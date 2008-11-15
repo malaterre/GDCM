@@ -110,7 +110,7 @@ EFUNC*/
 
 static void CodeSize()
 {
-  BEGIN("CodeSize");
+  BEGIN("CodeSize")
   int *cfip,i;
   int least_value,next_least_value;
   int least_value_index,next_least_value_index;
@@ -172,7 +172,7 @@ EFUNC*/
 
 static void CountBits()
 {
-  BEGIN("CountBits");
+  BEGIN("CountBits")
   int *csptr;
 
   ClearBits();
@@ -194,7 +194,7 @@ EFUNC*/
 
 static void AdjustBits()
 {
-  BEGIN("AdjustBits");
+  BEGIN("AdjustBits")
   int i,j;
 
   i=32;
@@ -233,7 +233,7 @@ EFUNC*/
 
 static void SortInput()
 {
-  BEGIN("SortInput");
+  BEGIN("SortInput")
   int i,j,p;
 
   for(p=0,i=1;i<33;i++)  /* Designate a length in i. */
@@ -258,7 +258,7 @@ EFUNC*/
 
 static void SizeTable()
 {
-  BEGIN("SizeTable");
+  BEGIN("SizeTable")
   int i,j,p;
 
   for(p=0,i=1;i<17;i++)
@@ -281,7 +281,7 @@ EFUNC*/
 
 static void CodeTable()
 {
-  BEGIN("CodeTable");
+  BEGIN("CodeTable")
   int p,code,size;
 
   p=0;
@@ -318,7 +318,7 @@ EFUNC*/
 
 static void OrderCodes()
 {
-  BEGIN("OrderCodes");
+  BEGIN("OrderCodes")
   int index,p;
 
   for(p=0;p<lastp;p++)
@@ -339,7 +339,7 @@ EFUNC*/
 
 static void DecoderTables()
 {
-  BEGIN("DecoderTables");
+  BEGIN("DecoderTables")
   int l,p;
 
   for(Dhuff->ml=1,p=0,l=1;l<=16;l++)
@@ -371,7 +371,7 @@ EFUNC*/
 void MakeHuffman(freq)
      int *freq;
 {
-  BEGIN("MakeHuffman");
+  BEGIN("MakeHuffman")
   int *ptr;
 
   for(ptr=frequency;ptr<frequency+256;ptr++)
@@ -397,7 +397,7 @@ void SpecifiedHuffman(bts,hvls)
      int *bts;
      int *hvls;
 {
-  BEGIN("MakeHuffman");
+  BEGIN("MakeHuffman")
   int i;
   int accum;
 
@@ -423,7 +423,7 @@ EFUNC*/
 
 void MakeDecoderHuffman()
 {
-  BEGIN("MakeDecoderHuffman");
+  BEGIN("MakeDecoderHuffman")
 
   SizeTable();
   CodeTable();
@@ -439,7 +439,7 @@ EFUNC*/
 
 void ReadHuffman()
 {
-  BEGIN("ReadHuffman");
+  BEGIN("ReadHuffman")
   int i,accum;
 
   for(accum=0,i=1;i<=16;i++)
@@ -479,7 +479,7 @@ EFUNC*/
 
 void WriteHuffman()
 {
-  BEGIN("WriteHuffman");
+  BEGIN("WriteHuffman")
   int i,accum;
 
   if (Xhuff)
@@ -510,7 +510,7 @@ EFUNC*/
 
 int DecodeHuffman()
 {
-  BEGIN("DecodeHuffman");
+  BEGIN("DecodeHuffman")
   int code,l,p;
 
   if (!Dhuff)
@@ -543,7 +543,7 @@ int DecodeHuffman()
   else
     {
       WHEREAMI();
-      printf("Huffman read error: l=%d code=%d\n");
+      /*printf("Huffman read error: l=%d code=%d\n");*/
       Resync();
       ErrorValue = ERROR_HUFFMAN_READ;
       return(0);
@@ -559,7 +559,7 @@ EFUNC*/
 void EncodeHuffman(value)
      int value;
 {
-  BEGIN("EncodeHuffman");
+  BEGIN("EncodeHuffman")
 
   if (Loud > WHISPER)
     {
@@ -598,7 +598,7 @@ EFUNC*/
 
 void MakeXhuff()
 {
-  BEGIN("MakeXhuff");
+  BEGIN("MakeXhuff")
 
   if (!(Xhuff = MakeStructure(XHUFF)))
     {
@@ -617,7 +617,7 @@ EFUNC*/
 
 void MakeEhuff()
 {
-  BEGIN("MakeEhuff");
+  BEGIN("MakeEhuff")
 
   if (!(Ehuff = MakeStructure(EHUFF)))
     {
@@ -636,7 +636,7 @@ EFUNC*/
 
 void MakeDhuff()
 {
-  BEGIN("MakeDhuff");
+  BEGIN("MakeDhuff")
 
   if (!(Dhuff = MakeStructure(DHUFF)))
     {
@@ -656,7 +656,7 @@ EFUNC*/
 void UseACHuffman(index)
      int index;
 {
-  BEGIN("UseACHuffman");
+  BEGIN("UseACHuffman")
 
   Xhuff = CImage->ACXhuff[index];
   Dhuff = CImage->ACDhuff[index];
@@ -678,7 +678,7 @@ EFUNC*/
 void UseDCHuffman(index)
      int index;
 {
-  BEGIN("UseDCHuffman");
+  BEGIN("UseDCHuffman")
 
   Xhuff = CImage->DCXhuff[index];
   Dhuff = CImage->DCDhuff[index];
@@ -700,7 +700,7 @@ EFUNC*/
 void SetACHuffman(index)
      int index;
 {
-  BEGIN("SetACHuffman");
+  BEGIN("SetACHuffman")
 
   CImage->ACXhuff[index] = Xhuff;
   CImage->ACDhuff[index] = Dhuff;
@@ -717,7 +717,7 @@ EFUNC*/
 void SetDCHuffman(index)
      int index;
 {
-  BEGIN("SetDCHuffman");
+  BEGIN("SetDCHuffman")
 
   CImage->DCXhuff[index] = Xhuff;
   CImage->DCDhuff[index] = Dhuff;
@@ -732,12 +732,12 @@ EFUNC*/
 
 void PrintHuffman()
 {
-  BEGIN("PrintHuffman");
+  BEGIN("PrintHuffman")
   int i;
 
   if (Xhuff)
     {
-      printf("Xhuff ID: %x\n",Xhuff);
+      printf("Xhuff ID: %p\n",(void*)Xhuff);
       printf("Bits: [length:number]\n");
       for(i=1;i<9;i++)
 	{
@@ -755,7 +755,7 @@ void PrintHuffman()
     }
   if (Ehuff)
     {
-      printf("Ehuff ID: %x\n",Ehuff);
+      printf("Ehuff ID: %p\n",(void*)Ehuff);
       printf("Ehufco:\n");
       PrintTable(Ehuff->ehufco);
       printf("Ehufsi:\n");
@@ -763,7 +763,7 @@ void PrintHuffman()
     }
   if (Dhuff)
     {
-      printf("Dhuff ID: %x\n",Dhuff);
+      printf("Dhuff ID: %p\n",(void*)Dhuff);
       printf("MaxLength: %d\n",Dhuff->ml);
       printf("[index:MaxCode:MinCode:ValPtr]\n");
       for(i=1;i<5;i++)
@@ -815,7 +815,7 @@ EFUNC*/
 void PrintTable(table)
      int *table;
 {
-  BEGIN("PrintTable");
+  BEGIN("PrintTable")
   int i,j;
 
   for(i=0;i<16;i++)

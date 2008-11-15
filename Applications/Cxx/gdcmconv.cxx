@@ -21,7 +21,7 @@
  *
  * Tools to conv. Goals being to 'purify' a DICOM file.
  * For now it will do the minimum:
- * - If Group Length is present, the length is garantee to be correct
+ * - If Group Length is present, the length is guarantee to be correct
  * - If Element with Group Tag 0x1, 0x3, 0x5 or 0x7 are present they are
  *   simply discarded (not written).
  * - Elements are written in alphabetical order
@@ -65,6 +65,7 @@
   make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
 */
 #include "gdcmReader.h"
+#include "gdcmAnonymizer.h"
 #include "gdcmVersion.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
@@ -79,7 +80,10 @@
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmFileExplicitFilter.h"
+#include "gdcmJPEG2000Codec.h"
+#include "gdcmSequenceOfFragments.h"
 
 #include <string>
 #include <iostream>
@@ -103,6 +107,14 @@ void PrintVersion()
   std::cout << date << std::endl;
 }
 
+void PrintLossyWarning()
+{
+  std::cout << "You have selected a lossy compression transfer syntax." << std::endl;
+  std::cout << "This will degrade the quality of your input image, and can." << std::endl;
+  std::cout << "impact professional interpretation of the image." << std::endl;
+  std::cout << "Do not use if you do not understand the risk." << std::endl;
+}
+
 void PrintHelp()
 {
   PrintVersion();
@@ -112,16 +124,25 @@ void PrintHelp()
   std::cout << "  -i --input      DICOM filename" << std::endl;
   std::cout << "  -o --output     DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -l --apply-lut  Apply LUT." << std::endl;
-  std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
-  std::cout << "  -W --raw        Decompress image." << std::endl;
-  std::cout << "  -J --jpeg       Compress image in jpeg." << std::endl;
-  std::cout << "  -K --j2k        Compress image in j2k." << std::endl;
-  std::cout << "  -L --jpegls     Compress image in jpeg-ls." << std::endl;
-  std::cout << "  -R --rle        Compress image in rle (lossless only)." << std::endl;
-  std::cout << "  -F --force      Force decompression/merging before recompression/splitting." << std::endl;
-  std::cout << "  -Y --lossy %d   Use the lossy (if possible), followed by comp. ratio" << std::endl;
-  std::cout << "  -S --split %d   Write 2D image with multiple fragments (using max size)" << std::endl;
+  std::cout << "  -X --explicit   Change Transfer Syntax to explicit." << std::endl;
+  std::cout << "  -M --implicit   Change Transfer Syntax to implicit." << std::endl;
+  std::cout << "  -U --use-dict   Use dict for VR." << std::endl;
+  std::cout << "  -C --check-meta Check File Meta Information (advanced user only)." << std::endl;
+  std::cout << "     --root-uid   Root UID." << std::endl;
+  std::cout << "     --remove-gl  Remove group length (deprecated in DICOM 2008)." << std::endl;
+  std::cout << "Image only Options:" << std::endl;
+  std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
+  std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
+  std::cout << "  -w --raw                            Decompress image." << std::endl;
+  std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
+  std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
+  std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
+  std::cout << "  -R --rle                            Compress image in rle (lossless only)." << std::endl;
+  std::cout << "  -F --force                          Force decompression/merging before recompression/splitting." << std::endl;
+  std::cout << "     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
+  std::cout << "     --planar-configuration [01]      Change planar configuration." << std::endl;
+  std::cout << "  -Y --lossy                          Use the lossy (if possible) compressor." << std::endl;
+  std::cout << "  -S --split %d                       Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -129,10 +150,222 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "J2K Options:" << std::endl;
+  std::cout << "  -r --rate    %*f           set rate." << std::endl;
+  std::cout << "  -q --quality %*f           set quality." << std::endl;
+  std::cout << "  -t --tile %d,%d            set tile size." << std::endl;
+  std::cout << "  -n --number-resolution %d  set number of resolution." << std::endl;
+  std::cout << "     --irreversible          set irreversible." << std::endl;
   std::cout << "Special Options:" << std::endl;
-  std::cout << "  -I --ignore-errors   print even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
+  std::cout << "  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
+  std::cout << "Env var:" << std::endl;
+  std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
+/* 
+ * Default behavior for root UID is:
+ * By default the GDCM one is used
+ * If GDCM_ROOT_UID is set, then use this one instead
+ * If --root-uid is explicitly set on the command line, it will override any other defined behavior
+ */
 }
 
+template <typename T>
+unsigned int readvector(std::vector<T> &v, const char *str)
+{
+  if( !str ) return 0;
+  std::istringstream os( str );
+  T f;
+  while( os >> f )
+    {
+    v.push_back( f );
+    os.get(); //  == ","
+    }
+  return v.size();
+}
+
+namespace gdcm
+{
+bool derives( File & file, const Image& compressed_image )
+{
+/*
+(0008,2111) ST [Lossy compression with JPEG extended sequential 8 bit, IJG quality... # 102, 1 DerivationDescription
+(0008,2112) SQ (Sequence with explicit length #=1)      # 188, 1 SourceImageSequence
+  (fffe,e000) na (Item with explicit length #=3)          # 180, 1 Item
+    (0008,1150) UI =UltrasoundImageStorage                  #  28, 1 ReferencedSOPClassUID
+    (0008,1155) UI [1.2.840.1136190195280574824680000700.3.0.1.19970424140438] #  58, 1 ReferencedSOPInstanceUID
+    (0040,a170) SQ (Sequence with explicit length #=1)      #  66, 1 PurposeOfReferenceCodeSequence
+      (fffe,e000) na (Item with explicit length #=3)          #  58, 1 Item
+        (0008,0100) SH [121320]                                 #   6, 1 CodeValue
+        (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+        (0008,0104) LO [Uncompressed predecessor]               #  24, 1 CodeMeaning
+      (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+  (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+*/
+    const Tag sisq(0x8,0x2112);
+    SequenceOfItems * sqi;
+      sqi = new SequenceOfItems;
+      DataElement de( sisq);
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi );
+      de.SetVLToUndefined();
+
+  DataSet &ds = file.GetDataSet();
+      ds.Insert( de );
+{
+    // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
+    gdcm::Attribute<0x0008,0x0008> at3;
+    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"}; 
+    at3.SetValues( values, 2, true ); // true => copy data !
+    if( ds.FindDataElement( at3.GetTag() ) )
+      {
+      const gdcm::DataElement &de = ds.GetDataElement( at3.GetTag() );
+      at3.SetFromDataElement( de );
+      // Make sure that value #1 is at least 'DERIVED', so override in all cases:
+      at3.SetValue( 0, values[0] );
+      }
+    ds.Replace( at3.GetAsDataElement() );
+
+}
+{
+    Attribute<0x0008,0x2111> at1;
+    at1.SetValue( "lossy conversion" );
+    ds.Replace( at1.GetAsDataElement() );
+}
+
+    sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item; //( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+
+    Item &item1 = sqi->GetItem(1);
+    DataSet &subds = item1.GetNestedDataSet();
+/*
+    (0008,1150) UI =UltrasoundImageStorage                  #  28, 1 ReferencedSOPClassUID
+    (0008,1155) UI [1.2.840.1136190195280574824680000700.3.0.1.19970424140438] #  58, 1 ReferencedSOPInstanceUID
+*/
+{
+    DataElement sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+    sopinstanceuid.SetTag( Tag(0x8,0x1150 ) );
+    subds.Replace( sopinstanceuid );
+    DataElement sopclassuid = ds.GetDataElement( Tag(0x0008,0x0018) );
+    sopclassuid.SetTag( Tag(0x8,0x1155 ) );
+    subds.Replace( sopclassuid );
+    ds.Remove( Tag(0x8,0x18) );
+}
+
+    const Tag prcs(0x0040,0xa170);
+    if( !subds.FindDataElement( prcs) )
+      {
+      SequenceOfItems *sqi2 = new SequenceOfItems;
+      DataElement de( prcs );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi2 );
+      de.SetVLToUndefined();
+      subds.Insert( de );
+      }
+
+    sqi = (SequenceOfItems*)subds.GetDataElement( prcs ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item; //( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+    Item &item2 = sqi->GetItem(1);
+    DataSet &subds2 = item2.GetNestedDataSet();
+
+/*
+        (0008,0100) SH [121320]                                 #   6, 1 CodeValue
+        (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+        (0008,0104) LO [Uncompressed predecessor]               #  24, 1 CodeMeaning
+*/
+
+    Attribute<0x0008,0x0100> at1;
+    at1.SetValue( "121320" );
+    subds2.Replace( at1.GetAsDataElement() );
+    Attribute<0x0008,0x0102> at2;
+    at2.SetValue( "DCM" );
+    subds2.Replace( at2.GetAsDataElement() );
+    Attribute<0x0008,0x0104> at3;
+    at3.SetValue( "Uncompressed predecessor" );
+    subds2.Replace( at3.GetAsDataElement() );
+
+/*
+(0008,9215) SQ (Sequence with explicit length #=1)      #  98, 1 DerivationCodeSequence
+  (fffe,e000) na (Item with explicit length #=3)          #  90, 1 Item
+    (0008,0100) SH [121327]                                 #   6, 1 CodeValue
+    (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+    (0008,0104) LO [Full fidelity image, uncompressed or lossless compressed] #  56, 1 CodeMeaning
+  (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+*/
+{
+    const Tag sisq(0x8,0x9215);
+    SequenceOfItems * sqi;
+      sqi = new SequenceOfItems;
+      DataElement de( sisq );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi );
+      de.SetVLToUndefined();
+      ds.Insert( de );
+    sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item; //( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+
+    Item &item1 = sqi->GetItem(1);
+    DataSet &subds3 = item1.GetNestedDataSet();
+
+    Attribute<0x0008,0x0100> at1;
+    at1.SetValue( "121327" );
+    subds3.Replace( at1.GetAsDataElement() );
+    Attribute<0x0008,0x0102> at2;
+    at2.SetValue( "DCM" );
+    subds3.Replace( at2.GetAsDataElement() );
+    Attribute<0x0008,0x0104> at3;
+    at3.SetValue( "Full fidelity image, uncompressed or lossless compressed" );
+    subds3.Replace( at3.GetAsDataElement() );
+}
+
+{
+/*
+(0028,2110) CS [01]                                     #   2, 1 LossyImageCompression
+(0028,2112) DS [15.95]                                  #   6, 1 LossyImageCompressionRatio
+(0028,2114) CS [ISO_10918_1]                            #  12, 1 LossyImageCompressionMethod
+*/
+  const DataElement & pixeldata = compressed_image.GetDataElement();
+  size_t len = pixeldata.GetSequenceOfFragments()->ComputeByteLength();
+  size_t reflen = compressed_image.GetBufferLength();
+  double ratio = (double)reflen / len;
+    Attribute<0x0028,0x2110> at1;
+    at1.SetValue( "01" );
+    ds.Replace( at1.GetAsDataElement() );
+    Attribute<0x0028,0x2112> at2;
+    at2.SetValues( &ratio, 1);
+    ds.Replace( at2.GetAsDataElement() );
+    Attribute<0x0028,0x2114> at3;
+static const CSComp newvalues2[] = {"ISO_10918_1"};
+    at3.SetValues(  newvalues2, 1 );
+    ds.Replace( at3.GetAsDataElement() );
+}
+
+  return true;
+
+}
+}
 
 int main (int argc, char *argv[])
 {
@@ -142,6 +375,8 @@ int main (int argc, char *argv[])
   std::string filename;
   std::string outfilename;
   std::string root;
+  int explicitts = 0; // explicit is a reserved keyword
+  int implicit = 0;
   int lut = 0;
   int raw = 0;
   int rootuid = 0;
@@ -151,9 +386,25 @@ int main (int argc, char *argv[])
   int j2k = 0;
   int lossy = 0;
   int split = 0;
+  int fragmentsize = 0;
   int rle = 0;
   int force = 0;
   int planarconf = 0;
+  int planarconfval = 0;
+  int usedict = 0;
+  int compressicon = 0;
+  int removegrouplength = 0;
+  int photometricinterpretation = 0;
+  std::string photometricinterpretation_str;
+  int quality = 0;
+  int rate = 0;
+  int tile = 0;
+  int nres = 0;
+  int nresvalue = 6; // ??
+  std::vector<float> qualities;
+  std::vector<float> rates;
+  std::vector<unsigned int> tilesize;
+  int irreversible = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -187,7 +438,7 @@ int main (int argc, char *argv[])
         {"pixeldata", 1, 0, 0}, // valid
         {"apply-lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
-        {"lossy", 1, &lossy, 1}, // Specify the compression ratio for lossy comp
+        {"lossy", 0, &lossy, 1}, // Specify lossy comp
         {"force", 0, &force, 1}, // force decompression even if target compression is identical
         {"jpeg", 0, &jpeg, 1}, // JPEG lossy / lossless
         {"jpegls", 0, &jpegls, 1}, // JPEG-LS: lossy / lossless
@@ -197,6 +448,18 @@ int main (int argc, char *argv[])
         {"jpip", 0, 0, 0}, // ??
         {"split", 1, &split, 1}, // split fragments
         {"planar-configuration", 1, &planarconf, 1}, // Planar Configuration
+        {"explicit", 0, &explicitts, 1}, // 
+        {"implicit", 0, &implicit, 1}, // 
+        {"use-dict", 0, &usedict, 1}, // 
+        {"compress-icon", 0, &compressicon, 1}, // 
+        {"remove-gl", 0, &removegrouplength, 1}, // 
+        {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
+// j2k :
+        {"rate", 1, &rate, 1}, // 
+        {"quality", 1, &quality, 1}, // 
+        {"tile", 1, &tile, 1}, // 
+        {"number-resolution", 1, &nres, 1}, // 
+        {"irreversible", 0, &irreversible, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -210,7 +473,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvIr:q:t:n:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -222,7 +485,7 @@ int main (int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -237,34 +500,137 @@ int main (int argc, char *argv[])
             assert( root.empty() );
             root = optarg;
             }
-          else if( option_index == 28 ) /* split */
+          else if( option_index == 27 ) /* split */
             {
             assert( strcmp(s, "split") == 0 );
-            split = atoi(optarg);
+            fragmentsize = atoi(optarg);
             }
-          else if( option_index == 29 ) /* planar conf*/
+          else if( option_index == 28 ) /* planar conf*/
             {
             assert( strcmp(s, "planar-configuration") == 0 );
-            planarconf = atoi(optarg);
+            planarconfval = atoi(optarg);
             }
-          printf (" with arg %s, index = %d", optarg, option_index);
+          else if( option_index == 34 ) /* photometricinterpretation */
+            {
+            assert( strcmp(s, "photometric-interpretation") == 0 );
+            photometricinterpretation_str = optarg;
+            }
+          else if( option_index == 35 ) /* rate */
+            {
+            assert( strcmp(s, "rate") == 0 );
+            readvector(rates, optarg);
+            }
+          else if( option_index == 36 ) /* qualit */
+            {
+            assert( strcmp(s, "quality") == 0 );
+            readvector(qualities, optarg);
+            }
+          else if( option_index == 37 ) /* tile */
+            {
+            assert( strcmp(s, "tile") == 0 );
+            unsigned int n = readvector(tilesize, optarg);
+            assert( n == 2 );
+            }
+          else if( option_index == 38 ) /* number of resolution */
+            {
+            assert( strcmp(s, ",number-resolution") == 0 );
+            nresvalue = atoi(optarg);
+            }
+          //printf (" with arg %s, index = %d", optarg, option_index);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
     case 'i':
-      printf ("option i with value '%s'\n", optarg);
+      //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      printf ("option o with value '%s'\n", optarg);
+      //printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
       break;
 
+    case 'X':
+      explicitts = 1;
+      break;
+
+    case 'M':
+      implicit = 1;
+      break;
+
+    case 'U':
+      usedict = 1;
+      break;
+
+    case 'C':
+      checkmeta = 1;
+      break;
+
+    // root-uid
+
+    case 'l':
+      lut = 1;
+      break;
+
+    case 'w':
+      raw = 1;
+      break;
+
+    case 'J':
+      jpeg = 1;
+      break;
+
+    case 'K':
+      j2k = 1;
+      break;
+
+    case 'R':
+      rle = 1;
+      break;
+
+    case 'F':
+      force = 1;
+      break;
+
+    case 'Y':
+      lossy = 1;
+      break;
+
+    case 'S':
+      split = 1;
+      fragmentsize = atoi(optarg);
+      break;
+
+    case 'P':
+      photometricinterpretation = 1;
+      photometricinterpretation_str = optarg;
+      break;
+
+    case 'r':
+      rate = 1;
+      readvector(rates, optarg);
+      break;
+
+    case 'q':
+      quality = 1;
+      readvector(qualities, optarg);
+      break;
+
+    case 't':
+      tile = 1;
+      readvector(tilesize, optarg);
+      break;
+
+    case 'n':
+      nres = 1;
+      nresvalue = atoi(optarg);
+      break;
+
+    // General option
     case 'V':
       verbose = 1;
       break;
@@ -289,6 +655,10 @@ int main (int argc, char *argv[])
       version = 1;
       break;
 
+    case 'I':
+      ignoreerrors = 1;
+      break;
+
     case '?':
       break;
 
@@ -301,13 +671,26 @@ int main (int argc, char *argv[])
   if (optind < argc)
     {
     //printf ("non-option ARGV-elements: ");
-    //while (optind < argc)
-    //  {
-    //  printf ("%s ", argv[optind++]);
-    //  }
+    std::vector<std::string> files;
+    while (optind < argc)
+      {
+      //printf ("%s\n", argv[optind++]);
+      files.push_back( argv[optind++] );
+      }
     //printf ("\n");
-    PrintHelp();
-    return 1;
+    if( files.size() == 2 
+      && filename.empty()
+      && outfilename.empty() 
+    )
+      {
+      filename = files[0];
+      outfilename = files[1];
+      }
+    else
+      {
+      PrintHelp();
+      return 1;
+      }
     }
 
   if( version )
@@ -349,8 +732,20 @@ int main (int argc, char *argv[])
     }
  
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
+  if( !rootuid )
+    {
+    // only read the env var is no explicit cmd line option
+    // maybe there is an env var defined... let's check
+    const char *rootuid_env = getenv("GDCM_ROOT_UID");
+    if( rootuid_env )
+      {
+      rootuid = 1;
+      root = rootuid_env;
+      }
+    }
   if( rootuid )
     {
+    // root is set either by the cmd line option or the env var
     if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
       {
       std::cerr << "specified Root UID is not valid: " << root << std::endl;
@@ -359,10 +754,93 @@ int main (int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-  if( lossy )
+  if( removegrouplength )
     {
-    std::cerr << "not supported for now" << std::endl;
-    return 1;
+    gdcm::Reader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+
+    gdcm::Anonymizer ano;
+    ano.SetFile( reader.GetFile() );
+    if( !ano.RemoveGroupLength() )
+      {
+      std::cerr << "Could not remove group length" << std::endl;
+      }
+
+    gdcm::Writer writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( ano.GetFile() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+
+    return 0;
+    }
+
+  // Handle here the general file (not required to be image)
+  if ( explicitts || implicit )
+    {
+    if( explicitts && implicit ) return 1; // guard
+    gdcm::Reader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+
+    gdcm::Writer writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    gdcm::File & file = writer.GetFile();
+    gdcm::FileMetaInformation &fmi = file.GetHeader();
+
+    const gdcm::TransferSyntax &orits = fmi.GetDataSetTransferSyntax();
+    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian )
+      {
+      std::cerr << "Sorry input Transfer Syntax not supported for this conversion: " << orits << std::endl;
+      return 1;
+      }
+
+    gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
+    if( explicitts )
+      {
+      ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+      }
+    const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
+    de.SetByteValue( tsuid, strlen(tsuid) );
+    de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
+    fmi.Replace( de );
+    fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
+    fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+    fmi.SetDataSetTransferSyntax(ts);
+
+    if( explicitts )
+      {
+      gdcm::FileExplicitFilter fef;
+      //fef.SetChangePrivateTags( true );
+      fef.SetFile( reader.GetFile() );
+      if( !fef.Change() )
+        {
+        std::cerr << "Failed to change: " << filename << std::endl;
+        return 1;
+        }
+      }
+
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+ 
+    return 0;
     }
 
   // split fragments
@@ -379,7 +857,7 @@ int main (int argc, char *argv[])
 
     gdcm::ImageFragmentSplitter splitter;
     splitter.SetInput( image );
-    splitter.SetFragmentSizeMax( split );
+    splitter.SetFragmentSizeMax( fragmentsize );
     splitter.SetForce( force );
     bool b = splitter.Split();
     if( !b )
@@ -391,6 +869,38 @@ int main (int argc, char *argv[])
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
     writer.SetImage( splitter.GetOutput() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+    }
+  else if( photometricinterpretation )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Image &image = reader.GetImage();
+
+    gdcm::PhotometricInterpretation pi (
+      gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) );
+    gdcm::ImageChangePhotometricInterpretation pifilt;
+    pifilt.SetInput( image );
+    pifilt.SetPhotometricInterpretation( pi );
+    bool b = pifilt.Change();
+    if( !b )
+      {
+      std::cerr << "Could not apply PhotometricInterpretation: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::ImageWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( pifilt.GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -426,7 +936,7 @@ int main (int argc, char *argv[])
       return 1;
       }
     }
-  else if( jpeg || j2k || jpegls || rle || raw )
+  else if( jpeg || j2k || jpegls || rle || raw /*|| planarconf*/ )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -436,29 +946,79 @@ int main (int argc, char *argv[])
       return 1;
       }
     const gdcm::Image &image = reader.GetImage();
-    const gdcm::IconImage &icon = image.GetIconImage();
-    if( !icon.IsEmpty() )
-      {
-      std::cerr << "Icons are not supported" << std::endl;
-      return 1;
-      }
+    //const gdcm::IconImage &icon = image.GetIconImage();
+    //if( !icon.IsEmpty() )
+    //  {
+    //  std::cerr << "Icons are not supported" << std::endl;
+    //  return 1;
+    //  }
 
+    gdcm::JPEG2000Codec j2kcodec;
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
+    change.SetCompressIconImage( compressicon );
     if( jpeg )
       {
+      if( lossy )
+        {
+        std::cerr << "not implemented" << std::endl;
+        return 1;
+        }
       change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
       }
     else if( jpegls )
       {
+      if( lossy )
+        {
+        std::cerr << "not implemented" << std::endl;
+        return 1;
+        }
       change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
       }
     else if( j2k )
       {
-      change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
+      if( lossy )
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000 );
+        if( rate )
+          {
+          int i = 0;
+          for(std::vector<float>::const_iterator it = rates.begin(); it != rates.end(); ++it )
+            {
+            j2kcodec.SetRate(i++, *it );
+            }
+          }
+        if( quality )
+          {
+          int i = 0;
+          for(std::vector<float>::const_iterator it = qualities.begin(); it != qualities.end(); ++it )
+            {
+            j2kcodec.SetQuality( i++, *it );
+            }
+          }
+        if( tile )
+          {
+          j2kcodec.SetTileSize( tilesize[0], tilesize[1] );
+          }
+        if( nres )
+          {
+          j2kcodec.SetNumberOfResolutions( nresvalue );
+          }
+        j2kcodec.SetReversible( !irreversible );
+        change.SetUserCodec( &j2kcodec );
+        }
+      else
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
+        }
       }
     else if( raw )
       {
+      if( lossy )
+        {
+        std::cerr << "no such thing as raw & lossy" << std::endl;
+        return 1;
+        }
       const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
 #ifdef GDCM_WORDS_BIGENDIAN
       change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
@@ -476,16 +1036,21 @@ int main (int argc, char *argv[])
       }
     else if( rle )
       {
+      if( lossy )
+        {
+        std::cerr << "no such thing as rle & lossy" << std::endl;
+        return 1;
+        }
       change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
       }
     else
       {
       return 1;
       }
-    if( raw )
+    if( raw && planarconf )
       {
       gdcm::ImageChangePlanarConfiguration icpc;
-      icpc.SetPlanarConfiguration( planarconf );
+      icpc.SetPlanarConfiguration( planarconfval );
       icpc.SetInput( image );
       bool b = icpc.Change();
       if( !b )
@@ -505,9 +1070,22 @@ int main (int argc, char *argv[])
       std::cerr << "Could not change the Transfer Syntax: " << filename << std::endl;
       return 1;
       }
-    //gdcm::FileExplicitFilter fef;
-    //fef.SetFile( reader.GetFile() );
-    //fef.Change();
+    if( lossy )
+      {
+      PrintLossyWarning();
+      gdcm::derives( reader.GetFile(), change.GetOutput() );
+      }
+    if( usedict /*ts.IsImplicit()*/ )
+      {
+      gdcm::FileExplicitFilter fef;
+      //fef.SetChangePrivateTags( true );
+      fef.SetFile( reader.GetFile() );
+      if(!fef.Change())
+        {
+        std::cerr << "Failed to change: " << filename << std::endl;
+        return 1;
+        }
+      }
 
     gdcm::ImageWriter writer;
     writer.SetFileName( outfilename.c_str() );
@@ -594,7 +1172,7 @@ int main (int argc, char *argv[])
         {
         std::cerr << "WARNING: an error was found during the reading of your DICOM file." << std::endl;
         std::cerr << "gdcmconv will still try to continue and rewrite your DICOM file." << std::endl;
-        std::cerr << "There is absolutely no garantee that your output file will be valid." << std::endl;
+        std::cerr << "There is absolutely no guarantee that your output file will be valid." << std::endl;
         }
       else
         {

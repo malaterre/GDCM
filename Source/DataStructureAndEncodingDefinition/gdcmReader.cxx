@@ -462,6 +462,8 @@ std::istream &is = *Stream;
               }
 
             // Explicit/Implicit
+            // gdcmData/c_vf1001.dcm falls into that category, while in fact the fmi could simply
+            // be inverted and all would be perfect...
             gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
             F->GetDataSet().Clear(); // remove garbage from 1st attempt...
             F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);

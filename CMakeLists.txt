@@ -9,6 +9,9 @@ MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PR
 SET(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
+SET(GDCM_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
+SET(GDCM_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
+
 IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
   SET(NAMELINK_ONLY NAMELINK_ONLY)
   SET(NAMELINK_SKIP NAMELINK_SKIP)
@@ -43,7 +46,7 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 9)
+SET(GDCM_BUILD_VERSION 10)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
@@ -53,6 +56,9 @@ SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
 SET(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
   VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
 )
+IF(GDCM_NO_EXECUTABLE_PROPERTIES)
+  SET(GDCM_EXECUTABLE_PROPERTIES)
+ENDIF(GDCM_NO_EXECUTABLE_PROPERTIES)
 
 #-----------------------------------------------------------------------------
 INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
@@ -237,7 +243,29 @@ IF(UNIX)
   OPTION(GDCM_USE_SYSTEM_UUID "Use system uuid" OFF)
 ENDIF(UNIX)
 OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
+OPTION(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
+OPTION(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg (1.0)" OFF)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT)
+MARK_AS_ADVANCED(GDCM_USE_SYSTEM_OPENJPEG GDCM_USE_SYSTEM_LJPEG)
+OPTION(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
+IF(GDCM_USE_SYSTEM_POPPLER)
+  FIND_PACKAGE(Poppler REQUIRED)
+ENDIF(GDCM_USE_SYSTEM_POPPLER)
+MARK_AS_ADVANCED(GDCM_USE_SYSTEM_POPPLER)
+
+IF(GDCM_USE_SYSTEM_LJPEG)
+  FIND_PACKAGE(LJPEG REQUIRED)
+  SET(GDCM_LJPEG_LIBRARIES ${LJPEG_LIBRARIES})
+ELSE(GDCM_USE_SYSTEM_LJPEG)
+  SET(GDCM_LJPEG_LIBRARIES gdcmjpeg8 gdcmjpeg12 gdcmjpeg16)
+ENDIF(GDCM_USE_SYSTEM_LJPEG)
+
+IF(GDCM_USE_SYSTEM_OPENJPEG)
+  FIND_PACKAGE(OpenJPEG REQUIRED)
+  SET(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
+ELSE(GDCM_USE_SYSTEM_OPENJPEG)
+  SET(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
+ENDIF(GDCM_USE_SYSTEM_OPENJPEG)
 
 # Very advanced user option:
 # This will cause building of the broken JPEG library released by the Standford PVRG group:
@@ -272,15 +300,14 @@ ENDIF(GDCM_USE_SYSTEM_EXPAT)
 #-----------------------------------------------------------------------------
 OPTION(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
 SET(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
-IF(BUILD_EXAMPLES)
-  SUBDIRS(Examples)
-ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # Add the testing directories
 OPTION(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
 SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
-MARK_AS_ADVANCED(BUILD_TESTING)
+# Hide BUILD_TESTING as user tend to always turn all options on and then complains when something
+# does not work 'by default'
+MARK_AS_ADVANCED(BUILD_TESTING GDCM_BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Python install
@@ -313,7 +340,8 @@ MARK_AS_ADVANCED(BUILD_TESTING)
 # On unix one have: "python2.4/site-packages"
 # while on Win32: "c:/Python24/Lib/site-packages/"
 # give up for now and place python modules stuff in a general 'python' subdir
-SET(python_site_package "python/site-packages")
+#SET(python_site_package "python/site-packages")
+SET(python_site_package "")
 
 # Typical runtime env should be then
 # (assuming CMAKE_INSTALL_PREFIX:PATH=/tmp/local)
@@ -333,8 +361,23 @@ IF(GDCM_BUILD_WRAPPING)
 ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
-MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA)
+OPTION(GDCM_WRAP_CSHARP "build csharp wrapping (very experimental !)" OFF)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA GDCM_WRAP_CSHARP)
+IF(GDCM_WRAP_CSHARP)
+FIND_PACKAGE(CSharp REQUIRED)
+INCLUDE(${CSharp_USE_FILE})
+#  cmake_minimum_required(VERSION 2.6)
+#  enable_language(CSharp)
+ENDIF(GDCM_WRAP_CSHARP)
+
+SET(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
+SET(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
+
 SUBDIRS(Wrapping)
+
+IF(BUILD_EXAMPLES)
+  SUBDIRS(Examples)
+ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # Special CMake Module required when doing Python Testing
@@ -367,35 +410,16 @@ IF(BUILD_TESTING)
   SUBDIRS(Testing)
   IF(NOT GDCM_DATA_ROOT)
     # http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F
-    MESSAGE(FATAL_ERROR "You need to set the path to GDCM_DATA_ROOT")
+    MESSAGE("You need to set the path to GDCM_DATA_ROOT (advanced option) or disable GDCM_BUILD_TESTING or you won't get all tests.")
   ENDIF(NOT GDCM_DATA_ROOT)
 ENDIF(BUILD_TESTING)
 
 
 #-----------------------------------------------------------------------------
-# Here is one cool test: you can pretty much test all configuration using
-# ctest...well except one, the case where a user set BUILD_TESTING=OFF
-# since this would deactivate the dashboard and would not submit...doh!
-# So instead let's create a test that would build gdcm with this option
-IF(UNIX AND GDCM_TEST_BOOSTRAP)
-  ADD_TEST(BuildGDCM ${CMAKE_CTEST_COMMAND}
-    #${VTK_EXAMPLE_TEST_CONFIG_TYPE}
-    --build-and-test
-    ${GDCM_SOURCE_DIR}
-    ${GDCM_BINARY_DIR}/GDCMLocal
-    --build-two-config
-    --build-generator ${CMAKE_GENERATOR}
-    --build-makeprogram ${CMAKE_MAKE_PROGRAM}
-    --build-project GDCMLOCAL
-    #--build-run-dir ${VTK_EXAMPLE_TEST_RUN_DIR}
-    --build-options -DGDCM_BUILD_TESTING:BOOL=OFF -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_SUPPORT_BROKEN_IMPLEMENTATION:BOOL=OFF
-    #--test-command "${VTK_BINARY_DIR}/Examples/Build/vtkLocal/bin/vtkLocalTest"
-    )
-ENDIF(UNIX AND GDCM_TEST_BOOSTRAP)
-
-
-#-----------------------------------------------------------------------------
 OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
+IF(GDCM_DOCUMENTATION)
+  OPTION(GDCM_PDF_DOCUMENTATION "Build source doxygen using doxygen as pdf" ON)
+ENDIF(GDCM_DOCUMENTATION)
 
 
 #-----------------------------------------------------------------------------
@@ -407,6 +431,7 @@ ENDIF(GDCM_USE_VTK)
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_ITK "itk bridge ?" OFF)
 IF(GDCM_USE_ITK)
+  MESSAGE(FATAL_ERROR "Do not use, instead prefer: ITK_USE_SYSTEM_GDCM, that was added after ITK 3.8")
   SUBDIRS(Utilities/Insight)
 ENDIF(GDCM_USE_ITK)
 
@@ -433,7 +458,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     INCLUDE(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
   ENDIF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
 
-  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM\n GDCM is yet another DICOM library.")
+  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${GDCM_PACKAGE_DESCRIPTION_SUMMARY})
   SET(CPACK_PACKAGE_VENDOR "GDCM")
   SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
   SET(CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
@@ -456,7 +481,10 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_MODIFY_PATH ON)
   ELSE(WIN32 AND NOT UNIX)
-    SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmscanner")
+    # http://www.vtk.org/Wiki/CMake:CPackConfiguration
+    # List of files to be stripped. Starting with CMake 2.6.0 CPACK_STRIP_FILES will be a boolean variable which enables
+    # stripping of all files (a list of files evaluates to TRUE in CMake, so this change is compatible).
+    SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmscanner;bin/gdcminfo;bin/gdcmraw;bin/gdcmimg;bin/gdcmtar")
     SET(CPACK_SOURCE_STRIP_FILES "")
     SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
 
@@ -482,12 +510,15 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     IF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
       SET(CPACK_SYSTEM_NAME Cygwin)
     ELSE("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+      #SET(CMAKE_SYSTEM_PROCESSOR "x86_64")
+      #SET(CPACK_GENERATOR "TGZ;TBZ2")
+      #SET(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
       SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
     ENDIF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
   ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
 
   # Need to set the architecture for debian package
-  SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
+  SET(CPACK_PACKAGE_CONTACT ${GDCM_PACKAGE_CONTACT})
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
   SET(CPACK_SOURCE_IGNORE_FILES "/debian/" "/CVS/" "/\\\\.svn/" "TODO" ".NoDartCoverage")
@@ -567,6 +598,12 @@ IF(MSVC)
     "${GDCM_SOURCE_DIR}/Utilities/C99"
   )
 ENDIF(MSVC)
+IF(GDCM_USE_VTK)
+    SET(GDCM_INCLUDE_PATH
+      ${GDCM_INCLUDE_PATH}
+      "${GDCM_SOURCE_DIR}/Utilities/VTK"
+      )
+ENDIF(GDCM_USE_VTK)
 SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 SUBDIRS(CMake/ExportConfiguration)
 

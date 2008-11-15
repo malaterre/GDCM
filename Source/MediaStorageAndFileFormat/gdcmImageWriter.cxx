@@ -40,6 +40,194 @@ void ImageWriter::SetImage(Image const &img)
   PixelData = img;
 }
 
+void ImageWriter::DoIconImage(DataSet & rootds, Image const & image)
+{
+  //const Tag ticonimage(0x0088,0x0200);
+  Attribute<0x0088,0x0200> iiat;
+  const IconImage &icon = image.GetIconImage();
+  if( !icon.IsEmpty() )
+    {
+    //DataElement iconimagesq = rootds.GetDataElement( ticonimage );
+    //iconimagesq.SetTag( ticonimage );
+    DataElement iconimagesq;
+    iconimagesq.SetTag( iiat.GetTag() );
+    iconimagesq.SetVR( VR::SQ );
+    SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
+    sq->SetLengthToUndefined();
+
+    DataSet ds;
+    //SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    //// Is SQ empty ?
+    //if( !sq ) return;
+    //SequenceOfItems::Iterator it = sq->Begin();
+    //DataSet &ds = it->GetNestedDataSet();
+
+    // col & rows:
+    Attribute<0x0028, 0x0011> columns;
+    columns.SetValue( icon.GetDimension(0) );
+    ds.Insert( columns.GetAsDataElement() );
+
+    Attribute<0x0028, 0x0010> rows;
+    rows.SetValue( icon.GetDimension(1) );
+    ds.Insert( rows.GetAsDataElement() );
+
+  PixelFormat pf = icon.GetPixelFormat();
+  Attribute<0x0028, 0x0100> bitsallocated;
+  bitsallocated.SetValue( pf.GetBitsAllocated() );
+  ds.Replace( bitsallocated.GetAsDataElement() );
+
+  Attribute<0x0028, 0x0101> bitsstored;
+  bitsstored.SetValue( pf.GetBitsStored() );
+  ds.Replace( bitsstored.GetAsDataElement() );
+
+  Attribute<0x0028, 0x0102> highbit;
+  highbit.SetValue( pf.GetHighBit() );
+  ds.Replace( highbit.GetAsDataElement() );
+
+  Attribute<0x0028, 0x0103> pixelrepresentation;
+  pixelrepresentation.SetValue( pf.GetPixelRepresentation() );
+  ds.Replace( pixelrepresentation.GetAsDataElement() );
+
+  Attribute<0x0028, 0x0002> samplesperpixel;
+  samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
+  ds.Replace( samplesperpixel.GetAsDataElement() );
+
+  if( pf.GetSamplesPerPixel() != 1 )
+    {
+    Attribute<0x0028, 0x0006> planarconf;
+    planarconf.SetValue( icon.GetPlanarConfiguration() );
+    ds.Replace( planarconf.GetAsDataElement() );
+    }
+  PhotometricInterpretation pi = icon.GetPhotometricInterpretation();
+Attribute<0x0028,0x0004> piat;
+    const char *pistr = PhotometricInterpretation::GetPIString(pi);
+    DataElement de( Tag(0x0028, 0x0004 ) );
+    de.SetByteValue( pistr, strlen(pistr) );
+    de.SetVR( piat.GetVR() );
+    ds.Replace( de );
+
+    if ( pi == PhotometricInterpretation::PALETTE_COLOR )
+      {
+      const LookupTable &lut = icon.GetLUT();
+      assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
+           || (pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0) );
+      // lut descriptor:
+      // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor
+      // (0028,1102) US 256\0\16                                 #   6, 3 GreenPaletteColorLookupTableDescriptor
+      // (0028,1103) US 256\0\16                                 #   6, 3 BluePaletteColorLookupTableDescriptor
+      // lut data:
+      unsigned short length, subscript, bitsize;
+      unsigned short rawlut8[256];
+      unsigned short rawlut16[65536];
+      unsigned short *rawlut = rawlut8;
+      unsigned int lutlen = 256;
+      if( pf.GetBitsAllocated() == 16 )
+        {
+        rawlut = rawlut16;
+        lutlen = 65536;
+        }
+      unsigned int l;
+
+      // FIXME: should I really clear rawlut each time ?
+      // RED
+      memset(rawlut,0,lutlen*2);
+      lut.GetLUT(LookupTable::RED, (unsigned char*)rawlut, l);
+      DataElement redde( Tag(0x0028, 0x1201) );
+      redde.SetVR( VR::OW );
+      redde.SetByteValue( (char*)rawlut, l);
+      ds.Replace( redde );
+      // descriptor:
+      Attribute<0x0028, 0x1101, VR::US, VM::VM3> reddesc;
+      lut.GetLUTDescriptor(LookupTable::RED, length, subscript, bitsize);
+      reddesc.SetValue(length,0); reddesc.SetValue(subscript,1); reddesc.SetValue(bitsize,2);
+      ds.Replace( reddesc.GetAsDataElement() );
+
+      // GREEN
+      memset(rawlut,0,lutlen*2);
+      lut.GetLUT(LookupTable::GREEN, (unsigned char*)rawlut, l);
+      DataElement greende( Tag(0x0028, 0x1202) );
+      greende.SetVR( VR::OW );
+      greende.SetByteValue( (char*)rawlut, l);
+      ds.Replace( greende );
+      // descriptor:
+      Attribute<0x0028, 0x1102, VR::US, VM::VM3> greendesc;
+      lut.GetLUTDescriptor(LookupTable::GREEN, length, subscript, bitsize);
+      greendesc.SetValue(length,0); greendesc.SetValue(subscript,1); greendesc.SetValue(bitsize,2);
+      ds.Replace( greendesc.GetAsDataElement() );
+
+      // BLUE
+      memset(rawlut,0,lutlen*2);
+      lut.GetLUT(LookupTable::BLUE, (unsigned char*)rawlut, l);
+      DataElement bluede( Tag(0x0028, 0x1203) );
+      bluede.SetVR( VR::OW );
+      bluede.SetByteValue( (char*)rawlut, l);
+      ds.Replace( bluede );
+      // descriptor:
+      Attribute<0x0028, 0x1103, VR::US, VM::VM3> bluedesc;
+      lut.GetLUTDescriptor(LookupTable::BLUE, length, subscript, bitsize);
+      bluedesc.SetValue(length,0); bluedesc.SetValue(subscript,1); bluedesc.SetValue(bitsize,2);
+      ds.Replace( bluedesc.GetAsDataElement() );
+      }
+
+    //ds.Remove( Tag(0x0028, 0x1221) );
+    //ds.Remove( Tag(0x0028, 0x1222) );
+    //ds.Remove( Tag(0x0028, 0x1223) );
+
+
+ {
+  // Pixel Data
+  DataElement de( Tag(0x7fe0,0x0010) );
+  const Value &v = icon.GetDataElement().GetValue();
+  de.SetValue( v );
+  const ByteValue *bv = de.GetByteValue();
+  const TransferSyntax &ts = icon.GetTransferSyntax();
+  assert( ts.IsExplicit() || ts.IsImplicit() );
+  VL vl;
+  if( bv )
+    {
+    // if ts is explicit -> set VR
+    vl = bv->GetLength();
+    }
+  else
+    {
+    // if ts is explicit -> set VR
+    vl.SetToUndefined();
+    }
+  if( ts.IsExplicit() )
+    {
+    switch ( pf.GetBitsAllocated() )
+      {
+      case 8:
+        de.SetVR( VR::OB );
+        break;
+      //case 12:
+      case 16:
+      case 32:
+        de.SetVR( VR::OW );
+        break;
+      default:
+        assert( 0 && "should not happen" );
+        break;
+      }
+    }
+  else
+    {
+    de.SetVR( VR::OB );
+    }
+  de.SetVL( vl );
+  ds.Replace( de );
+}
+
+    Item item;
+    item.SetNestedDataSet( ds );
+    sq->AddItem( item );
+    iconimagesq.SetValue( *sq );
+
+    rootds.Replace( iconimagesq );
+    
+    }
+}
+
 bool ImageWriter::Write()
 {
   //assert( Stream.is_open() );
@@ -69,6 +257,7 @@ bool ImageWriter::Write()
   // FIXME HACK !
   if( pf.GetBitsAllocated() == 24 )
     {
+    abort();
     pi = PhotometricInterpretation::RGB;
     pf.SetBitsAllocated( 8 );
     pf.SetBitsStored( 8 );
@@ -341,6 +530,10 @@ Attribute<0x0028,0x0004> piat;
     ds.Replace( de );
 }
 
+
+  // Do Icon Image
+  DoIconImage(ds, GetImage());
+
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
@@ -490,7 +683,7 @@ Attribute<0x0028,0x0004> piat;
       sq = new SequenceOfItems;
       }
     sq->SetLengthToUndefined();
-    Item item( Tag(0xfffe,0xe000) );
+    Item item; //( /*Tag(0xfffe,0xe000)*/ );
     de.SetVLToUndefined();
     //DataSet sourceimageds;
     // (0008,1150) UI =MRImageStorage                          #  26, 1 ReferencedSOPClassUID

@@ -18,6 +18,10 @@
 
 #include <iostream>
 
+/*!
+ * \test TestFilename
+ * bla coucou
+ */
 int TestFilename(int argc, char *argv[])
 {
   (void)argc;(void)argv;

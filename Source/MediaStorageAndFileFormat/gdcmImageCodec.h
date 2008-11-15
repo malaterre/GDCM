@@ -30,6 +30,7 @@ namespace gdcm
  */
 class GDCM_EXPORT ImageCodec : public Codec
 {
+  friend class ImageChangePhotometricInterpretation;
 public:
   ImageCodec();
   ~ImageCodec();
@@ -88,6 +89,7 @@ public:
     Dimensions[2] = d[2];
     }
   const unsigned int *GetDimensions() const { return Dimensions; }
+  void SetNumberOfDimensions(unsigned int dim);
 protected:
   bool RequestPlanarConfiguration;
   bool RequestPaddedCompositePixelCode;
@@ -101,6 +103,7 @@ protected:
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
   unsigned int Dimensions[3]; // FIXME
+  unsigned int NumberOfDimensions;
 
   bool DoOverlayCleanup(std::istream &is, std::ostream &os);
   bool DoByteSwap(std::istream &is, std::ostream &os);

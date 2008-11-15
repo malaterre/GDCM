@@ -10,11 +10,14 @@ SET(MSFF_TEST_SRCS
   TestImageHelper
   TestImageToImageFilter
   TestImageChangeTransferSyntax
-  #TestImageChangePhotometricInterpretation
-  #TestImageChangePhotometricInterpretation2
+  TestImageChangePhotometricInterpretation
+  TestImageChangePhotometricInterpretation2
   TestImageChangeTransferSyntax2
   TestImageChangeTransferSyntax3
   TestImageChangeTransferSyntax4
+  # see below
+  TestImageChangeTransferSyntax6
+  TestImageChangeTransferSyntax7
   TestImageApplyLookupTable
   TestImageChangePlanarConfiguration
   TestCoder
@@ -27,11 +30,8 @@ SET(MSFF_TEST_SRCS
   TestUIDGenerator
   #TestUIDGenerator3
   TestPrinter
-  TestScanner
   TestSorter
-  TestIPPSorter
   TestImageReader
-  TestCopyDataSet
   TestDirectionCosines
   TestImageWriter
   #TestImageWriter2
@@ -56,6 +56,15 @@ SET(MSFF_TEST_SRCS
   TestEncapsulatedDocument
   TestSpectroscopy
   )
+
+IF(GDCM_DATA_ROOT)
+  SET(MSFF_TEST_SRCS
+      ${MSFF_TEST_SRCS}
+  TestScanner
+  TestIPPSorter
+  TestCopyDataSet
+      )
+ENDIF(GDCM_DATA_ROOT)
 
 IF(GDCM_USE_JPEGLS)
   SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
@@ -175,11 +184,20 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
         ENDIF(is_dicomdir)
         # 
-        IF(filename_name STREQUAL "ALOKA_SSD-8-MONO2-RLE-SQ.dcm")
-          SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
-        ENDIF(filename_name STREQUAL "ALOKA_SSD-8-MONO2-RLE-SQ.dcm")
       ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
+
+# Need to SET_TESTS_PROPERTIES only *after* the loop is done (test need to have been declared first)
+IF(GDCM_TEST_DCMTK)
+  IF(DCMTK_DCMDJPEG_EXECUTABLE)
+# No pixel data
+  SET_TESTS_PROPERTIES("DCMDJPEG-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
+# It is missing the very last pixel, so technically is illegal
+  SET_TESTS_PROPERTIES("DCMDRLE-ALOKA_SSD-8-MONO2-RLE-SQ.dcm" PROPERTIES WILL_FAIL TRUE)
+# No pixel data
+  SET_TESTS_PROPERTIES("DCMDRLE-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
+  ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
+ENDIF(GDCM_TEST_DCMTK)
 

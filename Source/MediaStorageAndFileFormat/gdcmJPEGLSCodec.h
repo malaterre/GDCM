@@ -26,7 +26,7 @@ class JPEGLSInternals;
  * \note codec that implement the JPEG-LS compression
  * this is an implement of ImageCodec for JPEG-LS
  */
-class JPEGLSCodec : public ImageCodec
+class GDCM_EXPORT JPEGLSCodec : public ImageCodec
 {
 public:
   JPEGLSCodec();
@@ -39,6 +39,8 @@ public:
 
   bool Decode(DataElement const &is, DataElement &os);
   bool Code(DataElement const &in, DataElement &out);
+
+  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
 private:
   unsigned long BufferLength;

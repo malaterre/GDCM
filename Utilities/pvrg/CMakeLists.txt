@@ -8,10 +8,10 @@ SET(
   io.c
   chendct.c
   leedct.c
-  lexer.c
   marker.c
   stream.c
   transform.c
+  lexer.c
 )
 
 
@@ -20,6 +20,11 @@ SET(
 #  PROPERTIES
 #  COMPILE_FLAGS -Dmain=pvrgmain
 #)
+IF(MSVC)
+ADD_DEFINITIONS(-DNOTRUNCATE)
+ELSE(MSVC)
+ADD_DEFINITIONS(-DSYSV -DNOTRUNCATE)
+ENDIF(MSVC)
 #ADD_DEFINITIONS(-DIO_DEBUG)
 #ADD_LIBRARY(pvrg ${PVRG_SRCS})
 

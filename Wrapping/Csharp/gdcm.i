@@ -13,36 +13,141 @@
 
 =========================================================================*/
 // See docs:
-// http://www.swig.org/Doc1.3/Python.html
-// http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
-// http://www.geocities.com/foetsch/python/extending_python.htm
+// http://www.swig.org/Doc1.3/CSharp.html
+// http://www.swig.org/Doc1.3/SWIGPlus.html
+// The main difference with this wrapping is that gdcm.System is now renamed
+// to gdcm.PosixEmulation. I could not figure out a way to preserve gdcm.System
+// as swig by default flatten all namespace and gdcm.System would conflict
+// with .NET 'System' namespace... fix welcome to get back gdcm.System
+// until then gdcm.PosixEmulation will remain the recommended way to access
+// gdcm.System API from C#
+
+/*
+> I want to wrap C++ code in C#. Is there a way to instruct swig to insert
+> a
+> series of "using" statements for each C# source file that gets generated?
+
+
+%pragma(csharp) moduleimports=%{
+using System;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using My.Own.Namespace;
+%}
+
+%pragma(csharp) imclassimports=%{
+using System;
+using System.Runtime.InteropServices;
+using My.Own.Namespace;
+%}
+*/
 
 %module(docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
-#include "gdcmObject.h"
-#include "gdcmTag.h"
-#include "gdcmVL.h"
-#include "gdcmVR.h"
-#include "gdcmDataElement.h"
-#include "gdcmDataSet.h"
-#include "gdcmPreamble.h"
-#include "gdcmFile.h"
-#include "gdcmReader.h"
-#include "gdcmImageReader.h"
-#include "gdcmStringFilter.h"
-#include "gdcmGlobal.h"
-#include "gdcmVR.h"
-#include "gdcmVM.h"
-#include "gdcmDicts.h"
-#include "gdcmDict.h"
-#include "gdcmDictEntry.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
+#include "gdcmObject.h"
+#include "gdcmPixelFormat.h"
+#include "gdcmMediaStorage.h"
+#include "gdcmTag.h"
+#include "gdcmPrivateTag.h"
+#include "gdcmVL.h"
+#include "gdcmVR.h"
+#include "gdcmVM.h"
+#include "gdcmObject.h"
+#include "gdcmValue.h"
+#include "gdcmByteValue.h"
+#include "gdcmDataElement.h"
+#include "gdcmItem.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmDataSet.h"
+//#include "gdcmString.h"
+#include "gdcmPreamble.h"
+#include "gdcmFile.h"
+#include "gdcmPixmap.h"
+#include "gdcmImage.h"
+#include "gdcmIconImage.h"
+#include "gdcmFragment.h"
+#include "gdcmCSAHeader.h"
+#include "gdcmPDBHeader.h"
+#include "gdcmSequenceOfFragments.h"
+#include "gdcmTransferSyntax.h"
+#include "gdcmBasicOffsetTable.h"
+//#include "gdcmLO.h"
+#include "gdcmCSAElement.h"
+#include "gdcmPDBElement.h"
+#include "gdcmFileSet.h"
+
+#include "gdcmReader.h"
+#include "gdcmImageReader.h"
+#include "gdcmWriter.h"
+#include "gdcmImageWriter.h"
+#include "gdcmStringFilter.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDict.h"
+#include "gdcmCSAHeaderDict.h"
+#include "gdcmDictEntry.h"
+#include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+//#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
+#include "gdcmAttribute.h"
+#include "gdcmAnonymizer.h"
+#include "gdcmSystem.h"
+#include "gdcmTrace.h"
+#include "gdcmUIDs.h"
+#include "gdcmSorter.h"
+#include "gdcmIPPSorter.h"
+#include "gdcmSpectroscopy.h"
+#include "gdcmPrinter.h"
+#include "gdcmDumper.h"
+#include "gdcmOrientation.h"
+#include "gdcmFiducials.h"
+#include "gdcmWaveform.h"
+#include "gdcmPersonName.h"
+#include "gdcmIconImage.h"
+#include "gdcmCurve.h"
+#include "gdcmDICOMDIR.h"
+#include "gdcmValidate.h"
+#include "gdcmApplicationEntity.h"
+#include "gdcmDictPrinter.h"
+#include "gdcmFilenameGenerator.h"
+#include "gdcmVersion.h"
+#include "gdcmFilename.h"
+#include "gdcmEnumeratedValues.h"
+#include "gdcmPatient.h"
+#include "gdcmStudy.h"
+#include "gdcmModule.h"
+#include "gdcmModules.h"
+#include "gdcmDefs.h"
+#include "gdcmIOD.h"
+#include "gdcmIODs.h"
+#include "gdcmTableEntry.h"
+#include "gdcmDefinedTerms.h"
+#include "gdcmSeries.h"
+#include "gdcmModuleEntry.h"
+#include "gdcmNestedModuleEntries.h"
+#include "gdcmIODEntry.h"
+#include "gdcmRescaler.h"
+#include "gdcmSegmentedPaletteColorLookupTable.h"
+#include "gdcmUnpacker12Bits.h"
+#include "gdcmDirectionCosines.h"
+#include "gdcmTagPath.h"
+#include "gdcmImageToImageFilter.h"
+#include "gdcmSOPClassUIDToIOD.h"
+#include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmImageApplyLookupTable.h"
+#include "gdcmSplitMosaicFilter.h"
+//#include "gdcmImageChangePhotometricInterpretation.h"
+#include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmImageFragmentSplitter.h"
+#include "gdcmDataSetHelper.h"
+#include "gdcmFileExplicitFilter.h"
+#include "gdcmImageHelper.h"
 
 using namespace gdcm;
 %}
@@ -57,6 +162,7 @@ using namespace gdcm;
 %include "std_vector.i"
 %include "std_pair.i"
 %include "std_map.i"
+%include "exception.i"
 
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
@@ -67,12 +173,12 @@ using namespace gdcm;
 #define GDCM_EXPORT
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
-//%include "gdcmMediaStorage.h"
+%include "gdcmMediaStorage.h"
 %rename(__getitem__) gdcm::Tag::operator[];
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
-  const char *__str__() {
+  const char *toString() {
     static std::string buffer;
     std::ostringstream os;
     os << *self;
@@ -80,30 +186,203 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmPrivateTag.h"
+%include "gdcmVL.h"
+%include "gdcmVR.h"
+%include "gdcmVM.h"
+%template (FilenamesType) std::vector<std::string>;
+%include "gdcmDirectory.h"
+%include "gdcmObject.h"
+%include "gdcmValue.h"
+%include "gdcmByteValue.h"
+
+// Array marshaling for arrays of primitives
+%define %cs_marshal_array(TYPE, CSTYPE)
+       %typemap(ctype)  TYPE[] "void*"
+       %typemap(imtype, inattributes="[MarshalAs(UnmanagedType.LPArray)]") TYPE[] "CSTYPE[]"
+       %typemap(cstype) TYPE[] "CSTYPE[]"
+       %typemap(in)     TYPE[] %{ $1 = (TYPE*)$input; %}
+       %typemap(csin)   TYPE[] "$csinput"
+%enddef
+
+// The following macro invocations allow you to pass arrays of primitive
+
+// types. Arrays of other things such as System.Drawing.Point are also
+// possible.
+%cs_marshal_array(bool, bool)
+%cs_marshal_array(char, byte)
+%cs_marshal_array(short, short)
+%cs_marshal_array(unsigned short, ushort)
+%cs_marshal_array(int, int)
+%cs_marshal_array(unsigned int, uint)
+%cs_marshal_array(long, int)
+%cs_marshal_array(unsigned long, uint)
+%cs_marshal_array(long long, long)
+%cs_marshal_array(unsigned long long, ulong)
+%cs_marshal_array(float, float)
+%cs_marshal_array(double, double)
+
+
+// %clear commands should be unnecessary, but do it just-in-case
+%clear char* buffer;
+%clear unsigned char* buffer;
+
+%apply char[] { const char* array }
+
 %include "gdcmDataElement.h"
+
+%clear const char* array;
+
+%include "gdcmItem.h"
+%include "gdcmSequenceOfItems.h"
 %include "gdcmDataSet.h"
+%extend gdcm::DataSet
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+    }
+};
+
 %include "gdcmPhotometricInterpretation.h"
 %include "gdcmObject.h"
 %include "gdcmLookupTable.h"
 %include "gdcmOverlay.h"
-%include "gdcmVL.h"
-%include "gdcmValue.h"
-%include "gdcmByteValue.h"
+//%include "gdcmVL.h"
+//%template (DataElementSet) std::set<gdcm::DataElement>;
 %include "gdcmPreamble.h"
+%include "gdcmTransferSyntax.h"
 %include "gdcmFileMetaInformation.h"
 %include "gdcmFile.h"
+//%include "gdcm_arrays_csharp.i"
+
+%apply char[] { char* buffer }
+
+//%apply byte OUTPUT[] { char* buffer } ;
+//%ignore gdcm::Pixmap::GetBuffer(char*) const;
+//%apply byte FIXED[] { char *buffer }
+//%csmethodmodifiers gdcm::Pixmap::GetBuffer "public unsafe";
+//%define %cs_marshal_array(TYPE, CSTYPE)
+//       %typemap(ctype)  TYPE[] "void*"
+//       %typemap(imtype, inattributes="[MarshalAs(UnmanagedType.LPArray)]") TYPE[] "CSTYPE[]"
+//       %typemap(cstype) TYPE[] "CSTYPE[]"
+//       %typemap(in)     TYPE[] %{ $1 = (TYPE*)$input; %}
+//       %typemap(csin)   TYPE[] "$csinput"
+//%enddef
+//%cs_marshal_array(char, byte)
+%include "gdcmPixmap.h"
+//%extend gdcm::Pixmap
+//{
+//  bool GetBuffer(byte[] buffer) {
+//    self->GetBuffer(buffer);
+//  }
+//};
+%clear char* buffer;
+
+
 %include "gdcmImage.h"
+%include "gdcmIconImage.h"
+%include "gdcmFragment.h"
+%include "gdcmPDBElement.h"
+%include "gdcmPDBHeader.h"
+%include "gdcmCSAElement.h"
+%include "gdcmCSAHeader.h"
+%include "gdcmSequenceOfFragments.h"
+%include "gdcmBasicOffsetTable.h"
+//%include "gdcmLO.h"
+%include "gdcmFileSet.h"
+
 %include "gdcmGlobal.h"
+
 %include "gdcmDictEntry.h"
+%include "gdcmCSAHeaderDictEntry.h"
 %include "gdcmDict.h"
+%include "gdcmCSAHeaderDict.h"
 %include "gdcmDicts.h"
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
+%include "gdcmWriter.h"
+%include "gdcmImageWriter.h"
 %template (PairString) std::pair<std::string,std::string>;
+//%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmStringFilter.h"
-%template (FilenamesType) std::vector<std::string>;
-%include "gdcmDirectory.h"
-%include "gdcmTesting.h"
 %include "gdcmUIDGenerator.h"
+//%template (ValuesType)      std::set<std::string>;
 %include "gdcmScanner.h"
+#define GDCM_STATIC_ASSERT(x)
+%include "gdcmAttribute.h"
+%include "gdcmAnonymizer.h"
 
+// System is a namespace in C#, need to rename to something different
+%rename (PosixEmulation) System; 
+%include "gdcmSystem.h"
+
+%include "gdcmTrace.h"
+%include "gdcmUIDs.h"
+//%feature("director") gdcm::IPPSorter;      
+%include "gdcmSorter.h"
+%include "gdcmIPPSorter.h"
+%include "gdcmSpectroscopy.h"
+%include "gdcmPrinter.h"
+%include "gdcmDumper.h"
+%include "gdcmOrientation.h"
+%include "gdcmFiducials.h"
+%include "gdcmWaveform.h"
+%include "gdcmPersonName.h"
+%include "gdcmIconImage.h"
+%include "gdcmCurve.h"
+%include "gdcmDICOMDIR.h"
+%include "gdcmValidate.h"
+%include "gdcmApplicationEntity.h"
+%include "gdcmDictPrinter.h"
+%include "gdcmFilenameGenerator.h"
+%include "gdcmVersion.h"
+%include "gdcmFilename.h"
+%include "gdcmEnumeratedValues.h"
+%include "gdcmPatient.h"
+%include "gdcmStudy.h"
+%include "gdcmModuleEntry.h"
+%include "gdcmNestedModuleEntries.h"
+%include "gdcmModule.h"
+%include "gdcmModules.h"
+%include "gdcmDefs.h"
+%include "gdcmIOD.h"
+%include "gdcmIODs.h"
+%include "gdcmTableEntry.h"
+%include "gdcmDefinedTerms.h"
+%include "gdcmSeries.h"
+%include "gdcmIODEntry.h"
+%include "gdcmRescaler.h"
+%include "gdcmSegmentedPaletteColorLookupTable.h"
+%include "gdcmUnpacker12Bits.h"
+
+%include "gdcmConfigure.h"
+#ifdef GDCM_BUILD_TESTING
+%include "gdcmTesting.h"
+%ignore gdcm::Testing::ComputeFileMD5(const char*, char *);
+%extend gdcm::Testing
+{
+  static const char *ComputeFileMD5(const char *filename) {
+    static char buffer[33];
+    gdcm::Testing::ComputeFileMD5(filename, buffer);
+    return buffer;
+  }
+};
+#endif
+%include "gdcmDirectionCosines.h"
+%include "gdcmTagPath.h"
+%include "gdcmImageToImageFilter.h"
+%include "gdcmSOPClassUIDToIOD.h"
+%include "gdcmImageChangeTransferSyntax.h"
+%include "gdcmImageApplyLookupTable.h"
+%include "gdcmSplitMosaicFilter.h"
+//%include "gdcmImageChangePhotometricInterpretation.h"
+%include "gdcmImageChangePlanarConfiguration.h"
+%include "gdcmImageFragmentSplitter.h"
+%include "gdcmDataSetHelper.h"
+%include "gdcmFileExplicitFilter.h"
+%template (DoubleType) std::vector<double>;
+%include "gdcmImageHelper.h"

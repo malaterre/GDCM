@@ -2,14 +2,15 @@
 # DSED
 SET(DSED_TEST_SRCS
 	TestAttribute
+	TestAttribute7
   #TestReadPatientName
   TestLO
   TestCSAElement
   #TestByteBuffer
   #TestByteValue
   TestPreamble
+  TestLCNumeric
   TestReader
-  TestReader2
   TestWriter
   TestWriter2
   TestCSAHeader
@@ -43,6 +44,13 @@ SET(DSED_TEST_SRCS
   TestElement4
   TestElement5
   )
+
+IF(GDCM_DATA_ROOT)
+SET(DSED_TEST_SRCS
+  ${DSED_TEST_SRCS}
+  TestReader2
+  )
+ENDIF(GDCM_DATA_ROOT)
 
 CHECK_INCLUDE_FILE("fcntl.h"      CMAKE_HAVE_FCNTL_H)
 CHECK_INCLUDE_FILE("sched.h"      CMAKE_HAVE_SHED_H)

@@ -19,6 +19,7 @@
  */
 #include "vtkGDCMImageReader.h"
 
+#include "vtkVersion.h"
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
 #include "vtkImageShiftScale.h"
@@ -76,7 +77,11 @@ class vtkAngleWidget;
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmImageHelper.h"
+#include "gdcmTrace.h"
+#include "gdcmVersion.h"
 
+#include <getopt.h>
 #include <assert.h>
 //----------------------------------------------------------------------------
 // vtkImageViewer2 new interface wants SetSlice, but vtkImageViewer does not have
@@ -279,6 +284,8 @@ public:
 
 };
 
+int verbose;
+
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 class vtkBalloonCallback : public vtkCommand
 {
@@ -322,7 +329,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   //reader->FileLowerLeftOn();
   reader->Update();
   //reader->Print( cout );
-  reader->GetOutput()->Print( cout );
+  if( verbose )
+    reader->GetOutput()->Print( cout );
   //reader->GetOutput(1)->Print( cout );
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   double range[2];
@@ -391,6 +399,31 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
     vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
     rep->SetImage(reader->GetIconImage());
+    if( reader->GetIconImage()->GetPointData()->GetScalars() 
+     && reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable() )
+      {
+    vtkLookupTable *lut = reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable();
+      vtkImageMapToColors *map = vtkImageMapToColors::New ();
+      map->SetInput (reader->GetIconImage());
+      map->SetLookupTable (reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable());
+      //FIXME there is no way to know the type of LUT the icon is using:
+      //if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+        {
+        map->SetOutputFormatToRGB();
+        }
+      //else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+      //  {
+      //  map->SetOutputFormatToLuminance();
+      //  }
+      map->Update();
+      //map->GetOutput()->GetScalarRange(range);
+      //viewer->SetInput( map->GetOutput() );
+      //map->GetOutput()->Print( std::cout );
+      rep->SetImage( map->GetOutput() );
+      map->Delete();
+
+      }
+
     //reader->GetIconImage()->Print( std::cout );
 
     //vtkPropCollection *pc = vtkPropCollection::New();
@@ -556,7 +589,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // Always overwriting default is not always nice looking...
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
-  std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
+  if( verbose )
+    std::cout << "Range: " << range[0] << " " << range[1] << std::endl;
 
   viewer->SetupInteractor (iren);
   int dims[3];
@@ -633,52 +667,219 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   viewer->Delete();
 }
 
+void PrintVersion()
+{
+  std::cout << "gdcmviewer: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+  //std::cout << "             VTK " << vtkVersion::GetVTKVersion() << std::endl;
+  std::cout << "            " << vtkVersion::GetVTKSourceVersion() << std::endl;
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmviewer [OPTION] filename1.dcm [filename2.dcm...]" << std::endl;
+  std::cout << "or   : gdcmviewer [OPTION] directory" << std::endl;
+  std::cout << "Display a DICOM image file.\n";
+  std::cout << "Options:" << std::endl;
+  std::cout << "     --force-rescale    force rescale." << std::endl;
+  std::cout << "     --force-spacing    force spacing." << std::endl;
+  std::cout << "  -r --recursive        Recusively descend directory." << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning    print warning info." << std::endl;
+  std::cout << "  -D --debug      print debug info." << std::endl;
+  std::cout << "  -E --error      print error info." << std::endl;
+  std::cout << "  -h --help       print help." << std::endl;
+  std::cout << "  -v --version    print version." << std::endl;
+}
+
+
 int main(int argc, char *argv[])
 {
-  //vtkMultiThreader::SetGlobalMaximumNumberOfThreads(1);
+  int c;
+  //int digit_optind = 0;
 
-  vtkStringArray *filenames = vtkStringArray::New();
-  if( argc < 2 )
+  std::vector<std::string> filenames;
+  int forcerescale = 0;
+  int forcespacing = 0;
+  int recursive = 0;
+
+  verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
+
+  while (1) {
+    //int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+    static struct option long_options[] = {
+        {"force-rescale", 0, &forcerescale, 1},
+        {"force-spacing", 0, &forcespacing, 1},
+        {"recursive", 0, &recursive, 1},
+
+// General options !
+        {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
+
+        {0, 0, 0, 0}
+    };
+
+    c = getopt_long (argc, argv, "rVWDEhv",
+      long_options, &option_index);
+    if (c == -1)
+      {
+      break;
+      }
+
+    switch (c)
+      {
+    case 0:
+        {
+        const char *s = long_options[option_index].name;
+        //printf ("option %s", s);
+        if (optarg)
+          {
+          if( option_index == 0 ) /* input */
+            {
+            assert( strcmp(s, "input") == 0 );
+            //assert( filename.empty() );
+            //filename = optarg;
+            }
+          printf (" with arg %s", optarg);
+          }
+        //printf ("\n");
+        }
+      break;
+
+    case 'r':
+      recursive = 1;
+      break;
+
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
+      break;
+
+    case '?':
+      break;
+
+    default:
+      printf ("?? getopt returned character code 0%o ??\n", c);
+      }
+  }
+
+  if (optind < argc)
     {
-    std::cerr << argv[0] << " filename1.dcm [filename2.dcm ...]\n";
+    //printf ("non-option ARGV-elements: ");
+    while (optind < argc)
+      {
+      //printf ("%s ", argv[optind]);
+      filenames.push_back( argv[optind++] );
+      }
+    //printf ("\n");
+    }
+
+  if( version )
+    {
+    //std::cout << "version" << std::endl;
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    //std::cout << "help" << std::endl;
+    PrintHelp();
+    return 0;
+    }
+
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+
+  //vtkMultiThreader::SetGlobalMaximumNumberOfThreads(1);
+  gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
+  gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
+
+  if( filenames.empty() )
+    {
+    PrintHelp();
     return 1;
     }
-  else
+  vtkStringArray *names = vtkStringArray::New();
     {
     // Is it a single directory ? If so loop over all files contained in it:
-    const char *filename = argv[1];
-    if( argc == 2 && gdcm::System::FileIsDirectory( filename ) )
+    //const char *filename = argv[1];
+    if( filenames.size() == 1 && gdcm::System::FileIsDirectory( filenames[0].c_str() ) )
       {
-      std::cout << "Loading directory: " << filename << std::endl;
-      bool recursive = false;
+      if( verbose )
+        std::cout << "Loading directory: " << filenames[0] << std::endl;
       gdcm::Directory d;
-      d.Load(filename, recursive);
+      d.Load(filenames[0].c_str(), recursive);
       gdcm::Directory::FilenamesType const &files = d.GetFilenames();
       for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
         {
-        filenames->InsertNextValue( it->c_str() );
+        names->InsertNextValue( it->c_str() );
         }
       }
     else // list of files passed directly on the cmd line:
         // discard non-existing or directory
       {
-      for(int i=1; i < argc; ++i)
+      //for(int i=1; i < argc; ++i)
+      for(std::vector<std::string>::const_iterator it = filenames.begin(); it != filenames.end(); ++it)
         {
-        filename = argv[i];
-        if( gdcm::System::FileExists( filename ) )
+        //filename = argv[i];
+        const std::string & filename = *it;
+        if( gdcm::System::FileExists( filename.c_str() ) )
           {
-          if( gdcm::System::FileIsDirectory( filename ) )
+          if( gdcm::System::FileIsDirectory( filename.c_str() ) )
             {
-            std::cerr << "Discarding directory: " << filename << std::endl;
+            if(verbose)
+              std::cerr << "Discarding directory: " << filename << std::endl;
             }
           else
             {
-            filenames->InsertNextValue( filename );
+            names->InsertNextValue( filename.c_str() );
             }
           }
         else
           {
-          std::cerr << "Discarding non existing file: " << filename << std::endl;
+          if(verbose)
+            std::cerr << "Discarding non existing file: " << filename << std::endl;
           }
         }
       }
@@ -686,9 +887,9 @@ int main(int argc, char *argv[])
     }
 
   vtkImageColorViewer *viewer = vtkImageColorViewer::New();
-  ExecuteViewer<vtkImageColorViewer>(viewer, filenames);
+  ExecuteViewer<vtkImageColorViewer>(viewer, names);
 
-  filenames->Delete();
+  names->Delete();
 
   return 0;
 }

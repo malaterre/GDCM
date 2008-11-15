@@ -184,7 +184,7 @@ public:
     return os;
     }
 
-protected:
+//protected:
   void Print(std::ostream &os) const {
     os << "\t(" << SequenceLengthField << ")\n";
     ItemVector::const_iterator it =

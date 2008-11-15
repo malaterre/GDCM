@@ -63,22 +63,68 @@ inline int int_ceildivpow2(int a, int b) {
 class JPEG2000Internals
 {
 public:
+  JPEG2000Internals()
+    {
+    memset(&coder_param, 0, sizeof(coder_param));
+    opj_set_default_encoder_parameters(&coder_param);
+    }
+
+  opj_cparameters coder_param;
 };
+
+void JPEG2000Codec::SetRate(unsigned int idx, double rate)
+{
+  Internals->coder_param.tcp_rates[idx] = rate;
+  if( Internals->coder_param.tcp_numlayers <= idx )
+    {
+    Internals->coder_param.tcp_numlayers = idx + 1;
+    }
+				Internals->coder_param.cp_disto_alloc = 1;
+}
+double JPEG2000Codec::GetRate(unsigned int idx ) const
+{
+  return Internals->coder_param.tcp_rates[idx];
+}
+
+void JPEG2000Codec::SetQuality(unsigned int idx, double q)
+{
+  Internals->coder_param.tcp_distoratio[idx] = q;
+  if( Internals->coder_param.tcp_numlayers <= idx )
+    {
+    Internals->coder_param.tcp_numlayers = idx + 1;
+    }
+				Internals->coder_param.cp_fixed_quality = 1;
+}
+double JPEG2000Codec::GetQuality(unsigned int idx) const
+{
+  return Internals->coder_param.tcp_distoratio[idx];
+}
+
+void JPEG2000Codec::SetTileSize(unsigned int tx, unsigned int ty)
+{
+  Internals->coder_param.cp_tdx = tx;
+  Internals->coder_param.cp_tdy = ty;
+  Internals->coder_param.tile_size_on = true;
+}
+
+void JPEG2000Codec::SetNumberOfResolutions(unsigned int nres)
+{
+  Internals->coder_param.numresolution = nres;
+}
+
+void JPEG2000Codec::SetReversible(bool res)
+{
+  Internals->coder_param.irreversible = !res;
+}
 
 JPEG2000Codec::JPEG2000Codec()
 {
   Internals = new JPEG2000Internals;
-  NumberOfDimensions = 0;
 }
 
 JPEG2000Codec::~JPEG2000Codec()
 {
   delete Internals;
-}
-
-void JPEG2000Codec::SetNumberOfDimensions(unsigned int dim)
-{
-  NumberOfDimensions = dim;
 }
 
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
@@ -117,7 +163,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     delete[] buffer;
     std::stringstream os;
     bool r = Decode(is, os);
-    assert( r );
+    if(!r) return false;
     out = in;
     std::string str = os.str();
     out.SetByteValue( &str[0], str.size() );
@@ -148,6 +194,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       is.write(mybuffer, bv->GetLength());
       delete[] mybuffer;
       bool r = Decode(is, os);
+      if(!r) return false;
       assert( r == true );
       }
     std::string str = os.str();
@@ -175,6 +222,18 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
   int file_length = buf_size;
+
+  // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
+  // so we need to make sure to remove it:
+  // See for example: DX_J2K_0Padding.dcm
+  //             and D_CLUNIE_CT1_J2KR.dcm
+    //  Marker 0xffd9 EOI End of Image (JPEG 2000 EOC End of codestream)
+    // gdcmData/D_CLUNIE_CT1_J2KR.dcm contains a trailing 0xFF which apparently is ok...
+    //assert( src[file_length-1] == 0xd9 );
+  while( src[file_length-1] != 0xd9 )
+    {
+    file_length--;
+    }
 
   /* configure the event callbacks (not required) */
   memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
@@ -314,23 +373,38 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 }
 
 template<typename T>
-void rawtoimage_fill(T *inputbuffer, int w, int h, int numcomps, opj_image_t *image)
+void rawtoimage_fill(T *inputbuffer, int w, int h, int numcomps, opj_image_t *image, int pc)
 {
   T *p = inputbuffer;
-  for (int i = 0; i < w * h; i++)
+  if( pc )
     {
     for(int compno = 0; compno < numcomps; compno++)
       {
-      /* compno : 0 = GREY, (0, 1, 2) = (R, G, B) */
-      image->comps[compno].data[i] = *p;
-      ++p;
+      for (int i = 0; i < w * h; i++)
+        {
+        /* compno : 0 = GREY, (0, 1, 2) = (R, G, B) */
+        image->comps[compno].data[i] = *p;
+        ++p;
+        }
+      }
+    }
+  else
+    {
+    for (int i = 0; i < w * h; i++)
+      {
+      for(int compno = 0; compno < numcomps; compno++)
+        {
+        /* compno : 0 = GREY, (0, 1, 2) = (R, G, B) */
+        image->comps[compno].data[i] = *p;
+        ++p;
+        }
       }
     }
 }
 
 opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   int fragment_size, int image_width, int image_height, int sample_pixel,
-  int bitsallocated, int sign, int quality)
+  int bitsallocated, int sign, int quality, int pc)
 {
   (void)quality;
   int w, h;
@@ -350,8 +424,13 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     numcomps = 3;
     color_space = CLRSPC_SRGB;
     }
+  if( bitsallocated % 8 != 0 )
+    {
+    return 0;
+    }
   assert( bitsallocated % 8 == 0 );
-  assert( fragment_size == image_height * image_width * numcomps * (bitsallocated/8) );
+  // eg. fragment_size == 63532 and 181 * 117 * 3 * 8 == 63531 ...
+  assert( ((fragment_size + 1)/2 ) * 2 == ((image_height * image_width * numcomps * (bitsallocated/8) + 1)/ 2 )* 2 );
   int subsampling_dx = parameters->subsampling_dx;
   int subsampling_dy = parameters->subsampling_dy;
 
@@ -390,33 +469,33 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     {
     if( sign )
       {
-      rawtoimage_fill<int8_t>((int8_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<int8_t>((int8_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     else
       {
-      rawtoimage_fill<uint8_t>((uint8_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<uint8_t>((uint8_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     }
   else if (bitsallocated <= 16)
     {
     if( sign )
       {
-      rawtoimage_fill<int16_t>((int16_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<int16_t>((int16_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     else
       {
-      rawtoimage_fill<uint16_t>((uint16_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<uint16_t>((uint16_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     }
   else if (bitsallocated <= 32)
     {
     if( sign )
       {
-      rawtoimage_fill<int32_t>((int32_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<int32_t>((int32_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     else
       {
-      rawtoimage_fill<uint32_t>((uint32_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<uint32_t>((uint32_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     }
   else
@@ -481,13 +560,24 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     event_mgr.info_handler = info_callback;
 
     /* set encoding parameters to default values */
-    memset(&parameters, 0, sizeof(parameters));
-    opj_set_default_encoder_parameters(&parameters);
+    //memset(&parameters, 0, sizeof(parameters));
+    //opj_set_default_encoder_parameters(&parameters);
+
+    memcpy(&parameters, &(Internals->coder_param), sizeof(parameters));
+
+    if ((parameters.cp_disto_alloc || parameters.cp_fixed_alloc || parameters.cp_fixed_quality)
+      && (!(parameters.cp_disto_alloc ^ parameters.cp_fixed_alloc ^ parameters.cp_fixed_quality))) {
+      fprintf(stderr, "Error: options -r -q and -f cannot be used together !!\n");
+      return false;
+    }				/* mod fixed_quality */
 
     /* if no rate entered, lossless by default */
-    parameters.tcp_rates[0] = 0;
-    parameters.tcp_numlayers = 1;
-    parameters.cp_disto_alloc = 1;
+    if (parameters.tcp_numlayers == 0) 
+      {
+      parameters.tcp_rates[0] = 0;
+      parameters.tcp_numlayers = 1;
+      parameters.cp_disto_alloc = 1;
+      }
 
     if(parameters.cp_comment == NULL) {
       const char comment[] = "Created by GDCM/OpenJPEG version 1.0";
@@ -504,9 +594,9 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     image = rawtoimage((char*)inputdata, &parameters, 
       static_cast<int>( inputlength ), 
       image_width, image_height,
-      sample_pixel, bitsallocated, sign, quality);
+      sample_pixel, bitsallocated, sign, quality, this->GetPlanarConfiguration() );
     if (!image) {
-      return 1;
+      return false;
     }
 
     /* encode the destination image */
@@ -534,7 +624,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     if (!bSuccess) {
       opj_cio_close(cio);
       fprintf(stderr, "failed to encode image\n");
-      return 1;
+      return false;
     }
     codestream_length = cio_tell(cio);
 
@@ -707,7 +797,30 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     else if( image->numcomps == 3 )
       {
       assert( image->color_space == 0 );
-      PI = PhotometricInterpretation::RGB;
+      //PI = PhotometricInterpretation::RGB;
+/*
+8.2.4 JPEG 2000 IMAGE COMPRESSION
+The JPEG 2000 bit stream specifies whether or not a reversible or irreversible multi-component (color)
+transformation, if any, has been applied. If no multi-component transformation has been applied, then the
+components shall correspond to those specified by the DICOM Attribute Photometric Interpretation
+(0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation has been applied then
+the DICOM Attribute Photometric Interpretation (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1
+irreversible multi-component transformation has been applied then the DICOM Attribute Photometric
+Interpretation (0028,0004) shall be YBR_ICT.
+Notes: 1. For example, single component may be present, and the Photometric Interpretation (0028,0004) may
+be MONOCHROME2.
+PS 3.5-2008
+Page 51
+- Standard -
+2. Though it would be unusual, would not take advantage of correlation between the red, green and blue
+components, and would not achieve effective compression, a Photometric Interpretation of RGB could
+be specified as long as no multi-component transformation was specified by the JPEG 2000 bit stream.
+3. Despite the application of a multi-component color transformation and its reflection in the Photometric
+Interpretation attribute, the ¿color space¿ remains undefined. There is currently no means of conveying
+¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC profiles. Note in particular that
+the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated in DICOM.
+*/
+      PI = PhotometricInterpretation::YBR_RCT;
       this->PF.SetSamplesPerPixel( 3 );
       }
     else

@@ -1529,7 +1529,7 @@ This file was generated using the following commands:
   <entry group="0040" element="a504" vr="SQ" vm="1" name="Content Template Sequence"/>
   <entry group="0040" element="a525" vr="SQ" vm="1" name="Identical Documents Sequence"/>
   <entry group="0040" element="a730" vr="SQ" vm="1" name="Content Sequence"/>
-  <entry group="0040" element="b020" vr="SQ" vm="1" name="Annotation Sequence"/>
+  <entry group="0040" element="b020" vr="SQ" vm="1" name="Waveform Annotation Sequence"/>
   <entry group="0040" element="db00" vr="CS" vm="1" name="Template Identifier"/>
   <entry group="0040" element="db06" vr="DT" vm="1" retired="true" name="Template Version"/>
   <entry group="0040" element="db07" vr="DT" vm="1" retired="true" name="Template Local Version"/>

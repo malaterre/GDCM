@@ -30,6 +30,10 @@ namespace gdcm
  * \note This implementation provide a cross platform implementation
  * for manipulating directores: basically traversing directories
  * and harvesting files
+ *
+ * \note 
+ * will not take into account unix type hidden file
+ * recursive option will not look into UNIX type hidden directory (those starting with a .)
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Directory

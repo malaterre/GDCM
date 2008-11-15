@@ -181,13 +181,20 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   else if( ValueLengthField.IsUndefined() )
     {
-    if( VRField == VR::UN )
+    if( TagField == Tag(0x7fe0,0x0010) )
+      {
+      // Ok this is Pixel Data fragmented...
+      assert( VRField & VR::OB_OW || VRField == VR::UN );
+      ValueField = new SequenceOfFragments;
+      }
+    else
       {
       // Support cp246 conforming file:
       // Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm (illegal)
       // vs
       // undefined_length_un_vr.dcm
       assert( TagField != Tag(0x7fe0,0x0010) );
+      assert( VRField == VR::UN );
       ValueField = new SequenceOfItems;
       ValueField->SetLength(ValueLengthField); // perform realloc
       try
@@ -208,13 +215,6 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
         throw pe;
         }
       return is;
-      }
-    else
-      {
-      // Ok this is Pixel Data fragmented...
-      assert( TagField == Tag(0x7fe0,0x0010) );
-      assert( VRField & VR::OB_OW );
-      ValueField = new SequenceOfFragments;
       }
     }
   else
@@ -278,6 +278,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     assert( VRField & VR::VRBINARY );
     unsigned int vrsize = VRField.GetSize();
     assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+    if(VRField==VR::AT) vrsize = 2;
     switch(vrsize)
       {
     case 1:
@@ -301,6 +302,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( TagField == Tag(0x7fe0,0x0010) )
       {
+      // BUG this should be moved to the ImageReader class, only this class knows
+      // what 7fe0 actually is, and should tolerate partial Pixel Data element...
       // PMS-IncompletePixelData.dcm
       gdcmWarningMacro( "Incomplete Pixel Data found, use file at own risk" );
       is.clear();
@@ -408,7 +411,8 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
-    else if( GetSequenceOfItems() )
+    //else if( GetSequenceOfItems() )
+    else if( dynamic_cast<const SequenceOfItems*>(&GetValue()) )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       const SequenceOfItems *sq = GetSequenceOfItems();
@@ -423,7 +427,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {
-      assert( GetSequenceOfItems() );
+      assert( TagField == Tag(0x7fe0,0x0010) || GetSequenceOfItems() );
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -457,6 +461,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
         assert( VRField & VR::VRBINARY );
         unsigned int vrsize = VRField.GetSize();
         assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+        if(VRField==VR::AT) vrsize = 2;
         switch(vrsize)
           {
         case 1:

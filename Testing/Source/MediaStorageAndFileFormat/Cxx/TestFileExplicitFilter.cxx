@@ -26,6 +26,7 @@ int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose 
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
+    std::cerr << "could not read: " << filename << std::endl;
     return 1;
     }
   //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
@@ -65,11 +66,13 @@ int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose 
   bool b1 = gdcm::Testing::ComputeFileMD5(filename, digest1);
   if( !b1 )
     {
+    std::cerr << "Could not compute md5:" << filename << std::endl;
     return 1;
     }
   bool b2 = gdcm::Testing::ComputeFileMD5(outfilename.c_str(), digest2);
   if( !b2 )
     {
+    std::cerr << "Could not compute md5:" << outfilename << std::endl;
     return 1;
     }
   if( strcmp(digest1, digest2 ) == 0 )
@@ -79,8 +82,11 @@ int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose 
     }
   else
     {
+  if(verbose)
+{
     std::cerr << "input file contained wrong VR: " << filename << std::endl;
     std::cerr << "see: " << outfilename << std::endl;
+}
     }
 
   return 0;

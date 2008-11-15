@@ -121,6 +121,8 @@ typedef enum {
 
   MediaStorage(MSType type = MS_END):MSField(type) {}
 
+  /// Returns whether DICOM has a Pixel Data element (7fe0,0010)
+  /// \warning MRSpectroscopyStorage could be image but are not 
   static bool IsImage(MSType ts);
 
   operator MSType () const { return MSField; }

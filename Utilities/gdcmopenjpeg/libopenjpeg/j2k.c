@@ -29,6 +29,7 @@
  */
 
 #include "opj_includes.h"
+#include <assert.h>
 
 /** @defgroup J2K J2K - JPEG-2000 codestream reader/writer */
 /*@{*/
@@ -525,6 +526,11 @@ static void j2k_read_cod(opj_j2k_t *j2k) {
 	tcp->prg = (OPJ_PROG_ORDER)cio_read(cio, 1);		/* SGcod (A) */
 	tcp->numlayers = cio_read(cio, 2);	/* SGcod (B) */
 	tcp->mct = cio_read(cio, 1);		/* SGcod (C) */
+
+  if( tcp->mct )
+    {
+    assert( image->numcomps == 3);
+    }
 	
 	pos = cio_tell(cio);
 	for (i = 0; i < image->numcomps; i++) {
@@ -1239,7 +1245,7 @@ opj_image_t* j2k_decode(opj_j2k_t *j2k, opj_cio_t *cio) {
 		int id = cio_read(cio, 2);
 		if (id >> 8 != 0xff) {
 			opj_image_destroy(image);
-			opj_event_msg(cinfo, EVT_ERROR, "%.8x: expected a marker instead of %x\n", cio_tell(cio) - 2, id);
+			opj_event_msg(cinfo, EVT_ERROR, "%x: expected a marker instead of %x\n", cio_tell(cio) - 2, id);
 			return 0;
 		}
 		e = j2k_dec_mstab_lookup(id);

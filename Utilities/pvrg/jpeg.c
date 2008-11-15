@@ -29,6 +29,7 @@ This file contains the main calling routines for the JPEG coder.
 /* Include files. */
 
 #include "tables.h"
+#include "marker.h"
 #include "globals.h"
 #ifdef SYSV
 #include <sys/fcntl.h>
@@ -126,7 +127,7 @@ int main(argc,argv)
      int argc;
      char **argv;
 {
-  BEGIN("main");
+  BEGIN("main")
   int i,ComponentIndex;
   int Oracle=0;     /* Oracle means that we use the lexer interactively */
 
@@ -338,7 +339,7 @@ EFUNC*/
 
 static void JpegEncodeFrame()
 {
-  BEGIN("JpegEncodeFrame");
+  BEGIN("JpegEncodeFrame")
   int i,CurrentComponent;
 
   CurrentComponent=0;           /* Write start of image, start of frame */
@@ -433,7 +434,7 @@ EFUNC*/
 
 void JpegQuantizationFrame()
 {
-  BEGIN("JpegQuantizationFrame");
+  BEGIN("JpegQuantizationFrame")
   int i;
 
   if (CFrame->Q)                    /* if Q  rescale quantization matrices */
@@ -469,7 +470,7 @@ EFUNC*/
 
 void JpegDefaultHuffmanScan()
 {
-  BEGIN("JpegDefaultScan");
+  BEGIN("JpegDefaultScan")
   int i;
 
   if (CFrame->DataPrecision>8)
@@ -527,7 +528,7 @@ EFUNC*/
 
 void JpegFrequencyScan()
 {
-  BEGIN("JpegFrequencyScan");
+  BEGIN("JpegFrequencyScan")
   int i,j,h,v,dohf,dovf;
   int input[64],output[64];
   int DCTBound,DCTShift;
@@ -596,7 +597,7 @@ EFUNC*/
 void JpegCustomScan(flags)
      int flags;
 {
-  BEGIN("JpegCustomScan");
+  BEGIN("JpegCustomScan")
   int i,Sumbits;
   
   if ((GetFlag(CImage->JpegMode,J_FULLHUFFMAN)) ||
@@ -721,7 +722,7 @@ EFUNC*/
 
 void JpegEncodeScan()
 {
-  BEGIN("JpegEncodeScan");
+  BEGIN("JpegEncodeScan")
   int i,j,h,v,dohf,dovf;
   int input[64],output[64];
   int DCTBound,DCTShift;
@@ -828,7 +829,7 @@ EFUNC*/
 
 void JpegLosslessFrequencyScan()
 {
-  BEGIN("JpegLosslessFrequencyScan");
+  BEGIN("JpegLosslessFrequencyScan")
   int x,y,j,h,v,px;
   int height,width,horfreq,value;
   int MaxElem,CurrentElem,NumberElem;
@@ -1044,7 +1045,7 @@ EFUNC*/
 
 void JpegLosslessEncodeScan()
 {
-  BEGIN("JpegEncodeLosslessScan");
+  BEGIN("JpegEncodeLosslessScan")
   int x,y,j,h,v,px;
   int height,width,horfreq,value;
   int MaxElem,CurrentElem,NumberElem;
@@ -1285,7 +1286,7 @@ EFUNC*/
 
 static void JpegDecodeFrame()
 {
-  BEGIN("JpegDecodeFrame");
+  BEGIN("JpegDecodeFrame")
   int i;
   
   sropen(CImage->StreamFileName,0);   /* Zero index */
@@ -1357,7 +1358,7 @@ EFUNC*/
 
 static void JpegLosslessDecodeScan()
 {
-  BEGIN("JpegLosslessDecodeScan");
+  BEGIN("JpegLosslessDecodeScan")
   int j,v,h,value,px;
   int height,horfreq,width;
   int MaxElem,CurrentElem,NumberElem;
@@ -1606,7 +1607,7 @@ EFUNC*/
 
 static void JpegDecodeScan()
 {
-  BEGIN("JpegDecodeScan");
+  BEGIN("JpegDecodeScan")
   int j,v,h,dovf,dohf;
   int input[64],output[64];
   int IDCTBound,IDCTShift;
@@ -1722,10 +1723,10 @@ EFUNC*/
 
 void PrintImage()
 {
-  BEGIN("PrintImage");
+  BEGIN("PrintImage")
   int i;
 
-  printf("*** Image ID: %x ***\n",CImage);
+  printf("*** Image ID: %p ***\n",(void*)CImage); /* %p should work ... */
   if (CImage)
     {
       if (CImage->StreamFileName)
@@ -1772,17 +1773,17 @@ EFUNC*/
 
 void PrintFrame()
 {
-  BEGIN("PrintFrame");
+  BEGIN("PrintFrame")
   int i;
 
-  printf("*** Frame ID: %x *** (TYPE: %d)\n",CFrame,CFrame->Type);
+  printf("*** Frame ID: %p *** (TYPE: %d)\n",(void*)CFrame,CFrame->Type);
   if (CFrame)
     {
       printf("DataPrecision: %d  ResyncInterval: %d\n",
 	     CFrame->DataPrecision,CFrame->ResyncInterval);
       printf("Height: %d   Width: %d\n",
 	     CFrame->GlobalHeight,CFrame->GlobalWidth);
-      printf("BufferSize: %d  Image: %x\n",CFrame->BufferSize,CFrame->Image);
+      printf("BufferSize: %d  Image: %p\n",CFrame->BufferSize,(void*)CFrame->Image);
       printf("NumberComponents %d\n",
 	     CFrame->GlobalNumberComponents);
       for(i=0;i<CFrame->GlobalNumberComponents;i++)
@@ -1810,10 +1811,10 @@ EFUNC*/
 
 void PrintScan()
 {
-  BEGIN("PrintScan");
+  BEGIN("PrintScan")
   int i;
 
-  printf("*** Scan ID: %x ***\n",CScan);
+  printf("*** Scan ID: %p ***\n",(void*)CScan);
   if (CScan)
     {
       printf("NumberComponents %d\n",
@@ -1824,8 +1825,8 @@ void PrintScan()
 		 i,CScan->ci[i]);
 	  printf("DC Huffman Table: %d  AC Huffman Table: %d\n",
 		 CScan->td[i],CScan->ta[i]);
-	  printf("LastDC: %d  Iob: %x\n",
-		 *(CScan->LastDC[i]),CScan->Iob[i]);
+	  printf("LastDC: %d  Iob: %p\n",
+		 *(CScan->LastDC[i]),(void*)CScan->Iob[i]);
 	}
       printf("NumberACSend: %d  NumberDCSend: %d  NumberQSend: %d\n",
 	     CScan->NumberACTablesSend,
@@ -1844,7 +1845,7 @@ EFUNC*/
 
 void MakeImage()
 {
-  BEGIN("MakeImage");
+  BEGIN("MakeImage")
 
   if (!(CImage = MakeStructure(IMAGE)))
     {
@@ -1872,7 +1873,7 @@ EFUNC*/
 
 void MakeFrame()
 {
-  BEGIN("MakeFrame");
+  BEGIN("MakeFrame")
   int i;
 
   if (!(CFrame = MakeStructure(FRAME)))
@@ -1914,7 +1915,7 @@ EFUNC*/
 
 void MakeScanFrequency()
 {
-  BEGIN("MakeScanFrequency");
+  BEGIN("MakeScanFrequency")
   int i;
 
   for(i=0;i<MAXIMUM_SOURCES;i++)
@@ -1949,7 +1950,7 @@ EFUNC*/
 
 void MakeScan()
 {
-  BEGIN("MakeScan");
+  BEGIN("MakeScan")
   int i;
 
   if (!(CScan = MakeStructure(SCAN)))
@@ -1987,7 +1988,7 @@ EFUNC*/
 
 void MakeConsistentFileNames()
 {
-  BEGIN("MakeConsistentFileNames");
+  BEGIN("MakeConsistentFileNames")
   int i;
 
   for(i=0;i<CScan->NumberComponents;i++)
@@ -2019,7 +2020,7 @@ EFUNC*/
 
 void CheckValidity()
 {
-  BEGIN("CheckValidity");
+  BEGIN("CheckValidity")
   int i;
 
   ErrorValue = 0;           /* Check if within internal specs */
@@ -2085,7 +2086,7 @@ EFUNC*/
 
 int CheckBaseline()
 {
-  BEGIN("CheckBaseline");
+  BEGIN("CheckBaseline")
   int i;
 
   ErrorValue = 0;         /* Check for JPEG specs */
@@ -2125,7 +2126,7 @@ EFUNC*/
 
 void ConfirmFileSize()
 {
-  BEGIN("ConfirmFileSize");
+  BEGIN("ConfirmFileSize")
   int i,FileSize;
   FILE *test;
 
@@ -2188,7 +2189,7 @@ EFUNC*/
 
 static void Help()
 {
-  BEGIN("Help");
+  BEGIN("Help")
 
   printf("jpeg -iw ImageWidth -ih ImageHeight [-JFIF] [-q(l) Q-Factor]\n");
   printf("     [-a] [-b] [-d] [-k predictortype] [-n] [-o] [-y] [-z]\n");

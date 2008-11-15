@@ -448,6 +448,11 @@ void ImageHelper::SetForceRescaleInterceptSlope(bool b)
   ForceRescaleInterceptSlope = b;
 }
 
+bool ImageHelper::GetForceRescaleInterceptSlope()
+{
+  return ForceRescaleInterceptSlope;
+}
+
 void ImageHelper::SetForcePixelSpacing(bool b)
 {
   ForcePixelSpacing = b;
@@ -478,7 +483,9 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   interceptslope.resize( 2 );
   interceptslope[0] = 0;
   interceptslope[1] = 1;
-  if( ms == MediaStorage::CTImageStorage || ForceRescaleInterceptSlope )
+  if( ms == MediaStorage::CTImageStorage || ms == MediaStorage::SecondaryCaptureImageStorage ||
+    ForceRescaleInterceptSlope 
+  )
     {
     Attribute<0x0028,0x1052> at1;
     bool intercept = ds.FindDataElement(at1.GetTag());
@@ -575,13 +582,14 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0xffff,0xffff); // FIXME
     break;
   default:
-    gdcmWarningMacro( "Do not handle: " << ms );
-    //abort();
+    gdcmDebugMacro( "Do not handle: " << ms );
     t = Tag(0xffff,0xffff);
     break;
     }
 
-  if( ForcePixelSpacing )
+  // should only override unless Modality set it already
+  // basically only Secondary Capture should reach that point
+  if( ForcePixelSpacing && t == Tag(0xffff,0xffff) )
     {
     t = Tag(0x0028,0x0030);
     }
@@ -642,13 +650,12 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
     t = Tag(0xffff,0xffff);
     break;
   default:
-    gdcmWarningMacro( "Do not handle Z spacing for: " << ms );
+    gdcmDebugMacro( "Do not handle Z spacing for: " << ms );
     t = Tag(0xffff,0xffff);
-    //abort();
     break;
     }
 
-  if( ForcePixelSpacing )
+  if( ForcePixelSpacing && t == Tag(0xffff,0xffff) )
     {
     t = Tag(0x0018,0x0088);
     }
@@ -783,8 +790,9 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
   else if( ds.FindDataElement( Tag(0x0028,0x0009) ) ) // Frame Increment Pointer
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028,0x0009) );
-    gdcm::Attribute<0x0028,0x0009> at;
+    gdcm::Attribute<0x0028,0x0009,VR::AT,VM::VM1> at;
     at.SetFromDataElement( de );
+    assert( ds.FindDataElement( at.GetValue() ) );
     if( ds.FindDataElement( at.GetValue() ) )
       {
 /*
@@ -852,7 +860,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -874,7 +882,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -990,7 +998,7 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
 
     if( sqi->GetNumberOfItems() < itemidx )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1012,7 +1020,7 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1142,7 +1150,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1164,7 +1172,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1198,7 +1206,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 {
   MediaStorage ms;
-  // SetFromFile is required here, SetFromDataSet is not enought for all cases
+  // SetFromFile is required here, SetFromDataSet is not enough for all cases
   ms.SetFromFile(f);
   assert( MediaStorage::IsImage( ms ) );
   DataSet &ds = f.GetDataSet();
@@ -1244,7 +1252,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1266,7 +1274,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }

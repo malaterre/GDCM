@@ -109,7 +109,7 @@ void ReferenceDct(matrix,newmatrix)
      int *matrix;
      int *newmatrix;
 {
-  BEGIN("ReferenceDct");
+  BEGIN("ReferenceDct")
   int *mptr;
   double *sptr,*dptr;
   double sourcematrix[BLOCKSIZE],destmatrix[BLOCKSIZE];
@@ -150,7 +150,7 @@ static void DoubleReferenceDct1D(ivect,ovect)
      double *ivect;
      double *ovect;
 {
-  BEGIN("DoubleReferenceDct1D");
+  BEGIN("DoubleReferenceDct1D")
   double *mptr,*iptr,*optr;
 
   for(mptr=DctMatrix,optr=ovect;optr<ovect+BLOCKWIDTH;optr++)
@@ -174,7 +174,7 @@ void ReferenceIDct(matrix,newmatrix)
      int *matrix;
      int *newmatrix;
 {
-  BEGIN("ReferenceIDct");
+  BEGIN("ReferenceIDct")
   int *mptr;
   double *sptr,*dptr;
   double sourcematrix[BLOCKSIZE],destmatrix[BLOCKSIZE];
@@ -214,7 +214,7 @@ static void DoubleReferenceIDct1D(ivect,ovect)
      double *ivect;
      double *ovect;
 {
-  BEGIN("DoubleReferenceIDct1D");
+  BEGIN("DoubleReferenceIDct1D")
   double *mptr,*iptr,*optr;
 
   for(mptr = IDctMatrix,optr=ovect;optr<ovect+BLOCKWIDTH;optr++)
@@ -237,7 +237,7 @@ void TransposeMatrix(matrix,newmatrix)
      int *matrix;
      int *newmatrix;
 {
-  BEGIN("TransposeMatrix");
+  BEGIN("TransposeMatrix")
   int *tptr;
 
   for(tptr=transpose_index;tptr<transpose_index+BLOCKSIZE;tptr++)
@@ -257,7 +257,7 @@ static void DoubleTransposeMatrix(matrix,newmatrix)
      double *matrix;
      double *newmatrix;
 {
-  BEGIN("DoubleTransposeMatrix");
+  BEGIN("DoubleTransposeMatrix")
   int *tptr;
 
   for(tptr=transpose_index;tptr<transpose_index+BLOCKSIZE;tptr++)
@@ -276,7 +276,7 @@ void Quantize(matrix,qmatrix)
      int *matrix;
      int *qmatrix;
 {
-  BEGIN("Quantize");
+  BEGIN("Quantize")
   int *mptr;
 
   if (!qmatrix)
@@ -311,7 +311,7 @@ void IQuantize(matrix,qmatrix)
      int *matrix;
      int *qmatrix;
 {
-  BEGIN("IQuantize");
+  BEGIN("IQuantize")
   int *mptr;
 
   if (!qmatrix)
@@ -339,7 +339,7 @@ void PreshiftDctMatrix(matrix,shift)
      int *matrix;
      int shift;
 {
-  BEGIN("PreshiftDctMatrix");
+  BEGIN("PreshiftDctMatrix")
   int *mptr;
 
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++) {*mptr -= shift;}
@@ -356,7 +356,7 @@ void PostshiftIDctMatrix(matrix,shift)
      int *matrix;
      int shift;
 {
-  BEGIN("PostshiftIDctMatrix");
+  BEGIN("PostshiftIDctMatrix")
   int *mptr;
 
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++) {*mptr += shift;}
@@ -373,7 +373,7 @@ void BoundDctMatrix(matrix,Bound)
      int *matrix;
      int Bound;
 {
-  BEGIN("BoundDctMatrix");
+  BEGIN("BoundDctMatrix")
   int *mptr;
 
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++)
@@ -396,7 +396,7 @@ void BoundIDctMatrix(matrix,Bound)
      int *matrix;
      int Bound;
 {
-  BEGIN("BoundIDctMatrix");
+  BEGIN("BoundIDctMatrix")
   int *mptr;
 
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++)
@@ -417,7 +417,7 @@ void IZigzagMatrix(imatrix,omatrix)
      int *imatrix;
      int *omatrix;
 {
-  BEGIN("IZigzagMatrix");
+  BEGIN("IZigzagMatrix")
   int *tptr;
 
   for(tptr=zigzag_index;tptr<zigzag_index+BLOCKSIZE;tptr++)
@@ -438,7 +438,7 @@ void ZigzagMatrix(imatrix,omatrix)
      int *imatrix;
      int *omatrix;
 {
-  BEGIN("ZigzagMatrix");
+  BEGIN("ZigzagMatrix")
   int *tptr;
 
   for(tptr=zigzag_index;tptr<zigzag_index+BLOCKSIZE;tptr++)
@@ -461,7 +461,7 @@ int *ScaleMatrix(Numerator,Denominator,LongFlag,Matrix)
      int LongFlag;
      int *Matrix;
 {
-  BEGIN("ScaleMatrix");
+  BEGIN("ScaleMatrix")
   int *Temp,*tptr;
   int Limit;
 
@@ -492,7 +492,7 @@ EFUNC*/
 void PrintMatrix(matrix)
      int *matrix;
 {
-  BEGIN("PrintMatrix");
+  BEGIN("PrintMatrix")
   int i,j;
 
   if (matrix)
@@ -516,7 +516,7 @@ EFUNC*/
 void ClearMatrix(matrix)
      int *matrix;
 {
-  BEGIN("ClearMatrix");
+  BEGIN("ClearMatrix")
   int *mptr;
 
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++) {*mptr = 0;}

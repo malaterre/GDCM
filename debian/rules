@@ -25,8 +25,12 @@ ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 else
 	CFLAGS += -O2
 endif
-
 export CFLAGS
+
+# set the number of build jobs
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+        JOBS := -j$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+endif
 
 SRC	:= $(CURDIR)
 BUILD	:= $(CURDIR)/debian/build
@@ -44,6 +48,7 @@ debian/configure-python%-stamp:
 		-DCMAKE_C_COMPILER="/usr/bin/cc" \
 		-DCMAKE_C_FLAGS="-g -Wall -O2" \
 		-DCMAKE_SKIP_RPATH=ON \
+		-DGDCM_NO_EXECUTABLE_PROPERTIES=ON \
 		-DCMAKE_VERBOSE_MAKEFILE=ON \
 		-DGDCM_BUILD_APPLICATIONS=ON \
 		-DGDCM_BUILD_SHARED_LIBS=ON \
@@ -65,7 +70,7 @@ debian/build-stamp: debian/configure-stamp $(PYVERS:%=debian/build-python%-stamp
 
 debian/build-python%-stamp: 
 	dh_testdir
-	$(MAKE) -j4 -C $(BUILD)-python$*
+	$(MAKE) $(JOBS) -C $(BUILD)-python$*
 	-(cd $(BUILD)-python$* && LD_LIBRARY_PATH=$(BUILD)-python$*/gdcm ctest --force-new-ctest-process -V)
 	touch $@
 
@@ -85,7 +90,7 @@ install-common:
 	dh_installdirs
 
 install-python%:
-	$(MAKE) -j4 -C $(BUILD)-python$* install DESTDIR=$(TARGET)
+	$(MAKE) $(JOBS) -C $(BUILD)-python$* install DESTDIR=$(TARGET)
 
 # This single target is used to build all the packages, all at once, or
 # one at a time. So keep in mind: any options passed to commands here will

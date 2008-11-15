@@ -79,15 +79,18 @@ public:
     assert( idx < VMToLength<TVM>::Length );
     Internal[idx] = v;
   }
-  void Set(Value const &v) {
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
-    assert( bv ); // That would be bad...
-    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
-    std::stringstream ss;
-    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
-    ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
-      GetLength(),ss);
+
+  void SetFromDataElement(DataElement const &de) {
+    const ByteValue *bv = de.GetByteValue();
+    assert( bv );
+    if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+      {
+      Set(de.GetValue());
+      }
+    else
+      {
+      SetNoSwap(de.GetValue());
+      }
   }
 
   void Read(std::istream &_is) {
@@ -98,6 +101,30 @@ public:
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
+
+  // FIXME: remove this function
+  // this is only used in gdcm::SplitMosaicFilter / to pass value of a CSAElement
+  void Set(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      GetLength(),ss);
+  }
+protected:
+  void SetNoSwap(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal, 
+      GetLength(),ss);
+  }
 };
 
 
@@ -143,6 +170,11 @@ public:
     }
 
   template<typename T>
+  static inline void ReadNoSwap(T* data, unsigned long length,
+                          std::istream &_is) {
+    Read(data,length,_is);
+}
+  template<typename T>
   static inline void Write(const T* data, unsigned long length,
                            std::ostream &_os)  {
     assert( data );
@@ -159,6 +191,7 @@ public:
 template < typename Float >
 std::string to_string ( Float data ) {
   std::stringstream in;
+  // in.imbue(std::locale::classic()); // This is not required AFAIK
   unsigned long const digits =
     static_cast< unsigned long >(
     - std::log( std::numeric_limits<Float>::epsilon() )
@@ -170,7 +203,7 @@ std::string to_string ( Float data ) {
   }
 } 
 
-/* Writting VR::DS is not that easy after all */
+/* Writing VR::DS is not that easy after all */
 // http://groups.google.com/group/comp.lang.c++/browse_thread/thread/69ccd26f000a0802
 template<> inline void EncodingImplementation<VR::VRASCII>::Write(const float * data, unsigned long length, std::ostream &_os)  {
     assert( data );
@@ -217,6 +250,22 @@ public:
     }
     }
   template<typename T>
+  static inline void ReadNoSwap(T* data, unsigned long length,
+    std::istream &_is) {
+    const unsigned int type_size = sizeof(T);
+    assert( data ); // Can we read from pointer ?
+    assert( length );
+    assert( _is ); // Is stream valid ?
+    _is.read( reinterpret_cast<char*>(data+0), type_size);
+    for(unsigned long i=1; i<length; ++i) {
+      assert( _is );
+      _is.read( reinterpret_cast<char*>(data+i), type_size );
+    }
+    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
+    //  _is.GetSwapCode(), length);
+    //SwapperNoOp::SwapArray(data,length);
+  }
+  template<typename T>
   static inline void Read(T* data, unsigned long length,
     std::istream &_is) {
     const unsigned int type_size = sizeof(T);
@@ -241,10 +290,12 @@ public:
     assert( _os ); // Is stream valid ?
     //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
     //  _os.GetSwapCode(), length);
-    _os.write( reinterpret_cast<const char*>(&(data[0])), type_size);
+    T swappedData = SwapperNoOp::Swap(data[0]);
+    _os.write( reinterpret_cast<const char*>(&swappedData), type_size);
     for(unsigned long i=1; i<length;++i) {
       assert( _os );
-      _os.write( reinterpret_cast<const char*>(&(data[i])), type_size );
+      swappedData = SwapperNoOp::Swap(data[i]);
+      _os.write( reinterpret_cast<const char*>(&swappedData), type_size );
     }
     //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
     //  _os.GetSwapCode(), length);

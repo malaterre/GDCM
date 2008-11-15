@@ -23,6 +23,7 @@
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
+#include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -44,7 +45,9 @@
 //#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmPixmap.h"
 #include "gdcmImage.h"
+#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -224,6 +227,8 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmSmartPointer.h"
+%template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %include "gdcmDataElement.h"
 %extend gdcm::DataElement
 {
@@ -328,9 +333,9 @@ using namespace gdcm;
 };
 //%newobject gdcm::Image::GetBuffer;
 %include "cstring.i"
-%include "gdcmImage.h"
-%ignore gdcm::Image::GetBuffer(char*) const;
-%extend gdcm::Image
+%include "gdcmPixmap.h"
+%ignore gdcm::Pixmap::GetBuffer(char*) const;
+%extend gdcm::Pixmap
 {
   %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
   void GetBuffer(char **buffer, unsigned int *size) {
@@ -338,6 +343,20 @@ using namespace gdcm;
     *buffer = (char*)malloc(*size);
     self->GetBuffer(*buffer);
   }
+
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+
+};
+
+%include "gdcmImage.h"
+%extend gdcm::Image
+{
 
   const char *__str__() {
     static std::string buffer;
@@ -356,6 +375,7 @@ using namespace gdcm;
 //}
 
 };
+%include "gdcmIconImage.h"
 %include "gdcmFragment.h"
 %include "gdcmPDBElement.h"
 %extend gdcm::PDBElement

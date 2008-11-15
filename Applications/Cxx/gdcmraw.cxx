@@ -327,7 +327,11 @@ int main(int argc, char *argv[])
       fg.SetNumberOfFilenames( nfrags );
       fg.SetPrefix( outfilename.c_str() );
       fg.SetPattern( pattern.c_str() );
-      fg.Generate();
+      if(!fg.Generate())
+        {
+        std::cerr << "Could not generate" << std::endl;
+        return 1;
+        }
       for(unsigned int i = 0; i < nfrags; ++i)
         {
         const gdcm::Fragment& frag = sf->GetFragment(i);

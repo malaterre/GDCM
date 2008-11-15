@@ -15,6 +15,8 @@
 #include "gdcmDataSetHelper.h"
 #include "gdcmFile.h"
 #include "gdcmDataSet.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
@@ -40,6 +42,13 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
   const VR &refvr = entry.GetVR();
   //const VM &vm = entry.GetVM();
+
+  // not much we can do...
+  if( refvr == VR::INVALID || refvr == VR::UN )
+    {
+    // postcondition says it cannot be VR::INVALID, so return VR::UN
+    return VR::UN;
+    }
 
   VR vr = refvr;
 
@@ -87,6 +96,11 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
         vr = VR::US;
         }
       }
+    else
+      {
+      // FIXME ???
+      vr = VR::US;
+      }
     }
   else if( vr == VR::OB_OW )
     {
@@ -107,8 +121,9 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     Tag pixeldata(0x7fe0,0x0010);
     Tag overlaydata(0x6000,0x3000);
     Tag curvedata(0x5000,0x3000);
+    Tag variablepixeldata(0x7f00,0x0010);
     Tag bitsallocated(0x0028,0x0100);
-    assert( ds.FindDataElement( pixeldata ) );
+    //assert( ds.FindDataElement( pixeldata ) );
     assert( ds.FindDataElement( bitsallocated ) );
     Attribute<0x0028,0x0100> at;
     at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
@@ -121,17 +136,96 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       {
       vr = VR::OB;
       }
+    else if ( t.IsGroupXX(variablepixeldata) )
+      {
+      vr = VR::OB;
+      }
     else
       {
       assert( 0 && "Should not happen" );
       vr = VR::INVALID;
       }
     }
+  else if( vr == VR::US_SS_OW )
+    {
+    vr = VR::OW;
+    }
   // TODO need to treat US_SS_OW too
 
+  // \postcondition:
+  assert( vr.IsVRFile() );
+  assert( vr != VR::INVALID );
   return vr;
 }
 
 
+/*
+SequenceOfItems* DataSetHelper::ComputeSQFromByteValue(File const & file, DataSet const &ds, const Tag &tag)
+{
+  const TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
+  assert( ts != TransferSyntax::DeflatedExplicitVRLittleEndian );
+  const DataElement &de = ds.GetDataElement( tag );
+  if( de.IsEmpty() )
+    {
+    return 0;
+    }
+  Value &v = const_cast<Value&>(de.GetValue());
+  SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(&v);
+  if( sq ) // all set !
+    {
+    SmartPointer<SequenceOfItems> sqi = sq;
+    return sqi;
+    }
+
+  try
+    {
+    if( ts.GetSwapCode() == SwapCode::BigEndian )
+      {
+      abort();
+      }
+    else
+      {
+      if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+        {
+        assert( de.GetVR() == VR::INVALID );
+        const ByteValue *bv = de.GetByteValue();
+        assert( bv );
+        SequenceOfItems *sqi = new SequenceOfItems;
+        sqi->SetLength( bv->GetLength() );
+        std::stringstream ss;
+        ss.str( std::string( bv->GetPointer(), bv->GetLength() ) );
+        sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+        return sqi;
+        }
+      else
+        {
+        assert( de.GetVR() == VR::UN ); // cp 246, IVRLE SQ
+        const ByteValue *bv = de.GetByteValue();
+        assert( bv );
+        SequenceOfItems *sqi = new SequenceOfItems;
+        sqi->SetLength( bv->GetLength() );
+        std::stringstream ss;
+        ss.str( std::string( bv->GetPointer(), bv->GetLength() ) );
+        sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+        return sqi;
+        }
+      }
+    }
+  catch( ParseException &pex )
+    {
+    gdcmDebugMacro( pex.what() );
+    }
+  catch( Exception &ex )
+    {
+    gdcmDebugMacro( ex.what() );
+    }
+  catch( ... )
+    {
+    gdcmWarningMacro( "Unknown exception" );
+    }
+
+  return 0;
+}
+*/
 
 }

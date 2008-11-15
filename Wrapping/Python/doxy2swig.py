@@ -17,6 +17,9 @@ Code can be found at prabhu's page:
 
 http://www.aero.iitb.ac.in/~prabhu/software/code/python/doxy2swig.py
 
+Ref:
+http://www.enricozini.org/2007/tips/swig-doxygen-docstring.html
+http://internetducttape.com/2007/03/20/automatic_documentation_python_doxygen/
 """
 ######################################################################
 #

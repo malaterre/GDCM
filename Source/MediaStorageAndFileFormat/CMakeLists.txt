@@ -5,6 +5,7 @@ SET(MSFF_SRCS
   gdcmFileExplicitFilter.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
+  gdcmPixmap.cxx
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
   gdcmImageChangeTransferSyntax.cxx
@@ -12,9 +13,10 @@ SET(MSFF_SRCS
   gdcmOrientation.cxx
   gdcmDataSetHelper.cxx
   gdcmImageChangePlanarConfiguration.cxx
-  #gdcmImageChangePhotometricInterpretation.cxx
+  gdcmImageChangePhotometricInterpretation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx
+  gdcmSerieHelper.cxx
   gdcmIPPSorter.cxx
   gdcmApplicationEntity.cxx
   gdcmDICOMDIR.cxx
@@ -78,15 +80,22 @@ INCLUDE_DIRECTORIES(
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"
   "${GDCM_BINARY_DIR}/Utilities"
-  #"${GDCM_BINARY_DIR}/Utilities/jpeg/8"
-  #"${GDCM_SOURCE_DIR}/Utilities/jpeg"
-  #"${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
-  "${GDCM_BINARY_DIR}/Utilities/openjpeg"
   )
+IF(GDCM_USE_SYSTEM_OPENJPEG)
+  INCLUDE_DIRECTORIES(${OPENJPEG_INCLUDE_DIRS} )
+ELSE(GDCM_USE_SYSTEM_OPENJPEG)
+  INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg"
+    )
+ENDIF(GDCM_USE_SYSTEM_OPENJPEG)
+IF(GDCM_USE_SYSTEM_LJPEG)
+  #MESSAGE(${LJPEG_INCLUDE_DIRS} )
+  INCLUDE_DIRECTORIES(${LJPEG_INCLUDE_DIRS} )
+ENDIF(GDCM_USE_SYSTEM_LJPEG)
 IF(NOT GDCM_USE_SYSTEM_ZLIB)
-INCLUDE_DIRECTORIES(
-  "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
-)
+  INCLUDE_DIRECTORIES(
+    "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
+  )
 ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 IF(GDCM_USE_SYSTEM_UUID)
   INCLUDE_DIRECTORIES(
@@ -102,8 +111,10 @@ ENDIF(GDCM_USE_SYSTEM_UUID)
 
 ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
 SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT
-  gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
+
+# main libs:
+TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})
+
 IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
   # I am getting:
 # CMakeFiles/gdcmMSFF.dir/gdcmScanner.obj(.text$_ZN4gdcm6ReaderC1Ev[gdcm::Reader::Reader()]+0x3a):gdcmScanner.cxx: variable 'vtable for gdcm::Reader' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.

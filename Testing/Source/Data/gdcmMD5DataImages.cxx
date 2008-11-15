@@ -618,11 +618,12 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "59071590099d21dd439896592338bf95" , "ima43.dcm" },
 { "46bf12c412590767bb8cd7f0d53eaa87" , "TG18-CH-2k-01.dcm" },
 { "9214cc4f62fbea873ffad88e1be877c5" , "LJPEG_BuginGDCM12.dcm" },
+{ "52607a16af1eaddbbc71c14d32e489d8" , "DX_J2K_0Padding.dcm" },
 
 
-
-
-
+{ "6af53848fe77feb56a12aba74dadea8e" , "TheralysGDCM120Bug.dcm" },
+{ "79b8705f2e6c7464bd3e2fc7e1d3483b" , "TestVRSQUN2.dcm" },
+{ "71e4ea61df4f7ada2955799c91f93e74" , "TestVRSQUN1.dcm" },
 
 
 

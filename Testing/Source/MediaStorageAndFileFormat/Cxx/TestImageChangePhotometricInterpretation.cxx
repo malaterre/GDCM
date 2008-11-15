@@ -18,6 +18,19 @@
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
+namespace gdcm
+{
+PhotometricInterpretation InvertPI(PhotometricInterpretation pi)
+{
+  assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
+  if( pi == PhotometricInterpretation::MONOCHROME1 )
+    {
+    return PhotometricInterpretation::MONOCHROME2;
+    }
+  return PhotometricInterpretation::MONOCHROME1;
+}
+}
+
 int TestImageChangePhotometricInterpretationFunc(const char *filename, bool verbose = false)
 {
   gdcm::ImageReader reader;
@@ -27,7 +40,8 @@ int TestImageChangePhotometricInterpretationFunc(const char *filename, bool verb
     const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
     gdcm::MediaStorage ms = header.GetMediaStorage();
     bool isImage = gdcm::MediaStorage::IsImage( ms );
-    if( isImage )
+    bool pixeldata = reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x7fe0,0x0010) );
+    if( isImage && pixeldata )
       {
       std::cout << "Could not read: " << filename << std::endl;
       return 1;
@@ -37,9 +51,17 @@ int TestImageChangePhotometricInterpretationFunc(const char *filename, bool verb
   const gdcm::Image &image = reader.GetImage();
 
   //unsigned int pc = image.GetPlanarConfiguration();
+  gdcm::PhotometricInterpretation pi = image.GetPhotometricInterpretation();
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME1 && pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    // nothing to do:
+    return 0;
+    }
+  gdcm::PhotometricInterpretation invert_pi = gdcm::InvertPI(pi);
 
   gdcm::ImageChangePhotometricInterpretation pcfilt;
   pcfilt.SetInput( image );
+  pcfilt.SetPhotometricInterpretation( invert_pi );
   bool b = pcfilt.Change();
   if( !b )
     {

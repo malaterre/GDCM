@@ -1,17 +1,10 @@
-############################################################################
 #
-#  Program: GDCM (Grassroots DICOM). A DICOM library
-#  Module:  $URL$
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
-#  Copyright (c) 2006-2008 Mathieu Malaterre
-#  All rights reserved.
-#  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-#     This software is distributed WITHOUT ANY WARRANTY; without even
-#     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-#     PURPOSE.  See the above copyright notice for more information.
-#
-############################################################################
 
 # find md5sum
 

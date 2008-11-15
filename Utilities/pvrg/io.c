@@ -41,6 +41,7 @@ case, two-line-based, assumed to be of two lines per.
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h> /* memcpy */
+#include <assert.h> /* memcpy */
 #ifdef WIN32
 #include <io.h> /* lseek on win32 */
 #endif
@@ -113,7 +114,7 @@ static BUFFER *MakeXBuffer(nelem,wsize)
      int nelem;
      int wsize;
 {
-  BEGIN("MakeXBuffer");
+  BEGIN("MakeXBuffer")
   BUFFER *temp;
 
   if (!(temp = MakeStructure(BUFFER)))     /* Make structure */
@@ -148,7 +149,7 @@ EFUNC*/
 
 void ResizeIob()
 {
-  BEGIN("ResizeIob");
+  BEGIN("ResizeIob")
   int index;
 
   for(index=0;index<CScan->NumberComponents;index++)
@@ -172,7 +173,7 @@ void MakeIob(type,flags,wsize)
      int flags;
      int wsize;
 {
-  BEGIN("MakeIob");
+  BEGIN("MakeIob")
   int index,sofs;
   BUFFER **current;
   IOBUF *temp;
@@ -264,17 +265,17 @@ EFUNC*/
 
 void PrintIob()
 {
-  BEGIN("PrintIob");
+  BEGIN("PrintIob")
 
   if (Iob)
     {
-      printf("*** Iob ID: %x ***\n",Iob);
+      printf("*** Iob ID: %p ***\n",(void*)Iob);
       printf("Number of Buffers: %d  Width: %d  Height: %d\n",
 	     Iob->num,Iob->width,Iob->height);
       printf("hpos: %d  vpos: %d  hor-freq: %d  ver-freq: %d\n",
 	     Iob->hpos,Iob->vpos,Iob->hor,Iob->ver);
-      printf("filed: %d  flags: %d  BufferListId: %x\n",
-	     Iob->file,Iob->flags,Iob->blist);
+      printf("filed: %d  flags: %d  BufferListId: %p\n",
+	     Iob->file,Iob->flags,(void*)Iob->blist);
     }
   else
     {
@@ -295,7 +296,7 @@ static void WriteXBuffer(len,storage,buffer)
      int *storage;
      BUFFER *buffer;
 {
-  BEGIN("WriteXBuffer");
+  BEGIN("WriteXBuffer")
   int diff,wout;
 
   if (buffer->disable)
@@ -370,7 +371,7 @@ static void ReadXBuffer(len,storage,buffer)
      int *storage;
      BUFFER *buffer;
 {
-  BEGIN("ReadXBuffer");
+  BEGIN("ReadXBuffer")
   int i,numchars,maxelem,rin;
 
   if (buffer->disable)
@@ -454,7 +455,7 @@ static void ReadResizeBuffer(len,buffer)
      int len;
      BUFFER *buffer;
 {
-  BEGIN("ReadResizeBuffer");
+  BEGIN("ReadResizeBuffer")
   int retval,diff,location,amount;
 
   diff = buffer->tptr - buffer->bptr;        /* Find out the current usage */
@@ -468,6 +469,7 @@ static void ReadResizeBuffer(len,buffer)
   printf("SPACE: %x BPTR: %x DIFF: %d\n",buffer->space,buffer->bptr,diff);
   printf("ReadLseek %d\n",buffer->streamoffs+buffer->currentoffs);
 #endif
+  assert( diff >= 0 );
   memcpy(buffer->space,buffer->bptr,diff);   /* Move buffer down. */
   buffer->bptr = buffer->space;              /* Reset pointers. */
   buffer->tptr = buffer->space + diff;
@@ -504,7 +506,7 @@ EFUNC*/
 static void FlushBuffer(buffer)
      BUFFER *buffer;
 {
-  BEGIN("FlushBuffer");
+  BEGIN("FlushBuffer")
   int retval;
 
 #ifdef IO_DEBUG
@@ -535,7 +537,7 @@ EFUNC*/
 void ReadBlock(store)
      int *store;
 {
-  BEGIN("ReadBlock");
+  BEGIN("ReadBlock")
   int i,voffs;
 
   voffs = (Iob->vpos % Iob->ver)*BlockHeight;  /* Find current v offset*/
@@ -586,7 +588,7 @@ EFUNC*/
 void WriteBlock(store)
      int *store;
 {
-  BEGIN("WriteBlock");
+  BEGIN("WriteBlock")
   int i,voffs;
 
   voffs = (Iob->vpos % Iob->ver)*BlockHeight;  /* Find vertical buffer offs. */
@@ -632,14 +634,14 @@ EFUNC*/
 
 static void BlockMoveTo()
 {
-  BEGIN("BlockMoveTo");
+  BEGIN("BlockMoveTo")
   int i,vertical,horizontal;
 
   if (Loud > MUTE)
     {
       WHEREAMI();
-      printf("%x  Moving To [Horizontal:Vertical] [%d:%d] \n",
-	     Iob,Iob->hpos,Iob->vpos);
+      printf("%p  Moving To [Horizontal:Vertical] [%d:%d] \n",
+	     (void*)Iob,Iob->hpos,Iob->vpos);
     }
   horizontal =  Iob->hpos * BlockWidth;    /* Calculate actual */
   vertical = Iob->vpos * BlockHeight;      /* Pixel position */
@@ -670,7 +672,7 @@ EFUNC*/
 
 void RewindIob()
 {
-  BEGIN("RewindIob");
+  BEGIN("RewindIob")
   int i;
 
   switch(Iob->type)
@@ -727,11 +729,11 @@ EFUNC*/
 
 void FlushIob()
 {
-  BEGIN("FlushIob");
+  BEGIN("FlushIob")
   int i;
 
   if (Loud > MUTE)
-    printf("IOB: %x  Flushing buffers\n",Iob);
+    printf("IOB: %p  Flushing buffers\n",(void*)Iob);
   switch(Iob->type)
     {
     case IOB_BLOCK:
@@ -762,9 +764,9 @@ EFUNC*/
 
 void SeekEndIob()
 {
-  BEGIN("SeekEndIob");
+  BEGIN("SeekEndIob")
   int size,tsize;
-  static char Terminator[] = {0x80,0x00};
+  static unsigned char Terminator[] = {0x80,0x00};
 
   size = lseek(Iob->file,0,SEEK_END);
   tsize = Iob->width*Iob->height*Iob->wsize;
@@ -805,7 +807,7 @@ EFUNC*/
 
 void CloseIob()
 {
-  BEGIN("CloseIob");
+  BEGIN("CloseIob")
 
   if( !CFrame->tmpfile ) /* if file is closed we loose it for good */
 {
@@ -826,7 +828,7 @@ static void ReadXBound(nelem,cstore,buffer)
      int *cstore;
      BUFFER *buffer;
 {
-  BEGIN("ReadXBound");
+  BEGIN("ReadXBound")
   int i,diff;
 
   if ((diff = buffer->iob->width - TrueBufferPos(buffer)) <= nelem)
@@ -864,7 +866,7 @@ static void WriteXBound(nelem,cstore,buffer)
      int *cstore;
      BUFFER *buffer;
 {
-  BEGIN("WriteXBound");
+  BEGIN("WriteXBound")
   int diff;
 
   if ((diff = buffer->iob->width - TrueBufferPos(buffer)) <= nelem)
@@ -886,7 +888,7 @@ EFUNC*/
 void InstallIob(index)
      int index;
 {
-  BEGIN("InstallIob");
+  BEGIN("InstallIob")
 
   if (!(Iob = CScan->Iob[index]))
     {
@@ -907,9 +909,9 @@ EFUNC*/
 
 void TerminateFile()
 {
-  BEGIN("TerminateFile");
+  BEGIN("TerminateFile")
   int i,size;
-  static char Terminator[] = {0x80,0x00};
+  static unsigned char Terminator[] = {0x80,0x00};
 
   if (CFrame->GlobalHeight)
     {
@@ -979,7 +981,7 @@ void ReadLine(nelem,store)
      int nelem;
      int *store;
 {
-  BEGIN("ReadLine");
+  BEGIN("ReadLine")
   int i;
 
   for(i=0;i<Iob->ver+1;i++)         /* Use voffs to index into */
@@ -1016,7 +1018,7 @@ void ReadPreambleLine(nelem,store)
      int nelem;
      int *store;
 {
-  BEGIN("ReadPreambleLine");
+  BEGIN("ReadPreambleLine")
   int i;
   int preamblelength=1;
 
@@ -1067,7 +1069,7 @@ void WriteLine(nelem,store)
      int nelem;
      int *store;
 {
-  BEGIN("WriteLine");
+  BEGIN("WriteLine")
   int i;
 
   store += Iob->hor*nelem+1;        /* Get rid of first line */
@@ -1103,7 +1105,7 @@ EFUNC */
 
 extern void LineResetBuffers()
 {
-  BEGIN("LineResetBuffers");
+  BEGIN("LineResetBuffers")
   int i;
 
   if (Iob->type!=IOB_LINE)
@@ -1126,14 +1128,14 @@ EFUNC*/
 
 static void LineMoveTo()
 {
-  BEGIN("LineMoveTo");
+  BEGIN("LineMoveTo")
   int i,vertical,horizontal;
 
   if (Loud > MUTE)
     {
       WHEREAMI();
-      printf("%x  Moving To [Horizontal:Vertical] [%d:%d] \n",
-	     Iob,Iob->hpos,Iob->vpos);
+      printf("%p  Moving To [Horizontal:Vertical] [%d:%d] \n",
+	     (void*)Iob,Iob->hpos,Iob->vpos);
     }
   horizontal =  Iob->hpos;
   vertical = Iob->vpos;

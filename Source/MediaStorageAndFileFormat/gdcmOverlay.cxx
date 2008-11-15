@@ -285,22 +285,22 @@ void Overlay::Update(const DataElement & de)
 
 void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
 {
+  const unsigned int ovlength = Internal->Rows * Internal->Columns / 8;
+  Internal->Data.resize( ovlength ); // set to 0
   if( Internal->BitsAllocated == 16 )
     {
-    assert( Internal->BitPosition >= 12 );
+    //assert( Internal->BitPosition >= 12 );
     assert( ds.FindDataElement( Tag(0x7fe0,0x0010) ) );
     const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );
     const ByteValue *bv = pixeldata.GetByteValue();
     assert( bv );
     const char *array = bv->GetPointer();
-    const unsigned int ovlength = Internal->Rows * Internal->Columns / 8;
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is pain to support,
     // I cannot simply use the bv->GetLength I have to use the image dim:
     const unsigned int length = ovlength * 8 * 2; //bv->GetLength();
     const uint16_t *p = (uint16_t*)array;
     const uint16_t *end = (uint16_t*)(array + length);
     //const unsigned int ovlength = length / (8*2);
-    Internal->Data.resize( ovlength ); // set to 0
     assert( 8 * ovlength == (unsigned int)Internal->Rows * Internal->Columns );
     unsigned char * overlay = (unsigned char*)&Internal->Data[0];
     int c = 0;
@@ -323,6 +323,10 @@ void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
       ++c;
       }
     assert( (unsigned)c / 8 == ovlength );
+    }
+  else
+    {
+    gdcmErrorMacro( "Could not grab Overlay from image. Please report." );
     }
 }
 
@@ -371,14 +375,40 @@ bool Overlay::IsZero() const
 bool Overlay::IsInPixelData() const { return Internal->InPixelData; }
 void Overlay::IsInPixelData(bool b) { Internal->InPixelData = b; }
 
+/*
+ * row,col = 400,400   => 20000
+ * row,col = 1665,1453 => 302406
+ * row,col = 20,198    => 495 words + 1 dicom \0 padding
+ */
+inline unsigned int compute_bit_and_dicom_padding(unsigned short rows, unsigned short columns)
+{
+  unsigned int word_padding = ( rows * columns + 7 ) / 8; // need to send full word (8bits at a time)
+  return word_padding + word_padding%2; // Cannot have odd length
+}
+
 void Overlay::SetOverlay(const char *array, unsigned int length)
 {
   if( !array || length == 0 ) return;
   //char * p = (char*)&Internal->Data[0];
-  Internal->Data.resize( length ); // ??
-  std::copy(array, array+length, Internal->Data.begin());
-  assert( 8 * length == (unsigned int)Internal->Rows * Internal->Columns );
-  assert( Internal->Data.size() == length );
+  unsigned int computed_length = (Internal->Rows * Internal->Columns + 7) / 8;
+  Internal->Data.resize( computed_length ); // filled with 0 if length < computed_length
+  if( length < computed_length )
+    {
+    gdcmWarningMacro( "Not enough data found in Overlay. Proceed with caution" );
+    std::copy(array, array+length, Internal->Data.begin());
+    }
+  else
+    {
+    if( length > computed_length )
+      {
+      gdcmWarningMacro( "Too much data found in Overlay. Discarding extra data: " << (length - computed_length) << " bytes." );
+      }
+    // do not try to copy more than allocated:
+    std::copy(array, array+computed_length, Internal->Data.begin());
+    }
+  /* warning need to take into account padding to the next word (8bits) */
+  //assert( length == compute_bit_and_dicom_padding(Internal->Rows, Internal->Columns) );
+  assert( Internal->Data.size() == computed_length );
 }
 
 const ByteValue &Overlay::GetOverlayData() const

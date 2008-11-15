@@ -14,6 +14,13 @@
 # make install (will copy in ./bin)
 #
 # then all you need to do is export an env var DICOM3TOOLS pointing to that dir
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 FIND_PROGRAM(DCIODVFY_EXECUTABLE
   dciodvfy

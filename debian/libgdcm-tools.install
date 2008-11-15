@@ -4,3 +4,4 @@ usr/bin/gdcmimg*
 usr/bin/gdcminfo*
 usr/bin/gdcmraw*
 usr/bin/gdcmscanner*
+usr/bin/gdcmtar*

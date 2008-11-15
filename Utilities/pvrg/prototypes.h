@@ -139,6 +139,7 @@ extern void WriteSof();
 extern void WriteDri();
 extern void WriteDqt();
 extern void WriteSos();
+extern void WriteDnl();
 extern void WriteDht();
 extern void ReadSof();
 extern void ReadDqt();

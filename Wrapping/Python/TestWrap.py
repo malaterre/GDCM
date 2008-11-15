@@ -62,6 +62,7 @@ blacklist = (
 # MediaStorageAndFileFormat
 "ConstCharWrapper"
 "ImageConverter"
+"SerieHelper"
 # Do not expose low level jpeg implementation detail
 "JPEG8Codec"
 "JPEG12Codec"
@@ -82,6 +83,7 @@ blacklist = (
 "Decoder"
 "Coder"
 "ImageChangePhotometricInterpretation"
+"IconImage" # FIXME
 )
 
 def processonedir(dirname):

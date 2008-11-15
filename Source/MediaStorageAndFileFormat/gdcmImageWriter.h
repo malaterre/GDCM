@@ -42,6 +42,9 @@ public:
   /// Write
   bool Write(); // Execute()
 
+protected:
+  void DoIconImage(DataSet & ds, Image const & image);
+
 private:
   SmartPointer<Image> PixelData;
 };

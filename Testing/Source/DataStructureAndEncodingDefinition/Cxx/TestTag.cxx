@@ -310,5 +310,12 @@ int TestTag(int , char * [])
   res = TestPrivate();
   if( res ) return res;
 
+  const gdcm::Tag myTag(0x0008,0x103e);
+  gdcm::Tag myTag2(0x0008,0x103e);
+  if( !(myTag2 == myTag) )
+    {
+    return 1;
+    }
+
   return 0;
 }

@@ -49,6 +49,16 @@ int TestWrite2(const char *subdir, const char* filename, bool recursing)
     }
   else if( ts.IsImplicit() )
     {
+    gdcm::FileMetaInformation &fmi = reader.GetFile().GetHeader();
+    gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
+      ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+
+    const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
+    de.SetByteValue( tsuid, strlen(tsuid) );
+    de.SetVR( VR::UI ); //gdcm::Attribute<0x0002, 0x0010>::GetVR() );
+    fmi.Replace( de );
+
     reader.GetFile().GetHeader().SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
     }
   else
@@ -93,7 +103,7 @@ int TestWriter2(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestWrite2(argv[0], filename, false);
+    return gdcm::TestWrite2(argv[0], filename, false );
     }
 
   // else

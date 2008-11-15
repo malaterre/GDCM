@@ -29,10 +29,11 @@ namespace gdcm
  *   - One has to make sure that Vr is valid for the encoding
  *   - One has to make sure that VR 16bits can store the original value length
  */
+class Dicts;
 class GDCM_EXPORT FileExplicitFilter
 {
 public:
-  FileExplicitFilter():F(new File),ChangePrivateTags(false),UseVRUN(true) {}
+  FileExplicitFilter():F(new File),ChangePrivateTags(false),UseVRUN(true),RecomputeItemLength(false),RecomputeSequenceLength(false) {}
   ~FileExplicitFilter() {}
 
   /// Decide whether or not to VR'ify private tags
@@ -40,6 +41,12 @@ public:
 
   /// When VR=16bits in explicit but Implicit has a 32bits length, use VR=UN
   void SetUseVRUN(bool b) { UseVRUN = b; }
+
+  /// By default set Sequence & Item length to Undefined to avoid recomputing length:
+  void SetRecomputeItemLength(bool b);
+  void SetRecomputeSequenceLength(bool b);
+
+  /// Set FMI Transfer Syntax
 
   /// Change
   bool Change();
@@ -49,11 +56,15 @@ public:
   File &GetFile() { return *F; }
 
 protected:
+  bool ProcessDataSet(DataSet &ds, Dicts const & dicts);
+  bool ChangeFMI();
 
 private:
   SmartPointer<File> F;
   bool ChangePrivateTags;
   bool UseVRUN;
+  bool RecomputeItemLength;
+  bool RecomputeSequenceLength;
 };
 
 

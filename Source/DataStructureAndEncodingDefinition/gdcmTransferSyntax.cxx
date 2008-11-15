@@ -136,6 +136,25 @@ bool TransferSyntax::IsExplicit() const
   return !IsImplicit();
 }
 
+bool TransferSyntax::IsLossy() const
+{
+  if (
+    TSField == JPEGBaselineProcess1 ||
+    TSField == JPEGExtendedProcess2_4 ||
+    TSField == JPEGExtendedProcess3_5 ||
+    TSField == JPEGSpectralSelectionProcess6_8 ||
+    TSField == JPEGFullProgressionProcess10_12 ||
+    TSField == JPEGLSNearLossless ||
+    TSField == JPEG2000 ||
+    TSField == MPEG2MainProfile 
+  )
+    {
+    return true;
+    }
+  return false;
+
+}
+
 // By implementation those two functions form a partition
 bool TransferSyntax::IsExplicit(TSType ts) const
 {

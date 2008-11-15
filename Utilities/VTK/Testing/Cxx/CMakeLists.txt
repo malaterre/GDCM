@@ -39,9 +39,9 @@ INCLUDE_DIRECTORIES(
 CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS})
 ADD_EXECUTABLE(gdcmvtkGDCMTests ${vtkGDCMTests})
 IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm vtkRendering)
+  TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests ${VTKGDCM_NAME} vtkRendering)
 ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm vtkVolumeRendering)
+  TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests ${VTKGDCM_NAME} vtkVolumeRendering)
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
 # Need full path to executable:

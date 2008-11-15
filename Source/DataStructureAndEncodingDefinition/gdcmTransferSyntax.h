@@ -111,6 +111,7 @@ public:
 
   bool IsImplicit() const;
   bool IsExplicit() const;
+  bool IsLossy() const;
 
   const char *GetString() const { return TransferSyntax::GetTSString(TSField); }
 

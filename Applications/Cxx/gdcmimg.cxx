@@ -41,6 +41,8 @@
  * Todo: check compat API with jhead 
  */
 #include "gdcmFilename.h"
+#include "gdcmSmartPointer.h"
+#include "gdcmUIDGenerator.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSystem.h"
 #include "gdcmReader.h"
@@ -51,6 +53,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmPNMCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmVersion.h"
 
@@ -116,10 +119,13 @@ void PrintHelp()
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --depth      Depth." << std::endl;
-  std::cout << "  -s --size %d,%d Size." << std::endl;
-  std::cout << "  -R --region     Region." << std::endl;
-  std::cout << "  -F --fill       Fill." << std::endl;
+  std::cout << "  -d --depth       Depth." << std::endl;
+  std::cout << "  -s --size %d,%d  Size." << std::endl;
+  std::cout << "  -R --region      Region." << std::endl;
+  std::cout << "  -F --fill        Fill." << std::endl;
+  std::cout << "  -T --study-uid   Study UID." << std::endl;
+  std::cout << "  -S --series-uid  Series UID." << std::endl;
+  std::cout << "     --root-uid    Root UID." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -134,6 +140,8 @@ int main (int argc, char *argv[])
   int c;
   //int digit_optind = 0;
 
+  std::string root;
+  int rootuid = 0;
   gdcm::Filename filename;
   gdcm::Filename outfilename;
   unsigned int region[6] = {}; // Rows & Columns are VR=US anyway...
@@ -141,7 +149,11 @@ int main (int argc, char *argv[])
   bool b;
   int bregion = 0;
   int fill = 0;
+  int studyuid = 0;
+  int seriesuid = 0;
   unsigned int size[2] = {};
+  int depth = 0;
+  int bpp = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -150,6 +162,9 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
 
+  gdcm::UIDGenerator uid;
+  std::string series_uid = uid.Generate();
+  std::string study_uid = uid.Generate();
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -157,10 +172,13 @@ int main (int argc, char *argv[])
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
         // provide convert-like command line args:
-        {"depth", 1, 0, 0},
+        {"depth", 1, &depth, 1},
         {"size", 1, 0, 0},
         {"region", 1, &bregion, 1},
         {"fill", 1, &fill, 1},
+        {"study-uid", 1, &studyuid, 1},
+        {"series-uid", 1, &seriesuid, 1},
+        {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -197,6 +215,11 @@ int main (int argc, char *argv[])
             assert( filename.IsEmpty() );
             filename = optarg;
             }
+          else if( option_index == 2 ) /* depth */
+            {
+            assert( strcmp(s, "depth") == 0 );
+            bpp = atoi(optarg);
+            }
           else if( option_index == 3 ) /* size */
             {
             assert( strcmp(s, "size") == 0 );
@@ -211,6 +234,21 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "fill") == 0 );
             color = atoi(optarg);
+            }
+          else if( option_index == 6 ) /* study-uid */
+            {
+            assert( strcmp(s, "study-uid") == 0 );
+            study_uid = optarg;
+            }
+          else if( option_index == 7 ) /* series-uid */
+            {
+            assert( strcmp(s, "series-uid") == 0 );
+            series_uid = optarg;
+            }
+          else if( option_index == 8 ) /* root-uid */
+            {
+            assert( strcmp(s, "root-uid") == 0 );
+            root = optarg;
             }
           printf (" with arg %s", optarg);
           }
@@ -232,6 +270,7 @@ int main (int argc, char *argv[])
 
     case 'd': // depth
       printf ("option d with value '%s'\n", optarg);
+      bpp = atoi(optarg);
       break;
 
     case 's': // size
@@ -325,6 +364,29 @@ int main (int argc, char *argv[])
     return 1;
     }
 
+  if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;
+    return 1;
+    }
+
+  if( !gdcm::UIDGenerator::IsValid( series_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Series UID: " << series_uid << std::endl;
+    return 1;
+    }
+
+  // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
+  if( rootuid )
+    {
+    if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
+      {
+      std::cerr << "specified Root UID is not valid: " << root << std::endl;
+      return 1;
+      }
+    gdcm::UIDGenerator::SetRoot( root.c_str() );
+    }
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
   gdcm::Trace::SetWarning( warning );
@@ -361,7 +423,22 @@ int main (int argc, char *argv[])
       dims[0] = size[0];
       dims[1] = size[1];
       image.SetDimensions( size );
-      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT16;
+      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8; // default
+      if( depth )
+        {
+        switch(bpp)
+          {
+        case 8:
+          pf = gdcm::PixelFormat::UINT8;
+          break;
+        case 16:
+          pf = gdcm::PixelFormat::UINT16;
+          break;
+        default:
+          std::cerr << "Invalid depth: << " << bpp << std::endl;
+          return 1;
+          }
+        }
       image.SetPixelFormat( pf );
       gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
       image.SetPhotometricInterpretation( pi );
@@ -373,6 +450,22 @@ int main (int argc, char *argv[])
       image.SetDataElement( pixeldata );
 
       writer.SetFileName( outfilename );
+      gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+
+        {
+        gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
+        de.SetByteValue( study_uid.c_str(), study_uid.size() );
+        de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
+        ds.Insert( de );
+        }
+
+        {
+        gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
+        de.SetByteValue( series_uid.c_str(), series_uid.size() );
+        de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
+        ds.Insert( de );
+        }
+
       if( !writer.Write() )
         {
         return 1;
@@ -519,6 +612,55 @@ int main (int argc, char *argv[])
       return 0;
       }
 
+    if(  gdcm::System::StrCaseCmp(inputextension,".jls") == 0 )
+      {
+      gdcm::JPEGLSCodec jpeg;
+
+      std::ifstream is(filename);
+      gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+      jpeg.SetPixelFormat( pf );
+      gdcm::TransferSyntax ts;
+      bool b = jpeg.GetHeaderInfo( is, ts );
+      if( !b )
+        {
+        std::cerr << "Error: could not parse J2K header" << std::endl;
+        return 1;
+        }
+
+      gdcm::ImageWriter writer;
+      gdcm::Image &image = writer.GetImage();
+      image.SetNumberOfDimensions( 2 );
+      image.SetDimensions( jpeg.GetDimensions() );
+      image.SetPixelFormat( jpeg.GetPixelFormat() );
+      image.SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+      image.SetTransferSyntax( ts );
+
+      size_t len = gdcm::System::FileSize(filename);
+
+      char * buf = new char[len];
+      is.seekg(0, std::ios::beg );// rewind !
+      is.read(buf, len);
+      gdcm::DataElement pixeldata;
+
+      gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+
+      gdcm::Fragment frag;
+      frag.SetByteValue( buf, len );
+      delete[] buf;
+      sq->AddFragment( frag );
+      pixeldata.SetValue( *sq );
+
+      image.SetDataElement( pixeldata );
+
+      writer.SetFileName( outfilename );
+      if( !writer.Write() )
+        {
+        return 1;
+        }
+
+      return 0;
+      }
+
     if(  gdcm::System::StrCaseCmp(inputextension,".jp2") == 0 
       || gdcm::System::StrCaseCmp(inputextension,".j2k") == 0
       || gdcm::System::StrCaseCmp(inputextension,".jpc") == 0 )
@@ -536,6 +678,7 @@ int main (int argc, char *argv[])
       bool b = jpeg.GetHeaderInfo( is, ts );
       if( !b )
         {
+        std::cerr << "Error: could not parse J2K header" << std::endl;
         return 1;
         }
 
@@ -676,8 +819,8 @@ int main (int argc, char *argv[])
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
     assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
-    gdcm::Image image;
-    image.SetNumberOfDimensions( 2 ); // good default
+    gdcm::SmartPointer<gdcm::Image> image = new gdcm::Image;
+    image->SetNumberOfDimensions( 2 ); // good default
     const unsigned int *dims = imageori.GetDimensions();
     if ( region[0] > region[1] 
       || region[2] > region[3]
@@ -698,15 +841,15 @@ int main (int argc, char *argv[])
         }
       return 1;
       }
-    image.SetDimension(0, dims[0] );
-    image.SetDimension(1, dims[1] );
+    image->SetDimension(0, dims[0] );
+    image->SetDimension(1, dims[1] );
     if( imageori.GetNumberOfDimensions() == 3 )
       {
-      image.SetNumberOfDimensions( 3 );
-      image.SetDimension(2, dims[2] );
+      image->SetNumberOfDimensions( 3 );
+      image->SetDimension(2, dims[2] );
       }
-    image.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
-    image.SetPixelFormat( imageori.GetPixelFormat() );
+    image->SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+    image->SetPixelFormat( imageori.GetPixelFormat() );
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     bv->SetLength( len );
@@ -734,25 +877,25 @@ int main (int argc, char *argv[])
       }
 
     pixeldata.SetValue( *bv );
-    image.SetDataElement( pixeldata );
-    image.SetSpacing( imageori.GetSpacing() );
-    image.SetSpacing(2, imageori.GetSpacing()[2] );
+    image->SetDataElement( pixeldata );
+    image->SetSpacing( imageori.GetSpacing() );
+    image->SetSpacing(2, imageori.GetSpacing()[2] );
     const gdcm::TransferSyntax &ts = imageori.GetTransferSyntax();
     // FIXME: for now we do not know how to recompress the image...
     if( ts.IsExplicit() )
       {
-      image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      image->SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
       }
     else 
       {
       assert( ts.IsImplicit() );
-      image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+      image->SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
       }
     //imageori.Print( std::cout );
     //image.Print( std::cout );
 
     // Set our filled image instead:
-    writer.SetImage( image );
+    writer.SetImage( *image );
 #if 0
     // <entry group="0028" element="0301" vr="CS" vm="1" name="Burned In Annotation"/>
     gdcm::Attribute<0x0028,0x0301> at;
@@ -794,8 +937,6 @@ the UID ... vide infra).
     }
   //  ds.Remove( gdcm::Tag(0x0,0x0) ); // FIXME
 
-  // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
-  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;

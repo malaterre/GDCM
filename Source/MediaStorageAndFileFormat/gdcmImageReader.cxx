@@ -100,10 +100,10 @@ bool ImageReader::Read()
     //PixelData->SetCompressionFromTransferSyntax( ts );
     res = ReadImage(ms);
     }
-  else if( ms == MediaStorage::MRSpectroscopyStorage )
-    {
-    res = ReadImage(ms);
-    }
+  //else if( ms == MediaStorage::MRSpectroscopyStorage )
+  //  {
+  //  res = ReadImage(ms);
+  //  }
   else
     {
     //assert( !ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
@@ -194,11 +194,14 @@ signed short ImageReader::ReadSSFromTag( Tag const &t, std::stringstream &ss,
 {
   const ByteValue *bv = GetPointerFromElement(t);
   Element<VR::SS,VM::VM1> el;
+  const char *array = bv->GetPointer();
+  const VL &length = bv->GetLength();
   assert( bv->GetLength() == 2 );
-  conversion = std::string(bv->GetPointer(), 2); 
-  ss.clear();
-  ss.str( conversion );
-  el.Read( ss );
+  //conversion = std::string(bv->GetPointer(), 2); 
+  //ss.clear();
+  //ss.str( conversion );
+  //el.Read( ss );
+  memcpy( (void*)(&el), array, el.GetLength() * sizeof( VRToType<VR::SS>::Type) );
   return el.GetValue();
 }
 
@@ -206,12 +209,17 @@ unsigned short ImageReader::ReadUSFromTag( Tag const &t, std::stringstream &ss,
   std::string &conversion )
 {
   const ByteValue *bv = GetPointerFromElement(t);
+  assert( bv );
   Element<VR::US,VM::VM1> el;
+  const char *array = bv->GetPointer();
+  const VL &length = bv->GetLength();
   assert( bv->GetLength() == 2 );
-  conversion = std::string(bv->GetPointer(), 2); 
-  ss.clear();
-  ss.str( conversion );
-  el.Read( ss );
+  //conversion = std::string(bv->GetPointer(), 2); 
+  //ss.clear();
+  //ss.str( conversion );
+  //el.Read( ss );
+  //el.SetArray( (VRToType<VR::US>::Type*)array, length, true );
+  memcpy( (void*)(&el), array, el.GetLength() * sizeof( VRToType<VR::US>::Type) );
   return el.GetValue();
 }
 
@@ -247,7 +255,8 @@ void DoIconImage(const DataSet& rootds, Image& image)
   if( rootds.FindDataElement( ticonimage ) )
     {
     const DataElement &iconimagesq = rootds.GetDataElement( ticonimage );
-    const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    //const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sq = iconimagesq.GetValueAsSQ();
     // Is SQ empty ?
     if( !sq ) return;
     SequenceOfItems::ConstIterator it = sq->Begin();
@@ -322,6 +331,81 @@ void DoIconImage(const DataSet& rootds, Image& image)
         photometricinterpretation_str.c_str()));
     assert( pi != PhotometricInterpretation::UNKNOW);
     pixeldata.SetPhotometricInterpretation( pi );
+   
+    // 
+  if ( pi == PhotometricInterpretation::PALETTE_COLOR )
+      {
+    SmartPointer<LookupTable> lut = new LookupTable;
+    const Tag testseglut(0x0028, (0x1221 + 0));
+    if( ds.FindDataElement( testseglut ) )
+      {
+abort();
+      lut = new SegmentedPaletteColorLookupTable;
+      }
+    //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
+    lut->Allocate( pf.GetBitsAllocated() );
+
+    // for each red, green, blue:
+    for(int i=0; i<3; ++i)
+      {
+      // (0028,1101) US 0\0\16
+      // (0028,1102) US 0\0\16
+      // (0028,1103) US 0\0\16
+      const Tag tdescriptor(0x0028, (0x1101 + i));
+      //const Tag tdescriptor(0x0028, 0x3002);
+      Element<VR::US,VM::VM3> el_us3;
+      // Now pass the byte array to a DICOMizer:
+      el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
+      lut->InitializeLUT( LookupTable::LookupTableType(i),
+        el_us3[0], el_us3[1], el_us3[2] );
+
+      // (0028,1201) OW 
+      // (0028,1202) OW
+      // (0028,1203) OW 
+      const Tag tlut(0x0028, (0x1201 + i));
+      //const Tag tlut(0x0028, 0x3006);
+      
+      // Segmented LUT
+      // (0028,1221) OW 
+      // (0028,1222) OW
+      // (0028,1223) OW 
+      const Tag seglut(0x0028, (0x1221 + i));
+      if( ds.FindDataElement( tlut ) )
+        {
+        const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
+        assert( lut_raw );
+        // LookupTableType::RED == 0
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+        unsigned long check =
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          * el_us3.GetValue(2) / 8;
+        assert( check == lut_raw->GetLength() ); (void)check;
+        }
+      else if( ds.FindDataElement( seglut ) )
+        {
+        const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
+        assert( lut_raw );
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+        unsigned long check =
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          * el_us3.GetValue(2) / 8;
+        //assert( check == lut_raw->GetLength() ); (void)check;
+        }
+      else
+        {
+        abort();
+        }
+      }
+    pixeldata.SetLUT(*lut);
+
+      }
+
     const Tag tpixeldata = Tag(0x7fe0, 0x0010);
     if( !ds.FindDataElement( tpixeldata ) )
       {
@@ -330,8 +414,11 @@ void DoIconImage(const DataSet& rootds, Image& image)
       }
     const DataElement& de = ds.GetDataElement( tpixeldata );
     pixeldata.SetDataElement( de );
+
+    // Pass TransferSyntax:
+    pixeldata.SetTransferSyntax( image.GetTransferSyntax() );
     }
-  else if( rootds.FindDataElement( tgeiconimage ) )
+  else if( false && rootds.FindDataElement( tgeiconimage ) )
     {
     const DataElement &iconimagesq = rootds.GetDataElement( tgeiconimage );
     const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
@@ -424,7 +511,7 @@ void DoIconImage(const DataSet& rootds, Image& image)
       pixeldata.SetDataElement( de2 );
       }
     }
-  else if( rootds.FindDataElement( tgeiconimage2 ) )
+  else if( false && rootds.FindDataElement( tgeiconimage2 ) )
     {
     const DataElement &iconimagesq = rootds.GetDataElement( tgeiconimage2 );
     const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
@@ -634,7 +721,7 @@ void DoOverlays(const DataSet& ds, Image& pixeldata)
         // since the overlays are stored in the unused bit of the PixelData
         if( !ov.IsEmpty() )
           {
-          assert( unpack.str().size() == ov.GetRows() * ov.GetColumns() );
+          //assert( unpack.str().size() / 8 == ((ov.GetRows() * ov.GetColumns()) + 7 ) / 8 );
           assert( ov.IsInPixelData( ) == false );
           }
         else
@@ -699,8 +786,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   const Tag tcolumns(0x0028, 0x0011);
   if( ds.FindDataElement( tcolumns ) )
     {
-    PixelData->SetDimension(0,
-      ReadUSFromTag( tcolumns, ss, conversion ) );
+    //PixelData->SetDimension(0,
+    //  ReadUSFromTag( tcolumns, ss, conversion ) );
+    const DataElement& de = ds.GetDataElement( tcolumns );
+    Attribute<0x0028,0x0011> at;
+    at.SetFromDataElement( de );
+    PixelData->SetDimension(0, at.GetValue() );
     }
   else
     {
@@ -711,8 +802,15 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // D 0028|0010 [US] [Rows] [512]
-  PixelData->SetDimension(1,
-    ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+  //PixelData->SetDimension(1,
+  //  ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    Attribute<0x0028,0x0010> at;
+    at.SetFromDataElement( de );
+    PixelData->SetDimension(1, at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+    }
 
   // Dummy check
   const unsigned int *dims = PixelData->GetDimensions();
@@ -729,8 +827,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   const Tag samplesperpixel = Tag(0x0028, 0x0002);
   if( ds.FindDataElement( samplesperpixel ) )
     {
-    pf.SetSamplesPerPixel(
-      ReadUSFromTag( samplesperpixel, ss, conversion ) );
+    //pf.SetSamplesPerPixel(
+    //  ReadUSFromTag( samplesperpixel, ss, conversion ) );
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+    Attribute<0x0028,0x0002> at;
+    at.SetFromDataElement( de );
+    pf.SetSamplesPerPixel( at.GetValue() );
     }
 
   if( ms == MediaStorage::MRSpectroscopyStorage )
@@ -741,23 +843,50 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     {
     assert( MediaStorage::IsImage( ms ) );
     // D 0028|0100 [US] [Bits Allocated] [16]
-    pf.SetBitsAllocated(
-      ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    //pf.SetBitsAllocated(
+    //  ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+    Attribute<0x0028,0x0100> at;
+    at.SetFromDataElement( de );
+    pf.SetBitsAllocated( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    }
 
     // D 0028|0101 [US] [Bits Stored] [12]
-    pf.SetBitsStored(
-      ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    //pf.SetBitsStored(
+    //  ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+    Attribute<0x0028,0x0101> at;
+    at.SetFromDataElement( de );
+    pf.SetBitsStored( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    }
 
     // D 0028|0102 [US] [High Bit] [11]
-    pf.SetHighBit(
-      ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    //pf.SetHighBit(
+    //  ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+    Attribute<0x0028,0x0102> at;
+    at.SetFromDataElement( de );
+    pf.SetHighBit( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    }
 
     // D 0028|0103 [US] [Pixel Representation] [0]
     Tag tpixelrep(0x0028, 0x0103);
     if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
       {
-      pf.SetPixelRepresentation(
-        ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+      //pf.SetPixelRepresentation(
+      //  ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+    Attribute<0x0028,0x0103> at;
+    at.SetFromDataElement( de );
+    pf.SetPixelRepresentation( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+
       }
     else
       {
@@ -776,8 +905,18 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // well hopefully :(
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
-    PixelData->SetPlanarConfiguration(
-      ReadUSFromTag( planarconfiguration, ss, conversion ) );
+    const DataElement& de = ds.GetDataElement( planarconfiguration );
+    Attribute<0x0028,0x0006> at;
+    at.SetFromDataElement( de );
+
+    //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
+    unsigned int pc = at.GetValue();
+    if( pc && PixelData->GetPixelFormat().GetSamplesPerPixel() != 3 )
+      {
+      gdcmDebugMacro( "Cannot have PlanarConfiguration=1, when Sample Per Pixel != 3" );
+      pc = 0;
+      }
+    PixelData->SetPlanarConfiguration( pc );
     }
 
   // 4 1/2 Let's do Pixel Spacing
@@ -869,7 +1008,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       Element<VR::US,VM::VM1> ppv;
       if( !ds.GetDataElement(Tag(0x0028,0x0120) ).IsEmpty() )
         {
-        ppv.Set( ds.GetDataElement(Tag(0x0028,0x0120)).GetValue() );
+        ppv.SetFromDataElement( ds.GetDataElement(Tag(0x0028,0x0120)) ); //.GetValue() );
         if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
           {
           vizissue = false;
@@ -878,12 +1017,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       }
     else if( pf.GetPixelRepresentation() == 1 )
       {
-      gdcmWarningMacro( "TODO" );
+      gdcmDebugMacro( "TODO" );
       }
     // test if there is any viz issue:
     if( vizissue )
       {
-      gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+      gdcmDebugMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
       }
     }
   // 4. Palette Color Lookup Table Descriptor
@@ -913,7 +1052,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       //const Tag tdescriptor(0x0028, 0x3002);
       Element<VR::US,VM::VM3> el_us3;
       // Now pass the byte array to a DICOMizer:
-      el_us3.Set( ds[tdescriptor].GetValue() );
+      el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
         el_us3[0], el_us3[1], el_us3[2] );
 
@@ -1026,7 +1165,7 @@ bool ImageReader::ReadACRNEMAImage()
     at.SetFromDataElement( de );
     assert( at.GetNumberOfValues() == 1 );
     unsigned short imagedimensions = at.GetValue();
-    assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
+    //assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
     if ( imagedimensions == 3 )
       {
       PixelData->SetNumberOfDimensions(3);
@@ -1036,7 +1175,7 @@ bool ImageReader::ReadACRNEMAImage()
       at.SetFromDataElement( de );
       assert( at.GetNumberOfValues() == 1 );
       PixelData->SetDimension(2, at.GetValue() );
-      assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
+      //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
       }
     else if ( imagedimensions == 2 )
       {
@@ -1044,7 +1183,8 @@ bool ImageReader::ReadACRNEMAImage()
       }
     else
       {
-      abort();
+      gdcmErrorMacro( "Unhandled Image Dimensions: " << imagedimensions );
+      return false;
       }
     }
   else
@@ -1060,7 +1200,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0011> at;
     at.SetFromDataElement( de );
     PixelData->SetDimension(0, at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
     }
 
   // D 0028|0010 [US] [Rows] [512]
@@ -1069,7 +1209,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0010> at;
     at.SetFromDataElement( de );
     PixelData->SetDimension(1, at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     }
 
   // This is the definition of an ACR NEMA image:
@@ -1114,7 +1254,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0100> at;
     at.SetFromDataElement( de );
     pf.SetBitsAllocated( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     }
 
   // D 0028|0101 [US] [Bits Stored] [12]
@@ -1123,7 +1263,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0101> at;
     at.SetFromDataElement( de );
     pf.SetBitsStored( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     }
 
   // D 0028|0102 [US] [High Bit] [11]
@@ -1132,7 +1272,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0102> at;
     at.SetFromDataElement( de );
     pf.SetHighBit( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     }
 
   // D 0028|0103 [US] [Pixel Representation] [0]
@@ -1141,7 +1281,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0103> at;
     at.SetFromDataElement( de );
     pf.SetPixelRepresentation( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
     }
 
   PixelData->SetPixelFormat( pf );
@@ -1219,6 +1359,20 @@ bool ImageReader::ReadACRNEMAImage()
         photometricinterpretation_str.c_str()));
     assert( pi == PhotometricInterpretation::MONOCHROME2 );
     }
+  else
+    {
+    //assert( PixelData->GetPixelFormat().GetSamplesPerPixel() == 1 );
+    if( PixelData->GetPixelFormat().GetSamplesPerPixel() == 3 )
+      {
+      // LIBIDO-24-ACR_NEMA-Rectangle.dcm
+      PixelData->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
+    }
+
+  // Do the Rescale Intercept & Slope
+  std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
+  PixelData->SetIntercept( is[0] );
+  PixelData->SetSlope( is[1] );
 
   return true;
 }

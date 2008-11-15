@@ -45,9 +45,7 @@ class DataSet;
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(const Tag& t = Tag(0), VL const &vl = 0) 
-	  : DataElement(t, vl), NestedDataSet() {
-  }
+  Item() : DataElement(Tag(0xfffe, 0xe000)), NestedDataSet() {}
   friend std::ostream& operator<< (std::ostream &os, const Item &val);
 
   void Clear() {
@@ -104,7 +102,7 @@ public:
     }
     if( !TagField.Read<TSwap>(is) )
       {
-      throw Exception("Should not happen");
+      throw Exception("Should not happen (item)");
       return is;
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -152,7 +150,7 @@ public:
           ByteSwapFilter bsf(nested);
           bsf.ByteSwap();
           }
-        catch(...)
+        catch(ParseException &pe)
           {
           // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
           // You have to byteswap the length but not the tag...sigh
@@ -166,6 +164,15 @@ public:
           // Tag are read in big endian, need to byteswap them back...
           bsf.SetByteSwapTag(true);
           bsf.ByteSwap();
+          }
+        catch(Exception &e)
+          {
+          // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
+          throw e;
+          }
+        catch(...)
+          {
+          abort();
           }
         }
       else /* if( ValueLengthField.IsUndefined() ) */
@@ -186,8 +193,11 @@ public:
       //TagField = Tag(0xfffe, 0xe000);
       }
 #endif
-    //assert ( TagField == Tag(0xfffe, 0xe000)
-    //  || TagField == Tag(0xfffe, 0xe0dd) );
+    if( TagField != Tag(0xfffe, 0xe000) && TagField != Tag(0xfffe, 0xe0dd) )
+      {
+      throw Exception( "Not a valid Item" );
+      }
+    assert( TagField == Tag(0xfffe, 0xe000) || TagField == Tag(0xfffe, 0xe0dd) );
 
     if( !ValueLengthField.Read<TSwap>(is) )
       {

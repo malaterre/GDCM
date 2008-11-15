@@ -508,7 +508,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   if( this->LoadOverlays )
     {
     // If no icon found, we still need to be associated to port #2:
-    numvol = 3;
+    numvol = 2 + this->NumberOfOverlays;
     }
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
@@ -695,17 +695,15 @@ int vtkGDCMImageReader::RequestInformationCompat()
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
-  gdcm::Rescaler r;
-  r.SetIntercept( this->Shift );
-  r.SetSlope( this->Scale );
-  r.SetPixelFormat( pixeltype );
-  gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
-  if( ms == gdcm::MediaStorage::MRSpectroscopyStorage )
+  gdcm::PixelFormat::ScalarType outputpt = pixeltype;
+  // Compute output pixel format when Rescaling:
+  if( this->Shift != 0 || this->Scale != 1. )
     {
-    outputpt = pixeltype;
-    }
-  else
-    {
+    gdcm::Rescaler r;
+    r.SetIntercept( this->Shift );
+    r.SetSlope( this->Scale );
+    r.SetPixelFormat( pixeltype );
+    outputpt = r.ComputeInterceptSlopePixelType();
     assert( pixeltype <= outputpt );
     }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
@@ -792,6 +790,21 @@ int vtkGDCMImageReader::RequestInformationCompat()
       return 0;
       }
     this->IconNumberOfScalarComponents = iconpixelformat.GetSamplesPerPixel();
+    }
+
+  // Overlay!
+  unsigned int numoverlays = image.GetNumberOfOverlays();
+  if( this->LoadOverlays && numoverlays )
+    {
+    // Do overlay specific stuff...
+    // what if overlay do not have the same data extent as image ?
+    for( unsigned int ovidx = 0; ovidx < numoverlays; ++ovidx )
+      {
+      const gdcm::Overlay& ov = image.GetOverlay(ovidx);
+      assert( (unsigned int)ov.GetRows() == image.GetRows() );
+      assert( (unsigned int)ov.GetColumns() == image.GetColumns() );
+      }
+    this->NumberOfOverlays = numoverlays;
     }
 
 //  return this->Superclass::RequestInformation(
@@ -903,6 +916,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
   {
     assert( Scale == 1.0 && Shift == 0.0 );
+    assert( pixeltype.GetSamplesPerPixel() == 1 );
     // FIXME: I could avoid this extra copy:
     char * copy = new char[len];
     memcpy(copy, pointer, len);
@@ -918,6 +932,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
 
   if( Scale != 1.0 || Shift != 0.0 )
   {
+    assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
     r.SetIntercept( Shift );
     r.SetSlope( Scale );
@@ -928,6 +943,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     delete[] copy;
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
+    assert( data->GetNumberOfScalarComponents() == 1 );
   }
 
   // Do the Icon Image:
@@ -937,6 +953,24 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     char * iconpointer = static_cast<char*>(this->GetOutput(ICONIMAGEPORTNUMBER)->GetScalarPointer());
     assert( iconpointer );
     image.GetIconImage().GetBuffer( iconpointer );
+    if ( image.GetIconImage().GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+      {
+      const gdcm::LookupTable &lut = image.GetIconImage().GetLUT();
+      assert( lut.GetBitSample() == 8 );
+        {
+        vtkLookupTable *vtklut = vtkLookupTable::New();
+        vtklut->SetNumberOfTableValues(256);
+        // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
+        if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+          {
+          vtkWarningMacro( "Could not get values from LUT" );
+          return 0;
+          }
+        vtklut->SetRange(0,255);
+        this->GetOutput(ICONIMAGEPORTNUMBER)->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+        vtklut->Delete();
+        }
+      }
     }
 
   // Do the Curve:
@@ -969,13 +1003,15 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   // Do the Overlay:
   unsigned int numoverlays = image.GetNumberOfOverlays();
   long overlayoutsize = (dext[1] - dext[0] + 1);
-  this->NumberOfOverlays = numoverlays;
-  if( numoverlays )
+  //this->NumberOfOverlays = numoverlays;
+  //if( numoverlays )
+  if( !this->LoadOverlays ) assert( this->NumberOfOverlays == 0 );
+  for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
     {
-    vtkImageData *vtkimage = this->GetOutput(OVERLAYPORTNUMBER);
+    vtkImageData *vtkimage = this->GetOutput(OVERLAYPORTNUMBER + ovidx);
     // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
     // we have to decompress the bit overlay into an unsigned char array to please everybody:
-    const gdcm::Overlay& ov1 = image.GetOverlay();
+    const gdcm::Overlay& ov1 = image.GetOverlay(ovidx);
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
     chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
     overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
@@ -1066,6 +1102,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       }
     else if( image.GetPixelFormat().GetSamplesPerPixel() == 1 )
       {
+      abort();
       vtkWarningMacro( "Image was declared as YBR_FULL_422 but is just grayscale" );
       this->ImageFormat = VTK_LUMINANCE;
       }
@@ -1081,6 +1118,14 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 )
     {
     this->ImageFormat = VTK_LUMINANCE;
+    }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_RCT )
+    {
+    this->ImageFormat = VTK_RGB;
+    }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_ICT )
+    {
+    this->ImageFormat = VTK_RGB;
     }
   assert( this->ImageFormat );
 
@@ -1168,8 +1213,15 @@ int vtkGDCMImageReader::RequestDataCompat()
   if (!this->FileLowerLeft)
     {
     InPlaceYFlipImage(this->GetOutput(0));
-    InPlaceYFlipImage(this->GetOutput(ICONIMAGEPORTNUMBER));
-    InPlaceYFlipImage(this->GetOutput(OVERLAYPORTNUMBER));
+    if( this->LoadIconImage )
+      {
+      InPlaceYFlipImage(this->GetOutput(ICONIMAGEPORTNUMBER));
+      }
+    for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
+      {
+      assert( this->LoadOverlays );
+      InPlaceYFlipImage(this->GetOutput(OVERLAYPORTNUMBER+ovidx));
+      }
     }
 
   return 1;

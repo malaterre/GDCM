@@ -15,16 +15,12 @@
 #ifndef __gdcmImage_h
 #define __gdcmImage_h
 
-#include "gdcmPixelFormat.h"
+#include "gdcmPixmap.h"
 #include "gdcmSwapCode.h"
-#include "gdcmPhotometricInterpretation.h"
-#include "gdcmLookupTable.h"
 #include "gdcmSmartPointer.h"
-#include "gdcmTransferSyntax.h"
 #include "gdcmOverlay.h"
 #include "gdcmCurve.h"
 #include "gdcmIconImage.h"
-#include "gdcmDataElement.h"
 
 #include <vector>
 
@@ -50,42 +46,19 @@ namespace gdcm
  * Basically you can see it as a storage for the PixelData element.
  * However it was also used for MRSpectroscopy object (as proof of concept)
  */
-class GDCM_EXPORT Image : public Object
+class GDCM_EXPORT Image : public Pixmap
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),Spacing(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon(),Intercept(0),Slope(1),PixelData() {
+  Image ():Pixmap(),Spacing(),SC(),Overlays(),Curves(),Icon(),Intercept(0),Slope(1) {
     //DirectionCosines.resize(6);
+  Origin.resize( 3 /*NumberOfDimensions*/ ); // fill with 0
+  DirectionCosines.resize( 6 ); // fill with 0
+  DirectionCosines[0] = 1;
+  DirectionCosines[4] = 1;
+  Spacing.resize( 3 /*NumberOfDimensions*/, 1 ); // fill with 1
+
   }
   ~Image() {}
-
-  /// Return the number of dimension of the pixel data bytes; for example 2 for a 2D matrices of values
-  unsigned int GetNumberOfDimensions() const;
-  void SetNumberOfDimensions(unsigned int dim);
-
-  /// Return the dimension of the pixel data, first dimension (x), then 2nd (y), then 3rd (z)...
-  const unsigned int *GetDimensions() const;
-  unsigned int GetDimension(unsigned int idx) const;
-  void SetDimensions(const unsigned int *dims);
-  void SetDimension(unsigned int idx, unsigned int dim);
-
-  /// Get/Set PixelFormat
-  const PixelFormat &GetPixelFormat() const
-    {
-    return PF;
-    }
-  PixelFormat &GetPixelFormat()
-    {
-    return PF;
-    }
-  void SetPixelFormat(PixelFormat const &pf)
-    {
-    PF = pf;
-    }
-
-  /// Acces the raw data
-  bool GetBuffer(char *buffer) const;
-
-  bool GetBuffer2(std::ostream &os) const;
 
   /// Return a 3-tuples specifying the spacing
   /// NOTE: 3rd value can be an aribtrary 1 value when the spacing was not specified (ex. 2D image).
@@ -114,14 +87,7 @@ public:
   /// print
   void Print(std::ostream &os) const;
 
-  /// return the planar configuration
-  unsigned int GetPlanarConfiguration() const;
-  void SetPlanarConfiguration(unsigned int pc);
-
-  /// return the photometric interpretation
-  const PhotometricInterpretation &GetPhotometricInterpretation() const;
-  void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
-
+  /// DEPRECATED DO NOT USE
   SwapCode GetSwapCode() const
     {
     return SC;
@@ -129,29 +95,6 @@ public:
   void SetSwapCode(SwapCode sc)
     {
     SC = sc;
-    }
-
-  bool GetNeedByteSwap() const
-    {
-    return NeedByteSwap;
-    }
-  void SetNeedByteSwap(bool b)
-    {
-    NeedByteSwap = b;
-    }
-
-  /// Set/Get LUT
-  void SetLUT(LookupTable const &lut)
-    {
-    LUT = SmartPointer<LookupTable>( const_cast<LookupTable*>(&lut) );
-    }
-  const LookupTable &GetLUT() const
-    {
-    return *LUT;
-    }
-  LookupTable &GetLUT()
-    {
-    return *LUT;
     }
 
   /// Curve: group 50xx
@@ -188,19 +131,6 @@ public:
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
-  /// Return the length of the image after decompression
-  /// WARNING for palette color: It will NOT take into account the Palette Color
-  /// thus you need to multiply this length by 3 if the image is RGB for instance.
-  unsigned long GetBufferLength() const;
-
-  /// Transfer syntax
-  void SetTransferSyntax(TransferSyntax const &ts) {
-    TS = ts;
-  }
-  const TransferSyntax &GetTransferSyntax() const {
-    return TS;
-  }
-
   /// intercept
   void SetIntercept(double intercept) { Intercept = intercept; }
   double GetIntercept() const { return Intercept; }
@@ -209,48 +139,18 @@ public:
   void SetSlope(double slope) { Slope = slope; }
   double GetSlope() const { return Slope; }
 
-
-  void SetDataElement(DataElement const &de) {
-    PixelData = de;
-  }
-  const DataElement& GetDataElement() const { return PixelData; }
-  DataElement& GetDataElement() { return PixelData; }
-
-protected:
-  bool TryRAWCodec(char *buffer) const;
-  bool TryJPEGCodec(char *buffer) const;
-  bool TryPVRGCodec(char *buffer) const;
-  bool TryJPEGLSCodec(char *buffer) const;
-  bool TryJPEG2000Codec(char *buffer) const;
-  bool TryRLECodec(char *buffer) const;
-
-  bool TryJPEGCodec2(std::ostream &os) const;
-  bool TryJPEG2000Codec2(std::ostream &os) const;
-
 private:
-  unsigned int NumberOfDimensions;
-  unsigned int PlanarConfiguration;
-  std::vector<unsigned int> Dimensions;
   std::vector<double> Spacing;
   std::vector<double> Origin;
   std::vector<double> DirectionCosines;
 
-  PixelFormat PF;
-  PhotometricInterpretation PI;
-
-  TransferSyntax TS;
   // I believe the following 3 ivars can be derived from TS ...
   SwapCode SC;
-  bool NeedByteSwap;
-  typedef SmartPointer<LookupTable> LUTPtr;
-  LUTPtr LUT;
   std::vector<Overlay>  Overlays;
   std::vector<Curve>  Curves;
   IconImage Icon;
   double Intercept;
   double Slope;
-
-  DataElement PixelData; //copied from 7fe0,0010
 
 };
 

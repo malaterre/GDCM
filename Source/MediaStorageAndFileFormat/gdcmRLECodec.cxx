@@ -19,6 +19,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSmartPointer.h"
+#include "gdcmSwapper.h"
 
 #include <vector>
 
@@ -53,6 +54,7 @@ public:
     assert( sizeof(RLEHeader) == 64 );
     //ByteSwap<unsigned long>::SwapRangeFromSwapCodeIntoSystem(
     //  (unsigned long*)&Header, is.GetSwapCode(), 16);
+    SwapperNoOp::SwapArray((uint32_t*)&Header,16);
     uint32_t numSegments = Header.NumSegments;
     if( numSegments >= 1 )
       {
@@ -82,7 +84,6 @@ RLECodec::RLECodec()
   Internals = new RLEInternals;
   Length = 0;
   BufferLength = 0;
-  NumberOfDimensions = 0;
 }
 
 RLECodec::~RLECodec()
@@ -552,11 +553,6 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 // output nothing
 // Endif
 // Endloop
-
-void RLECodec::SetNumberOfDimensions(unsigned int dim)
-{
-  NumberOfDimensions = dim;
-}
 
 bool RLECodec::Decode(DataElement const &in, DataElement &out)
 {

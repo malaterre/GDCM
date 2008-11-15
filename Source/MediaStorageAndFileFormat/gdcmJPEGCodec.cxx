@@ -68,6 +68,10 @@ void JPEGCodec::SetBitSample(int bit)
 {
   BitSample = bit;
   assert( Internal == NULL );
+  if( this->GetPixelFormat().GetBitsAllocated() % 8 != 0 )
+    {
+    return;
+    }
   if ( BitSample <= 8 )
     {
     Internal = new JPEG8Codec;
@@ -233,6 +237,7 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
   const char *input = bv->GetPointer();
   unsigned long len = bv->GetLength();
   unsigned long image_len = len / dims[2];
+    if(!Internal) return false;
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
     std::stringstream os;

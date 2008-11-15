@@ -26,6 +26,7 @@ bool ImageFragmentSplitter::Split()
   const unsigned int *dims = image.GetDimensions();
   if( dims[2] != 1 )
     {
+    gdcmDebugMacro( "Cannot split a 3D image" );
     return false;
     }
   const DataElement& pixeldata = image.GetDataElement();
@@ -33,6 +34,7 @@ bool ImageFragmentSplitter::Split()
   const SequenceOfFragments *sqf = pixeldata.GetSequenceOfFragments();
   if( !sqf )
     {
+    gdcmDebugMacro( "Cannot split a non-encapsulated syntax" );
     return false;
     }
 
@@ -51,6 +53,7 @@ bool ImageFragmentSplitter::Split()
   // prevent zero division
   if( FragmentSizeMax == 0 )
     {
+    gdcmDebugMacro( "Need to set a real value for fragment size" );
     return false; // seriously...
     }
   unsigned long nfrags = len / FragmentSizeMax;
@@ -80,11 +83,23 @@ bool ImageFragmentSplitter::Split()
 
 void ImageFragmentSplitter::SetFragmentSizeMax(unsigned int fragsize)
 {
+/*
+ * A.4 TRANSFER SYNTAXES FOR ENCAPSULATION OF ENCODED PIXEL DATA
+ *
+ * All items containing an encoded fragment shall be made of an even number of bytes
+ * greater or equal to two. The last fragment of a frame may be padded, if necessary,
+ * to meet the sequence item format requirements of the DICOM Standard.
+ */
   FragmentSizeMax = fragsize;
   if( fragsize % 2 )
     {
-    // what is FragmentSizeMax == 0 ...
+    // what if FragmentSizeMax == 0 ...
     FragmentSizeMax--;
+    }
+  // How do I handle this one...
+  if( fragsize < 2 )
+    {
+    FragmentSizeMax = 2;
     }
 }
 

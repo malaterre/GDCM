@@ -104,14 +104,18 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
       }
     if ( S_ISREG(buf.st_mode) )    //is it a regular file?
       {
-      Filenames.push_back( fileName );
-      nFiles++;
+      if( fileName[0] != '.' )
+        {
+        Filenames.push_back( fileName );
+        nFiles++;
+        }
       }
     else if ( S_ISDIR(buf.st_mode) ) //directory?
       {
       // discard . and ..
       if( strcmp( d->d_name, "." ) == 0
-        || strcmp( d->d_name, ".." ) == 0 )
+        || strcmp( d->d_name, ".." ) == 0
+        || d->d_name[0] == '.' ) // discard any hidden dir
         continue;
       assert( d->d_name[0] != '.' ); // hidden directory ??
       if ( recursive )

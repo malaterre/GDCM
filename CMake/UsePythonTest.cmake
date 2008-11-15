@@ -11,6 +11,13 @@
 # SET_SOURCE_FILES_PROPERTIES(test.py PROPERTIES PYTHONPATH
 #   "${LIBRARY_OUTPUT_PATH}:${VTK_DIR}")
 # ADD_PYTHON_TEST(PYTHON-TEST test.py)
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 # Need python interpreter:
 FIND_PACKAGE(PythonInterp REQUIRED)

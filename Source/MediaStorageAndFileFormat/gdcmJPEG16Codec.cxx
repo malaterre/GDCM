@@ -14,11 +14,7 @@
 =========================================================================*/
 #include "gdcmJPEG16Codec.h"
 
-extern "C" {
-#include "jpeg/16/jinclude.h"
-#include "jpeg/16/jpeglib.h"
-#include "jpeg/16/jerror.h"
-}
+#include "gdcm_ljpeg16.h"
 
 #include <setjmp.h>
 
