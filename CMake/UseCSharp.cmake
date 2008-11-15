@@ -48,6 +48,12 @@ ELSE(DESIRED_CSHARP_COMPILER_VERSION MATCHES 3)
   MESSAGE(FATAL_ERROR "Do not know this version")
 ENDIF(DESIRED_CSHARP_COMPILER_VERSION MATCHES 1)
 
+# Check something is found:
+IF(NOT CMAKE_CSHARP_COMPILER)
+  # status message only for now:
+  MESSAGE("Sorry C# v${DESIRED_CSHARP_COMPILER_VERSION} was not found on your system")
+ENDIF(NOT CMAKE_CSHARP_COMPILER)
+
 MACRO(CSHARP_ADD_LIBRARY name)
   SET(csharp_cs_sources)
   SET(csharp_cs_sources_dep)
