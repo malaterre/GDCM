@@ -310,7 +310,7 @@ OPTION(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
 SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 # Hide BUILD_TESTING as user tend to always turn all options on and then complains when something
 # does not work 'by default'
-MARK_AS_ADVANCED(BUILD_TESTING GDCM_BUILD_TESTING)
+MARK_AS_ADVANCED(BUILD_TESTING) # GDCM_BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Python install
@@ -363,7 +363,7 @@ ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_CSHARP "build csharp wrapping (very experimental !)" OFF)
-MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA GDCM_WRAP_CSHARP)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA) # GDCM_WRAP_CSHARP)
 IF(GDCM_WRAP_CSHARP)
 FIND_PACKAGE(CSharp REQUIRED)
 INCLUDE(${CSharp_USE_FILE})
@@ -420,6 +420,7 @@ ENDIF(BUILD_TESTING)
 OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
 IF(GDCM_DOCUMENTATION)
   OPTION(GDCM_PDF_DOCUMENTATION "Build source doxygen using doxygen as pdf" ON)
+  MARK_AS_ADVANCED(GDCM_PDF_DOCUMENTATION)
 ENDIF(GDCM_DOCUMENTATION)
 
 
