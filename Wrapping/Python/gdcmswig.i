@@ -268,6 +268,7 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%rename (PythonDataSet) SWIGDataSet; 
 %include "gdcmDataSet.h"
 //namespace std {
 //  //struct lttag

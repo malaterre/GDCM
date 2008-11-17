@@ -189,12 +189,57 @@ using namespace gdcm;
 %include "gdcmPrivateTag.h"
 %include "gdcmVL.h"
 %include "gdcmVR.h"
+%extend gdcm::VR
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmVM.h"
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
+%extend gdcm::Directory
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmObject.h"
 %include "gdcmValue.h"
+%extend gdcm::Value
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmByteValue.h"
+%extend gdcm::ByteValue
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+  std::string WriteBuffer() {
+    std::ostringstream os;
+    self->WriteBuffer(os);
+    return os.str();
+  }
+};
 
 // Array marshaling for arrays of primitives
 %define %cs_marshal_array(TYPE, CSTYPE)
@@ -232,9 +277,39 @@ using namespace gdcm;
 %include "gdcmDataElement.h"
 
 %clear const char* array;
-
+%extend gdcm::DataElement
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmItem.h"
+%extend gdcm::Item
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmSequenceOfItems.h"
+%extend gdcm::SequenceOfItems
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%rename (CSharpDataSet) SWIGDataSet; 
 %include "gdcmDataSet.h"
 %extend gdcm::DataSet
 {
@@ -255,8 +330,39 @@ using namespace gdcm;
 //%template (DataElementSet) std::set<gdcm::DataElement>;
 %include "gdcmPreamble.h"
 %include "gdcmTransferSyntax.h"
+%extend gdcm::TransferSyntax
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmFileMetaInformation.h"
+%extend gdcm::FileMetaInformation
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmFile.h"
+%extend gdcm::File
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+
 //%include "gdcm_arrays_csharp.i"
 
 %apply char[] { char* buffer }
@@ -284,12 +390,64 @@ using namespace gdcm;
 
 
 %include "gdcmImage.h"
+%extend gdcm::Image
+{
+
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+
+};
 %include "gdcmIconImage.h"
 %include "gdcmFragment.h"
 %include "gdcmPDBElement.h"
+%extend gdcm::PDBElement
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmPDBHeader.h"
+%extend gdcm::PDBHeader
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmCSAElement.h"
+%extend gdcm::CSAElement
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmCSAHeader.h"
+%extend gdcm::CSAHeader
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmSequenceOfFragments.h"
 %include "gdcmBasicOffsetTable.h"
 //%include "gdcmLO.h"
@@ -298,7 +456,28 @@ using namespace gdcm;
 %include "gdcmGlobal.h"
 
 %include "gdcmDictEntry.h"
+%extend gdcm::DictEntry
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmCSAHeaderDictEntry.h"
+%extend gdcm::CSAHeaderDictEntry
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+
 %include "gdcmDict.h"
 %include "gdcmCSAHeaderDict.h"
 %include "gdcmDicts.h"
@@ -312,6 +491,16 @@ using namespace gdcm;
 %include "gdcmUIDGenerator.h"
 //%template (ValuesType)      std::set<std::string>;
 %include "gdcmScanner.h"
+%extend gdcm::Scanner
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmAnonymizer.h"
@@ -345,6 +534,16 @@ using namespace gdcm;
 %include "gdcmPatient.h"
 %include "gdcmStudy.h"
 %include "gdcmModuleEntry.h"
+%extend gdcm::ModuleEntry
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmNestedModuleEntries.h"
 %include "gdcmModule.h"
 %include "gdcmModules.h"
