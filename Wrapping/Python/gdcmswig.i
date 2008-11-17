@@ -217,6 +217,7 @@ using namespace gdcm;
   }
 };
 %include "gdcmByteValue.h"
+%ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
 %extend gdcm::ByteValue
 {
   const char *__str__() {
@@ -225,6 +226,11 @@ using namespace gdcm;
     os << *self;
     buffer = os.str();
     return buffer.c_str();
+  }
+  std::string WriteBuffer() {
+    std::ostringstream os;
+    self->WriteBuffer(os);
+    return os.str();
   }
 };
 %include "gdcmSmartPointer.h"
