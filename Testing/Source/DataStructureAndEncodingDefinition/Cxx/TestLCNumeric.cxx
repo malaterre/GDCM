@@ -19,7 +19,10 @@
 int TestLCNumeric(int argc, char *argv[])
 {
   //setenv("LC_NUMERIC", "fr_FR", 1);
-  putenv("LC_NUMERIC=fr_FR");
+  const char ss[] = "LC_NUMERIC=fr_FR";
+  char *copy = strdup(ss);
+  putenv(copy);
+  free(copy);
   std::ostringstream os;
   double d = 1.2;
   os << d;

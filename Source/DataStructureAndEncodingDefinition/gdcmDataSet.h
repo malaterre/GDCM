@@ -280,14 +280,17 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   return os;
 }
   	 
+// There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
+// I also had to test defined(SWIGEXPORT) ...
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGEXPORT)
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,
  * swig does not support wrapping of simple class like std::set...
  */
-class PythonDataSet
+class SWIGDataSet
 {
 public:
-  PythonDataSet(DataSet &des):Internal(des),it(des.Begin()) {}
+  SWIGDataSet(DataSet &des):Internal(des),it(des.Begin()) {}
   const DataElement& GetCurrent() const { return *it; }
   void Start() { it = Internal.Begin(); }
   bool IsAtEnd() const { return it == Internal.End(); }
@@ -296,6 +299,7 @@ private:
   DataSet & Internal;
   DataSet::ConstIterator it;
 };
+#endif /* SWIG */
 
 } // end namespace gdcm
 

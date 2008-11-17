@@ -30,6 +30,7 @@ SET(MSFF_TEST_SRCS
   TestUIDGenerator
   #TestUIDGenerator3
   TestPrinter
+  TestPrint
   TestSorter
   TestImageReader
   TestDirectionCosines

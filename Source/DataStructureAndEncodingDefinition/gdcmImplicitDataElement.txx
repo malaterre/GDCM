@@ -64,7 +64,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       }
     else
       {
-      gdcmErrorMacro( "Undefined value length is impossible in non-encapsulated Transfer Syntax" );
+      gdcmErrorMacro( "Undefined value length is impossible in non-encapsulated Transfer Syntax. Proceeding with caution" );
       ValueField = new SequenceOfFragments;
       }
     //VRField = VR::SQ;

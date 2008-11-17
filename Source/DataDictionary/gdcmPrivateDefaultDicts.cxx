@@ -3852,6 +3852,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2001,0x00a4,"Philips Imaging DD 001",VR::UL,VM::VM1,"Text Color Background",false },
   {0x2001,0x00a5,"Philips Imaging DD 001",VR::UL,VM::VM1,"Text Color Shadow",false },
   {0x2001,0x00c1,"Philips Imaging DD 001",VR::LO,VM::VM1,"Nested Object Type Name",false },
+  {0x2001,0x00c8,"Philips Imaging DD 001",VR::LO,VM::VM1,"?",false },
   {0x2001,0x00cc,"Philips Imaging DD 001",VR::ST,VM::VM1,"?",false },
   {0x2001,0x00da,"Philips Imaging DD 001",VR::CS,VM::VM1,"?",false },
   {0x2001,0x00f1,"Philips Imaging DD 001",VR::FL,VM::VM1,"Prospective Motion Correction",false },

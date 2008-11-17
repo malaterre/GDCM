@@ -434,7 +434,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
 
-  const SequenceOfItems *sqi = de.GetSequenceOfItems();
+  //const SequenceOfItems *sqi = de.GetSequenceOfItems();
   const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
   std::string strowner;
@@ -491,6 +491,9 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
     //os << "</entry>\n";
     }
 
+  if( entry.GetVR() == VR::SQ )
+{
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
   if( sqi )
     {
     SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
@@ -502,6 +505,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
       PrintDataSet2(os, ds);
       }
     }
+}
 }
 
 //-----------------------------------------------------------------------------

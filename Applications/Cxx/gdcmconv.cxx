@@ -124,12 +124,13 @@ void PrintHelp()
   std::cout << "  -i --input      DICOM filename" << std::endl;
   std::cout << "  -o --output     DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -X --explicit   Change Transfer Syntax to explicit." << std::endl;
-  std::cout << "  -M --implicit   Change Transfer Syntax to implicit." << std::endl;
-  std::cout << "  -U --use-dict   Use dict for VR." << std::endl;
-  std::cout << "  -C --check-meta Check File Meta Information (advanced user only)." << std::endl;
-  std::cout << "     --root-uid   Root UID." << std::endl;
-  std::cout << "     --remove-gl  Remove group length (deprecated in DICOM 2008)." << std::endl;
+  std::cout << "  -X --explicit            Change Transfer Syntax to explicit." << std::endl;
+  std::cout << "  -M --implicit            Change Transfer Syntax to implicit." << std::endl;
+  std::cout << "  -U --use-dict            Use dict for VR (only public by default)." << std::endl;
+  std::cout << "     --with-private-dict   Use private dict for VR (advanced user only)." << std::endl;
+  std::cout << "  -C --check-meta          Check File Meta Information (advanced user only)." << std::endl;
+  std::cout << "     --root-uid            Root UID." << std::endl;
+  std::cout << "     --remove-gl           Remove group length (deprecated in DICOM 2008)." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
@@ -405,6 +406,7 @@ int main (int argc, char *argv[])
   std::vector<float> rates;
   std::vector<unsigned int> tilesize;
   int irreversible = 0;
+  int changeprivatetags = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -454,6 +456,7 @@ int main (int argc, char *argv[])
         {"compress-icon", 0, &compressicon, 1}, // 
         {"remove-gl", 0, &removegrouplength, 1}, // 
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
+        {"with-private-dict", 0, &changeprivatetags, 1}, // 
 // j2k :
         {"rate", 1, &rate, 1}, // 
         {"quality", 1, &quality, 1}, // 
@@ -825,7 +828,7 @@ int main (int argc, char *argv[])
     if( explicitts )
       {
       gdcm::FileExplicitFilter fef;
-      //fef.SetChangePrivateTags( true );
+      fef.SetChangePrivateTags( changeprivatetags );
       fef.SetFile( reader.GetFile() );
       if( !fef.Change() )
         {
@@ -1078,7 +1081,7 @@ int main (int argc, char *argv[])
     if( usedict /*ts.IsImplicit()*/ )
       {
       gdcm::FileExplicitFilter fef;
-      //fef.SetChangePrivateTags( true );
+      fef.SetChangePrivateTags( changeprivatetags );
       fef.SetFile( reader.GetFile() );
       if(!fef.Change())
         {
