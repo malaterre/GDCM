@@ -432,6 +432,7 @@ ENDIF(GDCM_USE_VTK)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_ITK "itk bridge ?" OFF)
+MARK_AS_ADVANCED(GDCM_USE_ITK)
 IF(GDCM_USE_ITK)
   MESSAGE(FATAL_ERROR "Do not use, instead prefer: ITK_USE_SYSTEM_GDCM, that was added after ITK 3.8")
   SUBDIRS(Utilities/Insight)
