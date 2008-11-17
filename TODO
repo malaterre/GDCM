@@ -231,3 +231,5 @@ gdcmData/WeirdOverlayThingy.dcm
 Using gdcm2vtk will loose everything...
 -----------------------------------------------------------------------
 Test integration with ITK 3.10
+-----------------------------------------------------------------------
+Test unknown Explicit SQ (not in private dict) + gdcmprinter
