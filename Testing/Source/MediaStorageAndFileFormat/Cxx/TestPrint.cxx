@@ -15,12 +15,11 @@
 #include "gdcmStringFilter.h"
 #include "gdcmReader.h"
 #include "gdcmSequenceOfItems.h"
-#include "gdcmTesting.h"
 #include "gdcmTrace.h"
+#include "gdcmTesting.h"
 
-int TestStringFilt(const char *filename)
+int TestSimplePrint(const char *filename, bool verbose = false)
 {
-  gdcm::StringFilter sf;
   gdcm::Reader r;
   r.SetFileName( filename );
   if( !r.Read() )
@@ -28,42 +27,26 @@ int TestStringFilt(const char *filename)
     return 1;
     }
   gdcm::DataSet const& ds = r.GetFile().GetDataSet();
-  sf.SetFile( r.GetFile() );
   
   int ret = 0;
   gdcm::DataSet::ConstIterator it = ds.Begin();
+  std::ostringstream os;
   for( ; it != ds.End(); ++it)
     {
     const gdcm::DataElement &ref = *it;
-    std::pair<std::string, std::string> s = sf.ToStringPair( ref.GetTag() );
-    if( !s.second.empty() || ref.GetVL() == 0 )
-      {
-      std::cout << s.first << " -> " << s.second << std::endl;
-      }
-    else if( !ref.GetByteValue() ) // It means it's a SQ
-      {
-      std::cout << "SQ:" << ref.GetTag() << std::endl;
-      }
-    else if( ref.GetTag().IsPrivate() )
-      {
-      std::cout << "Private:" << ref.GetTag() << std::endl;
-      }
-    else
-      {
-      std::cerr << "Not supported: " << ref << std::endl;
-      //ret += 1;
-      }
+    os << ref << std::endl;
     }
+  if( verbose ) std::cout << os;
 
   return ret;
 }
 
-int TestStringFilter(int argc, char *argv[])
+int TestPrint(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestStringFilt(filename);
+    return TestSimplePrint(filename, true);
     }
 
   // else
@@ -75,7 +58,7 @@ int TestStringFilter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestStringFilt( filename );
+    r += TestSimplePrint( filename );
     ++i;
     }
 
