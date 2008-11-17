@@ -59,6 +59,15 @@ namespace gdcm
     return sqf;
   }
 
+  /*
+   *  Two cases are handled:
+   *  - Simple ones:
+   *     Explicit file with VR::SQ (defined or undefined length)
+   *     Implicit file with undefined length (clearly a SQ)
+   *  - If not in the previous case then we are in the second case: complex one (hidden SQ)
+   *     Implicit file with defined length SQ
+   *     Explicit file with SQ declared as UN + undefined length
+   */
   SmartPointer<SequenceOfItems> DataElement::GetValueAsSQ() const
     {
     if( IsEmpty() )
@@ -69,11 +78,12 @@ namespace gdcm
     SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(&v);
     if( sq ) // all set !
       {
+      //assert( GetVR() == VR::SQ );
       SmartPointer<SequenceOfItems> sqi = sq;
       return sqi;
       }
 
-      const Tag itemStart(0xfffe, 0xe000);
+    const Tag itemStart(0xfffe, 0xe000);
       {
         {
         if( GetVR() == VR::INVALID )
@@ -85,18 +95,18 @@ namespace gdcm
           std::string s( bv->GetPointer(), bv->GetLength() );
           try
             {
-          std::stringstream ss;
-          ss.str( s );
+            std::stringstream ss;
+            ss.str( s );
             sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
             }
           catch(Exception &ex)
             {
-      const Tag itemPMSStart(0xfeff, 0x00e0);
-      const Tag itemPMSStart2(0x3f3f, 0x3f00);
+            const Tag itemPMSStart(0xfeff, 0x00e0);
+            const Tag itemPMSStart2(0x3f3f, 0x3f00);
 
             // same player ...
-          std::stringstream ss;
-          ss.str( s );
+            std::stringstream ss;
+            ss.str( s );
             Tag item;
             item.Read<SwapperNoOp>(ss);
             assert( item == itemPMSStart );
@@ -119,18 +129,18 @@ namespace gdcm
           }
         }
       }
-//    catch( ParseException &pex )
-//      {
-//      gdcmDebugMacro( pex.what() );
-//      }
-//    catch( Exception &ex )
-//      {
-//      gdcmDebugMacro( ex.what() );
-//      }
-//    catch( ... )
-//      {
-//      gdcmWarningMacro( "Unknown exception" );
-//      }
+    //    catch( ParseException &pex )
+    //      {
+    //      gdcmDebugMacro( pex.what() );
+    //      }
+    //    catch( Exception &ex )
+    //      {
+    //      gdcmDebugMacro( ex.what() );
+    //      }
+    //    catch( ... )
+    //      {
+    //      gdcmWarningMacro( "Unknown exception" );
+    //      }
 
     return 0;
     }
