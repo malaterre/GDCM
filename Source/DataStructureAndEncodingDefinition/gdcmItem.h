@@ -45,7 +45,7 @@ class DataSet;
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item() : DataElement(Tag(0xfffe, 0xe000)), NestedDataSet() {}
+  Item() : DataElement(Tag(0xfffe, 0xe000), 0xFFFFFFFF), NestedDataSet() {}
   friend std::ostream& operator<< (std::ostream &os, const Item &val);
 
   void Clear() {

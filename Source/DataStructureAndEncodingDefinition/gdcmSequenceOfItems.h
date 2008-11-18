@@ -48,9 +48,9 @@ public:
   ConstIterator Begin() const { return Items.begin(); }
   ConstIterator End() const { return Items.end(); }
 
-/// \brief constructor (UndefinedLength by default)
+  /// \brief constructor (UndefinedLength by default)
+  SequenceOfItems():SequenceLengthField(0xFFFFFFFF) { }
   //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
-  SequenceOfItems() { }
 
   /// \brief Returns the SQ length, as read from disk
   VL GetLength() const { return SequenceLengthField; }
@@ -60,6 +60,10 @@ public:
   }
   void SetLengthToUndefined() {
     SequenceLengthField = 0xFFFFFFFF;
+  }
+  /// return if Value Length if of undefined length
+  bool IsUndefinedLength() const {
+    return SequenceLengthField.IsUndefined();
   }
 
   template <typename TDE>
