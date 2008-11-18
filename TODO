@@ -230,3 +230,4 @@ This is a SC, with Pixel Spacing and Rescale Slope/Intercept
 gdcmData/WeirdOverlayThingy.dcm
 Using gdcm2vtk will loose everything...
 -----------------------------------------------------------------------
+C# has some sort of compilation in XML to construct the documentation... to investigate

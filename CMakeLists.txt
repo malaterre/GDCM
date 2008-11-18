@@ -374,10 +374,12 @@ ENDIF(GDCM_WRAP_CSHARP)
 SET(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 SET(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 
-SUBDIRS(Wrapping)
+#SUBDIRS(Wrapping)
+add_subdirectory(Wrapping)
 
 IF(BUILD_EXAMPLES)
-  SUBDIRS(Examples)
+  #SUBDIRS(Examples)
+  add_subdirectory(Examples)
 ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
