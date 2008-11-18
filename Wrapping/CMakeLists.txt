@@ -12,6 +12,5 @@ IF(GDCM_WRAP_PHP)
 ENDIF(GDCM_WRAP_PHP)
 
 IF(GDCM_WRAP_CSHARP)
-  #SUBDIRS(Csharp)
-  add_subdirectory(Csharp)
+  SUBDIRS(Csharp)
 ENDIF(GDCM_WRAP_CSHARP)
