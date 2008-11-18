@@ -13,7 +13,7 @@
 
 =========================================================================*/
 #include "gdcmItem.h"
-#include "gdcmStringStream.h"
+//#include "gdcmStringStream.h"
 #include "gdcmVR.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmSwapper.h"
@@ -49,15 +49,27 @@ int TestItem(int , char *[])
   gdcm::DataSet ds;
   gdcm::ExplicitDataElement xde;
   CreateDataElement(xde,0);
-  ds.InsertDataElement( xde );
+  ds.Insert( xde );
   CreateDataElement(xde,1);
-  ds.InsertDataElement( xde );
+  ds.Insert( xde );
   CreateDataElement(xde,2);
-  ds.InsertDataElement( xde );
+  ds.Insert( xde );
   CreateDataElement(xde,3);
-  ds.InsertDataElement( xde );
+  ds.Insert( xde );
 
   std::cout << ds << std::endl;
+
+  // undefined by default:
+  gdcm::Item it3;
+  gdcm::VL vl = it3.GetVL();
+  if( !vl.IsUndefined() )
+    {
+    return 1;
+    }
+  if( !it3.IsUndefinedLength() )
+    {
+    return 1;
+    }
 
   return 0;
 }

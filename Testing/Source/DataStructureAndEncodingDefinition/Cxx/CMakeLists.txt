@@ -27,7 +27,7 @@ SET(DSED_TEST_SRCS
   TestFileSet
   TestFragment
   #TestImplicitDataElement
-  #TestItem
+  TestItem
   #TestParser
   TestSequenceOfFragments
   TestSequenceOfItems

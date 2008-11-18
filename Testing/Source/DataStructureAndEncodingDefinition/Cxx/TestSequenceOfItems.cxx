@@ -19,5 +19,15 @@ int TestSequenceOfItems(int, char *[])
   gdcm::SequenceOfItems si;
   std::cout << si << std::endl;
 
+  gdcm::VL vl = si.GetLength();
+  if( !vl.IsUndefined() )
+    {
+    return 1;
+    }
+  if( !si.IsUndefinedLength() )
+    {
+    return 1;
+    }
+
   return 0;
 }
