@@ -20,6 +20,8 @@ SET(DSED_TEST_SRCS
   #TestDataElement
   TestDataSet
   TestVRDS
+  TestVRLT
+  TestVRUI
   TestElement
   #TestExplicitDataElement
   TestFileMetaInformation

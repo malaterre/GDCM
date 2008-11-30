@@ -66,13 +66,14 @@ int TestParser(int argc, char *argv[])
     is.read(buf, sizeof(buf));
     size_t len = is.gcount();
     done = len < sizeof(buf);
-    if ( parser.Parse(buf, len, done) ) {
+    if ( parser.Parse(buf, len, done) )
+      {
       fprintf(stderr,
         "%s at line %" XML_FMT_INT_MOD "u\n",
         gdcm::Parser::GetErrorString(parser.GetErrorCode()),
         parser.GetCurrentByteIndex());
       return 1;
-    }
+      }
   } while (!done);
 
   is.close();
