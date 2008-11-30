@@ -514,6 +514,7 @@ static int gettimeofday(struct timeval *tv, struct timezone *tz)
 
 bool System::GetCurrentDateTime(char date[18])
 {
+  if(!date) return false;
   const size_t maxsize = 40;
   char tmp[maxsize];
   long milliseconds;
