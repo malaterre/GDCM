@@ -194,6 +194,7 @@ std::cout << "title:" << title.size() << std::endl;
   is.close();
 
   de.SetByteValue( buffer, length );
+  delete[] buffer;
 
   gdcm::FileMetaInformation &fmi = writer.GetFile().GetHeader();
   gdcm::TransferSyntax ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
@@ -389,7 +390,10 @@ std::cout << "title:" << title.size() << std::endl;
 
 
   writer.SetFileName( outfilename );
-  writer.Write();
+  if( !writer.Write() )
+  {
+  return 1;
+  }
 
   return 0;
 }
