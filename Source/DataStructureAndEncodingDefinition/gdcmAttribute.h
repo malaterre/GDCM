@@ -294,6 +294,10 @@ public:
   typedef typename VRToType<TVR>::Type ArrayType;
 
   unsigned int GetNumberOfValues() const { return Length; }
+  void SetNumberOfValues(unsigned int numel)
+    {
+    SetValues(NULL, numel, true);
+    }
 
   void SetValues(const ArrayType *array, unsigned int numel, bool own = false)
     {
@@ -308,9 +312,10 @@ public:
     assert( Internal == 0 );
     if( own ) // make a copy:
       {
-      assert( array && numel );
+      assert( /*array &&*/ numel );
       Internal = new ArrayType[numel];
-      std::copy(array, array+numel, Internal);
+      if( array && numel )
+        std::copy(array, array+numel, Internal);
       }
     else // pass pointer
       {
