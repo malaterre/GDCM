@@ -18,8 +18,9 @@
 #include "gdcmTypes.h"
 #include <vector>
 #include <assert.h>
+#include <string.h> // memmove
 
-#error should not be used 
+#error should not be used
 
 namespace gdcm
 {
@@ -87,7 +88,7 @@ public:
     }
 
   void UpdatePosition() {}
-  void ShitEnd(int len) {
+  void ShiftEnd(int len) {
     End += len;
   }
   const char *GetStart() const {

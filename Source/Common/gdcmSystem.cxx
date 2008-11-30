@@ -512,19 +512,11 @@ static int gettimeofday(struct timeval *tv, struct timezone *tz)
 }
 #endif
 
-bool System::GetCurrentDateTime(char date[18])
+bool System::FormatDateTime(char date[18], time_t timep, long milliseconds)
 {
   if(!date) return false;
   const size_t maxsize = 40;
   char tmp[maxsize];
-  long milliseconds;
-  time_t timep;
-
-  struct timeval tv;
-  gettimeofday (&tv, NULL);
-  timep = tv.tv_sec;
-  // Compute milliseconds from microseconds.
-  milliseconds = tv.tv_usec / 1000;
   // Obtain the time of day, and convert it to a tm struct.
   struct tm *ptm = localtime (&timep);
   // Format the date and time, down to a single second.
@@ -546,6 +538,20 @@ bool System::GetCurrentDateTime(char date[18])
 
   // Ok !
   return true;
+}
+
+bool System::GetCurrentDateTime(char date[18])
+{
+  long milliseconds;
+  time_t timep;
+
+  struct timeval tv;
+  gettimeofday (&tv, NULL);
+  timep = tv.tv_sec;
+  // Compute milliseconds from microseconds.
+  milliseconds = tv.tv_usec / 1000;
+
+  return FormatDateTime(date, timep, milliseconds);
 }
 
 int System::StrNCaseCmp(const char *s1, const char *s2, size_t n)

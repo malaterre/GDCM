@@ -66,6 +66,9 @@ public:
   // somewhat UID specific:
   /// Return the current data time
   static bool GetCurrentDateTime(char date[18]);
+
+  static bool FormatDateTime(char date[18], time_t t, long milliseconds = 0);
+
   /// Encode bytes
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 

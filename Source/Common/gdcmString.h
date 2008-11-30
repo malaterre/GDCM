@@ -26,7 +26,9 @@ template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream&
 /**
  * \brief String
  *
- * \note bla
+ * \note TDelimiter template parameter is used to separate multiple String (VM1 >)
+ *      TMaxLength is only a hint. Noone actually respect the max length
+ *      TPadChar is the string padding (0 or space)
  */
 template <char TDelimiter = EOF, unsigned int TMaxLength = 64, char TPadChar = ' '>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
@@ -59,7 +61,7 @@ public:
   }
   String(const value_type* s, size_type n): std::string(s, n) 
   {
-  // We are being passed a const char* pointer, so s[n-1] == 0 (garanteed!)
+  // We are being passed a const char* pointer, so s[n] == 0 (garanteed!)
   if( n % 2 )
     {
     push_back( TPadChar );
@@ -90,13 +92,13 @@ public:
 template <char TDelimiter, unsigned int TMaxLength, char TPadChar>
 inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar> &ms)
 {
-        if(is)
-        {
-  std::getline(is, ms, TDelimiter);
-  // no such thing as std::get where the delim char would be left, so I need to manually add it back...
-  // hopefully this is the right thing to do (no overhead)
-  is.putback( TDelimiter );
-        }
+  if(is)
+    {
+    std::getline(is, ms, TDelimiter);
+    // no such thing as std::get where the delim char would be left, so I need to manually add it back...
+    // hopefully this is the right thing to do (no overhead)
+    is.putback( TDelimiter );
+    }
   return is;
 }
 
