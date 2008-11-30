@@ -95,7 +95,7 @@ public:
   unsigned int GetRows() const { return GetDimension(1); }
   void SetDimensions(const unsigned int *dims);
   void SetDimension(unsigned int idx, unsigned int dim);
-  // Get/Set PixelFormat
+  /// Get/Set PixelFormat
   const PixelFormat &GetPixelFormat() const
     {
     return PF;
@@ -119,7 +119,7 @@ public:
 
   /// Return the length of the image after decompression
   /// WARNING for palette color: It will NOT take into account the Palette Color
-  /// thus you need to multiply this length by 3 if the image is RGB for instance.
+  /// thus you need to multiply this length by 3 if computing the size of equivalent RGB image
   unsigned long GetBufferLength() const;
 
   /// Acces the raw data
