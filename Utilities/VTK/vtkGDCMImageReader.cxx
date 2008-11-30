@@ -1096,16 +1096,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL_422 )
     {
-    if( image.GetPixelFormat().GetSamplesPerPixel() == 3 )
-      {
-      this->ImageFormat = VTK_RGB; // FIXME 
-      }
-    else if( image.GetPixelFormat().GetSamplesPerPixel() == 1 )
-      {
-      abort();
-      vtkWarningMacro( "Image was declared as YBR_FULL_422 but is just grayscale" );
-      this->ImageFormat = VTK_LUMINANCE;
-      }
+    assert( image.GetPixelFormat().GetSamplesPerPixel() == 3 );
+    this->ImageFormat = VTK_RGB;
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL )
     {
@@ -1172,7 +1164,16 @@ int vtkGDCMImageReader::RequestDataCompat()
   vtkImageData *output = this->GetOutput(0);
   output->GetPointData()->GetScalars()->SetName("GDCMImage");
 
-  char * pointer = static_cast<char*>(output->GetScalarPointer());
+  int outExt[6];
+  output->GetUpdateExtent(outExt);
+  //vtkIdType outInc[3];
+  //data->GetIncrements(outInc);
+  //int outSize[3];
+  //data->GetDimensions(outSize);
+
+  //void *outPtr = data->GetScalarPointerForExtent(outExt);
+
+  char * pointer = static_cast<char*>(output->GetScalarPointerForExtent(outExt));
   if( this->FileName )
     {
     const char *filename = this->FileName;
