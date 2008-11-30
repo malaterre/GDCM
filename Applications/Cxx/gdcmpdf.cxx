@@ -14,13 +14,20 @@
 =========================================================================*/
 /*
  */
+#include "gdcmUIDGenerator.h"
+#include "gdcmWriter.h"
+#include "gdcmAttribute.h"
+#include "gdcmSystem.h"
+
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
 #include <poppler/UnicodeMap.h>
 #include <poppler/PDFDocEncoding.h>
 #include <poppler/GlobalParams.h>
 
-static void printInfoString(Dict *infoDict, const char *key, const char *text, UnicodeMap *uMap)
+#include <string>
+
+std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
 {
   Object obj;
   GooString *s1;
@@ -28,10 +35,10 @@ static void printInfoString(Dict *infoDict, const char *key, const char *text, U
   Unicode u;
   char buf[8];
   int i, n;
+  std::string out;
 
   if (infoDict->lookup((char*)key, &obj)->isString())
     {
-    fputs(text, stdout);
     s1 = obj.getString();
     if ((s1->getChar(0) & 0xff) == 0xfe &&
       (s1->getChar(1) & 0xff) == 0xff)
@@ -58,11 +65,12 @@ static void printInfoString(Dict *infoDict, const char *key, const char *text, U
         ++i;
         }
       n = uMap->mapUnicode(u, buf, sizeof(buf));
-      fwrite(buf, 1, n, stdout);
+      //fwrite(buf,1,n,stdout);
+      out.append( std::string(buf, n) );
       }
-    fputc('\n', stdout);
     }
   obj.free();
+  return out;
 }
 
 int main (int argc, char *argv[])
@@ -74,10 +82,12 @@ int main (int argc, char *argv[])
   UnicodeMap *uMap;
   ownerPW = NULL;
   userPW = NULL;
-  globalParams = new GlobalParams(0);
+  globalParams = new GlobalParams();
   uMap = globalParams->getTextEncoding();
 
-  fileName = new GooString(argv[1]);
+  const char *filename = argv[1];
+  const char *outfilename = argv[2];
+  fileName = new GooString( filename );
   Object obj;
 
   obj.initNull();
@@ -89,18 +99,221 @@ int main (int argc, char *argv[])
     }
 
   doc->getDocInfo(&info);
-  if (info.isDict())
+  if (!info.isDict())
     {
-    printInfoString(info.getDict(), "Title",        "Title:          ", uMap);
-    printInfoString(info.getDict(), "Subject",      "Subject:        ", uMap);
-    printInfoString(info.getDict(), "Keywords",     "Keywords:       ", uMap);
-    printInfoString(info.getDict(), "Author",       "Author:         ", uMap);
-    printInfoString(info.getDict(), "Creator",      "Creator:        ", uMap);
-    printInfoString(info.getDict(), "Producer",     "Producer:       ", uMap);
+    return 1;
+    }
+    std::string title    = getInfoString(info.getDict(), "Title",    uMap);
+std::cout << "title:" << title.size() << std::endl;
+    std::string subject  = getInfoString(info.getDict(), "Subject",  uMap);
+    std::string keywords = getInfoString(info.getDict(), "Keywords", uMap);
+    std::string author   = getInfoString(info.getDict(), "Author",   uMap);
+    std::string creator  = getInfoString(info.getDict(), "Creator",  uMap);
+    std::string produce  = getInfoString(info.getDict(), "Producer", uMap);
     //printInfoDate(info.getDict(),   "CreationDate", "CreationDate:   ");
     //printInfoDate(info.getDict(),   "ModDate",      "ModDate:        ");
-    }
   info.free();
+
+  gdcm::Writer writer;
+  gdcm::DataElement de( gdcm::Tag( 0x42,0x11) );
+  de.SetVR( gdcm::VR::OB );
+  std::ifstream is;
+  is.open (filename, std::ios::binary );
+
+
+  // get length of file:
+  is.seekg (0, std::ios::end);
+  int length = is.tellg();
+  is.seekg (0, std::ios::beg);
+
+  char *buffer = new char [length];
+
+  // read data as a block:
+  is.read (buffer,length);
+  is.close();
+
+  de.SetByteValue( buffer, length );
+
+  gdcm::FileMetaInformation &fmi = writer.GetFile().GetHeader();
+  gdcm::TransferSyntax ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+  fmi.SetDataSetTransferSyntax( ts );
+  gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+  ds.Insert( de );
+
+  gdcm::UIDGenerator uid;
+{
+    const char *sop = uid.Generate();
+    gdcm::DataElement de( gdcm::Tag(0x0008,0x0018) );
+    de.SetByteValue( sop, strlen(sop) );
+    de.SetVR( gdcm::Attribute<0x0008, 0x0018>::GetVR() );
+    ds.Insert( de );
+}
+
+  gdcm::MediaStorage ms = gdcm::MediaStorage::EncapsulatedPDFStorage;
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
+    const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+    ds.Insert( de );
+    }
+
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmpdf" );
+
+  char date[18];
+  const size_t datelen = 8;
+  bool b = gdcm::System::GetCurrentDateTime(date);
+  std::cout << date << std::endl;
+
+{
+  gdcm::Attribute<0x0008, 0x005> at;
+  const char s[]="ISO_IR 100";
+  at.SetNumberOfValues( 1 );
+  at.SetValue( s );
+  ds.Insert( at.GetAsDataElement() );
+}
+{
+  gdcm::Attribute<0x0008, 0x0012> at;
+  std::string tmp( date, datelen );
+  at.SetValue( tmp.c_str() );
+  ds.Insert( at.GetAsDataElement() );
+}
+
+{
+  const size_t timelen = 6; // get rid of milliseconds
+  gdcm::Attribute<0x0008, 0x0013> at;
+  std::string tmp( date+datelen, timelen);
+  at.SetValue( tmp.c_str() );
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0020) DA (no value available)                     #   0, 0 StudyDate
+{
+  gdcm::Attribute<0x0008, 0x0020> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0023) DA (no value available)                     #   0, 0 ContentDate
+{
+  gdcm::Attribute<0x0008, 0x0023> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,002a) DT (no value available)                     #   0, 0 AcquisitionDatetime
+{
+  gdcm::Attribute<0x0008, 0x002a> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0030) TM (no value available)                     #   0, 0 StudyTime
+{
+  gdcm::Attribute<0x0008, 0x0030> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0033) TM (no value available)                     #   0, 0 ContentTime
+{
+  gdcm::Attribute<0x0008, 0x0033> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0050) SH (no value available)                     #   0, 0 AccessionNumber
+{
+  gdcm::Attribute<0x0008, 0x0050> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0060) CS [OT]                                     #   2, 1 Modality
+{
+  gdcm::Attribute<0x0008, 0x0060> at;
+  at.SetValue( "OT" );
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0064) CS [WSD]                                    #   4, 1 ConversionType
+{
+  gdcm::Attribute<0x0008, 0x0064> at;
+  at.SetValue( "WSD" );
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0070) LO (no value available)                     #   0, 0 Manufacturer
+{
+  gdcm::Attribute<0x0008, 0x0070> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0008,0090) PN (no value available)                     #   0, 0 ReferringPhysiciansName
+{
+  gdcm::Attribute<0x0008, 0x0090> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0010,0010) PN (no value available)                     #   0, 0 PatientsName
+{
+  gdcm::Attribute<0x0010, 0x0010> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0010,0020) LO (no value available)                     #   0, 0 PatientID
+{
+  gdcm::Attribute<0x0010, 0x0020> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0010,0030) DA (no value available)                     #   0, 0 PatientsBirthDate
+{
+  gdcm::Attribute<0x0010, 0x0030> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0010,0040) CS (no value available)                     #   0, 0 PatientsSex
+{
+  gdcm::Attribute<0x0010, 0x0040> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0020,000d) UI [1.2.276.0.7230010.3.1.4.8323329.511.1228064157.1] #  48, 1 StudyInstanceUID
+{
+  gdcm::Attribute<0x0020, 0x000d> at;
+  at.SetValue( uid.Generate() );
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0020,000e) UI [1.2.276.0.7230010.3.1.4.8323329.511.1228064157.2] #  48, 1 SeriesInstanceUID
+{
+  gdcm::Attribute<0x0020, 0x000e> at;
+  at.SetValue( uid.Generate() );
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0020,0010) SH (no value available)                     #   0, 0 StudyID
+{
+  gdcm::Attribute<0x0020, 0x0010> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0020,0011) IS [1]                                      #   2, 1 SeriesNumber
+{
+  gdcm::Attribute<0x0020, 0x0011> at = { 1 };
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0020,0013) IS [1]                                      #   2, 1 InstanceNumber
+{
+  gdcm::Attribute<0x0020, 0x0013> at = { 1 };
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0028,0301) CS [YES]                                    #   4, 1 BurnedInAnnotation
+{
+  gdcm::Attribute<0x0028, 0x0301> at;
+  at.SetValue( "YES" );
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0040,a043) SQ (Sequence with explicit length #=0)      #   0, 1 ConceptNameCodeSequence
+//(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+{
+//  gdcm::Attribute<0x0008, 0x0020> at;
+//  ds.Insert( at.GetAsDataElement() );
+}
+//(0042,0010) ST (no value available)                     #   0, 0 DocumentTitle
+{
+  gdcm::Attribute<0x0042, 0x0010> at;
+  at.SetValue( title.c_str() );
+  ds.Insert( at.GetAsDataElement() );
+}
+//(0042,0011) OB 25\50\44\46\2d\31\2e\34\0a\25\e7\f3\cf\d3\0a\32\34\35\38\38\20\30... # 6861900, 1 EncapsulatedDocument
+//(0042,0012) LO [application/pdf]                        #  16, 1 MIMETypeOfEncapsulatedDocument
+{
+  gdcm::Attribute<0x0042, 0x0012> at;
+  at.SetValue( "application/pdf" );
+  ds.Insert( at.GetAsDataElement() );
+}
+
+
+  writer.SetFileName( outfilename );
+  writer.Write();
 
   return 0;
 }
