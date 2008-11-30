@@ -27,6 +27,67 @@
 
 #include <string>
 
+std::string getInfoDate(Dict *infoDict, const char *key)
+{
+  Object obj;
+  char *s;
+  int year, mon, day, hour, min, sec, n;
+  struct tm tmStruct;
+  char buf[256];
+  std::string out;
+
+  if (infoDict->lookup((char*)key, &obj)->isString())
+    {
+    s = obj.getString()->getCString();
+    if (s[0] == 'D' && s[1] == ':')
+      {
+      s += 2;
+      }
+    if ((n = sscanf(s, "%4d%2d%2d%2d%2d%2d",
+          &year, &mon, &day, &hour, &min, &sec)) >= 1)
+      {
+      switch (n)
+        {
+      case 1: mon = 1;
+      case 2: day = 1;
+      case 3: hour = 0;
+      case 4: min = 0;
+      case 5: sec = 0;
+        }
+      tmStruct.tm_year = year - 1900;
+      tmStruct.tm_mon = mon - 1;
+      tmStruct.tm_mday = day;
+      tmStruct.tm_hour = hour;
+      tmStruct.tm_min = min;
+      tmStruct.tm_sec = sec;
+      tmStruct.tm_wday = -1;
+      tmStruct.tm_yday = -1;
+      tmStruct.tm_isdst = -1;
+/*
+      // compute the tm_wday and tm_yday fields
+      if (mktime(&tmStruct) != (time_t)-1 &&
+        strftime(buf, sizeof(buf), "%c", &tmStruct)) {
+        fputs(buf, stdout);
+      } else {
+        fputs(s, stdout);
+      }
+      } else {
+        fputs(s, stdout);
+*/
+      }
+    //fputc('\n', stdout);
+    char date[18];
+    time_t t = mktime(&tmStruct);
+    if( t != -1 )
+      {
+      if( gdcm::System::FormatDateTime(date, t) )
+        out = date;
+      }
+    }
+  obj.free();
+  return out;
+}
+
 std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
 {
   Object obj;
@@ -109,9 +170,9 @@ std::cout << "title:" << title.size() << std::endl;
     std::string keywords = getInfoString(info.getDict(), "Keywords", uMap);
     std::string author   = getInfoString(info.getDict(), "Author",   uMap);
     std::string creator  = getInfoString(info.getDict(), "Creator",  uMap);
-    std::string produce  = getInfoString(info.getDict(), "Producer", uMap);
-    //printInfoDate(info.getDict(),   "CreationDate", "CreationDate:   ");
-    //printInfoDate(info.getDict(),   "ModDate",      "ModDate:        ");
+    std::string producer = getInfoString(info.getDict(), "Producer", uMap);
+    std::string creationdate = getInfoDate(info.getDict(),   "CreationDate");
+    std::string moddate      = getInfoDate(info.getDict(),   "ModDate");
   info.free();
 
   gdcm::Writer writer;
@@ -179,8 +240,8 @@ std::cout << "title:" << title.size() << std::endl;
   ds.Insert( at.GetAsDataElement() );
 }
 
-{
   const size_t timelen = 6; // get rid of milliseconds
+{
   gdcm::Attribute<0x0008, 0x0013> at;
   std::string tmp( date+datelen, timelen);
   at.SetValue( tmp.c_str() );
@@ -194,6 +255,8 @@ std::cout << "title:" << title.size() << std::endl;
 //(0008,0023) DA (no value available)                     #   0, 0 ContentDate
 {
   gdcm::Attribute<0x0008, 0x0023> at;
+  std::string tmp( creationdate.c_str(), datelen );
+  at.SetValue( tmp.c_str() );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0008,002a) DT (no value available)                     #   0, 0 AcquisitionDatetime
@@ -209,6 +272,8 @@ std::cout << "title:" << title.size() << std::endl;
 //(0008,0033) TM (no value available)                     #   0, 0 ContentTime
 {
   gdcm::Attribute<0x0008, 0x0033> at;
+  std::string tmp( creationdate.c_str() + datelen, timelen);
+  at.SetValue( tmp.c_str() );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0008,0050) SH (no value available)                     #   0, 0 AccessionNumber
@@ -231,6 +296,7 @@ std::cout << "title:" << title.size() << std::endl;
 //(0008,0070) LO (no value available)                     #   0, 0 Manufacturer
 {
   gdcm::Attribute<0x0008, 0x0070> at;
+  at.SetValue( creator.c_str() );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0008,0090) PN (no value available)                     #   0, 0 ReferringPhysiciansName
@@ -241,6 +307,7 @@ std::cout << "title:" << title.size() << std::endl;
 //(0010,0010) PN (no value available)                     #   0, 0 PatientsName
 {
   gdcm::Attribute<0x0010, 0x0010> at;
+  at.SetValue( author.c_str() );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0010,0020) LO (no value available)                     #   0, 0 PatientID
@@ -256,6 +323,12 @@ std::cout << "title:" << title.size() << std::endl;
 //(0010,0040) CS (no value available)                     #   0, 0 PatientsSex
 {
   gdcm::Attribute<0x0010, 0x0040> at;
+  ds.Insert( at.GetAsDataElement() );
+}
+{
+  gdcm::Attribute<0x0018, 0x1020> at;
+  at.SetNumberOfValues( 1 );
+  at.SetValue( producer.c_str() );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0020,000d) UI [1.2.276.0.7230010.3.1.4.8323329.511.1228064157.1] #  48, 1 StudyInstanceUID
@@ -294,8 +367,11 @@ std::cout << "title:" << title.size() << std::endl;
 //(0040,a043) SQ (Sequence with explicit length #=0)      #   0, 1 ConceptNameCodeSequence
 //(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
 {
-//  gdcm::Attribute<0x0008, 0x0020> at;
-//  ds.Insert( at.GetAsDataElement() );
+  gdcm::Attribute<0x0040, 0xa043> at;
+  gdcm::DataElement de( at.GetTag() );
+  de.SetVR( at.GetVR() );
+  //ds.Insert( at.GetAsDataElement() );
+  ds.Insert( de );
 }
 //(0042,0010) ST (no value available)                     #   0, 0 DocumentTitle
 {
