@@ -74,14 +74,17 @@ void JPEGCodec::SetBitSample(int bit)
     }
   if ( BitSample <= 8 )
     {
+    gdcmDebugMacro( "Using JPEG8" );
     Internal = new JPEG8Codec;
     }
   else if ( BitSample <= 12 )
     {
+    gdcmDebugMacro( "Using JPEG12" );
     Internal = new JPEG12Codec;
     }
   else if ( BitSample <= 16 )
     {
+    gdcmDebugMacro( "Using JPEG16" );
     Internal = new JPEG16Codec;
     }
   else
