@@ -128,12 +128,19 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       gdcm::MediaStorage ms;
       ms.SetFromModality(ds);
       const char *msstr = ms.GetString();
-      xde.SetByteValue( msstr, strlen(msstr) );
-      xde.SetTag( Tag(0x0002, 0x0002) );
+      if( msstr )
         {
-        xde.SetVR( VR::UI );
+        xde.SetByteValue( msstr, strlen(msstr) );
+        xde.SetTag( Tag(0x0002, 0x0002) );
+          {
+          xde.SetVR( VR::UI );
+          }
+        Insert( xde );
         }
-      Insert( xde );
+      else
+        {
+        gdcmErrorMacro( "Could not find MediaStorage" );
+        }
       }
     else
       {
