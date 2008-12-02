@@ -41,6 +41,9 @@ SET(vtkgdcm_LIBS
 # Use wrapping hints for this project.
 #SET(VTK_WRAP_HINTS "${PROJECT_SOURCE_DIR}/hints")
 
+SET(VTKGDCM_NAME vtkgdcm CACHE STRING "vtk-gdcm lib name")
+MARK_AS_ADVANCED(VTKGDCM_NAME)
+
 # Create the instantiator for these classes.
 # FIXME: Are instantiator really needed when only doing python wrapping ?
 IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
@@ -93,8 +96,6 @@ ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 #IF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 #  ADD_LIBRARY(vtkgdcm STATIC ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
 #ELSE(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
-SET(VTKGDCM_NAME vtkgdcm CACHE STRING "vtk-gdcm lib name")
-MARK_AS_ADVANCED(VTKGDCM_NAME)
   ADD_LIBRARY(${VTKGDCM_NAME} ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
 #ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 
