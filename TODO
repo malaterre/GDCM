@@ -231,3 +231,11 @@ gdcmData/WeirdOverlayThingy.dcm
 Using gdcm2vtk will loose everything...
 -----------------------------------------------------------------------
 C# has some sort of compilation in XML to construct the documentation... to investigate
+-----------------------------------------------------------------------
+RegionOfInterestImageFilter is the streaming interface for ITKIO
+-----------------------------------------------------------------------
+http://www.stack.nl/~dimitri/doxygen/external.html
+with tag file from:
+http://www.vtk.org/doc/release/5.2/
+or:
+http://www.vtk.org/doc/nightly/
