@@ -5,6 +5,7 @@ SET(CSHARP_EXAMPLES
   ManipulateFile
   DecompressImage
   TestCSharpFilter
+  ScanDirectory
   )
 
 SET(DEP)
