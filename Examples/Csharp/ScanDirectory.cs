@@ -30,6 +30,7 @@ public class ScanDirectory
 
     Directory d = new Directory();
     uint nfiles = d.Load( directory );
+    if(nfiles == 0) return 1;
     //System.Console.WriteLine( "Files:\n" + d.toString() );
 
     Scanner s = new Scanner();
