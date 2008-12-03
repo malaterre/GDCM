@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-#include <stdint.h>
 #include <stdlib.h>
 
 /*
@@ -40,8 +39,8 @@ int main(int argc, char *argv[])
   int di;
   md5_state_t state;
   md5_byte_t digest[16];
-  uint32_t size_x, size_y, size_z;
-  uint16_t byte_per_scalar, num_comp;
+  unsigned int size_x, size_y, size_z;
+  unsigned short byte_per_scalar, num_comp;
   FILE *file;
   size_t s, len;
   void *image;
