@@ -45,11 +45,9 @@ debian/configure-python%-stamp:
 	dh_testdir
 	[ -d $(BUILD)-python$* ] || mkdir $(BUILD)-python$*
 	cd $(BUILD)-python$* && cmake $(CURDIR) -DCMAKE_INSTALL_PREFIX="/usr" \
-		-DCMAKE_C_COMPILER="/usr/bin/cc" \
-		-DCMAKE_C_FLAGS="-g -Wall -O2" \
 		-DCMAKE_SKIP_RPATH=ON \
 		-DGDCM_NO_EXECUTABLE_PROPERTIES=ON \
-		-DCMAKE_VERBOSE_MAKEFILE=ON \
+		-DCMAKE_VERBOSE_MAKEFILE=$(DH_VERBOSE) \
 		-DGDCM_BUILD_APPLICATIONS=ON \
 		-DGDCM_BUILD_SHARED_LIBS=ON \
 		-DGDCM_WRAP_PYTHON=ON \

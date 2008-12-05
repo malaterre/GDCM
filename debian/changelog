@@ -1,33 +1,57 @@
-gdcm (2.0.10) experimental; urgency=low
+gdcm (2.0.10) unstable; urgency=low
 
-  * bump up
+  * Non-maintainer upload.
+  * Add csharp-wrapping
+  * Use libopenjpeg-dev instead of gdcm internal one
+  * Fix installation of jpeg headers files
 
- -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Fri, 27 Sep 2008 14:20:36 +0200
+ -- Mathieu Malaterre <mathieu.malaterre@gmail.com>  Fri, 05 Dec 2008 11:24:20 +0100
 
-gdcm (2.0.9) experimental; urgency=low
+gdcm (2.0.9-1.1) unstable; urgency=low
 
-  * bump up
+  * Non-maintainer upload.
+  * debian/control: Some description cleanup
+  * debian/rules: Do not force C compiler. Preserve CFLAGS as set in rules files
+    turn verbose Makefile only if requested
 
- -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Fri, 26 Sep 2008 14:20:36 +0200
+ -- Mathieu Malaterre <mathieu.malaterre@gmail.com>  Mon, 01 Dec 2008 16:44:13 +0100
 
-gdcm (2.0.8) experimental; urgency=low
+gdcm (2.0.9-1) unstable; urgency=low
 
-  * bump up
+  * New upstream release.
+    - debian/python-gdcm.install: 
+    - debian/libgdcm2-dev.install:
+    - debian/libgdcm-tools.install: Adapt to new upstream.
+  
+  * debian/rules: Set number of jobs based on "parallel=N" in
+    DEB_BUILD_OPTIONS, rather than hardcoding 4.  Use quilt for patch
+    handling.
+  
+  * debian/control: Add build-dependencies for quilt, libjpeg62-dev,
+    libtiff4-dev, libfreetype6-dev, and libxext-dev.
+  
+  * debian/patches/no-executable-properties.patch: New.  Add CMake option
+    to suppress appending version to binaries.  Based on patch from
+    Mathieu Malaterre.
+  * debian/libgdcm-tools.install: Don't install binaries with version
+    suffix.
 
- -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Fri, 26 Sep 2008 14:19:26 +0200
-
-gdcm (2.0.7) experimental; urgency=low
-
-  * bump up
-
- -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Fri, 26 Sep 2008 14:16:49 +0200
+ -- Steve M. Robbins <smr@debian.org>  Sat, 15 Nov 2008 00:43:25 -0600
 
 gdcm (2.0.6) experimental; urgency=low
 
+  [ Mathieu Malaterre ]
   * Bump up
 
- -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Tue, 23 June 2008 16:15:26 -0500
+  [ Andreas Tille ]
+  * debian/control
+    - Group maintenance by Debian Med team
+    - Vcs fields
+    - Homepage field
+    - Standards-Version: 3.8.0 (no changes needed)
+  * debian/rules: Patch suggested by Mathieu
 
+ -- Andreas Tille <tille@debian.org>  Wed, 25 Jun 2008 10:12:45 +0200
 
 gdcm (2.0.5) experimental; urgency=low
 
