@@ -131,6 +131,7 @@ void PrintHelp()
   std::cout << "  -C --check-meta          Check File Meta Information (advanced user only)." << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --remove-gl           Remove group length (deprecated in DICOM 2008)." << std::endl;
+  std::cout << "     --remove-private-tags Remove private tags." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
@@ -395,6 +396,7 @@ int main (int argc, char *argv[])
   int usedict = 0;
   int compressicon = 0;
   int removegrouplength = 0;
+  int removeprivate = 0;
   int photometricinterpretation = 0;
   std::string photometricinterpretation_str;
   int quality = 0;
@@ -455,6 +457,7 @@ int main (int argc, char *argv[])
         {"use-dict", 0, &usedict, 1}, // 
         {"compress-icon", 0, &compressicon, 1}, // 
         {"remove-gl", 0, &removegrouplength, 1}, // 
+        {"remove-private", 0, &removeprivate, 1}, // 
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
         {"with-private-dict", 0, &changeprivatetags, 1}, // 
 // j2k :
@@ -513,28 +516,28 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "planar-configuration") == 0 );
             planarconfval = atoi(optarg);
             }
-          else if( option_index == 34 ) /* photometricinterpretation */
+          else if( option_index == 35 ) /* photometricinterpretation */
             {
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
-          else if( option_index == 35 ) /* rate */
+          else if( option_index == 36 ) /* rate */
             {
             assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
-          else if( option_index == 36 ) /* qualit */
+          else if( option_index == 37 ) /* qualit */
             {
             assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
-          else if( option_index == 37 ) /* tile */
+          else if( option_index == 38 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
             unsigned int n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
-          else if( option_index == 38 ) /* number of resolution */
+          else if( option_index == 39 ) /* number of resolution */
             {
             assert( strcmp(s, ",number-resolution") == 0 );
             nresvalue = atoi(optarg);
@@ -757,7 +760,7 @@ int main (int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-  if( removegrouplength )
+  if( removegrouplength || removeprivate )
     {
     gdcm::Reader reader;
     reader.SetFileName( filename.c_str() );
@@ -769,9 +772,19 @@ int main (int argc, char *argv[])
 
     gdcm::Anonymizer ano;
     ano.SetFile( reader.GetFile() );
-    if( !ano.RemoveGroupLength() )
+    if( removegrouplength )
       {
-      std::cerr << "Could not remove group length" << std::endl;
+      if( !ano.RemoveGroupLength() )
+        {
+        std::cerr << "Could not remove group length" << std::endl;
+        }
+      }
+    if( removeprivate )
+      {
+      if( !ano.RemovePrivateTags() )
+        {
+        std::cerr << "Could not remove private tags" << std::endl;
+        }
       }
 
     gdcm::Writer writer;
