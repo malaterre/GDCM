@@ -46,6 +46,21 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     throw Exception("Impossible");
     return is;
     }
+
+  /*
+   * technically this should not be needed, but what if an implementor, forgot to set
+   * VL = 0, then we should make sure to exit early
+   */
+  const Tag itemDelItem(0xfffe,0xe00d);
+  if( TagField == itemDelItem )
+    {
+    if( ValueLengthField != 0 )
+      {
+      gdcmWarningMacro( "VL should be set to 0" );
+      }
+    ValueField = 0;
+    return is;
+    }
   //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
   if( ValueLengthField == 0 )
     {

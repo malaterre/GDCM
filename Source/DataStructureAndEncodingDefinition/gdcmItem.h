@@ -195,6 +195,7 @@ public:
 #endif
     if( TagField != Tag(0xfffe, 0xe000) && TagField != Tag(0xfffe, 0xe0dd) )
       {
+      gdcmDebugMacro( "Invalid Item, found tag: " << TagField);
       throw Exception( "Not a valid Item" );
       }
     assert( TagField == Tag(0xfffe, 0xe000) || TagField == Tag(0xfffe, 0xe0dd) );
