@@ -1,22 +1,28 @@
 Source: gdcm
 Section: libs
 Priority: optional
-Maintainer: Mathieu Malaterre <mathieu.malaterre@gmail.com>
-Uploaders: Bla Foo <bla.foo@example.org>
-Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11),
+Maintainer: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+DM-Upload-Allowed: yes
+Uploaders: Mathieu Malaterre <mathieu.malaterre@gmail.com>,
+ Andreas Tille <tille@debian.org>
+Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11), quilt,
  python-support (>= 0.3.9), uuid-dev, zlib1g-dev, libexpat1-dev,
- swig, cmake, libvtk5-dev, python-vtk, mono-mcs (>= 1.0) | c-sharp-compiler, libopenjpeg-dev
-Standards-Version: 3.7.3
+ swig, cmake, libvtk5-dev, python-vtk, libpng12-dev | libpng-dev,
+ libjpeg62-dev, libtiff4-dev, libfreetype6-dev, libxext-dev,
+ mono-mcs (>= 1.0) | c-sharp-compiler, libopenjpeg-dev
+Standards-Version: 3.8.0
+Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/gdcm/trunk/?rev=0&sc=0
+Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/gdcm/trunk/
+Homepage: http://gdcm.sourceforge.net/
 
 Package: libgdcm2
 Architecture: any
 Depends: ${shlibs:Depends}
 Recommends: dcmtk
 Description: DICOM library
- Grassroots DiCoM is a C++ library for dealing with DICOM medical files. 
- It is automatically wrapped to python (using swig). It supports RAW,JPEG,
- J2K,JPEG lossless,RLE and deflate(zlib). It also comes with DICOM Part 
- 3,6 & 7 of the standard as XML files.
+ Grassroots DiCoM is a C++ library for DICOM medical files. It is automatically wrapped
+ to python/C#/Java (using swig). It supports RAW,JPEG (lossy/lossless),J2K,JPEG-LS, RLE 
+ and deflated. It also comes with DICOM Part 3,6 & 7 of the standard as XML files.
 
 Package: libgdcm-tools
 Architecture: any
@@ -66,10 +72,8 @@ Architecture: any
 Depends: ${shlibs:Depends}, libvtk5
 Recommends: dcmtk
 Description: DICOM library
- Grassroots DiCoM is a C++ library for dealing with DICOM medical files. 
- It is automatically wrapped to python (using swig). It supports RAW,JPEG,
- J2K,JPEG lossless,RLE and deflate(zlib). It also comes with DICOM Part 
- 3,6 & 7 of the standard as XML files.
+ Libvtkgdcm is a library that quickly allow programmer to use GDCM from
+ a VTK environment.
 
 Package: libvtkgdcm-dev
 Section: libdevel
