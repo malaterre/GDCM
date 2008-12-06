@@ -24,11 +24,13 @@ if __name__ == "__main__":
 
   label1 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori1 ) )
   if label1 != 'AXIAL':
+    print "Found:",label1
     sucess = False
   label2 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori2 ) )
   if label2 != 'CORONAL':
+    print "Found:",label2
     sucess = False
 
   # Test succeed ?
-  sys.exit(sucess)
+  sys.exit(sucess == False)
 
