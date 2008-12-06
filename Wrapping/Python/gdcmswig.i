@@ -525,17 +525,17 @@ using namespace gdcm;
 %include "gdcmPrinter.h"
 %include "gdcmDumper.h"
 
-// Grab a 6 element array as a Python 4-tuple
-%typemap(in) const double[6](double temp[6]) {   // temp[6] becomes a local variable
+// Grab a 6 element array as a Python 6-tuple
+%typemap(in) const double dircos[6](double temp[6]) {   // temp[6] becomes a local variable
   int i;
   if (PyTuple_Check($input)) {
     if (!PyArg_ParseTuple($input,"dddddd",temp,temp+1,temp+2,temp+3,temp+4,temp+5)) {
-      PyErr_SetString(PyExc_TypeError,"tuple must have 4 elements");
+      PyErr_SetString(PyExc_TypeError,"list must have 6 elements");
       return NULL;
     }
     $1 = &temp[0];
   } else {
-    PyErr_SetString(PyExc_TypeError,"expected a tuple.");
+    PyErr_SetString(PyExc_TypeError,"expected a list.");
     return NULL;
   }
 }
@@ -596,6 +596,18 @@ using namespace gdcm;
 #endif
 %include "gdcmPythonFilter.h"
 %include "gdcmDirectionCosines.h"
+%extend gdcm::DirectionCosines
+{
+  DirectionCosines(const double dircos[6]):DirectionCosines(dircos) {
+  }
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmTagPath.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
