@@ -26,7 +26,7 @@ if __name__ == "__main__":
   if label1 != 'AXIAL':
     sucess = False
   label2 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori2 ) )
-  if label1 != 'CORONAL':
+  if label2 != 'CORONAL':
     sucess = False
 
   # Test succeed ?
