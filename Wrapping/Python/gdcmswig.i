@@ -524,7 +524,23 @@ using namespace gdcm;
 %include "gdcmSpectroscopy.h"
 %include "gdcmPrinter.h"
 %include "gdcmDumper.h"
+
+// Grab a 6 element array as a Python 4-tuple
+%typemap(in) const double[6](double temp[6]) {   // temp[6] becomes a local variable
+  int i;
+  if (PyTuple_Check($input)) {
+    if (!PyArg_ParseTuple($input,"dddddd",temp,temp+1,temp+2,temp+3,temp+4,temp+5)) {
+      PyErr_SetString(PyExc_TypeError,"tuple must have 4 elements");
+      return NULL;
+    }
+    $1 = &temp[0];
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a tuple.");
+    return NULL;
+  }
+}
 %include "gdcmOrientation.h"
+
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
