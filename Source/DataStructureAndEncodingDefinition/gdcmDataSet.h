@@ -282,7 +282,7 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   	 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
 // I also had to test defined(SWIGEXPORT) ...
-#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGEXPORT)
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP)
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,
  * swig does not support wrapping of simple class like std::set...
