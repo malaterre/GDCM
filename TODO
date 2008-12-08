@@ -239,3 +239,6 @@ with tag file from:
 http://www.vtk.org/doc/release/5.2/
 or:
 http://www.vtk.org/doc/nightly/
+-----------------------------------------------------------------------
+Fix gdcmviewer for:
+JPEG_LossyYBR.dcm
