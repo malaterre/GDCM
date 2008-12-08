@@ -8,6 +8,8 @@
 # of the binary packages independantly, via binary-<package> targets.
 # ---
 
+include /usr/share/quilt/quilt.make
+
 # Uncomment this to turn on verbose mode. 
 #export DH_VERBOSE=1
 
@@ -19,7 +21,7 @@ export DH_OPTIONS
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-CFLAGS = -Werror -g
+CFLAGS = -g
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
 else
@@ -41,7 +43,7 @@ PYVERS  := $(shell pyversions -vs)
 debian/configure-stamp: $(PYVERS:%=debian/configure-python%-stamp) 
 	touch $@
 
-debian/configure-python%-stamp: 
+debian/configure-python%-stamp: $(QUILT_STAMPFN)
 	dh_testdir
 	[ -d $(BUILD)-python$* ] || mkdir $(BUILD)-python$*
 	cd $(BUILD)-python$* && cmake $(CURDIR) -DCMAKE_INSTALL_PREFIX="/usr" \
@@ -74,7 +76,7 @@ debian/build-python%-stamp:
 	-(cd $(BUILD)-python$* && LD_LIBRARY_PATH=$(BUILD)-python$*/gdcm ctest --force-new-ctest-process -V)
 	touch $@
 
-clean:
+clean: unpatch
 	dh_testdir
 	dh_testroot
 	rm -f debian/configure*stamp debian/build*stamp 
