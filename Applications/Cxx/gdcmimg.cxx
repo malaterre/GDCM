@@ -41,6 +41,7 @@
  * Todo: check compat API with jhead 
  */
 #include "gdcmFilename.h"
+#include "gdcmMediaStorage.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmSequenceOfFragments.h"
@@ -119,13 +120,14 @@ void PrintHelp()
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --depth       Depth." << std::endl;
-  std::cout << "  -s --size %d,%d  Size." << std::endl;
-  std::cout << "  -R --region      Region." << std::endl;
-  std::cout << "  -F --fill        Fill." << std::endl;
-  std::cout << "  -T --study-uid   Study UID." << std::endl;
-  std::cout << "  -S --series-uid  Series UID." << std::endl;
-  std::cout << "     --root-uid    Root UID." << std::endl;
+  std::cout << "  -d --depth           Depth." << std::endl;
+  std::cout << "  -s --size %d,%d      Size." << std::endl;
+  std::cout << "  -R --region          Region." << std::endl;
+  std::cout << "  -F --fill            Fill." << std::endl;
+  std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
+  std::cout << "  -T --study-uid       Study UID." << std::endl;
+  std::cout << "  -S --series-uid      Series UID." << std::endl;
+  std::cout << "     --root-uid        Root UID." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -154,6 +156,8 @@ int main (int argc, char *argv[])
   unsigned int size[2] = {};
   int depth = 0;
   int bpp = 0;
+  std::string sopclass;
+  int sopclassuid = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -179,6 +183,7 @@ int main (int argc, char *argv[])
         {"study-uid", 1, &studyuid, 1},
         {"series-uid", 1, &seriesuid, 1},
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
+        {"sop-class-uid", 1, &sopclassuid, 1}, // specific SOP Class UID
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -194,7 +199,7 @@ int main (int argc, char *argv[])
     // I -> input directory
     // o -> output file
     // O -> output directory
-    c = getopt_long (argc, argv, "i:o:I:O:d:s:R:F:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:I:O:d:s:R:C:F:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -250,6 +255,11 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
+          else if( option_index == 9 ) /* sop-class-uid */
+            {
+            assert( strcmp(s, "sop-class-uid") == 0 );
+            sopclass = optarg;
+            }
           printf (" with arg %s", optarg);
           }
         printf ("\n");
@@ -269,23 +279,24 @@ int main (int argc, char *argv[])
       break;
 
     case 'd': // depth
-      printf ("option d with value '%s'\n", optarg);
       bpp = atoi(optarg);
       break;
 
     case 's': // size
-      printf ("option s with value '%s'\n", optarg);
       readsize(optarg, size);
       break;
 
+    case 'C':
+      sopclassuid = 1;
+      sopclass = optarg;
+      break;
+
     case 'R': // region
-      printf ("option R with value '%s'\n", optarg);
       //outfilename = optarg;
       readgeometry(optarg, region);
       break;
 
     case 'F': // fill
-      printf ("option F with value '%s'\n", optarg);
       color = atoi( optarg );
       fill = 1;
       break;
@@ -706,6 +717,31 @@ int main (int argc, char *argv[])
       pixeldata.SetValue( *sq );
 
       image.SetDataElement( pixeldata );
+
+      if( sopclassuid )
+        {
+        gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+        // Is it by value or by name ?
+        gdcm::MediaStorage ms = gdcm::MediaStorage::MS_END;
+        if( gdcm::UIDGenerator::IsValid( sopclass.c_str() ) )
+          {
+          ms = gdcm::MediaStorage::GetMSType( sopclass.c_str() );
+          }
+        else
+          {
+          std::cerr << "not implemented" << std::endl;
+          }
+
+        const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+        if( !msstr )
+          {
+          return 1;
+          }
+        gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
+        de.SetByteValue( msstr, strlen(msstr) );
+        de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+        ds.Insert( de );
+        }
 
       writer.SetFileName( outfilename );
       if( !writer.Write() )
