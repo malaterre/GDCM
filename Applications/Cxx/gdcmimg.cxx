@@ -731,7 +731,7 @@ int main (int argc, char *argv[])
           {
           std::cerr << "not implemented" << std::endl;
           }
-        if( gdcm::MediaStorage::IsImage(ms) )
+        if( !gdcm::MediaStorage::IsImage(ms) )
           {
           std::cerr << "invalid media storage (no pixel data): " << sopclass << std::endl;
           return 1;
