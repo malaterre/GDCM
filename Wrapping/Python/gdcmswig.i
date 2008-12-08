@@ -15,9 +15,12 @@
 // See docs:
 // http://www.swig.org/Doc1.3/Python.html
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
+// cstring_output_allocate_size:
+// http://www.swig.org/Doc1.3/Library.html
 // http://www.geocities.com/foetsch/python/extending_python.htm
 // http://www.ddj.com/cpp/184401747
 // http://www.ddj.com/article/printableArticle.jhtml;jsessionid=VM4IXCQG5KM10QSNDLRSKH0CJUNN2JVN?articleID=184401747&dept_url=/cpp/
+// http://matt.eifelle.com/2008/11/04/exposing-an-array-interface-with-swig-for-a-cc-structure/
 
 %module(directors="1",docstring="A DICOM library") gdcmswig
 #pragma SWIG nowarn=504,510
@@ -344,6 +347,7 @@ using namespace gdcm;
 %ignore gdcm::Pixmap::GetBuffer(char*) const;
 %extend gdcm::Pixmap
 {
+  // http://mail.python.org/pipermail/python-list/2006-January/361540.html
   %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
   void GetBuffer(char **buffer, unsigned int *size) {
     *size = self->GetBufferLength();
@@ -361,10 +365,29 @@ using namespace gdcm;
 
 };
 
+%typemap(out) const double * {
+ int i;
+ $result = PyList_New(3);
+ for (i = 0; i < 3; i++) {
+   PyObject *o = PyFloat_FromDouble((double) $1[i]);
+   PyList_SetItem($result,i,o);
+ }
+}
+%ignore gdcm::Pixmap::GetDirectionCosines() const;
 %include "gdcmImage.h"
+%clear const double *;
+
+// Two-pass process:
+%typemap(out) const double * {
+ int i;
+ $result = PyList_New(6);
+ for (i = 0; i < 6; i++) {
+   PyObject *o = PyFloat_FromDouble((double) $1[i]);
+   PyList_SetItem($result,i,o);
+ }
+}
 %extend gdcm::Image
 {
-
   const char *__str__() {
     static std::string buffer;
     std::stringstream s;
@@ -372,16 +395,10 @@ using namespace gdcm;
     buffer = s.str();
     return buffer.c_str();
   }
-//%typemap(python,out) const double * GetOrigin2 {
-//	//float* source=(float*)$source;
-//	float source[3]={0,0,0};
-//	$target = PyTuple_New(3);
-//	for(int i=0;i<3;i++){
-//		PyTuple_SetItem($target,i,Py_BuildValue("f",(source[i])));
-//	}	
-//}
-
+  const double *GetDirectionCosines() const;
 };
+%clear const double *;
+
 %include "gdcmIconImage.h"
 %include "gdcmFragment.h"
 %include "gdcmPDBElement.h"
