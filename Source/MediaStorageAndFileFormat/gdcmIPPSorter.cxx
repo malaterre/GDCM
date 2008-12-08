@@ -37,6 +37,8 @@ IPPSorter::~IPPSorter()
 
 bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
+  if( filenames.empty() ) return true;
+
   Filenames.clear(); // cleanup !
   ZSpacing = 0;
   Scanner scanner;
