@@ -37,10 +37,11 @@ IPPSorter::~IPPSorter()
 
 bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
-  if( filenames.empty() ) return true;
-
   Filenames.clear(); // cleanup !
   ZSpacing = 0;
+
+  if( filenames.empty() ) return true;
+
   Scanner scanner;
   const Tag ipp(0x0020,0x0032); // Image Position (Patient)
   const Tag iop(0x0020,0x0037); // Image Orientation (Patient)
