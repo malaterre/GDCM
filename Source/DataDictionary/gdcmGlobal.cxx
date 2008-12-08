@@ -88,10 +88,6 @@ Global::Global()
     }
 }
 
-//void Global::Initialize(const char *argv0)
-//{
-//}
-
 Global::~Global()
 {
   if(--GlobalCount == 0)
@@ -152,6 +148,12 @@ const char *Global::Locate(const char *resfile) const
     if( System::FileExists(fullpath.c_str()) )
       {
       // we found a match
+      // check no invalid write access possible:
+      if( fullpath.size() >= sizeof(path) )
+        {
+        gdcmDebugMacro( "Impossible happen: path is too long" );
+        return NULL;
+        }
       strcpy(path, fullpath.c_str() );
       return path;
       }

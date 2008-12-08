@@ -40,11 +40,11 @@ class Dicts;
 class Defs;
 /**
  * \brief Global
- * \note bla
+ * \note
  * Global should be included in any translation unit
  * that will use Dict or that implements the singleton
  * pattern.  It makes sure that the Dict singleton is created
- * before and destroyed after all other singletons in VTK.
+ * before and destroyed after all other singletons in GDCM.
  * 
  */
 class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
@@ -66,12 +66,15 @@ public:
 
   /// Load all internal XML files, ressource path need to have been
   /// set before calling this member function (see Append/Prepend members func)
+  /// \warning not thread safe !
   bool LoadResourcesFiles();
 
   /// Append path at the end of the path list
+  /// \warning not thread safe !
   bool Append(const char *path);
 
   /// Prepend path at the begining of the path list
+  /// \warning not thread safe !
   bool Prepend(const char *path);
 
 protected:
