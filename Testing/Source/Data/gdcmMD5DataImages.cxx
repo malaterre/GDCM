@@ -625,6 +625,14 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "79b8705f2e6c7464bd3e2fc7e1d3483b" , "TestVRSQUN2.dcm" },
 { "71e4ea61df4f7ada2955799c91f93e74" , "TestVRSQUN1.dcm" },
 
+{ "6396332b75b15bf30b1dd1cd0f212691" , "SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm" },
+{ "ba8dae4b43075c7e8562f5addf5f95c3" , "DX_GE_FALCON_SNOWY-VOI.dcm" },
+{ "a03fa65f1a64b40ed62babe0ab5e4f0c" , "JPEG_LossyYBR.dcm" },
+{ "43f33c06d56f239ce9ed5ca0d66a69d2" , "PHILIPS_Brilliance_ExtraBytesInOverlay.dcm" },
+{ "dae9d2e2b412646fd0a0f31dc2d17aa4" , "BugGDCM2_UndefItemWrongVL.dcm" },
+
+
+
 
 
 
