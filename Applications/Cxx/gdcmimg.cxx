@@ -731,10 +731,16 @@ int main (int argc, char *argv[])
           {
           std::cerr << "not implemented" << std::endl;
           }
+        if( gdcm::MediaStorage::IsImage(ms) )
+          {
+          std::cerr << "invalid media storage (no pixel data): " << sopclass << std::endl;
+          return 1;
+          }
 
         const char* msstr = gdcm::MediaStorage::GetMSString(ms);
         if( !msstr )
           {
+          std::cerr << "problem with media storage: " << sopclass << std::endl;
           return 1;
           }
         gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
