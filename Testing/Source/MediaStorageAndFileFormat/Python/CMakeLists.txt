@@ -8,6 +8,7 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestAnonymizer
   #TestStringFilter
   TestOrientation
+  TestIPPSorter
   )
 IF(BUILD_APPLICATIONS)
   IF(DCMTK_DCMDUMP_EXECUTABLE)

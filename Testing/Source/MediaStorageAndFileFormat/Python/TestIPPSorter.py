@@ -17,27 +17,11 @@ import gdcm
 import os,sys
 
 if __name__ == "__main__":
-  sucess = True
+  sucess = 0
+  s = gdcm.IPPSorter()
+  # black box test:
+  if not s.Sort([]):
+    sys.exit(1)
 
-  ori1 = (1,0,0,0,1,0)
-  ori2 = (1,0,0,0,0,1)
-
-  label1 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori1 ) )
-  if label1 != 'AXIAL':
-    print "Found:",label1
-    sucess = False
-  label2 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori2 ) )
-  if label2 != 'CORONAL':
-    print "Found:",label2
-    sucess = False
-
-  image = gdcm.Image()
-  image.SetNumberOfDimensions(2)
-  print image
-  print image.GetOrigin()
-  print image.GetSpacing()
-  print image.GetDirectionCosines()
-
-  # Test succeed ?
-  sys.exit(sucess == False)
+  sys.exit(0)
 
