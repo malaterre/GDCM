@@ -211,7 +211,7 @@ int main (int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -260,20 +260,20 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "sop-class-uid") == 0 );
             sopclass = optarg;
             }
-          printf (" with arg %s", optarg);
+          //printf (" with arg %s", optarg);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
     case 'i':
-      printf ("option i with value '%s'\n", optarg);
+      //printf ("option i with value '%s'\n", optarg);
       assert( filename.IsEmpty() );
       filename = optarg;
       break;
 
     case 'o':
-      printf ("option o with value '%s'\n", optarg);
+      //printf ("option o with value '%s'\n", optarg);
       assert( outfilename.IsEmpty() );
       outfilename = optarg;
       break;
