@@ -283,7 +283,7 @@ void Overlay::Update(const DataElement & de)
     }
 }
 
-void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
+bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
 {
   const unsigned int ovlength = Internal->Rows * Internal->Columns / 8;
   Internal->Data.resize( ovlength ); // set to 0
@@ -327,7 +327,9 @@ void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
   else
     {
     gdcmErrorMacro( "Could not grab Overlay from image. Please report." );
+    return false;
     }
+  return true;
 }
 
 void Overlay::SetGroup(unsigned short group) { Internal->Group = group; }

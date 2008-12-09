@@ -90,7 +90,7 @@ public:
   /// set overlay from byte array + length
   void SetOverlay(const char *array, unsigned int length);
   ///
-  void GrabOverlayFromPixelData(DataSet const &ds);
+  bool GrabOverlayFromPixelData(DataSet const &ds);
 
   const ByteValue &GetOverlayData() const;
 

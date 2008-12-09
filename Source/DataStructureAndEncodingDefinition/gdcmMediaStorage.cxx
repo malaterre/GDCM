@@ -184,7 +184,7 @@ struct MSModalityType
 static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//MediaStorageDirectoryStorage,
   {"CR", 2},//ComputedRadiographyImageStorage,
-  {"  ", 2},//DigitalXRayImageStorageForPresentation,
+  {"DX", 2},//DigitalXRayImageStorageForPresentation,
   {"  ", 2},//DigitalXRayImageStorageForProcessing,
   {"MG", 2},//DigitalMammographyImageStorageForPresentation,
   {"MG", 2},//DigitalMammographyImageStorageForProcessing,

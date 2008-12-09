@@ -731,7 +731,10 @@ void DoOverlays(const DataSet& ds, Image& pixeldata)
             << "This is not supported right now"
             << std::endl );
           ov.IsInPixelData( true );
-          ov.GrabOverlayFromPixelData(ds);
+          if( !ov.GrabOverlayFromPixelData(ds) )
+            {
+            gdcmErrorMacro( "Could not extract Overlay from Pixel Data" );
+            }
           }
         }
       }
