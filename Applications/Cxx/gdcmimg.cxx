@@ -135,6 +135,14 @@ void PrintHelp()
   std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "Env var:" << std::endl;
+  std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
+/* 
+ * Default behavior for root UID is:
+ * By default the GDCM one is used
+ * If GDCM_ROOT_UID is set, then use this one instead
+ * If --root-uid is explicitly set on the command line, it will override any other defined behavior
+ */
 }
 
 int main (int argc, char *argv[])
@@ -389,6 +397,17 @@ int main (int argc, char *argv[])
 
   // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
+  if( !rootuid )
+    {
+    // only read the env var is no explicit cmd line option
+    // maybe there is an env var defined... let's check
+    const char *rootuid_env = getenv("GDCM_ROOT_UID");
+    if( rootuid_env )
+      {
+      rootuid = 1;
+      root = rootuid_env;
+      }
+    }
   if( rootuid )
     {
     if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
