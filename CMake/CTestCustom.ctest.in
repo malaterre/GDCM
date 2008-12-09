@@ -20,7 +20,7 @@ SET(CTEST_CUSTOM_MEMCHECK_IGNORE
   "DCDUMP"
   "DCMDJPEG"
   "DCMDRLE"
-  "VTK"
+  "vtk"
   )
 
 # ==3201== 8 bytes in 1 blocks are still reachable in loss record 2 of 8
