@@ -195,7 +195,6 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Pixma
 
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
-    assert( r );
     return r;
     }
   return false;
