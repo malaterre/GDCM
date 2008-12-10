@@ -44,7 +44,15 @@ DirectionCosines::DirectionCosines(const double *dircos)
 
 DirectionCosines::~DirectionCosines() {}
 
-void DirectionCosines::Print(std::ostream &) const {}
+void DirectionCosines::Print(std::ostream &os) const
+{
+  os << Values[0] << ",";
+  os << Values[1] << ",";
+  os << Values[2] << ",";
+  os << Values[3] << ",";
+  os << Values[4] << ",";
+  os << Values[5];
+}
 
 bool DirectionCosines::IsValid() const
 {
