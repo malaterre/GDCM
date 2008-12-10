@@ -29,33 +29,28 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
     @ONLY
   )
-  ADD_CUSTOM_COMMAND(
-    OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
-             ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
-    COMMAND  ${DOXYGEN}
-    ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
-    DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
-             ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
-             ${headerfiles}
-    COMMENT  "Creating doxygen doc"
-    #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-
   SET(GDCM_DOC_TARBALL
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tgz
   )
-  # every time doxygen runs, it overwrite index.html so depending only on
-  # one single file is ok
-  # tar command is executed using relative path, so that tar does not contains 
-  # full path
   ADD_CUSTOM_COMMAND(
-    OUTPUT   ${GDCM_DOC_TARBALL}
+    OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+             ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
+    # let's create the tarball within the same custom command to avoid complex dep. rules.
+             ${GDCM_DOC_TARBALL}
+    # 1. first thing first let's run doxygen
+    COMMAND  ${DOXYGEN}
+    ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
+    # 2. tarball gen.
     COMMAND  ${CMAKE_COMMAND}
     ARGS     -E tar cfz ${GDCM_DOC_TARBALL} html
-    DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
-    COMMENT  "Creating tarball of documentation"
+    DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
+             ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
+             ${headerfiles}
+    COMMENT  "Creating doxygen doc + tarball"
     #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  )
+    )
+
+  # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
   ADD_CUSTOM_TARGET(DoxygenDoc
     ALL
     DEPENDS ${GDCM_DOC_TARBALL}
@@ -92,6 +87,7 @@ IF(GDCM_DOCUMENTATION)
       COMMAND  ${CMAKE_MAKE_PROGRAM}
       DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex 
 ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
+    ${GDCM_DOC_TARBALL}
       COMMENT  "Creating (patched) pdf of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
