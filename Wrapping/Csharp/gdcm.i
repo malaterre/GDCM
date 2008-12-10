@@ -374,6 +374,7 @@ using namespace gdcm;
 //%include "gdcm_arrays_csharp.i"
 
 %apply char[] { char* buffer }
+%apply unsigned int[] { unsigned int* dims }
 
 //%apply byte OUTPUT[] { char* buffer } ;
 //%ignore gdcm::Pixmap::GetBuffer(char*) const;
@@ -395,6 +396,7 @@ using namespace gdcm;
 //  }
 //};
 %clear char* buffer;
+%clear unsigned int* dims;
 
 
 %include "gdcmImage.h"
