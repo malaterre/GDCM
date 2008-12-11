@@ -118,20 +118,22 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
           // is this a good idea to change them to an ASCII when we know this might not work ?
           if( !(oldvr & VR::VRASCII || oldvr == VR::INVALID || oldvr == VR::UN) )
             {
-            assert( t.IsPrivate() ); // Hopefully this only happen with private tag
-            gdcmErrorMacro( "Cannot convert VR for tag: " << t );
+            gdcmErrorMacro( "Cannot convert VR for tag: " << t << " " << oldvr << " is incompatible with " << cvr << " as given by ref. dict." );
             return false;
             }
           }
-        if( cvr & VR::VRBINARY )
+        else if( cvr & VR::VRBINARY )
           {
           // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
           if( !( oldvr & VR::VRBINARY || oldvr == VR::INVALID || oldvr == VR::UN ) )
             {
-            assert( t.IsPrivate() ); // Hopefully this only happen with private tag
-            gdcmErrorMacro( "Cannot convert VR for tag: " << t );
+            gdcmErrorMacro( "Cannot convert VR for tag: " << t << " " << oldvr << " is incompatible with " << cvr << " as given by ref. dict." );
             return false;
             }
+          }
+        else
+          {
+          assert( 0 ); // programmer error
           }
 
         // let's do one more check we are going to make this attribute explicit VR, there is
