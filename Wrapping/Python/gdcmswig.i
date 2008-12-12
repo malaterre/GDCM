@@ -365,7 +365,7 @@ using namespace gdcm;
 
 };
 
-%typemap(out) const double * {
+%typemap(out) const double *OUTPUT3 {
  int i;
  $result = PyList_New(3);
  for (i = 0; i < 3; i++) {
@@ -373,12 +373,7 @@ using namespace gdcm;
    PyList_SetItem($result,i,o);
  }
 }
-%ignore gdcm::Pixmap::GetDirectionCosines() const;
-%include "gdcmImage.h"
-%clear const double *;
-
-// Two-pass process:
-%typemap(out) const double * {
+%typemap(out) const double *OUTPUT6 {
  int i;
  $result = PyList_New(6);
  for (i = 0; i < 6; i++) {
@@ -386,6 +381,9 @@ using namespace gdcm;
    PyList_SetItem($result,i,o);
  }
 }
+%apply const double *OUTPUT3 { gdcm::Image::GetOrigin }
+%apply const double *OUTPUT6 { gdcm::Image::GetDirectionCosines }
+%include "gdcmImage.h"
 %extend gdcm::Image
 {
   const char *__str__() {
@@ -395,9 +393,9 @@ using namespace gdcm;
     buffer = s.str();
     return buffer.c_str();
   }
-  const double *GetDirectionCosines() const;
 };
-%clear const double *;
+%clear const double *OUTPUT3;
+%clear const double *OUTPUT6;
 
 %include "gdcmIconImage.h"
 %include "gdcmFragment.h"
