@@ -247,6 +247,11 @@ using namespace gdcm;
     self->WriteBuffer(os);
     return os.str();
   }
+  std::string GetBuffer() const {
+    std::ostringstream os;
+    self->WriteBuffer(os);
+    return os.str();
+  }
   std::string GetBuffer(unsigned long length) const {
     std::ostringstream os;
     self->WriteBuffer(os);
