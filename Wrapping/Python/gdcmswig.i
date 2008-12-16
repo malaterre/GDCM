@@ -177,6 +177,16 @@ using namespace gdcm;
   }
 };
 %include "gdcmPrivateTag.h"
+%extend gdcm::PrivateTag
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmVL.h"
 //%typemap(out) int
 //{
@@ -221,19 +231,27 @@ using namespace gdcm;
 };
 %include "gdcmByteValue.h"
 %ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
+%ignore gdcm::ByteValue::GetPointer() const;
+%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
 %extend gdcm::ByteValue
 {
-  const char *__str__() {
+  const char *__str__() const {
     static std::string buffer;
     std::ostringstream os;
     os << *self;
     buffer = os.str();
     return buffer.c_str();
   }
-  std::string WriteBuffer() {
+  std::string WriteBuffer() const {
     std::ostringstream os;
     self->WriteBuffer(os);
     return os.str();
+  }
+  std::string GetBuffer(unsigned long length) const {
+    std::ostringstream os;
+    self->WriteBuffer(os);
+    std::string copy( os.str().c_str(), length);
+    return copy;
   }
 };
 %include "gdcmSmartPointer.h"
@@ -343,8 +361,8 @@ using namespace gdcm;
 };
 //%newobject gdcm::Image::GetBuffer;
 %include "cstring.i"
-%include "gdcmPixmap.h"
 %ignore gdcm::Pixmap::GetBuffer(char*) const;
+%include "gdcmPixmap.h"
 %extend gdcm::Pixmap
 {
   // http://mail.python.org/pipermail/python-list/2006-January/361540.html
