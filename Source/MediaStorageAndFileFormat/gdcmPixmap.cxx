@@ -249,6 +249,7 @@ bool Pixmap::TryRAWCodec(char *buffer) const
   if( bv )
     {
     RAWCodec codec;
+    if( !codec.CanDecode( ts ) ) return false;
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetLUT( GetLUT() );
