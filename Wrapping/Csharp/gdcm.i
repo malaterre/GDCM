@@ -55,6 +55,7 @@ using My.Own.Namespace;
 
 %{
 #include "gdcmTypes.h"
+#include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -282,6 +283,9 @@ using namespace gdcm;
 
 %apply char[] { const char* array }
 
+%include "gdcmSmartPointer.h"
+%template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
+%template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
 %include "gdcmDataElement.h"
 
 %clear const char* array;
