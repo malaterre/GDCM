@@ -187,6 +187,11 @@ public:
   FragmentVector Fragments;
 };
 
+/**
+ * \example DecompressJPEGFile.cs
+ * This is a C# example on how to use gdcm::SequenceOfFragments
+ */
+
 } // end namespace gdcm
 
 #endif //__gdcmSequenceOfFragments_h

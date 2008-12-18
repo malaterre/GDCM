@@ -299,6 +299,11 @@ private:
 };
 #endif /* SWIG */
 
+/**
+ * \example TestCSharpFilter.cs
+ * This is a C# example on how to use gdcm::SWIGDataSet
+ */
+
 } // end namespace gdcm
 
 #include "gdcmDataSet.txx"
