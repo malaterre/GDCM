@@ -34,9 +34,19 @@ if __name__ == "__main__":
   image = gdcm.Image()
   image.SetNumberOfDimensions(2)
   print image
+  print image.GetDimensions()
   print image.GetOrigin()
   print image.GetSpacing()
   print image.GetDirectionCosines()
+
+  image.SetNumberOfDimensions(3)
+  image.SetDimensions( (512,256,128) )
+  print image.GetDimensions()
+
+  #dircos = gdcm.DirectionCosines( (1,0,0,0,0,-1) )
+  dircos = gdcm.DirectionCosines()
+  print dircos
+  #print dircos.Cross()
 
   # Test succeed ?
   sys.exit(sucess == False)
