@@ -154,6 +154,11 @@ private:
 
 };
 
+/**
+ * \example DecompressImage.cs
+ * This is a C# example on how to use gdcm::Image
+ */
+
 } // end namespace gdcm
 
 #endif //__gdcmImage_h

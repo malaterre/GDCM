@@ -140,6 +140,10 @@ private:
   Scanner::TagToValue::const_iterator it;
 };
 
+/**
+ * \example ScanDirectory.cs
+ * This is a C# example on how to use gdcm::Scanner
+ */
 
 } // end namespace gdcm
 

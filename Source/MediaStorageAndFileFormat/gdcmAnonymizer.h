@@ -72,6 +72,11 @@ private:
   SmartPointer<File> F;
 };
 
+/**
+ * \example ManipulateFile.cs
+ * This is a C# example on how to use gdcm::Anonymizer
+ */
+
 } // end namespace gdcm
 
 #endif //__gdcmAnonymizer_h
