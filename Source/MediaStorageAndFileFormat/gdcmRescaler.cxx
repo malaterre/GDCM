@@ -46,6 +46,8 @@ template<typename TOut, typename TIn>
 struct FImpl 
 { 
   // parameter 'size' is in bytes
+  // TODO: add template parameter for intercept/slope so that we can have specialized instanciation
+  // when 1. both are int, 2. slope is 1, 3. intercept is 0
   static void InverseRescaleFunction( TOut *out, const TIn *in, 
     double intercept, double slope, size_t size) // users, go ahead and specialize this 
     {
