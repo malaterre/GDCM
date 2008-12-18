@@ -16,10 +16,9 @@
 /*
  * Usage: 
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/DecompressImage.exe gdcmData/012345.002.050.dcm decompress.dcm 
+ * $ mono bin/DecompressJPEGFile.exe somejpegfile.jpg
  */
 using System;
-using System.IO;
 using gdcm;
 
 public class DecompressJPEGFile
@@ -27,43 +26,53 @@ public class DecompressJPEGFile
   public static int Main(string[] args)
     {
     string file1 = args[0];
-    string file2 = args[1];
-    FileStream infile = new FileStream(file1, FileMode.Open, FileAccess.Read);
+    System.IO.FileStream infile = 
+      new System.IO.FileStream(file1, System.IO.FileMode.Open, System.IO.FileAccess.Read);
     uint fsize = gdcm.PosixEmulation.FileSize(file1);
 
     byte[] jstream  = new byte[fsize];
     infile.Read(jstream, 0 , jstream.Length);
 
+    Trace.DebugOn();
     Image image = new Image();
-    image.SetNumberOfDimensions( 2 ); // important
+    image.SetNumberOfDimensions( 2 ); // important for now
     DataElement pixeldata = new DataElement( new gdcm.Tag(0x7fe0,0x0010) );
+
+    // DO NOT set a ByteValue here, JPEG is a particular kind of encapsulated syntax
+    // in which can one cannot use a simple byte array for storage. Instead, see
+    // gdcm.SequenceOfFragments
     //pixeldata.SetByteValue( jstream, new gdcm.VL( (uint)jstream.Length ) );
 
-    //SequenceOfFragments sq = new SequenceOfFragments();
-    SmartPtrFrag sq = new SmartPtrFrag();
+    // Create a new SequenceOfFragments C++ object, store it as a SmartPointer :
+    SmartPtrFrag sq = SequenceOfFragments.New();
     Fragment frag = new Fragment();
     frag.SetByteValue( jstream, new gdcm.VL( (uint)jstream.Length) );
+    // Single file => single fragment
     sq.AddFragment( frag );
+    // Pass by reference:
     pixeldata.SetValue( sq.__ref__() );
 
+    // insert:
     image.SetDataElement( pixeldata );
 
-    PhotometricInterpretation pi = new PhotometricInterpretation( PhotometricInterpretation.PIType.RGB );
+    // JPEG use YBR to achieve better compression ratio by default (not RGB)
+    // FIXME hardcoded:
+    PhotometricInterpretation pi = new PhotometricInterpretation( PhotometricInterpretation.PIType.YBR_FULL );
     image.SetPhotometricInterpretation( pi );
+    // FIXME hardcoded:
     PixelFormat pixeltype = new PixelFormat(3,8,8,7);
     image.SetPixelFormat( pixeltype );
-
 
     // FIXME hardcoded:
     image.SetTransferSyntax( new TransferSyntax( TransferSyntax.TSType.JPEGLosslessProcess14_1 ) );
     image.SetDimension(0, 692);
     image.SetDimension(1, 721);
 
+    // Decompress !
     byte[] decompressedData = new byte[(int)image.GetBufferLength()];
-    System.Diagnostics.Debugger.Break ();
     image.GetBuffer(decompressedData);
 
-    /////Write out the decompressed bytes
+    // Write out the decompressed bytes
     System.Console.WriteLine(image.toString());
     using (System.IO.Stream stream =
       System.IO.File.Open(@"/tmp/dd.raw",
