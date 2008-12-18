@@ -93,7 +93,7 @@ public:
   unsigned int GetColumns() const { return GetDimension(0); }
   void SetRows(unsigned int rows) { SetDimension(1,rows); }
   unsigned int GetRows() const { return GetDimension(1); }
-  void SetDimensions(const unsigned int *dims);
+  void SetDimensions(const unsigned int dims[3]);
   void SetDimension(unsigned int idx, unsigned int dim);
   /// Get/Set PixelFormat
   const PixelFormat &GetPixelFormat() const

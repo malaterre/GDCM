@@ -20,26 +20,24 @@
 namespace gdcm
 {
 
-DirectionCosines::DirectionCosines(const double *dircos)
+DirectionCosines::DirectionCosines()
 {
-  if( dircos )
-    {
-    Values[0] = dircos[0];
-    Values[1] = dircos[1];
-    Values[2] = dircos[2];
-    Values[3] = dircos[3];
-    Values[4] = dircos[4];
-    Values[5] = dircos[5];
-    }
-  else
-    {
     Values[0] = 1;
     Values[1] = 0;
     Values[2] = 0;
     Values[3] = 0;
     Values[4] = 1;
     Values[5] = 0;
-    }
+}
+
+DirectionCosines::DirectionCosines(const double dircos[6])
+{
+    Values[0] = dircos[0];
+    Values[1] = dircos[1];
+    Values[2] = dircos[2];
+    Values[3] = dircos[3];
+    Values[4] = dircos[4];
+    Values[5] = dircos[5];
 }
 
 DirectionCosines::~DirectionCosines() {}

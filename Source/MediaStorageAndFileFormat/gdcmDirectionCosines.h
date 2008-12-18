@@ -26,8 +26,10 @@ namespace gdcm
 class GDCM_EXPORT DirectionCosines
 {
 public:
-  //DirectionCosines();
-  DirectionCosines(const double *dircos = 0);
+  DirectionCosines();
+  DirectionCosines(const double dircos[6]);
+  // Cannot get the following signature to be wrapped with swig...
+  //DirectionCosines(const double *dircos = 0 );
   ~DirectionCosines();
 
   /// Print
