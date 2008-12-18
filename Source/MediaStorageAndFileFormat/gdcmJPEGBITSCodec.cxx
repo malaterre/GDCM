@@ -370,6 +370,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
         jpeg_destroy_decompress(&cinfo);
         return false;
         }
+      else
+        {
+        assert( 0 );
+        }
       }
     // Let's check the color space:
     // JCS_UNKNOWN    -> 0
