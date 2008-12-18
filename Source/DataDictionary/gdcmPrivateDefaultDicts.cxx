@@ -3719,7 +3719,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2007,0x0004,"Philips EV Imaging DD 021",VR::SL,VM::VM1,"Vol Seg Edit Connectivity",false },
   //{0x2007,0x0051,"Philips EV Imaging DD 021",VR::SS,VM::VM1,"??",false },
   {0x2007,0x0000,"Philips EV Imaging DD 022",VR::ST,VM::VM1,"",false },
-  {0x2007,0x0012,"Philips EV Imaging DD 022",VR::ST,VM::VM1,"Volume Sequence Capture",false },
+  {0x2007,0x0012,"Philips EV Imaging DD 022",VR::LO,VM::VM1,"Volume Sequence Capture",false },
   {0x2007,0x0017,"Philips EV Imaging DD 022",VR::UI,VM::VM1,"Original SOP Instance",false },
   {0x2007,0x0033,"Philips EV Imaging DD 022",VR::LO,VM::VM1,"",false },
   {0x2007,0x0034,"Philips EV Imaging DD 022",VR::CS,VM::VM1,"",false },
