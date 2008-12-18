@@ -60,8 +60,14 @@ bool JPEGCodec::CanCode(TransferSyntax const &ts) const
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 {
   ImageCodec::SetPixelFormat(pt);
-  //SetBitSample( pt.GetBitsAllocated() );
-  SetBitSample( pt.GetBitsStored() );
+  // Here is the deal: D_CLUNIE_RG3_JPLY.dcm is a 12Bits Stored / 16 Bits Allocated image
+  // the jpeg encapsulated is: a 12 Sample Precision
+  // so far so good.
+  // So what if we are dealing with image such as: SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm
+  // which is also a 12Bits Stored / 16 Bits Allocated image
+  // however the jpeg encapsulated is now a 16 Sample Precision
+  SetBitSample( pt.GetBitsAllocated() );
+  //SetBitSample( pt.GetBitsStored() );
 }
 
 void JPEGCodec::SetBitSample(int bit)
