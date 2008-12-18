@@ -366,8 +366,32 @@ using namespace gdcm;
 };
 //%newobject gdcm::Image::GetBuffer;
 %include "cstring.i"
+%typemap(out) const unsigned int *GetDimensions {
+ int i;
+ int n = arg1->GetNumberOfDimensions();
+ $result = PyList_New(n);
+ for (i = 0; i < n; i++) {
+   PyObject *o = PyInt_FromLong((long) $1[i]);
+   PyList_SetItem($result,i,o);
+ }
+}
+// Grab a 3 element array as a Python 3-tuple
+%typemap(in) const unsigned int dims[3] (unsigned int temp[3]) {   // temp[3] becomes a local variable
+  int i;
+  if (PyTuple_Check($input)) {
+    if (!PyArg_ParseTuple($input,"iii",temp,temp+1,temp+2)) {
+      PyErr_SetString(PyExc_TypeError,"tuple must have 3 elements");
+      return NULL;
+    }
+    $1 = &temp[0];
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a tuple.");
+    return NULL;
+  }
+}
 %ignore gdcm::Pixmap::GetBuffer(char*) const;
 %include "gdcmPixmap.h"
+%clear const unsigned int dims[3];
 %extend gdcm::Pixmap
 {
   // http://mail.python.org/pipermail/python-list/2006-January/361540.html
@@ -560,7 +584,7 @@ using namespace gdcm;
 %include "gdcmDumper.h"
 
 // Grab a 6 element array as a Python 6-tuple
-%typemap(in) const double dircos[6](double temp[6]) {   // temp[6] becomes a local variable
+%typemap(in) const double dircos[6] (double temp[6]) {   // temp[6] becomes a local variable
   int i;
   if (PyTuple_Check($input)) {
     if (!PyArg_ParseTuple($input,"dddddd",temp,temp+1,temp+2,temp+3,temp+4,temp+5)) {
@@ -574,6 +598,31 @@ using namespace gdcm;
   }
 }
 %include "gdcmOrientation.h"
+//%typemap(argout) double z[3] {   // temp[6] becomes a local variable
+// int i;
+// $result = PyList_New(3);
+// for (i = 0; i < 3; i++) {
+//   PyObject *o = PyFloat_FromDouble((double) $1[i]);
+//   PyList_SetItem($result,i,o);
+// }
+//}
+//%typemap(in,numinputs=0) double z[3] (double temp[3]) {
+//    $1[0] = temp[0];
+//    $1[1] = temp[1];
+//    $1[2] = temp[2];
+//}
+%include "gdcmDirectionCosines.h"
+%extend gdcm::DirectionCosines
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
+//%clear const double dircos[6];
 
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
@@ -629,19 +678,6 @@ using namespace gdcm;
 };
 #endif
 %include "gdcmPythonFilter.h"
-%include "gdcmDirectionCosines.h"
-%extend gdcm::DirectionCosines
-{
-  DirectionCosines(const double dircos[6]):DirectionCosines(dircos) {
-  }
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-};
 %include "gdcmTagPath.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
