@@ -1,0 +1,84 @@
+/*!
+
+\page gdcmpdf Tool to convert PDF to PDF/DICOM.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmpdf [options] file-in file-out
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmpdf 
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   PDF input filename
+
+file-out  DICOM output filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+       --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\section pdf_mapping PDF Info Mapping
+
+Here is how the PDF info is mapped to DICOM information:
+
+\verbatim
+Title:          GDCM Reference Guide
+Subject:        
+Keywords:       DICOM
+Author:         
+Creator:        LaTeX with hyperref package
+Producer:       pdfeTeX-1.21a
+CreationDate:   Mon Aug 11 11:52:35 2008
+Tagged:         no
+Pages:          816
+Encrypted:      no
+Page size:      612 x 792 pts (letter)
+File size:      6861899 bytes
+Optimized:      yes
+PDF version:    1.4
+\endverbatim
+
+\section usage_example Usage Example
+
+\verbatim
+ wget http://gdcm.sourceforge.net/gdcm.pdf    
+ gdcmpdf gdcm.pdf gdcm.dcm
+\endverbatim
+
+To re-extract the encapsulated pdf file:
+
+\verbatim
+ gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
+ diff gdcm.pdf gdcm.dcm.pdf
+\endverbatim
+
+
+\section see_also SEE ALSO
+
+<b>gdcmconv</b>(1), <b>gdcmraw</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2008 Mathieu Malaterre
+
+*/

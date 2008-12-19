@@ -1,0 +1,54 @@
+/*!
+
+\page gdcmconv Tool to convert DICOM to DICOM.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmconv [options] file-in file-out
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmconv 
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   DICOM input filename
+
+file-out  DICOM output filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2008 Mathieu Malaterre
+
+*/

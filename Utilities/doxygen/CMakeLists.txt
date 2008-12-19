@@ -15,6 +15,7 @@ IF(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Wrapping/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/Insight/*.h"
+    "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.man"
   )
   #MESSAGE(${headerfiles})
   # We are depending only on header files and README.txt but other files
@@ -91,13 +92,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       COMMENT  "Creating (patched) pdf of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
-    #ADD_CUSTOM_COMMAND(
-    #  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-    #  DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
-    #  COMMENT  "Creating pdf of documentation"
-    #  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
-    #)
-    #  MESSAGE(${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf)
     ADD_CUSTOM_COMMAND(
       OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       COMMAND  ${PDFOPT_EXECUTABLE}

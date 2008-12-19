@@ -538,6 +538,7 @@ INPUT                  = @GDCM_SOURCE_DIR@/Source \
                          @GDCM_SOURCE_DIR@/Wrapping \
                          @GDCM_SOURCE_DIR@/Utilities/VTK \
                          @GDCM_SOURCE_DIR@/Utilities/Insight \
+                         @GDCM_SOURCE_DIR@/Utilities/doxygen/man \
                          @GDCM_BINARY_DIR@/Utilities/doxygen/README.txt
 
 # This tag can be used to specify the character encoding of the source files 
@@ -555,7 +556,7 @@ INPUT_ENCODING         = UTF-8
 # *.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx 
 # *.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm *.py *.f90
 
-FILE_PATTERNS          = *.h
+FILE_PATTERNS          = *.h *.man *.dox
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
