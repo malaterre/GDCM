@@ -621,6 +621,12 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
       {
       // If we get here, the JPEG code has signaled an error.
       // We need to clean up the JPEG object, close the input file, and return.
+      // But first handle the case IJG does not like:
+      if ( jerr.pub.msg_code == JERR_BAD_PRECISION /* 18 */ )
+        {
+        this->BitSample = jerr.pub.msg_parm.i[0];
+        assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        }
       jpeg_destroy_decompress(&cinfo);
       // TODO: www.dcm4che.org/jira/secure/attachment/10185/ct-implicit-little.dcm
       // weird Icon Image from GE...
@@ -652,12 +658,13 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     // First of all are we using the proper JPEG decoder (correct bit sample):
     if( jerr.pub.num_warnings )
       {
-      if ( jerr.pub.msg_code == 128 )
-        {
-        this->BitSample = jerr.pub.msg_parm.i[0];
-        jpeg_destroy_decompress(&cinfo);
-        return false;
-        }
+      assert( 0 );
+      //if ( jerr.pub.msg_code == 128 )
+      //  {
+      //  this->BitSample = jerr.pub.msg_parm.i[0];
+      //  jpeg_destroy_decompress(&cinfo);
+      //  return false;
+      //  }
       }
     // Let's check the color space:
     // JCS_UNKNOWN    -> 0

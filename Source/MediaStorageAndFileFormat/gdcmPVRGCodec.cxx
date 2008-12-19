@@ -105,6 +105,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   //std::cerr << "system: " << ret << std::endl;
 
   size_t len = gdcm::System::FileSize(output);
+  if(!len) return false;
   assert( len );
 
   std::ifstream is(output);
