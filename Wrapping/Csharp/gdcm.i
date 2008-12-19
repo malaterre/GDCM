@@ -197,6 +197,16 @@ using namespace gdcm;
   }
 };
 %include "gdcmPrivateTag.h"
+%extend gdcm::PrivateTag
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmVL.h"
 %include "gdcmVR.h"
 %extend gdcm::VR
@@ -234,6 +244,9 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
+//%ignore gdcm::ByteValue::GetPointer() const;
+//%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
 %include "gdcmByteValue.h"
 %extend gdcm::ByteValue
 {
@@ -243,11 +256,6 @@ using namespace gdcm;
     os << *self;
     buffer = os.str();
     return buffer.c_str();
-  }
-  std::string WriteBuffer() {
-    std::ostringstream os;
-    self->WriteBuffer(os);
-    return os.str();
   }
 };
 
@@ -406,7 +414,6 @@ using namespace gdcm;
 %include "gdcmImage.h"
 %extend gdcm::Image
 {
-
   const char *toString() {
     static std::string buffer;
     std::stringstream s;
@@ -414,7 +421,6 @@ using namespace gdcm;
     buffer = s.str();
     return buffer.c_str();
   }
-
 };
 %include "gdcmIconImage.h"
 %include "gdcmFragment.h"
@@ -532,6 +538,7 @@ using namespace gdcm;
 %include "gdcmPrinter.h"
 %include "gdcmDumper.h"
 %include "gdcmOrientation.h"
+%include "gdcmDirectionCosines.h"
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
@@ -585,7 +592,6 @@ using namespace gdcm;
   }
 };
 #endif
-%include "gdcmDirectionCosines.h"
 %include "gdcmTagPath.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"

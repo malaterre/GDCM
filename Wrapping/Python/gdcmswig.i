@@ -229,10 +229,10 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-%include "gdcmByteValue.h"
 %ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
 %ignore gdcm::ByteValue::GetPointer() const;
 %ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
+%include "gdcmByteValue.h"
 %extend gdcm::ByteValue
 {
   const char *__str__() const {
@@ -439,7 +439,6 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-
 %include "gdcmIconImage.h"
 %include "gdcmFragment.h"
 %include "gdcmPDBElement.h"
