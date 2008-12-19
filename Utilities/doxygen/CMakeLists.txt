@@ -108,7 +108,20 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     )
   ENDIF(UNIX AND GDCM_PDF_DOCUMENTATION)
 
-  # Install at least man pages:
+  # Install html pages:
+  INSTALL(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcm2vtk.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmconv.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmdump.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmimg.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcminfo.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmpdf.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmraw.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmscanner.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmtar.html
+    ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmviewer.html
+    DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT Development
+  )
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
@@ -122,6 +135,9 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
     DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT Development
   )
+
+  # http://lists.debian.org/debian-italian/2006/12/msg00878.html
+  # man2txt : man man | col -b | less
 
 ENDIF(GDCM_DOCUMENTATION)
 
