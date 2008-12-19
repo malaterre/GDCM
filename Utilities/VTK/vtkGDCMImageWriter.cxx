@@ -887,7 +887,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 #endif
 
 
-  if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
+  if( this->FileDimensionality != 2 && (
+      ms == gdcm::MediaStorage::SecondaryCaptureImageStorage ||
+      ms == gdcm::MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
+  ) )
     {
     // A.8.3.4 Multi-frame Grayscale Byte SC Image IOD Content Constraints
 /*

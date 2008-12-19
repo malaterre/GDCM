@@ -200,7 +200,7 @@ static MSModalityType MSModalityTypes[] = {
   {"MR", 3},//EnhancedMRImageStorage,
   {"  ", 2},//MRSpectroscopyStorage,
   {"  ", 2},//NuclearMedicineImageStorageRetired,
-  {"OT", 3},//SecondaryCaptureImageStorage,
+  {"OT", 2},//SecondaryCaptureImageStorage,
   {"OT", 3},//MultiframeSingleBitSecondaryCaptureImageStorage,
   {"OT", 3},//MultiframeGrayscaleByteSecondaryCaptureImageStorage,
   {"OT", 3},//MultiframeGrayscaleWordSecondaryCaptureImageStorage,
