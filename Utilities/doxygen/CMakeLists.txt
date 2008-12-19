@@ -108,5 +108,20 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     )
   ENDIF(UNIX AND GDCM_PDF_DOCUMENTATION)
 
+  # Install at least man pages:
+  INSTALL(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmraw.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
+    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT Development
+  )
+
 ENDIF(GDCM_DOCUMENTATION)
 

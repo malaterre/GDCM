@@ -1,16 +1,16 @@
 /*!
 
-\page gdcmconv Tool to convert DICOM to DICOM.
+\page gdcmimg Tool to convert DICOM to DICOM.
 
 \section synopsis SYNOPSIS
 
 \verbatim
-gdcmconv [options] file-in file-out
+gdcmimg [options] file-in file-out
 \endverbatim
 
 \section description DESCRIPTION
 
-The \b gdcmconv 
+The \b gdcmimg 
 
 \section parameters PARAMETERS
 
