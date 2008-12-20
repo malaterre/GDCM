@@ -658,13 +658,22 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     // First of all are we using the proper JPEG decoder (correct bit sample):
     if( jerr.pub.num_warnings )
       {
-      assert( 0 );
-      //if ( jerr.pub.msg_code == 128 )
-      //  {
-      //  this->BitSample = jerr.pub.msg_parm.i[0];
-      //  jpeg_destroy_decompress(&cinfo);
-      //  return false;
-      //  }
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+      if ( jerr.pub.msg_code == 128 )
+        {
+        // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+        // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+        // MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
+        // LJPEG_BuginGDCM12.dcm
+        gdcmErrorMacro( "128 hack" );
+        this->BitSample = jerr.pub.msg_parm.i[0];
+        jpeg_destroy_decompress(&cinfo);
+        return false;
+        }
+      else
+        {
+        assert( 0 );
+        }
       }
     // Let's check the color space:
     // JCS_UNKNOWN    -> 0
