@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
       writer->SetDirectionCosines( reader->GetDirectionCosines() );
       writer->SetShift( reader->GetShift() );
       writer->SetScale( reader->GetScale() );
+      writer->SetImageFormat( reader->GetImageFormat() );
       reader->GetMedicalImageProperties()->Print( std::cout );
       }
     else if( vtkBMPReader * reader = vtkBMPReader::SafeDownCast(imgreader) )
