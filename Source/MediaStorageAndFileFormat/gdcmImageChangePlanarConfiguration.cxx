@@ -91,11 +91,19 @@ bool ImageChangePlanarConfiguration::Change()
   delete[] copy;
 
   Output->SetPlanarConfiguration( PlanarConfiguration );
-#ifdef GDCM_WORDS_BIGENDIAN
-  Output->SetTransferSyntax( TransferSyntax::ExplicitVRBigEndian );
-#else
-  Output->SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
-#endif
+  if( Input->GetTransferSyntax().IsImplicit() )
+    {
+    assert( Output->GetTransferSyntax().IsImplicit() );
+    }
+  else if( Input->GetTransferSyntax() == TransferSyntax::ExplicitVRBigEndian )
+    {
+    Output->SetTransferSyntax( TransferSyntax::ExplicitVRBigEndian );
+    }
+  else
+    {
+    Output->SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
+    }
+  //assert( Output->GetTransferSyntax().IsRaw() );
   assert( Output->GetPhotometricInterpretation() == Input->GetPhotometricInterpretation() );
 
   return true;
