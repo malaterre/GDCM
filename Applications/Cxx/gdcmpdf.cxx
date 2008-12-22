@@ -136,6 +136,10 @@ std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
 
 int main (int argc, char *argv[])
 {
+  if( argc < 1 )
+    {
+    return 1;
+    }
   GooString *ownerPW, *userPW;
   GooString *fileName;
   PDFDoc *doc;
@@ -143,7 +147,11 @@ int main (int argc, char *argv[])
   UnicodeMap *uMap;
   ownerPW = NULL;
   userPW = NULL;
+#ifdef LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM
+  globalParams = new GlobalParams(0);
+#else
   globalParams = new GlobalParams();
+#endif
   uMap = globalParams->getTextEncoding();
 
   const char *filename = argv[1];
