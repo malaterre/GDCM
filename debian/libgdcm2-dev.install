@@ -7,3 +7,11 @@ usr/include/gdcm-2.*/16/*
 usr/include/gdcm-2.*/8/*
 usr/include/gdcm-2.*/j*.h
 usr/share/gdcm-2.*/XML
+usr/share/doc/gdcm-2.*/gdcmconv.html
+usr/share/doc/gdcm-2.*/gdcmdump.html
+usr/share/doc/gdcm-2.*/gdcmimg.html
+usr/share/doc/gdcm-2.*/gdcminfo.html
+usr/share/doc/gdcm-2.*/gdcmpdf.html
+usr/share/doc/gdcm-2.*/gdcmraw.html
+usr/share/doc/gdcm-2.*/gdcmscanner.html
+usr/share/doc/gdcm-2.*/gdcmtar.html

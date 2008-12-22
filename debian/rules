@@ -29,6 +29,10 @@ else
 endif
 export CFLAGS
 
+# Repeat for C++ compilation flags
+CXXFLAGS = $(CFLAGS)
+export CXXFLAGS
+
 # set the number of build jobs
 ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
         JOBS := -j$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
@@ -60,8 +64,11 @@ debian/configure-python%-stamp: $(QUILT_STAMPFN)
 		-DGDCM_USE_SYSTEM_UUID:BOOL=ON \
 		-DGDCM_USE_SYSTEM_ZLIB:BOOL=ON \
 		-DGDCM_USE_SYSTEM_OPENJPEG:BOOL=ON \
+		-DGDCM_USE_SYSTEM_POPPLER:BOOL=ON \
 		-DGDCM_USE_VTK:BOOL=ON \
 		-DVTK_DIR:PATH=/usr/lib/vtk-5.0/ \
+		-DGDCM_DOCUMENTATION:BOOL=ON \
+		-DGDCM_PDF_DOCUMENTATION:BOOL=OFF \
 		-DPREFERRED_PYTHON_VERSION=python$*
 	touch $@
 

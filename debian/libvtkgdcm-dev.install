@@ -1,2 +1,4 @@
 usr/lib/libvtkgdcm*.so
 usr/include/gdcm-2.*/vtk*
+usr/share/doc/gdcm-2.*/gdcm2vtk.html
+usr/share/doc/gdcm-2.*/gdcmviewer.html
