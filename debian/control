@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11), quilt,
  python-support (>= 0.3.9), uuid-dev, zlib1g-dev, libexpat1-dev,
  swig, cmake, libvtk5-dev, python-vtk, libpng12-dev | libpng-dev,
  libjpeg62-dev, libtiff4-dev, libfreetype6-dev, libxext-dev,
- mono-mcs (>= 1.0) | c-sharp-compiler, libopenjpeg-dev
+ mono-mcs (>= 1.0) | c-sharp-compiler, libopenjpeg-dev, libpoppler-dev
 Standards-Version: 3.8.0
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/gdcm/trunk/?rev=0&sc=0
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/gdcm/trunk/
