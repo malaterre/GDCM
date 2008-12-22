@@ -18,11 +18,13 @@
 #include "vtkImageReader2Factory.h"
 #include "vtkImageReader2.h"
 #include "vtkImageData.h"
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMINCImageReader.h"
 #include "vtkMINCImageAttributes.h"
+#include "vtk_tiff.h" // ORIENTATION_BOTLEFT
+#endif
 #include "vtkMedicalImageProperties.h"
 #include "vtkTIFFReader.h"
-#include "vtk_tiff.h" // ORIENTATION_BOTLEFT
 #include "vtkGESignaReader.h"
 #include "vtkImageExtractComponents.h"
 #include "vtkImageRGBToYBR.h"
@@ -132,6 +134,7 @@ int main(int argc, char *argv[])
       writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
       reader->GetMedicalImageProperties()->Print( std::cout );
       }
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     else if( vtkMINCImageReader *reader = vtkMINCImageReader::SafeDownCast( imgreader ) )
       {
       writer->SetDirectionCosines( reader->GetDirectionCosines() );
@@ -141,13 +144,16 @@ int main(int argc, char *argv[])
       //writer->SetShift( reader->GetRescaleIntercept() );
       reader->GetImageAttributes()->PrintFileHeader();
       }
+#endif
     else if( vtkTIFFReader *reader = vtkTIFFReader::SafeDownCast( imgreader ) )
       {
       // TIFF has resolution (spacing), and VTK make sure to set set in mm
       // For some reason vtkTIFFReader is all skrew up and will load the image in whatever orientation
       // as stored on file, thus this is up to the user to set it properly...
       // If anyone has any clue why...
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       reader->SetOrientationType( ORIENTATION_BOTLEFT );
+#endif
       }
     }
   // nothing special need to be done for vtkStructuredPointsReader 
