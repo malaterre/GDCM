@@ -76,6 +76,7 @@ void JPEGCodec::SetBitSample(int bit)
   assert( Internal == NULL );
   if( this->GetPixelFormat().GetBitsAllocated() % 8 != 0 )
     {
+    gdcmWarningMacro( "Cannot set BitSample" );
     return;
     }
   if ( BitSample <= 8 )
@@ -105,6 +106,7 @@ void JPEGCodec::SetBitSample(int bit)
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
   //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
+  assert( Internal != NULL );
 }
 
 /*
@@ -115,6 +117,7 @@ For all images, including all frames of a multi-frame image, the JPEG Interchang
 */
 bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 {
+  assert( Internal );
   out = in;
   // Fragments...
   const SequenceOfFragments *sf = in.GetSequenceOfFragments();
