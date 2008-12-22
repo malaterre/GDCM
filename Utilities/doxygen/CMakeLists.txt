@@ -5,6 +5,12 @@ IF(GDCM_DOCUMENTATION)
 
   FIND_PACKAGE(Doxygen REQUIRED)
 
+  IF(GDCM_DOXYGEN_NO_FOOTER)
+    SET(GDCM_HTML_FOOTER)
+  ELSE(GDCM_DOXYGEN_NO_FOOTER)
+    # Otherwise use gdcm/piwik/sf.net footer:
+    SET(GDCM_HTML_FOOTER ${GDCM_SOURCE_DIR}/Utilities/doxygen/footer.html)
+  ENDIF(GDCM_DOXYGEN_NO_FOOTER)
   CONFIGURE_FILE(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/doxyfile.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
