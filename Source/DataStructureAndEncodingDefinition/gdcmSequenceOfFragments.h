@@ -150,14 +150,14 @@ std::ostream const &Write(std::ostream &os) const
   return os;
 }
 
-#if defined(SWIGPYTHON) || defined(SWIGCSHARP)
+//#if defined(SWIGPYTHON) || defined(SWIGCSHARP)
   // For now leave it there, this does not make sense in the C++ layer
   // Create a new object
   static SmartPointer<SequenceOfFragments> New()
   {
      return new SequenceOfFragments();
   }
-#endif
+//#endif
 
 protected:
 public:
