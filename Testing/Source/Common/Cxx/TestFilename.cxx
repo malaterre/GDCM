@@ -80,6 +80,16 @@ int TestFilename(int argc, char *argv[])
     return 1;
     }
 
+  {
+  const char *curprocfn = gdcm::System::GetCurrentProcessFileName();
+  if( curprocfn )
+  {
+gdcm::Filename fn( curprocfn );
+std::string str = fn.GetPath();
+std::cout << str << std::endl;
+  }
+  }
+
   return 0;
 }
 
