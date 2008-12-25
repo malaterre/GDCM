@@ -1,6 +1,6 @@
 /*!
 
-\page gdcm2vtk Tool to convert DICOM to DICOM.
+\page gdcm2vtk Convert a file supported by VTK into DICOM. 
 
 \section synopsis SYNOPSIS
 
@@ -15,7 +15,7 @@ The \b gdcm2vtk
 \section parameters PARAMETERS
 
 \verbatim
-file-in   DICOM input filename
+file-in   input filename (DICOM or VTK supported)
 
 file-out  DICOM output filename
 \endverbatim
@@ -45,7 +45,7 @@ file-out  DICOM output filename
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+<b>gdcmdump</b>(1), <b>gdcmviewer</b>(1)
 
 \section copyright COPYRIGHT
 
