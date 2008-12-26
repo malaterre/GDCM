@@ -21,7 +21,7 @@ export DH_OPTIONS
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-CFLAGS = -g -Werror
+CFLAGS = -g -Werror 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
 else
@@ -30,7 +30,7 @@ endif
 export CFLAGS
 
 # Repeat for C++ compilation flags
-CXXFLAGS = $(CFLAGS)
+CXXFLAGS = $(CFLAGS) -Wno-deprecated
 export CXXFLAGS
 
 # set the number of build jobs
@@ -81,6 +81,8 @@ debian/build-stamp: debian/configure-stamp $(PYVERS:%=debian/build-python%-stamp
 debian/build-python%-stamp: 
 	dh_testdir
 	$(MAKE) $(JOBS) -C $(BUILD)-python$*
+# doxygen stuff:
+	$(MAKE) GDCMDoxygenDoc -C $(BUILD)-python$*
 	-(cd $(BUILD)-python$* && LD_LIBRARY_PATH=$(BUILD)-python$*/gdcm ctest --force-new-ctest-process -V)
 	touch $@
 
