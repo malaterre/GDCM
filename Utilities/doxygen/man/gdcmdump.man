@@ -21,6 +21,7 @@ file-in   DICOM input filename
 \section options OPTIONS
 
 \subsection options options
+\verbatim
   -x --xml-dict  generate the XML dict (only private elements for now).
   -r --recursive recursive.
   -d --dump      dump value (limited use).
@@ -28,6 +29,7 @@ file-in   DICOM input filename
   -c --color     print in color.
   -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
   -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
+\endverbatim
 
 \subsection general_options general options
 \verbatim
@@ -51,7 +53,9 @@ file-in   DICOM input filename
 \endverbatim
 
 \subsection special_options special options
+\verbatim
   -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
+\endverbatim
 
 \section see_also SEE ALSO
 

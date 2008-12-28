@@ -25,7 +25,9 @@ Convert a file supported by VTK into DICOM.
 
 Typical usage is:
 
+\verbatim
 $ gdcm2vtk inputfile output.dcm
+\endverbatim
 
 It uses the internal factory mechanism of VTK to recognize a file (CanRead function). See VTK supported file here:
 
@@ -35,15 +37,19 @@ If your input file has 4 components, the 4th comp (alpha) will be removed from t
 
 Special care was taken for the following file format:
 
+\verbatim
    1. DICOM: Direction Cosines and vtkMedicalImageInformation are passed to the output
    2. BMP: By default the file is saved with a Lookup Table
    3. GE Signa: vtkMedicalImageProperties is passed to the output
    4. MINC: Direction Cosines is passed to the output
    5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and CVS). Only use it, if you know what you are doing. 
+\endverbatim
 
 \section dicom DICOM
 
+\verbatim
 $ gdcm2vtk input.dcm output.dcm
+\endverbatim
 
 vtkGDCMImageReader will be used to read in a DICOM file. not the default vtkDICOMImageReader.
 

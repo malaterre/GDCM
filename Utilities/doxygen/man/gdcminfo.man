@@ -21,7 +21,9 @@ file-in   DICOM input filename
 \section options OPTIONS
 
 \subsection options options
+\verbatim
   -d --check-deflated   check if file is proper deflated syntax.
+\endverbatim
 
 \subsection general_options general options
 \verbatim
