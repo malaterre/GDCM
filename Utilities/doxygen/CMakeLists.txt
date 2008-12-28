@@ -60,6 +60,7 @@ IF(GDCM_DOCUMENTATION)
 
   # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
   ADD_CUSTOM_TARGET(GDCMDoxygenDoc
+    ALL
     DEPENDS ${GDCM_DOC_TARBALL}
   )
 
@@ -109,6 +110,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     )
     # add target to 'ALL'
     ADD_CUSTOM_TARGET(GDCMDoxygenPDF
+      ALL
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
     )
   ENDIF(UNIX AND GDCM_PDF_DOCUMENTATION)
