@@ -1,6 +1,6 @@
 /*!
 
-\page gdcmtar Tool to convert DICOM to DICOM.
+\page gdcmtar Concatenate/Extract DICOM files.
 
 \section synopsis SYNOPSIS
 
@@ -21,6 +21,12 @@ file-out  DICOM output filename
 \endverbatim
 
 \section options OPTIONS
+
+\subsection options options
+\verbatim
+  -M --mosaic     Split SIEMENS Mosaic image into multiple frames.
+  -p --pattern    Specify trailing file pattern.
+\endverbatim
 
 \subsection general_options general options
 \verbatim

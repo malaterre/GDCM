@@ -1,6 +1,6 @@
 /*!
 
-\page gdcmraw Tool to convert DICOM to DICOM.
+\page gdcmraw Extract Data Element Value Field.
 
 \section synopsis SYNOPSIS
 
@@ -17,10 +17,17 @@ The \b gdcmraw
 \verbatim
 file-in   DICOM input filename
 
-file-out  DICOM output filename
+file-out  output filename
 \endverbatim
 
 \section options OPTIONS
+
+\subsection options options
+\verbatim
+  -S --split-frags Split fragments into multiple files.
+  -p --pattern     Specify trailing file pattern (see split-frags).
+  -P --pixel-data  Pixel Data trailing 0.
+\endverbatim
 
 \subsection general_options general options
 \verbatim

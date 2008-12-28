@@ -59,6 +59,7 @@ void PrintHelp()
   std::cout << "Extract Data Element Value Field" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename" << std::endl;
+  std::cout << "  -o --output     DICOM filename" << std::endl;
   std::cout << "  -t --tag         Specify tag to extract value from." << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -S --split-frags Split fragments into multiple files." << std::endl;

@@ -27,11 +27,17 @@ file-out  DICOM output filename
   -h   --help
          print this help text and exit
 
-       --version
+  -v   --version
          print version information and exit
 
   -V   --verbose
-         verbose mode
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
 
   -D   --debug
          debug mode, print debug information

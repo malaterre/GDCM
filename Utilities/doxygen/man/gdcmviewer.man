@@ -1,11 +1,11 @@
 /*!
 
-\page gdcmviewer Tool to convert DICOM to DICOM.
+\page gdcmviewer Simple DICOM viewer.
 
 \section synopsis SYNOPSIS
 
 \verbatim
-gdcmviewer [options] file-in file-out
+gdcmviewer [options] file-in
 \endverbatim
 
 \section description DESCRIPTION
@@ -16,8 +16,6 @@ The \b gdcmviewer
 
 \verbatim
 file-in   DICOM input filename
-
-file-out  DICOM output filename
 \endverbatim
 
 \section options OPTIONS

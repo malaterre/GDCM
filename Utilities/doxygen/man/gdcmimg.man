@@ -1,6 +1,6 @@
 /*!
 
-\page gdcmimg Tool to convert DICOM to DICOM.
+\page gdcmimg Manipulate DICOM file.
 
 \section synopsis SYNOPSIS
 
@@ -15,12 +15,21 @@ The \b gdcmimg
 \section parameters PARAMETERS
 
 \verbatim
-file-in   DICOM input filename
+file-in   input filename
 
-file-out  DICOM output filename
+file-out  output filename
 \endverbatim
 
 \section options OPTIONS
+
+\subsection options options
+  -d --depth       Depth.
+  -s --size %d,%d  Size.
+  -R --region      Region.
+  -F --fill        Fill.
+  -T --study-uid   Study UID.
+  -S --series-uid  Series UID.
+     --root-uid    Root UID.
 
 \subsection general_options general options
 \verbatim

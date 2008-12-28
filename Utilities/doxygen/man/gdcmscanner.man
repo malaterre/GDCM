@@ -1,11 +1,11 @@
 /*!
 
-\page gdcmscanner Tool to convert DICOM to DICOM.
+\page gdcmscanner Scan a directory containing DICOM files.
 
 \section synopsis SYNOPSIS
 
 \verbatim
-gdcmscanner [options] file-in file-out
+gdcmscanner [options] directory
 \endverbatim
 
 \section description DESCRIPTION
@@ -15,12 +15,17 @@ The \b gdcmscanner
 \section parameters PARAMETERS
 
 \verbatim
-file-in   DICOM input filename
-
-file-out  DICOM output filename
+directory   DICOM input directory
+tag         DICOM Tag
 \endverbatim
 
 \section options OPTIONS
+
+\subsection options options
+\verbatim
+  -p --print      Print output.
+  -r --recursive  Recusively descend directory.
+\endverbatim
 
 \subsection general_options general options
 \verbatim

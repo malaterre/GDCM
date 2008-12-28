@@ -1,11 +1,11 @@
 /*!
 
-\page gdcminfo Tool to convert DICOM to DICOM.
+\page gdcminfo Display meta info about the input DICOM file.
 
 \section synopsis SYNOPSIS
 
 \verbatim
-gdcminfo [options] file-in file-out
+gdcminfo [options] file-in
 \endverbatim
 
 \section description DESCRIPTION
@@ -16,11 +16,12 @@ The \b gdcminfo
 
 \verbatim
 file-in   DICOM input filename
-
-file-out  DICOM output filename
 \endverbatim
 
 \section options OPTIONS
+
+\subsection options options
+  -d --check-deflated   check if file is proper deflated syntax.
 
 \subsection general_options general options
 \verbatim
@@ -42,6 +43,11 @@ file-out  DICOM output filename
   -D   --debug
          debug mode, print debug information
 \endverbatim
+
+\subsection environment_variable environment variable
+
+  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)
+
 
 \section see_also SEE ALSO
 

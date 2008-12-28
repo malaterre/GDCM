@@ -1,6 +1,6 @@
 /*!
 
-\page gdcmdump Tool to convert DICOM to DICOM.
+\page gdcmdump dumps a DICOM file, it will display the structure and values contained in the specified DICOM file.
 
 \section synopsis SYNOPSIS
 
@@ -16,11 +16,18 @@ The \b gdcmdump
 
 \verbatim
 file-in   DICOM input filename
-
-file-out  DICOM output filename
 \endverbatim
 
 \section options OPTIONS
+
+\subsection options options
+  -x --xml-dict  generate the XML dict (only private elements for now).
+  -r --recursive recursive.
+  -d --dump      dump value (limited use).
+  -p --print     print value instead of simply dumping (default).
+  -c --color     print in color.
+  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
+  -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
 
 \subsection general_options general options
 \verbatim
@@ -42,6 +49,9 @@ file-out  DICOM output filename
   -D   --debug
          debug mode, print debug information
 \endverbatim
+
+\subsection special_options special options
+  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
 
 \section see_also SEE ALSO
 

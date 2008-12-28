@@ -22,6 +22,30 @@ file-out  DICOM output filename
 
 \section options OPTIONS
 
+\subsection options options
+  -X --explicit            Change Transfer Syntax to explicit.
+  -M --implicit            Change Transfer Syntax to implicit.
+  -U --use-dict            Use dict for VR (only public by default).
+     --with-private-dict   Use private dict for VR (advanced user only).
+  -C --check-meta          Check File Meta Information (advanced user only).
+     --root-uid            Root UID.
+     --remove-gl           Remove group length (deprecated in DICOM 2008).
+
+\subsection image_options image options
+
+  -l --apply-lut                      Apply LUT (non-standard, advanced user only).
+  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible).
+  -w --raw                            Decompress image.
+  -J --jpeg                           Compress image in jpeg.
+  -K --j2k                            Compress image in j2k.
+  -L --jpegls                         Compress image in jpeg-ls.
+  -R --rle                            Compress image in rle (lossless only).
+  -F --force                          Force decompression/merging before recompression/splitting.
+     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed.
+     --planar-configuration [01]      Change planar configuration.
+  -Y --lossy                          Use the lossy (if possible) compressor.
+  -S --split %d                       Write 2D image with multiple fragments (using max size)
+
 \subsection general_options general options
 \verbatim
   -h   --help
@@ -42,6 +66,20 @@ file-out  DICOM output filename
   -D   --debug
          debug mode, print debug information
 \endverbatim
+
+\subsection j2k_options j2k options
+  -r --rate    %*f           set rate.
+  -q --quality %*f           set quality.
+  -t --tile %d,%d            set tile size.
+  -n --number-resolution %d  set number of resolution.
+     --irreversible          set irreversible.
+
+\subsection special_options special options
+  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
+
+\subsection environment_variable environment variable
+
+  GDCM_ROOT_UID Root UID
 
 \section see_also SEE ALSO
 
