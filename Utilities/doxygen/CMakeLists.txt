@@ -39,6 +39,7 @@ IF(GDCM_DOCUMENTATION)
   SET(GDCM_DOC_TARBALL
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tgz
   )
+  # epstopdf is needed: sudo apt-get install texlive-extra-utils
   ADD_CUSTOM_COMMAND(
     OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
              ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
