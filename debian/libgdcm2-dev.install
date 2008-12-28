@@ -1,4 +1,12 @@
-usr/lib/libgdcm*.so
+usr/lib/libgdcmCommon.so
+usr/lib/libgdcmDICT.so
+usr/lib/libgdcmDSED.so
+usr/lib/libgdcmIOD.so
+usr/lib/libgdcmMSFF.so
+usr/lib/libgdcmjpeg12.so
+usr/lib/libgdcmjpeg16.so
+usr/lib/libgdcmjpeg8.so
+usr/lib/libgdcmopenjpeg.so
 usr/lib/gdcm-2.*/*
 usr/include/gdcm-2.*/gdcm*
 usr/include/gdcm-2.*/zip*
