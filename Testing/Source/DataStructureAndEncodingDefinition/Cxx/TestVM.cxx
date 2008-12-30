@@ -176,5 +176,14 @@ int TestVM(int, char *[])
   //vm = gdcm::VM::VM_END;
   //std::cout << vm << std::endl;
 
+{
+  gdcm::VM vm1 = gdcm::VM::VM8;
+  gdcm::VM vm2 = gdcm::VM::VM1_n;
+  if ( !vm2.Compatible( vm1 ) )
+    {
+    return 1;
+    }
+}
+
   return 0;
 }
