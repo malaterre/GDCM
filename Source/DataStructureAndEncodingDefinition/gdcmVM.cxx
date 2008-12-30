@@ -356,6 +356,9 @@ bool VM::Compatible(VM const &vm) const
   case VM2_n:
     r = vm.VMField >= VM::VM2;
     break;
+  case VM3_4:
+    r = vm.VMField == VM::VM3 || vm.VMField == VM::VM4;
+    break;
   case VM3_3n:
     r = vm.VMField >= VM::VM3 /*&& !(vm.GetLength() % 3)*/;
     break;
