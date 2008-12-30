@@ -43,27 +43,6 @@ file-out  DICOM output filename
          debug mode, print debug information
 \endverbatim
 
-\section pdf_mapping PDF Info Mapping
-
-Here is how the PDF info is mapped to DICOM information:
-
-\verbatim
-Title:          GDCM Reference Guide
-Subject:        
-Keywords:       DICOM
-Author:         
-Creator:        LaTeX with hyperref package
-Producer:       pdfeTeX-1.21a
-CreationDate:   Mon Aug 11 11:52:35 2008
-Tagged:         no
-Pages:          816
-Encrypted:      no
-Page size:      612 x 792 pts (letter)
-File size:      6861899 bytes
-Optimized:      yes
-PDF version:    1.4
-\endverbatim
-
 \section usage_example Usage Example
 
 \verbatim
@@ -76,6 +55,65 @@ To re-extract the encapsulated pdf file:
 \verbatim
  gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
  diff gdcm.pdf gdcm.dcm.pdf
+\endverbatim
+
+\section pdf_mapping PDF Info Mapping
+
+Here is how the PDF info is mapped to DICOM information:
+
+\verbatim
+Title:          GDCM Reference Manual
+Subject:        Grassroots DICOM API reference
+Keywords:       GDCM,DICOM,JPEG,Lossless JPEG,JPEG-LS,J2K,JPEG 2000,RLE
+Author:         Mathieu Malaterre and co.
+Creator:        LaTeX with hyperref package
+Producer:       pdfeTeX-1.21a
+CreationDate:   Tue Dec 30 03:11:00 2008
+Tagged:         no
+Pages:          1131
+Encrypted:      no
+Page size:      612 x 792 pts (letter)
+File size:      9235355 bytes
+Optimized:      yes
+PDF version:    1.4
+\endverbatim
+
+Converted to DICOM this leads to:
+
+\verbatim
+# Dicom-Data-Set
+# Used TransferSyntax: LittleEndianExplicit
+(0008,0005) CS [ISO_IR 100]                             #  10, 1 SpecificCharacterSet
+(0008,0012) DA [20081230]                               #   8, 1 InstanceCreationDate
+(0008,0013) TM [163920]                                 #   6, 1 InstanceCreationTime
+(0008,0016) UI =EncapsulatedPDFStorage                  #  30, 1 SOPClassUID
+(0008,0018) UI [1.2.826.0.1.3680043.2.1143.7358600061869921523097627771223681233] #  64, 1 SOPInstanceUID
+(0008,0020) DA (no value available)                     #   0, 0 StudyDate
+(0008,0023) DA [20081230]                               #   8, 1 ContentDate
+(0008,002a) DT (no value available)                     #   0, 0 AcquisitionDatetime
+(0008,0030) TM (no value available)                     #   0, 0 StudyTime
+(0008,0033) TM [031100]                                 #   6, 1 ContentTime
+(0008,0050) SH (no value available)                     #   0, 0 AccessionNumber
+(0008,0060) CS [OT]                                     #   2, 1 Modality
+(0008,0064) CS [WSD]                                    #   4, 1 ConversionType
+(0008,0070) LO [LaTeX with hyperref package]            #  28, 1 Manufacturer
+(0008,0090) PN (no value available)                     #   0, 0 ReferringPhysiciansName
+(0010,0010) PN [Mathieu Malaterre and co.]              #  26, 1 PatientsName
+(0010,0020) LO (no value available)                     #   0, 0 PatientID
+(0010,0030) DA (no value available)                     #   0, 0 PatientsBirthDate
+(0010,0040) CS (no value available)                     #   0, 0 PatientsSex
+(0018,1020) LO [pdfeTeX-1.21a]                          #  14, 1 SoftwareVersions
+(0020,000d) UI [1.2.826.0.1.3680043.2.1143.822608206476373319006287511430949001] #  64, 1 StudyInstanceUID
+(0020,000e) UI [1.2.826.0.1.3680043.2.1143.8366036243745521348043300248528841128] #  64, 1 SeriesInstanceUID
+(0020,0010) SH (no value available)                     #   0, 0 StudyID
+(0020,0011) IS [1]                                      #   2, 1 SeriesNumber
+(0020,0013) IS [1]                                      #   2, 1 InstanceNumber
+(0028,0301) CS [YES]                                    #   4, 1 BurnedInAnnotation
+(0040,a043) SQ (Sequence with explicit length #=0)      #   0, 1 ConceptNameCodeSequence
+(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+(0042,0010) ST [GDCM Reference Manual]                  #  22, 1 DocumentTitle
+(0042,0011) OB 25\50\44\46\2d\31\2e\34\0a\25\e7\f3\cf\d3\0a\33\30\34\36\38\20\30... # 9235356, 1 EncapsulatedDocument
+(0042,0012) LO [application/pdf]                        #  16, 1 MIMETypeOfEncapsulatedDocument
 \endverbatim
 
 
