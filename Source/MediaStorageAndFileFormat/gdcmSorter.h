@@ -27,6 +27,7 @@ namespace gdcm
 /**
  * \brief Sorter
  */
+class DataSet;
 class GDCM_EXPORT Sorter
 {
 public:
@@ -46,10 +47,15 @@ public:
   /// UNSUPPORTED FOR NOW
   bool AddSelect( Tag const &tag, const char *value );
 
+  /// Set the sort function which compares one dataset to the other
+  typedef bool (*SortFunction)(DataSet const &, DataSet const &);
+  void SetSortFunction( SortFunction f );
+
 protected:
   std::vector<std::string> Filenames;
   typedef std::map<Tag,std::string> SelectionMap;
   std::map<Tag,std::string> Selection;
+  SortFunction SortFunc;
 };
 
 
