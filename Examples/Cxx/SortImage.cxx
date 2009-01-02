@@ -21,11 +21,19 @@
 
 bool mysort(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
 {
-  gdcm::Attribute<0x0020,0x0013> at1;
-  at1.SetFromDataElement( ds1.GetDataElement( at1.GetTag() ) );
+  gdcm::Attribute<0x0020,0x0013> at1; // Instance Number 
+  gdcm::Attribute<0x0020,0x0032> at11; // Image Position (Patient)
+  at1.Set( ds1 );
+  at11.Set( ds1 );
   gdcm::Attribute<0x0020,0x0013> at2;
-  at2.SetFromDataElement( ds2.GetDataElement( at2.GetTag() ) );
-  return at1 < at2;
+  gdcm::Attribute<0x0020,0x0032> at22;
+  at2.Set( ds2 );
+  at22.Set( ds2 );
+  if( at11 == at22 )
+    {
+    return at1 < at2;
+    }
+  return at11 < at22;
 }
 
 int main(int argc, char *argv[])
