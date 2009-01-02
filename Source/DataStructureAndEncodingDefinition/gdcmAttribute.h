@@ -21,6 +21,7 @@
 #include "gdcmVM.h"
 #include "gdcmElement.h"
 #include "gdcmDataElement.h"
+#include "gdcmDataSet.h"
 #include "gdcmStaticAssert.h"
 
 #include <string>
@@ -131,6 +132,21 @@ public:
   ArrayType operator[] (unsigned int idx) {
     return GetValue(idx);
   }
+  // FIXME: is this always a good idea ?
+  // I do not think so, I prefer operator
+  //operator ArrayType () const { return Internal[0]; }
+
+  bool operator==(const Attribute &att) const
+    {
+    return std::equal(Internal, Internal+GetNumberOfValues(),
+      att.GetValues()); 
+    }
+  bool operator<(const Attribute &att) const
+    {
+    return std::lexicographical_compare(Internal, Internal+GetNumberOfValues(),
+      att.GetValues(), att.GetValues() + att.GetNumberOfValues() ); 
+    }
+
   // const reference
   ArrayType const &GetValue(unsigned int idx = 0) const {
     assert( idx < GetNumberOfValues() );
@@ -179,6 +195,9 @@ public:
       {
       SetByteValueNoSwap(bv);
       }
+  }
+  void Set(DataSet const &ds) {
+    SetFromDataElement( ds.GetDataElement( GetTag() ) );
   }
 protected:
   void SetByteValueNoSwap(const ByteValue *bv) {
