@@ -15,6 +15,7 @@
 #include "vtkGDCMImageReader.h"
 
 #include "vtkPNGWriter.h"
+#include "vtkImageColorViewer.h"
 #include "vtkImageData.h"
 #include "vtkImageActor.h"
 #include "vtkRenderWindowInteractor.h"
@@ -25,7 +26,7 @@
 
 #include "gdcmTesting.h"
 
-int TestvtkGDCMReadImageActor(const char *filename)
+int TestvtkGDCMReadImageViewer(const char *filename)
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   //reader->CanReadFile( filename );
@@ -36,47 +37,30 @@ int TestvtkGDCMReadImageActor(const char *filename)
   reader->GetOutput()->Print( cout );
 
 
-vtkImageActor *ia = vtkImageActor::New();
-ia->SetInput( reader->GetOutput() );
-
-//# Create the RenderWindow, Renderer and both Actors
-vtkRenderer *ren1 = vtkRenderer::New();
-vtkRenderWindow *renWin = vtkRenderWindow::New();
-    renWin->AddRenderer (ren1);
-vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
-    iren->SetRenderWindow (renWin);
-
-// Add the actors to the renderer, set the background and size
-ren1->AddActor (ia);
-//ren1-> SetBackground 0.1 0.2 0.4
-//renWin->SetSize (0,0);
-
-      vtkInteractorStyleImage *style = vtkInteractorStyleImage::New();
-      iren->SetInteractorStyle( style );
-      style->Delete();
-//# render the image
-//iren AddObserver UserEvent {wm deiconify .vtkInteract}
-//renWin->Render();
-iren->Initialize();
-iren->Start();
+  vtkImageColorViewer *viewer = vtkImageColorViewer::New();
+  viewer->SetInput( reader->GetOutput() );
 
 
-//set cam1 [ren1 GetActiveCamera]
-//$cam1 Elevation -30
-//$cam1 Roll -20
-//ren1 ResetCameraClippingRange
-//renWin Render
+  vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
+
+  viewer->SetupInteractor( iren );
+  viewer->Render();
+
+  iren->Initialize();
+  iren->Start();
 
   reader->Delete();
+  iren->Delete();
+
   return 0; 
 }
 
-int TestvtkGDCMImageActor(int argc, char *argv[])
+int TestvtkGDCMImageViewer(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMReadImageActor(filename);
+    return TestvtkGDCMReadImageViewer(filename);
     }
 
   // else
@@ -85,7 +69,7 @@ int TestvtkGDCMImageActor(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestvtkGDCMReadImageActor( filename );
+    r += TestvtkGDCMReadImageViewer( filename );
     ++i;
     }
 
