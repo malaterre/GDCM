@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:VWDEhv";
+    static const char short_options[] = "i:dVWDEhv";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -259,6 +259,10 @@ int main(int argc, char *argv[])
       //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
+      break;
+
+    case 'd':
+      deflated = 1;
       break;
 
     case 'V':
