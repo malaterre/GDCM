@@ -48,7 +48,7 @@ void PrintVersion()
   const char date[] = "$Date$";
   std::cout << date << std::endl;
   //std::cout << "             VTK " << vtkVersion::GetVTKVersion() << std::endl;
-  std::cout << "            " << vtkVersion::GetVTKSourceVersion() << std::endl;
+  std::cout << "          " << vtkVersion::GetVTKSourceVersion() << std::endl;
 }
 
 void PrintHelp()
@@ -199,6 +199,7 @@ int main(int argc, char *argv[])
 
   if( filenames.size() != 2 )
     {
+    PrintHelp();
     return 1;
     }
   const char *filename = filenames[0].c_str();
