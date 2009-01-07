@@ -28,7 +28,7 @@ def PrintProgress(object, event):
 
 def MySort(ds1, ds2):
   # compare ds1
-  return True
+  return False
   
 if __name__ == "__main__":
 
@@ -39,7 +39,10 @@ if __name__ == "__main__":
   print d
 
   sorter = gdcm.Sorter()
-  sorter.SetCallback( MySort )
-  sorter.AddObserver( "ProgressEvent", PrintProgress )
+  sorter.SetSortFunction( MySort )
+  #sorter.AddObserver( "ProgressEvent", PrintProgress )
   sorter.Sort( d.GetFilenames() )
+
+  print "Sorter:"
+  print sorter
 

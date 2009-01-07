@@ -15,17 +15,20 @@
 /* 
  */
 #include "gdcmSorter.h"
+#include "gdcmScanner.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
 
 
 bool mysort(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
 {
-  gdcm::Attribute<0x0020,0x0013> at1; // Instance Number 
+  //gdcm::Attribute<0x0020,0x0013> at1; // Instance Number 
+  gdcm::Attribute<0x0018,0x1060> at1; // Trigger Time
   gdcm::Attribute<0x0020,0x0032> at11; // Image Position (Patient)
   at1.Set( ds1 );
   at11.Set( ds1 );
-  gdcm::Attribute<0x0020,0x0013> at2;
+  //gdcm::Attribute<0x0020,0x0013> at2;
+  gdcm::Attribute<0x0018,0x1060> at2;
   gdcm::Attribute<0x0020,0x0032> at22;
   at2.Set( ds2 );
   at22.Set( ds2 );
@@ -40,7 +43,7 @@ int main(int argc, char *argv[])
 {
   const char *dirname = argv[1];
   gdcm::Directory dir;
-  dir.Load( dirname );
+  unsigned int nfiles = dir.Load( dirname );
 
   dir.Print( std::cout );
   
@@ -51,5 +54,26 @@ int main(int argc, char *argv[])
   std::cout << "Sorter:" << std::endl;
   sorter.Print( std::cout );
 
+  gdcm::Scanner s;
+  s.AddTag( gdcm::Tag(0x20,0x32) ); // Image Position (Patient)
+  //s.AddTag( gdcm::Tag(0x20,0x37) ); // Image Orientation (Patient)
+  s.Scan( dir.GetFilenames() );
+
+  s.Print( std::cout );
+
+  // Count how many different IPP there are:
+  const gdcm::Scanner::ValuesType &values = s.GetValues();
+  unsigned int nvalues = values.size();
+  std::cout << "There are " << nvalues << " different type of values" << std::endl;
+  
+  //std::cout << "nfiles=" << nfiles << std::endl;
+  if( nfiles % nvalues != 0 )
+    {
+    std::cerr << "Impossible: this is a not a proper series" << std::endl;
+    return 1;
+    }
+  std::cout << "Series is composed of " << (nfiles/nvalues) << " different 3D volumes" << std::endl;
+
   return 0;
 }
+
