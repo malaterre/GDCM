@@ -136,6 +136,7 @@ void PrintHelp()
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
   std::cout << "  -w --raw                            Decompress image." << std::endl;
+  std::cout << "  -d --deflated                       Comptess using deflated (gzip)." << std::endl;
   std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
   std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
@@ -381,6 +382,7 @@ int main (int argc, char *argv[])
   int implicit = 0;
   int lut = 0;
   int raw = 0;
+  int deflated = 0;
   int rootuid = 0;
   int checkmeta = 0;
   int jpeg = 0;
@@ -442,6 +444,7 @@ int main (int argc, char *argv[])
         {"pixeldata", 1, 0, 0}, // valid
         {"apply-lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
+        {"deflated", 0, &deflated, 1}, // DeflatedExplicitVRLittleEndian
         {"lossy", 0, &lossy, 1}, // Specify lossy comp
         {"force", 0, &force, 1}, // force decompression even if target compression is identical
         {"jpeg", 0, &jpeg, 1}, // JPEG lossy / lossless
@@ -479,7 +482,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvIr:q:t:n:",
+    c = getopt_long (argc, argv, "i:o:XMUClwdJKRFYS:P:VWDEhvIr:q:t:n:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -506,38 +509,38 @@ int main (int argc, char *argv[])
             assert( root.empty() );
             root = optarg;
             }
-          else if( option_index == 27 ) /* split */
+          else if( option_index == 28 ) /* split */
             {
             assert( strcmp(s, "split") == 0 );
             fragmentsize = atoi(optarg);
             }
-          else if( option_index == 28 ) /* planar conf*/
+          else if( option_index == 29 ) /* planar conf*/
             {
             assert( strcmp(s, "planar-configuration") == 0 );
             planarconfval = atoi(optarg);
             }
-          else if( option_index == 35 ) /* photometricinterpretation */
+          else if( option_index == 36 ) /* photometricinterpretation */
             {
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
-          else if( option_index == 36 ) /* rate */
+          else if( option_index == 37 ) /* rate */
             {
             assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
-          else if( option_index == 37 ) /* qualit */
+          else if( option_index == 38 ) /* qualit */
             {
             assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
-          else if( option_index == 38 ) /* tile */
+          else if( option_index == 39 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
             unsigned int n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
-          else if( option_index == 39 ) /* number of resolution */
+          else if( option_index == 40 ) /* number of resolution */
             {
             assert( strcmp(s, ",number-resolution") == 0 );
             nresvalue = atoi(optarg);
@@ -584,6 +587,10 @@ int main (int argc, char *argv[])
 
     case 'w':
       raw = 1;
+      break;
+
+    case 'd':
+      deflated = 1;
       break;
 
     case 'J':
@@ -952,7 +959,7 @@ int main (int argc, char *argv[])
       return 1;
       }
     }
-  else if( jpeg || j2k || jpegls || rle || raw /*|| planarconf*/ )
+  else if( jpeg || j2k || jpegls || rle || raw || deflated /*|| planarconf*/ )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -1059,8 +1066,18 @@ int main (int argc, char *argv[])
         }
       change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
       }
+    else if( deflated )
+      {
+      if( lossy )
+        {
+        std::cerr << "no such thing as deflated & lossy" << std::endl;
+        return 1;
+        }
+      change.SetTransferSyntax( gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian );
+      }
     else
       {
+      std::cerr << "unhandled action" << std::endl;
       return 1;
       }
     if( raw && planarconf )
