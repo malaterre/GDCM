@@ -28,16 +28,17 @@ that something won't work. Cheers !
 (*) http://www.cmake.org for more information
 
 For more help you can go online in the GDCM Wiki:
+* http://gdcm.sourceforge.net/
 
-* http://gdcm.sourceforge.net/wiki/index.php/GDCM_Release_2.0
-* http://gdcm.sourceforge.net/wiki/index.php/FAQ
+In Particular:
+* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=GDCM_Release_2.0
+* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=FAQ
 
 And a page describing each tool can be found at:
-* http://gdcm.sourceforge.net/wiki/index.php/Gdcmimg
-* http://gdcm.sourceforge.net/wiki/index.php/Gdcmraw
-* http://gdcm.sourceforge.net/wiki/index.php/Gdcmdump
-* http://gdcm.sourceforge.net/wiki/index.php/Gdcmconv
-* http://gdcm.sourceforge.net/wiki/index.php/Gdcmtar
+* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=End_User_Applications
+
+Eg:
+* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Gdcminfo
 
 Need VTK:
-* http://gdcm.sourceforge.net/wiki/index.php/Gdcmviewer
+* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Gdcmviewer
