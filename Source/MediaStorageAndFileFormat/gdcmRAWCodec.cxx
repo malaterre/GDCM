@@ -43,7 +43,8 @@ bool RAWCodec::CanCode(TransferSyntax const &ts) const
   return ts == TransferSyntax::ImplicitVRLittleEndian
    || ts == TransferSyntax::ExplicitVRLittleEndian
    || ts == TransferSyntax::ExplicitVRBigEndian
-   || ts == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+   || ts == TransferSyntax::ImplicitVRBigEndianPrivateGE
+   || ts == TransferSyntax::DeflatedExplicitVRLittleEndian;
 }
 
 bool RAWCodec::CanDecode(TransferSyntax const &ts) const
@@ -51,7 +52,8 @@ bool RAWCodec::CanDecode(TransferSyntax const &ts) const
   return ts == TransferSyntax::ImplicitVRLittleEndian
    || ts == TransferSyntax::ExplicitVRLittleEndian
    || ts == TransferSyntax::ExplicitVRBigEndian
-   || ts == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+   || ts == TransferSyntax::ImplicitVRBigEndianPrivateGE
+   || ts == TransferSyntax::DeflatedExplicitVRLittleEndian;
 }
 
 bool RAWCodec::Code(DataElement const &in, DataElement &out)
