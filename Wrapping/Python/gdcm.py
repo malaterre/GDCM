@@ -37,6 +37,7 @@ if os.name == 'posix':
   # http://gcc.gnu.org/faq.html#dso
   # http://mail.python.org/pipermail/python-dev/2002-May/023923.html
   # http://wiki.python.org/moin/boost.python/CrossExtensionModuleDependencies
+  # http://mail.python.org/pipermail/cplusplus-sig/2005-August/009135.html
   orig_dlopen_flags = sys.getdlopenflags()
   try:
     import dl
