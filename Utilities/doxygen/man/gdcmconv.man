@@ -95,6 +95,6 @@ file-out  DICOM output filename
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2008 Mathieu Malaterre
+Copyright (c) 2006-2009 Mathieu Malaterre
 
 */

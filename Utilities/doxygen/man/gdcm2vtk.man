@@ -84,6 +84,6 @@ IMPORTANT NOTE: The internal VTK structured will be filled from the input DICOM,
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2008 Mathieu Malaterre
+Copyright (c) 2006-2009 Mathieu Malaterre
 
 */
