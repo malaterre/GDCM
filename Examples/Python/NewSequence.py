@@ -59,10 +59,6 @@ if __name__ == "__main__":
   # Insert sequence into data set
   des=gdcm.DataElement(gdcm.Tag(0x0400,0x0550))
   des.SetVR(gdcm.VR(gdcm.VR.SQ))
-  #print dir(sq)
-  #print sq
-  #print sq.__ref__
-
   des.SetValue(sq.__ref__())
   des.SetVLToUndefined()
   
