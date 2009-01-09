@@ -16,7 +16,16 @@
 """
 Usage:
 
- python 
+ python --public /path/to/directory/
+or
+ python --private /path/to/directory/
+
+ python --public --extension bak /path/to/directory/
+
+rename -f 's/\.bak$//' *.bak
+
+TODO:
+http://docs.python.org/library/optparse.html#module-optparse
 """
 
 import vtkgdcm
@@ -24,7 +33,60 @@ import vtk
 import sys
 import gdcm
 
-def ProcessOneFile(filename, outfilename, tmpfile):
+def ProcessOneFilePublic(filename, outfilename, tmpfile):
+  gdcm.ImageHelper.SetForceRescaleInterceptSlope(True)
+  vtkreader = vtkgdcm.vtkGDCMImageReader()
+  vtkreader.SetFileName( filename )
+  vtkreader.Update()
+
+  cast = vtk.vtkImageCast()
+  cast.SetInput( vtkreader.GetOutput() )
+  cast.SetOutputScalarTypeToUnsignedShort()
+
+  # vtkGDCMImageWriter does not support Sequence, so let's write a tmp file first:
+  # Some operation will actually be discarded (we simply need a temp storage)
+  vtkwriter = vtkgdcm.vtkGDCMImageWriter()
+  vtkwriter.SetFileName( tmpfile )
+  vtkwriter.SetMedicalImageProperties( vtkreader.GetMedicalImageProperties() )
+  vtkwriter.SetDirectionCosines( vtkreader.GetDirectionCosines() )
+  print "Format:",vtkreader.GetImageFormat()
+  vtkwriter.SetImageFormat( vtkreader.GetImageFormat() )
+  vtkwriter.SetInput( cast.GetOutput() )
+  #vtkwriter.Update()
+  vtkwriter.Write()
+  
+  # ok now rewrite the exact same file as the original (keep all info)
+  # but use the Pixel Data Element from the written file
+  tmpreader = gdcm.ImageReader()
+  tmpreader.SetFileName( tmpfile )
+  if not tmpreader.Read():
+    sys.exit(1)
+
+  reader = gdcm.Reader()
+  reader.SetFileName( filename )
+  if not reader.Read():
+    sys.exit(1)
+
+  # Make sure to remove Slope/Rescale to avoid re-execution
+  ds = reader.GetFile().GetDataSet()
+  tags = [
+    gdcm.Tag(0x0028,0x1052),
+    gdcm.Tag(0x0028,0x1053),
+    gdcm.Tag(0x0028,0x1053),
+  ]
+  for tag in tags:
+    ds.Remove( tag )
+
+  writer = gdcm.ImageWriter()
+  writer.SetFileName( outfilename )
+  # Pass image from vtk written file
+  writer.SetImage( tmpreader.GetImage() )
+  # pass dataset from initial 'reader'
+  writer.SetFile( reader.GetFile() )
+  if not writer.Write():
+    sys.exit(1)
+
+def ProcessOneFilePrivate(filename, outfilename, tmpfile):
   vtkreader = vtkgdcm.vtkGDCMImageReader()
   vtkreader.SetFileName( filename )
   vtkreader.Update()
@@ -70,15 +132,18 @@ def ProcessOneFile(filename, outfilename, tmpfile):
   # because VTK image shift / scale convention is inverted from DICOM make sure shift is 0
   assert shift == 0
   ss.SetShift( shift )
-  ss.SetScale( 1. / scale )
+  ss.SetScale( scale )
   ss.SetOutputScalarTypeToUnsignedShort ()
   ss.Update()
   
   # vtkGDCMImageWriter does not support Sequence, so let's write a tmp file first:
+  # Some operation will actually be discarded (we simply need a temp storage)
   vtkwriter = vtkgdcm.vtkGDCMImageWriter()
   vtkwriter.SetFileName( tmpfile )
   vtkwriter.SetMedicalImageProperties( vtkreader.GetMedicalImageProperties() )
   vtkwriter.SetDirectionCosines( vtkreader.GetDirectionCosines() )
+  vtkwriter.SetImageFormat( reader.GetImageFormat() )
+  # do not pass shift/scale again
   vtkwriter.SetInput( ss.GetOutput() )
   #vtkwriter.Update()
   vtkwriter.Write()
@@ -101,17 +166,21 @@ def ProcessOneFile(filename, outfilename, tmpfile):
 
 if __name__ == "__main__":
 
+  gdcm.Trace.DebugOff()
+  gdcm.Trace.WarningOff()
   #filename = sys.argv[1]
   #outfilename = sys.argv[2]
   tmpfile = "/tmp/philips_rescaled.dcm"
   #ProcessOneFile( filename, outfilename, tmpfile )
-  dirname = sys.argv[1]
+  rescaletype = sys.argv[1]
+  assert rescaletype == "--public" or rescaletype == "--private"
+  dirname = sys.argv[2]
   d = gdcm.Directory()
   d.Load( dirname )
 
   for f in d.GetFilenames():
     #print f
-    ProcessOneFile( f, f + ".bak", tmpfile )
+    ProcessOneFilePublic( f, f + ".bak", tmpfile )
   
 
 print "success"
