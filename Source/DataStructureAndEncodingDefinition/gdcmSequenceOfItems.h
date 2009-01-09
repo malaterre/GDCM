@@ -206,6 +206,11 @@ public:
       }
   }
 
+  static SmartPointer<SequenceOfItems> New()
+  {
+     return new SequenceOfItems();
+  }
+
 private:
 public:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
