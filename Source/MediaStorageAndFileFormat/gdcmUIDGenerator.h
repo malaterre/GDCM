@@ -66,6 +66,7 @@ public:
   const char* Generate();
 
   /// Find out if the string is a valid UID or not
+  /// \todo: Move that in DataStructureAndEncoding (see FileMetaInformation::CheckFileMetaInformation)
   static bool IsValid(const char *uid);
 
   /// Return the default (GDCM) root UID:
