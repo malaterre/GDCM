@@ -245,3 +245,12 @@ JPEG_LossyYBR.dcm
 -----------------------------------------------------------------------
 TODO: explicit TS for:
 LUTDATA_implicit_OW.dcm
+-----------------------------------------------------------------------
+Fix gdcm::Sorter::SetSortFunction for wrapped language
+-----------------------------------------------------------------------
+Add more siemens stuff from:
+dicom_to_minc.c
+apt-get source minc
+-----------------------------------------------------------------------
+file meta header does not check for valid of imp class uid
+Need to be UIDGenerator::IsValid
