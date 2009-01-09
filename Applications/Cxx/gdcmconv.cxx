@@ -136,7 +136,7 @@ void PrintHelp()
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
   std::cout << "  -w --raw                            Decompress image." << std::endl;
-  std::cout << "  -d --deflated                       Comptess using deflated (gzip)." << std::endl;
+  std::cout << "  -d --deflated                       Compress using deflated (gzip)." << std::endl;
   std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
   std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
@@ -460,7 +460,7 @@ int main (int argc, char *argv[])
         {"use-dict", 0, &usedict, 1}, // 
         {"compress-icon", 0, &compressicon, 1}, // 
         {"remove-gl", 0, &removegrouplength, 1}, // 
-        {"remove-private", 0, &removeprivate, 1}, // 
+        {"remove-private-tags", 0, &removeprivate, 1}, // 
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
         {"with-private-dict", 0, &changeprivatetags, 1}, // 
 // j2k :
