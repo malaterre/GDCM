@@ -261,6 +261,7 @@ using namespace gdcm;
 };
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
+%template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
 %include "gdcmDataElement.h"
 %extend gdcm::DataElement
 {
