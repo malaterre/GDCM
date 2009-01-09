@@ -21,6 +21,7 @@
 #include "gdcmSwapper.h"
 #include "gdcmException.h"
 #include "gdcmTagToType.h"
+//#include "gdcmUIDGenerator.h"
 
 #include "gdcmTag.h"
 
@@ -263,6 +264,19 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     const char *implementation = FileMetaInformation::GetImplementationClassUID();
     xde.SetByteValue( implementation, strlen(implementation) );
     Insert( xde );
+    }
+  else
+    {
+    // TODO: Need to check Implementation UID is actually a valid UID...
+    //const DataElement& impuid = GetDataElement( Tag(0x0002, 0x0012) );
+    //const ByteValue *bv = impuid.GetByteValue();
+    //assert( bv );
+    //std::string copy( bv->GetPointer(), bv->GetLength() );
+    //if( !UIDGenerator::IsValid( copy.c_str() ) )
+    //  {
+    //const char *implementation = FileMetaInformation::GetImplementationClassUID();
+    //impuid.SetByteValue( implementation, strlen(implementation) );
+    //  }
     }
   // Implementation Version Name (0002,0013) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0013) ) )
