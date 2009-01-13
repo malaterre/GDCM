@@ -47,6 +47,9 @@ TARGET_LINK_LIBRARIES(FixBrokenJ2K gdcmMSFF)
 ADD_EXECUTABLE(SortImage SortImage.cxx)
 TARGET_LINK_LIBRARIES(SortImage gdcmMSFF)
 
+ADD_EXECUTABLE(MergeTwoFiles MergeTwoFiles.cxx)
+TARGET_LINK_LIBRARIES(MergeTwoFiles gdcmMSFF)
+
 ADD_EXECUTABLE(ReadExplicitLengthSQIVR ReadExplicitLengthSQIVR.cxx)
 TARGET_LINK_LIBRARIES(ReadExplicitLengthSQIVR gdcmMSFF)
 
