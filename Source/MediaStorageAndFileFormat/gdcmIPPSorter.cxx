@@ -52,7 +52,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   bool b = scanner.Scan( filenames );
   if( !b )
     {
-    //std::cerr << "Scanner failed" << std::endl;
+    gdcmDebugMacro( "Scanner failed" );
     return false;
     }
   const char *reference = filenames[0].c_str();
@@ -61,12 +61,13 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   // Take the first file in the list of filenames, if not IOP is found, simply gives up:
   if( it == t2v.end() )
     {
-    //std::cerr << "No iop in: " << reference << std::endl;
+    gdcmDebugMacro( "No iop in: " << reference );
     return false;
     }
   if( it->first != iop )
     {
     // first file does not contains Image Orientation (Patient), let's give up
+    gdcmDebugMacro( "No iop in first file ");
     return false;
     }
   const char *dircos = it->second;
@@ -98,7 +99,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     const char *value =  scanner.GetValue(filename, ipp);
     if( value )
       {
-      //std::cout << filename << " has " << ipp << " = " << value << std::endl;
+      //gdcmDebugMacro( filename << " has " << ipp << " = " << value );
       Element<VR::DS,VM::VM3> ipp;
       std::stringstream ss;
       ss.str( value );
@@ -108,7 +109,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       // FIXME: This test is weak, since implicitely we are doing a != on floating point value
       if( sorted.find(dist) != sorted.end() )
         {
-        std::cerr << "dist: " << dist << " already found" << std::endl;
+        gdcmDebugMacro( "dist: " << dist << " already found" );
         return false;
         }
       sorted.insert(
