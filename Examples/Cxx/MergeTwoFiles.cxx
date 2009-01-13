@@ -15,6 +15,9 @@
 /* 
  * This example will show how one can read in two DICOM files, use the dataset
  * from file1 and use image from file2  to save it in a 3rd file.
+ * 
+ * Eg:
+ * MergeTwoFiles gdcmData/012345.002.050.dcm gdcmData/test.acr merge.dcm
  */
 
 #include "gdcmReader.h"
