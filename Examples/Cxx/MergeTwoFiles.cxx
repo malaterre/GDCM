@@ -54,9 +54,19 @@ int main(int argc, char *argv[])
   // Warning: if file2 is -for example- a Secondary Capture Storage, then it has no
   // Image Orientation (Patient) thus any Image Orientation (Patient) from file1
   // will be discarded...
+
+  // let's be fancy. In case reader2 contains explicit, but reader1 is implicit
+  // we would rather see an implicit output
+  if( reader1.GetFile().GetHeader().GetDataSetTransferSyntax() == gdcm::TransferSyntax::ImplicitVRLittleEndian )
+    {
+    reader2.GetImage().SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+    }
+
   gdcm::ImageWriter writer;
   writer.SetFileName( file3 );
   writer.SetFile( reader1.GetFile() );
+  // ImageWriter will always use all of gdcm::Image information an override anything wrong from 
+  // reader1.GetFile(), including the Transfer Syntax
   writer.SetImage( reader2.GetImage() );
 
   gdcm::DataSet &ds = reader1.GetFile().GetDataSet();
