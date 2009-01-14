@@ -51,7 +51,11 @@ public:
       assert(0 && "Should not happen");
       return is;
       }
-    assert( TagField == itemStart );
+    //assert( TagField == itemStart );
+    if( TagField != itemStart )
+      {
+      throw "SIEMENS Icon thingy";
+      }
     if( !ValueLengthField.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");

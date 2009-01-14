@@ -120,6 +120,7 @@ namespace gdcm
           }
         if( l > locallength )
           {
+          gdcmDebugMacro( "Out of Range SQ detected" );
           throw Exception( "Out of Range" );
           }
         }

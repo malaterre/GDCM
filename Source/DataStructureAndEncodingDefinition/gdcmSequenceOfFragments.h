@@ -80,8 +80,30 @@ std::istream& Read(std::istream &is)
     {
     const Tag seqDelItem(0xfffe,0xe0dd);
     // First item is the basic offset table:
-    Table.Read<TSwap>(is);
-    gdcmDebugMacro( "Table: " << Table );
+    try
+      {
+      Table.Read<TSwap>(is);
+      gdcmDebugMacro( "Table: " << Table );
+      }
+    catch(...)
+      {
+      // Bug_Siemens_PrivateIconNoItem.dcm 
+      // First thing first let's rewind
+      is.seekg(-4, std::ios::cur);
+      if ( Table.GetTag() == Tag(0xD8FF,0xE0FF) )
+        {
+        Fragment frag;
+        is.seekg( 8340, std::ios::cur );
+        char dummy[8340];
+        frag.SetByteValue( dummy, 8340 - Table.GetLength() - 16 );
+        Fragments.push_back( frag );
+        return is;
+        }
+      else
+        {
+        abort();
+        }
+      }
     // not used for now...
     Fragment frag;
     try

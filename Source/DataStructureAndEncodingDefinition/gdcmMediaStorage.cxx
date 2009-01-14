@@ -370,6 +370,7 @@ void MediaStorage::SetFromModality(DataSet const &ds)
     if( MSField == MediaStorage::MS_END )
       {
       gdcmWarningMacro( "Unknown/Unhandle MediaStorage, but Pixel Data element found" );
+      // BUG: Need to check Col*Row*Bit*NSample == PixelSize (uncompressed)
       MSField = MediaStorage::SecondaryCaptureImageStorage;
       }
     }
