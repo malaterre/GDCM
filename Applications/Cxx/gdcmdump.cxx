@@ -63,7 +63,8 @@ int DoOperation(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  if( !reader.Read() && !ignoreerrors )
+  bool success = reader.Read();
+  if( !success && !ignoreerrors )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
@@ -74,7 +75,8 @@ int DoOperation(const std::string & filename)
   printer.SetColor( color );
   printer.Print( std::cout );
 
-  return 0;
+  // Only return success when file read succeeded not depending whether or not we printed it
+  return success ? 0 : 1;
 }
 
 int PrintPDB(const std::string & filename, bool verbose)

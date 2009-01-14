@@ -83,6 +83,7 @@
 #include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmJPEGCodec.h"
 #include "gdcmSequenceOfFragments.h"
 
 #include <string>
@@ -153,6 +154,8 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "JPEG Options:" << std::endl;
+  std::cout << "  -q --quality %*f           set quality." << std::endl;
   std::cout << "J2K Options:" << std::endl;
   std::cout << "  -r --rate    %*f           set rate." << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
@@ -465,7 +468,7 @@ int main (int argc, char *argv[])
         {"with-private-dict", 0, &changeprivatetags, 1}, // 
 // j2k :
         {"rate", 1, &rate, 1}, // 
-        {"quality", 1, &quality, 1}, // 
+        {"quality", 1, &quality, 1}, // will also work for regular jpeg compressor
         {"tile", 1, &tile, 1}, // 
         {"number-resolution", 1, &nres, 1}, // 
         {"irreversible", 0, &irreversible, 1}, // 
@@ -524,23 +527,23 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
-          else if( option_index == 37 ) /* rate */
+          else if( option_index == 38 ) /* rate */
             {
             assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
-          else if( option_index == 38 ) /* qualit */
+          else if( option_index == 39 ) /* quality */
             {
             assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
-          else if( option_index == 39 ) /* tile */
+          else if( option_index == 40 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
             unsigned int n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
-          else if( option_index == 40 ) /* number of resolution */
+          else if( option_index == 41 ) /* number of resolution */
             {
             assert( strcmp(s, ",number-resolution") == 0 );
             nresvalue = atoi(optarg);
@@ -977,6 +980,7 @@ int main (int argc, char *argv[])
     //  }
 
     gdcm::JPEG2000Codec j2kcodec;
+    gdcm::JPEGCodec jpegcodec;
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
     change.SetCompressIconImage( compressicon );
@@ -984,10 +988,19 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
-        std::cerr << "not implemented" << std::endl;
-        return 1;
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGBaselineProcess1 );
+        jpegcodec.SetLossless( false );
+        if( quality )
+          {
+          assert( qualities.size() == 1 );
+          jpegcodec.SetQuality( qualities[0] );
+          }
+        change.SetUserCodec( &jpegcodec );
         }
-      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+      else
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+        }
       }
     else if( jpegls )
       {
