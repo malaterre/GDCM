@@ -25,7 +25,7 @@
 namespace gdcm
 {
 
-JPEGCodec::JPEGCodec():BitSample(0)
+JPEGCodec::JPEGCodec():BitSample(0),Lossless(true),Quality(100)
 {
   Internal = NULL;
 }
@@ -33,6 +33,26 @@ JPEGCodec::JPEGCodec():BitSample(0)
 JPEGCodec::~JPEGCodec()
 {
   delete Internal;
+}
+
+void JPEGCodec::SetQuality(double q)
+{
+  Quality = q;
+}
+
+double JPEGCodec::GetQuality() const
+{
+  return Quality;
+}
+
+void JPEGCodec::SetLossless(bool l)
+{
+  Lossless = l;
+}
+
+bool JPEGCodec::GetLossless() const
+{
+  return Lossless;
 }
 
 bool JPEGCodec::CanDecode(TransferSyntax const &ts) const
@@ -249,7 +269,12 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
   const char *input = bv->GetPointer();
   unsigned long len = bv->GetLength();
   unsigned long image_len = len / dims[2];
-    if(!Internal) return false;
+  if(!Internal) return false;
+
+  // forward parameter to low level bits implementation (8/12/16)
+  Internal->SetLossless( this->GetLossless() );
+  Internal->SetQuality( this->GetQuality() );
+
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
     std::stringstream os;

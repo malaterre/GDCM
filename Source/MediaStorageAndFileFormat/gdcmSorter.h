@@ -42,7 +42,7 @@ public:
   const std::vector<std::string> &GetFilenames() const { return Filenames; }
 
   /// Print
-  void Print( std::ostream &os);
+  void Print(std::ostream &os) const;
 
   /// UNSUPPORTED FOR NOW
   bool AddSelect( Tag const &tag, const char *value );

@@ -56,6 +56,14 @@ public:
 
   virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
+  //void SetReversible(bool res);
+
+  void SetQuality(double q);
+  double GetQuality() const;
+
+  void SetLossless(bool l);
+  bool GetLossless() const;
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 
@@ -66,6 +74,8 @@ protected:
 
 protected:
   int BitSample;
+  bool Lossless;
+  int Quality;
 
 private:
   JPEGCodec *Internal;

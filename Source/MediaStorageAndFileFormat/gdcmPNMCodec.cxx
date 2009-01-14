@@ -140,18 +140,18 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
     }
   //if ( maxval * 8 != bpp ) return 1;
 
-    size_t pdlen = GetBufferLength();
-assert( pdlen );
-    char * buf = new char[pdlen];
-    // is should be at right offset, just read!
-    is.read(buf, len);
-    if( !is.eof() ) return 1;
+  size_t pdlen = GetBufferLength();
+  assert( pdlen );
+  char * buf = new char[pdlen];
+  // is should be at right offset, just read!
+  is.read(buf, len);
+  if( !is.eof() ) return false;
 
-    out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
-    out.SetByteValue( buf, pdlen );
-    delete[] buf;
-    
-is.close();
+  out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
+  out.SetByteValue( buf, pdlen );
+  delete[] buf;
+
+  is.close();
 
   return true;
 }

@@ -1088,13 +1088,20 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * Basicaly you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
    * TODO: is there a way to pick the right predictor (best compression/fastest ?)
    */
-  jpeg_simple_lossless (&cinfo, 1, 0);
-  //jpeg_simple_lossless (&cinfo, 7, 0);
+  if( Lossless )
+    {
+    jpeg_simple_lossless (&cinfo, 1, 0);
+    //jpeg_simple_lossless (&cinfo, 7, 0);
+    }
 
   /* Now you can set any non-default parameters you wish to.
    * Here we just illustrate the use of quality (quantization table) scaling:
    */
-  jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
+  if( Lossless )
+    {
+    assert( Quality == 100 );
+    }
+  jpeg_set_quality(&cinfo, Quality, TRUE /* limit to baseline-JPEG values */);
 
   /*
    * See write_file_header

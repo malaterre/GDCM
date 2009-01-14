@@ -110,7 +110,7 @@ bool Sorter::AddSelect( Tag const &tag, const char *value )
 }
 
 
-void Sorter::Print( std::ostream &os)
+void Sorter::Print( std::ostream &os) const
 {
   std::vector<std::string>::const_iterator it = Filenames.begin();
   for( ; it != Filenames.end(); ++it)

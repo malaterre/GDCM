@@ -79,8 +79,9 @@ void JPEG2000Codec::SetRate(unsigned int idx, double rate)
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
     }
-				Internals->coder_param.cp_disto_alloc = 1;
+  Internals->coder_param.cp_disto_alloc = 1;
 }
+
 double JPEG2000Codec::GetRate(unsigned int idx ) const
 {
   return Internals->coder_param.tcp_rates[idx];
@@ -93,8 +94,9 @@ void JPEG2000Codec::SetQuality(unsigned int idx, double q)
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
     }
-				Internals->coder_param.cp_fixed_quality = 1;
+  Internals->coder_param.cp_fixed_quality = 1;
 }
+
 double JPEG2000Codec::GetQuality(unsigned int idx) const
 {
   return Internals->coder_param.tcp_distoratio[idx];
@@ -130,13 +132,13 @@ JPEG2000Codec::~JPEG2000Codec()
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless 
-    || ts == TransferSyntax::JPEG2000;
+      || ts == TransferSyntax::JPEG2000;
 }
 
 bool JPEG2000Codec::CanCode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless 
-    || ts == TransferSyntax::JPEG2000;
+      || ts == TransferSyntax::JPEG2000;
 }
 
 /*

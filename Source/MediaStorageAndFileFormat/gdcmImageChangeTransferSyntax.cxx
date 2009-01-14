@@ -120,22 +120,28 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Pixmap 
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
-  JPEGCodec codec;
-  if( codec.CanCode( ts ) )
+  JPEGCodec jpgcodec;
+  ImageCodec *codec = &jpgcodec;
+  if( UserCodec && UserCodec->CanCode( ts ) )
     {
-    codec.SetDimensions( input.GetDimensions() );
+    codec = UserCodec;
+    }
+
+  if( codec->CanCode( ts ) )
+    {
+    codec->SetDimensions( input.GetDimensions() );
     // FIXME: GDCM always apply the planar configuration to 0...
     //if( input.GetPlanarConfiguration() )
     //  {
     //  output.SetPlanarConfiguration( 0 );
     //  }
-    codec.SetPlanarConfiguration( input.GetPlanarConfiguration() );
-    codec.SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
-    codec.SetPixelFormat( input.GetPixelFormat() );
-    codec.SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec->SetPlanarConfiguration( input.GetPlanarConfiguration() );
+    codec->SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
+    codec->SetPixelFormat( input.GetPixelFormat() );
+    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
-    bool r = codec.Code(pixelde, out);
+    bool r = codec->Code(pixelde, out);
     // FIXME: this is not the best place to change the Output image internal type,
     // but since I know IJG is always applying the Planar Configuration, it does make
     // any sense to EVER produce a JPEG image where the Planar Configuration would be one
@@ -162,7 +168,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Pixmap 
     //output.SetPlanarConfiguration(0);
     // FIXME ! This should be done all the time for all codec:
     // Did PI change or not ?
-    if ( output.GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
+    if ( output.GetPhotometricInterpretation() != codec->GetPhotometricInterpretation() )
       {
       // HACK
       //gdcm::Image *i = (gdcm::Image*)this;
