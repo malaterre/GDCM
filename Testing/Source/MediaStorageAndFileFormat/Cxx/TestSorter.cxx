@@ -17,6 +17,16 @@
 
 int TestSorter(int argc, char *argv[])
 {
+  // Black box:
+  gdcm::Directory::FilenamesType fns;
+  gdcm::Sorter s;
+  // No sort function and fns is empty
+  if( !s.Sort( fns ) )
+    {
+    return 1;
+    }
+  
+  // White box:
   const char *directory = gdcm::Testing::GetDataRoot();
   if( argc == 2 )
     {
@@ -27,7 +37,6 @@ int TestSorter(int argc, char *argv[])
   d.Print( std::cout );
   std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
-  gdcm::Sorter s;
   bool b = s.Sort( d.GetFilenames() );
 /*
   if( !b )
