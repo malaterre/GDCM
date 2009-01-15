@@ -11,45 +11,26 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
-ADD_EXECUTABLE(csa2img csa2img.cxx)
-TARGET_LINK_LIBRARIES(csa2img gdcmMSFF)
+SET(EXAMPLES_SRCS
+  CheckBigEndianBug
+  CompressImage
+  FixBrokenJ2K
+  GenFakeImage
+  HelloVizWorld
+  HelloWorld
+  MergeTwoFiles
+  MrProtocol
+  PatchFile
+  ReadExplicitLengthSQIVR
+  SortImage
+  VolumeSorter
+  csa2img
+  rle2img
+  uid_unique
+)
 
-ADD_EXECUTABLE(MrProtocol MrProtocol.cxx)
-TARGET_LINK_LIBRARIES(MrProtocol gdcmMSFF)
-
-ADD_EXECUTABLE(rle2img rle2img.cxx)
-TARGET_LINK_LIBRARIES(rle2img gdcmMSFF)
-
-ADD_EXECUTABLE(uid_unique uid_unique.cxx)
-TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
-
-ADD_EXECUTABLE(HelloWorld HelloWorld.cxx)
-TARGET_LINK_LIBRARIES(HelloWorld gdcmMSFF)
-
-ADD_EXECUTABLE(HelloVizWorld HelloVizWorld.cxx)
-TARGET_LINK_LIBRARIES(HelloVizWorld gdcmMSFF)
-
-ADD_EXECUTABLE(CompressImage CompressImage.cxx)
-TARGET_LINK_LIBRARIES(CompressImage gdcmMSFF)
-
-ADD_EXECUTABLE(CheckBigEndianBug CheckBigEndianBug.cxx)
-TARGET_LINK_LIBRARIES(CheckBigEndianBug gdcmMSFF)
-
-ADD_EXECUTABLE(PatchFile PatchFile.cxx)
-TARGET_LINK_LIBRARIES(PatchFile gdcmMSFF)
-
-ADD_EXECUTABLE(GenFakeImage GenFakeImage.cxx)
-TARGET_LINK_LIBRARIES(GenFakeImage gdcmMSFF)
-
-ADD_EXECUTABLE(FixBrokenJ2K FixBrokenJ2K.cxx)
-TARGET_LINK_LIBRARIES(FixBrokenJ2K gdcmMSFF)
-
-ADD_EXECUTABLE(SortImage SortImage.cxx)
-TARGET_LINK_LIBRARIES(SortImage gdcmMSFF)
-
-ADD_EXECUTABLE(MergeTwoFiles MergeTwoFiles.cxx)
-TARGET_LINK_LIBRARIES(MergeTwoFiles gdcmMSFF)
-
-ADD_EXECUTABLE(ReadExplicitLengthSQIVR ReadExplicitLengthSQIVR.cxx)
-TARGET_LINK_LIBRARIES(ReadExplicitLengthSQIVR gdcmMSFF)
+FOREACH(example ${EXAMPLES_SRCS})
+  ADD_EXECUTABLE(${example} ${example}.cxx)
+  TARGET_LINK_LIBRARIES(${example} gdcmMSFF)
+ENDFOREACH(example)
 
