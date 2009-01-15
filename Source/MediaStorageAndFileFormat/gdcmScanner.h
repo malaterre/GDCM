@@ -121,14 +121,15 @@ private:
   double Progress;
 };
 
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP)
 /*
  * HACK: I need this temp class to be able to manipulate a std::map from python,
  * swig does not support wrapping of simple class like std::map...
  */
-class PythonTagToValue
+class SWIGTagToValue
 {
 public:
-  PythonTagToValue(Scanner::TagToValue const &t2v):Internal(t2v),it(t2v.begin()) {}
+  SWIGTagToValue(Scanner::TagToValue const &t2v):Internal(t2v),it(t2v.begin()) {}
   const Scanner::TagToValueValueType& GetCurrent() const { return *it; }
   const Tag& GetCurrentTag() const { return it->first; }
   const char *GetCurrentValue() const { return it->second; }
@@ -139,6 +140,7 @@ private:
   const Scanner::TagToValue& Internal;
   Scanner::TagToValue::const_iterator it;
 };
+#endif /* SWIG */
 
 /**
  * \example ScanDirectory.cs

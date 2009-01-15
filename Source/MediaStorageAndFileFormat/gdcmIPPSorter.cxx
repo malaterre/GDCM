@@ -37,10 +37,14 @@ IPPSorter::~IPPSorter()
 
 bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
-  Filenames.clear(); // cleanup !
-  ZSpacing = 0;
-
-  if( filenames.empty() ) return true;
+  // BUG: I cannot clear Filenames since input filenames could also be the output of ourself...
+  // Filenames.clear();
+  if( filenames.empty() )
+    {
+    Filenames.clear();
+    ZSpacing = 0;
+    return true;
+    }
 
   Scanner scanner;
   const Tag ipp(0x0020,0x0032); // Image Position (Patient)

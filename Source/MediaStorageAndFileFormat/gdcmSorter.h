@@ -26,6 +26,13 @@ namespace gdcm
 {
 /**
  * \brief Sorter
+ * General class to do sorting using a custom function
+ * You simply need to provide a function of type: Sorter::SortFunction
+ *
+ * \warning implementation details. For now there is no cache mechanism. Which means
+ * that everytime you call Sort, all files specified as input paramater are *read*
+ * 
+ * \see Scanner
  */
 class DataSet;
 class GDCM_EXPORT Sorter
@@ -51,7 +58,7 @@ public:
   typedef bool (*SortFunction)(DataSet const &, DataSet const &);
   void SetSortFunction( SortFunction f );
 
-  bool StableSort(std::vector<std::string> const & filenames);
+  virtual bool StableSort(std::vector<std::string> const & filenames);
 
 protected:
   std::vector<std::string> Filenames;

@@ -69,22 +69,6 @@ void Scanner::AddTag( Tag const & t )
     }
 }
 
-bool Scanner::IsKey( const char * filename ) const
-{
-/*
-  // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dumb...
-  Directory::FilenamesType::const_iterator it = std::find(Filenames.begin(), Filenames.end(), filename);
-  if( it == Filenames.end() )
-    {
-    gdcmErrorMacro( "The file: " << filename << " was not scanned" );
-    return false;
-    }
-*/
-  // Look for the file in Mappings table:
-  MappingType::const_iterator it2 = Mappings.find(filename);
-  return it2 != Mappings.end();
-}
-
 bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
   // Is there at least one tag ?
@@ -204,6 +188,23 @@ Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
   return Mappings.find("")->second; // dummy file could not be found
 }
 
+bool Scanner::IsKey( const char * filename ) const
+{
+/*
+  // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dumb...
+  Directory::FilenamesType::const_iterator it = std::find(Filenames.begin(), Filenames.end(), filename);
+  if( it == Filenames.end() )
+    {
+    gdcmErrorMacro( "The file: " << filename << " was not scanned" );
+    return false;
+    }
+*/
+  // Look for the file in Mappings table:
+  MappingType::const_iterator it2 = Mappings.find(filename);
+  return it2 != Mappings.end();
+}
+
+
 Directory::FilenamesType Scanner::GetKeys() const
 {
   Directory::FilenamesType keys;
@@ -212,8 +213,7 @@ Directory::FilenamesType Scanner::GetKeys() const
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
-    MappingType::const_iterator it = Mappings.find(filename);
-    if ( it != Mappings.end() )
+    if( IsKey( filename ) )
       {
       keys.push_back( filename );
       }
