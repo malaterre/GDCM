@@ -7,6 +7,7 @@ SET(CSHARP_EXAMPLES
   DecompressJPEGFile
   TestCSharpFilter
   ScanDirectory
+  #SortImage2
   )
 
 SET(DEP)
