@@ -51,6 +51,8 @@ public:
   typedef bool (*SortFunction)(DataSet const &, DataSet const &);
   void SetSortFunction( SortFunction f );
 
+  bool StableSort(std::vector<std::string> const & filenames);
+
 protected:
   std::vector<std::string> Filenames;
   typedef std::map<Tag,std::string> SelectionMap;
