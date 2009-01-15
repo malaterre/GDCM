@@ -89,12 +89,15 @@ public :
   const DataSet& GetDataSet() const { return InternalDataSet; }
 
   /// return the format of the CSAHeader
+  /// SV10 and NOMAGIC are equivalent.
   CSAHeaderType GetFormat() const;
 
   /// Return the private tag used by SIEMENS to store the CSA Image Header
+  /// This is: PrivateTag(0x0029,0x0010,"SIEMENS CSA HEADER");
   static const PrivateTag & GetCSAImageHeaderInfoTag();
 
   /// Return the private tag used by SIEMENS to store the CSA Series Header
+  /// This is: PrivateTag(0x0029,0x0020,"SIEMENS CSA HEADER");
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
   /// Return the CSAElement corresponding to name 'name'
@@ -102,6 +105,7 @@ public :
   const CSAElement &GetCSAElementByName(const char *name);
 
   /// Return true if the CSA element matching 'name' is found or not
+  /// \warning Case Sensitive
   bool FindCSAElementByName(const char *name);
 
 protected:
