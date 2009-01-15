@@ -141,6 +141,11 @@ public:
     return std::equal(Internal, Internal+GetNumberOfValues(),
       att.GetValues()); 
     }
+  bool operator!=(const Attribute &att) const
+    {
+    return !std::equal(Internal, Internal+GetNumberOfValues(),
+      att.GetValues()); 
+    }
   bool operator<(const Attribute &att) const
     {
     return std::lexicographical_compare(Internal, Internal+GetNumberOfValues(),
