@@ -296,6 +296,7 @@ using namespace gdcm;
   }
 };
 %rename (PythonDataSet) SWIGDataSet; 
+%rename (PythonTagToValue) SWIGTagToValue; 
 %include "gdcmDataSet.h"
 //namespace std {
 //  //struct lttag
@@ -577,7 +578,61 @@ using namespace gdcm;
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
 //%feature("director") gdcm::IPPSorter;      
+
+%{
+static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2)
+{
+  PyObject *func, *arglist, *result;
+  func = 0; //(PyObject *)data;
+  if (!(arglist = Py_BuildValue("()"))) {
+    /* fail */
+    abort();
+  }
+  result = PyEval_CallObject(func, arglist);
+  Py_DECREF(arglist);
+  if (result && result != Py_None) {
+    PyErr_SetString(PyExc_TypeError,
+                    "Callback function should return nothing");
+    Py_DECREF(result);
+    /* fail */
+    abort();
+  } else if (!result) {
+    /* fail: a Python exception was raised */
+    abort();
+  }
+}
+%}
+//%{
+//static void callback_decref(void *data)
+//{
+//  /* Lose the reference to the Python callback */
+//  Py_DECREF(data);
+//}
+//%}
+%typemap(in) (gdcm::Sorter::SortFunction f) {
+  if (!PyCallable_Check($input)) {
+    PyErr_SetString(PyExc_TypeError, "Need a callable object!");
+    SWIG_fail;
+  }
+  $1 = callback_helper;
+//  $2 = (void *)$input;
+//  $2 = callback_decref;
+//  $3 = (void *)$input;
+  /* Keep a reference to the Python callback */
+  Py_INCREF($input);
+}
+
 %include "gdcmSorter.h"
+%extend gdcm::Sorter
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmIPPSorter.h"
 %include "gdcmSpectroscopy.h"
 %include "gdcmPrinter.h"
