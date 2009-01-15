@@ -39,6 +39,35 @@ bool mysort(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
   return at11 < at22;
 }
 
+bool mysort_part1(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
+{
+  gdcm::Attribute<0x0018,0x1060> at1;
+  at1.Set( ds1 );
+  gdcm::Attribute<0x0018,0x1060> at2;
+  at2.Set( ds2 );
+  return at1 < at2;
+}
+
+bool mysort_part2(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
+{
+  gdcm::Attribute<0x0020,0x0032> at1;
+  at1.Set( ds1 );
+  gdcm::Attribute<0x0020,0x0032> at2;
+  at2.Set( ds2 );
+  return at1 < at2;
+}
+
+// technically all files are in the same Frame of Reference, so this function
+// should be a no-op
+bool mysort_dummy(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
+{
+  gdcm::Attribute<0x0020,0x0052> at1; // FrameOfReferenceUID
+  at1.Set( ds1 );
+  gdcm::Attribute<0x0020,0x0052> at2;
+  at2.Set( ds2 );
+  return at1 < at2;
+}
+
 int main(int argc, char *argv[])
 {
   const char *dirname = argv[1];
@@ -53,6 +82,17 @@ int main(int argc, char *argv[])
 
   std::cout << "Sorter:" << std::endl;
   sorter.Print( std::cout );
+
+  gdcm::Sorter sorter2;
+  sorter2.SetSortFunction( mysort_part1 );
+  sorter2.StableSort( dir.GetFilenames() );
+  sorter2.SetSortFunction( mysort_part2 );
+  sorter2.StableSort( sorter2.GetFilenames() ); // IMPORTANT
+  sorter2.SetSortFunction( mysort_dummy );
+  sorter2.StableSort( sorter2.GetFilenames() ); // IMPORTANT
+
+  std::cout << "Sorter2:" << std::endl;
+  sorter2.Print( std::cout );
 
   gdcm::Scanner s;
   s.AddTag( gdcm::Tag(0x20,0x32) ); // Image Position (Patient)
