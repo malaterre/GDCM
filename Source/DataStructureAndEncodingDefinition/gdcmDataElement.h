@@ -112,8 +112,8 @@ public:
   /// Return the Value of DataElement as a ByteValue (if possible)
   /// \warning: You need to check for NULL return value
   const ByteValue* GetByteValue() const {
-    const Value &v = GetValue();
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    // Get the raw pointer from the gdcm::SmartPointer
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&*ValueField);
     return bv; // Will return NULL if not ByteValue
   }
 
