@@ -696,10 +696,11 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
   std::string ts;
 //  if( const ExplicitDataElement *xde = dynamic_cast<const ExplicitDataElement*>(&de) )
     {
-    const Value &v = de.GetValue();
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+    const ByteValue *bv = de.GetByteValue();
+    if( !bv ) 
+      throw Exception( "Unknown Transfer syntax" );
     // Pad string with a \0
-    ts = std::string(bv.GetPointer(), bv.GetLength());
+    ts = std::string(bv->GetPointer(), bv->GetLength());
     }
 //  else if( const ImplicitDataElement *ide = dynamic_cast<const ImplicitDataElement*>(&de) )
 //    {
