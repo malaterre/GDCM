@@ -113,7 +113,7 @@ public:
   /// \warning: You need to check for NULL return value
   const ByteValue* GetByteValue() const {
     // Get the raw pointer from the gdcm::SmartPointer
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&*ValueField);
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(ValueField.GetPointer());
     return bv; // Will return NULL if not ByteValue
   }
 
