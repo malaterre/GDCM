@@ -4001,7 +4001,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x0079,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"?",false },
   {0x2005,0x007a,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"?",false },
   {0x2005,0x007b,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"?",false },
-  {0x2005,0x007e,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"?",false },
+  {0x2005,0x007e,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Z-Spacing (Philips)",false },
   {0x2005,0x0080,"Philips MR Imaging DD 001",VR::SQ,VM::VM1,"?",false },
   {0x2005,0x0081,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"?",false },
   {0x2005,0x0083,"Philips MR Imaging DD 001",VR::SQ,VM::VM1,"?",false },
