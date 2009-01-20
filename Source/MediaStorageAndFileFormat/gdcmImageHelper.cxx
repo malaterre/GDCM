@@ -215,16 +215,17 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   // Check spacing is consistant:
   const double ZTolerance = 1e-3; // ??? FIXME
-  prev = distances[0]; // reset !
+  prev = distances[0];
   for(unsigned int i = 1; i < nitems; ++i)
     {
     const double current = distances[i] - prev;
-    if( fabs((current - prev) - zspacing) > ZTolerance )
+    if( fabs(current - zspacing) > ZTolerance )
       {
       // For now simply gives up
-      gdcmErrorMacro( "This Enhance Multiframe is not supported for now. Sorry" );
+      gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
       return false;
       }
+    prev = distances[i];
     }
   return true;
 }
