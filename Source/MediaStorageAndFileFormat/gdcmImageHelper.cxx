@@ -172,6 +172,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   // For each item
   std::vector<double> distances;
   unsigned int nitems = sqi->GetNumberOfItems();
+  std::vector<double> dircos_subds2; dircos_subds2.resize(6);
   for(unsigned int i = 1; i <= nitems; ++i)
     {
     const Item &item = sqi->GetItem(i);
@@ -183,6 +184,11 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     assert( sqi2 );
     const Item &item2 = sqi2->GetItem(1);
     const DataSet & subds2 = item2.GetNestedDataSet();
+    // Check Image Orientation (Patient)
+    if( ImageHelper::GetDirectionCosinesFromDataSet(subds2, dircos_subds2) )
+      {
+      assert( dircos_subds2 == cosines );
+      }
     // (0020,0032) DS [-82.5\-82.5\1153.75]                    #  20, 3 ImagePositionPatient
     const Tag tps(0x0020,0x0032);
     if( !subds2.FindDataElement(tps) ) return false;
@@ -198,7 +204,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   double prev = distances[0];
   for(unsigned int i = 1; i < nitems; ++i)
     {
-    double current = distances[i] - prev;
+    const double current = distances[i] - prev;
     meanspacing += current;
     prev = distances[i];
     }
@@ -206,6 +212,20 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   
   //zspacing = distances[1] - distances[0];
   zspacing = meanspacing;
+
+  // Check spacing is consistant:
+  const double ZTolerance = 1e-3; // ??? FIXME
+  prev = distances[0]; // reset !
+  for(unsigned int i = 1; i < nitems; ++i)
+    {
+    const double current = distances[i] - prev;
+    if( fabs((current - prev) - zspacing) > ZTolerance )
+      {
+      // For now simply gives up
+      gdcmErrorMacro( "This Enhance Multiframe is not supported for now. Sorry" );
+      return false;
+      }
+    }
   return true;
 }
 
@@ -380,27 +400,8 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
   return ori;
 }
 
-std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
+bool ImageHelper::GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector<double> & dircos)
 {
-  std::vector<double> dircos;
-  MediaStorage ms;
-  ms.SetFromFile(f);
-  const DataSet& ds = f.GetDataSet();
-
-  if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
-    {
-    const Tag t1(0x5200,0x9229);
-    const Tag t2(0x5200,0x9230);
-    if( GetDirectionCosinesValueFromSequence(ds,t1, dircos) 
-     || GetDirectionCosinesValueFromSequence(ds, t2, dircos) )
-      {
-      assert( dircos.size() == 6 );
-      return dircos;
-      }
-    abort();
-    }
-  dircos.resize( 6 );
 
   // else
   const Tag timageorientationpatient(0x0020, 0x0037);
@@ -422,15 +423,41 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
         gdcmWarningMacro( "DirectionCosines was not normalized. Fixed" );
         const double * p = dc;
         dircos = std::vector<double>(p, p + 6);
-        return dircos;
+        //return dircos;
         }
       else
         {
         gdcmWarningMacro( "Could not get DirectionCosines" );
         }
       }
+  return true;
     }
-  else
+  return false;
+}
+
+std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
+{
+  std::vector<double> dircos;
+  MediaStorage ms;
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
+    {
+    const Tag t1(0x5200,0x9229);
+    const Tag t2(0x5200,0x9230);
+    if( GetDirectionCosinesValueFromSequence(ds,t1, dircos) 
+     || GetDirectionCosinesValueFromSequence(ds, t2, dircos) )
+      {
+      assert( dircos.size() == 6 );
+      return dircos;
+      }
+    abort();
+    }
+
+  dircos.resize( 6 );
+  if( !GetDirectionCosinesFromDataSet(ds, dircos) )
     {
     dircos[0] = 1;
     dircos[1] = 0;
@@ -439,6 +466,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     dircos[4] = 1;
     dircos[5] = 0;
     }
+
   assert( dircos.size() == 6 );
   return dircos;
 }
@@ -682,7 +710,10 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       assert( sp.size() == 3 );
       return sp;
       }
-    abort();
+    // Else.
+    // How do I send an error ?
+    sp.push_back( 0.0 ); // FIXME !!
+    return sp;
     }
   else if( ms == MediaStorage::UltrasoundMultiFrameImageStorage )
     {

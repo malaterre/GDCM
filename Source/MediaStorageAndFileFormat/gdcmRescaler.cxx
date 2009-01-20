@@ -29,7 +29,7 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
     {
     // Implementation detail:
     // The rescale function does not add the usual +0.5 to do the proper integer type
-    // cast, sine TOut is expected to be floating point type whenever it would occur
+    // cast, since TOut is expected to be floating point type whenever it would occur
     out[i] = (TOut)(slope * in[i] + intercept);
     //assert( out[i] == (TOut)(slope * in[i] + intercept) ); // will really slow down stuff...
     //assert( in[i] == (TIn)(((double)out[i] - intercept) / slope + 0.5) );
@@ -49,7 +49,7 @@ template<typename TOut, typename TIn>
 struct FImpl 
 { 
   // parameter 'size' is in bytes
-  // TODO: add template parameter for intercept/slope so that we can have specialized instanciation
+  // TODO: add template parameter for intercept/slope so that we can have specialized instantiation
   // when 1. both are int, 2. slope is 1, 3. intercept is 0
   // Detail: casting from float to int is soooo slow
   static void InverseRescaleFunction( TOut *out, const TIn *in, 

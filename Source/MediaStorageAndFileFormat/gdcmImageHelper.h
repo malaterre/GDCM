@@ -79,6 +79,8 @@ public:
   /// DO NOT USE
   static bool ComputeSpacingFromImagePositionPatient(const std::vector<double> &imageposition, std::vector<double> & spacing);
 
+  static bool GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector<double> & dircos);
+
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);
   static Tag GetZSpacingTagFromMediaStorage(MediaStorage const &ms);
