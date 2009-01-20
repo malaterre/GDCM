@@ -254,3 +254,6 @@ apt-get source minc
 -----------------------------------------------------------------------
 file meta header does not check for valid of imp class uid
 Need to be UIDGenerator::IsValid
+-----------------------------------------------------------------------
+BUG: Z-Spacing computation should fail on:
+medical.nema.org/medical/dicom/DataSets/WG16/Philips/DICOM/IM_0016
