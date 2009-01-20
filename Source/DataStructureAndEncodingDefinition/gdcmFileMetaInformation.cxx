@@ -692,27 +692,14 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 {
   const Tag t(0x0002,0x0010);
   const DataElement &de = GetDataElement(t);
-  //TransferSyntax::NegociatedType nt = GetNegociatedType();
   std::string ts;
-//  if( const ExplicitDataElement *xde = dynamic_cast<const ExplicitDataElement*>(&de) )
+  const ByteValue *bv = de.GetByteValue();
+  if( !bv ) 
     {
-    const ByteValue *bv = de.GetByteValue();
-    if( !bv ) 
-      throw Exception( "Unknown Transfer syntax" );
-    // Pad string with a \0
-    ts = std::string(bv->GetPointer(), bv->GetLength());
+    throw Exception( "Unknown Transfer syntax" );
     }
-//  else if( const ImplicitDataElement *ide = dynamic_cast<const ImplicitDataElement*>(&de) )
-//    {
-//    const Value &v = ide.GetValue();
-//    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-//    // Pad string with a \0
-//    ts = std::string(bv.GetPointer(), bv.GetLength());
-//    }
-//  else
-//    {
-//    assert( 0 && "Cannot happen" );
-//    }
+  // Pad string with a \0
+  ts = std::string(bv->GetPointer(), bv->GetLength());
   gdcmDebugMacro( "TS: " << ts );
   TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
   if( tst == TransferSyntax::TS_END )
@@ -727,7 +714,7 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 
 void FileMetaInformation::SetDataSetTransferSyntax(const TransferSyntax &ts)
 { 
-DataSetTS = ts; 
+  DataSetTS = ts; 
 }
 
 MediaStorage FileMetaInformation::GetMediaStorage() const
