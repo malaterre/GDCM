@@ -87,7 +87,8 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   const Tag tpms(0x0020,0x9116);
   if( !subds.FindDataElement(tpms) ) return false;
   const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
-  assert( sqi2 );
+  assert( sqi2 && sqi2->GetNumberOfItems() );
+  // Take it from the first item
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
   // 
