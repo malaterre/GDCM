@@ -1246,9 +1246,11 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
-   && ms != MediaStorage::MRImageStorage
+   && ms != MediaStorage::MRImageStorage // FIXME !
    && ms != MediaStorage::PETImageStorage
    && ms != MediaStorage::SecondaryCaptureImageStorage
+   && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
