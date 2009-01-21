@@ -4144,7 +4144,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x000a,"Philips MR Imaging DD 005",VR::DS,VM::VM1,"Rescale Slope Philips",false },
   {0x2005,0x000b,"Philips MR Imaging DD 005",VR::LO,VM::VM1,"Rescale Type Philips",false },
   {0x2005,0x000e,"Philips MR Imaging DD 005",VR::SQ,VM::VM1,"?",false },
-  {0x2005,0x000f,"Philips MR Imaging DD 005",VR::SQ,VM::VM1,"?",false },
+  {0x2005,0x000f,"Philips MR Imaging DD 005",VR::SQ,VM::VM1,"Acquisition Parameters (Philips) Sequence",false },
   {0x2005,0x0010,"Philips MR Imaging DD 005",VR::IS,VM::VM1,"?",false },
   {0x2005,0x0011,"Philips MR Imaging DD 005",VR::UI,VM::VM1,"?",false },
   {0x2005,0x0012,"Philips MR Imaging DD 005",VR::IS,VM::VM1,"?",false },
