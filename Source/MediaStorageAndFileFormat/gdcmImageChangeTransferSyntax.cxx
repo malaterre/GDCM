@@ -80,6 +80,17 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Pixmap c
       {
       return false;
       }
+    // when decompressing J2K, need to revert to proper photo inter in uncompressed TS:
+    if( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
+      || input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
+      {
+      output.SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
+    assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
     return true;
     }
   return false;

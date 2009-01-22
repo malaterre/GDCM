@@ -492,6 +492,10 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
         }
       }
     break;
+  case PhotometricInterpretation::YBR_ICT:
+    break;
+  case PhotometricInterpretation::YBR_RCT:
+    break;
   default:
     abort();
     }
