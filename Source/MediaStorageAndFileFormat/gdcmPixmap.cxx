@@ -378,6 +378,7 @@ bool Pixmap::TryPVRGCodec(char *buffer) const
     codec.SetDimensions( GetDimensions() );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
+    if(!r) return false;
     assert( r );
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
