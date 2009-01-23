@@ -65,6 +65,10 @@ public:
 
   operator PIType () const { return PIField; }
 
+  // Will return whether current PhotometricInterpretation is the same Color Space as input:
+  // eg. RGB and YBR_RCT are
+  bool IsSameColorSpace( PhotometricInterpretation const &pi ) const;
+
 private:
   PIType PIField;
 };

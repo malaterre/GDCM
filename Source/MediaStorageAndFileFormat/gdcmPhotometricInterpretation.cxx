@@ -121,4 +121,19 @@ int PhotometricInterpretation::GetSamplesPerPixel()
     }
 }
 
+bool PhotometricInterpretation::IsSameColorSpace( PhotometricInterpretation const &pi ) const
+{
+  if( PIField == pi ) return true;
+
+  // else
+  if( PIField == PhotometricInterpretation::RGB
+   || PIField == PhotometricInterpretation::YBR_RCT
+   || PIField == PhotometricInterpretation::YBR_ICT )
+    {
+    if( pi == RGB || pi == YBR_RCT || pi == YBR_ICT ) return true;
+    }
+
+  return false;
+}
+
 } // end namespace gdcm

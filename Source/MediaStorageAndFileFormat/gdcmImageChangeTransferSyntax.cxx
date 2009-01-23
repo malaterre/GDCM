@@ -248,7 +248,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
 
     if( input.GetPixelFormat().GetSamplesPerPixel() == 3 )
       {
-      if( input.GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+      if( input.GetPhotometricInterpretation().IsSameColorSpace( PhotometricInterpretation::RGB ) )
         {
         if( ts == TransferSyntax::JPEG2000Lossless )
           {
@@ -262,7 +262,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
         }
       else
         {
-        assert( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL );
+        assert( input.GetPhotometricInterpretation().IsSameColorSpace( PhotometricInterpretation::YBR_FULL ) );
         if( ts == TransferSyntax::JPEG2000Lossless )
           {
           output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_FULL );
