@@ -12,6 +12,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * TODO: This app should be a suclass of gdcmimg application to avoid code duplication
+ */
 #include "vtkGDCMImageReader.h"
 #include "vtkGDCMImageWriter.h"
 
