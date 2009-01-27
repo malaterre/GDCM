@@ -257,3 +257,6 @@ Need to be UIDGenerator::IsValid
 -----------------------------------------------------------------------
 BUG: Z-Spacing computation should fail on:
 medical.nema.org/medical/dicom/DataSets/WG16/Philips/DICOM/IM_0016
+-----------------------------------------------------------------------
+Bug gdcmconv should properly autorecompute explicit length for:
+BogusItemLengthImplicitPrivateAtt.dcm
