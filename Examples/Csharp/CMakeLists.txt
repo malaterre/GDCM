@@ -4,6 +4,7 @@
 SET(CSHARP_EXAMPLES
   ManipulateFile
   DecompressImage
+  DecompressImageMultiframe
   DecompressJPEGFile
   TestCSharpFilter
   ScanDirectory
