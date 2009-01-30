@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
   w = gdcm.ImageWriter()
   w.SetFile( r1.GetFile() )
-  #w.SetImage( r2.GetImage() )  # See comment above
+  #w.SetImage( r2.GetImage() )  # See comment above
   w.SetImage( r1.GetImage() )
 
   w.SetFileName( "merge.dcm" )
