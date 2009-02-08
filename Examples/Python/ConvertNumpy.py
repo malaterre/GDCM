@@ -54,7 +54,7 @@ def gdcm_to_numpy(image):
 
     shape = image.GetDimension(0) * image.GetDimension(1), pf.GetSamplesPerPixel()
     if image.GetNumberOfDimensions() == 3:
-      d = d[0] * image.GetDimension(2), d[1]
+      shape = shape[0] * image.GetDimension(2), shape[1]
 
     dtype = get_numpy_array_type(pf)
     gdcm_array = image.GetBuffer()
