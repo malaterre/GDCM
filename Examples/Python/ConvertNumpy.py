@@ -52,12 +52,14 @@ def gdcm_to_numpy(image):
     assert pf in get_gdcm_to_numpy_typemap().keys(), \
            "Unsupported array type %s"%pf
 
-    shape = image.GetDimensions()
+    shape = image.GetDimension(0) * image.GetDimension(1), pf.GetSamplesPerPixel()
+    if image.GetNumberOfDimensions() == 3:
+      d = d[0] * image.GetDimension(2), d[1]
 
     dtype = get_numpy_array_type(pf)
     gdcm_array = image.GetBuffer()
     result = numpy.frombuffer(gdcm_array, dtype=dtype)
-    #result.shape = shape
+    result.shape = shape
     return result
 
 if __name__ == "__main__":
