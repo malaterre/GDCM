@@ -306,7 +306,26 @@ using namespace gdcm;
     buffer = os.str();
     return buffer.c_str();
   }
+ void SetArray(unsigned char array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(unsigned char) );
+ }
+ void SetArray(char array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(char) );
+ }
+ void SetArray(unsigned short array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(unsigned short) );
+ }
+ void SetArray(short array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(short) );
+ }
+ void SetArray(float array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(float) );
+ }
+ void SetArray(double array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(double) );
+ }
 };
+
 %include "gdcmItem.h"
 %extend gdcm::Item
 {
@@ -401,12 +420,27 @@ using namespace gdcm;
 //%enddef
 //%cs_marshal_array(char, byte)
 %include "gdcmPixmap.h"
-//%extend gdcm::Pixmap
-//{
-//  bool GetBuffer(byte[] buffer) {
-//    self->GetBuffer(buffer);
-//  }
-//};
+%extend gdcm::Pixmap
+{
+  bool GetArray(unsigned char buffer[]) const {
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(char buffer[]) const {
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(unsigned short buffer[]) const {
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(short buffer[]) const {
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(float buffer[]) const {
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(double buffer[]) const {
+    return $self->GetBuffer((char*)buffer);
+  }
+};
 %clear char* buffer;
 %clear unsigned int* dims;
 
