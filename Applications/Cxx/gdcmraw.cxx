@@ -58,8 +58,8 @@ void PrintHelp()
   std::cout << "Usage: gdcmraw [OPTION]... FILE..." << std::endl;
   std::cout << "Extract Data Element Value Field" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input     DICOM filename" << std::endl;
-  std::cout << "  -o --output     DICOM filename" << std::endl;
+  std::cout << "  -i --input       DICOM filename" << std::endl;
+  std::cout << "  -o --output      DICOM filename" << std::endl;
   std::cout << "  -t --tag         Specify tag to extract value from." << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -S --split-frags Split fragments into multiple files." << std::endl;
@@ -208,15 +208,26 @@ int main(int argc, char *argv[])
 
   if (optind < argc)
     {
-/*
-    printf ("non-option ARGV-elements: ");
+    std::vector<std::string> files;
     while (optind < argc)
       {
-      printf ("%s ", argv[optind++]);
+      //printf ("%s\n", argv[optind++]);
+      files.push_back( argv[optind++] );
       }
-    printf ("\n");
-*/
-    PrintHelp();
+    //printf ("\n");
+    if( files.size() == 2 
+      && filename.empty()
+      && outfilename.empty() 
+    )
+      {
+      filename = files[0];
+      outfilename = files[1];
+      }
+    else
+      {
+      PrintHelp();
+      return 1;
+      }
     }
 
   if( version )

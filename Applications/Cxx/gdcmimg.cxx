@@ -344,16 +344,27 @@ int main (int argc, char *argv[])
   // For now only support one input / one output
   if (optind < argc)
     {
-/*
-    printf ("non-option ARGV-elements: ");
+    //printf ("non-option ARGV-elements: ");
+    std::vector<std::string> files;
     while (optind < argc)
       {
-      printf ("%s ", argv[optind++]);
+      //printf ("%s\n", argv[optind++]);
+      files.push_back( argv[optind++] );
       }
-    printf ("\n");
-*/
-    PrintHelp();
-    return 1;
+    //printf ("\n");
+    if( files.size() == 2 
+      && filename.IsEmpty()
+      && outfilename.IsEmpty() 
+    )
+      {
+      filename = files[0].c_str();
+      outfilename = files[1].c_str();
+      }
+    else
+      {
+      PrintHelp();
+      return 1;
+      }
     }
 
   if( version )
