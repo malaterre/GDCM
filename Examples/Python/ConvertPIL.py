@@ -14,8 +14,7 @@
 ############################################################################
 
 """
-This module add support for converting a gdcm.Image to a numpy array then save 
-image using PIL
+save a DICOM image with PIL via numpy
 
 Caveats:
 - Does not support UINT12/INT12
@@ -25,7 +24,7 @@ Usage:
  python ConvertNumpy.py "IM000000"
 
 Thanks:
-  RayS <rays at blue-cove dot com>
+  plotting example - Ray Schumacher 2009
 """
 
 import gdcm
@@ -37,13 +36,10 @@ def get_gdcm_to_numpy_typemap():
     """Returns the GDCM Pixel Format to numpy array type mapping."""
     _gdcm_np = {gdcm.PixelFormat.UINT8  :numpy.int8,
                 gdcm.PixelFormat.INT8   :numpy.uint8,
-                #gdcm.PixelFormat.UINT12 :numpy.uint12,
-                #gdcm.PixelFormat.INT12  :numpy.int12,
                 gdcm.PixelFormat.UINT16 :numpy.uint16,
                 gdcm.PixelFormat.INT16  :numpy.int16,
                 gdcm.PixelFormat.UINT32 :numpy.uint32,
                 gdcm.PixelFormat.INT32  :numpy.int32,
-                #gdcm.PixelFormat.FLOAT16:numpy.float16,
                 gdcm.PixelFormat.FLOAT32:numpy.float32,
                 gdcm.PixelFormat.FLOAT64:numpy.float64 }
     return _gdcm_np
@@ -66,10 +62,12 @@ def gdcm_to_numpy(image):
     gdcm_array = image.GetBuffer()
     result = numpy.frombuffer(gdcm_array, dtype=dtype)
     maxV = float(result[result.argmax()])
-    #result = result + .5*(maxV-result) 
-    result = numpy.log(result+50) ## apprx background level
+    ## linear gamma adjust
+    #result = result + .5*(maxV-result)
+    ## log gamma
+    result = numpy.log(result+50) ## 50 is apprx background level
     maxV = float(result[result.argmax()])
-    result = result*(2.**8/maxV)
+    result = result*(2.**8/maxV) ## histogram stretch
     result.shape = d
     return result
 
@@ -80,9 +78,12 @@ if __name__ == "__main__":
   r.SetFileName( filename )
   if not r.Read():  sys.exit(1)
   numpy_array = gdcm_to_numpy( r.GetImage() )
+  ## L is 8 bit grey
+  ## http://www.pythonware.com/library/pil/handbook/concepts.htm
   pilImage = Image.frombuffer('L',
                            numpy_array.shape,
                            numpy_array.astype(numpy.uint8),
                            'raw','L',0,1)
-  pilImage = ImageOps.autocontrast(pilImage, cutoff=.1) 
+  ## cutoff removes background noise and spikes
+  pilImage = ImageOps.autocontrast(pilImage, cutoff=.1)
   pilImage.save(sys.argv[1]+'.jpg')
