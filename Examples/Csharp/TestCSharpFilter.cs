@@ -28,13 +28,15 @@ using gdcm;
 
 public class TestCSharpFilter
 {
-  public static void RecurseDataSet(DataSet ds, string indent)
+  public static void RecurseDataSet(File f, DataSet ds, string indent)
     {
     CSharpDataSet cds = new CSharpDataSet(ds);
     while(!cds.IsAtEnd())
       {
       DataElement de = cds.GetCurrent();
-      if( de.GetVR().Compatible( new VR(VR.VRType.SQ) ) )
+      VR vr = DataSetHelper.ComputeVR(f, ds, de.GetTag() );
+
+      if( vr.Compatible( new VR(VR.VRType.SQ) ) )
         {
         //SequenceOfItems sq = de.GetSequenceOfItems();
         // GetValueAsSQ handle more cases than GetSequenceOfItems
@@ -44,7 +46,7 @@ public class TestCSharpFilter
           {
           Item item = sq.GetItem( i );
           DataSet nested = item.GetNestedDataSet();
-          RecurseDataSet( nested, indent + "  " );
+          RecurseDataSet( f, nested, indent + "  " );
           }
         }
       else
@@ -68,7 +70,7 @@ public class TestCSharpFilter
     File f = reader.GetFile();
     DataSet ds = f.GetDataSet();
 
-    RecurseDataSet( ds, "" );
+    RecurseDataSet( f, ds, "" );
 
     return 0;
     }
