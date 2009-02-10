@@ -3656,7 +3656,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0009,0x0010,"PHILIPS MR/PART 12",VR::US,VM::VM1,"?",false },
   {0x0019,0x0010,"PHILIPS MR/PART 6",VR::IS,VM::VM1,"?",false },
   {0x0019,0x0000,"PHILIPS MR/PART 7",VR::IS,VM::VM1,"?",false },
-  {0x7051,0x0000,"PHILIPS NM -Private",VR::US,VM::VM1,"?",false },
+  {0x7051,0x0000,"PHILIPS NM -Private",VR::US,VM::VM1,"Current Segment",false },
   {0x7051,0x0001,"PHILIPS NM -Private",VR::US,VM::VM1,"Number of Segments",false },
   {0x7051,0x0002,"PHILIPS NM -Private",VR::FL,VM::VM1,"Segment Start Position",false },
   {0x7051,0x0003,"PHILIPS NM -Private",VR::FL,VM::VM1,"Segment Stop Position",false },
