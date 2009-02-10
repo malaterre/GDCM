@@ -34,10 +34,11 @@ public class TestCSharpFilter
     while(!cds.IsAtEnd())
       {
       DataElement de = cds.GetCurrent();
-      System.Console.WriteLine( indent + de.toString() );
       if( de.GetVR().Compatible( new VR(VR.VRType.SQ) ) )
         {
-        SequenceOfItems sq = cds.GetCurrent().GetSequenceOfItems();
+        //SequenceOfItems sq = de.GetSequenceOfItems();
+        // GetValueAsSQ handle more cases than GetSequenceOfItems
+        SmartPtrSQ sq = de.GetValueAsSQ();
         uint n = sq.GetNumberOfItems();
         for( uint i = 1; i <= n; i++)
           {
@@ -45,6 +46,10 @@ public class TestCSharpFilter
           DataSet nested = item.GetNestedDataSet();
           RecurseDataSet( nested, indent + "  " );
           }
+        }
+      else
+        {
+        System.Console.WriteLine( indent + de.toString() );
         }
       cds.Next();
       }
