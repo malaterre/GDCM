@@ -28,6 +28,28 @@ using gdcm;
 
 public class TestCSharpFilter
 {
+  public static void RecurseDataSet(DataSet ds, string indent)
+    {
+    CSharpDataSet cds = new CSharpDataSet(ds);
+    while(!cds.IsAtEnd())
+      {
+      DataElement de = cds.GetCurrent();
+      System.Console.WriteLine( indent + de.toString() );
+      if( de.GetVR().Compatible( new VR(VR.VRType.SQ) ) )
+        {
+        SequenceOfItems sq = cds.GetCurrent().GetSequenceOfItems();
+        uint n = sq.GetNumberOfItems();
+        for( uint i = 1; i <= n; i++)
+          {
+          Item item = sq.GetItem( i );
+          DataSet nested = item.GetNestedDataSet();
+          RecurseDataSet( nested, indent + "  " );
+          }
+        }
+      cds.Next();
+      }
+    }
+
   public static int Main(string[] args)
     {
     string filename = args[0];
@@ -40,14 +62,8 @@ public class TestCSharpFilter
       }
     File f = reader.GetFile();
     DataSet ds = f.GetDataSet();
-    CSharpDataSet cds = new CSharpDataSet(ds);
 
-    cds.Start(); // Make iterator go at begining
-    while(!cds.IsAtEnd())
-      {
-      System.Console.WriteLine( "out:" + cds.GetCurrent().toString() );
-      cds.Next();
-      }
+    RecurseDataSet( ds, "" );
 
     return 0;
     }
