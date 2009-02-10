@@ -34,15 +34,17 @@ public class TestCSharpFilter
     while(!cds.IsAtEnd())
       {
       DataElement de = cds.GetCurrent();
+      // Compute VR from the toplevel file, and the currently processed dataset:
       VR vr = DataSetHelper.ComputeVR(f, ds, de.GetTag() );
 
       if( vr.Compatible( new VR(VR.VRType.SQ) ) )
         {
+        System.Console.WriteLine( indent + de.GetTag().toString() ); // why not ?
         //SequenceOfItems sq = de.GetSequenceOfItems();
         // GetValueAsSQ handle more cases than GetSequenceOfItems
         SmartPtrSQ sq = de.GetValueAsSQ();
         uint n = sq.GetNumberOfItems();
-        for( uint i = 1; i <= n; i++)
+        for( uint i = 1; i <= n; i++) // item starts at 1, not 0
           {
           Item item = sq.GetItem( i );
           DataSet nested = item.GetNestedDataSet();
