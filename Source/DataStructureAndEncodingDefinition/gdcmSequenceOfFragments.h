@@ -90,7 +90,7 @@ std::istream& Read(std::istream &is)
       // Bug_Siemens_PrivateIconNoItem.dcm 
       // First thing first let's rewind
       is.seekg(-4, std::ios::cur);
-      if ( Table.GetTag() == Tag(0xD8FF,0xE0FF) )
+      if ( Table.GetTag() == Tag(0xd8ff,0xe0ff) )
         {
         Fragment frag;
         is.seekg( 8340, std::ios::cur );
