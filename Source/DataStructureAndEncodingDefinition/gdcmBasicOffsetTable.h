@@ -54,6 +54,7 @@ public:
     //assert( TagField == itemStart );
     if( TagField != itemStart )
       {
+      // Bug_Siemens_PrivateIconNoItem.dcm 
       throw "SIEMENS Icon thingy";
       }
     if( !ValueLengthField.Read<TSwap>(is) )
