@@ -118,9 +118,6 @@ public:
     return os.write((char*)(&copy), sizeof(uint16_t));
     }
 
-  // The following is required for wrapped language:
-  uint32_t GetValueLength() const { return ValueLength; }
-
 private:
   uint32_t ValueLength;
 };

@@ -184,6 +184,11 @@ using namespace gdcm;
 //%feature("autodoc", "1")
 //%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
 #define GDCM_EXPORT
+
+// The following must be define early on as gdcmVL.h get included real early
+%rename(GetValueLength) gdcm::VL::operator uint32_t;
+//%csmethodmodifiers gdcm::VL::GetValueLength "private"
+//%csmethodmodifiers GetValueLength "private"
 //%rename(GetValue) VL::operator uint32_t ();
 //  public static implicit operator int( MyType a )
 //        {
@@ -192,7 +197,7 @@ using namespace gdcm;
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
 %include "gdcmMediaStorage.h"
-//%rename(__getitem__) gdcm::Tag::operator[];
+//%rename(this ) gdcm::Tag::operator[];
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
@@ -226,6 +231,8 @@ using namespace gdcm;
     }
 %}
 }
+%csmethodmodifiers gdcm::VL::GetValueLength "private"
+
 %include "gdcmVR.h"
 %extend gdcm::VR
 {
