@@ -22,6 +22,9 @@
 // until then gdcm.PosixEmulation will remain the recommended way to access
 // gdcm.System API from C#
 
+// Some good reference:
+// https://code.crt.realtors.org/projects/librets/browser/librets/trunk/project/swig/librets.i?rev=729
+
 /*
 > I want to wrap C++ code in C#. Is there a way to instruct swig to insert
 > a
@@ -213,6 +216,15 @@ using namespace gdcm;
   }
 };
 %include "gdcmVL.h"
+namespace gdcm {
+%typemap(cscode) VL
+%{
+  public static implicit operator uint( VL vl )
+    {
+    return vl.ValueLength;
+    }
+%}
+}
 %include "gdcmVR.h"
 %extend gdcm::VR
 {
