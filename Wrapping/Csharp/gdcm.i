@@ -181,10 +181,15 @@ using namespace gdcm;
 //%feature("autodoc", "1")
 //%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
 #define GDCM_EXPORT
+//%rename(GetValue) VL::operator uint32_t ();
+//  public static implicit operator int( MyType a )
+//        {
+//            return a.value;
+//        }
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
 %include "gdcmMediaStorage.h"
-%rename(__getitem__) gdcm::Tag::operator[];
+//%rename(__getitem__) gdcm::Tag::operator[];
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
