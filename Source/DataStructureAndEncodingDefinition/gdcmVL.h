@@ -59,9 +59,6 @@ public:
 
   operator uint32_t () const { return ValueLength; }
 
-  // FIXME:
-  uint32_t GetValue() const { return ValueLength; }
-
   VL GetLength() const {
 	  // VL cannot know it's length...well in implicit yes...
 	  // TODO: need to check we cannot call this function from an Explicit element
@@ -121,7 +118,8 @@ public:
     return os.write((char*)(&copy), sizeof(uint16_t));
     }
 
-
+  // The following is required for wrapped language:
+  uint32_t GetValueLength() const { return ValueLength; }
 
 private:
   uint32_t ValueLength;

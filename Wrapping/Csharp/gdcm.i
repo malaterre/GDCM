@@ -216,12 +216,13 @@ using namespace gdcm;
   }
 };
 %include "gdcmVL.h"
-namespace gdcm {
+%extend gdcm::VL
+{
 %typemap(cscode) VL
 %{
   public static implicit operator uint( VL vl )
     {
-    return vl.ValueLength;
+    return vl.GetValueLength();
     }
 %}
 }
