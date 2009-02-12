@@ -59,6 +59,9 @@ public:
 
   operator uint32_t () const { return ValueLength; }
 
+  // FIXME:
+  uint32_t GetValue() const { return ValueLength; }
+
   VL GetLength() const {
 	  // VL cannot know it's length...well in implicit yes...
 	  // TODO: need to check we cannot call this function from an Explicit element
