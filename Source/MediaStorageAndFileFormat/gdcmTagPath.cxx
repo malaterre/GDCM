@@ -21,6 +21,12 @@
 namespace gdcm
 {
 
+struct PathElement
+{
+  Tag tag; // Contains a DICOM tag
+  unsigned int item; // Index to an item, if 'item' == 0 => consider all items
+};
+
 TagPath::TagPath():Path()
 {
 }
@@ -40,30 +46,39 @@ void TagPath::Print(std::ostream &os) const
 
 bool TagPath::IsValid(const char *path)
 {
-  return false;
+  TagPath tp;
+  return tp.ConstructFromString(path);
 }
 
-void TagPath::ConstructFromTagList(Tag const *l, unsigned int n)
+bool TagPath::ConstructFromTagList(Tag const *l, unsigned int n)
 {
   Path = std::vector<Tag>(l,l+n);
+  return true;
 }
 
-void TagPath::ConstructFromString(const char *path)
+bool TagPath::ConstructFromString(const char *path)
 {
   size_t pos = 0;
   const size_t len = strlen(path);
   Path.clear();
   while( pos != len )
-  {
-  if( path[pos] == '/' )
-  {
-	  ++pos;
-  }
-  Tag t;
-  t.ReadFromCommaSeparatedString( path+pos );
-  pos += 4 + 4 + 1;
-  Path.push_back( t );
-  }
+    {
+    if( path[pos] == '/' )
+      {
+      ++pos;
+      }
+    Tag t;
+    if( t.ReadFromCommaSeparatedString( path+pos ) )
+      {
+      pos += 4 + 4 + 1;
+      Path.push_back( t );
+      }
+    else
+      {
+      return false;
+      }
+    }
+  return true;
 }
 
 void TagPath::Push(Tag const & t)

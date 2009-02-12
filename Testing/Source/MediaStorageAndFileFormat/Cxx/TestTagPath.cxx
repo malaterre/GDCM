@@ -21,11 +21,19 @@ int TestTagPath(int argc, char *argv[])
   gdcm::TagPath tp;
 
   const char path[] = "/0010,0010";
+  if( !gdcm::TagPath::IsValid( path ) )
+    {
+    return 1;
+    }
   tp.ConstructFromString( path );
 
   tp.Print( std::cout );
 
   const char path2[] = "/0010,0011/1234,5678";
+  if( !gdcm::TagPath::IsValid( path2 ) )
+    {
+    return 1;
+    }
   tp.ConstructFromString( path2 );
 
   tp.Print( std::cout );

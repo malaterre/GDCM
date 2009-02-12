@@ -37,14 +37,14 @@ public:
   /// "/0018,0018/"...
   /// No space allowed, comma is use to separate tag group
   /// from tag element and slash is used to separate tag
-  /// throw an error if invalid
-  void ConstructFromString(const char *path);
+  /// return false if invalid
+  bool ConstructFromString(const char *path);
 
   /// Return if path is valid or not
   static bool IsValid(const char *path);
 
   /// Construct from a list of tags
-  void ConstructFromTagList(Tag const *l, unsigned int n);
+  bool ConstructFromTagList(Tag const *l, unsigned int n);
 
   void Push(Tag const & t);
   void Push(unsigned int itemnum);
