@@ -39,7 +39,8 @@ public class TestCSharpFilter
 
       if( vr.Compatible( new VR(VR.VRType.SQ) ) )
         {
-        System.Console.WriteLine( indent + de.GetTag().toString() ); // why not ?
+        uint uvl = (uint)de.GetVL(); // Test cast is ok
+        System.Console.WriteLine( indent + de.GetTag().toString() + ":" + uvl ); // why not ?
         //SequenceOfItems sq = de.GetSequenceOfItems();
         // GetValueAsSQ handle more cases than GetSequenceOfItems
         SmartPtrSQ sq = de.GetValueAsSQ();
