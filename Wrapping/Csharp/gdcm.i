@@ -223,6 +223,13 @@ using namespace gdcm;
 %include "gdcmVL.h"
 %extend gdcm::VL
 {
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
 %typemap(cscode) VL
 %{
   public static implicit operator uint( VL vl )

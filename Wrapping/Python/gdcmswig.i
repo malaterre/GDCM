@@ -160,6 +160,7 @@ using namespace gdcm;
 //%feature("autodoc", "1")
 //%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
 #define GDCM_EXPORT
+%rename(__add__) gdcm::VL::operator+=;
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
 %include "gdcmMediaStorage.h"
@@ -188,6 +189,16 @@ using namespace gdcm;
   }
 };
 %include "gdcmVL.h"
+%extend gdcm::VL
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 //%typemap(out) int
 //{
 //    $result = SWIG_NewPointerObj($1,SWIGTYPE_p_gdcm__VL,0);
