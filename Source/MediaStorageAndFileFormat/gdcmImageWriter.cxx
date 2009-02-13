@@ -414,6 +414,7 @@ bool ImageWriter::Write()
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
   //if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
     {
+    assert( pi != PhotometricInterpretation::UNKNOW );
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );
