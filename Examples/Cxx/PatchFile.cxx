@@ -105,11 +105,11 @@ int main(int argc, char *argv[])
   gdcm::Image &image = ir.GetImage();
   unsigned long len = image.GetBufferLength();
   const gdcm::ByteValue *bv = ir.GetFile().GetDataSet().GetDataElement( gdcm::Tag(0x7fe0,0x0010) ).GetByteValue();
-  std::cout << bv->GetLength() << " " << len << std::endl;
-  if( len != bv->GetLength() )
+  if( !bv || len != bv->GetLength() )
     {
     return 1;
     }
+  std::cout << bv->GetLength() << " " << len << std::endl;
 
   std::cout << "Sucess to rewrite image !" << std::endl;
   image.Print( std::cout );
