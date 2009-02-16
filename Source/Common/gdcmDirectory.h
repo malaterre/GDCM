@@ -34,6 +34,10 @@ namespace gdcm
  * \note 
  * will not take into account unix type hidden file
  * recursive option will not look into UNIX type hidden directory (those starting with a .)
+ *
+ * \note 
+ * Since python or C# provide there own equivalent implementation,
+ * in which case gdcm::Directory does not make much sense.
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Directory
