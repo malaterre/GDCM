@@ -363,7 +363,16 @@ bool derives( File & file, const Image& compressed_image )
     at2.SetValues( &ratio, 1);
     ds.Replace( at2.GetAsDataElement() );
     Attribute<0x0028,0x2114> at3;
-static const CSComp newvalues2[] = {"ISO_10918_1"};
+
+/*
+The Defined Terms for Lossy Image Compression Method (0028,2114) ar e :
+ISO_10918_1 = JPEG Lossy Compression
+ISO_14495_1 = JPEG-LS Near-lossless Compression
+ISO_15444_1 = JPEG 2000 Irreversible Compression
+ISO_13818_2 = MPEG2 Compression
+*/
+//static const CSComp newvalues2[] = {"ISO_10918_1"};
+static const CSComp newvalues2[] = {"ISO_15444_1"};
     at3.SetValues(  newvalues2, 1 );
     ds.Replace( at3.GetAsDataElement() );
 }
