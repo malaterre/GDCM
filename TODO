@@ -260,3 +260,5 @@ medical.nema.org/medical/dicom/DataSets/WG16/Philips/DICOM/IM_0016
 -----------------------------------------------------------------------
 Bug gdcmconv should properly autorecompute explicit length for:
 BogusItemLengthImplicitPrivateAtt.dcm
+-----------------------------------------------------------------------
+gdcmconv --squeeze to squeeze extra space (trailing)
