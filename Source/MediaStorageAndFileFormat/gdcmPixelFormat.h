@@ -113,6 +113,8 @@ public:
   /// PixelRepresentation
   unsigned short GetPixelRepresentation() const
     {
+    assert( PixelRepresentation == 0
+         || PixelRepresentation == 1 );
     return PixelRepresentation;
     }
   void SetPixelRepresentation(unsigned short pr)
