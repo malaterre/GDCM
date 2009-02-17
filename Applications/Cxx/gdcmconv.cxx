@@ -114,6 +114,7 @@ void PrintLossyWarning()
   std::cout << "This will degrade the quality of your input image, and can." << std::endl;
   std::cout << "impact professional interpretation of the image." << std::endl;
   std::cout << "Do not use if you do not understand the risk." << std::endl;
+  std::cout << "WARNING: this mode is very experimental." << std::endl;
 }
 
 void PrintHelp()
