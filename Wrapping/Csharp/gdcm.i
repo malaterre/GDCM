@@ -196,6 +196,16 @@ using namespace gdcm;
 //        }
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
+%extend gdcm::PixelFormat
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmMediaStorage.h"
 //%rename(this ) gdcm::Tag::operator[];
 %include "gdcmTag.h"
@@ -455,21 +465,27 @@ using namespace gdcm;
 %extend gdcm::Pixmap
 {
   bool GetArray(unsigned char buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::UINT8 );
     return $self->GetBuffer((char*)buffer);
   }
   bool GetArray(char buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::INT8 );
     return $self->GetBuffer((char*)buffer);
   }
   bool GetArray(unsigned short buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::UINT16 );
     return $self->GetBuffer((char*)buffer);
   }
   bool GetArray(short buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::INT16 );
     return $self->GetBuffer((char*)buffer);
   }
   bool GetArray(float buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::FLOAT32 );
     return $self->GetBuffer((char*)buffer);
   }
   bool GetArray(double buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::FLOAT64 );
     return $self->GetBuffer((char*)buffer);
   }
 };
