@@ -64,11 +64,11 @@ public class DecompressImage
     PhotometricInterpretation pi = ir.GetPhotometricInterpretation();
     image.SetPhotometricInterpretation( pi );
 
-    DataElement pixeldata = new DataElement( new gdcm.Tag(0x7fe0,0x0010) );
+    DataElement pixeldata = new DataElement( new Tag(0x7fe0,0x0010) );
     byte[] str1 = new byte[ ir.GetBufferLength()];
     ir.GetBuffer( str1 );
     //System.Console.WriteLine( ir.GetBufferLength() );
-    pixeldata.SetByteValue( str1, new gdcm.VL( (uint)str1.Length ) );
+    pixeldata.SetByteValue( str1, new VL( (uint)str1.Length ) );
     //image.SetDataElement( pixeldata );
     ir.SetDataElement( pixeldata );
 

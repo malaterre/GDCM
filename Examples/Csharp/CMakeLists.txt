@@ -9,6 +9,7 @@ SET(CSHARP_EXAMPLES
   TestCSharpFilter
   ScanDirectory
   #SortImage2
+  TestGetArray
   )
 
 SET(DEP)
