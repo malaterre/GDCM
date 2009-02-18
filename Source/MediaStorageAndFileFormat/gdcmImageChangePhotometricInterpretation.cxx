@@ -30,6 +30,11 @@ YBR_FULL as Photometric Interpretation is really the right thing to do. The prob
 */
 bool ImageChangePhotometricInterpretation::ChangeMonochrome()
 {
+  // Ok let's give up on this one for now.
+  // We would need to take care of Pixel Padding Value to actually be able to invert the image
+  // without this information we potentially will be making mistake. just like Largest Image Pixel Value and other
+  // would be wrong
+  return false;
   const Image &image = *Input;
   PhotometricInterpretation pi = image.GetPhotometricInterpretation();
   assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
