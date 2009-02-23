@@ -262,3 +262,15 @@ Bug gdcmconv should properly autorecompute explicit length for:
 BogusItemLengthImplicitPrivateAtt.dcm
 -----------------------------------------------------------------------
 gdcmconv --squeeze to squeeze extra space (trailing)
+-----------------------------------------------------------------------
+gdcmimg /usr/share/VTKData/Data/beach.jpg out.dcm
+gdcmraw out.dcm out.jpg
+-> out.jpg still contains the JFIF marker (color space...)
+-----------------------------------------------------------------------
+BUG: SERIOUS gdcm does not allow creation of such file
+dcmcjpeg +fs 100 GE_DLX-8-MONO2-Multiframe.dcm /tmp/jpeg3.dcm 
+
+tricky for jpeg 2000
+-----------------------------------------------------------------------
+Following same bug: need to fix gdcmconv --split 65536 for multiframe
+also need to check BasicOffset is properly discarded
