@@ -363,6 +363,11 @@ int main(int argc, char *argv[])
   const gdcm::DataSet &ds = file.GetDataSet();
   gdcm::MediaStorage ms;
   ms.SetFromFile(file);
+  /*
+   * Until gdcm::MediaStorage is fixed only *compile* time constant will be handled
+   * see -> http://chuckhahm.com/Ischem/Zurich/XX_0134
+   * which make gdcm::UIDs useless :(
+   */
   if( ms.IsUndefined() )
     {
     std::cerr << "Unknown MediaStorage" << std::endl;
