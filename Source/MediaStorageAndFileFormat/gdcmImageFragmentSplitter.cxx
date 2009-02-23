@@ -38,6 +38,12 @@ bool ImageFragmentSplitter::Split()
     return false;
     }
 
+  if ( sqf->GetNumberOfFragments() != 1 )
+    {
+    gdcmDebugMacro( "Case not handled (for now)" );
+    return false;
+    }
+
   //assert( sqf->GetNumberOfFragments() == 1 );
 
   // WARNING do not keep the same Basic Offset Table...
@@ -101,6 +107,8 @@ void ImageFragmentSplitter::SetFragmentSizeMax(unsigned int fragsize)
     {
     FragmentSizeMax = 2;
     }
+  // \postcondition:
+  assert( FragmentSizeMax >= 2 && (FragmentSizeMax % 2) == 0 );
 }
 
 } // end namespace gdcm
