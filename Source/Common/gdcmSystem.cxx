@@ -393,6 +393,9 @@ const char *System::GetCurrentModuleFileName()
   Dl_info info;
   if (dladdr( (void*)&where_am_i, &info ) == 0)
     {
+    size_t len = strlen(info.dli_fname);
+    if( len >= PATH_MAX ) return 0; // throw error ?
+    // else
     strcpy(path,info.dli_fname);
     return path; 
     }
