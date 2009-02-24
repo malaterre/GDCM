@@ -922,6 +922,13 @@ int main (int argc, char *argv[])
       }
     const gdcm::Image &image = reader.GetImage();
 
+    // Just in case:
+    if( gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) 
+      == gdcm::PhotometricInterpretation::PI_END )
+      {
+      std::cerr << "Do not handle PhotometricInterpretation: " << photometricinterpretation_str << std::endl;
+      return 1;
+      }
     gdcm::PhotometricInterpretation pi (
       gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) );
     gdcm::ImageChangePhotometricInterpretation pifilt;

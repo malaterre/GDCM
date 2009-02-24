@@ -57,7 +57,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
     }
 
   // Ouch ! We did not find anything, that's pretty bad, let's hope that 
-  // the toolkit who wrote the image is buggy and tolerate \0 padded ASCII
+  // the toolkit which wrote the image is buggy and tolerate \0 padded ASCII
   // string
   i = 0;
   while(PIStrings[i] != 0)
@@ -85,7 +85,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
     ++i;
     }
 
-  abort();
+  //abort();
   return PI_END;
 }
 
