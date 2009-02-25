@@ -274,3 +274,6 @@ tricky for jpeg 2000
 -----------------------------------------------------------------------
 Following same bug: need to fix gdcmconv --split 65536 for multiframe
 also need to check BasicOffset is properly discarded
+-----------------------------------------------------------------------
+Can I handle SetImageFormat (invalid) properly ?
+eg. vtkImageData is single comp but ImageFormat=RGB ...
