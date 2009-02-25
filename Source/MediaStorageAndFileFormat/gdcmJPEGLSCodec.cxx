@@ -64,6 +64,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 #else
   // First thing create a jpegls file from the fragment:
   const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  if(!sf) return false;
   assert(sf);
 
   char *input  = tempnam(0, "gdcminjpegls");

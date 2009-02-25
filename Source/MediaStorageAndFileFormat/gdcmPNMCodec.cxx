@@ -52,9 +52,11 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
   switch(pf)
     {
   case PixelFormat::UINT8:
+  case PixelFormat::INT8:
     os << "255";
     break;
   case PixelFormat::UINT16:
+  case PixelFormat::INT16:
     os << "65535";
     break;
   default:
