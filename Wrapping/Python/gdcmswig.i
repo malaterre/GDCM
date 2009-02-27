@@ -611,6 +611,7 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
     /* fail: a Python exception was raised */
     abort();
   }
+  return true;
 }
 %}
 //%{
