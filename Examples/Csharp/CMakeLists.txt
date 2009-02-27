@@ -10,6 +10,7 @@ SET(CSHARP_EXAMPLES
   ScanDirectory
   #SortImage2
   TestGetArray
+  NewSequence
   )
 
 SET(DEP)
