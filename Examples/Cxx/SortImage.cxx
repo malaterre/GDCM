@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
   //s.AddTag( gdcm::Tag(0x20,0x37) ); // Image Orientation (Patient)
   s.Scan( dir.GetFilenames() );
 
-  s.Print( std::cout );
+  //s.Print( std::cout );
 
   // Count how many different IPP there are:
   const gdcm::Scanner::ValuesType &values = s.GetValues();

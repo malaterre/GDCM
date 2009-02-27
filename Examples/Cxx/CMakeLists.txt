@@ -27,6 +27,7 @@ SET(EXAMPLES_SRCS
   csa2img
   rle2img
   uid_unique
+  PublicDict
 )
 
 FOREACH(example ${EXAMPLES_SRCS})
