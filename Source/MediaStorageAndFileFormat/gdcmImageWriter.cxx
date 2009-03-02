@@ -254,6 +254,12 @@ bool ImageWriter::Write()
 
   PixelFormat pf = PixelData->GetPixelFormat();
   PhotometricInterpretation pi = PixelData->GetPhotometricInterpretation();
+  if( pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel() )
+    {
+    gdcmWarningMacro( "Photometric Interpreation and Pixel format are not compatible" );
+    return false;
+    }
+
   // FIXME HACK !
   if( pf.GetBitsAllocated() == 24 )
     {
