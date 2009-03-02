@@ -284,7 +284,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     xde.SetTag( Tag(0x0002, 0x0013) );
     xde.SetVR( VR::SH );
     //const char version[] = GDCM_IMPLEMENTATION_VERSION_NAME;
-    const char *version = FileMetaInformation::GetImplementationVersionName();
+    SHComp version = FileMetaInformation::GetImplementationVersionName();
     xde.SetByteValue( version, strlen(version) );
     Insert( xde );
     }
