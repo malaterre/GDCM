@@ -188,6 +188,9 @@ void PrintHelp()
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
+  // the following options would require an advanced MediaStorage::SetFromFile ... sigh
+  //std::cout << "     --media-storage-uid   return media storage uid only." << std::endl;
+  //std::cout << "     --media-storage-name  return media storage name only (when possible)." << std::endl;
 //  std::cout << "  -b --check-big-endian   check if file is ." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;

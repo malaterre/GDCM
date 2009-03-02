@@ -491,7 +491,21 @@ int main (int argc, char *argv[])
 
 /*
  * Harvested data:
- * A lot of them are still non-obvious (ETL -> Echo Train Length...)
+ * A lot of them are still non-obvious
+
+Most obvious ones:
+ETL -> Echo Train Length
+FLIPANG -> Flip Angle
+MATRIXX / MATRIXY ->  Acquisition Matrix
+SLTHICK ->  Slice Thickness
+
+   ENTRY "Feet First"
++  POSITION "Supine"
+--------------------
+=  Patient Position
+
+
+Full list:
  
 ANREF "IC"
 ANREF "NA"
