@@ -615,7 +615,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   image.SetPixelFormat( pixeltype );
   image.SetPlanarConfiguration( 0 ); // VTK default
 
-  // Setup LUt if any:
+  // Setup LUT if any:
   if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();

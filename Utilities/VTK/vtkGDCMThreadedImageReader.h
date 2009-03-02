@@ -29,9 +29,11 @@
 //
 // .SECTION FIXME: you need to call SetFileName when reading a volume file (multiple slices DICOM)
 // since SetFileNames expect each single file to be single slice (see parent class)
-
+//
+// .SECTION BUG: you should really consider using vtkGDCMThreadedImageReader2 instead !
+//
 // .SECTION See Also
-// vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMThreadedImageReader2
 
 #ifndef __vtkGDCMThreadedImageReader_h
 #define __vtkGDCMThreadedImageReader_h

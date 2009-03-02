@@ -44,7 +44,7 @@
 // would be inconsistant in between the two data structures.
 
 // .SECTION See Also
-// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader
+// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
 
 #ifndef __vtkGDCMImageReader_h
 #define __vtkGDCMImageReader_h

@@ -16,7 +16,9 @@
 // .SECTION Description
 // vtkGDCMThreadedImageReader2 is a source object that reads some DICOM files
 // This reader is threaded. Meaning that on a multiple core CPU with N cpu, it will
-// read approx N times faster than when reading in a single thread.
+// read approx N times faster than when reading in a single thread assuming the IO is
+// not a bottleneck operation.
+// If looking for a single threaded class see: vtkGDCMImageReader
 //
 // .SECTION Warning: Advanced users only. Do not use this class in the general case, 
 // you have to understand how physicaly medium works first (sequencial reading for 
@@ -37,7 +39,7 @@
 // two types of thread is necessary to acheive a working implementation of UpdateProgress
 
 // .SECTION See Also
-// vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMImageReader
 
 #ifndef __vtkGDCMThreadedImageReader2_h
 #define __vtkGDCMThreadedImageReader2_h
