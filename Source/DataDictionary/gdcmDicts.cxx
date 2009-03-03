@@ -67,37 +67,37 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
   else
     {
     assert( tag.IsPrivate() );
-    // Check special private element: 0x0000 and [0x1,0xFF] are special cases:
-    if( tag.IsIllegal() )
+    if( owner && *owner )
       {
-      std::string pc ( "Illegal Element" );
-      Dummy.SetName( pc.c_str() );
-      Dummy.SetVR( VR::INVALID );
-      Dummy.SetVM( VM::VM0 );
-      Dummy.SetRetired( false ); // ??
-      return Dummy;
-      }
-    else if( tag.IsPrivateCreator() )
-      {
-      assert( !tag.IsIllegal() );
-      assert( tag.GetElement() ); // Not a group length !
-      //assert( owner );
-      assert( tag.IsPrivate() );
-      std::string pc ( "Private Creator" );
-      Dummy.SetName( pc.c_str() );
-      Dummy.SetVR( VR::LO );
-      Dummy.SetVM( VM::VM1 );
-      Dummy.SetRetired( false );
-      return Dummy;
+      size_t len = strlen(owner); (void)len;
+      PrivateTag ptag(tag.GetGroup(), ((uint16_t)(tag.GetElement() << 8)) >> 8, owner);
+      const DictEntry &de = GetPrivateDict().GetDictEntry(ptag);
+      return de;
       }
     else
       {
-      if( owner && *owner )
+      // Check special private element: 0x0000 and [0x1,0xFF] are special cases:
+      if( tag.IsIllegal() )
         {
-        size_t len = strlen(owner); (void)len;
-        PrivateTag ptag(tag.GetGroup(), ((uint16_t)(tag.GetElement() << 8)) >> 8, owner);
-        const DictEntry &de = GetPrivateDict().GetDictEntry(ptag);
-        return de;
+        std::string pc ( "Illegal Element" );
+        Dummy.SetName( pc.c_str() );
+        Dummy.SetVR( VR::INVALID );
+        Dummy.SetVM( VM::VM0 );
+        Dummy.SetRetired( false ); // ??
+        return Dummy;
+        }
+      else if( tag.IsPrivateCreator() )
+        {
+        assert( !tag.IsIllegal() );
+        assert( tag.GetElement() ); // Not a group length !
+        //assert( owner );
+        assert( tag.IsPrivate() );
+        std::string pc ( "Private Creator" );
+        Dummy.SetName( pc.c_str() );
+        Dummy.SetVR( VR::LO );
+        Dummy.SetVM( VM::VM1 );
+        Dummy.SetRetired( false );
+        return Dummy;
         }
       else
         {
