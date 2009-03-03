@@ -404,7 +404,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
 
 bool ImageHelper::GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector<double> & dircos)
 {
-
+  // \precondition: this dataset is not a secondary capture !
   // else
   const Tag timageorientationpatient(0x0020, 0x0037);
   if( ds.FindDataElement( timageorientationpatient ) /*&& !ds.GetDataElement( timageorientationpatient ).IsEmpty()*/ )
@@ -430,9 +430,10 @@ bool ImageHelper::GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector
       else
         {
         gdcmWarningMacro( "Could not get DirectionCosines" );
+        return false;
         }
       }
-  return true;
+    return true;
     }
   return false;
 }
@@ -459,7 +460,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     }
 
   dircos.resize( 6 );
-  if( !GetDirectionCosinesFromDataSet(ds, dircos) )
+  if( ms == MediaStorage::SecondaryCaptureImageStorage || !GetDirectionCosinesFromDataSet(ds, dircos) )
     {
     dircos[0] = 1;
     dircos[1] = 0;
@@ -486,6 +487,11 @@ bool ImageHelper::GetForceRescaleInterceptSlope()
 void ImageHelper::SetForcePixelSpacing(bool b)
 {
   ForcePixelSpacing = b;
+}
+
+bool ImageHelper::GetForcePixelSpacing()
+{
+  return ForcePixelSpacing;
 }
 
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
