@@ -277,3 +277,14 @@ also need to check BasicOffset is properly discarded
 -----------------------------------------------------------------------
 Can I handle SetImageFormat (invalid) properly ?
 eg. vtkImageData is single comp but ImageFormat=RGB ...
+-----------------------------------------------------------------------
+FIXME:
+gdcmconv --deflated gdcmDataExtra/gdcmNonImageData/c15-5.dcm out.dcm
+could not read: gdcmDataExtra/gdcmNonImageData/c15-5.dcm
+-----------------------------------------------------------------------
+Technically nothing prevent someone from using JPegcompress on PDF object
+So gdcm::ImageChangeTransferSyntax should let non-image pass
+-----------------------------------------------------------------------
+Prepare a DICOM file with lot of sequence so that 2Gb limit is reached.
+-----------------------------------------------------------------------
+Add support for invalid SC generated from ITK/gdcm 1.2.4
