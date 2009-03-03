@@ -761,7 +761,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // 1. First find how many dimensions there is:
   // D 0028|0008 [IS] [Number of Frames] [8 ]
   const Tag tnumberofframes = Tag(0x0028, 0x0008);
-  if( ds.FindDataElement( tnumberofframes ) )
+  if( ds.FindDataElement( tnumberofframes ) && ms != MediaStorage::SecondaryCaptureImageStorage )
     {
     int numberofframes = ReadISFromTag( tnumberofframes, ss, conversion );
     assert( numberofframes != 0 );

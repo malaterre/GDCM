@@ -244,12 +244,19 @@ bool ImageWriter::Write()
   ds.Replace( rows.GetAsDataElement() );
 
   // (0028,0008) IS [12]                                     #   2, 1 NumberOfFrames
-  if( PixelData->GetNumberOfDimensions() == 3 )
+  const Tag tnumberofframes = Tag(0x0028, 0x0008);
+  if( PixelData->GetNumberOfDimensions() == 3  )
     {
     Attribute<0x0028, 0x0008> numberofframes;
     assert( PixelData->GetDimension(2) > 1 );
     numberofframes.SetValue( PixelData->GetDimension(2) );
     ds.Replace( numberofframes.GetAsDataElement() );
+    }
+  else if( ds.FindDataElement(tnumberofframes) )
+    {
+    assert( PixelData->GetNumberOfDimensions() == 2 );
+    assert( PixelData->GetDimension(2) == 1 );
+    ds.Remove( tnumberofframes );
     }
 
   PixelFormat pf = PixelData->GetPixelFormat();
@@ -786,6 +793,13 @@ Attribute<0x0028,0x0004> piat;
     {
     DataElement de( Tag(0x0010,0x0040) );
     de.SetVR( Attribute<0x0010,0x0040>::GetVR() );
+    ds.Insert( de );
+    }
+  // Laterality
+  if( false && !ds.FindDataElement( Tag(0x0020,0x0060) ) )
+    {
+    DataElement de( Tag(0x0020,0x0060) );
+    de.SetVR( Attribute<0x0020,0x0060>::GetVR() );
     ds.Insert( de );
     }
   // StudyDate

@@ -223,7 +223,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
-  int file_length = buf_size;
+  int file_length = buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
 
   // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
   // so we need to make sure to remove it:
@@ -231,12 +231,12 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   //             and D_CLUNIE_CT1_J2KR.dcm
     //  Marker 0xffd9 EOI End of Image (JPEG 2000 EOC End of codestream)
     // gdcmData/D_CLUNIE_CT1_J2KR.dcm contains a trailing 0xFF which apparently is ok...
-  while( file_length && src[file_length-1] != 0xd9 )
+  while( file_length > 0 && src[file_length-1] != 0xd9 )
     {
     file_length--;
     }
   // what if 0xd9 is never found ?
-  assert( file_length && src[file_length-1] == 0xd9 );
+  assert( file_length > 0 && src[file_length-1] == 0xd9 );
 
   /* configure the event callbacks (not required) */
   memset(&event_mgr, 0, sizeof(opj_event_mgr_t));

@@ -45,7 +45,20 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
 {
   std::ofstream os(filename);
   const unsigned int *dims = this->GetDimensions();
-  os << "P5\n";
+  const PhotometricInterpretation &pi = this->GetPhotometricInterpretation();
+  if( pi == PhotometricInterpretation::MONOCHROME2 )
+    {
+    os << "P5\n";
+    }
+  else if( pi == PhotometricInterpretation::RGB )
+    {
+    os << "P6\n";
+    }
+  else
+    {
+    gdcmWarningMacro( "PhotometricInterpretation unhandled: " << pi );
+    return false;
+    }
   os << dims[0] << " " << dims[1] << "\n";
   
   const PixelFormat& pf = GetPixelFormat();
@@ -66,6 +79,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
   os << "\n";
 
   const gdcm::ByteValue *bv = out.GetByteValue();
+  if(!bv) return false;
   assert(bv);
   bv->WriteBuffer( os );
 

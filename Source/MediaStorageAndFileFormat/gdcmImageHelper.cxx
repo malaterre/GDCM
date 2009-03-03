@@ -382,7 +382,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
 
   // else
   const Tag timagepositionpatient(0x0020, 0x0032);
-  if( ds.FindDataElement( timagepositionpatient ) )
+  if( ms != MediaStorage::SecondaryCaptureImageStorage && ds.FindDataElement( timagepositionpatient ) )
     {
     const DataElement& de = ds.GetDataElement( timagepositionpatient );
     Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
@@ -868,6 +868,12 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
   assert( MediaStorage::IsImage( ms ) );
   if( ms == MediaStorage::SecondaryCaptureImageStorage )
     {
+    Tag pixelspacing(0x0028,0x0030);
+    Tag imagerpixelspacing(0x0018,0x1164);
+    Tag spacingbetweenslice(0x0018,0x0088);
+    ds.Remove( pixelspacing );
+    ds.Remove( imagerpixelspacing );
+    ds.Remove( spacingbetweenslice );
     return;
     }
   assert( spacing.size() == 3 );
@@ -1082,6 +1088,12 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
+  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    Tag ipp(0x0020,0x0032);
+    ds.Remove( ipp );
+    }
+
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
@@ -1089,6 +1101,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
+    // FIXME: should I remove the ipp tag ???
     return;
     }
 
@@ -1153,6 +1166,12 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
+  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    Tag iop(0x0020,0x0037);
+    ds.Remove( iop );
+    }
+
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
@@ -1160,6 +1179,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
+    // FIXME: should I remove the iop tag ???
     return;
     }
 
