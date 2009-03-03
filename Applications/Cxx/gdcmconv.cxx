@@ -820,9 +820,11 @@ int main (int argc, char *argv[])
     }
 
   // Handle here the general file (not required to be image)
-  if ( explicitts || implicit )
+  if ( explicitts || implicit || deflated )
     {
     if( explicitts && implicit ) return 1; // guard
+    if( explicitts && deflated ) return 1; // guard
+    if( implicit && deflated ) return 1; // guard
     gdcm::Reader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
@@ -838,7 +840,7 @@ int main (int argc, char *argv[])
     gdcm::FileMetaInformation &fmi = file.GetHeader();
 
     const gdcm::TransferSyntax &orits = fmi.GetDataSetTransferSyntax();
-    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian )
+    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian && orits != gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian )
       {
       std::cerr << "Sorry input Transfer Syntax not supported for this conversion: " << orits << std::endl;
       return 1;
@@ -849,7 +851,12 @@ int main (int argc, char *argv[])
       {
       ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
       }
+    else if( deflated )
+      {
+      ts = gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian;
+      }
     const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    // const char * is ok since padding is \0 anyway...
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
     de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
@@ -858,7 +865,7 @@ int main (int argc, char *argv[])
     fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
     fmi.SetDataSetTransferSyntax(ts);
 
-    if( explicitts )
+    if( explicitts || deflated )
       {
       gdcm::FileExplicitFilter fef;
       fef.SetChangePrivateTags( changeprivatetags );
@@ -979,7 +986,7 @@ int main (int argc, char *argv[])
       return 1;
       }
     }
-  else if( jpeg || j2k || jpegls || rle || raw || deflated /*|| planarconf*/ )
+  else if( jpeg || j2k || jpegls || rle || raw /*|| deflated*/ /*|| planarconf*/ )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );

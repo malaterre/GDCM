@@ -139,7 +139,12 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
-          else if( option_index == 5 ) /* input */
+          else if( option_index == 2 ) /* tag */
+            {
+            assert( strcmp(s, "tag") == 0 );
+            rawTag.ReadFromCommaSeparatedString(optarg);
+            }
+          else if( option_index == 5 ) /* pattern */
             {
             assert( strcmp(s, "pattern") == 0 );
             assert( pattern.empty() );
