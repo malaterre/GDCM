@@ -40,10 +40,16 @@ ImageCodec::ImageCodec()
   NeedOverlayCleanup = false;
   Dimensions[0] = Dimensions[1] = Dimensions[2] = 0;
   NumberOfDimensions = 0;
+  LossyFlag = false;
 }
 
 ImageCodec::~ImageCodec()
 {
+}
+
+bool ImageCodec::IsLossy() const
+{
+  return LossyFlag;
 }
 
 void ImageCodec::SetNumberOfDimensions(unsigned int dim)

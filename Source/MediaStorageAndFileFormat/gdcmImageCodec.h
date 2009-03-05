@@ -36,6 +36,8 @@ public:
   ~ImageCodec();
   bool CanDecode(TransferSyntax const &) const { return false; }
   bool Decode(DataElement const &is, DataElement &os);
+  bool IsLossy() const;
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 public:
@@ -104,6 +106,7 @@ protected:
   LUTPtr LUT;
   unsigned int Dimensions[3]; // FIXME
   unsigned int NumberOfDimensions;
+  bool LossyFlag;
 
   bool DoOverlayCleanup(std::istream &is, std::ostream &os);
   bool DoByteSwap(std::istream &is, std::ostream &os);

@@ -438,6 +438,8 @@ bool Pixmap::TryJPEG2000Codec(char *buffer) const
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
     memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+
+    assert( codec.IsLossy() == ts.IsLossy() );
     return r;
     }
   return false;

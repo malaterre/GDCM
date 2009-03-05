@@ -223,7 +223,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
-  int file_length = buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
+  uint32_t file_length = buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
 
   // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
   // so we need to make sure to remove it:
@@ -256,8 +256,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   const char jp2magic[] = "\x00\x00\x00\x0C\x6A\x50\x20\x20\x0D\x0A\x87\x0A";
   if( memcmp( src, jp2magic, sizeof(jp2magic) ) == 0 )
     {
-    /* JPEG-2000 compressed image data */
+    /* JPEG-2000 compressed image data ... sigh */
     // gdcmData/ELSCINT1_JP2vsJ2K.dcm
+    // gdcmData/MAROTECH_CT_JP2Lossy.dcm
     gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
     parameters.decod_format = JP2_CFMT;
     assert(parameters.decod_format == JP2_CFMT);
@@ -272,7 +273,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
-  switch(parameters.decod_format )
+  switch(parameters.decod_format)
     {
   case J2K_CFMT:
     dinfo = opj_create_decompress(CODEC_J2K);
@@ -281,11 +282,12 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     dinfo = opj_create_decompress(CODEC_JP2);
     break;
   default:
-    abort();
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
     }
 
   /* catch events using our callbacks and give a local context */
-  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
+  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
@@ -298,8 +300,42 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   if(!image) {
     opj_destroy_decompress(dinfo);
     opj_cio_close(cio);
+    gdcmErrorMacro( "opj_decode failed" );
     return false;
   }
+/*
+  if( j2k )
+    j2k_dump_cp(stdout, image, j2k->cp);
+  if( jp2 )
+    j2k_dump_cp(stdout, image, jp2->j2k->cp);
+*/
+  int reversible;
+  switch(parameters.decod_format)
+    {
+  case J2K_CFMT:
+    {
+    opj_j2k_t* j2k = (opj_j2k_t*)dinfo->j2k_handle;
+    assert( j2k );
+    reversible = j2k->cp->tcps->tccps->qmfbid;
+    }
+    break;
+  case JP2_CFMT:
+    {
+    opj_jp2_t* jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+    assert( jp2 );
+    reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+    }
+    break;
+  default:
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
+    }
+  LossyFlag = !reversible;
+
+ // ptr->j2k->cp->tcps->tccps->qmfbid
+
+
+//abort();
 
   /* close the byte stream */
   opj_cio_close(cio);
@@ -745,7 +781,8 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     dinfo = opj_create_decompress(CODEC_JP2);
     break;
   default:
-    abort();
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
     }
 
   /* catch events using our callbacks and give a local context */
@@ -762,6 +799,7 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   if(!image) {
     opj_destroy_decompress(dinfo);
     opj_cio_close(cio);
+    gdcmErrorMacro( "opj_decode failed" );
     return false;
   }
 
