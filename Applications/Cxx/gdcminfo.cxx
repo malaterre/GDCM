@@ -400,7 +400,9 @@ int main(int argc, char *argv[])
     gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
     const char *label = gdcm::Orientation::GetLabel( type );
     image.Print( std::cout );
+    bool lossy = image.IsLossy();
     std::cout << "Orientation Label: " << label << std::endl;
+    std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
     }
 
 // Do the IOD verification !
