@@ -29,6 +29,24 @@ int TestTransferSyntax(int argc, char *argv[])
     {
     return 1;
     }
+  ts = gdcm::TransferSyntax::JPEGLosslessProcess14_1;
+  if( !ts.IsLossless() )
+    {
+    return 1;
+    }
+  if( ts.IsLossy() )
+    {
+    return 1;
+    }
+  ts = gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian;
+  if( !ts.IsLossless() )
+    {
+    return 1;
+    }
+  if( ts.IsLossy() )
+    {
+    return 1;
+    }
 
   return 0;
 }
