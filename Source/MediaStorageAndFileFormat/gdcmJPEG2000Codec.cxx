@@ -802,6 +802,27 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     gdcmErrorMacro( "opj_decode failed" );
     return false;
   }
+  int reversible;
+  switch(parameters.decod_format)
+    {
+  case J2K_CFMT:
+    {
+    opj_j2k_t* j2k = (opj_j2k_t*)dinfo->j2k_handle;
+    assert( j2k );
+    reversible = j2k->cp->tcps->tccps->qmfbid;
+    }
+    break;
+  case JP2_CFMT:
+    {
+    opj_jp2_t* jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+    assert( jp2 );
+    reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+    }
+    break;
+  default:
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
+    }
 
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
@@ -868,7 +889,14 @@ the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated 
       {
       abort();
       }
-    ts = TransferSyntax::JPEG2000Lossless;
+    if( reversible )
+      {
+      ts = TransferSyntax::JPEG2000Lossless;
+      }
+    else
+      {
+      ts = TransferSyntax::JPEG2000;
+      }
 
   /* close the byte stream */
   opj_cio_close(cio);
