@@ -421,6 +421,9 @@ Encode an image into a JPEG-2000 codestream
 @return Returns true if successful, returns false otherwise
 */
 bool j2k_encode(opj_j2k_t *j2k, opj_cio_t *cio, opj_image_t *image, char *index);
+
+void j2k_dump_cp(FILE *fd, opj_image_t * img, opj_cp_t * cp);
+
 /* ----------------------------------------------------------------------- */
 /*@}*/
 
