@@ -111,7 +111,12 @@ public:
 
   bool IsImplicit() const;
   bool IsExplicit() const;
+
+  /// Return whether the Transfer Syntax contains a lossy or lossless Encapsulated stream
+  /// \warning IsLossy is NOT !IsLossless since JPEG 2000 Transfer Syntax is dual
+  /// the stream can be either lossy or lossless compressed.
   bool IsLossy() const;
+  bool IsLossless() const;
 
   const char *GetString() const { return TransferSyntax::GetTSString(TSField); }
 
