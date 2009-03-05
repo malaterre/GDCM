@@ -921,6 +921,7 @@ int main (int argc, char *argv[])
       gdcm::PNMCodec pnm;
       pnm.SetDimensions( imageori.GetDimensions() );
       pnm.SetPixelFormat( imageori.GetPixelFormat() );
+      pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
       const gdcm::DataElement& in = imageori.GetDataElement();
       bool b = pnm.Write( outfilename, in );
       if( !b )
