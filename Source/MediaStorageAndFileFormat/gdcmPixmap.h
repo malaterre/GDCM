@@ -127,6 +127,12 @@ public:
 
   virtual bool AreOverlaysInPixelData() const { return false; }
 
+  /// Return whether or not the image was compressed using a lossy compressor or not
+  /// Transfer Syntax alone is not sufficient to detect that.
+  /// Warning if the image contains an invalid stream, the return code is also 'false'
+  /// So this call return true only when the following combination is true:
+  /// 1. The image can succefully be read
+  /// 2. The image is indeed lossy
   bool IsLossy() const;
 
 protected:
