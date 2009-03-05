@@ -800,6 +800,17 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     Internals->StateSuspension = 4;
     }
 
+  /* we are done decompressing the file, now is a good time to store the type 
+     of compression used: lossless or not */
+  if( cinfo.process == JPROC_LOSSLESS )
+    {
+    LossyFlag = false;
+    }
+  else
+    {
+    LossyFlag = true;
+    }
+
   /* Step 8: Release JPEG decompression object */
 
   /* This is an important step since it will release a good deal of memory. */

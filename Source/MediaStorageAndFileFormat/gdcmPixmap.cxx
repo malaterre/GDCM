@@ -240,7 +240,7 @@ unsigned long Pixmap::GetBufferLength() const
   return len;
 }
 
-bool Pixmap::TryRAWCodec(char *buffer) const
+bool Pixmap::TryRAWCodec(char *buffer, bool &lossyflag) const
 {
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
@@ -269,13 +269,14 @@ bool Pixmap::TryRAWCodec(char *buffer) const
       }
     unsigned long check = outbv->GetLength();  // FIXME
     assert( check == len );
-    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    lossyflag = false;
     return r;
     }
   return false;
 }
 
-bool Pixmap::TryJPEGCodec(char *buffer) const
+bool Pixmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
 {
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
@@ -313,7 +314,10 @@ bool Pixmap::TryJPEGCodec(char *buffer) const
     unsigned long check = outbv->GetLength();  // FIXME
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
     assert( len <= outbv->GetLength() );
-    memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+
+    lossyflag = codec.IsLossy();
+    assert( codec.IsLossy() == ts.IsLossy() );
 
     return true;
     }
@@ -361,7 +365,7 @@ bool Pixmap::TryJPEGCodec2(std::ostream &os) const
   return false;
 }
 
-bool Pixmap::TryPVRGCodec(char *buffer) const
+bool Pixmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
 {
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
@@ -383,13 +387,17 @@ bool Pixmap::TryPVRGCodec(char *buffer) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
-    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+
+    lossyflag = codec.IsLossy();
+    assert( codec.IsLossy() == ts.IsLossy() );
+
     return r;
     }
   return false;
 }
    
-bool Pixmap::TryJPEGLSCodec(char *buffer) const
+bool Pixmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
 {
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
@@ -410,13 +418,28 @@ bool Pixmap::TryJPEGLSCodec(char *buffer) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
-    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+
+    lossyflag = codec.IsLossy();
+    assert( codec.IsLossy() == ts.IsLossy() );
+
     return r;
     }
   return false;
 }
 
-bool Pixmap::TryJPEG2000Codec(char *buffer) const
+bool Pixmap::IsLossy() const
+{
+  // FIXME each call is expensive...
+  bool lossyflag;
+  if( this->GetBufferInternal(0, lossyflag) )
+    {
+    return lossyflag;
+    }
+  return false;
+}
+
+bool Pixmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
 {
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
@@ -437,8 +460,9 @@ bool Pixmap::TryJPEG2000Codec(char *buffer) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
-    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
 
+    lossyflag = codec.IsLossy();
     assert( codec.IsLossy() == ts.IsLossy() );
     return r;
     }
@@ -472,7 +496,7 @@ bool Pixmap::TryJPEG2000Codec2(std::ostream &os) const
   return false;
 }
 
-bool Pixmap::TryRLECodec(char *buffer) const
+bool Pixmap::TryRLECodec(char *buffer, bool &lossyflag ) const
 {
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
@@ -494,7 +518,8 @@ bool Pixmap::TryRLECodec(char *buffer) const
     assert( r );
     const ByteValue *outbv = out.GetByteValue();
     //unsigned long check = outbv->GetLength();  // FIXME
-    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    lossyflag = false;
     return true;
     }
   return false;
@@ -503,13 +528,19 @@ bool Pixmap::TryRLECodec(char *buffer) const
 // Acces the raw data
 bool Pixmap::GetBuffer(char *buffer) const
 {
+  bool dummy;
+  return GetBufferInternal(buffer, dummy);
+}
+
+bool Pixmap::GetBufferInternal(char *buffer, bool &lossyflag) const
+{
   bool success = false;
-  if( !success ) success = TryRAWCodec(buffer);
-  if( !success ) success = TryJPEGCodec(buffer);
-  if( !success ) success = TryPVRGCodec(buffer); // AFTER IJG trial !
-  if( !success ) success = TryJPEG2000Codec(buffer);
-  if( !success ) success = TryJPEGLSCodec(buffer);
-  if( !success ) success = TryRLECodec(buffer);
+  if( !success ) success = TryRAWCodec(buffer, lossyflag);
+  if( !success ) success = TryJPEGCodec(buffer, lossyflag);
+  if( !success ) success = TryPVRGCodec(buffer, lossyflag); // AFTER IJG trial !
+  if( !success ) success = TryJPEG2000Codec(buffer, lossyflag);
+  if( !success ) success = TryJPEGLSCodec(buffer, lossyflag);
+  if( !success ) success = TryRLECodec(buffer, lossyflag);
   //if( !success ) success = TryDeltaEncodingCodec(buffer);
   if( !success )
     {

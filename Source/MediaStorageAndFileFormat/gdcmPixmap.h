@@ -127,13 +127,15 @@ public:
 
   virtual bool AreOverlaysInPixelData() const { return false; }
 
+  bool IsLossy() const;
+
 protected:
-  bool TryRAWCodec(char *buffer) const;
-  bool TryJPEGCodec(char *buffer) const;
-  bool TryPVRGCodec(char *buffer) const;
-  bool TryJPEGLSCodec(char *buffer) const;
-  bool TryJPEG2000Codec(char *buffer) const;
-  bool TryRLECodec(char *buffer) const;
+  bool TryRAWCodec(char *buffer, bool &lossyflag) const;
+  bool TryJPEGCodec(char *buffer, bool &lossyflag) const;
+  bool TryPVRGCodec(char *buffer, bool &lossyflag) const;
+  bool TryJPEGLSCodec(char *buffer, bool &lossyflag) const;
+  bool TryJPEG2000Codec(char *buffer, bool &lossyflag) const;
+  bool TryRLECodec(char *buffer, bool &lossyflag) const;
 
   bool TryJPEGCodec2(std::ostream &os) const;
   bool TryJPEG2000Codec2(std::ostream &os) const;
@@ -156,6 +158,9 @@ protected:
   LUTPtr LUT;
   // I believe the following 3 ivars can be derived from TS ...
   bool NeedByteSwap;
+
+private:
+  bool GetBufferInternal(char *buffer, bool &lossyflag) const;
 };
 
 } // end namespace gdcm
