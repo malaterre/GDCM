@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
   gdcm::File &file = reader.GetFile();
   gdcm::DataSet &ds = file.GetDataSet();
 
-  const unsigned int nitems = 100;
-  const unsigned int ptr_len = 4294967296 / nitems;
-  assert( ptr_len == 42949672 );
+  const unsigned int nitems = 1000;
+  const unsigned int ptr_len = 42; /*94967296 / nitems; */
+  //assert( ptr_len == 42949672 );
   char *ptr = new char[ptr_len];
   memset(ptr,0,ptr_len);
 
@@ -49,27 +49,35 @@ int main(int argc, char *argv[])
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
 
-  for(unsigned int idx = 0; idx < nitems; ++idx)
+  const char owner_str[] = "GDCM CONFORMANCE TESTS";
+    gdcm::DataElement owner( gdcm::Tag(0x4d4d, 0x10) );
+    owner.SetByteValue(owner_str, strlen(owner_str));
+    owner.SetVR( gdcm::VR::LO );
+
+  for(unsigned int idx = 0; idx < 10/* nitems*/; ++idx)
     {
     // Create a dataelement
-    gdcm::DataElement de( gdcm::Tag(0x0011, 0x2180) );
+    gdcm::DataElement de( gdcm::Tag(0x4d4d, 0x1002) );
     de.SetByteValue(ptr, ptr_len);
+    de.SetVR( gdcm::VR::OB );
 
     // Create an item
     gdcm::Item it;
     it.SetVLToUndefined();
     gdcm::DataSet &nds = it.GetNestedDataSet();
+    nds.Insert(owner);
     nds.Insert(de);
 
     sq->AddItem(it);
     }
 
   // Insert sequence into data set
-  gdcm::DataElement des( gdcm::Tag(0x0008,0x2112) );
-  //des.SetVR(gdcm.VR(gdcm.VR.SQ))
+  gdcm::DataElement des( gdcm::Tag(0x4d4d,0x1001) );
+  des.SetVR(gdcm::VR::SQ);
   des.SetValue(*sq);
   des.SetVLToUndefined();
   
+  ds.Insert(owner);
   ds.Insert(des);
 
   gdcm::Writer w;

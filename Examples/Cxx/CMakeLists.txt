@@ -28,6 +28,7 @@ SET(EXAMPLES_SRCS
   rle2img
   uid_unique
   PublicDict
+  GenSeqs
 )
 
 FOREACH(example ${EXAMPLES_SRCS})

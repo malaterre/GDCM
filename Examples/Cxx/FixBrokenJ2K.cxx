@@ -32,7 +32,7 @@
  * It's a software from http://rentgenprom.ru/ , shipped with universal digital radiographic units 
  * "ProScan-2000". The Ukrainian manufacturer developed own digital radiographic unit and it is 
  * compatible with software from "ProScan-2000". 
-*/
+ */
 int main(int argc, char *argv[])
 {
   if( argc < 3 )
