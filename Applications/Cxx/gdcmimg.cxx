@@ -120,6 +120,7 @@ void PrintHelp()
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
+  std::cout << "     --endian          Endianess (LSB/MSB)." << std::endl;
   std::cout << "  -d --depth           Depth." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
   std::cout << "  -R --region          Region." << std::endl;
@@ -163,8 +164,10 @@ int main (int argc, char *argv[])
   int seriesuid = 0;
   unsigned int size[2] = {};
   int depth = 0;
+  int endian = 0;
   int bpp = 0;
   std::string sopclass;
+  std::string lsb_msb;
   int sopclassuid = 0;
 
   int verbose = 0;
@@ -192,6 +195,7 @@ int main (int argc, char *argv[])
         {"series-uid", 1, &seriesuid, 1},
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"sop-class-uid", 1, &sopclassuid, 1}, // specific SOP Class UID
+        {"endian", 1, &endian, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -267,6 +271,11 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "sop-class-uid") == 0 );
             sopclass = optarg;
+            }
+          else if( option_index == 10 ) /* endian */
+            {
+            assert( strcmp(s, "endian") == 0 );
+            lsb_msb = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -483,8 +492,22 @@ int main (int argc, char *argv[])
       image.SetPixelFormat( pf );
       gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
       image.SetPhotometricInterpretation( pi );
-      //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
-      image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
+      image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      if( endian )
+        {
+        if( lsb_msb == "LSB" || lsb_msb == "MSB" )
+          {
+          if( lsb_msb == "MSB" )
+            {
+            image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE );
+            }
+          }
+        else
+          {
+          std::cerr << "Unrecognized endian: " << lsb_msb << std::endl;
+          return 1;
+          }
+        }
 
       gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
       pixeldata.SetByteValue( buf, len );
