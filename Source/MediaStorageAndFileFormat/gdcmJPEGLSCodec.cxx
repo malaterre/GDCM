@@ -130,6 +130,7 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   out = in;
   // First thing create a pnm file from the fragment:
   PNMCodec pnm;
+  pnm.SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
   pnm.SetDimensions( this->GetDimensions() );
   char *input  = tempnam(0, "gdcminjpegls");
   char *output = tempnam(0, "gdcmoutjpegls");

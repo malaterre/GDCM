@@ -79,6 +79,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
   os << "\n";
 
   const gdcm::ByteValue *bv = out.GetByteValue();
+  // FIXME: PNM Codec cannot handle encapsulated syntax... sigh
   if(!bv) return false;
   assert(bv);
   bv->WriteBuffer( os );

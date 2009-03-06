@@ -160,6 +160,26 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   // and not the shared one... oh well
   bool b1 = GetDirectionCosinesValueFromSequence(ds, t1, cosines) 
     || GetDirectionCosinesValueFromSequence(ds,t2,cosines);
+  if(!b1)
+    {
+    cosines.resize( 6 );
+    bool b2 = ImageHelper::GetDirectionCosinesFromDataSet(ds, cosines);
+    if( b2 )
+      {
+      gdcmWarningMacro( "Image Orientation (Patient) cannot be stored here!. Continuing" );
+      b1 = b2;
+      }
+    else
+      {
+      gdcmErrorMacro( "Image Orientation (Patient) was not found" );
+      cosines[0] = 1;
+      cosines[1] = 0;
+      cosines[2] = 0;
+      cosines[3] = 0;
+      cosines[4] = 1;
+      cosines[5] = 0;
+      }
+    }
   assert( b1 && cosines.size() == 6 ); // yeah we really need that
 
   const Tag tfgs(0x5200,0x9230);
@@ -456,7 +476,26 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
       assert( dircos.size() == 6 );
       return dircos;
       }
-    abort();
+    else
+      {
+      dircos.resize( 6 );
+      bool b2 = ImageHelper::GetDirectionCosinesFromDataSet(ds, dircos);
+      if( b2 )
+        {
+        gdcmWarningMacro( "Image Orientation (Patient) cannot be stored here!. Continuing" );
+        }
+      else
+        {
+        gdcmErrorMacro( "Image Orientation (Patient) was not found" );
+        dircos[0] = 1;
+        dircos[1] = 0;
+        dircos[2] = 0;
+        dircos[3] = 0;
+        dircos[4] = 1;
+        dircos[5] = 0;
+        }
+      return dircos;
+      }
     }
 
   dircos.resize( 6 );
@@ -494,35 +533,8 @@ bool ImageHelper::GetForcePixelSpacing()
   return ForcePixelSpacing;
 }
 
-std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
+bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<double> & interceptslope)
 {
-  std::vector<double> interceptslope;
-  MediaStorage ms;
-  ms.SetFromFile(f);
-  const DataSet& ds = f.GetDataSet();
-
-  if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
-    {
-    const Tag t1(0x5200,0x9229);
-    const Tag t2(0x5200,0x9230);
-    if( GetInterceptSlopeValueFromSequence(ds,t1, interceptslope) 
-     || GetInterceptSlopeValueFromSequence(ds,t2, interceptslope) )
-      {
-      assert( interceptslope.size() == 2 );
-      return interceptslope;
-      }
-    abort();
-    }
-
-  // else
-  interceptslope.resize( 2 );
-  interceptslope[0] = 0;
-  interceptslope[1] = 1;
-  if( ms == MediaStorage::CTImageStorage || ms == MediaStorage::SecondaryCaptureImageStorage ||
-    ForceRescaleInterceptSlope 
-  )
-    {
     Attribute<0x0028,0x1052> at1;
     bool intercept = ds.FindDataElement(at1.GetTag());
     if( intercept )
@@ -549,6 +561,46 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
           }
         }
       }
+  return true;
+}
+
+std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
+{
+  std::vector<double> interceptslope;
+  MediaStorage ms;
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
+    {
+    const Tag t1(0x5200,0x9229);
+    const Tag t2(0x5200,0x9230);
+    if( GetInterceptSlopeValueFromSequence(ds,t1, interceptslope) 
+     || GetInterceptSlopeValueFromSequence(ds,t2, interceptslope) )
+      {
+      assert( interceptslope.size() == 2 );
+      return interceptslope;
+      }
+    else
+      {
+  interceptslope.resize( 2 );
+  interceptslope[0] = 0;
+  interceptslope[1] = 1;
+      bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
+      return interceptslope;
+      }
+    }
+
+  // else
+  interceptslope.resize( 2 );
+  interceptslope[0] = 0;
+  interceptslope[1] = 1;
+  if( ms == MediaStorage::CTImageStorage || ms == MediaStorage::SecondaryCaptureImageStorage ||
+    ForceRescaleInterceptSlope 
+  )
+    {
+    bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
     }
 
   return interceptslope;
