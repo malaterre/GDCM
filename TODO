@@ -288,3 +288,7 @@ So gdcm::ImageChangeTransferSyntax should let non-image pass
 Prepare a DICOM file with lot of sequence so that 2Gb limit is reached.
 -----------------------------------------------------------------------
 Add support for invalid SC generated from ITK/gdcm 1.2.4
+-----------------------------------------------------------------------
+When converting an Enhanced CT, IOP is moved from root dataset to
+Sharedgroups but original attribute is kept (should be removed)
+same goes for WindowLevel, Rescale ...
