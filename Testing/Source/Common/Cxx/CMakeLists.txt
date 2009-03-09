@@ -14,6 +14,7 @@ SET(Common_TEST_SRCS
   TestSwapCode
   TestSystem
   TestTrace
+  TestTypes
   TestUnpacker12Bits
   )
 
