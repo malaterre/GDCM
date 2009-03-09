@@ -13,7 +13,7 @@
 
 =========================================================================*/
 /* 
- * This example is a little helper to detecte the famous SIEMENS JPEG lossless compressed image
+ * This example is a little helper to detect the famous SIEMENS JPEG lossless compressed image
  * where DICOM is declared as:
  *
  *  (0028,0100) US 16                                                 # 2,1 Bits Allocated
@@ -36,6 +36,10 @@
  *
  * 
  * This case is valid. One simply has to use the 16bits jpeg decoder to decode the 12bits stored image.
+ * This used to be an issue in GDCM 1.2.x (fixed in GDCM 1.2.5)
+ *
+ * The main return 0 (no error) when the file read is actually a potential problem. At the end of the main
+ * function, the jpeg stream is stored in the filename specified as second argument
  */
 
 #include "gdcmImageReader.h"
@@ -64,7 +68,7 @@ int main(int argc, char *argv[])
     }
 
   // The output of gdcm::Reader is a gdcm::File
-  gdcm::File &file = reader.GetFile();
+  const gdcm::File &file = reader.GetFile();
   const gdcm::Image &image = reader.GetImage();
 
   const gdcm::TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
@@ -76,9 +80,9 @@ int main(int argc, char *argv[])
     }
 
   // the dataset is the the set of element we are interested in:
-  gdcm::DataSet &ds = file.GetDataSet();
+  const gdcm::DataSet &ds = file.GetDataSet();
 
-  gdcm::Tag rawTag(0x7fe0, 0x0010); // Default to Pixel Data
+  const gdcm::Tag rawTag(0x7fe0, 0x0010); // Default to Pixel Data
   const gdcm::DataElement& pdde = ds.GetDataElement( rawTag );
   const gdcm::SequenceOfFragments *sf = pdde.GetSequenceOfFragments();
   if( sf )
@@ -108,12 +112,12 @@ int main(int argc, char *argv[])
    || jpeg.GetPixelFormat().GetBitsStored() != image.GetPixelFormat().GetBitsStored() )
     {
     std::cerr << "There is a mismatch in between DICOM declared Pixel Format and Sample Precision used in the JPEG stream" << std::endl;
-    return 1;
+    return 0;
     }
 
   std::cout << jpeg.GetPixelFormat() << std::endl;
   std::cout << image.GetPixelFormat() << std::endl;
 
-  return 0;
+  return 1;
 }
 
