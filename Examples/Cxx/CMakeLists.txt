@@ -29,6 +29,7 @@ SET(EXAMPLES_SRCS
   uid_unique
   PublicDict
   GenSeqs
+  GetJPEGSamplePrecision
 )
 
 FOREACH(example ${EXAMPLES_SRCS})

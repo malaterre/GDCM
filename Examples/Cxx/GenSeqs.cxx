@@ -50,9 +50,9 @@ int main(int argc, char *argv[])
   sq->SetLengthToUndefined();
 
   const char owner_str[] = "GDCM CONFORMANCE TESTS";
-    gdcm::DataElement owner( gdcm::Tag(0x4d4d, 0x10) );
-    owner.SetByteValue(owner_str, strlen(owner_str));
-    owner.SetVR( gdcm::VR::LO );
+  gdcm::DataElement owner( gdcm::Tag(0x4d4d, 0x10) );
+  owner.SetByteValue(owner_str, strlen(owner_str));
+  owner.SetVR( gdcm::VR::LO );
 
   for(unsigned int idx = 0; idx < 10/* nitems*/; ++idx)
     {
@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
 
   gdcm::Writer w;
   w.SetFile( file );
+  //w.SetCheckFileMetaInformation( true );
   w.SetFileName( outfilename );
   if (!w.Write() )
     {
