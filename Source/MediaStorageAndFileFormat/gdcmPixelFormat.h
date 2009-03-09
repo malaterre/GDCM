@@ -131,6 +131,10 @@ public:
   const char *GetScalarTypeAsString() const;
 
   /// return the size of the pixel
+  /// This is the number of words it would take to store one pixel
+  /// \warning the return value takes into account the SamplesPerPixel
+  /// \warning in the rare case when BitsAllocated == 12, the function
+  /// assume word padding and value returned will be identical as if BitsAllocated == 16
   uint8_t GetPixelSize() const;
 
   /// Print
