@@ -17,6 +17,7 @@
 #include "gdcmSystem.h"
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -82,7 +83,16 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
   // FIXME: PNM Codec cannot handle encapsulated syntax... sigh
   if(!bv) return false;
   assert(bv);
-  bv->WriteBuffer( os );
+
+  if( pf.GetBitsAllocated() == 16 )
+    {
+    bv->Write<SwapperDoOp, uint16_t>( os );
+    }
+  else
+    {
+    //bv->Write<SwapperDoOp, uint8_t>( os );
+    bv->WriteBuffer( os );
+    }
 
   os.close();
 
