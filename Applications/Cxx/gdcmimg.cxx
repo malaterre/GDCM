@@ -120,11 +120,12 @@ void PrintHelp()
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "     --endian          Endianess (LSB/MSB)." << std::endl;
-  std::cout << "  -d --depth           Depth." << std::endl;
+  std::cout << "     --endian %s       Endianess (LSB/MSB)." << std::endl;
+  std::cout << "  -d --depth %d        Depth (8/16/32)." << std::endl;
+  std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
-  std::cout << "  -R --region          Region." << std::endl;
-  std::cout << "  -F --fill            Fill." << std::endl;
+  std::cout << "  -R --region %d,%d    Region." << std::endl;
+  std::cout << "  -F --fill %d         Fill with pixel value specified." << std::endl;
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
   std::cout << "  -S --series-uid      Series UID." << std::endl;
@@ -160,12 +161,14 @@ int main (int argc, char *argv[])
   bool b;
   int bregion = 0;
   int fill = 0;
+  int sign = 0;
   int studyuid = 0;
   int seriesuid = 0;
   unsigned int size[2] = {};
   int depth = 0;
   int endian = 0;
   int bpp = 0;
+  int pixelsign = 0;
   std::string sopclass;
   std::string lsb_msb;
   int sopclassuid = 0;
@@ -196,6 +199,7 @@ int main (int argc, char *argv[])
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"sop-class-uid", 1, &sopclassuid, 1}, // specific SOP Class UID
         {"endian", 1, &endian, 1}, // 
+        {"sign", 1, &sign, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -277,6 +281,11 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "endian") == 0 );
             lsb_msb = optarg;
             }
+          else if( option_index == 11 ) /* sign */
+            {
+            assert( strcmp(s, "sign") == 0 );
+            pixelsign = atoi(optarg);
+            }
           //printf (" with arg %s", optarg);
           }
         //printf ("\n");
@@ -297,6 +306,7 @@ int main (int argc, char *argv[])
 
     case 'd': // depth
       bpp = atoi(optarg);
+      depth = 1;
       break;
 
     case 's': // size
@@ -447,6 +457,15 @@ int main (int argc, char *argv[])
     gdcm::Trace::SetWarning( verbose );
     gdcm::Trace::SetError( verbose);
     }
+
+  if( depth )
+    {
+    if( bpp != 8 && bpp != 16 && bpp != 32 ) return 1;
+    }
+  if( sign )
+    {
+    if( pixelsign != 0 && pixelsign != 1 ) return 1;
+    }
  
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
@@ -484,10 +503,17 @@ int main (int argc, char *argv[])
         case 16:
           pf = gdcm::PixelFormat::UINT16;
           break;
+        case 32:
+          pf = gdcm::PixelFormat::UINT32;
+          break;
         default:
           std::cerr << "Invalid depth: << " << bpp << std::endl;
           return 1;
           }
+        }
+      if( sign )
+        {
+        pf.SetPixelRepresentation( pixelsign );
         }
       image.SetPixelFormat( pf );
       gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
