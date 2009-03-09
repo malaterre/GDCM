@@ -303,34 +303,38 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     gdcmErrorMacro( "opj_decode failed" );
     return false;
   }
-/*
-  if( j2k )
-    j2k_dump_cp(stdout, image, j2k->cp);
-  if( jp2 )
-    j2k_dump_cp(stdout, image, jp2->j2k->cp);
-*/
+
+  
   int reversible;
+  opj_j2k_t* j2k = NULL;
+  opj_jp2_t* jp2 = NULL;
+
   switch(parameters.decod_format)
     {
   case J2K_CFMT:
-    {
-    opj_j2k_t* j2k = (opj_j2k_t*)dinfo->j2k_handle;
+    j2k = (opj_j2k_t*)dinfo->j2k_handle;
     assert( j2k );
     reversible = j2k->cp->tcps->tccps->qmfbid;
-    }
     break;
   case JP2_CFMT:
-    {
-    opj_jp2_t* jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+    jp2 = (opj_jp2_t*)dinfo->jp2_handle;
     assert( jp2 );
     reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
-    }
     break;
   default:
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
   LossyFlag = !reversible;
+#if 0
+#ifndef GDCM_USE_SYSTEM_OPENJPEG
+  if( j2k )
+    j2k_dump_cp(stdout, image, j2k->cp);
+  if( jp2 )
+    j2k_dump_cp(stdout, image, jp2->j2k->cp);
+#endif
+#endif
+
 
  // ptr->j2k->cp->tcps->tccps->qmfbid
 
@@ -802,27 +806,35 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     gdcmErrorMacro( "opj_decode failed" );
     return false;
   }
+
   int reversible;
+  opj_j2k_t* j2k = NULL;
+  opj_jp2_t* jp2 = NULL;
+
   switch(parameters.decod_format)
     {
   case J2K_CFMT:
-    {
-    opj_j2k_t* j2k = (opj_j2k_t*)dinfo->j2k_handle;
+    j2k = (opj_j2k_t*)dinfo->j2k_handle;
     assert( j2k );
     reversible = j2k->cp->tcps->tccps->qmfbid;
-    }
     break;
   case JP2_CFMT:
-    {
-    opj_jp2_t* jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+    jp2 = (opj_jp2_t*)dinfo->jp2_handle;
     assert( jp2 );
     reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
-    }
     break;
   default:
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
+#if 0
+#ifndef GDCM_USE_SYSTEM_OPENJPEG
+  if( j2k )
+    j2k_dump_cp(stdout, image, j2k->cp);
+  if( jp2 )
+    j2k_dump_cp(stdout, image, jp2->j2k->cp);
+#endif
+#endif
 
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];

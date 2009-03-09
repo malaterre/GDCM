@@ -463,7 +463,10 @@ bool Pixmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
     if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
 
     lossyflag = codec.IsLossy();
-    assert( codec.IsLossy() == ts.IsLossy() );
+    if( codec.IsLossy() != ts.IsLossy() )
+      {
+      gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
+      }
     return r;
     }
   return false;
