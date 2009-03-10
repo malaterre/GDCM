@@ -141,6 +141,8 @@ unsigned int Testing::GetNumberOfMD5DataImages()
 const char * const * Testing::GetMD5DataImage(unsigned int file)
 {
   if( file < Testing::GetNumberOfMD5DataImages() ) return gdcmMD5DataImages[file];
+  // else return the {0x0, 0x0} sentinel:
+  assert( *gdcmMD5DataImages[ Testing::GetNumberOfMD5DataImages() ] == 0 );
   return gdcmMD5DataImages[ Testing::GetNumberOfMD5DataImages() ];
 }
 
