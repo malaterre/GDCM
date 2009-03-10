@@ -389,9 +389,15 @@ bool UIDs::SetFromUID(const char *str)
     p = uids[i][0];
     }
   //const char * found = uids[i][1];
-  if( p ) TSField = TSType(i);
+  if( p )
+    {
+    TSField = TSType(i);
+    assert( TSField != (TSType)0 );
+    return true;
+    }
 
-  return true;
+  assert( TSField == (TSType)0 );
+  return false;
 }
 
 const char *UIDs::GetName() const
