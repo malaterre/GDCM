@@ -317,7 +317,7 @@ bool Pixmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     lossyflag = codec.IsLossy();
-    assert( codec.IsLossy() == ts.IsLossy() );
+    //assert( codec.IsLossy() == ts.IsLossy() );
 
     return true;
     }
