@@ -609,10 +609,11 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     memcpy(&parameters, &(Internals->coder_param), sizeof(parameters));
 
     if ((parameters.cp_disto_alloc || parameters.cp_fixed_alloc || parameters.cp_fixed_quality)
-      && (!(parameters.cp_disto_alloc ^ parameters.cp_fixed_alloc ^ parameters.cp_fixed_quality))) {
-      fprintf(stderr, "Error: options -r -q and -f cannot be used together !!\n");
+      && (!(parameters.cp_disto_alloc ^ parameters.cp_fixed_alloc ^ parameters.cp_fixed_quality)))
+      {
+      gdcmErrorMacro( "Error: options -r -q and -f cannot be used together." );
       return false;
-    }				/* mod fixed_quality */
+      }				/* mod fixed_quality */
 
     /* if no rate entered, lossless by default */
     if (parameters.tcp_numlayers == 0) 

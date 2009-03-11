@@ -326,7 +326,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   // If 16bits, need to do the padded composite...
   char *buffer = 0;
-  // if rgb (3 comp) need to the planar configuratio
+  // if rgb (3 comp) need to the planar configuration
   char *bufferrgb = 0;
   if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
