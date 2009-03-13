@@ -149,8 +149,11 @@ int main(int argc, char *argv [])
   // oh well this is just an example
   // use gdcm::Anonymizer::RemovePrivateTags if needed...
   writer.GetFile().GetDataSet().Remove( compressionpixeldata.GetTag() );
-
-  std::string outfilename = "outrle.dcm";
+  std::string outfilename;
+  if (argc > 2)
+     outfilename = argv[2];
+  else
+     outfilename = "outrle.dcm";
   writer.SetFileName( outfilename.c_str() );
   if( !writer.Write() )
     {
@@ -158,7 +161,7 @@ int main(int argc, char *argv [])
     return 1;
     }
 
-  std::cout << "sucess !" << std::endl;
+  std::cout << "success !" << std::endl;
 
   return 0;
 }

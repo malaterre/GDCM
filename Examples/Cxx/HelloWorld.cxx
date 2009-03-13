@@ -41,6 +41,10 @@ int main(int argc, char *argv[])
     return 1;
     }
 
+  // If we reach here, we know for sure 12 thing:
+  //  It is a valid DICOM
+  // (Maybe, it's NOT a Dicom image -could be a DICOMDIR, a RTSTRUCT, etc-)
+
   // The output of gdcm::Reader is a gdcm::File
   gdcm::File &file = reader.GetFile();
 
