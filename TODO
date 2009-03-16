@@ -296,3 +296,6 @@ Sharedgroups but original attribute is kept (should be removed)
 same goes for WindowLevel, Rescale ...
 -----------------------------------------------------------------------
 Make gdcmconv operate on gdcm::Pixmap and not gdcm::Image
+-----------------------------------------------------------------------
+old SC and numberOfFrames > 1:
+ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm
