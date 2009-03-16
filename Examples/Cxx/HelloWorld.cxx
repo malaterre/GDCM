@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  // If we reach here, we know for sure 12 thing:
-  //  It is a valid DICOM
+  // If we reach here, we know for sure only 1 thing:
+  // It is a valid DICOM file (potentially an old ACR-NEMA 1.0/2.0 file)
   // (Maybe, it's NOT a Dicom image -could be a DICOMDIR, a RTSTRUCT, etc-)
 
   // The output of gdcm::Reader is a gdcm::File
