@@ -659,14 +659,15 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     if( jerr.pub.num_warnings )
       {
       // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
-      if ( jerr.pub.msg_code == 128 )
+      if ( jerr.pub.msg_code == JWRN_MUST_DOWNSCALE )
         {
         // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
         // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
         // MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
         // LJPEG_BuginGDCM12.dcm
-        gdcmErrorMacro( "128 hack" );
+        gdcmDebugMacro( "JWRN_MUST_DOWNSCALE" );
         this->BitSample = jerr.pub.msg_parm.i[0];
+        assert( cinfo.data_precision == this->BitSample );
         jpeg_destroy_decompress(&cinfo);
         return false;
         }

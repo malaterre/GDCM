@@ -58,7 +58,7 @@ public:
   static bool IsRetired(PIType pi);
 
   /// return the value for Sample Per Pixel associated with a particular Photometric Interpretation
-  unsigned short GetSamplesPerPixel();
+  unsigned short GetSamplesPerPixel() const;
 
   // TODO
   // not all PhotometricInterpretation are allowed for compressed Transfer 

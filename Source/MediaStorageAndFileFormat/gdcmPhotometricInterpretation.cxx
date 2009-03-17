@@ -94,7 +94,7 @@ bool PhotometricInterpretation::IsRetired(PIType pi)
   return pi == HSV || pi == ARGB || pi == CMYK;
 }
 
-unsigned short PhotometricInterpretation::GetSamplesPerPixel()
+unsigned short PhotometricInterpretation::GetSamplesPerPixel() const
 {
   if ( PIField == UNKNOW ) return 0;
   else if( PIField == MONOCHROME1

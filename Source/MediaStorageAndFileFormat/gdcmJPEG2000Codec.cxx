@@ -304,6 +304,25 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     return false;
   }
 
+#if 0
+  if( image->color_space )
+    {
+    if( image->color_space == CLRSPC_GRAY )
+      {
+      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 
+        || this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+        || this->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR );
+      }
+    else if( image->color_space == CLRSPC_SRGB )
+      {
+      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
+      }
+    else
+      {
+      abort();
+      }
+    }
+#endif
   
   int reversible;
   opj_j2k_t* j2k = NULL;
@@ -335,6 +354,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 #endif
 #endif
 
+  assert( image->numcomps == this->GetPixelFormat().GetSamplesPerPixel() );
+  assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
+
 
  // ptr->j2k->cp->tcps->tccps->qmfbid
 
@@ -360,6 +382,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     //int h = image.comps[compno].h;
     int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
     //assert(  wr * hr * 1 * image->numcomps * (comp->prec/8) == len );
+
+    assert( wr == Dimensions[0] );
+    assert( hr == Dimensions[1] );
 
     if (comp->prec <= 8)
       {
@@ -471,6 +496,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     {
     numcomps = 3;
     color_space = CLRSPC_SRGB;
+    /* Does OpenJPEg support: CLRSPC_SYCC ?? */
     }
   if( bitsallocated % 8 != 0 )
     {
