@@ -632,6 +632,10 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "dae9d2e2b412646fd0a0f31dc2d17aa4" , "BugGDCM2_UndefItemWrongVL.dcm" },
 
 
+{ "62687f0a17e9c4153f18b55c8abfcef3" , "SIEMENS_CSA2.dcm" },
+{ "37647008dc1c94096f4e996b409b9d30" , "MAROTECH_CT_JP2Lossy.dcm" },
+{ "8b5e38699887158c3defd47900a68fc5" , "ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm" },
+
 
 
 
