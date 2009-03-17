@@ -26,15 +26,15 @@ static const char *PIStrings[] = {
   "MONOCHROME2 ",
   "PALETTE COLOR ",
   "RGB ",
-  "HSV",
+  "HSV ",
   "ARGB",
   "CMYK",
   "YBR_FULL",
   "YBR_FULL_422",
-  "YBR_PARTIAL_422",
-  "YBR_PARTIAL_420",
-  "YBR_ICT",
-  "YBR_RCT",
+  "YBR_PARTIAL_422 ",
+  "YBR_PARTIAL_420 ",
+  "YBR_ICT ",
+  "YBR_RCT ",
   0
 };
 

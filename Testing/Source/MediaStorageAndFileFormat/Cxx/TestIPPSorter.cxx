@@ -16,6 +16,7 @@
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
+#include "gdcmTrace.h"
 
 int TestIPPSorter(int argc, char *argv[])
 {
@@ -23,6 +24,7 @@ int TestIPPSorter(int argc, char *argv[])
   std::vector<std::string> filenames;
   if( argc == 2 )
     {
+    gdcm::Trace::DebugOn();
     directory = argv[1];
     if( gdcm::System::FileIsDirectory( directory ) )
       {

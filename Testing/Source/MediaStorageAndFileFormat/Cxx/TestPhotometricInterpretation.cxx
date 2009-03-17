@@ -14,8 +14,20 @@
 =========================================================================*/
 #include "gdcmPhotometricInterpretation.h"
 
+#include <string.h> // strlen
+
 int TestPhotometricInterpretation(int, char *[])
 {
   gdcm::PhotometricInterpretation pi;
+  int end = gdcm::PhotometricInterpretation::PI_END;
+  for( int i = 0; i < end; ++i)
+    {
+    const char *pistr = gdcm::PhotometricInterpretation::GetPIString( (gdcm::PhotometricInterpretation::PIType)i );
+    if( strlen( pistr ) % 2 )
+      {
+      std::cerr << pistr << std::endl;
+      return 1;
+      }
+    }
   return 0;
 }
