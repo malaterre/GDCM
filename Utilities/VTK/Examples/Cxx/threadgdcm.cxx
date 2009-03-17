@@ -94,6 +94,8 @@ void ShowFilenames(const threadparams &params)
 
 void ReadFiles(unsigned int nfiles, const char *filenames[])
 {
+  // \precondition: nfiles > 0
+  assert( nfiles > 0 );
   const char *reference= filenames[0]; // take the first image as reference
 
   gdcm::ImageReader reader;
@@ -109,6 +111,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   unsigned long len = image.GetBufferLength();
   const unsigned int *dims = image.GetDimensions();
   unsigned short pixelsize = pixeltype.GetPixelSize();
+  assert( image.GetNumberOfDimensions() == 2 );
 
   vtkImageData *output = vtkImageData::New();
   output->SetDimensions(dims[0], dims[1], nfiles);
