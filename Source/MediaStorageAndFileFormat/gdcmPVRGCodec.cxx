@@ -141,6 +141,9 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   free(input);
   free(output);
 
+  // FIXME:
+  LossyFlag = true;
+
   //return ImageCodec::Decode(in,out);
   return true;
 #endif

@@ -94,19 +94,20 @@ bool PhotometricInterpretation::IsRetired(PIType pi)
   return pi == HSV || pi == ARGB || pi == CMYK;
 }
 
-int PhotometricInterpretation::GetSamplesPerPixel()
+unsigned short PhotometricInterpretation::GetSamplesPerPixel()
 {
-  if( PIField == MONOCHROME1
-   || PIField == MONOCHROME2 )
+  if ( PIField == UNKNOW ) return 0;
+  else if( PIField == MONOCHROME1
+   || PIField == MONOCHROME2 
+   || PIField == PALETTE_COLOR )
     {
     return 1;
     }
   else
     {
-    assert( PIField != UNKNOW );
     assert( PIField != PI_END );
-    assert( PIField == PALETTE_COLOR
-         || PIField == RGB
+    assert( //PIField == PALETTE_COLOR
+            PIField == RGB
          || PIField == HSV
          || PIField == ARGB
          || PIField == CMYK

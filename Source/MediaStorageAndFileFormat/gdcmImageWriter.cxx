@@ -263,7 +263,7 @@ bool ImageWriter::Write()
   PhotometricInterpretation pi = PixelData->GetPhotometricInterpretation();
   if( pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel() )
     {
-    gdcmWarningMacro( "Photometric Interpreation and Pixel format are not compatible" );
+    gdcmWarningMacro( "Photometric Interpretation and Pixel format are not compatible: " << pi.GetSamplesPerPixel() << " vs " << pf.GetSamplesPerPixel() );
     return false;
     }
 

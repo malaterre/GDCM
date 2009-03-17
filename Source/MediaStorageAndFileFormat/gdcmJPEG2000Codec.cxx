@@ -363,7 +363,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
     if (comp->prec <= 8)
       {
-      assert( comp->prec == 8 && comp->prec == PF.GetBitsAllocated() );
+      //assert( comp->prec <= 8 && comp->prec == PF.GetBitsAllocated() );
+      assert( comp->prec <= 8 && comp->prec == PF.GetBitsStored() );
+      assert( comp->sgnd == PF.GetPixelRepresentation() );
       uint8_t *data8 = (uint8_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
@@ -374,6 +376,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     else if (comp->prec <= 16)
       {
+      assert( comp->prec <= 16 && comp->prec == PF.GetBitsStored());
+      assert( comp->sgnd == PF.GetPixelRepresentation() );
       // ELSCINT1_JP2vsJ2K.dcm is a 12bits image
       //assert( comp->prec == 16 && comp->prec == PF.GetBitsAllocated());
       uint16_t *data16 = (uint16_t*)raw + compno;
@@ -386,7 +390,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     else
       {
-      assert( comp->prec == 32 && comp->prec == PF.GetBitsAllocated());
+      assert( comp->prec <= 32 && comp->prec == PF.GetBitsStored());
+      assert( comp->sgnd == PF.GetPixelRepresentation() );
       uint32_t *data32 = (uint32_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
