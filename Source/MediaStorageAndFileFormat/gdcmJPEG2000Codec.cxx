@@ -452,7 +452,7 @@ void rawtoimage_fill(T *inputbuffer, int w, int h, int numcomps, opj_image_t *im
 
 opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   int fragment_size, int image_width, int image_height, int sample_pixel,
-  int bitsallocated, int sign, int quality, int pc)
+  int bitsallocated, int bitsstored, int sign, int quality, int pc)
 {
   (void)quality;
   int w, h;
@@ -490,7 +490,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   memset(&cmptparm[0], 0, 3 * sizeof(opj_image_cmptparm_t));
   //assert( bitsallocated == 8 );
   for(int i = 0; i < numcomps; i++) {
-    cmptparm[i].prec = bitsallocated;
+    cmptparm[i].prec = bitsstored;
     cmptparm[i].bpp = bitsallocated;
     cmptparm[i].sgnd = sign;
     cmptparm[i].dx = subsampling_dx;
@@ -585,6 +585,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     const PixelFormat &pf = this->GetPixelFormat();
     int sample_pixel = pf.GetSamplesPerPixel();
     int bitsallocated = pf.GetBitsAllocated();
+    int bitsstored = pf.GetBitsStored();
     int sign = pf.GetPixelRepresentation();
     int quality = 100;
 
@@ -643,7 +644,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     image = rawtoimage((char*)inputdata, &parameters, 
       static_cast<int>( inputlength ), 
       image_width, image_height,
-      sample_pixel, bitsallocated, sign, quality, this->GetPlanarConfiguration() );
+      sample_pixel, bitsallocated, bitsstored, sign, quality, this->GetPlanarConfiguration() );
     if (!image) {
       return false;
     }
