@@ -171,6 +171,7 @@ public:
 
   // Description:
   // Return VTK_LUMINANCE, VTK_RGB, VTK_LOOKUP_TABLE or VTK_YBR, VTK_RGB_PLANES
+  // or 0 when ImageFormat is not handled.
   vtkGetMacro(ImageFormat,int);
 
   // Description:

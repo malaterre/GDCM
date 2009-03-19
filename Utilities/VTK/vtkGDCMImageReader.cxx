@@ -705,6 +705,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     r.SetPixelFormat( pixeltype );
     outputpt = r.ComputeInterceptSlopePixelType();
     assert( pixeltype <= outputpt );
+    assert( pixeltype.GetSamplesPerPixel() == 1 && image.GetPhotometricInterpretation().GetSamplesPerPixel() == 1 );
+    assert( image.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::PALETTE_COLOR );
     }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
   //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
@@ -1127,9 +1129,9 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     // HSV / ARGB / CMYK ???
     // let's just give up for now
     vtkErrorMacro( "Does not handle: " << image.GetPhotometricInterpretation().GetString() );
-    return 0;
+    //return 0;
     }
-  assert( this->ImageFormat );
+  //assert( this->ImageFormat );
 
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );

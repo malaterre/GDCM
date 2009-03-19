@@ -63,6 +63,7 @@ void PrintHelp()
   std::cout << "     --force-rescale    force rescale." << std::endl;
   std::cout << "     --force-spacing    force spacing." << std::endl;
   std::cout << "     --palette-color    when supported generate a PALETTE COLOR file." << std::endl;
+  std::cout << "     --argb             when supported generate a ARGB file." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
   int forcerescale = 0;
   int forcespacing = 0;
   int palettecolor = 0;
+  int argb = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -96,6 +98,7 @@ int main(int argc, char *argv[])
         {"force-rescale", 0, &forcerescale, 1},
         {"force-spacing", 0, &forcespacing, 1},
         {"palette-color", 0, &palettecolor, 1},
+        {"argb", 0, &argb, 1},
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -252,7 +255,7 @@ int main(int argc, char *argv[])
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
   writer->SetFileName( outfilename );
 
-  if( imgreader && imgreader->GetOutput()->GetNumberOfScalarComponents() == 4 )
+  if( imgreader && imgreader->GetOutput()->GetNumberOfScalarComponents() == 4 && !argb )
     {
     std::cerr << "alpha channel will be lost" << std::endl;
     vtkImageExtractComponents *extract = vtkImageExtractComponents::New();
@@ -289,7 +292,11 @@ int main(int argc, char *argv[])
       writer->SetShift( reader->GetShift() );
       writer->SetScale( reader->GetScale() );
       writer->SetImageFormat( reader->GetImageFormat() );
-      reader->GetMedicalImageProperties()->Print( std::cout );
+      if( verbose )
+        {
+        reader->GetOutput()->Print( std::cout );
+        reader->GetMedicalImageProperties()->Print( std::cout );
+        }
       }
     else if( vtkBMPReader * reader = vtkBMPReader::SafeDownCast(imgreader) )
       {

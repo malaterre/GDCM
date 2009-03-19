@@ -580,8 +580,14 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       }
     else if( data->GetNumberOfScalarComponents() == 3 )
       {
+      // It could well be YBR ... oh well
       pi = gdcm::PhotometricInterpretation::RGB;
       // (0028,0006) US 0                                        #   2, 1 PlanarConfiguration
+      }
+    else if( data->GetNumberOfScalarComponents() == 4 )
+      {
+      // It could well be CMYK ... oh well
+      pi = gdcm::PhotometricInterpretation::ARGB;
       }
     else
       {
