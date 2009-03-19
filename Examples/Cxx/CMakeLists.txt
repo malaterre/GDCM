@@ -13,6 +13,8 @@ INCLUDE_DIRECTORIES(
 
 SET(EXAMPLES_SRCS
   CheckBigEndianBug
+  CreateARGBImage
+  CreateCMYKImage
   CompressImage
   FixBrokenJ2K
   GenFakeImage
