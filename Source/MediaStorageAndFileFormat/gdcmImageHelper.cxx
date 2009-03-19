@@ -42,7 +42,7 @@
 namespace gdcm
 {
 
-bool ImageHelper::ForceRescaleInterceptSlope = true;
+bool ImageHelper::ForceRescaleInterceptSlope = false;
 bool ImageHelper::ForcePixelSpacing = false;
 
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)

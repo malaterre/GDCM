@@ -748,6 +748,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::FLOAT32:
     this->DataScalarType = VTK_FLOAT;
     break;
+  case gdcm::PixelFormat::FLOAT64:
+    this->DataScalarType = VTK_DOUBLE;
+    break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
     return 0;
