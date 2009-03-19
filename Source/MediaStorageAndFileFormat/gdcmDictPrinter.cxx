@@ -66,6 +66,7 @@ VM GuessVMType(DataElement const &de)
       break;
     case VR::DA: case VR::TM: case VR::LT:
     case VR::SH: case VR::UI: case VR::LO: case VR::ST:
+    case VR::UT:
       vm = VM::VM1;
       break;
     case VR::PN:
