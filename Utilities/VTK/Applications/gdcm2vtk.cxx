@@ -62,6 +62,7 @@ void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "     --force-rescale    force rescale." << std::endl;
   std::cout << "     --force-spacing    force spacing." << std::endl;
+  std::cout << "     --palette-color    when supported generated a PALETTE COLOR file." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -79,6 +80,7 @@ int main(int argc, char *argv[])
   std::vector<std::string> filenames;
   int forcerescale = 0;
   int forcespacing = 0;
+  int palettecolor = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -93,6 +95,7 @@ int main(int argc, char *argv[])
     static struct option long_options[] = {
         {"force-rescale", 0, &forcerescale, 1},
         {"force-spacing", 0, &forcespacing, 1},
+        {"palette-color", 0, &palettecolor, 1},
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -290,11 +293,15 @@ int main(int argc, char *argv[])
       }
     else if( vtkBMPReader * reader = vtkBMPReader::SafeDownCast(imgreader) )
       {
-      reader->Allow8BitBMPOn( );
+      if( palettecolor )
+        reader->Allow8BitBMPOn( );
       reader->Update( );
       //reader->GetLookupTable()->Print( std::cout );
-      reader->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader->GetLookupTable() );
-      writer->SetImageFormat( VTK_LOOKUP_TABLE );
+      if( palettecolor )
+        {
+        reader->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader->GetLookupTable() );
+        writer->SetImageFormat( VTK_LOOKUP_TABLE );
+        }
       }
     else if( vtkGESignaReader * reader = vtkGESignaReader::SafeDownCast(imgreader) )
       {
