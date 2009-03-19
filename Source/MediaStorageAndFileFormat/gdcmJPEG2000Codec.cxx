@@ -358,20 +358,12 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
 
 
- // ptr->j2k->cp->tcps->tccps->qmfbid
-
-
-//abort();
-
   /* close the byte stream */
   opj_cio_close(cio);
 
-  //raw = (char*)src;
   // Copy buffer
-    char *raw = NULL;
-  //assert(image->prec % 8 == 0);
-  unsigned long len = Dimensions[0]*Dimensions[1] /* *Dimensions[2]*/ * (PF.GetBitsAllocated() / 8) * image->numcomps;
-  raw = new char[len];
+  unsigned long len = Dimensions[0]*Dimensions[1] * (PF.GetBitsAllocated() / 8) * image->numcomps;
+  char *raw = new char[len];
   for (int compno = 0; compno < image->numcomps; compno++)
     {
     opj_image_comp_t *comp = &image->comps[compno];
@@ -383,14 +375,21 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
     //assert(  wr * hr * 1 * image->numcomps * (comp->prec/8) == len );
 
-    assert( wr == Dimensions[0] );
-    assert( hr == Dimensions[1] );
+    // ELSCINT1_JP2vsJ2K.dcm
+    // -> prec = 12, bpp = 0, sgnd = 0
+    //assert( wr == Dimensions[0] );
+    //assert( hr == Dimensions[1] );
+    if( comp->bpp == PF.GetBitsAllocated() )
+      {
+      gdcmWarningMacro( "BPP = " << comp->bpp << " vs BitsAllocated = " << PF.GetBitsAllocated() );
+      }
+    assert( comp->sgnd == PF.GetPixelRepresentation() );
+    assert( comp->prec == PF.GetBitsStored());
+    assert( comp->prec - 1 == PF.GetHighBit());
+    assert( comp->prec <= 32 );
 
     if (comp->prec <= 8)
       {
-      //assert( comp->prec <= 8 && comp->prec == PF.GetBitsAllocated() );
-      assert( comp->prec <= 8 && comp->prec == PF.GetBitsStored() );
-      assert( comp->sgnd == PF.GetPixelRepresentation() );
       uint8_t *data8 = (uint8_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
@@ -401,10 +400,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     else if (comp->prec <= 16)
       {
-      assert( comp->prec <= 16 && comp->prec == PF.GetBitsStored());
-      assert( comp->sgnd == PF.GetPixelRepresentation() );
       // ELSCINT1_JP2vsJ2K.dcm is a 12bits image
-      //assert( comp->prec == 16 && comp->prec == PF.GetBitsAllocated());
       uint16_t *data16 = (uint16_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
@@ -415,8 +411,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     else
       {
-      assert( comp->prec <= 32 && comp->prec == PF.GetBitsStored());
-      assert( comp->sgnd == PF.GetPixelRepresentation() );
       uint32_t *data32 = (uint32_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
@@ -425,14 +419,11 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
         data32 += image->numcomps;
         }
       }
-    //free(image.comps[compno].data);
     }
-    os.write(raw, len );
-    delete[] raw;
+  os.write(raw, len );
+  delete[] raw;
   /* free the memory containing the code-stream */
   delete[] src;  //FIXME
-
-
 
   /* free remaining structures */
   if(dinfo) {
@@ -574,7 +565,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     }
   else
     {
-    abort();
+    return NULL;
     }
 
   return image;
@@ -872,76 +863,125 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
 
-    this->Dimensions[0] = comp->w;
-    this->Dimensions[1] = comp->h;
+  if( image->numcomps == 3 )
+    {
+    opj_image_comp_t *comp1 = &image->comps[1];
+    opj_image_comp_t *comp2 = &image->comps[2];
+    bool invalid = false;
+    if( comp->bpp  != comp1->bpp  ) invalid = true;
+    if( comp->bpp  != comp2->bpp  ) invalid = true;
+    if( comp->prec != comp1->prec ) invalid = true;
+    if( comp->prec != comp2->prec ) invalid = true;
+    if( comp->sgnd != comp1->sgnd ) invalid = true;
+    if( comp->sgnd != comp2->sgnd ) invalid = true;
+    if( invalid )
+      {
+      gdcmErrorMacro( "Invalid test failed" );
+      return false;
+      }
+    }
 
-    if( comp->prec <= 8 )
-      {
-      this->PF = PixelFormat( PixelFormat::UINT8 );
-      }
-    else if( comp->prec <= 16 )
-      {
-      this->PF = PixelFormat( PixelFormat::UINT16 );
-      }
-    else if( comp->prec <= 32 )
-      {
-      this->PF = PixelFormat( PixelFormat::UINT32 );
-      }
-    else
-      {
-      abort();
-      }
-    this->PF.SetBitsStored( comp->prec );
-    this->PF.SetHighBit( comp->prec - 1 );
-    this->PF.SetPixelRepresentation( comp->sgnd );
+  this->Dimensions[0] = comp->w;
+  this->Dimensions[1] = comp->h;
 
-    if( image->numcomps == 1 )
+  if( comp->prec <= 8 )
+    {
+    if( comp->bpp ) assert( comp->bpp == 8 );
+    this->PF = PixelFormat( PixelFormat::UINT8 );
+    }
+  else if( comp->prec <= 16 )
+    {
+    if( comp->bpp ) assert( comp->bpp == 16 );
+    this->PF = PixelFormat( PixelFormat::UINT16 );
+    }
+  else if( comp->prec <= 32 )
+    {
+    if( comp->bpp ) assert( comp->bpp == 32 );
+    this->PF = PixelFormat( PixelFormat::UINT32 );
+    }
+  else
+    {
+    gdcmErrorMacro( "do not handle precision: " << comp->prec );
+    return false;
+    }
+  this->PF.SetBitsStored( comp->prec );
+  this->PF.SetHighBit( comp->prec - 1 );
+  this->PF.SetPixelRepresentation( comp->sgnd );
+
+  if( image->numcomps == 1 )
+    {
+    assert( image->color_space == 0 );
+    PI = PhotometricInterpretation::MONOCHROME2;
+    this->PF.SetSamplesPerPixel( 1 );
+    }
+  else if( image->numcomps == 3 )
+    {
+    assert( image->color_space == 0 );
+    //PI = PhotometricInterpretation::RGB;
+    /*
+    8.2.4 JPEG 2000 IMAGE COMPRESSION
+    The JPEG 2000 bit stream specifies whether or not a reversible or irreversible multi-component (color)
+    transformation, if any, has been applied. If no multi-component transformation has been applied, then the
+    components shall correspond to those specified by the DICOM Attribute Photometric Interpretation
+    (0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation has been applied then
+    the DICOM Attribute Photometric Interpretation (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1
+    irreversible multi-component transformation has been applied then the DICOM Attribute Photometric
+    Interpretation (0028,0004) shall be YBR_ICT.
+    Notes: 1. For example, single component may be present, and the Photometric Interpretation (0028,0004) may
+    be MONOCHROME2.
+    2. Though it would be unusual, would not take advantage of correlation between the red, green and blue
+    components, and would not achieve effective compression, a Photometric Interpretation of RGB could
+    be specified as long as no multi-component transformation was specified by the JPEG 2000 bit stream.
+    3. Despite the application of a multi-component color transformation and its reflection in the Photometric
+    Interpretation attribute, the ¿color space¿ remains undefined. There is currently no means of conveying
+    ¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC profiles. Note in particular that
+    the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated in DICOM.
+     */
+    PI = PhotometricInterpretation::YBR_RCT;
+    this->PF.SetSamplesPerPixel( 3 );
+    }
+  else if( image->numcomps == 4 )
+    {
+    /* Yes this is legal */
+    // http://www.crc.ricoh.com/~gormish/jpeg2000conformance/
+    // jpeg2000testimages/Part4TestStreams/codestreams_profile0/p0_06.j2k
+    gdcmErrorMacro( "Image is 4 components which is not supported anymore in DICOM (ARGB is retired)" );
+    // TODO: How about I get the 3 comps and set the alpha plane in the overlay ?
+    return false;
+    }
+  else
+    {
+    // jpeg2000testimages/Part4TestStreams/codestreams_profile0/p0_13.j2k
+    gdcmErrorMacro( "Image is " << image->numcomps << " components which is not supported in DICOM" );
+    return false;
+    }
+
+  assert( PI != PhotometricInterpretation::UNKNOW );
+
+  if( reversible )
+    {
+    ts = TransferSyntax::JPEG2000Lossless;
+    }
+  else
+    {
+    ts = TransferSyntax::JPEG2000;
+    if( PI == PhotometricInterpretation::YBR_RCT )
       {
-      assert( image->color_space == 0 );
-      PI = PhotometricInterpretation::MONOCHROME2;
-      this->PF.SetSamplesPerPixel( 1 );
+      // FIXME ???
+      PI = PhotometricInterpretation::YBR_ICT;
       }
-    else if( image->numcomps == 3 )
-      {
-      assert( image->color_space == 0 );
-      //PI = PhotometricInterpretation::RGB;
-/*
-8.2.4 JPEG 2000 IMAGE COMPRESSION
-The JPEG 2000 bit stream specifies whether or not a reversible or irreversible multi-component (color)
-transformation, if any, has been applied. If no multi-component transformation has been applied, then the
-components shall correspond to those specified by the DICOM Attribute Photometric Interpretation
-(0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation has been applied then
-the DICOM Attribute Photometric Interpretation (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1
-irreversible multi-component transformation has been applied then the DICOM Attribute Photometric
-Interpretation (0028,0004) shall be YBR_ICT.
-Notes: 1. For example, single component may be present, and the Photometric Interpretation (0028,0004) may
-be MONOCHROME2.
-PS 3.5-2008
-Page 51
-- Standard -
-2. Though it would be unusual, would not take advantage of correlation between the red, green and blue
-components, and would not achieve effective compression, a Photometric Interpretation of RGB could
-be specified as long as no multi-component transformation was specified by the JPEG 2000 bit stream.
-3. Despite the application of a multi-component color transformation and its reflection in the Photometric
-Interpretation attribute, the ¿color space¿ remains undefined. There is currently no means of conveying
-¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC profiles. Note in particular that
-the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated in DICOM.
-*/
-      PI = PhotometricInterpretation::YBR_RCT;
-      this->PF.SetSamplesPerPixel( 3 );
-      }
-    else
-      {
-      abort();
-      }
-    if( reversible )
-      {
-      ts = TransferSyntax::JPEG2000Lossless;
-      }
-    else
-      {
-      ts = TransferSyntax::JPEG2000;
-      }
+    }
+
+  //assert( ts.IsLossy() == this->GetPhotometricInterpretation().IsLossy() );
+  //assert( ts.IsLossless() == this->GetPhotometricInterpretation().IsLossless() );
+  if( this->GetPhotometricInterpretation().IsLossy() )
+    {
+    assert( ts.IsLossy() );
+    }
+  if( ts.IsLossless() && !ts.IsLossy() )
+    {
+    assert( this->GetPhotometricInterpretation().IsLossless() );
+    }
 
   /* close the byte stream */
   opj_cio_close(cio);

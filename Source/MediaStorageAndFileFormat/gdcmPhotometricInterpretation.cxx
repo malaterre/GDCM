@@ -19,6 +19,24 @@
 
 namespace gdcm
 {
+/*
+ * HSV/ARGB/CMYK can still be found in PS 3.3 - 2000:
+ * 
+ * HSV = Pixel data represent a color image described by hue, saturation, and value image planes.
+ * The minimum sample value for each HSV plane represents a minimum value of each vector. This
+ * value may be used only when Samples per Pixel (0028,0002) has a value of 3.
+ *
+ * ARGB = Pixel data represent a color image described by red, green, blue, and alpha image planes.
+ * The minimum sample value for each RGB plane represents minimum intensity of the color. The
+ * alpha plane is passed through Palette Color Lookup Tables. If the alpha pixel value is greater than
+ * 0, the red, green, and blue lookup table values override the red, green, and blue, pixel plane colors.
+ * This value may be used only when Samples per Pixel (0028,0002) has a value of 4.
+ *
+ * CMYK = Pixel data represent a color image described by cyan, magenta, yellow, and black image
+ * planes. The minimum sample value for each CMYK plane represents a minimum intensity of the
+ * color. This value may be used only when Samples per Pixel (0028,0002) has a value of 4.
+ *
+ */
 
 static const char *PIStrings[] = {
   "UNKNOW",
@@ -103,14 +121,18 @@ unsigned short PhotometricInterpretation::GetSamplesPerPixel() const
     {
     return 1;
     }
+  else if( PIField == ARGB || PIField == CMYK )
+    {
+    return 4;
+    }
   else
     {
     assert( PIField != PI_END );
     assert( //PIField == PALETTE_COLOR
             PIField == RGB
          || PIField == HSV
-         || PIField == ARGB
-         || PIField == CMYK
+         //|| PIField == ARGB
+         //|| PIField == CMYK
          || PIField == YBR_FULL
          || PIField == YBR_FULL_422
          || PIField == YBR_PARTIAL_422
@@ -122,14 +144,51 @@ unsigned short PhotometricInterpretation::GetSamplesPerPixel() const
     }
 }
 
+bool PhotometricInterpretation::IsLossy() const
+{
+  return !IsLossless();
+}
+
+bool PhotometricInterpretation::IsLossless() const
+{
+  switch ( PIField )
+    {
+  case MONOCHROME1:
+  case MONOCHROME2:
+  case PALETTE_COLOR:
+  case RGB:
+  case HSV:
+  case ARGB:
+  case CMYK:
+  case YBR_FULL:
+  case YBR_RCT:
+    return true;
+    break;
+  case YBR_FULL_422:
+  case YBR_PARTIAL_422:
+  case YBR_PARTIAL_420:
+  case YBR_ICT:
+    return false;
+    break;
+    }
+
+  assert( 0 ); // technically one should not reach here, unless UNKNOW ...
+  return false;
+}
+
+const char *PhotometricInterpretation::GetString() const
+{
+  return PhotometricInterpretation::GetPIString( PIField );
+}
+
 bool PhotometricInterpretation::IsSameColorSpace( PhotometricInterpretation const &pi ) const
 {
   if( PIField == pi ) return true;
 
   // else
-  if( PIField == PhotometricInterpretation::RGB
-   || PIField == PhotometricInterpretation::YBR_RCT
-   || PIField == PhotometricInterpretation::YBR_ICT )
+  if( PIField == RGB
+   || PIField == YBR_RCT
+   || PIField == YBR_ICT )
     {
     if( pi == RGB || pi == YBR_RCT || pi == YBR_ICT ) return true;
     }

@@ -52,10 +52,16 @@ public:
   PhotometricInterpretation(PIType pi = UNKNOW):PIField(pi) {}
   
   static const char *GetPIString(PIType pi);
+
+  const char *GetString() const;
+
   // You need to make sure end of string is \0
   static PIType GetPIType(const char *pi);
 
   static bool IsRetired(PIType pi);
+
+  bool IsLossy() const;
+  bool IsLossless() const;
 
   /// return the value for Sample Per Pixel associated with a particular Photometric Interpretation
   unsigned short GetSamplesPerPixel() const;

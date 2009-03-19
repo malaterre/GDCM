@@ -44,7 +44,7 @@ unsigned short PixelFormat::GetSamplesPerPixel() const
     return 3;
     }
   // \postcondition
-  assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 );
+  assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
   return SamplesPerPixel;
 }
 
@@ -250,7 +250,7 @@ bool PixelFormat::Validate()
   assert( BitsAllocated >= HighBit );
   assert( BitsStored    >= HighBit );
   assert( PixelRepresentation == 0 || PixelRepresentation == 1 );
-  assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 );
+  assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
   if ( BitsAllocated == 24 )
     {
     assert( BitsStored == 24 && HighBit == 23 && SamplesPerPixel == 1 );

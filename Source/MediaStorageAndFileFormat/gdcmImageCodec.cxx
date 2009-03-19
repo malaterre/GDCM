@@ -503,6 +503,8 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   case PhotometricInterpretation::YBR_RCT:
     break;
   default:
+    gdcmErrorMacro( "Unhandled PhotometricInterpretation: " << PI );
+    return false;
     abort();
     }
 

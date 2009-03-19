@@ -82,6 +82,7 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
   is.write(bv->GetPointer(), bv->GetLength());
   std::stringstream os;
   bool r = Decode(is, os);
+  if(!r) return false;
   assert( r );
 
   std::string str = os.str();
@@ -94,8 +95,8 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
 
 bool RAWCodec::Decode(std::istream &is, std::ostream &os)
 {
-  ImageCodec::Decode(is, os);
-  return true;
+  bool r = ImageCodec::Decode(is, os);
+  return r;
 }
 
 } // end namespace gdcm

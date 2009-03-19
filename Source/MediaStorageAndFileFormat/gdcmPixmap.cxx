@@ -258,6 +258,7 @@ bool Pixmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
+    if( !r ) return false;
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     if( len != bv->GetLength() )
