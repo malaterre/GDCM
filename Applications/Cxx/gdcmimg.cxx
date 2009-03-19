@@ -584,7 +584,7 @@ int main (int argc, char *argv[])
       unsigned int dims[3] = {};
       dims[0] = size[0];
       dims[1] = size[1];
-      image.SetDimensions( size );
+      image.SetDimensions( dims );
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT16;
       image.SetPixelFormat( pf );
       gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
