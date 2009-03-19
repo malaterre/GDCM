@@ -515,7 +515,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     pixeltype = gdcm::PixelFormat::UINT32;
     break;
   case VTK_FLOAT:
-  case VTK_DOUBLE:
     if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
       {
       // I cannot consider that this is a problem, afterall a floating point type image
@@ -527,6 +526,19 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     will be doing unsigned short anyway...
     */
     pixeltype = gdcm::PixelFormat::FLOAT32;
+    break;
+  case VTK_DOUBLE:
+    if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
+      {
+      // I cannot consider that this is a problem, afterall a floating point type image
+      // could in fact really be only integer type, only print a warning to inform dummy user
+      vtkWarningMacro( "Image is floating point type, but rescale type is integer type. Rescaling anyway" );
+      }
+    /*
+    Note to myself: should I allow people to squeeze into unsigned char ? Or can I assume most people
+    will be doing unsigned short anyway...
+    */
+    pixeltype = gdcm::PixelFormat::FLOAT64;
     break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
