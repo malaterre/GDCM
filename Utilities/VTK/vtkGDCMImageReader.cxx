@@ -1119,6 +1119,13 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     {
     this->ImageFormat = VTK_RGB;
     }
+  else
+    {
+    // HSV / ARGB / CMYK ???
+    // let's just give up for now
+    vtkErrorMacro( "Does not handle: " << image.GetPhotometricInterpretation().GetString() );
+    return 0;
+    }
   assert( this->ImageFormat );
 
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
