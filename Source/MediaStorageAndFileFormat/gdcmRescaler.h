@@ -24,6 +24,11 @@ namespace gdcm
 /**
  * \brief Rescale class
  *
+ * \warning internally any time a floating point value is found either in the Rescale Slope
+ * or the Rescale Intercept it is assumed that the best matching output pixel type if FLOAT64
+ * in previous implementation it was FLOAT32. Because VR:DS is closer to a 64bits floating point type
+ * FLOAT64 is thus a best matching pixel type for the floating point transformation.
+ *
  * \note handle floating point transformation back and forth to integer properly (no loss)
  */
 class GDCM_EXPORT Rescaler

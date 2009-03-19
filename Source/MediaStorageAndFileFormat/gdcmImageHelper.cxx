@@ -42,7 +42,7 @@
 namespace gdcm
 {
 
-bool ImageHelper::ForceRescaleInterceptSlope = false;
+bool ImageHelper::ForceRescaleInterceptSlope = true;
 bool ImageHelper::ForcePixelSpacing = false;
 
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
@@ -535,32 +535,32 @@ bool ImageHelper::GetForcePixelSpacing()
 
 bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<double> & interceptslope)
 {
-    Attribute<0x0028,0x1052> at1;
-    bool intercept = ds.FindDataElement(at1.GetTag());
-    if( intercept )
+  Attribute<0x0028,0x1052> at1;
+  bool intercept = ds.FindDataElement(at1.GetTag());
+  if( intercept )
+    {
+    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
       {
-      if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
+      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+      interceptslope[0] = at1.GetValue();
+      }
+    }
+  Attribute<0x0028,0x1053> at2;
+  bool slope = ds.FindDataElement(at2.GetTag());
+  if ( slope )
+    {
+    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
+      {
+      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+      interceptslope[1] = at2.GetValue();
+      if( interceptslope[1] == 0 )
         {
-        at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
-        interceptslope[0] = at1.GetValue();
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+        interceptslope[1] = 1;
         }
       }
-    Attribute<0x0028,0x1053> at2;
-    bool slope     = ds.FindDataElement(at2.GetTag());
-    if ( slope )
-      {
-      if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
-        {
-        at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
-        interceptslope[1] = at2.GetValue();
-        if( interceptslope[1] == 0 )
-          {
-          // come' on ! WTF
-          gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
-          interceptslope[1] = 1;
-          }
-        }
-      }
+    }
   return true;
 }
 
@@ -584,9 +584,9 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       }
     else
       {
-  interceptslope.resize( 2 );
-  interceptslope[0] = 0;
-  interceptslope[1] = 1;
+      interceptslope.resize( 2 );
+      interceptslope[0] = 0;
+      interceptslope[1] = 1;
       bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
       return interceptslope;
       }
@@ -603,6 +603,8 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
     }
 
+  // \post condition slope can never be 0:
+  assert( interceptslope[1] != 0. );
   return interceptslope;
 }
 

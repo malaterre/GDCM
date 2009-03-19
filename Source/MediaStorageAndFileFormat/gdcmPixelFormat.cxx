@@ -132,12 +132,14 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
   case 32:
     type = PixelFormat::UINT32;
     break;    
+  case 64:
+    type = PixelFormat::UINT32; // why not ?
+    break;    
   case 24:
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
     type = PixelFormat::UINT8;
     abort();
     break;
-    
   default:
     gdcmErrorMacro( "I have never seen this before BitsAllocated "
       << BitsAllocated );
