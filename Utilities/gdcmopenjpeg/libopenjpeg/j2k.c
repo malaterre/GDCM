@@ -529,7 +529,13 @@ static void j2k_read_cod(opj_j2k_t *j2k) {
 
   if( tcp->mct )
     {
-    assert( image->numcomps == 3);
+    /* jpeg2000testimages/Part4TestStreams/codestreams_profile0/p0_13.j2k */
+    /* assert( image->numcomps == 3); */
+    if( image->numcomps != 3 )
+      {
+	    opj_common_ptr cinfo = j2k->cinfo;
+      opj_event_msg(cinfo, EVT_ERROR, "mct marker found but numcomps != 3\n");
+      }
     }
 	
 	pos = cio_tell(cio);
