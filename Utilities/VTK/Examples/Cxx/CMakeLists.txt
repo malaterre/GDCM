@@ -9,9 +9,14 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     gdcmscene
     gdcmvolume
     gdcmtexture
+  )
+  IF(GDCM_DATA_ROOT)
+  SET(GDCM_VTK_APPS
+    ${GDCM_VTK_APPS}
     ConvertRGBToLuminance
     Convert16BitsTo8Bits
   )
+  ENDIF(GDCM_DATA_ROOT)
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
 
 FOREACH(app ${GDCM_VTK_APPS})
