@@ -25,7 +25,6 @@ SET(EXAMPLES_SRCS
   PatchFile
   ReadExplicitLengthSQIVR
   SortImage
-  VolumeSorter
   csa2img
   rle2img
   uid_unique
@@ -33,6 +32,12 @@ SET(EXAMPLES_SRCS
   GenSeqs
   GetJPEGSamplePrecision
 )
+IF(GDCM_DATA_EXTRA_ROOT)
+SET(EXAMPLES_SRCS
+  ${EXAMPLES_SRCS}
+  VolumeSorter
+)
+ENDIF(GDCM_DATA_EXTRA_ROOT)
 
 FOREACH(example ${EXAMPLES_SRCS})
   ADD_EXECUTABLE(${example} ${example}.cxx)
