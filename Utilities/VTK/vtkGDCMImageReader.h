@@ -151,7 +151,7 @@ public:
   vtkGetMacro(NumberOfOverlays,int);
 
   // Description:
-  // Read only: number of icon image (there should ony be one)
+  // Read only: number of icon image (there can only be zero or one icon per file)
   vtkGetMacro(NumberOfIconImages,int);
 
   // Description:

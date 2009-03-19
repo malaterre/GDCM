@@ -461,6 +461,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     {
   case PhotometricInterpretation::MONOCHROME2:
   case PhotometricInterpretation::RGB:
+  case PhotometricInterpretation::ARGB:
     break;
   case PhotometricInterpretation::MONOCHROME1:
     // CR-MONO1-10-chest.dcm

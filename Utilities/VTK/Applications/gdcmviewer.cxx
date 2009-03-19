@@ -534,7 +534,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     std::cerr << "Not implemented" << std::endl;
 #endif
     }
-  else if( reader->GetImageFormat() == VTK_RGB )
+  else if( reader->GetImageFormat() == VTK_RGB 
+    || reader->GetImageFormat() == VTK_RGBA )
     {
     // easy case !
     }
