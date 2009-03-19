@@ -42,6 +42,17 @@
 // When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader 
 // it is *required* that FileLowerLeft is set to ON as coordinate system
 // would be inconsistant in between the two data structures.
+// .SECTION Color Space mapping:
+// * VTK_LUMINANCE         <-> MONOCHROME2
+// * VTK_LUMINANCE_ALPHA   <-> Not supported
+// * VTK_RGB               <-> RGB
+// * VTK_RGBA              <-> ARGB (deprecated, DICOM 2008)
+// * VTK_INVERSE_LUMINANCE <-> MONOCHROME1
+// * VTK_LOOKUP_TABLE      <-> PALETTE COLOR
+// * VTK_YBR               <-> YBR_FULL
+// 
+// For detailed information on color space transformation and true lossless transformation see:
+// http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Color_Space_Transformations
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
@@ -170,13 +181,15 @@ public:
   vtkBooleanMacro(ApplyYBRToRGB,int);
 
   // Description:
-  // Return VTK_LUMINANCE, VTK_RGB, VTK_LOOKUP_TABLE or VTK_YBR, VTK_RGB_PLANES
+  // Return VTK_LUMINANCE, VTK_INVERSE_LUMINANCE, VTK_RGB, VTK_RGBA, VTK_LOOKUP_TABLE or VTK_YBR
   // or 0 when ImageFormat is not handled.
+  // Warning: For color image, PlanarConfiguration need to be taken into account.
   vtkGetMacro(ImageFormat,int);
 
   // Description:
   // Return the Planar Configuration. This simply means that the internal DICOM image was stored
   // using a particular planar configuration (most of the time: 0)
+  // For monochrome image, PlanarConfiguration is always 0
   vtkGetMacro(PlanarConfiguration,int);
 
   // Description:

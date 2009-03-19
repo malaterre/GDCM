@@ -557,6 +557,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       case VTK_RGB:
         pi = gdcm::PhotometricInterpretation::RGB;
         break;
+      case VTK_RGBA:
+        pi = gdcm::PhotometricInterpretation::ARGB;
+        break;
       case VTK_INVERSE_LUMINANCE:
         pi = gdcm::PhotometricInterpretation::MONOCHROME1;
         break;

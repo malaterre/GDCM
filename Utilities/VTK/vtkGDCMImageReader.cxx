@@ -1124,9 +1124,13 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     {
     this->ImageFormat = VTK_RGB;
     }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::ARGB )
+    {
+    this->ImageFormat = VTK_RGBA;
+    }
   else
     {
-    // HSV / ARGB / CMYK ???
+    // HSV / CMYK ???
     // let's just give up for now
     vtkErrorMacro( "Does not handle: " << image.GetPhotometricInterpretation().GetString() );
     //return 0;
