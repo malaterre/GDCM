@@ -626,11 +626,20 @@ dicomTransferCapability = 268 // dicomTransferCapability
   static TransferSyntaxStringsType GetTransferSyntaxStrings();
   static const char * const *GetTransferSyntaxString(unsigned int ts);
   static unsigned int GetNumberOfTransferSyntaxStrings();
+
+
+  // TODO: Because I would like a dual signature for TSType and TSName, C++ won't let me do it...
   static const char* GetUIDString(/*TSType*/ unsigned int ts);
   static const char* GetUIDName(/*TSType*/ unsigned int ts);
   
+  /// Initialize object from a string (a uid number)
+  /// return false on error, and internal state is set to 0
   bool SetFromUID(const char *str);
+
+  /// When object is Initialize function return the well known name associated with uid
+  /// return NULL when not initialized
   const char *GetName() const;
+
 private:
   TSType TSField;
 };

@@ -383,6 +383,9 @@ NULL
 
 int TestUIDs(int, char *[])
 {
+  const char* s0 = gdcm::UIDs::GetUIDString( 0 );
+  if(s0) return 1;
+
   // {"1.2.840.10008.5.1.4.1.1.2.1","Enhanced CT Image Storage"},
   // uid_1_2_840_10008_5_1_4_1_1_2_1 = 117, // Enhanced CT Image Storage
   const char* s = gdcm::UIDs::GetUIDString( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
