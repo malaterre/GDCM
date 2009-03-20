@@ -24,7 +24,7 @@
 namespace gdcm
 {
         static const char * const TransferSyntaxStrings[][2] = {
-{"",""},
+{NULL,NULL}, // Starts a 1, not 0
 {"1.2.840.10008.1.1","Verification SOP Class"},
 {"1.2.840.10008.1.2","Implicit VR Little Endian: Default Transfer Syntax for DICOM"},
 {"1.2.840.10008.1.2.1","Explicit VR Little Endian"},
@@ -355,14 +355,30 @@ Correction: 1.2.840113619.4.27 -> 1.2.840.113619.4.27 ... sigh
 };
 
 
-const char* UIDs::GetUIDString(/*TSType*/ int ts)
+unsigned int UIDs::GetNumberOfTransferSyntaxStrings()
 {
-  return TransferSyntaxStrings[(int)ts][0];
+  // Do not count NULL sentinels at end
+  static const unsigned int size = sizeof(TransferSyntaxStrings)/sizeof(*TransferSyntaxStrings) - 2;
+  return size;
 }
 
-const char* UIDs::GetUIDName(/*TSType*/ int ts)
+const char * const * UIDs::GetTransferSyntaxString(unsigned int ts)
 {
-  return TransferSyntaxStrings[(int)ts][1];
+  if( ts > 0 && ts <= UIDs::GetNumberOfTransferSyntaxStrings() ) return TransferSyntaxStrings[ts];
+  // else return the {0x0, 0x0} sentinel (begin or end)
+  assert( *TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ] == 0 );
+  assert( *TransferSyntaxStrings[ 0 ] == 0 );
+  return TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ];
+}
+
+const char* UIDs::GetUIDString(/*TSType*/ unsigned int ts)
+{
+  return UIDs::GetTransferSyntaxString(ts)[0];
+}
+
+const char* UIDs::GetUIDName(/*TSType*/ unsigned int ts)
+{
+  return UIDs::GetTransferSyntaxString(ts)[1];
 }
 
 UIDs::TransferSyntaxStringsType UIDs::GetTransferSyntaxStrings()
@@ -372,16 +388,16 @@ UIDs::TransferSyntaxStringsType UIDs::GetTransferSyntaxStrings()
 
 bool UIDs::SetFromUID(const char *str)
 {
+  TSField = (TSType)0;
   if(!str) return false;
   //static const unsigned int size = sizeof(TransferSyntaxStrings) / sizeof(*TransferSyntaxStrings) - 1;
   TransferSyntaxStringsType uids = GetTransferSyntaxStrings();
 
-  int i = 0;
+  int i = 1; // Start at 1, not 0
   const char *p = uids[i][0];
-  TSField = (TSType)0;
   while( p != 0 )
     {
-    if( strcmp( str, p ) == 0 )
+    if( strcmp( p, str ) == 0 )
       {
       break;
       }

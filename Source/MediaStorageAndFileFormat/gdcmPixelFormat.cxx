@@ -143,7 +143,8 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
   default:
     gdcmErrorMacro( "I have never seen this before BitsAllocated "
       << BitsAllocated );
-    abort();
+    type = PixelFormat::UNKNOWN;
+    //abort();
     }
   if( PixelRepresentation == 0 )
     {

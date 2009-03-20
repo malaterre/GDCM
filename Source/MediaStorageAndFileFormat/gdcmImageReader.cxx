@@ -1145,6 +1145,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
 
     // FIXME:
     // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
+    //PixelFormat guesspf = PixelFormat->GuessPixelFormat();
 
     }
 

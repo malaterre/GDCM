@@ -230,6 +230,19 @@ unsigned long Pixmap::GetBufferLength() const
     assert( save * 8 / 12 == mul );
     mul = save;
     }
+  else if( PF.GetBitsAllocated() % 8 != 0 )
+    {
+    // gdcmDataExtra/gdcmSampleData/images_of_interest/USBitsAllocated14.dcm
+    // BitsAllocated      :14
+    // BitsStored         :14
+    // HighBit            :13
+    assert( PF.GetSamplesPerPixel() == 1 );
+    const ByteValue *bv = PixelData.GetByteValue();
+    assert( bv );
+    unsigned int ref = bv->GetLength() / mul;
+    assert( bv->GetLength() % mul == 0 );
+    mul *= ref;
+    }
   else
     {
     mul *= PF.GetPixelSize();

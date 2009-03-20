@@ -167,6 +167,7 @@ const char *VM::GetVMString(VMType vm)
 {
   unsigned int idx = GetIndex(vm);
   assert( idx < sizeof(VMStrings) / sizeof(VMStrings[0]) );
+  //assert( idx );
   return VMStrings[idx];
 }
 

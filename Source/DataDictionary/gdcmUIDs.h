@@ -621,11 +621,13 @@ dicomTransferCapability = 268 // dicomTransferCapability
 //ICBMSingleSubjectMRIFrameofReference = 288, // ICBM Single Subject MRI Frame of Reference
 } TSName;
 
-static const char* GetUIDString(/*TSType*/ int ts);
-static const char* GetUIDName(/*TSType*/ int ts);
 
   typedef const char* const (*TransferSyntaxStringsType)[2];
   static TransferSyntaxStringsType GetTransferSyntaxStrings();
+  static const char * const *GetTransferSyntaxString(unsigned int ts);
+  static unsigned int GetNumberOfTransferSyntaxStrings();
+  static const char* GetUIDString(/*TSType*/ unsigned int ts);
+  static const char* GetUIDName(/*TSType*/ unsigned int ts);
   
   bool SetFromUID(const char *str);
   const char *GetName() const;
