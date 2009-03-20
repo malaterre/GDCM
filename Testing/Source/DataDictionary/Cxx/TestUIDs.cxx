@@ -336,22 +336,97 @@ static const char * const sopclassuids[][2] = {
 { NULL, NULL}
 };
 
+// Custom list:
+static const char * const sopclassuids2[] = {
+"1.2.840.10008.1.3.10",
+"1.2.840.10008.5.1.4.1.1.1",
+"1.2.840.10008.5.1.4.1.1.1.1",
+"1.2.840.10008.5.1.4.1.1.11.1",
+"1.2.840.10008.5.1.4.1.1.1.2",
+"1.2.840.10008.5.1.4.1.1.12.1",
+"1.2.840.10008.5.1.4.1.1.12.2",
+"1.2.840.10008.5.1.4.1.1.128",
+"1.2.840.10008.5.1.4.1.1.2",
+"1.2.840.10008.5.1.4.1.1.20",
+"1.2.840.10008.5.1.4.1.1.3.1",
+"1.2.840.10008.5.1.4.1.1.4",
+"1.2.840.10008.5.1.4.1.1.4.1",
+"1.2.840.10008.5.1.4.1.1.481.3",
+"1.2.840.10008.5.1.4.1.1.5",
+"1.2.840.10008.5.1.4.1.1.6",
+"1.2.840.10008.5.1.4.1.1.6.1",
+"1.2.840.10008.5.1.4.1.1.66",
+"1.2.840.10008.5.1.4.1.1.7",
+"1.2.840.10008.5.1.4.1.1.88.11",
+"1.2.840.10008.5.1.4.1.1.88.22",
+"1.2.840.10008.5.1.4.1.1.88.3",
+"1.2.840.10008.5.1.4.1.1.88.59",
+"1.2.840.10008.5.1.4.1.1.9",
+"1.2.840.10008.5.1.4.1.1.9.4.1",
+"1.2.840.10008.5.1.4.38.1",
+"1.2.840.113619.4.26",
+"1.3.12.2.1107.5.9.1",
+"1.3.46.670589.11.0.0.12.2",
+"1.3.46.670589.5.0.1",
+"1.3.46.670589.5.0.10",
+"1.3.46.670589.5.0.1.1",
+"1.3.46.670589.5.0.11",
+"1.3.46.670589.5.0.13",
+"1.3.46.670589.5.0.14",
+"1.3.46.670589.5.0.2",
+"1.3.46.670589.5.0.2.1",
+"1.3.46.670589.5.0.3",
+"1.3.46.670589.5.0.8",
+//"1.3.6.1.4.1.20468.1.10", // invalid
+NULL
+};
+
 int TestUIDs(int, char *[])
 {
   // {"1.2.840.10008.5.1.4.1.1.2.1","Enhanced CT Image Storage"},
   // uid_1_2_840_10008_5_1_4_1_1_2_1 = 117, // Enhanced CT Image Storage
   const char* s = gdcm::UIDs::GetUIDString( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
+  if(!s) return 1;
   std::cout << s << std::endl;
   const char* n = gdcm::UIDs::GetUIDName( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
+  if(!n) return 1;
   std::cout << n << std::endl;
   const char* s1 = gdcm::UIDs::GetUIDString( gdcm::UIDs::EnhancedCTImageStorage );
+  if(!s1) return 1;
   std::cout << s1 << std::endl;
   const char* n1 = gdcm::UIDs::GetUIDName( gdcm::UIDs::EnhancedCTImageStorage );
+  if(!n1) return 1;
   std::cout << n1 << std::endl;
 
   gdcm::UIDs uid;
-  uid.SetFromUID( "1.2.840.10008.5.1.4.1.1.2.1" );
+  // valid:
+  if( !uid.SetFromUID( "1.2.840.10008.5.1.4.1.1.2.1" ) )
+    {
+    return 1;
+    }
   std::cout << "This is : " << uid.GetName() << std::endl;
+  // invalid
+  if( uid.SetFromUID( "prosper youpla boum c'est le roi du pain d'epices" ) )
+    {
+    return 1;
+    }
+  if( uid.GetName() ) return 1;
+  if( uid.SetFromUID( "1.2" ) )
+    {
+    return 1;
+    }
+  if( uid.GetName() ) return 1;
+  if( uid.SetFromUID( "" ) )
+    {
+    return 1;
+    }
+  if( uid.GetName() ) return 1;
+  // black box:
+  if( uid.SetFromUID( NULL ) )
+    {
+    return 1;
+    }
+  if( uid.GetName() ) return 1;
 
   typedef const char* const (*mytype)[2];
   mytype sopclassuid = sopclassuids;
@@ -368,6 +443,7 @@ int TestUIDs(int, char *[])
     const char *name = uid.GetName();
     if( !name )
       {
+      std::cerr << "problem with: " << uid_str << std::endl;
       return 1;
       }
     if( strcmp( name, name_str) != 0 )
@@ -379,7 +455,25 @@ int TestUIDs(int, char *[])
     ++sopclassuid;
     }
 
-  gdcm::Testing::GetMD5DataImage(1000000000u);
+  std::cout << "Custom List:" << std::endl;
+  const char * const *s2 = sopclassuids2;
+  while( *s2 )
+    {
+    const char *uid_str = *s2;
+    if( !uid.SetFromUID( uid_str ) )
+      {
+      std::cerr << "Invalid UID:" << uid_str << std::endl;
+      return 1;
+      }
+
+    const char *name = uid.GetName();
+    if( !name )
+      {
+      return 1;
+      }
+    std::cout << uid_str << "," << name << std::endl;
+    s2++;
+    }
 
   return 0;
 }
