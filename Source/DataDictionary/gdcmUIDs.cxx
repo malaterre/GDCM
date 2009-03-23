@@ -324,10 +324,12 @@ namespace gdcm
 {"1.2.392.200036.9116.7.8.1.1.1", "Toshiba Private Data Storage" },
 /* CREF4.09-80_iSite4.1DICOMConformance.pdf 
 Correction: 1.2.840113619.4.27 -> 1.2.840.113619.4.27 ... sigh
+DICOM_Conformance_Statement_MR_R2.6.pdf
 */
 {"1.2.840.113619.4.27"       ,"GE Nuclear Medicine private SOP Class"}, 
-{"1.3.46.670589.11.0.0.12.1"       ,"Philips Private Gyroscan MR Spectrum"}, 
-{"1.3.46.670589.11.0.0.12.2"       ,"Philips Private Gyroscan MR Serie Data"}, 
+{"1.3.46.670589.11.0.0.12.1"       ,"Philips Private MR Spectrum Storage"}, 
+{"1.3.46.670589.11.0.0.12.2"       ,"Philips Private MR Series Data Storage"}, 
+{"1.3.46.670589.11.0.0.12.4"       ,"Philips Private MR Examcard Storage"}, 
 {"1.3.46.670589.2.3.1.1"       ,"Philips Private Specialized XA Image"}, 
 {"1.3.46.670589.2.4.1.1"       ,"Philips Private CX Image Storage"}, 
 {"1.3.46.670589.2.5.1.1"       ,"Philips iE33 private 3D Object Storage"}, 
@@ -416,6 +418,10 @@ bool UIDs::SetFromUID(const char *str)
   return false;
 }
 
+const char *UIDs::GetString() const
+{
+  return GetUIDString(TSField);
+}
 const char *UIDs::GetName() const
 {
   return GetUIDName(TSField);

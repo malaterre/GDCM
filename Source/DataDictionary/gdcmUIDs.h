@@ -640,9 +640,20 @@ dicomTransferCapability = 268 // dicomTransferCapability
   /// return NULL when not initialized
   const char *GetName() const;
 
+  /// When object is Initialize function return the uid 
+  /// return NULL when not initialized
+  const char *GetString() const;
+
 private:
   TSType TSField;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream &operator<<(std::ostream &_os, const UIDs &uid)
+{
+  _os << uid.GetString() << " -> " << uid.GetName() << std::endl;
+  return _os;
+
+}
 
 } // end namespace gdcm
 

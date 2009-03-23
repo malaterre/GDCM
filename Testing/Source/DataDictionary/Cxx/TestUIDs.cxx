@@ -309,8 +309,10 @@ static const char * const sopclassuids[][2] = {
 { "1.2.840.113543.6.6.1.3.10002","Unregistred (?) Philips3D" },
 { "1.2.392.200036.9116.7.8.1.1.1","Toshiba Private Data Storage" },
 { "1.2.840.113619.4.27","GE Nuclear Medicine private SOP Class" },
-{ "1.3.46.670589.11.0.0.12.1","Philips Private Gyroscan MR Spectrum" },
-{ "1.3.46.670589.11.0.0.12.2","Philips Private Gyroscan MR Serie Data" },
+//{ "1.3.46.670589.11.0.0.12.1","Philips Private Gyroscan MR Spectrum" },
+{ "1.3.46.670589.11.0.0.12.1","Philips Private MR Spectrum Storage" },
+//{ "1.3.46.670589.11.0.0.12.2","Philips Private Gyroscan MR Serie Data" },
+{ "1.3.46.670589.11.0.0.12.2","Philips Private MR Series Data Storage" },
 { "1.3.46.670589.2.3.1.1","Philips Private Specialized XA Image" },
 { "1.3.46.670589.2.4.1.1","Philips Private CX Image Storage" },
 { "1.3.46.670589.2.5.1.1","Philips iE33 private 3D Object Storage" },
@@ -408,6 +410,8 @@ int TestUIDs(int, char *[])
     return 1;
     }
   std::cout << "This is : " << uid.GetName() << std::endl;
+  std::cout << "This is : " << uid.GetString() << std::endl;
+  std::cout << uid << std::endl;
   // invalid
   if( uid.SetFromUID( "prosper youpla boum c'est le roi du pain d'epices" ) )
     {

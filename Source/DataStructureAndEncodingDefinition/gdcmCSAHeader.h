@@ -61,7 +61,7 @@ class PrivateTag;
 class GDCM_EXPORT CSAHeader
 {
 public :
-  CSAHeader():InternalDataSet(),InternalType(UNKNOWN) {};
+  CSAHeader():InternalDataSet(),InternalType(UNKNOWN),InterfileData(0) {};
   ~CSAHeader() {};
 
   /// Divers format of CSAHeader as found 'in the wild'
@@ -70,6 +70,7 @@ public :
     SV10,
     NOMAGIC,
     DATASET_FORMAT,
+    INTERFILE,
     ZEROED_OUT
   } CSAHeaderType;
 
@@ -88,6 +89,9 @@ public :
   /// Return the DataSet output (use only if Format == DATASET_FORMAT )
   const DataSet& GetDataSet() const { return InternalDataSet; }
 
+  /// Return the string output (use only if Format == Interfile)
+  const char * GetInterfile() const { return InterfileData; }
+
   /// return the format of the CSAHeader
   /// SV10 and NOMAGIC are equivalent.
   CSAHeaderType GetFormat() const;
@@ -99,6 +103,10 @@ public :
   /// Return the private tag used by SIEMENS to store the CSA Series Header
   /// This is: PrivateTag(0x0029,0x0020,"SIEMENS CSA HEADER");
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
+
+  /// Return the private tag used by SIEMENS to store the CSA Data Info
+  /// This is: PrivateTag(0x0029,0x0010,"SIEMENS CSA NON-IMAGE");
+  static const PrivateTag & GetCSADataInfo();
 
   /// Return the CSAElement corresponding to name 'name'
   /// \warning Case Sensitive
@@ -117,6 +125,7 @@ private:
   CSAHeaderType InternalType;
   Tag DataElementTag;
   static CSAElement CSAEEnd;
+  const char *InterfileData;
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

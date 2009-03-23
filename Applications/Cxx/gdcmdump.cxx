@@ -126,6 +126,7 @@ int PrintCSA(const std::string & filename)
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
+  const gdcm::PrivateTag &t3 = csa.GetCSADataInfo();
 
   bool found = false;
   int ret = 0;
@@ -157,6 +158,30 @@ int PrintCSA(const std::string & filename)
       {
       std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
       ret = 1;
+      }
+    else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
+      {
+      gdcm::Printer p;
+      gdcm::File f;
+      f.SetDataSet( csa.GetDataSet() );
+      p.SetFile( f );
+      p.Print( std::cout );
+      }
+    }
+  if( ds.FindDataElement( t3 ) )
+    {
+    csa.LoadFromDataElement( ds.GetDataElement( t3 ) );
+    csa.Print( std::cout );
+    found = true;
+    if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
+      {
+      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      ret = 1;
+      }
+    else if( csa.GetFormat() == gdcm::CSAHeader::INTERFILE )
+      {
+      const char *interfile = csa.GetInterfile();
+      if( interfile ) std::cout << interfile << std::endl;
       }
     else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
       {
