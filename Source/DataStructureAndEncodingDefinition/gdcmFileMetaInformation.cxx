@@ -157,21 +157,25 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   else // Ok there is a value in (0002,0002) let see if it match (0008,0016)
     {
-    if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+    bool dicomdir = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    //if( !dicomdir )
       {
-      //abort();
-      // What should I do here ??
-      gdcmWarningMacro( "Missing SOPClassUID in DataSet but found in FileMeta" );
-      }
-    else
-      {
-      const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
-      DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
-      assert( !mssopclass.IsEmpty() );
-      const ByteValue *bv = sopclass.GetByteValue();
-      assert( bv );
-      mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
-      Replace( mssopclass );
+      if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+        {
+        //abort();
+        // What should I do here ??
+        gdcmWarningMacro( "Missing SOPClassUID in DataSet but found in FileMeta" );
+        }
+      else
+        {
+        const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
+        DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
+        assert( !mssopclass.IsEmpty() );
+        const ByteValue *bv = sopclass.GetByteValue();
+        assert( bv );
+        mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
+        Replace( mssopclass );
+        }
       }
     }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
@@ -208,18 +212,23 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   else // Ok there is a value in (0002,0003) let see if it match (0008,0018)
     {
-    if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+    bool dicomdir = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    //if( !dicomdir )
       {
-      abort();
+      if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+        {
+        throw gdcm::Exception( "No 8,18 element sorry" );
+        //abort();
+        }
+      const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+      //const DataElement & foo = GetDataElement( Tag(0x0002, 0x0003) );
+      assert( !GetDataElement( Tag(0x0002, 0x0003) ).IsEmpty() );
+      DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
+      const ByteValue *bv = sopinst.GetByteValue();
+      assert( bv );
+      mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
+      Replace( mssopinst );
       }
-    const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
-    //const DataElement & foo = GetDataElement( Tag(0x0002, 0x0003) );
-    assert( !GetDataElement( Tag(0x0002, 0x0003) ).IsEmpty() );
-    DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
-    const ByteValue *bv = sopinst.GetByteValue();
-    assert( bv );
-    mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
-    Replace( mssopinst );
     }
   //assert( !GetDataElement( Tag(0x0002,0x0003) ).IsEmpty() );
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)

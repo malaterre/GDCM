@@ -21,6 +21,7 @@ namespace gdcm
 {
 
 class DataSet;
+class Tag;
 class FileMetaInformation;
 class File;
 /**
@@ -129,21 +130,28 @@ typedef enum {
 
   const char *GetModality() const;
 
-  // Attempt to set the MediaStorage from a file:
-  // WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
-  // then MediaStorage is set to the default SecondaryCaptureImageStorage
-  void SetFromFile(File const &file);
+  /// Attempt to set the MediaStorage from a file:
+  /// WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
+  /// then MediaStorage is set to the default SecondaryCaptureImageStorage (return value is 
+  /// false in this case)
+  bool SetFromFile(File const &file);
 
-  // Those function are lower level than SetFromFile
-  void SetFromDataSet(DataSet const &ds, bool guess = false); // Will get the SOP Class UID
-  void SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
-  void SetFromModality(DataSet const &ds);
-  void SetFromSourceImageSequence(DataSet const &ds);
+  /// Advanced user only (functions should be protected level...)
+  /// Those function are lower level than SetFromFile
+  bool SetFromDataSet(DataSet const &ds); // Will get the SOP Class UID
+  bool SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
+  bool SetFromModality(DataSet const &ds);
   void GuessFromModality(const char *modality, unsigned int dimension = 2);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
 
   bool IsUndefined() const { return MSField == MS_END; }
+
+protected:
+  void SetFromSourceImageSequence(DataSet const &ds);
+
+private:
+  bool SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
 
 private:
   MSType MSField;

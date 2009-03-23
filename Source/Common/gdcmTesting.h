@@ -48,6 +48,13 @@ public :
   static unsigned int GetNumberOfFileNames();
   static const char * GetFileName(unsigned int file);
 
+  /// return the table that map the media storage (as string) of a filename (gdcmData)
+  typedef const char* const (*MediaStorageDataFilesType)[2];
+  static MediaStorageDataFilesType GetMediaStorageDataFiles();
+  static unsigned int GetNumberOfMediaStorageDataFiles();
+  static const char * const * GetMediaStorageDataFile(unsigned int file);
+  static const char * GetMediaStorageFromFile(const char *filepath);
+
   /// return the table that map the md5 (as in md5sum) of the Pixel Data associated
   /// to a filename
   typedef const char* const (*MD5DataImagesType)[2];

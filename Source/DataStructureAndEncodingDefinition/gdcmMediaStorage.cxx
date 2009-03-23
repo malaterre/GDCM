@@ -119,6 +119,7 @@ static const char *MSStrings[] = {
 
 MediaStorage::MSType MediaStorage::GetMSType(const char *str)
 {
+  if(!str) return MS_END;
   assert( std::string(str).find( ' ' ) == std::string::npos ); // no space allowed in UI
   int i = 0;
   while(MSStrings[i] != 0)
@@ -240,26 +241,6 @@ const char *MediaStorage::GetModality() const
   return MSModalityTypes[MSField].Modality;
 }
 
-void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
-{
-  const Tag mediastoragesopclassuid(0x0002, 0x0002);
-  if( fmi.FindDataElement( mediastoragesopclassuid ) )
-    {
-    const ByteValue *sopclassuid = fmi.GetDataElement( mediastoragesopclassuid ).GetByteValue();
-    std::string sopclassuid_str(
-      sopclassuid->GetPointer(),
-      sopclassuid->GetLength() );
-    assert( sopclassuid_str.find( ' ' ) == std::string::npos );
-    MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-    if( ms == MS_END )
-      {
-      // weird something was found, but we not find the MS anyway...
-      gdcmWarningMacro( "Does not know what: " << sopclassuid_str << " is..." );
-      }
-    MSField = ms;
-    }
-}
-
 void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
 {
   // no default value is set, it is up to the user to decide initial value
@@ -278,15 +259,14 @@ void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
     }
 }
 
-void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
+bool MediaStorage::SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
 {
-  const Tag tsopclassuid(0x0008, 0x0016);
-  if( ds.FindDataElement( tsopclassuid ) )
+  if( ds.FindDataElement( tag ) )
     {
-    const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
+    const ByteValue *sopclassuid = ds.GetDataElement( tag ).GetByteValue();
     // Empty SOP Class UID:
     // lifetechmed/A0038329.DCM
-    if( !sopclassuid ) return;
+    if( !sopclassuid ) return true;
     std::string sopclassuid_str(
       sopclassuid->GetPointer(),
       sopclassuid->GetLength() );
@@ -297,15 +277,28 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
       sopclassuid_str = sopclassuid_str.substr(0,pos);
       }
     MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-    //assert( ms != MS_END );
     MSField = ms;
+    if( ms == MS_END )
+      {
+      // weird something was found, but we not find the MS anyway...
+      gdcmWarningMacro( "Does not know what: " << sopclassuid_str << " is..." );
+      }
+    return true;
     }
-//  else if( guess )
-//    {
-//    // If user ask to guess MediaStorage, let's try again
-//    assert( MSField == MediaStorage::MS_END );
-//    //SetFromModality( ds );
-//    }
+  return false;
+}
+
+bool MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
+{
+  const Tag tmediastoragesopclassuid(0x0002, 0x0002);
+  return SetFromDataSetOrHeader(fmi, tmediastoragesopclassuid);
+}
+
+
+bool MediaStorage::SetFromDataSet(DataSet const &ds)
+{
+  const Tag tsopclassuid(0x0008, 0x0016);
+  return SetFromDataSetOrHeader(ds, tsopclassuid);
 }
 
 void MediaStorage::SetFromSourceImageSequence(DataSet const &ds)
@@ -345,7 +338,7 @@ void MediaStorage::SetFromSourceImageSequence(DataSet const &ds)
     }
 }
 
-void MediaStorage::SetFromModality(DataSet const &ds)
+bool MediaStorage::SetFromModality(DataSet const &ds)
 {
   // Ok let's try againg with little luck it contains a pixel data...
   if( ds.FindDataElement( Tag(0x7fe0,0x0010) ) )
@@ -372,25 +365,40 @@ void MediaStorage::SetFromModality(DataSet const &ds)
       gdcmWarningMacro( "Unknown/Unhandle MediaStorage, but Pixel Data element found" );
       // BUG: Need to check Col*Row*Bit*NSample == PixelSize (uncompressed)
       MSField = MediaStorage::SecondaryCaptureImageStorage;
+      return false;
       }
     }
+  return true;
 }
 
-void MediaStorage::SetFromFile(File const &file)
+bool MediaStorage::SetFromFile(File const &file)
 {
-  const DataSet &ds = file.GetDataSet();
+  /*
+   * DICOMDIR usually have group 0002 present, but no 0008,0016 (doh!)
+   * So we first check in header, if found, assumed it is ok (we should
+   * check that consistant with 0008,0016 ...)
+   * A lot of DICOM image file are still missing the group header
+   * this is why we check 0008,0016, and to preserve compat with ACR-NEMA
+   * we also check Modality element to guess a fake Media Storage UID
+   * file such as:
+   * gdcmData/SIEMENS-MR-RGB-16Bits.dcm
+   * are a pain to handle ...
+   */
   const FileMetaInformation &header = file.GetHeader();
-  SetFromDataSet( ds );
-  if( MSField == MediaStorage::MS_END ) // Nothing found...
+  if( !SetFromHeader( header ) )
     {
-    // try again but from header this time:
-    gdcmDebugMacro( "No MediaStorage found in DataSet, looking up in FileMetaInformation" );
-    SetFromHeader( header );
-    if( MSField == MediaStorage::MS_END ) // Nothing found...
+    const DataSet &ds = file.GetDataSet();
+    // try again but from dataset this time:
+    gdcmDebugMacro( "No MediaStorage found in Header, looking up in DataSet" );
+    if( !SetFromDataSet( ds ) )
       {
+      // ACR-NEMA compat:
       gdcmDebugMacro( "No MediaStorage found neither in DataSet nor in FileMetaInformation, trying from Modality" );
       // Attempt to read what's in Modality:
-      SetFromModality( ds );
+      if( !SetFromModality( ds ) )
+        {
+        return false;
+        }
       }
     }
 // BEGIN SPECIAL HANDLING FOR GDCM 1.2.x 'ReWrite'n files
@@ -415,6 +423,7 @@ void MediaStorage::SetFromFile(File const &file)
       }
     }
 #endif
+  return true;
 }
 
 } // end namespace gdcm

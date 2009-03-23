@@ -64,7 +64,15 @@ if( DS.IsEmpty() )
     if( CheckFileMetaInformation )
       {
       FileMetaInformation duplicate( Header );
-      duplicate.FillFromDataSet( DS );
+      try
+        {
+        duplicate.FillFromDataSet( DS );
+        }
+      catch(gdcm::Exception &ex)
+        {
+        gdcmErrorMacro( "Could not recreate the File Meta Header, please report:" << ex.what() );
+        return false;
+        }
       duplicate.Write(os);
       }
     else
@@ -74,6 +82,7 @@ if( DS.IsEmpty() )
     }
   catch( std::exception &ex)
     {
+    abort();
     // File such as PICKER-16-MONO2-No_DicomV3_Preamble.dcm
     // are a pain to rewrite since the metaheader was declared as implicit
     // we have to do a look up the in the dictionary to find out VR for those element

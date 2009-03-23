@@ -30,6 +30,7 @@ namespace gdcm
 
 #include "gdcmDataFileNames.cxx"
 #include "gdcmMD5DataImages.cxx"
+#include "gdcmMediaStorageDataFiles.cxx"
 
 inline void process_file(const char *filename, md5_byte_t *digest)
 {
@@ -126,6 +127,44 @@ const char * Testing::GetFileName(unsigned int file)
   return NULL;
 }
 
+Testing::MediaStorageDataFilesType Testing::GetMediaStorageDataFiles()
+{
+  return gdcmMediaStorageDataFiles;
+}
+unsigned int Testing::GetNumberOfMediaStorageDataFiles()
+{
+  // Do not count NULL value:
+  static const unsigned int size = sizeof(gdcmMediaStorageDataFiles)/sizeof(*gdcmMediaStorageDataFiles) - 1;
+  return size;
+}
+const char * const * Testing::GetMediaStorageDataFile(unsigned int file)
+{
+  if( file < Testing::GetNumberOfMediaStorageDataFiles() ) return gdcmMediaStorageDataFiles[file];
+  // else return the {0x0, 0x0} sentinel:
+  assert( *gdcmMediaStorageDataFiles[ Testing::GetNumberOfMediaStorageDataFiles() ] == 0 );
+  return gdcmMediaStorageDataFiles[ Testing::GetNumberOfMediaStorageDataFiles() ];
+}
+const char * Testing::GetMediaStorageFromFile(const char *filepath)
+{
+  unsigned int i = 0;
+  MediaStorageDataFilesType mediastorages = GetMediaStorageDataFiles();
+  const char *p = mediastorages[i][0];
+  Filename comp(filepath);
+  const char *filename = comp.GetName();
+  while( p != 0 )
+    {
+    if( strcmp( filename, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = mediastorages[i][0];
+    }
+  // \postcondition always valid (before sentinel)
+  assert( i <= GetNumberOfMediaStorageDataFiles() );
+  return mediastorages[i][1];
+}
+
 
 Testing::MD5DataImagesType Testing::GetMD5DataImages()
 {
@@ -148,7 +187,7 @@ const char * const * Testing::GetMD5DataImage(unsigned int file)
 
 const char * Testing::GetMD5FromFile(const char *filepath)
 {
-  int i = 0;
+  unsigned int i = 0;
   MD5DataImagesType md5s = GetMD5DataImages();
   const char *p = md5s[i][1];
   Filename comp(filepath);
@@ -162,6 +201,8 @@ const char * Testing::GetMD5FromFile(const char *filepath)
     ++i;
     p = md5s[i][1];
     }
+  // \postcondition always valid (before sentinel)
+  assert( i <= GetNumberOfMD5DataImages() );
   return md5s[i][0];
 }
 
