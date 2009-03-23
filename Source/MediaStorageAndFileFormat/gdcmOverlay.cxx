@@ -120,24 +120,28 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       }
     else
       {
-      // Yeah this is a potential overlay element, let's check this is not a broken LEADTOOL image:
-      ++numoverlays;
+      // Yeah this is a potential overlay element, let's check this is not a broken LEADTOOL image,
+      // or prova0001.dcm:
+      // (5000,0000) UL 0                                        #   4, 1 GenericGroupLength
+      // (6000,0000) UL 0                                        #   4, 1 GenericGroupLength
+      // (6001,0000) UL 28                                       #   4, 1 PrivateGroupLength
+      // (6001,0010) LT [PAPYRUS 3.0]                            #  12, 1 PrivateCreator
+      // (6001,1001) LT (no value available)                     #   0, 0 Unknown Tag & Data
       if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
         {
         // ok so far so good...
         const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
-        if( overlaydata.IsEmpty() )
+        if( !overlaydata.IsEmpty() )
           {
-          gdcmWarningMacro( "Overlay is empty" );
-          --numoverlays;
+          ++numoverlays;
           }
         }
-      // Store found tag in overlay:
-      overlay = de.GetTag();
-      // Move on to the next possible one:
-      overlay.SetGroup( overlay.GetGroup() + 2 );
-      // reset to element 0x0 just in case...
-      overlay.SetElement( 0 );
+        // Store found tag in overlay:
+        overlay = de.GetTag();
+        // Move on to the next possible one:
+        overlay.SetGroup( overlay.GetGroup() + 2 );
+        // reset to element 0x0 just in case...
+        overlay.SetElement( 0 );
       }
     }
 
