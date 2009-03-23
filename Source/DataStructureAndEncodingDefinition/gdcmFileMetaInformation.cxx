@@ -207,7 +207,8 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     else
       {
-      abort();
+      //abort();
+      throw gdcm::Exception( "No 2,3 and 8,18 element sorry" );
       }
     }
   else // Ok there is a value in (0002,0003) let see if it match (0008,0018)

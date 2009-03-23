@@ -102,6 +102,7 @@ public:
     KeyObjectSelectionDocument,
     HangingProtocolStorage,
     ModalityPerformedProcedureStepSOPClass,
+    PhilipsPrivateMRSyntheticImageStorage,
     MS_END
   } MSType; // Media Storage Type
 

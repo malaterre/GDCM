@@ -104,6 +104,10 @@ public:
 
   // Helper:
   /// Set the byte value
+  /// \warning user need to read DICOM standard for an understanding of:
+  /// * even padding
+  /// * \0 vs space padding
+  /// By default even padding is achieved using \0 regardless of the of VR
   void SetByteValue(const char *array, VL length)
     {
     ByteValue *bv = new ByteValue(array,length);

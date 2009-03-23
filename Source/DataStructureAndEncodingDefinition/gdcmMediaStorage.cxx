@@ -114,6 +114,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.38.1",
   // Modality Performed Procedure Step SOP Class
   "1.2.840.10008.3.1.2.3.3",
+  // Philips Private MR Synthetic Image Storage
+  "1.3.46.670589.5.0.10",
   0
 };
 
