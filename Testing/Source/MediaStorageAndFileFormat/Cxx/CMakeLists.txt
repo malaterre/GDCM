@@ -35,7 +35,7 @@ SET(MSFF_TEST_SRCS
   TestImageReader
   TestDirectionCosines
   TestImageWriter
-  #TestImageWriter2
+  TestImageWriter2
   TestCodec
   TestPDFCodec
   TestRLECodec

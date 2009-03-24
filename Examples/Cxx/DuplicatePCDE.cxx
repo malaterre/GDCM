@@ -30,6 +30,7 @@ Original thread can be found at:
 http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/82f28c4db28963af
 
 
+Question:
 1.
   There is no restriction for a specific Private Creator Data Element
 (PCDE) to be unique within the same group, right ?
@@ -75,6 +76,30 @@ Unknown Tag & Data
 \00\00\00\45\63\68\6f\4c\69... # 6788, 1 CSAImageHeaderInfo
 
   one should return two instances, correct ?
+
+Answer:
+I would say that this is covered in principle by the PS 3.5 7.1
+"The Data Elements ... shall occur at most once in a Data Set"
+rule, since the data element is defined by the tuple
+(private creator,gggg,ee) where xxee is the element
+number and xx is arbitrary and has no inherent meaning and
+does not serve to disambiguate the data element.
+
+E.g.:
+
+(0019,0030) Private Creator ID = "Smith"
+...
+(0019,0032) Private Creator ID = "Smith"
+...
+(0019,3015) Fractal Index = "32"
+...
+(0019,3215) Fractal Index = "32"
+
+would be illegal because even though they are assigned different
+(completely arbitrary) blocks, with the same group, element
+number and private creator, (0019,3015) and (0019,3215) are the
+"same" data element. 
+
 */
 
 int main(int argc, char *argv[])
@@ -139,8 +164,9 @@ int main(int argc, char *argv[])
         // Warning: when doing : duplicate = de, only the pointer to the ByteValue is passed
         // (to avoid large memory duplicate). We need to explicitely duplicate the bytevalue ourselves:
         duplicate.SetByteValue( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
-        // Let's recognize the duplicated elements:
-        duplicate.GetByteValue()->Fill( 'X' );
+        // Let's recognize the duplicated ASCII-type elements:
+        if( duplicate.GetVR() & gdcm::VR::VRASCII )
+          duplicate.GetByteValue()->Fill( 'X' );
         }
       dup.Insert( duplicate );
       }

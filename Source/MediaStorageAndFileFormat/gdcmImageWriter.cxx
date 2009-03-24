@@ -384,6 +384,13 @@ bool ImageWriter::Write()
   const ByteValue *bv = de.GetByteValue();
   const TransferSyntax &ts = PixelData->GetTransferSyntax();
   assert( ts.IsExplicit() || ts.IsImplicit() );
+
+  if( !ts.IsLossy() && PixelData->IsLossy() )
+    {
+    gdcmWarningMacro( "Sorry Pixel Data in encapsulated stream was found to be lossy while Transfer Syntax does not authorized that" );
+    return false;
+    }
+
   VL vl;
   if( bv )
     {
