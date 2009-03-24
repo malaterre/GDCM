@@ -650,7 +650,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &_os, const UIDs &uid)
 {
-  _os << uid.GetString() << " -> " << uid.GetName() << std::endl;
+  _os << uid.GetString() << " -> " << uid.GetName();
   return _os;
 
 }

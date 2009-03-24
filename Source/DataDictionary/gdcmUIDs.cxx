@@ -320,6 +320,7 @@ namespace gdcm
 {"1.2.840.113619.4.26"     , "GE Private 3D Model Storage" },
 {"1.2.840.113619.4.30"     , "GE Advance (PET) Raw Data Storage" },
 {"2.16.840.1.113709.1.5.1" , "GEPACS_PRIVATE_IMS_INFO Storage" },
+{"2.16.840.1.113709.1.2.2" , "COMPRESS_EXPRESS TRANSFER SYNTAX" },
 {"1.2.840.113543.6.6.1.3.10002", "Unregistred (?) Philips3D" },
 {"1.2.392.200036.9116.7.8.1.1.1", "Toshiba Private Data Storage" },
 /* CREF4.09-80_iSite4.1DICOMConformance.pdf 

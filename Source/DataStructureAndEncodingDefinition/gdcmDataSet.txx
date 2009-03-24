@@ -168,7 +168,7 @@ namespace gdcm
           }
         else
           {
-          assert( de.GetTag() == Tag(0xfffe,0xe000) );
+          //assert( de.GetTag() == Tag(0xfffe,0xe000) );
           is.seekg( -4, std::ios::cur );
           }
         // let's fix the length now:
