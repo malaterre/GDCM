@@ -178,7 +178,7 @@ public:
   Tag GetPrivateCreator() const
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
-    // eg: 0x1234,0x1425 -> 0x1234,0x0014
+    // eg: 0x0123,0x1425 -> 0x0123,0x0014
     assert( IsPrivate() && !IsPrivateCreator() );
     Tag r = *this;
     r.SetElement( GetElement() >> 8 );
@@ -188,10 +188,11 @@ public:
   void SetPrivateCreator(Tag const &t)
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
-    // eg: 0x1234,0x0056 -> 0x1234,0x5678
+    // eg: 0x0123,0x0045 -> 0x0123,0x4567
     assert( t.IsPrivate() /*&& t.IsPrivateCreator()*/ );
     uint16_t element = t.GetElement() << 8;
-    SetElement( GetElement() + element );
+    uint16_t base = GetElement() << 8;
+    SetElement( (base >> 8) + element );
     }
 
   /// Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number and yy in [0x10,0xFF]

@@ -120,6 +120,11 @@ public:
     const ByteValue *bv = dynamic_cast<const ByteValue*>(ValueField.GetPointer());
     return bv; // Will return NULL if not ByteValue
   }
+  ByteValue* GetByteValue() {
+    // Get the raw pointer from the gdcm::SmartPointer
+    ByteValue *bv = dynamic_cast<ByteValue*>(ValueField.GetPointer());
+    return bv; // Will return NULL if not ByteValue
+  }
 
   /// Return the Value of DataElement as a Sequence Of Items (if possible)
   /// \warning: You need to check for NULL return value

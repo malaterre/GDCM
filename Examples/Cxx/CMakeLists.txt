@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(
 
 SET(EXAMPLES_SRCS
   CheckBigEndianBug
+  DuplicatePCDE
   CreateARGBImage
   CreateCMYKImage
   CompressImage

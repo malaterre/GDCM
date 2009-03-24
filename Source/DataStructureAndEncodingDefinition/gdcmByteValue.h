@@ -128,6 +128,10 @@ public:
     if(!Internal.empty()) return &Internal[0];
     return 0;
   }
+  void Fill(char c) {
+    std::vector<char>::iterator it = Internal.begin();
+    for(; it != Internal.end(); ++it) *it = c;
+  }
   bool GetBuffer(char *buffer, unsigned long length) const {
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
     // so we need an inequality

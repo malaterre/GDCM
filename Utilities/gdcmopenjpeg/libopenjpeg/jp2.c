@@ -55,6 +55,7 @@ static void jp2_write_bpcc(opj_jp2_t *jp2, opj_cio_t *cio);
 static bool jp2_read_bpcc(opj_jp2_t *jp2, opj_cio_t *cio);
 static void jp2_write_colr(opj_jp2_t *jp2, opj_cio_t *cio);
 static bool jp2_read_colr(opj_jp2_t *jp2, opj_cio_t *cio);
+static bool jp2_read_pclr(opj_jp2_t *jp2, opj_cio_t *cio);
 /**
 Write the JP2H box - JP2 Header box
 @param jp2 JP2 handle
@@ -268,6 +269,25 @@ static void jp2_write_colr(opj_jp2_t *jp2, opj_cio_t *cio) {
 	cio_seek(cio, box.init_pos + box.length);
 }
 
+static bool jp2_read_pclr(opj_jp2_t *jp2, opj_cio_t *cio) {
+	opj_jp2_box_t box;
+	int skip_len;
+  bool found;
+
+	opj_common_ptr cinfo = jp2->cinfo;
+
+	jp2_read_boxhdr(cinfo, cio, &box);
+	do {
+		if (JP2_PCLR != box.type) {
+			cio_skip(cio, box.length - 8);
+			jp2_read_boxhdr(cinfo, cio, &box);
+		}
+	} while(JP2_PCLR != box.type);
+  abort();
+
+	return true;
+}
+
 static bool jp2_read_colr(opj_jp2_t *jp2, opj_cio_t *cio) {
 	opj_jp2_box_t box;
 	int skip_len;
@@ -352,6 +372,8 @@ static bool jp2_read_jp2h(opj_jp2_t *jp2, opj_cio_t *cio) {
 	}
 	if (!jp2_read_colr(jp2, cio))
 		return false;
+	/*if (!jp2_read_pclr(jp2, cio))
+		return false;*/
 
 	skip_len = box.init_pos + box.length - cio_tell(cio);
 	if (skip_len < 0) {

@@ -317,5 +317,15 @@ int TestTag(int , char * [])
     return 1;
     }
 
+  gdcm::Tag private_creator(0x0123,0x0045);
+  gdcm::Tag priv1(0x0123,0x0067);
+  gdcm::Tag priv2(0x0123,0x1067);
+  priv1.SetPrivateCreator( private_creator );
+  priv2.SetPrivateCreator( private_creator );
+  if( priv1 != priv2 ) return 1;
+  if( priv1 != gdcm::Tag(0x0123,0x4567) ) return 1;
+  if( priv1.GetPrivateCreator() != priv2.GetPrivateCreator() ) return 1;
+  if( priv1.GetPrivateCreator() != private_creator ) return 1;
+
   return 0;
 }
