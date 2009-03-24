@@ -178,7 +178,6 @@ bool ImageReader::Read()
         else
           {
           // Giving up
-          abort();
           res = false;
           }
         }

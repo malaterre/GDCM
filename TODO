@@ -299,3 +299,6 @@ Make gdcmconv operate on gdcm::Pixmap and not gdcm::Image
 -----------------------------------------------------------------------
 old SC and numberOfFrames > 1:
 ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm
+-----------------------------------------------------------------------
+TODO: try to handle:
+gdcmData/gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
