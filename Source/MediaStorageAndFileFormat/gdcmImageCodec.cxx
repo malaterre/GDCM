@@ -99,6 +99,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
     }
 #endif
   os.write(dummy_buffer, buf_size);
+  delete[] dummy_buffer;
   return true;
 }
 
