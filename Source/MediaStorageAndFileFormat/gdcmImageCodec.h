@@ -40,6 +40,7 @@ public:
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);
+  virtual bool IsValid(PhotometricInterpretation const &pi);
 public:
 
   unsigned int GetPlanarConfiguration() const

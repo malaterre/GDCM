@@ -305,3 +305,7 @@ gdcmData/gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
 -----------------------------------------------------------------------
 gdcm::Pixmap::IsLossy is an expensive call, need to benchmark impact of 
 extra call
+-----------------------------------------------------------------------
+OPJ_LIMIT_DECODING to parse header only
+-----------------------------------------------------------------------
+check volume_to_jp3d/ jp3d_to_volume to handle JPEG2000 Part 2

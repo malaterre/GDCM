@@ -524,6 +524,8 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     // there is no (0x60xx,0x3000) element, for example:
     // - XA_GE_JPEG_02_with_Overlays.dcm
     // - SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+    // Sigh, I finally found someone not declaring that unused bits where not zero:
+    // gdcmConformanceTests/dcm4chee_unusedbits_not_zero.dcm   
     if( NeedOverlayCleanup )
       DoOverlayCleanup(*cur_is,os);
     else
@@ -540,6 +542,11 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     }
 
   return true;
+}
+
+bool ImageCodec::IsValid(PhotometricInterpretation const &)
+{
+  return false;
 }
 
 } // end namespace gdcm

@@ -66,6 +66,7 @@ public:
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);
+  bool IsValid(PhotometricInterpretation const &pi);
 
 protected:
   // Internal method called by SetPixelFormat

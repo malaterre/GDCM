@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmTagPath.h"
+#include "gdcmTag.h"
 
 int TestTagPath(int argc, char *argv[])
 {
@@ -25,17 +26,39 @@ int TestTagPath(int argc, char *argv[])
     {
     return 1;
     }
-  tp.ConstructFromString( path );
+  if( !tp.ConstructFromString( path ) )
+    {
+    return 1;
+    }
 
   tp.Print( std::cout );
 
-  const char path2[] = "/0010,0011/1234,5678";
+  const char path2[] = "/0010,0011/*/1234,5678";
   if( !gdcm::TagPath::IsValid( path2 ) )
     {
     return 1;
     }
-  tp.ConstructFromString( path2 );
+  if( !tp.ConstructFromString( path2 ) )
+    {
+    return 1;
+    }
 
+  std::cout << "FromString:" << std::endl;
+  tp.Print( std::cout );
+
+  const unsigned int n = 10;
+  gdcm::Tag list[n];
+  for(unsigned i = 0; i < n; ++i)
+    {
+    list[i].SetGroup( 0x1234 );
+    list[i].SetElement( i );
+    }
+
+  if( !tp.ConstructFromTagList( list, n ) )
+    {
+    return 1;
+    }
+  std::cout << "TagList:" << std::endl;
   tp.Print( std::cout );
 
 

@@ -185,11 +185,11 @@ struct MSModalityType
 };
 
 static MSModalityType MSModalityTypes[] = {
-  {"  ", 2},//MediaStorageDirectoryStorage,
+  {"  ", 0},//MediaStorageDirectoryStorage,
   {"CR", 2},//ComputedRadiographyImageStorage,
-  {"DX", 2},//DigitalXRayImageStorageForPresentation,
-  {"  ", 2},//DigitalXRayImageStorageForProcessing,
-  {"MG", 2},//DigitalMammographyImageStorageForPresentation,
+  {"  ", 2},//DigitalXRayImageStorageForPresentation,
+  {"DX", 2},//DigitalXRayImageStorageForProcessing,
+  {"  ", 2},//DigitalMammographyImageStorageForPresentation,
   {"MG", 2},//DigitalMammographyImageStorageForProcessing,
   {"  ", 2},//DigitalIntraoralXrayImageStorageForPresentation,
   {"  ", 2},//DigitalIntraoralXRayImageStorageForProcessing,

@@ -358,4 +358,32 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
   return ImageCodec::Decode(tmpos,os);
 }
 
+bool JPEGCodec::IsValid(PhotometricInterpretation const &pi)
+{
+  bool ret = false;
+  switch( pi )
+    {
+    // JPEGCodec can produce the following PhotometricInterpretation as output:
+    case PhotometricInterpretation::MONOCHROME1:
+    case PhotometricInterpretation::MONOCHROME2:
+    case PhotometricInterpretation::PALETTE_COLOR:
+    case PhotometricInterpretation::RGB:
+    case PhotometricInterpretation::YBR_FULL:
+    case PhotometricInterpretation::YBR_FULL_422:
+    case PhotometricInterpretation::YBR_PARTIAL_422:
+    case PhotometricInterpretation::YBR_PARTIAL_420:
+      ret = true;
+      break;
+    default:
+      ;
+//    case HSV:
+//    case ARGB: // retired
+//    case CMYK:
+//    case YBR_RCT:
+//    case YBR_ICT:
+//      ret = false;
+    }
+  return ret;
+}
+
 } // end namespace gdcm
