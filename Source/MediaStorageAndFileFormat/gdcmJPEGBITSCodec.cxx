@@ -704,6 +704,9 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
           cinfo.jpeg_color_space = JCS_UNKNOWN;
           cinfo.out_color_space = JCS_UNKNOWN;
           }
+        if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
+         || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
+          this->PI = PhotometricInterpretation::RGB;
       break;
     case JCS_YCbCr:
       if( GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL &&
@@ -1058,27 +1061,33 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   cinfo.image_width = image_width; 	/* image width and height, in pixels */
   cinfo.image_height = image_height;
 
-  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
-   || this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1 
-   || this->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR )
+  switch( this->GetPhotometricInterpretation() )
     {
+  case PhotometricInterpretation::MONOCHROME1:
+  case PhotometricInterpretation::MONOCHROME2:
+  case PhotometricInterpretation::PALETTE_COLOR:
     cinfo.input_components = 1;     /* # of color components per pixel */
     cinfo.in_color_space = JCS_GRAYSCALE; /* colorspace of input image */
-    }
-  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
-    {
+    break;
+  case PhotometricInterpretation::RGB:
+  case PhotometricInterpretation::YBR_RCT:
+  case PhotometricInterpretation::YBR_ICT:
     cinfo.input_components = 3;		/* # of color components per pixel */
     cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
-    }
-  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL 
-    || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
-    {
+    break;
+  case PhotometricInterpretation::YBR_FULL:
+  case PhotometricInterpretation::YBR_FULL_422:
+  case PhotometricInterpretation::YBR_PARTIAL_420:
+  case PhotometricInterpretation::YBR_PARTIAL_422:
     cinfo.input_components = 3;		/* # of color components per pixel */
     cinfo.in_color_space = JCS_YCbCr; 	/* colorspace of input image */
-    }
-  else
-    {
-    std::cerr << "Not supported: " << this->GetPhotometricInterpretation() << std::endl;
+    break;
+  case PhotometricInterpretation::HSV:
+  case PhotometricInterpretation::ARGB:
+  case PhotometricInterpretation::CMYK:
+    // TODO !
+  case PhotometricInterpretation::UNKNOW:
+  case PhotometricInterpretation::PI_END: // To please compiler
     return false;
     }
   //if ( cinfo.process == JPROC_LOSSLESS )

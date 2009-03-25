@@ -302,3 +302,6 @@ ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm
 -----------------------------------------------------------------------
 TODO: try to handle:
 gdcmData/gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
+-----------------------------------------------------------------------
+gdcm::Pixmap::IsLossy is an expensive call, need to benchmark impact of 
+extra call

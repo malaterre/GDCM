@@ -255,12 +255,17 @@ unsigned long Pixmap::GetBufferLength() const
 
 bool Pixmap::TryRAWCodec(char *buffer, bool &lossyflag) const
 {
-  unsigned long len = GetBufferLength();
+  if(!buffer)
+    {
+    lossyflag = false;
+    return true;
+    }
   const TransferSyntax &ts = GetTransferSyntax();
 
   const ByteValue *bv = PixelData.GetByteValue();
   if( bv )
     {
+    unsigned long len = GetBufferLength();
     RAWCodec codec;
     if( !codec.CanDecode( ts ) ) return false;
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
@@ -284,7 +289,6 @@ bool Pixmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     unsigned long check = outbv->GetLength();  // FIXME
     assert( check == len );
     if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
-    lossyflag = false;
     return r;
     }
   return false;
