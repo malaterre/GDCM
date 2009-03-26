@@ -37,7 +37,9 @@
 // identical. But when FileLowerLeft is Off, we have to reorder the Y-line of the image, and thus the DataOrigin
 // is then translated to the other side of the image.
 // .SECTION Spacing
-// When reading a 3D volume, the spacing along the Z dimension might be negative
+// When reading a 3D volume, the spacing along the Z dimension might be negative (so as to respect up-side-down)
+// as specified in the Image Orientation (Patient) tag. When Z-spacing is 0, this means the multi-frame object
+// contains image which do not represent uniform volume.
 // .SECTION Warning
 // When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader 
 // it is *required* that FileLowerLeft is set to ON as coordinate system
@@ -56,6 +58,7 @@
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
+// vtkDICOMImageReader
 
 #ifndef __vtkGDCMImageReader_h
 #define __vtkGDCMImageReader_h
@@ -84,6 +87,9 @@ class vtkPolyData;
 #endif
 #ifndef VTK_YBR
 #define VTK_YBR 7
+#endif
+#ifndef VTK_CMYK
+#define VTK_CMYK 8
 #endif
 
 //BTX
@@ -181,7 +187,7 @@ public:
   vtkBooleanMacro(ApplyYBRToRGB,int);
 
   // Description:
-  // Return VTK_LUMINANCE, VTK_INVERSE_LUMINANCE, VTK_RGB, VTK_RGBA, VTK_LOOKUP_TABLE or VTK_YBR
+  // Return VTK_LUMINANCE, VTK_INVERSE_LUMINANCE, VTK_RGB, VTK_RGBA, VTK_LOOKUP_TABLE, VTK_YBR or VTK_CMYK
   // or 0 when ImageFormat is not handled.
   // Warning: For color image, PlanarConfiguration need to be taken into account.
   vtkGetMacro(ImageFormat,int);
@@ -202,14 +208,16 @@ public:
   vtkGetVector3Macro(ImagePositionPatient,double);
   vtkGetVector6Macro(ImageOrientationPatient,double);
 
+  // Description:
   // Set/Get the first Curve Data:
   vtkGetObjectMacro(Curve,vtkPolyData);
   virtual void SetCurve(vtkPolyData *pd);
 
+  // Description:
+  // \DEPRECATED:
   // Modality LUT
-  // DEPRECATED:
   // Value returned by GetShift/GetScale might be innacurate since Shift/Scale could be
-  // varying along the Series read. Therefore user are advices not to use those function
+  // varying along the Series read. Therefore user are advices not to use those functions
   // anymore
   vtkGetMacro(Shift,double);
   vtkGetMacro(Scale,double);

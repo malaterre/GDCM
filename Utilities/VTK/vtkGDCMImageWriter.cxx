@@ -479,7 +479,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     image.SetDimension(2, dims[2] );
     }
   // Even in case of 2D image, pass the 3rd dimension spacing, this might
-  // Be needed for exmaple in MR : Spacing Between Slice tag
+  // Be needed for example in MR : Spacing Between Slice tag
   image.SetSpacing(2, spacing[2] ); // should always be valid...
   // TODO: need to do Origin / Image Position (Patient)
   // For now FileDimensionality should match File Dimension
@@ -1044,6 +1044,14 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     origin[2] = vtkorigin[2] - norm * iop[3+2];
     }
   double new_origin[3];
+  // In order to compute the newer Image Position (Patient) we need to have a valid spacing along
+  // 3rd dimension. Simply give up in case 0:
+  // FIXME: Actually if user decides to write a series of SC object it is ok...
+  if( spacing[2] == 0. && dims[2] > 1 )
+    {
+    vtkErrorMacro( "Z-spacing cannot be 0 for multiframe image" );
+    return 0;
+    }
   for (int i = 0; i < 3; i++)
     {
     // the n'th slice is n * z-spacing aloung the IOP-derived

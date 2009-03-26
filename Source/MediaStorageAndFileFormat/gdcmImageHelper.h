@@ -57,7 +57,7 @@ public:
   /// still having a Pixel Spacing tag (0028,0030). If you have deal with those files, use this 
   /// very special flag to handle them
   /// Unless explicitely set elsewhere by the standard, it will use value from 0028,0030 / 0018,0088
-  // / for the Pixel Spacing of the Image
+  /// for the Pixel Spacing of the Image
   static void SetForcePixelSpacing(bool);
   static bool GetForcePixelSpacing();
 

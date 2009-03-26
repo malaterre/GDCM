@@ -1124,6 +1124,10 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     {
     this->ImageFormat = VTK_RGB;
     }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::CMYK )
+    {
+    this->ImageFormat = VTK_CMYK;
+    }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::ARGB )
     {
     this->ImageFormat = VTK_RGBA;

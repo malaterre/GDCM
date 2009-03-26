@@ -449,7 +449,14 @@ bool ImageHelper::GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector
         }
       else
         {
-        gdcmWarningMacro( "Could not get DirectionCosines" );
+        // PAPYRUS_CR_InvalidIOP.dcm
+        gdcmWarningMacro( "Could not get DirectionCosines. Will be set to unit vector." );
+        //dircos[0] = 1;
+        //dircos[1] = 0;
+        //dircos[2] = 0;
+        //dircos[3] = 0;
+        //dircos[4] = 1;
+        //dircos[5] = 0;
         return false;
         }
       }

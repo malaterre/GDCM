@@ -127,10 +127,18 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       // (6001,0000) UL 28                                       #   4, 1 PrivateGroupLength
       // (6001,0010) LT [PAPYRUS 3.0]                            #  12, 1 PrivateCreator
       // (6001,1001) LT (no value available)                     #   0, 0 Unknown Tag & Data
-      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+/*
+ * FIXME:
+ * In order to support : gdcmData/SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+ * I cannot simply check for overlay_group,3000 this would not work
+ * I would need a strong euristick
+ */
+      //if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x0010 ) ) )
         {
         // ok so far so good...
-        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        //const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x0010));
         if( !overlaydata.IsEmpty() )
           {
           ++numoverlays;
