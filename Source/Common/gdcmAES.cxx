@@ -61,8 +61,6 @@ namespace gdcm
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef POLARSSL_AES_H
-#define POLARSSL_AES_H
 
 #define AES_ENCRYPT     1
 #define AES_DECRYPT     0
@@ -78,10 +76,15 @@ typedef struct
 }
 aes_context;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+// PIMPL
+class AESInternals
+{
+public:
+  aes_context ctx;
+};
 
+
+// forward declaration
 /**
  * \brief          AES key schedule (encryption)
  *
@@ -156,11 +159,70 @@ void aes_crypt_cfb128( aes_context *ctx,
  */
 int aes_self_test( int verbose );
 
-#ifdef __cplusplus
+AES::AES()
+{
+  Internals = new AESInternals;
 }
-#endif
 
-#endif /* aes.h */
+AES::~AES()
+{
+  delete Internals;
+}
+
+void AES::SetkeyEnc(unsigned char *key, int keysize )
+{
+  aes_setkey_enc( &Internals->ctx, key, keysize );
+}
+
+void AES::SetkeyDec(unsigned char *key, int keysize )
+{
+  aes_setkey_dec( &Internals->ctx, key, keysize );
+}
+
+void AES::CryptEcb(
+                    int mode,
+                    unsigned char input[16],
+                    unsigned char output[16] )
+{
+aes_crypt_ecb( &Internals->ctx,
+                    mode,
+                    input,
+                    output );
+}
+
+void AES::CryptCbc(
+                    int mode,
+                    int length,
+                    unsigned char iv[16],
+                    unsigned char *input,
+                    unsigned char *output )
+{
+aes_crypt_cbc( &Internals->ctx,
+                    mode,
+                    length,
+                    iv,
+                    input,
+                    output );
+
+}
+
+void AES::CryptCfb128(
+                       int mode,
+                       int length,
+                       int *iv_off,
+                       unsigned char iv[16],
+                       unsigned char *input,
+                       unsigned char *output )
+{
+aes_crypt_cfb128( &Internals->ctx,
+                       mode,
+                       length,
+                       iv_off,
+                       iv,
+                       input,
+                       output );
+
+}
 
 /*
  *  FIPS-197 compliant AES implementation
