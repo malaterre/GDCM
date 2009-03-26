@@ -26,8 +26,11 @@ int TestAES(int argc, char *argv[])
   gdcm::AES aes;
   unsigned char key[32] = {};
   unsigned char buf[64];
-  aes.SetkeyEnc( key, 128 );
+  if( !aes.SetkeyEnc( key, 128 ) ) return 1;
   aes.CryptEcb( AES::DECRYPT, buf, buf );
+
+  unsigned char iv[16] = {};
+  aes.CryptCbc( AES::ENCRYPT, 16, iv, buf, buf );
 
   MyAES myaes;
   int ret = myaes.MySelfTest( 0 );

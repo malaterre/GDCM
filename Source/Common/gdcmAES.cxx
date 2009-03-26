@@ -92,7 +92,7 @@ public:
  * \param key      encryption key
  * \param keysize  must be 128, 192 or 256
  */
-void aes_setkey_enc( aes_context *ctx, unsigned char *key, int keysize );
+void aes_setkey_enc( aes_context *ctx, const unsigned char *key, int keysize );
 
 /**
  * \brief          AES key schedule (decryption)
@@ -101,7 +101,7 @@ void aes_setkey_enc( aes_context *ctx, unsigned char *key, int keysize );
  * \param key      decryption key
  * \param keysize  must be 128, 192 or 256
  */
-void aes_setkey_dec( aes_context *ctx, unsigned char *key, int keysize );
+void aes_setkey_dec( aes_context *ctx, const unsigned char *key, int keysize );
 
 /**
  * \brief          AES-ECB block encryption/decryption
@@ -113,7 +113,7 @@ void aes_setkey_dec( aes_context *ctx, unsigned char *key, int keysize );
  */
 void aes_crypt_ecb( aes_context *ctx,
                     int mode,
-                    unsigned char input[16],
+                    const unsigned char input[16],
                     unsigned char output[16] );
 
 /**
@@ -130,7 +130,7 @@ void aes_crypt_cbc( aes_context *ctx,
                     int mode,
                     int length,
                     unsigned char iv[16],
-                    unsigned char *input,
+                    const unsigned char *input,
                     unsigned char *output );
 
 /**
@@ -149,7 +149,7 @@ void aes_crypt_cfb128( aes_context *ctx,
                        int length,
                        int *iv_off,
                        unsigned char iv[16],
-                       unsigned char *input,
+                       const unsigned char *input,
                        unsigned char *output );
 
 /**
@@ -169,20 +169,41 @@ AES::~AES()
   delete Internals;
 }
 
-void AES::SetkeyEnc(unsigned char *key, int keysize )
+inline bool aes_check_params(const unsigned char *key, int keysize)
 {
-  aes_setkey_enc( &Internals->ctx, key, keysize );
+  if(!key) return false;
+  switch(keysize)
+    {
+    case 128:
+    case 192:
+    case 256:
+      return true;
+    default:
+      ;
+    }
+  return false;
 }
 
-void AES::SetkeyDec(unsigned char *key, int keysize )
+bool AES::SetkeyEnc(const unsigned char *key, int keysize )
 {
-  aes_setkey_dec( &Internals->ctx, key, keysize );
+  bool ok = aes_check_params(key, keysize);
+  if( ok )
+    aes_setkey_enc( &Internals->ctx, key, keysize );
+  return ok;
+}
+
+bool AES::SetkeyDec(const unsigned char *key, int keysize )
+{
+  bool ok = aes_check_params(key, keysize);
+  if( ok )
+    aes_setkey_dec( &Internals->ctx, key, keysize );
+  return ok;
 }
 
 void AES::CryptEcb(
                     int mode,
-                    unsigned char input[16],
-                    unsigned char output[16] )
+                    const unsigned char input[16],
+                    unsigned char output[16] ) const
 {
 aes_crypt_ecb( &Internals->ctx,
                     mode,
@@ -194,8 +215,8 @@ void AES::CryptCbc(
                     int mode,
                     int length,
                     unsigned char iv[16],
-                    unsigned char *input,
-                    unsigned char *output )
+                    const unsigned char *input,
+                    unsigned char *output ) const
 {
 aes_crypt_cbc( &Internals->ctx,
                     mode,
@@ -209,22 +230,22 @@ aes_crypt_cbc( &Internals->ctx,
 void AES::CryptCfb128(
                        int mode,
                        int length,
-                       int *iv_off,
+                       int &iv_off,
                        unsigned char iv[16],
-                       unsigned char *input,
-                       unsigned char *output )
+                       const unsigned char *input,
+                       unsigned char *output ) const
 {
 aes_crypt_cfb128( &Internals->ctx,
                        mode,
                        length,
-                       iv_off,
+                       &iv_off,
                        iv,
                        input,
                        output );
 
 }
 
-int AES::SelfTest( int verbose )
+int AES::SelfTest( int verbose ) const
 {
   return aes_self_test( verbose );
 }
@@ -688,7 +709,7 @@ static void aes_gen_tables( void )
 /*
  * AES key schedule (encryption)
  */
-void aes_setkey_enc( aes_context *ctx, unsigned char *key, int keysize )
+void aes_setkey_enc( aes_context *ctx, const unsigned char *key, int keysize )
 {
     int i;
     unsigned long *RK;
@@ -791,7 +812,7 @@ void aes_setkey_enc( aes_context *ctx, unsigned char *key, int keysize )
 /*
  * AES key schedule (decryption)
  */
-void aes_setkey_dec( aes_context *ctx, unsigned char *key, int keysize )
+void aes_setkey_dec( aes_context *ctx, const unsigned char *key, int keysize )
 {
     int i, j;
     aes_context cty;
@@ -890,7 +911,7 @@ void aes_setkey_dec( aes_context *ctx, unsigned char *key, int keysize )
  */
 void aes_crypt_ecb( aes_context *ctx,
                     int mode,
-                    unsigned char input[16],
+                    const unsigned char input[16],
                     unsigned char output[16] )
 {
     int i;
@@ -993,7 +1014,7 @@ void aes_crypt_cbc( aes_context *ctx,
                     int mode,
                     int length,
                     unsigned char iv[16],
-                    unsigned char *input,
+                    const unsigned char *input,
                     unsigned char *output )
 {
     int i;
@@ -1049,7 +1070,7 @@ void aes_crypt_cfb128( aes_context *ctx,
                        int length,
                        int *iv_off,
                        unsigned char iv[16],
-                       unsigned char *input,
+                       const unsigned char *input,
                        unsigned char *output )
 {
     int c, n = *iv_off;
@@ -1381,6 +1402,8 @@ int aes_self_test( int verbose )
     return( 0 );
 }
 
+#else
+int aes_self_test( int ) { return 1; }
 #endif
 
 #endif
