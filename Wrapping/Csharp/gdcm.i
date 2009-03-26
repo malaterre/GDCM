@@ -286,21 +286,6 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-%ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
-//%ignore gdcm::ByteValue::GetPointer() const;
-//%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
-%include "gdcmByteValue.h"
-%extend gdcm::ByteValue
-{
-  const char *toString() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
-
 // Array marshaling for arrays of primitives
 %define %cs_marshal_array(TYPE, CSTYPE)
        %typemap(ctype)  TYPE[] "void*"
@@ -330,6 +315,24 @@ using namespace gdcm;
 // %clear commands should be unnecessary, but do it just-in-case
 %clear char* buffer;
 %clear unsigned char* buffer;
+
+%apply char[] { char* buffer }
+%ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
+//%ignore gdcm::ByteValue::GetPointer() const;
+//%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
+%include "gdcmByteValue.h"
+%extend gdcm::ByteValue
+{
+  const char *toString() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%clear char* buffer;
+
 
 %apply char[] { const char* array }
 
