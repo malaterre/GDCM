@@ -224,6 +224,11 @@ aes_crypt_cfb128( &Internals->ctx,
 
 }
 
+int AES::SelfTest( int verbose )
+{
+  return aes_self_test( verbose );
+}
+
 /*
  *  FIPS-197 compliant AES implementation
  *
@@ -267,6 +272,11 @@ aes_crypt_cfb128( &Internals->ctx,
 
 //#include "polarssl/config.h"
 #define POLARSSL_AES_C
+
+// Only compile self test when in testing compilation
+#ifdef GDCM_BUILD_TESTING
+#define POLARSSL_SELF_TEST
+#endif
 
 #if defined(POLARSSL_AES_C)
 

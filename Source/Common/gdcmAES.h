@@ -43,7 +43,7 @@ public :
  * \param key      encryption key
  * \param keysize  must be 128, 192 or 256
  */
-void SetkeyEnc(unsigned char *key, int keysize );
+void SetkeyEnc(unsigned char *key, int keysize);
 
 /**
  * \brief          AES key schedule (decryption)
