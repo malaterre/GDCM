@@ -21,6 +21,7 @@ namespace gdcm
 {
 /**
  * \brief Class for AES encryption
+ *
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT AES
