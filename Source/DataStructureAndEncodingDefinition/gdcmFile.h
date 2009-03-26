@@ -22,7 +22,6 @@
 namespace gdcm
 {
 
-class FileInternal;
 /**
  * \brief a DICOM File
  * See PS 3.10

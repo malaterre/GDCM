@@ -25,7 +25,7 @@ int TestAES(int argc, char *argv[])
 {
   gdcm::AES aes;
   unsigned char key[32] = {};
-  unsigned char buf[64];
+  unsigned char buf[64] = {};
   if( !aes.SetkeyEnc( key, 128 ) ) return 1;
   aes.CryptEcb( AES::DECRYPT, buf, buf );
 
