@@ -309,3 +309,7 @@ extra call
 OPJ_LIMIT_DECODING to parse header only
 -----------------------------------------------------------------------
 check volume_to_jp3d/ jp3d_to_volume to handle JPEG2000 Part 2
+-----------------------------------------------------------------------
+Write a gdcm2jp2 that would be cool ?
+Need to handle PALETTE_COLOR in JP2 palettetized (PCLR)
+There is only one problem with slope/rescale -> float

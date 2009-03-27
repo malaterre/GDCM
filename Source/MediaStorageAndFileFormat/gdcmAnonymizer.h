@@ -21,6 +21,16 @@ namespace gdcm
 {
 /**
  * \brief Anonymizer
+ * This is a dumb anonymizer implementation. All it allows user is simple operation such as:
+ * Tag based functions:
+ * - complete removal of DICOM attribute (Remove)
+ * - make a take empty, ie make it's length 0 (Empty)
+ * - replace with another string-based value (Replace)
+ * 
+ * DataSet function:
+ * - Remove all group length attribute from a DICOM dataset (Group Length element are deprecated, DICOM 2008)
+ * - Remove all private attributes
+ *
  * All function calls actually execute the user specified request. Previous implementation were calling 
  * a general Anonymize function but traversing a std::set is O(n) operation, while a simple user specified
  * request is O(log(n)) operation. So 'm' user interaction is O(m*log(n)) which is < O(n) complexity.

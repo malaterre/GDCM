@@ -450,6 +450,26 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     abort(); // TODO
     }
 
+  // Pixel density stuff:
+/*
+UINT8 density_unit
+UINT16 X_density
+UINT16 Y_density
+	The resolution information to be written into the JFIF marker;
+	not used otherwise.  density_unit may be 0 for unknown,
+	1 for dots/inch, or 2 for dots/cm.  The default values are 0,1,1
+	indicating square pixels of unknown size.
+*/
+
+  if( cinfo.density_unit != 0
+    || cinfo.X_density != 1
+    || cinfo.Y_density != 1
+  )
+    {
+    gdcmErrorMacro( "Pixel Density from JFIF Marker is not supported (for now)" );
+    //return false;
+    }
+
   return true;
 
 #if 0
@@ -1127,7 +1147,10 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   /*
    * See write_file_header
    */
-  cinfo.write_JFIF_header = 0;
+  //cinfo.write_JFIF_header = 1;
+  //cinfo.density_unit = 2;
+  //cinfo.X_density = 4;
+  //cinfo.Y_density = 3;
 
   /* Step 4: Start compressor */
 
