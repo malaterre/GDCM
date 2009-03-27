@@ -67,11 +67,42 @@ int main(int argc, char *argv[])
   gdcm::Tag tag2(0x10,0x20);
 
   // Create an instance of the Encrypted Attributes DataSet
-  gdcm::DataSet encryptedds;
-  encryptedds.Insert( ds.GetDataElement( tag1 ) );
-  encryptedds.Insert( ds.GetDataElement( tag2 ) );
+/*
+Modified Attributes Sequence (0400,0550) 1
+Sequence of Items containing all Attributes
+that were removed or replaced by "dummy
+values" in the main dataset during deidentification
+of the SOP instance. Upon
+reversal of the de-identification process, the
+Attributes are copied back into the main
+dataset, replacing any dummy values that
+might have been created. Only a single
+Item shall be present.
+ */
+  // Create a Sequence
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
+  sq->SetLengthToUndefined();
+
+    // Create a *single* item
+    gdcm::Item it;
+    it.SetVLToUndefined();
+    gdcm::DataSet &encryptedds = it.GetNestedDataSet();
+    encryptedds.Insert( ds.GetDataElement( tag1 ) );
+    encryptedds.Insert( ds.GetDataElement( tag2 ) );
+
+    sq->AddItem(it);
+
+  gdcm::DataElement des( gdcm::Tag(0x0400,0x0550) );
+  des.SetVR(gdcm::VR::SQ);
+  des.SetValue(*sq);
+  des.SetVLToUndefined();
+  
+  //ds.Insert(des);
+
+
   std::ostringstream os;
-  encryptedds.Write<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>(os);
+  std::cout << des << std::endl;
+  des.Write<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>(os);
 
   std::string encrypted_str = os.str();
   std::cout << "Size:" <<  encrypted_str.size() << std::endl;
@@ -96,6 +127,7 @@ Process defined in RFC-2630.
   unsigned char iv[16] = {};
   aes.CryptCbc( gdcm::AES::ENCRYPT, encrypted_len, iv, buf, buf );
 
+{
   // Create a Sequence
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
@@ -129,38 +161,23 @@ Process defined in RFC-2630.
   des.SetVLToUndefined();
   
   ds.Insert(des);
-
-  // We still need to create a Modified Attributes Sequence,
-  // in order to list all attributes that were removed/dummyfied
-{
-  // Create a Sequence
-  gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
-  sq->SetLengthToUndefined();
-
-    // Create an item
-    gdcm::Item it;
-    it.SetVLToUndefined();
-    gdcm::DataSet &nds = it.GetNestedDataSet();
-    nds.Insert( gdcm::DataElement( tag1 ) );
-    nds.Insert( gdcm::DataElement( tag2 ) );
-
-    sq->AddItem(it);
-
-  gdcm::DataElement des( gdcm::Tag(0x0400,0x0550) );
-  des.SetVR(gdcm::VR::SQ);
-  des.SetValue(*sq);
-  des.SetVLToUndefined();
-  
-  ds.Insert(des);
 }
 
 
   gdcm::Anonymizer ano;
   ano.SetFile( reader.GetFile() );
-  ano.Empty( tag1 ); // Patient Name is 1C
-  ano.Empty( tag2 ); // Patient ID is 1C
+  ano.Replace( tag1, "D'oh! Patient Name is in Encrypted Content"); // Patient Name is 1C
+  ano.Replace( tag2, "-1" ); // Patient ID is 1C
   ano.RemoveGroupLength();
   ano.RemovePrivateTags();
+
+  // PS 3.15
+  // E.1 BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE
+  // 6. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
+  // value of YES, and a value inserted in De-identification Method (0012,0063) or De-identification
+  // Method Code Sequence (0012,0064).
+  ano.Replace( gdcm::Tag(0x0012,0x0062), "YES");
+  ano.Replace( gdcm::Tag(0x0012,0x0063), "BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE");
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "AnonymizeAES" );
     gdcm::FileMetaInformation &fmi = file.GetHeader();
