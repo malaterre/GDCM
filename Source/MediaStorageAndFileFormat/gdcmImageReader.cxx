@@ -1345,7 +1345,7 @@ bool ImageReader::ReadACRNEMAImage()
   PixelData->SetPhotometricInterpretation(
     PhotometricInterpretation::MONOCHROME2 );
   PixelData->SetPlanarConfiguration(0);
-  const Tag planarconfiguration = Tag(0x0028, 0x0006);
+  const Tag planarconfiguration(0x0028, 0x0006);
   assert( !ds.FindDataElement( planarconfiguration ) );
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   // Some funny ACR NEMA file have PhotometricInterpretation ...
@@ -1364,11 +1364,26 @@ bool ImageReader::ReadACRNEMAImage()
     }
   else
     {
-    //assert( PixelData->GetPixelFormat().GetSamplesPerPixel() == 1 );
-    if( PixelData->GetPixelFormat().GetSamplesPerPixel() == 3 )
+    // Wild guess:
+    if( PixelData->GetPixelFormat().GetSamplesPerPixel() == 1 )
+      {
+      assert( PixelData->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 );
+      // No need...
+      //PixelData->SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
+      }
+    else if( PixelData->GetPixelFormat().GetSamplesPerPixel() == 3 )
       {
       // LIBIDO-24-ACR_NEMA-Rectangle.dcm
       PixelData->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
+    else if( PixelData->GetPixelFormat().GetSamplesPerPixel() == 4 )
+      {
+      PixelData->SetPhotometricInterpretation( PhotometricInterpretation::ARGB );
+      }
+    else
+      {
+      gdcmErrorMacro( "Cannot handle Samples Per Pixel=" << PixelData->GetPixelFormat().GetSamplesPerPixel() );
+      return false;
       }
     }
 

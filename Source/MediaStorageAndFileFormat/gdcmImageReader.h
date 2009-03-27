@@ -28,15 +28,9 @@ class MediaStorage;
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
  * representation
  * By default it is also loading the lookup table and overlay when found as they impact the rendering or the image
- * \todo
- * old gdcm 1.X used to have in its dictionary:
  *
- * - 0028 0015 US 1 UsedNbX ACR Special (RET)
- * - 0028 0016 US 1 UsedNbY ACR Special (RET)
- * - 0028 0017 US 1 UsedNbZ ACR Special (RET)
- * - 0028 0018 US 1 UsedNbT ACR Special (RET)
- *
- * since I cannot find them *anywhere* I'll have to hard code them directly in a specific libido image reader
+ * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of attribute that belong to
+ * what gdcm calls a 'Image'
  * 
  */
 class GDCM_EXPORT ImageReader : public Reader
@@ -47,7 +41,8 @@ public:
 
   /// Read the DICOM image. There are two reason for failure:
   /// 1. The input filename is not DICOM
-  /// 2. The input DICOM file does not contains an Image
+  /// 2. The input DICOM file does not contains an Image.
+  
   bool Read();
 
   // Following methods are valid only after a call to 'Read'

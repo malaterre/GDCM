@@ -42,8 +42,8 @@ public :
   ~AES();
 
   typedef enum {
-/* #define */ ENCRYPT = 1,
-/* #define */ DECRYPT = 0
+/* #define AES_*/ ENCRYPT = 1,
+/* #define AES_*/ DECRYPT = 0
   } AESModeType;
 
 

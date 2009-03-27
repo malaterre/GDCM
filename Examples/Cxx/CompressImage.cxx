@@ -72,7 +72,10 @@ int main(int argc, char *argv[])
   writer.SetImage( change.GetOutput() );
   writer.SetFile( reader.GetFile() );
   writer.SetFileName( outfilename );
-  writer.Write();
+  if( !writer.Write() )
+    {
+    return 1;
+    }
 
   return 0;
 }

@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
   )
 
 SET(EXAMPLES_SRCS
+  AnonymizeAES
   CheckBigEndianBug
   DuplicatePCDE
   CreateARGBImage
