@@ -325,7 +325,8 @@ int main(int argc, char *argv[])
       // the following does not work with VTKData/Data/t3_grid_0.mnc
       //writer->SetScale( reader->GetRescaleSlope() );
       //writer->SetShift( reader->GetRescaleIntercept() );
-      reader->GetImageAttributes()->PrintFileHeader();
+      if( verbose )
+        reader->GetImageAttributes()->PrintFileHeader();
       }
 #endif
     else if( vtkTIFFReader *reader = vtkTIFFReader::SafeDownCast( imgreader ) )

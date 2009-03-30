@@ -66,6 +66,7 @@ ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 SET(Common_SRCS
   gdcmVersion.cxx
   gdcmAES.cxx
+  gdcmRSA.cxx
   gdcmObject.cxx
   gdcmDirectory.cxx
   gdcmTerminal.cxx
