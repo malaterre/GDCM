@@ -64,6 +64,9 @@ public:
   /// Main function that loop over all elements and remove group length
   bool RemoveGroupLength();
 
+  /// Main function that loop over all elements and remove retired element
+  bool RemoveRetired();
+
   /// Set/Get File
   void SetFile(const File& f) { F = f; }
   //const File &GetFile() const { return *F; }

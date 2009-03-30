@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmSpacing.cxx
   gdcmFileExplicitFilter.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx

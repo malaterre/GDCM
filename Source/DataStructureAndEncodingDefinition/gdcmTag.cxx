@@ -43,4 +43,16 @@ namespace gdcm
     SetElement( element );
     return true;
     }
+
+  std::string Tag::PrintAsPipeSeparatedString() const
+    {
+    std::ostringstream _os;
+    const Tag &_val = *this;
+    _os.setf( std::ios::right);
+    _os << std::hex << '(' << std::setw( 4 ) << std::setfill( '0' )
+      << _val[0] << '|' << std::setw( 4 ) << std::setfill( '0' )
+      << _val[1] << ')' << std::setfill( ' ' ) << std::dec;
+    return _os.str();
+    }
+
 } // end namespace gdcm

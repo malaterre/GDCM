@@ -125,13 +125,13 @@ public:
     }
 
   // copy:
-  ArrayType GetValue(unsigned int idx = 0) {
-    assert( idx < GetNumberOfValues() );
-    return Internal[idx];
-  }
-  ArrayType operator[] (unsigned int idx) {
-    return GetValue(idx);
-  }
+  //ArrayType GetValue(unsigned int idx = 0) {
+  //  assert( idx < GetNumberOfValues() );
+  //  return Internal[idx];
+  //}
+  //ArrayType operator[] (unsigned int idx) {
+  //  return GetValue(idx);
+  //}
   // FIXME: is this always a good idea ?
   // I do not think so, I prefer operator
   //operator ArrayType () const { return Internal[0]; }
@@ -152,6 +152,13 @@ public:
       att.GetValues(), att.GetValues() + att.GetNumberOfValues() ); 
     }
 
+  ArrayType &GetValue(unsigned int idx = 0) {
+    assert( idx < GetNumberOfValues() );
+    return Internal[idx];
+  }
+  ArrayType & operator[] (unsigned int idx) {
+    return GetValue(idx);
+  }
   // const reference
   ArrayType const &GetValue(unsigned int idx = 0) const {
     assert( idx < GetNumberOfValues() );
@@ -344,11 +351,11 @@ public:
     for(unsigned int i=1; i<GetNumberOfValues(); ++i)
       os << "," << Internal[i];
     }
-  ArrayType GetValue(unsigned int idx = 0) {
+  ArrayType &GetValue(unsigned int idx = 0) {
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
-  ArrayType operator[] (unsigned int idx) {
+  ArrayType &operator[] (unsigned int idx) {
     return GetValue(idx);
   }
   // const reference

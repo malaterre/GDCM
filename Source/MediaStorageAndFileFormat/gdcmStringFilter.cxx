@@ -41,6 +41,26 @@ std::string StringFilter::ToString(const Tag& t) const
   return ToStringPair(t).second;
 }
 
+/*
+std::string StringFilter::ToMIME64(const Tag& t) const
+{
+  return ToStringPair(t).second;
+          // base64 streams have to be a multiple of 4 bytes long
+          int encodedLengthEstimate = 2 * bv->GetLength();
+          encodedLengthEstimate = ((encodedLengthEstimate / 4) + 1) * 4;
+
+          char *bin = new char[encodedLengthEstimate];
+          unsigned int encodedLengthActual = static_cast<unsigned int>(
+            itksysBase64_Encode(
+              (const unsigned char *) bv->GetPointer(),
+              static_cast< unsigned long>( bv->GetLength() ),
+              (unsigned char *) bin,
+              static_cast< int >( 0 ) ));
+          std::string encodedValue(bin, encodedLengthActual);
+
+}
+*/
+
 #define StringFilterCase(type) \
   case VR::type: \
     { \

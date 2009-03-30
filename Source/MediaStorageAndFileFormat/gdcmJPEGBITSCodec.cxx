@@ -1149,8 +1149,8 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    */
   //cinfo.write_JFIF_header = 1;
   //cinfo.density_unit = 2;
-  //cinfo.X_density = 4;
-  //cinfo.Y_density = 3;
+  //cinfo.X_density = 2;
+  //cinfo.Y_density = 5;
 
   /* Step 4: Start compressor */
 

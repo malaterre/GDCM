@@ -94,9 +94,10 @@ void JPEGCodec::SetBitSample(int bit)
 {
   BitSample = bit;
   assert( Internal == NULL );
+  // gdcmData/DCMTK_JPEGExt_12Bits.dcm
   if( this->GetPixelFormat().GetBitsAllocated() % 8 != 0 )
     {
-    gdcmWarningMacro( "Cannot set BitSample" );
+    gdcmWarningMacro( "Cannot set BitSample: " << this->GetPixelFormat().GetBitsAllocated() );
     return;
     }
   if ( BitSample <= 8 )

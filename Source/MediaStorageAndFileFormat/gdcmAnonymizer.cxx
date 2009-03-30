@@ -223,6 +223,41 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
   return ret;
 }
 
+bool Anonymizer::RemoveRetired()
+{
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
+  static const Dict &pubdict = dicts.GetPublicDict();
+
+  DataSet &ds = F->GetDataSet();
+  DataSet::Iterator it = ds.Begin();
+  for( ; it != ds.End(); )
+    {
+    const DataElement &de = *it;
+    if( de.GetTag().IsPublic() )
+      {
+      const DictEntry &entry = pubdict.GetDictEntry( de.GetTag() );
+      if( entry.GetRetired() )
+        {
+        // std::set::erase invalidate iterator, so we need to make a copy first:
+        DataSet::Iterator dup = it;
+        ++it;
+        ds.GetDES().erase(dup);
+        }
+      else
+        {
+      ++it;
+        }
+      }
+    else
+      {
+      ++it;
+      }
+    }
+
+  return true;
+}
+
 bool Anonymizer::RemoveGroupLength()
 {
   DataSet &ds = F->GetDataSet();

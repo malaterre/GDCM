@@ -412,6 +412,7 @@ int main (int argc, char *argv[])
   int compressicon = 0;
   int removegrouplength = 0;
   int removeprivate = 0;
+  int removeretired = 0;
   int photometricinterpretation = 0;
   std::string photometricinterpretation_str;
   int quality = 0;
@@ -474,6 +475,7 @@ int main (int argc, char *argv[])
         {"compress-icon", 0, &compressicon, 1}, // 
         {"remove-gl", 0, &removegrouplength, 1}, // 
         {"remove-private-tags", 0, &removeprivate, 1}, // 
+        {"remove-retired", 0, &removeretired, 1}, // 
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
         {"with-private-dict", 0, &changeprivatetags, 1}, // 
 // j2k :
@@ -532,28 +534,28 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "planar-configuration") == 0 );
             planarconfval = atoi(optarg);
             }
-          else if( option_index == 36 ) /* photometricinterpretation */
+          else if( option_index == 37 ) /* photometricinterpretation */
             {
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
-          else if( option_index == 38 ) /* rate */
+          else if( option_index == 39 ) /* rate */
             {
             assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
-          else if( option_index == 39 ) /* quality */
+          else if( option_index == 40 ) /* quality */
             {
             assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
-          else if( option_index == 40 ) /* tile */
+          else if( option_index == 41 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
             unsigned int n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
-          else if( option_index == 41 ) /* number of resolution */
+          else if( option_index == 42 ) /* number of resolution */
             {
             assert( strcmp(s, ",number-resolution") == 0 );
             nresvalue = atoi(optarg);
@@ -780,7 +782,7 @@ int main (int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-  if( removegrouplength || removeprivate )
+  if( removegrouplength || removeprivate || removeretired )
     {
     gdcm::Reader reader;
     reader.SetFileName( filename.c_str() );
@@ -797,6 +799,13 @@ int main (int argc, char *argv[])
       if( !ano.RemoveGroupLength() )
         {
         std::cerr << "Could not remove group length" << std::endl;
+        }
+      }
+    if( removeretired )
+      {
+      if( !ano.RemoveRetired() )
+        {
+        std::cerr << "Could not remove retired tags" << std::endl;
         }
       }
     if( removeprivate )

@@ -240,6 +240,10 @@ public:
   /// \see ReadFromCommaSeparatedString
   bool ReadFromPipeSeparatedString(const char *str);
 
+  /// Print as a pipe separated string (GDCM 1.x compat only). Do not use in newer code
+  /// \see ReadFromPipeSeparatedString
+  std::string PrintAsPipeSeparatedString() const;
+
 private:
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;
 };

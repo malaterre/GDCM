@@ -42,6 +42,8 @@ public:
   /// Convert to string the ByteValue contained in a DataElement
   std::string ToString(const Tag& t) const;
 
+  //std::string ToMime64(const Tag& t) const;
+
   /// Convert to string the ByteValue contained in a DataElement
   /// the returned elements are:
   /// pair.first : the name as found in the dictionary of DataElement

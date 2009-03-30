@@ -16,6 +16,7 @@
 #define __gdcmSpacing_h
 
 #include "gdcmTypes.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -47,6 +48,8 @@ class Spacing
 public :
   Spacing();
   ~Spacing();
+
+  static Attribute<0x28,0x34> ComputePixelAspectRatioFromPixelSpacing(const Attribute<0x28,0x30>& pixelspacing);
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
