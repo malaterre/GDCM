@@ -244,7 +244,8 @@ int main(int argc, char *argv[])
     imgreader->SetFileName(filename);
     imgreader->Update();
     imgdata = imgreader->GetOutput();
-    std::cout << imgreader->GetClassName() << std::endl;
+    if( verbose )
+      std::cout << imgreader->GetClassName() << std::endl;
     }
   else if( res )
     {
@@ -257,7 +258,8 @@ int main(int argc, char *argv[])
 
   if( imgreader && imgreader->GetOutput()->GetNumberOfScalarComponents() == 4 && !argb )
     {
-    std::cerr << "alpha channel will be lost" << std::endl;
+    if( verbose )
+      std::cout << "alpha channel will be lost" << std::endl;
     vtkImageExtractComponents *extract = vtkImageExtractComponents::New();
     extract->SetInput( imgreader->GetOutput() );
     extract->SetComponents( 0,1,2 );
@@ -313,7 +315,7 @@ int main(int argc, char *argv[])
     else if( vtkGESignaReader * reader = vtkGESignaReader::SafeDownCast(imgreader) )
       {
       writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-      reader->GetMedicalImageProperties()->Print( std::cout );
+      //reader->GetMedicalImageProperties()->Print( std::cout );
       }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     else if( vtkMINCImageReader *reader = vtkMINCImageReader::SafeDownCast( imgreader ) )
@@ -341,7 +343,8 @@ int main(int argc, char *argv[])
 
   writer->Write();
 
-  writer->GetInput()->Print( std::cout );
+  if( verbose )
+    writer->GetInput()->Print( std::cout );
 
   writer->Delete();
   if( imgreader ) imgreader->Delete();
