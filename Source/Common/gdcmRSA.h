@@ -48,8 +48,19 @@ public :
  */
 int Pkcs1Encrypt( 
                        int mode, int  ilen,
-                       unsigned char *input,
-                       unsigned char *output );
+                       const unsigned char *input,
+                       unsigned char *output ) const;
+
+/**
+ * \brief          Load and parse a private RSA key
+ *
+ * \param rsa      RSA context to be initialized
+ * \param path     filename to read the private key from
+ * \param pwd      password to decrypt the file (can be NULL)
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int X509ParseKeyfile( const char *path, const char *password );
 
 private:
   RSAInternals *Internals;

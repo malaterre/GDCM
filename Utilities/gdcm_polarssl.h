@@ -12,15 +12,17 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_uuid_h
-#define __gdcm_uuid_h
+#ifndef __gdcm_polarssl_h
+#define __gdcm_polarssl_h
 
 /* Use the uuid library configured for gdcm.  */
 #include "gdcmTypes.h"
-#ifdef GDCM_USE_SYSTEM_UUID
+#ifdef GDCM_USE_SYSTEM_POLARSSL
 # include <uuid/uuid.h>
 #else
-# include <gdcmuuid/uuid.h>
+# include <gdcmpolarssl/include/polarssl/rsa.h>
+# include <gdcmpolarssl/include/polarssl/x509.h>
+# include <gdcmpolarssl/include/polarssl/aes.h>
 #endif
 
 #endif

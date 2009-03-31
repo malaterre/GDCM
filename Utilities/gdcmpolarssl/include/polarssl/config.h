@@ -63,8 +63,8 @@
 
 /*
  * Uncomment to enable the use of assembly code.
- */
 #define POLARSSL_HAVE_ASM
+ */
 
 /*
  * Uncomment if the CPU supports SSE2 (IA-32 specific).

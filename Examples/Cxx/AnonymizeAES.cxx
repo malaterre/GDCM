@@ -22,6 +22,16 @@
  *  AnonymizeAES gdcmData/012345.002.050.dcm out.dcm
  */
 
+/*
+ * Note. To generate a rsa key pair on linux simply do:
+ * $ ssh-keygen -t rsa
+ * choose empty passphrase (??)
+ * TODO: what is ssh-keygen -t dsa ? Apparently this is not supported by polarssl 0.10.1
+ *
+ * To install xyssl
+ * $ sudo apt-get install libxyssl-dev 
+ */
+
 #include "gdcmAES.h"
 #include "gdcmReader.h"
 #include "gdcmImage.h"

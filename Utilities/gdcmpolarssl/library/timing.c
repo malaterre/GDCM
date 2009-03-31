@@ -64,6 +64,7 @@ struct _hr_time
 
 #endif
 
+#if defined(POLARSSL_HAVE_ASM)
 #if (defined(_MSC_VER) && defined(_M_IX86)) || defined(__WATCOMC__)
 
 unsigned long hardclock( void )
@@ -170,6 +171,26 @@ unsigned long hardclock( void )
 #endif /* PowerPC */
 #endif /* AMD64   */
 #endif /* i586+   */
+#else
+static int hardclock_init = 0;
+static struct timeval tv_init;
+
+unsigned long hardclock( void )
+{
+    struct timeval tv_cur;
+
+    if( hardclock_init == 0 )
+    {
+        gettimeofday( &tv_init, NULL );
+        hardclock_init = 1;
+    }
+
+    gettimeofday( &tv_cur, NULL );
+    return( ( tv_cur.tv_sec  - tv_init.tv_sec  ) * 1000000
+          + ( tv_cur.tv_usec - tv_init.tv_usec ) );
+}
+
+#endif /* have_asm */
 
 int alarmed = 0;
 
