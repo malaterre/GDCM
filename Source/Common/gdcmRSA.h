@@ -32,6 +32,25 @@ public :
   RSA();
   ~RSA();
 
+/**
+ * \brief          Add the message padding, then do an RSA operation
+ *
+ * \param ctx      RSA context
+ * \param mode     RSA_PUBLIC or RSA_PRIVATE
+ * \param ilen     contains the plaintext length
+ * \param input    buffer holding the data to be encrypted
+ * \param output   buffer that will hold the ciphertext
+ *
+ * \return         0 if successful, or an XYSSL_ERR_RSA_XXX error code
+ *
+ * \note           The output buffer must be as large as the size
+ *                 of ctx->N (eg. 128 bytes if RSA-1024 is used).
+ */
+int Pkcs1Encrypt( 
+                       int mode, int  ilen,
+                       unsigned char *input,
+                       unsigned char *output );
+
 private:
   RSAInternals *Internals;
 };

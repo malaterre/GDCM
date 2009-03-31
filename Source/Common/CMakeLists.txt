@@ -67,6 +67,7 @@ SET(Common_SRCS
   gdcmVersion.cxx
   gdcmAES.cxx
   gdcmRSA.cxx
+  gdcmX509.cxx
   gdcmObject.cxx
   gdcmDirectory.cxx
   gdcmTerminal.cxx
