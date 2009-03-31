@@ -77,21 +77,19 @@ int TestRSA(int argc, char *argv[])
   std::cout << std::endl;
 
   int len;
-    if( rsa.Pkcs1Decrypt( RSA::PRIVATE, &len,
-                           rsa_ciphertext, rsa_decrypted,
-			   sizeof(rsa_decrypted) ) != 0 )
+  if( rsa.Pkcs1Decrypt( RSA::PRIVATE, &len,
+      rsa_ciphertext, rsa_decrypted,
+      sizeof(rsa_decrypted) ) != 0 )
     {
-
-        return 1 ;
+    return 1 ;
     }
 
-    if( memcmp( rsa_decrypted, rsa_plaintext, len ) != 0 )
+  if( memcmp( rsa_decrypted, rsa_plaintext, len ) != 0 )
     {
-
-        return 1 ;
+    return 1 ;
     }
 
 
-  return 0;
+  return ret;
 }
 

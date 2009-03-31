@@ -18,9 +18,7 @@
 ## DLEXT=dylib
 #
 SET(SRCS
-aes.c
-arc4.c
-base64.c
+  aes.c arc4.c base64.c
   bignum.c  certs.c    debug.c    
   des.c    dhm.c    havege.c  
   md2.c    md4.c    md5.c    
@@ -30,8 +28,19 @@ base64.c
   timing.c  x509parse.c  xtea.c    
   camellia.c
 )
-ADD_LIBRARY(gdcmpolarssl ${SRCS})
+ADD_LIBRARY(${POLARSSL_LIBRARY_NAME} ${SRCS})
 
+SET_TARGET_PROPERTIES(${POLARSSL_LIBRARY_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+set_target_properties(${POLARSSL_LIBRARY_NAME} PROPERTIES LINKER_LANGUAGE C)
+
+IF(NOT POLARSSL_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS ${POLARSSL_LIBRARY_NAME}
+    RUNTIME DESTINATION ${POLARSSL_INSTALL_BIN_DIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${POLARSSL_INSTALL_LIB_DIR} COMPONENT Runtime
+    ARCHIVE DESTINATION ${POLARSSL_INSTALL_LIB_DIR} COMPONENT Development
+  ${CPACK_NAMELINK_TYPE}
+  )
+ENDIF(NOT POLARSSL_INSTALL_NO_LIBRARIES)
 #OBJS=  aes.o    arc4.o    base64.o  \
 #  bignum.o  certs.o    debug.o    \
 #  des.o    dhm.o    havege.o  \
