@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "gdcmRSA.h"
 #include "gdcm_polarssl.h"
+#include <string.h>
+#include <iostream>
 
 /*
  */
@@ -29,11 +31,24 @@ rsa_context ctx;
 RSA::RSA()
 {
   Internals = new RSAInternals;
+    memset( &Internals->ctx, 0, sizeof( rsa_context ) );
 }
 
 RSA::~RSA()
 {
+  rsa_free( &Internals->ctx );
+
   delete Internals;
+}
+
+int RSA::CheckPubkey( ) const
+{
+  return rsa_check_pubkey( &Internals->ctx );
+}
+
+int RSA::CheckPrivkey() const
+{
+  return rsa_check_privkey( &Internals->ctx );
 }
 
 int RSA::Pkcs1Encrypt( 
@@ -41,6 +56,8 @@ int RSA::Pkcs1Encrypt(
                        const unsigned char *input,
                        unsigned char *output ) const
 {
+//    std::cout << "KEY_LEN:" << Internals->ctx.len << std::endl; //= KEY_LEN;
+
   return 
 rsa_pkcs1_encrypt( &Internals->ctx,
                        mode, ilen,
@@ -49,9 +66,40 @@ rsa_pkcs1_encrypt( &Internals->ctx,
 
 }
 
+int RSA::Pkcs1Decrypt(
+                       int mode, int *olen,
+                       const unsigned char *input,
+                       unsigned char *output,
+		       int output_max_len)
+{
+return 
+ rsa_pkcs1_decrypt( &Internals->ctx,
+                       mode, olen,
+                       const_cast<unsigned char *>(input),
+                       output,
+		       output_max_len);
+ 
+}
+
+int RSA::X509ParseKey(
+                   const unsigned char *buf, int buflen,
+                   const unsigned char *pwd, int pwdlen )
+{
+
+return x509parse_key( &Internals->ctx,
+                   const_cast<unsigned char*>(buf), buflen,
+                   const_cast<unsigned char*>(pwd), pwdlen );
+
+}
+
 int RSA::X509ParseKeyfile( const char *path, const char *password )
 {
   return x509parse_keyfile( &Internals->ctx, const_cast<char*>(path), const_cast<char*>(password) );
+}
+
+int RSA::SelfTest( int verbose ) const
+{
+  return rsa_self_test( verbose );
 }
 
 

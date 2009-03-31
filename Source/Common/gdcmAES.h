@@ -117,7 +117,7 @@ protected:
  *
  * \return         0 if successful, or 1 if the test failed (or not compiled in)
  */
-int SelfTest( int verbose ) const;
+int SelfTest( int verbose = 0 ) const;
 private:
 AESInternals *Internals;
 };

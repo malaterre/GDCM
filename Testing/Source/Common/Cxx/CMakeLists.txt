@@ -3,6 +3,7 @@
 SET(Common_TEST_SRCS
   TestVersion
   TestAES
+  TestRSA
   TestTesting
   TestSwapper
   TestByteSwap
