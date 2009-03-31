@@ -59,6 +59,8 @@ int TestRSA(int argc, char *argv[])
   unsigned char rsa_decrypted[PT_LEN];
   unsigned char rsa_ciphertext[KEY_LEN];
 
+  if( rsa.GetLenkey() != KEY_LEN ) return 1;
+
 //#define RSA_PT  "\xAA\xBB\xCC\x03\x02\x01\x00\xFF\xFF\xFF\xFF\xFF" \
 //                "\x11\x22\x33\x0A\x0B\x0C\xCC\xDD\xDD\xDD\xDD\xDD"
 //

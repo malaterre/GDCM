@@ -51,12 +51,16 @@ int RSA::CheckPrivkey() const
   return rsa_check_privkey( &Internals->ctx );
 }
 
+unsigned int RSA::GetLenkey() const
+{
+  return Internals->ctx.len;
+}
+
 int RSA::Pkcs1Encrypt( 
                        int mode, int  ilen,
                        const unsigned char *input,
                        unsigned char *output ) const
 {
-//    std::cout << "KEY_LEN:" << Internals->ctx.len << std::endl; //= KEY_LEN;
 
   return 
 rsa_pkcs1_encrypt( &Internals->ctx,

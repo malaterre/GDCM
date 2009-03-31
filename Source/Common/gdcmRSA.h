@@ -37,6 +37,9 @@ public :
 /* #define RSA_*/ PRIVATE   = 1
   } RSAModeType;
 
+  /// Return the length of the key:
+  unsigned int GetLenkey() const;
+
 /**
  * \brief          Check a public RSA key
  *
