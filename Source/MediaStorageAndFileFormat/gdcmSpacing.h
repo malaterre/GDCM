@@ -40,6 +40,11 @@ per-frame in a Functional Group Macro.
 See C.7.6.3.1.7.
 
 
+PS 3.3-2008
+10.7.1.3 Pixel Spacing Value Order and Valid Values
+All pixel spacing related attributes shall have non-zero values, except when there is only a single row or
+column or pixel of data present, in which case the corresponding value may be zero.
+
 Ref:
 http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
  */

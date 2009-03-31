@@ -84,14 +84,18 @@ double frap(double frac[2], double startx, double maxden = 10 )
   //  startx - ((double) m[0][0] / (double) m[1][0]));
   frac[0] = m[0][0];
   frac[1] = m[1][0];
-  return startx - ((double) m[0][0] / (double) m[1][0]);
+  const double error = startx - ((double) m[0][0] / (double) m[1][0]);
 
   /* now try other possibility */
-  //ai = (maxden - m[1][1]) / m[1][0];
-  //m[0][0] = m[0][0] * ai + m[0][1];
-  //m[1][0] = m[1][0] * ai + m[1][1];
+  ai = (maxden - m[1][1]) / m[1][0];
+  m[0][0] = m[0][0] * ai + m[0][1];
+  m[1][0] = m[1][0] * ai + m[1][1];
   //printf("%ld/%ld, error = %e\n", m[0][0], m[1][0],
   //  startx - ((double) m[0][0] / (double) m[1][0]));
+  const double error2 = startx - ((double) m[0][0] / (double) m[1][0]);
+  assert( fabs(error) < fabs(error2) );
+
+  return error;
 }
 
 Attribute<0x28,0x34> Spacing::ComputePixelAspectRatioFromPixelSpacing(const Attribute<0x28,0x30>& pixelspacing)
