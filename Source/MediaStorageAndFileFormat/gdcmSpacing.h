@@ -43,7 +43,7 @@ See C.7.6.3.1.7.
 Ref:
 http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
  */
-class Spacing
+class GDCM_EXPORT Spacing
 {
 public :
   Spacing();
