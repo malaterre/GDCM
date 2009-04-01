@@ -2,6 +2,7 @@
 # Common
 SET(Common_TEST_SRCS
   TestVersion
+  TestDummyValueGenerator
   TestAES
   TestRSA
   TestTesting

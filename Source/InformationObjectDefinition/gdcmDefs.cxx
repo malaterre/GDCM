@@ -66,10 +66,48 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
     case MediaStorage::CTImageStorage:
       iodname = "CT Image IOD Modules";
       break;
+    case MediaStorage::ComputedRadiographyImageStorage:
+      iodname = "CR Image IOD Modules";
+      break;
     default:
       iodname = 0;
     }
   return iodname;
+}
+
+Type Defs::GetTypeFromTag(const DataSet& ds, const Tag& tag) const
+{
+  Type ret;
+  MediaStorage ms;
+  ms.SetFromDataSet(ds);
+
+  const IODs &iods = GetIODs();
+  const Modules &modules = GetModules();
+  const char *iodname = GetIODNameFromMediaStorage( ms );
+  if( !iodname )
+    {
+    gdcmErrorMacro( "Not implemented" );
+    return ret;
+    }
+  const IOD &iod = iods.GetIOD( iodname );
+
+  unsigned int niods = iod.GetNumberOfIODs();
+  // Iterate over each iod entry in order:
+  for(unsigned int idx = 0; idx < niods; ++idx)
+    {
+    const IODEntry &iodentry = iod.GetIODEntry(idx);
+    const char *ref = iodentry.GetRef();
+    IODEntry::UsageType ut = iodentry.GetUsageType();
+
+    const Module &module = modules.GetModule( ref );
+    if( module.FindModuleEntry( tag ) )
+      {
+      const ModuleEntry &module_entry = module.GetModuleEntry(tag);
+      ret = module_entry.GetType();
+      }
+    }
+
+  return ret;
 }
 
 bool Defs::Verify(const DataSet& ds) const

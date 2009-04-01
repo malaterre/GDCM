@@ -12,18 +12,30 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_polarssl_h
-#define __gdcm_polarssl_h
+#ifndef __gdcmDummyValueGenerator_h
+#define __gdcmDummyValueGenerator_h
 
-/* Use the uuid library configured for gdcm.  */
 #include "gdcmTypes.h"
-#ifdef GDCM_USE_SYSTEM_POLARSSL
-# include <uuid/uuid.h>
-#else
-# include <gdcmpolarssl/include/polarssl/rsa.h>
-# include <gdcmpolarssl/include/polarssl/x509.h>
-# include <gdcmpolarssl/include/polarssl/aes.h>
-# include <gdcmpolarssl/include/polarssl/md5.h>
-#endif
 
-#endif
+namespace gdcm
+{
+
+/**
+ * \brief Class for generating dummy value
+ * \note bla
+ */
+class GDCM_EXPORT DummyValueGenerator
+{
+public:
+//  DummyValueGenerator();
+
+  /// NOT THREAD SAFE:
+  static const char* Generate(const char *input);
+
+private:
+};
+
+
+} // end namespace gdcm
+
+#endif //__gdcmDummyValueGenerator_h

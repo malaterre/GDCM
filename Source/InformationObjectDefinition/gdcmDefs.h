@@ -48,6 +48,8 @@ public:
 
   bool Verify(const DataSet& ds) const;
 
+  Type GetTypeFromTag(const DataSet& ds, const Tag& tag) const;
+
 protected:
   friend class Global;
   void LoadDefaults();

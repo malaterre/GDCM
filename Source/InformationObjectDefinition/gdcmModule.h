@@ -53,6 +53,11 @@ public:
     ModuleInternal.insert(
       MapModuleEntry::value_type(tag, module));
     }
+  bool FindModuleEntry(const Tag &tag) const 
+    {
+    MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
+    return it != ModuleInternal.end();
+    }
   const ModuleEntry& GetModuleEntry(const Tag &tag) const 
     {
     MapModuleEntry::const_iterator it = ModuleInternal.find(tag);

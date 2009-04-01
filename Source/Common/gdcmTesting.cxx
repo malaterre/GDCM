@@ -70,7 +70,7 @@ inline void process_file(const char *filename, md5_byte_t *digest)
 }
 
 bool Testing::ComputeMD5(const char *buffer, const unsigned long buf_len,
-  char *digest_str)
+  char digest_str[33])
 {
   if( !buffer || !buf_len )
     {

@@ -734,9 +734,15 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
 %include "gdcmConfigure.h"
 #ifdef GDCM_BUILD_TESTING
 %include "gdcmTesting.h"
-%ignore gdcm::Testing::ComputeFileMD5(const char*, char *);
+%ignore gdcm::Testing::ComputeMD5(const char *, const unsigned long , char []);
+%ignore gdcm::Testing::ComputeFileMD5(const char*, char []);
 %extend gdcm::Testing
 {
+  //static const char *ComputeMD5(const char *buffer) {
+  //  static char buffer[33];
+  //  gdcm::Testing::ComputeFileMD5(filename, buffer);
+  //  return buffer;
+  //}
   static const char *ComputeFileMD5(const char *filename) {
     static char buffer[33];
     gdcm::Testing::ComputeFileMD5(filename, buffer);

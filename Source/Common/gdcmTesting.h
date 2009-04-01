@@ -37,8 +37,8 @@ public :
   /// digest_str needs to be at least : strlen = [2*16+1];
   /// string will be \0 padded. (md5 are 32 bytes long)
   static bool ComputeMD5(const char *buffer, const unsigned long buf_len,
-    char *digest_str);
-  static bool ComputeFileMD5(const char *filename, char *digest_str);
+    char digest_str[33]);
+  static bool ComputeFileMD5(const char *filename, char digest_str[33]);
 
   /// Print
   void Print(std::ostream &os = std::cout);

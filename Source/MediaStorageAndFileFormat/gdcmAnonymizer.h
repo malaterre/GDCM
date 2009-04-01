@@ -76,17 +76,19 @@ public:
   //const File &GetFile() const { return *F; }
   File &GetFile() { return *F; }
 
-  /// PS 3.15 
-  /// E.1.1 De-Identifier
+  /// PS 3.15 / E.1.1 De-Identifier
   /// An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
   /// if it protects all Attributes that might be used by unauthorized entities to identify the patient.
   bool BasicApplicationLevelConfidentialityProfile();
 
+  /// Set/Get AES key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
   void SetAESKey(AES const &aes);
   const AES &GetAESKey() const;
 
 protected:
+  // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
   bool BALCPProtect(Tag const & tag);
+  bool CanEmptyTag(Tag const &tag);
 
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...

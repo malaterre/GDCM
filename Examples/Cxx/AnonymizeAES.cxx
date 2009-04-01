@@ -142,9 +142,6 @@ Process defined in RFC-2630.
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
 
-  //gdcm::DataElement copy = de;
-  //copy.SetByteValue( (char*)buf, bv->GetLength() );
-
   gdcm::TransferSyntax encrypted_ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
   // <entry group="0400" element="0510" vr="UI" vm="1" name="Encrypted Content Transfer Syntax UID"/>
   gdcm::DataElement encrypted_ts_de( gdcm::Tag(0x400,0x510) );

@@ -129,6 +129,7 @@ public:
     return 0;
   }
   void Fill(char c) {
+    //if( Internal.empty() ) return;
     std::vector<char>::iterator it = Internal.begin();
     for(; it != Internal.end(); ++it) *it = c;
   }

@@ -69,6 +69,7 @@ ENDIF(NOT GDCM_USE_SYSTEM_POLARSSL)
 
 SET(Common_SRCS
   gdcmVersion.cxx
+  gdcmDummyValueGenerator.cxx
   gdcmAES.cxx
   gdcmRSA.cxx
   #gdcmX509.cxx

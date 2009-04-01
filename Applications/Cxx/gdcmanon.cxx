@@ -22,6 +22,7 @@
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmGlobal.h"
 
 #include <getopt.h>
 
@@ -77,6 +78,7 @@ void PrintHelp()
   std::cout << "  -v --version   print version." << std::endl;
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
+  std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -290,14 +292,29 @@ int main(int argc, char *argv[])
   if( err != 0 )
     {
     std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
-    return 1;
+    //return 1;
     }
 
   std::cout << rsa_ciphertext << std::endl;
 
+  gdcm::Global& g = gdcm::Global::GetInstance();
+  const char *xmlpath = getenv("GDCM_RESOURCES_PATH");
+  if( xmlpath )
+    {
+    // Make sure to look for XML dict in user explicitly specified dir first:
+    g.Prepend( xmlpath );
+    }
+  // All set, then load the XML files:
+  if( !g.LoadResourcesFiles() )
+    {
+    return 1;
+    }
+
   gdcm::Anonymizer anon;
   anon.SetAESKey( aes );
   anon.SetFile( file );
+  anon.RemovePrivateTags();
+  anon.RemoveRetired();
   if( !anon.BasicApplicationLevelConfidentialityProfile() )
     {
     return 1;
@@ -308,10 +325,11 @@ int main(int argc, char *argv[])
   //fmi.Remove( gdcm::Tag(0x0002,0x0003) ); // will be regenerated
   fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
   fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+  fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );
-  writer.SetFile( reader.GetFile() );
+  writer.SetFile( file );
   if( !writer.Write() )
     {
     return 1;

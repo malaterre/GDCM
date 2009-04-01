@@ -13,7 +13,6 @@
 
 =========================================================================*/
 #include "gdcmAnonymizer.h"
-#include "gdcmDicts.h"
 #include "gdcmGlobal.h"
 #include "gdcmStringFilter.h"
 #include "gdcmSequenceOfItems.h"
@@ -22,6 +21,10 @@
 #include "gdcmAES.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAttribute.h"
+#include "gdcmDummyValueGenerator.h"
+#include "gdcmDicts.h"
+#include "gdcmType.h"
+#include "gdcmDefs.h"
 
 namespace gdcm
 {
@@ -462,14 +465,73 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
 }
 
 
+bool IsVRUI(Tag const &tag)
+{
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
+  const DictEntry &dictentry = dicts.GetDictEntry(tag);
+  if( dictentry.GetVR() == VR::UI ) return true;
+  //if( tag == Tag(0x0020,0x000d)   // Study Instance UID : UI
+  // || tag == Tag(0x0020,0x0052)   // 
+  // || tag == Tag(0x0020,0x000e) ) // Series Instance UID : UI
+  //  {
+  //  return true;
+  //  }
+  return false;
+}
+
+bool Anonymizer::CanEmptyTag(Tag const &tag)
+{
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
+  static const Defs &defs = g.GetDefs();
+  DataSet &ds = F->GetDataSet();
+  Type t = defs.GetTypeFromTag(ds, tag);
+  gdcmDebugMacro( "Type for tag=" << tag << " is " << t );
+
+  if( t == Type::T1 || t == Type::T1C )
+    {
+    return false;
+    }
+  assert( dicts.GetDictEntry(tag).GetVR() != VR::UI );
+  return true;
+}
+
 bool Anonymizer::BALCPProtect(Tag const & tag)
 {
+  typedef std::pair< Tag, std::string > TagValueKey;
+  typedef std::map< TagValueKey, std::string > DummyMap;
+  DummyMap dummymap;
+  gdcm::UIDGenerator uid;
+
   DataSet &ds = F->GetDataSet();
 
-  if( tag == Tag(0x0010,0x0020) )
+  bool canempty = CanEmptyTag( tag );
+  if( !canempty )
     {
+    TagValueKey tvk;
+    tvk.first = tag;
     DataElement copy = ds.GetDataElement( tag );
-    copy.GetByteValue()->Fill( '0' );
+    assert( !copy.IsEmpty() );
+    if( ByteValue *bv = copy.GetByteValue() )
+      {
+      tvk.second = std::string( bv->GetPointer(), bv->GetLength() );
+      }
+    assert( dummymap.count( tvk ) == 0 || dummymap.count( tvk ) == 1 );
+    if( dummymap.count( tvk ) == 0 )
+      {
+      // Generate a new (single) dummy value:
+      if( IsVRUI( tag ) )
+        {
+        dummymap[ tvk ] = uid.Generate();
+        }
+      else
+        {
+        dummymap[ tvk ] = DummyValueGenerator::Generate( tvk.second.c_str() );
+        }
+      }
+    std::string &v = dummymap[ tvk ];
+    copy.SetByteValue( v.c_str(), v.size() );
     ds.Replace( copy );
     }
   else

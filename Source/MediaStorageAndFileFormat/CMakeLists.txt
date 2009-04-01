@@ -77,6 +77,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
 
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"
