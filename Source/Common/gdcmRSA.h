@@ -130,6 +130,9 @@ int SelfTest( int verbose = 0 ) const;
 
 private:
   RSAInternals *Internals;
+private:
+  RSA(const RSA&);  // Not implemented.
+  void operator=(const RSA&);  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

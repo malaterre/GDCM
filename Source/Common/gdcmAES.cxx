@@ -127,4 +127,9 @@ int AES::SelfTest( int verbose ) const
   return aes_self_test( verbose );
 }
 
+void AES::operator=(const AES& aes)
+{
+  Internals->ctx = aes.Internals->ctx;
+}
+
 } // end namespace gdcm

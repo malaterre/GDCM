@@ -3,6 +3,7 @@
 # gdcmdump
 # gdcminfo
 # gdcmconv
+# gdcmanon
 
 
 IF(WIN32 AND NOT CYGWIN)
@@ -33,6 +34,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmdump
   gdcmraw
   gdcmscanner
+  gdcmanon
   #gdcmoverlay
   gdcmimg
   #deflate

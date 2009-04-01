@@ -16,6 +16,7 @@
 #define __gdcmAnonymizer_h
 
 #include "gdcmFile.h"
+#include "gdcmAES.h"
 
 namespace gdcm
 {
@@ -40,7 +41,7 @@ namespace gdcm
 class GDCM_EXPORT Anonymizer
 {
 public:
-  Anonymizer():F(new File) {}
+  Anonymizer():F(new File),AESKey() {}
   ~Anonymizer();
 
   /// Make Tag t empty (if not found tag will be created)
@@ -67,6 +68,9 @@ public:
   /// Main function that loop over all elements and remove retired element
   bool RemoveRetired();
 
+  // TODO:
+  // bool Remove( PRIVATE_TAGS | GROUP_LENGTH | RETIRED );
+
   /// Set/Get File
   void SetFile(const File& f) { F = f; }
   //const File &GetFile() const { return *F; }
@@ -78,11 +82,16 @@ public:
   /// if it protects all Attributes that might be used by unauthorized entities to identify the patient.
   bool BasicApplicationLevelConfidentialityProfile();
 
+  void SetAESKey(AES const &aes);
+  const AES &GetAESKey() const;
+
 protected:
+  bool BALCPProtect(Tag const & tag);
 
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
   SmartPointer<File> F;
+  AES AESKey;
 };
 
 /**

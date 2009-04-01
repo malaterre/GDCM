@@ -33,7 +33,7 @@ namespace gdcm
  *
  * \note 
  * will not take into account unix type hidden file
- * recursive option will not look into UNIX type hidden directory (those starting with a .)
+ * recursive option will not look into UNIX type hidden directory (those starting with a '.')
  *
  * \note 
  * Since python or C# provide there own equivalent implementation,
@@ -48,7 +48,8 @@ public :
   typedef std::string FilenameType;
   typedef std::vector<FilenameType> FilenamesType;
 
-  void Print(std::ostream &_os = std::cout);
+  /// Print
+  void Print(std::ostream &os = std::cout);
 
   /// Get the name of the toplevel directory
   FilenameType const &GetToplevel() const { return Toplevel; }
@@ -62,6 +63,7 @@ public :
   FilenamesType const &GetDirectories() const { return Directories; }
 
   /// construct a list of filenames and subdirectory beneath directory: name
+  /// \warning: hidden file and hidden directory are not loaded.
   unsigned int Load(FilenameType const &name, bool recursive = false) {
     Filenames.clear(); // clear previous
     Directories.clear(); // clear previous

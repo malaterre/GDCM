@@ -132,13 +132,24 @@ bool TagPath::ConstructFromString(const char *path)
   return true;
 }
 
-void TagPath::Push(Tag const & t)
+bool TagPath::Push(Tag const & t)
 {
-  Path.push_back( t );
+  if( Path.size() % 2 == 0 )
+    {
+    Path.push_back( t );
+    return true;
+    }
+  return false;
 }
 
-void TagPath::Push(unsigned int itemnum)
+bool TagPath::Push(unsigned int itemnum)
 {
+  if( Path.size() % 2 == 1 )
+    {
+    Path.push_back( itemnum );
+    return true;
+    }
+  return false;
 }
 
 }

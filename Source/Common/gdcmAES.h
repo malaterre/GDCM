@@ -111,6 +111,8 @@ void CryptCfb128(
                        const unsigned char *input,
                        unsigned char *output ) const;
 
+  void operator=(const AES&);
+
 protected:
 /**
  * \brief          Checkup routine
@@ -120,6 +122,8 @@ protected:
 int SelfTest( int verbose = 0 ) const;
 private:
 AESInternals *Internals;
+private:
+  AES(const AES&);  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

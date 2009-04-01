@@ -20,10 +20,10 @@ int TestFileSet(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::FileSet fs;
-  gdcm::File f1;
-  gdcm::File f2;
-  fs.AddFile( f1 );
-  fs.AddFile( f2 );
+  std::string f1;
+  std::string f2;
+  fs.AddFile( f1.c_str() );
+  fs.AddFile( f2.c_str() );
 
   return 0;
 }

@@ -13,7 +13,26 @@
 
 =========================================================================*/
 #include "gdcmFileSet.h"
+#include "gdcmSystem.h"
 
 namespace gdcm
 {
+  bool FileSet::AddFile(const char *filename)
+    {
+    if( System::FileExists(filename) )
+      {
+      Files.push_back( filename );
+      return true;
+      }
+    return false;
+    }
+  void FileSet::SetFiles(FilesType const &files)
+    {
+    FilesType::const_iterator it = files.begin();
+    for( ; it != files.end(); ++it )
+      {
+      AddFile( it->c_str() );
+      }
+    }
+
 }

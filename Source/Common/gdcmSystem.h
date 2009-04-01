@@ -41,7 +41,8 @@ public:
   /// Return the last error
   static const char *GetLastSystemError();
 
-  /// Return the filesize
+  /// Return the filesize. 0 if file does not exist.
+  /// \warning you need to use FileExists to differenciate between empty file and missing file.
   static size_t FileSize(const char* filename);
 
   /// Return the directory the current process (executable) is located:
@@ -64,9 +65,11 @@ public:
   static bool GetHardwareAddress(unsigned char addr[6]);
 
   // somewhat UID specific:
-  /// Return the current data time
+  /// Return the current data time, and format it as ASCII text.
   static bool GetCurrentDateTime(char date[18]);
 
+  /// format as ASCII text a time_t with milliseconds
+  /// See VR::DT from DICOM PS 3.5
   static bool FormatDateTime(char date[18], time_t t, long milliseconds = 0);
 
   /// Encode bytes

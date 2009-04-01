@@ -46,8 +46,8 @@ public:
   /// Construct from a list of tags
   bool ConstructFromTagList(Tag const *l, unsigned int n);
 
-  void Push(Tag const & t);
-  void Push(unsigned int itemnum);
+  bool Push(Tag const & t);
+  bool Push(unsigned int itemnum);
 
 private:
   std::vector<Tag> Path;

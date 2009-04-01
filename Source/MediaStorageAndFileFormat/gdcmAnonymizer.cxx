@@ -16,11 +16,18 @@
 #include "gdcmDicts.h"
 #include "gdcmGlobal.h"
 #include "gdcmStringFilter.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmExplicitDataElement.h"
+#include "gdcmSwapper.h"
+#include "gdcmAES.h"
+#include "gdcmUIDGenerator.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
 // PS 3.15 - 2008
 // Table E.1-1
+// BALCPA
 static Tag BasicApplicationLevelConfidentialityProfileAttributes[] = {
 //              Attribute Name                                            Tag
 /*              Instance Creator UID                                  */ Tag(0x0008,0x0014),
@@ -306,15 +313,180 @@ bool Anonymizer::RemovePrivateTags()
 
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
 {
-  //static Tag BasicApplicationLevelConfidentialityProfileAttributes[];
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
-  (void)end;
 
-  //return std::binary_search(start, end, tag);
+  DataSet &ds = F->GetDataSet();
+
+  // PS 3.15
+  // E.1 BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE
+  // An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
+  // if it protects all Attributes that might be used by unauthorized entities to identify the patient.
+  // Protection in this context is defined as the following process:
+
+  // 1. The application may create one or more instances of the Encrypted Attributes Data Set and copy
+  // Attributes to be protected into the (single) item of the Modified Attributes Sequence (0400,0550) of
+  // one or more of the Encrypted Attributes Data Set instances.
+
+  // Create an instance of the Encrypted Attributes DataSet
+  // Modified Attributes Sequence (0400,0550) 1 Sequence of Items containing all Attributes
+  // that were removed or replaced by "dummy values" in the main dataset during deidentification
+  // of the SOP instance. Upon reversal of the de-identification process, the
+  // Attributes are copied back into the main dataset, replacing any dummy values that
+  // might have been created. Only a single Item shall be present.
+
+  // Create a Sequence
+  SmartPointer<SequenceOfItems> sq = new SequenceOfItems();
+  sq->SetLengthToUndefined();
+
+  // Create a *single* item
+  Item it;
+  it.SetVLToUndefined();
+  DataSet &encryptedds = it.GetNestedDataSet();
+  for(const Tag *ptr = start ; ptr != end ; ++ptr)
+    {
+    const Tag& tag = *ptr;
+    if( ds.FindDataElement( tag ) )
+      encryptedds.Insert( ds.GetDataElement( tag ) );
+    }
+
+  sq->AddItem(it);
+
+  DataElement des( Tag(0x0400,0x0550) );
+  des.SetVR(VR::SQ);
+  des.SetValue(*sq);
+  des.SetVLToUndefined();
+
+  std::ostringstream os;
+  des.Write<ExplicitDataElement,SwapperNoOp>(os);
+
+  std::string encrypted_str = os.str();
+  //std::cout << "Size:" <<  encrypted_str.size() << std::endl;
+  size_t encrypted_len = encrypted_str.size();
+
+  // Note: 1. Content encryption may require that the content (the DICOM Data Set) be padded to a
+  // multiple of some block size. This shall be performed according to the Content-encryption
+  // Process defined in RFC-2630.
+  if( encrypted_len % 16 != 0 )
+    {
+    encrypted_len = ((encrypted_len / 16) + 1) * 16;
+    }
+  unsigned char *buf = new unsigned char[ encrypted_len ];
+  memset( buf, 0, encrypted_len );
+  memcpy( buf, encrypted_str.c_str(), encrypted_str.size() );
+
+  const AES& aes = AESKey;
+  unsigned char iv[16] = {}; // FIXME ???
+  aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, buf, buf );
+
+    {
+    // Create a Sequence
+    SmartPointer<SequenceOfItems> sq = new SequenceOfItems();
+    sq->SetLengthToUndefined();
+
+    // FIXME: should be user configurable:
+    TransferSyntax encrypted_ts = TransferSyntax::ImplicitVRLittleEndian;
+    // <entry group="0400" element="0510" vr="UI" vm="1" name="Encrypted Content Transfer Syntax UID"/>
+    DataElement encrypted_ts_de( Tag(0x400,0x510) );
+    encrypted_ts_de.SetByteValue( encrypted_ts.GetString(), strlen(encrypted_ts.GetString()) );
+    // <entry group="0400" element="0520" vr="OB" vm="1" name="Encrypted Content"/>
+    DataElement encrypted_de( Tag(0x400,0x520) );
+    encrypted_de.SetByteValue( (char*)buf, encrypted_len );
+    delete[] buf;
+
+    // Create an item
+    Item it;
+    it.SetVLToUndefined();
+    DataSet &nds = it.GetNestedDataSet();
+    nds.Insert(encrypted_ts_de);
+    nds.Insert(encrypted_de);
+
+    sq->AddItem(it);
+
+    // 4. All instances of the Encrypted Attributes Data Set shall be encoded with a DICOM Transfer Syntax,
+    // encrypted, and stored in the dataset to be protected as an Item of the Encrypted Attributes Sequence
+    // (0400,0500). The encryption shall be done using RSA [RFC 2313] for the key transport of the
+    // content-encryption keys. A de-identifier conforming to this security profile may use either AES or
+    // Triple-DES for content-encryption. The AES key length may be any length allowed by the RFCs. The
+    // Triple-DES key length is 168 bits as defined by ANSI X9.52. Encoding shall be performed according
+    // to the specifications for RSA Key Transport and Triple DES Content Encryption in RFC-3370 and for
+    // AES Content Encryption in RFC-3565.
+
+    // 5. No requirements on the size of the asymmetric key pairs used for RSA key transport are defined in
+    // this confidentiality scheme. Implementations claiming conformance to the Basic Application Level
+    // Confidentiality Profile as a de-identifier shall always protect (e.g. encrypt and replace) the SOP
+    // Instance UID (0008,0018) Attribute as well as all references to other SOP Instances, whether
+    // contained in the main dataset or embedded in an Item of a Sequence of Items, that could potentially
+    // be used by unauthorized entities to identify the patient.
+
+    // Insert sequence into data set
+    DataElement des( Tag(0x0400,0x0500) );
+    des.SetVR(VR::SQ);
+    des.SetValue(*sq);
+    des.SetVLToUndefined();
+
+    ds.Insert(des);
+    }
+
+  // 2. Each Attribute to be protected shall then either be removed from the dataset, or have its value
+  // replaced by a different "replacement value" which does not allow identification of the patient.
+
+  for(const Tag *ptr = start ; ptr != end ; ++ptr)
+    {
+    const Tag& tag = *ptr;
+    // FIXME Type 1 !
+    if( ds.FindDataElement( tag ) ) BALCPProtect(tag);
+    }
+
+  // Group Length are removed since PS 3.3-2008
+  RemoveGroupLength();
+
+  // 3. At the discretion of the de-identifier, Attributes may be added to the dataset to be protected.
+  // ...
+
+  // 6. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
+  // value of YES, and a value inserted in De-identification Method (0012,0063) or De-identification
+  // Method Code Sequence (0012,0064).
+  Replace( Tag(0x0012,0x0062), "YES");
+  Replace( Tag(0x0012,0x0063), "BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE");
+
+
+  // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
+  // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
+  UIDGenerator uid;
+  Replace( Tag(0x008,0x0018), uid.Generate() );
+
   return true;
+}
+
+
+bool Anonymizer::BALCPProtect(Tag const & tag)
+{
+  DataSet &ds = F->GetDataSet();
+
+  if( tag == Tag(0x0010,0x0020) )
+    {
+    DataElement copy = ds.GetDataElement( tag );
+    copy.GetByteValue()->Fill( '0' );
+    ds.Replace( copy );
+    }
+  else
+    {
+    Empty( tag );
+    }
+  return true;
+}
+
+void Anonymizer::SetAESKey(AES const &aes)
+{
+  AESKey = aes;
+}
+
+const AES &Anonymizer::GetAESKey() const
+{
+  return AESKey;
 }
 
 } // end namespace gdcm

@@ -28,14 +28,24 @@ namespace gdcm
 class GDCM_EXPORT FileSet
 {
 public:
-  FileSet() {}
-  void AddFile(const File &file)
-    {
-    Files.push_back( &file );
-    }
+  FileSet():Files() {}
+  typedef std::string FileType;
+  typedef std::vector<FileType> FilesType;
+
+  /// \deprecated. Does nothing
+  void AddFile(File const & ) {}
+
+  /// Add a file 'filename' to the list of files. Return true on success, false in case filename could not
+  /// be found on system.
+  bool AddFile(const char *filename);
+
+  void SetFiles(FilesType const &files);
+  FilesType const &GetFiles() const {
+    return Files; 
+  }
 
 private:
-  std::vector<const File*> Files;
+  FilesType Files;
 };
 
 } // end namespace gdcm
