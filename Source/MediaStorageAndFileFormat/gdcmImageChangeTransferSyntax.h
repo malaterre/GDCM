@@ -26,11 +26,14 @@ class ImageCodec;
 /**
  * \brief ImageChangeTransferSyntax class
  * Class to change the transfer syntax of an input DICOM
+ *
+ * If only Force param is set but no input TransferSyntax is set, it is assumed that user only wants
+ * to inspect encapsulated stream (advanced dev. option).
  */
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
 public:
-  ImageChangeTransferSyntax():TS(),Force(false),CompressIconImage(false),UserCodec(0) {}
+  ImageChangeTransferSyntax():TS(TransferSyntax::TS_END),Force(false),CompressIconImage(false),UserCodec(0) {}
   ~ImageChangeTransferSyntax() {}
 
   /// Set target Transfer Syntax

@@ -329,6 +329,19 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
 
 bool ImageChangeTransferSyntax::Change()
 {
+  if( TS == TransferSyntax::TS_END )
+    {
+    if( !Force ) return false;
+    // When force option is set but no specific TransferSyntax has been set, only inspect the 
+    // encapsulated stream...
+    // See gdcm::ImageReader::Read
+    if( Input->GetTransferSyntax().IsEncapsulated() && Input->GetTransferSyntax() != TransferSyntax::RLELossless )
+      {
+      Output = Input;
+      return true;
+      }
+    return false;
+    }
   // let's get rid of some easy case:
   if( Input->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR && 
     TS.IsLossy() )

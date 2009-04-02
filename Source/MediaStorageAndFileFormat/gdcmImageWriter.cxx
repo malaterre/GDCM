@@ -252,7 +252,7 @@ bool ImageWriter::Write()
     numberofframes.SetValue( PixelData->GetDimension(2) );
     ds.Replace( numberofframes.GetAsDataElement() );
     }
-  else if( ds.FindDataElement(tnumberofframes) )
+  else if( ds.FindDataElement(tnumberofframes) ) // Remove Number Of Frames
     {
     assert( PixelData->GetNumberOfDimensions() == 2 );
     assert( PixelData->GetDimension(2) == 1 );

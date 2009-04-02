@@ -995,7 +995,7 @@ int main (int argc, char *argv[])
       return 1;
       }
     }
-  else if( jpeg || j2k || jpegls || rle || raw /*|| deflated*/ /*|| planarconf*/ )
+  else if( jpeg || j2k || jpegls || rle || raw || force /*|| deflated*/ /*|| planarconf*/ )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -1120,6 +1120,11 @@ int main (int argc, char *argv[])
         return 1;
         }
       change.SetTransferSyntax( gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian );
+      }
+    else if( force )
+      {
+      // If image is encapsulated it will check some attribute (col/row/pi/pf) and
+      // some attributes...
       }
     else
       {
