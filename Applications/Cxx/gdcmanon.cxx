@@ -23,6 +23,7 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmGlobal.h"
+#include "gdcmHAVEGE.h"
 
 #include <getopt.h>
 
@@ -309,9 +310,14 @@ int main(int argc, char *argv[])
     }
   gdcm::File &file = reader.GetFile();
 
-  unsigned char key[32] = {};
   gdcm::AES aes;
   const unsigned int KEY_LEN = 256;
+  unsigned char key[ KEY_LEN / 8] = {};
+  // randomize key:
+  gdcm::HAVEGE havege;
+  for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
+    key[j] = havege.Rand();
+
   if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
 
   gdcm::RSA rsa;

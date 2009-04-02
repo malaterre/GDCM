@@ -12,19 +12,37 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_polarssl_h
-#define __gdcm_polarssl_h
+#include "gdcmHAVEGE.h"
+#include "gdcm_polarssl.h"
+#include <string.h>
+#include <iostream>
 
-/* Use the uuid library configured for gdcm.  */
-#include "gdcmTypes.h"
-#ifdef GDCM_USE_SYSTEM_POLARSSL
-# include <uuid/uuid.h>
-#else
-# include <gdcmpolarssl/include/polarssl/rsa.h>
-# include <gdcmpolarssl/include/polarssl/x509.h>
-# include <gdcmpolarssl/include/polarssl/aes.h>
-# include <gdcmpolarssl/include/polarssl/md5.h>
-# include <gdcmpolarssl/include/polarssl/havege.h>
-#endif
+/*
+ */
+namespace gdcm
+{
 
-#endif
+class HAVEGEInternals
+{
+public:
+havege_state hs;
+};
+
+HAVEGE::HAVEGE()
+{
+  Internals = new HAVEGEInternals;
+  havege_init( &Internals->hs );
+}
+
+HAVEGE::~HAVEGE()
+{
+  delete Internals;
+}
+
+int HAVEGE::Rand()
+{
+  return havege_rand( &Internals->hs );
+}
+
+
+} // end namespace gdcm
