@@ -209,6 +209,7 @@ int main(int argc, char *argv[])
 {
   int c;
   std::string filename;
+  std::string xmlpath;
   int deflated = 0; // check deflated
   int resourcespath = 0;
   int verbose = 0;
@@ -224,6 +225,7 @@ int main(int argc, char *argv[])
         {"input", 1, 0, 0},
         {"check-deflated", 0, &deflated, 1},
         {"resources-path", 0, &resourcespath, 1},
+
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -419,14 +421,32 @@ int main(int argc, char *argv[])
     gdcm::Global& g = gdcm::Global::GetInstance();
     // First thing we need to locate the XML dict
     // did the user requested to look XML file in a particular directory ?
-    const char *xmlpath = getenv("GDCM_RESOURCES_PATH");
-    if( xmlpath )
+    if( !resourcespath )
       {
-      // Make sure to look for XML dict in user explicitly specified dir first:
-      g.Prepend( xmlpath );
+      const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
+      if( xmlpathenv )
+        {
+        // Make sure to look for XML dict in user explicitly specified dir first:
+        xmlpath = xmlpathenv;
+        resourcespath = 1;
+        }
       }
+    if( resourcespath )
+      {
+      // xmlpath is set either by the cmd line option or the env var
+      if( !g.Prepend( xmlpath.c_str() ) )
+        {
+        std::cerr << "specified Resources Path is not valid: " << xmlpath << std::endl;
+        return 1;
+        }
+      }
+
     // All set, then load the XML files:
-    g.LoadResourcesFiles();
+    if( !g.LoadResourcesFiles() )
+      {
+      return 1;
+      }
+
     const gdcm::Defs &defs = g.GetDefs();
     bool v = defs.Verify( ds );
     std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
