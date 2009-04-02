@@ -69,6 +69,7 @@ void PrintHelp()
   std::cout << "  -o --output      DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
+  std::cout << "     --resources-path      Resources path." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -89,6 +90,8 @@ int main(int argc, char *argv[])
   std::string filename;
   std::string outfilename;
   std::string root;
+  std::string xmlpath;
+  int resourcespath = 0;
   int rootuid = 0;
   int verbose = 0;
   int warning = 0;
@@ -103,6 +106,7 @@ int main(int argc, char *argv[])
         {"input", 1, 0, 0},                 // i
         {"output", 1, 0, 0},                // o
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
+        {"resources-path", 1, &resourcespath, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -134,6 +138,18 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.empty() );
             filename = optarg;
+            }
+          else if( option_index == 1 ) /* root-uid */
+            {
+            assert( strcmp(s, "root-uid") == 0 );
+            assert( root.empty() );
+            root = optarg;
+            }
+          else if( option_index == 2 ) /* resources-path */
+            {
+            assert( strcmp(s, "resources-path") == 0 );
+            assert( xmlpath.empty() );
+            xmlpath = optarg;
             }
           printf (" with arg %s", optarg);
           }
@@ -242,6 +258,27 @@ int main(int argc, char *argv[])
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmanon" );
+  gdcm::Global& g = gdcm::Global::GetInstance();
+  if( !resourcespath )
+    {
+    const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
+    if( xmlpathenv )
+      {
+      // Make sure to look for XML dict in user explicitly specified dir first:
+      xmlpath = xmlpathenv;
+      resourcespath = 1;
+      }
+    }
+  if( resourcespath )
+    {
+    // xmlpath is set either by the cmd line option or the env var
+    if( !g.Prepend( xmlpath.c_str() ) )
+      {
+      std::cerr << "specified Resources Path is not valid: " << xmlpath << std::endl;
+      return 1;
+      }
+    }
+
   if( !rootuid )
     {
     // only read the env var is no explicit cmd line option
@@ -297,13 +334,6 @@ int main(int argc, char *argv[])
 
   std::cout << rsa_ciphertext << std::endl;
 
-  gdcm::Global& g = gdcm::Global::GetInstance();
-  const char *xmlpath = getenv("GDCM_RESOURCES_PATH");
-  if( xmlpath )
-    {
-    // Make sure to look for XML dict in user explicitly specified dir first:
-    g.Prepend( xmlpath );
-    }
   // All set, then load the XML files:
   if( !g.LoadResourcesFiles() )
     {

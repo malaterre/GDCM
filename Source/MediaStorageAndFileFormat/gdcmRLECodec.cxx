@@ -316,7 +316,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   //sq->GetTable().SetTag( itemStart );
   // FIXME  ? Is this compulsary ?
   const char dummy[4] = {};
-  sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
+  //sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
 
   const ByteValue *bv = in.GetByteValue();
   assert( bv );

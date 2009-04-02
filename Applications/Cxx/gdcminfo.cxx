@@ -188,6 +188,7 @@ void PrintHelp()
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
+  std::cout << "     --resources-path   Resources path." << std::endl;
   // the following options would require an advanced MediaStorage::SetFromFile ... sigh
   //std::cout << "     --media-storage-uid   return media storage uid only." << std::endl;
   //std::cout << "     --media-storage-name  return media storage name only (when possible)." << std::endl;
@@ -209,6 +210,7 @@ int main(int argc, char *argv[])
   int c;
   std::string filename;
   int deflated = 0; // check deflated
+  int resourcespath = 0;
   int verbose = 0;
   int warning = 0;
   int help = 0;
@@ -221,6 +223,7 @@ int main(int argc, char *argv[])
     static struct option long_options[] = {
         {"input", 1, 0, 0},
         {"check-deflated", 0, &deflated, 1},
+        {"resources-path", 0, &resourcespath, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -251,6 +254,12 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.empty() );
             filename = optarg;
+            }
+          else if( option_index == 2 ) /* resources-path */
+            {
+            assert( strcmp(s, "resources-path") == 0 );
+            assert( xmlpath.empty() );
+            xmlpath = optarg;
             }
           //printf (" with arg %s", optarg);
           }

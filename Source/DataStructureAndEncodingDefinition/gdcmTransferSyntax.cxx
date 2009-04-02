@@ -223,5 +223,38 @@ bool TransferSyntax::IsEncoded() const
   return TSField == DeflatedExplicitVRLittleEndian;
 }
 
+bool TransferSyntax::IsEncapsulated() const
+{
+  bool ret = false;
+  switch( TSField )
+    {
+  //case ImplicitVRLittleEndian:
+  //case ImplicitVRBigEndianPrivateGE:
+  //case ExplicitVRLittleEndian:
+  //case DeflatedExplicitVRLittleEndian:
+  //case ExplicitVRBigEndian:
+  case JPEGBaselineProcess1:
+  case JPEGExtendedProcess2_4:
+  case JPEGExtendedProcess3_5:
+  case JPEGSpectralSelectionProcess6_8:
+  case JPEGFullProgressionProcess10_12:
+  case JPEGLosslessProcess14:
+  case JPEGLosslessProcess14_1:
+  case JPEGLSLossless:
+  case JPEGLSNearLossless:
+  case JPEG2000Lossless:
+  case JPEG2000:
+  case RLELossless:
+  case MPEG2MainProfile:
+  //case ImplicitVRBigEndianACRNEMA:
+  //case WeirdPapryus:
+    ret = true;
+    break;
+  default:
+    ;
+    }
+  return ret;
+}
+
 } // end namespace gdcm
 

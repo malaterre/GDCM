@@ -59,6 +59,7 @@ public:
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 private:
+  bool GetHeaderInfo(const char * dummy_buffer, size_t len, TransferSyntax &ts);
   JPEG2000Internals *Internals;
 };
 

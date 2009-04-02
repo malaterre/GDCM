@@ -752,17 +752,24 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 
 bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
-  opj_dparameters_t parameters;  /* decompression parameters */
-  opj_event_mgr_t event_mgr;    /* event manager */
-  opj_image_t *image;
-  opj_dinfo_t* dinfo;  /* handle to a decompressor */
-  opj_cio_t *cio;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
+  bool b = GetHeaderInfo( dummy_buffer, buf_size, ts );
+  delete[] dummy_buffer;
+  return b;
+}
+
+bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, TransferSyntax &ts)
+{
+  opj_dparameters_t parameters;  /* decompression parameters */
+  opj_event_mgr_t event_mgr;    /* event manager */
+  opj_image_t *image;
+  opj_dinfo_t* dinfo;  /* handle to a decompressor */
+  opj_cio_t *cio;
   unsigned char *src = (unsigned char*)dummy_buffer;
   int file_length = buf_size;
 
@@ -987,7 +994,7 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   opj_cio_close(cio);
 
   /* free the memory containing the code-stream */
-  delete[] src;  //FIXME
+  //delete[] src;  //FIXME
 
   /* free remaining structures */
   if(dinfo) {

@@ -797,31 +797,49 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
   else
     {
-    // Pretty bad we really need this information. Should not 
-    // happen in theory. Maybe papyrus files ??
-    gdcmErrorMacro( "This should not happen !" );
-    return false;
+    const TransferSyntax &ts = PixelData->GetTransferSyntax();
+    gdcmWarningMacro( "This should not happen: No Columns found." );
+    if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
+      {
+      // Pretty bad we really need this information. Should not 
+      // happen in theory. Maybe papyrus files ??
+      return false;
+      }
     }
 
   // D 0028|0010 [US] [Rows] [512]
   //PixelData->SetDimension(1,
   //  ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
     Attribute<0x0028,0x0010> at;
-    at.SetFromDataElement( de );
-    PixelData->SetDimension(1, at.GetValue() );
-    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+    if( ds.FindDataElement( at.GetTag() ) )
+      {
+      const DataElement& de = ds.GetDataElement( at.GetTag() );
+      at.SetFromDataElement( de );
+      PixelData->SetDimension(1, at.GetValue() );
+      //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+      }
+    else
+      {
+      const TransferSyntax &ts = PixelData->GetTransferSyntax();
+      gdcmWarningMacro( "This should not happen: No Rows found." );
+      if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
+        {
+        // Pretty bad we really need this information. Should not 
+        // happen in theory. Maybe papyrus files ??
+        return false;
+        }
+      }
     }
 
   // Dummy check
-  const unsigned int *dims = PixelData->GetDimensions();
-  if( dims[0] == 0 || dims[1] == 0 )
-    {
-    // PhilipsLosslessRice.dcm
-    gdcmWarningMacro( "Image is empty" );
-    return false;
-    }
+  //const unsigned int *dims = PixelData->GetDimensions();
+  //if( dims[0] == 0 || dims[1] == 0 )
+  //  {
+  //  // PhilipsLosslessRice.dcm
+  //  gdcmWarningMacro( "Image is empty" );
+  //  return false;
+  //  }
 
   // 3. Pixel Format ?
   PixelFormat pf;
@@ -1146,6 +1164,34 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
     //PixelFormat guesspf = PixelFormat->GuessPixelFormat();
 
+    }
+
+  const unsigned int *dims = PixelData->GetDimensions();
+  if( dims[0] == 0 || dims[1] == 0 )
+    {
+    // Pseudo-declared JPEG SC image storage. Let's fix col/row/pf/pi
+    if( PixelData->GetTransferSyntax().IsEncapsulated() )
+      {
+      std::stringstream ss;
+      const DataElement &de = PixelData->GetDataElement();
+      //const ByteValue *bv = de.GetByteValue();
+      const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+      sqf->WriteBuffer( ss );
+      //std::string s( bv->GetPointer(), bv->GetLength() );
+      //is.str( s );
+      gdcm::JPEGCodec jpeg;
+      gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+      jpeg.SetPixelFormat( pf );
+      gdcm::TransferSyntax ts;
+      bool b = jpeg.GetHeaderInfo( ss, ts );
+      if( b )
+        {
+        PixelData->SetDimensions( jpeg.GetDimensions() );
+        PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
+        PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+        assert( PixelData->GetTransferSyntax() == ts );
+        }
+      }
     }
 
   return true;
