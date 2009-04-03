@@ -28,6 +28,7 @@
 #include "gdcmDefs.h"
 #include "gdcmOrientation.h"
 #include "gdcmVersion.h"
+#include "gdcmMD5.h"
 
 #include "puff.h"
 
@@ -189,6 +190,7 @@ void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
   std::cout << "     --resources-path   Resources path." << std::endl;
+  std::cout << "     --md5sum           Compute md5sum of Pixel Data attribute value." << std::endl;
   // the following options would require an advanced MediaStorage::SetFromFile ... sigh
   //std::cout << "     --media-storage-uid   return media storage uid only." << std::endl;
   //std::cout << "     --media-storage-name  return media storage name only (when possible)." << std::endl;
@@ -212,6 +214,7 @@ int main(int argc, char *argv[])
   std::string xmlpath;
   int deflated = 0; // check deflated
   int resourcespath = 0;
+  int md5sum = 0;
   int verbose = 0;
   int warning = 0;
   int help = 0;
@@ -225,6 +228,7 @@ int main(int argc, char *argv[])
         {"input", 1, 0, 0},
         {"check-deflated", 0, &deflated, 1},
         {"resources-path", 0, &resourcespath, 1},
+        {"md5sum", 0, &md5sum, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -414,6 +418,16 @@ int main(int argc, char *argv[])
     bool lossy = image.IsLossy();
     std::cout << "Orientation Label: " << label << std::endl;
     std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
+
+    if( md5sum )
+      {
+      char *buffer = new char[ image.GetBufferLength() ];
+      image.GetBuffer( buffer );
+      char digest[33] = {};
+      gdcm::MD5::Compute( buffer, image.GetBufferLength(), digest );
+      std::cout << "md5sum: " << digest << std::endl;
+      delete[] buffer;
+      }
     }
 
 // Do the IOD verification !

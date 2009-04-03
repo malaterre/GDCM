@@ -12,25 +12,48 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmDummyValueGenerator.h"
-#include "gdcmTrace.h"
-#include "gdcmSystem.h"
 #include "gdcmMD5.h"
+#include "gdcm_polarssl.h"
 
+/*
+ */
 namespace gdcm
 {
 
-const char* DummyValueGenerator::Generate(const char *input)
+class MD5Internals
 {
-  static char digest[32+1] = {};
-  bool b = false;
-  if( input )
-    b = MD5::Compute(input, strlen(input), digest);
+public:
+};
 
-  if( b )
-    return digest;
-  return 0;
+MD5::MD5()
+{
+  Internals = new MD5Internals;
 }
+
+MD5::~MD5()
+{
+  delete Internals;
+}
+
+bool MD5::Compute(const char *buffer, unsigned long buf_len, char digest[33])
+{
+  if( !buffer || !buf_len )
+    {
+    return false;
+    }
+  unsigned char output[16];
+
+  md5( (unsigned char*)buffer, buf_len, output);
+
+  for (int di = 0; di < 16; ++di)
+    {
+    sprintf(digest+2*di, "%02x", output[di]);
+    }
+  digest[2*16] = '\0';
+
+  return true;
+}
+
 
 
 } // end namespace gdcm

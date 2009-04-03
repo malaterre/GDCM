@@ -12,25 +12,33 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmDummyValueGenerator.h"
-#include "gdcmTrace.h"
-#include "gdcmSystem.h"
-#include "gdcmMD5.h"
+#ifndef __gdcmMD5_h
+#define __gdcmMD5_h
+
+#include "gdcmTypes.h"
 
 namespace gdcm
 {
-
-const char* DummyValueGenerator::Generate(const char *input)
+/**
+ * \brief Class for MD5 
+ *
+ */
+//-----------------------------------------------------------------------------
+class MD5Internals;
+class GDCM_EXPORT MD5
 {
-  static char digest[32+1] = {};
-  bool b = false;
-  if( input )
-    b = MD5::Compute(input, strlen(input), digest);
+public :
+  MD5();
+  ~MD5();
 
-  if( b )
-    return digest;
-  return 0;
-}
+  static bool Compute(const char *buffer, unsigned long buf_len, char digest_str[33]);
 
-
+private:
+  MD5Internals *Internals;
+private:
+  MD5(const MD5&);  // Not implemented.
+  void operator=(const MD5&);  // Not implemented.
+};
 } // end namespace gdcm
+//-----------------------------------------------------------------------------
+#endif //__gdcmMD5_h
