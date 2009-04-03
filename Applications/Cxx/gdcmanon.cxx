@@ -64,10 +64,13 @@ void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmanon [OPTION]... FILE..." << std::endl;
-  std::cout << "Basic Application Level Confidentiality Profile" << std::endl;
+  std::cout << "PS 3.15 / E.1 / Basic Application Level Confidentiality Profile" << std::endl;
+  std::cout << "Implementation of E.1.1 De-identify & E.1.2 Re-identify" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input       DICOM filename" << std::endl;
-  std::cout << "  -o --output      DICOM filename" << std::endl;
+  std::cout << "  -i --input               DICOM filename" << std::endl;
+  std::cout << "  -o --output              DICOM filename" << std::endl;
+  std::cout << "  -d --de-identify         De-identify DICOM (default)" << std::endl;
+  std::cout << "  -r --re-identify         Re-identify DICOM" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --resources-path      Resources path." << std::endl;
@@ -93,6 +96,8 @@ int main(int argc, char *argv[])
   std::string root;
   std::string xmlpath;
   int resourcespath = 0;
+  int deidentify = 0;
+  int reidentify = 0;
   int rootuid = 0;
   int verbose = 0;
   int warning = 0;
@@ -108,6 +113,8 @@ int main(int argc, char *argv[])
         {"output", 1, 0, 0},                // o
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"resources-path", 1, &resourcespath, 1},
+        {"de-identify", 0, &deidentify, 1},
+        {"re-identify", 0, &reidentify, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -168,6 +175,14 @@ int main(int argc, char *argv[])
       //printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
+      break;
+
+    case 'd':
+      deidentify = 1;
+      break;
+
+    case 'r':
+      reidentify = 1;
       break;
 
     case 'V':
@@ -246,6 +261,17 @@ int main(int argc, char *argv[])
     PrintHelp();
     return 1;
     }
+
+  // by default de-identify
+  if( !deidentify && !reidentify)
+    {
+    deidentify = 1;
+    }
+
+  if( deidentify && reidentify )
+    {
+    return 1;
+    }
  
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
@@ -279,6 +305,11 @@ int main(int argc, char *argv[])
       return 1;
       }
     }
+  // All set, then load the XML files:
+  if( !g.LoadResourcesFiles() )
+    {
+    return 1;
+    }
 
   if( !rootuid )
     {
@@ -310,16 +341,8 @@ int main(int argc, char *argv[])
     }
   gdcm::File &file = reader.GetFile();
 
-  gdcm::AES aes;
+  // Get RSA key
   const unsigned int KEY_LEN = 256;
-  unsigned char key[ KEY_LEN / 8] = {};
-  // randomize key:
-  gdcm::HAVEGE havege;
-  for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
-    key[j] = havege.Rand();
-
-  if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
-
   gdcm::RSA rsa;
   if( !GetRSAKey(rsa) )
     {
@@ -327,41 +350,57 @@ int main(int argc, char *argv[])
     }
   if( rsa.GetLenkey() != KEY_LEN ) return 1;
 
-  unsigned char rsa_plaintext[KEY_LEN];
-  unsigned char rsa_ciphertext[KEY_LEN];
-  memcpy( rsa_plaintext, key, KEY_LEN );
+  gdcm::AES aes;
+  unsigned char key[ KEY_LEN / 8] = {};
+  // randomize key:
+  gdcm::HAVEGE havege;
+  //for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
+  //  key[j] = havege.Rand();
 
-  int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
-  if( err != 0 )
+  if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
+
+  if( deidentify )
     {
-    std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
-    //return 1;
+    gdcm::Anonymizer anon;
+    anon.SetAESKey( aes );
+    anon.SetFile( file );
+    //anon.RemovePrivateTags();
+    //anon.RemoveRetired();
+    if( !anon.BasicApplicationLevelConfidentialityProfile() )
+      {
+      return 1;
+      }
+
+    // FIXME:
+    gdcm::FileMetaInformation &fmi = file.GetHeader();
+    //fmi.Remove( gdcm::Tag(0x0002,0x0003) ); // will be regenerated
+    fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
+    fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+    fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
+
+    // Save the AES key in an RSA enveloppe:
+    unsigned char rsa_plaintext[KEY_LEN];
+    unsigned char rsa_ciphertext[KEY_LEN];
+    memcpy( rsa_plaintext, key, KEY_LEN );
+
+    int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
+    if( err != 0 )
+      {
+      std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
+      //return 1;
+      }
+    std::cout << rsa_ciphertext << std::endl;
     }
-
-  std::cout << rsa_ciphertext << std::endl;
-
-  // All set, then load the XML files:
-  if( !g.LoadResourcesFiles() )
+  else if ( reidentify )
     {
-    return 1;
+    gdcm::Anonymizer anon;
+    anon.SetAESKey( aes );
+    anon.SetFile( file );
+    if( !anon.BasicApplicationLevelConfidentialityProfile2() )
+      {
+      return 1;
+      }
     }
-
-  gdcm::Anonymizer anon;
-  anon.SetAESKey( aes );
-  anon.SetFile( file );
-  anon.RemovePrivateTags();
-  anon.RemoveRetired();
-  if( !anon.BasicApplicationLevelConfidentialityProfile() )
-    {
-    return 1;
-    }
-
-  // FIXME:
-  gdcm::FileMetaInformation &fmi = file.GetHeader();
-  //fmi.Remove( gdcm::Tag(0x0002,0x0003) ); // will be regenerated
-  fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
-  fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
-  fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );

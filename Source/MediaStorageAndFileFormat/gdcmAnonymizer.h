@@ -81,6 +81,8 @@ public:
   /// if it protects all Attributes that might be used by unauthorized entities to identify the patient.
   bool BasicApplicationLevelConfidentialityProfile();
 
+  bool BasicApplicationLevelConfidentialityProfile2();
+
   /// Set/Get AES key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
   void SetAESKey(AES const &aes);
   const AES &GetAESKey() const;

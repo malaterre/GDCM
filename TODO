@@ -318,3 +318,6 @@ Private tags extracted from private DCS is cool, but one would also
 need Defined terms, that would be *very* cool !
 -----------------------------------------------------------------------
 gdcmconv --raw should process a gdcm::Pixmap not a gdcm::Image
+-----------------------------------------------------------------------
+Amicas JP2 to DICOM:
+http://www.mikekristofferson.com/misc/mri/amicas-patients/

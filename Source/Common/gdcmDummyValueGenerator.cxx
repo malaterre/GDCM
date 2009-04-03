@@ -15,17 +15,21 @@
 #include "gdcmDummyValueGenerator.h"
 #include "gdcmTrace.h"
 #include "gdcmSystem.h"
-#include "gdcmMD5.h"
+#include "gdcmSHA1.h"
 
 namespace gdcm
 {
 
 const char* DummyValueGenerator::Generate(const char *input)
 {
-  static char digest[32+1] = {};
+  static char digest[2*20+1] = {};
   bool b = false;
   if( input )
-    b = MD5::Compute(input, strlen(input), digest);
+    {
+    // Cannot use MD5 as it has been broken multiple time (2005)
+    //b = MD5::Compute(input, strlen(input), digest);
+    b = SHA1::Compute(input, strlen(input), digest);
+    }
 
   if( b )
     return digest;

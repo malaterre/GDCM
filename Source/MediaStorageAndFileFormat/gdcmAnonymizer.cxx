@@ -551,5 +551,52 @@ const AES &Anonymizer::GetAESKey() const
   return AESKey;
 }
 
+bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
+{
+  // 1. The application shall decrypt, using its recipient key, one instance of the Encrypted Content
+  // (0400,0520) Attribute within the Encrypted Attributes Sequence (0400,0500) and decode the resulting
+  // block of bytes into a DICOM dataset using the Transfer Syntax specified in the Encrypted Content
+  // Transfer Syntax UID (0400,0510). Re-identifiers claiming conformance to this profile shall be capable
+  // of decrypting the Encrypted Content using either AES or Triple-DES in all possible key lengths
+  // specified in this profile
+  const AES& aes = AESKey;
+  unsigned char iv[16] = {}; // FIXME ???
+
+  DataSet &ds = F->GetDataSet();
+  const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
+  const SequenceOfItems *sq = EncryptedAttributesSequence.GetSequenceOfItems();
+  const Item &item = sq->GetItem(1);
+  const DataSet &nds = item.GetNestedDataSet();
+  const DataElement &EncryptedContent = nds.GetDataElement( Tag(0x0400,0x0520) );
+  const ByteValue *bv = EncryptedContent.GetByteValue();
+  
+  size_t encrypted_len = bv->GetLength();
+  unsigned char *buf = new unsigned char[ bv->GetLength() ];
+  memcpy(buf, bv->GetPointer(), encrypted_len );
+  aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, buf, buf );
+
+  std::stringstream ss;
+  ss.str( std::string((char*)buf, encrypted_len) );
+  DataSet des;
+  des.Read<ExplicitDataElement,SwapperNoOp>(ss);
+
+  std::cout << des << std::endl; 
+
+  delete[] buf;
+
+  // 2. The application shall move all Attributes contained in the single item of the Modified Attributes
+  // Sequence (0400,0550) of the decoded dataset into the main dataset, replacing¿dummy value¿
+  // Attributes that may be present in the main dataset.
+
+  // 3. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
+  // value of NO and De-identification Method (0012,0063) and De-identification Method Code Sequence
+  // (0012,0064) shall be removed.
+  //Replace( Tag(0x0012,0x0062), "NO");
+  Remove( Tag(0x0012,0x0062) );
+  Remove( Tag(0x0012,0x0063) );
+
+  return true;
+}
+
 } // end namespace gdcm
 

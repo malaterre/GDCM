@@ -24,6 +24,7 @@
 # include <gdcmpolarssl/include/polarssl/x509.h>
 # include <gdcmpolarssl/include/polarssl/aes.h>
 # include <gdcmpolarssl/include/polarssl/md5.h>
+# include <gdcmpolarssl/include/polarssl/sha1.h>
 # include <gdcmpolarssl/include/polarssl/havege.h>
 #endif
 

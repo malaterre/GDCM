@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmMD5.h"
+#include "gdcmSHA1.h"
 #include "gdcm_polarssl.h"
 
 /*
@@ -20,37 +20,38 @@
 namespace gdcm
 {
 
-class MD5Internals
+class SHA1Internals
 {
 public:
-md5_context ctx;
+sha1_context ctx;
 };
 
-MD5::MD5()
+SHA1::SHA1()
 {
-  Internals = new MD5Internals;
+  Internals = new SHA1Internals;
 }
 
-MD5::~MD5()
+SHA1::~SHA1()
 {
   delete Internals;
 }
 
-bool MD5::Compute(const char *buffer, unsigned long buf_len, char digest[33])
+bool SHA1::Compute(const char *buffer, unsigned long buf_len, char digest[])
 {
   if( !buffer || !buf_len )
     {
     return false;
     }
-  unsigned char output[16];
 
-  md5( (unsigned char*)buffer, buf_len, output);
+  unsigned char output[20];
 
-  for (int di = 0; di < 16; ++di)
+  sha1( (unsigned char*)buffer, buf_len, output);
+
+  for (int di = 0; di < 20; ++di)
     {
     sprintf(digest+2*di, "%02x", output[di]);
     }
-  digest[2*16] = '\0';
+  digest[2*20] = '\0';
 
   return true;
 }

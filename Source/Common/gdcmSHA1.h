@@ -12,49 +12,33 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmMD5.h"
-#include "gdcm_polarssl.h"
+#ifndef __gdcmSHA1_h
+#define __gdcmSHA1_h
 
-/*
- */
+#include "gdcmTypes.h"
+
 namespace gdcm
 {
-
-class MD5Internals
+/**
+ * \brief Class for SHA1 
+ *
+ */
+//-----------------------------------------------------------------------------
+class SHA1Internals;
+class GDCM_EXPORT SHA1
 {
-public:
-md5_context ctx;
+public :
+  SHA1();
+  ~SHA1();
+
+  static bool Compute(const char *buffer, unsigned long buf_len, char digest_str[20*2+1]);
+
+private:
+  SHA1Internals *Internals;
+private:
+  SHA1(const SHA1&);  // Not implemented.
+  void operator=(const SHA1&);  // Not implemented.
 };
-
-MD5::MD5()
-{
-  Internals = new MD5Internals;
-}
-
-MD5::~MD5()
-{
-  delete Internals;
-}
-
-bool MD5::Compute(const char *buffer, unsigned long buf_len, char digest[33])
-{
-  if( !buffer || !buf_len )
-    {
-    return false;
-    }
-  unsigned char output[16];
-
-  md5( (unsigned char*)buffer, buf_len, output);
-
-  for (int di = 0; di < 16; ++di)
-    {
-    sprintf(digest+2*di, "%02x", output[di]);
-    }
-  digest[2*16] = '\0';
-
-  return true;
-}
-
-
-
 } // end namespace gdcm
+//-----------------------------------------------------------------------------
+#endif //__gdcmSHA1_h
