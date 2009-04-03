@@ -316,3 +316,5 @@ There is only one problem with slope/rescale -> float
 -----------------------------------------------------------------------
 Private tags extracted from private DCS is cool, but one would also
 need Defined terms, that would be *very* cool !
+-----------------------------------------------------------------------
+gdcmconv --raw should process a gdcm::Pixmap not a gdcm::Image
