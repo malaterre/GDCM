@@ -36,8 +36,6 @@ public :
 /**
  * \brief          HAVEGE rand function
  *
- * \param rng_st   points to an HAVEGE state
- *
  * \return         A random int
  */
 int Rand( );

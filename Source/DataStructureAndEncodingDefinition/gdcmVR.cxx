@@ -135,6 +135,9 @@ unsigned int VR::GetSizeof() const
   case VR::DS:
     size = sizeof(VRToType<VR::DS>::Type);
     break;
+  case VR::IS:
+    size = sizeof(VRToType<VR::IS>::Type);
+    break;
   case VR::LO:
     size = sizeof(VRToType<VR::LO>::Type);
     break;

@@ -678,6 +678,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::UltrasoundMultiFrameImageStorageRetired:
     // (0028,0034) IS [4\3]                                    #   4, 2 PixelAspectRatio
     t = Tag(0xffff,0xffff); // FIXME
+    t = Tag(0x0028,0x0034); // FIXME
     break;
   default:
     gdcmDebugMacro( "Do not handle: " << ms );
@@ -830,6 +831,21 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         // Stupid file: ct-mono2-8bit.dcm
         // The spacing is something like that: [0.2\0\0.200000]
         // I would need to throw an expection that VM is not compatible
+        el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
+        el.Read( ss );
+        for(unsigned long i = 0; i < el.GetLength(); ++i) 
+          sp.push_back( el.GetValue(i) );
+        assert( sp.size() == (unsigned int)entry.GetVM() );
+        }
+      break;
+    case VR::IS:
+        {
+        Element<VR::IS,VM::VM1_n> el;
+        std::stringstream ss;
+        const ByteValue *bv = de.GetByteValue();
+        assert( bv );
+        std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+        ss.str( s );
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
         for(unsigned long i = 0; i < el.GetLength(); ++i) 
