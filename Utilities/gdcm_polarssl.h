@@ -20,6 +20,7 @@
 #ifdef GDCM_USE_SYSTEM_POLARSSL
 # include <uuid/uuid.h>
 #else
+# include <gdcmpolarssl/include/polarssl/config.h>
 # include <gdcmpolarssl/include/polarssl/rsa.h>
 # include <gdcmpolarssl/include/polarssl/x509.h>
 # include <gdcmpolarssl/include/polarssl/aes.h>
