@@ -13,6 +13,8 @@
 
 =========================================================================*/
 /*
+ * PS 3.15 / E.1 / Basic Application Level Confidentiality Profile
+ * Implementation of E.1.1 De-identify & E.1.2 Re-identify
  */
 
 #include "gdcmReader.h"

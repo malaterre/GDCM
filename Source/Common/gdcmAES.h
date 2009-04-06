@@ -72,6 +72,7 @@ bool SetkeyDec(const unsigned char *key, unsigned int keysize );
  * \param mode     ENCRYPT or DECRYPT
  * \param input    16-byte input block
  * \param output   16-byte output block
+ * \return         false on error (invalid key)
  */
 bool CryptEcb(
                     int mode,
@@ -86,6 +87,7 @@ bool CryptEcb(
  * \param iv       initialization vector (updated after use)
  * \param input    buffer holding the input data
  * \param output   buffer holding the output data
+ * \return         false on error (invalid key, or length not multiple 16)
  */
 bool CryptCbc(
                     int mode,
@@ -103,6 +105,7 @@ bool CryptCbc(
  * \param iv       initialization vector (updated after use)
  * \param input    buffer holding the input data
  * \param output   buffer holding the output data
+ * \return         false on error (invalid key)
  */
 bool CryptCfb128(
                        int mode,
@@ -121,6 +124,11 @@ protected:
  * \return         0 if successful, or 1 if the test failed (or not compiled in)
  */
 int SelfTest( int verbose = 0 ) const;
+/**
+ * \brief          Checkup routine
+ *
+ * \return         0 if successful, or 1 if the test failed 
+ */
 int SimpleTest(int verbose = 0) const;
 private:
 AESInternals *Internals;

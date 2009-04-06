@@ -124,6 +124,7 @@ bool AES::CryptCbc(
                     unsigned char *output ) const
 {
   if( !aes_check_struct( &Internals->ctx ) ) return false;
+  if( length < 0 || length % 16 != 0 ) return false;
   aes_crypt_cbc( &Internals->ctx,
     mode,
     length,
@@ -143,13 +144,13 @@ bool AES::CryptCfb128(
                        unsigned char *output ) const
 {
   if( !aes_check_struct( &Internals->ctx ) ) return false;
-aes_crypt_cfb128( &Internals->ctx,
-                       mode,
-                       length,
-                       &iv_off,
-                       iv,
-                       const_cast<unsigned char*>(input),
-                       output );
+  aes_crypt_cfb128( &Internals->ctx,
+    mode,
+    length,
+    &iv_off,
+    iv,
+    const_cast<unsigned char*>(input),
+    output );
 
   return true;
 }
@@ -173,6 +174,8 @@ int AES::SimpleTest(int verbose) const
   aes_crypt_cbc( &ctx, AES_ENCRYPT, 16, tempInitVector, plainText, cipherText );
   if(verbose)
     printf("Ciphertext:\n");
+  //if(verbose)
+  //  printf("%s\n",ciphertext); 
 
   // Decrypt
   memset(tempInitVector,0,16);
