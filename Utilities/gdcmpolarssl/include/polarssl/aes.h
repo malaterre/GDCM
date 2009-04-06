@@ -60,7 +60,7 @@ extern "C" {
  * \param key      encryption key
  * \param keysize  must be 128, 192 or 256
  */
-void aes_setkey_enc( aes_context *ctx, unsigned char *key, int keysize );
+POLARSSL_EXPORT void aes_setkey_enc( aes_context *ctx, unsigned char *key, int keysize );
 
 /**
  * \brief          AES key schedule (decryption)
@@ -69,7 +69,7 @@ void aes_setkey_enc( aes_context *ctx, unsigned char *key, int keysize );
  * \param key      decryption key
  * \param keysize  must be 128, 192 or 256
  */
-void aes_setkey_dec( aes_context *ctx, unsigned char *key, int keysize );
+POLARSSL_EXPORT void aes_setkey_dec( aes_context *ctx, unsigned char *key, int keysize );
 
 /**
  * \brief          AES-ECB block encryption/decryption
@@ -79,7 +79,7 @@ void aes_setkey_dec( aes_context *ctx, unsigned char *key, int keysize );
  * \param input    16-byte input block
  * \param output   16-byte output block
  */
-void aes_crypt_ecb( aes_context *ctx,
+POLARSSL_EXPORT void aes_crypt_ecb( aes_context *ctx,
                     int mode,
                     unsigned char input[16],
                     unsigned char output[16] );
@@ -94,7 +94,7 @@ void aes_crypt_ecb( aes_context *ctx,
  * \param input    buffer holding the input data
  * \param output   buffer holding the output data
  */
-void aes_crypt_cbc( aes_context *ctx,
+POLARSSL_EXPORT void aes_crypt_cbc( aes_context *ctx,
                     int mode,
                     int length,
                     unsigned char iv[16],
@@ -112,7 +112,7 @@ void aes_crypt_cbc( aes_context *ctx,
  * \param input    buffer holding the input data
  * \param output   buffer holding the output data
  */
-void aes_crypt_cfb128( aes_context *ctx,
+POLARSSL_EXPORT void aes_crypt_cfb128( aes_context *ctx,
                        int mode,
                        int length,
                        int *iv_off,
@@ -125,7 +125,7 @@ void aes_crypt_cfb128( aes_context *ctx,
  *
  * \return         0 if successful, or 1 if the test failed
  */
-int aes_self_test( int verbose );
+POLARSSL_EXPORT int aes_self_test( int verbose );
 
 #ifdef __cplusplus
 }

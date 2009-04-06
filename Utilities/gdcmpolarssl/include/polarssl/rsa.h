@@ -148,7 +148,7 @@ void rsa_init( rsa_context *ctx,
  *
  * \return         0 if successful, or an POLARSSL_ERR_RSA_XXX error code
  */
-int rsa_gen_key( rsa_context *ctx, int nbits, int exponent );
+POLARSSL_EXPORT int rsa_gen_key( rsa_context *ctx, int nbits, int exponent );
 
 /**
  * \brief          Check a public RSA key
@@ -157,7 +157,7 @@ int rsa_gen_key( rsa_context *ctx, int nbits, int exponent );
  *
  * \return         0 if successful, or an POLARSSL_ERR_RSA_XXX error code
  */
-int rsa_check_pubkey( rsa_context *ctx );
+POLARSSL_EXPORT int rsa_check_pubkey( rsa_context *ctx );
 
 /**
  * \brief          Check a private RSA key
@@ -166,7 +166,7 @@ int rsa_check_pubkey( rsa_context *ctx );
  *
  * \return         0 if successful, or an POLARSSL_ERR_RSA_XXX error code
  */
-int rsa_check_privkey( rsa_context *ctx );
+POLARSSL_EXPORT int rsa_check_privkey( rsa_context *ctx );
 
 /**
  * \brief          Do an RSA public key operation
@@ -183,7 +183,7 @@ int rsa_check_privkey( rsa_context *ctx );
  * \note           The input and output buffers must be large
  *                 enough (eg. 128 bytes if RSA-1024 is used).
  */
-int rsa_public( rsa_context *ctx,
+POLARSSL_EXPORT int rsa_public( rsa_context *ctx,
                 unsigned char *input,
                 unsigned char *output );
 
@@ -199,7 +199,7 @@ int rsa_public( rsa_context *ctx,
  * \note           The input and output buffers must be large
  *                 enough (eg. 128 bytes if RSA-1024 is used).
  */
-int rsa_private( rsa_context *ctx,
+POLARSSL_EXPORT int rsa_private( rsa_context *ctx,
                  unsigned char *input,
                  unsigned char *output );
 
@@ -217,7 +217,7 @@ int rsa_private( rsa_context *ctx,
  * \note           The output buffer must be as large as the size
  *                 of ctx->N (eg. 128 bytes if RSA-1024 is used).
  */
-int rsa_pkcs1_encrypt( rsa_context *ctx,
+POLARSSL_EXPORT int rsa_pkcs1_encrypt( rsa_context *ctx,
                        int mode, int  ilen,
                        unsigned char *input,
                        unsigned char *output );
@@ -238,7 +238,7 @@ int rsa_pkcs1_encrypt( rsa_context *ctx,
  *                 of ctx->N (eg. 128 bytes if RSA-1024 is used) otherwise
  *                 an error is thrown.
  */
-int rsa_pkcs1_decrypt( rsa_context *ctx,
+POLARSSL_EXPORT int rsa_pkcs1_decrypt( rsa_context *ctx,
                        int mode, int *olen,
                        unsigned char *input,
                        unsigned char *output,
@@ -293,14 +293,14 @@ int rsa_pkcs1_verify( rsa_context *ctx,
 /**
  * \brief          Free the components of an RSA key
  */
-void rsa_free( rsa_context *ctx );
+POLARSSL_EXPORT void rsa_free( rsa_context *ctx );
 
 /**
  * \brief          Checkup routine
  *
  * \return         0 if successful, or 1 if the test failed
  */
-int rsa_self_test( int verbose );
+POLARSSL_EXPORT int rsa_self_test( int verbose );
 
 #ifdef __cplusplus
 }

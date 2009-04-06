@@ -84,7 +84,7 @@ void md5_finish( md5_context *ctx, unsigned char output[16] );
  * \param ilen     length of the input data
  * \param output   MD5 checksum result
  */
-void md5( unsigned char *input, int ilen, unsigned char output[16] );
+POLARSSL_EXPORT void md5( unsigned char *input, int ilen, unsigned char output[16] );
 
 /**
  * \brief          Output = MD5( file contents )

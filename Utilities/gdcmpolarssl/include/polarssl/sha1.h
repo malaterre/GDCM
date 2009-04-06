@@ -84,7 +84,7 @@ void sha1_finish( sha1_context *ctx, unsigned char output[20] );
  * \param ilen     length of the input data
  * \param output   SHA-1 checksum result
  */
-void sha1( unsigned char *input, int ilen, unsigned char output[20] );
+POLARSSL_EXPORT void sha1( unsigned char *input, int ilen, unsigned char output[20] );
 
 /**
  * \brief          Output = SHA-1( file contents )

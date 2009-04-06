@@ -43,6 +43,26 @@
 #define _CRT_SECURE_NO_DEPRECATE 1
 #endif
 
+#if defined(_WIN32) && defined(POLARSSL_DLL)
+  #if defined(gdcmpolarssl_EXPORTS)
+    #define POLARSSL_EXPORT __declspec( dllexport )
+  #else
+    #define POLARSSL_EXPORT __declspec( dllimport )
+  #endif
+#else
+  #define POLARSSL_EXPORT
+#endif /*defined(WIN32)*/
+
+#if defined(_WIN32) && defined(POLARSSL_DLL)
+  #if defined(gdcmpolarssl_EXPORTS)
+    #define POLARSSL_EXTERN __declspec( dllexport )
+  #else
+    #define POLARSSL_EXTERN __declspec( dllimport )
+  #endif
+#else
+  #define POLARSSL_EXTERN extern
+#endif /*defined(WIN32)*/
+
 /*
  * Uncomment if native integers are 8-bit wide.
  *
