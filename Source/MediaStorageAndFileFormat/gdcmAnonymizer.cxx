@@ -586,7 +586,18 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   ss.str( std::string((char*)buf, encrypted_len) );
   DataSet des;
   DataElement dummy;
-  dummy.Read<ExplicitDataElement, SwapperNoOp>(ss);
+  try
+    {
+    dummy.Read<ExplicitDataElement, SwapperNoOp>(ss);
+    }
+  //catch( std::Exception  & e)
+  catch( ... )
+    {
+  delete[] buf;
+  delete[] orig;
+
+    return false;
+    }
   des.Insert( dummy );
   //des.Read<ExplicitDataElement,SwapperNoOp>(ss);
   //des.ReadNested<ExplicitDataElement,SwapperNoOp>(ss);
@@ -597,6 +608,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   assert( ss.tellg() <= encrypted_len );
   // TODO: check that for i = ss.tellg() to encrypted_len, ss[i] == 0
   delete[] buf;
+  delete[] orig;
 
   // 2. The application shall move all Attributes contained in the single item of the Modified Attributes
   // Sequence (0400,0550) of the decoded dataset into the main dataset, replacing¿dummy value¿
