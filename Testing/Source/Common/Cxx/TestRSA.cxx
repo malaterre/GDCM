@@ -77,7 +77,7 @@ int TestRSA(int argc, char *argv[])
   std::cout << std::endl;
 
   int len;
-  if( rsa.Pkcs1Decrypt( RSA::PRIVATE, &len,
+  if( rsa.Pkcs1Decrypt( RSA::PRIVATE, len,
       rsa_ciphertext, rsa_decrypted,
       sizeof(rsa_decrypted) ) != 0 )
     {
