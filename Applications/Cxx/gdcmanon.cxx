@@ -342,28 +342,36 @@ int main(int argc, char *argv[])
   gdcm::File &file = reader.GetFile();
 
   // Get RSA key
-  const unsigned int KEY_LEN = 256;
+  const unsigned int KEY_LEN = 32;
   gdcm::RSA rsa;
   if( !GetRSAKey(rsa) )
     {
     return 1;
     }
-  if( rsa.GetLenkey() != KEY_LEN ) return 1;
+  if( rsa.GetLenkey() != KEY_LEN * 8 ) return 1;
 
   gdcm::AES aes;
-  unsigned char key[ KEY_LEN / 8] = {};
+  unsigned char key[ KEY_LEN ] = {};
   // randomize key:
   gdcm::HAVEGE havege;
   //for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
   //  key[j] = havege.Rand();
 
-  if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
+  if( deidentify )
+    {
+    if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
+    }
+  else if ( reidentify )
+    {
+    if( !aes.SetkeyDec( key, KEY_LEN ) ) return 1;
+    }
+
+  gdcm::Anonymizer anon;
+  anon.SetAESKey( aes ); // pass by COPY !
+  anon.SetFile( file );
 
   if( deidentify )
     {
-    gdcm::Anonymizer anon;
-    anon.SetAESKey( aes );
-    anon.SetFile( file );
     //anon.RemovePrivateTags();
     //anon.RemoveRetired();
     if( !anon.BasicApplicationLevelConfidentialityProfile() )
@@ -379,23 +387,20 @@ int main(int argc, char *argv[])
     fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
 
     // Save the AES key in an RSA enveloppe:
-    unsigned char rsa_plaintext[KEY_LEN];
-    unsigned char rsa_ciphertext[KEY_LEN];
-    memcpy( rsa_plaintext, key, KEY_LEN );
+    unsigned char rsa_plaintext[KEY_LEN*8];
+    unsigned char rsa_ciphertext[KEY_LEN*8];
+    memcpy( rsa_plaintext, key, KEY_LEN*8 );
 
-    int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
+    int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN*8, rsa_plaintext, rsa_ciphertext );
     if( err != 0 )
       {
       std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
       //return 1;
       }
-    std::cout << rsa_ciphertext << std::endl;
+    //std::cout << rsa_ciphertext << std::endl;
     }
   else if ( reidentify )
     {
-    gdcm::Anonymizer anon;
-    anon.SetAESKey( aes );
-    anon.SetFile( file );
     if( !anon.BasicApplicationLevelConfidentialityProfile2() )
       {
       return 1;

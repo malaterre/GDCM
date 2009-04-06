@@ -31,6 +31,7 @@ Electronic Code Book (ECB)
 Cipher Block Chaining (CBC)
     CBC mode uses the output of the last block encryption to affect the current block. An initialization vector of the same size as the cipher block size is used to handle the first block. The initialization vector should be chosen randomly and transmitted as the first block of the output. Errors in encryption affect the current block and the next block after which the cipher will correct itself. CBC is the most commonly used mode in software encryption. 
 
+ * \todo: should I reject CryptCbc( DECRYPT ) when SetkeyDec was not called (SetkeyEnc)
 
  */
 //-----------------------------------------------------------------------------
@@ -51,19 +52,19 @@ public :
  * \brief          AES key schedule (encryption)
  *
  * \param key      encryption key
- * \param keysize  must be 128, 192 or 256
+ * \param keysize  must be 16, 24 or 32
  * \return         false on error (wrong keysize, key null)
  */
-bool SetkeyEnc(const unsigned char *key, int keysize);
+bool SetkeyEnc(const unsigned char *key, unsigned int keysize);
 
 /**
  * \brief          AES key schedule (decryption)
  *
  * \param key      decryption key
- * \param keysize  must be 128, 192 or 256
+ * \param keysize  must be 16, 24 or 32
  * \return         false on error (wrong keysize, key null)
  */
-bool SetkeyDec(const unsigned char *key, int keysize );
+bool SetkeyDec(const unsigned char *key, unsigned int keysize );
 
 /**
  * \brief          AES-ECB block encryption/decryption
@@ -72,7 +73,7 @@ bool SetkeyDec(const unsigned char *key, int keysize );
  * \param input    16-byte input block
  * \param output   16-byte output block
  */
-void CryptEcb(
+bool CryptEcb(
                     int mode,
                     const unsigned char input[16],
                     unsigned char output[16] ) const;
@@ -86,7 +87,7 @@ void CryptEcb(
  * \param input    buffer holding the input data
  * \param output   buffer holding the output data
  */
-void CryptCbc(
+bool CryptCbc(
                     int mode,
                     int length,
                     unsigned char iv[16],
@@ -103,7 +104,7 @@ void CryptCbc(
  * \param input    buffer holding the input data
  * \param output   buffer holding the output data
  */
-void CryptCfb128(
+bool CryptCfb128(
                        int mode,
                        int length,
                        int& iv_off,
@@ -120,6 +121,7 @@ protected:
  * \return         0 if successful, or 1 if the test failed (or not compiled in)
  */
 int SelfTest( int verbose = 0 ) const;
+int SimpleTest(int verbose = 0) const;
 private:
 AESInternals *Internals;
 private:

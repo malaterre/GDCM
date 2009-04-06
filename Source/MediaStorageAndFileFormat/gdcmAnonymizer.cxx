@@ -376,13 +376,17 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
     {
     encrypted_len = ((encrypted_len / 16) + 1) * 16;
     }
+  unsigned char *orig = new unsigned char[ encrypted_len ];
   unsigned char *buf = new unsigned char[ encrypted_len ];
   memset( buf, 0, encrypted_len );
-  memcpy( buf, encrypted_str.c_str(), encrypted_str.size() );
+  memset( orig, 0, encrypted_len );
+  assert( encrypted_len == 512 );
+  memcpy( orig, encrypted_str.c_str(), encrypted_str.size() );
 
   const AES& aes = AESKey;
   unsigned char iv[16] = {}; // FIXME ???
-  aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, buf, buf );
+  aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
+  unsigned char key[ 256/ 8] = {};
 
     {
     // Create a Sequence
@@ -398,6 +402,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
     DataElement encrypted_de( Tag(0x400,0x520) );
     encrypted_de.SetByteValue( (char*)buf, encrypted_len );
     delete[] buf;
+    delete[] orig;
 
     // Create an item
     Item it;
@@ -560,7 +565,6 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   // of decrypting the Encrypted Content using either AES or Triple-DES in all possible key lengths
   // specified in this profile
   const AES& aes = AESKey;
-  unsigned char iv[16] = {}; // FIXME ???
 
   DataSet &ds = F->GetDataSet();
   const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
@@ -571,22 +575,44 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   const ByteValue *bv = EncryptedContent.GetByteValue();
   
   size_t encrypted_len = bv->GetLength();
+  assert( bv->GetLength() % 16 == 0 );
+  unsigned char *orig = new unsigned char[ bv->GetLength() ];
   unsigned char *buf = new unsigned char[ bv->GetLength() ];
-  memcpy(buf, bv->GetPointer(), encrypted_len );
-  aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, buf, buf );
+  memcpy(orig, bv->GetPointer(), encrypted_len );
+  unsigned char iv[16] = {}; // FIXME ???
+  aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
 
   std::stringstream ss;
   ss.str( std::string((char*)buf, encrypted_len) );
   DataSet des;
-  des.Read<ExplicitDataElement,SwapperNoOp>(ss);
+  DataElement dummy;
+  dummy.Read<ExplicitDataElement, SwapperNoOp>(ss);
+  des.Insert( dummy );
+  //des.Read<ExplicitDataElement,SwapperNoOp>(ss);
+  //des.ReadNested<ExplicitDataElement,SwapperNoOp>(ss);
 
-  std::cout << des << std::endl; 
-
+  //std::cout << des << std::endl; 
+  //std::cout << dummy << std::endl; 
+  //std::cout << ss.tellg() << std::endl; 
+  assert( ss.tellg() <= encrypted_len );
+  // TODO: check that for i = ss.tellg() to encrypted_len, ss[i] == 0
   delete[] buf;
 
   // 2. The application shall move all Attributes contained in the single item of the Modified Attributes
   // Sequence (0400,0550) of the decoded dataset into the main dataset, replacing¿dummy value¿
   // Attributes that may be present in the main dataset.
+  //assert( dummy.GetVR() == VR::SQ );
+{
+  const SequenceOfItems *sqi = dummy.GetSequenceOfItems();
+  assert( sqi );
+  Item const & item = sqi->GetItem( 1 );
+  const DataSet &nds = item.GetNestedDataSet();
+  DataSet::ConstIterator it = nds.Begin();
+  for( ; it !=  nds.End(); ++it )
+    {
+    ds.Replace( *it );
+    }
+}
 
   // 3. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
   // value of NO and De-identification Method (0012,0063) and De-identification Method Code Sequence
@@ -594,6 +620,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //Replace( Tag(0x0012,0x0062), "NO");
   Remove( Tag(0x0012,0x0062) );
   Remove( Tag(0x0012,0x0063) );
+
+  Remove( Tag(0x0400,0x0500) ); // ??
 
   return true;
 }

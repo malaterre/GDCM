@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmAES.h"
 #include "gdcm_polarssl.h"
+#include <string.h> // memset
 
 /*
  * Ok for now I'll try the following implementation:
@@ -39,6 +40,10 @@ public:
 AES::AES()
 {
   Internals = new AESInternals;
+  Internals->ctx.nr = 0;
+  Internals->ctx.rk = 0;
+  assert( sizeof( Internals->ctx.buf ) == 68 * sizeof(long) );
+  memset( Internals->ctx.buf, 0, sizeof( Internals->ctx.buf ) );
 }
 
 AES::~AES()
@@ -46,65 +51,90 @@ AES::~AES()
   delete Internals;
 }
 
-inline bool aes_check_params(const unsigned char *key, int keysize)
+inline bool aes_check_struct(aes_context *ctx)
 {
-  if(!key) return false;
-  switch(keysize)
+  switch( ctx->nr )
     {
+  case 10:
+  case 12:
+  case 14:
+    return true;
+    }
+  return false;
+}
+
+inline bool aes_check_params(const unsigned char *key, unsigned int keysize)
+{
+  if(key)
+    {
+    switch(keysize)
+      {
     case 128:
     case 192:
     case 256:
       return true;
     default:
       ;
+      }
     }
+  // all other case:
   return false;
 }
 
-bool AES::SetkeyEnc(const unsigned char *key, int keysize )
+bool AES::SetkeyEnc(const unsigned char *key, unsigned int keysize )
 {
-  bool ok = aes_check_params(key, keysize);
+  bool ok = aes_check_params(key, keysize * 8);
   if( ok )
-    aes_setkey_enc( &Internals->ctx, const_cast<unsigned char*>(key), keysize );
+    {
+    aes_setkey_enc( &Internals->ctx, const_cast<unsigned char*>(key), keysize * 8 );
+    assert( aes_check_struct( &Internals->ctx ) );
+    }
   return ok;
 }
 
-bool AES::SetkeyDec(const unsigned char *key, int keysize )
+bool AES::SetkeyDec(const unsigned char *key, unsigned int keysize )
 {
-  bool ok = aes_check_params(key, keysize);
+  bool ok = aes_check_params(key, keysize * 8);
   if( ok )
-    aes_setkey_dec( &Internals->ctx, const_cast<unsigned char*>(key), keysize );
+    {
+    aes_setkey_dec( &Internals->ctx, const_cast<unsigned char*>(key), keysize * 8 );
+    assert( aes_check_struct( &Internals->ctx ) );
+    }
   return ok;
 }
 
-void AES::CryptEcb(
+bool AES::CryptEcb(
                     int mode,
                     const unsigned char input[16],
                     unsigned char output[16] ) const
 {
-aes_crypt_ecb( &Internals->ctx,
-                    mode,
-                    const_cast<unsigned char*>(input),
-                    output );
+  if( !aes_check_struct( &Internals->ctx ) ) return false;
+  aes_crypt_ecb( &Internals->ctx,
+    mode,
+    const_cast<unsigned char*>(input),
+    output );
+  return true;
 }
 
-void AES::CryptCbc(
+bool AES::CryptCbc(
                     int mode,
                     int length,
                     unsigned char iv[16],
                     const unsigned char *input,
                     unsigned char *output ) const
 {
-aes_crypt_cbc( &Internals->ctx,
-                    mode,
-                    length,
-                    iv,
-                    const_cast<unsigned char*>(input),
-                    output );
+  if( !aes_check_struct( &Internals->ctx ) ) return false;
+  aes_crypt_cbc( &Internals->ctx,
+    mode,
+    length,
+    iv,
+    const_cast<unsigned char*>(input),
+    output );
 
+  return true;
 }
 
-void AES::CryptCfb128(
+bool AES::CryptCfb128(
                        int mode,
                        int length,
                        int &iv_off,
@@ -112,6 +142,7 @@ void AES::CryptCfb128(
                        const unsigned char *input,
                        unsigned char *output ) const
 {
+  if( !aes_check_struct( &Internals->ctx ) ) return false;
 aes_crypt_cfb128( &Internals->ctx,
                        mode,
                        length,
@@ -120,6 +151,40 @@ aes_crypt_cfb128( &Internals->ctx,
                        const_cast<unsigned char*>(input),
                        output );
 
+  return true;
+}
+
+int AES::SimpleTest(int verbose) const
+{
+  aes_context ctx;
+
+  unsigned char plainText[] = "Single block msg";
+  unsigned char plainText2[16+1] = {};
+  unsigned char initVector[16] = {};
+  unsigned char tempInitVector[16];
+  unsigned char cipherText[16+1];
+  unsigned char keyText[32] = {};
+
+  // Encrypt
+  memset(cipherText,0,16+1);
+  memset(tempInitVector,0,16);
+  memcpy(tempInitVector,initVector,16);
+  aes_setkey_enc( &ctx, keyText, 128*2 );
+  aes_crypt_cbc( &ctx, AES_ENCRYPT, 16, tempInitVector, plainText, cipherText );
+  if(verbose)
+    printf("Ciphertext:\n");
+
+  // Decrypt
+  memset(tempInitVector,0,16);
+  memset(plainText,0,16);
+  memcpy(tempInitVector,initVector,sizeof(tempInitVector));
+  aes_setkey_dec( &ctx, keyText, 128*2 );
+  aes_crypt_cbc( &ctx, AES_DECRYPT, 16, tempInitVector, cipherText, plainText2 );
+  if(verbose)
+    printf("Plaintext:\n");
+  if(verbose)
+    printf("%s\n",plainText2); 
+  return 0;
 }
 
 int AES::SelfTest( int verbose ) const

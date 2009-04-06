@@ -14,26 +14,45 @@
 =========================================================================*/
 #include "gdcmAES.h"
 #include "gdcmTesting.h"
+#include <string.h>
 
 using gdcm::AES;
 struct MyAES : public AES
 {
   int MySelfTest( int verbose ) { return SelfTest(verbose); }
+  int MySimpleTest( int verbose ) { return SimpleTest( verbose ); }
 };
 
 int TestAES(int argc, char *argv[])
 {
   gdcm::AES aes;
-  unsigned char key[32] = {};
-  unsigned char buf[64] = {};
-  if( !aes.SetkeyEnc( key, 128 ) ) return 1;
-  aes.CryptEcb( AES::DECRYPT, buf, buf );
+  const unsigned int KEY_LEN = 256;
+  unsigned char key[ KEY_LEN  / 8] = {};
+  if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
 
   unsigned char iv[16] = {};
-  aes.CryptCbc( AES::ENCRYPT, 16, iv, buf, buf );
+  const unsigned char plainTextRef[] = "Single\1\2 block msg2";
+  assert( sizeof(plainTextRef) <= 2*16 && sizeof(plainTextRef) >= 16 );
+  unsigned char plainText[32*16] = {};
+  memcpy( plainText, plainTextRef, sizeof(plainTextRef) );
+  unsigned char buf[32*16]         = {};
+  aes.CryptCbc( AES::ENCRYPT, 16*32, iv, plainText, buf );
+
+  unsigned char buf2[32*16]            = {};
+  memset(iv, 0, 16 );
+  if( !aes.SetkeyDec( key, KEY_LEN ) ) return 1;
+  aes.CryptCbc( AES::DECRYPT, 16*32, iv, buf, buf2);
+
+  std::cout << buf2 << std::endl;
+  int ret = 0;
+  if( memcmp( plainText, buf2, sizeof(plainTextRef) ) != 0 )
+    {
+    ++ret;
+    }
 
   MyAES myaes;
-  int ret = myaes.MySelfTest( 0 );
+  ret += myaes.MySelfTest( 0 );
+  ret += myaes.MySimpleTest( 0 );
 
   return ret;
 }
