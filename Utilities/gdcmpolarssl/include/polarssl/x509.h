@@ -251,7 +251,7 @@ int x509parse_crtfile( x509_cert *crt, char *path );
  *
  * \return         0 if successful, or a specific X509 error code
  */
-int x509parse_key( rsa_context *rsa,
+POLARSSL_EXPORT int x509parse_key( rsa_context *rsa,
                    unsigned char *buf, int buflen,
                    unsigned char *pwd, int pwdlen );
 
@@ -264,7 +264,7 @@ int x509parse_key( rsa_context *rsa,
  *
  * \return         0 if successful, or a specific X509 error code
  */
-int x509parse_keyfile( rsa_context *rsa, char *path, char *password );
+POLARSSL_EXPORT int x509parse_keyfile( rsa_context *rsa, char *path, char *password );
 
 /**
  * \brief          Store the certificate DN in printable form into buf;
