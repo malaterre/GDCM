@@ -57,7 +57,7 @@ extern "C" {
  *
  * \param hs       HAVEGE state to be initialized
  */
-void havege_init( havege_state *hs );
+POLARSSL_EXPORT void havege_init( havege_state *hs );
 
 /**
  * \brief          HAVEGE rand function
@@ -66,7 +66,7 @@ void havege_init( havege_state *hs );
  *
  * \return         A random int
  */
-int havege_rand( void *p_rng );
+POLARSSL_EXPORT int havege_rand( void *p_rng );
 
 #ifdef __cplusplus
 }
