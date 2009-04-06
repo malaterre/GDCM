@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -161,9 +161,9 @@ int main(int argc, char *argv[])
             assert( xmlpath.empty() );
             xmlpath = optarg;
             }
-          printf (" with arg %s", optarg);
+          //printf (" with arg %s", optarg);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
@@ -356,8 +356,8 @@ int main(int argc, char *argv[])
   unsigned char key[ KEY_LEN ] = {};
   // randomize key:
   gdcm::HAVEGE havege;
-  //for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
-  //  key[j] = havege.Rand();
+  for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
+    key[j] = havege.Rand();
 
   if( deidentify )
     {
@@ -389,17 +389,20 @@ int main(int argc, char *argv[])
     fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
 
     // Save the AES key in an RSA enveloppe:
-    unsigned char rsa_plaintext[KEY_LEN*8];
-    unsigned char rsa_ciphertext[KEY_LEN*8];
-    memcpy( rsa_plaintext, key, KEY_LEN*8 );
+    unsigned char rsa_plaintext[KEY_LEN];
+    unsigned char rsa_ciphertext[KEY_LEN*8] = {};
+    memcpy( rsa_plaintext, key, KEY_LEN );
 
-    int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN*8, rsa_plaintext, rsa_ciphertext );
+    int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
     if( err != 0 )
       {
       std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
-      //return 1;
+      return 1;
       }
     //std::cout << rsa_ciphertext << std::endl;
+    //int olen = 0;
+    //unsigned char buf[KEY_LEN*8] = {};
+    //err = rsa.Pkcs1Decrypt( gdcm::RSA::PRIVATE, olen, rsa_ciphertext, buf, sizeof(buf) );
     }
   else if ( reidentify )
     {

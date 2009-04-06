@@ -31,7 +31,7 @@ rsa_context ctx;
 RSA::RSA()
 {
   Internals = new RSAInternals;
-    memset( &Internals->ctx, 0, sizeof( rsa_context ) );
+  memset( &Internals->ctx, 0, sizeof( rsa_context ) );
 }
 
 RSA::~RSA()
@@ -61,39 +61,34 @@ int RSA::Pkcs1Encrypt(
                        const unsigned char *input,
                        unsigned char *output ) const
 {
-
   return 
-rsa_pkcs1_encrypt( &Internals->ctx,
-                       mode, ilen,
-                       const_cast<unsigned char*>(input),
-                       output );
-
+    rsa_pkcs1_encrypt( &Internals->ctx,
+      mode, ilen,
+      const_cast<unsigned char*>(input),
+      output );
 }
 
 int RSA::Pkcs1Decrypt(
-                       int mode, int *olen,
+                       int mode, int &olen,
                        const unsigned char *input,
                        unsigned char *output,
-		       int output_max_len)
+                       int output_max_len)
 {
-return 
- rsa_pkcs1_decrypt( &Internals->ctx,
-                       mode, olen,
-                       const_cast<unsigned char *>(input),
-                       output,
-		       output_max_len);
- 
+  return 
+    rsa_pkcs1_decrypt( &Internals->ctx,
+      mode, &olen,
+      const_cast<unsigned char *>(input),
+      output,
+      output_max_len);
 }
 
 int RSA::X509ParseKey(
                    const unsigned char *buf, int buflen,
                    const unsigned char *pwd, int pwdlen )
 {
-
-return x509parse_key( &Internals->ctx,
-                   const_cast<unsigned char*>(buf), buflen,
-                   const_cast<unsigned char*>(pwd), pwdlen );
-
+  return x509parse_key( &Internals->ctx,
+    const_cast<unsigned char*>(buf), buflen,
+    const_cast<unsigned char*>(pwd), pwdlen );
 }
 
 int RSA::X509ParseKeyfile( const char *path, const char *password )

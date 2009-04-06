@@ -94,7 +94,7 @@ int Pkcs1Encrypt(
  *                 an error is thrown.
  */
 int Pkcs1Decrypt(
-                       int mode, int *olen,
+                       int mode, int &olen,
                        const unsigned char *input,
                        unsigned char *output,
 		       int output_max_len);
