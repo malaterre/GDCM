@@ -64,7 +64,7 @@ struct _hr_time
 
 #endif
 
-#if defined(POLARSSL_HAVE_ASM)
+#if defined(POLARSSL_HAVE_ASM) || defined(_MSC_VER)
 #if (defined(_MSC_VER) && defined(_M_IX86)) || defined(__WATCOMC__)
 
 unsigned long hardclock( void )
