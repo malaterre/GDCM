@@ -527,7 +527,7 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[18
   size_t len = strlen(date); (void)len;
   struct tm ptm;
   char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
-  if( ptr ) // more data to process
+  if( ptr && *ptr ) // more data to process
     {
     if( sscanf( ptr, "%03ld", &milliseconds ) != 1 )
       {

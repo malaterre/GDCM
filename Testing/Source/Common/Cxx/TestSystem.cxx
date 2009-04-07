@@ -95,6 +95,7 @@ int TestSystem(int, char *[])
     return 1;
     }
 
+{
   char date[18+1];
   date[18] = 0;
   if( !gdcm::System::GetCurrentDateTime( date ) )
@@ -119,6 +120,38 @@ int TestSystem(int, char *[])
     std::cerr << "date2=" << date2 << std::endl;
     return 1;
     }
+}
+  // Skip millisecond this time:
+{
+  char date[18+1];
+  if( !gdcm::System::GetCurrentDateTime( date ) )
+    {
+    return 1;
+    }
+  date[14] = 0;
+  std::cout << date << std::endl;
+  time_t timep; long milliseconds;
+  if( !gdcm::System::ParseDateTime(timep, date) )
+    {
+    std::cerr << "ParseDateTime" << std::endl;
+    return 1;
+    }
+  char date2[18+1];
+  date2[18] = 0;
+  if( !gdcm::System::FormatDateTime(date2, timep) )
+    {
+    std::cerr << "FormatDateTime" << std::endl;
+    return 1;
+    }
+
+  // FormatDateTime always print millisecond, only compare the date up to the millisecond:
+  if( strncmp( date, date2, strlen(date) ) != 0 )
+    {
+    std::cerr << "date1=" << date << std::endl;
+    std::cerr << "date2=" << date2 << std::endl;
+    return 1;
+    }
+}
  
   return 0;
 }
