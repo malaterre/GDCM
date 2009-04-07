@@ -57,7 +57,7 @@ extern "C" {
  * \note           Call this function with *dlen = 0 to obtain the
  *                 required buffer size in *dlen
  */
-int base64_encode( unsigned char *dst, int *dlen,
+POLARSSL_EXPORT int base64_encode( unsigned char *dst, int *dlen,
                    unsigned char *src, int  slen );
 
 /**
@@ -76,7 +76,7 @@ int base64_encode( unsigned char *dst, int *dlen,
  * \note           Call this function with *dlen = 0 to obtain the
  *                 required buffer size in *dlen
  */
-int base64_decode( unsigned char *dst, int *dlen,
+POLARSSL_EXPORT int base64_decode( unsigned char *dst, int *dlen,
                    unsigned char *src, int  slen );
 
 /**
