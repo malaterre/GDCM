@@ -32,6 +32,12 @@ public :
   ~Base64();
 
 /**
+ *                 Call this function with dlen = 0 to obtain the
+ *                 required buffer size in dlen
+ */
+static int GetEncodeLength(const unsigned char *src, int  slen );
+
+/**
  * \brief          Encode a buffer into base64 format
  *
  * \param dst      destination buffer
@@ -40,14 +46,16 @@ public :
  * \param slen     amount of data to be encoded
  *
  * \return         0 if successful, or POLARSSL_ERR_BASE64_BUFFER_TOO_SMALL.
- *                 dlen is always updated to reflect the amount
- *                 of data that has (or would have) been written.
  *
- * \note           Call this function with dlen = 0 to obtain the
- *                 required buffer size in dlen
  */
-static int Encode( unsigned char *dst, int &dlen,
+static int Encode( unsigned char *dst, int dlen,
                    const unsigned char *src, int  slen );
+
+/**
+ *                 Call this function with *dlen = 0 to obtain the
+ *                 required buffer size in *dlen
+ */
+static int GetDecodeLength( const unsigned char *src, int  slen );
 
 /**
  * \brief          Decode a base64-formatted buffer
@@ -59,13 +67,10 @@ static int Encode( unsigned char *dst, int &dlen,
  *
  * \return         0 if successful, POLARSSL_ERR_BASE64_BUFFER_TOO_SMALL, or
  *                 POLARSSL_ERR_BASE64_INVALID_DATA if the input data is not
- *                 correct. *dlen is always updated to reflect the amount
- *                 of data that has (or would have) been written.
+ *                 correct.
  *
- * \note           Call this function with *dlen = 0 to obtain the
- *                 required buffer size in *dlen
  */
-static int Decode( unsigned char *dst, int &dlen,
+static int Decode( unsigned char *dst, int dlen,
                    const unsigned char *src, int  slen );
 
 protected:
