@@ -72,6 +72,13 @@ public:
   /// See VR::DT from DICOM PS 3.5
   static bool FormatDateTime(char date[18], time_t t, long milliseconds = 0);
 
+  /// Parse a date stored as ASCII text into a time_t structured (discard millisecond if any)
+  static bool ParseDateTime(time_t &timep, const char date[18]);
+
+  /// Parse a date stored as ASCII text into a time_t structured and millisecond
+  /// \see FormatDateTime
+  static bool ParseDateTime(time_t &timep, long &milliseconds, const char date[18]);
+
   /// Encode bytes
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 

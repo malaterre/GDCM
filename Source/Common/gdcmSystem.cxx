@@ -515,6 +515,31 @@ static int gettimeofday(struct timeval *tv, struct timezone *tz)
 }
 #endif
 
+bool System::ParseDateTime(time_t &timep, const char date[18])
+{
+  long milliseconds;
+  return ParseDateTime(timep, milliseconds, date);
+}
+
+bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[18])
+{
+  if(!date) return false;
+  size_t len = strlen(date); (void)len;
+  struct tm ptm;
+  char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
+  if( ptr ) // more data to process
+    {
+    if( sscanf( ptr, "%03ld", &milliseconds ) != 1 )
+      {
+      // Could not parse milliseconds but date looks ok, should I return false anyway ?
+      return false;
+      }
+    }
+  timep = mktime(&ptm);
+
+  return true;
+}
+
 bool System::FormatDateTime(char date[18], time_t timep, long milliseconds)
 {
   if(!date) return false;

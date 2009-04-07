@@ -94,6 +94,31 @@ int TestSystem(int, char *[])
     std::cerr << exename << "!=" << fn.GetName() << std::endl;
     return 1;
     }
+
+  char date[18+1];
+  date[18] = 0;
+  if( !gdcm::System::GetCurrentDateTime( date ) )
+    {
+    return 1;
+    }
+  time_t timep; long milliseconds;
+  if( !gdcm::System::ParseDateTime(timep, milliseconds, date) )
+    {
+    return 1;
+    }
+  char date2[18+1];
+  date2[18] = 0;
+  if( !gdcm::System::FormatDateTime(date2, timep, milliseconds) )
+    {
+    return 1;
+    }
+
+  if( strcmp( date, date2 ) != 0 )
+    {
+    std::cerr << "date1=" << date << std::endl;
+    std::cerr << "date2=" << date2 << std::endl;
+    return 1;
+    }
  
   return 0;
 }
