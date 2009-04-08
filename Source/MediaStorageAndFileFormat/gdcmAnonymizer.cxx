@@ -517,7 +517,7 @@ bool Anonymizer::BALCPProtect(Tag const & tag)
 {
   typedef std::pair< Tag, std::string > TagValueKey;
   typedef std::map< TagValueKey, std::string > DummyMap;
-  DummyMap dummymap;
+  static DummyMap dummymap;
   gdcm::UIDGenerator uid;
 
   DataSet &ds = F->GetDataSet();
