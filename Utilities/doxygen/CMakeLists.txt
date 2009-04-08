@@ -40,6 +40,7 @@ IF(GDCM_DOCUMENTATION)
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tar.gz
   )
   # epstopdf is needed: sudo apt-get install texlive-extra-utils
+  # pdflatex is needed: sudo apt-get install texlive-latex-extra
   ADD_CUSTOM_COMMAND(
     OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
              ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
