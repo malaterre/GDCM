@@ -46,6 +46,7 @@ public:
   const Module &GetModule(const char *name) const
     {
     ModuleMapType::const_iterator it = ModulesInternal.find( name );
+    assert( it != ModulesInternal.end() );
     assert( it->first == name );
     return it->second;
     }

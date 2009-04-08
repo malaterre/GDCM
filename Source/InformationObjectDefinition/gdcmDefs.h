@@ -50,12 +50,12 @@ public:
 
   Type GetTypeFromTag(const DataSet& ds, const Tag& tag) const;
 
+  static const char *GetIODNameFromMediaStorage(MediaStorage &ms);
+
 protected:
   friend class Global;
   void LoadDefaults();
   void LoadFromFile(const char *filename);
-
-  const char *GetIODNameFromMediaStorage(MediaStorage &ms) const;
 
 private:
   // Part 3 stuff:

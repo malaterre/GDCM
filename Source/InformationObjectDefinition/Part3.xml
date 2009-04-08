@@ -1622,7 +1622,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
     <entry ie="MR Spectroscopy" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="MR Spectroscopy" name="MR Spectroscopy" ref="C.8.14.1" usage="M"/>
     <entry ie="MR Spectroscopy" name="MR Spectroscopy Pulse Sequence" ref="C.8.14.2" usage="C - Required if Image Type (0008,0008) Value 1 is ORIGINAL. May be present otherwise."/>
-    <entry ie="MR Spectroscopy" name="MR Spectroscopy Data" ref="C.8.14.3" usage="M"/>
+    <entry ie="MR Spectroscopy" name="MR Spectroscopy Data" ref="C.8.14.4" usage="M"/>
     <entry ie="MR Spectroscopy" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
   <iod table="A.37-1" name="Raw Data IOD Modules">
@@ -7419,7 +7419,7 @@ RESPIRATORY SYNCHRONIZATION MODULE ATTRIBUTES
          </section>
     </entry>
   </module>
-  <module ref="C.7.6.18.1.1.1" table="C.7.6.18-2" name="Respiratory Synchronization Module Attributes">
+  <module ref="C.7.6.18.2" table="C.7.6.18-2" name="Respiratory Synchronization Module Attributes">
     <entry group="0018" element="9170" name="Respiratory Motion Compensation Technique" type="1C">
       <description>Applied technique to reduce respiratory motion artifacts.
 Defined Terms:
@@ -7960,7 +7960,7 @@ Note:	For X-Ray 3D Angiographic Images created from SOP Instances of the Enhance
 </section>
     </entry>
   </module>
-  <macro table="C.7-22" name="Palette Color Lookup Module">
+  <module ref="C.7.9" table="C.7-22" name="Palette Color Lookup Module">
     <entry group="0028" element="1101" name="Red Palette Color Lookup Table Descriptor" type="1">
       <description>Specifies the format of the Red Palette Color Lookup Table Data (0028,1201). See C.7.6.3.1.5 for further explanation.</description>
       <section ref="C.7.6.3.1.5" name="">The three values of Palette Color Lookup Table Descriptor (0028,1101-1103) describe the format of the Lookup Table Data in the corresponding Data Element (0028,1201-1203) or (0028,1221-1223).
@@ -8088,7 +8088,7 @@ SEGMENT TYPES
 <unrecognized-rows><term value="Opcode" meaning="Segment type"/><term value="0" meaning="Discrete"/><term value="1" meaning="Linear"/><term value="2" meaning="Indirect"/><term value="3 &amp; above" meaning="reserved"/></unrecognized-rows>
          </section>
     </entry>
-  </macro>
+  </module>
   <module ref="C.8.1.1" table="C.8-1" name="CR Series Module Attributes">
     <entry group="0018" element="0015" name="Body Part Examined" type="2">
       <description>Text description of the part of the body examined. See PS 3.16 Annex on Correspondence of Anatomic Region Codes and Body Part Examined for Defined Terms</description>

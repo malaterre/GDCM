@@ -18,6 +18,8 @@
 //#include "gdcmGlobal.h"
 #include "gdcmTrace.h"
 
+#include <stdlib.h>
+
 namespace gdcm
 {
 
@@ -55,7 +57,7 @@ void Defs::LoadFromFile(const char *filename)
   tr.Read();
 }
 
-const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
+const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms)
 {
   const char *iodname;
   switch(ms)
@@ -63,11 +65,41 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
     case MediaStorage::MRImageStorage:
       iodname = "MR Image IOD Modules";
       break;
+    case MediaStorage::EnhancedMRImageStorage:
+      iodname = "Enhanced MR Image IOD Modules";
+      break;
     case MediaStorage::CTImageStorage:
       iodname = "CT Image IOD Modules";
       break;
     case MediaStorage::ComputedRadiographyImageStorage:
       iodname = "CR Image IOD Modules";
+      break;
+    case MediaStorage::XRayAngiographicImageStorage:
+      iodname = "X Ray Angiographic Image IOD Modules";
+      break;
+    case MediaStorage::UltrasoundImageStorageRetired:
+    case MediaStorage::UltrasoundImageStorage:
+      iodname = "US Image IOD Modules";
+      break;
+    case MediaStorage::UltrasoundMultiFrameImageStorageRetired:
+    case MediaStorage::UltrasoundMultiFrameImageStorage:
+      iodname ="US Multi Frame Image IOD Modules";
+      break;
+    case MediaStorage::SecondaryCaptureImageStorage:
+      iodname = "SC Image IOD Modules";
+      break;
+    case MediaStorage::DigitalXRayImageStorageForPresentation:
+      iodname = "Digital X Ray Image IOD Modules";
+      break;
+    case MediaStorage::XRayRadiofluoroscopingImageStorage:
+      iodname = "XRF Image IOD Modules";
+      break;
+    case MediaStorage::MRSpectroscopyStorage:
+      iodname = "MR Spectroscopy IOD Modules";
+      break;
+    case MediaStorage::NuclearMedicineImageStorageRetired:
+    case MediaStorage::NuclearMedicineImageStorage:
+      iodname = "NM Image IOD Modules";
       break;
     default:
       iodname = 0;

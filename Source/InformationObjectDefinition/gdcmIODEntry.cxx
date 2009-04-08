@@ -30,6 +30,10 @@ IODEntry::UsageType IODEntry::GetUsageType() const
     {
     return UserOption;
     }
+  else if( Usage.find( "C- " ) <  Usage.size() )
+    {
+    return Conditional;
+    }
   else if( Usage.find( "C - " ) <  Usage.size() )
     {
     return Conditional;
