@@ -380,7 +380,6 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
   unsigned char *buf = new unsigned char[ encrypted_len ];
   memset( buf, 0, encrypted_len );
   memset( orig, 0, encrypted_len );
-  assert( encrypted_len == 512 );
   memcpy( orig, encrypted_str.c_str(), encrypted_str.size() );
 
   const AES& aes = AESKey;
@@ -494,11 +493,23 @@ bool Anonymizer::CanEmptyTag(Tag const &tag)
   Type t = defs.GetTypeFromTag(ds, tag);
   gdcmDebugMacro( "Type for tag=" << tag << " is " << t );
 
+  //assert( t != Type::UNKNOWN );
+
   if( t == Type::T1 || t == Type::T1C )
     {
     return false;
     }
-  assert( dicts.GetDictEntry(tag).GetVR() != VR::UI );
+  // What if we are dealing with a Standard Extended SOP class
+  // eg. gdcmData/05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm
+  // where Attribute is not present in standard DICOM IOD - (0x0088,0x0140) UI Storage Media FileSet UID
+  if( t == Type::UNKNOWN )
+    {
+    return true;
+    }
+  
+  // This is a Type 3 attribute but with VR=UI
+  // <entry group="0008" element="0014" vr="UI" vm="1" name="Instance Creator UID"/>
+  //assert( dicts.GetDictEntry(tag).GetVR() != VR::UI );
   return true;
 }
 
@@ -517,10 +528,14 @@ bool Anonymizer::BALCPProtect(Tag const & tag)
     TagValueKey tvk;
     tvk.first = tag;
     DataElement copy = ds.GetDataElement( tag );
-    assert( !copy.IsEmpty() );
-    if( ByteValue *bv = copy.GetByteValue() )
+    // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
+    // has an empty 0008,0018 attribute, let's try to handle that:
+    if( !copy.IsEmpty() )
       {
-      tvk.second = std::string( bv->GetPointer(), bv->GetLength() );
+      if( ByteValue *bv = copy.GetByteValue() )
+        {
+        tvk.second = std::string( bv->GetPointer(), bv->GetLength() );
+        }
       }
     assert( dummymap.count( tvk ) == 0 || dummymap.count( tvk ) == 1 );
     if( dummymap.count( tvk ) == 0 )
