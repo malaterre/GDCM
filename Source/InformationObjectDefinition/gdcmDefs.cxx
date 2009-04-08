@@ -71,6 +71,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms)
     case MediaStorage::CTImageStorage:
       iodname = "CT Image IOD Modules";
       break;
+    case MediaStorage::EnhancedCTImageStorage:
+      iodname = "Enhanced CT Image IOD Modules";
+      break;
     case MediaStorage::ComputedRadiographyImageStorage:
       iodname = "CR Image IOD Modules";
       break;
@@ -100,6 +103,18 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms)
     case MediaStorage::NuclearMedicineImageStorageRetired:
     case MediaStorage::NuclearMedicineImageStorage:
       iodname = "NM Image IOD Modules";
+      break;
+    case MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage:
+      iodname = "Multi Frame Single Bit SC Image IOD Modules";
+      break;
+    case MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
+      iodname = "Multi Frame Grayscale Byte SC Image IOD Modules";
+      break;
+    case MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
+      iodname = "Multi Frame Grayscale Word SC Image IOD Modules";
+      break;
+    case MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage:
+      iodname = "Multi Frame True Color SC Image IOD Modules";
       break;
     default:
       iodname = 0;
