@@ -188,9 +188,10 @@ void PrintHelp()
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
-  std::cout << "     --resources-path   Resources path." << std::endl;
-  std::cout << "     --md5sum           Compute md5sum of Pixel Data attribute value." << std::endl;
+  std::cout << "  -d --check-deflated     check if file is proper deflated syntax." << std::endl;
+  std::cout << "     --resources-path     Resources path." << std::endl;
+  std::cout << "     --md5sum             Compute md5sum of Pixel Data attribute value." << std::endl;
+  std::cout << "     --check-compression  check the encapsulated stream compression (lossless/lossy)." << std::endl;
   // the following options would require an advanced MediaStorage::SetFromFile ... sigh
   //std::cout << "     --media-storage-uid   return media storage uid only." << std::endl;
   //std::cout << "     --media-storage-name  return media storage name only (when possible)." << std::endl;
@@ -215,6 +216,7 @@ int main(int argc, char *argv[])
   int deflated = 0; // check deflated
   int resourcespath = 0;
   int md5sum = 0;
+  int checkcompression = 0;
   int verbose = 0;
   int warning = 0;
   int help = 0;
@@ -229,6 +231,7 @@ int main(int argc, char *argv[])
         {"check-deflated", 0, &deflated, 1},
         {"resources-path", 0, &resourcespath, 1},
         {"md5sum", 0, &md5sum, 1},
+        {"check-compression", 0, &md5sum, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -415,9 +418,12 @@ int main(int argc, char *argv[])
     gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
     const char *label = gdcm::Orientation::GetLabel( type );
     image.Print( std::cout );
-    bool lossy = image.IsLossy();
     std::cout << "Orientation Label: " << label << std::endl;
-    std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
+    if( checkcompression )
+      {
+      bool lossy = image.IsLossy();
+      std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
+      }
 
     if( md5sum )
       {
