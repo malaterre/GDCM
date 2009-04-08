@@ -1727,7 +1727,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
-    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4.b" usage="C - Required if contrast was administered, see A.41.4.2"/>
+    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4b" usage="C - Required if contrast was administered, see A.41.4.2"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -1751,7 +1751,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
-    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4.b" usage="C - Required if contrast was administered; see A.42.4.2"/>
+    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4b" usage="C - Required if contrast was administered; see A.42.4.2"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -5187,7 +5187,7 @@ BARIUM</description>
       <description>Milligrams of active ingredient per milliliter of (diluted) agent</description>
     </entry>
   </module>
-  <module ref="C.7.6.4" table="C.7-12b" name="Enhanced Contrast/bolus Module Attributes">
+  <module ref="C.7.6.4b" table="C.7-12b" name="Enhanced Contrast/bolus Module Attributes">
     <entry group="0018" element="0012" name="Contrast/Bolus Agent Sequence" type="1">
       <description>Sequence that identifies one or more contrast agents administered prior to or during the acquisition. Shall contain one or more Items.</description>
     </entry>
