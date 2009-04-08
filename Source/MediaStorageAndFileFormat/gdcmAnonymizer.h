@@ -22,6 +22,11 @@ namespace gdcm
 {
 /**
  * \brief Anonymizer
+ * This class is a multi purpose anonymizer. It can work in 2 mode:
+ * - dumb mode
+ * - smart mode (implement the Basic Application Level Confidentiality Profile, DICOM PS 3.15-2008)
+ * 
+ * 1. dumb mode
  * This is a dumb anonymizer implementation. All it allows user is simple operation such as:
  * Tag based functions:
  * - complete removal of DICOM attribute (Remove)
@@ -36,7 +41,17 @@ namespace gdcm
  * a general Anonymize function but traversing a std::set is O(n) operation, while a simple user specified
  * request is O(log(n)) operation. So 'm' user interaction is O(m*log(n)) which is < O(n) complexity.
  *
- * \todo implement the Basic Application Level Confidentiality Profile
+ * 2. smart mode
+ * this mode implements the Basic Application Level Confidentiality Profile (DICOM PS 3.15-2008)
+ * In this case it is extremely important to use the same gdcm::Anonymizer class when anonymizing 
+ * a FileSet. Once the gdcm::Anonymizer is destroyed its memory of known (already processed) UIDs
+ * will be lost. which will make the anonymizer behaves incorrectly for attributes such as Series UID
+ * Study UID where user want some consistancy.
+ * When attribute is Type 1 / Type 1C, a dummy generator will take in the existing value and produce
+ * a dummy value (a sha1 representation). sha1 algorithm is considered to be cryptograpgically strong
+ * (compared to md5sum) so that we meet the following two conditions:
+ *  - Produce the same dummy value for the same input value
+ *  - do not provide an easy way to retrieve the original value from the sha1 generated value
  */
 class GDCM_EXPORT Anonymizer
 {
