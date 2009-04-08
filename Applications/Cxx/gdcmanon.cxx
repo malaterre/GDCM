@@ -26,6 +26,8 @@
 #include "gdcmAnonymizer.h"
 #include "gdcmGlobal.h"
 #include "gdcmHAVEGE.h"
+#include "gdcmDefs.h"
+#include "gdcmDirectory.h"
 
 #include <getopt.h>
 
@@ -34,6 +36,66 @@ void PrintVersion()
   std::cout << "gdcmanon: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
+}
+
+// FIXME
+  int deidentify = 0;
+  int reidentify = 0;
+
+
+bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    return false;
+    }
+  gdcm::File &file = reader.GetFile();
+  gdcm::MediaStorage ms;
+  ms.SetFromFile(file);
+  if( !gdcm::Defs::GetIODNameFromMediaStorage(ms) )
+    {
+    std::cerr << "The Media Storage Type of your file is not supported: " << ms << std::endl;
+    std::cerr << "Please report" << std::endl;
+    return false;
+    }
+
+  anon.SetFile( file );
+
+  if( deidentify )
+    {
+    //anon.RemovePrivateTags();
+    //anon.RemoveRetired();
+    if( !anon.BasicApplicationLevelConfidentialityProfile( true ) )
+      {
+      return false;
+      }
+
+    // FIXME:
+    gdcm::FileMetaInformation &fmi = file.GetHeader();
+    //fmi.Remove( gdcm::Tag(0x0002,0x0003) ); // will be regenerated
+    fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
+    fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+    fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
+
+    }
+  else if ( reidentify )
+    {
+    if( !anon.BasicApplicationLevelConfidentialityProfile( false ) )
+      {
+      return false;
+      }
+    }
+
+  gdcm::Writer writer;
+  writer.SetFileName( outfilename );
+  writer.SetFile( file );
+  if( !writer.Write() )
+    {
+    return false;
+    }
+  return true;
 }
 
 bool GetRSAKey(gdcm::RSA &rsa)
@@ -69,8 +131,8 @@ void PrintHelp()
   std::cout << "PS 3.15 / E.1 / Basic Application Level Confidentiality Profile" << std::endl;
   std::cout << "Implementation of E.1.1 De-identify & E.1.2 Re-identify" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input               DICOM filename" << std::endl;
-  std::cout << "  -o --output              DICOM filename" << std::endl;
+  std::cout << "  -i --input               DICOM filename / directory" << std::endl;
+  std::cout << "  -o --output              DICOM filename / directory" << std::endl;
   std::cout << "  -d --de-identify         De-identify DICOM (default)" << std::endl;
   std::cout << "  -r --re-identify         Re-identify DICOM" << std::endl;
   std::cout << "Options:" << std::endl;
@@ -94,12 +156,12 @@ int main(int argc, char *argv[])
   //int digit_optind = 0;
 
   std::string filename;
+  gdcm::Directory::FilenamesType filenames;
   std::string outfilename;
+  gdcm::Directory::FilenamesType outfilenames;
   std::string root;
   std::string xmlpath;
   int resourcespath = 0;
-  int deidentify = 0;
-  int reidentify = 0;
   int rootuid = 0;
   int verbose = 0;
   int warning = 0;
@@ -274,7 +336,46 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
- 
+
+  // Are we in single file or directory mode:
+  if( !gdcm::System::FileExists(filename.c_str()) )
+    {
+    // doh !
+    return 1;
+    }
+
+  //
+  unsigned int nfiles = 1;
+  gdcm::Directory dir;
+  bool recursive = false; //true;
+  if( gdcm::System::FileIsDirectory(filename.c_str()) )
+    {
+    if( !gdcm::System::FileIsDirectory(outfilename.c_str()) )
+      {
+      return 1;
+      }
+    nfiles = dir.Load(filename, recursive);
+    filenames = dir.GetFilenames();
+    gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+    for( ; it != filenames.end(); ++it )
+      {
+      std::string dup = *it;
+      std::string out = dup.replace(0, filename.size(), outfilename );
+      outfilenames.push_back( out );
+      }
+    }
+  else
+    {
+    filenames.push_back( filename );
+    outfilenames.push_back( outfilename );
+    }
+
+  if( filenames.size() != outfilenames.size() )
+    {
+    std::cerr << "Something went really wrong" << std::endl;
+    return 1;
+    }
+
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
   gdcm::Trace::SetWarning( warning );
@@ -312,7 +413,7 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
-
+  const gdcm::Defs &defs = g.GetDefs();
   if( !rootuid )
     {
     // only read the env var is no explicit cmd line option
@@ -335,13 +436,7 @@ int main(int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
-    {
-    return 1;
-    }
-  gdcm::File &file = reader.GetFile();
+  // Setup gdcm::Anonymizer
 
   // Get RSA key
   const unsigned int KEY_LEN = 32;
@@ -370,56 +465,33 @@ int main(int argc, char *argv[])
 
   gdcm::Anonymizer anon;
   anon.SetAESKey( aes ); // pass by COPY !
-  anon.SetFile( file );
 
-  if( deidentify )
+  for(unsigned int i = 0; i < nfiles; ++i)
     {
-    //anon.RemovePrivateTags();
-    //anon.RemoveRetired();
-    if( !anon.BasicApplicationLevelConfidentialityProfile() )
+    const char *in  = filenames[i].c_str();
+    const char *out = outfilenames[i].c_str();
+    if( !AnonymizeOneFile(anon, in, out) )
       {
-      return 1;
-      }
-
-    // FIXME:
-    gdcm::FileMetaInformation &fmi = file.GetHeader();
-    //fmi.Remove( gdcm::Tag(0x0002,0x0003) ); // will be regenerated
-    fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
-    fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
-    fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
-
-    // Save the AES key in an RSA enveloppe:
-    unsigned char rsa_plaintext[KEY_LEN];
-    unsigned char rsa_ciphertext[KEY_LEN*8] = {};
-    memcpy( rsa_plaintext, key, KEY_LEN );
-
-    int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
-    if( err != 0 )
-      {
-      std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
-      return 1;
-      }
-    //std::cout << rsa_ciphertext << std::endl;
-    //int olen = 0;
-    //unsigned char buf[KEY_LEN*8] = {};
-    //err = rsa.Pkcs1Decrypt( gdcm::RSA::PRIVATE, olen, rsa_ciphertext, buf, sizeof(buf) );
-    }
-  else if ( reidentify )
-    {
-    if( !anon.BasicApplicationLevelConfidentialityProfile2() )
-      {
+      std::cerr << "Could not anonymize: " << in << std::endl;
       return 1;
       }
     }
 
-  gdcm::Writer writer;
-  writer.SetFileName( outfilename.c_str() );
-  writer.SetFile( file );
-  if( !writer.Write() )
+  // Save the AES key in an RSA enveloppe:
+  unsigned char rsa_plaintext[KEY_LEN];
+  unsigned char rsa_ciphertext[KEY_LEN*8] = {};
+  memcpy( rsa_plaintext, key, KEY_LEN );
+
+  int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
+  if( err != 0 )
     {
+    std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
     return 1;
     }
-
+  //std::cout << rsa_ciphertext << std::endl;
+  //int olen = 0;
+  //unsigned char buf[KEY_LEN*8] = {};
+  //err = rsa.Pkcs1Decrypt( gdcm::RSA::PRIVATE, olen, rsa_ciphertext, buf, sizeof(buf) );
 
   return 0;
 }
