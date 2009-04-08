@@ -142,6 +142,7 @@ using namespace gdcm;
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
+//typedef int gdcm::DataSet::SizeType; // FIXME
 //%include "typemaps.i"
 
 // gdcm does not use std::string in its interface, but we do need it for the 
