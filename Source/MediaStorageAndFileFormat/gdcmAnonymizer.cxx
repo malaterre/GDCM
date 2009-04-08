@@ -314,6 +314,15 @@ bool Anonymizer::RemovePrivateTags()
   return true;
 }
 
+/*
+ * Implementation note:
+ * In order to implement the dummy 'memory' we use a static std::map
+ * this works great but we cannot be thread safe.
+ * In order to be thread safe, we would need to externalize this map generation
+ * maybe using a gdcm::Scanner do the operation once (Scanner is doing) the merging
+ * automatically...
+ * this is left as an exercise for the reader :)
+ */
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
 {
   if( deidentify )

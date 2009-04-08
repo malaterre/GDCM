@@ -94,6 +94,7 @@ public:
   /// PS 3.15 / E.1.1 De-Identifier
   /// An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
   /// if it protects all Attributes that might be used by unauthorized entities to identify the patient.
+  /// NOT THREAD SAFE
   bool BasicApplicationLevelConfidentialityProfile(bool deidentify = true);
 
   /// Set/Get AES key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
