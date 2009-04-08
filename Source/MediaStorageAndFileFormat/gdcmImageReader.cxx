@@ -1125,6 +1125,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   //assert( pi.GetSamplesPerPixel() == pf.GetSamplesPerPixel() );
 
   // 5.5 Do IconImage if any
+  assert( PixelData->GetIconImage().IsEmpty() );
   DoIconImage(ds, *PixelData);
 
   // 6. Do the Curves if any
