@@ -1060,6 +1060,23 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           ds.Replace( de );
           }
         break;
+      case VR::IS:
+          {
+          Element<VR::IS,VM::VM1_n> el;
+          el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
+          assert( entry.GetVM() == VM::VM2 );
+          for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
+            {
+            el.SetValue( spacing[i], i );
+            }
+          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+          std::stringstream os;
+          el.Write( os );
+          de.SetVR( VR::IS );
+          de.SetByteValue( os.str().c_str(), os.str().size() );
+          ds.Replace( de );
+          }
+        break;
       default:
         abort();
         }
