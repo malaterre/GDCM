@@ -94,9 +94,7 @@ public:
   /// PS 3.15 / E.1.1 De-Identifier
   /// An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
   /// if it protects all Attributes that might be used by unauthorized entities to identify the patient.
-  bool BasicApplicationLevelConfidentialityProfile();
-
-  bool BasicApplicationLevelConfidentialityProfile2();
+  bool BasicApplicationLevelConfidentialityProfile(bool deidentify = true);
 
   /// Set/Get AES key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
   /// Warning: set is done by copy (not reference)
@@ -107,6 +105,10 @@ protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
   bool BALCPProtect(Tag const & tag);
   bool CanEmptyTag(Tag const &tag);
+
+private:
+  bool BasicApplicationLevelConfidentialityProfile1();
+  bool BasicApplicationLevelConfidentialityProfile2();
 
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...

@@ -314,7 +314,14 @@ bool Anonymizer::RemovePrivateTags()
   return true;
 }
 
-bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
+bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
+{
+  if( deidentify )
+    return BasicApplicationLevelConfidentialityProfile1();
+  return BasicApplicationLevelConfidentialityProfile2();
+}
+
+bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 {
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
