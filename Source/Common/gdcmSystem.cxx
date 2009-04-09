@@ -1145,7 +1145,7 @@ bool System::GetHostName(char name[255])
 
   if ( WSAStartup( wVersionRequested, &wsaData ) == 0 )
     {
-    gethostname(name,sizeof(name));
+    gethostname(name,255);
     WSACleanup( );
     return true;
     }
