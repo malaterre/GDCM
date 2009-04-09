@@ -1149,14 +1149,15 @@ bool System::GetHostName(char name[255])
     WSACleanup( );
     return true;
     }
-  return false;
 #else
   if( gethostname(name, 255) == 0 )
     {
     return true;
     }
-  return false;
 #endif
+  // If reach here gethostname failed, uninit name just in case
+  *name = 0;
+  return false;
 }
 
 } // end namespace gdcm
