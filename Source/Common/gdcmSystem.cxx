@@ -619,8 +619,7 @@ static char gmt[] = { "GMT" };
 static char utc[] = { "UTC" };
 
 static const u_char *conv_num(const unsigned char *, int *, uint, uint);
-static const u_char *find_string(const u_char *, int *, const char * const *,
-	const char * const *, int);
+static const u_char *find_string(const u_char *, int *, const char * const *,const char * const *, int);
 
 #ifndef __UNCONST
 #define __UNCONST(a)	((char *)(unsigned long)(const char *)(a))
@@ -985,6 +984,57 @@ literal:
 
 	return __UNCONST(bp);
 }
+
+static const u_char *
+conv_num(const unsigned char *buf, int *dest, uint llim, uint ulim)
+{
+	uint result = 0;
+	unsigned char ch;
+
+	/* The limit also determines the number of valid digits. */
+	uint rulim = ulim;
+
+	ch = *buf;
+	if (ch < '0' || ch > '9')
+		return NULL;
+
+	do {
+		result *= 10;
+		result += ch - '0';
+		rulim /= 10;
+		ch = *++buf;
+	} while ((result * 10 <= ulim) && rulim && ch >= '0' && ch <= '9');
+
+	if (result < llim || result > ulim)
+		return NULL;
+
+	*dest = result;
+	return buf;
+}
+
+static const u_char *
+find_string(const u_char *bp, int *tgt, const char * const *n1,
+		const char * const *n2, int c)
+{
+	int i;
+	unsigned int len;
+
+	/* check full name - then abbreviated ones */
+	for (; n1 != NULL; n1 = n2, n2 = NULL) {
+		for (i = 0; i < c; i++, n1++) {
+			len = strlen(*n1);
+			if (_strnicmp(*n1, (const char *)bp, len) == 0) {
+				*tgt = i;
+				return bp + len;
+			}
+		}
+	}
+
+	/* Nothing matched */
+	return NULL;
+}
+
+
 #endif
 
 bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[18])
