@@ -34,15 +34,19 @@ IPPSorter::~IPPSorter()
 {
 }
 
+inline double spacing_round(double n, unsigned d)
+{
+  return floor(n * pow(10., d) + .5) / pow(10., d);
+} 
 
 bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
   // BUG: I cannot clear Filenames since input filenames could also be the output of ourself...
   // Filenames.clear();
+  ZSpacing = 0;
   if( filenames.empty() )
     {
     Filenames.clear();
-    ZSpacing = 0;
     return true;
     }
 
@@ -152,7 +156,9 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     // is spacing good ?
     if( spacingisgood && ComputeZSpacing )
       {
-      ZSpacing = zspacing;
+      // If user ask for a ZTolerance of 1e-4, there is no need for us to 
+      // store the extra digits... this will make sure to return 2.2 from a 2.1999938551239993 value
+      ZSpacing = spacing_round(zspacing, -log10(ZTolerance) );
       }
     assert( spacingisgood == false ||  (ZSpacing > ZTolerance && ZTolerance > 0) );
     }

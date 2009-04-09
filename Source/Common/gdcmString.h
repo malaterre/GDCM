@@ -88,6 +88,17 @@ public:
     return true;
   }
 
+  /// Trim function is required to return a std::string object, otherwise we could not create 
+  /// a gdcm::String object with an odd number of bytes...
+  std::string Trim() const {
+    std::string str = *this; // copy
+    std::string::size_type pos1 = str.find_first_not_of(' ');
+    std::string::size_type pos2 = str.find_last_not_of(' ');
+    str = str.substr( (pos1 == std::string::npos) ? 0 : pos1, 
+      (pos2 == std::string::npos) ? (str.size() - 1) : (pos2 - pos1 + 1));
+    return str;
+  }
+
 };
 template <char TDelimiter, unsigned int TMaxLength, char TPadChar>
 inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar> &ms)
@@ -101,6 +112,12 @@ inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,T
     }
   return is;
 }
+//template <char TDelimiter = EOF, unsigned int TMaxLength = 64, char TPadChar = ' '>
+//String String::Trim() const
+//{
+//  String s;
+//  return s;
+//}
 
 } // end namespace gdcm
 

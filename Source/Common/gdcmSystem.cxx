@@ -1137,6 +1137,8 @@ int System::StrCaseCmp(const char *s1, const char *s2)
 
 bool System::GetHostName(char name[255])
 {
+// http://msdn.microsoft.com/en-us/library/ms738527.aspx
+// WSANOTINITIALISED A successful WSAStartup call must occur before using this function.
 #if _WIN32
   // Get the hostname
   WORD wVersionRequested;
@@ -1145,9 +1147,17 @@ bool System::GetHostName(char name[255])
 
   if ( WSAStartup( wVersionRequested, &wsaData ) == 0 )
     {
-    gethostname(name,255);
+    bool ret = false;
+    if( gethostname(name,255) == 0 )
+      {
+      ret = true;
+      }
+    else
+      {
+      *name = 0;
+      }
     WSACleanup( );
-    return true;
+    return ret;
     }
 #else
   if( gethostname(name, 255) == 0 )

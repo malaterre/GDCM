@@ -64,6 +64,8 @@ public:
   /// Start the scan !
   bool Scan( Directory::FilenamesType const & filenames );
 
+  Directory::FilenamesType const &GetFilenames() const { return Filenames; }
+
   /// Print result
   void Print( std::ostream & os ) const;
 
@@ -81,6 +83,8 @@ public:
 
   /// Get all the values found (in lexicographic order)
   ValuesType const & GetValues() const { return Values; }
+
+  ValuesType GetValues(Tag const &t) const;
 
   /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
   struct ltstr

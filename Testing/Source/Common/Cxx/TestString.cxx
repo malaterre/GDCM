@@ -104,6 +104,9 @@ int TestString(int argc, char *argv[])
   std::cout << values[0] << std::endl;
   Print( values[0] );
   
+  const char trim[] = "8 ";
+  gdcm::String<> strim( trim );
+  std::cout << "|" << strim.Trim() << "|" << std::endl;
 
   return 0;
 }

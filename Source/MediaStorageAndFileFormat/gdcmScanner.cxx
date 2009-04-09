@@ -225,12 +225,30 @@ Directory::FilenamesType Scanner::GetKeys() const
 
 const char* Scanner::GetValue(const char *filename, Tag const &t) const
 {
+  // \precondition
+  assert( Tags.find( t ) != Tags.end() );
   TagToValue const &ftv = GetMapping(filename);
   if( ftv.find(t) != ftv.end() )
     {
     return ftv.find(t)->second;
     }
   return NULL;
+}
+
+Scanner::ValuesType Scanner::GetValues(Tag const &t) const
+{
+  ValuesType vt;
+  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  for(; file != Filenames.end(); ++file)
+    {
+    const char *filename = file->c_str();
+    TagToValue const &ttv = GetMapping(filename);
+    if( ttv.find(t) != ttv.end() )
+      {
+      vt.insert( ttv.find(t)->second );
+      }
+    }
+  return vt;
 }
 
 } // end namespace gdcm
