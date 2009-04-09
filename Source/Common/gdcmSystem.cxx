@@ -1137,11 +1137,26 @@ int System::StrCaseCmp(const char *s1, const char *s2)
 
 bool System::GetHostName(char name[255])
 {
+#if _WIN32
+  // Get the hostname
+  WORD wVersionRequested;
+  WSADATA wsaData;
+  wVersionRequested = MAKEWORD(2,0);
+
+  if ( WSAStartup( wVersionRequested, &wsaData ) == 0 )
+    {
+    gethostname(name,sizeof(name));
+    WSACleanup( );
+    return true;
+    }
+  return false;
+#else
   if( gethostname(name, 255) == 0 )
     {
     return true;
     }
   return false;
+#endif
 }
 
 } // end namespace gdcm
