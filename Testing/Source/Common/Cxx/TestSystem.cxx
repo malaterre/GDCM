@@ -152,6 +152,12 @@ int TestSystem(int, char *[])
     return 1;
     }
 }
+
+  //const char long_str8[] = " 0123456789";
+  //long l = 0;
+  //int n = sscanf( long_str8, "%8ld", &l );
+  //std::cout << "Long:" << l << std::endl;
+  
  
   return 0;
 }
