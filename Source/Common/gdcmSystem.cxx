@@ -57,7 +57,7 @@
 #include <dlfcn.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include <unistd.h> /* gethostname */
 #include <strings.h> // strncasecmp
 #endif 
 
@@ -1133,6 +1133,15 @@ int System::StrCaseCmp(const char *s1, const char *s2)
 
  return tolower(*s1) - tolower(*s2);
 #endif
+}
+
+bool System::GetHostName(char name[255])
+{
+  if( gethostname(name, 255) == 0 )
+    {
+    return true;
+    }
+  return false;
 }
 
 } // end namespace gdcm

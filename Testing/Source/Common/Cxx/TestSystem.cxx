@@ -158,6 +158,16 @@ int TestSystem(int, char *[])
   //int n = sscanf( long_str8, "%8ld", &l );
   //std::cout << "Long:" << l << std::endl;
   
- 
+  char hostname[255+1];
+  hostname[255] = 0;
+  if( gdcm::System::GetHostName( hostname ) )
+    {
+    std::cout << hostname << std::endl;
+    }
+  else
+  {
+  return 1;
+  }
+   
   return 0;
 }
