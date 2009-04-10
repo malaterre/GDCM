@@ -93,6 +93,10 @@ public:
     return operator = (tmp);
     }
 
+  /// Explicit function to retrieve the pointer
+  ObjectType *GetPointer() const
+    { return Pointer; }
+
 private:
   void Register()
     {
