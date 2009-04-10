@@ -53,6 +53,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   Scanner scanner;
   const Tag ipp(0x0020,0x0032); // Image Position (Patient)
   const Tag iop(0x0020,0x0037); // Image Orientation (Patient)
+  const Tag frame(0x0020,0x0052); // Frame of Reference UID
   // Temporal Position Identifier (0020,0100) 3 Temporal order of a dynamic or functional set of Images.
   //const Tag tpi(0x0020,0x0100);
   scanner.AddTag( ipp );
@@ -63,12 +64,26 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     gdcmDebugMacro( "Scanner failed" );
     return false;
     }
+  Scanner::ValuesType iops = scanner.GetValues(iop);
+  Scanner::ValuesType frames = scanner.GetValues(frame);
+  if( iops.size() != 1 )
+    {
+    gdcmDebugMacro( "More than one IOP (or no IOP)" );
+    return false;
+    }
+  if( frames.size() > 1 ) // Should I really tolerate no Frame of Reference UID ?
+    {
+    gdcmDebugMacro( "More than one Frame Of Reference UID" );
+    return false;
+    }
+
   const char *reference = filenames[0].c_str();
   Scanner::TagToValue const &t2v = scanner.GetMapping(reference);
   Scanner::TagToValue::const_iterator it = t2v.find( iop );
   // Take the first file in the list of filenames, if not IOP is found, simply gives up:
   if( it == t2v.end() )
     {
+    // DEAD CODE
     gdcmDebugMacro( "No iop in: " << reference );
     return false;
     }

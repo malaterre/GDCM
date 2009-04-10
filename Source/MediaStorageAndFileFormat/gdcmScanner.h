@@ -84,6 +84,7 @@ public:
   /// Get all the values found (in lexicographic order)
   ValuesType const & GetValues() const { return Values; }
 
+  /// Get all the values found (in lexicographic order) associated with Tag 't'
   ValuesType GetValues(Tag const &t) const;
 
   /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
@@ -109,6 +110,7 @@ public:
   /// This is meant for a single short call. If multiple calls (multiple tags)
   /// should be done, prefer the GetMapping function, and then reuse the TagToValue
   /// hash table.
+  /// \warning Tag 't' should have been added via AddTag() prior to the Scan() call !
   const char* GetValue(const char *filename, Tag const &t) const;
 
 private:
