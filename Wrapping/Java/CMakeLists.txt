@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
 )
@@ -107,7 +108,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   ${CPACK_NAMELINK_TYPE}
   )
   # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
+  INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/gdcm.jar
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
