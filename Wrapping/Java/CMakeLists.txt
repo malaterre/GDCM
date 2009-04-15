@@ -26,8 +26,9 @@ INCLUDE_DIRECTORIES(
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 #INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
 
-# Some old swig 1.3 did not support this option:
-#SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}/swig-java")
+SET(GDCM_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/gdcm)
+MAKE_DIRECTORY(${GDCM_JAVA_HOME})
+SET(CMAKE_SWIG_OUTDIR "${GDCM_JAVA_HOME}")
 
 SET(CMAKE_SWIG_FLAGS "-package gdcm")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
@@ -62,24 +63,16 @@ ENDIF(UNIX)
 #FILE(GLOB javafiles "${CMAKE_CURRENT_BINARY_DIR}/*.java")
 #MESSAGE("javafile:${javafiles}")
 
-# This is kindda hackish:
-# 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated (which means all *.java should be there)
-ADD_CUSTOM_COMMAND(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm.class
-  COMMAND ${JAVA_COMPILE} ARGS "*.java" #${javafiles}
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS "${swig_generated_file_fullname}"
-  COMMENT "javac *.java"
-)
-
-# 2. now that the *.class have been generated construct the jar file. We can only rely on the gdcm.java / gdcm.class
-# to build dependencie, I am pretty sure it will break parallel builds... oh well
 ADD_CUSTOM_COMMAND(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
-  COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar *.class
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.class
-  COMMENT "jar cvf -> gdcm.jar"
+# 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated (which means all *.java should be there)
+  COMMAND ${JAVA_COMPILE} ARGS "gdcm/*.java" #${javafiles}
+# 2. now that the *.class have been generated construct the jar file. We can only rely on the gdcm.java / gdcm.class
+# to build dependencie, I am pretty sure it will break parallel builds... oh well
+  COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar gdcm/*.class
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
+  DEPENDS "${swig_generated_file_fullname}"
+  COMMENT "javac *.java; jar cvf -> gdcm.jar"
 )
 
 # 3. ok now add the target
