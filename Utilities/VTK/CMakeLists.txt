@@ -143,7 +143,7 @@ MAKE_DIRECTORY(${VTK_JAVA_HOME})
        ADD_CUSTOM_COMMAND(
          TARGET    ${VTKGDCM_NAME}Java
          POST_BUILD
-         COMMAND ${JAVA_COMPILE} ARGS "*.java"
+         COMMAND ${JAVA_COMPILE} ARGS -cp ${VTK_JAVA_JAR} "*.java"
          COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar *.class
          WORKING_DIRECTORY ${VTK_JAVA_HOME}
          COMMENT   "*.java -> jar"
