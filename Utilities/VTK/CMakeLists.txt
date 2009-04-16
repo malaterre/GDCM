@@ -129,24 +129,32 @@ ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
 IF(GDCM_WRAP_JAVA)
   IF(VTK_WRAP_JAVA)
+    ADD_EXECUTABLE(vtkgdcmrepackage repackage.cxx)
+    GET_TARGET_PROPERTY( VTKGDCMREPACKAGE
+      vtkgdcmrepackage
+      LOCATION
+    )
     SET(VTK_WRAP_JAVA3_INIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-    # Lars Matthäus insisted on having vtkGDCMImageReader within a vtk/ namespace in the jar file...
-    SET(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/vtk)
+    # Lars Matthäus patch (package vtkgdcm;)
+    SET(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/${PROJECT_NAME})
     MAKE_DIRECTORY(${VTK_JAVA_HOME})
     INCLUDE(${VTK_CMAKE_DIR}/vtkWrapJava.cmake)
-    INCLUDE_DIRECTORIES(
-      ${CMAKE_CURRENT_SOURCE_DIR}
-    )
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
     VTK_WRAP_JAVA3(${VTKGDCM_NAME}Java vtkgdcmJAVA_SRCS "${vtkgdcm_SRCS}")
     ADD_LIBRARY(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
+    FOREACH(c ${vtkgdcm_LIBS})
+      TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${c}Java)
+    ENDFOREACH(c)
 
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
-      COMMAND ${JAVA_COMPILE} ARGS -cp ${VTK_JAVA_JAR} "vtk/*.java"
-      COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
+      COMMAND ${VTKGDCMREPACKAGE} ARGS "${PROJECT_NAME}/*.java"
+      COMMAND ${JAVA_COMPILE} ARGS -cp ${VTK_JAVA_JAR} "${PROJECT_NAME}/*.java"
+      COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar ${PROJECT_NAME}/*.class
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
-      DEPENDS ${VTKGDCM_NAME}Java
+      DEPENDS ${VTKGDCM_NAME}Java vtkgdcmrepackage
       COMMENT   "*.java -> jar"
     )
     ADD_CUSTOM_TARGET(VTKGDCMJavaJar ALL
