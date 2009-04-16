@@ -1224,6 +1224,7 @@ int vtkGDCMImageReader::RequestDataCompat()
         }
       assert( len );
       pointer += len;
+      this->UpdateProgress( (double)(j - dext[4] ) / ( dext[5] - dext[4] ));
       }
     }
   else
