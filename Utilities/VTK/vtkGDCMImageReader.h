@@ -28,6 +28,8 @@
 // .SECTION TODO
 // This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
 // list of 2D files are supported for now.
+// .SECTION TODO
+// Did not implement SetFilePattern / SetFilePrefix API, move it to protected section for now.
 // .SECTION BUG
 // Overlay are assumed to have the same extent as image. Right now if overlay origin is not
 // 0,0 the overlay will have an offset...
@@ -285,6 +287,13 @@ protected:
   int IconDataScalarType;
   int IconNumberOfScalarComponents;
   int PlanarConfiguration;
+
+protected:
+  // TODO / FIXME
+  void SetFilePrefix(const char *) {}
+  vtkGetStringMacro(FilePrefix);
+  void SetFilePattern(const char *) {}
+  vtkGetStringMacro(FilePattern);
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
