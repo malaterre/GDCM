@@ -46,6 +46,7 @@ IF(GDCM_DOCUMENTATION)
              ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     # let's create the tarball within the same custom command to avoid complex dep. rules.
              ${GDCM_DOC_TARBALL}
+             ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex # output #1 (fake)
     # 1. first thing first let's run doxygen
     COMMAND  ${DOXYGEN}
     ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
@@ -55,15 +56,9 @@ IF(GDCM_DOCUMENTATION)
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
              ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
              ${headerfiles}
-    COMMENT  "Creating doxygen doc + tarball"
+    COMMENT  "GDCM: Creating doxygen doc + tarball"
     #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
-
-  # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
-  ADD_CUSTOM_TARGET(GDCMDoxygenDoc
-    ALL
-    DEPENDS ${GDCM_DOC_TARBALL}
-  )
 
   # PDF building part:
   # When building latex, we have to run a custom command to produce the pdf file:
@@ -96,8 +91,8 @@ IF(GDCM_DOCUMENTATION)
       COMMAND  ${CMAKE_MAKE_PROGRAM}
       DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex 
 ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
-    ${GDCM_DOC_TARBALL}
-      COMMENT  "Creating (patched) pdf of documentation"
+    #${GDCM_DOC_TARBALL}
+      COMMENT  "GDCM: Creating (patched) pdf of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
     ADD_CUSTOM_COMMAND(
@@ -106,13 +101,20 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf 
                ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-      COMMENT  "Creating optimized pdf version of documentation"
+      COMMENT  "GDCM: Creating optimized pdf version of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
     # add target to 'ALL'
     ADD_CUSTOM_TARGET(GDCMDoxygenPDF
       ALL
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+      COMMENT  "GDCM: Executing GDCMDoxygenPDF"
+    )
+  ELSE(UNIX AND GDCM_PDF_DOCUMENTATION)
+    # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
+    ADD_CUSTOM_TARGET(GDCMDoxygenDoc
+      ALL
+      DEPENDS ${GDCM_DOC_TARBALL}
     )
   ENDIF(UNIX AND GDCM_PDF_DOCUMENTATION)
 
