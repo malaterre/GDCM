@@ -660,6 +660,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x00e1,0x0061,"ELSCINT1",VR::LO,VM::VM1,"Protocol File Name",false },
   {0x00e1,0x0062,"ELSCINT1",VR::CS,VM::VM1,"?",false },
   {0x00e1,0x0063,"ELSCINT1",VR::SH,VM::VM1,"Patient Language",false },
+  {0x00e1,0x0065,"ELSCINT1",VR::LO,VM::VM1,"Patient Data Modification Date",false },
   {0x01e1,0x0017,"ELSCINT1",VR::UI,VM::VM1,"?UI?",false },
   {0x01e1,0x0018,"ELSCINT1",VR::OB,VM::VM1,"?",false },
   {0x01e1,0x001f,"ELSCINT1",VR::SH,VM::VM1,"?",false },

@@ -322,4 +322,6 @@ gdcmconv --raw should process a gdcm::Pixmap not a gdcm::Image
 Amicas JP2 to DICOM:
 http://www.mikekristofferson.com/misc/mri/amicas-patients/
 -----------------------------------------------------------------------
+Prepare a DICOM file with Vr:UN element with Value Length odd ... what is the padding then ?
+-----------------------------------------------------------------------
 Add example of JPC (redundancy 3D volume / J2K)
