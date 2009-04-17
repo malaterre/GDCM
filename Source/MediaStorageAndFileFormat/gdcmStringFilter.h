@@ -59,6 +59,9 @@ public:
   File &GetFile() { return *F; }
   const File &GetFile() const { return *F; }
 
+protected:
+  std::pair<std::string, std::string> ToStringPair(const Tag& t, DataSet const &ds) const;
+
 private:
   SmartPointer<File> F;
 };

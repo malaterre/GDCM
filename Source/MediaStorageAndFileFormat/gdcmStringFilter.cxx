@@ -75,10 +75,23 @@ std::string StringFilter::ToMIME64(const Tag& t) const
 
 std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) const
 {
+  if( t.GetGroup() == 0x2 )
+    {
+    const FileMetaInformation &header = GetFile().GetHeader();
+    return ToStringPair(t, header);
+    }
+  else
+    {
+    const DataSet &ds = GetFile().GetDataSet();
+    return ToStringPair(t, ds);
+    }
+}
+
+std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, DataSet const &ds) const
+{
   std::pair<std::string, std::string> ret;
   const Global &g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const DataSet &ds = GetFile().GetDataSet();
   if( ds.IsEmpty() || !ds.FindDataElement(t) )
     {
     gdcmDebugMacro( "DataSet is empty or does not contains tag:" );

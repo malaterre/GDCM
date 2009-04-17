@@ -117,30 +117,58 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       TagToValue &mapping = Mappings[filename];
       sf.SetFile( reader.GetFile() );
 
+      const FileMetaInformation & header = reader.GetFile().GetHeader();
       const DataSet & ds = reader.GetFile().GetDataSet();
       TagsType::const_iterator tag = Tags.begin();
       for( ; tag != Tags.end(); ++tag )
         {
-        if( ds.FindDataElement( *tag ) )
+        if( tag->GetGroup() == 0x2 )
           {
-          //std::string s;
-          DataElement const & de = ds.GetDataElement( *tag );
-          //const ByteValue *bv = de.GetByteValue();
-          ////assert( VR::IsASCII( vr ) );
-          //if( bv ) // Hum, should I store an empty string or what ?
-          //  {
-          //  s = std::string( bv->GetPointer(), bv->GetLength() );
-          //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-          //  }
-          std::string s = sf.ToString(de.GetTag());
+          if( header.FindDataElement( *tag ) )
+            {
+            //std::string s;
+            DataElement const & de = header.GetDataElement( *tag );
+            //const ByteValue *bv = de.GetByteValue();
+            ////assert( VR::IsASCII( vr ) );
+            //if( bv ) // Hum, should I store an empty string or what ?
+            //  {
+            //  s = std::string( bv->GetPointer(), bv->GetLength() );
+            //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+            //  }
+            std::string s = sf.ToString(de.GetTag());
 
-          // Store the potentially new value:
-          Values.insert( s );
-          assert( Values.find( s ) != Values.end() );
-          const char *value = Values.find( s )->c_str();
-          assert( value );
-          mapping.insert(
-            TagToValue::value_type(*tag, value));
+            // Store the potentially new value:
+            Values.insert( s );
+            assert( Values.find( s ) != Values.end() );
+            const char *value = Values.find( s )->c_str();
+            assert( value );
+            mapping.insert(
+              TagToValue::value_type(*tag, value));
+            }
+          }
+        else
+          {
+          if( ds.FindDataElement( *tag ) )
+            {
+            //std::string s;
+            DataElement const & de = ds.GetDataElement( *tag );
+            //const ByteValue *bv = de.GetByteValue();
+            ////assert( VR::IsASCII( vr ) );
+            //if( bv ) // Hum, should I store an empty string or what ?
+            //  {
+            //  s = std::string( bv->GetPointer(), bv->GetLength() );
+            //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+            //  }
+            std::string s = sf.ToString(de.GetTag());
+
+            // Store the potentially new value:
+            Values.insert( s );
+            assert( Values.find( s ) != Values.end() );
+            const char *value = Values.find( s )->c_str();
+            assert( value );
+            mapping.insert(
+              TagToValue::value_type(*tag, value));
+            }
           }
         }
       }
