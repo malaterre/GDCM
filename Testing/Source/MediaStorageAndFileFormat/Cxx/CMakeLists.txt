@@ -64,6 +64,7 @@ IF(GDCM_DATA_ROOT)
       ${MSFF_TEST_SRCS}
   TestScanner
   TestIPPSorter
+  TestIPPSorter2
   TestCopyDataSet
       )
 ENDIF(GDCM_DATA_ROOT)
