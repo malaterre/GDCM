@@ -15,6 +15,7 @@
 #include "gdcmIPPSorter.h"
 #include "gdcmScanner.h"
 #include "gdcmElement.h"
+#include "gdcmDirectionCosines.h"
 
 #include <map>
 #include <math.h>
@@ -108,6 +109,14 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
   normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
 
+  gdcm::DirectionCosines dc;
+  dc.SetFromString( dircos );
+  if( !dc.IsValid() ) return false;
+  double normal2[3];
+  dc.Cross( normal2 );
+  assert( normal2[0] == normal[0] && 
+          normal2[1] == normal[1] &&
+          normal2[2] == normal[2] );
   // You only have to do this once for all slices in the volume. Next, for
   // each slice, calculate the distance along the slice normal using the IPP
   // tag ("dist" is initialized to zero before reading the first slice) :
@@ -186,6 +195,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 
 bool IPPSorter::ComputeSpacing(std::vector<std::string> const & filenames)
 {
+  (void)filenames;
   return false;
 }
 

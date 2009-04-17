@@ -54,6 +54,8 @@ public:
 
   double CrossDot(DirectionCosines const &dc) const;
 
+  double ComputeDistAlongNormal(const double ipp[3]) const;
+
 private:
   double Values[6];
 };

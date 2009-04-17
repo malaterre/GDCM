@@ -148,6 +148,15 @@ double DirectionCosines::CrossDot(DirectionCosines const &dc) const
   return x[0]*y[0] + x[1]*y[1] + x[2]*y[2];
 }
 
+double DirectionCosines::ComputeDistAlongNormal(const double ipp[3]) const
+{
+  double normal[3];
+  Cross(normal);
+  double dist = 0.;
+  for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
+  return dist;
+}
+
 
 }
 

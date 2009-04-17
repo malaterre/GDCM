@@ -64,6 +64,9 @@ public:
       _os << "," << Internal[i];
     }
 
+  const typename VRToType<TVR>::Type *GetValues() const {
+    return Internal;
+  }
   const typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) const {
     assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];
