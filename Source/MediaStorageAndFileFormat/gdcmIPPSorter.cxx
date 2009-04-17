@@ -173,7 +173,8 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       {
       // If user ask for a ZTolerance of 1e-4, there is no need for us to 
       // store the extra digits... this will make sure to return 2.2 from a 2.1999938551239993 value
-      ZSpacing = spacing_round(zspacing, -log10(ZTolerance) );
+      const int l = -log10(ZTolerance);
+      ZSpacing = spacing_round(zspacing, l);
       }
     assert( spacingisgood == false ||  (ZSpacing > ZTolerance && ZTolerance > 0) );
     }

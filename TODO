@@ -325,3 +325,5 @@ http://www.mikekristofferson.com/misc/mri/amicas-patients/
 Prepare a DICOM file with Vr:UN element with Value Length odd ... what is the padding then ?
 -----------------------------------------------------------------------
 Add example of JPC (redundancy 3D volume / J2K)
+-----------------------------------------------------------------------
+Remove dep to dummy md5 lib, now that we have polarssl implementation

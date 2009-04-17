@@ -25,6 +25,8 @@ namespace gdcm
  * \brief class for testing
  * \details this class is used for the nightly regression system for GDCM
  * It makes heavily use of md5 computation
+ *
+ * \see gdcm::MD5 class for md5 computation
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Testing
@@ -36,6 +38,8 @@ public :
   /// MD5 stuff
   /// digest_str needs to be at least : strlen = [2*16+1];
   /// string will be \0 padded. (md5 are 32 bytes long)
+  /// Testing is not meant to be shipped with an installed GDCM release, always
+  /// prefer the gdcm::MD5 API when doing md5 computation.
   static bool ComputeMD5(const char *buffer, unsigned long buf_len,
     char digest_str[33]);
   static bool ComputeFileMD5(const char *filename, char digest_str[33]);
