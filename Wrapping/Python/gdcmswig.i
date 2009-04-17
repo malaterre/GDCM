@@ -130,6 +130,15 @@
 #include "gdcmDataSetHelper.h"
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmImageHelper.h"
+#include "gdcmHAVEGE.h"
+#include "gdcmAES.h"
+#include "gdcmMD5.h"
+#include "gdcmDummyValueGenerator.h"
+#include "gdcmX509.h"
+#include "gdcmRSA.h"
+#include "gdcmSHA1.h"
+#include "gdcmBase64.h"
+#include "gdcmSpacing.h"
 
 using namespace gdcm;
 %}
@@ -765,3 +774,13 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
 %include "gdcmFileExplicitFilter.h"
 %template (DoubleType) std::vector<double>;
 %include "gdcmImageHelper.h"
+%include "gdcmHAVEGE.h"
+%include "gdcmAES.h"
+%include "gdcmMD5.h"
+%include "gdcmDummyValueGenerator.h"
+%include "gdcmX509.h"
+%include "gdcmRSA.h"
+%include "gdcmSHA1.h"
+%include "gdcmBase64.h"
+%include "gdcmSpacing.h"
+

@@ -124,6 +124,15 @@
 #include "gdcmDataSetHelper.h"
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmImageHelper.h"
+#include "gdcmHAVEGE.h"
+#include "gdcmAES.h"
+#include "gdcmMD5.h"
+#include "gdcmDummyValueGenerator.h"
+#include "gdcmX509.h"
+#include "gdcmRSA.h"
+#include "gdcmSHA1.h"
+#include "gdcmBase64.h"
+#include "gdcmSpacing.h"
 
 using namespace gdcm;
 %}
@@ -584,7 +593,8 @@ using namespace gdcm;
 %include "gdcmConfigure.h"
 #ifdef GDCM_BUILD_TESTING
 %include "gdcmTesting.h"
-%ignore gdcm::Testing::ComputeFileMD5(const char*, char *);
+%ignore gdcm::Testing::ComputeMD5(const char *, const unsigned long , char []);
+%ignore gdcm::Testing::ComputeFileMD5(const char*, char []);
 %extend gdcm::Testing
 {
   static const char *ComputeFileMD5(const char *filename) {
@@ -607,3 +617,13 @@ using namespace gdcm;
 %include "gdcmFileExplicitFilter.h"
 %template (DoubleType) std::vector<double>;
 %include "gdcmImageHelper.h"
+%include "gdcmHAVEGE.h"
+%include "gdcmAES.h"
+%include "gdcmMD5.h"
+%include "gdcmDummyValueGenerator.h"
+%include "gdcmX509.h"
+%include "gdcmRSA.h"
+%include "gdcmSHA1.h"
+%include "gdcmBase64.h"
+%include "gdcmSpacing.h"
+
