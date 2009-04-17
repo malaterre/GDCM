@@ -184,4 +184,9 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   return true;
 }
 
+bool IPPSorter::ComputeSpacing(std::vector<std::string> const & filenames)
+{
+  return false;
+}
+
 } // end namespace gdcm

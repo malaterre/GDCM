@@ -73,6 +73,9 @@ protected:
   bool ComputeZSpacing;
   double ZSpacing;
   double ZTolerance;
+
+private:
+  bool ComputeSpacing(std::vector<std::string> const & filenames);
 };
 
 

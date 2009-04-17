@@ -50,6 +50,10 @@ public:
   /// Return whether or not this is a valid direction cosines
   bool IsValid() const;
 
+  bool SetFromString(const char *str);
+
+  double CrossDot(DirectionCosines const &dc) const;
+
 private:
   double Values[6];
 };

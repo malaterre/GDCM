@@ -118,6 +118,35 @@ void DirectionCosines::Normalize()
     }
 }
 
+bool DirectionCosines::SetFromString(const char *str)
+{
+  if( !str ) return false;
+  int n = sscanf( str, "%lf\\%lf\\%lf\\%lf\\%lf\\%lf", Values, Values+1, Values+2, Values+3, Values+4, Values+5 );
+  if( n == 6 )
+    {
+    return true;
+    }
+  // else
+  Values[0] = 1;
+  Values[1] = 0;
+  Values[2] = 0;
+  Values[3] = 0;
+  Values[4] = 1;
+  Values[5] = 0;
+  return false;
+}
+
+double DirectionCosines::CrossDot(DirectionCosines const &dc) const
+{
+  double z1[3];
+  Cross(z1);
+  double z2[3];
+  dc.Cross(z2);
+
+  const double *x = z1;
+  const double *y = z2;
+  return x[0]*y[0] + x[1]*y[1] + x[2]*y[2];
+}
 
 
 }
