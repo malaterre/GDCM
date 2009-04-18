@@ -36,7 +36,7 @@ X509::~X509()
   delete Internals;
 }
 
-int Pkcs1Encrypt( 
+int X509::Pkcs1Encrypt( 
                        int mode, int  ilen,
                        const unsigned char *input,
                        unsigned char *output )

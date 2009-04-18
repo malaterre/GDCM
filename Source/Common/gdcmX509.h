@@ -16,6 +16,7 @@
 #define __gdcmX509_h
 
 #include "gdcmTypes.h"
+#error do not use for now
 
 namespace gdcm
 {
@@ -30,6 +31,11 @@ class GDCM_EXPORT X509
 public :
   X509();
   ~X509();
+
+int Pkcs1Encrypt( 
+                       int mode, int  ilen,
+                       const unsigned char *input,
+                       unsigned char *output );
 
 private:
   X509Internals *Internals;
