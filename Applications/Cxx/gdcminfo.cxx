@@ -29,6 +29,8 @@
 #include "gdcmOrientation.h"
 #include "gdcmVersion.h"
 #include "gdcmMD5.h"
+#include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 #include "puff.h"
 
@@ -207,16 +209,95 @@ void PrintHelp()
   std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
+  int deflated = 0; // check deflated
+  int checkcompression = 0;
+  int md5sum = 0;
+
+int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
+{
+  if( deflated )
+  {
+    return checkdeflated(filename.c_str());
+  }
+ 
+  //const char *filename = argv[1];
+  //std::cout << "filename: " << filename << std::endl;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+  const gdcm::File &file = reader.GetFile();
+  const gdcm::DataSet &ds = file.GetDataSet();
+  gdcm::MediaStorage ms;
+  ms.SetFromFile(file);
+  /*
+   * Until gdcm::MediaStorage is fixed only *compile* time constant will be handled
+   * see -> http://chuckhahm.com/Ischem/Zurich/XX_0134
+   * which make gdcm::UIDs useless :(
+   */
+  if( ms.IsUndefined() )
+    {
+    std::cerr << "Unknown MediaStorage" << std::endl;
+    return 1;
+    }
+
+  gdcm::UIDs uid;
+  uid.SetFromUID( ms.GetString() );
+  std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
+  const gdcm::TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
+  uid.SetFromUID( ts.GetString() );
+  std::cout << "TransferSyntax is " << ts << " [" << uid.GetName() <<  "]" << std::endl;
+
+  if( gdcm::MediaStorage::IsImage( ms ) )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "Could not read image from: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::File &file = reader.GetFile();
+    const gdcm::DataSet &ds = file.GetDataSet();
+    const gdcm::Image &image = reader.GetImage();
+    const double *dircos = image.GetDirectionCosines();
+    gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
+    const char *label = gdcm::Orientation::GetLabel( type );
+    image.Print( std::cout );
+    std::cout << "Orientation Label: " << label << std::endl;
+    if( checkcompression )
+      {
+      bool lossy = image.IsLossy();
+      std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
+      }
+
+    if( md5sum )
+      {
+      char *buffer = new char[ image.GetBufferLength() ];
+      image.GetBuffer( buffer );
+      char digest[33] = {};
+      gdcm::MD5::Compute( buffer, image.GetBufferLength(), digest );
+      std::cout << "md5sum: " << digest << std::endl;
+      delete[] buffer;
+      }
+    }
+// Do the IOD verification !
+    bool v = defs.Verify( ds );
+    //std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
+
+  return 0;
+}
+
 
 int main(int argc, char *argv[])
 {
   int c;
   std::string filename;
   std::string xmlpath;
-  int deflated = 0; // check deflated
   int resourcespath = 0;
-  int md5sum = 0;
-  int checkcompression = 0;
   int verbose = 0;
   int warning = 0;
   int help = 0;
@@ -366,78 +447,11 @@ int main(int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
 
-  if( deflated )
-  {
-    return checkdeflated(filename.c_str());
-  }
- 
-  //const char *filename = argv[1];
-  //std::cout << "filename: " << filename << std::endl;
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
+  if( !gdcm::System::FileExists(filename.c_str()) )
     {
-    std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
-    }
-  const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = file.GetDataSet();
-  gdcm::MediaStorage ms;
-  ms.SetFromFile(file);
-  /*
-   * Until gdcm::MediaStorage is fixed only *compile* time constant will be handled
-   * see -> http://chuckhahm.com/Ischem/Zurich/XX_0134
-   * which make gdcm::UIDs useless :(
-   */
-  if( ms.IsUndefined() )
-    {
-    std::cerr << "Unknown MediaStorage" << std::endl;
     return 1;
     }
 
-  gdcm::UIDs uid;
-  uid.SetFromUID( ms.GetString() );
-  std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
-  const gdcm::TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
-  uid.SetFromUID( ts.GetString() );
-  std::cout << "TransferSyntax is " << ts << " [" << uid.GetName() <<  "]" << std::endl;
-
-  if( gdcm::MediaStorage::IsImage( ms ) )
-    {
-    gdcm::ImageReader reader;
-    reader.SetFileName( filename.c_str() );
-    if( !reader.Read() )
-      {
-      std::cerr << "Could not read image from: " << filename << std::endl;
-      return 1;
-      }
-    const gdcm::File &file = reader.GetFile();
-    const gdcm::DataSet &ds = file.GetDataSet();
-    const gdcm::Image &image = reader.GetImage();
-    const double *dircos = image.GetDirectionCosines();
-    gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
-    const char *label = gdcm::Orientation::GetLabel( type );
-    image.Print( std::cout );
-    std::cout << "Orientation Label: " << label << std::endl;
-    if( checkcompression )
-      {
-      bool lossy = image.IsLossy();
-      std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
-      }
-
-    if( md5sum )
-      {
-      char *buffer = new char[ image.GetBufferLength() ];
-      image.GetBuffer( buffer );
-      char digest[33] = {};
-      gdcm::MD5::Compute( buffer, image.GetBufferLength(), digest );
-      std::cout << "md5sum: " << digest << std::endl;
-      delete[] buffer;
-      }
-    }
-
-// Do the IOD verification !
-    {
     gdcm::Global& g = gdcm::Global::GetInstance();
     // First thing we need to locate the XML dict
     // did the user requested to look XML file in a particular directory ?
@@ -468,10 +482,24 @@ int main(int argc, char *argv[])
       }
 
     const gdcm::Defs &defs = g.GetDefs();
-    bool v = defs.Verify( ds );
-    std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
+
+  int res = 0;
+  if( gdcm::System::FileIsDirectory(filename.c_str()) )
+    {
+    gdcm::Directory d;
+    d.Load(filename);
+    gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
+    for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
+      {
+      std::cout << "filename: " << *it << std::endl;
+      res += ProcessOneFile(*it, defs);
+      }
+    }
+  else
+    {
+    res += ProcessOneFile( filename, defs );
     }
 
 
-  return 0;
+  return res;
 }
