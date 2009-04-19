@@ -30,7 +30,7 @@ template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream&
  *      TMaxLength is only a hint. Noone actually respect the max length
  *      TPadChar is the string padding (0 or space)
  */
-template <char TDelimiter = EOF, unsigned int TMaxLength = 64, char TPadChar = ' '>
+template <char TDelimiter = '\\', unsigned int TMaxLength = 64, char TPadChar = ' '>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {
   // UI wants \0 for pad character, while ASCII ones wants space char... do not allow anything else
