@@ -28,6 +28,7 @@ namespace itk
  *  http://gdcm.sourceforge.net
  *
  *  \ingroup IOFilters
+ *  \warning this class is deprecated, as gdcm 2.x has been integrated in ITK starting ITK 3.12
  */
 
 #ifndef ITK_EXPORT

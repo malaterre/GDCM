@@ -7,5 +7,9 @@ A PDF version of this doxygen documentation can be found here:
 
 http://gdcm.sourceforge.net/gdcm-@GDCM_VERSION@.pdf
 
+A tarball version of this HTML doxygen documentation can be found here:
+
+http://gdcm.sourceforge.net/gdcm-@GDCM_VERSION@-doc.tar.gz
+
 \author Mathieu Malaterre
 */
