@@ -155,6 +155,18 @@ int main (int argc, char *argv[])
   uMap = globalParams->getTextEncoding();
 
   const char *filename = argv[1];
+  if( !gdcm::System::FileExists(filename) )
+    {
+    return 1;
+    }
+  // get length of file:
+  size_t length = gdcm::System::FileSize(filename);
+  // PDF doc is stored in an OB element, check that 32bits length is fine:
+  if( length > gdcm::VL::GetVL32Max() )
+    {
+    return 1;
+    }
+
   const char *outfilename = argv[2];
   fileName = new GooString( filename );
   Object obj;
@@ -189,11 +201,6 @@ std::cout << "title:" << title.size() << std::endl;
   std::ifstream is;
   is.open (filename, std::ios::binary );
 
-
-  // get length of file:
-  is.seekg (0, std::ios::end);
-  int length = is.tellg();
-  is.seekg (0, std::ios::beg);
 
   char *buffer = new char [length];
 

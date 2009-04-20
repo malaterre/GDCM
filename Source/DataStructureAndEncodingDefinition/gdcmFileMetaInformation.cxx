@@ -79,7 +79,8 @@ void FileMetaInformation::SetSourceApplicationEntityTitle(const char * title)
 {
   //SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
   //SourceApplicationEntityTitle += "/";
-  SourceApplicationEntityTitle = title;
+  AEComp ae( title );
+  SourceApplicationEntityTitle = ae;
 }
 const char *FileMetaInformation::GetImplementationClassUID()
 {

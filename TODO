@@ -331,3 +331,5 @@ Remove dep to dummy md5 lib, now that we have polarssl implementation
 Provide a FindPolarSLL
 -----------------------------------------------------------------------
 Store a VR:UN element (>32bits) when VR should be 16bits
+-----------------------------------------------------------------------
+Create a PDF Storage class with a trailing Pixel Data element to test broken DICOM implementation

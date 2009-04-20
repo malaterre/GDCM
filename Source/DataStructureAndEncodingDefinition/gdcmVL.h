@@ -32,6 +32,10 @@ class GDCM_EXPORT VL
 public:
   VL(uint32_t vl = 0) : ValueLength(vl) { }
 
+  // FIXME: ugly
+  static uint32_t GetVL32Max() { return 0xFFFFFFFF; }
+  static uint16_t GetVL16Max() { return 0xFFFF; }
+
   bool IsUndefined() const {
     return ValueLength == 0xFFFFFFFF;
   }
