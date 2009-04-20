@@ -101,7 +101,8 @@ std::istream& Read(std::istream &is)
         }
       else
         {
-        abort();
+        throw "Catch me if you can";
+        //abort();
         }
       }
     // not used for now...

@@ -100,7 +100,7 @@ bool TestCrossDot()
       dc.SetFromString( ImageOrientationPatientList[i] );
       const double crossdot = ref.CrossDot( dc);
       const double eps = 1. - crossdot;
-      if( eps > 1e-7 ) return false;
+      if( eps > 1e-6 || eps < 0 ) return false;
       }
     }
   return true;
@@ -125,6 +125,7 @@ int TestDirectionCosines(int, char *[])
     }
 
   bool b = TestCrossDot();
+  if( !b ) return 1;
 
   return 0;
 }

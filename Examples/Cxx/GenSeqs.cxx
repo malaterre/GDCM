@@ -20,6 +20,20 @@
 #include "gdcmFile.h"
 #include "gdcmTag.h"
 
+/*
+ * This example is used to generate the file:
+ *
+ * gdcmConformanceTests/SequenceWithUndefinedLengthNotConvertibleToDefinedLength.dcm
+ * 
+ * There is a flaw in the DICOM design were it is assumed that Sequence can be
+ * either represented as undefined length or defined length. This should work
+ * in most case, but the undefined length is a little more general and can
+ * store sequence of items that a defined length cannot.
+ * Deflated syntax was used in this case since this synthetic example can be
+ * nicely compressed using this transfer syntax.
+ *
+ * Warning: do not try to compute the group length elements !
+ */
 int main(int argc, char *argv[])
 {
   if( argc < 3 )

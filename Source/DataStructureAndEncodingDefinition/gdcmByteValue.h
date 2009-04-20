@@ -23,7 +23,7 @@
 #include <iterator>
 #include <iomanip>
 
-#include <stdlib.h> // abort
+//#include <stdlib.h> // abort
 
 namespace gdcm
 {
@@ -44,10 +44,10 @@ public:
         }
   }
   ByteValue(std::vector<char> &v):Internal(v),Length(v.size()) {}
-  ByteValue(std::ostringstream const &os) {
-    (void)os;
-	   abort(); // TODO
-  }
+  //ByteValue(std::ostringstream const &os) {
+  //  (void)os;
+	//   abort(); // TODO
+  //}
   ~ByteValue() {
     Internal.clear();
   }
@@ -141,7 +141,7 @@ public:
       memcpy(buffer, &Internal[0], length);
       return true;
       }
-    abort();
+    gdcmDebugMacro( "Could not handle length= " << length );
     return false;
     }
   bool WriteBuffer(std::ostream &os) const {

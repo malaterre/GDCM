@@ -34,6 +34,7 @@ SET(EXAMPLES_SRCS
   PublicDict
   GenSeqs
   GetJPEGSamplePrecision
+  EncapsulateFileInRawData
 )
 IF(GDCM_BUILD_TESTING)
 SET(EXAMPLES_SRCS

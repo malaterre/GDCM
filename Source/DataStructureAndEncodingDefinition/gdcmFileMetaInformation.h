@@ -40,6 +40,7 @@ namespace gdcm
 class GDCM_EXPORT FileMetaInformation : public DataSet
 {
 public:
+  // FIXME: TransferSyntax::TS_END -> TransferSyntax::ImplicitDataElement
   FileMetaInformation():DataSetTS(TransferSyntax::TS_END),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
  ~FileMetaInformation() { };
 
