@@ -319,6 +319,229 @@ void x509_free( x509_cert *crt );
  */
 int x509_self_test( int verbose );
 
+/**
+ * \brief          Write a certificate info file
+ *
+ * \param chain    points to the raw certificate data
+ * \param path     filename to write the certificate to
+ * \param format   X509_OUTPUT_DER or X509_OUTPUT_PEM
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_crtfile( x509_raw *chain,
+                       unsigned char *path,
+                       int format );
+
+/**
+ * \brief          Write a certificate signing request message format file
+ *
+ * \param chain    points to the raw certificate (with x509write_create_csr) data
+ * \param path     filename to write the certificate to
+ * \param format   X509_OUTPUT_DER or X509_OUTPUT_PEM
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_csrfile( x509_raw *chain,
+                       unsigned char *path,
+                       int format );
+
+/*
+ * \brief          Write a private RSA key into a file
+ *
+ * \param rsa      points to an RSA key
+ * \param path     filename to write the key to
+ * \param format   X509_OUTPUT_DER or X509_OUTPUT_PEM
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+POLARSSL_EXPORT int x509write_keyfile( rsa_context *rsa,
+                       char *path,
+                       int format );
+
+/**
+ * \brief          Add a public key to certificate
+ *
+ * \param chain    points to the raw certificate data
+ * \param pubkey   points to an RSA key
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_add_pubkey( x509_raw *chain, rsa_context *pubkey );
+
+/**
+ * \brief          Create x509 subject/issuer field to raw certificate
+ *                 from string or CA cert. Make string NULL if you will
+ *                 use the CA copy function or make CA NULL then used
+ *                 the string parse.
+ *
+ * \param chain    points to the raw certificate data
+ * \param names    a string that can hold (separete with ";"):
+ *                     CN=CommonName
+ *                 --   O=Organization
+ *                 --  OU=OrgUnit
+ *                 --  ST=State
+ *                 --   L=Locality
+ *                 --   R=Email
+ *                 --   C=Country
+ *                 . Make that NULL if you didn't need that.
+ * \param flag     flag is X509_ISSUER or X509_SUBJECT that defined
+ *                 where change
+ * \param ca       the certificate for copy data. Make that NULL if you
+ *                 didn't need that.
+ * \param ca_flag  set the ca field from copy to crt
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_add_customize ( x509_raw *crt, 
+                          unsigned char *names, 
+                          int flag, 
+                          x509_cert *ca, 
+                          int ca_flag );
+
+/**
+* \brief          Add x509 issuer field
+*
+* \param chain    points to the raw certificate data
+* \param issuer   a string holding (separete with ";"):
+*                     CN=CommonName
+*                 --   O=Organization
+*                 --  OU=OrgUnit
+*                 --  ST=State
+*                 --   L=Locality
+*                 --   R=Email
+*                 --   C=Country
+*                 . Set this to NULL if not needed.
+* \return         0 if successful, or a specific X509 error code
+*/
+int x509write_add_issuer( x509_raw *crt, unsigned char *issuer);
+
+/**
+ * \brief          Add x509 subject field
+ *
+ * \param chain    points to the raw certificate data
+ * \param subject  a string holding (separete with ";"):
+ *                     CN=CommonName
+ *                 --   O=Organization
+ *                 --  OU=OrgUnit
+ *                 --  ST=State
+ *                 --   L=Locality
+ *                 --   R=Email
+ *                 --   C=Country
+ *                 . Set this to NULL if not needed.
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_add_subject( x509_raw *crt, unsigned char *subject);
+
+/**
+* \brief          Copy x509 issuer field from another certificate
+*
+* \param chain    points to the raw certificate data
+* \param from_crt the certificate whose issuer is to be copied.
+* \return         0 if successful, or a specific X509 error code
+*/
+int x509write_copy_issuer(x509_raw *crt, x509_cert *from_crt);
+
+/**
+* \brief          Copy x509 subject field from another certificate
+*
+* \param chain    points to the raw certificate data
+* \param from_crt the certificate whose subject is to be copied.
+* \return         0 if successful, or a specific X509 error code
+*/
+int x509write_copy_subject(x509_raw *crt, x509_cert *from_crt);
+
+/**
+* \brief          Copy x509 issuer field from the subject of another certificate
+*
+* \param chain    points to the raw certificate data
+* \param from_crt the certificate whose subject is to be copied.
+* \return         0 if successful, or a specific X509 error code
+*/
+int x509write_copy_issuer_from_subject(x509_raw *crt, x509_cert *from_crt);
+
+/**
+* \brief          Copy x509 subject field from the issuer of another certificate
+*
+* \param chain    points to the raw certificate data
+* \param from_crt the certificate whose issuer is to be copied.
+* \return         0 if successful, or a specific X509 error code
+*/
+int x509write_copy_subject_from_issuer(x509_raw *crt, x509_cert *from_crt);
+
+/**
+ * \brief          Create x509 validity time in UTC
+ *
+ * \param chain    points to the raw certificate data
+ * \param before   valid not before in format YYYY-MM-DD hh:mm:ss
+ * \param after    valid not after  in format YYYY-MM-DD hh:mm:ss
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_add_validity( x509_raw *crt,
+                               unsigned char *before,
+                               unsigned char *after );
+
+/**
+ * \brief          Create a self-signed certificate
+ *
+ * \param chain    points to the raw certificate data
+ * \param rsa      a private key to sign the certificate
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_create_selfsign( x509_raw *crt, rsa_context *raw );
+
+/**
+ * \brief          Create a certificate
+ *
+ * \param chain    points to the raw certificate data
+ * \param rsa      a private key to sign the certificate
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_create_sign( x509_raw *crt, rsa_context *raw );
+
+/**
+ * \brief          Create a certificate signing request
+ *
+ * \param chain    points to the raw certificate data. Didn't use the
+ *                 same chain that u have use for certificate.
+ * \param privkey  a rsa private key
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int x509write_create_csr( x509_raw *chain, rsa_context *privkey );
+
+/**
+ * \brief           Serialize an rsa key into DER
+ *
+ * \param rsa       a rsa key for output
+ * \param node      a x509 node for write into
+ *
+ * \return          0 if successful, or a specific X509 error code
+ */
+int x509write_serialize_key( rsa_context *rsa, x509_node *node );
+
+/**
+ * \brief          Unallocate all raw certificate data
+ */
+void x509write_free_raw( x509_raw *crt );
+
+/**
+ * \brief          Allocate all raw certificate data
+ */
+void x509write_init_raw( x509_raw *crt );
+
+/**
+ * \brief          Unallocate all node certificate data
+ */
+void x509write_free_node( x509_node *crt_node );
+
+/**
+ * \brief          Allocate all node certificate data
+ */
+void x509write_init_node( x509_node *crt_node );
+
 #ifdef __cplusplus
 }
 #endif

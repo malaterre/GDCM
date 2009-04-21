@@ -8,6 +8,9 @@ http://polarssl.org//?page=forum_view_topic&topic_id=14
 
 CMakeLists.txt files replaced the Makefile for the build generator.
 
+I also applied patch from:
+https://znerol.ch/svn/xrelayd/packages/openwrt-whiterussian/xyssl/patches/100-xyssl-0.9-bsd+x509write.patch
+
 --
 Mathieu Malaterre
 Tue Mar 31 18:17:24 CEST 2009
