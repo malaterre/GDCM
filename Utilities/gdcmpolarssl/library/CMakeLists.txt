@@ -26,7 +26,7 @@ SET(SRCS
   sha1.c    sha2.c    sha4.c    
   ssl_cli.c  ssl_srv.c  ssl_tls.c  
   timing.c  x509parse.c  xtea.c    
-  camellia.c
+  camellia.c x509write.c
 )
 ADD_LIBRARY(${POLARSSL_LIBRARY_NAME} ${SRCS})
 
