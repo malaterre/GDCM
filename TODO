@@ -333,3 +333,6 @@ Provide a FindPolarSLL
 Store a VR:UN element (>32bits) when VR should be 16bits
 -----------------------------------------------------------------------
 Create a PDF Storage class with a trailing Pixel Data element to test broken DICOM implementation
+-----------------------------------------------------------------------
+Prepare a Basic Pixel Spacing Calibration example but with SC SOP so that
+we have Nominal Scanned Pixel Spacing case...

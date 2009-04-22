@@ -162,6 +162,8 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     return false;
     }
 
+  LossyFlag = metadata.allowedlossyerror;
+
 	//TestCompliance(&rgbyteFile[0], rgbyteFile.size(), &rgbyteRaw[0], rgbyteRaw.size());
   // void TestCompliance(const BYTE* pbyteCompressed, int cbyteCompressed, const BYTE* rgbyteRaw, int cbyteRaw)
   const BYTE* pbyteCompressed = (const BYTE*)buffer;
