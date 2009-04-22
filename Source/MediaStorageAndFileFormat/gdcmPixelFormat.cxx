@@ -251,7 +251,7 @@ bool PixelFormat::Validate()
 {
   assert( BitsAllocated >= BitsStored );
   assert( BitsAllocated >= HighBit );
-  assert( BitsStored    >= HighBit );
+  //assert( BitsStored    >= HighBit ); // DigitexAlpha_no_7FE0.dcm
   assert( PixelRepresentation == 0 || PixelRepresentation == 1 );
   assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
   if ( BitsAllocated == 24 )
