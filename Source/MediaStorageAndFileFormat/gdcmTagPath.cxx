@@ -18,6 +18,7 @@
 #include <vector>
 #include <string.h> // strlen
 #include <stdlib.h> // abort
+#include <stdio.h> // sscanf
 
 namespace gdcm
 {
