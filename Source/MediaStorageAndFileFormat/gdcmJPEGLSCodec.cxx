@@ -144,48 +144,27 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   // allowedlossyerror == 0 => Lossless
   LossyFlag = metadata.allowedlossyerror;
 
-	//TestCompliance(&rgbyteFile[0], rgbyteFile.size(), &rgbyteRaw[0], rgbyteRaw.size());
-  // void TestCompliance(const BYTE* pbyteCompressed, int cbyteCompressed, const BYTE* rgbyteRaw, int cbyteRaw)
   const BYTE* pbyteCompressed = (const BYTE*)buffer;
   int cbyteCompressed = totalLen;
 
-	JlsParamaters params = {0};
-	JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+  JlsParamaters params = {0};
+  JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
-	std::vector<BYTE> rgbyteCompressed;
-	rgbyteCompressed.resize(params.height *params.width* 4);
-	
-	std::vector<BYTE> rgbyteOut;
-	rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
-	
-	JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
-	ASSERT(result == OK);
+  std::vector<BYTE> rgbyteCompressed;
+  rgbyteCompressed.resize(params.height *params.width* 4);
 
-	//if (params.allowedlossyerror == 0)
-	//{
-	//	BYTE* pbyteOut = &rgbyteOut[0];
-	//	for (int i = 0; i < cbyteRaw; ++i)
-	//	{
-	//		if (rgbyteRaw[i] != pbyteOut[i])
-	//		{
-	//			ASSERT(false);
-	//			break;
-	//		}
-	//	}						    
-	//}
+  std::vector<BYTE> rgbyteOut;
+  rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
-//	int cbyteCompressedActual = 0;
+  JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+  ASSERT(result == OK);
 
-//	JLS_ERROR error = JpegLsVerifyEncode(&rgbyteRaw[0], cbyteRaw, pbyteCompressed, cbyteCompressed);
-//	ASSERT(error == OK);
+  delete[] buffer;
 
+  out = in;
 
-    delete[] buffer;
-
-    out = in;
-
-    out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
-    return true;
+  out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
+  return true;
 
 #endif
 }
