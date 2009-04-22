@@ -31,25 +31,25 @@
  *  For CRS:
  *  http://www.faqs.org/rfcs/rfc2314.html
  */
+#include "polarssl/config.h"
+#include "polarssl/x509.h"
+#include "polarssl/base64.h"
+#include "polarssl/des.h"
+#include "polarssl/sha1.h"
+#include "polarssl/md5.h"
+
+#if !defined(NO_MD4)
+#include "polarssl/md4.h"
+#endif
+#if !defined(NO_MD2)
+#include "polarssl/md2.h"
+#endif
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
-
-#include "xyssl/x509.h"
-#include "xyssl/base64.h"
-#include "xyssl/des.h"
-#include "xyssl/sha1.h"
-#include "xyssl/md5.h"
-
-#if !defined(NO_MD4)
-#include "xyssl/md4.h"
-#endif
-#if !defined(NO_MD2)
-#include "xyssl/md2.h"
-#endif
 
 #define and &&
 #define or ||
@@ -144,7 +144,7 @@ static int asn1_add_obj(unsigned char *value, unsigned int size, int tag,
 
         memcpy(node->p, value, (size_t) size);
         if ((node->p += size -1) != node->end)
-            return XYSSL_ERR_X509_POINT_ERROR;
+            return POLARSSL_ERR_X509_POINT_ERROR;
     } else {
         /* make nothing -> NULL */
     }
@@ -201,7 +201,7 @@ static int asn1_add_int(signed int value, x509_node *node)
     }
 
     if (node->p != node->end)
-        return XYSSL_ERR_X509_POINT_ERROR;
+        return POLARSSL_ERR_X509_POINT_ERROR;
 
     return 0;
 }
@@ -229,7 +229,7 @@ static int asn1_add_mpi(mpi *value, int tag, x509_node *node)
 
     buf = (unsigned char*) malloc(size);
     if (mpi_write_binary(value, buf, buf_len) != 0)
-        return XYSSL_ERR_MPI_BUFFER_TOO_SMALL;
+        return POLARSSL_ERR_MPI_BUFFER_TOO_SMALL;
 
     /* tag */
     *(node->p) = tag & 0xFF;
@@ -249,7 +249,7 @@ static int asn1_add_mpi(mpi *value, int tag, x509_node *node)
     free(buf);
 
     if ((node->p += (int) size -1) != node->end)
-        return XYSSL_ERR_X509_POINT_ERROR;
+        return POLARSSL_ERR_X509_POINT_ERROR;
 
     return 0;
 }
@@ -297,7 +297,7 @@ static int asn1_append_tag(x509_node *node, int tag)
     /* good? */
     if ((tmp.p += (int) node->len -1) != tmp.end) {
         x509write_free_node(&tmp);
-        return XYSSL_ERR_X509_POINT_ERROR;
+        return POLARSSL_ERR_X509_POINT_ERROR;
     }
 
     free(node->data);
@@ -728,7 +728,7 @@ static int x509write_parse_names(x509_node *node, unsigned char *names)
         if (is_tag == 1) {
 
             if (tag_sp == &tag[3])
-                return XYSSL_ERR_X509_VALUE_TO_LENGTH;
+                return POLARSSL_ERR_X509_VALUE_TO_LENGTH;
 
             /* is tag end? */
             if (*sp == '=') {
@@ -880,7 +880,7 @@ static int x509write_copy_from_raw(x509_node *node, x509_buf *raw)
 
     memcpy(node->p, raw->p, (size_t)raw->len);
     if ((node->p += raw->len -1) != node->end)
-        return XYSSL_ERR_X509_POINT_ERROR;
+        return POLARSSL_ERR_X509_POINT_ERROR;
 
     return 0;
 }
