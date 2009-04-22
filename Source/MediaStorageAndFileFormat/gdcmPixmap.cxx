@@ -438,8 +438,12 @@ bool Pixmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
     unsigned long check = outbv->GetLength();  // FIXME
     if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
 
+    //assert( codec.IsLossy() == ts.IsLossy() );
     lossyflag = codec.IsLossy();
-    assert( codec.IsLossy() == ts.IsLossy() );
+    if( codec.IsLossy() != ts.IsLossy() )
+      {
+      gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
+      }
 
     return r;
     }

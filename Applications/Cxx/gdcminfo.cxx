@@ -312,7 +312,7 @@ int main(int argc, char *argv[])
         {"check-deflated", 0, &deflated, 1},
         {"resources-path", 0, &resourcespath, 1},
         {"md5sum", 0, &md5sum, 1},
-        {"check-compression", 0, &md5sum, 1},
+        {"check-compression", 0, &checkcompression, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
