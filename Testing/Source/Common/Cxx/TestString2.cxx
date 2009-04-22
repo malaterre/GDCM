@@ -17,6 +17,7 @@
 #include <iostream>
 
 #include <string.h> // strlen
+#include <stdio.h> // EOF
 
 int TestString2(int argc, char *argv[])
 {

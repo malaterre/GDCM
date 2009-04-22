@@ -742,6 +742,37 @@ int main (int argc, char *argv[])
 
       image.SetDataElement( pixeldata );
 
+      if( sopclassuid )
+        {
+        gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+        // Is it by value or by name ?
+        gdcm::MediaStorage ms = gdcm::MediaStorage::MS_END;
+        if( gdcm::UIDGenerator::IsValid( sopclass.c_str() ) )
+          {
+          ms = gdcm::MediaStorage::GetMSType( sopclass.c_str() );
+          }
+        else
+          {
+          std::cerr << "not implemented" << std::endl;
+          }
+        if( !gdcm::MediaStorage::IsImage(ms) )
+          {
+          std::cerr << "invalid media storage (no pixel data): " << sopclass << std::endl;
+          return 1;
+          }
+
+        const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+        if( !msstr )
+          {
+          std::cerr << "problem with media storage: " << sopclass << std::endl;
+          return 1;
+          }
+        gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
+        de.SetByteValue( msstr, strlen(msstr) );
+        de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+        ds.Insert( de );
+        }
+
       writer.SetFileName( outfilename );
       if( !writer.Write() )
         {

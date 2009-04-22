@@ -38,8 +38,38 @@ JPEGLSCodec::~JPEGLSCodec()
 
 bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
-  (void)is; (void)ts;
+#ifndef GDCM_USE_JPEGLS
   return false;
+#else
+  assert( NumberOfDimensions == 2 );
+
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.seekg(0, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+
+  JlsParamaters metadata;
+  if (JpegLsReadHeader(dummy_buffer, buf_size, &metadata) != OK)
+    {
+    return false;
+    }
+
+abort();
+//  this->Dimensions[0] = comp->w;
+//  this->Dimensions[1] = comp->h;
+//  this->PF = PixelFormat( PixelFormat::UINT8 );
+//    PI = PhotometricInterpretation::MONOCHROME2;
+//    this->PF.SetSamplesPerPixel( 1 );
+//
+//    if( metadata.allowedlossyerror )
+//      {
+//    ts = TransferSyntax::JPEG2000Lossless;
+//      }
+
+
+  return true;
+#endif
 }
 
 bool JPEGLSCodec::CanDecode(TransferSyntax const &ts) const
@@ -61,85 +91,6 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
       || ts == TransferSyntax::JPEGLSNearLossless;
 #endif
 }
-
-/*
-void SwapBytes(std::vector<BYTE>* rgbyte)
-{
-	 for (unsigned int i = 0; i < rgbyte->size(); i += 2)
-	 {
-		 std::swap((*rgbyte)[i], (*rgbyte)[i + 1]);
-	 }
-}
-
-void TestCompliance(const BYTE* pbyteCompressed, int cbyteCompressed, const BYTE* rgbyteRaw, int cbyteRaw)
-{	
-	JlsParamaters params = {0};
-	JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
-
-	std::vector<BYTE> rgbyteCompressed;
-	rgbyteCompressed.resize(params.height *params.width* 4);
-	
-	std::vector<BYTE> rgbyteOut;
-	rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
-	
-	JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
-	ASSERT(result == OK);
-
-	if (params.allowedlossyerror == 0)
-	{
-		BYTE* pbyteOut = &rgbyteOut[0];
-		for (int i = 0; i < cbyteRaw; ++i)
-		{
-			if (rgbyteRaw[i] != pbyteOut[i])
-			{
-				ASSERT(false);
-				break;
-			}
-		}						    
-	}
-
-//	int cbyteCompressedActual = 0;
-
-	JLS_ERROR error = JpegLsVerifyEncode(&rgbyteRaw[0], cbyteRaw, pbyteCompressed, cbyteCompressed);
-	ASSERT(error == OK);
-}
-
-void DecompressFile(SZC strNameEncoded, SZC strNameRaw, int ioffs)
-{
-	//std::cout << "Conformance test:" << strNameEncoded << "\n\r";
-	std::vector<BYTE> rgbyteFile;
-	ReadFile(strNameEncoded, &rgbyteFile);
-
-	JlsParamaters metadata;
-	if (JpegLsReadHeader(&rgbyteFile[0], rgbyteFile.size(), &metadata) != OK)
-	{
-		ASSERT(false);
-		return;
-	}
-
-// 	std::vector<BYTE> rgbyteRaw;
-//	ReadFile(strNameRaw, &rgbyteRaw, ioffs);
-//
-//	if (metadata.bitspersample > 8)
-//	{
-//		SwapBytes(&rgbyteRaw);		
-//	}
-
-//	Size size = Size(metadata.width, metadata.height);
-
-//	if (metadata.ilv == ILV_NONE && metadata.components == 3)
-//	{
-//		Triplet2Planar(rgbyteRaw, Size(metadata.width, metadata.height));
-//	}
-//
-//	if (metadata.ilv == ILV_LINE && metadata.components == 3)
-//	{
-//		Triplet2Line(rgbyteRaw, Size(metadata.width, metadata.height));
-//	}
-
-	TestCompliance(&rgbyteFile[0], rgbyteFile.size(), &rgbyteRaw[0], rgbyteRaw.size());
-}
-*/
 
 bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 {
