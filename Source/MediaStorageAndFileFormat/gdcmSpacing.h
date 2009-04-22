@@ -54,6 +54,35 @@ public :
   Spacing();
   ~Spacing();
 
+  // Here are the list of spacing we support:
+  // (0018,0088) DS [1.500000]                                         # 8,1 Spacing Between Slices
+  // (0018,1164) DS [0.5\0.5 ]                                         # 8,2 Imager Pixel Spacing
+  // (0018,2010) DS [0.664062\0.664062 ]                               # 18,2 Nominal Scanned Pixel Spacing
+  // (0018,7022) DS [0.125\0.125 ]                                     # 12,2 Detector Element Spacing
+  // (0028,0030) DS [0.25\0.25 ]                                       # 10,2 Pixel Spacing
+  // > (0028,0a02) CS [FIDUCIAL]                                         # 8,1 Pixel Spacing Calibration Type
+  // > (0028,0a04) LO [Used fiducial ]                                   # 14,1 Pixel Spacing Calibration Description
+  // (0028,0034) IS [4\3 ]                                             # 4,2 Pixel Aspect Ratio
+  // (3002,0011) DS [0.8\0.8 ]                                         # 8,2 Image Plane Pixel Spacing
+
+  // Here is the list of Spacing we do not support:
+  // <entry group="0018" element="7041" vr="LT" vm="1" name="Grid Spacing Material"/>
+  // <entry group="0018" element="9030" vr="FD" vm="1" name="Tag Spacing First Dimension"/>
+  // <entry group="0018" element="9218" vr="FD" vm="1" name="Tag Spacing Second Dimension"/>
+  // <entry group="0018" element="9322" vr="FD" vm="2" name="Reconstruction Pixel Spacing"/>
+  // <entry group="0018" element="9404" vr="FL" vm="2" name="Object Pixel Spacing in Center of Beam"/>
+  // <entry group="0040" element="08d8" vr="SQ" vm="1" name="Pixel Spacing Sequence"/>
+  // <entry group="0070" element="0101" vr="DS" vm="2" name="Presentation Pixel Spacing"/>
+  // <entry group="2010" element="0376" vr="DS" vm="2" name="Printer Pixel Spacing"/>
+  // <entry group="300a" element="00e9" vr="DS" vm="2" name="Compensator Pixel Spacing"/>
+
+  typedef enum {
+    DETECTOR = 0, // (0018,1164) Imager Pixel Spacing
+    MAGNIFIED,    // (0018,1114) (IHE Mammo)
+    CALIBRATED,   // (0028,0030) Pixel Spacing -> (0028,0a04) Pixel Spacing Calibration Description
+    UNKNOWN
+  } SpacingType;
+
   static Attribute<0x28,0x34> ComputePixelAspectRatioFromPixelSpacing(const Attribute<0x28,0x30>& pixelspacing);
 };
 } // end namespace gdcm
