@@ -655,8 +655,14 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0x3002,0x0011); // ImagePlanePixelSpacing
     break;
   case MediaStorage::SecondaryCaptureImageStorage:
+  case MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage:
   case MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
   case MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
+  case MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage:
+    // See PS 3.3-2008. Table C.8-25 SC IMAGE MODULE ATTRIBUTES
+    // and Table C.8-25b SC MULTI-FRAME IMAGE MODULE ATTRIBUTES
+    t = Tag(0x0018,0x2010);
+    break;
   case MediaStorage::HardcopyGrayscaleImageStorage:
     t = Tag(0xffff,0xffff);
     break;
@@ -949,10 +955,10 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     Tag pixelspacing(0x0028,0x0030);
     Tag imagerpixelspacing(0x0018,0x1164);
     Tag spacingbetweenslice(0x0018,0x0088);
-    ds.Remove( pixelspacing );
-    ds.Remove( imagerpixelspacing );
-    ds.Remove( spacingbetweenslice );
-    return;
+    //ds.Remove( pixelspacing );
+    //ds.Remove( imagerpixelspacing );
+    //ds.Remove( spacingbetweenslice );
+    //return;
     }
   assert( spacing.size() == 3 );
 
@@ -1056,6 +1062,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           std::stringstream os;
           el.Write( os );
           de.SetVR( VR::DS );
+          if( os.str().size() % 2 ) os << " ";
           de.SetByteValue( os.str().c_str(), os.str().size() );
           ds.Replace( de );
           }
@@ -1073,6 +1080,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           std::stringstream os;
           el.Write( os );
           de.SetVR( VR::IS );
+          if( os.str().size() % 2 ) os << " ";
           de.SetByteValue( os.str().c_str(), os.str().size() );
           ds.Replace( de );
           }
