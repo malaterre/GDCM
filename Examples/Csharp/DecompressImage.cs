@@ -41,9 +41,9 @@ public class DecompressImage
     image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );
 
     //Just for fun:
-    //dircos =  ir.GetDirectionCosines();
+    //int dircos =  ir.GetDirectionCosines();
     //t = gdcm.Orientation.GetType(dircos);
-    //l = gdcm.Orientation.GetLabel(t);
+    //int l = gdcm.Orientation.GetLabel(t);
     //System.Console.WriteLine( "Orientation label:" + l );
 
     // Set the dimensions, 
