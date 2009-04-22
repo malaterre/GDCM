@@ -16,6 +16,7 @@
 
 #include <limits>
 #include <math.h> // fabs
+#include <stdio.h> // sscanf
 
 namespace gdcm
 {
