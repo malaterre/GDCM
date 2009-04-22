@@ -50,7 +50,7 @@ public:
 
   Type GetTypeFromTag(const DataSet& ds, const Tag& tag) const;
 
-  static const char *GetIODNameFromMediaStorage(MediaStorage &ms);
+  static const char *GetIODNameFromMediaStorage(MediaStorage const &ms);
 
 protected:
   friend class Global;

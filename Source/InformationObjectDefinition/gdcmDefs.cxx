@@ -57,7 +57,7 @@ void Defs::LoadFromFile(const char *filename)
   tr.Read();
 }
 
-const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms)
+const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
 {
   const char *iodname;
   switch(ms)

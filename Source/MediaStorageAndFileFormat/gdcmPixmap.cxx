@@ -425,7 +425,7 @@ bool Pixmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
     {
     codec.SetPixelFormat( GetPixelFormat() );
     codec.SetBufferLength( len );
-    //codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );

@@ -398,10 +398,22 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   memset( orig, 0, encrypted_len );
   memcpy( orig, encrypted_str.c_str(), encrypted_str.size() );
 
+//{
+//  std::ofstream of( "/tmp/debug.bin", std::ios::binary );
+//  of.write( encrypted_str.c_str(), encrypted_str.size() );
+//  of.close();
+//}
+
   const AES& aes = AESKey;
   unsigned char iv[16] = {}; // FIXME ???
   aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
   unsigned char key[ 256/ 8] = {};
+
+//{
+//  std::ofstream of( "/tmp/debug.bin.aes", std::ios::binary );
+//  of.write( (char*)buf, encrypted_len );
+//  of.close();
+//}
 
     {
     // Create a Sequence
@@ -611,6 +623,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   unsigned char *buf = new unsigned char[ bv->GetLength() ];
   memcpy(orig, bv->GetPointer(), encrypted_len );
   unsigned char iv[16] = {}; // FIXME ???
+
   aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
 
   std::stringstream ss;
