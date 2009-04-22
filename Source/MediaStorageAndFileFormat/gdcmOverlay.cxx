@@ -130,15 +130,16 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
 /*
  * FIXME:
  * In order to support : gdcmData/SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+ *                       gdcmDataExtra/gdcmSampleData/images_of_interest/XA_GE_JPEG_02_with_Overlays.dcm  
  * I cannot simply check for overlay_group,3000 this would not work
  * I would need a strong euristick
  */
-      //if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
-      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x0010 ) ) )
+      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+      //if( ds.FindDataElement( Tag(overlay.GetGroup(),0x0010 ) ) )
         {
         // ok so far so good...
-        //const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
-        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x0010));
+        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        //const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x0010));
         if( !overlaydata.IsEmpty() )
           {
           ++numoverlays;
