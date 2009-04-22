@@ -23,7 +23,6 @@ namespace gdcm
 class X509Internals
 {
 public:
-rsa_context ctx;
 };
 
 X509::X509()
@@ -34,19 +33,6 @@ X509::X509()
 X509::~X509()
 {
   delete Internals;
-}
-
-int X509::Pkcs1Encrypt( 
-                       int mode, int  ilen,
-                       const unsigned char *input,
-                       unsigned char *output )
-{
-  return 
-rsa_pkcs1_encrypt( &Internals->ctx,
-                       mode, ilen,
-                       input,
-                       output );
-
 }
 
 } // end namespace gdcm

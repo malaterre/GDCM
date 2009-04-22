@@ -16,7 +16,6 @@
 #define __gdcmX509_h
 
 #include "gdcmTypes.h"
-#error do not use for now
 
 namespace gdcm
 {
@@ -32,10 +31,10 @@ public :
   X509();
   ~X509();
 
-int Pkcs1Encrypt( 
-                       int mode, int  ilen,
-                       const unsigned char *input,
-                       unsigned char *output );
+  typedef enum {
+/*#define POLARSSL_*/ ERR_X509_KEY_PASSWORD_REQUIRED           = -0x02C0,
+/*#define POLARSSL_*/ ERR_X509_KEY_PASSWORD_MISMATCH           = -0x02E0
+  } X509ErrorType;
 
 private:
   X509Internals *Internals;

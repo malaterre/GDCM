@@ -96,6 +96,14 @@ int RSA::X509ParseKeyfile( const char *path, const char *password )
   return x509parse_keyfile( &Internals->ctx, const_cast<char*>(path), const_cast<char*>(password) );
 }
 
+int RSA::X509WriteKeyfile( const char *path, int format )
+{
+  return x509write_keyfile( &Internals->ctx,
+                       const_cast<char*>(path),
+                       format );
+
+}
+
 int RSA::SelfTest( int verbose ) const
 {
   return rsa_self_test( verbose );

@@ -37,6 +37,11 @@ public :
 /* #define RSA_*/ PRIVATE   = 1
   } RSAModeType;
 
+  typedef enum {
+/* #define X509_*/ OUTPUT_DER            = 0x01,
+/* #define X509_*/ OUTPUT_PEM            = 0x02
+  } X509FormatType;
+
   /// Return the length of the key:
   unsigned int GetLenkey() const;
 
@@ -109,6 +114,18 @@ int Pkcs1Decrypt(
  * \return         0 if successful, or a specific X509 error code
  */
 int X509ParseKeyfile( const char *path, const char *password = 0 );
+
+/*
+ * \brief          Write a private RSA key into a file
+ *
+ * \param rsa      points to an RSA key
+ * \param path     filename to write the key to
+ * \param format   X509_OUTPUT_DER or X509_OUTPUT_PEM
+ *
+ * \return         0 if successful, or a specific X509 error code
+ */
+int X509WriteKeyfile( const char *path,
+                       int format = OUTPUT_PEM );
 
 /**
  * \brief          Parse a private RSA key

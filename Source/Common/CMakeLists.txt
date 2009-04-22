@@ -83,7 +83,7 @@ SET(Common_SRCS
   gdcmAES.cxx
   gdcmRSA.cxx
   gdcmHAVEGE.cxx
-  #gdcmX509.cxx
+  gdcmX509.cxx
   gdcmObject.cxx
   gdcmDirectory.cxx
   gdcmTerminal.cxx
