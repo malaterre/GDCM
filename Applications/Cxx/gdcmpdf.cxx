@@ -240,7 +240,7 @@ std::cout << "title:" << title.size() << std::endl;
   char date[18];
   const size_t datelen = 8;
   bool b = gdcm::System::GetCurrentDateTime(date);
-  std::cout << date << std::endl;
+  //std::cout << date << std::endl;
 
 {
   gdcm::Attribute<0x0008, 0x005> at;

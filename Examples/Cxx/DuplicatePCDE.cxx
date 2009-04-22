@@ -22,8 +22,12 @@
 /*
   Usage:
   DuplicatePCDE gdcmData/D_CLUNIE_CT1_J2KI.dcm out.dcm
+
 aka:
 medical.nema.org/medical/dicom/DataSets/WG04/IMAGES/J2KI/CT1_J2KI
+
+See:
+  gdcmConformanceTests/CT1_J2KI_DuplicatePCDE.dcm
 
 Original thread can be found at:
 

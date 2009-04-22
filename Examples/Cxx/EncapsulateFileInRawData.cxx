@@ -28,6 +28,9 @@
  * Usage:
  * ./EncapsulateFileInRawData large_input_file.exe large_input_file.dcm
  */
+
+// TODO:
+// $ file -bi /tmp/gdcm-2.1.0.pdf
 int main(int argc, char *argv[])
 {
   if( argc < 3 )

@@ -26,6 +26,7 @@
 #include "gdcmAnonymizer.h"
 #include "gdcmGlobal.h"
 #include "gdcmHAVEGE.h"
+#include "gdcmX509.h"
 #include "gdcmDefs.h"
 #include "gdcmDirectory.h"
 
@@ -98,26 +99,53 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   return true;
 }
 
-bool GetRSAKey(gdcm::RSA &rsa)
+bool GetRSAKey(gdcm::RSA &rsa, const char *path = 0)
 {
-  // By default on *nix system there should be a id_rsa file in $HOME/.ssh. Let's try parsing it:
-  char *home = getenv("HOME");
-  if(!home) return false;
+  std::string id_rsa_path;
+  if( !path || !*path )
+    {
+    // By default on *nix system there should be a id_rsa file in $HOME/.ssh. Let's try parsing it:
+    char *home = getenv("HOME");
+    if(!home) return false;
 
-  std::string id_rsa_path = home;
-  id_rsa_path += "/.ssh/id_rsa";
+    id_rsa_path = home;
+    id_rsa_path += "/.ssh/id_rsa";
+    }
+  else
+    {
+    id_rsa_path = path;
+    }
 
   if( !gdcm::System::FileExists( id_rsa_path.c_str() ) )
     {
+    std::cerr << "Could not find file: " << id_rsa_path << std::endl;
     return false;
     }
 
-  if( rsa.X509ParseKeyfile( id_rsa_path.c_str() ) != 0 ) // success == 0
+  int err_x509 = rsa.X509ParseKeyfile( id_rsa_path.c_str() );
+  if( err_x509 == gdcm::X509::ERR_X509_KEY_PASSWORD_REQUIRED  )
     {
+    std::cout << "Enter passphrase:" << std::endl;
+    std::string passphrase;
+    std::cin >> passphrase;
+    err_x509 = rsa.X509ParseKeyfile( id_rsa_path.c_str(), passphrase.c_str() );
+    passphrase.clear(); // paranoid security
+    }
+  else if( err_x509 == gdcm::X509::ERR_X509_KEY_PASSWORD_MISMATCH )
+    {
+    std::cerr << "Passphrase mismatch" << std::endl;
     return false;
     }
+  else if( err_x509 != 0 )
+    {
+    std::cerr << std::hex << err_x509 << std::endl;
+    return false;
+    }
+  assert( err_x509 == 0 ); // success == 0
+
   if( rsa.CheckPubkey() != 0 || rsa.CheckPrivkey() != 0 )
     {
+    std::cerr << "Invalid Pub/Priv key" << std::endl;
     return false;
     }
 
@@ -161,7 +189,9 @@ int main(int argc, char *argv[])
   gdcm::Directory::FilenamesType outfilenames;
   std::string root;
   std::string xmlpath;
+  std::string rsa_path;
   int resourcespath = 0;
+  int rsapath = 0;
   int rootuid = 0;
   int verbose = 0;
   int warning = 0;
@@ -179,6 +209,7 @@ int main(int argc, char *argv[])
         {"resources-path", 1, &resourcespath, 1},
         {"de-identify", 0, &deidentify, 1},
         {"re-identify", 0, &reidentify, 1},
+        {"rsa-path", 1, &rsapath, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -211,17 +242,29 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
-          else if( option_index == 1 ) /* root-uid */
+          else if( option_index == 1 ) /* input */
+            {
+            assert( strcmp(s, "output") == 0 );
+            assert( outfilename.empty() );
+            outfilename = optarg;
+            }
+          else if( option_index == 2 ) /* root-uid */
             {
             assert( strcmp(s, "root-uid") == 0 );
             assert( root.empty() );
             root = optarg;
             }
-          else if( option_index == 2 ) /* resources-path */
+          else if( option_index == 3 ) /* resources-path */
             {
             assert( strcmp(s, "resources-path") == 0 );
             assert( xmlpath.empty() );
             xmlpath = optarg;
+            }
+          else if( option_index == 6 ) /* rsa-path */
+            {
+            assert( strcmp(s, "rsa-path") == 0 );
+            assert( rsa_path.empty() );
+            rsa_path = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -230,13 +273,11 @@ int main(int argc, char *argv[])
       break;
 
     case 'i':
-      //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      //printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
       break;
@@ -441,11 +482,15 @@ int main(int argc, char *argv[])
   // Get RSA key
   const unsigned int KEY_LEN = 32;
   gdcm::RSA rsa;
-  if( !GetRSAKey(rsa) )
+  if( !GetRSAKey(rsa, rsa_path.c_str()) )
     {
     return 1;
     }
-  if( rsa.GetLenkey() != KEY_LEN * 8 ) return 1;
+  if( rsa.GetLenkey() != KEY_LEN * 8 )
+    {
+    std::cerr << "Wrong key len: " << rsa.GetLenkey() << std::endl;
+    return 1;
+    }
 
   gdcm::AES aes;
   unsigned char key[ KEY_LEN ] = {};
