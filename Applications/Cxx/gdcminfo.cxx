@@ -190,6 +190,7 @@ void PrintHelp()
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
+  std::cout << "  -r --recursive          recursive." << std::endl;
   std::cout << "  -d --check-deflated     check if file is proper deflated syntax." << std::endl;
   std::cout << "     --resources-path     Resources path." << std::endl;
   std::cout << "     --md5sum             Compute md5sum of Pixel Data attribute value." << std::endl;
@@ -309,6 +310,7 @@ int main(int argc, char *argv[])
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, 0, 0},
+        {"recursive", 0, &recursive, 1},
         {"check-deflated", 0, &deflated, 1},
         {"resources-path", 0, &resourcespath, 1},
         {"md5sum", 0, &md5sum, 1},
@@ -322,7 +324,7 @@ int main(int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:dVWDEhv";
+    static const char short_options[] = "i:rdVWDEhv";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -345,7 +347,7 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
-          else if( option_index == 2 ) /* resources-path */
+          else if( option_index == 3 ) /* resources-path */
             {
             assert( strcmp(s, "resources-path") == 0 );
             assert( xmlpath.empty() );
@@ -361,6 +363,10 @@ int main(int argc, char *argv[])
       //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
+      break;
+
+    case 'r':
+      recursive = 1;
       break;
 
     case 'd':
@@ -487,7 +493,7 @@ int main(int argc, char *argv[])
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     gdcm::Directory d;
-    d.Load(filename);
+    d.Load(filename, recursive);
     gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
     for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
       {
