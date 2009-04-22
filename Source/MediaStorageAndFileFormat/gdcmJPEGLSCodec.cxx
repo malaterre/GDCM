@@ -41,8 +41,6 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 #ifndef GDCM_USE_JPEGLS
   return false;
 #else
-  assert( NumberOfDimensions == 2 );
-
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
@@ -54,18 +52,48 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     {
     return false;
     }
+  delete[] dummy_buffer;
 
-abort();
-//  this->Dimensions[0] = comp->w;
-//  this->Dimensions[1] = comp->h;
-//  this->PF = PixelFormat( PixelFormat::UINT8 );
-//    PI = PhotometricInterpretation::MONOCHROME2;
-//    this->PF.SetSamplesPerPixel( 1 );
-//
-//    if( metadata.allowedlossyerror )
-//      {
-//    ts = TransferSyntax::JPEG2000Lossless;
-//      }
+  // $1 = {width = 512, height = 512, bitspersample = 8, components = 1, allowedlossyerror = 0, ilv = ILV_NONE, colorTransform = 0, custom = {MAXVAL = 0, T1 = 0, T2 = 0, T3 = 0, RESET = 0}}
+
+  this->Dimensions[0] = metadata.width;
+  this->Dimensions[1] = metadata.height;
+  switch( metadata.bitspersample )
+    {
+  case 8:
+    this->PF = PixelFormat( PixelFormat::UINT8 );
+    break;
+  case 12:
+    this->PF = PixelFormat( PixelFormat::UINT16 );
+    this->PF.SetBitsStored( 12 );
+    break;
+  case 16:
+    this->PF = PixelFormat( PixelFormat::UINT16 );
+    break;
+  default:
+    abort();
+    }
+  if( metadata.components == 1 )
+    {
+    PI = PhotometricInterpretation::MONOCHROME2;
+    this->PF.SetSamplesPerPixel( 1 );
+    }
+  else if( metadata.components == 3 )
+    {
+    PI = PhotometricInterpretation::RGB;
+    this->PF.SetSamplesPerPixel( 3 );
+    }
+  else abort();
+
+
+  if( metadata.allowedlossyerror == 0 )
+    {
+    ts = TransferSyntax::JPEGLSLossless;
+    }
+  else
+    {
+    ts = TransferSyntax::JPEGLSNearLossless;
+    }
 
 
   return true;
@@ -113,6 +141,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     return false;
     }
 
+  // allowedlossyerror == 0 => Lossless
   LossyFlag = metadata.allowedlossyerror;
 
 	//TestCompliance(&rgbyteFile[0], rgbyteFile.size(), &rgbyteRaw[0], rgbyteRaw.size());
