@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
     }
 
   gdcm::AES aes;
-  unsigned char key[ KEY_LEN ] = {};
+  char key[ KEY_LEN ] = {};
   // randomize key:
   gdcm::HAVEGE havege;
   for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
@@ -523,8 +523,8 @@ int main(int argc, char *argv[])
     }
 
   // Save the AES key in an RSA enveloppe:
-  unsigned char rsa_plaintext[KEY_LEN];
-  unsigned char rsa_ciphertext[KEY_LEN*8] = {};
+  char rsa_plaintext[KEY_LEN];
+  char rsa_ciphertext[KEY_LEN*8] = {};
   memcpy( rsa_plaintext, key, KEY_LEN );
 
   int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
