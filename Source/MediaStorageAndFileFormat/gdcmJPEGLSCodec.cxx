@@ -175,7 +175,53 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
 #ifndef GDCM_USE_JPEGLS
   return false;
 #else
-  return false;
+  out = in;
+  //
+  // Create a Sequence Of Fragments:
+  SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+  const Tag itemStart(0xfffe, 0xe000);
+  //sq->GetTable().SetTag( itemStart );
+
+  const unsigned int *dims = this->GetDimensions();
+    int image_width = dims[0];
+    int image_height = dims[1];
+    const PixelFormat &pf = this->GetPixelFormat();
+    int sample_pixel = pf.GetSamplesPerPixel();
+    int bitsallocated = pf.GetBitsAllocated();
+    int bitsstored = pf.GetBitsStored();
+
+  const ByteValue *bv = in.GetByteValue();
+  const char *input = bv->GetPointer();
+  unsigned long len = bv->GetLength();
+  unsigned long image_len = len / dims[2];
+  size_t inputlength = image_len;
+
+	JlsParamaters params = {0};
+	params.components = sample_pixel;
+	params.bitspersample = bitsstored;
+	params.height = image_height;
+	params.width = image_width;
+
+	if (sample_pixel == 3)
+	{
+		params.ilv = ILV_LINE;
+		params.colorTransform = 1;
+	}
+
+	std::vector<BYTE> rgbyteCompressed;
+	rgbyteCompressed.resize(image_width * image_height * 4);
+
+	size_t cbyteCompressed;
+	JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, input, inputlength, &params);
+
+    Fragment frag;
+    frag.SetByteValue( (char*)&rgbyteCompressed[0], cbyteCompressed );
+    sq->AddFragment( frag );
+
+  assert( sq->GetNumberOfFragments() == dims[2] );
+  out.SetValue( *sq );
+
+  return true;
 
 #endif
 }
