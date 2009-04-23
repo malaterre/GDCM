@@ -55,7 +55,7 @@ public :
  * \param keysize  must be 16, 24 or 32
  * \return         false on error (wrong keysize, key null)
  */
-bool SetkeyEnc(const unsigned char *key, unsigned int keysize);
+bool SetkeyEnc(const char *key, unsigned int keysize);
 
 /**
  * \brief          AES key schedule (decryption)
@@ -64,7 +64,7 @@ bool SetkeyEnc(const unsigned char *key, unsigned int keysize);
  * \param keysize  must be 16, 24 or 32
  * \return         false on error (wrong keysize, key null)
  */
-bool SetkeyDec(const unsigned char *key, unsigned int keysize );
+bool SetkeyDec(const char *key, unsigned int keysize );
 
 /**
  * \brief          AES-ECB block encryption/decryption
@@ -76,8 +76,8 @@ bool SetkeyDec(const unsigned char *key, unsigned int keysize );
  */
 bool CryptEcb(
                     int mode,
-                    const unsigned char input[16],
-                    unsigned char output[16] ) const;
+                    const char input[16],
+                    char output[16] ) const;
 
 /**
  * \brief          AES-CBC buffer encryption/decryption
@@ -91,10 +91,10 @@ bool CryptEcb(
  */
 bool CryptCbc(
                     int mode,
-                    int length,
-                    unsigned char iv[16],
-                    const unsigned char *input,
-                    unsigned char *output ) const;
+                    unsigned int length,
+                    char iv[16],
+                    const char *input,
+                    char *output ) const;
 
 /**
  * \brief          AES-CFB128 buffer encryption/decryption
@@ -109,11 +109,11 @@ bool CryptCbc(
  */
 bool CryptCfb128(
                        int mode,
-                       int length,
-                       int& iv_off,
-                       unsigned char iv[16],
-                       const unsigned char *input,
-                       unsigned char *output ) const;
+                       unsigned int length,
+                       unsigned int& iv_off,
+                       char iv[16],
+                       const char *input,
+                       char *output ) const;
 
   void operator=(const AES&);
 

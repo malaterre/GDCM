@@ -127,14 +127,14 @@ Process defined in RFC-2630.
     {
     encrypted_len = ((encrypted_len / 16) + 1) * 16;
     }
-  unsigned char *buf = new unsigned char[ encrypted_len ];
+  char *buf = new char[ encrypted_len ];
   memset( buf, 0, encrypted_len );
   memcpy( buf, encrypted_str.c_str(), encrypted_str.size() );
 
-  unsigned char key[32] = {};
+  char key[32] = {};
   gdcm::AES aes;
   if( !aes.SetkeyEnc( key, 128 ) ) return 1;
-  unsigned char iv[16] = {};
+  char iv[16] = {};
   aes.CryptCbc( gdcm::AES::ENCRYPT, encrypted_len, iv, buf, buf );
 
 {

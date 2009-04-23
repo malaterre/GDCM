@@ -55,9 +55,9 @@ int TestRSA(int argc, char *argv[])
 
   const unsigned int PT_LEN = 24;
   const unsigned int KEY_LEN = 256;
-  unsigned char rsa_plaintext[PT_LEN];
-  unsigned char rsa_decrypted[PT_LEN];
-  unsigned char rsa_ciphertext[KEY_LEN];
+  char rsa_plaintext[PT_LEN];
+  char rsa_decrypted[PT_LEN];
+  char rsa_ciphertext[KEY_LEN];
 
   if( rsa.GetLenkey() != KEY_LEN ) return 1;
 
@@ -76,7 +76,7 @@ int TestRSA(int argc, char *argv[])
     std::cout << (int)rsa_ciphertext[i] << ",";
   std::cout << std::endl;
 
-  int len;
+  unsigned int len;
   if( rsa.Pkcs1Decrypt( RSA::PRIVATE, len,
       rsa_ciphertext, rsa_decrypted,
       sizeof(rsa_decrypted) ) != 0 )

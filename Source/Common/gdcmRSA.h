@@ -78,9 +78,9 @@ int CheckPrivkey() const;
  *                 of ctx->N (eg. 128 bytes if RSA-1024 is used).
  */
 int Pkcs1Encrypt( 
-                       int mode, int  ilen,
-                       const unsigned char *input,
-                       unsigned char *output ) const;
+                       int mode, unsigned int ilen,
+                       const char *input,
+                       char *output ) const;
 
 /**
  * \brief          Do an RSA operation, then remove the message padding
@@ -99,10 +99,10 @@ int Pkcs1Encrypt(
  *                 an error is thrown.
  */
 int Pkcs1Decrypt(
-                       int mode, int &olen,
-                       const unsigned char *input,
-                       unsigned char *output,
-		       int output_max_len);
+                       int mode, unsigned int &olen,
+                       const char *input,
+                       char *output,
+		                   unsigned int output_max_len);
 
 /**
  * \brief          Load and parse a private RSA key
@@ -139,8 +139,8 @@ int X509WriteKeyfile( const char *path,
  * \return         0 if successful, or a specific X509 error code
  */
 int X509ParseKey(
-                   const unsigned char *buf, int buflen,
-                   const unsigned char *pwd = 0, int pwdlen = 0 );
+                   const char *buf, unsigned int buflen,
+                   const char *pwd = 0, unsigned int pwdlen = 0 );
 
 protected:
 int SelfTest( int verbose = 0 ) const;

@@ -27,18 +27,18 @@ int TestAES(int argc, char *argv[])
 {
   gdcm::AES aes;
   const unsigned int KEY_LEN = 256;
-  unsigned char key[ KEY_LEN  / 8] = {};
+  char key[ KEY_LEN  / 8] = {};
   if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
 
-  unsigned char iv[16] = {};
-  const unsigned char plainTextRef[] = "Single\1\2 block msg2";
+  char iv[16] = {};
+  const char plainTextRef[] = "Single\1\2 block msg2";
   assert( sizeof(plainTextRef) <= 2*16 && sizeof(plainTextRef) >= 16 );
-  unsigned char plainText[32*16] = {};
+  char plainText[32*16] = {};
   memcpy( plainText, plainTextRef, sizeof(plainTextRef) );
-  unsigned char buf[32*16]         = {};
+  char buf[32*16]         = {};
   aes.CryptCbc( AES::ENCRYPT, 16*32, iv, plainText, buf );
 
-  unsigned char buf2[32*16]            = {};
+  char buf2[32*16]            = {};
   memset(iv, 0, 16 );
   if( !aes.SetkeyDec( key, KEY_LEN ) ) return 1;
   aes.CryptCbc( AES::DECRYPT, 16*32, iv, buf, buf2);

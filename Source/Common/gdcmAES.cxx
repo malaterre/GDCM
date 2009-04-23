@@ -63,7 +63,7 @@ inline bool aes_check_struct(aes_context *ctx)
   return false;
 }
 
-inline bool aes_check_params(const unsigned char *key, unsigned int keysize)
+inline bool aes_check_params(const char *key, unsigned int keysize)
 {
   if(key)
     {
@@ -81,23 +81,23 @@ inline bool aes_check_params(const unsigned char *key, unsigned int keysize)
   return false;
 }
 
-bool AES::SetkeyEnc(const unsigned char *key, unsigned int keysize )
+bool AES::SetkeyEnc(const char *key, unsigned int keysize )
 {
   bool ok = aes_check_params(key, keysize * 8);
   if( ok )
     {
-    aes_setkey_enc( &Internals->ctx, const_cast<unsigned char*>(key), keysize * 8 );
+    aes_setkey_enc( &Internals->ctx, (unsigned char*)(key), keysize * 8 );
     assert( aes_check_struct( &Internals->ctx ) );
     }
   return ok;
 }
 
-bool AES::SetkeyDec(const unsigned char *key, unsigned int keysize )
+bool AES::SetkeyDec(const char *key, unsigned int keysize )
 {
   bool ok = aes_check_params(key, keysize * 8);
   if( ok )
     {
-    aes_setkey_dec( &Internals->ctx, const_cast<unsigned char*>(key), keysize * 8 );
+    aes_setkey_dec( &Internals->ctx, (unsigned char*)(key), keysize * 8 );
     assert( aes_check_struct( &Internals->ctx ) );
     }
   return ok;
@@ -105,52 +105,54 @@ bool AES::SetkeyDec(const unsigned char *key, unsigned int keysize )
 
 bool AES::CryptEcb(
                     int mode,
-                    const unsigned char input[16],
-                    unsigned char output[16] ) const
+                    const char input[16],
+                    char output[16] ) const
 {
   if( !aes_check_struct( &Internals->ctx ) ) return false;
   aes_crypt_ecb( &Internals->ctx,
     mode,
-    const_cast<unsigned char*>(input),
-    output );
+    (unsigned char*)(input),
+    (unsigned char*)output );
   return true;
 }
 
 bool AES::CryptCbc(
                     int mode,
-                    int length,
-                    unsigned char iv[16],
-                    const unsigned char *input,
-                    unsigned char *output ) const
+                    unsigned int length,
+                    char iv[16],
+                    const char *input,
+                    char *output ) const
 {
   if( !aes_check_struct( &Internals->ctx ) ) return false;
-  if( length < 0 || length % 16 != 0 ) return false;
+  if( length % 16 != 0 ) return false;
   aes_crypt_cbc( &Internals->ctx,
     mode,
     length,
-    iv,
-    const_cast<unsigned char*>(input),
-    output );
+    (unsigned char*)iv,
+    (unsigned char*)(input),
+    (unsigned char*)output );
 
   return true;
 }
 
 bool AES::CryptCfb128(
                        int mode,
-                       int length,
-                       int &iv_off,
-                       unsigned char iv[16],
-                       const unsigned char *input,
-                       unsigned char *output ) const
+                       unsigned int length,
+                       unsigned int &iv_off,
+                       char iv[16],
+                       const char *input,
+                       char *output ) const
 {
   if( !aes_check_struct( &Internals->ctx ) ) return false;
+  int iv_off_int;
   aes_crypt_cfb128( &Internals->ctx,
     mode,
     length,
-    &iv_off,
-    iv,
-    const_cast<unsigned char*>(input),
-    output );
+    &iv_off_int,
+    (unsigned char*)iv,
+    (unsigned char*)(input),
+    (unsigned char*)output );
+  iv_off = iv_off_int;
 
   return true;
 }

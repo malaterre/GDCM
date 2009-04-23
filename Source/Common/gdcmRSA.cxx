@@ -57,38 +57,41 @@ unsigned int RSA::GetLenkey() const
 }
 
 int RSA::Pkcs1Encrypt( 
-                       int mode, int  ilen,
-                       const unsigned char *input,
-                       unsigned char *output ) const
+                       int mode, unsigned int ilen,
+                       const char *input,
+                       char *output ) const
 {
   return 
     rsa_pkcs1_encrypt( &Internals->ctx,
       mode, ilen,
-      const_cast<unsigned char*>(input),
-      output );
+      (unsigned char*)input,
+      (unsigned char*)output );
 }
 
 int RSA::Pkcs1Decrypt(
-                       int mode, int &olen,
-                       const unsigned char *input,
-                       unsigned char *output,
-                       int output_max_len)
+                       int mode, unsigned int &olen,
+                       const char *input,
+                       char *output,
+                       unsigned int output_max_len)
 {
-  return 
+  int olen_int;
+  int val = 
     rsa_pkcs1_decrypt( &Internals->ctx,
-      mode, &olen,
-      const_cast<unsigned char *>(input),
-      output,
+      mode, &olen_int,
+      (unsigned char *)(input),
+      (unsigned char*)output,
       output_max_len);
+  olen = olen_int;
+  return val;
 }
 
 int RSA::X509ParseKey(
-                   const unsigned char *buf, int buflen,
-                   const unsigned char *pwd, int pwdlen )
+                   const char *buf, unsigned int buflen,
+                   const char *pwd, unsigned int pwdlen )
 {
   return x509parse_key( &Internals->ctx,
-    const_cast<unsigned char*>(buf), buflen,
-    const_cast<unsigned char*>(pwd), pwdlen );
+    (unsigned char*)(buf), buflen,
+    (unsigned char*)(pwd), pwdlen );
 }
 
 int RSA::X509ParseKeyfile( const char *path, const char *password )

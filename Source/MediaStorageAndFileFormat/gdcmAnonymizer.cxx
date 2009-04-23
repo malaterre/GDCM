@@ -392,8 +392,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     {
     encrypted_len = ((encrypted_len / 16) + 1) * 16;
     }
-  unsigned char *orig = new unsigned char[ encrypted_len ];
-  unsigned char *buf = new unsigned char[ encrypted_len ];
+  char *orig = new char[ encrypted_len ];
+  char *buf = new char[ encrypted_len ];
   memset( buf, 0, encrypted_len );
   memset( orig, 0, encrypted_len );
   memcpy( orig, encrypted_str.c_str(), encrypted_str.size() );
@@ -405,9 +405,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 //}
 
   const AES& aes = AESKey;
-  unsigned char iv[16] = {}; // FIXME ???
+  char iv[16] = {}; // FIXME ???
   aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
-  unsigned char key[ 256/ 8] = {};
+  char key[ 256/ 8] = {};
 
 //{
 //  std::ofstream of( "/tmp/debug.bin.aes", std::ios::binary );
@@ -619,10 +619,10 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   
   size_t encrypted_len = bv->GetLength();
   assert( bv->GetLength() % 16 == 0 );
-  unsigned char *orig = new unsigned char[ bv->GetLength() ];
-  unsigned char *buf = new unsigned char[ bv->GetLength() ];
+  char *orig = new char[ bv->GetLength() ];
+  char *buf = new char[ bv->GetLength() ];
   memcpy(orig, bv->GetPointer(), encrypted_len );
-  unsigned char iv[16] = {}; // FIXME ???
+  char iv[16] = {}; // FIXME ???
 
   aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
 

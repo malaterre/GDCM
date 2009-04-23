@@ -31,11 +31,16 @@ public :
   Base64();
   ~Base64();
 
+typedef enum {
+/*#define POLARSSL_*/ ERR_BASE64_BUFFER_TOO_SMALL               = -0x0010,
+/*#define POLARSSL_*/ ERR_BASE64_INVALID_CHARACTER              = -0x0012
+} ErrorType;
+
 /**
  *                 Call this function with dlen = 0 to obtain the
  *                 required buffer size in dlen
  */
-static int GetEncodeLength(const unsigned char *src, int  slen );
+static int GetEncodeLength(const char *src, int  slen );
 
 /**
  * \brief          Encode a buffer into base64 format
@@ -48,14 +53,14 @@ static int GetEncodeLength(const unsigned char *src, int  slen );
  * \return         0 if successful, or POLARSSL_ERR_BASE64_BUFFER_TOO_SMALL.
  *
  */
-static int Encode( unsigned char *dst, int dlen,
-                   const unsigned char *src, int  slen );
+static int Encode( char *dst, int dlen,
+                   const char *src, int  slen );
 
 /**
  *                 Call this function with *dlen = 0 to obtain the
  *                 required buffer size in *dlen
  */
-static int GetDecodeLength( const unsigned char *src, int  slen );
+static int GetDecodeLength( const char *src, int  slen );
 
 /**
  * \brief          Decode a base64-formatted buffer
@@ -70,8 +75,8 @@ static int GetDecodeLength( const unsigned char *src, int  slen );
  *                 correct.
  *
  */
-static int Decode( unsigned char *dst, int dlen,
-                   const unsigned char *src, int  slen );
+static int Decode( char *dst, int dlen,
+                   const char *src, int  slen );
 
 protected:
 int SelfTest( int verbose = 0 ) const;

@@ -35,34 +35,34 @@ Base64::~Base64()
   delete Internals;
 }
 
-int Base64::GetEncodeLength(const unsigned char *src, int  slen )
+int Base64::GetEncodeLength(const char *src, int slen )
 {
   int dlen = 0;
-  int r = base64_encode( NULL, &dlen, const_cast<unsigned char*>(src), slen );
-  if( r == 0 )
-    return dlen;
-  return -1;
+  int r = base64_encode( NULL, &dlen, (unsigned char*)(src), slen );
+  if( r == Base64::ERR_BASE64_INVALID_CHARACTER )
+    return -1;
+  return dlen;
 }
 
-int Base64::Encode( unsigned char *dst, int dlen,
-                   const unsigned char *src, int  slen )
+int Base64::Encode( char *dst, int dlen,
+                   const char *src, int  slen )
 {
-  return base64_encode( dst, &dlen, const_cast<unsigned char*>(src), slen );
+  return base64_encode( (unsigned char*)dst, &dlen, (unsigned char*)(src), slen );
 }
 
-int Base64::GetDecodeLength( const unsigned char *src, int  slen )
+int Base64::GetDecodeLength( const char *src, int  slen )
 {
   int dlen = 0;
-  int r = base64_decode( NULL, &dlen, const_cast<unsigned char*>(src), slen );
-  if( r == 0 )
-    return dlen;
-  return -1;
+  int r = base64_decode( NULL, &dlen, (unsigned char*)(src), slen );
+  if( r == Base64::ERR_BASE64_INVALID_CHARACTER )
+    return -1;
+  return dlen;
 }
 
-int Base64::Decode( unsigned char *dst, int dlen,
-                   const unsigned char *src, int  slen )
+int Base64::Decode( char *dst, int dlen,
+                   const char *src, int  slen )
 {
-  return base64_decode( dst, &dlen, const_cast<unsigned char*>(src), slen );
+  return base64_decode( (unsigned char*)dst, &dlen, (unsigned char*)(src), slen );
 }
 
 
