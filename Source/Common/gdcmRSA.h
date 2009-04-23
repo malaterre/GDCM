@@ -37,9 +37,10 @@ public :
 /* #define RSA_*/ PRIVATE   = 1
   } RSAModeType;
 
+  // 0 is a reserved value do not use
   typedef enum {
-/* #define X509_*/ OUTPUT_DER            = 0x01,
-/* #define X509_*/ OUTPUT_PEM            = 0x02
+/* #define X509_*/ OUTPUT_DER            = 1,
+/* #define X509_*/ OUTPUT_PEM            = 2
   } X509FormatType;
 
   /// Return the length of the key:

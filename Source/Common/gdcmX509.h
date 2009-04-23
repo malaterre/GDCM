@@ -31,9 +31,10 @@ public :
   X509();
   ~X509();
 
+  // 0 is a reserved value do not use
   typedef enum {
-/*#define POLARSSL_*/ ERR_X509_KEY_PASSWORD_REQUIRED           = -0x02C0,
-/*#define POLARSSL_*/ ERR_X509_KEY_PASSWORD_MISMATCH           = -0x02E0
+/*#define POLARSSL_*/ ERR_X509_KEY_PASSWORD_REQUIRED           = 1,
+/*#define POLARSSL_*/ ERR_X509_KEY_PASSWORD_MISMATCH           
   } X509ErrorType;
 
 private:

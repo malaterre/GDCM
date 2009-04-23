@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmRSA.h"
+#include "gdcmX509.h"
 #include "gdcm_polarssl.h"
 #include <string.h>
 #include <iostream>
@@ -96,14 +97,35 @@ int RSA::X509ParseKey(
 
 int RSA::X509ParseKeyfile( const char *path, const char *password )
 {
-  return x509parse_keyfile( &Internals->ctx, const_cast<char*>(path), const_cast<char*>(password) );
+  int format = x509parse_keyfile( &Internals->ctx, const_cast<char*>(path), const_cast<char*>(password) );
+  switch( format )
+    {
+    case POLARSSL_ERR_X509_KEY_PASSWORD_REQUIRED:
+      return X509::ERR_X509_KEY_PASSWORD_REQUIRED;
+    case POLARSSL_ERR_X509_KEY_PASSWORD_MISMATCH:
+      return X509::ERR_X509_KEY_PASSWORD_MISMATCH;
+    default:
+      return -1; // some other error
+    }
+  return 0; // no error
 }
 
 int RSA::X509WriteKeyfile( const char *path, int format )
 {
+  int polarssl_format = 0;
+  // remap
+  switch( format )
+    {
+    case( OUTPUT_DER ):
+      polarssl_format = X509_OUTPUT_DER;
+      break;
+    case( OUTPUT_PEM ):
+      polarssl_format = X509_OUTPUT_PEM;
+      break;
+    }
   return x509write_keyfile( &Internals->ctx,
                        const_cast<char*>(path),
-                       format );
+                       polarssl_format );
 
 }
 
