@@ -39,7 +39,7 @@ int Base64::GetEncodeLength(const char *src, int slen )
 {
   int dlen = 0;
   int r = base64_encode( NULL, &dlen, (unsigned char*)(src), slen );
-  if( r == Base64::ERR_BASE64_INVALID_CHARACTER )
+  if( r == POLARSSL_ERR_BASE64_INVALID_CHARACTER )
     return -1;
   return dlen;
 }
@@ -54,7 +54,7 @@ int Base64::GetDecodeLength( const char *src, int  slen )
 {
   int dlen = 0;
   int r = base64_decode( NULL, &dlen, (unsigned char*)(src), slen );
-  if( r == Base64::ERR_BASE64_INVALID_CHARACTER )
+  if( r == POLARSSL_ERR_BASE64_INVALID_CHARACTER )
     return -1;
   return dlen;
 }

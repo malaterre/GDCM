@@ -31,11 +31,6 @@ public :
   Base64();
   ~Base64();
 
-typedef enum {
-/*#define POLARSSL_*/ ERR_BASE64_BUFFER_TOO_SMALL               = -0x0010,
-/*#define POLARSSL_*/ ERR_BASE64_INVALID_CHARACTER              = -0x0012
-} ErrorType;
-
 /**
  *                 Call this function with dlen = 0 to obtain the
  *                 required buffer size in dlen
