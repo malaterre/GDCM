@@ -50,6 +50,7 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
+      std::cerr << "Could not read : " << filename << std::endl;
     return false;
     }
   gdcm::File &file = reader.GetFile();
@@ -70,6 +71,7 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
     //anon.RemoveRetired();
     if( !anon.BasicApplicationLevelConfidentialityProfile( true ) )
       {
+      std::cerr << "Could not De-indentify : " << filename << std::endl;
       return false;
       }
 
@@ -85,6 +87,7 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
     {
     if( !anon.BasicApplicationLevelConfidentialityProfile( false ) )
       {
+      std::cerr << "Could not Re-indentify : " << filename << std::endl;
       return false;
       }
     }
@@ -94,6 +97,7 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   writer.SetFile( file );
   if( !writer.Write() )
     {
+      std::cerr << "Could not Write : " << outfilename << std::endl;
     return false;
     }
   return true;
@@ -162,7 +166,7 @@ void PrintHelp()
   std::cout << "  -i --input               DICOM filename / directory" << std::endl;
   std::cout << "  -o --output              DICOM filename / directory" << std::endl;
   std::cout << "  -d --de-identify         De-identify DICOM (default)" << std::endl;
-  std::cout << "  -r --re-identify         Re-identify DICOM" << std::endl;
+  std::cout << "  -R --re-identify         Re-identify DICOM" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --resources-path      Resources path." << std::endl;
@@ -221,7 +225,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:dRVWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -282,11 +286,11 @@ int main(int argc, char *argv[])
       outfilename = optarg;
       break;
 
-    case 'd':
+    case 'D':
       deidentify = 1;
       break;
 
-    case 'r':
+    case 'R':
       reidentify = 1;
       break;
 
@@ -298,7 +302,7 @@ int main(int argc, char *argv[])
       warning = 1;
       break;
 
-    case 'D':
+    case 'd':
       debug = 1;
       break;
 
@@ -517,7 +521,7 @@ int main(int argc, char *argv[])
     const char *out = outfilenames[i].c_str();
     if( !AnonymizeOneFile(anon, in, out) )
       {
-      std::cerr << "Could not anonymize: " << in << std::endl;
+      //std::cerr << "Could not anonymize: " << in << std::endl;
       return 1;
       }
     }

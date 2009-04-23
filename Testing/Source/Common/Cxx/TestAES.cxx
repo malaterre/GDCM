@@ -26,8 +26,8 @@ struct MyAES : public AES
 int TestAES(int argc, char *argv[])
 {
   gdcm::AES aes;
-  const unsigned int KEY_LEN = 256;
-  char key[ KEY_LEN  / 8] = {};
+  const unsigned int KEY_LEN = 256 / 8;
+  char key[ KEY_LEN  ] = {};
   if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
 
   char iv[16] = {};
