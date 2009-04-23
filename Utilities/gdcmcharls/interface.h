@@ -32,7 +32,7 @@ enum interleavemode
 {
 	ILV_NONE = 0,
 	ILV_LINE = 1,
-	ILV_SAMPLE = 2,
+	ILV_SAMPLE = 2
 };
 
 struct JlsCustomParameters
