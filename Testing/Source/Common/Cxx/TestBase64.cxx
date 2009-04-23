@@ -31,6 +31,7 @@ int TestBase64(int argc, char *argv[])
   int ret = mybase64.MySelfTest( 0 );
 
 
+#if 0
   char *s1, *s2;
   const char begin[] = "-----BEGIN PGP PUBLIC KEY BLOCK-----";
   const char end[] = "-----END PGP PUBLIC KEY BLOCK-----";
@@ -68,6 +69,7 @@ int TestBase64(int argc, char *argv[])
   delete[] out;
 
   delete[] buffer;
+#endif
 
   return ret;
 }

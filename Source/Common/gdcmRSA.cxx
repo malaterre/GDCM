@@ -100,14 +100,14 @@ int RSA::X509ParseKeyfile( const char *path, const char *password )
   int format = x509parse_keyfile( &Internals->ctx, const_cast<char*>(path), const_cast<char*>(password) );
   switch( format )
     {
+    case 0:
+      return 0; // no error
     case POLARSSL_ERR_X509_KEY_PASSWORD_REQUIRED:
       return X509::ERR_X509_KEY_PASSWORD_REQUIRED;
     case POLARSSL_ERR_X509_KEY_PASSWORD_MISMATCH:
       return X509::ERR_X509_KEY_PASSWORD_MISMATCH;
-    default:
-      return -1; // some other error
     }
-  return 0; // no error
+  return -1; // some other error
 }
 
 int RSA::X509WriteKeyfile( const char *path, int format )
