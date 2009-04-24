@@ -44,6 +44,10 @@ public:
   /// Input is an array of 6 double
   static OrientationType GetType(const double dircos[6]);
 
+  /// ObliquityThresholdCosineValue stuff
+  static void SetObliquityThresholdCosineValue(double val);
+  static double GetObliquityThresholdCosineValue();
+
   /// Return the label of an Orientation
   static const char *GetLabel(OrientationType type);
 
@@ -51,7 +55,7 @@ protected:
   static char GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z);
 
 private:
-  static const double obliquityThresholdCosineValue;
+  static double ObliquityThresholdCosineValue;
 };
 
 } // end namespace gdcm

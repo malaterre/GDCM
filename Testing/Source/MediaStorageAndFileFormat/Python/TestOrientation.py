@@ -21,6 +21,7 @@ if __name__ == "__main__":
 
   ori1 = (1,0,0,0,1,0)
   ori2 = (1,0,0,0,0,1)
+  ori3 = (0,1,0,0,0,1)
 
   label1 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori1 ) )
   if label1 != 'AXIAL':
@@ -29,6 +30,10 @@ if __name__ == "__main__":
   label2 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori2 ) )
   if label2 != 'CORONAL':
     print "Found:",label2
+    sucess = False
+  label3 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori3 ) )
+  if label3 != 'SAGITTAL':
+    print "Found:",label3
     sucess = False
 
   image = gdcm.Image()

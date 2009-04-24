@@ -36,7 +36,7 @@ static const char *OrientationStrings[] = {
 // http://public.kitware.com/pipermail/insight-users/2005-March/012246.html
 // 0.5477 would be the square root of 1 (unit vector sum of squares) divided by 3 (oblique axes - a "double" oblique)
 // 0.7071 would be the square root of 1 (unit vector sum of squares) divided by 2 (oblique axes)
-const double Orientation::obliquityThresholdCosineValue = 0.8;
+double Orientation::ObliquityThresholdCosineValue = 0.8;
 //const double Orientation::obliquityThresholdCosineValue = 0.7071;
 char Orientation::GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z)
 {
@@ -54,15 +54,15 @@ char Orientation::GetMajorAxisFromPatientRelativeDirectionCosine(double x, doubl
   // just the threshold, since the sum of the squares should be == 1.0
   // but just in case ...
 
-  if (absX>obliquityThresholdCosineValue && absX>absY && absX>absZ)
+  if (absX>ObliquityThresholdCosineValue && absX>absY && absX>absZ)
     {
     axis = orientationX;
     }
-  else if (absY>obliquityThresholdCosineValue && absY>absX && absY>absZ)
+  else if (absY>ObliquityThresholdCosineValue && absY>absX && absY>absZ)
     {
     axis = orientationY;
     }
-  else if (absZ>obliquityThresholdCosineValue && absZ>absX && absZ>absY)
+  else if (absZ>ObliquityThresholdCosineValue && absZ>absX && absZ>absY)
     {
     axis = orientationZ;
     }
@@ -71,6 +71,16 @@ char Orientation::GetMajorAxisFromPatientRelativeDirectionCosine(double x, doubl
     // nothing
     }
   return axis;
+}
+
+void   Orientation::SetObliquityThresholdCosineValue(double val)
+{
+  Orientation::ObliquityThresholdCosineValue = val;
+}
+
+double Orientation::GetObliquityThresholdCosineValue()
+{
+  return Orientation::ObliquityThresholdCosineValue;
 }
 
 Orientation::OrientationType Orientation::GetType(const double dircos[6])

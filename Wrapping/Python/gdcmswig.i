@@ -663,7 +663,7 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
 // Grab a 6 element array as a Python 6-tuple
 %typemap(in) const double dircos[6] (double temp[6]) {   // temp[6] becomes a local variable
   int i;
-  if (PyTuple_Check($input)) {
+  if (PyTuple_Check($input) /*|| PyList_Check($input)*/) {
     if (!PyArg_ParseTuple($input,"dddddd",temp,temp+1,temp+2,temp+3,temp+4,temp+5)) {
       PyErr_SetString(PyExc_TypeError,"list must have 6 elements");
       return NULL;
