@@ -11,6 +11,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
+FIND_PACKAGE(MAGIC)
+
 SET(EXAMPLES_SRCS
   AnonymizeAES
   ClinicalTrialAnnotate
@@ -34,8 +36,14 @@ SET(EXAMPLES_SRCS
   PublicDict
   GenSeqs
   GetJPEGSamplePrecision
-  EncapsulateFileInRawData
 )
+
+IF(MAGIC_FOUND)
+  INCLUDE_DIRECTORIES(${MAGIC_INCLUDE_DIRS})
+  ADD_EXECUTABLE(EncapsulateFileInRawData EncapsulateFileInRawData.cxx)
+  TARGET_LINK_LIBRARIES(EncapsulateFileInRawData gdcmMSFF ${MAGIC_LIBRARIES})
+ENDIF(MAGIC_FOUND)
+
 IF(GDCM_BUILD_TESTING)
 SET(EXAMPLES_SRCS
   ${EXAMPLES_SRCS}

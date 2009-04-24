@@ -500,8 +500,8 @@ int main(int argc, char *argv[])
   char key[ KEY_LEN ] = {};
   // randomize key:
   gdcm::HAVEGE havege;
-  for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
-    key[j] = havege.Rand();
+  //for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
+  //  key[j] = havege.Rand();
 
   if( deidentify )
     {

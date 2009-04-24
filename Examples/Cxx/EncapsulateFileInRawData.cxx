@@ -19,6 +19,8 @@
 #include "gdcmTag.h"
 #include "gdcmSystem.h"
 
+#include "magic.h" // libmagic, API to file command line tool
+
 /*
  * Let say you want to encapsulate a file type that is not defined in DICOM (exe, zip, png)
  * PNG is a bad example, unless it contains transparency (which has been deprecated).
@@ -44,6 +46,10 @@ int main(int argc, char *argv[])
   if( !gdcm::System::FileExists( filename ) ) return 1;
 
   size_t s = gdcm::System::FileSize(filename);
+
+  magic_t cookie = magic_open(MAGIC_NONE);
+  const char * file_type = magic_file(cookie, filename);
+  magic_close(cookie);
 
   gdcm::Writer w;
   gdcm::File &file = w.GetFile();

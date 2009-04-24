@@ -196,8 +196,9 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   unsigned long image_len = len / dims[2];
   size_t inputlength = image_len;
 
-	JlsParamaters params = {0};
+	JlsParamaters params = {};
 	params.components = sample_pixel;
+	params.bitspersample = bitsallocated;
 	params.bitspersample = bitsstored;
 	params.height = image_height;
 	params.width = image_width;
@@ -212,7 +213,14 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
 	rgbyteCompressed.resize(image_width * image_height * 4);
 
 	size_t cbyteCompressed;
-	JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, input, inputlength, &params);
+	JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, input, inputlength, &params);
+  if( error != OK ) 
+    {
+    gdcmErrorMacro( "Error compressing: " << error );
+    return false;
+    }
+
+  assert( cbyteCompressed < rgbyteCompressed.size() );
 
     Fragment frag;
     frag.SetByteValue( (char*)&rgbyteCompressed[0], cbyteCompressed );

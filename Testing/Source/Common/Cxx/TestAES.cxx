@@ -31,7 +31,8 @@ int TestAES(int argc, char *argv[])
   if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
 
   char iv[16] = {};
-  const char plainTextRef[] = "Single\1\2 block msg2";
+  char plainTextRef[] = "Single\1\2 block msg2";
+  plainTextRef[0] = -1;
   assert( sizeof(plainTextRef) <= 2*16 && sizeof(plainTextRef) >= 16 );
   char plainText[32*16] = {};
   memcpy( plainText, plainTextRef, sizeof(plainTextRef) );

@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
+#include "gdcmSystem.h"
 
 #include <string.h> // strcmp
 #include <stdlib.h> // malloc
@@ -33,28 +34,25 @@ namespace gdcm
 #include "gdcmMD5DataImages.cxx"
 #include "gdcmMediaStorageDataFiles.cxx"
 
-inline void process_file(const char *filename, md5_byte_t *digest)
+inline bool process_file(const char *filename, md5_byte_t *digest)
 {
-  if( !filename || !digest ) return;
+  if( !filename || !digest ) return false;
 
   FILE *file = fopen(filename, "rb");
   if(!file) 
     {
-    throw Exception("Could not open");
+    return false;
     }
 
-  /* go to the end */
-  /*int*/ fseek(file, 0, SEEK_END);
-  size_t file_size = ftell(file);
-  /*int*/ fseek(file, 0, SEEK_SET);
+  size_t file_size = System::FileSize(filename);
   void *buffer = malloc(file_size);
   if(!buffer) 
     {
     fclose(file);
-    throw Exception("could not allocate");
+    return false;
     }
   size_t read = fread(buffer, 1, file_size, file);
-  assert( read == file_size ); (void)read;
+  if( read != file_size ) return false;
 
   md5_state_t state;
   md5_init(&state);
@@ -68,6 +66,7 @@ inline void process_file(const char *filename, md5_byte_t *digest)
   //printf("\t%s\n", filename);
   free(buffer);
   fclose(file);
+  return true;
 }
 
 bool Testing::ComputeMD5(const char *buffer, unsigned long buf_len,
@@ -83,11 +82,10 @@ bool Testing::ComputeMD5(const char *buffer, unsigned long buf_len,
   md5_append(&state, (const md5_byte_t *)buffer, buf_len);
   md5_finish(&state, digest);
 
-  //char digest_str[2*16+1];
   for (int di = 0; di < 16; ++di)
-  {
+    {
     sprintf(digest_str+2*di, "%02x", digest[di]);
-  }
+    }
   digest_str[2*16] = '\0';
   return true;
 }
@@ -99,13 +97,15 @@ bool Testing::ComputeFileMD5(const char *filename, char *digest_str)
   md5_byte_t digest[16];
 
   /* Do the file */
-  process_file(filename, digest);
+  if( !process_file(filename, digest) )
+    {
+    return false;
+    }
 
-  //char digest_str[2*16+1];
   for (int di = 0; di < 16; ++di)
-  {
+    {
     sprintf(digest_str+2*di, "%02x", digest[di]);
-  }
+    }
   digest_str[2*16] = '\0';
   return true;
 }

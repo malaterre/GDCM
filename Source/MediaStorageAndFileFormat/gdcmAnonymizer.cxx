@@ -406,7 +406,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
   const AES& aes = AESKey;
   char iv[16] = {}; // FIXME ???
-  aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
+  bool b = aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
+  assert( b );
   char key[ 256/ 8] = {};
 
 //{
@@ -624,7 +625,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   memcpy(orig, bv->GetPointer(), encrypted_len );
   char iv[16] = {}; // FIXME ???
 
-  aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
+  bool b = aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
+  assert( b );
 
   std::stringstream ss;
   ss.str( std::string((char*)buf, encrypted_len) );
