@@ -117,10 +117,12 @@ void JPEGCodec::SetBitSample(int bit)
     }
   else
     {
+    // gdcmNonImageData/RT/RTDOSE.dcm 
     gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
     // Clearly make sure Internal will not be used
     delete Internal;
     Internal = NULL;
+    return;
     }
   Internal->SetDimensions( this->GetDimensions() );
   Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
