@@ -82,6 +82,7 @@ SET(Common_SRCS
   gdcmDummyValueGenerator.cxx
   gdcmAES.cxx
   gdcmRSA.cxx
+  #gdcmPKCS7.cxx
   gdcmHAVEGE.cxx
   gdcmX509.cxx
   gdcmObject.cxx
