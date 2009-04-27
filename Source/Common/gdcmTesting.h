@@ -82,6 +82,8 @@ public :
 
   /// NOT THREAD SAFE
   static const char * GetTempFilename(const char *filename, const char * subdir = 0);
+
+  static const char *GetSourceDirectory();
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

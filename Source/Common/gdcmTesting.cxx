@@ -267,4 +267,9 @@ void Testing::Print(std::ostream &os)
     }
 }
 
+const char *Testing::GetSourceDirectory()
+{
+  return GDCM_SOURCE_DIR;
+}
+
 } // end of namespace gdcm

@@ -13,18 +13,19 @@
 
 =========================================================================*/
 #include "gdcmPKCS7.h"
+#include "gdcmX509.h"
 
 #include <string.h> // strcmp
+#include <assert.h>
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 namespace openssl // prevent namespace clash such as openssl::PKCS7 vs gdcm::PKCS7
 {
 #include <openssl/bio.h>
-#include <openssl/x509.h>
 #include <openssl/pem.h>
 #include <openssl/err.h>
 #include <openssl/rand.h>
-#define my_sk_X509_value(st, i) SKM_sk_value(openssl::X509, (st), (i))
+#define my_sk_PKCS7_SIGNER_INFO_value(st, i) SKM_sk_value(openssl::PKCS7_SIGNER_INFO, (st), (i))
 }
 #endif
 
@@ -41,6 +42,8 @@ namespace gdcm
 class PKCS7Internals
 {
 public:
+  PKCS7Internals():x509(NULL) {}
+  X509 *x509;
 };
 
 PKCS7::PKCS7()
@@ -62,31 +65,28 @@ PKCS7::CipherTypes PKCS7::GetCipherType() const
   return AES256_CIPHER;
 }
 
+void PKCS7::SetCertificate( X509 *cert )
+{
+  Internals->x509 = cert;
+}
+
+const X509 *PKCS7::GetCertificate( ) const
+{
+  return Internals->x509;
+}
+
 /*
 openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
 */
 bool PKCS7::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  int argc;
-  char *myargv[3];
-  myargv[0] = "coucou";
-  myargv[1] = "-k";
-  myargv[2] = "/tmp/server.pem";
-  myargv[3] = 0;
-  argc = 3;
-  char **argv;
-  argv = myargv;
-  openssl::X509 *x509;
   openssl::PKCS7 *p7;
-  openssl::BIO *in;
   openssl::BIO *data,*p7bio;
   char buf[1024*4];
   int i;
   int nodetach=1;
-  char *keyfile = NULL;
   const openssl::EVP_CIPHER *cipher=NULL;
-  openssl::STACK_OF(X509) *recips=NULL;
   openssl::BIO*  wbio = NULL;
   time_t t;
 
@@ -95,44 +95,13 @@ bool PKCS7::Encrypt(char *output, size_t &outlen, const char *array, size_t len)
 #ifdef _WIN32
   openssl::RAND_screen(); /* Loading video display memory into random state */
 #endif
+  X509 *x509 = Internals->x509;
 
   //openssl::OpenSSL_add_all_algorithms();
 
-  //data=openssl::BIO_new(openssl::BIO_s_file());
-  while(argc > 1)
-    {
-    if (strcmp(argv[1],"-nd") == 0)
-      {
-      nodetach=1;
-      argv++; argc--;
-      }
-    else if ((strcmp(argv[1],"-c") == 0) && (argc >= 2)) {
-      if(!(cipher = openssl::EVP_get_cipherbyname(argv[2]))) {
-        fprintf(stderr, "Unknown cipher %s\n", argv[2]);
-        goto err;
-      }
-      argc-=2;
-      argv+=2;
-    } else if ((strcmp(argv[1],"-k") == 0) && (argc >= 2)) {
-      keyfile = argv[2];
-      argc-=2;
-      argv+=2;
-      if (!(in=openssl::BIO_new_file(keyfile,"r"))) goto err;
-      if (!(x509=openssl::PEM_read_bio_X509(in,NULL,NULL,NULL)))
-        goto err;
-      if(!recips) recips = openssl::sk_X509_new_null();
-      openssl::sk_X509_push(recips, x509);
-      openssl::BIO_free(in);
-    } else break;
-  }
-
-  if(!recips) {
-    fprintf(stderr, "No recipients\n");
-    goto err;
-  }
-
   //if (!openssl::BIO_read_filename(data,argv[1])) goto err;
   data = openssl::BIO_new_mem_buf((void*)array, len);
+  if(!data) goto err;
 
   if(!cipher)  {
 #ifndef OPENSSL_NO_DES
@@ -152,11 +121,10 @@ bool PKCS7::Encrypt(char *output, size_t &outlen, const char *array, size_t len)
 
 
   if (!openssl::PKCS7_set_cipher(p7,cipher)) goto err;
-  for(i = 0; i < openssl::sk_X509_num(recips); i++) {
-    openssl::X509* recip = my_sk_X509_value(recips, i);
+  for(i = 0; i < x509->GetNumberOfRecipients(); i++) {
+    openssl::X509* recip = x509->GetRecipient(i);
     if (!PKCS7_add_recipient(p7,recip)) goto err;
   }
-  openssl::sk_X509_pop_free(recips, openssl::X509_free);
 
   if ((p7bio=PKCS7_dataInit(p7,NULL)) == NULL) goto err;
 
@@ -167,9 +135,10 @@ bool PKCS7::Encrypt(char *output, size_t &outlen, const char *array, size_t len)
     BIO_write(p7bio,buf,i);
     }
   (void)BIO_flush(p7bio);
+ BIO_free(data);
 
   if (!PKCS7_dataFinal(p7,p7bio)) goto err;
-  BIO_free(p7bio);
+  BIO_free_all(p7bio);
 
   if (!(wbio = openssl::BIO_new(openssl::BIO_s_mem()))) goto err;
   i2d_PKCS7_bio(wbio,p7);
@@ -202,7 +171,120 @@ err:
 */
 bool PKCS7::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  X509 *x509 = Internals->x509;
+  openssl::PKCS7 *p7;
+  openssl::PKCS7_SIGNER_INFO *si;
+  openssl::X509_STORE_CTX cert_ctx;
+  openssl::X509_STORE *cert_store=NULL;
+  openssl::BIO *data,*detached=NULL,*p7bio=NULL;
+  char buf[1024*4];
+  unsigned char *pp;
+  int i,printit=0;
+  openssl::STACK_OF(PKCS7_SIGNER_INFO) *sk;
+  char * ptr = output;
+
+  openssl::OpenSSL_add_all_algorithms();
+  //bio_err=BIO_new_fp(stderr,BIO_NOCLOSE);
+
+  //data=openssl::BIO_new(openssl::BIO_s_file());
+  pp=NULL;
+
+  openssl::EVP_PKEY *pkey = x509->GetPrivateKey();
+
+   //if (!BIO_read_filename(data,argv[0])) goto err; 
+  data = openssl::BIO_new_mem_buf((void*)array, len);
+  if(!data) goto err;
+
+
+  if (pp == NULL)
+    BIO_set_fp(data,stdin,BIO_NOCLOSE);
+
+
+  /* Load the PKCS7 object from a file */
+  //if ((p7=PEM_read_bio_PKCS7(data,NULL,NULL,NULL)) == NULL) goto err;
+  if ((p7=d2i_PKCS7_bio(data,NULL)) == NULL) goto err;
+
+  if(!PKCS7_type_is_enveloped(p7)) {
+    goto err;
+  }
+
+//  if(cert && !X509_check_private_key(cert, pkey)) {
+//    PKCS7err(PKCS7_F_PKCS7_DECRYPT,
+//        PKCS7_R_PRIVATE_KEY_DOES_NOT_MATCH_CERTIFICATE);
+//    return 0;
+//  }
+
+
+  /* This stuff is being setup for certificate verification.
+   * When using SSL, it could be replaced with a 
+   * cert_stre=SSL_CTX_get_cert_store(ssl_ctx); */
+  cert_store=openssl::X509_STORE_new();
+  openssl::X509_STORE_set_default_paths(cert_store);
+  openssl::X509_STORE_load_locations(cert_store,NULL,"../../certs");
+  //openssl::X509_STORE_set_verify_cb_func(cert_store,verify_callback);
+
+  openssl::ERR_clear_error();
+
+  /* We need to process the data */
+  /* We cannot support detached encryption */
+  p7bio=PKCS7_dataDecode(p7,pkey,detached,NULL);
+
+  if (p7bio == NULL)
+    {
+    printf("problems decoding\n");
+    goto err;
+    }
+
+  /* We now have to 'read' from p7bio to calculate digests etc. */
+  for (;;)
+    {
+    i=BIO_read(p7bio,buf,sizeof(buf));
+    /* print it? */
+    if (i <= 0) break;
+    //fwrite(buf,1, i, stdout);
+    memcpy(ptr, buf, i);
+    ptr += i;
+    }
+
+  /* We can now verify signatures */
+  sk=PKCS7_get_signer_info(p7);
+  if (sk == NULL)
+    {
+    //fprintf(stderr, "there are no signatures on this data\n");
+    }
+  else
+    {
+    /* Ok, first we need to, for each subject entry,
+     * see if we can verify */
+    openssl::ERR_clear_error();
+    for (i=0; i<sk_PKCS7_SIGNER_INFO_num(sk); i++)
+      {
+      si=my_sk_PKCS7_SIGNER_INFO_value(sk,i);
+      i=PKCS7_dataVerify(cert_store,&cert_ctx,p7bio,p7,si);
+      if (i <= 0)
+        goto err;
+      else
+        fprintf(stderr,"Signature verified\n");
+      }
+    }
+  X509_STORE_free(cert_store);
+
+  BIO_free_all(p7bio);
+  PKCS7_free(p7); p7 = NULL;
+  BIO_free(data);
+  EVP_PKEY_free(pkey);
+ openssl::EVP_cleanup();
+
+  return true;
+err:
+  openssl::ERR_load_crypto_strings();
+  openssl::ERR_print_errors_fp(stderr);
   return false;
+#else
+  outlen = 0;
+  return false;
+#endif /* GDCM_USE_SYSTEM_OPENSSL */
 }
 
 

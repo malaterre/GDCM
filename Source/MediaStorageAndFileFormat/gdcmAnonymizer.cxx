@@ -25,6 +25,8 @@
 #include "gdcmDicts.h"
 #include "gdcmType.h"
 #include "gdcmDefs.h"
+#include "gdcmX509.h"
+#include "gdcmPKCS7.h"
 
 namespace gdcm
 {
@@ -337,6 +339,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
 
+  PKCS7 p7;
+  p7.SetCertificate( this->x509 );
+
   DataSet &ds = F->GetDataSet();
 
   // PS 3.15
@@ -383,7 +388,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
   std::string encrypted_str = os.str();
   //std::cout << "Size:" <<  encrypted_str.size() << std::endl;
-  size_t encrypted_len = encrypted_str.size();
+  size_t encrypted_len = encrypted_str.size() * 4;
 
   // Note: 1. Content encryption may require that the content (the DICOM Data Set) be padded to a
   // multiple of some block size. This shall be performed according to the Content-encryption
@@ -404,11 +409,15 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 //  of.close();
 //}
 
-  const AES& aes = AESKey;
-  char iv[16] = {}; // FIXME ???
-  bool b = aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
-  assert( b );
-  char key[ 256/ 8] = {};
+//  const AES& aes = AESKey;
+//  char iv[16] = {}; // FIXME ???
+//  bool b = aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
+//  assert( b );
+//  char key[ 256/ 8] = {};
+
+  size_t encrypted_len2 = encrypted_len;
+  bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
+  assert( encrypted_len <= encrypted_len2 );
 
 //{
 //  std::ofstream of( "/tmp/debug.bin.aes", std::ios::binary );
@@ -590,15 +599,15 @@ bool Anonymizer::BALCPProtect(Tag const & tag)
   return true;
 }
 
-void Anonymizer::SetAESKey(AES const &aes)
-{
-  AESKey = aes;
-}
-
-const AES &Anonymizer::GetAESKey() const
-{
-  return AESKey;
-}
+//void Anonymizer::SetAESKey(AES const &aes)
+//{
+//  AESKey = aes;
+//}
+//
+//const AES &Anonymizer::GetAESKey() const
+//{
+//  return AESKey;
+//}
 
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 {
@@ -608,7 +617,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   // Transfer Syntax UID (0400,0510). Re-identifiers claiming conformance to this profile shall be capable
   // of decrypting the Encrypted Content using either AES or Triple-DES in all possible key lengths
   // specified in this profile
-  const AES& aes = AESKey;
+  PKCS7 p7;
+  p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
   const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
@@ -619,14 +629,17 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   const ByteValue *bv = EncryptedContent.GetByteValue();
   
   size_t encrypted_len = bv->GetLength();
-  assert( bv->GetLength() % 16 == 0 );
+  //assert( bv->GetLength() % 16 == 0 );
   char *orig = new char[ bv->GetLength() ];
   char *buf = new char[ bv->GetLength() ];
   memcpy(orig, bv->GetPointer(), encrypted_len );
   char iv[16] = {}; // FIXME ???
 
-  bool b = aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
+  //bool b = aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
+  size_t encrypted_len2 = encrypted_len;
+  bool b = p7.Decrypt( buf, encrypted_len, orig, encrypted_len);
   assert( b );
+  assert( encrypted_len <= encrypted_len2 );
 
   std::stringstream ss;
   ss.str( std::string((char*)buf, encrypted_len) );
@@ -682,6 +695,16 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   Remove( Tag(0x0400,0x0500) ); // ??
 
   return true;
+}
+
+void        Anonymizer::SetX509( X509 *x509 )
+{
+  this->x509 = x509;
+}
+
+const X509 *Anonymizer::GetX509() const
+{
+  return this->x509;
 }
 
 } // end namespace gdcm

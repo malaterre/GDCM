@@ -29,6 +29,7 @@
 #include "gdcmX509.h"
 #include "gdcmDefs.h"
 #include "gdcmDirectory.h"
+#include "gdcmPKCS7.h"
 
 #include <getopt.h>
 
@@ -103,29 +104,52 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   return true;
 }
 
-bool GetRSAKey(gdcm::RSA &rsa, const char *path = 0)
+bool GetRSAKeys(gdcm::X509 &x509, const char *privpath = 0, const char *certpath = 0)
 {
-  std::string id_rsa_path;
-  if( !path || !*path )
-    {
-    // By default on *nix system there should be a id_rsa file in $HOME/.ssh. Let's try parsing it:
-    char *home = getenv("HOME");
-    if(!home) return false;
+//  std::string id_rsa_path;
+//  if( !path || !*path )
+//    {
+//    // By default on *nix system there should be a id_rsa file in $HOME/.ssh. Let's try parsing it:
+//    char *home = getenv("HOME");
+//    if(!home) return false;
+//
+//    id_rsa_path = home;
+//    id_rsa_path += "/.ssh/id_rsa";
+//    }
+//  else
+//    {
+//    id_rsa_path = path;
+//    }
 
-    id_rsa_path = home;
-    id_rsa_path += "/.ssh/id_rsa";
-    }
-  else
+  if( privpath && *privpath )
     {
-    id_rsa_path = path;
+    if( !x509.ParseKeyFile( privpath ) )
+      {
+      return false;
+      }
     }
 
-  if( !gdcm::System::FileExists( id_rsa_path.c_str() ) )
+  if( certpath && *certpath )
     {
-    std::cerr << "Could not find file: " << id_rsa_path << std::endl;
-    return false;
+    if( !x509.ParseCertificateFile( certpath ) )
+      {
+      return false;
+      }
     }
 
+//  if( !gdcm::System::FileExists( id_rsa_path.c_str() ) )
+//    {
+//    std::cerr << "Could not find file: " << id_rsa_path << std::endl;
+//    return false;
+//    }
+//
+//  if( !gdcm::System::FileExists( id_rsa_path.c_str() ) )
+//    {
+//    std::cerr << "Could not find file: " << id_rsa_path << std::endl;
+//    return false;
+//    }
+
+#if 0
   int err_x509 = rsa.X509ParseKeyfile( id_rsa_path.c_str() );
   if( err_x509 == gdcm::X509::ERR_X509_KEY_PASSWORD_REQUIRED  )
     {
@@ -152,6 +176,9 @@ bool GetRSAKey(gdcm::RSA &rsa, const char *path = 0)
     std::cerr << "Invalid Pub/Priv key" << std::endl;
     return false;
     }
+#else
+
+#endif
 
   return true;
 }
@@ -170,6 +197,8 @@ void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --resources-path      Resources path." << std::endl;
+  std::cout << "     --key                 Path to RSA Private Key." << std::endl;
+  std::cout << "     --certificate         Path to Certificate." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -194,8 +223,10 @@ int main(int argc, char *argv[])
   std::string root;
   std::string xmlpath;
   std::string rsa_path;
+  std::string cert_path;
   int resourcespath = 0;
   int rsapath = 0;
+  int certpath = 0;
   int rootuid = 0;
   int verbose = 0;
   int warning = 0;
@@ -213,7 +244,8 @@ int main(int argc, char *argv[])
         {"resources-path", 1, &resourcespath, 1},
         {"de-identify", 0, &deidentify, 1},
         {"re-identify", 0, &reidentify, 1},
-        {"rsa-path", 1, &rsapath, 1},
+        {"key", 1, &rsapath, 1},
+        {"certificate", 1, &certpath, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -264,11 +296,17 @@ int main(int argc, char *argv[])
             assert( xmlpath.empty() );
             xmlpath = optarg;
             }
-          else if( option_index == 6 ) /* rsa-path */
+          else if( option_index == 6 ) /* key */
             {
-            assert( strcmp(s, "rsa-path") == 0 );
+            assert( strcmp(s, "key") == 0 );
             assert( rsa_path.empty() );
             rsa_path = optarg;
+            }
+          else if( option_index == 7 ) /* certificate */
+            {
+            assert( strcmp(s, "certificate") == 0 );
+            assert( cert_path.empty() );
+            cert_path = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -490,35 +528,14 @@ int main(int argc, char *argv[])
 
   // Get RSA key
   const unsigned int KEY_LEN = 32;
-  gdcm::RSA rsa;
-  if( !GetRSAKey(rsa, rsa_path.c_str()) )
+  gdcm::X509 x509;
+  if( !GetRSAKeys(x509, rsa_path.c_str(), cert_path.c_str() ) )
     {
     return 1;
-    }
-  if( rsa.GetLenkey() != KEY_LEN * 8 )
-    {
-    std::cerr << "Wrong key len: " << rsa.GetLenkey() << std::endl;
-    return 1;
-    }
-
-  gdcm::AES aes;
-  char key[ KEY_LEN ] = {};
-  // randomize key:
-  gdcm::HAVEGE havege;
-  //for(unsigned int j = 0; j < KEY_LEN / 8; ++j )
-  //  key[j] = havege.Rand();
-
-  if( deidentify )
-    {
-    if( !aes.SetkeyEnc( key, KEY_LEN ) ) return 1;
-    }
-  else if ( reidentify )
-    {
-    if( !aes.SetkeyDec( key, KEY_LEN ) ) return 1;
     }
 
   gdcm::Anonymizer anon;
-  anon.SetAESKey( aes ); // pass by COPY !
+  anon.SetX509( &x509 );
 
   for(unsigned int i = 0; i < nfiles; ++i)
     {
@@ -532,16 +549,16 @@ int main(int argc, char *argv[])
     }
 
   // Save the AES key in an RSA enveloppe:
-  char rsa_plaintext[KEY_LEN];
-  char rsa_ciphertext[KEY_LEN*8] = {};
-  memcpy( rsa_plaintext, key, KEY_LEN );
+  //char rsa_plaintext[KEY_LEN];
+  //char rsa_ciphertext[KEY_LEN*8] = {};
+  //memcpy( rsa_plaintext, key, KEY_LEN );
 
-  int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
-  if( err != 0 )
-    {
-    std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
-    return 1;
-    }
+  //int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
+  //if( err != 0 )
+  //  {
+  //  std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
+  //  return 1;
+  //  }
   //std::cout << rsa_ciphertext << std::endl;
   //int olen = 0;
   //unsigned char buf[KEY_LEN*8] = {};

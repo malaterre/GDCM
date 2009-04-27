@@ -26,6 +26,7 @@ namespace gdcm
  */
 //-----------------------------------------------------------------------------
 class PKCS7Internals;
+class X509;
 class GDCM_EXPORT PKCS7
 {
 public :
@@ -43,8 +44,8 @@ public :
   void SetCipherType( CipherTypes type);
   CipherTypes GetCipherType() const;
 
-//  void SetCertificates( X509 *cert );
-//  X509 &GetCertificates( ) const;
+  void SetCertificate( X509 *cert );
+  const X509 *GetCertificate( ) const;
 
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;

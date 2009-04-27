@@ -53,10 +53,11 @@ namespace gdcm
  *  - Produce the same dummy value for the same input value
  *  - do not provide an easy way to retrieve the original value from the sha1 generated value
  */
+class X509;
 class GDCM_EXPORT Anonymizer
 {
 public:
-  Anonymizer():F(new File),AESKey() {}
+  Anonymizer():F(new File),/*AESKey(),*/x509(NULL) {}
   ~Anonymizer();
 
   /// Make Tag t empty (if not found tag will be created)
@@ -102,6 +103,9 @@ public:
   void SetAESKey(AES const &aes);
   const AES &GetAESKey() const;
 
+  void SetX509( X509 *x509 );
+  const X509 *GetX509() const;
+
 protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
   bool BALCPProtect(Tag const & tag);
@@ -114,7 +118,8 @@ private:
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
   SmartPointer<File> F;
-  AES AESKey;
+  //AES AESKey;
+  X509 *x509;
 };
 
 /**

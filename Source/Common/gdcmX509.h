@@ -17,6 +17,9 @@
 
 #include "gdcmTypes.h"
 
+namespace openssl { 
+#include <openssl/x509.h>
+ }
 namespace gdcm
 {
 /**
@@ -37,8 +40,20 @@ public :
 /*#define POLARSSL_*/ ERR_X509_KEY_PASSWORD_MISMATCH           
   } X509ErrorType;
 
+unsigned int GetNumberOfRecipients() const;
+bool ParseCertificateFile( const char *filename );
+bool ParseKeyFile( const char *filename );
+
+protected:
+friend class PKCS7;
+openssl::X509* GetRecipient( unsigned int i ) const;
+openssl::EVP_PKEY* GetPrivateKey() const;
+
 private:
   X509Internals *Internals;
+private:
+  X509(const X509&);  // Not implemented.
+  void operator=(const X509&);  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
