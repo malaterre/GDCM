@@ -447,7 +447,7 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
-  const gdcm::Defs &defs = g.GetDefs();
+  const gdcm::Defs &defs = g.GetDefs(); (void)defs;
   if( !rootuid )
     {
     // only read the env var if no explicit cmd line option
