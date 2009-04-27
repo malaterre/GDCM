@@ -98,7 +98,7 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   writer.SetFile( file );
   if( !writer.Write() )
     {
-      std::cerr << "Could not Write : " << outfilename << std::endl;
+    std::cerr << "Could not Write : " << outfilename << std::endl;
     return false;
     }
   return true;
@@ -106,21 +106,6 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
 
 bool GetRSAKeys(gdcm::X509 &x509, const char *privpath = 0, const char *certpath = 0)
 {
-//  std::string id_rsa_path;
-//  if( !path || !*path )
-//    {
-//    // By default on *nix system there should be a id_rsa file in $HOME/.ssh. Let's try parsing it:
-//    char *home = getenv("HOME");
-//    if(!home) return false;
-//
-//    id_rsa_path = home;
-//    id_rsa_path += "/.ssh/id_rsa";
-//    }
-//  else
-//    {
-//    id_rsa_path = path;
-//    }
-
   if( privpath && *privpath )
     {
     if( !x509.ParseKeyFile( privpath ) )
@@ -136,50 +121,6 @@ bool GetRSAKeys(gdcm::X509 &x509, const char *privpath = 0, const char *certpath
       return false;
       }
     }
-
-//  if( !gdcm::System::FileExists( id_rsa_path.c_str() ) )
-//    {
-//    std::cerr << "Could not find file: " << id_rsa_path << std::endl;
-//    return false;
-//    }
-//
-//  if( !gdcm::System::FileExists( id_rsa_path.c_str() ) )
-//    {
-//    std::cerr << "Could not find file: " << id_rsa_path << std::endl;
-//    return false;
-//    }
-
-#if 0
-  int err_x509 = rsa.X509ParseKeyfile( id_rsa_path.c_str() );
-  if( err_x509 == gdcm::X509::ERR_X509_KEY_PASSWORD_REQUIRED  )
-    {
-    std::cout << "Enter passphrase:" << std::endl;
-    std::string passphrase;
-    std::cin >> passphrase;
-    err_x509 = rsa.X509ParseKeyfile( id_rsa_path.c_str(), passphrase.c_str() );
-    passphrase.clear(); // paranoid security
-    }
-  else if( err_x509 == gdcm::X509::ERR_X509_KEY_PASSWORD_MISMATCH )
-    {
-    std::cerr << "Passphrase mismatch" << std::endl;
-    return false;
-    }
-  else if( err_x509 != 0 )
-    {
-    std::cerr << std::hex << err_x509 << std::endl;
-    return false;
-    }
-  assert( err_x509 == 0 ); // success == 0
-
-  if( rsa.CheckPubkey() != 0 || rsa.CheckPrivkey() != 0 )
-    {
-    std::cerr << "Invalid Pub/Priv key" << std::endl;
-    return false;
-    }
-#else
-
-#endif
-
   return true;
 }
 
@@ -509,7 +450,7 @@ int main(int argc, char *argv[])
   const gdcm::Defs &defs = g.GetDefs();
   if( !rootuid )
     {
-    // only read the env var is no explicit cmd line option
+    // only read the env var if no explicit cmd line option
     // maybe there is an env var defined... let's check
     const char *rootuid_env = getenv("GDCM_ROOT_UID");
     if( rootuid_env )
@@ -529,16 +470,14 @@ int main(int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-  // Setup gdcm::Anonymizer
-
-  // Get RSA key
-  const unsigned int KEY_LEN = 32;
+  // Get private key/certificate
   gdcm::X509 x509;
   if( !GetRSAKeys(x509, rsa_path.c_str(), cert_path.c_str() ) )
     {
     return 1;
     }
 
+  // Setup gdcm::Anonymizer
   gdcm::Anonymizer anon;
   anon.SetX509( &x509 );
 
@@ -552,23 +491,6 @@ int main(int argc, char *argv[])
       return 1;
       }
     }
-
-  // Save the AES key in an RSA enveloppe:
-  //char rsa_plaintext[KEY_LEN];
-  //char rsa_ciphertext[KEY_LEN*8] = {};
-  //memcpy( rsa_plaintext, key, KEY_LEN );
-
-  //int err = rsa.Pkcs1Encrypt( gdcm::RSA::PUBLIC, KEY_LEN, rsa_plaintext, rsa_ciphertext );
-  //if( err != 0 )
-  //  {
-  //  std::cerr << "Pkcs1Encrypt failed with: " << err << std::endl;
-  //  return 1;
-  //  }
-  //std::cout << rsa_ciphertext << std::endl;
-  //int olen = 0;
-  //unsigned char buf[KEY_LEN*8] = {};
-  //err = rsa.Pkcs1Decrypt( gdcm::RSA::PRIVATE, olen, rsa_ciphertext, buf, sizeof(buf) );
-
   return 0;
 }
 

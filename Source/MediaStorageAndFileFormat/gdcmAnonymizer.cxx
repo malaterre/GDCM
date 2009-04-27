@@ -18,7 +18,6 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmSwapper.h"
-#include "gdcmAES.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAttribute.h"
 #include "gdcmDummyValueGenerator.h"
@@ -387,43 +386,21 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   des.Write<ExplicitDataElement,SwapperNoOp>(os);
 
   std::string encrypted_str = os.str();
-  //std::cout << "Size:" <<  encrypted_str.size() << std::endl;
-  size_t encrypted_len = encrypted_str.size() * 4;
 
   // Note: 1. Content encryption may require that the content (the DICOM Data Set) be padded to a
   // multiple of some block size. This shall be performed according to the Content-encryption
   // Process defined in RFC-2630.
-  if( encrypted_len % 16 != 0 )
-    {
-    encrypted_len = ((encrypted_len / 16) + 1) * 16;
-    }
+  size_t encrypted_len = encrypted_str.size() * 4; // this is really overestimated
+
   char *orig = new char[ encrypted_len ];
   char *buf = new char[ encrypted_len ];
   memset( buf, 0, encrypted_len );
   memset( orig, 0, encrypted_len );
   memcpy( orig, encrypted_str.c_str(), encrypted_str.size() );
 
-//{
-//  std::ofstream of( "/tmp/debug.bin", std::ios::binary );
-//  of.write( encrypted_str.c_str(), encrypted_str.size() );
-//  of.close();
-//}
-
-//  const AES& aes = AESKey;
-//  char iv[16] = {}; // FIXME ???
-//  bool b = aes.CryptCbc( AES::ENCRYPT, encrypted_len, iv, orig, buf );
-//  assert( b );
-//  char key[ 256/ 8] = {};
-
   size_t encrypted_len2 = encrypted_len;
   bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
   assert( encrypted_len <= encrypted_len2 );
-
-//{
-//  std::ofstream of( "/tmp/debug.bin.aes", std::ios::binary );
-//  of.write( (char*)buf, encrypted_len );
-//  of.close();
-//}
 
     {
     // Create a Sequence
@@ -629,13 +606,10 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   const ByteValue *bv = EncryptedContent.GetByteValue();
   
   size_t encrypted_len = bv->GetLength();
-  //assert( bv->GetLength() % 16 == 0 );
   char *orig = new char[ bv->GetLength() ];
   char *buf = new char[ bv->GetLength() ];
   memcpy(orig, bv->GetPointer(), encrypted_len );
-  char iv[16] = {}; // FIXME ???
 
-  //bool b = aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
   size_t encrypted_len2 = encrypted_len;
   bool b = p7.Decrypt( buf, encrypted_len, orig, encrypted_len);
   if( !b )
