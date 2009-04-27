@@ -411,9 +411,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     TransferSyntax encrypted_ts = TransferSyntax::ImplicitVRLittleEndian;
     // <entry group="0400" element="0510" vr="UI" vm="1" name="Encrypted Content Transfer Syntax UID"/>
     DataElement encrypted_ts_de( Tag(0x400,0x510) );
+    encrypted_ts_de.SetVR( Attribute<0x0400, 0x0510>::GetVR() );
     encrypted_ts_de.SetByteValue( encrypted_ts.GetString(), strlen(encrypted_ts.GetString()) );
     // <entry group="0400" element="0520" vr="OB" vm="1" name="Encrypted Content"/>
     DataElement encrypted_de( Tag(0x400,0x520) );
+    encrypted_de.SetVR( Attribute<0x0400, 0x0520>::GetVR() );
     encrypted_de.SetByteValue( (char*)buf, encrypted_len );
     delete[] buf;
     delete[] orig;

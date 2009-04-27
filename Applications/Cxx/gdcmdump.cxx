@@ -218,13 +218,14 @@ void PrintHelp()
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -x --xml-dict  generate the XML dict (only private elements for now)." << std::endl;
-  std::cout << "  -r --recursive recursive." << std::endl;
-  std::cout << "  -d --dump      dump value (limited use)." << std::endl;
-  std::cout << "  -p --print     print value instead of simply dumping (default)." << std::endl;
-  std::cout << "  -c --color     print in color." << std::endl;
-  std::cout << "  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
-  std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
+  std::cout << "  -x --xml-dict       generate the XML dict (only private elements for now)." << std::endl;
+  std::cout << "  -r --recursive      recursive." << std::endl;
+  std::cout << "  -d --dump           dump value (limited use)." << std::endl;
+  std::cout << "  -p --print          print value instead of simply dumping (default)." << std::endl;
+  std::cout << "  -c --color          print in color." << std::endl;
+  std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
+  std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
+  std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -255,6 +256,7 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
   int recursive = 0;
+  int mapuidnames = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -282,6 +284,7 @@ int main (int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
         {"ignore-errors", 0, &ignoreerrors, 1},
+        {"map-uid-names", 0, &mapuidnames, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPVWDEhvI";
@@ -444,6 +447,10 @@ int main (int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
    
+  if( mapuidnames )
+    {
+    std::cerr << "Not handled for now" << std::endl;
+    }
 
   // else
   int res = 0;

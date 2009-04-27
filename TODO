@@ -337,3 +337,5 @@ I think there is a bug in ByteValue::SetByte. What if byte buffer is 0xfffffffe 
 internally I ++ the length, which would make it an undefined length.
 -----------------------------------------------------------------------
 Get rid of polarssl now that OpenSSL completely replaces it
+-----------------------------------------------------------------------
+gdcmdump map-uid-names
