@@ -51,7 +51,7 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-      std::cerr << "Could not read : " << filename << std::endl;
+    std::cerr << "Could not read : " << filename << std::endl;
     return false;
     }
   gdcm::File &file = reader.GetFile();
@@ -138,8 +138,8 @@ void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --resources-path      Resources path." << std::endl;
-  std::cout << "     --key                 Path to RSA Private Key." << std::endl;
-  std::cout << "     --certificate         Path to Certificate." << std::endl;
+  std::cout << "  -k --key                 Path to RSA Private Key." << std::endl;
+  std::cout << "  -c --certificate         Path to Certificate." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:deVWDEhv",
+    c = getopt_long (argc, argv, "i:o:dek:c:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -263,6 +263,16 @@ int main(int argc, char *argv[])
     case 'o':
       assert( outfilename.empty() );
       outfilename = optarg;
+      break;
+
+    case 'k': // key
+      assert( rsa_path.empty() );
+      rsa_path = optarg;
+      break;
+
+    case 'c': // certificate
+      assert( cert_path.empty() );
+      cert_path = optarg;
       break;
 
     case 'e': // encrypt
