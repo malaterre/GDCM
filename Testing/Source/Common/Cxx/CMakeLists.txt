@@ -5,6 +5,7 @@ SET(Common_TEST_SRCS
   TestDummyValueGenerator
   TestAES
   TestRSA
+  TestPKCS7
   TestTesting
   TestSwapper
   TestByteSwap
