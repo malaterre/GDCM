@@ -10,7 +10,9 @@ gdcmanon [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmanon 
+The \b gdcmanon tool is an implementation of PS 3.15 / E.1 / Basic
+ Application Level Confidentiality Profile
+ (Implementation of E.1.1 De-identify & E.1.2 Re-identify)
 
 \section parameters PARAMETERS
 
@@ -24,8 +26,18 @@ file-out  DICOM output filename
 
 \subsection options options
 \verbatim
-  -d --de-identify         De-identify DICOM (default)
-  -r --re-identify         Re-identify DICOM
+  -i --input                  DICOM filename / directory
+  -o --output                 DICOM filename / directory
+  -e --de-identify            De-identify DICOM (default)
+  -d --re-identify            Re-identify DICOM
+\endverbatim
+
+\subsection options options
+\verbatim
+     --root-uid               Root UID.
+     --resources-path         Resources path.
+  -k --key                    Path to RSA Private Key.
+  -c --certificate            Path to Certificate.
 \endverbatim
 
 \subsection general_options general options
