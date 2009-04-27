@@ -40,6 +40,7 @@ public:
   }
   ~X509Internals() {
     openssl::sk_X509_pop_free(recips, openssl::X509_free);
+    EVP_PKEY_free(pkey);
     }
   openssl::STACK_OF(X509) *recips;
   openssl::EVP_PKEY *pkey;

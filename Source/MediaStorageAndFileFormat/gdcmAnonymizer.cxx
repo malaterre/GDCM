@@ -638,7 +638,12 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //bool b = aes.CryptCbc( AES::DECRYPT, encrypted_len, iv, orig, buf );
   size_t encrypted_len2 = encrypted_len;
   bool b = p7.Decrypt( buf, encrypted_len, orig, encrypted_len);
-  assert( b );
+  if( !b )
+    {
+    // ooops
+    gdcmDebugMacro( "Could not decrypt" );
+    return false;
+    }
   assert( encrypted_len <= encrypted_len2 );
 
   std::stringstream ss;

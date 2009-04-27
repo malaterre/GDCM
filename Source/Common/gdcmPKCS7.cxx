@@ -54,6 +54,7 @@ PKCS7::PKCS7()
 PKCS7::~PKCS7()
 {
   delete Internals;
+  //openssl::EVP_cleanup();
 }
 
 void        PKCS7::SetCipherType( CipherTypes type)
@@ -273,8 +274,6 @@ bool PKCS7::Decrypt(char *output, size_t &outlen, const char *array, size_t len)
   BIO_free_all(p7bio);
   PKCS7_free(p7); p7 = NULL;
   BIO_free(data);
-  EVP_PKEY_free(pkey);
- openssl::EVP_cleanup();
 
   return true;
 err:

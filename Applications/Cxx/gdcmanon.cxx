@@ -435,7 +435,12 @@ int main(int argc, char *argv[])
     {
     if( !gdcm::System::FileIsDirectory(outfilename.c_str()) )
       {
-      return 1;
+      //std::cout << "Making directory: " << outfilename << std::endl;
+      if( !gdcm::System::MakeDirectory( outfilename.c_str() ) )
+        {
+        std::cerr << "Could not create directory: " << outfilename << std::endl;
+        return 1;
+        }
       }
     // For now avoid user mistake
     if( filename == outfilename )
