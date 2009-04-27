@@ -163,10 +163,10 @@ void PrintHelp()
   std::cout << "PS 3.15 / E.1 / Basic Application Level Confidentiality Profile" << std::endl;
   std::cout << "Implementation of E.1.1 De-identify & E.1.2 Re-identify" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input               DICOM filename / directory" << std::endl;
-  std::cout << "  -o --output              DICOM filename / directory" << std::endl;
-  std::cout << "  -d --de-identify         De-identify DICOM (default)" << std::endl;
-  std::cout << "  -R --re-identify         Re-identify DICOM" << std::endl;
+  std::cout << "  -i --input                  DICOM filename / directory" << std::endl;
+  std::cout << "  -o --output                 DICOM filename / directory" << std::endl;
+  std::cout << "  -e --de-identify (encrypt)  De-identify DICOM (default)" << std::endl;
+  std::cout << "  -d --re-identify (decrypt)  Re-identify DICOM" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --resources-path      Resources path." << std::endl;
@@ -225,7 +225,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:dRVWDEhv",
+    c = getopt_long (argc, argv, "i:o:deVWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -286,11 +286,11 @@ int main(int argc, char *argv[])
       outfilename = optarg;
       break;
 
-    case 'D':
+    case 'e': // encrypt
       deidentify = 1;
       break;
 
-    case 'R':
+    case 'd': // decrypt
       reidentify = 1;
       break;
 
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
       warning = 1;
       break;
 
-    case 'd':
+    case 'D':
       debug = 1;
       break;
 
@@ -377,25 +377,30 @@ int main(int argc, char *argv[])
     deidentify = 1;
     }
 
+  // one option only please
   if( deidentify && reidentify )
     {
     return 1;
     }
 
-  // Are we in single file or directory mode:
   if( !gdcm::System::FileExists(filename.c_str()) )
     {
     // doh !
     return 1;
     }
 
-  //
+  // Are we in single file or directory mode:
   unsigned int nfiles = 1;
   gdcm::Directory dir;
   bool recursive = false; //true;
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     if( !gdcm::System::FileIsDirectory(outfilename.c_str()) )
+      {
+      return 1;
+      }
+    // For now avoid user mistake
+    if( filename == outfilename )
       {
       return 1;
       }
@@ -449,7 +454,7 @@ int main(int argc, char *argv[])
     // xmlpath is set either by the cmd line option or the env var
     if( !g.Prepend( xmlpath.c_str() ) )
       {
-      std::cerr << "specified Resources Path is not valid: " << xmlpath << std::endl;
+      std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
       return 1;
       }
     }

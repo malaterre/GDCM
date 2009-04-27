@@ -22,7 +22,10 @@ namespace gdcm
 Orientation::Orientation() {}
 Orientation::~Orientation() {}
 
-void Orientation::Print(std::ostream &) const {}
+void Orientation::Print(std::ostream &os) const
+{
+  os << "ObliquityThresholdCosineValue:" << ObliquityThresholdCosineValue;
+}
 
 static const char *OrientationStrings[] = {
   "UNKNOWN",

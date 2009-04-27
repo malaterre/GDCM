@@ -285,10 +285,6 @@ could not read: gdcmDataExtra/gdcmNonImageData/c15-5.dcm
 Technically nothing prevent someone from using JPegcompress on PDF object
 So gdcm::ImageChangeTransferSyntax should let non-image pass
 -----------------------------------------------------------------------
-Prepare a DICOM file with lot of sequence so that 2Gb limit is reached.
-
-Prepare a file with duplicate private element (not duplicate public element)
------------------------------------------------------------------------
 Add support for invalid SC generated from ITK/gdcm 1.2.4
 -----------------------------------------------------------------------
 When converting an Enhanced CT, IOP is moved from root dataset to
@@ -336,3 +332,6 @@ Create a PDF Storage class with a trailing Pixel Data element to test broken DIC
 -----------------------------------------------------------------------
 Prepare a Basic Pixel Spacing Calibration example but with SC SOP so that
 we have Nominal Scanned Pixel Spacing case...
+-----------------------------------------------------------------------
+I think there is a bug in ByteValue::SetByte. What if byte buffer is 0xfffffffe long ?
+internally I ++ the length, which would make it an undefined length.

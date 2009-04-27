@@ -675,6 +675,16 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
   }
 }
 %include "gdcmOrientation.h"
+%extend gdcm::Orientation
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 //%typemap(argout) double z[3] {   // temp[6] becomes a local variable
 // int i;
 // $result = PyList_New(3);
