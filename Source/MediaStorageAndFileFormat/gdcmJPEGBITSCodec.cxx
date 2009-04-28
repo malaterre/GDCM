@@ -421,6 +421,12 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       PI = PhotometricInterpretation::YBR_FULL_422;
       this->PF.SetSamplesPerPixel( 3 );
       }
+    else if( cinfo.jpeg_color_space == JCS_CMYK )
+      {
+      assert( cinfo.num_components == 4 );
+      PI = PhotometricInterpretation::CMYK;
+      this->PF.SetSamplesPerPixel( 4 );
+      }
     else
       {
       abort(); //TODO
@@ -748,6 +754,14 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         cinfo.jpeg_color_space = JCS_UNKNOWN;
         cinfo.out_color_space = JCS_UNKNOWN;
         }
+      break;
+    case JCS_CMYK:
+      assert( GetPhotometricInterpretation() == PhotometricInterpretation::CMYK );
+        if ( cinfo.process == JPROC_LOSSLESS )
+          {
+          cinfo.jpeg_color_space = JCS_UNKNOWN;
+          cinfo.out_color_space = JCS_UNKNOWN;
+          }
       break;
     default:
       abort();

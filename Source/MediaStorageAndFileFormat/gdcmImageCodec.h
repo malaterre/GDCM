@@ -38,6 +38,8 @@ public:
   bool Decode(DataElement const &is, DataElement &os);
   bool IsLossy() const;
 
+  virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
   virtual bool IsValid(PhotometricInterpretation const &pi);

@@ -348,37 +348,27 @@ bool derives( File & file, const Image& compressed_image )
 }
 
 {
-/*
-(0028,2110) CS [01]                                     #   2, 1 LossyImageCompression
-(0028,2112) DS [15.95]                                  #   6, 1 LossyImageCompressionRatio
-(0028,2114) CS [ISO_10918_1]                            #  12, 1 LossyImageCompressionMethod
-*/
+  /*
+  (0028,2110) CS [01]                                     #   2, 1 LossyImageCompression
+  (0028,2112) DS [15.95]                                  #   6, 1 LossyImageCompressionRatio
+  (0028,2114) CS [ISO_10918_1]                            #  12, 1 LossyImageCompressionMethod
+   */
   const DataElement & pixeldata = compressed_image.GetDataElement();
   size_t len = pixeldata.GetSequenceOfFragments()->ComputeByteLength();
   size_t reflen = compressed_image.GetBufferLength();
   double ratio = (double)reflen / len;
-    Attribute<0x0028,0x2110> at1;
-    at1.SetValue( "01" );
-    ds.Replace( at1.GetAsDataElement() );
-    Attribute<0x0028,0x2112> at2;
-    at2.SetValues( &ratio, 1);
-    ds.Replace( at2.GetAsDataElement() );
-    Attribute<0x0028,0x2114> at3;
+  Attribute<0x0028,0x2110> at1;
+  at1.SetValue( "01" );
+  ds.Replace( at1.GetAsDataElement() );
+  Attribute<0x0028,0x2112> at2;
+  at2.SetValues( &ratio, 1);
+  ds.Replace( at2.GetAsDataElement() );
+  Attribute<0x0028,0x2114> at3;
 
-/*
-The Defined Terms for Lossy Image Compression Method (0028,2114) ar e :
-ISO_10918_1 = JPEG Lossy Compression
-ISO_14495_1 = JPEG-LS Near-lossless Compression
-ISO_15444_1 = JPEG 2000 Irreversible Compression
-ISO_13818_2 = MPEG2 Compression
-*/
-//static const CSComp newvalues2[] = {"ISO_10918_1"};
-static const CSComp newvalues2[] = {"ISO_15444_1"};
-    at3.SetValues(  newvalues2, 1 );
-    ds.Replace( at3.GetAsDataElement() );
+  // ImageWriter will properly set attribute 0028,2114 (Lossy Image Compression Method)
 }
 
-  return true;
+return true;
 
 }
 }

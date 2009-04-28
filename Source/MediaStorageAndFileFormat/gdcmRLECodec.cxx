@@ -736,4 +736,11 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
   return ImageCodec::Decode(tmpos,os);
 }
 
+bool RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+{
+  (void)is;
+  ts = TransferSyntax::RLELossless;
+  return true;
+}
+
 } // end namespace gdcm

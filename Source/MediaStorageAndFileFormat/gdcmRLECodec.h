@@ -43,6 +43,7 @@ public:
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
   bool Code(DataElement const &in, DataElement &out);
+  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);

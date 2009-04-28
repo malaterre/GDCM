@@ -391,6 +391,48 @@ bool ImageWriter::Write()
     return false;
     }
 
+  if( ts.IsLossy() )
+    {
+    // Add the Lossy stuff:
+    Attribute<0x0028,0x2110> at1;
+    at1.SetValue( "01" );
+    ds.Replace( at1.GetAsDataElement() );
+    /*
+    The Defined Terms for Lossy Image Compression Method (0028,2114) ar e :
+    ISO_10918_1 = JPEG Lossy Compression
+    ISO_14495_1 = JPEG-LS Near-lossless Compression
+    ISO_15444_1 = JPEG 2000 Irreversible Compression
+    ISO_13818_2 = MPEG2 Compression
+     */
+
+    Attribute<0x0028,0x2114> at3;
+    if( ts == TransferSyntax::JPEG2000 )
+      {
+      static const CSComp newvalues2[] = {"ISO_15444_1"};
+      at3.SetValues(  newvalues2, 1 );
+      }
+    else if( ts == TransferSyntax::JPEGLSNearLossless )
+      {
+      static const CSComp newvalues2[] = {"ISO_14495_1"};
+      at3.SetValues(  newvalues2, 1 );
+      }
+    else if ( 
+      ts == TransferSyntax::JPEGBaselineProcess1 ||
+      ts == TransferSyntax::JPEGExtendedProcess2_4 ||
+      ts == TransferSyntax::JPEGExtendedProcess3_5 ||
+      ts == TransferSyntax::JPEGSpectralSelectionProcess6_8 ||
+      ts == TransferSyntax::JPEGFullProgressionProcess10_12 )
+      {
+      static const CSComp newvalues2[] = {"ISO_10918_1"};
+      at3.SetValues(  newvalues2, 1 );
+      }
+    else
+      {
+      return false;
+      }
+    ds.Replace( at3.GetAsDataElement() );
+    }
+
   VL vl;
   if( bv )
     {
@@ -634,13 +676,24 @@ Attribute<0x0028,0x0004> piat;
     if( ms == MediaStorage::SecondaryCaptureImageStorage )
       {
       // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
-      const char conversion[] = "SI"; // FIXME
+      const char conversion[] = "WSD "; // FIXME
       DataElement de( Tag(0x0008, 0x0064 ) );
       de.SetByteValue( conversion, strlen(conversion) );
       de.SetVR( Attribute<0x0008, 0x0064>::GetVR() );
       ds.Insert( de );
       }
     }
+  //if( !ds.FindDataElement( Tag(0x0020, 0x0062) ) )
+  //  {
+  //  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+  //    {
+  //    const char laterality[] = "U "; // FIXME
+  //    DataElement de( Tag(0x0020, 0x0062 ) );
+  //    de.SetByteValue( laterality, strlen(laterality) );
+  //    de.SetVR( Attribute<0x0020, 0x0062>::GetVR() );
+  //    ds.Insert( de );
+  //    }
+  //  }
 
   // Spacing:
   std::vector<double> sp;

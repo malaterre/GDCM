@@ -38,6 +38,8 @@ public:
   unsigned long GetBufferLength() const { return BufferLength; }
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
+  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+
   bool Read(const char *filename, DataElement &out) const;
   bool Write(const char *filename, const DataElement &out) const;
   //bool Write(const char *filename);

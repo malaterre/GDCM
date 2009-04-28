@@ -255,11 +255,11 @@ unsigned long Pixmap::GetBufferLength() const
 
 bool Pixmap::TryRAWCodec(char *buffer, bool &lossyflag) const
 {
-  if(!buffer)
-    {
-    lossyflag = false;
-    return true;
-    }
+  //if(!buffer)
+  //  {
+  //  lossyflag = false;
+  //  return true;
+  //  }
   const TransferSyntax &ts = GetTransferSyntax();
 
   const ByteValue *bv = PixelData.GetByteValue();
