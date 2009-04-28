@@ -1471,7 +1471,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     ds.Replace( at2.GetAsDataElement() );
 
     Attribute<0x0028,0x1054> at3; // Rescale Type
-    if( ds.FindDataElement( at3.GetTag() ) )
+    if( ds.FindDataElement( at3.GetTag() ) || ms == MediaStorage::SecondaryCaptureImageStorage )
       {
       at3.SetValue( "US" ); // FIXME
       ds.Replace( at3.GetAsDataElement() );

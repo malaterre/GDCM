@@ -233,8 +233,6 @@ bool Populate( gdcm::ImageWriter & writer, gdcm::ImageCodec & jpeg, const char *
        * the encapsulated Pixel Data Element...
        */
   std::ifstream is(filename);
-  gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
-  jpeg.SetPixelFormat( pf );
   gdcm::TransferSyntax ts;
   bool b = jpeg.GetHeaderInfo( is, ts );
   if( !b )
@@ -783,6 +781,10 @@ int main (int argc, char *argv[])
       || gdcm::System::StrCaseCmp(inputextension,".ljpeg") == 0 )
       {
       gdcm::JPEGCodec jpeg;
+      // Let's handle the case where user really wants to specify signess of data:
+      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
+      if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
+      jpeg.SetPixelFormat( pf );
       gdcm::ImageWriter writer;
       if( !Populate( writer, jpeg, filename ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;

@@ -375,17 +375,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
         assert( 0 );
         }
       }
-    // Let's check the color space:
-    // JCS_UNKNOWN    -> 0
-    // JCS_GRAYSCALE
-    // JCS_RGB
-    // JCS_YCbCr
-    // JCS_CMYK
-    // JCS_YCCK
-
     this->Dimensions[1] = cinfo.image_height;	/* Number of rows in image */
     this->Dimensions[0] = cinfo.image_width;		/* Number of columns in image */
 
+    int prep = this->PF.GetPixelRepresentation();
     if( this->BitSample == 8 )
       {
       this->PF = PixelFormat( PixelFormat::UINT8 );
@@ -400,10 +393,37 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       }
     else
       {
-      abort();
+      assert( 0 );
       }
+    this->PF.SetPixelRepresentation( prep );
 
-    if( cinfo.jpeg_color_space == JCS_GRAYSCALE )
+    // Let's check the color space:
+    //  JCS_UNKNOWN    -> 0
+    //  JCS_GRAYSCALE,    /* monochrome */
+    //  JCS_RGB,    /* red/green/blue */
+    //  JCS_YCbCr,    /* Y/Cb/Cr (also known as YUV) */
+    //  JCS_CMYK,   /* C/M/Y/K */
+    //  JCS_YCCK    /* Y/Cb/Cr/K */
+
+    if( cinfo.jpeg_color_space == JCS_UNKNOWN )
+      {
+      // I do not know if this possible, it looks like IJG always computes a default
+      if( cinfo.num_components == 1 )
+        {
+        PI = PhotometricInterpretation::MONOCHROME2;
+        this->PF.SetSamplesPerPixel( 1 );
+        }
+      else if( cinfo.num_components == 3 )
+        {
+        PI = PhotometricInterpretation::RGB;
+        this->PF.SetSamplesPerPixel( 3 );
+        }
+      else
+        {
+        assert( 0 );
+        }
+      }
+    else if( cinfo.jpeg_color_space == JCS_GRAYSCALE )
       {
       assert( cinfo.num_components == 1 );
       PI = PhotometricInterpretation::MONOCHROME2;
@@ -427,9 +447,16 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       PI = PhotometricInterpretation::CMYK;
       this->PF.SetSamplesPerPixel( 4 );
       }
+    else if( cinfo.jpeg_color_space == JCS_YCCK )
+      {
+      assert( cinfo.num_components == 4 );
+      PI = PhotometricInterpretation::YBR_FULL_422; // 4th plane ??
+      this->PF.SetSamplesPerPixel( 4 );
+      assert( 0 ); //TODO
+      }
     else
       {
-      abort(); //TODO
+      assert( 0 ); //TODO
       }
     }
   this->PlanarConfiguration = 0;
@@ -1161,7 +1188,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   /*
    * See write_file_header
    */
-  //cinfo.write_JFIF_header = 1;
+  cinfo.write_JFIF_header = 0;
   //cinfo.density_unit = 2;
   //cinfo.X_density = 2;
   //cinfo.Y_density = 5;

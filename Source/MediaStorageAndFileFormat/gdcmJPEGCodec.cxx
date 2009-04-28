@@ -93,6 +93,7 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 void JPEGCodec::SetBitSample(int bit)
 {
   BitSample = bit;
+  delete Internal; Internal = NULL;
   assert( Internal == NULL );
   // gdcmData/DCMTK_JPEGExt_12Bits.dcm
   if( this->GetPixelFormat().GetBitsAllocated() % 8 != 0 )
@@ -231,7 +232,9 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         // Foward everything back to meta jpeg codec:
         this->SetDimensions( Internal->GetDimensions() );
         this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
+        int prep = this->GetPixelFormat().GetPixelRepresentation();
         this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
+        this->PF.SetPixelRepresentation( prep );
         return true;
         }
       else
