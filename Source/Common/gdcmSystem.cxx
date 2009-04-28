@@ -220,6 +220,20 @@ bool System::FileIsDirectory(const char* name)
     }
 }
 
+time_t System::FileTime(const char* filename)
+{
+  struct stat fs;
+  if(stat(filename, &fs) == 0)
+    {
+    // man 2 stat
+    // time_t    st_atime;   /* time of last access */
+    // time_t    st_mtime;   /* time of last modification */
+    // time_t    st_ctime;   /* time of last status change */
+    return fs.st_mtime;
+    }
+  return 0;
+}
+
 const char *System::GetLastSystemError()
 {
   int e = errno;

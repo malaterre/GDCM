@@ -168,6 +168,11 @@ int TestSystem(int, char *[])
   {
   return 1;
   }
+
+  //time_t t = gdcm::System::FileTime("/etc/debian_version");
+  //char date3[18+1];
+  //gdcm::System::FormatDateTime(date3, t);
+  //std::cout << date3 << std::endl;
    
   return 0;
 }

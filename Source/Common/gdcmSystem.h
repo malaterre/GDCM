@@ -45,6 +45,10 @@ public:
   /// \warning you need to use FileExists to differenciate between empty file and missing file.
   static size_t FileSize(const char* filename);
 
+  /// Return the time of last modification of file
+  /// 0 if the file does not exist
+  static time_t FileTime(const char* filename);
+
   /// Return the directory the current process (executable) is located:
   /// NOT THREAD SAFE
   static const char *GetCurrentProcessFileName();

@@ -30,7 +30,7 @@
  *   DICOM RAW  <->  pnm/pgm
  *   DICOM jpg  <->  jpg
  *   DICOM ljpg <->  ljpg
- *   DICOM jpls <->  jpls
+ *   DICOM jls  <->  jls
  *   DICOM j2k  <->  j2k
  *   DICOM rle  <->  Utah RLE ??
  *
