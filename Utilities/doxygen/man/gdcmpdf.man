@@ -46,20 +46,20 @@ file-out  DICOM output filename
 \section usage_example Usage Example
 
 \verbatim
- wget http://gdcm.sourceforge.net/gdcm.pdf    
- gdcmpdf gdcm.pdf gdcm.dcm
+ $ wget http://gdcm.sourceforge.net/gdcm.pdf    
+ $ gdcmpdf gdcm.pdf gdcm.dcm
 \endverbatim
 
 To re-extract the encapsulated pdf file:
 
 \verbatim
- gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
- diff gdcm.pdf gdcm.dcm.pdf
+ $ gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
+ $ diff gdcm.pdf gdcm.dcm.pdf
 \endverbatim
 
 \section pdf_mapping PDF Info Mapping
 
-Here is how the PDF info is mapped to DICOM information:
+Here is how the PDF info is mapped to DICOM information (typical pdfinfo output):
 
 \verbatim
 Title:          GDCM Reference Manual
@@ -119,7 +119,7 @@ Converted to DICOM this leads to:
 
 \section see_also SEE ALSO
 
-<b>gdcmconv</b>(1), <b>gdcmraw</b>(1)
+<b>gdcmconv</b>(1), <b>gdcmraw</b>(1), <b>pdfinfo</b>(1)
 
 \section copyright COPYRIGHT
 

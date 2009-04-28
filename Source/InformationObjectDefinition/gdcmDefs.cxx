@@ -116,6 +116,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage:
       iodname = "Multi Frame True Color SC Image IOD Modules";
       break;
+    case MediaStorage::EncapsulatedPDFStorage:
+      iodname = "Encapsulated PDF IOD Modules";
+      break;
     default:
       iodname = 0;
     }
