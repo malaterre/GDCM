@@ -82,7 +82,7 @@ std::string getInfoDate(Dict *infoDict, const char *key)
 */
       }
     //fputc('\n', stdout);
-    char date[18];
+    char date[22];
     time_t t = mktime(&tmStruct);
     if( t != -1 )
       {
@@ -326,10 +326,21 @@ int main (int argc, char *argv[])
 
   //const char *outfilename = argv[2];
   fileName = new GooString( filename.c_str() );
+  //ownerPW = new GooString( "toto" );
   Object obj;
 
   obj.initNull();
   doc = new PDFDoc(fileName, ownerPW, userPW);
+
+  if (doc->isEncrypted())
+    {
+    std::string password;
+    std::cout << "Enter password:" << std::endl;
+    std::cin >> password;
+    std::cout << "Enter password:" << password << std::endl;
+    ownerPW = new GooString( password.c_str() );
+    doc = new PDFDoc(fileName, ownerPW, userPW);
+    }
 
   if (!doc->isOk())
     {
@@ -374,12 +385,12 @@ int main (int argc, char *argv[])
   gdcm::DataSet &ds = writer.GetFile().GetDataSet();
   ds.Insert( de );
 
-  time_t studydatetime = gdcm::System::FileTime( filename.c_str() );
 
 {
-  char date[18];
-  gdcm::System::FormatDateTime(date, studydatetime);
+  char date[22];
   const size_t datelen = 8;
+  int res = gdcm::System::GetCurrentDateTime(date);
+  if( !res ) return false;
     {
     gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
     // Do not copy the whole cstring:
@@ -388,14 +399,18 @@ int main (int argc, char *argv[])
     ds.Insert( de );
     }
   // StudyTime
-  const size_t timelen = 6; // get rid of milliseconds
+  const size_t timelen = 6 + 1 + 6; // time + milliseconds
     {
-    gdcm::DataElement de( gdcm::Tag(0x0008,0x0030) );
+    gdcm::Attribute<0x8,0x30> at;
+    at.SetValue( date+datelen );
+    ds.Insert( at.GetAsDataElement() );
+    //gdcm::DataElement de( gdcm::Tag(0x0008,0x0030) );
     // Do not copy the whole cstring:
-    de.SetByteValue( date+datelen, timelen );
-    de.SetVR( gdcm::Attribute<0x0008,0x0030>::GetVR() );
-    ds.Insert( de );
+    //de.SetByteValue( date+datelen, timelen );
+    //de.SetVR( gdcm::Attribute<0x0008,0x0030>::GetVR() );
+    //ds.Insert( de );
     }
+
 }
 
   gdcm::UIDGenerator uid;
@@ -418,7 +433,7 @@ int main (int argc, char *argv[])
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmpdf" );
 
-  char date[18];
+  char date[22];
   const size_t datelen = 8;
   bool b = gdcm::System::GetCurrentDateTime(date);
   //std::cout << date << std::endl;
@@ -437,7 +452,7 @@ int main (int argc, char *argv[])
   ds.Insert( at.GetAsDataElement() );
 }
 
-  const size_t timelen = 6; // get rid of milliseconds
+  const size_t timelen = 6 + 1 + 6; // TM + milliseconds
 {
   gdcm::Attribute<0x0008, 0x0013> at;
   std::string tmp( date+datelen, timelen);
@@ -459,6 +474,10 @@ int main (int argc, char *argv[])
 //(0008,002a) DT (no value available)                     #   0, 0 AcquisitionDatetime
 {
   gdcm::Attribute<0x0008, 0x002a> at;
+  time_t studydatetime = gdcm::System::FileTime( filename.c_str() );
+  char date[22];
+  gdcm::System::FormatDateTime(date, studydatetime);
+  at.SetValue( date );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0008,0030) TM (no value available)                     #   0, 0 StudyTime

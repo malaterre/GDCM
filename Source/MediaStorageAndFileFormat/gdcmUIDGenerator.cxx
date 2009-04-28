@@ -122,14 +122,14 @@ const char* UIDGenerator::Generate2()
   Unique += ".";
   Unique += EncodedHardwareAddress;
   Unique += ".";
-  char datetime[18];
+  char datetime[22];
   int res = System::GetCurrentDateTime(datetime);
   if( !res )
     {
     // Not sure how this is supposed to happen...
     return NULL;
     }
-  assert( strlen(datetime) < 18 );
+  assert( strlen(datetime) < 22 );
   Unique += datetime;
   // Also add a mini random number just in case:
   // FIXME: I choose 2 bytes for the random number, since GDCM Root UID is so long, and harware address can take up

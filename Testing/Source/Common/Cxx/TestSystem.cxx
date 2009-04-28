@@ -62,8 +62,9 @@ int TestSystem(int, char *[])
     return 1;
     }
 
-  char datetime[18];
+  char datetime[22];
   int res = gdcm::System::GetCurrentDateTime(datetime);
+  assert( datetime[21] == 0 );
   std::cerr << datetime << std::endl;
 
   const char *cwd = gdcm::System::GetCWD();
@@ -96,23 +97,23 @@ int TestSystem(int, char *[])
     }
 
 {
-  char date[18+1];
-  date[18] = 0;
+  char date[22];
   if( !gdcm::System::GetCurrentDateTime( date ) )
     {
     return 1;
     }
+  assert( date[21] == 0 );
   time_t timep; long milliseconds;
   if( !gdcm::System::ParseDateTime(timep, milliseconds, date) )
     {
     return 1;
     }
-  char date2[18+1];
-  date2[18] = 0;
+  char date2[22];
   if( !gdcm::System::FormatDateTime(date2, timep, milliseconds) )
     {
     return 1;
     }
+  assert( date2[21] == 0 );
 
   if( strcmp( date, date2 ) != 0 )
     {
@@ -123,7 +124,7 @@ int TestSystem(int, char *[])
 }
   // Skip millisecond this time:
 {
-  char date[18+1];
+  char date[22+1];
   if( !gdcm::System::GetCurrentDateTime( date ) )
     {
     return 1;
@@ -136,8 +137,8 @@ int TestSystem(int, char *[])
     std::cerr << "ParseDateTime" << std::endl;
     return 1;
     }
-  char date2[18+1];
-  date2[18] = 0;
+  char date2[22+1];
+  date2[22] = 0;
   if( !gdcm::System::FormatDateTime(date2, timep) )
     {
     std::cerr << "FormatDateTime" << std::endl;
@@ -170,9 +171,35 @@ int TestSystem(int, char *[])
   }
 
   //time_t t = gdcm::System::FileTime("/etc/debian_version");
-  //char date3[18+1];
+  //char date3[22];
   //gdcm::System::FormatDateTime(date3, t);
   //std::cout << date3 << std::endl;
+
+  const char fixed_date[] = "20090428172557.515500";
+  if( strlen( fixed_date ) != 21 )
+  {
+    return 1;
+  }
+  time_t fixed_timep;
+  time_t fixed_milliseconds;
+  if( !gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, fixed_date) )
+  {
+  return 1;
+  }
+  if( fixed_milliseconds != 515500 )
+{
+return 1;
+}
+  char fixed_date2[22];
+  if( !gdcm::System::FormatDateTime(fixed_date2, fixed_timep, fixed_milliseconds) )
+{
+  return 1;
+}
+assert( fixed_date2[21] == 0 );
+  if( strcmp( fixed_date, fixed_date2 ) != 0 )
+{
+  return 1;
+}
    
   return 0;
 }

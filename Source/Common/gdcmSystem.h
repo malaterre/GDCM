@@ -73,19 +73,25 @@ public:
   static bool GetHostName(char hostname[255]);
 
   // somewhat UID specific:
+  // In the following the size '22' is explicitely listed. You need to pass in at least 22bytes of
+  // array. If the string is an output it will be automatically padded ( array[21] == 0 ) for you.
+  // Those functions: GetCurrentDateTime / FormatDateTime / ParseDateTime do not return the 
+  // &YYZZ part of the DT structure as defined in DICOM PS 3.5 - 2008
+  // In this case it is simple to split the date[22] into a DA and TM structure !
+
   /// Return the current data time, and format it as ASCII text.
-  static bool GetCurrentDateTime(char date[18]);
+  static bool GetCurrentDateTime(char date[22]);
 
   /// format as ASCII text a time_t with milliseconds
   /// See VR::DT from DICOM PS 3.5
-  static bool FormatDateTime(char date[18], time_t t, long milliseconds = 0);
+  static bool FormatDateTime(char date[22], time_t t, long milliseconds = 0);
 
   /// Parse a date stored as ASCII text into a time_t structured (discard millisecond if any)
-  static bool ParseDateTime(time_t &timep, const char date[18]);
+  static bool ParseDateTime(time_t &timep, const char date[22]);
 
   /// Parse a date stored as ASCII text into a time_t structured and millisecond
   /// \see FormatDateTime
-  static bool ParseDateTime(time_t &timep, long &milliseconds, const char date[18]);
+  static bool ParseDateTime(time_t &timep, long &milliseconds, const char date[22]);
 
   /// Encode bytes
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);

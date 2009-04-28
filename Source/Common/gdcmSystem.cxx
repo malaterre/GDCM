@@ -220,6 +220,7 @@ bool System::FileIsDirectory(const char* name)
     }
 }
 
+// TODO st_mtimensec
 time_t System::FileTime(const char* filename)
 {
   struct stat fs;
@@ -230,6 +231,14 @@ time_t System::FileTime(const char* filename)
     // time_t    st_mtime;   /* time of last modification */
     // time_t    st_ctime;   /* time of last status change */
     return fs.st_mtime;
+
+    // Since  kernel 2.5.48, the stat structure supports nanosecond resolution
+    // for the three file timestamp fields.  Glibc exposes the nanosecond com-
+    // ponent of each field using names either of the form st_atim.tv_nsec, if
+    // the _BSD_SOURCE or _SVID_SOURCE feature test macro is  defined,  or  of
+    // the  form st_atimensec, if neither of these macros is defined.  On file
+    // systems that do not support  sub-second  timestamps,  these  nanosecond
+    // fields are returned with the value 0.
     }
   return 0;
 }
@@ -529,549 +538,67 @@ static int gettimeofday(struct timeval *tv, struct timezone *tz)
 }
 #endif
 
-bool System::ParseDateTime(time_t &timep, const char date[18])
+bool System::ParseDateTime(time_t &timep, const char date[22])
 {
   long milliseconds;
   return ParseDateTime(timep, milliseconds, date);
 }
 
-#if defined(_MSC_VER)
-// http://bugs.python.org/file10704/strftime.diff
-// http://social.msdn.microsoft.com/Forums/en-US/vcgeneral/thread/25a654f9-b6b6-490a-8f36-c87483bb36b7/
-// http://cvsweb.netbsd.org/bsdweb.cgi/src/lib/libc/time/
-/*-
- * Copyright (c) 1997, 1998, 2005, 2008 The NetBSD Foundation, Inc.
- * All rights reserved.
- *
- * This code was contributed to The NetBSD Foundation by Klaus Klein.
- * Heavily optimised by David Laight
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
-
-typedef unsigned int uint;
-#define TM_YEAR_BASE   1900
-#define IsLeapYear(x)   ((x % 4 == 0) && (x % 100 != 0 || x % 400 == 0))
-
-typedef struct {
-    const char *abday[7];
-    const char *day[7];
-    const char *abmon[12];
-    const char *mon[12];
-    const char *am_pm[2];
-    const char *d_t_fmt;
-    const char *d_fmt;
-    const char *t_fmt;
-    const char *t_fmt_ampm;
-} _TimeLocale;
-
-
-/*
- * This is the C locale default.  On Windows, if we wanted to make this
- * localized, we would use GetLocaleInfo to get the correct values.
- * It may be acceptable to do localization of month/day names, as the
- * numerical values would be considered the locale-independent versions.
- */
-static const _TimeLocale _DefaultTimeLocale = 
-{
-    {
-	"Sun","Mon","Tue","Wed","Thu","Fri","Sat",
-    },
-    {
-	"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-	"Friday", "Saturday"
-    },
-    {
-	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    },
-    {
-	"January", "February", "March", "April", "May", "June", "July",
-	"August", "September", "October", "November", "December"
-    },
-    {
-	"AM", "PM"
-    },
-    "%a %b %d %H:%M:%S %Y",
-    "%m/%d/%y",
-    "%H:%M:%S",
-    "%I:%M:%S %p"
-};
-
-static const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
-
-#define	_ctloc(x)		(_CurrentTimeLocale->x)
-
-/*
- * We do not implement alternate representations. However, we always
- * check whether a given modifier is allowed for a certain conversion.
- */
-#define ALT_E			0x01
-#define ALT_O			0x02
-#define	LEGAL_ALT(x)		{ if (alt_format & ~(x)) return NULL; }
-
-static char gmt[] = { "GMT" };
-static char utc[] = { "UTC" };
-
-static const u_char *conv_num(const unsigned char *, int *, uint, uint);
-static const u_char *find_string(const u_char *, int *, const char * const *,const char * const *, int);
-
-#ifndef __UNCONST
-#define __UNCONST(a)	((char *)(unsigned long)(const char *)(a))
-#endif
-
-char *
-strptime(const char *buf, const char *fmt, struct tm *tm)
-{
-	unsigned char c;
-	const unsigned char *bp;
-	int alt_format, i, split_year = 0, neg, offs;
-	const char *new_fmt;
-
-	bp = (const u_char *)buf;
-
-	while (bp != NULL && (c = *fmt++) != '\0') {
-		/* Clear `alternate' modifier prior to new conversion. */
-		alt_format = 0;
-		i = 0;
-
-		/* Eat up white-space. */
-		if (isspace(c)) {
-			while (isspace(*bp))
-				bp++;
-			continue;
-		}
-
-		if (c != '%')
-			goto literal;
-
-
-again:		switch (c = *fmt++) {
-		case '%':	/* "%%" is converted to "%". */
-literal:
-			if (c != *bp++)
-				return NULL;
-			LEGAL_ALT(0);
-			continue;
-
-		/*
-		 * "Alternative" modifiers. Just set the appropriate flag
-		 * and start over again.
-		 */
-		case 'E':	/* "%E?" alternative conversion modifier. */
-			LEGAL_ALT(0);
-			alt_format |= ALT_E;
-			goto again;
-
-		case 'O':	/* "%O?" alternative conversion modifier. */
-			LEGAL_ALT(0);
-			alt_format |= ALT_O;
-			goto again;
-
-		/*
-		 * "Complex" conversion rules, implemented through recursion.
-		 */
-		case 'c':	/* Date and time, using the locale's format. */
-			new_fmt = _ctloc(d_t_fmt);
-			goto recurse;
-
-		case 'D':	/* The date as "%m/%d/%y". */
-			new_fmt = "%m/%d/%y";
-			LEGAL_ALT(0);
-			goto recurse;
-
-		case 'F':	/* The date as "%Y-%m-%d". */
-			new_fmt = "%Y-%m-%d";
-			LEGAL_ALT(0);
-			goto recurse;
-
-		case 'R':	/* The time as "%H:%M". */
-			new_fmt = "%H:%M";
-			LEGAL_ALT(0);
-			goto recurse;
-
-		case 'r':	/* The time in 12-hour clock representation. */
-			new_fmt =_ctloc(t_fmt_ampm);
-			LEGAL_ALT(0);
-			goto recurse;
-
-		case 'T':	/* The time as "%H:%M:%S". */
-			new_fmt = "%H:%M:%S";
-			LEGAL_ALT(0);
-			goto recurse;
-
-		case 'X':	/* The time, using the locale's format. */
-			new_fmt =_ctloc(t_fmt);
-			goto recurse;
-
-		case 'x':	/* The date, using the locale's format. */
-			new_fmt =_ctloc(d_fmt);
-		    recurse:
-			bp = (const u_char *)strptime((const char *)bp,
-							    new_fmt, tm);
-			LEGAL_ALT(ALT_E);
-			continue;
-
-		/*
-		 * "Elementary" conversion rules.
-		 */
-		case 'A':	/* The day of week, using the locale's form. */
-		case 'a':
-			bp = find_string(bp, &tm->tm_wday, _ctloc(day),
-					_ctloc(abday), 7);
-			LEGAL_ALT(0);
-			continue;
-
-		case 'B':	/* The month, using the locale's form. */
-		case 'b':
-		case 'h':
-			bp = find_string(bp, &tm->tm_mon, _ctloc(mon),
-					_ctloc(abmon), 12);
-			LEGAL_ALT(0);
-			continue;
-
-		case 'C':	/* The century number. */
-			i = 20;
-			bp = conv_num(bp, &i, 0, 99);
-
-			i = i * 100 - TM_YEAR_BASE;
-			if (split_year)
-				i += tm->tm_year % 100;
-			split_year = 1;
-			tm->tm_year = i;
-			LEGAL_ALT(ALT_E);
-			continue;
-
-		case 'd':	/* The day of month. */
-		case 'e':
-			bp = conv_num(bp, &tm->tm_mday, 1, 31);
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'k':	/* The hour (24-hour clock representation). */
-			LEGAL_ALT(0);
-			/* FALLTHROUGH */
-		case 'H':
-			bp = conv_num(bp, &tm->tm_hour, 0, 23);
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'l':	/* The hour (12-hour clock representation). */
-			LEGAL_ALT(0);
-			/* FALLTHROUGH */
-		case 'I':
-			bp = conv_num(bp, &tm->tm_hour, 1, 12);
-			if (tm->tm_hour == 12)
-				tm->tm_hour = 0;
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'j':	/* The day of year. */
-			i = 1;
-			bp = conv_num(bp, &i, 1, 366);
-			tm->tm_yday = i - 1;
-			LEGAL_ALT(0);
-			continue;
-
-		case 'M':	/* The minute. */
-			bp = conv_num(bp, &tm->tm_min, 0, 59);
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'm':	/* The month. */
-			i = 1;
-			bp = conv_num(bp, &i, 1, 12);
-			tm->tm_mon = i - 1;
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'p':	/* The locale's equivalent of AM/PM. */
-			bp = find_string(bp, &i, _ctloc(am_pm), NULL, 2);
-			if (tm->tm_hour > 11)
-				return NULL;
-			tm->tm_hour += i * 12;
-			LEGAL_ALT(0);
-			continue;
-
-		case 'S':	/* The seconds. */
-			bp = conv_num(bp, &tm->tm_sec, 0, 61);
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'U':	/* The week of year, beginning on sunday. */
-		case 'W':	/* The week of year, beginning on monday. */
-			/*
-			 * XXX This is bogus, as we can not assume any valid
-			 * information present in the tm structure at this
-			 * point to calculate a real value, so just check the
-			 * range for now.
-			 */
-			 bp = conv_num(bp, &i, 0, 53);
-			 LEGAL_ALT(ALT_O);
-			 continue;
-
-		case 'w':	/* The day of week, beginning on sunday. */
-			bp = conv_num(bp, &tm->tm_wday, 0, 6);
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'u':	/* The day of week, monday = 1. */
-			bp = conv_num(bp, &i, 1, 7);
-			tm->tm_wday = i % 7;
-			LEGAL_ALT(ALT_O);
-			continue;
-
-		case 'g':	/* The year corresponding to the ISO week
-				 * number but without the century.
-				 */
-			bp = conv_num(bp, &i, 0, 99);
-			continue;
-
-		case 'G':	/* The year corresponding to the ISO week
-				 * number with century.
-				 */
-			do
-				bp++;
-			while (isdigit(*bp));
-			continue;
-
-		case 'V':	/* The ISO 8601:1988 week number as decimal */
-			bp = conv_num(bp, &i, 0, 53);
-			continue;
-
-		case 'Y':	/* The year. */
-			i = TM_YEAR_BASE;	/* just for data sanity... */
-			bp = conv_num(bp, &i, 0, 9999);
-			tm->tm_year = i - TM_YEAR_BASE;
-			LEGAL_ALT(ALT_E);
-			continue;
-
-		case 'y':	/* The year within 100 years of the epoch. */
-			/* LEGAL_ALT(ALT_E | ALT_O); */
-			bp = conv_num(bp, &i, 0, 99);
-
-			if (split_year)
-				/* preserve century */
-				i += (tm->tm_year / 100) * 100;
-			else {
-				split_year = 1;
-				if (i <= 68)
-					i = i + 2000 - TM_YEAR_BASE;
-				else
-					i = i + 1900 - TM_YEAR_BASE;
-			}
-			tm->tm_year = i;
-			continue;
-
-		case 'Z':
-			tzset();
-			if (strncmp((const char *)bp, gmt, 3) == 0) {
-				tm->tm_isdst = 0;
-#ifdef TM_GMTOFF
-				tm->TM_GMTOFF = 0;
-#endif
-#ifdef TM_ZONE
-				tm->TM_ZONE = gmt;
-#endif
-				bp += 3;
-			} else {
-				const unsigned char *ep;
-
-				ep = find_string(bp, &i,
-					       	 (const char * const *)tzname,
-					       	  NULL, 2);
-				if (ep != NULL) {
-					tm->tm_isdst = i;
-#ifdef TM_GMTOFF
-					tm->TM_GMTOFF = -(timezone);
-#endif
-#ifdef TM_ZONE
-					tm->TM_ZONE = tzname[i];
-#endif
-				}
-				bp = ep;
-			}
-			continue;
-
-		case 'z':
-			/*
-			 * We recognize all ISO 8601 formats:
-			 * Z	= Zulu time/UTC
-			 * [+-]hhmm
-			 * [+-]hh:mm
-			 * [+-]hh
-			 */
-			while (isspace(*bp))
-				bp++;
-
-			switch (*bp++) {
-			case 'Z':
-				tm->tm_isdst = 0;
-#ifdef TM_GMTOFF
-				tm->TM_GMTOFF = 0;
-#endif
-#ifdef TM_ZONE
-				tm->TM_ZONE = utc;
-#endif
-				continue;
-			case '+':
-				neg = 0;
-				break;
-			case '-':
-				neg = 1;
-				break;
-			default:
-				return NULL;
-			}
-			offs = 0;
-			for (i = 0; i < 4; ) {
-				if (isdigit(*bp)) {
-					offs = offs * 10 + (*bp++ - '0');
-					i++;
-					continue;
-				}
-				if (i == 2 && *bp == ':') {
-					bp++;
-					continue;
-				}
-				break;
-			}
-			switch (i) {
-			case 2:
-				offs *= 100;
-				break;
-			case 4:
-				i = offs % 100;
-				if (i >= 60)
-					return NULL;
-				/* Convert minutes into decimal */
-				offs = (offs / 100) * 100 + (i * 50) / 30;
-				break;
-			default:
-				return NULL;
-			}
-			if (neg)
-				offs = -offs;
-			tm->tm_isdst = 0;	/* XXX */
-#ifdef TM_GMTOFF
-			tm->TM_GMTOFF = offs;
-#endif
-#ifdef TM_ZONE
-			tm->TM_ZONE = NULL;	/* XXX */
-#endif
-			continue;
-
-		/*
-		 * Miscellaneous conversions.
-		 */
-		case 'n':	/* Any kind of white-space. */
-		case 't':
-			while (isspace(*bp))
-				bp++;
-			LEGAL_ALT(0);
-			continue;
-
-
-		default:	/* Unknown/unsupported conversion. */
-			return NULL;
-		}
-	}
-
-	return __UNCONST(bp);
-}
-
-static const u_char *
-conv_num(const unsigned char *buf, int *dest, uint llim, uint ulim)
-{
-	uint result = 0;
-	unsigned char ch;
-
-	/* The limit also determines the number of valid digits. */
-	uint rulim = ulim;
-
-	ch = *buf;
-	if (ch < '0' || ch > '9')
-		return NULL;
-
-	do {
-		result *= 10;
-		result += ch - '0';
-		rulim /= 10;
-		ch = *++buf;
-	} while ((result * 10 <= ulim) && rulim && ch >= '0' && ch <= '9');
-
-	if (result < llim || result > ulim)
-		return NULL;
-
-	*dest = result;
-	return buf;
-}
-
-static const u_char *
-find_string(const u_char *bp, int *tgt, const char * const *n1,
-		const char * const *n2, int c)
-{
-	int i;
-	unsigned int len;
-
-	/* check full name - then abbreviated ones */
-	for (; n1 != NULL; n1 = n2, n2 = NULL) {
-		for (i = 0; i < c; i++, n1++) {
-			len = strlen(*n1);
-			if (_strnicmp(*n1, (const char *)bp, len) == 0) {
-				*tgt = i;
-				return bp + len;
-			}
-		}
-	}
-
-	/* Nothing matched */
-	return NULL;
-}
-
-
-#endif
-
-bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[18])
+bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22])
 {
   if(!date) return false;
-  size_t len = strlen(date); (void)len;
   struct tm ptm;
-  char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
-  if( ptr && *ptr ) // more data to process
+  // No such thing as strptime on some st*$^% platform
+  //char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
+  // instead write our own:
+  int year, mon, day, hour, min, sec, n;
+  if ((n = sscanf(date, "%4d%2d%2d%2d%2d%2d",
+        &year, &mon, &day, &hour, &min, &sec)) >= 1)
     {
-    if( sscanf( ptr, "%03ld", &milliseconds ) != 1 )
+    switch (n)
+      {
+    case 1: mon = 1;
+    case 2: day = 1;
+    case 3: hour = 0;
+    case 4: min = 0;
+    case 5: sec = 0;
+      }
+    ptm.tm_year = year - 1900;
+    ptm.tm_mon = mon - 1;
+    ptm.tm_mday = day;
+    ptm.tm_hour = hour;
+    ptm.tm_min = min;
+    ptm.tm_sec = sec;
+    ptm.tm_wday = -1;
+    ptm.tm_yday = -1;
+    ptm.tm_isdst = -1;
+    }
+  else
+    {
+    return false;
+    }
+  timep = mktime(&ptm);
+
+  size_t len = strlen(date);
+  if( len > 14 ) // more data to process
+    {
+    const char *ptr = date + 14;
+    if( *ptr != '.' ) return false;
+    ++ptr;
+    if( sscanf( ptr, "%06ld", &milliseconds ) != 1 )
       {
       // Could not parse milliseconds but date looks ok, should I return false anyway ?
+      // -> yes this is an error !
       return false;
       }
     }
-  timep = mktime(&ptm);
 
   return true;
 }
 
-bool System::FormatDateTime(char date[18], time_t timep, long milliseconds)
+bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 {
+  // YYYYMMDDHHMMSS.FFFFFF&ZZXX
   if(!date) return false;
   const size_t maxsize = 40;
   char tmp[maxsize];
@@ -1079,15 +606,16 @@ bool System::FormatDateTime(char date[18], time_t timep, long milliseconds)
   struct tm *ptm = localtime (&timep);
   // Format the date and time, down to a single second.
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
+  assert( ret == 14 );
   if( ret == 0 || ret >= maxsize )
     {
     return false;
     }
 
   // Add milliseconds
-  const size_t maxsizall = 18;
+  const size_t maxsizall = 22;
   //char tmpAll[maxsizall];
-  int ret2 = snprintf(date,maxsizall,"%s%03ld",tmp,milliseconds);
+  int ret2 = snprintf(date,maxsizall,"%s.%06ld",tmp,milliseconds);
   assert( ret2 >= 0 );
   if( (unsigned int)ret2 >= maxsizall )
     {
@@ -1098,7 +626,7 @@ bool System::FormatDateTime(char date[18], time_t timep, long milliseconds)
   return true;
 }
 
-bool System::GetCurrentDateTime(char date[18])
+bool System::GetCurrentDateTime(char date[22])
 {
   long milliseconds;
   time_t timep;
@@ -1106,8 +634,19 @@ bool System::GetCurrentDateTime(char date[18])
   struct timeval tv;
   gettimeofday (&tv, NULL);
   timep = tv.tv_sec;
-  // Compute milliseconds from microseconds.
-  milliseconds = tv.tv_usec / 1000;
+  // A concatenated date-time character string in
+  // the format:
+  // YYYYMMDDHHMMSS.FFFFFF&ZZXX
+  // The components of this string, from left to
+  // right, are YYYY = Year, MM = Month, DD =
+  // Day, HH = Hour (range "00" - "23"), MM =
+  // Minute (range "00" - "59"), SS = Second
+  // (range "00" - "60").
+  // FFFFFF = Fractional Second contains a
+  // fractional part of a second as small as 1
+  // millionth of a second (range ¿000000¿ -
+  // ¿999999¿).
+  milliseconds = tv.tv_usec;
 
   return FormatDateTime(date, timep, milliseconds);
 }

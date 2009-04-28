@@ -155,7 +155,7 @@ void PrintHelp()
 bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
 {
   time_t studydatetime = gdcm::System::FileTime( filename );
-  char date[18];
+  char date[22];
   gdcm::System::FormatDateTime(date, studydatetime);
   const size_t datelen = 8;
     {
@@ -180,7 +180,7 @@ bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
 bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
 {
   // StudyDate
-  char date[18];
+  char date[22];
   const size_t datelen = 8;
   int res = gdcm::System::GetCurrentDateTime(date);
   if( !res ) return false;

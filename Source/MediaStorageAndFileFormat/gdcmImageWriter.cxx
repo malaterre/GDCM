@@ -863,7 +863,7 @@ Attribute<0x0028,0x0004> piat;
     ds.Insert( de );
     }
   // StudyDate
-  char date[18];
+  char date[22];
   const size_t datelen = 8;
   int res = System::GetCurrentDateTime(date);
   assert( res );
@@ -876,7 +876,7 @@ Attribute<0x0028,0x0004> piat;
     ds.Insert( de );
     }
   // StudyTime
-  const size_t timelen = 6; // get rid of milliseconds
+  const size_t timelen = 6 + 1 + 6; // time + milliseconds
   if( !ds.FindDataElement( Tag(0x0008,0x0030) ) )
     {
     DataElement de( Tag(0x0008,0x0030) );
