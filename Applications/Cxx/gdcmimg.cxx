@@ -152,13 +152,38 @@ void PrintHelp()
  */
 }
 
-// Set Study Date/Time to the file time:
-bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
+bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
 {
   time_t studydatetime = gdcm::System::FileTime( filename );
   char date[18];
   gdcm::System::FormatDateTime(date, studydatetime);
   const size_t datelen = 8;
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0008,0x0023) );
+    // Do not copy the whole cstring:
+    de.SetByteValue( date, datelen );
+    de.SetVR( gdcm::Attribute<0x0008,0x0023>::GetVR() );
+    ds.Insert( de );
+    }
+  // StudyTime
+  const size_t timelen = 6; // get rid of milliseconds
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0008,0x0033) );
+    // Do not copy the whole cstring:
+    de.SetByteValue( date+datelen, timelen );
+    de.SetVR( gdcm::Attribute<0x0008,0x0033>::GetVR() );
+    ds.Insert( de );
+    }
+  return true;
+}
+// Set Study Date/Time to the file time:
+bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
+{
+  // StudyDate
+  char date[18];
+  const size_t datelen = 8;
+  int res = gdcm::System::GetCurrentDateTime(date);
+  if( !res ) return false;
     {
     gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
     // Do not copy the whole cstring:
@@ -175,8 +200,9 @@ bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
     de.SetVR( gdcm::Attribute<0x0008,0x0030>::GetVR() );
     ds.Insert( de );
     }
-  return true;
+  return AddContentDateTime(ds, filename);
 }
+
 
 bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & study_uid, std::string const & series_uid, gdcm::DataSet& ds)
 {

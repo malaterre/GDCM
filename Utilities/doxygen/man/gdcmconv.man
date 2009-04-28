@@ -22,6 +22,12 @@ file-out  DICOM output filename
 
 \section options OPTIONS
 
+\subsection parameters parameters
+\verbatim
+  -i --input      DICOM filename
+  -o --output     DICOM filename
+\endverbatim
+
 \subsection options options
 \verbatim
   -X --explicit            Change Transfer Syntax to explicit.
@@ -31,6 +37,7 @@ file-out  DICOM output filename
   -C --check-meta          Check File Meta Information (advanced user only).
      --root-uid            Root UID.
      --remove-gl           Remove group length (deprecated in DICOM 2008).
+     --remove-private-tags Remove private tags.
 \endverbatim
 
 \subsection image_options image options
@@ -38,6 +45,7 @@ file-out  DICOM output filename
   -l --apply-lut                      Apply LUT (non-standard, advanced user only).
   -P --photometric-interpretation %s  Change Photometric Interpretation (when possible).
   -w --raw                            Decompress image.
+  -d --deflated                       Compress using deflated (gzip).
   -J --jpeg                           Compress image in jpeg.
   -K --j2k                            Compress image in j2k.
   -L --jpegls                         Compress image in jpeg-ls.
@@ -47,6 +55,20 @@ file-out  DICOM output filename
      --planar-configuration [01]      Change planar configuration.
   -Y --lossy                          Use the lossy (if possible) compressor.
   -S --split %d                       Write 2D image with multiple fragments (using max size)
+\endverbatim
+
+\subsection j2k_options JPEG options
+\verbatim
+  -q --quality %*f           set quality.
+\endverbatim
+
+\subsection j2k_options J2K options
+\verbatim
+  -r --rate    %*f           set rate.
+  -q --quality %*f           set quality.
+  -t --tile %d,%d            set tile size.
+  -n --number-resolution %d  set number of resolution.
+     --irreversible          set irreversible.
 \endverbatim
 
 \subsection general_options general options
@@ -70,15 +92,6 @@ file-out  DICOM output filename
          debug mode, print debug information
 \endverbatim
 
-\subsection j2k_options j2k options
-\verbatim
-  -r --rate    %*f           set rate.
-  -q --quality %*f           set quality.
-  -t --tile %d,%d            set tile size.
-  -n --number-resolution %d  set number of resolution.
-     --irreversible          set irreversible.
-\endverbatim
-
 \subsection special_options special options
 \verbatim
   -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
@@ -88,6 +101,27 @@ file-out  DICOM output filename
 \verbatim
   GDCM_ROOT_UID Root UID
 \endverbatim
+
+\section usage Typical usage
+\subsection jpeg Compressing to JPEG
+
+$ gdcmconv --jpeg -i uncompressed.dcm -o compressed.dcm
+
+\subsection lossless_j2k Compressing to lossless J2K
+
+$ gdcmconv --j2k -i uncompressed.dcm -o compressed.dcm
+
+\subsection lossy_j2k Compressing to lossy J2K
+
+$ gdcmconv --lossy -q 55,50,45 --j2k -i uncompressed.dcm -o lossy_compressed.dcm
+
+Note:
+
+    * -q is just one of the many way to specify lossy quality, you need to inspect the other cmd line flag to specify lossyness properties. 
+
+\subsection rle Compressing to RLE
+
+$ gdcmconv --rle -i uncompressed.dcm -o compressed.dcm
 
 \section see_also SEE ALSO
 

@@ -14,6 +14,7 @@
 =========================================================================*/
 /*
  */
+#include "gdcmVersion.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmWriter.h"
 #include "gdcmAttribute.h"
@@ -26,6 +27,11 @@
 #include <poppler/GlobalParams.h>
 
 #include <string>
+
+#include <stdio.h>     /* for printf */
+#include <stdlib.h>    /* for exit */
+#include <getopt.h>
+#include <string.h>
 
 std::string getInfoDate(Dict *infoDict, const char *key)
 {
@@ -134,12 +140,163 @@ std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
   return out;
 }
 
+void PrintVersion()
+{
+  std::cout << "gdcmpdf: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmpdf [OPTION]... FILE..." << std::endl;
+  std::cout << "Convert a PDF file to DICOM/PDF\n";
+  std::cout << "Parameter (required):" << std::endl;
+  std::cout << "  -i --input     PDF filename" << std::endl;
+  std::cout << "  -o --output    DICOM filename" << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning   print warning info." << std::endl;
+  std::cout << "  -D --debug     print debug info." << std::endl;
+  std::cout << "  -E --error     print error info." << std::endl;
+  std::cout << "  -h --help      print help." << std::endl;
+  std::cout << "  -v --version   print version." << std::endl;
+}
+
 int main (int argc, char *argv[])
 {
-  if( argc < 1 )
+  int c;
+  //int digit_optind = 0;
+
+  std::string filename;
+  std::string outfilename;
+  int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
+  while (1) {
+    //int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+/*
+   struct option {
+              const char *name;
+              int has_arg;
+              int *flag;
+              int val;
+          };
+*/
+    static struct option long_options[] = {
+        {"input", 1, 0, 0},
+        {"output", 1, 0, 0},
+        {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
+        {0, 0, 0, 0} // required
+    };
+    static const char short_options[] = "i:o:VWDEhv";
+    c = getopt_long (argc, argv, short_options,
+      long_options, &option_index);
+    if (c == -1)
+      {
+      break;
+      }
+
+    switch (c)
+      {
+    case 0:
+    case '-':
+        {
+        const char *s = long_options[option_index].name;
+        //printf ("option %s", s);
+        if (optarg)
+          {
+          if( option_index == 0 ) /* input */
+            {
+            assert( strcmp(s, "input") == 0 );
+            assert( filename.empty() );
+            filename = optarg;
+            }
+          //printf (" with arg %s", optarg);
+          }
+        //printf ("\n");
+        }
+      break;
+
+    case 'i':
+      //printf ("option i with value '%s'\n", optarg);
+      assert( filename.empty() );
+      filename = optarg;
+      break;
+
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
+      break;
+
+    case '?':
+      break;
+
+    default:
+      printf ("?? getopt returned character code 0%o ??\n", c);
+      }
+  }
+
+  if (optind < argc)
     {
-    return 1;
+    //printf ("non-option ARGV-elements: %d", optind );
+    //while (optind < argc)
+    //  {
+    //  printf ("%s\n", argv[optind++]);
+    //  }
+    //printf ("\n");
+    int v = argc - optind;
+    if( v == 2 )
+      {
+      filename = argv[optind];
+      outfilename = argv[optind+1];
+      }
+    else return 1;
     }
+
+  if( version )
+    {
+    //std::cout << "version" << std::endl;
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    //std::cout << "help" << std::endl;
+    PrintHelp();
+    return 0;
+    }
+
   GooString *ownerPW, *userPW;
   GooString *fileName;
   PDFDoc *doc;
@@ -154,21 +311,21 @@ int main (int argc, char *argv[])
 #endif
   uMap = globalParams->getTextEncoding();
 
-  const char *filename = argv[1];
-  if( !gdcm::System::FileExists(filename) )
+  //const char *filename = argv[1];
+  if( !gdcm::System::FileExists(filename.c_str()) )
     {
     return 1;
     }
   // get length of file:
-  size_t length = gdcm::System::FileSize(filename);
+  size_t length = gdcm::System::FileSize(filename.c_str());
   // PDF doc is stored in an OB element, check that 32bits length is fine:
   if( length > gdcm::VL::GetVL32Max() )
     {
     return 1;
     }
 
-  const char *outfilename = argv[2];
-  fileName = new GooString( filename );
+  //const char *outfilename = argv[2];
+  fileName = new GooString( filename.c_str() );
   Object obj;
 
   obj.initNull();
@@ -185,7 +342,7 @@ int main (int argc, char *argv[])
     return 1;
     }
     std::string title    = getInfoString(info.getDict(), "Title",    uMap);
-std::cout << "title:" << title.size() << std::endl;
+//std::cout << "title:" << title.size() << std::endl;
     std::string subject  = getInfoString(info.getDict(), "Subject",  uMap);
     std::string keywords = getInfoString(info.getDict(), "Keywords", uMap);
     std::string author   = getInfoString(info.getDict(), "Author",   uMap);
@@ -199,7 +356,7 @@ std::cout << "title:" << title.size() << std::endl;
   gdcm::DataElement de( gdcm::Tag( 0x42,0x11) );
   de.SetVR( gdcm::VR::OB );
   std::ifstream is;
-  is.open (filename, std::ios::binary );
+  is.open (filename.c_str(), std::ios::binary );
 
 
   char *buffer = new char [length];
@@ -216,6 +373,30 @@ std::cout << "title:" << title.size() << std::endl;
   fmi.SetDataSetTransferSyntax( ts );
   gdcm::DataSet &ds = writer.GetFile().GetDataSet();
   ds.Insert( de );
+
+  time_t studydatetime = gdcm::System::FileTime( filename.c_str() );
+
+{
+  char date[18];
+  gdcm::System::FormatDateTime(date, studydatetime);
+  const size_t datelen = 8;
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
+    // Do not copy the whole cstring:
+    de.SetByteValue( date, datelen );
+    de.SetVR( gdcm::Attribute<0x0008,0x0020>::GetVR() );
+    ds.Insert( de );
+    }
+  // StudyTime
+  const size_t timelen = 6; // get rid of milliseconds
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0008,0x0030) );
+    // Do not copy the whole cstring:
+    de.SetByteValue( date+datelen, timelen );
+    de.SetVR( gdcm::Attribute<0x0008,0x0030>::GetVR() );
+    ds.Insert( de );
+    }
+}
 
   gdcm::UIDGenerator uid;
 {
@@ -404,7 +585,7 @@ std::cout << "title:" << title.size() << std::endl;
 }
 
 
-  writer.SetFileName( outfilename );
+  writer.SetFileName( outfilename.c_str() );
   if( !writer.Write() )
   {
   return 1;

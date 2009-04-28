@@ -22,15 +22,28 @@ file-out  output filename
 
 \section options OPTIONS
 
+\subsection parameters parameters
+\verbatim
+  -i --input     Input filename
+  -o --output    Output filename
+\endverbatim
+
 \subsection options options
 \verbatim
-  -d --depth       Depth.
-  -s --size %d,%d  Size.
-  -R --region      Region.
-  -F --fill        Fill.
-  -T --study-uid   Study UID.
-  -S --series-uid  Series UID.
-     --root-uid    Root UID.
+     --endian %s       Endianess (LSB/MSB).
+  -d --depth %d        Depth (8/16/32).
+     --sign %s         Pixel sign (0/1).
+  -s --size %d,%d      Size.
+  -C --sop-class-uid   SOP Class UID (name or value).
+  -T --study-uid       Study UID.
+  -S --series-uid      Series UID.
+     --root-uid        Root UID.
+\endverbatim
+
+\subsection fill_options fill options
+\verbatim
+  -R --region %d,%d    Region.
+  -F --fill %d         Fill with pixel value specified.
 \endverbatim
 
 \subsection general_options general options
@@ -53,6 +66,69 @@ file-out  output filename
   -D   --debug
          debug mode, print debug information
 \endverbatim
+
+\subsection environment_variable environment variable
+\verbatim
+  GDCM_ROOT_UID Root UID
+\endverbatim
+
+\section usage Typical usage
+\subsection blank_out Remove a rectangular part of the image
+
+To fill the region [0,100]x[0,100] of a DICOM image simply do:
+
+\verbatim
+$ gdcmimg --fill 0 --region 0,100,0,100 -i input.dcm -o output_black.dcm
+\endverbatim
+
+Warning: if the Pixel Data is compressed, the image is first decompressed so that pixel can be set to 0, but it is not recompressed.
+
+\subsection raw Convert RAW to DICOM
+
+Recognized extension is .raw (case insensitive)
+
+\verbatim
+$ gdcmimg --size 512,512 --depth 16 -i input.raw -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+\subsection pnm Convert PGM/PNM/PPM to DICOM
+
+Recognized extensions are .pgm, .pnm, .ppm (case insensitive)
+
+\verbatim
+$ gdcmimg -i input.pgm -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+\subsection rle Convert RLE to DICOM
+
+Recognized extension is .rle (case insensitive)
+
+\verbatim
+$ gdcmimg --size 512,512 --depth 16 -i input.rle -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+\subsection jpeg Convert JPEG to DICOM
+
+Recognized extensions are .jpg, .jpeg, .ljpg, .ljpeg (case insensitive)
+
+\verbatim
+$ gdcmimg -i input.ljpeg -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+
+\subsection j2k Convert J2K to DICOM
+
+Recognized extensions are .j2k, .jp2, .jpc (case insensitive)
+
+\verbatim
+$ gdcmimg -i input.j2k -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture 
 
 \section see_also SEE ALSO
 

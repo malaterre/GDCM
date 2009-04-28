@@ -22,7 +22,11 @@ file-in   DICOM input filename
 
 \subsection options options
 \verbatim
-  -d --check-deflated   check if file is proper deflated syntax.
+  -r --recursive          recursive.
+  -d --check-deflated     check if file is proper deflated syntax.
+     --resources-path     Resources path.
+     --md5sum             Compute md5sum of Pixel Data attribute value.
+     --check-compression  check the encapsulated stream compression (lossless/lossy).
 \endverbatim
 
 \subsection general_options general options
