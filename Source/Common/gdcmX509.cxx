@@ -34,6 +34,7 @@ namespace gdcm
 
 class X509Internals
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 public:
   X509Internals():pkey(NULL) {
     recips = openssl::sk_X509_new_null();
@@ -44,9 +45,9 @@ public:
     }
   openssl::STACK_OF(X509) *recips;
   openssl::EVP_PKEY *pkey;
+#endif
 };
 
-void foobar() {}
 X509::X509()
 {
   Internals = new X509Internals;
@@ -59,6 +60,7 @@ X509::~X509()
 
 bool X509::ParseKeyFile( const char *keyfile)
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   openssl::BIO *in;
   openssl::EVP_PKEY *pkey;
   if ((in=openssl::BIO_new_file(keyfile,"r")) == NULL)
@@ -74,10 +76,14 @@ bool X509::ParseKeyFile( const char *keyfile)
   BIO_free(in);
   Internals->pkey = pkey;
   return true;
+#else
+  return false;
+#endif
 }
 
 bool X509::ParseCertificateFile( const char *keyfile)
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   openssl::STACK_OF(X509) *recips = Internals->recips;
   assert( recips );
   openssl::X509 *x509 = NULL;
@@ -95,26 +101,41 @@ bool X509::ParseCertificateFile( const char *keyfile)
   openssl::BIO_free(in); in = NULL;
   openssl::sk_X509_push(recips, x509);
   return true;
+#else
+  return false;
+#endif
 }
 
 unsigned int X509::GetNumberOfRecipients() const
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   openssl::STACK_OF(X509) *recips = Internals->recips;
   if(!recips) {
     return 0;
   }
   return openssl::sk_X509_num(recips);
+#else
+  return 0;
+#endif
 }
 
 openssl::X509* X509::GetRecipient( unsigned int i ) const
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   openssl::STACK_OF(X509) *recips = Internals->recips;
   return my_sk_X509_value(recips, i);
+#else
+  return NULL;
+#endif
 }
 
 openssl::EVP_PKEY* X509::GetPrivateKey() const
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   return Internals->pkey;
+#else
+  return NULL;
+#endif
 }
 
 } // end namespace gdcm
