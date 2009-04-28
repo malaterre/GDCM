@@ -547,6 +547,7 @@ bool System::ParseDateTime(time_t &timep, const char date[22])
 bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22])
 {
   if(!date) return false;
+  assert( strlen(date) <= 22 );
   struct tm ptm;
   // No such thing as strptime on some st*$^% platform
   //char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);

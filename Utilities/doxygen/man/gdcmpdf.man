@@ -10,7 +10,10 @@ gdcmpdf [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmpdf 
+The \b gdcmpdf tool convert a PDF file (any PDF version) into an encapsulated PDF/DICOM file.
+By default it will try to read the PDF meta information stored in the PDF and convert this
+information to some specific DICOM fields (see below). However it may fails (eg. wrong
+password on encrypted PDF file) in which case empty value are used.
 
 \section parameters PARAMETERS
 
@@ -85,14 +88,14 @@ Converted to DICOM this leads to:
 # Used TransferSyntax: Little Endian Explicit
 (0008,0005) CS [ISO_IR 100]                             #  10, 1 SpecificCharacterSet
 (0008,0012) DA [20090428]                               #   8, 1 InstanceCreationDate
-(0008,0013) TM [160546]                                 #   6, 1 InstanceCreationTime
+(0008,0013) TM [182550.302631]                          #  14, 1 InstanceCreationTime
 (0008,0016) UI =EncapsulatedPDFStorage                  #  30, 1 SOPClassUID
-(0008,0018) UI [1.2.826.0.1.3680043.2.1143.5963562292195369331976192588047163530] #  64, 1 SOPInstanceUID
+(0008,0018) UI [1.2.826.0.1.3680043.2.1143.776842935192792959289022034349197114] #  64, 1 SOPInstanceUID
 (0008,0020) DA [20090428]                               #   8, 1 StudyDate
 (0008,0023) DA [20090428]                               #   8, 1 ContentDate
-(0008,002a) DT [20090428153437000]                      #  18, 1 AcquisitionDateTime
-(0008,0030) TM [160546]                                 #   6, 1 StudyTime
-(0008,0033) TM [153426]                                 #   6, 1 ContentTime
+(0008,002a) DT [20090428153437.000000]                  #  22, 1 AcquisitionDateTime
+(0008,0030) TM [182550.302160]                          #  14, 1 StudyTime
+(0008,0033) TM [153426.000000]                          #  14, 1 ContentTime
 (0008,0050) SH (no value available)                     #   0, 0 AccessionNumber
 (0008,0060) CS [OT]                                     #   2, 1 Modality
 (0008,0064) CS [WSD]                                    #   4, 1 ConversionType
@@ -103,8 +106,8 @@ Converted to DICOM this leads to:
 (0010,0030) DA (no value available)                     #   0, 0 PatientsBirthDate
 (0010,0040) CS (no value available)                     #   0, 0 PatientsSex
 (0018,1020) LO [pdfeTeX-1.21a]                          #  14, 1 SoftwareVersions
-(0020,000d) UI [1.2.826.0.1.3680043.2.1143.3729669315766900920932371797515820472] #  64, 1 StudyInstanceUID
-(0020,000e) UI [1.2.826.0.1.3680043.2.1143.9759761440620953984177289349065596241] #  64, 1 SeriesInstanceUID
+(0020,000d) UI [1.2.826.0.1.3680043.2.1143.1868121832223417351654232480755123133] #  64, 1 StudyInstanceUID
+(0020,000e) UI [1.2.826.0.1.3680043.2.1143.1330099150825746617507846107663964311] #  64, 1 SeriesInstanceUID
 (0020,0010) SH (no value available)                     #   0, 0 StudyID
 (0020,0011) IS [1]                                      #   2, 1 SeriesNumber
 (0020,0013) IS [1]                                      #   2, 1 InstanceNumber

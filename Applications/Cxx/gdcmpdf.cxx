@@ -280,7 +280,16 @@ int main (int argc, char *argv[])
       filename = argv[optind];
       outfilename = argv[optind+1];
       }
-    else return 1;
+    else 
+      {
+      PrintHelp();
+      return 1;
+      }
+    }
+  if( filename.empty() || outfilename.empty() )
+    {
+    PrintHelp();
+    return 1;
     }
 
   if( version )
@@ -337,38 +346,42 @@ int main (int argc, char *argv[])
     std::string password;
     std::cout << "Enter password:" << std::endl;
     std::cin >> password;
-    std::cout << "Enter password:" << password << std::endl;
+    //std::cout << "Enter password:" << password << std::endl;
     ownerPW = new GooString( password.c_str() );
     doc = new PDFDoc(fileName, ownerPW, userPW);
     }
 
-  if (!doc->isOk())
-    {
-    return 1;
-    }
+  std::string title;
+  std::string subject;
+  std::string keywords;
+  std::string author;
+  std::string creator;
+  std::string producer;
+  std::string creationdate;
+  std::string moddate;
 
-  doc->getDocInfo(&info);
-  if (!info.isDict())
+  if (doc->isOk())
     {
-    return 1;
+    doc->getDocInfo(&info);
+    if (info.isDict())
+      {
+      title        = getInfoString(info.getDict(), "Title",    uMap);
+      subject      = getInfoString(info.getDict(), "Subject",  uMap);
+      keywords     = getInfoString(info.getDict(), "Keywords", uMap);
+      author       = getInfoString(info.getDict(), "Author",   uMap);
+      creator      = getInfoString(info.getDict(), "Creator",  uMap);
+      producer     = getInfoString(info.getDict(), "Producer", uMap);
+      creationdate = getInfoDate(  info.getDict(), "CreationDate"  );
+      moddate      = getInfoDate(  info.getDict(), "ModDate"       );
+      info.free();
+      }
     }
-    std::string title    = getInfoString(info.getDict(), "Title",    uMap);
-//std::cout << "title:" << title.size() << std::endl;
-    std::string subject  = getInfoString(info.getDict(), "Subject",  uMap);
-    std::string keywords = getInfoString(info.getDict(), "Keywords", uMap);
-    std::string author   = getInfoString(info.getDict(), "Author",   uMap);
-    std::string creator  = getInfoString(info.getDict(), "Creator",  uMap);
-    std::string producer = getInfoString(info.getDict(), "Producer", uMap);
-    std::string creationdate = getInfoDate(info.getDict(),   "CreationDate");
-    std::string moddate      = getInfoDate(info.getDict(),   "ModDate");
-  info.free();
 
   gdcm::Writer writer;
-  gdcm::DataElement de( gdcm::Tag( 0x42,0x11) );
+  gdcm::DataElement de( gdcm::Tag(0x42,0x11) );
   de.SetVR( gdcm::VR::OB );
   std::ifstream is;
   is.open (filename.c_str(), std::ios::binary );
-
 
   char *buffer = new char [length];
 
