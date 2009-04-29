@@ -18,7 +18,12 @@
 #include "gdcmTypes.h"
 
 namespace openssl { 
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 #include <openssl/x509.h>
+#else
+class X509;
+class EVP_PKEY;
+#endif
  }
 namespace gdcm
 {
