@@ -204,10 +204,32 @@ int TestVR(int, char *[])
     {
     std::cout << vr << "is ASCII\n";
     }
+  else
+    {
+    return 1;
+    }
   vr = gdcm::VR::UI;
   if( vr & gdcm::VR::VRASCII )
     {
     std::cout << vr << "is ASCII\n";
+    }
+  else
+    {
+    return 1;
+    }
+  vr = gdcm::VR::OB;
+  if( vr & gdcm::VR::VRBINARY )
+    {
+    std::cout << vr << "is Binary\n";
+    }
+  else
+    {
+    return 1;
+    }
+  vr = gdcm::VR::UI;
+  if( vr & (gdcm::VR::OB | gdcm::VR::OF | gdcm::VR::OW /*| gdcm::VR::SQ*/ | gdcm::VR::UN) )
+    {
+    return 1;
     }
 }
 
