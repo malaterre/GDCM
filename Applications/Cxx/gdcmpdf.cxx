@@ -345,8 +345,29 @@ int main (int argc, char *argv[])
     {
     std::string password;
     std::cout << "Enter password:" << std::endl;
+    //  http://www.daniweb.com/code/snippet1174.html
     std::cin >> password;
     //std::cout << "Enter password:" << password << std::endl;
+/*
+#include <termios.h>
+#include <unistd.h>
+
+int mygetch(void)
+{
+struct termios oldt,
+newt;
+int ch;
+tcgetattr( STDIN_FILENO, &oldt );
+newt = oldt;
+newt.c_lflag &= ~( ICANON | ECHO );
+tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+ch = getchar();
+tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+return ch;
+
+http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
+}
+ */
     ownerPW = new GooString( password.c_str() );
     doc = new PDFDoc(fileName, ownerPW, userPW);
     }

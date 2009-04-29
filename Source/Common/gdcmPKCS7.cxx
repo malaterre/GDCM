@@ -13,10 +13,12 @@
 
 =========================================================================*/
 #include "gdcmPKCS7.h"
-#include "gdcmX509.h"
 
+#include <stdio.h> // stderr
 #include <string.h> // strcmp
 #include <assert.h>
+
+#include "gdcmX509.h"
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 namespace openssl // prevent namespace clash such as openssl::PKCS7 vs gdcm::PKCS7
