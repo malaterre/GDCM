@@ -55,7 +55,22 @@ add_library(${CHARLS_LIBRARY_NAME} header.cpp  interface.cpp  jpegls.cpp
   stdafx.cpp
   )
 
+# Install library
+IF(NOT CHARLS_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS ${CHARLS_LIBRARY_NAME}
+    RUNTIME DESTINATION ${CHARLS_INSTALL_BIN_DIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${CHARLS_INSTALL_LIB_DIR} COMPONENT Runtime
+    ARCHIVE DESTINATION ${CHARLS_INSTALL_LIB_DIR} COMPONENT Development
+  ${CPACK_NAMELINK_TYPE}
+  )
+ENDIF(NOT CHARLS_INSTALL_NO_LIBRARIES)
 
+IF(NOT CHARLS_INSTALL_NO_DEVELOPMENT)
+  FILE(GLOB header_files "*.h")
+  INSTALL(FILES ${header_files}
+    DESTINATION ${CHARLS_INSTALL_INCLUDE_DIR} COMPONENT Development
+  )
+ENDIF(NOT CHARLS_INSTALL_NO_DEVELOPMENT)
 #add_executable(charlstest test/test.cpp test/time.cpp)
 #target_link_libraries (charlstest CharLS)
 
