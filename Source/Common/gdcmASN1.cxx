@@ -106,6 +106,7 @@ static int print_hex(unsigned char *buf, int len)
 
 int ASN1::TestPBKDF2()
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 	const char pass[] = "password";
 	const char salt[] = "12340000";
 	int ic = 1;
@@ -121,6 +122,7 @@ int ASN1::TestPBKDF2()
 	printf("EVP_BytesToKey(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
 	print_hex(buf, 32+16);
 
+#endif
 	return 0;
 }
 
