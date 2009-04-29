@@ -17,12 +17,6 @@
 
 #include "gdcmTypes.h"
 
-#ifdef GDCM_USE_SYSTEM_OPENSSL
-#include <openssl/bio.h>
-#include <openssl/pem.h>
-#include <openssl/err.h>
-#include <openssl/rand.h>
-#endif
 
 namespace gdcm
 {
@@ -41,6 +35,8 @@ public :
   static bool ParseDumpFile(const char *filename);
 
   static bool ParseDump(const char *array, size_t length);
+
+  int TestPBKDF2();
 
 protected:
 

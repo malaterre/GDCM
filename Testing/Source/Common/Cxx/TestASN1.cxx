@@ -19,6 +19,9 @@ int TestASN1(int argc, char *argv[])
   const char *filename = argv[1];
   gdcm::ASN1 asn1;
   asn1.ParseDumpFile( filename );
+
+  asn1.TestPBKDF2();
+
   return 0;
 }
 

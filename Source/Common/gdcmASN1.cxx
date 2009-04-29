@@ -15,6 +15,18 @@
 #include "gdcmASN1.h"
 #include "gdcmSystem.h"
 
+#include <string.h>
+
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+#include <openssl/bio.h>
+#include <openssl/err.h>
+#include <openssl/evp.h>
+#include <openssl/hmac.h>
+#include <openssl/pem.h>
+#include <openssl/rand.h>
+#include <openssl/x509.h>
+#endif
+
 #include <fstream>
 
 /*
@@ -50,9 +62,14 @@ bool ASN1::ParseDumpFile(const char *filename)
 
 bool ASN1::ParseDump(const char *array, size_t length)
 {
-  int indent = 1;
-  int dump = 0; // -1
-	BIO *in=NULL,*out=NULL,*b64=NULL, *derout = NULL;
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  // check array pointer:
+  // if length == 0, then return ok. This is an empty element.
+  if( !array ) return !length;
+
+  int indent = 1; // 0 is not visually nice
+  int dump = 0; // -1 => will print hex stuff
+	BIO *out=NULL;
   
 	out=BIO_new(BIO_s_file());
   assert( out );
@@ -63,6 +80,48 @@ bool ASN1::ParseDump(const char *array, size_t length)
     }
 
   return true;
+#else
+  return false;
+#endif
+}
+
+static int print_hex(unsigned char *buf, int len)
+{
+	int i;
+	int n;
+
+	for(i=0,n=0;i<len;i++){
+		if(n > 7){
+			printf("\n");
+			n = 0;
+		}
+		printf("0x%02x, ",buf[i]);
+		n++;
+	}
+	printf("\n");
+
+	return(0);
+}
+
+
+int ASN1::TestPBKDF2()
+{
+	const char pass[] = "password";
+	const char salt[] = "12340000";
+	int ic = 1;
+	unsigned char buf[1024];
+
+	ic = 1;
+	PKCS5_PBKDF2_HMAC_SHA1(pass, strlen(pass), (unsigned char*)salt, strlen(salt), ic, 32+16, buf);
+	printf("PKCS5_PBKDF2_HMAC_SHA1(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
+	print_hex(buf, 32+16);
+
+	ic = 1;
+	EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char*)salt, (unsigned char*)pass, strlen(pass), ic, buf, buf+32);
+	printf("EVP_BytesToKey(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
+	print_hex(buf, 32+16);
+
+	return 0;
 }
 
 } // end namespace gdcm
