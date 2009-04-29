@@ -43,12 +43,12 @@ bool ASN1::ParseDumpFile(const char *filename)
   size_t length = System::FileSize(filename);
   char * str = new char[length];
   is.read( str, length );
-  bool b = ParseDumpFile( str, length );
+  bool b = ParseDump( str, length );
   delete[] str;
   return b;
 }
 
-bool ASN1::ParseDumpFile(const char *array, size_t length)
+bool ASN1::ParseDump(const char *array, size_t length)
 {
   int indent = 1;
   int dump = 0; // -1

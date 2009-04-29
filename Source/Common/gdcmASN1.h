@@ -38,8 +38,9 @@ public :
   ASN1();
   ~ASN1();
 
-  bool ParseDumpFile(const char *filename);
-  bool ParseDumpFile(const char *array, size_t length);
+  static bool ParseDumpFile(const char *filename);
+
+  static bool ParseDump(const char *array, size_t length);
 
 protected:
 

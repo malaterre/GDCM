@@ -45,6 +45,8 @@
 #include "gdcmDirectory.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmASN1.h"
 
 #include <string>
 #include <iostream>
@@ -77,6 +79,43 @@ int DoOperation(const std::string & filename)
 
   // Only return success when file read succeeded not depending whether or not we printed it
   return success ? 0 : 1;
+}
+
+int PrintASN1(const std::string & filename, bool verbose)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  gdcm::Tag tencryptedattributessequence(0x0400,0x0500);
+  if( !ds.FindDataElement( tencryptedattributessequence ) )
+    {
+    return 1;
+    }
+  const gdcm::DataElement &encryptedattributessequence = ds.GetDataElement( tencryptedattributessequence );
+  const gdcm::SequenceOfItems * sqi = encryptedattributessequence.GetSequenceOfItems();
+  if( !sqi->GetNumberOfItems() )
+    {
+    return 1;
+    }
+  const gdcm::Item &item1 = sqi->GetItem(1);
+  const gdcm::DataSet &subds = item1.GetNestedDataSet();
+
+  gdcm::Tag tencryptedcontent(0x0400,0x0520);
+  if( !subds.FindDataElement( tencryptedcontent) )
+    {
+    return 1;
+    }
+  const gdcm::DataElement &encryptedcontent = subds.GetDataElement( tencryptedcontent );
+  const gdcm::ByteValue *bv = encryptedcontent.GetByteValue();
+
+  bool b = gdcm::ASN1::ParseDump( bv->GetPointer(), bv->GetLength() );
+  if( !b ) return 1;
+  return 0;
 }
 
 int PrintPDB(const std::string & filename, bool verbose)
@@ -225,6 +264,7 @@ void PrintHelp()
   std::cout << "  -c --color          print in color." << std::endl;
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
+  std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -256,6 +296,7 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
   int recursive = 0;
+  int printasn1 = 0;
   int mapuidnames = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
@@ -284,10 +325,11 @@ int main (int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
         {"ignore-errors", 0, &ignoreerrors, 1},
+        {"asn1", 0, &printasn1, 1},
         {"map-uid-names", 0, &mapuidnames, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:xrpdcCPVWDEhvI";
+    static const char short_options[] = "i:xrpdcCPAVWDEhvI";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -346,6 +388,10 @@ int main (int argc, char *argv[])
 
     case 'C':
       printcsa = 1;
+      break;
+
+    case 'A':
+      printasn1 = 1;
       break;
 
     case 'P':
@@ -470,6 +516,10 @@ int main (int argc, char *argv[])
         {
         res += DoOperation<gdcm::DictPrinter>(*it);
         }
+      else if( printasn1 )
+        {
+        res += PrintASN1(*it, verbose);
+        }
       else if( printpdb )
         {
         res += PrintPDB(*it, verbose);
@@ -496,6 +546,10 @@ int main (int argc, char *argv[])
     if( printdict )
       {
       res += DoOperation<gdcm::DictPrinter>(filename);
+      }
+    else if( printasn1 )
+      {
+      res += PrintASN1(filename, verbose);
       }
     else if( printpdb )
       {
