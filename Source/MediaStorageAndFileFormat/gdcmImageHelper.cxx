@@ -746,8 +746,10 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
   case MediaStorage::HardcopyGrayscaleImageStorage:
     t = Tag(0xffff,0xffff);
     break;
-  case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
   case MediaStorage::RTDoseStorage: // gdcmData/BogugsItemAndSequenceLengthCorrected.dcm
+    t = Tag(0x3004,0x000c);
+    break;
+  case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
   case MediaStorage::GEPrivate3DModelStorage:
   case MediaStorage::Philips3D:
   case MediaStorage::VideoEndoscopicImageStorage:
@@ -886,27 +888,44 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
       assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
-      assert( entry.GetVM() == VM::VM1 );
-      switch(vr)
+      if( entry.GetVM() == VM::VM1 )
         {
-      case VR::DS:
+        switch(vr)
           {
-          Element<VR::DS,VM::VM1_n> el;
-          std::stringstream ss;
-          const ByteValue *bv = de.GetByteValue();
-          assert( bv );
-          std::string s = std::string( bv->GetPointer(), bv->GetLength() );
-          ss.str( s );
-          el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
-          el.Read( ss );
-          for(unsigned long i = 0; i < el.GetLength(); ++i) 
-            sp.push_back( el.GetValue(i) );
-          //assert( sp.size() == entry.GetVM() );
+        case VR::DS:
+            {
+            Element<VR::DS,VM::VM1_n> el;
+            std::stringstream ss;
+            const ByteValue *bv = de.GetByteValue();
+            assert( bv );
+            std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+            ss.str( s );
+            el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
+            el.Read( ss );
+            for(unsigned long i = 0; i < el.GetLength(); ++i) 
+              sp.push_back( el.GetValue(i) );
+            //assert( sp.size() == entry.GetVM() );
+            }
+          break;
+        default:
+          abort();
+          break;
           }
-        break;
-      default:
-        abort();
-        break;
+        }
+      else
+        {
+        assert( entry.GetVM() == VM::VM2_n );
+        assert( vr == VR::DS );
+        Attribute<0x28,0x8> numberoframes;
+        const DataElement& de1 = ds.GetDataElement( numberoframes.GetTag() );
+        numberoframes.SetFromDataElement( de1 );
+        Attribute<0x3004,0x000c> gridframeoffsetvector;
+        const DataElement& de2 = ds.GetDataElement( gridframeoffsetvector.GetTag() );
+        gridframeoffsetvector.SetFromDataElement( de2 );
+        double v1 = gridframeoffsetvector[0];
+        double v2 = gridframeoffsetvector[1];
+        // FIXME. I should check consistency
+        sp.push_back( v2 - v1 );
         }
       }
     }
