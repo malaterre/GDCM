@@ -80,7 +80,7 @@ unsigned int VM::GetLength() const
     break;
   default:
     len = 0;
-    abort();
+    assert(0);
     }
   assert( len );
   return len;

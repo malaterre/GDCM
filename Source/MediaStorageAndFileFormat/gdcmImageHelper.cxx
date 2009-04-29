@@ -1120,27 +1120,55 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       const VR & vr = entry.GetVR();
       const VM & vm = entry.GetVM(); (void)vm;
       assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
-      switch(vr)
+      if( entry.GetVM() == VM::VM2_n )
         {
-      case VR::DS:
+        assert( vr == VR::DS );
+        assert( de.GetTag() == Tag(0x3004,0x000c) );
+        Attribute<0x28,0x8> numberoframes;
+        const DataElement& de1 = ds.GetDataElement( numberoframes.GetTag() );
+        numberoframes.SetFromDataElement( de1 );
+
+            Element<VR::DS,VM::VM2_n> el;
+            el.SetLength( numberoframes.GetValue() * vr.GetSizeof() );
+            assert( entry.GetVM() == VM::VM2_n );
+            double spacing_start = 0;
+            for( unsigned int i = 0; i < numberoframes.GetValue(); ++i)
+              {
+              el.SetValue( spacing_start, i );
+              spacing_start += spacing[2];
+              }
+            //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+            std::stringstream os;
+            el.Write( os );
+            de.SetVR( VR::DS );
+            de.SetByteValue( os.str().c_str(), os.str().size() );
+            ds.Replace( de );
+
+        }
+      else
+        {
+        switch(vr)
           {
-          Element<VR::DS,VM::VM1_n> el;
-          el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
-          assert( entry.GetVM() == VM::VM1 );
-          for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
+        case VR::DS:
             {
-            el.SetValue( spacing[i+2], i );
+            Element<VR::DS,VM::VM1_n> el;
+            el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
+            assert( entry.GetVM() == VM::VM1 );
+            for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
+              {
+              el.SetValue( spacing[i+2], i );
+              }
+            //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+            std::stringstream os;
+            el.Write( os );
+            de.SetVR( VR::DS );
+            de.SetByteValue( os.str().c_str(), os.str().size() );
+            ds.Replace( de );
             }
-          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
-          std::stringstream os;
-          el.Write( os );
-          de.SetVR( VR::DS );
-          de.SetByteValue( os.str().c_str(), os.str().size() );
-          ds.Replace( de );
+          break;
+        default:
+          assert(0);
           }
-        break;
-      default:
-        abort();
         }
       }
     }
@@ -1219,6 +1247,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
+   && ms != MediaStorage::RTDoseStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
@@ -1297,6 +1326,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
+   && ms != MediaStorage::RTDoseStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
