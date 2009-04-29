@@ -39,6 +39,7 @@ public :
   ~ASN1();
 
   bool ParseDumpFile(const char *filename);
+  bool ParseDumpFile(const char *array, size_t length);
 
 protected:
 
