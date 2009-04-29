@@ -17,6 +17,7 @@
 
 #include <string.h> // strcmp
 #include <stdlib.h> // malloc
+#include <stdio.h> // fopen
 
 #include "gdcm_md5.h"
 

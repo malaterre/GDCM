@@ -35,6 +35,7 @@ Altered by: Mathieu Malaterre 2008, for GDCM project
             also when writing deflate back to disk, the add_footer must be called
 */
 #include <string.h> // memcpy
+#include <stdio.h> // EOF
 
 //*****************************************************************************
 //  template class basic_zip_streambuf
