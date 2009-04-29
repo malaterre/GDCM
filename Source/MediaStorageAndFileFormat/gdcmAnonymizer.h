@@ -100,8 +100,8 @@ public:
 
   /// Set/Get AES key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
   /// Warning: set is done by copy (not reference)
-  void SetAESKey(AES const &aes);
-  const AES &GetAESKey() const;
+  //void SetAESKey(AES const &aes);
+  //const AES &GetAESKey() const;
 
   void SetX509( X509 *x509 );
   const X509 *GetX509() const;

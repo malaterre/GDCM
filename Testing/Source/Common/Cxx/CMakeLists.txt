@@ -4,6 +4,7 @@ SET(Common_TEST_SRCS
   TestVersion
   TestDummyValueGenerator
   TestAES
+  TestASN1
   TestRSA
   TestPKCS7
   TestTesting

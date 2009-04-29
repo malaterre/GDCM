@@ -287,7 +287,8 @@ bool Pixmap::TryRAWCodec(char *buffer, bool &lossyflag) const
       ((ByteValue*)outbv)->SetLength( len );
       }
     unsigned long check = outbv->GetLength();  // FIXME
-    assert( check == len );
+    // DermaColorLossLess.dcm
+    assert( check == len || check == len + 1 );
     if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     return r;
     }
