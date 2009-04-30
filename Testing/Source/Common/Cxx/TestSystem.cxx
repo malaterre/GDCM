@@ -181,7 +181,7 @@ int TestSystem(int, char *[])
     return 1;
   }
   time_t fixed_timep;
-  time_t fixed_milliseconds;
+  long fixed_milliseconds;
   if( !gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, fixed_date) )
   {
   return 1;
