@@ -131,11 +131,6 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
     }
 }
 
-void vtkGDCMImageReader::SetFileName(const char *filename)
-{
-  this->Superclass::SetFileName( filename );
-}
-
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
 void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)

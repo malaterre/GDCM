@@ -1114,11 +1114,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   return 1;
 }
 
-void vtkGDCMImageWriter::SetFileName(const char *filename)
-{
-  this->Superclass::SetFileName( filename );
-}
-
 //----------------------------------------------------------------------------
 void vtkGDCMImageWriter::PrintSelf(ostream& os, vtkIndent indent)
 {

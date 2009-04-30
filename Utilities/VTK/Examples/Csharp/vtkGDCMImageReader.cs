@@ -38,6 +38,12 @@ namespace vtkgdcm
     public override void SetFileName(string filename) {
       inter.SetFileName( filename );
       }
+    public void SetInput(vtkDataObject obj) {
+      inter.SetInput( obj );
+      }
+    public override void Write() {
+      inter.Write();
+      }
     }
 }
 
