@@ -24,7 +24,7 @@ class RAWInternals;
 /**
  * \brief RAWCodec class
  */
-class RAWCodec : public ImageCodec
+class GDCM_EXPORT RAWCodec : public ImageCodec
 {
 public:
   RAWCodec();

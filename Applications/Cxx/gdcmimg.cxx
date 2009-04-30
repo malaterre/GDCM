@@ -118,8 +118,8 @@ void PrintHelp()
   PrintVersion();
   std::cout << "Usage: gdcmimg [OPTION]... FILE..." << std::endl;
   std::cout << "Manipulate DICOM image file:" << std::endl;
-  std::cout << " 1. Anonymize burn-in annotation (rect region fill with pixel value)" << std::endl;
-  std::cout << " 2. Convert to and from other file format (jpg, jp2, pnm...)" << std::endl;
+  std::cout << " 1. Convert to and from other file format (jpg, jp2, pnm...)" << std::endl;
+  std::cout << " 2. Anonymize burn-in annotation (rect region fill with pixel value)" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
