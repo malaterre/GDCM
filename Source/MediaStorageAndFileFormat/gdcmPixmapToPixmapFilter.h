@@ -12,23 +12,36 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmImageToImageFilter.h"
-#include "gdcmImage.h"
+#ifndef __gdcmPixmapToPixmapFilter_h
+#define __gdcmPixmapToPixmapFilter_h
+
+#include "gdcmPixmap.h"
 
 namespace gdcm
 {
 
-ImageToImageFilter::ImageToImageFilter()
+/**
+ * \brief PixmapToPixmapFilter class
+ * Super class for all filter taking an image and producing an output image
+ */
+class GDCM_EXPORT PixmapToPixmapFilter
 {
-  Input = new Image;
-  Output = new Image;
-}
+public:
+  PixmapToPixmapFilter():Input(new Pixmap),Output(new Pixmap) {}
+  ~PixmapToPixmapFilter() {}
 
-const Image &ImageToImageFilter::GetOutput() const
-{
-  return dynamic_cast<const Image&>(*Output);
-}
+  /// Set input image
+  void SetInput(const Pixmap& image);
 
+  /// Get Output image
+  const Pixmap &GetOutput() const { return *Output; }
+
+protected:
+  SmartPointer<Pixmap> Input;
+  SmartPointer<Pixmap> Output;
+};
 
 } // end namespace gdcm
+
+#endif //__gdcmPixmapToPixmapFilter_h
 

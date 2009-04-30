@@ -36,7 +36,7 @@ public:
   /// (see parent class to see how to pass dataset)
   const Image& GetImage() const { return dynamic_cast<const Image&>(*PixelData); }
   Image& GetImage() { return dynamic_cast<Image&>(*PixelData); } // FIXME 
-  void SetImage(Image const &img);
+  //void SetImage(Image const &img);
 
   /// Write
   bool Write(); // Execute()

@@ -10,6 +10,7 @@ SET(MSFF_SRCS
   gdcmBitmap.cxx
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
+  gdcmPixmapToPixmapFilter.cxx
   gdcmImageChangeTransferSyntax.cxx
   gdcmImageApplyLookupTable.cxx
   gdcmOrientation.cxx

@@ -901,4 +901,9 @@ Attribute<0x0028,0x0004> piat;
   return true;
 }
 
+void PixmapWriter::SetImage(Pixmap const &img)
+{
+  PixelData = img;
+}
+
 } // end namespace gdcm

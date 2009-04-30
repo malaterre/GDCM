@@ -12,21 +12,17 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmImageToImageFilter.h"
-#include "gdcmImage.h"
+#include "gdcmPixmapToPixmapFilter.h"
+#include <limits>
+#include <stdlib.h> // abort
+#include <string.h> // memcpy
 
 namespace gdcm
 {
 
-ImageToImageFilter::ImageToImageFilter()
+void PixmapToPixmapFilter::SetInput(const Pixmap& image)
 {
-  Input = new Image;
-  Output = new Image;
-}
-
-const Image &ImageToImageFilter::GetOutput() const
-{
-  return dynamic_cast<const Image&>(*Output);
+  Input = image;
 }
 
 

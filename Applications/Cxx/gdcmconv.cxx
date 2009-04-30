@@ -76,6 +76,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmImage.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmImageFragmentSplitter.h"
