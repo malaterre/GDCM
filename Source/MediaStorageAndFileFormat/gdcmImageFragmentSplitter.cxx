@@ -21,7 +21,7 @@ namespace gdcm
 bool ImageFragmentSplitter::Split()
 {
   Output = Input;
-  const Image &image = *Input;
+  const Pixmap &image = *Input;
 
   const unsigned int *dims = image.GetDimensions();
   if( dims[2] != 1 )

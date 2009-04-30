@@ -20,7 +20,7 @@
 namespace gdcm
 {
 
-void ImageToImageFilter::SetInput(const Image& image)
+void ImageToImageFilter::SetInput(const Pixmap& image)
 {
   Input = image;
 }

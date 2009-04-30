@@ -20,7 +20,7 @@ namespace gdcm
 bool ImageApplyLookupTable::Apply()
 {
   Output = Input;
-  const Image &image = *Input;
+  const Pixmap &image = *Input;
 
   PhotometricInterpretation pi = image.GetPhotometricInterpretation();
   if( pi != PhotometricInterpretation::PALETTE_COLOR )

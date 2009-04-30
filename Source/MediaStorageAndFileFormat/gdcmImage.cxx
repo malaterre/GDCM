@@ -113,6 +113,7 @@ double Image::GetDirectionCosines(unsigned int idx) const
     }
   return 0; // FIXME !!
 }
+
 void Image::SetDirectionCosines(const float *dircos)
 {
   assert( NumberOfDimensions );
@@ -122,29 +123,18 @@ void Image::SetDirectionCosines(const float *dircos)
     DirectionCosines[i] = dircos[i];
     }
 }
+
 void Image::SetDirectionCosines(const double *dircos)
 {
   assert( NumberOfDimensions );
   DirectionCosines = std::vector<double>(dircos, 
     dircos+6);
 }
+
 void Image::SetDirectionCosines(unsigned int idx, double dircos)
 {
   DirectionCosines.resize( idx + 1 );
   DirectionCosines[idx] = dircos;
-}
-
-
-bool Image::AreOverlaysInPixelData() const
-{
-  int total = 0;
-  std::vector<Overlay>::const_iterator it = Overlays.begin();
-  for(; it != Overlays.end(); ++it)
-    {
-    total += (int)it->IsInPixelData();
-    }
-  assert( total == (int)GetNumberOfOverlays() || !total );
-  return total != 0;
 }
 
 void Image::Print(std::ostream &os) const

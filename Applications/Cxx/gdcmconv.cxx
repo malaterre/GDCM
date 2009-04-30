@@ -67,8 +67,8 @@
 #include "gdcmReader.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmVersion.h"
-#include "gdcmImageReader.h"
-#include "gdcmImageWriter.h"
+#include "gdcmPixmapReader.h"
+#include "gdcmPixmapWriter.h"
 #include "gdcmWriter.h"
 #include "gdcmSystem.h"
 #include "gdcmFileMetaInformation.h"
@@ -191,7 +191,7 @@ unsigned int readvector(std::vector<T> &v, const char *str)
 
 namespace gdcm
 {
-bool derives( File & file, const Image& compressed_image )
+bool derives( File & file, const Pixmap& compressed_image )
 {
 /*
 (0008,2111) ST [Lossy compression with JPEG extended sequential 8 bit, IJG quality... # 102, 1 DerivationDescription
@@ -888,14 +888,14 @@ int main (int argc, char *argv[])
   // split fragments
   if( split )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
 
     gdcm::ImageFragmentSplitter splitter;
     splitter.SetInput( image );
@@ -907,10 +907,10 @@ int main (int argc, char *argv[])
       std::cerr << "Could not split: " << filename << std::endl;
       return 1;
       }
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( splitter.GetOutput() );
+    writer.SetPixmap( splitter.GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -919,14 +919,14 @@ int main (int argc, char *argv[])
     }
   else if( photometricinterpretation )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
 
     // Just in case:
     if( gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) 
@@ -946,10 +946,10 @@ int main (int argc, char *argv[])
       std::cerr << "Could not apply PhotometricInterpretation: " << filename << std::endl;
       return 1;
       }
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( pifilt.GetOutput() );
+    writer.SetPixmap( pifilt.GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -958,14 +958,14 @@ int main (int argc, char *argv[])
     }
   else if( lut )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
 
     gdcm::ImageApplyLookupTable lutfilt;
     lutfilt.SetInput( image );
@@ -975,10 +975,10 @@ int main (int argc, char *argv[])
       std::cerr << "Could not apply LUT: " << filename << std::endl;
       return 1;
       }
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( lutfilt.GetOutput() );
+    writer.SetPixmap( lutfilt.GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -987,14 +987,14 @@ int main (int argc, char *argv[])
     }
   else if( jpeg || j2k || jpegls || rle || raw || force /*|| deflated*/ /*|| planarconf*/ )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
     //const gdcm::IconImage &icon = image.GetIconImage();
     //if( !icon.IsEmpty() )
     //  {
@@ -1161,11 +1161,11 @@ int main (int argc, char *argv[])
         }
       }
 
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
     //writer.SetFile( fef.GetFile() );
-    writer.SetImage( change.GetOutput() );
+    writer.SetPixmap( change.GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -1175,7 +1175,7 @@ int main (int argc, char *argv[])
     }
   else if( raw && false )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
@@ -1183,9 +1183,9 @@ int main (int argc, char *argv[])
       return 1;
       }
 
-    const gdcm::Image &ir = reader.GetImage();
+    const gdcm::Pixmap &ir = reader.GetPixmap();
 
-    gdcm::Image image( ir );
+    gdcm::Pixmap image( ir );
     const gdcm::TransferSyntax &ts = ir.GetTransferSyntax();
     if( ts.IsExplicit() )
       {
@@ -1222,9 +1222,9 @@ int main (int argc, char *argv[])
     pixeldata.SetValue( *bv );
     image.SetDataElement( pixeldata );
 
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( image );
+    writer.SetPixmap( image );
     writer.SetFileName( outfilename.c_str() );
 
     gdcm::File& file = writer.GetFile();

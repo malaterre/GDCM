@@ -35,7 +35,7 @@ bool ImageChangePhotometricInterpretation::ChangeMonochrome()
   // without this information we potentially will be making mistake. just like Largest Image Pixel Value and other
   // would be wrong
   return false;
-  const Image &image = *Input;
+  const Pixmap &image = *Input;
   PhotometricInterpretation pi = image.GetPhotometricInterpretation();
   assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
   if( pi == PI )

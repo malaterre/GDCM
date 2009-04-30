@@ -15,14 +15,10 @@
 #ifndef __gdcmPixmap_h
 #define __gdcmPixmap_h
 
-#include "gdcmObject.h"
-#include "gdcmDataElement.h"
-#include "gdcmPhotometricInterpretation.h"
-#include "gdcmPixelFormat.h"
-#include "gdcmTransferSyntax.h"
-#include "gdcmLookupTable.h"
-
-#include <vector>
+#include "gdcmBitmap.h"
+#include "gdcmCurve.h"
+#include "gdcmIconImage.h"
+#include "gdcmOverlay.h"
 
 namespace gdcm
 {
@@ -32,141 +28,49 @@ namespace gdcm
  * A bitmap based image. Used as parent for both IconImage and the main Pixel Data Image
  * It does not contains any World Space information (IPP, IOP)
  */
-class GDCM_EXPORT Pixmap : public Object
+class GDCM_EXPORT Pixmap : public Bitmap
 {
 public:
   Pixmap();
   ~Pixmap();
   void Print(std::ostream &) const {}
 
-  /// Return the number of dimension of the pixel data bytes; for example 2 for a 2D matrices of values
-  unsigned int GetNumberOfDimensions() const;
-  void SetNumberOfDimensions(unsigned int dim);
+  /// returns if Overlays are stored in the unused bit of the pixel data:
+  bool AreOverlaysInPixelData() const;
 
-  /// return the planar configuration
-  unsigned int GetPlanarConfiguration() const;
-  void SetPlanarConfiguration(unsigned int pc);
-
-  bool GetNeedByteSwap() const
-    {
-    return NeedByteSwap;
-    }
-  void SetNeedByteSwap(bool b)
-    {
-    NeedByteSwap = b;
-    }
-
-
-  /// Transfer syntax
-  void SetTransferSyntax(TransferSyntax const &ts) {
-    TS = ts;
+  /// Curve: group 50xx
+  Curve& GetCurve(unsigned int i = 0) { 
+    assert( i < Curves.size() );
+    return Curves[i]; 
   }
-  const TransferSyntax &GetTransferSyntax() const {
-    return TS;
+  const Curve& GetCurve(unsigned int i = 0) const { 
+    assert( i < Curves.size() );
+    return Curves[i]; 
   }
-  void SetDataElement(DataElement const &de) {
-    PixelData = de;
+  unsigned int GetNumberOfCurves() const { return Curves.size(); }
+  void SetNumberOfCurves(unsigned int n) { Curves.resize(n); }
+
+  /// Overlay: group 60xx
+  Overlay& GetOverlay(unsigned int i = 0) { 
+    assert( i < Overlays.size() );
+    return Overlays[i]; 
   }
-  const DataElement& GetDataElement() const { return PixelData; }
-  DataElement& GetDataElement() { return PixelData; }
+  const Overlay& GetOverlay(unsigned int i = 0) const { 
+    assert( i < Overlays.size() );
+    return Overlays[i]; 
+  }
+  unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
+  void SetNumberOfOverlays(unsigned int n) { Overlays.resize(n); }
 
-  /// Set/Get LUT
-  void SetLUT(LookupTable const &lut)
-    {
-    LUT = SmartPointer<LookupTable>( const_cast<LookupTable*>(&lut) );
-    }
-  const LookupTable &GetLUT() const
-    {
-    return *LUT;
-    }
-  LookupTable &GetLUT()
-    {
-    return *LUT;
-    }
-
-
-  /// Return the dimension of the pixel data, first dimension (x), then 2nd (y), then 3rd (z)...
-  const unsigned int *GetDimensions() const;
-  unsigned int GetDimension(unsigned int idx) const;
-
-  void SetColumns(unsigned int col) { SetDimension(0,col); }
-  unsigned int GetColumns() const { return GetDimension(0); }
-  void SetRows(unsigned int rows) { SetDimension(1,rows); }
-  unsigned int GetRows() const { return GetDimension(1); }
-  void SetDimensions(const unsigned int dims[3]);
-  void SetDimension(unsigned int idx, unsigned int dim);
-  /// Get/Set PixelFormat
-  const PixelFormat &GetPixelFormat() const
-    {
-    return PF;
-    }
-  PixelFormat &GetPixelFormat()
-    {
-    return PF;
-    }
-  void SetPixelFormat(PixelFormat const &pf)
-    {
-    PF = pf;
-    PF.Validate();
-    }
-
-  /// return the photometric interpretation
-  const PhotometricInterpretation &GetPhotometricInterpretation() const;
-  void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
-
-  bool IsEmpty() const { return Dimensions.size() == 0; }
-  void Clear();
-
-  /// Return the length of the image after decompression
-  /// WARNING for palette color: It will NOT take into account the Palette Color
-  /// thus you need to multiply this length by 3 if computing the size of equivalent RGB image
-  unsigned long GetBufferLength() const;
-
-  /// Acces the raw data
-  bool GetBuffer(char *buffer) const;
-
-  virtual bool AreOverlaysInPixelData() const { return false; }
-
-  /// Return whether or not the image was compressed using a lossy compressor or not
-  /// Transfer Syntax alone is not sufficient to detect that.
-  /// Warning if the image contains an invalid stream, the return code is also 'false'
-  /// So this call return true only when the following combination is true:
-  /// 1. The image can succefully be read
-  /// 2. The image is indeed lossy
-  bool IsLossy() const;
-
-protected:
-  bool TryRAWCodec(char *buffer, bool &lossyflag) const;
-  bool TryJPEGCodec(char *buffer, bool &lossyflag) const;
-  bool TryPVRGCodec(char *buffer, bool &lossyflag) const;
-  bool TryJPEGLSCodec(char *buffer, bool &lossyflag) const;
-  bool TryJPEG2000Codec(char *buffer, bool &lossyflag) const;
-  bool TryRLECodec(char *buffer, bool &lossyflag) const;
-
-  bool TryJPEGCodec2(std::ostream &os) const;
-  bool TryJPEG2000Codec2(std::ostream &os) const;
-
-  bool GetBuffer2(std::ostream &os) const;
+  /// Set/Get Icon Image
+  const IconImage &GetIconImage() const { return Icon; }
+  IconImage &GetIconImage() { return Icon; }
 
 //private:
 protected:
-  unsigned int PlanarConfiguration;
-  unsigned int NumberOfDimensions;
-  TransferSyntax TS;
-  PixelFormat PF; // SamplesPerPixel, BitsAllocated, BitsStored, HighBit, PixelRepresentation
-  PhotometricInterpretation PI;
-  // Mind dump: unsigned int is required here, since we are reading (0028,0008) Number Of Frames
-  // which is VR::IS, so I cannot simply assumed that unsigned short is enough... :(
-  std::vector<unsigned int> Dimensions; // Col/Row
-  DataElement PixelData; // copied from 7fe0,0010
-
-  typedef SmartPointer<LookupTable> LUTPtr;
-  LUTPtr LUT;
-  // I believe the following 3 ivars can be derived from TS ...
-  bool NeedByteSwap;
-
-private:
-  bool GetBufferInternal(char *buffer, bool &lossyflag) const;
+  std::vector<Overlay>  Overlays;
+  std::vector<Curve>  Curves;
+  IconImage Icon;
 };
 
 } // end namespace gdcm

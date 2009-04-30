@@ -15,7 +15,7 @@
 #ifndef __gdcmImageToImageFilter_h
 #define __gdcmImageToImageFilter_h
 
-#include "gdcmImage.h"
+#include "gdcmPixmap.h"
 
 namespace gdcm
 {
@@ -27,18 +27,18 @@ namespace gdcm
 class GDCM_EXPORT ImageToImageFilter
 {
 public:
-  ImageToImageFilter():Input(new Image),Output(new Image) {}
+  ImageToImageFilter():Input(new Pixmap),Output(new Pixmap) {}
   ~ImageToImageFilter() {}
 
   /// Set input image
-  void SetInput(const Image& image);
+  void SetInput(const Pixmap& image);
 
   /// Get Output image
-  const Image &GetOutput() const { return *Output; }
+  const Pixmap &GetOutput() const { return *Output; }
 
 protected:
-  SmartPointer<Image> Input;
-  SmartPointer<Image> Output;
+  SmartPointer<Pixmap> Input;
+  SmartPointer<Pixmap> Output;
 };
 
 } // end namespace gdcm

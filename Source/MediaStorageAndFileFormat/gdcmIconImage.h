@@ -84,12 +84,12 @@ private:
 
 } // end namespace gdcm
 #endif
-#include "gdcmPixmap.h"
+#include "gdcmBitmap.h"
 
 namespace gdcm
 {
   //class GDCM_EXPORT IconImage : public Pixmap {};
-  typedef Pixmap IconImage;
+  typedef Bitmap IconImage;
 }
 
 #endif //__gdcmIconImage_h

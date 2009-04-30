@@ -16,6 +16,8 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmFragment.h"
+#include "gdcmPixmap.h"
+#include "gdcmBitmap.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
@@ -56,7 +58,7 @@ bool ImageChangeTransferSyntax::TryRAWCodecIcon(const DataElement &pixelde)
 }
 */
 
-bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output)
+bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
   unsigned long len = input.GetBufferLength();
   //assert( len == pixelde.GetByteValue()->GetLength() );
@@ -96,7 +98,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Pixmap c
   return false;
 }
 
-bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output)
+bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
   unsigned long len = input.GetBufferLength();
   //assert( len == pixelde.GetByteValue()->GetLength() );
@@ -136,7 +138,7 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Pixmap c
   return false;
 }
 
-bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output)
+bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
   unsigned long len = input.GetBufferLength();
   //assert( len == pixelde.GetByteValue()->GetLength() );
@@ -212,7 +214,7 @@ abort();
   return false;
 }
 
-bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output)
+bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
   unsigned long len = input.GetBufferLength();
   //assert( len == pixelde.GetByteValue()->GetLength() );
@@ -251,7 +253,7 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Pixma
   return false;
 }
 
-bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pixmap const &input, Pixmap &output)
+bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
   unsigned long len = input.GetBufferLength();
   //assert( len == pixelde.GetByteValue()->GetLength() );

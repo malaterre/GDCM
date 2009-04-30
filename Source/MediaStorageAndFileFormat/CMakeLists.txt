@@ -7,6 +7,7 @@ SET(MSFF_SRCS
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
   gdcmPixmap.cxx
+  gdcmBitmap.cxx
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
   gdcmImageChangeTransferSyntax.cxx
@@ -32,7 +33,9 @@ SET(MSFF_SRCS
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
   gdcmScanner.cxx
+  gdcmPixmapReader.cxx
   gdcmImageReader.cxx
+  gdcmPixmapWriter.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
   gdcmImageHelper.cxx

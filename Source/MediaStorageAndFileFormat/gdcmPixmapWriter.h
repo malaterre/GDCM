@@ -12,40 +12,41 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageWriter_h
-#define __gdcmImageWriter_h
+#ifndef __gdcmPixmapWriter_h
+#define __gdcmPixmapWriter_h
 
-#include "gdcmPixmapWriter.h"
-#include "gdcmImage.h"
+#include "gdcmWriter.h"
+#include "gdcmPixmap.h"
 
 namespace gdcm
 {
 
-class Image;
+class Pixmap;
 /**
- * \brief ImageWriter
+ * \brief PixmapWriter
  */
-class GDCM_EXPORT ImageWriter : public PixmapWriter
+class GDCM_EXPORT PixmapWriter : public Writer
 {
 public:
-  ImageWriter();
-  ~ImageWriter();
+  PixmapWriter();
+  ~PixmapWriter();
 
-  /// Set/Get Image to be written
-  /// It will overwrite anything Image infos found in DataSet
+  /// Set/Get Pixmap to be written
+  /// It will overwrite anything Pixmap infos found in DataSet
   /// (see parent class to see how to pass dataset)
-  const Image& GetImage() const { return dynamic_cast<const Image&>(*PixelData); }
-  Image& GetImage() { return dynamic_cast<Image&>(*PixelData); } // FIXME 
-  void SetImage(Image const &img);
+  const Pixmap& GetPixmap() const { return *PixelData; }
+  Pixmap& GetPixmap() { return *PixelData; } // FIXME 
+  void SetPixmap(Pixmap const &img);
 
   /// Write
   bool Write(); // Execute()
 
 protected:
+  void DoIconImage(DataSet & ds, Pixmap const & image);
 
-private:
+  SmartPointer<Pixmap> PixelData;
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmImageWriter_h
+#endif //__gdcmPixmapWriter_h
