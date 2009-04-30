@@ -13,16 +13,7 @@
 
 =========================================================================*/
 using System;
-using vtkgdcmswig;
-using Kitware.VTK;
-
-namespace vtkgdcm
-{
-  public class vtkGDCMImageReader : vtkMedicalImageReader2
-    {
-    vtkGDCMImageReader() {}
-    }
-}
+using vtkgdcm;
 
 public class HelloVTKWorld
 {
