@@ -131,14 +131,14 @@ IF(GDCM_WRAP_ACTIVIZ)
   FIND_PACKAGE(SWIG REQUIRED)
   MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
   INCLUDE(${SWIG_USE_FILE})
-  SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
-  SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm")
+  SET_SOURCE_FILES_PROPERTIES(vtkgdcmswig.i PROPERTIES CPLUSPLUS ON)
+  SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcmswig")
   SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
-  SWIG_ADD_MODULE(vtkgdcmcli csharp vtkgdcm.i)
-  SWIG_LINK_LIBRARIES(vtkgdcmcli vtkgdcm)
+  SWIG_ADD_MODULE(vtkgdcmswig csharp vtkgdcmswig.i)
+  SWIG_LINK_LIBRARIES(vtkgdcmswig vtkgdcm)
   # Stupid cmake-swig module is doing that for us, when not needed
   IF(UNIX)
-    SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmcli_REAL_NAME} PROPERTIES PREFIX "lib")
+    SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmswig_REAL_NAME} PROPERTIES PREFIX "lib")
   ENDIF(UNIX)
 
 #IF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -153,14 +153,19 @@ IF(GDCM_WRAP_ACTIVIZ)
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     @ONLY)
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm_csharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm_csharp.dll" "*.cs" 
-#${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+    OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     COMMENT "csc *.cs"
   )
+ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
+  DEPENDS 
+    ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
+    #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
+  COMMENT "building vtkgdcmswig_csharp.dll"
+)
 
 ENDIF(GDCM_WRAP_ACTIVIZ)
 
