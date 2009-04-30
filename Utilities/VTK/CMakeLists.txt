@@ -127,11 +127,49 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
   )
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
+IF(GDCM_WRAP_ACTIVIZ)
+  FIND_PACKAGE(SWIG REQUIRED)
+  MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
+  INCLUDE(${SWIG_USE_FILE})
+  SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
+  SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm")
+  SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
+  SWIG_ADD_MODULE(vtkgdcmcli csharp vtkgdcm.i)
+  SWIG_LINK_LIBRARIES(vtkgdcmcli vtkgdcm)
+  # Stupid cmake-swig module is doing that for us, when not needed
+  IF(UNIX)
+    SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmcli_REAL_NAME} PROPERTIES PREFIX "lib")
+  ENDIF(UNIX)
+
+#IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+#  INSTALL(TARGETS ${SWIG_MODULE_gdcm_REAL_NAME}
+#    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+#    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+#    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+#  )
+#ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+  CONFIGURE_FILE(
+    ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
+    ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+    @ONLY)
+  ADD_CUSTOM_COMMAND(
+    OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm_csharp.dll
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm_csharp.dll" "*.cs" 
+#${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS "${swig_generated_file_fullname}"
+      ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+    COMMENT "csc *.cs"
+  )
+
+ENDIF(GDCM_WRAP_ACTIVIZ)
+
 IF(GDCM_WRAP_JAVA)
   IF(VTK_WRAP_JAVA)
     SET(VTK_WRAP_JAVA3_INIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
     # Lars Matthäus patch (package vtk => imply vtk subdir )
     SET(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/vtk)
+    # This is *required* don't ask
     MAKE_DIRECTORY(${VTK_JAVA_HOME})
     INCLUDE(${VTK_CMAKE_DIR}/vtkWrapJava.cmake)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
@@ -142,7 +180,9 @@ IF(GDCM_WRAP_JAVA)
     FOREACH(c ${vtkgdcm_LIBS})
       TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${c}Java)
     ENDFOREACH(c)
-
+    # Create the jar file:
+    # I am pretty sure this *.java thingy will byte me one day, when someone will try
+    # to recompile from an existing build tree with invalid generated *.java file...
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       COMMAND ${JAVA_COMPILE} ARGS -cp ${VTK_JAVA_JAR} "vtk/*.java"
@@ -151,23 +191,23 @@ IF(GDCM_WRAP_JAVA)
       DEPENDS ${VTKGDCM_NAME}Java
       COMMENT   "*.java -> jar"
     )
+    # Target to execute custom command:
     ADD_CUSTOM_TARGET(VTKGDCMJavaJar ALL
       DEPENDS ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       COMMENT "building vtkgdcm.jar"
     )
-
+    # Install rules:
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-        INSTALL(TARGETS ${VTKGDCM_NAME}Java
-          RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-          LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime ${NAMELINK_SKIP}
-          ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
-        )
+      INSTALL(TARGETS ${VTKGDCM_NAME}Java
+        RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime ${NAMELINK_SKIP}
+        ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+      )
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
   ELSE(VTK_WRAP_JAVA)
     MESSAGE("GDCM_WRAP_JAVA canot be build without VTK_WRAP_JAVA")
   ENDIF(VTK_WRAP_JAVA)
-
 ENDIF(GDCM_WRAP_JAVA)
 
 IF(GDCM_WRAP_PYTHON)
