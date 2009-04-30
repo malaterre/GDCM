@@ -22,6 +22,7 @@
 
 %{
 #include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageWriter.h"
 %}
 
 #define VTK_EXPORT
@@ -32,4 +33,5 @@
 #define vtkBooleanMacro(a,b)
 //
 %include "vtkGDCMImageReader.h"
+%include "vtkGDCMImageWriter.h"
 

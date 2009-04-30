@@ -22,7 +22,13 @@ public class HelloVTKWorld
     string filename = args[0];
     vtkGDCMImageReader reader = new vtkGDCMImageReader();
     reader.SetFileName( filename );
-    reader.Update();
+    //reader.Update();
+
+    string outfilename = args[1];
+    vtkGDCMImageWriter writer = new vtkGDCMImageWriter();
+    writer.SetFileName( outfilename );
+    writer.SetInput( reader.GetOutput() );
+    writer.Write();
 
     return 0;
     }

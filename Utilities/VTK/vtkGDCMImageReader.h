@@ -135,6 +135,9 @@ public:
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
 #endif
 
+  // FIXME SWIGCSHARP
+  void SetFileName(const char *filename);
+
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
   virtual void SetFileNames(vtkStringArray*);

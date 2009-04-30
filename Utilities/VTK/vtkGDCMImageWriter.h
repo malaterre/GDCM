@@ -57,6 +57,9 @@ public:
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
 
+  // FIXME SWIGCSHARP
+  void SetFileName(const char *filename);
+
   // Description:
   // Pass in the list of filename to be used to write out the DICOM file(s)
   virtual void SetFileNames(vtkStringArray*);
