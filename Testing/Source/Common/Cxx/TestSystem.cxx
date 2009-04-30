@@ -163,7 +163,7 @@ int TestSystem(int, char *[])
   hostname[255] = 0;
   if( gdcm::System::GetHostName( hostname ) )
     {
-    std::cout << hostname << std::endl;
+    std::cout << "Host:" <<  hostname << std::endl;
     }
   else
   {
