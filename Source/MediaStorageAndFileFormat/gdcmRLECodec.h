@@ -31,7 +31,7 @@ class RLEInternals;
  * be encoded separately. Each frame shall be encoded in one and only one Fragment (see PS 3.5.8.2).
  *
  */
-class RLECodec : public ImageCodec
+class GDCM_EXPORT RLECodec : public ImageCodec
 {
 public:
   RLECodec();
