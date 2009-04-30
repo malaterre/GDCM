@@ -35,8 +35,16 @@ using Kitware.VTK;
 //%}
 
 //%inline %{
-//using Kitware.VTK
+//using Kitware.VTK;
 //%}
+
+%typemap(csimports) SWIGTYPE %{
+// I need to duplicate those also:
+using System;
+using System.Runtime.InteropServices;
+// my special import:
+using Kitware.VTK;
+%}
 
 #define VTK_EXPORT
 
@@ -50,5 +58,6 @@ using Kitware.VTK;
 
 %typemap(cstype) vtkDataObject * "vtkDataObject"
 %typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
+
 %include "vtkGDCMImageWriter.h"
 
