@@ -33,7 +33,7 @@ public:
 
   // NOTE: covariant return-type to preserve backward compatible API
   /// Get Output image
-  const Image &GetOutput() const;
+  //const Image &GetOutput() const;
 
 protected:
 };
