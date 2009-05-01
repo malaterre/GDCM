@@ -29,7 +29,7 @@
 
 namespace gdcm
 {
-PixmapReader::PixmapReader():PixelData(new Pixmap)
+PixmapReader::PixmapReader()/*:PixelData(new Pixmap)*/
 {
 }
 

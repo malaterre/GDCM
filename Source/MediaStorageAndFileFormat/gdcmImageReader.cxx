@@ -103,6 +103,10 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
 
 bool ImageReader::ReadACRNEMAImage()
 {
+  if( !PixmapReader::ReadACRNEMAImage() )
+    {
+    return false;
+    }
   const DataSet &ds = F->GetDataSet();
   Image& pixeldata = GetImage();
 
