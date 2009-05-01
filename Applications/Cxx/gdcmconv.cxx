@@ -911,7 +911,7 @@ int main (int argc, char *argv[])
     gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetPixmap( splitter.GetOutput() );
+    writer.SetPixmap( splitter.PixmapToPixmapFilter::GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -950,7 +950,7 @@ int main (int argc, char *argv[])
     gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetPixmap( pifilt.GetOutput() );
+    writer.SetPixmap( pifilt.PixmapToPixmapFilter::GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -979,7 +979,7 @@ int main (int argc, char *argv[])
     gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetPixmap( lutfilt.GetOutput() );
+    writer.SetPixmap( lutfilt.PixmapToPixmapFilter::GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -1133,7 +1133,7 @@ int main (int argc, char *argv[])
         std::cerr << "Could not change the Planar Configuration: " << filename << std::endl;
         return 1;
         }
-      change.SetInput( icpc.GetOutput() );
+      change.SetInput( icpc.PixmapToPixmapFilter::GetOutput() );
       }
     else
       {
@@ -1148,7 +1148,7 @@ int main (int argc, char *argv[])
     if( lossy )
       {
       PrintLossyWarning();
-      gdcm::derives( reader.GetFile(), change.GetOutput() );
+      gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() );
       }
     if( usedict /*ts.IsImplicit()*/ )
       {
