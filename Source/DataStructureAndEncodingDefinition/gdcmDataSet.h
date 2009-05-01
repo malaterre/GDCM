@@ -279,7 +279,7 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   return os;
 }
   	 
-#if defined(SWIGPYTHON) || defined(SWIGCSHARP)
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,
  * swig does not support wrapping of simple class like std::set...

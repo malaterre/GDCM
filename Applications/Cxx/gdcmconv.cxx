@@ -1166,7 +1166,8 @@ int main (int argc, char *argv[])
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
     //writer.SetFile( fef.GetFile() );
-    writer.SetPixmap( change.GetOutput() );
+    const gdcm::Pixmap &pixout = change.PixmapToPixmapFilter::GetOutput();
+    writer.SetPixmap( pixout );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;

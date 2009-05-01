@@ -127,7 +127,7 @@ private:
   double Progress;
 };
 
-#if defined(SWIGPYTHON) || defined(SWIGCSHARP)
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
 /*
  * HACK: I need this temp class to be able to manipulate a std::map from python,
  * swig does not support wrapping of simple class like std::map...
