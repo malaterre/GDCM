@@ -43,6 +43,8 @@ ImageWriter::~ImageWriter()
 
 bool ImageWriter::Write()
 {
+  if( !PrepareWrite() ) return false;
+
   //assert( Stream.is_open() );
   File& file = GetFile();
   DataSet& ds = file.GetDataSet();
@@ -98,11 +100,10 @@ bool ImageWriter::Write()
     }
 
   assert( Stream );
-  if( !PixmapWriter::Write() )
+  if( !Writer::Write() )
     {
     return false;
     }
-
   return true;
 }
 

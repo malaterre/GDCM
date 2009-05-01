@@ -228,7 +228,7 @@ Attribute<0x0028,0x0004> piat;
     }
 }
 
-bool PixmapWriter::Write()
+bool PixmapWriter::PrepareWrite()
 {
   //assert( Stream.is_open() );
   File& file = GetFile();
@@ -892,6 +892,13 @@ Attribute<0x0028,0x0004> piat;
   //assert( Stream.is_open() );
   //Stream << dummy;
 
+
+  return true;
+}
+
+bool PixmapWriter::Write()
+{
+  if( !PrepareWrite() ) return false;
 
   assert( Stream );
   if( !Writer::Write() )

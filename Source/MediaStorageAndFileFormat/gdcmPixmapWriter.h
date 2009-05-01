@@ -47,6 +47,7 @@ public:
 
 protected:
   void DoIconImage(DataSet & ds, Pixmap const & image);
+  bool PrepareWrite();
 
   SmartPointer<Pixmap> PixelData;
 };
