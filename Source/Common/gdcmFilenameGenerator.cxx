@@ -73,6 +73,19 @@ bool FilenameGenerator::Generate()
       // I am pretty sure this is an error:
       return false;
       }
+    const char *pattern = Pattern.c_str();
+    int num_percent = 0;
+    while( pattern = strchr( pattern, '%') )
+      {
+      ++pattern;
+      ++num_percent;
+      }
+    if ( num_percent != 1 )
+      {
+      // Bug: what if someone wants to output file such as %%%02 ... oh well
+      gdcmDebugMacro( "No more than one % in string formating please" );
+      return false;
+      }
     bool success = true;
     char *internal = new char[internal_len];
     for( unsigned int i = 0; i < numfiles && success; ++i)

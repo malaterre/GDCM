@@ -10,7 +10,7 @@ gdcmraw [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmraw 
+The \b gdcmraw tool is mostly used for development purpose. It is used to extract a specific binary field from a DICOM DataSet.
 
 \section parameters PARAMETERS
 
