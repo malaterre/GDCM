@@ -262,8 +262,19 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
 
     JlsParamaters params = {};
     params.components = sample_pixel;
-    params.bitspersample = bitsallocated;
-    params.bitspersample = bitsstored;
+    // D_CLUNIE_RG3_JPLY.dcm. The famous 16bits allocated / 10 bits stored with the pixel value = 1024
+    // CharLS properly encode 1024 considering it as 10bits data, so the output
+    // Using bitsstored for the encoder gives a slightly better compression ratio, and is indeed the
+    // right way of doing it.
+    if( pf.GetPixelRepresentation() )
+      {
+      // gdcmData/CT_16b_signed-UsedBits13.dcm
+      params.bitspersample = bitsallocated;
+      }
+    else
+      {
+      params.bitspersample = bitsstored;
+      }
     params.height = image_height;
     params.width = image_width;
 

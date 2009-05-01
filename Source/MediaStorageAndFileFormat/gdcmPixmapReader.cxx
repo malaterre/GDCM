@@ -31,6 +31,7 @@ namespace gdcm
 {
 PixmapReader::PixmapReader()/*:PixelData(new Pixmap)*/
 {
+  if( !PixelData ) PixelData = new Pixmap;
 }
 
 PixmapReader::~PixmapReader()

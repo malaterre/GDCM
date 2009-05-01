@@ -825,7 +825,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     const Dicts &dicts = g.GetDicts();
     const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
     const VR & vr = entry.GetVR();
-    assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+    assert( vr.Compatible( de.GetVR() ) );
     switch(vr)
       {
     case VR::DS:

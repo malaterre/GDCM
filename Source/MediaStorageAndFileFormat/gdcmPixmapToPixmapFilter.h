@@ -27,7 +27,7 @@ namespace gdcm
 class GDCM_EXPORT PixmapToPixmapFilter
 {
 public:
-  PixmapToPixmapFilter()/*:Input(new Pixmap),Output(new Pixmap)*/ {}
+  PixmapToPixmapFilter();
   ~PixmapToPixmapFilter() {}
 
   /// Set input image
