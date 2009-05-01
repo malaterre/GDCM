@@ -125,46 +125,106 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 #ifndef GDCM_USE_JPEGLS
   return false;
 #else
-  assert( NumberOfDimensions == 2 );
-
-  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  assert( sf );
-  std::stringstream is;
-  unsigned long totalLen = sf->ComputeByteLength();
-  char *buffer = new char[totalLen];
-  sf->GetBuffer(buffer, totalLen);
-  //is.write(buffer, totalLen);
-
-  JlsParamaters metadata;
-  if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
+  if( NumberOfDimensions == 2 )
     {
-    return false;
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    std::stringstream is;
+    unsigned long totalLen = sf->ComputeByteLength();
+    char *buffer = new char[totalLen];
+    sf->GetBuffer(buffer, totalLen);
+    //is.write(buffer, totalLen);
+
+    JlsParamaters metadata;
+    if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
+      {
+      return false;
+      }
+
+    // allowedlossyerror == 0 => Lossless
+    LossyFlag = metadata.allowedlossyerror;
+
+    const BYTE* pbyteCompressed = (const BYTE*)buffer;
+    int cbyteCompressed = totalLen;
+
+    JlsParamaters params = {0};
+    JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+
+    std::vector<BYTE> rgbyteCompressed;
+    rgbyteCompressed.resize(params.height *params.width* 4);
+
+    std::vector<BYTE> rgbyteOut;
+    rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
+
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    ASSERT(result == OK);
+
+    delete[] buffer;
+
+    out = in;
+
+    out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
+    return true;
     }
+  else if( NumberOfDimensions == 3 )
+    {
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    assert( sf->GetNumberOfFragments() == Dimensions[2] );
+    std::stringstream os;
+    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+      {
+      const Fragment &frag = sf->GetFragment(i);
+      if( frag.IsEmpty() ) return false;
+      const ByteValue *bv = frag.GetByteValue();
+      assert( bv );
+      char *mybuffer = new char[bv->GetLength()];
+    unsigned long totalLen = bv->GetLength();
 
-  // allowedlossyerror == 0 => Lossless
-  LossyFlag = metadata.allowedlossyerror;
+      bv->GetBuffer(mybuffer, bv->GetLength());
 
-  const BYTE* pbyteCompressed = (const BYTE*)buffer;
-  int cbyteCompressed = totalLen;
+    JlsParamaters metadata;
+    if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
+      {
+      return false;
+      }
 
-  JlsParamaters params = {0};
-  JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+    // allowedlossyerror == 0 => Lossless
+    LossyFlag = metadata.allowedlossyerror;
 
-  std::vector<BYTE> rgbyteCompressed;
-  rgbyteCompressed.resize(params.height *params.width* 4);
+    const BYTE* pbyteCompressed = (const BYTE*)mybuffer;
+    int cbyteCompressed = totalLen;
 
-  std::vector<BYTE> rgbyteOut;
-  rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
+    JlsParamaters params = {0};
+    JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
-  JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
-  ASSERT(result == OK);
+    std::vector<BYTE> rgbyteCompressed;
+    rgbyteCompressed.resize(params.height *params.width* 4);
 
-  delete[] buffer;
+    std::vector<BYTE> rgbyteOut;
+    rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
-  out = in;
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    ASSERT(result == OK);
+bool r = true;
 
-  out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
-  return true;
+
+      delete[] mybuffer;
+    os.write( (char*)&rgbyteOut[0], rgbyteOut.size() );
+
+      if(!r) return false;
+      assert( r == true );
+
+
+      }
+    std::string str = os.str();
+    assert( str.size() );
+    out.SetByteValue( &str[0], str.size() );
+
+
+    return true;
+    }
+    return false;
 
 #endif
 }
@@ -196,35 +256,40 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   unsigned long image_len = len / dims[2];
   size_t inputlength = image_len;
 
-	JlsParamaters params = {};
-	params.components = sample_pixel;
-	params.bitspersample = bitsallocated;
-	params.bitspersample = bitsstored;
-	params.height = image_height;
-	params.width = image_width;
-
-	if (sample_pixel == 3)
-	{
-		params.ilv = ILV_LINE;
-		params.colorTransform = 1;
-	}
-
-	std::vector<BYTE> rgbyteCompressed;
-	rgbyteCompressed.resize(image_width * image_height * 4);
-
-	size_t cbyteCompressed;
-	JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, input, inputlength, &params);
-  if( error != OK ) 
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
-    gdcmErrorMacro( "Error compressing: " << error );
-    return false;
-    }
+    const char *inputdata = input + dim * image_len; //bv->GetPointer();
 
-  assert( cbyteCompressed < rgbyteCompressed.size() );
+    JlsParamaters params = {};
+    params.components = sample_pixel;
+    params.bitspersample = bitsallocated;
+    params.bitspersample = bitsstored;
+    params.height = image_height;
+    params.width = image_width;
+
+    if (sample_pixel == 3)
+      {
+      params.ilv = ILV_LINE;
+      params.colorTransform = 1;
+      }
+
+    std::vector<BYTE> rgbyteCompressed;
+    rgbyteCompressed.resize(image_width * image_height * 4);
+
+    size_t cbyteCompressed;
+    JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, inputdata, inputlength, &params);
+    if( error != OK ) 
+      {
+      gdcmErrorMacro( "Error compressing: " << error );
+      return false;
+      }
+
+    assert( cbyteCompressed < rgbyteCompressed.size() );
 
     Fragment frag;
     frag.SetByteValue( (char*)&rgbyteCompressed[0], cbyteCompressed );
     sq->AddFragment( frag );
+    }
 
   assert( sq->GetNumberOfFragments() == dims[2] );
   out.SetValue( *sq );

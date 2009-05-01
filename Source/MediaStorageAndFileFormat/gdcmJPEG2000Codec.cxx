@@ -184,6 +184,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
     assert( sf );
     std::stringstream os;
+    assert( sf->GetNumberOfFragments() == Dimensions[2] );
     for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
       {
       std::stringstream is;
