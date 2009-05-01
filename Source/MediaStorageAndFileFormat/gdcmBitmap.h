@@ -152,6 +152,9 @@ protected:
 
   bool GetBuffer2(std::ostream &os) const;
 
+  friend class PixmapReader;
+  bool ComputeLossyFlag();
+
 //private:
 protected:
   unsigned int PlanarConfiguration;
@@ -168,6 +171,7 @@ protected:
   LUTPtr LUT;
   // I believe the following 3 ivars can be derived from TS ...
   bool NeedByteSwap;
+  bool LossyFlag;
 
 private:
   bool GetBufferInternal(char *buffer, bool &lossyflag) const;

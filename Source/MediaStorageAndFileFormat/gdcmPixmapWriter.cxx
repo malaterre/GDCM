@@ -391,7 +391,7 @@ bool PixmapWriter::PrepareWrite()
     return false;
     }
 
-  if( ts.IsLossy() )
+  if( /*ts.IsLossy() &&*/ PixelData->IsLossy() )
     {
     // Add the Lossy stuff:
     Attribute<0x0028,0x2110> at1;

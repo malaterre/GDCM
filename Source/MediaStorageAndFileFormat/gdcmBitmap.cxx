@@ -49,6 +49,7 @@ Bitmap::Bitmap():
   PF(),
   PI(),
   NeedByteSwap(false),
+  LossyFlag(false),
   Dimensions(),
   LUT(0),
   PixelData() {}
@@ -255,18 +256,22 @@ unsigned long Bitmap::GetBufferLength() const
 
 bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
 {
-  //if(!buffer)
-  //  {
-  //  lossyflag = false;
-  //  return true;
-  //  }
+  RAWCodec codec;
   const TransferSyntax &ts = GetTransferSyntax();
+  if(!buffer)
+    {
+    if( codec.CanDecode( ts ) ) // short path
+      {
+      lossyflag = false;
+      return true;
+      }
+    return false;
+    }
 
   const ByteValue *bv = PixelData.GetByteValue();
   if( bv )
     {
     unsigned long len = GetBufferLength();
-    RAWCodec codec;
     if( !codec.CanDecode( ts ) ) return false;
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
@@ -454,12 +459,25 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
 bool Bitmap::IsLossy() const
 {
   // FIXME each call is expensive...
+  //bool lossyflag;
+  //if( this->GetBufferInternal(0, lossyflag) )
+  //  {
+  //  return lossyflag;
+  //  }
+  //return false;
+  return LossyFlag;
+}
+
+bool Bitmap::ComputeLossyFlag()
+{
   bool lossyflag;
   if( this->GetBufferInternal(0, lossyflag) )
     {
-    return lossyflag;
+    LossyFlag = lossyflag;
+    return true;
     }
-  return false;
+  LossyFlag = false;
+  return false; 
 }
 
 bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const

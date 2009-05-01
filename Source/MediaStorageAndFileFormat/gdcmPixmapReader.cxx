@@ -1161,6 +1161,8 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       }
     }
 
+  PixelData->ComputeLossyFlag();
+
   return true;
 }
 
