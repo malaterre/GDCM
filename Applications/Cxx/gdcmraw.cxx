@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:t:p:fP",
+    c = getopt_long (argc, argv, "i:o:t:Sp:PVWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -150,9 +150,9 @@ int main(int argc, char *argv[])
             assert( pattern.empty() );
             pattern = optarg;
             }
-          printf (" with arg %s", optarg);
+          //printf (" with arg %s", optarg);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
@@ -168,13 +168,21 @@ int main(int argc, char *argv[])
       outfilename = optarg;
       break;
 
+    case 'P':
+      pixeldata = 1;
+      break;
+
+    case 'S':
+      splitfrags = 1;
+      break;
+
     case 'p':
       assert( pattern.empty() );
       pattern = optarg;
       break;
 
     case 't':
-      printf ("option t with value '%s'\n", optarg);
+      //printf ("option t with value '%s'\n", optarg);
       rawTag.ReadFromCommaSeparatedString(optarg);
       //std::cerr << rawTag << std::endl;
       break;
