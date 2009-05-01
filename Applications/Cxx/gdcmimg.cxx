@@ -41,6 +41,7 @@
  * Todo: check compat API with jhead 
  */
 #include "gdcmFilename.h"
+#include "gdcmDirectory.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmUIDGenerator.h"
@@ -253,7 +254,7 @@ bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & 
   return true;
 }
 
-bool Populate( gdcm::ImageWriter & writer, gdcm::ImageCodec & jpeg, const char *filename )
+bool PopulateSingeFile( gdcm::ImageWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename )
 {
       /*
        * FIXME: when JPEG contains JFIF marker, we should only read them
@@ -269,7 +270,6 @@ bool Populate( gdcm::ImageWriter & writer, gdcm::ImageCodec & jpeg, const char *
     }
 
   gdcm::Image &image = writer.GetImage();
-  image.SetNumberOfDimensions( 2 );
   image.SetDimensions( jpeg.GetDimensions() );
   image.SetPixelFormat( jpeg.GetPixelFormat() );
   image.SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
@@ -293,8 +293,6 @@ bool Populate( gdcm::ImageWriter & writer, gdcm::ImageCodec & jpeg, const char *
 
   if( ts.IsEncapsulated() )
     {
-    gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
-
     gdcm::Fragment frag;
     frag.SetByteValue( buf, len );
     sq->AddFragment( frag );
@@ -309,6 +307,29 @@ bool Populate( gdcm::ImageWriter & writer, gdcm::ImageCodec & jpeg, const char *
 
   return true;
 }
+
+bool Populate( gdcm::ImageWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames )
+{
+  std::vector<std::string>::const_iterator it = filenames.begin();
+  bool b = true;
+  gdcm::Image &image = writer.GetImage();
+  image.SetNumberOfDimensions( 2 );
+  if( filenames.size() > 1 )
+    {
+  image.SetNumberOfDimensions( 3 );
+    }
+
+    gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+  for(; it != filenames.end(); ++it)
+    {
+    b = b && PopulateSingeFile( writer, sq, jpeg, it->c_str() );
+    }
+  if( filenames.size() > 1 )
+  image.SetDimension(2,  filenames.size() );
+
+  return b;
+}
+
 
 bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int pixelsign )
 {
@@ -346,6 +367,7 @@ int main (int argc, char *argv[])
   std::string root;
   int rootuid = 0;
   gdcm::Filename filename;
+  gdcm::Directory::FilenamesType filenames;
   gdcm::Filename outfilename;
   unsigned int region[6] = {}; // Rows & Columns are VR=US anyway...
   unsigned int color = 0;
@@ -562,13 +584,15 @@ int main (int argc, char *argv[])
       files.push_back( argv[optind++] );
       }
     //printf ("\n");
-    if( files.size() == 2 
+    if( files.size() >= 2 
       && filename.IsEmpty()
       && outfilename.IsEmpty() 
     )
       {
       filename = files[0].c_str();
-      outfilename = files[1].c_str();
+      filenames = files;
+      outfilename = files[ files.size() - 1 ].c_str();
+      filenames.pop_back();
       }
     else
       {
@@ -591,7 +615,7 @@ int main (int argc, char *argv[])
     return 0;
     }
 
-  if( filename.IsEmpty() )
+  if( filenames.empty() && filename.IsEmpty() )
     {
     //std::cerr << "Need input file (-i)\n";
     PrintHelp();
@@ -700,7 +724,7 @@ int main (int argc, char *argv[])
           }
         }
 
-      if( !Populate( writer, raw, filename ) ) return 1;
+      if( !Populate( writer, raw, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -733,7 +757,7 @@ int main (int argc, char *argv[])
       gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
       rle.SetPhotometricInterpretation( pi );
 
-      if( !Populate( writer, rle, filename ) ) return 1;
+      if( !Populate( writer, rle, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -751,7 +775,7 @@ int main (int argc, char *argv[])
       {
       gdcm::PNMCodec pnm;
       gdcm::ImageWriter writer;
-      if( !Populate( writer, pnm, filename ) ) return 1;
+      if( !Populate( writer, pnm, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -767,7 +791,7 @@ int main (int argc, char *argv[])
       {
       gdcm::JPEGLSCodec jpeg;
       gdcm::ImageWriter writer;
-      if( !Populate( writer, jpeg, filename ) ) return 1;
+      if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -790,7 +814,7 @@ int main (int argc, char *argv[])
        */
       gdcm::JPEG2000Codec jpeg;
       gdcm::ImageWriter writer;
-      if( !Populate( writer, jpeg, filename ) ) return 1;
+      if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -814,7 +838,7 @@ int main (int argc, char *argv[])
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
       jpeg.SetPixelFormat( pf );
       gdcm::ImageWriter writer;
-      if( !Populate( writer, jpeg, filename ) ) return 1;
+      if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
       writer.SetFileName( outfilename );

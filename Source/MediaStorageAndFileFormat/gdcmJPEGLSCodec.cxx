@@ -183,6 +183,14 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
       bv->GetBuffer(mybuffer, bv->GetLength());
 
+    const BYTE* pbyteCompressed = (const BYTE*)mybuffer;
+      while( totalLen > 0 && pbyteCompressed[totalLen-1] != 0xd9 )
+        {
+        totalLen--;
+        }
+  // what if 0xd9 is never found ?
+  assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
+
     JlsParamaters metadata;
     if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
       {
@@ -192,7 +200,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     // allowedlossyerror == 0 => Lossless
     LossyFlag = metadata.allowedlossyerror;
 
-    const BYTE* pbyteCompressed = (const BYTE*)mybuffer;
+
     int cbyteCompressed = totalLen;
 
     JlsParamaters params = {0};
