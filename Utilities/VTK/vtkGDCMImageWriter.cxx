@@ -33,6 +33,7 @@
 #include "gdcmImageWriter.h"
 #include "gdcmByteValue.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmAnonymizer.h"
 #include "gdcmAttribute.h"
 #include "gdcmRescaler.h"
 #include "gdcmGlobal.h"
@@ -102,6 +103,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->Scale = 1.;
   this->FileLowerLeft = 0; // same default as vtkImageReader2
   this->PlanarConfiguration = 0;
+  this->LossyFlag = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -409,10 +411,12 @@ void vtkGDCMImageWriter::WriteSlice(vtkImageData *data)
 
 #endif
 
-void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
+//void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
+void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::Anonymizer & ano)
 {
   if( s && *s )
     {
+#if 0
     gdcm::DataElement de( t );
     de.SetByteValue( s, strlen( s ) );
     const gdcm::Global& g = gdcm::Global::GetInstance();
@@ -422,6 +426,9 @@ void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
     const gdcm::DictEntry &dictentry = dicts.GetDictEntry( t );
     de.SetVR( dictentry.GetVR() );
     ds.Insert( de );
+#else
+    ano.Replace(t, s);
+#endif
     }
 }
 
@@ -451,6 +458,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //writer.SetImage( image );
 
   gdcm::Image &image = writer.GetImage();
+  image.SetLossyFlag( this->LossyFlag );
   // Nowadays this is the default one:
 #ifdef GDCM_WORDS_BIGENDIAN
   // FIXME: this is not the default syntax, but should be a little faster on big endian machine
@@ -784,72 +792,74 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   gdcm::File& file = writer.GetFile();
   gdcm::DataSet& ds = file.GetDataSet();
+  gdcm::Anonymizer ano;
+  ano.SetFile( file );
   // For ex: DICOM (0010,0010) = DOE,JOHN
-  SetStringValueFromTag(this->MedicalImageProperties->GetPatientName(), gdcm::Tag(0x0010,0x0010), ds);
+  SetStringValueFromTag(this->MedicalImageProperties->GetPatientName(), gdcm::Tag(0x0010,0x0010), ano);
   // For ex: DICOM (0010,0020) = 1933197
-  SetStringValueFromTag( this->MedicalImageProperties->GetPatientID(), gdcm::Tag(0x0010,0x0020), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientID(), gdcm::Tag(0x0010,0x0020), ano);
   // For ex: DICOM (0010,1010) = 031Y
-  SetStringValueFromTag( this->MedicalImageProperties->GetPatientAge(), gdcm::Tag(0x0010,0x1010), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientAge(), gdcm::Tag(0x0010,0x1010), ano);
   // For ex: DICOM (0010,0040) = M
-  SetStringValueFromTag( this->MedicalImageProperties->GetPatientSex(), gdcm::Tag(0x0010,0x0040), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientSex(), gdcm::Tag(0x0010,0x0040), ano);
   // For ex: DICOM (0010,0030) = 19680427
-  SetStringValueFromTag( this->MedicalImageProperties->GetPatientBirthDate(), gdcm::Tag(0x0010,0x0030), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientBirthDate(), gdcm::Tag(0x0010,0x0030), ano);
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
-  SetStringValueFromTag( this->MedicalImageProperties->GetStudyDate(), gdcm::Tag(0x0008,0x0020), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyDate(), gdcm::Tag(0x0008,0x0020), ano);
 #endif
   // For ex: DICOM (0008,0022) = 20030617
-  SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionDate(), gdcm::Tag(0x0008,0x0022), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionDate(), gdcm::Tag(0x0008,0x0022), ano);
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
-  SetStringValueFromTag( this->MedicalImageProperties->GetStudyTime(), gdcm::Tag(0x0008,0x0030), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyTime(), gdcm::Tag(0x0008,0x0030), ano);
 #endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
-  SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionTime(), gdcm::Tag(0x0008,0x0032), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionTime(), gdcm::Tag(0x0008,0x0032), ano);
   // For ex: DICOM (0008,0023) = 20030617
-  SetStringValueFromTag( this->MedicalImageProperties->GetImageDate(), gdcm::Tag(0x0008,0x0023), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetImageDate(), gdcm::Tag(0x0008,0x0023), ano);
   // For ex: DICOM (0008,0033) = 162552.0705 or 230012, or 0012
-  SetStringValueFromTag( this->MedicalImageProperties->GetImageTime(), gdcm::Tag(0x0008,0x0033), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetImageTime(), gdcm::Tag(0x0008,0x0033), ano);
   // For ex: DICOM (0020,0013) = 1
-  SetStringValueFromTag( this->MedicalImageProperties->GetImageNumber(), gdcm::Tag(0x0020,0x0013), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetImageNumber(), gdcm::Tag(0x0020,0x0013), ano);
   // For ex: DICOM (0020,0011) = 902
-  SetStringValueFromTag( this->MedicalImageProperties->GetSeriesNumber(), gdcm::Tag(0x0020,0x0011), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetSeriesNumber(), gdcm::Tag(0x0020,0x0011), ano);
   // For ex: DICOM (0008,103e) = SCOUT
-  SetStringValueFromTag( this->MedicalImageProperties->GetSeriesDescription(), gdcm::Tag(0x0008,0x103e), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetSeriesDescription(), gdcm::Tag(0x0008,0x103e), ano);
   // For ex: DICOM (0020,0010) = 37481
-  SetStringValueFromTag( this->MedicalImageProperties->GetStudyID(), gdcm::Tag(0x0020,0x0010), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyID(), gdcm::Tag(0x0020,0x0010), ano);
   // For ex: DICOM (0008,1030) = BRAIN/C-SP/FACIAL
-  SetStringValueFromTag( this->MedicalImageProperties->GetStudyDescription(), gdcm::Tag(0x0008,0x1030), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyDescription(), gdcm::Tag(0x0008,0x1030), ano);
   // For ex: DICOM (0008,0060)= CT
-  SetStringValueFromTag( this->MedicalImageProperties->GetModality(), gdcm::Tag(0x0008,0x0060), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetModality(), gdcm::Tag(0x0008,0x0060), ano);
   // For ex: DICOM (0008,0070) = Siemens
-  SetStringValueFromTag( this->MedicalImageProperties->GetManufacturer(), gdcm::Tag(0x0008,0x0070), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetManufacturer(), gdcm::Tag(0x0008,0x0070), ano);
   // For ex: DICOM (0008,1090) = LightSpeed QX/i
-  SetStringValueFromTag( this->MedicalImageProperties->GetManufacturerModelName(), gdcm::Tag(0x0008,0x1090), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetManufacturerModelName(), gdcm::Tag(0x0008,0x1090), ano);
   // For ex: DICOM (0008,1010) = LSPD_OC8
-  SetStringValueFromTag( this->MedicalImageProperties->GetStationName(), gdcm::Tag(0x0008,0x1010), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetStationName(), gdcm::Tag(0x0008,0x1010), ano);
   // For ex: DICOM (0008,0080) = FooCity Medical Center
-  SetStringValueFromTag( this->MedicalImageProperties->GetInstitutionName(), gdcm::Tag(0x0008,0x0080), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetInstitutionName(), gdcm::Tag(0x0008,0x0080), ano);
   // For ex: DICOM (0018,1210) = Bone
-  SetStringValueFromTag( this->MedicalImageProperties->GetConvolutionKernel(), gdcm::Tag(0x0018,0x1210), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetConvolutionKernel(), gdcm::Tag(0x0018,0x1210), ano);
   // For ex: DICOM (0018,0050) = 0.273438
-  SetStringValueFromTag( this->MedicalImageProperties->GetSliceThickness(), gdcm::Tag(0x0018,0x0050), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetSliceThickness(), gdcm::Tag(0x0018,0x0050), ano);
   // For ex: DICOM (0018,0060) = 120
-  SetStringValueFromTag( this->MedicalImageProperties->GetKVP(), gdcm::Tag(0x0018,0x0060), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetKVP(), gdcm::Tag(0x0018,0x0060), ano);
   // For ex: DICOM (0018,1120) = 15
-  SetStringValueFromTag( this->MedicalImageProperties->GetGantryTilt(), gdcm::Tag(0x0018,0x1120), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetGantryTilt(), gdcm::Tag(0x0018,0x1120), ano);
   // For ex: DICOM (0018,0081) = 105
-  SetStringValueFromTag( this->MedicalImageProperties->GetEchoTime(), gdcm::Tag(0x0018,0x0081), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetEchoTime(), gdcm::Tag(0x0018,0x0081), ano);
   // For ex: DICOM (0018,0091) = 35
-  SetStringValueFromTag( this->MedicalImageProperties->GetEchoTrainLength(), gdcm::Tag(0x0018,0x0091), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetEchoTrainLength(), gdcm::Tag(0x0018,0x0091), ano);
   // For ex: DICOM (0018,0080) = 2040
-  SetStringValueFromTag( this->MedicalImageProperties->GetRepetitionTime(), gdcm::Tag(0x0018,0x0080), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetRepetitionTime(), gdcm::Tag(0x0018,0x0080), ano);
   // For ex: DICOM (0018,1150) = 5
-  SetStringValueFromTag( this->MedicalImageProperties->GetExposureTime(), gdcm::Tag(0x0018,0x1150), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetExposureTime(), gdcm::Tag(0x0018,0x1150), ano);
   // For ex: DICOM (0018,1151) = 400
-  SetStringValueFromTag( this->MedicalImageProperties->GetXRayTubeCurrent(), gdcm::Tag(0x0018,0x1151), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetXRayTubeCurrent(), gdcm::Tag(0x0018,0x1151), ano);
   // For ex: DICOM (0018,1152) = 114
-  SetStringValueFromTag( this->MedicalImageProperties->GetExposure(), gdcm::Tag(0x0018,0x1152), ds);
+  SetStringValueFromTag( this->MedicalImageProperties->GetExposure(), gdcm::Tag(0x0018,0x1152), ano);
 
   // Window Level / Window Center
   int numwl = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
@@ -903,7 +913,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     gdcm::Tag t;
     // Lookup up tag by name is truly inefficient : 0(n)
     const gdcm::DictEntry &de = pubdict.GetDictEntryByName(name, t); (void)de;
-    SetStringValueFromTag( value, t, ds);
+    SetStringValueFromTag( value, t, ano);
     }
 #endif
 
@@ -1104,7 +1114,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   std::ostringstream os;
   os << k;
   // Will only be added if none found
-  SetStringValueFromTag(os.str().c_str(), gdcm::Tag(0x0020,0x0013), ds);
+  SetStringValueFromTag(os.str().c_str(), gdcm::Tag(0x0020,0x0013), ano);
   writer.SetFileName( filename );
   if( !writer.Write() )
     {

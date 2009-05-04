@@ -406,6 +406,11 @@ bool PixmapWriter::PrepareWrite()
      */
 
     Attribute<0x0028,0x2114> at3;
+{
+      static const CSComp newvalues2[] = {"UNDEFINED"};
+      at3.SetValues(  newvalues2, 1 );
+}
+
     if( ts == TransferSyntax::JPEG2000 )
       {
       static const CSComp newvalues2[] = {"ISO_15444_1"};
@@ -428,7 +433,7 @@ bool PixmapWriter::PrepareWrite()
       }
     else
       {
-      return false;
+      //return false;
       }
     ds.Replace( at3.GetAsDataElement() );
     }
@@ -837,13 +842,12 @@ Attribute<0x0028,0x0004> piat;
     }
   // StudyTime
   const size_t timelen = 6 + 1 + 6; // time + milliseconds
-  if( !ds.FindDataElement( Tag(0x0008,0x0030) ) )
+  Attribute<0x0008, 0x0030> studytime;
+  if( !ds.FindDataElement( studytime.GetTag() ) )
     {
-    DataElement de( Tag(0x0008,0x0030) );
     // Do not copy the whole cstring:
-    de.SetByteValue( date+datelen, timelen );
-    de.SetVR( Attribute<0x0008,0x0030>::GetVR() );
-    ds.Insert( de );
+    studytime.SetValue( CSComp(date+datelen, timelen) );
+    ds.Insert( studytime.GetAsDataElement() );
     }
   // ReferringPhysicianName
   if( !ds.FindDataElement( Tag(0x0008,0x0090) ) )

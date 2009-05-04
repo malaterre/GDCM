@@ -108,6 +108,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->IconDataScalarType = VTK_CHAR;
   this->IconNumberOfScalarComponents = 1;
   this->PlanarConfiguration = 0;
+  this->LossyFlag = 0;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -600,6 +601,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
+  this->LossyFlag = image.IsLossy();
   const unsigned int *dims = image.GetDimensions();
 
   // Set the Extents.
@@ -898,6 +900,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     return 0;
     }
   gdcm::Image &image = reader.GetImage();
+  this->LossyFlag = image.IsLossy();
   //VTK does not cope with Planar Configuration, so let's schew the work to please it
   assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
   // Store the PlanarConfiguration before inverting it !

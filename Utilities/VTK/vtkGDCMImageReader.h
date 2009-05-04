@@ -155,6 +155,10 @@ public:
   vtkSetMacro(LoadIconImage,int);
   vtkBooleanMacro(LoadIconImage,int);
 
+  vtkGetMacro(LossyFlag,int);
+  vtkSetMacro(LossyFlag,int);
+  vtkBooleanMacro(LossyFlag,int);
+
   // Description:
   // Read only: number of overlays as found in this image (multiple overlays per slice is allowed)
   vtkGetMacro(NumberOfOverlays,int);
@@ -288,6 +292,7 @@ protected:
   int IconDataScalarType;
   int IconNumberOfScalarComponents;
   int PlanarConfiguration;
+  int LossyFlag;
 
 protected:
   // TODO / FIXME

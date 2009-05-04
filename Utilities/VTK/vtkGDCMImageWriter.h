@@ -62,6 +62,10 @@ public:
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
 
+  vtkGetMacro(LossyFlag,int);
+  vtkSetMacro(LossyFlag,int);
+  vtkBooleanMacro(LossyFlag,int);
+
   // I need that...
   virtual void Write();
 
@@ -152,6 +156,7 @@ private:
   double Scale;
   int FileLowerLeft;
   int PlanarConfiguration;
+  int LossyFlag;
 };
 
 #endif

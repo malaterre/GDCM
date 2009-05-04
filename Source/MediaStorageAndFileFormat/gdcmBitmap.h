@@ -139,6 +139,8 @@ public:
   /// 2. The image is indeed lossy
   bool IsLossy() const;
 
+  void SetLossyFlag(bool f) { LossyFlag = f; }
+
 protected:
   bool TryRAWCodec(char *buffer, bool &lossyflag) const;
   bool TryJPEGCodec(char *buffer, bool &lossyflag) const;

@@ -32,6 +32,7 @@
 #include "vtkGESignaReader.h"
 #include "vtkImageExtractComponents.h"
 #include "vtkImageRGBToYBR.h"
+#include "vtkJPEGReader.h"
 #include "vtkBMPReader.h"
 #include "vtkLookupTable.h"
 #include "vtkPointData.h"
@@ -299,6 +300,11 @@ int main(int argc, char *argv[])
         reader->GetOutput()->Print( std::cout );
         reader->GetMedicalImageProperties()->Print( std::cout );
         }
+      }
+    else if( vtkJPEGReader * reader = vtkJPEGReader::SafeDownCast(imgreader) )
+      {
+      // vtk JPEG reader only read 8bits lossy file
+      writer->SetLossyFlag( 1 );
       }
     else if( vtkBMPReader * reader = vtkBMPReader::SafeDownCast(imgreader) )
       {

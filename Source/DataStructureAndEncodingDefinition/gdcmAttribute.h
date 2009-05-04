@@ -405,6 +405,16 @@ public:
       GetNumberOfValues(),os);
     ret.SetVR( GetVR() );
     assert( ret.GetVR() != VR::SQ );
+    if( VRToEncoding<TVR>::Mode == VR::VRASCII )
+      {
+      if( GetVR() != VR::UI )
+        {
+        if( os.str().size() % 2 )
+          {
+          os << " ";
+          }
+        }
+      }
     ret.SetByteValue( os.str().c_str(), os.str().size() );
     return ret;
   }
