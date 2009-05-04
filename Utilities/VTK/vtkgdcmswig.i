@@ -44,6 +44,7 @@
 #include "vtkObjectBase.h"
 #include "vtkObject.h"
 
+#include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
 
 // Wrap vtkImageData
@@ -109,6 +110,9 @@
 //%ignore vtkImageAlgorithm::GetInput;
 //%ignore vtkImageAlgorithm::GetImageDataInput;
 
+%ignore vtkMatrix4x4::Invert(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
+%ignore vtkMatrix4x4::Transpose(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
+
 %ignore vtkImageWriter::GetInput; // I am getting a warning on swig 1.3.33 because of vtkImageAlgorithm.GetInput
 
 // Let's wrap the following constants:
@@ -156,6 +160,7 @@
 %include "vtkObjectBase.h"
 %include "vtkObject.h"
 
+%include "vtkMatrix4x4.h"
 %include "vtkMedicalImageProperties.h"
 
 %include "vtkDataObject.h"

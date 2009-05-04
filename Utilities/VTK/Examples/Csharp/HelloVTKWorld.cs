@@ -35,16 +35,20 @@ public class HelloVTKWorld
       System.Console.WriteLine( "Image is MONOCHROME2" ); // 
       }
 
+    // Just for fun, invert the direction cosines, output should reflect that:
+    vtkMatrix4x4 dircos = reader.GetDirectionCosines();
+    dircos.Invert();
+
     string outfilename = args[1];
     vtkGDCMImageWriter writer = vtkGDCMImageWriter.New();
     writer.SetMedicalImageProperties( reader.GetMedicalImageProperties() );
-    writer.SetDirectionCosines( reader.GetDirectionCosines() );
+    writer.SetDirectionCosines( dircos );
     writer.SetShift( reader.GetShift() );
     writer.SetScale( reader.GetScale() );
     writer.SetImageFormat( reader.GetImageFormat() );
     writer.SetFileName( outfilename );
-    //writer.SetInputConnection( reader.GetOutputPort() );
-    writer.SetInput( reader.GetOutput() );
+    //writer.SetInputConnection( reader.GetOutputPort() ); // new
+    writer.SetInput( reader.GetOutput() ); // old
     writer.Write();
 
     return 0;
