@@ -136,20 +136,6 @@ public:
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
 #endif
 
-#if defined(SWIGCSHARP)
-  // FIXME SWIGCSHARP
-//BTX
-  vtkDataObject* GetOutput()
-    {
-    return this->Superclass::GetOutput();
-    }
-  void SetFileName(const char *filename)
-    {
-    this->Superclass::SetFileName( filename );
-    }
-//ETX
-#endif // SWIGCSHARP
-
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
   virtual void SetFileNames(vtkStringArray*);
