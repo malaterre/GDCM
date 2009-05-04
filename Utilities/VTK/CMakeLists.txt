@@ -23,6 +23,7 @@ INCLUDE_DIRECTORIES(
   ${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
   ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat
   ${GDCM_SOURCE_DIR}/Source/DataDictionary
+  ${GDCM_SOURCE_DIR}/Utilities/VTK
   )
 
 # FIXME: temp fix
@@ -100,7 +101,14 @@ ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 #ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 
 SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
+TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
+#/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/libvtkCommon.so
+#/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/libvtkIO.so
+#/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/libvtkImaging.so
+#/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/libvtkRendering.so
+
+${vtkgdcm_LIBS}
+)
 # this need to be set on the vtkIO lib directly
 #  SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -127,8 +135,8 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
   )
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
-IF(GDCM_WRAP_ACTIVIZ)
-  FIND_PACKAGE(ACTIVIZ REQUIRED)
+IF(GDCM_WRAP_CSHARP)
+  #FIND_PACKAGE(ACTIVIZ REQUIRED)
   FIND_PACKAGE(SWIG REQUIRED)
   MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
   INCLUDE(${SWIG_USE_FILE})
@@ -155,7 +163,8 @@ IF(GDCM_WRAP_ACTIVIZ)
     @ONLY)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -168,7 +177,7 @@ ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
   COMMENT "building vtkgdcmswig_csharp.dll"
 )
 
-ENDIF(GDCM_WRAP_ACTIVIZ)
+ENDIF(GDCM_WRAP_CSHARP)
 
 IF(GDCM_WRAP_JAVA)
   IF(VTK_WRAP_JAVA)
