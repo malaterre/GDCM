@@ -75,7 +75,7 @@ bool FilenameGenerator::Generate()
       }
     const char *pattern = Pattern.c_str();
     int num_percent = 0;
-    while( pattern = strchr( pattern, '%') )
+    while( (pattern = strchr( pattern, '%')) )
       {
       ++pattern;
       ++num_percent;

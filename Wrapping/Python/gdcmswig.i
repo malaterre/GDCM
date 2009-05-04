@@ -48,6 +48,7 @@
 //#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmBitmap.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
 #include "gdcmIconImage.h"
@@ -63,8 +64,10 @@
 #include "gdcmFileSet.h"
 
 #include "gdcmReader.h"
+#include "gdcmPixmapReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmWriter.h"
+#include "gdcmPixmapWriter.h"
 #include "gdcmImageWriter.h"
 #include "gdcmStringFilter.h"
 #include "gdcmGlobal.h"
@@ -119,6 +122,7 @@
 #include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
@@ -173,6 +177,16 @@ using namespace gdcm;
 %rename(__add__) gdcm::VL::operator+=;
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
+%extend gdcm::PixelFormat
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmMediaStorage.h"
 %rename(__getitem__) gdcm::Tag::operator[];
 //%rename(__getattr__) gdcm::Tag::operator[];
@@ -412,10 +426,10 @@ using namespace gdcm;
     return NULL;
   }
 }
-%ignore gdcm::Pixmap::GetBuffer(char*) const;
-%include "gdcmPixmap.h"
+%ignore gdcm::Bitmap::GetBuffer(char*) const;
+%include "gdcmBitmap.h"
 %clear const unsigned int dims[3];
-%extend gdcm::Pixmap
+%extend gdcm::Bitmap
 {
   // http://mail.python.org/pipermail/python-list/2006-January/361540.html
   %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
@@ -433,6 +447,17 @@ using namespace gdcm;
     return buffer.c_str();
   }
 
+};
+%include "gdcmPixmap.h"
+%extend gdcm::Pixmap
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
 };
 
 %typemap(out) const double *GetOrigin, const double *GetSpacing {
@@ -554,8 +579,10 @@ using namespace gdcm;
    }
 }
 %include "gdcmReader.h"
+%include "gdcmPixmapReader.h"
 %include "gdcmImageReader.h"
 %include "gdcmWriter.h"
+%include "gdcmPixmapWriter.h"
 %include "gdcmImageWriter.h"
 %template (PairString) std::pair<std::string,std::string>;
 //%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
@@ -772,6 +799,7 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
 #endif
 %include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
+%include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"

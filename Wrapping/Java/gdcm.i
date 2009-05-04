@@ -43,6 +43,7 @@
 //#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmBitmap.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
 #include "gdcmIconImage.h"
@@ -58,8 +59,10 @@
 #include "gdcmFileSet.h"
 
 #include "gdcmReader.h"
+#include "gdcmPixmapReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmWriter.h"
+#include "gdcmPixmapWriter.h"
 #include "gdcmImageWriter.h"
 #include "gdcmStringFilter.h"
 #include "gdcmGlobal.h"
@@ -113,6 +116,7 @@
 #include "gdcmUnpacker12Bits.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
@@ -147,6 +151,7 @@ using namespace gdcm;
 %include "std_vector.i"
 %include "std_pair.i"
 %include "std_map.i"
+%include "exception.i"
 
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
@@ -268,6 +273,7 @@ using namespace gdcm;
 %clear char* buffer;
 %clear unsigned char* buffer;
 
+%apply char[] { char* buffer }
 %ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
 //%ignore gdcm::ByteValue::GetPointer() const;
 //%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
@@ -282,6 +288,7 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%clear char* buffer;
 
 
 %apply char[] { const char* array }
@@ -301,7 +308,26 @@ using namespace gdcm;
     buffer = os.str();
     return buffer.c_str();
   }
+ void SetArray(unsigned char array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(unsigned char) );
+ }
+ void SetArray(char array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(char) );
+ }
+ void SetArray(unsigned short array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(unsigned short) );
+ }
+ void SetArray(short array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(short) );
+ }
+ void SetArray(float array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(float) );
+ }
+ void SetArray(double array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(double) );
+ }
 };
+
 %include "gdcmItem.h"
 %extend gdcm::Item
 {
@@ -324,7 +350,8 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-%rename (CSharpDataSet) SWIGDataSet; 
+%rename (JavaDataSet) SWIGDataSet; 
+%rename (JavaTagToValue) SWIGTagToValue; 
 %include "gdcmDataSet.h"
 //namespace std {
 //  //struct lttag
@@ -411,16 +438,48 @@ using namespace gdcm;
 //       %typemap(csin)   TYPE[] "$csinput"
 //%enddef
 //%cs_marshal_array(char, byte)
-%include "gdcmPixmap.h"
-//%extend gdcm::Pixmap
-//{
-//  bool GetBuffer(byte[] buffer) {
-//    self->GetBuffer(buffer);
-//  }
-//};
+%include "gdcmBitmap.h"
+%extend gdcm::Bitmap
+{
+  bool GetArray(unsigned char buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::UINT8 );
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(char buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::INT8 );
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(unsigned short buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::UINT16 );
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(short buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::INT16 );
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(float buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::FLOAT32 );
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(double buffer[]) const {
+    assert( $self->GetPixelFormat() == PixelFormat::FLOAT64 );
+    return $self->GetBuffer((char*)buffer);
+  }
+};
 %clear char* buffer;
 %clear unsigned int* dims;
 
+%include "gdcmPixmap.h"
+%extend gdcm::Pixmap
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 
 %include "gdcmImage.h"
 %extend gdcm::Image
@@ -513,14 +572,17 @@ using namespace gdcm;
 %include "gdcmCSAHeaderDict.h"
 %include "gdcmDicts.h"
 %include "gdcmReader.h"
+%include "gdcmPixmapReader.h"
 %include "gdcmImageReader.h"
 %include "gdcmWriter.h"
+%include "gdcmPixmapWriter.h"
 %include "gdcmImageWriter.h"
 %template (PairString) std::pair<std::string,std::string>;
 //%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmStringFilter.h"
 %include "gdcmUIDGenerator.h"
 //%template (ValuesType)      std::set<std::string>;
+%rename (JavaTagToValue) SWIGTagToValue; 
 %include "gdcmScanner.h"
 %extend gdcm::Scanner
 {
@@ -544,12 +606,43 @@ using namespace gdcm;
 %include "gdcmUIDs.h"
 //%feature("director") gdcm::IPPSorter;      
 %include "gdcmSorter.h"
+%extend gdcm::Sorter
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmIPPSorter.h"
 %include "gdcmSpectroscopy.h"
 %include "gdcmPrinter.h"
 %include "gdcmDumper.h"
 %include "gdcmOrientation.h"
+%extend gdcm::Orientation
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmDirectionCosines.h"
+%extend gdcm::DirectionCosines
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
+
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
@@ -605,6 +698,7 @@ using namespace gdcm;
 };
 #endif
 %include "gdcmTagPath.h"
+%include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"

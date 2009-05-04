@@ -80,6 +80,7 @@ using My.Own.Namespace;
 //#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmBitmap.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
 #include "gdcmIconImage.h"
@@ -95,8 +96,10 @@ using My.Own.Namespace;
 #include "gdcmFileSet.h"
 
 #include "gdcmReader.h"
+#include "gdcmPixmapReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmWriter.h"
+#include "gdcmPixmapWriter.h"
 #include "gdcmImageWriter.h"
 #include "gdcmStringFilter.h"
 #include "gdcmGlobal.h"
@@ -148,8 +151,10 @@ using My.Own.Namespace;
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
+//#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
@@ -403,6 +408,7 @@ using namespace gdcm;
   }
 };
 %rename (CSharpDataSet) SWIGDataSet; 
+%rename (CSharpTagToValue) SWIGTagToValue; 
 %include "gdcmDataSet.h"
 %extend gdcm::DataSet
 {
@@ -473,8 +479,8 @@ using namespace gdcm;
 //       %typemap(csin)   TYPE[] "$csinput"
 //%enddef
 //%cs_marshal_array(char, byte)
-%include "gdcmPixmap.h"
-%extend gdcm::Pixmap
+%include "gdcmBitmap.h"
+%extend gdcm::Bitmap
 {
   bool GetArray(unsigned char buffer[]) const {
     assert( $self->GetPixelFormat() == PixelFormat::UINT8 );
@@ -504,6 +510,17 @@ using namespace gdcm;
 %clear char* buffer;
 %clear unsigned int* dims;
 
+%include "gdcmPixmap.h"
+%extend gdcm::Pixmap
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 
 %include "gdcmImage.h"
 %extend gdcm::Image
@@ -596,8 +613,10 @@ using namespace gdcm;
 %include "gdcmCSAHeaderDict.h"
 %include "gdcmDicts.h"
 %include "gdcmReader.h"
+%include "gdcmPixmapReader.h"
 %include "gdcmImageReader.h"
 %include "gdcmWriter.h"
+%include "gdcmPixmapWriter.h"
 %include "gdcmImageWriter.h"
 %template (PairString) std::pair<std::string,std::string>;
 //%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
@@ -675,12 +694,43 @@ using namespace gdcm;
 %cs_callback(Sorter::SortFunction, Sorter::CppSortFunction)
 
 %include "gdcmSorter.h"
+%extend gdcm::Sorter
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmIPPSorter.h"
 %include "gdcmSpectroscopy.h"
 %include "gdcmPrinter.h"
 %include "gdcmDumper.h"
 %include "gdcmOrientation.h"
+%extend gdcm::Orientation
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmDirectionCosines.h"
+%extend gdcm::DirectionCosines
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
+
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
@@ -736,6 +786,7 @@ using namespace gdcm;
 };
 #endif
 %include "gdcmTagPath.h"
+%include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"
