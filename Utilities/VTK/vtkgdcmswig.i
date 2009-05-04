@@ -38,13 +38,21 @@ using Kitware.VTK;
 //using Kitware.VTK;
 //%}
 
+//%typemap(csimports) vtkGDCMImageWriter %{
 %typemap(csimports) SWIGTYPE %{
 // I need to duplicate those also:
 using System;
 using System.Runtime.InteropServices;
 // my special import:
 using Kitware.VTK;
+using Kitware.mummy.Runtime;
 %}
+
+//%pragma(csharp) imclassimports=%{
+//using System;
+//using System.Runtime.InteropServices;
+//using My.Own.Namespace;
+//%}
 
 #define VTK_EXPORT
 
@@ -54,10 +62,30 @@ using Kitware.VTK;
 #define vtkBooleanMacro(a,b)
 
 
-%include "vtkGDCMImageReader.h"
-
 %typemap(cstype) vtkDataObject * "vtkDataObject"
 %typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
+%typemap(csout) (vtkDataObject *) {
+  vtkImageData points = null;
+  uint mteStatus = 0;
+  //uint maxValue = uint.MaxValue;
+  uint maxValue = 1;
+  uint rawRefCount = 0;
+  //IntPtr rawCppThis = vtkCell_GetPoints_23(base.GetCppThis(), ref
+  //  mteStatus, ref maxValue, ref rawRefCount);
+  IntPtr rawCppThis = $imcall;
+  if (IntPtr.Zero != rawCppThis)
+    {
+    bool flag;
+    points = (vtkImageData) Methods.CreateWrappedObject(mteStatus,
+      maxValue, rawRefCount, rawCppThis, true, out flag);
+    if (flag)
+      {
+      points.Register(null);
+      }
+    }
+  return points;
+}
 
+%include "vtkGDCMImageReader.h"
 %include "vtkGDCMImageWriter.h"
 

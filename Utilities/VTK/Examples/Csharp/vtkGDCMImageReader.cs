@@ -18,30 +18,36 @@ using Kitware.VTK;
 namespace vtkgdcm
 {
   // using vtkgdcmswig;
-  public class vtkGDCMImageReader : vtkMedicalImageReader2
+  public class vtkGDCMImageReader /*: vtkMedicalImageReader2*/
     {
     vtkgdcmswig.vtkGDCMImageReader inter;
     public vtkGDCMImageReader() {
       inter = vtkgdcmswig.vtkGDCMImageReader.New();
       }
-    public override void SetFileName(string filename) {
+    public void SetFileName(string filename) {
       inter.SetFileName( filename );
+      }
+    //public void Update() {
+    //  inter.Update();
+    //  }
+    public vtkDataObject GetOutput() {
+      return inter.GetOutput();
       }
     }
 
-  public class vtkGDCMImageWriter : vtkImageWriter
+  public class vtkGDCMImageWriter /*: vtkImageWriter*/
     {
     vtkgdcmswig.vtkGDCMImageWriter inter;
     public vtkGDCMImageWriter() {
       inter = vtkgdcmswig.vtkGDCMImageWriter.New();
       }
-    public override void SetFileName(string filename) {
+    public void SetFileName(string filename) {
       inter.SetFileName( filename );
       }
     public void SetInput(vtkDataObject obj) {
       inter.SetInput( obj );
       }
-    public override void Write() {
+    public void Write() {
       inter.Write();
       }
     }

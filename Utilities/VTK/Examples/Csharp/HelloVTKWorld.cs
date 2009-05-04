@@ -14,6 +14,7 @@
 =========================================================================*/
 using System;
 using vtkgdcm;
+using Kitware.VTK;
 
 public class HelloVTKWorld
 {
@@ -23,6 +24,7 @@ public class HelloVTKWorld
     vtkGDCMImageReader reader = new vtkGDCMImageReader();
     reader.SetFileName( filename );
     //reader.Update();
+    System.Console.WriteLine( reader.GetOutput() );
 
     string outfilename = args[1];
     vtkGDCMImageWriter writer = new vtkGDCMImageWriter();
