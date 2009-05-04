@@ -12,23 +12,38 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-using System;
-using vtkgdcm;
-using Kitware.VTK;
+using vtkgdcmswig;
 
+/*
+ * This test only test the SWIG/VTK part, you do not need Activiz
+ */
 public class HelloVTKWorld
 {
   public static int Main(string[] args)
     {
     string filename = args[0];
-    vtkGDCMImageReader reader = new vtkGDCMImageReader();
+    vtkGDCMImageReader reader = vtkGDCMImageReader.New();
     reader.SetFileName( filename );
-    //reader.Update();
-    System.Console.WriteLine( reader.GetOutput() );
+    reader.Update();
+
+    vtkMedicalImageProperties prop = reader.GetMedicalImageProperties();
+    System.Console.WriteLine( prop.GetPatientName() ); // 
+
+    // Do a full name resolution since namespace is vtkgdcmswig and classname is also vtkgdcmswig
+    if( reader.GetImageFormat() == vtkgdcmswig.vtkgdcmswig.VTK_LUMINANCE ) // MONOCHROME2
+      {
+      System.Console.WriteLine( "Image is MONOCHROME2" ); // 
+      }
 
     string outfilename = args[1];
-    vtkGDCMImageWriter writer = new vtkGDCMImageWriter();
+    vtkGDCMImageWriter writer = vtkGDCMImageWriter.New();
+    writer.SetMedicalImageProperties( reader.GetMedicalImageProperties() );
+    writer.SetDirectionCosines( reader.GetDirectionCosines() );
+    writer.SetShift( reader.GetShift() );
+    writer.SetScale( reader.GetScale() );
+    writer.SetImageFormat( reader.GetImageFormat() );
     writer.SetFileName( outfilename );
+    //writer.SetInputConnection( reader.GetOutputPort() );
     writer.SetInput( reader.GetOutput() );
     writer.Write();
 
