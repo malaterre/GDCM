@@ -54,7 +54,7 @@ public class HelloActiviz
 
   static Kitware.VTK.vtkImageData ConnectSWIGToActiviz(vtkgdcmswig.vtkImageData imgin)
     {
-    HandleRef rawCppThis = imgin.getRawCppThis();
+    HandleRef rawCppThis = imgin.GetCppThis();
     Kitware.VTK.vtkImageData imgout = new Kitware.VTK.vtkImageData( rawCppThis.Handle, false, false);
     return imgout;
     }
@@ -62,7 +62,7 @@ public class HelloActiviz
   static vtkgdcmswig.vtkImageData ConnectActivizToSWIG(Kitware.VTK.vtkImageData imgin)
     {
     HandleRef rawCppThis = imgin.GetCppThis();
-    vtkgdcmswig.vtkImageData imgout = vtkgdcmswig.vtkImageData.ConstructFromCppThis( rawCppThis );
+    vtkgdcmswig.vtkImageData imgout = new vtkgdcmswig.vtkImageData( rawCppThis );
     return imgout;
     }
 

@@ -64,6 +64,7 @@
 #include "vtkGDCMImageWriter.h"
 
 #include "vtkImageExport.h"
+#include "vtkImageImport.h"
 %}
 
 //%typemap(csimports) vtkGDCMImageWriter %{
@@ -114,6 +115,11 @@
 //%ignore vtkImageAlgorithm::GetInput;
 //%ignore vtkImageAlgorithm::GetImageDataInput;
 
+%ignore operator<<(ostream& os, vtkObjectBase& o);
+
+%ignore vtkMatrix4x4::operator[];
+%ignore vtkMatrix4x4::Determinant(vtkMatrix4x4 &);
+%ignore vtkMatrix4x4::Adjoint(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 %ignore vtkMatrix4x4::Invert(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 %ignore vtkMatrix4x4::Transpose(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 
@@ -175,6 +181,7 @@
 #define vtkNotUsed(x) x
 
 %include "vtkObjectBase.h"
+%csmethodmodifiers vtkObjectBase::ToString() "public override"
 %extend vtkObjectBase
 {
   const char *ToString()
@@ -199,22 +206,14 @@
 {
 %typemap(cscode) vtkImageData
 %{
-  public HandleRef getRawCppThis()
+  public HandleRef GetCppThis()
     {
     return getCPtr(this);
     }
-//  public void setRawCppThis(HandleRef hr)
-//    {
-//    swigCMemOwn = true;
-//    swigCPtr = hr; //new HandleRef(this, hr.Handle);
-//    }
 
-  public new static vtkImageData ConstructFromCppThis(HandleRef hr) {
-    IntPtr cPtr = hr.Handle;
-    vtkImageData ret = (cPtr == IntPtr.Zero) ? null : new vtkImageData(cPtr, false);
-    return ret;
+  public vtkImageData(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkImageDataUpcast(hr.Handle), false) {
+    swigCPtr = new HandleRef(this, hr.Handle);
   }
-
 %}
 };
 
@@ -227,4 +226,5 @@
 %include "vtkGDCMImageWriter.h"
 
 %include "vtkImageExport.h"
+%include "vtkImageImport.h"
 
