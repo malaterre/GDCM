@@ -19,7 +19,7 @@ IF(SSL_EAY_DEBUG AND SSL_EAY_RELEASE)
    SET(LIB_FOUND 1)
 ENDIF(SSL_EAY_DEBUG AND SSL_EAY_RELEASE)
 
-# 
+# http://www.slproweb.com/products/Win32OpenSSL.html
 FIND_PATH(OPENSSL_INCLUDE_DIR openssl/ssl.h 
   PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/include"
 )
