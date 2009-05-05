@@ -406,10 +406,10 @@ bool PixmapWriter::PrepareWrite()
      */
 
     Attribute<0x0028,0x2114> at3;
-{
-      static const CSComp newvalues2[] = {"UNDEFINED"};
-      at3.SetValues(  newvalues2, 1 );
-}
+//{
+//      static const CSComp newvalues2[] = {"UNDEFINED"};
+//      at3.SetValues(  newvalues2, 1 );
+//}
 
     if( ts == TransferSyntax::JPEG2000 )
       {
@@ -433,7 +433,7 @@ bool PixmapWriter::PrepareWrite()
       }
     else
       {
-      //return false;
+      return false;
       }
     ds.Replace( at3.GetAsDataElement() );
     }

@@ -122,6 +122,19 @@
 #define VTK_RGB             3
 #define VTK_RGBA            4
 
+//#include "vtkConfigure.h"
+//#define VTK_USE_64BIT_IDS
+//
+//#ifdef VTK_USE_64BIT_IDS
+//typedef long long vtkIdType;
+//#else
+//typedef int vtkIdType;
+//#endif
+//typedef vtkIdType2 vtkIdType;
+//%apply vtkIdType { vtkIdType }
+//#define vtkIdType vtkIdType;
+//%include "vtkType.h"
+
 //%typemap(cstype) vtkDataObject * "vtkDataObject"
 //%typemap(cstype) vtkImageData * "vtkImageData"
 //%typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
