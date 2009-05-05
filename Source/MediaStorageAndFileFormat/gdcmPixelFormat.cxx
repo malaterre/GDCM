@@ -218,8 +218,9 @@ int64_t PixelFormat::GetMin() const
   //  }
   else
     {
-    abort();
+    assert(0);
     }
+  return 0;
 }
 
 int64_t PixelFormat::GetMax() const
@@ -243,8 +244,9 @@ int64_t PixelFormat::GetMax() const
   //  }
   else
     {
-    abort();
+    assert(0);
     }
+  return 0;
 }
 
 bool PixelFormat::Validate()
