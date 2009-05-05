@@ -162,8 +162,8 @@ IF(GDCM_WRAP_CSHARP)
     @ONLY)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs

@@ -83,6 +83,15 @@
 //using My.Own.Namespace;
 //%}
 
+%typemap(csimports) SWIGTYPE %{
+// I need to duplicate those also:
+using System;
+using System.Runtime.InteropServices;
+// my special import:
+using Kitware.VTK;
+//using Kitware.mummy.Runtime;
+%}
+
 #define VTK_EXPORT
 #define VTK_COMMON_EXPORT
 #define VTK_FILTERING_EXPORT
@@ -198,6 +207,23 @@
 
 %include "vtkMatrix4x4.h"
 %include "vtkMedicalImageProperties.h"
+%extend vtkMedicalImageProperties
+{
+%typemap(cscode) vtkMedicalImageProperties
+%{
+  public HandleRef GetCppThis() {
+    return getCPtr(this);
+    }
+  public vtkMedicalImageProperties(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkMedicalImagePropertiesUpcast(hr.Handle), false) {
+    swigCPtr = new HandleRef(this, hr.Handle);
+  }
+  public Kitware.VTK.vtkMedicalImageProperties CastToActiviz() {
+    HandleRef rawCppThis = GetCppThis();
+    Kitware.VTK.vtkMedicalImageProperties ret = new Kitware.VTK.vtkMedicalImageProperties( rawCppThis.Handle, false, false );
+    return ret;
+  }
+%}
+};
 
 %include "vtkDataObject.h"
 %include "vtkDataSet.h"
