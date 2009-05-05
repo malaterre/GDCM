@@ -45,6 +45,7 @@
 #include "vtkObjectBase.h"
 #include "vtkObject.h"
 
+#include "vtkStringArray.h"
 #include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
 
@@ -52,11 +53,14 @@
 #include "vtkDataObject.h"
 #include "vtkDataSet.h"
 #include "vtkImageData.h"
+#include "vtkPointSet.h"
+#include "vtkPolyData.h"
 
 // same for vtkGDCMImageReader / vtkGDCMImageWriter so that we get all 
 // parent's member class functions properly wrapped. (Update, SetFileName ...)
 #include "vtkAlgorithm.h"
 #include "vtkImageAlgorithm.h"
+#include "vtkThreadedImageAlgorithm.h"
 #include "vtkImageWriter.h"
 #include "vtkImageReader2.h"
 #include "vtkMedicalImageReader2.h"
@@ -65,6 +69,11 @@
 
 #include "vtkImageExport.h"
 #include "vtkImageImport.h"
+#include "vtkImageCast.h"
+#include "vtkVolumeReader.h"
+#include "vtkVolume16Reader.h"
+
+#include "vtkToolkits.h" // VTK_DATA_ROOT
 %}
 
 //%typemap(csimports) vtkGDCMImageWriter %{
@@ -113,6 +122,12 @@ using Kitware.VTK;
 #define vtkSetClampMacro(name,type,min,max) virtual void Set##name (type _arg);
 #define vtkSetStringMacro(name) virtual void Set##name (const char* _arg);
 #define vtkGetStringMacro(name) virtual char* Get##name ();
+#define vtkGetVectorMacro(name,type,count) virtual type *Get##name ();
+#define vtkNotUsed(x) x
+#define vtkGetVector2Macro(name,type) virtual type *Get##name ();
+#define vtkSetVector2Macro(name,type) virtual void Set##name (type _arg1, type _arg2);
+#define vtkSetVector3Macro(name,type) virtual void Set##name (type _arg1, type _arg2, type _arg3);
+
 
 //%include "vtkConfigure.h"
 
@@ -237,9 +252,6 @@ using Kitware.VTK;
 //
 #endif //USEACTIVIZ
 
-#define vtkGetVectorMacro(name,type,count) virtual type *Get##name ();
-#define vtkNotUsed(x) x
-
 #ifdef USEACTIVIZ
 // By hiding all New operator I make sure that no-one will ever be 
 // able to create a swig wrap object I did not decide to allow.
@@ -259,6 +271,7 @@ using Kitware.VTK;
 %csmethodmodifiers vtkMedicalImageReader2::New() "internal new"
 %csmethodmodifiers vtkGDCMImageReader::New() "internal new"
 %csmethodmodifiers vtkGDCMImageWriter::New() "internal new"
+#endif
 
 %ignore vtkObjectBase::PrintSelf;
 %ignore vtkObjectBase::PrintHeader;
@@ -274,7 +287,6 @@ using Kitware.VTK;
 %ignore vtkMedicalImageReader2::PrintSelf;
 %ignore vtkGDCMImageReader::PrintSelf;
 %ignore vtkGDCMImageWriter::PrintSelf;
-#endif
 
 %include "vtkObjectBase.h"
 %csmethodmodifiers vtkObjectBase::ToString() "public override"
@@ -293,47 +305,25 @@ using Kitware.VTK;
 %include "vtkObject.h"
 
 #ifndef USEACTIVIZ
+%inline {
+const char *vtkGetDataRoot() { return VTK_DATA_ROOT; }
+}
+
+%include "vtkStringArray.h"
 %include "vtkMatrix4x4.h"
 %include "vtkMedicalImageProperties.h"
-%extend vtkMedicalImageProperties
-{
-%typemap(cscode) vtkMedicalImageProperties
-%{
-  public HandleRef GetCppThis() {
-    return getCPtr(this);
-    }
-  public vtkMedicalImageProperties(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkMedicalImagePropertiesUpcast(hr.Handle), false) {
-    swigCPtr = new HandleRef(this, hr.Handle);
-  }
-//  public Kitware.VTK.vtkMedicalImageProperties CastToActiviz() {
-//    HandleRef rawCppThis = GetCppThis();
-//    Kitware.VTK.vtkMedicalImageProperties ret = new Kitware.VTK.vtkMedicalImageProperties( rawCppThis.Handle, false, false );
-//    return ret;
-//  }
-%}
-};
-
 %include "vtkDataObject.h"
 %include "vtkDataSet.h"
 %include "vtkImageData.h"
-%extend vtkImageData
-{
-%typemap(cscode) vtkImageData
-%{
-  public HandleRef GetCppThis()
-    {
-    return getCPtr(this);
-    }
-
-  public vtkImageData(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkImageDataUpcast(hr.Handle), false) {
-    swigCPtr = new HandleRef(this, hr.Handle);
-  }
-%}
-};
+%include "vtkPointSet.h"
+%include "vtkPolyData.h"
 #endif
 
 %include "vtkAlgorithm.h"
 %include "vtkImageAlgorithm.h"
+#ifndef USEACTIVIZ
+%include "vtkThreadedImageAlgorithm.h"
+#endif
 %include "vtkImageWriter.h"
 %include "vtkImageReader2.h"
 %include "vtkMedicalImageReader2.h"
@@ -386,6 +376,8 @@ while we would want:
 //%rename (vtkGDCMImageWriterInternal) vtkGDCMImageWriter;
 
 %include "vtkGDCMImageReader.h"
+%include "vtkGDCMImageWriter.h"
+#ifdef USEACTIVIZ
 %extend vtkGDCMImageReader
 {
 %typemap(cscode) vtkGDCMImageReader
@@ -394,7 +386,6 @@ while we would want:
   }
 %}
 };
-%include "vtkGDCMImageWriter.h"
 %extend vtkGDCMImageWriter
 {
 %typemap(cscode) vtkGDCMImageWriter
@@ -403,10 +394,14 @@ while we would want:
   }
 %}
 };
+#endif
 %clear double*;
 
 #ifndef USEACTIVIZ
 %include "vtkImageExport.h"
 %include "vtkImageImport.h"
+%include "vtkImageCast.h"
+%include "vtkVolumeReader.h"
+%include "vtkVolume16Reader.h"
 #endif
 
