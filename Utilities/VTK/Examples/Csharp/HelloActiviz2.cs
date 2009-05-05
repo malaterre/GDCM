@@ -13,7 +13,7 @@
 
 =========================================================================*/
 using Kitware.VTK;
-using vtkgdcmswig;
+using vtkgdcm;
 
 /*
  * From the outside view, no-one can detect that object pass to/from 
@@ -29,7 +29,7 @@ public class HelloActiviz2
     string outfilename = args[1];
     string outfilename2 = args[2];
 
-    vtkgdcmswig.vtkGDCMImageReader reader = new vtkgdcmswig.vtkGDCMImageReader();
+    vtkgdcm.vtkGDCMImageReader reader = new vtkgdcm.vtkGDCMImageReader();
     reader.SetFileName( filename );
 
     System.Console.WriteLine( reader.ToString() ); // Test the ToString compat with Activiz
@@ -47,7 +47,7 @@ public class HelloActiviz2
     pngwriter.Write();
 
     // at that point the .Write() should have triggered an Update() on the reader:
-    if( reader.GetImageFormat() == vtkgdcmswig.vtkgdcmswig.VTK_LUMINANCE ) // MONOCHROME2
+    if( reader.GetImageFormat() == vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
       {
       System.Console.WriteLine( "Image is MONOCHROME2" ); // 
       }

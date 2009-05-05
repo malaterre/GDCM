@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-using vtkgdcmswig;
+using vtkgdcm;
 
 /*
  * This test only test the SWIG/VTK part, you do not need Activiz
@@ -29,8 +29,7 @@ public class HelloVTKWorld
     vtkMedicalImageProperties prop = reader.GetMedicalImageProperties();
     System.Console.WriteLine( prop.GetPatientName() ); // 
 
-    // Do a full name resolution since namespace is vtkgdcmswig and classname is also vtkgdcmswig
-    if( reader.GetImageFormat() == vtkgdcmswig.vtkgdcmswig.VTK_LUMINANCE ) // MONOCHROME2
+    if( reader.GetImageFormat() == vtkgdcm.vtkgdcmswig.VTK_LUMINANCE ) // MONOCHROME2
       {
       System.Console.WriteLine( "Image is MONOCHROME2" ); // 
       }

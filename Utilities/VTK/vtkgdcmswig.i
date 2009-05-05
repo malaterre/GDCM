@@ -83,6 +83,7 @@
 //using My.Own.Namespace;
 //%}
 
+#ifdef USEACTIVIZ
 %typemap(csimports) SWIGTYPE %{
 // I need to duplicate those also:
 using System;
@@ -91,6 +92,7 @@ using System.Runtime.InteropServices;
 using Kitware.VTK;
 //using Kitware.mummy.Runtime;
 %}
+#endif
 
 #define VTK_EXPORT
 #define VTK_COMMON_EXPORT
@@ -153,6 +155,8 @@ using Kitware.VTK;
 //%apply vtkIdType { vtkIdType }
 //#define vtkIdType vtkIdType;
 //%include "vtkType.h"
+
+#ifdef USEACTIVIZ
 
 %typemap(cstype) vtkDataObject * "vtkDataObject"
 %typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
@@ -231,9 +235,12 @@ using Kitware.VTK;
 //    return data;
 //}
 //
+#endif //USEACTIVIZ
+
 #define vtkGetVectorMacro(name,type,count) virtual type *Get##name ();
 #define vtkNotUsed(x) x
 
+#ifdef USEACTIVIZ
 // By hiding all New operator I make sure that no-one will ever be 
 // able to create a swig wrap object I did not decide to allow.
 // For instance the only two objects allowed for now are:
@@ -267,6 +274,7 @@ using Kitware.VTK;
 %ignore vtkMedicalImageReader2::PrintSelf;
 %ignore vtkGDCMImageReader::PrintSelf;
 %ignore vtkGDCMImageWriter::PrintSelf;
+#endif
 
 %include "vtkObjectBase.h"
 %csmethodmodifiers vtkObjectBase::ToString() "public override"
@@ -284,43 +292,45 @@ using Kitware.VTK;
 
 %include "vtkObject.h"
 
-//%include "vtkMatrix4x4.h"
-//%include "vtkMedicalImageProperties.h"
-//%extend vtkMedicalImageProperties
-//{
-//%typemap(cscode) vtkMedicalImageProperties
-//%{
-//  public HandleRef GetCppThis() {
-//    return getCPtr(this);
-//    }
-//  public vtkMedicalImageProperties(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkMedicalImagePropertiesUpcast(hr.Handle), false) {
-//    swigCPtr = new HandleRef(this, hr.Handle);
-//  }
+#ifndef USEACTIVIZ
+%include "vtkMatrix4x4.h"
+%include "vtkMedicalImageProperties.h"
+%extend vtkMedicalImageProperties
+{
+%typemap(cscode) vtkMedicalImageProperties
+%{
+  public HandleRef GetCppThis() {
+    return getCPtr(this);
+    }
+  public vtkMedicalImageProperties(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkMedicalImagePropertiesUpcast(hr.Handle), false) {
+    swigCPtr = new HandleRef(this, hr.Handle);
+  }
 //  public Kitware.VTK.vtkMedicalImageProperties CastToActiviz() {
 //    HandleRef rawCppThis = GetCppThis();
 //    Kitware.VTK.vtkMedicalImageProperties ret = new Kitware.VTK.vtkMedicalImageProperties( rawCppThis.Handle, false, false );
 //    return ret;
 //  }
-//%}
-//};
+%}
+};
 
-//%include "vtkDataObject.h"
-//%include "vtkDataSet.h"
-//%include "vtkImageData.h"
-//%extend vtkImageData
-//{
-//%typemap(cscode) vtkImageData
-//%{
-//  public HandleRef GetCppThis()
-//    {
-//    return getCPtr(this);
-//    }
-//
-//  public vtkImageData(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkImageDataUpcast(hr.Handle), false) {
-//    swigCPtr = new HandleRef(this, hr.Handle);
-//  }
-//%}
-//};
+%include "vtkDataObject.h"
+%include "vtkDataSet.h"
+%include "vtkImageData.h"
+%extend vtkImageData
+{
+%typemap(cscode) vtkImageData
+%{
+  public HandleRef GetCppThis()
+    {
+    return getCPtr(this);
+    }
+
+  public vtkImageData(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkImageDataUpcast(hr.Handle), false) {
+    swigCPtr = new HandleRef(this, hr.Handle);
+  }
+%}
+};
+#endif
 
 %include "vtkAlgorithm.h"
 %include "vtkImageAlgorithm.h"
@@ -393,7 +403,10 @@ while we would want:
   }
 %}
 };
+%clear double*;
 
-//%include "vtkImageExport.h"
-//%include "vtkImageImport.h"
+#ifndef USEACTIVIZ
+%include "vtkImageExport.h"
+%include "vtkImageImport.h"
+#endif
 

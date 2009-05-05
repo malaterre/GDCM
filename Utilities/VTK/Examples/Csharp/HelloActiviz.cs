@@ -12,13 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-using vtkgdcmswig;
+using vtkgdcm;
 using Kitware.VTK;
 using System;
 using System.Runtime.InteropServices;
 
 /*
- * This example shows how vtkgdcmswig can be connected to Kitware.VTK Activiz product.
+ * This example shows how vtkgdcm can be connected to Kitware.VTK Activiz product.
  * Three (3) arguments are required:
  * 1. Input DICOM file                      (SWIG)
  * 2. Temporary PNG (intermediate) file     (Activiz)
@@ -52,17 +52,17 @@ public class HelloActiviz
     }
 */
 
-  static Kitware.VTK.vtkImageData ConnectSWIGToActiviz(vtkgdcmswig.vtkImageData imgin)
+  static Kitware.VTK.vtkImageData ConnectSWIGToActiviz(vtkgdcm.vtkImageData imgin)
     {
     HandleRef rawCppThis = imgin.GetCppThis();
     Kitware.VTK.vtkImageData imgout = new Kitware.VTK.vtkImageData( rawCppThis.Handle, false, false);
     return imgout;
     }
 
-  static vtkgdcmswig.vtkImageData ConnectActivizToSWIG(Kitware.VTK.vtkImageData imgin)
+  static vtkgdcm.vtkImageData ConnectActivizToSWIG(Kitware.VTK.vtkImageData imgin)
     {
     HandleRef rawCppThis = imgin.GetCppThis();
-    vtkgdcmswig.vtkImageData imgout = new vtkgdcmswig.vtkImageData( rawCppThis );
+    vtkgdcm.vtkImageData imgout = new vtkgdcm.vtkImageData( rawCppThis );
     return imgout;
     }
 
@@ -93,7 +93,7 @@ public class HelloActiviz
 
     System.Console.WriteLine( bmpreader.GetOutput().ToString() ); // not initialized as expected
 
-    vtkgdcmswig.vtkImageData imgout2 = ConnectActivizToSWIG(bmpreader.GetOutput());
+    vtkgdcm.vtkImageData imgout2 = ConnectActivizToSWIG(bmpreader.GetOutput());
 
     System.Console.WriteLine( imgout2.ToString() ); // not initialized as expected
 
