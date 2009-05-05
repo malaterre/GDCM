@@ -29,8 +29,12 @@ IF(WIN32 AND MSVC)
    # others, the libnames have to change here too
    # use also ssl and ssleay32 in debug as fallback for openssl < 0.9.8b
 
-   FIND_LIBRARY(SSL_EAY_DEBUG NAMES ssleay32MDd ssl ssleay32)
-   FIND_LIBRARY(SSL_EAY_RELEASE NAMES ssleay32MD ssl ssleay32)
+   FIND_LIBRARY(SSL_EAY_DEBUG NAMES ssleay32MDd ssl ssleay32
+  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/bin"
+)
+   FIND_LIBRARY(SSL_EAY_RELEASE NAMES ssleay32MD ssl ssleay32
+  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/bin"
+)
 
    IF(MSVC_IDE)
       IF(SSL_EAY_DEBUG AND SSL_EAY_RELEASE)
@@ -50,7 +54,9 @@ IF(WIN32 AND MSVC)
    MARK_AS_ADVANCED(SSL_EAY_DEBUG SSL_EAY_RELEASE)
 ELSE(WIN32 AND MSVC)
 
-   FIND_LIBRARY(OPENSSL_LIBRARIES NAMES ssl ssleay32 ssleay32MD )
+   FIND_LIBRARY(OPENSSL_LIBRARIES NAMES ssl ssleay32 ssleay32MD 
+  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/bin"
+)
 
 ENDIF(WIN32 AND MSVC)
 
