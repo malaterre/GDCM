@@ -17,16 +17,12 @@ namespace Kitware
 {
 namespace VTK
 {
-  public class vtkGDCMImageReader : vtkgdcmswig.vtkGDCMImageReader
+  public class vtkGDCMImageReader : vtkgdcmswig.vtkGDCMImageReaderInternal
     {
-    public vtkGDCMImageReader() {
-      }
     }
 
-  public class vtkGDCMImageWriter : vtkgdcmswig.vtkGDCMImageWriter
+  public class vtkGDCMImageWriter : vtkgdcmswig.vtkGDCMImageWriterInternal
     {
-    public vtkGDCMImageWriter() {
-      }
     }
 } // end namespace VTK
 } // end namespace Kitware
