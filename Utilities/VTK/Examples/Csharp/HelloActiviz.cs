@@ -97,8 +97,13 @@ public class HelloActiviz
 
     System.Console.WriteLine( imgout2.ToString() ); // not initialized as expected
 
+
+    Kitware.VTK.vtkMedicalImageProperties prop = new Kitware.VTK.vtkMedicalImageProperties();
+    prop.SetModality( "MR" );
+
     string outfilename2 = args[2];
     vtkGDCMImageWriter writer2 = vtkGDCMImageWriter.New();
+    writer2.SetMedicalImageProperties( prop.CastToActiviz() );
     writer2.SetFileName( outfilename2 );
     writer2.SetInput( imgout2 );
     writer2.Write();
