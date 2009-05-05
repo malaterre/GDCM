@@ -154,15 +154,60 @@ using Kitware.VTK;
 //#define vtkIdType vtkIdType;
 //%include "vtkType.h"
 
-//%typemap(cstype) vtkDataObject * "vtkDataObject"
-//%typemap(cstype) vtkImageData * "vtkImageData"
-//%typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
-//%typemap(csin) vtkImageData * "$csinput.GetCppThis()"
-//%typemap(csout) (vtkImageData *) {
-//  IntPtr rawCppThisSwig = $imcall;
-//  vtkImageData data = null;
-//  return data;
-//}
+%typemap(cstype) vtkDataObject * "vtkDataObject"
+%typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
+/*
+  public vtkDataObject GetOutputDataObject(int port) {
+    IntPtr cPtr = vtkgdcmswigPINVOKE.vtkAlgorithm_GetOutputDataObject(swigCPtr, port);
+    SWIGTYPE_p_vtkDataObject ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_vtkDataObject(cPtr, false);
+    return ret;
+  }
+*/
+%typemap(csout) (vtkDataObject*) {
+  IntPtr rawCppThisSwig = $imcall;
+  vtkDataObject data = new vtkDataObject( rawCppThisSwig, false, false );
+  return data;
+}
+
+%typemap(cstype) vtkStringArray * "vtkStringArray"
+%typemap(csin) vtkStringArray * "$csinput.GetCppThis()"
+%typemap(csout) (vtkStringArray*) {
+  IntPtr rawCppThisSwig = $imcall;
+  vtkStringArray data = new vtkStringArray( rawCppThisSwig, false, false );
+  return data;
+}
+
+%typemap(cstype) vtkPolyData * "vtkPolyData"
+%typemap(csin) vtkPolyData * "$csinput.GetCppThis()"
+%typemap(csout) (vtkPolyData*) {
+  IntPtr rawCppThisSwig = $imcall;
+  vtkPolyData data = new vtkPolyData( rawCppThisSwig, false, false );
+  return data;
+}
+
+%typemap(cstype) vtkMatrix4x4 * "vtkMatrix4x4"
+%typemap(csin) vtkMatrix4x4 * "$csinput.GetCppThis()"
+%typemap(csout) (vtkMatrix4x4*) {
+  IntPtr rawCppThisSwig = $imcall;
+  vtkMatrix4x4 data = new vtkMatrix4x4( rawCppThisSwig, false, false );
+  return data;
+}
+
+%typemap(cstype) vtkMedicalImageProperties * "vtkMedicalImageProperties"
+%typemap(csin) vtkMedicalImageProperties * "$csinput.GetCppThis()"
+%typemap(csout) (vtkMedicalImageProperties*) {
+  IntPtr rawCppThisSwig = $imcall;
+  vtkMedicalImageProperties data = new vtkMedicalImageProperties( rawCppThisSwig, false, false );
+  return data;
+}
+
+%typemap(cstype) vtkImageData * "vtkImageData"
+%typemap(csin) vtkImageData * "$csinput.GetCppThis()"
+%typemap(csout) (vtkImageData *) {
+  IntPtr rawCppThisSwig = $imcall;
+  vtkImageData data = new vtkImageData( rawCppThisSwig, false, false );
+  return data;
+}
 //
 //%typemap(csout) (vtkDataObject *) {
 //    vtkImageData data = null;
@@ -189,6 +234,40 @@ using Kitware.VTK;
 #define vtkGetVectorMacro(name,type,count) virtual type *Get##name ();
 #define vtkNotUsed(x) x
 
+// By hiding all New operator I make sure that no-one will ever be 
+// able to create a swig wrap object I did not decide to allow.
+// For instance the only two objects allowed for now are:
+// - vtkGDCMImageReader
+// - vtkGDCMImageWriter
+// BUG:
+// when using %ignore vtkObjectBase::New()
+// the vtkObjectBase_New() function is not generated, which is used
+// internally in the new cstor that I provide
+%csmethodmodifiers vtkObjectBase::New() "internal new"
+%csmethodmodifiers vtkObject::New() "internal new"
+%csmethodmodifiers vtkAlgorithm::New() "internal new"
+%csmethodmodifiers vtkImageAlgorithm::New() "internal new"
+%csmethodmodifiers vtkImageWriter::New() "internal new"
+%csmethodmodifiers vtkImageReader2::New() "internal new"
+%csmethodmodifiers vtkMedicalImageReader2::New() "internal new"
+%csmethodmodifiers vtkGDCMImageReader::New() "internal new"
+%csmethodmodifiers vtkGDCMImageWriter::New() "internal new"
+
+%ignore vtkObjectBase::PrintSelf;
+%ignore vtkObjectBase::PrintHeader;
+%ignore vtkObjectBase::PrintTrailer;
+%ignore vtkObjectBase::Print;
+%ignore vtkObjectBase::PrintRevisions;
+%ignore vtkObject::PrintSelf;
+%ignore vtkAlgorithm::PrintSelf;
+%ignore vtkImageAlgorithm::PrintSelf;
+%ignore vtkImageAlgorithm::ProcessRequest;
+%ignore vtkImageWriter::PrintSelf;
+%ignore vtkImageReader2::PrintSelf;
+%ignore vtkMedicalImageReader2::PrintSelf;
+%ignore vtkGDCMImageReader::PrintSelf;
+%ignore vtkGDCMImageWriter::PrintSelf;
+
 %include "vtkObjectBase.h"
 %csmethodmodifiers vtkObjectBase::ToString() "public override"
 %extend vtkObjectBase
@@ -205,52 +284,116 @@ using Kitware.VTK;
 
 %include "vtkObject.h"
 
-%include "vtkMatrix4x4.h"
-%include "vtkMedicalImageProperties.h"
-%extend vtkMedicalImageProperties
-{
-%typemap(cscode) vtkMedicalImageProperties
-%{
-  public HandleRef GetCppThis() {
-    return getCPtr(this);
-    }
-  public vtkMedicalImageProperties(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkMedicalImagePropertiesUpcast(hr.Handle), false) {
-    swigCPtr = new HandleRef(this, hr.Handle);
-  }
-  public Kitware.VTK.vtkMedicalImageProperties CastToActiviz() {
-    HandleRef rawCppThis = GetCppThis();
-    Kitware.VTK.vtkMedicalImageProperties ret = new Kitware.VTK.vtkMedicalImageProperties( rawCppThis.Handle, false, false );
-    return ret;
-  }
-%}
-};
+//%include "vtkMatrix4x4.h"
+//%include "vtkMedicalImageProperties.h"
+//%extend vtkMedicalImageProperties
+//{
+//%typemap(cscode) vtkMedicalImageProperties
+//%{
+//  public HandleRef GetCppThis() {
+//    return getCPtr(this);
+//    }
+//  public vtkMedicalImageProperties(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkMedicalImagePropertiesUpcast(hr.Handle), false) {
+//    swigCPtr = new HandleRef(this, hr.Handle);
+//  }
+//  public Kitware.VTK.vtkMedicalImageProperties CastToActiviz() {
+//    HandleRef rawCppThis = GetCppThis();
+//    Kitware.VTK.vtkMedicalImageProperties ret = new Kitware.VTK.vtkMedicalImageProperties( rawCppThis.Handle, false, false );
+//    return ret;
+//  }
+//%}
+//};
 
-%include "vtkDataObject.h"
-%include "vtkDataSet.h"
-%include "vtkImageData.h"
-%extend vtkImageData
-{
-%typemap(cscode) vtkImageData
-%{
-  public HandleRef GetCppThis()
-    {
-    return getCPtr(this);
-    }
-
-  public vtkImageData(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkImageDataUpcast(hr.Handle), false) {
-    swigCPtr = new HandleRef(this, hr.Handle);
-  }
-%}
-};
+//%include "vtkDataObject.h"
+//%include "vtkDataSet.h"
+//%include "vtkImageData.h"
+//%extend vtkImageData
+//{
+//%typemap(cscode) vtkImageData
+//%{
+//  public HandleRef GetCppThis()
+//    {
+//    return getCPtr(this);
+//    }
+//
+//  public vtkImageData(HandleRef hr) : base(vtkgdcmswigPINVOKE.vtkImageDataUpcast(hr.Handle), false) {
+//    swigCPtr = new HandleRef(this, hr.Handle);
+//  }
+//%}
+//};
 
 %include "vtkAlgorithm.h"
 %include "vtkImageAlgorithm.h"
 %include "vtkImageWriter.h"
 %include "vtkImageReader2.h"
 %include "vtkMedicalImageReader2.h"
-%include "vtkGDCMImageReader.h"
-%include "vtkGDCMImageWriter.h"
 
-%include "vtkImageExport.h"
-%include "vtkImageImport.h"
+/*
+By default swig generates:
+  public virtual SWIGTYPE_p_double GetImageOrientationPatient() {
+    IntPtr cPtr = vtkgdcmswigPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
+    SWIGTYPE_p_double ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_double(cPtr, false);
+    return ret;
+  }
+while we would want:
+  public virtual double[] GetImageOrientationPatient() {
+    IntPtr source = vtkgdcmswigPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
+    double[] ret = null;
+    if (IntPtr.Zero != source)
+    {
+        ret = new double[6];
+        Marshal.Copy(source, destination, 0, destination.Length);
+    }
+    return ret;
+  }
+
+*/
+
+//%typemap(ctype) double[] "double*"
+%typemap(cstype) double * "double[]"
+%typemap(csout) double* GetImagePositionPatient() {
+    IntPtr source = $imcall;
+    double[] destination = null;
+    if (IntPtr.Zero != source) {
+      destination = new double[3];
+      Marshal.Copy(source, destination, 0, destination.Length);
+    }
+    return destination;
+  }
+
+%typemap(csout) double* GetImageOrientationPatient() {
+    IntPtr source = $imcall;
+    double[] destination = null;
+    if (IntPtr.Zero != source) {
+      destination = new double[6];
+      Marshal.Copy(source, destination, 0, destination.Length);
+    }
+    return destination;
+  }
+
+
+//%rename (vtkGDCMImageReaderInternal) vtkGDCMImageReader;
+//%rename (vtkGDCMImageWriterInternal) vtkGDCMImageWriter;
+
+%include "vtkGDCMImageReader.h"
+%extend vtkGDCMImageReader
+{
+%typemap(cscode) vtkGDCMImageReader
+%{
+  public vtkGDCMImageReader() : this(vtkgdcmswigPINVOKE.vtkGDCMImageReader_New(), false) {
+  }
+%}
+};
+%include "vtkGDCMImageWriter.h"
+%extend vtkGDCMImageWriter
+{
+%typemap(cscode) vtkGDCMImageWriter
+%{
+  public vtkGDCMImageWriter() : this(vtkgdcmswigPINVOKE.vtkGDCMImageWriter_New(), false) {
+  }
+%}
+};
+
+//%include "vtkImageExport.h"
+//%include "vtkImageImport.h"
 
