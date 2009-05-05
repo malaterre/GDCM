@@ -13,56 +13,21 @@
 
 =========================================================================*/
 
-using Kitware.VTK;
-using System;
-
-namespace vtkgdcm
+namespace Kitware
 {
-  // using vtkgdcmswig;
-  public class vtkGDCMImageReader : vtkMedicalImageReader2
+namespace VTK
+{
+  public class vtkGDCMImageReader : vtkgdcmswig.vtkGDCMImageReader
     {
-    vtkgdcmswig.vtkGDCMImageReader inter;
     public vtkGDCMImageReader() {
-      inter = vtkgdcmswig.vtkGDCMImageReader.New();
       }
-    public void MySetFileName(string filename) {
-      SetFileName( filename );
-      inter.SetFileName( filename );
-      }
-    public void MyUpdate() {
-      Update();
-      inter.SetOutput( GetOutput() );
-      inter.Update();
-      }
-    //public vtkDataObject GetOutput() {
-    //vtkImageData data = null;
-    //uint mteStatus = 0;
-    //uint maxValue = uint.MaxValue;
-    //uint rawRefCount = 0;
-    //IntPtr rawCppThis = vtkImageAlgorithm.vtkImageAlgorithm_GetOutput_06(base.GetCppThis(), ref mteStatus, ref maxValue, ref rawRefCount);
-
-    //  //return inter.GetOutput();
-    //  }
     }
 
-  public class vtkGDCMImageWriter /*: vtkImageWriter*/
+  public class vtkGDCMImageWriter : vtkgdcmswig.vtkGDCMImageWriter
     {
-    vtkgdcmswig.vtkGDCMImageWriter inter;
     public vtkGDCMImageWriter() {
-      inter = vtkgdcmswig.vtkGDCMImageWriter.New();
-      }
-    public void SetFileName(string filename) {
-      inter.SetFileName( filename );
-      }
-    public void SetInput(vtkImageData obj) {
-      inter.SetInput( obj );
-      }
-    //public void SetInput(vtkDataObject obj) {
-    //  inter.SetInput( obj );
-    //  }
-    public void Write() {
-      inter.Write();
       }
     }
-}
+} // end namespace VTK
+} // end namespace Kitware
 

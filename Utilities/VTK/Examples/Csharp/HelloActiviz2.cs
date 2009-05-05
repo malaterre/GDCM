@@ -27,7 +27,7 @@ public class HelloActiviz2
     vtkGDCMImageReader reader = new vtkGDCMImageReader();
     reader.SetFileName( filename );
 
-    vtkGDCMImageWriter writer = vtkGDCMImageWriter.New();
+    vtkGDCMImageWriter writer = new vtkGDCMImageWriter();
     writer.SetInput( reader.GetOutput() );
     writer.SetFileName( outfilename2 );
     writer.Write();
@@ -40,7 +40,7 @@ public class HelloActiviz2
     vtkPNGReader bmpreader = new vtkPNGReader();
     bmpreader.SetFileName( outfilename );
 
-    vtkGDCMImageWriter writer2 = vtkGDCMImageWriter.New();
+    vtkGDCMImageWriter writer2 = new vtkGDCMImageWriter();
     writer2.SetFileName( outfilename2 );
     writer2.SetInput( bmpreader.GetOutput() );
     writer2.Write();
