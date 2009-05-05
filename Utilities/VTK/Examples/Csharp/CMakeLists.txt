@@ -23,7 +23,10 @@ FOREACH(example ${CSHARP_EXAMPLES})
   SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
 ENDFOREACH(example)
 
+IF(GDCM_USE_ACTIVIZ)
+  FIND_PACKAGE(ACTIVIZ REQUIRED)
 SET(example HelloActiviz)
+  file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
     #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
@@ -35,6 +38,7 @@ SET(example HelloActiviz)
     COMMENT "Create ${example}.exe"
   )
   SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+ENDIF(GDCM_USE_ACTIVIZ)
 
 ADD_CUSTOM_TARGET(VTKGDCMExampleCSharp ALL
   DEPENDS ${DEP}

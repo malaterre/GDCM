@@ -61,6 +61,8 @@
 #include "vtkMedicalImageReader2.h"
 #include "vtkGDCMImageReader.h"
 #include "vtkGDCMImageWriter.h"
+
+#include "vtkImageExport.h"
 %}
 
 //%typemap(csimports) vtkGDCMImageWriter %{
@@ -83,6 +85,7 @@
 #define VTK_COMMON_EXPORT
 #define VTK_FILTERING_EXPORT
 #define VTK_IO_EXPORT
+#define VTK_IMAGING_EXPORT
 
 
 // FIXME. Including #include vtkSetGet would not work on siwg 1.3.33 ...
@@ -187,4 +190,6 @@
 %include "vtkMedicalImageReader2.h"
 %include "vtkGDCMImageReader.h"
 %include "vtkGDCMImageWriter.h"
+
+%include "vtkImageExport.h"
 
