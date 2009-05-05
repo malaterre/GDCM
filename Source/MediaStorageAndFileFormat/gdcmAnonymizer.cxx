@@ -390,7 +390,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   // Note: 1. Content encryption may require that the content (the DICOM Data Set) be padded to a
   // multiple of some block size. This shall be performed according to the Content-encryption
   // Process defined in RFC-2630.
-  size_t encrypted_len = encrypted_str.size() * 4; // this is really overestimated
+  size_t encrypted_len = encrypted_str.size() * 20; // this is really overestimated
 
   char *orig = new char[ encrypted_len ];
   char *buf = new char[ encrypted_len ];

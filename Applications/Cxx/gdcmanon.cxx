@@ -20,16 +20,13 @@
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
 #include "gdcmVersion.h"
-#include "gdcmRSA.h"
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmGlobal.h"
-#include "gdcmHAVEGE.h"
 #include "gdcmX509.h"
 #include "gdcmDefs.h"
 #include "gdcmDirectory.h"
-#include "gdcmPKCS7.h"
 
 #include <getopt.h>
 
