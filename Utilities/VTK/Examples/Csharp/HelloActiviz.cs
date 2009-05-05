@@ -14,35 +14,94 @@
 =========================================================================*/
 using vtkgdcmswig;
 using Kitware.VTK;
+using System;
+using System.Runtime.InteropServices;
 
 /*
+ * This example shows how vtkgdcmswig can be connected to Kitware.VTK Activiz product.
+ * Three (3) arguments are required:
+ * 1. Input DICOM file                      (SWIG)
+ * 2. Temporary PNG (intermediate) file     (Activiz)
+ * 3. Final DICOM file                      (SWIG)
+ *
+ * $ MONO_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/ LD_LIBRARY_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ mono ./bin/HelloActiviz.exe ~/Creatis/gdcmData/test.acr out.png toto.dcm
+ *
+ * Footnote:
+ * this test originally used vtkBMPWriter / vtkBMPReader combination to store intermediate
+ * image file, but BMP file are 24bits by default. Instead use PNG format which supports seems
+ * to be closer to what was expected in this simple test.
  */
 public class HelloActiviz
 {
-void ConnectSWIGToActiviz(Kitware.VTK.vtkImageExport imgin, Kitware.VTK.vtkImageImport imgout)
-{
-  imgout.SetUpdateInformationCallback(imgin.GetUpdateInformationCallback());
-  imgout.SetPipelineModifiedCallback(imgin.GetPipelineModifiedCallback());
-  imgout.SetWholeExtentCallback(imgin.GetWholeExtentCallback());
-  imgout.SetSpacingCallback(imgin.GetSpacingCallback());
-  imgout.SetOriginCallback(imgin.GetOriginCallback());
-  imgout.SetScalarTypeCallback(imgin.GetScalarTypeCallback());
-  imgout.SetNumberOfComponentsCallback(imgin.GetNumberOfComponentsCallback());
-  imgout.SetPropagateUpdateExtentCallback(imgin.GetPropagateUpdateExtentCallback());
-  imgout.SetUpdateDataCallback(imgin.GetUpdateDataCallback());
-  imgout.SetDataExtentCallback(imgin.GetDataExtentCallback());
-  imgout.SetBufferPointerCallback(imgin.GetBufferPointerCallback());
-  imgout.SetCallbackUserData(imgin.GetCallbackUserData());
-}
+  // Does not work with ActiViz.NET-5.4.0.455-Linux-x86_64-Personal
+/*
+  static void ConnectSWIGToActiviz(Kitware.VTK.vtkImageExport imgin, Kitware.VTK.vtkImageImport imgout)
+    {
+    imgout.SetUpdateInformationCallback(imgin.GetUpdateInformationCallback());
+    imgout.SetPipelineModifiedCallback(imgin.GetPipelineModifiedCallback());
+    imgout.SetWholeExtentCallback(imgin.GetWholeExtentCallback());
+    imgout.SetSpacingCallback(imgin.GetSpacingCallback());
+    imgout.SetOriginCallback(imgin.GetOriginCallback());
+    imgout.SetScalarTypeCallback(imgin.GetScalarTypeCallback());
+    imgout.SetNumberOfComponentsCallback(imgin.GetNumberOfComponentsCallback());
+    imgout.SetPropagateUpdateExtentCallback(imgin.GetPropagateUpdateExtentCallback());
+    imgout.SetUpdateDataCallback(imgin.GetUpdateDataCallback());
+    imgout.SetDataExtentCallback(imgin.GetDataExtentCallback());
+    imgout.SetBufferPointerCallback(imgin.GetBufferPointerCallback());
+    imgout.SetCallbackUserData(imgin.GetCallbackUserData());
+    }
+*/
+
+  static Kitware.VTK.vtkImageData ConnectSWIGToActiviz(vtkgdcmswig.vtkImageData imgin)
+    {
+    HandleRef rawCppThis = imgin.getRawCppThis();
+    Kitware.VTK.vtkImageData imgout = new Kitware.VTK.vtkImageData( rawCppThis.Handle, false, false);
+    return imgout;
+    }
+
+  static vtkgdcmswig.vtkImageData ConnectActivizToSWIG(Kitware.VTK.vtkImageData imgin)
+    {
+    HandleRef rawCppThis = imgin.GetCppThis();
+    vtkgdcmswig.vtkImageData imgout = vtkgdcmswig.vtkImageData.ConstructFromCppThis( rawCppThis );
+    return imgout;
+    }
 
 
   public static int Main(string[] args)
     {
     string filename = args[0];
+    string outfilename = args[1];
+
+    // Step 1. Test SWIG -> Activiz
     vtkGDCMImageReader reader = vtkGDCMImageReader.New();
     reader.SetFileName( filename );
-    //reader.Update();
+    //reader.Update(); // DO NOT call Update to check pipeline execution
 
+    Kitware.VTK.vtkImageData imgout = ConnectSWIGToActiviz(reader.GetOutput());
+
+    System.Console.WriteLine( imgout.ToString() ); // not initialized as expected
+
+    vtkPNGWriter writer = new vtkPNGWriter();
+    writer.SetInput( imgout );
+    writer.SetFileName( outfilename );
+    writer.Write();
+
+    // Step 2. Test Activiz -> SWIG
+    vtkPNGReader bmpreader = new vtkPNGReader();
+    bmpreader.SetFileName( outfilename );
+    //bmpreader.Update(); // DO NOT update to check pipeline execution
+
+    System.Console.WriteLine( bmpreader.GetOutput().ToString() ); // not initialized as expected
+
+    vtkgdcmswig.vtkImageData imgout2 = ConnectActivizToSWIG(bmpreader.GetOutput());
+
+    System.Console.WriteLine( imgout2.ToString() ); // not initialized as expected
+
+    string outfilename2 = args[2];
+    vtkGDCMImageWriter writer2 = vtkGDCMImageWriter.New();
+    writer2.SetFileName( outfilename2 );
+    writer2.SetInput( imgout2 );
+    writer2.Write();
 
     return 0;
     }

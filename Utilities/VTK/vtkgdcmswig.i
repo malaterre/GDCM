@@ -39,6 +39,7 @@
 #include "vtkType.h"
 #include "vtkSystemIncludes.h"
 #include "vtkSetGet.h"
+#include <sstream>
 
 // Common stuff
 #include "vtkObjectBase.h"
@@ -174,6 +175,18 @@
 #define vtkNotUsed(x) x
 
 %include "vtkObjectBase.h"
+%extend vtkObjectBase
+{
+  const char *ToString()
+    {
+    static std::string buffer;
+    std::ostringstream os;
+    self->Print( os );
+    buffer = os.str();
+    return buffer.c_str();
+    }
+};
+
 %include "vtkObject.h"
 
 %include "vtkMatrix4x4.h"
@@ -182,6 +195,28 @@
 %include "vtkDataObject.h"
 %include "vtkDataSet.h"
 %include "vtkImageData.h"
+%extend vtkImageData
+{
+%typemap(cscode) vtkImageData
+%{
+  public HandleRef getRawCppThis()
+    {
+    return getCPtr(this);
+    }
+//  public void setRawCppThis(HandleRef hr)
+//    {
+//    swigCMemOwn = true;
+//    swigCPtr = hr; //new HandleRef(this, hr.Handle);
+//    }
+
+  public new static vtkImageData ConstructFromCppThis(HandleRef hr) {
+    IntPtr cPtr = hr.Handle;
+    vtkImageData ret = (cPtr == IntPtr.Zero) ? null : new vtkImageData(cPtr, false);
+    return ret;
+  }
+
+%}
+};
 
 %include "vtkAlgorithm.h"
 %include "vtkImageAlgorithm.h"
