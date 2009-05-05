@@ -62,6 +62,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
   const char *iodname;
   switch(ms)
     {
+    case MediaStorage::MediaStorageDirectoryStorage:
+      iodname = "Basic Directory IOD Modules";
+      break;
     case MediaStorage::MRImageStorage:
       iodname = "MR Image IOD Modules";
       break;
