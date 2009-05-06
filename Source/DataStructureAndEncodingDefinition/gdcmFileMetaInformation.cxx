@@ -214,7 +214,10 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   else // Ok there is a value in (0002,0003) let see if it match (0008,0018)
     {
-    bool dicomdir = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    bool dirrecsq = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    MediaStorage ms;
+    ms.SetFromHeader( *this );
+    bool dicomdir = (ms == MediaStorage::MediaStorageDirectoryStorage && dirrecsq);
     if( !dicomdir )
       {
       if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
