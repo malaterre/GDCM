@@ -37,12 +37,14 @@
 #include "vtkLookupTable.h"
 #include "vtkPointData.h"
 #include "vtkStructuredPointsReader.h"
+#include "vtkStructuredPointsWriter.h"
 #include "vtkStructuredPoints.h"
 
 #include "gdcmFilename.h"
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
 #include "gdcmImageHelper.h"
+#include "gdcmSystem.h"
 
 #include <getopt.h>
 
@@ -65,6 +67,7 @@ void PrintHelp()
   std::cout << "     --force-spacing    force spacing." << std::endl;
   std::cout << "     --palette-color    when supported generate a PALETTE COLOR file." << std::endl;
   std::cout << "     --argb             when supported generate a ARGB file." << std::endl;
+  std::cout << "     --modality         set Modality." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -84,6 +87,8 @@ int main(int argc, char *argv[])
   int forcespacing = 0;
   int palettecolor = 0;
   int argb = 0;
+  int modality = 0;
+  std::string modality_str;
 
   int verbose = 0;
   int warning = 0;
@@ -100,6 +105,7 @@ int main(int argc, char *argv[])
         {"force-spacing", 0, &forcespacing, 1},
         {"palette-color", 0, &palettecolor, 1},
         {"argb", 0, &argb, 1},
+        {"modality", 1, &modality, 1},
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -133,7 +139,13 @@ int main(int argc, char *argv[])
             //assert( filename.empty() );
             //filename = optarg;
             }
-          printf (" with arg %s", optarg);
+          if( option_index == 4 ) /* input */
+            {
+            assert( strcmp(s, "modality") == 0 );
+            //assert( filename.empty() );
+            modality_str = optarg;
+            }
+          //printf (" with arg %s", optarg);
           }
         //printf ("\n");
         }
@@ -254,6 +266,23 @@ int main(int argc, char *argv[])
     imgdata = datareader->GetOutput();
     }
 
+  gdcm::Filename fn = outfilename;
+  const char *outputextension = fn.GetExtension();
+
+  if ( outputextension )
+    {
+    if(  gdcm::System::StrCaseCmp(outputextension,".vtk") == 0  )
+      {
+      vtkStructuredPointsWriter * writer = vtkStructuredPointsWriter::New();
+      writer->SetFileName( outfilename );
+      writer->SetFileTypeToBinary();
+      writer->SetInput( imgdata );
+      writer->Write();
+      return 0;
+      }
+    }
+  // else
+
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
   writer->SetFileName( outfilename );
 
@@ -347,6 +376,13 @@ int main(int argc, char *argv[])
       }
     }
   // nothing special need to be done for vtkStructuredPointsReader 
+
+  // Handle here the specific modality:
+  if ( modality )
+    {
+    if( !modality_str.empty() )
+      writer->GetMedicalImageProperties()->SetModality( modality_str.c_str() );;
+    }
 
   writer->Write();
 

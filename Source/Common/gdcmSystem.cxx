@@ -548,12 +548,15 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
 {
   if(!date) return false;
   assert( strlen(date) <= 22 );
+  size_t len = strlen(date);
+  if( len < 4 ) return false; // need at least the full year
+
   struct tm ptm;
   // No such thing as strptime on some st*$^% platform
   //char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
   // instead write our own:
   int year, mon, day, hour, min, sec, n;
-  if ((n = sscanf(date, "%4d%2d%2d%2d%2d%2d",
+  if ((n = sscanf(date, "%04d%2d%2d%2d%2d%2d",
         &year, &mon, &day, &hour, &min, &sec)) >= 1)
     {
     switch (n)
@@ -565,6 +568,7 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     case 5: sec = 0;
       }
     ptm.tm_year = year - 1900;
+    if( year - 1900 < 0 ) return false;
     ptm.tm_mon = mon - 1;
     ptm.tm_mday = day;
     ptm.tm_hour = hour;
@@ -580,13 +584,12 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     }
   timep = mktime(&ptm);
 
-  size_t len = strlen(date);
   if( len > 14 ) // more data to process
     {
     const char *ptr = date + 14;
     if( *ptr != '.' ) return false;
     ++ptr;
-    if( sscanf( ptr, "%06ld", &milliseconds ) != 1 )
+    if( !*ptr || sscanf( ptr, "%06ld", &milliseconds ) != 1 )
       {
       // Could not parse milliseconds but date looks ok, should I return false anyway ?
       // -> yes this is an error !
@@ -599,6 +602,9 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
 
 bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 {
+  // \precondition
+  assert( milliseconds >= 0 && milliseconds < 1000000 );
+
   // YYYYMMDDHHMMSS.FFFFFF&ZZXX
   if(!date) return false;
   const size_t maxsize = 40;
@@ -632,6 +638,37 @@ bool System::GetCurrentDateTime(char date[22])
   long milliseconds;
   time_t timep;
 
+#if 0
+       The functions gettimeofday() and settimeofday() can  get  and  set  the
+       time  as  well  as a timezone.  The tv argument is a struct timeval (as
+       specified  in <sys/time.h>):
+
+         struct timeval {
+             time_t      tv_sec;     /* seconds */
+             suseconds_t tv_usec;    /* microseconds */
+         };
+
+       and gives the number of seconds and microseconds since the  Epoch  (see
+       time(2)).  The tz argument is a struct timezone:
+
+         struct timezone {
+             int tz_minuteswest;     /* minutes west of Greenwich */
+             int tz_dsttime;         /* type of DST correction */
+         };
+
+       If  either  tv or tz is NULL, the corresponding structure is not set or
+       returned.
+
+       The use of the timezone structure is obsolete; the tz  argument  should
+       normally  be  specified  as  NULL.  The tz_dsttime field has never been
+       used under Linux; it has not been and will not be supported by libc  or
+       glibc.   Each  and  every occurrence of this field in the kernel source
+       (other than the declaration) is a bug. Thus, the following is purely of
+       historic interest.
+#endif
+
+  // Apparently suseconds_t is defined as long on linux system... why would this be signed ?
+
   struct timeval tv;
   gettimeofday (&tv, NULL);
   timep = tv.tv_sec;
@@ -647,6 +684,7 @@ bool System::GetCurrentDateTime(char date[22])
   // fractional part of a second as small as 1
   // millionth of a second (range ¿000000¿ -
   // ¿999999¿).
+  assert( tv.tv_usec >= 0 && tv.tv_usec < 1000000 );
   milliseconds = tv.tv_usec;
 
   return FormatDateTime(date, timep, milliseconds);

@@ -84,6 +84,7 @@ public:
 
   /// format as ASCII text a time_t with milliseconds
   /// See VR::DT from DICOM PS 3.5
+  /// milliseconds is in the range [0, 999999]
   static bool FormatDateTime(char date[22], time_t t, long milliseconds = 0);
 
   /// Parse a date stored as ASCII text into a time_t structured (discard millisecond if any)

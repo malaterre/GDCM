@@ -200,6 +200,31 @@ assert( fixed_date2[21] == 0 );
 {
   return 1;
 }
+
+  const char invalid_date1[] = "20090428172557.";
+if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date1) )
+{
+std::cerr << "should reject:" << invalid_date1 << std::endl;
+return 1;
+}
+  const char invalid_date2[] = "200";
+if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date2) )
+{
+std::cerr << "should reject:" << invalid_date2 << std::endl;
+return 1;
+}
+  const char invalid_date3[] = "17890714172557";
+if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date3) )
+{
+std::cerr << "should reject:" << invalid_date3 << std::endl;
+return 1;
+}
+  const char valid_date1[] = "19890714172557";
+if( !gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, valid_date1) )
+{
+std::cerr << "should accept:" << valid_date1 << std::endl;
+return 1;
+}
    
   return 0;
 }
