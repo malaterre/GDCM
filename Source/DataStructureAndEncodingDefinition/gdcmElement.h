@@ -160,15 +160,15 @@ public:
     assert( _is );
     // FIXME BUG: what if >> operation fails ?
     // gdcmData/MR00010001.dcm / SpacingBetweenSlices
-    _is >> data[0];
+    _is >> std::ws >> data[0];
     char sep;
     //std::cout << "GetLength: " << af->GetLength() << std::endl;
     for(unsigned long i=1; i<length;++i) {
       assert( _is );
       // Get the separator in between the values
-      _is.get(sep);
+      _is >> std::ws >> sep; //_is.get(sep);
       assert( sep == '\\' ); // FIXME: Bad use of assert
-      _is >> data[i];
+      _is >> std::ws >> data[i];
       }
     }
 
