@@ -6,6 +6,7 @@
 #  OPENSSL_LIBRARIES - The libraries needed to use OpenSSL
 
 # Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# Copyright (c) 2009, Mathieu Malaterre, <mathieu.malaterre@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
