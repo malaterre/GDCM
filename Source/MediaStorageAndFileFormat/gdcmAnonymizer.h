@@ -108,8 +108,9 @@ public:
 
 protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
-  bool BALCPProtect(Tag const & tag);
+  bool BALCPProtect(DataSet &ds, Tag const & tag);
   bool CanEmptyTag(Tag const &tag);
+  void RecurseDataSet( DataSet & ds );
 
 private:
   bool BasicApplicationLevelConfidentialityProfile1();

@@ -211,6 +211,7 @@ public:
   {
      return new SequenceOfItems();
   }
+  bool FindDataElement(const Tag &t) const;
 
 private:
 public:

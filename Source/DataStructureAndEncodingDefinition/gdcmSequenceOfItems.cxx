@@ -44,6 +44,17 @@ const Item &SequenceOfItems::GetItem(unsigned int position) const
   return Items[position-1];
 }
 
+bool SequenceOfItems::FindDataElement(const Tag &t) const
+{
+  ConstIterator it = Begin();
+  bool found = false;
+  for(; it != End() && !found; ++it)
+    {
+    const Item & item = *it;
+    found = item.FindDataElement( t );
+    }
+  return found;
+}
 
 } // end namespace gdcm
 

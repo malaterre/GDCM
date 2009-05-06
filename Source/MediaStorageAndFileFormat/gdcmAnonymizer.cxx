@@ -368,12 +368,38 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   Item it;
   it.SetVLToUndefined();
   DataSet &encryptedds = it.GetNestedDataSet();
+  // Loop over root level attributes:
   for(const Tag *ptr = start ; ptr != end ; ++ptr)
     {
     const Tag& tag = *ptr;
     if( ds.FindDataElement( tag ) )
       encryptedds.Insert( ds.GetDataElement( tag ) );
     }
+  // Check that root level sequence do not contains any of those attributes
+{
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    const DataElement &de = *it;
+    //const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    const ByteValue *bv = de.GetByteValue();
+    SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+    if( sqi )
+      {
+      bool found = false;
+      for(const Tag *ptr = start ; ptr != end && !found ; ++ptr)
+        {
+        const Tag& tag = *ptr;
+        found = sqi->FindDataElement( tag );
+        }
+      if( found )
+        {
+        // A special Tag was found let's store the entire Sequence of Item:
+        encryptedds.Insert( de );
+        }
+      }
+    }
+}
 
   sq->AddItem(it);
 
@@ -457,12 +483,14 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   // 2. Each Attribute to be protected shall then either be removed from the dataset, or have its value
   // replaced by a different "replacement value" which does not allow identification of the patient.
 
-  for(const Tag *ptr = start ; ptr != end ; ++ptr)
-    {
-    const Tag& tag = *ptr;
-    // FIXME Type 1 !
-    if( ds.FindDataElement( tag ) ) BALCPProtect(tag);
-    }
+  //for(const Tag *ptr = start ; ptr != end ; ++ptr)
+  //  {
+  //  const Tag& tag = *ptr;
+  //  // FIXME Type 1 !
+  //  if( ds.FindDataElement( tag ) ) BALCPProtect(F->GetDataSet(), tag);
+  //  }
+  // Check that root level sequence do not contains any of those attributes
+  RecurseDataSet( F->GetDataSet() );
 
   // Group Length are removed since PS 3.3-2008
   RemoveGroupLength();
@@ -480,7 +508,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
   // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
   UIDGenerator uid;
-  Replace( Tag(0x008,0x0018), uid.Generate() );
+  if( ds.FindDataElement( Tag(0x008,0x0018) ) )
+    Replace( Tag(0x008,0x0018), uid.Generate() );
 
   return true;
 }
@@ -507,7 +536,7 @@ bool Anonymizer::CanEmptyTag(Tag const &tag)
   static const Dicts &dicts = g.GetDicts();
   static const Defs &defs = g.GetDefs();
   DataSet &ds = F->GetDataSet();
-  Type t = defs.GetTypeFromTag(ds, tag);
+  Type t = defs.GetTypeFromTag(*F, tag);
   gdcmDebugMacro( "Type for tag=" << tag << " is " << t );
 
   //assert( t != Type::UNKNOWN );
@@ -530,14 +559,17 @@ bool Anonymizer::CanEmptyTag(Tag const &tag)
   return true;
 }
 
-bool Anonymizer::BALCPProtect(Tag const & tag)
+bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
 {
+  // \precondition
+  assert( ds.FindDataElement(tag) );
+
   typedef std::pair< Tag, std::string > TagValueKey;
   typedef std::map< TagValueKey, std::string > DummyMap;
   static DummyMap dummymap;
   gdcm::UIDGenerator uid;
 
-  DataSet &ds = F->GetDataSet();
+  //DataSet &ds = F->GetDataSet();
 
   bool canempty = CanEmptyTag( tag );
   if( !canempty )
@@ -573,9 +605,54 @@ bool Anonymizer::BALCPProtect(Tag const & tag)
     }
   else
     {
-    Empty( tag );
+    //Empty( tag );
+    DataElement copy = ds.GetDataElement( tag );
+    copy.Empty();
+    ds.Replace( copy );
     }
   return true;
+}
+
+void Anonymizer::RecurseDataSet( DataSet & ds )
+{
+  static const unsigned int deidSize = sizeof(Tag);
+  static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
+  static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
+  static const Tag *end = start + numDeIds;
+
+  DataSet::Iterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    DataElement de = *it;
+    //const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+    if( sqi )
+      {
+      //sqi->SetLengthToUndefined();
+      de.SetVLToUndefined();
+      unsigned int n = sqi->GetNumberOfItems();
+      for( unsigned int i = 1; i <= n; ++i )
+        {
+        Item &item = sqi->GetItem( i );
+        DataSet &nested = item.GetNestedDataSet();
+        RecurseDataSet( nested );
+        }
+      }
+    else
+      {
+      for(const Tag *ptr = start ; ptr != end ; ++ptr)
+        {
+        const Tag& tag = *ptr;
+        // FIXME Type 1 !
+        if( ds.FindDataElement( tag ) )
+          {
+          BALCPProtect(ds, tag);
+          }
+        }
+      }
+    ds.Replace( de );
+    }
+
 }
 
 //void Anonymizer::SetAESKey(AES const &aes)
@@ -656,11 +733,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //assert( dummy.GetVR() == VR::SQ );
 {
   const SequenceOfItems *sqi = dummy.GetSequenceOfItems();
-  assert( sqi );
+  assert( sqi && sqi->GetNumberOfItems() == 1 );
   Item const & item = sqi->GetItem( 1 );
   const DataSet &nds = item.GetNestedDataSet();
   DataSet::ConstIterator it = nds.Begin();
-  for( ; it !=  nds.End(); ++it )
+  for( ; it != nds.End(); ++it )
     {
     ds.Replace( *it );
     }

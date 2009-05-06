@@ -102,6 +102,8 @@ public:
   /// Check if Data Element is empty
   bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
+  void Empty() { ValueField = 0; ValueLengthField = 0; }
+
   // Helper:
   /// Set the byte value
   /// \warning user need to read DICOM standard for an understanding of:

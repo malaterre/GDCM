@@ -34,8 +34,7 @@ namespace gdcm
   }
 
   SequenceOfItems* DataElement::GetSequenceOfItems() {
-    Value &v = GetValue();
-    SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&v);
+    SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if(!sqi)
       {
       // Was the element loaded as a byte value ? Let's check:
@@ -44,8 +43,7 @@ namespace gdcm
     return sqi;
   }
   const SequenceOfItems* DataElement::GetSequenceOfItems() const {
-    const Value &v = GetValue();
-    const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&v);
+    const SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if(!sqi)
       {
       // Was the element loaded as a byte value ? Let's check:
@@ -54,8 +52,7 @@ namespace gdcm
     return sqi;
   }
   const SequenceOfFragments* DataElement::GetSequenceOfFragments() const {
-    const Value &v = GetValue();
-    const SequenceOfFragments *sqf = dynamic_cast<const SequenceOfFragments*>(&v);
+    const SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
     return sqf;
   }
 
@@ -70,12 +67,11 @@ namespace gdcm
    */
   SmartPointer<SequenceOfItems> DataElement::GetValueAsSQ() const
     {
-    if( IsEmpty() )
+    if( IsEmpty() || GetByteValue() || GetSequenceOfFragments() )
       {
       return 0;
       }
-    Value &v = const_cast<Value&>(GetValue());
-    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(&v);
+    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if( sq ) // all set !
       {
       //assert( GetVR() == VR::SQ );

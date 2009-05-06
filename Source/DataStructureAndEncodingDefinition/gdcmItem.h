@@ -297,6 +297,9 @@ by the Transfer Syntax. They shall be encoded as Implicit VR. These special Data
 However, the Data Set within the Value Field of the Data Element Item (FFFE,E000) shall be encoded
 according to the rules conveyed by the Transfer Syntax.
 */
+  bool FindDataElement(const Tag &t) const {
+    return NestedDataSet.FindDataElement( t );
+  }
 
 private:
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.

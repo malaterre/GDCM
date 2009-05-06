@@ -32160,10 +32160,10 @@ One Item may be present in this Sequence.</description>
     <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No baseline context ID. The Coding Scheme Designator attribute may indicate a local coding scheme (e.g., with value “L”) when it is implicitly that of the institution’s employee identifier system.The Code Meaning attribute, though it is encoded with a VR of LO, may be encoded according to the rules of the PN VR (see Section 10.1)."/>
   </module>
   <iod table="F.3-1" name="Basic Directory IOD Modules">
-    <entry ie="File-set Identification" name="F.3.2.1" ref="M" usage="File-set identification information"/>
-    <entry ie="Directory Information" name="F.3.2.2" ref="U" usage="Directory Information followed by a Sequence of Directory Records. Note: The Directory Information Module is optional. This Directory Information Module should be present in all but primitive environments where a directory is not needed. In this case, only the File-set Identification Information is present."/>
+    <entry ie="File-set Identification" ref="F.3.2.1" usage="M" name="File-set identification information"/>
+    <entry ie="Directory Information" ref="F.3.2.2" usage="U" name="Directory Information followed by a Sequence of Directory Records. Note: The Directory Information Module is optional. This Directory Information Module should be present in all but primitive environments where a directory is not needed. In this case, only the File-set Identification Information is present."/>
   </iod>
-  <macro table="F.3-2" name="File Set Identification Module">
+  <module ref="F.3.2.1" table="F.3-2" name="File Set Identification Module">
     <entry group="0004" element="1130" name="File-set ID" type="2">
       <description>User or implementation specific Identifier (up to 16 characters). For definition, see PS 3.10. The File-set ID is intended to be a short human readable label to easily (but not necessarily uniquely) identify a specific File-set to facilitate operator manipulation of the physical media on which the File-set is stored. Assignment of Value and semantics are environment specific.</description>
     </entry>
@@ -32198,8 +32198,8 @@ DEFINED TERMS FOR MULTI-BYTE CHARACTER SETS WITHOUT CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Unicode in UTF-8" meaning="ISO_IR 192"/><term value="GB18030" meaning="GB18030"/></unrecognized-rows>
          </section>
     </entry>
-  </macro>
-  <macro table="F.3-3" name="Directory Information Module">
+  </module>
+  <module ref="F.3.2.2" table="F.3-3" name="Directory Information Module">
     <entry group="0004" element="1200" name="Offset of the First Directory Record of the Root Directory Entity" type="1">
       <description>Offset of the first byte (of the Item Data Element) of the first Directory Record of the Root Directory Entity. This Offset is a number of bytes starting with the first byte of the File Meta Information. When the Root Directory Entity contains no Directory Record, this offset shall be set to 00000000H.
 Note: This offset includes the File Preamble and the DICM Prefix.</description>
@@ -32283,7 +32283,7 @@ Required if the Directory Record references a SOP Instance that encodes the Rela
 Note: This may be useful to an FSR that does not support the SOP Class of the referenced Instance, but which does support one of the Related General SOP Classes.</description>
     </entry>
     <include ref="&gt;Record Selection Keys" type="SeeF.5" description="A number of DICOM Data Elements which contain specific keys defined for each type of Directory Record (0004,1430) defined in Section F.5."/>
-  </macro>
+  </module>
   <module ref="F.5.1" table="F.5-1" name="Patient Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys</description>

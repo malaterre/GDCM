@@ -24,6 +24,7 @@
 namespace gdcm
 {
 class DataSet;
+class File;
 class MediaStorage;
 /**
  * \brief FIXME I do not like the name 'Defs'
@@ -48,7 +49,7 @@ public:
 
   bool Verify(const DataSet& ds) const;
 
-  Type GetTypeFromTag(const DataSet& ds, const Tag& tag) const;
+  Type GetTypeFromTag(const File& file, const Tag& tag) const;
 
   static const char *GetIODNameFromMediaStorage(MediaStorage const &ms);
 

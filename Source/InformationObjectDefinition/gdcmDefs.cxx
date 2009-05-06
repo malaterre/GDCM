@@ -128,11 +128,11 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
   return iodname;
 }
 
-Type Defs::GetTypeFromTag(const DataSet& ds, const Tag& tag) const
+Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
 {
   Type ret;
   MediaStorage ms;
-  ms.SetFromDataSet(ds);
+  ms.SetFromFile(file); // SetFromDataSet does not handle DICOMDIR
 
   const IODs &iods = GetIODs();
   const Modules &modules = GetModules();
