@@ -17,6 +17,7 @@
 #include "gdcmMediaStorage.h"
 //#include "gdcmGlobal.h"
 #include "gdcmTrace.h"
+#include "gdcmFile.h"
 
 #include <stdlib.h>
 
@@ -161,6 +162,41 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
     }
 
   return ret;
+}
+
+bool Defs::Verify(const File& file) const
+{
+  MediaStorage ms;
+  ms.SetFromFile(file);
+
+  const IODs &iods = GetIODs();
+  const Modules &modules = GetModules();
+  const char *iodname = GetIODNameFromMediaStorage( ms );
+  if( !iodname )
+    {
+    gdcmErrorMacro( "Not implemented" );
+    return false;
+    }
+  const IOD &iod = iods.GetIOD( iodname );
+
+  //std::cout << iod << std::endl;
+  //std::cout << iod.GetIODEntry(14) << std::endl;
+  unsigned int niods = iod.GetNumberOfIODs();
+  bool v = true;
+  // Iterate over each iod entry in order:
+  for(unsigned int idx = 0; idx < niods; ++idx)
+    {
+    const IODEntry &iodentry = iod.GetIODEntry(idx);
+    const char *ref = iodentry.GetRef();
+    IODEntry::UsageType ut = iodentry.GetUsageType();
+
+    const Module &module = modules.GetModule( ref );
+    //std::cout << module << std::endl;
+    v = v && module.Verify( file.GetDataSet() );
+    }
+
+  return v;
+
 }
 
 bool Defs::Verify(const DataSet& ds) const

@@ -286,7 +286,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
       }
     }
 // Do the IOD verification !
-    bool v = defs.Verify( ds );
+    bool v = defs.Verify( file );
     //std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
 
   return 0;

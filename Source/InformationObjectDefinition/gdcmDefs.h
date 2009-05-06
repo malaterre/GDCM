@@ -47,6 +47,9 @@ public:
 
   bool IsEmpty() const { return GetModules().IsEmpty(); }
 
+  bool Verify(const File& file) const;
+  
+  // \deprecated DO NOT USE
   bool Verify(const DataSet& ds) const;
 
   Type GetTypeFromTag(const File& file, const Tag& tag) const;
