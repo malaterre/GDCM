@@ -32,12 +32,21 @@ public class HelloActiviz2
     vtkgdcm.vtkGDCMImageReader reader = new vtkgdcm.vtkGDCMImageReader();
     reader.SetFileName( filename );
 
+    // When calling multiple times creation of C# object from the same C++ object it triggers a:
+//error: potential refcounting error: Duplicate rawCppThis - weak reference that is still alive. Attempting to add '0x00b2dc10' again.
+//       Allowing new wrapped object to take over table key...
+//       Original object should *not* have been destroyed while we still had it in our table without notifying us...
+    //reader.GetOutput();
+    //reader.GetOutput();
+
     System.Console.WriteLine( reader.ToString() ); // Test the ToString compat with Activiz
 
     vtkGDCMImageWriter writer = new vtkGDCMImageWriter();
     writer.SetInput( reader.GetOutput() );
     writer.SetFileName( outfilename2 );
     writer.Write();
+
+    System.Console.WriteLine( reader.GetOutput().ToString() ); // Test the ToString compat with Activiz
 
     System.Console.WriteLine( writer.ToString() ); // Test the ToString compat with Activiz
 

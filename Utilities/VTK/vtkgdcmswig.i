@@ -273,6 +273,9 @@ using Kitware.VTK;
 %csmethodmodifiers vtkGDCMImageWriter::New() "internal new"
 #endif
 
+// TODO: I need to fix Delete and make sure SWIG owns the C++ ptr (call ->Delete in the Dispose layer)
+%ignore vtkObjectBase::Delete;
+%ignore vtkObjectBase::FastDelete;
 %ignore vtkObjectBase::PrintSelf;
 %ignore vtkObjectBase::PrintHeader;
 %ignore vtkObjectBase::PrintTrailer;
@@ -386,6 +389,12 @@ while we would want:
   }
 %}
 };
+//%typemap(csdestruct, methodname="Dispose", methodmodifiers="public") vtkGDCMImageWriter {
+//toto destruct
+//};
+//%typemap(csdestruct) vtkGDCMImageWriter "";
+%include "vtkGDCMImageWriter.h"
+
 %extend vtkGDCMImageWriter
 {
 %typemap(cscode) vtkGDCMImageWriter
