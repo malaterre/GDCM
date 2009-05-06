@@ -538,6 +538,16 @@ static int gettimeofday(struct timeval *tv, struct timezone *tz)
 }
 #endif
 
+/**
+ Implementation note. We internally use mktime which seems to be quite relaxed when it
+ comes to invalid date. It handles :
+ "17890714172557";
+ "19891714172557";
+ "19890014172557";
+ While the DICOM PS 3.5-2008 would prohibit them. 
+ I leave it this way so that we correctly read in /almost/ valid date. What we write out is
+ always valid anyway which is what is important.
+*/
 bool System::ParseDateTime(time_t &timep, const char date[22])
 {
   long milliseconds;
@@ -556,7 +566,7 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
   //char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
   // instead write our own:
   int year, mon, day, hour, min, sec, n;
-  if ((n = sscanf(date, "%04d%2d%2d%2d%2d%2d",
+  if ((n = sscanf(date, "%4d%2d%2d%2d%2d%2d",
         &year, &mon, &day, &hour, &min, &sec)) >= 1)
     {
     switch (n)
@@ -568,7 +578,6 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     case 5: sec = 0;
       }
     ptm.tm_year = year - 1900;
-    if( year - 1900 < 0 ) return false;
     ptm.tm_mon = mon - 1;
     ptm.tm_mday = day;
     ptm.tm_hour = hour;
@@ -583,7 +592,9 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     return false;
     }
   timep = mktime(&ptm);
+  if( timep == (time_t)-1) return false;
 
+  milliseconds = 0;
   if( len > 14 ) // more data to process
     {
     const char *ptr = date + 14;
