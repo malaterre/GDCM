@@ -56,7 +56,7 @@ public class HelloActiviz2
     pngwriter.Write();
 
     // at that point the .Write() should have triggered an Update() on the reader:
-    if( reader.GetImageFormat() == vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
+    if( reader.GetImageFormat() == vtkgdcmswig.VTK_LUMINANCE ) // MONOCHROME2
       {
       System.Console.WriteLine( "Image is MONOCHROME2" ); // 
       }

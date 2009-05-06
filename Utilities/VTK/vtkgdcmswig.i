@@ -225,6 +225,14 @@ using Kitware.VTK;
 %typemap(csout) (vtkImageData *) {
   IntPtr rawCppThisSwig = $imcall;
   vtkImageData data = new vtkImageData( rawCppThisSwig, false, false );
+  //vtkImageData data = null;
+  //bool created;
+  //if( IntPtr.Zero != rawCppThisSwig )
+  //  {
+  //  data = (vtkImageData) Kitware.mummy.Runtime.Methods.CreateWrappedObject(
+  //    vtkImageData.MRClassNameKey, rawCppThisSwig, false, out created);
+  //  // created is true if the C# object was created by this call, false if it was already cached in the table
+  //  }
   return data;
 }
 //
@@ -328,8 +336,6 @@ const char *vtkGetDataRoot() { return VTK_DATA_ROOT; }
 %include "vtkThreadedImageAlgorithm.h"
 #endif
 %include "vtkImageWriter.h"
-%include "vtkImageReader2.h"
-%include "vtkMedicalImageReader2.h"
 
 /*
 By default swig generates:
@@ -374,6 +380,28 @@ while we would want:
     return destination;
   }
 
+%typemap(csout) double* GetDataSpacing() {
+    IntPtr source = $imcall;
+    double[] destination = null;
+    if (IntPtr.Zero != source) {
+      destination = new double[3];
+      Marshal.Copy(source, destination, 0, destination.Length);
+    }
+    return destination;
+  }
+
+%typemap(csout) double* GetDataOrigin() {
+    IntPtr source = $imcall;
+    double[] destination = null;
+    if (IntPtr.Zero != source) {
+      destination = new double[3];
+      Marshal.Copy(source, destination, 0, destination.Length);
+    }
+    return destination;
+  }
+
+%include "vtkImageReader2.h"
+%include "vtkMedicalImageReader2.h"
 
 //%rename (vtkGDCMImageReaderInternal) vtkGDCMImageReader;
 //%rename (vtkGDCMImageWriterInternal) vtkGDCMImageWriter;
