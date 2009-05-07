@@ -1,6 +1,103 @@
 
 // File: index.xml
 
+// File: classgdcm_1_1AES.xml
+%feature("docstring") gdcm::AES "C++ includes: gdcmAES.h ";
+
+%feature("docstring")  gdcm::AES::AES "gdcm::AES::AES() ";
+
+%feature("docstring")  gdcm::AES::CryptCbc "bool
+gdcm::AES::CryptCbc(int mode, unsigned int length, char iv[16], const
+char *input, char *output) const
+
+AES-CBC buffer encryption/decryption.
+
+Parameters:
+-----------
+
+mode:  ENCRYPT or DECRYPT
+
+length:  length of the input data
+
+iv:  initialization vector (updated after use)
+
+input:  buffer holding the input data
+
+output:  buffer holding the output data
+
+false on error (invalid key, or length not multiple 16) ";
+
+%feature("docstring")  gdcm::AES::CryptCfb128 "bool
+gdcm::AES::CryptCfb128(int mode, unsigned int length, unsigned int
+&iv_off, char iv[16], const char *input, char *output) const
+
+AES-CFB128 buffer encryption/decryption.
+
+Parameters:
+-----------
+
+mode:  ENCRYPT or DECRYPT
+
+length:  length of the input data
+
+iv_off:  offset in IV (updated after use)
+
+iv:  initialization vector (updated after use)
+
+input:  buffer holding the input data
+
+output:  buffer holding the output data
+
+false on error (invalid key) ";
+
+%feature("docstring")  gdcm::AES::CryptEcb "bool
+gdcm::AES::CryptEcb(int mode, const char input[16], char output[16])
+const
+
+AES-ECB block encryption/decryption.
+
+Parameters:
+-----------
+
+mode:  ENCRYPT or DECRYPT
+
+input:  16-byte input block
+
+output:  16-byte output block
+
+false on error (invalid key) ";
+
+%feature("docstring")  gdcm::AES::SetkeyDec "bool
+gdcm::AES::SetkeyDec(const char *key, unsigned int keysize)
+
+AES key schedule (decryption).
+
+Parameters:
+-----------
+
+key:  decryption key
+
+keysize:  must be 16, 24 or 32
+
+false on error (wrong keysize, key null) ";
+
+%feature("docstring")  gdcm::AES::SetkeyEnc "bool
+gdcm::AES::SetkeyEnc(const char *key, unsigned int keysize)
+
+AES key schedule (encryption).
+
+Parameters:
+-----------
+
+key:  encryption key
+
+keysize:  must be 16, 24 or 32
+
+false on error (wrong keysize, key null) ";
+
+%feature("docstring")  gdcm::AES::~AES "gdcm::AES::~AES() ";
+
+
 // File: classstd_1_1allocator.xml
 %feature("docstring") std::allocator "
 
@@ -8,28 +105,20 @@ STL class. ";
 
 
 // File: classgdcm_1_1Anonymizer.xml
-%feature("docstring") gdcm::Anonymizer "
-
-Anonymizer All function calls actually execute the user specified
-request. Previous implementation were calling a general Anonymize
-function but traversing a std::set is O(n) operation, while a simple
-user specified request is O(log(n)) operation. So 'm' user interaction
-is O(m*log(n)) which is < O(n) complexity.
-
-Todo implement the Basic Application Level Confidentiality Profile
-
-C++ includes: gdcmAnonymizer.h ";
+%feature("docstring") gdcm::Anonymizer "C++ includes:
+gdcmAnonymizer.h ";
 
 %feature("docstring")  gdcm::Anonymizer::Anonymizer "gdcm::Anonymizer::Anonymizer() ";
 
 %feature("docstring")
 gdcm::Anonymizer::BasicApplicationLevelConfidentialityProfile "bool
-gdcm::Anonymizer::BasicApplicationLevelConfidentialityProfile()
+gdcm::Anonymizer::BasicApplicationLevelConfidentialityProfile(bool
+deidentify=true)
 
-PS 3.15 E.1.1 De-Identifier An Application may claim conformance to
+PS 3.15 / E.1.1 De-Identifier An Application may claim conformance to
 the Basic Application Level Confidentiality Profile as a deidentifier
 if it protects all Attributes that might be used by unauthorized
-entities to identify the patient. ";
+entities to identify the patient. NOT THREAD SAFE ";
 
 %feature("docstring")  gdcm::Anonymizer::Empty "bool
 gdcm::Anonymizer::Empty(Tag const &t)
@@ -39,6 +128,9 @@ handle SQ element ";
 
 %feature("docstring")  gdcm::Anonymizer::GetFile "File&
 gdcm::Anonymizer::GetFile() ";
+
+%feature("docstring")  gdcm::Anonymizer::GetX509 "const X509*
+gdcm::Anonymizer::GetX509() const ";
 
 %feature("docstring")  gdcm::Anonymizer::Remove "bool
 gdcm::Anonymizer::Remove(Tag const &t)
@@ -54,6 +146,12 @@ Main function that loop over all elements and remove group length. ";
 gdcm::Anonymizer::RemovePrivateTags()
 
 Main function that loop over all elements and remove private tags. ";
+
+%feature("docstring")  gdcm::Anonymizer::RemoveRetired "bool
+gdcm::Anonymizer::RemoveRetired()
+
+Main function that loop over all elements and remove retired element.
+";
 
 %feature("docstring")  gdcm::Anonymizer::Replace "bool
 gdcm::Anonymizer::Replace(Tag const &t, const char *value, VL const
@@ -73,6 +171,13 @@ created: WARNING: this function can only execute if tag is a VRASCII
 gdcm::Anonymizer::SetFile(const File &f)
 
 Set/Get File. ";
+
+%feature("docstring")  gdcm::Anonymizer::SetX509 "void
+gdcm::Anonymizer::SetX509(X509 *x509)
+
+Set/Get AES key that will be used to encrypt the dataset within
+BasicApplicationLevelConfidentialityProfile Warning: set is done by
+copy (not reference) ";
 
 %feature("docstring")  gdcm::Anonymizer::~Anonymizer "gdcm::Anonymizer::~Anonymizer() ";
 
@@ -105,6 +210,17 @@ gdcm::ApplicationEntity::SetBlob(const std::vector< char > &v) ";
 
 %feature("docstring")  gdcm::ApplicationEntity::Squeeze "void
 gdcm::ApplicationEntity::Squeeze() ";
+
+
+// File: classgdcm_1_1ASN1.xml
+%feature("docstring") gdcm::ASN1 "C++ includes: gdcmASN1.h ";
+
+%feature("docstring")  gdcm::ASN1::ASN1 "gdcm::ASN1::ASN1() ";
+
+%feature("docstring")  gdcm::ASN1::TestPBKDF2 "int
+gdcm::ASN1::TestPBKDF2() ";
+
+%feature("docstring")  gdcm::ASN1::~ASN1 "gdcm::ASN1::~ASN1() ";
 
 
 // File: classgdcm_1_1Attribute.xml
@@ -151,7 +267,7 @@ const ";
 gdcm::Attribute< Group, Element, TVR, TVM >::GetValue(unsigned int
 idx=0) const ";
 
-%feature("docstring")  gdcm::Attribute::GetValue "ArrayType
+%feature("docstring")  gdcm::Attribute::GetValue "ArrayType&
 gdcm::Attribute< Group, Element, TVR, TVM >::GetValue(unsigned int
 idx=0) ";
 
@@ -160,6 +276,9 @@ gdcm::Attribute< Group, Element, TVR, TVM >::GetValues() const ";
 
 %feature("docstring")  gdcm::Attribute::Print "void gdcm::Attribute<
 Group, Element, TVR, TVM >::Print(std::ostream &os) const ";
+
+%feature("docstring")  gdcm::Attribute::Set "void gdcm::Attribute<
+Group, Element, TVR, TVM >::Set(DataSet const &ds) ";
 
 %feature("docstring")  gdcm::Attribute::SetFromDataElement "void
 gdcm::Attribute< Group, Element, TVR, TVM
@@ -211,7 +330,7 @@ TVR, VM::VM1_n >::GetNumberOfValues() const ";
 VM::VM1_n >::GetValue(unsigned int idx=0) const ";
 
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_n
->::GetValue " ArrayType gdcm::Attribute< Group, Element, TVR,
+>::GetValue " ArrayType& gdcm::Attribute< Group, Element, TVR,
 VM::VM1_n >::GetValue(unsigned int idx=0) ";
 
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_n
@@ -225,6 +344,10 @@ VM::VM1_n >::GetValues() const ";
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_n
 >::SetFromDataElement " void gdcm::Attribute< Group, Element, TVR,
 VM::VM1_n >::SetFromDataElement(DataElement const &de) ";
+
+%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_n
+>::SetNumberOfValues " void gdcm::Attribute< Group, Element, TVR,
+VM::VM1_n >::SetNumberOfValues(unsigned int numel) ";
 
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_n
 >::SetValue " void gdcm::Attribute< Group, Element, TVR, VM::VM1_n
@@ -325,6 +448,16 @@ STL class. ";
 %feature("docstring") std::bad_typeid "
 
 STL class. ";
+
+
+// File: classgdcm_1_1Base64.xml
+%feature("docstring") gdcm::Base64 "C++ includes: gdcmBase64.h ";
+
+%feature("docstring")  gdcm::Base64::Base64 "gdcm::Base64::Base64()
+";
+
+%feature("docstring")  gdcm::Base64::~Base64 "gdcm::Base64::~Base64()
+";
 
 
 // File: classstd_1_1basic__fstream.xml
@@ -584,6 +717,158 @@ C++ includes: gdcmBasicOffsetTable.h ";
 gdcm::BasicOffsetTable::Read(std::istream &is) ";
 
 
+// File: classgdcm_1_1Bitmap.xml
+%feature("docstring") gdcm::Bitmap "
+
+Bitmap class A bitmap based image. Used as parent for both IconImage
+and the main Pixel Data Image It does not contains any World Space
+information (IPP, IOP).
+
+C++ includes: gdcmBitmap.h ";
+
+%feature("docstring")  gdcm::Bitmap::AreOverlaysInPixelData "virtual
+bool gdcm::Bitmap::AreOverlaysInPixelData() const ";
+
+%feature("docstring")  gdcm::Bitmap::Bitmap "gdcm::Bitmap::Bitmap()
+";
+
+%feature("docstring")  gdcm::Bitmap::Clear "void
+gdcm::Bitmap::Clear() ";
+
+%feature("docstring")  gdcm::Bitmap::GetBuffer "bool
+gdcm::Bitmap::GetBuffer(char *buffer) const
+
+Acces the raw data. ";
+
+%feature("docstring")  gdcm::Bitmap::GetBufferLength "unsigned long
+gdcm::Bitmap::GetBufferLength() const
+
+Return the length of the image after decompression WARNING for palette
+color: It will NOT take into account the Palette Color thus you need
+to multiply this length by 3 if computing the size of equivalent RGB
+image ";
+
+%feature("docstring")  gdcm::Bitmap::GetColumns "unsigned int
+gdcm::Bitmap::GetColumns() const ";
+
+%feature("docstring")  gdcm::Bitmap::GetDataElement "DataElement&
+gdcm::Bitmap::GetDataElement() ";
+
+%feature("docstring")  gdcm::Bitmap::GetDataElement "const
+DataElement& gdcm::Bitmap::GetDataElement() const ";
+
+%feature("docstring")  gdcm::Bitmap::GetDimension "unsigned int
+gdcm::Bitmap::GetDimension(unsigned int idx) const ";
+
+%feature("docstring")  gdcm::Bitmap::GetDimensions "const unsigned
+int* gdcm::Bitmap::GetDimensions() const
+
+Return the dimension of the pixel data, first dimension (x), then 2nd
+(y), then 3rd (z)... ";
+
+%feature("docstring")  gdcm::Bitmap::GetLUT "LookupTable&
+gdcm::Bitmap::GetLUT() ";
+
+%feature("docstring")  gdcm::Bitmap::GetLUT "const LookupTable&
+gdcm::Bitmap::GetLUT() const ";
+
+%feature("docstring")  gdcm::Bitmap::GetNeedByteSwap "bool
+gdcm::Bitmap::GetNeedByteSwap() const ";
+
+%feature("docstring")  gdcm::Bitmap::GetNumberOfDimensions "unsigned
+int gdcm::Bitmap::GetNumberOfDimensions() const
+
+Return the number of dimension of the pixel data bytes; for example 2
+for a 2D matrices of values. ";
+
+%feature("docstring")  gdcm::Bitmap::GetPhotometricInterpretation "const PhotometricInterpretation&
+gdcm::Bitmap::GetPhotometricInterpretation() const
+
+return the photometric interpretation ";
+
+%feature("docstring")  gdcm::Bitmap::GetPixelFormat "PixelFormat&
+gdcm::Bitmap::GetPixelFormat() ";
+
+%feature("docstring")  gdcm::Bitmap::GetPixelFormat "const
+PixelFormat& gdcm::Bitmap::GetPixelFormat() const
+
+Get/Set PixelFormat. ";
+
+%feature("docstring")  gdcm::Bitmap::GetPlanarConfiguration "unsigned
+int gdcm::Bitmap::GetPlanarConfiguration() const
+
+return the planar configuration ";
+
+%feature("docstring")  gdcm::Bitmap::GetRows "unsigned int
+gdcm::Bitmap::GetRows() const ";
+
+%feature("docstring")  gdcm::Bitmap::GetTransferSyntax "const
+TransferSyntax& gdcm::Bitmap::GetTransferSyntax() const ";
+
+%feature("docstring")  gdcm::Bitmap::IsEmpty "bool
+gdcm::Bitmap::IsEmpty() const ";
+
+%feature("docstring")  gdcm::Bitmap::IsLossy "bool
+gdcm::Bitmap::IsLossy() const
+
+Return whether or not the image was compressed using a lossy
+compressor or not Transfer Syntax alone is not sufficient to detect
+that. Warning if the image contains an invalid stream, the return code
+is also 'false' So this call return true only when the following
+combination is true: 1. The image can succefully be read 2. The image
+is indeed lossy ";
+
+%feature("docstring")  gdcm::Bitmap::Print "void
+gdcm::Bitmap::Print(std::ostream &) const ";
+
+%feature("docstring")  gdcm::Bitmap::SetColumns "void
+gdcm::Bitmap::SetColumns(unsigned int col) ";
+
+%feature("docstring")  gdcm::Bitmap::SetDataElement "void
+gdcm::Bitmap::SetDataElement(DataElement const &de) ";
+
+%feature("docstring")  gdcm::Bitmap::SetDimension "void
+gdcm::Bitmap::SetDimension(unsigned int idx, unsigned int dim) ";
+
+%feature("docstring")  gdcm::Bitmap::SetDimensions "void
+gdcm::Bitmap::SetDimensions(const unsigned int dims[3]) ";
+
+%feature("docstring")  gdcm::Bitmap::SetLossyFlag "void
+gdcm::Bitmap::SetLossyFlag(bool f) ";
+
+%feature("docstring")  gdcm::Bitmap::SetLUT "void
+gdcm::Bitmap::SetLUT(LookupTable const &lut)
+
+Set/Get LUT. ";
+
+%feature("docstring")  gdcm::Bitmap::SetNeedByteSwap "void
+gdcm::Bitmap::SetNeedByteSwap(bool b) ";
+
+%feature("docstring")  gdcm::Bitmap::SetNumberOfDimensions "void
+gdcm::Bitmap::SetNumberOfDimensions(unsigned int dim) ";
+
+%feature("docstring")  gdcm::Bitmap::SetPhotometricInterpretation "void
+gdcm::Bitmap::SetPhotometricInterpretation(PhotometricInterpretation
+const &pi) ";
+
+%feature("docstring")  gdcm::Bitmap::SetPixelFormat "void
+gdcm::Bitmap::SetPixelFormat(PixelFormat const &pf) ";
+
+%feature("docstring")  gdcm::Bitmap::SetPlanarConfiguration "void
+gdcm::Bitmap::SetPlanarConfiguration(unsigned int pc) ";
+
+%feature("docstring")  gdcm::Bitmap::SetRows "void
+gdcm::Bitmap::SetRows(unsigned int rows) ";
+
+%feature("docstring")  gdcm::Bitmap::SetTransferSyntax "void
+gdcm::Bitmap::SetTransferSyntax(TransferSyntax const &ts)
+
+Transfer syntax. ";
+
+%feature("docstring")  gdcm::Bitmap::~Bitmap "gdcm::Bitmap::~Bitmap()
+";
+
+
 // File: classstd_1_1bitset.xml
 %feature("docstring") std::bitset "
 
@@ -608,8 +893,8 @@ gdcm::ByteBuffer::Get(int len) ";
 %feature("docstring")  gdcm::ByteBuffer::GetStart "const char*
 gdcm::ByteBuffer::GetStart() const ";
 
-%feature("docstring")  gdcm::ByteBuffer::ShitEnd "void
-gdcm::ByteBuffer::ShitEnd(int len) ";
+%feature("docstring")  gdcm::ByteBuffer::ShiftEnd "void
+gdcm::ByteBuffer::ShiftEnd(int len) ";
 
 %feature("docstring")  gdcm::ByteBuffer::UpdatePosition "void
 gdcm::ByteBuffer::UpdatePosition() ";
@@ -651,14 +936,15 @@ Class to represent binary value (array of bytes).
 
 C++ includes: gdcmByteValue.h ";
 
-%feature("docstring")  gdcm::ByteValue::ByteValue "gdcm::ByteValue::ByteValue(std::ostringstream const &os) ";
-
 %feature("docstring")  gdcm::ByteValue::ByteValue "gdcm::ByteValue::ByteValue(std::vector< char > &v) ";
 
 %feature("docstring")  gdcm::ByteValue::ByteValue "gdcm::ByteValue::ByteValue(const char *array=0, VL const &vl=0) ";
 
 %feature("docstring")  gdcm::ByteValue::Clear "void
 gdcm::ByteValue::Clear() ";
+
+%feature("docstring")  gdcm::ByteValue::Fill "void
+gdcm::ByteValue::Fill(char c) ";
 
 %feature("docstring")  gdcm::ByteValue::GetBuffer "bool
 gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const
@@ -887,7 +1173,8 @@ C++ includes: gdcmCSAHeader.h ";
 %feature("docstring")  gdcm::CSAHeader::FindCSAElementByName "bool
 gdcm::CSAHeader::FindCSAElementByName(const char *name)
 
-Return true if the CSA element matching 'name' is found or not. ";
+Return true if the CSA element matching 'name' is found or not
+WARNING:  Case Sensitive ";
 
 %feature("docstring")  gdcm::CSAHeader::GetCSAElementByName "const
 CSAElement& gdcm::CSAHeader::GetCSAElementByName(const char *name)
@@ -903,7 +1190,12 @@ Return the DataSet output (use only if Format == DATASET_FORMAT ). ";
 %feature("docstring")  gdcm::CSAHeader::GetFormat "CSAHeaderType
 gdcm::CSAHeader::GetFormat() const
 
-return the format of the CSAHeader ";
+return the format of the CSAHeader SV10 and NOMAGIC are equivalent. ";
+
+%feature("docstring")  gdcm::CSAHeader::GetInterfile "const char*
+gdcm::CSAHeader::GetInterfile() const
+
+Return the string output (use only if Format == Interfile). ";
 
 %feature("docstring")  gdcm::CSAHeader::LoadFromDataElement "bool
 gdcm::CSAHeader::LoadFromDataElement(DataElement const &de)
@@ -1104,6 +1396,12 @@ gdcm::DataElement::Clear() ";
 %feature("docstring")  gdcm::DataElement::DataElement "gdcm::DataElement::DataElement(const Tag &t=Tag(0), const VL &vl=0,
 const VR &vr=VR::INVALID) ";
 
+%feature("docstring")  gdcm::DataElement::Empty "void
+gdcm::DataElement::Empty() ";
+
+%feature("docstring")  gdcm::DataElement::GetByteValue "ByteValue*
+gdcm::DataElement::GetByteValue() ";
+
 %feature("docstring")  gdcm::DataElement::GetByteValue "const
 ByteValue* gdcm::DataElement::GetByteValue() const
 
@@ -1193,7 +1491,9 @@ gdcm::DataElement::ReadOrSkip(std::istream &is, std::set< Tag > const
 %feature("docstring")  gdcm::DataElement::SetByteValue "void
 gdcm::DataElement::SetByteValue(const char *array, VL length)
 
-Set the byte value. ";
+Set the byte value WARNING:  user need to read DICOM standard for an
+understanding of: even padding vs space padding By default even
+padding is achieved using  regardless of the of VR ";
 
 %feature("docstring")  gdcm::DataElement::SetTag "void
 gdcm::DataElement::SetTag(const Tag &t)
@@ -1433,11 +1733,17 @@ gdcm::Defs::GetModules() ";
 %feature("docstring")  gdcm::Defs::GetModules "const Modules&
 gdcm::Defs::GetModules() const ";
 
+%feature("docstring")  gdcm::Defs::GetTypeFromTag "Type
+gdcm::Defs::GetTypeFromTag(const File &file, const Tag &tag) const ";
+
 %feature("docstring")  gdcm::Defs::IsEmpty "bool
 gdcm::Defs::IsEmpty() const ";
 
 %feature("docstring")  gdcm::Defs::Verify "bool
 gdcm::Defs::Verify(const DataSet &ds) const ";
+
+%feature("docstring")  gdcm::Defs::Verify "bool
+gdcm::Defs::Verify(const File &file) const ";
 
 %feature("docstring")  gdcm::Defs::~Defs "gdcm::Defs::~Defs() ";
 
@@ -1712,12 +2018,21 @@ class to handle DirectionCosines
 
 C++ includes: gdcmDirectionCosines.h ";
 
+%feature("docstring")  gdcm::DirectionCosines::ComputeDistAlongNormal
+"double gdcm::DirectionCosines::ComputeDistAlongNormal(const double
+ipp[3]) const ";
+
 %feature("docstring")  gdcm::DirectionCosines::Cross "void
 gdcm::DirectionCosines::Cross(double z[3]) const
 
 Compute Cross product. ";
 
-%feature("docstring")  gdcm::DirectionCosines::DirectionCosines "gdcm::DirectionCosines::DirectionCosines(const double *dircos=0) ";
+%feature("docstring")  gdcm::DirectionCosines::CrossDot "double
+gdcm::DirectionCosines::CrossDot(DirectionCosines const &dc) const ";
+
+%feature("docstring")  gdcm::DirectionCosines::DirectionCosines "gdcm::DirectionCosines::DirectionCosines(const double dircos[6]) ";
+
+%feature("docstring")  gdcm::DirectionCosines::DirectionCosines "gdcm::DirectionCosines::DirectionCosines() ";
 
 %feature("docstring")  gdcm::DirectionCosines::Dot "double
 gdcm::DirectionCosines::Dot() const
@@ -1739,6 +2054,9 @@ gdcm::DirectionCosines::Print(std::ostream &) const
 
 Print. ";
 
+%feature("docstring")  gdcm::DirectionCosines::SetFromString "bool
+gdcm::DirectionCosines::SetFromString(const char *str) ";
+
 %feature("docstring")  gdcm::DirectionCosines::~DirectionCosines "gdcm::DirectionCosines::~DirectionCosines() ";
 
 
@@ -1752,7 +2070,10 @@ manipulating directores: basically traversing directories and
 harvesting files
 
 will not take into account unix type hidden file recursive option will
-not look into UNIX type hidden directory (those starting with a .)
+not look into UNIX type hidden directory (those starting with a '.')
+
+Since python or C# provide there own equivalent implementation, in
+which case gdcm::Directory does not make much sense.
 
 C++ includes: gdcmDirectory.h ";
 
@@ -1777,10 +2098,12 @@ Get the name of the toplevel directory. ";
 gdcm::Directory::Load(FilenameType const &name, bool recursive=false)
 
 construct a list of filenames and subdirectory beneath directory: name
-";
+WARNING:  : hidden file and hidden directory are not loaded. ";
 
 %feature("docstring")  gdcm::Directory::Print "void
-gdcm::Directory::Print(std::ostream &_os=std::cout) ";
+gdcm::Directory::Print(std::ostream &os=std::cout)
+
+Print. ";
 
 %feature("docstring")  gdcm::Directory::~Directory "gdcm::Directory::~Directory() ";
 
@@ -1789,6 +2112,16 @@ gdcm::Directory::Print(std::ostream &_os=std::cout) ";
 %feature("docstring") std::domain_error "
 
 STL class. ";
+
+
+// File: classgdcm_1_1DummyValueGenerator.xml
+%feature("docstring") gdcm::DummyValueGenerator "
+
+Class for generating dummy value.
+
+bla
+
+C++ includes: gdcmDummyValueGenerator.h ";
 
 
 // File: classgdcm_1_1Dumper.xml
@@ -1826,6 +2159,9 @@ gdcm::Element< TVR, TVM >::GetValue(unsigned int idx=0) ";
 %feature("docstring")  gdcm::Element::GetValue "const
 VRToType<TVR>::Type& gdcm::Element< TVR, TVM >::GetValue(unsigned int
 idx=0) const ";
+
+%feature("docstring")  gdcm::Element::GetValues "const
+VRToType<TVR>::Type* gdcm::Element< TVR, TVM >::GetValues() const ";
 
 %feature("docstring")  gdcm::Element::Print "void gdcm::Element< TVR,
 TVM >::Print(std::ostream &_os) const ";
@@ -2377,10 +2713,24 @@ are unique.
 
 C++ includes: gdcmFileSet.h ";
 
+%feature("docstring")  gdcm::FileSet::AddFile "bool
+gdcm::FileSet::AddFile(const char *filename)
+
+Add a file 'filename' to the list of files. Return true on success,
+false in case filename could not be found on system. ";
+
 %feature("docstring")  gdcm::FileSet::AddFile "void
-gdcm::FileSet::AddFile(const File &file) ";
+gdcm::FileSet::AddFile(File const &)
+
+Deprecated . Does nothing ";
 
 %feature("docstring")  gdcm::FileSet::FileSet "gdcm::FileSet::FileSet() ";
+
+%feature("docstring")  gdcm::FileSet::GetFiles "FilesType const&
+gdcm::FileSet::GetFiles() const ";
+
+%feature("docstring")  gdcm::FileSet::SetFiles "void
+gdcm::FileSet::SetFiles(FilesType const &files) ";
 
 
 // File: classgdcm_1_1FileWithName.xml
@@ -2428,6 +2778,9 @@ V2.0) images This class is only an adaptor to the gdcm library
 (currently gdcm 2.0 is used):.
 
 http://gdcm.sourceforge.net
+
+WARNING:  this class is deprecated, as gdcm 2.x has been integrated in
+ITK starting ITK 3.12
 
 C++ includes: itkGDCMImageIO2.h ";
 
@@ -2605,17 +2958,17 @@ has been called with a valid file name. ";
 
 Global.
 
-bla Global should be included in any translation unit that will use
-Dict or that implements the singleton pattern. It makes sure that the
-Dict singleton is created before and destroyed after all other
-singletons in VTK.
+Global should be included in any translation unit that will use Dict
+or that implements the singleton pattern. It makes sure that the Dict
+singleton is created before and destroyed after all other singletons
+in GDCM.
 
 C++ includes: gdcmGlobal.h ";
 
 %feature("docstring")  gdcm::Global::Append "bool
 gdcm::Global::Append(const char *path)
 
-Append path at the end of the path list. ";
+Append path at the end of the path list WARNING:  not thread safe ! ";
 
 %feature("docstring")  gdcm::Global::GetDefs "Defs const&
 gdcm::Global::GetDefs() const
@@ -2637,12 +2990,13 @@ gdcm::Global::LoadResourcesFiles()
 
 Load all internal XML files, ressource path need to have been set
 before calling this member function (see Append/Prepend members func)
-";
+WARNING:  not thread safe ! ";
 
 %feature("docstring")  gdcm::Global::Prepend "bool
 gdcm::Global::Prepend(const char *path)
 
-Prepend path at the begining of the path list. ";
+Prepend path at the begining of the path list WARNING:  not thread
+safe ! ";
 
 %feature("docstring")  gdcm::Global::~Global "gdcm::Global::~Global()
 ";
@@ -2671,6 +3025,22 @@ gdcm::GroupDict::GetName(uint16_t num) const ";
 gdcm::GroupDict::Size() const ";
 
 %feature("docstring")  gdcm::GroupDict::~GroupDict "gdcm::GroupDict::~GroupDict() ";
+
+
+// File: classgdcm_1_1HAVEGE.xml
+%feature("docstring") gdcm::HAVEGE "C++ includes: gdcmHAVEGE.h ";
+
+%feature("docstring")  gdcm::HAVEGE::HAVEGE "gdcm::HAVEGE::HAVEGE()
+";
+
+%feature("docstring")  gdcm::HAVEGE::Rand "int gdcm::HAVEGE::Rand()
+
+HAVEGE rand function.
+
+A random int ";
+
+%feature("docstring")  gdcm::HAVEGE::~HAVEGE "gdcm::HAVEGE::~HAVEGE()
+";
 
 
 // File: classstd_1_1ifstream.xml
@@ -2702,19 +3072,6 @@ concept)
 
 C++ includes: gdcmImage.h ";
 
-%feature("docstring")  gdcm::Image::AreOverlaysInPixelData "bool
-gdcm::Image::AreOverlaysInPixelData() const
-
-returns if Overlays are stored in the unused bit of the pixel data: ";
-
-%feature("docstring")  gdcm::Image::GetCurve "const Curve&
-gdcm::Image::GetCurve(unsigned int i=0) const ";
-
-%feature("docstring")  gdcm::Image::GetCurve "Curve&
-gdcm::Image::GetCurve(unsigned int i=0)
-
-Curve: group 50xx. ";
-
 %feature("docstring")  gdcm::Image::GetDirectionCosines "double
 gdcm::Image::GetDirectionCosines(unsigned int idx) const ";
 
@@ -2725,22 +3082,8 @@ Return a 6-tuples specifying the direction cosines A default value of
 (1,0,0,0,1,0) will be return when the direction cosines was not
 specified. ";
 
-%feature("docstring")  gdcm::Image::GetIconImage "IconImage&
-gdcm::Image::GetIconImage() ";
-
-%feature("docstring")  gdcm::Image::GetIconImage "const IconImage&
-gdcm::Image::GetIconImage() const
-
-Set/Get Icon Image. ";
-
 %feature("docstring")  gdcm::Image::GetIntercept "double
 gdcm::Image::GetIntercept() const ";
-
-%feature("docstring")  gdcm::Image::GetNumberOfCurves "unsigned int
-gdcm::Image::GetNumberOfCurves() const ";
-
-%feature("docstring")  gdcm::Image::GetNumberOfOverlays "unsigned int
-gdcm::Image::GetNumberOfOverlays() const ";
 
 %feature("docstring")  gdcm::Image::GetOrigin "double
 gdcm::Image::GetOrigin(unsigned int idx) const ";
@@ -2750,14 +3093,6 @@ gdcm::Image::GetOrigin() const
 
 Return a 3-tuples specifying the origin Will return (0,0,0) if the
 origin was not specified. ";
-
-%feature("docstring")  gdcm::Image::GetOverlay "const Overlay&
-gdcm::Image::GetOverlay(unsigned int i=0) const ";
-
-%feature("docstring")  gdcm::Image::GetOverlay "Overlay&
-gdcm::Image::GetOverlay(unsigned int i=0)
-
-Overlay: group 60xx. ";
 
 %feature("docstring")  gdcm::Image::GetSlope "double
 gdcm::Image::GetSlope() const ";
@@ -2798,12 +3133,6 @@ gdcm::Image::SetDirectionCosines(const float *dircos) ";
 gdcm::Image::SetIntercept(double intercept)
 
 intercept ";
-
-%feature("docstring")  gdcm::Image::SetNumberOfCurves "void
-gdcm::Image::SetNumberOfCurves(unsigned int n) ";
-
-%feature("docstring")  gdcm::Image::SetNumberOfOverlays "void
-gdcm::Image::SetNumberOfOverlays(unsigned int n) ";
 
 %feature("docstring")  gdcm::Image::SetOrigin "void
 gdcm::Image::SetOrigin(unsigned int idx, double ori) ";
@@ -2932,6 +3261,10 @@ gdcm::ImageChangePlanarConfiguration::~ImageChangePlanarConfiguration
 ImageChangeTransferSyntax class Class to change the transfer syntax of
 an input DICOM.
 
+If only Force param is set but no input TransferSyntax is set, it is
+assumed that user only wants to inspect encapsulated stream (advanced
+dev. option).
+
 C++ includes: gdcmImageChangeTransferSyntax.h ";
 
 %feature("docstring")  gdcm::ImageChangeTransferSyntax::Change "bool
@@ -2999,6 +3332,10 @@ Decode. ";
 %feature("docstring")  gdcm::ImageCodec::GetDimensions "const
 unsigned int* gdcm::ImageCodec::GetDimensions() const ";
 
+%feature("docstring")  gdcm::ImageCodec::GetHeaderInfo "virtual bool
+gdcm::ImageCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+";
+
 %feature("docstring")  gdcm::ImageCodec::GetLUT "const LookupTable&
 gdcm::ImageCodec::GetLUT() const ";
 
@@ -3015,6 +3352,9 @@ PixelFormat& gdcm::ImageCodec::GetPixelFormat() const ";
 %feature("docstring")  gdcm::ImageCodec::GetPlanarConfiguration "unsigned int gdcm::ImageCodec::GetPlanarConfiguration() const ";
 
 %feature("docstring")  gdcm::ImageCodec::ImageCodec "gdcm::ImageCodec::ImageCodec() ";
+
+%feature("docstring")  gdcm::ImageCodec::IsLossy "bool
+gdcm::ImageCodec::IsLossy() const ";
 
 %feature("docstring")  gdcm::ImageCodec::SetDimensions "void
 gdcm::ImageCodec::SetDimensions(const unsigned int *d) ";
@@ -3119,11 +3459,11 @@ approach to image where MR Image Storage are distinct object from
 Enhanced MR Image Storage. For example the Pixel Spacing in one object
 is not at the same position (ie Tag) as in the other this class is the
 central (read: fragile) place where all the dispatching is done from a
-united view of a world image (typically VTK or ITK point of view) down
-to the low level DICOM point of view.
+unified view of a world image (typically VTK or ITK point of view)
+down to the low level DICOM point of view.
 
-WARNING:  : do not expect the API of this class to be maintain at any
-point, since as Modalities are added the API might have to be
+WARNING:  : do not expect the API of this class to be maintained at
+any point, since as Modalities are added the API might have to be
 augmented or behavior changed to cope with new modalities.
 
 C++ includes: gdcmImageHelper.h ";
@@ -3136,19 +3476,9 @@ ImageReader.
 
 its role is to convert the DICOM DataSet into a gdcm::Image
 representation By default it is also loading the lookup table and
-overlay when found as they impact the rendering or the image Todo old
-gdcm 1.X used to have in its dictionary:
-
-0028 0015 US 1 UsedNbX ACR Special (RET)
-
-0028 0016 US 1 UsedNbY ACR Special (RET)
-
-0028 0017 US 1 UsedNbZ ACR Special (RET)
-
-0028 0018 US 1 UsedNbT ACR Special (RET)
-
-since I cannot find them *anywhere* I'll have to hard code them
-directly in a specific libido image reader
+overlay when found as they impact the rendering or the image  See PS
+3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of
+attribute that belong to what gdcm calls a 'Image'
 
 C++ includes: gdcmImageReader.h ";
 
@@ -3167,7 +3497,7 @@ gdcm::ImageReader::Read()
 
 Read the DICOM image. There are two reason for failure: 1. The input
 filename is not DICOM 2. The input DICOM file does not contains an
-Image ";
+Image. ";
 
 %feature("docstring")  gdcm::ImageReader::~ImageReader "gdcm::ImageReader::~ImageReader() ";
 
@@ -3186,11 +3516,6 @@ Image& gdcm::ImageToImageFilter::GetOutput() const
 Get Output image. ";
 
 %feature("docstring")  gdcm::ImageToImageFilter::ImageToImageFilter "gdcm::ImageToImageFilter::ImageToImageFilter() ";
-
-%feature("docstring")  gdcm::ImageToImageFilter::SetInput "void
-gdcm::ImageToImageFilter::SetInput(const Image &image)
-
-Set input image. ";
 
 %feature("docstring")  gdcm::ImageToImageFilter::~ImageToImageFilter "gdcm::ImageToImageFilter::~ImageToImageFilter() ";
 
@@ -3212,9 +3537,6 @@ Set/Get Image to be written It will overwrite anything Image infos
 found in DataSet (see parent class to see how to pass dataset) ";
 
 %feature("docstring")  gdcm::ImageWriter::ImageWriter "gdcm::ImageWriter::ImageWriter() ";
-
-%feature("docstring")  gdcm::ImageWriter::SetImage "void
-gdcm::ImageWriter::SetImage(Image const &img) ";
 
 %feature("docstring")  gdcm::ImageWriter::Write "bool
 gdcm::ImageWriter::Write()
@@ -3395,8 +3717,10 @@ gdcm::IPPSorter::GetZSpacing() const
 
 Read-only function to provide access to the computed value for the
 Z-Spacing The ComputeZSpacing must have been set to true before
-execution of sort algorithm Z-Spacing will be 0 on 2 occsasions: 1.
-Sorting simply failed, potentially duplicate IPP => ZSpacing = 0 2.
+execution of sort algorithm. Call this function *after* calling
+Sort(); Z-Spacing will be 0 on 2 occasions: Sorting simply failed,
+potentially duplicate IPP => ZSpacing = 0
+
 ZSpacing could not be computed (Z-Spacing is not constant, or
 ZTolerance is too low) ";
 
@@ -3464,6 +3788,9 @@ Representation Sequence of Items. An Item contains a Data Set.
 C++ includes: gdcmItem.h ";
 
 %feature("docstring")  gdcm::Item::Clear "void gdcm::Item::Clear() ";
+
+%feature("docstring")  gdcm::Item::FindDataElement "bool
+gdcm::Item::FindDataElement(const Tag &t) const ";
 
 %feature("docstring")  gdcm::Item::GetDataElement "const DataElement&
 gdcm::Item::GetDataElement(const Tag &t) const ";
@@ -3685,10 +4012,22 @@ Decode. ";
 gdcm::JPEGCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 ";
 
+%feature("docstring")  gdcm::JPEGCodec::GetLossless "bool
+gdcm::JPEGCodec::GetLossless() const ";
+
+%feature("docstring")  gdcm::JPEGCodec::GetQuality "double
+gdcm::JPEGCodec::GetQuality() const ";
+
 %feature("docstring")  gdcm::JPEGCodec::JPEGCodec "gdcm::JPEGCodec::JPEGCodec() ";
+
+%feature("docstring")  gdcm::JPEGCodec::SetLossless "void
+gdcm::JPEGCodec::SetLossless(bool l) ";
 
 %feature("docstring")  gdcm::JPEGCodec::SetPixelFormat "void
 gdcm::JPEGCodec::SetPixelFormat(PixelFormat const &pf) ";
+
+%feature("docstring")  gdcm::JPEGCodec::SetQuality "void
+gdcm::JPEGCodec::SetQuality(double q) ";
 
 %feature("docstring")  gdcm::JPEGCodec::~JPEGCodec "gdcm::JPEGCodec::~JPEGCodec() ";
 
@@ -3698,8 +4037,8 @@ gdcm::JPEGCodec::SetPixelFormat(PixelFormat const &pf) ";
 
 JPEG-LS.
 
-codec that implement the JPEG-LS compression this is an implement of
-ImageCodec for JPEG-LS
+codec that implement the JPEG-LS compression this is an implementation
+of ImageCodec for JPEG-LS  It uses the CharLS JPEG-LS implementation
 
 C++ includes: gdcmJPEGLSCodec.h ";
 
@@ -3936,6 +4275,14 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classgdcm_1_1MD5.xml
+%feature("docstring") gdcm::MD5 "C++ includes: gdcmMD5.h ";
+
+%feature("docstring")  gdcm::MD5::MD5 "gdcm::MD5::MD5() ";
+
+%feature("docstring")  gdcm::MD5::~MD5 "gdcm::MD5::~MD5() ";
+
+
 // File: classgdcm_1_1MediaStorage.xml
 %feature("docstring") gdcm::MediaStorage "
 
@@ -3944,7 +4291,7 @@ MediaStorage.
 FIXME There should not be any notion of Image and/or PDF at that point
 Only the codec can answer yes I support this Media Storage or not...
 For instance an ImageCodec will answer yes to most of them while a
-PDFCodec will answer only for the Encaplusated PDF
+PDFCodec will answer only for the Encapsulated PDF
 
 C++ includes: gdcmMediaStorage.h ";
 
@@ -3963,22 +4310,25 @@ gdcm::MediaStorage::IsUndefined() const ";
 
 %feature("docstring")  gdcm::MediaStorage::MediaStorage "gdcm::MediaStorage::MediaStorage(MSType type=MS_END) ";
 
-%feature("docstring")  gdcm::MediaStorage::SetFromDataSet "void
-gdcm::MediaStorage::SetFromDataSet(DataSet const &ds, bool
-guess=false) ";
+%feature("docstring")  gdcm::MediaStorage::SetFromDataSet "bool
+gdcm::MediaStorage::SetFromDataSet(DataSet const &ds)
 
-%feature("docstring")  gdcm::MediaStorage::SetFromFile "void
-gdcm::MediaStorage::SetFromFile(File const &file) ";
+Advanced user only (functions should be protected level...) Those
+function are lower level than SetFromFile ";
 
-%feature("docstring")  gdcm::MediaStorage::SetFromHeader "void
+%feature("docstring")  gdcm::MediaStorage::SetFromFile "bool
+gdcm::MediaStorage::SetFromFile(File const &file)
+
+Attempt to set the MediaStorage from a file: WARNING: When no
+MediaStorage & Modality are found BUT a PixelData element is found
+then MediaStorage is set to the default SecondaryCaptureImageStorage
+(return value is false in this case) ";
+
+%feature("docstring")  gdcm::MediaStorage::SetFromHeader "bool
 gdcm::MediaStorage::SetFromHeader(FileMetaInformation const &fmi) ";
 
-%feature("docstring")  gdcm::MediaStorage::SetFromModality "void
+%feature("docstring")  gdcm::MediaStorage::SetFromModality "bool
 gdcm::MediaStorage::SetFromModality(DataSet const &ds) ";
-
-%feature("docstring")  gdcm::MediaStorage::SetFromSourceImageSequence
-"void gdcm::MediaStorage::SetFromSourceImageSequence(DataSet const
-&ds) ";
 
 
 // File: classgdcm_1_1Module.xml
@@ -4011,6 +4361,9 @@ gdcm::Module::End() ";
 
 %feature("docstring")  gdcm::Module::End "ConstIterator
 gdcm::Module::End() const ";
+
+%feature("docstring")  gdcm::Module::FindModuleEntry "bool
+gdcm::Module::FindModuleEntry(const Tag &tag) const ";
 
 %feature("docstring")  gdcm::Module::GetModuleEntry "const
 ModuleEntry& gdcm::Module::GetModuleEntry(const Tag &tag) const ";
@@ -4318,7 +4671,7 @@ get type ";
 %feature("docstring")  gdcm::Overlay::GetUnpackBuffer "bool
 gdcm::Overlay::GetUnpackBuffer(unsigned char *buffer) const ";
 
-%feature("docstring")  gdcm::Overlay::GrabOverlayFromPixelData "void
+%feature("docstring")  gdcm::Overlay::GrabOverlayFromPixelData "bool
 gdcm::Overlay::GrabOverlayFromPixelData(DataSet const &ds) ";
 
 %feature("docstring")  gdcm::Overlay::IsEmpty "bool
@@ -4605,8 +4958,23 @@ Class to represent an PhotometricInterpretation.
 C++ includes: gdcmPhotometricInterpretation.h ";
 
 %feature("docstring")
-gdcm::PhotometricInterpretation::GetSamplesPerPixel "int
-gdcm::PhotometricInterpretation::GetSamplesPerPixel() ";
+gdcm::PhotometricInterpretation::GetSamplesPerPixel "unsigned short
+gdcm::PhotometricInterpretation::GetSamplesPerPixel() const
+
+return the value for Sample Per Pixel associated with a particular
+Photometric Interpretation ";
+
+%feature("docstring")  gdcm::PhotometricInterpretation::GetString "const char* gdcm::PhotometricInterpretation::GetString() const ";
+
+%feature("docstring")  gdcm::PhotometricInterpretation::IsLossless "bool gdcm::PhotometricInterpretation::IsLossless() const ";
+
+%feature("docstring")  gdcm::PhotometricInterpretation::IsLossy "bool
+gdcm::PhotometricInterpretation::IsLossy() const ";
+
+%feature("docstring")
+gdcm::PhotometricInterpretation::IsSameColorSpace "bool
+gdcm::PhotometricInterpretation::IsSameColorSpace(PhotometricInterpretation
+const &pi) const ";
 
 %feature("docstring")
 gdcm::PhotometricInterpretation::PhotometricInterpretation "gdcm::PhotometricInterpretation::PhotometricInterpretation(PIType
@@ -4663,7 +5031,13 @@ PixelRepresentation. ";
 %feature("docstring")  gdcm::PixelFormat::GetPixelSize "uint8_t
 gdcm::PixelFormat::GetPixelSize() const
 
-return the size of the pixel ";
+return the size of the pixel This is the number of words it would take
+to store one pixel WARNING:  the return value takes into account the
+SamplesPerPixel
+
+in the rare case when BitsAllocated == 12, the function assume word
+padding and value returned will be identical as if BitsAllocated == 16
+";
 
 %feature("docstring")  gdcm::PixelFormat::GetSamplesPerPixel "unsigned short gdcm::PixelFormat::GetSamplesPerPixel() const
 
@@ -4716,81 +5090,40 @@ information (IPP, IOP).
 
 C++ includes: gdcmPixmap.h ";
 
-%feature("docstring")  gdcm::Pixmap::AreOverlaysInPixelData "virtual
-bool gdcm::Pixmap::AreOverlaysInPixelData() const ";
+%feature("docstring")  gdcm::Pixmap::AreOverlaysInPixelData "bool
+gdcm::Pixmap::AreOverlaysInPixelData() const
 
-%feature("docstring")  gdcm::Pixmap::Clear "void
-gdcm::Pixmap::Clear() ";
+returns if Overlays are stored in the unused bit of the pixel data: ";
 
-%feature("docstring")  gdcm::Pixmap::GetBuffer "bool
-gdcm::Pixmap::GetBuffer(char *buffer) const
+%feature("docstring")  gdcm::Pixmap::GetCurve "const Curve&
+gdcm::Pixmap::GetCurve(unsigned int i=0) const ";
 
-Acces the raw data. ";
+%feature("docstring")  gdcm::Pixmap::GetCurve "Curve&
+gdcm::Pixmap::GetCurve(unsigned int i=0)
 
-%feature("docstring")  gdcm::Pixmap::GetBufferLength "unsigned long
-gdcm::Pixmap::GetBufferLength() const
+Curve: group 50xx. ";
 
-Return the length of the image after decompression WARNING for palette
-color: It will NOT take into account the Palette Color thus you need
-to multiply this length by 3 if the image is RGB for instance. ";
+%feature("docstring")  gdcm::Pixmap::GetIconImage "IconImage&
+gdcm::Pixmap::GetIconImage() ";
 
-%feature("docstring")  gdcm::Pixmap::GetColumns "unsigned int
-gdcm::Pixmap::GetColumns() const ";
+%feature("docstring")  gdcm::Pixmap::GetIconImage "const IconImage&
+gdcm::Pixmap::GetIconImage() const
 
-%feature("docstring")  gdcm::Pixmap::GetDataElement "DataElement&
-gdcm::Pixmap::GetDataElement() ";
+Set/Get Icon Image. ";
 
-%feature("docstring")  gdcm::Pixmap::GetDataElement "const
-DataElement& gdcm::Pixmap::GetDataElement() const ";
+%feature("docstring")  gdcm::Pixmap::GetNumberOfCurves "unsigned int
+gdcm::Pixmap::GetNumberOfCurves() const ";
 
-%feature("docstring")  gdcm::Pixmap::GetDimension "unsigned int
-gdcm::Pixmap::GetDimension(unsigned int idx) const ";
+%feature("docstring")  gdcm::Pixmap::GetNumberOfOverlays "unsigned
+int gdcm::Pixmap::GetNumberOfOverlays() const ";
 
-%feature("docstring")  gdcm::Pixmap::GetDimensions "const unsigned
-int* gdcm::Pixmap::GetDimensions() const
+%feature("docstring")  gdcm::Pixmap::GetOverlay "const Overlay&
+gdcm::Pixmap::GetOverlay(unsigned int i=0) const ";
 
-Return the dimension of the pixel data, first dimension (x), then 2nd
-(y), then 3rd (z)... ";
+%feature("docstring")  gdcm::Pixmap::GetOverlay "Overlay&
+gdcm::Pixmap::GetOverlay(unsigned int i=0)
 
-%feature("docstring")  gdcm::Pixmap::GetLUT "LookupTable&
-gdcm::Pixmap::GetLUT() ";
-
-%feature("docstring")  gdcm::Pixmap::GetLUT "const LookupTable&
-gdcm::Pixmap::GetLUT() const ";
-
-%feature("docstring")  gdcm::Pixmap::GetNeedByteSwap "bool
-gdcm::Pixmap::GetNeedByteSwap() const ";
-
-%feature("docstring")  gdcm::Pixmap::GetNumberOfDimensions "unsigned
-int gdcm::Pixmap::GetNumberOfDimensions() const
-
-Return the number of dimension of the pixel data bytes; for example 2
-for a 2D matrices of values. ";
-
-%feature("docstring")  gdcm::Pixmap::GetPhotometricInterpretation "const PhotometricInterpretation&
-gdcm::Pixmap::GetPhotometricInterpretation() const
-
-return the photometric interpretation ";
-
-%feature("docstring")  gdcm::Pixmap::GetPixelFormat "PixelFormat&
-gdcm::Pixmap::GetPixelFormat() ";
-
-%feature("docstring")  gdcm::Pixmap::GetPixelFormat "const
-PixelFormat& gdcm::Pixmap::GetPixelFormat() const ";
-
-%feature("docstring")  gdcm::Pixmap::GetPlanarConfiguration "unsigned
-int gdcm::Pixmap::GetPlanarConfiguration() const
-
-return the planar configuration ";
-
-%feature("docstring")  gdcm::Pixmap::GetRows "unsigned int
-gdcm::Pixmap::GetRows() const ";
-
-%feature("docstring")  gdcm::Pixmap::GetTransferSyntax "const
-TransferSyntax& gdcm::Pixmap::GetTransferSyntax() const ";
-
-%feature("docstring")  gdcm::Pixmap::IsEmpty "bool
-gdcm::Pixmap::IsEmpty() const ";
+Overlay: group 60xx. ";
 
 %feature("docstring")  gdcm::Pixmap::Pixmap "gdcm::Pixmap::Pixmap()
 ";
@@ -4798,49 +5131,138 @@ gdcm::Pixmap::IsEmpty() const ";
 %feature("docstring")  gdcm::Pixmap::Print "void
 gdcm::Pixmap::Print(std::ostream &) const ";
 
-%feature("docstring")  gdcm::Pixmap::SetColumns "void
-gdcm::Pixmap::SetColumns(unsigned int col) ";
+%feature("docstring")  gdcm::Pixmap::SetNumberOfCurves "void
+gdcm::Pixmap::SetNumberOfCurves(unsigned int n) ";
 
-%feature("docstring")  gdcm::Pixmap::SetDataElement "void
-gdcm::Pixmap::SetDataElement(DataElement const &de) ";
-
-%feature("docstring")  gdcm::Pixmap::SetDimension "void
-gdcm::Pixmap::SetDimension(unsigned int idx, unsigned int dim) ";
-
-%feature("docstring")  gdcm::Pixmap::SetDimensions "void
-gdcm::Pixmap::SetDimensions(const unsigned int *dims) ";
-
-%feature("docstring")  gdcm::Pixmap::SetLUT "void
-gdcm::Pixmap::SetLUT(LookupTable const &lut)
-
-Set/Get LUT. ";
-
-%feature("docstring")  gdcm::Pixmap::SetNeedByteSwap "void
-gdcm::Pixmap::SetNeedByteSwap(bool b) ";
-
-%feature("docstring")  gdcm::Pixmap::SetNumberOfDimensions "void
-gdcm::Pixmap::SetNumberOfDimensions(unsigned int dim) ";
-
-%feature("docstring")  gdcm::Pixmap::SetPhotometricInterpretation "void
-gdcm::Pixmap::SetPhotometricInterpretation(PhotometricInterpretation
-const &pi) ";
-
-%feature("docstring")  gdcm::Pixmap::SetPixelFormat "void
-gdcm::Pixmap::SetPixelFormat(PixelFormat const &pf) ";
-
-%feature("docstring")  gdcm::Pixmap::SetPlanarConfiguration "void
-gdcm::Pixmap::SetPlanarConfiguration(unsigned int pc) ";
-
-%feature("docstring")  gdcm::Pixmap::SetRows "void
-gdcm::Pixmap::SetRows(unsigned int rows) ";
-
-%feature("docstring")  gdcm::Pixmap::SetTransferSyntax "void
-gdcm::Pixmap::SetTransferSyntax(TransferSyntax const &ts)
-
-Transfer syntax. ";
+%feature("docstring")  gdcm::Pixmap::SetNumberOfOverlays "void
+gdcm::Pixmap::SetNumberOfOverlays(unsigned int n) ";
 
 %feature("docstring")  gdcm::Pixmap::~Pixmap "gdcm::Pixmap::~Pixmap()
 ";
+
+
+// File: classgdcm_1_1PixmapReader.xml
+%feature("docstring") gdcm::PixmapReader "
+
+PixmapReader.
+
+its role is to convert the DICOM DataSet into a gdcm::Pixmap
+representation By default it is also loading the lookup table and
+overlay when found as they impact the rendering or the image  See PS
+3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of
+attribute that belong to what gdcm calls a 'Pixmap'
+
+C++ includes: gdcmPixmapReader.h ";
+
+%feature("docstring")  gdcm::PixmapReader::GetPixmap "Pixmap&
+gdcm::PixmapReader::GetPixmap() ";
+
+%feature("docstring")  gdcm::PixmapReader::GetPixmap "const Pixmap&
+gdcm::PixmapReader::GetPixmap() const
+
+Return the read image. ";
+
+%feature("docstring")  gdcm::PixmapReader::PixmapReader "gdcm::PixmapReader::PixmapReader() ";
+
+%feature("docstring")  gdcm::PixmapReader::Read "bool
+gdcm::PixmapReader::Read()
+
+Read the DICOM image. There are two reason for failure: 1. The input
+filename is not DICOM 2. The input DICOM file does not contains an
+Pixmap. ";
+
+%feature("docstring")  gdcm::PixmapReader::~PixmapReader "gdcm::PixmapReader::~PixmapReader() ";
+
+
+// File: classgdcm_1_1PixmapToPixmapFilter.xml
+%feature("docstring") gdcm::PixmapToPixmapFilter "
+
+PixmapToPixmapFilter class Super class for all filter taking an image
+and producing an output image.
+
+C++ includes: gdcmPixmapToPixmapFilter.h ";
+
+%feature("docstring")  gdcm::PixmapToPixmapFilter::GetOutput "const
+Pixmap& gdcm::PixmapToPixmapFilter::GetOutput() const
+
+Get Output image. ";
+
+%feature("docstring")
+gdcm::PixmapToPixmapFilter::PixmapToPixmapFilter "gdcm::PixmapToPixmapFilter::PixmapToPixmapFilter() ";
+
+%feature("docstring")  gdcm::PixmapToPixmapFilter::SetInput "void
+gdcm::PixmapToPixmapFilter::SetInput(const Pixmap &image)
+
+Set input image. ";
+
+%feature("docstring")
+gdcm::PixmapToPixmapFilter::~PixmapToPixmapFilter "gdcm::PixmapToPixmapFilter::~PixmapToPixmapFilter() ";
+
+
+// File: classgdcm_1_1PixmapWriter.xml
+%feature("docstring") gdcm::PixmapWriter "
+
+PixmapWriter.
+
+C++ includes: gdcmPixmapWriter.h ";
+
+%feature("docstring")  gdcm::PixmapWriter::GetImage "virtual Pixmap&
+gdcm::PixmapWriter::GetImage() ";
+
+%feature("docstring")  gdcm::PixmapWriter::GetImage "virtual const
+Pixmap& gdcm::PixmapWriter::GetImage() const
+
+Set/Get Pixmap to be written It will overwrite anything Pixmap infos
+found in DataSet (see parent class to see how to pass dataset) ";
+
+%feature("docstring")  gdcm::PixmapWriter::GetPixmap "Pixmap&
+gdcm::PixmapWriter::GetPixmap() ";
+
+%feature("docstring")  gdcm::PixmapWriter::GetPixmap "const Pixmap&
+gdcm::PixmapWriter::GetPixmap() const ";
+
+%feature("docstring")  gdcm::PixmapWriter::PixmapWriter "gdcm::PixmapWriter::PixmapWriter() ";
+
+%feature("docstring")  gdcm::PixmapWriter::SetImage "virtual void
+gdcm::PixmapWriter::SetImage(Pixmap const &img) ";
+
+%feature("docstring")  gdcm::PixmapWriter::SetPixmap "void
+gdcm::PixmapWriter::SetPixmap(Pixmap const &img) ";
+
+%feature("docstring")  gdcm::PixmapWriter::Write "bool
+gdcm::PixmapWriter::Write()
+
+Write. ";
+
+%feature("docstring")  gdcm::PixmapWriter::~PixmapWriter "gdcm::PixmapWriter::~PixmapWriter() ";
+
+
+// File: classgdcm_1_1PKCS7.xml
+%feature("docstring") gdcm::PKCS7 "C++ includes: gdcmPKCS7.h ";
+
+%feature("docstring")  gdcm::PKCS7::Decrypt "bool
+gdcm::PKCS7::Decrypt(char *output, size_t &outlen, const char *array,
+size_t len) const ";
+
+%feature("docstring")  gdcm::PKCS7::Encrypt "bool
+gdcm::PKCS7::Encrypt(char *output, size_t &outlen, const char *array,
+size_t len) const ";
+
+%feature("docstring")  gdcm::PKCS7::GetCertificate "const X509*
+gdcm::PKCS7::GetCertificate() const ";
+
+%feature("docstring")  gdcm::PKCS7::GetCipherType "CipherTypes
+gdcm::PKCS7::GetCipherType() const ";
+
+%feature("docstring")  gdcm::PKCS7::PKCS7 "gdcm::PKCS7::PKCS7() ";
+
+%feature("docstring")  gdcm::PKCS7::SetCertificate "void
+gdcm::PKCS7::SetCertificate(X509 *cert) ";
+
+%feature("docstring")  gdcm::PKCS7::SetCipherType "void
+gdcm::PKCS7::SetCipherType(CipherTypes type) ";
+
+%feature("docstring")  gdcm::PKCS7::~PKCS7 "gdcm::PKCS7::~PKCS7() ";
 
 
 // File: classgdcm_1_1PNMCodec.xml
@@ -4867,6 +5289,9 @@ it). ";
 
 %feature("docstring")  gdcm::PNMCodec::GetBufferLength "unsigned long
 gdcm::PNMCodec::GetBufferLength() const ";
+
+%feature("docstring")  gdcm::PNMCodec::GetHeaderInfo "bool
+gdcm::PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts) ";
 
 %feature("docstring")  gdcm::PNMCodec::PNMCodec "gdcm::PNMCodec::PNMCodec() ";
 
@@ -5047,25 +5472,6 @@ Decode. ";
 %feature("docstring")  gdcm::PVRGCodec::~PVRGCodec "gdcm::PVRGCodec::~PVRGCodec() ";
 
 
-// File: classgdcm_1_1PythonDataSet.xml
-%feature("docstring") gdcm::PythonDataSet "C++ includes:
-gdcmDataSet.h ";
-
-%feature("docstring")  gdcm::PythonDataSet::GetCurrent "const
-DataElement& gdcm::PythonDataSet::GetCurrent() const ";
-
-%feature("docstring")  gdcm::PythonDataSet::IsAtEnd "bool
-gdcm::PythonDataSet::IsAtEnd() const ";
-
-%feature("docstring")  gdcm::PythonDataSet::Next "void
-gdcm::PythonDataSet::Next() ";
-
-%feature("docstring")  gdcm::PythonDataSet::PythonDataSet "gdcm::PythonDataSet::PythonDataSet(DataSet &des) ";
-
-%feature("docstring")  gdcm::PythonDataSet::Start "void
-gdcm::PythonDataSet::Start() ";
-
-
 // File: classgdcm_1_1PythonFilter.xml
 %feature("docstring") gdcm::PythonFilter "
 
@@ -5097,33 +5503,6 @@ gdcm::PythonFilter::ToPyObject(const Tag &t) const ";
 gdcm::PythonFilter::UseDictAlways(bool use) ";
 
 %feature("docstring")  gdcm::PythonFilter::~PythonFilter "gdcm::PythonFilter::~PythonFilter() ";
-
-
-// File: classgdcm_1_1PythonTagToValue.xml
-%feature("docstring") gdcm::PythonTagToValue "C++ includes:
-gdcmScanner.h ";
-
-%feature("docstring")  gdcm::PythonTagToValue::GetCurrent "const
-Scanner::TagToValueValueType& gdcm::PythonTagToValue::GetCurrent()
-const ";
-
-%feature("docstring")  gdcm::PythonTagToValue::GetCurrentTag "const
-Tag& gdcm::PythonTagToValue::GetCurrentTag() const ";
-
-%feature("docstring")  gdcm::PythonTagToValue::GetCurrentValue "const
-char* gdcm::PythonTagToValue::GetCurrentValue() const ";
-
-%feature("docstring")  gdcm::PythonTagToValue::IsAtEnd "bool
-gdcm::PythonTagToValue::IsAtEnd() const ";
-
-%feature("docstring")  gdcm::PythonTagToValue::Next "void
-gdcm::PythonTagToValue::Next() ";
-
-%feature("docstring")  gdcm::PythonTagToValue::PythonTagToValue "gdcm::PythonTagToValue::PythonTagToValue(Scanner::TagToValue const
-&t2v) ";
-
-%feature("docstring")  gdcm::PythonTagToValue::Start "void
-gdcm::PythonTagToValue::Start() ";
 
 
 // File: classstd_1_1queue.xml
@@ -5166,6 +5545,9 @@ Code. ";
 gdcm::RAWCodec::Decode(DataElement const &is, DataElement &os)
 
 Decode. ";
+
+%feature("docstring")  gdcm::RAWCodec::GetHeaderInfo "bool
+gdcm::RAWCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts) ";
 
 %feature("docstring")  gdcm::RAWCodec::RAWCodec "gdcm::RAWCodec::RAWCodec() ";
 
@@ -5235,6 +5617,13 @@ gdcm::Reader::~Reader() ";
 %feature("docstring") gdcm::Rescaler "
 
 Rescale class.
+
+WARNING:  internally any time a floating point value is found either
+in the Rescale Slope or the Rescale Intercept it is assumed that the
+best matching output pixel type if FLOAT64 in previous implementation
+it was FLOAT32. Because VR:DS is closer to a 64bits floating point
+type FLOAT64 is thus a best matching pixel type for the floating point
+transformation.
 
 handle floating point transformation back and forth to integer
 properly (no loss)
@@ -5328,6 +5717,9 @@ Decode. ";
 %feature("docstring")  gdcm::RLECodec::GetBufferLength "unsigned long
 gdcm::RLECodec::GetBufferLength() const ";
 
+%feature("docstring")  gdcm::RLECodec::GetHeaderInfo "bool
+gdcm::RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts) ";
+
 %feature("docstring")  gdcm::RLECodec::RLECodec "gdcm::RLECodec::RLECodec() ";
 
 %feature("docstring")  gdcm::RLECodec::SetBufferLength "void
@@ -5337,6 +5729,134 @@ gdcm::RLECodec::SetBufferLength(unsigned long l) ";
 gdcm::RLECodec::SetLength(unsigned long l) ";
 
 %feature("docstring")  gdcm::RLECodec::~RLECodec "gdcm::RLECodec::~RLECodec() ";
+
+
+// File: classgdcm_1_1RSA.xml
+%feature("docstring") gdcm::RSA "C++ includes: gdcmRSA.h ";
+
+%feature("docstring")  gdcm::RSA::CheckPrivkey "int
+gdcm::RSA::CheckPrivkey() const
+
+Check a private RSA key.
+
+Parameters:
+-----------
+
+ctx:   RSA context to be checked
+
+0 if successful, or an POLARSSL_ERR_RSA_XXX error code ";
+
+%feature("docstring")  gdcm::RSA::CheckPubkey "int
+gdcm::RSA::CheckPubkey() const
+
+Check a public RSA key.
+
+Parameters:
+-----------
+
+ctx:   RSA context to be checked
+
+0 if successful, or an POLARSSL_ERR_RSA_XXX error code ";
+
+%feature("docstring")  gdcm::RSA::GetLenkey "unsigned int
+gdcm::RSA::GetLenkey() const
+
+Return the length of the key:. ";
+
+%feature("docstring")  gdcm::RSA::Pkcs1Decrypt "int
+gdcm::RSA::Pkcs1Decrypt(int mode, unsigned int &olen, const char
+*input, char *output, unsigned int output_max_len)
+
+Do an RSA operation, then remove the message padding.
+
+Parameters:
+-----------
+
+ctx:   RSA context
+
+mode:  RSA_PUBLIC or RSA_PRIVATE
+
+input:  buffer holding the encrypted data
+
+output:  buffer that will hold the plaintext
+
+olen:  will contain the plaintext length
+
+output_max_len:  maximum length of the output buffer
+
+0 if successful, or an POLARSSL_ERR_RSA_XXX error code
+
+The output buffer must be as large as the size of ctx->N (eg. 128
+bytes if RSA-1024 is used) otherwise an error is thrown. ";
+
+%feature("docstring")  gdcm::RSA::Pkcs1Encrypt "int
+gdcm::RSA::Pkcs1Encrypt(int mode, unsigned int ilen, const char
+*input, char *output) const
+
+Add the message padding, then do an RSA operation.
+
+Parameters:
+-----------
+
+ctx:   RSA context
+
+mode:  RSA_PUBLIC or RSA_PRIVATE
+
+ilen:  contains the plaintext length
+
+input:  buffer holding the data to be encrypted
+
+output:  buffer that will hold the ciphertext
+
+0 if successful, or an XYSSL_ERR_RSA_XXX error code
+
+The output buffer must be as large as the size of ctx->N (eg. 128
+bytes if RSA-1024 is used). ";
+
+%feature("docstring")  gdcm::RSA::RSA "gdcm::RSA::RSA() ";
+
+%feature("docstring")  gdcm::RSA::X509ParseKey "int
+gdcm::RSA::X509ParseKey(const char *buf, unsigned int buflen, const
+char *pwd=0, unsigned int pwdlen=0)
+
+Parse a private RSA key.
+
+Parameters:
+-----------
+
+rsa:   RSA context to be initialized
+
+buf:  input buffer
+
+buflen:  size of the buffer
+
+pwd:  password for decryption (optional)
+
+pwdlen:  size of the password
+
+0 if successful, or a specific X509 error code ";
+
+%feature("docstring")  gdcm::RSA::X509ParseKeyfile "int
+gdcm::RSA::X509ParseKeyfile(const char *path, const char *password=0)
+
+Load and parse a private RSA key.
+
+Parameters:
+-----------
+
+rsa:   RSA context to be initialized
+
+path:  filename to read the private key from
+
+pwd:  password to decrypt the file (can be NULL)
+
+0 if successful, or a specific X509 error code ";
+
+%feature("docstring")  gdcm::RSA::X509WriteKeyfile "int
+gdcm::RSA::X509WriteKeyfile(const char *path, int format=OUTPUT_PEM)
+";
+
+%feature("docstring")  gdcm::RSA::~RSA "gdcm::RSA::~RSA() ";
 
 
 // File: classstd_1_1runtime__error.xml
@@ -5386,6 +5906,8 @@ gdcm::Scanner::ClearTags() ";
 %feature("docstring")  gdcm::Scanner::End "ConstIterator
 gdcm::Scanner::End() const ";
 
+%feature("docstring")  gdcm::Scanner::GetFilenames "Directory::FilenamesType const& gdcm::Scanner::GetFilenames() const ";
+
 %feature("docstring")  gdcm::Scanner::GetKeys "Directory::FilenamesType gdcm::Scanner::GetKeys() const
 
 Return the list of filename that are key in the internal map, which
@@ -5408,7 +5930,14 @@ gdcm::Scanner::GetValue(const char *filename, Tag const &t) const
 Retrieve the value found for tag: t associated with file: filename
 This is meant for a single short call. If multiple calls (multiple
 tags) should be done, prefer the GetMapping function, and then reuse
-the TagToValue hash table. ";
+the TagToValue hash table. WARNING:   Tag 't' should have been added
+via AddTag() prior to the Scan() call ! ";
+
+%feature("docstring")  gdcm::Scanner::GetValues "ValuesType
+gdcm::Scanner::GetValues(Tag const &t) const
+
+Get all the values found (in lexicographic order) associated with Tag
+'t'. ";
 
 %feature("docstring")  gdcm::Scanner::GetValues "ValuesType const&
 gdcm::Scanner::GetValues() const
@@ -5518,6 +6047,9 @@ Returns the SQ length, as read from disk. ";
 %feature("docstring")  gdcm::SequenceOfFragments::GetTable "const
 BasicOffsetTable& gdcm::SequenceOfFragments::GetTable() const ";
 
+%feature("docstring")  gdcm::SequenceOfFragments::Print "void
+gdcm::SequenceOfFragments::Print(std::ostream &os) const ";
+
 %feature("docstring")  gdcm::SequenceOfFragments::Read "std::istream&
 gdcm::SequenceOfFragments::Read(std::istream &is) ";
 
@@ -5577,6 +6109,9 @@ gdcm::SequenceOfItems::End() const ";
 %feature("docstring")  gdcm::SequenceOfItems::End "Iterator
 gdcm::SequenceOfItems::End() ";
 
+%feature("docstring")  gdcm::SequenceOfItems::FindDataElement "bool
+gdcm::SequenceOfItems::FindDataElement(const Tag &t) const ";
+
 %feature("docstring")  gdcm::SequenceOfItems::GetItem "Item&
 gdcm::SequenceOfItems::GetItem(unsigned int position) ";
 
@@ -5589,6 +6124,11 @@ gdcm::SequenceOfItems::GetLength() const
 Returns the SQ length, as read from disk. ";
 
 %feature("docstring")  gdcm::SequenceOfItems::GetNumberOfItems "unsigned int gdcm::SequenceOfItems::GetNumberOfItems() const ";
+
+%feature("docstring")  gdcm::SequenceOfItems::IsUndefinedLength "bool
+gdcm::SequenceOfItems::IsUndefinedLength() const
+
+return if Value Length if of undefined length ";
 
 %feature("docstring")  gdcm::SequenceOfItems::Print "void
 gdcm::SequenceOfItems::Print(std::ostream &os) const ";
@@ -5709,6 +6249,14 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classgdcm_1_1SHA1.xml
+%feature("docstring") gdcm::SHA1 "C++ includes: gdcmSHA1.h ";
+
+%feature("docstring")  gdcm::SHA1::SHA1 "gdcm::SHA1::SHA1() ";
+
+%feature("docstring")  gdcm::SHA1::~SHA1 "gdcm::SHA1::~SHA1() ";
+
+
 // File: classgdcm_1_1SmartPointer.xml
 %feature("docstring") gdcm::SmartPointer "
 
@@ -5723,6 +6271,11 @@ See:  http://www.davethehat.com/articles/smartp.htm  and
 itk::SmartPointer
 
 C++ includes: gdcmSmartPointer.h ";
+
+%feature("docstring")  gdcm::SmartPointer::GetPointer "ObjectType*
+gdcm::SmartPointer< ObjectType >::GetPointer() const
+
+Explicit function to retrieve the pointer. ";
 
 %feature("docstring")  gdcm::SmartPointer::SmartPointer "gdcm::SmartPointer< ObjectType >::SmartPointer(ObjectType const &p) ";
 
@@ -5745,11 +6298,7 @@ C++ includes: gdcmSOPClassUIDToIOD.h ";
 
 
 // File: classgdcm_1_1Sorter.xml
-%feature("docstring") gdcm::Sorter "
-
-Sorter.
-
-C++ includes: gdcmSorter.h ";
+%feature("docstring") gdcm::Sorter "C++ includes: gdcmSorter.h ";
 
 %feature("docstring")  gdcm::Sorter::AddSelect "bool
 gdcm::Sorter::AddSelect(Tag const &tag, const char *value)
@@ -5763,9 +6312,12 @@ Return the list of filenames as sorted by the specific algorithm used.
 Empty by default (before Sort() is called) ";
 
 %feature("docstring")  gdcm::Sorter::Print "void
-gdcm::Sorter::Print(std::ostream &os)
+gdcm::Sorter::Print(std::ostream &os) const
 
 Print. ";
+
+%feature("docstring")  gdcm::Sorter::SetSortFunction "void
+gdcm::Sorter::SetSortFunction(SortFunction f) ";
 
 %feature("docstring")  gdcm::Sorter::Sort "virtual bool
 gdcm::Sorter::Sort(std::vector< std::string > const &filenames)
@@ -5775,8 +6327,42 @@ Typically the output of gdcm::Directory::GetFilenames(). ";
 %feature("docstring")  gdcm::Sorter::Sorter "gdcm::Sorter::Sorter()
 ";
 
+%feature("docstring")  gdcm::Sorter::StableSort "virtual bool
+gdcm::Sorter::StableSort(std::vector< std::string > const &filenames)
+";
+
 %feature("docstring")  gdcm::Sorter::~Sorter "virtual
 gdcm::Sorter::~Sorter() ";
+
+
+// File: classgdcm_1_1Spacing.xml
+%feature("docstring") gdcm::Spacing "
+
+Class for Spacing.
+
+See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES
+
+Ratio of the vertical size and horizontal size of the pixels in the
+image specified by a pair of integer values where the first value is
+the vertical pixel size, and the second value is the horizontal pixel
+size. Required if the aspect ratio values do not have a ratio of 1:1
+and the physical pixel spacing is not specified by Pixel Spacing
+(0028,0030), or Imager Pixel Spacing (0018,1164) or Nominal Scanned
+Pixel Spacing (0018,2010), either for the entire Image or per-frame in
+a Functional Group Macro. See C.7.6.3.1.7.
+
+PS 3.3-2008 10.7.1.3 Pixel Spacing Value Order and Valid Values All
+pixel spacing related attributes shall have non-zero values, except
+when there is only a single row or column or pixel of data present, in
+which case the corresponding value may be zero.
+
+Ref:http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
+
+C++ includes: gdcmSpacing.h ";
+
+%feature("docstring")  gdcm::Spacing::Spacing "gdcm::Spacing::Spacing() ";
+
+%feature("docstring")  gdcm::Spacing::~Spacing "gdcm::Spacing::~Spacing() ";
 
 
 // File: classgdcm_1_1Spectroscopy.xml
@@ -5846,7 +6432,9 @@ includes: gdcmStaticAssert.h ";
 
 String.
 
-bla
+TDelimiter template parameter is used to separate multiple String (VM1
+>) TMaxLength is only a hint. Noone actually respect the max length
+TPadChar is the string padding (0 or space)
 
 C++ includes: gdcmString.h ";
 
@@ -5870,6 +6458,13 @@ TDelimiter, TMaxLength, TPadChar >::String(const value_type *s) ";
 TDelimiter, TMaxLength, TPadChar >::String()
 
 String constructors. ";
+
+%feature("docstring")  gdcm::String::Trim "std::string gdcm::String<
+TDelimiter, TMaxLength, TPadChar >::Trim() const
+
+Trim function is required to return a std::string object, otherwise we
+could not create a gdcm::String object with an odd number of bytes...
+";
 
 
 // File: classstd_1_1string.xml
@@ -6171,6 +6766,11 @@ and therefore listed in the DICOM Data Element Dictionary in PS 3.6.
 Is the Tag from the Public dict...well the implementation is buggy it
 does not prove the element is indeed in the dict... ";
 
+%feature("docstring")  gdcm::Tag::PrintAsPipeSeparatedString "std::string gdcm::Tag::PrintAsPipeSeparatedString() const
+
+Print as a pipe separated string (GDCM 1.x compat only). Do not use in
+newer code See:   ReadFromPipeSeparatedString ";
+
 %feature("docstring")  gdcm::Tag::Read "std::istream&
 gdcm::Tag::Read(std::istream &is)
 
@@ -6243,14 +6843,14 @@ Any Resemblance to Existing XPath is Purely Coincidental
 
 C++ includes: gdcmTagPath.h ";
 
-%feature("docstring")  gdcm::TagPath::ConstructFromString "void
+%feature("docstring")  gdcm::TagPath::ConstructFromString "bool
 gdcm::TagPath::ConstructFromString(const char *path)
 
 \"/0018,0018/\"... No space allowed, comma is use to separate tag
-group from tag element and slash is used to separate tag throw an
-error if invalid ";
+group from tag element and slash is used to separate tag return false
+if invalid ";
 
-%feature("docstring")  gdcm::TagPath::ConstructFromTagList "void
+%feature("docstring")  gdcm::TagPath::ConstructFromTagList "bool
 gdcm::TagPath::ConstructFromTagList(Tag const *l, unsigned int n)
 
 Construct from a list of tags. ";
@@ -6258,10 +6858,10 @@ Construct from a list of tags. ";
 %feature("docstring")  gdcm::TagPath::Print "void
 gdcm::TagPath::Print(std::ostream &) const ";
 
-%feature("docstring")  gdcm::TagPath::Push "void
+%feature("docstring")  gdcm::TagPath::Push "bool
 gdcm::TagPath::Push(unsigned int itemnum) ";
 
-%feature("docstring")  gdcm::TagPath::Push "void
+%feature("docstring")  gdcm::TagPath::Push "bool
 gdcm::TagPath::Push(Tag const &t) ";
 
 %feature("docstring")  gdcm::TagPath::TagPath "gdcm::TagPath::TagPath() ";
@@ -6276,6 +6876,8 @@ class for testing
 
 this class is used for the nightly regression system for GDCM It makes
 heavily use of md5 computation
+
+See:   gdcm::MD5 class for md5 computation
 
 C++ includes: gdcmTesting.h ";
 
@@ -6327,6 +6929,9 @@ gdcm::TransferSyntax::GetString() const ";
 %feature("docstring")  gdcm::TransferSyntax::GetSwapCode "SwapCode
 gdcm::TransferSyntax::GetSwapCode() const ";
 
+%feature("docstring")  gdcm::TransferSyntax::IsEncapsulated "bool
+gdcm::TransferSyntax::IsEncapsulated() const ";
+
 %feature("docstring")  gdcm::TransferSyntax::IsEncoded "bool
 gdcm::TransferSyntax::IsEncoded() const ";
 
@@ -6335,6 +6940,17 @@ gdcm::TransferSyntax::IsExplicit() const ";
 
 %feature("docstring")  gdcm::TransferSyntax::IsImplicit "bool
 gdcm::TransferSyntax::IsImplicit() const ";
+
+%feature("docstring")  gdcm::TransferSyntax::IsLossless "bool
+gdcm::TransferSyntax::IsLossless() const ";
+
+%feature("docstring")  gdcm::TransferSyntax::IsLossy "bool
+gdcm::TransferSyntax::IsLossy() const
+
+Return whether the Transfer Syntax contains a lossy or lossless
+Encapsulated stream WARNING:  IsLossy is NOT !IsLossless since JPEG
+2000 Transfer Syntax is dual the stream can be either lossy or
+lossless compressed. ";
 
 %feature("docstring")  gdcm::TransferSyntax::IsValid "bool
 gdcm::TransferSyntax::IsValid() const ";
@@ -6398,10 +7014,22 @@ all known uids
 C++ includes: gdcmUIDs.h ";
 
 %feature("docstring")  gdcm::UIDs::GetName "const char*
-gdcm::UIDs::GetName() const ";
+gdcm::UIDs::GetName() const
+
+When object is Initialize function return the well known name
+associated with uid return NULL when not initialized ";
+
+%feature("docstring")  gdcm::UIDs::GetString "const char*
+gdcm::UIDs::GetString() const
+
+When object is Initialize function return the uid return NULL when not
+initialized ";
 
 %feature("docstring")  gdcm::UIDs::SetFromUID "bool
-gdcm::UIDs::SetFromUID(const char *str) ";
+gdcm::UIDs::SetFromUID(const char *str)
+
+Initialize object from a string (a uid number) return false on error,
+and internal state is set to 0 ";
 
 
 // File: classstd_1_1underflow__error.xml
@@ -6731,6 +7359,8 @@ vtkGDCMImageReader::vtkBooleanMacro(ApplyYBRToRGB, int) ";
 
 %feature("docstring")  vtkGDCMImageReader::vtkBooleanMacro "vtkGDCMImageReader::vtkBooleanMacro(ApplyLookupTable, int) ";
 
+%feature("docstring")  vtkGDCMImageReader::vtkBooleanMacro "vtkGDCMImageReader::vtkBooleanMacro(LossyFlag, int) ";
+
 %feature("docstring")  vtkGDCMImageReader::vtkBooleanMacro "vtkGDCMImageReader::vtkBooleanMacro(LoadIconImage, int) ";
 
 %feature("docstring")  vtkGDCMImageReader::vtkBooleanMacro "vtkGDCMImageReader::vtkBooleanMacro(LoadOverlays, int) ";
@@ -6751,6 +7381,8 @@ vtkSetMacro(ApplyYBRToRGB ";
 %feature("docstring")  vtkGDCMImageReader::vtkGetMacro "vtkGDCMImageReader::vtkGetMacro(NumberOfIconImages, int) ";
 
 %feature("docstring")  vtkGDCMImageReader::vtkGetMacro "vtkGDCMImageReader::vtkGetMacro(NumberOfOverlays, int) ";
+
+%feature("docstring")  vtkGDCMImageReader::vtkGetMacro "vtkGDCMImageReader::vtkGetMacro(LossyFlag, int) ";
 
 %feature("docstring")  vtkGDCMImageReader::vtkGetMacro "vtkGDCMImageReader::vtkGetMacro(LoadIconImage, int) ";
 
@@ -6773,6 +7405,8 @@ vtkMedicalImageProperties) ";
 double) ";
 
 %feature("docstring")  vtkGDCMImageReader::vtkSetMacro "vtkGDCMImageReader::vtkSetMacro(ApplyLookupTable, int) ";
+
+%feature("docstring")  vtkGDCMImageReader::vtkSetMacro "vtkGDCMImageReader::vtkSetMacro(LossyFlag, int) ";
 
 %feature("docstring")  vtkGDCMImageReader::vtkSetMacro "vtkGDCMImageReader::vtkSetMacro(LoadIconImage, int) ";
 
@@ -6806,6 +7440,8 @@ vtkGDCMImageWriter::SetMedicalImageProperties(vtkMedicalImageProperties
 
 %feature("docstring")  vtkGDCMImageWriter::vtkBooleanMacro "vtkGDCMImageWriter::vtkBooleanMacro(FileLowerLeft, int) ";
 
+%feature("docstring")  vtkGDCMImageWriter::vtkBooleanMacro "vtkGDCMImageWriter::vtkBooleanMacro(LossyFlag, int) ";
+
 %feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(FileLowerLeft, int) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(ImageFormat, int) ";
@@ -6813,6 +7449,8 @@ vtkGDCMImageWriter::SetMedicalImageProperties(vtkMedicalImageProperties
 %feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(Scale, double) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(Shift, double) ";
+
+%feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(LossyFlag, int) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkGetObjectMacro "vtkGDCMImageWriter::vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4)
 ";
@@ -6831,6 +7469,8 @@ vtkMedicalImageProperties) ";
 %feature("docstring")  vtkGDCMImageWriter::vtkSetMacro "vtkGDCMImageWriter::vtkSetMacro(Scale, double) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkSetMacro "vtkGDCMImageWriter::vtkSetMacro(Shift, double) ";
+
+%feature("docstring")  vtkGDCMImageWriter::vtkSetMacro "vtkGDCMImageWriter::vtkSetMacro(LossyFlag, int) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkTypeRevisionMacro "vtkGDCMImageWriter::vtkTypeRevisionMacro(vtkGDCMImageWriter,
 vtkImageWriter) ";
@@ -7398,6 +8038,23 @@ STL iterator class. ";
 STL class. ";
 
 
+// File: classgdcm_1_1X509.xml
+%feature("docstring") gdcm::X509 "C++ includes: gdcmX509.h ";
+
+%feature("docstring")  gdcm::X509::GetNumberOfRecipients "unsigned
+int gdcm::X509::GetNumberOfRecipients() const ";
+
+%feature("docstring")  gdcm::X509::ParseCertificateFile "bool
+gdcm::X509::ParseCertificateFile(const char *filename) ";
+
+%feature("docstring")  gdcm::X509::ParseKeyFile "bool
+gdcm::X509::ParseKeyFile(const char *filename) ";
+
+%feature("docstring")  gdcm::X509::X509 "gdcm::X509::X509() ";
+
+%feature("docstring")  gdcm::X509::~X509 "gdcm::X509::~X509() ";
+
+
 // File: classgdcm_1_1XMLDictReader.xml
 %feature("docstring") gdcm::XMLDictReader "
 
@@ -7479,6 +8136,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: namespaceitk.xml
 
 
+// File: namespaceopenssl.xml
+
+
 // File: namespacestd.xml
 
 
@@ -7495,10 +8155,22 @@ whether stream is compressed or not. ";
 // File: namespacezlib__stream_1_1detail.xml
 
 
+// File: gdcm2vtk_8man.xml
+
+
+// File: gdcmAES_8h.xml
+
+
+// File: gdcmanon_8man.xml
+
+
 // File: gdcmAnonymizer_8h.xml
 
 
 // File: gdcmApplicationEntity_8h.xml
+
+
+// File: gdcmASN1_8h.xml
 
 
 // File: gdcmAttribute_8h.xml
@@ -7507,7 +8179,13 @@ whether stream is compressed or not. ";
 // File: gdcmAudioCodec_8h.xml
 
 
+// File: gdcmBase64_8h.xml
+
+
 // File: gdcmBasicOffsetTable_8h.xml
+
+
+// File: gdcmBitmap_8h.xml
 
 
 // File: gdcmByteBuffer_8h.xml
@@ -7529,6 +8207,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmConstCharWrapper_8h.xml
+
+
+// File: gdcmconv_8man.xml
 
 
 // File: gdcmCP246ExplicitDataElement_8h.xml
@@ -7597,6 +8278,12 @@ whether stream is compressed or not. ";
 // File: gdcmDirectory_8h.xml
 
 
+// File: gdcmDummyValueGenerator_8h.xml
+
+
+// File: gdcmdump_8man.xml
+
+
 // File: gdcmDumper_8h.xml
 
 
@@ -7648,6 +8335,9 @@ whether stream is compressed or not. ";
 // File: gdcmGroupDict_8h.xml
 
 
+// File: gdcmHAVEGE_8h.xml
+
+
 // File: gdcmIconImage_8h.xml
 
 
@@ -7687,7 +8377,13 @@ whether stream is compressed or not. ";
 // File: gdcmImageWriter_8h.xml
 
 
+// File: gdcmimg_8man.xml
+
+
 // File: gdcmImplicitDataElement_8h.xml
+
+
+// File: gdcminfo_8man.xml
 
 
 // File: gdcmIOD_8h.xml
@@ -7729,6 +8425,9 @@ whether stream is compressed or not. ";
 // File: gdcmLookupTable_8h.xml
 
 
+// File: gdcmMD5_8h.xml
+
+
 // File: gdcmMediaStorage_8h.xml
 
 
@@ -7768,6 +8467,9 @@ whether stream is compressed or not. ";
 // File: gdcmPDBHeader_8h.xml
 
 
+// File: gdcmpdf_8man.xml
+
+
 // File: gdcmPDFCodec_8h.xml
 
 
@@ -7781,6 +8483,18 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmPixmap_8h.xml
+
+
+// File: gdcmPixmapReader_8h.xml
+
+
+// File: gdcmPixmapToPixmapFilter_8h.xml
+
+
+// File: gdcmPixmapWriter_8h.xml
+
+
+// File: gdcmPKCS7_8h.xml
 
 
 // File: gdcmPNMCodec_8h.xml
@@ -7801,6 +8515,9 @@ whether stream is compressed or not. ";
 // File: gdcmPythonFilter_8h.xml
 
 
+// File: gdcmraw_8man.xml
+
+
 // File: gdcmRAWCodec_8h.xml
 
 
@@ -7813,7 +8530,13 @@ whether stream is compressed or not. ";
 // File: gdcmRLECodec_8h.xml
 
 
+// File: gdcmRSA_8h.xml
+
+
 // File: gdcmScanner_8h.xml
+
+
+// File: gdcmscanner_8man.xml
 
 
 // File: gdcmSegmentedPaletteColorLookupTable_8h.xml
@@ -7831,6 +8554,9 @@ whether stream is compressed or not. ";
 // File: gdcmSeries_8h.xml
 
 
+// File: gdcmSHA1_8h.xml
+
+
 // File: gdcmSmartPointer_8h.xml
 
 
@@ -7838,6 +8564,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmSorter_8h.xml
+
+
+// File: gdcmSpacing_8h.xml
 
 
 // File: gdcmSpectroscopy_8h.xml
@@ -7880,6 +8609,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmTagPath_8h.xml
+
+
+// File: gdcmtar_8man.xml
 
 
 // File: gdcmTerminal_8h.xml
@@ -7927,6 +8659,9 @@ whether stream is compressed or not. ";
 // File: gdcmVersion_8h.xml
 
 
+// File: gdcmviewer_8man.xml
+
+
 // File: gdcmVL_8h.xml
 
 
@@ -7946,6 +8681,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmWriter_8h.xml
+
+
+// File: gdcmX509_8h.xml
 
 
 // File: gdcmXMLDictReader_8h.xml
@@ -7999,52 +8737,106 @@ whether stream is compressed or not. ";
 // File: zipstreamimpl_8h.xml
 
 
+// File: gdcm2vtk.xml
+
+
+// File: gdcmanon.xml
+
+
+// File: gdcmconv.xml
+
+
+// File: gdcmdump.xml
+
+
+// File: gdcmimg.xml
+
+
+// File: gdcminfo.xml
+
+
+// File: gdcmpdf.xml
+
+
+// File: gdcmraw.xml
+
+
+// File: gdcmscanner.xml
+
+
+// File: gdcmtar.xml
+
+
+// File: gdcmviewer.xml
+
+
 // File: todo.xml
 
 
 // File: deprecated.xml
 
 
-// File: dir_bd4e6d9bb1728c86d8086c5e1b36f909.xml
+// File: dir_94663f64a4c9abc2af609c8921669420.xml
 
 
-// File: dir_806c8d39d42fadcefd97763ac9b2f652.xml
+// File: dir_ef3f1d3d1931db38e8877801b76cee47.xml
 
 
-// File: dir_7449d195d5ab342b9da134f997bb4871.xml
+// File: dir_2d3bfe65ed61652ce4282d382fb7381c.xml
 
 
-// File: dir_3eb77dd1cd76881789a64c6fef969956.xml
+// File: dir_d664f98ee8bfa963c1a2dbafcf73efdb.xml
 
 
-// File: dir_cb6937f7b1f1c1e93dcfd6bd7437409a.xml
+// File: dir_22e413e04fdb2aa57f644f5b2bf83a37.xml
 
 
-// File: dir_e19234f006089ec27a64cb5d235a05e7.xml
+// File: dir_71317de669b61881d08eaa980a0a7f61.xml
 
 
-// File: dir_0367cae363ce884ab7e7a5f1b5dfbfc0.xml
+// File: dir_a49807c94180157599109994f3d6fa13.xml
 
 
-// File: dir_af88f490248786847e535f767f1fb3d0.xml
+// File: dir_4e7dd5b08fafd552d520142d6e70630c.xml
 
 
-// File: dir_f0d0fe86f2218c31405f1d7e16cba996.xml
+// File: dir_68acd7bfcd07014c2149dcf52f8ec00c.xml
 
 
-// File: dir_af31fb6b17c96b681f40d069b56acceb.xml
+// File: dir_5ae6d2d8536e26194c0f107ac4bca055.xml
 
 
-// File: dir_e7f64b7cb27352425e46140852d4fb18.xml
+// File: dir_51dc117650d25ac4befb6d4ab9561c1e.xml
 
 
-// File: dir_f5d35c4d8d673123d574ee0333f181a8.xml
+// File: dir_0a7fa83fb02ee8e83244764d6a3121f8.xml
+
+
+// File: dir_374e9784d867c39e5352223cf32d6ad5.xml
+
+
+// File: dir_e2ec2116e5bb06c1314456bb68d69435.xml
+
+
+// File: DecompressImage_8cs-example.xml
+
+
+// File: DecompressJPEGFile_8cs-example.xml
+
+
+// File: ManipulateFile_8cs-example.xml
 
 
 // File: PatchFile_8cxx-example.xml
 
 
+// File: ScanDirectory_8cs-example.xml
+
+
 // File: TestByteSwap_8cxx-example.xml
+
+
+// File: TestCSharpFilter_8cs-example.xml
 
 
 // File: TestReader_8cxx-example.xml
