@@ -180,12 +180,6 @@ using My.Own.Namespace;
 using namespace gdcm;
 %}
 
-//%include "docstrings.i"
-%csmethodmodifiers gdcm::Tag::GetGroup() "
-  /**
-    * This is the GetGroup func
-    */
-  public";
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
@@ -230,6 +224,12 @@ using namespace gdcm;
 };
 %include "gdcmMediaStorage.h"
 //%rename(this ) gdcm::Tag::operator[];
+%csmethodmodifiers gdcm::Tag::GetGroup "
+  /// <summary>
+  /// This is the GetGroup func
+  /// </summary>
+  public";
+%csmethodmodifiers gdcm::Tag::GetElement "/** coucou */ public"
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
