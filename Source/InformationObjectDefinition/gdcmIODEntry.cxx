@@ -43,7 +43,7 @@ IODEntry::UsageType IODEntry::GetUsageType() const
     return Conditional;
     }
   //else
-  abort();
+  assert(0); // Keep me so that I can debug Part3.xml
   return Invalid;
 }
 

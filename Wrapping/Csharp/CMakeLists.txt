@@ -1,5 +1,11 @@
 # TODO:
 # http://www.disconnectd.com/?p=21
+
+# C# Cmd line options:
+# http://msdn.microsoft.com/en-us/library/ms379563(VS.80).aspx
+# http://msdn.microsoft.com/en-us/library/aa288436(VS.71).aspx
+# http://msdn.microsoft.com/en-us/library/aa288481(VS.71).aspx
+
 FIND_PACKAGE(SWIG REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
@@ -126,7 +132,7 @@ IF(OLDSTYLECSHARP)
     @ONLY)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_LIBRARY_DIR}/gdcm_csharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "*.cs" 
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "*.cs" 
 #${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"

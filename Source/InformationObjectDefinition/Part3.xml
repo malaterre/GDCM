@@ -32285,11 +32285,14 @@ Note: This may be useful to an FSR that does not support the SOP Class of the re
     <include ref="&gt;Record Selection Keys" type="SeeF.5" description="A number of DICOM Data Elements which contain specific keys defined for each type of Directory Record (0004,1430) defined in Section F.5."/>
   </module>
   <!-- TODO FIXME -->
+  <!-- drt : directory record type -->
+<!--
   <iod table="F.4-1" name="Relationship Between Directory Records">
-    <entry ie="Patient" name="Patient" ref="F.5.1" usage="M"/>
-    <entry ie="Patient" name="Study" ref="F.5.2" usage="M"/>
-    <entry ie="Patient" name="Series" ref="F.5.3" usage="M"/>
+    <entry drt="Patient" ref="F.5.1" usage="M"/>
+    <entry drt="Study" ref="F.5.2" usage="M"/>
+    <entry drt="Series" ref="F.5.3" usage="M"/>
   </iod>
+-->
   <module ref="F.5.1" table="F.5-1" name="Patient Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys</description>

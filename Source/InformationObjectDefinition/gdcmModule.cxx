@@ -26,26 +26,26 @@ bool Module::Verify(const DataSet& ds) const
     {
     const Tag &tag = it->first;
     const ModuleEntry &me = it->second;
-      const gdcm::Type &type = me.GetType();
-      if( ds.FindDataElement( tag ) )
+    const gdcm::Type &type = me.GetType();
+    if( ds.FindDataElement( tag ) )
+      {
+      // element found
+      const DataElement &de = ds.GetDataElement( tag );
+      if ( de.IsEmpty() && (type == Type::T1 || type == Type::T1C ) )
         {
-        // element found
-        const DataElement &de = ds.GetDataElement( tag );
-        if ( de.IsEmpty() && (type == Type::T1 || type == Type::T1C ) )
-          {
-          gdcmWarningMacro( "T1 element cannot be empty: " << de );
-          success = false;
-          }
+        gdcmWarningMacro( "T1 element cannot be empty: " << de );
+        success = false;
         }
-      else
+      }
+    else
+      {
+      if( type == Type::T1 || type == Type::T1C )
         {
-        if( type == Type::T1 || type == Type::T1C )
-          {
-          gdcmWarningMacro( "DataSet is missing tag: " << tag );
-          gdcmWarningMacro( "ModuleEntry specify: " << me );
-          success = false;
-          }
+        gdcmWarningMacro( "DataSet is missing tag: " << tag );
+        gdcmWarningMacro( "ModuleEntry specify: " << me );
+        success = false;
         }
+      }
     }
 
   return success;
