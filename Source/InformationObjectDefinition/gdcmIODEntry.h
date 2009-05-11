@@ -15,7 +15,7 @@
 #ifndef __gdcmIODEntry_h
 #define __gdcmIODEntry_h
 
-#include "gdcmTypes.h"
+#include "gdcmUsage.h"
 #include "gdcmType.h"
 
 #include <string>
@@ -52,7 +52,7 @@ Types specified in the Modules in Annex C shall be supported.
 class GDCM_EXPORT IODEntry
 {
 public:
-  IODEntry(const char *name = "", const char *ref = "", const char *usage = ""):Name(name),Ref(ref),Usage(usage) {
+  IODEntry(const char *name = "", const char *ref = "", const char *usag = ""):Name(name),Ref(ref),usage(usag) {
   }
   friend std::ostream& operator<<(std::ostream& _os, const IODEntry &_val);
 
@@ -65,16 +65,9 @@ public:
   void SetRef(const char *ref) { Ref = ref; }
   const char *GetRef() const { return Ref.c_str(); }
 
-  typedef enum {
-    Invalid,
-    Mandatory, // (see A.1.3.1) , abbreviated M
-    Conditional, // (see A.1.3.2) , abbreviated C
-    UserOption // (see A.1.3.3) , abbreviated U
-  } UsageType;
-
-  void SetUsage(const char *usage) { Usage = usage; }
-  const char *GetUsage() const { return Usage.c_str(); }
-  UsageType GetUsageType() const;
+  void SetUsage(const char *usag) { usage = usag; }
+  const char *GetUsage() const { return usage.c_str(); }
+  Usage::UsageType GetUsageType() const;
 
 private:
   std::string IE;
@@ -83,12 +76,12 @@ private:
 
   std::string Ref;
 
-  std::string Usage;
+  std::string usage;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const IODEntry &_val)
 {
-  _os << _val.IE << "\t" << _val.Name << "\t" << _val.Ref << "\t" << _val.Usage;
+  _os << _val.IE << "\t" << _val.Name << "\t" << _val.Ref << "\t" << _val.usage;
   return _os;
 }
 

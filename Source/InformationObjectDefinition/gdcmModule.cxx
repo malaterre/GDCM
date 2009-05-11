@@ -14,11 +14,12 @@
 =========================================================================*/
 #include "gdcmModule.h"
 #include "gdcmDataSet.h"
+#include "gdcmUsage.h"
 
 namespace gdcm
 {
 
-bool Module::Verify(const DataSet& ds) const
+bool Module::Verify(const DataSet& ds, Usage const & usage) const
 {
   bool success = true;
   Module::MapModuleEntry::const_iterator it = ModuleInternal.begin();

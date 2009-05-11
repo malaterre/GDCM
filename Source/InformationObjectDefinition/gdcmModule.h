@@ -25,6 +25,7 @@ namespace gdcm
 {
 
 class DataSet;
+class Usage;
 /**
  * \brief Class for representing a Module
  * \note bla
@@ -69,7 +70,7 @@ public:
 
   // Verify will print on std::cerr for error
   // Upon success will return true, false otherwise
-  bool Verify(const DataSet& ds) const;
+  bool Verify(const DataSet& ds, Usage const & usage) const;
 
 private:
   //Module &operator=(const Module &_val); // purposely not implemented

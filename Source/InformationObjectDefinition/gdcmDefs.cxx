@@ -151,7 +151,7 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
     {
     const IODEntry &iodentry = iod.GetIODEntry(idx);
     const char *ref = iodentry.GetRef();
-    IODEntry::UsageType ut = iodentry.GetUsageType();
+    //Usage::UsageType ut = iodentry.GetUsageType();
 
     const Module &module = modules.GetModule( ref );
     if( module.FindModuleEntry( tag ) )
@@ -188,11 +188,11 @@ bool Defs::Verify(const File& file) const
     {
     const IODEntry &iodentry = iod.GetIODEntry(idx);
     const char *ref = iodentry.GetRef();
-    IODEntry::UsageType ut = iodentry.GetUsageType();
+    Usage::UsageType ut = iodentry.GetUsageType();
 
     const Module &module = modules.GetModule( ref );
     //std::cout << module << std::endl;
-    v = v && module.Verify( file.GetDataSet() );
+    v = v && module.Verify( file.GetDataSet(), ut );
     }
 
   return v;
@@ -223,11 +223,11 @@ bool Defs::Verify(const DataSet& ds) const
     {
     const IODEntry &iodentry = iod.GetIODEntry(idx);
     const char *ref = iodentry.GetRef();
-    IODEntry::UsageType ut = iodentry.GetUsageType();
+    Usage::UsageType ut = iodentry.GetUsageType();
 
     const Module &module = modules.GetModule( ref );
     //std::cout << module << std::endl;
-    v = v && module.Verify( ds );
+    v = v && module.Verify( ds, ut );
     }
 
   return v;

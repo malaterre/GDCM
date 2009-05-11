@@ -14,6 +14,7 @@ SET(IOD_SRCS
   gdcmStudy.cxx
   gdcmPatient.cxx
   gdcmType.cxx
+  gdcmUsage.cxx
   gdcmIOD.cxx
   #gdcmXMLDictReader.cxx
   #gdcmXMLPrivateDictReader.cxx

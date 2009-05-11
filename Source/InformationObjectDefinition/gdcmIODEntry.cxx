@@ -19,32 +19,32 @@
 namespace gdcm
 {
 
-IODEntry::UsageType IODEntry::GetUsageType() const
+Usage::UsageType IODEntry::GetUsageType() const
 {
-  assert( !Usage.empty() );
-  if( Usage == "M" )
+  assert( !usage.empty() );
+  if( usage == "M" )
     {
-    return Mandatory;
+    return Usage::Mandatory;
     }
-  else if( Usage == "U" )
+  else if( usage == "U" )
     {
-    return UserOption;
+    return Usage::UserOption;
     }
-  else if( Usage.find( "U - " ) <  Usage.size() )
+  else if( usage.find( "U - " ) <  usage.size() )
     {
-    return UserOption;
+    return Usage::UserOption;
     }
-  else if( Usage.find( "C- " ) <  Usage.size() )
+  else if( usage.find( "C- " ) <  usage.size() )
     {
-    return Conditional;
+    return Usage::Conditional;
     }
-  else if( Usage.find( "C - " ) <  Usage.size() )
+  else if( usage.find( "C - " ) <  usage.size() )
     {
-    return Conditional;
+    return Usage::Conditional;
     }
   //else
   assert(0); // Keep me so that I can debug Part3.xml
-  return Invalid;
+  return Usage::Invalid;
 }
 
 }
