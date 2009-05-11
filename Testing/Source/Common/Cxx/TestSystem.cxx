@@ -17,6 +17,34 @@
 #include <iostream>
 #include <string.h> // strlen
 
+#include <time.h>
+
+int TestGetTimeOfDay()
+{
+  time_t t = time(0);
+  char date[22];
+  if( !gdcm::System::GetCurrentDateTime(date) )
+    {
+    std::cerr << "Error" << std::endl;
+    return 1;
+    }
+  char time_date[22];
+  if( !gdcm::System::FormatDateTime(time_date, t) )
+    {
+    std::cerr << "Error" << std::endl;
+    return 1;
+    }
+  //std::cout << date << std::endl;
+  //std::cout << time_date << std::endl;
+
+  if ( strncmp( date, time_date, strlen("20090511172802.") ) != 0 )
+    {
+    std::cerr << "Error" << std::endl;
+    return 1;
+    }
+  return 0;
+}
+
 int TestSystem(int, char *[])
 {
   const char s1[] = "HELLO, wORLD !";
@@ -63,7 +91,8 @@ int TestSystem(int, char *[])
     }
 
   char datetime[22];
-  int res = gdcm::System::GetCurrentDateTime(datetime);
+  bool bres = gdcm::System::GetCurrentDateTime(datetime);
+  assert( bres );
   assert( datetime[21] == 0 );
   std::cerr << datetime << std::endl;
 
@@ -248,6 +277,8 @@ if( !gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, valid_date1) )
 std::cerr << "should accept:" << valid_date1 << std::endl;
 return 1;
 }
+  int res = 0;
+  res +=  TestGetTimeOfDay();
    
-  return 0;
+  return res;
 }

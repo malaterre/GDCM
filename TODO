@@ -352,3 +352,5 @@ gettimeofday on WIN32 is busted
 + * size by 20.
 + */
 -> polarssl
+-----------------------------------------------------------------------
+Update charls for bug fix
