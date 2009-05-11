@@ -534,7 +534,7 @@ static int gettimeofday2(struct timeval *tv, struct timezone *tz)
   filetime |= ft.dwLowDateTime;
   filetime -= OFFSET;
 
-  tv->tv_sec = (time_t)(filetime / 10000000); /* seconds since epoch */
+  tv->tv_sec = (long)(filetime / 10000000); /* seconds since epoch */
   tv->tv_usec = (uint32_t)((filetime % 10000000) / 10);
 
   return 0;
@@ -577,7 +577,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     /*converting file time to unix epoch*/
     tmpres /= 10;  /*convert into microseconds*/
     tmpres -= DELTA_EPOCH_IN_MICROSECS; 
-    tv->tv_sec = (time_t)(tmpres / 1000000UL);
+    tv->tv_sec = (long)(tmpres / 1000000UL);
     tv->tv_usec = (long)(tmpres % 1000000UL);
   }
  
