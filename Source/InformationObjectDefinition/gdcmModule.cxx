@@ -22,6 +22,7 @@ namespace gdcm
 bool Module::Verify(const DataSet& ds, Usage const & usage) const
 {
   bool success = true;
+  if( usage == Usage::UserOption ) return success;
   Module::MapModuleEntry::const_iterator it = ModuleInternal.begin();
   for(;it != ModuleInternal.end(); ++it)
     {
@@ -44,6 +45,7 @@ bool Module::Verify(const DataSet& ds, Usage const & usage) const
         {
         gdcmWarningMacro( "DataSet is missing tag: " << tag );
         gdcmWarningMacro( "ModuleEntry specify: " << me );
+        gdcmWarningMacro( "Usage is: " << usage );
         success = false;
         }
       }
