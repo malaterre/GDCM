@@ -80,6 +80,8 @@ public:
   // In this case it is simple to split the date[22] into a DA and TM structure !
 
   /// Return the current data time, and format it as ASCII text.
+  // That's simply a call to gettimeofday + FormatDateTime, but since WIN32 do not have an 
+  // implementation for gettimeofday this is more portable. (and time(0) is not precise)
   static bool GetCurrentDateTime(char date[22]);
 
   /// format as ASCII text a time_t with milliseconds
