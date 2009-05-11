@@ -515,6 +515,11 @@ bool System::GetHardwareAddress(unsigned char addr[6])
 
 #if defined(_WIN32) && !defined(HAVE_GETTIMEOFDAY)
 #include <stdio.h>
+
+// http://www.openasthra.com/c-tidbits/gettimeofday-function-for-windows/
+// http://www.sisvia.com/blog/?p=24
+// -> srand + gettimeofday
+// http://csl.sublevel3.org/c++/
 static int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
   FILETIME ft;
