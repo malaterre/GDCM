@@ -526,12 +526,12 @@ static int gettimeofday2(struct timeval *tv, struct timezone *tz)
   const uint64_t c1 = 27111902;
   const uint64_t c2 = 3577643008UL;
   const uint64_t OFFSET = (c1 << 32) + c2;
-  uint64_t filetime;
+  uint64_t filetime = 0;
   GetSystemTimeAsFileTime(&ft);
 
-  filetime = ft.dwHighDateTime;
-  filetime = filetime << 32;
-  filetime += ft.dwLowDateTime;
+  filetime |= ft.dwHighDateTime;
+  filetime <<= 32;
+  filetime |= ft.dwLowDateTime;
   filetime -= OFFSET;
 
   tv->tv_sec = (time_t)(filetime / 10000000); /* seconds since epoch */
@@ -545,17 +545,26 @@ static int gettimeofday2(struct timeval *tv, struct timezone *tz)
   #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif
 
-struct timezone 
-{
-  int  tz_minuteswest; /* minutes W of Greenwich */
-  int  tz_dsttime;     /* type of dst correction */
-};
+//struct timezone 
+//{
+//  int  tz_minuteswest; /* minutes W of Greenwich */
+//  int  tz_dsttime;     /* type of dst correction */
+//};
  
 int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
+/*
+       The use of the timezone structure is obsolete; the tz  argument  should
+       normally  be  specified  as  NULL.  The tz_dsttime field has never been
+       used under Linux; it has not been and will not be supported by libc  or
+       glibc.   Each  and  every occurrence of this field in the kernel source
+       (other than the declaration) is a bug. Thus, the following is purely of
+       historic interest.
+*/
+  assert( tz == 0 );
   FILETIME ft;
   unsigned __int64 tmpres = 0;
-  static int tzflag;
+  //static int tzflag;
  
   if (NULL != tv)
   {
@@ -568,20 +577,20 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     /*converting file time to unix epoch*/
     tmpres /= 10;  /*convert into microseconds*/
     tmpres -= DELTA_EPOCH_IN_MICROSECS; 
-    tv->tv_sec = (long)(tmpres / 1000000UL);
+    tv->tv_sec = (time_t)(tmpres / 1000000UL);
     tv->tv_usec = (long)(tmpres % 1000000UL);
   }
  
-  if (NULL != tz)
-  {
-    if (!tzflag)
-    {
-      _tzset();
-      tzflag++;
-    }
-    tz->tz_minuteswest = _timezone / 60;
-    tz->tz_dsttime = _daylight;
-  }
+//  if (NULL != tz)
+//  {
+//    if (!tzflag)
+//    {
+//      _tzset();
+//      tzflag++;
+//    }
+//    tz->tz_minuteswest = _timezone / 60;
+//    tz->tz_dsttime = _daylight;
+//  }
  
   return 0;
 }
