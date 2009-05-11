@@ -255,9 +255,6 @@ apt-get source minc
 file meta header does not check for valid of imp class uid
 Need to be UIDGenerator::IsValid
 -----------------------------------------------------------------------
-BUG: Z-Spacing computation should fail on:
-medical.nema.org/medical/dicom/DataSets/WG16/Philips/DICOM/IM_0016
------------------------------------------------------------------------
 Bug gdcmconv should properly autorecompute explicit length for:
 BogusItemLengthImplicitPrivateAtt.dcm
 -----------------------------------------------------------------------
@@ -291,16 +288,11 @@ When converting an Enhanced CT, IOP is moved from root dataset to
 Sharedgroups but original attribute is kept (should be removed)
 same goes for WindowLevel, Rescale ...
 -----------------------------------------------------------------------
-Make gdcmconv operate on gdcm::Pixmap and not gdcm::Image
------------------------------------------------------------------------
 old SC and numberOfFrames > 1:
 ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm
 -----------------------------------------------------------------------
 TODO: try to handle:
 gdcmData/gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
------------------------------------------------------------------------
-gdcm::Pixmap::IsLossy is an expensive call, need to benchmark impact of 
-extra call
 -----------------------------------------------------------------------
 OPJ_LIMIT_DECODING to parse header only
 -----------------------------------------------------------------------
@@ -312,8 +304,6 @@ There is only one problem with slope/rescale -> float
 -----------------------------------------------------------------------
 Private tags extracted from private DCS is cool, but one would also
 need Defined terms, that would be *very* cool !
------------------------------------------------------------------------
-gdcmconv --raw should process a gdcm::Pixmap not a gdcm::Image
 -----------------------------------------------------------------------
 Amicas JP2 to DICOM:
 http://www.mikekristofferson.com/misc/mri/amicas-patients/
