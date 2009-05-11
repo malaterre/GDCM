@@ -341,3 +341,14 @@ Get rid of polarssl now that OpenSSL completely replaces it
 http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Tools/openssl#Giving_up_on_OpenSSL
 -----------------------------------------------------------------------
 gdcmdump map-uid-names
+-----------------------------------------------------------------------
+gettimeofday on WIN32 is busted
+-----------------------------------------------------------------------
++/*
++ * Windows _snprintf and _vsnprintf are not compatible to linux versions.
++ * Result value is not size of buffer needed, but -1 if no fit is possible.
++ *
++ * This fuction tries to 'fix' this by at least suggesting enlarging the
++ * size by 20.
++ */
+-> polarssl
