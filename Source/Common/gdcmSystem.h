@@ -35,7 +35,6 @@ public:
   static bool FileIsDirectory(const char* name);
   /// remove a file
   static bool RemoveFile(const char* source);
-  //static bool MakeDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
   //static bool DeleteDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
 
   /// Return the last error
