@@ -152,5 +152,10 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   # http://lists.debian.org/debian-italian/2006/12/msg00878.html
   # man2txt : man man | col -b | less
 
+  IF(GDCM_USE_VTK)
+    SET(BUILD_DOCUMENTATION 1)
+    SUBDIRS(vtk)
+  ENDIF(GDCM_USE_VTK)
+
 ENDIF(GDCM_DOCUMENTATION)
 

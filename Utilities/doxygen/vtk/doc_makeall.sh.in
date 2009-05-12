@@ -19,6 +19,7 @@ export GZIP_PROG="@GZIP@"              # gzip (Unix-like 'gzip compressor')
 export GNUPLOT_PROG="@GNUPLOT@"        # gnuplot (data plotting program)
 export HHC_PROG="@HTML_HELP_COMPILER@" # HTML Help Compiler
 export MV_PROG="@MV@"                  # mv (Unix-like 'move/rename files')
+export CP_PROG="@CP@"                  # mv (Unix-like 'move/rename files')
 export PERL_PROG="@PERL@"              # Perl
 export RM_PROG="@RM@"                  # rm (Unix-like 'remove files')
 export TAR_PROG="@TAR@"                # tar (Unix-like 'archiver')
@@ -42,6 +43,8 @@ export PROJECT_NAME=@DOXYGEN_PROJECT_NAME@
 #   PATH_TO_VTK_DOX_SCRIPTS=@CMAKE_CURRENT_SOURCE_DIR@
 #
 export PATH_TO_VTK_DOX_SCRIPTS="@DOXYGEN_SOURCE_DIR@"
+
+export PATH_TO_VTKGDCM_FINAL_PATH="@VTKGDCM_FINAL_PATH@"
 
 # SOURCE_DIR:
 # Source directory. The top directory of the source files.
@@ -283,6 +286,14 @@ if test "x$CREATE_HTML_TARZ_ARCHIVE" == "xON" ; then
             fi
        fi
    fi
+fi
+
+# ----------------------------------------------------------------------------
+# Let's overwrite any *vtk* file produce by our custom vtk/doxygen tool
+# on top of the existing doxygen one.
+
+if test "x$CP_PROG" != "xNOTFOUND" ; then
+  $CP_PROG "$OUTPUT_DIRECTORY/html/*vtk*" "$PATH_TO_VTKGDCM_FINAL_PATH"
 fi
 
 # ----------------------------------------------------------------------------
