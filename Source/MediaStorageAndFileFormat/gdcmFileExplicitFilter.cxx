@@ -140,7 +140,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
         // still a special case, when VL is > uint16_max then we must give up:
         if( !(cvr & VR::VL32) && de.GetVL() > UINT16_MAX )
           {
-          abort(); // TODO need testing
+          cvr = VR::UN;
           }
         de.SetVR( cvr );
         }
