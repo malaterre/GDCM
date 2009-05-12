@@ -680,6 +680,7 @@ bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
   char tmp[maxsize];
   // Obtain the time of day, and convert it to a tm struct.
   struct tm *ptm = localtime (&timep);
+  if(!ptm) return false;
   // Format the date and time, down to a single second.
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
   assert( ret == 14 );

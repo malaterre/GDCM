@@ -5,7 +5,7 @@ GDCM 2.x:
           Charl P. Botha             : Contributor (python, VTK)
              Shane Blackett          : Contributor (Win32)
            Mathieu Malaterre         : Project leader, main developer
-              Mark Roden             : Contributor (C#)	   
+              Mark Roden             : Contributor (C#)     
        Jean-Pierre Roux              : Developer, maintain gdcmDataExtra
          Christina Rossmanith        : Contributor (Siemens CSA)       
      Christopher W Treml             : Contributor (C#)       
@@ -18,7 +18,7 @@ GDCM 1.x (Developpers and contributors, alphabetical order)
            Fabrice Bellet
             Hugues Benoit-Cattin
           Francois Bertel
-	      Eric Boix
+              Eric Boix
           Charl P. Botha
              Peter Cech
    Eduardo Enrique Davila Serrano
@@ -26,7 +26,7 @@ GDCM 1.x (Developpers and contributors, alphabetical order)
              David Feng
              Marco Feuerstein
             Pierre Fillard
-	  Leonardo Flores Valencia
+   Leonardo Flores Valencia
             Dennis Hu
               Luis Ibanez
     Paulo Henrique Junqueira Amorim
@@ -35,10 +35,10 @@ GDCM 1.x (Developpers and contributors, alphabetical order)
             George Li
               Sean McInemey
              Johan Montagnat
-	  Emmanuel Olart
+          Emmanuel Olart
               Luca Picello
          Parikshit Prasad
-	    Benoit Regrain 
+            Benoit Regrain 
        Jean-Michel Rouet
            Olivier Stern
             Satomi Takeo
