@@ -67,7 +67,7 @@ namespace gdcm
    */
   SmartPointer<SequenceOfItems> DataElement::GetValueAsSQ() const
     {
-    if( IsEmpty() || GetByteValue() || GetSequenceOfFragments() )
+    if( IsEmpty() /*|| GetByteValue()*/ || GetSequenceOfFragments() )
       {
       return 0;
       }

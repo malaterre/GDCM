@@ -254,7 +254,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
 
   const gdcm::DataElement &roicsq = ds.GetDataElement( troicsq );
   //std::cout << roicsq << std::endl;
-  //const gdcm::SequenceOfItems *sqi = roicsq.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems *sqi_debug = roicsq.GetSequenceOfItems();
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = roicsq.GetValueAsSQ();
   if( !sqi || !sqi->GetNumberOfItems() )
     {
