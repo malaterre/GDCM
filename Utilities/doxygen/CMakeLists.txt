@@ -153,6 +153,8 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   # man2txt : man man | col -b | less
 
   IF(GDCM_USE_VTK)
+    # Make this option a hidden option as vtkgdcm/doxygen stuff is a mess (copy/paste
+    # from paraview). It always rerun -sigh-
     IF(GDCM_VTK_DOCUMENTATION)
       SET(BUILD_DOCUMENTATION 1)
     ENDIF(GDCM_VTK_DOCUMENTATION)

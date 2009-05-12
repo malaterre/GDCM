@@ -26,7 +26,7 @@ class JPEGLSInternals;
  * \note codec that implement the JPEG-LS compression
  * this is an implementation of ImageCodec for JPEG-LS
  *
- * It uses the CharLS JPEG-LS implementation
+ * It uses the CharLS JPEG-LS implementation http://charls.codeplex.com
  */
 class GDCM_EXPORT JPEGLSCodec : public ImageCodec
 {

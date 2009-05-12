@@ -332,8 +332,6 @@ http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Tools/openssl#Giving_
 -----------------------------------------------------------------------
 gdcmdump map-uid-names
 -----------------------------------------------------------------------
-gettimeofday on WIN32 is busted
------------------------------------------------------------------------
 +/*
 + * Windows _snprintf and _vsnprintf are not compatible to linux versions.
 + * Result value is not size of buffer needed, but -1 if no fit is possible.
@@ -343,4 +341,8 @@ gettimeofday on WIN32 is busted
 + */
 -> polarssl
 -----------------------------------------------------------------------
-Update charls for bug fix
+Update charls for bug fix (16bits RGB still not working)
+-----------------------------------------------------------------------
+vtkGDCMImageReader::IsLossy should work (this is important)
+-----------------------------------------------------------------------
+vtkGDCMImageReader::GetDirectionCosines(uint i)

@@ -31,7 +31,7 @@ MARK_AS_ADVANCED(VTK_DIR)
   SET(DOXYGEN_PROJECT_SOURCE_DIR "${vtkgdcm_SOURCE_DIR}")
   SET(VTK_DOXYGEN_HOME "${vtkgdcm_SOURCE_DIR}/VTK/Utilities/Doxygen")
   SET(DOXYGEN_CVSWEB_CHECKOUT "http://public.kitware.com/cgi-bin/cvsweb.cgi/~checkout~/vtkgdcm/")
-  SET(DOXYGEN_CVSWEB_CHECKOUT_SUFFIX "?cvsroot=vtkgdcm3")
+  SET(DOXYGEN_CVSWEB_CHECKOUT_SUFFIX "?cvsroot=vtkgdcm")
   SET(DOXYGEN_SOURCE_LOCATIONS_DIR "${vtkgdcm_SOURCE_DIR}")
   SET(DOXYGEN_SOURCE_LOCATIONS
        "\"${vtkgdcm_SOURCE_DIR}\" \\
