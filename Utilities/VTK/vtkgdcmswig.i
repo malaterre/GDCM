@@ -433,6 +433,8 @@ while we would want:
 };
 #endif
 %clear double*;
+%clear double* GetDataSpacing();
+%clear double* GetDataOrigin();
 
 #ifndef USEACTIVIZ
 %include "vtkImageExport.h"
