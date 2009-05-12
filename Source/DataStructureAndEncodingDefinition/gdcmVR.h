@@ -77,7 +77,8 @@ public:
     US_SS = US | SS,
     US_SS_OW = US | SS | OW,
     // The following do not have a VRString equivalent (ie cannot be found in PS 3.6)
-    VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
+    VL16 = AE | AS | AT | CS | DA | DS | DT | FD | FL | IS | LO | LT | PN | SH | SL | SS | ST | TM | UI | UL | US, // if( VR & VL16 ) => VR has its VL coded over 16bits
+    VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VL32 ) => VR has its VL coded over 32bits
     VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI | UT,
     VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US, // FIXME: UN ?
     // PS 3.5:

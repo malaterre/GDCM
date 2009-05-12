@@ -364,7 +364,8 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     return os;
     }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( VRField == VR::INVALID )
+  bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > VL::GetVL16Max());
+  if( VRField == VR::INVALID || vr16bitsimpossible )
     {
     VR un = VR::UN;
     un.Write(os);

@@ -74,6 +74,7 @@ public:
   void AddItem(Item const &item);
 
   unsigned int GetNumberOfItems() const {  return Items.size(); }
+  void SetNumberOfItems(unsigned int n) {  Items.resize(n); }
 
   /* WARNING: first item is #1 (see DICOM standard)
    *  Each Item shall be implicitly assigned an ordinal position starting with the value 1 for the

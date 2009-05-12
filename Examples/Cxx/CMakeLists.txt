@@ -14,6 +14,7 @@ INCLUDE_DIRECTORIES(
 FIND_PACKAGE(MAGIC)
 
 SET(EXAMPLES_SRCS
+  LargeVRDSExplicit
   AnonymizeAES
   ClinicalTrialAnnotate
   CheckBigEndianBug
