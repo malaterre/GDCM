@@ -106,12 +106,17 @@ STRATEGY* JlsCodecFactory<STRATEGY>::GetCodecImpl(const JlsParamaters& _info)
 		if (_info.components == 3 && _info.bitspersample == 8)
 		{
 			if (_info.allowedlossyerror == 0)
-				return new JlsCodec<LosslessTraitsT<Triplet,8>, STRATEGY>(LosslessTraitsT<Triplet,8>(), _info);
+				return new JlsCodec<LosslessTraitsT<Triplet<BYTE>,8>, STRATEGY>(LosslessTraitsT<Triplet<BYTE>,8>(), _info);
 
-			DefaultTraitsT<BYTE,Triplet> traits((1 << _info.bitspersample) - 1, _info.allowedlossyerror); 
-			return new JlsCodec<DefaultTraitsT<BYTE,Triplet>, STRATEGY>(traits, _info); 	
+			DefaultTraitsT<BYTE,Triplet<BYTE> > traits((1 << _info.bitspersample) - 1, _info.allowedlossyerror); 
+			return new JlsCodec<DefaultTraitsT<BYTE,Triplet<BYTE> >, STRATEGY>(traits, _info); 	
 		}
 	
+		if (_info.components == 3 && 8 < _info.bitspersample && _info.bitspersample <= 16)
+		{
+			DefaultTraitsT<USHORT,Triplet<USHORT> > traits((1 << _info.bitspersample) - 1, _info.allowedlossyerror); 
+			return new JlsCodec<DefaultTraitsT<USHORT,Triplet<USHORT> >, STRATEGY>(traits, _info); 	
+		}
 		return NULL;
 	}
 

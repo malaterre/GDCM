@@ -9,7 +9,6 @@
 #include <vector>
 #include "util.h"
 
-
 class JpegSegment;
 
 

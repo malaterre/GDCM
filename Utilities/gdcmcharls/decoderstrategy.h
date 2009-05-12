@@ -7,27 +7,24 @@
 #define CHARLS_DECODERSTRATEGY
 
 #include "streams.h"
-#include "colortransform.h"
+#include "processline.h"
 
 class DecoderStrategy
 {
 public:
 	DecoderStrategy(const JlsParamaters& info) :
-	  _readCache(0),
+		  _info(info),
+	          _processLine(0),
+		  _readCache(0),
 		  _validBits(0),
-		  _pbyteCompressed(0),
-		  _info(info)
+		  _pbyteCompressed(0)
 	  {
-		  if (_info.ilv != ILV_LINE)
-		  {
-				_info.components  = 1;
-		  }
 	  }
 
-	 enum { IsDecoding = 1};
-
 	  virtual ~DecoderStrategy()
-	  {}
+	  {
+		  delete _processLine;
+	  }
 
 	  virtual void SetPresets(const JlsCustomParameters& presets) = 0;
 	  virtual size_t DecodeScan(void* pvoidOut, const Size& size, const void* pvoidIn, size_t cbyte, bool bCheck) = 0;
@@ -49,63 +46,13 @@ public:
 	  }
 
 	
-	  void OnLineBegin(int iline, LONG cpixel, void* ptypeBuffer, LONG pixelStride) 
+	  void OnLineBegin(LONG cpixel, void* ptypeBuffer, LONG pixelStride) 
 	  {}
 
 
-
-	  void OnLineEnd(int iline, LONG cpixel, const Triplet* ptypeBuffer, LONG pixelStride)
+	  void OnLineEnd(LONG cpixel, const void* ptypeBuffer, LONG pixelStride)
 	  {
-		  Triplet* ptypeUnc = ((Triplet*)_ptypeUncompressed) + iline * cpixel;				
-	
-	  		switch(_info.colorTransform)
-			{
-				case COLORXFORM_NONE : return TransformLine(ptypeUnc, ptypeBuffer, cpixel, TransformNone());
-				case COLORXFORM_HP1 :  return TransformLine(ptypeUnc, ptypeBuffer, cpixel, TransformHp1ToRgb());
-				case COLORXFORM_HP2 :  return TransformLine(ptypeUnc, ptypeBuffer, cpixel, TransformHp2ToRgb());
-				case COLORXFORM_HP3 :  return TransformLine(ptypeUnc, ptypeBuffer, cpixel, TransformHp3ToRgb());
-			}
-	  }
-
-	  template <class T>
-	  void OnLineEnd(int iline, LONG cpixel, const T* ptypeBuffer, LONG pixelStride)
-	  {
-
-		  
-		  for (int icomponent = 0; icomponent < _info.components; ++icomponent)
-			{
-				T* ptypeUnc = ((T*)_ptypeUncompressed) + (iline *_info.components + icomponent)* cpixel;				
-#ifdef _DEBUG			
-				for (LONG i = 0; i < cpixel; ++i)
-				{
-					//CheckedAssign(ptypeLine[i], ptypeCur[i]);
-					ptypeUnc[i] = ptypeBuffer[i + icomponent*pixelStride];
-				}
-#else
-				memcpy(ptypeUnc, ptypeBuffer+ icomponent*pixelStride, cpixel * sizeof(T) );
-#endif
-			}
-	  }
-	 
-	  void OnLineEnd(int iline, LONG cpixel, const BYTE* ptypeBuffer, LONG pixelStride)
-	  {
-		BYTE* ptypeUnc = ((BYTE*)(_ptypeUncompressed));
-		if (_info.components == 1)
-		{
-			memcpy(ptypeUnc + cpixel * iline,  ptypeBuffer, cpixel * sizeof(BYTE));
-			return;
-		}
-
-		ptypeUnc += iline * _info.components * cpixel;
-		
-		switch(_info.colorTransform)
-		{
-			case COLORXFORM_NONE : return TransformLineToTriplet(ptypeBuffer, pixelStride, ptypeUnc, cpixel, TransformNone());			
-			case COLORXFORM_HP1 : return TransformLineToTriplet(ptypeBuffer, pixelStride, ptypeUnc, cpixel, TransformHp1ToRgb());
-			case COLORXFORM_HP2 : return TransformLineToTriplet(ptypeBuffer, pixelStride, ptypeUnc, cpixel, TransformHp2ToRgb());
-			case COLORXFORM_HP3 : return TransformLineToTriplet(ptypeBuffer, pixelStride, ptypeUnc, cpixel, TransformHp3ToRgb());			
-		}
-
+	  		_processLine->NewLineDecoded(ptypeBuffer, cpixel, pixelStride);
 	  }
 
 	  typedef size_t bufType;
@@ -142,8 +89,8 @@ public:
 				  return;
 			  }
 
-			  bufType valnew	  = *_pbyteCompressed;
-			  _readCache		 |= bufType(_pbyteCompressed[0]) << (bufferbits - 8  - _validBits);
+			  bufType valnew	  = _pbyteCompressed[0];
+			  _readCache		 |= valnew << (bufferbits - 8  - _validBits);
 			  _pbyteCompressed   += 1;				
 			  _validBits		 += 8; 
 
@@ -155,6 +102,7 @@ public:
 		  while (_validBits < bufferbits - 8);
 
 		  _pbyteNextFF = FindNextFF();
+		  return;
 
 	  }
 
@@ -163,13 +111,17 @@ public:
 	  {
 		  BYTE* pbyteNextFF =_pbyteCompressed;
 
-		  while (pbyteNextFF < _pbyteCompressedEnd && *pbyteNextFF != 0xFF)
+		  while (pbyteNextFF < _pbyteCompressedEnd)
 	      {
-			   pbyteNextFF++;
+			  if (*pbyteNextFF == 0xFF) 
+				  break;
+
+    		  pbyteNextFF++;
 		  }
 		  
 		  return pbyteNextFF - (sizeof(bufType)-1);
 	  }
+
 
 	  BYTE* GetCurBytePos() const
 	  {
@@ -279,6 +231,7 @@ public:
 protected:
 	JlsParamaters _info;
 	void* _ptypeUncompressed;
+	ProcessLine* _processLine;
 
 private:
 	// decoding

@@ -1,6 +1,7 @@
 This directory contains a subset of the CharLS project (http://charls.codeplex.com/)
 
-It was retrieved on Wed Apr 22 15:43:16 CEST 2009 from:
+It was retrieved on Tue May 12 18:01:34 CEST 2009
+URL:
 $ svn co https://charls.svn.codeplex.com/svn 
 The main author (Jan de Vaan <jan dot devaan at versatel dot nl>) claims this is a 1.0 release eventhough there are no tarball uploaded yet.
 
@@ -24,4 +25,4 @@ Modifications
 - remove tests/* subdirs
 - remove *.vcproj/*.sln M$ Visual Studio specific files (use cmake in all cases)
 - apply dos2unix to all files
-
+- remove trailing comma (,) in enum {}
