@@ -46,6 +46,18 @@ using My.Own.Namespace;
 %}
 */
 
+/*
+In order to get documentation on member function and class, one can do (SWIG 1.3.39):
+
+%csmethodmodifiers gdcm::Tag::GetGroup "
+  /// <summary>
+  /// This is the GetGroup func
+  /// </summary>
+  public";
+%typemap(csclassmodifiers) gdcm::Tag "/// coucou class
+public class";
+*/
+
 %module(docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
 
@@ -180,6 +192,7 @@ using My.Own.Namespace;
 using namespace gdcm;
 %}
 
+//%include "docstrings.i"
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
@@ -224,12 +237,6 @@ using namespace gdcm;
 };
 %include "gdcmMediaStorage.h"
 //%rename(this ) gdcm::Tag::operator[];
-%csmethodmodifiers gdcm::Tag::GetGroup "
-  /// <summary>
-  /// This is the GetGroup func
-  /// </summary>
-  public";
-%csmethodmodifiers gdcm::Tag::GetElement "/** coucou */ public"
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
