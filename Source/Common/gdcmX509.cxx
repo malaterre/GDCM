@@ -16,12 +16,12 @@
 #include <iostream>
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-namespace openssl // prevent namespace clash such as openssl::PKCS7 vs gdcm::PKCS7
-{
+//namespace openssl // prevent namespace clash such as openssl::PKCS7 vs gdcm::PKCS7
+//{
 #include <openssl/pem.h>
 #include <openssl/x509.h>
-#define my_sk_X509_value(st, i) SKM_sk_value(openssl::X509, (st), (i))
-}
+#define my_sk_X509_value(st, i) SKM_sk_value(::X509, (st), (i))
+//}
 #endif
 
 //#include <stdlib>
@@ -37,14 +37,14 @@ class X509Internals
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 public:
   X509Internals():pkey(NULL) {
-    recips = openssl::sk_X509_new_null();
+    recips = sk_X509_new_null();
   }
   ~X509Internals() {
-    openssl::sk_X509_pop_free(recips, openssl::X509_free);
+    sk_X509_pop_free(recips, X509_free);
     EVP_PKEY_free(pkey);
     }
-  openssl::STACK_OF(X509) *recips;
-  openssl::EVP_PKEY *pkey;
+  ::STACK_OF(X509) *recips;
+  ::EVP_PKEY *pkey;
 #endif
 };
 
@@ -61,9 +61,9 @@ X509::~X509()
 bool X509::ParseKeyFile( const char *keyfile)
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  openssl::BIO *in;
-  openssl::EVP_PKEY *pkey;
-  if ((in=openssl::BIO_new_file(keyfile,"r")) == NULL)
+  ::BIO *in;
+  ::EVP_PKEY *pkey;
+  if ((in=::BIO_new_file(keyfile,"r")) == NULL)
     {
     return false;
     }
@@ -84,22 +84,22 @@ bool X509::ParseKeyFile( const char *keyfile)
 bool X509::ParseCertificateFile( const char *keyfile)
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  openssl::STACK_OF(X509) *recips = Internals->recips;
+  ::STACK_OF(X509) *recips = Internals->recips;
   assert( recips );
-  openssl::X509 *x509 = NULL;
+  ::X509 *x509 = NULL;
 
-  ::openssl::BIO *in;
-  if (!(in=openssl::BIO_new_file(keyfile,"r")))
+  ::BIO *in;
+  if (!(in=::BIO_new_file(keyfile,"r")))
     {
     return false;
     }
   // -> LEAK reported by valgrind...
-  if (!(x509=openssl::PEM_read_bio_X509(in,NULL,NULL,NULL)))
+  if (!(x509=::PEM_read_bio_X509(in,NULL,NULL,NULL)))
     {
     return false;
     }
-  openssl::BIO_free(in); in = NULL;
-  openssl::sk_X509_push(recips, x509);
+  ::BIO_free(in); in = NULL;
+  ::sk_X509_push(recips, x509);
   return true;
 #else
   return false;
@@ -109,27 +109,28 @@ bool X509::ParseCertificateFile( const char *keyfile)
 unsigned int X509::GetNumberOfRecipients() const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  openssl::STACK_OF(X509) *recips = Internals->recips;
+  ::STACK_OF(X509) *recips = Internals->recips;
   if(!recips) {
     return 0;
   }
-  return openssl::sk_X509_num(recips);
+  return ::sk_X509_num(recips);
 #else
   return 0;
 #endif
 }
 
-openssl::X509* X509::GetRecipient( unsigned int i ) const
+::X509* X509::GetRecipient( unsigned int i ) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  openssl::STACK_OF(X509) *recips = Internals->recips;
-  return my_sk_X509_value(recips, i);
+  ::STACK_OF(X509) *recips = Internals->recips;
+  ::X509 *ret = my_sk_X509_value(recips, i);
+  return ret;
 #else
   return NULL;
 #endif
 }
 
-openssl::EVP_PKEY* X509::GetPrivateKey() const
+::EVP_PKEY* X509::GetPrivateKey() const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   return Internals->pkey;

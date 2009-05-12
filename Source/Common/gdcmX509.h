@@ -17,14 +17,14 @@
 
 #include "gdcmTypes.h"
 
-namespace openssl { 
+//namespace openssl { 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 #include <openssl/x509.h>
 #else
 class X509;
 class EVP_PKEY;
 #endif
- }
+// }
 namespace gdcm
 {
 /**
@@ -50,9 +50,9 @@ bool ParseCertificateFile( const char *filename );
 bool ParseKeyFile( const char *filename );
 
 protected:
-friend class PKCS7;
-openssl::X509* GetRecipient( unsigned int i ) const;
-openssl::EVP_PKEY* GetPrivateKey() const;
+	friend class PKCS7;
+	::X509* GetRecipient( unsigned int i ) const;
+	::EVP_PKEY* GetPrivateKey() const;
 
 private:
   X509Internals *Internals;
