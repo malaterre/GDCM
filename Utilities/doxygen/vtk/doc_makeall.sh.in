@@ -293,7 +293,7 @@ fi
 # on top of the existing doxygen one.
 
 if test "x$CP_PROG" != "xNOTFOUND" ; then
-  $CP_PROG "$OUTPUT_DIRECTORY/html/*vtk*" "$PATH_TO_VTKGDCM_FINAL_PATH"
+  $CP_PROG "$OUTPUT_DIRECTORY/html/"*vtk* "$PATH_TO_VTKGDCM_FINAL_PATH"
 fi
 
 # ----------------------------------------------------------------------------
