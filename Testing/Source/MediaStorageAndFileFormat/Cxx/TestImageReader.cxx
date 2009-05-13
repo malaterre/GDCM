@@ -20,7 +20,7 @@
 #include "gdcmTrace.h"
 #include "gdcmTesting.h"
 
-int TestImageRead(const char* filename, bool verbose = false)
+int TestImageRead(const char* filename, bool verbose = false, bool lossydump = false)
 {
   if( verbose )
     std::cerr << "Reading: " << filename << std::endl;
@@ -33,6 +33,11 @@ int TestImageRead(const char* filename, bool verbose = false)
     const gdcm::Image &img = reader.GetImage();
     //std::cerr << "Success to read image from file: " << filename << std::endl;
     unsigned long len = img.GetBufferLength();
+    if ( lossydump )
+      {
+      int lossy = img.IsLossy();
+      std::cout << lossy << "," << filename << std::endl;
+      }
     char* buffer = new char[len];
     bool res2 = img.GetBuffer(buffer);
     if( !res2 )
@@ -128,7 +133,8 @@ int TestImageReader(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestImageRead( filename );
+    r += TestImageRead( filename, false, true );
+    //r += TestImageRead( filename, false, true );
     ++i;
     }
 
