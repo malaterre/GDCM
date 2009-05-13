@@ -24,8 +24,7 @@
 #include "gdcmDicts.h"
 #include "gdcmType.h"
 #include "gdcmDefs.h"
-#include "gdcmX509.h"
-#include "gdcmPKCS7.h"
+#include "gdcmCryptographicMessageSyntax.h"
 
 namespace gdcm
 {
@@ -338,8 +337,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
 
-  PKCS7 p7;
-  p7.SetCertificate( this->x509 );
+  CryptographicMessageSyntax &p7 = *CMS;
+  //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
 
@@ -673,8 +672,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   // Transfer Syntax UID (0400,0510). Re-identifiers claiming conformance to this profile shall be capable
   // of decrypting the Encrypted Content using either AES or Triple-DES in all possible key lengths
   // specified in this profile
-  PKCS7 p7;
-  p7.SetCertificate( this->x509 );
+  CryptographicMessageSyntax &p7 = *CMS;
+  //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
   const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
@@ -755,14 +754,14 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   return true;
 }
 
-void        Anonymizer::SetX509( X509 *x509 )
+void Anonymizer::SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms)
 {
-  this->x509 = x509;
+  CMS = cms;
 }
 
-const X509 *Anonymizer::GetX509() const
+const CryptographicMessageSyntax *Anonymizer::GetCryptographicMessageSyntax() const
 {
-  return this->x509;
+  return CMS;
 }
 
 } // end namespace gdcm

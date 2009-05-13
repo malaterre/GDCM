@@ -3,10 +3,7 @@
 SET(Common_TEST_SRCS
   TestVersion
   TestDummyValueGenerator
-  TestAES
   TestASN1
-  TestRSA
-  TestPKCS7
   TestTesting
   TestSwapper
   TestByteSwap
@@ -29,6 +26,8 @@ SET(Common_TEST_SRCS
   ${Common_TEST_SRCS}
   TestDirectory
   TestFilename
+  TestMD5
+  TestSHA1
   )
 ENDIF(GDCM_DATA_ROOT)
 

@@ -16,6 +16,7 @@
 #define __gdcmPKCS7_h
 
 #include "gdcmTypes.h"
+#error
 
 namespace gdcm
 {
@@ -33,22 +34,6 @@ public :
   PKCS7();
   ~PKCS7();
 
-  typedef enum {
-    DES_CIPHER,    // DES
-    DES3_CIPHER,   // Triple DES
-    AES128_CIPHER, // CBC AES
-    AES192_CIPHER, // '   '
-    AES256_CIPHER  // '   '
-  } CipherTypes;
-
-  void SetCipherType( CipherTypes type);
-  CipherTypes GetCipherType() const;
-
-  void SetCertificate( X509 *cert );
-  const X509 *GetCertificate( ) const;
-
-  bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
-  bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
 
 protected:
 

@@ -16,6 +16,7 @@
 #define __gdcmHAVEGE_h
 
 #include "gdcmTypes.h"
+#error
 
 namespace gdcm
 {

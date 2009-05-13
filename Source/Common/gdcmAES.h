@@ -16,6 +16,7 @@
 #define __gdcmAES_h
 
 #include "gdcmTypes.h"
+#error
 
 namespace gdcm
 {

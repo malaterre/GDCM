@@ -16,6 +16,7 @@
 #define __gdcmX509_h
 
 #include "gdcmTypes.h"
+#error
 
 //namespace openssl { 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
@@ -46,8 +47,6 @@ public :
   } X509ErrorType;
 
 unsigned int GetNumberOfRecipients() const;
-bool ParseCertificateFile( const char *filename );
-bool ParseKeyFile( const char *filename );
 
 protected:
 	friend class PKCS7;

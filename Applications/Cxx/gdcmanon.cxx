@@ -21,10 +21,10 @@
 #include "gdcmWriter.h"
 #include "gdcmVersion.h"
 #include "gdcmSystem.h"
+#include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmGlobal.h"
-#include "gdcmX509.h"
 #include "gdcmDefs.h"
 #include "gdcmDirectory.h"
 
@@ -101,11 +101,11 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   return true;
 }
 
-bool GetRSAKeys(gdcm::X509 &x509, const char *privpath = 0, const char *certpath = 0)
+bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpath = 0, const char *certpath = 0)
 {
   if( privpath && *privpath )
     {
-    if( !x509.ParseKeyFile( privpath ) )
+    if( !cms.ParseKeyFile( privpath ) )
       {
       return false;
       }
@@ -113,7 +113,7 @@ bool GetRSAKeys(gdcm::X509 &x509, const char *privpath = 0, const char *certpath
 
   if( certpath && *certpath )
     {
-    if( !x509.ParseCertificateFile( certpath ) )
+    if( !cms.ParseCertificateFile( certpath ) )
       {
       return false;
       }
@@ -478,15 +478,15 @@ int main(int argc, char *argv[])
     }
 
   // Get private key/certificate
-  gdcm::X509 x509;
-  if( !GetRSAKeys(x509, rsa_path.c_str(), cert_path.c_str() ) )
+  gdcm::CryptographicMessageSyntax cms;
+  if( !GetRSAKeys(cms, rsa_path.c_str(), cert_path.c_str() ) )
     {
     return 1;
     }
 
   // Setup gdcm::Anonymizer
   gdcm::Anonymizer anon;
-  anon.SetX509( &x509 );
+  //anon.SetCry( &x509 );
 
   for(unsigned int i = 0; i < nfiles; ++i)
     {

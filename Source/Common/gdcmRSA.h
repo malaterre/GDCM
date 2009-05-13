@@ -16,6 +16,7 @@
 #define __gdcmRSA_h
 
 #include "gdcmTypes.h"
+#error
 
 namespace gdcm
 {

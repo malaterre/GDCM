@@ -33,6 +33,8 @@ public :
 
   static bool Compute(const char *buffer, unsigned long buf_len, char digest_str[33]);
 
+  static bool ComputeFile(const char *filename, char digest_str[33]);
+
 private:
   MD5Internals *Internals;
 private:

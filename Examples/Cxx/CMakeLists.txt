@@ -15,7 +15,7 @@ FIND_PACKAGE(MAGIC)
 
 SET(EXAMPLES_SRCS
   LargeVRDSExplicit
-  AnonymizeAES
+  #AnonymizeAES
   ClinicalTrialAnnotate
   CheckBigEndianBug
   DuplicatePCDE

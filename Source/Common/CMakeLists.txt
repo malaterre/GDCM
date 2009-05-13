@@ -80,12 +80,8 @@ SET(Common_SRCS
   gdcmBase64.cxx
   gdcmSHA1.cxx
   gdcmDummyValueGenerator.cxx
-  gdcmAES.cxx
-  gdcmRSA.cxx
+  gdcmCryptographicMessageSyntax.cxx
   gdcmASN1.cxx
-  gdcmPKCS7.cxx
-  gdcmHAVEGE.cxx
-  gdcmX509.cxx
   gdcmObject.cxx
   gdcmDirectory.cxx
   gdcmTerminal.cxx

@@ -33,6 +33,8 @@ public :
 
   static bool Compute(const char *buffer, unsigned long buf_len, char digest_str[20*2+1]);
 
+  static bool ComputeFile(const char *filename, char digest_str[20*2+1]);
+
 private:
   SHA1Internals *Internals;
 private:

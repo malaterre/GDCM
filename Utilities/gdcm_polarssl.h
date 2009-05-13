@@ -15,6 +15,8 @@
 #ifndef __gdcm_polarssl_h
 #define __gdcm_polarssl_h
 
+#error
+
 /* Use the uuid library configured for gdcm.  */
 #include "gdcmTypes.h"
 #ifdef GDCM_USE_SYSTEM_POLARSSL
