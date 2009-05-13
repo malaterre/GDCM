@@ -137,6 +137,12 @@ void PrintHelp()
   std::cout << "     --resources-path      Resources path." << std::endl;
   std::cout << "  -k --key                 Path to RSA Private Key." << std::endl;
   std::cout << "  -c --certificate         Path to Certificate." << std::endl;
+  std::cout << "Encryption Algorithm Options:" << std::endl;
+  std::cout << "     --des            DES." << std::endl;
+  std::cout << "     --des3           Triple DES." << std::endl;
+  std::cout << "     --aes128         AES 128." << std::endl;
+  std::cout << "     --aes192         AES 192." << std::endl;
+  std::cout << "     --aes256         AES 256." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -147,6 +153,37 @@ void PrintHelp()
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
   std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
+}
+
+gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char * str )
+{
+  gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
+  if( strcmp( str, "des" ) == 0 )
+    {
+    ciphertype = gdcm::CryptographicMessageSyntax::DES_CIPHER;
+    }
+  else if( strcmp( str, "des3" ) == 0 )
+    {
+    ciphertype = gdcm::CryptographicMessageSyntax::DES3_CIPHER;
+    }
+  else if( strcmp( str, "aes128" ) == 0 )
+    {
+    ciphertype = gdcm::CryptographicMessageSyntax::AES128_CIPHER;
+    }
+  else if( strcmp( str, "aes192" ) == 0 )
+    {
+    ciphertype = gdcm::CryptographicMessageSyntax::AES192_CIPHER;
+    }
+  else if( strcmp( str, "aes256" ) == 0 )
+    {
+    ciphertype = gdcm::CryptographicMessageSyntax::AES256_CIPHER;
+    }
+  else
+    {
+    // if unrecognized return aes 256...
+    ciphertype = gdcm::CryptographicMessageSyntax::AES256_CIPHER;
+    }
+  return ciphertype;
 }
 
 int main(int argc, char *argv[])

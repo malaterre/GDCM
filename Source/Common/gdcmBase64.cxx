@@ -93,7 +93,7 @@ int Base64::Encode( char *dst, int dlen,
 
   // Encode all the data
   BIO_write(mem, src, slen);
-  BIO_flush(mem);
+  (void)BIO_flush(mem);
 
   // Create a new string from the data in the memory buffer
   char * base64Pointer;
@@ -142,6 +142,7 @@ int Base64::GetDecodeLength( const char *src, int  slen )
   return -1;
 #endif
 }
+// http://www.openssl.org/docs/crypto/BIO_f_base64.html
 
 int Base64::Decode( char *dst, int dlen,
                    const char *src, int  slen )

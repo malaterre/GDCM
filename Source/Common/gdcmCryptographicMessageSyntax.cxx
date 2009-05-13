@@ -20,15 +20,11 @@
 #include <time.h> // time()
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-//namespace openssl // prevent namespace clash such as PKCS7 vs gdcm::PKCS7
-//{
 #include <openssl/evp.h>
 #include <openssl/bio.h>
 #include <openssl/pem.h>
 #include <openssl/err.h>
 #include <openssl/rand.h>
-//#define my_sk_PKCS7_SIGNER_INFO_value(st, i) SKM_sk_value(PKCS7_SIGNER_INFO, (st), (i))
-//}
 #endif
 
 /*
@@ -45,7 +41,7 @@ class CryptographicMessageSyntaxInternals
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 public:
-  CryptographicMessageSyntaxInternals():pkey(NULL) {
+  CryptographicMessageSyntaxInternals():recips(NULL),pkey(NULL),CipherType( CryptographicMessageSyntax::AES256_CIPHER ) {
     recips = sk_X509_new_null();
   }
   ~CryptographicMessageSyntaxInternals() {
@@ -73,9 +69,16 @@ public:
   ::EVP_PKEY* GetPrivateKey() const {
     return pkey;
   }
+  void SetCipherType(CryptographicMessageSyntax::CipherTypes ciphertype) {
+    CipherType = ciphertype;
+  }
+  CryptographicMessageSyntax::CipherTypes GetCipherType() {
+    return CipherType;
+  }
 private:
   ::STACK_OF(X509) *recips;
   ::EVP_PKEY *pkey;
+  CryptographicMessageSyntax::CipherTypes CipherType;
 #endif
 };
 
@@ -89,13 +92,14 @@ CryptographicMessageSyntax::~CryptographicMessageSyntax()
   delete Internals;
 }
 
-void        CryptographicMessageSyntax::SetCipherType( CipherTypes type)
+void CryptographicMessageSyntax::SetCipherType( CipherTypes type)
 {
+  Internals->SetCipherType( type );
 }
 
 CryptographicMessageSyntax::CipherTypes CryptographicMessageSyntax::GetCipherType() const
 {
-  return AES256_CIPHER;
+  return Internals->GetCipherType();
 }
 
 //void CryptographicMessageSyntax::SetCertificate( X509 *cert )
@@ -111,6 +115,30 @@ CryptographicMessageSyntax::CipherTypes CryptographicMessageSyntax::GetCipherTyp
 /*
 openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
 */
+const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype)
+{
+  const EVP_CIPHER *cipher = 0;
+  switch( ciphertype )
+    {
+  case CryptographicMessageSyntax::DES_CIPHER:    // DES
+    cipher = EVP_des_cbc();
+    break;
+  case CryptographicMessageSyntax::DES3_CIPHER:   // Triple DES
+    cipher = EVP_des_ede3_cbc();
+    break;
+  case CryptographicMessageSyntax::AES128_CIPHER: // CBC AES
+    cipher = EVP_aes_128_cbc();
+    break;
+  case CryptographicMessageSyntax::AES192_CIPHER: // '   '
+    cipher = EVP_aes_192_cbc();
+    break;
+  case CryptographicMessageSyntax::AES256_CIPHER: // '   '
+    cipher = EVP_aes_256_cbc();
+    break;
+    }
+  return cipher;
+}
+
 bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
@@ -137,14 +165,12 @@ bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const cha
   if(!data) goto err;
 
   if(!cipher)  {
-#ifndef OPENSSL_NO_DES
-    //cipher = EVP_des_ede3_cbc();
-    cipher = EVP_aes_256_cbc();
-#else
-    fprintf(stderr, "No cipher selected\n");
-    goto err;
-#endif
+    cipher = CreateCipher( Internals->GetCipherType() );
   }
+  if(!cipher)
+    {
+    return false;
+    }
 
   // The following is inspired by PKCS7_encrypt
   // and openssl/crypto/pkcs7/enc.c
