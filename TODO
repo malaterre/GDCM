@@ -338,3 +338,8 @@ http://blog.mozilla.com/nnethercote/2009/02/27/eliminating-undefined-values-with
 I think adding -Weffc++ to the CXXFLAGS should help about that.
 -----------------------------------------------------------------------
 gdcmimg should strip the JFIF / JP2 markers
+-----------------------------------------------------------------------
+TODO: to get rid of openssl on Win32 one could use the CryptoAPI:
+[Example C Program: Signing a Message and Verifying a Message Signature]
+http://msdn.microsoft.com/en-us/library/aa382372.aspx
+http://www.ureader.com/msg/16591281.aspx
