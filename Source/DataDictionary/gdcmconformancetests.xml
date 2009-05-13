@@ -24,5 +24,6 @@
     <entry group="4d4d" element="0001" vr="SQ" vm="1" name="Array Container Sequence"/>
     <!-- dummy 0-filled array meant to quickly reach the hardcoded implicit limit of 2Gb -->
     <entry group="4d4d" element="0002" vr="OB" vm="1" name="0-Filled Array"/>
+    <!--entry group="4d4d" element="0003" vr="CS" vm="1" name="Initial"/-->
   </dict>
 </dicts>

@@ -637,7 +637,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "8b5e38699887158c3defd47900a68fc5" , "ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm" },
 
 
-
+{ "c57035e2dac52e339b27e8c965251b3d" , "DCMTK_JPEGExt_12Bits.dcm" }, // checked with dcmdjpeg v3.5.4+ 2009-05-07
 
 
 
