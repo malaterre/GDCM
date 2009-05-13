@@ -24,20 +24,29 @@ file-out  DICOM output filename
 
 \section options OPTIONS
 
-\subsection options options
+\subsection params params
 \verbatim
-  -i --input                  DICOM filename / directory
-  -o --output                 DICOM filename / directory
   -e --de-identify            De-identify DICOM (default)
   -d --re-identify            Re-identify DICOM
 \endverbatim
 
 \subsection options options
 \verbatim
+  -i --input                  DICOM filename / directory
+  -o --output                 DICOM filename / directory
      --root-uid               Root UID.
      --resources-path         Resources path.
   -k --key                    Path to RSA Private Key.
   -c --certificate            Path to Certificate.
+\endverbatim
+
+\subsection encryption_options encryption_options
+\verbatim
+     --des            DES.
+     --des3           Triple DES.
+     --aes128         AES 128.
+     --aes192         AES 192.
+     --aes256         AES 256.
 \endverbatim
 
 \subsection general_options general options

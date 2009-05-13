@@ -18,6 +18,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmSwapper.h"
+#include "gdcmDataSetHelper.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAttribute.h"
 #include "gdcmDummyValueGenerator.h"
@@ -382,7 +383,12 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     const DataElement &de = *it;
     //const SequenceOfItems *sqi = de.GetSequenceOfItems();
     const ByteValue *bv = de.GetByteValue();
-    SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+    SmartPointer<SequenceOfItems> sqi = 0;
+    VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
+    if( vr == VR::SQ )
+      {
+      sqi = de.GetValueAsSQ();
+      }
     if( sqi )
       {
       bool found = false;
@@ -624,7 +630,12 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
     {
     DataElement de = *it;
     //const SequenceOfItems *sqi = de.GetSequenceOfItems();
-    SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+    VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
+    SmartPointer<SequenceOfItems> sqi = 0;
+    if( vr == VR::SQ )
+      {
+      sqi = de.GetValueAsSQ();
+      }
     if( sqi )
       {
       //sqi->SetLengthToUndefined();

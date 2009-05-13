@@ -30,7 +30,7 @@
 
 #include <getopt.h>
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmanon: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
@@ -42,7 +42,7 @@ void PrintVersion()
   int reidentify = 0;
 
 
-bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename)
+static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -101,7 +101,7 @@ bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *
   return true;
 }
 
-bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpath = 0, const char *certpath = 0)
+static bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpath = 0, const char *certpath = 0)
 {
   if( privpath && *privpath )
     {
@@ -121,41 +121,41 @@ bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpath = 0,
   return true;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmanon [OPTION]... FILE..." << std::endl;
   std::cout << "PS 3.15 / E.1 / Basic Application Level Confidentiality Profile" << std::endl;
   std::cout << "Implementation of E.1.1 De-identify & E.1.2 Re-identify" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input                  DICOM filename / directory" << std::endl;
-  std::cout << "  -o --output                 DICOM filename / directory" << std::endl;
   std::cout << "  -e --de-identify (encrypt)  De-identify DICOM (default)" << std::endl;
   std::cout << "  -d --re-identify (decrypt)  Re-identify DICOM" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "     --root-uid            Root UID." << std::endl;
-  std::cout << "     --resources-path      Resources path." << std::endl;
-  std::cout << "  -k --key                 Path to RSA Private Key." << std::endl;
-  std::cout << "  -c --certificate         Path to Certificate." << std::endl;
+  std::cout << "  -i --input                  DICOM filename / directory" << std::endl;
+  std::cout << "  -o --output                 DICOM filename / directory" << std::endl;
+  std::cout << "     --root-uid               Root UID." << std::endl;
+  std::cout << "     --resources-path         Resources path." << std::endl;
+  std::cout << "  -k --key                    Path to RSA Private Key." << std::endl;
+  std::cout << "  -c --certificate            Path to Certificate." << std::endl;
   std::cout << "Encryption Algorithm Options:" << std::endl;
-  std::cout << "     --des            DES." << std::endl;
-  std::cout << "     --des3           Triple DES." << std::endl;
-  std::cout << "     --aes128         AES 128." << std::endl;
-  std::cout << "     --aes192         AES 192." << std::endl;
-  std::cout << "     --aes256         AES 256." << std::endl;
+  std::cout << "     --des                    DES." << std::endl;
+  std::cout << "     --des3                   Triple DES." << std::endl;
+  std::cout << "     --aes128                 AES 128." << std::endl;
+  std::cout << "     --aes192                 AES 192." << std::endl;
+  std::cout << "     --aes256                 AES 256 (default)." << std::endl;
   std::cout << "General Options:" << std::endl;
-  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
-  std::cout << "  -W --warning   print warning info." << std::endl;
-  std::cout << "  -D --debug     print debug info." << std::endl;
-  std::cout << "  -E --error     print error info." << std::endl;
-  std::cout << "  -h --help      print help." << std::endl;
-  std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "  -V --verbose                more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning                print warning info." << std::endl;
+  std::cout << "  -D --debug                  print debug info." << std::endl;
+  std::cout << "  -E --error                  print error info." << std::endl;
+  std::cout << "  -h --help                   print help." << std::endl;
+  std::cout << "  -v --version                print version." << std::endl;
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
   std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
-gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char * str )
+static gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char * str )
 {
   gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
   if( strcmp( str, "des" ) == 0 )
@@ -200,6 +200,11 @@ int main(int argc, char *argv[])
   std::string rsa_path;
   std::string cert_path;
   int resourcespath = 0;
+  int des = 0;
+  int des3 = 0;
+  int aes128 = 0;
+  int aes192 = 0;
+  int aes256 = 0;
   int rsapath = 0;
   int certpath = 0;
   int rootuid = 0;
@@ -221,6 +226,11 @@ int main(int argc, char *argv[])
         {"re-identify", 0, &reidentify, 1},
         {"key", 1, &rsapath, 1},
         {"certificate", 1, &certpath, 1},
+        {"des", 0, &des, 1},
+        {"des3", 0, &des3, 1},
+        {"aes128", 0, &aes128, 1},
+        {"aes192", 0, &aes192, 1},
+        {"aes256", 0, &aes256, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -406,6 +416,38 @@ int main(int argc, char *argv[])
     return 1;
     }
 
+  // by default AES 256
+  gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
+  if( !des && !des3 && !aes128 && !aes192 && !aes256 )
+    {
+    aes256 = 1;
+    }
+
+  if( des )
+    {
+    ciphertype = GetFromString( "des" );
+    }
+  else if( des3 )
+    {
+    ciphertype = GetFromString( "des3" );
+    }
+  else if( aes128 )
+    {
+    ciphertype = GetFromString( "aes128" );
+    }
+  else if( aes192 )
+    {
+    ciphertype = GetFromString( "aes192" );
+    }
+  else if( aes256 )
+    {
+    ciphertype = GetFromString( "aes256" );
+    }
+  else
+    {
+    return 1;
+    }
+
   if( !gdcm::System::FileExists(filename.c_str()) )
     {
     // doh !
@@ -520,10 +562,11 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
+  cms.SetCipherType( ciphertype );
 
   // Setup gdcm::Anonymizer
   gdcm::Anonymizer anon;
-  //anon.SetCry( &x509 );
+  anon.SetCryptographicMessageSyntax( &cms );
 
   for(unsigned int i = 0; i < nfiles; ++i)
     {
