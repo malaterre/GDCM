@@ -73,6 +73,7 @@ bool SHA1::Compute(const char *buffer, unsigned long buf_len, char digest[])
 #endif
 }
 
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 inline bool process_file(const char *filename, unsigned char *digest)
 {
   if( !filename || !digest ) return false;
@@ -108,9 +109,11 @@ inline bool process_file(const char *filename, unsigned char *digest)
   fclose(file);
   return true;
 }
+#endif
 
 bool SHA1::ComputeFile(const char *filename, char digest_str[20*2+1])
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   // If not file exist
   // return false;
   unsigned char digest[20];
@@ -127,6 +130,10 @@ bool SHA1::ComputeFile(const char *filename, char digest_str[20*2+1])
     }
   digest_str[2*20] = '\0';
   return true;
+#else
+  digest_str = 0;
+  return false;
+#endif
 }
 
 

@@ -13,11 +13,12 @@
 
 =========================================================================*/
 #include "gdcmMD5.h"
-#include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 #include <openssl/md5.h>
+#else
+#include "gdcmTesting.h" // FIXME
 #endif
 
 #include <string.h>//memcmp
@@ -45,9 +46,15 @@ MD5::~MD5()
 
 bool MD5::Compute(const char *buffer, unsigned long buf_len, char digest[33])
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  digest = 0;
+  return false;
+#else
   return Testing::ComputeMD5(buffer, buf_len, digest);
+#endif
 }
 
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 inline bool process_file(const char *filename, unsigned char *digest)
 {
   if( !filename || !digest ) return false;
@@ -83,9 +90,11 @@ inline bool process_file(const char *filename, unsigned char *digest)
   fclose(file);
   return true;
 }
+#endif
 
 bool MD5::ComputeFile(const char *filename, char digest_str[33])
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   // If not file exist
   // return false;
   unsigned char digest[16];
@@ -101,13 +110,10 @@ bool MD5::ComputeFile(const char *filename, char digest_str[33])
     sprintf(digest_str+2*di, "%02x", digest[di]);
     }
   digest_str[2*16] = '\0';
-
-  char output2[33];
-  Testing::ComputeFileMD5(filename, output2);
-  assert( strcmp( digest_str, output2 ) == 0 );
-
   return true;
-
+#else
+  return Testing::ComputeFileMD5(filename, digest_str);
+#endif
 }
 
 
