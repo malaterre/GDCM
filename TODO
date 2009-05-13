@@ -331,10 +331,10 @@ gdcmdump map-uid-names
 -----------------------------------------------------------------------
 Update charls for bug fix (16bits RGB still not working)
 -----------------------------------------------------------------------
-vtkGDCMImageReader::IsLossy should work (this is important)
------------------------------------------------------------------------
 vtkGDCMImageReader::GetDirectionCosines(uint i)
 -----------------------------------------------------------------------
 http://blog.mozilla.com/nnethercote/2009/02/27/eliminating-undefined-values-with-valgrind-the-easy-way/
 > And just think, if C++ warned about fields uninitialised by constructors,
 I think adding -Weffc++ to the CXXFLAGS should help about that.
+-----------------------------------------------------------------------
+gdcmimg should strip the JFIF / JP2 markers
