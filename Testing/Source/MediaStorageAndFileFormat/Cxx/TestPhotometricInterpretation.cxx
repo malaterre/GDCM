@@ -29,5 +29,8 @@ int TestPhotometricInterpretation(int, char *[])
       return 1;
       }
     }
+
+  pi = gdcm::PhotometricInterpretation::RGB;
+
   return 0;
 }

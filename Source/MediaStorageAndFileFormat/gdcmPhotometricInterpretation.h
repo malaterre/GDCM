@@ -22,6 +22,7 @@
 namespace gdcm
 {
 
+class TransferSyntax;
 /**
  * \brief Class to represent an PhotometricInterpretation
  */
@@ -78,6 +79,8 @@ public:
   // Will return whether current PhotometricInterpretation is the same Color Space as input:
   // eg. RGB and YBR_RCT are
   bool IsSameColorSpace( PhotometricInterpretation const &pi ) const;
+
+  //static PIType GetEquivalent(TransferSyntax const &ts);
 
 private:
   PIType PIField;

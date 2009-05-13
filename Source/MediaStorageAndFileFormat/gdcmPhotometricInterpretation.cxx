@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmPhotometricInterpretation.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmTrace.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -196,4 +197,14 @@ bool PhotometricInterpretation::IsSameColorSpace( PhotometricInterpretation cons
   return false;
 }
 
+//PhotometricInterpretation::PIType PhotometricInterpretation::GetEquivalent(TransferSyntax const &ts)
+//{
+//  // A.8.5.4 Multi-frame True Color SC Image IOD Content Constraints
+//  if( PIField == RGB )
+//    {
+//    if( ts == gdcm::TransferSyntax::
+//    }
+//  return PIField;
+//}
+//
 } // end namespace gdcm
