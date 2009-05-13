@@ -105,15 +105,21 @@ file-out  DICOM output filename
 \section usage Typical usage
 \subsection jpeg Compressing to JPEG
 
+\verbatim
 $ gdcmconv --jpeg uncompressed.dcm compressed.dcm
+\endverbatim
 
 \subsection lossless_j2k Compressing to lossless J2K
 
+\verbatim
 $ gdcmconv --j2k uncompressed.dcm compressed.dcm
+\endverbatim
 
 \subsection lossy_j2k Compressing to lossy J2K
 
+\verbatim
 $ gdcmconv --lossy -q 55,50,45 --j2k uncompressed.dcm lossy_compressed.dcm
+\endverbatim
 
 Note:
 
@@ -121,7 +127,9 @@ Note:
 
 \subsection rle Compressing to RLE
 
+\verbatim
 $ gdcmconv --rle uncompressed.dcm compressed.dcm
+\endverbatim
 
 \section see_also SEE ALSO
 
