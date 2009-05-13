@@ -18,6 +18,8 @@ GENERATE_MAN         = NO
 GENERATE_RTF         = NO
 GENERATE_TAGFILE     = "@CMAKE_CURRENT_BINARY_DIR@/@DOXYGEN_PROJECT_NAME@.tag"
 
+PDF_HYPERLINKS       = YES
+
 HAVE_DOT             = YES
 #HAVE_DOT            = NO
 DOT_PATH             = "@DOT_PATH@"
@@ -28,7 +30,7 @@ INCLUDE_GRAPH        = YES
 INCLUDED_BY_GRAPH    = YES
 CLASS_DIAGRAMS       = YES
 GENERATE_LEGEND      = YES
-GRAPHICAL_HIERARCHY  = YES
+GRAPHICAL_HIERARCHY  = NO        # would be too large for vtkObject
 
 ALLEXTERNALS         = NO
 
@@ -46,6 +48,7 @@ TAGFILES             = @TAGFILES@
 EXTRACT_ALL          = YES
 EXTRACT_PRIVATE      = NO
 EXTRACT_STATIC       = YES
+EXTRACT_LOCAL_CLASSES = NO
 HIDE_UNDOC_MEMBERS   = NO
 HIDE_UNDOC_CLASSES   = YES
 ALWAYS_DETAILED_SEC  = NO
@@ -58,6 +61,9 @@ JAVADOC_AUTOBRIEF    = YES
 SORT_MEMBER_DOCS     = NO
 DISTRIBUTE_GROUP_DOC = YES
 TAB_SIZE             = 3
+DETAILS_AT_TOP       = YES
+SHORT_NAMES          = @DOXYGEN_SHORT_NAMES@
+# PAPER_TYPE           = letter
 
 FILE_PATTERNS        = *.h
 RECURSIVE            = NO
@@ -137,7 +143,15 @@ PREDEFINED  = "vtkSetMacro(name,type)= \
                    virtual void Set##name(float x, float y); \
                    virtual float *Get##name();" \
                "vtkTypeMacro(thisClass,superclass)= \
+                   typedef superclass Superclass; \
                    virtual const char *GetClassName(); \
                    static int IsTypeOf(const char *type); \
                    virtual int IsA(const char *type); \
-                   static thisClass* SafeDownCast(vtkObject *o);"
+                   static thisClass* SafeDownCast(vtkObject *o);" \
+               "vtkTypeRevisionMacro(thisClass,superclass)= \
+                   typedef superclass Superclass; \
+                   virtual const char *GetClassName(); \
+                   static int IsTypeOf(const char *type); \
+                   virtual int IsA(const char *type); \
+                   static thisClass* SafeDownCast(vtkObject *o);" \
+               "VTK_LEGACY(x)= x"
