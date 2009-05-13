@@ -22,6 +22,12 @@ namespace gdcm
 /**
  * \brief Class for MD5 
  *
+ * \warning this class is able to pick from two implementations:
+ *
+ * 1. a lightweight md5 implementation (when GDCM_BUILD_TESTING is turned ON)
+ * 2. the one from OpenSSL (when GDCM_USE_SYSTEM_OPENSSL is turned ON)
+ *
+ * In all other cases it will return an error
  */
 //-----------------------------------------------------------------------------
 class MD5Internals;

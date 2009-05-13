@@ -22,6 +22,11 @@ namespace gdcm
 /**
  * \brief Class for SHA1 
  *
+ * \warning this class is able to pick from one implementation:
+ *
+ * 1. the one from OpenSSL (when GDCM_USE_SYSTEM_OPENSSL is turned ON)
+ *
+ * In all other cases it will return an error
  */
 //-----------------------------------------------------------------------------
 class SHA1Internals;

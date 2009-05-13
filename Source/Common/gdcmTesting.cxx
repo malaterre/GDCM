@@ -15,12 +15,11 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
+#include "gdcmMD5.h"
 
 #include <string.h> // strcmp
 #include <stdlib.h> // malloc
 #include <stdio.h> // fopen
-
-#include "gdcm_md5.h"
 
 
 namespace gdcm
@@ -34,80 +33,15 @@ namespace gdcm
 #include "gdcmMD5DataImages.cxx"
 #include "gdcmMediaStorageDataFiles.cxx"
 
-inline bool process_file(const char *filename, md5_byte_t *digest)
-{
-  if( !filename || !digest ) return false;
-
-  FILE *file = fopen(filename, "rb");
-  if(!file) 
-    {
-    return false;
-    }
-
-  size_t file_size = System::FileSize(filename);
-  void *buffer = malloc(file_size);
-  if(!buffer) 
-    {
-    fclose(file);
-    return false;
-    }
-  size_t read = fread(buffer, 1, file_size, file);
-  if( read != file_size ) return false;
-
-  md5_state_t state;
-  md5_init(&state);
-  md5_append(&state, (const md5_byte_t *)buffer, file_size);
-  md5_finish(&state, digest);
-  /*printf("MD5 (\"%s\") = ", test[i]); */
-  /*for (int di = 0; di < 16; ++di)
-  {
-    printf("%02x", digest[di]);
-  }*/
-  //printf("\t%s\n", filename);
-  free(buffer);
-  fclose(file);
-  return true;
-}
-
 bool Testing::ComputeMD5(const char *buffer, unsigned long buf_len,
   char digest_str[33])
 {
-  if( !buffer || !buf_len )
-    {
-    return false;
-    }
-  md5_byte_t digest[16];
-  md5_state_t state;
-  md5_init(&state);
-  md5_append(&state, (const md5_byte_t *)buffer, buf_len);
-  md5_finish(&state, digest);
-
-  for (int di = 0; di < 16; ++di)
-    {
-    sprintf(digest_str+2*di, "%02x", digest[di]);
-    }
-  digest_str[2*16] = '\0';
-  return true;
+  return MD5::Compute(buffer, buf_len, digest_str);
 }
 
 bool Testing::ComputeFileMD5(const char *filename, char *digest_str)
 {
-  // If not file exist
-  // return false;
-  md5_byte_t digest[16];
-
-  /* Do the file */
-  if( !process_file(filename, digest) )
-    {
-    return false;
-    }
-
-  for (int di = 0; di < 16; ++di)
-    {
-    sprintf(digest_str+2*di, "%02x", digest[di]);
-    }
-  digest_str[2*16] = '\0';
-  return true;
+  return MD5::ComputeFile(filename, digest_str);
 }
 
 const char * const *Testing::GetFileNames()
