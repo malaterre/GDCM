@@ -94,12 +94,18 @@ CryptographicMessageSyntax::~CryptographicMessageSyntax()
 
 void CryptographicMessageSyntax::SetCipherType( CipherTypes type)
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   Internals->SetCipherType( type );
+#endif
 }
 
 CryptographicMessageSyntax::CipherTypes CryptographicMessageSyntax::GetCipherType() const
 {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
   return Internals->GetCipherType();
+#else
+  return AES256_CIPHER; // why not :)
+#endif
 }
 
 //void CryptographicMessageSyntax::SetCertificate( X509 *cert )
@@ -115,6 +121,7 @@ CryptographicMessageSyntax::CipherTypes CryptographicMessageSyntax::GetCipherTyp
 /*
 openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
 */
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype)
 {
   const EVP_CIPHER *cipher = 0;
@@ -138,6 +145,7 @@ const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes cipherty
     }
   return cipher;
 }
+#endif
 
 bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
