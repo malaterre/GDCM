@@ -18,7 +18,7 @@ SET(Common_TEST_SRCS
   TestTrace
   TestTypes
   TestUnpacker12Bits
-  #TestBase64
+  TestBase64
   )
 
 IF(GDCM_DATA_ROOT)

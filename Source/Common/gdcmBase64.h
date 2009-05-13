@@ -14,7 +14,6 @@
 =========================================================================*/
 #ifndef __gdcmBase64_h
 #define __gdcmBase64_h
-#error
 
 #include "gdcmTypes.h"
 
@@ -73,9 +72,6 @@ static int GetDecodeLength( const char *src, int  slen );
  */
 static int Decode( char *dst, int dlen,
                    const char *src, int  slen );
-
-protected:
-int SelfTest( int verbose = 0 ) const;
 
 private:
   Base64Internals *Internals;
