@@ -135,6 +135,7 @@ void PrintHelp()
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --remove-gl           Remove group length (deprecated in DICOM 2008)." << std::endl;
   std::cout << "     --remove-private-tags Remove private tags." << std::endl;
+  std::cout << "     --remove-retired      Remove retired tags." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
