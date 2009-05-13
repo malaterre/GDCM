@@ -121,10 +121,23 @@ int Base64::GetDecodeLength( const char *src, int  slen )
 #endif
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  char *out = new char[slen];
-  int b = Base64::Decode(out, slen, src, slen);
-  size_t len = strlen(out);
-  return len + 1;
+  // Create a memory buffer containing Base64 encoded string data
+  BIO * mem = BIO_new_mem_buf((void *) src, slen);
+
+  // Push a Base64 filter so that reading from the buffer decodes it
+  BIO * b64 = BIO_new(BIO_f_base64());
+  BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+  mem = BIO_push(b64, mem);
+
+  // Decode
+  char *dst = new char[slen]; // FIXME
+  int len = BIO_read(mem, dst, slen);
+  delete[] dst;
+
+  // Clean up and go home
+  BIO_free_all(mem);
+
+  return len;
 #else
   return -1;
 #endif
@@ -133,6 +146,7 @@ int Base64::GetDecodeLength( const char *src, int  slen )
 int Base64::Decode( char *dst, int dlen,
                    const char *src, int  slen )
 {
+ //http://markmail.org/message/cdndl7pofs7maixq#query:+page:1+mid:cdndl7pofs7maixq+state:results
 #if 0
   return base64_decode( (unsigned char*)dst, &dlen, (unsigned char*)(src), slen );
 #endif
@@ -146,17 +160,12 @@ int Base64::Decode( char *dst, int dlen,
   BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
   mem = BIO_push(b64, mem);
 
-  // Decode into an NSMutableData
-  char inbuf[512];
-  int totallen = 0;
-  int inlen;
-  char *ptr = dst;
-  while ((inlen = BIO_read(mem, inbuf, sizeof(inbuf))) > 0)
+  // Decode
+  int len = BIO_read(mem, dst, dlen);
+  assert( len < dlen );
+  if( len < 0 )
     {
-    totallen += inlen;
-    if( totallen > dlen ) return -1;
-    memcpy( ptr, inbuf, inlen );
-    ptr += inlen;
+    return -1;
     }
 
   // Clean up and go home
