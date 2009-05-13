@@ -274,7 +274,13 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     // CharLS properly encode 1024 considering it as 10bits data, so the output
     // Using bitsstored for the encoder gives a slightly better compression ratio, and is indeed the
     // right way of doing it.
-    if( pf.GetPixelRepresentation() )
+
+/*
+FIXME: 12bits RGB is not working, so for now use the bitsallocated all the time
+Problem reading image from: /home/mathieu/Creatis/gdcmData/SIEMENS-MR-RGB-16Bits.dcm
+Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e25
+*/
+    if( true ||pf.GetPixelRepresentation() )
       {
       // gdcmData/CT_16b_signed-UsedBits13.dcm
       params.bitspersample = bitsallocated;
