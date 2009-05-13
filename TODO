@@ -343,3 +343,5 @@ TODO: to get rid of openssl on Win32 one could use the CryptoAPI:
 [Example C Program: Signing a Message and Verifying a Message Signature]
 http://msdn.microsoft.com/en-us/library/aa382372.aspx
 http://www.ureader.com/msg/16591281.aspx
+-----------------------------------------------------------------------
+Fix gdcm::spacing before release CP-586

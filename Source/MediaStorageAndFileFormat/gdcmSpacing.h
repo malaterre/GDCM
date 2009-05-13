@@ -21,6 +21,41 @@
 namespace gdcm
 {
 /**
+  It all began with a mail to WG6:
+
+Subject: 	Imager Pixel Spacing vs Pixel Spacing
+Body: 	[Apologies for the duplicate post, namely to David Clunie & OFFIS team]
+
+I have been trying to understand CP-586 in the following two cases:
+
+On the one hand:
+- DISCIMG/IMAGES/CRIMAGE taken from
+http://dclunie.com/images/pixelspacingtestimages.zip
+
+And on the other hand:
+- http://gdcm.sourceforge.net/thingies/cr_pixelspacing.dcm
+
+If I understand correctly the CP, one is required to use Pixel Spacing
+for measurement ('true size' print) instead of Imager Pixel Spacing,
+since the two attributes are present and Pixel Spacing is different from
+Imager Pixel Spacing.
+
+If this is correct, then the test data DISCIMG/IMAGES/CRIMAGE is
+incorrect. If this is incorrect (ie. I need to use Imager Pixel
+Spacing), then the display of cr_pixelspacing.dcm for measurement will
+be incorrect.
+
+Could someone please let me know what am I missing here? I could not
+find any information in any header that would allow me to differentiate
+those.
+
+Thank you for your time,
+
+Ref:
+  http://lists.nema.org/scripts/lyris.pl?sub=488573&id=400720477
+*/
+
+/**
  * \brief Class for Spacing 
  *
  * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES 
