@@ -328,6 +328,11 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
       }
+    if ( GetPixelFormat() != codec.GetPixelFormat() )
+      {
+      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      i->SetPixelFormat( codec.GetPixelFormat() );
+      }
     if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;

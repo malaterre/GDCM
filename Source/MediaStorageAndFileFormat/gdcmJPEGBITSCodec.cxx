@@ -333,6 +333,12 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       {
       // If we get here, the JPEG code has signaled an error.
       // We need to clean up the JPEG object, close the input file, and return.
+      // But first handle the case IJG does not like:
+      if ( jerr.pub.msg_code == JERR_BAD_PRECISION /* 18 */ )
+        {
+        this->BitSample = jerr.pub.msg_parm.i[0];
+        assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        }
       jpeg_destroy_decompress(&cinfo);
       // TODO: www.dcm4che.org/jira/secure/attachment/10185/ct-implicit-little.dcm
       // weird Icon Image from GE...
@@ -476,7 +482,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     }
   else if( cinfo.process == JPROC_SEQUENTIAL )
     {
-    ts = TransferSyntax::JPEGBaselineProcess1;
+    if( this->BitSample == 8 )
+      ts = TransferSyntax::JPEGBaselineProcess1;
+    else if( this->BitSample == 12 )
+      ts = TransferSyntax::JPEGExtendedProcess2_4;
     }
   else
     {

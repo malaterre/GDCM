@@ -95,12 +95,6 @@ void JPEGCodec::SetBitSample(int bit)
   BitSample = bit;
   delete Internal; Internal = NULL;
   assert( Internal == NULL );
-  // gdcmData/DCMTK_JPEGExt_12Bits.dcm
-  if( this->GetPixelFormat().GetBitsAllocated() % 8 != 0 )
-    {
-    gdcmWarningMacro( "Cannot set BitSample: " << this->GetPixelFormat().GetBitsAllocated() );
-    return;
-    }
   if ( BitSample <= 8 )
     {
     gdcmDebugMacro( "Using JPEG8" );
@@ -359,6 +353,11 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
     {
     gdcmWarningMacro( "PhotometricInterpretation issue" );
     this->PI = Internal->PI;
+    }
+  if( this->PF == PixelFormat::UINT12
+   || this->PF == PixelFormat::INT12 )
+    {
+    this->PF.SetBitsAllocated( 16 );
     }
 
   return ImageCodec::Decode(tmpos,os);

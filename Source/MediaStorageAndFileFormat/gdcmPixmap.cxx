@@ -13,14 +13,6 @@
 
 =========================================================================*/
 #include "gdcmPixmap.h"
-#include "gdcmRAWCodec.h"
-#include "gdcmSequenceOfFragments.h"
-#include "gdcmRAWCodec.h"
-#include "gdcmJPEGCodec.h"
-#include "gdcmPVRGCodec.h"
-#include "gdcmJPEGLSCodec.h"
-#include "gdcmJPEG2000Codec.h"
-#include "gdcmRLECodec.h"
 
 namespace gdcm
 {

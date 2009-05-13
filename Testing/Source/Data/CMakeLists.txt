@@ -115,9 +115,6 @@ BogusItemStartItemEnd.dcm
 
 # buggy dcm4che
   kos.dcm
-
-# we do not handle 12bits allocated properly:
-  DCMTK_JPEGExt_12Bits.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
