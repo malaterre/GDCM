@@ -168,7 +168,7 @@ bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const cha
     BIO_write(p7bio,buf,i);
     }
   (void)BIO_flush(p7bio);
- BIO_free(data);
+  BIO_free(data);
 
   if (!PKCS7_dataFinal(p7,p7bio)) goto err;
   BIO_free_all(p7bio);

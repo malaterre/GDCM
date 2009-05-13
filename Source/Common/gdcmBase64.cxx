@@ -83,22 +83,27 @@ int Base64::Encode( char *dst, int dlen,
 #endif
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  BIO *bmem, *b64;
-  BUF_MEM *bptr;
+  // Create a memory buffer which will contain the Base64 encoded string
+  BIO * mem = BIO_new(BIO_s_mem());
 
-  b64 = BIO_new(BIO_f_base64());
-  bmem = BIO_new(BIO_s_mem());
-  b64 = BIO_push(b64, bmem);
-  BIO_write(b64, src, slen);
-  (void)BIO_flush(b64);
-  BIO_get_mem_ptr(b64, &bptr);
+  // Push on a Base64 filter so that writing to the buffer encodes the data
+  BIO * b64 = BIO_new(BIO_f_base64());
+  BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+  mem = BIO_push(b64, mem);
 
-  if( dlen < bptr->length ) return -1;
+  // Encode all the data
+  BIO_write(mem, src, slen);
+  BIO_flush(mem);
 
-  memcpy(dst, bptr->data, bptr->length-1);
-  dst[bptr->length-1] = 0;
+  // Create a new string from the data in the memory buffer
+  char * base64Pointer;
+  long base64Length = BIO_get_mem_data(mem, &base64Pointer);
+  if( base64Length > dlen ) return -1;
 
-  BIO_free_all(b64);
+  memcpy( dst, base64Pointer, base64Length);
+
+  // Clean up and go home
+  BIO_free_all(mem);
   return 0;
 #else
  return -1;
@@ -116,19 +121,10 @@ int Base64::GetDecodeLength( const char *src, int  slen )
 #endif
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  BIO *b64, *bmem;
-
-  b64 = BIO_new(BIO_f_base64());
-  bmem = BIO_new_mem_buf((char*)src, slen);
-  bmem = BIO_push(b64, bmem);
-  char *output = new char[ slen ];
-  BIO_read(bmem, output, slen );
-
-  int len = strlen(output);
-  BIO_free_all(bmem);
-
-  delete[] output;
-  return len;
+  char *out = new char[slen];
+  int b = Base64::Decode(out, slen, src, slen);
+  size_t len = strlen(out);
+  return len + 1;
 #else
   return -1;
 #endif
@@ -142,22 +138,29 @@ int Base64::Decode( char *dst, int dlen,
 #endif
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  BIO *b64, *bmem;
+  // Create a memory buffer containing Base64 encoded string data
+  BIO * mem = BIO_new_mem_buf((void *) src, slen);
 
-  b64 = BIO_new(BIO_f_base64());
-  bmem = BIO_new_mem_buf((char*)src, slen);
-  bmem = BIO_push(b64, bmem);
+  // Push a Base64 filter so that reading from the buffer decodes it
+  BIO * b64 = BIO_new(BIO_f_base64());
+  BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+  mem = BIO_push(b64, mem);
 
-  char *output = new char[ slen ];
-  BIO_read(bmem, output, slen);
+  // Decode into an NSMutableData
+  char inbuf[512];
+  int totallen = 0;
+  int inlen;
+  char *ptr = dst;
+  while ((inlen = BIO_read(mem, inbuf, sizeof(inbuf))) > 0)
+    {
+    totallen += inlen;
+    if( totallen > dlen ) return -1;
+    memcpy( ptr, inbuf, inlen );
+    ptr += inlen;
+    }
 
-  int len = strlen(output);
-
-  if( len > dlen ) return -1;
-  memcpy(dst, output, len);
-  delete[] output;
-
-  BIO_free_all(bmem);
+  // Clean up and go home
+  BIO_free_all(mem);
   return 0;
 #else
   return -1;
