@@ -15,7 +15,10 @@
 #include "gdcmMD5.h"
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
-#include "gdcm_polarssl.h"
+
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+#include <openssl/md5.h>
+#endif
 
 #include <string.h>//memcmp
 #include <stdlib.h> // malloc
@@ -28,7 +31,6 @@ namespace gdcm
 class MD5Internals
 {
 public:
-md5_context ctx;
 };
 
 MD5::MD5()
@@ -43,26 +45,9 @@ MD5::~MD5()
 
 bool MD5::Compute(const char *buffer, unsigned long buf_len, char digest[33])
 {
-  if( !buffer || !buf_len )
-    {
-    return false;
-    }
-  char output[16];
-  unsigned char output2[16];
-
-  md5( (unsigned char*)buffer, buf_len, output2);
-  Testing::ComputeMD5(buffer, buf_len, output);
-
-  assert( memcmp( output, output2, 16 ) == 0 );
-
-  for (int di = 0; di < 16; ++di)
-    {
-    sprintf(digest+2*di, "%02x", output[di]);
-    }
-  digest[2*16] = '\0';
-
-  return true;
+  return Testing::ComputeMD5(buffer, buf_len, digest);
 }
+
 inline bool process_file(const char *filename, unsigned char *digest)
 {
   if( !filename || !digest ) return false;
@@ -83,11 +68,10 @@ inline bool process_file(const char *filename, unsigned char *digest)
   size_t read = fread(buffer, 1, file_size, file);
   if( read != file_size ) return false;
 
-  //SHA_CTX ctx;
-  //SHA1_Init(&ctx);
-  //SHA1_Update(&ctx, buffer, file_size);
-  //SHA1_Final(digest, &ctx);
-  md5( (unsigned char*)buffer, file_size, digest);
+  MD5_CTX ctx;
+  MD5_Init(&ctx);
+  MD5_Update(&ctx, buffer, file_size);
+  MD5_Final(digest, &ctx);
 
   /*printf("MD5 (\"%s\") = ", test[i]); */
   /*for (int di = 0; di < 16; ++di)

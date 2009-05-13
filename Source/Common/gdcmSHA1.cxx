@@ -14,7 +14,6 @@
 =========================================================================*/
 #include "gdcmSHA1.h"
 #include "gdcmSystem.h"
-#include "gdcm_polarssl.h"
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 #include <openssl/sha.h>
@@ -60,10 +59,6 @@ bool SHA1::Compute(const char *buffer, unsigned long buf_len, char digest[])
   SHA1_Init(&ctx);
   SHA1_Update(&ctx, buffer, buf_len);
   SHA1_Final(output, &ctx);
-
-  unsigned char output2[20];
-  sha1( (unsigned char*)buffer, buf_len, output2);
-  assert( memcmp( output, output2, 20 ) == 0 );
 
   for (int di = 0; di < 20; ++di)
     {
