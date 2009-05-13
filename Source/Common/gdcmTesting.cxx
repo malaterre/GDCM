@@ -19,7 +19,6 @@
 
 #include <string.h> // strcmp
 #include <stdlib.h> // malloc
-#include <stdio.h> // fopen
 
 
 namespace gdcm
