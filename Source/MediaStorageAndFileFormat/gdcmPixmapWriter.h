@@ -24,6 +24,14 @@ namespace gdcm
 class Pixmap;
 /**
  * \brief PixmapWriter
+ * This class will takes two inputs:
+ * 1. The DICOM DataSet
+ * 2. The Image input
+ * It will override any info from the Image over the DataSet.
+ * 
+ * For instance when one read in a lossy compressed image and write out as unencapsulated
+ * (ie implicitely lossless) then some attribute are definitely needed to mark this
+ * dataset as Lossy (typically 0028,2114)
  */
 class GDCM_EXPORT PixmapWriter : public Writer
 {

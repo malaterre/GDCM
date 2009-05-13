@@ -324,6 +324,7 @@ int main(int argc, char *argv[])
       writer->SetShift( reader->GetShift() );
       writer->SetScale( reader->GetScale() );
       writer->SetImageFormat( reader->GetImageFormat() );
+      writer->SetLossyFlag( reader->GetLossyFlag() );
       if( verbose )
         {
         reader->GetOutput()->Print( std::cout );
@@ -334,6 +335,7 @@ int main(int argc, char *argv[])
       {
       // vtk JPEG reader only read 8bits lossy file
       writer->SetLossyFlag( 1 );
+      // TODO: It would be nice to specify the original encoder was JPEG -> ISO_10918_1
       }
     else if( vtkBMPReader * reader = vtkBMPReader::SafeDownCast(imgreader) )
       {

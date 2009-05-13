@@ -62,6 +62,8 @@ public:
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
 
+  // Description:
+  // Set/Get whether or not the image was compressed using a lossy compression algorithm
   vtkGetMacro(LossyFlag,int);
   vtkSetMacro(LossyFlag,int);
   vtkBooleanMacro(LossyFlag,int);
