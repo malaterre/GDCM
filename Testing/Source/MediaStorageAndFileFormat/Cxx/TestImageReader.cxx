@@ -133,7 +133,7 @@ int TestImageReader(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestImageRead( filename, false, true );
+    r += TestImageRead( filename);
     //r += TestImageRead( filename, false, true );
     ++i;
     }
