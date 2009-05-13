@@ -14,6 +14,7 @@
 =========================================================================*/
 #ifndef __gdcmBase64_h
 #define __gdcmBase64_h
+#error
 
 #include "gdcmTypes.h"
 

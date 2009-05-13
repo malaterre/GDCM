@@ -131,7 +131,7 @@
 #include "gdcmMD5.h"
 #include "gdcmDummyValueGenerator.h"
 #include "gdcmSHA1.h"
-#include "gdcmBase64.h"
+//#include "gdcmBase64.h"
 #include "gdcmSpacing.h"
 
 using namespace gdcm;
@@ -710,6 +710,6 @@ using namespace gdcm;
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
 %include "gdcmSHA1.h"
-%include "gdcmBase64.h"
+//%include "gdcmBase64.h"
 %include "gdcmSpacing.h"
 

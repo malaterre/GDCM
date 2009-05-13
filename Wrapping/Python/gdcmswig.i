@@ -137,7 +137,7 @@
 #include "gdcmMD5.h"
 #include "gdcmDummyValueGenerator.h"
 #include "gdcmSHA1.h"
-#include "gdcmBase64.h"
+//#include "gdcmBase64.h"
 #include "gdcmSpacing.h"
 
 using namespace gdcm;
@@ -811,6 +811,6 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
 %include "gdcmSHA1.h"
-%include "gdcmBase64.h"
+//%include "gdcmBase64.h"
 %include "gdcmSpacing.h"
 
