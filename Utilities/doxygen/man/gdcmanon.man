@@ -76,6 +76,21 @@ file-out  DICOM output filename
   GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)
 \endverbatim
 
+\section usage Typical usage
+\subsection de-identification (anonymization, encrypt)
+
+\verbatim
+$ gdcmanon --certificate certificate.pem -e original.dcm original_anonymized.dcm
+\endverbatim
+
+\subsection re-identification (de-anonymization,decrypt)
+
+\verbatim
+$ gdcmanon --key privatekey.pem -d original_anonymized.dcm original_copy.dcm
+\endverbatim
+
+You can then check that original.dcm and original_copy.dcm are identical.
+
 \section see_also SEE ALSO
 
 <b>gdcmconv</b>(1), <b>gdcminfo</b>(1)
