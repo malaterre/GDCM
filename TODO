@@ -345,3 +345,10 @@ http://msdn.microsoft.com/en-us/library/aa382372.aspx
 http://www.ureader.com/msg/16591281.aspx
 -----------------------------------------------------------------------
 Fix gdcm::spacing before release CP-586
+-----------------------------------------------------------------------
+This is part of CPack's API.  There is no API in the make system to use
+this feature.
+
+You have to run "make preinstall" to prepare the installation and then
+run "cmake -DCOMPONENT=Runtime -P cmake_install.cmake" to do the
+component-specific installation.
