@@ -577,7 +577,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # refers to the fact that this is the set of components that
   # will be included when CPack is instructed to put everything
   # into the binary installer (the default behavior).
-  set(CPACK_COMPONENTS_ALL applications libraries headers)
+  set(CPACK_COMPONENTS_ALL Applications Libraries Headers)
   
   # Set the displayed names for each of the components to install.
   # These will be displayed in the list of components inside the installer.
@@ -611,6 +611,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # (because you could never use the headers!), so make the headers component
   # depend on the libraries component.
   set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
+  set(CPACK_COMPONENT_APPLICATIONS_DEPENDS libraries)
   
   # Create two installation types with pre-selected components.
   # The "Developer" installation has just the library and headers,

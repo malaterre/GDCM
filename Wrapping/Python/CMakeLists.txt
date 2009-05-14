@@ -136,16 +136,16 @@ ADD_CUSTOM_COMMAND(
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package} COMPONENT Runtime
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package} COMPONENT Libraries
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Libraries
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Development
   )
   # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py 
     ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py 
-    #DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
-    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+    #DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Libraries
+    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Libraries
   )
   # pth file are actually a pain to use since they are *required* to be in some very specific location;
   # for instance you have a /tmp/gdcm.pth file and set PYTHONPATH=/tmp ... well believe it or not
@@ -153,7 +153,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   # only official rpm/deb could be sure of where the user will install those python module
   #INSTALL(FILES 
   #  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
-  #  DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+  #  DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Libraries
   #)
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
