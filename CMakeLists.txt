@@ -450,6 +450,10 @@ ENDIF(GDCM_DOCUMENTATION)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_VTK "vtk bridge ?" OFF)
+IF(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
+  OPTION(GDCM_USE_ACTIVIZ "vtk/Activiz bridge ?" OFF)
+ENDIF(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
+
 IF(GDCM_USE_VTK)
   SUBDIRS(Utilities/VTK)
 ENDIF(GDCM_USE_VTK)
