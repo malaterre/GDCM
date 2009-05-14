@@ -581,9 +581,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   
   # Set the displayed names for each of the components to install.
   # These will be displayed in the list of components inside the installer.
-  set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "MyLib Application")
-  set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
-  set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
+  set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "GDCM Applications")
+  set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "GDCM Libraries")
+  set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "GDCM C/C++ Headers")
   
   # Provide descriptions for each of the components to install.
   # When the user hovers the mouse over the name of a component,
@@ -591,11 +591,11 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # installer. If no descriptions are provided, the "Description"
   # box will be removed.
   set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
-    "An extremely useful application that makes use of MyLib")
+    "Command line applications that uses GDCM: gdcmconv, gdcmdump, gdcminfo...")
   set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
-    "Static libraries used to build programs with MyLib")
+    "Libraries used to build programs with GDCM")
   set(CPACK_COMPONENT_HEADERS_DESCRIPTION
-    "C/C++ header files for use with MyLib")
+    "C/C++ header files for use with GDCM")
 
   # Put the components into two different groups: "Runtime" and "Development"
   set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
@@ -605,13 +605,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # Also, provide this group with a description.
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
-    "All of the tools you'll ever need to develop software")
+    "All of the tools you'll ever need to develop software using GDCM")
   
   # It doesn't make sense to install the headers without the libraries
   # (because you could never use the headers!), so make the headers component
   # depend on the libraries component.
-  set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
-  set(CPACK_COMPONENT_APPLICATIONS_DEPENDS libraries)
+  set(CPACK_COMPONENT_HEADERS_DEPENDS Libraries)
+  set(CPACK_COMPONENT_APPLICATIONS_DEPENDS Libraries)
   
   # Create two installation types with pre-selected components.
   # The "Developer" installation has just the library and headers,
