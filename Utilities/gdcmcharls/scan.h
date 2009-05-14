@@ -694,7 +694,7 @@ void JlsCodec<TRAITS,STRATEGY>::DoLine(Triplet<SAMPLE>*)
 		}
 
 	}
-};
+}
 
 
 

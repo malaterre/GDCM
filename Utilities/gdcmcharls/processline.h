@@ -55,7 +55,7 @@ void TransformLine(Triplet<SAMPLE>* pDest, const Triplet<SAMPLE>* pSrc, int pixe
 	{
 		pDest[i] = TRANSFORM::Apply(pSrc[i].v1, pSrc[i].v2, pSrc[i].v3);
 	}
-};
+}
 
 
 template<class TRANSFORM, class SAMPLE> 

@@ -58,7 +58,7 @@ public:
 	  typedef size_t bufType;
 
 	  enum { 
-		  bufferbits = sizeof( bufType ) * 8,
+		  bufferbits = sizeof( bufType ) * 8
 	  };
 		
 	  void MakeValid()
