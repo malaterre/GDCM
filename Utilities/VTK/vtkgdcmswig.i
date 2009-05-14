@@ -316,8 +316,16 @@ using Kitware.VTK;
 %include "vtkObject.h"
 
 #ifndef USEACTIVIZ
-%inline {
-const char *vtkGetDataRoot() { return VTK_DATA_ROOT; }
+%inline
+{
+  const char *vtkGetDataRoot()
+    {
+#ifdef VTK_DATA_ROOT
+    return VTK_DATA_ROOT; 
+#else
+    return NULL; 
+#endif
+    }
 }
 
 %include "vtkStringArray.h"
