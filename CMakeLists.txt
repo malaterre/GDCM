@@ -577,7 +577,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # refers to the fact that this is the set of components that
   # will be included when CPack is instructed to put everything
   # into the binary installer (the default behavior).
-  set(CPACK_COMPONENTS_ALL Applications Libraries Headers VTKApplications VTKLibraries VTKHeaders)
+  set(CPACK_COMPONENTS_ALL Applications Libraries Headers VTKApplications VTKLibraries VTKHeaders PythonModule VTKPythonModule)
   
   # Set the displayed names for each of the components to install.
   # These will be displayed in the list of components inside the installer.
@@ -587,6 +587,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKLIBRARIES_DISPLAY_NAME "VTK/GDCM Libraries")
   set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "GDCM C/C++ Headers")
   set(CPACK_COMPONENT_VTKHEADERS_DISPLAY_NAME "VTK/GDCM C/C++ Headers")
+  set(CPACK_COMPONENT_PYTHONMODULE_DISPLAY_NAME "GDCM Python Module")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DISPLAY_NAME "VTK/GDCM Python Module")
   
   # Provide descriptions for each of the components to install.
   # When the user hovers the mouse over the name of a component,
@@ -605,10 +607,16 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     "C/C++ header files for use with GDCM")
   set(CPACK_COMPONENT_VTKHEADERS_DESCRIPTION
     "C/C++ header files for use with VTK/GDCM")
+  set(CPACK_COMPONENT_PYTHONMODULE_DESCRIPTION
+    "Python Module for GDCM")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DESCRIPTION
+    "Python Module for VTK/GDCM")
 
   # Put the components into two different groups: "Runtime" and "Development"
   set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
   set(CPACK_COMPONENT_VTKAPPLICATIONS_GROUP "Runtime")
+  set(CPACK_COMPONENT_PYTHONMODULE_GROUP "Runtime")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_GROUP "Runtime")
   set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_VTKLIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_HEADERS_GROUP "Development")
@@ -624,8 +632,11 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # depend on the libraries component.
   set(CPACK_COMPONENT_HEADERS_DEPENDS Libraries)
   set(CPACK_COMPONENT_VTKHEADERS_DEPENDS VTKLibraries)
+  set(CPACK_COMPONENT_VTKLIBRARIES_DEPENDS Libraries)
   set(CPACK_COMPONENT_APPLICATIONS_DEPENDS Libraries)
   set(CPACK_COMPONENT_VTKAPPLICATIONS_DEPENDS VTKLibraries)
+  set(CPACK_COMPONENT_PYTHONMODULE_DEPENDS Libraries)
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DEPENDS VTKLibraries)
   
   # Create two installation types with pre-selected components.
   # The "Developer" installation has just the library and headers,
@@ -638,6 +649,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKHEADERS_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
   set(CPACK_COMPONENT_VTKAPPLICATIONS_INSTALL_TYPES Full)
+  set(CPACK_COMPONENT_PYTHONMODULE_INSTALL_TYPES Full)
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_INSTALL_TYPES Full)
 
 
   INCLUDE(CPack)

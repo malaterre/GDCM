@@ -136,7 +136,7 @@ ADD_CUSTOM_COMMAND(
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package} COMPONENT Libraries
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package} COMPONENT PythonModule
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Libraries
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Development
   )
@@ -145,7 +145,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py 
     ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py 
     #DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Libraries
-    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Libraries
+    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT PythonModule
   )
   # pth file are actually a pain to use since they are *required* to be in some very specific location;
   # for instance you have a /tmp/gdcm.pth file and set PYTHONPATH=/tmp ... well believe it or not
