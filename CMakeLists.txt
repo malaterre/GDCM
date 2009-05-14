@@ -577,13 +577,16 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # refers to the fact that this is the set of components that
   # will be included when CPack is instructed to put everything
   # into the binary installer (the default behavior).
-  set(CPACK_COMPONENTS_ALL Applications Libraries Headers)
+  set(CPACK_COMPONENTS_ALL Applications Libraries Headers VTKApplications VTKLibraries VTKHeaders)
   
   # Set the displayed names for each of the components to install.
   # These will be displayed in the list of components inside the installer.
   set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "GDCM Applications")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DISPLAY_NAME "VTK/GDCM Applications")
   set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "GDCM Libraries")
+  set(CPACK_COMPONENT_VTKLIBRARIES_DISPLAY_NAME "VTK/GDCM Libraries")
   set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "GDCM C/C++ Headers")
+  set(CPACK_COMPONENT_VTKHEADERS_DISPLAY_NAME "VTK/GDCM C/C++ Headers")
   
   # Provide descriptions for each of the components to install.
   # When the user hovers the mouse over the name of a component,
@@ -591,16 +594,25 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # installer. If no descriptions are provided, the "Description"
   # box will be removed.
   set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
-    "Command line applications that uses GDCM: gdcmconv, gdcmdump, gdcminfo...")
+    "Command line applications that uses GDCM: gdcmconv, gdcmdump, gdcminfo, gdcmscanner, gdcmimg, gdcmanon")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DESCRIPTION
+    "Command line applications that uses GDCM: gdcmviewer & gdcm2vtk")
   set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
     "Libraries used to build programs with GDCM")
+  set(CPACK_COMPONENT_VTKLIBRARIES_DESCRIPTION
+    "Libraries used to build programs with VTK/GDCM")
   set(CPACK_COMPONENT_HEADERS_DESCRIPTION
     "C/C++ header files for use with GDCM")
+  set(CPACK_COMPONENT_VTKHEADERS_DESCRIPTION
+    "C/C++ header files for use with VTK/GDCM")
 
   # Put the components into two different groups: "Runtime" and "Development"
   set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_GROUP "Runtime")
   set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
+  set(CPACK_COMPONENT_VTKLIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_HEADERS_GROUP "Development")
+  set(CPACK_COMPONENT_VTKHEADERS_GROUP "Development")
   # Expand the "Development" group by default, since we have so few components.
   # Also, provide this group with a description.
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
@@ -611,7 +623,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # (because you could never use the headers!), so make the headers component
   # depend on the libraries component.
   set(CPACK_COMPONENT_HEADERS_DEPENDS Libraries)
+  set(CPACK_COMPONENT_VTKHEADERS_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_APPLICATIONS_DEPENDS Libraries)
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DEPENDS VTKLibraries)
   
   # Create two installation types with pre-selected components.
   # The "Developer" installation has just the library and headers,
