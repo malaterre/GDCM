@@ -16,12 +16,14 @@
 FIND_FILE(ACTIVIZ_KITWARE_VTK_LIBRARY
   NAMES Kitware.VTK.dll
   PATHS /usr/lib /usr/local/lib
+  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Kitware\\ActiVizDotNet 5.2.1]/bin"
   $ENV{ACTIVIZ_ROOT}/bin
   )
 
 FIND_FILE(ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY
   NAMES Kitware.mummy.Runtime.dll
   PATHS /usr/lib /usr/local/lib
+  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Kitware\\ActiVizDotNet 5.2.1]/bin"
   $ENV{ACTIVIZ_ROOT}/bin
   )
 
