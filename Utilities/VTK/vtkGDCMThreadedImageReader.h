@@ -39,8 +39,9 @@
 #define __vtkGDCMThreadedImageReader_h
 
 #include "vtkGDCMImageReader.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
 
-class VTK_EXPORT vtkGDCMThreadedImageReader : public vtkGDCMImageReader
+class GDCM_EXPORT vtkGDCMThreadedImageReader : public vtkGDCMImageReader
 {
 public:
   static vtkGDCMThreadedImageReader *New();

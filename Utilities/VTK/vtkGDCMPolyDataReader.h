@@ -27,12 +27,13 @@
 #define __vtkGDCMPolyDataReader_h
 
 #include "vtkPolyDataAlgorithm.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
 
 class vtkMedicalImageProperties;
 //BTX
 namespace gdcm { class Reader; }
 //ETX
-class VTK_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
+class GDCM_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
 {
 public:
   static vtkGDCMPolyDataReader *New();

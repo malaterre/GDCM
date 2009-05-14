@@ -67,6 +67,8 @@
 
 #include "vtkMedicalImageReader2.h"
 #include "vtkImageData.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
+
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
 class vtkMedicalImageProperties;
@@ -99,7 +101,7 @@ class vtkPolyData;
 namespace gdcm { class ImageReader; }
 //ETX
 class vtkMatrix4x4;
-class VTK_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
+class GDCM_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
 {
 public:
   static vtkGDCMImageReader *New();

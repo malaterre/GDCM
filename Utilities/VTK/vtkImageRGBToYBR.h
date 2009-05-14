@@ -25,8 +25,9 @@
 #define __vtkImageRGBToYBR_h
 
 #include "vtkThreadedImageAlgorithm.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
 
-class VTK_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
+class GDCM_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageRGBToYBR *New();
