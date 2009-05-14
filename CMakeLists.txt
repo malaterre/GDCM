@@ -1,5 +1,5 @@
 PROJECT(GDCM)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6) # Sorry I want the cpack/component
 #-----------------------------------------------------------------------------
 # New cmake policy thingy
 IF(COMMAND CMAKE_POLICY)
@@ -572,6 +572,56 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-patch.diff.in ${CPACK_CYGWIN_PATCH_FILE})
     CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-package.sh.in ${CPACK_CYGWIN_BUILD_SCRIPT})
   ENDIF(CYGWIN)
+
+  # Tell CPack all of the components to install. The "ALL"
+  # refers to the fact that this is the set of components that
+  # will be included when CPack is instructed to put everything
+  # into the binary installer (the default behavior).
+  set(CPACK_COMPONENTS_ALL applications libraries headers)
+  
+  # Set the displayed names for each of the components to install.
+  # These will be displayed in the list of components inside the installer.
+  set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "MyLib Application")
+  set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
+  set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
+  
+  # Provide descriptions for each of the components to install.
+  # When the user hovers the mouse over the name of a component,
+  # the description will be shown in the "Description" box in the
+  # installer. If no descriptions are provided, the "Description"
+  # box will be removed.
+  set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
+    "An extremely useful application that makes use of MyLib")
+  set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
+    "Static libraries used to build programs with MyLib")
+  set(CPACK_COMPONENT_HEADERS_DESCRIPTION
+    "C/C++ header files for use with MyLib")
+
+  # Put the components into two different groups: "Runtime" and "Development"
+  set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
+  set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
+  set(CPACK_COMPONENT_HEADERS_GROUP "Development")
+  # Expand the "Development" group by default, since we have so few components.
+  # Also, provide this group with a description.
+  set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
+  set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
+    "All of the tools you'll ever need to develop software")
+  
+  # It doesn't make sense to install the headers without the libraries
+  # (because you could never use the headers!), so make the headers component
+  # depend on the libraries component.
+  set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
+  
+  # Create two installation types with pre-selected components.
+  # The "Developer" installation has just the library and headers,
+  # while the "Full" installation has everything.
+  set(CPACK_ALL_INSTALL_TYPES Full Developer)
+  set(CPACK_INSTALL_TYPE_FULL_DISPLAY_NAME "Everything")
+  set(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_HEADERS_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
+
+
   INCLUDE(CPack)
 
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
