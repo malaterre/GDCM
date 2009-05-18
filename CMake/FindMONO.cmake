@@ -29,6 +29,12 @@ FIND_PROGRAM(MONO_EXECUTABLE mono)
 FIND_PROGRAM(MCS_EXECUTABLE mcs)    # 1.0 
 FIND_PROGRAM(GMCS_EXECUTABLE gmcs)  # 2.0
 FIND_PROGRAM(SMCS_EXECUTABLE smcs)  # Moonlight
+# mono-gac: /usr/bin/gacutil
+FIND_PROGRAM(GACUTIL_EXECUTABLE gacutil)  # gacutil - Global Assembly Cache management utility.
+# mono-1.0-devel: /usr/bin/ilasm
+FIND_PROGRAM(ILASM_EXECUTABLE ilasm)  #  ilasm, ilasm2 - Mono IL assembler
+# mono-1.0-devel: /usr/bin/sn
+FIND_PROGRAM(SN_EXECUTABLE sn)  #  sn - Digitally sign/verify/compare strongnames on CLR assemblies.
 
 # We decide to declare mono found when both interpreter and compiler 1.0 are found.
 IF(MONO_EXECUTABLE AND MCS_EXECUTABLE)
