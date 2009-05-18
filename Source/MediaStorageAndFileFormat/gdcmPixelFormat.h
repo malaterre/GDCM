@@ -37,6 +37,7 @@ namespace gdcm
 class GDCM_EXPORT PixelFormat
 {
   friend class Bitmap;
+  friend std::ostream& operator<<(std::ostream &_os, const PixelFormat &pf);
 public:
   // When adding a type please add its dual type (its unsigned conterpart)
   typedef enum {
@@ -162,6 +163,12 @@ private:
   // D 0028|0103 [US] [Pixel Representation] [0]
   unsigned short PixelRepresentation;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const PixelFormat &pf)
+{
+  pf.Print( os );
+  return os;
+}
 
 } // end namespace gdcm
 

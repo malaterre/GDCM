@@ -756,7 +756,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DataScalarType = VTK_DOUBLE;
     break;
   default:
-    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
+    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType() );
     return 0;
     }
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
@@ -793,7 +793,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       this->IconDataScalarType = VTK_UNSIGNED_SHORT;
       break;
     default:
-      vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat );
+      vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat.GetScalarType() );
       return 0;
       }
     this->IconNumberOfScalarComponents = iconpixelformat.GetSamplesPerPixel();
