@@ -42,6 +42,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Directory
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Directory &d);
 public :
   Directory() {}
   ~Directory() {}
@@ -49,7 +50,7 @@ public :
   typedef std::vector<FilenameType> FilenamesType;
 
   /// Print
-  void Print(std::ostream &os = std::cout);
+  void Print(std::ostream &os = std::cout) const;
 
   /// Get the name of the toplevel directory
   FilenameType const &GetToplevel() const { return Toplevel; }
@@ -88,6 +89,13 @@ private :
   /// name of the toplevel directory to explore
   FilenameType Toplevel;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Directory &d)
+{
+  d.Print( os );
+  return os;
+}
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //__gdcmDirectory_h

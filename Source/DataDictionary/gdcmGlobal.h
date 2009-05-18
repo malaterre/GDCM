@@ -49,6 +49,7 @@ class Defs;
  */
 class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Global &g);
 public:
   Global();
   ~Global();
@@ -88,6 +89,11 @@ private:
   // but we could have also directly exposed a Dicts *Internals;
   static GlobalInternal *Internals;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Global &g)
+{
+  return os;
+}
 
 // This instance will show up in any translation unit that uses
 // Global or that has a singleton.  It will make sure

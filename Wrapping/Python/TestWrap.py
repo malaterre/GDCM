@@ -35,7 +35,7 @@ blacklist = (
 "UNExplicitImplicitDataElement"
 "Attribute"
 "VR16ExplicitDataElement"
-"LO" # stupid swig
+"LO" # issue with swig
 "String"
 "Parser"
 
@@ -59,8 +59,6 @@ blacklist = (
 "Exception"
 "ByteSwap"
 "Terminal"
-"PKCS7"
-"ASN1"
 # MediaStorageAndFileFormat
 "ConstCharWrapper"
 "ImageConverter"

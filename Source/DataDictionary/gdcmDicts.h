@@ -28,6 +28,7 @@ namespace gdcm
  */
 class GDCM_EXPORT Dicts
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Dicts &d);
 public:
   Dicts();
   ~Dicts();
@@ -72,6 +73,11 @@ private:
   Dicts &operator=(const Dicts &_val); // purposely not implemented
   Dicts(const Dicts &_val); // purposely not implemented
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Dicts &d)
+{
+  return os;
+}
 
 
 } // end namespace gdcm

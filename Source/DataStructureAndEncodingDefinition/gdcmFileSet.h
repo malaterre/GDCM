@@ -27,6 +27,7 @@ namespace gdcm
  */
 class GDCM_EXPORT FileSet
 {
+  friend std::ostream& operator<<(std::ostream &_os, const FileSet &d);
 public:
   FileSet():Files() {}
   typedef std::string FileType;
@@ -47,6 +48,11 @@ public:
 private:
   FilesType Files;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const FileSet &f)
+{
+  return os;
+}
 
 } // end namespace gdcm
 

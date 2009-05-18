@@ -37,6 +37,7 @@ namespace gdcm
 class DataSet;
 class GDCM_EXPORT Sorter
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Sorter &s);
 public:
   Sorter();
   virtual ~Sorter();
@@ -66,6 +67,12 @@ protected:
   std::map<Tag,std::string> Selection;
   SortFunction SortFunc;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Sorter &s)
+{
+  s.Print( os );
+  return os;
+}
 
 
 } // end namespace gdcm

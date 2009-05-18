@@ -60,6 +60,7 @@ class PrivateTag;
  */
 class GDCM_EXPORT CSAHeader
 {
+  friend std::ostream& operator<<(std::ostream &_os, const CSAHeader &d);
 public :
   CSAHeader():InternalDataSet(),InternalType(UNKNOWN),InterfileData(0) {};
   ~CSAHeader() {};
@@ -127,6 +128,13 @@ private:
   static CSAElement CSAEEnd;
   const char *InterfileData;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const CSAHeader &d)
+{
+  d.Print( os );
+  return os;
+}
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //__gdcmCSAHeader_h

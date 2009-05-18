@@ -25,6 +25,7 @@ namespace gdcm
  */
 class GDCM_EXPORT Orientation
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Orientation &o);
 public:
   Orientation();
   ~Orientation();
@@ -57,6 +58,12 @@ protected:
 private:
   static double ObliquityThresholdCosineValue;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Orientation &o)
+{
+  o.Print( os );
+  return os;
+}
 
 } // end namespace gdcm
 

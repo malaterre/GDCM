@@ -139,7 +139,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
   return nFiles;
 }
 
-void Directory::Print(std::ostream &_os)
+void Directory::Print(std::ostream &_os) const
 {
   // FIXME Both structures are FilenamesType I could factorize the code
   _os << "Directories: ";

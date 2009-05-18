@@ -50,6 +50,7 @@ class PrivateTag;
  */
 class GDCM_EXPORT PDBHeader
 {
+  friend std::ostream& operator<<(std::ostream &_os, const PDBHeader &d);
 public :
   PDBHeader() {}
   ~PDBHeader() {}
@@ -78,6 +79,13 @@ private:
   std::vector<PDBElement> InternalPDBDataSet;
   static PDBElement PDBEEnd;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const PDBHeader &d)
+{
+  d.Print( os );
+  return os;
+}
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //__gdcmPDBHeader_h

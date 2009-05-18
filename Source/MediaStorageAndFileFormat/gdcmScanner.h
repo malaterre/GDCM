@@ -38,6 +38,7 @@ namespace gdcm
  */
 class GDCM_EXPORT Scanner
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Scanner &s);
 public:
   Scanner():Values(),Filenames(),Mappings() {}
   ~Scanner();
@@ -126,6 +127,12 @@ private:
 
   double Progress;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Scanner &s)
+{
+  s.Print( os );
+  return os;
+}
 
 #if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
 /*
