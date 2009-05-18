@@ -188,12 +188,19 @@ IF(GDCM_WRAP_CSHARP)
   )
 
   ENDIF(GDCM_USE_ACTIVIZ)
+
 ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
   DEPENDS 
     ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
     #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
   COMMENT "building vtkgdcmswig_csharp.dll"
 )
+
+  # because vtkgdcmswig_csharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
+SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
+  INSTALL(FILES ${GDCM_LIBRARY_DIR2}/vtkgdcmswig_csharp.dll
+    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
+  )
 
 ENDIF(GDCM_WRAP_CSHARP)
 
