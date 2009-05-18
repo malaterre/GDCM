@@ -23,8 +23,12 @@ int TestDummyValueGenerator(int argc, char *argv[])
   // Because patientid1 & patientid2 are equivalent in DICOM we need to be able to generate 
   // identical replacement value in case of de-identifier operation:
 
-  std::string str1 = gdcm::DummyValueGenerator::Generate( patientid1 );
-  std::string str2 = gdcm::DummyValueGenerator::Generate( patientid2 );
+  const char *ptr1 = gdcm::DummyValueGenerator::Generate( patientid1 );
+  const char *ptr2 = gdcm::DummyValueGenerator::Generate( patientid2 );
+  if( !ptr1 || !ptr2 ) return 1;
+
+  std::string str1 = ptr1;
+  std::string str2 = ptr2;
 
   if( str1 != str2 )
     {
