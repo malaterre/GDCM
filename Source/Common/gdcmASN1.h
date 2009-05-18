@@ -36,9 +36,8 @@ public :
 
   static bool ParseDump(const char *array, size_t length);
 
-  int TestPBKDF2();
-
 protected:
+  int TestPBKDF2();
 
 private:
   ASN1Internals *Internals;
