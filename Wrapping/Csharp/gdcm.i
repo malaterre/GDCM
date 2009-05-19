@@ -183,7 +183,7 @@ public class";
 #include "gdcmMD5.h"
 #include "gdcmDummyValueGenerator.h"
 #include "gdcmSHA1.h"
-#include "gdcmBase64.h"
+//#include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
 
@@ -622,7 +622,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
 %include "gdcmSHA1.h"
-%include "gdcmBase64.h"
+//%include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
 
