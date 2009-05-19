@@ -55,6 +55,10 @@ public:
     PlanarConfiguration = pc;
     }
 
+  PixelFormat &GetPixelFormat()
+    {
+    return PF;
+    }
   const PixelFormat &GetPixelFormat() const
     {
     return PF;

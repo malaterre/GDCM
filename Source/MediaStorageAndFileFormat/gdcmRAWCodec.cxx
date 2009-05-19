@@ -17,6 +17,7 @@
 #include "gdcmByteSwap.txx"
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmUnpacker12Bits.h"
 
 #include <sstream>
 
@@ -70,8 +71,11 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
     !RequestPaddedCompositePixelCode &&
     PI == PhotometricInterpretation::MONOCHROME2 &&
     !PlanarConfiguration && !RequestPlanarConfiguration &&
+    GetPixelFormat().GetBitsAllocated() != 12 &&
     !NeedOverlayCleanup )
     {
+    assert( this->GetPixelFormat() != PixelFormat::UINT12 );
+    assert( this->GetPixelFormat() != PixelFormat::INT12 );
     out = in;
     return true;
     }
@@ -89,7 +93,25 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
   std::string::size_type check = str.size();
 
   out = in;
-  out.SetByteValue( &str[0], str.size() );
+
+  if( this->GetPixelFormat() == PixelFormat::UINT12 ||
+    this->GetPixelFormat() == PixelFormat::INT12 )
+    {
+    unsigned long len = str.size() * 16 / 12;
+    char * copy = new char[len];
+    Unpacker12Bits u12;
+    bool b = u12.Unpack(copy, &str[0], str.size() );
+    assert( b );
+    out.SetByteValue( copy, len );
+    delete[] copy;
+
+    this->GetPixelFormat().SetBitsAllocated( 16 );
+    }
+  else
+    {
+    out.SetByteValue( &str[0], str.size() );
+    }
+
   return r;
 }
 
