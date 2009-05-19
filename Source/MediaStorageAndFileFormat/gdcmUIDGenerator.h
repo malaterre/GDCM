@@ -31,7 +31,7 @@ class GDCM_EXPORT UIDGenerator
 {
 public:
   /// By default the root of a UID is a GDCM Root...
-  UIDGenerator() {}
+  UIDGenerator():Unique() {}
 
   // Function to override the GDCM root with a user one:
   // WARNING: This need to be a valid root, otherwise call will fail

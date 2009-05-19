@@ -13,8 +13,11 @@
 
 =========================================================================*/
 #include "gdcmSystem.h"
+#include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include <iostream>
+#include <fstream>
+
 #include <string.h> // strlen
 
 #include <time.h>
@@ -81,8 +84,8 @@ int TestSystem(int, char *[])
   unsigned long size4 = sizeof(std::streamsize);
   if( size1 > size2 )
     {
-    std::cerr << "size_t is not approriate on this system" << std::endl;
-    return 1;
+    std::cerr << "size_t is not appropriate on this system" << std::endl;
+    //return 1;
     }
   if( size2 != size4 )
     {
@@ -279,6 +282,32 @@ return 1;
 }
   int res = 0;
   res +=  TestGetTimeOfDay();
+
+  const char * testfilesize = gdcm::Testing::GetTempFilename( "filesize.bin" );
+if( gdcm::System::FileExists( testfilesize ) )
+{
+  gdcm::System::RemoveFile(testfilesize);
+}
+
+  size_t ss1 = gdcm::System::FileSize( testfilesize );
+if( ss1 != 0 )
+{
+std::cerr << "found:" << ss1 << std::endl;
+  ++res;
+}
+
+  std::ofstream os( testfilesize );
+  const char coucou[] = "coucou";
+  os << coucou;
+  os.flush();
+  os.close();
+
+  size_t ss2 = gdcm::System::FileSize( testfilesize );
+  if( ss2 != strlen( coucou ) ) 
+{
+std::cerr << "found:" << ss2 << std::endl;
+  res++;
+}
    
   return res;
 }

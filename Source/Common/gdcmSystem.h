@@ -42,6 +42,8 @@ public:
 
   /// Return the filesize. 0 if file does not exist.
   /// \warning you need to use FileExists to differenciate between empty file and missing file.
+  /// \warning for very large size file and on system where size_t is not appropriate to store
+  /// off_t value the function will return 0.
   static size_t FileSize(const char* filename);
 
   /// Return the time of last modification of file

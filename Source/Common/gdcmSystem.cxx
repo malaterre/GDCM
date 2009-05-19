@@ -307,15 +307,36 @@ bool System::RemoveFile(const char* source)
 // return size of file; also returns zero if no file exists
 size_t System::FileSize(const char* filename)
 {
+#if 0
+       All of these system calls return a stat structure, which  contains  the
+       following fields:
+
+          struct stat {
+              dev_t     st_dev;     /* ID of device containing file */
+              ino_t     st_ino;     /* inode number */
+              mode_t    st_mode;    /* protection */
+              nlink_t   st_nlink;   /* number of hard links */
+              uid_t     st_uid;     /* user ID of owner */
+              gid_t     st_gid;     /* group ID of owner */
+              dev_t     st_rdev;    /* device ID (if special file) */
+              off_t     st_size;    /* total size, in bytes */
+              blksize_t st_blksize; /* blocksize for filesystem I/O */
+              blkcnt_t  st_blocks;  /* number of blocks allocated */
+              time_t    st_atime;   /* time of last access */
+              time_t    st_mtime;   /* time of last modification */
+              time_t    st_ctime;   /* time of last status change */
+          };
+#endif
   struct stat fs;
   if (stat(filename, &fs) != 0) 
     {
     return 0;
     }
-  else
-    {
-    return fs.st_size;
-    }
+  off_t size = fs.st_size;
+  size_t size2 = size;
+  // off_t can be larger than size_t
+  if( size != (off_t)size2 ) return 0;
+  return size2;
 }
 
 #if 0
