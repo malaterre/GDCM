@@ -16,6 +16,7 @@
 #define __gdcmVersion_h
 
 #include "gdcmTypes.h"
+#include <iostream>
 
 namespace gdcm
 {
@@ -26,16 +27,25 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Version
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Version &v);
 public :
   static const char *GetVersion() { return GDCM_VERSION; }
   static int GetMajorVersion()    { return GDCM_MAJOR_VERSION; }
   static int GetMinorVersion()    { return GDCM_MINOR_VERSION; }
   static int GetBuildVersion()    { return GDCM_BUILD_VERSION; }
 
+  void Print(std::ostream &os = std::cout) const;
+
 protected:
   Version() {};
   ~Version() {};
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Version &v)
+{
+  v.Print( os );
+  return os;
+}
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

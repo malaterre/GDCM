@@ -16,4 +16,10 @@
 
 namespace gdcm
 {
+
+void Version::Print(std::ostream &os) const
+{
+  os << Version::GetVersion();
+}
+
 }
