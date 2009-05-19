@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -15,51 +15,59 @@
 // .NAME vtkGDCMImageWriter - write DICOM files
 // .SECTION Description
 // vtkGDCMImageWriter is a sink object that write DICOM files
-// this writer is single threaded
+// this writer is single threaded (see vtkGDCMThreadedImageReader2 for multi-thread)
 //
-// .SECTION FIXME vtkLookupTable is not taken into account...
+// .SECTION Warning: vtkLookupTable from the vtkImageData object taken into account
+// only if ImageFormat is set to VTK_LOOKUP_TABLE
 //
 // .SECTION NOTE We are not using the usual API SetFilePrefix / SetFilePattern, 
-// but instead a list of filenames: see SetFileNames
+// but instead a list of filenames: see SetFileNames and class gdcm::FilenameGenerator
+//
 // .SECTION Warning
 // You need to specify the correct ImageFormat (taken from the reader)
 // You need to explicitely specify the DirectionCosines (taken from the reader)
-// .SECTION Bug
-// You need to set the FileDimensionality to match the dim of your 
-// data for now (generating a 2D series out of 3D volume is not 
-// currently supported)
-// .SECTION NOTE Shift/Scale are global to all DICOM files written for example
+//
+// .SECTION NOTE Shift/Scale are global to all DICOM frames (=files) written
 // as 2D slice, therefore the shift/scale operation might not be optimized for 
-// all slices.
+// all slices. This is not recommended for image with a large dynamic range.
 //
 // .SECTION See Also
-// vtkImageWriter vtkMedicalImageProperties
+// vtkImageWriter vtkMedicalImageProperties vtkGDCMImageReader
 
 #ifndef __vtkGDCMImageWriter_h
 #define __vtkGDCMImageWriter_h
 
 #include "vtkImageWriter.h"
+#include "gdcmTypes.h"
 
 class vtkLookupTable;
 class vtkMedicalImageProperties;
 class vtkStringArray;
 class vtkMatrix4x4;
 class vtkStringArray;
-class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
+class GDCM_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
   static vtkGDCMImageWriter *New();
   vtkTypeRevisionMacro(vtkGDCMImageWriter,vtkImageWriter);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
-  //virtual void SetLookupTable(vtkLookupTable*);
-  //vtkGetObjectMacro(LookupTable, vtkLookupTable);
-
+  // Description:
+  // Pass in the vtkmedicalimageproperties object for medical information
+  // to be mapped to DICOM attributes.
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
 
+  // Description:
+  // Pass in the list of filename to be used to write out the DICOM file(s)
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
+
+  // Description:
+  // Set/Get whether or not the image was compressed using a lossy compression algorithm
+  vtkGetMacro(LossyFlag,int);
+  vtkSetMacro(LossyFlag,int);
+  vtkBooleanMacro(LossyFlag,int);
 
   // I need that...
   virtual void Write();
@@ -74,17 +82,21 @@ public:
   virtual const char* GetDescriptiveName() {
     return "DICOM"; }
 
+  // Description:
   // You need to manually specify the direction the image is in to write a valid DICOM file
-  // since vtkImageData do not contains one
+  // since vtkImageData do not contains one (eg. MR Image Storage, CT Image Storage...)
   virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
+  // Description:
   // Modality LUT
   vtkSetMacro(Shift, double);
   vtkGetMacro(Shift, double);
   vtkSetMacro(Scale, double);
   vtkGetMacro(Scale, double);
 
+  // Description:
+  // See vtkGDCMImageReader for list of ImageFormat
   vtkGetMacro(ImageFormat,int);
   vtkSetMacro(ImageFormat,int);
 
@@ -95,6 +107,8 @@ public:
   vtkGetMacro(FileLowerLeft, int);
   vtkSetMacro(FileLowerLeft, int);
 
+  // Description:
+  // For color image (more than a single comp) you can specify the planar configuration you prefer
   vtkSetMacro(PlanarConfiguration,int);
 
 protected:
@@ -145,6 +159,7 @@ private:
   double Scale;
   int FileLowerLeft;
   int PlanarConfiguration;
+  int LossyFlag;
 };
 
 #endif

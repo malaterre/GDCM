@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -40,6 +40,10 @@ int main(int argc, char *argv[])
     std::cerr << "Could not read: " << filename << std::endl;
     return 1;
     }
+
+  // If we reach here, we know for sure only 1 thing:
+  // It is a valid DICOM file (potentially an old ACR-NEMA 1.0/2.0 file)
+  // (Maybe, it's NOT a Dicom image -could be a DICOMDIR, a RTSTRUCT, etc-)
 
   // The output of gdcm::Reader is a gdcm::File
   gdcm::File &file = reader.GetFile();

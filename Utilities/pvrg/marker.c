@@ -669,7 +669,7 @@ void ReadSos()
     }
   else
     {
-      MakeIob(IOB_BLOCK,O_WRONLY | O_CREAT | O_TRUNC,
+      MakeIob(IOB_BLOCK,O_RDWR | O_CREAT | O_TRUNC,
 	      ((CFrame->DataPrecision>8)?2:1));
       if (CFrame->GlobalHeight)
 	{

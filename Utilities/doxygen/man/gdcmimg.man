@@ -1,0 +1,180 @@
+/*!
+
+\page gdcmimg Manipulate DICOM file.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmimg [options] file-in file-out
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmimg command line tool can be used in two fashions:
+1. Converting a recognized file format into its encapsulated DICOM counterpart,
+2. Anonymizing a rectangular portion of a DICOM file.
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   input filename
+
+file-out  output filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection parameters parameters
+\verbatim
+  -i --input     Input filename
+  -o --output    Output filename
+\endverbatim
+
+\subsection options options
+\verbatim
+     --endian %s       Endianess (LSB/MSB).
+  -d --depth %d        Depth (8/16/32).
+     --sign %s         Pixel sign (0/1).
+  -s --size %d,%d      Size.
+  -C --sop-class-uid   SOP Class UID (name or value).
+  -T --study-uid       Study UID.
+  -S --series-uid      Series UID.
+     --root-uid        Root UID.
+\endverbatim
+
+\subsection fill_options fill options
+\verbatim
+  -R --region %d,%d    Region.
+  -F --fill %d         Fill with pixel value specified.
+\endverbatim
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\subsection environment_variable environment variable
+\verbatim
+  GDCM_ROOT_UID Root UID
+\endverbatim
+
+\section supported Supported File Format (appropriate file extension)
+gdcmimg will base it's conversion process based on the file extension. Follows
+the list of recognized file extension. When no extension is found, DICOM file is assumed.
+
+input format
+\verbatim
+  * RAW       (raw)
+  * RLE       (rle)
+  * PNM       (pgm, pnm, ppm)
+  * JPEG-LS   (jls)
+  * JPEG 2000 (jp2, j2k, j2c, jpc)
+  * JPEG      (jpg, jpeg, ljpg, ljpeg)
+  * DICOM     ()
+\endverbatim
+
+output format:
+\verbatim
+  * PGM       (pgm, pnm, ppm)
+  * DICOM     ()
+\endverbatim
+
+For RAW file format, you should take special care of the --endian option.
+For the JPEG file format, both the lossy and lossless format are supported.
+For file format such as RLE or RAW, user is expected to fill in information required to find the dimension
+and type of input data as there is no other way to find this information. For all other file format,
+the properties are derived from the file format itself.
+PNM file are supposed to be big endian.
+
+\section usage Typical usage
+\subsection blank_out Remove a rectangular part of the image
+
+To fill the region [0,100]x[0,100] of a DICOM image simply do:
+
+\verbatim
+$ gdcmimg --fill 0 --region 0,100,0,100 -i input.dcm -o output_black.dcm
+\endverbatim
+
+Warning: if the Pixel Data is compressed, the image is first decompressed so that pixel can be set to 0, but it is not recompressed.
+
+\subsection raw Convert RAW to DICOM
+
+Recognized extension is .raw (case insensitive)
+
+\verbatim
+$ gdcmimg --size 512,512 --depth 16 -i input.raw -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+\subsection pnm Convert PGM/PNM/PPM to DICOM
+
+Recognized extensions are .pgm, .pnm, .ppm (case insensitive)
+
+\verbatim
+$ gdcmimg -i input.pgm -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+\subsection rle Convert RLE to DICOM
+
+Recognized extension is .rle (case insensitive)
+
+\verbatim
+$ gdcmimg --size 512,512 --depth 16 -i input.rle -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+\subsection jpeg Convert JPEG to DICOM
+
+Recognized extensions are .jpg, .jpeg, .ljpg, .ljpeg (case insensitive)
+
+\verbatim
+$ gdcmimg -i input.ljpeg -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture
+
+\subsection j2k Convert J2K to DICOM
+
+Recognized extensions are .j2k, .jp2, .jpc (case insensitive)
+
+\verbatim
+$ gdcmimg -i input.j2k -o output.dcm
+\endverbatim
+
+the image will be a Secondary Capture 
+
+\section warning Warning
+
+There are a couple of issues with gdcmimg implementation:
+For JFIF file and JP2 file (with header) the header is copied into the Pixel Data element which is illegal for JP2.
+Use gdcmconv to properly re-encode a JP2/JFIF file into J2K/JPG.
+
+For RLE file, no check is done for crossing the row boundary. It is recommended to use gdcmconv --rle to reencode into a proper RLE file in case of doubt.
+
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>convert</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2009 Mathieu Malaterre
+
+*/

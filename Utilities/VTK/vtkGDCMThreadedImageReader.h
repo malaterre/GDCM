@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -29,16 +29,19 @@
 //
 // .SECTION FIXME: you need to call SetFileName when reading a volume file (multiple slices DICOM)
 // since SetFileNames expect each single file to be single slice (see parent class)
-
+//
+// .SECTION BUG: you should really consider using vtkGDCMThreadedImageReader2 instead !
+//
 // .SECTION See Also
-// vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMThreadedImageReader2
 
 #ifndef __vtkGDCMThreadedImageReader_h
 #define __vtkGDCMThreadedImageReader_h
 
 #include "vtkGDCMImageReader.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
 
-class VTK_EXPORT vtkGDCMThreadedImageReader : public vtkGDCMImageReader
+class GDCM_EXPORT vtkGDCMThreadedImageReader : public vtkGDCMImageReader
 {
 public:
   static vtkGDCMThreadedImageReader *New();

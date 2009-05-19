@@ -29,8 +29,9 @@
 #define __vtkImageMapToWindowLevelColors2_h
 
 #include "vtkImageMapToColors.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
 
-class VTK_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
+class GDCM_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
 {
 public:
   static vtkImageMapToWindowLevelColors2 *New();

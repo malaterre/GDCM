@@ -1,0 +1,52 @@
+/*!
+
+\page gdcmviewer Simple DICOM viewer.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmviewer [options] file-in
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmviewer 
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   DICOM input filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2009 Mathieu Malaterre
+
+*/

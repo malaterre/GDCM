@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -32,7 +32,7 @@
  * It's a software from http://rentgenprom.ru/ , shipped with universal digital radiographic units 
  * "ProScan-2000". The Ukrainian manufacturer developed own digital radiographic unit and it is 
  * compatible with software from "ProScan-2000". 
-*/
+ */
 int main(int argc, char *argv[])
 {
   if( argc < 3 )

@@ -43,6 +43,7 @@
 #define JP2_JP2H 0x6a703268		/**< JP2 header box */
 #define JP2_IHDR 0x69686472		/**< Image header box */
 #define JP2_COLR 0x636f6c72		/**< Colour specification box */
+#define	JP2_PCLR 0x70636c72   /**< Palette */
 #define JP2_JP2C 0x6a703263		/**< Contiguous codestream box */
 #define JP2_URL  0x75726c20		/**< URL box */
 #define JP2_DBTL 0x6474626c		/**< ??? */

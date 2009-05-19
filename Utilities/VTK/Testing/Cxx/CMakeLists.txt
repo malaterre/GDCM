@@ -4,7 +4,9 @@ SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   TestvtkGDCMImageReader2
   TestvtkGDCMImageReader4
+  TestvtkGDCMImageReaderIsLossy
   #TestvtkGDCMImageActor
+  #TestvtkGDCMImageViewer
 )
 IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
   SET(VTK_GDCM_TEST_SRCS

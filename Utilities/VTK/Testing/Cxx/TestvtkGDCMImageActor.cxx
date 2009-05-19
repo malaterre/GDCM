@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -23,7 +23,7 @@
 #include "vtkInteractorStyleImage.h"
 #include <vtksys/SystemTools.hxx>
 
-#include "gdcmDataImages.h"
+#include "gdcmTesting.h"
 
 int TestvtkGDCMReadImageActor(const char *filename)
 {
@@ -82,7 +82,8 @@ int TestvtkGDCMImageActor(int argc, char *argv[])
   // else
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestvtkGDCMReadImageActor( filename );
     ++i;

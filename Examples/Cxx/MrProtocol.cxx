@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -478,7 +478,22 @@ int main(int argc, char *argv [])
     std::cerr << "Impossible: " << partial_fourier << std::endl;
     return 1;
     }
+/*
+This is the Flip Angle:
+adFlipAngleDegree[0]                     = 30
 
+One can find it also in the protocol:
+
+...
+      <ParamFunctor.""T1mapFunctor""> 
+      {
+        <Class> ""T1mapFunctor@IceImagePostProcFunctors"" 
+        
+        <ParamBool.""EXECUTE"">  { }
+        <ParamDouble.""Flip1_deg"">  { <Precision> 16  14.7378520000000000  }
+...
+
+*/
   // Below is an attemp to play with the CSAHeader dict:
 #if 0
   const char gspec[] = "sGRADSPEC.flSensitivityX";

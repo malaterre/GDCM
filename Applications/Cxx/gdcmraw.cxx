@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -58,7 +58,8 @@ void PrintHelp()
   std::cout << "Usage: gdcmraw [OPTION]... FILE..." << std::endl;
   std::cout << "Extract Data Element Value Field" << std::endl;
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input     DICOM filename" << std::endl;
+  std::cout << "  -i --input       DICOM filename" << std::endl;
+  std::cout << "  -o --output      DICOM filename" << std::endl;
   std::cout << "  -t --tag         Specify tag to extract value from." << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -S --split-frags Split fragments into multiple files." << std::endl;
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:t:p:fP",
+    c = getopt_long (argc, argv, "i:o:t:Sp:PVWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -129,7 +130,7 @@ int main(int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -138,15 +139,20 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
-          else if( option_index == 5 ) /* input */
+          else if( option_index == 2 ) /* tag */
+            {
+            assert( strcmp(s, "tag") == 0 );
+            rawTag.ReadFromCommaSeparatedString(optarg);
+            }
+          else if( option_index == 5 ) /* pattern */
             {
             assert( strcmp(s, "pattern") == 0 );
             assert( pattern.empty() );
             pattern = optarg;
             }
-          printf (" with arg %s", optarg);
+          //printf (" with arg %s", optarg);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
@@ -162,13 +168,21 @@ int main(int argc, char *argv[])
       outfilename = optarg;
       break;
 
+    case 'P':
+      pixeldata = 1;
+      break;
+
+    case 'S':
+      splitfrags = 1;
+      break;
+
     case 'p':
       assert( pattern.empty() );
       pattern = optarg;
       break;
 
     case 't':
-      printf ("option t with value '%s'\n", optarg);
+      //printf ("option t with value '%s'\n", optarg);
       rawTag.ReadFromCommaSeparatedString(optarg);
       //std::cerr << rawTag << std::endl;
       break;
@@ -207,15 +221,26 @@ int main(int argc, char *argv[])
 
   if (optind < argc)
     {
-/*
-    printf ("non-option ARGV-elements: ");
+    std::vector<std::string> files;
     while (optind < argc)
       {
-      printf ("%s ", argv[optind++]);
+      //printf ("%s\n", argv[optind++]);
+      files.push_back( argv[optind++] );
       }
-    printf ("\n");
-*/
-    PrintHelp();
+    //printf ("\n");
+    if( files.size() == 2 
+      && filename.empty()
+      && outfilename.empty() 
+    )
+      {
+      filename = files[0];
+      outfilename = files[1];
+      }
+    else
+      {
+      PrintHelp();
+      return 1;
+      }
     }
 
   if( version )

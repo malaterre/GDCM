@@ -11,39 +11,60 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
-ADD_EXECUTABLE(csa2img csa2img.cxx)
-TARGET_LINK_LIBRARIES(csa2img gdcmMSFF)
+FIND_PACKAGE(MAGIC)
 
-ADD_EXECUTABLE(MrProtocol MrProtocol.cxx)
-TARGET_LINK_LIBRARIES(MrProtocol gdcmMSFF)
+SET(EXAMPLES_SRCS
+  LargeVRDSExplicit
+  #AnonymizeAES
+  ClinicalTrialAnnotate
+  CheckBigEndianBug
+  DuplicatePCDE
+  CreateARGBImage
+  CreateCMYKImage
+  CompressImage
+  FixBrokenJ2K
+  GenFakeImage
+  HelloVizWorld
+  HelloWorld
+  MergeTwoFiles
+  MrProtocol
+  PatchFile
+  ReadExplicitLengthSQIVR
+  SortImage
+  csa2img
+  rle2img
+  uid_unique
+  PublicDict
+  GenSeqs
+  GetJPEGSamplePrecision
+)
 
-ADD_EXECUTABLE(rle2img rle2img.cxx)
-TARGET_LINK_LIBRARIES(rle2img gdcmMSFF)
+IF(MAGIC_FOUND)
+  INCLUDE_DIRECTORIES(${MAGIC_INCLUDE_DIRS})
+  ADD_EXECUTABLE(EncapsulateFileInRawData EncapsulateFileInRawData.cxx)
+  TARGET_LINK_LIBRARIES(EncapsulateFileInRawData gdcmMSFF ${MAGIC_LIBRARIES})
+ENDIF(MAGIC_FOUND)
 
-ADD_EXECUTABLE(uid_unique uid_unique.cxx)
-TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
+IF(GDCM_BUILD_TESTING)
+SET(EXAMPLES_SRCS
+  ${EXAMPLES_SRCS}
+  VolumeSorter
+)
+ENDIF(GDCM_BUILD_TESTING)
 
-ADD_EXECUTABLE(HelloWorld HelloWorld.cxx)
-TARGET_LINK_LIBRARIES(HelloWorld gdcmMSFF)
+FOREACH(example ${EXAMPLES_SRCS})
+  ADD_EXECUTABLE(${example} ${example}.cxx)
+  TARGET_LINK_LIBRARIES(${example} gdcmMSFF)
+ENDFOREACH(example)
 
-ADD_EXECUTABLE(HelloVizWorld HelloVizWorld.cxx)
-TARGET_LINK_LIBRARIES(HelloVizWorld gdcmMSFF)
+IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+#../../bin/libgdcmDSED.dll.a(d000469.o)(.text+0x0): multiple definition of `gdcm::VL gdcm::Item::GetLength<gdcm::ImplicitDataElement>() const'
+#CMakeFiles/ReadExplicitLengthSQIVR.dir/ReadExplicitLengthSQIVR.obj(.text$_ZNK4gdcm4Item9GetLengthINS_19ImplicitDataElementEEENS_2VLEv[gdcm::VL gdcm::Item::GetLength<gdcm::ImplicitDataElement>() const]+0x0):ReadExplicitLengthSQIVR.cxx: first defined here
+#../../bin/libgdcmDSED.dll.a(d000252.o)(.text+0x0): multiple definition of `std::istream& gdcm::DataSet::ReadNested<gdcm::ImplicitDataElement, gdcm::SwapperDoOp>(std::istream&)'
+#CMakeFiles/ReadExplicitLengthSQIVR.dir/ReadExplicitLengthSQIVR.obj(.text$_ZN4gdcm7DataSet10ReadNestedINS_19ImplicitDataElementENS_11SwapperDoOpEEERSiS4_[std::basic_istream<char, std::char_traits<char> >& gdcm::DataSet::ReadNested<gdcm::ImplicitDataElement, gdcm::SwapperDoOp>(std::basic_istream<char, std::char_traits<char> >&)]+0x0):ReadExplicitLengthSQIVR.cxx: first defined here
+#../../bin/libgdcmDSED.dll.a(d000253.o)(.text+0x0): multiple definition of `std::istream& gdcm::DataSet::ReadNested<gdcm::ImplicitDataElement, gdcm::SwapperNoOp>(std::istream&)'
+#CMakeFiles/ReadExplicitLengthSQIVR.dir/ReadExplicitLengthSQIVR.obj(.text$_ZN4gdcm7DataSet10ReadNestedINS_19ImplicitDataElementENS_11SwapperNoOpEEERSiS4_[std::basic_istream<char, std::char_traits<char> >& gdcm::DataSet::ReadNested<gdcm::ImplicitDataElement, gdcm::SwapperNoOp>(std::basic_istream<char, std::char_traits<char> >&)]+0x0):ReadExplicitLengthSQIVR.cxx: first defined here
+#../../bin/libgdcmDSED.dll.a(d000271.o)(.text+0x0): multiple definition of `std::istream& gdcm::DataSet::ReadWithLength<gdcm::ImplicitDataElement, gdcm::SwapperDoOp>(std::istream&, gdcm::VL&)'
 
-ADD_EXECUTABLE(CompressImage CompressImage.cxx)
-TARGET_LINK_LIBRARIES(CompressImage gdcmMSFF)
-
-ADD_EXECUTABLE(CheckBigEndianBug CheckBigEndianBug.cxx)
-TARGET_LINK_LIBRARIES(CheckBigEndianBug gdcmMSFF)
-
-ADD_EXECUTABLE(PatchFile PatchFile.cxx)
-TARGET_LINK_LIBRARIES(PatchFile gdcmMSFF)
-
-ADD_EXECUTABLE(GenFakeImage GenFakeImage.cxx)
-TARGET_LINK_LIBRARIES(GenFakeImage gdcmMSFF)
-
-ADD_EXECUTABLE(FixBrokenJ2K FixBrokenJ2K.cxx)
-TARGET_LINK_LIBRARIES(FixBrokenJ2K gdcmMSFF)
-
-ADD_EXECUTABLE(ReadExplicitLengthSQIVR ReadExplicitLengthSQIVR.cxx)
-TARGET_LINK_LIBRARIES(ReadExplicitLengthSQIVR gdcmMSFF)
-
+  SET_TARGET_PROPERTIES( ReadExplicitLengthSQIVR PROPERTIES LINK_FLAGS "-Wl,--allow-multiple-definition")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)

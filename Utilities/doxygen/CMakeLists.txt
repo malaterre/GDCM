@@ -5,6 +5,12 @@ IF(GDCM_DOCUMENTATION)
 
   FIND_PACKAGE(Doxygen REQUIRED)
 
+  IF(GDCM_DOXYGEN_NO_FOOTER)
+    SET(GDCM_HTML_FOOTER)
+  ELSE(GDCM_DOXYGEN_NO_FOOTER)
+    # Otherwise use gdcm/piwik/sf.net footer:
+    SET(GDCM_HTML_FOOTER ${GDCM_SOURCE_DIR}/Utilities/doxygen/footer.html)
+  ENDIF(GDCM_DOXYGEN_NO_FOOTER)
   CONFIGURE_FILE(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/doxyfile.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
@@ -15,6 +21,7 @@ IF(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Wrapping/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/Insight/*.h"
+    "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.man"
   )
   #MESSAGE(${headerfiles})
   # We are depending only on header files and README.txt but other files
@@ -29,37 +36,29 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
     @ONLY
   )
+  SET(GDCM_DOC_TARBALL
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tar.gz
+  )
+  # epstopdf is needed: sudo apt-get install texlive-extra-utils
+  # pdflatex is needed: sudo apt-get install texlive-latex-extra
   ADD_CUSTOM_COMMAND(
     OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
              ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
+    # let's create the tarball within the same custom command to avoid complex dep. rules.
+             ${GDCM_DOC_TARBALL}
+             ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex # output #1 (fake)
+    # 1. first thing first let's run doxygen
     COMMAND  ${DOXYGEN}
     ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
+    # 2. tarball gen.
+    COMMAND  ${CMAKE_COMMAND}
+    ARGS     -E tar cfz ${GDCM_DOC_TARBALL} html
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
              ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
              ${headerfiles}
-    COMMENT  "Creating doxygen doc"
+    COMMENT  "GDCM: Creating doxygen doc + tarball"
     #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
-
-  SET(GDCM_DOC_TARBALL
-    ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tgz
-  )
-  # every time doxygen runs, it overwrite index.html so depending only on
-  # one single file is ok
-  # tar command is executed using relative path, so that tar does not contains 
-  # full path
-  ADD_CUSTOM_COMMAND(
-    OUTPUT   ${GDCM_DOC_TARBALL}
-    COMMAND  ${CMAKE_COMMAND}
-    ARGS     -E tar cfz ${GDCM_DOC_TARBALL} html
-    DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
-    COMMENT  "Creating tarball of documentation"
-    #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  )
-  ADD_CUSTOM_TARGET(DoxygenDoc
-    ALL
-    DEPENDS ${GDCM_DOC_TARBALL}
-  )
 
   # PDF building part:
   # When building latex, we have to run a custom command to produce the pdf file:
@@ -92,31 +91,75 @@ IF(GDCM_DOCUMENTATION)
       COMMAND  ${CMAKE_MAKE_PROGRAM}
       DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex 
 ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
-      COMMENT  "Creating (patched) pdf of documentation"
+    #${GDCM_DOC_TARBALL}
+      COMMENT  "GDCM: Creating (patched) pdf of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
-    #ADD_CUSTOM_COMMAND(
-    #  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-    #  DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
-    #  COMMENT  "Creating pdf of documentation"
-    #  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
-    #)
-    #  MESSAGE(${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf)
     ADD_CUSTOM_COMMAND(
       OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       COMMAND  ${PDFOPT_EXECUTABLE}
       ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf 
                ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-      COMMENT  "Creating optimized pdf version of documentation"
+      COMMENT  "GDCM: Creating optimized pdf version of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
     # add target to 'ALL'
-    ADD_CUSTOM_TARGET(DoxygenPDF
+    ADD_CUSTOM_TARGET(GDCMDoxygenPDF
       ALL
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+      COMMENT  "GDCM: Executing GDCMDoxygenPDF"
+    )
+  ELSE(UNIX AND GDCM_PDF_DOCUMENTATION)
+    # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
+    ADD_CUSTOM_TARGET(GDCMDoxygenDoc
+      ALL
+      DEPENDS ${GDCM_DOC_TARBALL}
+      COMMENT  "GDCM: Executing GDCMDoxygenDoc"
     )
   ENDIF(UNIX AND GDCM_PDF_DOCUMENTATION)
+
+  # Install html pages:
+  #INSTALL(FILES 
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcm2vtk.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmconv.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmanon.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmdump.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmimg.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcminfo.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmpdf.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmraw.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmscanner.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmtar.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmviewer.html
+  #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT Development
+  #)
+  INSTALL(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmraw.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
+    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT Development
+  )
+
+  # http://lists.debian.org/debian-italian/2006/12/msg00878.html
+  # man2txt : man man | col -b | less
+
+  IF(GDCM_USE_VTK)
+    # Make this option a hidden option as vtkgdcm/doxygen stuff is a mess (copy/paste
+    # from paraview). It always rerun -sigh-
+    IF(GDCM_VTK_DOCUMENTATION)
+      SET(BUILD_DOCUMENTATION 1)
+    ENDIF(GDCM_VTK_DOCUMENTATION)
+    SUBDIRS(vtk)
+  ENDIF(GDCM_USE_VTK)
 
 ENDIF(GDCM_DOCUMENTATION)
 

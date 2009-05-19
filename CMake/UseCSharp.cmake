@@ -7,7 +7,7 @@
 #   CSHARP_LINK_LIBRARIES(name [ libraries ])
 #     - Link libraries to csharp library
 #
-#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
@@ -34,7 +34,7 @@ ELSE(WIN32)
   SET(CMAKE_CSHARP_INTERPRETER ${MONO_EXECUTABLE})
 ENDIF(WIN32)
 
-SET(DESIRED_CSHARP_COMPILER_VERSION 1 CACHE STRING "Pick a version for C# compiler to use: 1, 2 or 3")
+SET(DESIRED_CSHARP_COMPILER_VERSION 2 CACHE STRING "Pick a version for C# compiler to use: 1, 2 or 3")
 MARK_AS_ADVANCED(DESIRED_CSHARP_COMPILER_VERSION)
 
 # default to v1:

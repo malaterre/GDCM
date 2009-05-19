@@ -1,0 +1,142 @@
+/*!
+
+\page gdcmconv Tool to convert DICOM to DICOM.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmconv [options] file-in file-out
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmconv 
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   DICOM input filename
+
+file-out  DICOM output filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection parameters parameters
+\verbatim
+  -i --input      DICOM filename
+  -o --output     DICOM filename
+\endverbatim
+
+\subsection options options
+\verbatim
+  -X --explicit            Change Transfer Syntax to explicit.
+  -M --implicit            Change Transfer Syntax to implicit.
+  -U --use-dict            Use dict for VR (only public by default).
+     --with-private-dict   Use private dict for VR (advanced user only).
+  -C --check-meta          Check File Meta Information (advanced user only).
+     --root-uid            Root UID.
+     --remove-gl           Remove group length (deprecated in DICOM 2008).
+     --remove-private-tags Remove private tags.
+\endverbatim
+
+\subsection image_options image options
+\verbatim
+  -l --apply-lut                      Apply LUT (non-standard, advanced user only).
+  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible).
+  -w --raw                            Decompress image.
+  -d --deflated                       Compress using deflated (gzip).
+  -J --jpeg                           Compress image in jpeg.
+  -K --j2k                            Compress image in j2k.
+  -L --jpegls                         Compress image in jpeg-ls.
+  -R --rle                            Compress image in rle (lossless only).
+  -F --force                          Force decompression/merging before recompression/splitting.
+     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed.
+     --planar-configuration [01]      Change planar configuration.
+  -Y --lossy                          Use the lossy (if possible) compressor.
+  -S --split %d                       Write 2D image with multiple fragments (using max size)
+\endverbatim
+
+\subsection j2k_options JPEG options
+\verbatim
+  -q --quality %*f           set quality.
+\endverbatim
+
+\subsection j2k_options J2K options
+\verbatim
+  -r --rate    %*f           set rate.
+  -q --quality %*f           set quality.
+  -t --tile %d,%d            set tile size.
+  -n --number-resolution %d  set number of resolution.
+     --irreversible          set irreversible.
+\endverbatim
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\subsection special_options special options
+\verbatim
+  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
+\endverbatim
+
+\subsection environment_variable environment variable
+\verbatim
+  GDCM_ROOT_UID Root UID
+\endverbatim
+
+\section usage Typical usage
+\subsection jpeg Compressing to JPEG
+
+\verbatim
+$ gdcmconv --jpeg uncompressed.dcm compressed.dcm
+\endverbatim
+
+\subsection lossless_j2k Compressing to lossless J2K
+
+\verbatim
+$ gdcmconv --j2k uncompressed.dcm compressed.dcm
+\endverbatim
+
+\subsection lossy_j2k Compressing to lossy J2K
+
+\verbatim
+$ gdcmconv --lossy -q 55,50,45 --j2k uncompressed.dcm lossy_compressed.dcm
+\endverbatim
+
+Note:
+
+    * -q is just one of the many way to specify lossy quality, you need to inspect the other cmd line flag to specify lossyness properties. 
+
+\subsection rle Compressing to RLE
+
+\verbatim
+$ gdcmconv --rle uncompressed.dcm compressed.dcm
+\endverbatim
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2009 Mathieu Malaterre
+
+*/

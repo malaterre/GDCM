@@ -3,7 +3,7 @@
 #  Program: GDCM (Grassroots DICOM). A DICOM library
 #  Module:  $URL$
 #
-#  Copyright (c) 2006-2008 Mathieu Malaterre
+#  Copyright (c) 2006-2009 Mathieu Malaterre
 #  All rights reserved.
 #  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 #
@@ -122,6 +122,7 @@ if __name__ == "__main__":
   gdcm.Tag(0x0018,0x1315),
   gdcm.Tag(0x0018,0x1316),
   gdcm.Tag(0x0020,0x0110),
+  gdcm.Tag(0x0028,0x0120),
   gdcm.Tag(0x0028,0x1050),
   gdcm.Tag(0x0028,0x1051)
   ]

@@ -1,11 +1,15 @@
-gdcm (2.0.10) unstable; urgency=low
+gdcm (2.0.10-1) unstable; urgency=low
 
-  * Non-maintainer upload.
+  [ Steve M. Robbins ]
+  * New upstream.
+    - patches/no-executable-properties.patch: Remove.  Applied upstream.
+
+  [ Mathieu Malaterre ]
   * Add csharp-wrapping
   * Use libopenjpeg-dev instead of gdcm internal one
   * Fix installation of jpeg headers files
 
- -- Mathieu Malaterre <mathieu.malaterre@gmail.com>  Fri, 05 Dec 2008 11:24:20 +0100
+ -- Steve M. Robbins <smr@debian.org>  Sat, 06 Dec 2008 17:51:47 -0600
 
 gdcm (2.0.9-1.1) unstable; urgency=low
 

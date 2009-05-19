@@ -55,6 +55,7 @@
 #define __vtkImageColorViewer_h
 
 #include "vtkObject.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
 
 class vtkAlgorithmOutput;
 class vtkImageActor;
@@ -66,7 +67,7 @@ class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkPolyData;
 
-class VTK_EXPORT vtkImageColorViewer : public vtkObject 
+class GDCM_EXPORT vtkImageColorViewer : public vtkObject 
 {
 public:
   static vtkImageColorViewer *New();

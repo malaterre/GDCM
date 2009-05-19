@@ -1,5 +1,5 @@
 PROJECT(GDCM)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6) # Sorry I want the cpack/component
 #-----------------------------------------------------------------------------
 # New cmake policy thingy
 IF(COMMAND CMAKE_POLICY)
@@ -45,17 +45,18 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
-SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 10)
+SET(GDCM_MINOR_VERSION 1)
+SET(GDCM_BUILD_VERSION 0)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
   VERSION "${GDCM_VERSION}"
   SOVERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
 )
-SET(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
-  VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
-)
+#SET(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
+#  VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
+#)
+SET(GDCM_EXECUTABLE_PROPERTIES)
 IF(GDCM_NO_EXECUTABLE_PROPERTIES)
   SET(GDCM_EXECUTABLE_PROPERTIES)
   SET(python_site_package "python/site-packages")
@@ -206,6 +207,14 @@ IF(NOT GDCM_INSTALL_INCLUDE_DIR)
   SET(GDCM_INSTALL_INCLUDE_DIR "include/${subdir}")
 ENDIF(NOT GDCM_INSTALL_INCLUDE_DIR)
 
+IF(NOT GDCM_INSTALL_DOC_DIR)
+  SET(GDCM_INSTALL_DOC_DIR "share/doc/${subdir}")
+ENDIF(NOT GDCM_INSTALL_DOC_DIR)
+
+IF(NOT GDCM_INSTALL_MAN_DIR)
+  SET(GDCM_INSTALL_MAN_DIR "man")
+ENDIF(NOT GDCM_INSTALL_MAN_DIR)
+
 IF(NOT GDCM_INSTALL_PACKAGE_DIR)
   SET(GDCM_INSTALL_PACKAGE_DIR ${GDCM_INSTALL_LIB_DIR}/${subdir}
     CACHE INTERNAL "")
@@ -241,14 +250,17 @@ ENDIF(GDCM_BUILD_SHARED_LIBS)
 #-----------------------------------------------------------------------------
 #System stuff, mainly for packager or paranoid people with up-to-date lib moto
 OPTION(GDCM_USE_SYSTEM_ZLIB "Use system zlib" OFF)
+#OPTION(GDCM_USE_SYSTEM_POLARSSL "Use system polarssl (xyssl)" OFF)
+OPTION(GDCM_USE_SYSTEM_OPENSSL  "Use system OpenSSL" OFF)
 IF(UNIX)
-  # I think that FreeBSD/MaxOSX do not need that only Linux should...
+  # Will search for the uuid_generate symbols.
+  # Can be in libSystem.dylib or libuuid.so
   OPTION(GDCM_USE_SYSTEM_UUID "Use system uuid" OFF)
 ENDIF(UNIX)
 OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
 OPTION(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
-OPTION(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg (1.0)" OFF)
-MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT)
+OPTION(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg (1.x)" OFF)
+MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT GDCM_USE_SYSTEM_OPENSSL)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_OPENJPEG GDCM_USE_SYSTEM_LJPEG)
 OPTION(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
 IF(GDCM_USE_SYSTEM_POPPLER)
@@ -282,6 +294,19 @@ IF(GDCM_USE_SYSTEM_ZLIB)
 ELSE(GDCM_USE_SYSTEM_ZLIB)
   SET(GDCM_ZLIB_LIBRARIES "gdcmzlib")
 ENDIF(GDCM_USE_SYSTEM_ZLIB)
+
+#IF(GDCM_USE_SYSTEM_POLARSSL)
+#  # If user say so, then this is a requirement !
+#  FIND_PACKAGE(POLARSSL REQUIRED)
+#  SET(GDCM_POLARSSL_LIBRARIES ${POLARSSL_LIBRARIES})
+#
+#ELSE(GDCM_USE_SYSTEM_POLARSSL)
+#  SET(GDCM_POLARSSL_LIBRARIES "gdcmpolarssl")
+#ENDIF(GDCM_USE_SYSTEM_POLARSSL)
+
+IF(GDCM_USE_SYSTEM_OPENSSL)
+  FIND_PACKAGE(OpenSSL2 REQUIRED)
+ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
 IF(GDCM_USE_SYSTEM_UUID)
   # If user say so, then this is a requirement !
@@ -361,9 +386,13 @@ IF(GDCM_BUILD_WRAPPING)
   SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
 ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
-OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
-OPTION(GDCM_WRAP_CSHARP "build csharp wrapping (very experimental !)" OFF)
-MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA) # GDCM_WRAP_CSHARP)
+OPTION(GDCM_WRAP_JAVA "build java wrapping" OFF)
+OPTION(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP) #GDCM_WRAP_JAVA) # GDCM_WRAP_CSHARP)
+MARK_AS_ADVANCED(GDCM_USE_RLE)
+MARK_AS_ADVANCED(GDCM_USE_ACTIVIZ)
+MARK_AS_ADVANCED(GDCM_TEST_BOOSTRAP)
+MARK_AS_ADVANCED(GDCM_USE_JPEGLS)
 IF(GDCM_WRAP_CSHARP)
 FIND_PACKAGE(CSharp REQUIRED)
 INCLUDE(${CSharp_USE_FILE})
@@ -411,7 +440,7 @@ IF(BUILD_TESTING)
   SUBDIRS(Testing)
   IF(NOT GDCM_DATA_ROOT)
     # http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F
-    MESSAGE("You need to set the path to GDCM_DATA_ROOT (advanced option) or disable GDCM_BUILD_TESTING or you won't get all tests.")
+    MESSAGE("If you want to build the test suite, you must set the path to GDCM_DATA_ROOT (advanced option); if you don't want, disable GDCM_BUILD_TESTING (advanced option) .")
   ENDIF(NOT GDCM_DATA_ROOT)
 ENDIF(BUILD_TESTING)
 
@@ -426,6 +455,10 @@ ENDIF(GDCM_DOCUMENTATION)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_VTK "vtk bridge ?" OFF)
+IF(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
+  OPTION(GDCM_USE_ACTIVIZ "vtk/Activiz bridge ?" OFF)
+ENDIF(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
+
 IF(GDCM_USE_VTK)
   SUBDIRS(Utilities/VTK)
 ENDIF(GDCM_USE_VTK)
@@ -483,6 +516,12 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_NSIS_HELP_LINK "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_MODIFY_PATH ON)
+    IF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    ELSE(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    STRING(REPLACE ${PROJECT_NAME} ${CPACK_PACKAGE_INSTALL_DIRECTORY} dummy ${CMAKE_INSTALL_PREFIX} )
+    SET(CMAKE_INSTALL_PREFIX ${dummy} CACHE PATH "" FORCE)
+    ENDIF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    
   ELSE(WIN32 AND NOT UNIX)
     # http://www.vtk.org/Wiki/CMake:CPackConfiguration
     # List of files to be stripped. Starting with CMake 2.6.0 CPACK_STRIP_FILES will be a boolean variable which enables
@@ -538,6 +577,98 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-patch.diff.in ${CPACK_CYGWIN_PATCH_FILE})
     CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-package.sh.in ${CPACK_CYGWIN_BUILD_SCRIPT})
   ENDIF(CYGWIN)
+
+  # Tell CPack all of the components to install. The "ALL"
+  # refers to the fact that this is the set of components that
+  # will be included when CPack is instructed to put everything
+  # into the binary installer (the default behavior).
+  set(CPACK_COMPONENTS_ALL Applications Libraries Headers VTKApplications VTKLibraries VTKHeaders PythonModule VTKPythonModule CSharpModule VTKCSharpModule)
+  
+  # Set the displayed names for each of the components to install.
+  # These will be displayed in the list of components inside the installer.
+  set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "GDCM Applications")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DISPLAY_NAME "VTK/GDCM Applications")
+  set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "GDCM Libraries")
+  set(CPACK_COMPONENT_VTKLIBRARIES_DISPLAY_NAME "VTK/GDCM Libraries")
+  set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "GDCM C/C++ Headers")
+  set(CPACK_COMPONENT_VTKHEADERS_DISPLAY_NAME "VTK/GDCM C/C++ Headers")
+  set(CPACK_COMPONENT_PYTHONMODULE_DISPLAY_NAME "GDCM Python Module")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DISPLAY_NAME "VTK/GDCM Python Module")
+  set(CPACK_COMPONENT_CSHARPMODULE_DISPLAY_NAME "GDCM C# Module")
+  set(CPACK_COMPONENT_VTKCSHARPMODULE_DISPLAY_NAME "VTK/GDCM C# Module")
+  
+  # Provide descriptions for each of the components to install.
+  # When the user hovers the mouse over the name of a component,
+  # the description will be shown in the "Description" box in the
+  # installer. If no descriptions are provided, the "Description"
+  # box will be removed.
+  set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
+    "Command line applications that uses GDCM: gdcmconv, gdcmdump, gdcminfo, gdcmscanner, gdcmimg, gdcmanon")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DESCRIPTION
+    "Command line applications that uses GDCM: gdcmviewer & gdcm2vtk")
+  set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
+    "Libraries used to build programs with GDCM")
+  set(CPACK_COMPONENT_VTKLIBRARIES_DESCRIPTION
+    "Libraries used to build programs with VTK/GDCM")
+  set(CPACK_COMPONENT_HEADERS_DESCRIPTION
+    "C/C++ header files for use with GDCM")
+  set(CPACK_COMPONENT_VTKHEADERS_DESCRIPTION
+    "C/C++ header files for use with VTK/GDCM")
+  set(CPACK_COMPONENT_PYTHONMODULE_DESCRIPTION
+    "Python Module for GDCM")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DESCRIPTION
+    "Python Module for VTK/GDCM")
+  set(CPACK_COMPONENT_CSHARPMODULE_DESCRIPTION
+    "C# Module for GDCM")
+  set(CPACK_COMPONENT_VTKCSHARPMODULE_DESCRIPTION
+    "C# Module for VTK/GDCM")
+
+  # Put the components into two different groups: "Runtime" and "Development"
+  set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_GROUP "Runtime")
+  set(CPACK_COMPONENT_PYTHONMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_CSHARPMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_VTKCSHARPMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
+  set(CPACK_COMPONENT_VTKLIBRARIES_GROUP "Development")
+  set(CPACK_COMPONENT_HEADERS_GROUP "Development")
+  set(CPACK_COMPONENT_VTKHEADERS_GROUP "Development")
+  # Expand the "Development" group by default, since we have so few components.
+  # Also, provide this group with a description.
+  set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
+  set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
+    "All of the tools you'll ever need to develop software using GDCM")
+  
+  # It doesn't make sense to install the headers without the libraries
+  # (because you could never use the headers!), so make the headers component
+  # depend on the libraries component.
+  set(CPACK_COMPONENT_HEADERS_DEPENDS Libraries)
+  set(CPACK_COMPONENT_VTKHEADERS_DEPENDS VTKLibraries)
+  set(CPACK_COMPONENT_VTKLIBRARIES_DEPENDS Libraries)
+  set(CPACK_COMPONENT_APPLICATIONS_DEPENDS Libraries)
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DEPENDS VTKLibraries)
+  set(CPACK_COMPONENT_PYTHONMODULE_DEPENDS Libraries)
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DEPENDS VTKLibraries)
+  set(CPACK_COMPONENT_CSHARPMODULE_DEPENDS Libraries)
+  set(CPACK_COMPONENT_VTKCSHARPMODULE_DEPENDS VTKLibraries)
+  
+  # Create two installation types with pre-selected components.
+  # The "Developer" installation has just the library and headers,
+  # while the "Full" installation has everything.
+  set(CPACK_ALL_INSTALL_TYPES Full Developer)
+  set(CPACK_INSTALL_TYPE_FULL_DISPLAY_NAME "Everything")
+  set(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_VTKLIBRARIES_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_HEADERS_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_VTKHEADERS_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_INSTALL_TYPES Full)
+  set(CPACK_COMPONENT_PYTHONMODULE_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_CSHARPMODULE_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_VTKCSHARPMODULE_INSTALL_TYPES Developer Full)
+
   INCLUDE(CPack)
 
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")

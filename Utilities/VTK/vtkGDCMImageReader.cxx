@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -108,6 +108,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->IconDataScalarType = VTK_CHAR;
   this->IconNumberOfScalarComponents = 1;
   this->PlanarConfiguration = 0;
+  this->LossyFlag = 0;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -600,6 +601,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
+  this->LossyFlag = image.IsLossy();
   const unsigned int *dims = image.GetDimensions();
 
   // Set the Extents.
@@ -705,6 +707,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     r.SetPixelFormat( pixeltype );
     outputpt = r.ComputeInterceptSlopePixelType();
     assert( pixeltype <= outputpt );
+    assert( pixeltype.GetSamplesPerPixel() == 1 && image.GetPhotometricInterpretation().GetSamplesPerPixel() == 1 );
+    assert( image.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::PALETTE_COLOR );
     }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
   //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
@@ -748,8 +752,11 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::FLOAT32:
     this->DataScalarType = VTK_FLOAT;
     break;
+  case gdcm::PixelFormat::FLOAT64:
+    this->DataScalarType = VTK_DOUBLE;
+    break;
   default:
-    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
+    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType() );
     return 0;
     }
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
@@ -786,7 +793,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       this->IconDataScalarType = VTK_UNSIGNED_SHORT;
       break;
     default:
-      vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat );
+      vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat.GetScalarType() );
       return 0;
       }
     this->IconNumberOfScalarComponents = iconpixelformat.GetSamplesPerPixel();
@@ -893,6 +900,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     return 0;
     }
   gdcm::Image &image = reader.GetImage();
+  this->LossyFlag = image.IsLossy();
   //VTK does not cope with Planar Configuration, so let's schew the work to please it
   assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
   // Store the PlanarConfiguration before inverting it !
@@ -1096,16 +1104,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL_422 )
     {
-    if( image.GetPixelFormat().GetSamplesPerPixel() == 3 )
-      {
-      this->ImageFormat = VTK_RGB; // FIXME 
-      }
-    else if( image.GetPixelFormat().GetSamplesPerPixel() == 1 )
-      {
-      abort();
-      vtkWarningMacro( "Image was declared as YBR_FULL_422 but is just grayscale" );
-      this->ImageFormat = VTK_LUMINANCE;
-      }
+    assert( image.GetPixelFormat().GetSamplesPerPixel() == 3 );
+    this->ImageFormat = VTK_RGB;
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL )
     {
@@ -1127,7 +1127,22 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     {
     this->ImageFormat = VTK_RGB;
     }
-  assert( this->ImageFormat );
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::CMYK )
+    {
+    this->ImageFormat = VTK_CMYK;
+    }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::ARGB )
+    {
+    this->ImageFormat = VTK_RGBA;
+    }
+  else
+    {
+    // HSV / CMYK ???
+    // let's just give up for now
+    vtkErrorMacro( "Does not handle: " << image.GetPhotometricInterpretation().GetString() );
+    //return 0;
+    }
+  //assert( this->ImageFormat );
 
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
@@ -1172,7 +1187,16 @@ int vtkGDCMImageReader::RequestDataCompat()
   vtkImageData *output = this->GetOutput(0);
   output->GetPointData()->GetScalars()->SetName("GDCMImage");
 
-  char * pointer = static_cast<char*>(output->GetScalarPointer());
+  int outExt[6];
+  output->GetUpdateExtent(outExt);
+  //vtkIdType outInc[3];
+  //data->GetIncrements(outInc);
+  //int outSize[3];
+  //data->GetDimensions(outSize);
+
+  //void *outPtr = data->GetScalarPointerForExtent(outExt);
+
+  char * pointer = static_cast<char*>(output->GetScalarPointerForExtent(outExt));
   if( this->FileName )
     {
     const char *filename = this->FileName;

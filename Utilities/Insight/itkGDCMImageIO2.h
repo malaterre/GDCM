@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -28,6 +28,7 @@ namespace itk
  *  http://gdcm.sourceforge.net
  *
  *  \ingroup IOFilters
+ *  \warning this class is deprecated, as gdcm 2.x has been integrated in ITK starting ITK 3.12
  */
 
 #ifndef ITK_EXPORT

@@ -32,8 +32,11 @@
 #include <stdlib.h>
 
 #include "openjpeg.h"
+#include "j2k.h"
+#include "jp2.h"
 #include "compat/getopt.h"
 #include "convert.h"
+#include <strings.h> /* strncasecmp */
 
 #ifndef WIN32
 #define stricmp strcasecmp
@@ -360,6 +363,17 @@ int main(int argc, char **argv) {
 	/* free the memory containing the code-stream */
 	free(src);
 	src = NULL;
+
+{
+  opj_j2k_t* j2k = NULL;
+  opj_jp2_t* jp2 = NULL;
+    j2k = (opj_j2k_t*)dinfo->j2k_handle;
+    jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+  if( j2k )
+    j2k_dump_cp(stdout, image, j2k->cp );
+  if( jp2 )
+    j2k_dump_cp(stdout, image, jp2->j2k->cp );
+}
 
 	/* create output image */
 	/* ------------------- */

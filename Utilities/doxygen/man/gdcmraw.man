@@ -1,0 +1,61 @@
+/*!
+
+\page gdcmraw Extract Data Element Value Field.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmraw [options] file-in file-out
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmraw tool is mostly used for development purpose. It is used to extract a specific binary field from a DICOM DataSet.
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   DICOM input filename
+
+file-out  output filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection options options
+\verbatim
+  -S --split-frags Split fragments into multiple files.
+  -p --pattern     Specify trailing file pattern (see split-frags).
+  -P --pixel-data  Pixel Data trailing 0.
+\endverbatim
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2009 Mathieu Malaterre
+
+*/

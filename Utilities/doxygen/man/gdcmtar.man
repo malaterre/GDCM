@@ -1,0 +1,60 @@
+/*!
+
+\page gdcmtar Concatenate/Extract DICOM files.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmtar [options] file-in file-out
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmtar 
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   DICOM input filename
+
+file-out  DICOM output filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection options options
+\verbatim
+  -M --mosaic     Split SIEMENS Mosaic image into multiple frames.
+  -p --pattern    Specify trailing file pattern.
+\endverbatim
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2009 Mathieu Malaterre
+
+*/

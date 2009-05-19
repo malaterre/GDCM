@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -39,19 +39,24 @@ public class DecompressImage
     Image ir = reader.GetImage();
 
     image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );
-    //uint dims[] = ir.GetDimensions();
-    //print ir.GetDimension(0);
-    //print ir.GetDimension(1);
-    //print "Dims:",dims
 
     //Just for fun:
-    //dircos =  ir.GetDirectionCosines();
+    //int dircos =  ir.GetDirectionCosines();
     //t = gdcm.Orientation.GetType(dircos);
-    //l = gdcm.Orientation.GetLabel(t);
+    //int l = gdcm.Orientation.GetLabel(t);
     //System.Console.WriteLine( "Orientation label:" + l );
 
-    image.SetDimension(0, ir.GetDimension(0) );
-    image.SetDimension(1, ir.GetDimension(1) );
+    // Set the dimensions, 
+    // 1. either one at a time
+    //image.SetDimension(0, ir.GetDimension(0) );
+    //image.SetDimension(1, ir.GetDimension(1) );
+
+    // 2. the array at once
+    uint[] dims = {0, 0};
+    // Just for fun let's invert the dimensions:
+    dims[0] = ir.GetDimension(1);
+    dims[1] = ir.GetDimension(0);
+    ir.SetDimensions( dims );
 
     PixelFormat pixeltype = ir.GetPixelFormat();
     image.SetPixelFormat( pixeltype );
@@ -59,11 +64,11 @@ public class DecompressImage
     PhotometricInterpretation pi = ir.GetPhotometricInterpretation();
     image.SetPhotometricInterpretation( pi );
 
-    DataElement pixeldata = new DataElement( new gdcm.Tag(0x7fe0,0x0010) );
+    DataElement pixeldata = new DataElement( new Tag(0x7fe0,0x0010) );
     byte[] str1 = new byte[ ir.GetBufferLength()];
     ir.GetBuffer( str1 );
     //System.Console.WriteLine( ir.GetBufferLength() );
-    pixeldata.SetByteValue( str1, new gdcm.VL( (uint)str1.Length ) );
+    pixeldata.SetByteValue( str1, new VL( (uint)str1.Length ) );
     //image.SetDataElement( pixeldata );
     ir.SetDataElement( pixeldata );
 

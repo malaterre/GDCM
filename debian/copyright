@@ -9,7 +9,7 @@ Upstream Authors:
 
 Copyright:
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   Copyright (c) 1993-2005 CREATIS
 
 License:
@@ -28,9 +28,6 @@ modification, are permitted provided that the following conditions are met:
    contributors (CNRS, INSERM, UCB, Universite Lyon I), may be used to
    endorse or promote products derived from this software without specific
    prior written permission.
-
- * Modified source versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS''
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE

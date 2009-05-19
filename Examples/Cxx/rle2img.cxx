@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -133,7 +133,7 @@ int main(int argc, char *argv [])
   delta_decode(bv2->GetPointer(), bv2->GetLength(), buffer);
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-  pixeldata.SetVR( gdcm::VR::OB );
+  pixeldata.SetVR( gdcm::VR::OW );
   pixeldata.SetByteValue( (char*)&buffer[0], buffer.size() * sizeof( unsigned short ) );
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
@@ -149,8 +149,11 @@ int main(int argc, char *argv [])
   // oh well this is just an example
   // use gdcm::Anonymizer::RemovePrivateTags if needed...
   writer.GetFile().GetDataSet().Remove( compressionpixeldata.GetTag() );
-
-  std::string outfilename = "outrle.dcm";
+  std::string outfilename;
+  if (argc > 2)
+     outfilename = argv[2];
+  else
+     outfilename = "outrle.dcm";
   writer.SetFileName( outfilename.c_str() );
   if( !writer.Write() )
     {
@@ -158,7 +161,7 @@ int main(int argc, char *argv [])
     return 1;
     }
 
-  std::cout << "sucess !" << std::endl;
+  std::cout << "success !" << std::endl;
 
   return 0;
 }

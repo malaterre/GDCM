@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -45,6 +45,8 @@
 #include "gdcmDirectory.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmASN1.h"
 
 #include <string>
 #include <iostream>
@@ -63,7 +65,8 @@ int DoOperation(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  if( !reader.Read() && !ignoreerrors )
+  bool success = reader.Read();
+  if( !success && !ignoreerrors )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
@@ -74,6 +77,44 @@ int DoOperation(const std::string & filename)
   printer.SetColor( color );
   printer.Print( std::cout );
 
+  // Only return success when file read succeeded not depending whether or not we printed it
+  return success ? 0 : 1;
+}
+
+int PrintASN1(const std::string & filename, bool verbose)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  gdcm::Tag tencryptedattributessequence(0x0400,0x0500);
+  if( !ds.FindDataElement( tencryptedattributessequence ) )
+    {
+    return 1;
+    }
+  const gdcm::DataElement &encryptedattributessequence = ds.GetDataElement( tencryptedattributessequence );
+  const gdcm::SequenceOfItems * sqi = encryptedattributessequence.GetSequenceOfItems();
+  if( !sqi->GetNumberOfItems() )
+    {
+    return 1;
+    }
+  const gdcm::Item &item1 = sqi->GetItem(1);
+  const gdcm::DataSet &subds = item1.GetNestedDataSet();
+
+  gdcm::Tag tencryptedcontent(0x0400,0x0520);
+  if( !subds.FindDataElement( tencryptedcontent) )
+    {
+    return 1;
+    }
+  const gdcm::DataElement &encryptedcontent = subds.GetDataElement( tencryptedcontent );
+  const gdcm::ByteValue *bv = encryptedcontent.GetByteValue();
+
+  bool b = gdcm::ASN1::ParseDump( bv->GetPointer(), bv->GetLength() );
+  if( !b ) return 1;
   return 0;
 }
 
@@ -124,6 +165,7 @@ int PrintCSA(const std::string & filename)
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
+  const gdcm::PrivateTag &t3 = csa.GetCSADataInfo();
 
   bool found = false;
   int ret = 0;
@@ -165,6 +207,30 @@ int PrintCSA(const std::string & filename)
       p.Print( std::cout );
       }
     }
+  if( ds.FindDataElement( t3 ) )
+    {
+    csa.LoadFromDataElement( ds.GetDataElement( t3 ) );
+    csa.Print( std::cout );
+    found = true;
+    if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
+      {
+      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      ret = 1;
+      }
+    else if( csa.GetFormat() == gdcm::CSAHeader::INTERFILE )
+      {
+      const char *interfile = csa.GetInterfile();
+      if( interfile ) std::cout << interfile << std::endl;
+      }
+    else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
+      {
+      gdcm::Printer p;
+      gdcm::File f;
+      f.SetDataSet( csa.GetDataSet() );
+      p.SetFile( f );
+      p.Print( std::cout );
+      }
+    }
   if( !found )
     {
     std::cout << "no csa tag found" << std::endl;
@@ -191,13 +257,15 @@ void PrintHelp()
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -x --xml-dict  generate the XML dict (only private elements for now)." << std::endl;
-  std::cout << "  -r --recursive recursive." << std::endl;
-  std::cout << "  -d --dump      dump value (limited use)." << std::endl;
-  std::cout << "  -p --print     print value instead of simply dumping (default)." << std::endl;
-  std::cout << "  -c --color     print in color." << std::endl;
-  std::cout << "  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
-  std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
+  std::cout << "  -x --xml-dict       generate the XML dict (only private elements for now)." << std::endl;
+  std::cout << "  -r --recursive      recursive." << std::endl;
+  std::cout << "  -d --dump           dump value (limited use)." << std::endl;
+  std::cout << "  -p --print          print value instead of simply dumping (default)." << std::endl;
+  std::cout << "  -c --color          print in color." << std::endl;
+  std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
+  std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
+  std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
+  std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -228,6 +296,8 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
   int recursive = 0;
+  int printasn1 = 0;
+  int mapuidnames = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -255,9 +325,11 @@ int main (int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
         {"ignore-errors", 0, &ignoreerrors, 1},
+        {"asn1", 0, &printasn1, 1},
+        {"map-uid-names", 0, &mapuidnames, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:xrpdcCPVWDEhvI";
+    static const char short_options[] = "i:xrpdcCPAVWDEhvI";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -316,6 +388,10 @@ int main (int argc, char *argv[])
 
     case 'C':
       printcsa = 1;
+      break;
+
+    case 'A':
+      printasn1 = 1;
       break;
 
     case 'P':
@@ -417,6 +493,10 @@ int main (int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
    
+  if( mapuidnames )
+    {
+    std::cerr << "Not handled for now" << std::endl;
+    }
 
   // else
   int res = 0;
@@ -435,6 +515,10 @@ int main (int argc, char *argv[])
       if( printdict )
         {
         res += DoOperation<gdcm::DictPrinter>(*it);
+        }
+      else if( printasn1 )
+        {
+        res += PrintASN1(*it, verbose);
         }
       else if( printpdb )
         {
@@ -463,6 +547,10 @@ int main (int argc, char *argv[])
       {
       res += DoOperation<gdcm::DictPrinter>(filename);
       }
+    else if( printasn1 )
+      {
+      res += PrintASN1(filename, verbose);
+      }
     else if( printpdb )
       {
       res += PrintPDB(filename, verbose);
@@ -489,7 +577,21 @@ int main (int argc, char *argv[])
 
 /*
  * Harvested data:
- * A lot of them are still non-obvious (ETL -> Echo Train Length...)
+ * A lot of them are still non-obvious
+
+Most obvious ones:
+ETL -> Echo Train Length
+FLIPANG -> Flip Angle
+MATRIXX / MATRIXY ->  Acquisition Matrix
+SLTHICK ->  Slice Thickness
+
+   ENTRY "Feet First"
++  POSITION "Supine"
+--------------------
+=  Patient Position
+
+
+Full list:
  
 ANREF "IC"
 ANREF "NA"

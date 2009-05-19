@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -399,10 +399,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
     vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
     rep->SetImage(reader->GetIconImage());
-    if( reader->GetIconImage()->GetPointData()->GetScalars() 
+    //reader->GetIconImage()->Print( std::cout );
+    if( reader->GetIconImage()->GetPointData()->GetScalars()
      && reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable() )
       {
-    vtkLookupTable *lut = reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable();
+      vtkLookupTable *lut = reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable();
       vtkImageMapToColors *map = vtkImageMapToColors::New ();
       map->SetInput (reader->GetIconImage());
       map->SetLookupTable (reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable());
@@ -421,6 +422,12 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
       //map->GetOutput()->Print( std::cout );
       rep->SetImage( map->GetOutput() );
       map->Delete();
+
+      //vtkPNGWriter *iconw = vtkPNGWriter::New();
+      //iconw->SetInput( map->GetOutput() );
+      //iconw->SetFileName( "/tmp/icon.png" );
+      //iconw->Write();
+      //iconw->Delete();
 
       }
 
@@ -527,7 +534,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     std::cerr << "Not implemented" << std::endl;
 #endif
     }
-  else if( reader->GetImageFormat() == VTK_RGB )
+  else if( reader->GetImageFormat() == VTK_RGB 
+    || reader->GetImageFormat() == VTK_RGBA )
     {
     // easy case !
     }

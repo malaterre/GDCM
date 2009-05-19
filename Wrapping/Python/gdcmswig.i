@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -15,9 +15,12 @@
 // See docs:
 // http://www.swig.org/Doc1.3/Python.html
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
+// cstring_output_allocate_size:
+// http://www.swig.org/Doc1.3/Library.html
 // http://www.geocities.com/foetsch/python/extending_python.htm
 // http://www.ddj.com/cpp/184401747
 // http://www.ddj.com/article/printableArticle.jhtml;jsessionid=VM4IXCQG5KM10QSNDLRSKH0CJUNN2JVN?articleID=184401747&dept_url=/cpp/
+// http://matt.eifelle.com/2008/11/04/exposing-an-array-interface-with-swig-for-a-cc-structure/
 
 %module(directors="1",docstring="A DICOM library") gdcmswig
 #pragma SWIG nowarn=504,510
@@ -45,6 +48,7 @@
 //#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmBitmap.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
 #include "gdcmIconImage.h"
@@ -60,8 +64,10 @@
 #include "gdcmFileSet.h"
 
 #include "gdcmReader.h"
+#include "gdcmPixmapReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmWriter.h"
+#include "gdcmPixmapWriter.h"
 #include "gdcmImageWriter.h"
 #include "gdcmStringFilter.h"
 #include "gdcmGlobal.h"
@@ -99,6 +105,9 @@
 #include "gdcmEnumeratedValues.h"
 #include "gdcmPatient.h"
 #include "gdcmStudy.h"
+#include "gdcmUsage.h"
+#include "gdcmModuleEntry.h"
+#include "gdcmNestedModuleEntries.h"
 #include "gdcmModule.h"
 #include "gdcmModules.h"
 #include "gdcmDefs.h"
@@ -107,8 +116,6 @@
 #include "gdcmTableEntry.h"
 #include "gdcmDefinedTerms.h"
 #include "gdcmSeries.h"
-#include "gdcmModuleEntry.h"
-#include "gdcmNestedModuleEntries.h"
 #include "gdcmIODEntry.h"
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
@@ -116,6 +123,7 @@
 #include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
@@ -127,6 +135,12 @@
 #include "gdcmDataSetHelper.h"
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmImageHelper.h"
+#include "gdcmMD5.h"
+#include "gdcmDummyValueGenerator.h"
+#include "gdcmSHA1.h"
+#include "gdcmBase64.h"
+#include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmSpacing.h"
 
 using namespace gdcm;
 %}
@@ -139,6 +153,7 @@ using namespace gdcm;
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
+//typedef int gdcm::DataSet::SizeType; // FIXME
 //%include "typemaps.i"
 
 // gdcm does not use std::string in its interface, but we do need it for the 
@@ -154,18 +169,10 @@ using namespace gdcm;
 %ignore operator=;                      // Ignore = everywhere.
 %ignore operator++;                     // Ignore
 
-//%feature("autodoc", "1")
-//%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
-#define GDCM_EXPORT
-%include "gdcmSwapCode.h"
-%include "gdcmPixelFormat.h"
-%include "gdcmMediaStorage.h"
-%rename(__getitem__) gdcm::Tag::operator[];
-//%rename(__getattr__) gdcm::Tag::operator[];
-%include "gdcmTag.h"
-%extend gdcm::Tag
+%define EXTEND_CLASS_PRINT_GENERAL(classfuncname,classname)
+%extend classname
 {
-  const char *__str__() {
+  const char *classfuncname() {
     static std::string buffer;
     std::ostringstream os;
     os << *self;
@@ -173,102 +180,80 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%enddef
+
+#if defined(SWIGPYTHON)
+%define EXTEND_CLASS_PRINT(classname)
+EXTEND_CLASS_PRINT_GENERAL(__str__,classname)
+%enddef
+#endif
+
+//%feature("autodoc", "1")
+//%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
+#define GDCM_EXPORT
+%rename(__add__) gdcm::VL::operator+=;
+%include "gdcmSwapCode.h"
+%include "gdcmPixelFormat.h"
+EXTEND_CLASS_PRINT(gdcm::PixelFormat)
+%include "gdcmMediaStorage.h"
+EXTEND_CLASS_PRINT(gdcm::MediaStorage)
+%rename(__getitem__) gdcm::Tag::operator[];
+//%rename(__getattr__) gdcm::Tag::operator[];
+%include "gdcmTag.h"
+EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
+EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 %include "gdcmVL.h"
+EXTEND_CLASS_PRINT(gdcm::VL)
 //%typemap(out) int
 //{
 //    $result = SWIG_NewPointerObj($1,SWIGTYPE_p_gdcm__VL,0);
 //}
 %include "gdcmVR.h"
-%extend gdcm::VR
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::VR)
 %include "gdcmVM.h"
 //%template (FilenameType) std::string;
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
-%extend gdcm::Directory
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::Directory)
 %include "gdcmObject.h"
 %include "gdcmValue.h"
-%extend gdcm::Value
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
-%include "gdcmByteValue.h"
+EXTEND_CLASS_PRINT(gdcm::Value)
 %ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
+%ignore gdcm::ByteValue::GetPointer() const;
+%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
+%include "gdcmByteValue.h"
+EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %extend gdcm::ByteValue
 {
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-  std::string WriteBuffer() {
+  std::string WriteBuffer() const {
     std::ostringstream os;
     self->WriteBuffer(os);
     return os.str();
   }
+  std::string GetBuffer() const {
+    std::ostringstream os;
+    self->WriteBuffer(os);
+    return os.str();
+  }
+  std::string GetBuffer(unsigned long length) const {
+    std::ostringstream os;
+    self->WriteBuffer(os);
+    std::string copy( os.str().c_str(), length);
+    return copy;
+  }
 };
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
+%template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
 %include "gdcmDataElement.h"
-%extend gdcm::DataElement
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::DataElement)
 %include "gdcmItem.h"
-%extend gdcm::Item
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::Item)
 %include "gdcmSequenceOfItems.h"
-%extend gdcm::SequenceOfItems
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (PythonDataSet) SWIGDataSet; 
+%rename (PythonTagToValue) SWIGTagToValue; 
 %include "gdcmDataSet.h"
 //namespace std {
 //  //struct lttag
@@ -283,184 +268,122 @@ using namespace gdcm;
 //  //%template(DataElementSet) gdcm::DataSet::DataElementSet;
 //  %template(DataElementSet) set<DataElement, lttag>;
 //}
-%extend gdcm::DataSet
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-    }
-};
+EXTEND_CLASS_PRINT(gdcm::DataSet)
 //%include "gdcmString.h"
 //%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
+EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
 %include "gdcmLookupTable.h"
+EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
+EXTEND_CLASS_PRINT(gdcm::Overlay)
 //%include "gdcmVR.h"
 //%rename(DataElementSetPython) std::set<DataElement, lttag>;
 //%rename(DataElementSetPython2) DataSet::DataElementSet;
 %template (DataElementSet) std::set<gdcm::DataElement>;
 //%rename (SetString2) gdcm::DataElementSet;
 %include "gdcmPreamble.h"
+EXTEND_CLASS_PRINT(gdcm::Preamble)
 %include "gdcmTransferSyntax.h"
-%extend gdcm::TransferSyntax
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::TransferSyntax)
 %include "gdcmFileMetaInformation.h"
-%extend gdcm::FileMetaInformation
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::FileMetaInformation)
 %include "gdcmFile.h"
-%extend gdcm::File
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::File)
 //%newobject gdcm::Image::GetBuffer;
 %include "cstring.i"
-%include "gdcmPixmap.h"
-%ignore gdcm::Pixmap::GetBuffer(char*) const;
-%extend gdcm::Pixmap
+%typemap(out) const unsigned int *GetDimensions {
+ int i;
+ int n = arg1->GetNumberOfDimensions();
+ $result = PyList_New(n);
+ for (i = 0; i < n; i++) {
+   PyObject *o = PyInt_FromLong((long) $1[i]);
+   PyList_SetItem($result,i,o);
+ }
+}
+// Grab a 3 element array as a Python 3-tuple
+%typemap(in) const unsigned int dims[3] (unsigned int temp[3]) {   // temp[3] becomes a local variable
+  int i;
+  if (PyTuple_Check($input)) {
+    if (!PyArg_ParseTuple($input,"iii",temp,temp+1,temp+2)) {
+      PyErr_SetString(PyExc_TypeError,"tuple must have 3 elements");
+      return NULL;
+    }
+    $1 = &temp[0];
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a tuple.");
+    return NULL;
+  }
+}
+%ignore gdcm::Bitmap::GetBuffer(char*) const;
+%include "gdcmBitmap.h"
+%clear const unsigned int dims[3];
+EXTEND_CLASS_PRINT(gdcm::Bitmap)
+%extend gdcm::Bitmap
 {
+  // http://mail.python.org/pipermail/python-list/2006-January/361540.html
   %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
   void GetBuffer(char **buffer, unsigned int *size) {
     *size = self->GetBufferLength();
     *buffer = (char*)malloc(*size);
     self->GetBuffer(*buffer);
   }
-
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-
 };
-
+%include "gdcmPixmap.h"
+EXTEND_CLASS_PRINT(gdcm::Pixmap)
+%typemap(out) const double *GetOrigin, const double *GetSpacing {
+ int i;
+ $result = PyList_New(3);
+ for (i = 0; i < 3; i++) {
+   PyObject *o = PyFloat_FromDouble((double) $1[i]);
+   PyList_SetItem($result,i,o);
+ }
+}
+%typemap(out) const double *GetDirectionCosines {
+ int i;
+ $result = PyList_New(6);
+ for (i = 0; i < 6; i++) {
+   PyObject *o = PyFloat_FromDouble((double) $1[i]);
+   PyList_SetItem($result,i,o);
+ }
+}
 %include "gdcmImage.h"
-%extend gdcm::Image
-{
-
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-//%typemap(python,out) const double * GetOrigin2 {
-//	//float* source=(float*)$source;
-//	float source[3]={0,0,0};
-//	$target = PyTuple_New(3);
-//	for(int i=0;i<3;i++){
-//		PyTuple_SetItem($target,i,Py_BuildValue("f",(source[i])));
-//	}	
-//}
-
-};
+EXTEND_CLASS_PRINT(gdcm::Image)
 %include "gdcmIconImage.h"
+EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmFragment.h"
+EXTEND_CLASS_PRINT(gdcm::Fragment)
 %include "gdcmPDBElement.h"
-%extend gdcm::PDBElement
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::PDBElement)
 %include "gdcmPDBHeader.h"
-%extend gdcm::PDBHeader
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::PDBHeader)
 %include "gdcmCSAElement.h"
-%extend gdcm::CSAElement
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::CSAElement)
 %include "gdcmCSAHeader.h"
-%extend gdcm::CSAHeader
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::CSAHeader)
 %include "gdcmSequenceOfFragments.h"
+EXTEND_CLASS_PRINT(gdcm::SequenceOfFragments)
 %include "gdcmBasicOffsetTable.h"
+EXTEND_CLASS_PRINT(gdcm::BasicOffsetTable)
 //%include "gdcmLO.h"
 %include "gdcmFileSet.h"
+EXTEND_CLASS_PRINT(gdcm::FileSet)
 
 %include "gdcmGlobal.h"
+EXTEND_CLASS_PRINT(gdcm::Global)
 
 %include "gdcmDictEntry.h"
-%extend gdcm::DictEntry
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::DictEntry)
 %include "gdcmCSAHeaderDictEntry.h"
-%extend gdcm::CSAHeaderDictEntry
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 
 %include "gdcmDict.h"
+EXTEND_CLASS_PRINT(gdcm::Dict)
 %include "gdcmCSAHeaderDict.h"
+EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
+EXTEND_CLASS_PRINT(gdcm::Dicts)
 
 %exception ReadFooBar {
    try {
@@ -474,13 +397,23 @@ using namespace gdcm;
    }
 }
 %include "gdcmReader.h"
+//EXTEND_CLASS_PRINT(gdcm::Reader)
+%include "gdcmPixmapReader.h"
+//EXTEND_CLASS_PRINT(gdcm::PixmapReader)
 %include "gdcmImageReader.h"
+//EXTEND_CLASS_PRINT(gdcm::ImageReader)
 %include "gdcmWriter.h"
+//EXTEND_CLASS_PRINT(gdcm::Writer)
+%include "gdcmPixmapWriter.h"
+//EXTEND_CLASS_PRINT(gdcm::PixmapWriter)
 %include "gdcmImageWriter.h"
+//EXTEND_CLASS_PRINT(gdcm::ImageWriter)
 %template (PairString) std::pair<std::string,std::string>;
 //%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmStringFilter.h"
+//EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UIDGenerator)
 //%include "gdcmConstCharWrapper.h"
 //%{
 //  typedef char * PString;   // copied to wrapper code
@@ -494,16 +427,7 @@ using namespace gdcm;
 //%template (TagToValue)      std::map<gdcm::Tag,const char*>;
 //%template (TagToValue)      std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmScanner.h"
-%extend gdcm::Scanner
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%template (stdFilenameToValue) std::map<const char*,const char*>;
 //namespace gdcm
 //{
@@ -515,16 +439,104 @@ using namespace gdcm;
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmAnonymizer.h"
+//EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 %include "gdcmSystem.h"
+//EXTEND_CLASS_PRINT(gdcm::System)
+
 %include "gdcmTrace.h"
+//EXTEND_CLASS_PRINT(gdcm::Trace)
 %include "gdcmUIDs.h"
+EXTEND_CLASS_PRINT(gdcm::UIDs)
 //%feature("director") gdcm::IPPSorter;      
+
+%{
+static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2)
+{
+  PyObject *func, *arglist, *result;
+  func = 0; //(PyObject *)data;
+  if (!(arglist = Py_BuildValue("()"))) {
+    /* fail */
+    abort();
+  }
+  result = PyEval_CallObject(func, arglist);
+  Py_DECREF(arglist);
+  if (result && result != Py_None) {
+    PyErr_SetString(PyExc_TypeError,
+                    "Callback function should return nothing");
+    Py_DECREF(result);
+    /* fail */
+    abort();
+  } else if (!result) {
+    /* fail: a Python exception was raised */
+    abort();
+  }
+  return true;
+}
+%}
+//%{
+//static void callback_decref(void *data)
+//{
+//  /* Lose the reference to the Python callback */
+//  Py_DECREF(data);
+//}
+//%}
+%typemap(in) (gdcm::Sorter::SortFunction f) {
+  if (!PyCallable_Check($input)) {
+    PyErr_SetString(PyExc_TypeError, "Need a callable object!");
+    SWIG_fail;
+  }
+  $1 = callback_helper;
+//  $2 = (void *)$input;
+//  $2 = callback_decref;
+//  $3 = (void *)$input;
+  /* Keep a reference to the Python callback */
+  Py_INCREF($input);
+}
+
 %include "gdcmSorter.h"
+//EXTEND_CLASS_PRINT(gdcm::Sorter)
 %include "gdcmIPPSorter.h"
+//EXTEND_CLASS_PRINT(gdcm::IPPSorter)
 %include "gdcmSpectroscopy.h"
+//EXTEND_CLASS_PRINT(gdcm::Spectroscopy)
 %include "gdcmPrinter.h"
+//EXTEND_CLASS_PRINT(gdcm::Printer)
 %include "gdcmDumper.h"
+//EXTEND_CLASS_PRINT(gdcm::Dumper)
+
+// Grab a 6 element array as a Python 6-tuple
+%typemap(in) const double dircos[6] (double temp[6]) {   // temp[6] becomes a local variable
+  int i;
+  if (PyTuple_Check($input) /*|| PyList_Check($input)*/) {
+    if (!PyArg_ParseTuple($input,"dddddd",temp,temp+1,temp+2,temp+3,temp+4,temp+5)) {
+      PyErr_SetString(PyExc_TypeError,"list must have 6 elements");
+      return NULL;
+    }
+    $1 = &temp[0];
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a list.");
+    return NULL;
+  }
+}
 %include "gdcmOrientation.h"
+EXTEND_CLASS_PRINT(gdcm::Orientation)
+//%typemap(argout) double z[3] {   // temp[6] becomes a local variable
+// int i;
+// $result = PyList_New(3);
+// for (i = 0; i < 3; i++) {
+//   PyObject *o = PyFloat_FromDouble((double) $1[i]);
+//   PyList_SetItem($result,i,o);
+// }
+//}
+//%typemap(in,numinputs=0) double z[3] (double temp[3]) {
+//    $1[0] = temp[0];
+//    $1[1] = temp[1];
+//    $1[2] = temp[2];
+//}
+%include "gdcmDirectionCosines.h"
+EXTEND_CLASS_PRINT(gdcm::DirectionCosines)
+//%clear const double dircos[6];
+
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
@@ -536,21 +548,14 @@ using namespace gdcm;
 %include "gdcmDictPrinter.h"
 %include "gdcmFilenameGenerator.h"
 %include "gdcmVersion.h"
+EXTEND_CLASS_PRINT(gdcm::Version)
 %include "gdcmFilename.h"
 %include "gdcmEnumeratedValues.h"
 %include "gdcmPatient.h"
 %include "gdcmStudy.h"
+%include "gdcmUsage.h"
 %include "gdcmModuleEntry.h"
-%extend gdcm::ModuleEntry
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::ostringstream os;
-    os << *self;
-    buffer = os.str();
-    return buffer.c_str();
-  }
-};
+EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmNestedModuleEntries.h"
 %include "gdcmModule.h"
 %include "gdcmModules.h"
@@ -568,9 +573,15 @@ using namespace gdcm;
 %include "gdcmConfigure.h"
 #ifdef GDCM_BUILD_TESTING
 %include "gdcmTesting.h"
-%ignore gdcm::Testing::ComputeFileMD5(const char*, char *);
+%ignore gdcm::Testing::ComputeMD5(const char *, const unsigned long , char []);
+%ignore gdcm::Testing::ComputeFileMD5(const char*, char []);
 %extend gdcm::Testing
 {
+  //static const char *ComputeMD5(const char *buffer) {
+  //  static char buffer[33];
+  //  gdcm::Testing::ComputeFileMD5(filename, buffer);
+  //  return buffer;
+  //}
   static const char *ComputeFileMD5(const char *filename) {
     static char buffer[33];
     gdcm::Testing::ComputeFileMD5(filename, buffer);
@@ -579,8 +590,8 @@ using namespace gdcm;
 };
 #endif
 %include "gdcmPythonFilter.h"
-%include "gdcmDirectionCosines.h"
 %include "gdcmTagPath.h"
+%include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"
@@ -593,3 +604,10 @@ using namespace gdcm;
 %include "gdcmFileExplicitFilter.h"
 %template (DoubleType) std::vector<double>;
 %include "gdcmImageHelper.h"
+%include "gdcmMD5.h"
+%include "gdcmDummyValueGenerator.h"
+%include "gdcmSHA1.h"
+%include "gdcmBase64.h"
+%include "gdcmCryptographicMessageSyntax.h"
+%include "gdcmSpacing.h"
+

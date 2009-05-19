@@ -23,6 +23,7 @@
 #define __vtkImagePlanarComponentsToComponents_h
 
 #include "vtkImageAlgorithm.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
 
 // everything is now handled within the vtkGDCMImageReader as Planar Configuration can not
 // be externalized (conflict with file lower left)
@@ -30,7 +31,7 @@
 #error do not use this class 
 
 //class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
-class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
+class GDCM_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
 {
 public:
   static vtkImagePlanarComponentsToComponents *New();

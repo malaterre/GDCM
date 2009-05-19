@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -28,6 +28,8 @@
 // .SECTION TODO
 // This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
 // list of 2D files are supported for now.
+// .SECTION TODO
+// Did not implement SetFilePattern / SetFilePrefix API, move it to protected section for now.
 // .SECTION BUG
 // Overlay are assumed to have the same extent as image. Right now if overlay origin is not
 // 0,0 the overlay will have an offset...
@@ -37,19 +39,36 @@
 // identical. But when FileLowerLeft is Off, we have to reorder the Y-line of the image, and thus the DataOrigin
 // is then translated to the other side of the image.
 // .SECTION Spacing
-// When reading a 3D volume, the spacing along the Z dimension might be negative
+// When reading a 3D volume, the spacing along the Z dimension might be negative (so as to respect up-side-down)
+// as specified in the Image Orientation (Patient) tag. When Z-spacing is 0, this means the multi-frame object
+// contains image which do not represent uniform volume.
 // .SECTION Warning
 // When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader 
 // it is *required* that FileLowerLeft is set to ON as coordinate system
 // would be inconsistant in between the two data structures.
+// .SECTION Color Space mapping:
+// * VTK_LUMINANCE         <-> MONOCHROME2
+// * VTK_LUMINANCE_ALPHA   <-> Not supported
+// * VTK_RGB               <-> RGB
+// * VTK_RGBA              <-> ARGB (deprecated, DICOM 2008)
+// * VTK_INVERSE_LUMINANCE <-> MONOCHROME1
+// * VTK_LOOKUP_TABLE      <-> PALETTE COLOR
+// * VTK_YBR               <-> YBR_FULL
+// 
+// For detailed information on color space transformation and true lossless transformation see:
+// http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Color_Space_Transformations
 
 // .SECTION See Also
-// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader
+// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
+// vtkDICOMImageReader
 
 #ifndef __vtkGDCMImageReader_h
 #define __vtkGDCMImageReader_h
 
 #include "vtkMedicalImageReader2.h"
+#include "vtkImageData.h"
+#include "gdcmTypes.h" // GDCM_EXPORT
+
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
 class vtkMedicalImageProperties;
@@ -74,12 +93,15 @@ class vtkPolyData;
 #ifndef VTK_YBR
 #define VTK_YBR 7
 #endif
+#ifndef VTK_CMYK
+#define VTK_CMYK 8
+#endif
 
 //BTX
 namespace gdcm { class ImageReader; }
 //ETX
 class vtkMatrix4x4;
-class VTK_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
+class GDCM_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
 {
 public:
   static vtkGDCMImageReader *New();
@@ -136,11 +158,17 @@ public:
   vtkBooleanMacro(LoadIconImage,int);
 
   // Description:
+  // Set/Get whether or not the image was compressed using a lossy compression algorithm
+  vtkGetMacro(LossyFlag,int);
+  vtkSetMacro(LossyFlag,int);
+  vtkBooleanMacro(LossyFlag,int);
+
+  // Description:
   // Read only: number of overlays as found in this image (multiple overlays per slice is allowed)
   vtkGetMacro(NumberOfOverlays,int);
 
   // Description:
-  // Read only: number of icon image (there should ony be one)
+  // Read only: number of icon image (there can only be zero or one icon per file)
   vtkGetMacro(NumberOfIconImages,int);
 
   // Description:
@@ -170,12 +198,15 @@ public:
   vtkBooleanMacro(ApplyYBRToRGB,int);
 
   // Description:
-  // Return VTK_LUMINANCE, VTK_RGB, VTK_LOOKUP_TABLE or VTK_YBR, VTK_RGB_PLANES
+  // Return VTK_LUMINANCE, VTK_INVERSE_LUMINANCE, VTK_RGB, VTK_RGBA, VTK_LOOKUP_TABLE, VTK_YBR or VTK_CMYK
+  // or 0 when ImageFormat is not handled.
+  // Warning: For color image, PlanarConfiguration need to be taken into account.
   vtkGetMacro(ImageFormat,int);
 
   // Description:
   // Return the Planar Configuration. This simply means that the internal DICOM image was stored
   // using a particular planar configuration (most of the time: 0)
+  // For monochrome image, PlanarConfiguration is always 0
   vtkGetMacro(PlanarConfiguration,int);
 
   // Description:
@@ -188,14 +219,16 @@ public:
   vtkGetVector3Macro(ImagePositionPatient,double);
   vtkGetVector6Macro(ImageOrientationPatient,double);
 
+  // Description:
   // Set/Get the first Curve Data:
   vtkGetObjectMacro(Curve,vtkPolyData);
   virtual void SetCurve(vtkPolyData *pd);
 
+  // Description:
+  // \DEPRECATED:
   // Modality LUT
-  // DEPRECATED:
   // Value returned by GetShift/GetScale might be innacurate since Shift/Scale could be
-  // varying along the Series read. Therefore user are advices not to use those function
+  // varying along the Series read. Therefore user are advices not to use those functions
   // anymore
   vtkGetMacro(Shift,double);
   vtkGetMacro(Scale,double);
@@ -263,6 +296,14 @@ protected:
   int IconDataScalarType;
   int IconNumberOfScalarComponents;
   int PlanarConfiguration;
+  int LossyFlag;
+
+protected:
+  // TODO / FIXME
+  void SetFilePrefix(const char *) {}
+  vtkGetStringMacro(FilePrefix);
+  void SetFilePattern(const char *) {}
+  vtkGetStringMacro(FilePattern);
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.

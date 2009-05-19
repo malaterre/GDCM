@@ -3,7 +3,7 @@
 #  Program: GDCM (Grassroots DICOM). A DICOM library
 #  Module:  $URL$
 #
-#  Copyright (c) 2006-2008 Mathieu Malaterre
+#  Copyright (c) 2006-2009 Mathieu Malaterre
 #  All rights reserved.
 #  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 #
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
   w = gdcm.ImageWriter()
   w.SetFile( r1.GetFile() )
-  #w.SetImage( r2.GetImage() )  # See comment above
+  #w.SetImage( r2.GetImage() )  # See comment above
   w.SetImage( r1.GetImage() )
 
   w.SetFileName( "merge.dcm" )

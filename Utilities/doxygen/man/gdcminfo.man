@@ -1,0 +1,66 @@
+/*!
+
+\page gdcminfo Display meta info about the input DICOM file.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcminfo [options] file-in
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcminfo 
+
+\section parameters PARAMETERS
+
+\verbatim
+file-in   DICOM input filename
+\endverbatim
+
+\section options OPTIONS
+
+\subsection options options
+\verbatim
+  -r --recursive          recursive.
+  -d --check-deflated     check if file is proper deflated syntax.
+     --resources-path     Resources path.
+     --md5sum             Compute md5sum of Pixel Data attribute value.
+     --check-compression  check the encapsulated stream compression (lossless/lossy).
+\endverbatim
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\subsection environment_variable environment variable
+
+  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)
+
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2009 Mathieu Malaterre
+
+*/

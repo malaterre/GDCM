@@ -106,11 +106,6 @@ There are still some subtle issues with Enhanced modality:
 * what if frames are not order according to IPP ?
 * what is the intercept/slope are not constant throughout the frames ?
 -----------------------------------------------------------------------
-Explicit-VR transfer syntax limits the value
-multiplicity of DICOM data elements with
-decimal string (DS) value representation
-http://www.iop.org/EJ/article/0031-9155/51/5/L01/pmb6_5_l01.pdf?request-id=00122d0d-5f95-4c78-bbeb-e9555ef639ae
------------------------------------------------------------------------
 Add support for namelink packaging
 -----------------------------------------------------------------------
 Need a MediaStorage::IsRetired / UIDs::IsRetired
@@ -136,9 +131,6 @@ http://sourceforge.net/projects/od1n/
 -----------------------------------------------------------------------
 STL-based (non-validating) XML Parser
 http://www.codeguru.com/cpp/i-n/internet/xml/article.php/c3451/
------------------------------------------------------------------------
-Undefined length and explicit length are not interchangeable. Explicit length
-has an hardocded limit: 0xffff.... while undefined not.
 -----------------------------------------------------------------------
 There is subttle bug in the Part3 support:
 
@@ -230,3 +222,133 @@ This is a SC, with Pixel Spacing and Rescale Slope/Intercept
 gdcmData/WeirdOverlayThingy.dcm
 Using gdcm2vtk will loose everything...
 -----------------------------------------------------------------------
+C# has some sort of compilation in XML to construct the documentation... to investigate
+-----------------------------------------------------------------------
+RegionOfInterestImageFilter is the streaming interface for ITKIO
+-----------------------------------------------------------------------
+http://www.stack.nl/~dimitri/doxygen/external.html
+with tag file from:
+http://www.vtk.org/doc/release/5.2/
+or:
+http://www.vtk.org/doc/nightly/
+-----------------------------------------------------------------------
+Fix gdcmviewer for:
+JPEG_LossyYBR.dcm
+-----------------------------------------------------------------------
+TODO: explicit TS for:
+LUTDATA_implicit_OW.dcm
+-----------------------------------------------------------------------
+Fix gdcm::Sorter::SetSortFunction for wrapped language
+-----------------------------------------------------------------------
+Add more siemens stuff from:
+dicom_to_minc.c
+apt-get source minc
+-----------------------------------------------------------------------
+file meta header does not check for valid of imp class uid
+Need to be UIDGenerator::IsValid
+-----------------------------------------------------------------------
+Bug gdcmconv should properly autorecompute explicit length for:
+BogusItemLengthImplicitPrivateAtt.dcm
+-----------------------------------------------------------------------
+gdcmconv --squeeze to squeeze extra space (trailing)
+-----------------------------------------------------------------------
+gdcmimg /usr/share/VTKData/Data/beach.jpg out.dcm
+gdcmraw out.dcm out.jpg
+-> out.jpg still contains the JFIF marker (color space...)
+-----------------------------------------------------------------------
+BUG: SERIOUS gdcm does not allow creation of such file
+dcmcjpeg +fs 100 GE_DLX-8-MONO2-Multiframe.dcm /tmp/jpeg3.dcm 
+
+tricky for jpeg 2000
+-----------------------------------------------------------------------
+Following same bug: need to fix gdcmconv --split 65536 for multiframe
+also need to check BasicOffset is properly discarded
+-----------------------------------------------------------------------
+Can I handle SetImageFormat (invalid) properly ?
+eg. vtkImageData is single comp but ImageFormat=RGB ...
+-----------------------------------------------------------------------
+FIXME:
+gdcmconv --deflated gdcmDataExtra/gdcmNonImageData/c15-5.dcm out.dcm
+could not read: gdcmDataExtra/gdcmNonImageData/c15-5.dcm
+-----------------------------------------------------------------------
+Technically nothing prevent someone from using JPegcompress on PDF object
+So gdcm::ImageChangeTransferSyntax should let non-image pass
+-----------------------------------------------------------------------
+Add support for invalid SC generated from ITK/gdcm 1.2.4
+-----------------------------------------------------------------------
+When converting an Enhanced CT, IOP is moved from root dataset to
+Sharedgroups but original attribute is kept (should be removed)
+same goes for WindowLevel, Rescale ...
+-----------------------------------------------------------------------
+old SC and numberOfFrames > 1:
+ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm
+-----------------------------------------------------------------------
+TODO: try to handle:
+gdcmData/gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
+-----------------------------------------------------------------------
+OPJ_LIMIT_DECODING to parse header only
+-----------------------------------------------------------------------
+check volume_to_jp3d/ jp3d_to_volume to handle JPEG2000 Part 2
+-----------------------------------------------------------------------
+Write a gdcm2jp2 that would be cool ?
+Need to handle PALETTE_COLOR in JP2 palettetized (PCLR)
+There is only one problem with slope/rescale -> float
+-----------------------------------------------------------------------
+Private tags extracted from private DCS is cool, but one would also
+need Defined terms, that would be *very* cool !
+-----------------------------------------------------------------------
+Amicas JP2 to DICOM:
+http://www.mikekristofferson.com/misc/mri/amicas-patients/
+-----------------------------------------------------------------------
+Prepare a DICOM file with Vr:UN element with Value Length odd ... what is the padding then ?
+-----------------------------------------------------------------------
+Add example of JPC (redundancy 3D volume / J2K)
+-----------------------------------------------------------------------
+Provide a FindPolarSLL
+-----------------------------------------------------------------------
+Create a PDF Storage class with a trailing Pixel Data element to test broken DICOM implementation
+-----------------------------------------------------------------------
+Prepare a Basic Pixel Spacing Calibration example but with SC SOP so that
+we have Nominal Scanned Pixel Spacing case...
+-----------------------------------------------------------------------
+I think there is a bug in ByteValue::SetByte. What if byte buffer is 0xfffffffe long ?
+internally I ++ the length, which would make it an undefined length.
+-----------------------------------------------------------------------
+Get rid of polarssl now that OpenSSL completely replaces it
+... I might even have to get rid of OpenSSL
+http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Tools/openssl#Giving_up_on_OpenSSL
+-----------------------------------------------------------------------
+gdcmdump map-uid-names
+-----------------------------------------------------------------------
++/*
++ * Windows _snprintf and _vsnprintf are not compatible to linux versions.
++ * Result value is not size of buffer needed, but -1 if no fit is possible.
++ *
++ * This fuction tries to 'fix' this by at least suggesting enlarging the
++ * size by 20.
++ */
+-> polarssl
+-----------------------------------------------------------------------
+Update charls for bug fix (16bits RGB still not working)
+-----------------------------------------------------------------------
+vtkGDCMImageReader::GetDirectionCosines(uint i)
+-----------------------------------------------------------------------
+http://blog.mozilla.com/nnethercote/2009/02/27/eliminating-undefined-values-with-valgrind-the-easy-way/
+> And just think, if C++ warned about fields uninitialised by constructors,
+I think adding -Weffc++ to the CXXFLAGS should help about that.
+-----------------------------------------------------------------------
+gdcmimg should strip the JFIF / JP2 markers
+-----------------------------------------------------------------------
+TODO: to get rid of openssl on Win32 one could use the CryptoAPI:
+[Example C Program: Signing a Message and Verifying a Message Signature]
+http://msdn.microsoft.com/en-us/library/aa382372.aspx
+http://www.ureader.com/msg/16591281.aspx
+-----------------------------------------------------------------------
+Fix gdcm::spacing before release CP-586
+-----------------------------------------------------------------------
+This is part of CPack's API.  There is no API in the make system to use
+this feature.
+
+You have to run "make preinstall" to prepare the installation and then
+run "cmake -DCOMPONENT=Runtime -P cmake_install.cmake" to do the
+component-specific installation.

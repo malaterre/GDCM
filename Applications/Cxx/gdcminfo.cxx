@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -28,6 +28,9 @@
 #include "gdcmDefs.h"
 #include "gdcmOrientation.h"
 #include "gdcmVersion.h"
+#include "gdcmMD5.h"
+#include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 #include "puff.h"
 
@@ -187,7 +190,14 @@ void PrintHelp()
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
+  std::cout << "  -r --recursive          recursive." << std::endl;
+  std::cout << "  -d --check-deflated     check if file is proper deflated syntax." << std::endl;
+  std::cout << "     --resources-path     Resources path." << std::endl;
+  std::cout << "     --md5sum             Compute md5sum of Pixel Data attribute value." << std::endl;
+  std::cout << "     --check-compression  check the encapsulated stream compression (lossless/lossy)." << std::endl;
+  // the following options would require an advanced MediaStorage::SetFromFile ... sigh
+  //std::cout << "     --media-storage-uid   return media storage uid only." << std::endl;
+  //std::cout << "     --media-storage-name  return media storage name only (when possible)." << std::endl;
 //  std::cout << "  -b --check-big-endian   check if file is ." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -200,12 +210,95 @@ void PrintHelp()
   std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
+  int deflated = 0; // check deflated
+  int checkcompression = 0;
+  int md5sum = 0;
+
+int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
+{
+  if( deflated )
+  {
+    return checkdeflated(filename.c_str());
+  }
+ 
+  //const char *filename = argv[1];
+  //std::cout << "filename: " << filename << std::endl;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+  const gdcm::File &file = reader.GetFile();
+  const gdcm::DataSet &ds = file.GetDataSet();
+  gdcm::MediaStorage ms;
+  ms.SetFromFile(file);
+  /*
+   * Until gdcm::MediaStorage is fixed only *compile* time constant will be handled
+   * see -> http://chuckhahm.com/Ischem/Zurich/XX_0134
+   * which make gdcm::UIDs useless :(
+   */
+  if( ms.IsUndefined() )
+    {
+    std::cerr << "Unknown MediaStorage" << std::endl;
+    return 1;
+    }
+
+  gdcm::UIDs uid;
+  uid.SetFromUID( ms.GetString() );
+  std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
+  const gdcm::TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
+  uid.SetFromUID( ts.GetString() );
+  std::cout << "TransferSyntax is " << ts << " [" << uid.GetName() <<  "]" << std::endl;
+
+  if( gdcm::MediaStorage::IsImage( ms ) )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "Could not read image from: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::File &file = reader.GetFile();
+    const gdcm::DataSet &ds = file.GetDataSet();
+    const gdcm::Image &image = reader.GetImage();
+    const double *dircos = image.GetDirectionCosines();
+    gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
+    const char *label = gdcm::Orientation::GetLabel( type );
+    image.Print( std::cout );
+    std::cout << "Orientation Label: " << label << std::endl;
+    if( checkcompression )
+      {
+      bool lossy = image.IsLossy();
+      std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
+      }
+
+    if( md5sum )
+      {
+      char *buffer = new char[ image.GetBufferLength() ];
+      image.GetBuffer( buffer );
+      char digest[33] = {};
+      gdcm::MD5::Compute( buffer, image.GetBufferLength(), digest );
+      std::cout << "md5sum: " << digest << std::endl;
+      delete[] buffer;
+      }
+    }
+// Do the IOD verification !
+    bool v = defs.Verify( file );
+    //std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
+
+  return 0;
+}
+
 
 int main(int argc, char *argv[])
 {
   int c;
   std::string filename;
-  int deflated = 0; // check deflated
+  std::string xmlpath;
+  int resourcespath = 0;
   int verbose = 0;
   int warning = 0;
   int help = 0;
@@ -217,7 +310,12 @@ int main(int argc, char *argv[])
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, 0, 0},
+        {"recursive", 0, &recursive, 1},
         {"check-deflated", 0, &deflated, 1},
+        {"resources-path", 0, &resourcespath, 1},
+        {"md5sum", 0, &md5sum, 1},
+        {"check-compression", 0, &checkcompression, 1},
+
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -226,7 +324,7 @@ int main(int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:VWDEhv";
+    static const char short_options[] = "i:rdVWDEhv";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -249,6 +347,12 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
+          else if( option_index == 3 ) /* resources-path */
+            {
+            assert( strcmp(s, "resources-path") == 0 );
+            assert( xmlpath.empty() );
+            xmlpath = optarg;
+            }
           //printf (" with arg %s", optarg);
           }
         //printf ("\n");
@@ -259,6 +363,14 @@ int main(int argc, char *argv[])
       //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
+      break;
+
+    case 'r':
+      recursive = 1;
+      break;
+
+    case 'd':
+      deflated = 1;
       break;
 
     case 'V':
@@ -341,74 +453,59 @@ int main(int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
 
-  if( deflated )
-  {
-    return checkdeflated(filename.c_str());
-  }
- 
-  //const char *filename = argv[1];
-  //std::cout << "filename: " << filename << std::endl;
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
+  if( !gdcm::System::FileExists(filename.c_str()) )
     {
-    std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
-    }
-  const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = file.GetDataSet();
-  gdcm::MediaStorage ms;
-  ms.SetFromFile(file);
-  if( ms.IsUndefined() )
-    {
-    std::cerr << "Unknown MediaStorage" << std::endl;
     return 1;
     }
 
-  gdcm::UIDs uid;
-  uid.SetFromUID( ms.GetString() );
-  std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
-  const gdcm::TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
-  uid.SetFromUID( ts.GetString() );
-  std::cout << "TransferSyntax is " << ts << " [" << uid.GetName() <<  "]" << std::endl;
-
-  if( gdcm::MediaStorage::IsImage( ms ) )
-    {
-    gdcm::ImageReader reader;
-    reader.SetFileName( filename.c_str() );
-    if( !reader.Read() )
-      {
-      std::cerr << "Could not read image from: " << filename << std::endl;
-      return 1;
-      }
-    const gdcm::File &file = reader.GetFile();
-    const gdcm::DataSet &ds = file.GetDataSet();
-    const gdcm::Image &image = reader.GetImage();
-    const double *dircos = image.GetDirectionCosines();
-    gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
-    const char *label = gdcm::Orientation::GetLabel( type );
-    image.Print( std::cout );
-    std::cout << "Orientation Label: " << label << std::endl;
-    }
-
-// Do the IOD verification !
-    {
     gdcm::Global& g = gdcm::Global::GetInstance();
     // First thing we need to locate the XML dict
     // did the user requested to look XML file in a particular directory ?
-    const char *xmlpath = getenv("GDCM_RESOURCES_PATH");
-    if( xmlpath )
+    if( !resourcespath )
       {
-      // Make sure to look for XML dict in user explicitly specified dir first:
-      g.Prepend( xmlpath );
+      const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
+      if( xmlpathenv )
+        {
+        // Make sure to look for XML dict in user explicitly specified dir first:
+        xmlpath = xmlpathenv;
+        resourcespath = 1;
+        }
       }
+    if( resourcespath )
+      {
+      // xmlpath is set either by the cmd line option or the env var
+      if( !g.Prepend( xmlpath.c_str() ) )
+        {
+        std::cerr << "specified Resources Path is not valid: " << xmlpath << std::endl;
+        return 1;
+        }
+      }
+
     // All set, then load the XML files:
-    g.LoadResourcesFiles();
+    if( !g.LoadResourcesFiles() )
+      {
+      return 1;
+      }
+
     const gdcm::Defs &defs = g.GetDefs();
-    bool v = defs.Verify( ds );
-    std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
+
+  int res = 0;
+  if( gdcm::System::FileIsDirectory(filename.c_str()) )
+    {
+    gdcm::Directory d;
+    d.Load(filename, recursive);
+    gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
+    for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
+      {
+      std::cout << "filename: " << *it << std::endl;
+      res += ProcessOneFile(*it, defs);
+      }
+    }
+  else
+    {
+    res += ProcessOneFile( filename, defs );
     }
 
 
-  return 0;
+  return res;
 }

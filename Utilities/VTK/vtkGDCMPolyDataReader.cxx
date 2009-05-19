@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -254,7 +254,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
 
   const gdcm::DataElement &roicsq = ds.GetDataElement( troicsq );
   //std::cout << roicsq << std::endl;
-  //const gdcm::SequenceOfItems *sqi = roicsq.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems *sqi_debug = roicsq.GetSequenceOfItems();
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = roicsq.GetValueAsSQ();
   if( !sqi || !sqi->GetNumberOfItems() )
     {

@@ -3,8 +3,15 @@
 
 SET(CSHARP_EXAMPLES
   ManipulateFile
+  ExtractEncapsulatedFile
   DecompressImage
+  DecompressImageMultiframe
+  DecompressJPEGFile
   TestCSharpFilter
+  ScanDirectory
+  #SortImage2
+  TestGetArray
+  NewSequence
   )
 
 SET(DEP)

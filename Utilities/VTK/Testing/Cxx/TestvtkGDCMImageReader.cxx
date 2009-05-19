@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -102,6 +102,7 @@ int TestvtkGDCMImageReader(int argc, char *argv[])
   // else
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

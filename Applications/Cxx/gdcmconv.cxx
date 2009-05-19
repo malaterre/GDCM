@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -67,8 +67,8 @@
 #include "gdcmReader.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmVersion.h"
-#include "gdcmImageReader.h"
-#include "gdcmImageWriter.h"
+#include "gdcmPixmapReader.h"
+#include "gdcmPixmapWriter.h"
 #include "gdcmWriter.h"
 #include "gdcmSystem.h"
 #include "gdcmFileMetaInformation.h"
@@ -76,6 +76,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmImage.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmImageFragmentSplitter.h"
@@ -83,6 +84,7 @@
 #include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmJPEGCodec.h"
 #include "gdcmSequenceOfFragments.h"
 
 #include <string>
@@ -113,6 +115,7 @@ void PrintLossyWarning()
   std::cout << "This will degrade the quality of your input image, and can." << std::endl;
   std::cout << "impact professional interpretation of the image." << std::endl;
   std::cout << "Do not use if you do not understand the risk." << std::endl;
+  std::cout << "WARNING: this mode is very experimental." << std::endl;
 }
 
 void PrintHelp()
@@ -131,10 +134,13 @@ void PrintHelp()
   std::cout << "  -C --check-meta          Check File Meta Information (advanced user only)." << std::endl;
   std::cout << "     --root-uid            Root UID." << std::endl;
   std::cout << "     --remove-gl           Remove group length (deprecated in DICOM 2008)." << std::endl;
+  std::cout << "     --remove-private-tags Remove private tags." << std::endl;
+  std::cout << "     --remove-retired      Remove retired tags." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
   std::cout << "  -w --raw                            Decompress image." << std::endl;
+  std::cout << "  -d --deflated                       Compress using deflated (gzip)." << std::endl;
   std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
   std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
@@ -151,6 +157,8 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "JPEG Options:" << std::endl;
+  std::cout << "  -q --quality %*f           set quality." << std::endl;
   std::cout << "J2K Options:" << std::endl;
   std::cout << "  -r --rate    %*f           set rate." << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
@@ -185,7 +193,7 @@ unsigned int readvector(std::vector<T> &v, const char *str)
 
 namespace gdcm
 {
-bool derives( File & file, const Image& compressed_image )
+bool derives( File & file, const Pixmap& compressed_image )
 {
 /*
 (0008,2111) ST [Lossy compression with JPEG extended sequential 8 bit, IJG quality... # 102, 1 DerivationDescription
@@ -342,28 +350,27 @@ bool derives( File & file, const Image& compressed_image )
 }
 
 {
-/*
-(0028,2110) CS [01]                                     #   2, 1 LossyImageCompression
-(0028,2112) DS [15.95]                                  #   6, 1 LossyImageCompressionRatio
-(0028,2114) CS [ISO_10918_1]                            #  12, 1 LossyImageCompressionMethod
-*/
+  /*
+  (0028,2110) CS [01]                                     #   2, 1 LossyImageCompression
+  (0028,2112) DS [15.95]                                  #   6, 1 LossyImageCompressionRatio
+  (0028,2114) CS [ISO_10918_1]                            #  12, 1 LossyImageCompressionMethod
+   */
   const DataElement & pixeldata = compressed_image.GetDataElement();
   size_t len = pixeldata.GetSequenceOfFragments()->ComputeByteLength();
   size_t reflen = compressed_image.GetBufferLength();
   double ratio = (double)reflen / len;
-    Attribute<0x0028,0x2110> at1;
-    at1.SetValue( "01" );
-    ds.Replace( at1.GetAsDataElement() );
-    Attribute<0x0028,0x2112> at2;
-    at2.SetValues( &ratio, 1);
-    ds.Replace( at2.GetAsDataElement() );
-    Attribute<0x0028,0x2114> at3;
-static const CSComp newvalues2[] = {"ISO_10918_1"};
-    at3.SetValues(  newvalues2, 1 );
-    ds.Replace( at3.GetAsDataElement() );
+  Attribute<0x0028,0x2110> at1;
+  at1.SetValue( "01" );
+  ds.Replace( at1.GetAsDataElement() );
+  Attribute<0x0028,0x2112> at2;
+  at2.SetValues( &ratio, 1);
+  ds.Replace( at2.GetAsDataElement() );
+  Attribute<0x0028,0x2114> at3;
+
+  // ImageWriter will properly set attribute 0028,2114 (Lossy Image Compression Method)
 }
 
-  return true;
+return true;
 
 }
 }
@@ -380,6 +387,7 @@ int main (int argc, char *argv[])
   int implicit = 0;
   int lut = 0;
   int raw = 0;
+  int deflated = 0;
   int rootuid = 0;
   int checkmeta = 0;
   int jpeg = 0;
@@ -395,6 +403,8 @@ int main (int argc, char *argv[])
   int usedict = 0;
   int compressicon = 0;
   int removegrouplength = 0;
+  int removeprivate = 0;
+  int removeretired = 0;
   int photometricinterpretation = 0;
   std::string photometricinterpretation_str;
   int quality = 0;
@@ -440,6 +450,7 @@ int main (int argc, char *argv[])
         {"pixeldata", 1, 0, 0}, // valid
         {"apply-lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
+        {"deflated", 0, &deflated, 1}, // DeflatedExplicitVRLittleEndian
         {"lossy", 0, &lossy, 1}, // Specify lossy comp
         {"force", 0, &force, 1}, // force decompression even if target compression is identical
         {"jpeg", 0, &jpeg, 1}, // JPEG lossy / lossless
@@ -455,11 +466,13 @@ int main (int argc, char *argv[])
         {"use-dict", 0, &usedict, 1}, // 
         {"compress-icon", 0, &compressicon, 1}, // 
         {"remove-gl", 0, &removegrouplength, 1}, // 
+        {"remove-private-tags", 0, &removeprivate, 1}, // 
+        {"remove-retired", 0, &removeretired, 1}, // 
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
         {"with-private-dict", 0, &changeprivatetags, 1}, // 
 // j2k :
         {"rate", 1, &rate, 1}, // 
-        {"quality", 1, &quality, 1}, // 
+        {"quality", 1, &quality, 1}, // will also work for regular jpeg compressor
         {"tile", 1, &tile, 1}, // 
         {"number-resolution", 1, &nres, 1}, // 
         {"irreversible", 0, &irreversible, 1}, // 
@@ -476,7 +489,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvIr:q:t:n:",
+    c = getopt_long (argc, argv, "i:o:XMUClwdJKRFYS:P:VWDEhvIr:q:t:n:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -503,38 +516,38 @@ int main (int argc, char *argv[])
             assert( root.empty() );
             root = optarg;
             }
-          else if( option_index == 27 ) /* split */
+          else if( option_index == 28 ) /* split */
             {
             assert( strcmp(s, "split") == 0 );
             fragmentsize = atoi(optarg);
             }
-          else if( option_index == 28 ) /* planar conf*/
+          else if( option_index == 29 ) /* planar conf*/
             {
             assert( strcmp(s, "planar-configuration") == 0 );
             planarconfval = atoi(optarg);
             }
-          else if( option_index == 34 ) /* photometricinterpretation */
+          else if( option_index == 37 ) /* photometricinterpretation */
             {
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
-          else if( option_index == 35 ) /* rate */
+          else if( option_index == 39 ) /* rate */
             {
             assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
-          else if( option_index == 36 ) /* qualit */
+          else if( option_index == 40 ) /* quality */
             {
             assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
-          else if( option_index == 37 ) /* tile */
+          else if( option_index == 41 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
             unsigned int n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
-          else if( option_index == 38 ) /* number of resolution */
+          else if( option_index == 42 ) /* number of resolution */
             {
             assert( strcmp(s, ",number-resolution") == 0 );
             nresvalue = atoi(optarg);
@@ -581,6 +594,10 @@ int main (int argc, char *argv[])
 
     case 'w':
       raw = 1;
+      break;
+
+    case 'd':
+      deflated = 1;
       break;
 
     case 'J':
@@ -757,7 +774,7 @@ int main (int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-  if( removegrouplength )
+  if( removegrouplength || removeprivate || removeretired )
     {
     gdcm::Reader reader;
     reader.SetFileName( filename.c_str() );
@@ -769,9 +786,26 @@ int main (int argc, char *argv[])
 
     gdcm::Anonymizer ano;
     ano.SetFile( reader.GetFile() );
-    if( !ano.RemoveGroupLength() )
+    if( removegrouplength )
       {
-      std::cerr << "Could not remove group length" << std::endl;
+      if( !ano.RemoveGroupLength() )
+        {
+        std::cerr << "Could not remove group length" << std::endl;
+        }
+      }
+    if( removeretired )
+      {
+      if( !ano.RemoveRetired() )
+        {
+        std::cerr << "Could not remove retired tags" << std::endl;
+        }
+      }
+    if( removeprivate )
+      {
+      if( !ano.RemovePrivateTags() )
+        {
+        std::cerr << "Could not remove private tags" << std::endl;
+        }
       }
 
     gdcm::Writer writer;
@@ -787,9 +821,11 @@ int main (int argc, char *argv[])
     }
 
   // Handle here the general file (not required to be image)
-  if ( explicitts || implicit )
+  if ( explicitts || implicit || deflated )
     {
     if( explicitts && implicit ) return 1; // guard
+    if( explicitts && deflated ) return 1; // guard
+    if( implicit && deflated ) return 1; // guard
     gdcm::Reader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
@@ -805,7 +841,7 @@ int main (int argc, char *argv[])
     gdcm::FileMetaInformation &fmi = file.GetHeader();
 
     const gdcm::TransferSyntax &orits = fmi.GetDataSetTransferSyntax();
-    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian )
+    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian && orits != gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian )
       {
       std::cerr << "Sorry input Transfer Syntax not supported for this conversion: " << orits << std::endl;
       return 1;
@@ -816,7 +852,12 @@ int main (int argc, char *argv[])
       {
       ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
       }
+    else if( deflated )
+      {
+      ts = gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian;
+      }
     const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    // const char * is ok since padding is \0 anyway...
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
     de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
@@ -825,7 +866,7 @@ int main (int argc, char *argv[])
     fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
     fmi.SetDataSetTransferSyntax(ts);
 
-    if( explicitts )
+    if( explicitts || deflated )
       {
       gdcm::FileExplicitFilter fef;
       fef.SetChangePrivateTags( changeprivatetags );
@@ -849,14 +890,14 @@ int main (int argc, char *argv[])
   // split fragments
   if( split )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
 
     gdcm::ImageFragmentSplitter splitter;
     splitter.SetInput( image );
@@ -868,10 +909,10 @@ int main (int argc, char *argv[])
       std::cerr << "Could not split: " << filename << std::endl;
       return 1;
       }
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( splitter.GetOutput() );
+    writer.SetPixmap( splitter.PixmapToPixmapFilter::GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -880,15 +921,22 @@ int main (int argc, char *argv[])
     }
   else if( photometricinterpretation )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
 
+    // Just in case:
+    if( gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) 
+      == gdcm::PhotometricInterpretation::PI_END )
+      {
+      std::cerr << "Do not handle PhotometricInterpretation: " << photometricinterpretation_str << std::endl;
+      return 1;
+      }
     gdcm::PhotometricInterpretation pi (
       gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) );
     gdcm::ImageChangePhotometricInterpretation pifilt;
@@ -900,10 +948,10 @@ int main (int argc, char *argv[])
       std::cerr << "Could not apply PhotometricInterpretation: " << filename << std::endl;
       return 1;
       }
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( pifilt.GetOutput() );
+    writer.SetPixmap( pifilt.PixmapToPixmapFilter::GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -912,14 +960,14 @@ int main (int argc, char *argv[])
     }
   else if( lut )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
 
     gdcm::ImageApplyLookupTable lutfilt;
     lutfilt.SetInput( image );
@@ -929,26 +977,26 @@ int main (int argc, char *argv[])
       std::cerr << "Could not apply LUT: " << filename << std::endl;
       return 1;
       }
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( lutfilt.GetOutput() );
+    writer.SetPixmap( lutfilt.PixmapToPixmapFilter::GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
       return 1;
       }
     }
-  else if( jpeg || j2k || jpegls || rle || raw /*|| planarconf*/ )
+  else if( jpeg || j2k || jpegls || rle || raw || force /*|| deflated*/ /*|| planarconf*/ )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
       std::cerr << "could not read: " << filename << std::endl;
       return 1;
       }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Pixmap &image = reader.GetPixmap();
     //const gdcm::IconImage &icon = image.GetIconImage();
     //if( !icon.IsEmpty() )
     //  {
@@ -957,6 +1005,7 @@ int main (int argc, char *argv[])
     //  }
 
     gdcm::JPEG2000Codec j2kcodec;
+    gdcm::JPEGCodec jpegcodec;
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
     change.SetCompressIconImage( compressicon );
@@ -964,10 +1013,19 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
-        std::cerr << "not implemented" << std::endl;
-        return 1;
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGBaselineProcess1 );
+        jpegcodec.SetLossless( false );
+        if( quality )
+          {
+          assert( qualities.size() == 1 );
+          jpegcodec.SetQuality( qualities[0] );
+          }
+        change.SetUserCodec( &jpegcodec );
         }
-      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+      else
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+        }
       }
     else if( jpegls )
       {
@@ -1046,8 +1104,23 @@ int main (int argc, char *argv[])
         }
       change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
       }
+    else if( deflated )
+      {
+      if( lossy )
+        {
+        std::cerr << "no such thing as deflated & lossy" << std::endl;
+        return 1;
+        }
+      change.SetTransferSyntax( gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian );
+      }
+    else if( force )
+      {
+      // If image is encapsulated it will check some attribute (col/row/pi/pf) and
+      // some attributes...
+      }
     else
       {
+      std::cerr << "unhandled action" << std::endl;
       return 1;
       }
     if( raw && planarconf )
@@ -1061,7 +1134,7 @@ int main (int argc, char *argv[])
         std::cerr << "Could not change the Planar Configuration: " << filename << std::endl;
         return 1;
         }
-      change.SetInput( icpc.GetOutput() );
+      change.SetInput( icpc.PixmapToPixmapFilter::GetOutput() );
       }
     else
       {
@@ -1076,7 +1149,7 @@ int main (int argc, char *argv[])
     if( lossy )
       {
       PrintLossyWarning();
-      gdcm::derives( reader.GetFile(), change.GetOutput() );
+      gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() );
       }
     if( usedict /*ts.IsImplicit()*/ )
       {
@@ -1090,11 +1163,12 @@ int main (int argc, char *argv[])
         }
       }
 
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
     //writer.SetFile( fef.GetFile() );
-    writer.SetImage( change.GetOutput() );
+    const gdcm::Pixmap &pixout = change.PixmapToPixmapFilter::GetOutput();
+    writer.SetPixmap( pixout );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
@@ -1104,7 +1178,7 @@ int main (int argc, char *argv[])
     }
   else if( raw && false )
     {
-    gdcm::ImageReader reader;
+    gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
@@ -1112,9 +1186,9 @@ int main (int argc, char *argv[])
       return 1;
       }
 
-    const gdcm::Image &ir = reader.GetImage();
+    const gdcm::Pixmap &ir = reader.GetPixmap();
 
-    gdcm::Image image( ir );
+    gdcm::Pixmap image( ir );
     const gdcm::TransferSyntax &ts = ir.GetTransferSyntax();
     if( ts.IsExplicit() )
       {
@@ -1151,9 +1225,9 @@ int main (int argc, char *argv[])
     pixeldata.SetValue( *bv );
     image.SetDataElement( pixeldata );
 
-    gdcm::ImageWriter writer;
+    gdcm::PixmapWriter writer;
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( image );
+    writer.SetPixmap( image );
     writer.SetFileName( outfilename.c_str() );
 
     gdcm::File& file = writer.GetFile();

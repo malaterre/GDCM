@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -28,6 +28,38 @@ using gdcm;
 
 public class TestCSharpFilter
 {
+  public static void RecurseDataSet(File f, DataSet ds, string indent)
+    {
+    CSharpDataSet cds = new CSharpDataSet(ds);
+    while(!cds.IsAtEnd())
+      {
+      DataElement de = cds.GetCurrent();
+      // Compute VR from the toplevel file, and the currently processed dataset:
+      VR vr = DataSetHelper.ComputeVR(f, ds, de.GetTag() );
+
+      if( vr.Compatible( new VR(VR.VRType.SQ) ) )
+        {
+        uint uvl = (uint)de.GetVL(); // Test cast is ok
+        System.Console.WriteLine( indent + de.GetTag().toString() + ":" + uvl ); // why not ?
+        //SequenceOfItems sq = de.GetSequenceOfItems();
+        // GetValueAsSQ handle more cases than GetSequenceOfItems
+        SmartPtrSQ sq = de.GetValueAsSQ();
+        uint n = sq.GetNumberOfItems();
+        for( uint i = 1; i <= n; i++) // item starts at 1, not 0
+          {
+          Item item = sq.GetItem( i );
+          DataSet nested = item.GetNestedDataSet();
+          RecurseDataSet( f, nested, indent + "  " );
+          }
+        }
+      else
+        {
+        System.Console.WriteLine( indent + de.toString() );
+        }
+      cds.Next();
+      }
+    }
+
   public static int Main(string[] args)
     {
     string filename = args[0];
@@ -40,14 +72,8 @@ public class TestCSharpFilter
       }
     File f = reader.GetFile();
     DataSet ds = f.GetDataSet();
-    CSharpDataSet cds = new CSharpDataSet(ds);
 
-    cds.Start(); // Make iterator go at begining
-    while(!cds.IsAtEnd())
-      {
-      System.Console.WriteLine( "out:" + cds.GetCurrent().toString() );
-      cds.Next();
-      }
+    RecurseDataSet( f, ds, "" );
 
     return 0;
     }
