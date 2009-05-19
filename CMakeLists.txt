@@ -253,12 +253,13 @@ OPTION(GDCM_USE_SYSTEM_ZLIB "Use system zlib" OFF)
 #OPTION(GDCM_USE_SYSTEM_POLARSSL "Use system polarssl (xyssl)" OFF)
 OPTION(GDCM_USE_SYSTEM_OPENSSL  "Use system OpenSSL" OFF)
 IF(UNIX)
-  # I think that FreeBSD/MaxOSX do not need that only Linux should...
+  # Will search for the uuid_generate symbols.
+  # Can be in libSystem.dylib or libuuid.so
   OPTION(GDCM_USE_SYSTEM_UUID "Use system uuid" OFF)
 ENDIF(UNIX)
 OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
 OPTION(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
-OPTION(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg (1.0)" OFF)
+OPTION(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg (1.x)" OFF)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT GDCM_USE_SYSTEM_OPENSSL)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_OPENJPEG GDCM_USE_SYSTEM_LJPEG)
 OPTION(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
