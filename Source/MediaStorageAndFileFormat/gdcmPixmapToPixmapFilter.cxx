@@ -12,37 +12,25 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmHAVEGE.h"
-#include "gdcm_polarssl.h"
-#include <string.h>
-#include <iostream>
+#include "gdcmPixmapToPixmapFilter.h"
+#include <limits>
+#include <stdlib.h> // abort
+#include <string.h> // memcpy
 
-/*
- */
 namespace gdcm
 {
 
-class HAVEGEInternals
+PixmapToPixmapFilter::PixmapToPixmapFilter()
 {
-public:
-havege_state hs;
-};
-
-HAVEGE::HAVEGE()
-{
-  Internals = new HAVEGEInternals;
-  havege_init( &Internals->hs );
+if(!Input) Input = new Pixmap;
+if(!Output) Output = new Pixmap;
 }
 
-HAVEGE::~HAVEGE()
+void PixmapToPixmapFilter::SetInput(const Pixmap& image)
 {
-  delete Internals;
-}
-
-int HAVEGE::Rand()
-{
-  return havege_rand( &Internals->hs );
+  Input = image;
 }
 
 
 } // end namespace gdcm
+

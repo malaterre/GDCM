@@ -59,7 +59,8 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     if( t != Tag(0x0028,0x0071) )
       {
       // In case of SAX parser, we would have had to process Pixel Representation already:
-      Tag pixelrep(0x0028,0x0103);
+      Attribute<0x0028,0x0103> at;
+      const Tag &pixelrep = at.GetTag();
       assert( pixelrep < t );
       const DataSet &rootds = file.GetDataSet();
       // FIXME
@@ -71,7 +72,6 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       // gdcmDataExtra/gdcmSampleData/ImagesPapyrus/TestImages/wristb.pap
       // It's the contrary: root dataset does not have a Pixel Representation, but each SQ do...
       assert( rootds.FindDataElement( pixelrep ) || ds.FindDataElement( pixelrep ) );
-      Attribute<0x0028,0x0103> at;
       if( ds.FindDataElement( pixelrep ) )
         {
         at.SetFromDataElement( ds.GetDataElement( pixelrep ) );

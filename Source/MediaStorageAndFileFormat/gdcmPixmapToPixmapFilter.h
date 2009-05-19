@@ -12,28 +12,36 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmX509_h
-#define __gdcmX509_h
+#ifndef __gdcmPixmapToPixmapFilter_h
+#define __gdcmPixmapToPixmapFilter_h
 
-#include "gdcmTypes.h"
+#include "gdcmPixmap.h"
 
 namespace gdcm
 {
-/**
- * \brief Class for x509 
- *
- */
-//-----------------------------------------------------------------------------
-class X509Internals;
-class GDCM_EXPORT X509
-{
-public :
-  X509();
-  ~X509();
 
-private:
-  X509Internals *Internals;
+/**
+ * \brief PixmapToPixmapFilter class
+ * Super class for all filter taking an image and producing an output image
+ */
+class GDCM_EXPORT PixmapToPixmapFilter
+{
+public:
+  PixmapToPixmapFilter();
+  ~PixmapToPixmapFilter() {}
+
+  /// Set input image
+  void SetInput(const Pixmap& image);
+
+  /// Get Output image
+  const Pixmap &GetOutput() const { return *Output; }
+
+protected:
+  SmartPointer<Pixmap> Input;
+  SmartPointer<Pixmap> Output;
 };
+
 } // end namespace gdcm
-//-----------------------------------------------------------------------------
-#endif //__gdcmX509_h
+
+#endif //__gdcmPixmapToPixmapFilter_h
+

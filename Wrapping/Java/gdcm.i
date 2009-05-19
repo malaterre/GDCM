@@ -464,6 +464,7 @@ EXTEND_CLASS_PRINT(gdcm::DirectionCosines)
 %include "gdcmDictPrinter.h"
 %include "gdcmFilenameGenerator.h"
 %include "gdcmVersion.h"
+EXTEND_CLASS_PRINT(gdcm::Version)
 %include "gdcmFilename.h"
 %include "gdcmEnumeratedValues.h"
 %include "gdcmPatient.h"
