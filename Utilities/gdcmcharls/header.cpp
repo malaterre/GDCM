@@ -100,7 +100,7 @@ JpegSegment* CreateMarkerStartOfFrame(Size size, LONG cbpp, LONG ccomp)
 	}
 
 	return new JpegMarkerSegment(JPEG_SOF, vec);
-};
+}
 
 
 
@@ -419,7 +419,7 @@ void JLSInputStream::ReadScan(void* pvout)
 	std::auto_ptr<DecoderStrategy> qcodec(JlsCodecFactory<DecoderStrategy>().GetCodec(_info, _info.custom));
 	Size size = Size(_info.width,_info.height);
 	_cbyteOffset += qcodec->DecodeScan(pvout, size, _pdata + _cbyteOffset, _cbyteLength - _cbyteOffset, _bCompare); 
-};
+}
 
 
 class JpegImageDataSegment: public JpegSegment

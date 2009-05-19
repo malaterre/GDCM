@@ -13,7 +13,6 @@
 
 =========================================================================*/
 #include "gdcmBitmap.h"
-#include "gdcmRAWCodec.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
@@ -224,12 +223,16 @@ unsigned long Bitmap::GetBufferLength() const
   // Special handling of packed format:
   if( PF == PixelFormat::UINT12 )
     {
+#if 1
+    mul *= PF.GetPixelSize();
+#else
     assert( PF.GetSamplesPerPixel() == 1 );
     unsigned int save = mul;
     save *= 12;
     save /= 8;
     assert( save * 8 / 12 == mul );
     mul = save;
+#endif
     }
   else if( PF.GetBitsAllocated() % 8 != 0 )
     {
@@ -291,6 +294,12 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
         " is different from computed value " << len );
       ((ByteValue*)outbv)->SetLength( len );
       }
+    if ( GetPixelFormat() != codec.GetPixelFormat() )
+      {
+      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      i->SetPixelFormat( codec.GetPixelFormat() );
+      }
+
     unsigned long check = outbv->GetLength();  // FIXME
     // DermaColorLossLess.dcm
     assert( check == len || check == len + 1 );

@@ -35,10 +35,10 @@ JLS_ERROR CheckInput(const void* pdataCompressed, size_t cbyteCompressed, const 
 
 	switch (pparams->components)
 	{
-		case 3: return (pparams->bitspersample != 8) ? ParameterValueNotSupported : OK;
+		case 3: return OK;
 		case 1: return OK;
 		case 0: return InvalidJlsParameters;
-		default: return ParameterValueNotSupported;
+		default: return pparams->ilv != ILV_NONE ? ParameterValueNotSupported : OK; 
 	}
 }
 

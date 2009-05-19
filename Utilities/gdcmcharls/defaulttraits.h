@@ -61,9 +61,11 @@ public:
 	inlinehint bool IsNear(LONG lhs, LONG rhs) const
 		{ return abs(lhs-rhs) <=NEAR; }
 
-	bool IsNear(Triplet lhs, Triplet rhs) const
+	bool IsNear(Triplet<SAMPLE> lhs, Triplet<SAMPLE> rhs) const
 	{
-		return abs(lhs.v1-rhs.v1) <=NEAR && abs(lhs.v2-rhs.v2) <=NEAR && abs(lhs.v3-rhs.v3) <=NEAR; 
+		return abs(lhs.v1-rhs.v1) <=NEAR && 
+			abs(lhs.v2-rhs.v2) <=NEAR && 
+			abs(lhs.v3-rhs.v3) <=NEAR; 
 	}
 
 	inlinehint LONG CorrectPrediction(LONG Pxc) const

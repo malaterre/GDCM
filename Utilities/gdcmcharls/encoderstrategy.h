@@ -5,7 +5,7 @@
 #ifndef CHARLS_ENCODERSTRATEGY
 #define CHARLS_ENCODERSTRATEGY
 
-#include "colortransform.h"
+#include "processline.h"
 #include "decoderstrategy.h"
 
 class EncoderStrategy
@@ -14,65 +14,29 @@ class EncoderStrategy
 public:
 	explicit EncoderStrategy(const JlsParamaters& info) :
 		 _qdecoder(0),
-		 valcurrent(0),
+		 _info(info),
+		 _processLine(0),
+ 		 valcurrent(0),
 		 bitpos(0),
 		 _bFFWritten(false),
-		 _cbyteWritten(0),
-		 _info(info)
+		 _cbyteWritten(0)
+		
 	{
-		  if (_info.ilv != ILV_LINE)
-		  {
-				_info.components  = 1;
-		  }
-		};
+	};
 
 	virtual ~EncoderStrategy() 
-		 {}
+	{
+	    delete _processLine;
+	}
 
 	LONG PeekByte();
 	
-	
-
-	void OnLineBegin(int iline, LONG cpixel, Triplet* ptypeBuffer, LONG /*pixelStride*/)
+	void OnLineBegin(LONG cpixel, void* ptypeBuffer, LONG pixelStride)
 	{
-		Triplet* ptypeInput = ((Triplet*)(_ptypeUncompressed));
-
-		switch(_info.colorTransform)
-		{
-			case COLORXFORM_NONE : return TransformLine(ptypeBuffer, ptypeInput + cpixel*iline, cpixel, TransformNone());
-			case COLORXFORM_HP1 : return TransformLine(ptypeBuffer, ptypeInput + cpixel*iline, cpixel, TransformRgbToHp1());
-			case COLORXFORM_HP2 : return TransformLine(ptypeBuffer, ptypeInput + cpixel*iline, cpixel, TransformRgbToHp2());
-			case COLORXFORM_HP3 : return TransformLine(ptypeBuffer, ptypeInput + cpixel*iline, cpixel, TransformRgbToHp3());
-		}
+		_processLine->NewLineRequested(ptypeBuffer, cpixel, pixelStride);
 	}
 
-	void OnLineBegin(int iline, LONG cpixel, USHORT* ptypeBuffer, LONG /*pixelStride*/)
-	{
-		USHORT* ptypeInput = ((USHORT*)(_ptypeUncompressed));
-		memcpy(ptypeBuffer, ptypeInput + cpixel*iline, cpixel * sizeof(USHORT));
-	}
-	
-	void OnLineBegin(int iline, LONG cpixel, BYTE* ptypeBuffer, LONG pixelStride)
-	{
-		BYTE* ptypeUnc = ((BYTE*)(_ptypeUncompressed));
-		if (_info.components == 1)
-		{
-			memcpy(ptypeBuffer, ptypeUnc + cpixel * iline,  cpixel * sizeof(BYTE));
-			return;
-		}
-		
-		ptypeUnc += iline * _info.components * cpixel;
-		
-		switch(_info.colorTransform)
-		{
-			case COLORXFORM_NONE : return TransformTripletToLine(ptypeUnc, cpixel, ptypeBuffer, pixelStride, TransformNone());
-			case COLORXFORM_HP1 : return TransformTripletToLine(ptypeUnc, cpixel, ptypeBuffer, pixelStride, TransformRgbToHp1());
-			case COLORXFORM_HP2 : return TransformTripletToLine(ptypeUnc, cpixel, ptypeBuffer, pixelStride, TransformRgbToHp2());
-			case COLORXFORM_HP3 : return TransformTripletToLine(ptypeUnc, cpixel, ptypeBuffer, pixelStride, TransformRgbToHp3());
-		}
-	}
-
-	void OnLineEnd(int iline, LONG cpixel, void* ptypeBuffer, LONG pixelStride) {};
+	void OnLineEnd(LONG cpixel, void* ptypeBuffer, LONG pixelStride) {};
 
     virtual void SetPresets(const JlsCustomParameters& presets) = 0;
 		
@@ -117,7 +81,15 @@ protected:
 		valcurrent |= value << bitpos;	
 
 	}
-	
+
+	void FlushStreamEnd()
+	{
+		Flush();
+		AppendToBitStream(0,bitpos % 8);
+		ASSERT(bitpos % 8 == 0);
+		Flush();
+		ASSERT(bitpos == 0x20);
+	}
 
 	void Flush()
 	{
@@ -167,7 +139,7 @@ protected:
 protected:
 	JlsParamaters _info;
 	const void* _ptypeUncompressed;
-
+	ProcessLine* _processLine;
 private:
 
 	unsigned int valcurrent;

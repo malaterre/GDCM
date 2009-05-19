@@ -33,7 +33,11 @@ void CreateDataElement(gdcm::ExplicitDataElement &de, int offset)
   const char *slen = reinterpret_cast<char*>(&len);
   ss.write( slen, 4);
   val.Write<gdcm::SwapperNoOp>(ss);
+#ifdef GDCM_WORDS_BIGENDIAN
+  de.Read<gdcm::SwapperDoOp>( ss );
+#else
   de.Read<gdcm::SwapperNoOp>( ss );
+#endif
 
   std::cout << de << std::endl;
 }

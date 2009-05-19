@@ -14,10 +14,18 @@
 =========================================================================*/
 #include "gdcmASN1.h"
 
+struct MyASN1 : public gdcm::ASN1
+{
+  int TestPBKDF2()
+    {
+    return this->gdcm::ASN1::TestPBKDF2();
+    }
+};
+
 int TestASN1(int argc, char *argv[])
 {
   const char *filename = argv[1];
-  gdcm::ASN1 asn1;
+  MyASN1 asn1;
   asn1.ParseDumpFile( filename );
 
   asn1.TestPBKDF2();

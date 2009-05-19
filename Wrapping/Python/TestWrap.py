@@ -59,8 +59,6 @@ blacklist = (
 "Exception"
 "ByteSwap"
 "Terminal"
-"PKCS7"
-"ASN1"
 # MediaStorageAndFileFormat
 "ConstCharWrapper"
 "ImageConverter"
