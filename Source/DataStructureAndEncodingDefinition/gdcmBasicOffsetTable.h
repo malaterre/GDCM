@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -51,7 +51,12 @@ public:
       assert(0 && "Should not happen");
       return is;
       }
-    assert( TagField == itemStart );
+    //assert( TagField == itemStart );
+    if( TagField != itemStart )
+      {
+      // Bug_Siemens_PrivateIconNoItem.dcm 
+      throw "SIEMENS Icon thingy";
+      }
     if( !ValueLengthField.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");

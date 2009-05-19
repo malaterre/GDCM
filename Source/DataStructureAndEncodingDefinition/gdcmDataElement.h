@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -102,8 +102,14 @@ public:
   /// Check if Data Element is empty
   bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
+  void Empty() { ValueField = 0; ValueLengthField = 0; }
+
   // Helper:
   /// Set the byte value
+  /// \warning user need to read DICOM standard for an understanding of:
+  /// * even padding
+  /// * \0 vs space padding
+  /// By default even padding is achieved using \0 regardless of the of VR
   void SetByteValue(const char *array, VL length)
     {
     ByteValue *bv = new ByteValue(array,length);
@@ -114,6 +120,11 @@ public:
   const ByteValue* GetByteValue() const {
     // Get the raw pointer from the gdcm::SmartPointer
     const ByteValue *bv = dynamic_cast<const ByteValue*>(ValueField.GetPointer());
+    return bv; // Will return NULL if not ByteValue
+  }
+  ByteValue* GetByteValue() {
+    // Get the raw pointer from the gdcm::SmartPointer
+    ByteValue *bv = dynamic_cast<ByteValue*>(ValueField.GetPointer());
     return bv; // Will return NULL if not ByteValue
   }
 

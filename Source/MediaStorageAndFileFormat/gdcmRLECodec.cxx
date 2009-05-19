@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -316,7 +316,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   //sq->GetTable().SetTag( itemStart );
   // FIXME  ? Is this compulsary ?
   const char dummy[4] = {};
-  sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
+  //sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
 
   const ByteValue *bv = in.GetByteValue();
   assert( bv );
@@ -326,7 +326,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   // If 16bits, need to do the padded composite...
   char *buffer = 0;
-  // if rgb (3 comp) need to the planar configuratio
+  // if rgb (3 comp) need to the planar configuration
   char *bufferrgb = 0;
   if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
@@ -609,6 +609,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
         uint32_t check = bv.GetLength() - p;
         // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
         assert( check == 0 || check == 1 || check == 2 );
+        if( check ) gdcmWarningMacro( "tiny offset detected in between RLE segments" );
         }
       else
         {
@@ -733,6 +734,13 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     }
 
   return ImageCodec::Decode(tmpos,os);
+}
+
+bool RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+{
+  (void)is;
+  ts = TransferSyntax::RLELossless;
+  return true;
 }
 
 } // end namespace gdcm

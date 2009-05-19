@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -64,6 +64,9 @@ public:
       _os << "," << Internal[i];
     }
 
+  const typename VRToType<TVR>::Type *GetValues() const {
+    return Internal;
+  }
   const typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) const {
     assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];

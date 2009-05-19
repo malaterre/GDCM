@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -28,6 +28,7 @@ namespace gdcm
  */
 class GDCM_EXPORT Dicts
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Dicts &d);
 public:
   Dicts();
   ~Dicts();
@@ -72,6 +73,11 @@ private:
   Dicts &operator=(const Dicts &_val); // purposely not implemented
   Dicts(const Dicts &_val); // purposely not implemented
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Dicts &d)
+{
+  return os;
+}
 
 
 } // end namespace gdcm

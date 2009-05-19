@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -16,4 +16,10 @@
 
 namespace gdcm
 {
+
+void Version::Print(std::ostream &os) const
+{
+  os << Version::GetVersion();
+}
+
 }

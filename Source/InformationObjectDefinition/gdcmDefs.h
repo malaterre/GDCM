@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,6 +24,7 @@
 namespace gdcm
 {
 class DataSet;
+class File;
 class MediaStorage;
 /**
  * \brief FIXME I do not like the name 'Defs'
@@ -46,14 +47,19 @@ public:
 
   bool IsEmpty() const { return GetModules().IsEmpty(); }
 
+  bool Verify(const File& file) const;
+  
+  // \deprecated DO NOT USE
   bool Verify(const DataSet& ds) const;
+
+  Type GetTypeFromTag(const File& file, const Tag& tag) const;
+
+  static const char *GetIODNameFromMediaStorage(MediaStorage const &ms);
 
 protected:
   friend class Global;
   void LoadDefaults();
   void LoadFromFile(const char *filename);
-
-  const char *GetIODNameFromMediaStorage(MediaStorage &ms) const;
 
 private:
   // Part 3 stuff:

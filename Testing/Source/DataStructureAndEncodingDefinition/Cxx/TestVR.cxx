@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -204,10 +204,32 @@ int TestVR(int, char *[])
     {
     std::cout << vr << "is ASCII\n";
     }
+  else
+    {
+    return 1;
+    }
   vr = gdcm::VR::UI;
   if( vr & gdcm::VR::VRASCII )
     {
     std::cout << vr << "is ASCII\n";
+    }
+  else
+    {
+    return 1;
+    }
+  vr = gdcm::VR::OB;
+  if( vr & gdcm::VR::VRBINARY )
+    {
+    std::cout << vr << "is Binary\n";
+    }
+  else
+    {
+    return 1;
+    }
+  vr = gdcm::VR::UI;
+  if( vr & (gdcm::VR::OB | gdcm::VR::OF | gdcm::VR::OW /*| gdcm::VR::SQ*/ | gdcm::VR::UN) )
+    {
+    return 1;
     }
 }
 

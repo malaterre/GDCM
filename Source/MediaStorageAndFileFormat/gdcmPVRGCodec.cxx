@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -72,6 +72,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #else
   // First thing create a jpegls file from the fragment:
   const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  if(!sf) return false;
   assert(sf);
 
   // http://msdn.microsoft.com/en-us/library/hs3e7355.aspx
@@ -105,6 +106,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   //std::cerr << "system: " << ret << std::endl;
 
   size_t len = gdcm::System::FileSize(output);
+  if(!len) return false;
   assert( len );
 
   std::ifstream is(output);
@@ -138,6 +140,9 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 
   free(input);
   free(output);
+
+  // FIXME:
+  LossyFlag = true;
 
   //return ImageCodec::Decode(in,out);
   return true;

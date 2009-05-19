@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -66,6 +66,7 @@ VM GuessVMType(DataElement const &de)
       break;
     case VR::DA: case VR::TM: case VR::LT:
     case VR::SH: case VR::UI: case VR::LO: case VR::ST:
+    case VR::UT: case VR::AE: case VR::AS:
       vm = VM::VM1;
       break;
     case VR::PN:
@@ -87,7 +88,7 @@ VM GuessVMType(DataElement const &de)
       break;
     default:
       vm = VM::VM0;
-      abort();
+      assert( 0 ); // Impossible happen ! (someone added new VR and forgot this switch)
       }
     }
 

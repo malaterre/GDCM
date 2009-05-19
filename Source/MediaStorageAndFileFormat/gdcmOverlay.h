@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -90,7 +90,7 @@ public:
   /// set overlay from byte array + length
   void SetOverlay(const char *array, unsigned int length);
   ///
-  void GrabOverlayFromPixelData(DataSet const &ds);
+  bool GrabOverlayFromPixelData(DataSet const &ds);
 
   const ByteValue &GetOverlayData() const;
 

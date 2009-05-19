@@ -7,7 +7,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -621,17 +621,39 @@ dicomTransferCapability = 268 // dicomTransferCapability
 //ICBMSingleSubjectMRIFrameofReference = 288, // ICBM Single Subject MRI Frame of Reference
 } TSName;
 
-static const char* GetUIDString(/*TSType*/ int ts);
-static const char* GetUIDName(/*TSType*/ int ts);
 
   typedef const char* const (*TransferSyntaxStringsType)[2];
   static TransferSyntaxStringsType GetTransferSyntaxStrings();
+  static const char * const *GetTransferSyntaxString(unsigned int ts);
+  static unsigned int GetNumberOfTransferSyntaxStrings();
+
+
+  // TODO: Because I would like a dual signature for TSType and TSName, C++ won't let me do it...
+  static const char* GetUIDString(/*TSType*/ unsigned int ts);
+  static const char* GetUIDName(/*TSType*/ unsigned int ts);
   
+  /// Initialize object from a string (a uid number)
+  /// return false on error, and internal state is set to 0
   bool SetFromUID(const char *str);
+
+  /// When object is Initialize function return the well known name associated with uid
+  /// return NULL when not initialized
   const char *GetName() const;
+
+  /// When object is Initialize function return the uid 
+  /// return NULL when not initialized
+  const char *GetString() const;
+
 private:
   TSType TSField;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream &operator<<(std::ostream &_os, const UIDs &uid)
+{
+  _os << uid.GetString() << " -> " << uid.GetName();
+  return _os;
+
+}
 
 } // end namespace gdcm
 

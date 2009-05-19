@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,7 +21,7 @@ namespace gdcm
 bool ImageFragmentSplitter::Split()
 {
   Output = Input;
-  const Image &image = *Input;
+  const Pixmap &image = *Input;
 
   const unsigned int *dims = image.GetDimensions();
   if( dims[2] != 1 )
@@ -35,6 +35,12 @@ bool ImageFragmentSplitter::Split()
   if( !sqf )
     {
     gdcmDebugMacro( "Cannot split a non-encapsulated syntax" );
+    return false;
+    }
+
+  if ( sqf->GetNumberOfFragments() != 1 )
+    {
+    gdcmDebugMacro( "Case not handled (for now)" );
     return false;
     }
 
@@ -101,6 +107,8 @@ void ImageFragmentSplitter::SetFragmentSizeMax(unsigned int fragsize)
     {
     FragmentSizeMax = 2;
     }
+  // \postcondition:
+  assert( FragmentSizeMax >= 2 && (FragmentSizeMax % 2) == 0 );
 }
 
 } // end namespace gdcm

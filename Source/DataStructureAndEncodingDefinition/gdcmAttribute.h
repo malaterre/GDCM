@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,6 +21,7 @@
 #include "gdcmVM.h"
 #include "gdcmElement.h"
 #include "gdcmDataElement.h"
+#include "gdcmDataSet.h"
 #include "gdcmStaticAssert.h"
 
 #include <string>
@@ -95,6 +96,16 @@ public:
   GDCM_STATIC_ASSERT( ((((VR::VRType)TVR & VR::VR_VM1) && ((VM::VMType)TVM == VM::VM1) )
                     || !((VR::VRType)TVR & VR::VR_VM1) ) );
 
+  static Tag GetTag() { return Tag(Group,Element); }
+  static VR  GetVR()  { return (VR::VRType)TVR; }
+  static VM  GetVM()  { return (VM::VMType)TVM; }
+
+  // The following two methods do make sense only in case of public element,
+  // when the template is intanciated with private element the VR/VM are simply
+  // defaulted to allow everything (see gdcmTagToType.h default template for TagToType)
+  static VR  GetDictVR() { return (VR::VRType)(TagToType<Group, Element>::VRType); }
+  static VM  GetDictVM() { return (VM::VMType)(TagToType<Group, Element>::VMType); }
+
   // Some extra dummy checks:
   // Data Elements with a VR of SQ, OF, OW, OB or UN shall always have a Value Multiplicity of one.
 
@@ -113,22 +124,39 @@ public:
       os << "," << Internal[i];
     }
 
-  static Tag GetTag() { return Tag(Group,Element); }
-  static VR  GetVR() { return (VR::VRType)TVR; }
-  static VM  GetVM() { return (VM::VMType)TVM; }
-
-  // The following two methods do make sense only in case of public element,
-  // when the template is intanciated with private element the VR/VM are simply
-  // defaulted to allow everything (see gdcmTagToType.h default template for TagToType)
-  static VR  GetDictVR() { return (VR::VRType)(TagToType<Group, Element>::VRType); }
-  static VM  GetDictVM() { return (VM::VMType)(TagToType<Group, Element>::VMType); }
-
   // copy:
-  ArrayType GetValue(unsigned int idx = 0) {
+  //ArrayType GetValue(unsigned int idx = 0) {
+  //  assert( idx < GetNumberOfValues() );
+  //  return Internal[idx];
+  //}
+  //ArrayType operator[] (unsigned int idx) {
+  //  return GetValue(idx);
+  //}
+  // FIXME: is this always a good idea ?
+  // I do not think so, I prefer operator
+  //operator ArrayType () const { return Internal[0]; }
+
+  bool operator==(const Attribute &att) const
+    {
+    return std::equal(Internal, Internal+GetNumberOfValues(),
+      att.GetValues()); 
+    }
+  bool operator!=(const Attribute &att) const
+    {
+    return !std::equal(Internal, Internal+GetNumberOfValues(),
+      att.GetValues()); 
+    }
+  bool operator<(const Attribute &att) const
+    {
+    return std::lexicographical_compare(Internal, Internal+GetNumberOfValues(),
+      att.GetValues(), att.GetValues() + att.GetNumberOfValues() ); 
+    }
+
+  ArrayType &GetValue(unsigned int idx = 0) {
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
-  ArrayType operator[] (unsigned int idx) {
+  ArrayType & operator[] (unsigned int idx) {
     return GetValue(idx);
   }
   // const reference
@@ -189,6 +217,9 @@ public:
       {
       SetByteValueNoSwap(bv);
       }
+  }
+  void Set(DataSet const &ds) {
+    SetFromDataElement( ds.GetDataElement( GetTag() ) );
   }
 protected:
   void SetByteValueNoSwap(const ByteValue *bv) {
@@ -278,18 +309,20 @@ template<uint16_t Group, uint16_t Element, int TVR >
 class Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
-  static Tag GetTag() { return Tag(Group,Element); }
-  static VR  GetVR() { return (VR::VRType)TVR; }
-  static VM  GetVM() { return VM::VM1_n; }
-
-  static VR  GetDictVR() { return (VR::VRType)(TagToType<Group, Element>::VRType); }
-  static VM  GetDictVM() { return GetVM(); }
+  typedef typename VRToType<TVR>::Type ArrayType;
 
   // Make sure that user specified VR/VM are compatible with the public dictionary:
   GDCM_STATIC_ASSERT( ((VR::VRType)TVR & (VR::VRType)(TagToType<Group, Element>::VRType)) );
   GDCM_STATIC_ASSERT( (VM::VM1_n & (VM::VMType)(TagToType<Group, Element>::VMType)) );
   GDCM_STATIC_ASSERT( ((((VR::VRType)TVR & VR::VR_VM1) && ((VM::VMType)TagToType<Group,Element>::VMType == VM::VM1) )
                     || !((VR::VRType)TVR & VR::VR_VM1) ) );
+
+  static Tag GetTag() { return Tag(Group,Element); }
+  static VR  GetVR()  { return (VR::VRType)TVR; }
+  static VM  GetVM()  { return VM::VM1_n; }
+
+  static VR  GetDictVR() { return (VR::VRType)(TagToType<Group, Element>::VRType); }
+  static VM  GetDictVM() { return GetVM(); }
 
   // This the way to prevent default initialization
   explicit Attribute() { Internal=0; Length=0; Own = true; }
@@ -300,10 +333,44 @@ public:
     Internal = 0; // paranoid
   }
 
-  // typedef's
-  typedef typename VRToType<TVR>::Type ArrayType;
-
   unsigned int GetNumberOfValues() const { return Length; }
+
+  void SetNumberOfValues(unsigned int numel)
+    {
+    SetValues(NULL, numel, true);
+    }
+
+  const ArrayType* GetValues() const {
+    return Internal;
+  }
+  void Print(std::ostream &os) const {
+    os << GetTag() << " ";
+    os << GetVR()  << " ";
+    os << GetVM()  << " ";
+    os << Internal[0]; // VM is at least garantee to be one
+    for(unsigned int i=1; i<GetNumberOfValues(); ++i)
+      os << "," << Internal[i];
+    }
+  ArrayType &GetValue(unsigned int idx = 0) {
+    assert( idx < GetNumberOfValues() );
+    return Internal[idx];
+  }
+  ArrayType &operator[] (unsigned int idx) {
+    return GetValue(idx);
+  }
+  // const reference
+  ArrayType const &GetValue(unsigned int idx = 0) const {
+    assert( idx < GetNumberOfValues() );
+    return Internal[idx];
+  }
+  ArrayType const & operator[] (unsigned int idx) const {
+    return GetValue(idx);
+  }
+  void SetValue(unsigned int idx, ArrayType v) {
+    assert( idx < GetNumberOfValues() );
+    Internal[idx] = v;
+  }
+  void SetValue(ArrayType v) { SetValue(0, v); }
 
   void SetValues(const ArrayType *array, unsigned int numel, bool own = false)
     {
@@ -318,9 +385,10 @@ public:
     assert( Internal == 0 );
     if( own ) // make a copy:
       {
-      assert( array && numel );
+      assert( /*array &&*/ numel );
       Internal = new ArrayType[numel];
-      std::copy(array, array+numel, Internal);
+      if( array && numel )
+        std::copy(array, array+numel, Internal);
       }
     else // pass pointer
       {
@@ -329,17 +397,7 @@ public:
     // postcondition
     assert( numel == GetNumberOfValues() );
     }
-  const ArrayType* GetValues() const {
-    return Internal;
-  }
-  void Print(std::ostream &os) const {
-    os << GetTag() << " ";
-    os << GetVR()  << " ";
-    os << GetVM()  << " ";
-    os << Internal[0]; // VM is at least garantee to be one
-    for(unsigned int i=1; i<GetNumberOfValues(); ++i)
-      os << "," << Internal[i];
-    }
+
   DataElement GetAsDataElement() const {
     DataElement ret( GetTag() );
     std::ostringstream os;
@@ -347,24 +405,19 @@ public:
       GetNumberOfValues(),os);
     ret.SetVR( GetVR() );
     assert( ret.GetVR() != VR::SQ );
+    if( VRToEncoding<TVR>::Mode == VR::VRASCII )
+      {
+      if( GetVR() != VR::UI )
+        {
+        if( os.str().size() % 2 )
+          {
+          os << " ";
+          }
+        }
+      }
     ret.SetByteValue( os.str().c_str(), os.str().size() );
     return ret;
   }
-  ArrayType GetValue(unsigned int idx = 0) {
-    assert( idx < GetNumberOfValues() );
-    return Internal[idx];
-  }
-  // const reference
-  ArrayType const &GetValue(unsigned int idx = 0) const {
-    assert( idx < GetNumberOfValues() );
-    return Internal[idx];
-  }
-  void SetValue(unsigned int idx, ArrayType v) {
-    assert( idx < GetNumberOfValues() );
-    Internal[idx] = v;
-  }
-  void SetValue(ArrayType v) { SetValue(0, v); }
-
   void SetFromDataElement(DataElement const &de) {
     // This is kind of hackish but since I do not generate other element than the first one: 0x6000 I should be ok:
     assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 );

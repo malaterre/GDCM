@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -333,6 +333,12 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       {
       // If we get here, the JPEG code has signaled an error.
       // We need to clean up the JPEG object, close the input file, and return.
+      // But first handle the case IJG does not like:
+      if ( jerr.pub.msg_code == JERR_BAD_PRECISION /* 18 */ )
+        {
+        this->BitSample = jerr.pub.msg_parm.i[0];
+        assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        }
       jpeg_destroy_decompress(&cinfo);
       // TODO: www.dcm4che.org/jira/secure/attachment/10185/ct-implicit-little.dcm
       // weird Icon Image from GE...
@@ -370,18 +376,15 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
         jpeg_destroy_decompress(&cinfo);
         return false;
         }
+      else
+        {
+        assert( 0 );
+        }
       }
-    // Let's check the color space:
-    // JCS_UNKNOWN    -> 0
-    // JCS_GRAYSCALE
-    // JCS_RGB
-    // JCS_YCbCr
-    // JCS_CMYK
-    // JCS_YCCK
-
     this->Dimensions[1] = cinfo.image_height;	/* Number of rows in image */
     this->Dimensions[0] = cinfo.image_width;		/* Number of columns in image */
 
+    int prep = this->PF.GetPixelRepresentation();
     if( this->BitSample == 8 )
       {
       this->PF = PixelFormat( PixelFormat::UINT8 );
@@ -396,10 +399,37 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       }
     else
       {
-      abort();
+      assert( 0 );
       }
+    this->PF.SetPixelRepresentation( prep );
 
-    if( cinfo.jpeg_color_space == JCS_GRAYSCALE )
+    // Let's check the color space:
+    //  JCS_UNKNOWN    -> 0
+    //  JCS_GRAYSCALE,    /* monochrome */
+    //  JCS_RGB,    /* red/green/blue */
+    //  JCS_YCbCr,    /* Y/Cb/Cr (also known as YUV) */
+    //  JCS_CMYK,   /* C/M/Y/K */
+    //  JCS_YCCK    /* Y/Cb/Cr/K */
+
+    if( cinfo.jpeg_color_space == JCS_UNKNOWN )
+      {
+      // I do not know if this possible, it looks like IJG always computes a default
+      if( cinfo.num_components == 1 )
+        {
+        PI = PhotometricInterpretation::MONOCHROME2;
+        this->PF.SetSamplesPerPixel( 1 );
+        }
+      else if( cinfo.num_components == 3 )
+        {
+        PI = PhotometricInterpretation::RGB;
+        this->PF.SetSamplesPerPixel( 3 );
+        }
+      else
+        {
+        assert( 0 );
+        }
+      }
+    else if( cinfo.jpeg_color_space == JCS_GRAYSCALE )
       {
       assert( cinfo.num_components == 1 );
       PI = PhotometricInterpretation::MONOCHROME2;
@@ -417,9 +447,22 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       PI = PhotometricInterpretation::YBR_FULL_422;
       this->PF.SetSamplesPerPixel( 3 );
       }
+    else if( cinfo.jpeg_color_space == JCS_CMYK )
+      {
+      assert( cinfo.num_components == 4 );
+      PI = PhotometricInterpretation::CMYK;
+      this->PF.SetSamplesPerPixel( 4 );
+      }
+    else if( cinfo.jpeg_color_space == JCS_YCCK )
+      {
+      assert( cinfo.num_components == 4 );
+      PI = PhotometricInterpretation::YBR_FULL_422; // 4th plane ??
+      this->PF.SetSamplesPerPixel( 4 );
+      assert( 0 ); //TODO
+      }
     else
       {
-      abort(); //TODO
+      assert( 0 ); //TODO
       }
     }
   this->PlanarConfiguration = 0;
@@ -439,11 +482,34 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     }
   else if( cinfo.process == JPROC_SEQUENTIAL )
     {
-    ts = TransferSyntax::JPEGBaselineProcess1;
+    if( this->BitSample == 8 )
+      ts = TransferSyntax::JPEGBaselineProcess1;
+    else if( this->BitSample == 12 )
+      ts = TransferSyntax::JPEGExtendedProcess2_4;
     }
   else
     {
     abort(); // TODO
+    }
+
+  // Pixel density stuff:
+/*
+UINT8 density_unit
+UINT16 X_density
+UINT16 Y_density
+	The resolution information to be written into the JFIF marker;
+	not used otherwise.  density_unit may be 0 for unknown,
+	1 for dots/inch, or 2 for dots/cm.  The default values are 0,1,1
+	indicating square pixels of unknown size.
+*/
+
+  if( cinfo.density_unit != 0
+    || cinfo.X_density != 1
+    || cinfo.Y_density != 1
+  )
+    {
+    gdcmErrorMacro( "Pixel Density from JFIF Marker is not supported (for now)" );
+    //return false;
     }
 
   return true;
@@ -617,6 +683,12 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
       {
       // If we get here, the JPEG code has signaled an error.
       // We need to clean up the JPEG object, close the input file, and return.
+      // But first handle the case IJG does not like:
+      if ( jerr.pub.msg_code == JERR_BAD_PRECISION /* 18 */ )
+        {
+        this->BitSample = jerr.pub.msg_parm.i[0];
+        assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        }
       jpeg_destroy_decompress(&cinfo);
       // TODO: www.dcm4che.org/jira/secure/attachment/10185/ct-implicit-little.dcm
       // weird Icon Image from GE...
@@ -648,11 +720,22 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     // First of all are we using the proper JPEG decoder (correct bit sample):
     if( jerr.pub.num_warnings )
       {
-      if ( jerr.pub.msg_code == 128 )
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+      if ( jerr.pub.msg_code == JWRN_MUST_DOWNSCALE )
         {
+        // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+        // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+        // MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
+        // LJPEG_BuginGDCM12.dcm
+        gdcmDebugMacro( "JWRN_MUST_DOWNSCALE" );
         this->BitSample = jerr.pub.msg_parm.i[0];
+        assert( cinfo.data_precision == this->BitSample );
         jpeg_destroy_decompress(&cinfo);
         return false;
+        }
+      else
+        {
+        assert( 0 );
         }
       }
     // Let's check the color space:
@@ -683,6 +766,9 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
           cinfo.jpeg_color_space = JCS_UNKNOWN;
           cinfo.out_color_space = JCS_UNKNOWN;
           }
+        if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
+         || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
+          this->PI = PhotometricInterpretation::RGB;
       break;
     case JCS_YCbCr:
       if( GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL &&
@@ -704,6 +790,14 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         cinfo.jpeg_color_space = JCS_UNKNOWN;
         cinfo.out_color_space = JCS_UNKNOWN;
         }
+      break;
+    case JCS_CMYK:
+      assert( GetPhotometricInterpretation() == PhotometricInterpretation::CMYK );
+        if ( cinfo.process == JPROC_LOSSLESS )
+          {
+          cinfo.jpeg_color_space = JCS_UNKNOWN;
+          cinfo.out_color_space = JCS_UNKNOWN;
+          }
       break;
     default:
       abort();
@@ -778,6 +872,17 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     {
     /* Suspension: jpeg_finish_decompress */
     Internals->StateSuspension = 4;
+    }
+
+  /* we are done decompressing the file, now is a good time to store the type 
+     of compression used: lossless or not */
+  if( cinfo.process == JPROC_LOSSLESS )
+    {
+    LossyFlag = false;
+    }
+  else
+    {
+    LossyFlag = true;
     }
 
   /* Step 8: Release JPEG decompression object */
@@ -1026,27 +1131,33 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   cinfo.image_width = image_width; 	/* image width and height, in pixels */
   cinfo.image_height = image_height;
 
-  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
-   || this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1 
-   || this->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR )
+  switch( this->GetPhotometricInterpretation() )
     {
+  case PhotometricInterpretation::MONOCHROME1:
+  case PhotometricInterpretation::MONOCHROME2:
+  case PhotometricInterpretation::PALETTE_COLOR:
     cinfo.input_components = 1;     /* # of color components per pixel */
     cinfo.in_color_space = JCS_GRAYSCALE; /* colorspace of input image */
-    }
-  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
-    {
+    break;
+  case PhotometricInterpretation::RGB:
+  case PhotometricInterpretation::YBR_RCT:
+  case PhotometricInterpretation::YBR_ICT:
     cinfo.input_components = 3;		/* # of color components per pixel */
     cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
-    }
-  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL 
-    || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
-    {
+    break;
+  case PhotometricInterpretation::YBR_FULL:
+  case PhotometricInterpretation::YBR_FULL_422:
+  case PhotometricInterpretation::YBR_PARTIAL_420:
+  case PhotometricInterpretation::YBR_PARTIAL_422:
     cinfo.input_components = 3;		/* # of color components per pixel */
     cinfo.in_color_space = JCS_YCbCr; 	/* colorspace of input image */
-    }
-  else
-    {
-    std::cerr << "Not supported: " << this->GetPhotometricInterpretation() << std::endl;
+    break;
+  case PhotometricInterpretation::HSV:
+  case PhotometricInterpretation::ARGB:
+  case PhotometricInterpretation::CMYK:
+    // TODO !
+  case PhotometricInterpretation::UNKNOW:
+  case PhotometricInterpretation::PI_END: // To please compiler
     return false;
     }
   //if ( cinfo.process == JPROC_LOSSLESS )
@@ -1068,18 +1179,28 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * Basicaly you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
    * TODO: is there a way to pick the right predictor (best compression/fastest ?)
    */
-  jpeg_simple_lossless (&cinfo, 1, 0);
-  //jpeg_simple_lossless (&cinfo, 7, 0);
+  if( Lossless )
+    {
+    jpeg_simple_lossless (&cinfo, 1, 0);
+    //jpeg_simple_lossless (&cinfo, 7, 0);
+    }
 
   /* Now you can set any non-default parameters you wish to.
    * Here we just illustrate the use of quality (quantization table) scaling:
    */
-  jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
+  if( Lossless )
+    {
+    assert( Quality == 100 );
+    }
+  jpeg_set_quality(&cinfo, Quality, TRUE /* limit to baseline-JPEG values */);
 
   /*
    * See write_file_header
    */
   cinfo.write_JFIF_header = 0;
+  //cinfo.density_unit = 2;
+  //cinfo.X_density = 2;
+  //cinfo.Y_density = 5;
 
   /* Step 4: Start compressor */
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -44,6 +44,17 @@ const Item &SequenceOfItems::GetItem(unsigned int position) const
   return Items[position-1];
 }
 
+bool SequenceOfItems::FindDataElement(const Tag &t) const
+{
+  ConstIterator it = Begin();
+  bool found = false;
+  for(; it != End() && !found; ++it)
+    {
+    const Item & item = *it;
+    found = item.FindDataElement( t );
+    }
+  return found;
+}
 
 } // end namespace gdcm
 

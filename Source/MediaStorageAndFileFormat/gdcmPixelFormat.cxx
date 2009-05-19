@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -43,6 +43,8 @@ unsigned short PixelFormat::GetSamplesPerPixel() const
     abort();
     return 3;
     }
+  // \postcondition
+  assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
   return SamplesPerPixel;
 }
 
@@ -130,16 +132,19 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
   case 32:
     type = PixelFormat::UINT32;
     break;    
+  case 64:
+    type = PixelFormat::UINT32; // why not ?
+    break;    
   case 24:
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
     type = PixelFormat::UINT8;
     abort();
     break;
-    
   default:
     gdcmErrorMacro( "I have never seen this before BitsAllocated "
       << BitsAllocated );
-    abort();
+    type = PixelFormat::UNKNOWN;
+    //abort();
     }
   if( PixelRepresentation == 0 )
     {
@@ -213,8 +218,9 @@ int64_t PixelFormat::GetMin() const
   //  }
   else
     {
-    abort();
+    assert(0);
     }
+  return 0;
 }
 
 int64_t PixelFormat::GetMax() const
@@ -238,12 +244,18 @@ int64_t PixelFormat::GetMax() const
   //  }
   else
     {
-    abort();
+    assert(0);
     }
+  return 0;
 }
 
 bool PixelFormat::Validate()
 {
+  assert( BitsAllocated >= BitsStored );
+  assert( BitsAllocated >= HighBit );
+  //assert( BitsStored    >= HighBit ); // DigitexAlpha_no_7FE0.dcm
+  assert( PixelRepresentation == 0 || PixelRepresentation == 1 );
+  assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
   if ( BitsAllocated == 24 )
     {
     assert( BitsStored == 24 && HighBit == 23 && SamplesPerPixel == 1 );

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -34,10 +34,10 @@ class Image;
  * MR Image Storage are distinct object from Enhanced MR Image Storage. For example the
  * Pixel Spacing in one object is not at the same position (ie Tag) as in the other
  * this class is the central (read: fragile) place where all the dispatching is done from
- * a united view of a world image (typically VTK or ITK point of view) down to the low
+ * a unified view of a world image (typically VTK or ITK point of view) down to the low
  * level DICOM point of view.
  *
- * \warning: do not expect the API of this class to be maintain at any point, since as
+ * \warning: do not expect the API of this class to be maintained at any point, since as
  * Modalities are added the API might have to be augmented or behavior changed to cope
  * with new modalities.
  */
@@ -57,8 +57,9 @@ public:
   /// still having a Pixel Spacing tag (0028,0030). If you have deal with those files, use this 
   /// very special flag to handle them
   /// Unless explicitely set elsewhere by the standard, it will use value from 0028,0030 / 0018,0088
-  // / for the Pixel Spacing of the Image
+  /// for the Pixel Spacing of the Image
   static void SetForcePixelSpacing(bool);
+  static bool GetForcePixelSpacing();
 
   /// Set/Get shift/scale from/to a file
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
@@ -78,6 +79,8 @@ public:
 
   /// DO NOT USE
   static bool ComputeSpacingFromImagePositionPatient(const std::vector<double> &imageposition, std::vector<double> & spacing);
+
+  static bool GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector<double> & dircos);
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);

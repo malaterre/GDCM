@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -69,22 +69,6 @@ void Scanner::AddTag( Tag const & t )
     }
 }
 
-bool Scanner::IsKey( const char * filename ) const
-{
-/*
-  // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dumb...
-  Directory::FilenamesType::const_iterator it = std::find(Filenames.begin(), Filenames.end(), filename);
-  if( it == Filenames.end() )
-    {
-    gdcmErrorMacro( "The file: " << filename << " was not scanned" );
-    return false;
-    }
-*/
-  // Look for the file in Mappings table:
-  MappingType::const_iterator it2 = Mappings.find(filename);
-  return it2 != Mappings.end();
-}
-
 bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
   // Is there at least one tag ?
@@ -133,30 +117,58 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       TagToValue &mapping = Mappings[filename];
       sf.SetFile( reader.GetFile() );
 
+      const FileMetaInformation & header = reader.GetFile().GetHeader();
       const DataSet & ds = reader.GetFile().GetDataSet();
       TagsType::const_iterator tag = Tags.begin();
       for( ; tag != Tags.end(); ++tag )
         {
-        if( ds.FindDataElement( *tag ) )
+        if( tag->GetGroup() == 0x2 )
           {
-          //std::string s;
-          DataElement const & de = ds.GetDataElement( *tag );
-          //const ByteValue *bv = de.GetByteValue();
-          ////assert( VR::IsASCII( vr ) );
-          //if( bv ) // Hum, should I store an empty string or what ?
-          //  {
-          //  s = std::string( bv->GetPointer(), bv->GetLength() );
-          //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-          //  }
-          std::string s = sf.ToString(de.GetTag());
+          if( header.FindDataElement( *tag ) )
+            {
+            //std::string s;
+            DataElement const & de = header.GetDataElement( *tag );
+            //const ByteValue *bv = de.GetByteValue();
+            ////assert( VR::IsASCII( vr ) );
+            //if( bv ) // Hum, should I store an empty string or what ?
+            //  {
+            //  s = std::string( bv->GetPointer(), bv->GetLength() );
+            //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+            //  }
+            std::string s = sf.ToString(de.GetTag());
 
-          // Store the potentially new value:
-          Values.insert( s );
-          assert( Values.find( s ) != Values.end() );
-          const char *value = Values.find( s )->c_str();
-          assert( value );
-          mapping.insert(
-            TagToValue::value_type(*tag, value));
+            // Store the potentially new value:
+            Values.insert( s );
+            assert( Values.find( s ) != Values.end() );
+            const char *value = Values.find( s )->c_str();
+            assert( value );
+            mapping.insert(
+              TagToValue::value_type(*tag, value));
+            }
+          }
+        else
+          {
+          if( ds.FindDataElement( *tag ) )
+            {
+            //std::string s;
+            DataElement const & de = ds.GetDataElement( *tag );
+            //const ByteValue *bv = de.GetByteValue();
+            ////assert( VR::IsASCII( vr ) );
+            //if( bv ) // Hum, should I store an empty string or what ?
+            //  {
+            //  s = std::string( bv->GetPointer(), bv->GetLength() );
+            //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+            //  }
+            std::string s = sf.ToString(de.GetTag());
+
+            // Store the potentially new value:
+            Values.insert( s );
+            assert( Values.find( s ) != Values.end() );
+            const char *value = Values.find( s )->c_str();
+            assert( value );
+            mapping.insert(
+              TagToValue::value_type(*tag, value));
+            }
           }
         }
       }
@@ -204,6 +216,23 @@ Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
   return Mappings.find("")->second; // dummy file could not be found
 }
 
+bool Scanner::IsKey( const char * filename ) const
+{
+/*
+  // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dumb...
+  Directory::FilenamesType::const_iterator it = std::find(Filenames.begin(), Filenames.end(), filename);
+  if( it == Filenames.end() )
+    {
+    gdcmErrorMacro( "The file: " << filename << " was not scanned" );
+    return false;
+    }
+*/
+  // Look for the file in Mappings table:
+  MappingType::const_iterator it2 = Mappings.find(filename);
+  return it2 != Mappings.end();
+}
+
+
 Directory::FilenamesType Scanner::GetKeys() const
 {
   Directory::FilenamesType keys;
@@ -212,8 +241,7 @@ Directory::FilenamesType Scanner::GetKeys() const
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
-    MappingType::const_iterator it = Mappings.find(filename);
-    if ( it != Mappings.end() )
+    if( IsKey( filename ) )
       {
       keys.push_back( filename );
       }
@@ -225,12 +253,30 @@ Directory::FilenamesType Scanner::GetKeys() const
 
 const char* Scanner::GetValue(const char *filename, Tag const &t) const
 {
+  // \precondition
+  assert( Tags.find( t ) != Tags.end() );
   TagToValue const &ftv = GetMapping(filename);
   if( ftv.find(t) != ftv.end() )
     {
     return ftv.find(t)->second;
     }
   return NULL;
+}
+
+Scanner::ValuesType Scanner::GetValues(Tag const &t) const
+{
+  ValuesType vt;
+  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  for(; file != Filenames.end(); ++file)
+    {
+    const char *filename = file->c_str();
+    TagToValue const &ttv = GetMapping(filename);
+    if( ttv.find(t) != ttv.end() )
+      {
+      vt.insert( ttv.find(t)->second );
+      }
+    }
+  return vt;
 }
 
 } // end namespace gdcm

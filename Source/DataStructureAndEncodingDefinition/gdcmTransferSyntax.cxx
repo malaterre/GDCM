@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -155,6 +155,24 @@ bool TransferSyntax::IsLossy() const
 
 }
 
+bool TransferSyntax::IsLossless() const
+{
+  if (
+    TSField == JPEGBaselineProcess1 ||
+    TSField == JPEGExtendedProcess2_4 ||
+    TSField == JPEGExtendedProcess3_5 ||
+    TSField == JPEGSpectralSelectionProcess6_8 ||
+    TSField == JPEGFullProgressionProcess10_12 ||
+    // TSField == JPEGLSNearLossless || -> can be lossy & lossless
+    // TSField == JPEG2000 || -> can be lossy & lossless
+    TSField == MPEG2MainProfile 
+  )
+    {
+    return false;
+    }
+  return true;
+}
+
 // By implementation those two functions form a partition
 bool TransferSyntax::IsExplicit(TSType ts) const
 {
@@ -203,6 +221,39 @@ SwapCode TransferSyntax::GetSwapCode() const
 bool TransferSyntax::IsEncoded() const
 {
   return TSField == DeflatedExplicitVRLittleEndian;
+}
+
+bool TransferSyntax::IsEncapsulated() const
+{
+  bool ret = false;
+  switch( TSField )
+    {
+  //case ImplicitVRLittleEndian:
+  //case ImplicitVRBigEndianPrivateGE:
+  //case ExplicitVRLittleEndian:
+  //case DeflatedExplicitVRLittleEndian:
+  //case ExplicitVRBigEndian:
+  case JPEGBaselineProcess1:
+  case JPEGExtendedProcess2_4:
+  case JPEGExtendedProcess3_5:
+  case JPEGSpectralSelectionProcess6_8:
+  case JPEGFullProgressionProcess10_12:
+  case JPEGLosslessProcess14:
+  case JPEGLosslessProcess14_1:
+  case JPEGLSLossless:
+  case JPEGLSNearLossless:
+  case JPEG2000Lossless:
+  case JPEG2000:
+  case RLELossless:
+  case MPEG2MainProfile:
+  //case ImplicitVRBigEndianACRNEMA:
+  //case WeirdPapryus:
+    ret = true;
+    break;
+  default:
+    ;
+    }
+  return ret;
 }
 
 } // end namespace gdcm

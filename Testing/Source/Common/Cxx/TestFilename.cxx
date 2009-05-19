@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -79,6 +79,16 @@ int TestFilename(int argc, char *argv[])
     {
     return 1;
     }
+
+  {
+  const char *curprocfn = gdcm::System::GetCurrentProcessFileName();
+  if( curprocfn )
+  {
+gdcm::Filename fn( curprocfn );
+std::string str = fn.GetPath();
+std::cout << str << std::endl;
+  }
+  }
 
   return 0;
 }

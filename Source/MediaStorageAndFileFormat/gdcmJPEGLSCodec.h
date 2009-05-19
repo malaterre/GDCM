@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,7 +24,9 @@ class JPEGLSInternals;
 /**
  * \brief JPEG-LS
  * \note codec that implement the JPEG-LS compression
- * this is an implement of ImageCodec for JPEG-LS
+ * this is an implementation of ImageCodec for JPEG-LS
+ *
+ * It uses the CharLS JPEG-LS implementation http://charls.codeplex.com
  */
 class GDCM_EXPORT JPEGLSCodec : public ImageCodec
 {

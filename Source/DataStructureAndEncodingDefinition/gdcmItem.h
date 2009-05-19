@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -45,7 +45,7 @@ class DataSet;
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item() : DataElement(Tag(0xfffe, 0xe000)), NestedDataSet() {}
+  Item() : DataElement(Tag(0xfffe, 0xe000), 0xFFFFFFFF), NestedDataSet() {}
   friend std::ostream& operator<< (std::ostream &os, const Item &val);
 
   void Clear() {
@@ -297,6 +297,9 @@ by the Transfer Syntax. They shall be encoded as Implicit VR. These special Data
 However, the Data Set within the Value Field of the Data Element Item (FFFE,E000) shall be encoded
 according to the rules conveyed by the Transfer Syntax.
 */
+  bool FindDataElement(const Tag &t) const {
+    return NestedDataSet.FindDataElement( t );
+  }
 
 private:
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.

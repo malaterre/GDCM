@@ -2,12 +2,15 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmSpacing.cxx
   gdcmFileExplicitFilter.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
   gdcmPixmap.cxx
+  gdcmBitmap.cxx
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
+  gdcmPixmapToPixmapFilter.cxx
   gdcmImageChangeTransferSyntax.cxx
   gdcmImageApplyLookupTable.cxx
   gdcmOrientation.cxx
@@ -31,7 +34,9 @@ SET(MSFF_SRCS
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
   gdcmScanner.cxx
+  gdcmPixmapReader.cxx
   gdcmImageReader.cxx
+  gdcmPixmapWriter.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
   gdcmImageHelper.cxx
@@ -76,11 +81,18 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
 
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"
   "${GDCM_BINARY_DIR}/Utilities"
   )
+
+# CharLS
+IF(GDCM_USE_JPEGLS)
+  #INCLUDE_DIRECTORIES("${GDCM_BINARY_DIR}/Utilities/gdcmcharls")
+ENDIF(GDCM_USE_JPEGLS)
+
 IF(GDCM_USE_SYSTEM_OPENJPEG)
   INCLUDE_DIRECTORIES(${OPENJPEG_INCLUDE_DIRS} )
 ELSE(GDCM_USE_SYSTEM_OPENJPEG)
@@ -114,6 +126,9 @@ SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 
 # main libs:
 TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})
+IF(GDCM_USE_JPEGLS)
+  TARGET_LINK_LIBRARIES(gdcmMSFF gdcmcharls)
+ENDIF(GDCM_USE_JPEGLS)
 
 IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
   # I am getting:
@@ -134,8 +149,8 @@ TARGET_LINK_LIBRARIES(gdcmMSFF ${GDCMUUID})
 ENDIF(WIN32)
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmMSFF
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime ${NAMELINK_SKIP}
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
   )
   #INSTALL(TARGETS gdcmMSFF
@@ -146,6 +161,6 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB header_files "*.h" "*.txx")
   INSTALL(FILES ${header_files}
-    DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Development
+    DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)

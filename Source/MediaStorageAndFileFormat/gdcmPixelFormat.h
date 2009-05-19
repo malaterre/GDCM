@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -36,7 +36,8 @@ namespace gdcm
  */
 class GDCM_EXPORT PixelFormat
 {
-  friend class Pixmap;
+  friend class Bitmap;
+  friend std::ostream& operator<<(std::ostream &_os, const PixelFormat &pf);
 public:
   // When adding a type please add its dual type (its unsigned conterpart)
   typedef enum {
@@ -113,6 +114,8 @@ public:
   /// PixelRepresentation
   unsigned short GetPixelRepresentation() const
     {
+    assert( PixelRepresentation == 0
+         || PixelRepresentation == 1 );
     return PixelRepresentation;
     }
   void SetPixelRepresentation(unsigned short pr)
@@ -129,6 +132,10 @@ public:
   const char *GetScalarTypeAsString() const;
 
   /// return the size of the pixel
+  /// This is the number of words it would take to store one pixel
+  /// \warning the return value takes into account the SamplesPerPixel
+  /// \warning in the rare case when BitsAllocated == 12, the function
+  /// assume word padding and value returned will be identical as if BitsAllocated == 16
   uint8_t GetPixelSize() const;
 
   /// Print
@@ -156,6 +163,12 @@ private:
   // D 0028|0103 [US] [Pixel Representation] [0]
   unsigned short PixelRepresentation;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const PixelFormat &pf)
+{
+  pf.Print( os );
+  return os;
+}
 
 } // end namespace gdcm
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -57,7 +57,7 @@
 #include <dlfcn.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include <unistd.h> /* gethostname */
 #include <strings.h> // strncasecmp
 #endif 
 
@@ -220,6 +220,29 @@ bool System::FileIsDirectory(const char* name)
     }
 }
 
+// TODO st_mtimensec
+time_t System::FileTime(const char* filename)
+{
+  struct stat fs;
+  if(stat(filename, &fs) == 0)
+    {
+    // man 2 stat
+    // time_t    st_atime;   /* time of last access */
+    // time_t    st_mtime;   /* time of last modification */
+    // time_t    st_ctime;   /* time of last status change */
+    return fs.st_mtime;
+
+    // Since  kernel 2.5.48, the stat structure supports nanosecond resolution
+    // for the three file timestamp fields.  Glibc exposes the nanosecond com-
+    // ponent of each field using names either of the form st_atim.tv_nsec, if
+    // the _BSD_SOURCE or _SVID_SOURCE feature test macro is  defined,  or  of
+    // the  form st_atimensec, if neither of these macros is defined.  On file
+    // systems that do not support  sub-second  timestamps,  these  nanosecond
+    // fields are returned with the value 0.
+    }
+  return 0;
+}
+
 const char *System::GetLastSystemError()
 {
   int e = errno;
@@ -284,15 +307,36 @@ bool System::RemoveFile(const char* source)
 // return size of file; also returns zero if no file exists
 size_t System::FileSize(const char* filename)
 {
+#if 0
+       All of these system calls return a stat structure, which  contains  the
+       following fields:
+
+          struct stat {
+              dev_t     st_dev;     /* ID of device containing file */
+              ino_t     st_ino;     /* inode number */
+              mode_t    st_mode;    /* protection */
+              nlink_t   st_nlink;   /* number of hard links */
+              uid_t     st_uid;     /* user ID of owner */
+              gid_t     st_gid;     /* group ID of owner */
+              dev_t     st_rdev;    /* device ID (if special file) */
+              off_t     st_size;    /* total size, in bytes */
+              blksize_t st_blksize; /* blocksize for filesystem I/O */
+              blkcnt_t  st_blocks;  /* number of blocks allocated */
+              time_t    st_atime;   /* time of last access */
+              time_t    st_mtime;   /* time of last modification */
+              time_t    st_ctime;   /* time of last status change */
+          };
+#endif
   struct stat fs;
   if (stat(filename, &fs) != 0) 
     {
     return 0;
     }
-  else
-    {
-    return fs.st_size;
-    }
+  off_t size = fs.st_size;
+  size_t size2 = size;
+  // off_t can be larger than size_t
+  if( size != (off_t)size2 ) return 0;
+  return size2;
 }
 
 #if 0
@@ -393,6 +437,9 @@ const char *System::GetCurrentModuleFileName()
   Dl_info info;
   if (dladdr( (void*)&where_am_i, &info ) == 0)
     {
+    size_t len = strlen(info.dli_fname);
+    if( len >= PATH_MAX ) return 0; // throw error ?
+    // else
     strcpy(path,info.dli_fname);
     return path; 
     }
@@ -489,54 +536,184 @@ bool System::GetHardwareAddress(unsigned char addr[6])
 
 #if defined(_WIN32) && !defined(HAVE_GETTIMEOFDAY)
 #include <stdio.h>
-static int gettimeofday(struct timeval *tv, struct timezone *tz)
+
+// http://www.openasthra.com/c-tidbits/gettimeofday-function-for-windows/
+// http://www.sisvia.com/blog/?p=24
+// -> srand + gettimeofday
+// http://csl.sublevel3.org/c++/
+static int gettimeofday2(struct timeval *tv, struct timezone *tz)
 {
   FILETIME ft;
   const uint64_t c1 = 27111902;
   const uint64_t c2 = 3577643008UL;
   const uint64_t OFFSET = (c1 << 32) + c2;
-  uint64_t filetime;
+  uint64_t filetime = 0;
   GetSystemTimeAsFileTime(&ft);
 
-  filetime = ft.dwHighDateTime;
-  filetime = filetime << 32;
-  filetime += ft.dwLowDateTime;
+  filetime |= ft.dwHighDateTime;
+  filetime <<= 32;
+  filetime |= ft.dwLowDateTime;
   filetime -= OFFSET;
 
-  memset(tv,0, sizeof(*tv));
-  assert( sizeof(*tv) == sizeof(struct timeval));
-  tv->tv_sec = (time_t)(filetime / 10000000); /* seconds since epoch */
+  tv->tv_sec = (long)(filetime / 10000000); /* seconds since epoch */
   tv->tv_usec = (uint32_t)((filetime % 10000000) / 10);
 
   return 0;
 }
+#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
+#else
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif
 
-bool System::GetCurrentDateTime(char date[18])
+//struct timezone 
+//{
+//  int  tz_minuteswest; /* minutes W of Greenwich */
+//  int  tz_dsttime;     /* type of dst correction */
+//};
+ 
+int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
+/*
+       The use of the timezone structure is obsolete; the tz  argument  should
+       normally  be  specified  as  NULL.  The tz_dsttime field has never been
+       used under Linux; it has not been and will not be supported by libc  or
+       glibc.   Each  and  every occurrence of this field in the kernel source
+       (other than the declaration) is a bug. Thus, the following is purely of
+       historic interest.
+*/
+  assert( tz == 0 );
+  FILETIME ft;
+  unsigned __int64 tmpres = 0;
+  //static int tzflag;
+ 
+  if (NULL != tv)
+  {
+    GetSystemTimeAsFileTime(&ft);
+ 
+    tmpres |= ft.dwHighDateTime;
+    tmpres <<= 32;
+    tmpres |= ft.dwLowDateTime;
+ 
+    /*converting file time to unix epoch*/
+    tmpres /= 10;  /*convert into microseconds*/
+    tmpres -= DELTA_EPOCH_IN_MICROSECS; 
+    tv->tv_sec = (long)(tmpres / 1000000UL);
+    tv->tv_usec = (long)(tmpres % 1000000UL);
+  }
+ 
+//  if (NULL != tz)
+//  {
+//    if (!tzflag)
+//    {
+//      _tzset();
+//      tzflag++;
+//    }
+//    tz->tz_minuteswest = _timezone / 60;
+//    tz->tz_dsttime = _daylight;
+//  }
+ 
+  return 0;
+}
+#endif
+
+/**
+ Implementation note. We internally use mktime which seems to be quite relaxed when it
+ comes to invalid date. It handles :
+ "17890714172557";
+ "19891714172557";
+ "19890014172557";
+ While the DICOM PS 3.5-2008 would prohibit them. 
+ I leave it this way so that we correctly read in /almost/ valid date. What we write out is
+ always valid anyway which is what is important.
+*/
+bool System::ParseDateTime(time_t &timep, const char date[22])
+{
+  long milliseconds;
+  return ParseDateTime(timep, milliseconds, date);
+}
+
+bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22])
+{
+  if(!date) return false;
+  assert( strlen(date) <= 22 );
+  size_t len = strlen(date);
+  if( len < 4 ) return false; // need at least the full year
+
+  struct tm ptm;
+  // No such thing as strptime on some st*$^% platform
+  //char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
+  // instead write our own:
+  int year, mon, day, hour, min, sec, n;
+  if ((n = sscanf(date, "%4d%2d%2d%2d%2d%2d",
+        &year, &mon, &day, &hour, &min, &sec)) >= 1)
+    {
+    switch (n)
+      {
+    case 1: mon = 1;
+    case 2: day = 1;
+    case 3: hour = 0;
+    case 4: min = 0;
+    case 5: sec = 0;
+      }
+    ptm.tm_year = year - 1900;
+    ptm.tm_mon = mon - 1;
+    ptm.tm_mday = day;
+    ptm.tm_hour = hour;
+    ptm.tm_min = min;
+    ptm.tm_sec = sec;
+    ptm.tm_wday = -1;
+    ptm.tm_yday = -1;
+    ptm.tm_isdst = -1;
+    }
+  else
+    {
+    return false;
+    }
+  timep = mktime(&ptm);
+  if( timep == (time_t)-1) return false;
+
+  milliseconds = 0;
+  if( len > 14 ) // more data to process
+    {
+    const char *ptr = date + 14;
+    if( *ptr != '.' ) return false;
+    ++ptr;
+    if( !*ptr || sscanf( ptr, "%06ld", &milliseconds ) != 1 )
+      {
+      // Could not parse milliseconds but date looks ok, should I return false anyway ?
+      // -> yes this is an error !
+      return false;
+      }
+    }
+
+  return true;
+}
+
+bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
+{
+  // \precondition
+  assert( milliseconds >= 0 && milliseconds < 1000000 );
+
+  // YYYYMMDDHHMMSS.FFFFFF&ZZXX
+  if(!date) return false;
   const size_t maxsize = 40;
   char tmp[maxsize];
-  long milliseconds;
-  time_t timep;
-
-  struct timeval tv;
-  gettimeofday (&tv, NULL);
-  timep = tv.tv_sec;
-  // Compute milliseconds from microseconds.
-  milliseconds = tv.tv_usec / 1000;
   // Obtain the time of day, and convert it to a tm struct.
   struct tm *ptm = localtime (&timep);
+  if(!ptm) return false;
   // Format the date and time, down to a single second.
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
+  assert( ret == 14 );
   if( ret == 0 || ret >= maxsize )
     {
     return false;
     }
 
   // Add milliseconds
-  const size_t maxsizall = 18;
+  const size_t maxsizall = 22;
   //char tmpAll[maxsizall];
-  int ret2 = snprintf(date,maxsizall,"%s%03ld",tmp,milliseconds);
+  int ret2 = snprintf(date,maxsizall,"%s.%06ld",tmp,milliseconds);
   assert( ret2 >= 0 );
   if( (unsigned int)ret2 >= maxsizall )
     {
@@ -545,6 +722,63 @@ bool System::GetCurrentDateTime(char date[18])
 
   // Ok !
   return true;
+}
+
+bool System::GetCurrentDateTime(char date[22])
+{
+  long milliseconds;
+  time_t timep;
+
+#if 0
+       The functions gettimeofday() and settimeofday() can  get  and  set  the
+       time  as  well  as a timezone.  The tv argument is a struct timeval (as
+       specified  in <sys/time.h>):
+
+         struct timeval {
+             time_t      tv_sec;     /* seconds */
+             suseconds_t tv_usec;    /* microseconds */
+         };
+
+       and gives the number of seconds and microseconds since the  Epoch  (see
+       time(2)).  The tz argument is a struct timezone:
+
+         struct timezone {
+             int tz_minuteswest;     /* minutes west of Greenwich */
+             int tz_dsttime;         /* type of DST correction */
+         };
+
+       If  either  tv or tz is NULL, the corresponding structure is not set or
+       returned.
+
+       The use of the timezone structure is obsolete; the tz  argument  should
+       normally  be  specified  as  NULL.  The tz_dsttime field has never been
+       used under Linux; it has not been and will not be supported by libc  or
+       glibc.   Each  and  every occurrence of this field in the kernel source
+       (other than the declaration) is a bug. Thus, the following is purely of
+       historic interest.
+#endif
+
+  // Apparently suseconds_t is defined as long on linux system... why would this be signed ?
+
+  struct timeval tv;
+  gettimeofday (&tv, NULL);
+  timep = tv.tv_sec;
+  // A concatenated date-time character string in
+  // the format:
+  // YYYYMMDDHHMMSS.FFFFFF&ZZXX
+  // The components of this string, from left to
+  // right, are YYYY = Year, MM = Month, DD =
+  // Day, HH = Hour (range "00" - "23"), MM =
+  // Minute (range "00" - "59"), SS = Second
+  // (range "00" - "60").
+  // FFFFFF = Fractional Second contains a
+  // fractional part of a second as small as 1
+  // millionth of a second (range ¿000000¿ -
+  // ¿999999¿).
+  assert( tv.tv_usec >= 0 && tv.tv_usec < 1000000 );
+  milliseconds = tv.tv_usec;
+
+  return FormatDateTime(date, timep, milliseconds);
 }
 
 int System::StrNCaseCmp(const char *s1, const char *s2, size_t n)
@@ -582,6 +816,41 @@ int System::StrCaseCmp(const char *s1, const char *s2)
 
  return tolower(*s1) - tolower(*s2);
 #endif
+}
+
+bool System::GetHostName(char name[255])
+{
+// http://msdn.microsoft.com/en-us/library/ms738527.aspx
+// WSANOTINITIALISED A successful WSAStartup call must occur before using this function.
+#if _WIN32
+  // Get the hostname
+  WORD wVersionRequested;
+  WSADATA wsaData;
+  wVersionRequested = MAKEWORD(2,0);
+
+  if ( WSAStartup( wVersionRequested, &wsaData ) == 0 )
+    {
+    bool ret = false;
+    if( gethostname(name,255) == 0 )
+      {
+      ret = true;
+      }
+    else
+      {
+      *name = 0;
+      }
+    WSACleanup( );
+    return ret;
+    }
+#else
+  if( gethostname(name, 255) == 0 )
+    {
+    return true;
+    }
+#endif
+  // If reach here gethostname failed, uninit name just in case
+  *name = 0;
+  return false;
 }
 
 } // end namespace gdcm

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -104,6 +104,9 @@ int TestString(int argc, char *argv[])
   std::cout << values[0] << std::endl;
   Print( values[0] );
   
+  const char trim[] = "8 ";
+  gdcm::String<> strim( trim );
+  std::cout << "|" << strim.Trim() << "|" << std::endl;
 
   return 0;
 }

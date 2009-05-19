@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -38,6 +38,7 @@ namespace gdcm
  */
 class GDCM_EXPORT Scanner
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Scanner &s);
 public:
   Scanner():Values(),Filenames(),Mappings() {}
   ~Scanner();
@@ -64,6 +65,8 @@ public:
   /// Start the scan !
   bool Scan( Directory::FilenamesType const & filenames );
 
+  Directory::FilenamesType const &GetFilenames() const { return Filenames; }
+
   /// Print result
   void Print( std::ostream & os ) const;
 
@@ -81,6 +84,9 @@ public:
 
   /// Get all the values found (in lexicographic order)
   ValuesType const & GetValues() const { return Values; }
+
+  /// Get all the values found (in lexicographic order) associated with Tag 't'
+  ValuesType GetValues(Tag const &t) const;
 
   /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
   struct ltstr
@@ -105,6 +111,7 @@ public:
   /// This is meant for a single short call. If multiple calls (multiple tags)
   /// should be done, prefer the GetMapping function, and then reuse the TagToValue
   /// hash table.
+  /// \warning Tag 't' should have been added via AddTag() prior to the Scan() call !
   const char* GetValue(const char *filename, Tag const &t) const;
 
 private:
@@ -120,15 +127,22 @@ private:
 
   double Progress;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Scanner &s)
+{
+  s.Print( os );
+  return os;
+}
 
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
 /*
  * HACK: I need this temp class to be able to manipulate a std::map from python,
  * swig does not support wrapping of simple class like std::map...
  */
-class PythonTagToValue
+class SWIGTagToValue
 {
 public:
-  PythonTagToValue(Scanner::TagToValue const &t2v):Internal(t2v),it(t2v.begin()) {}
+  SWIGTagToValue(Scanner::TagToValue const &t2v):Internal(t2v),it(t2v.begin()) {}
   const Scanner::TagToValueValueType& GetCurrent() const { return *it; }
   const Tag& GetCurrentTag() const { return it->first; }
   const char *GetCurrentValue() const { return it->second; }
@@ -139,7 +153,12 @@ private:
   const Scanner::TagToValue& Internal;
   Scanner::TagToValue::const_iterator it;
 };
+#endif /* SWIG */
 
+/**
+ * \example ScanDirectory.cs
+ * This is a C# example on how to use gdcm::Scanner
+ */
 
 } // end namespace gdcm
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -165,7 +165,6 @@ public:
     ConstIterator it = DES.find(r);
     if( it != DES.end() )
       return *it;
-    //throw DataElementException();
     return GetDEEnd();
     }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
@@ -280,9 +279,7 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   return os;
 }
   	 
-// There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
-// I also had to test defined(SWIGEXPORT) ...
-#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGEXPORT)
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,
  * swig does not support wrapping of simple class like std::set...
@@ -300,6 +297,11 @@ private:
   DataSet::ConstIterator it;
 };
 #endif /* SWIG */
+
+/**
+ * \example TestCSharpFilter.cs
+ * This is a C# example on how to use gdcm::SWIGDataSet
+ */
 
 } // end namespace gdcm
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -40,10 +40,22 @@ ImageCodec::ImageCodec()
   NeedOverlayCleanup = false;
   Dimensions[0] = Dimensions[1] = Dimensions[2] = 0;
   NumberOfDimensions = 0;
+  LossyFlag = false;
 }
 
 ImageCodec::~ImageCodec()
 {
+}
+
+bool ImageCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+{
+  assert( 0 );
+  return false;
+}
+
+bool ImageCodec::IsLossy() const
+{
+  return LossyFlag;
 }
 
 void ImageCodec::SetNumberOfDimensions(unsigned int dim)
@@ -93,6 +105,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
     }
 #endif
   os.write(dummy_buffer, buf_size);
+  delete[] dummy_buffer;
   return true;
 }
 
@@ -455,6 +468,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     {
   case PhotometricInterpretation::MONOCHROME2:
   case PhotometricInterpretation::RGB:
+  case PhotometricInterpretation::ARGB:
     break;
   case PhotometricInterpretation::MONOCHROME1:
     // CR-MONO1-10-chest.dcm
@@ -492,7 +506,13 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
         }
       }
     break;
+  case PhotometricInterpretation::YBR_ICT:
+    break;
+  case PhotometricInterpretation::YBR_RCT:
+    break;
   default:
+    gdcmErrorMacro( "Unhandled PhotometricInterpretation: " << PI );
+    return false;
     abort();
     }
 
@@ -511,6 +531,8 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     // there is no (0x60xx,0x3000) element, for example:
     // - XA_GE_JPEG_02_with_Overlays.dcm
     // - SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+    // Sigh, I finally found someone not declaring that unused bits where not zero:
+    // gdcmConformanceTests/dcm4chee_unusedbits_not_zero.dcm   
     if( NeedOverlayCleanup )
       DoOverlayCleanup(*cur_is,os);
     else
@@ -527,6 +549,11 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     }
 
   return true;
+}
+
+bool ImageCodec::IsValid(PhotometricInterpretation const &)
+{
+  return false;
 }
 
 } // end namespace gdcm

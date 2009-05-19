@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -19,24 +19,32 @@
 namespace gdcm
 {
 
-IODEntry::UsageType IODEntry::GetUsageType() const
+Usage::UsageType IODEntry::GetUsageType() const
 {
-  assert( !Usage.empty() );
-  if( Usage == "M" )
+  assert( !usage.empty() );
+  if( usage == "M" )
     {
-    return Mandatory;
+    return Usage::Mandatory;
     }
-  else if( Usage == "U" )
+  else if( usage == "U" )
     {
-    return UserOption;
+    return Usage::UserOption;
     }
-  else if( Usage.find( "C - " ) <  Usage.size() )
+  else if( usage.find( "U - " ) <  usage.size() )
     {
-    return Conditional;
+    return Usage::UserOption;
+    }
+  else if( usage.find( "C- " ) <  usage.size() )
+    {
+    return Usage::Conditional;
+    }
+  else if( usage.find( "C - " ) <  usage.size() )
+    {
+    return Usage::Conditional;
     }
   //else
-  abort();
-  return Invalid;
+  assert(0); // Keep me so that I can debug Part3.xml
+  return Usage::Invalid;
 }
 
 }

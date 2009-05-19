@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -27,6 +27,9 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
   size /= sizeof(TIn);
   for(size_t i = 0; i != size; ++i)
     {
+    // Implementation detail:
+    // The rescale function does not add the usual +0.5 to do the proper integer type
+    // cast, since TOut is expected to be floating point type whenever it would occur
     out[i] = (TOut)(slope * in[i] + intercept);
     //assert( out[i] == (TOut)(slope * in[i] + intercept) ); // will really slow down stuff...
     //assert( in[i] == (TIn)(((double)out[i] - intercept) / slope + 0.5) );
@@ -46,9 +49,16 @@ template<typename TOut, typename TIn>
 struct FImpl 
 { 
   // parameter 'size' is in bytes
+  // TODO: add template parameter for intercept/slope so that we can have specialized instantiation
+  // when 1. both are int, 2. slope is 1, 3. intercept is 0
+  // Detail: casting from float to int is soooo slow
   static void InverseRescaleFunction( TOut *out, const TIn *in, 
     double intercept, double slope, size_t size) // users, go ahead and specialize this 
     {
+    // If you read the code down below you'll see a specialized function for float, thus
+    // if we reach here it prettu much means slope/intercept were integer type
+    assert( intercept == (int)intercept );
+    assert( slope == (int)slope );
     size /= sizeof(TIn);
     for(size_t i = 0; i != size; ++i)
       {
@@ -70,7 +80,27 @@ struct FImpl<TOut, float>
       // '+ 0.5' trick is needed for instance for : gdcmData/MR-MONO2-12-shoulder.dcm
       // well known trick of adding 0.5 after a floating point type operation to properly find the
       // closest integer that will represent the transformation
+      // TOut in this case is integer type, while input is floating point type
       out[i] = (TOut)(((double)in[i] - intercept) / slope + 0.5);
+      //assert( out[i] == (TOut)(((double)in[i] - intercept) / slope ) );
+      }
+    }
+};
+template<typename TOut> 
+struct FImpl<TOut, double>
+{
+  static void InverseRescaleFunction(TOut *out, const double *in,
+    double intercept, double slope, size_t size)
+    {
+    size /= sizeof(double);
+    for(size_t i = 0; i != size; ++i)
+      {
+      // '+ 0.5' trick is needed for instance for : gdcmData/MR-MONO2-12-shoulder.dcm
+      // well known trick of adding 0.5 after a floating point type operation to properly find the
+      // closest integer that will represent the transformation
+      // TOut in this case is integer type, while input is floating point type
+      out[i] = (TOut)(((double)in[i] - intercept) / slope + 0.5);
+      //assert( out[i] == (TOut)(((double)in[i] - intercept) / slope ) );
       }
     }
 };
@@ -149,7 +179,7 @@ PixelFormat::ScalarType Rescaler::ComputeInterceptSlopePixelType()
   if( Slope != (int)Slope || Intercept != (int)Intercept)
     {
     //assert( PF != PixelFormat::INT8 && PF != PixelFormat::UINT8 ); // Is there any Object that have Rescale on char ?
-    return PixelFormat::FLOAT32;
+    return PixelFormat::FLOAT64;
     }
   double intercept = Intercept;
   double slope = Slope;
@@ -187,6 +217,9 @@ void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
     break;
   case PixelFormat::FLOAT32:
     RescaleFunction<float,TIn>((float*)out,in,intercept,slope,n);
+    break;
+  case PixelFormat::FLOAT64:
+    RescaleFunction<double,TIn>((double*)out,in,intercept,slope,n);
     break;
   default:
     abort();
@@ -242,7 +275,7 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
   // check if we are dealing with floating point type
   if( Slope != (int)Slope || Intercept != (int)Intercept)
   {
-  // need to rescale as float (32bits) as slope/intercept are 32bits
+  // need to rescale as double (64bits) as slope/intercept are 64bits
   //abort();
   }
   // else integral type
@@ -269,6 +302,10 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
   case PixelFormat::FLOAT32:
     assert( sizeof(float) == 32 / 8 );
     InverseRescaleFunctionIntoBestFit<float>(out,(float*)in,n);
+    break;
+  case PixelFormat::FLOAT64:
+    assert( sizeof(double) == 64 / 8 );
+    InverseRescaleFunctionIntoBestFit<double>(out,(double*)in,n);
     break;
   default:
     //InverseRescaleFunction<unsigned short, float>((unsigned short*)out,(float*)in,Intercept,Slope,n);
@@ -393,7 +430,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       }
     }
 	assert( st != PixelFormat::UNKNOWN );
-	assert( st != PixelFormat::FLOAT32 && st != PixelFormat::FLOAT16 );
+	assert( st != PixelFormat::FLOAT32 && st != PixelFormat::FLOAT16 && st != PixelFormat::FLOAT64 );
   return st;
 }
 

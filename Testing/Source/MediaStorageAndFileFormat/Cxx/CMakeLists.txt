@@ -2,6 +2,8 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestDataElementValueAsSQ
+  TestSpacing
   TestFileExplicitFilter
   TestImageFragmentSplitter
   TestTagPath
@@ -11,7 +13,7 @@ SET(MSFF_TEST_SRCS
   TestImageToImageFilter
   TestImageChangeTransferSyntax
   TestImageChangePhotometricInterpretation
-  TestImageChangePhotometricInterpretation2
+  #TestImageChangePhotometricInterpretation2 # does not compile on mingw...
   TestImageChangeTransferSyntax2
   TestImageChangeTransferSyntax3
   TestImageChangeTransferSyntax4
@@ -35,7 +37,7 @@ SET(MSFF_TEST_SRCS
   TestImageReader
   TestDirectionCosines
   TestImageWriter
-  #TestImageWriter2
+  TestImageWriter2
   TestCodec
   TestPDFCodec
   TestRLECodec
@@ -63,6 +65,7 @@ IF(GDCM_DATA_ROOT)
       ${MSFF_TEST_SRCS}
   TestScanner
   TestIPPSorter
+  TestIPPSorter2
   TestCopyDataSet
       )
 ENDIF(GDCM_DATA_ROOT)

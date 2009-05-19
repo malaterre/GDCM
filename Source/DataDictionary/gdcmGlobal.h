@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -40,15 +40,16 @@ class Dicts;
 class Defs;
 /**
  * \brief Global
- * \note bla
+ * \note
  * Global should be included in any translation unit
  * that will use Dict or that implements the singleton
  * pattern.  It makes sure that the Dict singleton is created
- * before and destroyed after all other singletons in VTK.
+ * before and destroyed after all other singletons in GDCM.
  * 
  */
 class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Global &g);
 public:
   Global();
   ~Global();
@@ -66,12 +67,15 @@ public:
 
   /// Load all internal XML files, ressource path need to have been
   /// set before calling this member function (see Append/Prepend members func)
+  /// \warning not thread safe !
   bool LoadResourcesFiles();
 
   /// Append path at the end of the path list
+  /// \warning not thread safe !
   bool Append(const char *path);
 
   /// Prepend path at the begining of the path list
+  /// \warning not thread safe !
   bool Prepend(const char *path);
 
 protected:
@@ -85,6 +89,11 @@ private:
   // but we could have also directly exposed a Dicts *Internals;
   static GlobalInternal *Internals;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Global &g)
+{
+  return os;
+}
 
 // This instance will show up in any translation unit that uses
 // Global or that has a singleton.  It will make sure

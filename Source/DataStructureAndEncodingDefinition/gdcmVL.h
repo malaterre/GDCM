@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -31,6 +31,10 @@ class GDCM_EXPORT VL
 {
 public:
   VL(uint32_t vl = 0) : ValueLength(vl) { }
+
+  // FIXME: ugly
+  static uint32_t GetVL32Max() { return 0xFFFFFFFF; }
+  static uint16_t GetVL16Max() { return 0xFFFF; }
 
   bool IsUndefined() const {
     return ValueLength == 0xFFFFFFFF;
@@ -117,8 +121,6 @@ public:
     TSwap::SwapArray(&copy,1);
     return os.write((char*)(&copy), sizeof(uint16_t));
     }
-
-
 
 private:
   uint32_t ValueLength;

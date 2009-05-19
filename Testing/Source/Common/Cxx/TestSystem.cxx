@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,9 +13,40 @@
 
 =========================================================================*/
 #include "gdcmSystem.h"
+#include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include <iostream>
+#include <fstream>
+
 #include <string.h> // strlen
+
+#include <time.h>
+
+int TestGetTimeOfDay()
+{
+  time_t t = time(0);
+  char date[22];
+  if( !gdcm::System::GetCurrentDateTime(date) )
+    {
+    std::cerr << "Error" << std::endl;
+    return 1;
+    }
+  char time_date[22];
+  if( !gdcm::System::FormatDateTime(time_date, t) )
+    {
+    std::cerr << "Error" << std::endl;
+    return 1;
+    }
+  //std::cout << date << std::endl;
+  //std::cout << time_date << std::endl;
+
+  if ( strncmp( date, time_date, strlen("20090511172802.") ) != 0 )
+    {
+    std::cerr << "Error" << std::endl;
+    return 1;
+    }
+  return 0;
+}
 
 int TestSystem(int, char *[])
 {
@@ -53,8 +84,8 @@ int TestSystem(int, char *[])
   unsigned long size4 = sizeof(std::streamsize);
   if( size1 > size2 )
     {
-    std::cerr << "size_t is not approriate on this system" << std::endl;
-    return 1;
+    std::cerr << "size_t is not appropriate on this system" << std::endl;
+    //return 1;
     }
   if( size2 != size4 )
     {
@@ -62,8 +93,10 @@ int TestSystem(int, char *[])
     return 1;
     }
 
-  char datetime[18];
-  int res = gdcm::System::GetCurrentDateTime(datetime);
+  char datetime[22];
+  bool bres = gdcm::System::GetCurrentDateTime(datetime);
+  assert( bres );
+  assert( datetime[21] == 0 );
   std::cerr << datetime << std::endl;
 
   const char *cwd = gdcm::System::GetCWD();
@@ -94,6 +127,187 @@ int TestSystem(int, char *[])
     std::cerr << exename << "!=" << fn.GetName() << std::endl;
     return 1;
     }
- 
-  return 0;
+
+{
+  char date[22];
+  if( !gdcm::System::GetCurrentDateTime( date ) )
+    {
+    return 1;
+    }
+  assert( date[21] == 0 );
+  time_t timep; long milliseconds;
+  if( !gdcm::System::ParseDateTime(timep, milliseconds, date) )
+    {
+    return 1;
+    }
+  char date2[22];
+  if( !gdcm::System::FormatDateTime(date2, timep, milliseconds) )
+    {
+    return 1;
+    }
+  assert( date2[21] == 0 );
+
+  if( strcmp( date, date2 ) != 0 )
+    {
+    std::cerr << "date1=" << date << std::endl;
+    std::cerr << "date2=" << date2 << std::endl;
+    return 1;
+    }
+}
+  // Skip millisecond this time:
+{
+  char date[22+1];
+  if( !gdcm::System::GetCurrentDateTime( date ) )
+    {
+    return 1;
+    }
+  date[14] = 0;
+  std::cout << date << std::endl;
+  time_t timep; long milliseconds;
+  if( !gdcm::System::ParseDateTime(timep, date) )
+    {
+    std::cerr << "ParseDateTime" << std::endl;
+    return 1;
+    }
+  char date2[22+1];
+  date2[22] = 0;
+  if( !gdcm::System::FormatDateTime(date2, timep) )
+    {
+    std::cerr << "FormatDateTime" << std::endl;
+    return 1;
+    }
+
+  // FormatDateTime always print millisecond, only compare the date up to the millisecond:
+  if( strncmp( date, date2, strlen(date) ) != 0 )
+    {
+    std::cerr << "date1=" << date << std::endl;
+    std::cerr << "date2=" << date2 << std::endl;
+    return 1;
+    }
+}
+
+  //const char long_str8[] = " 0123456789";
+  //long l = 0;
+  //int n = sscanf( long_str8, "%8ld", &l );
+  //std::cout << "Long:" << l << std::endl;
+  
+  char hostname[255+1];
+  hostname[255] = 0;
+  if( gdcm::System::GetHostName( hostname ) )
+    {
+    std::cout << "Host:" <<  hostname << std::endl;
+    }
+  else
+  {
+  return 1;
+  }
+
+  //time_t t = gdcm::System::FileTime("/etc/debian_version");
+  //char date3[22];
+  //gdcm::System::FormatDateTime(date3, t);
+  //std::cout << date3 << std::endl;
+
+  const char fixed_date[] = "20090428172557.515500";
+  if( strlen( fixed_date ) != 21 )
+  {
+    return 1;
+  }
+  time_t fixed_timep;
+  long fixed_milliseconds;
+  if( !gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, fixed_date) )
+  {
+  return 1;
+  }
+  if( fixed_milliseconds != 515500 )
+{
+return 1;
+}
+  char fixed_date2[22];
+  if( !gdcm::System::FormatDateTime(fixed_date2, fixed_timep, fixed_milliseconds) )
+{
+  return 1;
+}
+assert( fixed_date2[21] == 0 );
+  if( strcmp( fixed_date, fixed_date2 ) != 0 )
+{
+  return 1;
+}
+
+  const char invalid_date1[] = "20090428172557.";
+if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date1) )
+{
+std::cerr << "should reject:" << invalid_date1 << std::endl;
+return 1;
+}
+  const char invalid_date2[] = "200";
+if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date2) )
+{
+std::cerr << "should reject:" << invalid_date2 << std::endl;
+return 1;
+}
+//  const char invalid_date3[] = "17890714172557";
+//if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date3) )
+//{
+//std::cerr << "should reject:" << invalid_date3 << std::endl;
+//char buffer[22];
+//gdcm::System::FormatDateTime( buffer, fixed_timep, fixed_milliseconds );
+//std::cerr << "Found" <<  buffer << std::endl;
+//return 1;
+//}
+//  const char invalid_date4[] = "19891714172557";
+//if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date4) )
+//{
+//std::cerr << "should reject:" << invalid_date4 << std::endl;
+//char buffer[22];
+//gdcm::System::FormatDateTime( buffer, fixed_timep, fixed_milliseconds );
+//std::cerr << "Found" <<  buffer << std::endl;
+//
+//return 1;
+//}
+//  const char invalid_date5[] = "19890014172557";
+//if( gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, invalid_date5) )
+//{
+//std::cerr << "should reject:" << invalid_date5 << std::endl;
+//char buffer[22];
+//gdcm::System::FormatDateTime( buffer, fixed_timep, fixed_milliseconds );
+//std::cerr << "Found" <<  buffer << std::endl;
+//
+//return 1;
+//}
+  const char valid_date1[] = "19890714172557";
+if( !gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, valid_date1) )
+{
+std::cerr << "should accept:" << valid_date1 << std::endl;
+return 1;
+}
+  int res = 0;
+  res +=  TestGetTimeOfDay();
+
+  const char * testfilesize = gdcm::Testing::GetTempFilename( "filesize.bin" );
+if( gdcm::System::FileExists( testfilesize ) )
+{
+  gdcm::System::RemoveFile(testfilesize);
+}
+
+  size_t ss1 = gdcm::System::FileSize( testfilesize );
+if( ss1 != 0 )
+{
+std::cerr << "found:" << ss1 << std::endl;
+  ++res;
+}
+
+  std::ofstream os( testfilesize );
+  const char coucou[] = "coucou";
+  os << coucou;
+  os.flush();
+  os.close();
+
+  size_t ss2 = gdcm::System::FileSize( testfilesize );
+  if( ss2 != strlen( coucou ) ) 
+{
+std::cerr << "found:" << ss2 << std::endl;
+  res++;
+}
+   
+  return res;
 }

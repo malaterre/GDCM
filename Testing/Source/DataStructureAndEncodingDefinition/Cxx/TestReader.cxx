@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -18,9 +18,10 @@
 #include "gdcmTesting.h"
 #include "gdcmMediaStorage.h"
 
-int TestRead(const char* filename)
+int TestRead(const char* filename, bool verbose = false)
 {
-  std::cerr << "TestRead: " << filename << std::endl;
+  if( verbose )
+  std::cout << "TestRead: " << filename << std::endl;
 
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -40,11 +41,20 @@ int TestRead(const char* filename)
   ms.SetFromFile( reader.GetFile() );
   if( ms.IsUndefined() )
     {
-    std::cerr << "TestReadError: MediaStorage: " << ms << std::endl;
+    std::cerr << "TestReadError: MediaStorage: " << filename << std::endl;
     return 1;
     }
 
-  std::cerr << "Found MediaStorage: " << ms << std::endl;
+  // Make sure it is the right one:
+
+  const char *ref = gdcm::Testing::GetMediaStorageFromFile(filename);
+
+  if( ms != gdcm::MediaStorage::GetMSType(ref) )
+    {
+    
+    std::cerr << "Error: Found MediaStorage: " << ms << " for " << filename << std::endl;
+    return 1;
+    }
 
   return 0;
 }
@@ -54,7 +64,7 @@ int TestReader(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestRead(filename);
+    return TestRead(filename, true);
     }
 
   // else

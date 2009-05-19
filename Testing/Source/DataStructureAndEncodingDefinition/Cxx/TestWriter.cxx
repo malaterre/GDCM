@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -96,6 +96,11 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 // 2. > (0x2001,0x1068) SQ ?   VR=<SQ>   VL=<0xffffffff> is sent twice (don't ask), second entry cannot be stored...
 // dcdump kindda show file are somewhat compatible.
 { "69ca7a4300967cf2841da34d7904c6c4" , "TheralysGDCM120Bug.dcm" }, // size mismatch
+
+// GDCM 1.0 generated file. At that time, VL for a start/end item delimitor would be set to 0xFFF... instead of 0x0
+// dcmtk / dicom3tools do not seems to care about the value stored for VL, so does GDCM (now).
+// As a side note the FMI was set to Little Endian Implicit ...
+{ "ddf83cd708e58021a633588927d55ab8" , "BugGDCM2_UndefItemWrongVL.dcm" }, // size mismatch
 
 
 { 0 ,0 }

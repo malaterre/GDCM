@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,7 +24,7 @@ class RAWInternals;
 /**
  * \brief RAWCodec class
  */
-class RAWCodec : public ImageCodec
+class GDCM_EXPORT RAWCodec : public ImageCodec
 {
 public:
   RAWCodec();
@@ -33,6 +33,9 @@ public:
   bool CanDecode(TransferSyntax const &ts) const;
   bool Decode(DataElement const &is, DataElement &os);
   bool Code(DataElement const &in, DataElement &out);
+
+  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 

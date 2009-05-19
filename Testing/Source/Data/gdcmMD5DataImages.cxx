@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -625,7 +625,19 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "79b8705f2e6c7464bd3e2fc7e1d3483b" , "TestVRSQUN2.dcm" },
 { "71e4ea61df4f7ada2955799c91f93e74" , "TestVRSQUN1.dcm" },
 
+{ "6396332b75b15bf30b1dd1cd0f212691" , "SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm" },
+{ "ba8dae4b43075c7e8562f5addf5f95c3" , "DX_GE_FALCON_SNOWY-VOI.dcm" },
+{ "a03fa65f1a64b40ed62babe0ab5e4f0c" , "JPEG_LossyYBR.dcm" },
+{ "43f33c06d56f239ce9ed5ca0d66a69d2" , "PHILIPS_Brilliance_ExtraBytesInOverlay.dcm" },
+{ "dae9d2e2b412646fd0a0f31dc2d17aa4" , "BugGDCM2_UndefItemWrongVL.dcm" },
 
+
+{ "62687f0a17e9c4153f18b55c8abfcef3" , "SIEMENS_CSA2.dcm" },
+{ "37647008dc1c94096f4e996b409b9d30" , "MAROTECH_CT_JP2Lossy.dcm" },
+{ "8b5e38699887158c3defd47900a68fc5" , "ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm" },
+
+
+{ "c57035e2dac52e339b27e8c965251b3d" , "DCMTK_JPEGExt_12Bits.dcm" }, // checked with dcmdjpeg v3.5.4+ 2009-05-07
 
 
 

@@ -7,7 +7,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,7 +24,7 @@
 namespace gdcm
 {
         static const char * const TransferSyntaxStrings[][2] = {
-{"",""},
+{NULL,NULL}, // Starts a 1, not 0
 {"1.2.840.10008.1.1","Verification SOP Class"},
 {"1.2.840.10008.1.2","Implicit VR Little Endian: Default Transfer Syntax for DICOM"},
 {"1.2.840.10008.1.2.1","Explicit VR Little Endian"},
@@ -320,14 +320,17 @@ namespace gdcm
 {"1.2.840.113619.4.26"     , "GE Private 3D Model Storage" },
 {"1.2.840.113619.4.30"     , "GE Advance (PET) Raw Data Storage" },
 {"2.16.840.1.113709.1.5.1" , "GEPACS_PRIVATE_IMS_INFO Storage" },
+{"2.16.840.1.113709.1.2.2" , "COMPRESS_EXPRESS TRANSFER SYNTAX" },
 {"1.2.840.113543.6.6.1.3.10002", "Unregistred (?) Philips3D" },
 {"1.2.392.200036.9116.7.8.1.1.1", "Toshiba Private Data Storage" },
 /* CREF4.09-80_iSite4.1DICOMConformance.pdf 
 Correction: 1.2.840113619.4.27 -> 1.2.840.113619.4.27 ... sigh
+DICOM_Conformance_Statement_MR_R2.6.pdf
 */
 {"1.2.840.113619.4.27"       ,"GE Nuclear Medicine private SOP Class"}, 
-{"1.3.46.670589.11.0.0.12.1"       ,"Philips Private Gyroscan MR Spectrum"}, 
-{"1.3.46.670589.11.0.0.12.2"       ,"Philips Private Gyroscan MR Serie Data"}, 
+{"1.3.46.670589.11.0.0.12.1"       ,"Philips Private MR Spectrum Storage"}, 
+{"1.3.46.670589.11.0.0.12.2"       ,"Philips Private MR Series Data Storage"}, 
+{"1.3.46.670589.11.0.0.12.4"       ,"Philips Private MR Examcard Storage"}, 
 {"1.3.46.670589.2.3.1.1"       ,"Philips Private Specialized XA Image"}, 
 {"1.3.46.670589.2.4.1.1"       ,"Philips Private CX Image Storage"}, 
 {"1.3.46.670589.2.5.1.1"       ,"Philips iE33 private 3D Object Storage"}, 
@@ -355,14 +358,30 @@ Correction: 1.2.840113619.4.27 -> 1.2.840.113619.4.27 ... sigh
 };
 
 
-const char* UIDs::GetUIDString(/*TSType*/ int ts)
+unsigned int UIDs::GetNumberOfTransferSyntaxStrings()
 {
-  return TransferSyntaxStrings[(int)ts][0];
+  // Do not count NULL sentinels at end
+  static const unsigned int size = sizeof(TransferSyntaxStrings)/sizeof(*TransferSyntaxStrings) - 2;
+  return size;
 }
 
-const char* UIDs::GetUIDName(/*TSType*/ int ts)
+const char * const * UIDs::GetTransferSyntaxString(unsigned int ts)
 {
-  return TransferSyntaxStrings[(int)ts][1];
+  if( ts > 0 && ts <= UIDs::GetNumberOfTransferSyntaxStrings() ) return TransferSyntaxStrings[ts];
+  // else return the {0x0, 0x0} sentinel (begin or end)
+  assert( *TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ] == 0 );
+  assert( *TransferSyntaxStrings[ 0 ] == 0 );
+  return TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ];
+}
+
+const char* UIDs::GetUIDString(/*TSType*/ unsigned int ts)
+{
+  return UIDs::GetTransferSyntaxString(ts)[0];
+}
+
+const char* UIDs::GetUIDName(/*TSType*/ unsigned int ts)
+{
+  return UIDs::GetTransferSyntaxString(ts)[1];
 }
 
 UIDs::TransferSyntaxStringsType UIDs::GetTransferSyntaxStrings()
@@ -372,16 +391,16 @@ UIDs::TransferSyntaxStringsType UIDs::GetTransferSyntaxStrings()
 
 bool UIDs::SetFromUID(const char *str)
 {
+  TSField = (TSType)0;
   if(!str) return false;
   //static const unsigned int size = sizeof(TransferSyntaxStrings) / sizeof(*TransferSyntaxStrings) - 1;
   TransferSyntaxStringsType uids = GetTransferSyntaxStrings();
 
-  int i = 0;
+  int i = 1; // Start at 1, not 0
   const char *p = uids[i][0];
-  TSField = (TSType)0;
   while( p != 0 )
     {
-    if( strcmp( str, p ) == 0 )
+    if( strcmp( p, str ) == 0 )
       {
       break;
       }
@@ -389,11 +408,21 @@ bool UIDs::SetFromUID(const char *str)
     p = uids[i][0];
     }
   //const char * found = uids[i][1];
-  if( p ) TSField = TSType(i);
+  if( p )
+    {
+    TSField = TSType(i);
+    assert( TSField != (TSType)0 );
+    return true;
+    }
 
-  return true;
+  assert( TSField == (TSType)0 );
+  return false;
 }
 
+const char *UIDs::GetString() const
+{
+  return GetUIDString(TSField);
+}
 const char *UIDs::GetName() const
 {
   return GetUIDName(TSField);

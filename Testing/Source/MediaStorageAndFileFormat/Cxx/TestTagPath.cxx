@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmTagPath.h"
+#include "gdcmTag.h"
 
 int TestTagPath(int argc, char *argv[])
 {
@@ -21,13 +22,43 @@ int TestTagPath(int argc, char *argv[])
   gdcm::TagPath tp;
 
   const char path[] = "/0010,0010";
-  tp.ConstructFromString( path );
+  if( !gdcm::TagPath::IsValid( path ) )
+    {
+    return 1;
+    }
+  if( !tp.ConstructFromString( path ) )
+    {
+    return 1;
+    }
 
   tp.Print( std::cout );
 
-  const char path2[] = "/0010,0011/1234,5678";
-  tp.ConstructFromString( path2 );
+  const char path2[] = "/0010,0011/*/1234,5678";
+  if( !gdcm::TagPath::IsValid( path2 ) )
+    {
+    return 1;
+    }
+  if( !tp.ConstructFromString( path2 ) )
+    {
+    return 1;
+    }
 
+  std::cout << "FromString:" << std::endl;
+  tp.Print( std::cout );
+
+  const unsigned int n = 10;
+  gdcm::Tag list[n];
+  for(unsigned i = 0; i < n; ++i)
+    {
+    list[i].SetGroup( 0x1234 );
+    list[i].SetElement( i );
+    }
+
+  if( !tp.ConstructFromTagList( list, n ) )
+    {
+    return 1;
+    }
+  std::cout << "TagList:" << std::endl;
   tp.Print( std::cout );
 
 

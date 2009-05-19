@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -25,6 +25,7 @@ namespace gdcm
  */
 class GDCM_EXPORT Orientation
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Orientation &o);
 public:
   Orientation();
   ~Orientation();
@@ -44,6 +45,10 @@ public:
   /// Input is an array of 6 double
   static OrientationType GetType(const double dircos[6]);
 
+  /// ObliquityThresholdCosineValue stuff
+  static void SetObliquityThresholdCosineValue(double val);
+  static double GetObliquityThresholdCosineValue();
+
   /// Return the label of an Orientation
   static const char *GetLabel(OrientationType type);
 
@@ -51,8 +56,14 @@ protected:
   static char GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z);
 
 private:
-  static const double obliquityThresholdCosineValue;
+  static double ObliquityThresholdCosineValue;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Orientation &o)
+{
+  o.Print( os );
+  return os;
+}
 
 } // end namespace gdcm
 

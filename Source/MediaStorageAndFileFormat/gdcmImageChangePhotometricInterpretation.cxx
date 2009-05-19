@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -30,7 +30,12 @@ YBR_FULL as Photometric Interpretation is really the right thing to do. The prob
 */
 bool ImageChangePhotometricInterpretation::ChangeMonochrome()
 {
-  const Image &image = *Input;
+  // Ok let's give up on this one for now.
+  // We would need to take care of Pixel Padding Value to actually be able to invert the image
+  // without this information we potentially will be making mistake. just like Largest Image Pixel Value and other
+  // would be wrong
+  return false;
+  const Pixmap &image = *Input;
   PhotometricInterpretation pi = image.GetPhotometricInterpretation();
   assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
   if( pi == PI )

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -44,7 +44,7 @@ bool ImageChangePlanarConfiguration::Change()
     return true;
     }
 
-  const Image &image = *Input;
+  const Pixmap &image = *Input;
 
   const unsigned int *dims = image.GetDimensions();
   unsigned long len = image.GetBufferLength();
@@ -91,6 +91,20 @@ bool ImageChangePlanarConfiguration::Change()
   delete[] copy;
 
   Output->SetPlanarConfiguration( PlanarConfiguration );
+  if( Input->GetTransferSyntax().IsImplicit() )
+    {
+    assert( Output->GetTransferSyntax().IsImplicit() );
+    }
+  else if( Input->GetTransferSyntax() == TransferSyntax::ExplicitVRBigEndian )
+    {
+    Output->SetTransferSyntax( TransferSyntax::ExplicitVRBigEndian );
+    }
+  else
+    {
+    Output->SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
+    }
+  //assert( Output->GetTransferSyntax().IsRaw() );
+  assert( Output->GetPhotometricInterpretation() == Input->GetPhotometricInterpretation() );
 
   return true;
 }

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -71,6 +71,19 @@ bool FilenameGenerator::Generate()
       {
       gdcmDebugMacro( "Need to specify the number of files" );
       // I am pretty sure this is an error:
+      return false;
+      }
+    const char *pattern = Pattern.c_str();
+    int num_percent = 0;
+    while( (pattern = strchr( pattern, '%')) )
+      {
+      ++pattern;
+      ++num_percent;
+      }
+    if ( num_percent != 1 )
+      {
+      // Bug: what if someone wants to output file such as %%%02 ... oh well
+      gdcmDebugMacro( "No more than one % in string formating please" );
       return false;
       }
     bool success = true;

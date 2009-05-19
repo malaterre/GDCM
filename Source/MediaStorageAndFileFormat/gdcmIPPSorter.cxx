@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -15,6 +15,7 @@
 #include "gdcmIPPSorter.h"
 #include "gdcmScanner.h"
 #include "gdcmElement.h"
+#include "gdcmDirectionCosines.h"
 
 #include <map>
 #include <math.h>
@@ -34,14 +35,26 @@ IPPSorter::~IPPSorter()
 {
 }
 
+inline double spacing_round(double n, int d) /* pow is defined as pow( double, double) or pow(double int) on M$ comp */
+{
+  return floor(n * pow(10., d) + .5) / pow(10., d);
+} 
 
 bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
-  Filenames.clear(); // cleanup !
+  // BUG: I cannot clear Filenames since input filenames could also be the output of ourself...
+  // Filenames.clear();
   ZSpacing = 0;
+  if( filenames.empty() )
+    {
+    Filenames.clear();
+    return true;
+    }
+
   Scanner scanner;
   const Tag ipp(0x0020,0x0032); // Image Position (Patient)
   const Tag iop(0x0020,0x0037); // Image Orientation (Patient)
+  const Tag frame(0x0020,0x0052); // Frame of Reference UID
   // Temporal Position Identifier (0020,0100) 3 Temporal order of a dynamic or functional set of Images.
   //const Tag tpi(0x0020,0x0100);
   scanner.AddTag( ipp );
@@ -49,21 +62,36 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   bool b = scanner.Scan( filenames );
   if( !b )
     {
-    //std::cerr << "Scanner failed" << std::endl;
+    gdcmDebugMacro( "Scanner failed" );
     return false;
     }
+  Scanner::ValuesType iops = scanner.GetValues(iop);
+  Scanner::ValuesType frames = scanner.GetValues(frame);
+  if( iops.size() != 1 )
+    {
+    gdcmDebugMacro( "More than one IOP (or no IOP)" );
+    return false;
+    }
+  if( frames.size() > 1 ) // Should I really tolerate no Frame of Reference UID ?
+    {
+    gdcmDebugMacro( "More than one Frame Of Reference UID" );
+    return false;
+    }
+
   const char *reference = filenames[0].c_str();
   Scanner::TagToValue const &t2v = scanner.GetMapping(reference);
   Scanner::TagToValue::const_iterator it = t2v.find( iop );
   // Take the first file in the list of filenames, if not IOP is found, simply gives up:
   if( it == t2v.end() )
     {
-    //std::cerr << "No iop in: " << reference << std::endl;
+    // DEAD CODE
+    gdcmDebugMacro( "No iop in: " << reference );
     return false;
     }
   if( it->first != iop )
     {
     // first file does not contains Image Orientation (Patient), let's give up
+    gdcmDebugMacro( "No iop in first file ");
     return false;
     }
   const char *dircos = it->second;
@@ -81,6 +109,14 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
   normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
 
+  gdcm::DirectionCosines dc;
+  dc.SetFromString( dircos );
+  if( !dc.IsValid() ) return false;
+  double normal2[3];
+  dc.Cross( normal2 );
+  assert( normal2[0] == normal[0] && 
+          normal2[1] == normal[1] &&
+          normal2[2] == normal[2] );
   // You only have to do this once for all slices in the volume. Next, for
   // each slice, calculate the distance along the slice normal using the IPP
   // tag ("dist" is initialized to zero before reading the first slice) :
@@ -95,7 +131,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     const char *value =  scanner.GetValue(filename, ipp);
     if( value )
       {
-      //std::cout << filename << " has " << ipp << " = " << value << std::endl;
+      //gdcmDebugMacro( filename << " has " << ipp << " = " << value );
       Element<VR::DS,VM::VM3> ipp;
       std::stringstream ss;
       ss.str( value );
@@ -105,7 +141,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       // FIXME: This test is weak, since implicitely we are doing a != on floating point value
       if( sorted.find(dist) != sorted.end() )
         {
-        std::cerr << "dist: " << dist << " already found" << std::endl;
+        gdcmDebugMacro( "dist: " << dist << " already found" );
         return false;
         }
       sorted.insert(
@@ -144,7 +180,10 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     // is spacing good ?
     if( spacingisgood && ComputeZSpacing )
       {
-      ZSpacing = zspacing;
+      // If user ask for a ZTolerance of 1e-4, there is no need for us to 
+      // store the extra digits... this will make sure to return 2.2 from a 2.1999938551239993 value
+      const int l = -log10(ZTolerance);
+      ZSpacing = spacing_round(zspacing, l);
       }
     assert( spacingisgood == false ||  (ZSpacing > ZTolerance && ZTolerance > 0) );
     }
@@ -152,6 +191,12 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 
   // return true: means sorting succeed, it does not mean spacing computation succeded !
   return true;
+}
+
+bool IPPSorter::ComputeSpacing(std::vector<std::string> const & filenames)
+{
+  (void)filenames;
+  return false;
 }
 
 } // end namespace gdcm

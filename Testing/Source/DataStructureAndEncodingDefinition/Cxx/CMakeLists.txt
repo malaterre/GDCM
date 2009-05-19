@@ -2,6 +2,7 @@
 # DSED
 SET(DSED_TEST_SRCS
 	TestAttribute
+	TestAttribute1
 	TestAttribute7
   #TestReadPatientName
   TestLO
@@ -20,6 +21,8 @@ SET(DSED_TEST_SRCS
   #TestDataElement
   TestDataSet
   TestVRDS
+  TestVRLT
+  TestVRUI
   TestElement
   #TestExplicitDataElement
   TestFileMetaInformation
@@ -27,7 +30,7 @@ SET(DSED_TEST_SRCS
   TestFileSet
   TestFragment
   #TestImplicitDataElement
-  #TestItem
+  TestItem
   #TestParser
   TestSequenceOfFragments
   TestSequenceOfItems
@@ -85,6 +88,9 @@ INCLUDE_DIRECTORIES(
 CREATE_TEST_SOURCELIST(DSEDTests gdcmDSEDTests.cxx ${DSED_TEST_SRCS})
 ADD_EXECUTABLE(gdcmDSEDTests ${DSEDTests})
 TARGET_LINK_LIBRARIES(gdcmDSEDTests gdcmDSED)
+IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+  SET_TARGET_PROPERTIES( gdcmDSEDTests PROPERTIES LINK_FLAGS "-Wl,--allow-multiple-definition")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 
 #Don't understand why I need that ??
 SET(GDCM_DSED_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDSEDTests")

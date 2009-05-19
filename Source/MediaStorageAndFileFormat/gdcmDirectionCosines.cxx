@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -16,35 +16,42 @@
 
 #include <limits>
 #include <math.h> // fabs
+#include <stdio.h> // sscanf
 
 namespace gdcm
 {
 
-DirectionCosines::DirectionCosines(const double *dircos)
+DirectionCosines::DirectionCosines()
 {
-  if( dircos )
-    {
-    Values[0] = dircos[0];
-    Values[1] = dircos[1];
-    Values[2] = dircos[2];
-    Values[3] = dircos[3];
-    Values[4] = dircos[4];
-    Values[5] = dircos[5];
-    }
-  else
-    {
     Values[0] = 1;
     Values[1] = 0;
     Values[2] = 0;
     Values[3] = 0;
     Values[4] = 1;
     Values[5] = 0;
-    }
+}
+
+DirectionCosines::DirectionCosines(const double dircos[6])
+{
+    Values[0] = dircos[0];
+    Values[1] = dircos[1];
+    Values[2] = dircos[2];
+    Values[3] = dircos[3];
+    Values[4] = dircos[4];
+    Values[5] = dircos[5];
 }
 
 DirectionCosines::~DirectionCosines() {}
 
-void DirectionCosines::Print(std::ostream &) const {}
+void DirectionCosines::Print(std::ostream &os) const
+{
+  os << Values[0] << ",";
+  os << Values[1] << ",";
+  os << Values[2] << ",";
+  os << Values[3] << ",";
+  os << Values[4] << ",";
+  os << Values[5];
+}
 
 bool DirectionCosines::IsValid() const
 {
@@ -112,6 +119,44 @@ void DirectionCosines::Normalize()
     }
 }
 
+bool DirectionCosines::SetFromString(const char *str)
+{
+  if( !str ) return false;
+  int n = sscanf( str, "%lf\\%lf\\%lf\\%lf\\%lf\\%lf", Values, Values+1, Values+2, Values+3, Values+4, Values+5 );
+  if( n == 6 )
+    {
+    return true;
+    }
+  // else
+  Values[0] = 1;
+  Values[1] = 0;
+  Values[2] = 0;
+  Values[3] = 0;
+  Values[4] = 1;
+  Values[5] = 0;
+  return false;
+}
+
+double DirectionCosines::CrossDot(DirectionCosines const &dc) const
+{
+  double z1[3];
+  Cross(z1);
+  double z2[3];
+  dc.Cross(z2);
+
+  const double *x = z1;
+  const double *y = z2;
+  return x[0]*y[0] + x[1]*y[1] + x[2]*y[2];
+}
+
+double DirectionCosines::ComputeDistAlongNormal(const double ipp[3]) const
+{
+  double normal[3];
+  Cross(normal);
+  double dist = 0.;
+  for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
+  return dist;
+}
 
 
 }

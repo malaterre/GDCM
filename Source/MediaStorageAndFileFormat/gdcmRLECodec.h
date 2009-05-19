@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -31,7 +31,7 @@ class RLEInternals;
  * be encoded separately. Each frame shall be encoded in one and only one Fragment (see PS 3.5.8.2).
  *
  */
-class RLECodec : public ImageCodec
+class GDCM_EXPORT RLECodec : public ImageCodec
 {
 public:
   RLECodec();
@@ -43,6 +43,7 @@ public:
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
   bool Code(DataElement const &in, DataElement &out);
+  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);

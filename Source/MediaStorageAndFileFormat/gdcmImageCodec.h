@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -36,8 +36,13 @@ public:
   ~ImageCodec();
   bool CanDecode(TransferSyntax const &) const { return false; }
   bool Decode(DataElement const &is, DataElement &os);
+  bool IsLossy() const;
+
+  virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
+  virtual bool IsValid(PhotometricInterpretation const &pi);
 public:
 
   unsigned int GetPlanarConfiguration() const
@@ -50,6 +55,10 @@ public:
     PlanarConfiguration = pc;
     }
 
+  PixelFormat &GetPixelFormat()
+    {
+    return PF;
+    }
   const PixelFormat &GetPixelFormat() const
     {
     return PF;
@@ -104,6 +113,7 @@ protected:
   LUTPtr LUT;
   unsigned int Dimensions[3]; // FIXME
   unsigned int NumberOfDimensions;
+  bool LossyFlag;
 
   bool DoOverlayCleanup(std::istream &is, std::ostream &os);
   bool DoByteSwap(std::istream &is, std::ostream &os);

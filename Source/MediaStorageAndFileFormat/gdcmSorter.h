@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -26,9 +26,18 @@ namespace gdcm
 {
 /**
  * \brief Sorter
+ * General class to do sorting using a custom function
+ * You simply need to provide a function of type: Sorter::SortFunction
+ *
+ * \warning implementation details. For now there is no cache mechanism. Which means
+ * that everytime you call Sort, all files specified as input paramater are *read*
+ * 
+ * \see Scanner
  */
+class DataSet;
 class GDCM_EXPORT Sorter
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Sorter &s);
 public:
   Sorter();
   virtual ~Sorter();
@@ -41,16 +50,29 @@ public:
   const std::vector<std::string> &GetFilenames() const { return Filenames; }
 
   /// Print
-  void Print( std::ostream &os);
+  void Print(std::ostream &os) const;
 
   /// UNSUPPORTED FOR NOW
   bool AddSelect( Tag const &tag, const char *value );
+
+  /// Set the sort function which compares one dataset to the other
+  typedef bool (*SortFunction)(DataSet const &, DataSet const &);
+  void SetSortFunction( SortFunction f );
+
+  virtual bool StableSort(std::vector<std::string> const & filenames);
 
 protected:
   std::vector<std::string> Filenames;
   typedef std::map<Tag,std::string> SelectionMap;
   std::map<Tag,std::string> Selection;
+  SortFunction SortFunc;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Sorter &s)
+{
+  s.Print( os );
+  return os;
+}
 
 
 } // end namespace gdcm

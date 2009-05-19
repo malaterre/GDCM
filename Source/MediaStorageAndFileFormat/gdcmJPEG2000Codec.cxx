@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -79,8 +79,9 @@ void JPEG2000Codec::SetRate(unsigned int idx, double rate)
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
     }
-				Internals->coder_param.cp_disto_alloc = 1;
+  Internals->coder_param.cp_disto_alloc = 1;
 }
+
 double JPEG2000Codec::GetRate(unsigned int idx ) const
 {
   return Internals->coder_param.tcp_rates[idx];
@@ -93,8 +94,9 @@ void JPEG2000Codec::SetQuality(unsigned int idx, double q)
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
     }
-				Internals->coder_param.cp_fixed_quality = 1;
+  Internals->coder_param.cp_fixed_quality = 1;
 }
+
 double JPEG2000Codec::GetQuality(unsigned int idx) const
 {
   return Internals->coder_param.tcp_distoratio[idx];
@@ -130,13 +132,13 @@ JPEG2000Codec::~JPEG2000Codec()
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless 
-    || ts == TransferSyntax::JPEG2000;
+      || ts == TransferSyntax::JPEG2000;
 }
 
 bool JPEG2000Codec::CanCode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless 
-    || ts == TransferSyntax::JPEG2000;
+      || ts == TransferSyntax::JPEG2000;
 }
 
 /*
@@ -182,6 +184,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
     assert( sf );
     std::stringstream os;
+    assert( sf->GetNumberOfFragments() == Dimensions[2] );
     for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
       {
       std::stringstream is;
@@ -221,7 +224,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
-  int file_length = buf_size;
+  uint32_t file_length = buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
 
   // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
   // so we need to make sure to remove it:
@@ -229,11 +232,12 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   //             and D_CLUNIE_CT1_J2KR.dcm
     //  Marker 0xffd9 EOI End of Image (JPEG 2000 EOC End of codestream)
     // gdcmData/D_CLUNIE_CT1_J2KR.dcm contains a trailing 0xFF which apparently is ok...
-    //assert( src[file_length-1] == 0xd9 );
-  while( src[file_length-1] != 0xd9 )
+  while( file_length > 0 && src[file_length-1] != 0xd9 )
     {
     file_length--;
     }
+  // what if 0xd9 is never found ?
+  assert( file_length > 0 && src[file_length-1] == 0xd9 );
 
   /* configure the event callbacks (not required) */
   memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
@@ -253,8 +257,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   const char jp2magic[] = "\x00\x00\x00\x0C\x6A\x50\x20\x20\x0D\x0A\x87\x0A";
   if( memcmp( src, jp2magic, sizeof(jp2magic) ) == 0 )
     {
-    /* JPEG-2000 compressed image data */
+    /* JPEG-2000 compressed image data ... sigh */
     // gdcmData/ELSCINT1_JP2vsJ2K.dcm
+    // gdcmData/MAROTECH_CT_JP2Lossy.dcm
     gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
     parameters.decod_format = JP2_CFMT;
     assert(parameters.decod_format == JP2_CFMT);
@@ -269,7 +274,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
-  switch(parameters.decod_format )
+  switch(parameters.decod_format)
     {
   case J2K_CFMT:
     dinfo = opj_create_decompress(CODEC_J2K);
@@ -278,11 +283,12 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     dinfo = opj_create_decompress(CODEC_JP2);
     break;
   default:
-    abort();
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
     }
 
   /* catch events using our callbacks and give a local context */
-  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
+  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
@@ -295,18 +301,70 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   if(!image) {
     opj_destroy_decompress(dinfo);
     opj_cio_close(cio);
+    gdcmErrorMacro( "opj_decode failed" );
     return false;
   }
+
+#if 0
+  if( image->color_space )
+    {
+    if( image->color_space == CLRSPC_GRAY )
+      {
+      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 
+        || this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+        || this->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR );
+      }
+    else if( image->color_space == CLRSPC_SRGB )
+      {
+      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
+      }
+    else
+      {
+      abort();
+      }
+    }
+#endif
+  
+  int reversible;
+  opj_j2k_t* j2k = NULL;
+  opj_jp2_t* jp2 = NULL;
+
+  switch(parameters.decod_format)
+    {
+  case J2K_CFMT:
+    j2k = (opj_j2k_t*)dinfo->j2k_handle;
+    assert( j2k );
+    reversible = j2k->cp->tcps->tccps->qmfbid;
+    break;
+  case JP2_CFMT:
+    jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+    assert( jp2 );
+    reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+    break;
+  default:
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
+    }
+  LossyFlag = !reversible;
+#if 0
+#ifndef GDCM_USE_SYSTEM_OPENJPEG
+  if( j2k )
+    j2k_dump_cp(stdout, image, j2k->cp);
+  if( jp2 )
+    j2k_dump_cp(stdout, image, jp2->j2k->cp);
+#endif
+#endif
+
+  assert( image->numcomps == this->GetPixelFormat().GetSamplesPerPixel() );
+  assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
+
 
   /* close the byte stream */
   opj_cio_close(cio);
 
-  //raw = (char*)src;
   // Copy buffer
-    char *raw = NULL;
-  //assert(image->prec % 8 == 0);
-  unsigned long len = Dimensions[0]*Dimensions[1] /* *Dimensions[2]*/ * (PF.GetBitsAllocated() / 8) * image->numcomps;
-  raw = new char[len];
+  unsigned long len = Dimensions[0]*Dimensions[1] * (PF.GetBitsAllocated() / 8) * image->numcomps;
+  char *raw = new char[len];
   for (int compno = 0; compno < image->numcomps; compno++)
     {
     opj_image_comp_t *comp = &image->comps[compno];
@@ -318,9 +376,21 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
     //assert(  wr * hr * 1 * image->numcomps * (comp->prec/8) == len );
 
+    // ELSCINT1_JP2vsJ2K.dcm
+    // -> prec = 12, bpp = 0, sgnd = 0
+    //assert( wr == Dimensions[0] );
+    //assert( hr == Dimensions[1] );
+    if( comp->bpp == PF.GetBitsAllocated() )
+      {
+      gdcmWarningMacro( "BPP = " << comp->bpp << " vs BitsAllocated = " << PF.GetBitsAllocated() );
+      }
+    assert( comp->sgnd == PF.GetPixelRepresentation() );
+    assert( comp->prec == PF.GetBitsStored());
+    assert( comp->prec - 1 == PF.GetHighBit());
+    assert( comp->prec <= 32 );
+
     if (comp->prec <= 8)
       {
-      assert( comp->prec == 8 && comp->prec == PF.GetBitsAllocated() );
       uint8_t *data8 = (uint8_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
@@ -332,7 +402,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     else if (comp->prec <= 16)
       {
       // ELSCINT1_JP2vsJ2K.dcm is a 12bits image
-      //assert( comp->prec == 16 && comp->prec == PF.GetBitsAllocated());
       uint16_t *data16 = (uint16_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
@@ -343,7 +412,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     else
       {
-      assert( comp->prec == 32 && comp->prec == PF.GetBitsAllocated());
       uint32_t *data32 = (uint32_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
@@ -352,14 +420,11 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
         data32 += image->numcomps;
         }
       }
-    //free(image.comps[compno].data);
     }
-    os.write(raw, len );
-    delete[] raw;
+  os.write(raw, len );
+  delete[] raw;
   /* free the memory containing the code-stream */
   delete[] src;  //FIXME
-
-
 
   /* free remaining structures */
   if(dinfo) {
@@ -404,7 +469,7 @@ void rawtoimage_fill(T *inputbuffer, int w, int h, int numcomps, opj_image_t *im
 
 opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   int fragment_size, int image_width, int image_height, int sample_pixel,
-  int bitsallocated, int sign, int quality, int pc)
+  int bitsallocated, int bitsstored, int sign, int quality, int pc)
 {
   (void)quality;
   int w, h;
@@ -423,6 +488,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     {
     numcomps = 3;
     color_space = CLRSPC_SRGB;
+    /* Does OpenJPEg support: CLRSPC_SYCC ?? */
     }
   if( bitsallocated % 8 != 0 )
     {
@@ -442,7 +508,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   memset(&cmptparm[0], 0, 3 * sizeof(opj_image_cmptparm_t));
   //assert( bitsallocated == 8 );
   for(int i = 0; i < numcomps; i++) {
-    cmptparm[i].prec = bitsallocated;
+    cmptparm[i].prec = bitsstored;
     cmptparm[i].bpp = bitsallocated;
     cmptparm[i].sgnd = sign;
     cmptparm[i].dx = subsampling_dx;
@@ -500,7 +566,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     }
   else
     {
-    abort();
+    return NULL;
     }
 
   return image;
@@ -537,6 +603,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     const PixelFormat &pf = this->GetPixelFormat();
     int sample_pixel = pf.GetSamplesPerPixel();
     int bitsallocated = pf.GetBitsAllocated();
+    int bitsstored = pf.GetBitsStored();
     int sign = pf.GetPixelRepresentation();
     int quality = 100;
 
@@ -566,10 +633,11 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     memcpy(&parameters, &(Internals->coder_param), sizeof(parameters));
 
     if ((parameters.cp_disto_alloc || parameters.cp_fixed_alloc || parameters.cp_fixed_quality)
-      && (!(parameters.cp_disto_alloc ^ parameters.cp_fixed_alloc ^ parameters.cp_fixed_quality))) {
-      fprintf(stderr, "Error: options -r -q and -f cannot be used together !!\n");
+      && (!(parameters.cp_disto_alloc ^ parameters.cp_fixed_alloc ^ parameters.cp_fixed_quality)))
+      {
+      gdcmErrorMacro( "Error: options -r -q and -f cannot be used together." );
       return false;
-    }				/* mod fixed_quality */
+      }				/* mod fixed_quality */
 
     /* if no rate entered, lossless by default */
     if (parameters.tcp_numlayers == 0) 
@@ -594,7 +662,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     image = rawtoimage((char*)inputdata, &parameters, 
       static_cast<int>( inputlength ), 
       image_width, image_height,
-      sample_pixel, bitsallocated, sign, quality, this->GetPlanarConfiguration() );
+      sample_pixel, bitsallocated, bitsstored, sign, quality, this->GetPlanarConfiguration() );
     if (!image) {
       return false;
     }
@@ -685,17 +753,24 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 
 bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
-  opj_dparameters_t parameters;  /* decompression parameters */
-  opj_event_mgr_t event_mgr;    /* event manager */
-  opj_image_t *image;
-  opj_dinfo_t* dinfo;  /* handle to a decompressor */
-  opj_cio_t *cio;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
+  bool b = GetHeaderInfo( dummy_buffer, buf_size, ts );
+  delete[] dummy_buffer;
+  return b;
+}
+
+bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, TransferSyntax &ts)
+{
+  opj_dparameters_t parameters;  /* decompression parameters */
+  opj_event_mgr_t event_mgr;    /* event manager */
+  opj_image_t *image;
+  opj_dinfo_t* dinfo;  /* handle to a decompressor */
+  opj_cio_t *cio;
   unsigned char *src = (unsigned char*)dummy_buffer;
   int file_length = buf_size;
 
@@ -742,7 +817,8 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     dinfo = opj_create_decompress(CODEC_JP2);
     break;
   default:
-    abort();
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
     }
 
   /* catch events using our callbacks and give a local context */
@@ -759,81 +835,167 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   if(!image) {
     opj_destroy_decompress(dinfo);
     opj_cio_close(cio);
+    gdcmErrorMacro( "opj_decode failed" );
     return false;
   }
+
+  int reversible;
+  opj_j2k_t* j2k = NULL;
+  opj_jp2_t* jp2 = NULL;
+
+  switch(parameters.decod_format)
+    {
+  case J2K_CFMT:
+    j2k = (opj_j2k_t*)dinfo->j2k_handle;
+    assert( j2k );
+    reversible = j2k->cp->tcps->tccps->qmfbid;
+    break;
+  case JP2_CFMT:
+    jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+    assert( jp2 );
+    reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+    break;
+  default:
+    gdcmErrorMacro( "Impossible happen" );
+    return false;
+    }
+#if 0
+#ifndef GDCM_USE_SYSTEM_OPENJPEG
+  if( j2k )
+    j2k_dump_cp(stdout, image, j2k->cp);
+  if( jp2 )
+    j2k_dump_cp(stdout, image, jp2->j2k->cp);
+#endif
+#endif
 
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
 
-    this->Dimensions[0] = comp->w;
-    this->Dimensions[1] = comp->h;
+  if( image->numcomps == 3 )
+    {
+    opj_image_comp_t *comp1 = &image->comps[1];
+    opj_image_comp_t *comp2 = &image->comps[2];
+    bool invalid = false;
+    if( comp->bpp  != comp1->bpp  ) invalid = true;
+    if( comp->bpp  != comp2->bpp  ) invalid = true;
+    if( comp->prec != comp1->prec ) invalid = true;
+    if( comp->prec != comp2->prec ) invalid = true;
+    if( comp->sgnd != comp1->sgnd ) invalid = true;
+    if( comp->sgnd != comp2->sgnd ) invalid = true;
+    if( invalid )
+      {
+      gdcmErrorMacro( "Invalid test failed" );
+      return false;
+      }
+    }
 
-    if( comp->prec <= 8 )
-      {
-      this->PF = PixelFormat( PixelFormat::UINT8 );
-      }
-    else if( comp->prec <= 16 )
-      {
-      this->PF = PixelFormat( PixelFormat::UINT16 );
-      }
-    else if( comp->prec <= 32 )
-      {
-      this->PF = PixelFormat( PixelFormat::UINT32 );
-      }
-    else
-      {
-      abort();
-      }
-    this->PF.SetBitsStored( comp->prec );
-    this->PF.SetHighBit( comp->prec - 1 );
-    this->PF.SetPixelRepresentation( comp->sgnd );
+  this->Dimensions[0] = comp->w;
+  this->Dimensions[1] = comp->h;
 
-    if( image->numcomps == 1 )
-      {
-      assert( image->color_space == 0 );
-      PI = PhotometricInterpretation::MONOCHROME2;
-      this->PF.SetSamplesPerPixel( 1 );
-      }
-    else if( image->numcomps == 3 )
-      {
-      assert( image->color_space == 0 );
-      //PI = PhotometricInterpretation::RGB;
-/*
-8.2.4 JPEG 2000 IMAGE COMPRESSION
-The JPEG 2000 bit stream specifies whether or not a reversible or irreversible multi-component (color)
-transformation, if any, has been applied. If no multi-component transformation has been applied, then the
-components shall correspond to those specified by the DICOM Attribute Photometric Interpretation
-(0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation has been applied then
-the DICOM Attribute Photometric Interpretation (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1
-irreversible multi-component transformation has been applied then the DICOM Attribute Photometric
-Interpretation (0028,0004) shall be YBR_ICT.
-Notes: 1. For example, single component may be present, and the Photometric Interpretation (0028,0004) may
-be MONOCHROME2.
-PS 3.5-2008
-Page 51
-- Standard -
-2. Though it would be unusual, would not take advantage of correlation between the red, green and blue
-components, and would not achieve effective compression, a Photometric Interpretation of RGB could
-be specified as long as no multi-component transformation was specified by the JPEG 2000 bit stream.
-3. Despite the application of a multi-component color transformation and its reflection in the Photometric
-Interpretation attribute, the ¿color space¿ remains undefined. There is currently no means of conveying
-¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC profiles. Note in particular that
-the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated in DICOM.
-*/
-      PI = PhotometricInterpretation::YBR_RCT;
-      this->PF.SetSamplesPerPixel( 3 );
-      }
-    else
-      {
-      abort();
-      }
+  if( comp->prec <= 8 )
+    {
+    if( comp->bpp ) assert( comp->bpp == 8 );
+    this->PF = PixelFormat( PixelFormat::UINT8 );
+    }
+  else if( comp->prec <= 16 )
+    {
+    if( comp->bpp ) assert( comp->bpp == 16 );
+    this->PF = PixelFormat( PixelFormat::UINT16 );
+    }
+  else if( comp->prec <= 32 )
+    {
+    if( comp->bpp ) assert( comp->bpp == 32 );
+    this->PF = PixelFormat( PixelFormat::UINT32 );
+    }
+  else
+    {
+    gdcmErrorMacro( "do not handle precision: " << comp->prec );
+    return false;
+    }
+  this->PF.SetBitsStored( comp->prec );
+  this->PF.SetHighBit( comp->prec - 1 );
+  this->PF.SetPixelRepresentation( comp->sgnd );
+
+  if( image->numcomps == 1 )
+    {
+    assert( image->color_space == 0 );
+    PI = PhotometricInterpretation::MONOCHROME2;
+    this->PF.SetSamplesPerPixel( 1 );
+    }
+  else if( image->numcomps == 3 )
+    {
+    assert( image->color_space == 0 );
+    //PI = PhotometricInterpretation::RGB;
+    /*
+    8.2.4 JPEG 2000 IMAGE COMPRESSION
+    The JPEG 2000 bit stream specifies whether or not a reversible or irreversible multi-component (color)
+    transformation, if any, has been applied. If no multi-component transformation has been applied, then the
+    components shall correspond to those specified by the DICOM Attribute Photometric Interpretation
+    (0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation has been applied then
+    the DICOM Attribute Photometric Interpretation (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1
+    irreversible multi-component transformation has been applied then the DICOM Attribute Photometric
+    Interpretation (0028,0004) shall be YBR_ICT.
+    Notes: 1. For example, single component may be present, and the Photometric Interpretation (0028,0004) may
+    be MONOCHROME2.
+    2. Though it would be unusual, would not take advantage of correlation between the red, green and blue
+    components, and would not achieve effective compression, a Photometric Interpretation of RGB could
+    be specified as long as no multi-component transformation was specified by the JPEG 2000 bit stream.
+    3. Despite the application of a multi-component color transformation and its reflection in the Photometric
+    Interpretation attribute, the ¿color space¿ remains undefined. There is currently no means of conveying
+    ¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC profiles. Note in particular that
+    the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated in DICOM.
+     */
+    PI = PhotometricInterpretation::YBR_RCT;
+    this->PF.SetSamplesPerPixel( 3 );
+    }
+  else if( image->numcomps == 4 )
+    {
+    /* Yes this is legal */
+    // http://www.crc.ricoh.com/~gormish/jpeg2000conformance/
+    // jpeg2000testimages/Part4TestStreams/codestreams_profile0/p0_06.j2k
+    gdcmErrorMacro( "Image is 4 components which is not supported anymore in DICOM (ARGB is retired)" );
+    // TODO: How about I get the 3 comps and set the alpha plane in the overlay ?
+    return false;
+    }
+  else
+    {
+    // jpeg2000testimages/Part4TestStreams/codestreams_profile0/p0_13.j2k
+    gdcmErrorMacro( "Image is " << image->numcomps << " components which is not supported in DICOM" );
+    return false;
+    }
+
+  assert( PI != PhotometricInterpretation::UNKNOW );
+
+  if( reversible )
+    {
     ts = TransferSyntax::JPEG2000Lossless;
+    }
+  else
+    {
+    ts = TransferSyntax::JPEG2000;
+    if( PI == PhotometricInterpretation::YBR_RCT )
+      {
+      // FIXME ???
+      PI = PhotometricInterpretation::YBR_ICT;
+      }
+    }
+
+  //assert( ts.IsLossy() == this->GetPhotometricInterpretation().IsLossy() );
+  //assert( ts.IsLossless() == this->GetPhotometricInterpretation().IsLossless() );
+  if( this->GetPhotometricInterpretation().IsLossy() )
+    {
+    assert( ts.IsLossy() );
+    }
+  if( ts.IsLossless() && !ts.IsLossy() )
+    {
+    assert( this->GetPhotometricInterpretation().IsLossless() );
+    }
 
   /* close the byte stream */
   opj_cio_close(cio);
 
   /* free the memory containing the code-stream */
-  delete[] src;  //FIXME
+  //delete[] src;  //FIXME
 
   /* free remaining structures */
   if(dinfo) {

@@ -2,6 +2,8 @@
 # Common
 SET(Common_TEST_SRCS
   TestVersion
+  TestDummyValueGenerator
+  TestASN1
   TestTesting
   TestSwapper
   TestByteSwap
@@ -14,7 +16,9 @@ SET(Common_TEST_SRCS
   TestSwapCode
   TestSystem
   TestTrace
+  TestTypes
   TestUnpacker12Bits
+  TestBase64
   )
 
 IF(GDCM_DATA_ROOT)
@@ -22,6 +26,8 @@ SET(Common_TEST_SRCS
   ${Common_TEST_SRCS}
   TestDirectory
   TestFilename
+  TestMD5
+  TestSHA1
   )
 ENDIF(GDCM_DATA_ROOT)
 

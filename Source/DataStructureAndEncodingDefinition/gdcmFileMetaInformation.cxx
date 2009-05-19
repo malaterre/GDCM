@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,6 +21,7 @@
 #include "gdcmSwapper.h"
 #include "gdcmException.h"
 #include "gdcmTagToType.h"
+//#include "gdcmUIDGenerator.h"
 
 #include "gdcmTag.h"
 
@@ -78,7 +79,8 @@ void FileMetaInformation::SetSourceApplicationEntityTitle(const char * title)
 {
   //SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
   //SourceApplicationEntityTitle += "/";
-  SourceApplicationEntityTitle = title;
+  AEComp ae( title );
+  SourceApplicationEntityTitle = ae;
 }
 const char *FileMetaInformation::GetImplementationClassUID()
 {
@@ -128,12 +130,19 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       gdcm::MediaStorage ms;
       ms.SetFromModality(ds);
       const char *msstr = ms.GetString();
-      xde.SetByteValue( msstr, strlen(msstr) );
-      xde.SetTag( Tag(0x0002, 0x0002) );
+      if( msstr )
         {
-        xde.SetVR( VR::UI );
+        xde.SetByteValue( msstr, strlen(msstr) );
+        xde.SetTag( Tag(0x0002, 0x0002) );
+          {
+          xde.SetVR( VR::UI );
+          }
+        Insert( xde );
         }
-      Insert( xde );
+      else
+        {
+        gdcmErrorMacro( "Could not find MediaStorage" );
+        }
       }
     else
       {
@@ -149,21 +158,25 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   else // Ok there is a value in (0002,0002) let see if it match (0008,0016)
     {
-    if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+    bool dicomdir = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    //if( !dicomdir )
       {
-      //abort();
-      // What should I do here ??
-      gdcmWarningMacro( "Missing SOPClassUID in DataSet but found in FileMeta" );
-      }
-    else
-      {
-      const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
-      DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
-      assert( !mssopclass.IsEmpty() );
-      const ByteValue *bv = sopclass.GetByteValue();
-      assert( bv );
-      mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
-      Replace( mssopclass );
+      if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+        {
+        //abort();
+        // What should I do here ??
+        gdcmWarningMacro( "Missing SOPClassUID in DataSet but found in FileMeta" );
+        }
+      else
+        {
+        const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
+        DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
+        assert( !mssopclass.IsEmpty() );
+        const ByteValue *bv = sopclass.GetByteValue();
+        assert( bv );
+        mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
+        Replace( mssopclass );
+        }
       }
     }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
@@ -195,23 +208,32 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     else
       {
-      abort();
+      //abort();
+      throw gdcm::Exception( "No 2,3 and 8,18 element sorry" );
       }
     }
   else // Ok there is a value in (0002,0003) let see if it match (0008,0018)
     {
-    if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+    bool dirrecsq = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    MediaStorage ms;
+    ms.SetFromHeader( *this );
+    bool dicomdir = (ms == MediaStorage::MediaStorageDirectoryStorage && dirrecsq);
+    if( !dicomdir )
       {
-      abort();
+      if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+        {
+        throw gdcm::Exception( "No 8,18 element sorry" );
+        //abort();
+        }
+      const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+      //const DataElement & foo = GetDataElement( Tag(0x0002, 0x0003) );
+      assert( !GetDataElement( Tag(0x0002, 0x0003) ).IsEmpty() );
+      DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
+      const ByteValue *bv = sopinst.GetByteValue();
+      assert( bv );
+      mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
+      Replace( mssopinst );
       }
-    const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
-    //const DataElement & foo = GetDataElement( Tag(0x0002, 0x0003) );
-    assert( !GetDataElement( Tag(0x0002, 0x0003) ).IsEmpty() );
-    DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
-    const ByteValue *bv = sopinst.GetByteValue();
-    assert( bv );
-    mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
-    Replace( mssopinst );
     }
   //assert( !GetDataElement( Tag(0x0002,0x0003) ).IsEmpty() );
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
@@ -257,13 +279,26 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     xde.SetByteValue( implementation, strlen(implementation) );
     Insert( xde );
     }
+  else
+    {
+    // TODO: Need to check Implementation UID is actually a valid UID...
+    //const DataElement& impuid = GetDataElement( Tag(0x0002, 0x0012) );
+    //const ByteValue *bv = impuid.GetByteValue();
+    //assert( bv );
+    //std::string copy( bv->GetPointer(), bv->GetLength() );
+    //if( !UIDGenerator::IsValid( copy.c_str() ) )
+    //  {
+    //const char *implementation = FileMetaInformation::GetImplementationClassUID();
+    //impuid.SetByteValue( implementation, strlen(implementation) );
+    //  }
+    }
   // Implementation Version Name (0002,0013) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0013) ) )
     {
     xde.SetTag( Tag(0x0002, 0x0013) );
     xde.SetVR( VR::SH );
     //const char version[] = GDCM_IMPLEMENTATION_VERSION_NAME;
-    const char *version = FileMetaInformation::GetImplementationVersionName();
+    SHComp version = FileMetaInformation::GetImplementationVersionName();
     xde.SetByteValue( version, strlen(version) );
     Insert( xde );
     }
@@ -671,26 +706,14 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 {
   const Tag t(0x0002,0x0010);
   const DataElement &de = GetDataElement(t);
-  //TransferSyntax::NegociatedType nt = GetNegociatedType();
   std::string ts;
-//  if( const ExplicitDataElement *xde = dynamic_cast<const ExplicitDataElement*>(&de) )
+  const ByteValue *bv = de.GetByteValue();
+  if( !bv ) 
     {
-    const Value &v = de.GetValue();
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-    // Pad string with a \0
-    ts = std::string(bv.GetPointer(), bv.GetLength());
+    throw Exception( "Unknown Transfer syntax" );
     }
-//  else if( const ImplicitDataElement *ide = dynamic_cast<const ImplicitDataElement*>(&de) )
-//    {
-//    const Value &v = ide.GetValue();
-//    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-//    // Pad string with a \0
-//    ts = std::string(bv.GetPointer(), bv.GetLength());
-//    }
-//  else
-//    {
-//    assert( 0 && "Cannot happen" );
-//    }
+  // Pad string with a \0
+  ts = std::string(bv->GetPointer(), bv->GetLength());
   gdcmDebugMacro( "TS: " << ts );
   TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
   if( tst == TransferSyntax::TS_END )
@@ -705,7 +728,7 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 
 void FileMetaInformation::SetDataSetTransferSyntax(const TransferSyntax &ts)
 { 
-DataSetTS = ts; 
+  DataSetTS = ts; 
 }
 
 MediaStorage FileMetaInformation::GetMediaStorage() const

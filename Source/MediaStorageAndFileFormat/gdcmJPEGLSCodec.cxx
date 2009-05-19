@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -14,11 +14,16 @@
 =========================================================================*/
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmTransferSyntax.h"
-#include "gdcmDataElement.h"
-#include "gdcmFilename.h"
-#include "gdcmSystem.h"
 #include "gdcmSequenceOfFragments.h"
-#include "gdcmPNMCodec.h"
+#include "gdcmDataElement.h"
+
+// CharLS includes
+#include "gdcmcharls/stdafx.h" // sigh...
+#include "gdcmcharls/interface.h"
+#include "gdcmcharls/util.h"
+#include "gdcmcharls/defaulttraits.h"
+#include "gdcmcharls/losslesstraits.h"
+
 
 namespace gdcm
 {
@@ -33,8 +38,66 @@ JPEGLSCodec::~JPEGLSCodec()
 
 bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
-  (void)is; (void)ts;
+#ifndef GDCM_USE_JPEGLS
   return false;
+#else
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.seekg(0, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+
+  JlsParamaters metadata;
+  if (JpegLsReadHeader(dummy_buffer, buf_size, &metadata) != OK)
+    {
+    return false;
+    }
+  delete[] dummy_buffer;
+
+  // $1 = {width = 512, height = 512, bitspersample = 8, components = 1, allowedlossyerror = 0, ilv = ILV_NONE, colorTransform = 0, custom = {MAXVAL = 0, T1 = 0, T2 = 0, T3 = 0, RESET = 0}}
+
+  this->Dimensions[0] = metadata.width;
+  this->Dimensions[1] = metadata.height;
+  switch( metadata.bitspersample )
+    {
+  case 8:
+    this->PF = PixelFormat( PixelFormat::UINT8 );
+    break;
+  case 12:
+    this->PF = PixelFormat( PixelFormat::UINT16 );
+    this->PF.SetBitsStored( 12 );
+    break;
+  case 16:
+    this->PF = PixelFormat( PixelFormat::UINT16 );
+    break;
+  default:
+    abort();
+    }
+  if( metadata.components == 1 )
+    {
+    PI = PhotometricInterpretation::MONOCHROME2;
+    this->PF.SetSamplesPerPixel( 1 );
+    }
+  else if( metadata.components == 3 )
+    {
+    PI = PhotometricInterpretation::RGB;
+    this->PF.SetSamplesPerPixel( 3 );
+    }
+  else abort();
+
+
+  if( metadata.allowedlossyerror == 0 )
+    {
+    ts = TransferSyntax::JPEGLSLossless;
+    }
+  else
+    {
+    ts = TransferSyntax::JPEGLSNearLossless;
+    }
+
+
+  return true;
+#endif
 }
 
 bool JPEGLSCodec::CanDecode(TransferSyntax const &ts) const
@@ -43,7 +106,7 @@ bool JPEGLSCodec::CanDecode(TransferSyntax const &ts) const
   return false;
 #else
   return ts == TransferSyntax::JPEGLSLossless 
-    || ts == TransferSyntax::JPEGLSNearLossless;
+      || ts == TransferSyntax::JPEGLSNearLossless;
 #endif
 }
 
@@ -53,7 +116,7 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
   return false;
 #else
   return ts == TransferSyntax::JPEGLSLossless 
-    || ts == TransferSyntax::JPEGLSNearLossless;
+      || ts == TransferSyntax::JPEGLSNearLossless;
 #endif
 }
 
@@ -62,61 +125,115 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 #ifndef GDCM_USE_JPEGLS
   return false;
 #else
-  // First thing create a jpegls file from the fragment:
-  const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  assert(sf);
-
-  char *input  = tempnam(0, "gdcminjpegls");
-  char *output = tempnam(0, "gdcmoutjpegls");
-  if( !input || !output ) 
+  if( NumberOfDimensions == 2 )
     {
-    //free(input);
-    //free(output);
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    std::stringstream is;
+    unsigned long totalLen = sf->ComputeByteLength();
+    char *buffer = new char[totalLen];
+    sf->GetBuffer(buffer, totalLen);
+    //is.write(buffer, totalLen);
+
+    JlsParamaters metadata;
+    if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
+      {
+      return false;
+      }
+
+    // allowedlossyerror == 0 => Lossless
+    LossyFlag = metadata.allowedlossyerror;
+
+    const BYTE* pbyteCompressed = (const BYTE*)buffer;
+    int cbyteCompressed = totalLen;
+
+    JlsParamaters params = {0};
+    JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+
+    std::vector<BYTE> rgbyteCompressed;
+    rgbyteCompressed.resize(params.height *params.width* 4);
+
+    std::vector<BYTE> rgbyteOut;
+    rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
+
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    ASSERT(result == OK);
+
+    delete[] buffer;
+
+    out = in;
+
+    out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
+    return true;
+    }
+  else if( NumberOfDimensions == 3 )
+    {
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    assert( sf->GetNumberOfFragments() == Dimensions[2] );
+    std::stringstream os;
+    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+      {
+      const Fragment &frag = sf->GetFragment(i);
+      if( frag.IsEmpty() ) return false;
+      const ByteValue *bv = frag.GetByteValue();
+      assert( bv );
+      char *mybuffer = new char[bv->GetLength()];
+    unsigned long totalLen = bv->GetLength();
+
+      bv->GetBuffer(mybuffer, bv->GetLength());
+
+    const BYTE* pbyteCompressed = (const BYTE*)mybuffer;
+      while( totalLen > 0 && pbyteCompressed[totalLen-1] != 0xd9 )
+        {
+        totalLen--;
+        }
+  // what if 0xd9 is never found ?
+  assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
+
+    JlsParamaters metadata;
+    if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
+      {
+      return false;
+      }
+
+    // allowedlossyerror == 0 => Lossless
+    LossyFlag = metadata.allowedlossyerror;
+
+
+    int cbyteCompressed = totalLen;
+
+    JlsParamaters params = {0};
+    JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+
+    std::vector<BYTE> rgbyteCompressed;
+    rgbyteCompressed.resize(params.height *params.width* 4);
+
+    std::vector<BYTE> rgbyteOut;
+    rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
+
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    ASSERT(result == OK);
+bool r = true;
+
+
+      delete[] mybuffer;
+    os.write( (char*)&rgbyteOut[0], rgbyteOut.size() );
+
+      if(!r) return false;
+      assert( r == true );
+
+
+      }
+    std::string str = os.str();
+    assert( str.size() );
+    out.SetByteValue( &str[0], str.size() );
+
+
+    return true;
+    }
     return false;
-    }
 
-  std::ofstream outfile(input, std::ios::binary);
-  sf->WriteBuffer(outfile);
-  outfile.close(); // flush !
-
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string executable_path = fn.GetPath();
-  std::string locod_command = executable_path + "/gdcmlocod ";
-  locod_command += "-i";
-  locod_command += input; // no space !
-  locod_command += " -o";
-  locod_command += output; // no space !
-
-  //std::cerr << locod_command << std::endl;
-  gdcmDebugMacro( locod_command );
-  int ret = system(locod_command.c_str());
-  //std::cerr << "system: " << ret << std::endl;
-
-  // Do not use the return value from system (not portable AFAIK).
-  if ( !System::FileExists(output) )
-    {
-    free(input);
-    free(output);
-    return false;
-    }
-  PNMCodec pnm;
-  pnm.SetBufferLength( GetBufferLength() );
-  bool b = pnm.Read( output, out );
-
-  if( !System::RemoveFile(input) )
-    {
-    gdcmErrorMacro( "Could not delete input: " << input );
-    }
-
-  if( !System::RemoveFile(output) )
-    {
-    gdcmErrorMacro( "Could not delete output: " << output );
-    }
-
-  free(input);
-  free(output);
-
-  return b;
 #endif
 }
 
@@ -127,77 +244,83 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   return false;
 #else
   out = in;
-  // First thing create a pnm file from the fragment:
-  PNMCodec pnm;
-  pnm.SetDimensions( this->GetDimensions() );
-  char *input  = tempnam(0, "gdcminjpegls");
-  char *output = tempnam(0, "gdcmoutjpegls");
-  if( !input || !output ) 
-    {
-    //free(input);
-    //free(output);
-    return false;
-    }
-  pnm.SetPixelFormat( GetPixelFormat() );
-  bool b = pnm.Write( input, in );
-  if( !b ) return false;
-
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string executable_path = fn.GetPath();
-  std::string locoe_command = executable_path + "/gdcmlocoe ";
-  locoe_command += "-i";
-  locoe_command += input; // no space !
-  locoe_command += " -o";
-  locoe_command += output; // no space !
-
-  //std::cerr << locoe_command << std::endl;
-  gdcmDebugMacro( locoe_command );
-  int ret = system(locoe_command.c_str());
-  //std::cerr << "system: " << ret << std::endl;
-
-  // I do not know how to interpret the return value of 'system', it looks like
-  // this is not very portable. Instead assume that if output file exist then 
-  // everything went smoothly
-  if ( !System::FileExists(output) )
-    {
-    gdcmErrorMacro( "locoe failed" );
-    free(input);
-    free(output);
-    return false;
-    }
-  size_t len = gdcm::System::FileSize(output);
-  std::ifstream is(output);
-  char *buf = new char[len];
-  is.read(buf, len);
-
+  //
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
   const Tag itemStart(0xfffe, 0xe000);
   //sq->GetTable().SetTag( itemStart );
 
-  Fragment frag;
-  //frag.SetTag( itemStart );
-  frag.SetByteValue( buf, len );
-  sq->AddFragment( frag );
+  const unsigned int *dims = this->GetDimensions();
+    int image_width = dims[0];
+    int image_height = dims[1];
+    const PixelFormat &pf = this->GetPixelFormat();
+    int sample_pixel = pf.GetSamplesPerPixel();
+    int bitsallocated = pf.GetBitsAllocated();
+    int bitsstored = pf.GetBitsStored();
+
+  const ByteValue *bv = in.GetByteValue();
+  const char *input = bv->GetPointer();
+  unsigned long len = bv->GetLength();
+  unsigned long image_len = len / dims[2];
+  size_t inputlength = image_len;
+
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
+    {
+    const char *inputdata = input + dim * image_len; //bv->GetPointer();
+
+    JlsParamaters params = {};
+    params.components = sample_pixel;
+    // D_CLUNIE_RG3_JPLY.dcm. The famous 16bits allocated / 10 bits stored with the pixel value = 1024
+    // CharLS properly encode 1024 considering it as 10bits data, so the output
+    // Using bitsstored for the encoder gives a slightly better compression ratio, and is indeed the
+    // right way of doing it.
+
+/*
+FIXME: 12bits RGB is not working, so for now use the bitsallocated all the time
+Problem reading image from: /home/mathieu/Creatis/gdcmData/SIEMENS-MR-RGB-16Bits.dcm
+Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e25
+*/
+    if( true ||pf.GetPixelRepresentation() )
+      {
+      // gdcmData/CT_16b_signed-UsedBits13.dcm
+      params.bitspersample = bitsallocated;
+      }
+    else
+      {
+      params.bitspersample = bitsstored;
+      }
+    params.height = image_height;
+    params.width = image_width;
+
+    if (sample_pixel == 3)
+      {
+      params.ilv = ILV_LINE;
+      params.colorTransform = 1;
+      }
+
+    std::vector<BYTE> rgbyteCompressed;
+    rgbyteCompressed.resize(image_width * image_height * 4);
+
+    size_t cbyteCompressed;
+    JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, inputdata, inputlength, &params);
+    if( error != OK ) 
+      {
+      gdcmErrorMacro( "Error compressing: " << error );
+      return false;
+      }
+
+    assert( cbyteCompressed < rgbyteCompressed.size() );
+
+    Fragment frag;
+    frag.SetByteValue( (char*)&rgbyteCompressed[0], cbyteCompressed );
+    sq->AddFragment( frag );
+    }
+
+  assert( sq->GetNumberOfFragments() == dims[2] );
   out.SetValue( *sq );
 
-  delete[] buf;
-
- 
-  if( !System::RemoveFile(input) )
-    {
-    gdcmErrorMacro( "Could not delete input: " << input );
-    }
-
-  if( !System::RemoveFile(output) )
-    {
-    gdcmErrorMacro( "Could not delete output: " << output );
-    }
-
-  free(input);
-  free(output);
-
   return true;
+
 #endif
 }
 

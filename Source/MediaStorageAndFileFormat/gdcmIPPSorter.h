@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -63,16 +63,19 @@ public:
 
   /// Read-only function to provide access to the computed value for the Z-Spacing
   /// The ComputeZSpacing must have been set to true before execution of
-  /// sort algorithm
-  /// Z-Spacing will be 0 on 2 occsasions:
-  /// 1. Sorting simply failed, potentially duplicate IPP => ZSpacing = 0
-  /// 2. ZSpacing could not be computed (Z-Spacing is not constant, or ZTolerance is too low)
+  /// sort algorithm. Call this function *after* calling Sort();
+  /// Z-Spacing will be 0 on 2 occasions:
+  /// \li Sorting simply failed, potentially duplicate IPP => ZSpacing = 0
+  /// \li ZSpacing could not be computed (Z-Spacing is not constant, or ZTolerance is too low)
   double GetZSpacing() const { return ZSpacing; }
 
 protected:
   bool ComputeZSpacing;
   double ZSpacing;
   double ZTolerance;
+
+private:
+  bool ComputeSpacing(std::vector<std::string> const & filenames);
 };
 
 

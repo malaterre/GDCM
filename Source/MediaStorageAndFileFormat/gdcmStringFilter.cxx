@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -41,6 +41,26 @@ std::string StringFilter::ToString(const Tag& t) const
   return ToStringPair(t).second;
 }
 
+/*
+std::string StringFilter::ToMIME64(const Tag& t) const
+{
+  return ToStringPair(t).second;
+          // base64 streams have to be a multiple of 4 bytes long
+          int encodedLengthEstimate = 2 * bv->GetLength();
+          encodedLengthEstimate = ((encodedLengthEstimate / 4) + 1) * 4;
+
+          char *bin = new char[encodedLengthEstimate];
+          unsigned int encodedLengthActual = static_cast<unsigned int>(
+            itksysBase64_Encode(
+              (const unsigned char *) bv->GetPointer(),
+              static_cast< unsigned long>( bv->GetLength() ),
+              (unsigned char *) bin,
+              static_cast< int >( 0 ) ));
+          std::string encodedValue(bin, encodedLengthActual);
+
+}
+*/
+
 #define StringFilterCase(type) \
   case VR::type: \
     { \
@@ -55,10 +75,23 @@ std::string StringFilter::ToString(const Tag& t) const
 
 std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) const
 {
+  if( t.GetGroup() == 0x2 )
+    {
+    const FileMetaInformation &header = GetFile().GetHeader();
+    return ToStringPair(t, header);
+    }
+  else
+    {
+    const DataSet &ds = GetFile().GetDataSet();
+    return ToStringPair(t, ds);
+    }
+}
+
+std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, DataSet const &ds) const
+{
   std::pair<std::string, std::string> ret;
   const Global &g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const DataSet &ds = GetFile().GetDataSet();
   if( ds.IsEmpty() || !ds.FindDataElement(t) )
     {
     gdcmDebugMacro( "DataSet is empty or does not contains tag:" );

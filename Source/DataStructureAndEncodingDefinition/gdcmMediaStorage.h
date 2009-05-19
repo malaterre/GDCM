@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,6 +21,7 @@ namespace gdcm
 {
 
 class DataSet;
+class Tag;
 class FileMetaInformation;
 class File;
 /**
@@ -30,7 +31,7 @@ class File;
  * FIXME There should not be any notion of Image and/or PDF at that point
  * Only the codec can answer yes I support this Media Storage or not...
  * For instance an ImageCodec will answer yes to most of them
- * while a PDFCodec will answer only for the Encaplusated PDF
+ * while a PDFCodec will answer only for the Encapsulated PDF
  */
 class GDCM_EXPORT MediaStorage
 {
@@ -101,6 +102,7 @@ public:
     KeyObjectSelectionDocument,
     HangingProtocolStorage,
     ModalityPerformedProcedureStepSOPClass,
+    PhilipsPrivateMRSyntheticImageStorage,
     MS_END
   } MSType; // Media Storage Type
 
@@ -129,21 +131,28 @@ typedef enum {
 
   const char *GetModality() const;
 
-  // Attempt to set the MediaStorage from a file:
-  // WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
-  // then MediaStorage is set to the default SecondaryCaptureImageStorage
-  void SetFromFile(File const &file);
+  /// Attempt to set the MediaStorage from a file:
+  /// WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
+  /// then MediaStorage is set to the default SecondaryCaptureImageStorage (return value is 
+  /// false in this case)
+  bool SetFromFile(File const &file);
 
-  // Those function are lower level than SetFromFile
-  void SetFromDataSet(DataSet const &ds, bool guess = false); // Will get the SOP Class UID
-  void SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
-  void SetFromModality(DataSet const &ds);
-  void SetFromSourceImageSequence(DataSet const &ds);
+  /// Advanced user only (functions should be protected level...)
+  /// Those function are lower level than SetFromFile
+  bool SetFromDataSet(DataSet const &ds); // Will get the SOP Class UID
+  bool SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
+  bool SetFromModality(DataSet const &ds);
   void GuessFromModality(const char *modality, unsigned int dimension = 2);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
 
   bool IsUndefined() const { return MSField == MS_END; }
+
+protected:
+  void SetFromSourceImageSequence(DataSet const &ds);
+
+private:
+  bool SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
 
 private:
   MSType MSField;

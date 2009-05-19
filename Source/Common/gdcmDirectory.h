@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -33,18 +33,24 @@ namespace gdcm
  *
  * \note 
  * will not take into account unix type hidden file
- * recursive option will not look into UNIX type hidden directory (those starting with a .)
+ * recursive option will not look into UNIX type hidden directory (those starting with a '.')
+ *
+ * \note 
+ * Since python or C# provide there own equivalent implementation,
+ * in which case gdcm::Directory does not make much sense.
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Directory
 {
+  friend std::ostream& operator<<(std::ostream &_os, const Directory &d);
 public :
   Directory() {}
   ~Directory() {}
   typedef std::string FilenameType;
   typedef std::vector<FilenameType> FilenamesType;
 
-  void Print(std::ostream &_os = std::cout);
+  /// Print
+  void Print(std::ostream &os = std::cout) const;
 
   /// Get the name of the toplevel directory
   FilenameType const &GetToplevel() const { return Toplevel; }
@@ -58,6 +64,7 @@ public :
   FilenamesType const &GetDirectories() const { return Directories; }
 
   /// construct a list of filenames and subdirectory beneath directory: name
+  /// \warning: hidden file and hidden directory are not loaded.
   unsigned int Load(FilenameType const &name, bool recursive = false) {
     Filenames.clear(); // clear previous
     Directories.clear(); // clear previous
@@ -82,6 +89,13 @@ private :
   /// name of the toplevel directory to explore
   FilenameType Toplevel;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const Directory &d)
+{
+  d.Print( os );
+  return os;
+}
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //__gdcmDirectory_h

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,14 +13,25 @@
 
 =========================================================================*/
 #include "gdcmAnonymizer.h"
-#include "gdcmDicts.h"
 #include "gdcmGlobal.h"
 #include "gdcmStringFilter.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmExplicitDataElement.h"
+#include "gdcmSwapper.h"
+#include "gdcmDataSetHelper.h"
+#include "gdcmUIDGenerator.h"
+#include "gdcmAttribute.h"
+#include "gdcmDummyValueGenerator.h"
+#include "gdcmDicts.h"
+#include "gdcmType.h"
+#include "gdcmDefs.h"
+#include "gdcmCryptographicMessageSyntax.h"
 
 namespace gdcm
 {
 // PS 3.15 - 2008
 // Table E.1-1
+// BALCPA
 static Tag BasicApplicationLevelConfidentialityProfileAttributes[] = {
 //              Attribute Name                                            Tag
 /*              Instance Creator UID                                  */ Tag(0x0008,0x0014),
@@ -223,6 +234,41 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
   return ret;
 }
 
+bool Anonymizer::RemoveRetired()
+{
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
+  static const Dict &pubdict = dicts.GetPublicDict();
+
+  DataSet &ds = F->GetDataSet();
+  DataSet::Iterator it = ds.Begin();
+  for( ; it != ds.End(); )
+    {
+    const DataElement &de = *it;
+    if( de.GetTag().IsPublic() )
+      {
+      const DictEntry &entry = pubdict.GetDictEntry( de.GetTag() );
+      if( entry.GetRetired() )
+        {
+        // std::set::erase invalidate iterator, so we need to make a copy first:
+        DataSet::Iterator dup = it;
+        ++it;
+        ds.GetDES().erase(dup);
+        }
+      else
+        {
+      ++it;
+        }
+      }
+    else
+      {
+      ++it;
+      }
+    }
+
+  return true;
+}
+
 bool Anonymizer::RemoveGroupLength()
 {
   DataSet &ds = F->GetDataSet();
@@ -269,17 +315,464 @@ bool Anonymizer::RemovePrivateTags()
   return true;
 }
 
-bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
+/*
+ * Implementation note:
+ * In order to implement the dummy 'memory' we use a static std::map
+ * this works great but we cannot be thread safe.
+ * In order to be thread safe, we would need to externalize this map generation
+ * maybe using a gdcm::Scanner do the operation once (Scanner is doing) the merging
+ * automatically...
+ * this is left as an exercise for the reader :)
+ */
+bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
 {
-  //static Tag BasicApplicationLevelConfidentialityProfileAttributes[];
+  if( deidentify )
+    return BasicApplicationLevelConfidentialityProfile1();
+  return BasicApplicationLevelConfidentialityProfile2();
+}
+
+bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
+{
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
-  (void)end;
 
-  //return std::binary_search(start, end, tag);
+  CryptographicMessageSyntax &p7 = *CMS;
+  //p7.SetCertificate( this->x509 );
+
+  DataSet &ds = F->GetDataSet();
+
+  // PS 3.15
+  // E.1 BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE
+  // An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
+  // if it protects all Attributes that might be used by unauthorized entities to identify the patient.
+  // Protection in this context is defined as the following process:
+
+  // 1. The application may create one or more instances of the Encrypted Attributes Data Set and copy
+  // Attributes to be protected into the (single) item of the Modified Attributes Sequence (0400,0550) of
+  // one or more of the Encrypted Attributes Data Set instances.
+
+  // Create an instance of the Encrypted Attributes DataSet
+  // Modified Attributes Sequence (0400,0550) 1 Sequence of Items containing all Attributes
+  // that were removed or replaced by "dummy values" in the main dataset during deidentification
+  // of the SOP instance. Upon reversal of the de-identification process, the
+  // Attributes are copied back into the main dataset, replacing any dummy values that
+  // might have been created. Only a single Item shall be present.
+
+  // Create a Sequence
+  SmartPointer<SequenceOfItems> sq = new SequenceOfItems();
+  sq->SetLengthToUndefined();
+
+  // Create a *single* item
+  Item it;
+  it.SetVLToUndefined();
+  DataSet &encryptedds = it.GetNestedDataSet();
+  // Loop over root level attributes:
+  for(const Tag *ptr = start ; ptr != end ; ++ptr)
+    {
+    const Tag& tag = *ptr;
+    if( ds.FindDataElement( tag ) )
+      encryptedds.Insert( ds.GetDataElement( tag ) );
+    }
+  // Check that root level sequence do not contains any of those attributes
+{
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    const DataElement &de = *it;
+    //const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    const ByteValue *bv = de.GetByteValue();
+    SmartPointer<SequenceOfItems> sqi = 0;
+    VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
+    if( vr == VR::SQ )
+      {
+      sqi = de.GetValueAsSQ();
+      }
+    if( sqi )
+      {
+      bool found = false;
+      for(const Tag *ptr = start ; ptr != end && !found ; ++ptr)
+        {
+        const Tag& tag = *ptr;
+        found = sqi->FindDataElement( tag );
+        }
+      if( found )
+        {
+        // A special Tag was found let's store the entire Sequence of Item:
+        encryptedds.Insert( de );
+        }
+      }
+    }
+}
+
+  sq->AddItem(it);
+
+  DataElement des( Tag(0x0400,0x0550) );
+  des.SetVR(VR::SQ);
+  des.SetValue(*sq);
+  des.SetVLToUndefined();
+
+  std::ostringstream os;
+  des.Write<ExplicitDataElement,SwapperNoOp>(os);
+
+  std::string encrypted_str = os.str();
+
+  // Note: 1. Content encryption may require that the content (the DICOM Data Set) be padded to a
+  // multiple of some block size. This shall be performed according to the Content-encryption
+  // Process defined in RFC-2630.
+  size_t encrypted_len = encrypted_str.size() * 20; // this is really overestimated
+
+  char *orig = new char[ encrypted_len ];
+  char *buf = new char[ encrypted_len ];
+  memset( buf, 0, encrypted_len );
+  memset( orig, 0, encrypted_len );
+  memcpy( orig, encrypted_str.c_str(), encrypted_str.size() );
+
+  size_t encrypted_len2 = encrypted_len;
+  bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
+  assert( encrypted_len <= encrypted_len2 );
+
+    {
+    // Create a Sequence
+    SmartPointer<SequenceOfItems> sq = new SequenceOfItems();
+    sq->SetLengthToUndefined();
+
+    // FIXME: should be user configurable:
+    TransferSyntax encrypted_ts = TransferSyntax::ImplicitVRLittleEndian;
+    // <entry group="0400" element="0510" vr="UI" vm="1" name="Encrypted Content Transfer Syntax UID"/>
+    DataElement encrypted_ts_de( Tag(0x400,0x510) );
+    encrypted_ts_de.SetVR( Attribute<0x0400, 0x0510>::GetVR() );
+    encrypted_ts_de.SetByteValue( encrypted_ts.GetString(), strlen(encrypted_ts.GetString()) );
+    // <entry group="0400" element="0520" vr="OB" vm="1" name="Encrypted Content"/>
+    DataElement encrypted_de( Tag(0x400,0x520) );
+    encrypted_de.SetVR( Attribute<0x0400, 0x0520>::GetVR() );
+    encrypted_de.SetByteValue( (char*)buf, encrypted_len );
+    delete[] buf;
+    delete[] orig;
+
+    // Create an item
+    Item it;
+    it.SetVLToUndefined();
+    DataSet &nds = it.GetNestedDataSet();
+    nds.Insert(encrypted_ts_de);
+    nds.Insert(encrypted_de);
+
+    sq->AddItem(it);
+
+    // 4. All instances of the Encrypted Attributes Data Set shall be encoded with a DICOM Transfer Syntax,
+    // encrypted, and stored in the dataset to be protected as an Item of the Encrypted Attributes Sequence
+    // (0400,0500). The encryption shall be done using RSA [RFC 2313] for the key transport of the
+    // content-encryption keys. A de-identifier conforming to this security profile may use either AES or
+    // Triple-DES for content-encryption. The AES key length may be any length allowed by the RFCs. The
+    // Triple-DES key length is 168 bits as defined by ANSI X9.52. Encoding shall be performed according
+    // to the specifications for RSA Key Transport and Triple DES Content Encryption in RFC-3370 and for
+    // AES Content Encryption in RFC-3565.
+
+    // 5. No requirements on the size of the asymmetric key pairs used for RSA key transport are defined in
+    // this confidentiality scheme. Implementations claiming conformance to the Basic Application Level
+    // Confidentiality Profile as a de-identifier shall always protect (e.g. encrypt and replace) the SOP
+    // Instance UID (0008,0018) Attribute as well as all references to other SOP Instances, whether
+    // contained in the main dataset or embedded in an Item of a Sequence of Items, that could potentially
+    // be used by unauthorized entities to identify the patient.
+
+    // Insert sequence into data set
+    DataElement des( Tag(0x0400,0x0500) );
+    des.SetVR(VR::SQ);
+    des.SetValue(*sq);
+    des.SetVLToUndefined();
+
+    ds.Insert(des);
+    }
+
+  // 2. Each Attribute to be protected shall then either be removed from the dataset, or have its value
+  // replaced by a different "replacement value" which does not allow identification of the patient.
+
+  //for(const Tag *ptr = start ; ptr != end ; ++ptr)
+  //  {
+  //  const Tag& tag = *ptr;
+  //  // FIXME Type 1 !
+  //  if( ds.FindDataElement( tag ) ) BALCPProtect(F->GetDataSet(), tag);
+  //  }
+  // Check that root level sequence do not contains any of those attributes
+  RecurseDataSet( F->GetDataSet() );
+
+  // Group Length are removed since PS 3.3-2008
+  RemoveGroupLength();
+
+  // 3. At the discretion of the de-identifier, Attributes may be added to the dataset to be protected.
+  // ...
+
+  // 6. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
+  // value of YES, and a value inserted in De-identification Method (0012,0063) or De-identification
+  // Method Code Sequence (0012,0064).
+  Replace( Tag(0x0012,0x0062), "YES");
+  Replace( Tag(0x0012,0x0063), "BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE");
+
+
+  // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
+  // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
+  UIDGenerator uid;
+  if( ds.FindDataElement( Tag(0x008,0x0018) ) )
+    Replace( Tag(0x008,0x0018), uid.Generate() );
+
   return true;
+}
+
+
+bool IsVRUI(Tag const &tag)
+{
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
+  const DictEntry &dictentry = dicts.GetDictEntry(tag);
+  if( dictentry.GetVR() == VR::UI ) return true;
+  //if( tag == Tag(0x0020,0x000d)   // Study Instance UID : UI
+  // || tag == Tag(0x0020,0x0052)   // 
+  // || tag == Tag(0x0020,0x000e) ) // Series Instance UID : UI
+  //  {
+  //  return true;
+  //  }
+  return false;
+}
+
+bool Anonymizer::CanEmptyTag(Tag const &tag)
+{
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
+  static const Defs &defs = g.GetDefs();
+  DataSet &ds = F->GetDataSet();
+  Type t = defs.GetTypeFromTag(*F, tag);
+  gdcmDebugMacro( "Type for tag=" << tag << " is " << t );
+
+  //assert( t != Type::UNKNOWN );
+
+  if( t == Type::T1 || t == Type::T1C )
+    {
+    return false;
+    }
+  // What if we are dealing with a Standard Extended SOP class
+  // eg. gdcmData/05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm
+  // where Attribute is not present in standard DICOM IOD - (0x0088,0x0140) UI Storage Media FileSet UID
+  if( t == Type::UNKNOWN )
+    {
+    return true;
+    }
+  
+  // This is a Type 3 attribute but with VR=UI
+  // <entry group="0008" element="0014" vr="UI" vm="1" name="Instance Creator UID"/>
+  //assert( dicts.GetDictEntry(tag).GetVR() != VR::UI );
+  return true;
+}
+
+bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
+{
+  // \precondition
+  assert( ds.FindDataElement(tag) );
+
+  typedef std::pair< Tag, std::string > TagValueKey;
+  typedef std::map< TagValueKey, std::string > DummyMap;
+  static DummyMap dummymap;
+  gdcm::UIDGenerator uid;
+
+  //DataSet &ds = F->GetDataSet();
+
+  bool canempty = CanEmptyTag( tag );
+  if( !canempty )
+    {
+    TagValueKey tvk;
+    tvk.first = tag;
+    DataElement copy = ds.GetDataElement( tag );
+    // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
+    // has an empty 0008,0018 attribute, let's try to handle that:
+    if( !copy.IsEmpty() )
+      {
+      if( ByteValue *bv = copy.GetByteValue() )
+        {
+        tvk.second = std::string( bv->GetPointer(), bv->GetLength() );
+        }
+      }
+    assert( dummymap.count( tvk ) == 0 || dummymap.count( tvk ) == 1 );
+    if( dummymap.count( tvk ) == 0 )
+      {
+      // Generate a new (single) dummy value:
+      if( IsVRUI( tag ) )
+        {
+        dummymap[ tvk ] = uid.Generate();
+        }
+      else
+        {
+        dummymap[ tvk ] = DummyValueGenerator::Generate( tvk.second.c_str() );
+        }
+      }
+    std::string &v = dummymap[ tvk ];
+    copy.SetByteValue( v.c_str(), v.size() );
+    ds.Replace( copy );
+    }
+  else
+    {
+    //Empty( tag );
+    DataElement copy = ds.GetDataElement( tag );
+    copy.Empty();
+    ds.Replace( copy );
+    }
+  return true;
+}
+
+void Anonymizer::RecurseDataSet( DataSet & ds )
+{
+  static const unsigned int deidSize = sizeof(Tag);
+  static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
+  static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
+  static const Tag *end = start + numDeIds;
+
+  DataSet::Iterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    DataElement de = *it;
+    //const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
+    SmartPointer<SequenceOfItems> sqi = 0;
+    if( vr == VR::SQ )
+      {
+      sqi = de.GetValueAsSQ();
+      }
+    if( sqi )
+      {
+      //sqi->SetLengthToUndefined();
+      de.SetVLToUndefined();
+      unsigned int n = sqi->GetNumberOfItems();
+      for( unsigned int i = 1; i <= n; ++i )
+        {
+        Item &item = sqi->GetItem( i );
+        DataSet &nested = item.GetNestedDataSet();
+        RecurseDataSet( nested );
+        }
+      }
+    else
+      {
+      for(const Tag *ptr = start ; ptr != end ; ++ptr)
+        {
+        const Tag& tag = *ptr;
+        // FIXME Type 1 !
+        if( ds.FindDataElement( tag ) )
+          {
+          BALCPProtect(ds, tag);
+          }
+        }
+      }
+    ds.Replace( de );
+    }
+
+}
+
+//void Anonymizer::SetAESKey(AES const &aes)
+//{
+//  AESKey = aes;
+//}
+//
+//const AES &Anonymizer::GetAESKey() const
+//{
+//  return AESKey;
+//}
+
+bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
+{
+  // 1. The application shall decrypt, using its recipient key, one instance of the Encrypted Content
+  // (0400,0520) Attribute within the Encrypted Attributes Sequence (0400,0500) and decode the resulting
+  // block of bytes into a DICOM dataset using the Transfer Syntax specified in the Encrypted Content
+  // Transfer Syntax UID (0400,0510). Re-identifiers claiming conformance to this profile shall be capable
+  // of decrypting the Encrypted Content using either AES or Triple-DES in all possible key lengths
+  // specified in this profile
+  CryptographicMessageSyntax &p7 = *CMS;
+  //p7.SetCertificate( this->x509 );
+
+  DataSet &ds = F->GetDataSet();
+  const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
+  const SequenceOfItems *sq = EncryptedAttributesSequence.GetSequenceOfItems();
+  const Item &item = sq->GetItem(1);
+  const DataSet &nds = item.GetNestedDataSet();
+  const DataElement &EncryptedContent = nds.GetDataElement( Tag(0x0400,0x0520) );
+  const ByteValue *bv = EncryptedContent.GetByteValue();
+  
+  size_t encrypted_len = bv->GetLength();
+  char *orig = new char[ bv->GetLength() ];
+  char *buf = new char[ bv->GetLength() ];
+  memcpy(orig, bv->GetPointer(), encrypted_len );
+
+  size_t encrypted_len2 = encrypted_len;
+  bool b = p7.Decrypt( buf, encrypted_len, orig, encrypted_len);
+  if( !b )
+    {
+    // ooops
+    gdcmDebugMacro( "Could not decrypt" );
+    return false;
+    }
+  assert( encrypted_len <= encrypted_len2 );
+
+  std::stringstream ss;
+  ss.str( std::string((char*)buf, encrypted_len) );
+  DataSet des;
+  DataElement dummy;
+  try
+    {
+    dummy.Read<ExplicitDataElement, SwapperNoOp>(ss);
+    }
+  //catch( std::Exception  & e)
+  catch( ... )
+    {
+  delete[] buf;
+  delete[] orig;
+
+    return false;
+    }
+  des.Insert( dummy );
+  //des.Read<ExplicitDataElement,SwapperNoOp>(ss);
+  //des.ReadNested<ExplicitDataElement,SwapperNoOp>(ss);
+
+  //std::cout << des << std::endl; 
+  //std::cout << dummy << std::endl; 
+  //std::cout << ss.tellg() << std::endl; 
+  assert( ss.tellg() <= encrypted_len );
+  // TODO: check that for i = ss.tellg() to encrypted_len, ss[i] == 0
+  delete[] buf;
+  delete[] orig;
+
+  // 2. The application shall move all Attributes contained in the single item of the Modified Attributes
+  // Sequence (0400,0550) of the decoded dataset into the main dataset, replacing¿dummy value¿
+  // Attributes that may be present in the main dataset.
+  //assert( dummy.GetVR() == VR::SQ );
+{
+  const SequenceOfItems *sqi = dummy.GetSequenceOfItems();
+  assert( sqi && sqi->GetNumberOfItems() == 1 );
+  Item const & item = sqi->GetItem( 1 );
+  const DataSet &nds = item.GetNestedDataSet();
+  DataSet::ConstIterator it = nds.Begin();
+  for( ; it != nds.End(); ++it )
+    {
+    ds.Replace( *it );
+    }
+}
+
+  // 3. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
+  // value of NO and De-identification Method (0012,0063) and De-identification Method Code Sequence
+  // (0012,0064) shall be removed.
+  //Replace( Tag(0x0012,0x0062), "NO");
+  Remove( Tag(0x0012,0x0062) );
+  Remove( Tag(0x0012,0x0063) );
+
+  Remove( Tag(0x0400,0x0500) ); // ??
+
+  return true;
+}
+
+void Anonymizer::SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms)
+{
+  CMS = cms;
+}
+
+const CryptographicMessageSyntax *Anonymizer::GetCryptographicMessageSyntax() const
+{
+  return CMS;
 }
 
 } // end namespace gdcm

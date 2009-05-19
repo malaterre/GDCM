@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -31,7 +31,7 @@ class GDCM_EXPORT UIDGenerator
 {
 public:
   /// By default the root of a UID is a GDCM Root...
-  UIDGenerator() {}
+  UIDGenerator():Unique() {}
 
   // Function to override the GDCM root with a user one:
   // WARNING: This need to be a valid root, otherwise call will fail
@@ -66,6 +66,7 @@ public:
   const char* Generate();
 
   /// Find out if the string is a valid UID or not
+  /// \todo: Move that in DataStructureAndEncoding (see FileMetaInformation::CheckFileMetaInformation)
   static bool IsValid(const char *uid);
 
   /// Return the default (GDCM) root UID:

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -127,10 +127,19 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       // (6001,0000) UL 28                                       #   4, 1 PrivateGroupLength
       // (6001,0010) LT [PAPYRUS 3.0]                            #  12, 1 PrivateCreator
       // (6001,1001) LT (no value available)                     #   0, 0 Unknown Tag & Data
+/*
+ * FIXME:
+ * In order to support : gdcmData/SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+ *                       gdcmDataExtra/gdcmSampleData/images_of_interest/XA_GE_JPEG_02_with_Overlays.dcm  
+ * I cannot simply check for overlay_group,3000 this would not work
+ * I would need a strong euristick
+ */
       if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+      //if( ds.FindDataElement( Tag(overlay.GetGroup(),0x0010 ) ) )
         {
         // ok so far so good...
         const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        //const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x0010));
         if( !overlaydata.IsEmpty() )
           {
           ++numoverlays;
@@ -287,7 +296,7 @@ void Overlay::Update(const DataElement & de)
     }
 }
 
-void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
+bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
 {
   const unsigned int ovlength = Internal->Rows * Internal->Columns / 8;
   Internal->Data.resize( ovlength ); // set to 0
@@ -331,7 +340,9 @@ void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
   else
     {
     gdcmErrorMacro( "Could not grab Overlay from image. Please report." );
+    return false;
     }
+  return true;
 }
 
 void Overlay::SetGroup(unsigned short group) { Internal->Group = group; }

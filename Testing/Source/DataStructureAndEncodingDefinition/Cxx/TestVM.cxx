@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -175,6 +175,15 @@ int TestVM(int, char *[])
   std::cout << vm << std::endl;
   //vm = gdcm::VM::VM_END;
   //std::cout << vm << std::endl;
+
+{
+  gdcm::VM vm1 = gdcm::VM::VM8;
+  gdcm::VM vm2 = gdcm::VM::VM1_n;
+  if ( !vm2.Compatible( vm1 ) )
+    {
+    return 1;
+    }
+}
 
   return 0;
 }

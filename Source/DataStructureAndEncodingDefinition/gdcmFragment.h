@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -112,15 +112,33 @@ public:
       }
     assert( TagField == itemStart
          || TagField == seqDelItem );
-    if( !ValueLengthField.Write<TSwap>(os) )
+    const ByteValue *bv = GetByteValue();
+    // VL
+    // The following piece of code is hard to read in order to support such broken file as:
+    // CompressedLossy.dcm
+    if( IsEmpty() )
       {
-      assert(0 && "Should not happen");
-      return os;
+      //assert( bv );
+      VL zero = 0;
+      if( !zero.Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
       }
-    if( ValueLengthField )
+    else
+      {
+      assert( ValueLengthField );
+      if( !ValueLengthField.Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
+      }
+    // Value 
+    if( ValueLengthField && bv )
       {
       // Self
-      const ByteValue *bv = GetByteValue();
       assert( bv );
       assert( bv->GetLength() == ValueLengthField );
       if( !bv->Write<TSwap>(os) )

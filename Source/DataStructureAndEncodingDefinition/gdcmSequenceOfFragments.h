@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -80,8 +80,31 @@ std::istream& Read(std::istream &is)
     {
     const Tag seqDelItem(0xfffe,0xe0dd);
     // First item is the basic offset table:
-    Table.Read<TSwap>(is);
-    gdcmDebugMacro( "Table: " << Table );
+    try
+      {
+      Table.Read<TSwap>(is);
+      gdcmDebugMacro( "Table: " << Table );
+      }
+    catch(...)
+      {
+      // Bug_Siemens_PrivateIconNoItem.dcm 
+      // First thing first let's rewind
+      is.seekg(-4, std::ios::cur);
+      if ( Table.GetTag() == Tag(0xd8ff,0xe0ff) )
+        {
+        Fragment frag;
+        is.seekg( 8340, std::ios::cur );
+        char dummy[8340];
+        frag.SetByteValue( dummy, 8340 - Table.GetLength() - 16 );
+        Fragments.push_back( frag );
+        return is;
+        }
+      else
+        {
+        throw "Catch me if you can";
+        //abort();
+        }
+      }
     // not used for now...
     Fragment frag;
     try
@@ -186,6 +209,11 @@ public:
   /// \brief Vector of Sequence Fragments
   FragmentVector Fragments;
 };
+
+/**
+ * \example DecompressJPEGFile.cs
+ * This is a C# example on how to use gdcm::SequenceOfFragments
+ */
 
 } // end namespace gdcm
 

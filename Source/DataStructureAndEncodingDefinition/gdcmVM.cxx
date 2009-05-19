@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -80,7 +80,7 @@ unsigned int VM::GetLength() const
     break;
   default:
     len = 0;
-    abort();
+    assert(0);
     }
   assert( len );
   return len;
@@ -167,6 +167,7 @@ const char *VM::GetVMString(VMType vm)
 {
   unsigned int idx = GetIndex(vm);
   assert( idx < sizeof(VMStrings) / sizeof(VMStrings[0]) );
+  //assert( idx );
   return VMStrings[idx];
 }
 
@@ -355,6 +356,9 @@ bool VM::Compatible(VM const &vm) const
     break;
   case VM2_n:
     r = vm.VMField >= VM::VM2;
+    break;
+  case VM3_4:
+    r = vm.VMField == VM::VM3 || vm.VMField == VM::VM4;
     break;
   case VM3_3n:
     r = vm.VMField >= VM::VM3 /*&& !(vm.GetLength() % 3)*/;

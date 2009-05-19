@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -23,7 +23,7 @@
 #include <iterator>
 #include <iomanip>
 
-#include <stdlib.h> // abort
+//#include <stdlib.h> // abort
 
 namespace gdcm
 {
@@ -44,10 +44,10 @@ public:
         }
   }
   ByteValue(std::vector<char> &v):Internal(v),Length(v.size()) {}
-  ByteValue(std::ostringstream const &os) {
-    (void)os;
-	   abort(); // TODO
-  }
+  //ByteValue(std::ostringstream const &os) {
+  //  (void)os;
+	//   abort(); // TODO
+  //}
   ~ByteValue() {
     Internal.clear();
   }
@@ -128,6 +128,11 @@ public:
     if(!Internal.empty()) return &Internal[0];
     return 0;
   }
+  void Fill(char c) {
+    //if( Internal.empty() ) return;
+    std::vector<char>::iterator it = Internal.begin();
+    for(; it != Internal.end(); ++it) *it = c;
+  }
   bool GetBuffer(char *buffer, unsigned long length) const {
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
     // so we need an inequality
@@ -136,7 +141,7 @@ public:
       memcpy(buffer, &Internal[0], length);
       return true;
       }
-    abort();
+    gdcmDebugMacro( "Could not handle length= " << length );
     return false;
     }
   bool WriteBuffer(std::ostream &os) const {

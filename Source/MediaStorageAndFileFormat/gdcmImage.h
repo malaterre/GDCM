@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,10 +17,6 @@
 
 #include "gdcmPixmap.h"
 #include "gdcmSwapCode.h"
-#include "gdcmSmartPointer.h"
-#include "gdcmOverlay.h"
-#include "gdcmCurve.h"
-#include "gdcmIconImage.h"
 
 #include <vector>
 
@@ -49,7 +45,7 @@ namespace gdcm
 class GDCM_EXPORT Image : public Pixmap
 {
 public:
-  Image ():Pixmap(),Spacing(),SC(),Overlays(),Curves(),Icon(),Intercept(0),Slope(1) {
+  Image ():Spacing(),SC(),Intercept(0),Slope(1) {
     //DirectionCosines.resize(6);
   Origin.resize( 3 /*NumberOfDimensions*/ ); // fill with 0
   DirectionCosines.resize( 6 ); // fill with 0
@@ -97,37 +93,6 @@ public:
     SC = sc;
     }
 
-  /// Curve: group 50xx
-  Curve& GetCurve(unsigned int i = 0) { 
-    assert( i < Curves.size() );
-    return Curves[i]; 
-  }
-  const Curve& GetCurve(unsigned int i = 0) const { 
-    assert( i < Curves.size() );
-    return Curves[i]; 
-  }
-  unsigned int GetNumberOfCurves() const { return Curves.size(); }
-  void SetNumberOfCurves(unsigned int n) { Curves.resize(n); }
-
-  /// Overlay: group 60xx
-  Overlay& GetOverlay(unsigned int i = 0) { 
-    assert( i < Overlays.size() );
-    return Overlays[i]; 
-  }
-  const Overlay& GetOverlay(unsigned int i = 0) const { 
-    assert( i < Overlays.size() );
-    return Overlays[i]; 
-  }
-  unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
-  void SetNumberOfOverlays(unsigned int n) { Overlays.resize(n); }
-
-  /// returns if Overlays are stored in the unused bit of the pixel data:
-  bool AreOverlaysInPixelData() const;
-
-  /// Set/Get Icon Image
-  const IconImage &GetIconImage() const { return Icon; }
-  IconImage &GetIconImage() { return Icon; }
-
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -146,13 +111,14 @@ private:
 
   // I believe the following 3 ivars can be derived from TS ...
   SwapCode SC;
-  std::vector<Overlay>  Overlays;
-  std::vector<Curve>  Curves;
-  IconImage Icon;
   double Intercept;
   double Slope;
-
 };
+
+/**
+ * \example DecompressImage.cs
+ * This is a C# example on how to use gdcm::Image
+ */
 
 } // end namespace gdcm
 

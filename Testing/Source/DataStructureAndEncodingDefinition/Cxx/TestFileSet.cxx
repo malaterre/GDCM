@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -20,10 +20,10 @@ int TestFileSet(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::FileSet fs;
-  gdcm::File f1;
-  gdcm::File f2;
-  fs.AddFile( f1 );
-  fs.AddFile( f2 );
+  std::string f1;
+  std::string f2;
+  fs.AddFile( f1.c_str() );
+  fs.AddFile( f2.c_str() );
 
   return 0;
 }

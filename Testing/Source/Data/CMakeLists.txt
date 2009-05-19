@@ -112,6 +112,9 @@ BogusItemStartItemEnd.dcm
 # invalid j2k stream:
   PixelDataWithVRUN.dcm
   InvalidYCCForJ2K.dcm
+
+# buggy dcm4che
+  kos.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

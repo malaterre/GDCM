@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,6 +17,16 @@
 
 int TestSorter(int argc, char *argv[])
 {
+  // Black box:
+  gdcm::Directory::FilenamesType fns;
+  gdcm::Sorter s;
+  // No sort function and fns is empty
+  if( !s.Sort( fns ) )
+    {
+    return 1;
+    }
+  
+  // White box:
   const char *directory = gdcm::Testing::GetDataRoot();
   if( argc == 2 )
     {
@@ -27,7 +37,6 @@ int TestSorter(int argc, char *argv[])
   d.Print( std::cout );
   std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
-  gdcm::Sorter s;
   bool b = s.Sort( d.GetFilenames() );
 /*
   if( !b )

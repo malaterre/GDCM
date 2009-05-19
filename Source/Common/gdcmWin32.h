@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,7 +21,7 @@
 #endif
 //-----------------------------------------------------------------------------
 #if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
-  #if (defined(gdcmCommon_EXPORTS) || defined(gdcmDICT_EXPORTS) || defined(gdcmDSED_EXPORTS) || defined(gdcmIOD_EXPORTS) || defined(gdcmMSFF_EXPORTS) || defined(_gdcmswig_EXPORTS))
+  #if (defined(gdcmCommon_EXPORTS) || defined(gdcmDICT_EXPORTS) || defined(gdcmDSED_EXPORTS) || defined(gdcmIOD_EXPORTS) || defined(gdcmMSFF_EXPORTS) || defined(_gdcmswig_EXPORTS)) || defined(vtkgdcm_EXPORTS)
     #define GDCM_EXPORT __declspec( dllexport )
   #else
     #define GDCM_EXPORT __declspec( dllimport )

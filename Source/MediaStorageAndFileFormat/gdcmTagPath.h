@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -37,17 +37,17 @@ public:
   /// "/0018,0018/"...
   /// No space allowed, comma is use to separate tag group
   /// from tag element and slash is used to separate tag
-  /// throw an error if invalid
-  void ConstructFromString(const char *path);
+  /// return false if invalid
+  bool ConstructFromString(const char *path);
 
   /// Return if path is valid or not
   static bool IsValid(const char *path);
 
   /// Construct from a list of tags
-  void ConstructFromTagList(Tag const *l, unsigned int n);
+  bool ConstructFromTagList(Tag const *l, unsigned int n);
 
-  void Push(Tag const & t);
-  void Push(unsigned int itemnum);
+  bool Push(Tag const & t);
+  bool Push(unsigned int itemnum);
 
 private:
   std::vector<Tag> Path;

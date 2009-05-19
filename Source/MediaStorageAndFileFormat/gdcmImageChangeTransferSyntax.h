@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -26,11 +26,14 @@ class ImageCodec;
 /**
  * \brief ImageChangeTransferSyntax class
  * Class to change the transfer syntax of an input DICOM
+ *
+ * If only Force param is set but no input TransferSyntax is set, it is assumed that user only wants
+ * to inspect encapsulated stream (advanced dev. option).
  */
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
 public:
-  ImageChangeTransferSyntax():TS(),Force(false),CompressIconImage(false),UserCodec(0) {}
+  ImageChangeTransferSyntax():TS(TransferSyntax::TS_END),Force(false),CompressIconImage(false),UserCodec(0) {}
   ~ImageChangeTransferSyntax() {}
 
   /// Set target Transfer Syntax
@@ -54,11 +57,11 @@ public:
   void SetUserCodec(ImageCodec *ic) { UserCodec = ic; }
 
 protected:
-  bool TryJPEGCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
-  bool TryJPEG2000Codec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
-  bool TryJPEGLSCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
-  bool TryRAWCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
-  bool TryRLECodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
+  bool TryJPEGCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
+  bool TryJPEG2000Codec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
+  bool TryJPEGLSCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
+  bool TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
+  bool TryRLECodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
 
 private:
   TransferSyntax TS;

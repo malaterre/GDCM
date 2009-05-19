@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -25,7 +25,7 @@
 namespace gdcm
 {
 
-JPEGCodec::JPEGCodec():BitSample(0)
+JPEGCodec::JPEGCodec():BitSample(0),Lossless(true),Quality(100)
 {
   Internal = NULL;
 }
@@ -33,6 +33,26 @@ JPEGCodec::JPEGCodec():BitSample(0)
 JPEGCodec::~JPEGCodec()
 {
   delete Internal;
+}
+
+void JPEGCodec::SetQuality(double q)
+{
+  Quality = q;
+}
+
+double JPEGCodec::GetQuality() const
+{
+  return Quality;
+}
+
+void JPEGCodec::SetLossless(bool l)
+{
+  Lossless = l;
+}
+
+bool JPEGCodec::GetLossless() const
+{
+  return Lossless;
 }
 
 bool JPEGCodec::CanDecode(TransferSyntax const &ts) const
@@ -60,6 +80,12 @@ bool JPEGCodec::CanCode(TransferSyntax const &ts) const
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 {
   ImageCodec::SetPixelFormat(pt);
+  // Here is the deal: D_CLUNIE_RG3_JPLY.dcm is a 12Bits Stored / 16 Bits Allocated image
+  // the jpeg encapsulated is: a 12 Sample Precision
+  // so far so good.
+  // So what if we are dealing with image such as: SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm
+  // which is also a 12Bits Stored / 16 Bits Allocated image
+  // however the jpeg encapsulated is now a 16 Sample Precision
   //SetBitSample( pt.GetBitsAllocated() );
   SetBitSample( pt.GetBitsStored() );
 }
@@ -67,35 +93,38 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 void JPEGCodec::SetBitSample(int bit)
 {
   BitSample = bit;
+  delete Internal; Internal = NULL;
   assert( Internal == NULL );
-  if( this->GetPixelFormat().GetBitsAllocated() % 8 != 0 )
-    {
-    return;
-    }
   if ( BitSample <= 8 )
     {
+    gdcmDebugMacro( "Using JPEG8" );
     Internal = new JPEG8Codec;
     }
   else if ( BitSample <= 12 )
     {
+    gdcmDebugMacro( "Using JPEG12" );
     Internal = new JPEG12Codec;
     }
   else if ( BitSample <= 16 )
     {
+    gdcmDebugMacro( "Using JPEG16" );
     Internal = new JPEG16Codec;
     }
   else
     {
+    // gdcmNonImageData/RT/RTDOSE.dcm 
     gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
     // Clearly make sure Internal will not be used
     delete Internal;
     Internal = NULL;
+    return;
     }
   Internal->SetDimensions( this->GetDimensions() );
   Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
   //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
+  assert( Internal != NULL );
 }
 
 /*
@@ -106,6 +135,7 @@ For all images, including all frames of a multi-frame image, the JPEG Interchang
 */
 bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 {
+  assert( Internal );
   out = in;
   // Fragments...
   const SequenceOfFragments *sf = in.GetSequenceOfFragments();
@@ -196,7 +226,9 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         // Foward everything back to meta jpeg codec:
         this->SetDimensions( Internal->GetDimensions() );
         this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
+        int prep = this->GetPixelFormat().GetPixelRepresentation();
         this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
+        this->PF.SetPixelRepresentation( prep );
         return true;
         }
       else
@@ -237,7 +269,12 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
   const char *input = bv->GetPointer();
   unsigned long len = bv->GetLength();
   unsigned long image_len = len / dims[2];
-    if(!Internal) return false;
+  if(!Internal) return false;
+
+  // forward parameter to low level bits implementation (8/12/16)
+  Internal->SetLossless( this->GetLossless() );
+  Internal->SetQuality( this->GetQuality() );
+
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
     std::stringstream os;
@@ -317,8 +354,41 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
     gdcmWarningMacro( "PhotometricInterpretation issue" );
     this->PI = Internal->PI;
     }
+  if( this->PF == PixelFormat::UINT12
+   || this->PF == PixelFormat::INT12 )
+    {
+    this->PF.SetBitsAllocated( 16 );
+    }
 
   return ImageCodec::Decode(tmpos,os);
+}
+
+bool JPEGCodec::IsValid(PhotometricInterpretation const &pi)
+{
+  bool ret = false;
+  switch( pi )
+    {
+    // JPEGCodec can produce the following PhotometricInterpretation as output:
+    case PhotometricInterpretation::MONOCHROME1:
+    case PhotometricInterpretation::MONOCHROME2:
+    case PhotometricInterpretation::PALETTE_COLOR:
+    case PhotometricInterpretation::RGB:
+    case PhotometricInterpretation::YBR_FULL:
+    case PhotometricInterpretation::YBR_FULL_422:
+    case PhotometricInterpretation::YBR_PARTIAL_422:
+    case PhotometricInterpretation::YBR_PARTIAL_420:
+      ret = true;
+      break;
+    default:
+      ;
+//    case HSV:
+//    case ARGB: // retired
+//    case CMYK:
+//    case YBR_RCT:
+//    case YBR_ICT:
+//      ret = false;
+    }
+  return ret;
 }
 
 } // end namespace gdcm

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -120,6 +120,7 @@ namespace gdcm
           }
         if( l > locallength )
           {
+          gdcmDebugMacro( "Out of Range SQ detected: " << l << " while max: " << locallength );
           throw Exception( "Out of Range" );
           }
         }
@@ -167,7 +168,7 @@ namespace gdcm
           }
         else
           {
-          assert( de.GetTag() == Tag(0xfffe,0xe000) );
+          //assert( de.GetTag() == Tag(0xfffe,0xe000) );
           is.seekg( -4, std::ios::cur );
           }
         // let's fix the length now:

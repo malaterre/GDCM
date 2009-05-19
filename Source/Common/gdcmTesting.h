@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -25,6 +25,8 @@ namespace gdcm
  * \brief class for testing
  * \details this class is used for the nightly regression system for GDCM
  * It makes heavily use of md5 computation
+ *
+ * \see gdcm::MD5 class for md5 computation
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Testing
@@ -36,9 +38,11 @@ public :
   /// MD5 stuff
   /// digest_str needs to be at least : strlen = [2*16+1];
   /// string will be \0 padded. (md5 are 32 bytes long)
-  static bool ComputeMD5(const char *buffer, const unsigned long buf_len,
-    char *digest_str);
-  static bool ComputeFileMD5(const char *filename, char *digest_str);
+  /// Testing is not meant to be shipped with an installed GDCM release, always
+  /// prefer the gdcm::MD5 API when doing md5 computation.
+  static bool ComputeMD5(const char *buffer, unsigned long buf_len,
+    char digest_str[33]);
+  static bool ComputeFileMD5(const char *filename, char digest_str[33]);
 
   /// Print
   void Print(std::ostream &os = std::cout);
@@ -47,6 +51,13 @@ public :
   static const char * const * GetFileNames();
   static unsigned int GetNumberOfFileNames();
   static const char * GetFileName(unsigned int file);
+
+  /// return the table that map the media storage (as string) of a filename (gdcmData)
+  typedef const char* const (*MediaStorageDataFilesType)[2];
+  static MediaStorageDataFilesType GetMediaStorageDataFiles();
+  static unsigned int GetNumberOfMediaStorageDataFiles();
+  static const char * const * GetMediaStorageDataFile(unsigned int file);
+  static const char * GetMediaStorageFromFile(const char *filepath);
 
   /// return the table that map the md5 (as in md5sum) of the Pixel Data associated
   /// to a filename
@@ -71,6 +82,8 @@ public :
 
   /// NOT THREAD SAFE
   static const char * GetTempFilename(const char *filename, const char * subdir = 0);
+
+  static const char *GetSourceDirectory();
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

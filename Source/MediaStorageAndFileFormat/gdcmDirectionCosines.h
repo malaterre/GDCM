@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -26,8 +26,10 @@ namespace gdcm
 class GDCM_EXPORT DirectionCosines
 {
 public:
-  //DirectionCosines();
-  DirectionCosines(const double *dircos = 0);
+  DirectionCosines();
+  DirectionCosines(const double dircos[6]);
+  // Cannot get the following signature to be wrapped with swig...
+  //DirectionCosines(const double *dircos = 0 );
   ~DirectionCosines();
 
   /// Print
@@ -47,6 +49,12 @@ public:
 
   /// Return whether or not this is a valid direction cosines
   bool IsValid() const;
+
+  bool SetFromString(const char *str);
+
+  double CrossDot(DirectionCosines const &dc) const;
+
+  double ComputeDistAlongNormal(const double ipp[3]) const;
 
 private:
   double Values[6];

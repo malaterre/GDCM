@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -48,9 +48,9 @@ public:
   ConstIterator Begin() const { return Items.begin(); }
   ConstIterator End() const { return Items.end(); }
 
-/// \brief constructor (UndefinedLength by default)
+  /// \brief constructor (UndefinedLength by default)
+  SequenceOfItems():SequenceLengthField(0xFFFFFFFF) { }
   //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
-  SequenceOfItems() { }
 
   /// \brief Returns the SQ length, as read from disk
   VL GetLength() const { return SequenceLengthField; }
@@ -61,6 +61,10 @@ public:
   void SetLengthToUndefined() {
     SequenceLengthField = 0xFFFFFFFF;
   }
+  /// return if Value Length if of undefined length
+  bool IsUndefinedLength() const {
+    return SequenceLengthField.IsUndefined();
+  }
 
   template <typename TDE>
   VL ComputeLength() const;
@@ -70,6 +74,7 @@ public:
   void AddItem(Item const &item);
 
   unsigned int GetNumberOfItems() const {  return Items.size(); }
+  void SetNumberOfItems(unsigned int n) {  Items.resize(n); }
 
   /* WARNING: first item is #1 (see DICOM standard)
    *  Each Item shall be implicitly assigned an ordinal position starting with the value 1 for the
@@ -137,6 +142,7 @@ public:
         //assert( item.GetTag() == Tag(0xfffe,0xe000) );
         Items.push_back( item );
         l += item.template GetLength<TDE>();
+        if( l > SequenceLengthField ) throw "Length of Item larger than expected";
         assert( l <= SequenceLengthField );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
@@ -201,6 +207,12 @@ public:
       os << "\t" << zero;
       }
   }
+
+  static SmartPointer<SequenceOfItems> New()
+  {
+     return new SequenceOfItems();
+  }
+  bool FindDataElement(const Tag &t) const;
 
 private:
 public:

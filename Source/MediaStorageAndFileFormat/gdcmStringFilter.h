@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -42,6 +42,8 @@ public:
   /// Convert to string the ByteValue contained in a DataElement
   std::string ToString(const Tag& t) const;
 
+  //std::string ToMime64(const Tag& t) const;
+
   /// Convert to string the ByteValue contained in a DataElement
   /// the returned elements are:
   /// pair.first : the name as found in the dictionary of DataElement
@@ -56,6 +58,9 @@ public:
   void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
   const File &GetFile() const { return *F; }
+
+protected:
+  std::pair<std::string, std::string> ToStringPair(const Tag& t, DataSet const &ds) const;
 
 private:
   SmartPointer<File> F;

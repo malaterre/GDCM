@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -60,8 +60,9 @@ class PrivateTag;
  */
 class GDCM_EXPORT CSAHeader
 {
+  friend std::ostream& operator<<(std::ostream &_os, const CSAHeader &d);
 public :
-  CSAHeader():InternalDataSet(),InternalType(UNKNOWN) {};
+  CSAHeader():InternalDataSet(),InternalType(UNKNOWN),InterfileData(0) {};
   ~CSAHeader() {};
 
   /// Divers format of CSAHeader as found 'in the wild'
@@ -70,6 +71,7 @@ public :
     SV10,
     NOMAGIC,
     DATASET_FORMAT,
+    INTERFILE,
     ZEROED_OUT
   } CSAHeaderType;
 
@@ -88,20 +90,31 @@ public :
   /// Return the DataSet output (use only if Format == DATASET_FORMAT )
   const DataSet& GetDataSet() const { return InternalDataSet; }
 
+  /// Return the string output (use only if Format == Interfile)
+  const char * GetInterfile() const { return InterfileData; }
+
   /// return the format of the CSAHeader
+  /// SV10 and NOMAGIC are equivalent.
   CSAHeaderType GetFormat() const;
 
   /// Return the private tag used by SIEMENS to store the CSA Image Header
+  /// This is: PrivateTag(0x0029,0x0010,"SIEMENS CSA HEADER");
   static const PrivateTag & GetCSAImageHeaderInfoTag();
 
   /// Return the private tag used by SIEMENS to store the CSA Series Header
+  /// This is: PrivateTag(0x0029,0x0020,"SIEMENS CSA HEADER");
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
+
+  /// Return the private tag used by SIEMENS to store the CSA Data Info
+  /// This is: PrivateTag(0x0029,0x0010,"SIEMENS CSA NON-IMAGE");
+  static const PrivateTag & GetCSADataInfo();
 
   /// Return the CSAElement corresponding to name 'name'
   /// \warning Case Sensitive
   const CSAElement &GetCSAElementByName(const char *name);
 
   /// Return true if the CSA element matching 'name' is found or not
+  /// \warning Case Sensitive
   bool FindCSAElementByName(const char *name);
 
 protected:
@@ -113,7 +126,15 @@ private:
   CSAHeaderType InternalType;
   Tag DataElementTag;
   static CSAElement CSAEEnd;
+  const char *InterfileData;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const CSAHeader &d)
+{
+  d.Print( os );
+  return os;
+}
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //__gdcmCSAHeader_h
