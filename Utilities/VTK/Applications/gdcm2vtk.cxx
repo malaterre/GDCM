@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
 
-  // HACK: call it *after* instanciating vtkGDCMImageReader
+  // HACK: call it *after* instanciating vtkGDCMImageWriter
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcm2vtk" );
 
   writer->SetFileName( outfilename );
@@ -394,13 +394,14 @@ int main(int argc, char *argv[])
   time_t studydatetime = gdcm::System::FileTime( filename );
   char date[22];
   gdcm::System::FormatDateTime(date, studydatetime);
+  // ContentDate
   const size_t datelen = 8;
     {
     // Do not copy the whole cstring:
     std::string s( date, date+datelen );
     writer->GetMedicalImageProperties()->SetImageDate( s.c_str() );;
     }
-  // StudyTime
+  // ContentTime
   const size_t timelen = 6; // get rid of milliseconds
     {
     // Do not copy the whole cstring:
