@@ -44,6 +44,7 @@
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
 #include "gdcmImageHelper.h"
+#include "gdcmFileMetaInformation.h"
 #include "gdcmSystem.h"
 
 #include <getopt.h>
@@ -227,7 +228,6 @@ int main(int argc, char *argv[])
   const char *filename = filenames[0].c_str();
   const char *outfilename = filenames[1].c_str();
 
-
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
@@ -284,6 +284,10 @@ int main(int argc, char *argv[])
   // else
 
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
+
+  // HACK: call it *after* instanciating vtkGDCMImageReader
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcm2vtk" );
+
   writer->SetFileName( outfilename );
 
   if( imgreader && imgreader->GetOutput()->GetNumberOfScalarComponents() == 4 && !argb )
@@ -384,6 +388,24 @@ int main(int argc, char *argv[])
     {
     if( !modality_str.empty() )
       writer->GetMedicalImageProperties()->SetModality( modality_str.c_str() );;
+    }
+
+  // Pass on the filetime of input file
+  time_t studydatetime = gdcm::System::FileTime( filename );
+  char date[22];
+  gdcm::System::FormatDateTime(date, studydatetime);
+  const size_t datelen = 8;
+    {
+    // Do not copy the whole cstring:
+    std::string s( date, date+datelen );
+    writer->GetMedicalImageProperties()->SetImageDate( s.c_str() );;
+    }
+  // StudyTime
+  const size_t timelen = 6; // get rid of milliseconds
+    {
+    // Do not copy the whole cstring:
+    std::string s( date+datelen, timelen );
+    writer->GetMedicalImageProperties()->SetImageTime( s.c_str() );;
     }
 
   writer->Write();
