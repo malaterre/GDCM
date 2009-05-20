@@ -164,9 +164,19 @@ ENDIF(BUILD_EXAMPLES)
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
   DEPENDS 
     ${GDCM_LIBRARY_DIR}/gdcm_csharp.dll
-    ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
   COMMENT "building gdcm_csharp.dll"
 )
+
+IF(BUILD_EXAMPLES)
+ADD_CUSTOM_TARGET(GDCMCSharpExample
+  DEPENDS 
+    ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
+  COMMENT "building HelloWorld.exe"
+)
+add_dependencies(GDCMCSharpExample
+ GDCMCSharp)
+
+ENDIF(BUILD_EXAMPLES)
 
 
 
