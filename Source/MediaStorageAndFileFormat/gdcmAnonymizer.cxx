@@ -338,6 +338,12 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
   return ret;
 }
 
+// Implementation note:
+// This function trigger:
+// 1 StartEvent
+// 1 EndEvent
+// 6 IterationEvent
+// N AnonymizeEvent (depend on number of tag found)
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 {
   static const unsigned int deidSize = sizeof(Tag);
@@ -507,6 +513,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   // Check that root level sequence do not contains any of those attributes
   RecurseDataSet( F->GetDataSet() );
 
+  this->InvokeEvent( IterationEvent() );
+
   // Group Length are removed since PS 3.3-2008
   RemoveGroupLength();
 
@@ -526,6 +534,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   UIDGenerator uid;
   if( ds.FindDataElement( Tag(0x008,0x0018) ) )
     Replace( Tag(0x008,0x0018), uid.Generate() );
+
+  this->InvokeEvent( IterationEvent() );
 
   return true;
 }
