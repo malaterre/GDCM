@@ -76,6 +76,8 @@ ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 
 SET(Common_SRCS
   gdcmVersion.cxx
+  gdcmEvent.cxx
+  gdcmCommand.cxx
   gdcmMD5.cxx
   gdcmBase64.cxx
   gdcmSHA1.cxx
@@ -83,6 +85,7 @@ SET(Common_SRCS
   gdcmCryptographicMessageSyntax.cxx
   gdcmASN1.cxx
   gdcmObject.cxx
+  gdcmSubject.cxx
   gdcmDirectory.cxx
   gdcmTerminal.cxx
   gdcmString.cxx
