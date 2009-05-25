@@ -27,6 +27,7 @@
 #include "gdcmDefs.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmEvent.h"
+#include "gdcmAnonymizeEvent.h"
 
 namespace gdcm
 {
@@ -579,6 +580,10 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
   // \precondition
   assert( ds.FindDataElement(tag) );
 
+  gdcm::AnonymizeEvent ae;
+  ae.SetTag( tag );
+  this->InvokeEvent( ae );
+
   typedef std::pair< Tag, std::string > TagValueKey;
   typedef std::map< TagValueKey, std::string > DummyMap;
   static DummyMap dummymap;
@@ -587,11 +592,12 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
   //DataSet &ds = F->GetDataSet();
 
   bool canempty = CanEmptyTag( tag );
+  DataElement copy;
   if( !canempty )
     {
     TagValueKey tvk;
     tvk.first = tag;
-    DataElement copy = ds.GetDataElement( tag );
+    copy = ds.GetDataElement( tag );
     // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
     // has an empty 0008,0018 attribute, let's try to handle that:
     if( !copy.IsEmpty() )
@@ -637,10 +643,21 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
 
-  DataSet::ConstIterator it = ds.Begin();
-  for( ; it != ds.End(); ++it )
+  for(const Tag *ptr = start ; ptr != end ; ++ptr)
     {
-    DataElement de = *it;
+    const Tag& tag = *ptr;
+    // FIXME Type 1 !
+    if( ds.FindDataElement( tag ) )
+      {
+      BALCPProtect(ds, tag);
+      }
+    }
+
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); /*++it*/ )
+    {
+    assert( it != ds.End() );
+    DataElement de = *it; ++it;
     //const SequenceOfItems *sqi = de.GetSequenceOfItems();
     VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
     SmartPointer<SequenceOfItems> sqi = 0;
@@ -658,18 +675,6 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
         Item &item = sqi->GetItem( i );
         DataSet &nested = item.GetNestedDataSet();
         RecurseDataSet( nested );
-        }
-      }
-    else
-      {
-      for(const Tag *ptr = start ; ptr != end ; ++ptr)
-        {
-        const Tag& tag = *ptr;
-        // FIXME Type 1 !
-        if( ds.FindDataElement( tag ) )
-          {
-          BALCPProtect(ds, tag);
-          }
         }
       }
     ds.Replace( de );

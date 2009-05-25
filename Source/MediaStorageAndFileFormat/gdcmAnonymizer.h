@@ -21,24 +21,6 @@
 
 namespace gdcm
 {
-class  AnonymizeEvent : public AnyEvent {
-public:
-  typedef AnonymizeEvent Self;
-  typedef AnyEvent Superclass;
-  AnonymizeEvent(Tag const &tag = 0):m_Tag(tag) {}
-  virtual ~AnonymizeEvent() {}
-  virtual const char * GetEventName() const { return "AnonymizeEvent"; }
-  virtual bool CheckEvent(const ::gdcm::Event* e) const
-    { return dynamic_cast<const Self*>(e); }
-  virtual ::gdcm::Event* MakeObject() const
-    { return new Self; }
-  AnonymizeEvent(const Self&s) : AnyEvent(s){};
-private:
-  void operator=(const Self&);
-  Tag m_Tag;
-};
-
-
 /**
  * \brief Anonymizer
  * This class is a multi purpose anonymizer. It can work in 2 mode:

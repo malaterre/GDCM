@@ -18,6 +18,7 @@
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
 #include "gdcmSmartPointer.h"
+#include "gdcmAnonymizeEvent.h"
 
 namespace gdcm
 {
@@ -64,6 +65,7 @@ private:
   unsigned long m_ProgressTag;
   unsigned long m_IterationTag;
   unsigned long m_AbortTag;
+  unsigned long m_AnonymizeTag;
 
   bool m_TestAbort;
 

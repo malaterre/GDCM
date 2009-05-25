@@ -78,7 +78,6 @@ SET(Common_SRCS
   gdcmVersion.cxx
   gdcmEvent.cxx
   gdcmCommand.cxx
-  gdcmSimpleSubjectWatcher.cxx
   gdcmMD5.cxx
   gdcmBase64.cxx
   gdcmSHA1.cxx

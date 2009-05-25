@@ -6,6 +6,8 @@ SET(MSFF_SRCS
   gdcmFileExplicitFilter.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
+  gdcmSimpleSubjectWatcher.cxx
+  gdcmAnonymizeEvent.cxx
   gdcmPixmap.cxx
   gdcmBitmap.cxx
   gdcmRescaler.cxx
