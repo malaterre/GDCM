@@ -26,6 +26,7 @@
 #include "gdcmType.h"
 #include "gdcmDefs.h"
 #include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmEvent.h"
 
 namespace gdcm
 {
@@ -326,9 +327,14 @@ bool Anonymizer::RemovePrivateTags()
  */
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
 {
+  this->InvokeEvent( StartEvent() );
+  bool ret;
   if( deidentify )
-    return BasicApplicationLevelConfidentialityProfile1();
-  return BasicApplicationLevelConfidentialityProfile2();
+    ret = BasicApplicationLevelConfidentialityProfile1();
+  else
+    ret = BasicApplicationLevelConfidentialityProfile2();
+  this->InvokeEvent( EndEvent() );
+  return ret;
 }
 
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
@@ -625,7 +631,7 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
 
-  DataSet::Iterator it = ds.Begin();
+  DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     DataElement de = *it;

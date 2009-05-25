@@ -16,6 +16,7 @@
 #define __gdcmAnonymizer_h
 
 #include "gdcmFile.h"
+#include "gdcmSubject.h"
 
 namespace gdcm
 {
@@ -51,9 +52,11 @@ namespace gdcm
  * (compared to md5sum) so that we meet the following two conditions:
  *  - Produce the same dummy value for the same input value
  *  - do not provide an easy way to retrieve the original value from the sha1 generated value
+ *
+ * \see CryptographicMessageSyntax
  */
 class CryptographicMessageSyntax;
-class GDCM_EXPORT Anonymizer
+class GDCM_EXPORT Anonymizer : public Subject
 {
 public:
   Anonymizer():F(new File),/*AESKey(),*/CMS(NULL) {}

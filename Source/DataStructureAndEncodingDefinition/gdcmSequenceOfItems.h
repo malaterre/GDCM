@@ -210,7 +210,7 @@ public:
 
   static SmartPointer<SequenceOfItems> New()
   {
-     return new SequenceOfItems();
+     return new SequenceOfItems;
   }
   bool FindDataElement(const Tag &t) const;
 

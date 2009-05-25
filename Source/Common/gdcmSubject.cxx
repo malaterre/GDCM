@@ -206,11 +206,11 @@ PrintObservers(std::ostream& os, std::string indent) const
   return true;
 }
 
-Subject::  Subject()
+Subject::Subject():Internals(new SubjectInternals)
 {
-  Internals = new SubjectInternals;
 }
-Subject::  ~Subject()
+
+Subject::~Subject()
 {
   delete Internals;
 }

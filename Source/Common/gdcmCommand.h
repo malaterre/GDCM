@@ -45,6 +45,68 @@ private:
   Command(const Command&);  // Not implemented.
   void operator=(const Command&);  // Not implemented.
 };
+
+/** \class SimpleMemberCommand
+ *  \brief Command subclass that calls a pointer to a member function
+ *
+ *  SimpleMemberCommand calls a pointer to a member function with no 
+ *  arguments.   
+ */
+template <typename T>
+class SimpleMemberCommand : public Command
+{ 
+public:
+  /** A method callback. */
+  typedef  void (T::*TMemberFunctionPointer)(); 
+  
+  /** Standard class typedefs. */
+  typedef SimpleMemberCommand   Self;
+  //typedef SmartPointer<Self>    Pointer;
+  
+  /** Run-time type information (and related methods). */
+  //itkTypeMacro(SimpleMemberCommand,Command);
+
+  /** Method for creation through the object factory. */
+  static SmartPointer<SimpleMemberCommand> New()
+    {
+    return new SimpleMemberCommand;
+    }
+
+  /** Specify the callback function. */
+  void SetCallbackFunction(T* object,  
+                           TMemberFunctionPointer memberFunction)
+    {
+    m_This = object;
+    m_MemberFunction = memberFunction;
+    }
+  
+  /** Invoke the callback function. */
+  virtual void Execute(Subject *,const Event & ) 
+    { 
+    if( m_MemberFunction ) 
+      {
+      ((*m_This).*(m_MemberFunction))();
+      }
+    }
+  virtual void Execute(const Subject *,const Event & ) 
+    { 
+    if( m_MemberFunction ) 
+      {
+      ((*m_This).*(m_MemberFunction))();
+      }
+    }
+  
+protected:
+  T* m_This;
+  TMemberFunctionPointer m_MemberFunction;
+  SimpleMemberCommand():m_MemberFunction(0) {}
+  virtual ~SimpleMemberCommand() {}
+
+private:
+  SimpleMemberCommand(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+};
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //__gdcmCommand_h
