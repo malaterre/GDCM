@@ -186,6 +186,7 @@ public class";
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmSimpleSubjectWatcher.h"
 
 using namespace gdcm;
 %}
@@ -625,4 +626,5 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+%include "gdcmSimpleSubjectWatcher.h"
 
