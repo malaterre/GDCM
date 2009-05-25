@@ -93,6 +93,7 @@ gdcmEventMacro( AbortEvent         , AnyEvent );
 gdcmEventMacro( ModifiedEvent      , AnyEvent );
 gdcmEventMacro( InitializeEvent    , AnyEvent );
 gdcmEventMacro( IterationEvent     , AnyEvent );
+//gdcmEventMacro( AnonymizeEvent     , AnyEvent );
 gdcmEventMacro( UserEvent          , AnyEvent );
 
 

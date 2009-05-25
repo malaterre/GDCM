@@ -21,11 +21,13 @@ namespace gdcm
 SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Subject(s),m_Comment(comment)
 {
   // Create a series of commands
-  m_StartFilterCommand =      CommandType::New();
-  m_EndFilterCommand =        CommandType::New();
-  m_ProgressFilterCommand =   CommandType::New();
-  m_IterationFilterCommand =  CommandType::New();
-  m_AbortFilterCommand =      CommandType::New();
+  m_StartFilterCommand =      SimpleCommandType::New();
+  m_EndFilterCommand =        SimpleCommandType::New();
+  m_ProgressFilterCommand =   SimpleCommandType::New();
+  m_IterationFilterCommand =  SimpleCommandType::New();
+  m_AbortFilterCommand =      SimpleCommandType::New();
+
+  m_AnonymizeFilterCommand =      CommandType::New();
 
   // Assign the callbacks
   m_StartFilterCommand->SetCallbackFunction(this,
@@ -38,6 +40,8 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
                                         &SimpleSubjectWatcher::ShowIteration);
   m_AbortFilterCommand->SetCallbackFunction(this,
                                         &SimpleSubjectWatcher::ShowAbort);
+  m_AnonymizeFilterCommand->SetCallbackFunction(this,
+                                        &SimpleSubjectWatcher::ShowAnonymization);
 
 
   // Add the commands as observers
@@ -50,6 +54,7 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
   m_AbortTag
     = m_Subject->AddObserver(AbortEvent(), m_AbortFilterCommand);
 
+  m_TestAbort = false;
 }
 
 SimpleSubjectWatcher::~SimpleSubjectWatcher()
@@ -66,19 +71,28 @@ void SimpleSubjectWatcher::EndFilter()
 }
 void SimpleSubjectWatcher::ShowProgress()
 {
+  std::cout << "Progress" << std::endl;
 }
 void SimpleSubjectWatcher::ShowIteration()
 {
+  std::cout << "Iteration" << std::endl;
 }
 void SimpleSubjectWatcher::ShowAbort()
 {
+  std::cout << "Abort" << std::endl;
+}
+void SimpleSubjectWatcher::ShowAnonymization(Subject *caller, const Event &evt)
+{
+  const AnonymizeEvent &ae = dynamic_cast<const AnonymizeEvent&>(evt);
 }
 
 void SimpleSubjectWatcher::TestAbortOn()
 {
+  m_TestAbort = true;
 }
 void SimpleSubjectWatcher::TestAbortOff()
 {
+  m_TestAbort = false;
 }
 
 

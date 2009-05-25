@@ -381,6 +381,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     if( ds.FindDataElement( tag ) )
       encryptedds.Insert( ds.GetDataElement( tag ) );
     }
+  this->InvokeEvent( IterationEvent() );
   // Check that root level sequence do not contains any of those attributes
 {
   DataSet::ConstIterator it = ds.Begin();
@@ -412,6 +413,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     }
 }
 
+  this->InvokeEvent( IterationEvent() );
   sq->AddItem(it);
 
   DataElement des( Tag(0x0400,0x0550) );
@@ -490,6 +492,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
     ds.Insert(des);
     }
+  this->InvokeEvent( IterationEvent() );
 
   // 2. Each Attribute to be protected shall then either be removed from the dataset, or have its value
   // replaced by a different "replacement value" which does not allow identification of the patient.
@@ -515,6 +518,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   Replace( Tag(0x0012,0x0062), "YES");
   Replace( Tag(0x0012,0x0063), "BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE");
 
+  this->InvokeEvent( IterationEvent() );
 
   // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
   // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
@@ -626,6 +630,8 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
 
 void Anonymizer::RecurseDataSet( DataSet & ds )
 {
+  if( ds.IsEmpty() ) return;
+
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;

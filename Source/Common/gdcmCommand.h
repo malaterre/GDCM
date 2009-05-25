@@ -46,6 +46,83 @@ private:
   void operator=(const Command&);  // Not implemented.
 };
 
+/** \class MemberCommand
+ *  \brief Command subclass that calls a pointer to a member function
+ *
+ *  MemberCommand calls a pointer to a member function with the same
+ *  arguments as Execute on Command.   
+ * 
+ */
+template <class T>
+class MemberCommand : public Command
+{
+public:
+  /** pointer to a member function that takes a Subject* and the event */
+  typedef  void (T::*TMemberFunctionPointer)(Subject*, const Event &);
+  typedef  void (T::*TConstMemberFunctionPointer)(const Subject*, 
+                                                  const Event &);
+    
+  /** Standard class typedefs. */
+  typedef MemberCommand       Self;
+  //typedef SmartPointer<Self>  Pointer;
+  
+  /** Method for creation through the object factory. */
+  //itkNewMacro(Self);
+  static SmartPointer<MemberCommand> New()
+    {
+    return new MemberCommand;
+    }
+ 
+  /** Run-time type information (and related methods). */
+  //itkTypeMacro(MemberCommand,Command);
+
+  /**  Set the callback function along with the object that it will
+   *  be invoked on. */
+  void SetCallbackFunction(T* object,  
+                           TMemberFunctionPointer memberFunction)
+    {
+    m_This = object;
+    m_MemberFunction = memberFunction;
+    }
+  void SetCallbackFunction(T* object,  
+                           TConstMemberFunctionPointer memberFunction)
+    {
+    m_This = object;
+    m_ConstMemberFunction = memberFunction;
+    }
+  
+  /**  Invoke the member function. */
+  virtual void Execute(Subject *caller, const Event & event )
+    { 
+    if( m_MemberFunction ) 
+      {
+      ((*m_This).*(m_MemberFunction))(caller, event);
+      }
+    }
+
+  /**  Invoke the member function with a const object. */
+  virtual void Execute( const Subject *caller, const Event & event )
+    { 
+    if( m_ConstMemberFunction ) 
+      {
+      ((*m_This).*(m_ConstMemberFunction))(caller, event);
+      }
+    }
+
+protected:
+
+  T* m_This;
+  TMemberFunctionPointer m_MemberFunction;
+  TConstMemberFunctionPointer m_ConstMemberFunction;
+  MemberCommand():m_MemberFunction(0),m_ConstMemberFunction(0) {}
+  virtual ~MemberCommand(){}
+
+private:
+  MemberCommand(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+};
+
 /** \class SimpleMemberCommand
  *  \brief Command subclass that calls a pointer to a member function
  *

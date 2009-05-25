@@ -42,24 +42,30 @@ protected:
   virtual void EndFilter();
   virtual void ShowProgress();
   virtual void ShowIteration();
+  virtual void ShowAnonymization(Subject *caller, const Event &evt);
   virtual void ShowAbort();
 
 private:
   SmartPointer<gdcm::Subject> m_Subject;
   std::string m_Comment;
 
-  typedef SimpleMemberCommand<SimpleSubjectWatcher> CommandType;
-  SmartPointer<CommandType> m_StartFilterCommand;
-  SmartPointer<CommandType> m_EndFilterCommand;
-  SmartPointer<CommandType> m_ProgressFilterCommand;
-  SmartPointer<CommandType> m_IterationFilterCommand;
-  SmartPointer<CommandType> m_AbortFilterCommand;
+  typedef SimpleMemberCommand<SimpleSubjectWatcher> SimpleCommandType;
+  SmartPointer<SimpleCommandType> m_StartFilterCommand;
+  SmartPointer<SimpleCommandType> m_EndFilterCommand;
+  SmartPointer<SimpleCommandType> m_ProgressFilterCommand;
+  SmartPointer<SimpleCommandType> m_IterationFilterCommand;
+  SmartPointer<SimpleCommandType> m_AbortFilterCommand;
+
+  typedef MemberCommand<SimpleSubjectWatcher> CommandType;
+  SmartPointer<CommandType> m_AnonymizeFilterCommand;
 
   unsigned long m_StartTag;
   unsigned long m_EndTag;
   unsigned long m_ProgressTag;
   unsigned long m_IterationTag;
   unsigned long m_AbortTag;
+
+  bool m_TestAbort;
 
   SimpleSubjectWatcher(const SimpleSubjectWatcher&);  // Not implemented.
   void operator=(const SimpleSubjectWatcher&);  // Not implemented.
