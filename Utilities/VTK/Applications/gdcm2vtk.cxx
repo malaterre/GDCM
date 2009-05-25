@@ -39,6 +39,7 @@
 #include "vtkStructuredPointsReader.h"
 #include "vtkStructuredPointsWriter.h"
 #include "vtkStructuredPoints.h"
+#include "vtkXMLImageDataWriter.h"
 
 #include "gdcmFilename.h"
 #include "gdcmTrace.h"
@@ -276,6 +277,15 @@ int main(int argc, char *argv[])
       vtkStructuredPointsWriter * writer = vtkStructuredPointsWriter::New();
       writer->SetFileName( outfilename );
       writer->SetFileTypeToBinary();
+      writer->SetInput( imgdata );
+      writer->Write();
+      return 0;
+      }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  )
+      {
+      vtkXMLImageDataWriter * writer = vtkXMLImageDataWriter::New();
+      writer->SetFileName( outfilename );
+      writer->SetDataModeToBinary();
       writer->SetInput( imgdata );
       writer->Write();
       return 0;
