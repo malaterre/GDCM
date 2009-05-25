@@ -21,6 +21,7 @@
 
 #include <string.h> // memcmp
 #include <stdlib.h> // malloc
+#include <stdio.h> // sprintf
 
 /*
  */
