@@ -49,7 +49,11 @@ public class BasicAnonymizer
       return 1;
       }
 
-    Anonymizer ano = new Anonymizer();
+    SmartPtrAno sano = Anonymizer.New();
+    Anonymizer ano = sano.__ref__();
+
+    SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(ano, "Anonymizer");
+
     ano.SetFile( reader.GetFile() );
     ano.SetCryptographicMessageSyntax( cms );
     if( !ano.BasicApplicationLevelConfidentialityProfile() )

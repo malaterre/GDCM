@@ -18,6 +18,7 @@
 #include "gdcmFile.h"
 #include "gdcmSubject.h"
 #include "gdcmEvent.h"
+#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
@@ -109,7 +110,10 @@ public:
   void SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms );
   const CryptographicMessageSyntax *GetCryptographicMessageSyntax() const;
 
+  static SmartPointer<Anonymizer> New() { return new Anonymizer; }
+
 protected:
+
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
   bool BALCPProtect(DataSet &ds, Tag const & tag);
   bool CanEmptyTag(Tag const &tag);

@@ -125,6 +125,8 @@ public class";
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
+#include "gdcmSubject.h"
+#include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
@@ -484,8 +486,20 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
+%include "gdcmSubject.h"
+%include "gdcmCommand.h"
+%template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
+%ignore gdcm::Anonymizer::Anonymizer;
 %include "gdcmAnonymizer.h"
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
+%extend gdcm::Anonymizer
+{
+%typemap(cscode) gdcm::Anonymizer
+%{
+  public Anonymizer() : this(gdcmPINVOKE.Anonymizer_New(), false) {
+  }
+%}
+};
 
 // System is a namespace in C#, need to rename to something different
 %rename (PosixEmulation) System; 
