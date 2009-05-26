@@ -58,7 +58,7 @@ In order to get documentation on member function and class, one can do (SWIG 1.3
 public class";
 */
 
-%module(docstring="A DICOM library") gdcm
+%module(docstring="A DICOM library",directors=1) gdcm
 #pragma SWIG nowarn=504,510
 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
@@ -73,6 +73,8 @@ public class";
 #include "gdcmTypes.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
+#include "gdcmEvent.h"
+#include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
 #include "gdcmObject.h"
@@ -244,6 +246,11 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 //            return a.value;
 //        }
 %include "gdcmSwapCode.h"
+
+//%feature("director") Event;
+//%feature("director") AnyEvent;
+%include "gdcmEvent.h"
+
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
 %include "gdcmMediaStorage.h"
@@ -254,6 +261,10 @@ EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
+
+//%feature("director") AnonymizeEvent;
+%include "gdcmAnonymizeEvent.h"
+
 %include "gdcmVL.h"
 EXTEND_CLASS_PRINT(gdcm::VL)
 %extend gdcm::VL
@@ -640,5 +651,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+
+%feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"
 

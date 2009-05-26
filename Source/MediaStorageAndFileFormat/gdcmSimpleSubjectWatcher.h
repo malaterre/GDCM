@@ -34,17 +34,18 @@ public:
   SimpleSubjectWatcher(Subject * s, const char *comment = "");
   ~SimpleSubjectWatcher();
 
-protected:
-  // Custom API used for internal Testing do not use !
-  void TestAbortOn();
-  void TestAbortOff();
-
+public:
   virtual void StartFilter();
   virtual void EndFilter();
   virtual void ShowProgress();
   virtual void ShowIteration();
   virtual void ShowAnonymization(Subject *caller, const Event &evt);
   virtual void ShowAbort();
+
+protected:
+  // Custom API used for internal Testing do not use !
+  void TestAbortOn();
+  void TestAbortOff();
 
 private:
   SmartPointer<gdcm::Subject> m_Subject;

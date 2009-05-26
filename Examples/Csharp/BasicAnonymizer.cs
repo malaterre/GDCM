@@ -21,6 +21,43 @@
 using System;
 using gdcm;
 
+public class MyWatcher : SimpleSubjectWatcher
+{
+  public MyWatcher(Subject s):base(s,"Override String"){}
+  public override void StartFilter() {
+    System.Console.WriteLine( "This is my start" );
+  }
+  public override void EndFilter(){
+    System.Console.WriteLine( "This is my end" );
+  }
+  public override void ShowProgress(){
+    System.Console.WriteLine( "This is my progress" );
+  }
+  public override void ShowIteration(){
+    System.Console.WriteLine( "This is my iteration" );
+  }
+  public override void ShowAnonymization(Subject caller, Event evt){
+    System.Console.WriteLine( "This is my Anonymization. Type: " + evt.GetEventName() );
+    System.Type type = evt.GetType();
+    System.Console.WriteLine( "This is my Anonymization. System.Type: " + type.ToString() );
+    AnonymizeEvent ae = new AnonymizeEvent(evt);
+    System.Console.WriteLine( "This is my Anonymization. CheckEvent: " + ae.CheckEvent( evt ) );
+      System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + ae.GetTag().toString() );
+    //if(evt is AnonymizeEvent)
+      {
+      //Tag t = ((AnonymizeEvent)evt).GetTag();
+      //System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + t.toString() );
+      }
+    //else
+    //  {
+    //  System.Console.WriteLine( "This is my Anonymization. Event " + evt.GetEventName() );
+    //  }
+  }
+  public override void ShowAbort(){
+    System.Console.WriteLine( "This is my abort" );
+  }
+}
+
 public class BasicAnonymizer
 {
   public static int Main(string[] args)
@@ -52,7 +89,8 @@ public class BasicAnonymizer
     SmartPtrAno sano = Anonymizer.New();
     Anonymizer ano = sano.__ref__();
 
-    SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(ano, "Anonymizer");
+    //SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(ano, "Anonymizer");
+    MyWatcher watcher = new MyWatcher(ano);
 
     ano.SetFile( reader.GetFile() );
     ano.SetCryptographicMessageSyntax( cms );
