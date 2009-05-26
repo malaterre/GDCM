@@ -52,6 +52,7 @@ IF(GDCM_DATA_ROOT)
 SET(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
   TestReader2
+	TestAttribute8
   )
 ENDIF(GDCM_DATA_ROOT)
 
