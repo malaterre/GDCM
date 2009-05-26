@@ -214,6 +214,7 @@ int main(int argc, char *argv[])
   int error = 0;
   int help = 0;
   int version = 0;
+  int recursive = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -231,6 +232,7 @@ int main(int argc, char *argv[])
         {"aes128", 0, &aes128, 1},
         {"aes192", 0, &aes192, 1},
         {"aes256", 0, &aes256, 1},
+        {"recursive", 0, &recursive, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -307,6 +309,10 @@ int main(int argc, char *argv[])
     case 'o':
       assert( outfilename.empty() );
       outfilename = optarg;
+      break;
+
+    case 'r':
+      recursive = 1;
       break;
 
     case 'k': // key
@@ -457,7 +463,6 @@ int main(int argc, char *argv[])
   // Are we in single file or directory mode:
   unsigned int nfiles = 1;
   gdcm::Directory dir;
-  bool recursive = false; //true;
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     if( !gdcm::System::FileIsDirectory(outfilename.c_str()) )
