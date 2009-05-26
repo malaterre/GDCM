@@ -37,10 +37,10 @@ namespace gdcm
 
 Reader::~Reader()
 {
-	if (Ifstream) {
-		Ifstream->close();
-		delete Ifstream;
-	}
+  if (Ifstream) {
+    Ifstream->close();
+    delete Ifstream;
+  }
 }
 
 /// \brief tells us if "DICM" is found as position 128
