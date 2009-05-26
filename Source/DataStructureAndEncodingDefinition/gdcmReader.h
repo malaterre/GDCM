@@ -54,19 +54,20 @@ class GDCM_EXPORT Reader
 {
 public:
   Reader():F(new File){
-	  Stream = NULL;
-	  Ifstream = NULL;
+    Stream = NULL;
+    Ifstream = NULL;
   }
   virtual ~Reader();
 
   virtual bool Read(); // Execute()
   void SetFileName(const char *filename) {
-	  Ifstream = new std::ifstream();
-	  Ifstream->open(filename, std::ios::binary);
-	  Stream = Ifstream;
+    if(Ifstream) delete Ifstream;
+    Ifstream = new std::ifstream();
+    Ifstream->open(filename, std::ios::binary);
+    Stream = Ifstream;
   }
   void SetStream(std::istream &input_stream) {
-	  Stream = &input_stream;
+    Stream = &input_stream;
   }
 
   const File &GetFile() const { return *F; }
