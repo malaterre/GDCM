@@ -34,7 +34,7 @@ public:
   SimpleSubjectWatcher(Subject * s, const char *comment = "");
   ~SimpleSubjectWatcher();
 
-public:
+protected:
   virtual void StartFilter();
   virtual void EndFilter();
   virtual void ShowProgress();

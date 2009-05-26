@@ -24,23 +24,23 @@ using gdcm;
 public class MyWatcher : SimpleSubjectWatcher
 {
   public MyWatcher(Subject s):base(s,"Override String"){}
-  public override void StartFilter() {
+  protected override void StartFilter() {
     System.Console.WriteLine( "This is my start" );
   }
-  public override void EndFilter(){
+  protected override void EndFilter(){
     System.Console.WriteLine( "This is my end" );
   }
-  public override void ShowProgress(){
+  protected override void ShowProgress(){
     System.Console.WriteLine( "This is my progress" );
   }
-  public override void ShowIteration(){
+  protected override void ShowIteration(){
     System.Console.WriteLine( "This is my iteration" );
   }
-  public override void ShowAnonymization(Subject caller, Event evt){
+  protected override void ShowAnonymization(Subject caller, Event evt){
     System.Console.WriteLine( "This is my Anonymization. Type: " + evt.GetEventName() );
     System.Type type = evt.GetType();
     System.Console.WriteLine( "This is my Anonymization. System.Type: " + type.ToString() );
-    AnonymizeEvent ae = new AnonymizeEvent(evt);
+    AnonymizeEvent ae = new AnonymizeEvent();
     System.Console.WriteLine( "This is my Anonymization. CheckEvent: " + ae.CheckEvent( evt ) );
       System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + ae.GetTag().toString() );
     //if(evt is AnonymizeEvent)
@@ -53,7 +53,7 @@ public class MyWatcher : SimpleSubjectWatcher
     //  System.Console.WriteLine( "This is my Anonymization. Event " + evt.GetEventName() );
     //  }
   }
-  public override void ShowAbort(){
+  protected override void ShowAbort(){
     System.Console.WriteLine( "This is my abort" );
   }
 }
