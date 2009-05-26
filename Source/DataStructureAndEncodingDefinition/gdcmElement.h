@@ -130,6 +130,20 @@ protected:
   }
 };
 
+struct ignore_char {
+  ignore_char(char c): m_char(c) {}
+  char m_char;
+};
+ignore_char const backslash('\\');
+
+  inline std::istream& operator>> (std::istream& in, ignore_char const& ic) {
+    if (!in.eof())
+      in.clear(in.rdstate() & ~std::ios_base::failbit);
+    if (in.get() != ic.m_char)
+      in.setstate(std::ios_base::failbit);
+    return in;
+  } 
+
 
 // Implementation to perform formatted read and write
 template<> class EncodingImplementation<VR::VRASCII> {
@@ -141,6 +155,7 @@ public:
     //assert( length ); // != 0
     length = 0;
     assert( _is );
+#if 0
     char sep;
     while( _is >> data[length++] )
       {
@@ -150,6 +165,11 @@ public:
       assert( sep == '\\' || sep == ' ' ); // FIXME: Bad use of assert
       if( sep == ' ' ) length--; // FIXME
       }
+#else
+  while( _is >> std::ws >> data[length++] >> std::ws >> backslash )
+    {
+    }
+#endif
     }
 
   template<typename T> // FIXME this should be VRToType<TVR>::Type
