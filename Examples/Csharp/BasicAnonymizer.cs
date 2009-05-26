@@ -37,21 +37,26 @@ public class MyWatcher : SimpleSubjectWatcher
     System.Console.WriteLine( "This is my iteration" );
   }
   protected override void ShowAnonymization(Subject caller, Event evt){
-    System.Console.WriteLine( "This is my Anonymization. Type: " + evt.GetEventName() );
-    System.Type type = evt.GetType();
-    System.Console.WriteLine( "This is my Anonymization. System.Type: " + type.ToString() );
-    AnonymizeEvent ae = new AnonymizeEvent();
-    System.Console.WriteLine( "This is my Anonymization. CheckEvent: " + ae.CheckEvent( evt ) );
-      System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + ae.GetTag().toString() );
-    //if(evt is AnonymizeEvent)
+/*
+ * A couple of explanation are necessary here to understand how SWIG work
+ *  http://www.swig.org/Doc1.3/Java.html#adding_downcasts
+ *
+ *  System.Console.WriteLine( "This is my Anonymization. Type: " + evt.GetEventName() );
+ *  System.Type type = evt.GetType();
+ *  System.Console.WriteLine( "This is my Anonymization. System.Type: " + type.ToString() );
+ *  System.Console.WriteLine( "This is my Anonymization. CheckEvent: " + ae.CheckEvent( evt ) );
+ *  System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + ae.GetTag().toString() );
+ */
+    AnonymizeEvent ae = AnonymizeEvent.Cast(evt);
+    if( ae != null )
       {
-      //Tag t = ((AnonymizeEvent)evt).GetTag();
-      //System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + t.toString() );
+      Tag t = ae.GetTag();
+      System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + t.toString() );
       }
-    //else
-    //  {
-    //  System.Console.WriteLine( "This is my Anonymization. Event " + evt.GetEventName() );
-    //  }
+    else
+      {
+      System.Console.WriteLine( "This is my Anonymization. Unhandled Event type: " + evt.GetEventName() );
+      }
   }
   protected override void ShowAbort(){
     System.Console.WriteLine( "This is my abort" );

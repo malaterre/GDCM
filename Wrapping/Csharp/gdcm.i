@@ -264,6 +264,11 @@ EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 
 //%feature("director") AnonymizeEvent;
 %include "gdcmAnonymizeEvent.h"
+%extend gdcm::AnonymizeEvent {
+  static AnonymizeEvent *Cast(Event *event) {
+    return dynamic_cast<AnonymizeEvent*>(event);
+  }
+};
 
 %include "gdcmVL.h"
 EXTEND_CLASS_PRINT(gdcm::VL)
