@@ -17,6 +17,7 @@
  */
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
+#include "gdcmScanner.h"
 #include "gdcmVersion.h"
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
@@ -24,6 +25,10 @@
 #include "gdcmGlobal.h"
 #include "gdcmDefs.h"
 #include "gdcmDirectory.h"
+
+#include "gdcmSequenceOfItems.h"
+#include "gdcmTag.h"
+#include "gdcmVR.h"
 
 #include <getopt.h>
 
@@ -57,6 +62,51 @@ void PrintHelp()
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
   std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
+}
+
+/*
+  (fffe,e000) na "Directory Record" IMAGE #=13            # u/l, 1 Item
+  #  offset=$1398  refFileID="IMAGES\DXIMAGE"
+    (0004,1400) up 0                                        #   4, 1 OffsetOfTheNextDirectoryRecord
+    (0004,1410) US 65535                                    #   2, 1 RecordInUseFlag
+    (0004,1420) up 0                                        #   4, 1 OffsetOfReferencedLowerLevelDirectoryEntity
+    (0004,1430) CS [IMAGE]                                  #   6, 1 DirectoryRecordType
+    (0004,1500) CS [IMAGES\DXIMAGE]                         #  14, 2 ReferencedFileID
+    (0004,1510) UI =DigitalXRayImageStorageForPresentation  #  28, 1 ReferencedSOPClassUIDInFile
+    (0004,1511) UI [1.3.6.1.4.1.5962.1.1.65535.3.1.1119624143.7180.0] #  48, 1 ReferencedSOPInstanceUIDInFile
+    (0004,1512) UI =LittleEndianExplicit                    #  20, 1 ReferencedTransferSyntaxUIDInFile
+    (0008,0008) CS [ORIGINAL\PRIMARY]                       #  16, 2 ImageType
+    (0020,0013) IS [1]                                      #   2, 1 InstanceNumber
+    (0028,0004) CS [MONOCHROME2]                            #  12, 1 PhotometricInterpretation
+    (0028,0008) IS [1]                                      #   2, 1 NumberOfFrames
+    (0050,0004) CS (no value available)                     #   0, 0 CalibrationImage
+  (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
+*/
+using gdcm::Tag;
+using gdcm::VR;
+using gdcm::SequenceOfItems;
+using gdcm::DataSet;
+using gdcm::DataElement;
+using gdcm::Item;
+
+bool AddImageDirectoryRecord(gdcm::DataSet &ds, gdcm::Scanner const & scanner)
+{
+  const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
+  SequenceOfItems * sqi;
+  sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+
+  Item item1; //( Tag(0xfffe,0xe000) );
+  item1.SetVLToUndefined();
+  sqi->AddItem( item1 );
+
+  Item &item = sqi->GetItem(1);
+  DataSet &subds = item.GetNestedDataSet();
+
+  DataElement sopinstanceuid( Tag(0x0008,0x008) );
+  sopinstanceuid.SetByteValue( "toto", 4 );
+  subds.Replace( sopinstanceuid );
+
+  return true;
 }
 
 int main(int argc, char *argv[])
@@ -268,6 +318,46 @@ int main(int argc, char *argv[])
     }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmgendir" );
 
+  gdcm::Scanner scanner;
+  // 
+  scanner.AddTag( Tag(0x8,0x8) );
+  scanner.AddTag( Tag(0x20,0x13) );
+  scanner.AddTag( Tag(0x28,0x4) );
+  scanner.AddTag( Tag(0x28,0x8) );
+  scanner.AddTag( Tag(0x50,0x4) );
+
+  if( !scanner.Scan( filenames ) )
+    {
+    return false;
+    }
+
+  scanner.Print( std::cout );
+
+  // (0004,1220) SQ (Sequence with undefined length #=8)     # u/l, 1 DirectoryRecordSequence
+
+  gdcm::Writer writer;
+  gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+  gdcm::DataElement de( Tag(0x4,0x1220) );
+
+  SequenceOfItems * sqi = new SequenceOfItems;
+  //DataElement de( sisq );
+  de.SetVR( VR::SQ );
+  de.SetValue( *sqi );
+  de.SetVLToUndefined();
+
+  ds.Insert( de );
+
+  bool b = AddImageDirectoryRecord(ds, scanner);
+
+  writer.GetFile().GetHeader();
+
+  std::cout << ds << std::endl;
+
+  writer.SetFileName( "debug.DICOMDIR" );
+  if( !writer.Write() )
+    {
+    return 1;
+    }
 
   return res;
 }
