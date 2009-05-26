@@ -389,6 +389,10 @@ EXTEND_CLASS_PRINT(gdcm::Preamble)
 EXTEND_CLASS_PRINT(gdcm::TransferSyntax)
 %include "gdcmFileMetaInformation.h"
 EXTEND_CLASS_PRINT(gdcm::FileMetaInformation)
+
+//%template(File) gdcm::SmartPointer<gdcm::File>;
+//%ignore gdcm::File;
+
 %include "gdcmFile.h"
 EXTEND_CLASS_PRINT(gdcm::File)
 //%include "gdcm_arrays_csharp.i"
@@ -505,20 +509,29 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 %include "gdcmSubject.h"
 %include "gdcmCommand.h"
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
-%ignore gdcm::Anonymizer::Anonymizer;
+//%ignore gdcm::Anonymizer::Anonymizer;
+
+
+//%template(Anonymizer) gdcm::SmartPointer<gdcm::Anonymizer>;
+//
+//%ignore gdcm::Anonymizer;
+//%feature("unref") Anonymizer "coucou $this->Delete();"
+// http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+
+
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
-%extend gdcm::Anonymizer
-{
-%typemap(cscode) gdcm::Anonymizer
-%{
-  public Anonymizer() : this(gdcmPINVOKE.Anonymizer_New(), false) {
-  }
-%}
-};
+//%extend gdcm::Anonymizer
+//{
+//%typemap(cscode) gdcm::Anonymizer
+//%{
+//  public Anonymizer() : this(gdcmPINVOKE.Anonymizer_New(), false) {
+//  }
+//%}
+//};
 
 // System is a namespace in C#, need to rename to something different
-%rename (PosixEmulation) System; 
+%rename (PosixEmulation) System;
 %include "gdcmSystem.h"
 //EXTEND_CLASS_PRINT(gdcm::System)
 
