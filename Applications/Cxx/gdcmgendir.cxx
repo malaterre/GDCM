@@ -295,14 +295,29 @@ bool AddImageDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanne
     if( ttv.find( sopclassuid.GetTag() ) != ttv.end() )
       {
       referencedsopclassuidinfile.SetValue( ttv.find(sopclassuid.GetTag())->second );
-      ds.Insert( referencedsopclassuidinfile.GetAsDataElement() );
       }
-
     ds.Insert( referencedsopclassuidinfile.GetAsDataElement() );
     Attribute<0x0004,0x1511> referencedsopinstanceuidinfile;
+    Attribute<0x8,0x18> sopinstanceuid;
+    if( ttv.find( sopinstanceuid.GetTag() ) != ttv.end() )
+      {
+      referencedsopinstanceuidinfile.SetValue( ttv.find(sopinstanceuid.GetTag())->second );
+      }
     ds.Insert( referencedsopinstanceuidinfile.GetAsDataElement() );
     Attribute<0x0004,0x1512> referencedtransfersyntaxuidinfile;
+    Attribute<0x2,0x10> transfersyntaxuid;
+    if( ttv.find( transfersyntaxuid.GetTag() ) != ttv.end() )
+      {
+      referencedtransfersyntaxuidinfile.SetValue( ttv.find(transfersyntaxuid.GetTag())->second );
+      }
     ds.Insert( referencedtransfersyntaxuidinfile.GetAsDataElement() );
+
+    Attribute<0x20,0x13> instancenumber;
+    if( ttv.find( instancenumber.GetTag() ) != ttv.end() )
+      {
+      instancenumber.SetValue( atoi(ttv.find(instancenumber.GetTag())->second) );
+      }
+    ds.Insert( instancenumber.GetAsDataElement() );
 
     //Attribute<0x8,0x8> imagetype;
     //gdcm::Scanner::ValuesType imagetypes = scanner.GetValues( imagetype.GetTag() );
@@ -528,6 +543,8 @@ int main(int argc, char *argv[])
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmgendir" );
 
   gdcm::Scanner scanner;
+  // <entry group="0002" element="0010" vr="UI" vm="1" name="Transfer Syntax UID"/>
+  scanner.AddTag( Tag(0x02,0x10) );
   // <entry group="0010" element="0010" vr="PN" vm="1" name="Patient's Name"/>
   scanner.AddTag( Tag(0x10,0x10) );
   // <entry group="0010" element="0020" vr="LO" vm="1" name="Patient ID"/>
