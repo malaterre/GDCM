@@ -124,6 +124,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcm2vtk.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmconv.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmanon.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmgendir.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmdump.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmimg.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcminfo.html
@@ -138,6 +139,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
