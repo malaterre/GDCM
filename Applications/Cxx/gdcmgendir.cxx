@@ -25,8 +25,10 @@
 #include "gdcmGlobal.h"
 #include "gdcmDefs.h"
 #include "gdcmDirectory.h"
+#include "gdcmAttribute.h"
 
 #include "gdcmSequenceOfItems.h"
+#include "gdcmFileMetaInformation.h"
 #include "gdcmTag.h"
 #include "gdcmVR.h"
 
@@ -64,6 +66,167 @@ void PrintHelp()
   std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
+using gdcm::Tag;
+using gdcm::VR;
+using gdcm::SequenceOfItems;
+using gdcm::DataSet;
+using gdcm::DataElement;
+using gdcm::Item;
+using gdcm::Attribute;
+using gdcm::FileMetaInformation;
+
+
+template<uint16_t Group, uint16_t Element>
+void SingleDataElementInserter(gdcm::DataSet &ds, gdcm::Scanner const & scanner)
+{
+  Attribute<Group,Element> patientsname;
+  gdcm::Scanner::ValuesType patientsnames = scanner.GetValues( patientsname.GetTag() );
+  unsigned int npatient = patientsnames.size();
+  assert( npatient == 1 );
+  gdcm::Scanner::ValuesType::const_iterator it = patientsnames.begin();
+  patientsname.SetValue( it->c_str() );
+  ds.Insert( patientsname.GetAsDataElement() );
+}
+
+
+/*
+  (fffe,e000) na "Directory Record" PATIENT #=8           # u/l, 1 Item
+  #  offset=$374
+    (0004,1400) up 0                                        #   4, 1 OffsetOfTheNextDirectoryRecord
+    (0004,1410) US 65535                                    #   2, 1 RecordInUseFlag
+    (0004,1420) up 502                                      #   4, 1 OffsetOfReferencedLowerLevelDirectoryEntity
+    (0004,1430) CS [PATIENT]                                #   8, 1 DirectoryRecordType
+    (0010,0010) PN [Test^PixelSpacing]                      #  18, 1 PatientsName
+    (0010,0020) LO [62354PQGRRST]                           #  12, 1 PatientID
+    (0010,0030) DA (no value available)                     #   0, 0 PatientsBirthDate
+    (0010,0040) CS (no value available)                     #   0, 0 PatientsSex
+  (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
+*/
+bool AddPatientDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
+{
+  const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
+  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  Item item;
+  item.SetVLToUndefined();
+  DataSet &ds = item.GetNestedDataSet();
+
+  // (0004,1400) up 0                                        #   4, 1 OffsetOfTheNextDirectoryRecord
+  // (0004,1410) US 65535                                    #   2, 1 RecordInUseFlag
+  // (0004,1420) up 502                                      #   4, 1 OffsetOfReferencedLowerLevelDirectoryEntity
+  // (0004,1430) CS [PATIENT]                                #   8, 1 DirectoryRecordType
+  Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
+  ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
+  Attribute<0x4,0x1410> recordinuseflag = {0};
+  ds.Insert( recordinuseflag.GetAsDataElement() );
+  Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
+  ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
+  Attribute<0x4,0x1430> directoryrecordtype;
+  directoryrecordtype.SetValue( "PATIENT" );
+  ds.Insert( directoryrecordtype.GetAsDataElement() );
+
+  SingleDataElementInserter<0x10,0x10>(ds, scanner);
+  SingleDataElementInserter<0x10,0x20>(ds, scanner);
+  SingleDataElementInserter<0x10,0x30>(ds, scanner);
+  SingleDataElementInserter<0x10,0x40>(ds, scanner);
+
+  sqi->AddItem( item );
+  return true;
+}
+
+/*
+  (fffe,e000) na "Directory Record" STUDY #=10            # u/l, 1 Item
+  #  offset=$502
+    (0004,1400) up 0                                        #   4, 1 OffsetOfTheNextDirectoryRecord
+    (0004,1410) US 65535                                    #   2, 1 RecordInUseFlag
+    (0004,1420) up 748                                      #   4, 1 OffsetOfReferencedLowerLevelDirectoryEntity
+    (0004,1430) CS [STUDY]                                  #   6, 1 DirectoryRecordType
+    (0008,0020) DA [20050624]                               #   8, 1 StudyDate
+    (0008,0030) TM [104221]                                 #   6, 1 StudyTime
+    (0008,0050) SH [8-13547713751]                          #  14, 1 AccessionNumber
+    (0008,1030) LO [Test support of different pixel spacing attributes] #  50, 1 StudyDescription
+    (0020,000d) UI [1.3.6.1.4.1.5962.1.2.65535.1119624141.7160.0] #  44, 1 StudyInstanceUID
+    (0020,0010) SH [734591762345]                           #  12, 1 StudyID
+  (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
+*/
+bool AddStudyDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
+{
+  const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
+  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  Item item;
+  item.SetVLToUndefined();
+  DataSet &ds = item.GetNestedDataSet();
+
+  Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
+  ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
+  Attribute<0x4,0x1410> recordinuseflag = {0};
+  ds.Insert( recordinuseflag.GetAsDataElement() );
+  Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
+  ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
+  Attribute<0x4,0x1430> directoryrecordtype;
+  directoryrecordtype.SetValue( "STUDY" );
+  ds.Insert( directoryrecordtype.GetAsDataElement() );
+
+  SingleDataElementInserter<0x8,0x20>(ds, scanner);
+  SingleDataElementInserter<0x8,0x30>(ds, scanner);
+  SingleDataElementInserter<0x8,0x1030>(ds, scanner);
+  SingleDataElementInserter<0x20,0xd>(ds, scanner);
+  SingleDataElementInserter<0x20,0x10>(ds, scanner);
+  SingleDataElementInserter<0x8,0x50>(ds, scanner);
+
+  sqi->AddItem( item );
+  return true;
+}
+
+/*
+  (fffe,e000) na "Directory Record" SERIES #=11           # u/l, 1 Item
+  #  offset=$748
+    (0004,1400) up 1214                                     #   4, 1 OffsetOfTheNextDirectoryRecord
+    (0004,1410) US 65535                                    #   2, 1 RecordInUseFlag
+    (0004,1420) up 938                                      #   4, 1 OffsetOfReferencedLowerLevelDirectoryEntity
+    (0004,1430) CS [SERIES]                                 #   6, 1 DirectoryRecordType
+    (0008,0060) CS [CR]                                     #   2, 1 Modality
+    (0008,0080) LO (no value available)                     #   0, 0 InstitutionName
+    (0008,0081) ST (no value available)                     #   0, 0 InstitutionAddress
+    (0008,103e) LO [Computed Radiography]                   #  20, 1 SeriesDescription
+    (0008,1050) PN (no value available)                     #   0, 0 PerformingPhysiciansName
+    (0020,000e) UI [1.3.6.1.4.1.5962.1.3.65535.4.1119624143.7187.0] #  46, 1 SeriesInstanceUID
+    (0020,0011) IS [4]                                      #   2, 1 SeriesNumber
+  (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
+*/
+bool AddSeriesDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
+{
+  Attribute<0x20,0xe> seriesinstanceuid;
+  gdcm::Scanner::ValuesType seriesinstanceuids = scanner.GetValues( seriesinstanceuid.GetTag() );
+  unsigned int nseries = seriesinstanceuids.size();
+
+  const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
+  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+
+  gdcm::Scanner::ValuesType::const_iterator it = seriesinstanceuids.begin();
+  for( ; it  != seriesinstanceuids.end(); ++it)
+    {
+    Item item;
+    item.SetVLToUndefined();
+    DataSet &ds = item.GetNestedDataSet();
+
+    Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
+    ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
+    Attribute<0x4,0x1410> recordinuseflag = {0};
+    ds.Insert( recordinuseflag.GetAsDataElement() );
+    Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
+    ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
+    Attribute<0x4,0x1430> directoryrecordtype;
+    directoryrecordtype.SetValue( "SERIES" );
+    ds.Insert( directoryrecordtype.GetAsDataElement() );
+    seriesinstanceuid.SetValue( it->c_str() );
+    ds.Insert( seriesinstanceuid.GetAsDataElement() );
+
+    sqi->AddItem( item );
+    }
+
+  return true;
+}
+
 /*
   (fffe,e000) na "Directory Record" IMAGE #=13            # u/l, 1 Item
   #  offset=$1398  refFileID="IMAGES\DXIMAGE"
@@ -82,29 +245,43 @@ void PrintHelp()
     (0050,0004) CS (no value available)                     #   0, 0 CalibrationImage
   (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
 */
-using gdcm::Tag;
-using gdcm::VR;
-using gdcm::SequenceOfItems;
-using gdcm::DataSet;
-using gdcm::DataElement;
-using gdcm::Item;
-
-bool AddImageDirectoryRecord(gdcm::DataSet &ds, gdcm::Scanner const & scanner)
+bool AddImageDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
 {
-  const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
-  SequenceOfItems * sqi;
-  sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  Attribute<0x8,0x18> sopinstanceuid;
+  gdcm::Scanner::ValuesType sopinstanceuids = scanner.GetValues( sopinstanceuid.GetTag() );
+  unsigned int ninstance = sopinstanceuids.size();
 
-  Item item1; //( Tag(0xfffe,0xe000) );
-  item1.SetVLToUndefined();
-  sqi->AddItem( item1 );
+  const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
+  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
 
-  Item &item = sqi->GetItem(1);
-  DataSet &subds = item.GetNestedDataSet();
+  gdcm::Scanner::ValuesType::const_iterator it = sopinstanceuids.begin();
+  for( ; it  != sopinstanceuids.end(); ++it)
+    {
+    Item item;
+    item.SetVLToUndefined();
+    DataSet &ds = item.GetNestedDataSet();
 
-  DataElement sopinstanceuid( Tag(0x0008,0x008) );
-  sopinstanceuid.SetByteValue( "toto", 4 );
-  subds.Replace( sopinstanceuid );
+    Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
+    ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
+    Attribute<0x4,0x1410> recordinuseflag = {0};
+    ds.Insert( recordinuseflag.GetAsDataElement() );
+    Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
+    ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
+    Attribute<0x4,0x1430> directoryrecordtype;
+    directoryrecordtype.SetValue( "IMAGE" );
+    ds.Insert( directoryrecordtype.GetAsDataElement() );
+
+
+    //Attribute<0x8,0x8> imagetype;
+    //gdcm::Scanner::ValuesType imagetypes = scanner.GetValues( imagetype.GetTag() );
+    //gdcm::Scanner::ValuesType::const_iterator it = imagetypes.begin();
+    //assert( imagetypes.size() == 1 );
+    //imagetype.SetNumberOfValues( 1 );
+    //imagetype.SetValue( it->c_str() );
+    //ds.Replace( imagetype.GetAsDataElement() );
+
+    sqi->AddItem( item );
+    }
 
   return true;
 }
@@ -319,12 +496,40 @@ int main(int argc, char *argv[])
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmgendir" );
 
   gdcm::Scanner scanner;
-  // 
-  scanner.AddTag( Tag(0x8,0x8) );
+  // <entry group="0010" element="0010" vr="PN" vm="1" name="Patient's Name"/>
+  scanner.AddTag( Tag(0x10,0x10) );
+  // <entry group="0010" element="0020" vr="LO" vm="1" name="Patient ID"/>
+  scanner.AddTag( Tag(0x10,0x20) );
+  // <entry group="0008" element="0018" vr="UI" vm="1" name="SOP Instance UID"/>
+  scanner.AddTag( Tag(0x8,0x18) );
+  // <entry group="0008" element="0020" vr="DA" vm="1" name="Study Date"/>
+  scanner.AddTag( Tag(0x8,0x20) );
+  // <entry group="0008" element="0030" vr="TM" vm="1" name="Study Time"/>
+  scanner.AddTag( Tag(0x8,0x30) );
+  // <entry group="0008" element="1030" vr="LO" vm="1" name="Study Description"/>
+  scanner.AddTag( Tag(0x8,0x1030) );
+  // <entry group="0008" element="0050" vr="SH" vm="1" name="Accession Number"/>
+  scanner.AddTag( Tag(0x8,0x50) );
+  // <entry group="0020" element="0013" vr="IS" vm="1" name="Instance Number"/>
   scanner.AddTag( Tag(0x20,0x13) );
+  // <entry group="0020" element="000d" vr="UI" vm="1" name="Study Instance UID"/>
+  scanner.AddTag( Tag(0x20,0xd) );
+  // <entry group="0020" element="0010" vr="SH" vm="1" name="Study ID"/>
+  scanner.AddTag( Tag(0x20,0x10) );
+  // <entry group="0020" element="000e" vr="UI" vm="1" name="Series Instance UID"/>
+  scanner.AddTag( Tag(0x20,0xe) );
+  // <entry group="0028" element="0004" vr="CS" vm="1" name="Photometric Interpretation"/>
   scanner.AddTag( Tag(0x28,0x4) );
+  // <entry group="0028" element="0008" vr="IS" vm="1" name="Number of Frames"/>
   scanner.AddTag( Tag(0x28,0x8) );
+  // <entry group="0050" element="0004" vr="CS" vm="1" name="Calibration Image"/>
   scanner.AddTag( Tag(0x50,0x4) );
+  // <entry group="0010" element="0030" vr="DA" vm="1" name="Patient's Birth Date"/>
+  scanner.AddTag( Tag(0x10,0x30) );
+  // <entry group="0010" element="0040" vr="CS" vm="1" name="Patient's Sex"/>
+  scanner.AddTag( Tag(0x10,0x40) );
+  // <entry group="0008" element="0080" vr="LO" vm="1" name="Institution Name"/>
+  scanner.AddTag( Tag(0x8,0x80) );
 
   if( !scanner.Scan( filenames ) )
     {
@@ -337,6 +542,17 @@ int main(int argc, char *argv[])
 
   gdcm::Writer writer;
   gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+
+  Attribute<0x4,0x1130> filesetid;
+  ds.Insert( filesetid.GetAsDataElement() );
+  Attribute<0x4,0x1200> offsetofthefirstdirectoryrecordoftherootdirectoryentity = {0};
+  ds.Insert( offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetAsDataElement() );
+  Attribute<0x4,0x1202> offsetofthelastdirectoryrecordoftherootdirectoryentity = { 0 };
+  ds.Insert( offsetofthelastdirectoryrecordoftherootdirectoryentity.GetAsDataElement() );
+  Attribute<0x4,0x1212> filesetconsistencyflag = {0};
+  ds.Insert( filesetconsistencyflag.GetAsDataElement() );
+
+
   gdcm::DataElement de( Tag(0x4,0x1220) );
 
   SequenceOfItems * sqi = new SequenceOfItems;
@@ -347,11 +563,46 @@ int main(int argc, char *argv[])
 
   ds.Insert( de );
 
-  bool b = AddImageDirectoryRecord(ds, scanner);
+  bool b;
+  b = AddPatientDirectoryRecord(ds, scanner);
+  b = AddStudyDirectoryRecord(ds, scanner);
+  b = AddSeriesDirectoryRecord(ds, scanner);
+  b = AddImageDirectoryRecord(ds, scanner);
 
-  writer.GetFile().GetHeader();
+/*
+The DICOMDIR File shall use the Explicit VR Little Endian Transfer Syntax (UID=1.2.840.10008.1.2.1) to
+encode the Media Storage Directory SOP Class. The DICOMDIR File shall comply with the DICOM File
+Format specified in Section 7 of this Standard. In particular the:
+a. SOP Class UID in the File Meta Information (header of the DICOMDIR File) shall have the
+Value specified in PS 3.4 of this Standard for the Media Storage Directory SOP Class;
+b. SOP Instance UID in the File Meta Information (header of the DICOMDIR File) shall contain
+the File-set UID Value. The File-set UID is assigned by the Application Entity which created
+the File-set (FSC role, see Section 8.3) with zero or more DICOM Files. This File-set UID
+Value shall not be changed by any other Application Entities reading or updating the content of
+the File-set.
+*/
+  FileMetaInformation &h = writer.GetFile().GetHeader();
+  gdcm::Attribute<0x2,0x2> at1;
+  gdcm::MediaStorage ms = gdcm::MediaStorage::MediaStorageDirectoryStorage;
+  const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+  at1.SetValue( msstr );
+  h.Insert( at1.GetAsDataElement() );
+
+  gdcm::Attribute<0x2,0x3> at2;
+  gdcm::UIDGenerator uid;
+  const char *mediastoragesopinstanceuid = uid.Generate();
+  if( !gdcm::UIDGenerator::IsValid( mediastoragesopinstanceuid ) )
+    {
+    return 1;
+    }
+  at2.SetValue( mediastoragesopinstanceuid );
+  h.Insert( at2.GetAsDataElement() );
+
+  gdcm::TransferSyntax ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+  h.SetDataSetTransferSyntax( ts );
 
   std::cout << ds << std::endl;
+  std::cout << h << std::endl;
 
   writer.SetFileName( "debug.DICOMDIR" );
   if( !writer.Write() )

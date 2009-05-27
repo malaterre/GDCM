@@ -163,7 +163,6 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       {
       if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
         {
-        //abort();
         // What should I do here ??
         gdcmWarningMacro( "Missing SOPClassUID in DataSet but found in FileMeta" );
         }
