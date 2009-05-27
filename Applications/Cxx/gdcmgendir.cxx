@@ -353,6 +353,7 @@ int main(int argc, char *argv[])
   int error = 0;
   int resourcespath = 0;
   int rootuid = 0;
+  std::string root;
   while (1) {
     int option_index = 0;
     static struct option long_options[] = {
@@ -392,6 +393,11 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.empty() );
             filename = optarg;
+            }
+          else if( option_index == 2 ) /* root-uid */
+            {
+            assert( strcmp(s, "root-uid") == 0 );
+            root = optarg;
             }
           else if( option_index == 3 ) /* resources-path */
             {
@@ -533,6 +539,28 @@ int main(int argc, char *argv[])
   const gdcm::Defs &defs = g.GetDefs();
 */
 
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmgendir" );
+  if( !rootuid )
+    {
+    // only read the env var is no explicit cmd line option
+    // maybe there is an env var defined... let's check
+    const char *rootuid_env = getenv("GDCM_ROOT_UID");
+    if( rootuid_env )
+      {
+      rootuid = 1;
+      root = rootuid_env;
+      }
+    }
+  if( rootuid )
+    {
+    if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
+      {
+      std::cerr << "specified Root UID is not valid: " << root << std::endl;
+      return 1;
+      }
+    gdcm::UIDGenerator::SetRoot( root.c_str() );
+    }
+
   int res = 0;
   unsigned int nfiles = 1;
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
@@ -545,7 +573,6 @@ int main(int argc, char *argv[])
     {
     filenames.push_back( filename );
     }
-  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmgendir" );
 
   gdcm::Scanner scanner;
   // <entry group="0002" element="0010" vr="UI" vm="1" name="Transfer Syntax UID"/>

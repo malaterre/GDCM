@@ -40,9 +40,10 @@ public:
   const char *GetExtension();
   /// Convert backslash (windows style) to UNIX style slash.
   const char *ToUnixSlashes();
-
+  /// Convert foward slash (UNIX style) to windows style slash.
   const char *ToWindowsSlashes();
 
+  /// Join two paths
   /// NOT THREAD SAFE
   static const char *Join(const char *path, const char *filename);
 
