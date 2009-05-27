@@ -401,20 +401,23 @@ public:
   DataElement GetAsDataElement() const {
     DataElement ret( GetTag() );
     std::ostringstream os;
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
-      GetNumberOfValues(),os);
-    ret.SetVR( GetVR() );
-    assert( ret.GetVR() != VR::SQ );
-    if( VRToEncoding<TVR>::Mode == VR::VRASCII )
+    if( Internal )
       {
-      if( GetVR() != VR::UI )
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+        GetNumberOfValues(),os);
+      if( VRToEncoding<TVR>::Mode == VR::VRASCII )
         {
-        if( os.str().size() % 2 )
+        if( GetVR() != VR::UI )
           {
-          os << " ";
+          if( os.str().size() % 2 )
+            {
+            os << " ";
+            }
           }
         }
       }
+    ret.SetVR( GetVR() );
+    assert( ret.GetVR() != VR::SQ );
     ret.SetByteValue( os.str().c_str(), os.str().size() );
     return ret;
   }
@@ -457,6 +460,13 @@ private:
   ArrayType *Internal;
   unsigned int Length;
   bool Own : 1;
+};
+
+template<uint16_t Group, uint16_t Element, int TVR> 
+class Attribute<Group,Element,TVR,VM::VM1_8> : public Attribute<Group,Element,TVR,VM::VM1_n>
+{
+public:
+  VM  GetVM() const { return VM::VM1_8; }
 };
 
 template<uint16_t Group, uint16_t Element, int TVR> 

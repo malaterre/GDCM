@@ -107,6 +107,9 @@ public:
   /// Get the std::map mapping filenames to value for file 'filename'
   TagToValue const & GetMapping(const char *filename) const;
 
+  /// 
+  TagToValue const & GetMappingFromTagToValue(Tag const &t, const char *value) const;
+
   /// Retrieve the value found for tag: t associated with file: filename
   /// This is meant for a single short call. If multiple calls (multiple tags)
   /// should be done, prefer the GetMapping function, and then reuse the TagToValue
