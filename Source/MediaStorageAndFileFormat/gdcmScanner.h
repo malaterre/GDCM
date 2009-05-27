@@ -107,7 +107,12 @@ public:
   /// Get the std::map mapping filenames to value for file 'filename'
   TagToValue const & GetMapping(const char *filename) const;
 
-  /// 
+  /// Will loop over all files and return the first file where value match the reference value
+  /// 'valueref'
+  const char *GetFilenameFromTagToValue(Tag const &t, const char *valueref) const;
+
+  /// See GetFilenameFromTagToValue(). This is simply GetFilenameFromTagToValue followed
+  // by a call to GetMapping()
   TagToValue const & GetMappingFromTagToValue(Tag const &t, const char *value) const;
 
   /// Retrieve the value found for tag: t associated with file: filename

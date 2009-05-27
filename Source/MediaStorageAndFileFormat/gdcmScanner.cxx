@@ -263,7 +263,7 @@ const char* Scanner::GetValue(const char *filename, Tag const &t) const
   return NULL;
 }
 
-Scanner::TagToValue const & Scanner::GetMappingFromTagToValue(Tag const &t, const char *valueref) const
+const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valueref) const
 {
   const char *filenameref = 0;
   if( valueref )
@@ -279,8 +279,12 @@ Scanner::TagToValue const & Scanner::GetMappingFromTagToValue(Tag const &t, cons
         }
       }
     }
-  return GetMapping( filenameref );
+  return filenameref;
+}
 
+Scanner::TagToValue const & Scanner::GetMappingFromTagToValue(Tag const &t, const char *valueref) const
+{
+  return GetMapping( GetFilenameFromTagToValue(t, valueref) );
 }
 
 Scanner::ValuesType Scanner::GetValues(Tag const &t) const

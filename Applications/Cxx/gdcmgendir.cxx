@@ -16,6 +16,7 @@
  * Implementation of General Purpose CD-R Interchange / STD-GEN-CD DICOMDIR in GDCM 
  */
 #include "gdcmReader.h"
+#include "gdcmFilename.h"
 #include "gdcmWriter.h"
 #include "gdcmScanner.h"
 #include "gdcmVersion.h"
@@ -116,7 +117,7 @@ bool AddPatientDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scan
   // (0004,1430) CS [PATIENT]                                #   8, 1 DirectoryRecordType
   Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
   ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
-  Attribute<0x4,0x1410> recordinuseflag = {0};
+  Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
   ds.Insert( recordinuseflag.GetAsDataElement() );
   Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
   ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
@@ -158,7 +159,7 @@ bool AddStudyDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanne
 
   Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
   ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
-  Attribute<0x4,0x1410> recordinuseflag = {0};
+  Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
   ds.Insert( recordinuseflag.GetAsDataElement() );
   Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
   ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
@@ -211,7 +212,7 @@ bool AddSeriesDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scann
 
     Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
     ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
-    Attribute<0x4,0x1410> recordinuseflag = {0};
+    Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
     ds.Insert( recordinuseflag.GetAsDataElement() );
     Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
     ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
@@ -278,7 +279,7 @@ bool AddImageDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanne
 
     Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
     ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
-    Attribute<0x4,0x1410> recordinuseflag = {0};
+    Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
     ds.Insert( recordinuseflag.GetAsDataElement() );
     Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
     ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
@@ -289,6 +290,10 @@ bool AddImageDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanne
     const char *sopuid = it->c_str();
     gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(sopinstanceuid.GetTag(), sopuid);
     Attribute<0x0004,0x1500> referencedfileid;
+    const char *fn_str = scanner.GetFilenameFromTagToValue(sopinstanceuid.GetTag(), sopuid);
+    referencedfileid.SetNumberOfValues( 1 );
+    gdcm::Filename fn = fn_str;
+    referencedfileid.SetValue( fn.ToWindowsSlashes() );
     ds.Insert( referencedfileid.GetAsDataElement() );
     Attribute<0x0004,0x1510> referencedsopclassuidinfile;
     Attribute<0x8,0x16> sopclassuid;

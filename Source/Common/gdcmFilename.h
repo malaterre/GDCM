@@ -41,6 +41,8 @@ public:
   /// Convert backslash (windows style) to UNIX style slash.
   const char *ToUnixSlashes();
 
+  const char *ToWindowsSlashes();
+
   /// NOT THREAD SAFE
   static const char *Join(const char *path, const char *filename);
 
