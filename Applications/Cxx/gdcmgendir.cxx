@@ -126,8 +126,8 @@ bool AddPatientDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scan
 
   SingleDataElementInserter<0x10,0x10>(ds, scanner);
   SingleDataElementInserter<0x10,0x20>(ds, scanner);
-  SingleDataElementInserter<0x10,0x30>(ds, scanner);
-  SingleDataElementInserter<0x10,0x40>(ds, scanner);
+  //SingleDataElementInserter<0x10,0x30>(ds, scanner);
+  //SingleDataElementInserter<0x10,0x40>(ds, scanner);
 
   sqi->AddItem( item );
   return true;
@@ -221,6 +221,21 @@ bool AddSeriesDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scann
     seriesinstanceuid.SetValue( it->c_str() );
     ds.Insert( seriesinstanceuid.GetAsDataElement() );
 
+    const char *seriesuid = it->c_str();
+    gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(seriesinstanceuid.GetTag(), seriesuid);
+    Attribute<0x8,0x60> modality;
+    if( ttv.find( modality.GetTag() ) != ttv.end() )
+      {
+      modality.SetValue( ttv.find(modality.GetTag())->second );
+      ds.Insert( modality.GetAsDataElement() );
+      }
+    Attribute<0x20,0x11> seriesnumber;
+    if( ttv.find( seriesnumber.GetTag() ) != ttv.end() )
+      {
+      seriesnumber.SetValue( atoi(ttv.find(seriesnumber.GetTag())->second) );
+      ds.Insert( seriesnumber.GetAsDataElement() );
+      }
+
     sqi->AddItem( item );
     }
 
@@ -271,6 +286,23 @@ bool AddImageDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanne
     directoryrecordtype.SetValue( "IMAGE" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
 
+    const char *sopuid = it->c_str();
+    gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(sopinstanceuid.GetTag(), sopuid);
+    Attribute<0x0004,0x1500> referencedfileid;
+    ds.Insert( referencedfileid.GetAsDataElement() );
+    Attribute<0x0004,0x1510> referencedsopclassuidinfile;
+    Attribute<0x8,0x16> sopclassuid;
+    if( ttv.find( sopclassuid.GetTag() ) != ttv.end() )
+      {
+      referencedsopclassuidinfile.SetValue( ttv.find(sopclassuid.GetTag())->second );
+      ds.Insert( referencedsopclassuidinfile.GetAsDataElement() );
+      }
+
+    ds.Insert( referencedsopclassuidinfile.GetAsDataElement() );
+    Attribute<0x0004,0x1511> referencedsopinstanceuidinfile;
+    ds.Insert( referencedsopinstanceuidinfile.GetAsDataElement() );
+    Attribute<0x0004,0x1512> referencedtransfersyntaxuidinfile;
+    ds.Insert( referencedtransfersyntaxuidinfile.GetAsDataElement() );
 
     //Attribute<0x8,0x8> imagetype;
     //gdcm::Scanner::ValuesType imagetypes = scanner.GetValues( imagetype.GetTag() );
@@ -500,6 +532,10 @@ int main(int argc, char *argv[])
   scanner.AddTag( Tag(0x10,0x10) );
   // <entry group="0010" element="0020" vr="LO" vm="1" name="Patient ID"/>
   scanner.AddTag( Tag(0x10,0x20) );
+  // <entry group="0008" element="0060" vr="CS" vm="1" name="Modality"/>
+  scanner.AddTag( Tag(0x8,0x60) );
+  // <entry group="0020" element="0011" vr="IS" vm="1" name="Series Number"/>
+  scanner.AddTag( Tag(0x20,0x11) );
   // <entry group="0008" element="0018" vr="UI" vm="1" name="SOP Instance UID"/>
   scanner.AddTag( Tag(0x8,0x18) );
   // <entry group="0008" element="0020" vr="DA" vm="1" name="Study Date"/>
@@ -530,6 +566,8 @@ int main(int argc, char *argv[])
   scanner.AddTag( Tag(0x10,0x40) );
   // <entry group="0008" element="0080" vr="LO" vm="1" name="Institution Name"/>
   scanner.AddTag( Tag(0x8,0x80) );
+  // <entry group="0008" element="0016" vr="UI" vm="1" name="SOP Class UID"/>
+  scanner.AddTag( Tag(0x8,0x16) );
 
   if( !scanner.Scan( filenames ) )
     {
