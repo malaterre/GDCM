@@ -44,8 +44,16 @@ public:
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
+  void SetLossless(bool l);
+  bool GetLossless() const;
+
+  /// [0-3] generally
+  void SetLossyError(int error);
+
 private:
   unsigned long BufferLength;
+  bool Lossless;
+  int LossyError;
 };
 
 } // end namespace gdcm

@@ -28,12 +28,22 @@
 namespace gdcm
 {
 
-JPEGLSCodec::JPEGLSCodec():BufferLength(0)
+JPEGLSCodec::JPEGLSCodec():BufferLength(0),Lossless(true),LossyError(0)
 {
 }
 
 JPEGLSCodec::~JPEGLSCodec()
 {
+}
+
+void JPEGLSCodec::SetLossless(bool l)
+{
+  Lossless = l;
+}
+
+bool JPEGLSCodec::GetLossless() const
+{
+  return Lossless;
 }
 
 bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
@@ -269,6 +279,32 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     const char *inputdata = input + dim * image_len; //bv->GetPointer();
 
     JlsParamaters params = {};
+/*
+The fields in JlsCustomParameters do not control lossy/lossless. They
+provide the possiblity to tune the JPEG-LS internals for better compression
+ratios. Expect a lot of work and testing to achieve small improvements.
+
+Lossy/lossless is controlled by the field allowedlossyerror. If you put in
+0, encoding is lossless. If it is non-zero, then encoding is lossy. The
+value of 3 is often suggested as a default.
+
+The nice part about JPEG-LS encoding is that in lossy encoding, there is a
+guarenteed maximum error for each pixel. So a pixel that has value 12,
+encoded with a maximum lossy error of 3, may be decoded as a value between 9
+and 15, but never anything else. In medical imaging this could be a useful
+guarantee.
+
+The not so nice part is that you may see striping artifacts when decoding
+"non-natural" images. I haven't seen the effects myself on medical images,
+but I suspect screenshots may suffer the most. Also, the bandwidth saving is
+not as big as with other lossy schemes.
+
+As for 12 bit, I am about to commit a unit test (with the sample you gave
+me) that does a successful round trip encoding of 12 bit color. I did notice
+that for 12 bit, the encoder fails if the unused bits are non-zero, but the
+sample dit not suffer from that.
+*/
+    params.allowedlossyerror = Lossless ? 0 : LossyError;
     params.components = sample_pixel;
     // D_CLUNIE_RG3_JPLY.dcm. The famous 16bits allocated / 10 bits stored with the pixel value = 1024
     // CharLS properly encode 1024 considering it as 10bits data, so the output
@@ -322,6 +358,11 @@ Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e
   return true;
 
 #endif
+}
+
+void JPEGLSCodec::SetLossyError(int error)
+{
+  LossyError = error;
 }
 
 } // end namespace gdcm

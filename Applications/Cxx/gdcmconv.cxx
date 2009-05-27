@@ -85,6 +85,7 @@
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
 #include "gdcmSequenceOfFragments.h"
 
 #include <string>
@@ -159,6 +160,8 @@ void PrintHelp()
   std::cout << "  -v --version    print version." << std::endl;
   std::cout << "JPEG Options:" << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
+  std::cout << "JPEG-LS Options:" << std::endl;
+  std::cout << "  -e --lossy-error %*i             set error." << std::endl;
   std::cout << "J2K Options:" << std::endl;
   std::cout << "  -r --rate    %*f           set rate." << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
@@ -425,6 +428,8 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
   int ignoreerrors = 0;
+  int jpeglserror = 0;
+  int jpeglserror_value = 0;
 
   while (1) {
     //int this_option_optind = optind ? optind : 1;
@@ -476,6 +481,7 @@ int main (int argc, char *argv[])
         {"tile", 1, &tile, 1}, // 
         {"number-resolution", 1, &nres, 1}, // 
         {"irreversible", 0, &irreversible, 1}, // 
+        {"allowed-error", 1, &jpeglserror, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -489,7 +495,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwdJKRFYS:P:VWDEhvIr:q:t:n:",
+    c = getopt_long (argc, argv, "i:o:XMUClwdJKRFYS:P:VWDEhvIr:q:t:n:e:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -549,8 +555,13 @@ int main (int argc, char *argv[])
             }
           else if( option_index == 42 ) /* number of resolution */
             {
-            assert( strcmp(s, ",number-resolution") == 0 );
+            assert( strcmp(s, "number-resolution") == 0 );
             nresvalue = atoi(optarg);
+            }
+          else if( option_index == 44 ) /* JPEG-LS error */
+            {
+            assert( strcmp(s, "allowed-error") == 0 );
+            jpeglserror_value = atoi(optarg);
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -594,6 +605,11 @@ int main (int argc, char *argv[])
 
     case 'w':
       raw = 1;
+      break;
+
+    case 'e':
+      jpeglserror = 1;
+      jpeglserror_value = atoi(optarg);
       break;
 
     case 'd':
@@ -1006,6 +1022,7 @@ int main (int argc, char *argv[])
 
     gdcm::JPEG2000Codec j2kcodec;
     gdcm::JPEGCodec jpegcodec;
+    gdcm::JPEGLSCodec jpeglscodec;
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
     change.SetCompressIconImage( compressicon );
@@ -1031,10 +1048,18 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
-        std::cerr << "not implemented" << std::endl;
-        return 1;
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSNearLossless );
+        jpeglscodec.SetLossless( false );
+        if( jpeglserror )
+          {
+          jpeglscodec.SetLossyError( jpeglserror_value );
+          }
+        change.SetUserCodec( &jpeglscodec );
         }
-      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
+      else
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
+        }
       }
     else if( j2k )
       {
