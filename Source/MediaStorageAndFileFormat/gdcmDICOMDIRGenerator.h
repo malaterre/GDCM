@@ -54,6 +54,9 @@ private:
   unsigned int FindNextDirectoryRecord( unsigned int item1, const char *directorytype );
   SequenceOfItems *GetDirectoryRecordSequence();
   unsigned int FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype );
+  std::string GetReferenceValueForDirectoryType(unsigned int item);
+  bool SeriesBelongToStudy(const char *seriesuid, const char *studyuid);
+  bool ImageBelongToSameSeries(const char *sopuid, const char *seriesuid);
 
   DICOMDIRGeneratorInternal * Internals;
 };

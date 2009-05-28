@@ -84,11 +84,136 @@ const char *GetLowerLevelDirectoryRecord(const char *input)
   return NULL;
 }
 
-unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype )
+std::string DICOMDIRGenerator::GetReferenceValueForDirectoryType(unsigned int itemidx)
 {
-  return FindNextDirectoryRecord( item1, GetLowerLevelDirectoryRecord( directorytype ) );
+  /*
+   * This function will return the Patient ID when directorytype          == "PATIENT"
+   * This function will return the Study Instance UID when directorytype  == "STUDY"
+   * This function will return the Series Instance UID when directorytype == "SERIES"
+   * This function will return the SOP Instance UID when directorytype    == "IMAGE"
+   */
+  const SequenceOfItems *sqi = GetDirectoryRecordSequence();
+  const Item &item = sqi->GetItem(itemidx);
+  const DataSet &ds = item.GetNestedDataSet();
+  Attribute<0x4,0x1430> directoryrecordtype;
+  directoryrecordtype.Set( ds );
+
+  const char *input = directoryrecordtype.GetValue();
+  assert( input );
+
+  if( strcmp( input, "PATIENT " ) == 0 )
+    {
+    Attribute<0x10,0x20> patientid;
+    patientid.Set( ds );
+    return patientid.GetValue();
+    }
+  else if( strcmp( input, "STUDY ") == 0 )
+    {
+    Attribute <0x20,0xd> studyuid;
+    studyuid.Set( ds );
+    return studyuid.GetValue();
+    }
+  else if( strcmp( input, "SERIES" ) == 0 )
+    {
+    Attribute <0x20,0xe> seriesuid;
+    seriesuid.Set( ds );
+    return seriesuid.GetValue();
+    }
+  else if( strcmp( input, "IMAGE " ) == 0 )
+    {
+    Attribute <0x04,0x1511> sopuid;
+    sopuid.Set( ds );
+    return sopuid.GetValue();
+    }
+  else
+    {
+    assert( 0 );
+    }
+  return "";
 }
 
+bool DICOMDIRGenerator::SeriesBelongToStudy(const char *seriesuid, const char *studyuid)
+{
+  assert( seriesuid );
+  assert( studyuid );
+  const Scanner &scanner = GetScanner();
+
+  Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(Tag(0x20,0xe), seriesuid);
+  Tag tstudyuid(0x20,0xd);
+  bool b = false;
+  if( ttv.find( tstudyuid ) != ttv.end() )
+    {
+    const char *v = ttv.find(tstudyuid)->second;
+    if( v && strcmp(v, studyuid ) )
+      {
+      b = true;
+      }
+    }
+
+  return b;
+}
+
+bool DICOMDIRGenerator::ImageBelongToSameSeries(const char *sopuid1, const char *sopuid2)
+{
+  assert( sopuid1 );
+  assert( sopuid2 );
+  const Scanner &scanner = GetScanner();
+
+  Scanner::TagToValue const &ttv1 = scanner.GetMappingFromTagToValue(Tag(0x8,0x18), sopuid1);
+  Scanner::TagToValue const &ttv2 = scanner.GetMappingFromTagToValue(Tag(0x8,0x18), sopuid2);
+  Tag tseriesuid(0x20,0xe);
+  bool b = false;
+  const char *seriesuid1 = NULL;
+  if( ttv1.find( tseriesuid ) != ttv1.end() )
+    {
+    seriesuid1 = ttv1.find(tseriesuid)->second;
+    }
+  const char *seriesuid2 = NULL;
+  if( ttv2.find( tseriesuid ) != ttv2.end() )
+    {
+    seriesuid2 = ttv2.find(tseriesuid)->second;
+    }
+  assert( seriesuid1 );
+  assert( seriesuid2 );
+
+  b = strcmp( seriesuid1, seriesuid2) == 0;
+  return b;
+}
+
+unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype )
+{
+//  return FindNextDirectoryRecord( item1, GetLowerLevelDirectoryRecord( directorytype ) );
+  const char *lowerdirectorytype = GetLowerLevelDirectoryRecord( directorytype );
+  if( !lowerdirectorytype ) return 0;
+
+  const SequenceOfItems *sqi = GetDirectoryRecordSequence();
+  unsigned int nitems = sqi->GetNumberOfItems();
+  for(unsigned int i = item1 + 1; i <= nitems; ++i)
+    {
+    const Item &item = sqi->GetItem(i);
+    const DataSet &ds = item.GetNestedDataSet();
+    Attribute<0x4,0x1430> directoryrecordtype;
+    directoryrecordtype.Set( ds );
+
+    // found a match ?
+    if( strcmp( lowerdirectorytype, directoryrecordtype.GetValue() ) == 0 )
+      {
+      return i;
+      }
+    assert( strncmp( lowerdirectorytype, directoryrecordtype.GetValue(), strlen( lowerdirectorytype ) ) != 0 );
+    }
+
+  // Not found
+  return 0;
+
+}
+
+/*
+ * Finding the next Directory Record type is easy, simply starting from the start and iterating
+ * to the end guarantee travering everything without omitting anyone.
+ *
+ * TODO: Need to make sure that Series belong to the same Study...
+ */
 unsigned int DICOMDIRGenerator::FindNextDirectoryRecord( unsigned int item1, const char *directorytype )
 {
   if( !directorytype ) return 0;
@@ -104,7 +229,19 @@ unsigned int DICOMDIRGenerator::FindNextDirectoryRecord( unsigned int item1, con
     // found a match ?
     if( strcmp( directorytype, directoryrecordtype.GetValue() ) == 0 )
       {
-      return i;
+      // Need to make sure belong to same parent record:
+      if( strcmp( directorytype, "IMAGE " ) == 0 )
+        {
+        std::string refval1 = GetReferenceValueForDirectoryType(item1);
+        std::string refval2 = GetReferenceValueForDirectoryType(i);
+        bool b = ImageBelongToSameSeries(refval1.c_str(), refval2.c_str());
+        assert( b == false );
+        return 0;
+        }
+      else
+        {
+        return i;
+        }
       }
     assert( strncmp( directorytype, directoryrecordtype.GetValue(), strlen( directorytype ) ) != 0 );
     }
