@@ -47,6 +47,16 @@ public:
   void SetLossless(bool l);
   bool GetLossless() const;
 
+/*
+ * test.acr can look pretty bad, even with a lossy error of 2. Explanation follows:
+ * I agree that the test image looks ugly. In this particular case I can
+ * explain though.
+ * 
+ * The image is 8 bit, but it does not use the full 8 bit dynamic range. The
+ * black pixels have value 234 and the white 255. If you set allowed lossy
+ * error to 2, you allow an error of about 10% of the actual dynamic range.
+ * That is of course very visible.
+ */
   /// [0-3] generally
   void SetLossyError(int error);
 
