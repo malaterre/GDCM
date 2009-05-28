@@ -49,7 +49,11 @@ protected:
   bool AddImageDirectoryRecord();
 
 private:
-  bool TraverseDirectoryRecords(const SequenceOfItems *sqi, VL start );
+  bool TraverseDirectoryRecords(VL start );
+  bool ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi, VL start);
+  unsigned int FindNextDirectoryRecord( unsigned int item1, const char *directorytype );
+  SequenceOfItems *GetDirectoryRecordSequence();
+  unsigned int FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype );
 
   DICOMDIRGeneratorInternal * Internals;
 };

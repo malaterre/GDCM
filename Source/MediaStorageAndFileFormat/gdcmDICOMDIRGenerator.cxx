@@ -38,20 +38,109 @@ public:
   typedef Directory::FilenamesType  FilenamesType;
   FilenamesType fns;
   Scanner scanner;
+  std::vector<uint32_t> OffsetTable;
 };
 
-bool DICOMDIRGenerator::TraverseDirectoryRecords(const SequenceOfItems *sqi, VL start )
+bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi, VL start)
 {
-  Scanner &scanner = GetScanner();
-
   unsigned int nitems = sqi->GetNumberOfItems();
-  for(unsigned int i = 1; i <=nitems; ++i)
+  std::vector<uint32_t> &offsets = Internals->OffsetTable;
+  Internals->OffsetTable.resize( nitems );
+  offsets[0] = start;
+  for(unsigned int i = 1; i <= nitems; ++i)
+    {
+    const Item &item = sqi->GetItem(i);
+    offsets[i] = offsets[i-1] + item.GetLength<ExplicitDataElement>(); 
+    }
+
+#define MDEBUG
+#ifdef MDEBUG
+  for(unsigned int i = 0; i <= nitems; ++i)
+    {
+    std::cout << "offset #" << i << " -> "<< offsets[i] << std::endl;
+    }
+#endif
+
+  return true;
+}
+
+const char *GetLowerLevelDirectoryRecord(const char *input)
+{
+  if( !input ) return NULL;
+
+  if( strcmp( input, "PATIENT" ) == 0 )
+    {
+    return "STUDY";
+    }
+  else if( strcmp( input, "STUDY" ) == 0 )
+    {
+    return "SERIES";
+    }
+  else if( strcmp( input, "SERIES" ) == 0 )
+    {
+    return "IMAGE";
+    }
+  return NULL;
+}
+
+unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype )
+{
+  return FindNextDirectoryRecord( item1, GetLowerLevelDirectoryRecord( directorytype ) );
+}
+
+unsigned int DICOMDIRGenerator::FindNextDirectoryRecord( unsigned int item1, const char *directorytype )
+{
+  if( !directorytype ) return 0;
+  const SequenceOfItems *sqi = GetDirectoryRecordSequence();
+  unsigned int nitems = sqi->GetNumberOfItems();
+  for(unsigned int i = item1 + 1; i <= nitems; ++i)
     {
     const Item &item = sqi->GetItem(i);
     const DataSet &ds = item.GetNestedDataSet();
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.Set( ds );
+
+    // found a match ?
+    if( strcmp( directorytype, directoryrecordtype.GetValue() ) == 0 )
+      {
+      return i;
+      }
+    }
+
+  // Not found
+  return 0;
+}
+
+bool DICOMDIRGenerator::TraverseDirectoryRecords(VL start )
+{
+  SequenceOfItems *sqi = GetDirectoryRecordSequence();
+
+  ComputeDirectoryRecordsOffset(sqi, start);
+
+  Scanner &scanner = GetScanner();
+
+  unsigned int nitems = sqi->GetNumberOfItems();
+  for(unsigned int i = 1; i <=nitems; ++i)
+    {
+    Item &item = sqi->GetItem(i);
+    DataSet &ds = item.GetNestedDataSet();
+    Attribute<0x4,0x1430> directoryrecordtype;
+    directoryrecordtype.Set( ds );
     std::cout << "FOUND DIRECTORY TYPE:" << directoryrecordtype.GetValue() << std::endl;
+    unsigned int next = FindNextDirectoryRecord( i, directoryrecordtype.GetValue() );
+    if( next )
+      {
+      Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
+      offsetofthenextdirectoryrecord.SetValue( Internals->OffsetTable[ next - 1 ] );
+      ds.Replace( offsetofthenextdirectoryrecord.GetAsDataElement() );
+      }
+    unsigned int lower = FindLowerLevelDirectoryRecord( i, directoryrecordtype.GetValue() );
+    if( lower )
+      {
+      Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
+      offsetofreferencedlowerleveldirectoryentity.SetValue( Internals->OffsetTable[ lower - 1 ] );
+      ds.Replace( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
+      }
     }
   return true;
 }
@@ -504,7 +593,7 @@ the File-set.
 
   ds.Replace( offsetofthelastdirectoryrecordoftherootdirectoryentity.GetAsDataElement() );
 
-  TraverseDirectoryRecords(sqi, offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetValue() );
+  TraverseDirectoryRecords(offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetValue() );
 }
 
   return true;
@@ -523,6 +612,14 @@ File &DICOMDIRGenerator::GetFile()
 Scanner &DICOMDIRGenerator::GetScanner()
 {
   return Internals->scanner;
+}
+
+SequenceOfItems *DICOMDIRGenerator::GetDirectoryRecordSequence()
+{
+  gdcm::DataSet &ds = GetFile().GetDataSet();
+  const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
+  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  return sqi;
 }
 
 } // end namespace gdcm

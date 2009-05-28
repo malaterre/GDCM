@@ -82,7 +82,6 @@ public:
    * Sequence shall have an ordinal position equal to the number of Items in the Sequence.
    */
   const Item &GetItem(unsigned int position) const;
-
   Item &GetItem(unsigned int position);
 
   SequenceOfItems &operator=(const SequenceOfItems &val) {
