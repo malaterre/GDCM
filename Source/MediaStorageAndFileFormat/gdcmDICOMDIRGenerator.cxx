@@ -144,7 +144,28 @@ bool DICOMDIRGenerator::SeriesBelongToStudy(const char *seriesuid, const char *s
   if( ttv.find( tstudyuid ) != ttv.end() )
     {
     const char *v = ttv.find(tstudyuid)->second;
-    if( v && strcmp(v, studyuid ) )
+    if( v && strcmp(v, studyuid ) == 0 )
+      {
+      b = true;
+      }
+    }
+
+  return b;
+}
+
+bool DICOMDIRGenerator::ImageBelongToSeries(const char *sopuid, const char *seriesuid)
+{
+  assert( seriesuid );
+  assert( sopuid );
+  const Scanner &scanner = GetScanner();
+
+  Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(Tag(0x8,0x18), sopuid);
+  Tag tseriesuid(0x20,0xe);
+  bool b = false;
+  if( ttv.find( tseriesuid) != ttv.end() )
+    {
+    const char *v = ttv.find(tseriesuid)->second;
+    if( v && strcmp(v, seriesuid) == 0 )
       {
       b = true;
       }
@@ -198,9 +219,20 @@ unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item
     // found a match ?
     if( strcmp( lowerdirectorytype, directoryrecordtype.GetValue() ) == 0 )
       {
-      return i;
+      // Need to make sure belong to same parent record:
+      if( strcmp( lowerdirectorytype, "IMAGE " ) == 0 )
+        {
+        std::string refval1 = GetReferenceValueForDirectoryType(item1);
+        std::string refval2 = GetReferenceValueForDirectoryType(i);
+        bool b = ImageBelongToSeries(refval2.c_str(), refval1.c_str());
+        if( b ) return i;
+        }
+      else
+        {
+        return i;
+        }
       }
-    assert( strncmp( lowerdirectorytype, directoryrecordtype.GetValue(), strlen( lowerdirectorytype ) ) != 0 );
+    //assert( strncmp( lowerdirectorytype, directoryrecordtype.GetValue(), strlen( lowerdirectorytype ) ) != 0 );
     }
 
   // Not found
