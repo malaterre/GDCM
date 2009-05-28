@@ -68,18 +68,19 @@ const char *GetLowerLevelDirectoryRecord(const char *input)
 {
   if( !input ) return NULL;
 
-  if( strcmp( input, "PATIENT" ) == 0 )
+  if( strcmp( input, "PATIENT " ) == 0 )
     {
-    return "STUDY";
+    return "STUDY ";
     }
-  else if( strcmp( input, "STUDY" ) == 0 )
+  else if( strcmp( input, "STUDY ") == 0 )
     {
     return "SERIES";
     }
   else if( strcmp( input, "SERIES" ) == 0 )
     {
-    return "IMAGE";
+    return "IMAGE ";
     }
+  std::cerr << "COULD NOT FIND:" << input << std::endl;
   return NULL;
 }
 
@@ -105,6 +106,7 @@ unsigned int DICOMDIRGenerator::FindNextDirectoryRecord( unsigned int item1, con
       {
       return i;
       }
+    assert( strncmp( directorytype, directoryrecordtype.GetValue(), strlen( directorytype ) ) != 0 );
     }
 
   // Not found
