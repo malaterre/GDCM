@@ -20,6 +20,9 @@
 namespace gdcm
 {
 class File;
+class Scanner;
+class SequenceOfItems;
+class VL;
 class DICOMDIRGeneratorInternal;
 /**
  * \brief DICOMDIRGenerator 
@@ -38,7 +41,16 @@ public:
   void SetFile(const File& f);
   File &GetFile();
 
+protected:
+  Scanner &GetScanner();
+  bool AddPatientDirectoryRecord();
+  bool AddStudyDirectoryRecord();
+  bool AddSeriesDirectoryRecord();
+  bool AddImageDirectoryRecord();
+
 private:
+  bool TraverseDirectoryRecords(const SequenceOfItems *sqi, VL start );
+
   DICOMDIRGeneratorInternal * Internals;
 };
 

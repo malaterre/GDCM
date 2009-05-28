@@ -1,6 +1,6 @@
 /*!
 
-\page gdcmgendir Tool to anonymize a DICOM file.
+\page gdcmgendir Tool to generate a DICOMDIR file from a File-Set.
 
 \section synopsis SYNOPSIS
 
@@ -10,9 +10,6 @@ gdcmgendir [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmgendir tool is an implementation of PS 3.15 / E.1 / Basic
- Application Level Confidentiality Profile
- (Implementation of E.1.1 De-identify & E.1.2 Re-identify)
 
 \section parameters PARAMETERS
 
@@ -26,27 +23,14 @@ file-out  DICOM output filename
 
 \subsection params params
 \verbatim
-  -e --de-identify            De-identify DICOM (default)
-  -d --re-identify            Re-identify DICOM
 \endverbatim
 
 \subsection options options
 \verbatim
-  -i --input                  DICOM filename / directory
-  -o --output                 DICOM filename / directory
-     --root-uid               Root UID.
-     --resources-path         Resources path.
-  -k --key                    Path to RSA Private Key.
-  -c --certificate            Path to Certificate.
 \endverbatim
 
 \subsection encryption_options encryption_options
 \verbatim
-     --des            DES.
-     --des3           Triple DES.
-     --aes128         AES 128.
-     --aes192         AES 192.
-     --aes256         AES 256.
 \endverbatim
 
 \subsection general_options general options
@@ -77,23 +61,10 @@ file-out  DICOM output filename
 \endverbatim
 
 \section usage Typical usage
-\subsection de-identification (anonymization, encrypt)
-
-\verbatim
-$ gdcmgendir --certificate certificate.pem -e original.dcm original_anonymized.dcm
-\endverbatim
-
-\subsection re-identification (de-anonymization,decrypt)
-
-\verbatim
-$ gdcmgendir --key privatekey.pem -d original_anonymized.dcm original_copy.dcm
-\endverbatim
-
-You can then check that original.dcm and original_copy.dcm are identical.
 
 \section see_also SEE ALSO
 
-<b>gdcmconv</b>(1), <b>gdcminfo</b>(1)
+<b>gdcminfo</b>(1), <b>gdcmanon</b>(1)
 
 \section copyright COPYRIGHT
 

@@ -37,10 +37,13 @@ public:
   SmartPointer<File> F;
   typedef Directory::FilenamesType  FilenamesType;
   FilenamesType fns;
+  Scanner scanner;
 };
 
-bool TraverseDirectoryRecords(gdcm::Scanner const & scanner, const SequenceOfItems *sqi, VL start )
+bool DICOMDIRGenerator::TraverseDirectoryRecords(const SequenceOfItems *sqi, VL start )
 {
+  Scanner &scanner = GetScanner();
+
   unsigned int nitems = sqi->GetNumberOfItems();
   for(unsigned int i = 1; i <=nitems; ++i)
     {
@@ -79,8 +82,10 @@ void SingleDataElementInserter(gdcm::DataSet &ds, gdcm::Scanner const & scanner)
     (0010,0040) CS (no value available)                     #   0, 0 PatientsSex
   (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
 */
-bool AddPatientDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
+bool DICOMDIRGenerator::AddPatientDirectoryRecord()
 {
+  gdcm::DataSet &rootds = GetFile().GetDataSet();
+  gdcm::Scanner const & scanner = GetScanner();
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   Item item;
@@ -125,8 +130,11 @@ bool AddPatientDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scan
     (0020,0010) SH [734591762345]                           #  12, 1 StudyID
   (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
 */
-bool AddStudyDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
+bool DICOMDIRGenerator::AddStudyDirectoryRecord()
 {
+  gdcm::DataSet &rootds = GetFile().GetDataSet();
+  gdcm::Scanner const & scanner = GetScanner();
+
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   Item item;
@@ -170,8 +178,11 @@ bool AddStudyDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanne
     (0020,0011) IS [4]                                      #   2, 1 SeriesNumber
   (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
 */
-bool AddSeriesDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
+bool DICOMDIRGenerator::AddSeriesDirectoryRecord()
 {
+  gdcm::DataSet &rootds = GetFile().GetDataSet();
+  gdcm::Scanner const & scanner = GetScanner();
+
   Attribute<0x20,0xe> seriesinstanceuid;
   gdcm::Scanner::ValuesType seriesinstanceuids = scanner.GetValues( seriesinstanceuid.GetTag() );
   unsigned int nseries = seriesinstanceuids.size();
@@ -237,8 +248,11 @@ bool AddSeriesDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scann
     (0050,0004) CS (no value available)                     #   0, 0 CalibrationImage
   (fffe,e00d) na "ItemDelimitationItem"                   #   0, 0 ItemDelimitationItem
 */
-bool AddImageDirectoryRecord(gdcm::DataSet &rootds, gdcm::Scanner const & scanner)
+bool DICOMDIRGenerator::AddImageDirectoryRecord()
 {
+  gdcm::DataSet &rootds = GetFile().GetDataSet();
+  gdcm::Scanner const & scanner = GetScanner();
+
   Attribute<0x8,0x18> sopinstanceuid;
   gdcm::Scanner::ValuesType sopinstanceuids = scanner.GetValues( sopinstanceuid.GetTag() );
   unsigned int ninstance = sopinstanceuids.size();
@@ -331,7 +345,7 @@ void DICOMDIRGenerator::SetFilesames( FilenamesType const & fns )
 
 bool DICOMDIRGenerator::Generate()
 {
-  gdcm::Scanner scanner;
+  gdcm::Scanner &scanner = GetScanner();
   // <entry group="0002" element="0010" vr="UI" vm="1" name="Transfer Syntax UID"/>
   scanner.AddTag( Tag(0x02,0x10) );
   // <entry group="0010" element="0010" vr="PN" vm="1" name="Patient's Name"/>
@@ -408,10 +422,10 @@ bool DICOMDIRGenerator::Generate()
   ds.Insert( de );
 
   bool b;
-  b = AddPatientDirectoryRecord(ds, scanner);
-  b = AddStudyDirectoryRecord(ds, scanner);
-  b = AddSeriesDirectoryRecord(ds, scanner);
-  b = AddImageDirectoryRecord(ds, scanner);
+  b = AddPatientDirectoryRecord();
+  b = AddStudyDirectoryRecord();
+  b = AddSeriesDirectoryRecord();
+  b = AddImageDirectoryRecord();
 
 /*
 The DICOMDIR File shall use the Explicit VR Little Endian Transfer Syntax (UID=1.2.840.10008.1.2.1) to
@@ -490,7 +504,7 @@ the File-set.
 
   ds.Replace( offsetofthelastdirectoryrecordoftherootdirectoryentity.GetAsDataElement() );
 
-  TraverseDirectoryRecords(scanner, sqi, offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetValue() );
+  TraverseDirectoryRecords(sqi, offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetValue() );
 }
 
   return true;
@@ -504,6 +518,11 @@ void DICOMDIRGenerator::SetFile(const File& f)
 File &DICOMDIRGenerator::GetFile()
 {
   return *Internals->F;
+}
+
+Scanner &DICOMDIRGenerator::GetScanner()
+{
+  return Internals->scanner;
 }
 
 } // end namespace gdcm
