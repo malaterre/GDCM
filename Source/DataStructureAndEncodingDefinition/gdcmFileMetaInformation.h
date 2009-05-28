@@ -20,6 +20,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmTransferSyntax.h"
+#include "gdcmExplicitDataElement.h"
 
 namespace gdcm
 {
@@ -98,6 +99,10 @@ public:
     DataSetTS = fmi.DataSetTS;
     MetaInformationTS = fmi.MetaInformationTS;
     DataSetMS = fmi.DataSetMS;
+    }
+
+    VL GetFullLength() const {
+      return P.GetLength() + DataSet::GetLength<ExplicitDataElement>();
     }
 
 protected:
