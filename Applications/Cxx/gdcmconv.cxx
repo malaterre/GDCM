@@ -796,7 +796,14 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( reader.GetFile() );
+    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
+      {
+      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
       return 1;
       }
 
@@ -846,7 +853,14 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( reader.GetFile() );
+    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
+      {
+      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
       return 1;
       }
 
@@ -910,7 +924,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -941,7 +955,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -980,7 +994,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -1009,7 +1023,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -1207,7 +1221,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
 
@@ -1281,6 +1295,13 @@ int main (int argc, char *argv[])
         std::cerr << "Failed to read: " << filename << std::endl;
         return 1;
         }
+      }
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( reader.GetFile() );
+    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
+      {
+      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
+      return 1;
       }
 
 #if 0
