@@ -44,20 +44,10 @@ public class HelloActiviz5
     vtkImageMapToWindowLevelColors coronalColors = vtkImageMapToWindowLevelColors.New();
     coronalColors.SetInput(reader.GetOutput());
 
-    //System.Console.Write(reader.GetOutput());
     actor.SetInput(coronalColors.GetOutput());
-
-    vtkCamera aCamera = vtkCamera.New();
-    aCamera.SetViewUp (0, 0, -1);
-    aCamera.SetPosition (0, 1, 0);
-    aCamera.SetFocalPoint (0, 0, 0);
-    aCamera.ComputeViewPlaneNormal();
 
     ren1.AddActor(actor);
     iren.SetRenderWindow(renWin);
-    ren1.SetActiveCamera(aCamera);
-    ren1.Render();
-    ren1.ResetCamera();
 
     iren.Initialize();
     iren.Start();
