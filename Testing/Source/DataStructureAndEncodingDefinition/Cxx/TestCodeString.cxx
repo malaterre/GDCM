@@ -1,0 +1,117 @@
+/*=========================================================================
+
+  Program: GDCM (Grassroots DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2009 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#include "gdcmCodeString.h"
+#include "gdcmAttribute.h"
+
+#include <iostream>
+
+int TestCodeString(int , char *[])
+{
+  const char fn1[] = "IMG01";
+
+  gdcm::Attribute< 0x0004, 0x1500 > at;
+  at.SetNumberOfValues( 1 );
+  at.SetValue( fn1 );
+
+  unsigned int n = at.GetNumberOfValues();
+  if( n != 1 ) return 1;
+
+  const char fn2[] = "SUBDIR\\IMG01";
+  at.SetNumberOfValues( 2 );
+  at.SetValue( fn2 );
+  n = at.GetNumberOfValues();
+  if( n != 2 ) return 1;
+
+  const char fn3[] = "SUBDIR1\\SUBDIR2\\IMG01 ";
+
+  gdcm::DataElement de( at.GetTag() );
+  de.SetByteValue( fn3, strlen(fn3) );
+
+  at.SetFromDataElement( de );
+  n = at.GetNumberOfValues();
+  //std::cout << n << std::endl;
+  if( n != 3 ) return 1;
+
+  for( unsigned int i = 0; i < n; ++i)
+    {
+    gdcm::CodeString cs = at.GetValue( i );
+    if( !cs.IsValid() )
+      {
+      std::cerr << "Invalid CS: " << cs << std::endl;
+      return 1;
+      }
+    }
+
+  const char fn4[] = "SUBDIR1\\SUBDIR2\\IMG01";
+{
+  std::string copy = fn4;
+  if( copy.size() % 2 )
+    {
+    copy.push_back( ' ' );
+    }
+  gdcm::DataElement de( at.GetTag() );
+  de.SetByteValue( copy.c_str(), copy.size() );
+
+  at.SetFromDataElement( de );
+  n = at.GetNumberOfValues();
+  //std::cout << n << std::endl;
+  if( n != 3 ) return 1;
+
+  for( unsigned int i = 0; i < n; ++i)
+    {
+    gdcm::CodeString cs = at.GetValue( i );
+    if( !cs.IsValid() )
+      {
+      std::cerr << "Invalid CS: " << cs << std::endl;
+      return 1;
+      }
+    }
+}
+
+  const char fn5[] = "SUBDIR1\\SUBDIR2\\LONGSUBDIR\\IMG01";
+{
+  std::string copy = fn5;
+  if( copy.size() % 2 )
+    {
+    copy.push_back( ' ' );
+    }
+
+  gdcm::DataElement de( at.GetTag() );
+  de.SetByteValue( copy.c_str(), copy.size() );
+
+  at.SetFromDataElement( de );
+  n = at.GetNumberOfValues();
+  //std::cout << n << std::endl;
+  if( n != 4 ) return 1;
+
+  for( unsigned int i = 0; i < n; ++i)
+    {
+    gdcm::CodeString cs = at.GetValue( i );
+    if( !cs.IsValid() )
+      {
+      std::cerr << "Invalid CS: " << cs << std::endl;
+      return 1;
+      }
+    }
+
+  if( strlen(at.GetValue(2) ) < 8 )
+    {
+    return 1;
+    }
+}
+
+  return 0;
+}
+

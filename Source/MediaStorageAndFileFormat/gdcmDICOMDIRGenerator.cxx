@@ -95,6 +95,10 @@ const char *GetLowerLevelDirectoryRecord(const char *input)
 DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(unsigned int itemidx)
 {
   /*
+   * PS 3.11 - 2008 / D.3.3 Directory Information in DICOMDIR
+   * The Patient ID at the patient level shall be unique for each patient directory record in one File Set.
+  */
+  /*
    * This function will return the Patient ID when directorytype          == "PATIENT"
    * This function will return the Study Instance UID when directorytype  == "STUDY"
    * This function will return the Series Instance UID when directorytype == "SERIES"
@@ -617,6 +621,35 @@ DICOMDIRGenerator::~DICOMDIRGenerator(  )
   delete Internals;
 }
 
+bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
+{
+  if(!filename) return false;
+  // (0004,1500) CS [IMG001]                                 #   6, 1 ReferencedFileID
+  // <entry group="0004" element="1500" vr="CS" vm="1-8" name="Referenced File ID"/>
+  Attribute< 0x4, 0x1500 > at;
+  DataElement de( at.GetTag() );
+  std::string copy = filename;
+  if( copy.size() % 2 )
+    {
+    copy.push_back( ' ' );
+    }
+  de.SetByteValue( copy.c_str(), copy.size() ) ;
+  at.SetFromDataElement( de );
+  unsigned int n = at.GetNumberOfValues();
+  // A volume may have at most 8 levels of directories, where the root directory is defined as level 1.
+  if( n > 8 ) return false;
+
+  for( unsigned int i = 0; i < n; ++i)
+    {
+    gdcm::CodeString cs = at.GetValue( i );
+    if( !cs.IsValid() || cs.size() > 8 )
+      {
+      return false;
+      }
+    }
+  return true;
+}
+
 void DICOMDIRGenerator::SetFilenames( FilenamesType const & fns )
 {
   Internals->fns = fns;
@@ -671,6 +704,22 @@ bool DICOMDIRGenerator::Generate()
   scanner.AddTag( Tag(0x2,0x10) );
 
   FilenamesType const &filenames = Internals->fns;
+
+  // Let's check that filenames are ok for iso9660 + compatible with VR:CS
+{
+  FilenamesType::const_iterator it = filenames.begin();
+  for( ; it != filenames.end(); ++it )
+    {
+    gdcm::Filename fn = it->c_str();
+    const char *f = fn.ToWindowsSlashes();
+    if( !IsCompatibleWithISOIEC9660MediaFormat( f ) )
+      {
+      gdcmErrorMacro( "Invalid file name: " << f );
+      return false;
+      }
+    }
+}
+
   if( !scanner.Scan( filenames ) )
     {
     return false;

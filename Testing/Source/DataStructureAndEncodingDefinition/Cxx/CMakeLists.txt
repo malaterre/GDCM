@@ -2,6 +2,7 @@
 # DSED
 SET(DSED_TEST_SRCS
 	TestAttribute
+  TestCodeString
 	TestAttribute1
 	TestAttribute7
   #TestReadPatientName

@@ -34,7 +34,11 @@ Repertoire
     for( ; it != end(); ++it )
       {
       int c = *it;
-      if( !isupper(c) && !isdigit(c) && c != ' ' && c != '_' ) return false;
+      if( !isupper(c) && !isdigit(c) && c != ' ' && c != '_' )
+        {
+        // char dummy = c;
+        return false;
+        }
       }
     return true;
   }
