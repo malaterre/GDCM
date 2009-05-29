@@ -597,13 +597,20 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
       }
     ds.Insert( instancenumber.GetAsDataElement() );
 
-    //Attribute<0x8,0x8> imagetype;
+    Attribute<0x8,0x8> imagetype;
     //gdcm::Scanner::ValuesType imagetypes = scanner.GetValues( imagetype.GetTag() );
     //gdcm::Scanner::ValuesType::const_iterator it = imagetypes.begin();
     //assert( imagetypes.size() == 1 );
     //imagetype.SetNumberOfValues( 1 );
     //imagetype.SetValue( it->c_str() );
     //ds.Replace( imagetype.GetAsDataElement() );
+    DataElement de( imagetype.GetTag() );
+    if( ttv.find( imagetype.GetTag() ) != ttv.end() )
+      {
+      const char *v = ttv.find(imagetype.GetTag())->second;
+      de.SetByteValue( v, strlen(v) );
+      }
+    ds.Insert( de );
 
     sqi->AddItem( item );
     }
@@ -702,6 +709,8 @@ bool DICOMDIRGenerator::Generate()
   scanner.AddTag( Tag(0x8,0x16) );
   // <entry group="0002" element="0010" vr="UI" vm="1" name="Transfer Syntax UID"/>
   scanner.AddTag( Tag(0x2,0x10) );
+  // <entry group="0008" element="0008" vr="CS" vm="2-n" name="Image Type"/>
+  scanner.AddTag( Tag(0x8,0x8) );
 
   FilenamesType const &filenames = Internals->fns;
 
