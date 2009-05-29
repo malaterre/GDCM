@@ -28,6 +28,12 @@ class VL;
 class DICOMDIRGeneratorInternal;
 /**
  * \brief DICOMDIRGenerator 
+ * This is a STD-GEN-CD DICOMDIR generator.
+ *
+ * \warning
+ * - Input files should be Explicit VR Little Endian
+ * - filenames should be valid VR::CS value (16 bytes, upper case)
+ *
  */
 class GDCM_EXPORT DICOMDIRGenerator
 {
@@ -36,12 +42,17 @@ public:
   DICOMDIRGenerator();
   ~DICOMDIRGenerator();
 
+  /// Set the list of filenames from which the DICOMDIR should be generated from
   void SetFilenames( FilenamesType const & fns );
 
+  /// Set the File Set ID. 
+  /// \warning this need to be a valid VR::CS value
   void SetDescriptor( const char *d );
 
+  /// Main function to generate the DICOMDIR
   bool Generate();
 
+  /// Set/Get file. The DICOMDIR file will be valid once a call to Generate has been done
   void SetFile(const File& f);
   File &GetFile();
 
