@@ -80,11 +80,17 @@ const char *GetLowerLevelDirectoryRecord(const char *input)
     {
     return "IMAGE ";
     }
-  std::cerr << "COULD NOT FIND:" << input << std::endl;
+  else if( strcmp( input, "IMAGE " ) == 0 )
+    {
+    return NULL;
+    }
+  assert( 0 );
+  //std::cerr << "COULD NOT FIND:" << input << std::endl;
   return NULL;
 }
 
-std::string DICOMDIRGenerator::GetReferenceValueForDirectoryType(unsigned int itemidx)
+
+DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(unsigned int itemidx)
 {
   /*
    * This function will return the Patient ID when directorytype          == "PATIENT"
@@ -92,6 +98,7 @@ std::string DICOMDIRGenerator::GetReferenceValueForDirectoryType(unsigned int it
    * This function will return the Series Instance UID when directorytype == "SERIES"
    * This function will return the SOP Instance UID when directorytype    == "IMAGE"
    */
+  MyPair ret;
   const SequenceOfItems *sqi = GetDirectoryRecordSequence();
   const Item &item = sqi->GetItem(itemidx);
   const DataSet &ds = item.GetNestedDataSet();
@@ -105,31 +112,57 @@ std::string DICOMDIRGenerator::GetReferenceValueForDirectoryType(unsigned int it
     {
     Attribute<0x10,0x20> patientid;
     patientid.Set( ds );
-    return patientid.GetValue();
+    ret.first = patientid.GetValue();
+    ret.second = patientid.GetTag();
     }
   else if( strcmp( input, "STUDY ") == 0 )
     {
     Attribute <0x20,0xd> studyuid;
     studyuid.Set( ds );
-    return studyuid.GetValue();
+    ret.first = studyuid.GetValue();
+    ret.second = studyuid.GetTag();
     }
   else if( strcmp( input, "SERIES" ) == 0 )
     {
     Attribute <0x20,0xe> seriesuid;
     seriesuid.Set( ds );
-    return seriesuid.GetValue();
+    ret.first = seriesuid.GetValue();
+    ret.second = seriesuid.GetTag();
     }
   else if( strcmp( input, "IMAGE " ) == 0 )
     {
     Attribute <0x04,0x1511> sopuid;
     sopuid.Set( ds );
-    return sopuid.GetValue();
+    ret.first = sopuid.GetValue();
+    ret.second = Tag(0x8,0x18); // watch out !
     }
   else
     {
     assert( 0 );
     }
-  return "";
+  return ret;
+}
+
+Tag GetParentTag(Tag const &t)
+{
+  Tag ret;
+  if( t == Tag(0x8,0x18) )
+    {
+    ret = Tag(0x20,0xe);
+    }
+  else if( t == Tag(0x20,0xe) )
+    {
+    ret = Tag(0x20,0xd);
+    }
+  else if( t == Tag(0x20,0xe) )
+    {
+    ret = Tag(0x10,0x20);
+    }
+  else
+    {
+    assert( 0 );
+    }
+  return ret;
 }
 
 bool DICOMDIRGenerator::SeriesBelongToStudy(const char *seriesuid, const char *studyuid)
@@ -153,18 +186,17 @@ bool DICOMDIRGenerator::SeriesBelongToStudy(const char *seriesuid, const char *s
   return b;
 }
 
-bool DICOMDIRGenerator::ImageBelongToSeries(const char *sopuid, const char *seriesuid)
+bool DICOMDIRGenerator::ImageBelongToSeries(const char *sopuid, const char *seriesuid, Tag const &t1, Tag const &t2)
 {
   assert( seriesuid );
   assert( sopuid );
   const Scanner &scanner = GetScanner();
 
-  Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(Tag(0x8,0x18), sopuid);
-  Tag tseriesuid(0x20,0xe);
+  Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(t1, sopuid);
   bool b = false;
-  if( ttv.find( tseriesuid) != ttv.end() )
+  if( ttv.find( t2 ) != ttv.end() )
     {
-    const char *v = ttv.find(tseriesuid)->second;
+    const char *v = ttv.find(t2)->second;
     if( v && strcmp(v, seriesuid) == 0 )
       {
       b = true;
@@ -174,15 +206,15 @@ bool DICOMDIRGenerator::ImageBelongToSeries(const char *sopuid, const char *seri
   return b;
 }
 
-bool DICOMDIRGenerator::ImageBelongToSameSeries(const char *sopuid1, const char *sopuid2)
+bool DICOMDIRGenerator::ImageBelongToSameSeries(const char *sopuid1, const char *sopuid2, Tag const &t)
 {
   assert( sopuid1 );
   assert( sopuid2 );
   const Scanner &scanner = GetScanner();
 
-  Scanner::TagToValue const &ttv1 = scanner.GetMappingFromTagToValue(Tag(0x8,0x18), sopuid1);
-  Scanner::TagToValue const &ttv2 = scanner.GetMappingFromTagToValue(Tag(0x8,0x18), sopuid2);
-  Tag tseriesuid(0x20,0xe);
+  Scanner::TagToValue const &ttv1 = scanner.GetMappingFromTagToValue(t, sopuid1);
+  Scanner::TagToValue const &ttv2 = scanner.GetMappingFromTagToValue(t, sopuid2);
+  Tag tseriesuid = GetParentTag( t );
   bool b = false;
   const char *seriesuid1 = NULL;
   if( ttv1.find( tseriesuid ) != ttv1.end() )
@@ -220,17 +252,10 @@ unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item
     if( strcmp( lowerdirectorytype, directoryrecordtype.GetValue() ) == 0 )
       {
       // Need to make sure belong to same parent record:
-      if( strcmp( lowerdirectorytype, "IMAGE " ) == 0 )
-        {
-        std::string refval1 = GetReferenceValueForDirectoryType(item1);
-        std::string refval2 = GetReferenceValueForDirectoryType(i);
-        bool b = ImageBelongToSeries(refval2.c_str(), refval1.c_str());
-        if( b ) return i;
-        }
-      else
-        {
-        return i;
-        }
+      MyPair refval1 = GetReferenceValueForDirectoryType(item1);
+      MyPair refval2 = GetReferenceValueForDirectoryType(i);
+      bool b = ImageBelongToSeries(refval2.first.c_str(), refval1.first.c_str(), refval2.second, refval1.second);
+      if( b ) return i;
       }
     //assert( strncmp( lowerdirectorytype, directoryrecordtype.GetValue(), strlen( lowerdirectorytype ) ) != 0 );
     }
@@ -262,18 +287,10 @@ unsigned int DICOMDIRGenerator::FindNextDirectoryRecord( unsigned int item1, con
     if( strcmp( directorytype, directoryrecordtype.GetValue() ) == 0 )
       {
       // Need to make sure belong to same parent record:
-      if( strcmp( directorytype, "IMAGE " ) == 0 )
-        {
-        std::string refval1 = GetReferenceValueForDirectoryType(item1);
-        std::string refval2 = GetReferenceValueForDirectoryType(i);
-        bool b = ImageBelongToSameSeries(refval1.c_str(), refval2.c_str());
-        assert( b == false );
-        return 0;
-        }
-      else
-        {
-        return i;
-        }
+      MyPair refval1 = GetReferenceValueForDirectoryType(item1);
+      MyPair refval2 = GetReferenceValueForDirectoryType(i);
+      bool b = ImageBelongToSameSeries(refval1.first.c_str(), refval2.first.c_str(), refval1.second);
+      if( b ) return i;
       }
     assert( strncmp( directorytype, directoryrecordtype.GetValue(), strlen( directorytype ) ) != 0 );
     }
@@ -648,6 +665,8 @@ bool DICOMDIRGenerator::Generate()
   scanner.AddTag( Tag(0x8,0x80) );
   // <entry group="0008" element="0016" vr="UI" vm="1" name="SOP Class UID"/>
   scanner.AddTag( Tag(0x8,0x16) );
+  // <entry group="0002" element="0010" vr="UI" vm="1" name="Transfer Syntax UID"/>
+  scanner.AddTag( Tag(0x2,0x10) );
 
   FilenamesType const &filenames = Internals->fns;
   if( !scanner.Scan( filenames ) )
@@ -656,6 +675,19 @@ bool DICOMDIRGenerator::Generate()
     }
 
   scanner.Print( std::cout );
+
+  Scanner::ValuesType vt = scanner.GetValues( Tag(0x2,0x10) );
+  Scanner::ValuesType vtref;
+  vtref.insert( TransferSyntax::GetTSString( TransferSyntax::ExplicitVRLittleEndian ) );
+  if( vt == vtref )
+    {
+    // All files are ExplicitVRLittleEndian which is required for DICOMDIR
+    }
+  else
+    {
+    gdcmErrorMacro( "Found Transfer Syntax not ExplicitVRLittleEndian." );
+    return false;
+    }
 
   // (0004,1220) SQ (Sequence with undefined length #=8)     # u/l, 1 DirectoryRecordSequence
 

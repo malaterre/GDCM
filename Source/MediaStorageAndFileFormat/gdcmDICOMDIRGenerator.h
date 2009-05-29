@@ -16,6 +16,8 @@
 #define __gdcmDICOMDIRGenerator_h
 
 #include "gdcmDirectory.h"
+#include "gdcmTag.h"
+#include <utility> // std::pair
 
 namespace gdcm
 {
@@ -54,10 +56,11 @@ private:
   unsigned int FindNextDirectoryRecord( unsigned int item1, const char *directorytype );
   SequenceOfItems *GetDirectoryRecordSequence();
   unsigned int FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype );
-  std::string GetReferenceValueForDirectoryType(unsigned int item);
+  typedef std::pair< std::string, Tag> MyPair;
+  MyPair GetReferenceValueForDirectoryType(unsigned int item);
   bool SeriesBelongToStudy(const char *seriesuid, const char *studyuid);
-  bool ImageBelongToSeries(const char *sopuid, const char *seriesuid);
-  bool ImageBelongToSameSeries(const char *sopuid, const char *seriesuid);
+  bool ImageBelongToSeries(const char *sopuid, const char *seriesuid, Tag const &t1, Tag const &t2);
+  bool ImageBelongToSameSeries(const char *sopuid, const char *seriesuid, Tag const &t);
 
   DICOMDIRGeneratorInternal * Internals;
 };
