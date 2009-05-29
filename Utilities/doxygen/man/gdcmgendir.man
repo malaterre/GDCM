@@ -62,9 +62,25 @@ file-out  DICOM output filename
 
 \section usage Typical usage
 
+\section note NOTE
+One may have to run some preliminary steps in order to get gdcmgendir to generate the DICOMDIR file. Namely two steps:
+1. Batch renaming of the DICOM filename into something compatible with ISO 9660 filename convention
+2. Convert all DICOM file into the Explicit VR Little Endian Uncompressed (1.2.840.10008.1.2.1)
+
+Step 1. can be solved in a numerous way. Eg. on UNIX environment this could either be solved using the mkisofs 
+command line tool. filename should not contains any extension since the VR CS does not allow for the '.' character.
+Only upper case, digit 0-9, the space ' ' and the underscore '_' character are valid in VR CS, with a maximum
+of 8 bytes.
+
+Step 2. can simply be achieved using the gdcmconv command line tool:
+
+\verbatim
+  $ for i in `ls IMG*`; do gdcmconv --raw --force $i /tmp/out/$i; done
+\endverbatim
+
 \section see_also SEE ALSO
 
-<b>gdcminfo</b>(1), <b>gdcmanon</b>(1)
+<b>gdcmconv</b>(1), <b>gdcmanon</b>(1)
 
 \section copyright COPYRIGHT
 
