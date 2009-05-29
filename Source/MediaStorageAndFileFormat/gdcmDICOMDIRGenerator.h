@@ -52,8 +52,8 @@ class DICOMDIRGeneratorInternal;
  */
 class GDCM_EXPORT DICOMDIRGenerator
 {
-  typedef Directory::FilenamesType  FilenamesType;
 public:
+  typedef Directory::FilenamesType  FilenamesType;
   DICOMDIRGenerator();
   ~DICOMDIRGenerator();
 

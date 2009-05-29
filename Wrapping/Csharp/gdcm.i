@@ -191,6 +191,7 @@ public class";
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
 #include "gdcmSimpleSubjectWatcher.h"
+#include "gdcmDICOMDIRGenerator.h"
 
 using namespace gdcm;
 %}
@@ -672,4 +673,5 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 
 %feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"
+%include "gdcmDICOMDIRGenerator.h"
 
