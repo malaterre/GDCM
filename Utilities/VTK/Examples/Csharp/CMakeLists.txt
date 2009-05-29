@@ -1,7 +1,13 @@
 SET(DEP)
 IF(GDCM_USE_ACTIVIZ)
   #FIND_PACKAGE(ACTIVIZ REQUIRED)
-SET(example HelloActiviz2)
+SET(examples 
+HelloActiviz2
+HelloActiviz3
+HelloActiviz4
+HelloActiviz5
+)
+FOREACH(example ${examples})
   file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
   #file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMImageReader.cs result2)
   ADD_CUSTOM_COMMAND(
@@ -15,6 +21,8 @@ SET(example HelloActiviz2)
     COMMENT "Create ${example}.exe"
   )
   SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+ENDFOREACH(example)
+
 ELSE(GDCM_USE_ACTIVIZ)
 
 SET(CSHARP_EXAMPLES
