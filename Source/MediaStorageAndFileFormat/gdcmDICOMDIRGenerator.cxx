@@ -227,7 +227,8 @@ bool DICOMDIRGenerator::ImageBelongToSameSeries(const char *sopuid1, const char 
   Tag tseriesuid = GetParentTag( t );
   if( tseriesuid == Tag(0x0,0x0) )
     {
-    return false;
+    // Let's pretend that Patient belong to the same 'root' element:
+    return true;
     }
   bool b = false;
   const char *seriesuid1 = NULL;
