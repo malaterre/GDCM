@@ -25,6 +25,7 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmTag.h"
 #include "gdcmVR.h"
+#include "gdcmCodeString.h"
 
 
 namespace gdcm
@@ -39,6 +40,7 @@ public:
   FilenamesType fns;
   Scanner scanner;
   std::vector<uint32_t> OffsetTable;
+  std::string FileSetID;
 };
 
 bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi, VL start)
@@ -292,7 +294,7 @@ unsigned int DICOMDIRGenerator::FindNextDirectoryRecord( unsigned int item1, con
       bool b = ImageBelongToSameSeries(refval1.first.c_str(), refval2.first.c_str(), refval1.second);
       if( b ) return i;
       }
-    assert( strncmp( directorytype, directoryrecordtype.GetValue(), strlen( directorytype ) ) != 0 );
+    //assert( strncmp( directorytype, directoryrecordtype.GetValue(), strlen( directorytype ) ) != 0 );
     }
 
   // Not found
@@ -615,7 +617,7 @@ DICOMDIRGenerator::~DICOMDIRGenerator(  )
   delete Internals;
 }
 
-void DICOMDIRGenerator::SetFilesames( FilenamesType const & fns )
+void DICOMDIRGenerator::SetFilenames( FilenamesType const & fns )
 {
   Internals->fns = fns;
 }
@@ -694,7 +696,16 @@ bool DICOMDIRGenerator::Generate()
   gdcm::DataSet &ds = GetFile().GetDataSet();
 
   Attribute<0x4,0x1130> filesetid;
+  filesetid.SetValue( Internals->FileSetID.c_str() );
   ds.Insert( filesetid.GetAsDataElement() );
+
+  CodeString cs = filesetid.GetValue();
+  if( !cs.IsValid() )
+    {
+    gdcmErrorMacro( "Invalid File Set ID: " << filesetid.GetValue() );
+    return false;
+    }
+
   Attribute<0x4,0x1200> offsetofthefirstdirectoryrecordoftherootdirectoryentity = {0};
   ds.Insert( offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetAsDataElement() );
   Attribute<0x4,0x1202> offsetofthelastdirectoryrecordoftherootdirectoryentity = { 0 };
@@ -823,6 +834,11 @@ SequenceOfItems *DICOMDIRGenerator::GetDirectoryRecordSequence()
   const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
   SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   return sqi;
+}
+
+void DICOMDIRGenerator::SetDescriptor( const char *d )
+{
+  Internals->FileSetID = d;
 }
 
 } // end namespace gdcm

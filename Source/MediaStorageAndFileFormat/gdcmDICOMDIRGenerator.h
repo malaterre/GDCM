@@ -36,7 +36,9 @@ public:
   DICOMDIRGenerator();
   ~DICOMDIRGenerator();
 
-  void SetFilesames( FilenamesType const & fns );
+  void SetFilenames( FilenamesType const & fns );
+
+  void SetDescriptor( const char *d );
 
   bool Generate();
 

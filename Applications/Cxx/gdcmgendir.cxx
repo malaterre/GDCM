@@ -45,6 +45,7 @@ void PrintHelp()
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "  -o --output    DICOM filename or directory" << std::endl;
   std::cout << "  -r --recursive          recursive." << std::endl;
+  std::cout << "     --descriptor          descriptor." << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -63,6 +64,7 @@ int main(int argc, char *argv[])
 {
   int c;
   std::string filename;
+  std::string outfilename;
   gdcm::Directory::FilenamesType filenames;
   std::string xmlpath;
   int verbose = 0;
@@ -74,6 +76,8 @@ int main(int argc, char *argv[])
   int error = 0;
   int resourcespath = 0;
   int rootuid = 0;
+  int descriptor = 0;
+  std::string descriptor_str;
   std::string root;
   while (1) {
     int option_index = 0;
@@ -83,6 +87,7 @@ int main(int argc, char *argv[])
         {"recursive", 0, &recursive, 1},
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"resources-path", 1, &resourcespath, 1},
+        {"descriptor", 1, &descriptor, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -92,7 +97,7 @@ int main(int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:rVWDEhv";
+    static const char short_options[] = "i:o:rVWDEhv";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -115,16 +120,28 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
-          else if( option_index == 2 ) /* root-uid */
+          else if( option_index == 1 ) /* output */
+            {
+            assert( strcmp(s, "output") == 0 );
+            assert( outfilename.empty() );
+            outfilename = optarg;
+            }
+          else if( option_index == 3 ) /* root-uid */
             {
             assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
-          else if( option_index == 3 ) /* resources-path */
+          else if( option_index == 4 ) /* resources-path */
             {
             assert( strcmp(s, "resources-path") == 0 );
             assert( xmlpath.empty() );
             xmlpath = optarg;
+            }
+          else if( option_index == 5 ) /* descriptor */
+            {
+            assert( strcmp(s, "descriptor") == 0 );
+            assert( descriptor_str.empty() );
+            descriptor_str = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -136,6 +153,11 @@ int main(int argc, char *argv[])
       //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
+      break;
+
+    case 'o':
+      assert( outfilename.empty() );
+      outfilename = optarg;
       break;
 
     case 'r':
@@ -177,16 +199,27 @@ int main(int argc, char *argv[])
   if (optind < argc)
     {
     //printf ("non-option ARGV-elements: %d", optind );
-    //while (optind < argc)
-    //  {
-    //  printf ("%s\n", argv[optind++]);
-    //  }
-    //printf ("\n");
-    // Ok there is only one arg, easy, it's the filename:
-    int v = argc - optind;
-    if( v == 1 )
+    std::vector<std::string> files;
+    while (optind < argc)
       {
-      filename = argv[optind];
+      //printf ("%s\n", argv[optind++]);
+      files.push_back( argv[optind++] );
+      }
+    //printf ("\n");
+    if( files.size() >= 2 
+      && filename.empty()
+      && outfilename.empty() 
+    )
+      {
+      filename = files[0].c_str();
+      filenames = files;
+      outfilename = files[ files.size() - 1 ].c_str();
+      filenames.pop_back();
+      }
+    else
+      {
+      PrintHelp();
+      return 1;
       }
     }
 
@@ -204,7 +237,8 @@ int main(int argc, char *argv[])
     return 0;
     }
 
-  if( filename.empty() )
+  if( filename.empty() 
+    || outfilename.empty() )
     {
     //std::cerr << "Need input file (-i)\n";
     PrintHelp();
@@ -292,11 +326,12 @@ int main(int argc, char *argv[])
     }
   else
     {
-    filenames.push_back( filename );
+    // should be all set !
     }
 
   gdcm::DICOMDIRGenerator gen;
-  gen.SetFilesames( filenames );
+  gen.SetFilenames( filenames );
+  gen.SetDescriptor( descriptor_str.c_str() );
   if( !gen.Generate() )
     {
     return 1;
@@ -304,7 +339,7 @@ int main(int argc, char *argv[])
 
   gdcm::Writer writer;
   writer.SetFile( gen.GetFile() );
-  writer.SetFileName( "debug.DICOMDIR" );
+  writer.SetFileName( outfilename.c_str() );
   if( !writer.Write() )
     {
     return 1;
