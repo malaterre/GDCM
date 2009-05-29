@@ -47,8 +47,12 @@ class DICOMDIRGeneratorInternal;
  *
  * \warning
  * - Input files should be Explicit VR Little Endian
- * - filenames should be valid VR::CS value (16 bytes, upper case)
+ * - filenames should be valid VR::CS value (16 bytes, upper case ...)
  *
+ * \bug:
+ * There is a current limitation of not handling Referenced SOP Class UID / 
+ * Referenced SOP Instance UID simply because the gdcm::Scanner does not allow us
+ * See PS 3.11 / Table D.3-2 STD-GEN Additional DICOMDIR Keys
  */
 class GDCM_EXPORT DICOMDIRGenerator
 {
