@@ -26,8 +26,9 @@ class Scanner;
 class SequenceOfItems;
 class VL;
 class DICOMDIRGeneratorInternal;
+
 /**
- * \brief DICOMDIRGenerator 
+ * \brief DICOMDIRGenerator class
  * This is a STD-GEN-CD DICOMDIR generator.
  * ref: PS 3.11-2008 Annex D (Normative) - General Purpose CD-R and DVD Interchange Profiles
  *
