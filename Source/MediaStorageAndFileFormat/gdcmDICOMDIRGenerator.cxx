@@ -160,9 +160,13 @@ Tag GetParentTag(Tag const &t)
     {
     ret = Tag(0x20,0xd);
     }
-  else if( t == Tag(0x20,0xe) )
+  else if( t == Tag(0x20,0xd) )
     {
     ret = Tag(0x10,0x20);
+    }
+  else if( t == Tag(0x10,0x20) )
+    {
+    ret = Tag(0x0,0x0);
     }
   else
     {
@@ -221,6 +225,10 @@ bool DICOMDIRGenerator::ImageBelongToSameSeries(const char *sopuid1, const char 
   Scanner::TagToValue const &ttv1 = scanner.GetMappingFromTagToValue(t, sopuid1);
   Scanner::TagToValue const &ttv2 = scanner.GetMappingFromTagToValue(t, sopuid2);
   Tag tseriesuid = GetParentTag( t );
+  if( tseriesuid == Tag(0x0,0x0) )
+    {
+    return false;
+    }
   bool b = false;
   const char *seriesuid1 = NULL;
   if( ttv1.find( tseriesuid ) != ttv1.end() )
@@ -314,7 +322,7 @@ bool DICOMDIRGenerator::TraverseDirectoryRecords(VL start )
   Scanner &scanner = GetScanner();
 
   unsigned int nitems = sqi->GetNumberOfItems();
-  for(unsigned int i = 1; i <=nitems; ++i)
+  for(unsigned int i = 1; i <= nitems; ++i)
     {
     Item &item = sqi->GetItem(i);
     DataSet &ds = item.GetNestedDataSet();
@@ -369,32 +377,54 @@ bool DICOMDIRGenerator::AddPatientDirectoryRecord()
 {
   gdcm::DataSet &rootds = GetFile().GetDataSet();
   gdcm::Scanner const & scanner = GetScanner();
+
+  Attribute<0x10,0x20> patientid;
+  gdcm::Scanner::ValuesType patientids = scanner.GetValues( patientid.GetTag() );
+  unsigned int npatients = patientids.size();
+
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
-  Item item;
-  item.SetVLToUndefined();
-  DataSet &ds = item.GetNestedDataSet();
 
-  // (0004,1400) up 0                                        #   4, 1 OffsetOfTheNextDirectoryRecord
-  // (0004,1410) US 65535                                    #   2, 1 RecordInUseFlag
-  // (0004,1420) up 502                                      #   4, 1 OffsetOfReferencedLowerLevelDirectoryEntity
-  // (0004,1430) CS [PATIENT]                                #   8, 1 DirectoryRecordType
-  Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
-  ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
-  Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
-  ds.Insert( recordinuseflag.GetAsDataElement() );
-  Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
-  ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
-  Attribute<0x4,0x1430> directoryrecordtype;
-  directoryrecordtype.SetValue( "PATIENT" );
-  ds.Insert( directoryrecordtype.GetAsDataElement() );
+  gdcm::Scanner::ValuesType::const_iterator it = patientids.begin();
+  for( ; it  != patientids.end(); ++it)
+    {
+    Item item;
+    item.SetVLToUndefined();
+    DataSet &ds = item.GetNestedDataSet();
 
-  SingleDataElementInserter<0x10,0x10>(ds, scanner);
-  SingleDataElementInserter<0x10,0x20>(ds, scanner);
-  //SingleDataElementInserter<0x10,0x30>(ds, scanner);
-  //SingleDataElementInserter<0x10,0x40>(ds, scanner);
+    // (0004,1400) up 0                                        #   4, 1 OffsetOfTheNextDirectoryRecord
+    // (0004,1410) US 65535                                    #   2, 1 RecordInUseFlag
+    // (0004,1420) up 502                                      #   4, 1 OffsetOfReferencedLowerLevelDirectoryEntity
+    // (0004,1430) CS [PATIENT]                                #   8, 1 DirectoryRecordType
+    Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
+    ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
+    Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
+    ds.Insert( recordinuseflag.GetAsDataElement() );
+    Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
+    ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
+    Attribute<0x4,0x1430> directoryrecordtype;
+    directoryrecordtype.SetValue( "PATIENT" );
+    ds.Insert( directoryrecordtype.GetAsDataElement() );
+    patientid.SetValue( it->c_str() );
+    ds.Insert( patientid.GetAsDataElement() );
 
-  sqi->AddItem( item );
+    const char *pid = it->c_str();
+    gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(patientid.GetTag(), pid);
+    Attribute<0x10,0x10> patientsname;
+    if( ttv.find( patientsname.GetTag() ) != ttv.end() )
+      {
+      patientsname.SetValue( ttv.find(patientsname.GetTag())->second );
+      ds.Insert( patientsname.GetAsDataElement() );
+      }
+
+    //SingleDataElementInserter<0x10,0x10>(ds, scanner);
+    //SingleDataElementInserter<0x10,0x20>(ds, scanner);
+    //SingleDataElementInserter<0x10,0x30>(ds, scanner);
+    //SingleDataElementInserter<0x10,0x40>(ds, scanner);
+
+    sqi->AddItem( item );
+    }
+
   return true;
 }
 
@@ -418,30 +448,75 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
   gdcm::DataSet &rootds = GetFile().GetDataSet();
   gdcm::Scanner const & scanner = GetScanner();
 
+  Attribute<0x20,0xd> studyinstanceuid;
+  gdcm::Scanner::ValuesType studyinstanceuids = scanner.GetValues( studyinstanceuid.GetTag() );
+  unsigned int nstudy = studyinstanceuids.size();
+
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
-  Item item;
-  item.SetVLToUndefined();
-  DataSet &ds = item.GetNestedDataSet();
 
-  Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
-  ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
-  Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
-  ds.Insert( recordinuseflag.GetAsDataElement() );
-  Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
-  ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
-  Attribute<0x4,0x1430> directoryrecordtype;
-  directoryrecordtype.SetValue( "STUDY" );
-  ds.Insert( directoryrecordtype.GetAsDataElement() );
+  gdcm::Scanner::ValuesType::const_iterator it = studyinstanceuids.begin();
+  for( ; it  != studyinstanceuids.end(); ++it)
+    {
+    Item item;
+    item.SetVLToUndefined();
+    DataSet &ds = item.GetNestedDataSet();
 
-  SingleDataElementInserter<0x8,0x20>(ds, scanner);
-  SingleDataElementInserter<0x8,0x30>(ds, scanner);
-  SingleDataElementInserter<0x8,0x1030>(ds, scanner);
-  SingleDataElementInserter<0x20,0xd>(ds, scanner);
-  SingleDataElementInserter<0x20,0x10>(ds, scanner);
-  SingleDataElementInserter<0x8,0x50>(ds, scanner);
+    Attribute<0x4,0x1400> offsetofthenextdirectoryrecord = {0};
+    ds.Insert( offsetofthenextdirectoryrecord.GetAsDataElement() );
+    Attribute<0x4,0x1410> recordinuseflag = {0xFFFF};
+    ds.Insert( recordinuseflag.GetAsDataElement() );
+    Attribute<0x4,0x1420> offsetofreferencedlowerleveldirectoryentity = {0};
+    ds.Insert( offsetofreferencedlowerleveldirectoryentity.GetAsDataElement() );
+    Attribute<0x4,0x1430> directoryrecordtype;
+    directoryrecordtype.SetValue( "STUDY" );
+    ds.Insert( directoryrecordtype.GetAsDataElement() );
+    studyinstanceuid.SetValue( it->c_str() );
+    ds.Insert( studyinstanceuid.GetAsDataElement() );
 
-  sqi->AddItem( item );
+    //SingleDataElementInserter<0x20,0xd>(ds, scanner);
+    //SingleDataElementInserter<0x8,0x20>(ds, scanner);
+    //SingleDataElementInserter<0x8,0x30>(ds, scanner);
+    //SingleDataElementInserter<0x8,0x1030>(ds, scanner);
+    //SingleDataElementInserter<0x8,0x50>(ds, scanner);
+    //SingleDataElementInserter<0x20,0x10>(ds, scanner);
+    const char *studyuid = it->c_str();
+    gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(studyinstanceuid.GetTag(), studyuid);
+
+    Attribute<0x8,0x20> studydate;
+    if( ttv.find( studydate.GetTag() ) != ttv.end() )
+      {
+      studydate.SetValue( ttv.find(studydate.GetTag())->second );
+      ds.Insert( studydate.GetAsDataElement() );
+      }
+    Attribute<0x8,0x30> studytime;
+    if( ttv.find( studytime.GetTag() ) != ttv.end() )
+      {
+      studytime.SetValue( ttv.find(studytime.GetTag())->second );
+      ds.Insert( studytime.GetAsDataElement() );
+      }
+    Attribute<0x8,0x1030> studydesc;
+    if( ttv.find( studydesc.GetTag() ) != ttv.end() )
+      {
+      studydesc.SetValue( ttv.find(studydesc.GetTag())->second );
+      ds.Insert( studydesc.GetAsDataElement() );
+      }
+    Attribute<0x8,0x50> accessionnumber;
+    if( ttv.find( accessionnumber.GetTag() ) != ttv.end() )
+      {
+      accessionnumber.SetValue( ttv.find(accessionnumber.GetTag())->second );
+      ds.Insert( accessionnumber.GetAsDataElement() );
+      }
+    Attribute<0x20,0x10> studyid;
+    if( ttv.find( studyid.GetTag() ) != ttv.end() )
+      {
+      studyid.SetValue( ttv.find(studyid.GetTag())->second );
+      ds.Insert( studyid.GetAsDataElement() );
+      }
+
+    sqi->AddItem( item );
+    }
+
   return true;
 }
 
@@ -605,6 +680,7 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
     //imagetype.SetValue( it->c_str() );
     //ds.Replace( imagetype.GetAsDataElement() );
     DataElement de( imagetype.GetTag() );
+    de.SetVR( imagetype.GetVR() );
     if( ttv.find( imagetype.GetTag() ) != ttv.end() )
       {
       const char *v = ttv.find(imagetype.GetTag())->second;
