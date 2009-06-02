@@ -144,7 +144,7 @@ void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v);
 //-----------------------------------------------------------------------------
 void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictEntry& entry) 
 {
-abort();
+assert(0);
   const Tag &t = xde.GetTag();
   const VR &vr = xde.GetVR();
   const VL &vl = xde.GetVL();
@@ -213,7 +213,7 @@ abort();
   //    {
   //    gdcmErrorMacro( "Wrong VR should be " << dictVR );
   //    // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
-  //    //abort();
+  //    //assert(0);
   //    }
   //  if( pstyle == Printer::CONDENSED_STYLE )
   //    {
@@ -359,12 +359,12 @@ PrinterTemplateSubCase(type, VM5) \
 PrinterTemplateSubCase(type, VM6) \
 PrinterTemplateSubCase(type, VM24) \
 PrinterTemplateSubCase1n(type, VM1_n) \
-default: abort(); }
+default: assert(0); }
 
 #define PrinterTemplateSub2(type) \
 switch(vm) { \
 	PrinterTemplateSubCase1n(type, VM1) \
-default: abort(); }
+default: assert(0); }
 
 #define PrinterTemplateCase(type) \
   case VR::type: \
@@ -403,7 +403,7 @@ PrinterTemplateCase(UL) \
 PrinterTemplateCase(UN) \
 PrinterTemplateCase(US) \
 PrinterTemplateCase(UT) \
-default: abort(); }
+default: assert(0); }
 
 void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v)
 {
@@ -523,7 +523,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       }
     else
     {
-	    abort();
+	    assert(0);
     }
     }
 
@@ -531,7 +531,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
         }
       else
         {
-        abort();
+        assert(0);
         const Value& val = de.GetValue();
         _os << de.GetTag();
         if ( printVR )
@@ -817,7 +817,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
           }
         break;
       default:
-        abort();
+        assert(0);
         break;
         }
       os << s;

@@ -193,7 +193,7 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
         //if( !ValueIO<VR16ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
         if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
           {
-          abort();
+          assert(0);
           }
         }
       catch( std::exception &ex)

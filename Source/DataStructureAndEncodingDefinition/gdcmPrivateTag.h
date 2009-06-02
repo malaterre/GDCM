@@ -64,7 +64,7 @@ public:
         //assert( strcmp(Owner.c_str(), _val.GetOwner()) == 0 );
         //return true;
         res = gdcm::System::StrCaseCmp(s1,s2) < 0;
-abort();
+assert(0);
         }
 #endif
       return res;

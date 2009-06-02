@@ -289,7 +289,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
     {
-    gdcmWarningMacro( "ValueLengthField was bogus" ); abort();
+    gdcmWarningMacro( "ValueLengthField was bogus" ); assert(0);
     ValueLengthField = dummy;
     }
 #else
@@ -349,7 +349,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
         //if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
         if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
           {
-          abort();
+          assert(0);
           }
         }
       catch( std::exception &ex)
@@ -448,7 +448,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
       failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
       break;
     default:
-      abort();
+      assert(0);
       }
     }
   if( failed )

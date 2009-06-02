@@ -320,7 +320,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     else
       {
-      abort();
+      assert(0);
       }
     }
 #endif

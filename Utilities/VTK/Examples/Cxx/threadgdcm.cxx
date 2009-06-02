@@ -103,7 +103,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   if( !reader.Read() )
     {
     // That would be very bad...
-    abort();
+    assert(0);
     }
 
   const gdcm::Image &image = reader.GetImage();
@@ -141,7 +141,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
     output->SetScalarType ( VTK_UNSIGNED_INT );
     break;
   default:
-    abort();
+    assert(0);
     }
 
   output->SetNumberOfScalarComponents ( pixeltype.GetSamplesPerPixel() );
@@ -177,7 +177,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
     if( res )
       {
       std::cerr << "Unable to start a new thread, pthread returned: " << res << std::endl;
-      abort();
+      assert(0);
       }
     //ShowFilenames(params[thread]);
     }

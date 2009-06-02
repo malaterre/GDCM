@@ -90,7 +90,7 @@ TransferSyntax Reader::GuessTransferSyntax()
       sc = SwapCode::BigEndian;
       break;
     default:
-      abort();
+      assert(0);
       }
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[3];
@@ -127,7 +127,7 @@ TransferSyntax Reader::GuessTransferSyntax()
           gdcmWarningMacro( "Bad Big Endian" );
           break;
         default:
-          abort();
+          assert(0);
           }
         }
       nts = TransferSyntax::Implicit;
@@ -143,7 +143,7 @@ TransferSyntax Reader::GuessTransferSyntax()
       sc = SwapCode::LittleEndian;
       break;
     default:
-      abort();
+      assert(0);
       }
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[3];
@@ -178,12 +178,12 @@ TransferSyntax Reader::GuessTransferSyntax()
       }
     else
       {
-      abort();
+      assert(0);
       }
     }
   else
     {
-    abort();
+    assert(0);
     }
   Stream->seekg( start, std::ios::beg );
   assert( ts != TransferSyntax::TS_END );
@@ -216,7 +216,7 @@ std::istream &is = *Stream;
     }
   catch( ... )
     {
-    abort();
+    assert(0);
     }
 
   bool hasmetaheader = false;
@@ -259,7 +259,7 @@ std::istream &is = *Stream;
   catch( ... )
     {
     // Ooops..
-    abort();
+    assert(0);
     }
   if( F->GetHeader().IsEmpty() )
     {
@@ -417,7 +417,7 @@ std::istream &is = *Stream;
       //
       gdcmWarningMacro( "Attempt to read Philips with ByteSwap private sequence wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      abort();  // TODO FIXME
+      assert(0);  // TODO FIXME
       }
     else if( ex.GetLastElement().GetVR() == VR::INVALID )
       {
@@ -597,7 +597,7 @@ std::istream &is = *Stream;
     }
   catch( ... )
     {
-    abort();
+    assert(0);
     }
 
   bool hasmetaheader = true;
@@ -636,7 +636,7 @@ std::istream &is = *Stream;
   catch( ... )
     {
     // Ooops..
-    abort();
+    assert(0);
     }
 
   const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();
@@ -781,7 +781,7 @@ std::istream &is = *Stream;
       //
       gdcmWarningMacro( "Attempt to read Philips with ByteSwap private sequence wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      abort();  // TODO FIXME
+      assert(0);  // TODO FIXME
       }
     else
       {

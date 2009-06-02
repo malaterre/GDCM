@@ -207,7 +207,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
       // HACK
       //gdcm::Image *i = (gdcm::Image*)this;
       //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
-abort();
+assert(0);
       }
     return true;
     }
@@ -385,7 +385,7 @@ bool ImageChangeTransferSyntax::Change()
     Output->SetTransferSyntax( TS );
     if( !success )
       {
-      //abort();
+      //assert(0);
       return false;
       }
 
@@ -413,7 +413,7 @@ bool ImageChangeTransferSyntax::Change()
     Output->GetIconImage().SetTransferSyntax( TS );
     if( !success )
       {
-      //abort();
+      //assert(0);
       return false;
       }
     assert( Output->GetIconImage().GetTransferSyntax() == TS );
@@ -433,7 +433,7 @@ bool ImageChangeTransferSyntax::Change()
   Output->SetTransferSyntax( TS );
   if( !success )
     {
-    //abort();
+    //assert(0);
     return false;
     }
 
@@ -449,7 +449,7 @@ bool ImageChangeTransferSyntax::Change()
     Output->GetIconImage().SetTransferSyntax( TS );
     if( !success )
       {
-      //abort();
+      //assert(0);
       return false;
       }
   assert( Output->GetIconImage().GetTransferSyntax() == TS );

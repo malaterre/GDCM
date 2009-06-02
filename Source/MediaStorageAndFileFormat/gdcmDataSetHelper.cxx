@@ -181,7 +181,7 @@ SequenceOfItems* DataSetHelper::ComputeSQFromByteValue(File const & file, DataSe
     {
     if( ts.GetSwapCode() == SwapCode::BigEndian )
       {
-      abort();
+      assert(0);
       }
     else
       {

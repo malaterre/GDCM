@@ -133,7 +133,7 @@ std::istream &CP246ExplicitDataElement::Read(std::istream &is)
         {
         if( !ValueIO<CP246ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
           {
-          abort();
+          assert(0);
           }
         }
       catch( std::exception &ex)

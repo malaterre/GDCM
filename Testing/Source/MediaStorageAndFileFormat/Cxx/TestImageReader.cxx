@@ -74,7 +74,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       {
       // new regression image needs a md5 sum
       std::cout << "Missing md5 " << digest << " for: " << filename <<  std::endl;
-      //abort();
+      //assert(0);
       res = 1;
       }
     else if( strcmp(digest, ref) )
@@ -86,7 +86,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       std::ofstream debug("/tmp/dump.gray");
       debug.write(buffer, len);
       debug.close();
-      //abort();
+      //assert(0);
 #endif
       }
     delete[] buffer;

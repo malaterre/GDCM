@@ -410,7 +410,7 @@ std::string GetVersion(std::string const &owner)
 //      {
 //      // HEY !
 //      std::cerr << "OWNER= \"" << p->owner << "\"" << std::endl;
-//      abort();
+//      assert(0);
 //      }
 //#endif
     //if( owner == p->owner )

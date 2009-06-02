@@ -42,7 +42,7 @@ VL CP246ExplicitDataElement::GetLength() const
       return TagField.GetLength() + VRField.GetLength() 
         + ValueLengthField.GetLength() + sf->ComputeLength();
       }
-    abort();
+    assert(0);
     }
   else
     {

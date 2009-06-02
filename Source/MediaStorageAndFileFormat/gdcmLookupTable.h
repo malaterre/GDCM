@@ -73,7 +73,7 @@ public:
 
   LookupTable(LookupTable const &lut):Object(lut)
     {
-    abort();
+    assert(0);
     }
 
   /// return the LUT as RGBA buffer

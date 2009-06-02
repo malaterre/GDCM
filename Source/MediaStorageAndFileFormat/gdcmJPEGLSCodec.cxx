@@ -81,7 +81,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     this->PF = PixelFormat( PixelFormat::UINT16 );
     break;
   default:
-    abort();
+    assert(0);
     }
   if( metadata.components == 1 )
     {
@@ -93,7 +93,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     PI = PhotometricInterpretation::RGB;
     this->PF.SetSamplesPerPixel( 3 );
     }
-  else abort();
+  else assert(0);
 
 
   if( metadata.allowedlossyerror == 0 )

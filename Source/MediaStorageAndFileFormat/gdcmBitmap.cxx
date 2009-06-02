@@ -118,7 +118,7 @@ unsigned int Bitmap::GetPlanarConfiguration() const
 {
   if( PlanarConfiguration && PF.GetSamplesPerPixel() != 3 )
     {
-    abort();
+    assert(0);
     // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm
     // User specify PlanarConfiguration whereas SamplesPerPixel != 3
     gdcmWarningMacro( 

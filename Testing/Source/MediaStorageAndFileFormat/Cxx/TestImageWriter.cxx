@@ -100,7 +100,7 @@ int TestImageWrite(const char *subdir, const char* filename)
       {
       // new regression image needs a md5 sum
       std::cout << "Missing md5 " << digest << " for: " << outfilename <<  std::endl;
-      //abort();
+      //assert(0);
       res = 1;
       }
     else if( strcmp(digest, ref) )
@@ -112,7 +112,7 @@ int TestImageWrite(const char *subdir, const char* filename)
       std::ofstream debug("/tmp/dump.gray");
       debug.write(buffer, len);
       debug.close();
-      //abort();
+      //assert(0);
 #endif
       }
     delete[] buffer;

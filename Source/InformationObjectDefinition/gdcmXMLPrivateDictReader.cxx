@@ -76,7 +76,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
         if( raw[0] == '5' ) tag.SetGroup( 0x5000 );
         else if( raw[0] == '6' ) tag.SetGroup( 0x6000 );
         else if( raw[0] == '7' ) tag.SetGroup( 0x7000 );
-        else abort();
+        else assert(0);
         CurrentDE.SetGroupXX( true );
         }
       }
@@ -99,7 +99,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
           }
         else
           {
-          abort(); // FIXME
+          assert(0); // FIXME
           }
         }
       else
@@ -118,7 +118,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
           }
         else
           {
-          abort();
+          assert(0);
           }
         }
       }
@@ -146,7 +146,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
         }
       else
         {
-        abort();
+        assert(0);
         }
       }
     else if( version == *current )
@@ -163,7 +163,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
       }
     else
       {
-      abort();
+      assert(0);
       }
     // goes on to the next attribute (need to skip value)
     ++current;
@@ -218,7 +218,7 @@ void XMLPrivateDictReader::StartElement(const char *name, const char **atts)
   else
     {
     std::cerr << name << std::endl;
-    abort();
+    assert(0);
     }
 }
 
@@ -247,7 +247,7 @@ void XMLPrivateDictReader::EndElement(const char *name)
     }
   else
     {
-    abort();
+    assert(0);
     }
 }
 

@@ -122,7 +122,7 @@ void XMLDictReader::HandleEntry(const char **atts)
         }
       else
         {
-        abort();
+        assert(0);
         }
       }
     else if( version == *current )
@@ -135,7 +135,7 @@ void XMLDictReader::HandleEntry(const char **atts)
       }
     else
       {
-      abort();
+      assert(0);
       }
     // goes on to the next attribute (need to skip value)
     ++current;
@@ -189,7 +189,7 @@ void XMLDictReader::StartElement(const char *name, const char **atts)
   else
     {
     std::cerr << name << std::endl;
-    abort();
+    assert(0);
     }
 }
 
@@ -216,7 +216,7 @@ void XMLDictReader::EndElement(const char *name)
     }
   else
     {
-    abort();
+    assert(0);
     }
 }
 

@@ -36,7 +36,7 @@ PythonFilter::~PythonFilter()
 
 void PythonFilter::SetDicts(const Dicts &dicts)
 {
-  abort(); // FIXME
+  assert(0); // FIXME
 }
 
 static const char *PythonTypesFromVR[] = {

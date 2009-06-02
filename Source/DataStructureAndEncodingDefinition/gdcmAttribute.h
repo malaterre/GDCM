@@ -598,7 +598,7 @@ public:
       // TODO rewrite this stupid code:
       Length = len;
       //Internal = array;
-      abort();
+      assert(0);
       }
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)

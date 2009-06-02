@@ -138,7 +138,7 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
     //  }
     else
       {
-      abort();
+      assert(0);
       }
     }
   else
@@ -165,7 +165,7 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
     //  }
     else
       {
-      abort();
+      assert(0);
       }
     }
   assert( st != PixelFormat::UNKNOWN );
@@ -222,7 +222,7 @@ void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
     RescaleFunction<double,TIn>((double*)out,in,intercept,slope,n);
     break;
   default:
-    abort();
+    assert(0);
     break;
     }
  }
@@ -258,7 +258,7 @@ void Rescaler::InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_
   //  InverseRescaleFunction<float,TIn>((float*)out,in,intercept,slope,n);
   //  break;
   default:
-    abort();
+    assert(0);
     break;
     }
  }
@@ -276,7 +276,7 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
   if( Slope != (int)Slope || Intercept != (int)Intercept)
   {
   // need to rescale as double (64bits) as slope/intercept are 64bits
-  //abort();
+  //assert(0);
   }
   // else integral type
   switch(PF)
@@ -309,7 +309,7 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
     break;
   default:
     //InverseRescaleFunction<unsigned short, float>((unsigned short*)out,(float*)in,Intercept,Slope,n);
-    abort();
+    assert(0);
     break;
     }
  
@@ -327,7 +327,7 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
   if( Slope != (int)Slope || Intercept != (int)Intercept)
   {
   // need to rescale as float (32bits) as slope/intercept are 32bits
-  //abort();
+  //assert(0);
   }
   // else integral type
   switch(PF)
@@ -340,11 +340,11 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
     break;
   case PixelFormat::UINT12:
     //RescaleFunctionIntoBestFit<uint12_t>(out,in,n);
-    abort();
+    assert(0);
     break;
   case PixelFormat::INT12:
     //RescaleFunctionIntoBestFit<int12_t>(out,in,n);
-    abort();
+    assert(0);
     break;
   case PixelFormat::UINT16:
     RescaleFunctionIntoBestFit<uint16_t>(out,(uint16_t*)in,n);
@@ -359,7 +359,7 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
     RescaleFunctionIntoBestFit<int32_t>(out,(int32_t*)in,n);
     break;
   default:
-    abort();
+    assert(0);
     break;
     }
  
@@ -407,7 +407,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       }
     else
       {
-      abort();
+      assert(0);
       }
     }
   else
@@ -426,7 +426,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       }
     else
       {
-      abort();
+      assert(0);
       }
     }
 	assert( st != PixelFormat::UNKNOWN );
@@ -453,10 +453,10 @@ PixelFormat Rescaler::ComputePixelTypeFromMinMax()
       break;
     case PixelFormat::FLOAT32:
       output = ComputeInverseBestFitFromMinMax (/*PF,*/intercept,slope,ScalarRangeMin,ScalarRangeMax);
-      //abort();
+      //assert(0);
       break;
     default:
-      abort();
+      assert(0);
       }
     }
 #endif

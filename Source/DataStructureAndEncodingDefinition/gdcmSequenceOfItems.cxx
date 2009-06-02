@@ -22,7 +22,7 @@ void SequenceOfItems::AddItem(Item const &item)
   Items.push_back( item );
   if( !SequenceLengthField.IsUndefined() )
     {
-    abort(); // TODO
+    assert(0); // TODO
     }
 }
 

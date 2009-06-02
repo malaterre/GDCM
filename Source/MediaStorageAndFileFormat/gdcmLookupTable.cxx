@@ -66,7 +66,7 @@ void LookupTable::Allocate( unsigned short bitsample )
     }
   else
     {
-    abort();
+    assert(0);
     }
   BitSample = bitsample;
 }

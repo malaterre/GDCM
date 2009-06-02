@@ -292,7 +292,7 @@ void Overlay::Update(const DataElement & de)
   else
     {
     gdcmErrorMacro( "Tag is not supported: " << de.GetTag() << std::endl );
-    abort();
+    assert(0);
     }
 }
 

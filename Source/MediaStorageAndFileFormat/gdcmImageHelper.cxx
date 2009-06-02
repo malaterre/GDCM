@@ -396,7 +396,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
       assert( ori.size() == 3 );
       return ori;
       }
-    abort();
+    assert(0);
     }
   ori.resize( 3 );
 
@@ -675,7 +675,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::UltrasoundMultiFrameImageStorage:
     // gdcmData/US-MONO2-8-8x-execho.dcm
     // this should be handled somewhere else
-    //abort();
+    //assert(0);
     gdcmWarningMacro( "FIXME" );
     t = Tag(0xffff,0xffff);
     break;
@@ -862,7 +862,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         }
       break;
     default:
-      abort();
+      assert(0);
       break;
       }
     }
@@ -908,7 +908,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
             }
           break;
         default:
-          abort();
+          assert(0);
           break;
           }
         }
@@ -1105,7 +1105,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           }
         break;
       default:
-        abort();
+        assert(0);
         }
       }
     }

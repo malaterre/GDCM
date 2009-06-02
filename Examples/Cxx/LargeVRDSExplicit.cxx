@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
   nestedds2.Replace( at_interpolate.GetAsDataElement() );
   nestedds2.Replace( ncontourpoints.GetAsDataElement() );
 
-  //abort();
+  //assert(0);
 
   // Let's take item one and subdivide it
 

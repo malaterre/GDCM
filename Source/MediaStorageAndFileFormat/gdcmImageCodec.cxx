@@ -128,7 +128,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   unsigned long size = buf_size/3;
   unsigned char *copy = new unsigned char[ buf_size ];
   memmove( copy, dummy_buffer, buf_size);
-abort(); // Do not use this code !
+assert(0); // Do not use this code !
   // FIXME FIXME FIXME
   // The following is bogus: we are doing two operation at once:
   // Planar configuration AND YBR... doh !
@@ -427,7 +427,7 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
     }
   else
     {
-    abort(); // TODO
+    assert(0); // TODO
     }
   return true;
 }
@@ -513,7 +513,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   default:
     gdcmErrorMacro( "Unhandled PhotometricInterpretation: " << PI );
     return false;
-    abort();
+    assert(0);
     }
 
   if( /*PlanarConfiguration ||*/ RequestPlanarConfiguration )

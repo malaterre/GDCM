@@ -57,7 +57,7 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {
-abort();
+assert(0);
 }
 
 void FileMetaInformation::AppendImplementationClassUID(const char * imp)
@@ -207,7 +207,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     else
       {
-      //abort();
+      //assert(0);
       throw gdcm::Exception( "No 2,3 and 8,18 element sorry" );
       }
     }
@@ -222,7 +222,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
         {
         throw gdcm::Exception( "No 8,18 element sorry" );
-        //abort();
+        //assert(0);
         }
       const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
       //const DataElement & foo = GetDataElement( Tag(0x0002, 0x0003) );
@@ -799,7 +799,7 @@ std::ostream &FileMetaInformation::Write(std::ostream &os) const
   }
 //  else
 //  {
-//    abort();
+//    assert(0);
 //  }
 #if 0
     // At least make sure to have group length

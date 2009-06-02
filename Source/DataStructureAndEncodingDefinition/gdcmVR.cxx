@@ -369,7 +369,7 @@ bool VR::IsASCII(VRType vr)
     VRTemplate(VRASCII)
   default:
       // 1.3.12.2.1107.5.1.4.54035.30000005100516290423400005768-no-phi.dcm has a VR=RT
-      //abort();
+      //assert(0);
       return false;
     }
 }
@@ -409,7 +409,7 @@ bool VR::IsBinary(VRType vr)
     return true;
   default:
       // 1.3.12.2.1107.5.1.4.54035.30000005100516290423400005768-no-phi.dcm has a VR=RT
-      //abort();
+      //assert(0);
       return false;
     }
 }

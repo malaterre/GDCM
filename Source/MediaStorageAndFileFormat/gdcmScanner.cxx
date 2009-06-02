@@ -43,7 +43,7 @@ void Scanner::ClearSkipTags()
 void Scanner::AddSkipTag( Tag const & t )
 {
   SkipTags.insert( t );
-  abort(); // This is NOT implemented for now
+  assert(0); // This is NOT implemented for now
 }
 
 // Warning: API is passing a public tag (no way to specify private tag)
