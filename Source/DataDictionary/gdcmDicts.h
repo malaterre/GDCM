@@ -76,6 +76,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const Dicts &d)
 {
+  (void)d;
   return os;
 }
 
