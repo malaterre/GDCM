@@ -25,6 +25,7 @@ FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
 # 0003e67e T _uuid_generate_random
 # 000b37a1 T _uuid_generate_time
 IF(APPLE)
+  SET(CMAKE_FIND_FRAMEWORK NEVER)
   SET(UUID_LIBRARY_VAR System)
 ELSE(APPLE)
   # Linux type:
