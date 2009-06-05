@@ -14,11 +14,6 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
-/usr/local/include
-/usr/include
-)
-
 # On MacOSX we have:
 # $ nm -g /usr/lib/libSystem.dylib | grep uuid_generate
 # 000b3aeb T _uuid_generate
@@ -31,6 +26,11 @@ ELSE(APPLE)
   # Linux type:
   SET(UUID_LIBRARY_VAR uuid)
 ENDIF(APPLE)
+
+FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
+/usr/local/include
+/usr/include
+)
 
 FIND_LIBRARY(UUID_LIBRARY
   NAMES ${UUID_LIBRARY_VAR}
