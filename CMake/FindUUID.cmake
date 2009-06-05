@@ -20,22 +20,24 @@
 # 0003e67e T _uuid_generate_random
 # 000b37a1 T _uuid_generate_time
 IF(APPLE)
-  SET(CMAKE_FIND_FRAMEWORK NEVER)
   SET(UUID_LIBRARY_VAR System)
 ELSE(APPLE)
   # Linux type:
   SET(UUID_LIBRARY_VAR uuid)
 ENDIF(APPLE)
 
-FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
-/usr/local/include
-/usr/include
-)
-
 FIND_LIBRARY(UUID_LIBRARY
   NAMES ${UUID_LIBRARY_VAR}
   PATHS /lib /usr/lib /usr/local/lib
   )
+
+# Must be *after* the lib itself
+SET(CMAKE_FIND_FRAMEWORK NEVER)
+
+FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
+/usr/local/include
+/usr/include
+)
 
 IF (UUID_LIBRARY AND UUID_INCLUDE_DIR)
   SET(UUID_LIBRARIES ${UUID_LIBRARY})
