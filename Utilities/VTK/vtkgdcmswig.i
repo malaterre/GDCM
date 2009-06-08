@@ -178,7 +178,7 @@ using Kitware.VTK;
 %typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
 /*
   public vtkDataObject GetOutputDataObject(int port) {
-    IntPtr cPtr = vtkgdcmswigPINVOKE.vtkAlgorithm_GetOutputDataObject(swigCPtr, port);
+    IntPtr cPtr = vtkgdcmPINVOKE.vtkAlgorithm_GetOutputDataObject(swigCPtr, port);
     SWIGTYPE_p_vtkDataObject ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_vtkDataObject(cPtr, false);
     return ret;
   }
@@ -349,13 +349,13 @@ using Kitware.VTK;
 /*
 By default swig generates:
   public virtual SWIGTYPE_p_double GetImageOrientationPatient() {
-    IntPtr cPtr = vtkgdcmswigPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
+    IntPtr cPtr = vtkgdcmPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
     SWIGTYPE_p_double ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_double(cPtr, false);
     return ret;
   }
 while we would want:
   public virtual double[] GetImageOrientationPatient() {
-    IntPtr source = vtkgdcmswigPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
+    IntPtr source = vtkgdcmPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
     double[] ret = null;
     if (IntPtr.Zero != source)
     {
@@ -422,7 +422,7 @@ while we would want:
 {
 %typemap(cscode) vtkGDCMImageReader
 %{
-  public vtkGDCMImageReader() : this(vtkgdcmswigPINVOKE.vtkGDCMImageReader_New(), false) {
+  public vtkGDCMImageReader() : this(vtkgdcmPINVOKE.vtkGDCMImageReader_New(), false) {
   }
 %}
 };
@@ -436,7 +436,7 @@ while we would want:
 {
 %typemap(cscode) vtkGDCMImageWriter
 %{
-  public vtkGDCMImageWriter() : this(vtkgdcmswigPINVOKE.vtkGDCMImageWriter_New(), false) {
+  public vtkGDCMImageWriter() : this(vtkgdcmPINVOKE.vtkGDCMImageWriter_New(), false) {
   }
 %}
 };
