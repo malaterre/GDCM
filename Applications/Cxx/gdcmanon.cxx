@@ -186,7 +186,7 @@ static void PrintHelp()
   std::cout << "     --aes128                 AES 128." << std::endl;
   std::cout << "     --aes192                 AES 192." << std::endl;
   std::cout << "     --aes256                 AES 256 (default)." << std::endl;
-  std::cout << "Dump mode options:" << std::endl;
+  std::cout << "Dumb mode options:" << std::endl;
   std::cout << "     --empty   %d,%d           DICOM tag(s) to empty" << std::endl;
   std::cout << "     --remove  %d,%d           DICOM tag(s) to remove" << std::endl;
   std::cout << "     --replace %d,%d,%s        DICOM tag(s) to replace" << std::endl;
