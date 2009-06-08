@@ -61,7 +61,7 @@ class CryptographicMessageSyntax;
 class GDCM_EXPORT Anonymizer : public Subject
 {
 public:
-  Anonymizer():F(new File),/*AESKey(),*/CMS(NULL) {}
+  Anonymizer():F(new File),CMS(NULL) {}
   ~Anonymizer();
 
   /// Make Tag t empty (if not found tag will be created)
@@ -102,18 +102,14 @@ public:
   /// NOT THREAD SAFE
   bool BasicApplicationLevelConfidentialityProfile(bool deidentify = true);
 
-  /// Set/Get AES key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
-  /// Warning: set is done by copy (not reference)
-  //void SetAESKey(AES const &aes);
-  //const AES &GetAESKey() const;
-
+  /// Set/Get CMS key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
   void SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms );
   const CryptographicMessageSyntax *GetCryptographicMessageSyntax() const;
 
+  /// for wrapped language: instanciate a reference counted object
   static SmartPointer<Anonymizer> New() { return new Anonymizer; }
 
 protected:
-
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
   bool BALCPProtect(DataSet &ds, Tag const & tag);
   bool CanEmptyTag(Tag const &tag);
@@ -126,7 +122,6 @@ private:
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
   SmartPointer<File> F;
-  //AES AESKey;
   CryptographicMessageSyntax *CMS;
 };
 
