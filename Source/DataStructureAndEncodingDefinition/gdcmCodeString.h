@@ -25,7 +25,7 @@ namespace gdcm
  *
  * \note TODO
  */
-class /*GDCM_EXPORT*/ CodeString : public String<'\\',16> /* PLEASE do not export me */
+class GDCM_EXPORT CodeString : public String<'\\',16> /* PLEASE do not export me */
 {
 public:
   // typedef are not inherited:
