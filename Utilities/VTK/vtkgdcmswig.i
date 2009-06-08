@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-%module(docstring="A VTK/GDCM binding") vtkgdcmswig
+%module(docstring="A VTK/GDCM binding") vtkgdcm
 #pragma SWIG nowarn=504,510
 
 //%pragma(csharp) moduleimports=%{

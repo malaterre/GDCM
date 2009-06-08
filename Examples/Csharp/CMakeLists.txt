@@ -16,6 +16,10 @@ SET(CSHARP_EXAMPLES
   )
 
 SET(DEP)
+# http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_add_a_dependency_to_a_source_file_which_is_generated_in_a_subdirectory.3F
+# Tell CMake the source won't be available until build time.
+SET_SOURCE_FILES_PROPERTIES(${GDCM_LIBRARY_DIR}/gdcm-sharp.dll PROPERTIES GENERATED 1)
+# Make sure the source is generated before the executable builds.
 FOREACH(example ${CSHARP_EXAMPLES})
   file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
 # WORKING_DIRECTORY is set to the src dir because of a strange issue with CSC compiler on Win32 system:
@@ -25,10 +29,13 @@ FOREACH(example ${CSHARP_EXAMPLES})
     #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
     COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
     #WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
+    DEPENDS #${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
             ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
     COMMENT "Create ${example}.exe"
   )
+  ADD_CUSTOM_TARGET(gdcm_sharp_${example} DEPENDS ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+  ADD_DEPENDENCIES(gdcm_sharp_${example} GDCMCSharp)
+
   SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
 ENDFOREACH(example)
 
@@ -36,4 +43,5 @@ ADD_CUSTOM_TARGET(GDCMExampleCSharp ALL
   DEPENDS ${DEP}
   COMMENT "building examples"
 )
+ADD_DEPENDENCIES(GDCMExampleCSharp  GDCMCSharp)
 
