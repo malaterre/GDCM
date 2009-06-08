@@ -73,9 +73,9 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #    ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
 #    @ONLY)
 ##  ADD_CUSTOM_COMMAND(
-##    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+##    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm-sharp.dll
 ##    # $(CSC) /t:library /out:mapscript_csharp.dll *.cs config/AssemblyInfo.cs
-##    COMMAND ${MCS_EXECUTABLE} ARGS "/t:library" "/out:gdcm_csharp.dll" "*.cs" ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+##    COMMAND ${MCS_EXECUTABLE} ARGS "/t:library" "/out:gdcm-sharp.dll" "*.cs" ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
 ##    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 ##    DEPENDS "${swig_generated_file_fullname}"
 ##      ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -86,7 +86,7 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ##$(CSC) /r:mapscript_csharp.dll /out:shpdump.exe examples/shpdump.cs
 ## Cannot use glob since files are not generated yet...
 ##FILE(GLOB bla "${CMAKE_CURRENT_BINARY_DIR}/*.cs")
-#CSHARP_ADD_LIBRARY(gdcm_csharp ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs \"*.cs\")
+#CSHARP_ADD_LIBRARY(gdcm-sharp ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs \"*.cs\")
 #ADD_CUSTOM_TARGET(CSharp_gdcm_sharp ALL
 #    DEPENDS ${SWIG_MODULE_gdcm_REAL_NAME}
 #  )
@@ -99,10 +99,10 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #  )
 #ENDIF(WIN32)
 ##CSHARP_ADD_EXECUTABLE(HelloWorld HelloWorld.cs)
-##CSHARP_LINK_LIBRARIES(HelloWorld gdcm_csharp)
+##CSHARP_LINK_LIBRARIES(HelloWorld gdcm-sharp)
 ##ADD_CUSTOM_TARGET(CSHARP_EXECUTABLE_HelloWorld ALL
 ##    DEPENDS 
-##      ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+##      ${CMAKE_CURRENT_BINARY_DIR}/gdcm-sharp.dll
 ##    # CSharp_gdcm_csharp
 ##  )
 #
@@ -112,9 +112,9 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ## $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
 ##ADD_CUSTOM_TARGET(GDCMCSharp ALL
 ##  DEPENDS 
-##    ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+##    ${CMAKE_CURRENT_BINARY_DIR}/gdcm-sharp.dll
 ##    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
-##  COMMENT "building gdcm_csharp.dll"
+##  COMMENT "building gdcm-sharp.dll"
 ##)
 #
 #IF(BUILD_TESTING)
@@ -130,9 +130,25 @@ IF(OLDSTYLECSHARP)
     ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     @ONLY)
+
+# From Mirco Bauer on debian-cli
+# Hm? You wrote the C# binding for gdcm? Using C# in the lib name is
+# very wrong in all cases. The CIL bytecode can be used by any language
+# that targets the CLI. To give some examples: VB.NET, Boo, Nemerle (yes,
+# those are all in debian already :)).
+# 
+# There is a common prefix of nFOO (like nunit or nant) and for
+# bindings even more common is the suffix of FOO-sharp (not -csharp)
+# like gtk-sharp, gnome-sharp, evolution-sharp.
+# 
+# /usr/lib/mono/gtk-sharp/gtk-sharp.dll
+# /usr/lib/mono/gtk-sharp/gdk-sharp.dll
+# /usr/lib/mono/gtk-sharp/atk-sharp.dll
+
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${GDCM_LIBRARY_DIR}/gdcm_csharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "*.cs" 
+    #OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
+    OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs" 
 #${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
@@ -144,9 +160,9 @@ IF(BUILD_EXAMPLES)
 # building HelloWorld:
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS ${GDCM_LIBRARY_DIR}/gdcm_csharp.dll
+    DEPENDS ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
             ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     COMMENT "Create HelloWorld.exe"
   )
@@ -163,8 +179,8 @@ ENDIF(BUILD_EXAMPLES)
 # $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
   DEPENDS 
-    ${GDCM_LIBRARY_DIR}/gdcm_csharp.dll
-  COMMENT "building gdcm_csharp.dll"
+    ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
+  COMMENT "building gdcm-sharp.dll"
 )
 
 IF(BUILD_EXAMPLES)
@@ -195,8 +211,8 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   ${CPACK_NAMELINK_TYPE}
   )
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-  # because gdcm_csharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-  INSTALL(FILES ${GDCM_LIBRARY_DIR2}/gdcm_csharp.dll
+  # because gdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
+  INSTALL(FILES ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)

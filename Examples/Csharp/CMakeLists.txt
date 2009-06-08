@@ -1,5 +1,5 @@
 #ADD_EXECUTABLE(ManipulateFile ManipulateFile.cs)
-#TARGET_LINK_LIBRARIES(ManipulateFile gdcm_csharp)
+#TARGET_LINK_LIBRARIES(ManipulateFile gdcm-sharp)
 
 SET(CSHARP_EXAMPLES
   ManipulateFile
@@ -22,10 +22,10 @@ FOREACH(example ${CSHARP_EXAMPLES})
 # http://groups.google.com/group/microsoft.public.dotnet.languages.csharp/browse_thread/thread/9d3ac7eb9f7f56be
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
     #WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS ${GDCM_LIBRARY_DIR}/gdcm_csharp.dll
+    DEPENDS ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
             ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
     COMMENT "Create ${example}.exe"
   )
