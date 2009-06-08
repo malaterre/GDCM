@@ -28,6 +28,7 @@ file-out  DICOM output filename
 \verbatim
   -e --de-identify            De-identify DICOM (default)
   -d --re-identify            Re-identify DICOM
+     --dumb                   Dumb mode anonymizer
 \endverbatim
 
 \subsection options options
