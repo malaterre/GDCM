@@ -49,6 +49,13 @@ file-out  DICOM output filename
      --aes256         AES 256.
 \endverbatim
 
+\subsection dumb_mode_options dumb_mode_options
+\verbatim
+     --empty   %d,%d           DICOM tag(s) to empty
+     --remove  %d,%d           DICOM tag(s) to remove
+     --replace %d,%d,%s        DICOM tag(s) to replace
+\endverbatim
+
 \subsection general_options general options
 \verbatim
   -h   --help
@@ -90,6 +97,12 @@ $ gdcmanon --key privatekey.pem -d original_anonymized.dcm original_copy.dcm
 \endverbatim
 
 You can then check that original.dcm and original_copy.dcm are identical.
+
+\subsection dumb mode
+
+\verbatim
+$ gdcmanon --dumb --empty 10,10 --empty 10,20 --remove 10,40 --remove 10,1010 --replace 10,1030,10 012345.002.050.dcm out.dcm
+\endverbatim
 
 \section see_also SEE ALSO
 
