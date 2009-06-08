@@ -30,6 +30,19 @@
   #define GDCM_EXPORT
 #endif
 
+// In VTK 4.2 vtkWrapPython does not like anything other than VTK_*EXPORT
+// [ 86%] Generating vtkGDCMImageReaderPython.cxx
+// syntax error
+// *** SYNTAX ERROR found in parsing the header file /usr/local/src/gdcm2/tags/gdcm-2-0-11/Utilities/VTK/vtkGDCMImageReader.h before line 128***
+// make[2]: *** [Utilities/VTK/vtkGDCMImageReaderPython.cxx] Error 1
+// make[1]: *** [Utilities/VTK/CMakeFiles/vtkgdcmPythonD.dir/all] Error 2
+// make: *** [all] Error 2
+
+#if ( VTK_MAJOR_VERSION == 4 )
+#undef VTK_EXPORT
+#define VTK_EXPORT GDCM_EXPORT
+#endif
+
 //-----------------------------------------------------------------------------
 //This is needed when compiling in debug mode
 #ifdef _MSC_VER

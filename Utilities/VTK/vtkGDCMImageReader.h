@@ -101,7 +101,7 @@ class vtkPolyData;
 namespace gdcm { class ImageReader; }
 //ETX
 class vtkMatrix4x4;
-class GDCM_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
+class VTK_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
 {
 public:
   static vtkGDCMImageReader *New();
