@@ -42,6 +42,48 @@ static void PrintVersion()
   int reidentify = 0;
 
 
+static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, const char *outfilename,
+  std::vector<gdcm::Tag> const &empty_tags, std::vector<gdcm::Tag> const &remove_tags, std::vector< std::pair<gdcm::Tag, std::string> > const & replace_tags)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    std::cerr << "Could not read : " << filename << std::endl;
+    return false;
+    }
+  gdcm::File &file = reader.GetFile();
+
+  anon.SetFile( file );
+
+  std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
+  for(; it != empty_tags.end(); ++it)
+    {
+    anon.Empty( *it );
+    }
+  it = remove_tags.begin();
+  for(; it != remove_tags.end(); ++it)
+    {
+    anon.Remove( *it );
+    }
+
+  std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it2 = replace_tags.begin();
+  for(; it2 != replace_tags.end(); ++it2)
+    {
+    anon.Replace( it2->first, it2->second.c_str() );
+    }
+
+  gdcm::Writer writer;
+  writer.SetFileName( outfilename );
+  writer.SetFile( file );
+  if( !writer.Write() )
+    {
+    std::cerr << "Could not Write : " << outfilename << std::endl;
+    return false;
+    }
+  return true;
+}
+
 static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename)
 {
   gdcm::Reader reader;
@@ -130,6 +172,7 @@ static void PrintHelp()
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -e --de-identify (encrypt)  De-identify DICOM (default)" << std::endl;
   std::cout << "  -d --re-identify (decrypt)  Re-identify DICOM" << std::endl;
+  std::cout << "     --dumb                   Dumb mode anonymizer" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -i --input                  DICOM filename / directory" << std::endl;
   std::cout << "  -o --output                 DICOM filename / directory" << std::endl;
@@ -143,6 +186,10 @@ static void PrintHelp()
   std::cout << "     --aes128                 AES 128." << std::endl;
   std::cout << "     --aes192                 AES 192." << std::endl;
   std::cout << "     --aes256                 AES 256 (default)." << std::endl;
+  std::cout << "Dump mode options:" << std::endl;
+  std::cout << "     --empty   %d,%d           DICOM tag(s) to empty" << std::endl;
+  std::cout << "     --remove  %d,%d           DICOM tag(s) to remove" << std::endl;
+  std::cout << "     --replace %d,%d,%s        DICOM tag(s) to replace" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose                more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning                print warning info." << std::endl;
@@ -200,6 +247,7 @@ int main(int argc, char *argv[])
   std::string rsa_path;
   std::string cert_path;
   int resourcespath = 0;
+  int dumb_mode = 0;
   int des = 0;
   int des3 = 0;
   int aes128 = 0;
@@ -215,6 +263,14 @@ int main(int argc, char *argv[])
   int help = 0;
   int version = 0;
   int recursive = 0;
+  int empty_tag = 0;
+  int remove_tag = 0;
+  int replace_tag = 0;
+  std::vector<gdcm::Tag> empty_tags;
+  std::vector<gdcm::Tag> remove_tags;
+  std::vector< std::pair<gdcm::Tag, std::string> > replace_tags_value;
+  gdcm::Tag tag;
+
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -226,13 +282,17 @@ int main(int argc, char *argv[])
         {"de-identify", 0, &deidentify, 1},
         {"re-identify", 0, &reidentify, 1},
         {"key", 1, &rsapath, 1},
-        {"certificate", 1, &certpath, 1},
+        {"certificate", 1, &certpath, 1}, // 7
         {"des", 0, &des, 1},
         {"des3", 0, &des3, 1},
         {"aes128", 0, &aes128, 1},
         {"aes192", 0, &aes192, 1},
         {"aes256", 0, &aes256, 1},
         {"recursive", 0, &recursive, 1},
+        {"dumb", 0, &dumb_mode, 1},
+        {"empty", 1, &empty_tag, 1}, // 15
+        {"remove", 1, &remove_tag, 1},
+        {"replace", 1, &replace_tag, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -294,6 +354,34 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "certificate") == 0 );
             assert( cert_path.empty() );
             cert_path = optarg;
+            }
+          else if( option_index == 15 ) /* empty */
+            {
+            assert( strcmp(s, "empty") == 0 );
+            tag.ReadFromCommaSeparatedString(optarg);
+            empty_tags.push_back( tag );
+            }
+          else if( option_index == 16 ) /* remove */
+            {
+            assert( strcmp(s, "remove") == 0 );
+            tag.ReadFromCommaSeparatedString(optarg);
+            remove_tags.push_back( tag );
+            }
+          else if( option_index == 17 ) /* replace */
+            {
+            assert( strcmp(s, "replace") == 0 );
+            tag.ReadFromCommaSeparatedString(optarg);
+            std::stringstream ss;
+            ss.str( optarg );
+            int dummy;
+            char cdummy;
+            ss >> dummy;
+            ss >> cdummy;
+            ss >> dummy;
+            ss >> cdummy;
+            std::string str;
+            ss >> str;
+            replace_tags_value.push_back( std::make_pair(tag, str) );
             }
           //printf (" with arg %s", optarg);
           }
@@ -411,7 +499,7 @@ int main(int argc, char *argv[])
     }
 
   // by default de-identify
-  if( !deidentify && !reidentify)
+  if( !deidentify && !reidentify && !dumb_mode)
     {
     deidentify = 1;
     }
@@ -421,37 +509,45 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
+  // dumb mode vs smart mode:
+  if( ( deidentify || reidentify ) && dumb_mode )
+    {
+    return 1;
+    }
 
   // by default AES 256
   gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
-  if( !des && !des3 && !aes128 && !aes192 && !aes256 )
+  if( !dumb_mode )
     {
-    aes256 = 1;
-    }
+    if( !des && !des3 && !aes128 && !aes192 && !aes256 )
+      {
+      aes256 = 1;
+      }
 
-  if( des )
-    {
-    ciphertype = GetFromString( "des" );
-    }
-  else if( des3 )
-    {
-    ciphertype = GetFromString( "des3" );
-    }
-  else if( aes128 )
-    {
-    ciphertype = GetFromString( "aes128" );
-    }
-  else if( aes192 )
-    {
-    ciphertype = GetFromString( "aes192" );
-    }
-  else if( aes256 )
-    {
-    ciphertype = GetFromString( "aes256" );
-    }
-  else
-    {
-    return 1;
+    if( des )
+      {
+      ciphertype = GetFromString( "des" );
+      }
+    else if( des3 )
+      {
+      ciphertype = GetFromString( "des3" );
+      }
+    else if( aes128 )
+      {
+      ciphertype = GetFromString( "aes128" );
+      }
+    else if( aes192 )
+      {
+      ciphertype = GetFromString( "aes192" );
+      }
+    else if( aes256 )
+      {
+      ciphertype = GetFromString( "aes256" );
+      }
+    else
+      {
+      return 1;
+      }
     }
 
   if( !gdcm::System::FileExists(filename.c_str()) )
@@ -563,24 +659,44 @@ int main(int argc, char *argv[])
 
   // Get private key/certificate
   gdcm::CryptographicMessageSyntax cms;
-  if( !GetRSAKeys(cms, rsa_path.c_str(), cert_path.c_str() ) )
+  if( !dumb_mode )
     {
-    return 1;
+    if( !GetRSAKeys(cms, rsa_path.c_str(), cert_path.c_str() ) )
+      {
+      return 1;
+      }
+    cms.SetCipherType( ciphertype );
     }
-  cms.SetCipherType( ciphertype );
 
   // Setup gdcm::Anonymizer
   gdcm::Anonymizer anon;
-  anon.SetCryptographicMessageSyntax( &cms );
+  if( !dumb_mode )
+    anon.SetCryptographicMessageSyntax( &cms );
 
-  for(unsigned int i = 0; i < nfiles; ++i)
+  if( dumb_mode )
     {
-    const char *in  = filenames[i].c_str();
-    const char *out = outfilenames[i].c_str();
-    if( !AnonymizeOneFile(anon, in, out) )
+    for(unsigned int i = 0; i < nfiles; ++i)
       {
-      //std::cerr << "Could not anonymize: " << in << std::endl;
-      return 1;
+      const char *in  = filenames[i].c_str();
+      const char *out = outfilenames[i].c_str();
+      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value) )
+        {
+        //std::cerr << "Could not anonymize: " << in << std::endl;
+        return 1;
+        }
+      }
+    }
+  else
+    {
+    for(unsigned int i = 0; i < nfiles; ++i)
+      {
+      const char *in  = filenames[i].c_str();
+      const char *out = outfilenames[i].c_str();
+      if( !AnonymizeOneFile(anon, in, out) )
+        {
+        //std::cerr << "Could not anonymize: " << in << std::endl;
+        return 1;
+        }
       }
     }
   return 0;
