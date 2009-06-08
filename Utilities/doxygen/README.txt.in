@@ -5,11 +5,11 @@ This is the developpers documentation.
 
 A PDF version of this doxygen documentation can be found here:
 
-http://gdcm.sourceforge.net/gdcm-@GDCM_VERSION@.pdf
+@GDCM_DOC_PDF_LINK@
 
 A tarball version of this HTML doxygen documentation can be found here:
 
-http://gdcm.sourceforge.net/gdcm-@GDCM_VERSION@-doc.tar.gz
+@GDCM_DOC_TARBALL_LINK@
 
 \author Mathieu Malaterre
 */

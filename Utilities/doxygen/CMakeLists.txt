@@ -31,6 +31,21 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/TestsList.txt
     @ONLY
   )
+  IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+    SET(GDCM_DOC_PDF_LINK
+      "http://gdcm.sourceforge.net/${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}/gdcm-${GDCM_VERSION}.pdf"
+    )
+    SET(GDCM_DOC_TARBALL_LINK 
+      "http://gdcm.sourceforge.net/${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}/gdcm-${GDCM_VERSION}-doc.tar.gz"
+    )
+  ELSE(GDCM_MINOR_VERSION MATCHES "[02468]$")
+    SET(GDCM_DOC_PDF_LINK
+      "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}.pdf"
+    )
+    SET(GDCM_DOC_TARBALL_LINK 
+      "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}-doc.tar.gz"
+    )
+  ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
   CONFIGURE_FILE(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/README.txt.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
