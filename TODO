@@ -352,3 +352,10 @@ this feature.
 You have to run "make preinstall" to prepare the installation and then
 run "cmake -DCOMPONENT=Runtime -P cmake_install.cmake" to do the
 component-specific installation.
+-----------------------------------------------------------------------
+vtkGDCMImageReader:: SetReferencedStudyUID()
+to allow creation of DERIVED / SECONDARY
+-----------------------------------------------------------------------
+Make sure Overlay can reference original instance
+question:
+image is a reslice of original image, how do I map to original UID ?
