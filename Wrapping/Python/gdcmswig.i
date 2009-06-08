@@ -22,12 +22,15 @@
 // http://www.ddj.com/article/printableArticle.jhtml;jsessionid=VM4IXCQG5KM10QSNDLRSKH0CJUNN2JVN?articleID=184401747&dept_url=/cpp/
 // http://matt.eifelle.com/2008/11/04/exposing-an-array-interface-with-swig-for-a-cc-structure/
 
-%module(directors="1",docstring="A DICOM library") gdcmswig
+%module(docstring="A DICOM library",directors=1) gdcmswig
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
+#include "gdcmASN1.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
+#include "gdcmEvent.h"
+#include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
 #include "gdcmObject.h"
@@ -46,6 +49,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmDataSet.h"
 //#include "gdcmString.h"
+//#include "gdcmCodeString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
@@ -80,6 +84,8 @@
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
+#include "gdcmSubject.h"
+#include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
@@ -141,6 +147,8 @@
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmSimpleSubjectWatcher.h"
+#include "gdcmDICOMDIRGenerator.h"
 
 using namespace gdcm;
 %}
@@ -193,6 +201,11 @@ EXTEND_CLASS_PRINT_GENERAL(__str__,classname)
 #define GDCM_EXPORT
 %rename(__add__) gdcm::VL::operator+=;
 %include "gdcmSwapCode.h"
+
+//%feature("director") Event;
+//%feature("director") AnyEvent;
+%include "gdcmEvent.h"
+
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
 %include "gdcmMediaStorage.h"
@@ -203,6 +216,15 @@ EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
+
+//%feature("director") AnonymizeEvent;
+%include "gdcmAnonymizeEvent.h"
+%extend gdcm::AnonymizeEvent {
+  static AnonymizeEvent *Cast(Event *event) {
+    return dynamic_cast<AnonymizeEvent*>(event);
+  }
+};
+
 %include "gdcmVL.h"
 EXTEND_CLASS_PRINT(gdcm::VL)
 //%typemap(out) int
@@ -212,6 +234,7 @@ EXTEND_CLASS_PRINT(gdcm::VL)
 %include "gdcmVR.h"
 EXTEND_CLASS_PRINT(gdcm::VR)
 %include "gdcmVM.h"
+EXTEND_CLASS_PRINT(gdcm::VM)
 //%template (FilenameType) std::string;
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
@@ -243,6 +266,7 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
     return copy;
   }
 };
+%include "gdcmASN1.h"
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
@@ -270,6 +294,7 @@ EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 //}
 EXTEND_CLASS_PRINT(gdcm::DataSet)
 //%include "gdcmString.h"
+//%include "gdcmCodeString.h"
 //%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
@@ -438,7 +463,20 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //}
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
+%include "gdcmSubject.h"
+%include "gdcmCommand.h"
+%template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
+//%ignore gdcm::Anonymizer::Anonymizer;
+
+
+//%template(Anonymizer) gdcm::SmartPointer<gdcm::Anonymizer>;
+//
+//%ignore gdcm::Anonymizer;
+//%feature("unref") Anonymizer "coucou $this->Delete();"
+// http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+
+
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 %include "gdcmSystem.h"
 //EXTEND_CLASS_PRINT(gdcm::System)
@@ -494,9 +532,9 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
 }
 
 %include "gdcmSorter.h"
-//EXTEND_CLASS_PRINT(gdcm::Sorter)
+EXTEND_CLASS_PRINT(gdcm::Sorter)
 %include "gdcmIPPSorter.h"
-//EXTEND_CLASS_PRINT(gdcm::IPPSorter)
+EXTEND_CLASS_PRINT(gdcm::IPPSorter)
 %include "gdcmSpectroscopy.h"
 //EXTEND_CLASS_PRINT(gdcm::Spectroscopy)
 %include "gdcmPrinter.h"
@@ -610,4 +648,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+
+%feature("director") SimpleSubjectWatcher;
+%include "gdcmSimpleSubjectWatcher.h"
+%include "gdcmDICOMDIRGenerator.h"
 

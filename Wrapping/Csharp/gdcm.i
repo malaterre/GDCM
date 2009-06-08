@@ -374,7 +374,8 @@ EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (CSharpTagToValue) SWIGTagToValue; 
 %include "gdcmDataSet.h"
 EXTEND_CLASS_PRINT(gdcm::DataSet)
-
+//%include "gdcmString.h"
+//%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
@@ -382,7 +383,7 @@ EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
 EXTEND_CLASS_PRINT(gdcm::Overlay)
-//%include "gdcmVL.h"
+//%include "gdcmVR.h"
 //%template (DataElementSet) std::set<gdcm::DataElement>;
 %include "gdcmPreamble.h"
 EXTEND_CLASS_PRINT(gdcm::Preamble)
@@ -650,6 +651,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
   }
 };
 #endif
+//%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
 %include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"

@@ -20,6 +20,8 @@ import sys,os,stat
 import gdcm
 
 blacklist = (
+"_j2k" # :)
+"_jp2" # :)
 "treamimpl" # :)
 # DataStructureAndEncodingDefinition
 "ByteBuffer" # WTF ?
@@ -37,6 +39,7 @@ blacklist = (
 "VR16ExplicitDataElement"
 "LO" # issue with swig
 "String"
+"CodeString"
 "Parser"
 
 # DataDict:
