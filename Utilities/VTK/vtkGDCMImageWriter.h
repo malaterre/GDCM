@@ -45,7 +45,7 @@ class vtkMedicalImageProperties;
 class vtkStringArray;
 class vtkMatrix4x4;
 class vtkStringArray;
-class GDCM_EXPORT vtkGDCMImageWriter : public vtkImageWriter
+class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
   static vtkGDCMImageWriter *New();

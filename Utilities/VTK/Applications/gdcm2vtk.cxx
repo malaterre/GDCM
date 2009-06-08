@@ -26,12 +26,12 @@
 #include "vtkMINCImageReader.h"
 #include "vtkMINCImageAttributes.h"
 #include "vtk_tiff.h" // ORIENTATION_BOTLEFT
+#include "vtkImageRGBToYBR.h"
 #endif
 #include "vtkMedicalImageProperties.h"
 #include "vtkTIFFReader.h"
 #include "vtkGESignaReader.h"
 #include "vtkImageExtractComponents.h"
-#include "vtkImageRGBToYBR.h"
 #include "vtkJPEGReader.h"
 #include "vtkBMPReader.h"
 #include "vtkLookupTable.h"
@@ -365,7 +365,9 @@ int main(int argc, char *argv[])
       }
     else if( vtkGESignaReader * reader = vtkGESignaReader::SafeDownCast(imgreader) )
       {
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+#endif
       //reader->GetMedicalImageProperties()->Print( std::cout );
       }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
