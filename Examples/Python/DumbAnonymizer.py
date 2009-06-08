@@ -14,10 +14,12 @@
 ############################################################################
 
 """
+This example shows how one can use the gdcm.Anonymizer in 'dumb' mode.
+This class becomes really handy when one knows which particular tag to fill in.
 
 Usage:
 
- python 
+ python DumbAnonymizer.py gdcmData/012345.002.050.dcm out.dcm   
 
 """
 
@@ -37,19 +39,19 @@ tag_rules={
   # Method
   #(0x0002,0x0003):("Method","GenerateMSOPId"),
   #(0x0008,0x1155):("Method","GenerateMSOPId"),
+  (0x0008,0x0018):("Method","GenerateMSOPId"),
   (0x0010,0x0010):("Method","GetSponsorInitials"),
   (0x0010,0x0020):("Method","GetSponsorId"),
   (0x0012,0x0030):("Method","GetSiteId"),
   (0x0012,0x0031):("Method","GetSiteName"),
   (0x0012,0x0040):("Method","GetSponsorId"),
   (0x0012,0x0050):("Method","GetTPId"),
+  (0x0018,0x0022):("Method","KeepIfExist"),
+  (0x0018,0x1315):("Method","KeepIfExist"),
   (0x0020,0x000d):("Method","GenerateStudyId"),
   (0x0020,0x000e):("Method","GenerateSeriesId"),
-  (0x0008,0x0018):("Method","GenerateMSOPId"),
   (0x0020,0x1002):("Method","GetNumberOfFrames"),
   (0x0020,0x0020):("Method","GetPatientOrientation"),
-  (0x0018,0x1315):("Method","KeepIfExist"),
-  (0x0018,0x0022):("Method","KeepIfExist"),
   # Other:
   (0x0012,0x0051):("Patient Field","Type Examen"),
   (0x0018,0x1250):("Sequence Field","Receive Coil"),
