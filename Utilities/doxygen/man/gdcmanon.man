@@ -100,6 +100,10 @@ $ gdcmanon --key privatekey.pem -d original_anonymized.dcm original_copy.dcm
 You can then check that original.dcm and original_copy.dcm are identical.
 
 \subsection dumb mode
+This functionality is not describe in the DICOM standard. Users are advised that improper use
+of that mode is not recommended, meaning that important tag can be empty/remove/replace resulting
+in illegal/invalid DICOM file.
+Only use when you know what you are doing.
 
 \verbatim
 $ gdcmanon --dumb --empty 10,10 --empty 10,20 --remove 10,40 --remove 10,1010 --replace 10,1030,10 012345.002.050.dcm out.dcm
