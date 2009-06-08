@@ -166,17 +166,12 @@ There are a couple of issues with gdcmimg implementation:
 For JFIF file and JP2 file (with header) the header is copied into the Pixel Data element which is illegal for JP2.
 Use gdcmconv to properly re-encode a JP2/JFIF file into J2K/JPG.
 
-For RLE file, no check is done for crossing the row boundary. It is recommended to use gdcmconv --rle to reencode into a proper RLE file in case of doubt.
-
-
-\section issues ISSUES
-Currently the conversion from JP2 (read JPEG 200 file) is poorly supported as the output DICOM will contains the JP2 header. Whereas the DICOM standard
-stricly prohibits this behavior. As a workaround one can do the following steps to strip out any JP2 header (warning this will recompress the stream):
-
 \verbatim
 $ gdcmimg input.jp2 output_jp2.dcm
 $ gdcmconv --j2K --force output_jp2 output_j2k.dcm
 \endverbatim
+
+For RLE file, no check is done for crossing the row boundary. It is recommended to use gdcmconv --rle to reencode into a proper RLE file in case of doubt.
 
 \section see_also SEE ALSO
 
