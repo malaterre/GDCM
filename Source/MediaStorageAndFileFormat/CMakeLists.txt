@@ -85,6 +85,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  ${CMAKE_CURRENT_SOURCE_DIR}
 
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"
