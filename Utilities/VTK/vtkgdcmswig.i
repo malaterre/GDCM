@@ -322,17 +322,17 @@ using Kitware.VTK;
 %ignore vtkGDCMImageReader::PrintSelf;
 %ignore vtkGDCMImageWriter::PrintSelf;
 
-%typemap(csdestruct, methodname="Dispose", methodmodifiers="public") vtkObjectBase {
-  lock(this) {
-    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
-      swigCMemOwn = false;
-      // $imcall;
-      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
-    }
-    swigCPtr = new HandleRef(null, IntPtr.Zero);
-    GC.SuppressFinalize(this);
-  }
-} 
+//%typemap(csdestruct, methodname="Dispose", methodmodifiers="public") vtkObjectBase {
+//  lock(this) {
+//    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
+//      swigCMemOwn = false;
+//      // $imcall;
+//      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
+//    }
+//    swigCPtr = new HandleRef(null, IntPtr.Zero);
+//    GC.SuppressFinalize(this);
+//  }
+//} 
 %typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMTesting {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
