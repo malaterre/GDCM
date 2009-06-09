@@ -18,6 +18,15 @@
 
 %module(docstring="A DICOM library",directors=1) gdcm
 #pragma SWIG nowarn=504,510
+
+// There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
+// I need to redefine it myself... seems to be solved in later revision
+#if defined(SWIGJAVA)
+%{
+#define SWIGJAVA
+%}
+#endif
+
 %{
 #include "gdcmTypes.h"
 #include "gdcmSmartPointer.h"

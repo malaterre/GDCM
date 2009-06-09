@@ -71,6 +71,7 @@ public class";
 
 %{
 #include "gdcmTypes.h"
+#include "gdcmASN1.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
 #include "gdcmEvent.h"
@@ -93,6 +94,7 @@ public class";
 #include "gdcmSequenceOfItems.h"
 #include "gdcmDataSet.h"
 //#include "gdcmString.h"
+//#include "gdcmCodeString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
@@ -337,6 +339,7 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 
 %apply char[] { const char* array }
 
+%include "gdcmASN1.h"
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;

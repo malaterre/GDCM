@@ -32,15 +32,16 @@ SET(CMAKE_SWIG_OUTDIR "${GDCM_JAVA_HOME}")
 
 SET(CMAKE_SWIG_FLAGS "-package gdcm")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
-SWIG_ADD_MODULE(gdcm java gdcm.i)
-SWIG_LINK_LIBRARIES(gdcm gdcmMSFF
+# http://www.debian.org/doc/packaging-manuals/java-policy/x105.html
+SWIG_ADD_MODULE(gdcmjni java gdcm.i)
+SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
   #${JNI_LIBRARIES}
   ${JAVA_AWT_LIB_PATH}
   ${JAVA_JVM_LIB_PATH}
 ) 
 # Stupid cmake-swig module is doing that for us, when not needed
 IF(UNIX)
-  SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcm_REAL_NAME} PROPERTIES PREFIX "lib")
+  SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES PREFIX "lib")
 ENDIF(UNIX)
 
 # swig-java dummy run:
@@ -94,7 +95,7 @@ ADD_CUSTOM_TARGET(GDCMJavaJar ALL
 # but for poor win32 user I decided to place them
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${SWIG_MODULE_gdcm_REAL_NAME}
+  INSTALL(TARGETS ${SWIG_MODULE_gdcmjni_REAL_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development

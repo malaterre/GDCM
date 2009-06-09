@@ -148,11 +148,11 @@ IF(GDCM_WRAP_CSHARP)
   SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm")
   ENDIF(GDCM_USE_ACTIVIZ)
   SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
-  SWIG_ADD_MODULE(vtkgdcmgluelib csharp vtkgdcmswig.i)
-  SWIG_LINK_LIBRARIES(vtkgdcmgluelib vtkgdcm)
+  SWIG_ADD_MODULE(vtkgdcmsharpglue csharp vtkgdcmswig.i)
+  SWIG_LINK_LIBRARIES(vtkgdcmsharpglue vtkgdcm)
   # Stupid cmake-swig module is doing that for us, when not needed
   IF(UNIX)
-    SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmgluelib_REAL_NAME} PROPERTIES PREFIX "lib")
+    SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
   ENDIF(UNIX)
 
 #IF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -198,7 +198,9 @@ ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
 
   # because vtkgdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-  INSTALL(FILES ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
+  INSTALL(FILES 
+    ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
+    ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
   )
 
