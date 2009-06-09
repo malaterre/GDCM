@@ -3,7 +3,6 @@
 
 SET(CSHARP_EXAMPLES
   ManipulateFile
-  BasicAnonymizer
   ExtractEncapsulatedFile
   DecompressImage
   DecompressImageMultiframe
@@ -14,6 +13,13 @@ SET(CSHARP_EXAMPLES
   GetArray
   NewSequence
   )
+
+IF(BUILD_TESTING)
+SET(CSHARP_EXAMPLES
+  ${CSHARP_EXAMPLES}
+  BasicAnonymizer
+  )
+ENDIF(BUILD_TESTING)
 
 SET(DEP)
 # http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_add_a_dependency_to_a_source_file_which_is_generated_in_a_subdirectory.3F

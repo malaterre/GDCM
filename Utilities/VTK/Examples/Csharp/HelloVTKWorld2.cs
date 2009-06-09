@@ -21,7 +21,7 @@ public class HelloVTKWorld2
 {
   public static int Main(string[] args)
     {
-    string VTK_DATA_ROOT = vtkgdcmswig.vtkGetDataRoot();
+    string VTK_DATA_ROOT = vtkGDCMTesting.GetVTKDataRoot();
 
     vtkVolume16Reader reader = vtkVolume16Reader.New();
     reader.SetDataDimensions(64, 64);

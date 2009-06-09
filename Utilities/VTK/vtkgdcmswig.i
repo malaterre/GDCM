@@ -294,19 +294,16 @@ using Kitware.VTK;
 %csmethodmodifiers vtkGDCMTesting::New() "public new"
 
 %newobject vtkGDCMTesting::New();
-%delobject vtkObjectBase::Delete();
-%delobject vtkGDCMTesting::Delete();
-%typemap(newfree) vtkGDCMTesting::Delete "toto1";
-%typemap(newfree) vtkObjectBase::Delete "toto2";
 %newobject vtkGDCMImageWriter::New();
 %newobject vtkGDCMImageReader::New();
 
+%delobject vtkObjectBase::Delete();
 
 #endif
 
 // TODO: I need to fix Delete and make sure SWIG owns the C++ ptr (call ->Delete in the Dispose layer)
 //%ignore vtkObjectBase::Delete;
-//%ignore vtkObjectBase::FastDelete;
+%ignore vtkObjectBase::FastDelete;
 %ignore vtkObjectBase::PrintSelf;
 %ignore vtkObjectBase::PrintHeader;
 %ignore vtkObjectBase::PrintTrailer;
@@ -322,22 +319,10 @@ using Kitware.VTK;
 %ignore vtkGDCMImageReader::PrintSelf;
 %ignore vtkGDCMImageWriter::PrintSelf;
 
-//%typemap(csdestruct, methodname="Dispose", methodmodifiers="public") vtkObjectBase {
-//  lock(this) {
-//    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
-//      swigCMemOwn = false;
-//      // $imcall;
-//      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
-//    }
-//    swigCPtr = new HandleRef(null, IntPtr.Zero);
-//    GC.SuppressFinalize(this);
-//  }
-//} 
 %typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMTesting {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
-      // $imcall;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
@@ -349,7 +334,6 @@ using Kitware.VTK;
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
-      // $imcall;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
@@ -361,7 +345,6 @@ using Kitware.VTK;
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
-      // $imcall;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
@@ -369,8 +352,6 @@ using Kitware.VTK;
     base.Dispose();
   }
 }
-//%nodefaultdtor vtkGDCMTesting;
-%defaultdtor vtkGDCMTesting;
 
 %include "vtkObjectBase.h"
 %csmethodmodifiers vtkObjectBase::ToString() "public override"
@@ -388,39 +369,8 @@ using Kitware.VTK;
 
 %include "vtkObject.h"
 
-//%inline
-//{
-//  const char *vtkGetDataRoot()
-//    {
-//#ifdef VTK_DATA_ROOT
-//    return VTK_DATA_ROOT; 
-//#else
-//    return NULL; 
-//#endif
-//    }
-//}
-
-//%feature("ref") vtkGDCMTesting "foobar2" // this one is working
-%feature("unref") vtkGDCMTesting "foobar3"
-
-//%refobject   vtkGDCMTesting "$this->addref();"
-%unrefobject vtkGDCMTesting "$this->deletebla();"
-
-//%typemap(csdestruct, methodname="Dispose", methodmodifiers="protected") vtkGDCMTesting {
-//  lock(this) {
-//    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
-//      swigCMemOwn = false;
-//      // $imcall;
-//      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
-//      coucou
-//    }
-//    swigCPtr = new HandleRef(null, IntPtr.Zero);
-//    GC.SuppressFinalize(this);
-//  }
-//} 
-%typemap(csdestruct) vtkGDCMTesting "coucou1";
+%defaultdtor vtkGDCMTesting; // FIXME does not seems to be working
 %include "vtkGDCMTesting.h"
-%typemap(csdestruct) vtkGDCMTesting "coucou2";
 
 #ifndef USEACTIVIZ
 %include "vtkStringArray.h"
@@ -514,37 +464,12 @@ while we would want:
 #ifdef USEACTIVIZ
 %extend vtkGDCMTesting
 {
-%typemap(csdestruct) vtkGDCMTesting "coucou";
-//%typemap(csdestruct, methodname="Dispose", methodmodifiers="protected") vtkGDCMTesting {
-//  lock(this) {
-//    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
-//      swigCMemOwn = false;
-//      // $imcall;
-//      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
-//      coucou
-//    }
-//    swigCPtr = new HandleRef(null, IntPtr.Zero);
-//    GC.SuppressFinalize(this);
-//  }
-//} 
-%nodefaultdtor vtkGDCMTesting;
-
 %typemap(cscode) vtkGDCMTesting
 %{
   public vtkGDCMTesting() : this(vtkgdcmPINVOKE.vtkGDCMTesting_New(), true) {
   }
   ~vtkGDCMTesting() {
     Dispose();
-//    lock(this) {
-//      if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
-//        swigCMemOwn = false;
-//        vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
-//      }
-//      swigCPtr = new HandleRef(null, IntPtr.Zero);
-//      GC.SuppressFinalize(this);
-//      base.Dispose();
-//    }
-//
   }
 %}
 };
@@ -556,22 +481,10 @@ while we would want:
   public vtkGDCMImageReader() : this(vtkgdcmPINVOKE.vtkGDCMImageReader_New(), true) {
   }
   ~vtkGDCMImageReader() {
-    lock(this) {
-      if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
-        swigCMemOwn = false;
-        vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
-      }
-      swigCPtr = new HandleRef(null, IntPtr.Zero);
-      GC.SuppressFinalize(this);
-      base.Dispose();
-    }
+    Dispose();
   }
 %}
 };
-//%typemap(csdestruct, methodname="Dispose", methodmodifiers="public") vtkGDCMImageWriter {
-//toto destruct
-//};
-//%typemap(csdestruct) vtkGDCMImageWriter "";
 
 %extend vtkGDCMImageWriter
 {
@@ -580,15 +493,7 @@ while we would want:
   public vtkGDCMImageWriter() : this(vtkgdcmPINVOKE.vtkGDCMImageWriter_New(), true) {
   }
   ~vtkGDCMImageWriter() {
-    lock(this) {
-      if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
-        swigCMemOwn = false;
-        vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
-      }
-      swigCPtr = new HandleRef(null, IntPtr.Zero);
-      GC.SuppressFinalize(this);
-      base.Dispose();
-    }
+    Dispose();
   }
 %}
 };
