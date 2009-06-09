@@ -282,6 +282,7 @@ using Kitware.VTK;
 %csmethodmodifiers vtkMedicalImageReader2::New() "internal new"
 %csmethodmodifiers vtkGDCMImageReader::New() "public new"
 %csmethodmodifiers vtkGDCMImageWriter::New() "public new"
+%csmethodmodifiers vtkGDCMTesting::New() "public new"
 #endif
 
 // TODO: I need to fix Delete and make sure SWIG owns the C++ ptr (call ->Delete in the Dispose layer)
