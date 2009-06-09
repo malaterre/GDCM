@@ -460,7 +460,18 @@ while we would want:
 {
 %typemap(cscode) vtkGDCMImageReader
 %{
-  public vtkGDCMImageReader() : this(vtkgdcmPINVOKE.vtkGDCMImageReader_New(), false) {
+  public vtkGDCMImageReader() : this(vtkgdcmPINVOKE.vtkGDCMImageReader_New(), true) {
+  }
+  ~vtkGDCMImageReader() {
+    lock(this) {
+      if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
+        swigCMemOwn = false;
+        vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
+      }
+      swigCPtr = new HandleRef(null, IntPtr.Zero);
+      GC.SuppressFinalize(this);
+      base.Dispose();
+    }
   }
 %}
 };
@@ -473,7 +484,18 @@ while we would want:
 {
 %typemap(cscode) vtkGDCMImageWriter
 %{
-  public vtkGDCMImageWriter() : this(vtkgdcmPINVOKE.vtkGDCMImageWriter_New(), false) {
+  public vtkGDCMImageWriter() : this(vtkgdcmPINVOKE.vtkGDCMImageWriter_New(), true) {
+  }
+  ~vtkGDCMImageWriter() {
+    lock(this) {
+      if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
+        swigCMemOwn = false;
+        vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
+      }
+      swigCPtr = new HandleRef(null, IntPtr.Zero);
+      GC.SuppressFinalize(this);
+      base.Dispose();
+    }
   }
 %}
 };

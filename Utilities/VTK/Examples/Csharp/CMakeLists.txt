@@ -6,6 +6,7 @@ HelloActiviz2
 HelloActiviz3
 HelloActiviz4
 HelloActiviz5
+RefCounting
 )
 FOREACH(example ${examples})
   file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
@@ -22,6 +23,15 @@ FOREACH(example ${examples})
   )
   SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
 ENDFOREACH(example)
+
+IF(BUILD_TESTING)
+IF(GDCM_DATA_ROOT)
+  get_filename_component(dummy ${ACTIVIZ_KITWARE_VTK_LIBRARY} PATH)
+  SET_SOURCE_FILES_PROPERTIES(${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe PROPERTIES RUNTIMEPATH ${dummy})
+  ADD_CSHARP_TEST(TestHelloActiviz5CSharp ${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe)
+ENDIF(GDCM_DATA_ROOT)
+  ADD_CSHARP_TEST(TestRefCountingCSharp ${GDCM_EXECUTABLE_DIR}/RefCounting.exe)
+ENDIF(BUILD_TESTING)
 
 ELSE(GDCM_USE_ACTIVIZ)
 
@@ -55,11 +65,4 @@ ADD_CUSTOM_TARGET(VTKGDCMExampleCSharp ALL
   COMMENT "building examples"
 )
 
-IF(BUILD_TESTING)
-IF(GDCM_DATA_ROOT)
-  get_filename_component(dummy ${ACTIVIZ_KITWARE_VTK_LIBRARY} PATH)
-  SET_SOURCE_FILES_PROPERTIES(${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe PROPERTIES RUNTIMEPATH ${dummy})
-  ADD_CSHARP_TEST(TestHelloActiviz5CSharp ${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe)
-ENDIF(GDCM_DATA_ROOT)
-ENDIF(BUILD_TESTING)
 
