@@ -48,7 +48,9 @@ MACRO(ADD_CSHARP_TEST TESTNAME FILENAME)
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
 "
   SET(ENV{LD_LIBRARY_PATH} ${pyenv})
-  MESSAGE(\"${pyenv}\")
+  SET(ENV{MONO_PATH} ${pyenv})
+  #MESSAGE(\"pyenv: ${pyenv}\")
+  #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   EXECUTE_PROCESS(
   	COMMAND ${CMAKE_CSHARP_INTERPRETER} ${loc} ${wo_semicolumn}
   	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@

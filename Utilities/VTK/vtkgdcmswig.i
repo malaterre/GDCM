@@ -56,6 +56,8 @@
 #include "vtkPointSet.h"
 #include "vtkPolyData.h"
 
+#include "vtkGDCMTesting.h"
+
 // same for vtkGDCMImageReader / vtkGDCMImageWriter so that we get all 
 // parent's member class functions properly wrapped. (Update, SetFileName ...)
 #include "vtkAlgorithm.h"
@@ -278,8 +280,8 @@ using Kitware.VTK;
 %csmethodmodifiers vtkImageWriter::New() "internal new"
 %csmethodmodifiers vtkImageReader2::New() "internal new"
 %csmethodmodifiers vtkMedicalImageReader2::New() "internal new"
-//%csmethodmodifiers vtkGDCMImageReader::New() "internal new"
-//%csmethodmodifiers vtkGDCMImageWriter::New() "internal new"
+%csmethodmodifiers vtkGDCMImageReader::New() "public new"
+%csmethodmodifiers vtkGDCMImageWriter::New() "public new"
 #endif
 
 // TODO: I need to fix Delete and make sure SWIG owns the C++ ptr (call ->Delete in the Dispose layer)
@@ -316,19 +318,21 @@ using Kitware.VTK;
 
 %include "vtkObject.h"
 
-#ifndef USEACTIVIZ
-%inline
-{
-  const char *vtkGetDataRoot()
-    {
-#ifdef VTK_DATA_ROOT
-    return VTK_DATA_ROOT; 
-#else
-    return NULL; 
-#endif
-    }
-}
+//%inline
+//{
+//  const char *vtkGetDataRoot()
+//    {
+//#ifdef VTK_DATA_ROOT
+//    return VTK_DATA_ROOT; 
+//#else
+//    return NULL; 
+//#endif
+//    }
+//}
 
+%include "vtkGDCMTesting.h"
+
+#ifndef USEACTIVIZ
 %include "vtkStringArray.h"
 %include "vtkMatrix4x4.h"
 %include "vtkMedicalImageProperties.h"
@@ -418,6 +422,15 @@ while we would want:
 %include "vtkGDCMImageReader.h"
 %include "vtkGDCMImageWriter.h"
 #ifdef USEACTIVIZ
+%extend vtkGDCMTesting
+{
+%typemap(cscode) vtkGDCMTesting
+%{
+  public vtkGDCMTesting() : this(vtkgdcmPINVOKE.vtkGDCMTesting_New(), false) {
+  }
+%}
+};
+
 %extend vtkGDCMImageReader
 {
 %typemap(cscode) vtkGDCMImageReader
@@ -430,7 +443,6 @@ while we would want:
 //toto destruct
 //};
 //%typemap(csdestruct) vtkGDCMImageWriter "";
-%include "vtkGDCMImageWriter.h"
 
 %extend vtkGDCMImageWriter
 {

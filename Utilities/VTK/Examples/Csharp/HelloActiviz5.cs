@@ -15,6 +15,11 @@
 using Kitware.VTK;
 using vtkgdcm;
 
+// The command line arguments are:
+// -I        => run in interactive mode; unless this is used, the program will
+//              not allow interaction and exit
+// -D <path> => path to the data; the data should be in <path>/Data/
+
 /*
  * $ MONO_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/ LD_LIBRARY_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ mono ./bin/HelloActiviz5.exe ~/Creatis/gdcmData/test.acr
  *
@@ -23,9 +28,38 @@ public class HelloActiviz5
 {
   public static int Main(string[] args)
     {
-    string filename = args[0];
+    vtkTesting testHelper = vtkTesting.New();
+    for ( int cc = 0; cc < args.Length; cc++ )
+      {
+      //testHelper.AddArguments(argc,const_cast<const char **>(argv));
+      System.Console.Write( "args: " + args[cc] + "\n" );
+      testHelper.AddArgument( args[cc] );
+      }
+  if ( testHelper.IsFlagSpecified("-D") != 0 )
+    {
+    string VTK_DATA_ROOT = vtkGDCMTesting.GetVTKDataRoot();
+    if( VTK_DATA_ROOT != null )
+      {
+      System.Console.Write( "VTK_DATA_ROOT: " + VTK_DATA_ROOT  + "\n" );
+      testHelper.SetDataRoot(VTK_DATA_ROOT);
+      testHelper.AddArgument("-D");
+      testHelper.AddArgument(VTK_DATA_ROOT);
+      }
+    }
 
-    vtkGDCMImageReader reader = new vtkGDCMImageReader();
+    string dataRoot = testHelper.GetDataRoot();
+    string filename = dataRoot;
+    filename += "/Data/mr.001";
+
+    vtkDirectory dir = vtkDirectory.New();
+    if( dir.FileIsDirectory( dataRoot ) == 0 )
+      {
+      filename = vtkGDCMTesting.GetGDCMDataRoot() + "/test.acr";
+      }
+    System.Console.Write( "dataRoot: " + dataRoot + "\n" );
+    System.Console.Write( "filename: " + filename + "\n" );
+
+    vtkGDCMImageReader reader = vtkGDCMImageReader.New();
     vtkStringArray array = vtkStringArray.New();
     array.InsertNextValue(filename);
     reader.SetFileNames(array);
@@ -50,7 +84,16 @@ public class HelloActiviz5
     iren.SetRenderWindow(renWin);
 
     iren.Initialize();
-    iren.Start();
+
+    renWin.Render();
+
+    int retVal = testHelper.IsInteractiveModeSpecified();
+    System.Console.Write( "retval: " + retVal );
+
+    if( retVal != 0 )
+      {
+      iren.Start();
+      }
 
     return 0;
     }
