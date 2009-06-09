@@ -25,7 +25,7 @@ public class HelloActiviz3
     {
     string filename = args[0];
 
-    vtkGDCMImageReader reader = new vtkGDCMImageReader();
+    vtkGDCMImageReader reader = vtkGDCMImageReader.New();
     vtkStringArray array = vtkStringArray.New();
     array.InsertNextValue(filename);
 

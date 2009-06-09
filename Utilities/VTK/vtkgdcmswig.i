@@ -78,14 +78,6 @@
 #include "vtkToolkits.h" // VTK_DATA_ROOT
 %}
 
-//%refobject   vtkGDCMTesting "$this->addref();"
-//%unrefobject vtkGDCMTesting "$this->delref();"
-
-//%feature("ref") vtkGDCMTesting "$this->Register();"
-//%feature("unref") vtkGDCMTesting "$this->Delete();"
-//%feature("unref") vtkGDCMImageReader "$this->Delete();" 
-
-
 //%typemap(csimports) vtkGDCMImageWriter %{
 //%typemap(csimports) SWIGTYPE %{
 //// I need to duplicate those also:
