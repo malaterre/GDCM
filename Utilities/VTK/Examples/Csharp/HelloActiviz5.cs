@@ -32,20 +32,20 @@ public class HelloActiviz5
     for ( int cc = 0; cc < args.Length; cc++ )
       {
       //testHelper.AddArguments(argc,const_cast<const char **>(argv));
-      System.Console.Write( "args: " + args[cc] + "\n" );
+      //System.Console.Write( "args: " + args[cc] + "\n" );
       testHelper.AddArgument( args[cc] );
       }
-  if ( testHelper.IsFlagSpecified("-D") != 0 )
-    {
-    string VTK_DATA_ROOT = vtkGDCMTesting.GetVTKDataRoot();
-    if( VTK_DATA_ROOT != null )
+    if ( testHelper.IsFlagSpecified("-D") != 0 )
       {
-      System.Console.Write( "VTK_DATA_ROOT: " + VTK_DATA_ROOT  + "\n" );
-      testHelper.SetDataRoot(VTK_DATA_ROOT);
-      testHelper.AddArgument("-D");
-      testHelper.AddArgument(VTK_DATA_ROOT);
+      string VTK_DATA_ROOT = vtkGDCMTesting.GetVTKDataRoot();
+      if( VTK_DATA_ROOT != null )
+        {
+        //System.Console.Write( "VTK_DATA_ROOT: " + VTK_DATA_ROOT  + "\n" );
+        testHelper.SetDataRoot(VTK_DATA_ROOT);
+        testHelper.AddArgument("-D");
+        testHelper.AddArgument(VTK_DATA_ROOT);
+        }
       }
-    }
 
     string dataRoot = testHelper.GetDataRoot();
     string filename = dataRoot;
@@ -56,8 +56,8 @@ public class HelloActiviz5
       {
       filename = vtkGDCMTesting.GetGDCMDataRoot() + "/test.acr";
       }
-    System.Console.Write( "dataRoot: " + dataRoot + "\n" );
-    System.Console.Write( "filename: " + filename + "\n" );
+    //System.Console.Write( "dataRoot: " + dataRoot + "\n" );
+    System.Console.Write( "filename being used is: " + filename + "\n" );
 
     vtkGDCMImageReader reader = vtkGDCMImageReader.New();
     vtkStringArray array = vtkStringArray.New();
@@ -88,7 +88,6 @@ public class HelloActiviz5
     renWin.Render();
 
     int retVal = testHelper.IsInteractiveModeSpecified();
-    System.Console.Write( "retval: " + retVal );
 
     if( retVal != 0 )
       {

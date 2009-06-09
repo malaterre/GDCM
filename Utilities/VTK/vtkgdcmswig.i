@@ -78,6 +78,14 @@
 #include "vtkToolkits.h" // VTK_DATA_ROOT
 %}
 
+//%refobject   vtkGDCMTesting "$this->addref();"
+//%unrefobject vtkGDCMTesting "$this->delref();"
+
+//%feature("ref") vtkGDCMTesting "$this->Register();"
+//%feature("unref") vtkGDCMTesting "$this->Delete();"
+//%feature("unref") vtkGDCMImageReader "$this->Delete();" 
+
+
 //%typemap(csimports) vtkGDCMImageWriter %{
 //%typemap(csimports) SWIGTYPE %{
 //// I need to duplicate those also:
@@ -280,14 +288,19 @@ using Kitware.VTK;
 %csmethodmodifiers vtkImageWriter::New() "internal new"
 %csmethodmodifiers vtkImageReader2::New() "internal new"
 %csmethodmodifiers vtkMedicalImageReader2::New() "internal new"
+
 %csmethodmodifiers vtkGDCMImageReader::New() "public new"
 %csmethodmodifiers vtkGDCMImageWriter::New() "public new"
 %csmethodmodifiers vtkGDCMTesting::New() "public new"
+
+%newobject vtkGDCMTesting::New();
+%newobject vtkGDCMImageWriter::New();
+%newobject vtkGDCMImageReader::New();
 #endif
 
 // TODO: I need to fix Delete and make sure SWIG owns the C++ ptr (call ->Delete in the Dispose layer)
-%ignore vtkObjectBase::Delete;
-%ignore vtkObjectBase::FastDelete;
+//%ignore vtkObjectBase::Delete;
+//%ignore vtkObjectBase::FastDelete;
 %ignore vtkObjectBase::PrintSelf;
 %ignore vtkObjectBase::PrintHeader;
 %ignore vtkObjectBase::PrintTrailer;
@@ -427,7 +440,18 @@ while we would want:
 {
 %typemap(cscode) vtkGDCMTesting
 %{
-  public vtkGDCMTesting() : this(vtkgdcmPINVOKE.vtkGDCMTesting_New(), false) {
+  public vtkGDCMTesting() : this(vtkgdcmPINVOKE.vtkGDCMTesting_New(), true) {
+  }
+  ~vtkGDCMTesting() {
+    lock(this) {
+      if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
+        swigCMemOwn = false;
+        vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
+      }
+      swigCPtr = new HandleRef(null, IntPtr.Zero);
+      GC.SuppressFinalize(this);
+      base.Dispose();
+    }
   }
 %}
 };
