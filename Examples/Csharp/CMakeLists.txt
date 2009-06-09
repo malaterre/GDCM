@@ -8,10 +8,10 @@ SET(CSHARP_EXAMPLES
   DecompressImage
   DecompressImageMultiframe
   DecompressJPEGFile
-  TestCSharpFilter
+  SimplePrint
   ScanDirectory
   #SortImage2
-  TestGetArray
+  GetArray
   NewSequence
   )
 
@@ -45,3 +45,12 @@ ADD_CUSTOM_TARGET(GDCMExampleCSharp ALL
 )
 ADD_DEPENDENCIES(GDCMExampleCSharp  GDCMCSharp)
 
+IF(BUILD_TESTING)
+IF(GDCM_DATA_ROOT)
+  ADD_CSHARP_TEST(TestSimplePrintCSharp ${GDCM_EXECUTABLE_DIR}/SimplePrint.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
+# TODO:
+#IF(BUILD_EXAMPLES)
+#  ADD_CSHARP_TEST(HelloWorldCSharp ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
+#ENDIF(BUILD_EXAMPLES)
+ENDIF(GDCM_DATA_ROOT)
+ENDIF(BUILD_TESTING)

@@ -419,6 +419,11 @@ IF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
   INCLUDE(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
 ENDIF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
 
+# Special CMake Module required when doing C# Testing
+IF(BUILD_TESTING AND GDCM_WRAP_CSHARP)
+  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
+ENDIF(BUILD_TESTING AND GDCM_WRAP_CSHARP)
+
 #-----------------------------------------------------------------------------
 # Need pthread for the following class:
 CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)

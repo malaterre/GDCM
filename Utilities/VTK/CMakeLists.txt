@@ -189,9 +189,17 @@ IF(GDCM_WRAP_CSHARP)
 
   ENDIF(GDCM_USE_ACTIVIZ)
 
+  ADD_CUSTOM_COMMAND(
+    OUTPUT  ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config
+    COMMENT "Copying vtkgdcm-sharp.dll.config"
+  )
+
 ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
   DEPENDS 
     ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
+    ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
     #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
   COMMENT "building vtkgdcm-sharp.dll"
 )

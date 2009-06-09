@@ -169,6 +169,14 @@ IF(BUILD_EXAMPLES)
   )
 ENDIF(BUILD_EXAMPLES)
 
+  ADD_CUSTOM_COMMAND(
+    OUTPUT  ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.config
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gdcm-sharp.dll.config
+    COMMENT "Copying gdcm-sharp.dll.config"
+  )
+
+
 #IF(WIN32)
 #  CONFIGURE_FILE(
 #    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
@@ -181,17 +189,18 @@ ENDIF(BUILD_EXAMPLES)
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
   DEPENDS 
     ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
+    ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.config
   COMMENT "building gdcm-sharp.dll"
 )
 
 IF(BUILD_EXAMPLES)
-ADD_CUSTOM_TARGET(GDCMCSharpExample
+ADD_CUSTOM_TARGET(GDCMCSharpExample ALL
   DEPENDS 
     ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
   COMMENT "building HelloWorld.exe"
 )
-add_dependencies(GDCMCSharpExample
- GDCMCSharp)
+#add_dependencies(GDCMCSharpExample
+# GDCMCSharp)
 
 ENDIF(BUILD_EXAMPLES)
 
@@ -200,9 +209,11 @@ ENDIF(BUILD_EXAMPLES)
 ELSE(OLDSTYLECSHARP)
 ENDIF(OLDSTYLECSHARP)
 
-IF(BUILD_TESTING)
-  ADD_TEST(HelloWorldCSharp ${CMAKE_CSHARP_INTERPRETER} ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
-ENDIF(BUILD_TESTING)
+# Cannot do test here as CTest has not yet been included. Simply construct example and hope someone else
+# will call the test for us...
+#IF(BUILD_TESTING)
+#  ADD_TEST(HelloWorldCSharp ${CMAKE_CSHARP_INTERPRETER} ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
+#ENDIF(BUILD_TESTING)
 
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_gdcmsharpglue_REAL_NAME}

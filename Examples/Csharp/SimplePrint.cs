@@ -21,12 +21,12 @@
 /*
  * Usage: 
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/TestCSharpFilter.exe gdcmData/012345.002.050.dcm
+ * $ mono bin/SimplePrint.exe gdcmData/012345.002.050.dcm
  */
 using System;
 using gdcm;
 
-public class TestCSharpFilter
+public class SimplePrint
 {
   public static void RecurseDataSet(File f, DataSet ds, string indent)
     {

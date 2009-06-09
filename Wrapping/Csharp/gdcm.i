@@ -25,6 +25,11 @@
 // Some good reference:
 // https://code.crt.realtors.org/projects/librets/browser/librets/trunk/project/swig/librets.i?rev=729
 // http://vcielka.darksun.sk/~jnx/download/asterisk/minisip-trunk/libminisip-swig/source/minisip.i
+// http://www.mono-project.com/Interop_with_Native_Libraries
+// http://msdn.microsoft.com/en-us/magazine/cc301501.aspx
+// http://www.codeproject.com/KB/cs/unmanage.aspx
+// http://www.gamedev.net/community/forums/mod/journal/journal.asp?jn=458883&reply_id=3221347
+// http://msdn.microsoft.com/en-us/magazine/cc164193.aspx
 
 /*
 > I want to wrap C++ code in C#. Is there a way to instruct swig to insert
