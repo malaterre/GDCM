@@ -184,6 +184,16 @@ int main(int argc, char *argv[])
         }
       break;
 
+    case 'T':
+      studyuid = 1;
+      study_uid = optarg;
+      break;
+
+    case 'S':
+      seriesuid = 1;
+      series_uid = optarg;
+      break;
+
     case 'V':
       verbose = 1;
       break;
