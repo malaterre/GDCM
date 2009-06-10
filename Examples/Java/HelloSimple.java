@@ -17,7 +17,7 @@
  * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar javac HelloSimple.java 
  *
  * Usage: 
- * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar java HelloSimple.class gdcmData/test.acr
+ * $ LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar:. java HelloSimple ~/Creatis/gdcmData/test.acr
  */
 import gdcm.*;
 
