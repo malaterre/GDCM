@@ -426,6 +426,11 @@ IF(BUILD_TESTING AND GDCM_WRAP_CSHARP)
   INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
 ENDIF(BUILD_TESTING AND GDCM_WRAP_CSHARP)
 
+# Special CMake Module required when doing Java Testing
+IF(BUILD_TESTING AND GDCM_WRAP_JAVA)
+  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
+ENDIF(BUILD_TESTING AND GDCM_WRAP_JAVA)
+
 #-----------------------------------------------------------------------------
 # Need pthread for the following class:
 CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)
