@@ -32,5 +32,67 @@ int TestPhotometricInterpretation(int, char *[])
 
   pi = gdcm::PhotometricInterpretation::RGB;
 
+  pi = gdcm::PhotometricInterpretation::GetPIType( "MONOCHROME2" );
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( "MONOCHROME2 " );
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( " MONOCHROME2 " );
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( " MONOCHROME2  " );
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( "  MONOCHROME2  " );
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( "MONOCHROME" );
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( "YBR_PARTIAL_42 " );
+  if( pi != gdcm::PhotometricInterpretation::YBR_PARTIAL_420)
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( "PALETTE" );
+  if( pi != gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  pi = gdcm::PhotometricInterpretation::GetPIType( "YBR_FULL_4" );
+  if( pi != gdcm::PhotometricInterpretation::YBR_FULL_422)
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+  // FIXME ?
+  pi = gdcm::PhotometricInterpretation::GetPIType( "YBR_FUL" );
+  if( pi != gdcm::PhotometricInterpretation::YBR_FULL_422 )
+    {
+    std::cerr << "PhotometricInterpretation: " << pi << std::endl;
+    return 1;
+    }
+
   return 0;
 }

@@ -15,6 +15,9 @@
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmTrace.h"
+#include "gdcmCodeString.h"
+#include "gdcmVR.h"
+
 #include <assert.h>
 #include <stdlib.h>
 
@@ -59,51 +62,44 @@ static const char *PIStrings[] = {
 
 const char *PhotometricInterpretation::GetPIString(PIType pi)
 {
-  assert( pi < PhotometricInterpretation::PI_END );
+  //assert( pi < PhotometricInterpretation::PI_END );
   return PIStrings[pi];
 }
 
-PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const char *pi)
+PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const char *inputpi)
 {
-  int i = 0;
-  while(PIStrings[i] != 0)
+  if( !inputpi ) return PI_END;
+
+  // The following code allows use to handle whitespace and invalid padding:
+  CodeString codestring = inputpi;
+  CSComp cs = codestring.Trim();
+  const char *pi = cs.c_str();
+  for( unsigned int i = 1; PIStrings[i] != 0; ++i )
     {
     if( strcmp(pi, PIStrings[i]) == 0 )
       {
       return PIType(i);
       }
-    ++i;
     }
 
   // Ouch ! We did not find anything, that's pretty bad, let's hope that 
   // the toolkit which wrote the image is buggy and tolerate \0 padded ASCII
   // string
-  i = 0;
-  while(PIStrings[i] != 0)
+  // warning this piece of code will do MONOCHROME -> MONOCHROME1
+  static const unsigned int n = sizeof(PIStrings) / sizeof(*PIStrings) - 1;
+
+  size_t len = strlen(pi);
+  if( pi[len-1] == ' ' ) len--;
+
+  for( unsigned int i = n - 1; i > 0; --i )
     {
-    if( strncmp(pi, PIStrings[i], strlen(pi) ) == 0 )
+    if( strncmp(pi, PIStrings[i], len ) == 0 )
       {
       gdcmDebugMacro( "PhotometricInterpretation was found: [" << pi 
         << "], but is invalid. It should be padded with a space" );
       return PIType(i);
       }
-    ++i;
     }
-  // too many whitespaces ??
-  // http://deckard.mc.duke.edu/~samei/tg18_files/TG18-CH-dcm.zip
-  // TG18-CH-2k-01.dcm
-  i = 0;
-  while(PIStrings[i] != 0)
-    {
-    if( strncmp(pi, PIStrings[i], strlen(PIStrings[i]) ) == 0 )
-      {
-      gdcmDebugMacro( "PhotometricInterpretation was found: [" << pi 
-        << "], but is invalid. It should be padded with at most a single space" );
-      return PIType(i);
-      }
-    ++i;
-    }
-
   //assert(0);
   return PI_END;
 }
