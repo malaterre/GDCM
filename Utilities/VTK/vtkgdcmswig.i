@@ -285,13 +285,13 @@ using Kitware.VTK;
 %csmethodmodifiers vtkGDCMImageWriter::New() "public new"
 %csmethodmodifiers vtkGDCMTesting::New() "public new"
 
+#endif
+
 %newobject vtkGDCMTesting::New();
 %newobject vtkGDCMImageWriter::New();
 %newobject vtkGDCMImageReader::New();
 
 %delobject vtkObjectBase::Delete();
-
-#endif
 
 // TODO: I need to fix Delete and make sure SWIG owns the C++ ptr (call ->Delete in the Dispose layer)
 //%ignore vtkObjectBase::Delete;
@@ -453,7 +453,6 @@ while we would want:
 
 %include "vtkGDCMImageReader.h"
 %include "vtkGDCMImageWriter.h"
-#ifdef USEACTIVIZ
 %extend vtkGDCMTesting
 {
 %typemap(cscode) vtkGDCMTesting
@@ -489,7 +488,6 @@ while we would want:
   }
 %}
 };
-#endif
 %clear double*;
 %clear double* GetDataSpacing();
 %clear double* GetDataOrigin();

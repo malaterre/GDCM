@@ -363,4 +363,9 @@ image is a reslice of original image, how do I map to original UID ?
  * There is a current limitation of not handling Referenced SOP Class UID / 
  * Referenced SOP Instance UID simply because the gdcm::Scanner does not allow us
  * See PS 3.11 / Table D.3-2 STD-GEN Additional DICOMDIR Keys
+-----------------------------------------------------------------------
+RTSTRUCT support
+http://www.nabble.com/How-to-load-sequence-items-td20622657.html
 
+Re: How to load sequence items
+-----------------------------------------------------------------------
