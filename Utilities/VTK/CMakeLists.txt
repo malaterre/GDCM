@@ -9,6 +9,7 @@ SET(vtkgdcm_SRCS
   vtkGDCMTesting.cxx
   vtkGDCMImageReader.cxx
   vtkGDCMImageWriter.cxx
+  vtkGDCMMedicalImageProperties.cxx
   )
 
 IF(CMAKE_HAVE_PTHREAD_H)
