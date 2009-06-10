@@ -104,6 +104,13 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->FileLowerLeft = 0; // same default as vtkImageReader2
   this->PlanarConfiguration = 0;
   this->LossyFlag = 0;
+  
+  // For both case (2d file or 3d file) we need a common uid for the Series/Study:
+  gdcm::UIDGenerator uidgen;
+  const char *uid = uidgen.Generate();
+  this->SetStudyUID(uid);
+  uid = uidgen.Generate();
+  this->SetSeriesUID(uid);
 }
 
 //----------------------------------------------------------------------------
@@ -285,11 +292,11 @@ void vtkGDCMImageWriter::Write()
 
 
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
-  gdcm::UIDGenerator uidgen;
-  const char *uid = uidgen.Generate();
-  this->SetStudyUID(uid);
-  uid = uidgen.Generate();
-  this->SetSeriesUID(uid);
+  //gdcm::UIDGenerator uidgen;
+  //const char *uid = uidgen.Generate();
+  //this->SetStudyUID(uid);
+  //uid = uidgen.Generate();
+  //this->SetSeriesUID(uid);
 
   // Did the user specified dim of output file to be 2 ?
   if( this->FileDimensionality == 2 )
@@ -348,13 +355,6 @@ void vtkGDCMImageWriter::Write()
 //    vtkErrorMacro(<<"Write:Please specify either a FileName or a file prefix and pattern");
 //    return;
 //    }
-  
-  // For both case (2d file or 3d file) we need a common uid for the Series/Study:
-  gdcm::UIDGenerator uidgen;
-  const char *uid = uidgen.Generate();
-  this->SetStudyUID(uid);
-  uid = uidgen.Generate();
-  this->SetSeriesUID(uid);
 
   // Make sure the file name is allocated
   this->InternalFileName =  0;

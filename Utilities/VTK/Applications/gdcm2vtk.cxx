@@ -47,6 +47,7 @@
 #include "gdcmImageHelper.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmSystem.h"
+#include "gdcmUIDGenerator.h"
 
 #include <getopt.h>
 
@@ -70,6 +71,9 @@ void PrintHelp()
   std::cout << "     --palette-color    when supported generate a PALETTE COLOR file." << std::endl;
   std::cout << "     --argb             when supported generate a ARGB file." << std::endl;
   std::cout << "     --modality         set Modality." << std::endl;
+  std::cout << "  -T --study-uid        Study UID." << std::endl;
+  std::cout << "  -S --series-uid       Series UID." << std::endl;
+  std::cout << "     --root-uid         Root UID." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -77,6 +81,8 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "Env var:" << std::endl;
+  std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -84,6 +90,8 @@ int main(int argc, char *argv[])
   int c;
   //int digit_optind = 0;
 
+  std::string root_uid;
+  int rootuid = 0;
   std::vector<std::string> filenames;
   int forcerescale = 0;
   int forcespacing = 0;
@@ -91,6 +99,8 @@ int main(int argc, char *argv[])
   int argb = 0;
   int modality = 0;
   std::string modality_str;
+  int studyuid = 0;
+  int seriesuid = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -99,6 +109,9 @@ int main(int argc, char *argv[])
   int help = 0;
   int version = 0;
 
+  gdcm::UIDGenerator uid;
+  std::string series_uid = uid.Generate();
+  std::string study_uid = uid.Generate();
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -108,6 +121,9 @@ int main(int argc, char *argv[])
         {"palette-color", 0, &palettecolor, 1},
         {"argb", 0, &argb, 1},
         {"modality", 1, &modality, 1},
+        {"study-uid", 1, &studyuid, 1},
+        {"series-uid", 1, &seriesuid, 1},
+        {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -120,7 +136,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "VWDEhv",
+    c = getopt_long (argc, argv, "T:S:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -141,11 +157,26 @@ int main(int argc, char *argv[])
             //assert( filename.empty() );
             //filename = optarg;
             }
-          if( option_index == 4 ) /* input */
+          else if( option_index == 4 ) /* modality */
             {
             assert( strcmp(s, "modality") == 0 );
             //assert( filename.empty() );
             modality_str = optarg;
+            }
+          else if( option_index == 5 ) /* study-uid */
+            {
+            assert( strcmp(s, "study-uid") == 0 );
+            series_uid = optarg;
+            }
+          else if( option_index == 6 ) /* series-uid */
+            {
+            assert( strcmp(s, "series-uid") == 0 );
+            study_uid = optarg;
+            }
+          else if( option_index == 7 ) /* root-uid */
+            {
+            assert( strcmp(s, "root-uid") == 0 );
+            root_uid = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -294,9 +325,47 @@ int main(int argc, char *argv[])
   // else
 
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
+  if( studyuid )
+    {
+    writer->SetStudyUID( study_uid.c_str() );
+    }
+  if( seriesuid )
+    {
+    writer->SetSeriesUID( series_uid.c_str() );
+    }
 
   // HACK: call it *after* instanciating vtkGDCMImageWriter
+  if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;
+    return 1;
+    }
+  if( !gdcm::UIDGenerator::IsValid( series_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Series UID: " << series_uid << std::endl;
+    return 1;
+    }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcm2vtk" );
+  if( !rootuid )
+    {
+    // only read the env var is no explicit cmd line option
+    // maybe there is an env var defined... let's check
+    const char *rootuid_env = getenv("GDCM_ROOT_UID");
+    if( rootuid_env )
+      {
+      rootuid = 1;
+      root_uid = rootuid_env;
+      }
+    }
+  if( rootuid )
+    {
+    if( !gdcm::UIDGenerator::IsValid( root_uid.c_str() ) )
+      {
+      std::cerr << "specified Root UID is not valid: " << root_uid << std::endl;
+      return 1;
+      }
+    gdcm::UIDGenerator::SetRoot( root_uid.c_str() );
+    }
 
   writer->SetFileName( outfilename );
 

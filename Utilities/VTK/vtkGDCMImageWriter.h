@@ -42,7 +42,6 @@
 
 class vtkLookupTable;
 class vtkMedicalImageProperties;
-class vtkStringArray;
 class vtkMatrix4x4;
 class vtkStringArray;
 class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
@@ -110,6 +109,14 @@ public:
   // Description:
   // For color image (more than a single comp) you can specify the planar configuration you prefer
   vtkSetMacro(PlanarConfiguration,int);
+  vtkGetMacro(PlanarConfiguration,int);
+
+  // Description:
+  // Set/Get specific StudyUID / SeriesUID
+  vtkSetStringMacro(StudyUID);
+  vtkGetStringMacro(StudyUID);
+  vtkSetStringMacro(SeriesUID);
+  vtkGetStringMacro(SeriesUID);
 
 protected:
   vtkGDCMImageWriter();
@@ -144,8 +151,6 @@ private:
   // VTK structs:
   //vtkLookupTable *LookupTable;
   vtkMedicalImageProperties *MedicalImageProperties;
-  vtkSetStringMacro(StudyUID);
-  vtkSetStringMacro(SeriesUID);
   char *StudyUID;
   char *SeriesUID;
 
