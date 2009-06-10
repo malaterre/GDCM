@@ -44,10 +44,6 @@ class vtkLookupTable;
 class vtkMedicalImageProperties;
 class vtkMatrix4x4;
 class vtkStringArray;
-//BTX
-namespace gdcm { class ImageCodec; }
-//ETX
-
 class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
@@ -121,10 +117,6 @@ public:
   vtkGetStringMacro(StudyUID);
   vtkSetStringMacro(SeriesUID);
   vtkGetStringMacro(SeriesUID);
-
-//BTX
-  virtual void SetImageCodec(gdcm::ImageCodec* ic);
-//ETX
 
 protected:
   vtkGDCMImageWriter();

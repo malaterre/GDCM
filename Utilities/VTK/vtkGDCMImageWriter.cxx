@@ -1129,10 +1129,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   return 1;
 }
-//----------------------------------------------------------------------------
-void vtkGDCMImageWriter::SetImageCodec(gdcm::ImageCodec* ic)
-{
-}
 
 //----------------------------------------------------------------------------
 void vtkGDCMImageWriter::PrintSelf(ostream& os, vtkIndent indent)
