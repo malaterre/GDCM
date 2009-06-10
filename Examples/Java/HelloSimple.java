@@ -17,16 +17,16 @@
  * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar javac HelloSimple.java 
  *
  * Usage: 
- * $ LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar:. java HelloSimple ~/Creatis/gdcmData/test.acr
+ * $ LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar:. java HelloSimple ~/Creatis/gdcmData/012345.002.050.dcm
  */
 import gdcm.*;
 
 public class HelloSimple
 {
   static { 
-    // System.loadLibrary("gdcm");
+    // System.loadLibrary("gdcmjni");
     try {
-      System.loadLibrary("gdcm");
+      System.loadLibrary("gdcmjni");
     } catch (Throwable e) {
       System.out.println("cannot load gdcm");
     }
