@@ -14,6 +14,7 @@
 =========================================================================*/
 using Kitware.VTK;
 using vtkgdcm;
+using gdcm;
 
 // The command line arguments are:
 // -I        => run in interactive mode; unless this is used, the program will
@@ -64,6 +65,18 @@ public class HelloActiviz5
     array.InsertNextValue(filename);
     reader.SetFileNames(array);
     reader.Update();
+
+    gdcm.JPEG2000Codec j2kcodec = new gdcm.JPEG2000Codec();
+
+    vtkGDCMImageWriter writer = vtkGDCMImageWriter.New();
+    writer.SetMedicalImageProperties( reader.GetMedicalImageProperties() );
+    writer.SetDirectionCosines( reader.GetDirectionCosines() );
+    writer.SetShift( reader.GetShift() );
+    writer.SetScale( reader.GetScale() );
+    writer.SetImageFormat( reader.GetImageFormat() );
+    writer.SetLossyFlag( reader.GetLossyFlag() );
+    writer.SetImageCodec( j2kcodec );
+    writer.Write();
 
     //System.Console.Write(reader.GetOutput());
 

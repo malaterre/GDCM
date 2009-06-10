@@ -200,6 +200,12 @@ public class";
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmDICOMDIRGenerator.h"
 
+#include "gdcmCoder.h"
+#include "gdcmDecoder.h"
+#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
+#include "gdcmJPEG2000Codec.h"
+
 using namespace gdcm;
 %}
 
@@ -684,4 +690,12 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
+
+%ignore gdcm::Coder::CanCode(gdcm::TransferSyntax const &) const;
+%ignore gdcm::ImageCodec::CanCode(gdcm::TransferSyntax const &) const;
+%ignore gdcm::Coder::CanCode;
+%ignore gdcm::Codec::CanCode;
+%ignore gdcm::ImageCodec::CanCode;
+%include "gdcmImageCodec.h"
+%include "gdcmJPEG2000Codec.h"
 

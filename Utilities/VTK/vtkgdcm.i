@@ -101,6 +101,7 @@ using System;
 using System.Runtime.InteropServices;
 // my special import:
 using Kitware.VTK;
+using gdcm;
 //using Kitware.mummy.Runtime;
 %}
 #endif
@@ -451,6 +452,7 @@ while we would want:
 //%rename (vtkGDCMImageReaderInternal) vtkGDCMImageReader;
 //%rename (vtkGDCMImageWriterInternal) vtkGDCMImageWriter;
 
+%typemap(cstype) gdcm::ImageCodec * "ImageCodec"
 %include "vtkGDCMImageReader.h"
 %include "vtkGDCMImageWriter.h"
 %extend vtkGDCMTesting

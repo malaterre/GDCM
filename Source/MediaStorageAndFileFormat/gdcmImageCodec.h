@@ -31,9 +31,10 @@ namespace gdcm
 class GDCM_EXPORT ImageCodec : public Codec
 {
   friend class ImageChangePhotometricInterpretation;
-public:
+protected:
   ImageCodec();
   ~ImageCodec();
+public:
   bool CanDecode(TransferSyntax const &) const { return false; }
   bool Decode(DataElement const &is, DataElement &os);
   bool IsLossy() const;
