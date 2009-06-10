@@ -23,15 +23,6 @@ import gdcm.*;
 
 public class HelloSimple
 {
-  static { 
-    // System.loadLibrary("gdcmjni");
-    try {
-      System.loadLibrary("gdcmjni");
-    } catch (Throwable e) {
-      System.out.println("cannot load gdcm");
-    }
-  }
-
   public static void main(String[] args) throws Exception
     {
     String filename = args[0];

@@ -154,6 +154,20 @@
 using namespace gdcm;
 %}
 
+
+// http://www.swig.org/Doc1.3/Java.html#imclass_pragmas
+
+%pragma(java) jniclasscode=%{
+ static {
+   try {
+       System.loadLibrary("gdcmjni");
+   } catch (UnsatisfiedLinkError e) {
+     System.err.println("Native code library failed to load. \n" + e);
+     System.exit(1);
+   }
+ }
+%}
+
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
 
