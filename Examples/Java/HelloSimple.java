@@ -32,17 +32,22 @@ public class HelloSimple
     }
   }
 
-  public static void main(String[] args)
+  public static void main(String[] args) throws Exception
     {
-    System.out.println("Hello World");
     String filename = args[0];
     Reader reader = new Reader();
     reader.SetFileName( filename );
     boolean ret = reader.Read();
     if( !ret )
       {
+      throw new Exception("Could not read: " + filename );
       }
+    File f = reader.GetFile();
+    DataSet ds = f.GetDataSet();
 
+    System.out.println( ds.toString() );
+
+    System.out.println("Success reading: " + filename );
     }
 }
 
