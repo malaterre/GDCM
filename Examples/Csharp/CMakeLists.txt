@@ -12,6 +12,7 @@ SET(CSHARP_EXAMPLES
   #SortImage2
   GetArray
   NewSequence
+  GenerateDICOMDIR
   )
 
 IF(BUILD_TESTING)

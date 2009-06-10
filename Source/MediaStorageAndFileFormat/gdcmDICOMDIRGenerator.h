@@ -97,6 +97,11 @@ private:
   DICOMDIRGeneratorInternal * Internals;
 };
 
+/**
+ * \example GenerateDICOMDIR.cs
+ * This is a C# example on how to use gdcm::DICOMDIRGenerator
+ */
+
 } // end namespace gdcm
 
 #endif //__gdcmDICOMDIRGenerator_h
