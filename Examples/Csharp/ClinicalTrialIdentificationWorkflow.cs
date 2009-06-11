@@ -216,8 +216,6 @@ public class ClinicalTrialIdentificationWorkflow
         }
       }
 
-//  public static bool ProcessOneFile( gdcm.Anonymizer ano , string filename, string outfilename )
-
     return 0;
     }
 }

@@ -196,7 +196,7 @@ unsigned int readvector(std::vector<T> &v, const char *str)
 
 namespace gdcm
 {
-bool derives( File & file, const Pixmap& compressed_image )
+static bool derives( File & file, const Pixmap& compressed_image )
 {
 /*
 (0008,2111) ST [Lossy compression with JPEG extended sequential 8 bit, IJG quality... # 102, 1 DerivationDescription
