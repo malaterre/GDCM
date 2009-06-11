@@ -1143,7 +1143,13 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   switch( this->CompressionType )
     {
+    /*
+     * 10.1 DICOM DEFAULT TRANSFER SYNTAX
+     *  DICOM defines a default Transfer Syntax, the DICOM Implicit VR Little Endian Transfer Syntax (UID =
+     *  "1.2.840.10008.1.2"), which shall be supported by every conformant DICOM Implementation.
+     */
     case NO_COMPRESSION:
+      change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
       break;
     case JPEG_COMPRESSION:
       change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
@@ -1160,12 +1166,14 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
   if( !change.Change() )
     {
+    vtkErrorMacro( "Could not change" );
     return 0;
     }
   writer.SetImage( change.GetOutput() );
   writer.SetFileName( filename );
   if( !writer.Write() )
     {
+    vtkErrorMacro( "Could not write" );
     return 0;
     }
 
