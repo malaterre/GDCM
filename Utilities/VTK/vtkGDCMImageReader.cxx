@@ -119,7 +119,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
 #endif
   this->SetImageOrientationPatient(1,0,0,0,1,0);
 
-  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
+//  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
 }
 
 //----------------------------------------------------------------------------
@@ -502,7 +502,6 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   // Add more info:
   vtkGDCMMedicalImageProperties *gdcmmip = 
     dynamic_cast<vtkGDCMMedicalImageProperties*>( this->MedicalImageProperties );
-  assert( gdcmmip );
   if( gdcmmip )
     {
     gdcmmip->PushBackFile( file );
