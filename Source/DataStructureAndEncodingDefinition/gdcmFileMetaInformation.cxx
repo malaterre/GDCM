@@ -80,7 +80,7 @@ void FileMetaInformation::SetSourceApplicationEntityTitle(const char * title)
   //SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
   //SourceApplicationEntityTitle += "/";
   AEComp ae( title );
-  SourceApplicationEntityTitle = ae;
+  SourceApplicationEntityTitle = ae.Truncate();
 }
 const char *FileMetaInformation::GetImplementationClassUID()
 {

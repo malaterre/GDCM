@@ -88,6 +88,13 @@ public:
     return true;
   }
 
+  gdcm::String<TDelimiter, TMaxLength, TPadChar> Truncate() const {
+    if( IsValid() ) return *this;
+    std::string str = *this; // copy
+    str.resize( TMaxLength );
+    return str;
+  }
+
   /// Trim function is required to return a std::string object, otherwise we could not create 
   /// a gdcm::String object with an odd number of bytes...
   std::string Trim() const {

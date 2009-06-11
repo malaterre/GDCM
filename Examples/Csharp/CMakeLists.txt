@@ -13,6 +13,7 @@ SET(CSHARP_EXAMPLES
   GetArray
   NewSequence
   GenerateDICOMDIR
+  ClinicalTrialIdentificationWorkflow
   )
 
 IF(BUILD_TESTING)

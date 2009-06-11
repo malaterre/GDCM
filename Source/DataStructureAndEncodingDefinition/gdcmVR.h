@@ -226,7 +226,7 @@ inline std::ostream& operator<<(std::ostream &_os, const UI &_val)
   return _os;
 }
 
-typedef String<'\\',64> AEComp;
+typedef String<'\\',16> AEComp;
 typedef String<'\\',64> ASComp;
 typedef String<'\\',16> CSComp;
 typedef String<'\\',64> DAComp;

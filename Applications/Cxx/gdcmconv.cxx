@@ -894,6 +894,7 @@ int main (int argc, char *argv[])
     fmi.Replace( de );
     fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
     fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+    //fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
     fmi.SetDataSetTransferSyntax(ts);
 
     if( explicitts || deflated )
