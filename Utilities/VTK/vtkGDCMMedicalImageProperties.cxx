@@ -24,7 +24,7 @@ vtkStandardNewMacro(vtkGDCMMedicalImageProperties)
 class vtkGDCMMedicalImagePropertiesInternals
 {
 public:
-  std::vector< gdcm::File > Files;
+  std::vector< gdcm::SmartPointer<gdcm::File> > Files;
 };
 
 //----------------------------------------------------------------------------
@@ -55,14 +55,14 @@ void vtkGDCMMedicalImageProperties::PushBackFile(gdcm::File const &f)
 {
   this->Internals->Files.push_back( f );
   int i = this->Internals->Files.size();
-  gdcm::DataSet &ds = this->Internals->Files[ i - 1 ].GetDataSet();
+  gdcm::DataSet &ds = this->Internals->Files[ i - 1 ]->GetDataSet();
   ds.Remove( gdcm::Tag( 0x7fe0, 0x0010 ) );
 }
 
 //----------------------------------------------------------------------------
 gdcm::File const & vtkGDCMMedicalImageProperties::GetFile(unsigned int t)
 {
-  return this->Internals->Files[ t ];
+  return *this->Internals->Files[ t ];
 }
 
 //----------------------------------------------------------------------------
