@@ -109,6 +109,12 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->IconNumberOfScalarComponents = 1;
   this->PlanarConfiguration = 0;
   this->LossyFlag = 0;
+
+  // DirectionCosine was added after 5.2
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
+  this->MedicalImageProperties->SetDirectionCosine(1,0,0,0,1,0);
+#endif
+  this->SetImageOrientationPatient(1,0,0,0,1,0);
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -666,6 +672,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
       this->DirectionCosines->SetElement(2,1, dircos[5]);
       for(int i=0;i<6;++i)
         this->ImageOrientationPatient[i] = dircos[i];
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
+      this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
+#endif
       }
     // Apply transform:
     if( dircos && origin )

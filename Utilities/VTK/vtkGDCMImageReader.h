@@ -237,6 +237,8 @@ protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
 
+  vtkSetVector6Macro(ImageOrientationPatient,double);
+
 //BTX
   void FillMedicalImageInformation(const gdcm::ImageReader &reader);
 //ETX

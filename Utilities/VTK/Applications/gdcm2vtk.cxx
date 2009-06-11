@@ -343,6 +343,8 @@ int main(int argc, char *argv[])
     {
     writer->SetSeriesUID( series_uid.c_str() );
     }
+  //writer->SetCompressionType( vtkGDCMImageWriter::NO_COMPRESSION );
+  //writer->SetCompressionType( vtkGDCMImageWriter::JPEG2000_COMPRESSION );
 
   // HACK: call it *after* instanciating vtkGDCMImageWriter
   if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )

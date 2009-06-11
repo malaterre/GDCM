@@ -91,7 +91,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
   size_t len = strlen(pi);
   if( pi[len-1] == ' ' ) len--;
 
-  for( unsigned int i = n - 1; i > 0; --i )
+  for( unsigned int i = 1; i < n; ++i )
     {
     if( strncmp(pi, PIStrings[i], len ) == 0 )
       {

@@ -42,6 +42,7 @@
 #include "gdcmTag.h"
 #include "gdcmImageHelper.h"
 #include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmImageChangeTransferSyntax.h"
 
 #include <limits>
 
@@ -104,6 +105,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->FileLowerLeft = 0; // same default as vtkImageReader2
   this->PlanarConfiguration = 0;
   this->LossyFlag = 0;
+  this->CompressionType = NO_COMPRESSION;
   
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
   gdcm::UIDGenerator uidgen;
@@ -456,8 +458,11 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   gdcm::ImageWriter writer;
   //writer.SetImage( image );
+  gdcm::ImageChangeTransferSyntax change;
 
-  gdcm::Image &image = writer.GetImage();
+  //gdcm::Image &image = writer.GetImage();
+  gdcm::Image &image = change.GetInput();
+
   image.SetLossyFlag( this->LossyFlag );
   // Nowadays this is the default one:
 #ifdef GDCM_WORDS_BIGENDIAN
@@ -1027,6 +1032,20 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     {
     iop[i+3] = dircos->GetElement(i,1);
     }
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
+   const double *iop_mip = this->MedicalImageProperties->GetDirectionCosine();
+   if( iop[0] != iop_mip[0]
+    || iop[1] != iop_mip[1]
+    || iop[2] != iop_mip[2]
+    || iop[3] != iop_mip[3]
+    || iop[4] != iop_mip[4]
+    || iop[5] != iop_mip[5]
+   )
+     {
+     vtkErrorMacro( "DirectionCosines is not compatible with vtkMedicalImageProperties::DirectionCosine" );
+     return 0;
+     }
+#endif
 
   image.SetDirectionCosines( &iop[0] );
 
@@ -1121,6 +1140,29 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   os << k;
   // Will only be added if none found
   SetStringValueFromTag(os.str().c_str(), gdcm::Tag(0x0020,0x0013), ano);
+
+  switch( this->CompressionType )
+    {
+    case NO_COMPRESSION:
+      break;
+    case JPEG_COMPRESSION:
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+      break;
+    case JPEG2000_COMPRESSION:
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
+      break;
+    case JPEGLS_COMPRESSION:
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
+      break;
+    case RLE_COMPRESSION:
+      change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
+      break;
+    }
+  if( !change.Change() )
+    {
+    return 0;
+    }
+  writer.SetImage( change.GetOutput() );
   writer.SetFileName( filename );
   if( !writer.Write() )
     {

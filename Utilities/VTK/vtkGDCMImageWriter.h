@@ -26,6 +26,8 @@
 // .SECTION Warning
 // You need to specify the correct ImageFormat (taken from the reader)
 // You need to explicitely specify the DirectionCosines (taken from the reader)
+// Since VTK 5.4 vtkMedicalImageProperties has its own DirectionCosine (no 's') 
+// user need to make sure the vtkMatrix4x4 is compatible with the 6-vector DirectionCosine.
 //
 // .SECTION NOTE Shift/Scale are global to all DICOM frames (=files) written
 // as 2D slice, therefore the shift/scale operation might not be optimized for 
@@ -118,6 +120,19 @@ public:
   vtkSetStringMacro(SeriesUID);
   vtkGetStringMacro(SeriesUID);
 
+//BTX
+  enum CompressionTypes {
+    NO_COMPRESSION = 0,   // raw (default)
+    JPEG_COMPRESSION,     // JPEG
+    JPEG2000_COMPRESSION, // J2K
+    JPEGLS_COMPRESSION,   // JPEG-LS
+    RLE_COMPRESSION       // RLE
+  };
+//ETX
+  // Set/Get the compression type
+  vtkSetMacro(CompressionType, int);
+  vtkGetMacro(CompressionType, int);
+
 protected:
   vtkGDCMImageWriter();
   ~vtkGDCMImageWriter();
@@ -165,6 +180,7 @@ private:
   int FileLowerLeft;
   int PlanarConfiguration;
   int LossyFlag;
+  int CompressionType;
 };
 
 #endif

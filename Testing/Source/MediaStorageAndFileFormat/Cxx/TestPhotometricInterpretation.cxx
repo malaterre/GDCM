@@ -63,13 +63,13 @@ int TestPhotometricInterpretation(int, char *[])
     return 1;
     }
   pi = gdcm::PhotometricInterpretation::GetPIType( "MONOCHROME" );
-  if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 )
+  if( pi != gdcm::PhotometricInterpretation::MONOCHROME1 )
     {
     std::cerr << "PhotometricInterpretation: " << pi << std::endl;
     return 1;
     }
   pi = gdcm::PhotometricInterpretation::GetPIType( "YBR_PARTIAL_42 " );
-  if( pi != gdcm::PhotometricInterpretation::YBR_PARTIAL_420)
+  if( pi != gdcm::PhotometricInterpretation::YBR_PARTIAL_422)
     {
     std::cerr << "PhotometricInterpretation: " << pi << std::endl;
     return 1;
@@ -88,7 +88,7 @@ int TestPhotometricInterpretation(int, char *[])
     }
   // FIXME ?
   pi = gdcm::PhotometricInterpretation::GetPIType( "YBR_FUL" );
-  if( pi != gdcm::PhotometricInterpretation::YBR_FULL_422 )
+  if( pi != gdcm::PhotometricInterpretation::YBR_FULL )
     {
     std::cerr << "PhotometricInterpretation: " << pi << std::endl;
     return 1;

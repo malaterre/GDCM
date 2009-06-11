@@ -25,7 +25,7 @@
 #include "vtkObject.h"
 #include "gdcmTypes.h" // GDCM_EXPORT
 
-class GDCM_EXPORT vtkGDCMTesting : public vtkObject
+class VTK_EXPORT vtkGDCMTesting : public vtkObject
 {
 public:
   static vtkGDCMTesting *New();
