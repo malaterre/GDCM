@@ -5,6 +5,7 @@ SET(MSFF_SRCS
   gdcmDICOMDIRGenerator.cxx
   gdcmSpacing.cxx
   gdcmFileExplicitFilter.cxx
+  gdcmFileDerivation.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
   gdcmSimpleSubjectWatcher.cxx

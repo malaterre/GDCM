@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmImage.h"
 #include "gdcmImageWriter.h"
+#include "gdcmFileDerivation.h"
 //#include "gdcmImageChangePhotometricInterpretation.h"
 
 int main(int, char *[])
@@ -68,6 +69,17 @@ int main(int, char *[])
   im->SetDataElement( pixeldata );
 
   gdcm::ImageWriter w;
+
+  gdcm::FileDerivation fd;
+  fd.AddReference( "1.2.3.4", "5.6.7.8" );
+  fd.AddReference( "0.1.2.3.4", "0.5.6.7.8" );
+  fd.SetDerivationCodeSequenceCodeValue( 113072 );
+  fd.SetFile( w.GetFile() );
+  if( !fd.Derive() )
+    {
+    return 1;
+    }
+
   w.SetImage( *im );
   w.SetFileName( "ybr2.dcm" );
   //w.SetFileName( "rgb.dcm" );
