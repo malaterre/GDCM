@@ -133,6 +133,9 @@ public:
   vtkSetMacro(CompressionType, int);
   vtkGetMacro(CompressionType, int);
 
+  //void SetCompressionTypeFromString(const char *);
+  //const char *GetCompressionTypeAsString();
+
 protected:
   vtkGDCMImageWriter();
   ~vtkGDCMImageWriter();

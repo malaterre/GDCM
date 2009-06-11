@@ -1166,7 +1166,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
   if( !change.Change() )
     {
-    vtkErrorMacro( "Could not change" );
+    vtkErrorMacro( "Could not change the Transfer Syntax for Compression Type: " );
     return 0;
     }
   writer.SetImage( change.GetOutput() );
@@ -1179,6 +1179,19 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   return 1;
 }
+
+//void vtkGDCMImageWriter::SetCompressionTypeFromString(const char *)
+//{
+//}
+//
+//const char *vtkGDCMImageWriter::GetCompressionTypeAsString()
+//{
+//    NO_COMPRESSION = 0,   // raw (default)
+//    JPEG_COMPRESSION,     // JPEG
+//    JPEG2000_COMPRESSION, // J2K
+//    JPEGLS_COMPRESSION,   // JPEG-LS
+//    RLE_COMPRESSION       // RLE
+//}
 
 //----------------------------------------------------------------------------
 void vtkGDCMImageWriter::PrintSelf(ostream& os, vtkIndent indent)
