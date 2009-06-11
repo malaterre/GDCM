@@ -222,7 +222,6 @@ bool FileDerivation::AddDerivationDescription()
   at2.SetValue( "DCM" );
   subds3.Replace( at2.GetAsDataElement() );
   Attribute<0x0008,0x0104> at3;
-  //at3.SetValue( cd->Definition );
   at3.SetValue( cd->CodeMeaning );
   subds3.Replace( at3.GetAsDataElement() );
 
