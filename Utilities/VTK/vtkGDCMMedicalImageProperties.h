@@ -27,6 +27,9 @@
 #include "vtkMedicalImageProperties.h"
 
 class vtkGDCMMedicalImagePropertiesInternals;
+//BTX
+namespace gdcm { class File; }
+//ETX
 
 class VTK_EXPORT vtkGDCMMedicalImageProperties : public vtkMedicalImageProperties
 {
@@ -350,13 +353,20 @@ public:
   void SetOrientationType(int volumeidx, int orientation);
   static const char *GetStringFromOrientationType(unsigned int type);
 */
-
 protected:
   vtkGDCMMedicalImageProperties();
   ~vtkGDCMMedicalImageProperties();
 
-  vtkGDCMMedicalImagePropertiesInternals *Internals;
+//BTX
+  friend class vtkGDCMImageReader;
+  friend class vtkGDCMImageWriter;
+  void PushBackFile(gdcm::File const &f);
+  gdcm::File const & GetFile(unsigned int t);
+//ETX
+
 private:
+  vtkGDCMMedicalImagePropertiesInternals *Internals;
+
   vtkGDCMMedicalImageProperties(const vtkGDCMMedicalImageProperties&); // Not implemented.
   void operator=(const vtkGDCMMedicalImageProperties&); // Not implemented.
 };

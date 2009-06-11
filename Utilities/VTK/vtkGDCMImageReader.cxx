@@ -20,6 +20,7 @@
 #include "vtkCellArray.h"
 #include "vtkPoints.h"
 #include "vtkMedicalImageProperties.h"
+#include "vtkGDCMMedicalImageProperties.h"
 #include "vtkStringArray.h"
 #include "vtkPointData.h"
 #include "vtkLookupTable.h"
@@ -68,7 +69,9 @@ inline bool vtkGDCMImageReader_IsCharTypeSigned()
 #define OVERLAYPORTNUMBER   2
 
 vtkCxxSetObjectMacro(vtkGDCMImageReader,Curve,vtkPolyData)
+vtkCxxSetObjectMacro(vtkGDCMImageReader,MedicalImageProperties,vtkMedicalImageProperties)
 
+//----------------------------------------------------------------------------
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
   // vtkDataArray has an internal vtkLookupTable why not used it ?
@@ -115,8 +118,11 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->MedicalImageProperties->SetDirectionCosine(1,0,0,0,1,0);
 #endif
   this->SetImageOrientationPatient(1,0,0,0,1,0);
+
+  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
 }
 
+//----------------------------------------------------------------------------
 vtkGDCMImageReader::~vtkGDCMImageReader()
 {
   //delete this->Internals;
@@ -138,6 +144,7 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
     }
 }
 
+//----------------------------------------------------------------------------
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
 void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
@@ -176,6 +183,7 @@ void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
 }
 #endif
 
+//----------------------------------------------------------------------------
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
 void vtkGDCMImageReader::ExecuteInformation()
@@ -248,6 +256,7 @@ void vtkGDCMImageReader::ExecuteInformation()
     }
 }
 
+//----------------------------------------------------------------------------
 void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 {
   //std::cerr << "ExecuteData" << std::endl;
@@ -281,6 +290,7 @@ void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
+//----------------------------------------------------------------------------
 int vtkGDCMImageReader::CanReadFile(const char* fname)
 {
   gdcm::ImageReader reader;
@@ -490,7 +500,13 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
 #endif
  
   // Add more info:
-
+  vtkGDCMMedicalImageProperties *gdcmmip = 
+    dynamic_cast<vtkGDCMMedicalImageProperties*>( this->MedicalImageProperties );
+  assert( gdcmmip );
+  if( gdcmmip )
+    {
+    gdcmmip->PushBackFile( file );
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -561,6 +577,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 }
 #endif
 
+//----------------------------------------------------------------------------
 int vtkGDCMImageReader::RequestInformationCompat()
 {
   // FIXME, need to implement the other modes too:
@@ -829,6 +846,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   return 1;
 }
 
+//----------------------------------------------------------------------------
 template <class T>
 inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
 {
@@ -836,6 +854,7 @@ inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
   return sizeof(T);
 }
 
+//----------------------------------------------------------------------------
 void InPlaceYFlipImage(vtkImageData* data)
 {
   unsigned long outsize = data->GetNumberOfScalarComponents();
@@ -1261,6 +1280,7 @@ int vtkGDCMImageReader::RequestDataCompat()
   return 1;
 }
 
+//----------------------------------------------------------------------------
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 vtkAlgorithmOutput* vtkGDCMImageReader::GetOverlayPort(int index)
 {
@@ -1284,6 +1304,7 @@ vtkImageData* vtkGDCMImageReader::GetOverlay(int i)
     return this->GetOutput(i+OVERLAYPORTNUMBER);
   return NULL;
 }
+
 //----------------------------------------------------------------------------
 vtkImageData* vtkGDCMImageReader::GetIconImage()
 {

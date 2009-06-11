@@ -137,6 +137,7 @@ public:
   // Get the medical image properties object
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
 #endif
+  virtual void SetMedicalImageProperties(vtkMedicalImageProperties *pd);
 
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else

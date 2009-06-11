@@ -15,12 +15,16 @@
 #include "vtkGDCMMedicalImageProperties.h"
 #include "vtkObjectFactory.h"
 
+#include "gdcmFile.h"
+
 //----------------------------------------------------------------------------
 vtkCxxRevisionMacro(vtkGDCMMedicalImageProperties, "1.21")
 vtkStandardNewMacro(vtkGDCMMedicalImageProperties)
 
 class vtkGDCMMedicalImagePropertiesInternals
 {
+public:
+  std::vector< gdcm::File > Files;
 };
 
 //----------------------------------------------------------------------------
@@ -44,6 +48,21 @@ vtkGDCMMedicalImageProperties::~vtkGDCMMedicalImageProperties()
 void vtkGDCMMedicalImageProperties::Clear()
 {
   this->Superclass::Clear();
+}
+
+//----------------------------------------------------------------------------
+void vtkGDCMMedicalImageProperties::PushBackFile(gdcm::File const &f)
+{
+  this->Internals->Files.push_back( f );
+  int i = this->Internals->Files.size();
+  gdcm::DataSet &ds = this->Internals->Files[ i - 1 ].GetDataSet();
+  ds.Remove( gdcm::Tag( 0x7fe0, 0x0010 ) );
+}
+
+//----------------------------------------------------------------------------
+gdcm::File const & vtkGDCMMedicalImageProperties::GetFile(unsigned int t)
+{
+  return this->Internals->Files[ t ];
 }
 
 //----------------------------------------------------------------------------
