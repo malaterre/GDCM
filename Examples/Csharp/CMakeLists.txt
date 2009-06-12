@@ -13,7 +13,6 @@ SET(CSHARP_EXAMPLES
   GetArray
   NewSequence
   GenerateDICOMDIR
-  ClinicalTrialIdentificationWorkflow
   StandardizeFiles
   ReformatFile
   )
@@ -22,6 +21,7 @@ IF(BUILD_TESTING)
 SET(CSHARP_EXAMPLES
   ${CSHARP_EXAMPLES}
   BasicAnonymizer
+  ClinicalTrialIdentificationWorkflow
   )
 ENDIF(BUILD_TESTING)
 
