@@ -50,6 +50,7 @@ public:
   /// Set/Get File
   void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
+  const File &GetFile() const { return *F; }
 
 protected:
   bool AddDerivationDescription();

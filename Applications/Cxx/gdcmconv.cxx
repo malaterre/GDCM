@@ -524,7 +524,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwdJKRFYS:P:VWDEhvIr:q:t:n:e:",
+    c = getopt_long (argc, argv, "i:o:XMUClwdJKLRFYS:P:VWDEhvIr:q:t:n:e:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -651,6 +651,10 @@ int main (int argc, char *argv[])
 
     case 'K':
       j2k = 1;
+      break;
+
+    case 'L':
+      jpegls = 1;
       break;
 
     case 'R':

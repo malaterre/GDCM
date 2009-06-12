@@ -74,6 +74,11 @@ void PrintHelp()
   std::cout << "  -T --study-uid        Study UID." << std::endl;
   std::cout << "  -S --series-uid       Series UID." << std::endl;
   std::cout << "     --root-uid         Root UID." << std::endl;
+  std::cout << "Compression Types (lossless):" << std::endl;
+  std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
+  std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
+  std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
+  std::cout << "  -R --rle                            Compress image in rle (lossless only)." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -101,6 +106,11 @@ int main(int argc, char *argv[])
   std::string modality_str;
   int studyuid = 0;
   int seriesuid = 0;
+  // compression
+  int jpeg = 0;
+  int jpegls = 0;
+  int j2k = 0;
+  int rle = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -124,6 +134,10 @@ int main(int argc, char *argv[])
         {"study-uid", 1, &studyuid, 1},
         {"series-uid", 1, &seriesuid, 1},
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
+        {"jpeg", 0, &jpeg, 1}, // JPEG lossy / lossless
+        {"jpegls", 0, &jpegls, 1}, // JPEG-LS: lossy / lossless
+        {"j2k", 0, &j2k, 1}, // J2K: lossy / lossless
+        {"rle", 0, &rle, 1}, // lossless !
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -136,7 +150,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "T:S:VWDEhv",
+    c = getopt_long (argc, argv, "JKLRT:S:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -182,6 +196,22 @@ int main(int argc, char *argv[])
           }
         //printf ("\n");
         }
+      break;
+
+    case 'J':
+      jpeg = 1;
+      break;
+
+    case 'K':
+      j2k = 1;
+      break;
+
+    case 'L':
+      jpegls = 1;
+      break;
+
+    case 'R':
+      rle = 1;
       break;
 
     case 'T':
@@ -343,8 +373,25 @@ int main(int argc, char *argv[])
     {
     writer->SetSeriesUID( series_uid.c_str() );
     }
-  //writer->SetCompressionType( vtkGDCMImageWriter::NO_COMPRESSION );
-  //writer->SetCompressionType( vtkGDCMImageWriter::JPEG2000_COMPRESSION );
+
+  // Default:
+  writer->SetCompressionType( vtkGDCMImageWriter::NO_COMPRESSION ); // Implicit VR Little Endian
+  if( jpeg )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::JPEG_COMPRESSION );
+    }
+  else if( j2k )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::JPEG2000_COMPRESSION );
+    }
+  else if( jpegls )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::JPEGLS_COMPRESSION );
+    }
+  else if( rle )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::RLE_COMPRESSION );
+    }
 
   // HACK: call it *after* instanciating vtkGDCMImageWriter
   if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
