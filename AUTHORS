@@ -5,10 +5,12 @@ GDCM 2.x:
           Charl P. Botha             : Contributor (python, VTK)
              Shane Blackett          : Contributor (Win32)
            Mathieu Malaterre         : Project leader, main developer
-              Mark Roden             : Contributor (C#)     
+              Lars Matthaus          : Contributor (Java)
+          Steve M. Robbins           : Contributor (debian)
+              Mark Roden             : Contributor (C#)
        Jean-Pierre Roux              : Developer, maintain gdcmDataExtra
-         Christina Rossmanith        : Contributor (Siemens CSA)       
-     Christopher W Treml             : Contributor (C#)       
+         Christina Rossmanith        : Contributor (Siemens CSA)
+     Christopher W Treml             : Contributor (C#)
               Joel Spaltenstein      : Developer (MacOSX)
 
 
