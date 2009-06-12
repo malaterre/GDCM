@@ -15,6 +15,7 @@ SET(CSHARP_EXAMPLES
   GenerateDICOMDIR
   ClinicalTrialIdentificationWorkflow
   StandardizeFiles
+  ReformatFile
   )
 
 IF(BUILD_TESTING)
