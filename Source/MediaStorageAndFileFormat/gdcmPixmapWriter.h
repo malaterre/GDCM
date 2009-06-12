@@ -60,6 +60,11 @@ protected:
   SmartPointer<Pixmap> PixelData;
 };
 
+/**
+ * \example StandardizeFiles.cs
+ * This is a C++ example on how to use gdcm::PixmapWriter
+ */
+
 } // end namespace gdcm
 
 #endif //__gdcmPixmapWriter_h

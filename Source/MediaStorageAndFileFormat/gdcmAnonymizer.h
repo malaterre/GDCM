@@ -135,6 +135,7 @@ private:
 
 /**
  * \example ManipulateFile.cs
+ * \example ClinicalTrialIdentificationWorkflow.cs
  * This is a C# example on how to use gdcm::Anonymizer
  */
 

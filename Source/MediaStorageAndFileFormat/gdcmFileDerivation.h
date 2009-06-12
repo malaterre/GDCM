@@ -64,6 +64,7 @@ private:
 
 /**
  * \example GenFakeImage.cxx
+ * \example ReformatFile.cs
  * This is a C++ example on how to use gdcm::FileDerivation
  */
 

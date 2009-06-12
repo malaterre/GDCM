@@ -68,6 +68,11 @@ protected:
   SmartPointer<Pixmap> PixelData;
 };
 
+/**
+ * \example StandardizeFiles.cs
+ * This is a C++ example on how to use gdcm::PixmapReader
+ */
+
 } // end namespace gdcm
 
 #endif //__gdcmPixmapReader_h
