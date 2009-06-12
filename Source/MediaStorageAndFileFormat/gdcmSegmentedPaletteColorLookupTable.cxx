@@ -182,7 +182,7 @@ void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsign
 {
   if( BitSample == 8 )
     {
-    abort(); // TODO
+    assert(0); // TODO
     }
   else if( BitSample == 16 )
     {

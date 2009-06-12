@@ -46,7 +46,7 @@ public:
   unsigned int GetMaxLength() const { return MaxLength; };
   void SetBlob(const std::vector<char>& v) {
   (void)v;
-    //abort(); //TODO
+    //assert(0); //TODO
   }
   void SetComponents(const char *comp1 = "", 
     const char *comp2 = "",

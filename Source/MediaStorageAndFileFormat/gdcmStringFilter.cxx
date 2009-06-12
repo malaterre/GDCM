@@ -33,7 +33,7 @@ StringFilter::~StringFilter()
 
 void StringFilter::SetDicts(const Dicts &dicts)
 {
-  abort(); // FIXME
+  assert(0); // FIXME
 }
 
 std::string StringFilter::ToString(const Tag& t) const
@@ -168,7 +168,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
         StringFilterCase(UT);
       case VR::UN:
       case VR::US_SS:
-        abort();
+        assert(0);
         break;
       case VR::OB:
       case VR::OW:
@@ -178,7 +178,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
         ret.second = "";
         break;
       default:
-        abort();
+        assert(0);
         break;
         }
       }
@@ -195,7 +195,7 @@ std::string StringFilter::FromString(const Tag&t, const char * value, VL const &
   const VR &vr = entry.GetVR();
   if( vl != vm.GetLength() * vr.GetSizeof() )
     {
-    abort();
+    assert(0);
     }
 
   std::string s(value,value+vl);
@@ -215,7 +215,7 @@ std::string StringFilter::FromString(const Tag&t, const char * value, VL const &
     break;
   default:
     gdcmErrorMacro( "Not implemented" );
-    abort();
+    assert(0);
     }
   return os.str();
 }

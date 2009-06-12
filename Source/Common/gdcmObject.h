@@ -66,6 +66,8 @@ public:
   Object(const Object&):ReferenceCount(0){}
   void operator=(const Object&){}
 
+  //static Object* New() { return new Object; }
+
 protected:
   // For the purpose of the invasive SmartPointer implementation
   void Register() {

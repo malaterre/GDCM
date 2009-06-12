@@ -102,7 +102,7 @@ std::istream& Read(std::istream &is)
       else
         {
         throw "Catch me if you can";
-        //abort();
+        //assert(0);
         }
       }
     // not used for now...

@@ -96,7 +96,7 @@ public:
   SwapCode GetSwapCode() const;
 
   // TODO
-  //SwapCode GetPixelDataSwapCode() const { abort(); };
+  //SwapCode GetPixelDataSwapCode() const { assert(0); };
 
   bool IsValid() const { return TSField != TS_END; }
 

@@ -556,6 +556,13 @@ bool IsVRUI(Tag const &tag)
   return false;
 }
 
+static const Tag SpecialTypeTags[] = {
+/*              Patient's Name                                        */ Tag(0x0010,0x0010),
+/*              Patient ID                                            */ Tag(0x0010,0x0020),
+/*              Study ID                                              */ Tag(0x0020,0x0010),
+/*              Series Number                                         */ Tag(0x0020,0x0011)
+};
+
 bool Anonymizer::CanEmptyTag(Tag const &tag)
 {
   static const Global &g = GlobalInstance;
@@ -578,11 +585,35 @@ bool Anonymizer::CanEmptyTag(Tag const &tag)
     {
     return true;
     }
+
+  // http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/b1b23101bb655b81
+/*
+...
+3. It is the responsibility of the de-identifier to ensure the
+consistency of dummy values for Attributes
+such as Study Instance UID (0020,000D) or Frame of Reference UID
+(0020,0052) if multiple related
+SOP Instances are protected.
+...
+
+I think it would also make sense to quote the following attributes:
+* Patient ID,
+* Study ID,
+* Series Number.
+It is required they have consistent values when one is about to
+generate a DICOMDIR 
+
+=> Sup 142
+*/
+  static const unsigned int deidSize = sizeof(Tag);
+  static const unsigned int numDeIds = sizeof(SpecialTypeTags) / deidSize;
+
+  bool b = std::binary_search(SpecialTypeTags, SpecialTypeTags + numDeIds, tag);
   
   // This is a Type 3 attribute but with VR=UI
   // <entry group="0008" element="0014" vr="UI" vm="1" name="Instance Creator UID"/>
   //assert( dicts.GetDictEntry(tag).GetVR() != VR::UI );
-  return true;
+  return !b;
 }
 
 bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)

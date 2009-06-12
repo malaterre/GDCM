@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmDICOMDIRGenerator.cxx
   gdcmSpacing.cxx
   gdcmFileExplicitFilter.cxx
   gdcmFileDerivation.cxx
@@ -85,6 +86,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  ${CMAKE_CURRENT_SOURCE_DIR}
 
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"

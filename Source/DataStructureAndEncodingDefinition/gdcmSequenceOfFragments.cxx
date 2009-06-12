@@ -100,7 +100,7 @@ bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const
   if( total != length )
     {
     //std::cerr << " DEBUG: " << total << " " << length << std::endl;
-    abort();
+    assert(0);
     return false;
     }
   return true;
@@ -122,7 +122,7 @@ bool SequenceOfFragments::WriteBuffer(std::ostream &os) const
   //if( total != length )
   //  {
   //  //std::cerr << " DEBUG: " << total << " " << length << std::endl;
-  //  abort();
+  //  assert(0);
   //  return false;
   //  }
   return true;

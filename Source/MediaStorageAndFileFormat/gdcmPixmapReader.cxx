@@ -338,7 +338,7 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
     const Tag testseglut(0x0028, (0x1221 + 0));
     if( ds.FindDataElement( testseglut ) )
       {
-abort();
+assert(0);
       lut = new SegmentedPaletteColorLookupTable;
       }
     //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
@@ -398,7 +398,7 @@ abort();
         }
       else
         {
-        abort();
+        assert(0);
         }
       }
     pixeldata.SetLUT(*lut);
@@ -1082,7 +1082,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
         }
       else
         {
-        abort();
+        assert(0);
         }
       }
     PixelData->SetLUT(*lut);
@@ -1261,7 +1261,7 @@ bool PixmapReader::ReadACRNEMAImage()
     gdcmWarningMacro(
       "Reading as ACR NEMA an image which does not look likes ACR NEMA" );
     // File: acc-max.dcm is it ACR or DICOM ?
-    // abort();
+    // assert(0);
     }
 
   // 3. Pixel Format ?
@@ -1318,7 +1318,7 @@ bool PixmapReader::ReadACRNEMAImage()
   const DataElement& de = ds.GetDataElement( pixeldata );
   if ( de.GetVR() == VR::OW )
     {
-    //abort();
+    //assert(0);
     //PixelData->SetNeedByteSwap(true);
     }
   PixelData->SetDataElement( de );

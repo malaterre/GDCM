@@ -149,7 +149,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       }
     else
       {
-      abort();
+      assert(0);
       }
     }
 }

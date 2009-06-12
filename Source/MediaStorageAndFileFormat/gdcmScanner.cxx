@@ -43,7 +43,7 @@ void Scanner::ClearSkipTags()
 void Scanner::AddSkipTag( Tag const & t )
 {
   SkipTags.insert( t );
-  abort(); // This is NOT implemented for now
+  assert(0); // This is NOT implemented for now
 }
 
 // Warning: API is passing a public tag (no way to specify private tag)
@@ -261,6 +261,30 @@ const char* Scanner::GetValue(const char *filename, Tag const &t) const
     return ftv.find(t)->second;
     }
   return NULL;
+}
+
+const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valueref) const
+{
+  const char *filenameref = 0;
+  if( valueref )
+    {
+    Directory::FilenamesType::const_iterator file = Filenames.begin();
+    for(; file != Filenames.end() && !filenameref; ++file)
+      {
+      const char *filename = file->c_str();
+      const char * value = GetValue(filename, t);
+      if( value && strcmp(value, valueref ) == 0 )
+        {
+        filenameref = filename;
+        }
+      }
+    }
+  return filenameref;
+}
+
+Scanner::TagToValue const & Scanner::GetMappingFromTagToValue(Tag const &t, const char *valueref) const
+{
+  return GetMapping( GetFilenameFromTagToValue(t, valueref) );
 }
 
 Scanner::ValuesType Scanner::GetValues(Tag const &t) const

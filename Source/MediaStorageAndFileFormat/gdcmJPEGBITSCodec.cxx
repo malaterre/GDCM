@@ -489,7 +489,7 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     }
   else
     {
-    abort(); // TODO
+    assert(0); // TODO
     }
 
   // Pixel density stuff:
@@ -553,7 +553,7 @@ UINT16 Y_density
         }
       break;
     default:
-      abort();
+      assert(0);
       return false;
       }
     //assert( cinfo.data_precision == BITS_IN_JSAMPLE );
@@ -800,7 +800,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
           }
       break;
     default:
-      abort();
+      assert(0);
       return false;
       }
     //assert( cinfo.data_precision == BITS_IN_JSAMPLE );

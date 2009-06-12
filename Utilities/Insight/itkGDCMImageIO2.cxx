@@ -207,11 +207,11 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     m_ComponentType = ImageIOBase::UCHAR;
     break;
   case gdcm::PixelFormat::INT12:
-    abort();
+    assert(0);
     m_ComponentType = ImageIOBase::SHORT;
     break;
   case gdcm::PixelFormat::UINT12:
-    abort();
+    assert(0);
     m_ComponentType = ImageIOBase::USHORT;
     break;
   case gdcm::PixelFormat::INT16:

@@ -27,7 +27,7 @@ void std_print_header(rle_compressed_frame * frame)
 
 int write_RLE_file(const char *filename)
 {
-  abort();
+  assert(0);
   return 0;
 }
 
@@ -39,7 +39,7 @@ int fill_input_buffer(rle_decompressed_frame * frame)
 
 int read_RLE_file(const char *filename)
 {
-  abort();
+  assert(0);
   return 1;
 }
 

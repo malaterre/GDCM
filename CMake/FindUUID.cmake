@@ -14,11 +14,6 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
-/usr/local/include
-/usr/include
-)
-
 # On MacOSX we have:
 # $ nm -g /usr/lib/libSystem.dylib | grep uuid_generate
 # 000b3aeb T _uuid_generate
@@ -35,6 +30,14 @@ FIND_LIBRARY(UUID_LIBRARY
   NAMES ${UUID_LIBRARY_VAR}
   PATHS /lib /usr/lib /usr/local/lib
   )
+
+# Must be *after* the lib itself
+SET(CMAKE_FIND_FRAMEWORK NEVER)
+
+FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
+/usr/local/include
+/usr/include
+)
 
 IF (UUID_LIBRARY AND UUID_INCLUDE_DIR)
   SET(UUID_LIBRARIES ${UUID_LIBRARY})

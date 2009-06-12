@@ -31,6 +31,21 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/TestsList.txt
     @ONLY
   )
+  IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+    SET(GDCM_DOC_PDF_LINK
+      "http://gdcm.sourceforge.net/${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}/gdcm-${GDCM_VERSION}.pdf"
+    )
+    SET(GDCM_DOC_TARBALL_LINK 
+      "http://gdcm.sourceforge.net/${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}/gdcm-${GDCM_VERSION}-doc.tar.gz"
+    )
+  ELSE(GDCM_MINOR_VERSION MATCHES "[02468]$")
+    SET(GDCM_DOC_PDF_LINK
+      "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}.pdf"
+    )
+    SET(GDCM_DOC_TARBALL_LINK 
+      "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}-doc.tar.gz"
+    )
+  ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
   CONFIGURE_FILE(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/README.txt.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
@@ -124,6 +139,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcm2vtk.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmconv.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmanon.html
+  #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmgendir.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmdump.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmimg.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcminfo.html
@@ -138,6 +154,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1

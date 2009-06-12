@@ -468,7 +468,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
     if( res )
       {
       std::cerr << "Unable to start a new thread, pthread returned: " << res << std::endl;
-      abort();
+      assert(0);
       }
     }
 // DEBUG

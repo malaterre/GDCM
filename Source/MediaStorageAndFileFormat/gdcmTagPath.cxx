@@ -128,7 +128,7 @@ bool TagPath::ConstructFromString(const char *path)
       }
     ++flip;
     if( pos != len && path[pos] == '/' ) ++pos;
-    //else abort();
+    //else assert(0);
     }
   return true;
 }

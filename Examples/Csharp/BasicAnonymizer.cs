@@ -21,6 +21,48 @@
 using System;
 using gdcm;
 
+public class MyWatcher : SimpleSubjectWatcher
+{
+  public MyWatcher(Subject s):base(s,"Override String"){}
+  protected override void StartFilter() {
+    System.Console.WriteLine( "This is my start" );
+  }
+  protected override void EndFilter(){
+    System.Console.WriteLine( "This is my end" );
+  }
+  protected override void ShowProgress(){
+    System.Console.WriteLine( "This is my progress" );
+  }
+  protected override void ShowIteration(){
+    System.Console.WriteLine( "This is my iteration" );
+  }
+  protected override void ShowAnonymization(Subject caller, Event evt){
+/*
+ * A couple of explanation are necessary here to understand how SWIG work
+ *  http://www.swig.org/Doc1.3/Java.html#adding_downcasts
+ *
+ *  System.Console.WriteLine( "This is my Anonymization. Type: " + evt.GetEventName() );
+ *  System.Type type = evt.GetType();
+ *  System.Console.WriteLine( "This is my Anonymization. System.Type: " + type.ToString() );
+ *  System.Console.WriteLine( "This is my Anonymization. CheckEvent: " + ae.CheckEvent( evt ) );
+ *  System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + ae.GetTag().toString() );
+ */
+    AnonymizeEvent ae = AnonymizeEvent.Cast(evt);
+    if( ae != null )
+      {
+      Tag t = ae.GetTag();
+      System.Console.WriteLine( "This is my Anonymization. Processing Tag #" + t.toString() );
+      }
+    else
+      {
+      System.Console.WriteLine( "This is my Anonymization. Unhandled Event type: " + evt.GetEventName() );
+      }
+  }
+  protected override void ShowAbort(){
+    System.Console.WriteLine( "This is my abort" );
+  }
+}
+
 public class BasicAnonymizer
 {
   public static int Main(string[] args)
@@ -49,7 +91,13 @@ public class BasicAnonymizer
       return 1;
       }
 
-    Anonymizer ano = new Anonymizer();
+    //Anonymizer ano = new Anonymizer();
+    SmartPtrAno sano = Anonymizer.New();
+    Anonymizer ano = sano.__ref__();
+
+    //SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(ano, "Anonymizer");
+    MyWatcher watcher = new MyWatcher(ano);
+
     ano.SetFile( reader.GetFile() );
     ano.SetCryptographicMessageSyntax( cms );
     if( !ano.BasicApplicationLevelConfidentialityProfile() )

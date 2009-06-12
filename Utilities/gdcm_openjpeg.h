@@ -19,8 +19,18 @@
 #include "gdcmTypes.h"
 #ifdef GDCM_USE_SYSTEM_OPENJPEG
 #include <openjpeg.h>
-#include <j2k.h>
-#include <jp2.h>
+// MM:
+// See openjpeg issue #3:
+// http://code.google.com/p/openjpeg/issues/detail?id=3
+//#include <j2k.h>
+//#include <jp2.h>
+
+// Instead duplicate header (I know this is bad)
+extern "C" {
+#include "gdcm_j2k.h"
+#include "gdcm_jp2.h"
+}
+
 #else
 extern "C" {
 #include <gdcmopenjpeg/libopenjpeg/openjpeg.h>

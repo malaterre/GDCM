@@ -74,13 +74,13 @@ inline unsigned short *vtkLinearLookup16(double v,
 
 void vtkLookupTableLogRange16(double range[2], double logRange[2])
 {
-abort();
+assert(0);
 }
 
 inline double vtkApplyLogScale16(double v, double range[2], 
                                double logRange[2])
 {
-abort();
+assert(0);
  return 0;
 }
 
@@ -366,7 +366,7 @@ void vtkLookupTable16::MapScalarsThroughTable2(void *input,
 {
   if (this->UseMagnitude && inputIncrement > 1)
     {
-abort();
+assert(0);
 //    switch (inputDataType)
 //      {
 //      vtkTemplateMacro(
@@ -386,7 +386,7 @@ abort();
     {
     case VTK_BIT:
       {
-abort();
+assert(0);
       //vtkIdType i, id;
       //vtkBitArray *bitArray = vtkBitArray::New();
       //bitArray->SetVoidArray(input,numberOfValues,1);

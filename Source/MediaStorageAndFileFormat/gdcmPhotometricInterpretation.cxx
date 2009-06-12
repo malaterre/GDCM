@@ -100,7 +100,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
       return PIType(i);
       }
     }
-  //abort();
+  //assert(0);
   return PI_END;
 }
 

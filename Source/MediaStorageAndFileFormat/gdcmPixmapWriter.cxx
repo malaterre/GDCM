@@ -273,7 +273,7 @@ bool PixmapWriter::PrepareWrite()
   // FIXME HACK !
   if( pf.GetBitsAllocated() == 24 )
     {
-    abort();
+    assert(0);
     pi = PhotometricInterpretation::RGB;
     pf.SetBitsAllocated( 8 );
     pf.SetBitsStored( 8 );

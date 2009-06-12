@@ -24,19 +24,19 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
   if( cinfo->header->num_segments > 16 || cinfo->header->num_segments < 1 )
     {
     /* Need to throw something here*/
-      abort();
+      assert(0);
     }
   if( cinfo->header->offset[0] != 64 )
     {
     /* Need to throw something here*/
-      abort();
+      assert(0);
     }
   for(i=1; i < cinfo->header->num_segments; ++i)
     {
     if( cinfo->header->offset[i-1] > cinfo->header->offset[i] )
       {
       /* Need to throw something here*/
-      abort();
+      assert(0);
       }
     }
   for(i=cinfo->header->num_segments; i < 16; ++i)
@@ -44,7 +44,7 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
     if( cinfo->header->offset[i] != 0 )
       {
       /* Need to throw something here*/
-      /*abort();*/
+      /*assert(0);*/
       fprintf(stderr, "Impossible : %d for offset # %d\n", cinfo->header->offset[i], i );
       }
     }

@@ -17,6 +17,7 @@
 #define __gdcmPreamble_h
 
 #include "gdcmTypes.h"
+#include "gdcmVL.h"
 
 namespace gdcm
 {
@@ -51,6 +52,8 @@ public:
   const char *GetInternal() const { return Internal; }
 
   bool IsEmpty() const { return !Internal; }
+
+  VL GetLength() const { return 128 + 4; }
 
   Preamble(Preamble const &preamble)
     {

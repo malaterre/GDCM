@@ -100,7 +100,7 @@ int TestUnpacker12Bits(int, char *[])
     {
     if( values[i] != ref[i] )
       {
-      abort();
+      assert(0);
       ++res;
       }
     }

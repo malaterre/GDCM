@@ -206,7 +206,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
     {
-    gdcmWarningMacro( "ValueLengthField was bogus" ); abort();
+    gdcmWarningMacro( "ValueLengthField was bogus" ); assert(0);
     ValueLengthField = dummy;
     }
 #else

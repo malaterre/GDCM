@@ -40,7 +40,7 @@ unsigned short PixelFormat::GetSamplesPerPixel() const
   if ( BitsAllocated == 24 )
     {
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
-    abort();
+    assert(0);
     return 3;
     }
   // \postcondition
@@ -105,7 +105,7 @@ void PixelFormat::SetScalarType(ScalarType st)
     PixelRepresentation = 0;
     break;
   default:
-    abort();
+    assert(0);
     break;
     }
   BitsStored = BitsAllocated;
@@ -138,13 +138,13 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
   case 24:
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
     type = PixelFormat::UINT8;
-    abort();
+    assert(0);
     break;
   default:
     gdcmErrorMacro( "I have never seen this before BitsAllocated "
       << BitsAllocated );
     type = PixelFormat::UNKNOWN;
-    //abort();
+    //assert(0);
     }
   if( PixelRepresentation == 0 )
     {
@@ -173,7 +173,7 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
     }
   else
     {
-    abort();
+    assert(0);
     }
   return type;
 }

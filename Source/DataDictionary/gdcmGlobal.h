@@ -92,6 +92,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const Global &g)
 {
+  (void)g;
   return os;
 }
 

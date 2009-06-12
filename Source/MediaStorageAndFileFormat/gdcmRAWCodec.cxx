@@ -60,7 +60,7 @@ bool RAWCodec::CanDecode(TransferSyntax const &ts) const
 bool RAWCodec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
-  //abort();
+  //assert(0);
   return true;
 }
 

@@ -202,7 +202,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
         //if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
         if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
           {
-          abort();
+          assert(0);
           }
         }
       catch( std::exception &ex)
@@ -294,7 +294,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
       break;
     default:
-      abort();
+      assert(0);
       }
     }
   if( failed )
@@ -342,7 +342,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
-    abort();
+    assert(0);
     assert( ValueField == 0 );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ValueLengthField != 0 )
@@ -478,7 +478,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
           failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Write(os,*ValueField);
           break;
         default:
-          abort();
+          assert(0);
           }
         }
       if( failed )

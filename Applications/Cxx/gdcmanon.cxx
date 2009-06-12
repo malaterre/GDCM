@@ -262,6 +262,7 @@ int main(int argc, char *argv[])
   int error = 0;
   int help = 0;
   int version = 0;
+  int recursive = 0;
   int empty_tag = 0;
   int remove_tag = 0;
   int replace_tag = 0;
@@ -287,6 +288,7 @@ int main(int argc, char *argv[])
         {"aes128", 0, &aes128, 1},
         {"aes192", 0, &aes192, 1},
         {"aes256", 0, &aes256, 1},
+        {"recursive", 0, &recursive, 1},
         {"dumb", 0, &dumb_mode, 1},
         {"empty", 1, &empty_tag, 1}, // 15
         {"remove", 1, &remove_tag, 1},
@@ -395,6 +397,10 @@ int main(int argc, char *argv[])
     case 'o':
       assert( outfilename.empty() );
       outfilename = optarg;
+      break;
+
+    case 'r':
+      recursive = 1;
       break;
 
     case 'k': // key
@@ -553,7 +559,6 @@ int main(int argc, char *argv[])
   // Are we in single file or directory mode:
   unsigned int nfiles = 1;
   gdcm::Directory dir;
-  bool recursive = false; //true;
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     if( !gdcm::System::FileIsDirectory(outfilename.c_str()) )

@@ -63,6 +63,21 @@ const char *Filename::GetName()
   return &FileName[0];
 }
 
+const char *Filename::ToWindowsSlashes()
+{
+  Conversion = FileName;
+  assert( !Conversion.empty() );
+  for (std::string::iterator it = Conversion.begin(); it != Conversion.end(); ++it )
+    {
+    if( *it == '/' )
+      {
+      *it = '\\';
+      }
+    }
+
+  return Conversion.c_str();
+}
+
 // convert windows slashes to unix slashes 
 const char *Filename::ToUnixSlashes()
 {
@@ -71,13 +86,13 @@ const char *Filename::ToUnixSlashes()
   //assert( s == std::string::npos );
   assert( !Conversion.empty() );
   for (std::string::iterator it = Conversion.begin(); it != Conversion.end(); ++it )
-  {
-	  if( *it == '\\' )
-	  {
-		  assert( it+1 != Conversion.end() && *(it+1) != ' ' ); // is it an escaped space ?
-		  *it = '/';
-	  }
-  }
+    {
+    if( *it == '\\' )
+      {
+      assert( it+1 != Conversion.end() && *(it+1) != ' ' ); // is it an escaped space ?
+      *it = '/';
+      }
+    }
 
   return Conversion.c_str();
 }

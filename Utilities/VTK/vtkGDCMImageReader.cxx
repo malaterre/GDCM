@@ -874,7 +874,7 @@ void InPlaceYFlipImage(vtkImageData* data)
 #endif
     default:
       //vtkErrorMacro("do not support scalar type: " << data->GetScalarType() );
-      abort();
+      assert(0);
     }
   outsize *= (dext[1] - dext[0] + 1);
   char * ref = static_cast<char*>(data->GetScalarPointer());

@@ -82,7 +82,7 @@ if( DS.IsEmpty() )
     }
   catch( std::exception &ex)
     {
-    abort();
+    assert(0);
     // File such as PICKER-16-MONO2-No_DicomV3_Preamble.dcm
     // are a pain to rewrite since the metaheader was declared as implicit
     // we have to do a look up the in the dictionary to find out VR for those element

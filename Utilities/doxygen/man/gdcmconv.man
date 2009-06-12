@@ -38,6 +38,7 @@ file-out  DICOM output filename
      --root-uid            Root UID.
      --remove-gl           Remove group length (deprecated in DICOM 2008).
      --remove-private-tags Remove private tags.
+     --remove-retired      Remove retired tags.
 \endverbatim
 
 \subsection image_options image options
@@ -103,11 +104,37 @@ file-out  DICOM output filename
 \endverbatim
 
 \section usage Typical usage
-\subsection jpeg Compressing to JPEG
+\subsection lossless_jpeg Compressing to lossless JPEG
 
 \verbatim
 $ gdcmconv --jpeg uncompressed.dcm compressed.dcm
 \endverbatim
+
+\subsection lossy_jpeg Compressing to lossy JPEG
+
+\verbatim
+$ gdcmconv --lossy --jpeg -q 90 uncompressed.dcm compressed.dcm
+\endverbatim
+
+Note:
+
+    * -q is just one of the many way to specify lossy quality, you need to inspect the other cmd line flag to specify lossyness properties. 
+
+\subsection lossless_jpegls Compressing to lossless JPEG-LS
+
+\verbatim
+$ gdcmconv --jpegls uncompressed.dcm compressed.dcm
+\endverbatim
+
+\subsection lossy_jpegls Compressing to lossy JPEG-LS
+
+\verbatim
+$ gdcmconv --lossy --jpegls -e 2 uncompressed.dcm lossy_compressed.dcm
+\endverbatim
+
+Note:
+
+  -e (or --lossy-error) means that the maximum tolerate error is 2 for each pixel value
 
 \subsection lossless_j2k Compressing to lossless J2K
 

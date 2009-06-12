@@ -186,7 +186,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 void JPEGCodec::ComputeOffsetTable(bool b)
 {
   // Not implemented 
-  abort();
+  assert(0);
 }
 
 bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
@@ -202,7 +202,7 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         " but JPEG header says it's: " << Internal->BitSample );
       if( this->BitSample < Internal->BitSample )
         {
-        //abort(); // Outside buffer will be too small
+        //assert(0); // Outside buffer will be too small
         }
       this->BitSample = Internal->BitSample; // Store the value found before destroying Internal
       delete Internal; Internal = 0; // Do not attempt to reuse the pointer
@@ -219,7 +219,7 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         Internal = new JPEG16Codec;
         break;
       default:
-        abort();
+        assert(0);
         }
       if( Internal->GetHeaderInfo(is, ts) )
         {
@@ -233,7 +233,7 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         }
       else
         {
-        abort(); // FATAL ERROR
+        assert(0); // FATAL ERROR
         }
       }
     return false;
@@ -316,7 +316,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         " but JPEG header says it's: " << Internal->BitSample );
       if( this->BitSample < Internal->BitSample )
         {
-        //abort(); // Outside buffer will be too small
+        //assert(0); // Outside buffer will be too small
         }
       this->BitSample = Internal->BitSample; // Store the value found before destroying Internal
       delete Internal; Internal = 0; // Do not attempt to reuse the pointer
@@ -333,7 +333,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         Internal = new JPEG16Codec;
         break;
       default:
-        abort();
+        assert(0);
         }
       Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaning less ?
       Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
@@ -343,7 +343,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         }
       else
         {
-        abort(); // FATAL ERROR
+        assert(0); // FATAL ERROR
         }
       }
 #endif

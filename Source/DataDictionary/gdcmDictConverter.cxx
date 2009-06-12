@@ -154,7 +154,7 @@ void DictConverter::Convert()
           }
         }
       else
-        abort();
+        assert(0);
       }
     else if ( line[7] == 'x' && line[8] == 'x' )
       {
@@ -180,7 +180,7 @@ void DictConverter::Convert()
           }
         }
       else
-        abort();
+        assert(0);
       }
     else
       {

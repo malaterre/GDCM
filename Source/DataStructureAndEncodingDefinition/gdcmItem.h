@@ -172,7 +172,7 @@ public:
           }
         catch(...)
           {
-          abort();
+          assert(0);
           }
         }
       else /* if( ValueLengthField.IsUndefined() ) */

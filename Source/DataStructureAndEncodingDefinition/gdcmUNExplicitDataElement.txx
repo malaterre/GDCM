@@ -156,7 +156,7 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
         //if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
         if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
           {
-          abort();
+          assert(0);
           }
         }
       catch( std::exception &ex)
@@ -196,7 +196,7 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
     //we really need to read item marker
   )
     {
-    abort(); // Could we possibly be so unlucky to have this mixture of bugs...
+    assert(0); // Could we possibly be so unlucky to have this mixture of bugs...
     }
 
   if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField) )

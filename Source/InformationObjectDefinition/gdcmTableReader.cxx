@@ -114,7 +114,7 @@ void TableReader::HandleMacroEntry(const char **atts)
       }
     else
       {
-      abort();
+      assert(0);
       }
     ++current;
     ++current;
@@ -162,7 +162,7 @@ void TableReader::HandleModuleEntry(const char **atts)
       }
     else
       {
-      abort();
+      assert(0);
       }
     ++current;
     ++current;
@@ -204,7 +204,7 @@ void TableReader::HandleIODEntry(const char **atts)
       }
     else
       {
-      abort();
+      assert(0);
       }
     ++current;
     ++current;
@@ -244,7 +244,7 @@ void TableReader::HandleModule(const char **atts)
       }
     else
       {
-      abort();
+      assert(0);
       }
     ++current;
     ++current;
@@ -308,7 +308,7 @@ void TableReader::StartElement(const char *name, const char **atts)
       }
     else /*if( ParsingIODoEntry )*/
       {
-      abort();
+      assert(0);
       }
     }
   else if( strcmp(name, "section" ) == 0 )
@@ -349,7 +349,7 @@ void TableReader::StartElement(const char *name, const char **atts)
     }
   else
     {
-    abort();
+    assert(0);
     }
 }
 
@@ -420,7 +420,7 @@ void TableReader::EndElement(const char *name)
       }
     else
       {
-      abort();
+      assert(0);
       }
     }
   else if( strcmp(name, "mapping" ) == 0 )
@@ -465,12 +465,12 @@ void TableReader::EndElement(const char *name)
       }
     else
       {
-      abort();
+      assert(0);
       }
     }
   else
     {
-    abort();
+    assert(0);
     }
 }
 
@@ -490,7 +490,7 @@ void TableReader::CharacterDataHandler(const char *data, int length)
     }
   else
     {
-    //abort();
+    //assert(0);
     }
 }
 
