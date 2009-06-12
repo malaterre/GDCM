@@ -133,7 +133,7 @@ public class ClinicalTrialIdentificationWorkflow
       }
 
     gdcm.FileMetaInformation fmi = ano.GetFile().GetHeader();
-    // The following two lines make sure to regenerate any value:
+    // The following three lines make sure to regenerate any value:
     fmi.Remove( new gdcm.Tag(0x0002,0x0012) );
     fmi.Remove( new gdcm.Tag(0x0002,0x0013) );
     fmi.Remove( new gdcm.Tag(0x0002,0x0016) );

@@ -14,6 +14,7 @@ SET(CSHARP_EXAMPLES
   NewSequence
   GenerateDICOMDIR
   ClinicalTrialIdentificationWorkflow
+  StandardizeFiles
   )
 
 IF(BUILD_TESTING)

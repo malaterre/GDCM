@@ -18,7 +18,7 @@
  *
  * Usage: 
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/GenerateDICOMDIR.exe path
+ * $ mono bin/GenerateDICOMDIR.exe path output_filename
  */
 using System;
 using gdcm;
