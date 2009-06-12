@@ -3,7 +3,6 @@
 
 SET(CSHARP_EXAMPLES
   ManipulateFile
-  BasicAnonymizer
   ExtractEncapsulatedFile
   DecompressImage
   DecompressImageMultiframe
