@@ -23,6 +23,13 @@ namespace gdcm
 class FileDerivationInternals;
 /**
  * \brief FileDerivation class
+ * See PS 3.16 - 2008 For the list of Code Value that can be used for in Derivation Code Sequence
+ *
+ * URL: medical.nema.org/medical/dicom/2008/08_16pu.pdf
+ * DICOM Part 16 has two Context Groups CID 7202 and CID 7203 which contain a set of codes defining
+ * reason for a source image reference (ie. reason code for referenced image sequence) and a coded 
+ * description of the deriation applied to the new image data from the original. Both these context 
+ * groups are extensible.
  */
 class GDCM_EXPORT FileDerivation
 {
@@ -41,7 +48,6 @@ public:
   void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
 
-
 protected:
   bool AddDerivationDescription();
   bool AddSourceImageSequence();
@@ -50,6 +56,11 @@ private:
   SmartPointer<File> F;
   FileDerivationInternals *Internals;
 };
+
+/**
+ * \example GenFakeImage.cxx
+ * This is a C++ example on how to use gdcm::FileDerivation
+ */
 
 
 } // end namespace gdcm

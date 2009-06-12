@@ -110,15 +110,70 @@ DICOM Code Definitions (Coding Scheme Designator ¿DCM¿ Coding Scheme Version ¿01
 
 struct CodeDefinition
 {
+const char *CodingSchemeDesignator;
 unsigned int CodeValue;
 const char *CodeMeaning;
-const char *Definition;
-const char *Notes;
 };
 
-static const CodeDefinition CodeDefinitions[] = {
- { 113072, "Multiplanar reformatting", "The image is derived by reformatting in a flat plane other than that originally acquired.", NULL },
- { 0, NULL, NULL, NULL }
+// CID 7202 Source Image Purposes of Reference
+static const CodeDefinition SourceImagePurposesofReference[] = {
+{"DCM",121320,"Uncompressed predecessor"},
+{"DCM",121321,"Mask image for image processing operation"},
+{"DCM",121322,"Source image for image processing operation"},
+{"DCM",121329,"Source image for montage"},
+{"DCM",121330,"Lossy compressed predecessor"},
+{NULL,0,NULL} // sentinel
+};
+
+// CID 7203 Image Derivation
+static const CodeDefinition ImageDerivation[] = {
+{ "DCM",113040,"Lossy Compression" },
+{ "DCM",113041,"Apparent Diffusion Coefficient" },
+{ "DCM",113042,"Pixel by pixel addition" },
+{ "DCM",113043,"Diffusion weighted" },
+{ "DCM",113044,"Diffusion Anisotropy" },
+{ "DCM",113045,"Diffusion Attenuated" },
+{ "DCM",113046,"Pixel by pixel division" },
+{ "DCM",113047,"Pixel by pixel mask" },
+{ "DCM",113048,"Pixel by pixel Maximum" },
+{ "DCM",113049,"Pixel by pixel mean" },
+{ "DCM",113050,"Metabolite Maps from spectroscopy data" },
+{ "DCM",113051,"Pixel by pixel Minimum" },
+{ "DCM",113052,"Mean Transit Time" },
+{ "DCM",113053,"Pixel by pixel multiplication" },
+{ "DCM",113054,"Negative Enhancement Integral" },
+{ "DCM",113055,"Regional Cerebral Blood Flow" },
+{ "DCM",113056,"Regional Cerebral Blood Volume" },
+{ "DCM",113057,"R-Coefficient Map" },
+{ "DCM",113058,"Proton Density map" },
+{ "DCM",113059,"Signal Change Map" },
+{ "DCM",113060,"Signal to Noise Map" },
+{ "DCM",113061,"Standard Deviation" },
+{ "DCM",113062,"Pixel by pixel subtraction" },
+{ "DCM",113063,"T1 Map" },
+{ "DCM",113064,"T2* Map" },
+{ "DCM",113065,"T2 Map" },
+{ "DCM",113066,"Time Course of Signal" },
+{ "DCM",113067,"Temperature encoded" },
+{ "DCM",113068,"Student's T-Test" },
+{ "DCM",113069,"Time To Peak map" },
+{ "DCM",113070,"Velocity encoded" },
+{ "DCM",113071,"Z-Score Map" },
+{ "DCM",113072,"Multiplanar reformatting" },
+{ "DCM",113073,"Curved multiplanar reformatting" },
+{ "DCM",113074,"Volume rendering" },
+{ "DCM",113075,"Surface rendering" },
+{ "DCM",113076,"Segmentation" },
+{ "DCM",113077,"Volume editing" },
+{ "DCM",113078,"Maximum intensity projection" },
+{ "DCM",113079,"Minimum intensity projection" },
+{ "DCM",113085,"Spatial resampling" },
+{ "DCM",113086,"Edge enhancement" },
+{ "DCM",113087,"Smoothing" },
+{ "DCM",113088,"Gaussian blur" },
+{ "DCM",113089,"Unsharp mask" },
+{ "DCM",113090,"Image stitching" },
+{NULL,0,NULL} // sentinel
 };
 
 class FileDerivationInternals
@@ -139,7 +194,7 @@ FileDerivation::~FileDerivation()
 
 const CodeDefinition * GetCodeDefinition( unsigned int codevalue )
 {
-  const CodeDefinition * cds = CodeDefinitions;
+  const CodeDefinition * cds = ImageDerivation;
   while( cds->CodeMeaning && cds->CodeValue != codevalue )
     {
     ++cds;

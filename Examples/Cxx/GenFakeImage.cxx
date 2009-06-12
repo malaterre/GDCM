@@ -78,6 +78,7 @@ int main(int, char *[])
   gdcm::FileDerivation fd;
   fd.AddReference( ReferencedSOPClassUID, uid.Generate() );
   fd.AddReference( ReferencedSOPClassUID, uid.Generate() );
+  // { "DCM",113072,"Multiplanar reformatting" },
   fd.SetDerivationCodeSequenceCodeValue( 113072 );
   fd.SetFile( w.GetFile() );
   if( !fd.Derive() )
