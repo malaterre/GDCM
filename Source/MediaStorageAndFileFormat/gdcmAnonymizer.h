@@ -16,9 +16,14 @@
 #define __gdcmAnonymizer_h
 
 #include "gdcmFile.h"
+#include "gdcmSubject.h"
+#include "gdcmEvent.h"
+#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
+class TagPath;
+
 /**
  * \brief Anonymizer
  * This class is a multi purpose anonymizer. It can work in 2 mode:
@@ -51,20 +56,26 @@ namespace gdcm
  * (compared to md5sum) so that we meet the following two conditions:
  *  - Produce the same dummy value for the same input value
  *  - do not provide an easy way to retrieve the original value from the sha1 generated value
+ *
+ * \see CryptographicMessageSyntax
  */
 class CryptographicMessageSyntax;
-class GDCM_EXPORT Anonymizer
+class GDCM_EXPORT Anonymizer : public Subject
 {
 public:
-  Anonymizer():F(new File),/*AESKey(),*/CMS(NULL) {}
+  Anonymizer():F(new File),CMS(NULL) {}
   ~Anonymizer();
 
   /// Make Tag t empty (if not found tag will be created)
   /// Warning: does not handle SQ element
   bool Empty( Tag const &t );
+  //bool Empty( PrivateTag const &t );
+  //bool Empty( TagPath const &t );
 
   /// remove a tag (even a SQ can be removed)
   bool Remove( Tag const &t );
+  //bool Remove( PrivateTag const &t );
+  //bool Remove( TagPath const &t );
 
   /// Replace tag with another value, if tag is not found it will be created:
   /// WARNING: this function can only execute if tag is a VRASCII
@@ -73,6 +84,8 @@ public:
   /// when the value contains \0, it is a good idea to specify the length. This function
   /// is required when dealing with VRBINARY tag
   bool Replace( Tag const &t, const char *value, VL const & vl );
+  //bool Replace( PrivateTag const &t, const char *value, VL const & vl );
+  //bool Replace( TagPath const &t, const char *value, VL const & vl );
 
   /// Main function that loop over all elements and remove private tags
   bool RemovePrivateTags();
@@ -97,13 +110,12 @@ public:
   /// NOT THREAD SAFE
   bool BasicApplicationLevelConfidentialityProfile(bool deidentify = true);
 
-  /// Set/Get AES key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
-  /// Warning: set is done by copy (not reference)
-  //void SetAESKey(AES const &aes);
-  //const AES &GetAESKey() const;
-
+  /// Set/Get CMS key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
   void SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms );
   const CryptographicMessageSyntax *GetCryptographicMessageSyntax() const;
+
+  /// for wrapped language: instanciate a reference counted object
+  static SmartPointer<Anonymizer> New() { return new Anonymizer; }
 
 protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
@@ -118,12 +130,12 @@ private:
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
   SmartPointer<File> F;
-  //AES AESKey;
   CryptographicMessageSyntax *CMS;
 };
 
 /**
  * \example ManipulateFile.cs
+ * \example ClinicalTrialIdentificationWorkflow.cs
  * This is a C# example on how to use gdcm::Anonymizer
  */
 

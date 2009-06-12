@@ -13,16 +13,27 @@
 
 =========================================================================*/
 // See docs:
-// http://www.swig.org/Doc1.3/Python.html
+// http://www.swig.org/Doc1.3/Java.html
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
-// http://www.geocities.com/foetsch/python/extending_python.htm
 
-%module(docstring="A DICOM library") gdcm
+%module(docstring="A DICOM library",directors=1) gdcm
 #pragma SWIG nowarn=504,510
+
+// There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
+// I need to redefine it myself... seems to be solved in later revision
+#if defined(SWIGJAVA)
+%{
+#define SWIGJAVA
+%}
+#endif
+
 %{
 #include "gdcmTypes.h"
+#include "gdcmASN1.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
+#include "gdcmEvent.h"
+#include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
 #include "gdcmObject.h"
@@ -41,6 +52,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmDataSet.h"
 //#include "gdcmString.h"
+//#include "gdcmCodeString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
@@ -75,6 +87,8 @@
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
+#include "gdcmSubject.h"
+#include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
@@ -136,8 +150,25 @@
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmSimpleSubjectWatcher.h"
+#include "gdcmDICOMDIRGenerator.h"
+#include "gdcmFileDerivation.h"
 
 using namespace gdcm;
+%}
+
+
+// http://www.swig.org/Doc1.3/Java.html#imclass_pragmas
+
+%pragma(java) jniclasscode=%{
+ static {
+   try {
+       System.loadLibrary("gdcmjni");
+   } catch (UnsatisfiedLinkError e) {
+     System.err.println("Native code library failed to load. \n" + e);
+     System.exit(1);
+   }
+ }
 %}
 
 // swig need to know what are uint16_t, uint8_t...
@@ -179,6 +210,11 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 //%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
 #define GDCM_EXPORT
 %include "gdcmSwapCode.h"
+
+//%feature("director") Event;
+//%feature("director") AnyEvent;
+%include "gdcmEvent.h"
+
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
 %include "gdcmMediaStorage.h"
@@ -189,6 +225,15 @@ EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
+
+//%feature("director") AnonymizeEvent;
+%include "gdcmAnonymizeEvent.h"
+%extend gdcm::AnonymizeEvent {
+  static AnonymizeEvent *Cast(Event *event) {
+    return dynamic_cast<AnonymizeEvent*>(event);
+  }
+};
+
 %include "gdcmVL.h"
 EXTEND_CLASS_PRINT(gdcm::VL)
 %include "gdcmVR.h"
@@ -243,6 +288,7 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 
 %apply char[] { const char* array }
 
+%include "gdcmASN1.h"
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
@@ -301,17 +347,18 @@ EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
 EXTEND_CLASS_PRINT(gdcm::Overlay)
-//%include "gdcmVL.h"
-//%rename(DataElementSetPython) std::set<DataElement, lttag>;
-//%rename(DataElementSetPython2) DataSet::DataElementSet;
+//%include "gdcmVR.h"
 //%template (DataElementSet) std::set<gdcm::DataElement>;
-//%rename (SetString2) gdcm::DataElementSet;
 %include "gdcmPreamble.h"
 EXTEND_CLASS_PRINT(gdcm::Preamble)
 %include "gdcmTransferSyntax.h"
 EXTEND_CLASS_PRINT(gdcm::TransferSyntax)
 %include "gdcmFileMetaInformation.h"
 EXTEND_CLASS_PRINT(gdcm::FileMetaInformation)
+
+//%template(File) gdcm::SmartPointer<gdcm::File>;
+//%ignore gdcm::File;
+
 %include "gdcmFile.h"
 EXTEND_CLASS_PRINT(gdcm::File)
 //%include "gdcm_arrays_csharp.i"
@@ -425,11 +472,24 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
+%include "gdcmSubject.h"
+%include "gdcmCommand.h"
+%template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
+//%ignore gdcm::Anonymizer::Anonymizer;
+
+
+//%template(Anonymizer) gdcm::SmartPointer<gdcm::Anonymizer>;
+//
+//%ignore gdcm::Anonymizer;
+//%feature("unref") Anonymizer "coucou $this->Delete();"
+// http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+
+
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 
 // System is a namespace in C#, need to rename to something different
-%rename (PosixEmulation) System; 
+%rename (PosixEmulation) System;
 %include "gdcmSystem.h"
 //EXTEND_CLASS_PRINT(gdcm::System)
 
@@ -500,6 +560,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
   }
 };
 #endif
+//%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
 %include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
@@ -520,4 +581,9 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+
+%feature("director") SimpleSubjectWatcher;
+%include "gdcmSimpleSubjectWatcher.h"
+%include "gdcmDICOMDIRGenerator.h"
+%include "gdcmFileDerivation.h"
 

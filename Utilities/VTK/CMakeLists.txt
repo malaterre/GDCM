@@ -6,8 +6,10 @@ MARK_AS_ADVANCED(VTK_DIR)
 
 # Define the src for the vtk-gdcm bridge
 SET(vtkgdcm_SRCS
+  vtkGDCMTesting.cxx
   vtkGDCMImageReader.cxx
   vtkGDCMImageWriter.cxx
+  vtkGDCMMedicalImageProperties.cxx
   )
 
 IF(CMAKE_HAVE_PTHREAD_H)
@@ -140,37 +142,37 @@ IF(GDCM_WRAP_CSHARP)
   FIND_PACKAGE(SWIG REQUIRED)
   MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
   INCLUDE(${SWIG_USE_FILE})
-  SET_SOURCE_FILES_PROPERTIES(vtkgdcmswig.i PROPERTIES CPLUSPLUS ON)
-  #SET_SOURCE_FILES_PROPERTIES(vtkgdcmswig.i PROPERTIES COMPILE_FLAGS -DUSEACTIVIZ)
+  SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
+  #SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES COMPILE_FLAGS -DUSEACTIVIZ)
   IF(GDCM_USE_ACTIVIZ)
   SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -DUSEACTIVIZ")
   ELSE(GDCM_USE_ACTIVIZ)
   SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm")
   ENDIF(GDCM_USE_ACTIVIZ)
   SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
-  SWIG_ADD_MODULE(vtkgdcmswig csharp vtkgdcmswig.i)
-  SWIG_LINK_LIBRARIES(vtkgdcmswig vtkgdcm)
+  SWIG_ADD_MODULE(vtkgdcmsharpglue csharp vtkgdcm.i)
+  SWIG_LINK_LIBRARIES(vtkgdcmsharpglue vtkgdcm)
   # Stupid cmake-swig module is doing that for us, when not needed
   IF(UNIX)
-    SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmswig_REAL_NAME} PROPERTIES PREFIX "lib")
+    SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
   ENDIF(UNIX)
 
-#IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-#  INSTALL(TARGETS ${SWIG_MODULE_gdcm_REAL_NAME}
-#    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
-#    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
-#    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
-#  )
-#ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
+    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+  )
+ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
   CONFIGURE_FILE(
     ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     @ONLY)
   IF(GDCM_USE_ACTIVIZ)
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
+    OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -178,9 +180,9 @@ IF(GDCM_WRAP_CSHARP)
   )
   ELSE(GDCM_USE_ACTIVIZ)
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll" "*.cs" 
+    OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -189,16 +191,26 @@ IF(GDCM_WRAP_CSHARP)
 
   ENDIF(GDCM_USE_ACTIVIZ)
 
+  ADD_CUSTOM_COMMAND(
+    OUTPUT  ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config
+    COMMENT "Copying vtkgdcm-sharp.dll.config"
+  )
+
 ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
   DEPENDS 
-    ${GDCM_LIBRARY_DIR}/vtkgdcmswig_csharp.dll
+    ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
+    ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
     #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
-  COMMENT "building vtkgdcmswig_csharp.dll"
+  COMMENT "building vtkgdcm-sharp.dll"
 )
 
-  # because vtkgdcmswig_csharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
+  # because vtkgdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-  INSTALL(FILES ${GDCM_LIBRARY_DIR2}/vtkgdcmswig_csharp.dll
+  INSTALL(FILES 
+    ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
+    ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
   )
 

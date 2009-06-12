@@ -39,12 +39,15 @@
 #include "vtkStructuredPointsReader.h"
 #include "vtkStructuredPointsWriter.h"
 #include "vtkStructuredPoints.h"
+#include "vtkXMLImageDataWriter.h"
 
 #include "gdcmFilename.h"
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
 #include "gdcmImageHelper.h"
+#include "gdcmFileMetaInformation.h"
 #include "gdcmSystem.h"
+#include "gdcmUIDGenerator.h"
 
 #include <getopt.h>
 
@@ -68,6 +71,14 @@ void PrintHelp()
   std::cout << "     --palette-color    when supported generate a PALETTE COLOR file." << std::endl;
   std::cout << "     --argb             when supported generate a ARGB file." << std::endl;
   std::cout << "     --modality         set Modality." << std::endl;
+  std::cout << "  -T --study-uid        Study UID." << std::endl;
+  std::cout << "  -S --series-uid       Series UID." << std::endl;
+  std::cout << "     --root-uid         Root UID." << std::endl;
+  std::cout << "Compression Types (lossless):" << std::endl;
+  std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
+  std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
+  std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
+  std::cout << "  -R --rle                            Compress image in rle (lossless only)." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -75,6 +86,8 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "Env var:" << std::endl;
+  std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -82,6 +95,8 @@ int main(int argc, char *argv[])
   int c;
   //int digit_optind = 0;
 
+  std::string root_uid;
+  int rootuid = 0;
   std::vector<std::string> filenames;
   int forcerescale = 0;
   int forcespacing = 0;
@@ -89,6 +104,13 @@ int main(int argc, char *argv[])
   int argb = 0;
   int modality = 0;
   std::string modality_str;
+  int studyuid = 0;
+  int seriesuid = 0;
+  // compression
+  int jpeg = 0;
+  int jpegls = 0;
+  int j2k = 0;
+  int rle = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -97,6 +119,9 @@ int main(int argc, char *argv[])
   int help = 0;
   int version = 0;
 
+  gdcm::UIDGenerator uid;
+  std::string series_uid = uid.Generate();
+  std::string study_uid = uid.Generate();
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -106,6 +131,13 @@ int main(int argc, char *argv[])
         {"palette-color", 0, &palettecolor, 1},
         {"argb", 0, &argb, 1},
         {"modality", 1, &modality, 1},
+        {"study-uid", 1, &studyuid, 1},
+        {"series-uid", 1, &seriesuid, 1},
+        {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
+        {"jpeg", 0, &jpeg, 1}, // JPEG lossy / lossless
+        {"jpegls", 0, &jpegls, 1}, // JPEG-LS: lossy / lossless
+        {"j2k", 0, &j2k, 1}, // J2K: lossy / lossless
+        {"rle", 0, &rle, 1}, // lossless !
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -118,7 +150,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "VWDEhv",
+    c = getopt_long (argc, argv, "JKLRT:S:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -139,16 +171,57 @@ int main(int argc, char *argv[])
             //assert( filename.empty() );
             //filename = optarg;
             }
-          if( option_index == 4 ) /* input */
+          else if( option_index == 4 ) /* modality */
             {
             assert( strcmp(s, "modality") == 0 );
             //assert( filename.empty() );
             modality_str = optarg;
             }
+          else if( option_index == 5 ) /* study-uid */
+            {
+            assert( strcmp(s, "study-uid") == 0 );
+            series_uid = optarg;
+            }
+          else if( option_index == 6 ) /* series-uid */
+            {
+            assert( strcmp(s, "series-uid") == 0 );
+            study_uid = optarg;
+            }
+          else if( option_index == 7 ) /* root-uid */
+            {
+            assert( strcmp(s, "root-uid") == 0 );
+            root_uid = optarg;
+            }
           //printf (" with arg %s", optarg);
           }
         //printf ("\n");
         }
+      break;
+
+    case 'J':
+      jpeg = 1;
+      break;
+
+    case 'K':
+      j2k = 1;
+      break;
+
+    case 'L':
+      jpegls = 1;
+      break;
+
+    case 'R':
+      rle = 1;
+      break;
+
+    case 'T':
+      studyuid = 1;
+      study_uid = optarg;
+      break;
+
+    case 'S':
+      seriesuid = 1;
+      series_uid = optarg;
       break;
 
     case 'V':
@@ -227,7 +300,6 @@ int main(int argc, char *argv[])
   const char *filename = filenames[0].c_str();
   const char *outfilename = filenames[1].c_str();
 
-
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
@@ -280,10 +352,80 @@ int main(int argc, char *argv[])
       writer->Write();
       return 0;
       }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  )
+      {
+      vtkXMLImageDataWriter * writer = vtkXMLImageDataWriter::New();
+      writer->SetFileName( outfilename );
+      writer->SetDataModeToBinary();
+      writer->SetInput( imgdata );
+      writer->Write();
+      return 0;
+      }
     }
   // else
 
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
+  if( studyuid )
+    {
+    writer->SetStudyUID( study_uid.c_str() );
+    }
+  if( seriesuid )
+    {
+    writer->SetSeriesUID( series_uid.c_str() );
+    }
+
+  // Default:
+  writer->SetCompressionType( vtkGDCMImageWriter::NO_COMPRESSION ); // Implicit VR Little Endian
+  if( jpeg )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::JPEG_COMPRESSION );
+    }
+  else if( j2k )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::JPEG2000_COMPRESSION );
+    }
+  else if( jpegls )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::JPEGLS_COMPRESSION );
+    }
+  else if( rle )
+    {
+    writer->SetCompressionType( vtkGDCMImageWriter::RLE_COMPRESSION );
+    }
+
+  // HACK: call it *after* instanciating vtkGDCMImageWriter
+  if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;
+    return 1;
+    }
+  if( !gdcm::UIDGenerator::IsValid( series_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Series UID: " << series_uid << std::endl;
+    return 1;
+    }
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcm2vtk" );
+  if( !rootuid )
+    {
+    // only read the env var is no explicit cmd line option
+    // maybe there is an env var defined... let's check
+    const char *rootuid_env = getenv("GDCM_ROOT_UID");
+    if( rootuid_env )
+      {
+      rootuid = 1;
+      root_uid = rootuid_env;
+      }
+    }
+  if( rootuid )
+    {
+    if( !gdcm::UIDGenerator::IsValid( root_uid.c_str() ) )
+      {
+      std::cerr << "specified Root UID is not valid: " << root_uid << std::endl;
+      return 1;
+      }
+    gdcm::UIDGenerator::SetRoot( root_uid.c_str() );
+    }
+
   writer->SetFileName( outfilename );
 
   if( imgreader && imgreader->GetOutput()->GetNumberOfScalarComponents() == 4 && !argb )
@@ -386,6 +528,25 @@ int main(int argc, char *argv[])
     {
     if( !modality_str.empty() )
       writer->GetMedicalImageProperties()->SetModality( modality_str.c_str() );;
+    }
+
+  // Pass on the filetime of input file
+  time_t studydatetime = gdcm::System::FileTime( filename );
+  char date[22];
+  gdcm::System::FormatDateTime(date, studydatetime);
+  // ContentDate
+  const size_t datelen = 8;
+    {
+    // Do not copy the whole cstring:
+    std::string s( date, date+datelen );
+    writer->GetMedicalImageProperties()->SetImageDate( s.c_str() );;
+    }
+  // ContentTime
+  const size_t timelen = 6; // get rid of milliseconds
+    {
+    // Do not copy the whole cstring:
+    std::string s( date+datelen, timelen );
+    writer->GetMedicalImageProperties()->SetImageTime( s.c_str() );;
     }
 
   writer->Write();

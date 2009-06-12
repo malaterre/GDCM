@@ -151,6 +151,7 @@ protected:
   bool GetBuffer2(std::ostream &os) const;
 
   friend class PixmapReader;
+  friend class ImageChangeTransferSyntax;
   bool ComputeLossyFlag();
 
 //private:

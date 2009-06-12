@@ -29,7 +29,7 @@ public class HelloVTKWorld
     vtkMedicalImageProperties prop = reader.GetMedicalImageProperties();
     System.Console.WriteLine( prop.GetPatientName() ); // 
 
-    if( reader.GetImageFormat() == vtkgdcmswig.VTK_LUMINANCE ) // MONOCHROME2
+    if( reader.GetImageFormat() == vtkgdcm.vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
       {
       System.Console.WriteLine( "Image is MONOCHROME2" ); // 
       }

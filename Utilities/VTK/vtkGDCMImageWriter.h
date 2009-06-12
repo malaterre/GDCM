@@ -26,6 +26,8 @@
 // .SECTION Warning
 // You need to specify the correct ImageFormat (taken from the reader)
 // You need to explicitely specify the DirectionCosines (taken from the reader)
+// Since VTK 5.4 vtkMedicalImageProperties has its own DirectionCosine (no 's') 
+// user need to make sure the vtkMatrix4x4 is compatible with the 6-vector DirectionCosine.
 //
 // .SECTION NOTE Shift/Scale are global to all DICOM frames (=files) written
 // as 2D slice, therefore the shift/scale operation might not be optimized for 
@@ -42,7 +44,6 @@
 
 class vtkLookupTable;
 class vtkMedicalImageProperties;
-class vtkStringArray;
 class vtkMatrix4x4;
 class vtkStringArray;
 class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
@@ -110,6 +111,30 @@ public:
   // Description:
   // For color image (more than a single comp) you can specify the planar configuration you prefer
   vtkSetMacro(PlanarConfiguration,int);
+  vtkGetMacro(PlanarConfiguration,int);
+
+  // Description:
+  // Set/Get specific StudyUID / SeriesUID
+  vtkSetStringMacro(StudyUID);
+  vtkGetStringMacro(StudyUID);
+  vtkSetStringMacro(SeriesUID);
+  vtkGetStringMacro(SeriesUID);
+
+//BTX
+  enum CompressionTypes {
+    NO_COMPRESSION = 0,   // raw (default)
+    JPEG_COMPRESSION,     // JPEG
+    JPEG2000_COMPRESSION, // J2K
+    JPEGLS_COMPRESSION,   // JPEG-LS
+    RLE_COMPRESSION       // RLE
+  };
+//ETX
+  // Set/Get the compression type
+  vtkSetMacro(CompressionType, int);
+  vtkGetMacro(CompressionType, int);
+
+  //void SetCompressionTypeFromString(const char *);
+  //const char *GetCompressionTypeAsString();
 
 protected:
   vtkGDCMImageWriter();
@@ -144,8 +169,6 @@ private:
   // VTK structs:
   //vtkLookupTable *LookupTable;
   vtkMedicalImageProperties *MedicalImageProperties;
-  vtkSetStringMacro(StudyUID);
-  vtkSetStringMacro(SeriesUID);
   char *StudyUID;
   char *SeriesUID;
 
@@ -160,6 +183,7 @@ private:
   int FileLowerLeft;
   int PlanarConfiguration;
   int LossyFlag;
+  int CompressionType;
 };
 
 #endif

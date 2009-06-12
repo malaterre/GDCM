@@ -88,7 +88,8 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const PhotometricInterpretation &val)
 {
-  os << PhotometricInterpretation::GetPIString(val.PIField);
+  const char *s = PhotometricInterpretation::GetPIString(val.PIField);
+  os << (s ? s : "");
   return os;
 }
 

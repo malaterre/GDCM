@@ -123,6 +123,10 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::EncapsulatedPDFStorage:
       iodname = "Encapsulated PDF IOD Modules";
       break;
+    case MediaStorage::DigitalMammographyImageStorageForPresentation:
+    case MediaStorage::DigitalMammographyImageStorageForProcessing:
+      iodname = "Digital Mammography X Ray Image IOD Modules";
+      break;
     default:
       iodname = 0;
     }
@@ -140,7 +144,7 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
   const char *iodname = GetIODNameFromMediaStorage( ms );
   if( !iodname )
     {
-    gdcmErrorMacro( "Not implemented" );
+    gdcmErrorMacro( "Not implemented: " << ms );
     return ret;
     }
   const IOD &iod = iods.GetIOD( iodname );

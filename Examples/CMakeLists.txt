@@ -17,6 +17,10 @@ IF(GDCM_WRAP_CSHARP)
   SUBDIRS(Csharp)
 ENDIF(GDCM_WRAP_CSHARP)
 
+IF(GDCM_WRAP_JAVA)
+  SUBDIRS(Java)
+ENDIF(GDCM_WRAP_JAVA)
+
 ELSE(GDCM_BINARY_DIR)
 
   # We are building outside the GDCM tree.  Build the examples directly.

@@ -16,12 +16,12 @@
 /*
  * Usage: 
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/DecompressImage.exe gdcmData/012345.002.050.dcm decompress.dcm 
+ * $ mono bin/GetArray.exe gdcmData/012345.002.050.dcm
  */
 using System;
 using gdcm;
 
-public class TestGetArray
+public class GetArray
 {
   public static int Main(string[] args)
     {

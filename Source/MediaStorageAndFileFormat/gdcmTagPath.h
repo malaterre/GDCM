@@ -26,6 +26,7 @@ namespace gdcm
  * \brief class to handle a path of tag.
  *
  * Any Resemblance to Existing XPath is Purely Coincidental
+ * ftp://medical.nema.org/medical/dicom/supps/sup118_pc.pdf
  */
 class GDCM_EXPORT TagPath
 {

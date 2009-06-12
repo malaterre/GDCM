@@ -4,6 +4,7 @@ SET(MSFF_SRCS
   gdcmAnonymizer.cxx
   gdcmSpacing.cxx
   gdcmFileExplicitFilter.cxx
+  gdcmFileDerivation.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
   gdcmPixmap.cxx

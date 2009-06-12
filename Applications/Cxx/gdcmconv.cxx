@@ -65,6 +65,7 @@
   make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
 */
 #include "gdcmReader.h"
+#include "gdcmFileDerivation.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmVersion.h"
 #include "gdcmPixmapReader.h"
@@ -85,6 +86,7 @@
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
 #include "gdcmSequenceOfFragments.h"
 
 #include <string>
@@ -159,6 +161,8 @@ void PrintHelp()
   std::cout << "  -v --version    print version." << std::endl;
   std::cout << "JPEG Options:" << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
+  std::cout << "JPEG-LS Options:" << std::endl;
+  std::cout << "  -e --lossy-error %*i             set error." << std::endl;
   std::cout << "J2K Options:" << std::endl;
   std::cout << "  -r --rate    %*f           set rate." << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
@@ -193,8 +197,35 @@ unsigned int readvector(std::vector<T> &v, const char *str)
 
 namespace gdcm
 {
-bool derives( File & file, const Pixmap& compressed_image )
+static bool derives( File & file, const Pixmap& compressed_image )
 {
+#if 1
+  DataSet &ds = file.GetDataSet();
+
+  DataElement sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+  DataElement sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
+  ds.Remove( Tag(0x8,0x18) );
+
+  FileDerivation fd;
+  fd.SetFile( file );
+  fd.AddReference( sopclassuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetPointer() );
+
+  // CID 7202 Source Image Purposes of Reference
+  // {"DCM",121320,"Uncompressed predecessor"},
+  fd.SetPurposeOfReferenceCodeSequenceCodeValue( 121320 );
+
+  // CID 7203 Image Derivation
+  // { "DCM",113040,"Lossy Compression" },
+  fd.SetDerivationCodeSequenceCodeValue( 113040 );
+  fd.SetDerivationDescription( "lossy conversion" );
+  if( !fd.Derive() )
+    {
+    std::cerr << "Sorry could not derive using input info" << std::endl;
+    return 1;
+    }
+
+
+#else
 /*
 (0008,2111) ST [Lossy compression with JPEG extended sequential 8 bit, IJG quality... # 102, 1 DerivationDescription
 (0008,2112) SQ (Sequence with explicit length #=1)      # 188, 1 SourceImageSequence
@@ -348,6 +379,7 @@ bool derives( File & file, const Pixmap& compressed_image )
     at3.SetValue( "Full fidelity image, uncompressed or lossless compressed" );
     subds3.Replace( at3.GetAsDataElement() );
 }
+#endif
 
 {
   /*
@@ -425,6 +457,8 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
   int ignoreerrors = 0;
+  int jpeglserror = 0;
+  int jpeglserror_value = 0;
 
   while (1) {
     //int this_option_optind = optind ? optind : 1;
@@ -476,6 +510,7 @@ int main (int argc, char *argv[])
         {"tile", 1, &tile, 1}, // 
         {"number-resolution", 1, &nres, 1}, // 
         {"irreversible", 0, &irreversible, 1}, // 
+        {"allowed-error", 1, &jpeglserror, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -489,7 +524,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwdJKRFYS:P:VWDEhvIr:q:t:n:",
+    c = getopt_long (argc, argv, "i:o:XMUClwdJKLRFYS:P:VWDEhvIr:q:t:n:e:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -549,8 +584,13 @@ int main (int argc, char *argv[])
             }
           else if( option_index == 42 ) /* number of resolution */
             {
-            assert( strcmp(s, ",number-resolution") == 0 );
+            assert( strcmp(s, "number-resolution") == 0 );
             nresvalue = atoi(optarg);
+            }
+          else if( option_index == 44 ) /* JPEG-LS error */
+            {
+            assert( strcmp(s, "allowed-error") == 0 );
+            jpeglserror_value = atoi(optarg);
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -596,6 +636,11 @@ int main (int argc, char *argv[])
       raw = 1;
       break;
 
+    case 'e':
+      jpeglserror = 1;
+      jpeglserror_value = atoi(optarg);
+      break;
+
     case 'd':
       deflated = 1;
       break;
@@ -606,6 +651,10 @@ int main (int argc, char *argv[])
 
     case 'K':
       j2k = 1;
+      break;
+
+    case 'L':
+      jpegls = 1;
       break;
 
     case 'R':
@@ -780,7 +829,14 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( reader.GetFile() );
+    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
+      {
+      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
       return 1;
       }
 
@@ -830,7 +886,14 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( reader.GetFile() );
+    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
+      {
+      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
       return 1;
       }
 
@@ -864,6 +927,7 @@ int main (int argc, char *argv[])
     fmi.Replace( de );
     fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
     fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+    //fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
     fmi.SetDataSetTransferSyntax(ts);
 
     if( explicitts || deflated )
@@ -894,7 +958,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -925,7 +989,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -964,7 +1028,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -993,7 +1057,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
     const gdcm::Pixmap &image = reader.GetPixmap();
@@ -1006,6 +1070,7 @@ int main (int argc, char *argv[])
 
     gdcm::JPEG2000Codec j2kcodec;
     gdcm::JPEGCodec jpegcodec;
+    gdcm::JPEGLSCodec jpeglscodec;
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
     change.SetCompressIconImage( compressicon );
@@ -1031,10 +1096,18 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
-        std::cerr << "not implemented" << std::endl;
-        return 1;
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSNearLossless );
+        jpeglscodec.SetLossless( false );
+        if( jpeglserror )
+          {
+          jpeglscodec.SetLossyError( jpeglserror_value );
+          }
+        change.SetUserCodec( &jpeglscodec );
         }
-      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
+      else
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
+        }
       }
     else if( j2k )
       {
@@ -1149,7 +1222,11 @@ int main (int argc, char *argv[])
     if( lossy )
       {
       PrintLossyWarning();
-      gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() );
+      if( !gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() ) )
+        {
+        std::cerr << "Failed to derives: " << filename << std::endl;
+        return 1;
+        }
       }
     if( usedict /*ts.IsImplicit()*/ )
       {
@@ -1182,7 +1259,7 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "could not read: " << filename << std::endl;
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
 
@@ -1256,6 +1333,13 @@ int main (int argc, char *argv[])
         std::cerr << "Failed to read: " << filename << std::endl;
         return 1;
         }
+      }
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( reader.GetFile() );
+    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
+      {
+      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
+      return 1;
       }
 
 #if 0

@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-%module(docstring="A VTK/GDCM binding") vtkgdcmswig
+%module(docstring="A VTK/GDCM binding") vtkgdcm
 #pragma SWIG nowarn=504,510
 
 //%pragma(csharp) moduleimports=%{
@@ -55,6 +55,8 @@
 #include "vtkImageData.h"
 #include "vtkPointSet.h"
 #include "vtkPolyData.h"
+
+#include "vtkGDCMTesting.h"
 
 // same for vtkGDCMImageReader / vtkGDCMImageWriter so that we get all 
 // parent's member class functions properly wrapped. (Update, SetFileName ...)
@@ -178,7 +180,7 @@ using Kitware.VTK;
 %typemap(csin) vtkDataObject * "$csinput.GetCppThis()"
 /*
   public vtkDataObject GetOutputDataObject(int port) {
-    IntPtr cPtr = vtkgdcmswigPINVOKE.vtkAlgorithm_GetOutputDataObject(swigCPtr, port);
+    IntPtr cPtr = vtkgdcmPINVOKE.vtkAlgorithm_GetOutputDataObject(swigCPtr, port);
     SWIGTYPE_p_vtkDataObject ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_vtkDataObject(cPtr, false);
     return ret;
   }
@@ -278,12 +280,21 @@ using Kitware.VTK;
 %csmethodmodifiers vtkImageWriter::New() "internal new"
 %csmethodmodifiers vtkImageReader2::New() "internal new"
 %csmethodmodifiers vtkMedicalImageReader2::New() "internal new"
-%csmethodmodifiers vtkGDCMImageReader::New() "internal new"
-%csmethodmodifiers vtkGDCMImageWriter::New() "internal new"
+
+%csmethodmodifiers vtkGDCMImageReader::New() "public new"
+%csmethodmodifiers vtkGDCMImageWriter::New() "public new"
+%csmethodmodifiers vtkGDCMTesting::New() "public new"
+
 #endif
 
+%newobject vtkGDCMTesting::New();
+%newobject vtkGDCMImageWriter::New();
+%newobject vtkGDCMImageReader::New();
+
+%delobject vtkObjectBase::Delete();
+
 // TODO: I need to fix Delete and make sure SWIG owns the C++ ptr (call ->Delete in the Dispose layer)
-%ignore vtkObjectBase::Delete;
+//%ignore vtkObjectBase::Delete;
 %ignore vtkObjectBase::FastDelete;
 %ignore vtkObjectBase::PrintSelf;
 %ignore vtkObjectBase::PrintHeader;
@@ -299,6 +310,40 @@ using Kitware.VTK;
 %ignore vtkMedicalImageReader2::PrintSelf;
 %ignore vtkGDCMImageReader::PrintSelf;
 %ignore vtkGDCMImageWriter::PrintSelf;
+
+%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMTesting {
+  lock(this) {
+    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
+      swigCMemOwn = false;
+      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
+    }
+    swigCPtr = new HandleRef(null, IntPtr.Zero);
+    GC.SuppressFinalize(this);
+    base.Dispose();
+  }
+}
+%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMImageReader {
+  lock(this) {
+    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
+      swigCMemOwn = false;
+      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
+    }
+    swigCPtr = new HandleRef(null, IntPtr.Zero);
+    GC.SuppressFinalize(this);
+    base.Dispose();
+  }
+}
+%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMImageWriter {
+  lock(this) {
+    if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
+      swigCMemOwn = false;
+      vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
+    }
+    swigCPtr = new HandleRef(null, IntPtr.Zero);
+    GC.SuppressFinalize(this);
+    base.Dispose();
+  }
+}
 
 %include "vtkObjectBase.h"
 %csmethodmodifiers vtkObjectBase::ToString() "public override"
@@ -316,19 +361,10 @@ using Kitware.VTK;
 
 %include "vtkObject.h"
 
-#ifndef USEACTIVIZ
-%inline
-{
-  const char *vtkGetDataRoot()
-    {
-#ifdef VTK_DATA_ROOT
-    return VTK_DATA_ROOT; 
-#else
-    return NULL; 
-#endif
-    }
-}
+%defaultdtor vtkGDCMTesting; // FIXME does not seems to be working
+%include "vtkGDCMTesting.h"
 
+#ifndef USEACTIVIZ
 %include "vtkStringArray.h"
 %include "vtkMatrix4x4.h"
 %include "vtkMedicalImageProperties.h"
@@ -349,13 +385,13 @@ using Kitware.VTK;
 /*
 By default swig generates:
   public virtual SWIGTYPE_p_double GetImageOrientationPatient() {
-    IntPtr cPtr = vtkgdcmswigPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
+    IntPtr cPtr = vtkgdcmPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
     SWIGTYPE_p_double ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_double(cPtr, false);
     return ret;
   }
 while we would want:
   public virtual double[] GetImageOrientationPatient() {
-    IntPtr source = vtkgdcmswigPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
+    IntPtr source = vtkgdcmPINVOKE.vtkGDCMImageReader_GetImageOrientationPatient(swigCPtr);
     double[] ret = null;
     if (IntPtr.Zero != source)
     {
@@ -417,30 +453,41 @@ while we would want:
 
 %include "vtkGDCMImageReader.h"
 %include "vtkGDCMImageWriter.h"
-#ifdef USEACTIVIZ
+%extend vtkGDCMTesting
+{
+%typemap(cscode) vtkGDCMTesting
+%{
+  public vtkGDCMTesting() : this(vtkgdcmPINVOKE.vtkGDCMTesting_New(), true) {
+  }
+  ~vtkGDCMTesting() {
+    Dispose();
+  }
+%}
+};
+
 %extend vtkGDCMImageReader
 {
 %typemap(cscode) vtkGDCMImageReader
 %{
-  public vtkGDCMImageReader() : this(vtkgdcmswigPINVOKE.vtkGDCMImageReader_New(), false) {
+  public vtkGDCMImageReader() : this(vtkgdcmPINVOKE.vtkGDCMImageReader_New(), true) {
+  }
+  ~vtkGDCMImageReader() {
+    Dispose();
   }
 %}
 };
-//%typemap(csdestruct, methodname="Dispose", methodmodifiers="public") vtkGDCMImageWriter {
-//toto destruct
-//};
-//%typemap(csdestruct) vtkGDCMImageWriter "";
-%include "vtkGDCMImageWriter.h"
 
 %extend vtkGDCMImageWriter
 {
 %typemap(cscode) vtkGDCMImageWriter
 %{
-  public vtkGDCMImageWriter() : this(vtkgdcmswigPINVOKE.vtkGDCMImageWriter_New(), false) {
+  public vtkGDCMImageWriter() : this(vtkgdcmPINVOKE.vtkGDCMImageWriter_New(), true) {
+  }
+  ~vtkGDCMImageWriter() {
+    Dispose();
   }
 %}
 };
-#endif
 %clear double*;
 %clear double* GetDataSpacing();
 %clear double* GetDataOrigin();

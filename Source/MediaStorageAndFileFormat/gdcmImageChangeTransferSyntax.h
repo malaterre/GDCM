@@ -71,6 +71,11 @@ private:
   ImageCodec *UserCodec;
 };
 
+/**
+ * \example StandardizeFiles.cs
+ * This is a C++ example on how to use gdcm::ImageChangeTransferSyntax
+ */
+
 } // end namespace gdcm
 
 #endif //__gdcmImageChangeTransferSyntax_h

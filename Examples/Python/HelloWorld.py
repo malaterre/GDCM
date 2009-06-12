@@ -22,6 +22,11 @@ import sys
 
 if __name__ == "__main__":
 
+  # verbosity:
+  #gdcm.Trace.DebugOn()
+  #gdcm.Trace.WarningOn()
+  #gdcm.Trace.ErrorOn()
+
   # Get the filename from the command line
   filename = sys.argv[1]
 

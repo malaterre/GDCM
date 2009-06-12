@@ -428,7 +428,7 @@ int main (int argc, char *argv[])
     // I -> input directory
     // o -> output file
     // O -> output directory
-    c = getopt_long (argc, argv, "i:o:I:O:d:s:R:C:F:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:I:O:d:s:R:C:F:T:S:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -524,6 +524,16 @@ int main (int argc, char *argv[])
 
     case 's': // size
       readsize(optarg, size);
+      break;
+
+    case 'T':
+      studyuid = 1;
+      study_uid = optarg;
+      break;
+
+    case 'S':
+      seriesuid = 1;
+      series_uid = optarg;
       break;
 
     case 'C':

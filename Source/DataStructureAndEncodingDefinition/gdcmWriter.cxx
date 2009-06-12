@@ -148,11 +148,12 @@ try
 }
 catch(std::exception &ex)
 {
-  std::cerr << ex.what() << std::endl;
+  gdcmErrorMacro( ex.what() );
   return false;
 }
 catch(...)
 {
+  gdcmErrorMacro( "what the hell" );
   return false;
 }
 
