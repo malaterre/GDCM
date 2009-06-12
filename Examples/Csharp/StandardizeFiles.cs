@@ -70,7 +70,7 @@ public class StandardizeFiles
 
   public static int Main(string[] args)
     {
-    gdcm.FileMetaInformation.SetSourceApplicationEntityTitle( "My ClinicalTrial App" );
+    gdcm.FileMetaInformation.SetSourceApplicationEntityTitle( "My Standardize App" );
 
     // http://www.oid-info.com/get/1.3.6.1.4.17434
     string THERALYS_ORG_ROOT = "1.3.6.1.4.17434";
