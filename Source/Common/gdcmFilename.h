@@ -40,6 +40,10 @@ public:
   const char *GetExtension();
   /// Convert backslash (windows style) to UNIX style slash.
   const char *ToUnixSlashes();
+
+  /// NOT THREAD SAFE
+  static const char *Join(const char *path, const char *filename);
+
   /// return whether the filename is empty
   bool IsEmpty() const { return FileName.empty(); }
 

@@ -136,5 +136,14 @@ bool Filename::IsIdentical(Filename const &fn) const
   return realpath1 == realpath2;
 }
 
+const char *Filename::Join(const char *path, const char *filename)
+{
+  static std::string s;
+  s = path;
+  s += '/';
+  s += filename;
+  return s.c_str();
+}
+
 } // end namespace gdcm
 

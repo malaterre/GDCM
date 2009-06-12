@@ -26,6 +26,8 @@
 #include "gdcmType.h"
 #include "gdcmDefs.h"
 #include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmEvent.h"
+#include "gdcmAnonymizeEvent.h"
 
 namespace gdcm
 {
@@ -326,11 +328,22 @@ bool Anonymizer::RemovePrivateTags()
  */
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
 {
+  this->InvokeEvent( StartEvent() );
+  bool ret;
   if( deidentify )
-    return BasicApplicationLevelConfidentialityProfile1();
-  return BasicApplicationLevelConfidentialityProfile2();
+    ret = BasicApplicationLevelConfidentialityProfile1();
+  else
+    ret = BasicApplicationLevelConfidentialityProfile2();
+  this->InvokeEvent( EndEvent() );
+  return ret;
 }
 
+// Implementation note:
+// This function trigger:
+// 1 StartEvent
+// 1 EndEvent
+// 6 IterationEvent
+// N AnonymizeEvent (depend on number of tag found)
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 {
   static const unsigned int deidSize = sizeof(Tag);
@@ -375,6 +388,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     if( ds.FindDataElement( tag ) )
       encryptedds.Insert( ds.GetDataElement( tag ) );
     }
+  this->InvokeEvent( IterationEvent() );
   // Check that root level sequence do not contains any of those attributes
 {
   DataSet::ConstIterator it = ds.Begin();
@@ -406,6 +420,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     }
 }
 
+  this->InvokeEvent( IterationEvent() );
   sq->AddItem(it);
 
   DataElement des( Tag(0x0400,0x0550) );
@@ -484,6 +499,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
     ds.Insert(des);
     }
+  this->InvokeEvent( IterationEvent() );
 
   // 2. Each Attribute to be protected shall then either be removed from the dataset, or have its value
   // replaced by a different "replacement value" which does not allow identification of the patient.
@@ -497,6 +513,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   // Check that root level sequence do not contains any of those attributes
   RecurseDataSet( F->GetDataSet() );
 
+  this->InvokeEvent( IterationEvent() );
+
   // Group Length are removed since PS 3.3-2008
   RemoveGroupLength();
 
@@ -509,12 +527,15 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   Replace( Tag(0x0012,0x0062), "YES");
   Replace( Tag(0x0012,0x0063), "BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE");
 
+  this->InvokeEvent( IterationEvent() );
 
   // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
   // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
   UIDGenerator uid;
   if( ds.FindDataElement( Tag(0x008,0x0018) ) )
     Replace( Tag(0x008,0x0018), uid.Generate() );
+
+  this->InvokeEvent( IterationEvent() );
 
   return true;
 }
@@ -569,6 +590,10 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
   // \precondition
   assert( ds.FindDataElement(tag) );
 
+  gdcm::AnonymizeEvent ae;
+  ae.SetTag( tag );
+  this->InvokeEvent( ae );
+
   typedef std::pair< Tag, std::string > TagValueKey;
   typedef std::map< TagValueKey, std::string > DummyMap;
   static DummyMap dummymap;
@@ -577,11 +602,12 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
   //DataSet &ds = F->GetDataSet();
 
   bool canempty = CanEmptyTag( tag );
+  DataElement copy;
   if( !canempty )
     {
     TagValueKey tvk;
     tvk.first = tag;
-    DataElement copy = ds.GetDataElement( tag );
+    copy = ds.GetDataElement( tag );
     // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
     // has an empty 0008,0018 attribute, let's try to handle that:
     if( !copy.IsEmpty() )
@@ -620,15 +646,28 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
 
 void Anonymizer::RecurseDataSet( DataSet & ds )
 {
+  if( ds.IsEmpty() ) return;
+
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
 
-  DataSet::Iterator it = ds.Begin();
-  for( ; it != ds.End(); ++it )
+  for(const Tag *ptr = start ; ptr != end ; ++ptr)
     {
-    DataElement de = *it;
+    const Tag& tag = *ptr;
+    // FIXME Type 1 !
+    if( ds.FindDataElement( tag ) )
+      {
+      BALCPProtect(ds, tag);
+      }
+    }
+
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); /*++it*/ )
+    {
+    assert( it != ds.End() );
+    DataElement de = *it; ++it;
     //const SequenceOfItems *sqi = de.GetSequenceOfItems();
     VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
     SmartPointer<SequenceOfItems> sqi = 0;
@@ -646,18 +685,6 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
         Item &item = sqi->GetItem( i );
         DataSet &nested = item.GetNestedDataSet();
         RecurseDataSet( nested );
-        }
-      }
-    else
-      {
-      for(const Tag *ptr = start ; ptr != end ; ++ptr)
-        {
-        const Tag& tag = *ptr;
-        // FIXME Type 1 !
-        if( ds.FindDataElement( tag ) )
-          {
-          BALCPProtect(ds, tag);
-          }
         }
       }
     ds.Replace( de );

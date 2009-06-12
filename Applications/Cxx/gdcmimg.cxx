@@ -160,7 +160,7 @@ bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
   gdcm::System::FormatDateTime(date, studydatetime);
   const size_t datelen = 8;
     {
-    gdcm::DataElement de( gdcm::Tag(0x0008,0x0023) );
+    gdcm::DataElement de( gdcm::Tag(0x0008,0x0023) ); // Content Date
     // Do not copy the whole cstring:
     de.SetByteValue( date, datelen );
     de.SetVR( gdcm::Attribute<0x0008,0x0023>::GetVR() );
@@ -169,7 +169,7 @@ bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
   // StudyTime
   const size_t timelen = 6; // get rid of milliseconds
     {
-    gdcm::DataElement de( gdcm::Tag(0x0008,0x0033) );
+    gdcm::DataElement de( gdcm::Tag(0x0008,0x0033) ); // Content Time
     // Do not copy the whole cstring:
     de.SetByteValue( date+datelen, timelen );
     de.SetVR( gdcm::Attribute<0x0008,0x0033>::GetVR() );

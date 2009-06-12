@@ -7,6 +7,8 @@ SET(MSFF_SRCS
   gdcmFileDerivation.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
+  gdcmSimpleSubjectWatcher.cxx
+  gdcmAnonymizeEvent.cxx
   gdcmPixmap.cxx
   gdcmBitmap.cxx
   gdcmRescaler.cxx
