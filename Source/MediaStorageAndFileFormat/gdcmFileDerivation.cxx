@@ -176,12 +176,24 @@ static const CodeDefinition ImageDerivation[] = {
 {NULL,0,NULL} // sentinel
 };
 
+// CID 7205 Purpose Of Reference to Alternate Representation
+static const CodeDefinition PurposeOfReferencetoAlternateRepresentation[] = {
+{ "DCM",121324,"Source image" },
+{ "DCM",121325,"Lossy compressed image" },
+{ "DCM",121326,"Alternate SOP Class instance" },
+{ "DCM",121327,"Full fidelity image" },
+{ "DCM",121328,"Alternate Photometric Interpretation image" },
+{NULL,0,NULL} // sentinel
+};
+
 class FileDerivationInternals
 {
 public:
-  FileDerivationInternals():References(),DerivationCodeSequenceCodeValue(0){}
+  FileDerivationInternals():References(),DerivationCodeSequenceCodeValue(0),PurposeOfReferenceCodeSequenceCodeValue(0),DerivationDescription() {}
   std::vector< std::pair< std::string, std::string > > References;
   unsigned int DerivationCodeSequenceCodeValue;
+  unsigned int PurposeOfReferenceCodeSequenceCodeValue;
+  std::string DerivationDescription;
 };
 
 FileDerivation::FileDerivation():F(new File),Internals(new FileDerivationInternals)
@@ -192,9 +204,9 @@ FileDerivation::~FileDerivation()
 {
 }
 
-const CodeDefinition * GetCodeDefinition( unsigned int codevalue )
+const CodeDefinition * GetCodeDefinition( unsigned int codevalue, const CodeDefinition list[] )
 {
-  const CodeDefinition * cds = ImageDerivation;
+  const CodeDefinition * cds = list;
   while( cds->CodeMeaning && cds->CodeValue != codevalue )
     {
     ++cds;
@@ -205,9 +217,19 @@ const CodeDefinition * GetCodeDefinition( unsigned int codevalue )
   return NULL;
 }
 
+void FileDerivation::SetDerivationDescription( const char *dd )
+{
+  this->Internals->DerivationDescription = dd;
+}
+
 void FileDerivation::SetDerivationCodeSequenceCodeValue(unsigned int codevalue)
 {
   this->Internals->DerivationCodeSequenceCodeValue = codevalue;
+}
+
+void FileDerivation::SetPurposeOfReferenceCodeSequenceCodeValue(unsigned int codevalue)
+{
+  this->Internals->PurposeOfReferenceCodeSequenceCodeValue = codevalue;
 }
 
 bool FileDerivation::AddReference(const char *referencedsopclassuid, const char *referencedsopinstanceuid)
@@ -239,6 +261,13 @@ bool FileDerivation::AddDerivationDescription()
   File &file = GetFile();
   DataSet &ds = file.GetDataSet();
 
+  if( !this->Internals->DerivationDescription.empty() )
+    {
+    Attribute<0x0008,0x2111> at1;
+    at1.SetValue( this->Internals->DerivationDescription.c_str() );
+    ds.Replace( at1.GetAsDataElement() );
+    }
+
   const Tag sisq(0x8,0x9215);
   SequenceOfItems * sqi;
   sqi = new SequenceOfItems;
@@ -261,8 +290,8 @@ bool FileDerivation::AddDerivationDescription()
   DataSet &subds3 = item1.GetNestedDataSet();
 
   unsigned int codevalue = this->Internals->DerivationCodeSequenceCodeValue;
-  const CodeDefinition *cd = GetCodeDefinition( codevalue );
-  if (!cd )
+  const CodeDefinition *cd = GetCodeDefinition( codevalue, ImageDerivation );
+  if ( !cd )
     {
     return false;
     }
@@ -274,7 +303,7 @@ bool FileDerivation::AddDerivationDescription()
   at1.SetValue( os.str() );
   subds3.Replace( at1.GetAsDataElement() );
   Attribute<0x0008,0x0102> at2;
-  at2.SetValue( "DCM" );
+  at2.SetValue( cd->CodingSchemeDesignator );
   subds3.Replace( at2.GetAsDataElement() );
   Attribute<0x0008,0x0104> at3;
   at3.SetValue( cd->CodeMeaning );
@@ -332,11 +361,84 @@ bool FileDerivation::AddSourceImageSequence()
       sopclassuid.SetValue( it->second );
       subds.Replace( sopclassuid.GetAsDataElement() );
       }
+    if( !AddPurposeOfReferenceCodeSequence(subds) )
+      {
+      return false;
+      }
     sqi->AddItem( item1 );
     }
 
+
   return true;
 }
+
+bool FileDerivation::AddPurposeOfReferenceCodeSequence(DataSet &subds)
+{
+/*
+    (0040,a170) SQ (Sequence with undefined length #=1)     # u/l, 1 PurposeOfReferenceCodeSequence
+      (fffe,e000) na (Item with undefined length #=3)         # u/l, 1 Item
+        (0008,0100) SH [121320]                                 #   6, 1 CodeValue
+        (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+        (0008,0104) LO [Uncompressed predecessor]               #  24, 1 CodeMeaning
+      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+*/
+  const Tag prcs(0x0040,0xa170);
+  if( !subds.FindDataElement( prcs) )
+    {
+    SequenceOfItems *sqi2 = new SequenceOfItems;
+    DataElement de( prcs );
+    de.SetVR( VR::SQ );
+    de.SetValue( *sqi2 );
+    de.SetVLToUndefined();
+    subds.Insert( de );
+    }
+
+  SequenceOfItems *sqi = (SequenceOfItems*)subds.GetDataElement( prcs ).GetSequenceOfItems();
+  sqi->SetLengthToUndefined();
+
+  if( !sqi->GetNumberOfItems() )
+    {
+    Item item; //( Tag(0xfffe,0xe000) );
+    item.SetVLToUndefined();
+    sqi->AddItem( item );
+    }
+  Item &item2 = sqi->GetItem(1);
+  DataSet &subds2 = item2.GetNestedDataSet();
+
+  /*
+  (0008,0100) SH [121320]                                 #   6, 1 CodeValue
+  (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+  (0008,0104) LO [Uncompressed predecessor]               #  24, 1 CodeMeaning
+   */
+
+  unsigned int codevalue = this->Internals->PurposeOfReferenceCodeSequenceCodeValue;
+  const CodeDefinition *cd = GetCodeDefinition( codevalue, SourceImagePurposesofReference );
+  if( !cd )
+    {
+    cd = GetCodeDefinition( codevalue, PurposeOfReferencetoAlternateRepresentation );
+    }
+  if (!cd)
+    {
+    return false;
+    }
+
+  std::ostringstream os;
+  os << cd->CodeValue;
+
+  Attribute<0x0008,0x0100> at1;
+  at1.SetValue( os.str() );
+  subds2.Replace( at1.GetAsDataElement() );
+  Attribute<0x0008,0x0102> at2;
+  at2.SetValue( cd->CodingSchemeDesignator );
+  subds2.Replace( at2.GetAsDataElement() );
+  Attribute<0x0008,0x0104> at3;
+  at3.SetValue( cd->CodeMeaning );
+  subds2.Replace( at3.GetAsDataElement() );
+
+  return true;
+}
+
 
 bool FileDerivation::Derive()
 {
@@ -370,90 +472,6 @@ bool FileDerivation::Derive()
   if( !b ) return false;
 
 
-#if 0
-  const Tag prcs(0x0040,0xa170);
-  if( !subds.FindDataElement( prcs) )
-    {
-    SequenceOfItems *sqi2 = new SequenceOfItems;
-    DataElement de( prcs );
-    de.SetVR( VR::SQ );
-    de.SetValue( *sqi2 );
-    de.SetVLToUndefined();
-    subds.Insert( de );
-    }
-
-  sqi = (SequenceOfItems*)subds.GetDataElement( prcs ).GetSequenceOfItems();
-  sqi->SetLengthToUndefined();
-
-  if( !sqi->GetNumberOfItems() )
-    {
-    Item item; //( Tag(0xfffe,0xe000) );
-    item.SetVLToUndefined();
-    sqi->AddItem( item );
-    }
-  Item &item2 = sqi->GetItem(1);
-  DataSet &subds2 = item2.GetNestedDataSet();
-
-  /*
-  (0008,0100) SH [121320]                                 #   6, 1 CodeValue
-  (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
-  (0008,0104) LO [Uncompressed predecessor]               #  24, 1 CodeMeaning
-   */
-
-  Attribute<0x0008,0x0100> at1;
-  at1.SetValue( "121320" );
-  subds2.Replace( at1.GetAsDataElement() );
-  Attribute<0x0008,0x0102> at2;
-  at2.SetValue( "DCM" );
-  subds2.Replace( at2.GetAsDataElement() );
-  Attribute<0x0008,0x0104> at3;
-  at3.SetValue( "Uncompressed predecessor" );
-  subds2.Replace( at3.GetAsDataElement() );
-
-  /*
-  (0008,9215) SQ (Sequence with explicit length #=1)      #  98, 1 DerivationCodeSequence
-  (fffe,e000) na (Item with explicit length #=3)          #  90, 1 Item
-  (0008,0100) SH [121327]                                 #   6, 1 CodeValue
-  (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
-  (0008,0104) LO [Full fidelity image, uncompressed or lossless compressed] #  56, 1 CodeMeaning
-  (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
-  (fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
-   */
-    {
-    const Tag sisq(0x8,0x9215);
-    SequenceOfItems * sqi;
-    sqi = new SequenceOfItems;
-    DataElement de( sisq );
-    de.SetVR( VR::SQ );
-    de.SetValue( *sqi );
-    de.SetVLToUndefined();
-    ds.Insert( de );
-    sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
-    sqi->SetLengthToUndefined();
-
-    if( !sqi->GetNumberOfItems() )
-      {
-      Item item; //( Tag(0xfffe,0xe000) );
-      item.SetVLToUndefined();
-      sqi->AddItem( item );
-      }
-
-    Item &item1 = sqi->GetItem(1);
-    DataSet &subds3 = item1.GetNestedDataSet();
-
-    Attribute<0x0008,0x0100> at1;
-    at1.SetValue( "121327" );
-    subds3.Replace( at1.GetAsDataElement() );
-    Attribute<0x0008,0x0102> at2;
-    at2.SetValue( "DCM" );
-    subds3.Replace( at2.GetAsDataElement() );
-    Attribute<0x0008,0x0104> at3;
-    at3.SetValue( "Full fidelity image, uncompressed or lossless compressed" );
-    subds3.Replace( at3.GetAsDataElement() );
-
-    // ImageWriter will properly set attribute 0028,2114 (Lossy Image Compression Method)
-    }
-#endif
 
   return true;
 }

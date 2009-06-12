@@ -353,6 +353,8 @@ bool ImageChangeTransferSyntax::Change()
     }
 
   Output = Input;
+//  if( TS.IsLossy() && !TS.IsLossless() )
+//    Output->SetLossyFlag( true );
 
   // Fast path
   if( Input->GetTransferSyntax() == TS && !Force ) return true;
@@ -419,7 +421,9 @@ bool ImageChangeTransferSyntax::Change()
     assert( Output->GetIconImage().GetTransferSyntax() == TS );
 }
 
+    //Output->ComputeLossyFlag();
     assert( Output->GetTransferSyntax() == TS );
+    //if( TS.IsLossy() ) assert( Output->IsLossy() );
     return success;
     }
 
@@ -454,6 +458,8 @@ bool ImageChangeTransferSyntax::Change()
       }
   assert( Output->GetIconImage().GetTransferSyntax() == TS );
   }
+
+  //Output->ComputeLossyFlag();
 
   assert( Output->GetTransferSyntax() == TS );
   return success;

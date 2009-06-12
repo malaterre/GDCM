@@ -21,6 +21,7 @@ namespace gdcm
 {
 
 class FileDerivationInternals;
+class DataSet;
 /**
  * \brief FileDerivation class
  * See PS 3.16 - 2008 For the list of Code Value that can be used for in Derivation Code Sequence
@@ -40,6 +41,8 @@ public:
   bool AddReference(const char *referencedsopclassuid, const char *referencedsopinstanceuid);
 
   void SetDerivationCodeSequenceCodeValue(unsigned int codevalue);
+  void SetPurposeOfReferenceCodeSequenceCodeValue(unsigned int codevalue);
+  void SetDerivationDescription( const char *dd );
 
   /// Change
   bool Derive();
@@ -51,6 +54,7 @@ public:
 protected:
   bool AddDerivationDescription();
   bool AddSourceImageSequence();
+  bool AddPurposeOfReferenceCodeSequence(DataSet &ds);
 
 private:
   SmartPointer<File> F;

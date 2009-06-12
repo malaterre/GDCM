@@ -65,6 +65,7 @@
   make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
 */
 #include "gdcmReader.h"
+#include "gdcmFileDerivation.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmVersion.h"
 #include "gdcmPixmapReader.h"
@@ -198,6 +199,33 @@ namespace gdcm
 {
 static bool derives( File & file, const Pixmap& compressed_image )
 {
+#if 1
+  DataSet &ds = file.GetDataSet();
+
+  DataElement sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+  DataElement sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
+  ds.Remove( Tag(0x8,0x18) );
+
+  FileDerivation fd;
+  fd.SetFile( file );
+  fd.AddReference( sopclassuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetPointer() );
+
+  // CID 7202 Source Image Purposes of Reference
+  // {"DCM",121320,"Uncompressed predecessor"},
+  fd.SetPurposeOfReferenceCodeSequenceCodeValue( 121320 );
+
+  // CID 7203 Image Derivation
+  // { "DCM",113040,"Lossy Compression" },
+  fd.SetDerivationCodeSequenceCodeValue( 113040 );
+  fd.SetDerivationDescription( "lossy conversion" );
+  if( !fd.Derive() )
+    {
+    std::cerr << "Sorry could not derive using input info" << std::endl;
+    return 1;
+    }
+
+
+#else
 /*
 (0008,2111) ST [Lossy compression with JPEG extended sequential 8 bit, IJG quality... # 102, 1 DerivationDescription
 (0008,2112) SQ (Sequence with explicit length #=1)      # 188, 1 SourceImageSequence
@@ -351,6 +379,7 @@ static bool derives( File & file, const Pixmap& compressed_image )
     at3.SetValue( "Full fidelity image, uncompressed or lossless compressed" );
     subds3.Replace( at3.GetAsDataElement() );
 }
+#endif
 
 {
   /*
@@ -1189,7 +1218,11 @@ int main (int argc, char *argv[])
     if( lossy )
       {
       PrintLossyWarning();
-      gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() );
+      if( !gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() ) )
+        {
+        std::cerr << "Failed to derives: " << filename << std::endl;
+        return 1;
+        }
       }
     if( usedict /*ts.IsImplicit()*/ )
       {

@@ -78,6 +78,10 @@ int main(int, char *[])
   gdcm::FileDerivation fd;
   fd.AddReference( ReferencedSOPClassUID, uid.Generate() );
   fd.AddReference( ReferencedSOPClassUID, uid.Generate() );
+  // CID 7202 Source Image Purposes of Reference
+  // {"DCM",121322,"Source image for image processing operation"},
+  fd.SetPurposeOfReferenceCodeSequenceCodeValue( 121322 );
+  // CID 7203 Image Derivation
   // { "DCM",113072,"Multiplanar reformatting" },
   fd.SetDerivationCodeSequenceCodeValue( 113072 );
   fd.SetFile( w.GetFile() );
