@@ -233,11 +233,15 @@ IF(GDCM_WRAP_JAVA)
       TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${c}Java)
     ENDFOREACH(c)
     # Create the jar file:
-    # I am pretty sure this *.java thingy will byte me one day, when someone will try
+    # I am pretty sure this *.java thingy will bite me one day, when someone will try
     # to recompile from an existing build tree with invalid generated *.java file...
+    if(EXISTS ${VTK_JAVA_JAR})
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
+      set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
+    endif(EXISTS ${VTK_JAVA_JAR})
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
-      COMMAND ${JAVA_COMPILE} ARGS -cp ${VTK_JAVA_JAR} "vtk/*.java"
+      COMMAND ${JAVA_COMPILE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
       COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
       DEPENDS ${VTKGDCM_NAME}Java
@@ -254,6 +258,10 @@ IF(GDCM_WRAP_JAVA)
         RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKApplications
         LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKLibraries ${NAMELINK_SKIP}
         ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKDevelopment
+      )
+    # because vtkgdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
+    INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
+      DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
       )
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
