@@ -179,7 +179,7 @@ Use gdcmconv to properly re-encode a JP2/JFIF file into J2K/JPG.
 
 \verbatim
 $ gdcmimg input.jp2 output_jp2.dcm
-$ gdcmconv --j2K --force output_jp2 output_j2k.dcm
+$ gdcmconv --j2k --force output_jp2 output_j2k.dcm
 \endverbatim
 
 For RLE file, no check is done for crossing the row boundary. It is recommended to use gdcmconv --rle to reencode into a proper RLE file in case of doubt.

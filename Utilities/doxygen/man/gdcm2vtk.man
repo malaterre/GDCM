@@ -10,7 +10,8 @@ gdcm2vtk [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcm2vtk 
+The \b gdcm2vtk takes as input any file supported by VTK (including DICOM file) and will generate as output
+a DICOM file.
 
 \section parameters PARAMETERS
 

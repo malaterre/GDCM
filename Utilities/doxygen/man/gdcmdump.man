@@ -10,7 +10,11 @@ gdcmdump [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmdump 
+The \b gdcmdump command line program dumps a DICOM file to the console.
+For those familiary with dcmdump output, gdcmdump has some minor differences. Namely:
+\li For Implicit Transfer Syntax gdcmdump will print \b ?? instead of the dictionary VR
+
+gdcmdump has a limited private dictionary that is used to lookup private element whenever possible.
 
 \section parameters PARAMETERS
 
@@ -29,6 +33,7 @@ file-in   DICOM input filename
   -c --color     print in color.
   -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
   -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
+  -A --asn1      print encapsulated ASN1 structure >(0400,0520).
 \endverbatim
 
 \subsection general_options general options
@@ -56,6 +61,66 @@ file-in   DICOM input filename
 \verbatim
   -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
 \endverbatim
+
+\section usage Typical usage
+\subsection siemens_csa SIEMENS CSA Header 
+
+Using this option it is possible to dump as a readable text what is contained in the private attribute as found in
+typical SIEMENS MR DICOM file.
+
+Eg.:
+
+\verbatim
+$ gdcmdump --csa MR_SIEMENS_forceLoad29-1010_29-1020.dcm
+\endverbatim
+
+\verbatim
+(0029,0010)siemens csa header
+Image shadow data (0029,xx10)
+
+0 - 'EchoLinePosition' VM 1, VR IS, SyngoDT 6, NoOfItems 6, Data '64      '
+1 - 'EchoColumnPosition' VM 1, VR IS, SyngoDT 6, NoOfItems 6, Data '64      '
+2 - 'EchoPartitionPosition' VM 1, VR IS, SyngoDT 6, NoOfItems 6, Data '32      '
+3 - 'UsedChannelMask' VM 1, VR UL, SyngoDT 9, NoOfItems 6, Data '255     '
+4 - 'Actual3DImaPartNumber' VM 1, VR IS, SyngoDT 6, NoOfItems 0, Data 
+5 - 'ICE_Dims' VM 1, VR LO, SyngoDT 19, NoOfItems 6, Data 'X_1_1_1_1_1_1_31_1_1_1_1_19'
+6 - 'B_value' VM 1, VR IS, SyngoDT 6, NoOfItems 6, Data '0       '
+7 - 'Filter1' VM 1, VR IS, SyngoDT 6, NoOfItems 0, Data 
+8 - 'Filter2' VM 1, VR IS, SyngoDT 6, NoOfItems 0, Data 
+...
+\endverbatim
+
+\subsection gems_pdb GEMS Protocol Data Block
+
+Using this option it is possible to dump as a readable text what is contained in the private attribute as found in
+typical GEMS MR DICOM file.
+
+Protocol Data Block : 0025,xx1b,GEMS_SERS_01
+
+\verbatim
+$ gdcmdump --pdb GE_MR_0025xx1bProtocolDataBlock.dcm
+\endverbatim
+
+\verbatim
+ENTRY "Head First"
+POSITION "Supine"
+ANREF "NA"
+COIL "HEAD"
+PLANE "OBLIQUE"
+SEDESCFLAG "1"
+SEDESC "AX FSE T2"
+IMODE "2D"
+PSEQ "FSE-XL"
+IOPT "FC, EDR, TRF, Fast"
+PLUG "22"
+FILTCHOICE "None"
+BWRT "-1"
+TRICKSIMG "1"
+TAG_SPACE "7"
+TAG_TYPE "None"
+...
+\endverbatim
+
 
 \section see_also SEE ALSO
 
