@@ -1,6 +1,6 @@
 /*!
 
-\page gdcmimg Manipulate DICOM file.
+\page gdcmimg Manipulate DICOM image file.
 
 \section synopsis SYNOPSIS
 
@@ -11,8 +11,8 @@ gdcmimg [options] file-in file-out
 \section description DESCRIPTION
 
 The \b gdcmimg command line tool can be used in two fashions:
-1. Converting a recognized file format into its encapsulated DICOM counterpart,
-2. Anonymizing a rectangular portion of a DICOM file.
+\li 1. Converting a recognized file format into its encapsulated DICOM counterpart,
+\li 2. Anonymizing a rectangular portion of a DICOM file.
 
 \section parameters PARAMETERS
 
@@ -96,7 +96,8 @@ output format:
 \endverbatim
 
 For RAW file format, you should take special care of the --endian option.
-For the JPEG file format, both the lossy and lossless format are supported.
+For the (old) JPEG file format, both the lossy and lossless format are supported, user should pay attention to
+the --sign option.
 For file format such as RLE or RAW, user is expected to fill in information required to find the dimension
 and type of input data as there is no other way to find this information. For all other file format,
 the properties are derived from the file format itself.
@@ -111,7 +112,8 @@ To fill the region [0,100]x[0,100] of a DICOM image simply do:
 $ gdcmimg --fill 0 --region 0,100,0,100 -i input.dcm -o output_black.dcm
 \endverbatim
 
-Warning: if the Pixel Data is compressed, the image is first decompressed so that pixel can be set to 0, but it is not recompressed.
+Warning: if the Pixel Data is compressed, the image is first decompressed so that pixel can be set to 0, 
+but it is not recompressed.
 
 \subsection raw Convert RAW to DICOM
 
@@ -122,6 +124,14 @@ $ gdcmimg --size 512,512 --depth 16 -i input.raw -o output.dcm
 \endverbatim
 
 the image will be a Secondary Capture
+
+You can use the \b dd cmd line to skip any header you would like to discard, for instance,
+if you would like to skip the first 108 bytes, simply do:
+
+\verbatim
+$ dd skip=108 bs=1 if=input.raw of=output.raw
+\endverbatim
+
 \subsection pnm Convert PGM/PNM/PPM to DICOM
 
 Recognized extensions are .pgm, .pnm, .ppm (case insensitive)
@@ -131,6 +141,7 @@ $ gdcmimg -i input.pgm -o output.dcm
 \endverbatim
 
 the image will be a Secondary Capture
+
 \subsection rle Convert RLE to DICOM
 
 Recognized extension is .rle (case insensitive)
@@ -175,7 +186,7 @@ For RLE file, no check is done for crossing the row boundary. It is recommended 
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>convert</b>(1)
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>convert</b>(1), <b>dd</b>(1)
 
 \section copyright COPYRIGHT
 

@@ -69,5 +69,8 @@ using System.Runtime.CompilerServices;
 // .NET Framework documentation for more information about signing.
 // This is not required, if you don't want signing let these attributes like they're.
 [assembly: AssemblyDelaySign(false)]
+// http://msdn.microsoft.com/en-us/library/6f05ezxy(VS.80).aspx
+//[assembly: AssemblyKeyFile("key.snk")]
 [assembly: AssemblyKeyFile("")]
+//[assembly: AssemblyKeyName("GDCM Key")]
 [assembly: AssemblyKeyName("")]
