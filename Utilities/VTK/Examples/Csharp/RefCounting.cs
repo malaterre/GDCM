@@ -17,6 +17,8 @@ using vtkgdcm;
 
 
 /*
+ * this is not so much an example but simply a test to make sure cstor / dstor work as expected
+ * and call the ::New and ->Delete() of VTK style.
  */
 public class RefCounting
 {
