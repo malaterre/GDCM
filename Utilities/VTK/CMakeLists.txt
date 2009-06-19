@@ -248,6 +248,7 @@ IF(GDCM_WRAP_JAVA)
       DEPENDS ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       COMMENT "building vtkgdcm.jar"
     )
+    ADD_DEPENDENCIES(VTKGDCMJavaJar vtkgdcmJavaJavaClasses)
     # Install rules:
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
       INSTALL(TARGETS ${VTKGDCM_NAME}Java
