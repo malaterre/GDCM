@@ -21,19 +21,21 @@ file-out  DICOM output filename
 
 \section options OPTIONS
 
-\subsection params params
+\subsection params Parameters
 \verbatim
 \endverbatim
 
-\subsection options options
+\subsection options Options
 \verbatim
+  -i --input     DICOM filename or directory
+  -o --output    DICOM filename or directory
+  -r --recursive          recursive.
+     --descriptor          descriptor.
+     --root-uid               Root UID.
+     --resources-path         Resources path.
 \endverbatim
 
-\subsection encryption_options encryption_options
-\verbatim
-\endverbatim
-
-\subsection general_options general options
+\subsection general_options General Options
 \verbatim
   -h   --help
          print this help text and exit
