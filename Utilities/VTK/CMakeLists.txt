@@ -103,7 +103,21 @@ ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 #ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 
 SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+  IF(GDCM_USE_ACTIVIZ)
+    get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
+                                PATH)
+
+                              LINK_DIRECTORIES(${bla})
+TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
+  ${bla}/libvtkCommon.so
+  #${bla}/libvtkIO.so
+  ${bla}/libvtkImaging.so
+  ${bla}/libvtkRendering.so
+  )
+  ELSE(GDCM_USE_ACTIVIZ)
 TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
+  ENDIF(GDCM_USE_ACTIVIZ)
+
 # this need to be set on the vtkIO lib directly
 #  SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -245,13 +259,17 @@ IF(GDCM_WRAP_JAVA)
       COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
       DEPENDS ${VTKGDCM_NAME}Java
-      COMMENT   "*.java -> jar"
+      #${VTK_JAVA_DEPENDENCIES}
+      #vtkgdcmJavaJavaClasses
+      COMMENT   "javac *.java -> jar; jar cvf -> vtkgdcm.jar"
     )
     # Target to execute custom command:
     ADD_CUSTOM_TARGET(VTKGDCMJavaJar ALL
       DEPENDS ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       COMMENT "building vtkgdcm.jar"
     )
+    ADD_DEPENDENCIES(VTKGDCMJavaJar vtkgdcmJavaJavaClasses)
+
     # Install rules:
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
       INSTALL(TARGETS ${VTKGDCM_NAME}Java
