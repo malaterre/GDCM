@@ -34,8 +34,6 @@ Altered by: Mathieu Malaterre 2008, for GDCM project
             when reading deflate bit stream in DICOM special handling of \0 is needed
             also when writing deflate back to disk, the add_footer must be called
 */
-#include <string.h> // memcpy
-#include <stdio.h> // EOF
 
 //*****************************************************************************
 //  template class basic_zip_streambuf
