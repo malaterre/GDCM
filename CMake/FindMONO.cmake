@@ -42,6 +42,10 @@ SET(MONO_FOUND TRUE)
 # TODO get version
 # TODO: there are multiple 'mcs' command on unix, need to check this is Mono:
 # mcs --version should return "Mono C# compiler version 1.9.1.0"
+ELSEIF(MONO_EXECUTABLE AND GMCS_EXECUTABLE)
+SET(MONO_FOUND TRUE)
+ELSEIF(MONO_EXECUTABLE AND SMCS_EXECUTABLE)
+SET(MONO_FOUND TRUE)
 ENDIF(MONO_EXECUTABLE AND MCS_EXECUTABLE)
 
 IF(NOT MONO_FOUND)

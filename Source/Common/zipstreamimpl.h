@@ -59,6 +59,9 @@ zran.c
 #include <iostream>
 #include <algorithm>
 
+#include <string.h> // memcpy
+#include <stdio.h> // EOF
+
 #include <gdcm_zlib.h>
 
 #ifdef WIN32 /* Window 95 & Windows NT */
