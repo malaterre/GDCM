@@ -73,6 +73,7 @@ public:
 
   /// Get VL
   const VL& GetVL() const { return ValueLengthField; }
+  VL& GetVL() { return ValueLengthField; }
   /// Set VL
   /// Use with cautious (need to match Part 6), advanced user only
   /// \see SetByteValue

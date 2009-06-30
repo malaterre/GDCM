@@ -19,6 +19,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmFile.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmCodeString.h"
 
 namespace gdcm
 {
@@ -122,14 +123,28 @@ static const char *MSStrings[] = {
 MediaStorage::MSType MediaStorage::GetMSType(const char *str)
 {
   if(!str) return MS_END;
-  assert( std::string(str).find( ' ' ) == std::string::npos ); // no space allowed in UI
-  int i = 0;
-  while(MSStrings[i] != 0)
+
+  for(unsigned int i = 0; MSStrings[i] != 0; ++i)
     {
     if( strcmp(str, MSStrings[i]) == 0 )
+      {
       return (MSType)i;
-    ++i;
+      }
     }
+  // Ouch ! We did not find anything, that's pretty bad, let's hope that 
+  // the toolkit which wrote the image is buggy and tolerate space padded binary
+  // string
+  CodeString codestring = str;
+  std::string cs = codestring.Trim();
+  for(unsigned int i = 0; MSStrings[i] != 0; ++i)
+    {
+    if( strcmp(cs.c_str(), MSStrings[i]) == 0 )
+      {
+      return (MSType)i;
+      }
+    }
+
+  //assert(0);
   return MS_END;
 }
 
