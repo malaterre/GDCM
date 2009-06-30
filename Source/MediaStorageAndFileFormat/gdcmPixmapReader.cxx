@@ -128,7 +128,6 @@ bool PixmapReader::Read()
         std::string sopclassuid_str(
           sopclassuid->GetPointer(),
           sopclassuid->GetLength() );
-        assert( sopclassuid_str.find( ' ' ) == std::string::npos );
         MediaStorage ms2 = MediaStorage::GetMSType(sopclassuid_str.c_str());
         bool isImage2 = MediaStorage::IsImage( ms2 );
         if( isImage2 )
