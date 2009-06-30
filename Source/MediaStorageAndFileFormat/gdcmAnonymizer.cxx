@@ -658,7 +658,13 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
         }
       else
         {
-        dummymap[ tvk ] = DummyValueGenerator::Generate( tvk.second.c_str() );
+        const char *ret = DummyValueGenerator::Generate( tvk.second.c_str() );
+        if( ret )
+          {
+          dummymap[ tvk ] = ret;
+          }
+        else
+          dummymap[ tvk ] = "";
         }
       }
     std::string &v = dummymap[ tvk ];
@@ -708,8 +714,9 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
       }
     if( sqi )
       {
-      //sqi->SetLengthToUndefined();
       de.SetVLToUndefined();
+      //de.GetVL().SetToUndefined();
+      //sqi->SetLengthToUndefined();
       unsigned int n = sqi->GetNumberOfItems();
       for( unsigned int i = 1; i <= n; ++i )
         {
