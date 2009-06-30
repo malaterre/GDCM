@@ -374,6 +374,7 @@ bool CryptographicMessageSyntax::ParseKeyFile( const char *keyfile)
   Internals->SetPrivateKey( pkey );
   return true;
 #else
+  gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif
 }
@@ -399,6 +400,7 @@ bool CryptographicMessageSyntax::ParseCertificateFile( const char *keyfile)
   ::sk_X509_push(recips, x509);
   return true;
 #else
+  gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif
 }
