@@ -149,6 +149,7 @@ static bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpa
     {
     if( !cms.ParseKeyFile( privpath ) )
       {
+      std::cerr << "Could not parse Private Key: " << privpath << std::endl;
       return false;
       }
     }
@@ -157,6 +158,7 @@ static bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpa
     {
     if( !cms.ParseCertificateFile( certpath ) )
       {
+      std::cerr << "Could not parse Certificate Key: " << certpath << std::endl;
       return false;
       }
     }
@@ -507,11 +509,13 @@ int main(int argc, char *argv[])
   // one option only please
   if( deidentify && reidentify )
     {
+    std::cerr << "One option please" << std::endl;
     return 1;
     }
   // dumb mode vs smart mode:
   if( ( deidentify || reidentify ) && dumb_mode )
     {
+    std::cerr << "One option please" << std::endl;
     return 1;
     }
 
