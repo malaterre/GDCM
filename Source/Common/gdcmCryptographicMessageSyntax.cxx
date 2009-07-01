@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmTrace.h"
 
 #include <stdio.h> // stderr
 #include <string.h> // strcmp
