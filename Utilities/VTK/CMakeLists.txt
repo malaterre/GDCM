@@ -253,6 +253,11 @@ IF(GDCM_WRAP_JAVA)
       # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
       set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
     endif(EXISTS ${VTK_JAVA_JAR})
+    MARK_AS_ADVANCED(GDCM_VTK_JAVA_JAR)
+    if(EXISTS ${GDCM_VTK_JAVA_JAR})
+    else(EXISTS ${GDCM_VTK_JAVA_JAR})
+      message(FATAL_ERROR "Could not find vtk.jar file")
+    endif(EXISTS ${GDCM_VTK_JAVA_JAR})
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       COMMAND ${JAVA_COMPILE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
