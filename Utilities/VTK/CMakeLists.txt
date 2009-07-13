@@ -241,6 +241,22 @@ IF(GDCM_WRAP_JAVA)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
     VTK_WRAP_JAVA3(${VTKGDCM_NAME}Java vtkgdcmJAVA_SRCS "${vtkgdcm_SRCS}")
+    # libvtk-java is a pain to handle...
+    if(EXISTS ${VTK_JAVA_JAR})
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
+      set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
+    else(EXISTS ${VTK_JAVA_JAR})
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533198
+      if(EXISTS /usr/lib/jni/libvtkCommonJava.so)
+        message("Implicitely adding debian package layout...")
+        link_directories("/usr/lib/jni")
+      endif()
+    endif(EXISTS ${VTK_JAVA_JAR})
+    MARK_AS_ADVANCED(GDCM_VTK_JAVA_JAR)
+    if(EXISTS ${GDCM_VTK_JAVA_JAR})
+    else(EXISTS ${GDCM_VTK_JAVA_JAR})
+      message(FATAL_ERROR "Could not find vtk.jar file")
+    endif(EXISTS ${GDCM_VTK_JAVA_JAR})
     ADD_LIBRARY(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
     FOREACH(c ${vtkgdcm_LIBS})
@@ -249,15 +265,6 @@ IF(GDCM_WRAP_JAVA)
     # Create the jar file:
     # I am pretty sure this *.java thingy will bite me one day, when someone will try
     # to recompile from an existing build tree with invalid generated *.java file...
-    if(EXISTS ${VTK_JAVA_JAR})
-      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
-      set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
-    endif(EXISTS ${VTK_JAVA_JAR})
-    MARK_AS_ADVANCED(GDCM_VTK_JAVA_JAR)
-    if(EXISTS ${GDCM_VTK_JAVA_JAR})
-    else(EXISTS ${GDCM_VTK_JAVA_JAR})
-      message(FATAL_ERROR "Could not find vtk.jar file")
-    endif(EXISTS ${GDCM_VTK_JAVA_JAR})
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       COMMAND ${JAVA_COMPILE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
