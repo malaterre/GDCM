@@ -369,3 +369,11 @@ http://www.nabble.com/How-to-load-sequence-items-td20622657.html
 
 Re: How to load sequence items
 -----------------------------------------------------------------------
+# CPP check
+find_program(CPPCHECK_EXECUTABLE NAMES cppcheck
+DOC "cppcheck - static check tool")
+add_custom_target (cppcheck ${CPPCHECK_EXECUTABLE} -a -f -q 
+${GDCM_SOURCE_DIR}"
+COMMENT "Checking C++ code")
+
+-----------------------------------------------------------------------
