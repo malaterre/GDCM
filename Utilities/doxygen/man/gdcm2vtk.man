@@ -77,6 +77,22 @@ Special care was taken for the following file format:
    5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and CVS). Only use it, if you know what you are doing. 
 \endverbatim
 
+\subsection convert_vti CONVERT VTI
+
+\verbatim
+$ gdcm2vtk inputfile output.vti
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into a XML VTK ImageData .vti file.
+
+\subsection convert_vtk CONVERT VTK
+
+\verbatim
+$ gdcm2vtk inputfile output.vtk
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into an old VTK Structured PointSets .vtk file.
+
 \section dicom DICOM
 
 \verbatim
