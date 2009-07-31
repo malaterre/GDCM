@@ -77,6 +77,14 @@ Special care was taken for the following file format:
    5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and CVS). Only use it, if you know what you are doing. 
 \endverbatim
 
+\subsection convert_meta CONVERT MetaImage (mhd, mha)
+
+\verbatim
+$ gdcm2vtk inputfile output.mha
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into a MetaImage .mha file. Same goes for .mhd file.
+
 \subsection convert_vti CONVERT VTI
 
 \verbatim
