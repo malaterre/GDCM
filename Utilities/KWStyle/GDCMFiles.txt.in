@@ -1,0 +1,6 @@
+"@GDCM_SOURCE_DIR@/Source/Common/*.txx"
+"@GDCM_SOURCE_DIR@/Source/Common/*.cxx"
+"@GDCM_SOURCE_DIR@/Source/Common/*.h*"
+-f (zipstream\.h)
+-f (zipstream\.cxx)
+
