@@ -48,7 +48,8 @@ bool ImageHelper::ForcePixelSpacing = false;
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -56,7 +57,8 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
   // Plane position Sequence
   const Tag tpms(0x0020,0x9113);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
@@ -78,7 +80,8 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
 bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -86,7 +89,8 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   // Plane position Sequence
   const Tag tpms(0x0020,0x9116);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 && sqi2->GetNumberOfItems() );
   // Take it from the first item
   const Item &item2 = sqi2->GetItem(1);
@@ -111,7 +115,8 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
 bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -119,7 +124,8 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   // (0028,9145) SQ (Sequence with undefined length)               # u/l,1 Pixel Value Transformation Sequence
   const Tag tpms(0x0028,0x9145);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
@@ -184,7 +190,8 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   const Tag tfgs(0x5200,0x9230);
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   double normal[3];
   DirectionCosines dc( &cosines[0] );
@@ -201,7 +208,8 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     // (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
     const Tag tpms(0x0020,0x9113);
     if( !subds.FindDataElement(tpms) ) return false;
-    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
     assert( sqi2 );
     const Item &item2 = sqi2->GetItem(1);
     const DataSet & subds2 = item2.GetNestedDataSet();
@@ -263,7 +271,8 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   //const Tag tfgs(0x5200,0x9230);
   //assert( ds.FindDataElement( tfgs ) );
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -271,7 +280,8 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
   const Tag tpms(0x0028,0x9110);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
