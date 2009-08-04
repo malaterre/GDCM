@@ -115,7 +115,7 @@ Converted to DICOM this leads to:
 (0040,a043) SQ (Sequence with explicit length #=0)      #   0, 1 ConceptNameCodeSequence
 (fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
 (0042,0010) ST [GDCM Reference Manual]                  #  22, 1 DocumentTitle
-(0042,0011) OB 25\50\44\46\2d\31\2e\34\0a\25\e7\f3\cf\d3\0a\33\32\30\37\37\20\30... # 13756842, 1 EncapsulatedDocument
+(0042,0011) OB 25\\50\\44\\46\\2d\\31\\2e\\34\\0a\\25\\e7\\f3\\cf\\d3\\0a\\33\\32\\30\\37\\37\\20\\30... # 13756842, 1 EncapsulatedDocument
 (0042,0012) LO [application/pdf]                        #  16, 1 MIMETypeOfEncapsulatedDocument
 \endverbatim
 
@@ -131,10 +131,11 @@ Change: 2009-04-28 16:05:00.000000000 +0200
 \endverbatim
 
 
-Explanation:
-* Study Date/Time, Instance Creation Date/Time are both equal to the current time gdcmpdf tool was run,
-* AcquisitionDateTime is set to the Modify Time of the actual pdf file,
-* Content Date/Time are set from the actual PDF header info: CreationDate.
+Explanation for the different Date/Time mappings:
+
+\li Study Date/Time, Instance Creation Date/Time are both equal to the current time gdcmpdf tool was run,
+\li Acquisition Date Time is set to the Modify Time of the actual pdf file,
+\li Content Date/Time are set from the actual PDF header info: CreationDate.
 
 
 \section see_also SEE ALSO
