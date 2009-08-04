@@ -287,7 +287,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     gdcm::Tag stcsq(0x3006,0x0026);
     if( !snestedds.FindDataElement( stcsq ) )
       {
-      return 0;
+      continue;
       }
     const gdcm::DataElement &sde = snestedds.GetDataElement( stcsq );
 
@@ -307,7 +307,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     gdcm::Tag tcsq(0x3006,0x0040);
     if( !nestedds.FindDataElement( tcsq ) )
       {
-      return 0;
+      continue;
       }
     const gdcm::DataElement& csq = nestedds.GetDataElement( tcsq );
     //std::cout << csq << std::endl;
@@ -316,7 +316,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = csq.GetValueAsSQ();
     if( !sqi2 || !sqi2->GetNumberOfItems() )
       {
-      return 0;
+      continue;
       }
     unsigned int nitems = sqi2->GetNumberOfItems();
     //std::cout << nitems << std::endl;
