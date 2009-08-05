@@ -4,8 +4,11 @@ At a minimum you should consider the following cmake options:
 
 CMAKE_SKIP_RPATH:BOOL=YES
 CMAKE_INSTALL_PREFIX:PATH=/usr
+To build the cmd line applications:
 GDCM_BUILD_APPLICATIONS:BOOL=ON
+To build shared libs:
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
+To build the documentation:
 GDCM_DOCUMENTATION:BOOL=ON
 
 You should really consider:
@@ -33,6 +36,10 @@ GDCM_USE_SYSTEM_EXPAT:BOOL=ON
 GDCM_USE_SYSTEM_ZLIB:BOOL=ON
 GDCM_USE_SYSTEM_UUID:BOOL=ON
 GDCM_USE_SYSTEM_OPENJPEG:BOOL=ON
+
+OpenSSL option is slightly different as not 'convenient' openssl is shipped within GDCM, so the only
+way to access the openssl functionalities is to have openssl installed in the target system.
+GDCM_USE_SYSTEM_OPENSSL:BOOL=ON
 
 Examples:
 GDCM comes with some examples for user, but setting the following:
