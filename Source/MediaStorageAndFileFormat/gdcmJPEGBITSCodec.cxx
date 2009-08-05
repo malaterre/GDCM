@@ -512,7 +512,6 @@ UINT16 Y_density
     //return false;
     }
 
-  return true;
 
 #if 0
     switch ( cinfo.jpeg_color_space )
@@ -626,6 +625,7 @@ UINT16 Y_density
     /* Suspension: jpeg_finish_decompress */
     Internals->StateSuspension = 4;
     }
+#endif
 
   /* Step 8: Release JPEG decompression object */
 
@@ -647,7 +647,6 @@ UINT16 Y_density
 
   /* And we're done! */
   return true;
-#endif
 
 }
 

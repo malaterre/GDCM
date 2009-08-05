@@ -35,6 +35,10 @@ namespace gdcm
 
 Writer::~Writer()
 {
+  if (Ofstream) {
+    Ofstream->close();
+    delete Ofstream;
+  }
 }
 
 bool Writer::Write()
