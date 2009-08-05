@@ -380,3 +380,5 @@ COMMENT "Checking C++ code")
 Reduce excess linkage:
 http://wiki.mandriva.com/en/Development/Tasks/Packaging/Problems/Underlinking
 http://wiki.mandriva.com/en/Overlinking
+-----------------------------------------------------------------------
+Introduce deprecation mechanism and *really* rid of GetSequenceOfItems() !!!
