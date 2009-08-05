@@ -103,7 +103,17 @@ public:
   /// Check if Data Element is empty
   bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
+  /// Make Data Element empty (no Value)
   void Empty() { ValueField = 0; ValueLengthField = 0; }
+
+  /// Clear Data Element (make Value empty and invalidate Tag & VR)
+  void Clear()
+    {
+    TagField = 0;
+    VRField = VR::INVALID;
+    ValueField = 0;
+    ValueLengthField = 0;
+    }
 
   // Helper:
   /// Set the byte value
@@ -135,6 +145,7 @@ public:
   /// in those case the return of the function will be NULL, while the Value would be
   /// a valid SequenceOfItems, in those case prefer GetValueAsSQ. In which case
   /// the code internally trigger an assert to warn developper.
+  /// When in doubt do not use this function and prefer GetValueAsSQ()
   const SequenceOfItems* GetSequenceOfItems() const;
   SequenceOfItems* GetSequenceOfItems();
 
@@ -220,13 +231,6 @@ public:
   const std::ostream &Write(std::ostream &os) const {
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
-  void Clear()
-    {
-  TagField = 0;
-  ValueLengthField = 0;
-  VRField = VR::INVALID;
-  ValueField = 0;
-    }
 
 protected:
   Tag TagField;
