@@ -377,3 +377,6 @@ ${GDCM_SOURCE_DIR}"
 COMMENT "Checking C++ code")
 
 -----------------------------------------------------------------------
+Reduce excess linkage:
+http://wiki.mandriva.com/en/Development/Tasks/Packaging/Problems/Underlinking
+http://wiki.mandriva.com/en/Overlinking
