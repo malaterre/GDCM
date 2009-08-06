@@ -56,6 +56,12 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
 
   anon.SetFile( file );
 
+  if( empty_tags.empty() && replace_tags.empty() && remove_tags.empty() )
+    {
+    std::cerr << "No operation to be done." << std::endl;
+    return false;
+    }
+
   std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
   for(; it != empty_tags.end(); ++it)
     {
