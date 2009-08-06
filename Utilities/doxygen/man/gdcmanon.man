@@ -46,6 +46,8 @@ You need to specify at least one operating mode, from the following list (and on
      --dumb                   Dumb mode anonymizer
 \endverbatim
 
+Warning when operating in dumb mode, you need to also specify an operation to do, such as 'remove' or 'empty' a tag, see below the dumb mode options.
+
 \subsection options options
 \verbatim
   -i --input                  DICOM filename / directory
