@@ -518,6 +518,13 @@ int main(int argc, char *argv[])
     std::cerr << "One option please" << std::endl;
     return 1;
     }
+  if( deidentify || reidentify )
+    {
+#ifndef GDCM_USE_SYSTEM_OPENSSL
+    std::cerr << "OpenSSL was not configured." << std::endl;
+    return 1;
+#endif 
+    }
 
   // by default AES 256
   gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
