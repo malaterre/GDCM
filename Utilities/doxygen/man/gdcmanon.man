@@ -157,7 +157,7 @@ $ openssl req -new -key CA_key.pem -x509 -days 365 -out CA_cert.cer
 
 \section see_also SEE ALSO
 
-<b>gdcmconv</b>(1), <b>gdcminfo</b>(1)
+<b>gdcmconv</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1)
 
 \section copyright COPYRIGHT
 
