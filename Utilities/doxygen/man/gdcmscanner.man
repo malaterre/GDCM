@@ -48,7 +48,7 @@ File-Set.
 
 \section usage Typical usage
 \section simple_usage Simple usage
-In order to display all the value for Patient Name (0010,0010) in the directory name \t gdcmData, simply do:
+In order to display all the value for Patient Name (0010,0010) in the directory name \b gdcmData, simply do:
 
 \verbatim
 $ gdcmscanner -t 10,10 -d gdcmData -p
