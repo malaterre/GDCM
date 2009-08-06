@@ -41,7 +41,7 @@ file-out  DICOM output filename
   -c --certificate            Path to Certificate.
 \endverbatim
 
-\subsection encryption_options encryption_options
+\subsection encryption_options encryption options
 \verbatim
      --des            DES.
      --des3           Triple DES.
@@ -50,7 +50,7 @@ file-out  DICOM output filename
      --aes256         AES 256.
 \endverbatim
 
-\subsection dumb_mode_options dumb_mode_options
+\subsection dumb_mode_options dumb mode options
 \verbatim
      --empty   %d,%d           DICOM tag(s) to empty
      --remove  %d,%d           DICOM tag(s) to remove
@@ -85,13 +85,13 @@ file-out  DICOM output filename
 \endverbatim
 
 \section usage Typical usage
-\subsection de-identification (anonymization, encrypt)
+\subsection deident De-identification (anonymization, encrypt)
 
 \verbatim
 $ gdcmanon --certificate certificate.pem -e original.dcm original_anonymized.dcm
 \endverbatim
 
-\subsection re-identification (de-anonymization,decrypt)
+\subsection reindent Re-identification (de-anonymization,decrypt)
 
 \verbatim
 $ gdcmanon --key privatekey.pem -d original_anonymized.dcm original_copy.dcm
@@ -99,7 +99,7 @@ $ gdcmanon --key privatekey.pem -d original_anonymized.dcm original_copy.dcm
 
 You can then check that original.dcm and original_copy.dcm are identical.
 
-\subsection dumb mode
+\subsection dump Dumb mode
 This functionality is not describe in the DICOM standard. Users are advised that improper use
 of that mode is not recommended, meaning that important tag can be empty/remove/replace resulting
 in illegal/invalid DICOM file.
