@@ -6,6 +6,7 @@
 
 \verbatim
 gdcmanon [options] file-in file-out
+gdcmanon [options] dir-in  dir-out
 \endverbatim
 
 \section description DESCRIPTION
@@ -36,7 +37,9 @@ file-out  DICOM output filename
 
 \section options OPTIONS
 
-\subsection params params
+You need to specify at least one operating mode, from the following list (and only one):
+
+\subsection params Required parameters
 \verbatim
   -e --de-identify            De-identify DICOM (default)
   -d --re-identify            Re-identify DICOM
