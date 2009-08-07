@@ -36,6 +36,14 @@ file-in   DICOM input filename
 file-out  DICOM output filename
 \endverbatim
 
+or
+
+\verbatim
+file-in   DICOM input directory
+
+file-out  DICOM output directory
+\endverbatim
+
 \section options OPTIONS
 
 You need to specify at least one operating mode, from the following list (and only one):
@@ -123,6 +131,13 @@ $ gdcmanon --key privatekey.pem -d original_anonymized.dcm original_copy.dcm
 \endverbatim
 
 You can then check that original.dcm and original_copy.dcm are identical.
+
+\subsection caveat Multiple files caveat
+
+When anonymizing multiple DICOM file, you are required to use the directory input. You cannot 
+call multiple time the gdcmanon command line tool. Indeed the tool stores in memory during the
+process only a hash table of conversion so that each time a particular value is found it get always
+replaced by the same de-identified value (think: consistant Series Instance UID).
 
 \subsection dump Dumb mode
 This functionality is not described in the DICOM standard. Users are advised that improper use
