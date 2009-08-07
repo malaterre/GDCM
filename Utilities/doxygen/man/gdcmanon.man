@@ -139,14 +139,14 @@ call multiple time the gdcmanon command line tool. Indeed the tool stores in mem
 process only a hash table of conversion so that each time a particular value is found it get always
 replaced by the same de-identified value (think: consistant Series Instance UID).
 
-\subsection dump Dumb mode
+\subsection dumb Dumb mode
 This functionality is not described in the DICOM standard. Users are advised that improper use
 of that mode is not recommended, meaning that important tag can be empty/remove/replace resulting
 in illegal/invalid DICOM file.
 Only use when you know what you are doing. If you delete a Type 1 attribute, chance is that your DICOM
 file will be not accepted in most DICOM third party viewer.
 Unfortunately this is often this mode that is implemented in popular DICOM Viewer, always prefer 
-what the DICOM standard describes, and avoid the dump mode.
+what the DICOM standard describes, and avoid the dumb mode.
 
 The following example shows how to use dumb mode and achieve 5 operations at the same time:
 \li Empty the tag (0010,0010) Patient's Name,
