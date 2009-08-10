@@ -237,7 +237,7 @@ You can use 3rd party tool to check the output of gdcmconv is correct.
 \subsection other_toolkit DCMTK / dicom3tools
 
 Using another DICOM implementation such as the one from DCMTK or dicom3tools can be a good process to check the output of gdcmconv.
-\li For DCMTK use: gdcmdump
+\li For DCMTK use: dcmdump
 \li For dicom3tools use: dcdump
 
 \subsection vim VIM: vimdiff
