@@ -62,7 +62,7 @@ gdcmviewer will try to read your file, and the print the vtk information associa
 
 \section wiki_link Wiki Link
 
-The wiki page, will color picture can be found at:
+The wiki page, will color pictures can be found at:
 http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Gdcmviewer
 
 \section see_also SEE ALSO

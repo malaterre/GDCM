@@ -121,10 +121,69 @@ TAG_TYPE "None"
 ...
 \endverbatim
 
+\subsection asn1 Encapsulated ASN1 Structure
+
+This option is mainly used for dumping the ASN1 structure of the encrypted Attribute (0040,0520)
+
+\verbatim
+$ gdcmdump encrypted.dcm
+\endverbatim
+
+\verbatim
+...
+(0400,0500) SQ                                                    # u/l,1 Encrypted Attributes Sequence
+  (fffe,e000) na (Item with undefined length)
+    (0400,0510) UI [1.2.840.10008.1.2]                            # 18,1 Encrypted Content Transfer Syntax UID
+    (0400,0520) OB 30\\82\\03\\ba\\06\\09\\2a\\86\\48\\55\\04\\08\\13         # 958,1 Encrypted Content
+  (fffe,e00d)
+(fffe,e0dd)
+...
+\endverbatim
+
+\verbatim
+$ gdcmdump --asn1 encrypted.dcm
+\endverbatim
+
+\verbatim
+    0:d=0  hl=4 l= 954 cons: SEQUENCE          
+    4:d=1  hl=2 l=   9 prim:  OBJECT            :pkcs7-envelopedData
+   15:d=1  hl=4 l= 939 cons:  cont [ 0 ]        
+   19:d=2  hl=4 l= 935 cons:   SEQUENCE          
+   23:d=3  hl=2 l=   1 prim:    INTEGER           :00
+   26:d=3  hl=4 l= 366 cons:    SET               
+   30:d=4  hl=4 l= 362 cons:     SEQUENCE          
+   34:d=5  hl=2 l=   1 prim:      INTEGER           :00
+   37:d=5  hl=2 l=  82 cons:      SEQUENCE          
+   39:d=6  hl=2 l=  69 cons:       SEQUENCE          
+   41:d=7  hl=2 l=  11 cons:        SET               
+   43:d=8  hl=2 l=   9 cons:         SEQUENCE          
+   45:d=9  hl=2 l=   3 prim:          OBJECT            :countryName
+   50:d=9  hl=2 l=   2 prim:          PRINTABLESTRING   :AU
+   54:d=7  hl=2 l=  19 cons:        SET               
+   56:d=8  hl=2 l=  17 cons:         SEQUENCE          
+   58:d=9  hl=2 l=   3 prim:          OBJECT            :stateOrProvinceName
+   63:d=9  hl=2 l=  10 prim:          PRINTABLESTRING   :Some-State
+   75:d=7  hl=2 l=  33 cons:        SET               
+   77:d=8  hl=2 l=  31 cons:         SEQUENCE          
+   79:d=9  hl=2 l=   3 prim:          OBJECT            :organizationName
+   84:d=9  hl=2 l=  24 prim:          PRINTABLESTRING   :Internet Widgits Pty Ltd
+  110:d=6  hl=2 l=   9 prim:       INTEGER           :AC966D88787A51B4
+  121:d=5  hl=2 l=  13 cons:      SEQUENCE          
+  123:d=6  hl=2 l=   9 prim:       OBJECT            :rsaEncryption
+  134:d=6  hl=2 l=   0 prim:       NULL              
+  136:d=5  hl=4 l= 256 prim:      OCTET STRING      [HEX DUMP]:822368070285AD756C962ECB973514B291F946...
+  396:d=3  hl=4 l= 558 cons:    SEQUENCE          
+  400:d=4  hl=2 l=   9 prim:     OBJECT            :pkcs7-data
+  411:d=4  hl=2 l=  29 cons:     SEQUENCE          
+  413:d=5  hl=2 l=   9 prim:      OBJECT            :aes-256-cbc
+  424:d=5  hl=2 l=  16 prim:      OCTET STRING      [HEX DUMP]:3B49AFE71749F2BFF1519EBAEA95A393
+  442:d=4  hl=4 l= 512 prim:     cont [ 0 ]        
+\endverbatim
+
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>gdcmanon</b>(1)
 
 \section copyright COPYRIGHT
 

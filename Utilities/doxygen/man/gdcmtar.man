@@ -49,9 +49,77 @@ file-out  DICOM output filename
          debug mode, print debug information
 \endverbatim
 
+\section usage Typical usage
+\subsection mosaic SIEMENS Mosaic
+
+\verbatim
+ $ gdcminfo MR-sonata-3D-as-Tile.dcm
+\endverbatim
+
+\verbatim
+MediaStorage is 1.2.840.10008.5.1.4.1.1.4 [MR Image Storage]
+TransferSyntax is 1.2.840.10008.1.2.1 [Explicit VR Little Endian]
+NumberOfDimensions: 2
+Dimensions: (384,384,1)
+...
+\endverbatim
+
+\verbatim
+$ gdcmtar --mosaic -i MR-sonata-3D-as-Tile.dcm -o mosaic --pattern %03d.dcm 
+\endverbatim
+
+Will output:
+
+\verbatim
+-rw-r--r--   1 mathieu mathieu 72882 2009-08-10 11:14 mosaic000.dcm
+-rw-r--r--   1 mathieu mathieu 72886 2009-08-10 11:14 mosaic001.dcm
+-rw-r--r--   1 mathieu mathieu 72886 2009-08-10 11:14 mosaic002.dcm
+-rw-r--r--   1 mathieu mathieu 72886 2009-08-10 11:14 mosaic003.dcm
+-rw-r--r--   1 mathieu mathieu 72886 2009-08-10 11:14 mosaic004.dcm
+-rw-r--r--   1 mathieu mathieu 72886 2009-08-10 11:14 mosaic005.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic006.dcm
+-rw-r--r--   1 mathieu mathieu 72882 2009-08-10 11:14 mosaic007.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic008.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic009.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic010.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic011.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic012.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic013.dcm
+-rw-r--r--   1 mathieu mathieu 72882 2009-08-10 11:14 mosaic014.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic015.dcm
+-rw-r--r--   1 mathieu mathieu 72882 2009-08-10 11:14 mosaic016.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic017.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic018.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic019.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic020.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic021.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic022.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic023.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic024.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic025.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic026.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic027.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic028.dcm
+-rw-r--r--   1 mathieu mathieu 72884 2009-08-10 11:14 mosaic029.dcm
+-rw-r--r--   1 mathieu mathieu 72882 2009-08-10 11:14 mosaic030.dcm
+\endverbatim
+
+\verbatim
+ $ gdcminfo mosaic000.dcm
+\endverbatim
+
+\verbatim
+MediaStorage is 1.2.840.10008.5.1.4.1.1.4 [MR Image Storage]
+TransferSyntax is 1.2.840.10008.1.2.1 [Explicit VR Little Endian]
+NumberOfDimensions: 2
+Dimensions: (64,64,1)
+...
+\endverbatim
+
+
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>gdcminfo</b>(1)
 
 \section copyright COPYRIGHT
 
