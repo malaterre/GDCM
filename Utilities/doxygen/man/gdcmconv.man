@@ -150,6 +150,13 @@ $ gdcmconv --check-meta input.dcm output.dcm
 
 See typical cases such as: GE_DLX-8-MONO2-PrivateSyntax.dcm or PICKER-16-MONO2-No_DicomV3_Preamble.dcm from gdcmData.
 
+\subsection explicit Conversion to Explicit Transfer Syntax
+To convert a file that was written using Implicit Transfer Syntax into Explicit Transfer Syntax simply use:
+
+\verbatim
+$ gdcmconv --explicit uncompressed.dcm compressed.dcm
+\endverbatim
+
 \subsection lossless_jpeg Compressing to lossless JPEG
 To compress an uncompressed DICOM file to a JPEG Lossless encapsulated format:
 
