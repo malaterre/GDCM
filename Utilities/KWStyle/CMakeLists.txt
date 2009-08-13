@@ -7,17 +7,17 @@ IF(GDCM_USE_KWSTYLE)
   find_package(KWStyle)
 
   CONFIGURE_FILE(${GDCM_SOURCE_DIR}/Utilities/KWStyle/GDCM.kws.xml.in
-                 ${GDCM_BINARY_DIR}/GDCM.kws.xml)
+                 ${GDCM_BINARY_DIR}/Utilities/KWStyle/GDCM.kws.xml)
   #CONFIGURE_FILE(${GDCM_SOURCE_DIR}/Utilities/KWStyle/GDCMMoreChecks.kws.xml.in
   #             ${GDCM_BINARY_DIR}/GDCMMoreChecks.kws.xml)
 
   CONFIGURE_FILE(${GDCM_SOURCE_DIR}/Utilities/KWStyle/GDCMFiles.txt.in
-                 ${GDCM_BINARY_DIR}/GDCMFiles.txt)
+                 ${GDCM_BINARY_DIR}/Utilities/KWStyle/GDCMFiles.txt)
 
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_BINARY_DIR}/KWStyleReport.txt
     COMMAND ${KWSTYLE_EXECUTABLE}
-    ARGS    -xml ${GDCM_BINARY_DIR}/GDCM.kws.xml -o ${GDCM_SOURCE_DIR}/Utilities/KWStyle/GDCMOverwrite.txt -v ${KWSTYLE_ARGUMENTS} -D ${GDCM_BINARY_DIR}/GDCMFiles.txt 
+    ARGS    -xml ${GDCM_BINARY_DIR}/Utilities/KWStyle/GDCM.kws.xml -o ${GDCM_SOURCE_DIR}/Utilities/KWStyle/GDCMOverwrite.txt -v ${KWSTYLE_ARGUMENTS} -D ${GDCM_BINARY_DIR}/Utilities/KWStyle/GDCMFiles.txt 
     COMMENT "Coding Style Checker"
     )
 
