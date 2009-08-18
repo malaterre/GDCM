@@ -563,7 +563,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 //%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
 %include "gdcmPixmapToPixmapFilter.h"
-%ignore gdcm::ImageToImageFilter::GetOutput() const;
+//%ignore gdcm::ImageToImageFilter::GetOutput() const;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"
