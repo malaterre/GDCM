@@ -17,17 +17,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.2)
 # Do full dependency headers.
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-#-----------------------------------------------------------------------------
-# IJG version number, usefull for packaging and doxygen doc:
-SET(JPEG_MAJOR_VERSION 62) # 62 number version comes from the debian shared lib: /usr/lib/libjpeg.so.62
-SET(JPEG_MINOR_VERSION 1)  # bump up the minor version number so that there is no collision
-SET(JPEG_BUILD_VERSION 0)
-SET(JPEG_VERSION
-  "${JPEG_MAJOR_VERSION}.${JPEG_MINOR_VERSION}.${JPEG_BUILD_VERSION}")
-
 SET(JPEG_LIBRARY_PROPERTIES ${JPEG_LIBRARY_PROPERTIES}
-  VERSION "${JPEG_VERSION}"
-  SOVERSION "${JPEG_MAJOR_VERSION}.${JPEG_MINOR_VERSION}"
+  VERSION "${GDCM_VERSION}"
+  SOVERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
 )
 
 
