@@ -146,8 +146,9 @@ public:
   /// a valid SequenceOfItems, in those case prefer GetValueAsSQ. In which case
   /// the code internally trigger an assert to warn developper.
   /// When in doubt do not use this function and prefer GetValueAsSQ()
-  const SequenceOfItems* GetSequenceOfItems() const;
-  SequenceOfItems* GetSequenceOfItems();
+  /// @deprecated Replaced by DataElement::GetValueAsSQ() as of GDCM 2.2.
+  GDCM_LEGACY(const SequenceOfItems* GetSequenceOfItems() const)
+  GDCM_LEGACY(SequenceOfItems* GetSequenceOfItems())
 
   /// Interpret the Value stored in the DataElement. This is more robust (but also more
   /// expensive) to call this function rather than the simpliest form: GetSequenceOfItems()

@@ -40,6 +40,13 @@ CHECK_FUNCTION_EXISTS(_snprintf   HAVE__SNPRINTF)
 #INCLUDE(CheckSymbolExists)
 CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 
+#-----------------------------------------------------------------------------
+# Provide compatibility options.
+OPTION(GDCM_LEGACY_REMOVE "Remove all legacy code completely." OFF)
+OPTION(GDCM_LEGACY_SILENT "Silence all legacy code messages." OFF)
+MARK_AS_ADVANCED(GDCM_LEGACY_REMOVE GDCM_LEGACY_SILENT)
+
+
 CONFIGURE_FILE(
   "${GDCM_SOURCE_DIR}/Source/Common/gdcmConfigure.h.in"
   "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"

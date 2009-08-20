@@ -33,7 +33,10 @@ namespace gdcm
     ValueLengthField.SetToUndefined();
   }
 
+#if !defined(VTK_LEGACY_REMOVE)
   SequenceOfItems* DataElement::GetSequenceOfItems() {
+    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
+                              DataElement::GetValueAsSQ);
     SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if(!sqi)
       {
@@ -43,6 +46,8 @@ namespace gdcm
     return sqi;
   }
   const SequenceOfItems* DataElement::GetSequenceOfItems() const {
+    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
+                              DataElement::GetValueAsSQ);
     const SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if(!sqi)
       {
@@ -51,6 +56,7 @@ namespace gdcm
       }
     return sqi;
   }
+#endif
   const SequenceOfFragments* DataElement::GetSequenceOfFragments() const {
     const SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
     return sqf;
