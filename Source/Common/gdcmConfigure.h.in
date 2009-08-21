@@ -46,6 +46,7 @@
 #cmakedefine GDCM_USE_SYSTEM_EXPAT
 #cmakedefine GDCM_USE_SYSTEM_LJPEG
 #cmakedefine GDCM_USE_SYSTEM_OPENJPEG
+#cmakedefine GDCM_USE_SYSTEM_PVRG
 
 #cmakedefine GDCM_USE_PVRG
 #cmakedefine GDCM_USE_JPEGLS
@@ -117,6 +118,8 @@
  * add some over head. Turn Off at your own risk 
  */
 #cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+
+#define GDCM_PVRG_JPEG_EXECUTABLE "@PVRGJPEG_EXECUTABLE@"
 
 /* Undocumented on purpose :-P */
 #cmakedefine GDCM_WRITE_ODD_LENGTH

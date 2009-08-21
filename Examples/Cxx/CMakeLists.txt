@@ -15,6 +15,8 @@ IF(GDCM_BINARY_DIR)
 FIND_PACKAGE(MAGIC)
 
 find_package(Qt4 4.4.3 COMPONENTS QtGUI)
+# cmake 2.6.4 does not set it to advanced
+mark_as_advanced(QT_QMAKE_EXECUTABLE)
 
 ENDIF(GDCM_BINARY_DIR)
 

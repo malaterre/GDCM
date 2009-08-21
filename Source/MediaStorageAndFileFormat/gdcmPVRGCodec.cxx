@@ -58,7 +58,7 @@ bool PVRGCodec::CanCode(TransferSyntax const &ts) const
 
 /* PVRG command line is a bit tricky to use:
  *
- * ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw  
+ * ./bin/pvrg-jpeg -d -s jpeg.jpg -ci 0 out.raw  
  *
  * means decompress input file: jpeg.jpg into out.raw
  * warning the -ci is important otherwise JFIF is assumed 
@@ -93,7 +93,12 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   gdcm::Filename fn( System::GetCurrentProcessFileName() );
   std::string executable_path = fn.GetPath();
   // -u -> set Notify to 0 (less verbose)
+#ifdef GDCM_USE_SYSTEM_PVRG
+  std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
+  pvrg_command += " -ci 0 -d -u ";
+#else
   std::string pvrg_command = executable_path + "/gdcmjpeg -ci 0 -d -u ";
+#endif
   // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw  
   pvrg_command += "-s ";
   pvrg_command += input;
