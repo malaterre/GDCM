@@ -207,8 +207,11 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 #endif
 
 //%feature("autodoc", "1")
-//%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
-#define GDCM_EXPORT
+%include "gdcmConfigure.h"
+%include "gdcmTypes.h"
+%include "gdcmWin32.h"
+%include "gdcmMacro.h"
+
 %include "gdcmSwapCode.h"
 
 //%feature("director") Event;

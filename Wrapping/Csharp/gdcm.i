@@ -242,8 +242,10 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 #endif
 
 //%feature("autodoc", "1")
-//%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
-#define GDCM_EXPORT
+%include "gdcmConfigure.h"
+%include "gdcmTypes.h"
+%include "gdcmWin32.h"
+%include "gdcmMacro.h"
 
 // The following must be define early on as gdcmVL.h get included real early
 %rename(GetValueLength) gdcm::VL::operator uint32_t;
