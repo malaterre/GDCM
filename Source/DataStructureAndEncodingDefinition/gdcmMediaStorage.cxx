@@ -276,14 +276,15 @@ void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
     }
 }
 
-bool MediaStorage::SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
+const char* MediaStorage::GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
 {
+  static std::string ret;
   if( ds.FindDataElement( tag ) )
     {
     const ByteValue *sopclassuid = ds.GetDataElement( tag ).GetByteValue();
     // Empty SOP Class UID:
     // lifetechmed/A0038329.DCM
-    if( !sopclassuid || !sopclassuid->GetPointer() ) return false;
+    if( !sopclassuid || !sopclassuid->GetPointer() ) return 0;
     std::string sopclassuid_str(
       sopclassuid->GetPointer(),
       sopclassuid->GetLength() );
@@ -293,22 +294,45 @@ bool MediaStorage::SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
       std::string::size_type pos = sopclassuid_str.find_last_of(' ');
       sopclassuid_str = sopclassuid_str.substr(0,pos);
       }
-    MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+    ret = sopclassuid_str.c_str();
+    return ret.c_str();
+    }
+  return 0;
+}
+
+bool MediaStorage::SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
+{
+  const char * ms_str = GetFromDataSetOrHeader(ds,tag);
+  if( ms_str )
+    {
+    MediaStorage ms = MediaStorage::GetMSType(ms_str);
     MSField = ms;
     if( ms == MS_END )
       {
       // weird something was found, but we not find the MS anyway...
-      gdcmWarningMacro( "Does not know what: " << sopclassuid_str << " is..." );
+      gdcmWarningMacro( "Does not know what: " << ms_str << " is..." );
       }
     return true;
     }
   return false;
 }
 
+const char* MediaStorage::GetFromHeader(FileMetaInformation const &fmi)
+{
+  const Tag tmediastoragesopclassuid(0x0002, 0x0002);
+  return GetFromDataSetOrHeader(fmi, tmediastoragesopclassuid);
+}
+
 bool MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
 {
   const Tag tmediastoragesopclassuid(0x0002, 0x0002);
   return SetFromDataSetOrHeader(fmi, tmediastoragesopclassuid);
+}
+
+const char* MediaStorage::GetFromDataSet(DataSet const &ds)
+{
+  const Tag tsopclassuid(0x0008, 0x0016);
+  return GetFromDataSetOrHeader(ds, tsopclassuid);
 }
 
 
@@ -402,9 +426,45 @@ bool MediaStorage::SetFromFile(File const &file)
    * are a pain to handle ...
    */
   const FileMetaInformation &header = file.GetHeader();
+  const char* header_ms_ptr = GetFromHeader(header);
+  std::string copy1;
+  const char *header_ms_str = 0;
+  if( header_ms_ptr )
+    {
+    copy1 = header_ms_ptr;
+    header_ms_str = copy1.c_str();
+    }
+  const DataSet &ds = file.GetDataSet();
+  const char* ds_ms_ptr = GetFromDataSet(ds);
+  std::string copy2;
+  const char *ds_ms_str = 0;
+  if( ds_ms_ptr )
+    {
+    copy2 = ds_ms_ptr;
+    ds_ms_str = copy2.c_str();
+    }
+
+  // Easy case:
+  if( header_ms_str && ds_ms_str && strcmp(header_ms_str, ds_ms_str) == 0 )
+    {
+    return SetFromHeader( header );
+    }
+
+  if( ds_ms_str )
+    {
+    // means either no header ms or different, take from dataset just in case
+    return SetFromDataSet( ds );
+    }
+
+  // Looks suspicious or DICOMDIR...
+  if( header_ms_str )
+    {
+    return SetFromHeader( header );
+    }
+
+  // old fall back
   if( !SetFromHeader( header ) )
     {
-    const DataSet &ds = file.GetDataSet();
     // try again but from dataset this time:
     gdcmDebugMacro( "No MediaStorage found in Header, looking up in DataSet" );
     if( !SetFromDataSet( ds ) )

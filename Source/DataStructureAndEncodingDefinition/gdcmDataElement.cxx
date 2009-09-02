@@ -33,7 +33,7 @@ namespace gdcm
     ValueLengthField.SetToUndefined();
   }
 
-#if !defined(VTK_LEGACY_REMOVE)
+#if !defined(GDCM_LEGACY_REMOVE)
   SequenceOfItems* DataElement::GetSequenceOfItems() {
     GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
                               DataElement::GetValueAsSQ);

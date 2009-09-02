@@ -153,6 +153,9 @@ protected:
 
 private:
   bool SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
+  const char* GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
+  const char* GetFromHeader(FileMetaInformation const &fmi);
+  const char* GetFromDataSet(DataSet const &ds);
 
 private:
   MSType MSField;
