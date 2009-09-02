@@ -49,9 +49,8 @@ int TestRead(const char* filename, bool verbose = false)
 
   const char *ref = gdcm::Testing::GetMediaStorageFromFile(filename);
 
-  if( ms != gdcm::MediaStorage::GetMSType(ref) )
+  if( ref && ms != gdcm::MediaStorage::GetMSType(ref) )
     {
-    
     std::cerr << "Error: Found MediaStorage: " << ms << " for " << filename << std::endl;
     std::cerr << "It should be instead: " << ref << std::endl;
     return 1;
