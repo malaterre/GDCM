@@ -53,6 +53,7 @@ int TestRead(const char* filename, bool verbose = false)
     {
     
     std::cerr << "Error: Found MediaStorage: " << ms << " for " << filename << std::endl;
+    std::cerr << "It should be instead: " << ref << std::endl;
     return 1;
     }
 
