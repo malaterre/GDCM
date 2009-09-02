@@ -53,6 +53,7 @@ blacklist = (
 "Table"
 "XMLPrivateDictReader"
 # Common
+"Macro"
 "Swapper"
 "SmartPointer"
 "Win32"
