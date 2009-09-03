@@ -505,7 +505,10 @@ std::istream &FileMetaInformation::Read(std::istream &is)
   if( vr != VR::UL ) throw Exception( "INVALID" );
   // TODO FIXME: I should not do seekg for valid file this is costly
   is.seekg(-6,std::ios::cur);
-  xde.Read<SwapperNoOp>(is);
+// /opt/ibmcmp/vacpp/9.0/bin/xlC: 1501-230 (S) Internal compiler error; please contact your Service Representative
+#if !defined(__xlC__)
+  xde.Read<SwapperDoOp>(is);
+#endif
   Insert( xde );
   // See PS 3.5, Data Element Structure With Explicit VR
   while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
