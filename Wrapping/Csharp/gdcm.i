@@ -644,7 +644,20 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
 %include "gdcmIODEntry.h"
+
+%apply char[] { char* out }
+%apply char[] { char* in }
 %include "gdcmRescaler.h"
+//EXTEND_CLASS_PRINT(gdcm::Rescaler)
+%extend gdcm::Rescaler
+{
+  bool Rescale(double out[], const short in[], size_t n) {
+    return $self->Rescale((char*)out, (char*)in, n);
+  }
+}
+%clear char* out;
+%clear char* in;
+
 %include "gdcmSegmentedPaletteColorLookupTable.h"
 %include "gdcmUnpacker12Bits.h"
 

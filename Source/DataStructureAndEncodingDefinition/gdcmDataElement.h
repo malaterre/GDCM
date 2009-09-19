@@ -87,7 +87,7 @@ public:
   /// Use with cautious (need to match Part 6), advanced user only
   /// \pre vr is a VR::VRALL (not a dual one such as OB_OW)
   void SetVR(VR const &vr) { 
-    assert( vr.IsVRFile() );
+    // assert( vr.IsVRFile() );
     VRField = vr; 
   }
 
