@@ -214,31 +214,119 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
 
 std::string StringFilter::FromString(const Tag&t, const char * value, VL const & vl)
 {
+  abort();
+  return "";
+}
+
+#define FromStringFilterCase(type) \
+  case VR::type: \
+      { \
+      Element<VR::type,VM::VM1_n> el; \
+      /* el.ReadComputeLength( is ); */ \
+      el.SetLength( vl );  \
+       for(unsigned int i = 0; i < vm.GetLength(); ++i)  \
+        is >> el.GetValue(i);  \
+      el.Write(os); \
+      } \
+    break
+
+size_t count_backslash(const char *s, size_t len)
+{
+  size_t c = 0;
+  for(size_t i = 0; i < len; ++i, ++s)
+    {
+    if( *s == '\\' )
+      {
+      ++c;
+      }
+    }
+  return c;
+}
+
+std::string StringFilter::FromString(const Tag&t, const char * value, size_t len)
+{
+  if( !value || !len ) return "";
   const Global &g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const DictEntry &entry = dicts.GetDictEntry(t);
-  const VM &vm = entry.GetVM();
-  const VR &vr = entry.GetVR();
-  if( vl != vm.GetLength() * vr.GetSizeof() )
-    {
-    assert(0);
+  std::string strowner;
+  const char *owner = 0;
+  const DataSet &ds = GetFile().GetDataSet();
+  if( t.IsPrivate() && !t.IsPrivateCreator() )
+    { 
+    strowner = ds.GetPrivateCreator(t);
+    owner = strowner.c_str();
     }
 
-  std::string s(value,value+vl);
+  const DictEntry &entry = dicts.GetDictEntry(t, owner);
+  const VM &vm = entry.GetVM();
+  //const VR &vr = entry.GetVR();
+  const DataElement &de = ds.GetDataElement( t );
+  const VR &vr_read = de.GetVR();
+  const VR &vr_dict = entry.GetVR();
+
+  VR vr;
+  // always prefer the vr from the file:
+  if( vr_read == VR::INVALID )
+    {
+    vr = vr_dict;
+    }
+  else if ( vr_read == VR::UN && vr_dict != VR::INVALID ) // File is explicit, but still prefer vr from dict when UN
+    {
+    vr = vr_dict;
+    }
+  else // cool the file is Explicit !
+    {
+    vr = vr_read;
+    }
+  if( vr.IsDual() ) // This mean vr was read from a dict entry:
+    {
+    vr = DataSetHelper::ComputeVR(*F,ds, t);
+    }
+
+  if( vr == VR::UN )
+    {
+    // this element is not known...
+    //return ret;
+    }
+
+  std::string s(value,value+len);
+  if( VR::IsASCII( vr ) )
+    {
+    return s;
+    }
+  unsigned int count = VM::GetNumberOfElementsFromArray(value, len);
+  VL vl = vm.GetLength() * vr.GetSizeof();
+  if( vm.GetLength() == 0 )
+    {
+    // VM1_n
+    vl = count * vr.GetSizeof();
+    VM check  = VM::GetVMTypeFromLength(count, 1);
+    assert( vm.Compatible( check ) );
+    }
+
+  //if( vl != vm.GetLength() * vr.GetSizeof() )
+  //  {
+  //  assert(0);
+  //  }
+
   std::istringstream is;
   is.str( s );
   std::ostringstream os;
   switch(vr)
     {
-  case VR::US:
-      {
-      Element<VR::US,VM::VM1_n> el;
-      el.SetLength( vl );
-      for(unsigned int i = 0; i < vm.GetLength(); ++i)
-        is >> el.GetValue(i);
-      el.Write(os);
-      }
-    break;
+    FromStringFilterCase(AT);
+    FromStringFilterCase(FL);
+    FromStringFilterCase(FD);
+    //FromStringFilterCase(OB);
+    FromStringFilterCase(OF);
+    //FromStringFilterCase(OW);
+    FromStringFilterCase(SL);
+    //FromStringFilterCase(SQ);
+    FromStringFilterCase(SS);
+    FromStringFilterCase(UL);
+    //FromStringFilterCase(UN);
+    FromStringFilterCase(US);
+    FromStringFilterCase(UT);
   default:
     gdcmErrorMacro( "Not implemented" );
     assert(0);

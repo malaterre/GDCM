@@ -497,6 +497,11 @@ public:
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
+  //void ReadComputeLength(std::istream &_is) {
+  //  if( !Internal ) return;
+  //  EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(Internal, 
+  //    Length,_is);
+  //  }
   void Write(std::ostream &_os) const {
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);

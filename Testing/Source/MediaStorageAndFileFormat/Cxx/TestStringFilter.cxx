@@ -39,6 +39,8 @@ int TestStringFilt(const char *filename)
     if( !s.second.empty() || ref.GetVL() == 0 )
       {
       std::cout << s.first << " -> " << s.second << std::endl;
+      std::string s2 = sf.FromString( ref.GetTag(), s.second.c_str(), s.second.size() );
+      //std::cout << s.first << " -> " << s2 << std::endl;
       }
     else if( !ref.GetByteValue() ) // It means it's a SQ
       {
@@ -46,7 +48,8 @@ int TestStringFilt(const char *filename)
       }
     else if( ref.GetTag().IsPrivate() )
       {
-      std::cout << "Private:" << ref.GetTag() << std::endl;
+      //std::cout << "Private:" << ref.GetTag() << std::endl;
+      std::string s2 = sf.FromString( ref.GetTag(), s.second.c_str(), s.second.size() );
       }
     else
       {

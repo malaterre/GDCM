@@ -49,6 +49,7 @@ public:
   } 
 
   friend std::ostream& operator<<(std::ostream &_os, const Tag &_val);
+  friend std::istream& operator>>(std::istream &_is, Tag &_val);
 
   /// \brief Returns the 'Group number' of the given Tag
   uint16_t GetGroup() const { return ElementTag.tags[0]; }
@@ -87,7 +88,7 @@ public:
     return ElementTag.tags[_id];
     }
   // \brief Returns the Group or Element of the given Tag, depending on id (0/1)    
-  const uint16_t &operator[](const unsigned int &_id)
+  uint16_t &operator[](const unsigned int &_id)
     {
     assert(_id<2);
     return ElementTag.tags[_id];
@@ -248,6 +249,24 @@ private:
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;
 };
 //-----------------------------------------------------------------------------
+inline std::istream& operator>>(std::istream &_is, Tag &_val)
+{
+  char c;
+  _is >> c;
+  uint16_t a, b;
+  _is >> std::hex >> a;
+  //_is >> std::hex >> _val[0];
+  //_is >> std::hex >> _val.ElementTag.tags[0];
+  _is >> c;
+  //_is >> _val[1];
+  //_is >> std::hex >> _val.ElementTag.tags[1];
+  _is >> std::hex >> b;
+  _is >> c;
+  _val.SetGroup( a );
+  _val.SetElement( b );
+  return _is;
+}
+
 inline std::ostream& operator<<(std::ostream &_os, const Tag &_val)
 {
   _os.setf( std::ios::right);

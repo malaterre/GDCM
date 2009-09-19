@@ -127,19 +127,92 @@ bool VR::IsVRFile() const
 unsigned int VR::GetSizeof() const
 {
   unsigned int size;
+  // Question: Should I move all ASCII type VR down to the bottom ?
   switch(VRField)
     {
-  case VR::US:
-    size = sizeof(VRToType<VR::US>::Type);
+  case VR::AE:
+    size = sizeof(VRToType<VR::AE>::Type);
+    break;
+  case VR::AS:
+    size = sizeof(VRToType<VR::AS>::Type);
+    break;
+  case VR::AT:
+    size = sizeof(VRToType<VR::AT>::Type);
+    break;
+  case VR::CS:
+    size = sizeof(VRToType<VR::CS>::Type);
+    break;
+  case VR::DA:
+    size = sizeof(VRToType<VR::DA>::Type);
     break;
   case VR::DS:
     size = sizeof(VRToType<VR::DS>::Type);
+    break;
+  case VR::DT:
+    size = sizeof(VRToType<VR::DT>::Type);
+    break;
+  case VR::FD:
+    size = sizeof(VRToType<VR::FD>::Type);
+    break;
+  case VR::FL:
+    size = sizeof(VRToType<VR::FL>::Type);
     break;
   case VR::IS:
     size = sizeof(VRToType<VR::IS>::Type);
     break;
   case VR::LO:
     size = sizeof(VRToType<VR::LO>::Type);
+    break;
+  case VR::LT:
+    size = sizeof(VRToType<VR::LT>::Type);
+    break;
+  case VR::OB:
+    size = sizeof(VRToType<VR::OB>::Type);
+    break;
+  case VR::OF:
+    size = sizeof(VRToType<VR::OF>::Type);
+    break;
+  case VR::OW:
+    size = sizeof(VRToType<VR::OW>::Type);
+    break;
+  case VR::PN:
+    size = sizeof(VRToType<VR::PN>::Type);
+    break;
+  case VR::SH:
+    size = sizeof(VRToType<VR::SH>::Type);
+    break;
+  case VR::SL:
+    size = sizeof(VRToType<VR::SL>::Type);
+    break;
+  case VR::SQ:
+    size = sizeof(VRToType<VR::SQ>::Type);
+    break;
+  case VR::SS:
+    size = sizeof(VRToType<VR::SS>::Type);
+    break;
+  case VR::ST:
+    size = sizeof(VRToType<VR::ST>::Type);
+    break;
+  case VR::TM:
+    size = sizeof(VRToType<VR::TM>::Type);
+    break;
+  case VR::UI:
+    size = sizeof(VRToType<VR::UI>::Type);
+    break;
+  case VR::UL:
+    size = sizeof(VRToType<VR::UL>::Type);
+    break;
+  case VR::UN:
+    size = sizeof(VRToType<VR::UN>::Type);
+    break;
+  case VR::US:
+    size = sizeof(VRToType<VR::US>::Type);
+    break;
+  case VR::UT:
+    size = sizeof(VRToType<VR::UT>::Type);
+    break;
+  case VR::US_SS:
+    size = sizeof(VRToType<VR::US>::Type); // why not ?
     break;
   default:
     size = 0;

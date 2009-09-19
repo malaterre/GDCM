@@ -50,7 +50,11 @@ public:
   /// pari.second : the value encoded into a string (US,UL...) are properly converted
   std::pair<std::string, std::string> ToStringPair(const Tag& t) const;
 
+  /// DEPRECATED: NEVER USE IT
   std::string FromString(const Tag&t, const char * value, VL const & vl);
+
+  // Use this one
+  std::string FromString(const Tag&t, const char * value, size_t len);
 
   //typedef std::map<Tag, gdcm::ConstCharWrapper> StringSet;
 
