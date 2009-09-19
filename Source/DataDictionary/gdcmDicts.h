@@ -33,8 +33,10 @@ public:
   Dicts();
   ~Dicts();
 
-  // works for both public and private dicts:
-  // owner is null for public dict
+  /// works for both public and private dicts:
+  /// owner is null for public dict
+  /// \warning owner need to be set to appropriate owner for call to work. see
+  // DataSet::GetPrivateCreator
   const DictEntry &GetDictEntry(const Tag& tag, const char *owner = NULL) const;
 
   //enum PublicTypes {
