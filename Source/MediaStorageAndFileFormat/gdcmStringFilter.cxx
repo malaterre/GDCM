@@ -97,13 +97,17 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
     gdcmDebugMacro( "DataSet is empty or does not contains tag:" );
     return ret;
     }
-  if( t.IsPrivate() )
-    {
-    return ret;
-    }
   const DataElement &de = ds.GetDataElement( t );
-  assert( de.GetTag().IsPublic() );
-  const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
+  //assert( de.GetTag().IsPublic() );
+  std::string strowner;
+  const char *owner = 0;
+  if( t.IsPrivate() && !t.IsPrivateCreator() )
+    { 
+    strowner = ds.GetPrivateCreator(t);
+    owner = strowner.c_str();
+    }
+
+  const DictEntry &entry = dicts.GetDictEntry(de.GetTag(), owner);
   if( entry.GetVR() == VR::INVALID )
     {
     // FIXME This is a public element we do not support...

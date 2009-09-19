@@ -144,7 +144,7 @@ void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v);
 //-----------------------------------------------------------------------------
 void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictEntry& entry) 
 {
-assert(0);
+  assert(0);
   const Tag &t = xde.GetTag();
   const VR &vr = xde.GetVR();
   const VL &vl = xde.GetVL();
@@ -282,7 +282,7 @@ assert(0);
     }
 }
 
-template <typename T>
+  template <typename T>
 inline char *bswap(char *out, const char *in, size_t length)
 {
   assert( !(length % sizeof(T)) );
@@ -595,397 +595,398 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
     } break
 
 
-VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent )
+VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds, 
+  const DataElement &de, std::ostream &out, std::string const & indent )
 {
-    const ByteValue *bv = de.GetByteValue();
-    const SequenceOfItems *sqi = 0; //de.GetSequenceOfItems();
-    const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+  const ByteValue *bv = de.GetByteValue();
+  const SequenceOfItems *sqi = 0; //de.GetSequenceOfItems();
+  const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
-    std::string strowner;
-    const char *owner = 0;
-    const Tag& t = de.GetTag();
-    if( t.IsPrivate() && !t.IsPrivateCreator() )
-      { 
-      strowner = ds.GetPrivateCreator(t);
-      owner = strowner.c_str();
-      }
-    const DictEntry &entry = dicts.GetDictEntry(t,owner);
-    const VR &vr = entry.GetVR();
-    const VM &vm = entry.GetVM();
-    const char *name = entry.GetName();
-    bool retired = entry.GetRetired();
-    //if( t.IsPrivate() ) assert( retired == false );
+  std::string strowner;
+  const char *owner = 0;
+  const Tag& t = de.GetTag();
+  if( t.IsPrivate() && !t.IsPrivateCreator() )
+    { 
+    strowner = ds.GetPrivateCreator(t);
+    owner = strowner.c_str();
+    }
+  const DictEntry &entry = dicts.GetDictEntry(t,owner);
+  const VR &vr = entry.GetVR();
+  const VM &vm = entry.GetVM();
+  const char *name = entry.GetName();
+  bool retired = entry.GetRetired();
+  //if( t.IsPrivate() ) assert( retired == false );
 
-    const VR &vr_read = de.GetVR();
-    const VL &vl_read = de.GetVL();
-    os << indent; // first thing do the shift !
-    os << t << " ";
-    os << vr_read << " ";
+  const VR &vr_read = de.GetVR();
+  const VL &vl_read = de.GetVL();
+  os << indent; // first thing do the shift !
+  os << t << " ";
+  os << vr_read << " ";
 
-    //VR refvr = GetRefVR(dicts, de);
-    VR refvr;
-    // always prefer the vr from the file:
-    if( vr_read == VR::INVALID )
-      {
-      refvr = vr;
-      }
-    else if ( vr_read == VR::UN && vr != VR::INVALID ) // File is explicit, but still prefer vr from dict when UN
-      {
-      refvr = vr;
-      }
-    else // cool the file is Explicit !
-      {
-      refvr = vr_read;
-      }
-    if( refvr.IsDual() ) // This mean vr was read from a dict entry:
-      {
-      refvr = DataSetHelper::ComputeVR(*F,ds, t);
-      }
+  //VR refvr = GetRefVR(dicts, de);
+  VR refvr;
+  // always prefer the vr from the file:
+  if( vr_read == VR::INVALID )
+    {
+    refvr = vr;
+    }
+  else if ( vr_read == VR::UN && vr != VR::INVALID ) // File is explicit, but still prefer vr from dict when UN
+    {
+    refvr = vr;
+    }
+  else // cool the file is Explicit !
+    {
+    refvr = vr_read;
+    }
+  if( refvr.IsDual() ) // This mean vr was read from a dict entry:
+    {
+    refvr = DataSetHelper::ComputeVR(*F,ds, t);
+    }
 
-    assert( refvr != VR::US_SS );
-    assert( refvr != VR::OB_OW );
+  assert( refvr != VR::US_SS );
+  assert( refvr != VR::OB_OW );
 
-    if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID || vr_read == VR::UN ) )
+  if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID || vr_read == VR::UN ) )
+    {
+    assert( vr != VR::INVALID );
+    // FIXME : if terminal supports it: print in red/green !
+    os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
+    if( vr == VR::US_SS || vr == VR::OB_OW )
       {
-      assert( vr != VR::INVALID );
-      // FIXME : if terminal supports it: print in red/green !
-      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
-      if( vr == VR::US_SS || vr == VR::OB_OW )
+      os << "(" << vr << " => " << refvr << ") ";
+      }
+    else
+      {
+      os << "(" << vr << ") ";
+      }
+    os << GDCM_TERMINAL_VT100_NORMAL;
+    }
+  else if( sqi /*de.GetSequenceOfItems()*/ && refvr == VR::INVALID )
+    {
+    // when vr == VR::INVALID and vr_read is also VR::INVALID, we have a seldom case where we can guess
+    // the vr
+    // eg. CD1/647662/647663/6471066 has a SQ at (2001,9000)
+    os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
+    os << "(SQ) ";
+    os << GDCM_TERMINAL_VT100_NORMAL;
+    assert( refvr == VR::INVALID );
+    refvr = VR::SQ;
+    }
+  // Print Value now:
+  if( refvr & VR::VRASCII )
+    {
+    assert( !sqi && !sqf );
+    if( bv )
+      {
+      VL l = std::min( bv->GetLength(), MaxPrintLength );
+      os << "[";
+      if( bv->IsPrintable(l) )
         {
-        os << "(" << vr << " => " << refvr << ") ";
+        bv->PrintASCII(os,l);
         }
       else
         {
-        os << "(" << vr << ") ";
-        }
-      os << GDCM_TERMINAL_VT100_NORMAL;
-      }
-    else if( sqi /*de.GetSequenceOfItems()*/ && refvr == VR::INVALID )
-      {
-      // when vr == VR::INVALID and vr_read is also VR::INVALID, we have a seldom case where we can guess
-      // the vr
-      // eg. CD1/647662/647663/6471066 has a SQ at (2001,9000)
-      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
-      os << "(SQ) ";
-      os << GDCM_TERMINAL_VT100_NORMAL;
-      assert( refvr == VR::INVALID );
-      refvr = VR::SQ;
-      }
-    // Print Value now:
-    if( refvr & VR::VRASCII )
-      {
-      assert( !sqi && !sqf );
-      if( bv )
-        {
-        VL l = std::min( bv->GetLength(), MaxPrintLength );
-        os << "[";
-        if( bv->IsPrintable(l) )
-          {
-          bv->PrintASCII(os,l);
-          }
-        else
-          {
-          os << GDCM_TERMINAL_VT100_INVERSE;
-          os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
-          bv->PrintASCII(os,l);
-          os << GDCM_TERMINAL_VT100_NORMAL;
-          }
-        os << "]";
-        }
-      else
-        {
-        assert( de.IsEmpty() );
         os << GDCM_TERMINAL_VT100_INVERSE;
-        os << "(no value)";
+        os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+        bv->PrintASCII(os,l);
         os << GDCM_TERMINAL_VT100_NORMAL;
         }
+      os << "]";
       }
     else
       {
-      assert( refvr & VR::VRBINARY || (vr == VR::INVALID && refvr == VR::INVALID) );
-      //std::ostringstream os;
-      std::string s;
-      switch(refvr)
+      assert( de.IsEmpty() );
+      os << GDCM_TERMINAL_VT100_INVERSE;
+      os << "(no value)";
+      os << GDCM_TERMINAL_VT100_NORMAL;
+      }
+    }
+  else
+    {
+    assert( refvr & VR::VRBINARY || (vr == VR::INVALID && refvr == VR::INVALID) );
+    //std::ostringstream os;
+    std::string s;
+    switch(refvr)
+      {
+      StringFilterCase(AT);
+      StringFilterCase(FL);
+      StringFilterCase(FD);
+      //StringFilterCase(OB);
+      StringFilterCase(OF);
+      //StringFilterCase(OW);
+      StringFilterCase(SL);
+      //StringFilterCase(SQ);
+      StringFilterCase(SS);
+      StringFilterCase(UL);
+      //StringFilterCase(UN);
+      StringFilterCase(US);
+      //StringFilterCase(UT);
+    case VR::OB:
+    case VR::OW:
+    case VR::OB_OW:
+    case VR::UN:
+    case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm 
+      /*
+      VR::US_SS_OW:
+      undefined_length_un_vr.dcm
+      GDCMFakeJPEG.dcm
+      PhilipsWith15Overlays.dcm
+       */
         {
-        StringFilterCase(AT);
-        StringFilterCase(FL);
-        StringFilterCase(FD);
-        //StringFilterCase(OB);
-        StringFilterCase(OF);
-        //StringFilterCase(OW);
-        StringFilterCase(SL);
-        //StringFilterCase(SQ);
-        StringFilterCase(SS);
-        StringFilterCase(UL);
-        //StringFilterCase(UN);
-        StringFilterCase(US);
-        //StringFilterCase(UT);
-      case VR::OB:
-      case VR::OW:
-      case VR::OB_OW:
-      case VR::UN:
-      case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm 
-/*
-  VR::US_SS_OW:
-  undefined_length_un_vr.dcm
-  GDCMFakeJPEG.dcm
-  PhilipsWith15Overlays.dcm
-*/
+        if ( bv )
           {
-          if ( bv )
-            {
-            //VL l = std::min( bv->GetLength(), MaxPrintLength );
-            //VL l = std::min( (int)bv->GetLength(), 0xF );
-            //int width = (vr == VR::OW ? 4 : 2);
-            //os << std::hex << std::setw( width ) << std::setfill('0');
-            bv->PrintHex(os, MaxPrintLength / 4);
-            //os << std::dec;
-            }
-          else if ( sqf )
-            {
-            assert( t == Tag(0x7fe0,0x0010) );
-            //os << *sqf;
-            }
-          else if ( sqi )
-            {
-            // gdcmDataExtra/gdcmSampleData/images_of_interest/illegal_UN_stands_for_SQ.dcm  
-            gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );
-            //os << *sqi;
-            }
-          else
-            {
-            assert( !sqi && !sqf );
-            assert( de.IsEmpty() );
-            os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
-            }
+          //VL l = std::min( bv->GetLength(), MaxPrintLength );
+          //VL l = std::min( (int)bv->GetLength(), 0xF );
+          //int width = (vr == VR::OW ? 4 : 2);
+          //os << std::hex << std::setw( width ) << std::setfill('0');
+          bv->PrintHex(os, MaxPrintLength / 4);
+          //os << std::dec;
           }
-        break;
-      case VR::US_SS:
-        // impossible...
-        assert( refvr != VR::US_SS );
-        break;
-      case VR::SQ:
-        if( !sqi /*!de.GetSequenceOfItems()*/ && !de.IsEmpty() && de.GetValue().GetLength() )
+        else if ( sqf )
           {
-          // This case is insane, this is an implicit file, with a defined length SQ.
-          // Since this is a private element there is no way to guess that, and to 
-          // make it even worse the binary blob does not start with item start...
-          // Bug_Philips_ItemTag_3F3F.dcm 
-          //os << GDCM_TERMINAL_VT100_BACKGROUND_RED;
-          //bv->PrintHex(os, MaxPrintLength / 4);
-          //os << GDCM_TERMINAL_VT100_NORMAL;
+          assert( t == Tag(0x7fe0,0x0010) );
+          //os << *sqf;
+          }
+        else if ( sqi )
+          {
+          // gdcmDataExtra/gdcmSampleData/images_of_interest/illegal_UN_stands_for_SQ.dcm  
+          gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );
+          //os << *sqi;
           }
         else
           {
-          if( vl_read.IsUndefined() )
-            {
-            os << "(Sequence with undefined length)";
-            }
-          else
-            {
-            os << "(Sequence with defined length)";
-            }
+          assert( !sqi && !sqf );
+          assert( de.IsEmpty() );
+          os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
           }
-        break;
-      // Let's be a little more helpful and try to print anyway when possible:
-      case VR::INVALID:
-          {
-          if( bv )
-            {
-            VL l = std::min( bv->GetLength(), MaxPrintLength );
-            if( bv->IsPrintable(l) ) 
-              {
-              os << "[";
-              bv->PrintASCII(os,l);
-              os << "]";
-              }
-            else if( t == Tag(0xfffe,0xe000) ) bv->PrintHex(os, MaxPrintLength / 8);
-            else 
-              {
-              os << GDCM_TERMINAL_VT100_INVERSE;
-              // << "(non-printable character found)"
-              bv->PrintHex(os, MaxPrintLength / 8);
-              os << GDCM_TERMINAL_VT100_NORMAL;
-              }
-            }
-          else
-            {
-            assert( !sqi && !sqf );
-            assert( de.IsEmpty() );
-            os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
-            }
-          }
-        break;
-      default:
-        assert(0);
-        break;
         }
-      os << s;
-      }
-    out.width(57);
-    out << std::left << os.str();
-    // There is something wrong going on when doing terminal color stuff
-    // Let's add a couple of space to be nicer...
-    if( os.str().find( GDCM_TERMINAL_VT100_NORMAL ) != std::string::npos )
-      {
-      out << "        ";
-      }
-    os.str( "" );
-    // Extra info (not in the file)
-    os << " # ";
-    // Append the VL
-    if( vl_read.IsUndefined() )
-      {
-      os << "u/l";
-      }
-    else
-      {
-      os << std::dec << vl_read;
-      }
-    if( vl_read.IsOdd() )
-      {
-      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
-      os << " (" << (vl_read + 1) << ")";
-      os << GDCM_TERMINAL_VT100_NORMAL;
-      }
-    os << ",";
-    // Append the VM
-    if( vm != VM::VM0 )
-      {
-      os << vm;
-      }
-    else
-      {
-      os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
-      os << "?";
-      os << GDCM_TERMINAL_VT100_NORMAL;
-      }
-    VM guessvm = VM::VM0;
-    if( refvr & VR::VRASCII )
-      {
-      assert( refvr != VR::INVALID );
-      assert( refvr & VR::VRASCII );
-      if( bv )
+      break;
+    case VR::US_SS:
+      // impossible...
+      assert( refvr != VR::US_SS );
+      break;
+    case VR::SQ:
+      if( !sqi /*!de.GetSequenceOfItems()*/ && !de.IsEmpty() && de.GetValue().GetLength() )
         {
-        unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
-        guessvm = VM::GetVMTypeFromLength(count, 1); // hackish...
-        }
-      }
-    else if( refvr & VR::VRBINARY )
-      {
-      assert( refvr != VR::INVALID );
-      assert( refvr & VR::VRBINARY );
-      if( refvr & VR::OB_OW || refvr == VR::SQ )
-        {
-        guessvm = VM::VM1;
-        }
-      else if ( refvr == VR::UN && sqi )
-        {
-        // This is a SQ / UN
-        guessvm = VM::VM1;
-        }
-      else if( bv )
-        {
-        guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
+        // This case is insane, this is an implicit file, with a defined length SQ.
+        // Since this is a private element there is no way to guess that, and to 
+        // make it even worse the binary blob does not start with item start...
+        // Bug_Philips_ItemTag_3F3F.dcm 
+        //os << GDCM_TERMINAL_VT100_BACKGROUND_RED;
+        //bv->PrintHex(os, MaxPrintLength / 4);
+        //os << GDCM_TERMINAL_VT100_NORMAL;
         }
       else
         {
-        if( de.IsEmpty() ) guessvm = VM::VM0;
-        else assert( 0 && "Impossible" );
+        if( vl_read.IsUndefined() )
+          {
+          os << "(Sequence with undefined length)";
+          }
+        else
+          {
+          os << "(Sequence with defined length)";
+          }
         }
+      break;
+      // Let's be a little more helpful and try to print anyway when possible:
+    case VR::INVALID:
+        {
+        if( bv )
+          {
+          VL l = std::min( bv->GetLength(), MaxPrintLength );
+          if( bv->IsPrintable(l) ) 
+            {
+            os << "[";
+            bv->PrintASCII(os,l);
+            os << "]";
+            }
+          else if( t == Tag(0xfffe,0xe000) ) bv->PrintHex(os, MaxPrintLength / 8);
+          else 
+            {
+            os << GDCM_TERMINAL_VT100_INVERSE;
+            // << "(non-printable character found)"
+            bv->PrintHex(os, MaxPrintLength / 8);
+            os << GDCM_TERMINAL_VT100_NORMAL;
+            }
+          }
+        else
+          {
+          assert( !sqi && !sqf );
+          assert( de.IsEmpty() );
+          os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
+          }
+        }
+      break;
+    default:
+      assert(0);
+      break;
       }
-    else if( refvr == VR::INVALID )
+    os << s;
+    }
+  out.width(57);
+  out << std::left << os.str();
+  // There is something wrong going on when doing terminal color stuff
+  // Let's add a couple of space to be nicer...
+  if( os.str().find( GDCM_TERMINAL_VT100_NORMAL ) != std::string::npos )
+    {
+    out << "        ";
+    }
+  os.str( "" );
+  // Extra info (not in the file)
+  os << " # ";
+  // Append the VL
+  if( vl_read.IsUndefined() )
+    {
+    os << "u/l";
+    }
+  else
+    {
+    os << std::dec << vl_read;
+    }
+  if( vl_read.IsOdd() )
+    {
+    os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
+    os << " (" << (vl_read + 1) << ")";
+    os << GDCM_TERMINAL_VT100_NORMAL;
+    }
+  os << ",";
+  // Append the VM
+  if( vm != VM::VM0 )
+    {
+    os << vm;
+    }
+  else
+    {
+    os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+    os << "?";
+    os << GDCM_TERMINAL_VT100_NORMAL;
+    }
+  VM guessvm = VM::VM0;
+  if( refvr & VR::VRASCII )
+    {
+    assert( refvr != VR::INVALID );
+    assert( refvr & VR::VRASCII );
+    if( bv )
       {
-      refvr = VR::UN;
+      unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
+      guessvm = VM::GetVMTypeFromLength(count, 1); // hackish...
+      }
+    }
+  else if( refvr & VR::VRBINARY )
+    {
+    assert( refvr != VR::INVALID );
+    assert( refvr & VR::VRBINARY );
+    if( refvr & VR::OB_OW || refvr == VR::SQ )
+      {
       guessvm = VM::VM1;
       }
-    else
+    else if ( refvr == VR::UN && sqi )
       {
-      // Burst into flames !
-      assert( 0 && "Impossible happen" );
+      // This is a SQ / UN
+      guessvm = VM::VM1;
       }
-    if( !vm.Compatible( guessvm ) )
+    else if( bv )
       {
-      os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
-      os << " (" << guessvm << ") ";
-      os << GDCM_TERMINAL_VT100_NORMAL;
-      }
-    // Append the name now:
-    if( name && *name )
-      {
-      // No owner case !
-      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
-        {
-        os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
-        os << " " << name;
-        os << GDCM_TERMINAL_VT100_NORMAL;
-        }
-      // retired element
-      else if( retired )
-        {
-        assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
-        os << " " << GDCM_TERMINAL_VT100_FOREGROUND_RED << GDCM_TERMINAL_VT100_UNDERLINE;
-        os << name;
-        os << GDCM_TERMINAL_VT100_NORMAL;
-        os << GDCM_TERMINAL_VT100_NORMAL;
-        }
-      else
-        {
-        os << GDCM_TERMINAL_VT100_BOLD;
-        os << " " << name;
-        os << GDCM_TERMINAL_VT100_NORMAL;
-        }
+      guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
       }
     else
       {
+      if( de.IsEmpty() ) guessvm = VM::VM0;
+      else assert( 0 && "Impossible" );
+      }
+    }
+  else if( refvr == VR::INVALID )
+    {
+    refvr = VR::UN;
+    guessvm = VM::VM1;
+    }
+  else
+    {
+    // Burst into flames !
+    assert( 0 && "Impossible happen" );
+    }
+  if( !vm.Compatible( guessvm ) )
+    {
+    os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+    os << " (" << guessvm << ") ";
+    os << GDCM_TERMINAL_VT100_NORMAL;
+    }
+  // Append the name now:
+  if( name && *name )
+    {
+    // No owner case !
+    if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
+      {
       os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
-      if( t.IsPublic() )
-        {
-        // What ? A public element that we do not know about !!!
-        os << GDCM_TERMINAL_VT100_BLINK;
-        }
-      os << " UNKNOWN";
+      os << " " << name;
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
-    os << "\n";
-return refvr;
+    // retired element
+    else if( retired )
+      {
+      assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
+      os << " " << GDCM_TERMINAL_VT100_FOREGROUND_RED << GDCM_TERMINAL_VT100_UNDERLINE;
+      os << name;
+      os << GDCM_TERMINAL_VT100_NORMAL;
+      os << GDCM_TERMINAL_VT100_NORMAL;
+      }
+    else
+      {
+      os << GDCM_TERMINAL_VT100_BOLD;
+      os << " " << name;
+      os << GDCM_TERMINAL_VT100_NORMAL;
+      }
+    }
+  else
+    {
+    os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+    if( t.IsPublic() )
+      {
+      // What ? A public element that we do not know about !!!
+      os << GDCM_TERMINAL_VT100_BLINK;
+      }
+    os << " UNKNOWN";
+    os << GDCM_TERMINAL_VT100_NORMAL;
+    }
+  os << "\n";
+  return refvr;
 }
 
 void Printer::PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & indent)
 {
-if( !sqi ) return;
-        SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
-        for(; it != sqi->Items.end(); ++it)
-          {
-          const Item &item = *it;
-          const DataSet &ds = item.GetNestedDataSet();
-          const DataElement &deitem = item;
-          std::string nextindent = indent + "  ";
-          os << nextindent << deitem.GetTag();
-          os << " ";
-          os << "na"; //deitem.GetVR();
-          os << " ";
-          if( deitem.GetVL().IsUndefined() )
-            {
-            os << "(Item with undefined length)";
-            }
-          else
-            {
-            os << "(Item with defined length)";
-            }
-          os << "\n";
-          PrintDataSet(ds, os, nextindent + "  ");
-          if( deitem.GetVL().IsUndefined() )
-            {
-            const Tag itemDelItem(0xfffe,0xe00d);
-            os << nextindent << itemDelItem << "\n";
-            }
-          }
-        if( sqi->GetLength().IsUndefined() )
-          {
-          const Tag seqDelItem(0xfffe,0xe0dd);
-          os << indent << seqDelItem << "\n";
-          }
+  if( !sqi ) return;
+  SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+  for(; it != sqi->Items.end(); ++it)
+    {
+    const Item &item = *it;
+    const DataSet &ds = item.GetNestedDataSet();
+    const DataElement &deitem = item;
+    std::string nextindent = indent + "  ";
+    os << nextindent << deitem.GetTag();
+    os << " ";
+    os << "na"; //deitem.GetVR();
+    os << " ";
+    if( deitem.GetVL().IsUndefined() )
+      {
+      os << "(Item with undefined length)";
+      }
+    else
+      {
+      os << "(Item with defined length)";
+      }
+    os << "\n";
+    PrintDataSet(ds, os, nextindent + "  ");
+    if( deitem.GetVL().IsUndefined() )
+      {
+      const Tag itemDelItem(0xfffe,0xe00d);
+      os << nextindent << itemDelItem << "\n";
+      }
+    }
+  if( sqi->GetLength().IsUndefined() )
+    {
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    os << indent << seqDelItem << "\n";
+    }
 }
 
 void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
@@ -993,7 +994,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
- 
+
   DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
@@ -1008,31 +1009,31 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
 
     if( refvr == VR::SQ /*|| sqi*/ )
       {
-          //SmartPointer<SequenceOfItems> sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
-          SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ();
-          PrintSQ(sqi2, os, indent);
-/*
-    const SequenceOfItems *sqi = de.GetSequenceOfItems();
+      //SmartPointer<SequenceOfItems> sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
+      SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ();
+      PrintSQ(sqi2, os, indent);
+      /*
+      const SequenceOfItems *sqi = de.GetSequenceOfItems();
       if( sqi ) // empty SQ ?
-        {
-        assert( sqi );
-        PrintSQ(sqi, os, indent);
-        }
+      {
+      assert( sqi );
+      PrintSQ(sqi, os, indent);
+      }
       else
-        {
-        if( !de.IsEmpty() )
-          {
-          // Ok so far we know:
-          // 1. VR is SQ sqi == NULL
-          // 2. DataElement is not empty ...
-          // => This is a VR:UN or Implicit SQ with defined length.
-          // let's try to interpret this sequence
-          SequenceOfItems *sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
-          if(sqi2) PrintSQ(sqi2, os, indent);
-          delete sqi2;
-          }
-        }
-*/
+      {
+      if( !de.IsEmpty() )
+      {
+      // Ok so far we know:
+      // 1. VR is SQ sqi == NULL
+      // 2. DataElement is not empty ...
+      // => This is a VR:UN or Implicit SQ with defined length.
+      // let's try to interpret this sequence
+      SequenceOfItems *sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
+      if(sqi2) PrintSQ(sqi2, os, indent);
+      delete sqi2;
+      }
+      }
+       */
       }
     else if ( sqf )
       {
