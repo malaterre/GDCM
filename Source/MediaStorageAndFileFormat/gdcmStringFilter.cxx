@@ -108,19 +108,41 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
     }
 
   const DictEntry &entry = dicts.GetDictEntry(de.GetTag(), owner);
-  if( entry.GetVR() == VR::INVALID )
+
+  const VR &vr_read = de.GetVR();
+  const VR &vr_dict = entry.GetVR();
+
+  if( vr_dict == VR::INVALID )
     {
     // FIXME This is a public element we do not support...
-    //throw Exception();
     return ret;
     }
 
-  VR vr = entry.GetVR();
-  // If Explicit override with coded VR:
-  if( de.GetVR() != VR::INVALID && de.GetVR() != VR::UN )
+  VR vr;
+  // always prefer the vr from the file:
+  if( vr_read == VR::INVALID )
     {
-    vr = de.GetVR();
+    vr = vr_dict;
     }
+  else if ( vr_read == VR::UN && vr_dict != VR::INVALID ) // File is explicit, but still prefer vr from dict when UN
+    {
+    vr = vr_dict;
+    }
+  else // cool the file is Explicit !
+    {
+    vr = vr_read;
+    }
+  if( vr.IsDual() ) // This mean vr was read from a dict entry:
+    {
+    vr = DataSetHelper::ComputeVR(*F,ds, t);
+    }
+
+  if( vr == VR::UN )
+    {
+    // this element is not known...
+    return ret;
+    }
+
   assert( vr != VR::UN && vr != VR::INVALID );
   //std::cerr << "Found " << vr << " for " << de.GetTag() << std::endl;
   ret.first = entry.GetName();
