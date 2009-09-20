@@ -204,6 +204,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0,"D_CLUNIE_VL1_RLE.dcm" },
 { 0,"SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm" },
 { 0,"00191113.dcm" },
+{ 0,"TestVRSQUN2.dcm" },
 { 0, NULL }
 };
 
