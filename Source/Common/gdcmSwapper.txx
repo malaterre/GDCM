@@ -55,7 +55,10 @@ namespace gdcm
     {
     return Swap((uint32_t)val);
     }
-    
+  template <> inline float SwapperNoOp::Swap<float>(float val)
+    {
+    return Swap((uint32_t)val);
+    }
   template <> inline uint64_t SwapperNoOp::Swap<uint64_t>(uint64_t val)
     {
 #ifdef HAVE_BYTESWAP_H
@@ -67,6 +70,10 @@ namespace gdcm
 #endif
     }
   template <> inline int64_t SwapperNoOp::Swap<int64_t>(int64_t val)
+    {
+    return Swap((uint64_t)val);
+    }
+  template <> inline double SwapperNoOp::Swap<double>(double val)
     {
     return Swap((uint64_t)val);
     }
@@ -130,6 +137,10 @@ namespace gdcm
     {
     return Swap((uint32_t)val);
     }
+  template <> inline float SwapperDoOp::Swap<float>(float val)
+    {
+    return Swap((uint32_t)val);
+    }
   template <> inline uint64_t SwapperDoOp::Swap<uint64_t>(uint64_t val)
     {
 #ifdef HAVE_BYTESWAP_H
@@ -141,6 +152,10 @@ namespace gdcm
 #endif
     }
   template <> inline int64_t SwapperDoOp::Swap<int64_t>(int64_t val)
+    {
+    return Swap((uint64_t)val);
+    }
+  template <> inline double SwapperDoOp::Swap<double>(double val)
     {
     return Swap((uint64_t)val);
     }
