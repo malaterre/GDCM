@@ -644,6 +644,8 @@ dicomTransferCapability = 268 // dicomTransferCapability
   /// return NULL when not initialized
   const char *GetString() const;
 
+  operator TSType () const { return TSField; }
+
 private:
   TSType TSField;
 };

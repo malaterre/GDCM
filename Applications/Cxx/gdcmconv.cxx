@@ -123,7 +123,7 @@ void PrintLossyWarning()
 void PrintHelp()
 {
   PrintVersion();
-  std::cout << "Usage: gdcmconv [OPTION] -i input.dcm -o output.dcm" << std::endl;
+  std::cout << "Usage: gdcmconv [OPTION] input.dcm output.dcm" << std::endl;
   std::cout << "Convert a DICOM file into another DICOM file.\n";
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input      DICOM filename" << std::endl;
