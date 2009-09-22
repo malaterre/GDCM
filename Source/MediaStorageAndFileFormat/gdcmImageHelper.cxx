@@ -828,7 +828,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     }
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
-  if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) )
+  if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) && !ds.GetDataElement( spacingtag ).IsEmpty() )
     {
     const DataElement& de = ds.GetDataElement( spacingtag );
     const Global &g = GlobalInstance;
