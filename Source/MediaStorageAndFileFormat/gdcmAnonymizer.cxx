@@ -753,7 +753,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 
   DataSet &ds = F->GetDataSet();
   const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
-  const SequenceOfItems *sq = EncryptedAttributesSequence.GetSequenceOfItems();
+  //const SequenceOfItems *sq = EncryptedAttributesSequence.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sq = EncryptedAttributesSequence.GetValueAsSQ();
   const Item &item = sq->GetItem(1);
   const DataSet &nds = item.GetNestedDataSet();
   const DataElement &EncryptedContent = nds.GetDataElement( Tag(0x0400,0x0520) );
@@ -807,7 +808,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   // Attributes that may be present in the main dataset.
   //assert( dummy.GetVR() == VR::SQ );
 {
-  const SequenceOfItems *sqi = dummy.GetSequenceOfItems();
+  //const SequenceOfItems *sqi = dummy.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = dummy.GetValueAsSQ();
   assert( sqi && sqi->GetNumberOfItems() == 1 );
   Item const & item = sqi->GetItem( 1 );
   const DataSet &nds = item.GetNestedDataSet();

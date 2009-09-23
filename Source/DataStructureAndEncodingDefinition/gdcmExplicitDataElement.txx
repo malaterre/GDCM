@@ -416,7 +416,8 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     else if( dynamic_cast<const SequenceOfItems*>(&GetValue()) )
       {
       assert( ValueField->GetLength() == ValueLengthField );
-      const SequenceOfItems *sq = GetSequenceOfItems();
+      //const SequenceOfItems *sq = GetSequenceOfItems();
+      SmartPointer<SequenceOfItems> sq = GetValueAsSQ();
       VL dummy = sq->template ComputeLength<ExplicitDataElement>();
       assert( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
       }
@@ -428,7 +429,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {
-      assert( TagField == Tag(0x7fe0,0x0010) || GetSequenceOfItems() );
+      assert( TagField == Tag(0x7fe0,0x0010) || GetValueAsSQ() );
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

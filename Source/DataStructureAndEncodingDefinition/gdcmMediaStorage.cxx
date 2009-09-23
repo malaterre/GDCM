@@ -348,7 +348,8 @@ void MediaStorage::SetFromSourceImageSequence(DataSet const &ds)
   if( ds.FindDataElement( sourceImageSequenceTag ) )
     {
     const DataElement &sourceImageSequencesq = ds.GetDataElement( sourceImageSequenceTag );
-    const SequenceOfItems* sq = sourceImageSequencesq.GetSequenceOfItems();
+    //const SequenceOfItems* sq = sourceImageSequencesq.GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sq = sourceImageSequencesq.GetValueAsSQ();
     if( !sq ) return;
     SequenceOfItems::ConstIterator it = sq->Begin();
     const DataSet &subds = it->GetNestedDataSet();

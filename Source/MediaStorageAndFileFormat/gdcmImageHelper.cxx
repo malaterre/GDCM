@@ -345,7 +345,8 @@ bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double
 */
   const Tag tsqusreg(0x0018,0x6011);
   if( !ds.FindDataElement( tsqusreg ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tsqusreg ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tsqusreg ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tsqusreg ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -1003,7 +1004,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
     const Tag tfgs(0x5200,0x9229);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1013,7 +1014,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1035,7 +1037,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1188,7 +1191,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag const & sqtag, unsigned int itemidx)
 {
     const Tag tfgs = sqtag; //(0x5200,0x9230);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1198,7 +1201,8 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( sqi->GetNumberOfItems() < itemidx )
@@ -1220,7 +1224,8 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1356,7 +1361,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
     const Tag tfgs(0x5200,0x9229);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1366,7 +1371,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1388,7 +1394,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1461,7 +1468,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
     const Tag tfgs(0x5200,0x9229);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1471,7 +1478,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1493,7 +1501,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )

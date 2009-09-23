@@ -401,7 +401,8 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
     }
   const gdcm::DataElement &wsq = ds.GetDataElement( twsq );
   //std::cout << wsq << std::endl;
-  const gdcm::SequenceOfItems *sqi = wsq.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems *sqi = wsq.GetSequenceOfItems();
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = wsq.GetValueAsSQ();
   if( !sqi || !sqi->GetNumberOfItems() )
     {
     return 0;

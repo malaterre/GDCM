@@ -189,7 +189,7 @@ public:
       GetNumberOfValues(),os);
     ret.SetVR( GetVR() );
     assert( ret.GetVR() != VR::SQ );
-    if( VRToEncoding<TVR>::Mode == VR::VRASCII )
+    if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
       {
       if( GetVR() != VR::UI )
         {
@@ -405,7 +405,7 @@ public:
       {
       EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
         GetNumberOfValues(),os);
-      if( VRToEncoding<TVR>::Mode == VR::VRASCII )
+      if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
         {
         if( GetVR() != VR::UI )
           {

@@ -24,7 +24,8 @@ namespace gdcm
 {
   void DataElement::SetVLToUndefined() { 
     assert( VRField == VR::SQ || VRField == VR::INVALID );
-    SequenceOfItems *sqi = GetSequenceOfItems();
+    //SequenceOfItems *sqi = GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sqi = GetValueAsSQ();
     //SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&GetValue());
     if( sqi )
       {

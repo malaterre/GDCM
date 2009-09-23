@@ -40,11 +40,14 @@ bool ByteSwapFilter::ByteSwap()
     const DataElement &de = *it;
     VR const & vr = de.GetVR();
     //assert( vr & VR::VRASCII || vr & VR::VRBINARY );
+    const ByteValue *bv = de.GetByteValue();
+    gdcm::SmartPointer<gdcm::SequenceOfItems> si = de.GetValueAsSQ();
     if( de.IsEmpty() )
       {
       }
-    else if( const ByteValue *bv = de.GetByteValue() )
+    else if( bv && !si )
       {
+      assert( !si );
       // ASCII do not need byte swap
       if( vr & VR::VRBINARY /*&& de.GetTag().IsPrivate()*/ )
         {
@@ -97,7 +100,8 @@ bool ByteSwapFilter::ByteSwap()
           }
         }
       }
-    else if( const SequenceOfItems *si = de.GetSequenceOfItems() )
+    //else if( const SequenceOfItems *si = de.GetSequenceOfItems() )
+    else if( si )
       {
       //if( de.GetTag().IsPrivate() )
         {
