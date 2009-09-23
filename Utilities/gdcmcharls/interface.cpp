@@ -30,14 +30,18 @@ JLS_ERROR CheckInput(const void* pdataCompressed, size_t cbyteCompressed, const 
 	if (pparams->height < 1 || pparams->height > 65535)
 		return ParameterValueNotSupported;
 
-	if (cbyteUncompressed < size_t(pparams->width * pparams->height * pparams->components * ((pparams->bitspersample + 7)/8)))
+	int bytesperline = pparams->bytesperline < 0 ? -pparams->bytesperline : pparams->bytesperline;
+
+	if (cbyteUncompressed < size_t(bytesperline * pparams->height))
 		return InvalidJlsParameters;
 
 	switch (pparams->components)
 	{
+		case 4: return pparams->ilv == ILV_SAMPLE ? ParameterValueNotSupported : OK; 
 		case 3: return OK;
-		case 1: return OK;
+		case 1: return pparams->ilv != ILV_NONE ? ParameterValueNotSupported : OK;
 		case 0: return InvalidJlsParameters;
+
 		default: return pparams->ilv != ILV_NONE ? ParameterValueNotSupported : OK; 
 	}
 }
@@ -48,7 +52,17 @@ extern "C"
 
 CHARLS_IMEXPORT JLS_ERROR JpegLsEncode(void* pdataCompressed, size_t cbyteBuffer, size_t* pcbyteWritten, const void* pdataUncompressed, size_t cbyteUncompressed, const JlsParamaters* pparams)
 {
-	JLS_ERROR parameterError = CheckInput(pdataCompressed, cbyteBuffer, pdataUncompressed, cbyteUncompressed, pparams);
+	JlsParamaters info = *pparams;
+	if(info.bytesperline == 0)
+	{
+		info.bytesperline = info.width * ((info.bitspersample + 7)/8);
+		if (info.ilv != ILV_NONE)
+		{
+			info.bytesperline *= info.components;
+		}
+	}
+	
+	JLS_ERROR parameterError = CheckInput(pdataCompressed, cbyteBuffer, pdataUncompressed, cbyteUncompressed, &info);
 
 	if (parameterError != OK)
 		return parameterError;
@@ -56,30 +70,29 @@ CHARLS_IMEXPORT JLS_ERROR JpegLsEncode(void* pdataCompressed, size_t cbyteBuffer
 	if (pcbyteWritten == NULL)
 		return InvalidJlsParameters;
 
-	Size size = Size(pparams->width, pparams->height);
-	LONG cbit = pparams->bitspersample;
-	
+	Size size = Size(info.width, info.height);
+	LONG cbit = info.bitspersample;
 	JLSOutputStream stream;
 	
-	stream.Init(size, pparams->bitspersample, pparams->components);
+	stream.Init(size, info.bitspersample, info.components);
 	
-	if (pparams->colorTransform != 0)
+	if (info.colorTransform != 0)
 	{
-		stream.AddColorTransform(pparams->colorTransform);
+		stream.AddColorTransform(info.colorTransform);
 	}
 
-	if (pparams->ilv == ILV_NONE)
+	if (info.ilv == ILV_NONE)
 	{
 		LONG cbyteComp = size.cx*size.cy*((cbit +7)/8);
-		for (LONG icomp = 0; icomp < pparams->components; ++icomp)
+		for (LONG icomp = 0; icomp < info.components; ++icomp)
 		{
 			const BYTE* pbyteComp = static_cast<const BYTE*>(pdataUncompressed) + icomp*cbyteComp;
-			stream.AddScan(pbyteComp, pparams);
+			stream.AddScan(pbyteComp, &info);
 		}
 	}
 	else 
 	{
-		stream.AddScan(pdataUncompressed, pparams);
+		stream.AddScan(pdataUncompressed, &info);
 	}
 
 	
@@ -89,9 +102,14 @@ CHARLS_IMEXPORT JLS_ERROR JpegLsEncode(void* pdataCompressed, size_t cbyteBuffer
 	return OK;
 }
 
-CHARLS_IMEXPORT JLS_ERROR JpegLsDecode(void* pdataUncompressed, size_t cbyteUncompressed, const void* pdataCompressed, size_t cbyteCompressed)
+CHARLS_IMEXPORT JLS_ERROR JpegLsDecode(void* pdataUncompressed, size_t cbyteUncompressed, const void* pdataCompressed, size_t cbyteCompressed, JlsParamaters* info)
 {
 	JLSInputStream reader((BYTE*)pdataCompressed, cbyteCompressed);
+
+	if(info != NULL)
+	{
+	 	reader.SetInfo(info);
+	}
 
 	try
 	{
@@ -107,7 +125,7 @@ CHARLS_IMEXPORT JLS_ERROR JpegLsDecode(void* pdataUncompressed, size_t cbyteUnco
 
 CHARLS_IMEXPORT JLS_ERROR JpegLsVerifyEncode(const void* pdataUncompressed, size_t cbyteUncompressed, const void* pdataCompressed, size_t cbyteBuffer)
 {
-	JlsParamaters params = {0};
+	JlsParamaters params = JlsParamaters();
 
 	JLS_ERROR error = JpegLsReadHeader(pdataCompressed, cbyteBuffer, &params);
 	if (error != OK)

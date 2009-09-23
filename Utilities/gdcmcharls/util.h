@@ -6,59 +6,10 @@
 #ifndef CHARLS_UTIL
 #define CHARLS_UTIL
 
-
-#ifdef _DEBUG
-#include <assert.h>
-#define ASSERT(t) assert(t)
-#else
-#define ASSERT(t) {}
-#endif
-
-#if defined(WIN32)
-#define CHARLS_IMEXPORT __declspec(dllexport) 
-
-// default signed int types (32 or 64 bit)
-#ifdef  _WIN64
-typedef  int LONG;
-#else
-typedef int LONG;
-#endif
-
-#else
-#include <stdint.h>
-
-// default signed int types (32 or 64 bit)
-typedef intptr_t LONG;
-#endif
-
-
-
-enum constants
-{
-  LONG_BITCOUNT = sizeof(LONG)*8
-};
-
-typedef unsigned char BYTE;
-typedef unsigned short USHORT;
-
-
-#include <string.h>
 #include <stdlib.h>
-
-
-#undef  NEAR
-
-#ifdef _MSC_VER
-#ifdef _DEBUG
-#define inlinehint
-#else
-#define inlinehint __forceinline
-#endif
-#else
-#define inlinehint __inline
-#endif
-
-
+#include <string.h>
+#include "config.h"
+#include "interface.h"
 
 
 #ifndef MAX
@@ -102,8 +53,6 @@ inline LONG BitWiseSign(LONG i)
 	{ return i >> (LONG_BITCOUNT-1); }	
 
 
-#pragma pack(push, 1)
-
 template<class SAMPLE>
 struct Triplet
 { 
@@ -111,13 +60,13 @@ struct Triplet
 		v1(0),
 		v2(0),
 		v3(0)
-	{};
+	{}
 
 	Triplet(LONG x1, LONG x2, LONG x3) :
 		v1((SAMPLE)x1),
 		v2((SAMPLE)x2),
 		v3((SAMPLE)x3)
-	{};
+	{}
 
 		union 
 		{
@@ -136,16 +85,69 @@ struct Triplet
 		};
 };
 
-
-#pragma pack(pop)
-
-
-#include "interface.h"
-
 inline bool operator==(const Triplet<BYTE>& lhs, const Triplet<BYTE>& rhs)
 	{ return lhs.v1 == rhs.v1 && lhs.v2 == rhs.v2 && lhs.v3 == rhs.v3; }
 
 inline bool  operator!=(const Triplet<BYTE>& lhs, const Triplet<BYTE>& rhs)
 	{ return !(lhs == rhs); }
+
+
+template<class sample>
+struct Quad : public Triplet<sample>
+{
+	Quad() : 
+		v4(0)
+		{}
+
+	Quad(Triplet<sample> triplet, LONG alpha) : Triplet<sample>(triplet), A((sample)alpha)
+		{}
+		
+	union 
+	{
+		sample v4;
+		sample A;
+	};
+};
+
+
+
+template <int size>
+struct FromBigEndian
+{	
+};
+
+template <>
+struct FromBigEndian<4>
+{
+	inlinehint static unsigned int Read(BYTE* pbyte)
+	{
+		return  (pbyte[0] << 24) + (pbyte[1] << 16) + (pbyte[2] << 8) + (pbyte[3] << 0);
+	}
+};
+
+
+
+template <>
+struct FromBigEndian<8>
+{
+	typedef unsigned long long UINT64;
+
+	inlinehint static UINT64 Read(BYTE* pbyte)
+	{
+		return  (UINT64(pbyte[0]) << 56) + (UINT64(pbyte[1]) << 48) + (UINT64(pbyte[2]) << 40) + (UINT64(pbyte[3]) << 32) + 
+		  		(UINT64(pbyte[4]) << 24) + (UINT64(pbyte[5]) << 16) + (UINT64(pbyte[6]) <<  8) + (UINT64(pbyte[7]) << 0);
+	}
+};
+
+
+class JlsException
+{
+public:
+	JlsException(JLS_ERROR error) : _error(error)
+		{ }
+
+	JLS_ERROR _error;
+};
+
 
 #endif

@@ -7,6 +7,9 @@
 
 #include "lookuptable.h"
 
+// This file contains the code for handling a "scan". Usually an image is encoded as a single scan. 
+
+
 #ifdef _MSC_VER
 #pragma warning (disable: 4127)
 #endif
@@ -47,31 +50,33 @@ Presets ComputeDefault(LONG MAXVAL, LONG NEAR)
 }
 
 
-/* Two alternatives for GetPredictedValue() (second is slightly faster due to reduced branching)
+// Two alternatives for GetPredictedValue() (second is slightly faster due to reduced branching)
+
+#if 0
 
 inlinehint LONG GetPredictedValue(LONG Ra, LONG Rb, LONG Rc)
 {
-if (Ra < Rb)
-{
-if (Rc < Ra)
-return Rb;
+	if (Ra < Rb)
+	{
+		if (Rc < Ra)
+			return Rb;
 
-if (Rc > Rb)
-return Ra;
+		if (Rc > Rb)
+			return Ra;
+	}
+	else
+	{
+		if (Rc < Rb)
+			return Ra;
+
+		if (Rc > Ra)
+			return Rb;
+	}
+
+	return Ra + Rb - Rc;
 }
-else
-{
-if (Rc < Rb)
-return Ra;
 
-if (Rc > Ra)
-return Rb;
-}
-
-return Ra + Rb - Rc;
-}
-
-/*/
+#else
 
 inlinehint LONG GetPredictedValue(LONG Ra, LONG Rb, LONG Rc)
 {
@@ -80,17 +85,19 @@ inlinehint LONG GetPredictedValue(LONG Ra, LONG Rb, LONG Rc)
 
 	// is Ra between Rc and Rb? 
 	if ((sgn ^ (Rc - Ra)) < 0)
+	{
 		return Rb;
-
-	// is Rb between Rc and Ra?
-	if ((sgn ^ (Rb - Rc)) < 0)
+	} 
+	else if ((sgn ^ (Rb - Rc)) < 0)
+	{
 		return Ra;
+	}
 
 	// default case, valid if Rc element of [Ra,Rb] 
 	return Ra + Rb - Rc;
 }
 
-//*/
+#endif
 
 inlinehint LONG UnMapErrVal(LONG mappedError)
 {
@@ -152,8 +159,19 @@ public:
 			  presets.T2 != 0 ? presets.T2 : presetDefault.T2,
 			  presets.T3 != 0 ? presets.T3 : presetDefault.T3, 
 			  presets.RESET != 0 ? presets.RESET : presetDefault.RESET);
-	  }
+	  }	
 
+
+	  bool IsInterleaved()
+	  {
+		  if (STRATEGY::_info.ilv == ILV_NONE)
+			  return false;
+
+		  if (STRATEGY::_info.components == 1)
+			  return false;
+
+		  return true;
+	  }
 
 
 	  signed char QuantizeGratientOrg(LONG Di);
@@ -193,8 +211,8 @@ public:
 	  void DoScan(BYTE* pbyteCompressed, size_t cbyteCompressed);         
 
 public:
-	void InitProcess(void* pvoidOut);
-    void InitDefault();
+	ProcessLine* InitProcess(void* pvoidOut);
+	void InitDefault();
 	void InitParams(LONG t1, LONG t2, LONG t3, LONG nReset);
 
 	size_t  EncodeScan(const void* pvoid, const Size& size, void* pvoidOut, size_t cbyte, void* pvoidCompare);
@@ -225,6 +243,7 @@ protected:
 };
 
 
+// Encode/decode a single sample. Performancewise the #1 important functions
 
 template<class TRAITS, class STRATEGY>
 typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::DoRegular(LONG Qs, LONG, LONG pred, DecoderStrategy*)
@@ -249,8 +268,9 @@ typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::DoRegular(LONG Qs, LONG, LONG
 			throw JlsException(InvalidCompressedData);
 	}	
 	ErrVal = ErrVal ^ ((traits.NEAR == 0) ? ctx.GetErrorCorrection(k) : 0);
-	ctx.UpdateVariables(ErrVal, traits.NEAR, traits.RESET);			
-	return traits.ComputeReconstructedSample(Px, ApplySign(ErrVal, sign)); 
+	ctx.UpdateVariables(ErrVal, traits.NEAR, traits.RESET);	
+	ErrVal = ApplySign(ErrVal, sign);
+	return traits.ComputeReconstructedSample(Px, ErrVal); 
 }
 
 
@@ -271,6 +291,7 @@ typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::DoRegular(LONG Qs, LONG x, LO
 }
 
 
+// Functions to build tables used to decode short golomb codes.
 
 inlinehint std::pair<LONG, LONG> CreateEncodedValue(LONG k, LONG mappederval)
 {
@@ -310,6 +331,7 @@ CTable InitTable(LONG k)
 }
 
 
+// Encoding/decoding of golomb codes
 
 template<class TRAITS, class STRATEGY>
 LONG JlsCodec<TRAITS,STRATEGY>::DecodeValue(LONG k, LONG limit, LONG qbpp)
@@ -357,6 +379,8 @@ inlinehint void JlsCodec<TRAITS,STRATEGY>::EncodeMappedValue(LONG k, LONG mapped
 }
 
 
+// Sets up a lookup table to "Quantize" sample difference.
+
 template<class TRAITS, class STRATEGY>
 void JlsCodec<TRAITS,STRATEGY>::InitQuantizationLUT()
 {
@@ -398,9 +422,7 @@ void JlsCodec<TRAITS,STRATEGY>::InitQuantizationLUT()
 	{
 		_pquant[i] = QuantizeGratientOrg(i);
 	}
-
 }
-
 
 
 template<class TRAITS, class STRATEGY>
@@ -420,65 +442,7 @@ signed char JlsCodec<TRAITS,STRATEGY>::QuantizeGratientOrg(LONG Di)
 
 
 
-template<class TRAITS, class STRATEGY>
-void JlsCodec<TRAITS,STRATEGY>::EncodeRunPixels(LONG runLength, bool bEndofline)
-{
-	while (runLength >= LONG(1 << J[RUNindex])) 
-	{
-		STRATEGY::AppendOnesToBitStream(1);
-		runLength = runLength - LONG(1 << J[RUNindex]);
-		IncrementRunIndex();
-	}
-
-	if (bEndofline) 
-	{
-		if (runLength != 0) 
-		{
-			STRATEGY::AppendOnesToBitStream(1);	
-		}
-	}
-	else
-	{
-		STRATEGY::AppendToBitStream(runLength, J[RUNindex] + 1);	// leading 0 + actual remaining length
-	}
-}
-
-
-
-template<class TRAITS, class STRATEGY>
-LONG JlsCodec<TRAITS,STRATEGY>::DecodeRunPixels(PIXEL Ra, PIXEL* ptype, LONG cpixelMac)
-{
-	LONG ipixel = 0;
-	while (STRATEGY::ReadBit())
-	{
-		int cpixel = MIN(1 << J[RUNindex], int(cpixelMac - ipixel));
-		ipixel += cpixel;
-		ASSERT(ipixel <= cpixelMac);
-
-		if (cpixel == (1 << J[RUNindex]))
-		{
-			IncrementRunIndex();
-		}
-
-		if (ipixel == cpixelMac)
-			break;
-	}
-
-
-	if (ipixel != cpixelMac)
-	{
-		// incomplete run 	
-		ipixel += (J[RUNindex] > 0) ? STRATEGY::ReadValue(J[RUNindex]) : 0;
-	}
-
-	for (LONG i = 0; i < ipixel; ++i)
-	{
-		ptype[i] = Ra;
-	}	
-
-	return ipixel;
-}
-
+// RI = Run interruption: functions that handle the sample terminating a run.
 
 template<class TRAITS, class STRATEGY>
 LONG JlsCodec<TRAITS,STRATEGY>::DecodeRIError(CContextRunMode& ctx)
@@ -522,16 +486,14 @@ Triplet<typename TRAITS::SAMPLE> JlsCodec<TRAITS,STRATEGY>::DecodeRIPixel(Triple
 template<class TRAITS, class STRATEGY>
 Triplet<typename TRAITS::SAMPLE> JlsCodec<TRAITS,STRATEGY>::EncodeRIPixel(Triplet<SAMPLE> x, Triplet<SAMPLE> Ra, Triplet<SAMPLE> Rb)
 {
-	const LONG RItype		= 0;
-
 	LONG errval1	= traits.ComputeErrVal(Sign(Rb.v1 - Ra.v1) * (x.v1 - Rb.v1));
-	EncodeRIError(_contextRunmode[RItype], errval1);
+	EncodeRIError(_contextRunmode[0], errval1);
 
 	LONG errval2	= traits.ComputeErrVal(Sign(Rb.v2 - Ra.v2) * (x.v2 - Rb.v2));
-	EncodeRIError(_contextRunmode[RItype], errval2);
+	EncodeRIError(_contextRunmode[0], errval2);
 
 	LONG errval3	= traits.ComputeErrVal(Sign(Rb.v3 - Ra.v3) * (x.v3 - Rb.v3));
-	EncodeRIError(_contextRunmode[RItype], errval3);
+	EncodeRIError(_contextRunmode[0], errval3);
 
 
 	return Triplet<SAMPLE>(traits.ComputeReconstructedSample(Rb.v1, errval1 * Sign(Rb.v1  - Ra.v1)),
@@ -557,7 +519,6 @@ typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::DecodeRIPixel(LONG Ra, LONG R
 }
 
 
-
 template<class TRAITS, class STRATEGY>
 typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::EncodeRIPixel(LONG x, LONG Ra, LONG Rb)
 {
@@ -576,7 +537,65 @@ typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::EncodeRIPixel(LONG x, LONG Ra
 }
 
 
+// RunMode: Functions that handle run-length encoding
 
+template<class TRAITS, class STRATEGY>
+void JlsCodec<TRAITS,STRATEGY>::EncodeRunPixels(LONG runLength, bool bEndofline)
+{
+	while (runLength >= LONG(1 << J[RUNindex])) 
+	{
+		STRATEGY::AppendOnesToBitStream(1);
+		runLength = runLength - LONG(1 << J[RUNindex]);
+		IncrementRunIndex();
+	}
+
+	if (bEndofline) 
+	{
+		if (runLength != 0) 
+		{
+			STRATEGY::AppendOnesToBitStream(1);	
+		}
+	}
+	else
+	{
+		STRATEGY::AppendToBitStream(runLength, J[RUNindex] + 1);	// leading 0 + actual remaining length
+	}
+}
+
+
+template<class TRAITS, class STRATEGY>
+LONG JlsCodec<TRAITS,STRATEGY>::DecodeRunPixels(PIXEL Ra, PIXEL* ptype, LONG cpixelMac)
+{
+	LONG ipixel = 0;
+	while (STRATEGY::ReadBit())
+	{
+		int cpixel = MIN(1 << J[RUNindex], int(cpixelMac - ipixel));
+		ipixel += cpixel;
+		ASSERT(ipixel <= cpixelMac);
+
+		if (cpixel == (1 << J[RUNindex]))
+		{
+			IncrementRunIndex();
+		}
+
+		if (ipixel == cpixelMac)
+			break;
+	}
+
+
+	if (ipixel != cpixelMac)
+	{
+		// incomplete run 	
+		ipixel += (J[RUNindex] > 0) ? STRATEGY::ReadValue(J[RUNindex]) : 0;
+	}
+
+	for (LONG i = 0; i < ipixel; ++i)
+	{
+		ptype[i] = Ra;
+	}	
+
+	return ipixel;
+}
 
 template<class TRAITS, class STRATEGY>
 LONG JlsCodec<TRAITS,STRATEGY>::DoRunMode(LONG ipixel, EncoderStrategy*)
@@ -606,7 +625,6 @@ LONG JlsCodec<TRAITS,STRATEGY>::DoRunMode(LONG ipixel, EncoderStrategy*)
 	ptypeCurX[runLength] = EncodeRIPixel(ptypeCurX[runLength], Ra, ptypePrevX[runLength]);
 	DecrementRunIndex();
 	return runLength + 1;
-
 }
 
 
@@ -625,12 +643,13 @@ LONG JlsCodec<TRAITS,STRATEGY>::DoRunMode(LONG ipixelStart, DecoderStrategy*)
 
 	// run interruption
 	PIXEL Rb = ptypePrev[ipixelEnd];
-	ptypeCur[ipixelEnd] = DecodeRIPixel(Ra, Rb);
+	ptypeCur[ipixelEnd] =	DecodeRIPixel(Ra, Rb);
 	DecrementRunIndex();
 	return ipixelEnd - ipixelStart + 1;
 }
 
 
+// DoLine: Encodes/Decodes a scanline of samples
 
 template<class TRAITS, class STRATEGY>
 void JlsCodec<TRAITS,STRATEGY>::DoLine(SAMPLE*)
@@ -648,21 +667,22 @@ void JlsCodec<TRAITS,STRATEGY>::DoLine(SAMPLE*)
 
 		LONG Qs = ComputeContextID(QuantizeGratient(Rd - Rb), QuantizeGratient(Rb - Rc), QuantizeGratient(Rc - Ra));
 
-		if (Qs == 0)
+		if (Qs != 0)
+		{
+			ptypeCur[ipixel] = DoRegular(Qs, ptypeCur[ipixel], GetPredictedValue(Ra, Rb, Rc), (STRATEGY*)(NULL));
+			ipixel++;
+		}
+		else
 		{
 			ipixel += DoRunMode(ipixel, (STRATEGY*)(NULL));
 			Rb = ptypePrev[ipixel-1];
 			Rd = ptypePrev[ipixel];	
-		}
-		else
-		{
-			ptypeCur[ipixel] = DoRegular(Qs, ptypeCur[ipixel], GetPredictedValue(Ra, Rb, Rc), (STRATEGY*)(NULL));
-			ipixel++;
 		}				
 	}
 }
 
 
+// DoLine: Encodes/Decodes a scanline of triplets in ILV_SAMPLE mode
 
 template<class TRAITS, class STRATEGY>
 void JlsCodec<TRAITS,STRATEGY>::DoLine(Triplet<SAMPLE>*)
@@ -679,6 +699,7 @@ void JlsCodec<TRAITS,STRATEGY>::DoLine(Triplet<SAMPLE>*)
 		LONG Qs2 = ComputeContextID(QuantizeGratient(Rd.v2 - Rb.v2), QuantizeGratient(Rb.v2 - Rc.v2), QuantizeGratient(Rc.v2 - Ra.v2));
 		LONG Qs3 = ComputeContextID(QuantizeGratient(Rd.v3 - Rb.v3), QuantizeGratient(Rb.v3 - Rc.v3), QuantizeGratient(Rc.v3 - Ra.v3));
 
+		
 		if (Qs1 == 0 && Qs2 == 0 && Qs3 == 0)
 		{
 			ipixel += DoRunMode(ipixel, (STRATEGY*)(NULL));
@@ -691,12 +712,15 @@ void JlsCodec<TRAITS,STRATEGY>::DoLine(Triplet<SAMPLE>*)
 			Rx.v3 = DoRegular(Qs3, ptypeCur[ipixel].v3, GetPredictedValue(Ra.v3, Rb.v3, Rc.v3), (STRATEGY*)(NULL));
 			ptypeCur[ipixel] = Rx;
 			ipixel++;
-		}
-
+		}	
 	}
 }
 
 
+// DoScan: Encodes or decodes a scan. 
+// In ILV_SAMPLE mode, multiple components are handled in DoLine
+// In ILV_LINE mode, a call do DoLine is made for every component
+// In ILV_NONE mode, DoScan is called for each component 
 
 template<class TRAITS, class STRATEGY>
 void JlsCodec<TRAITS,STRATEGY>::DoScan(BYTE* pbyteCompressed, size_t cbyteCompressed)
@@ -706,6 +730,7 @@ void JlsCodec<TRAITS,STRATEGY>::DoScan(BYTE* pbyteCompressed, size_t cbyteCompre
 	LONG pixelstride = _size.cx + 4;
 
 	int components = STRATEGY::_info.ilv == ILV_LINE ? STRATEGY::_info.components : 1;
+
 	std::vector<PIXEL> vectmp;
 	vectmp.resize((components*2) * pixelstride);
 
@@ -731,7 +756,6 @@ void JlsCodec<TRAITS,STRATEGY>::DoScan(BYTE* pbyteCompressed, size_t cbyteCompre
 			ptypePrev[_size.cx]	= ptypePrev[_size.cx - 1];
 			ptypeCur[-1]		= ptypePrev[0];
 			DoLine((PIXEL*) NULL); // dummy arg for overload resolution
-
 	
 			rgRUNindex[component] = RUNindex;
 			ptypePrev += pixelstride;
@@ -743,11 +767,12 @@ void JlsCodec<TRAITS,STRATEGY>::DoScan(BYTE* pbyteCompressed, size_t cbyteCompre
 }
 
 
+// Setup codec for encoding and calls DoScan
 
 template<class TRAITS, class STRATEGY>
 size_t JlsCodec<TRAITS,STRATEGY>::EncodeScan(const void* pvoid, const Size& size, void* pvoidOut, size_t cbyte, void* pvoidCompare)
 {
-	InitProcess(const_cast<void*>(pvoid)); 
+	STRATEGY::_processLine = InitProcess(const_cast<void*>(pvoid)); 
 	_size = size;
 
 	BYTE* pbyteCompressed = static_cast<BYTE*>(pvoidOut);
@@ -770,32 +795,48 @@ size_t JlsCodec<TRAITS,STRATEGY>::EncodeScan(const void* pvoid, const Size& size
 
 }
 
-
+// Factory function for ProcessLine objects to copy/transform unencoded pixels to/from our scanline buffers.
 
 template<class TRAITS, class STRATEGY>
-void JlsCodec<TRAITS,STRATEGY>::InitProcess(void* pvoidOut)
+ProcessLine* JlsCodec<TRAITS,STRATEGY>::InitProcess(void* pvoidOut)
 {
-	if (STRATEGY::_info.components == 1)
-	{
-		STRATEGY::_processLine = new PostProcesSingleComponent(pvoidOut, STRATEGY::_info, sizeof(typename TRAITS::PIXEL));
-	}
-	else
+	if (!IsInterleaved())
+		return new PostProcesSingleComponent(pvoidOut, STRATEGY::_info, sizeof(typename TRAITS::PIXEL));
+
+	if (STRATEGY::_info.colorTransform == 0)
+		return new ProcessTransformed<TransformNone<typename TRAITS::SAMPLE> >(pvoidOut, STRATEGY::_info, TransformNone<SAMPLE>()); 
+
+	if ((STRATEGY::_info.bitspersample == sizeof(SAMPLE)*8))
 	{
 		switch(STRATEGY::_info.colorTransform)
 		{
-			case COLORXFORM_NONE: STRATEGY::_processLine = new ProcessTransformed<TransformNone<typename TRAITS::SAMPLE> >(pvoidOut, STRATEGY::_info); break;
-			case COLORXFORM_HP1 : STRATEGY::_processLine = new ProcessTransformed<TransformHp1<SAMPLE,1 << sizeof(SAMPLE)*8> >(pvoidOut, STRATEGY::_info); break;
-			case COLORXFORM_HP2 : STRATEGY::_processLine = new ProcessTransformed<TransformHp2<SAMPLE,1 << sizeof(SAMPLE)*8> >(pvoidOut, STRATEGY::_info); break;
-			case COLORXFORM_HP3 : STRATEGY::_processLine = new ProcessTransformed<TransformHp3<SAMPLE,1 << sizeof(SAMPLE)*8> >(pvoidOut, STRATEGY::_info); break;
+			case COLORXFORM_HP1 : return new ProcessTransformed<TransformHp1<SAMPLE> >(pvoidOut, STRATEGY::_info, TransformHp1<SAMPLE>()); break;
+			case COLORXFORM_HP2 : return new ProcessTransformed<TransformHp2<SAMPLE> >(pvoidOut, STRATEGY::_info, TransformHp2<SAMPLE>()); break;
+			case COLORXFORM_HP3 : return new ProcessTransformed<TransformHp3<SAMPLE> >(pvoidOut, STRATEGY::_info, TransformHp3<SAMPLE>()); break;
+			default: throw JlsException(UnsupportedColorTransform);
+		}
+	} else if (STRATEGY::_info.bitspersample > 8)
+
+	{
+		int shift = 16 - STRATEGY::_info.bitspersample;
+		switch(STRATEGY::_info.colorTransform)
+		{
+			case COLORXFORM_HP1 : return new ProcessTransformed<TransformShifted<TransformHp1<USHORT> > >(pvoidOut, STRATEGY::_info, TransformShifted<TransformHp1<USHORT> >(shift)); break;
+			case COLORXFORM_HP2 : return new ProcessTransformed<TransformShifted<TransformHp2<USHORT> > >(pvoidOut, STRATEGY::_info, TransformShifted<TransformHp2<USHORT> >(shift)); break;
+			case COLORXFORM_HP3 : return new ProcessTransformed<TransformShifted<TransformHp3<USHORT> > >(pvoidOut, STRATEGY::_info, TransformShifted<TransformHp3<USHORT> >(shift)); break;
+			default: throw JlsException(UnsupportedColorTransform);
 		}
 	}
+	throw JlsException(UnsupportedBitDepthForTransform);
 }
 
+
+// Setup codec for decoding and calls DoScan
 
 template<class TRAITS, class STRATEGY>
 size_t JlsCodec<TRAITS,STRATEGY>::DecodeScan(void* pvoidOut, const Size& size, const void* pvoidIn, size_t cbyte, bool bCompare)
 {
-	InitProcess(pvoidOut);
+	STRATEGY::_processLine = InitProcess(pvoidOut);
 
 	PIXEL* ptypeOut			= static_cast<PIXEL*>(pvoidOut);
 	BYTE* pbyteCompressed	= const_cast<BYTE*>(static_cast<const BYTE*>(pvoidIn));
@@ -820,10 +861,7 @@ size_t JlsCodec<TRAITS,STRATEGY>::DecodeScan(void* pvoidOut, const Size& size, c
 	return STRATEGY::GetCurBytePos() - pbyteCompressed;
 }
 
-
-
-
-
+// Initialize the codec data structures. Depends on JPEG-LS parameters like T1-T3.
 
 template<class TRAITS, class STRATEGY>
 void JlsCodec<TRAITS,STRATEGY>::InitParams(LONG t1, LONG t2, LONG t3, LONG nReset)

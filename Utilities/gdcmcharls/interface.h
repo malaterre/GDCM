@@ -2,7 +2,6 @@
 // (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
 // 
 
-#include "util.h"
 
 #ifndef JLS_INTERFACE
 #define JLS_INTERFACE
@@ -16,16 +15,9 @@ enum JLS_ERROR
 	UncompressedBufferTooSmall,
 	CompressedBufferTooSmall,
 	InvalidCompressedData,
-	ImageTypeNotSupported
-};
-
-class JlsException
-{
-public:
-	JlsException(JLS_ERROR error) : _error(error)
-		{ }
-
-	JLS_ERROR _error;
+	ImageTypeNotSupported,
+	UnsupportedBitDepthForTransform,
+	UnsupportedColorTransform
 };
 
 enum interleavemode
@@ -34,6 +26,8 @@ enum interleavemode
 	ILV_LINE = 1,
 	ILV_SAMPLE = 2
 };
+
+
 
 struct JlsCustomParameters
 {
@@ -44,20 +38,34 @@ struct JlsCustomParameters
 	int RESET;
 };
 
+struct JfifParamaters
+{
+	int   Ver;
+	char  units;
+	int   XDensity;
+	int   YDensity;
+	short Xthumb;
+	short Ythumb;
+	void* pdataThumbnail; // user must set buffer which size is Xthumb*Ythumb*3(RGB) before JpegLsDecode()
+};
+
 struct JlsParamaters
 {
 	int width;
 	int height;
 	int bitspersample;
+	int bytesperline;	// for [source (at encoding)][decoded (at decoding)] pixel image in user buffer
 	int components;
 	int allowedlossyerror;
 	interleavemode ilv;
 	int colorTransform;
+	bool outputBgr;
 	JlsCustomParameters custom;
+	JfifParamaters jfif;
 };
 
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #ifndef CHARLS_IMEXPORT
 #define CHARLS_IMEXPORT __declspec(dllimport) 
 #pragma comment (lib,"charls.lib")
@@ -66,17 +74,15 @@ struct JlsParamaters
 #ifndef CHARLS_IMEXPORT
 #define CHARLS_IMEXPORT
 #endif
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 
 extern "C"
 {
   CHARLS_IMEXPORT JLS_ERROR JpegLsEncode(void* pdataCompressed, size_t cbyteBuffer, size_t* pcbyteWritten, const void* pdataUncompressed, size_t cbyteUncompressed, const JlsParamaters* pparams);
-  CHARLS_IMEXPORT JLS_ERROR JpegLsDecode(void* pdataUncompressed, size_t cbyteUncompressed, const void* pdataCompressed, size_t cbyteCompressed);
+  CHARLS_IMEXPORT JLS_ERROR JpegLsDecode(void* pdataUncompressed, size_t cbyteUncompressed, const void* pdataCompressed, size_t cbyteCompressed, JlsParamaters* info = NULL);
   CHARLS_IMEXPORT JLS_ERROR JpegLsReadHeader(const void* pdataUncompressed, size_t cbyteUncompressed, JlsParamaters* pparams);
   CHARLS_IMEXPORT JLS_ERROR JpegLsVerifyEncode(const void* pdataUncompressed, size_t cbyteUncompressed, const void* pdataCompressed, size_t cbyteCompressed);
-//CHARLS_IMEXPORT	JLS_ERROR JpegLsCanEncode(JlsParamaters*);
-  //CHARLS_IMEXPORT   JLS_ERROR JpegLsCanDecode(JlsParamaters*);
 }
 
 

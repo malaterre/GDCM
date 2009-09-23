@@ -2,12 +2,17 @@
 // (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
 // 
 
-
-#ifndef CHARLS_DECODERSTRATEGY
-#define CHARLS_DECODERSTRATEGY
+#ifndef CHARLS_DECODERSTATEGY
+#define CHARLS_DECODERSTATEGY
 
 #include "streams.h"
 #include "processline.h"
+#include "config.h"
+#include "util.h"
+
+// Implements encoding to stream of bits. In encoding mode JpegLsCodec inherits from EncoderStrategy
+
+
 
 class DecoderStrategy
 {
@@ -46,13 +51,29 @@ public:
 	  }
 
 	
-	  void OnLineBegin(LONG cpixel, void* ptypeBuffer, LONG pixelStride) 
+	  void OnLineBegin(LONG /*cpixel*/, void* /*ptypeBuffer*/, LONG /*pixelStride*/) 
 	  {}
 
 
 	  void OnLineEnd(LONG cpixel, const void* ptypeBuffer, LONG pixelStride)
 	  {
 	  		_processLine->NewLineDecoded(ptypeBuffer, cpixel, pixelStride);
+	  }
+
+
+	  inlinehint bool OptimizedRead()
+	  {
+		  // Easy & fast: if there is no 0xFF byte in sight, we can read without bitstuffing
+		  if (_pbyteCompressed < _pbyteNextFF)
+		  {
+			  _readCache		 |= FromBigEndian<sizeof(bufType)>::Read(_pbyteCompressed) >> _validBits;
+			  int bytesToRead = (bufferbits - _validBits) >> 3;
+			  _pbyteCompressed += bytesToRead;
+			  _validBits += bytesToRead * 8;
+			  ASSERT(_validBits >= bufferbits - 8);
+			  return true;
+		  }
+		  return false;
 	  }
 
 	  typedef size_t bufType;
@@ -65,19 +86,8 @@ public:
 	  {
 		  ASSERT(_validBits <=bufferbits - 8);
 
-		  if (_pbyteCompressed < _pbyteNextFF)
-		  {
-			  do
-			  {
-				  _readCache		 |= bufType(_pbyteCompressed[0]) << (bufferbits - 8  - _validBits);
-				  _validBits		 += 8; 				  
-				  _pbyteCompressed   += 1;				
-			  }
-			  while (_validBits < bufferbits - 8);
-			  
-			  ASSERT(_validBits >= bufferbits - 8);
+		  if (OptimizedRead())
 			  return;
-		  }
 
 		  do
 		  {
@@ -90,6 +100,19 @@ public:
 			  }
 
 			  bufType valnew	  = _pbyteCompressed[0];
+			  
+			  if (valnew == 0xFF)		
+			  {
+				  // JPEG bitstream rule: no FF may be followed by 0x80 or higher	    			 
+				 if (_pbyteCompressed == _pbyteCompressedEnd - 1 || (_pbyteCompressed[1] & 0x80) != 0)
+				 {
+					 if (_validBits <= 0)
+					 	throw JlsException(InvalidCompressedData);
+					 
+					 return;
+			     }
+			  }
+
 			  _readCache		 |= valnew << (bufferbits - 8  - _validBits);
 			  _pbyteCompressed   += 1;				
 			  _validBits		 += 8; 
@@ -114,11 +137,13 @@ public:
 		  while (pbyteNextFF < _pbyteCompressedEnd)
 	      {
 			  if (*pbyteNextFF == 0xFF) 
+			  {				  
 				  break;
-
+			  }
     		  pbyteNextFF++;
 		  }
 		  
+
 		  return pbyteNextFF - (sizeof(bufType)-1);
 	  }
 
@@ -170,7 +195,7 @@ public:
 
 	  inlinehint bool ReadBit()
 	  {
-		  if (_validBits == 0)
+		  if (_validBits <= 0)
 		  {
 			  MakeValid();
 		  }

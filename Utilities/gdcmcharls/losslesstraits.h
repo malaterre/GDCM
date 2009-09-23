@@ -9,7 +9,8 @@
 
 //
 // optimized trait classes for lossless compression of 8 bit color and 8/16 bit monochrome images.
-// 
+// This class is assumes MAXVAL correspond to a whole number of bits, and no custom RESET value is set when encoding.
+// The point of this is to have the most optimized code for the most common and most demanding scenario. 
 
 template <class sample, LONG bitsperpixel>
 struct LosslessTraitsImplT 
@@ -54,7 +55,6 @@ struct LosslessTraitsImplT
 template <class SAMPLE, LONG bpp>
 struct LosslessTraitsT : public LosslessTraitsImplT<SAMPLE, bpp> 
 {
-//	enum { ccomponent = 1};
 	typedef SAMPLE PIXEL;
 };
 
@@ -63,7 +63,6 @@ struct LosslessTraitsT : public LosslessTraitsImplT<SAMPLE, bpp>
 template<>
 struct LosslessTraitsT<BYTE,8> : public LosslessTraitsImplT<BYTE, 8> 
 {
-//	enum { ccomponent = 1};
 	typedef SAMPLE PIXEL;
 
 	static inlinehint signed char ModRange(LONG Errval) 
@@ -82,7 +81,6 @@ struct LosslessTraitsT<BYTE,8> : public LosslessTraitsImplT<BYTE, 8>
 template<>
 struct LosslessTraitsT<USHORT,16> : public LosslessTraitsImplT<USHORT,16> 
 {
-//	enum { ccomponent = 1};
 	typedef SAMPLE PIXEL;
 
 	static inlinehint short ModRange(LONG Errval) 
@@ -102,7 +100,6 @@ struct LosslessTraitsT<USHORT,16> : public LosslessTraitsImplT<USHORT,16>
 template<class SAMPLE, LONG bpp>
 struct LosslessTraitsT<Triplet<SAMPLE>,bpp> : public LosslessTraitsImplT<SAMPLE,bpp>
 {
-//	enum { 		ccomponent = 3 };
 	typedef Triplet<SAMPLE> PIXEL;
 
 	static inlinehint bool IsNear(LONG lhs, LONG rhs) 

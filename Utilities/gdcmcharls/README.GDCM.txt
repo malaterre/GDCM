@@ -1,9 +1,9 @@
 This directory contains a subset of the CharLS project (http://charls.codeplex.com/)
 
-It was retrieved on Tue May 12 18:01:34 CEST 2009
+It was retrieved on Wed Sep 23 18:30:14 CEST 2009
 URL:
-$ svn co https://charls.svn.codeplex.com/svn 
-The main author (Jan de Vaan <jan dot devaan at versatel dot nl>) claims this is a 1.0 release eventhough there are no tarball uploaded yet.
+http://charls.codeplex.com/Release/ProjectReleases.aspx?ReleaseId=32643
+This is the 1.0 Beta Release
 
 Project Description
 An optimized implementation of the JPEG-LS standard for lossless and near-lossless image compression. JPEG-LS is a low-complexity standard that matches JPEG 2000 compression ratios. In terms of speed, CharLS outperforms open source and commercial JPEG LS implementations.

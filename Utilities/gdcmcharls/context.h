@@ -7,9 +7,6 @@
 #define CHARLS_CONTEXT
 
 
-#define MIN_C -128
-#define MAX_C 127
-
 //
 // JlsContext: a JPEG-LS context with it's current statistics.
 //
@@ -29,8 +26,8 @@ public:
 
 	LONG A;
 	LONG B;
-	LONG C;
-	LONG N;
+	short C;
+	short N;
 
 	inlinehint LONG GetErrorCorrection(LONG k) const
 	{
@@ -39,44 +36,50 @@ public:
 
 		return BitWiseSign(2 * B + N - 1);
 	}
+	
 
-
-	inlinehint void UpdateVariables(LONG Errval, LONG NEAR, LONG NRESET)
+	inlinehint void UpdateVariables(LONG errorValue, LONG NEAR, LONG NRESET)
 	{
 		ASSERT(N != 0);
 
-		B = B + Errval * (2 * NEAR + 1); 
-		A = A + abs(Errval);
+		// For performance work on copies of A,B,N (compiler will use registers).
+		int b = B + errorValue * (2 * NEAR + 1); 
+		int a = A + abs(errorValue);
+		int n = N;
+
+		ASSERT(a < 65536 * 256);
+		ASSERT(abs(b) < 65536 * 256);
 		
-		ASSERT(A < 65536 * 256);
-		ASSERT(abs(B) < 65536 * 256);
-
-		if (N == NRESET) 
+		if (n == NRESET) 
 		{
-			A = A >> 1;
-			B = B >> 1;
-			N = N >> 1;
+			a = a >> 1;
+			b = b >> 1;
+			n = n >> 1;
 		}
 
-		N = N + 1;
-
-		if (B <= - N) 
+		n = n + 1;
+		
+		if (b + n <= 0) 
 		{
-			B = MAX(-N + 1, B + N);
-			if (C > MIN_C)
+			b = b + n;
+			if (b <= -n)
 			{
-				C--;
+				b = -n + 1;
 			}
+			C = _tableC[C - 1];
 		} 
-		else if (B > 0) 
+		else  if (b > 0) 
 		{
-			B = MIN(B - N, 0);				
-			if (C < MAX_C) 
+			b = b - n;				
+			if (b > 0)
 			{
-				C++;
+				b = 0;
 			}
-
+			C = _tableC[C + 1];
 		}
+		A = a;
+		B = b;
+		N = (short)n;
 		ASSERT(N != 0);
 	}
 
@@ -94,6 +97,26 @@ public:
 		return k;
 	}
 
+	static signed char* CreateTableC()
+	{
+		static std::vector<signed char> rgtableC;
+		
+		rgtableC.reserve(256 + 2);
+
+		rgtableC.push_back(-128);	
+		for (int i = -128; i < 128; i++)
+		{
+			rgtableC.push_back(char(i));	
+		}
+		rgtableC.push_back(127);	
+		
+		signed char* pZero = &rgtableC[128 + 1];	
+		ASSERT(pZero[0] == 0);
+		return pZero;
+	}
+private:
+
+	static signed char* _tableC;
 };
 
 #endif

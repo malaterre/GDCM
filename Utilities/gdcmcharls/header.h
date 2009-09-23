@@ -18,6 +18,7 @@
 #define JPEG_DRI  0xDD
 #define JPEG_RSTm  0xD0
 #define JPEG_COM  0xFE
+#define JPEG_APP0 0xE0 // JFIF
 #define JPEG_APP7 0xE7 // colorspace
 #define JPEG_APP8 0xE8 // colorXForm
 
