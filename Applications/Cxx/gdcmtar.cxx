@@ -524,6 +524,8 @@ std::cerr << "Not implemented" << std::endl;
  }
   else
     {
+ std::cerr << "Not implemented" << std::endl;
+	  return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
