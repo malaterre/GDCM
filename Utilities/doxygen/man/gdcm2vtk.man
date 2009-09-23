@@ -85,6 +85,18 @@ $ gdcm2vtk inputfile output.mha
 
 This command will convert the input DICOM file: inputfile into a MetaImage .mha file. Same goes for .mhd file.
 
+\subsection convert_mha CONVERT MHA/MHD
+
+\verbatim
+$ gdcm2vtk inputfile output.mha
+\endverbatim
+or
+\verbatim
+$ gdcm2vtk inputfile output.mhd
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into a MetaImageData .mha/.mhd file.
+
 \subsection convert_vti CONVERT VTI
 
 \verbatim
