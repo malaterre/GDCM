@@ -23,6 +23,9 @@
 #include "gdcmcharls/util.h"
 #include "gdcmcharls/defaulttraits.h"
 #include "gdcmcharls/losslesstraits.h"
+#include "gdcmcharls/colortransform.h"
+#include "gdcmcharls/streams.h"
+#include "gdcmcharls/processline.h"
 
 
 namespace gdcm
@@ -316,7 +319,7 @@ FIXME: 12bits RGB is not working, so for now use the bitsallocated all the time
 Problem reading image from: /home/mathieu/Creatis/gdcmData/SIEMENS-MR-RGB-16Bits.dcm
 Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e25
 */
-    if( true ||pf.GetPixelRepresentation() )
+    if( true || pf.GetPixelRepresentation() )
       {
       // gdcmData/CT_16b_signed-UsedBits13.dcm
       params.bitspersample = bitsallocated;
@@ -328,14 +331,19 @@ Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e
     params.height = image_height;
     params.width = image_width;
 
-    if (sample_pixel == 3)
+    if (sample_pixel == 4)
+{
+      params.ilv = ILV_LINE;
+}
+    else if (sample_pixel == 3)
       {
       params.ilv = ILV_LINE;
-      params.colorTransform = 1;
+      params.colorTransform = COLORXFORM_HP1;
       }
 
     std::vector<BYTE> rgbyteCompressed;
     rgbyteCompressed.resize(image_width * image_height * 4);
+    //rgbyteCompressed.resize(size.cx *size.cy * ccomp * cbit / 4);
 
     size_t cbyteCompressed;
     JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, inputdata, inputlength, &params);
