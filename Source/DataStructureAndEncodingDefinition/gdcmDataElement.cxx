@@ -118,7 +118,7 @@ namespace gdcm
             }
           return sqi;
           }
-        else
+        else if  ( GetVR() == VR::UN ) // cp 246, IVRLE SQ
           {
           assert( GetVR() == VR::UN ); // cp 246, IVRLE SQ
           const ByteValue *bv = GetByteValue();
@@ -130,6 +130,12 @@ namespace gdcm
           sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
           return sqi;
           }
+        else
+{
+assert( GetVR().IsVRFile() );
+assert( GetByteValue() );
+return 0;
+}
         }
       }
     //    catch( ParseException &pex )
