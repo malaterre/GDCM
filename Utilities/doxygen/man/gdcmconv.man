@@ -230,6 +230,26 @@ Real life example of why you would use --force:
 \li When Pixel Data is missing data / is padded with junk
 \li When you would like to make sure GDCM can handle decompression & recompression cycle
 
+\subsection raw Decompressing a Compressed DICOM
+
+\verbatim
+$ gdcmconv --raw compressed.dcm uncompressed.dcm
+\endverbatim
+
+\subsection planar_configuration Changing the planar Configuration
+
+Often RLE files are compressed using a different Planar Comnfiguration (RRR ... GGG... BBB...) instead of the usual triplet (RGB ... RGB ... RGB ). So upon decompression the Planar Configuration is 1. This is perfectly legal in DICOM, however this is unconventional, and thus it may be a good idea to also change the planar configuration and set it to the default :
+
+\verbatim
+$ gdcmconv --raw --planar-configuration 0 compressed.dcm uncompressed1.dcm
+\endverbatim
+
+To reinvert the planar configuration of file 'uncompressed1.dcm', simply do:
+
+\verbatim
+$ gdcmconv --raw --planar-configuration 1 uncompressed1.dcm uncompressed2.dcm
+\endverbatim
+
 \section lossless_conversion Lossless Conversion
 When talking about lossless conversion, there is an ambiguity that need to be understood. To achieve higher compression ratio, the RGB color space is usually not used, in favor of a YBR one. Changing from one color space to the other is (bit level) not lossless.
 
