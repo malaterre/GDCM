@@ -22,6 +22,7 @@ SET(DSED_TEST_SRCS
   #TestDataElement
   TestDataSet
   TestVRDS
+  TestDS
   TestVRLT
   TestVRUI
   TestElement
