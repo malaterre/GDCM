@@ -60,7 +60,7 @@ file-out  DICOM output filename
   -S --split %d                       Write 2D image with multiple fragments (using max size)
 \endverbatim
 
-\subsection j2k_options JPEG options
+\subsection jpeg_options JPEG options
 \verbatim
   -q --quality %*f           set quality.
 \endverbatim
@@ -211,7 +211,7 @@ Note:
 
     * -q is just one of the many way to specify lossy quality, you need to inspect the other cmd line flag to specify lossyness properties. 
 
-\subsection rle Compressing to RLE
+\subsection lossless_rle Compressing to lossless RLE
 To compress an uncompressed DICOM file to a RLE Lossless encapsulated format:
 
 \verbatim
@@ -230,7 +230,7 @@ Real life example of why you would use --force:
 \li When Pixel Data is missing data / is padded with junk
 \li When you would like to make sure GDCM can handle decompression & recompression cycle
 
-\subsection raw Decompressing a Compressed DICOM
+\subsection decompress_raw Decompressing a Compressed DICOM
 
 \verbatim
 $ gdcmconv --raw compressed.dcm uncompressed.dcm

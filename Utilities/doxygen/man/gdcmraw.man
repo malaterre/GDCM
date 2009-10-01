@@ -82,7 +82,7 @@ $ md5sum test.raw
 f845c8f283d39a0204c325654493ba53  test.raw
 \endverbatim
 
-\subsection Encapsulated Syntax
+\subsection encapsulated_syntax Encapsulated Syntax
 
 When the Pixel Data is encapsulated, multiple fragments can be used to store a single slice image:
 
