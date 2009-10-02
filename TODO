@@ -304,8 +304,6 @@ Prepare a DICOM file with VR:UN element with Value Length odd ... what is the pa
 -----------------------------------------------------------------------
 Add example of JPC (redundancy 3D volume / J2K)
 -----------------------------------------------------------------------
-Provide a FindPolarSLL
------------------------------------------------------------------------
 Create a PDF Storage class with a trailing Pixel Data element to test broken DICOM implementation
 -----------------------------------------------------------------------
 Prepare a Basic Pixel Spacing Calibration example but with SC SOP so that
@@ -381,4 +379,4 @@ Reduce excess linkage:
 http://wiki.mandriva.com/en/Development/Tasks/Packaging/Problems/Underlinking
 http://wiki.mandriva.com/en/Overlinking
 -----------------------------------------------------------------------
-Introduce deprecation mechanism and *really* rid of GetSequenceOfItems() !!!
+Generate doc for python automatically
