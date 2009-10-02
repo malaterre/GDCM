@@ -7,6 +7,7 @@
 #define CHARLS_UTIL
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include "config.h"
 #include "interface.h"
@@ -130,7 +131,8 @@ struct FromBigEndian<4>
 template <>
 struct FromBigEndian<8>
 {
-	typedef unsigned long long UINT64;
+	//typedef unsigned long long UINT64;
+	typedef uint64_t UINT64;
 
 	inlinehint static UINT64 Read(BYTE* pbyte)
 	{
