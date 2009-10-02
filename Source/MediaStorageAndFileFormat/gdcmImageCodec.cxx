@@ -376,7 +376,7 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
       smask =
         smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) );
       // nmask : to propagate sign bit on negative values
-      int16_t nmask = 0x8000;  
+      int16_t nmask = (int16_t)0x8000;  
       nmask = nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 );
 
       uint16_t c;
