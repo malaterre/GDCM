@@ -1,107 +1,37 @@
 
 // File: index.xml
 
-// File: classgdcm_1_1AES.xml
-%feature("docstring") gdcm::AES "C++ includes: gdcmAES.h ";
-
-%feature("docstring")  gdcm::AES::AES "gdcm::AES::AES() ";
-
-%feature("docstring")  gdcm::AES::CryptCbc "bool
-gdcm::AES::CryptCbc(int mode, unsigned int length, char iv[16], const
-char *input, char *output) const
-
-AES-CBC buffer encryption/decryption.
-
-Parameters:
------------
-
-mode:  ENCRYPT or DECRYPT
-
-length:  length of the input data
-
-iv:  initialization vector (updated after use)
-
-input:  buffer holding the input data
-
-output:  buffer holding the output data
-
-false on error (invalid key, or length not multiple 16) ";
-
-%feature("docstring")  gdcm::AES::CryptCfb128 "bool
-gdcm::AES::CryptCfb128(int mode, unsigned int length, unsigned int
-&iv_off, char iv[16], const char *input, char *output) const
-
-AES-CFB128 buffer encryption/decryption.
-
-Parameters:
------------
-
-mode:  ENCRYPT or DECRYPT
-
-length:  length of the input data
-
-iv_off:  offset in IV (updated after use)
-
-iv:  initialization vector (updated after use)
-
-input:  buffer holding the input data
-
-output:  buffer holding the output data
-
-false on error (invalid key) ";
-
-%feature("docstring")  gdcm::AES::CryptEcb "bool
-gdcm::AES::CryptEcb(int mode, const char input[16], char output[16])
-const
-
-AES-ECB block encryption/decryption.
-
-Parameters:
------------
-
-mode:  ENCRYPT or DECRYPT
-
-input:  16-byte input block
-
-output:  16-byte output block
-
-false on error (invalid key) ";
-
-%feature("docstring")  gdcm::AES::SetkeyDec "bool
-gdcm::AES::SetkeyDec(const char *key, unsigned int keysize)
-
-AES key schedule (decryption).
-
-Parameters:
------------
-
-key:  decryption key
-
-keysize:  must be 16, 24 or 32
-
-false on error (wrong keysize, key null) ";
-
-%feature("docstring")  gdcm::AES::SetkeyEnc "bool
-gdcm::AES::SetkeyEnc(const char *key, unsigned int keysize)
-
-AES key schedule (encryption).
-
-Parameters:
------------
-
-key:  encryption key
-
-keysize:  must be 16, 24 or 32
-
-false on error (wrong keysize, key null) ";
-
-%feature("docstring")  gdcm::AES::~AES "gdcm::AES::~AES() ";
-
-
 // File: classstd_1_1allocator.xml
 %feature("docstring") std::allocator "
 
 STL class. ";
+
+
+// File: classgdcm_1_1AnonymizeEvent.xml
+%feature("docstring") gdcm::AnonymizeEvent "C++ includes:
+gdcmAnonymizeEvent.h ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::AnonymizeEvent "gdcm::AnonymizeEvent::AnonymizeEvent(const Self &s) ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::AnonymizeEvent "gdcm::AnonymizeEvent::AnonymizeEvent(Tag const &tag=0) ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::CheckEvent "virtual bool
+gdcm::AnonymizeEvent::CheckEvent(const ::gdcm::Event *e) const ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::GetEventName "virtual
+const char* gdcm::AnonymizeEvent::GetEventName() const ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::GetTag "Tag const&
+gdcm::AnonymizeEvent::GetTag() const ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::MakeObject "virtual
+::gdcm::Event* gdcm::AnonymizeEvent::MakeObject() const ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::SetTag "void
+gdcm::AnonymizeEvent::SetTag(const Tag &t) ";
+
+%feature("docstring")  gdcm::AnonymizeEvent::~AnonymizeEvent "virtual
+gdcm::AnonymizeEvent::~AnonymizeEvent() ";
 
 
 // File: classgdcm_1_1Anonymizer.xml
@@ -126,11 +56,12 @@ gdcm::Anonymizer::Empty(Tag const &t)
 Make Tag t empty (if not found tag will be created) Warning: does not
 handle SQ element ";
 
+%feature("docstring")  gdcm::Anonymizer::GetCryptographicMessageSyntax
+"const CryptographicMessageSyntax*
+gdcm::Anonymizer::GetCryptographicMessageSyntax() const ";
+
 %feature("docstring")  gdcm::Anonymizer::GetFile "File&
 gdcm::Anonymizer::GetFile() ";
-
-%feature("docstring")  gdcm::Anonymizer::GetX509 "const X509*
-gdcm::Anonymizer::GetX509() const ";
 
 %feature("docstring")  gdcm::Anonymizer::Remove "bool
 gdcm::Anonymizer::Remove(Tag const &t)
@@ -167,17 +98,18 @@ Replace tag with another value, if tag is not found it will be
 created: WARNING: this function can only execute if tag is a VRASCII
 ";
 
+%feature("docstring")  gdcm::Anonymizer::SetCryptographicMessageSyntax
+"void
+gdcm::Anonymizer::SetCryptographicMessageSyntax(CryptographicMessageSyntax
+*cms)
+
+Set/Get CMS key that will be used to encrypt the dataset within
+BasicApplicationLevelConfidentialityProfile. ";
+
 %feature("docstring")  gdcm::Anonymizer::SetFile "void
 gdcm::Anonymizer::SetFile(const File &f)
 
 Set/Get File. ";
-
-%feature("docstring")  gdcm::Anonymizer::SetX509 "void
-gdcm::Anonymizer::SetX509(X509 *x509)
-
-Set/Get AES key that will be used to encrypt the dataset within
-BasicApplicationLevelConfidentialityProfile Warning: set is done by
-copy (not reference) ";
 
 %feature("docstring")  gdcm::Anonymizer::~Anonymizer "gdcm::Anonymizer::~Anonymizer() ";
 
@@ -216,9 +148,6 @@ gdcm::ApplicationEntity::Squeeze() ";
 %feature("docstring") gdcm::ASN1 "C++ includes: gdcmASN1.h ";
 
 %feature("docstring")  gdcm::ASN1::ASN1 "gdcm::ASN1::ASN1() ";
-
-%feature("docstring")  gdcm::ASN1::TestPBKDF2 "int
-gdcm::ASN1::TestPBKDF2() ";
 
 %feature("docstring")  gdcm::ASN1::~ASN1 "gdcm::ASN1::~ASN1() ";
 
@@ -291,6 +220,15 @@ unsigned int idx=0) ";
 %feature("docstring")  gdcm::Attribute::SetValues "void
 gdcm::Attribute< Group, Element, TVR, TVM >::SetValues(const ArrayType
 *array, unsigned int numel=VMType) ";
+
+
+// File: classgdcm_1_1Attribute_3_01Group_00_01Element_00_01TVR_00_01VM_1_1VM1__8_01_4.xml
+%feature("docstring") gdcm::Attribute< Group, Element, TVR, VM::VM1_8
+> " C++ includes: gdcmAttribute.h ";
+
+%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_8
+>::GetVM " VM gdcm::Attribute< Group, Element, TVR, VM::VM1_8
+>::GetVM() const ";
 
 
 // File: classgdcm_1_1Attribute_3_01Group_00_01Element_00_01TVR_00_01VM_1_1VM1__n_01_4.xml
@@ -812,11 +750,7 @@ gdcm::Bitmap::IsEmpty() const ";
 gdcm::Bitmap::IsLossy() const
 
 Return whether or not the image was compressed using a lossy
-compressor or not Transfer Syntax alone is not sufficient to detect
-that. Warning if the image contains an invalid stream, the return code
-is also 'false' So this call return true only when the following
-combination is true: 1. The image can succefully be read 2. The image
-is indeed lossy ";
+compressor or not. ";
 
 %feature("docstring")  gdcm::Bitmap::Print "void
 gdcm::Bitmap::Print(std::ostream &) const ";
@@ -834,7 +768,10 @@ gdcm::Bitmap::SetDimension(unsigned int idx, unsigned int dim) ";
 gdcm::Bitmap::SetDimensions(const unsigned int dims[3]) ";
 
 %feature("docstring")  gdcm::Bitmap::SetLossyFlag "void
-gdcm::Bitmap::SetLossyFlag(bool f) ";
+gdcm::Bitmap::SetLossyFlag(bool f)
+
+Specifically set that the image was compressed using a lossy
+compression mechanism. ";
 
 %feature("docstring")  gdcm::Bitmap::SetLUT "void
 gdcm::Bitmap::SetLUT(LookupTable const &lut)
@@ -1027,6 +964,48 @@ Code. ";
 gdcm::Coder::~Coder() ";
 
 
+// File: classgdcm_1_1CodeString.xml
+%feature("docstring") gdcm::CodeString "
+
+CodeString.
+
+TODO
+
+C++ includes: gdcmCodeString.h ";
+
+%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString(const Superclass &s, size_type pos=0,
+size_type n=npos) ";
+
+%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString(const value_type *s, size_type n) ";
+
+%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString(const value_type *s) ";
+
+%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString() ";
+
+%feature("docstring")  gdcm::CodeString::IsValid "bool
+gdcm::CodeString::IsValid() const ";
+
+
+// File: classgdcm_1_1Command.xml
+%feature("docstring") gdcm::Command "
+
+superclass for callback/observer methods
+
+C++ includes: gdcmCommand.h ";
+
+%feature("docstring")  gdcm::Command::Execute "virtual void
+gdcm::Command::Execute(const Subject *caller, const Event &event)=0
+
+Abstract method that defines the action to be taken by the command.
+This variant is expected to be used when requests comes from a const
+Object ";
+
+%feature("docstring")  gdcm::Command::Execute "virtual void
+gdcm::Command::Execute(Subject *caller, const Event &event)=0
+
+Abstract method that defines the action to be taken by the command. ";
+
+
 // File: classstd_1_1complex.xml
 %feature("docstring") std::complex "
 
@@ -1060,6 +1039,40 @@ gdcm::CP246ExplicitDataElement::GetLength() const ";
 "std::istream&
 gdcm::CP246ExplicitDataElement::ReadWithLength(std::istream &is, VL
 &length) ";
+
+
+// File: classgdcm_1_1CryptographicMessageSyntax.xml
+%feature("docstring") gdcm::CryptographicMessageSyntax "C++ includes:
+gdcmCryptographicMessageSyntax.h ";
+
+%feature("docstring")
+gdcm::CryptographicMessageSyntax::CryptographicMessageSyntax "gdcm::CryptographicMessageSyntax::CryptographicMessageSyntax() ";
+
+%feature("docstring")  gdcm::CryptographicMessageSyntax::Decrypt "bool gdcm::CryptographicMessageSyntax::Decrypt(char *output, size_t
+&outlen, const char *array, size_t len) const ";
+
+%feature("docstring")  gdcm::CryptographicMessageSyntax::Encrypt "bool gdcm::CryptographicMessageSyntax::Encrypt(char *output, size_t
+&outlen, const char *array, size_t len) const ";
+
+%feature("docstring")  gdcm::CryptographicMessageSyntax::GetCipherType
+"CipherTypes gdcm::CryptographicMessageSyntax::GetCipherType() const
+";
+
+%feature("docstring")
+gdcm::CryptographicMessageSyntax::ParseCertificateFile "bool
+gdcm::CryptographicMessageSyntax::ParseCertificateFile(const char
+*filename) ";
+
+%feature("docstring")  gdcm::CryptographicMessageSyntax::ParseKeyFile
+"bool gdcm::CryptographicMessageSyntax::ParseKeyFile(const char
+*filename) ";
+
+%feature("docstring")  gdcm::CryptographicMessageSyntax::SetCipherType
+"void gdcm::CryptographicMessageSyntax::SetCipherType(CipherTypes
+type) ";
+
+%feature("docstring")
+gdcm::CryptographicMessageSyntax::~CryptographicMessageSyntax "gdcm::CryptographicMessageSyntax::~CryptographicMessageSyntax() ";
 
 
 // File: classgdcm_1_1CSAElement.xml
@@ -1389,7 +1402,9 @@ Value Representation of that Data Element is specified explicitly.
 C++ includes: gdcmDataElement.h ";
 
 %feature("docstring")  gdcm::DataElement::Clear "void
-gdcm::DataElement::Clear() ";
+gdcm::DataElement::Clear()
+
+Clear Data Element (make Value empty and invalidate Tag & VR). ";
 
 %feature("docstring")  gdcm::DataElement::DataElement "gdcm::DataElement::DataElement(const DataElement &_val) ";
 
@@ -1397,7 +1412,32 @@ gdcm::DataElement::Clear() ";
 const VR &vr=VR::INVALID) ";
 
 %feature("docstring")  gdcm::DataElement::Empty "void
-gdcm::DataElement::Empty() ";
+gdcm::DataElement::Empty()
+
+Make Data Element empty (no Value). ";
+
+%feature("docstring")  gdcm::DataElement::GDCM_LEGACY "gdcm::DataElement::GDCM_LEGACY(const SequenceOfItems
+*GetSequenceOfItems() const) GDCM_LEGACY(SequenceOfItems
+*GetSequenceOfItems()) SmartPointer< SequenceOfItems > GetValueAsSQ()
+const
+
+Return the Value of DataElement as a Sequence Of Items (if possible)
+WARNING:  : You need to check for NULL return value
+
+: In some case a Value could not have been recognized as a
+SequenceOfItems in those case the return of the function will be NULL,
+while the Value would be a valid SequenceOfItems, in those case prefer
+GetValueAsSQ. In which case the code internally trigger an assert to
+warn developper. When in doubt do not use this function and prefer
+GetValueAsSQ() Deprecated Replaced by DataElement::GetValueAsSQ() as
+of GDCM 2.2. Interpret the Value stored in the DataElement. This is
+more robust (but also more expensive) to call this function rather
+than the simpliest form: GetSequenceOfItems() It also return NULL when
+the Value is NOT of type SequenceOfItems WARNING:  in case
+GetSequenceOfItems() succeed the function return this value, otherwise
+it creates a new SequenceOfItems, you should handle that in your case,
+for instance: SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+";
 
 %feature("docstring")  gdcm::DataElement::GetByteValue "ByteValue*
 gdcm::DataElement::GetByteValue() ";
@@ -1417,20 +1457,6 @@ const
 Return the Value of DataElement as a Sequence Of Fragments (if
 possible) WARNING:  : You need to check for NULL return value ";
 
-%feature("docstring")  gdcm::DataElement::GetSequenceOfItems "SequenceOfItems* gdcm::DataElement::GetSequenceOfItems() ";
-
-%feature("docstring")  gdcm::DataElement::GetSequenceOfItems "const
-SequenceOfItems* gdcm::DataElement::GetSequenceOfItems() const
-
-Return the Value of DataElement as a Sequence Of Items (if possible)
-WARNING:  : You need to check for NULL return value
-
-: In some case a Value could not have been recognized as a
-SequenceOfItems in those case the return of the function will be NULL,
-while the Value would be a valid SequenceOfItems, in those case prefer
-GetValueAsSQ. In which case the code internally trigger an assert to
-warn developper. ";
-
 %feature("docstring")  gdcm::DataElement::GetTag "Tag&
 gdcm::DataElement::GetTag() ";
 
@@ -1447,16 +1473,8 @@ gdcm::DataElement::GetValue() const
 
 Set/Get Value (bytes array, SQ of items, SQ of fragments):. ";
 
-%feature("docstring")  gdcm::DataElement::GetValueAsSQ "SmartPointer<SequenceOfItems> gdcm::DataElement::GetValueAsSQ() const
-
-Interpret the Value stored in the DataElement. This is more robust
-(but also more expensive) to call this function rather than the
-simpliest form: GetSequenceOfItems() It also return NULL when the
-Value is NOT of type SequenceOfItems WARNING:  in case
-GetSequenceOfItems() succeed the function return this value, otherwise
-it creates a new SequenceOfItems, you should handle that in your case,
-for instance: SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-";
+%feature("docstring")  gdcm::DataElement::GetVL "VL&
+gdcm::DataElement::GetVL() ";
 
 %feature("docstring")  gdcm::DataElement::GetVL "const VL&
 gdcm::DataElement::GetVL() const
@@ -1802,13 +1820,75 @@ STL iterator class. ";
 // File: classgdcm_1_1DICOMDIR.xml
 %feature("docstring") gdcm::DICOMDIR "
 
-DICOMDIR.
+DICOMDIR class.
+
+Structured for handling DICOMDIR
 
 C++ includes: gdcmDICOMDIR.h ";
 
 %feature("docstring")  gdcm::DICOMDIR::DICOMDIR "gdcm::DICOMDIR::DICOMDIR(const FileSet &fs) ";
 
 %feature("docstring")  gdcm::DICOMDIR::DICOMDIR "gdcm::DICOMDIR::DICOMDIR() ";
+
+
+// File: classgdcm_1_1DICOMDIRGenerator.xml
+%feature("docstring") gdcm::DICOMDIRGenerator "
+
+DICOMDIRGenerator class This is a STD-GEN-CD DICOMDIR generator. ref:
+PS 3.11-2008 Annex D (Normative) - General Purpose CD-R and DVD
+Interchange Profiles.
+
+PS 3.11 - 2008 / D.3.2 Physical Medium And Medium Format The STD-GEN-
+CD and STD-GEN-SEC-CD application profiles require the 120 mm CD-R
+physical medium with the ISO/IEC 9660 Media Format, as defined in
+PS3.12. See also PS 3.12 - 2008 / Annex F 120mm CD-R Medium
+(Normative) and PS 3.10 - 2008 / 8 DICOM File Service / 8.1 FILE-SET
+
+WARNING:  : PS 3.11 - 2008 / D.3.1 SOP Classes and Transfer Syntaxes
+Composite Image & Stand-alone Storage are required to be stored as
+Explicit VR Little Endian Uncompressed (1.2.840.10008.1.2.1). When a
+DICOM file is found using another Transfer Syntax the generator will
+simply stops.
+
+Input files should be Explicit VR Little Endian
+
+filenames should be valid VR::CS value (16 bytes, upper case ...)
+
+Bug : There is a current limitation of not handling Referenced SOP
+Class UID / Referenced SOP Instance UID simply because the
+gdcm::Scanner does not allow us See PS 3.11 / Table D.3-2 STD-GEN
+Additional DICOMDIR Keys
+
+C++ includes: gdcmDICOMDIRGenerator.h ";
+
+%feature("docstring")  gdcm::DICOMDIRGenerator::DICOMDIRGenerator "gdcm::DICOMDIRGenerator::DICOMDIRGenerator() ";
+
+%feature("docstring")  gdcm::DICOMDIRGenerator::Generate "bool
+gdcm::DICOMDIRGenerator::Generate()
+
+Main function to generate the DICOMDIR. ";
+
+%feature("docstring")  gdcm::DICOMDIRGenerator::GetFile "File&
+gdcm::DICOMDIRGenerator::GetFile() ";
+
+%feature("docstring")  gdcm::DICOMDIRGenerator::SetDescriptor "void
+gdcm::DICOMDIRGenerator::SetDescriptor(const char *d)
+
+Set the File Set ID. WARNING:  this need to be a valid VR::CS value ";
+
+%feature("docstring")  gdcm::DICOMDIRGenerator::SetFile "void
+gdcm::DICOMDIRGenerator::SetFile(const File &f)
+
+Set/Get file. The DICOMDIR file will be valid once a call to Generate
+has been done. ";
+
+%feature("docstring")  gdcm::DICOMDIRGenerator::SetFilenames "void
+gdcm::DICOMDIRGenerator::SetFilenames(FilenamesType const &fns)
+
+Set the list of filenames from which the DICOMDIR should be generated
+from. ";
+
+%feature("docstring")  gdcm::DICOMDIRGenerator::~DICOMDIRGenerator "gdcm::DICOMDIRGenerator::~DICOMDIRGenerator() ";
 
 
 // File: classgdcm_1_1Dict.xml
@@ -1997,7 +2077,11 @@ CSAHeaderDict& gdcm::Dicts::GetCSAHeaderDict() const ";
 
 %feature("docstring")  gdcm::Dicts::GetDictEntry "const DictEntry&
 gdcm::Dicts::GetDictEntry(const Tag &tag, const char *owner=NULL)
-const ";
+const
+
+works for both public and private dicts: owner is null for public dict
+WARNING:  owner need to be set to appropriate owner for call to work.
+see ";
 
 %feature("docstring")  gdcm::Dicts::GetPrivateDict "const
 PrivateDict& gdcm::Dicts::GetPrivateDict() const ";
@@ -2101,7 +2185,7 @@ construct a list of filenames and subdirectory beneath directory: name
 WARNING:  : hidden file and hidden directory are not loaded. ";
 
 %feature("docstring")  gdcm::Directory::Print "void
-gdcm::Directory::Print(std::ostream &os=std::cout)
+gdcm::Directory::Print(std::ostream &os=std::cout) const
 
 Print. ";
 
@@ -2345,6 +2429,44 @@ C++ includes: gdcmEnumeratedValues.h ";
 %feature("docstring")  gdcm::EnumeratedValues::EnumeratedValues "gdcm::EnumeratedValues::EnumeratedValues() ";
 
 
+// File: classgdcm_1_1Event.xml
+%feature("docstring") gdcm::Event "
+
+superclass for callback/observer methods
+
+C++ includes: gdcmEvent.h ";
+
+%feature("docstring")  gdcm::Event::CheckEvent "virtual bool
+gdcm::Event::CheckEvent(const Event *) const =0
+
+Check if given event matches or derives from this event. ";
+
+%feature("docstring")  gdcm::Event::Event "gdcm::Event::Event(const
+Event &) ";
+
+%feature("docstring")  gdcm::Event::Event "gdcm::Event::Event() ";
+
+%feature("docstring")  gdcm::Event::GetEventName "virtual const char*
+gdcm::Event::GetEventName(void) const =0
+
+Return the StringName associated with the event. ";
+
+%feature("docstring")  gdcm::Event::MakeObject "virtual Event*
+gdcm::Event::MakeObject() const =0
+
+Create an Event of this type This method work as a Factory for
+creating events of each particular type. ";
+
+%feature("docstring")  gdcm::Event::Print "virtual void
+gdcm::Event::Print(std::ostream &os) const
+
+Print Event information. This method can be overridden by specific
+Event subtypes. The default is to print out the type of the event. ";
+
+%feature("docstring")  gdcm::Event::~Event "virtual
+gdcm::Event::~Event() ";
+
+
 // File: classstd_1_1exception.xml
 %feature("docstring") std::exception "
 
@@ -2471,6 +2593,60 @@ gdcm::File::Write(std::ostream &os) const ";
 %feature("docstring")  gdcm::File::~File "gdcm::File::~File() ";
 
 
+// File: classgdcm_1_1FileDerivation.xml
+%feature("docstring") gdcm::FileDerivation "
+
+FileDerivation class See PS 3.16 - 2008 For the list of Code Value
+that can be used for in Derivation Code Sequence.
+
+URL: medical.nema.org/medical/dicom/2008/08_16pu.pdf DICOM Part 16 has
+two Context Groups CID 7202 and CID 7203 which contain a set of codes
+defining reason for a source image reference (ie. reason code for
+referenced image sequence) and a coded description of the deriation
+applied to the new image data from the original. Both these context
+groups are extensible.
+
+C++ includes: gdcmFileDerivation.h ";
+
+%feature("docstring")  gdcm::FileDerivation::AddReference "bool
+gdcm::FileDerivation::AddReference(const char *referencedsopclassuid,
+const char *referencedsopinstanceuid) ";
+
+%feature("docstring")  gdcm::FileDerivation::Derive "bool
+gdcm::FileDerivation::Derive()
+
+Change. ";
+
+%feature("docstring")  gdcm::FileDerivation::FileDerivation "gdcm::FileDerivation::FileDerivation() ";
+
+%feature("docstring")  gdcm::FileDerivation::GetFile "const File&
+gdcm::FileDerivation::GetFile() const ";
+
+%feature("docstring")  gdcm::FileDerivation::GetFile "File&
+gdcm::FileDerivation::GetFile() ";
+
+%feature("docstring")
+gdcm::FileDerivation::SetDerivationCodeSequenceCodeValue "void
+gdcm::FileDerivation::SetDerivationCodeSequenceCodeValue(unsigned int
+codevalue) ";
+
+%feature("docstring")  gdcm::FileDerivation::SetDerivationDescription
+"void gdcm::FileDerivation::SetDerivationDescription(const char *dd)
+";
+
+%feature("docstring")  gdcm::FileDerivation::SetFile "void
+gdcm::FileDerivation::SetFile(const File &f)
+
+Set/Get File. ";
+
+%feature("docstring")
+gdcm::FileDerivation::SetPurposeOfReferenceCodeSequenceCodeValue "void
+gdcm::FileDerivation::SetPurposeOfReferenceCodeSequenceCodeValue(unsigned
+int codevalue) ";
+
+%feature("docstring")  gdcm::FileDerivation::~FileDerivation "gdcm::FileDerivation::~FileDerivation() ";
+
+
 // File: classgdcm_1_1FileExplicitFilter.xml
 %feature("docstring") gdcm::FileExplicitFilter "C++ includes:
 gdcmFileExplicitFilter.h ";
@@ -2548,6 +2724,9 @@ Construct a FileMetaInformation from an already existing DataSet:. ";
 gdcm::FileMetaInformation::GetDataSetTransferSyntax "const
 TransferSyntax& gdcm::FileMetaInformation::GetDataSetTransferSyntax()
 const ";
+
+%feature("docstring")  gdcm::FileMetaInformation::GetFullLength "VL
+gdcm::FileMetaInformation::GetFullLength() const ";
 
 %feature("docstring")  gdcm::FileMetaInformation::GetMediaStorage "MediaStorage gdcm::FileMetaInformation::GetMediaStorage() const ";
 
@@ -2644,6 +2823,11 @@ gdcm::Filename::IsIdentical(Filename const &fn) const ";
 gdcm::Filename::ToUnixSlashes()
 
 Convert backslash (windows style) to UNIX style slash. ";
+
+%feature("docstring")  gdcm::Filename::ToWindowsSlashes "const char*
+gdcm::Filename::ToWindowsSlashes()
+
+Convert foward slash (UNIX style) to windows style slash. ";
 
 
 // File: classgdcm_1_1FilenameGenerator.xml
@@ -3027,26 +3211,17 @@ gdcm::GroupDict::Size() const ";
 %feature("docstring")  gdcm::GroupDict::~GroupDict "gdcm::GroupDict::~GroupDict() ";
 
 
-// File: classgdcm_1_1HAVEGE.xml
-%feature("docstring") gdcm::HAVEGE "C++ includes: gdcmHAVEGE.h ";
-
-%feature("docstring")  gdcm::HAVEGE::HAVEGE "gdcm::HAVEGE::HAVEGE()
-";
-
-%feature("docstring")  gdcm::HAVEGE::Rand "int gdcm::HAVEGE::Rand()
-
-HAVEGE rand function.
-
-A random int ";
-
-%feature("docstring")  gdcm::HAVEGE::~HAVEGE "gdcm::HAVEGE::~HAVEGE()
-";
-
-
 // File: classstd_1_1ifstream.xml
 %feature("docstring") std::ifstream "
 
 STL class. ";
+
+
+// File: structgdcm_1_1ignore__char.xml
+%feature("docstring") gdcm::ignore_char "C++ includes: gdcmElement.h
+";
+
+%feature("docstring")  gdcm::ignore_char::ignore_char "gdcm::ignore_char::ignore_char(char c) ";
 
 
 // File: classgdcm_1_1Image.xml
@@ -3349,6 +3524,9 @@ gdcm::ImageCodec::GetPhotometricInterpretation() const ";
 %feature("docstring")  gdcm::ImageCodec::GetPixelFormat "const
 PixelFormat& gdcm::ImageCodec::GetPixelFormat() const ";
 
+%feature("docstring")  gdcm::ImageCodec::GetPixelFormat "PixelFormat&
+gdcm::ImageCodec::GetPixelFormat() ";
+
 %feature("docstring")  gdcm::ImageCodec::GetPlanarConfiguration "unsigned int gdcm::ImageCodec::GetPlanarConfiguration() const ";
 
 %feature("docstring")  gdcm::ImageCodec::ImageCodec "gdcm::ImageCodec::ImageCodec() ";
@@ -3510,6 +3688,9 @@ and producing an output image.
 
 C++ includes: gdcmImageToImageFilter.h ";
 
+%feature("docstring")  gdcm::ImageToImageFilter::GetInput "Image&
+gdcm::ImageToImageFilter::GetInput() ";
+
 %feature("docstring")  gdcm::ImageToImageFilter::GetOutput "const
 Image& gdcm::ImageToImageFilter::GetOutput() const
 
@@ -3640,11 +3821,11 @@ gdcm::IODEntry::GetRef() const ";
 %feature("docstring")  gdcm::IODEntry::GetUsage "const char*
 gdcm::IODEntry::GetUsage() const ";
 
-%feature("docstring")  gdcm::IODEntry::GetUsageType "UsageType
+%feature("docstring")  gdcm::IODEntry::GetUsageType "Usage::UsageType
 gdcm::IODEntry::GetUsageType() const ";
 
 %feature("docstring")  gdcm::IODEntry::IODEntry "gdcm::IODEntry::IODEntry(const char *name=\"\", const char *ref=\"\",
-const char *usage=\"\") ";
+const char *usag=\"\") ";
 
 %feature("docstring")  gdcm::IODEntry::SetIE "void
 gdcm::IODEntry::SetIE(const char *ie) ";
@@ -3656,7 +3837,7 @@ gdcm::IODEntry::SetName(const char *name) ";
 gdcm::IODEntry::SetRef(const char *ref) ";
 
 %feature("docstring")  gdcm::IODEntry::SetUsage "void
-gdcm::IODEntry::SetUsage(const char *usage) ";
+gdcm::IODEntry::SetUsage(const char *usag) ";
 
 
 // File: classgdcm_1_1IODs.xml
@@ -3787,7 +3968,9 @@ Representation Sequence of Items. An Item contains a Data Set.
 
 C++ includes: gdcmItem.h ";
 
-%feature("docstring")  gdcm::Item::Clear "void gdcm::Item::Clear() ";
+%feature("docstring")  gdcm::Item::Clear "void gdcm::Item::Clear()
+
+Clear Data Element (make Value empty and invalidate Tag & VR). ";
 
 %feature("docstring")  gdcm::Item::FindDataElement "bool
 gdcm::Item::FindDataElement(const Tag &t) const ";
@@ -4038,7 +4221,8 @@ gdcm::JPEGCodec::SetQuality(double q) ";
 JPEG-LS.
 
 codec that implement the JPEG-LS compression this is an implementation
-of ImageCodec for JPEG-LS  It uses the CharLS JPEG-LS implementation
+of ImageCodec for JPEG-LS  It uses the CharLS JPEG-LS
+implementationhttp://charls.codeplex.com
 
 C++ includes: gdcmJPEGLSCodec.h ";
 
@@ -4071,10 +4255,21 @@ long gdcm::JPEGLSCodec::GetBufferLength() const ";
 gdcm::JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 ";
 
+%feature("docstring")  gdcm::JPEGLSCodec::GetLossless "bool
+gdcm::JPEGLSCodec::GetLossless() const ";
+
 %feature("docstring")  gdcm::JPEGLSCodec::JPEGLSCodec "gdcm::JPEGLSCodec::JPEGLSCodec() ";
 
 %feature("docstring")  gdcm::JPEGLSCodec::SetBufferLength "void
 gdcm::JPEGLSCodec::SetBufferLength(unsigned long l) ";
+
+%feature("docstring")  gdcm::JPEGLSCodec::SetLossless "void
+gdcm::JPEGLSCodec::SetLossless(bool l) ";
+
+%feature("docstring")  gdcm::JPEGLSCodec::SetLossyError "void
+gdcm::JPEGLSCodec::SetLossyError(int error)
+
+[0-3] generally ";
 
 %feature("docstring")  gdcm::JPEGLSCodec::~JPEGLSCodec "gdcm::JPEGLSCodec::~JPEGLSCodec() ";
 
@@ -4331,6 +4526,39 @@ gdcm::MediaStorage::SetFromHeader(FileMetaInformation const &fmi) ";
 gdcm::MediaStorage::SetFromModality(DataSet const &ds) ";
 
 
+// File: classgdcm_1_1MemberCommand.xml
+%feature("docstring") gdcm::MemberCommand "
+
+Command subclass that calls a pointer to a member function.
+
+MemberCommand calls a pointer to a member function with the same
+arguments as Execute on Command.
+
+C++ includes: gdcmCommand.h ";
+
+%feature("docstring")  gdcm::MemberCommand::Execute "virtual void
+gdcm::MemberCommand< T >::Execute(const Subject *caller, const Event
+&event)
+
+Invoke the member function with a const object. ";
+
+%feature("docstring")  gdcm::MemberCommand::Execute "virtual void
+gdcm::MemberCommand< T >::Execute(Subject *caller, const Event &event)
+
+Invoke the member function. ";
+
+%feature("docstring")  gdcm::MemberCommand::SetCallbackFunction "void
+gdcm::MemberCommand< T >::SetCallbackFunction(T *object,
+TConstMemberFunctionPointer memberFunction) ";
+
+%feature("docstring")  gdcm::MemberCommand::SetCallbackFunction "void
+gdcm::MemberCommand< T >::SetCallbackFunction(T *object,
+TMemberFunctionPointer memberFunction)
+
+Run-time type information (and related methods). Set the callback
+function along with the object that it will be invoked on. ";
+
+
 // File: classgdcm_1_1Module.xml
 %feature("docstring") gdcm::Module "
 
@@ -4378,7 +4606,7 @@ gdcm::Module::GetName() const ";
 gdcm::Module::SetName(const char *name) ";
 
 %feature("docstring")  gdcm::Module::Verify "bool
-gdcm::Module::Verify(const DataSet &ds) const ";
+gdcm::Module::Verify(const DataSet &ds, Usage const &usage) const ";
 
 
 // File: classgdcm_1_1ModuleEntry.xml
@@ -4562,6 +4790,72 @@ gdcm::Object::~Object() ";
 %feature("docstring") std::ofstream "
 
 STL class. ";
+
+
+// File: structopj__cp.xml
+%feature("docstring") opj_cp "
+
+Coding parameters
+
+C++ includes: gdcm_j2k.h ";
+
+
+// File: structopj__j2k.xml
+%feature("docstring") opj_j2k "
+
+JPEG-2000 codestream reader/writer
+
+C++ includes: gdcm_j2k.h ";
+
+
+// File: structopj__jp2.xml
+%feature("docstring") opj_jp2 "
+
+JPEG-2000 file format reader/writer
+
+C++ includes: gdcm_jp2.h ";
+
+
+// File: structopj__jp2__box.xml
+%feature("docstring") opj_jp2_box "
+
+JP2 Box
+
+C++ includes: gdcm_jp2.h ";
+
+
+// File: structopj__jp2__comps.xml
+%feature("docstring") opj_jp2_comps "
+
+JP2 component
+
+C++ includes: gdcm_jp2.h ";
+
+
+// File: structopj__stepsize.xml
+%feature("docstring") opj_stepsize "
+
+Quantization stepsize
+
+C++ includes: gdcm_j2k.h ";
+
+
+// File: structopj__tccp.xml
+%feature("docstring") opj_tccp "
+
+Tile-component coding parameters
+
+C++ includes: gdcm_j2k.h ";
+
+
+// File: structopj__tcp.xml
+%feature("docstring") opj_tcp "
+
+Tile coding parameters : this structure is used to store
+coding/decoding parameters common to all tiles (information like COD,
+COC in main header)
+
+C++ includes: gdcm_j2k.h ";
 
 
 // File: classgdcm_1_1Orientation.xml
@@ -5202,7 +5496,13 @@ gdcm::PixmapToPixmapFilter::~PixmapToPixmapFilter "gdcm::PixmapToPixmapFilter::~
 // File: classgdcm_1_1PixmapWriter.xml
 %feature("docstring") gdcm::PixmapWriter "
 
-PixmapWriter.
+PixmapWriter This class will takes two inputs: 1. The DICOM DataSet 2.
+The Image input It will override any info from the Image over the
+DataSet.
+
+For instance when one read in a lossy compressed image and write out
+as unencapsulated (ie implicitely lossless) then some attribute are
+definitely needed to mark this dataset as Lossy (typically 0028,2114)
 
 C++ includes: gdcmPixmapWriter.h ";
 
@@ -5235,34 +5535,6 @@ gdcm::PixmapWriter::Write()
 Write. ";
 
 %feature("docstring")  gdcm::PixmapWriter::~PixmapWriter "gdcm::PixmapWriter::~PixmapWriter() ";
-
-
-// File: classgdcm_1_1PKCS7.xml
-%feature("docstring") gdcm::PKCS7 "C++ includes: gdcmPKCS7.h ";
-
-%feature("docstring")  gdcm::PKCS7::Decrypt "bool
-gdcm::PKCS7::Decrypt(char *output, size_t &outlen, const char *array,
-size_t len) const ";
-
-%feature("docstring")  gdcm::PKCS7::Encrypt "bool
-gdcm::PKCS7::Encrypt(char *output, size_t &outlen, const char *array,
-size_t len) const ";
-
-%feature("docstring")  gdcm::PKCS7::GetCertificate "const X509*
-gdcm::PKCS7::GetCertificate() const ";
-
-%feature("docstring")  gdcm::PKCS7::GetCipherType "CipherTypes
-gdcm::PKCS7::GetCipherType() const ";
-
-%feature("docstring")  gdcm::PKCS7::PKCS7 "gdcm::PKCS7::PKCS7() ";
-
-%feature("docstring")  gdcm::PKCS7::SetCertificate "void
-gdcm::PKCS7::SetCertificate(X509 *cert) ";
-
-%feature("docstring")  gdcm::PKCS7::SetCipherType "void
-gdcm::PKCS7::SetCipherType(CipherTypes type) ";
-
-%feature("docstring")  gdcm::PKCS7::~PKCS7 "gdcm::PKCS7::~PKCS7() ";
 
 
 // File: classgdcm_1_1PNMCodec.xml
@@ -5323,6 +5595,9 @@ gdcm::Preamble::Create() ";
 
 %feature("docstring")  gdcm::Preamble::GetInternal "const char*
 gdcm::Preamble::GetInternal() const ";
+
+%feature("docstring")  gdcm::Preamble::GetLength "VL
+gdcm::Preamble::GetLength() const ";
 
 %feature("docstring")  gdcm::Preamble::IsEmpty "bool
 gdcm::Preamble::IsEmpty() const ";
@@ -5623,7 +5898,13 @@ in the Rescale Slope or the Rescale Intercept it is assumed that the
 best matching output pixel type if FLOAT64 in previous implementation
 it was FLOAT32. Because VR:DS is closer to a 64bits floating point
 type FLOAT64 is thus a best matching pixel type for the floating point
-transformation.
+transformation.  Example: Let say input is FLOAT64, and we want UINT16
+as ouput, we would doM
+
+Rescaler ir; ir.SetIntercept( 0 ); ir.SetSlope( 5.6789 );
+ir.SetPixelFormat( FLOAT64 ); ir.SetMinMaxForPixelType( ((
+PixelFormat)UINT16).GetMin(), (( PixelFormat)UINT16).GetMax() );
+ir.InverseRescale(output,input,numberofbytes );
 
 handle floating point transformation back and forth to integer
 properly (no loss)
@@ -5731,134 +6012,6 @@ gdcm::RLECodec::SetLength(unsigned long l) ";
 %feature("docstring")  gdcm::RLECodec::~RLECodec "gdcm::RLECodec::~RLECodec() ";
 
 
-// File: classgdcm_1_1RSA.xml
-%feature("docstring") gdcm::RSA "C++ includes: gdcmRSA.h ";
-
-%feature("docstring")  gdcm::RSA::CheckPrivkey "int
-gdcm::RSA::CheckPrivkey() const
-
-Check a private RSA key.
-
-Parameters:
------------
-
-ctx:   RSA context to be checked
-
-0 if successful, or an POLARSSL_ERR_RSA_XXX error code ";
-
-%feature("docstring")  gdcm::RSA::CheckPubkey "int
-gdcm::RSA::CheckPubkey() const
-
-Check a public RSA key.
-
-Parameters:
------------
-
-ctx:   RSA context to be checked
-
-0 if successful, or an POLARSSL_ERR_RSA_XXX error code ";
-
-%feature("docstring")  gdcm::RSA::GetLenkey "unsigned int
-gdcm::RSA::GetLenkey() const
-
-Return the length of the key:. ";
-
-%feature("docstring")  gdcm::RSA::Pkcs1Decrypt "int
-gdcm::RSA::Pkcs1Decrypt(int mode, unsigned int &olen, const char
-*input, char *output, unsigned int output_max_len)
-
-Do an RSA operation, then remove the message padding.
-
-Parameters:
------------
-
-ctx:   RSA context
-
-mode:  RSA_PUBLIC or RSA_PRIVATE
-
-input:  buffer holding the encrypted data
-
-output:  buffer that will hold the plaintext
-
-olen:  will contain the plaintext length
-
-output_max_len:  maximum length of the output buffer
-
-0 if successful, or an POLARSSL_ERR_RSA_XXX error code
-
-The output buffer must be as large as the size of ctx->N (eg. 128
-bytes if RSA-1024 is used) otherwise an error is thrown. ";
-
-%feature("docstring")  gdcm::RSA::Pkcs1Encrypt "int
-gdcm::RSA::Pkcs1Encrypt(int mode, unsigned int ilen, const char
-*input, char *output) const
-
-Add the message padding, then do an RSA operation.
-
-Parameters:
------------
-
-ctx:   RSA context
-
-mode:  RSA_PUBLIC or RSA_PRIVATE
-
-ilen:  contains the plaintext length
-
-input:  buffer holding the data to be encrypted
-
-output:  buffer that will hold the ciphertext
-
-0 if successful, or an XYSSL_ERR_RSA_XXX error code
-
-The output buffer must be as large as the size of ctx->N (eg. 128
-bytes if RSA-1024 is used). ";
-
-%feature("docstring")  gdcm::RSA::RSA "gdcm::RSA::RSA() ";
-
-%feature("docstring")  gdcm::RSA::X509ParseKey "int
-gdcm::RSA::X509ParseKey(const char *buf, unsigned int buflen, const
-char *pwd=0, unsigned int pwdlen=0)
-
-Parse a private RSA key.
-
-Parameters:
------------
-
-rsa:   RSA context to be initialized
-
-buf:  input buffer
-
-buflen:  size of the buffer
-
-pwd:  password for decryption (optional)
-
-pwdlen:  size of the password
-
-0 if successful, or a specific X509 error code ";
-
-%feature("docstring")  gdcm::RSA::X509ParseKeyfile "int
-gdcm::RSA::X509ParseKeyfile(const char *path, const char *password=0)
-
-Load and parse a private RSA key.
-
-Parameters:
------------
-
-rsa:   RSA context to be initialized
-
-path:  filename to read the private key from
-
-pwd:  password to decrypt the file (can be NULL)
-
-0 if successful, or a specific X509 error code ";
-
-%feature("docstring")  gdcm::RSA::X509WriteKeyfile "int
-gdcm::RSA::X509WriteKeyfile(const char *path, int format=OUTPUT_PEM)
-";
-
-%feature("docstring")  gdcm::RSA::~RSA "gdcm::RSA::~RSA() ";
-
-
 // File: classstd_1_1runtime__error.xml
 %feature("docstring") std::runtime_error "
 
@@ -5906,6 +6059,12 @@ gdcm::Scanner::ClearTags() ";
 %feature("docstring")  gdcm::Scanner::End "ConstIterator
 gdcm::Scanner::End() const ";
 
+%feature("docstring")  gdcm::Scanner::GetFilenameFromTagToValue "const char* gdcm::Scanner::GetFilenameFromTagToValue(Tag const &t,
+const char *valueref) const
+
+Will loop over all files and return the first file where value match
+the reference value 'valueref' ";
+
 %feature("docstring")  gdcm::Scanner::GetFilenames "Directory::FilenamesType const& gdcm::Scanner::GetFilenames() const ";
 
 %feature("docstring")  gdcm::Scanner::GetKeys "Directory::FilenamesType gdcm::Scanner::GetKeys() const
@@ -5917,6 +6076,12 @@ means those filename were properly parsed ";
 gdcm::Scanner::GetMapping(const char *filename) const
 
 Get the std::map mapping filenames to value for file 'filename'. ";
+
+%feature("docstring")  gdcm::Scanner::GetMappingFromTagToValue "TagToValue const& gdcm::Scanner::GetMappingFromTagToValue(Tag const
+&t, const char *value) const
+
+See GetFilenameFromTagToValue(). This is simply
+GetFilenameFromTagToValue followed. ";
 
 %feature("docstring")  gdcm::Scanner::GetMappings "MappingType const&
 gdcm::Scanner::GetMappings() const
@@ -6147,6 +6312,9 @@ Sets the actual SQ length. ";
 
 %feature("docstring")  gdcm::SequenceOfItems::SetLengthToUndefined "void gdcm::SequenceOfItems::SetLengthToUndefined() ";
 
+%feature("docstring")  gdcm::SequenceOfItems::SetNumberOfItems "void
+gdcm::SequenceOfItems::SetNumberOfItems(unsigned int n) ";
+
 %feature("docstring")  gdcm::SequenceOfItems::Write "std::ostream
 const& gdcm::SequenceOfItems::Write(std::ostream &os) const ";
 
@@ -6257,6 +6425,48 @@ STL iterator class. ";
 %feature("docstring")  gdcm::SHA1::~SHA1 "gdcm::SHA1::~SHA1() ";
 
 
+// File: classgdcm_1_1SimpleMemberCommand.xml
+%feature("docstring") gdcm::SimpleMemberCommand "
+
+Command subclass that calls a pointer to a member function.
+
+SimpleMemberCommand calls a pointer to a member function with no
+arguments.
+
+C++ includes: gdcmCommand.h ";
+
+%feature("docstring")  gdcm::SimpleMemberCommand::Execute "virtual
+void gdcm::SimpleMemberCommand< T >::Execute(const Subject *, const
+Event &)
+
+Abstract method that defines the action to be taken by the command.
+This variant is expected to be used when requests comes from a const
+Object ";
+
+%feature("docstring")  gdcm::SimpleMemberCommand::Execute "virtual
+void gdcm::SimpleMemberCommand< T >::Execute(Subject *, const Event &)
+
+Invoke the callback function. ";
+
+%feature("docstring")  gdcm::SimpleMemberCommand::SetCallbackFunction
+"void gdcm::SimpleMemberCommand< T >::SetCallbackFunction(T *object,
+TMemberFunctionPointer memberFunction)
+
+Specify the callback function. ";
+
+
+// File: classgdcm_1_1SimpleSubjectWatcher.xml
+%feature("docstring") gdcm::SimpleSubjectWatcher "C++ includes:
+gdcmSimpleSubjectWatcher.h ";
+
+%feature("docstring")
+gdcm::SimpleSubjectWatcher::SimpleSubjectWatcher "gdcm::SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const
+char *comment=\"\") ";
+
+%feature("docstring")
+gdcm::SimpleSubjectWatcher::~SimpleSubjectWatcher "gdcm::SimpleSubjectWatcher::~SimpleSubjectWatcher() ";
+
+
 // File: classgdcm_1_1SmartPointer.xml
 %feature("docstring") gdcm::SmartPointer "
 
@@ -6340,7 +6550,37 @@ gdcm::Sorter::~Sorter() ";
 
 Class for Spacing.
 
-See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES
+It all began with a mail to WG6:
+
+Subject: Imager Pixel Spacing vs Pixel Spacing Body: [Apologies for
+the duplicate post, namely to David Clunie & OFFIS team]
+
+I have been trying to understand CP-586 in the following two cases:
+
+On the one hand: DISCIMG/IMAGES/CRIMAGE taken
+fromhttp://dclunie.com/images/pixelspacingtestimages.zip
+
+And on the other hand:
+http://gdcm.sourceforge.net/thingies/cr_pixelspacing.dcm
+
+If I understand correctly the CP, one is required to use Pixel Spacing
+for measurement ('true size' print) instead of Imager Pixel Spacing,
+since the two attributes are present and Pixel Spacing is different
+from Imager Pixel Spacing.
+
+If this is correct, then the test data DISCIMG/IMAGES/CRIMAGE is
+incorrect. If this is incorrect (ie. I need to use Imager Pixel
+Spacing), then the display of cr_pixelspacing.dcm for measurement will
+be incorrect.
+
+Could someone please let me know what am I missing here? I could not
+find any information in any header that would allow me to
+differentiate those.
+
+Thank you for your time,
+
+Ref:http://lists.nema.org/scripts/lyris.pl?sub=488573&id=400720477 See
+PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES
 
 Ratio of the vertical size and horizontal size of the pixels in the
 image specified by a pair of integer values where the first value is
@@ -6427,6 +6667,12 @@ gdcmStaticAssert.h ";
 includes: gdcmStaticAssert.h ";
 
 
+// File: classstd_1_1string.xml
+%feature("docstring") std::string "
+
+STL class. ";
+
+
 // File: classgdcm_1_1String.xml
 %feature("docstring") gdcm::String "
 
@@ -6466,11 +6712,8 @@ Trim function is required to return a std::string object, otherwise we
 could not create a gdcm::String object with an odd number of bytes...
 ";
 
-
-// File: classstd_1_1string.xml
-%feature("docstring") std::string "
-
-STL class. ";
+%feature("docstring")  gdcm::String::Truncate "gdcm::String<TDelimiter, TMaxLength, TPadChar> gdcm::String<
+TDelimiter, TMaxLength, TPadChar >::Truncate() const ";
 
 
 // File: classstd_1_1string_1_1const__iterator.xml
@@ -6508,8 +6751,14 @@ language.
 C++ includes: gdcmStringFilter.h ";
 
 %feature("docstring")  gdcm::StringFilter::FromString "std::string
+gdcm::StringFilter::FromString(const Tag &t, const char *value, size_t
+len) ";
+
+%feature("docstring")  gdcm::StringFilter::FromString "std::string
 gdcm::StringFilter::FromString(const Tag &t, const char *value, VL
-const &vl) ";
+const &vl)
+
+DEPRECATED: NEVER USE IT. ";
 
 %feature("docstring")  gdcm::StringFilter::GetFile "const File&
 gdcm::StringFilter::GetFile() const ";
@@ -6562,6 +6811,67 @@ Study.
 C++ includes: gdcmStudy.h ";
 
 %feature("docstring")  gdcm::Study::Study "gdcm::Study::Study() ";
+
+
+// File: classgdcm_1_1Subject.xml
+%feature("docstring") gdcm::Subject "
+
+Subject.
+
+C++ includes: gdcmSubject.h ";
+
+%feature("docstring")  gdcm::Subject::AddObserver "unsigned long
+gdcm::Subject::AddObserver(const Event &event, Command *) const ";
+
+%feature("docstring")  gdcm::Subject::AddObserver "unsigned long
+gdcm::Subject::AddObserver(const Event &event, Command *)
+
+Allow people to add/remove/invoke observers (callbacks) to any GDCM
+object. This is an implementation of the subject/observer design
+pattern. An observer is added by specifying an event to respond to and
+an gdcm::Command to execute. It returns an unsigned long tag which can
+be used later to remove the event or retrieve the command. The memory
+for the Command becomes the responsibility of this object, so don't
+pass the same instance of a command to two different objects ";
+
+%feature("docstring")  gdcm::Subject::GetCommand "Command*
+gdcm::Subject::GetCommand(unsigned long tag)
+
+Get the command associated with the given tag. NOTE: This returns a
+pointer to a Command, but it is safe to asign this to a
+Command::Pointer. Since Command inherits from LightObject, at this
+point in the code, only a pointer or a reference to the Command can be
+used. ";
+
+%feature("docstring")  gdcm::Subject::HasObserver "bool
+gdcm::Subject::HasObserver(const Event &event) const
+
+Return true if an observer is registered for this event. ";
+
+%feature("docstring")  gdcm::Subject::InvokeEvent "void
+gdcm::Subject::InvokeEvent(const Event &) const
+
+Call Execute on all the Commands observing this event id. The actions
+triggered by this call doesn't modify this object. ";
+
+%feature("docstring")  gdcm::Subject::InvokeEvent "void
+gdcm::Subject::InvokeEvent(const Event &)
+
+Call Execute on all the Commands observing this event id. ";
+
+%feature("docstring")  gdcm::Subject::RemoveAllObservers "void
+gdcm::Subject::RemoveAllObservers()
+
+Remove all observers . ";
+
+%feature("docstring")  gdcm::Subject::RemoveObserver "void
+gdcm::Subject::RemoveObserver(unsigned long tag)
+
+Remove the observer with this tag value. ";
+
+%feature("docstring")  gdcm::Subject::Subject "gdcm::Subject::Subject() ";
+
+%feature("docstring")  gdcm::Subject::~Subject "gdcm::Subject::~Subject() ";
 
 
 // File: classgdcm_1_1SwapCode.xml
@@ -6839,7 +7149,8 @@ Write a tag in binary rep. ";
 
 class to handle a path of tag.
 
-Any Resemblance to Existing XPath is Purely Coincidental
+Any Resemblance to Existing XPath is Purely
+Coincidentalftp://medical.nema.org/medical/dicom/supps/sup118_pc.pdf
 
 C++ includes: gdcmTagPath.h ";
 
@@ -7087,6 +7398,43 @@ You can only unpack a multiple of 3 bytes.
 C++ includes: gdcmUnpacker12Bits.h ";
 
 
+// File: classgdcm_1_1Usage.xml
+%feature("docstring") gdcm::Usage "
+
+Usage.
+
+A.1.3 IOD Module Table and Functional Group Macro Table This Section
+of each IOD defines in a tabular form the Modules comprising the IOD.
+The following information must be specified for each Module in the
+table: The name of the Module or Functional Group
+
+A reference to the Section in Annex C which defines the Module or
+Functional Group
+
+The usage of the Module or Functional Group; whether it is:
+
+Mandatory (see A.1.3.1) , abbreviated M
+
+Conditional (see A.1.3.2) , abbreviated C
+
+User Option (see A.1.3.3) , abbreviated U The Modules referenced are
+defined in Annex C. A.1.3.1 MANDATORY MODULES For each IOD, Mandatory
+Modules shall be supported per the definitions, semantics and
+requirements defined in Annex C.
+
+A.1.3.2 CONDITIONAL MODULES Conditional Modules are Mandatory Modules
+if specific conditions are met. If the specified conditions are not
+met, this Module shall not be supported; that is, no information
+defined in that Module shall be sent. A.1.3.3 USER OPTION MODULES User
+Option Modules may or may not be supported. If an optional Module is
+supported, the Attribute Types specified in the Modules in Annex C
+shall be supported.
+
+C++ includes: gdcmUsage.h ";
+
+%feature("docstring")  gdcm::Usage::Usage "gdcm::Usage::Usage(UsageType type=Invalid) ";
+
+
 // File: classstd_1_1valarray.xml
 %feature("docstring") std::valarray "
 
@@ -7185,6 +7533,9 @@ STL iterator class. ";
 major/minor and build version
 
 C++ includes: gdcmVersion.h ";
+
+%feature("docstring")  gdcm::Version::Print "void
+gdcm::Version::Print(std::ostream &os=std::cout) const ";
 
 
 // File: classgdcm_1_1VL.xml
@@ -7354,6 +7705,10 @@ vtkGDCMImageReader::SetCurve(vtkPolyData *pd) ";
 %feature("docstring")  vtkGDCMImageReader::SetFileNames "virtual void
 vtkGDCMImageReader::SetFileNames(vtkStringArray *) ";
 
+%feature("docstring")  vtkGDCMImageReader::SetMedicalImageProperties "virtual void
+vtkGDCMImageReader::SetMedicalImageProperties(vtkMedicalImageProperties
+*pd) ";
+
 %feature("docstring")  vtkGDCMImageReader::vtkBooleanMacro "int
 vtkGDCMImageReader::vtkBooleanMacro(ApplyYBRToRGB, int) ";
 
@@ -7442,6 +7797,10 @@ vtkGDCMImageWriter::SetMedicalImageProperties(vtkMedicalImageProperties
 
 %feature("docstring")  vtkGDCMImageWriter::vtkBooleanMacro "vtkGDCMImageWriter::vtkBooleanMacro(LossyFlag, int) ";
 
+%feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(CompressionType, int) ";
+
+%feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(PlanarConfiguration, int) ";
+
 %feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(FileLowerLeft, int) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkGetMacro "vtkGDCMImageWriter::vtkGetMacro(ImageFormat, int) ";
@@ -7460,6 +7819,12 @@ vtkGDCMImageWriter::SetMedicalImageProperties(vtkMedicalImageProperties
 %feature("docstring")  vtkGDCMImageWriter::vtkGetObjectMacro "vtkGDCMImageWriter::vtkGetObjectMacro(MedicalImageProperties,
 vtkMedicalImageProperties) ";
 
+%feature("docstring")  vtkGDCMImageWriter::vtkGetStringMacro "vtkGDCMImageWriter::vtkGetStringMacro(SeriesUID) ";
+
+%feature("docstring")  vtkGDCMImageWriter::vtkGetStringMacro "vtkGDCMImageWriter::vtkGetStringMacro(StudyUID) ";
+
+%feature("docstring")  vtkGDCMImageWriter::vtkSetMacro "vtkGDCMImageWriter::vtkSetMacro(CompressionType, int) ";
+
 %feature("docstring")  vtkGDCMImageWriter::vtkSetMacro "vtkGDCMImageWriter::vtkSetMacro(PlanarConfiguration, int) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkSetMacro "vtkGDCMImageWriter::vtkSetMacro(FileLowerLeft, int) ";
@@ -7472,11 +7837,31 @@ vtkMedicalImageProperties) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkSetMacro "vtkGDCMImageWriter::vtkSetMacro(LossyFlag, int) ";
 
+%feature("docstring")  vtkGDCMImageWriter::vtkSetStringMacro "vtkGDCMImageWriter::vtkSetStringMacro(SeriesUID) ";
+
+%feature("docstring")  vtkGDCMImageWriter::vtkSetStringMacro "vtkGDCMImageWriter::vtkSetStringMacro(StudyUID) ";
+
 %feature("docstring")  vtkGDCMImageWriter::vtkTypeRevisionMacro "vtkGDCMImageWriter::vtkTypeRevisionMacro(vtkGDCMImageWriter,
 vtkImageWriter) ";
 
 %feature("docstring")  vtkGDCMImageWriter::Write "virtual void
 vtkGDCMImageWriter::Write() ";
+
+
+// File: classvtkGDCMMedicalImageProperties.xml
+%feature("docstring") vtkGDCMMedicalImageProperties "C++ includes:
+vtkGDCMMedicalImageProperties.h ";
+
+%feature("docstring")  vtkGDCMMedicalImageProperties::Clear "virtual
+void vtkGDCMMedicalImageProperties::Clear() ";
+
+%feature("docstring")  vtkGDCMMedicalImageProperties::PrintSelf "void
+vtkGDCMMedicalImageProperties::PrintSelf(ostream &os, vtkIndent
+indent) ";
+
+%feature("docstring")
+vtkGDCMMedicalImageProperties::vtkTypeRevisionMacro "vtkGDCMMedicalImageProperties::vtkTypeRevisionMacro(vtkGDCMMedicalImageProperties,
+vtkMedicalImageProperties) ";
 
 
 // File: classvtkGDCMPolyDataReader.xml
@@ -7495,6 +7880,16 @@ vtkMedicalImageProperties) ";
 
 %feature("docstring")  vtkGDCMPolyDataReader::vtkTypeRevisionMacro "vtkGDCMPolyDataReader::vtkTypeRevisionMacro(vtkGDCMPolyDataReader,
 vtkPolyDataAlgorithm) ";
+
+
+// File: classvtkGDCMTesting.xml
+%feature("docstring") vtkGDCMTesting "C++ includes: vtkGDCMTesting.h
+";
+
+%feature("docstring")  vtkGDCMTesting::PrintSelf "void
+vtkGDCMTesting::PrintSelf(ostream &os, vtkIndent indent) ";
+
+%feature("docstring")  vtkGDCMTesting::vtkTypeRevisionMacro "vtkGDCMTesting::vtkTypeRevisionMacro(vtkGDCMTesting, vtkObject) ";
 
 
 // File: classvtkGDCMThreadedImageReader.xml
@@ -8038,23 +8433,6 @@ STL iterator class. ";
 STL class. ";
 
 
-// File: classgdcm_1_1X509.xml
-%feature("docstring") gdcm::X509 "C++ includes: gdcmX509.h ";
-
-%feature("docstring")  gdcm::X509::GetNumberOfRecipients "unsigned
-int gdcm::X509::GetNumberOfRecipients() const ";
-
-%feature("docstring")  gdcm::X509::ParseCertificateFile "bool
-gdcm::X509::ParseCertificateFile(const char *filename) ";
-
-%feature("docstring")  gdcm::X509::ParseKeyFile "bool
-gdcm::X509::ParseKeyFile(const char *filename) ";
-
-%feature("docstring")  gdcm::X509::X509 "gdcm::X509::X509() ";
-
-%feature("docstring")  gdcm::X509::~X509 "gdcm::X509::~X509() ";
-
-
 // File: classgdcm_1_1XMLDictReader.xml
 %feature("docstring") gdcm::XMLDictReader "
 
@@ -8113,6 +8491,33 @@ gdcm::XMLPrivateDictReader::~XMLPrivateDictReader "gdcm::XMLPrivateDictReader::~
 
 
 // File: namespacegdcm.xml
+%feature("docstring")  gdcm::terminal::backslash "ignore_char const
+gdcm::backslash('\\\\\\\\') ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(UserEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(IterationEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(InitializeEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(ModifiedEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(AbortEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(ExitEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(ProgressEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(EndEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(StartEvent, AnyEvent) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(AnyEvent, Event) ";
+
+%feature("docstring")  gdcm::terminal::gdcmEventMacro "gdcm::gdcmEventMacro(NoEvent, Event)
+
+Define some common GDCM events ";
+
 %feature("docstring")  gdcm::terminal::to_string "std::string
 gdcm::to_string(Float data) ";
 
@@ -8136,9 +8541,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: namespaceitk.xml
 
 
-// File: namespaceopenssl.xml
-
-
 // File: namespacestd.xml
 
 
@@ -8158,10 +8560,293 @@ whether stream is compressed or not. ";
 // File: gdcm2vtk_8man.xml
 
 
-// File: gdcmAES_8h.xml
+// File: gdcm__j2k_8h.xml
+/*  Exported functions  */
+
+/* */
+
+%feature("docstring")  j2k_convert_progression_order "char*
+j2k_convert_progression_order(OPJ_PROG_ORDER prg_order)
+
+Converts an enum type progression order to string type ";
+
+%feature("docstring")  j2k_create_compress "opj_j2k_t*
+j2k_create_compress(opj_common_ptr cinfo)
+
+Creates a J2K compression structure
+
+Parameters:
+-----------
+
+cinfo:  Codec context info
+
+Returns a handle to a J2K compressor if successful, returns NULL
+otherwise ";
+
+%feature("docstring")  j2k_create_decompress "opj_j2k_t*
+j2k_create_decompress(opj_common_ptr cinfo)
+
+Creates a J2K decompression structure
+
+Parameters:
+-----------
+
+cinfo:  Codec context info
+
+Returns a handle to a J2K decompressor if successful, returns NULL
+otherwise ";
+
+%feature("docstring")  j2k_decode "opj_image_t* j2k_decode(opj_j2k_t
+*j2k, opj_cio_t *cio, opj_codestream_info_t *cstr_info)
+
+Decode an image from a JPEG-2000 codestream
+
+Parameters:
+-----------
+
+j2k:  J2K decompressor handle
+
+cio:  Input buffer stream
+
+cstr_info:  Codestream information structure if required, NULL
+otherwise
+
+Returns a decoded image if successful, returns NULL otherwise ";
+
+%feature("docstring")  j2k_decode_jpt_stream "opj_image_t*
+j2k_decode_jpt_stream(opj_j2k_t *j2k, opj_cio_t *cio,
+opj_codestream_info_t *cstr_info)
+
+Decode an image form a JPT-stream (JPEG 2000, JPIP)
+
+Parameters:
+-----------
+
+j2k:  J2K decompressor handle
+
+cio:  Input buffer stream
+
+cstr_info:  Codestream information structure if required, NULL
+otherwise
+
+Returns a decoded image if successful, returns NULL otherwise ";
+
+%feature("docstring")  j2k_destroy_compress "void
+j2k_destroy_compress(opj_j2k_t *j2k)
+
+Destroy a J2K compressor handle
+
+Parameters:
+-----------
+
+j2k:  J2K compressor handle to destroy ";
+
+%feature("docstring")  j2k_destroy_decompress "void
+j2k_destroy_decompress(opj_j2k_t *j2k)
+
+Destroy a J2K decompressor handle
+
+Parameters:
+-----------
+
+j2k:  J2K decompressor handle to destroy ";
+
+%feature("docstring")  j2k_encode "bool j2k_encode(opj_j2k_t *j2k,
+opj_cio_t *cio, opj_image_t *image, opj_codestream_info_t *cstr_info)
+
+Encode an image into a JPEG-2000 codestream
+
+Parameters:
+-----------
+
+j2k:  J2K compressor handle
+
+cio:  Output buffer stream
+
+image:  Image to encode
+
+cstr_info:  Codestream information structure if required, NULL
+otherwise
+
+Returns true if successful, returns false otherwise ";
+
+%feature("docstring")  j2k_setup_decoder "void
+j2k_setup_decoder(opj_j2k_t *j2k, opj_dparameters_t *parameters)
+
+Setup the decoder decoding parameters using user parameters. Decoding
+parameters are returned in j2k->cp.
+
+Parameters:
+-----------
+
+j2k:  J2K decompressor handle
+
+parameters:  decompression parameters ";
+
+%feature("docstring")  j2k_setup_encoder "void
+j2k_setup_encoder(opj_j2k_t *j2k, opj_cparameters_t *parameters,
+opj_image_t *image)
+
+Setup the encoder parameters using the current image and using user
+parameters. Coding parameters are returned in j2k->cp.
+
+Parameters:
+-----------
+
+j2k:  J2K compressor handle
+
+parameters:  compression parameters
+
+image:  input filled image ";
+
+
+// File: gdcm__jp2_8h.xml
+/*  Exported functions  */
+
+/* */
+
+%feature("docstring")  jp2_create_compress "opj_jp2_t*
+jp2_create_compress(opj_common_ptr cinfo)
+
+Creates a JP2 compression structure
+
+Parameters:
+-----------
+
+cinfo:  Codec context info
+
+Returns a handle to a JP2 compressor if successful, returns NULL
+otherwise ";
+
+%feature("docstring")  jp2_create_decompress "opj_jp2_t*
+jp2_create_decompress(opj_common_ptr cinfo)
+
+Creates a JP2 decompression structure
+
+Parameters:
+-----------
+
+cinfo:  Codec context info
+
+Returns a handle to a JP2 decompressor if successful, returns NULL
+otherwise ";
+
+%feature("docstring")  jp2_decode "opj_image_t* jp2_decode(opj_jp2_t
+*jp2, opj_cio_t *cio, opj_codestream_info_t *cstr_info)
+
+Decode an image from a JPEG-2000 file stream
+
+Parameters:
+-----------
+
+jp2:  JP2 decompressor handle
+
+cio:  Input buffer stream
+
+cstr_info:  Codestream information structure if required, NULL
+otherwise
+
+Returns a decoded image if successful, returns NULL otherwise ";
+
+%feature("docstring")  jp2_destroy_compress "void
+jp2_destroy_compress(opj_jp2_t *jp2)
+
+Destroy a JP2 compressor handle
+
+Parameters:
+-----------
+
+jp2:  JP2 compressor handle to destroy ";
+
+%feature("docstring")  jp2_destroy_decompress "void
+jp2_destroy_decompress(opj_jp2_t *jp2)
+
+Destroy a JP2 decompressor handle
+
+Parameters:
+-----------
+
+jp2:  JP2 decompressor handle to destroy ";
+
+%feature("docstring")  jp2_encode "bool jp2_encode(opj_jp2_t *jp2,
+opj_cio_t *cio, opj_image_t *image, opj_codestream_info_t *cstr_info)
+
+Encode an image into a JPEG-2000 file stream
+
+Parameters:
+-----------
+
+jp2:  JP2 compressor handle
+
+cio:  Output buffer stream
+
+image:  Image to encode
+
+cstr_info:  Codestream information structure if required, NULL
+otherwise
+
+Returns true if successful, returns false otherwise ";
+
+%feature("docstring")  jp2_read_jp2h "bool jp2_read_jp2h(opj_jp2_t
+*jp2, opj_cio_t *cio)
+
+Read the JP2H box - JP2 Header box (used in MJ2)
+
+Parameters:
+-----------
+
+jp2:  JP2 handle
+
+cio:  Input buffer stream
+
+Returns true if successful, returns false otherwise ";
+
+%feature("docstring")  jp2_setup_decoder "void
+jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters)
+
+Setup the decoder decoding parameters using user parameters. Decoding
+parameters are returned in jp2->j2k->cp.
+
+Parameters:
+-----------
+
+jp2:  JP2 decompressor handle
+
+parameters:  decompression parameters ";
+
+%feature("docstring")  jp2_setup_encoder "void
+jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters,
+opj_image_t *image)
+
+Setup the encoder parameters using the current image and using user
+parameters. Coding parameters are returned in jp2->j2k->cp.
+
+Parameters:
+-----------
+
+jp2:  JP2 compressor handle
+
+parameters:  compression parameters
+
+image:  input filled image ";
+
+%feature("docstring")  jp2_write_jp2h "void jp2_write_jp2h(opj_jp2_t
+*jp2, opj_cio_t *cio)
+
+Write the JP2H box - JP2 Header box (used in MJ2)
+
+Parameters:
+-----------
+
+jp2:  JP2 handle
+
+cio:  Output buffer stream ";
 
 
 // File: gdcmanon_8man.xml
+
+
+// File: gdcmAnonymizeEvent_8h.xml
 
 
 // File: gdcmAnonymizer_8h.xml
@@ -8206,6 +8891,12 @@ whether stream is compressed or not. ";
 // File: gdcmCoder_8h.xml
 
 
+// File: gdcmCodeString_8h.xml
+
+
+// File: gdcmCommand_8h.xml
+
+
 // File: gdcmConstCharWrapper_8h.xml
 
 
@@ -8213,6 +8904,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmCP246ExplicitDataElement_8h.xml
+
+
+// File: gdcmCryptographicMessageSyntax_8h.xml
 
 
 // File: gdcmCSAElement_8h.xml
@@ -8257,6 +8951,9 @@ whether stream is compressed or not. ";
 // File: gdcmDICOMDIR_8h.xml
 
 
+// File: gdcmDICOMDIRGenerator_8h.xml
+
+
 // File: gdcmDict_8h.xml
 
 
@@ -8296,6 +8993,9 @@ whether stream is compressed or not. ";
 // File: gdcmEnumeratedValues_8h.xml
 
 
+// File: gdcmEvent_8h.xml
+
+
 // File: gdcmException_8h.xml
 
 
@@ -8309,6 +9009,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmFile_8h.xml
+
+
+// File: gdcmFileDerivation_8h.xml
 
 
 // File: gdcmFileExplicitFilter_8h.xml
@@ -8329,13 +9032,13 @@ whether stream is compressed or not. ";
 // File: gdcmFragment_8h.xml
 
 
+// File: gdcmgendir_8man.xml
+
+
 // File: gdcmGlobal_8h.xml
 
 
 // File: gdcmGroupDict_8h.xml
-
-
-// File: gdcmHAVEGE_8h.xml
 
 
 // File: gdcmIconImage_8h.xml
@@ -8425,6 +9128,9 @@ whether stream is compressed or not. ";
 // File: gdcmLookupTable_8h.xml
 
 
+// File: gdcmMacro_8h.xml
+
+
 // File: gdcmMD5_8h.xml
 
 
@@ -8494,9 +9200,6 @@ whether stream is compressed or not. ";
 // File: gdcmPixmapWriter_8h.xml
 
 
-// File: gdcmPKCS7_8h.xml
-
-
 // File: gdcmPNMCodec_8h.xml
 
 
@@ -8530,9 +9233,6 @@ whether stream is compressed or not. ";
 // File: gdcmRLECodec_8h.xml
 
 
-// File: gdcmRSA_8h.xml
-
-
 // File: gdcmScanner_8h.xml
 
 
@@ -8555,6 +9255,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmSHA1_8h.xml
+
+
+// File: gdcmSimpleSubjectWatcher_8h.xml
 
 
 // File: gdcmSmartPointer_8h.xml
@@ -8585,6 +9288,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmStudy_8h.xml
+
+
+// File: gdcmSubject_8h.xml
 
 
 // File: gdcmSwapCode_8h.xml
@@ -8647,6 +9353,9 @@ whether stream is compressed or not. ";
 // File: gdcmUnpacker12Bits_8h.xml
 
 
+// File: gdcmUsage_8h.xml
+
+
 // File: gdcmValidate_8h.xml
 
 
@@ -8683,9 +9392,6 @@ whether stream is compressed or not. ";
 // File: gdcmWriter_8h.xml
 
 
-// File: gdcmX509_8h.xml
-
-
 // File: gdcmXMLDictReader_8h.xml
 
 
@@ -8704,7 +9410,13 @@ whether stream is compressed or not. ";
 // File: vtkGDCMImageWriter_8h.xml
 
 
+// File: vtkGDCMMedicalImageProperties_8h.xml
+
+
 // File: vtkGDCMPolyDataReader_8h.xml
+
+
+// File: vtkGDCMTesting_8h.xml
 
 
 // File: vtkGDCMThreadedImageReader_8h.xml
@@ -8737,6 +9449,12 @@ whether stream is compressed or not. ";
 // File: zipstreamimpl_8h.xml
 
 
+// File: group__J2K.xml
+
+
+// File: group__JP2.xml
+
+
 // File: gdcm2vtk.xml
 
 
@@ -8747,6 +9465,9 @@ whether stream is compressed or not. ";
 
 
 // File: gdcmdump.xml
+
+
+// File: gdcmgendir.xml
 
 
 // File: gdcmimg.xml
@@ -8770,52 +9491,58 @@ whether stream is compressed or not. ";
 // File: gdcmviewer.xml
 
 
-// File: todo.xml
-
-
 // File: deprecated.xml
 
 
-// File: dir_94663f64a4c9abc2af609c8921669420.xml
+// File: bug.xml
 
 
-// File: dir_ef3f1d3d1931db38e8877801b76cee47.xml
+// File: todo.xml
 
 
-// File: dir_2d3bfe65ed61652ce4282d382fb7381c.xml
+// File: dir_b0acde1af02c9f304fde1cb65927ee23.xml
 
 
-// File: dir_d664f98ee8bfa963c1a2dbafcf73efdb.xml
+// File: dir_c6f52e6f90495e77f392a0b2fad6116a.xml
 
 
-// File: dir_22e413e04fdb2aa57f644f5b2bf83a37.xml
+// File: dir_b32de78713338c8cbc4fca5bd4e7a884.xml
 
 
-// File: dir_71317de669b61881d08eaa980a0a7f61.xml
+// File: dir_40a451c361af4157dba3387b04149ffd.xml
 
 
-// File: dir_a49807c94180157599109994f3d6fa13.xml
+// File: dir_bf87a73539f88040a9e9cfca7d4f5d43.xml
 
 
-// File: dir_4e7dd5b08fafd552d520142d6e70630c.xml
+// File: dir_a175adcd00ff99de4877c206986e2dfb.xml
 
 
-// File: dir_68acd7bfcd07014c2149dcf52f8ec00c.xml
+// File: dir_2b8d31898e660b940c7db7a5ead3974e.xml
 
 
-// File: dir_5ae6d2d8536e26194c0f107ac4bca055.xml
+// File: dir_6e943f70b1131909e1133a79cf15872c.xml
 
 
-// File: dir_51dc117650d25ac4befb6d4ab9561c1e.xml
+// File: dir_a9dd1025e0c576c3b9269f511f90f582.xml
 
 
-// File: dir_0a7fa83fb02ee8e83244764d6a3121f8.xml
+// File: dir_758060a2b98bbffc30263e51b03d33b9.xml
 
 
-// File: dir_374e9784d867c39e5352223cf32d6ad5.xml
+// File: dir_1acd31764b29b4fe919644b71a481cd7.xml
 
 
-// File: dir_e2ec2116e5bb06c1314456bb68d69435.xml
+// File: dir_4a98f4cbd10608ba32a2ae0d6d7f67a5.xml
+
+
+// File: dir_6804468d5eee81fceffc25df8d904bf6.xml
+
+
+// File: dir_6cc442aa5df14e619c16fdc696fc9fcb.xml
+
+
+// File: ClinicalTrialIdentificationWorkflow_8cs-example.xml
 
 
 // File: DecompressImage_8cs-example.xml
@@ -8824,19 +9551,31 @@ whether stream is compressed or not. ";
 // File: DecompressJPEGFile_8cs-example.xml
 
 
+// File: GenerateDICOMDIR_8cs-example.xml
+
+
+// File: GenFakeImage_8cxx-example.xml
+
+
 // File: ManipulateFile_8cs-example.xml
 
 
 // File: PatchFile_8cxx-example.xml
 
 
+// File: ReformatFile_8cs-example.xml
+
+
 // File: ScanDirectory_8cs-example.xml
 
 
+// File: SimplePrint_8cs-example.xml
+
+
+// File: StandardizeFiles_8cs-example.xml
+
+
 // File: TestByteSwap_8cxx-example.xml
-
-
-// File: TestCSharpFilter_8cs-example.xml
 
 
 // File: TestReader_8cxx-example.xml
