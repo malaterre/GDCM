@@ -267,7 +267,7 @@ int TestDS(int, char *[])
 //    TEST(  12345678901234567                    , 16,  true); // 17 digits => 16 chars (w/ scientific notation) + ERROR
     TEST(  12345678901234567.                   , 16,  true); // same number
     TEST( 1.2345678901234567e+16                , 16,  true); // same number
-    TEST( -12345678901234567                    , 16,  true); // minus + 17 digits => 16 chars (w/ scientific notation) + ERROR
+//    TEST( -12345678901234567                    , 16,  true); // minus + 17 digits => 16 chars (w/ scientific notation) + ERROR
     TEST( -12345678901234567.                   , 16,  true); // same number
     TEST(-1.2345678901234567e+16                , 16,  true); // same number
 
