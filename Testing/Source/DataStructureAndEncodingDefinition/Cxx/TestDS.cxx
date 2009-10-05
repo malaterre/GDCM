@@ -225,11 +225,11 @@ int TestDS(int, char *[])
     TEST(     1234567890123.123                 , 16,  true); // 13 digits + dot + 3 digit => 16 chars + ERROR
     TEST(    -1234567890123.123                 , 16,  true); // minus + 13 digits + dot + 3 digit => 16 chars + ERROR
 
-    TEST(     12345678901234                    , 14, false); // 14 digits => 14 chars
+//    TEST(     12345678901234                    , 14, false); // 14 digits => 14 chars
     TEST(     12345678901234.                   , 14, false); // same number
     TEST(     12345678901234.0                  , 14, false); // same number
     TEST(    1.2345678901234e+13                , 14, false); // same number
-    TEST(    -12345678901234                    , 15, false); // minus + 14 digits => 15 chars
+//    TEST(    -12345678901234                    , 15, false); // minus + 14 digits => 15 chars
     TEST(    -12345678901234.                   , 15, false); // same number
     TEST(    -12345678901234.0                  , 15, false); // same number
     TEST(   -1.2345678901234e+13                , 15, false); // same number
@@ -239,12 +239,12 @@ int TestDS(int, char *[])
     TEST(     12345678901234.12                 , 16,  true); // 14 digits + dot + 2 digit => 16 chars + ERROR
     TEST(    -12345678901234.12                 , 15,  true); // minus + 15 digits + dot + 1 digit => 15 chars + ERROR
 
-    TEST(    123456789012345                    , 15, false); // 15 digit => 15 chars
+//    TEST(    123456789012345                    , 15, false); // 15 digit => 15 chars
     TEST(    123456789012345.                   , 15, false); // same number
     TEST(    123456789012345.0                  , 15, false); // same number
     TEST(   1.23456789012345e+14                , 15, false); // same number
 
-    TEST(   -123456789012345                    , 16, false); // minus + 15 digit => 16 chars
+//    TEST(   -123456789012345                    , 16, false); // minus + 15 digit => 16 chars
     TEST(   -123456789012345.                   , 16, false); // same number
     TEST(   -123456789012345.0                  , 16, false); // same number
     TEST(  -1.23456789012345e+14                , 16, false); // same number
@@ -252,11 +252,11 @@ int TestDS(int, char *[])
     TEST(    123456789012345.1                  , 15,  true); // 15 digits + dot + 1 digit => 15 chars + ERROR
     TEST(   -123456789012345.1                  , 16,  true); // minus + 15 digits + dot + 1 digit => 16 chars + ERROR
 
-    TEST(   1234567890123456                    , 16, false); // 16 digits => 16 chars
+//    TEST(   1234567890123456                    , 16, false); // 16 digits => 16 chars
     TEST(   1234567890123456.                   , 16, false); // same number
     TEST(   1234567890123456.0                  , 16, false); // same number
     TEST(  1.234567890123456e+15                , 16, false); // same number
-    TEST(  -1234567890123456                    , 16,  true); // minus + 6 digits => 16 chars
+//    TEST(  -1234567890123456                    , 16,  true); // minus + 6 digits => 16 chars
     TEST(  -1234567890123456.                   , 16,  true); // same number
     TEST(  -1234567890123456.0                  , 16,  true); // same number
     TEST( -1.234567890123456e+15                , 16,  true); // same number
@@ -264,19 +264,25 @@ int TestDS(int, char *[])
     TEST(   1234567890123456.2                  , 16,  true); // 16 digits + dot + 1 digit => 16 chars + ERROR
     TEST(  -1234567890123456.2                  , 16,  true); // minus + 16 digits + dot + 1 digit => 16 chars + ERROR
 
-    TEST(  12345678901234567                    , 16,  true); // 17 digits => 16 chars (w/ scientific notation) + ERROR
+//    TEST(  12345678901234567                    , 16,  true); // 17 digits => 16 chars (w/ scientific notation) + ERROR
+    TEST(  12345678901234567.                   , 16,  true); // same number
     TEST( 1.2345678901234567e+16                , 16,  true); // same number
     TEST( -12345678901234567                    , 16,  true); // minus + 17 digits => 16 chars (w/ scientific notation) + ERROR
+    TEST( -12345678901234567.                   , 16,  true); // same number
     TEST(-1.2345678901234567e+16                , 16,  true); // same number
 
-    TEST( 123456789012345678                    , 16,  true); // 18 digits => 16 chars (w/ scientific notation) + ERROR
+//    TEST( 123456789012345678                    , 16,  true); // 18 digits => 16 chars (w/ scientific notation) + ERROR
+    TEST( 123456789012345678.                   , 16,  true); // same number
     TEST(1.23456789012345678e+17                , 16,  true); // same number
-    TEST(-123456789012345678                    , 16,  true); // minus + 18 digits => 16 chars (w/ scientific notation) + ERROR
+//    TEST(-123456789012345678                    , 16,  true); // minus + 18 digits => 16 chars (w/ scientific notation) + ERROR
+    TEST(-123456789012345678.                   , 16,  true); // same number
     TEST(-1.23456789012345678e+17               , 16,  true); // same number
 
-    TEST( 1234567890123456789                   , 16,  true); // 19 digits => 16 chars (w/ scientific notation) + ERROR
+//    TEST( 1234567890123456789                   , 16,  true); // 19 digits => 16 chars (w/ scientific notation) + ERROR
+    TEST( 1234567890123456789.                  , 16,  true); // same number
     TEST(1.234567890123456789e+18               , 16,  true); // same number
-    TEST(-1234567890123456789                   , 16,  true); // minus + 19 digits => 16 chars (w/ scientific notation) + ERROR
+//    TEST(-1234567890123456789                   , 16,  true); // minus + 19 digits => 16 chars (w/ scientific notation) + ERROR
+    TEST(-1234567890123456789.                  , 16,  true); // same number
     TEST(-1.234567890123456789e+18              , 16,  true); // same number
 
     TEST(1.2345678901234567891e+19              , 16,  true);
@@ -289,21 +295,21 @@ int TestDS(int, char *[])
     TEST(1.23456789012345678901e+100            , 16,  true);
     TEST(-1.23456789012345678901e+100           , 16,  true);
 
-    TEST(    100000000000000                    , 15, false); // 15 digits => 15 chars
-    TEST(   -100000000000000                    , 16, false); // minus + 15 digits => 15 chars
-    TEST(    999999999999999                    , 15, false); // 15 digits => 15 chars
-    TEST(   -999999999999999                    , 16, false); // minus + 15 digits => 15 chars
-    TEST(   1000000000000000                    , 16, false); // 16 chars
+    TEST(    100000000000000.                   , 15, false); // 15 digits => 15 chars
+    TEST(   -100000000000000.                   , 16, false); // minus + 15 digits => 15 chars
+    TEST(    999999999999999.                   , 15, false); // 15 digits => 15 chars
+    TEST(   -999999999999999.                   , 16, false); // minus + 15 digits => 15 chars
+    TEST(   1000000000000000.                   , 16, false); // 16 chars
     TEST(              1e+15                    , 16, false); // same number
-    TEST(  -1000000000000000                    ,  6, false); // minus + 6 chars (w/ scientific notation)
+    TEST(  -1000000000000000.                   ,  6, false); // minus + 6 chars (w/ scientific notation)
     TEST(             -1e+15                    ,  6, false); // same number
-    TEST(   9999999999999998                    , 16, false); // 16 chars
-    TEST(  -9999999999999998                    , 16,  true); // minus + 16 chars
+    TEST(   9999999999999998.                   , 16, false); // 16 chars
+    TEST(  -9999999999999998.                   , 16,  true); // minus + 16 chars
 
-    TEST(  -9999999990099999                    , 16,  true);
+    TEST(  -9999999990099999.                   , 16,  true);
 
-    TEST(  10000000000000000                    ,  5, false); // 17 chars => 5 digits (w/ scientific notation)
-    TEST( -10000000000000000                    , 16, false); // minus + 17 chars => 16 digits (w/ scientific notation)
+    TEST(  10000000000000000.                   ,  5, false); // 17 chars => 5 digits (w/ scientific notation)
+    TEST( -10000000000000000.                   , 16, false); // minus + 17 chars => 16 digits (w/ scientific notation)
 
     TEST(               1e16                    ,  5, false);
     TEST(              -1e16                    , 16, false);
@@ -351,21 +357,21 @@ int TestDS(int, char *[])
 
 // Tests failing due to double precision
 
-    if (1234567890123456.1 != 1234567890123456)
+    if (1234567890123456.1 != 1234567890123456.)
     {  TEST(   1234567890123456.1                  , 16,  true); } // 16 digits + dot + 1 digit => 16 chars + ERROR
     else
     {  TEST(   1234567890123456.1                  , 16, false); } // 16 digits + dot + 1 digit => 16 chars + NO ERROR
 
 
-    if ( 9999999999999999 != 1e+16 )
-    {  TEST(   9999999999999999                    , 16, false); } // 16 chars => 16 digits
+    if ( 9999999999999999. != 1e+16 )
+    {  TEST(   9999999999999999.                   , 16, false); } // 16 chars => 16 digits
     else
-    {  TEST(   9999999999999999                    ,  5, false); } // 16 chars => 5 digits (w/ scientific notation)
+    {  TEST(   9999999999999999.                   ,  5, false); } // 16 chars => 5 digits (w/ scientific notation)
 
-    if ( -9999999998999999 != -9.999999999e+15 )
-    {  TEST(  -9999999998999999                    , 16,  true); }
+    if ( -9999999998999999. != -9.999999999e+15 )
+    {  TEST(  -9999999998999999.                   , 16,  true); }
     else
-    {  TEST(  -9999999998999999                    , 16, false); }
+    {  TEST(  -9999999998999999.                   , 16, false); }
 
 
     std::cout << "---> Failed test(s): " << err_count << " of " << test_count << std::endl << std::endl;
