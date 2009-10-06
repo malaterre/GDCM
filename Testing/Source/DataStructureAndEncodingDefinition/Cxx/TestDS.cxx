@@ -106,9 +106,9 @@ bool checkerror(double d, std::string s)
         eo += 1;
 
 
-    if (error > pow(10, eo) )
+    if (error > pow(10., eo) )
     {
-        std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10, eo) << ")" << std::endl;
+        std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;
         return true;
     }
 //    else if (error != 0.0) std::cout << "OK (error = " << error << ", is < " << pow(10, eo) << ")" << std::endl;
@@ -388,7 +388,7 @@ int TestDS(int, char *[])
     {
         // Create something that looks like a random double
         int rand_exp =  ( ( std::rand() / (double)(RAND_MAX) ) * (max_exp - min_exp) ) + min_exp;
-        double rand = static_cast<double>(std::rand()) * pow(10, rand_exp);
+        double rand = static_cast<double>(std::rand()) * pow(10., rand_exp);
         if (rand != rand) {i--; continue;} // nan
         if (rand == std::numeric_limits<double>::infinity()) {i--; continue;} // inf
 
