@@ -72,7 +72,7 @@ inline std::ostream& operator<<(std::ostream& os, Event &e)
      virtual ~classname() {} \
      virtual const char * GetEventName() const { return #classname; } \
      virtual bool CheckEvent(const ::gdcm::Event* e) const \
-       { return dynamic_cast<const Self*>(e); } \
+       { return dynamic_cast<const Self*>(e) : true ? false; } \
      virtual ::gdcm::Event* MakeObject() const \
        { return new Self; } \
      classname(const Self&s) : super(s){}; \
