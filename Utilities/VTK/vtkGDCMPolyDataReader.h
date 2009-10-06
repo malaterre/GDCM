@@ -14,13 +14,16 @@
 =========================================================================*/
 // .NAME vtkGDCMPolyDataReader - read DICOM PolyData files (Contour Data...)
 // .SECTION Description
-// For now only support RTSTRUCT (RTStructureSetStorage)
-// See Contour Data
+// For now only support RTSTRUCT (RT Structure Set Storage)
 // .SECTION TODO
 // Need to do the same job for DVH Sequence/DVH Data...
+// .SECTION Warning
+// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader 
+// it is *required* that FileLowerLeft is set to ON as coordinate system
+// would be inconsistant in between the two data structures.
 //
 // .SECTION See Also
-// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMImageReader
+// vtkGDCMImageReader vtkMedicalImageReader2 vtkMedicalImageProperties
 
 
 #ifndef __vtkGDCMPolyDataReader_h

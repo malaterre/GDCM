@@ -432,43 +432,43 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
   size_t len = bv->GetLength();
   int16_t *p = (int16_t*)bv;
 
-    // get the info object
-int pd = 0;
-    vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
+  // get the info object
+  int pd = 0;
+  vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
 
-    // get the ouptut
-    vtkPolyData *output = vtkPolyData::SafeDownCast(
-      outInfo1->Get(vtkDataObject::DATA_OBJECT()));
+  // get the ouptut
+  vtkPolyData *output = vtkPolyData::SafeDownCast(
+    outInfo1->Get(vtkDataObject::DATA_OBJECT()));
 
-    vtkPoints *newPts = vtkPoints::New();
+  vtkPoints *newPts = vtkPoints::New();
   size_t npts = len / 2;
-//npts = 10; // DEBUG !
+  //npts = 10; // DEBUG !
   for(size_t i = 0; i < npts; ++i )
     {
     float x[3];
     x[0] = (float)p[i] / 8800;
-//std::cout << p[i] << std::endl;
+    //std::cout << p[i] << std::endl;
     x[1] = i;
     x[2] = 0;
     vtkIdType ptId = newPts->InsertNextPoint( x );
     }
-    output->SetPoints(newPts);
-    newPts->Delete();
+  output->SetPoints(newPts);
+  newPts->Delete();
 
-    vtkCellArray* lines = vtkCellArray::New();
-    for ( int i = 0; i < newPts->GetNumberOfPoints() - 1; ++i )
-      {
-      vtkIdType topol[2];
-      topol[0] = i;
-      topol[1] = i+1;
-      lines->InsertNextCell( 2, topol );
-      }
+  vtkCellArray* lines = vtkCellArray::New();
+  for ( int i = 0; i < newPts->GetNumberOfPoints() - 1; ++i )
+    {
+    vtkIdType topol[2];
+    topol[0] = i;
+    topol[1] = i+1;
+    lines->InsertNextCell( 2, topol );
+    }
 
-    output->SetLines(lines);
-    lines->Delete();
-output->BuildCells();
-    //output->GetCellData()->SetScalars(scalars);
-    //scalars->Delete();
+  output->SetLines(lines);
+  lines->Delete();
+  output->BuildCells();
+  //output->GetCellData()->SetScalars(scalars);
+  //scalars->Delete();
 
   return 1;
 }
