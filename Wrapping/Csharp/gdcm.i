@@ -243,8 +243,10 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 
 //%feature("autodoc", "1")
 %include "gdcmConfigure.h"
-%include "gdcmTypes.h"
-%include "gdcmWin32.h"
+//%include "gdcmTypes.h"
+//%include "gdcmWin32.h"
+// I cannot include gdcmWin32.h without gdcmTypes.h, first. But gdcmTypes.h needs to know _MSC_VER at swig time...
+#define GDCM_EXPORT
 %include "gdcmMacro.h"
 
 // The following must be define early on as gdcmVL.h get included real early
