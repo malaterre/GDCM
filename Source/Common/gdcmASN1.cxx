@@ -53,7 +53,7 @@ bool ASN1::ParseDumpFile(const char *filename)
 {
   if(!filename) return false;
   std::ifstream is(filename);
-  if( !is.good() );
+  if( !is.good() ) return false;
   size_t length = System::FileSize(filename);
   char * str = new char[length];
   is.read( str, length );
