@@ -5,6 +5,7 @@ GDCM 2.x:
           Charl P. Botha             : Contributor (python, VTK)
              Shane Blackett          : Contributor (Win32)
            Daniele Domenichelli      : Contributor (C++)
+              Dean Inglis            : Contributor (Win32)
            Mathieu Malaterre         : Project leader, main developer
               Lars Matthaus          : Contributor (Java)
           Steve M. Robbins           : Contributor (debian)
