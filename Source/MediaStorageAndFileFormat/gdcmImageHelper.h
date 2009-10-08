@@ -69,8 +69,14 @@ public:
   static std::vector<double> GetOriginValue(File const & f);
   static void SetOriginValue(DataSet & ds, const Image & img);
 
-  /// Set/Get Direction Cosines (IOP) from/to a file
+  /// Get Direction Cosines (IOP) from/to a file
   static std::vector<double> GetDirectionCosinesValue(File const & f);
+  /// Set Direction Cosines (IOP) from/to a file
+  /// When IOD does not defines what is IOP (eg. typically Secondary Capture Image Storage)
+  /// this call will simply remove the IOP attribute.
+  /// Else in case of MR/CT image storage, this call will properly lookup the correct attribute
+  /// to store the IOP.
+  // FIXME: There is a major issue for image with multiple IOP (eg. Enhanced * Image Storage).
   static void SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos);
 
   /// Set/Get Spacing from/to a File
