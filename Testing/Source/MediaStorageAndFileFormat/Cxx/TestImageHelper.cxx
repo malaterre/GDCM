@@ -16,6 +16,7 @@
 #include "gdcmMediaStorage.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
+#include "gdcmDirectionCosines.h"
 
 int TestImageHelper(int, char *[])
 {
@@ -78,11 +79,28 @@ int TestImageHelper(int, char *[])
   // Since SC this is a no-op
   gdcm::ImageHelper::SetDirectionCosinesValue( ds, dircos );
 
-  // previous call should not have executed anything
+  // previous call should not have replaced tag with default value
   gdcm::Tag iop(0x0020,0x0037);
-  if(  ds.FindDataElement( iop ) ) return 1;
+  if(  !ds.FindDataElement( iop ) ) return 1;
 
-  // TODO: need to check DirectionCosines .IsValid()
+  const gdcm::DataElement &iopde = ds.GetDataElement( iop );
+  gdcm::Attribute<0x0020,0x0037> at;
+  at.SetFromDataElement( iopde );
+
+  dircos.clear();
+  dircos.push_back( at.GetValue(0) );
+  dircos.push_back( at.GetValue(1) );
+  dircos.push_back( at.GetValue(2) );
+  dircos.push_back( at.GetValue(3) );
+  dircos.push_back( at.GetValue(4) );
+  dircos.push_back( at.GetValue(5) );
+  gdcm::DirectionCosines dc( &dircos[0] );
+  if (!dc.IsValid()) return 1;
+
+
+  if ( (at.GetValue(0) != 1) || (at.GetValue(1) != 0) || (at.GetValue(2) != 0) ||
+       (at.GetValue(3) != 0) || (at.GetValue(4) != 1) || (at.GetValue(5) != 0) ) return 1;
+
 } 
   
   return 0;
