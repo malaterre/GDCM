@@ -1323,11 +1323,6 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
 void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos)
 {
-#ifndef NDEBUG
-  assert( dircos.size() == 6 );
-  DirectionCosines dc( &dircos[0] );
-  assert( dc.IsValid() );
-#endif
   MediaStorage ms;
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
@@ -1336,6 +1331,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     {
     Tag iop(0x0020,0x0037);
     ds.Remove( iop );
+    return;
     }
 
   // FIXME Hardcoded
@@ -1348,6 +1344,25 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     {
     // FIXME: should I remove the iop tag ???
     return;
+    }
+
+  // Image Orientation (Patient)
+  gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
+
+  assert( dircos.size() == 6 );
+  DirectionCosines dc( &dircos[0] );
+  if( !dc.IsValid() )
+    {
+    gdcmWarningMacro( "Direction Cosines are not valid. Using default value (1\\0\\0\\0\\1\\0)" );
+    }
+  else
+    {
+    iop.SetValue( dircos[0], 0);
+    iop.SetValue( dircos[1], 1);
+    iop.SetValue( dircos[2], 2);
+    iop.SetValue( dircos[3], 3);
+    iop.SetValue( dircos[4], 4);
+    iop.SetValue( dircos[5], 5);
     }
 
   if( ms == MediaStorage::EnhancedCTImageStorage
@@ -1407,26 +1422,9 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     Item &item2 = sqi->GetItem(1);
     DataSet &subds2 = item2.GetNestedDataSet();
 
-    Attribute<0x0020,0x0037> iop = {{}};
-    iop.SetValue( dircos[0], 0);
-    iop.SetValue( dircos[1], 1);
-    iop.SetValue( dircos[2], 2);
-    iop.SetValue( dircos[3], 3);
-    iop.SetValue( dircos[4], 4);
-    iop.SetValue( dircos[5], 5);
     subds2.Replace( iop.GetAsDataElement() );
-
     return;
     }
-
-  // Image Orientation (Patient)
-  gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
-  iop.SetValue( dircos[0], 0);
-  iop.SetValue( dircos[1], 1);
-  iop.SetValue( dircos[2], 2);
-  iop.SetValue( dircos[3], 3);
-  iop.SetValue( dircos[4], 4);
-  iop.SetValue( dircos[5], 5);
 
   ds.Replace( iop.GetAsDataElement() );
 }
