@@ -139,7 +139,7 @@ namespace gdcm
     }
   template <> inline float SwapperDoOp::Swap<float>(float val)
     {
-    return Swap((uint32_t)val);
+    return static_cast<float>(Swap((uint32_t)val));
     }
   template <> inline uint64_t SwapperDoOp::Swap<uint64_t>(uint64_t val)
     {
@@ -157,7 +157,7 @@ namespace gdcm
     }
   template <> inline double SwapperDoOp::Swap<double>(double val)
     {
-    return Swap((uint64_t)val);
+    return static_cast<double>(Swap((uint64_t)val));
     }
 
   template <> inline Tag SwapperDoOp::Swap<Tag>(Tag val)
