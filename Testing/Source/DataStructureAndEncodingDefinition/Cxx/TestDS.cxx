@@ -25,7 +25,21 @@
 #include <limits> // min_exponent10 and max_exponent10
 
 
-#define MIN_NEGATIVE_EXP 5
+// WARNING: The number of digits in exponent can be dependent from compiler.
+//          gcc uses 2 digits if the exponent is < 100 and 3 digits if >=, but
+//          some compilers (i.e. MSVC) may always use 3 digits in exponent.
+//          If some other compiler with this behaviour is detected, should be
+//          added here.
+#if defined(_MSC_VER)
+ #define ALWAYS_3_DIGITS_IN_EXPONENT
+#endif
+
+
+#ifdef ALWAYS_3_DIGITS_IN_EXPONENT
+ #define MIN_NEGATIVE_EXP 6 //MSVC always use 3 digits in exponent.
+#else
+ #define MIN_NEGATIVE_EXP 5
+#endif
 
 template < typename Float >
 std::string to_string ( Float data ) {
@@ -54,16 +68,14 @@ std::string to_string ( Float data ) {
             if ( ldata > 16 || (ldata > 15 && data < 0) || ldata < -MIN_NEGATIVE_EXP+1 )
             {
                 in << std::scientific;
+#ifdef ALWAYS_3_DIGITS_IN_EXPONENT
+                digits -= 6; // (first digit + exponent)
+#else
                 digits -= 5; // (first digit + exponent)
                 // 3 digits in exponent
                 if ( ldata >= 100 || ldata < -99 )
                     digits -=1;
-            // WARNING: The number of digits in exponent can be dependent from compiler.
-            //          gcc uses 2 digits if the exponent is < 100 and 3 digits if >=, but
-            //          some compilers (MSVC?) may always use 3 digits in exponent.
-            //          In this case MIN_NEGATIVE_EXP should be 6 and the previous 4 lines
-            //          should be replaced by:
-            //   digits -= 6; // (first digit + exponent)
+#endif
             }
             else if( ldata < 0)
                 digits += ldata; // (zeros before first significant digit)
