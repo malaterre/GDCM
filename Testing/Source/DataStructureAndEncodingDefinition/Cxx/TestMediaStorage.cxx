@@ -38,6 +38,25 @@ int TestMediaStorage(int argc, char *argv[])
     {
     return 1;
     }
+  //checks *MSStrings[] and MSModalityTypes[] length
+  gdcm::MediaStorage::MSType mst;
+  for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
+    {
+    if ( gdcm::MediaStorage::GetMSString(mst) == 0 )
+      {
+      return 1;
+      }
+    }
+  mst = gdcm::MediaStorage::MS_END;
+  if ( gdcm::MediaStorage::GetMSString(mst) != 0 )
+    {
+    return 1;
+    }
+  gdcm::MediaStorage ms2;
+  if ( ms2.GetModality() )
+    {
+    return 1;
+    }
 
   return 0;
 }

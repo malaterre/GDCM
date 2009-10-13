@@ -248,13 +248,32 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//RTPlanStorage,
   {"  ", 2},//CSANonImageStorage,
   {"  ", 2},//Philips3D,
-  {"  ", 2},//MS_END
-  {NULL, 0}
+  {"  ", 2},//EnhancedSR
+  {"  ", 2},//BasicTextSR
+  {"  ", 2},//HardcopyGrayscaleImageStorage
+  {"  ", 2},//ComprehensiveSR
+  {"  ", 2},//DetachedStudyManagementSOPClass
+  {"  ", 2},//EncapsulatedPDFStorage
+  {"  ", 2},//StudyComponentManagementSOPClass
+  {"  ", 2},//DetachedVisitManagementSOPClass
+  {"  ", 2},//DetachedPatientManagementSOPClass
+  {"  ", 2},//VideoEndoscopicImageStorage
+  {"  ", 2},//GeneralElectricMagneticResonanceImageStorage
+  {"  ", 2},//GEPrivate3DModelStorage
+  {"  ", 2},//ToshibaPrivateDataStorage
+  {"  ", 2},//MammographyCADSR
+  {"  ", 2},//KeyObjectSelectionDocument
+  {"  ", 2},//HangingProtocolStorage
+  {"  ", 2},//ModalityPerformedProcedureStepSOPClass
+  {"  ", 2},//PhilipsPrivateMRSyntheticImageStorage
+  {NULL, 0} //MS_END
 };
 
 const char *MediaStorage::GetModality() const
 {
-  assert( MSModalityTypes[MSField].Modality[0] != ' ' );
+  if (!MSModalityTypes[MSField].Modality)
+    return NULL;
+  assert( MSModalityTypes[MSField].Modality[0] != ' ' ); // FIXME
   return MSModalityTypes[MSField].Modality;
 }
 
