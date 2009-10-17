@@ -47,6 +47,7 @@ SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
 IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
 ENDIF(UNIX)
+SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 
 #Module are always place in the library destination
