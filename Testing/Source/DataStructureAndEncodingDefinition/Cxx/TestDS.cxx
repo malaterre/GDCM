@@ -104,15 +104,19 @@ bool checkerror(double d, std::string s)
     double error = fabs(d - atof( s.c_str() ));
 
     int Log = (int)log10(fabs(d));
-    int eo = ( Log - 14);
-
+    int eo = ( Log - 14 );
 
     if ( Log <= -1 && Log >= -4 )
         eo = -13;
+#ifdef ALWAYS_3_DIGITS_IN_EXPONENT
+    else if ( Log >= 15 )
+        eo = ( Log - 9);
+#else
     else if ( Log >= 99 )
         eo = ( Log - 9 );
     else if ( Log >= 15 )
         eo = ( Log - 10);
+#endif
 
     if (d<0)
         eo += 1;
@@ -213,7 +217,6 @@ int TestDS(int, char *[])
     TEST(                -0.00149700609543      , 16,  true); // zero + dot + 2 zeros + 12 digits => 16 chars + ERROR
     TEST(                 0.0014970060954       , 15, false); // zero + dot + 2 zeros + 11 digits => 15 chars
     TEST(                -0.0014970060954       , 16, false); // zero + dot + 2 zeros + 11 digits => 16 chars
-
     TEST(                 0.000593035158168     , 16,  true); // zero + dot + 3 zeros + 12 digits => 16 chars + ERROR
     TEST(                 5.93035158168e-04     , 16,  true); // same number: cannot fit in 16 chars even in scientific notation (17 chars)
     TEST(                 0.00059303515816      , 16, false); // zero + dot + 3 zeros + 11 digits => 16 chars
@@ -222,11 +225,17 @@ int TestDS(int, char *[])
     TEST(                -0.0005930351581       , 16, false); // minus + zero + dot + 3 zeros + 10 digits => 16 chars
 
     TEST(                 0.0000593035158168    , 16,  true); // zero + dot + 4 zeros + 12 digits => 16 chars (w/ scientific notation) + ERROR
-    TEST(                 0.000059303515816     , 16, false); // zero + dot + 4 zeros + 11 digits => 16 chars (w/ scientific notation)
     TEST(                 0.00005930351581      , 16, false); // zero + dot + 4 zeros + 10 digits => 16 chars
     TEST(                -0.000059303515816     , 16,  true); // minus + zero + dot + 4 zeros + 10 digits => 16 chars (w/ scientific notation) + ERROR
-    TEST(                -0.00005930351581      , 16, false); // minus + zero + dot + 4 zeros + 10 digits => 16 chars (w/ scientific notation)
     TEST(                -0.0000593035158       , 16, false); // minus + zero + dot + 4 zeros + 10 digits => 16 chars
+
+#ifdef ALWAYS_3_DIGITS_IN_EXPONENT
+    TEST(                 0.000059303515816     , 16, true); // zero + dot + 4 zeros + 11 digits => 16 chars (w/ scientific notation) + ERROR
+    TEST(                -0.00005930351581      , 16, true); // minus + zero + dot + 4 zeros + 10 digits => 16 chars (w/ scientific notation) + ERROR
+#else
+    TEST(                 0.000059303515816     , 16, false); // zero + dot + 4 zeros + 11 digits => 16 chars (w/ scientific notation)
+    TEST(                -0.00005930351581      , 16, false); // minus + zero + dot + 4 zeros + 10 digits => 16 chars (w/ scientific notation)
+#endif
 
     TEST(      123456789012.1                   , 14, false); // 12 digits + dot + 1 digit => 14 chars
     TEST(     -123456789012.1                   , 15, false); // minus + 12 digits + dot + 1 digit => 14 chars
@@ -313,17 +322,23 @@ int TestDS(int, char *[])
     TEST(   -999999999999999.                   , 16, false); // minus + 15 digits => 15 chars
     TEST(   1000000000000000.                   , 16, false); // 16 chars
     TEST(              1e+15                    , 16, false); // same number
-    TEST(  -1000000000000000.                   ,  6, false); // minus + 6 chars (w/ scientific notation)
-    TEST(             -1e+15                    ,  6, false); // same number
     TEST(   9999999999999998.                   , 16, false); // 16 chars
     TEST(  -9999999999999998.                   , 16,  true); // minus + 16 chars
-
     TEST(  -9999999990099999.                   , 16,  true);
-
-    TEST(  10000000000000000.                   ,  5, false); // 17 chars => 5 digits (w/ scientific notation)
     TEST( -10000000000000000.                   , 16, false); // minus + 17 chars => 16 digits (w/ scientific notation)
 
+#ifdef ALWAYS_3_DIGITS_IN_EXPONENT
+    TEST(  10000000000000000.                   ,  6, false); // 17 chars => 6 digits (w/ scientific notation)
+    TEST(               1e16                    ,  6, false);
+    TEST(  -1000000000000000.                   ,  7, false); // minus + 7 chars (w/ scientific notation)
+    TEST(             -1e+15                    ,  7, false); // same number
+#else
+    TEST(  10000000000000000.                   ,  5, false); // 17 chars => 5 digits (w/ scientific notation)
     TEST(               1e16                    ,  5, false);
+    TEST(  -1000000000000000.                   ,  6, false); // minus + 7 chars (w/ scientific notation)
+    TEST(             -1e+15                    ,  6, false); // same number
+#endif
+
     TEST(              -1e16                    , 16, false);
     TEST(               1e17                    , 16, false);
     TEST(              -1e17                    , 16, false);
@@ -338,10 +353,18 @@ int TestDS(int, char *[])
     TEST(                  1                    ,  1, false); // 1 digit => 1 char
 
     TEST(    9.9999999999e-4                    , 16, false);
+#ifdef ALWAYS_3_DIGITS_IN_EXPONENT
+    TEST(               1e-5                    , 6, false);
+#else
     TEST(               1e-5                    , 16, false);
+#endif
 
     TEST(             5.1e-4                    ,  7, false);
+#ifdef ALWAYS_3_DIGITS_IN_EXPONENT
     TEST(             5.1e-5                    , 16, false);
+#else
+    TEST(             5.1e-5                    , 16, false);
+#endif
     TEST(             5.1e-6                    , 16, false);
     TEST(             5.1e-7                    , 16, false);
     TEST(             5.1e-8                    , 16, false);
