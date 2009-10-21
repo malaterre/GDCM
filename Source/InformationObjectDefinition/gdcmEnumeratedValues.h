@@ -21,9 +21,16 @@ namespace gdcm
 {
 /**
  * \brief
-Enumerated Values are used when the specified explicit Values are the only Values allowed for a Data Element. A Data Element with Enumerated Values that does not have a Value equivalent to one of the Values specified in this standard has an invalid value within the scope of a specific Information Object/SOP Class definition.
-Note: 1. Patient Sex (0010, 0040) is an example of a Data Element having Enumerated Values. It is defined to have a Value that is either "M, "F, or "O (see PS 3.3). No other Value shall be given to this Data Element. 2. Future modifications of this standard may add to the set of allowed values for Data Elements with Enumerated Values. Such additions by themselves may or may not require a change in SOP Class UIDs, depending on the semantics of the Data Element.
- *
+ * Element. A Data Element with Enumerated Values that does not have a Value equivalent to one of the
+ * Values specified in this standard has an invalid value within the scope of a specific Information
+ * Object/SOP Class definition.
+ * Note:
+ *   1. Patient Sex (0010, 0040) is an example of a Data Element having Enumerated Values. It is defined to
+ *   have a Value that is either "M”, "F”, or "O” (see PS 3.3). No other Value shall be given to this Data
+ *   Element.
+ *   2. Future modifications of this standard may add to the set of allowed values for Data Elements with
+ *   Enumerated Values. Such additions by themselves may or may not require a change in SOP Class
+ *   UIDs, depending on the semantics of the Data Element.
  */
 class GDCM_EXPORT EnumeratedValues
 {
