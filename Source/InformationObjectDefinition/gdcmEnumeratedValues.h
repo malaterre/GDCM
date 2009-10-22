@@ -26,7 +26,7 @@ namespace gdcm
  * Object/SOP Class definition.
  * Note:
  *   1. Patient Sex (0010, 0040) is an example of a Data Element having Enumerated Values. It is defined to
- *   have a Value that is either "M”, "F”, or "O” (see PS 3.3). No other Value shall be given to this Data
+ *   have a Value that is either "M", "F", or "O" (see PS 3.3). No other Value shall be given to this Data
  *   Element.
  *   2. Future modifications of this standard may add to the set of allowed values for Data Elements with
  *   Enumerated Values. Such additions by themselves may or may not require a change in SOP Class
