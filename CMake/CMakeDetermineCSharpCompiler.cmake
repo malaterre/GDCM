@@ -61,7 +61,7 @@ CONFIGURE_FILE(
   ${CMAKE_MODULE_PATH}/CMakeCSharpCompiler.cmake.in 
   #  "${CMAKE_PLATFORM_ROOT_BIN}/CMakeCSharpCompiler.cmake"
   ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeCSharpCompiler.cmake
-  @ONLY IMMEDIATE # IMMEDIATE must be here for compatibility mode <= 2.0
+  @ONLY
   )
 
 SET(CMAKE_CSharp_COMPILER_ENV_VAR "CSC")

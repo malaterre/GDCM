@@ -61,7 +61,7 @@ IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 SET(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
-               @ONLY IMMEDIATE)
+               @ONLY )
 ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 
 IF(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)

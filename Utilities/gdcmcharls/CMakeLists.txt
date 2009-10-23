@@ -31,7 +31,7 @@ ENDIF(NOT CHARLS_INSTALL_LIB_DIR)
 #SET(MANGLE_PREFIX ${JPEGLS_LIBRARY_NAME})
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jpegls_mangle.h.in
 #               ${CMAKE_CURRENT_BINARY_DIR}/jpegls_mangle.h
-#               @ONLY IMMEDIATE)
+#               @ONLY )
 
 
 

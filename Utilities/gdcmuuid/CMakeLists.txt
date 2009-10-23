@@ -93,7 +93,7 @@ ENDIF( UUID_HAVES )
 SET(MANGLE_PREFIX ${UUID_LIBRARY_NAME})
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/uuid_mangle.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/uuid_mangle.h
-               @ONLY IMMEDIATE)
+               @ONLY )
 
 # for uuid_mangle.h
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
