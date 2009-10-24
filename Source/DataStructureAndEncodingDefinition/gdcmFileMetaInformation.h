@@ -62,7 +62,7 @@ public:
       }
     else
       {
-      gdcmErrorMacro( "Cannot add element with group != 0x0002 in the file meta header" );
+      gdcmErrorMacro( "Cannot add element with group != 0x0002 in the file meta header: " << de );
       }
   }
   void Replace(const DataElement& de) {

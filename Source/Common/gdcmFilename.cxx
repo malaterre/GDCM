@@ -109,6 +109,10 @@ inline void Realpath(const char *path, std::string & resolved_path)
     Filename fn( fullpath );
     resolved_path = fn.ToUnixSlashes();
     }
+  else
+    {
+    resolved_path = "";
+    }
 }
 #else
 /* The maximum length of a file name.  */
@@ -124,8 +128,15 @@ inline void Realpath(const char *path, std::string & resolved_path)
 {
   char resolved_name[GDCM_FILENAME_MAXPATH];
 
-  realpath(path, resolved_name);
-  resolved_path = resolved_name;
+  char *ret = realpath(path, resolved_name);
+  if( ret )
+    {
+    resolved_path = resolved_name;
+    }
+  else
+    {
+    resolved_path = "";
+    }
 }
 #endif
 

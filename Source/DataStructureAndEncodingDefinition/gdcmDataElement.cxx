@@ -24,7 +24,8 @@ namespace gdcm
 {
   void DataElement::SetVLToUndefined() { 
     assert( VRField == VR::SQ || VRField == VR::INVALID );
-    SequenceOfItems *sqi = GetSequenceOfItems();
+    //SequenceOfItems *sqi = GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sqi = GetValueAsSQ();
     //SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&GetValue());
     if( sqi )
       {
@@ -33,7 +34,10 @@ namespace gdcm
     ValueLengthField.SetToUndefined();
   }
 
+#if !defined(GDCM_LEGACY_REMOVE)
   SequenceOfItems* DataElement::GetSequenceOfItems() {
+    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
+                              DataElement::GetValueAsSQ);
     SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if(!sqi)
       {
@@ -43,6 +47,8 @@ namespace gdcm
     return sqi;
   }
   const SequenceOfItems* DataElement::GetSequenceOfItems() const {
+    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
+                              DataElement::GetValueAsSQ);
     const SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if(!sqi)
       {
@@ -51,6 +57,7 @@ namespace gdcm
       }
     return sqi;
   }
+#endif
   const SequenceOfFragments* DataElement::GetSequenceOfFragments() const {
     const SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
     return sqf;
@@ -111,7 +118,7 @@ namespace gdcm
             }
           return sqi;
           }
-        else
+        else if  ( GetVR() == VR::UN ) // cp 246, IVRLE SQ
           {
           assert( GetVR() == VR::UN ); // cp 246, IVRLE SQ
           const ByteValue *bv = GetByteValue();
@@ -123,6 +130,12 @@ namespace gdcm
           sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
           return sqi;
           }
+        else
+{
+assert( GetVR().IsVRFile() );
+assert( GetByteValue() );
+return 0;
+}
         }
       }
     //    catch( ParseException &pex )

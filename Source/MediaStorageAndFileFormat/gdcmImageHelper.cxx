@@ -48,7 +48,8 @@ bool ImageHelper::ForcePixelSpacing = false;
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -56,7 +57,8 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
   // Plane position Sequence
   const Tag tpms(0x0020,0x9113);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
@@ -78,7 +80,8 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
 bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -86,7 +89,8 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   // Plane position Sequence
   const Tag tpms(0x0020,0x9116);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 && sqi2->GetNumberOfItems() );
   // Take it from the first item
   const Item &item2 = sqi2->GetItem(1);
@@ -111,7 +115,8 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
 bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -119,7 +124,8 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   // (0028,9145) SQ (Sequence with undefined length)               # u/l,1 Pixel Value Transformation Sequence
   const Tag tpms(0x0028,0x9145);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
@@ -184,7 +190,8 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   const Tag tfgs(0x5200,0x9230);
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   double normal[3];
   DirectionCosines dc( &cosines[0] );
@@ -201,7 +208,8 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     // (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
     const Tag tpms(0x0020,0x9113);
     if( !subds.FindDataElement(tpms) ) return false;
-    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
     assert( sqi2 );
     const Item &item2 = sqi2->GetItem(1);
     const DataSet & subds2 = item2.GetNestedDataSet();
@@ -263,7 +271,8 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   //const Tag tfgs(0x5200,0x9230);
   //assert( ds.FindDataElement( tfgs ) );
   if( !ds.FindDataElement( tfgs ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -271,7 +280,8 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
   const Tag tpms(0x0028,0x9110);
   if( !subds.FindDataElement(tpms) ) return false;
-  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
@@ -335,7 +345,8 @@ bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double
 */
   const Tag tsqusreg(0x0018,0x6011);
   if( !ds.FindDataElement( tsqusreg ) ) return false;
-  const SequenceOfItems * sqi = ds.GetDataElement( tsqusreg ).GetSequenceOfItems();
+  //const SequenceOfItems * sqi = ds.GetDataElement( tsqusreg ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tsqusreg ).GetValueAsSQ();
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
@@ -818,7 +829,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     }
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
-  if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) )
+  if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) && !ds.GetDataElement( spacingtag ).IsEmpty() )
     {
     const DataElement& de = ds.GetDataElement( spacingtag );
     const Global &g = GlobalInstance;
@@ -993,7 +1004,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
     const Tag tfgs(0x5200,0x9229);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1003,7 +1014,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1025,7 +1037,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1178,7 +1191,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag const & sqtag, unsigned int itemidx)
 {
     const Tag tfgs = sqtag; //(0x5200,0x9230);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1188,7 +1201,8 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( sqi->GetNumberOfItems() < itemidx )
@@ -1210,7 +1224,8 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1308,11 +1323,6 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
 void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos)
 {
-#ifndef NDEBUG
-  assert( dircos.size() == 6 );
-  DirectionCosines dc( &dircos[0] );
-  assert( dc.IsValid() );
-#endif
   MediaStorage ms;
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
@@ -1321,6 +1331,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     {
     Tag iop(0x0020,0x0037);
     ds.Remove( iop );
+    return;
     }
 
   // FIXME Hardcoded
@@ -1335,6 +1346,25 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     return;
     }
 
+  // Image Orientation (Patient)
+  gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
+
+  assert( dircos.size() == 6 );
+  DirectionCosines dc( &dircos[0] );
+  if( !dc.IsValid() )
+    {
+    gdcmWarningMacro( "Direction Cosines are not valid. Using default value (1\\0\\0\\0\\1\\0)" );
+    }
+  else
+    {
+    iop.SetValue( dircos[0], 0);
+    iop.SetValue( dircos[1], 1);
+    iop.SetValue( dircos[2], 2);
+    iop.SetValue( dircos[3], 3);
+    iop.SetValue( dircos[4], 4);
+    iop.SetValue( dircos[5], 5);
+    }
+
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage )
     {
@@ -1346,7 +1376,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
     const Tag tfgs(0x5200,0x9229);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1356,7 +1386,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1378,7 +1409,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1390,26 +1422,9 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     Item &item2 = sqi->GetItem(1);
     DataSet &subds2 = item2.GetNestedDataSet();
 
-    Attribute<0x0020,0x0037> iop = {{}};
-    iop.SetValue( dircos[0], 0);
-    iop.SetValue( dircos[1], 1);
-    iop.SetValue( dircos[2], 2);
-    iop.SetValue( dircos[3], 3);
-    iop.SetValue( dircos[4], 4);
-    iop.SetValue( dircos[5], 5);
     subds2.Replace( iop.GetAsDataElement() );
-
     return;
     }
-
-  // Image Orientation (Patient)
-  gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
-  iop.SetValue( dircos[0], 0);
-  iop.SetValue( dircos[1], 1);
-  iop.SetValue( dircos[2], 2);
-  iop.SetValue( dircos[3], 3);
-  iop.SetValue( dircos[4], 4);
-  iop.SetValue( dircos[5], 5);
 
   ds.Replace( iop.GetAsDataElement() );
 }
@@ -1451,7 +1466,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
     const Tag tfgs(0x5200,0x9229);
-    SequenceOfItems * sqi;
+    SmartPointer<SequenceOfItems> sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
@@ -1461,7 +1476,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
       de.SetVLToUndefined();
       ds.Insert( de );
       }
-    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )
@@ -1483,7 +1499,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
       subds.Insert( de );
       }
 
-    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
     sqi->SetLengthToUndefined();
 
     if( !sqi->GetNumberOfItems() )

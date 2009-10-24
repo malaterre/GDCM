@@ -304,8 +304,6 @@ Prepare a DICOM file with VR:UN element with Value Length odd ... what is the pa
 -----------------------------------------------------------------------
 Add example of JPC (redundancy 3D volume / J2K)
 -----------------------------------------------------------------------
-Provide a FindPolarSLL
------------------------------------------------------------------------
 Create a PDF Storage class with a trailing Pixel Data element to test broken DICOM implementation
 -----------------------------------------------------------------------
 Prepare a Basic Pixel Spacing Calibration example but with SC SOP so that
@@ -369,3 +367,16 @@ http://www.nabble.com/How-to-load-sequence-items-td20622657.html
 
 Re: How to load sequence items
 -----------------------------------------------------------------------
+# CPP check
+find_program(CPPCHECK_EXECUTABLE NAMES cppcheck
+DOC "cppcheck - static check tool")
+add_custom_target (cppcheck ${CPPCHECK_EXECUTABLE} -a -f -q 
+${GDCM_SOURCE_DIR}"
+COMMENT "Checking C++ code")
+
+-----------------------------------------------------------------------
+Reduce excess linkage:
+http://wiki.mandriva.com/en/Development/Tasks/Packaging/Problems/Underlinking
+http://wiki.mandriva.com/en/Overlinking
+-----------------------------------------------------------------------
+Generate doc for python automatically

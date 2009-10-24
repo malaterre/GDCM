@@ -34,7 +34,7 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 # Some old swig 1.3 did not support this option:
 #SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
 
-SET(CMAKE_SWIG_FLAGS "-namespace gdcm")
+SET(CMAKE_SWIG_FLAGS "-namespace gdcm -dllimport gdcmsharpglue")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # libgdksharpglue.so
 SWIG_ADD_MODULE(gdcmsharpglue csharp gdcm.i)
@@ -47,6 +47,7 @@ SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
 IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
 ENDIF(UNIX)
+SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 
 #Module are always place in the library destination

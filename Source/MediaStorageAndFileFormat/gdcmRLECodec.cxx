@@ -232,7 +232,7 @@ int rle_encode(char *output, unsigned int outputlength, const char *input, unsig
       // Test first we are allowed to write two bytes:
       if( pout + 1 + 1 > output + outputlength ) return -1;
       *pout = -count + 1;
-      assert( *pout != -128 && 1 - *pout == count );
+      assert( /**pout != -128 &&*/ 1 - *pout == count );
       assert( *pout <= -1 && *pout >= -127 );
       ++pout;
       *pout = *pin;

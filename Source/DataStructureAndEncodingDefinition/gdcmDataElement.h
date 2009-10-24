@@ -73,6 +73,7 @@ public:
 
   /// Get VL
   const VL& GetVL() const { return ValueLengthField; }
+  VL& GetVL() { return ValueLengthField; }
   /// Set VL
   /// Use with cautious (need to match Part 6), advanced user only
   /// \see SetByteValue
@@ -86,7 +87,7 @@ public:
   /// Use with cautious (need to match Part 6), advanced user only
   /// \pre vr is a VR::VRALL (not a dual one such as OB_OW)
   void SetVR(VR const &vr) { 
-    assert( vr.IsVRFile() );
+    // assert( vr.IsVRFile() );
     VRField = vr; 
   }
 
@@ -102,7 +103,17 @@ public:
   /// Check if Data Element is empty
   bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
+  /// Make Data Element empty (no Value)
   void Empty() { ValueField = 0; ValueLengthField = 0; }
+
+  /// Clear Data Element (make Value empty and invalidate Tag & VR)
+  void Clear()
+    {
+    TagField = 0;
+    VRField = VR::INVALID;
+    ValueField = 0;
+    ValueLengthField = 0;
+    }
 
   // Helper:
   /// Set the byte value
@@ -134,8 +145,10 @@ public:
   /// in those case the return of the function will be NULL, while the Value would be
   /// a valid SequenceOfItems, in those case prefer GetValueAsSQ. In which case
   /// the code internally trigger an assert to warn developper.
-  const SequenceOfItems* GetSequenceOfItems() const;
-  SequenceOfItems* GetSequenceOfItems();
+  /// When in doubt do not use this function and prefer GetValueAsSQ()
+  /// @deprecated Replaced by DataElement::GetValueAsSQ() as of GDCM 2.2.
+  GDCM_LEGACY(const SequenceOfItems* GetSequenceOfItems() const)
+  GDCM_LEGACY(SequenceOfItems* GetSequenceOfItems())
 
   /// Interpret the Value stored in the DataElement. This is more robust (but also more
   /// expensive) to call this function rather than the simpliest form: GetSequenceOfItems()
@@ -219,13 +232,6 @@ public:
   const std::ostream &Write(std::ostream &os) const {
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
-  void Clear()
-    {
-  TagField = 0;
-  ValueLengthField = 0;
-  VRField = VR::INVALID;
-  ValueField = 0;
-    }
 
 protected:
   Tag TagField;

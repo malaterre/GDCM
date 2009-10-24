@@ -3,6 +3,7 @@
 
 SET(CSHARP_EXAMPLES
   ManipulateFile
+  RescaleImage
   ExtractEncapsulatedFile
   DecompressImage
   DecompressImageMultiframe

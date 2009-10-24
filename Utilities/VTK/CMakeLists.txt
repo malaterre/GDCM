@@ -103,7 +103,21 @@ ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 #ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 
 SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+  IF(GDCM_USE_ACTIVIZ)
+    get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
+                                PATH)
+
+                              LINK_DIRECTORIES(${bla})
+TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
+  ${bla}/libvtkCommon.so
+  #${bla}/libvtkIO.so
+  ${bla}/libvtkImaging.so
+  ${bla}/libvtkRendering.so
+  )
+  ELSE(GDCM_USE_ACTIVIZ)
 TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
+  ENDIF(GDCM_USE_ACTIVIZ)
+
 # this need to be set on the vtkIO lib directly
 #  SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -145,9 +159,9 @@ IF(GDCM_WRAP_CSHARP)
   SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
   #SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES COMPILE_FLAGS -DUSEACTIVIZ)
   IF(GDCM_USE_ACTIVIZ)
-  SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -DUSEACTIVIZ")
+  SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue -DUSEACTIVIZ")
   ELSE(GDCM_USE_ACTIVIZ)
-  SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm")
+  SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue")
   ENDIF(GDCM_USE_ACTIVIZ)
   SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
   SWIG_ADD_MODULE(vtkgdcmsharpglue csharp vtkgdcm.i)
@@ -227,21 +241,42 @@ IF(GDCM_WRAP_JAVA)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
     VTK_WRAP_JAVA3(${VTKGDCM_NAME}Java vtkgdcmJAVA_SRCS "${vtkgdcm_SRCS}")
+    # libvtk-java is a pain to handle...
+    if(EXISTS ${VTK_JAVA_JAR})
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
+      set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
+    else(EXISTS ${VTK_JAVA_JAR})
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533198
+      if(EXISTS /usr/lib/jni/libvtkCommonJava.so)
+        message("Implicitely adding debian package layout...")
+        link_directories("/usr/lib/jni")
+      endif()
+    endif(EXISTS ${VTK_JAVA_JAR})
+    MARK_AS_ADVANCED(GDCM_VTK_JAVA_JAR)
+    if(EXISTS ${GDCM_VTK_JAVA_JAR})
+    else(EXISTS ${GDCM_VTK_JAVA_JAR})
+      message(FATAL_ERROR "Could not find vtk.jar file, VTK_JAVA_JAR is wrong, please set proper GDCM_VTK_JAVA_JAR replacement var")
+    endif(EXISTS ${GDCM_VTK_JAVA_JAR})
     ADD_LIBRARY(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
     FOREACH(c ${vtkgdcm_LIBS})
       TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${c}Java)
     ENDFOREACH(c)
     # Create the jar file:
-    # I am pretty sure this *.java thingy will byte me one day, when someone will try
+    # I am pretty sure this *.java thingy will bite me one day, when someone will try
     # to recompile from an existing build tree with invalid generated *.java file...
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
-      COMMAND ${JAVA_COMPILE} ARGS -cp ${VTK_JAVA_JAR} "vtk/*.java"
+      #COMMAND ${JAVA_COMPILE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
+      # No such thing as -cp for javac only java is listed:
+      # http://java.sun.com/j2se/1.5.0/docs/tooldocs/windows/classpath.html
+      COMMAND ${JAVA_COMPILE} ARGS -classpath ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
       COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
       DEPENDS ${VTKGDCM_NAME}Java
-      COMMENT   "*.java -> jar"
+      #${VTK_JAVA_DEPENDENCIES}
+      #vtkgdcmJavaJavaClasses
+      COMMENT   "javac *.java -> jar; jar cvf -> vtkgdcm.jar"
     )
     # Target to execute custom command:
     ADD_CUSTOM_TARGET(VTKGDCMJavaJar ALL
@@ -249,12 +284,17 @@ IF(GDCM_WRAP_JAVA)
       COMMENT "building vtkgdcm.jar"
     )
     ADD_DEPENDENCIES(VTKGDCMJavaJar vtkgdcmJavaJavaClasses)
+
     # Install rules:
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
       INSTALL(TARGETS ${VTKGDCM_NAME}Java
         RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKApplications
         LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKLibraries ${NAMELINK_SKIP}
         ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKDevelopment
+      )
+    # because vtkgdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
+    INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
+      DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
       )
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 

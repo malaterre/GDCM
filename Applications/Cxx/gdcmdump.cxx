@@ -97,7 +97,8 @@ int PrintASN1(const std::string & filename, bool verbose)
     return 1;
     }
   const gdcm::DataElement &encryptedattributessequence = ds.GetDataElement( tencryptedattributessequence );
-  const gdcm::SequenceOfItems * sqi = encryptedattributessequence.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems * sqi = encryptedattributessequence.GetSequenceOfItems();
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = encryptedattributessequence.GetValueAsSQ();
   if( !sqi->GetNumberOfItems() )
     {
     return 1;

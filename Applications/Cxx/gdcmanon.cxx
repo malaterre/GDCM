@@ -56,6 +56,12 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
 
   anon.SetFile( file );
 
+  if( empty_tags.empty() && replace_tags.empty() && remove_tags.empty() )
+    {
+    std::cerr << "No operation to be done." << std::endl;
+    return false;
+    }
+
   std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
   for(; it != empty_tags.end(); ++it)
     {
@@ -149,6 +155,7 @@ static bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpa
     {
     if( !cms.ParseKeyFile( privpath ) )
       {
+      std::cerr << "Could not parse Private Key: " << privpath << std::endl;
       return false;
       }
     }
@@ -157,6 +164,7 @@ static bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpa
     {
     if( !cms.ParseCertificateFile( certpath ) )
       {
+      std::cerr << "Could not parse Certificate Key: " << certpath << std::endl;
       return false;
       }
     }
@@ -507,12 +515,21 @@ int main(int argc, char *argv[])
   // one option only please
   if( deidentify && reidentify )
     {
+    std::cerr << "One option please" << std::endl;
     return 1;
     }
   // dumb mode vs smart mode:
   if( ( deidentify || reidentify ) && dumb_mode )
     {
+    std::cerr << "One option please" << std::endl;
     return 1;
+    }
+  if( deidentify || reidentify )
+    {
+#ifndef GDCM_USE_SYSTEM_OPENSSL
+    std::cerr << "OpenSSL was not configured." << std::endl;
+    return 1;
+#endif 
     }
 
   // by default AES 256

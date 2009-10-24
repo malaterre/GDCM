@@ -29,6 +29,15 @@ namespace gdcm
  * in previous implementation it was FLOAT32. Because VR:DS is closer to a 64bits floating point type
  * FLOAT64 is thus a best matching pixel type for the floating point transformation.
  *
+ * Example: Let say input is FLOAT64, and we want UINT16 as ouput, we would doM
+ *
+ *  Rescaler ir;
+ *  ir.SetIntercept( 0 );
+ *  ir.SetSlope( 5.6789 );
+ *  ir.SetPixelFormat( FLOAT64 );
+ *  ir.SetMinMaxForPixelType( ((PixelFormat)UINT16).GetMin(), ((PixelFormat)UINT16).GetMax() );
+ *  ir.InverseRescale(output,input,numberofbytes );
+ *
  * \note handle floating point transformation back and forth to integer properly (no loss)
  */
 class GDCM_EXPORT Rescaler

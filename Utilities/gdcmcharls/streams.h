@@ -1,16 +1,19 @@
 // 
 // (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
 // 
-
-
 #ifndef CHARLS_STREAMS
 #define CHARLS_STREAMS
 
 #include <vector>
 #include "util.h"
 
-class JpegSegment;
 
+
+// This file defines JPEG-LS streams: The header and the actual pixel data. Header markers have fixed length, the pixeldata not. 
+
+
+
+class JpegSegment;
 
 enum JPEGLS_ColorXForm
 {
@@ -52,7 +55,7 @@ public:
 	size_t Write(BYTE* pdata, size_t cbyteLength);
 	
 	void EnableCompare(bool bCompare) 
-	{ _bCompare = bCompare; };
+	{ _bCompare = bCompare; }
 private:
 	BYTE* GetPos() const
 		{ return _pdata + _cbyteOffset; }
@@ -104,7 +107,7 @@ public:
 		T2 = 0;
 		T3 = 0;
 		RESET = 0;
-	};
+	}
 };
 
 
@@ -130,6 +133,8 @@ public:
 	
 	void EnableCompare(bool bCompare)
 		{ _bCompare = bCompare;	}
+
+	void SetInfo(JlsParamaters* info) { _info = *info; }
 private:
 	void ReadPixels(void* pvoid, LONG cbyteAvailable);
 	void ReadScan(void*);	
@@ -141,6 +146,8 @@ private:
 	int ReadWord();
 	void ReadNBytes(std::vector<char>& dst, int byteCount);
 
+	// JFIF
+	void ReadJfif();
 	// Color Transform Application Markers & Code Stream (HP extension)
 	void ReadColorSpace();
 	void ReadColorXForm();

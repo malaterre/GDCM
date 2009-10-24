@@ -56,7 +56,7 @@ struct FImpl
     double intercept, double slope, size_t size) // users, go ahead and specialize this 
     {
     // If you read the code down below you'll see a specialized function for float, thus
-    // if we reach here it prettu much means slope/intercept were integer type
+    // if we reach here it pretty much means slope/intercept were integer type
     assert( intercept == (int)intercept );
     assert( slope == (int)slope );
     size /= sizeof(TIn);

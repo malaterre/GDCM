@@ -65,7 +65,7 @@ public class HelloActiviz5
     reader.SetFileNames(array);
     reader.Update();
 
-    //System.Console.Write(reader.GetOutput());
+    System.Console.Write(reader.GetOutput());
 
     vtkRenderWindowInteractor iren = vtkRenderWindowInteractor.New();
 

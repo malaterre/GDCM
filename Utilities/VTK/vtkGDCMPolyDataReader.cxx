@@ -287,7 +287,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     gdcm::Tag stcsq(0x3006,0x0026);
     if( !snestedds.FindDataElement( stcsq ) )
       {
-      return 0;
+      continue;
       }
     const gdcm::DataElement &sde = snestedds.GetDataElement( stcsq );
 
@@ -307,7 +307,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     gdcm::Tag tcsq(0x3006,0x0040);
     if( !nestedds.FindDataElement( tcsq ) )
       {
-      return 0;
+      continue;
       }
     const gdcm::DataElement& csq = nestedds.GetDataElement( tcsq );
     //std::cout << csq << std::endl;
@@ -316,7 +316,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = csq.GetValueAsSQ();
     if( !sqi2 || !sqi2->GetNumberOfItems() )
       {
-      return 0;
+      continue;
       }
     unsigned int nitems = sqi2->GetNumberOfItems();
     //std::cout << nitems << std::endl;
@@ -401,7 +401,8 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
     }
   const gdcm::DataElement &wsq = ds.GetDataElement( twsq );
   //std::cout << wsq << std::endl;
-  const gdcm::SequenceOfItems *sqi = wsq.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems *sqi = wsq.GetSequenceOfItems();
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = wsq.GetValueAsSQ();
   if( !sqi || !sqi->GetNumberOfItems() )
     {
     return 0;
@@ -431,43 +432,43 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
   size_t len = bv->GetLength();
   int16_t *p = (int16_t*)bv;
 
-    // get the info object
-int pd = 0;
-    vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
+  // get the info object
+  int pd = 0;
+  vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
 
-    // get the ouptut
-    vtkPolyData *output = vtkPolyData::SafeDownCast(
-      outInfo1->Get(vtkDataObject::DATA_OBJECT()));
+  // get the ouptut
+  vtkPolyData *output = vtkPolyData::SafeDownCast(
+    outInfo1->Get(vtkDataObject::DATA_OBJECT()));
 
-    vtkPoints *newPts = vtkPoints::New();
+  vtkPoints *newPts = vtkPoints::New();
   size_t npts = len / 2;
-//npts = 10; // DEBUG !
+  //npts = 10; // DEBUG !
   for(size_t i = 0; i < npts; ++i )
     {
     float x[3];
     x[0] = (float)p[i] / 8800;
-//std::cout << p[i] << std::endl;
+    //std::cout << p[i] << std::endl;
     x[1] = i;
     x[2] = 0;
     vtkIdType ptId = newPts->InsertNextPoint( x );
     }
-    output->SetPoints(newPts);
-    newPts->Delete();
+  output->SetPoints(newPts);
+  newPts->Delete();
 
-    vtkCellArray* lines = vtkCellArray::New();
-    for ( int i = 0; i < newPts->GetNumberOfPoints() - 1; ++i )
-      {
-      vtkIdType topol[2];
-      topol[0] = i;
-      topol[1] = i+1;
-      lines->InsertNextCell( 2, topol );
-      }
+  vtkCellArray* lines = vtkCellArray::New();
+  for ( int i = 0; i < newPts->GetNumberOfPoints() - 1; ++i )
+    {
+    vtkIdType topol[2];
+    topol[0] = i;
+    topol[1] = i+1;
+    lines->InsertNextCell( 2, topol );
+    }
 
-    output->SetLines(lines);
-    lines->Delete();
-output->BuildCells();
-    //output->GetCellData()->SetScalars(scalars);
-    //scalars->Delete();
+  output->SetLines(lines);
+  lines->Delete();
+  output->BuildCells();
+  //output->GetCellData()->SetScalars(scalars);
+  //scalars->Delete();
 
   return 1;
 }

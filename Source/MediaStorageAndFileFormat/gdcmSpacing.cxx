@@ -108,8 +108,8 @@ Attribute<0x28,0x34> Spacing::ComputePixelAspectRatioFromPixelSpacing(const Attr
   double frac[2];
   double error = frap(frac, ratio);
   (void)error;
-  pixelaspectratio[0] = frac[0];
-  pixelaspectratio[1] = frac[1];
+  pixelaspectratio[0] = static_cast<int>(frac[0]);
+  pixelaspectratio[1] = static_cast<int>(frac[1]);
 
   return pixelaspectratio;
 }

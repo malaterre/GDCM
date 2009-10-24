@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "itkGDCMImageIO2.h"
 #include "itkVersion.h"
+#include <string.h>
 #include "itkMetaDataObject.h" // ExposeMetaData
 
 // GDCM
@@ -24,9 +25,15 @@
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
 #include "gdcmDictEntry.h"
+#include "gdcmImageHelper.h"
+#include "gdcmRescaler.h"
+#include "gdcmStringFilter.h"
+#include "gdcmDataSetHelper.h"
 
 // KWSYS
 #include <itksys/SystemTools.hxx>
+#include <itksys/SystemTools.hxx>
+#include <itksys/Base64.h>
 
 // VNL
 #include <vnl/vnl_vector.h>
@@ -176,7 +183,6 @@ void GDCMImageIO2::Read(void* buffer)
   image.GetBuffer((char*)buffer);
 }
 
-
 void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
 {
   //read header
@@ -184,6 +190,9 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     {
     itkExceptionMacro(<< "Cannot read requested file");
     }
+
+  // In general this should be relatively safe to assume
+  gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);
 
   const char *filename = m_FileName.c_str();
   gdcm::ImageReader reader;
@@ -193,35 +202,60 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     itkExceptionMacro(<< "Cannot read requested file");
     }
   const gdcm::Image &image = reader.GetImage();
-  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  const gdcm::File &f = reader.GetFile();
+  const gdcm::DataSet &ds = f.GetDataSet();
   const unsigned int *dims = image.GetDimensions();
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+
+  m_RescaleIntercept = image.GetIntercept();
+  m_RescaleSlope = image.GetSlope();
+  gdcm::Rescaler r;
+  r.SetIntercept( m_RescaleIntercept );
+  r.SetSlope( m_RescaleSlope );
+  r.SetPixelFormat( pixeltype );
+  gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
+
+  assert( pixeltype <= outputpt );
+
   m_ComponentType = UNKNOWNCOMPONENTTYPE;
-  switch( pixeltype )
+  switch( outputpt )
     {
-  case gdcm::PixelFormat::INT8:
-    m_ComponentType = ImageIOBase::CHAR;
-    break;
-  case gdcm::PixelFormat::UINT8:
-    m_ComponentType = ImageIOBase::UCHAR;
-    break;
-  case gdcm::PixelFormat::INT12:
-    assert(0);
-    m_ComponentType = ImageIOBase::SHORT;
-    break;
-  case gdcm::PixelFormat::UINT12:
-    assert(0);
-    m_ComponentType = ImageIOBase::USHORT;
-    break;
-  case gdcm::PixelFormat::INT16:
-    m_ComponentType = ImageIOBase::SHORT;
-    break;
-  case gdcm::PixelFormat::UINT16:
-    m_ComponentType = ImageIOBase::USHORT;
-    break;
-  default:
-    ;
+    case gdcm::PixelFormat::INT8:
+      m_ComponentType = ImageIOBase::CHAR; // Is it signed char ?
+      break;
+    case gdcm::PixelFormat::UINT8:
+      m_ComponentType = ImageIOBase::UCHAR;
+      break;
+      /* INT12 / UINT12 should not happen anymore in any modern DICOM */
+    case gdcm::PixelFormat::INT12:
+      m_ComponentType = ImageIOBase::SHORT;
+      break;
+    case gdcm::PixelFormat::UINT12:
+      m_ComponentType = ImageIOBase::USHORT;
+      break;
+    case gdcm::PixelFormat::INT16:
+      m_ComponentType = ImageIOBase::SHORT;
+      break;
+    case gdcm::PixelFormat::UINT16:
+      m_ComponentType = ImageIOBase::USHORT;
+      break;
+      // RT / SC have 32bits
+    case gdcm::PixelFormat::INT32:
+      m_ComponentType = ImageIOBase::INT;
+      break;
+    case gdcm::PixelFormat::UINT32:
+      m_ComponentType = ImageIOBase::UINT;
+      break;
+      //case gdcm::PixelFormat::FLOAT16: // TODO
+    case gdcm::PixelFormat::FLOAT32:
+      m_ComponentType = ImageIOBase::FLOAT;
+      break;
+    case gdcm::PixelFormat::FLOAT64:
+      m_ComponentType = ImageIOBase::DOUBLE;
+      break;
+    default:
+      itkExceptionMacro( "Unhandled PixelFormat: \n" << gdcm::PixelFormat(outputpt) ); 
     }
 
   m_NumberOfComponents = pixeltype.GetSamplesPerPixel();
@@ -230,7 +264,9 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     {
     assert( m_NumberOfComponents == 1 );
     // TODO: need to do the LUT ourself...
-    itkExceptionMacro(<< "PALETTE_COLOR is not implemented yet");
+    //itkExceptionMacro(<< "PALETTE_COLOR is not implemented yet");
+    // AFAIK ITK user don't care about the palette so always apply it and fake a RGB image for them
+    m_NumberOfComponents = 3;
     }
   if (m_NumberOfComponents == 1)
     {
@@ -249,44 +285,112 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
   const double *spacing = image.GetSpacing();
   m_Spacing[0] = spacing[0];
   m_Spacing[1] = spacing[1];
+  m_Spacing[2] = spacing[2];
 
   const double *origin = image.GetOrigin();
-  if( origin )
-    {
-    m_Origin[0] = origin[0];
-    m_Origin[1] = origin[1];
-    }
+  m_Origin[0] = origin[0];
+  m_Origin[1] = origin[1];
+  m_Origin[2] = origin[2];
 
   if( image.GetNumberOfDimensions() == 3 )
     {
     m_Dimensions[2] = dims[2];
-    m_Spacing[2] = spacing[2];
-    if( origin )
-      m_Origin[2] = origin[2];
     }
   else
     {
     m_Dimensions[2] = 1;
-    m_Spacing[2] = 1.;
-    m_Origin[2] = 0;
     }
 
   const double *dircos = image.GetDirectionCosines();
-  if( dircos )
-    {
-    vnl_vector<double> rowDirection(3), columnDirection(3);
-    rowDirection[0] = dircos[0];
-    rowDirection[1] = dircos[1];
-    rowDirection[2] = dircos[2];
-    columnDirection[0] = dircos[3];
-    columnDirection[1] = dircos[4];
-    columnDirection[2] = dircos[5];
+  vnl_vector<double> rowDirection(3), columnDirection(3);
+  rowDirection[0] = dircos[0];
+  rowDirection[1] = dircos[1];
+  rowDirection[2] = dircos[2];
+  columnDirection[0] = dircos[3];
+  columnDirection[1] = dircos[4];
+  columnDirection[2] = dircos[5];
 
-    vnl_vector<double> sliceDirection = vnl_cross_3d(rowDirection, columnDirection);
-    this->SetDirection(0, rowDirection);
-    this->SetDirection(1, columnDirection);
-    this->SetDirection(2, sliceDirection);
+  vnl_vector<double> sliceDirection = vnl_cross_3d(rowDirection, columnDirection);
+  this->SetDirection(0, rowDirection);
+  this->SetDirection(1, columnDirection);
+  this->SetDirection(2, sliceDirection);
+
+  //Now copying the gdcm dictionary to the itk dictionary:
+  MetaDataDictionary & dico = this->GetMetaDataDictionary();
+
+  gdcm::StringFilter sf;
+  sf.SetFile( f );
+  gdcm::DataSet::ConstIterator it = ds.Begin();
+
+  // Copy of the header->content
+  for(; it != ds.End(); ++it)
+    {
+    const gdcm::DataElement &ref = *it;
+    const gdcm::Tag &tag = ref.GetTag();
+    // Compute VR from the toplevel file, and the currently processed dataset:
+    gdcm::VR vr = gdcm::DataSetHelper::ComputeVR(f, ds, tag);
+
+    // Process binary field and encode them as mime64: only when we do not know of any better
+    // representation. VR::US is binary, but user want ASCII representation.
+    if ( vr & (gdcm::VR::OB | gdcm::VR::OF | gdcm::VR::OW | gdcm::VR::SQ | gdcm::VR::UN) )
+      {
+      // assert( vr & gdcm::VR::VRBINARY );
+      /*
+       * Old behavior was to skip SQ, Pixel Data element. I decided that it is not safe to mime64
+       * VR::UN element. There used to be a bug in gdcm 1.2.0 and VR:UN element.
+       */
+      if ( tag.IsPublic() && vr != gdcm::VR::SQ && tag != gdcm::Tag(0x7fe0,0x0010) /* && vr != gdcm::VR::UN*/ )
+        {
+        const gdcm::ByteValue *bv = ref.GetByteValue();
+        if( bv )
+          {
+          // base64 streams have to be a multiple of 4 bytes long
+          int encodedLengthEstimate = 2 * bv->GetLength();
+          encodedLengthEstimate = ((encodedLengthEstimate / 4) + 1) * 4;
+
+          char *bin = new char[encodedLengthEstimate];
+          unsigned int encodedLengthActual = static_cast<unsigned int>(
+            itksysBase64_Encode(
+              (const unsigned char *) bv->GetPointer(),
+              static_cast< unsigned long>( bv->GetLength() ),
+              (unsigned char *) bin,
+              static_cast< int >( 0 ) ));
+          std::string encodedValue(bin, encodedLengthActual);
+          EncapsulateMetaData<std::string>(dico, tag.PrintAsPipeSeparatedString(), encodedValue);
+          delete []bin;
+          }
+        }
+      }
+    else /* if ( vr & gdcm::VR::VRASCII ) */
+      {
+      // Only copying field from the public DICOM dictionary
+      if( tag.IsPublic() )
+        {
+        EncapsulateMetaData<std::string>(dico, tag.PrintAsPipeSeparatedString(), sf.ToString( tag ) );
+        }
+      }
+
     }
+
+
+  // Now is a good time to fill in the class member:
+  char name[512];
+  this->GetPatientName(name);
+  this->GetPatientID(name);
+  this->GetPatientSex(name);
+  this->GetPatientAge(name);
+  this->GetStudyID(name);
+  this->GetPatientDOB(name);
+  this->GetStudyDescription(name);
+  this->GetBodyPart(name);
+  this->GetNumberOfSeriesInStudy(name);
+  this->GetNumberOfStudyRelatedSeries(name);
+  this->GetStudyDate(name);
+  this->GetModality(name);
+  this->GetManufacturer(name);
+  this->GetInstitution(name);
+  this->GetModel(name);
+  this->GetScanOptions(name);
 
 }
 

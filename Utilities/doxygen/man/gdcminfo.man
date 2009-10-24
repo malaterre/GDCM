@@ -10,7 +10,8 @@ gdcminfo [options] file-in
 
 \section description DESCRIPTION
 
-The \b gdcminfo 
+The \b gdcminfo command line program takes as input a DICOM file, or a directory and process it to extract meta-
+information about the DICOM file processed.
 
 \section parameters PARAMETERS
 
@@ -53,6 +54,55 @@ file-in   DICOM input filename
 \subsection environment_variable environment variable
 
   GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)
+
+\section simple_usage Simple usage
+
+\subsection gdcmdata gdcmData
+Using data from gdcmData:
+
+\verbatim
+$ gdcminfo gdcmData/012345.002.050.dcm
+\endverbatim
+
+\verbatim
+MediaStorage is 1.2.840.10008.5.1.4.1.1.4 [MR Image Storage]
+NumberOfDimensions: 2
+Dimensions: (256,256)
+Origin: (-85,21.6,108.7)
+Spacing: (0.664062,0.664062,1.5)
+DirectionCosines: (1,0,0,0,0,-1)
+Rescale Intercept/Slope: (0,1)
+SamplesPerPixel    :1
+BitsAllocated      :16
+BitsStored         :16
+HighBit            :15
+PixelRepresentation:1
+Orientation Label: CORONAL
+\endverbatim
+
+\subsection dclunie Davie Clunie datasets:
+
+Using data from David Clunie datasets:
+
+\verbatim
+$ gdcminfo BRTUM001.dcm
+\endverbatim
+
+\verbatim
+MediaStorage is 1.2.840.10008.5.1.4.1.1.4.1 [Enhanced MR Image Storage]
+NumberOfDimensions: 3
+Dimensions: (256,256,15)
+Origin: (40,-105,105)
+Spacing: (0.820312,0.820312,6)
+DirectionCosines: (0,1,0,0,0,-1)
+Rescale Intercept/Slope: (0,1)
+SamplesPerPixel    :1
+BitsAllocated      :16
+BitsStored         :16
+HighBit            :15
+PixelRepresentation:1
+Orientation Label: SAGITTAL
+\endverbatim
 
 
 \section see_also SEE ALSO

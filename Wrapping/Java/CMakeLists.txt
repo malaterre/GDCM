@@ -43,6 +43,7 @@ SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
 IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES PREFIX "lib")
 ENDIF(UNIX)
+SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 # swig-java dummy run:
 # the following execute_process is a dummy run and generate all *.java files in a directory
@@ -67,7 +68,10 @@ ENDIF(UNIX)
 ADD_CUSTOM_COMMAND(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
 # 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated (which means all *.java should be there)
-  COMMAND ${JAVA_COMPILE} ARGS "gdcm/*.java" #${javafiles}
+# Some compiler are picky about Java version. For instance covariant return type was only added to Java 5, so to
+# please compiler such as ecj (Eclipse Java Compiler 0.894_R34x) explicitly state we want 1.5 version to compile
+# gdcm::ImageToImageFilter::GetOutput() const as covariant return type
+  COMMAND ${JAVA_COMPILE} ARGS -source 1.5 "gdcm/*.java" #${javafiles}
 # 2. now that the *.class have been generated construct the jar file. We can only rely on the gdcm.java / gdcm.class
 # to build dependencie, I am pretty sure it will break parallel builds... oh well
   COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar gdcm/*.class

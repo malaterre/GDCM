@@ -384,7 +384,8 @@ bool DICOMDIRGenerator::AddPatientDirectoryRecord()
   unsigned int npatients = patientids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
-  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
   gdcm::Scanner::ValuesType::const_iterator it = patientids.begin();
   for( ; it  != patientids.end(); ++it)
@@ -454,7 +455,8 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
   unsigned int nstudy = studyinstanceuids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
-  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
   gdcm::Scanner::ValuesType::const_iterator it = studyinstanceuids.begin();
   for( ; it  != studyinstanceuids.end(); ++it)
@@ -547,7 +549,8 @@ bool DICOMDIRGenerator::AddSeriesDirectoryRecord()
   unsigned int nseries = seriesinstanceuids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
-  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
   gdcm::Scanner::ValuesType::const_iterator it = seriesinstanceuids.begin();
   for( ; it  != seriesinstanceuids.end(); ++it)
@@ -617,7 +620,8 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
   unsigned int ninstance = sopinstanceuids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
-  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
   gdcm::Scanner::ValuesType::const_iterator it = sopinstanceuids.begin();
   for( ; it  != sopinstanceuids.end(); ++it)
@@ -933,7 +937,8 @@ the File-set.
 
 {
   const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
-  const SequenceOfItems * sqi = de.GetSequenceOfItems();
+  //const SequenceOfItems * sqi = de.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
   unsigned int n = sqi->GetNumberOfItems();
   const Item &item = sqi->GetItem( n ); // last item
   VL sub = item.GetLength<ExplicitDataElement>(); 
@@ -967,7 +972,8 @@ SequenceOfItems *DICOMDIRGenerator::GetDirectoryRecordSequence()
 {
   gdcm::DataSet &ds = GetFile().GetDataSet();
   const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
-  SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
   return sqi;
 }
 

@@ -37,22 +37,23 @@ int TestRead(const char* filename, bool verbose = false)
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   //std::cout << ds << std::endl;
 
+  const char *ref = gdcm::Testing::GetMediaStorageFromFile(filename);
+
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  if( ms.IsUndefined() )
+  if( ms.IsUndefined() && ref )
     {
     std::cerr << "TestReadError: MediaStorage: " << filename << std::endl;
+    std::cerr << "It should be instead: " << ref << std::endl;
     return 1;
     }
 
   // Make sure it is the right one:
 
-  const char *ref = gdcm::Testing::GetMediaStorageFromFile(filename);
-
-  if( ms != gdcm::MediaStorage::GetMSType(ref) )
+  if( ref && ms != gdcm::MediaStorage::GetMSType(ref) )
     {
-    
     std::cerr << "Error: Found MediaStorage: " << ms << " for " << filename << std::endl;
+    std::cerr << "It should be instead: " << ref << std::endl;
     return 1;
     }
 

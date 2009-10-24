@@ -65,7 +65,7 @@ SET(GDCM_BUILD_TYPE_CONFIG ${CMAKE_BUILD_TYPE})
 # Configure GDCMConfig.cmake for the build tree.
 CONFIGURE_FILE(
   ${CMAKE_CURRENT_SOURCE_DIR}/GDCMConfig.cmake.in
-  ${GDCM_BINARY_DIR}/GDCMConfig.cmake @ONLY IMMEDIATE)
+  ${GDCM_BINARY_DIR}/GDCMConfig.cmake @ONLY )
 
 #-----------------------------------------------------------------------------
 # Settings specific to the install tree.
@@ -155,7 +155,7 @@ IF(CMAKE_CONFIGURATION_TYPES)
     CONFIGURE_FILE(
       ${CMAKE_CURRENT_SOURCE_DIR}/GDCMConfig.cmake.in
       ${CMAKE_CURRENT_BINARY_DIR}/${config}/GDCMConfig.cmake
-      @ONLY IMMEDIATE)
+      @ONLY )
   ENDFOREACH(config)
 
   # Install the config file corresponding to the build configuration
@@ -172,7 +172,7 @@ ELSE(CMAKE_CONFIGURATION_TYPES)
   SET(GDCM_BUILD_TYPE_CONFIG ${CMAKE_BUILD_TYPE})
   CONFIGURE_FILE(
     ${CMAKE_CURRENT_SOURCE_DIR}/GDCMConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/GDCMConfig.cmake @ONLY IMMEDIATE)
+    ${CMAKE_CURRENT_BINARY_DIR}/GDCMConfig.cmake @ONLY )
 
   # Setup an install rule for the config file.
   IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)

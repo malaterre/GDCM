@@ -707,7 +707,7 @@ Attribute<0x0028,0x0004> piat;
     //assert( 0 && "TODO FIXME" );
     const Tag tsourceImageSequence(0x0008,0x2112);
     //assert( ds.FindDataElement( tsourceImageSequence ) == false );
-    SequenceOfItems *sq;
+    SmartPointer<SequenceOfItems> sq;
     if( ds.FindDataElement( tsourceImageSequence ) )
       {
       DataElement &de = (DataElement&)ds.GetDataElement( tsourceImageSequence );
@@ -718,7 +718,7 @@ Attribute<0x0028,0x0004> piat;
         sq = new SequenceOfItems;
         de.SetValue( *sq );
         }
-      sq = (SequenceOfItems*)de.GetSequenceOfItems();
+      sq = de.GetValueAsSQ();
       }
     else
       {

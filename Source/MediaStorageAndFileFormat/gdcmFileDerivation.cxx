@@ -269,14 +269,15 @@ bool FileDerivation::AddDerivationDescription()
     }
 
   const Tag sisq(0x8,0x9215);
-  SequenceOfItems * sqi;
+  SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
   DataElement de( sisq );
   de.SetVR( VR::SQ );
   de.SetValue( *sqi );
   de.SetVLToUndefined();
   ds.Insert( de );
-  sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+  //sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+  sqi = ds.GetDataElement( sisq ).GetValueAsSQ();
   sqi->SetLengthToUndefined();
 
   if( !sqi->GetNumberOfItems() )
@@ -325,7 +326,7 @@ bool FileDerivation::AddSourceImageSequence()
   File &file = GetFile();
 
   const Tag sisq(0x8,0x2112);
-  SequenceOfItems * sqi;
+  SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
   DataElement de( sisq);
   de.SetVR( VR::SQ );
@@ -335,7 +336,8 @@ bool FileDerivation::AddSourceImageSequence()
   DataSet &ds = file.GetDataSet();
   ds.Insert( de );
 
-  sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+  //sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+  sqi = ds.GetDataElement( sisq ).GetValueAsSQ();
   sqi->SetLengthToUndefined();
 
   if( sqi->GetNumberOfItems() )
@@ -394,7 +396,8 @@ bool FileDerivation::AddPurposeOfReferenceCodeSequence(DataSet &subds)
     subds.Insert( de );
     }
 
-  SequenceOfItems *sqi = (SequenceOfItems*)subds.GetDataElement( prcs ).GetSequenceOfItems();
+  //SequenceOfItems *sqi = (SequenceOfItems*)subds.GetDataElement( prcs ).GetSequenceOfItems();
+  SmartPointer<SequenceOfItems> sqi = subds.GetDataElement( prcs ).GetValueAsSQ();
   sqi->SetLengthToUndefined();
 
   if( !sqi->GetNumberOfItems() )

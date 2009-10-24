@@ -33,6 +33,12 @@
 #include "vtkVolume16Reader.h"
 #include "vtkImageData.h"
 #include "vtkImageChangeInformation.h"
+#include "vtkOrientationMarkerWidget.h"
+#include "vtkAnnotatedCubeActor.h"
+#include "vtkAxesActor.h"
+#include "vtkCaptionActor2D.h"
+#include "vtkTextProperty.h"
+#include "vtkPropAssembly.h"
 
 #include "vtkGDCMImageReader.h"
 #include "vtkGDCMImageWriter.h"
@@ -335,6 +341,54 @@ int main( int argc, char *argv[] )
   //ren1->GetActiveCamera()->Azimuth(45);
   //ren1->GetActiveCamera()->Dolly(1.15);
   ren1->ResetCameraClippingRange();
+
+  vtkAnnotatedCubeActor* cube = vtkAnnotatedCubeActor::New();
+  cube->SetXPlusFaceText ( "V" );
+  cube->SetXMinusFaceText( "K" );
+  cube->SetYPlusFaceText ( "T" );
+  cube->SetZPlusFaceText ( "" );
+  cube->SetZMinusFaceText( "" );
+  cube->SetYMinusFaceText( "" );
+  cube->SetFaceTextScale( 0.666667 );
+
+  vtkAxesActor* axes2 = vtkAxesActor::New();
+
+  // simulate a left-handed coordinate system
+  //
+  //transform->Identity();
+  //transform->RotateY(90);
+  axes2->SetShaftTypeToCylinder();
+  //axes2->SetUserTransform( transform );
+  axes2->SetXAxisLabelText( "w" );
+  axes2->SetYAxisLabelText( "v" );
+  axes2->SetZAxisLabelText( "u" );
+
+  axes2->SetTotalLength( 1.5, 1.5, 1.5 );
+  axes2->SetCylinderRadius( 0.500 * axes2->GetCylinderRadius() );
+  axes2->SetConeRadius    ( 1.025 * axes2->GetConeRadius() );
+  axes2->SetSphereRadius  ( 1.500 * axes2->GetSphereRadius() );
+
+  vtkTextProperty* tprop = axes2->GetXAxisCaptionActor2D()->
+    GetCaptionTextProperty();
+  tprop->ItalicOn();
+  tprop->ShadowOn();
+  tprop->SetFontFamilyToTimes();
+
+  axes2->GetYAxisCaptionActor2D()->GetCaptionTextProperty()->ShallowCopy( tprop );
+  axes2->GetZAxisCaptionActor2D()->GetCaptionTextProperty()->ShallowCopy( tprop );
+
+  vtkPropAssembly* assembly = vtkPropAssembly::New();
+  assembly->AddPart( axes2 );
+  assembly->AddPart( cube );
+
+  vtkOrientationMarkerWidget* widget = vtkOrientationMarkerWidget::New();
+  widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
+  widget->SetOrientationMarker( assembly );
+  widget->SetInteractor( iren );
+  widget->SetViewport( 0.0, 0.0, 0.4, 0.4 );
+  widget->SetEnabled( 1 );
+  widget->InteractiveOff();
+  widget->InteractiveOn();
 
   // Playback recorded events
   //

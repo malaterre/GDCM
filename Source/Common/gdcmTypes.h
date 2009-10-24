@@ -20,7 +20,7 @@
 
 #include "gdcmWin32.h"
 
-#include "gdcmException.h"
+#include "gdcmMacro.h"
 
 //-----------------------------------------------------------------------------
 #ifdef CMAKE_HAVE_STDINT_H

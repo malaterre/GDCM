@@ -10,7 +10,8 @@ gdcm2vtk [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcm2vtk 
+The \b gdcm2vtk takes as input any file supported by VTK (including DICOM file) and will generate as output
+a DICOM file.
 
 \section parameters PARAMETERS
 
@@ -75,6 +76,42 @@ Special care was taken for the following file format:
    4. MINC: Direction Cosines is passed to the output
    5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and CVS). Only use it, if you know what you are doing. 
 \endverbatim
+
+\subsection convert_meta CONVERT MetaImage (mhd, mha)
+
+\verbatim
+$ gdcm2vtk inputfile output.mha
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into a MetaImage .mha file. Same goes for .mhd file.
+
+\subsection convert_mha CONVERT MHA/MHD
+
+\verbatim
+$ gdcm2vtk inputfile output.mha
+\endverbatim
+or
+\verbatim
+$ gdcm2vtk inputfile output.mhd
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into a MetaImageData .mha/.mhd file.
+
+\subsection convert_vti CONVERT VTI
+
+\verbatim
+$ gdcm2vtk inputfile output.vti
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into a XML VTK ImageData .vti file.
+
+\subsection convert_vtk CONVERT VTK
+
+\verbatim
+$ gdcm2vtk inputfile output.vtk
+\endverbatim
+
+This command will convert the input DICOM file: inputfile into an old VTK Structured PointSets .vtk file.
 
 \section dicom DICOM
 

@@ -13,6 +13,8 @@
 
 =========================================================================*/
 #include "gdcmVR.h"
+#include "gdcmAttribute.h"
+#include "gdcmByteValue.h"
 
 #include <sstream>
 #include <iostream>
@@ -56,6 +58,44 @@ int TestVRDS(int, char *[])
     std::cerr << "Double does not work:" << copy << " vs " << str << std::endl;
     return 1;
     }
+
+  const double d1 = -118.242525316066;
+  const double d2 = 0.00149700609543456;
+  const double d3 = 0.059303515816892;
+
+  gdcm::Attribute<0x20,0x32> at;
+  at.SetValue( d1, 0);
+  at.SetValue( d2, 1);
+  at.SetValue( d3, 2);
+
+  gdcm::DataElement de = at.GetAsDataElement();
+  std::cout << de << std::endl;
+
+  gdcm::ByteValue* bv = de.GetByteValue();
+{
+  std::string str = bv->GetPointer();
+  std::string::size_type pos1 = str.find("\\");
+  std::string::size_type pos2 = str.find("\\", pos1 + 1);
+
+  if( pos1 > dsmaxbytes )
+    {
+    std::string s = str.substr(0, pos1);
+    std::cout << "Problem with: " << s << " " << s.size() << std::endl;
+    return 1;
+    }
+  if( (pos2 - pos1) > dsmaxbytes )
+    {
+    std::string s  = str.substr(pos1 + 1, pos2 - pos1 - 1);
+    std::cout << "Problem with: " << s << " " << s.size() << std::endl;
+    return 1;
+    }
+  if( (str.size() - pos2) > dsmaxbytes )
+    {
+    std::string s = str.substr(pos2 + 1);
+    std::cout << "Problem with: " << s << " " << s.size() << std::endl;
+    return 1;
+    }
+}
 
   return 0;
 }

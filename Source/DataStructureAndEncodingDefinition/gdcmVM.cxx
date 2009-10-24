@@ -72,12 +72,71 @@ unsigned int VM::GetLength() const
   case VM::VM2:
     len = VMToLength<VM::VM2>::Length;
     break;
+  case VM::VM3:
+    len = VMToLength<VM::VM3>::Length;
+    break;
+  case VM::VM4:
+    len = VMToLength<VM::VM4>::Length;
+    break;
+  case VM::VM5:
+    len = VMToLength<VM::VM5>::Length;
+    break;
+  case VM::VM6:
+    len = VMToLength<VM::VM6>::Length;
+    break;
   case VM::VM8:
     len = VMToLength<VM::VM8>::Length;
+    break;
+  case VM::VM9:
+    len = VMToLength<VM::VM9>::Length;
+    break;
+  case VM::VM10:
+    len = VMToLength<VM::VM10>::Length;
+    break;
+  case VM::VM12:
+    len = VMToLength<VM::VM12>::Length;
     break;
   case VM::VM16:
     len = VMToLength<VM::VM16>::Length;
     break;
+  case VM::VM18:
+    len = VMToLength<VM::VM18>::Length;
+    break;
+  case VM::VM24:
+    len = VMToLength<VM::VM24>::Length;
+    break;
+  case VM::VM28:
+    len = VMToLength<VM::VM28>::Length;
+    break;
+  case VM::VM32:
+    len = VMToLength<VM::VM32>::Length;
+    break;
+  case VM::VM35:
+    len = VMToLength<VM::VM35>::Length;
+    break;
+  case VM::VM99:
+    len = VMToLength<VM::VM99>::Length;
+    break;
+  case VM::VM256:
+    len = VMToLength<VM::VM256>::Length;
+    break;
+  case VM::VM1_2:
+  case VM::VM1_3:
+  case VM::VM1_4:
+  case VM::VM1_5:
+  case VM::VM1_8:
+  case VM::VM1_32:
+  case VM::VM1_99:
+  case VM::VM1_n:
+  case VM::VM2_2n:
+  case VM::VM2_n:
+  case VM::VM3_4:
+  case VM::VM3_3n:
+  case VM::VM3_n:
+  case VM::VM4_4n:
+  case VM::VM6_6n:
+  case VM::VM7_7n:
+    return 0;
   default:
     len = 0;
     assert(0);

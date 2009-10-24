@@ -22,6 +22,8 @@
 #include "vtkImageReader2Factory.h"
 #include "vtkImageReader2.h"
 #include "vtkImageData.h"
+#include "vtkMetaImageReader.h"
+#include "vtkMetaImageWriter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMINCImageReader.h"
 #include "vtkMINCImageAttributes.h"
@@ -352,11 +354,22 @@ int main(int argc, char *argv[])
       writer->Write();
       return 0;
       }
-    else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  )
+    else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  ) // vtkXMLImageDataWriter::GetDefaultFileExtension()
       {
       vtkXMLImageDataWriter * writer = vtkXMLImageDataWriter::New();
       writer->SetFileName( outfilename );
       writer->SetDataModeToBinary();
+      writer->SetInput( imgdata );
+      writer->Write();
+      return 0;
+      }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".mha") == 0 ||
+              gdcm::System::StrCaseCmp(outputextension,".mhd") == 0  ) // vtkMetaImageReader::GetFileExtensions()
+      {
+      // Weird, the writer does not offer the same API as the Reader, for instance
+      // One cannot set the patient name to store (see vtkMetaImageReader::GetPatientName ...)
+      vtkMetaImageWriter * writer = vtkMetaImageWriter::New();
+      writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
       return 0;
@@ -519,6 +532,32 @@ int main(int argc, char *argv[])
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       reader->SetOrientationType( ORIENTATION_BOTLEFT );
 #endif
+      }
+    else if( vtkMetaImageReader *reader = vtkMetaImageReader::SafeDownCast( imgreader ) )
+      {
+//  vtkGetMacro(RescaleSlope, double);
+//  vtkGetMacro(RescaleOffset, double);
+      writer->SetScale( reader->GetRescaleSlope() );
+      writer->SetShift( reader->GetRescaleOffset() );
+//  vtkGetStringMacro(Modality);
+      writer->GetMedicalImageProperties()->SetModality( reader->GetModality() );
+
+//  vtkGetStringMacro(DistanceUnits);
+  // -> this one is insane, the default behavior is 'um' . What in the world is 'um' unit ?
+  // I think I should discard any non 'mm' distance unit, simple as that
+
+// The following looks nice from the API, but the VTK implementation only sets them to '?' ... weird
+//  vtkGetMacro(BitsAllocated, int);
+//  vtkGetStringMacro(AnatomicalOrientation);
+//  vtkGetMacro(GantryAngle, double); 
+//  vtkGetStringMacro(PatientName);
+//  vtkGetStringMacro(PatientID);
+//  vtkGetStringMacro(Date);
+//  vtkGetStringMacro(Series);
+//  vtkGetStringMacro(ImageNumber);
+//  vtkGetStringMacro(StudyID);
+//  vtkGetStringMacro(StudyUID);
+//  vtkGetStringMacro(TransferSyntaxUID);
       }
     }
   // nothing special need to be done for vtkStructuredPointsReader 

@@ -198,8 +198,12 @@ EXTEND_CLASS_PRINT_GENERAL(__str__,classname)
 #endif
 
 //%feature("autodoc", "1")
-//%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
+%include "gdcmConfigure.h"
+//%include "gdcmTypes.h"
+//%include "gdcmWin32.h"
+// I cannot include gdcmWin32.h without gdcmTypes.h, first. But gdcmTypes.h needs to know _MSC_VER at swig time...
 #define GDCM_EXPORT
+%include "gdcmMacro.h"
 %rename(__add__) gdcm::VL::operator+=;
 %include "gdcmSwapCode.h"
 

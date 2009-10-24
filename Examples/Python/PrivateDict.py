@@ -13,20 +13,24 @@
 #
 ############################################################################
 
+"""
+"""
+
 import gdcm
-import sys
+import sys,os
 
-r = gdcm.Reader()
-r.SetFileName('test.acr')
-r.Read()
+if __name__ == "__main__":
+  #gdcm.Trace.DebugOn()
+  globInst = gdcm.Global.GetInstance()
+  # Try to load Part3.xml file
+  # This fils is too big for being accessible directly at runtime.
+  globInst.LoadResourcesFiles()
 
-f = gdcm.PythonFilter()
-f.SetFile( r.GetFile() )
-t = gdcm.Tag( 0x8, 0x8 )
-print f.ToPyObject( t )
-t = gdcm.Tag( 0x8, 0x1010 )
-print f.ToPyObject( t )
-t = gdcm.Tag( 0x20, 0x32 )
-print f.ToPyObject( t )
-t = gdcm.Tag( 0x28, 0x10 )
-print f.ToPyObject( t )
+
+  # Get a private tag from the runtime dicts. LoadResourcesFiles could
+  # have failed but this has no impact on the private dict
+
+  d = globInst.GetDicts()
+  print d.GetDictEntry( gdcm.Tag(0x0029,0x0010) ,"SIEMENS CSA HEADER" )
+  pd = d.GetPrivateDict()
+  print pd.GetDictEntry( gdcm.PrivateTag(0x0029,0x0010,"SIEMENS CSA HEADER") )

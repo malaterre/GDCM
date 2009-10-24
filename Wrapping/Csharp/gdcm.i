@@ -242,8 +242,12 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 #endif
 
 //%feature("autodoc", "1")
-//%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
+%include "gdcmConfigure.h"
+//%include "gdcmTypes.h"
+//%include "gdcmWin32.h"
+// I cannot include gdcmWin32.h without gdcmTypes.h, first. But gdcmTypes.h needs to know _MSC_VER at swig time...
 #define GDCM_EXPORT
+%include "gdcmMacro.h"
 
 // The following must be define early on as gdcmVL.h get included real early
 %rename(GetValueLength) gdcm::VL::operator uint32_t;
@@ -642,7 +646,20 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
 %include "gdcmIODEntry.h"
+
+%apply char[] { char* out }
+%apply char[] { char* in }
 %include "gdcmRescaler.h"
+//EXTEND_CLASS_PRINT(gdcm::Rescaler)
+%extend gdcm::Rescaler
+{
+  bool Rescale(double out[], const short in[], size_t n) {
+    return $self->Rescale((char*)out, (char*)in, n);
+  }
+}
+%clear char* out;
+%clear char* in;
+
 %include "gdcmSegmentedPaletteColorLookupTable.h"
 %include "gdcmUnpacker12Bits.h"
 

@@ -327,5 +327,23 @@ int TestTag(int , char * [])
   if( priv1.GetPrivateCreator() != priv2.GetPrivateCreator() ) return 1;
   if( priv1.GetPrivateCreator() != private_creator ) return 1;
 
+{
+  gdcm::Tag tag(0x0123,0x4567);
+  gdcm::Tag tag2;
+  std::stringstream ss;
+  ss << tag;
+  //std::cout << ss;
+  ss >> tag2;
+  //std::istringstream is;
+  //is.str( "1234567890" );
+  //is >> tag2;
+  if( tag != tag2 )
+    {
+    std::cout << tag << std::endl;
+    std::cout << tag2 << std::endl;
+    return 1;
+    }
+}
+
   return 0;
 }

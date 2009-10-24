@@ -854,6 +854,7 @@ int main (int argc, char *argv[])
       writer.SetFileName( outfilename );
       if( !writer.Write() )
         {
+        std::cerr << "Problem during DICOM steps" << std::endl;
         return 1;
         }
 
