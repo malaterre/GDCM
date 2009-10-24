@@ -299,7 +299,7 @@ private:
 #endif /* SWIG */
 
 /**
- * \example TestCSharpFilter.cs
+ * \example SimplePrint.cs
  * This is a C# example on how to use gdcm::SWIGDataSet
  */
 
