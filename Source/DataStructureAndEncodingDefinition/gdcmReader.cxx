@@ -471,6 +471,7 @@ std::istream &is = *Stream;
             }
           catch ( Exception &ex )
             {
+            (void)ex;
             is.clear();
             if( haspreamble )
               {
