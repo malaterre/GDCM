@@ -144,6 +144,8 @@ std::istream& Read(std::istream &is)
         // 3. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found instead of terminator (eof is the next char)
         gdcmWarningMacro( "Reading failed at Tag:" << frag.GetTag() << ". Use file at own risk." << ex.what() );
         }
+#else
+      (void)ex;
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       }
     }
