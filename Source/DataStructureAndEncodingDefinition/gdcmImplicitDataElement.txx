@@ -317,6 +317,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
           }
         catch( std::exception &ex )
           {
+          (void)ex;
           ValueLengthField = ValueField->GetLength();
           }
         return is;
