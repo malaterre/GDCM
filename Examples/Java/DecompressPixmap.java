@@ -50,6 +50,8 @@ public class DecompressPixmap
 
     // When using a PixmapReader the following code crashes, I do not understand why (MM)
     // Instead hack our way in, and use an ImageReader instead of a PixmapReader
+    //
+    // Hum looks like Java Covariant Return type is not working for some reason
     Pixmap out = ((PixmapToPixmapFilter)change).GetOutput();
     System.out.println( out.toString() );
 
