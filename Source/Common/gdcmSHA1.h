@@ -19,6 +19,8 @@
 
 namespace gdcm
 {
+//-----------------------------------------------------------------------------
+class SHA1Internals;
 /**
  * \brief Class for SHA1 
  *
@@ -28,8 +30,6 @@ namespace gdcm
  *
  * In all other cases it will return an error
  */
-//-----------------------------------------------------------------------------
-class SHA1Internals;
 class GDCM_EXPORT SHA1
 {
 public :

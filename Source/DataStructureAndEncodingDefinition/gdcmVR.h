@@ -217,6 +217,7 @@ template<int T> struct VRToType;
   { typedef rtype Type; };
 
 
+// Do not use me
 struct UI { char Internal[64+1]; 
   friend std::ostream& operator<<(std::ostream &_os, const UI &_val);
 };

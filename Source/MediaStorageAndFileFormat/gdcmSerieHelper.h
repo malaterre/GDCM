@@ -25,13 +25,6 @@
 namespace gdcm
 {
 
-/**
- * \class SerieHelper
- * DO NOT USE this class, it is only a temporary solution for ITK migration from GDCM 1.x to GDCM 2.x
- * It will disapear soon, you've been warned.
- *
- * Instead see gdcm::ImageHelper or gdcm::IPPSorter
- */
 enum CompOperators {
    GDCM_EQUAL = 0,
    GDCM_DIFFERENT,
@@ -50,7 +43,7 @@ enum LodModeType
 
 
 /**
- * \brief SerieHelper
+ * \brief FileWithName
  *
  * \details
  * Backward only class do not use in newer code
@@ -65,6 +58,14 @@ public:
 typedef std::vector< SmartPointer<FileWithName> > FileList;
 typedef bool (*BOOL_FUNCTION_PFILE_PFILE_POINTER)(File *, File *);
 class Scanner;
+
+/**
+ * \class SerieHelper
+ * DO NOT USE this class, it is only a temporary solution for ITK migration from GDCM 1.x to GDCM 2.x
+ * It will disapear soon, you've been warned.
+ *
+ * Instead see gdcm::ImageHelper or gdcm::IPPSorter
+ */
 class GDCM_EXPORT SerieHelper
 {
 public:
