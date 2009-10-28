@@ -17,5 +17,9 @@
 int TestVersion(int, char *[])
 {
   const char *version = gdcm::Version::GetVersion();
+
+  gdcm::Version v;
+  v.Print( std::cout );
+
   return 0;
 }

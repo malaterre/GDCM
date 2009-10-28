@@ -36,7 +36,7 @@ public :
 
   void Print(std::ostream &os = std::cout) const;
 
-protected:
+//protected:
   Version() {};
   ~Version() {};
 };
