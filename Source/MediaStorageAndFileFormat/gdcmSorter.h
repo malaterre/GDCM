@@ -24,6 +24,8 @@
 
 namespace gdcm
 {
+class DataSet;
+
 /**
  * \brief Sorter
  * General class to do sorting using a custom function
@@ -34,7 +36,6 @@ namespace gdcm
  * 
  * \see Scanner
  */
-class DataSet;
 class GDCM_EXPORT Sorter
 {
   friend std::ostream& operator<<(std::ostream &_os, const Sorter &s);

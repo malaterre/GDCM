@@ -18,6 +18,8 @@
 namespace gdcm
 {
 
+#error
+
 /*
  * This class is a pure hack. Its only goal is to work around a bad bug in :
  *  $ swig -version 
@@ -34,8 +36,10 @@ namespace gdcm
  * -  http://sourceforge.net/mailarchive/forum.php?thread_name=bf0c3b3f0802290552y5163989t76572b80a044ce28%40mail.gmail.com&forum_name=swig-user
  */
 
-#error
 
+/**
+ * Do not use me
+ */
 class ConstCharWrapper
 {
 public:

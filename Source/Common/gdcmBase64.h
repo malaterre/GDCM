@@ -19,12 +19,12 @@
 
 namespace gdcm
 {
+//-----------------------------------------------------------------------------
+class Base64Internals;
 /**
  * \brief Class for Base64
  *
  */
-//-----------------------------------------------------------------------------
-class Base64Internals;
 class GDCM_EXPORT Base64
 {
 public :
