@@ -20,12 +20,12 @@
 namespace gdcm
 {
 class Event;
+//-----------------------------------------------------------------------------
 /**
  * \class Command
  * \brief superclass for callback/observer methods
  *
  */
-//-----------------------------------------------------------------------------
 class GDCM_EXPORT Command : public Subject
 {
 public :

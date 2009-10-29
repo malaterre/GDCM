@@ -19,12 +19,12 @@
 
 namespace gdcm
 {
+//-----------------------------------------------------------------------------
 /**
  * \class Event
  * \brief superclass for callback/observer methods
  *
  */
-//-----------------------------------------------------------------------------
 class GDCM_EXPORT Event
 {
 public :
