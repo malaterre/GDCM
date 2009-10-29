@@ -38,7 +38,7 @@ namespace gdcm
 
 
 /**
- * Do not use me
+ * \brief Do not use me
  */
 class ConstCharWrapper
 {
