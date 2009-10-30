@@ -5,12 +5,20 @@
 #  OPENSSL_INCLUDE_DIR - the OpenSSL include directory
 #  OPENSSL_LIBRARIES - The libraries needed to use OpenSSL
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2009, Mathieu Malaterre, <mathieu.malaterre@gmail.com>
+#=============================================================================
+# Copyright 2006-2009 Kitware, Inc.
+# Copyright 2006 Alexander Neundorf <neundorf@kde.org>
+# Copyright 2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distributed this file outside of CMake, substitute the full
+#  License text for the above reference.)
 
 IF(OPENSSL_LIBRARIES)
    SET(OpenSSL_FIND_QUIETLY TRUE)
@@ -21,7 +29,7 @@ IF(SSL_EAY_DEBUG AND SSL_EAY_RELEASE)
 ENDIF(SSL_EAY_DEBUG AND SSL_EAY_RELEASE)
 
 # http://www.slproweb.com/products/Win32OpenSSL.html
-FIND_PATH(OPENSSL_INCLUDE_DIR openssl/ssl.h 
+FIND_PATH(OPENSSL_INCLUDE_DIR openssl/ssl.h
   PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/include"
 )
 
@@ -31,19 +39,17 @@ IF(WIN32 AND MSVC)
    # use also ssl and ssleay32 in debug as fallback for openssl < 0.9.8b
 
    FIND_LIBRARY(LIB_EAY_DEBUG NAMES libeay32MDd libeay32
-  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
-)
-    FIND_LIBRARY(LIB_EAY_RELEASE NAMES libeay32MD libeay32
-  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
-)
-   # FIND_LIBRARY(SSL_EAY_DEBUG NAMES  ssleay32
+     PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+     )
+   FIND_LIBRARY(LIB_EAY_RELEASE NAMES libeay32MD libeay32
+     PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+     )
    FIND_LIBRARY(SSL_EAY_DEBUG NAMES ssleay32MDd ssl ssleay32
-  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
-)
-   #FIND_LIBRARY(SSL_EAY_RELEASE NAMES  ssleay32
+     PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+     )
    FIND_LIBRARY(SSL_EAY_RELEASE NAMES ssleay32MD ssl ssleay32
-  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
-)
+     PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+     )
 
    IF(MSVC_IDE)
       IF(SSL_EAY_DEBUG AND SSL_EAY_RELEASE)
