@@ -9,20 +9,26 @@
 # DCMTK_DIR can be used to make it simpler to find the various include
 # directories and compiled libraries if you've just compiled it in the
 # source tree. Just set it to the root of the tree where you extracted
-# the source.
+# the source (default to /usr/include/dcmtk/)
+
+#=============================================================================
+# Copyright 2004-2009 Kitware, Inc.
+# Copyright 2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distributed this file outside of CMake, substitute the full
+#  License text for the above reference.)
+
 #
 # Written for VXL by Amitha Perera.
 # Upgraded for GDCM by Mathieu Malaterre.
 # 
-# For debian you need:
-# sudo apt-get install libdcmtk1-dev dcmtk
-#
-#  Copyright (c) 2006-2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
-#
-#  Redistribution and use is allowed according to the terms of the New
-#  BSD license.
-#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-#
 
 IF( NOT DCMTK_FOUND )
   SET( DCMTK_DIR "/usr/include/dcmtk/"
@@ -84,11 +90,12 @@ FIND_LIBRARY( DCMTK_dcmimgle_LIBRARY dcmimgle
   ${DCMTK_DIR}/lib
 )
 
-#FIND_LIBRARY(DCMTK_imagedb_LIBRARY imagedb 
-#  ${DCMTK_DIR}/imagectn/libsrc/Release
-#  ${DCMTK_DIR}/imagectn/libsrc/
-#  ${DCMTK_DIR}/imagectn/libsrc/Debug
-#  )
+# MM: I could not find this library on debian system / dcmtk 3.5.4
+FIND_LIBRARY(DCMTK_imagedb_LIBRARY imagedb 
+  ${DCMTK_DIR}/imagectn/libsrc/Release
+  ${DCMTK_DIR}/imagectn/libsrc/
+  ${DCMTK_DIR}/imagectn/libsrc/Debug
+  )
 
 FIND_LIBRARY(DCMTK_dcmnet_LIBRARY dcmnet 
   ${DCMTK_DIR}/dcmnet/libsrc/Release
@@ -97,13 +104,13 @@ FIND_LIBRARY(DCMTK_dcmnet_LIBRARY dcmnet
   )
 
 
-IF( DCMTK_config_INCLUDE_DIR )
-IF( DCMTK_ofstd_INCLUDE_DIR )
-IF( DCMTK_ofstd_LIBRARY )
-IF( DCMTK_dcmdata_INCLUDE_DIR )
-IF( DCMTK_dcmdata_LIBRARY )
-IF( DCMTK_dcmimgle_INCLUDE_DIR )
-IF( DCMTK_dcmimgle_LIBRARY )
+IF( DCMTK_config_INCLUDE_DIR 
+    AND DCMTK_ofstd_INCLUDE_DIR 
+    AND DCMTK_ofstd_LIBRARY
+    AND DCMTK_dcmdata_INCLUDE_DIR
+    AND DCMTK_dcmdata_LIBRARY
+    AND DCMTK_dcmimgle_INCLUDE_DIR
+    AND DCMTK_dcmimgle_LIBRARY )
 
   SET( DCMTK_FOUND "YES" )
   SET( DCMTK_INCLUDE_DIR
@@ -138,13 +145,13 @@ IF( DCMTK_dcmimgle_LIBRARY )
     SET( DCMTK_LIBRARIES ${DCMTK_LIBRARIES} netapi32 )
   ENDIF( WIN32 )
 
-ENDIF( DCMTK_dcmimgle_LIBRARY )
-ENDIF( DCMTK_dcmimgle_INCLUDE_DIR )
-ENDIF( DCMTK_dcmdata_LIBRARY )
-ENDIF( DCMTK_dcmdata_INCLUDE_DIR )
-ENDIF( DCMTK_ofstd_LIBRARY )
-ENDIF( DCMTK_ofstd_INCLUDE_DIR )
-ENDIF( DCMTK_config_INCLUDE_DIR )
+ENDIF( DCMTK_config_INCLUDE_DIR 
+    AND DCMTK_ofstd_INCLUDE_DIR 
+    AND DCMTK_ofstd_LIBRARY
+    AND DCMTK_dcmdata_INCLUDE_DIR
+    AND DCMTK_dcmdata_LIBRARY
+    AND DCMTK_dcmimgle_INCLUDE_DIR
+    AND DCMTK_dcmimgle_LIBRARY )
 
 FIND_PROGRAM(DCMTK_DCMDUMP_EXECUTABLE dcmdump
   ${DCMTK_DIR}/bin
