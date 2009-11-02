@@ -53,7 +53,7 @@ file-in   DICOM input filename
 
 \subsection environment_variable environment variable
 
-  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, \&...)
+  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)
 
 \section simple_usage Simple usage
 

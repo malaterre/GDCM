@@ -238,7 +238,7 @@ $ gdcmdump --asn1 encrypted.dcm
   121:d=5  hl=2 l=  13 cons:      SEQUENCE          
   123:d=6  hl=2 l=   9 prim:       OBJECT            :rsaEncryption
   134:d=6  hl=2 l=   0 prim:       NULL              
-  136:d=5  hl=4 l= 256 prim:      OCTET STRING      [HEX DUMP]:822368070285AD756C962ECB973514B291F946\&...
+  136:d=5  hl=4 l= 256 prim:      OCTET STRING      [HEX DUMP]:822368070285AD756C962ECB973514B291F946...
   396:d=3  hl=4 l= 558 cons:    SEQUENCE          
   400:d=4  hl=2 l=   9 prim:     OBJECT            :pkcs7-data
   411:d=4  hl=2 l=  29 cons:     SEQUENCE          
