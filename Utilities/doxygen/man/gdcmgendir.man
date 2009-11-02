@@ -59,7 +59,7 @@ file-out  DICOM output filename
 \subsection environment_variable environment variable
 \verbatim
   GDCM_ROOT_UID Root UID
-  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)
+  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, \&...)
 \endverbatim
 
 \section usage Typical usage
