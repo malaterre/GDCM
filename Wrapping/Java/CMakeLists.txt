@@ -15,7 +15,7 @@ INCLUDE_DIRECTORIES(
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/ 
 # $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
-FIND_PACKAGE(Java REQUIRED) # javac, jar
+FIND_PACKAGE(Java 1.5 REQUIRED) # javac, jar
 FIND_PACKAGE(JNI REQUIRED)
 INCLUDE_DIRECTORIES(
   #${JNI_INCLUDE_PATH}
