@@ -29,10 +29,10 @@ class GDCM_EXPORT Version
 {
   friend std::ostream& operator<<(std::ostream &_os, const Version &v);
 public :
-  static const char *GetVersion() { return GDCM_VERSION; }
-  static int GetMajorVersion()    { return GDCM_MAJOR_VERSION; }
-  static int GetMinorVersion()    { return GDCM_MINOR_VERSION; }
-  static int GetBuildVersion()    { return GDCM_BUILD_VERSION; }
+  static const char *GetVersion();
+  static int GetMajorVersion();
+  static int GetMinorVersion();
+  static int GetBuildVersion();
 
   void Print(std::ostream &os = std::cout) const;
 
