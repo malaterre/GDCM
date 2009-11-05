@@ -16,7 +16,11 @@
 
 int TestVersion(int, char *[])
 {
+  // The following statements just test whether those functions are callable: 
   const char *version = gdcm::Version::GetVersion();
+  const int majorVersion = gdcm::Version::GetMajorVersion();
+  const int minorVersion = gdcm::Version::GetMinorVersion();
+  const int buildVersion = gdcm::Version::GetBuildVersion();
 
   gdcm::Version v;
   v.Print( std::cout );
