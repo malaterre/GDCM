@@ -1,7 +1,5 @@
 /**
 
-\example TestFilename.cxx
-\example TestImageReader.cxx
-\example TestImageWriter.cxx
+@DOXYFILE_EXAMPLES@
 
 */

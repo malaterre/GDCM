@@ -26,6 +26,17 @@ IF(GDCM_DOCUMENTATION)
   #MESSAGE(${headerfiles})
   # We are depending only on header files and README.txt but other files
   # could be needed for complete dependencies
+  FILE(GLOB_RECURSE examplefiles
+    "${GDCM_SOURCE_DIR}/Examples/*.cxx"
+    "${GDCM_SOURCE_DIR}/Examples/*.cs"
+    "${GDCM_SOURCE_DIR}/Examples/*.java"
+    "${GDCM_SOURCE_DIR}/Examples/*.py"
+    )
+  SET(DOXYFILE_EXAMPLES)
+  foreach(file ${examplefiles})
+    get_filename_component(f ${file} NAME)
+    set(DOXYFILE_EXAMPLES "${DOXYFILE_EXAMPLES}\n\\example ${f}")
+  endforeach(file)
   CONFIGURE_FILE(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/TestsList.txt.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/TestsList.txt
@@ -70,6 +81,7 @@ IF(GDCM_DOCUMENTATION)
     ARGS     -E tar cfz ${GDCM_DOC_TARBALL} html
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
              ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
+             ${GDCM_BINARY_DIR}/Utilities/doxygen/TestsList.txt
              ${headerfiles}
     COMMENT  "GDCM: Creating doxygen doc + tarball"
     #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
