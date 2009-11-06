@@ -24,28 +24,61 @@ int TestBase64(int argc, char *argv[])
   gdcm::Base64 base64;
 
   int l1 = gdcm::Base64::GetEncodeLength( str, sizeof(str) );
-  if( l1 != 37 ) return 1;
+  if( l1 != 37 )
+    {
+    std::cerr << "Fail 1" << std::endl;
+    return 1;
+    }
 
   char buffer[256];
-  if( l1 > sizeof(buffer) ) return 1;
+  if( l1 > sizeof(buffer) )
+    {
+    std::cerr << "Fail 2" << std::endl;
+    return 1;
+    }
 
   int l2 = gdcm::Base64::Encode( buffer, sizeof(buffer), str, sizeof(str) );
-  if( l2 != 0 ) return 1;
+  if( l2 != 0 )
+    {
+    std::cerr << "Fail 3" << std::endl;
+    return 1;
+    }
 
   size_t lbuffer = strlen(buffer);
-  if( lbuffer != l1 - 1 ) return 1;
+  if( lbuffer != l1 - 1 )
+    {
+    std::cerr << "Fail 4" << std::endl;
+    return 1;
+    }
 
   int l3 = gdcm::Base64::GetDecodeLength( buffer, l1 - 1 );
-  if( l3 != 26 ) return 1;
-  if( l3 != sizeof(str) ) return 1;
+  if( l3 != 26 )
+    {
+    std::cerr << "Fail 5" << std::endl;
+    return 1;
+    }
+  if( l3 != sizeof(str) )
+    {
+    std::cerr << "Fail 6" << std::endl;
+    return 1;
+    }
 
   char buffer2[256];
-  if( l3 > sizeof(buffer2) ) return 1;
+  if( l3 > sizeof(buffer2) )
+    {
+    std::cerr << "Fail 7" << std::endl;
+    return 1;
+    }
   int l4 = gdcm::Base64::Decode( buffer2, sizeof(buffer2), buffer, l1 - 1);
-  if( l4 != 0 ) return 1;
+  if( l4 != 0 )
+    {
+    std::cerr << "Fail 8" << std::endl;
+    return 1;
+    }
 
   if( strcmp( str, buffer2 ) != 0 )
     {
+    std::cerr << "Fail 9" << std::endl;
     return 1;
     }
 
