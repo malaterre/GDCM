@@ -67,7 +67,8 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   const float in[] = { 3.77417493 };
   if( outref[0] != in[0] )
   {
-    std::cerr << "Wrong input/output" << std::endl;
+    std::cerr << "Wrong input/output:" << std::endl;
+    std::cerr << outref[0] << " vs " << in[0] << std::endl;
     return 1;
   }
   const char *tempimage = (char*)in;
