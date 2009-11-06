@@ -2,7 +2,7 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
-  TestAnonymizer2
+  #TestAnonymizer2
   TestSpacing
   TestFileExplicitFilter
   TestImageFragmentSplitter
