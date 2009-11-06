@@ -44,31 +44,34 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   const double slope     = atof( "3.774114" );
   ir.SetIntercept( intercept );
   ir.SetSlope( slope );
-  ir.SetPixelFormat( gdcm::PixelFormat::FLOAT32 );
+  ir.SetPixelFormat( gdcm::PixelFormat::FLOAT64 );
   const double smin = 6.0999998822808266e-05;
   const double smax = 247336.561051;
   ir.SetMinMaxForPixelType( smin, smax );
   
-  float outref[] = { 0 };
+  double outref[] = { 0 };
 {
   char *copy = (char*)outref;
   const uint16_t in[] = { 1. };
   const char *tempimage = (char*)in;
   size_t vtklen = sizeof(in);
   ir.SetPixelFormat( gdcm::PixelFormat::UINT16 );
-  ir.Rescale(copy,tempimage,vtklen);
+  bool b = ir.Rescale(copy,tempimage,vtklen);
+  if( !b ) return 1;
 
   std::cout << outref[0] << std::endl;
 }
 
-  ir.SetPixelFormat( gdcm::PixelFormat::FLOAT32 );
+  ir.SetPixelFormat( gdcm::PixelFormat::FLOAT64 );
   uint16_t out[] = { 0 };
   char *copy = (char*)out;
-  const float in[] = { 3.77417493 };
+  //const double in[] = { 3.77417493 };
+  const double in[] = { 3.774175 };
   if( outref[0] != in[0] )
   {
     std::cerr << "Wrong input/output:" << std::endl;
     std::cerr << outref[0] << " vs " << in[0] << std::endl;
+    std::cerr << (outref[0] - in[0]) << std::endl;
     return 1;
   }
   const char *tempimage = (char*)in;
