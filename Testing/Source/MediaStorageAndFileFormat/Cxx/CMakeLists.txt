@@ -37,7 +37,6 @@ SET(MSFF_TEST_SRCS
   TestImageReader
   TestDirectionCosines
   TestImageWriter
-  TestImageWriter2
   TestCodec
   TestPDFCodec
   TestRLECodec
@@ -68,6 +67,7 @@ IF(GDCM_DATA_ROOT)
   TestIPPSorter2
   TestCopyDataSet
   TestDataElementValueAsSQ
+  TestImageWriter2
       )
 ENDIF(GDCM_DATA_ROOT)
 
