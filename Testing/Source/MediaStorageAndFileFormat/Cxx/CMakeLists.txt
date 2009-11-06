@@ -3,7 +3,6 @@
 SET(MSFF_TEST_SRCS
   TestAnonymizer
   TestAnonymizer2
-  TestDataElementValueAsSQ
   TestSpacing
   TestFileExplicitFilter
   TestImageFragmentSplitter
@@ -68,6 +67,7 @@ IF(GDCM_DATA_ROOT)
   TestIPPSorter
   TestIPPSorter2
   TestCopyDataSet
+  TestDataElementValueAsSQ
       )
 ENDIF(GDCM_DATA_ROOT)
 
