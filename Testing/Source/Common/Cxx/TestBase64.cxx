@@ -23,6 +23,8 @@ int TestBase64(int argc, char *argv[])
   const char str[] = "GDCM Test Base64 Encoding";
   gdcm::Base64 base64;
 
+  std::cout << "sizeof:" << sizeof(str) << std::endl;
+  std::cout << "strlen:" << strlen(str) << std::endl;
   int l1 = gdcm::Base64::GetEncodeLength( str, sizeof(str) );
   if( l1 != 37 )
     {
@@ -30,7 +32,7 @@ int TestBase64(int argc, char *argv[])
     return 1;
     }
 
-  char buffer[256];
+  char buffer[256] = {};
   if( l1 > sizeof(buffer) )
     {
     std::cerr << "Fail 2" << std::endl;
