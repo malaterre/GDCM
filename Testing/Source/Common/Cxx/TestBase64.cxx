@@ -26,7 +26,7 @@ int TestBase64(int argc, char *argv[])
   int l1 = gdcm::Base64::GetEncodeLength( str, sizeof(str) );
   if( l1 != 37 )
     {
-    std::cerr << "Fail 1" << std::endl;
+    std::cerr << "Fail 1: " << l1 << std::endl;
     return 1;
     }
 
