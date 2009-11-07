@@ -974,6 +974,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       ms = gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
       if( this->Shift != 0 || this->Scale != 1 )
         {
+        // Table C.8-25b SC MULTI-FRAME IMAGE MODULE ATTRIBUTES
+        // Note: This specifies an identity Modality LUT transformation.
         vtkErrorMacro( "Cannot have shift/scale" );
         return 0;
         }
