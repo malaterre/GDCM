@@ -25,7 +25,7 @@ int TestBase64(int argc, char *argv[])
 
   std::cout << "sizeof:" << sizeof(str) << std::endl;
   std::cout << "strlen:" << strlen(str) << std::endl;
-  int l1 = gdcm::Base64::GetEncodeLength( str, sizeof(str) );
+  unsigned int l1 = gdcm::Base64::GetEncodeLength( str, sizeof(str) );
   if( l1 != 37 )
     {
     std::cerr << "Fail 1: " << l1 << std::endl;
