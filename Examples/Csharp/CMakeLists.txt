@@ -16,6 +16,7 @@ SET(CSHARP_EXAMPLES
   GenerateDICOMDIR
   StandardizeFiles
   ReformatFile
+  CompressLossyJPEG
   )
 
 IF(BUILD_TESTING)
