@@ -65,6 +65,11 @@ file-out  DICOM output filename
   -q --quality %*f           set quality.
 \endverbatim
 
+\subsection jpegls_options JPEG-LS options
+\verbatim
+  -e --lossy-error %*i       set error.
+\endverbatim
+
 \subsection j2k_options J2K options
 \verbatim
   -r --rate    %*f           set rate.
