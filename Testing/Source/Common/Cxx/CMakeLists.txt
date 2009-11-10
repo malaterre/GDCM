@@ -18,8 +18,13 @@ SET(Common_TEST_SRCS
   TestTrace
   TestTypes
   TestUnpacker12Bits
-  TestBase64
   )
+IF(GDCM_USE_SYSTEM_OPENSSL)
+SET(Common_TEST_SRCS
+  ${Common_TEST_SRCS}
+  TestBase64 # we need the openssl implementation
+  )
+ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
 IF(GDCM_DATA_ROOT)
 SET(Common_TEST_SRCS
