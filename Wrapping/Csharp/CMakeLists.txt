@@ -159,14 +159,14 @@ IF(OLDSTYLECSHARP)
   )
 
 IF(BUILD_EXAMPLES)
-# building HelloWorld:
+# building HelloCSharpWorld:
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-            ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
-    COMMENT "Create HelloWorld.exe"
+            ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
+    COMMENT "Create HelloCsharpWorld.exe"
   )
 ENDIF(BUILD_EXAMPLES)
 
@@ -198,8 +198,8 @@ ADD_CUSTOM_TARGET(GDCMCSharp ALL
 IF(BUILD_EXAMPLES)
 ADD_CUSTOM_TARGET(GDCMCSharpExample ALL
   DEPENDS 
-    ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
-  COMMENT "building HelloWorld.exe"
+    ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
+  COMMENT "building HelloCsharpWorld.exe"
 )
 #add_dependencies(GDCMCSharpExample
 # GDCMCSharp)
