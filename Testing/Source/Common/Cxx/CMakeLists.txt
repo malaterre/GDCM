@@ -20,20 +20,20 @@ SET(Common_TEST_SRCS
   TestUnpacker12Bits
   )
 IF(GDCM_USE_SYSTEM_OPENSSL)
-SET(Common_TEST_SRCS
-  ${Common_TEST_SRCS}
+list(APPEND Common_TEST_SRCS
   TestBase64 # we need the openssl implementation
   )
 ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
 IF(GDCM_DATA_ROOT)
-SET(Common_TEST_SRCS
-  ${Common_TEST_SRCS}
+list(APPEND Common_TEST_SRCS
   TestDirectory
   TestFilename
   TestMD5
-  TestSHA1
   )
+IF(GDCM_USE_SYSTEM_OPENSSL)
+  list(APPEND Common_TEST_SRCS TestSHA1)
+ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 ENDIF(GDCM_DATA_ROOT)
 
 # Add the include paths
