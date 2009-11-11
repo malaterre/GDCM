@@ -159,23 +159,24 @@ IF(OLDSTYLECSHARP)
   )
 
 IF(BUILD_EXAMPLES)
-# building HelloWorld:
+# building HelloCSharpWorld:
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-            ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
-    COMMENT "Create HelloWorld.exe"
+            ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
+    COMMENT "Create HelloCsharpWorld.exe"
   )
 ENDIF(BUILD_EXAMPLES)
 
-  ADD_CUSTOM_COMMAND(
-    OUTPUT  ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.config
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gdcm-sharp.dll.config
-    COMMENT "Copying gdcm-sharp.dll.config"
-  )
+# This config file is only a mono thingy anyway
+#  ADD_CUSTOM_COMMAND(
+#    OUTPUT  ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.config
+#    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
+#    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gdcm-sharp.dll.config
+#    COMMENT "Copying gdcm-sharp.dll.config"
+#  )
 
 
 #IF(WIN32)
@@ -190,15 +191,15 @@ ENDIF(BUILD_EXAMPLES)
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
   DEPENDS 
     ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-    ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.config
+    #${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.config
   COMMENT "building gdcm-sharp.dll"
 )
 
 IF(BUILD_EXAMPLES)
 ADD_CUSTOM_TARGET(GDCMCSharpExample ALL
   DEPENDS 
-    ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
-  COMMENT "building HelloWorld.exe"
+    ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
+  COMMENT "building HelloCsharpWorld.exe"
 )
 #add_dependencies(GDCMCSharpExample
 # GDCMCSharp)
@@ -225,10 +226,10 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   )
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
   # because gdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-  INSTALL(FILES 
-    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
-    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
-  )
+  #  INSTALL(FILES 
+  #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
+  #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
+  #    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
+  #  )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 

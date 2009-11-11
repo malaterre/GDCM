@@ -20,12 +20,12 @@
 
 namespace gdcm
 {
+//-----------------------------------------------------------------------------
+class ASN1Internals;
 /**
  * \brief Class for ASN1 
  *
  */
-//-----------------------------------------------------------------------------
-class ASN1Internals;
 class GDCM_EXPORT ASN1
 {
 public :

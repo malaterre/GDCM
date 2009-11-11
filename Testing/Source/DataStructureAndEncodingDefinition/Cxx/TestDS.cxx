@@ -353,18 +353,21 @@ int TestDS(int, char *[])
     TEST(                  1                    ,  1, false); // 1 digit => 1 char
 
     TEST(    9.9999999999e-4                    , 16, false);
+
 #ifdef ALWAYS_3_DIGITS_IN_EXPONENT
-    TEST(               1e-5                    , 6, false);
+    TEST(               1e-5                    ,  6, false);
 #else
     TEST(               1e-5                    , 16, false);
 #endif
 
     TEST(             5.1e-4                    ,  7, false);
+
 #ifdef ALWAYS_3_DIGITS_IN_EXPONENT
-    TEST(             5.1e-5                    , 16, false);
+    TEST(             5.1e-5                    ,  8, false);
 #else
     TEST(             5.1e-5                    , 16, false);
 #endif
+
     TEST(             5.1e-6                    , 16, false);
     TEST(             5.1e-7                    , 16, false);
     TEST(             5.1e-8                    , 16, false);

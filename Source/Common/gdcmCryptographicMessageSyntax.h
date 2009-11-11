@@ -19,13 +19,18 @@
 
 namespace gdcm
 {
-/**
- * \brief Class for CryptographicMessageSyntax encryption
- *
- * http://www.openssl.org/docs/crypto/PKCS7_encrypt.html
- */
-//-----------------------------------------------------------------------------
 class CryptographicMessageSyntaxInternals;
+//-----------------------------------------------------------------------------
+
+/**
+ * \brief 
+ * Class for CryptographicMessageSyntax encryption. This is just a simple
+ * wrapper around openssl PKCS7_encrypt functionalities
+ *
+ * See online documentation
+ * http://www.openssl.org/docs/crypto/PKCS7_encrypt.html
+ *
+ */
 class GDCM_EXPORT CryptographicMessageSyntax
 {
 public :

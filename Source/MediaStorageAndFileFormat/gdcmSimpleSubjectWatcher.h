@@ -22,12 +22,12 @@
 
 namespace gdcm
 {
+//-----------------------------------------------------------------------------
 class Event;
 /**
  * \class SimpleSubjectWatcher
  *
  */
-//-----------------------------------------------------------------------------
 class GDCM_EXPORT SimpleSubjectWatcher
 {
 public:

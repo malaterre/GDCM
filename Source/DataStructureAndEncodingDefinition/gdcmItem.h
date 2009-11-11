@@ -152,6 +152,7 @@ public:
           }
         catch(ParseException &pe)
           {
+          (void)pe;
           // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
           // You have to byteswap the length but not the tag...sigh
           gdcmWarningMacro( "Attempt to read nested Item without byteswapping the Value Length." );

@@ -88,27 +88,26 @@ double Orientation::GetObliquityThresholdCosineValue()
 
 Orientation::OrientationType Orientation::GetType(const double dircos[6])
 {
-  if( !dircos )
+  OrientationType type = Orientation::UNKNOWN;
+  if( dircos )
     {
-    return Orientation::UNKNOWN;
-    }
-  OrientationType type;
-  char rowAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[0],dircos[1],dircos[2]);
-  char colAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[3],dircos[4],dircos[5]);
-  if (rowAxis != 0 && colAxis != 0 )
-    {
-    if      ((rowAxis == 'R' || rowAxis == 'L') && (colAxis == 'A' || colAxis == 'P')) type = Orientation::AXIAL;
-    else if ((colAxis == 'R' || colAxis == 'L') && (rowAxis == 'A' || rowAxis == 'P')) type = Orientation::AXIAL;
+    char rowAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[0],dircos[1],dircos[2]);
+    char colAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[3],dircos[4],dircos[5]);
+    if (rowAxis != 0 && colAxis != 0 )
+      {
+      if      ((rowAxis == 'R' || rowAxis == 'L') && (colAxis == 'A' || colAxis == 'P')) type = Orientation::AXIAL;
+      else if ((colAxis == 'R' || colAxis == 'L') && (rowAxis == 'A' || rowAxis == 'P')) type = Orientation::AXIAL;
 
-    else if ((rowAxis == 'R' || rowAxis == 'L') && (colAxis == 'H' || colAxis == 'F')) type = Orientation::CORONAL;
-    else if ((colAxis == 'R' || colAxis == 'L') && (rowAxis == 'H' || rowAxis == 'F')) type = Orientation::CORONAL;
+      else if ((rowAxis == 'R' || rowAxis == 'L') && (colAxis == 'H' || colAxis == 'F')) type = Orientation::CORONAL;
+      else if ((colAxis == 'R' || colAxis == 'L') && (rowAxis == 'H' || rowAxis == 'F')) type = Orientation::CORONAL;
 
-    else if ((rowAxis == 'A' || rowAxis == 'P') && (colAxis == 'H' || colAxis == 'F')) type = Orientation::SAGITTAL;
-    else if ((colAxis == 'A' || colAxis == 'P') && (rowAxis == 'H' || rowAxis == 'F')) type = Orientation::SAGITTAL;
-    }
-  else
-    {
-    type = Orientation::OBLIQUE;
+      else if ((rowAxis == 'A' || rowAxis == 'P') && (colAxis == 'H' || colAxis == 'F')) type = Orientation::SAGITTAL;
+      else if ((colAxis == 'A' || colAxis == 'P') && (rowAxis == 'H' || rowAxis == 'F')) type = Orientation::SAGITTAL;
+      }
+    else
+      {
+      type = Orientation::OBLIQUE;
+      }
     }
   return type;
 }

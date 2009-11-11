@@ -1,5 +1,5 @@
 PROJECT(GDCM)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6) # Sorry I want the cpack/component
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2) # Sorry I want the cpack/component
 #-----------------------------------------------------------------------------
 # New cmake policy thingy
 IF(COMMAND CMAKE_POLICY)
@@ -46,7 +46,7 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 13)
+SET(GDCM_BUILD_VERSION 14)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_API_VERSION
@@ -318,7 +318,7 @@ ENDIF(GDCM_USE_SYSTEM_ZLIB)
 #ENDIF(GDCM_USE_SYSTEM_POLARSSL)
 
 IF(GDCM_USE_SYSTEM_OPENSSL)
-  FIND_PACKAGE(OpenSSL2 REQUIRED)
+  FIND_PACKAGE(OpenSSL REQUIRED)
 ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
 IF(GDCM_USE_SYSTEM_UUID)
@@ -610,11 +610,28 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # refers to the fact that this is the set of components that
   # will be included when CPack is instructed to put everything
   # into the binary installer (the default behavior).
+  set(components)
+  if(GDCM_BUILD_APPLICATIONS)
+    list(APPEND components Applications)
+  endif(GDCM_BUILD_APPLICATIONS)
+  list(APPEND components Libraries)
+  list(APPEND components Headers)
+  if(GDCM_WRAP_PYTHON)
+    list(APPEND components PythonModule)
+  endif(GDCM_WRAP_PYTHON)
+  if(GDCM_WRAP_CSHARP)
+    list(APPEND components CSharpModule)
+  endif(GDCM_WRAP_CSHARP)
+  if(GDCM_WRAP_JAVA)
+    list(APPEND components JavaModule)
+  endif(GDCM_WRAP_JAVA)
   if(GDCM_USE_VTK)
-    set(CPACK_COMPONENTS_ALL Applications Libraries Headers VTKApplications VTKLibraries VTKHeaders PythonModule VTKPythonModule CSharpModule VTKCSharpModule)
-  else(GDCM_USE_VTK)
-    set(CPACK_COMPONENTS_ALL Applications Libraries Headers PythonModule CSharpModule)
+    foreach(comp ${components})
+      list(APPEND components VTK${comp})
+    endforeach(comp)
   endif(GDCM_USE_VTK)
+  # Ok this is the complete list of all components:
+  set(CPACK_COMPONENTS_ALL ${components})
   
   # Set the displayed names for each of the components to install.
   # These will be displayed in the list of components inside the installer.
@@ -623,13 +640,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "GDCM C/C++ Headers")
   set(CPACK_COMPONENT_PYTHONMODULE_DISPLAY_NAME "GDCM Python Module")
   set(CPACK_COMPONENT_CSHARPMODULE_DISPLAY_NAME "GDCM C# Module")
-  if(GDCM_USE_VTK)
-    set(CPACK_COMPONENT_VTKAPPLICATIONS_DISPLAY_NAME "VTK/GDCM Applications")
-    set(CPACK_COMPONENT_VTKLIBRARIES_DISPLAY_NAME "VTK/GDCM Libraries")
-    set(CPACK_COMPONENT_VTKHEADERS_DISPLAY_NAME "VTK/GDCM C/C++ Headers")
-    set(CPACK_COMPONENT_VTKPYTHONMODULE_DISPLAY_NAME "VTK/GDCM Python Module")
-    set(CPACK_COMPONENT_VTKCSHARPMODULE_DISPLAY_NAME "VTK/GDCM C# Module")
-  endif(GDCM_USE_VTK)
+  set(CPACK_COMPONENT_JAVAMODULE_DISPLAY_NAME "GDCM Java Module")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DISPLAY_NAME "VTK/GDCM Applications")
+  set(CPACK_COMPONENT_VTKLIBRARIES_DISPLAY_NAME "VTK/GDCM Libraries")
+  set(CPACK_COMPONENT_VTKHEADERS_DISPLAY_NAME "VTK/GDCM C/C++ Headers")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DISPLAY_NAME "VTK/GDCM Python Module")
+  set(CPACK_COMPONENT_VTKCSHARPMODULE_DISPLAY_NAME "VTK/GDCM C# Module")
+  set(CPACK_COMPONENT_VTKJAVAMODULE_DISPLAY_NAME "VTK/GDCM Java Module")
   
   # Provide descriptions for each of the components to install.
   # When the user hovers the mouse over the name of a component,
@@ -646,33 +663,35 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     "Python Module for GDCM")
   set(CPACK_COMPONENT_CSHARPMODULE_DESCRIPTION
     "C# Module for GDCM")
-  if(GDCM_USE_VTK)
-    set(CPACK_COMPONENT_VTKAPPLICATIONS_DESCRIPTION
-      "Command line applications that uses GDCM: gdcmviewer & gdcm2vtk")
-    set(CPACK_COMPONENT_VTKLIBRARIES_DESCRIPTION
-      "Libraries used to build programs with VTK/GDCM")
-    set(CPACK_COMPONENT_VTKHEADERS_DESCRIPTION
-      "C/C++ header files for use with VTK/GDCM")
-    set(CPACK_COMPONENT_VTKPYTHONMODULE_DESCRIPTION
-      "Python Module for VTK/GDCM")
-    set(CPACK_COMPONENT_VTKCSHARPMODULE_DESCRIPTION
-      "C# Module for VTK/GDCM")
-  endif(GDCM_USE_VTK)
+  set(CPACK_COMPONENT_JAVAMODULE_DESCRIPTION
+    "Java Module for GDCM")
+  set(CPACK_COMPONENT_VTKAPPLICATIONS_DESCRIPTION
+    "Command line applications that uses GDCM: gdcmviewer & gdcm2vtk")
+  set(CPACK_COMPONENT_VTKLIBRARIES_DESCRIPTION
+    "Libraries used to build programs with VTK/GDCM")
+  set(CPACK_COMPONENT_VTKHEADERS_DESCRIPTION
+    "C/C++ header files for use with VTK/GDCM")
+  set(CPACK_COMPONENT_VTKPYTHONMODULE_DESCRIPTION
+    "Python Module for VTK/GDCM")
+  set(CPACK_COMPONENT_VTKCSHARPMODULE_DESCRIPTION
+    "C# Module for VTK/GDCM")
+  set(CPACK_COMPONENT_VTKJAVAMODULE_DESCRIPTION
+    "Java Module for VTK/GDCM")
 
 
   # Put the components into two different groups: "Runtime" and "Development"
   set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
   set(CPACK_COMPONENT_PYTHONMODULE_GROUP "Development")
   set(CPACK_COMPONENT_CSHARPMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_JAVAMODULE_GROUP "Development")
   set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_HEADERS_GROUP "Development")
-  if(GDCM_USE_VTK)
   set(CPACK_COMPONENT_VTKAPPLICATIONS_GROUP "Runtime")
   set(CPACK_COMPONENT_VTKPYTHONMODULE_GROUP "Development")
   set(CPACK_COMPONENT_VTKCSHARPMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_VTKJAVAMODULE_GROUP "Development")
   set(CPACK_COMPONENT_VTKLIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_VTKHEADERS_GROUP "Development")
-  endif(GDCM_USE_VTK)
   # Expand the "Development" group by default, since we have so few components.
   # Also, provide this group with a description.
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
@@ -686,13 +705,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_APPLICATIONS_DEPENDS Libraries)
   set(CPACK_COMPONENT_PYTHONMODULE_DEPENDS Libraries)
   set(CPACK_COMPONENT_CSHARPMODULE_DEPENDS Libraries)
-  if(GDCM_USE_VTK)
+  set(CPACK_COMPONENT_JAVAMODULE_DEPENDS Libraries)
   set(CPACK_COMPONENT_VTKHEADERS_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKLIBRARIES_DEPENDS Libraries)
   set(CPACK_COMPONENT_VTKAPPLICATIONS_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKPYTHONMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKCSHARPMODULE_DEPENDS VTKLibraries)
-  endif(GDCM_USE_VTK)
+  set(CPACK_COMPONENT_VTKJAVAMODULE_DEPENDS VTKLibraries)
   
   # Create two installation types with pre-selected components.
   # The "Developer" installation has just the library and headers,
@@ -704,13 +723,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
   set(CPACK_COMPONENT_PYTHONMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_CSHARPMODULE_INSTALL_TYPES Developer Full)
-  if(GDCM_USE_VTK)
+  set(CPACK_COMPONENT_JAVAMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKLIBRARIES_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKHEADERS_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKAPPLICATIONS_INSTALL_TYPES Full)
   set(CPACK_COMPONENT_VTKPYTHONMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKCSHARPMODULE_INSTALL_TYPES Developer Full)
-  endif(GDCM_USE_VTK)
+  set(CPACK_COMPONENT_VTKJAVAMODULE_INSTALL_TYPES Developer Full)
 
   INCLUDE(CPack)
 

@@ -23,6 +23,7 @@
 namespace gdcm
 {
 class TagPath;
+class CryptographicMessageSyntax;
 
 /**
  * \brief Anonymizer
@@ -59,7 +60,6 @@ class TagPath;
  *
  * \see CryptographicMessageSyntax
  */
-class CryptographicMessageSyntax;
 class GDCM_EXPORT Anonymizer : public Subject
 {
 public:

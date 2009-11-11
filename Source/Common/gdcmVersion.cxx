@@ -22,4 +22,24 @@ void Version::Print(std::ostream &os) const
   os << Version::GetVersion();
 }
 
+const char * Version::GetVersion()
+{
+  return GDCM_VERSION;
+}
+
+int Version::GetMajorVersion()
+{
+  return GDCM_MAJOR_VERSION;
+}
+
+int Version::GetMinorVersion()
+{
+  return GDCM_MINOR_VERSION;
+}
+
+int Version::GetBuildVersion()
+{
+  return GDCM_BUILD_VERSION;
+}
+
 }

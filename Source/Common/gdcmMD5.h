@@ -19,6 +19,8 @@
 
 namespace gdcm
 {
+//-----------------------------------------------------------------------------
+class MD5Internals;
 /**
  * \brief Class for MD5 
  *
@@ -29,8 +31,6 @@ namespace gdcm
  *
  * In all other cases it will return an error
  */
-//-----------------------------------------------------------------------------
-class MD5Internals;
 class GDCM_EXPORT MD5
 {
 public :

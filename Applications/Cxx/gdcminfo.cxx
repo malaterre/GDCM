@@ -32,6 +32,14 @@
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
 
+#ifdef GDCM_USE_SYSTEM_POPPLER
+#include <poppler/poppler-config.h>
+#include <poppler/PDFDoc.h>
+#include <poppler/UnicodeMap.h>
+#include <poppler/PDFDocEncoding.h>
+#include <poppler/GlobalParams.h>
+#endif // GDCM_USE_SYSTEM_POPPLER
+
 #include "puff.h"
 
 #include <iostream>
@@ -175,6 +183,116 @@ int checkdeflated(const char *name)
   return ret;
 }
 
+#ifdef GDCM_USE_SYSTEM_POPPLER
+std::string getInfoDate(Dict *infoDict, const char *key)
+{
+  Object obj;
+  char *s;
+  int year, mon, day, hour, min, sec, n;
+  struct tm tmStruct;
+  char buf[256];
+  std::string out;
+
+  if (infoDict->lookup((char*)key, &obj)->isString())
+    {
+    s = obj.getString()->getCString();
+    if (s[0] == 'D' && s[1] == ':')
+      {
+      s += 2;
+      }
+    if ((n = sscanf(s, "%4d%2d%2d%2d%2d%2d",
+          &year, &mon, &day, &hour, &min, &sec)) >= 1)
+      {
+      switch (n)
+        {
+      case 1: mon = 1;
+      case 2: day = 1;
+      case 3: hour = 0;
+      case 4: min = 0;
+      case 5: sec = 0;
+        }
+      tmStruct.tm_year = year - 1900;
+      tmStruct.tm_mon = mon - 1;
+      tmStruct.tm_mday = day;
+      tmStruct.tm_hour = hour;
+      tmStruct.tm_min = min;
+      tmStruct.tm_sec = sec;
+      tmStruct.tm_wday = -1;
+      tmStruct.tm_yday = -1;
+      tmStruct.tm_isdst = -1;
+/*
+      // compute the tm_wday and tm_yday fields
+      if (mktime(&tmStruct) != (time_t)-1 &&
+        strftime(buf, sizeof(buf), "%c", &tmStruct)) {
+        fputs(buf, stdout);
+      } else {
+        fputs(s, stdout);
+      }
+      } else {
+        fputs(s, stdout);
+*/
+      }
+    //fputc('\n', stdout);
+    char date[22];
+    time_t t = mktime(&tmStruct);
+    if( t != -1 )
+      {
+      if( gdcm::System::FormatDateTime(date, t) )
+        out = date;
+      }
+    }
+  obj.free();
+  return out;
+}
+
+std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
+{
+  Object obj;
+  GooString *s1;
+  GBool isUnicode;
+  Unicode u;
+  char buf[8];
+  int i, n;
+  std::string out;
+
+  if (infoDict->lookup((char*)key, &obj)->isString())
+    {
+    s1 = obj.getString();
+    if ((s1->getChar(0) & 0xff) == 0xfe &&
+      (s1->getChar(1) & 0xff) == 0xff)
+      {
+      isUnicode = gTrue;
+      i = 2;
+      }
+    else 
+      {
+      isUnicode = gFalse;
+      i = 0;
+      }
+    while (i < obj.getString()->getLength())
+      {
+      if (isUnicode)
+        {
+        u = ((s1->getChar(i) & 0xff) << 8) |
+          (s1->getChar(i+1) & 0xff);
+        i += 2;
+        }
+      else
+        {
+        u = pdfDocEncoding[s1->getChar(i) & 0xff];
+        ++i;
+        }
+      n = uMap->mapUnicode(u, buf, sizeof(buf));
+      //fwrite(buf,1,n,stdout);
+      out.append( std::string(buf, n) );
+      }
+    }
+  obj.free();
+  return out;
+}
+#endif
+
+
 void PrintVersion()
 {
   std::cout << "gdcminfo: gdcm " << gdcm::Version::GetVersion() << " ";
@@ -284,6 +402,113 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
       std::cout << "md5sum: " << digest << std::endl;
       delete[] buffer;
       }
+    }
+  else if ( ms == gdcm::MediaStorage::EncapsulatedPDFStorage ) 
+    {
+#ifdef GDCM_USE_SYSTEM_POPPLER
+  const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x42,0x11) );
+  const gdcm::ByteValue* bv = de.GetByteValue();
+  const char *p = bv->GetPointer();
+    Object appearDict;
+  //appearDict.initDict(xref);
+  //appearDict.dictAdd(copyString("Length"),
+	//	     obj1.initInt(appearBuf->getLength()));
+  //appearDict.dictAdd(copyString("Subtype"), obj1.initName("Form"));
+  //obj1.initArray(xref);
+  //obj1.arrayAdd(obj2.initReal(0));
+  //obj1.arrayAdd(obj2.initReal(0));
+  //obj1.arrayAdd(obj2.initReal(xMax - xMin));
+  //obj1.arrayAdd(obj2.initReal(yMax - yMin));
+  //appearDict.dictAdd(copyString("BBox"), &obj1);
+
+  MemStream *appearStream;
+
+  appearStream = new MemStream((char*)bv->GetPointer(), 0,
+			       bv->GetLength(), &appearDict);
+  GooString *ownerPW, *userPW;
+  ownerPW = NULL;
+  userPW = NULL;
+
+  PDFDoc *doc;
+    doc = new PDFDoc(appearStream, ownerPW, userPW);
+
+  std::string title;
+  std::string subject;
+  std::string keywords;
+  std::string author;
+  std::string creator;
+  std::string producer;
+  std::string creationdate;
+  std::string moddate;
+
+  UnicodeMap *uMap;
+  globalParams = new GlobalParams();
+  uMap = globalParams->getTextEncoding();
+
+  Object info;
+  if (doc->isOk())
+    {
+    doc->getDocInfo(&info);
+    if (info.isDict())
+      {
+      title        = getInfoString(info.getDict(), "Title",    uMap);
+      subject      = getInfoString(info.getDict(), "Subject",  uMap);
+      keywords     = getInfoString(info.getDict(), "Keywords", uMap);
+      author       = getInfoString(info.getDict(), "Author",   uMap);
+      creator      = getInfoString(info.getDict(), "Creator",  uMap);
+      producer     = getInfoString(info.getDict(), "Producer", uMap);
+      creationdate = getInfoDate(  info.getDict(), "CreationDate"  );
+      moddate      = getInfoDate(  info.getDict(), "ModDate"       );
+      info.free();
+      }
+   const char *tagged = doc->getStructTreeRoot()->isDict() ? "yes" : "no";
+   int pages = doc->getNumPages();
+  const char *encrypted = doc->isEncrypted() ? "yes" : "no";
+  //  printf("yes (print:%s copy:%s change:%s addNotes:%s)\n",
+	//   doc->okToPrint(gTrue) ? "yes" : "no",
+	//   doc->okToCopy(gTrue) ? "yes" : "no",
+	//   doc->okToChange(gTrue) ? "yes" : "no",
+	//   doc->okToAddNotes(gTrue) ? "yes" : "no");
+  //} else {
+  //  printf("no\n");
+  //}
+
+  // print linearization info
+  const char *optimized = doc->isLinearized() ? "yes" : "no";
+
+  // print PDF version
+  float pdfversion = doc->getPDFVersion();
+
+
+  // print page count
+  printf("Pages:          %d\n", doc->getNumPages());
+
+    std::cout << "PDF Info:" << std::endl;
+    std::cout << "  Title:          " << title << std::endl;
+    std::cout << "  Subject:        " << subject << std::endl;
+    std::cout << "  Keywords:       " << keywords << std::endl;
+    std::cout << "  Author:         " << author << std::endl;
+    std::cout << "  Creator:        " << creator << std::endl;
+    std::cout << "  Producer:       " << producer << std::endl;
+    std::cout << "  CreationDate:   " << creationdate << std::endl;
+    std::cout << "  ModDate:        " << moddate << std::endl;
+    std::cout << "  Tagged:         " << tagged << std::endl;
+    std::cout << "  Pages:          " << pages << std::endl;
+    std::cout << "  Encrypted:      " << encrypted << std::endl;
+    //std::cout << "Page size:      " << subject << std::endl;
+    std::cout << "  File size:      " << bv->GetLength() << std::endl;
+    std::cout << "  Optimized:      " << optimized << std::endl;
+    std::cout << "  PDF version:    " << pdfversion << std::endl;
+
+    }
+  else
+    {
+    std::cout << "Problem reading Encapsulated PDF " << std::endl;
+    }
+  
+#else // GDCM_USE_SYSTEM_POPPLER
+    std::cout << "  Encapsulated PDF File" << std::endl;
+#endif // GDCM_USE_SYSTEM_POPPLER
     }
 // Do the IOD verification !
     bool v = defs.Verify( file );

@@ -21,6 +21,12 @@
 namespace gdcm
 {
 
+/**
+ * \brief AnonymizeEvent
+ * Special type of event triggered during the Anonymization process
+ *
+ * \see Anonymizer
+ */
 class  AnonymizeEvent : public AnyEvent
 {
 public:

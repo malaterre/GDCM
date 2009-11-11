@@ -31,6 +31,8 @@ def TestDCMTKMD5( filename, verbose = False ):
   'dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents',
   'dicomdir_With_embedded_icons',
   # Unsupported file:
+  'MR_Spectroscopy_SIEMENS_OF.dcm',
+  'ELSCINT1_PMSCT_RLE1.dcm',
   'SignedShortLosslessBug.dcm',
   'JDDICOM_Sample2.dcm',
   'GE_DLX-8-MONO2-PrivateSyntax.dcm',

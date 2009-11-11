@@ -8,7 +8,7 @@ To build the cmd line applications:
 GDCM_BUILD_APPLICATIONS:BOOL=ON
 To build shared libs:
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
-To build the documentation:
+To build the documentation (need doxygen >= 1.6.1)
 GDCM_DOCUMENTATION:BOOL=ON
 
 You should really consider:

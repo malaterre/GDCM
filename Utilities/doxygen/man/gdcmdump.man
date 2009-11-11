@@ -78,7 +78,7 @@ $ gdcmdump GE_DLX-8-MONO2-PrivateSyntax.dcm
 \&...
 (0008,0000) ?? (UL) 434                                           # 4,1 Generic Group Length
 (0008,0005) ?? (CS) [ISO_IR 100]                                  # 10,1-n Specific Character Set
-(0008,0008) ?? (CS) [ORIGINAL\PRIMARY\SINGLE PLANE ]              # 30,2-n Image Type
+(0008,0008) ?? (CS) [ORIGINAL\\PRIMARY\\SINGLE PLANE ]              # 30,2-n Image Type
 (0008,0016) ?? (UI) [1.2.840.10008.5.1.4.1.1.12.1]                # 28,1 SOP Class UID
 (0008,0018) ?? (UI) [1.2.840.113619.2.16.1.0.906539207.1.24207]   # 42,1 SOP Instance UID
 (0008,0020) ?? (DA) [19980923]                                    # 8,1 Study Date

@@ -2,8 +2,7 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
-  TestAnonymizer2
-  TestDataElementValueAsSQ
+  #TestAnonymizer2
   TestSpacing
   TestFileExplicitFilter
   TestImageFragmentSplitter
@@ -38,7 +37,6 @@ SET(MSFF_TEST_SRCS
   TestImageReader
   TestDirectionCosines
   TestImageWriter
-  TestImageWriter2
   TestCodec
   TestPDFCodec
   TestRLECodec
@@ -68,6 +66,8 @@ IF(GDCM_DATA_ROOT)
   TestIPPSorter
   TestIPPSorter2
   TestCopyDataSet
+  TestDataElementValueAsSQ
+  TestImageWriter2
       )
 ENDIF(GDCM_DATA_ROOT)
 

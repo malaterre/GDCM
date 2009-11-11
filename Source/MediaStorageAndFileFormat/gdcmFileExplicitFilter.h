@@ -19,6 +19,7 @@
 
 namespace gdcm
 {
+class Dicts;
 
 /**
  * \brief FileExplicitFilter class
@@ -29,7 +30,6 @@ namespace gdcm
  *   - One has to make sure that Vr is valid for the encoding
  *   - One has to make sure that VR 16bits can store the original value length
  */
-class Dicts;
 class GDCM_EXPORT FileExplicitFilter
 {
 public:

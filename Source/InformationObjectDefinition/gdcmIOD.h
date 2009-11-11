@@ -23,13 +23,14 @@
 
 namespace gdcm
 {
+class DataSet;
+
 /**
  * \brief Class for representing a IOD
  * \note bla
  * 
  * \sa Dict
  */
-class DataSet;
 class GDCM_EXPORT IOD
 {
 public:
