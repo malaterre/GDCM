@@ -58,7 +58,7 @@ IF(GDCM_USE_SYSTEM_POPPLER)
     list(APPEND libpoppler_flags -DLIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
   ENDIF(LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
   CHECK_CXX_SOURCE_COMPILES(
-    "\#include <poppler/PDFDoc.h>\nint main() { PDFDoc d; d.getPDFVersion(); return 0;}"
+    "\#include <poppler/PDFDoc.h>\nint main() { PDFDoc d((GooString*)NULL,(GooString*)NULL,(GooString*)NULL); d.getPDFVersion(); return 0;}"
     LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
   IF(LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
     list(APPEND libpoppler_flags -DLIBPOPPLER_PDFDOC_HAS_PDFVERSION)
