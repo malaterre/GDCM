@@ -481,7 +481,11 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
   const char *optimized = doc->isLinearized() ? "yes" : "no";
 
   // print PDF version
+#ifdef LIBPOPPLER_PDFDOC_HAS_PDFVERSION
   float pdfversion = doc->getPDFVersion();
+#else
+  float pdfversion = doc->getPDFMajorVersion() + 0.1 * doc->getPDFMinorVersion();
+#endif
 
 
   // print page count
