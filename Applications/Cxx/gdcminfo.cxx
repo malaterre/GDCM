@@ -442,7 +442,11 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
   std::string moddate;
 
   UnicodeMap *uMap;
+#ifdef LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM
+  globalParams = new GlobalParams(0);
+#else
   globalParams = new GlobalParams();
+#endif
   uMap = globalParams->getTextEncoding();
 
   Object info;

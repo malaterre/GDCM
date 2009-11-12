@@ -43,6 +43,9 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmtar
   gdcminfo
   )
+# poppler people have the worse API backward compatibility I know of.
+# there is absolutely no way to check the version of poppler 
+# they change the API during a minor change of the version
 IF(GDCM_USE_SYSTEM_POPPLER)
   INCLUDE(CheckCXXSourceCompiles)
   SET(CMAKE_REQUIRED_INCLUDES ${POPPLER_INCLUDE_DIRS})
@@ -50,11 +53,24 @@ IF(GDCM_USE_SYSTEM_POPPLER)
   CHECK_CXX_SOURCE_COMPILES(
     "\#include <poppler/GlobalParams.h>\nint main() { globalParams = new GlobalParams(0); return 0;}"
     LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
+  set(libpoppler_flags)
   IF(LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
+  ENDIF(LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
+  CHECK_CXX_SOURCE_COMPILES(
+    "\#include <poppler/PDFDoc.h>\nint main() { PDFDoc d; d.getPDFVersion(); return 0;}"
+    LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
+  IF(LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_PDFDOC_HAS_PDFVERSION)
+  ENDIF(LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
+  IF(libpoppler_flags)
+    SET_SOURCE_FILES_PROPERTIES(
+      ${CMAKE_CURRENT_SOURCE_DIR}/gdcminfo.cxx
+      PROPERTIES COMPILE_FLAGS ${libpoppler_flags})
     SET_SOURCE_FILES_PROPERTIES(
       ${CMAKE_CURRENT_SOURCE_DIR}/gdcmpdf.cxx
-      PROPERTIES COMPILE_FLAGS -DLIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
-  ENDIF(LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
+      PROPERTIES COMPILE_FLAGS ${libpoppler_flags})
+  endif(libpoppler_flags)
   INCLUDE_DIRECTORIES(${POPPLER_INCLUDE_DIRS})
   SET(GDCM_EXECUTABLE_NAME
     ${GDCM_EXECUTABLE_NAME}
