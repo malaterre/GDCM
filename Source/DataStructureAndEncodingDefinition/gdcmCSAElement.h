@@ -65,15 +65,20 @@ public:
     //assert( DataField == 0 );
     DataField = vl;
   }
+  /// Check if CSA Element is empty
   bool IsEmpty() const { return DataField == 0; }
+
+  /// Set
   void SetByteValue(const char *array, VL length)
-  {
+    {
     ByteValue *bv = new ByteValue(array,length);
     SetValue( *bv );
-  }
+    }
+  /// Return the Value of CSAElement as a ByteValue (if possible)
+  /// \warning: You need to check for NULL return value
   const ByteValue* GetByteValue() const {
-    const Value &v = GetValue();
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    // Get the raw pointer from the gdcm::SmartPointer
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(ValueField.GetPointer());
     return bv; // Will return NULL if not ByteValue
   }
 
