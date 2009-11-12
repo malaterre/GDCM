@@ -226,10 +226,10 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   )
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
   # because gdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-  #  INSTALL(FILES 
-  #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
+    INSTALL(FILES 
+      ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
   #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
-  #    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
-  #  )
+      DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
+    )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
