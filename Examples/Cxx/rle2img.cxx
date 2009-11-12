@@ -34,7 +34,7 @@
  * See post at:
  * http://groups.google.com/group/comp.protocols.dicom/msg/f2b99bf706a7f8ca
  * 
- * Thanks to Jesús Spínola, for more datasets,
+ * Thanks to Jesus Spinola, for more datasets,
  * http://www.itk.org/pipermail/insight-users/2008-April/025571.html
  *
  * And last but not least, a very big thank to Ivo van Poorten, without
