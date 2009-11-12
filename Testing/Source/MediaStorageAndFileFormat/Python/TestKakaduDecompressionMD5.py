@@ -58,8 +58,11 @@ def TestKakadu(filename, kdu_expand):
     img.Read()
     if img.GetImage().GetDimension(2) != 1:
       print "Test do not handle multiframes for now"
+    elif img.GetImage().GetPixelFormat().GetSamplesPerPixel() != 1:
+      print "Test do not handle RGB for now. kdu_expand expand as RRR GGG BBB by default"
     else:
       print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      print "raw file was: %s"%(output_raw)
       retval = 1
 
   return retval

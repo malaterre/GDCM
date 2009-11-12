@@ -41,7 +41,7 @@ if __name__ == "__main__":
   print ir.GetDimension(1);
   print "Dims:",dims
 
-  # Just for fun:
+  #  Just for fun:
   dircos =  ir.GetDirectionCosines()
   t = gdcm.Orientation.GetType(dircos)
   l = gdcm.Orientation.GetLabel(t)

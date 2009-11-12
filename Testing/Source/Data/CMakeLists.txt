@@ -117,7 +117,8 @@ BogusItemStartItemEnd.dcm
   kos.dcm
 
   # It started failing in ~2009
-  MR-MONO2-12-shoulder.dcm
+  #MR-MONO2-12-shoulder.dcm
+  MR-MONO2-12-angio-an1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

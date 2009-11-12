@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
   filenames = d.GetFilenames()
 
-  # Get rid of any Warning while parsing the DICOM files
+  #  Get rid of any Warning while parsing the DICOM files
   gdcm.Trace.WarningOff()
 
   # instanciate Scanner:
