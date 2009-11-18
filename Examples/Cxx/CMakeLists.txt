@@ -14,7 +14,7 @@ INCLUDE_DIRECTORIES(
 IF(GDCM_BINARY_DIR)
 FIND_PACKAGE(MAGIC)
 
-find_package(Qt4 4.4.3 COMPONENTS QtGUI)
+find_package(Qt4 4.4.3 COMPONENTS QtCore QtGui)
 # cmake 2.6.4 does not set it to advanced
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
 
@@ -49,6 +49,8 @@ SET(EXAMPLES_SRCS
 IF(QT4_FOUND)
   INCLUDE(${QT_USE_FILE})
   ADD_EXECUTABLE(ConvertToQImage ConvertToQImage.cxx)
+  # qtGUI will resolved QImage symbol
+  # qtcore will resolve qstring symbols
   TARGET_LINK_LIBRARIES(ConvertToQImage gdcmMSFF ${QT_LIBRARIES})
 ENDIF(QT4_FOUND)
 
