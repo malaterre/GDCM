@@ -101,7 +101,8 @@ int TestFilename(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 #else
-  char fn1[] = {
+  char ifn2[] = "α.dcm"; //MM: I do not think this is legal C++...
+  char ifn1[] = {
   (char)0xCE,
   (char)0xB1,
   '.',
@@ -109,23 +110,50 @@ int TestFilename(int argc, char *argv[])
   'c',
   'm',
   0}; // trailing NULL char
-  const char *fn = gdcm::Testing::GetTempFilename(fn1);
-  std::ofstream outputFileStream( fn );
+  std::string sfn1 = gdcm::Testing::GetTempFilename(ifn1);
+  const char *fn1 = sfn1.c_str();
+  std::string sfn2 = gdcm::Testing::GetTempFilename(ifn2);
+  const char *fn2 = sfn2.c_str();
+  std::ofstream outputFileStream( fn1 );
   if ( ! outputFileStream.is_open() )
     {
-    std::cerr << "Failed to create UTF-8 file: " << fn << std::endl;
+    std::cerr << "Failed to create UTF-8 file: " << fn1 << std::endl;
     return EXIT_FAILURE;
     }
-  outputFileStream << "bla";
+  const char secret[]= "My_secret_pass_phrase";
+  outputFileStream << secret;
   outputFileStream.close();
-  if( !gdcm::System::FileExists(fn) )
+  if( !gdcm::System::FileExists(fn1) )
     {
-    std::cerr << "File does not exist: " << fn << std::endl;
+    std::cerr << "File does not exist: " << fn1 << std::endl;
     return EXIT_FAILURE;
     }
-  if( !gdcm::System::RemoveFile(fn) )
+
+  // Now open version 2 (different encoding)
+  std::ifstream inputFileStream( fn2 );
+  if ( ! inputFileStream.is_open() )
     {
-    std::cerr << "Could not remvoe: " << fn << std::endl;
+    std::cerr << "Failed to open UTF-8 file: " << fn2 << std::endl;
+    return EXIT_FAILURE;
+    }
+  std::string ssecret;
+  inputFileStream >> ssecret;
+  inputFileStream.close();
+  if( ssecret != secret )
+    {
+    std::cerr << "Found: " << ssecret << " should have been " << secret << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  if( !gdcm::System::RemoveFile(fn1) )
+    {
+    std::cerr << "Could not remvoe #1: " << fn1 << std::endl;
+    return EXIT_FAILURE;
+    }
+  // cannot remove twice the same file:
+  if( gdcm::System::RemoveFile(fn2) )
+    {
+    std::cerr << "Could remvoe #2 a second time...seriously " << fn2 << std::endl;
     return EXIT_FAILURE;
     }
 #endif
