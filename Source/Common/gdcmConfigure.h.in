@@ -113,6 +113,12 @@
 #cmakedefine HAVE_GETTIMEOFDAY
 #endif
 
+// MM: I have a feeling that if HAVE_GETTIMEOFDAY, then UNICODE filename 
+// are expected to be specified as UTF-16, but if no API exist for UTF-16
+// at std::ifstream level, then const char* of std::ifstream might accept
+// UTF-8
+#cmakedefine HAVE_WCHAR_IFSTREAM
+
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
 /* To Remove code that support broken DICOM implementation and therefore

@@ -83,12 +83,30 @@ int TestFilename(int argc, char *argv[])
   {
   const char *curprocfn = gdcm::System::GetCurrentProcessFileName();
   if( curprocfn )
-  {
-gdcm::Filename fn( curprocfn );
-std::string str = fn.GetPath();
-std::cout << str << std::endl;
+    {
+    gdcm::Filename fn( curprocfn );
+    std::string str = fn.GetPath();
+    std::cout << str << std::endl;
+    }
   }
-  }
+
+{
+#ifdef HAVE_WCHAR_IFSTREAM
+  const wchar_t fn[] = L"UnicodeFileName.dcm"; 
+  std::ifstream inputFileStream( fn );
+  (void)inputFileStream;
+#else
+  char fn[] = {
+  (char)0xCE,
+  (char)0xB1,
+  '.',
+  'd',
+  'c',
+  'm',
+  0}; // trailing NULL char
+  std::ifstream inputFileStream( fn );
+#endif
+}
 
   return 0;
 }
