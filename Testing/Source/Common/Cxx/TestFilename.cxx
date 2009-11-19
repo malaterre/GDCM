@@ -131,6 +131,55 @@ int TestFilename(int argc, char *argv[])
 #endif
 }
 
+{
+  // Apparently there is an issue with long pathanem i nWin32 system:
+  // http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
+  // The only way to work around the 260 byte limitation it appears as if we
+  // have to deal with universal naming convention (UNC) path.
+  const char *subdir = 
+    "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
+    "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
+    "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
+    "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/";
+  const char *directory = gdcm::Testing::GetTempDirectory(subdir);
+  if( !gdcm::System::MakeDirectory(directory))
+    {
+    std::cerr << "Failed to create directory with long path: " << directory << std::endl;
+    return EXIT_FAILURE;
+    }
+std::string sfn = gdcm::Testing::GetTempFilename( "dummy.dcm", subdir );
+  std::cerr << "Long path is: " << sfn.size() << std::endl;
+  std::cerr << "Long path is: " << sfn << std::endl;
+  if( sfn.size() > 260 )
+    {
+    const char *fn = sfn.c_str();
+    // Should demontrate the issue
+  std::ofstream outputFileStream( fn );
+  if ( ! outputFileStream.is_open() )
+    {
+    std::cerr << "Failed to create file with long path: " << fn << std::endl;
+    return EXIT_FAILURE;
+    }
+  outputFileStream.close();
+  if( !gdcm::System::FileExists(fn) )
+    {
+    std::cerr << "File does not exist: " << fn << std::endl;
+    return EXIT_FAILURE;
+    }
+  if( !gdcm::System::RemoveFile(fn) )
+    {
+    std::cerr << "Could not remvoe: " << fn << std::endl;
+    return EXIT_FAILURE;
+    }
+
+    }
+else
+{
+    std::cerr << "seriously " << fn << std::endl;
+    return EXIT_FAILURE;
+}
+}
+
   return 0;
 }
 
