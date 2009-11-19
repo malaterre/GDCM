@@ -17,6 +17,7 @@
 #include "gdcmTesting.h"
 
 #include <iostream>
+#include <cstdlib> // EXIT_FAILURE
 
 /*!
  * \test TestFilename
@@ -94,9 +95,13 @@ int TestFilename(int argc, char *argv[])
 #ifdef HAVE_WCHAR_IFSTREAM
   const wchar_t fn[] = L"UnicodeFileName.dcm"; 
   std::ifstream inputFileStream( fn );
-  (void)inputFileStream;
+  if ( ! inputFileStream.is_open() )
+    {
+    std::cerr << "Failed to read UTF-16" << std::endl;
+    return EXIT_FAILURE;
+    }
 #else
-  char fn[] = {
+  char fn1[] = {
   (char)0xCE,
   (char)0xB1,
   '.',
@@ -104,7 +109,25 @@ int TestFilename(int argc, char *argv[])
   'c',
   'm',
   0}; // trailing NULL char
-  std::ifstream inputFileStream( fn );
+  const char *fn = gdcm::Testing::GetTempFilename(fn1);
+  std::ofstream outputFileStream( fn );
+  if ( ! outputFileStream.is_open() )
+    {
+    std::cerr << "Failed to create UTF-8 file: " << fn << std::endl;
+    return EXIT_FAILURE;
+    }
+  outputFileStream << "bla";
+  outputFileStream.close();
+  if( !gdcm::System::FileExists(fn) )
+    {
+    std::cerr << "File does not exist: " << fn << std::endl;
+    return EXIT_FAILURE;
+    }
+  if( !gdcm::System::RemoveFile(fn) )
+    {
+    std::cerr << "Could not remvoe: " << fn << std::endl;
+    return EXIT_FAILURE;
+    }
 #endif
 }
 

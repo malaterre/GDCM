@@ -42,7 +42,7 @@ CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 
 INCLUDE(CheckCXXSourceCompiles)
 CHECK_CXX_SOURCE_COMPILES(
-  "\#include <fstream>\nint main() { const wchar_t fn[]; std::ifstream is( fn ); return 0;}"
+  "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); return 0;}"
   HAVE_WCHAR_IFSTREAM)
 
 #-----------------------------------------------------------------------------

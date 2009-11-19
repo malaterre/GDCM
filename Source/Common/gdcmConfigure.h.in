@@ -113,7 +113,7 @@
 #cmakedefine HAVE_GETTIMEOFDAY
 #endif
 
-// MM: I have a feeling that if HAVE_GETTIMEOFDAY, then UNICODE filename 
+// MM: I have a feeling that if HAVE_WCHAR_IFSTREAM, then UNICODE filename 
 // are expected to be specified as UTF-16, but if no API exist for UTF-16
 // at std::ifstream level, then const char* of std::ifstream might accept
 // UTF-8
