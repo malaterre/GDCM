@@ -28,7 +28,7 @@ class GDCM_EXPORT System
 {
 public:
   /// Create a directory
-  static bool MakeDirectory(const char *path); 
+  static bool MakeDirectory(const char *path);
   /// Check whether the specified file exist on the sytem
   static bool FileExists(const char* filename);
   /// Check whether the file specified is a directory:
