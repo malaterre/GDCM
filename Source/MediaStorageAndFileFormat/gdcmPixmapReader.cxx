@@ -187,56 +187,6 @@ bool PixmapReader::Read()
   return res;
 }
 
-signed short PixmapReader::ReadSSFromTag( Tag const &t, std::stringstream &ss,
-  std::string &conversion )
-{
-  const ByteValue *bv = GetPointerFromElement(t);
-  Element<VR::SS,VM::VM1> el;
-  const char *array = bv->GetPointer();
-  const VL &length = bv->GetLength();
-  assert( bv->GetLength() == 2 );
-  //conversion = std::string(bv->GetPointer(), 2); 
-  //ss.clear();
-  //ss.str( conversion );
-  //el.Read( ss );
-  memcpy( (void*)(&el), array, el.GetLength() * sizeof( VRToType<VR::SS>::Type) );
-  return el.GetValue();
-}
-
-unsigned short PixmapReader::ReadUSFromTag( Tag const &t, std::stringstream &ss,
-  std::string &conversion )
-{
-  const ByteValue *bv = GetPointerFromElement(t);
-  assert( bv );
-  Element<VR::US,VM::VM1> el;
-  const char *array = bv->GetPointer();
-  const VL &length = bv->GetLength();
-  assert( bv->GetLength() == 2 );
-  //conversion = std::string(bv->GetPointer(), 2); 
-  //ss.clear();
-  //ss.str( conversion );
-  //el.Read( ss );
-  //el.SetArray( (VRToType<VR::US>::Type*)array, length, true );
-  memcpy( (void*)(&el), array, el.GetLength() * sizeof( VRToType<VR::US>::Type) );
-  return el.GetValue();
-}
-
-int PixmapReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
-  std::string &conversion )
-{
-  const ByteValue *bv = GetPointerFromElement(t);
-  Element<VR::IS,VM::VM1> el;
-  conversion = std::string(bv->GetPointer(), bv->GetLength());
-  assert( conversion.size() == bv->GetLength() );
-  const char *debug = conversion.c_str();
-  assert( debug[bv->GetLength()] == '\0' ); 
-  ss.clear();
-  ss.str( conversion );
-  el.Read( ss );
-  int r = el.GetValue();
-  return r;
-}
-
 // PICKER-16-MONO2-Nested_icon.dcm
 void DoIconImage(const DataSet& rootds, Pixmap& image)
 {
@@ -763,8 +713,11 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   const Tag tnumberofframes = Tag(0x0028, 0x0008);
   if( ds.FindDataElement( tnumberofframes ) /*&& ms != MediaStorage::SecondaryCaptureImageStorage*/ )
     {
-    int numberofframes = ReadISFromTag( tnumberofframes, ss, conversion );
-    assert( numberofframes != 0 );
+    const DataElement& de = ds.GetDataElement( tnumberofframes );
+    Attribute<0x0028,0x0008> at = { 0 };
+    at.SetFromDataElement( de );
+    int numberofframes = at.GetValue();
+    // What should I do when numberofframes == 0 ?
     if( numberofframes > 1 )
       {
       PixelData->SetNumberOfDimensions(3);
