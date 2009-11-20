@@ -57,14 +57,6 @@ protected:
   virtual bool ReadImage(MediaStorage const &ms);
   virtual bool ReadACRNEMAImage();
   
-  // ugliest thing ever:
-  signed short ReadSSFromTag( Tag const &t, std::stringstream &ss,
-    std::string &conversion );
-  unsigned short ReadUSFromTag( Tag const &t, std::stringstream &ss,
-    std::string &conversion );
-  int ReadISFromTag( Tag const &t, std::stringstream &ss,
-    std::string &conversion );
-
   SmartPointer<Pixmap> PixelData;
 };
 
