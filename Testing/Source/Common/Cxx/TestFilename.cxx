@@ -93,13 +93,15 @@ int TestFilename(int argc, char *argv[])
 
 {
 #ifdef HAVE_WCHAR_IFSTREAM
-  const wchar_t fn[] = L"UnicodeFileName.dcm"; 
-  std::ifstream inputFileStream( fn );
-  if ( ! inputFileStream.is_open() )
+  const wchar_t ifn[] = L"UnicodeFileName.dcm"; 
+  const char* fn = gdcm::Testing::GetTempFilename(ifn);
+  std::ofstream outputFileStream( fn );
+  if ( ! outputFileStream.is_open() )
     {
-    std::cerr << "Failed to read UTF-16" << std::endl;
+    std::cerr << "Failed to read UTF-16: " << fn << std::endl;
     return EXIT_FAILURE;
     }
+  outputFileStream.close();
 #else
   char ifn2[] = "α.dcm"; //MM: I do not think this is legal C++...
   char ifn1[] = {
