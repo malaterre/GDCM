@@ -293,8 +293,8 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   gdcm::Attribute<0x0028,0x0030> at;
   at.SetFromDataElement( de );
   //at.Print( std::cout );
-  sp.push_back( at.GetValue(0) );
   sp.push_back( at.GetValue(1) );
+  sp.push_back( at.GetValue(0) );
 
   // BUG ! Check for instace:
   // gdcmData/BRTUM001.dcm
@@ -847,13 +847,15 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         assert( bv );
         std::string s = std::string( bv->GetPointer(), bv->GetLength() );
         ss.str( s );
-        // Stupid file: ct-mono2-8bit.dcm
+        // Stupid file: CT-MONO2-8-abdo.dcm
         // The spacing is something like that: [0.2\0\0.200000]
         // I would need to throw an expection that VM is not compatible
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
+        assert( el.GetLength() == 2 ); 
         for(unsigned long i = 0; i < el.GetLength(); ++i) 
           sp.push_back( el.GetValue(i) );
+        std::swap( sp[0], sp[1]);
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
       break;
@@ -1054,8 +1056,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     //Attribute<0x0018,0x0050> at2;
     //at2.SetValue( spacing[2] );
     Attribute<0x0028,0x0030> at1;
-    at1.SetValue( spacing[0], 0 );
-    at1.SetValue( spacing[1], 1 );
+    at1.SetValue( spacing[1], 0 );
+    at1.SetValue( spacing[0], 1 );
     subds2.Replace( at1.GetAsDataElement() );
     //subds2.Replace( at2.GetAsDataElement() );
 
@@ -1090,6 +1092,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             {
             el.SetValue( spacing[i], i );
             }
+          el.SetValue( spacing[1], 0 );
+          el.SetValue( spacing[0], 1 );
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
           el.Write( os );
