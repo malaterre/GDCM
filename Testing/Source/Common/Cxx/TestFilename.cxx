@@ -103,8 +103,8 @@ int TestFilename(int argc, char *argv[])
     }
   outputFileStream.close();
 #else
-  char ifn2[] = "α.dcm"; //MM: I do not think this is legal C++...
-  // char ifn2[] = "\xCE\xB1.dcm"; // this is the proper way to write it, but then the test is not proving anything...
+  //char ifn2[] = "α.dcm"; //MM: I do not think this is legal C++...
+  char ifn2[] = "\xCE\xB1.dcm"; // this is the proper way to write it (portable)
   char ifn1[] = {
   (char)0xCE,
   (char)0xB1,
