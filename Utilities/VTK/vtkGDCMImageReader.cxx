@@ -634,7 +634,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   this->DataExtent[3] = dims[1] - 1;
   if( image.GetNumberOfDimensions() == 2 )
     {
-    // This is just so much painfull to deal with DICOM / VTK
+    // This is just so much painful to deal with DICOM / VTK
     // they simply assume that number of file is equal to the dimension
     // of the last axe (see vtkImageReader2::SetFileNames )
     if ( this->FileNames && this->FileNames->GetNumberOfValues() > 1 )
@@ -669,55 +669,55 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DataSpacing[2] = image.GetSpacing(2);
     }
 
-    const double *origin = image.GetOrigin();
-    if( origin )
-      {
-      this->ImagePositionPatient[0] = image.GetOrigin(0);
-      this->ImagePositionPatient[1] = image.GetOrigin(1);
-      this->ImagePositionPatient[2] = image.GetOrigin(2);
-      }
+  const double *origin = image.GetOrigin();
+  if( origin )
+    {
+    this->ImagePositionPatient[0] = image.GetOrigin(0);
+    this->ImagePositionPatient[1] = image.GetOrigin(1);
+    this->ImagePositionPatient[2] = image.GetOrigin(2);
+    }
 
-    const double *dircos = image.GetDirectionCosines();
-    if( dircos )
-      {
-      this->DirectionCosines->SetElement(0,0, dircos[0]);
-      this->DirectionCosines->SetElement(1,0, dircos[1]);
-      this->DirectionCosines->SetElement(2,0, dircos[2]);
-      this->DirectionCosines->SetElement(0,1, dircos[3]);
-      this->DirectionCosines->SetElement(1,1, dircos[4]);
-      this->DirectionCosines->SetElement(2,1, dircos[5]);
-      for(int i=0;i<6;++i)
-        this->ImageOrientationPatient[i] = dircos[i];
+  const double *dircos = image.GetDirectionCosines();
+  if( dircos )
+    {
+    this->DirectionCosines->SetElement(0,0, dircos[0]);
+    this->DirectionCosines->SetElement(1,0, dircos[1]);
+    this->DirectionCosines->SetElement(2,0, dircos[2]);
+    this->DirectionCosines->SetElement(0,1, dircos[3]);
+    this->DirectionCosines->SetElement(1,1, dircos[4]);
+    this->DirectionCosines->SetElement(2,1, dircos[5]);
+    for(int i=0;i<6;++i)
+      this->ImageOrientationPatient[i] = dircos[i];
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
-      this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
+    this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
 #endif
-      }
-    // Apply transform:
-    if( dircos && origin )
+    }
+  // Apply transform:
+  if( dircos && origin )
+    {
+    if( this->FileLowerLeft )
       {
-      if( this->FileLowerLeft )
-        {
-        // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
-        // are the same:
-        this->DataOrigin[0] = origin[0];
-        this->DataOrigin[1] = origin[1];
-        this->DataOrigin[2] = origin[2];
-        }
-      else
-        {
-        // We are doing the Y-flip:
-        // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
-        // Step 1: Compute norm of translation vector:
-        // Because position is in the center of the pixel, we need to substract 1 to the dimY:
-        assert( dims[1] >=1 );
-        double norm = (dims[1] - 1) * this->DataSpacing[1];
-        // Step 2: translate:
-        this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
-        this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
-        this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
-        }
+      // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
+      // are the same:
+      this->DataOrigin[0] = origin[0];
+      this->DataOrigin[1] = origin[1];
+      this->DataOrigin[2] = origin[2];
       }
-    // Need to set the rest to 0 ???
+    else
+      {
+      // We are doing the Y-flip:
+      // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
+      // Step 1: Compute norm of translation vector:
+      // Because position is in the center of the pixel, we need to substract 1 to the dimY:
+      assert( dims[1] >=1 );
+      double norm = (dims[1] - 1) * this->DataSpacing[1];
+      // Step 2: translate:
+      this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
+      this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
+      this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
+      }
+    }
+  // Need to set the rest to 0 ???
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();
