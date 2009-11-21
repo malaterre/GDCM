@@ -51,6 +51,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileSet &f)
 {
+  (void)f; // FIXME
   return os;
 }
 
