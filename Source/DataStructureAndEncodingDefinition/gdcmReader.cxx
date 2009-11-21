@@ -622,6 +622,7 @@ std::istream &is = *Stream;
         catch( std::exception &ex )
           {
           // Ok I get it now... there is absolutely no meta header, giving up
+          (void)ex;
           hasmetaheader = false;
           }
         }
