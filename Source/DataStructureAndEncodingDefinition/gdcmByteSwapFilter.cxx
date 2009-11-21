@@ -34,8 +34,9 @@ ByteSwapFilter::~ByteSwapFilter()
 
 bool ByteSwapFilter::ByteSwap()
 {
-  DataSet::ConstIterator it = DS.Begin();
-  for( ; it != DS.End(); ++it)
+  for(
+    DataSet::ConstIterator it = DS.Begin(); 
+    it != DS.End(); ++it)
     {
     const DataElement &de = *it;
     VR const & vr = de.GetVR();
