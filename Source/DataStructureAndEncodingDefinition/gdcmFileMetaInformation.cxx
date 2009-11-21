@@ -57,7 +57,8 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {
-assert(0);
+  assert(0);
+  (void)imp;
 }
 
 void FileMetaInformation::AppendImplementationClassUID(const char * imp)
@@ -159,6 +160,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   else // Ok there is a value in (0002,0002) let see if it match (0008,0016)
     {
     bool dicomdir = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    (void)dicomdir;
     //if( !dicomdir )
       {
       if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )

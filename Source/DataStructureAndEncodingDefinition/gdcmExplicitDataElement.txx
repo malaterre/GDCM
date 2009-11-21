@@ -83,6 +83,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
     bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+    (void)failed;
     return is;
     //throw Exception( "Unhandled" );
     }
