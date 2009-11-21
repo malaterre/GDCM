@@ -614,8 +614,14 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   interceptslope.resize( 2 );
   interceptslope[0] = 0;
   interceptslope[1] = 1;
-  if( ms == MediaStorage::CTImageStorage || ms == MediaStorage::SecondaryCaptureImageStorage ||
-    ms == MediaStorage::ComputedRadiographyImageStorage || ForceRescaleInterceptSlope 
+  if( ms == MediaStorage::CTImageStorage
+ || ms == MediaStorage::ComputedRadiographyImageStorage
+ /*|| ms == MediaStorage::MRImageStorage // FIXME ! */
+ || ms == MediaStorage::PETImageStorage
+ || ms == MediaStorage::SecondaryCaptureImageStorage
+ || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+ || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+ || ForceRescaleInterceptSlope 
   )
     {
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
