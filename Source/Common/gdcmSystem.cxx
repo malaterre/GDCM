@@ -428,7 +428,9 @@ const char *System::GetCurrentProcessFileName()
    return 0;
 }
 
+#ifdef __USE_GNU
 static void where_am_i() {}
+#endif
 
 const char *System::GetCurrentModuleFileName()
 {
