@@ -183,6 +183,9 @@ int main( int argc, char *argv[] )
   reader->SetFileNames( files );
   reader->Update(); // important
   //reader->GetOutput()->Print( std::cout );
+  //vtkFloatingPointType range[2];
+  //reader->GetOutput()->GetScalarRange(range);
+  //std::cout << "Range: " << range[0] << " " << range[1] << std::endl;
 
   const vtkFloatingPointType *spacing = reader->GetOutput()->GetSpacing();
 
