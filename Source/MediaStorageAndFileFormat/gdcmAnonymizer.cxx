@@ -374,8 +374,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   // might have been created. Only a single Item shall be present.
 
   // Create a Sequence
-  SmartPointer<SequenceOfItems> sq = new SequenceOfItems();
-  sq->SetLengthToUndefined();
+  SmartPointer<SequenceOfItems> sq1 = new SequenceOfItems();
+  sq1->SetLengthToUndefined();
 
   // Create a *single* item
   Item it;
@@ -421,11 +421,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 }
 
   this->InvokeEvent( IterationEvent() );
-  sq->AddItem(it);
+  sq1->AddItem(it);
 
   DataElement des( Tag(0x0400,0x0550) );
   des.SetVR(VR::SQ);
-  des.SetValue(*sq);
+  des.SetValue(*sq1);
   des.SetVLToUndefined();
 
   std::ostringstream os;
@@ -492,12 +492,12 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     // be used by unauthorized entities to identify the patient.
 
     // Insert sequence into data set
-    DataElement des( Tag(0x0400,0x0500) );
-    des.SetVR(VR::SQ);
-    des.SetValue(*sq);
-    des.SetVLToUndefined();
+    DataElement subdes( Tag(0x0400,0x0500) );
+    subdes.SetVR(VR::SQ);
+    subdes.SetValue(*sq);
+    subdes.SetVLToUndefined();
 
-    ds.Insert(des);
+    ds.Insert(subdes);
     }
   this->InvokeEvent( IterationEvent() );
 
@@ -543,7 +543,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
 bool IsVRUI(Tag const &tag)
 {
-  static const Global &g = GlobalInstance;
+  static const Global &g = Global::GetInstance();
   static const Dicts &dicts = g.GetDicts();
   const DictEntry &dictentry = dicts.GetDictEntry(tag);
   if( dictentry.GetVR() == VR::UI ) return true;
@@ -565,8 +565,8 @@ static const Tag SpecialTypeTags[] = {
 
 bool Anonymizer::CanEmptyTag(Tag const &tag)
 {
-  static const Global &g = GlobalInstance;
-  static const Dicts &dicts = g.GetDicts();
+  static const Global &g = Global::GetInstance();
+  //static const Dicts &dicts = g.GetDicts();
   static const Defs &defs = g.GetDefs();
   DataSet &ds = F->GetDataSet();
   Type t = defs.GetTypeFromTag(*F, tag);
