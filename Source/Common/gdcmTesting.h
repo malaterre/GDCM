@@ -81,7 +81,13 @@ public :
   static const char * GetTempDirectory(const char * subdir = 0);
 
   /// NOT THREAD SAFE
+  static const wchar_t *GetTempDirectoryW(const wchar_t * subdir = 0);
+
+  /// NOT THREAD SAFE
   static const char * GetTempFilename(const char *filename, const char * subdir = 0);
+
+  /// NOT THREAD SAFE
+  static const wchar_t* GetTempFilenameW(const wchar_t *filename, const wchar_t* subdir = 0);
 
   static const char *GetSourceDirectory();
 };

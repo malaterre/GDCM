@@ -94,7 +94,7 @@ int TestFilename(int argc, char *argv[])
 {
 #ifdef HAVE_WCHAR_IFSTREAM
   const wchar_t ifn[] = L"UnicodeFileName.dcm"; 
-  const char* fn = gdcm::Testing::GetTempFilename(ifn);
+  const wchar_t* fn = gdcm::Testing::GetTempFilenameW(ifn);
   std::ofstream outputFileStream( fn );
   if ( ! outputFileStream.is_open() )
     {
