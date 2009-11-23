@@ -130,6 +130,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
     }
   catch( Exception &ex )
     {
+    (void)ex;
     VRField = VR::INVALID;
     is.seekg( -2, std::ios::cur );
 
@@ -215,6 +216,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
           }
         catch( std::exception &ex )
           {
+          (void)ex;
           ValueLengthField = ValueField->GetLength();
           }
         return is;

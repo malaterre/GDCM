@@ -232,16 +232,18 @@ std::istream &is = *Stream;
         }
       catch( std::exception &ex )
         {
+        (void)ex;
         // Weird implicit meta header:
         is.seekg(128+4, std::ios::beg );
         try
           {
           F->GetHeader().ReadCompat(is);
           }
-        catch( std::exception &ex )
+        catch( std::exception &ex2 )
           {
           // Ok I get it now... there is absolutely no meta header, giving up
           //hasmetaheader = false;
+          (void)ex2;
           }
         }
       }
@@ -437,7 +439,7 @@ std::istream &is = *Stream;
           F->GetDataSet().Read<VR16ExplicitDataElement,SwapperNoOp>(is);
           // This file can only be rewritten as implicit...
           }
-        catch ( Exception &ex )
+        catch ( Exception &ex1 )
           {
           try
             {
