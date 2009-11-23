@@ -12,8 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#if 0
 #include "gdcmIconImage.h"
+
+namespace gdcm
+{
+} // end namespace gdcm
+
+#if 0
 #include "gdcmRAWCodec.h"
 #include "gdcmSequenceOfFragments.h"
 
