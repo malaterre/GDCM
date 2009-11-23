@@ -633,11 +633,11 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
   //DataSet &ds = F->GetDataSet();
 
   bool canempty = CanEmptyTag( tag );
-  DataElement copy;
   if( !canempty )
     {
     TagValueKey tvk;
     tvk.first = tag;
+    DataElement copy;
     copy = ds.GetDataElement( tag );
     // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
     // has an empty 0008,0018 attribute, let's try to handle that:
@@ -756,8 +756,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //const SequenceOfItems *sq = EncryptedAttributesSequence.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sq = EncryptedAttributesSequence.GetValueAsSQ();
   const Item &item = sq->GetItem(1);
-  const DataSet &nds = item.GetNestedDataSet();
-  const DataElement &EncryptedContent = nds.GetDataElement( Tag(0x0400,0x0520) );
+  const DataSet &nds1 = item.GetNestedDataSet();
+  const DataElement &EncryptedContent = nds1.GetDataElement( Tag(0x0400,0x0520) );
   const ByteValue *bv = EncryptedContent.GetByteValue();
   
   size_t encrypted_len = bv->GetLength();
@@ -812,9 +812,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   SmartPointer<SequenceOfItems> sqi = dummy.GetValueAsSQ();
   assert( sqi && sqi->GetNumberOfItems() == 1 );
   Item const & item = sqi->GetItem( 1 );
-  const DataSet &nds = item.GetNestedDataSet();
-  DataSet::ConstIterator it = nds.Begin();
-  for( ; it != nds.End(); ++it )
+  const DataSet &nds2 = item.GetNestedDataSet();
+  DataSet::ConstIterator it = nds2.Begin();
+  for( ; it != nds2.End(); ++it )
     {
     ds.Replace( *it );
     }
