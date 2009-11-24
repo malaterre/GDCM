@@ -470,7 +470,7 @@ IF(BUILD_TESTING)
   INCLUDE(CTest)
   SUBDIRS(Testing)
   IF(NOT GDCM_DATA_ROOT)
-    # http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F
+    # http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=General_questions#What_is_gdcmData_.3F
     MESSAGE("If you want to build the test suite, you must set the path to GDCM_DATA_ROOT (advanced option); if you don't want, disable GDCM_BUILD_TESTING (advanced option) .")
   ENDIF(NOT GDCM_DATA_ROOT)
 ENDIF(BUILD_TESTING)

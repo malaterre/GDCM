@@ -186,7 +186,7 @@ int TestFilename(int argc, char *argv[])
     std::cerr << "Failed to create directory with long path: " << directory << std::endl;
     return EXIT_FAILURE;
     }
-std::string sfn = gdcm::Testing::GetTempFilename( "dummy.dcm", subdir );
+  std::string sfn = gdcm::Testing::GetTempFilename( "dummy.dcm", subdir );
   std::cerr << "Long path is: " << sfn.size() << std::endl;
   std::cerr << "Long path is: " << sfn << std::endl;
   if( sfn.size() > 260 )
