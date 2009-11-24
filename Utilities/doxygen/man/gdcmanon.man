@@ -181,6 +181,33 @@ previous operation.  Always use gdcmdump on the input and output file to check
 what was actually achieved. You can use a diff program to check only what
 changed (see <b>diff</b>(1) for example).
 
+\subsubsection irreversible_anon Irreversible Anonymization
+
+In some very case, one would want to anonymize using the PS 3.15 mode so as to
+take benefit of the automatic conversion of all content that could contain
+Patient related information.
+
+In the end all Patient related information has been removed and has been
+secretely stored in the 0400,0500 DICOM attribute. However to make sure that
+no-one ever try to break that security using brute-force algorithm, one want
+want to remove completely this DICOM attribute. This will make the DICOM:
+
+\li Completely free of any Patient related information (as per PS 3.15 specification)
+\li Remove any mean of people to brute force attack the file to find out the identity of the Patient
+
+In this case one could simply do, as a first step execute the reversible anonymizer:
+
+\verbatim
+ gdcmanon -c certificate.pem input.dcm anonymized_reversible.dcm
+\endverbatim
+
+and now completely remove the DICOM attribute containing the secretly encrypted Patient related
+information:
+
+\verbatim
+ gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reversible.dcm anonymized_irreversible.dcm
+\endverbatim
+
 \section openssl OpenSSL
 
 On most system you can have access to OpenSSL to generate the Private
