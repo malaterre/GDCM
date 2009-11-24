@@ -640,6 +640,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "c57035e2dac52e339b27e8c965251b3d" , "DCMTK_JPEGExt_12Bits.dcm" }, // checked with dcmdjpeg v3.5.4+ 2009-05-07
 
+{"d7673c8575cb2765f8ae25aa3899c77e","PHILIPS_GDCM12xBug.dcm"},
+{"a597540a79306be4710f4f04497fc23a","PHILIPS_GDCM12xBug2.dcm"},
 
 
 /* Stopping condition */
