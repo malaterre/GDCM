@@ -167,12 +167,20 @@ int TestFilename(int argc, char *argv[])
   // http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
   // The only way to work around the 260 byte limitation it appears as if we
   // have to deal with universal naming convention (UNC) path.
-  const char *subdir = 
+  const char subdir[] = 
     "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
     "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
     "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
     "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/";
-  const char *directory = gdcm::Testing::GetTempDirectory(subdir);
+  const char *directory_ = gdcm::Testing::GetTempDirectory(subdir);
+#ifdef _WIN32
+  gdcm::Filename mydir( directory_ );
+  std::string unc = "\\\\?\\";
+  unc += mydir.ToWindowsSlashes();
+  const char *directory = unc.c_str();
+#else
+  const char *directory = directory_;
+#endif
   if( !gdcm::System::MakeDirectory(directory))
     {
     std::cerr << "Failed to create directory with long path: " << directory << std::endl;
