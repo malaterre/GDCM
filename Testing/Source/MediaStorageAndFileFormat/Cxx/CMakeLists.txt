@@ -68,6 +68,7 @@ IF(GDCM_DATA_ROOT)
   TestCopyDataSet
   TestDataElementValueAsSQ
   TestImageWriter2
+  TestDICOMDIRGenerator
       )
 ENDIF(GDCM_DATA_ROOT)
 
