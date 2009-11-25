@@ -51,10 +51,16 @@ public class CompressLossyJPEG
     //image.Print( cout );
 
     ImageChangeTransferSyntax change = new ImageChangeTransferSyntax();
-    change.SetTransferSyntax( new TransferSyntax( TransferSyntax.TSType.JPEGBaselineProcess1 ) );
+    TransferSyntax targetts =  new TransferSyntax( TransferSyntax.TSType.JPEGBaselineProcess1 );
+    change.SetTransferSyntax( targetts );
 
     // Setup our JPEGCodec, warning it should be compatible with JPEGBaselineProcess1
     JPEGCodec jpegcodec = new JPEGCodec();
+    if( !jpegcodec.CanCode( targetts ) )
+      {
+      System.Console.WriteLine( "Something went really wrong, JPEGCodec cannot handle JPEGBaselineProcess1" );
+      return 1;
+      }
     jpegcodec.SetLossless( false );
     jpegcodec.SetQuality( 50 ); // poor quality !
     change.SetUserCodec( jpegcodec ); // specify the codec to use to the ImageChangeTransferSyntax

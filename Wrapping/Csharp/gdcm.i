@@ -187,6 +187,8 @@ public class";
 #include "gdcmCodec.h"
 #include "gdcmImageCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
+#include "gdcmJPEG2000Codec.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
@@ -696,6 +698,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %feature("director") ImageCodec;
 %include "gdcmImageCodec.h"
 %include "gdcmJPEGCodec.h"
+%include "gdcmJPEGLSCodec.h"
+%include "gdcmJPEG2000Codec.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"

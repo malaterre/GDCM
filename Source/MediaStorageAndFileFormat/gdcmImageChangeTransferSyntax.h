@@ -29,6 +29,12 @@ class ImageCodec;
  *
  * If only Force param is set but no input TransferSyntax is set, it is assumed that user only wants
  * to inspect encapsulated stream (advanced dev. option).
+ *
+ * When using UserCodec it is very important that the TransferSyntax (as set in SetTransferSyntax)
+ * is actually understood by UserCodec (ie. UserCodec->CanCode( TransferSyntax ) ). Otherwise
+ * the behavior is to use a default codec.
+ *
+ * \sa JPEGCodec JPEGLSCodec JPEG2000Codec
  */
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
@@ -54,6 +60,10 @@ public:
   /// a JPEG (for example) image
   void SetForce( bool f ) { Force = f; }
 
+  /// Allow user to specify exactly which codec to use. this is needed to specify special qualities
+  /// or compression option.
+  /// \warning is the codec 'ic' is not compatible with the TransferSyntax requested, it will
+  /// not be used. It is the user responsability to check that UserCodec->CanCode( TransferSyntax )
   void SetUserCodec(ImageCodec *ic) { UserCodec = ic; }
 
 protected:
