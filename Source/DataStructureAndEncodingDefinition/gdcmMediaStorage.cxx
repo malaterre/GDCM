@@ -117,6 +117,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.3.1.2.3.3",
   // Philips Private MR Synthetic Image Storage
   "1.3.46.670589.5.0.10",
+  "1.2.840.10008.5.1.4.1.1.77.1.4", // "VL Photographic Image Storage",
   0
 };
 
@@ -266,6 +267,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//HangingProtocolStorage
   {"  ", 2},//ModalityPerformedProcedureStepSOPClass
   {"  ", 2},//PhilipsPrivateMRSyntheticImageStorage
+  {"XC", 2},//VLPhotographicImageStorage
   {NULL, 0} //MS_END
 };
 
