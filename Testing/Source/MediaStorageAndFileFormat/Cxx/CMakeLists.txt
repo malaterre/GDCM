@@ -3,7 +3,10 @@
 SET(MSFF_TEST_SRCS
   TestAnonymizer
   #TestAnonymizer2
+  TestFileDerivation
+  TestPNMCodec
   TestSpacing
+  TestSerieHelper
   TestFileExplicitFilter
   TestImageFragmentSplitter
   TestTagPath
