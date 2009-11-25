@@ -3,6 +3,7 @@
 SET(DSED_TEST_SRCS
 	TestAttribute
   TestCodeString
+  TestPDBHeader
 	TestAttribute1
 	TestAttribute7
   #TestReadPatientName
