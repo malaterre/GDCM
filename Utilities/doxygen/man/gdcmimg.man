@@ -171,6 +171,14 @@ $ gdcmimg -i input.j2k -o output.dcm
 
 the image will be a Secondary Capture 
 
+\subsection sopclassuid Specifying a SOP Class UID
+
+Instead of the default Secondary Capture Image Storage, one may want to specify, say VL Photographic Image Storage.
+
+\verbatim
+$ gdcmimg --sop-class-uid 1.2.840.10008.5.1.4.1.1.77.1.4 input.jpg output.dcm 
+\endverbatim
+
 \section warning Warning
 
 There are a couple of issues with gdcmimg implementation:
