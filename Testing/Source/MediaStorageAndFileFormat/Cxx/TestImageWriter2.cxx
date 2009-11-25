@@ -68,6 +68,7 @@ int TestImageWriter2(int argc, char *argv[])
   // We should never authorized writing of image that was lossy compress and declare as lossless
   if( writer.Write() )
     {
+    std::cerr << "We should never authorized writing of image that was lossy compress and declare as lossless" << std::endl;
     return 1;
     }
 }
