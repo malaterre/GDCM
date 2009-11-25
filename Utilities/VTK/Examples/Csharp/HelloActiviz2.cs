@@ -16,6 +16,13 @@ using Kitware.VTK;
 using vtkgdcm;
 
 /*
+ * Usage:
+ * export LD_LIBRARY_PATH=/home/mathieu/Perso/gdcm/debug-activiz/bin:/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
+ * export MONO_PATH=/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
+ * $ mono ./bin/HelloActiviz2.exe gdcmData/test.acr bla.png bla2.dcm        
+ */
+
+/*
  * From the outside view, no-one can detect that object pass to/from 
  * vtkGDCMImageWriter/vtkGDCMImageReader are not Activiz object.
  *

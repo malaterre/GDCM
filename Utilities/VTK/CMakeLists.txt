@@ -108,6 +108,8 @@ SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     # so one can safely link to them, instead of having to build a VTK by hand, link vtkgdcm to it
     # and hope compiler configuration are compatible.
     # if you use Activiz/VTK 5.2.1 you are on your own (see gdcm 2.0.12 which supports Activiz 5.2.1)
+    FIND_PACKAGE(ACTIVIZ REQUIRED)
+    #message(${ACTIVIZ_KITWARE_VTK_LIBRARY})
     get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
                                 PATH)
 
