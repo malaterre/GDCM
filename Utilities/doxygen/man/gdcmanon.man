@@ -252,6 +252,10 @@ The DICOM Standard at the time of releasing gdcmanon is:
 
 ftp://medical.nema.org/medical/dicom/2008/
 
+Direct link to PS 3.15-2008:
+
+ftp://medical.nema.org/medical/dicom/2008/08_15pu.pdf
+
 \section see_also SEE ALSO
 
 <b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1)
