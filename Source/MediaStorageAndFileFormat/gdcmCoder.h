@@ -34,8 +34,10 @@ public:
   /// Return whether this coder support this transfer syntax (can code it)
   virtual bool CanCode(TransferSyntax const &) const = 0;
 
+  // Note: in / out are reserved keyword in C#. Change to in_ / out_
+
   /// Code
-  virtual bool Code(DataElement const &in, DataElement &out) { (void)in; (void)out; return false; }
+  virtual bool Code(DataElement const &in_, DataElement &out_) { (void)in_; (void)out_; return false; }
 protected:
   virtual bool InternalCode(const char *bv, unsigned long len, std::ostream &os) { (void)bv;(void)os;return false; } 
 };

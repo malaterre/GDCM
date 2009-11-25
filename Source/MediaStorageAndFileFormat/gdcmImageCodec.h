@@ -34,14 +34,15 @@ class GDCM_EXPORT ImageCodec : public Codec
 public:
   ImageCodec();
   ~ImageCodec();
+  bool CanCode(TransferSyntax const &) const { return false; }
   bool CanDecode(TransferSyntax const &) const { return false; }
-  bool Decode(DataElement const &is, DataElement &os);
+  bool Decode(DataElement const &is_, DataElement &os);
   bool IsLossy() const;
 
-  virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+  virtual bool GetHeaderInfo(std::istream &is_, TransferSyntax &ts);
 
 protected:
-  bool Decode(std::istream &is, std::ostream &os);
+  bool Decode(std::istream &is_, std::ostream &os);
   virtual bool IsValid(PhotometricInterpretation const &pi);
 public:
 
@@ -115,13 +116,13 @@ protected:
   unsigned int NumberOfDimensions;
   bool LossyFlag;
 
-  bool DoOverlayCleanup(std::istream &is, std::ostream &os);
-  bool DoByteSwap(std::istream &is, std::ostream &os);
-  bool DoYBR(std::istream &is, std::ostream &os);
-  bool DoPlanarConfiguration(std::istream &is, std::ostream &os);
-  bool DoSimpleCopy(std::istream &is, std::ostream &os);
-  bool DoPaddedCompositePixelCode(std::istream &is, std::ostream &os);
-  bool DoInvertMonochrome(std::istream &is, std::ostream &os);
+  bool DoOverlayCleanup(std::istream &is_, std::ostream &os);
+  bool DoByteSwap(std::istream &is_, std::ostream &os);
+  bool DoYBR(std::istream &is_, std::ostream &os);
+  bool DoPlanarConfiguration(std::istream &is_, std::ostream &os);
+  bool DoSimpleCopy(std::istream &is_, std::ostream &os);
+  bool DoPaddedCompositePixelCode(std::istream &is_, std::ostream &os);
+  bool DoInvertMonochrome(std::istream &is_, std::ostream &os);
 
   //template <typename T>
   //bool DoInvertPlanarConfiguration(T *output, const T *input, uint32_t length);

@@ -182,6 +182,11 @@ public class";
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
+#include "gdcmCoder.h"
+#include "gdcmDecoder.h"
+#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
+#include "gdcmJPEGCodec.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
@@ -682,6 +687,15 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
+//%feature("director") Coder;
+//%include "gdcmCoder.h"
+//%feature("director") Decoder;
+//%include "gdcmDecoder.h"
+//%feature("director") Codec;
+//%include "gdcmCodec.h"
+%feature("director") ImageCodec;
+%include "gdcmImageCodec.h"
+%include "gdcmJPEGCodec.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"

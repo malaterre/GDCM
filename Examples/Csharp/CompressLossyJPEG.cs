@@ -14,8 +14,8 @@
 =========================================================================*/
 /* 
  * Usage: 
- * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/ClinicalTrialIdentificationWorkflow.exe input_dir output_dir
+ * $ export LD_LIBRARY_PATH=$HOME/Perso/gdcm/debug-gcc/bin
+ * $ mono bin/CompressLossyJPEG.exe input.dcm output.dcm
  */
 
 using System;
@@ -52,6 +52,13 @@ public class CompressLossyJPEG
 
     ImageChangeTransferSyntax change = new ImageChangeTransferSyntax();
     change.SetTransferSyntax( new TransferSyntax( TransferSyntax.TSType.JPEGBaselineProcess1 ) );
+
+    // Setup our JPEGCodec, warning it should be compatible with JPEGBaselineProcess1
+    JPEGCodec jpegcodec = new JPEGCodec();
+    jpegcodec.SetLossless( false );
+    jpegcodec.SetQuality( 50 ); // poor quality !
+    change.SetUserCodec( jpegcodec ); // specify the codec to use to the ImageChangeTransferSyntax
+
     change.SetInput( image );
     bool b = change.Change();
     if( !b )
