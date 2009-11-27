@@ -203,12 +203,25 @@ static bool derives( File & file, const Pixmap& compressed_image )
   DataSet &ds = file.GetDataSet();
 
   DataElement sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+  if( !ds.FindDataElement( Tag(0x0008,0x0016) ) )
+    {
+    assert(0);
+    return false;
+    }
   DataElement sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) ) )
+    {
+    assert(0);
+    return false;
+    }
+  // Make sure that const char* pointer will be properly padded with \0 char:
+  std::string sopclassuid_str( sopclassuid.GetByteValue()->GetPointer(), sopclassuid.GetByteValue()->GetLength() );
+  std::string sopinstanceuid_str( sopinstanceuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetLength() );
   ds.Remove( Tag(0x8,0x18) );
 
   FileDerivation fd;
   fd.SetFile( file );
-  fd.AddReference( sopclassuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetPointer() );
+  fd.AddReference( sopclassuid_str.c_str(), sopinstanceuid_str.c_str() );
 
   // CID 7202 Source Image Purposes of Reference
   // {"DCM",121320,"Uncompressed predecessor"},
@@ -221,7 +234,7 @@ static bool derives( File & file, const Pixmap& compressed_image )
   if( !fd.Derive() )
     {
     std::cerr << "Sorry could not derive using input info" << std::endl;
-    return 1;
+    return false;
     }
 
 
