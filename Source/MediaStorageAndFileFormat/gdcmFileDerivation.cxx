@@ -202,6 +202,7 @@ FileDerivation::FileDerivation():F(new File),Internals(new FileDerivationInterna
 
 FileDerivation::~FileDerivation()
 {
+  delete Internals;
 }
 
 const CodeDefinition * GetCodeDefinition( unsigned int codevalue, const CodeDefinition list[] )
