@@ -22,7 +22,6 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   LargeVRDSExplicit
-  #AnonymizeAES
   ClinicalTrialAnnotate
   CheckBigEndianBug
   DuplicatePCDE
