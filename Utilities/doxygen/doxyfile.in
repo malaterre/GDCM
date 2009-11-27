@@ -636,6 +636,7 @@ EXCLUDE_SYMBOLS        =
 
 EXAMPLE_PATH           = @GDCM_SOURCE_DIR@/Examples \
                          @GDCM_SOURCE_DIR@/Testing \
+                         @GDCM_SOURCE_DIR@/Utilities/VTK/Examples \
                          @GDCM_SOURCE_DIR@/Applications
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
