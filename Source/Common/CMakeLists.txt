@@ -44,6 +44,17 @@ INCLUDE(CheckCXXSourceCompiles)
 CHECK_CXX_SOURCE_COMPILES(
   "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); return 0;}"
   HAVE_WCHAR_IFSTREAM)
+IF(GDCM_USE_SYSTEM_OPENSSL)
+SET(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
+SET(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES}
+  ${CMAKE_DL_LIBS} # FIXME ??
+  )
+CHECK_CXX_SOURCE_COMPILES(
+  #  "\#include <openssl/cms.h>\nint main() { CMS_add0_recipient_key(0); return 0;}"
+  #HAVE_CMS_RECIPIENT_KEY)
+    "\#include <openssl/cms.h>\nint main() { CMS_add0_recipient_password(0,0,0,0,0,0,0); return 0;}"
+  HAVE_CMS_RECIPIENT_PASSWORD)
+ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
 #-----------------------------------------------------------------------------
 # Provide compatibility options.
