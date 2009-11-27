@@ -15,19 +15,28 @@
 #include "gdcmAttribute.h"
 
 #include <stdlib.h> /* setenv */
+#include <locale.h>
+
 
 int TestLCNumeric(int argc, char *argv[])
 {
   //setenv("LC_NUMERIC", "fr_FR", 1);
-  const char ss[] = "LC_NUMERIC=fr_FR";
-  char *copy = strdup(ss);
-  putenv(copy);
-  free(copy);
+  //const char ss[] = "LC_NUMERIC=fr_FR";
+  //setlocale(LC_NUMERIC,"C");
+  char *l = setlocale(LC_NUMERIC,"fr_FR.UTF-8");
+  if( !l )
+    {
+    std::cerr << "Could not set LC_NUMERIC" << std::endl;
+    return 1;
+    }
+  //char *copy = strdup(ss);
+  //putenv(copy);
+  //free(copy);
   std::ostringstream os;
   double d = 1.2;
   os << d;
   std::string s = os.str();
-  std::cout << s << std::endl;
+  std::cout << "s:" << s << std::endl;
   std::string::size_type pos_comma = s.find( "," );
   if( pos_comma != std::string::npos )
     {
