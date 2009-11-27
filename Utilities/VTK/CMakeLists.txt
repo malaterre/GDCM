@@ -103,26 +103,26 @@ ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 #ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 
 SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-  IF(GDCM_USE_ACTIVIZ)
-    # the following only works with Activiz VTK 5.4.2. The pure VTK lib are now shipped as separate libs.
-    # so one can safely link to them, instead of having to build a VTK by hand, link vtkgdcm to it
-    # and hope compiler configuration are compatible.
-    # if you use Activiz/VTK 5.2.1 you are on your own (see gdcm 2.0.12 which supports Activiz 5.2.1)
-    FIND_PACKAGE(ACTIVIZ REQUIRED)
-    #message(${ACTIVIZ_KITWARE_VTK_LIBRARY})
-    get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
-                                PATH)
+IF(GDCM_USE_ACTIVIZ AND UNIX)
+  # the following only works with Activiz VTK 5.4.2. The pure VTK lib are now shipped as separate libs.
+  # so one can safely link to them, instead of having to build a VTK by hand, link vtkgdcm to it
+  # and hope compiler configuration are compatible.
+  # if you use Activiz/VTK 5.2.1 you are on your own (see gdcm 2.0.12 which supports Activiz 5.2.1)
+  FIND_PACKAGE(ACTIVIZ REQUIRED)
+  #message(${ACTIVIZ_KITWARE_VTK_LIBRARY})
+  get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
+    PATH)
 
-                              LINK_DIRECTORIES(${bla})
-TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
-  ${bla}/libvtkCommon.so
-  #${bla}/libvtkIO.so
-  ${bla}/libvtkImaging.so
-  ${bla}/libvtkRendering.so
-  )
-  ELSE(GDCM_USE_ACTIVIZ)
-TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
-  ENDIF(GDCM_USE_ACTIVIZ)
+  LINK_DIRECTORIES(${bla})
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
+    ${bla}/libvtkCommon.so
+    #${bla}/libvtkIO.so
+    ${bla}/libvtkImaging.so
+    ${bla}/libvtkRendering.so
+    )
+ELSE(GDCM_USE_ACTIVIZ AND UNIX)
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
+ENDIF(GDCM_USE_ACTIVIZ AND UNIX)
 
 # this need to be set on the vtkIO lib directly
 #  SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
