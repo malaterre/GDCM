@@ -380,3 +380,8 @@ http://wiki.mandriva.com/en/Development/Tasks/Packaging/Problems/Underlinking
 http://wiki.mandriva.com/en/Overlinking
 -----------------------------------------------------------------------
 Generate doc for python automatically
+-----------------------------------------------------------------------
+$ gdcmviewer /media/disk/GolgotBackup/gdcmData/www.ps.uci.edu/~markm/swartz/UCI_FLE/AI_f006f
+This is a PET + changing Rescale Slope/Intercept
+Then simply set the first Rescale Slope/Intercept to 0/1 and hope this will break the approach
+of best fitting.
