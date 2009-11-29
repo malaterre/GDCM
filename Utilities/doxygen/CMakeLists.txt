@@ -32,8 +32,14 @@ IF(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Examples/*.java"
     "${GDCM_SOURCE_DIR}/Examples/*.py"
     )
+  FILE(GLOB_RECURSE vtkexamplefiles
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.cxx"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.cs"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.java"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.py"
+    )
   SET(DOXYFILE_EXAMPLES)
-  foreach(file ${examplefiles})
+  foreach(file ${examplefiles} ${vtkexamplefiles})
     get_filename_component(f ${file} NAME)
     set(DOXYFILE_EXAMPLES "${DOXYFILE_EXAMPLES}\n\\example ${f}")
   endforeach(file)
