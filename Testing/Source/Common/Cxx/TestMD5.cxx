@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmMD5.h"
+#include "gdcmFilename.h"
 #include "gdcmTrace.h"
 #include "gdcmTesting.h"
 
@@ -210,12 +211,15 @@ static const char * const gdcmMD5SumFiles[][2] = {
 
 int TestMD5Func(const char* filename, const char *md5ref, bool verbose = false)
 {
+  if( !filename || !md5ref) return 1;
+
   if( verbose )
     std::cout << "TestRead: " << filename << std::endl;
   const char *dataroot = gdcm::Testing::GetDataRoot();
   std::string path = dataroot;
   path += "/";
   path += filename;
+  path = filename;
   char md5[2*16+1] = {};
   bool b = gdcm::MD5::ComputeFile( path.c_str(), md5);
   if( !b )
@@ -232,6 +236,25 @@ int TestMD5Func(const char* filename, const char *md5ref, bool verbose = false)
   return 0;
 }
 
+static const char *GetMD5Sum(const char *filename)
+{
+  typedef const char * const (*md5pair)[2];
+  const char *md5filename;
+  md5pair md5filenames = gdcmMD5SumFiles;
+  int i = 0;
+  while( ( md5filename = md5filenames[i][1] ) )
+    {
+    gdcm::Filename fn( filename );
+    if( strcmp( md5filename, fn.GetName() ) == 0 )
+      {
+      return md5filenames[i][0];
+      }
+    ++i;
+    }
+  std::cerr << "Missing Md5 for: " << filename << std::endl;
+  return 0;
+}
+
 int TestMD5(int argc, char *argv[])
 {
 //  if( argc == 2 )
@@ -245,11 +268,11 @@ int TestMD5(int argc, char *argv[])
   gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
-  typedef const char * const (*md5pair)[2];
-  md5pair filenames = gdcmMD5SumFiles;
-  while( (filename = filenames[i][1]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
-    r += TestMD5Func( filename, filenames[i][0] );
+    const char *md5 = GetMD5Sum( filename );
+    r += TestMD5Func( filename, md5 );
     ++i;
     }
 
