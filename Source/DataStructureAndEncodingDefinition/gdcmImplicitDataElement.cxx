@@ -33,6 +33,15 @@ VL ImplicitDataElement::GetLength() const
       return TagField.GetLength() + ValueLengthField.GetLength() 
         + sq->ComputeLength<ImplicitDataElement>();
       }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+    if( sf )
+      {
+      //assert( VRField & VR::OB_OW ); // VR::INVALID is not possible AFAIK...
+      return TagField.GetLength() /*+ VRField.GetLength()*/ 
+        + ValueLengthField.GetLength() + sf->ComputeLength();
+      }
+#endif
     assert( !ValueLengthField.IsUndefined() );
     return ValueLengthField;
     }

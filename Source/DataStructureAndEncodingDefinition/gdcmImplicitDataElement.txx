@@ -254,8 +254,18 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
     {
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
-    assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems;
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    if( TagField == Tag(0x7fe0,0x0010) )
+      {
+      ValueField = new SequenceOfFragments;
+      }
+    else
+#else
+      assert( TagField != Tag(0x7fe0,0x0010) );
+#endif
+      {
+      ValueField = new SequenceOfItems;
+      }
     //VRField = VR::SQ;
     }
   else
