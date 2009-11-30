@@ -206,6 +206,8 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "0b3ae440e8dbb144205074a664228c1e"  , "US-RGB-8-epicard.dcm" },
 { "0ae1d92cc14706add796368622deaa26"  , "US-RGB-8-esopecho.dcm" },
 { "d23db052b02b2a2c510104486cdf40b2"  , "XA-MONO2-8-12x-catheter.dcm" },
+{ "231bb6c25d482422745bb839d6f8610a"  , "PHILIPS_GDCM12xBug2.dcm" },
+{ "e2558e4e01d937bfac33b7e0fb07b7b5"  , "PHILIPS_GDCM12xBug.dcm" },
 { NULL, NULL}
 };
 
