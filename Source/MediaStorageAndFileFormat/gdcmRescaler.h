@@ -29,7 +29,9 @@ namespace gdcm
  * There are basically two cases:
  * In CT: the linear transform is generally integer based. Eg the Stored Pixel Type is unsigned
  * short 12bits, but to get Hounsfield unit, one need to apply the linear transform:
+ *  \f[
  *   RWV = 1. * SV - 1024
+ *  \f]
  * So the best scalar to store the Real World Value will be 16 bit signed type.
  * In PET: the linear transform is generally floating point based.
  * Since the dynamic range can be quite high, the Rescale Slope / Rescale Intercept can be
@@ -43,12 +45,14 @@ namespace gdcm
  *
  * Example: Let say input is FLOAT64, and we want UINT16 as ouput, we would do:
  *
+ *\code
  *  Rescaler ir;
  *  ir.SetIntercept( 0 );
  *  ir.SetSlope( 5.6789 );
  *  ir.SetPixelFormat( FLOAT64 );
  *  ir.SetMinMaxForPixelType( ((PixelFormat)UINT16).GetMin(), ((PixelFormat)UINT16).GetMax() );
  *  ir.InverseRescale(output,input,numberofbytes );
+ *\endcode
  *
  * \note handle floating point transformation back and forth to integer properly (no loss)
  */
