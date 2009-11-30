@@ -13,11 +13,12 @@
 
 =========================================================================*/
 #include "gdcmPDFCodec.h"
+#include "gdcmTransferSyntax.h"
 
 int TestPDFCodec(int , char *[])
 {
   gdcm::PDFCodec c;
-  (void)c;
+  c.CanCode(gdcm::TransferSyntax());
 
   return 0;
 }
