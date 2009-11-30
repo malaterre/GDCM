@@ -55,6 +55,8 @@ namespace gdcm
  *\endcode
  *
  * \note handle floating point transformation back and forth to integer properly (no loss)
+ *
+ * \see Unpacker12Bits
  */
 class GDCM_EXPORT Rescaler
 {
