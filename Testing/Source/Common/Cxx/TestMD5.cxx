@@ -233,6 +233,9 @@ int TestMD5Func(const char* filename, const char *md5ref, bool verbose = false)
     {
     std::cout << "Problem with: " << path << std::endl;
     std::cout << "Ref: " << md5ref << " vs " << md5 << std::endl;
+    // Let's remove this buggy file:
+    std::cout << "Removing: " << path << std::endl;
+    gdcm::System::RemoveFile(path);
     return 1;
     }
   return 0;
