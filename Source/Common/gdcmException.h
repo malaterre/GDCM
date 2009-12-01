@@ -42,12 +42,14 @@ class Exception : public std::exception
   /// Creates the text to be returned by Exception:what().
   static StringHolder CreateWhat(const char* const desc,
                                  const char* const file,
-                                 const unsigned int lineNumber)
+                                 const unsigned int lineNumber,
+                                 const char* const func)
   {
     assert(desc != NULL);
     assert(file != NULL);
+    assert(func != NULL);
     std::ostringstream oswhat;
-    oswhat << file << ":" << lineNumber << ":\n";
+    oswhat << file << ":" << lineNumber << " (" << func << "):\n";
     oswhat << desc;
     return StringHolder( oswhat.str() );
   }
@@ -61,9 +63,10 @@ public:
   explicit Exception(const char *desc = "None", 
             const char *file = __FILE__,
             unsigned int lineNumber = __LINE__,
-            const char * = ""/*__FUNCTION__*/ )
+            // FIXME:  __PRETTY_FUNCTION__ is the non-mangled version for __GNUC__ compiler
+            const char *func = __FUNCTION__)
   :
-  What( CreateWhat(desc, file, lineNumber) ),
+  What( CreateWhat(desc, file, lineNumber, func) ),
   Description(desc)
   {
   }
