@@ -24,6 +24,10 @@ class DataSet;
 class Tag;
 class FileMetaInformation;
 class File;
+
+// WARNING: This class will be deprecated in the future. There is no reason to extend this class.
+// Please check the gdcm::UIDs class if adding new well known UID.
+
 /**
  * \brief MediaStorage
  *
