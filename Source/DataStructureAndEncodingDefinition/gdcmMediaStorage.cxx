@@ -107,6 +107,8 @@ static const char *MSStrings[] = {
   "1.2.840.113619.4.26",
   // Toshiba Private Data Storage
   "1.2.392.200036.9116.7.8.1.1.1",
+  // Fuji Private CR Image Storage
+  "1.2.392.200036.9125.1.1.2",
   // MammographyCADSR,
   "1.2.840.10008.5.1.4.1.1.88.50",
   // KeyObjectSelectionDocument
