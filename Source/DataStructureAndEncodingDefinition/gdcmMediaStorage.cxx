@@ -107,8 +107,6 @@ static const char *MSStrings[] = {
   "1.2.840.113619.4.26",
   // Toshiba Private Data Storage
   "1.2.392.200036.9116.7.8.1.1.1",
-  // Fuji Private CR Image Storage
-  "1.2.392.200036.9125.1.1.2",
   // MammographyCADSR,
   "1.2.840.10008.5.1.4.1.1.88.50",
   // KeyObjectSelectionDocument
@@ -272,6 +270,25 @@ static MSModalityType MSModalityTypes[] = {
   {"XC", 2},//VLPhotographicImageStorage
   {NULL, 0} //MS_END
 };
+
+unsigned int MediaStorage::GetNumberOfMSType()
+{
+  const unsigned int n = MS_END; 
+  assert( n > 0 );
+  return n - 1;
+}
+
+unsigned int MediaStorage::GetNumberOfMSString()
+{
+  static const unsigned int n = sizeof( MSStrings ) / sizeof( *MSStrings );
+  return n;
+}
+
+unsigned int MediaStorage::GetNumberOfModality()
+{
+  static const unsigned int n = sizeof( MSModalityTypes ) / sizeof( *MSModalityTypes );
+  return n;
+}
 
 const char *MediaStorage::GetModality() const
 {

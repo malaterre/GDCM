@@ -132,6 +132,11 @@ typedef enum {
 
   const char *GetModality() const;
 
+  static unsigned int GetNumberOfMSType();
+  static unsigned int GetNumberOfMSString();
+  static unsigned int GetNumberOfModality();
+
+
   /// Attempt to set the MediaStorage from a file:
   /// WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
   /// then MediaStorage is set to the default SecondaryCaptureImageStorage (return value is 

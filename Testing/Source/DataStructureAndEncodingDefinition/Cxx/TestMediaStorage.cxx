@@ -58,6 +58,16 @@ int TestMediaStorage(int argc, char *argv[])
     return 1;
     }
 
+  // MediaStorage is really poorly implemented. We need to add a test to avoid dev shooting themself in the foot.
+  unsigned int nMSType = gdcm::MediaStorage::GetNumberOfMSString();
+  unsigned int nMSString = gdcm::MediaStorage::GetNumberOfMSString();
+  unsigned int nMSMod = gdcm::MediaStorage::GetNumberOfModality();
+  if( nMSType != nMSString || nMSType != nMSMod ) 
+    {
+    std::cerr << "yuou are shootingh yourself in the foot, dear." << std::endl;
+    return 1;
+    }
+
   return 0;
 }
 
