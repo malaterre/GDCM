@@ -64,7 +64,7 @@ public:
             const char *file = __FILE__,
             unsigned int lineNumber = __LINE__,
             // FIXME:  __PRETTY_FUNCTION__ is the non-mangled version for __GNUC__ compiler
-            const char *func = __FUNCTION__)
+            const char *func = "" /*__FUNCTION__*/)
   :
   What( CreateWhat(desc, file, lineNumber, func) ),
   Description(desc)
