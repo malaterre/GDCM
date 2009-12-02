@@ -61,7 +61,7 @@ namespace gdcm
 class GDCM_EXPORT Rescaler
 {
 public:
-  Rescaler():Intercept(0),Slope(1),PF(PixelFormat::UNKNOWN) {}
+  Rescaler():Intercept(0),Slope(1),PF(PixelFormat::UNKNOWN),TargetScalarType(PixelFormat::UNKNOWN), ScalarRangeMin(0), ScalarRangeMax(0), UseTargetPixelType(false) {}
   ~Rescaler() {}
 
   /// Direct transform
@@ -75,6 +75,15 @@ public:
 
   /// Set Slope: user for both direct&inverse transformation
   void SetSlope(double s) { Slope = s; }
+
+  /// By default (when UseTargetPixelType is false), a best
+  /// matching Target Pixel Type is computed. However user can override
+  /// this auto selection by switching UseTargetPixelType:true and
+  /// also specifying the specifix Target Pixel Type
+  void SetTargetPixelType( PixelFormat const & targetst );
+  
+  /// Override default behavior of Rescale
+  void SetUseTargetPixelType(bool b);
 
   /// Set Pixel Format of input data
   void SetPixelFormat(PixelFormat const & pf) { PF = pf; }
@@ -105,8 +114,10 @@ private:
   double Intercept; // 0028,1052
   double Slope;     // 0028,1053
   PixelFormat PF;
+  PixelFormat::ScalarType TargetScalarType;
   double ScalarRangeMin;
   double ScalarRangeMax;
+  bool UseTargetPixelType;
 };
 
 } // end namespace gdcm

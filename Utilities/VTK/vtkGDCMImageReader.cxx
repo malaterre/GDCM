@@ -120,6 +120,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->SetImageOrientationPatient(1,0,0,0,1,0);
 
 //  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
+    this->ForceRescale = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -576,6 +577,94 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 }
 #endif
 
+gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames)
+{
+  gdcm::PixelFormat::ScalarType outputpt ;
+  outputpt = gdcm::PixelFormat::UNKNOWN;
+  // there is a very subbtle bug here. Let's imagine we have a collection of file
+  // they can all have different Rescale Slope / Intercept. In this case we should:
+  // 1. Make sure to read each Rescale Slope / Intercept individually
+  // 2. Make sure to decide which Pixel Type to use using *all* slices:
+  if( inputfilename )
+    {
+      gdcm::ImageReader reader;
+      reader.SetFileName( inputfilename );
+      if( !reader.Read() )
+        {
+        //vtkErrorMacro( "ImageReader failed" );
+        return gdcm::PixelFormat::UNKNOWN;
+        }
+      const gdcm::Image &image = reader.GetImage();
+      const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+      double shift = image.GetIntercept();
+      double scale = image.GetSlope();
+
+      gdcm::Rescaler r;
+      r.SetIntercept( shift );
+      r.SetSlope( scale );
+      r.SetPixelFormat( pixeltype );
+      outputpt = r.ComputeInterceptSlopePixelType();
+    }
+  else if ( filenames && filenames->GetNumberOfValues() > 0 )
+    {
+    std::set< gdcm::PixelFormat::ScalarType > pixeltypes;
+    for(int i = 0; i < filenames->GetNumberOfValues(); ++i )
+      {
+      const char *filename = filenames->GetValue( i );
+      gdcm::ImageReader reader;
+      reader.SetFileName( filename );
+      if( !reader.Read() )
+        {
+        vtkGenericWarningMacro( "ImageReader failed: " << filename );
+        return gdcm::PixelFormat::UNKNOWN;
+        }
+      const gdcm::Image &image = reader.GetImage();
+      const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+      double shift = image.GetIntercept();
+      double scale = image.GetSlope();
+
+      gdcm::PixelFormat::ScalarType outputpt2 = pixeltype;
+      gdcm::Rescaler r;
+      r.SetIntercept( shift );
+      r.SetSlope( scale );
+      r.SetPixelFormat( pixeltype );
+      outputpt2 = r.ComputeInterceptSlopePixelType();
+      //std::cout << "Found: " << outputpt << std::endl;
+      pixeltypes.insert( outputpt2 );
+      }
+    if( pixeltypes.size() == 1 )
+      {
+      // Ok easy case
+      outputpt = *pixeltypes.begin();
+      }
+    else
+      {
+      // Hardcoded. If Pixel Type found is the maximum (as of PS 3.5 - 2008)
+      // There is nothing bigger that FLOAT64
+      if( pixeltypes.count( gdcm::PixelFormat::FLOAT64 ) != 0 )
+        {
+        outputpt = gdcm::PixelFormat::FLOAT64;
+        }
+      else
+        {
+        // should I just take the biggest value ? 
+        // MM: I am not sure UINT16 and INT16 are really compatible
+        // so taking the biggest value might not be the solution
+        // In this case we could use INT32, but FLOAT64 also works...
+        // oh well, let's just use FLOAT64 always.
+        vtkGenericWarningMacro( "This may not always be optimized. Sorry" );
+        outputpt = gdcm::PixelFormat::FLOAT64;
+        }
+      }
+    }
+  else
+    {
+    assert( 0 ); // I do not think this is possible
+    }
+
+  return outputpt;
+}
+
 //----------------------------------------------------------------------------
 int vtkGDCMImageReader::RequestInformationCompat()
 {
@@ -722,21 +811,29 @@ int vtkGDCMImageReader::RequestInformationCompat()
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
-  gdcm::PixelFormat::ScalarType outputpt = pixeltype;
+
+  //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
+  gdcm::PixelFormat::ScalarType outputpt = ComputePixelTypeFromFiles(this->FileName, this->FileNames);
+
   // Compute output pixel format when Rescaling:
-  if( this->Shift != 0 || this->Scale != 1. )
-    {
-    gdcm::Rescaler r;
-    r.SetIntercept( this->Shift );
-    r.SetSlope( this->Scale );
-    r.SetPixelFormat( pixeltype );
-    outputpt = r.ComputeInterceptSlopePixelType();
-    assert( pixeltype <= outputpt );
-    assert( pixeltype.GetSamplesPerPixel() == 1 && image.GetPhotometricInterpretation().GetSamplesPerPixel() == 1 );
-    assert( image.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::PALETTE_COLOR );
-    }
+//  if( this->Shift != 0 || this->Scale != 1. )
+//    {
+//    gdcm::Rescaler r;
+//    r.SetIntercept( this->Shift );
+//    r.SetSlope( this->Scale );
+//    r.SetPixelFormat( pixeltype );
+//    outputpt = r.ComputeInterceptSlopePixelType();
+//    assert( pixeltype <= outputpt );
+//    assert( pixeltype.GetSamplesPerPixel() == 1 && image.GetPhotometricInterpretation().GetSamplesPerPixel() == 1 );
+//    assert( image.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::PALETTE_COLOR );
+//    }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
-  //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
+
+  this->ForceRescale = 0; // always reset this thing
+  if( pixeltype != outputpt )
+    {
+    this->ForceRescale = 1;
+    }
 
   switch( outputpt )
     {
@@ -781,7 +878,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DataScalarType = VTK_DOUBLE;
     break;
   default:
-    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType() );
+    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType()
+      << " with " << outputpt  );
     return 0;
     }
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
@@ -965,12 +1063,57 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
 
-  if( Scale != 1.0 || Shift != 0.0 )
+  if( Scale != 1.0 || Shift != 0.0 || this->ForceRescale )
   {
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
-    r.SetIntercept( Shift );
-    r.SetSlope( Scale );
+    r.SetIntercept( Shift ); // FIXME
+    r.SetSlope( Scale ); // FIXME
+    gdcm::PixelFormat::ScalarType targetpixeltype = gdcm::PixelFormat::UNKNOWN;
+    // r.SetTargetPixelType( gdcm::PixelFormat::FLOAT64 );
+    int scalarType = data->GetScalarType();
+   switch( scalarType )
+    {
+  case VTK_CHAR:
+    if( vtkGDCMImageReader_IsCharTypeSigned() )
+      targetpixeltype = gdcm::PixelFormat::INT8;
+    else
+      targetpixeltype = gdcm::PixelFormat::UINT8;
+    break;
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+  case VTK_SIGNED_CHAR:
+    targetpixeltype = gdcm::PixelFormat::INT8;
+    break;
+#endif
+  case VTK_UNSIGNED_CHAR:
+    targetpixeltype = gdcm::PixelFormat::UINT8;
+    break;
+  case VTK_SHORT:
+    targetpixeltype = gdcm::PixelFormat::INT16;
+    break;
+  case VTK_UNSIGNED_SHORT:
+    targetpixeltype = gdcm::PixelFormat::UINT16;
+    break;
+  case VTK_INT:
+    targetpixeltype = gdcm::PixelFormat::INT32;
+    break;
+  case VTK_UNSIGNED_INT:
+    targetpixeltype = gdcm::PixelFormat::UINT32;
+    break;
+  case VTK_FLOAT:
+    targetpixeltype = gdcm::PixelFormat::FLOAT32;
+    break;
+  case VTK_DOUBLE:
+    targetpixeltype = gdcm::PixelFormat::FLOAT64;
+    break;
+  default:
+    vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
+    assert( 0 );
+    return 0;
+    }
+    r.SetTargetPixelType( targetpixeltype );
+
+    r.SetUseTargetPixelType(true);
     r.SetPixelFormat( pixeltype );
     char * copy = new char[len];
     memcpy(copy, pointer, len);
@@ -1244,6 +1387,7 @@ int vtkGDCMImageReader::RequestDataCompat()
     unsigned long len = 0;
     for(int j = dext[4]; j <= dext[5]; ++j)
       {
+      assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
       const char *filename = this->FileNames->GetValue( j );
       int load = this->LoadSingleFile( filename, pointer, len );
       if( !load )

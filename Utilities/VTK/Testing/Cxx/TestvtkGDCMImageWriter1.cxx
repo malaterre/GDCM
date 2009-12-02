@@ -161,6 +161,12 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
           {
           // gdcmData/GE_LOGIQBook-8-RGB-HugePreview.dcm
           }
+        else if( ms1 == gdcm::MediaStorage::DigitalXRayImageStorageForProcessing
+          && ms2 == gdcm::MediaStorage::DigitalXRayImageStorageForPresentation
+        )
+          {
+          // gdcmData/DX_GE_FALCON_SNOWY-VOI.dcm
+          }
         else
           {
           std::cerr << "MediaStorage incompatible: " << ms1 << " vs " << ms2 << " for file: " << filename << std::endl;
@@ -223,7 +229,7 @@ out.close();
   return res;
 }
 
-int TestvtkGDCMImageWriter(int argc, char *argv[])
+int TestvtkGDCMImageWriter1(int argc, char *argv[])
 {
   if( argc == 2 )
     {

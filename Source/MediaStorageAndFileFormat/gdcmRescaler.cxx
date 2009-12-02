@@ -143,15 +143,18 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
     }
   else
     {
-    if( max <= std::numeric_limits<int8_t>::max() )
+    if( max <= std::numeric_limits<int8_t>::max()
+     && min >= std::numeric_limits<int8_t>::min() )
       {
       st = PixelFormat::INT8;
       }
-    else if( max <= std::numeric_limits<int16_t>::max() )
+    else if( max <= std::numeric_limits<int16_t>::max()
+      && min >= std::numeric_limits<int16_t>::min() )
       {
       st = PixelFormat::INT16;
       }
-    else if( max <= std::numeric_limits<int32_t>::max() )
+    else if( max <= std::numeric_limits<int32_t>::max() 
+      && min >= std::numeric_limits<int32_t>::min() )
       {
       st = PixelFormat::INT32;
       }
@@ -168,6 +171,9 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
       assert(0);
       }
     }
+  // postcondition:
+  assert( min >= PixelFormat(st).GetMin() );
+  assert( max <= PixelFormat(st).GetMax() );
   assert( st != PixelFormat::UNKNOWN );
   return st;
 }
@@ -188,13 +194,16 @@ PixelFormat::ScalarType Rescaler::ComputeInterceptSlopePixelType()
   return output;
 }
 
-
 template <typename TIn>
 void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
 {
 	double intercept = Intercept;
 	double slope = Slope;
   PixelFormat::ScalarType output = ComputeInterceptSlopePixelType();
+  if( UseTargetPixelType )
+    {
+    output = TargetScalarType;
+    }
   switch(output)
     {
   case PixelFormat::UINT8:
@@ -274,18 +283,18 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
     }
   // check if we are dealing with floating point type
   if( Slope != (int)Slope || Intercept != (int)Intercept)
-  {
-  // need to rescale as double (64bits) as slope/intercept are 64bits
-  //assert(0);
-  }
+    {
+    // need to rescale as double (64bits) as slope/intercept are 64bits
+    //assert(0);
+    }
   // else integral type
   switch(PF)
     {
   //case PixelFormat::UINT8:
-  //  RescaleFunctionIntoBestFit<uint8_t>(out,(uint8_t*)in,n);
+  //  InverseRescaleFunctionIntoBestFit<uint8_t>(out,(uint8_t*)in,n);
   //  break;
   //case PixelFormat::INT8:
-  //  RescaleFunctionIntoBestFit<int8_t>(out,(int8_t*)in,n);
+  //  InverseRescaleFunctionIntoBestFit<int8_t>(out,(int8_t*)in,n);
   //  break;
   case PixelFormat::UINT16:
     InverseRescaleFunctionIntoBestFit<uint16_t>(out,(uint16_t*)in,n);
@@ -317,18 +326,21 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
 
 bool Rescaler::Rescale(char *out, const char *in, size_t n)
 {
-  // fast path:
-  if( Slope == 1 && Intercept == 0 ) 
+  if( UseTargetPixelType == false )
     {
-    memcpy(out,in,n);
-    return true;
+    // fast path:
+    if( Slope == 1 && Intercept == 0 ) 
+      {
+      memcpy(out,in,n);
+      return true;
+      }
+    // check if we are dealing with floating point type
+    if( Slope != (int)Slope || Intercept != (int)Intercept)
+      {
+      // need to rescale as float (32bits) as slope/intercept are 32bits
+      //assert(0);
+      }
     }
-  // check if we are dealing with floating point type
-  if( Slope != (int)Slope || Intercept != (int)Intercept)
-  {
-  // need to rescale as float (32bits) as slope/intercept are 32bits
-  //assert(0);
-  }
   // else integral type
   switch(PF)
     {
@@ -359,6 +371,7 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
     RescaleFunctionIntoBestFit<int32_t>(out,(int32_t*)in,n);
     break;
   default:
+    gdcmErrorMacro( "Unhandled: " << PF );
     assert(0);
     break;
     }
@@ -463,6 +476,16 @@ PixelFormat Rescaler::ComputePixelTypeFromMinMax()
   output = ComputeInverseBestFitFromMinMax (/*PF,*/intercept,slope,ScalarRangeMin,ScalarRangeMax);
   assert( output != PixelFormat::UNKNOWN && output >= PixelFormat::UINT8 && output <= PixelFormat::INT32 );
   return output;
+}
+
+void Rescaler::SetTargetPixelType( PixelFormat const & targetpf )
+{
+  TargetScalarType = targetpf.GetScalarType();
+}
+
+void Rescaler::SetUseTargetPixelType(bool b)
+{
+  UseTargetPixelType = b;
 }
 
 } // end namespace gdcm

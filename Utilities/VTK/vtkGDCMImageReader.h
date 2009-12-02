@@ -300,6 +300,7 @@ protected:
   int IconNumberOfScalarComponents;
   int PlanarConfiguration;
   int LossyFlag;
+  int ForceRescale;
 
 protected:
   // TODO / FIXME
