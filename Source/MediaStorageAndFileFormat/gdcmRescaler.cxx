@@ -197,8 +197,8 @@ PixelFormat::ScalarType Rescaler::ComputeInterceptSlopePixelType()
 template <typename TIn>
 void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
 {
-	double intercept = Intercept;
-	double slope = Slope;
+  double intercept = Intercept;
+  double slope = Slope;
   PixelFormat::ScalarType output = ComputeInterceptSlopePixelType();
   if( UseTargetPixelType )
     {
@@ -239,8 +239,8 @@ void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
 template <typename TIn>
 void Rescaler::InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
 {
-	double intercept = Intercept;
-	double slope = Slope;
+  double intercept = Intercept;
+  double slope = Slope;
   //PixelFormat::ScalarType output = ComputeInterceptSlopePixelType();
   PixelFormat output = ComputePixelTypeFromMinMax();
   switch(output)
@@ -425,15 +425,18 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
     }
   else
     {
-    if( max <= std::numeric_limits<int8_t>::max() )
+    if( max <= std::numeric_limits<int8_t>::max() 
+      && min >= std::numeric_limits<int8_t>::min() )
       {
       st = PixelFormat::INT8;
       }
-    else if( max <= std::numeric_limits<int16_t>::max() )
+    else if( max <= std::numeric_limits<int16_t>::max()
+      && min >= std::numeric_limits<int16_t>::min() )
       {
       st = PixelFormat::INT16;
       }
-    else if( max <= std::numeric_limits<int32_t>::max() )
+    else if( max <= std::numeric_limits<int32_t>::max() 
+      && min >= std::numeric_limits<int32_t>::min() )
       {
       st = PixelFormat::INT32;
       }
@@ -442,8 +445,11 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       assert(0);
       }
     }
-	assert( st != PixelFormat::UNKNOWN );
-	assert( st != PixelFormat::FLOAT32 && st != PixelFormat::FLOAT16 && st != PixelFormat::FLOAT64 );
+  // postcondition:
+  assert( min >= PixelFormat(st).GetMin() );
+  assert( max <= PixelFormat(st).GetMax() );
+  assert( st != PixelFormat::UNKNOWN );
+  assert( st != PixelFormat::FLOAT32 && st != PixelFormat::FLOAT16 && st != PixelFormat::FLOAT64 );
   return st;
 }
 

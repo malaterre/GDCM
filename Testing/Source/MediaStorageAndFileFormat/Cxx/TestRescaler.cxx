@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmRescaler.h"
+#include <limits>
 
 #include <stdlib.h> // atof
 
@@ -109,17 +110,26 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   double scale = 1;
   // gdcmData/CT-MONO2-16-ort.dcm
   gdcm::PixelFormat pixeltype( 1, 16, 16, 15, 1 );
-      gdcm::Rescaler r;
-      r.SetIntercept( shift );
-      r.SetSlope( scale );
-      r.SetPixelFormat( pixeltype );
-      outputpt = r.ComputeInterceptSlopePixelType();
+  gdcm::Rescaler r;
+  r.SetIntercept( shift );
+  r.SetSlope( scale );
+  r.SetPixelFormat( pixeltype );
+  outputpt = r.ComputeInterceptSlopePixelType();
   // min,max = [-33792, 31743]
   // we need at least int32 to store that
-      if( outputpt != gdcm::PixelFormat::INT32 ) 
-        {
-        return  1;
-        }
+  if( outputpt != gdcm::PixelFormat::INT32 ) 
+    {
+    return  1;
+    }
+  // let's pretend image is really the full range:
+  // FIXME: I think it is ok to compute this way since shift is double anyway:
+  r.SetMinMaxForPixelType(std::numeric_limits<int16_t>::min() + shift,std::numeric_limits<int16_t>::max() + shift );
+
+  gdcm::PixelFormat pf2 = r.ComputePixelTypeFromMinMax();
+  if( pf2 != pixeltype )
+    {
+    return 1;
+    }
 }
 
   return 0;

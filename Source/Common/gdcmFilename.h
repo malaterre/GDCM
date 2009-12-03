@@ -28,7 +28,7 @@ namespace gdcm
 class GDCM_EXPORT Filename
 {
 public:
-  Filename(const char* filename = ""):FileName(filename ? filename : "") {}
+  Filename(const char* filename = ""):FileName(filename ? filename : ""),Path(),Conversion() {}
 
   /// Return the full filename
   const char *GetFileName() const { return FileName.c_str(); }
