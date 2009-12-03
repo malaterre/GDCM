@@ -25,22 +25,22 @@ namespace gdcm
  * \brief Rescale class
  * This class is meant to apply the linear tranform of Stored Pixel Value to Real World Value.
  * This is mostly found in CT or PET dataset, where the value are stored using one type, but
- * need to be converted to another scale using a linear tranform.
+ * need to be converted to another scale using a linear transform.
  * There are basically two cases:
- * In CT: the linear transform is generally integer based. Eg the Stored Pixel Type is unsigned
+ * In CT: the linear transform is generally integer based. E.g. the Stored Pixel Type is unsigned
  * short 12bits, but to get Hounsfield unit, one need to apply the linear transform:
  *  \f[
  *   RWV = 1. * SV - 1024
  *  \f]
- * So the best scalar to store the Real World Value will be 16 bit signed type.
+ * So the best scalar to store the Real World Value will be 16 bits signed type.
  * In PET: the linear transform is generally floating point based.
  * Since the dynamic range can be quite high, the Rescale Slope / Rescale Intercept can be
- * changing thoughout the Series. So it is important to read all linear tranform and deduce
- * the best Pixel Type only at the end (when all image to be read, have been parsed).
+ * changing thoughout the Series. So it is important to read all linear transform and deduce
+ * the best Pixel Type only at the end (when all the images to be read have been parsed).
  *
- * \warning internally any time a floating point value is found either in the Rescale Slope
- * or the Rescale Intercept it is assumed that the best matching output pixel type if FLOAT64
- * in previous implementation it was FLOAT32. Because VR:DS is closer to a 64bits floating point type
+ * \warning Internally any time a floating point value is found either in the Rescale Slope
+ * or the Rescale Intercept it is assumed that the best matching output pixel type is FLOAT64
+ * (in previous implementation it was FLOAT32). Because VR:DS is closer to a 64bits floating point type
  * FLOAT64 is thus a best matching pixel type for the floating point transformation.
  *
  * Example: Let say input is FLOAT64, and we want UINT16 as ouput, we would do:
