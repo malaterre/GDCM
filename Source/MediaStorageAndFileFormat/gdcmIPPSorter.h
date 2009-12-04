@@ -31,6 +31,15 @@ namespace gdcm
  * \warning See special note for SetZSpacingTolerance when computing the ZSpacing
  * from the IPP of each DICOM files (default tolerance for consistant spacing is: 
  * 1e-6mm)
+ * 
+ * For more information on Spacing, and how it is defined in DICOM, advanced user
+ * may refers to:
+ *
+ * http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
+ *
+ * \bug There currently a couple of bug in this implementation:
+ * \li Frame Of Reference UID is not taken into account
+ * \li Gantry Tilt is not considered
  */
 class GDCM_EXPORT IPPSorter : public Sorter
 {
