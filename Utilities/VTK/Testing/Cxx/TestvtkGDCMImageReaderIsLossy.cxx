@@ -207,6 +207,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0,"TestVRSQUN2.dcm" },
 { 0,"PHILIPS_GDCM12xBug.dcm"},
 { 0,"PHILIPS_GDCM12xBug2.dcm"},
+{ 0,"TestVRSQUN1.dcm"} ,
 { 0, NULL }
 };
 
