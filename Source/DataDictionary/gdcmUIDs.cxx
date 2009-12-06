@@ -183,6 +183,7 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.66.2","Spatial Fiducials Storage"},
 {"1.2.840.10008.5.1.4.1.1.66.3","Deformable Spatial Registration Storage"},
 {"1.2.840.10008.5.1.4.1.1.66.4","Segmentation Storage"},
+{"1.2.840.10008.5.1.4.1.1.66.5","Surface Segmentation Storage"}, // Sup 132
 {"1.2.840.10008.5.1.4.1.1.67","Real World Value Mapping Storage"},
 {"1.2.840.10008.5.1.4.1.1.77.1","VL Image Storage - Trial"},
 {"1.2.840.10008.5.1.4.1.1.77.2","VL Multi-frame Image Storage - Trial"},

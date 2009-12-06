@@ -108,6 +108,7 @@ public:
     ModalityPerformedProcedureStepSOPClass,
     PhilipsPrivateMRSyntheticImageStorage,
     VLPhotographicImageStorage,
+    SegmentationStorage, // "1.2.840.10008.5.1.4.1.1.66.4"
     MS_END
   } MSType; // Media Storage Type
 
@@ -163,8 +164,11 @@ protected:
 
 private:
   bool SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
+  /// NOT THREAD SAFE
   const char* GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
+  /// NOT THREAD SAFE
   const char* GetFromHeader(FileMetaInformation const &fmi);
+  /// NOT THREAD SAFE
   const char* GetFromDataSet(DataSet const &ds);
 
 private:
