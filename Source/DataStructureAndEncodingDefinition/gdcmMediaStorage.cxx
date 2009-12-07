@@ -188,6 +188,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == HangingProtocolStorage
     || ms == MRSpectroscopyStorage
     || ms == ModalityPerformedProcedureStepSOPClass
+    || ms == RawDataStorage
     || ms == RTStructureSetStorage )
     {
     return false;
