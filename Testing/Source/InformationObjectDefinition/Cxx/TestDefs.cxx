@@ -13,10 +13,36 @@
 
 =========================================================================*/
 #include "gdcmDefs.h"
+#include "gdcmUIDs.h"
+#include "gdcmGlobal.h"
+#include "gdcmMediaStorage.h"
 
 int TestDefs(int, char *[])
 {
-  gdcm::Defs defs;
+  gdcm::Global& g = gdcm::Global::GetInstance();
+  if( !g.LoadResourcesFiles() )
+    {
+    std::cerr << "Could not LoadResourcesFiles" << std::endl;
+    return 1;
+    }
+
+  const gdcm::Defs &defs = g.GetDefs();
+
+  gdcm::MediaStorage::MSType mst;
+  for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
+    {
+    const char *iod = defs.GetIODNameFromMediaStorage(mst);
+    if( !iod )
+      {
+      std::cerr << "Missing iod for MS: " << mst << " " <<
+        gdcm::MediaStorage::GetMSString(mst) << std::endl;
+      gdcm::UIDs uid;
+      uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
+      std::cerr << "MediaStorage is " << mst << " [" << uid.GetName() << "]" << std::endl;
+      }
+    }
+
+
   return 0;
 }
 
