@@ -127,6 +127,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::DigitalMammographyImageStorageForProcessing:
       iodname = "Digital Mammography X Ray Image IOD Modules";
       break;
+    case MediaStorage::RawDataStorage:
+      iodname = "Raw Data IOD Modules";
+      break;
     default:
       iodname = 0;
     }
