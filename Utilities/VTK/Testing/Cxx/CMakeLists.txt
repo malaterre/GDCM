@@ -38,7 +38,9 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Testing/Source/Data" # for gdcmDataImages.h
   )
 
-CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS})
+CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS}
+  EXTRA_INCLUDE gdcmTestDriver.h
+  )
 ADD_EXECUTABLE(gdcmvtkGDCMTests ${vtkGDCMTests})
 IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests ${VTKGDCM_NAME} vtkRendering)

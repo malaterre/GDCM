@@ -354,6 +354,13 @@ SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 MARK_AS_ADVANCED(BUILD_TESTING) # GDCM_BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
+IF(GDCM_TESTING_USE_LC_NUMERIC)
+  SET(CMAKE_TESTDRIVER_BEFORE_TESTMAIN 
+    "setlocale(LC_ALL,\"fr_FR.UTF-8\");std::locale::global(std::locale(\"fr_FR.UTF-8\"));"
+    )
+ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
+
+#-----------------------------------------------------------------------------
 # Python install
 #FIND_PACKAGE(PythonInterp REQUIRED)
 #MACRO(GET_PYTHON_SITE_PACKAGE dir)
