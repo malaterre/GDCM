@@ -23,6 +23,7 @@ blacklist = (
 "_j2k" # :)
 "_jp2" # :)
 "treamimpl" # :)
+"TestDriver"
 # DataStructureAndEncodingDefinition
 "ByteBuffer" # WTF ?
 "ExplicitDataElement"
