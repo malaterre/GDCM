@@ -41,7 +41,7 @@ int TestUnpacker12Bits(int, char *[])
     for( size_t i = 0; i < outlen / 2; ++i )
       {
       const short &v = output_s[i];
-      // There is no way we can have values greate than a 12bits integer:
+      // There is no way we can have values greater than a 12bits integer:
       if( v >= 4096 || v < 0 )
         {
         std::cerr << "Too big:" << v << std::endl;

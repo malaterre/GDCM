@@ -28,6 +28,7 @@ int TestDefs(int, char *[])
 
   const gdcm::Defs &defs = g.GetDefs();
 
+  int ret = 0;
   gdcm::MediaStorage::MSType mst;
   for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
     {
@@ -39,10 +40,11 @@ int TestDefs(int, char *[])
       gdcm::UIDs uid;
       uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
       std::cerr << "MediaStorage is " << mst << " [" << uid.GetName() << "]" << std::endl;
+      ++ret;
       }
     }
 
 
-  return 0;
+  return ret;
 }
 
