@@ -80,8 +80,8 @@ public:
     XRayAngiographicBiPlaneImageStorageRetired,
     NuclearMedicineImageStorage,
     RawDataStorage,
-    SpacialRegistrationStorage,
-    SpacialFiducialsStorage,
+    SpacialRegistrationStorage, // Spatial
+    SpacialFiducialsStorage, // Spatial..
     PETImageStorage,
     RTImageStorage,
     RTDoseStorage,

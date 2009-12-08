@@ -82,6 +82,7 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
       iodname = "CR Image IOD Modules";
       break;
     case MediaStorage::XRayAngiographicImageStorage:
+    //case MediaStorage::XRayAngiographicBiPlaneImageStorageRetired: // FIXME ???
       iodname = "X Ray Angiographic Image IOD Modules";
       break;
     case MediaStorage::UltrasoundImageStorageRetired:
@@ -94,9 +95,6 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
       break;
     case MediaStorage::SecondaryCaptureImageStorage:
       iodname = "SC Image IOD Modules";
-      break;
-    case MediaStorage::DigitalXRayImageStorageForPresentation:
-      iodname = "Digital X Ray Image IOD Modules";
       break;
     case MediaStorage::XRayRadiofluoroscopingImageStorage:
       iodname = "XRF Image IOD Modules";
@@ -123,12 +121,92 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::EncapsulatedPDFStorage:
       iodname = "Encapsulated PDF IOD Modules";
       break;
+    case MediaStorage::VLPhotographicImageStorage:
+      iodname = "VL Photographic Image IOD Modules";
+      break;
+    case MediaStorage::SegmentationStorage:
+      iodname = "Segmentation IOD Modules";
+      break;
+    case MediaStorage::RawDataStorage:
+      iodname = "Raw Data IOD Modules";
+      break;
+    case MediaStorage::MammographyCADSR:
+      iodname = "Mammography CAD SR IOD Modules";
+      break;
+    case MediaStorage::VideoEndoscopicImageStorage:
+      iodname = "Video Endoscopic Image IOD Modules";
+      break;
+    case MediaStorage::RTImageStorage:
+      iodname = "RT Image IOD Modules";
+      break;
+    case MediaStorage::RTDoseStorage:
+      iodname = "RT Dose IOD Modules";
+      break;
+    case MediaStorage::RTStructureSetStorage:
+      iodname = "RT Structure Set IOD Modules";
+      break;
+    case MediaStorage::RTPlanStorage:
+      iodname = "RT Plan IOD Modules";
+      break;
+    case MediaStorage::ModalityPerformedProcedureStepSOPClass:
+      iodname = "Modality Performed Procedure Step IOD Modules";
+      break;
+    case MediaStorage::HangingProtocolStorage:
+      iodname = "Hanging Protocol IOD Modules";
+      break;
+    case MediaStorage::KeyObjectSelectionDocument:
+      iodname = "Key Object Selection Document IOD Modules";
+      break;
+    case MediaStorage::ComprehensiveSR:
+      iodname = "Comprehensive SR IOD Modules";
+      break;
+    case MediaStorage::HemodynamicWaveformStorage:
+      iodname = "Hemodynamic IOD Modules";
+      break;
+    case MediaStorage::DigitalIntraoralXrayImageStorageForPresentation:
+    case MediaStorage::DigitalIntraoralXRayImageStorageForProcessing:
+      iodname = "Digital Intra Oral X Ray Image IOD Modules";
+      break;
+    case MediaStorage::DigitalXRayImageStorageForPresentation:
+    case MediaStorage::DigitalXRayImageStorageForProcessing:
+      iodname = "Digital X Ray Image IOD Modules";
+      break;
     case MediaStorage::DigitalMammographyImageStorageForPresentation:
     case MediaStorage::DigitalMammographyImageStorageForProcessing:
       iodname = "Digital Mammography X Ray Image IOD Modules";
       break;
-    case MediaStorage::RawDataStorage:
-      iodname = "Raw Data IOD Modules";
+    case MediaStorage::GrayscaleSoftcopyPresentationStateStorageSOPClass:
+      iodname = "Grayscale Softcopy Presentation State IOD Modules";
+      break;
+    case MediaStorage::LeadECGWaveformStorage:
+      iodname = "12 Lead ECG IOD Modules";
+      break;
+    case MediaStorage::GeneralECGWaveformStorage:
+      iodname = "General ECG IOD Modules";
+      break;
+    case MediaStorage::AmbulatoryECGWaveformStorage:
+      iodname = "Ambulatory ECG IOD Modules";
+      break;
+    case MediaStorage::BasicVoiceAudioWaveformStorage:
+      iodname = "Basic Voice Audio IOD Modules";
+      break;
+    case MediaStorage::SpacialFiducialsStorage:
+      iodname = "Spatial Fiducials IOD Modules";
+      break;
+    case MediaStorage::BasicTextSR:
+      iodname = "Basic Text SR IOD Modules";
+      break;
+    case MediaStorage::CardiacElectrophysiologyWaveformStorage:
+      iodname = "Basic Cardiac EP IOD Modules";
+      break;
+    case MediaStorage::PETImageStorage:
+      iodname = "PET Image IOD Modules";
+      break;
+    case MediaStorage::EnhancedSR:
+      iodname = "Enhanced SR IOD Modules";
+      break;
+    case MediaStorage::SpacialRegistrationStorage:
+      iodname = "Spatial Registration IOD Modules";
       break;
     default:
       iodname = 0;

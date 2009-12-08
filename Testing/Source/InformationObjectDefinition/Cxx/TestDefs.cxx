@@ -19,6 +19,7 @@
 
 int TestDefs(int, char *[])
 {
+  using gdcm::MediaStorage;
   gdcm::Global& g = gdcm::Global::GetInstance();
   if( !g.LoadResourcesFiles() )
     {
@@ -35,12 +36,21 @@ int TestDefs(int, char *[])
     const char *iod = defs.GetIODNameFromMediaStorage(mst);
     if( !iod )
       {
-      std::cerr << "Missing iod for MS: " << mst << " " <<
-        gdcm::MediaStorage::GetMSString(mst) << std::endl;
       gdcm::UIDs uid;
       uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
-      std::cerr << "MediaStorage is " << mst << " [" << uid.GetName() << "]" << std::endl;
-      ++ret;
+      // We do not support Private IODs (for now??)
+      if( mst != MediaStorage::PhilipsPrivateMRSyntheticImageStorage 
+        && mst != MediaStorage::ToshibaPrivateDataStorage 
+        && mst != MediaStorage::GEPrivate3DModelStorage 
+        && mst != MediaStorage::Philips3D
+        && mst != MediaStorage::CSANonImageStorage
+        && mst != MediaStorage::GeneralElectricMagneticResonanceImageStorage )
+        {
+        std::cerr << "Missing iod for MS: " << mst << " " <<
+          gdcm::MediaStorage::GetMSString(mst) << std::endl;
+        std::cerr << "MediaStorage is " << mst << " [" << uid.GetName() << "]" << std::endl;
+        ++ret;
+        }
       }
     }
 
