@@ -109,6 +109,7 @@ public:
     PhilipsPrivateMRSyntheticImageStorage,
     VLPhotographicImageStorage,
     SegmentationStorage, // "1.2.840.10008.5.1.4.1.1.66.4"
+    RTIonPlanStorage, // 1.2.840.10008.5.1.4.1.1.481.8
     MS_END
   } MSType; // Media Storage Type
 

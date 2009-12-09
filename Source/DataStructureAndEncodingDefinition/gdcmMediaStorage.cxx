@@ -119,6 +119,7 @@ static const char *MSStrings[] = {
   "1.3.46.670589.5.0.10",
   "1.2.840.10008.5.1.4.1.1.77.1.4", // "VL Photographic Image Storage",
   "1.2.840.10008.5.1.4.1.1.66.4", // Segmentation Storage 
+  "1.2.840.10008.5.1.4.1.1.481.8", // RT Ion Plan Storage
   0
 };
 
@@ -189,6 +190,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == MRSpectroscopyStorage
     || ms == ModalityPerformedProcedureStepSOPClass
     || ms == RawDataStorage
+    || ms == RTIonPlanStorage
     || ms == RTStructureSetStorage )
     {
     return false;
@@ -271,6 +273,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//PhilipsPrivateMRSyntheticImageStorage
   {"XC", 2},//VLPhotographicImageStorage
   {"  ", 2},// Segmentation Storage 
+  {"  ", 2},// RT Ion Plan Storage
   {NULL, 0} //MS_END
 };
 

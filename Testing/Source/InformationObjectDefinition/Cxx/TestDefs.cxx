@@ -16,6 +16,7 @@
 #include "gdcmUIDs.h"
 #include "gdcmGlobal.h"
 #include "gdcmMediaStorage.h"
+#include "gdcmSOPClassUIDToIOD.h"
 
 int TestDefs(int, char *[])
 {
@@ -34,10 +35,10 @@ int TestDefs(int, char *[])
   for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
     {
     const char *iod = defs.GetIODNameFromMediaStorage(mst);
+    gdcm::UIDs uid;
+    uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
     if( !iod )
       {
-      gdcm::UIDs uid;
-      uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
       // We do not support Private IODs (for now??)
       if( mst != MediaStorage::PhilipsPrivateMRSyntheticImageStorage 
         && mst != MediaStorage::ToshibaPrivateDataStorage 
@@ -49,6 +50,20 @@ int TestDefs(int, char *[])
         std::cerr << "Missing iod for MS: " << mst << " " <<
           gdcm::MediaStorage::GetMSString(mst) << std::endl;
         std::cerr << "MediaStorage is " << mst << " [" << uid.GetName() << "]" << std::endl;
+        ++ret;
+        }
+      }
+    else
+      {
+      const char *iod_ref = gdcm::SOPClassUIDToIOD::GetIOD(uid);
+      if( !iod_ref )
+        {
+        std::cerr << "Could not find IOD for SOPClass: " << uid << std::endl;
+        ++ret;
+        }
+      else if( strcmp(iod_ref, iod) != 0 || strcmp(iod, iod_ref) != 0 )
+        {
+        std::cerr << "Incompatible IODs: " << iod << " versus ref= " << iod_ref << std::endl;
         ++ret;
         }
       }

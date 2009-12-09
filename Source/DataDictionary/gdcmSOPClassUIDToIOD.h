@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
+  Module:  $URL$
 
   Copyright (c) 2006-2009 Mathieu Malaterre
   All rights reserved.
