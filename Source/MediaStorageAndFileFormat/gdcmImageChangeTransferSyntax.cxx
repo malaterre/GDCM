@@ -92,6 +92,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap c
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::ARGB
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
     return true;
     }

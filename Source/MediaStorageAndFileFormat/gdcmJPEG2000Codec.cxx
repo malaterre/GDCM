@@ -385,8 +385,11 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       gdcmWarningMacro( "BPP = " << comp->bpp << " vs BitsAllocated = " << PF.GetBitsAllocated() );
       }
     assert( comp->sgnd == PF.GetPixelRepresentation() );
-    assert( comp->prec == PF.GetBitsStored());
+#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    assert( comp->prec == PF.GetBitsStored()); // D_CLUNIE_RG3_JPLY.dcm
     assert( comp->prec - 1 == PF.GetHighBit());
+#endif
+    assert( comp->prec >= PF.GetBitsStored());
     assert( comp->prec <= 32 );
 
     if (comp->prec <= 8)
@@ -603,7 +606,12 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     const PixelFormat &pf = this->GetPixelFormat();
     int sample_pixel = pf.GetSamplesPerPixel();
     int bitsallocated = pf.GetBitsAllocated();
+#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     int bitsstored = pf.GetBitsStored();
+#else
+    // Usual D_CLUNIE_RG3_JPLY.dcm kludge:
+    int bitsstored = pf.GetBitsAllocated();
+#endif
     int sign = pf.GetPixelRepresentation();
     int quality = 100;
 
