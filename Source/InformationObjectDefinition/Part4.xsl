@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
@@ -12,6 +12,9 @@
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
+-->
+<!-- how to run:
+$ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008/08_04pu.xml 
 -->
 <xsl:template match="text()" />
   <xsl:template match="informaltable">
