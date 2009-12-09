@@ -366,27 +366,43 @@ int main(int argc, char *argv[])
           else if( option_index == 15 ) /* empty */
             {
             assert( strcmp(s, "empty") == 0 );
-            tag.ReadFromCommaSeparatedString(optarg);
+            if( !tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              return 1;
+              }
             empty_tags.push_back( tag );
             }
           else if( option_index == 16 ) /* remove */
             {
             assert( strcmp(s, "remove") == 0 );
-            tag.ReadFromCommaSeparatedString(optarg);
+            if( !tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              return 1;
+              }
             remove_tags.push_back( tag );
             }
           else if( option_index == 17 ) /* replace */
             {
             assert( strcmp(s, "replace") == 0 );
-            tag.ReadFromCommaSeparatedString(optarg);
+            if( !tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              return 1;
+              }
             std::stringstream ss;
             ss.str( optarg );
-            int dummy;
-            char cdummy;
-            ss >> dummy;
+            uint16_t dummy;
+            char cdummy; // comma
+            ss >> std::hex >> dummy;
+            assert( tag.GetGroup() == dummy );
             ss >> cdummy;
-            ss >> dummy;
+            assert( cdummy == ',' );
+            ss >> std::hex >> dummy;
+            assert( tag.GetElement() == dummy );
             ss >> cdummy;
+            assert( cdummy == ',' );
             std::string str;
             ss >> str;
             replace_tags_value.push_back( std::make_pair(tag, str) );
@@ -580,6 +596,12 @@ int main(int argc, char *argv[])
     {
     if( !gdcm::System::FileIsDirectory(outfilename.c_str()) )
       {
+      if( gdcm::System::FileExists( outfilename.c_str() ) )
+        {
+        std::cerr << "Could not create directory since " << outfilename << " is already a file" << std::endl;
+        return 1;
+        }
+
       //std::cout << "Making directory: " << outfilename << std::endl;
       if( !gdcm::System::MakeDirectory( outfilename.c_str() ) )
         {
