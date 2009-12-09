@@ -63,8 +63,9 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
 #-----------------------------------------------------------------------------
-# Install Part3.xml
+# Install Part3.xml / Part4.xml
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
+              ${CMAKE_CURRENT_SOURCE_DIR}/Part4.xml
   DESTINATION ${GDCM_INSTALL_DATA_DIR}/XML COMPONENT Libraries
 )
 
