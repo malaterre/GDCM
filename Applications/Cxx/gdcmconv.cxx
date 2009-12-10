@@ -62,7 +62,7 @@
 /*
  check-meta is ideal for image like:
 
-  make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
+  gdcmconv -C gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm bla.dcm 
 */
 #include "gdcmReader.h"
 #include "gdcmFileDerivation.h"
