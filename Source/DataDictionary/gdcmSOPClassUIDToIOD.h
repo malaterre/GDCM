@@ -28,6 +28,7 @@ class GDCM_EXPORT SOPClassUIDToIOD
 {
 public:
   static const char *GetIOD(UIDs const & uid);
+  static unsigned int GetNumberOfSOPClassToIOD();
 };
 
 } // end namespace gdcm

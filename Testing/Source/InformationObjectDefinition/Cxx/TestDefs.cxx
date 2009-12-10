@@ -61,12 +61,26 @@ int TestDefs(int, char *[])
         std::cerr << "Could not find IOD for SOPClass: " << uid << std::endl;
         ++ret;
         }
-      else if( strcmp(iod_ref, iod) != 0 || strcmp(iod, iod_ref) != 0 )
+      else 
         {
-        std::cerr << "Incompatible IODs: " << iod << " versus ref= " << iod_ref << std::endl;
-        ++ret;
+        std::string iod_ref_str = iod_ref;
+        //iod_ref_str += " IOD Modules";
+        if( iod_ref_str != iod )
+          {
+          std::cerr << "Incompatible IODs: [" << iod << "] versus ref= [" << iod_ref_str << "]" << std::endl;
+          ++ret;
+          }
         }
       }
+    }
+
+  unsigned int nm = MediaStorage::GetNumberOfModality();
+  unsigned int nsop = gdcm::SOPClassUIDToIOD::GetNumberOfSOPClassToIOD();
+  if( nm != nsop )
+    {
+    std::cerr << "Incompatible MediaStorage knows: " << nm << 
+      " SOP Classes while SOPClassUIDToIOD knows: " << nsop << " classes" << std::endl;
+    ++ret;
     }
 
 

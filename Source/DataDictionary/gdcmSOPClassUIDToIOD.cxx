@@ -87,7 +87,7 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.481.5" , ""},
 {"1.2.840.10008.5.1.4.1.1.481.6" , ""},
 {"1.2.840.10008.5.1.4.1.1.481.7" , ""},
-{"1.2.840.10008.5.1.4.1.1.481.8" , "IOD defined in PS 3.3"},
+{"1.2.840.10008.5.1.4.1.1.481.8" , "RT Ion Plan IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.481.9" , "IOD defined in PS 3.3"},
 {"1.2.840.10008.5.1.4.1.1.5" , ""},
 {"1.2.840.10008.5.1.4.1.1.6" , ""},
@@ -178,6 +178,12 @@ namespace gdcm
 { 0, 0 }
 };
 
+unsigned int SOPClassUIDToIOD::GetNumberOfSOPClassToIOD()
+{
+  static const unsigned int n = sizeof( SOPClassToIOD ) / sizeof( *SOPClassToIOD );
+  assert( n > 0 );
+  return n - 1;
+}
 
 const char *SOPClassUIDToIOD::GetIOD(UIDs const & uid)
 {

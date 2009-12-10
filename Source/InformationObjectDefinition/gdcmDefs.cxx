@@ -208,6 +208,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::SpacialRegistrationStorage:
       iodname = "Spatial Registration IOD Modules";
       break;
+    case MediaStorage::RTIonPlanStorage:
+      iodname = "RT Ion Plan IOD Modules";
+      break;
     default:
       iodname = 0;
     }
