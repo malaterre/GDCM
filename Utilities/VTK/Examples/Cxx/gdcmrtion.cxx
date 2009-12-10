@@ -29,6 +29,11 @@
 #include "gdcmReader.h"
 #include "gdcmAttribute.h"
 
+/*
+ This example is just for fun. We found a RT Ion Plan Storage and simply extracted the viz stuff for VTK
+
+    RTIonPlanStorage, // 1.2.840.10008.5.1.4.1.1.481.8
+*/
 int main(int argc, char *argv[])
 {
   if( argc < 3 )
