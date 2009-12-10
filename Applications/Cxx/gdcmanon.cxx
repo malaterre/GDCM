@@ -127,6 +127,8 @@ static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const
     fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
     fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
     fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
+    fmi.Remove( gdcm::Tag(0x0002,0x0100) ); //  '   '    ' // PrivateInformationCreatorUID
+    fmi.Remove( gdcm::Tag(0x0002,0x0102) ); //  '   '    ' // PrivateInformation
 
     }
   else if ( reidentify )
