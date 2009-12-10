@@ -31,6 +31,7 @@
 #include "gdcmScanner.h"
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
+#include "gdcmSimpleSubjectWatcher.h"
 
 #include <string>
 #include <iostream>
@@ -247,7 +248,9 @@ int main(int argc, char *argv[])
   if( verbose ) d.Print( std::cout );
   std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
 
-  gdcm::Scanner s;
+  gdcm::Scanner *ps = new gdcm::Scanner;
+  gdcm::Scanner &s = *ps;
+  //gdcm::SimpleSubjectWatcher watcher(ps, "Scanner");
   for( VectorTags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
     s.AddTag( *it );
