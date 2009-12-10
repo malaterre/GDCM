@@ -37,7 +37,6 @@ public:
   /// return VR::INVALID in case of error
   static VR ComputeVR(File const & file, DataSet const &ds, const Tag& tag);
 
-
   //static SequenceOfItems* ComputeSQFromByteValue(File const & file, DataSet const &ds, const Tag &tag);
 
 protected:

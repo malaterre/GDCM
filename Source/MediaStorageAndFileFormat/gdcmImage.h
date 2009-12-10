@@ -39,8 +39,12 @@ namespace gdcm
  * with gdcm::JPEGImage which would from the stream extract the header info
  * and fill it to please gdcm::Image...well except origin for instance
  * 
- * Basically you can see it as a storage for the PixelData element.
- * However it was also used for MRSpectroscopy object (as proof of concept)
+ * Basically you can see it as a storage for the Pixel Data element (7fe0,0010).
+ *
+ * \warning This class does some heuristics to guess the Spacing but is not
+ * compatible with DICOM CP-586. In case of doubt use PixmapReader instead
+ *
+ * \see ImageReader PixmapReader
  */
 class GDCM_EXPORT Image : public Pixmap
 {
