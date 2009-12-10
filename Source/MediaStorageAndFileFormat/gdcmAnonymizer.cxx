@@ -621,7 +621,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
   // \precondition
   assert( ds.FindDataElement(tag) );
 
-  gdcm::AnonymizeEvent ae;
+  AnonymizeEvent ae;
   ae.SetTag( tag );
   this->InvokeEvent( ae );
 

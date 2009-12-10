@@ -37,7 +37,7 @@ public:
 protected:
   virtual void StartFilter();
   virtual void EndFilter();
-  virtual void ShowProgress();
+  virtual void ShowProgress(Subject *caller, const Event &evt);
   virtual void ShowIteration();
   virtual void ShowAnonymization(Subject *caller, const Event &evt);
   virtual void ShowAbort();
@@ -52,13 +52,13 @@ private:
   std::string m_Comment;
 
   typedef SimpleMemberCommand<SimpleSubjectWatcher> SimpleCommandType;
+  typedef MemberCommand<SimpleSubjectWatcher> CommandType;
+
   SmartPointer<SimpleCommandType> m_StartFilterCommand;
   SmartPointer<SimpleCommandType> m_EndFilterCommand;
-  SmartPointer<SimpleCommandType> m_ProgressFilterCommand;
+  SmartPointer<CommandType> m_ProgressFilterCommand;
   SmartPointer<SimpleCommandType> m_IterationFilterCommand;
   SmartPointer<SimpleCommandType> m_AbortFilterCommand;
-
-  typedef MemberCommand<SimpleSubjectWatcher> CommandType;
   SmartPointer<CommandType> m_AnonymizeFilterCommand;
 
   unsigned long m_StartTag;

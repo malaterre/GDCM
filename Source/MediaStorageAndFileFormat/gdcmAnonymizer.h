@@ -58,6 +58,12 @@ class CryptographicMessageSyntax;
  *  - Produce the same dummy value for the same input value
  *  - do not provide an easy way to retrieve the original value from the sha1 generated value
  *
+ * This class implement the Subject/Observer pattern trigger the following event:
+ * \li AnonymizeEvent
+ * \li IterationEvent
+ * \li StartEvent
+ * \li EndEvent
+ *
  * \see CryptographicMessageSyntax
  */
 class GDCM_EXPORT Anonymizer : public Subject

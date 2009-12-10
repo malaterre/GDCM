@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAnonymizeEvent_h
-#define __gdcmAnonymizeEvent_h
+#ifndef __gdcmProgressEvent_h
+#define __gdcmProgressEvent_h
 
 #include "gdcmEvent.h"
 #include "gdcmTag.h"
@@ -22,33 +22,33 @@ namespace gdcm
 {
 
 /**
- * \brief AnonymizeEvent
- * Special type of event triggered during the Anonymization process
+ * \brief ProgressEvent
+ * Special type of event triggered during 
  *
- * \see Anonymizer
+ * \see 
  */
-class AnonymizeEvent : public AnyEvent
+class ProgressEvent : public AnyEvent
 {
 public:
-  typedef AnonymizeEvent Self;
+  typedef ProgressEvent Self;
   typedef AnyEvent Superclass;
-  AnonymizeEvent(Tag const &tag = 0):m_Tag(tag) {}
-  virtual ~AnonymizeEvent() {}
-  virtual const char * GetEventName() const { return "AnonymizeEvent"; }
+  ProgressEvent(double p = 0):m_Progress(p) {}
+  virtual ~ProgressEvent() {}
+  virtual const char * GetEventName() const { return "ProgressEvent"; }
   virtual bool CheckEvent(const ::gdcm::Event* e) const
     { return dynamic_cast<const Self*>(e); }
   virtual ::gdcm::Event* MakeObject() const
     { return new Self; }
-  AnonymizeEvent(const Self&s) : AnyEvent(s){};
+  ProgressEvent(const Self&s) : AnyEvent(s){};
 
-  void SetTag(const Tag& t ) { m_Tag = t; }
-  Tag const & GetTag() const { return m_Tag; }
+  void SetProgress(double p) { m_Progress = p; }
+  double GetProgress() const { return m_Progress; }
 private:
   void operator=(const Self&);
-  Tag m_Tag;
+  double m_Progress;
 };
 
 
 } // end namespace gdcm
 
-#endif //__gdcmAnonymizeEvent_h
+#endif //__gdcmProgressEvent_h

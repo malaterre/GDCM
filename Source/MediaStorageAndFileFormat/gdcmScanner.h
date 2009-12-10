@@ -16,7 +16,9 @@
 #define __gdcmScanner_h
 
 #include "gdcmDirectory.h"
+#include "gdcmSubject.h"
 #include "gdcmTag.h"
+#include "gdcmSmartPointer.h"
 
 #include <map>
 #include <set>
@@ -35,8 +37,13 @@ namespace gdcm
  *
  * \note: implementation details. All values are stored in a std::set of std::string. Then the *address*
  * of the cstring underlying the std::string is used in the std::map
+ *
+ * This class implement the Subject/Observer pattern trigger the following event:
+ * \li ProgressEvent
+ * \li StartEvent
+ * \li EndEvent
  */
-class GDCM_EXPORT Scanner
+class GDCM_EXPORT Scanner : public Subject
 {
   friend std::ostream& operator<<(std::ostream &_os, const Scanner &s);
 public:
@@ -121,6 +128,9 @@ public:
   /// hash table.
   /// \warning Tag 't' should have been added via AddTag() prior to the Scan() call !
   const char* GetValue(const char *filename, Tag const &t) const;
+
+  /// for wrapped language: instanciate a reference counted object
+  static SmartPointer<Scanner> New() { return new Scanner; }
 
 private:
   // struct to store all uniq tags in ascending order:

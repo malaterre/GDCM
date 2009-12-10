@@ -87,7 +87,7 @@ gdcmEventMacro( NoEvent            , Event );
 gdcmEventMacro( AnyEvent           , Event );
 gdcmEventMacro( StartEvent         , AnyEvent );
 gdcmEventMacro( EndEvent           , AnyEvent );
-gdcmEventMacro( ProgressEvent      , AnyEvent );
+//gdcmEventMacro( ProgressEvent      , AnyEvent );
 gdcmEventMacro( ExitEvent          , AnyEvent );
 gdcmEventMacro( AbortEvent         , AnyEvent );
 gdcmEventMacro( ModifiedEvent      , AnyEvent );
