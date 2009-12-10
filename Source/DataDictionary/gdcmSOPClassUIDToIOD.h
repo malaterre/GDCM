@@ -22,12 +22,18 @@ namespace gdcm
 {
 
 /**
- * \brief Class convert a class uid into IOD
+ * \brief Class convert a class SOP Class UID into IOD
+ *
+ * Reference PS 3.4 Table B.5-1 STANDARD SOP CLASSES
  */
 class GDCM_EXPORT SOPClassUIDToIOD
 {
 public:
+  /// Return the associated IOD based on a SOP Class UID uid
+  /// (there is a one-to-one mapping from SOP Class UID to matching IOD)
   static const char *GetIOD(UIDs const & uid);
+
+  /// Return the number of SOP Class UID listed internally
   static unsigned int GetNumberOfSOPClassToIOD();
 };
 

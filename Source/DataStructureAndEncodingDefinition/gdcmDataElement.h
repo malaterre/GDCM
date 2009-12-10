@@ -40,6 +40,7 @@ class SequenceOfFragments;
 /**
  * \brief Class to represent a Data Element
  * either Implicit or Explicit
+ *
  * \details
  * DATA ELEMENT: 
  * A unit of information as defined by a single entry in the data dictionary.
@@ -49,7 +50,7 @@ class SequenceOfFragments;
  * also contains a VR Field where the Value Representation of that Data 
  * Element is specified explicitly.
  *
- * \section Design:
+ * Design:
  * - A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
  * - A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
  * - For Item start/end (See 0xfffe tags), Value is NULL

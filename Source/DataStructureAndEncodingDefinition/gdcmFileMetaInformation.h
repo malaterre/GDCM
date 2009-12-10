@@ -26,17 +26,20 @@ namespace gdcm
 {
 /**
  * \brief Class to represent a File Meta Information
- * \note
- * FileMetaInformation is a Explicit Structured Set.
+ *
+ * \details FileMetaInformation is a Explicit Structured Set.
  * Whenever the file contains an ImplicitDataElement DataSet, a conversion
  * will take place.
  * \todo
  * If user adds an element with group != 0x0002 it will be written...
- * Definition:
  *
- * The File Meta Information includes identifying information on the encapsulated Data Set. This header
- * consists of a 128 byte File Preamble, followed by a 4 byte DICOM prefix, followed by the File Meta
- * Elements shown in Table 7.1-1. This header shall be present in every DICOM file.
+ * Definition:
+ * The File Meta Information includes identifying information on the
+ * encapsulated Data Set. This header consists of a 128 byte File Preamble,
+ * followed by a 4 byte DICOM prefix, followed by the File Meta Elements shown
+ * in Table 7.1-1. This header shall be present in every DICOM file.
+ *
+ * \see Writer Reader
  */
 class GDCM_EXPORT FileMetaInformation : public DataSet
 {
