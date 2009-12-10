@@ -51,6 +51,7 @@
 #include "vtkOrientedGlyphContourRepresentation.h"
 #include "vtkPointHandleRepresentation2D.h"
 #include "vtkDistanceRepresentation2D.h"
+#include "vtkLegendScaleActor.h"
 #include "vtkProperty2D.h"
 #else
 class vtkLogoWidget;
@@ -625,6 +626,9 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
   obs->Delete();
+
+  //vtkLegendScaleActor *legend = vtkLegendScaleActor::New();
+  //viewer->GetRenderer()->AddActor( legend );
 
   iren->Initialize();
   iren->Start();
