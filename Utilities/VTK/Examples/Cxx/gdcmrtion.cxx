@@ -13,19 +13,22 @@
 
 =========================================================================*/
 #include "vtkImageData.h"
+#include "vtkPointData.h"
 #include "vtkDoubleArray.h"
+#include <vtkXMLImageDataWriter.h>
 
 #include "gdcmReader.h"
 #include "gdcmAttribute.h"
 
 int main(int argc, char *argv[])
 {
-  if( argc < 2 )
+  if( argc < 3 )
     {
-    std::cerr << argv[0] << " filename.dcm\n";
+    std::cerr << argv[0] << " filename.dcm outfile.vti\n";
     return 1;
     }
   const char * filename = argv[1];
+  const char * outfilename = argv[2];
 
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -82,9 +85,10 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-    const gdcm::Item & item = sqi->GetItem(1); // Item start at #1
-    const gdcm::DataSet& nestedds = item.GetNestedDataSet();
-    //std::cout << nestedds << std::endl;
+  //const gdcm::Item & item = sqi->GetItem(1); // Item start at #1
+  const gdcm::Item & item = sqi->GetItem(2); // Item start at #1
+  const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+  //std::cout << nestedds << std::endl;
   gdcm::Tag tcompensatorsq(0x300a,0x00e3);
   if( !nestedds.FindDataElement( tcompensatorsq ) )
     {
@@ -93,8 +97,8 @@ int main(int argc, char *argv[])
   const gdcm::DataElement &compensatorsq = nestedds.GetDataElement( tcompensatorsq );
   //std::cout << compensatorsq << std::endl;
   gdcm::SmartPointer<gdcm::SequenceOfItems> ssqi = compensatorsq.GetValueAsSQ();
-    const gdcm::Item & item2 = ssqi->GetItem(1); // Item start at #1
-    const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
+  const gdcm::Item & item2 = ssqi->GetItem(1); // Item start at #1
+  const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
   //std::cout << nestedds2 << std::endl;
   gdcm::Tag tcompensatorthicknessdata(0x300a,0x00ec);
   if( !nestedds2.FindDataElement( tcompensatorthicknessdata ) )
@@ -103,26 +107,35 @@ int main(int argc, char *argv[])
     }
   const gdcm::DataElement &compensatorthicknessdata = nestedds2.GetDataElement( tcompensatorthicknessdata );
   //  std::cout << compensatorthicknessdata << std::endl;
-      gdcm::Attribute<0x300a,0x00ec> at;
-      at.SetFromDataElement( compensatorthicknessdata );
-      const double* pts = at.GetValues();
-//        (300a,00e7) IS [35]                                       # 2,1 Compensator Rows
-      gdcm::Attribute<0x300a,0x00e7> at1;
+  gdcm::Attribute<0x300a,0x00ec> at;
+  at.SetFromDataElement( compensatorthicknessdata );
+  const double* pts = at.GetValues();
+  //        (300a,00e7) IS [35]                                       # 2,1 Compensator Rows
+  gdcm::Attribute<0x300a,0x00e7> at1;
   const gdcm::DataElement &compensatorrows = nestedds2.GetDataElement( at1.GetTag() );
   at1.SetFromDataElement( compensatorrows );
-std::cout << at1.GetValue() << std::endl;
-//        (300a,00e8) IS [37]                                       # 2,1 Compensator Columns
-      gdcm::Attribute<0x300a,0x00e8> at2;
+  std::cout << at1.GetValue() << std::endl;
+  //        (300a,00e8) IS [37]                                       # 2,1 Compensator Columns
+  gdcm::Attribute<0x300a,0x00e8> at2;
   const gdcm::DataElement &compensatorcols = nestedds2.GetDataElement( at2.GetTag() );
   at2.SetFromDataElement( compensatorcols );
-std::cout << at2.GetValue() << std::endl;
+  std::cout << at2.GetValue() << std::endl;
 
   vtkDoubleArray *d = vtkDoubleArray::New();
   d->SetArray( (double*)pts , at1.GetValue() * at2.GetValue() , 0 );
 
   vtkImageData *img = vtkImageData::New();
-  img->SetDimensions( at1.GetValue(), at2.GetValue(), 1 );
-  //img->GetPi
+  img->Initialize();
+  img->SetDimensions( at2.GetValue(), at1.GetValue(), 1 );
+  //imgb->SetExtent(1, xdim, 1, ydim, 1, zdim);
+  img->SetScalarTypeToDouble();
+  img->SetNumberOfScalarComponents(1);
+  img->GetPointData()->SetScalars(d);
+
+  vtkXMLImageDataWriter *writeb= vtkXMLImageDataWriter::New();
+  writeb->SetInput( img );
+  writeb->SetFileName( outfilename );
+  writeb->Write( );
 
   return 0;
 }
