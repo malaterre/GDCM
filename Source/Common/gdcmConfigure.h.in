@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmConfigure_h
-#define __gdcmConfigure_h
+#ifndef GDCMCONFIGURE_H
+#define GDCMCONFIGURE_H
 
 /* This header is configured by GDCM's build process.  */
 

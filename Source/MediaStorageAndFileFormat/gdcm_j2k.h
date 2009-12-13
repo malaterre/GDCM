@@ -29,8 +29,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef __J2K_H
-#define __J2K_H
+#ifndef GDCM_J2K_H
+#define GDCM_J2K_H
 /**
 @file j2k.h
 @brief The JPEG-2000 Codestream Reader/Writer (J2K)
@@ -443,4 +443,4 @@ bool j2k_encode(opj_j2k_t *j2k, opj_cio_t *cio, opj_image_t *image, opj_codestre
 
 /*@}*/
 
-#endif /* __J2K_H */
+#endif /* GDCM_J2K_H */

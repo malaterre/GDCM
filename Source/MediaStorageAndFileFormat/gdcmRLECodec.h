@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmRLEcodec_h
-#define __gdcmRLEcodec_h
+#ifndef GDCMRLECODEC_H
+#define GDCMRLECODEC_H
 
 #include "gdcmImageCodec.h"
 
@@ -61,4 +61,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmRLEcodec_h
+#endif //GDCMRLECODEC_H

@@ -16,7 +16,7 @@
 #ifndef GDCMWIN32_H
 #define GDCMWIN32_H
 
-#if !defined(__gdcmTypes_h)
+#if !defined(GDCMTYPES_H)
 #error you need to include gdcmType.h instead
 #endif
 //-----------------------------------------------------------------------------

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPNMcodec_h
-#define __gdcmPNMcodec_h
+#ifndef GDCMPNMCODEC_H
+#define GDCMPNMCODEC_H
 
 #include "gdcmImageCodec.h"
 
@@ -49,4 +49,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmPNMcodec_h
+#endif //GDCMPNMCODEC_H
