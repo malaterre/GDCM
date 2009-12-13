@@ -373,11 +373,8 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     assert( MaxNumSegments % 3 == 0 );
     }
 
-  RLEHeader header;
-  header.NumSegments = MaxNumSegments;
-  for(int i = 0; i < 16;++i)
-    header.Offset[i] = 0;
-  header.Offset[0] = 64; // there cannot be any space in between the end of the RLE header and the start
+  RLEHeader header = { MaxNumSegments, { 64 } };
+  // there cannot be any space in between the end of the RLE header and the start
   // of the first RLE segment
   //
   // Create a RLE Frame for each frame:
