@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSubject_h
-#define __gdcmSubject_h
+#ifndef GDCMSUBJECT_H
+#define GDCMSUBJECT_H
 
 #include "gdcmObject.h"
 
@@ -74,5 +74,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSubject_h
+#endif //GDCMSUBJECT_H
 

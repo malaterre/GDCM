@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDirectory_h
-#define __gdcmDirectory_h
+#ifndef GDCMDIRECTORY_H
+#define GDCMDIRECTORY_H
 
 #include "gdcmTypes.h"
 
@@ -98,4 +98,4 @@ inline std::ostream& operator<<(std::ostream &os, const Directory &d)
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmDirectory_h
+#endif //GDCMDIRECTORY_H

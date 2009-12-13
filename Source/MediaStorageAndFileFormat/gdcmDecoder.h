@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmDecoder_h
-#define __gdcmDecoder_h
+#ifndef GDCMDECODER_H
+#define GDCMDECODER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDataElement.h" // FIXME
@@ -43,4 +43,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmDecoder_h
+#endif //GDCMDECODER_H

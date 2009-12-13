@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmUIDGenerator_h
-#define __gdcmUIDGenerator_h
+#ifndef GDCMUIDGENERATOR_H
+#define GDCMUIDGENERATOR_H
 
 #include "gdcmTypes.h"
 
@@ -86,4 +86,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmUIDGenerator_h
+#endif //GDCMUIDGENERATOR_H

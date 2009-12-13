@@ -23,8 +23,8 @@
 // .SECTION See Also
 // vtkLookupTable vtkScalarsToColors
 
-#ifndef __vtkImageMapToColors16_h
-#define __vtkImageMapToColors16_h
+#ifndef VTKIMAGEMAPTOCOLORS16_H
+#define VTKIMAGEMAPTOCOLORS16_H
 
 
 #include "vtkThreadedImageAlgorithm.h"

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmMediaStorage_h
-#define __gdcmMediaStorage_h
+#ifndef GDCMMEDIASTORAGE_H
+#define GDCMMEDIASTORAGE_H
 
 #include "gdcmTransferSyntax.h"
 
@@ -185,4 +185,4 @@ inline std::ostream &operator<<(std::ostream &_os, const MediaStorage &ms)
 
 } // end namespace gdcm
 
-#endif // __gdcmMediaStorage_h
+#endif // GDCMMEDIASTORAGE_H

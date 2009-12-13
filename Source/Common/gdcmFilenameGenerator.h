@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFilenameGenerator_h
-#define __gdcmFilenameGenerator_h
+#ifndef GDCMFILENAMEGENERATOR_H
+#define GDCMFILENAMEGENERATOR_H
 
 #include "gdcmTypes.h"
 #include <string>
@@ -72,4 +72,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmFilenameGenerator_h
+#endif //GDCMFILENAMEGENERATOR_H

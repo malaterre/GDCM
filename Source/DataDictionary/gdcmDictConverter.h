@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmDictConverter_h
-#define __gdcmDictConverter_h
+#ifndef GDCMDICTCONVERTER_H
+#define GDCMDICTCONVERTER_H
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"
@@ -81,4 +81,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDictConverter_h
+#endif //GDCMDICTCONVERTER_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_md5_h
-#define __gdcm_md5_h
+#ifndef GDCM_MD5_H
+#define GDCM_MD5_H
 
 /* Use the md5 library configured for gdcm.  */
 #include "gdcmTypes.h"

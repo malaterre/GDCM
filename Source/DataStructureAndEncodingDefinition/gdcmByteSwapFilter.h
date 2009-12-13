@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmByteSwapFilter_h
-#define __gdcmByteSwapFilter_h
+#ifndef GDCMBYTESWAPFILTER_H
+#define GDCMBYTESWAPFILTER_H
 
 #include "gdcmDataSet.h"
 
@@ -41,4 +41,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmByteSwapFilter_h
+#endif //GDCMBYTESWAPFILTER_H

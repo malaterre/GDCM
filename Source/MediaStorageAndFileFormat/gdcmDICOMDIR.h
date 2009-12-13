@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDICOMDIR_h
-#define __gdcmDICOMDIR_h
+#ifndef GDCMDICOMDIR_H
+#define GDCMDICOMDIR_H
 
 #include "gdcmFileSet.h"
 
@@ -36,4 +36,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDICOMDIR_h
+#endif //GDCMDICOMDIR_H

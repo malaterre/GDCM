@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSwapper_h
-#define __gdcmSwapper_h
+#ifndef GDCMSWAPPER_H
+#define GDCMSWAPPER_H
 
 #include "gdcmSwapCode.h"
 
@@ -72,4 +72,4 @@ public:
 
 #include "gdcmSwapper.txx"
 
-#endif //__gdcmSwapper_h
+#endif //GDCMSWAPPER_H

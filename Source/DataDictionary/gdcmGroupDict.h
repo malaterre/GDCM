@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmGroupDict_h
-#define __gdcmGroupDict_h
+#ifndef GDCMGROUPDICT_H
+#define GDCMGROUPDICT_H
 
 #include "gdcmTypes.h"
 
@@ -77,4 +77,4 @@ inline std::ostream& operator<<(std::ostream& _os, const GroupDict &_val)
 
 } // end namespace gdcm
 
-#endif //__gdcmGroupDict_h
+#endif //GDCMGROUPDICT_H

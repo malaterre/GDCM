@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmString_h
-#define __gdcmString_h
+#ifndef GDCMSTRING_H
+#define GDCMSTRING_H
 
 #include "gdcmTypes.h"
 #include "gdcmStaticAssert.h"
@@ -128,5 +128,5 @@ inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,T
 
 } // end namespace gdcm
 
-#endif //__gdcmString_h
+#endif //GDCMSTRING_H
 

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmIconImage_h
-#define __gdcmIconImage_h
+#ifndef GDCMICONIMAGE_H
+#define GDCMICONIMAGE_H
 
 #if 0
 #include "gdcmObject.h"
@@ -92,4 +92,4 @@ namespace gdcm
   typedef Bitmap IconImage;
 }
 
-#endif //__gdcmIconImage_h
+#endif //GDCMICONIMAGE_H

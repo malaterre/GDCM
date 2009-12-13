@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageWriter_h
-#define __gdcmImageWriter_h
+#ifndef GDCMIMAGEWRITER_H
+#define GDCMIMAGEWRITER_H
 
 #include "gdcmPixmapWriter.h"
 #include "gdcmImage.h"
@@ -48,4 +48,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageWriter_h
+#endif //GDCMIMAGEWRITER_H

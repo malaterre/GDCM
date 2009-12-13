@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmConstCharWrapper_h
-#define __gdcmConstCharWrapper_h
+#ifndef GDCMCONSTCHARWRAPPER_H
+#define GDCMCONSTCHARWRAPPER_H
 
 namespace gdcm
 {
@@ -51,5 +51,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmConstCharWrapper_h
+#endif //GDCMCONSTCHARWRAPPER_H
 

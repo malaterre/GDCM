@@ -36,8 +36,8 @@
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties vtkGDCMImageReader
 
-#ifndef __vtkGDCMImageWriter_h
-#define __vtkGDCMImageWriter_h
+#ifndef VTKGDCMIMAGEWRITER_H
+#define VTKGDCMIMAGEWRITER_H
 
 #include "vtkImageWriter.h"
 #include "gdcmTypes.h"

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPythonFilter_h
-#define __gdcmPythonFilter_h
+#ifndef GDCMPYTHONFILTER_H
+#define GDCMPYTHONFILTER_H
 
 #include <Python.h>
 
@@ -53,4 +53,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmPythonFilter_h
+#endif //GDCMPYTHONFILTER_H

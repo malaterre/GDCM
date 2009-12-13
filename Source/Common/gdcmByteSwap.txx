@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmByteSwap_txx
-#define __gdcmByteSwap_txx
+#ifndef GDCMBYTESWAP_TXX
+#define GDCMBYTESWAP_TXX
 
 #include "gdcmByteSwap.h"
 #include <iostream>
@@ -152,4 +152,4 @@ void Swap8(T &a, SwapCode const &swapcode)
 
 } // end namespace gdcm
 
-#endif // __gdcmByteSwap_txx
+#endif // GDCMBYTESWAP_TXX

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataSet_h
-#define __gdcmDataSet_h
+#ifndef GDCMDATASET_H
+#define GDCMDATASET_H
 
 #include "gdcmDataElement.h"
 #include "gdcmTag.h"
@@ -307,5 +307,5 @@ private:
 
 #include "gdcmDataSet.txx"
 
-#endif //__gdcmDataSet_h
+#endif //GDCMDATASET_H
 

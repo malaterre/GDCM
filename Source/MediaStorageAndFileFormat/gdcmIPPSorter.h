@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmIPPSorter_h
-#define __gdcmIPPSorter_h
+#ifndef GDCMIPPSORTER_H
+#define GDCMIPPSORTER_H
 
 #include "gdcmSorter.h"
 
@@ -90,4 +90,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmIPPSorter_h
+#endif //GDCMIPPSORTER_H

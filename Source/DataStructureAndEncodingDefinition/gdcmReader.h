@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmReader_h
-#define __gdcmReader_h
+#ifndef GDCMREADER_H
+#define GDCMREADER_H
 
 #include "gdcmFile.h"
 
@@ -111,4 +111,4 @@ private:
 } // end namespace gdcm
 
 
-#endif //__gdcmReader_h
+#endif //GDCMREADER_H

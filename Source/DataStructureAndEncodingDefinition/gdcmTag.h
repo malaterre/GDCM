@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTag_h
-#define __gdcmTag_h
+#ifndef GDCMTAG_H
+#define GDCMTAG_H
 
 #include "gdcmTypes.h"
 
@@ -278,5 +278,5 @@ inline std::ostream& operator<<(std::ostream &_os, const Tag &_val)
 
 } // end namespace gdcm
 
-#endif //__gdcmTag_h
+#endif //GDCMTAG_H
 

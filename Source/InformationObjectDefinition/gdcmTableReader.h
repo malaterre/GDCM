@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTableReader_h
-#define __gdcmTableReader_h
+#ifndef GDCMTABLEREADER_H
+#define GDCMTABLEREADER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDefs.h"
@@ -99,4 +99,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmTableReader_h
+#endif //GDCMTABLEREADER_H

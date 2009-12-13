@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataSet_txx
-#define __gdcmDataSet_txx
+#ifndef GDCMDATASET_TXX
+#define GDCMDATASET_TXX
 
 #include "gdcmByteValue.h"
 #include "gdcmParseException.h"
@@ -205,5 +205,5 @@ namespace gdcm
   }
 } // end namespace gdcm
 
-#endif // __gdcmDataSet_txx
+#endif // GDCMDATASET_TXX
 

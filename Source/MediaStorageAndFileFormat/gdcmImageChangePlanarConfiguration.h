@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageChangePlanarConfiguration_h
-#define __gdcmImageChangePlanarConfiguration_h
+#ifndef GDCMIMAGECHANGEPLANARCONFIGURATION_H
+#define GDCMIMAGECHANGEPLANARCONFIGURATION_H
 
 #include "gdcmImageToImageFilter.h"
 
@@ -88,5 +88,5 @@ size_t ImageChangePlanarConfiguration::RGBPixelsToRGBPlanes(T *r, T *g, T *b, co
 
 } // end namespace gdcm
 
-#endif //__gdcmImageChangePlanarConfiguration_h
+#endif //GDCMIMAGECHANGEPLANARCONFIGURATION_H
 

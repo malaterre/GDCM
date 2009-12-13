@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmValue_h
-#define __gdcmValue_h
+#ifndef GDCMVALUE_H
+#define GDCMVALUE_H
 
 #include "gdcmObject.h"
 
@@ -45,5 +45,5 @@ public:
 
 #include "gdcmValue.txx"
 
-#endif //__gdcmValue_h
+#endif //GDCMVALUE_H
 

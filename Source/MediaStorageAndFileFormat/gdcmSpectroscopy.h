@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSpectroscopy_h
-#define __gdcmSpectroscopy_h
+#ifndef GDCMSPECTROSCOPY_H
+#define GDCMSPECTROSCOPY_H
 
 #include "gdcmFile.h"
 
@@ -32,4 +32,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSpectroscopy_h
+#endif //GDCMSPECTROSCOPY_H

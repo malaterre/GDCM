@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFilename_h
-#define __gdcmFilename_h
+#ifndef GDCMFILENAME_H
+#define GDCMFILENAME_H
 
 #include "gdcmTypes.h"
 
@@ -69,4 +69,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmFilename_h
+#endif //GDCMFILENAME_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmException_h
-#define __gdcmException_h
+#ifndef GDCMEXCEPTION_H
+#define GDCMEXCEPTION_H
 
 #include <cassert>
 #include <cstdlib> // NULL

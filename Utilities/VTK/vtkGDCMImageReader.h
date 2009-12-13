@@ -62,8 +62,8 @@
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
 // vtkDICOMImageReader
 
-#ifndef __vtkGDCMImageReader_h
-#define __vtkGDCMImageReader_h
+#ifndef VTKGDCMIMAGEREADER_H
+#define VTKGDCMIMAGEREADER_H
 
 #include "vtkMedicalImageReader2.h"
 #include "vtkImageData.h"

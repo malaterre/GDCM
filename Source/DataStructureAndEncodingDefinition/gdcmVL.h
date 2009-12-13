@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmVL_h
-#define __gdcmVL_h
+#ifndef GDCMVL_H
+#define GDCMVL_H
 
 #include "gdcmTypes.h"
 
@@ -134,4 +134,4 @@ inline std::ostream& operator<<(std::ostream& os, const VL& val)
 
 } // end namespace gdcm
 
-#endif //__gdcmVL_h
+#endif //GDCMVL_H

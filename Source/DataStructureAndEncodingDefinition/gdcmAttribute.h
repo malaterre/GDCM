@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAttribute_h
-#define __gdcmAttribute_h
+#ifndef GDCMATTRIBUTE_H
+#define GDCMATTRIBUTE_H
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"
@@ -782,4 +782,4 @@ public:
 
 } // namespace gdcm
 
-#endif //__gdcmAttribute_h
+#endif //GDCMATTRIBUTE_H

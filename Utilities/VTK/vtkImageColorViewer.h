@@ -51,8 +51,8 @@
 // .SECTION See Also
 // vtkRenderWindow vtkRenderer vtkImageActor vtkImageMapToWindowLevelColors
 
-#ifndef __vtkImageColorViewer_h
-#define __vtkImageColorViewer_h
+#ifndef VTKIMAGECOLORVIEWER_H
+#define VTKIMAGECOLORVIEWER_H
 
 #include "vtkObject.h"
 #include "gdcmTypes.h" // GDCM_EXPORT

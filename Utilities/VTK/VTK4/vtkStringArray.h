@@ -19,8 +19,8 @@
 //
 // .SECTION See Also
 
-#ifndef __vtkStringArray_h
-#define __vtkStringArray_h
+#ifndef VTKSTRINGARRAY_H
+#define VTKSTRINGARRAY_H
 
 #include "vtkObject.h"
 

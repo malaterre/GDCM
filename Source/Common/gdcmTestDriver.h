@@ -13,8 +13,8 @@
 
 =========================================================================*/
 // This header is included by all the C++ test drivers in GDCM.
-#ifndef __gdcmTestDriver_h
-#define __gdcmTestDriver_h
+#ifndef GDCMTESTDRIVER_H
+#define GDCMTESTDRIVER_H
 
 // CREATE_TEST_SOURCELIST supports the flag EXTRA_INCLUDE but only one per call.
 // So there is no way to specify we want to include two files... instead
@@ -22,4 +22,4 @@
 #include <clocale> // C setlocale()
 #include <locale> // C++ locale
 
-#endif // __gdcmTestDriver_h
+#endif // GDCMTESTDRIVER_H

@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmLookupTable_h
-#define __gdcmLookupTable_h
+#ifndef GDCMLOOKUPTABLE_H
+#define GDCMLOOKUPTABLE_H
 
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
@@ -97,4 +97,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmLookupTable_h
+#endif //GDCMLOOKUPTABLE_H

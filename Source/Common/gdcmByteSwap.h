@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmByteSwap_h
-#define __gdcmByteSwap_h
+#ifndef GDCMBYTESWAP_H
+#define GDCMBYTESWAP_H
 
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
@@ -58,5 +58,5 @@ private:
 
 #include "gdcmByteSwap.txx"
 
-#endif //__gdcmByteSwap_h
+#endif //GDCMBYTESWAP_H
 

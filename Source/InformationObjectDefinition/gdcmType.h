@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmType_h
-#define __gdcmType_h
+#ifndef GDCMTYPE_H
+#define GDCMTYPE_H
 
 #include "gdcmTypes.h"
 
@@ -70,4 +70,4 @@ inline std::ostream &operator<<(std::ostream &_os, const Type &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmType_h
+#endif //GDCMTYPE_H

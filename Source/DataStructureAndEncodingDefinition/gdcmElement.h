@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmElement_h
-#define __gdcmElement_h
+#ifndef GDCMELEMENT_H
+#define GDCMELEMENT_H
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"
@@ -618,4 +618,4 @@ template <int TVM> class Element<VR::OW, TVM>;
 
 } // namespace gdcm
 
-#endif //__gdcmElement_h
+#endif //GDCMELEMENT_H

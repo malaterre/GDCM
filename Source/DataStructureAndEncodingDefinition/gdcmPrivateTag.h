@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPrivateTag_h
-#define __gdcmPrivateTag_h
+#ifndef GDCMPRIVATETAG_H
+#define GDCMPRIVATETAG_H
 
 #include "gdcmTag.h"
 #include "gdcmSystem.h" // FIXME
@@ -90,5 +90,5 @@ inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmPrivateTag_h
+#endif //GDCMPRIVATETAG_H
 

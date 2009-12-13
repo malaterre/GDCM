@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTesting_h
-#define __gdcmTesting_h
+#ifndef GDCMTESTING_H
+#define GDCMTESTING_H
 
 #include "gdcmTypes.h"
 
@@ -93,4 +93,4 @@ public :
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmTesting_h
+#endif //GDCMTESTING_H

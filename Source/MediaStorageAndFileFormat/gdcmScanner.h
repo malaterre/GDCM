@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmScanner_h
-#define __gdcmScanner_h
+#ifndef GDCMSCANNER_H
+#define GDCMSCANNER_H
 
 #include "gdcmDirectory.h"
 #include "gdcmSubject.h"
@@ -180,4 +180,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmScanner_h
+#endif //GDCMSCANNER_H

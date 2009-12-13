@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmByteBuffer_h
-#define __gdcmByteBuffer_h
+#ifndef GDCMBYTEBUFFER_H
+#define GDCMBYTEBUFFER_H
 
 #include "gdcmTypes.h"
 #include <vector>
@@ -105,4 +105,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmByteBuffer_h
+#endif //GDCMBYTEBUFFER_H

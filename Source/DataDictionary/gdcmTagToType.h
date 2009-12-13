@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmTagToType_h
-#define __gdcmTagToType_h
+#ifndef GDCMTAGTOTYPE_H
+#define GDCMTAGTOTYPE_H
 
 #include "gdcmVR.h"
 #include "gdcmVM.h"
@@ -18542,4 +18542,4 @@ static const char* GetVMString() { return "1"; }
 };
 
 } // end namespace gdcm
-#endif // __gdcmTagToType_h
+#endif // GDCMTAGTOTYPE_H

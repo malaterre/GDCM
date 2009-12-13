@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStaticAssert_h
-#define __gdcmStaticAssert_h
+#ifndef GDCMSTATICASSERT_H
+#define GDCMSTATICASSERT_H
 
 
 // the following was shamelessly borowed from BOOST static assert:
@@ -50,5 +50,5 @@ namespace gdcm
  * };
  * 
  */
-#endif // __gdcmStaticAssert_h
+#endif // GDCMSTATICASSERT_H
 

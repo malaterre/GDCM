@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmVR_h
-#define __gdcmVR_h
+#ifndef GDCMVR_H
+#define GDCMVR_H
 
 #include "gdcmTag.h"
 #include "gdcmTrace.h"
@@ -318,5 +318,5 @@ inline unsigned int VR::GetSize() const
 
 } // end namespace gdcm
 
-#endif //__gdcmVR_h
+#endif //GDCMVR_H
 

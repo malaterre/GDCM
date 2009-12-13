@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmProgressEvent_h
-#define __gdcmProgressEvent_h
+#ifndef GDCMPROGRESSEVENT_H
+#define GDCMPROGRESSEVENT_H
 
 #include "gdcmEvent.h"
 #include "gdcmTag.h"
@@ -51,4 +51,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmProgressEvent_h
+#endif //GDCMPROGRESSEVENT_H

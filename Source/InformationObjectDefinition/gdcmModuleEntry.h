@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmModuleEntry_h
-#define __gdcmModuleEntry_h
+#ifndef GDCMMODULEENTRY_H
+#define GDCMMODULEENTRY_H
 
 #include "gdcmTypes.h"
 #include "gdcmType.h"
@@ -75,4 +75,4 @@ typedef ModuleEntry MacroEntry;
 
 } // end namespace gdcm
 
-#endif //__gdcmModuleEntry_h
+#endif //GDCMMODULEENTRY_H

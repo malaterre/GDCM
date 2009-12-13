@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCurve_h
-#define __gdcmCurve_h
+#ifndef GDCMCURVE_H
+#define GDCMCURVE_H
 
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
@@ -76,4 +76,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmCurve_h
+#endif //GDCMCURVE_H

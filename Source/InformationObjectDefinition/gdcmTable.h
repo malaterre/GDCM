@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTable_h
-#define __gdcmTable_h
+#ifndef GDCMTABLE_H
+#define GDCMTABLE_H
 
 #include "gdcmTableEntry.h"
 #include "gdcmTag.h"
@@ -66,4 +66,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmTable_h
+#endif //GDCMTABLE_H

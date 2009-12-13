@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImage_h
-#define __gdcmImage_h
+#ifndef GDCMIMAGE_H
+#define GDCMIMAGE_H
 
 #include "gdcmPixmap.h"
 #include "gdcmSwapCode.h"
@@ -126,5 +126,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImage_h
+#endif //GDCMIMAGE_H
 

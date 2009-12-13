@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCryptographicMessageSyntax_h
-#define __gdcmCryptographicMessageSyntax_h
+#ifndef GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
+#define GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
 
 #include "gdcmTypes.h"
 
@@ -63,4 +63,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmCryptographicMessageSyntax_h
+#endif //GDCMCRYPTOGRAPHICMESSAGESYNTAX_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSmartPointer_h
-#define __gdcmSmartPointer_h
+#ifndef GDCMSMARTPOINTER_H
+#define GDCMSMARTPOINTER_H
 
 #include "gdcmObject.h"
 
@@ -113,5 +113,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSmartPointer_h
+#endif //GDCMSMARTPOINTER_H
 

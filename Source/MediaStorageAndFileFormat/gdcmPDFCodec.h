@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPDFCodec_h
-#define __gdcmPDFCodec_h
+#ifndef GDCMPDFCODEC_H
+#define GDCMPDFCODEC_H
 
 #include "gdcmCodec.h"
 
@@ -35,4 +35,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmPDFCodec_h
+#endif //GDCMPDFCODEC_H

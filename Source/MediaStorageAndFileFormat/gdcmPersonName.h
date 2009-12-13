@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmPersonName_h
-#define __gdcmPersonName_h
+#ifndef GDCMPERSONNAME_H
+#define GDCMPERSONNAME_H
 
 #include "gdcmTypes.h"
 #include <vector>
@@ -81,5 +81,5 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmPersonName_h
+#endif //GDCMPERSONNAME_H
 

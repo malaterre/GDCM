@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFileExplicitFilter_h
-#define __gdcmFileExplicitFilter_h
+#ifndef GDCMFILEEXPLICITFILTER_H
+#define GDCMFILEEXPLICITFILTER_H
 
 #include "gdcmFile.h"
 
@@ -75,5 +75,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmFileExplicitFilter_h
+#endif //GDCMFILEEXPLICITFILTER_H
 

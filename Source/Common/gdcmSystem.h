@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSystem_h
-#define __gdcmSystem_h
+#ifndef GDCMSYSTEM_H
+#define GDCMSYSTEM_H
 
 #include "gdcmTypes.h"
 
@@ -126,4 +126,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSystem_h
+#endif //GDCMSYSTEM_H

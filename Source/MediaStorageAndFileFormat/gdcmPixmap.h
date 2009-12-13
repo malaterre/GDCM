@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPixmap_h
-#define __gdcmPixmap_h
+#ifndef GDCMPIXMAP_H
+#define GDCMPIXMAP_H
 
 #include "gdcmBitmap.h"
 #include "gdcmCurve.h"
@@ -77,4 +77,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmPixmap_h
+#endif //GDCMPIXMAP_H

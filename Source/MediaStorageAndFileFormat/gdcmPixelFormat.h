@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmPixelFormat_h
-#define __gdcmPixelFormat_h
+#ifndef GDCMPIXELFORMAT_H
+#define GDCMPIXELFORMAT_H
 
 #include "gdcmTypes.h"
 #include <iostream>
@@ -172,5 +172,5 @@ inline std::ostream& operator<<(std::ostream &os, const PixelFormat &pf)
 
 } // end namespace gdcm
 
-#endif //__gdcmPixelFormat_h
+#endif //GDCMPIXELFORMAT_H
 

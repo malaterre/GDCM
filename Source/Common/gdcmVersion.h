@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmVersion_h
-#define __gdcmVersion_h
+#ifndef GDCMVERSION_H
+#define GDCMVERSION_H
 
 #include "gdcmTypes.h"
 #include <iostream>
@@ -49,4 +49,4 @@ inline std::ostream& operator<<(std::ostream &os, const Version &v)
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmVersion_h
+#endif //GDCMVERSION_H

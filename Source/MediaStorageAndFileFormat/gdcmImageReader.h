@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageReader_h
-#define __gdcmImageReader_h
+#ifndef GDCMIMAGEREADER_H
+#define GDCMIMAGEREADER_H
 
 #include "gdcmPixmapReader.h"
 #include "gdcmImage.h"
@@ -58,5 +58,5 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageReader_h
+#endif //GDCMIMAGEREADER_H
 

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDirectionCosines_h
-#define __gdcmDirectionCosines_h
+#ifndef GDCMDIRECTIONCOSINES_H
+#define GDCMDIRECTIONCOSINES_H
 
 #include "gdcmTypes.h"
 
@@ -62,4 +62,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDirectionCosines_h
+#endif //GDCMDIRECTIONCOSINES_H

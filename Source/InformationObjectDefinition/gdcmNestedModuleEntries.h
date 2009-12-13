@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmNestedModuleEntries_h
-#define __gdcmNestedModuleEntries_h
+#ifndef GDCMNESTEDMODULEENTRIES_H
+#define GDCMNESTEDMODULEENTRIES_H
 
 #include "gdcmModuleEntry.h"
 #include <vector>
@@ -53,4 +53,4 @@ typedef NestedModuleEntries NestedMacroEntries;
 
 } // end namespace gdcm
 
-#endif //__gdcmNestedModuleEntries_h
+#endif //GDCMNESTEDMODULEENTRIES_H

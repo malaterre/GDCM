@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPrinter_h
-#define __gdcmPrinter_h
+#ifndef GDCMPRINTER_H
+#define GDCMPRINTER_H
 
 // TODO Class to implement printing
 // Since DICOM does printing ?
@@ -97,4 +97,4 @@ void PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & 
 
 } // end namespace gdcm
 
-#endif //__gdcmPrinter_h
+#endif //GDCMPRINTER_H

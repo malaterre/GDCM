@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmWin32_h
-#define __gdcmWin32_h
+#ifndef GDCMWIN32_H
+#define GDCMWIN32_H
 
 #if !defined(__gdcmTypes_h)
 #error you need to include gdcmType.h instead
@@ -70,4 +70,4 @@
 #endif //_MSC_VER
 
 //-----------------------------------------------------------------------------
-#endif //__gdcmWin32_h
+#endif //GDCMWIN32_H

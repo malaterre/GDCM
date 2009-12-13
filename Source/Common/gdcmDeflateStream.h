@@ -12,10 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDeflateStream_h
-#define __gdcmDeflateStream_h
+#ifndef GDCMDEFLATESTREAM_H
+#define GDCMDEFLATESTREAM_H
 
 #include "zipstreamimpl.h"
 
-#endif //__gdcmDeflateStream_h
+#endif //GDCMDEFLATESTREAM_H
 

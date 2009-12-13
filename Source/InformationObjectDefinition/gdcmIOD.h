@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmIOD_h
-#define __gdcmIOD_h
+#ifndef GDCMIOD_H
+#define GDCMIOD_H
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
@@ -75,5 +75,5 @@ inline std::ostream& operator<<(std::ostream& _os, const IOD &_val)
 
 } // end namespace gdcm
 
-#endif //__gdcmIOD_h
+#endif //GDCMIOD_H
 

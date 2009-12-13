@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmParser_h
-#define __gdcmParser_h
+#ifndef GDCMPARSER_H
+#define GDCMPARSER_H
 
 #include "gdcmTag.h"
 #error do not use
@@ -118,4 +118,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmParser_h
+#endif //GDCMPARSER_H

@@ -21,8 +21,8 @@
 // .SECTION See Also
 // vtkImageRGBToHSV
 
-#ifndef __vtkImageYBRToRGB_h
-#define __vtkImageYBRToRGB_h
+#ifndef VTKIMAGEYBRTORGB_H
+#define VTKIMAGEYBRTORGB_H
 
 #include "vtkThreadedImageAlgorithm.h"
 #include "gdcmTypes.h" // GDCM_EXPORT

@@ -26,8 +26,8 @@
 // vtkGDCMImageReader vtkMedicalImageReader2 vtkMedicalImageProperties
 
 
-#ifndef __vtkGDCMPolyDataReader_h
-#define __vtkGDCMPolyDataReader_h
+#ifndef VTKGDCMPOLYDATAREADER_H
+#define VTKGDCMPOLYDATAREADER_H
 
 #include "vtkPolyDataAlgorithm.h"
 #include "gdcmTypes.h" // GDCM_EXPORT

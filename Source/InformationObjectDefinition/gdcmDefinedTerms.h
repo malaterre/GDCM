@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDefinedTerms_h
-#define __gdcmDefinedTerms_h
+#ifndef GDCMDEFINEDTERMS_H
+#define GDCMDEFINEDTERMS_H
 
 #include "gdcmTypes.h"
 
@@ -35,4 +35,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDefinedTerms_h
+#endif //GDCMDEFINEDTERMS_H

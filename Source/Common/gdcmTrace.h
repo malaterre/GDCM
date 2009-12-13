@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTrace_h
-#define __gdcmTrace_h
+#ifndef GDCMTRACE_H
+#define GDCMTRACE_H
 
 #include "gdcmTypes.h"
 
@@ -186,4 +186,4 @@ private:
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmTrace_h
+#endif //GDCMTRACE_H

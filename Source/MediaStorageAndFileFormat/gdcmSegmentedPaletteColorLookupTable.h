@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmSegmentedPaletteColorLookupTable_h
-#define __gdcmSegmentedPaletteColorLookupTable_h
+#ifndef GDCMSEGMENTEDPALETTECOLORLOOKUPTABLE_H
+#define GDCMSEGMENTEDPALETTECOLORLOOKUPTABLE_H
 
 #include "gdcmLookupTable.h"
 
@@ -39,4 +39,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmSegmentedPaletteColorLookupTable_h
+#endif //GDCMSEGMENTEDPALETTECOLORLOOKUPTABLE_H

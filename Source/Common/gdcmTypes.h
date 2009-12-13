@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmTypes_h
-#define __gdcmTypes_h
+#ifndef GDCMTYPES_H
+#define GDCMTYPES_H
 
 #include "gdcmConfigure.h"
 
@@ -58,4 +58,4 @@ typedef  unsigned __int64    uint64_t;
 #endif
 
 //-----------------------------------------------------------------------------
-#endif //__gdcmTypes_h
+#endif //GDCMTYPES_H

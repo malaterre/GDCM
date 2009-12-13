@@ -12,11 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmValue_txx
-#define __gdcmValue_txx
+#ifndef GDCMVALUE_TXX
+#define GDCMVALUE_TXX
 
 namespace gdcm
 {
 } // end namespace gdcm
 
-#endif // __gdcmValue_txx
+#endif // GDCMVALUE_TXX

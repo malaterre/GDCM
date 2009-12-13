@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmVR16ExplicitDataElement_h
-#define __gdcmVR16ExplicitDataElement_h
+#ifndef GDCMVR16EXPLICITDATAELEMENT_H
+#define GDCMVR16EXPLICITDATAELEMENT_H
 
 #include "gdcmDataElement.h"
 
@@ -46,5 +46,5 @@ public:
 
 #include "gdcmVR16ExplicitDataElement.txx"
 
-#endif //__gdcmVR16ExplicitDataElement_h
+#endif //GDCMVR16EXPLICITDATAELEMENT_H
 

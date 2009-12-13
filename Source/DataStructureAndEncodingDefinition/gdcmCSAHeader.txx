@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCSAHeader_txx
-#define __gdcmCSAHeader_txx
+#ifndef GDCMCSAHEADER_TXX
+#define GDCMCSAHEADER_TXX
 
 #include "gdcmByteValue.h"
 
@@ -32,5 +32,5 @@ namespace gdcm
   }
 } // end namespace gdcm
 
-#endif // __gdcmCSAHeader_txx
+#endif // GDCMCSAHEADER_TXX
 

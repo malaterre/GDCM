@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFileMetaInformation_h
-#define __gdcmFileMetaInformation_h
+#ifndef GDCMFILEMETAINFORMATION_H
+#define GDCMFILEMETAINFORMATION_H
 
 #include "gdcmPreamble.h"
 #include "gdcmDataSet.h"
@@ -149,5 +149,5 @@ inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val
 
 } // end namespace gdcm
 
-#endif //__gdcmFileMetaInformation_h
+#endif //GDCMFILEMETAINFORMATION_H
 

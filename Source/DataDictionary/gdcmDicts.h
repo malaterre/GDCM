@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDicts_h
-#define __gdcmDicts_h
+#ifndef GDCMDICTS_H
+#define GDCMDICTS_H
 
 #include "gdcmDict.h"
 #include "gdcmCSAHeaderDict.h"
@@ -85,4 +85,4 @@ inline std::ostream& operator<<(std::ostream &os, const Dicts &d)
 
 } // end namespace gdcm
 
-#endif //__gdcmDicts_h
+#endif //GDCMDICTS_H

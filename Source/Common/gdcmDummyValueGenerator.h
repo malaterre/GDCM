@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDummyValueGenerator_h
-#define __gdcmDummyValueGenerator_h
+#ifndef GDCMDUMMYVALUEGENERATOR_H
+#define GDCMDUMMYVALUEGENERATOR_H
 
 #include "gdcmTypes.h"
 
@@ -41,4 +41,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDummyValueGenerator_h
+#endif //GDCMDUMMYVALUEGENERATOR_H

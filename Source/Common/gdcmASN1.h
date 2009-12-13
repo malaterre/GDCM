@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmASN1_h
-#define __gdcmASN1_h
+#ifndef GDCMASN1_H
+#define GDCMASN1_H
 
 #include "gdcmTypes.h"
 
@@ -47,4 +47,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmASN1_h
+#endif //GDCMASN1_H

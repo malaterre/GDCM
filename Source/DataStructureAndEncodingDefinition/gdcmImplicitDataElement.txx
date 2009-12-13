@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImplicitDataElement_txx
-#define __gdcmImplicitDataElement_txx
+#ifndef GDCMIMPLICITDATAELEMENT_TXX
+#define GDCMIMPLICITDATAELEMENT_TXX
 
 #include "gdcmSequenceOfItems.h"
 
@@ -468,4 +468,4 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
 } // end namespace gdcm
 
 
-#endif // __gdcmImplicitDataElement_txx
+#endif // GDCMIMPLICITDATAELEMENT_TXX

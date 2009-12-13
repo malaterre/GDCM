@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSimpleSubjectWatcher_h
-#define __gdcmSimpleSubjectWatcher_h
+#ifndef GDCMSIMPLESUBJECTWATCHER_H
+#define GDCMSIMPLESUBJECTWATCHER_H
 
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
@@ -75,4 +75,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmSimpleSubjectWatcher_h
+#endif //GDCMSIMPLESUBJECTWATCHER_H

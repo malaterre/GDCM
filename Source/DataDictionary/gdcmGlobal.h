@@ -28,8 +28,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmGlobal_h
-#define __gdcmGlobal_h
+#ifndef GDCMGLOBAL_H
+#define GDCMGLOBAL_H
 
 #include "gdcmTypes.h"
 
@@ -104,5 +104,5 @@ static Global GlobalInstance;
 
 } // end namespace gdcm
 
-#endif //__gdcmGlobal_h
+#endif //GDCMGLOBAL_H
 

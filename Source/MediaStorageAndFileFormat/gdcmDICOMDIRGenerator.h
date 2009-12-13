@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDICOMDIRGenerator_h
-#define __gdcmDICOMDIRGenerator_h
+#ifndef GDCMDICOMDIRGENERATOR_H
+#define GDCMDICOMDIRGENERATOR_H
 
 #include "gdcmDirectory.h"
 #include "gdcmTag.h"
@@ -104,4 +104,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDICOMDIRGenerator_h
+#endif //GDCMDICOMDIRGENERATOR_H

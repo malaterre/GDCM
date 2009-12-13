@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAnonymizeEvent_h
-#define __gdcmAnonymizeEvent_h
+#ifndef GDCMANONYMIZEEVENT_H
+#define GDCMANONYMIZEEVENT_H
 
 #include "gdcmEvent.h"
 #include "gdcmTag.h"
@@ -51,4 +51,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmAnonymizeEvent_h
+#endif //GDCMANONYMIZEEVENT_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCodec_h
-#define __gdcmCodec_h
+#ifndef GDCMCODEC_H
+#define GDCMCODEC_H
 
 #include "gdcmCoder.h"
 #include "gdcmDecoder.h"
@@ -30,4 +30,4 @@ class GDCM_EXPORT Codec : public Coder, public Decoder
 
 } // end namespace gdcm
 
-#endif //__gdcmCodec_h
+#endif //GDCMCODEC_H

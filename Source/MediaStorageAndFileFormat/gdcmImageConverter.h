@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmImageConverter_h
-#define __gdcmImageConverter_h
+#ifndef GDCMIMAGECONVERTER_H
+#define GDCMIMAGECONVERTER_H
 
 #include "gdcmTypes.h"
 
@@ -49,5 +49,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageConverter_h
+#endif //GDCMIMAGECONVERTER_H
 

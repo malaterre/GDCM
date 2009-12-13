@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmExplicitImplicitDataElement_h
-#define __gdcmExplicitImplicitDataElement_h
+#ifndef GDCMEXPLICITIMPLICITDATAELEMENT_H
+#define GDCMEXPLICITIMPLICITDATAELEMENT_H
 
 #include "gdcmDataElement.h"
 
@@ -50,5 +50,5 @@ std::istream &ReadWithLength(std::istream &is, VL & length)
 
 #include "gdcmExplicitImplicitDataElement.txx"
 
-#endif //__gdcmExplicitImplicitDataElement_h
+#endif //GDCMEXPLICITIMPLICITDATAELEMENT_H
 

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmRescaler_h
-#define __gdcmRescaler_h
+#ifndef GDCMRESCALER_H
+#define GDCMRESCALER_H
 
 #include "gdcmTypes.h"
 #include "gdcmPixelFormat.h"
@@ -122,4 +122,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmRescaler_h
+#endif //GDCMRESCALER_H

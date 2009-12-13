@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmMD5_h
-#define __gdcmMD5_h
+#ifndef GDCMMD5_H
+#define GDCMMD5_H
 
 #include "gdcmTypes.h"
 
@@ -49,4 +49,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmMD5_h
+#endif //GDCMMD5_H

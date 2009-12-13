@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSplitMosaicFilter_h
-#define __gdcmSplitMosaicFilter_h
+#ifndef GDCMSPLITMOSAICFILTER_H
+#define GDCMSPLITMOSAICFILTER_H
 
 #include "gdcmFile.h"
 #include "gdcmImage.h"
@@ -60,5 +60,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSplitMosaicFilter_h
+#endif //GDCMSPLITMOSAICFILTER_H
 

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTerminal_h
-#define __gdcmTerminal_h
+#ifndef GDCMTERMINAL_H
+#define GDCMTERMINAL_H
 
 #include "gdcmTypes.h"
 
@@ -64,4 +64,4 @@ namespace terminal
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmTerminal_h
+#endif //GDCMTERMINAL_H

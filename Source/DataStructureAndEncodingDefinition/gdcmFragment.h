@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFragment_h
-#define __gdcmFragment_h
+#ifndef GDCMFRAGMENT_H
+#define GDCMFRAGMENT_H
 
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
@@ -166,4 +166,4 @@ inline std::ostream &operator<<(std::ostream &os, const Fragment &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmFragment_h
+#endif //GDCMFRAGMENT_H

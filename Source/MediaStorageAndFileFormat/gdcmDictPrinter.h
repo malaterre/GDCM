@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDictPrinter_h
-#define __gdcmDictPrinter_h
+#ifndef GDCMDICTPRINTER_H
+#define GDCMDICTPRINTER_H
 
 #include "gdcmPrinter.h"
 
@@ -39,4 +39,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmDictPrinter_h
+#endif //GDCMDICTPRINTER_H

@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmWriter_h
-#define __gdcmWriter_h
+#ifndef GDCMWRITER_H
+#define GDCMWRITER_H
 
 #include "gdcmFile.h"
 
@@ -98,4 +98,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmWriter_h
+#endif //GDCMWRITER_H

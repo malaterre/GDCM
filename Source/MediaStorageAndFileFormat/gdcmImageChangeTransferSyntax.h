@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageChangeTransferSyntax_h
-#define __gdcmImageChangeTransferSyntax_h
+#ifndef GDCMIMAGECHANGETRANSFERSYNTAX_H
+#define GDCMIMAGECHANGETRANSFERSYNTAX_H
 
 #include "gdcmImageToImageFilter.h"
 #include "gdcmTransferSyntax.h"
@@ -88,5 +88,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageChangeTransferSyntax_h
+#endif //GDCMIMAGECHANGETRANSFERSYNTAX_H
 

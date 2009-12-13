@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmApplicationEntity_h
-#define __gdcmApplicationEntity_h
+#ifndef GDCMAPPLICATIONENTITY_H
+#define GDCMAPPLICATIONENTITY_H
 
 #include "gdcmTypes.h"
 #include <vector>
@@ -58,5 +58,5 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmApplicationEntity_h
+#endif //GDCMAPPLICATIONENTITY_H
 

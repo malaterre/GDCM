@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmModules_h
-#define __gdcmModules_h
+#ifndef GDCMMODULES_H
+#define GDCMMODULES_H
 
 #include "gdcmTypes.h"
 #include "gdcmModule.h"
@@ -75,5 +75,5 @@ typedef Modules Macros;
 
 } // end namespace gdcm
 
-#endif //__gdcmModules_h
+#endif //GDCMMODULES_H
 

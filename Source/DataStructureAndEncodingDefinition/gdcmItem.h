@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmItem_h
-#define __gdcmItem_h
+#ifndef GDCMITEM_H
+#define GDCMITEM_H
 
 #include "gdcmDataElement.h"
 #include "gdcmDataSet.h"
@@ -324,4 +324,4 @@ inline std::ostream& operator<<(std::ostream& os, const Item &val)
 
 #include "gdcmItem.txx"
 
-#endif //__gdcmItem_h
+#endif //GDCMITEM_H

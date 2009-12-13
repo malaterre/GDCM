@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_zlib_h
-#define __gdcm_zlib_h
+#ifndef GDCM_ZLIB_H
+#define GDCM_ZLIB_H
 
 /* Use the zlib library configured for gdcm.  */
 #include "gdcmTypes.h"

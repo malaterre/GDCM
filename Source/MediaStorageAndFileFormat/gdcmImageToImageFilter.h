@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageToImageFilter_h
-#define __gdcmImageToImageFilter_h
+#ifndef GDCMIMAGETOIMAGEFILTER_H
+#define GDCMIMAGETOIMAGEFILTER_H
 
 #include "gdcmPixmapToPixmapFilter.h"
 
@@ -42,5 +42,5 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageToImageFilter_h
+#endif //GDCMIMAGETOIMAGEFILTER_H
 

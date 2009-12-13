@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCSAElement_h
-#define __gdcmCSAElement_h
+#ifndef GDCMCSAELEMENT_H
+#define GDCMCSAELEMENT_H
 
 #include "gdcmTag.h"
 #include "gdcmVM.h"
@@ -171,5 +171,5 @@ inline std::ostream& operator<<(std::ostream &os, const CSAElement &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmCSAElement_h
+#endif //GDCMCSAELEMENT_H
 

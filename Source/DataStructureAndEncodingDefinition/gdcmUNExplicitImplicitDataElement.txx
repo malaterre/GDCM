@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmUNExplicitImplicitDataElement_txx
-#define __gdcmUNExplicitImplicitDataElement_txx
+#ifndef GDCMUNEXPLICITIMPLICITDATAELEMENT_TXX
+#define GDCMUNEXPLICITIMPLICITDATAELEMENT_TXX
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
@@ -56,4 +56,4 @@ std::istream &UNExplicitImplicitDataElement::Read(std::istream &is)
 
 } // end namespace gdcm
 
-#endif // __gdcmUNExplicitImplicitDataElement_txx
+#endif // GDCMUNEXPLICITIMPLICITDATAELEMENT_TXX

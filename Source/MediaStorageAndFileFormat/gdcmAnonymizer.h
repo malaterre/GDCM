@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAnonymizer_h
-#define __gdcmAnonymizer_h
+#ifndef GDCMANONYMIZER_H
+#define GDCMANONYMIZER_H
 
 #include "gdcmFile.h"
 #include "gdcmSubject.h"
@@ -147,4 +147,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmAnonymizer_h
+#endif //GDCMANONYMIZER_H

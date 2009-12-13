@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmUNExplicitDataElement_h
-#define __gdcmUNExplicitDataElement_h
+#ifndef GDCMUNEXPLICITDATAELEMENT_H
+#define GDCMUNEXPLICITDATAELEMENT_H
 
 #include "gdcmDataElement.h"
 
@@ -44,5 +44,5 @@ public:
 
 #include "gdcmUNExplicitDataElement.txx"
 
-#endif //__gdcmUNExplicitDataElement_h
+#endif //GDCMUNEXPLICITDATAELEMENT_H
 

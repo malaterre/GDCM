@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTagPath_h
-#define __gdcmTagPath_h
+#ifndef GDCMTAGPATH_H
+#define GDCMTAGPATH_H
 
 #include "gdcmTag.h"
 
@@ -56,4 +56,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmTagPath_h
+#endif //GDCMTAGPATH_H

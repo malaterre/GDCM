@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCoder_h
-#define __gdcmCoder_h
+#ifndef GDCMCODER_H
+#define GDCMCODER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDataElement.h" // FIXME
@@ -44,4 +44,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmCoder_h
+#endif //GDCMCODER_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCSAHeaderDict_h
-#define __gdcmCSAHeaderDict_h
+#ifndef GDCMCSAHEADERDICT_H
+#define GDCMCSAHEADERDICT_H
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
@@ -96,4 +96,4 @@ inline std::ostream& operator<<(std::ostream& os, const CSAHeaderDict &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmCSAHeaderDict_h
+#endif //GDCMCSAHEADERDICT_H

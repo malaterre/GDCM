@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmXMLDictReader_h
-#define __gdcmXMLDictReader_h
+#ifndef GDCMXMLDICTREADER_H
+#define GDCMXMLDICTREADER_H
 
 #include "gdcmTableReader.h"
 #include "gdcmDict.h"
@@ -53,4 +53,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmXMLDictReader_h
+#endif //GDCMXMLDICTREADER_H

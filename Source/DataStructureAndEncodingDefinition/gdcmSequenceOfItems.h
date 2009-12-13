@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmSequenceOfItems_h
-#define __gdcmSequenceOfItems_h
+#ifndef GDCMSEQUENCEOFITEMS_H
+#define GDCMSEQUENCEOFITEMS_H
 
 #include "gdcmValue.h"
 #include "gdcmItem.h"
@@ -225,5 +225,5 @@ public:
 
 #include "gdcmSequenceOfItems.txx"
 
-#endif //__gdcmSequenceOfItems_h
+#endif //GDCMSEQUENCEOFITEMS_H
 

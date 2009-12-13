@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataSetHelper_h
-#define __gdcmDataSetHelper_h
+#ifndef GDCMDATASETHELPER_H
+#define GDCMDATASETHELPER_H
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_expat_h
-#define __gdcm_expat_h
+#ifndef GDCM_EXPAT_H
+#define GDCM_EXPAT_H
 
 /* Use the expat library configured for gdcm.  */
 #include "gdcmTypes.h"

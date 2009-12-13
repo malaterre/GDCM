@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPDBElement_h
-#define __gdcmPDBElement_h
+#ifndef GDCMPDBELEMENT_H
+#define GDCMPDBELEMENT_H
 
 #include "gdcmTag.h"
 #include "gdcmVM.h"
@@ -65,5 +65,5 @@ inline std::ostream& operator<<(std::ostream &os, const PDBElement &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmPDBElement_h
+#endif //GDCMPDBELEMENT_H
 

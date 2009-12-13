@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmOverlay_h
-#define __gdcmOverlay_h
+#ifndef GDCMOVERLAY_H
+#define GDCMOVERLAY_H
 
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
@@ -118,4 +118,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmOverlay_h
+#endif //GDCMOVERLAY_H

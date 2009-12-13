@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmPhotometricInterpretation_h
-#define __gdcmPhotometricInterpretation_h
+#ifndef GDCMPHOTOMETRICINTERPRETATION_H
+#define GDCMPHOTOMETRICINTERPRETATION_H
 
 #include "gdcmTypes.h"
 #include <iostream>
@@ -96,4 +96,4 @@ inline std::ostream& operator<<(std::ostream& os, const PhotometricInterpretatio
 
 } // end namespace gdcm
 
-#endif //__gdcmPhotometricInterpretation_h
+#endif //GDCMPHOTOMETRICINTERPRETATION_H

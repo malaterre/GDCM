@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCodeString_h
-#define __gdcmCodeString_h
+#ifndef GDCMCODESTRING_H
+#define GDCMCODESTRING_H
 
 #include "gdcmString.h"
 
@@ -53,5 +53,5 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmCodeString_h
+#endif //GDCMCODESTRING_H
 

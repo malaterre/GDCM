@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmEvent_h
-#define __gdcmEvent_h
+#ifndef GDCMEVENT_H
+#define GDCMEVENT_H
 
 #include "gdcmTypes.h"
 
@@ -99,4 +99,4 @@ gdcmEventMacro( UserEvent          , AnyEvent );
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmEvent_h
+#endif //GDCMEVENT_H

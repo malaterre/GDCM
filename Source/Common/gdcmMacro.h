@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmMacro_h
-#define __gdcmMacro_h
+#ifndef GDCMMACRO_H
+#define GDCMMACRO_H
 
 #include "gdcmException.h"
 #include "gdcmTrace.h"
@@ -71,4 +71,4 @@
 #endif
 
 
-#endif // __gdcmMacro_h
+#endif // GDCMMACRO_H

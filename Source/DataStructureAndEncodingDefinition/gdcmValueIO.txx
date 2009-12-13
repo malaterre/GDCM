@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmValueIO_txx
-#define __gdcmValueIO_txx
+#ifndef GDCMVALUEIO_TXX
+#define GDCMVALUEIO_TXX
 
 #include "gdcmValueIO.h"
 

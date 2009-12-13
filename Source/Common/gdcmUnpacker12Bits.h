@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmUnpacker12Bits_h
-#define __gdcmUnpacker12Bits_h
+#ifndef GDCMUNPACKER12BITS_H
+#define GDCMUNPACKER12BITS_H
 
 #include "gdcmTypes.h"
 
@@ -44,4 +44,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmUnpacker12Bits_h
+#endif //GDCMUNPACKER12BITS_H

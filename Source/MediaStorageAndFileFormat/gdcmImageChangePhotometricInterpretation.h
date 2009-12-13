@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageChangePhotometricInterpretation_h
-#define __gdcmImageChangePhotometricInterpretation_h
+#ifndef GDCMIMAGECHANGEPHOTOMETRICINTERPRETATION_H
+#define GDCMIMAGECHANGEPHOTOMETRICINTERPRETATION_H
 
 #include "gdcmImageToImageFilter.h"
 #include "gdcmPhotometricInterpretation.h"
@@ -115,5 +115,5 @@ void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
 
 } // end namespace gdcm
 
-#endif //__gdcmImageChangePhotometricInterpretation_h
+#endif //GDCMIMAGECHANGEPHOTOMETRICINTERPRETATION_H
 

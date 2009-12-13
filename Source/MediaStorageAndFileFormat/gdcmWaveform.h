@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmWaveform_h
-#define __gdcmWaveform_h
+#ifndef GDCMWAVEFORM_H
+#define GDCMWAVEFORM_H
 
 #include "gdcmFile.h"
 
@@ -32,4 +32,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmWaveform_h
+#endif //GDCMWAVEFORM_H

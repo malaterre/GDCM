@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmUIDs_h
-#define __gdcmUIDs_h
+#ifndef GDCMUIDS_H
+#define GDCMUIDS_H
 
 #include "gdcmTypes.h"
 
@@ -659,6 +659,6 @@ inline std::ostream &operator<<(std::ostream &_os, const UIDs &uid)
 
 } // end namespace gdcm
 
-#endif //__gdcmUIDs_h
+#endif //GDCMUIDS_H
 
 

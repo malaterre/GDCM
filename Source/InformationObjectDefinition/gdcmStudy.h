@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStudy_h
-#define __gdcmStudy_h
+#ifndef GDCMSTUDY_H
+#define GDCMSTUDY_H
 
 #include "gdcmTypes.h"
 #include "gdcmSeries.h"
@@ -36,4 +36,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmStudy_h
+#endif //GDCMSTUDY_H

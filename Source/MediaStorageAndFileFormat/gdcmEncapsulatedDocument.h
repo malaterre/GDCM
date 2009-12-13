@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmEncapsulatedDocument_h
-#define __gdcmEncapsulatedDocument_h
+#ifndef GDCMENCAPSULATEDDOCUMENT_H
+#define GDCMENCAPSULATEDDOCUMENT_H
 
 #include "gdcmFile.h"
 
@@ -32,4 +32,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmEncapsulatedDocument_h
+#endif //GDCMENCAPSULATEDDOCUMENT_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSHA1_h
-#define __gdcmSHA1_h
+#ifndef GDCMSHA1_H
+#define GDCMSHA1_H
 
 #include "gdcmTypes.h"
 
@@ -48,4 +48,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmSHA1_h
+#endif //GDCMSHA1_H

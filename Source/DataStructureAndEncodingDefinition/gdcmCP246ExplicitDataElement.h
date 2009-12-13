@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCP246ExplicitDataElement_h
-#define __gdcmCP246ExplicitDataElement_h
+#ifndef GDCMCP246EXPLICITDATAELEMENT_H
+#define GDCMCP246EXPLICITDATAELEMENT_H
 
 #include "gdcmDataElement.h"
 
@@ -45,5 +45,5 @@ public:
 
 #include "gdcmCP246ExplicitDataElement.txx"
 
-#endif //__gdcmCP246ExplicitDataElement_h
+#endif //GDCMCP246EXPLICITDATAELEMENT_H
 

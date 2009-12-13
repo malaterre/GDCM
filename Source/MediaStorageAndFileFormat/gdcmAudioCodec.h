@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAudioCodec_h
-#define __gdcmAudioCodec_h
+#ifndef GDCMAUDIOCODEC_H
+#define GDCMAUDIOCODEC_H
 
 #include "gdcmCodec.h"
 
@@ -35,4 +35,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmAudioCodec_h
+#endif //GDCMAUDIOCODEC_H

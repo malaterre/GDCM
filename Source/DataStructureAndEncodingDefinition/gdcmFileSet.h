@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFileSet_h
-#define __gdcmFileSet_h
+#ifndef GDCMFILESET_H
+#define GDCMFILESET_H
 
 #include "gdcmFile.h"
 #include <vector>
@@ -57,4 +57,4 @@ inline std::ostream& operator<<(std::ostream &os, const FileSet &f)
 
 } // end namespace gdcm
 
-#endif //__gdcmFileSet_h
+#endif //GDCMFILESET_H

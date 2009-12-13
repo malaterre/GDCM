@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStringFilter_h
-#define __gdcmStringFilter_h
+#ifndef GDCMSTRINGFILTER_H
+#define GDCMSTRINGFILTER_H
 
 #include "gdcmDataElement.h"
 #include "gdcmDicts.h"
@@ -72,4 +72,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmStringFilter_h
+#endif //GDCMSTRINGFILTER_H

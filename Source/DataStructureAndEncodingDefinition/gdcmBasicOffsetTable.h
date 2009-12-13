@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmBasicOffsetTable_h
-#define __gdcmBasicOffsetTable_h
+#ifndef GDCMBASICOFFSETTABLE_H
+#define GDCMBASICOFFSETTABLE_H
 
 #include "gdcmFragment.h"
 
@@ -123,4 +123,4 @@ inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmBasicOffsetTable_h
+#endif //GDCMBASICOFFSETTABLE_H

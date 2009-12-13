@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmSOPClassUIDToIOD_h
-#define __gdcmSOPClassUIDToIOD_h
+#ifndef GDCMSOPCLASSUIDTOIOD_H
+#define GDCMSOPCLASSUIDTOIOD_H
 
 #include "gdcmUIDs.h"
 
@@ -39,6 +39,6 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmSOPClassUIDToIOD_h
+#endif //GDCMSOPCLASSUIDTOIOD_H
 
 

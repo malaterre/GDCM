@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmEnumeratedValues_h
-#define __gdcmEnumeratedValues_h
+#ifndef GDCMENUMERATEDVALUES_H
+#define GDCMENUMERATEDVALUES_H
 
 #include "gdcmTypes.h"
 
@@ -42,4 +42,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmEnumeratedValues_h
+#endif //GDCMENUMERATEDVALUES_H

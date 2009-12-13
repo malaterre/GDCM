@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmObject_h
-#define __gdcmObject_h
+#ifndef GDCMOBJECT_H
+#define GDCMOBJECT_H
 
 #include "gdcmTypes.h"
 
@@ -103,5 +103,5 @@ inline std::ostream& operator<<(std::ostream &os, const Object &obj)
 
 } // end namespace gdcm
 
-#endif //__gdcmObject_h
+#endif //GDCMOBJECT_H
 

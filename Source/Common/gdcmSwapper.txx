@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSwapper_txx
-#define __gdcmSwapper_txx
+#ifndef GDCMSWAPPER_TXX
+#define GDCMSWAPPER_TXX
 
 #ifdef HAVE_BYTESWAP_H
 // TODO: not cross platform...
@@ -195,4 +195,4 @@ namespace gdcm
 #endif
 } // end namespace gdcm
  
-#endif // __gdcmSwapper_txx
+#endif // GDCMSWAPPER_TXX

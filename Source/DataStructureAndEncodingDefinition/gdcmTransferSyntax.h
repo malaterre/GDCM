@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTransferSyntax_h
-#define __gdcmTransferSyntax_h
+#ifndef GDCMTRANSFERSYNTAX_H
+#define GDCMTRANSFERSYNTAX_H
 
 #include "gdcmSwapCode.h"
 
@@ -142,5 +142,5 @@ inline std::ostream &operator<<(std::ostream &_os, const TransferSyntax &ts)
 
 } // end namespace gdcm
 
-#endif //__gdcmTransferSyntax_h
+#endif //GDCMTRANSFERSYNTAX_H
 

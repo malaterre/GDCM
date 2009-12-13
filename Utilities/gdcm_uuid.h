@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_uuid_h
-#define __gdcm_uuid_h
+#ifndef GDCM_UUID_H
+#define GDCM_UUID_H
 
 /* Use the uuid library configured for gdcm.  */
 #include "gdcmTypes.h"

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataElement_h
-#define __gdcmDataElement_h
+#ifndef GDCMDATAELEMENT_H
+#define GDCMDATAELEMENT_H
 
 #include "gdcmTag.h"
 #include "gdcmVL.h"
@@ -259,5 +259,5 @@ inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmDataElement_h
+#endif //GDCMDATAELEMENT_H
 

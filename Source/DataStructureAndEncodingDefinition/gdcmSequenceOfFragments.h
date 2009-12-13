@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSequenceOfFragments_h
-#define __gdcmSequenceOfFragments_h
+#ifndef GDCMSEQUENCEOFFRAGMENTS_H
+#define GDCMSEQUENCEOFFRAGMENTS_H
 
 #include "gdcmValue.h"
 #include "gdcmVL.h"
@@ -219,4 +219,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmSequenceOfFragments_h
+#endif //GDCMSEQUENCEOFFRAGMENTS_H

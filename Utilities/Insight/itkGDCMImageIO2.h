@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __itkGDCMImageIO2_h
-#define __itkGDCMImageIO2_h
+#ifndef ITKGDCMIMAGEIO2_H
+#define ITKGDCMIMAGEIO2_H
 
 #include "itkImageIOBase.h"
 
@@ -235,4 +235,4 @@ private:
 
 } // end namespace itk
 
-#endif // __itkGDCMImageIO2_h
+#endif // ITKGDCMIMAGEIO2_H

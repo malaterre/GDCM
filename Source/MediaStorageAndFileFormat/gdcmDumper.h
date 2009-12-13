@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDumper_h
-#define __gdcmDumper_h
+#ifndef GDCMDUMPER_H
+#define GDCMDUMPER_H
 
 #include "gdcmPrinter.h"
 
@@ -36,4 +36,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmDumper_h
+#endif //GDCMDUMPER_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageApplyLookupTable_h
-#define __gdcmImageApplyLookupTable_h
+#ifndef GDCMIMAGEAPPLYLOOKUPTABLE_H
+#define GDCMIMAGEAPPLYLOOKUPTABLE_H
 
 #include "gdcmImageToImageFilter.h"
 
@@ -42,5 +42,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageApplyLookupTable_h
+#endif //GDCMIMAGEAPPLYLOOKUPTABLE_H
 

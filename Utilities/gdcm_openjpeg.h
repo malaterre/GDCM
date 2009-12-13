@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_openjpeg_h
-#define __gdcm_openjpeg_h
+#ifndef GDCM_OPENJPEG_H
+#define GDCM_OPENJPEG_H
 
 /* Use the openjpeg library configured for gdcm.  */
 #include "gdcmTypes.h"

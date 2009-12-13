@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmCP246ExplicitDataElement_txx
-#define __gdcmCP246ExplicitDataElement_txx
+#ifndef GDCMCP246EXPLICITDATAELEMENT_TXX
+#define GDCMCP246EXPLICITDATAELEMENT_TXX
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
@@ -211,4 +211,4 @@ std::istream &CP246ExplicitDataElement::ReadWithLength(std::istream &is, VL & le
 
 } // end namespace gdcm
 
-#endif // __gdcmCP246ExplicitDataElement_txx
+#endif // GDCMCP246EXPLICITDATAELEMENT_TXX

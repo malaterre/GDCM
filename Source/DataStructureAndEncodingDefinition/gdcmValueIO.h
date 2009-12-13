@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmValueIO_h
-#define __gdcmValueIO_h
+#ifndef GDCMVALUEIO_H
+#define GDCMVALUEIO_H
 
 #include "gdcmTypes.h"
 

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmItem_txx
-#define __gdcmItem_txx
+#ifndef GDCMITEM_TXX
+#define GDCMITEM_TXX
 
 #include "gdcmItem.h"
 
@@ -47,4 +47,4 @@ VL Item::GetLength() const
 
 } // end namespace gdcm
 
-#endif // __gdcmItem_txx
+#endif // GDCMITEM_TXX

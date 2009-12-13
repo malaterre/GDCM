@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmPreamble_h
-#define __gdcmPreamble_h
+#ifndef GDCMPREAMBLE_H
+#define GDCMPREAMBLE_H
 
 #include "gdcmTypes.h"
 #include "gdcmVL.h"
@@ -80,5 +80,5 @@ inline std::ostream& operator<<(std::ostream &os, const Preamble &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmPreamble_h
+#endif //GDCMPREAMBLE_H
 

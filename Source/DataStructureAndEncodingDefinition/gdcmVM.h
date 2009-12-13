@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmVM_h
-#define __gdcmVM_h
+#ifndef GDCMVM_H
+#define GDCMVM_H
 
 #include "gdcmTypes.h"
 #include <iostream>
@@ -189,4 +189,4 @@ TYPETOLENGTH(VM256,256)
 
 } // end namespace gdcm
 
-#endif //__gdcmVM_h
+#endif //GDCMVM_H

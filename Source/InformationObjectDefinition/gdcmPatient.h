@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPatient_h
-#define __gdcmPatient_h
+#ifndef GDCMPATIENT_H
+#define GDCMPATIENT_H
 
 #include "gdcmTypes.h"
 #include "gdcmStudy.h"
@@ -37,4 +37,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmPatient_h
+#endif //GDCMPATIENT_H

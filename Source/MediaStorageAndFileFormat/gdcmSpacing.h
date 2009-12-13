@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSpacing_h
-#define __gdcmSpacing_h
+#ifndef GDCMSPACING_H
+#define GDCMSPACING_H
 
 #include "gdcmTypes.h"
 #include "gdcmAttribute.h"
@@ -122,4 +122,4 @@ public :
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmSpacing_h
+#endif //GDCMSPACING_H

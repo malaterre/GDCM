@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageCodec_h
-#define __gdcmImageCodec_h
+#ifndef GDCMIMAGECODEC_H
+#define GDCMIMAGECODEC_H
 
 #include "gdcmCodec.h"
 #include "gdcmPhotometricInterpretation.h"
@@ -130,4 +130,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageCodec_h
+#endif //GDCMIMAGECODEC_H

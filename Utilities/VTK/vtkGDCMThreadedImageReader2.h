@@ -41,8 +41,8 @@
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMImageReader
 
-#ifndef __vtkGDCMThreadedImageReader2_h
-#define __vtkGDCMThreadedImageReader2_h
+#ifndef VTKGDCMTHREADEDIMAGEREADER2_H
+#define VTKGDCMTHREADEDIMAGEREADER2_H
 
 #include "vtkThreadedImageAlgorithm.h"
 #include "gdcmTypes.h" // GDCM_EXPORT

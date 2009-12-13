@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmBitmap_h
-#define __gdcmBitmap_h
+#ifndef GDCMBITMAP_H
+#define GDCMBITMAP_H
 
 #include "gdcmObject.h"
 #include "gdcmCurve.h"
@@ -178,4 +178,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmBitmap_h
+#endif //GDCMBITMAP_H

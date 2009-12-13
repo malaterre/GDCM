@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmBase64_h
-#define __gdcmBase64_h
+#ifndef GDCMBASE64_H
+#define GDCMBASE64_H
 
 #include "gdcmTypes.h"
 
@@ -81,4 +81,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmBase64_h
+#endif //GDCMBASE64_H

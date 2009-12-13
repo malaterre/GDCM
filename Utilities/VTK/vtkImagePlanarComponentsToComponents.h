@@ -19,8 +19,8 @@
 // TODO: Can I make this filter threaded ?
 // TODO: How do I handle the VTK-flipping (FileLowerLeft)?
 
-#ifndef __vtkImagePlanarComponentsToComponents_h
-#define __vtkImagePlanarComponentsToComponents_h
+#ifndef VTKIMAGEPLANARCOMPONENTSTOCOMPONENTS_H
+#define VTKIMAGEPLANARCOMPONENTSTOCOMPONENTS_H
 
 #include "vtkImageAlgorithm.h"
 #include "gdcmTypes.h" // GDCM_EXPORT

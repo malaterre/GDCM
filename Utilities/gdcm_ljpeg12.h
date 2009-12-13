@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcm_ljpeg12_h
-#define __gdcm_ljpeg12_h
+#ifndef GDCM_LJPEG12_H
+#define GDCM_LJPEG12_H
 
 /* Use the ljpeg library configured for gdcm.  */
 #include "gdcmTypes.h"

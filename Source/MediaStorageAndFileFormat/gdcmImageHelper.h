@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageHelper_h
-#define __gdcmImageHelper_h
+#ifndef GDCMIMAGEHELPER_H
+#define GDCMIMAGEHELPER_H
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"

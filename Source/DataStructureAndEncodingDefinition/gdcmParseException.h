@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmParseException_h
-#define __gdcmParseException_h
+#ifndef GDCMPARSEEXCEPTION_H
+#define GDCMPARSEEXCEPTION_H
 
 
 #include "gdcmException.h"

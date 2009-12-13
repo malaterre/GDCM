@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmValidate_h
-#define __gdcmValidate_h
+#ifndef GDCMVALIDATE_H
+#define GDCMVALIDATE_H
 
 #include "gdcmFile.h"
 
@@ -41,4 +41,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmValidate_h
+#endif //GDCMVALIDATE_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPDBHeader_h
-#define __gdcmPDBHeader_h
+#ifndef GDCMPDBHEADER_H
+#define GDCMPDBHEADER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDataSet.h"
@@ -88,4 +88,4 @@ inline std::ostream& operator<<(std::ostream &os, const PDBHeader &d)
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmPDBHeader_h
+#endif //GDCMPDBHEADER_H

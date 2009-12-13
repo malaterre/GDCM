@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCSAHeader_h
-#define __gdcmCSAHeader_h
+#ifndef GDCMCSAHEADER_H
+#define GDCMCSAHEADER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDataSet.h"
@@ -137,4 +137,4 @@ inline std::ostream& operator<<(std::ostream &os, const CSAHeader &d)
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmCSAHeader_h
+#endif //GDCMCSAHEADER_H

@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFiducials_h
-#define __gdcmFiducials_h
+#ifndef GDCMFIDUCIALS_H
+#define GDCMFIDUCIALS_H
 
 #include "gdcmFile.h"
 
@@ -32,4 +32,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmFiducials_h
+#endif //GDCMFIDUCIALS_H
