@@ -22,6 +22,10 @@
 #ifndef VTKSTRINGARRAY_H
 #define VTKSTRINGARRAY_H
 
+#ifdef __vtkStringArray_h
+#error Something went terribly wrong
+#endif
+
 #include "vtkObject.h"
 
 #include <string>

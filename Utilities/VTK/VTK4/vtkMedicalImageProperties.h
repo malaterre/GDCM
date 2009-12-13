@@ -24,6 +24,10 @@
 #ifndef VTKMEDICALIMAGEPROPERTIES_H
 #define VTKMEDICALIMAGEPROPERTIES_H
 
+#ifdef __vtkMedicalImageProperties_h
+#error Something went terribly wrong
+#endif
+
 #include "vtkObject.h"
 
 class vtkMedicalImagePropertiesInternals;
