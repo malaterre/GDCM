@@ -203,6 +203,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   delete[] dummy_buffer /*copy*/;
 
   os.write(copy /*dummy_buffer*/, buf_size);
+  delete[] copy;
   return true;
 }
 
