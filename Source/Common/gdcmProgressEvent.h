@@ -25,7 +25,7 @@ namespace gdcm
  * \brief ProgressEvent
  * Special type of event triggered during 
  *
- * \see 
+ * \see AnyEvent
  */
 class ProgressEvent : public AnyEvent
 {

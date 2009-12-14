@@ -21,9 +21,7 @@ namespace gdcm
 {
 //-----------------------------------------------------------------------------
 /**
- * \class Event
  * \brief superclass for callback/observer methods
- *
  */
 class GDCM_EXPORT Event
 {
@@ -63,7 +61,7 @@ inline std::ostream& operator<<(std::ostream& os, Event &e)
  *  Macro for creating new Events
  */
 #define gdcmEventMacro( classname , super ) \
- /** \class classname */  \
+ /** \brief classname */  \
  class  classname : public super { \
    public: \
      typedef classname Self; \
