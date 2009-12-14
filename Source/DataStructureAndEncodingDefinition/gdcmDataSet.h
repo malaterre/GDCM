@@ -49,8 +49,8 @@ class PrivateTag;
  * or defined length (different from 0) means nested dataset with defined
  * length.
  *
- * TODO:
- * a DataSet DOES NOT have a TS type... a file does !
+ * \warning
+ * a DataSet does not have a Transfer Syntax type, only a File does.
  */
 class GDCM_EXPORT DataSet
 {
