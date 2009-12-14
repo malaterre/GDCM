@@ -45,7 +45,7 @@ class PrivateTag;
  * Everything you do with this code is at your own risk, since decoding process
  * was not written from specification documents.
  *
- * \WARNING: the API of this class might change.
+ * \warning: the API of this class might change.
  *
  */
 class GDCM_EXPORT PDBHeader

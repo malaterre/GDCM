@@ -606,10 +606,10 @@ RECURSIVE              = YES
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
 EXCLUDE                = @GDCM_SOURCE_DIR@/Source/DataDictionary/gdcmTagToType.h \
-                         @GDCM_SOURCE_DIR@Source/Common/zipstreamimpl.h \
-                         @GDCM_SOURCE_DIR@Source/Common/zipstreamimpl.hpp \
-                         @GDCM_SOURCE_DIR@Source/MediaStorageAndFileFormat/gdcm_jp2.h \
-                         @GDCM_SOURCE_DIR@Source/MediaStorageAndFileFormat/gdcm_j2k.h
+                         @GDCM_SOURCE_DIR@/Source/Common/zipstreamimpl.h \
+                         @GDCM_SOURCE_DIR@/Source/Common/zipstreamimpl.hpp \
+                         @GDCM_SOURCE_DIR@/Source/MediaStorageAndFileFormat/gdcm_jp2.h \
+                         @GDCM_SOURCE_DIR@/Source/MediaStorageAndFileFormat/gdcm_j2k.h
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
 # directories that are symbolic links (a Unix filesystem feature) are excluded

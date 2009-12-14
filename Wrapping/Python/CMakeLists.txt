@@ -164,7 +164,7 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 IF(BUILD_TESTING)
   ADD_PYTHON_TEST(TestWrapPython TestWrap.py ${GDCM_SOURCE_DIR}/Source)
   IF(GDCM_DOCUMENTATION)
-  ADD_PYTHON_TEST(TestDoxy2SWIGPython doxy2swig.py ${GDCM_BINARY_DIR}/Utilities/doxygen/xml/index.xml ${GDCM_BINARY_DIR}/generated_docstrings.i)
+    ADD_PYTHON_TEST(TestDoxy2SWIGPython doxy2swig.py ${GDCM_BINARY_DIR}/Utilities/doxygen/xml/index.xml ${GDCM_BINARY_DIR}/generated_docstrings.i)
   ENDIF(GDCM_DOCUMENTATION)
 ENDIF(BUILD_TESTING)
 
