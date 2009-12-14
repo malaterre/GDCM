@@ -30,6 +30,7 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
 #include "gdcmEvent.h"
+#include "gdcmProgressEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -222,6 +223,12 @@ EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 
+%include "gdcmProgressEvent.h"
+%extend gdcm::ProgressEvent {
+  static ProgressEvent *Cast(Event *event) {
+    return dynamic_cast<ProgressEvent*>(event);
+  }
+};
 //%feature("director") AnonymizeEvent;
 %include "gdcmAnonymizeEvent.h"
 %extend gdcm::AnonymizeEvent {
