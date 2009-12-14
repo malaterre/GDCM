@@ -89,7 +89,7 @@ const char *Filename::ToUnixSlashes()
     {
     if( *it == '\\' )
       {
-      assert( it+1 != Conversion.end() && *(it+1) != ' ' ); // is it an escaped space ?
+      assert( it+1 == Conversion.end() || *(it+1) != ' ' ); // is it an escaped space ?
       *it = '/';
       }
     }
@@ -164,7 +164,7 @@ bool Filename::IsIdentical(Filename const &fn) const
 
 const char *Filename::Join(const char *path, const char *filename)
 {
-  static std::string s;
+  static std::string s; // warning C4640: 's' : construction of local static object is not thread-safe
   s = path;
   s += '/';
   s += filename;
