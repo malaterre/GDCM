@@ -93,6 +93,15 @@ input value
 do not provide an easy way to retrieve the original value from the
 sha1 generated value
 
+This class implement the Subject/Observer pattern trigger the
+following event:  AnonymizeEvent
+
+IterationEvent
+
+StartEvent
+
+EndEvent
+
 See:   CryptographicMessageSyntax
 
 C++ includes: gdcmAnonymizer.h ";
@@ -535,160 +544,6 @@ STL class. ";
 STL class. ";
 
 
-// File: classzlib__stream_1_1basic__unzip__streambuf.xml
-%feature("docstring") zlib_stream::basic_unzip_streambuf "
-
-A stream decorator that takes compressed input and unzips it to a
-istream.
-
-The class wraps up the deflate method of the zlib library
-1.1.4http://www.gzip.org/zlib/
-
-C++ includes: zipstreamimpl.h ";
-
-%feature("docstring")
-zlib_stream::basic_unzip_streambuf::basic_unzip_streambuf "zlib_stream::basic_unzip_streambuf< charT, traits
->::basic_unzip_streambuf(istream_reference istream, int window_size,
-size_t read_buffer_size, size_t input_buffer_size)
-
-Construct a unzip stream More info on the following parameters can be
-found in the zlib documentation. ";
-
-%feature("docstring")
-zlib_stream::basic_unzip_streambuf::~basic_unzip_streambuf "zlib_stream::basic_unzip_streambuf< charT, traits
->::~basic_unzip_streambuf(void) ";
-
-%feature("docstring")  zlib_stream::basic_unzip_streambuf::get_crc "unsigned long zlib_stream::basic_unzip_streambuf< charT, traits
->::get_crc(void) const ";
-
-%feature("docstring")  zlib_stream::basic_unzip_streambuf::get_in_size
-"long zlib_stream::basic_unzip_streambuf< charT, traits
->::get_in_size(void) const ";
-
-%feature("docstring")  zlib_stream::basic_unzip_streambuf::get_istream
-"istream_reference zlib_stream::basic_unzip_streambuf< charT, traits
->::get_istream(void)
-
-returns the compressed input istream ";
-
-%feature("docstring")
-zlib_stream::basic_unzip_streambuf::get_out_size "long
-zlib_stream::basic_unzip_streambuf< charT, traits
->::get_out_size(void) const ";
-
-%feature("docstring")  zlib_stream::basic_unzip_streambuf::get_zerr "int zlib_stream::basic_unzip_streambuf< charT, traits
->::get_zerr(void) const ";
-
-%feature("docstring")
-zlib_stream::basic_unzip_streambuf::get_zip_stream "z_stream&
-zlib_stream::basic_unzip_streambuf< charT, traits
->::get_zip_stream(void) ";
-
-%feature("docstring")  zlib_stream::basic_unzip_streambuf::underflow "int_type zlib_stream::basic_unzip_streambuf< charT, traits
->::underflow(void) ";
-
-
-// File: classzlib__stream_1_1basic__zip__istream.xml
-%feature("docstring") zlib_stream::basic_zip_istream "C++ includes:
-zipstreamimpl.h ";
-
-%feature("docstring")
-zlib_stream::basic_zip_istream::basic_zip_istream "zlib_stream::basic_zip_istream< charT, traits
->::basic_zip_istream(istream_reference istream, int window_size=-15,
-size_t read_buffer_size=zstream_default_buffer_size, size_t
-input_buffer_size=zstream_default_buffer_size) ";
-
-%feature("docstring")  zlib_stream::basic_zip_istream::check_crc "bool zlib_stream::basic_zip_istream< charT, traits >::check_crc(void)
-";
-
-%feature("docstring")  zlib_stream::basic_zip_istream::check_data_size
-"bool zlib_stream::basic_zip_istream< charT, traits
->::check_data_size(void) const ";
-
-%feature("docstring")  zlib_stream::basic_zip_istream::get_gzip_crc "long zlib_stream::basic_zip_istream< charT, traits
->::get_gzip_crc(void) const ";
-
-%feature("docstring")
-zlib_stream::basic_zip_istream::get_gzip_data_size "long
-zlib_stream::basic_zip_istream< charT, traits
->::get_gzip_data_size(void) const ";
-
-%feature("docstring")  zlib_stream::basic_zip_istream::is_gzip "bool
-zlib_stream::basic_zip_istream< charT, traits >::is_gzip(void) const
-";
-
-
-// File: classzlib__stream_1_1basic__zip__ostream.xml
-%feature("docstring") zlib_stream::basic_zip_ostream "C++ includes:
-zipstreamimpl.h ";
-
-%feature("docstring")
-zlib_stream::basic_zip_ostream::basic_zip_ostream "zlib_stream::basic_zip_ostream< charT, traits
->::basic_zip_ostream(ostream_reference ostream, bool is_gzip=false,
-int level=Z_DEFAULT_COMPRESSION, EStrategy strategy=DefaultStrategy,
-int window_size=-15, int memory_level=8, size_t
-buffer_size=zstream_default_buffer_size) ";
-
-%feature("docstring")
-zlib_stream::basic_zip_ostream::~basic_zip_ostream "zlib_stream::basic_zip_ostream< charT, traits
->::~basic_zip_ostream(void) ";
-
-%feature("docstring")  zlib_stream::basic_zip_ostream::finished "void
-zlib_stream::basic_zip_ostream< charT, traits >::finished(void) ";
-
-%feature("docstring")  zlib_stream::basic_zip_ostream::is_gzip "bool
-zlib_stream::basic_zip_ostream< charT, traits >::is_gzip(void) const
-";
-
-%feature("docstring")  zlib_stream::basic_zip_ostream::zflush "basic_zip_ostream<charT, traits>& zlib_stream::basic_zip_ostream<
-charT, traits >::zflush(void) ";
-
-
-// File: classzlib__stream_1_1basic__zip__streambuf.xml
-%feature("docstring") zlib_stream::basic_zip_streambuf "
-
-A stream decorator that takes raw input and zips it to a ostream.
-
-The class wraps up the inflate method of the zlib library
-1.1.4http://www.gzip.org/zlib/
-
-C++ includes: zipstreamimpl.h ";
-
-%feature("docstring")
-zlib_stream::basic_zip_streambuf::basic_zip_streambuf "zlib_stream::basic_zip_streambuf< charT, traits
->::basic_zip_streambuf(ostream_reference ostream, int level, EStrategy
-strategy, int window_size, int memory_level, size_t buffer_size) ";
-
-%feature("docstring")
-zlib_stream::basic_zip_streambuf::~basic_zip_streambuf "zlib_stream::basic_zip_streambuf< charT, traits
->::~basic_zip_streambuf(void) ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::flush "std::streamsize zlib_stream::basic_zip_streambuf< charT, traits
->::flush(void) ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::get_crc "unsigned long zlib_stream::basic_zip_streambuf< charT, traits
->::get_crc(void) const ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::get_in_size "unsigned long zlib_stream::basic_zip_streambuf< charT, traits
->::get_in_size(void) const ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::get_ostream "ostream_reference zlib_stream::basic_zip_streambuf< charT, traits
->::get_ostream(void) const ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::get_out_size
-"long zlib_stream::basic_zip_streambuf< charT, traits
->::get_out_size(void) const ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::get_zerr "int zlib_stream::basic_zip_streambuf< charT, traits >::get_zerr(void)
-const ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::overflow "int_type zlib_stream::basic_zip_streambuf< charT, traits
->::overflow(int_type c) ";
-
-%feature("docstring")  zlib_stream::basic_zip_streambuf::sync "int
-zlib_stream::basic_zip_streambuf< charT, traits >::sync(void) ";
-
-
 // File: classgdcm_1_1BasicOffsetTable.xml
 %feature("docstring") gdcm::BasicOffsetTable "
 
@@ -981,10 +836,6 @@ gdcm::ByteValue::Write(std::ostream &os) const ";
 gdcm::ByteValue::WriteBuffer(std::ostream &os) const ";
 
 
-// File: classclassname.xml
-%feature("docstring") classname "C++ includes: gdcmEvent.h ";
-
-
 // File: classgdcm_1_1Codec.xml
 %feature("docstring") gdcm::Codec "
 
@@ -1010,7 +861,7 @@ Return whether this coder support this transfer syntax (can code it).
 ";
 
 %feature("docstring")  gdcm::Coder::Code "virtual bool
-gdcm::Coder::Code(DataElement const &in, DataElement &out)
+gdcm::Coder::Code(DataElement const &in_, DataElement &out_)
 
 Code. ";
 
@@ -1099,12 +950,6 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1multimap_1_1const__iterator.xml
-%feature("docstring") std::multimap::const_iterator "
-
-STL iterator class. ";
-
-
 // File: classstd_1_1set_1_1const__iterator.xml
 %feature("docstring") std::set::const_iterator "
 
@@ -1119,6 +964,12 @@ STL iterator class. ";
 
 // File: classstd_1_1vector_1_1const__iterator.xml
 %feature("docstring") std::vector::const_iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1multimap_1_1const__iterator.xml
+%feature("docstring") std::multimap::const_iterator "
 
 STL iterator class. ";
 
@@ -1153,12 +1004,6 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1map_1_1const__reverse__iterator.xml
-%feature("docstring") std::map::const_reverse_iterator "
-
-STL iterator class. ";
-
-
 // File: classstd_1_1multimap_1_1const__reverse__iterator.xml
 %feature("docstring") std::multimap::const_reverse_iterator "
 
@@ -1167,6 +1012,12 @@ STL iterator class. ";
 
 // File: classstd_1_1set_1_1const__reverse__iterator.xml
 %feature("docstring") std::set::const_reverse_iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1map_1_1const__reverse__iterator.xml
+%feature("docstring") std::map::const_reverse_iterator "
 
 STL iterator class. ";
 
@@ -1587,6 +1438,16 @@ Element Tag, a Value Length, and a Value Field. For some specific
 Transfer Syntaxes, a Data Element also contains a VR Field where the
 Value Representation of that Data Element is specified explicitly.
 
+Design: A DataElement in GDCM always store VL ( Value Length) on a 32
+bits integer even when VL is 16 bits
+
+A DataElement always store the VR even for Implicit TS, in which case
+VR is defaulted to VR::INVALID
+
+For Item start/end (See 0xfffe tags), Value is NULL
+
+See:   ExplicitDataElement ImplicitDataElement
+
 C++ includes: gdcmDataElement.h ";
 
 %feature("docstring")  gdcm::DataElement::DataElement "gdcm::DataElement::DataElement(const DataElement &_val) ";
@@ -1756,8 +1617,10 @@ Implementation note. If one do: DataSet ds; ds.SetLength(0);
 ds.Read(is); setting length to 0 actually means try to read is as if
 it was a root DataSet. Other value are undefined (nested dataset with
 undefined length) or defined length (different from 0) means nested
-dataset with defined length.  TODO: a DataSet DOES NOT have a TS
-type... a file does !
+dataset with defined length.
+
+WARNING:  a DataSet does not have a Transfer Syntax type, only a File
+does.
 
 C++ includes: gdcmDataSet.h ";
 
@@ -1888,7 +1751,7 @@ Return whether this decoder support this transfer syntax (can decode
 it). ";
 
 %feature("docstring")  gdcm::Decoder::Decode "virtual bool
-gdcm::Decoder::Decode(DataElement const &is, DataElement &os)
+gdcm::Decoder::Decode(DataElement const &is_, DataElement &os)
 
 Decode. ";
 
@@ -2649,13 +2512,19 @@ STL class. ";
 
 Exception.
 
-Standard exception handling object.
+Standard exception handling object. Its copy-constructor and
+assignment operator are generated by the compiler.
 
 C++ includes: gdcmException.h ";
 
 %feature("docstring")  gdcm::Exception::Exception "gdcm::Exception::Exception(const char *desc=\"None\", const char
 *file=__FILE__, unsigned int lineNumber=__LINE__, const char
-*loc=\"\") ";
+*func=\"\")
+
+Explicit constructor, initializing the description and the text
+returned by what(). The last parameter is ignored for the time being.
+It may be used to specify the function where the exception was thrown.
+";
 
 %feature("docstring")  gdcm::Exception::~Exception "virtual
 gdcm::Exception::~Exception()  throw ()";
@@ -2743,6 +2612,8 @@ more bytes, where the first byte is at the beginning of the file and
 the last byte at the end of the File. Files are identified by a unique
 File ID and may by written, read and/or deleted.
 
+See:   Reader Writer
+
 C++ includes: gdcmFile.h ";
 
 %feature("docstring")  gdcm::File::File "gdcm::File::File() ";
@@ -2750,28 +2621,44 @@ C++ includes: gdcmFile.h ";
 %feature("docstring")  gdcm::File::~File "gdcm::File::~File() ";
 
 %feature("docstring")  gdcm::File::GetDataSet "DataSet&
-gdcm::File::GetDataSet() ";
+gdcm::File::GetDataSet()
+
+Get Data Set. ";
 
 %feature("docstring")  gdcm::File::GetDataSet "const DataSet&
-gdcm::File::GetDataSet() const ";
+gdcm::File::GetDataSet() const
+
+Get Data Set. ";
 
 %feature("docstring")  gdcm::File::GetHeader "FileMetaInformation&
-gdcm::File::GetHeader() ";
+gdcm::File::GetHeader()
+
+Get File Meta Information. ";
 
 %feature("docstring")  gdcm::File::GetHeader "const
-FileMetaInformation& gdcm::File::GetHeader() const ";
+FileMetaInformation& gdcm::File::GetHeader() const
+
+Get File Meta Information. ";
 
 %feature("docstring")  gdcm::File::Read "std::istream&
-gdcm::File::Read(std::istream &is) ";
+gdcm::File::Read(std::istream &is)
+
+Read. ";
 
 %feature("docstring")  gdcm::File::SetDataSet "void
-gdcm::File::SetDataSet(const DataSet &ds) ";
+gdcm::File::SetDataSet(const DataSet &ds)
+
+Set Data Set. ";
 
 %feature("docstring")  gdcm::File::SetHeader "void
-gdcm::File::SetHeader(const FileMetaInformation &fmi) ";
+gdcm::File::SetHeader(const FileMetaInformation &fmi)
+
+Set File Meta Information. ";
 
 %feature("docstring")  gdcm::File::Write "std::ostream const&
-gdcm::File::Write(std::ostream &os) const ";
+gdcm::File::Write(std::ostream &os) const
+
+Write. ";
 
 
 // File: classgdcm_1_1FileDerivation.xml
@@ -2780,12 +2667,15 @@ gdcm::File::Write(std::ostream &os) const ";
 FileDerivation class See PS 3.16 - 2008 For the list of Code Value
 that can be used for in Derivation Code Sequence.
 
-URL: medical.nema.org/medical/dicom/2008/08_16pu.pdf DICOM Part 16 has
-two Context Groups CID 7202 and CID 7203 which contain a set of codes
-defining reason for a source image reference (ie. reason code for
-referenced image sequence) and a coded description of the deriation
-applied to the new image data from the original. Both these context
-groups are extensible.
+URL:http://medical.nema.org/medical/dicom/2008/08_16pu.pdf
+
+DICOM Part 16 has two Context Groups CID 7202 and CID 7203 which
+contain a set of codes defining reason for a source image reference
+(ie. reason code for referenced image sequence) and a coded
+description of the deriation applied to the new image data from the
+original. Both these context groups are extensible.
+
+File Derivation is compulsary when creating a lossy derived image.
 
 C++ includes: gdcmFileDerivation.h ";
 
@@ -2795,7 +2685,13 @@ C++ includes: gdcmFileDerivation.h ";
 
 %feature("docstring")  gdcm::FileDerivation::AddReference "bool
 gdcm::FileDerivation::AddReference(const char *referencedsopclassuid,
-const char *referencedsopinstanceuid) ";
+const char *referencedsopinstanceuid)
+
+Create the proper reference. Need to pass the original SOP Class UID
+and the original SOP Instance UID, so that those value can be used as
+Reference. WARNING:  referencedsopclassuid and
+referencedsopinstanceuid needs to be padded. This is not compatible
+with how ByteValue->GetPointer works. ";
 
 %feature("docstring")  gdcm::FileDerivation::Derive "bool
 gdcm::FileDerivation::Derive()
@@ -2811,11 +2707,14 @@ gdcm::FileDerivation::GetFile() ";
 %feature("docstring")
 gdcm::FileDerivation::SetDerivationCodeSequenceCodeValue "void
 gdcm::FileDerivation::SetDerivationCodeSequenceCodeValue(unsigned int
-codevalue) ";
+codevalue)
+
+Specify the Derivation Code Sequence Code Value. Eg 113040. ";
 
 %feature("docstring")  gdcm::FileDerivation::SetDerivationDescription
 "void gdcm::FileDerivation::SetDerivationDescription(const char *dd)
-";
+
+Specify the Derivation Description. Eg \"lossy conversion\". ";
 
 %feature("docstring")  gdcm::FileDerivation::SetFile "void
 gdcm::FileDerivation::SetFile(const File &f)
@@ -2825,13 +2724,19 @@ Set/Get File. ";
 %feature("docstring")
 gdcm::FileDerivation::SetPurposeOfReferenceCodeSequenceCodeValue "void
 gdcm::FileDerivation::SetPurposeOfReferenceCodeSequenceCodeValue(unsigned
-int codevalue) ";
+int codevalue)
+
+Specify the Purpose Of Reference Code Value. Eg. 121320. ";
 
 
 // File: classgdcm_1_1FileExplicitFilter.xml
 %feature("docstring") gdcm::FileExplicitFilter "
 
-FileExplicitFilter class.
+FileExplicitFilter class After changing a file from Implicit to
+Explicit representation (see ImageChangeTransferSyntax) one operation
+is to make sure the VR of each DICOM attribute are accurate and do
+match the one from PS 3.6. Indeed when a file is written in Implicit
+reprensentation, the VR is not stored directly in the file.
 
 WARNING:  changing an implicit dataset to an explicit dataset is NOT a
 trivial task of simply changing the VR to the dict one: One has to
@@ -2894,13 +2799,15 @@ VR=UN. ";
 Class to represent a File Meta Information.
 
 FileMetaInformation is a Explicit Structured Set. Whenever the file
-contains an ImplicitDataElement DataSet, a conversion will take place.
-Todo If user adds an element with group != 0x0002 it will be
+contains an ImplicitDataElement DataSet, a conversion will take
+place.Todo If user adds an element with group != 0x0002 it will be
 written... Definition: The File Meta Information includes identifying
 information on the encapsulated Data Set. This header consists of a
 128 byte File Preamble, followed by a 4 byte DICOM prefix, followed by
 the File Meta Elements shown in Table 7.1-1. This header shall be
 present in every DICOM file.
+
+See:   Writer Reader
 
 C++ includes: gdcmFileMetaInformation.h ";
 
@@ -3436,9 +3343,14 @@ redundant. One way to solve that would be to subclass gdcm::Image with
 gdcm::JPEGImage which would from the stream extract the header info
 and fill it to please gdcm::Image...well except origin for instance
 
-Basically you can see it as a storage for the PixelData element.
-However it was also used for MRSpectroscopy object (as proof of
-concept)
+Basically you can see it as a storage for the Pixel Data element
+(7fe0,0010).
+
+WARNING:  This class does some heuristics to guess the Spacing but is
+not compatible with DICOM CP-586. In case of doubt use PixmapReader
+instead
+
+See:   ImageReader PixmapReader
 
 C++ includes: gdcmImage.h ";
 
@@ -3635,6 +3547,13 @@ If only Force param is set but no input TransferSyntax is set, it is
 assumed that user only wants to inspect encapsulated stream (advanced
 dev. option).
 
+When using UserCodec it is very important that the TransferSyntax (as
+set in SetTransferSyntax) is actually understood by UserCodec (ie.
+UserCodec->CanCode( TransferSyntax ) ). Otherwise the behavior is to
+use a default codec.
+
+See:   JPEGCodec JPEGLSCodec JPEG2000Codec
+
 C++ includes: gdcmImageChangeTransferSyntax.h ";
 
 %feature("docstring")
@@ -3676,7 +3595,13 @@ TransferSyntax &ts)
 
 Set target Transfer Syntax. ";
 
-%feature("docstring")  gdcm::ImageChangeTransferSyntax::SetUserCodec "void gdcm::ImageChangeTransferSyntax::SetUserCodec(ImageCodec *ic) ";
+%feature("docstring")  gdcm::ImageChangeTransferSyntax::SetUserCodec "void gdcm::ImageChangeTransferSyntax::SetUserCodec(ImageCodec *ic)
+
+Allow user to specify exactly which codec to use. this is needed to
+specify special qualities or compression option. WARNING:  is the
+codec 'ic' is not compatible with the TransferSyntax requested, it
+will not be used. It is the user responsability to check that
+UserCodec->CanCode( TransferSyntax ) ";
 
 
 // File: classgdcm_1_1ImageCodec.xml
@@ -3692,6 +3617,12 @@ C++ includes: gdcmImageCodec.h ";
 
 %feature("docstring")  gdcm::ImageCodec::~ImageCodec "gdcm::ImageCodec::~ImageCodec() ";
 
+%feature("docstring")  gdcm::ImageCodec::CanCode "bool
+gdcm::ImageCodec::CanCode(TransferSyntax const &) const
+
+Return whether this coder support this transfer syntax (can code it).
+";
+
 %feature("docstring")  gdcm::ImageCodec::CanDecode "bool
 gdcm::ImageCodec::CanDecode(TransferSyntax const &) const
 
@@ -3699,7 +3630,7 @@ Return whether this decoder support this transfer syntax (can decode
 it). ";
 
 %feature("docstring")  gdcm::ImageCodec::Decode "bool
-gdcm::ImageCodec::Decode(DataElement const &is, DataElement &os)
+gdcm::ImageCodec::Decode(DataElement const &is_, DataElement &os)
 
 Decode. ";
 
@@ -3707,7 +3638,7 @@ Decode. ";
 unsigned int* gdcm::ImageCodec::GetDimensions() const ";
 
 %feature("docstring")  gdcm::ImageCodec::GetHeaderInfo "virtual bool
-gdcm::ImageCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+gdcm::ImageCodec::GetHeaderInfo(std::istream &is_, TransferSyntax &ts)
 ";
 
 %feature("docstring")  gdcm::ImageCodec::GetLUT "const LookupTable&
@@ -4091,7 +4022,16 @@ support duplicate and will FAIL in case of duplicate IPP.
 
 WARNING:  See special note for SetZSpacingTolerance when computing the
 ZSpacing from the IPP of each DICOM files (default tolerance for
-consistant spacing is: 1e-6mm)
+consistant spacing is: 1e-6mm)  For more information on Spacing, and
+how it is defined in DICOM, advanced user may refers to:
+
+http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
+
+Bug There currently a couple of bug in this implementation:
+
+Frame Of Reference UID is not taken into account
+
+Gantry Tilt is not considered
 
 C++ includes: gdcmIPPSorter.h ";
 
@@ -4242,20 +4182,8 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1vector_1_1iterator.xml
-%feature("docstring") std::vector::iterator "
-
-STL iterator class. ";
-
-
 // File: classstd_1_1map_1_1iterator.xml
 %feature("docstring") std::map::iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1multimap_1_1iterator.xml
-%feature("docstring") std::multimap::iterator "
 
 STL iterator class. ";
 
@@ -4266,8 +4194,20 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classstd_1_1vector_1_1iterator.xml
+%feature("docstring") std::vector::iterator "
+
+STL iterator class. ";
+
+
 // File: classstd_1_1multiset_1_1iterator.xml
 %feature("docstring") std::multiset::iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1multimap_1_1iterator.xml
+%feature("docstring") std::multimap::iterator "
 
 STL iterator class. ";
 
@@ -4954,6 +4894,8 @@ gdcm::NestedModuleEntries::GetNumberOfModuleEntries() ";
 // File: classgdcm_1_1NoEvent.xml
 %feature("docstring") gdcm::NoEvent "
 
+classname
+
 Define some common GDCM events
 
 C++ includes: gdcmEvent.h ";
@@ -4989,72 +4931,6 @@ gdcm::Object::Print(std::ostream &) const ";
 %feature("docstring") std::ofstream "
 
 STL class. ";
-
-
-// File: structopj__cp.xml
-%feature("docstring") opj_cp "
-
-Coding parameters
-
-C++ includes: gdcm_j2k.h ";
-
-
-// File: structopj__j2k.xml
-%feature("docstring") opj_j2k "
-
-JPEG-2000 codestream reader/writer
-
-C++ includes: gdcm_j2k.h ";
-
-
-// File: structopj__jp2.xml
-%feature("docstring") opj_jp2 "
-
-JPEG-2000 file format reader/writer
-
-C++ includes: gdcm_jp2.h ";
-
-
-// File: structopj__jp2__box.xml
-%feature("docstring") opj_jp2_box "
-
-JP2 Box
-
-C++ includes: gdcm_jp2.h ";
-
-
-// File: structopj__jp2__comps.xml
-%feature("docstring") opj_jp2_comps "
-
-JP2 component
-
-C++ includes: gdcm_jp2.h ";
-
-
-// File: structopj__stepsize.xml
-%feature("docstring") opj_stepsize "
-
-Quantization stepsize
-
-C++ includes: gdcm_j2k.h ";
-
-
-// File: structopj__tccp.xml
-%feature("docstring") opj_tccp "
-
-Tile-component coding parameters
-
-C++ includes: gdcm_j2k.h ";
-
-
-// File: structopj__tcp.xml
-%feature("docstring") opj_tcp "
-
-Tile coding parameters : this structure is used to store
-coding/decoding parameters common to all tiles (information like COD,
-COC in main header)
-
-C++ includes: gdcm_j2k.h ";
 
 
 // File: classgdcm_1_1Orientation.xml
@@ -5357,6 +5233,7 @@ Data Block and allow users to query element by name.
 
 WARNING:  : Everything you do with this code is at your own risk,
 since decoding process was not written from specification documents.
+
 : the API of this class might change.
 
 C++ includes: gdcmPDBHeader.h ";
@@ -5580,6 +5457,8 @@ gdcm::PixelFormat::SetScalarType(ScalarType st) ";
 Pixmap class A bitmap based image. Used as parent for both IconImage
 and the main Pixel Data Image It does not contains any World Space
 information (IPP, IOP).
+
+See:   PixmapReader
 
 C++ includes: gdcmPixmap.h ";
 
@@ -5904,8 +5783,40 @@ gdcm::PrivateTag::SetOwner(const char *owner) ";
 
 
 // File: classgdcm_1_1ProgressEvent.xml
-%feature("docstring") gdcm::ProgressEvent "C++ includes: gdcmEvent.h
-";
+%feature("docstring") gdcm::ProgressEvent "
+
+ProgressEvent Special type of event triggered during.
+
+See:   AnyEvent
+
+C++ includes: gdcmProgressEvent.h ";
+
+%feature("docstring")  gdcm::ProgressEvent::ProgressEvent "gdcm::ProgressEvent::ProgressEvent(const Self &s) ";
+
+%feature("docstring")  gdcm::ProgressEvent::ProgressEvent "gdcm::ProgressEvent::ProgressEvent(double p=0) ";
+
+%feature("docstring")  gdcm::ProgressEvent::~ProgressEvent "virtual
+gdcm::ProgressEvent::~ProgressEvent() ";
+
+%feature("docstring")  gdcm::ProgressEvent::CheckEvent "virtual bool
+gdcm::ProgressEvent::CheckEvent(const ::gdcm::Event *e) const ";
+
+%feature("docstring")  gdcm::ProgressEvent::GetEventName "virtual
+const char* gdcm::ProgressEvent::GetEventName() const
+
+Return the StringName associated with the event. ";
+
+%feature("docstring")  gdcm::ProgressEvent::GetProgress "double
+gdcm::ProgressEvent::GetProgress() const ";
+
+%feature("docstring")  gdcm::ProgressEvent::MakeObject "virtual
+::gdcm::Event* gdcm::ProgressEvent::MakeObject() const
+
+Create an Event of this type This method work as a Factory for
+creating events of each particular type. ";
+
+%feature("docstring")  gdcm::ProgressEvent::SetProgress "void
+gdcm::ProgressEvent::SetProgress(double p) ";
 
 
 // File: classgdcm_1_1PVRGCodec.xml
@@ -6044,7 +5955,7 @@ formed document).
 
 Detailled description here
 
-A DataSet DOES NOT contains group 0x0002
+A DataSet DOES NOT contains group 0x0002 (see FileMetaInformation)
 
 This is really a DataSet reader. This will not make sure the dataset
 conform to any IOD at all. This is a completely different step. The
@@ -6052,14 +5963,16 @@ reasoning was that user could control the IOD there lib would handle
 and thus we would not be able to read a DataSet if the IOD was not
 found Instead we separate the reading from the validation.
 
-NOTE: From GDCM1.x. Users will realize that one feature is missing
-from this DOM implementation. In GDCM 1.x user used to be able to
-control the size of the Value to be read. By default it was 0xfff. The
-main author of GDCM2 thought this was too dangerous and harmful and
-therefore this feature did not make it into GDCM2
+From GDCM1.x. Users will realize that one feature is missing from this
+DOM implementation. In GDCM 1.x user used to be able to control the
+size of the Value to be read. By default it was 0xfff. The main author
+of GDCM2 thought this was too dangerous and harmful and therefore this
+feature did not make it into GDCM2
 
-WARNING: GDCM will not produce warning for unorder (non-alphabetical
-order). See gdcm::Writer for more info
+WARNING:  GDCM will not produce warning for unorder (non-alphabetical
+order).
+
+See:   Writer FileMetaInformation DataSet File
 
 C++ includes: gdcmReader.h ";
 
@@ -6070,48 +5983,73 @@ C++ includes: gdcmReader.h ";
 gdcm::Reader::~Reader() ";
 
 %feature("docstring")  gdcm::Reader::GetFile "File&
-gdcm::Reader::GetFile() ";
+gdcm::Reader::GetFile()
+
+Set/Get File. ";
 
 %feature("docstring")  gdcm::Reader::GetFile "const File&
-gdcm::Reader::GetFile() const ";
+gdcm::Reader::GetFile() const
+
+Set/Get File. ";
 
 %feature("docstring")  gdcm::Reader::Read "virtual bool
-gdcm::Reader::Read() ";
+gdcm::Reader::Read()
+
+Main function to read a file. ";
 
 %feature("docstring")  gdcm::Reader::ReadUpToTag "bool
 gdcm::Reader::ReadUpToTag(const Tag &tag, std::set< Tag > const
-&skiptags) ";
+&skiptags)
+
+Will read only up to Tag 'tag'. ";
 
 %feature("docstring")  gdcm::Reader::SetFile "void
-gdcm::Reader::SetFile(File &file) ";
+gdcm::Reader::SetFile(File &file)
+
+Set/Get File. ";
 
 %feature("docstring")  gdcm::Reader::SetFileName "void
-gdcm::Reader::SetFileName(const char *filename) ";
+gdcm::Reader::SetFileName(const char *filename)
+
+Set the filename to open. This will create a std::ifstream internally
+See SetStream if you are dealing with different std::istream object ";
 
 %feature("docstring")  gdcm::Reader::SetStream "void
-gdcm::Reader::SetStream(std::istream &input_stream) ";
+gdcm::Reader::SetStream(std::istream &input_stream)
+
+Set the open-ed stream directly. ";
 
 
 // File: classgdcm_1_1Rescaler.xml
 %feature("docstring") gdcm::Rescaler "
 
-Rescale class.
+Rescale class This class is meant to apply the linear tranform of
+Stored Pixel Value to Real World Value. This is mostly found in CT or
+PET dataset, where the value are stored using one type, but need to be
+converted to another scale using a linear transform. There are
+basically two cases: In CT: the linear transform is generally integer
+based. E.g. the Stored Pixel Type is unsigned short 12bits, but to get
+Hounsfield unit, one need to apply the linear transform: \\\\[ RWV =
+1. * SV - 1024 \\\\] So the best scalar to store the Real World Value
+will be 16 bits signed type. In PET: the linear transform is generally
+floating point based. Since the dynamic range can be quite high, the
+Rescale Slope / Rescale Intercept can be changing thoughout the
+Series. So it is important to read all linear transform and deduce the
+best Pixel Type only at the end (when all the images to be read have
+been parsed).
 
-WARNING:  internally any time a floating point value is found either
+WARNING:  Internally any time a floating point value is found either
 in the Rescale Slope or the Rescale Intercept it is assumed that the
-best matching output pixel type if FLOAT64 in previous implementation
-it was FLOAT32. Because VR:DS is closer to a 64bits floating point
+best matching output pixel type is FLOAT64 (in previous implementation
+it was FLOAT32). Because VR:DS is closer to a 64bits floating point
 type FLOAT64 is thus a best matching pixel type for the floating point
 transformation.  Example: Let say input is FLOAT64, and we want UINT16
-as ouput, we would doM
-
-Rescaler ir; ir.SetIntercept( 0 ); ir.SetSlope( 5.6789 );
-ir.SetPixelFormat( FLOAT64 ); ir.SetMinMaxForPixelType( ((
-PixelFormat)UINT16).GetMin(), (( PixelFormat)UINT16).GetMax() );
-ir.InverseRescale(output,input,numberofbytes );
+as ouput, we would do:
 
 handle floating point transformation back and forth to integer
 properly (no loss)
+
+See:   Unpacker12Bits
 
 C++ includes: gdcmRescaler.h ";
 
@@ -6162,6 +6100,19 @@ gdcm::Rescaler::SetSlope(double s)
 
 Set Slope: user for both direct&inverse transformation. ";
 
+%feature("docstring")  gdcm::Rescaler::SetTargetPixelType "void
+gdcm::Rescaler::SetTargetPixelType(PixelFormat const &targetst)
+
+By default (when UseTargetPixelType is false), a best matching Target
+Pixel Type is computed. However user can override this auto selection
+by switching UseTargetPixelType:true and also specifying the specifix
+Target Pixel Type ";
+
+%feature("docstring")  gdcm::Rescaler::SetUseTargetPixelType "void
+gdcm::Rescaler::SetUseTargetPixelType(bool b)
+
+Override default behavior of Rescale. ";
+
 
 // File: classstd_1_1basic__string_1_1reverse__iterator.xml
 %feature("docstring") std::basic_string::reverse_iterator "
@@ -6181,32 +6132,8 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1multimap_1_1reverse__iterator.xml
-%feature("docstring") std::multimap::reverse_iterator "
-
-STL iterator class. ";
-
-
 // File: classstd_1_1vector_1_1reverse__iterator.xml
 %feature("docstring") std::vector::reverse_iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1deque_1_1reverse__iterator.xml
-%feature("docstring") std::deque::reverse_iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1multiset_1_1reverse__iterator.xml
-%feature("docstring") std::multiset::reverse_iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1set_1_1reverse__iterator.xml
-%feature("docstring") std::set::reverse_iterator "
 
 STL iterator class. ";
 
@@ -6217,8 +6144,32 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classstd_1_1multimap_1_1reverse__iterator.xml
+%feature("docstring") std::multimap::reverse_iterator "
+
+STL iterator class. ";
+
+
 // File: classstd_1_1list_1_1reverse__iterator.xml
 %feature("docstring") std::list::reverse_iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1deque_1_1reverse__iterator.xml
+%feature("docstring") std::deque::reverse_iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1set_1_1reverse__iterator.xml
+%feature("docstring") std::set::reverse_iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1multiset_1_1reverse__iterator.xml
+%feature("docstring") std::multiset::reverse_iterator "
 
 STL iterator class. ";
 
@@ -6298,7 +6249,12 @@ output will be garbage
 
 : implementation details. All values are stored in a std::set of
 std::string. Then the *address* of the cstring underlying the
-std::string is used in the std::map
+std::string is used in the std::map  This class implement the
+Subject/Observer pattern trigger the following event:  ProgressEvent
+
+StartEvent
+
+EndEvent
 
 C++ includes: gdcmScanner.h ";
 
@@ -6700,8 +6656,12 @@ Specify the callback function. ";
 
 
 // File: classgdcm_1_1SimpleSubjectWatcher.xml
-%feature("docstring") gdcm::SimpleSubjectWatcher "C++ includes:
-gdcmSimpleSubjectWatcher.h ";
+%feature("docstring") gdcm::SimpleSubjectWatcher "
+
+SimpleSubjectWatcher This is a typical Subject Watcher class. It will
+observe all events.
+
+C++ includes: gdcmSimpleSubjectWatcher.h ";
 
 %feature("docstring")
 gdcm::SimpleSubjectWatcher::SimpleSubjectWatcher "gdcm::SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const
@@ -6746,7 +6706,9 @@ Explicit function to retrieve the pointer. ";
 // File: classgdcm_1_1SOPClassUIDToIOD.xml
 %feature("docstring") gdcm::SOPClassUIDToIOD "
 
-Class convert a class uid into IOD.
+Class convert a class SOP Class UID into IOD.
+
+Reference PS 3.4 Table B.5-1 STANDARD SOP CLASSES
 
 C++ includes: gdcmSOPClassUIDToIOD.h ";
 
@@ -7629,6 +7591,13 @@ Pack/Unpack 12 bits pixel into 16bits You can only pack an even number
 of 16bits, which means a multiple of 4 (expressed in bytes)
 
 You can only unpack a multiple of 3 bytes.
+
+This class has no purpose in general purpose DICOM implementation.
+However to be able to cope with some early ACR-NEMA file generated by
+a well-known private vendor, one would need to unpack 12bits Stored
+Pixel Value into a more standard 16bits Stored Pixel Value.
+
+See:   Rescaler
 
 C++ includes: gdcmUnpacker12Bits.h ";
 
@@ -8572,8 +8541,10 @@ Alphabetical order for elements (garanteed by design of internals)
 
 32bits VR will be rewritten with 00
 
-WARNING: gdcm::Writer cannot write a DataSet if no SOP Instance UID
+WARNING:   gdcm::Writer cannot write a DataSet if no SOP Instance UID
 (0008,0018) is found
+
+See:   Reader DataSet File
 
 C++ includes: gdcmWriter.h ";
 
@@ -8715,307 +8686,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: namespacestd.xml
 
 
-// File: namespacezlib__stream.xml
-%feature("docstring")  zlib_stream::detail::isGZip "bool
-zlib_stream::isGZip(std::istream &is)
-
-A typedef for basic_zip_ostream<wchar_t>.
-
-A typedef for basic_zip_istream<wchart> Helper function to check
-whether stream is compressed or not. ";
-
-
-// File: namespacezlib__stream_1_1detail.xml
-
-
 // File: gdcm2vtk_8man.xml
-
-
-// File: gdcm__j2k_8h.xml
-/*  Exported functions  */
-
-/*
-
-*/
-
-%feature("docstring")  j2k_convert_progression_order "char*
-j2k_convert_progression_order(OPJ_PROG_ORDER prg_order)
-
-Converts an enum type progression order to string type ";
-
-%feature("docstring")  j2k_create_compress "opj_j2k_t*
-j2k_create_compress(opj_common_ptr cinfo)
-
-Creates a J2K compression structure
-
-Parameters:
------------
-
-cinfo:  Codec context info
-
-Returns a handle to a J2K compressor if successful, returns NULL
-otherwise ";
-
-%feature("docstring")  j2k_create_decompress "opj_j2k_t*
-j2k_create_decompress(opj_common_ptr cinfo)
-
-Creates a J2K decompression structure
-
-Parameters:
------------
-
-cinfo:  Codec context info
-
-Returns a handle to a J2K decompressor if successful, returns NULL
-otherwise ";
-
-%feature("docstring")  j2k_decode "opj_image_t* j2k_decode(opj_j2k_t
-*j2k, opj_cio_t *cio, opj_codestream_info_t *cstr_info)
-
-Decode an image from a JPEG-2000 codestream
-
-Parameters:
------------
-
-j2k:  J2K decompressor handle
-
-cio:  Input buffer stream
-
-cstr_info:  Codestream information structure if required, NULL
-otherwise
-
-Returns a decoded image if successful, returns NULL otherwise ";
-
-%feature("docstring")  j2k_decode_jpt_stream "opj_image_t*
-j2k_decode_jpt_stream(opj_j2k_t *j2k, opj_cio_t *cio,
-opj_codestream_info_t *cstr_info)
-
-Decode an image form a JPT-stream (JPEG 2000, JPIP)
-
-Parameters:
------------
-
-j2k:  J2K decompressor handle
-
-cio:  Input buffer stream
-
-cstr_info:  Codestream information structure if required, NULL
-otherwise
-
-Returns a decoded image if successful, returns NULL otherwise ";
-
-%feature("docstring")  j2k_destroy_compress "void
-j2k_destroy_compress(opj_j2k_t *j2k)
-
-Destroy a J2K compressor handle
-
-Parameters:
------------
-
-j2k:  J2K compressor handle to destroy ";
-
-%feature("docstring")  j2k_destroy_decompress "void
-j2k_destroy_decompress(opj_j2k_t *j2k)
-
-Destroy a J2K decompressor handle
-
-Parameters:
------------
-
-j2k:  J2K decompressor handle to destroy ";
-
-%feature("docstring")  j2k_encode "bool j2k_encode(opj_j2k_t *j2k,
-opj_cio_t *cio, opj_image_t *image, opj_codestream_info_t *cstr_info)
-
-Encode an image into a JPEG-2000 codestream
-
-Parameters:
------------
-
-j2k:  J2K compressor handle
-
-cio:  Output buffer stream
-
-image:  Image to encode
-
-cstr_info:  Codestream information structure if required, NULL
-otherwise
-
-Returns true if successful, returns false otherwise ";
-
-%feature("docstring")  j2k_setup_decoder "void
-j2k_setup_decoder(opj_j2k_t *j2k, opj_dparameters_t *parameters)
-
-Setup the decoder decoding parameters using user parameters. Decoding
-parameters are returned in j2k->cp.
-
-Parameters:
------------
-
-j2k:  J2K decompressor handle
-
-parameters:  decompression parameters ";
-
-%feature("docstring")  j2k_setup_encoder "void
-j2k_setup_encoder(opj_j2k_t *j2k, opj_cparameters_t *parameters,
-opj_image_t *image)
-
-Setup the encoder parameters using the current image and using user
-parameters. Coding parameters are returned in j2k->cp.
-
-Parameters:
------------
-
-j2k:  J2K compressor handle
-
-parameters:  compression parameters
-
-image:  input filled image ";
-
-
-// File: gdcm__jp2_8h.xml
-/*  Exported functions  */
-
-/*
-
-*/
-
-%feature("docstring")  jp2_create_compress "opj_jp2_t*
-jp2_create_compress(opj_common_ptr cinfo)
-
-Creates a JP2 compression structure
-
-Parameters:
------------
-
-cinfo:  Codec context info
-
-Returns a handle to a JP2 compressor if successful, returns NULL
-otherwise ";
-
-%feature("docstring")  jp2_create_decompress "opj_jp2_t*
-jp2_create_decompress(opj_common_ptr cinfo)
-
-Creates a JP2 decompression structure
-
-Parameters:
------------
-
-cinfo:  Codec context info
-
-Returns a handle to a JP2 decompressor if successful, returns NULL
-otherwise ";
-
-%feature("docstring")  jp2_decode "opj_image_t* jp2_decode(opj_jp2_t
-*jp2, opj_cio_t *cio, opj_codestream_info_t *cstr_info)
-
-Decode an image from a JPEG-2000 file stream
-
-Parameters:
------------
-
-jp2:  JP2 decompressor handle
-
-cio:  Input buffer stream
-
-cstr_info:  Codestream information structure if required, NULL
-otherwise
-
-Returns a decoded image if successful, returns NULL otherwise ";
-
-%feature("docstring")  jp2_destroy_compress "void
-jp2_destroy_compress(opj_jp2_t *jp2)
-
-Destroy a JP2 compressor handle
-
-Parameters:
------------
-
-jp2:  JP2 compressor handle to destroy ";
-
-%feature("docstring")  jp2_destroy_decompress "void
-jp2_destroy_decompress(opj_jp2_t *jp2)
-
-Destroy a JP2 decompressor handle
-
-Parameters:
------------
-
-jp2:  JP2 decompressor handle to destroy ";
-
-%feature("docstring")  jp2_encode "bool jp2_encode(opj_jp2_t *jp2,
-opj_cio_t *cio, opj_image_t *image, opj_codestream_info_t *cstr_info)
-
-Encode an image into a JPEG-2000 file stream
-
-Parameters:
------------
-
-jp2:  JP2 compressor handle
-
-cio:  Output buffer stream
-
-image:  Image to encode
-
-cstr_info:  Codestream information structure if required, NULL
-otherwise
-
-Returns true if successful, returns false otherwise ";
-
-%feature("docstring")  jp2_read_jp2h "bool jp2_read_jp2h(opj_jp2_t
-*jp2, opj_cio_t *cio)
-
-Read the JP2H box - JP2 Header box (used in MJ2)
-
-Parameters:
------------
-
-jp2:  JP2 handle
-
-cio:  Input buffer stream
-
-Returns true if successful, returns false otherwise ";
-
-%feature("docstring")  jp2_setup_decoder "void
-jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters)
-
-Setup the decoder decoding parameters using user parameters. Decoding
-parameters are returned in jp2->j2k->cp.
-
-Parameters:
------------
-
-jp2:  JP2 decompressor handle
-
-parameters:  decompression parameters ";
-
-%feature("docstring")  jp2_setup_encoder "void
-jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters,
-opj_image_t *image)
-
-Setup the encoder parameters using the current image and using user
-parameters. Coding parameters are returned in jp2->j2k->cp.
-
-Parameters:
------------
-
-jp2:  JP2 compressor handle
-
-parameters:  compression parameters
-
-image:  input filled image ";
-
-%feature("docstring")  jp2_write_jp2h "void jp2_write_jp2h(opj_jp2_t
-*jp2, opj_cio_t *cio)
-
-Write the JP2H box - JP2 Header box (used in MJ2)
-
-Parameters:
------------
-
-jp2:  JP2 handle
-
-cio:  Output buffer stream ";
 
 
 // File: gdcmanon_8man.xml
@@ -9387,6 +9058,9 @@ cio:  Output buffer stream ";
 // File: gdcmPrivateTag_8h.xml
 
 
+// File: gdcmProgressEvent_8h.xml
+
+
 // File: gdcmPVRGCodec_8h.xml
 
 
@@ -9496,6 +9170,9 @@ cio:  Output buffer stream ";
 
 
 // File: gdcmTerminal_8h.xml
+
+
+// File: gdcmTestDriver_8h.xml
 
 
 // File: gdcmTesting_8h.xml
@@ -9624,15 +9301,6 @@ cio:  Output buffer stream ";
 // File: vtkLookupTable16_8h.xml
 
 
-// File: zipstreamimpl_8h.xml
-
-
-// File: group__J2K.xml
-
-
-// File: group__JP2.xml
-
-
 // File: gdcm2vtk.xml
 
 
@@ -9720,10 +9388,10 @@ cio:  Output buffer stream ";
 // File: dir_81c24e40aa7b22441c095d24435a1a68.xml
 
 
-// File: AnonymizeAES_8cxx-example.xml
-
-
 // File: BasicAnonymizer_8cs-example.xml
+
+
+// File: CastConvertPhilips_8py-example.xml
 
 
 // File: CheckBigEndianBug_8cxx-example.xml
@@ -9741,6 +9409,9 @@ cio:  Output buffer stream ";
 // File: CompressLossyJPEG_8cs-example.xml
 
 
+// File: Convert16BitsTo8Bits_8cxx-example.xml
+
+
 // File: ConvertMPL_8py-example.xml
 
 
@@ -9748,6 +9419,9 @@ cio:  Output buffer stream ";
 
 
 // File: ConvertPIL_8py-example.xml
+
+
+// File: ConvertRGBToLuminance_8cxx-example.xml
 
 
 // File: ConvertToQImage_8cxx-example.xml
@@ -9798,6 +9472,21 @@ cio:  Output buffer stream ";
 // File: FixCommaBug_8py-example.xml
 
 
+// File: gdcmorthoplanes_8cxx-example.xml
+
+
+// File: gdcmrtion_8cxx-example.xml
+
+
+// File: gdcmscene_8cxx-example.xml
+
+
+// File: gdcmtexture_8cxx-example.xml
+
+
+// File: gdcmvolume_8cxx-example.xml
+
+
 // File: GenerateDICOMDIR_8cs-example.xml
 
 
@@ -9816,10 +9505,37 @@ cio:  Output buffer stream ";
 // File: GetPortionCSAHeader_8py-example.xml
 
 
+// File: headsq2dcm_8py-example.xml
+
+
+// File: HelloActiviz_8cs-example.xml
+
+
+// File: HelloActiviz2_8cs-example.xml
+
+
+// File: HelloActiviz3_8cs-example.xml
+
+
+// File: HelloActiviz4_8cs-example.xml
+
+
+// File: HelloActiviz5_8cs-example.xml
+
+
 // File: HelloSimple_8java-example.xml
 
 
 // File: HelloVizWorld_8cxx-example.xml
+
+
+// File: HelloVTKWorld_8cs-example.xml
+
+
+// File: HelloVTKWorld_8java-example.xml
+
+
+// File: HelloVTKWorld2_8cs-example.xml
 
 
 // File: HelloWorld_8cxx-example.xml
@@ -9873,6 +9589,9 @@ cio:  Output buffer stream ";
 // File: ReadExplicitLengthSQIVR_8cxx-example.xml
 
 
+// File: RefCounting_8cs-example.xml
+
+
 // File: ReformatFile_8cs-example.xml
 
 
@@ -9886,6 +9605,9 @@ cio:  Output buffer stream ";
 
 
 // File: rle2img_8cxx-example.xml
+
+
+// File: rtion_8cxx-example.xml
 
 
 // File: ScanDirectory_8cs-example.xml
@@ -9916,6 +9638,9 @@ cio:  Output buffer stream ";
 
 
 // File: TestReader_8py-example.xml
+
+
+// File: threadgdcm_8cxx-example.xml
 
 
 // File: uid__unique_8cxx-example.xml
