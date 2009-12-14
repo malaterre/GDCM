@@ -19,6 +19,10 @@
 #include "gdcmSequenceOfItems.h"
 
 /**
+ * This example is used to generate the file:
+ *
+ *  gdcmConformanceTests/RTStruct_VRDSAsVRUN.dcm
+ *
  * This is an advanced example. Its goal is to explain one dark corner of DICOM PS 3.10
  * file format. The idea is that when writting an Attribute in an Explicit Transfer
  * Syntax one, cannot always use V:DS for writing a VR:DS attribute since dong so
@@ -27,7 +31,7 @@
  * when the VL is larger than 16bits limit.
  *
  * Usage:
- * ./LargeVRDSExplicit  gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm out.dcm
+ * ./LargeVRDSExplicit gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm out.dcm
  */
 
 bool interpolate(const double * pts, unsigned int npts, std::vector<double> &out )

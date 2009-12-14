@@ -33,6 +33,7 @@
  * nicely compressed using this transfer syntax.
  *
  * Warning: do not try to compute the group length elements !
+ * Warning: You may need a 64bits machine for this example to work.
  */
 int main(int argc, char *argv[])
 {
