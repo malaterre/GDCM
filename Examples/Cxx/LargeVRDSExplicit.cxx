@@ -17,10 +17,18 @@
 #include "gdcmAttribute.h"
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmSequenceOfItems.h"
-/*
-  Usage:
-     gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm
-*/
+
+/**
+ * This is an advanced example. Its goal is to explain one dark corner of DICOM PS 3.10
+ * file format. The idea is that when writting an Attribute in an Explicit Transfer
+ * Syntax one, cannot always use V:DS for writing a VR:DS attribute since dong so
+ * would imply using a VL:16bits.
+ * This example shows that converting from Implicit to Explicit should preserver VR:UN
+ * when the VL is larger than 16bits limit.
+ *
+ * Usage:
+ * ./LargeVRDSExplicit  gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm out.dcm
+ */
 
 bool interpolate(const double * pts, unsigned int npts, std::vector<double> &out )
 {
