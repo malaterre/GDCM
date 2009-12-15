@@ -165,7 +165,7 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename, bool verbose = false
 
 } // end namespace gdcm
 
-int TestImageChangeTransferSyntax(int argc, char *argv[])
+int TestImageChangeTransferSyntax1(int argc, char *argv[])
 {
   if( argc == 2 )
     {
