@@ -38,7 +38,7 @@
 // make[1]: *** [Utilities/VTK/CMakeFiles/vtkgdcmPythonD.dir/all] Error 2
 // make: *** [all] Error 2
 
-#if ( VTK_MAJOR_VERSION == 4 )
+#if defined(VTK_MAJOR_VERSION) && ( VTK_MAJOR_VERSION == 4 )
 #undef VTK_EXPORT
 #define VTK_EXPORT GDCM_EXPORT
 #endif
