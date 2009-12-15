@@ -71,7 +71,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 16 1 */
 { "3372195a35448b76daee682d23502090" , "CT-SIEMENS-Icone-With-PaletteColor.dcm" },
 /* gdcm 512 512 1 16 1 */
-{ "7f029288f98f4c04e62f1aac0122e429" , "D_CLUNIE_CT1_J2KI.dcm" },
+{ "05bbdbcc81081791f6f9f8a1ffa648c8" , "D_CLUNIE_CT1_J2KI.dcm" },
 /* gdcm 512 512 1 16 1 */
 { "f3a3d0e739e5f4fbeddd1452b81f4d89" , "D_CLUNIE_CT1_J2KR.dcm" },
 /* gdcm 512 512 1 16 1 */
@@ -612,7 +612,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "4d790e17ee35572d64e37c55dbc36725" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" },
 { "93ddc0c3d642af60f55630232d2801ae" , "CT_Image_Storage_multiframe.dcm" },
-{ "ff261592e1c4b205eca7eea99d0101c0" , "ELSCINT1_JP2vsJ2K.dcm" },
+{ "6127740892542f23e37e6ab516b17caf" , "ELSCINT1_JP2vsJ2K.dcm" },
 { "b620a57170941e26dfd07ff334c73cb4" , "GE_MR_0025xx1bProtocolDataBlock.dcm" },
 { "4b5423b34ab4e104c222359a91448a5d" , "CT-SIEMENS-MissingPixelDataInIconSQ.dcm" },
 { "79b8705f2e6c7464bd3e2fc7e1d3483b" , "KODAK_CompressedIcon.dcm" },
@@ -634,7 +634,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 
 { "62687f0a17e9c4153f18b55c8abfcef3" , "SIEMENS_CSA2.dcm" },
-{ "37647008dc1c94096f4e996b409b9d30" , "MAROTECH_CT_JP2Lossy.dcm" },
+{ "a02fa05065b3a93a391f820ac38bd9ee" , "MAROTECH_CT_JP2Lossy.dcm" },
 { "8b5e38699887158c3defd47900a68fc5" , "ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm" },
 
 
