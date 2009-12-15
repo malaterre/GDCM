@@ -152,6 +152,8 @@ int main( int argc, char *argv[] )
     //names->Print( std::cout );
     }
 
+  //gdcm::Trace::DebugOn();
+  //gdcm::Trace::WarningOn();
   gdcm::IPPSorter s;
   s.SetComputeZSpacing( true );
   s.SetZSpacingTolerance( 1e-3 );

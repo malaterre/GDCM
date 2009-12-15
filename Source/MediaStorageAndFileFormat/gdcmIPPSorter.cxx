@@ -69,7 +69,8 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   Scanner::ValuesType frames = scanner.GetValues(frame);
   if( iops.size() != 1 )
     {
-    gdcmDebugMacro( "More than one IOP (or no IOP)" );
+    gdcmDebugMacro( "More than one IOP (or no IOP): " << iops.size() );
+    //std::copy(iops.begin(), iops.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
     return false;
     }
   if( frames.size() > 1 ) // Should I really tolerate no Frame of Reference UID ?
