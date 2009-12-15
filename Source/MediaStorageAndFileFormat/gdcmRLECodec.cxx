@@ -336,6 +336,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
     {
     bufferrgb = new char [ image_len ];
@@ -361,6 +362,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
     {
     MaxNumSegments *= 3;
