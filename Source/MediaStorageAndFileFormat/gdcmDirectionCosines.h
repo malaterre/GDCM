@@ -50,10 +50,14 @@ public:
   /// Return whether or not this is a valid direction cosines
   bool IsValid() const;
 
+  /// Initialize from string str. It requires 6 floating point separated by a
+  /// backslash character.
   bool SetFromString(const char *str);
 
+  /// Compute the Dot product of the two cross vector of both DirectionCosines object
   double CrossDot(DirectionCosines const &dc) const;
 
+  /// Compute the distance along the normal
   double ComputeDistAlongNormal(const double ipp[3]) const;
 
 private:
