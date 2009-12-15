@@ -383,3 +383,8 @@ Generate doc for python automatically
 -----------------------------------------------------------------------
 Display Shutter: It should not invert to white when radiologist invert
 lookup table
+-----------------------------------------------------------------------
+Private Tags IMPAC
+http://www.varian.com/media/oncology/services_and_support/pdf/dicom/System_Server_8.2_8.5_8.6.pdf
+http://www.varian.com/media/oncology/services_and_support/pdf/dicom/System_Server_DCS.pdf
+
