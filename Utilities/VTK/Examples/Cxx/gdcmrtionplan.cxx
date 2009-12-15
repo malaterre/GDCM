@@ -23,6 +23,7 @@
 #include "vtkPoints.h"
 #include "vtkDoubleArray.h"
 #include <vtkXMLImageDataWriter.h>
+#include <vtkXMLPolyDataWriter.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageColorViewer.h>
 
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
     }
   const char * filename = argv[1];
   const char * outfilename = argv[2];
+  const char * outfilename2 = argv[3];
 
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -59,16 +61,22 @@ int main(int argc, char *argv[])
     }
 
 /*
-(300a,00b0) SQ                                                    # u/l,1 Beam Sequence
+(300a,03a2) SQ                                                    # u/l,1 Ion Beam Sequence
   (fffe,e000) na (Item with undefined length)
+    (0008,1040) LO [Test]                                         # 4,1 Institutional Department Name
     (300a,00b2) SH (no value)                                     # 0,1 Treatment Machine Name
+    (300a,00b3) CS [MU]                                           # 2,1 Primary Dosimeter Unit
     (300a,00c0) IS [1 ]                                           # 2,1 Beam Number
     (300a,00c2) LO [1 ]                                           # 2,1 Beam Name
     (300a,00c4) CS [STATIC]                                       # 6,1 Beam Type
     (300a,00c6) CS [PROTON]                                       # 6,1 Radiation Type
     (300a,00ce) CS [TREATMENT ]                                   # 10,1 Treatment Delivery Type
+    (300a,00d0) IS [0 ]                                           # 2,1 Number of Wedges
     (300a,00e0) IS [1 ]                                           # 2,1 Number of Compensators
-    (300a,00e3) SQ                                                # u/l,1 Compensator Sequence
+    (300a,00ed) IS [0 ]                                           # 2,1 Number of Boli
+    (300a,00f0) IS [1 ]                                           # 2,1 Number of Blocks
+    (300a,0110) IS [2 ]                                           # 2,1 Number of Control Points
+    (300a,02ea) SQ                                                # u/l,1 Ion Range Compensator Sequence
       (fffe,e000) na (Item with undefined length)
         (300a,00e1) SH [lucite]                                   # 6,1 Material ID
         (300a,00e4) IS [1 ]                                       # 2,1 Compensator Number
@@ -80,13 +88,13 @@ int main(int argc, char *argv[])
         (300a,00ec) DS [52.13\52.13\52.13\53.18\54.04\54.04\47.11\40.06\40.06\38.79\34.87\33.28\33.28\33.28\33.28\35.43\35.43\34.54\34.54\34.71\36.10\38.62\44.88\44.88\44.88\45.00\45.00\45.00\45.66\45.66\46.42\39.77\39.77\39.77\39.77\39.77\43.52\52.13\52.13\52.13\53.18\53.52\54.0]         # 7618,1-n Compensator Thickness Data
         (300a,02e0) CS [ABSENT]                                   # 6,1 Compensator Divergence
         (300a,02e1) CS [SOURCE_SIDE ]                             # 12,1 Compensator Mounting Position
+        (300a,02e4) FL 39.2                                       # 4,1 Isocenter to Compensator Tray Distance
+        (300a,02e5) FL 2.12                                       # 4,1 Compensator Column Offset
+        (300a,02e8) FL 4.76                                       # 4,1 Compensator Milling Tool Diameter
       (fffe,e00d)
-      (fffe,e000) na (Item with undefined length)
-      (fffe,e00d)
-    (fffe,e0dd)
 */
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-  gdcm::Tag tbeamsq(0x300a,0x00b0);
+  gdcm::Tag tbeamsq(0x300a,0x03a2);
   if( !ds.FindDataElement( tbeamsq ) )
     {
     return 1;
@@ -105,7 +113,7 @@ int main(int argc, char *argv[])
     const gdcm::Item & item = sqi->GetItem(1); // Item start at #1
     const gdcm::DataSet& nestedds = item.GetNestedDataSet();
     //std::cout << nestedds << std::endl;
-    gdcm::Tag tcompensatorsq(0x300a,0x00e3);
+    gdcm::Tag tcompensatorsq(0x300a,0x02ea);
     if( !nestedds.FindDataElement( tcompensatorsq ) )
       {
       return 1;
@@ -161,27 +169,31 @@ int main(int argc, char *argv[])
     img->SetNumberOfScalarComponents(1);
     img->GetPointData()->SetScalars(d);
 
+    img->Update();
+    img->Print(std::cout);
+
     vtkXMLImageDataWriter *writeb= vtkXMLImageDataWriter::New();
     writeb->SetInput( img );
     writeb->SetFileName( outfilename );
     writeb->Write( );
 /*
- (300a,00f4) SQ                                                # u/l,1 Block Sequence
+    (300a,03a6) SQ                                        # u/l,1 Ion Block Sequence
       (fffe,e000) na (Item with undefined length)
-        (300a,00e1) SH [brass ]                                   # 6,1 Material ID
-        (300a,00f8) CS [APERTURE]                                 # 8,1 Block Type
-        (300a,00fa) CS [ABSENT]                                   # 6,1 Block Divergence
-        (300a,00fb) CS [SOURCE_SIDE ]                             # 12,1 Block Mounting Position
-        (300a,00fc) IS [1 ]                                       # 2,1 Block Number
-        (300a,0100) DS [50.00 ]                                   # 6,1 Block Thickness
-        (300a,0104) IS [179 ]                                     # 4,1 Block Number of Points
-        (300a,0106) DS [1.7\50.0\14.3\50.0\16.7\49.4\18.7\48.2\19.4\47.7\20.1\47.1\21.0\47.0\22.3\47.0\23.7\46.8\25.7\46.2\27.0\45.6\27.2\45.4\28.2\44.6\28.9\44.2\29.7\43.9\31.5\43.5\33.0\42.8\33.7\42.4\35.2\41.3\38.2\40.4\39.6\39.7\40.0\39.5\41.5\37.9\42.2\37.4\43.0\37.1\44.7\36]         # 1934,2-2n Block Data
-      (fffe,e00d)
-      (fffe,e000) na (Item with undefined length)
+        (300a,00e1) SH [brass ]                           # 6,1 Material ID
+        (300a,00f7) FL 95.03                              # 4,1 Isocenter to Block Tray Distance
+        (300a,00f8) CS [APERTURE]                         # 8,1 Block Type
+        (300a,00fa) CS [ABSENT]                           # 6,1 Block Divergence
+        (300a,00fb) CS [SOURCE_SIDE ]                     # 12,1 Block Mounting Position
+        (300a,00fc) IS [1 ]                               # 2,1 Block Number
+        (300a,0100) DS [50.00 ]                           # 6,1 Block Thickness
+        (300a,0104) IS [179 ]                             # 4,1 Block Number of Points
+        (300a,0106) DS [1.7\50.0\14.3\50.0\16.7\49.4\18.7\48.2\19.4\47.7\20.1\47.1\21.0\47.0\22.3\47.0\23.7\46.8\25.7\46.2\27.0\45.6\27.2\45.4\28.2\44.6\28.9\44.2\29.7\43.9\31.5\43.5\33.0\42.8\33.7\42.4\35.2\41.3\38.2\40.4\39.6\39.7\40.0\39.5\41.5\37.9\42
+2\37.4\43.0\37.1\44.7\36] # 1934,2-2n Block Data
       (fffe,e00d)
     (fffe,e0dd)
+
 */
-    gdcm::Tag tblocksq(0x300a,0x00f4);
+    gdcm::Tag tblocksq(0x300a,0x03a6);
     if( !nestedds.FindDataElement( tblocksq ) )
       {
       return 1;
@@ -254,7 +266,9 @@ int main(int argc, char *argv[])
    viewer->SetInput(img);
    viewer->SetupInteractor(iren);
    viewer->SetSize(600, 600);
+   viewer->GetRenderer()->ResetCameraClippingRange();
    viewer->Render();
+   viewer->GetRenderer()->ResetCameraClippingRange();
 
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
   //vtkPolyDataMapper2D* cubeMapper = vtkPolyDataMapper2D::New();
@@ -267,6 +281,11 @@ int main(int argc, char *argv[])
   property->SetRepresentationToWireframe();
 
 viewer->GetRenderer()->AddActor( cubeActor );
+
+    vtkXMLPolyDataWriter *writec= vtkXMLPolyDataWriter::New();
+    writec->SetInput( output );
+    writec->SetFileName( outfilename2 );
+    writec->Write( );
 
    iren->Initialize();
    iren->Start();
