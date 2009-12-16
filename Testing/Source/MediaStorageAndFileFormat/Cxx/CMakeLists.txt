@@ -4,7 +4,6 @@ SET(MSFF_TEST_SRCS
   TestAnonymizer
   TestValidate
   TestAnonymizeEvent
-  TestSplitMosaicFilter
   #TestAnonymizer2
   TestFileDerivation
   TestSegmentedPaletteColorLookupTable
@@ -78,6 +77,13 @@ IF(GDCM_DATA_ROOT)
   TestDICOMDIRGenerator
       )
 ENDIF(GDCM_DATA_ROOT)
+# gdcmDataExtra
+IF(GDCM_DATA_EXTRA_ROOT)
+  SET(MSFF_TEST_SRCS
+      ${MSFF_TEST_SRCS}
+  TestSplitMosaicFilter
+)
+ENDIF(GDCM_DATA_EXTRA_ROOT)
 
 IF(GDCM_USE_JPEGLS)
   SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
