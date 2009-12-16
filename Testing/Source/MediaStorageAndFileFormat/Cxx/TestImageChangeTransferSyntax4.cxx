@@ -54,7 +54,8 @@ int TestImageChangeTransferSyntaxRAW(const char *filename, bool verbose = false)
   if( ts == gdcm::TransferSyntax::ExplicitVRLittleEndian )
     {
     // TODO: I think that duplicate goals of TestImageWriter2  ...
-    change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+    //change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+    change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
     }
   else
     {

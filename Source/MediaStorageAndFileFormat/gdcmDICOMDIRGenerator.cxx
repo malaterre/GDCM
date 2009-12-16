@@ -724,14 +724,20 @@ bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
   de.SetByteValue( copy.c_str(), copy.size() ) ;
   at.SetFromDataElement( de );
   unsigned int n = at.GetNumberOfValues();
-  // A volume may have at most 8 levels of directories, where the root directory is defined as level 1.
-  if( n > 8 ) return false;
+  // A volume may have at most 8 levels of directories, where the root
+  // directory is defined as level 1.
+  if( n > 8 )
+    {
+    gdcmDebugMacro( "8 Levels of directories" );
+    return false;
+    }
 
   for( unsigned int i = 0; i < n; ++i)
     {
     gdcm::CodeString cs = at.GetValue( i );
     if( !cs.IsValid() || cs.size() > 8 )
       {
+      gdcmDebugMacro( "Problem with CS: " << cs );
       return false;
       }
     }
