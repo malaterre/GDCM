@@ -12,13 +12,25 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPNMCodec.h"
-#include "gdcmTransferSyntax.h"
+#include "gdcmCommand.h"
+#include "gdcmEvent.h"
+#include "gdcmSmartPointer.h"
 
-int TestPNMCodec(int, char *[])
+using gdcm::SmartPointer;
+
+struct Watcher {};
+
+void foo(gdcm::Command *c)
 {
-  gdcm::PNMCodec pnm;
-  pnm.CanDecode( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+  c->Execute((gdcm::Subject*)0, gdcm::AnyEvent() );
+}
+
+int TestCommand(int argc, char *argv[])
+{
+  SmartPointer<gdcm::MemberCommand<Watcher> > mc = gdcm::MemberCommand<Watcher>::New();
+  foo(mc);
+  SmartPointer<gdcm::SimpleMemberCommand<Watcher> > smc = gdcm::SimpleMemberCommand<Watcher>::New();
+  foo(smc);
   return 0;
 }
 

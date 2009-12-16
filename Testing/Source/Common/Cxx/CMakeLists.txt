@@ -2,6 +2,7 @@
 # Common
 SET(Common_TEST_SRCS
   TestVersion
+  TestCommand
   TestCryptographicMessageSyntax
   TestDummyValueGenerator
   TestASN1

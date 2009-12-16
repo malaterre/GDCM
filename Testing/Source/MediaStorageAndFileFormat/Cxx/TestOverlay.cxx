@@ -17,5 +17,6 @@
 int TestOverlay(int, char *[])
 {
   gdcm::Overlay o;
+  o.Print( std::cout );
   return 0;
 }

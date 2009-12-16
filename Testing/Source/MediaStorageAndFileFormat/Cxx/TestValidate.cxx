@@ -17,6 +17,7 @@
 int TestValidate(int, char *[])
 {
   gdcm::Validate v;
+  v.Validation();
   return 0;
 }
 

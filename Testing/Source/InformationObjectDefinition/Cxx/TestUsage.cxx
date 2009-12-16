@@ -12,13 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPNMCodec.h"
-#include "gdcmTransferSyntax.h"
+#include "gdcmUsage.h"
 
-int TestPNMCodec(int, char *[])
+int TestUsage(int, char *[])
 {
-  gdcm::PNMCodec pnm;
-  pnm.CanDecode( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+  gdcm::Usage u;
   return 0;
 }
 

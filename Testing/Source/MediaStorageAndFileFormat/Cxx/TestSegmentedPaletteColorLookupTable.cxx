@@ -12,13 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPNMCodec.h"
-#include "gdcmTransferSyntax.h"
+#include "gdcmSegmentedPaletteColorLookupTable.h"
 
-int TestPNMCodec(int, char *[])
+int TestSegmentedPaletteColorLookupTable(int, char *[])
 {
-  gdcm::PNMCodec pnm;
-  pnm.CanDecode( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+  gdcm::SegmentedPaletteColorLookupTable o;
   return 0;
 }
-

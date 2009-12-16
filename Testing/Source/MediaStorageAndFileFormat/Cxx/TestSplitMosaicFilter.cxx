@@ -12,13 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPNMCodec.h"
-#include "gdcmTransferSyntax.h"
+#include "gdcmSplitMosaicFilter.h"
 
-int TestPNMCodec(int, char *[])
+int TestSplitMosaicFilter(int, char *[])
 {
-  gdcm::PNMCodec pnm;
-  pnm.CanDecode( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+  gdcm::SplitMosaicFilter s;
   return 0;
 }
-

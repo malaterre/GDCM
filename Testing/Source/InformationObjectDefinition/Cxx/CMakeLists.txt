@@ -18,6 +18,7 @@ SET(IOD_TEST_SRCS
   TestStudy
   TestDefinedTerms
   TestEnumeratedValues
+  TestUsage
   #TestXMLDictReader
   #TestXMLPrivateDictReader
   )

@@ -67,14 +67,13 @@ public:
   //typedef SmartPointer<Self>  Pointer;
   
   /** Method for creation through the object factory. */
-  //itkNewMacro(Self);
   static SmartPointer<MemberCommand> New()
     {
     return new MemberCommand;
     }
  
   /** Run-time type information (and related methods). */
-  //itkTypeMacro(MemberCommand,Command);
+  //gdcmTypeMacro(MemberCommand,Command);
 
   /**  Set the callback function along with the object that it will
    *  be invoked on. */
@@ -141,7 +140,7 @@ public:
   //typedef SmartPointer<Self>    Pointer;
   
   /** Run-time type information (and related methods). */
-  //itkTypeMacro(SimpleMemberCommand,Command);
+  //gdcmTypeMacro(SimpleMemberCommand,Command);
 
   /** Method for creation through the object factory. */
   static SmartPointer<SimpleMemberCommand> New()

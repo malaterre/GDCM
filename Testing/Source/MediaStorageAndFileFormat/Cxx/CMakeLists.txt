@@ -2,8 +2,12 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestValidate
+  TestAnonymizeEvent
+  TestSplitMosaicFilter
   #TestAnonymizer2
   TestFileDerivation
+  TestSegmentedPaletteColorLookupTable
   TestPNMCodec
   TestSpacing
   TestSerieHelper

@@ -12,13 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPNMCodec.h"
-#include "gdcmTransferSyntax.h"
+#include "gdcmAnonymizeEvent.h"
 
-int TestPNMCodec(int, char *[])
+int TestAnonymizeEvent(int, char *[])
 {
-  gdcm::PNMCodec pnm;
-  pnm.CanDecode( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+  gdcm::AnonymizeEvent ae;
   return 0;
 }
 
