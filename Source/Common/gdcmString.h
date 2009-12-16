@@ -20,8 +20,6 @@
 
 namespace gdcm
 {
-template <char TDelimiter, unsigned int TMaxLength, char TPadChar> class String;
-template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar>& ms);
 
 /**
  * \brief String
@@ -36,7 +34,6 @@ class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
   // UI wants \0 for pad character, while ASCII ones wants space char... do not allow anything else
   GDCM_STATIC_ASSERT( TPadChar == ' ' || TPadChar == 0 );
 
-  friend std::istream& operator>> <TDelimiter>(std::istream &is, String<TDelimiter>& ms);
 public:
   // typedef are not inherited:
   typedef std::string::value_type             value_type;
