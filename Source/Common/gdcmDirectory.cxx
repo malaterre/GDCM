@@ -104,7 +104,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
       }
     if ( S_ISREG(buf.st_mode) )    //is it a regular file?
       {
-      if( fileName[0] != '.' )
+      if( d->d_name[0] != '.' )
         {
         Filenames.push_back( fileName );
         nFiles++;
