@@ -13,6 +13,13 @@
 
 =========================================================================*/
 
+/**
+ * This is a minimal Anonymizer. All it does is anonymize a single file.
+ * When anonymizing more than a single file, one should be really careful
+ * to only create one single instance of a gdcm.Anonymizer and reuse it
+ * for the entire Series.
+ * See ClinicalTrialIdentificationWorkflow.cs for a more complex example
+ */
 /*
  * Usage: 
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
