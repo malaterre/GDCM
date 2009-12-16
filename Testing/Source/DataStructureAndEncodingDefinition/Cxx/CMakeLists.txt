@@ -3,7 +3,6 @@
 SET(DSED_TEST_SRCS
 	TestAttribute
   TestCodeString
-  TestPDBHeader
 	TestAttribute1
 	TestAttribute7
   #TestReadPatientName
@@ -56,6 +55,7 @@ SET(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
   TestReader2
 	TestAttribute8
+  TestPDBHeader
   )
 ENDIF(GDCM_DATA_ROOT)
 
