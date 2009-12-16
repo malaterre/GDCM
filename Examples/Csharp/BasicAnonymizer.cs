@@ -30,8 +30,9 @@ public class MyWatcher : SimpleSubjectWatcher
   protected override void EndFilter(){
     System.Console.WriteLine( "This is my end" );
   }
-  protected override void ShowProgress(){
-    System.Console.WriteLine( "This is my progress" );
+  protected override void ShowProgress(Subject caller, Event evt){
+    ProgressEvent pe = ProgressEvent.Cast(evt);
+    System.Console.WriteLine( "This is my progress: " + pe.GetProgress() );
   }
   protected override void ShowIteration(){
     System.Console.WriteLine( "This is my iteration" );
