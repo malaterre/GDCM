@@ -191,6 +191,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == ModalityPerformedProcedureStepSOPClass
     || ms == RawDataStorage
     || ms == RTIonPlanStorage
+    || ms == LeadECGWaveformStorage
     || ms == RTStructureSetStorage )
     {
     return false;
