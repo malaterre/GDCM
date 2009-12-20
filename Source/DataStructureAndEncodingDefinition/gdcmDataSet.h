@@ -260,6 +260,7 @@ protected:
         "Original entry kept is: " << *pr.first );
       }
 #endif
+    assert( de.IsEmpty() || de.GetVL() == de.GetValue().GetLength() );
     }
 
 protected:
