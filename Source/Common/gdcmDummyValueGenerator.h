@@ -22,17 +22,17 @@ namespace gdcm
 
 /**
  * \brief Class for generating dummy value
- * \note bla
+ * \see Anonymizer
  */
 class GDCM_EXPORT DummyValueGenerator
 {
 public:
-//  DummyValueGenerator();
 
-  /// Generate a dummy value from an input value. This is guarantee to always return the same output value
-  /// when input is identical.
-  /// Return an array of bytes that can be used for anonymization purpose, return NULL on error
-  /// NOT THREAD SAFE:
+  /** Generate a dummy value from an input value. This is guarantee to always
+   * return the same output value when input is identical.  Return an array of
+   * bytes that can be used for anonymization purpose, return NULL on error 
+   * NOT THREAD SAFE
+   */
   static const char* Generate(const char *input);
 
 private:

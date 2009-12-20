@@ -22,6 +22,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 /**
  * \brief superclass for callback/observer methods
+ * \see Command Subject
  */
 class GDCM_EXPORT Event
 {

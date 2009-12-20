@@ -12,14 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMTYPES_H
 #define GDCMTYPES_H
 
 #include "gdcmConfigure.h"
-
 #include "gdcmWin32.h"
-
 #include "gdcmMacro.h"
 
 //-----------------------------------------------------------------------------

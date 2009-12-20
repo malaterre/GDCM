@@ -33,7 +33,6 @@ namespace gdcm
 // -> Value
 // TODO: This class SHOULD be pure virtual. I dont want a user
 // to shoot himself in the foot.
-//class Value;
 
 class SequenceOfItems;
 class SequenceOfFragments;
@@ -45,15 +44,15 @@ class SequenceOfFragments;
  * DATA ELEMENT: 
  * A unit of information as defined by a single entry in the data dictionary.
  * An encoded Information Object Definition (IOD) Attribute that is composed
- * of, at a minimum, three fields: a Data Element Tag, a Value Length, 
- * and a Value Field. For some specific Transfer Syntaxes, a Data Element
- * also contains a VR Field where the Value Representation of that Data 
- * Element is specified explicitly.
+ * of, at a minimum, three fields: a Data Element Tag, a Value Length, and a
+ * Value Field. For some specific Transfer Syntaxes, a Data Element also
+ * contains a VR Field where the Value Representation of that Data Element is
+ * specified explicitly.
  *
  * Design:
- * - A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
- * - A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
- * - For Item start/end (See 0xfffe tags), Value is NULL
+ * \li A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
+ * \li A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
+ * \li For Item start/end (See 0xfffe tags), Value is NULL
  *
  * \see ExplicitDataElement ImplicitDataElement
  */

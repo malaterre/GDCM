@@ -25,13 +25,14 @@ namespace gdcm
 
 /**
  * \brief Class to represent a DICOM Data Element (Attribute) Tag (Group, Element).
- * Basically an uint32_t which can also be expressed as two uint16_t (group and element)
+ * Basically an uint32_t which can also be expressed as two uint16_t (group and
+ * element)
  * \note
  * DATA ELEMENT TAG: 
- * A unique identifier for a Data Element composed of an ordered pair of 
- * numbers (a Group Number followed by an Element Number).
- * GROUP NUMBER: The first number in the ordered pair of numbers that makes
- * up a Data Element Tag.
+ * A unique identifier for a Data Element composed of an ordered pair of
+ * numbers (a Group Number followed by an Element Number).  GROUP NUMBER: The
+ * first number in the ordered pair of numbers that makes up a Data Element
+ * Tag.
  * ELEMENT NUMBER: The second number in the ordered pair of numbers that
  * makes up a Data Element Tag.
  */
@@ -196,7 +197,8 @@ public:
     SetElement( (base >> 8) + element );
     }
 
-  /// Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number and yy in [0x10,0xFF]
+  /// Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number
+  /// and yy in [0x10,0xFF]
   bool IsPrivateCreator() const
     {
     return IsPrivate() && (GetElement() <= 0xFF && GetElement() >= 0x10);
@@ -233,8 +235,8 @@ public:
   /// Read from a comma separated string.
   /// This is a highly user oriented function, the string should be formated as:
   /// 1234,5678 to specify the tag (0x1234,0x5678)
-  /// The notation comes from the DICOM standard, and is handy to use from a command line
-  /// program
+  /// The notation comes from the DICOM standard, and is handy to use from a
+  /// command line program
   bool ReadFromCommaSeparatedString(const char *str);
 
   /// Read from a pipe separated string (GDCM 1.x compat only). Do not use in newer code

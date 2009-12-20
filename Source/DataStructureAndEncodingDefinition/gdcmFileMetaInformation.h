@@ -27,11 +27,8 @@ namespace gdcm
 /**
  * \brief Class to represent a File Meta Information
  *
- * \details FileMetaInformation is a Explicit Structured Set.
- * Whenever the file contains an ImplicitDataElement DataSet, a conversion
- * will take place.
- * \todo
- * If user adds an element with group != 0x0002 it will be written...
+ * \details FileMetaInformation is a Explicit Structured Set.  Whenever the
+ * file contains an ImplicitDataElement DataSet, a conversion will take place.
  *
  * Definition:
  * The File Meta Information includes identifying information on the

@@ -20,11 +20,10 @@
 namespace gdcm
 {
 class Event;
-//-----------------------------------------------------------------------------
+
 /**
- * \class Command
- * \brief superclass for callback/observer methods
- *
+ * \brief Command superclass for callback/observer methods
+ * \see Subject
  */
 class GDCM_EXPORT Command : public Subject
 {
@@ -34,7 +33,8 @@ public :
 
   /** Abstract method that defines the action to be taken by the command.
    * This variant is expected to be used when requests comes from a 
-   * const Object */
+   * const Object 
+   */
   virtual void Execute(const Subject *caller, const Event & event ) = 0;
 
 protected:

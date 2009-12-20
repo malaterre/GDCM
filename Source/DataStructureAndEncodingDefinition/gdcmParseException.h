@@ -15,16 +15,13 @@
 #ifndef GDCMPARSEEXCEPTION_H
 #define GDCMPARSEEXCEPTION_H
 
-
 #include "gdcmException.h"
 #include "gdcmDataElement.h"
 
-
 namespace gdcm
 {
-
-/** \class ParseException
- * \brief Standard exception handling object.
+/**
+ * \brief ParseException Standard exception handling object.
  *
  */
 class ParseException : public Exception

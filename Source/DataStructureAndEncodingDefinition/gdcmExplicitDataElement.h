@@ -19,7 +19,6 @@
 
 namespace gdcm
 {
-// Data Element (Explicit)
 /**
  * \brief Class to read/write a DataElement as Explicit Data Element
  * \note bla

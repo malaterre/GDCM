@@ -24,6 +24,7 @@ class Command;
 class SubjectInternals;
 /**
  * \brief Subject
+ * \see Command Event
  */
 class GDCM_EXPORT Subject : public Object
 {

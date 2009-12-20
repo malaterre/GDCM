@@ -23,17 +23,18 @@ class Dicts;
 
 /**
  * \brief FileExplicitFilter class
- * After changing a file from Implicit to Explicit representation (see ImageChangeTransferSyntax)
- * one operation is to make sure the VR of each DICOM attribute are accurate and do match the one
- * from PS 3.6. Indeed when a file is written in Implicit reprensentation, the VR is not stored
- * directly in the file.
+ * After changing a file from Implicit to Explicit representation (see
+ * ImageChangeTransferSyntax) one operation is to make sure the VR of each
+ * DICOM attribute are accurate and do match the one from PS 3.6. Indeed when a
+ * file is written in Implicit reprensentation, the VR is not stored directly
+ * in the file.
  *
- * \warning changing an implicit dataset to an explicit dataset is NOT a trivial task of
- * simply changing the VR to the dict one:
- *   - One has to make sure SQ is properly set
- *   - One has to recompute the explicit length SQ
- *   - One has to make sure that Vr is valid for the encoding
- *   - One has to make sure that VR 16bits can store the original value length
+ * \warning changing an implicit dataset to an explicit dataset is NOT a
+ * trivial task of simply changing the VR to the dict one:
+ * \li One has to make sure SQ is properly set
+ * \li One has to recompute the explicit length SQ
+ * \li One has to make sure that VR is valid for the encoding
+ * \li One has to make sure that VR 16bits can store the original value length
  */
 class GDCM_EXPORT FileExplicitFilter
 {
