@@ -85,6 +85,15 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
   if( !writer.Write() )
     {
     std::cerr << "Could not Write : " << outfilename << std::endl;
+    if( strcmp(filename,outfilename) != 0 )
+      {
+      gdcm::System::RemoveFile( outfilename );
+      }
+    else
+      {
+      std::cerr << "gdcmanon just corrupted: " << filename << " for you (data lost)." << std::endl;
+      }
+
     return false;
     }
   return true;
@@ -146,6 +155,15 @@ static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const
   if( !writer.Write() )
     {
     std::cerr << "Could not Write : " << outfilename << std::endl;
+    if( strcmp(filename,outfilename) != 0 )
+      {
+      gdcm::System::RemoveFile( outfilename );
+      }
+    else
+      {
+      std::cerr << "gdcmanon just corrupted: " << filename << " for you (data lost)." << std::endl;
+      }
+
     return false;
     }
   return true;
