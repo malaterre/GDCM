@@ -175,6 +175,12 @@ public class ClinicalTrialIdentificationWorkflow
       return 1;
       }
 
+    if( args.Length != 2 )
+      {
+      System.Console.WriteLine( "Usage:" );
+      System.Console.WriteLine( "ClinicalTrialIdentificationWorkflow input_dir output_dir" );
+      return 1;
+      }
     string dir1 = args[0];
     string dir2 = args[1];
 
