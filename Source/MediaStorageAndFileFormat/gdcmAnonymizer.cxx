@@ -714,7 +714,9 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
       }
     if( sqi )
       {
+      de.SetValue( *sqi ); // EXTREMELY IMPORTANT #2912092
       de.SetVLToUndefined();
+      assert( sqi->IsUndefinedLength() );
       //de.GetVL().SetToUndefined();
       //sqi->SetLengthToUndefined();
       unsigned int n = sqi->GetNumberOfItems();
