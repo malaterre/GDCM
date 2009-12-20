@@ -184,6 +184,31 @@ private:
 }
 #endif //NDEBUG
 
+/**
+ * \brief   AssertAlways 
+ * @param arg argument to test
+ *        An easy solution to pass also a message is to do:
+ *        gdcmAssertMacro( "my message" && 2 < 3 )
+ */
+#ifdef NDEBUG
+// User asked for release compilation, but still need to report
+// if grave issue.
+#define gdcmAssertAlwaysMacro(arg) \
+{                                                           \
+   if( !(arg) )                                             \
+   {                                                        \
+   std::ostringstream osmacro;                              \
+   osmacro << "Assert: In " __FILE__ ", line " << __LINE__  \
+           << ", function " << GDCM_FUNCTION                \
+           << "\n\n";                                       \
+   throw osmacro.str();                                          \
+   }                                                        \
+}
+#else
+// Simply reproduce gdcmAssertMacro behavior:
+#define gdcmAssertAlwaysMacro(arg) gdcmAssertMacro(arg)
+#endif //NDEBUG
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //GDCMTRACE_H
