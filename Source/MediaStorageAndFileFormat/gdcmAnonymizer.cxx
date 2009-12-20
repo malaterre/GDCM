@@ -236,85 +236,146 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
   return ret;
 }
 
-bool Anonymizer::RemoveRetired()
+static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
 {
   static const Global &g = GlobalInstance;
   static const Dicts &dicts = g.GetDicts();
   static const Dict &pubdict = dicts.GetPublicDict();
-
-  DataSet &ds = F->GetDataSet();
   DataSet::Iterator it = ds.Begin();
   for( ; it != ds.End(); )
     {
-    const DataElement &de = *it;
-    if( de.GetTag().IsPublic() )
+    const DataElement &de1 = *it;
+    // std::set::erase invalidate iterator, so we need to make a copy first:
+    DataSet::Iterator dup = it;
+    ++it;
+    if( de1.GetTag().IsPublic() )
       {
-      const DictEntry &entry = pubdict.GetDictEntry( de.GetTag() );
+      const DictEntry &entry = pubdict.GetDictEntry( de1.GetTag() );
       if( entry.GetRetired() )
         {
-        // std::set::erase invalidate iterator, so we need to make a copy first:
-        DataSet::Iterator dup = it;
-        ++it;
         ds.GetDES().erase(dup);
-        }
-      else
-        {
-      ++it;
         }
       }
     else
       {
-      ++it;
+      const DataElement &de = *dup;
+      VR vr = DataSetHelper::ComputeVR(file, ds, de.GetTag() );
+      if( vr.Compatible(VR::SQ) )
+        {
+        SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
+        if( sq )
+          {
+          unsigned int n = sq->GetNumberOfItems();
+          for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+            {
+            Item &item = sq->GetItem( i );
+            DataSet &nested = item.GetNestedDataSet();
+            Anonymizer_RemoveRetired( file, nested );
+            }
+          DataElement de_dup = *dup;
+          de_dup.SetValue( *sq );
+          ds.Replace( de_dup );
+          }
+        }
       }
     }
+  return true;
+}
 
+bool Anonymizer::RemoveRetired()
+{
+  DataSet &ds = F->GetDataSet();
+  return Anonymizer_RemoveRetired(*F, ds);
+}
+
+static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
+{
+  DataSet::Iterator it = ds.Begin();
+  for( ; it != ds.End(); )
+    {
+    const DataElement &de1 = *it;
+      // std::set::erase invalidate iterator, so we need to make a copy first:
+      DataSet::Iterator dup = it;
+      ++it;
+    if( de1.GetTag().IsGroupLength() )
+      {
+      ds.GetDES().erase(dup);
+      }
+    else
+      {
+      const DataElement &de = *dup;
+      VR vr = DataSetHelper::ComputeVR(file, ds, de.GetTag() );
+      if( vr.Compatible(VR::SQ) )
+        {
+        SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
+        if( sq )
+          {
+          unsigned int n = sq->GetNumberOfItems();
+          for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+            {
+            Item &item = sq->GetItem( i );
+            DataSet &nested = item.GetNestedDataSet();
+            Anonymizer_RemoveGroupLength( file, nested );
+            }
+          DataElement de_dup = *dup;
+          de_dup.SetValue( *sq );
+          ds.Replace( de_dup );
+          }
+        }
+      }
+    }
   return true;
 }
 
 bool Anonymizer::RemoveGroupLength()
 {
   DataSet &ds = F->GetDataSet();
+  return Anonymizer_RemoveGroupLength(*F, ds);
+}
+
+static bool Anonymizer_RemovePrivateTags(File const &file, DataSet &ds)
+{
   DataSet::Iterator it = ds.Begin();
   for( ; it != ds.End(); )
     {
-    const DataElement &de = *it;
-    if( de.GetTag().IsGroupLength() )
-      {
+    const DataElement &de1 = *it;
       // std::set::erase invalidate iterator, so we need to make a copy first:
       DataSet::Iterator dup = it;
       ++it;
+    if( de1.GetTag().IsPrivate() )
+      {
       ds.GetDES().erase(dup);
       }
     else
       {
-      ++it;
+      const DataElement &de = *dup;
+      VR vr = DataSetHelper::ComputeVR(file, ds, de.GetTag() );
+      if( vr.Compatible(VR::SQ) )
+        {
+        SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
+        if( sq )
+          {
+          unsigned int n = sq->GetNumberOfItems();
+          for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+            {
+            Item &item = sq->GetItem( i );
+            DataSet &nested = item.GetNestedDataSet();
+            Anonymizer_RemovePrivateTags( file, nested );
+            }
+          DataElement de_dup = *dup;
+          de_dup.SetValue( *sq );
+          ds.Replace( de_dup );
+          }
+        }
       }
     }
-
   return true;
 }
 
 bool Anonymizer::RemovePrivateTags()
 {
   DataSet &ds = F->GetDataSet();
-  DataSet::Iterator it = ds.Begin();
-  for( ; it != ds.End(); )
-    {
-    const DataElement &de = *it;
-    if( de.GetTag().IsPrivate() )
-      {
-      // std::set::erase invalidate iterator, so we need to make a copy first:
-      DataSet::Iterator dup = it;
-      ++it;
-      ds.GetDES().erase(dup);
-      }
-    else
-      {
-      ++it;
-      }
-    }
-
-  return true;
+  return Anonymizer_RemovePrivateTags(*F, ds);
 }
 
 /*
