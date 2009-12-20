@@ -16,7 +16,6 @@
 #define GDCMIMPLICITDATAELEMENT_TXX
 
 #include "gdcmSequenceOfItems.h"
-
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
 
@@ -452,7 +451,7 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
   if( ValueLengthField )
     {
     assert( ValueField );
-    assert( ValueLengthField == ValueField->GetLength() );
+    gdcmAssertAlwaysMacro( ValueLengthField == ValueField->GetLength() );
     assert( TagField != Tag(0xfffe, 0xe00d)
          && TagField != Tag(0xfffe, 0xe0dd) );
     if( !ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField) )
