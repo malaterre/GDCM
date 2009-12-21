@@ -232,9 +232,6 @@ http://www.vtk.org/doc/release/5.2/
 or:
 http://www.vtk.org/doc/nightly/
 -----------------------------------------------------------------------
-Fix gdcmviewer for:
-JPEG_LossyYBR.dcm
------------------------------------------------------------------------
 TODO: explicit TS for:
 LUTDATA_implicit_OW.dcm
 -----------------------------------------------------------------------
