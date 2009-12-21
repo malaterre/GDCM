@@ -71,6 +71,8 @@ VR ComputeVRImplicitLittleEndian(DataSet const &ds, const Tag& tag)
         in Little Endian. The first and third values are always interpreted as unsigned,
         regardless of the Value Representation.
     */
+  VR vr = VR::INVALID;
+  return vr;
 }
 
 VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
