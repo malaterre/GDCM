@@ -23,17 +23,19 @@ namespace gdcm
 /**
  * \brief Class to manipulate Transfer Syntax
  * \note
- * TRANSFER SYNTAX (Standard and Private): A set of encoding rules that
- * allow Application Entities to unambiguously negotiate the encoding 
- * techniques (e.g., Data Element structure, byte ordering, compression) 
- * they are able to support, thereby allowing these Application Entities
- * to communicate.
+ * TRANSFER SYNTAX (Standard and Private): A set of encoding rules that allow
+ * Application Entities to unambiguously negotiate the encoding techniques
+ * (e.g., Data Element structure, byte ordering, compression) they are able to
+ * support, thereby allowing these Application Entities to communicate.
+ *
  * \todo: The implementation is completely retarded -> see gdcm::UIDs for a replacement
  * We need: IsSupported
  * We need preprocess of raw/xml file
  * We need GetFullName()
  *
- * Need a notion of Private Syntax. As defined in Ps 3.5. Section 9.2
+ * Need a notion of Private Syntax. As defined in PS 3.5. Section 9.2
+ *
+ * \see UIDs
  */
 class GDCM_EXPORT TransferSyntax
 {

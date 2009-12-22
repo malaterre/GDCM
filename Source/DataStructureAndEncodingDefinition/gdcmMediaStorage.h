@@ -36,6 +36,8 @@ class File;
  * Only the codec can answer yes I support this Media Storage or not...
  * For instance an ImageCodec will answer yes to most of them
  * while a PDFCodec will answer only for the Encapsulated PDF
+ *
+ * \see UIDs
  */
 class GDCM_EXPORT MediaStorage
 {

@@ -30,15 +30,22 @@ namespace gdcm
 {
 /**
  * \brief Scanner
- * \todo
- * This filter is dealing with both VRASCII and VRBINARY element, thanks to the help of gdcm::StringFilter
+ * This filter is meant for quickly browsing a FileSet (a set of files on
+ * disk). Special consideration are taken so as to read the mimimum amount of
+ * information in each file in order to retrieve the user specified set of
+ * DICOM Attribute.
+ *
+ * This filter is dealing with both VRASCII and VRBINARY element, thanks to the
+ * help of gdcm::StringFilter
  * 
- * \warning: IMPORTANT In case of file where tags are not ordered, the output will be garbage
+ * \warning IMPORTANT In case of file where tags are not ordered (illegal as
+ * per DICOM specification), the output will be missing information
  *
- * \note: implementation details. All values are stored in a std::set of std::string. Then the *address*
- * of the cstring underlying the std::string is used in the std::map
+ * \note implementation details. All values are stored in a std::set of
+ * std::string. Then the address of the cstring underlying the std::string is
+ * used in the std::map.
  *
- * This class implement the Subject/Observer pattern trigger the following event:
+ * This class implement the Subject/Observer pattern trigger the following events:
  * \li ProgressEvent
  * \li StartEvent
  * \li EndEvent
