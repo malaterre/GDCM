@@ -39,6 +39,8 @@ public:
   // DataSet::GetPrivateCreator
   const DictEntry &GetDictEntry(const Tag& tag, const char *owner = NULL) const;
 
+  const DictEntry &GetDictEntry(const PrivateTag& tag) const;
+
   //enum PublicTypes {
   //  DICOMV3_DICT,
   //  ACRNEMA_DICT,

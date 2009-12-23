@@ -25,8 +25,8 @@ namespace gdcm
 {
 /**
  * \brief Class to represent a PDB Element
+ * \see PDBHeader
  */
-
 class GDCM_EXPORT PDBElement
 {
 public:

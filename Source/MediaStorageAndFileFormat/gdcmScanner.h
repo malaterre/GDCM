@@ -18,6 +18,7 @@
 #include "gdcmDirectory.h"
 #include "gdcmSubject.h"
 #include "gdcmTag.h"
+#include "gdcmPrivateTag.h"
 #include "gdcmSmartPointer.h"
 
 #include <map>
@@ -28,6 +29,8 @@
 
 namespace gdcm
 {
+class StringFilter;
+
 /**
  * \brief Scanner
  * This filter is meant for quickly browsing a FileSet (a set of files on
@@ -71,6 +74,9 @@ public:
   /// Add a tag that will need to be read. Those are root level skip tags
   void AddTag( Tag const & t );
   void ClearTags();
+
+  // Work in progress do not use:
+  void AddPrivateTag( PrivateTag const & t );
 
   /// Add a tag that will need to be skipped. Those are root level skip tags
   void AddSkipTag( Tag const & t );
@@ -139,10 +145,14 @@ public:
   /// for wrapped language: instanciate a reference counted object
   static SmartPointer<Scanner> New() { return new Scanner; }
 
+protected:
+  void ProcessPublicTag(StringFilter &sf, const char *filename);
 private:
   // struct to store all uniq tags in ascending order:
   typedef std::set< Tag > TagsType;
+  typedef std::set< PrivateTag > PrivateTagsType;
   std::set< Tag > Tags;
+  std::set< PrivateTag > PrivateTags;
   std::set< Tag > SkipTags;
   ValuesType Values;
   Directory::FilenamesType Filenames;

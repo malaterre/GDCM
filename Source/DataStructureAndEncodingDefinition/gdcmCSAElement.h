@@ -25,8 +25,8 @@ namespace gdcm
 {
 /**
  * \brief Class to represent a CSA Element
+ * \see CSAHeader
  */
-
 class GDCM_EXPORT CSAElement
 {
 public:

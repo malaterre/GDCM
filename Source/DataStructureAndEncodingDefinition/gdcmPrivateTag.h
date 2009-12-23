@@ -72,6 +72,8 @@ assert(0);
     else return t1 < t2;
     }
 
+  bool ReadFromCommaSeparatedString(const char *str);
+
 private:
   // SIEMENS MED, GEMS_PETD_01 ...
   std::string Owner;

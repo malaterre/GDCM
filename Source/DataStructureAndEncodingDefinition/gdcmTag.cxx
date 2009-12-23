@@ -22,9 +22,9 @@ namespace gdcm
   bool Tag::ReadFromCommaSeparatedString(const char *str)
     {
     unsigned int group = 0, element = 0;
-    if( sscanf(str, "%04x,%04x", &group , &element) != 2 )
+    if( !str || sscanf(str, "%04x,%04x", &group , &element) != 2 )
       {
-      gdcmDebugMacro( "Problem reading the Tag: " << str );
+      gdcmDebugMacro( "Problem reading Tag: " << str );
       return false;
       }
     SetGroup( group );
@@ -34,9 +34,9 @@ namespace gdcm
   bool Tag::ReadFromPipeSeparatedString(const char *str)
     {
     unsigned int group = 0, element = 0;
-    if( sscanf(str, "%04x|%04x", &group , &element) != 2 )
+    if( !str || sscanf(str, "%04x|%04x", &group , &element) != 2 )
       {
-      gdcmDebugMacro( "Problem reading the Tag: " << str );
+      gdcmDebugMacro( "Problem reading Tag: " << str );
       return false;
       }
     SetGroup( group );

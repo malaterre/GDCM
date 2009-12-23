@@ -41,12 +41,13 @@ class PrivateTag;
  * not be used as is. This class de-encapsulated the Protocol Data Block and
  * allow users to query element by name.
  *
- * \warning:
+ * \warning
  * Everything you do with this code is at your own risk, since decoding process
  * was not written from specification documents.
  *
  * \warning: the API of this class might change.
  *
+ * \see CSAHeader
  */
 class GDCM_EXPORT PDBHeader
 {

@@ -110,6 +110,12 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
   }
 }
 
+const DictEntry &Dicts::GetDictEntry(const PrivateTag& tag) const
+{
+  return GetDictEntry(tag, tag.GetOwner() );
+}
+
+
 const char *Dicts::GetConstructorString(ConstructorType type)
 {
   (void)type;
