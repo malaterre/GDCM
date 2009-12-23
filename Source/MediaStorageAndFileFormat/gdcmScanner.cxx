@@ -154,7 +154,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
         // Keep the mapping:
         sf.SetFile( reader.GetFile() );
         Scanner::ProcessPublicTag(sf, filename);
-        Scanner::ProcessPrivateTag(sf, filename);
+        //Scanner::ProcessPrivateTag(sf, filename);
         }
       Progress += progresstick;
       ProgressEvent pe;
