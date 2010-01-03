@@ -47,11 +47,12 @@ Bitmap::Bitmap():
   TS(),
   PF(),
   PI(),
+  Dimensions(),
+  PixelData() 
+  LUT(0),
   NeedByteSwap(false),
   LossyFlag(false),
-  Dimensions(),
-  LUT(0),
-  PixelData() {}
+{}
 
 Bitmap::~Bitmap() {}
 

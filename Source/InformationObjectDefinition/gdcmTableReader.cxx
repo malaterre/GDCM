@@ -479,13 +479,13 @@ void TableReader::CharacterDataHandler(const char *data, int length)
   if( ParsingModuleEntryDescription )
     {
     std::string name( data, length);
-    assert( length == strlen( name.c_str() ) );
+    assert( (unsigned int)length == strlen( name.c_str() ) );
     Description.append( name );
     }
   else if( ParsingMacroEntryDescription )
     {
     std::string name( data, length);
-    assert( length == strlen( name.c_str() ) );
+    assert( (unsigned int)length == strlen( name.c_str() ) );
     Description.append( name );
     }
   else

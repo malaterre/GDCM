@@ -1155,7 +1155,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             el.SetLength( numberoframes.GetValue() * vr.GetSizeof() );
             assert( entry.GetVM() == VM::VM2_n );
             double spacing_start = 0;
-            for( unsigned int i = 0; i < numberoframes.GetValue(); ++i)
+            assert( 0 < numberoframes.GetValue() );
+            for( int i = 0; i < numberoframes.GetValue(); ++i)
               {
               el.SetValue( spacing_start, i );
               spacing_start += spacing[2];
