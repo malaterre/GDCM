@@ -32,7 +32,7 @@ file-out  output filename
 
 \subsection options options
 \verbatim
-     --endian %s       Endianess (LSB/MSB).
+     --endian %s       Endianness (LSB/MSB).
   -d --depth %d        Depth (8/16/32).
      --sign %s         Pixel sign (0/1).
   -s --size %d,%d      Size.
@@ -190,7 +190,7 @@ $ gdcmimg input.jp2 output_jp2.dcm
 $ gdcmconv --j2k --force output_jp2.dcm output_j2k.dcm
 \endverbatim
 
-For RLE file, no check is done for crossing the row boundary. It is recommended to use gdcmconv --rle to reencode into a proper RLE file in case of doubt.
+For RLE file, no check is done for crossing the row boundary. It is recommended to use gdcmconv --rle to re-encode into a proper RLE file in case of doubt.
 
 \section see_also SEE ALSO
 
