@@ -6,6 +6,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
@@ -22,6 +24,7 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   LargeVRDSExplicit
+  GenerateStandardSOPClasses
   ClinicalTrialAnnotate
   CheckBigEndianBug
   DuplicatePCDE

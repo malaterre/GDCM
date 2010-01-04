@@ -12,14 +12,18 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/* 
+ */
+
 #include "gdcmDefs.h"
 #include "gdcmUIDs.h"
 #include "gdcmGlobal.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmSOPClassUIDToIOD.h"
 
-int TestDefs(int, char *[])
+int main(int argc, char *argv[])
 {
+
   using gdcm::MediaStorage;
   gdcm::Global& g = gdcm::Global::GetInstance();
   if( !g.LoadResourcesFiles() )
@@ -31,60 +35,31 @@ int TestDefs(int, char *[])
   const gdcm::Defs &defs = g.GetDefs();
 
   int ret = 0;
+
   gdcm::MediaStorage::MSType mst;
   for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
     {
     const char *iod = defs.GetIODNameFromMediaStorage(mst);
     gdcm::UIDs uid;
     uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
-    if( !iod )
-      {
-      // We do not support Private IODs (for now??)
-      if( mst != MediaStorage::PhilipsPrivateMRSyntheticImageStorage 
-        && mst != MediaStorage::ToshibaPrivateDataStorage 
-        && mst != MediaStorage::GEPrivate3DModelStorage 
-        && mst != MediaStorage::Philips3D
-        && mst != MediaStorage::CSANonImageStorage
-        && mst != MediaStorage::GeneralElectricMagneticResonanceImageStorage )
-        {
-        std::cerr << "Missing iod for MS: " << mst << " " <<
-          gdcm::MediaStorage::GetMSString(mst) << "  "; //std::endl;
-        std::cerr << "MediaStorage is " << mst << " [" << uid.GetName() << "]" << std::endl;
-        ++ret;
-        }
-      }
-    else
+    if( iod )
       {
       const char *iod_ref = gdcm::SOPClassUIDToIOD::GetIOD(uid);
-      if( !iod_ref )
-        {
-        std::cerr << "Could not find IOD for SOPClass: " << uid << std::endl;
-        ++ret;
-        }
-      else 
+      if( iod_ref )
         {
         std::string iod_ref_str = iod_ref;
         //iod_ref_str += " IOD Modules";
-        if( iod_ref_str != iod )
+        //if( iod_ref_str != iod )
           {
-          std::cerr << "UID: " << uid << "   ";
-          std::cerr << "Incompatible IODs: [" << iod << "] versus ref= [" << iod_ref_str << "]" << std::endl;
+          std::cout << "UID: " << uid << "   ";
+          std::cout << "Incompatible IODs: [" << iod << "] versus ref= [" << iod_ref_str << "]" << std::endl;
           ++ret;
           }
         }
       }
     }
 
-  unsigned int nm = MediaStorage::GetNumberOfModality();
-  unsigned int nsop = gdcm::SOPClassUIDToIOD::GetNumberOfSOPClassToIOD();
-  if( nm != nsop )
-    {
-    std::cerr << "Incompatible MediaStorage knows: " << nm << 
-      " SOP Classes while SOPClassUIDToIOD knows: " << nsop << " classes" << std::endl;
-    ++ret;
-    }
 
-
-  return ret;
+  return 0;
 }
 
