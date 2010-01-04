@@ -864,7 +864,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //std::cout << des << std::endl; 
   //std::cout << dummy << std::endl; 
   //std::cout << ss.tellg() << std::endl; 
-  assert( ss.tellg() <= encrypted_len );
+  assert( (size_t)ss.tellg() <= encrypted_len );
   // TODO: check that for i = ss.tellg() to encrypted_len, ss[i] == 0
   delete[] buf;
   delete[] orig;
