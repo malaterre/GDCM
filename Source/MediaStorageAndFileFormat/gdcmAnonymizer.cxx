@@ -274,6 +274,7 @@ static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
             }
           DataElement de_dup = *dup;
           de_dup.SetValue( *sq );
+          de_dup.SetVLToUndefined(); // FIXME
           ds.Replace( de_dup );
           }
         }
@@ -319,6 +320,7 @@ static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
             }
           DataElement de_dup = *dup;
           de_dup.SetValue( *sq );
+          de_dup.SetVLToUndefined(); // FIXME
           ds.Replace( de_dup );
           }
         }
@@ -364,6 +366,7 @@ static bool Anonymizer_RemovePrivateTags(File const &file, DataSet &ds)
             }
           DataElement de_dup = *dup;
           de_dup.SetValue( *sq );
+          de_dup.SetVLToUndefined(); // FIXME
           ds.Replace( de_dup );
           }
         }
