@@ -420,7 +420,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       //const SequenceOfItems *sq = GetSequenceOfItems();
       SmartPointer<SequenceOfItems> sq = GetValueAsSQ();
       VL dummy = sq->template ComputeLength<ExplicitDataElement>();
-      assert( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
+      gdcmAssertAlwaysMacro( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
       }
     else if( GetSequenceOfFragments() )
       {
