@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:java="http://xml.apache.org/xslt/java" version="1.1" exclude-result-prefixes="java">
   <xsl:output method="pdf"/>
 <!-- fop -xml Part6.xml -xsl Part6PDF.xsl Part6.pdf -->
