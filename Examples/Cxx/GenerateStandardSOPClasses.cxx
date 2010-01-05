@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
         //if( iod_ref_str != iod )
           {
           //std::cout << "UID: " << uid << "   ";
-          std::cout << uid.GetName() << "," << uid.GetString() << "," << iod << std::endl;
+          std::cout << '"' << uid.GetName() << '"' <<"," << '"' <<uid.GetString() << '"' <<"," << '"' <<iod << '"' << std::endl;
           //std::cout << "Incompatible IODs: [" << iod << "] versus ref= [" << iod_ref_str << "]" << std::endl;
           ++ret;
           }

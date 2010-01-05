@@ -14,10 +14,10 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-  <xsl:template match="/dicts">
+  <xsl:template match="/sop-classes">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc Part4ToC++.xsl Part4.xml &gt; gdcmPart4.cxx
+// $ xsltproc Part4ToC++.xsl Part4.xml &gt; gdcmSOPClassUIDToIOD.cxx
 
 /*=========================================================================
 
@@ -34,24 +34,27 @@
 
 =========================================================================*/
 </xsl:text>
-
 <xsl:text>
-#ifndef __gdcmPart4_h
-#define __gdcmPart4_h
+#include "gdcmSOPClassUIDToIOD.h"
 
-  typedef enum {
+namespace gdcm
+{
+  static const char * const SOPClassToIOD[][2] = {
 </xsl:text>
-    <xsl:for-each select="standard-sop-classes/mapping">
+    <xsl:for-each select="media-storage-standard-sop-classes/mapping">
+        <xsl:text>{"</xsl:text>
         <xsl:value-of select="@sop-class-uid"/>
-        <xsl:text> = </xsl:text>
+        <xsl:text>" , "</xsl:text>
         <xsl:value-of select="@iod"/>
+        <xsl:text>"},</xsl:text>
 <xsl:text>
 </xsl:text>
     </xsl:for-each>
 <xsl:text>
-} TSType;
+{ 0, 0 }
+};
 
-#endif //__gdcmPart4_cxx
+} // end namespace gdcm
 </xsl:text>
   </xsl:template>
 </xsl:stylesheet>
