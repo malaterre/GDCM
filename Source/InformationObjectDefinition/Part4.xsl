@@ -18,8 +18,22 @@ $ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008
 -->
 <xsl:template match="text()" />
   <xsl:template match="informaltable">
-	  <xsl:if test="tgroup/tbody/row/entry/para = 'SOP Class Name'">
-    <xsl:apply-templates/>
+	  <!--xsl:if test="tgroup/tbody/row/entry/para = 'SOP Class Name'"-->
+	  <!--xsl:if test="tgroup/tbody/row/entry/para = 'SOP Class UID'"-->
+	  <xsl:if test="tgroup/tbody/row/entry/para = 'Related General SOP Class Name'">
+    <standard-and-related-general-sop-classes>
+      <xsl:apply-templates/>
+    </standard-and-related-general-sop-classes>
+	  </xsl:if>
+	  <xsl:if test="tgroup/tbody/row/entry/para = 'IOD Specification'">
+    <media-storage-standard-sop-classes>
+      <xsl:apply-templates/>
+    </media-storage-standard-sop-classes>
+	  </xsl:if>
+	  <xsl:if test="tgroup/tbody/row/entry/para = 'IOD Specification(defined in PS 3.3)'">
+    <standard-sop-classes>
+      <xsl:apply-templates/>
+    </standard-sop-classes>
 	  </xsl:if>
   </xsl:template>
 
@@ -39,11 +53,13 @@ $ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008
     <xsl:variable name="section-number" select="'Table B.5-1STANDARD SOP CLASSES'"/>
     <xsl:variable name="section-anchor" select="para[starts-with(normalize-space(.),$section-number)]"/>
     <xsl:message><xsl:value-of select="$section-anchor"/></xsl:message>
-    <standard-sop-classes>
 	    <!--xsl:apply-templates select="article/sect1/sect2/informaltable"/-->
 	    <!--xsl:apply-templates select="informaltable"/-->
-	    <xsl:apply-templates select="sect1/sect2/informaltable"/>
-    </standard-sop-classes>
+	    <!--xsl:apply-templates select="sect1/sect2/informaltable"/-->
+	    <!--xsl:apply-templates select="article/informaltable"/-->
+    <sop-classes>
+	    <xsl:apply-templates select="informaltable"/>
+    </sop-classes>
   </xsl:template>
  
   <xsl:template match="row">

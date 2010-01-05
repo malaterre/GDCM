@@ -36,8 +36,13 @@ int main(int argc, char *argv[])
 
   int ret = 0;
 
+  //std::cout << "Table B.5-1 STANDARD SOP CLASSES" << std::endl;
+  std::cout << "SOP Class Name,SOP Class UID,IOD Specification (defined in PS 3.3)" << std::endl;
+
+
   gdcm::MediaStorage::MSType mst;
-  for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
+  for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END;
+    mst = (gdcm::MediaStorage::MSType)(mst + 1) )
     {
     const char *iod = defs.GetIODNameFromMediaStorage(mst);
     gdcm::UIDs uid;
@@ -51,8 +56,9 @@ int main(int argc, char *argv[])
         //iod_ref_str += " IOD Modules";
         //if( iod_ref_str != iod )
           {
-          std::cout << "UID: " << uid << "   ";
-          std::cout << "Incompatible IODs: [" << iod << "] versus ref= [" << iod_ref_str << "]" << std::endl;
+          //std::cout << "UID: " << uid << "   ";
+          std::cout << uid.GetName() << "," << uid.GetString() << "," << iod << std::endl;
+          //std::cout << "Incompatible IODs: [" << iod << "] versus ref= [" << iod_ref_str << "]" << std::endl;
           ++ret;
           }
         }
