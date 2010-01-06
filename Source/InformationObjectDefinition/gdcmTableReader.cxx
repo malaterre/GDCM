@@ -347,6 +347,18 @@ void TableReader::StartElement(const char *name, const char **atts)
     {
     // TODO !
     }
+  else if ( strcmp(name,"sop-classes") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"standard-and-related-general-sop-classes") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"media-storage-standard-sop-classes") == 0 )
+    {
+    // TODO !
+    }
   else
     {
     assert(0);
@@ -431,6 +443,14 @@ void TableReader::EndElement(const char *name)
     {
     // TODO !
     }
+  else if ( strcmp(name,"standard-and-related-general-sop-classes") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"media-storage-standard-sop-classes") == 0 )
+    {
+    // TODO !
+    }
   else if( strcmp(name, "section" ) == 0 )
     {
     // TODO !
@@ -452,6 +472,10 @@ void TableReader::EndElement(const char *name)
     // TODO !
     }
   else if( strcmp(name, "term" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "sop-classes" ) == 0 )
     {
     // TODO !
     }
