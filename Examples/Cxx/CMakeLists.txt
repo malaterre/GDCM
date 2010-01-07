@@ -24,6 +24,7 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   LargeVRDSExplicit
+    ReadAndDumpDICOMDIR
   GenerateStandardSOPClasses
   ClinicalTrialAnnotate
   CheckBigEndianBug
