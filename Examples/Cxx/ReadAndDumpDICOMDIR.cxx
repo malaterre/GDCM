@@ -19,6 +19,7 @@
  *   Tom Marynowski (lordglub gmail) for contributing this example
  */
 #include "gdcmReader.h"
+#include "gdcmMediaStorage.h"
 
 typedef std::set<gdcm::DataElement> DataElementSet;
 typedef DataElementSet::const_iterator ConstIterator;
@@ -41,6 +42,13 @@ int main(int argc, char *argv [])
   gdcm::DataSet &ds = file.GetDataSet();
   gdcm::FileMetaInformation &fmi = file.GetHeader();
 
+  gdcm::MediaStorage ms;
+  ms.SetFromFile(file);
+  if( ms != gdcm::MediaStorage::MediaStorageDirectoryStorage )
+    {
+    std::cout << "This file is not a DICOMDIR" << std::endl;
+    return 1;
+    }
 
   if (fmi.FindDataElement( gdcm::Tag (0x0002, 0x0002)))
     {   strm.str("");
@@ -55,7 +63,7 @@ int main(int argc, char *argv [])
   if ("1.2.840.10008.1.3.10"!=strm.str())
     {
     std::cout << "This file is not a DICOMDIR" << std::endl;
-
+    return 1;
     }
 
   ConstIterator it = ds.GetDES().begin();
