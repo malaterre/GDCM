@@ -584,7 +584,7 @@ bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
     }
   bool success = true;
 
-  try
+try
     {
 std::istream &is = *Stream;
 
@@ -604,7 +604,7 @@ std::istream &is = *Stream;
     assert(0);
     }
 
-  bool hasmetaheader = true;
+  bool hasmetaheader = false;
   try
     {
     if( haspreamble )
@@ -612,25 +612,30 @@ std::istream &is = *Stream;
       try
         {
         F->GetHeader().Read( is );
+        hasmetaheader = true;
+        assert( !F->GetHeader().IsEmpty() );
         }
       catch( std::exception &ex )
         {
+        (void)ex;
         // Weird implicit meta header:
         is.seekg(128+4, std::ios::beg );
         try
           {
           F->GetHeader().ReadCompat(is);
           }
-        catch( std::exception &ex )
+        catch( std::exception &ex2 )
           {
           // Ok I get it now... there is absolutely no meta header, giving up
-          (void)ex;
-          hasmetaheader = false;
+          //hasmetaheader = false;
+          (void)ex2;
           }
         }
       }
     else
+      {
       F->GetHeader().ReadCompat(is);
+      }
     }
   catch( std::exception &ex )
     {
@@ -642,6 +647,11 @@ std::istream &is = *Stream;
     {
     // Ooops..
     assert(0);
+    }
+  if( F->GetHeader().IsEmpty() )
+    {
+    hasmetaheader = false;
+    gdcmWarningMacro( "no file meta info found" );
     }
 
   const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();
@@ -656,12 +666,20 @@ std::istream &is = *Stream;
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
+#if 0
+  std::ofstream out( "/tmp/deflate.raw");
+  out << is.rdbuf();
+  out.close();
+#endif
     zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag, skiptags);
-
-    return is;
+    // I need the following hack to read: srwithgraphdeflated.dcm
+    //is.clear();
+    // well not anymore, see special handling of trailing \0 in:
+    // basic_unzip_streambuf<charT, traits>::fill_input_buffer(void)
+    return is.good();
     }
 
   try
@@ -673,7 +691,8 @@ std::istream &is = *Stream;
         {
         // There is no such thing as Implicit Big Endian... oh well
         // LIBIDO-16-ACR_NEMA-Volume.dcm
-        F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag, skiptags);
+        //F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag, skiptags);
+        throw "Virtual Big Endian Implicit is not defined by DICOM";
         }
       else
         {
@@ -788,8 +807,86 @@ std::istream &is = *Stream;
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
       assert(0);  // TODO FIXME
       }
+    else if( ex.GetLastElement().GetVR() == VR::INVALID )
+      {
+      if( ts.GetNegociatedType() == TransferSyntax::Explicit )
+        {
+        try
+          {
+          gdcmWarningMacro( "Attempt to read file with VR16bits" );
+          // We could not read the VR in an explicit dataset
+          // seek back tag + vr:
+          is.seekg( -6, std::ios::cur );
+          VR16ExplicitDataElement ide;
+          ide.Read<SwapperNoOp>( is );
+          // If we are here it means we succeeded in reading the implicit data element:
+          F->GetDataSet().Insert( ide );
+          F->GetDataSet().Read<VR16ExplicitDataElement,SwapperNoOp>(is);
+          // This file can only be rewritten as implicit...
+          }
+        catch ( Exception &ex1 )
+          {
+          try
+            {
+            // Ouch ! the file is neither:
+            // 1. An Explicit encoded
+            // 2. I could not reread it using the VR16Explicit reader, last option is
+            // that the file is explicit/implicit
+            is.clear();
+            if( haspreamble )
+              {
+              is.seekg(128+4, std::ios::beg);
+              }
+            else
+              {
+              is.seekg(0, std::ios::beg);
+              }
+            if( hasmetaheader )
+              {
+              // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+              // We should be able to seek to proper place instead of re-reading
+              FileMetaInformation header;
+              header.Read(is);
+              }
+
+            // Explicit/Implicit
+            // gdcmData/c_vf1001.dcm falls into that category, while in fact the fmi could simply
+            // be inverted and all would be perfect...
+            gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
+            F->GetDataSet().Clear(); // remove garbage from 1st attempt...
+            F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+            }
+          catch ( Exception &ex )
+            {
+            (void)ex;
+            is.clear();
+            if( haspreamble )
+              {
+              is.seekg(128+4, std::ios::beg);
+              }
+            else
+              {
+              is.seekg(0, std::ios::beg);
+              }
+            if( hasmetaheader )
+              {
+              // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+              // We should be able to seek to proper place instead of re-reading
+              FileMetaInformation header;
+              header.Read(is);
+              }
+
+            // Explicit/Implicit
+            gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
+            F->GetDataSet().Clear(); // remove garbage from 1st attempt...
+            F->GetDataSet().Read<UNExplicitImplicitDataElement,SwapperNoOp>(is);
+            }
+          }
+        }
+      }
     else
       {
+        gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
       // Let's try again with an ExplicitImplicitDataElement:
       if( ts.GetSwapCode() == SwapCode::LittleEndian &&
         ts.GetNegociatedType() == TransferSyntax::Explicit )
@@ -812,14 +909,13 @@ std::istream &is = *Stream;
           }
 
         // Philips
-        gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
         F->GetDataSet().Clear(); // remove garbage from 1st attempt...
         F->GetDataSet().ReadUpToTag<ExplicitImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
         // This file can only be rewritten as implicit...
         }
       }
 #else
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
     }
@@ -834,7 +930,7 @@ std::istream &is = *Stream;
     success = false;
     }
 
-    //assert( Stream->eof() );
+    //if( success ) assert( Stream->eof() );
     }
   catch( Exception &ex )
     {
@@ -846,9 +942,20 @@ std::istream &is = *Stream;
     gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
+//  if( !success )
+//    {
+//    F->GetHeader().Clear();
+//    F->GetDataSet().Clear();
+//    }
 
   // FIXME : call this function twice...
-  //Stream->close();
+  if (Ifstream && Ifstream->is_open())
+    {
+    Ifstream->close();
+    delete Ifstream;
+    Ifstream = NULL;
+    Stream = NULL;
+    }
 
   return success;
 }
