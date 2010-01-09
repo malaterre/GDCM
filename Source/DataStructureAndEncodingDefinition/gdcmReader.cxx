@@ -190,7 +190,57 @@ TransferSyntax Reader::GuessTransferSyntax()
   return ts;
 }
 
+template <> struct Reader::Caller<0> 
+{
+  DataSet & DS;
+  Caller(DataSet &ds):DS(ds){}
+  template<class T1, class T2>
+    void ReadCommon(std::istream & is)
+      {
+      DS.Read<T1,T2>(is);
+      }
+  template<class T1, class T2>
+    void ReadCommonWithLength(std::istream & is, VL & length)
+      {
+      DS.ReadWithLength<T1,T2>(is,length);
+      }
+  static void Check(bool b, std::istream &stream) 
+    {
+    if( b ) assert( stream.eof() );
+    }
+};
+template <> struct Reader::Caller<1> 
+{
+  DataSet & DS;
+  const Tag & T;
+  std::set<Tag> const & SkipTags;
+  Caller(DataSet &ds,const Tag & tag, std::set<Tag> const & skiptags):DS(ds),T(tag),SkipTags(skiptags){}
+  template<class T1, class T2>
+    void ReadCommon(std::istream & is) 
+      {
+      DS.ReadUpToTag<T1,T2>(is,T,SkipTags);
+      }
+  template<class T1, class T2>
+    void ReadCommonWithLength(std::istream & is, VL & length) 
+      {
+      DS.ReadUpToTagWithLength<T1,T2>(is,T,length);
+      }
+  static void Check(bool , std::istream &)  {}
+}; 
+
 bool Reader::Read()
+{
+  Caller<0> caller(F->GetDataSet());
+  return InternalReadCommon(caller);
+}
+
+bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
+{
+  Caller<1> caller(F->GetDataSet(),tag,skiptags);
+  return InternalReadCommon(caller);
+}
+
+bool Reader::Read2()
 {
   if( !Stream )
     {
@@ -575,7 +625,8 @@ std::istream &is = *Stream;
   return success;
 }
 
-bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
+template <int T>
+bool Reader::InternalReadCommon(Caller<T> &caller)
 {
   if( !Stream )
     {
@@ -674,7 +725,8 @@ std::istream &is = *Stream;
     zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
-    F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag, skiptags);
+    //F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag, skiptags);
+    caller.template ReadCommon<ExplicitDataElement,SwapperNoOp>(gzis);
     // I need the following hack to read: srwithgraphdeflated.dcm
     //is.clear();
     // well not anymore, see special handling of trailing \0 in:
@@ -696,7 +748,8 @@ std::istream &is = *Stream;
         }
       else
         {
-        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperDoOp>(is,tag, skiptags);
+        //F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperDoOp>(is,tag, skiptags);
+        caller.template ReadCommon<ExplicitDataElement,SwapperDoOp>(is);
         }
       }
     else // LittleEndian
@@ -705,7 +758,8 @@ std::istream &is = *Stream;
         {
         if( hasmetaheader && haspreamble )
           {
-          F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+          //F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+          caller.template ReadCommon<ImplicitDataElement,SwapperNoOp>(is);
           }
         else
           {
@@ -714,13 +768,15 @@ std::istream &is = *Stream;
           std::streampos end = is.tellg();
           VL l = (VL)(end - start);
           is.seekg( start, std::ios::beg );
-          F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
+          //F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
+          caller.template ReadCommonWithLength<ImplicitDataElement,SwapperNoOp>(is,l);
           is.peek();
           }
         }
       else
         {
-        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+        //F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+        caller.template ReadCommon<ExplicitDataElement,SwapperNoOp>(is);
         }
       }
     }
@@ -752,7 +808,8 @@ std::istream &is = *Stream;
       // GDCM 1.X
       gdcmWarningMacro( "Attempt to read non CP 246" );
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      F->GetDataSet().ReadUpToTag<CP246ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+      //F->GetDataSet().ReadUpToTag<CP246ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+      caller.template ReadCommon<CP246ExplicitDataElement,SwapperNoOp>(is);
       }
     else if( ex.GetLastElement().GetVR() == VR::UN )
       {
@@ -777,7 +834,8 @@ std::istream &is = *Stream;
       // GDCM 1.X
       gdcmWarningMacro( "Attempt to read GDCM 1.X wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      F->GetDataSet().ReadUpToTag<UNExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+      //F->GetDataSet().ReadUpToTag<UNExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+      caller.template ReadCommon<UNExplicitDataElement,SwapperNoOp>(is);
       // This file can only be rewritten as implicit...
       }
     else if ( ex.GetLastElement().GetTag() == Tag(0xfeff,0x00e0) )
@@ -910,7 +968,8 @@ std::istream &is = *Stream;
 
         // Philips
         F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-        F->GetDataSet().ReadUpToTag<ExplicitImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+        //F->GetDataSet().ReadUpToTag<ExplicitImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
+        caller.template ReadCommon<ExplicitImplicitDataElement,SwapperNoOp>(is);
         // This file can only be rewritten as implicit...
         }
       }
@@ -931,6 +990,7 @@ std::istream &is = *Stream;
     }
 
     //if( success ) assert( Stream->eof() );
+    caller.Check(success, *Stream );
     }
   catch( Exception &ex )
     {

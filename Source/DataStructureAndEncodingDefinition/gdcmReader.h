@@ -97,6 +97,11 @@ protected:
   SmartPointer<File> F;
 
 private:
+  // Forward declaration
+  template <int T> struct Caller;
+  template <int T>
+  bool InternalReadCommon(Caller<T> &caller);
+  bool Read2();
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;
