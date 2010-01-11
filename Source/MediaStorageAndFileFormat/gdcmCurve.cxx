@@ -128,10 +128,12 @@ unsigned int Curve::GetNumberOfCurves(DataSet const & ds)
     else
       {
       // Yeah this is an overlay element
-      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+      //if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+      if( ds.FindDataElement( Tag(de.GetTag().GetGroup(),0x3000 ) ) )
         {
         // ok so far so good...
-        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        //const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        const DataElement& overlaydata = ds.GetDataElement(Tag(de.GetTag().GetGroup(),0x3000));
         if( !overlaydata.IsEmpty() )
           {
           ++numoverlays;
