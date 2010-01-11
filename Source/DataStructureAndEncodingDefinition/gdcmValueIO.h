@@ -12,7 +12,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMVALUEIO_H
 #define GDCMVALUEIO_H
 
@@ -21,10 +20,7 @@
 namespace gdcm
 {
 /**
- * \brief Class to represent the value of a Data Element.
- * \note
- * VALUE: A component of a Value Field. A Value Field may consist of one
- * or more of these components.
+ * \brief Class to dispatch template calls
  */
 template <typename TDE, typename TSwap, typename TType=uint8_t>
 class /*GDCM_EXPORT*/ ValueIO
@@ -34,7 +30,6 @@ public:
 
   static const std::ostream &Write(std::ostream &os, const Value& v);
 };
-
 
 } // end namespace gdcm
 
