@@ -457,7 +457,8 @@ bool FileDerivation::Derive()
     if( ds.FindDataElement( at3.GetTag() ) )
       {
       const gdcm::DataElement &de = ds.GetDataElement( at3.GetTag() );
-      at3.SetFromDataElement( de );
+      if( !de.IsEmpty() )
+        at3.SetFromDataElement( de );
       // Make sure that value #1 is at least 'DERIVED', so override in all cases:
       at3.SetValue( 0, values[0] );
       }
