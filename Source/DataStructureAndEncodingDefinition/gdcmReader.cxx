@@ -195,9 +195,9 @@ namespace
   class DefaultCaller
   {
   private:
-    DataSet & m_dataSet;
+    gdcm::DataSet & m_dataSet;
   public:
-    DefaultCaller(DataSet &ds): m_dataSet(ds){}
+    DefaultCaller(gdcm::DataSet &ds): m_dataSet(ds){}
     template<class T1, class T2>
       void ReadCommon(std::istream & is) const
         {
@@ -217,11 +217,11 @@ namespace
   class ReadUpToTagCaller 
   {
   private:
-    DataSet & m_dataSet;
-    const Tag & m_tag;
-    std::set<Tag> const & m_skipTags;
+    gdcm::DataSet & m_dataSet;
+    const gdcm::Tag & m_tag;
+    std::set<gdcm::Tag> const & m_skipTags;
   public:
-    ReadUpToTagCaller(DataSet &ds,const Tag & tag, std::set<Tag> const & skiptags)
+    ReadUpToTagCaller(gdcm::DataSet &ds,const gdcm::Tag & tag, std::set<gdcm::Tag> const & skiptags)
     :
     m_dataSet(ds),m_tag(tag),m_skipTags(skiptags)
     {
