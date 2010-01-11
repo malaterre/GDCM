@@ -564,6 +564,7 @@ assert(0);
     }
 }
 
+// GE_DLX-8-MONO2-Multiframe.dcm
 void DoCurves(const DataSet& ds, Pixmap& pixeldata)
 {
   unsigned int numcurves;
