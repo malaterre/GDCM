@@ -26,11 +26,10 @@ class MediaStorage;
  * \brief ImageReader
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
  * representation
- * By default it is also loading the lookup table and overlay when found as they impact the rendering or the image
+ * Image is different from Pixmap has it has a position and a direction in
+ * Space.
  *
- * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of attribute that belong to
- * what gdcm calls a 'Image'
- * 
+ * \see Image
  */
 class GDCM_EXPORT ImageReader : public PixmapReader
 {
