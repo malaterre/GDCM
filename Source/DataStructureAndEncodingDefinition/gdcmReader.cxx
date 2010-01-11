@@ -201,12 +201,12 @@ namespace
     template<class T1, class T2>
       void ReadCommon(std::istream & is) const
         {
-        m_dataSet.Read<T1,T2>(is);
+        m_dataSet.template Read<T1,T2>(is);
         }
     template<class T1, class T2>
       void ReadCommonWithLength(std::istream & is, VL & length) const
         {
-        m_dataSet.ReadWithLength<T1,T2>(is,length);
+        m_dataSet.template ReadWithLength<T1,T2>(is,length);
         }
     static void Check(bool b, std::istream &stream) 
       {
@@ -230,12 +230,12 @@ namespace
     template<class T1, class T2>
       void ReadCommon(std::istream & is) const
         {
-        m_dataSet.ReadUpToTag<T1,T2>(is,m_tag,m_skipTags);
+        m_dataSet.template ReadUpToTag<T1,T2>(is,m_tag,m_skipTags);
         }
     template<class T1, class T2>
       void ReadCommonWithLength(std::istream & is, VL & length) const
         {
-        m_dataSet.ReadUpToTagWithLength<T1,T2>(is,m_tag,length);
+        m_dataSet.template ReadUpToTagWithLength<T1,T2>(is,m_tag,length);
         }
     static void Check(bool , std::istream &)  {}
   }; 
@@ -505,10 +505,10 @@ std::istream &is = *Stream;
           // seek back tag + vr:
           is.seekg( -6, std::ios::cur );
           VR16ExplicitDataElement ide;
-          ide.Read<SwapperNoOp>( is );
+          ide.template Read<SwapperNoOp>( is );
           // If we are here it means we succeeded in reading the implicit data element:
           F->GetDataSet().Insert( ide );
-          F->GetDataSet().Read<VR16ExplicitDataElement,SwapperNoOp>(is);
+          F->GetDataSet().template Read<VR16ExplicitDataElement,SwapperNoOp>(is);
           // This file can only be rewritten as implicit...
           }
         catch ( Exception &ex1 )
@@ -541,7 +541,7 @@ std::istream &is = *Stream;
             // be inverted and all would be perfect...
             gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
             F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-            F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+            F->GetDataSet().template Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
             }
           catch ( Exception &ex )
             {
@@ -566,7 +566,7 @@ std::istream &is = *Stream;
             // Explicit/Implicit
             gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
             F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-            F->GetDataSet().Read<UNExplicitImplicitDataElement,SwapperNoOp>(is);
+            F->GetDataSet().template Read<UNExplicitImplicitDataElement,SwapperNoOp>(is);
             }
           }
         }
