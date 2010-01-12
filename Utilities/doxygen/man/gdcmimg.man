@@ -76,7 +76,8 @@ file-out  output filename
 
 \section supported Supported File Format (appropriate file extension)
 gdcmimg will base it's conversion process based on the file extension. Follows
-the list of recognized file extension. When no extension is found, DICOM file is assumed.
+the list of recognized file extension. When no extension is found, DICOM file
+is assumed.
 
 input format
 \verbatim
@@ -96,11 +97,12 @@ output format:
 \endverbatim
 
 For RAW file format, you should take special care of the --endian option.
-For the (old) JPEG file format, both the lossy and lossless format are supported, user should pay attention to
-the --sign option.
-For file format such as RLE or RAW, user is expected to fill in information required to find the dimension
-and type of input data as there is no other way to find this information. For all other file format,
-the properties are derived from the file format itself.
+For the (old) JPEG file format, both the lossy and lossless format are
+supported, user should pay attention to the --sign option.
+For file format such as RLE or RAW, user is expected to fill in information
+required to find the dimension and type of input data as there is no other way
+to find this information. For all other file format, the properties are derived
+from the file format itself.
 PNM file are supposed to be big endian.
 
 \section usage Typical usage
@@ -173,7 +175,8 @@ the image will be a Secondary Capture
 
 \subsection sopclassuid Specifying a SOP Class UID
 
-Instead of the default Secondary Capture Image Storage, one may want to specify, say VL Photographic Image Storage.
+Instead of the default Secondary Capture Image Storage, one may want to
+specify, say VL Photographic Image Storage.
 
 \verbatim
 $ gdcmimg --sop-class-uid 1.2.840.10008.5.1.4.1.1.77.1.4 input.jpg output.dcm 
@@ -182,7 +185,8 @@ $ gdcmimg --sop-class-uid 1.2.840.10008.5.1.4.1.1.77.1.4 input.jpg output.dcm
 \section warning Warning
 
 There are a couple of issues with gdcmimg implementation:
-For JFIF file and JP2 file (with header) the header is copied into the Pixel Data element which is illegal for JP2.
+For JFIF file and JP2 file (with header) the header is copied into the Pixel
+Data element which is illegal for JP2.
 Use gdcmconv to properly re-encode a JP2/JFIF file into J2K/JPG.
 
 \verbatim
@@ -190,11 +194,20 @@ $ gdcmimg input.jp2 output_jp2.dcm
 $ gdcmconv --j2k --force output_jp2.dcm output_j2k.dcm
 \endverbatim
 
-For RLE file, no check is done for crossing the row boundary. It is recommended to use gdcmconv --rle to re-encode into a proper RLE file in case of doubt.
+For RLE file, no check is done for crossing the row boundary. It is recommended
+to use gdcmconv --rle to re-encode into a proper RLE file in case of doubt.
+
+Of course if the compression is not ok with your setup, you can always
+de-encapsulated the DICOM file (typically JPEG) to a non-encapsulated form,
+using gdcmconv:
+
+\verbatim
+$ gdcmconv --raw input_jpeg.dcm output_raw.dcm
+\endverbatim
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>convert</b>(1), <b>dd</b>(1)
+<b>gdcmdump</b>(1), <b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>convert</b>(1), <b>dd</b>(1)
 
 \section copyright COPYRIGHT
 
