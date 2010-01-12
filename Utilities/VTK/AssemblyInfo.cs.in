@@ -2,7 +2,7 @@
 /*=========================================================================
 
   BSD License [http://www.opensource.org/licenses/bsd-license.php]
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -50,7 +50,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("GDCM -- http://gdcm.sourceforge.net")]
 [assembly: AssemblyProduct("vtkgdcm-sharp.dll")]
 [assembly: AssemblyDefaultAlias("vtkgdcm-sharp")]
-[assembly: AssemblyCopyright("Copyright ©2006-2009 Mathieu Malaterre. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright ©2006-2010 Mathieu Malaterre. All rights reserved.")]
 [assembly: AssemblyTrademark("GDCM -- http://gdcm.sourceforge.net")]
 [assembly: AssemblyCulture("")]
 

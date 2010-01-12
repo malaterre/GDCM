@@ -131,6 +131,6 @@ IMPORTANT NOTE: When converting from a lossy format such as JPEG, the informatio
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2009 Mathieu Malaterre
+Copyright (c) 2006-2010 Mathieu Malaterre
 
 */

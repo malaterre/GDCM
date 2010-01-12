@@ -15,7 +15,7 @@
 # The name-specific variable MONO_MODULE_<name>_EXTRA_DEPS may be used
 # to specify extra dependencies for the generated modules.
 #
-#  Copyright (c) 2006-2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.

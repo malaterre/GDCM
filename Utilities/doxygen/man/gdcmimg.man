@@ -211,6 +211,6 @@ $ gdcmconv --raw input_jpeg.dcm output_raw.dcm
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2009 Mathieu Malaterre
+Copyright (c) 2006-2010 Mathieu Malaterre
 
 */
