@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
   const char *filename = argv[1];
   const char *outfilename = argv[2];
 
-      size_t len = gdcm::System::FileSize(filename);
-      std::ifstream is(filename);
+  size_t len = gdcm::System::FileSize(filename);
+  std::ifstream is(filename);
 
-      char * buf = new char[len];
-      is.read(buf, len);
+  char * buf = new char[len];
+  is.read(buf, len);
 
   gdcm::ImageWriter writer;
   gdcm::Image &image = writer.GetImage();
@@ -57,16 +57,16 @@ int main(int argc, char *argv[])
   image.SetPhotometricInterpretation( pi );
   image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
 
-      gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-      pixeldata.SetByteValue( buf, len );
-      image.SetDataElement( pixeldata );
+  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+  pixeldata.SetByteValue( buf, len );
+  image.SetDataElement( pixeldata );
 
-      writer.SetFileName( outfilename );
-      if( !writer.Write() )
-        {
-        return 1;
-        }
-      delete[] buf;
+  writer.SetFileName( outfilename );
+  if( !writer.Write() )
+    {
+    return 1;
+    }
+  delete[] buf;
 
 
   return 0;
