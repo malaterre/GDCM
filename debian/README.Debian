@@ -1,9 +1,0 @@
-Debian packages of gdcm
----------------------------
-
-There are 3 primary packages at this point:
-libgdcm, libgdcm-dev and libgdcm-dbg, which respectively
-provide the library, static and headers for the library, and debug symbols for
-the shared library.
-
-- Mathieu Malaterre.
