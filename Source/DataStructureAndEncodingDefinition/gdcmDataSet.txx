@@ -92,6 +92,83 @@ namespace gdcm
   }
 
   template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadSelectedTags(std::istream &inputStream, const std::set<Tag> & selectedTags) {
+    if ( ! selectedTags.empty() )
+    {
+      const Tag maxTag = *(selectedTags.rbegin());
+      std::set<Tag> tags = selectedTags;
+      DataElement dataElem;
+
+      // TODO There's an optimization opportunity here:
+      // dataElem.Read only needs to read the value if the tag is selected!
+      // Niels Dekker, LKEB, Jan 2010.
+      while( !inputStream.eof() && dataElem.template Read<TDE,TSwap>(inputStream) )
+      {
+        const Tag tag = dataElem.GetTag();
+        const std::set<Tag>::iterator found = tags.find(tag);
+
+        if ( found != tags.end() )
+        {
+          InsertDataElement( dataElem );
+          tags.erase(found);
+
+          if ( tags.empty() )
+          {
+            // All selected tags were found, we can exit the loop:
+            break;
+          }
+        }
+        if ( ! (tag < maxTag ) )
+        {
+          // The maximum tag was encountered, and as we assume
+          // ascending tag ordering, we can exit the loop:
+          break;
+        }
+      }
+    }
+    return inputStream;
+  }
+
+
+  template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadSelectedTagsWithLength(std::istream &inputStream, const std::set<Tag> & selectedTags, VL & length) {
+    if ( ! selectedTags.empty() )
+    {
+      const Tag maxTag = *(selectedTags.rbegin());
+      std::set<Tag> tags = selectedTags;
+      DataElement dataElem;
+
+      // TODO There's an optimization opportunity here:
+      // dataElem.ReadWithLength only needs to read the value if the tag is selected!
+      // Niels Dekker, LKEB, Jan 2010.
+      while( !inputStream.eof() && dataElem.template ReadWithLength<TDE,TSwap>(inputStream, length) )
+      {
+        const Tag tag = dataElem.GetTag();
+        const std::set<Tag>::iterator found = tags.find(tag);
+
+        if ( found != tags.end() )
+        {
+          InsertDataElement( dataElem );
+          tags.erase(found);
+
+          if ( tags.empty() )
+          {
+            // All selected tags were found, we can exit the loop:
+            break;
+          }
+        }
+        if ( ! (tag < maxTag ) )
+        {
+          // The maximum tag was encountered, and as we assume
+          // ascending tag ordering, we can exit the loop:
+          break;
+        }
+      }
+    }
+    return inputStream;
+  }
+
+  template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadWithLength(std::istream &is, VL &length) {
     DataElement de;
     VL l = 0;

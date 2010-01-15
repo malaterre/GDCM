@@ -89,6 +89,9 @@ public:
   /// Will read only up to Tag 'tag'
   bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags);
 
+  /// Will only read the specified selected tags.
+  bool ReadSelectedTags(std::set<Tag> const & tags);
+
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();

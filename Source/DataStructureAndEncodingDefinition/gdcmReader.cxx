@@ -240,6 +240,30 @@ namespace
     static void Check(bool , std::istream &)  {}
   }; 
 
+  class ReadSelectedTagsCaller 
+  {
+  private:
+    DataSet & m_dataSet;
+    std::set<Tag> const & m_tags;
+  public:
+    ReadSelectedTagsCaller(DataSet &ds, std::set<Tag> const & tags)
+      :
+    m_dataSet(ds),m_tags(tags)
+    {
+    }
+
+    template<class T1, class T2>
+    void ReadCommon(std::istream & is) const
+    {
+      m_dataSet.template ReadSelectedTags<T1,T2>(is,m_tags);
+    }
+    template<class T1, class T2>
+    void ReadCommonWithLength(std::istream & is, VL & length) const
+    {
+      m_dataSet.template ReadSelectedTagsWithLength<T1,T2>(is,m_tags,length);
+    }
+    static void Check(bool , std::istream &)  {}
+  }; 
 }
 
 bool Reader::Read()
@@ -251,6 +275,12 @@ bool Reader::Read()
 bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
 {
   ReadUpToTagCaller caller(F->GetDataSet(),tag,skiptags);
+  return InternalReadCommon(caller);
+}
+
+bool Reader::ReadSelectedTags( std::set<Tag> const & selectedTags )
+{
+  ReadSelectedTagsCaller caller(F->GetDataSet(), selectedTags);
   return InternalReadCommon(caller);
 }
 

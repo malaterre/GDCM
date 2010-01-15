@@ -234,6 +234,11 @@ public:
   std::istream &ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length);
 
   template <typename TDE, typename TSwap>
+  std::istream &ReadSelectedTags(std::istream &is, const std::set<Tag> & tags);
+  template <typename TDE, typename TSwap>
+  std::istream &ReadSelectedTagsWithLength(std::istream &is, const std::set<Tag> & tags, VL & length);
+
+  template <typename TDE, typename TSwap>
   std::ostream const &Write(std::ostream &os) const;
 
   template <typename TDE, typename TSwap>
