@@ -394,8 +394,9 @@ int main (int argc, char *argv[])
   int version = 0;
 
   gdcm::UIDGenerator uid;
-  std::string series_uid = uid.Generate();
-  std::string study_uid = uid.Generate();
+  // Too early for UID Generation
+  std::string series_uid; // = uid.Generate();
+  std::string study_uid; // = uid.Generate();
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -638,18 +639,6 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
-    {
-    std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;
-    return 1;
-    }
-
-  if( !gdcm::UIDGenerator::IsValid( series_uid.c_str() ) )
-    {
-    std::cerr << "Invalid UID for Series UID: " << series_uid << std::endl;
-    return 1;
-    }
-
   // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
   if( !rootuid )
@@ -672,6 +661,26 @@ int main (int argc, char *argv[])
       }
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
+  if( study_uid.empty() )
+    {
+    study_uid = uid.Generate();
+    }
+  if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;
+    return 1;
+    }
+
+  if( series_uid.empty() )
+    {
+    series_uid  = uid.Generate();
+    }
+  if( !gdcm::UIDGenerator::IsValid( series_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Series UID: " << series_uid << std::endl;
+    return 1;
+    }
+
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
   gdcm::Trace::SetWarning( warning );
