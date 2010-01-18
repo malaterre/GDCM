@@ -125,7 +125,7 @@ void PrintHelp()
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "     --endian %s       Endianess (LSB/MSB)." << std::endl;
+  std::cout << "     --endian %s       Endianness (LSB/MSB)." << std::endl;
   std::cout << "  -d --depth %d        Depth (8/16/32)." << std::endl;
   std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
