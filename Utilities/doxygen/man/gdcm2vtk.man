@@ -113,7 +113,7 @@ $ gdcm2vtk inputfile output.vtk
 
 This command will convert the input DICOM file: inputfile into an old VTK Structured PointSets .vtk file.
 
-\section dicom DICOM
+\section convert_dicom CONVERT DICOM
 
 \verbatim
 $ gdcm2vtk input.dcm output.dcm
