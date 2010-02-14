@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dict edition="2008">
-<!--
+<dict edition="2009">
+  <!--
 This file was generated using the following commands:
 
   $ xsltproc PartToGDCM.xsl Part6.xml > tmp.xml
   $ xsltproc order.xsl tmp.xml > DICOMV3.xml
     -->
-<!--
-  Program: GDCM (Grassroots DICOM). A DICOM library
+  <!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2010 Mathieu Malaterre
@@ -56,7 +56,7 @@ This file was generated using the following commands:
   <entry group="0000" element="5110" vr="AT" vm="1" name="Display Format" retired="true"/>
   <entry group="0000" element="5120" vr="AT" vm="1" name="Page Position ID" retired="true"/>
   <entry group="0000" element="5130" vr="CS" vm="1" name="Text Format ID" retired="true"/>
-  <entry group="0000" element="5140" vr="CS" vm="1" name="Nor/Rev" retired="true"/>
+  <entry group="0000" element="5140" vr="CS" vm="1" name="Normal/Reverse" retired="true"/>
   <entry group="0000" element="5150" vr="CS" vm="1" name="Add Gray Scale" retired="true"/>
   <entry group="0000" element="5160" vr="CS" vm="1" name="Borders" retired="true"/>
   <entry group="0000" element="5170" vr="IS" vm="1" name="Copies" retired="true"/>
@@ -95,6 +95,7 @@ This file was generated using the following commands:
   <entry group="0004" element="1600" vr="UL" vm="1" retired="true" name="Number of References"/>
   <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End"/>
   <entry group="0008" element="0005" vr="CS" vm="1-n" name="Specific Character Set"/>
+  <entry group="0008" element="0006" vr="SQ" vm="1" name="Language Code Sequence"/>
   <entry group="0008" element="0008" vr="CS" vm="2-n" name="Image Type"/>
   <entry group="0008" element="0010" vr="CS" vm="1" retired="true" name="Recognition Code"/>
   <entry group="0008" element="0012" vr="DA" vm="1" name="Instance Creation Date"/>
@@ -121,6 +122,7 @@ This file was generated using the following commands:
   <entry group="0008" element="0041" vr="LO" vm="1" retired="true" name="Data Set Subtype"/>
   <entry group="0008" element="0042" vr="CS" vm="1" retired="true" name="Nuclear Medicine Series Type"/>
   <entry group="0008" element="0050" vr="SH" vm="1" name="Accession Number"/>
+  <entry group="0008" element="0051" vr="SQ" vm="1" name="Issuer of Accession Number Sequence"/>
   <entry group="0008" element="0052" vr="CS" vm="1" name="Query/Retrieve Level"/>
   <entry group="0008" element="0054" vr="AE" vm="1-n" name="Retrieve AE Title"/>
   <entry group="0008" element="0056" vr="CS" vm="1" name="Instance Availability"/>
@@ -154,12 +156,14 @@ This file was generated using the following commands:
   <entry group="0008" element="0114" vr="ST" vm="1" name="Coding Scheme External ID"/>
   <entry group="0008" element="0115" vr="ST" vm="1" name="Coding Scheme Name"/>
   <entry group="0008" element="0116" vr="ST" vm="1" name="Coding Scheme Responsible Organization"/>
+  <entry group="0008" element="0117" vr="UI" vm="1" name="Context UID"/>
   <entry group="0008" element="0201" vr="SH" vm="1" name="Timezone Offset From UTC"/>
   <entry group="0008" element="1000" vr="AE" vm="1" retired="true" name="Network ID"/>
   <entry group="0008" element="1010" vr="SH" vm="1" name="Station Name"/>
   <entry group="0008" element="1030" vr="LO" vm="1" name="Study Description"/>
   <entry group="0008" element="1032" vr="SQ" vm="1" name="Procedure Code Sequence"/>
   <entry group="0008" element="103e" vr="LO" vm="1" name="Series Description"/>
+  <entry group="0008" element="103f" vr="SQ" vm="1" name="Series Description Code Sequence"/>
   <entry group="0008" element="1040" vr="LO" vm="1" name="Institutional Department Name"/>
   <entry group="0008" element="1048" vr="PN" vm="1-n" name="Physician(s) of Record"/>
   <entry group="0008" element="1049" vr="SQ" vm="1" name="Physician(s) of Record Identification Sequence"/>
@@ -179,6 +183,7 @@ This file was generated using the following commands:
   <entry group="0008" element="1120" vr="SQ" vm="1" name="Referenced Patient Sequence"/>
   <entry group="0008" element="1125" vr="SQ" vm="1" name="Referenced Visit Sequence"/>
   <entry group="0008" element="1130" vr="SQ" vm="1" retired="true" name="Referenced Overlay Sequence"/>
+  <entry group="0008" element="1134" vr="SQ" vm="1" name="Referenced Stereometric Instance Sequence"/>
   <entry group="0008" element="113a" vr="SQ" vm="1" name="Referenced Waveform Sequence"/>
   <entry group="0008" element="1140" vr="SQ" vm="1" name="Referenced Image Sequence"/>
   <entry group="0008" element="1145" vr="SQ" vm="1" retired="true" name="Referenced Curve Sequence"/>
@@ -188,6 +193,11 @@ This file was generated using the following commands:
   <entry group="0008" element="1155" vr="UI" vm="1" name="Referenced SOP Instance UID"/>
   <entry group="0008" element="115a" vr="UI" vm="1-n" name="SOP Classes Supported"/>
   <entry group="0008" element="1160" vr="IS" vm="1-n" name="Referenced Frame Number"/>
+  <entry group="0008" element="1161" vr="UL" vm="1-n" name="Simple Frame List"/>
+  <entry group="0008" element="1162" vr="UL" vm="3-3n" name="Calculated Frame List"/>
+  <entry group="0008" element="1163" vr="FD" vm="2" name="Time Range"/>
+  <entry group="0008" element="1164" vr="SQ" vm="1" name="Frame Extraction Sequence"/>
+  <entry group="0008" element="1167" vr="UI" vm="1" name="Multi-Frame Source SOP Instance UID"/>
   <entry group="0008" element="1195" vr="UI" vm="1" name="Transaction UID"/>
   <entry group="0008" element="1197" vr="US" vm="1" name="Failure Reason"/>
   <entry group="0008" element="1198" vr="SQ" vm="1" name="Failed SOP Sequence"/>
@@ -206,6 +216,9 @@ This file was generated using the following commands:
   <entry group="0008" element="212a" vr="IS" vm="1" name="Number of Views in Stage"/>
   <entry group="0008" element="2130" vr="DS" vm="1-n" name="Event Elapsed Time(s)"/>
   <entry group="0008" element="2132" vr="LO" vm="1-n" name="Event Timer Name(s)"/>
+  <entry group="0008" element="2133" vr="SQ" vm="1" name="Event Timer Sequence"/>
+  <entry group="0008" element="2134" vr="FD" vm="1" name="Event Time Offset"/>
+  <entry group="0008" element="2135" vr="SQ" vm="1" name="Event Code Sequence"/>
   <entry group="0008" element="2142" vr="IS" vm="1" name="Start Trim"/>
   <entry group="0008" element="2143" vr="IS" vm="1" name="Stop Trim"/>
   <entry group="0008" element="2144" vr="IS" vm="1" name="Recommended Display Frame Rate"/>
@@ -245,7 +258,7 @@ This file was generated using the following commands:
   <entry group="0008" element="9208" vr="CS" vm="1" name="Complex Image Component"/>
   <entry group="0008" element="9209" vr="CS" vm="1" name="Acquisition Contrast"/>
   <entry group="0008" element="9215" vr="SQ" vm="1" name="Derivation Code Sequence"/>
-  <entry group="0008" element="9237" vr="SQ" vm="1" name="Referenced Grayscale Presentation State Sequence"/>
+  <entry group="0008" element="9237" vr="SQ" vm="1" name="Referenced Presentation State Sequence"/>
   <entry group="0008" element="9410" vr="SQ" vm="1" name="Referenced Other Plane Sequence"/>
   <entry group="0008" element="9458" vr="SQ" vm="1" name="Frame Display Sequence"/>
   <entry group="0008" element="9459" vr="FL" vm="1" name="Recommended Display Frame Rate in Float"/>
@@ -254,12 +267,13 @@ This file was generated using the following commands:
   <entry group="0010" element="0020" vr="LO" vm="1" name="Patient ID"/>
   <entry group="0010" element="0021" vr="LO" vm="1" name="Issuer of Patient ID"/>
   <entry group="0010" element="0022" vr="CS" vm="1" name="Type of Patient ID"/>
+  <entry group="0010" element="0024" vr="SQ" vm="1" name="Issuer of Patient ID Qualifiers Sequence"/>
   <entry group="0010" element="0030" vr="DA" vm="1" name="Patient's Birth Date"/>
   <entry group="0010" element="0032" vr="TM" vm="1" name="Patient's Birth Time"/>
   <entry group="0010" element="0040" vr="CS" vm="1" name="Patient's Sex"/>
   <entry group="0010" element="0050" vr="SQ" vm="1" name="Patient's Insurance Plan Code Sequence"/>
   <entry group="0010" element="0101" vr="SQ" vm="1" name="Patient's Primary Language Code Sequence"/>
-  <entry group="0010" element="0102" vr="SQ" vm="1" name="Patient's Primary Language Code Modifier Sequence"/>
+  <entry group="0010" element="0102" vr="SQ" vm="1" name="Patient's Primary Language Modifier Code Sequence"/>
   <entry group="0010" element="1000" vr="LO" vm="1-n" name="Other Patient IDs"/>
   <entry group="0010" element="1001" vr="PN" vm="1-n" name="Other Patient Names"/>
   <entry group="0010" element="1002" vr="SQ" vm="1" name="Other Patient IDs Sequence"/>
@@ -288,6 +302,7 @@ This file was generated using the following commands:
   <entry group="0010" element="2201" vr="LO" vm="1" name="Patient Species Description"/>
   <entry group="0010" element="2202" vr="SQ" vm="1" name="Patient Species Code Sequence"/>
   <entry group="0010" element="2203" vr="CS" vm="1" name="Patient's Sex Neutered"/>
+  <entry group="0010" element="2210" vr="CS" vm="1" name="Anatomical Orientation Type"/>
   <entry group="0010" element="2292" vr="LO" vm="1" name="Patient Breed Description"/>
   <entry group="0010" element="2293" vr="SQ" vm="1" name="Patient Breed Code Sequence"/>
   <entry group="0010" element="2294" vr="SQ" vm="1" name="Breed Registration Sequence"/>
@@ -313,6 +328,11 @@ This file was generated using the following commands:
   <entry group="0012" element="0064" vr="SQ" vm="1" name="De-identification Method Code Sequence"/>
   <entry group="0012" element="0071" vr="LO" vm="1" name="Clinical Trial Series ID"/>
   <entry group="0012" element="0072" vr="LO" vm="1" name="Clinical Trial Series Description"/>
+  <entry group="0012" element="0081" vr="LO" vm="1" name="Clinical Trial Protocol Ethics Committee Name"/>
+  <entry group="0012" element="0082" vr="LO" vm="1" name="Clinical Trial Protocol Ethics Committee Approval Number"/>
+  <entry group="0012" element="0083" vr="SQ" vm="1" name="Consent for Clinical Trial Use Sequence"/>
+  <entry group="0012" element="0084" vr="CS" vm="1" name="Distribution Type"/>
+  <entry group="0012" element="0085" vr="CS" vm="1" name="Consent for Distribution Flag"/>
   <entry group="0018" element="0010" vr="LO" vm="1" name="Contrast/Bolus Agent"/>
   <entry group="0018" element="0012" vr="SQ" vm="1" name="Contrast/Bolus Agent Sequence"/>
   <entry group="0018" element="0014" vr="SQ" vm="1" name="Contrast/Bolus Administration Route Sequence"/>
@@ -326,7 +346,7 @@ This file was generated using the following commands:
   <entry group="0018" element="0026" vr="SQ" vm="1" name="Intervention Drug Information Sequence"/>
   <entry group="0018" element="0027" vr="TM" vm="1" name="Intervention Drug Stop Time"/>
   <entry group="0018" element="0028" vr="DS" vm="1" name="Intervention Drug Dose"/>
-  <entry group="0018" element="0029" vr="SQ" vm="1" name="Intervention Drug Sequence"/>
+  <entry group="0018" element="0029" vr="SQ" vm="1" name="Intervention Drug Code Sequence"/>
   <entry group="0018" element="002a" vr="SQ" vm="1" name="Additional Drug Sequence"/>
   <entry group="0018" element="0030" vr="LO" vm="1-n" retired="true" name="Radionuclide"/>
   <entry group="0018" element="0031" vr="LO" vm="1" name="Radiopharmaceutical"/>
@@ -340,6 +360,7 @@ This file was generated using the following commands:
   <entry group="0018" element="0039" vr="CS" vm="1" retired="true" name="Therapy Description"/>
   <entry group="0018" element="003a" vr="ST" vm="1" name="Intervention Description"/>
   <entry group="0018" element="0040" vr="IS" vm="1" name="Cine Rate"/>
+  <entry group="0018" element="0042" vr="CS" vm="1" name="Initial Cine Run State"/>
   <entry group="0018" element="0050" vr="DS" vm="1" name="Slice Thickness"/>
   <entry group="0018" element="0060" vr="DS" vm="1" name="KVP"/>
   <entry group="0018" element="0070" vr="IS" vm="1" name="Counts Accumulated"/>
@@ -375,10 +396,10 @@ This file was generated using the following commands:
   <entry group="0018" element="1011" vr="LO" vm="1" retired="true" name="Hardcopy Creation Device ID"/>
   <entry group="0018" element="1012" vr="DA" vm="1" name="Date of Secondary Capture"/>
   <entry group="0018" element="1014" vr="TM" vm="1" name="Time of Secondary Capture"/>
-  <entry group="0018" element="1016" vr="LO" vm="1" name="Secondary Capture Device Manufacturers"/>
+  <entry group="0018" element="1016" vr="LO" vm="1" name="Secondary Capture Device Manufacturer"/>
   <entry group="0018" element="1017" vr="LO" vm="1" retired="true" name="Hardcopy Device Manufacturer"/>
   <entry group="0018" element="1018" vr="LO" vm="1" name="Secondary Capture Device Manufacturer's Model Name"/>
-  <entry group="0018" element="1019" vr="LO" vm="1-n" name="Secondary Capture Device Software Version(s)"/>
+  <entry group="0018" element="1019" vr="LO" vm="1-n" name="Secondary Capture Device Software Versions"/>
   <entry group="0018" element="101a" vr="LO" vm="1-n" retired="true" name="Hardcopy Device Software Version"/>
   <entry group="0018" element="101b" vr="LO" vm="1" retired="true" name="Hardcopy Device Manufacturer's Model Name"/>
   <entry group="0018" element="1020" vr="LO" vm="1-n" name="Software Version(s)"/>
@@ -557,7 +578,7 @@ This file was generated using the following commands:
   <entry group="0018" element="3105" vr="IS" vm="1-n" name="Lesion Number"/>
   <entry group="0018" element="4000" vr="LT" vm="1" retired="true" name="Acquisition Comments"/>
   <entry group="0018" element="5000" vr="SH" vm="1-n" name="Output Power"/>
-  <entry group="0018" element="5010" vr="LO" vm="3" name="Transducer Data"/>
+  <entry group="0018" element="5010" vr="LO" vm="1-n" name="Transducer Data"/>
   <entry group="0018" element="5012" vr="DS" vm="1" name="Focus Depth"/>
   <entry group="0018" element="5020" vr="LO" vm="1" name="Processing Function"/>
   <entry group="0018" element="5021" vr="LO" vm="1" retired="true" name="Postprocessing Function"/>
@@ -601,7 +622,7 @@ This file was generated using the following commands:
   <entry group="0018" element="6039" vr="SL" vm="1" name="Doppler Sample Volume X Position"/>
   <entry group="0018" element="603a" vr="UL" vm="1" retired="true" name="Doppler Sample Volume Y Position (Retired)"/>
   <entry group="0018" element="603b" vr="SL" vm="1" name="Doppler Sample Volume Y Position"/>
-  <entry group="0018" element="603c" vr="UL" vm="1" retired="true" name="TM-Line Position X0 (Retired)"/>
+  <entry group="0018" element="603c" vr="UL" vm="1" retired="true" name="TMLine Position X0 (Retired)"/>
   <entry group="0018" element="603d" vr="SL" vm="1" name="TM-Line Position X0"/>
   <entry group="0018" element="603e" vr="UL" vm="1" retired="true" name="TM-Line Position Y0 (Retired)"/>
   <entry group="0018" element="603f" vr="SL" vm="1" name="TM-Line Position Y0"/>
@@ -657,6 +678,8 @@ This file was generated using the following commands:
   <entry group="0018" element="7050" vr="CS" vm="1-n" name="Filter Material"/>
   <entry group="0018" element="7052" vr="DS" vm="1-n" name="Filter Thickness Minimum"/>
   <entry group="0018" element="7054" vr="DS" vm="1-n" name="Filter Thickness Maximum"/>
+  <entry group="0018" element="7056" vr="FL" vm="1-n" name="Filter Beam Path Length Minimum"/>
+  <entry group="0018" element="7058" vr="FL" vm="1-n" name="Filter Beam Path Length Maximum"/>
   <entry group="0018" element="7060" vr="CS" vm="1" name="Exposure Control Mode"/>
   <entry group="0018" element="7062" vr="LT" vm="1" name="Exposure Control Mode Description"/>
   <entry group="0018" element="7064" vr="CS" vm="1" name="Exposure Status"/>
@@ -782,8 +805,8 @@ This file was generated using the following commands:
   <entry group="0018" element="9184" vr="FD" vm="1" name="Tagging Delay"/>
   <entry group="0018" element="9185" vr="ST" vm="1" name="Respiratory Motion Compensation Technique Description"/>
   <entry group="0018" element="9186" vr="SH" vm="1" name="Respiratory Signal Source ID"/>
-  <entry group="0018" element="9195" vr="FD" vm="1" retired="true" name="Chemical Shifts Minimum Integration Limit in Hz"/>
-  <entry group="0018" element="9196" vr="FD" vm="1" retired="true" name="Chemical Shifts Maximum Integration Limit in Hz"/>
+  <entry group="0018" element="9195" vr="FD" vm="1" retired="true" name="Chemical Shift Minimum Integration Limit in Hz"/>
+  <entry group="0018" element="9196" vr="FD" vm="1" retired="true" name="Chemical Shift Maximum Integration Limit in Hz"/>
   <entry group="0018" element="9197" vr="SQ" vm="1" name="MR Velocity Encoding Sequence"/>
   <entry group="0018" element="9198" vr="CS" vm="1" name="First Order Phase Correction"/>
   <entry group="0018" element="9199" vr="CS" vm="1" name="Water Referenced Phase Correction"/>
@@ -802,8 +825,8 @@ This file was generated using the following commands:
   <entry group="0018" element="9239" vr="SQ" vm="1" name="Specific Absorption Rate Sequence"/>
   <entry group="0018" element="9240" vr="US" vm="1" name="RF Echo Train Length"/>
   <entry group="0018" element="9241" vr="US" vm="1" name="Gradient Echo Train Length"/>
-  <entry group="0018" element="9295" vr="FD" vm="1" name="Chemical Shifts Minimum Integration Limit in ppm"/>
-  <entry group="0018" element="9296" vr="FD" vm="1" name="Chemical Shifts Maximum Integration Limit in ppm"/>
+  <entry group="0018" element="9295" vr="FD" vm="1" name="Chemical Shift Minimum Integration Limit in ppm"/>
+  <entry group="0018" element="9296" vr="FD" vm="1" name="Chemical Shift Maximum Integration Limit in ppm"/>
   <entry group="0018" element="9301" vr="SQ" vm="1" name="CT Acquisition Type Sequence"/>
   <entry group="0018" element="9302" vr="CS" vm="1" name="Acquisition Type"/>
   <entry group="0018" element="9303" vr="FD" vm="1" name="Tube Angle"/>
@@ -849,6 +872,7 @@ This file was generated using the following commands:
   <entry group="0018" element="9346" vr="SQ" vm="1" name="CTDI Phantom Type Code Sequence"/>
   <entry group="0018" element="9351" vr="FL" vm="1" name="Calcium Scoring Mass Factor Patient"/>
   <entry group="0018" element="9352" vr="FL" vm="3" name="Calcium Scoring Mass Factor Device"/>
+  <entry group="0018" element="9353" vr="FL" vm="1" name="Energy Weighting Factor"/>
   <entry group="0018" element="9360" vr="SQ" vm="1" name="CT Additional X-Ray Source Sequence"/>
   <entry group="0018" element="9401" vr="SQ" vm="1" name="Projection Pixel Calibration Sequence"/>
   <entry group="0018" element="9402" vr="FL" vm="1" name="Distance Source to Isocenter"/>
@@ -929,6 +953,62 @@ This file was generated using the following commands:
   <entry group="0018" element="9605" vr="FD" vm="1" name="Diffusion b-value YY"/>
   <entry group="0018" element="9606" vr="FD" vm="1" name="Diffusion b-value YZ"/>
   <entry group="0018" element="9607" vr="FD" vm="1" name="Diffusion b-value ZZ"/>
+  <entry group="0018" element="9701" vr="DT" vm="1" name="Decay Correction DateTime"/>
+  <entry group="0018" element="9715" vr="FD" vm="1" name="Start Density Threshold"/>
+  <entry group="0018" element="9716" vr="FD" vm="1" name="Start Relative Density Difference Threshold"/>
+  <entry group="0018" element="9717" vr="FD" vm="1" name="Start Cardiac Trigger Count Threshold"/>
+  <entry group="0018" element="9718" vr="FD" vm="1" name="Start Respiratory Trigger Count Threshold"/>
+  <entry group="0018" element="9719" vr="FD" vm="1" name="Termination Counts Threshold"/>
+  <entry group="0018" element="9720" vr="FD" vm="1" name="Termination Density Threshold"/>
+  <entry group="0018" element="9721" vr="FD" vm="1" name="Termination Relative Density Threshold"/>
+  <entry group="0018" element="9722" vr="FD" vm="1" name="Termination Time Threshold"/>
+  <entry group="0018" element="9723" vr="FD" vm="1" name="Termination Cardiac Trigger Count Threshold"/>
+  <entry group="0018" element="9724" vr="FD" vm="1" name="Termination Respiratory Trigger Count Threshold"/>
+  <entry group="0018" element="9725" vr="CS" vm="1" name="Detector Geometry"/>
+  <entry group="0018" element="9726" vr="FD" vm="1" name="Transverse Detector Separation"/>
+  <entry group="0018" element="9727" vr="FD" vm="1" name="Axial Detector Dimension"/>
+  <entry group="0018" element="9729" vr="US" vm="1" name="Radiopharmaceutical Agent Number"/>
+  <entry group="0018" element="9732" vr="SQ" vm="1" name="PET Frame Acquisition Sequence"/>
+  <entry group="0018" element="9733" vr="SQ" vm="1" name="PET Detector Motion Details Sequence"/>
+  <entry group="0018" element="9734" vr="SQ" vm="1" name="PET Table Dynamics Sequence"/>
+  <entry group="0018" element="9735" vr="SQ" vm="1" name="PET Position Sequence"/>
+  <entry group="0018" element="9736" vr="SQ" vm="1" name="PET Frame Correction Factors Sequence"/>
+  <entry group="0018" element="9737" vr="SQ" vm="1" name="Radiopharmaceutical Usage Sequence"/>
+  <entry group="0018" element="9738" vr="CS" vm="1" name="Attenuation Correction Source"/>
+  <entry group="0018" element="9739" vr="US" vm="1" name="Number of Iterations"/>
+  <entry group="0018" element="9740" vr="US" vm="1" name="Number of Subsets"/>
+  <entry group="0018" element="9749" vr="SQ" vm="1" name="PET Reconstruction Sequence"/>
+  <entry group="0018" element="9751" vr="SQ" vm="1" name="PET Frame Type Sequence"/>
+  <entry group="0018" element="9755" vr="CS" vm="1" name="Time of Flight Information Used"/>
+  <entry group="0018" element="9756" vr="CS" vm="1" name="Reconstruction Type"/>
+  <entry group="0018" element="9758" vr="CS" vm="1" name="Decay Corrected"/>
+  <entry group="0018" element="9759" vr="CS" vm="1" name="Attenuation Corrected"/>
+  <entry group="0018" element="9760" vr="CS" vm="1" name="Scatter Corrected"/>
+  <entry group="0018" element="9761" vr="CS" vm="1" name="Dead Time Corrected"/>
+  <entry group="0018" element="9762" vr="CS" vm="1" name="Gantry Motion Corrected"/>
+  <entry group="0018" element="9763" vr="CS" vm="1" name="Patient Motion Corrected"/>
+  <entry group="0018" element="9764" vr="CS" vm="1" name="Count Loss Normalization Corrected"/>
+  <entry group="0018" element="9765" vr="CS" vm="1" name="Randoms Corrected"/>
+  <entry group="0018" element="9766" vr="CS" vm="1" name="Non-uniform Radial Sampling Corrected"/>
+  <entry group="0018" element="9767" vr="CS" vm="1" name="Sensitivity Calibrated"/>
+  <entry group="0018" element="9768" vr="CS" vm="1" name="Detector Normalization Correction"/>
+  <entry group="0018" element="9769" vr="CS" vm="1" name="Iterative Reconstruction Method"/>
+  <entry group="0018" element="9770" vr="CS" vm="1" name="Attenuation Correction Temporal Relationship"/>
+  <entry group="0018" element="9771" vr="SQ" vm="1" name="Patient Physiological State Sequence"/>
+  <entry group="0018" element="9772" vr="SQ" vm="1" name="Patient Physiological State Code Sequence"/>
+  <entry group="0018" element="9801" vr="FD" vm="1-n" name="Depth(s) of Focus"/>
+  <entry group="0018" element="9803" vr="SQ" vm="1" name="Excluded Intervals Sequence"/>
+  <entry group="0018" element="9804" vr="DT" vm="1" name="Exclusion Start Datetime"/>
+  <entry group="0018" element="9805" vr="FD" vm="1" name="Exclusion Duration"/>
+  <entry group="0018" element="9806" vr="SQ" vm="1" name="US Image Description Sequence"/>
+  <entry group="0018" element="9807" vr="SQ" vm="1" name="Image Data Type Sequence"/>
+  <entry group="0018" element="9808" vr="CS" vm="1" name="Data Type"/>
+  <entry group="0018" element="9809" vr="SQ" vm="1" name="Transducer Scan Pattern Code Sequence"/>
+  <entry group="0018" element="980b" vr="CS" vm="1" name="Aliased Data Type"/>
+  <entry group="0018" element="980c" vr="CS" vm="1" name="Position Measuring Device Used"/>
+  <entry group="0018" element="980d" vr="SQ" vm="1" name="Transducer Geometry Code Sequence"/>
+  <entry group="0018" element="980e" vr="SQ" vm="1" name="Transducer Beam Steering Code Sequence"/>
+  <entry group="0018" element="980f" vr="SQ" vm="1" name="Transducer Application Code Sequence"/>
   <entry group="0018" element="a001" vr="SQ" vm="1" name="Contributing Equipment Sequence"/>
   <entry group="0018" element="a002" vr="DT" vm="1" name="Contribution Date Time"/>
   <entry group="0018" element="a003" vr="ST" vm="1" name="Contribution Description"/>
@@ -947,7 +1027,7 @@ This file was generated using the following commands:
   <entry group="0020" element="0020" vr="CS" vm="2" name="Patient Orientation"/>
   <entry group="0020" element="0022" vr="IS" vm="1" retired="true" name="Overlay Number"/>
   <entry group="0020" element="0024" vr="IS" vm="1" retired="true" name="Curve Number"/>
-  <entry group="0020" element="0026" vr="IS" vm="1" retired="true" name="Lookup Table Number"/>
+  <entry group="0020" element="0026" vr="IS" vm="1" retired="true" name="LUT Number"/>
   <entry group="0020" element="0030" vr="DS" vm="3" retired="true" name="Image Position"/>
   <entry group="0020" element="0032" vr="DS" vm="3" name="Image Position (Patient)"/>
   <entry group="0020" element="0035" vr="DS" vm="6" retired="true" name="Image Orientation"/>
@@ -962,6 +1042,7 @@ This file was generated using the following commands:
   <entry group="0020" element="0105" vr="IS" vm="1" name="Number of Temporal Positions"/>
   <entry group="0020" element="0110" vr="DS" vm="1" name="Temporal Resolution"/>
   <entry group="0020" element="0200" vr="UI" vm="1" name="Synchronization Frame of Reference UID"/>
+  <entry group="0020" element="0242" vr="UI" vm="1" name="SOP Instance UID of Concatenation Source"/>
   <entry group="0020" element="1000" vr="IS" vm="1" retired="true" name="Series in Study"/>
   <entry group="0020" element="1001" vr="IS" vm="1" retired="true" name="Acquisitions in Series"/>
   <entry group="0020" element="1002" vr="IS" vm="1" name="Images in Acquisition"/>
@@ -1025,6 +1106,20 @@ This file was generated using the following commands:
   <entry group="0020" element="9255" vr="FD" vm="1" name="Nominal Respiratory Trigger Delay Time"/>
   <entry group="0020" element="9256" vr="FD" vm="1" name="Respiratory Trigger Delay Threshold"/>
   <entry group="0020" element="9257" vr="FD" vm="1" name="Actual Respiratory Trigger Delay Time"/>
+  <entry group="0020" element="9301" vr="FD" vm="3" name="Image Position (Volume)"/>
+  <entry group="0020" element="9302" vr="FD" vm="6" name="Image Orientation (Volume)"/>
+  <entry group="0020" element="9307" vr="CS" vm="1" name="Ultrasound Acquisition Geometry"/>
+  <entry group="0020" element="9308" vr="FD" vm="3" name="Apex Position"/>
+  <entry group="0020" element="9309" vr="FD" vm="16" name="Volume to Transducer Mapping Matrix"/>
+  <entry group="0020" element="930a" vr="FD" vm="16" name="Volume to Table Mapping Matrix"/>
+  <entry group="0020" element="930c" vr="CS" vm="1" name="Patient Frame of Reference Source"/>
+  <entry group="0020" element="930d" vr="FD" vm="1" name="Temporal Position Time Offset"/>
+  <entry group="0020" element="930e" vr="SQ" vm="1" name="Plane Position (Volume) Sequence"/>
+  <entry group="0020" element="930f" vr="SQ" vm="1" name="Plane Orientation (Volume) Sequence"/>
+  <entry group="0020" element="9310" vr="SQ" vm="1" name="Temporal Position Sequence"/>
+  <entry group="0020" element="9311" vr="CS" vm="1" name="Dimension Organization Type"/>
+  <entry group="0020" element="9312" vr="UI" vm="1" name="Volume Frame of Reference UID"/>
+  <entry group="0020" element="9313" vr="UI" vm="1" name="Table Frame of Reference UID"/>
   <entry group="0020" element="9421" vr="LO" vm="1" name="Dimension Description Label"/>
   <entry group="0020" element="9450" vr="SQ" vm="1" name="Patient Orientation in Frame Sequence"/>
   <entry group="0020" element="9453" vr="LO" vm="1" name="Frame Label"/>
@@ -1154,7 +1249,7 @@ This file was generated using the following commands:
   <entry group="0028" element="0730" vr="US" vm="1" retired="true" name="Adaptive Map Format"/>
   <entry group="0028" element="0740" vr="US" vm="1" retired="true" name="Code Number Format"/>
   <entry group="0028" element="08x0" vr="CS" vm="1-n" retired="true" name="Code Label"/>
-  <entry group="0028" element="08x2" vr="US" vm="1" retired="true" name="Number of Table"/>
+  <entry group="0028" element="08x2" vr="US" vm="1" retired="true" name="Number of Tables"/>
   <entry group="0028" element="08x3" vr="AT" vm="1-n" retired="true" name="Code Table Location"/>
   <entry group="0028" element="08x4" vr="US" vm="1" retired="true" name="Bits For Code Word"/>
   <entry group="0028" element="08x8" vr="AT" vm="1-n" retired="true" name="Image Data Location"/>
@@ -1175,6 +1270,7 @@ This file was generated using the following commands:
   <entry group="0028" element="1101" vr="US_SS" vm="3" name="Red Palette Color Lookup Table Descriptor"/>
   <entry group="0028" element="1102" vr="US_SS" vm="3" name="Green Palette Color Lookup Table Descriptor"/>
   <entry group="0028" element="1103" vr="US_SS" vm="3" name="Blue Palette Color Lookup Table Descriptor"/>
+  <entry group="0028" element="1104" vr="US" vm="3" name="Alpha Palette Color Lookup Table Descriptor"/>
   <entry group="0028" element="1111" vr="US_SS" vm="4" retired="true" name="Large Red Palette Color Lookup Table Descriptor"/>
   <entry group="0028" element="1112" vr="US_SS" vm="4" retired="true" name="Large Green Palette Color Lookup Table Descriptor"/>
   <entry group="0028" element="1113" vr="US_SS" vm="4" retired="true" name="Large Blue Palette Color Lookup Table Descriptor"/>
@@ -1183,6 +1279,7 @@ This file was generated using the following commands:
   <entry group="0028" element="1201" vr="OW" vm="1" name="Red Palette Color Lookup Table Data"/>
   <entry group="0028" element="1202" vr="OW" vm="1" name="Green Palette Color Lookup Table Data"/>
   <entry group="0028" element="1203" vr="OW" vm="1" name="Blue Palette Color Lookup Table Data"/>
+  <entry group="0028" element="1204" vr="OW" vm="1" name="Alpha Palette Color Lookup Table Data"/>
   <entry group="0028" element="1211" vr="OW" vm="1" retired="true" name="Large Red Palette Color Lookup Table Data"/>
   <entry group="0028" element="1212" vr="OW" vm="1" retired="true" name="Large Green Palette Color Lookup Table Data"/>
   <entry group="0028" element="1213" vr="OW" vm="1" retired="true" name="Large Blue Palette Color Lookup Table Data"/>
@@ -1190,11 +1287,25 @@ This file was generated using the following commands:
   <entry group="0028" element="1221" vr="OW" vm="1" name="Segmented Red Palette Color Lookup Table Data"/>
   <entry group="0028" element="1222" vr="OW" vm="1" name="Segmented Green Palette Color Lookup Table Data"/>
   <entry group="0028" element="1223" vr="OW" vm="1" name="Segmented Blue Palette Color Lookup Table Data"/>
-  <entry group="0028" element="1300" vr="CS" vm="1" name="Implant Present"/>
+  <entry group="0028" element="1300" vr="CS" vm="1" name="Breast Implant Present"/>
   <entry group="0028" element="1350" vr="CS" vm="1" name="Partial View"/>
   <entry group="0028" element="1351" vr="ST" vm="1" name="Partial View Description"/>
   <entry group="0028" element="1352" vr="SQ" vm="1" name="Partial View Code Sequence"/>
   <entry group="0028" element="135a" vr="CS" vm="1" name="Spatial Locations Preserved"/>
+  <entry group="0028" element="1401" vr="SQ" vm="1" name="Data Frame Assignment Sequence"/>
+  <entry group="0028" element="1402" vr="CS" vm="1" name="Data Path Assignment"/>
+  <entry group="0028" element="1403" vr="US" vm="1" name="Bits Mapped to Color Lookup Table"/>
+  <entry group="0028" element="1404" vr="SQ" vm="1" name="Blending LUT 1 Sequence"/>
+  <entry group="0028" element="1405" vr="CS" vm="1" name="Blending LUT 1 Transfer Function"/>
+  <entry group="0028" element="1406" vr="FD" vm="1" name="Blending Weight Constant"/>
+  <entry group="0028" element="1407" vr="US" vm="3" name="Blending Lookup Table Descriptor"/>
+  <entry group="0028" element="1408" vr="OW" vm="1" name="Blending Lookup Table Data"/>
+  <entry group="0028" element="140b" vr="SQ" vm="1" name="Enhanced Palette Color Lookup Table Sequence"/>
+  <entry group="0028" element="140c" vr="SQ" vm="1" name="Blending LUT 2 Sequence"/>
+  <entry group="0028" element="140d" vr="CS" vm="1" name="Blending LUT 2 Transfer Function"/>
+  <entry group="0028" element="140e" vr="CS" vm="1" name="Data Path ID"/>
+  <entry group="0028" element="140f" vr="CS" vm="1" name="RGB LUT Transfer Function"/>
+  <entry group="0028" element="1410" vr="CS" vm="1" name="Alpha LUT Transfer Function"/>
   <entry group="0028" element="2000" vr="OB" vm="1" name="ICC Profile"/>
   <entry group="0028" element="2110" vr="CS" vm="1" name="Lossy Image Compression"/>
   <entry group="0028" element="2112" vr="DS" vm="1-n" name="Lossy Image Compression Ratio"/>
@@ -1210,7 +1321,7 @@ This file was generated using the following commands:
   <entry group="0028" element="5000" vr="SQ" vm="1" retired="true" name="Bi-Plane Acquisition Sequence"/>
   <entry group="0028" element="6010" vr="US" vm="1" name="Representative Frame Number"/>
   <entry group="0028" element="6020" vr="US" vm="1-n" name="Frame Numbers of Interest (FOI)"/>
-  <entry group="0028" element="6022" vr="LO" vm="1-n" name="Frame(s) of Interest Description"/>
+  <entry group="0028" element="6022" vr="LO" vm="1-n" name="Frame of Interest Description"/>
   <entry group="0028" element="6023" vr="CS" vm="1-n" name="Frame of Interest Type"/>
   <entry group="0028" element="6030" vr="US" vm="1-n" retired="true" name="Mask Pointer(s)"/>
   <entry group="0028" element="6040" vr="US" vm="1-n" name="R Wave Pointer"/>
@@ -1242,6 +1353,13 @@ This file was generated using the following commands:
   <entry group="0028" element="9446" vr="CS" vm="1-n" name="Image Processing Applied"/>
   <entry group="0028" element="9454" vr="CS" vm="1" name="Mask Selection Mode"/>
   <entry group="0028" element="9474" vr="CS" vm="1" name="LUT Function"/>
+  <entry group="0028" element="9478" vr="FL" vm="1" name="Mask Visibility Percentage"/>
+  <entry group="0028" element="9501" vr="SQ" vm="1" name="Pixel Shift Sequence"/>
+  <entry group="0028" element="9502" vr="SQ" vm="1" name="Region Pixel Shift Sequence"/>
+  <entry group="0028" element="9503" vr="SS" vm="2-2n" name="Vertices of the Region"/>
+  <entry group="0028" element="9505" vr="SQ" vm="1" name="Multi-frame Presentation Sequence"/>
+  <entry group="0028" element="9506" vr="US" vm="2-2n" name="Pixel Shift Frame Range"/>
+  <entry group="0028" element="9507" vr="US" vm="2-2n" name="LUT Frame Range"/>
   <entry group="0028" element="9520" vr="DS" vm="16" name="Image to Equipment Mapping Matrix"/>
   <entry group="0028" element="9537" vr="CS" vm="1" name="Equipment Coordinate System Identification"/>
   <entry group="0032" element="000a" vr="CS" vm="1" retired="true" name="Study Status ID"/>
@@ -1261,6 +1379,7 @@ This file was generated using the following commands:
   <entry group="0032" element="1031" vr="SQ" vm="1" name="Requesting Physician Identification Sequence"/>
   <entry group="0032" element="1032" vr="PN" vm="1" name="Requesting Physician"/>
   <entry group="0032" element="1033" vr="LO" vm="1" name="Requesting Service"/>
+  <entry group="0032" element="1034" vr="SQ" vm="1" name="Requesting Service Code Sequence"/>
   <entry group="0032" element="1040" vr="DA" vm="1" retired="true" name="Study Arrival Date"/>
   <entry group="0032" element="1041" vr="TM" vm="1" retired="true" name="Study Arrival Time"/>
   <entry group="0032" element="1050" vr="DA" vm="1" retired="true" name="Study Completion Date"/>
@@ -1273,7 +1392,8 @@ This file was generated using the following commands:
   <entry group="0038" element="0004" vr="SQ" vm="1" name="Referenced Patient Alias Sequence"/>
   <entry group="0038" element="0008" vr="CS" vm="1" name="Visit Status ID"/>
   <entry group="0038" element="0010" vr="LO" vm="1" name="Admission ID"/>
-  <entry group="0038" element="0011" vr="LO" vm="1" name="Issuer of Admission ID"/>
+  <entry group="0038" element="0011" vr="LO" vm="1" retired="true" name="Issuer of Admission ID"/>
+  <entry group="0038" element="0014" vr="SQ" vm="1" name="Issuer of Admission ID Sequence"/>
   <entry group="0038" element="0016" vr="LO" vm="1" name="Route of Admissions"/>
   <entry group="0038" element="001a" vr="DA" vm="1" retired="true" name="Scheduled Admission Date"/>
   <entry group="0038" element="001b" vr="TM" vm="1" retired="true" name="Scheduled Admission Time"/>
@@ -1288,8 +1408,9 @@ This file was generated using the following commands:
   <entry group="0038" element="0044" vr="SQ" vm="1" retired="true" name="Discharge Diagnosis Code Sequence"/>
   <entry group="0038" element="0050" vr="LO" vm="1" name="Special Needs"/>
   <entry group="0038" element="0060" vr="LO" vm="1" name="Service Episode ID"/>
-  <entry group="0038" element="0061" vr="LO" vm="1" name="Issuer of Service Episode ID"/>
+  <entry group="0038" element="0061" vr="LO" vm="1" retired="true" name="Issuer of Service Episode ID"/>
   <entry group="0038" element="0062" vr="LO" vm="1" name="Service Episode Description"/>
+  <entry group="0038" element="0064" vr="SQ" vm="1" name="Issuer of Service Episode ID Sequence"/>
   <entry group="0038" element="0100" vr="SQ" vm="1" name="Pertinent Documents Sequence"/>
   <entry group="0038" element="0300" vr="LO" vm="1" name="Current Patient Location"/>
   <entry group="0038" element="0400" vr="LO" vm="1" name="Patient's Institution Residence"/>
@@ -1349,6 +1470,15 @@ This file was generated using the following commands:
   <entry group="0040" element="0011" vr="SH" vm="1" name="Scheduled Procedure Step Location"/>
   <entry group="0040" element="0012" vr="LO" vm="1" name="Pre-Medication"/>
   <entry group="0040" element="0020" vr="CS" vm="1" name="Scheduled Procedure Step Status"/>
+  <entry group="0040" element="0026" vr="SQ" vm="1" name="Order Placer Identifier Sequence"/>
+  <entry group="0040" element="0027" vr="SQ" vm="1" name="Order Filler Identifier Sequence"/>
+  <entry group="0040" element="0031" vr="UT" vm="1" name="Local Namespace Entity ID"/>
+  <entry group="0040" element="0032" vr="UT" vm="1" name="Universal Entity ID"/>
+  <entry group="0040" element="0033" vr="CS" vm="1" name="Universal Entity ID Type"/>
+  <entry group="0040" element="0035" vr="CS" vm="1" name="Identifier Type Code"/>
+  <entry group="0040" element="0036" vr="SQ" vm="1" name="Assigning Facility Sequence"/>
+  <entry group="0040" element="0039" vr="SQ" vm="1" name="Assigning Jurisdiction Code Sequence"/>
+  <entry group="0040" element="003a" vr="SQ" vm="1" name="Assigning Agency or Department Code Sequence"/>
   <entry group="0040" element="0100" vr="SQ" vm="1" name="Scheduled Procedure Step Sequence"/>
   <entry group="0040" element="0220" vr="SQ" vm="1" name="Referenced Non-Image Composite SOP Instance Sequence"/>
   <entry group="0040" element="0241" vr="AE" vm="1" name="Performed Station AE Title"/>
@@ -1363,6 +1493,7 @@ This file was generated using the following commands:
   <entry group="0040" element="0254" vr="LO" vm="1" name="Performed Procedure Step Description"/>
   <entry group="0040" element="0255" vr="LO" vm="1" name="Performed Procedure Type Description"/>
   <entry group="0040" element="0260" vr="SQ" vm="1" name="Performed Protocol Code Sequence"/>
+  <entry group="0040" element="0261" vr="CS" vm="1" name="Performed Protocol Type"/>
   <entry group="0040" element="0270" vr="SQ" vm="1" name="Scheduled Step Attributes Sequence"/>
   <entry group="0040" element="0275" vr="SQ" vm="1" name="Request Attributes Sequence"/>
   <entry group="0040" element="0280" vr="ST" vm="1" name="Comments on the Performed Procedure Step"/>
@@ -1391,15 +1522,30 @@ This file was generated using the following commands:
   <entry group="0040" element="0400" vr="LT" vm="1" name="Comments on the Scheduled Procedure Step"/>
   <entry group="0040" element="0440" vr="SQ" vm="1" name="Protocol Context Sequence"/>
   <entry group="0040" element="0441" vr="SQ" vm="1" name="Content Item Modifier Sequence"/>
-  <entry group="0040" element="050a" vr="LO" vm="1" name="Specimen Accession Number"/>
-  <entry group="0040" element="0550" vr="SQ" vm="1" name="Specimen Sequence"/>
+  <entry group="0040" element="0500" vr="SQ" vm="1" name="Scheduled Specimen Sequence"/>
+  <entry group="0040" element="050a" vr="LO" vm="1" retired="true" name="Specimen Accession Number"/>
+  <entry group="0040" element="0512" vr="LO" vm="1" name="Container Identifier"/>
+  <entry group="0040" element="0513" vr="SQ" vm="1" name="Issuer of the Container Identifier Sequence"/>
+  <entry group="0040" element="0515" vr="SQ" vm="1" name="Alternate Container Identifier Sequence"/>
+  <entry group="0040" element="0518" vr="SQ" vm="1" name="Container Type Code Sequence"/>
+  <entry group="0040" element="051a" vr="LO" vm="1" name="Container Description"/>
+  <entry group="0040" element="0520" vr="SQ" vm="1" name="Container Component Sequence"/>
+  <entry group="0040" element="0550" vr="SQ" vm="1" retired="true" name="Specimen Sequence"/>
   <entry group="0040" element="0551" vr="LO" vm="1" name="Specimen Identifier"/>
   <entry group="0040" element="0552" vr="SQ" vm="1" retired="true" name="Specimen Description Sequence - Trial"/>
   <entry group="0040" element="0553" vr="ST" vm="1" retired="true" name="Specimen Description - Trial"/>
+  <entry group="0040" element="0554" vr="UI" vm="1" name="Specimen UID"/>
   <entry group="0040" element="0555" vr="SQ" vm="1" name="Acquisition Context Sequence"/>
   <entry group="0040" element="0556" vr="ST" vm="1" name="Acquisition Context Description"/>
+  <entry group="0040" element="0560" vr="SQ" vm="1" name="Specimen Description Sequence"/>
+  <entry group="0040" element="0562" vr="SQ" vm="1" name="Issuer of the Specimen Identifier Sequence"/>
   <entry group="0040" element="059a" vr="SQ" vm="1" name="Specimen Type Code Sequence"/>
-  <entry group="0040" element="06fa" vr="LO" vm="1" name="Slide Identifier"/>
+  <entry group="0040" element="0600" vr="LO" vm="1" name="Specimen Short Description"/>
+  <entry group="0040" element="0602" vr="UT" vm="1" name="Specimen Detailed Description"/>
+  <entry group="0040" element="0610" vr="SQ" vm="1" name="Specimen Preparation Sequence"/>
+  <entry group="0040" element="0612" vr="SQ" vm="1" name="Specimen Preparation Step Content Item Sequence"/>
+  <entry group="0040" element="0620" vr="SQ" vm="1" name="Specimen Localization Content Item Sequence"/>
+  <entry group="0040" element="06fa" vr="LO" vm="1" retired="true" name="Slide Identifier"/>
   <entry group="0040" element="071a" vr="SQ" vm="1" name="Image Center Point Coordinates Sequence"/>
   <entry group="0040" element="072a" vr="DS" vm="1" name="X offset in Slide Coordinate System"/>
   <entry group="0040" element="073a" vr="DS" vm="1" name="Y offset in Slide Coordinate System"/>
@@ -1420,6 +1566,7 @@ This file was generated using the following commands:
   <entry group="0040" element="100a" vr="SQ" vm="1" name="Reason for Requested Procedure Code Sequence"/>
   <entry group="0040" element="1010" vr="PN" vm="1-n" name="Names of Intended Recipients of Results"/>
   <entry group="0040" element="1011" vr="SQ" vm="1" name="Intended Recipients of Results Identification Sequence"/>
+  <entry group="0040" element="1012" vr="SQ" vm="1" name="Reason For Performed Procedure Code Sequence"/>
   <entry group="0040" element="1101" vr="SQ" vm="1" name="Person Identification Code Sequence"/>
   <entry group="0040" element="1102" vr="ST" vm="1" name="Person's Address"/>
   <entry group="0040" element="1103" vr="LO" vm="1-n" name="Person's Telephone Numbers"/>
@@ -1440,12 +1587,12 @@ This file was generated using the following commands:
   <entry group="0040" element="4002" vr="CS" vm="1" name="General Purpose Performed Procedure Step Status"/>
   <entry group="0040" element="4003" vr="CS" vm="1" name="General Purpose Scheduled Procedure Step Priority"/>
   <entry group="0040" element="4004" vr="SQ" vm="1" name="Scheduled Processing Applications Code Sequence"/>
-  <entry group="0040" element="4005" vr="DT" vm="1" name="Scheduled Procedure Step Start Date and Time"/>
+  <entry group="0040" element="4005" vr="DT" vm="1" name="Scheduled Procedure Step Start DateTime"/>
   <entry group="0040" element="4006" vr="CS" vm="1" name="Multiple Copies Flag"/>
   <entry group="0040" element="4007" vr="SQ" vm="1" name="Performed Processing Applications Code Sequence"/>
   <entry group="0040" element="4009" vr="SQ" vm="1" name="Human Performer Code Sequence"/>
-  <entry group="0040" element="4010" vr="DT" vm="1" name="Scheduled Procedure Step Modification Date and Time"/>
-  <entry group="0040" element="4011" vr="DT" vm="1" name="Expected Completion Date and Time"/>
+  <entry group="0040" element="4010" vr="DT" vm="1" name="Scheduled Procedure Step Modification Date Time"/>
+  <entry group="0040" element="4011" vr="DT" vm="1" name="Expected Completion Date Time"/>
   <entry group="0040" element="4015" vr="SQ" vm="1" name="Resulting General Purpose Performed Procedure Steps Sequence"/>
   <entry group="0040" element="4016" vr="SQ" vm="1" name="Referenced General Purpose Scheduled Procedure Step Sequence"/>
   <entry group="0040" element="4018" vr="SQ" vm="1" name="Scheduled Workitem Code Sequence"/>
@@ -1467,6 +1614,7 @@ This file was generated using the following commands:
   <entry group="0040" element="4035" vr="SQ" vm="1" name="Actual Human Performers Sequence"/>
   <entry group="0040" element="4036" vr="LO" vm="1" name="Human Performer's Organization"/>
   <entry group="0040" element="4037" vr="PN" vm="1" name="Human Performer's Name"/>
+  <entry group="0040" element="4040" vr="CS" vm="1" name="Raw Data Handling"/>
   <entry group="0040" element="8302" vr="DS" vm="1" name="Entrance Dose in mGy"/>
   <entry group="0040" element="9094" vr="SQ" vm="1" name="Referenced Image Real World Value Mapping Sequence"/>
   <entry group="0040" element="9096" vr="SQ" vm="1" name="Real World Value Mapping Sequence"/>
@@ -1526,6 +1674,7 @@ This file was generated using the following commands:
   <entry group="0040" element="a492" vr="LO" vm="1" name="Completion Flag Description"/>
   <entry group="0040" element="a493" vr="CS" vm="1" name="Verification Flag"/>
   <entry group="0040" element="a494" vr="CS" vm="1" name="Archive Requested"/>
+  <entry group="0040" element="a496" vr="CS" vm="1" name="Preliminary Flag"/>
   <entry group="0040" element="a504" vr="SQ" vm="1" name="Content Template Sequence"/>
   <entry group="0040" element="a525" vr="SQ" vm="1" name="Identical Documents Sequence"/>
   <entry group="0040" element="a730" vr="SQ" vm="1" name="Content Sequence"/>
@@ -1541,6 +1690,7 @@ This file was generated using the following commands:
   <entry group="0040" element="e004" vr="DT" vm="1" name="HL7 Document Effective Time"/>
   <entry group="0040" element="e006" vr="SQ" vm="1" name="HL7 Document Type Code Sequence"/>
   <entry group="0040" element="e010" vr="UT" vm="1" name="Retrieve URI"/>
+  <entry group="0040" element="e011" vr="UI" vm="1" name="Retrieve Location UID"/>
   <entry group="0042" element="0010" vr="ST" vm="1" name="Document Title"/>
   <entry group="0042" element="0011" vr="OB" vm="1" name="Encapsulated Document"/>
   <entry group="0042" element="0012" vr="LO" vm="1" name="MIME Type of Encapsulated Document"/>
@@ -1560,13 +1710,70 @@ This file was generated using the following commands:
   <entry group="0044" element="0012" vr="LO" vm="1" name="Substance Administration Device ID"/>
   <entry group="0044" element="0013" vr="SQ" vm="1" name="Product Parameter Sequence"/>
   <entry group="0044" element="0019" vr="SQ" vm="1" name="Substance Administration Parameter Sequence"/>
+  <entry group="0046" element="0012" vr="LO" vm="1" name="Lens Description"/>
+  <entry group="0046" element="0014" vr="SQ" vm="1" name="Right Lens Sequence"/>
+  <entry group="0046" element="0015" vr="SQ" vm="1" name="Left Lens Sequence"/>
+  <entry group="0046" element="0016" vr="SQ" vm="1" name="Unspecified Laterality Lens Sequence"/>
+  <entry group="0046" element="0018" vr="SQ" vm="1" name="Cylinder Sequence"/>
+  <entry group="0046" element="0028" vr="SQ" vm="1" name="Prism Sequence"/>
+  <entry group="0046" element="0030" vr="FD" vm="1" name="Horizontal Prism Power"/>
+  <entry group="0046" element="0032" vr="CS" vm="1" name="Horizontal Prism Base"/>
+  <entry group="0046" element="0034" vr="FD" vm="1" name="Vertical Prism Power"/>
+  <entry group="0046" element="0036" vr="CS" vm="1" name="Vertical Prism Base"/>
+  <entry group="0046" element="0038" vr="CS" vm="1" name="Lens Segment Type"/>
+  <entry group="0046" element="0040" vr="FD" vm="1" name="Optical Transmittance"/>
+  <entry group="0046" element="0042" vr="FD" vm="1" name="Channel Width"/>
+  <entry group="0046" element="0044" vr="FD" vm="1" name="Pupil Size"/>
+  <entry group="0046" element="0046" vr="FD" vm="1" name="Corneal Size"/>
+  <entry group="0046" element="0050" vr="SQ" vm="1" name="Autorefraction Right Eye Sequence"/>
+  <entry group="0046" element="0052" vr="SQ" vm="1" name="Autorefraction Left Eye Sequence"/>
+  <entry group="0046" element="0060" vr="FD" vm="1" name="Distance Pupillary Distance"/>
+  <entry group="0046" element="0062" vr="FD" vm="1" name="Near Pupillary Distance"/>
+  <entry group="0046" element="0063" vr="FD" vm="1" name="Intermediate Pupillary Distance"/>
+  <entry group="0046" element="0064" vr="FD" vm="1" name="Other Pupillary Distance"/>
+  <entry group="0046" element="0070" vr="SQ" vm="1" name="Keratometry Right Eye Sequence"/>
+  <entry group="0046" element="0071" vr="SQ" vm="1" name="Keratometry Left Eye Sequence"/>
+  <entry group="0046" element="0074" vr="SQ" vm="1" name="Steep Keratometric Axis Sequence"/>
+  <entry group="0046" element="0075" vr="FD" vm="1" name="Radius of Curvature"/>
+  <entry group="0046" element="0076" vr="FD" vm="1" name="Keratometric Power"/>
+  <entry group="0046" element="0077" vr="FD" vm="1" name="Keratometric Axis"/>
+  <entry group="0046" element="0080" vr="SQ" vm="1" name="Flat Keratometric Axis Sequence"/>
+  <entry group="0046" element="0092" vr="CS" vm="1" name="Background Color"/>
+  <entry group="0046" element="0094" vr="CS" vm="1" name="Optotype"/>
+  <entry group="0046" element="0095" vr="CS" vm="1" name="Optotype Presentation"/>
+  <entry group="0046" element="0097" vr="SQ" vm="1" name="Subjective Refraction Right Eye Sequence"/>
+  <entry group="0046" element="0098" vr="SQ" vm="1" name="Subjective Refraction Left Eye Sequence"/>
+  <entry group="0046" element="0100" vr="SQ" vm="1" name="Add Near Sequence"/>
+  <entry group="0046" element="0101" vr="SQ" vm="1" name="Add Intermediate Sequence"/>
+  <entry group="0046" element="0102" vr="SQ" vm="1" name="Add Other Sequence"/>
+  <entry group="0046" element="0104" vr="FD" vm="1" name="Add Power"/>
+  <entry group="0046" element="0106" vr="FD" vm="1" name="Viewing Distance"/>
+  <entry group="0046" element="0121" vr="SQ" vm="1" name="Visual Acuity Type Code Sequence"/>
+  <entry group="0046" element="0122" vr="SQ" vm="1" name="Visual Acuity Right Eye Sequence"/>
+  <entry group="0046" element="0123" vr="SQ" vm="1" name="Visual Acuity Left Eye Sequence"/>
+  <entry group="0046" element="0124" vr="SQ" vm="1" name="Visual Acuity Both Eyes Open Sequence"/>
+  <entry group="0046" element="0125" vr="CS" vm="1" name="Viewing Distance Type"/>
+  <entry group="0046" element="0135" vr="SS" vm="2" name="Visual Acuity Modifiers"/>
+  <entry group="0046" element="0137" vr="FD" vm="1" name="Decimal Visual Acuity"/>
+  <entry group="0046" element="0139" vr="LO" vm="1" name="Optotype Detailed Definition"/>
+  <entry group="0046" element="0145" vr="SQ" vm="1" name="Referenced Refractive Measurements Sequence"/>
+  <entry group="0046" element="0146" vr="FD" vm="1" name="Sphere Power"/>
+  <entry group="0046" element="0147" vr="FD" vm="1" name="Cylinder Power"/>
   <entry group="0050" element="0004" vr="CS" vm="1" name="Calibration Image"/>
   <entry group="0050" element="0010" vr="SQ" vm="1" name="Device Sequence"/>
+  <entry group="0050" element="0012" vr="SQ" vm="1" name="Container Component Type Code Sequence"/>
+  <entry group="0050" element="0013" vr="FD" vm="1" name="Container Component Thickness"/>
   <entry group="0050" element="0014" vr="DS" vm="1" name="Device Length"/>
+  <entry group="0050" element="0015" vr="FD" vm="1" name="Container Component Width"/>
   <entry group="0050" element="0016" vr="DS" vm="1" name="Device Diameter"/>
   <entry group="0050" element="0017" vr="CS" vm="1" name="Device Diameter Units"/>
   <entry group="0050" element="0018" vr="DS" vm="1" name="Device Volume"/>
-  <entry group="0050" element="0019" vr="DS" vm="1" name="Intermarker Distance"/>
+  <entry group="0050" element="0019" vr="DS" vm="1" name="Inter-Marker Distance"/>
+  <entry group="0050" element="001a" vr="CS" vm="1" name="Container Component Material"/>
+  <entry group="0050" element="001b" vr="LO" vm="1" name="Container Component ID"/>
+  <entry group="0050" element="001c" vr="FD" vm="1" name="Container Component Length"/>
+  <entry group="0050" element="001d" vr="FD" vm="1" name="Container Component Diameter"/>
+  <entry group="0050" element="001e" vr="LO" vm="1" name="Container Component Description"/>
   <entry group="0050" element="0020" vr="LO" vm="1" name="Device Description"/>
   <entry group="0054" element="0010" vr="US" vm="1-n" name="Energy Window Vector"/>
   <entry group="0054" element="0011" vr="US" vm="1" name="Number of Energy Windows"/>
@@ -1677,6 +1884,51 @@ This file was generated using the following commands:
   <entry group="0064" element="0009" vr="OF" vm="1" name="Vector Grid Data"/>
   <entry group="0064" element="000f" vr="SQ" vm="1" name="Pre Deformation Matrix Registration Sequence"/>
   <entry group="0064" element="0010" vr="SQ" vm="1" name="Post Deformation Matrix Registration Sequence"/>
+  <entry group="0066" element="0001" vr="UL" vm="1" name="Number of Surfaces"/>
+  <entry group="0066" element="0002" vr="SQ" vm="1" name="Surface Sequence"/>
+  <entry group="0066" element="0003" vr="UL" vm="1" name="Surface Number"/>
+  <entry group="0066" element="0004" vr="LT" vm="1" name="Surface Comments"/>
+  <entry group="0066" element="0009" vr="CS" vm="1" name="Surface Processing"/>
+  <entry group="0066" element="000a" vr="FL" vm="1" name="Surface Processing Ratio"/>
+  <entry group="0066" element="000b" vr="LO" vm="1" name="Surface Processing Description"/>
+  <entry group="0066" element="000c" vr="FL" vm="1" name="Recommended Presentation Opacity"/>
+  <entry group="0066" element="000d" vr="CS" vm="1" name="Recommended Presentation Type"/>
+  <entry group="0066" element="000e" vr="CS" vm="1" name="Finite Volume"/>
+  <entry group="0066" element="0010" vr="CS" vm="1" name="Manifold"/>
+  <entry group="0066" element="0011" vr="SQ" vm="1" name="Surface Points Sequence"/>
+  <entry group="0066" element="0012" vr="SQ" vm="1" name="Surface Points Normals Sequence"/>
+  <entry group="0066" element="0013" vr="SQ" vm="1" name="Surface Mesh Primitives Sequence"/>
+  <entry group="0066" element="0015" vr="UL" vm="1" name="Number of Surface Points"/>
+  <entry group="0066" element="0016" vr="OF" vm="1" name="Point Coordinates Data"/>
+  <entry group="0066" element="0017" vr="FL" vm="3" name="Point Position Accuracy"/>
+  <entry group="0066" element="0018" vr="FL" vm="1" name="Mean Point Distance"/>
+  <entry group="0066" element="0019" vr="FL" vm="1" name="Maximum Point Distance"/>
+  <entry group="0066" element="001a" vr="FL" vm="6" name="Points Bounding Box Coordinates"/>
+  <entry group="0066" element="001b" vr="FL" vm="3" name="Axis of Rotation"/>
+  <entry group="0066" element="001c" vr="FL" vm="3" name="Center of Rotation"/>
+  <entry group="0066" element="001e" vr="UL" vm="1" name="Number of Vectors"/>
+  <entry group="0066" element="001f" vr="US" vm="1" name="Vector Dimensionality"/>
+  <entry group="0066" element="0020" vr="FL" vm="1-n" name="Vector Accuracy"/>
+  <entry group="0066" element="0021" vr="OF" vm="1" name="Vector Coordinate Data"/>
+  <entry group="0066" element="0023" vr="OW" vm="1" name="Triangle Point Index List"/>
+  <entry group="0066" element="0024" vr="OW" vm="1" name="Edge Point Index List"/>
+  <entry group="0066" element="0025" vr="OW" vm="1" name="Vertex Point Index List"/>
+  <entry group="0066" element="0026" vr="SQ" vm="1" name="Triangle Strip Sequence"/>
+  <entry group="0066" element="0027" vr="SQ" vm="1" name="Triangle Fan Sequence"/>
+  <entry group="0066" element="0028" vr="SQ" vm="1" name="Line Sequence"/>
+  <entry group="0066" element="0029" vr="OW" vm="1" name="Primitive Point Index List"/>
+  <entry group="0066" element="002a" vr="UL" vm="1" name="Surface Count"/>
+  <entry group="0066" element="002b" vr="SQ" vm="1" name="Referenced Surface Sequence"/>
+  <entry group="0066" element="002c" vr="UL" vm="1" name="Referenced Surface Number"/>
+  <entry group="0066" element="002d" vr="SQ" vm="1" name="Segment Surface Generation Algorithm Identification Sequence"/>
+  <entry group="0066" element="002e" vr="SQ" vm="1" name="Segment Surface Source Instance Sequence"/>
+  <entry group="0066" element="002f" vr="SQ" vm="1" name="Algorithm Family Code Sequence"/>
+  <entry group="0066" element="0030" vr="SQ" vm="1" name="Algorithm Name Code Sequence"/>
+  <entry group="0066" element="0031" vr="LO" vm="1" name="Algorithm Version"/>
+  <entry group="0066" element="0032" vr="LT" vm="1" name="Algorithm Parameters"/>
+  <entry group="0066" element="0034" vr="SQ" vm="1" name="Facet Sequence"/>
+  <entry group="0066" element="0035" vr="SQ" vm="1" name="Surface Processing Algorithm Identification Sequence"/>
+  <entry group="0066" element="0036" vr="LO" vm="1" name="Algorithm Name"/>
   <entry group="0070" element="0001" vr="SQ" vm="1" name="Graphic Annotation Sequence"/>
   <entry group="0070" element="0002" vr="CS" vm="1" name="Graphic Layer"/>
   <entry group="0070" element="0003" vr="CS" vm="1" name="Bounding Box Annotation Units"/>
@@ -1714,6 +1966,7 @@ This file was generated using the following commands:
   <entry group="0070" element="0083" vr="TM" vm="1" name="Presentation Creation Time"/>
   <entry group="0070" element="0084" vr="PN" vm="1" name="Content Creator's Name"/>
   <entry group="0070" element="0086" vr="SQ" vm="1" name="Content Creator's Identification Code Sequence"/>
+  <entry group="0070" element="0087" vr="SQ" vm="1" name="Alternate Content Description Sequence"/>
   <entry group="0070" element="0100" vr="CS" vm="1" name="Presentation Size Mode"/>
   <entry group="0070" element="0101" vr="DS" vm="2" name="Presentation Pixel Spacing"/>
   <entry group="0070" element="0102" vr="IS" vm="2" name="Presentation Pixel Aspect Ratio"/>
@@ -1817,6 +2070,14 @@ This file was generated using the following commands:
   <entry group="0072" element="0402" vr="CS" vm="1" name="Filter-by Category"/>
   <entry group="0072" element="0404" vr="CS" vm="1" name="Filter-by Attribute Presence"/>
   <entry group="0072" element="0406" vr="CS" vm="1" name="Filter-by Operator"/>
+  <entry group="0072" element="0420" vr="US" vm="3" name="Structured Display Background CIELab Value"/>
+  <entry group="0072" element="0421" vr="US" vm="3" name="Empty Image Box CIELab Value"/>
+  <entry group="0072" element="0422" vr="SQ" vm="1" name="Structured Display Image Box Sequence"/>
+  <entry group="0072" element="0424" vr="SQ" vm="1" name="Structured Display Text Box Sequence"/>
+  <entry group="0072" element="0427" vr="SQ" vm="1" name="Referenced First Frame Sequence"/>
+  <entry group="0072" element="0430" vr="SQ" vm="1" name="Image Box Synchronization Sequence"/>
+  <entry group="0072" element="0432" vr="US" vm="2-n" name="Synchronized Image Box List"/>
+  <entry group="0072" element="0434" vr="CS" vm="1" name="Type of Synchronization"/>
   <entry group="0072" element="0500" vr="CS" vm="1" name="Blending Operation Type"/>
   <entry group="0072" element="0510" vr="CS" vm="1" name="Reformatting Operation Type"/>
   <entry group="0072" element="0512" vr="FD" vm="1" name="Reformatting Thickness"/>
@@ -1828,7 +2089,7 @@ This file was generated using the following commands:
   <entry group="0072" element="0604" vr="CS" vm="1" name="Sorting Direction"/>
   <entry group="0072" element="0700" vr="CS" vm="2" name="Display Set Patient Orientation"/>
   <entry group="0072" element="0702" vr="CS" vm="1" name="VOI Type"/>
-  <entry group="0072" element="0704" vr="CS" vm="1" name="Pseudo-color Type"/>
+  <entry group="0072" element="0704" vr="CS" vm="1" name="Pseudo-Color Type"/>
   <entry group="0072" element="0706" vr="CS" vm="1" name="Show Grayscale Inverted"/>
   <entry group="0072" element="0710" vr="CS" vm="1" name="Show Image True Size Flag"/>
   <entry group="0072" element="0712" vr="CS" vm="1" name="Show Graphic Annotation Flag"/>
@@ -1837,7 +2098,7 @@ This file was generated using the following commands:
   <entry group="0072" element="0717" vr="CS" vm="1" name="Display Set Horizontal Justification"/>
   <entry group="0072" element="0718" vr="CS" vm="1" name="Display Set Vertical Justification"/>
   <entry group="0074" element="1000" vr="CS" vm="1" name="Unified Procedure Step State"/>
-  <entry group="0074" element="1002" vr="SQ" vm="1" name="UPS Progress Information Sequence"/>
+  <entry group="0074" element="1002" vr="SQ" vm="1" name="Unified Procedure Step Progress Information Sequence"/>
   <entry group="0074" element="1004" vr="DS" vm="1" name="Unified Procedure Step Progress"/>
   <entry group="0074" element="1006" vr="ST" vm="1" name="Unified Procedure Step Progress Description"/>
   <entry group="0074" element="1008" vr="SQ" vm="1" name="Unified Procedure Step Communications URI Sequence"/>
@@ -1870,7 +2131,7 @@ This file was generated using the following commands:
   <entry group="0074" element="1204" vr="LO" vm="1" name="Procedure Step Label"/>
   <entry group="0074" element="1210" vr="SQ" vm="1" name="Scheduled Processing Parameters Sequence"/>
   <entry group="0074" element="1212" vr="SQ" vm="1" name="Performed Processing Parameters Sequence"/>
-  <entry group="0074" element="1216" vr="SQ" vm="1" name="UPS Performed Procedure Sequence"/>
+  <entry group="0074" element="1216" vr="SQ" vm="1" name="Unified Procedure Step Performed Procedure Sequence"/>
   <entry group="0074" element="1220" vr="SQ" vm="1" name="Related Procedure Step Sequence"/>
   <entry group="0074" element="1222" vr="LO" vm="1" name="Procedure Step Relationship Type"/>
   <entry group="0074" element="1230" vr="LO" vm="1" name="Deletion Lock"/>
@@ -1879,7 +2140,7 @@ This file was generated using the following commands:
   <entry group="0074" element="1238" vr="LT" vm="1" name="Reason for Cancellation"/>
   <entry group="0074" element="1242" vr="CS" vm="1" name="SCP Status"/>
   <entry group="0074" element="1244" vr="CS" vm="1" name="Subscription List Status"/>
-  <entry group="0074" element="1246" vr="CS" vm="1" name="UPS List Status"/>
+  <entry group="0074" element="1246" vr="CS" vm="1" name="Unified Procedure Step List Status"/>
   <entry group="0088" element="0130" vr="SH" vm="1" name="Storage Media File-set ID"/>
   <entry group="0088" element="0140" vr="UI" vm="1" name="Storage Media File-set UID"/>
   <entry group="0088" element="0200" vr="SQ" vm="1" name="Icon Image Sequence"/>
@@ -1888,7 +2149,7 @@ This file was generated using the following commands:
   <entry group="0088" element="0910" vr="LO" vm="1" retired="true" name="Topic Author"/>
   <entry group="0088" element="0912" vr="LO" vm="1-32" retired="true" name="Topic Keywords"/>
   <entry group="0100" element="0410" vr="CS" vm="1" name="SOP Instance Status"/>
-  <entry group="0100" element="0420" vr="DT" vm="1" name="SOP Authorization Date and Time"/>
+  <entry group="0100" element="0420" vr="DT" vm="1" name="SOP Authorization DateTime"/>
   <entry group="0100" element="0424" vr="LT" vm="1" name="SOP Authorization Comment"/>
   <entry group="0100" element="0426" vr="LO" vm="1" name="Authorization Equipment Certification Number"/>
   <entry group="0400" element="0005" vr="US" vm="1" name="MAC ID Number"/>
@@ -2061,6 +2322,9 @@ This file was generated using the following commands:
   <entry group="3002" element="0040" vr="SQ" vm="1" name="Fluence Map Sequence"/>
   <entry group="3002" element="0041" vr="CS" vm="1" name="Fluence Data Source"/>
   <entry group="3002" element="0042" vr="DS" vm="1" name="Fluence Data Scale"/>
+  <entry group="3002" element="0050" vr="SQ" vm="1" name="Primary Fluence Mode Sequence"/>
+  <entry group="3002" element="0051" vr="CS" vm="1" name="Fluence Mode"/>
+  <entry group="3002" element="0052" vr="SH" vm="1" name="Fluence Mode ID"/>
   <entry group="3004" element="0001" vr="CS" vm="1" name="DVH Type"/>
   <entry group="3004" element="0002" vr="CS" vm="1" name="Dose Units"/>
   <entry group="3004" element="0004" vr="CS" vm="1" name="Dose Type"/>
@@ -2558,9 +2822,9 @@ This file was generated using the following commands:
   <entry group="300a" element="0410" vr="SQ" vm="1" name="Motion Synchronization Sequence"/>
   <entry group="300a" element="0412" vr="FL" vm="3" name="Control Point Orientation"/>
   <entry group="300a" element="0420" vr="SQ" vm="1" name="General Accessory Sequence"/>
-  <entry group="300a" element="0421" vr="CS" vm="1" name="General Accessory ID"/>
+  <entry group="300a" element="0421" vr="SH" vm="1" name="General Accessory ID"/>
   <entry group="300a" element="0422" vr="ST" vm="1" name="General Accessory Description"/>
-  <entry group="300a" element="0423" vr="SH" vm="1" name="General Accessory Type"/>
+  <entry group="300a" element="0423" vr="CS" vm="1" name="General Accessory Type"/>
   <entry group="300a" element="0424" vr="IS" vm="1" name="General Accessory Number"/>
   <entry group="300c" element="0002" vr="SQ" vm="1" name="Referenced RT Plan Sequence"/>
   <entry group="300c" element="0004" vr="SQ" vm="1" name="Referenced Beam Sequence"/>

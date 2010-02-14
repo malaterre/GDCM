@@ -5,7 +5,7 @@
 -->
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
+  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/DefaultDicts.xsl $
 
   Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
@@ -26,7 +26,7 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
+  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/DefaultDicts.xsl $
 
   Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
@@ -51,6 +51,7 @@ typedef struct
 {
   uint16_t group;
   uint16_t element;
+  const char *owner;
   VR::VRType vr;
   VM::VMType vm;
   const char *name;
@@ -107,7 +108,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="count" select="255"/>
             <xsl:with-param name="group" select="@group"/>
             <xsl:with-param name="element" select="$element"/> <!-- replaced xx with 00 which is what we want -->
-            <!--xsl:with-param name="owner" select="@owner"/-->
+            <xsl:with-param name="owner" select="@owner"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
@@ -119,7 +120,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="count" select="255"/>
             <xsl:with-param name="group" select="@group"/>
             <xsl:with-param name="element" select="$element"/>
-            <!--xsl:with-param name="owner" select="@owner"/-->
+            <xsl:with-param name="owner" select="@owner"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
@@ -147,7 +148,7 @@ generating group length for arbitrary even group number seems to get my xsltproc
           <xsl:with-param name="element" select="'0000'"/>
           <xsl:with-param name="vr" select="'UL'"/>
           <xsl:with-param name="vm" select="'1'"/>
-          <!--xsl:with-param name="owner" select="@owner"/-->
+          <xsl:with-param name="owner" select="@owner"/>
           <xsl:with-param name="retired" select="'true'"/>
           <xsl:with-param name="name" select="concat('Group Length ',@group)"/>
         </xsl:call-template>
@@ -232,9 +233,9 @@ void PrivateDict::LoadDefault()
       <xsl:value-of select="$group"/>
       <xsl:text>,0x</xsl:text>
       <xsl:value-of select="$element"/>
-      <!--xsl:text>,"</xsl:text>
+      <xsl:text>,"</xsl:text>
       <xsl:value-of select="$owner"/>
-      <xsl:text>"</xsl:text-->
+      <xsl:text>"</xsl:text>
 <!--xsl:value-of select="$temp"/-->
       <xsl:text>,VR::</xsl:text>
       <xsl:if test="not ($vr != '')">
@@ -281,7 +282,7 @@ void PrivateDict::LoadDefault()
           <xsl:with-param name="element" select="$element"/>
           <xsl:with-param name="vr" select="$vr"/>
           <xsl:with-param name="vm" select="$vm"/>
-          <!--xsl:with-param name="owner" select="$owner"/-->
+          <xsl:with-param name="owner" select="$owner"/>
           <xsl:with-param name="retired" select="$retired"/>
           <xsl:with-param name="name" select="$name"/>
         </xsl:call-template>
@@ -309,7 +310,7 @@ void PrivateDict::LoadDefault()
           <xsl:with-param name="element" select="$element_xx"/>
           <xsl:with-param name="vr" select="$vr"/>
           <xsl:with-param name="vm" select="$vm"/>
-          <!--xsl:with-param name="owner" select="$owner"/-->
+          <xsl:with-param name="owner" select="$owner"/>
           <xsl:with-param name="retired" select="$retired"/>
           <xsl:with-param name="name" select="$name"/>
         </xsl:call-template>

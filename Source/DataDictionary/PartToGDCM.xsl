@@ -46,7 +46,7 @@ This file was generated using the following commands:
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
     <xsl:element name="dict">
-      <xsl:attribute name="edition">2008</xsl:attribute>
+      <xsl:attribute name="edition">2009</xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
