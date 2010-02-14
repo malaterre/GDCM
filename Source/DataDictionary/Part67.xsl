@@ -89,17 +89,17 @@ template for a row in data-elements mode. Should be:
   <xsl:template match="row" mode="data-elements-part7">
     <xsl:param name="retired" select="0"/>
     <xsl:if test="entry[1]/para != 'Message Field'">
-      <xsl:variable name="tag_value" select="translate(entry[2]/para,'ABCDEF','abcdef')"/>
+      <xsl:variable name="tag_value" select="translate(entry[3]/para,'ABCDEF','abcdef')"/>
       <xsl:variable name="group_value" select="substring-after(substring-before($tag_value,','), '(')"/>
       <xsl:variable name="element_value" select="substring-after(substring-before($tag_value,')'), ',')"/>
       <xsl:variable name="vr">
         <xsl:call-template name="process-vr">
-          <xsl:with-param name="text" select="normalize-space(entry[3]/para)"/>
+          <xsl:with-param name="text" select="normalize-space(entry[4]/para)"/>
         </xsl:call-template>
       </xsl:variable>
-      <xsl:variable name="vm" select="normalize-space(entry[4]/para)"/>
+      <xsl:variable name="vm" select="normalize-space(entry[5]/para)"/>
       <xsl:variable name="name" select="normalize-space(entry[1]/para)"/>
-      <xsl:variable name="description" select="entry[5]"/>
+      <xsl:variable name="description" select="entry[6]"/>
       <entry group="{$group_value}" element="{$element_value}" vr="{$vr}" vm="{$vm}" name="{$name}">
         <xsl:if test="$retired = 1">
           <xsl:attribute name="retired">true</xsl:attribute>
