@@ -47,7 +47,7 @@ bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi
 {
   unsigned int nitems = sqi->GetNumberOfItems();
   std::vector<uint32_t> &offsets = Internals->OffsetTable;
-  Internals->OffsetTable.resize( nitems );
+  Internals->OffsetTable.resize( nitems + 1 );
   offsets[0] = start;
   for(unsigned int i = 1; i <= nitems; ++i)
     {
