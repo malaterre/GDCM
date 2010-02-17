@@ -56,7 +56,7 @@ public:
     }
     return ::sk_X509_num(recips);
     }
-  ::STACK_OF(X509)* GetRecipients( ) const {
+  STACK_OF(X509)* GetRecipients( ) const {
     return recips;
   }
   ::X509* GetRecipient( unsigned int i ) const {
@@ -77,7 +77,7 @@ public:
     return CipherType;
   }
 private:
-  ::STACK_OF(X509) *recips;
+  STACK_OF(X509) *recips;
   ::EVP_PKEY *pkey;
   CryptographicMessageSyntax::CipherTypes CipherType;
 #endif
