@@ -334,6 +334,7 @@ int main(int argc, char *argv[])
   gen.SetDescriptor( descriptor_str.c_str() );
   if( !gen.Generate() )
     {
+    std::cerr << "Problem during generation" << std::endl;
     return 1;
     }
 
