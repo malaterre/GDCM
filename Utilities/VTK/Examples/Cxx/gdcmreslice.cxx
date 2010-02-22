@@ -16,6 +16,7 @@
 
 #include "vtkRenderer.h"
 #include "vtkAssembly.h"
+#include "vtkImageReslice.h"
 #include "vtkRenderWindow.h"
 #include "vtkAnnotatedCubeActor.h"
 #include "vtkTransform.h"
@@ -36,9 +37,15 @@ int main( int argc, char *argv[] )
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   reader->SetFileName( argv[1] );
-
+  //reader->FileLowerLeftOn();
   reader->Update();
-  vtkImageData* ima = reader->GetOutput();
+
+  vtkImageReslice *reslice = vtkImageReslice::New();
+  reslice->SetInput(reader->GetOutput());
+  //reslice->SetResliceAxesDirectionCosines()
+  reslice->SetResliceAxes( reader->GetDirectionCosines() );
+  reslice->Update();
+  vtkImageData* ima = reslice->GetOutput();
 
   vtkLookupTable* table = vtkLookupTable::New();
   table->SetNumberOfColors(1000);
@@ -57,9 +64,6 @@ int main( int argc, char *argv[] )
 
   // PlaneSource
   vtkPlaneSource* plane = vtkPlaneSource::New();
-  plane->SetOrigin( -0.5, -0.5, 0.0);
-  plane->SetPoint1(  0.5, -0.5, 0.0);
-  plane->SetPoint2( -0.5,  0.5, 0.0);
 
   // PolyDataMapper
   vtkPolyDataMapper *planeMapper = vtkPolyDataMapper::New();
@@ -89,27 +93,15 @@ int main( int argc, char *argv[] )
   cube->SetZMinusFaceText( "F" );
 
   vtkAxesActor* axes2 = vtkAxesActor::New();
-  // simulate a left-handed coordinate system
-  //
-  vtkTransform *transform = vtkTransform::New();
-  transform->Identity();
-  //transform->RotateY(180);
   reader->GetDirectionCosines()->Print(std::cout);
-  transform->Concatenate(reader->GetDirectionCosines());
-  //axes2->SetShaftTypeToCylinder();
-  axes2->SetUserTransform( transform );
-  //cube->SetUserTransform( transform ); // cant get it to work
-  cube->GetAssembly()->SetUserTransform( transform ); // cant get it to work
 
   vtkPropAssembly* assembly = vtkPropAssembly::New();
   assembly->AddPart( axes2 );
   assembly->AddPart( cube );
 
   vtkOrientationMarkerWidget* widget = vtkOrientationMarkerWidget::New();
-  //widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
   widget->SetOrientationMarker( assembly );
   widget->SetInteractor( iren );
-  //widget->SetViewport( 0.0, 0.0, 0.4, 0.4 );
   widget->SetEnabled( 1 );
   widget->InteractiveOff();
   widget->InteractiveOn();

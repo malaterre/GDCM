@@ -11,6 +11,7 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     gdcmrtplan
     gdcmvolume
     gdcmtexture
+    gdcmreslice
   )
   IF(GDCM_BUILD_TESTING)
   SET(GDCM_VTK_APPS
