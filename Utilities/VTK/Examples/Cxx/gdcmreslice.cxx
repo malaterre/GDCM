@@ -15,6 +15,7 @@
 #include "vtkGDCMImageReader.h"
 
 #include "vtkRenderer.h"
+#include "vtkAssembly.h"
 #include "vtkImageFlip.h"
 #include "vtkImageReslice.h"
 #include "vtkRenderWindow.h"
@@ -50,7 +51,12 @@ int main( int argc, char *argv[] )
   reslice->SetInput(flip->GetOutput());
   //reslice->SetResliceAxesDirectionCosines()
   reader->GetDirectionCosines()->Print(std::cout);
-  reslice->SetResliceAxes( reader->GetDirectionCosines() );
+  vtkMatrix4x4 *invert = vtkMatrix4x4::New();
+  invert->DeepCopy( reader->GetDirectionCosines() );
+  invert->Invert();
+
+  //reslice->SetResliceAxes( reader->GetDirectionCosines() );
+  reslice->SetResliceAxes( invert );
   reslice->Update();
   vtkImageData* ima = reslice->GetOutput();
 
@@ -101,6 +107,14 @@ int main( int argc, char *argv[] )
   cube->SetZMinusFaceText( "F" );
 
   vtkAxesActor* axes2 = vtkAxesActor::New();
+
+  vtkTransform *transform = vtkTransform::New();
+  transform->Identity();
+  //reader->GetDirectionCosines()->Print(std::cout);
+  transform->Concatenate(invert);
+  //axes2->SetShaftTypeToCylinder();
+  axes2->SetUserTransform( transform );
+  cube->GetAssembly()->SetUserTransform( transform ); // cant get it to work
 
   vtkPropAssembly* assembly = vtkPropAssembly::New();
   assembly->AddPart( axes2 );
