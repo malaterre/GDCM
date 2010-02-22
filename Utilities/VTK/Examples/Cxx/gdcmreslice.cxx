@@ -15,7 +15,7 @@
 #include "vtkGDCMImageReader.h"
 
 #include "vtkRenderer.h"
-#include "vtkAssembly.h"
+#include "vtkImageFlip.h"
 #include "vtkImageReslice.h"
 #include "vtkRenderWindow.h"
 #include "vtkAnnotatedCubeActor.h"
@@ -40,9 +40,16 @@ int main( int argc, char *argv[] )
   //reader->FileLowerLeftOn();
   reader->Update();
 
+  vtkImageFlip *flip = vtkImageFlip::New();
+  flip->SetInput(reader->GetOutput());
+  flip->SetFilteredAxis(0);
+  flip->Update();
+
   vtkImageReslice *reslice = vtkImageReslice::New();
-  reslice->SetInput(reader->GetOutput());
+  //reslice->SetInput(reader->GetOutput());
+  reslice->SetInput(flip->GetOutput());
   //reslice->SetResliceAxesDirectionCosines()
+  reader->GetDirectionCosines()->Print(std::cout);
   reslice->SetResliceAxes( reader->GetDirectionCosines() );
   reslice->Update();
   vtkImageData* ima = reslice->GetOutput();
@@ -84,16 +91,16 @@ int main( int argc, char *argv[] )
   ren->AddActor(planeActor);
   ren->SetBackground(0,0,0.5);
 
+  // DICOM is RAH:
   vtkAnnotatedCubeActor* cube = vtkAnnotatedCubeActor::New();
-  cube->SetXPlusFaceText ( "L" );
-  cube->SetXMinusFaceText( "R" );
+  cube->SetXPlusFaceText ( "R" );
+  cube->SetXMinusFaceText( "L" );
   cube->SetYPlusFaceText ( "A" );
   cube->SetYMinusFaceText( "P" );
   cube->SetZPlusFaceText ( "H" );
   cube->SetZMinusFaceText( "F" );
 
   vtkAxesActor* axes2 = vtkAxesActor::New();
-  reader->GetDirectionCosines()->Print(std::cout);
 
   vtkPropAssembly* assembly = vtkPropAssembly::New();
   assembly->AddPart( axes2 );
