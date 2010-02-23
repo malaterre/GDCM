@@ -16,6 +16,7 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#include "vtkMath.h"
 #include "vtkPolyData.h"
 #include "vtkCellArray.h"
 #include "vtkPoints.h"
@@ -78,12 +79,19 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   // vtkMedicalImageProperties is in the parent class
   //this->FileLowerLeft = 1;
   this->DirectionCosines = vtkMatrix4x4::New();
-  this->DirectionCosines->SetElement(0,0,1);
-  this->DirectionCosines->SetElement(1,0,0);
-  this->DirectionCosines->SetElement(2,0,0);
-  this->DirectionCosines->SetElement(0,1,0);
-  this->DirectionCosines->SetElement(1,1,1);
-  this->DirectionCosines->SetElement(2,1,0);
+  this->DirectionCosines->Identity();
+  //this->DirectionCosines->SetElement(0,0,1); // x0
+  //this->DirectionCosines->SetElement(1,0,0); // x1
+  //this->DirectionCosines->SetElement(2,0,0); // x2
+  //this->DirectionCosines->SetElement(3,0,0); // 
+  //this->DirectionCosines->SetElement(0,1,0); // y0
+  //this->DirectionCosines->SetElement(1,1,1); // y1
+  //this->DirectionCosines->SetElement(2,1,0); // y2
+  //this->DirectionCosines->SetElement(3,1,0); // 
+  //this->DirectionCosines->SetElement(0,2,0); // y0
+  //this->DirectionCosines->SetElement(1,2,0); // y1
+  //this->DirectionCosines->SetElement(2,2,1); // y2
+  //this->DirectionCosines->SetElement(3,2,0); // 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
@@ -772,9 +780,19 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DirectionCosines->SetElement(0,0, dircos[0]);
     this->DirectionCosines->SetElement(1,0, dircos[1]);
     this->DirectionCosines->SetElement(2,0, dircos[2]);
+    this->DirectionCosines->SetElement(3,0, 0);
     this->DirectionCosines->SetElement(0,1, dircos[3]);
     this->DirectionCosines->SetElement(1,1, dircos[4]);
     this->DirectionCosines->SetElement(2,1, dircos[5]);
+    this->DirectionCosines->SetElement(3,1, 0);
+    double dircosz[3];
+    vtkMath::Cross(dircos, dircos+3, dircosz);
+    this->DirectionCosines->SetElement(0,2, dircosz[0]);
+    this->DirectionCosines->SetElement(1,2, dircosz[1]);
+    this->DirectionCosines->SetElement(2,2, dircosz[2]);
+    this->DirectionCosines->SetElement(3,2, 0);
+    //std::cout << "Det: " << this->DirectionCosines->Determinant() << std::endl;
+
     for(int i=0;i<6;++i)
       this->ImageOrientationPatient[i] = dircos[i];
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
