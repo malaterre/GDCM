@@ -15,6 +15,9 @@
 
 #include "vtkActor.h"
 #include "vtkCamera.h"
+#include "vtkMatrix4x4.h"
+#include "vtkTransform.h"
+#include "vtkAssembly.h"
 #include "vtkCellPicker.h"
 #include "vtkCommand.h"
 #include "vtkImageActor.h"
@@ -348,25 +351,29 @@ int main( int argc, char *argv[] )
   ren1->ResetCameraClippingRange();
 
   vtkAnnotatedCubeActor* cube = vtkAnnotatedCubeActor::New();
-  cube->SetXPlusFaceText ( "V" );
-  cube->SetXMinusFaceText( "K" );
-  cube->SetYPlusFaceText ( "T" );
-  cube->SetZPlusFaceText ( "" );
-  cube->SetZMinusFaceText( "" );
-  cube->SetYMinusFaceText( "" );
+  cube->SetXPlusFaceText ( "R" );
+  cube->SetXMinusFaceText( "L" );
+  cube->SetYPlusFaceText ( "A" );
+  cube->SetYMinusFaceText( "P" );
+  cube->SetZPlusFaceText ( "H" );
+  cube->SetZMinusFaceText( "F" );
   cube->SetFaceTextScale( 0.666667 );
 
   vtkAxesActor* axes2 = vtkAxesActor::New();
 
+  vtkMatrix4x4 *invert = vtkMatrix4x4::New();
+  invert->DeepCopy( reader->GetDirectionCosines() );
+  invert->Invert();
+
   // simulate a left-handed coordinate system
   //
-  //transform->Identity();
+  vtkTransform *transform = vtkTransform::New();
+  transform->Identity();
   //transform->RotateY(90);
+  transform->Concatenate(invert);
   axes2->SetShaftTypeToCylinder();
-  //axes2->SetUserTransform( transform );
-  axes2->SetXAxisLabelText( "w" );
-  axes2->SetYAxisLabelText( "v" );
-  axes2->SetZAxisLabelText( "u" );
+  axes2->SetUserTransform( transform );
+  cube->GetAssembly()->SetUserTransform( transform );
 
   axes2->SetTotalLength( 1.5, 1.5, 1.5 );
   axes2->SetCylinderRadius( 0.500 * axes2->GetCylinderRadius() );
