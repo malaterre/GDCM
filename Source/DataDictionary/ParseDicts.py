@@ -1,5 +1,10 @@
 #! /usr/bin/env python
 """
+WARNING: This script has no meaning today (post 2008).
+Since the standard is now available as .doc. If we assume
+that the .doc is valid (according to standard only pdf should)
+then there is not point in using this parser anymore today.
+
 Let's write our own python parser to clean up the pdf (after 
 pdftotext of course). 
 Instructions: run pdftotext like this:

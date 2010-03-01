@@ -60,15 +60,11 @@ http://www.thescripts.com/forum/thread86881.html
       <xsl:value-of select="translate(@element,'abcdef','ABCDEF')"/>
       <xsl:text>) VERS="</xsl:text>
       <xsl:choose>
-        <xsl:when test="@version = 2">
+        <xsl:when test="@retired = 'true'">
           <xsl:text>2</xsl:text>
         </xsl:when>
-        <xsl:when test="@version = 3">
-          <xsl:text>3</xsl:text>
-        </xsl:when>
         <xsl:otherwise>
-          <!--message-->
-          <xsl:text>1</xsl:text>
+          <xsl:text>3</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="@retired != &quot;false&quot;">
@@ -82,7 +78,7 @@ http://www.thescripts.com/forum/thread86881.html
       <xsl:variable name="apos">'</xsl:variable>
       <!--translating an apostrophe is a pain ... better solution ? -->
       <xsl:variable name="description_apos">
-        <xsl:value-of select="translate(description, $apos, '')"/>
+        <xsl:value-of select="translate(@name, $apos, '')"/>
       </xsl:variable>
       <xsl:variable name="description_dash">
         <!-- the dicom3tools is not always consistant with capitalization. 
@@ -97,7 +93,7 @@ http://www.thescripts.com/forum/thread86881.html
       <!-- remove remaining extra character -->
       <xsl:value-of select="translate($description_cap,'/(),','')"/>
       <xsl:text>" Name="</xsl:text>
-      <xsl:value-of select="description"/>
+      <xsl:value-of select="@name"/>
       <xsl:text>"</xsl:text>
       <xsl:text>
 </xsl:text>
