@@ -18,6 +18,7 @@
  *
  * Implementation details:
  * http://www.sqlite.org/c3ref/bind_blob.html
+ * http://www.adp-gmbh.ch/sqlite/bind_insert.html
  */
 #include "gdcmScanner.h"
 #include "gdcmDirectory.h"
