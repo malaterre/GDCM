@@ -402,6 +402,48 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
   return ret;
 }
 
+bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const
+{
+  static const unsigned int deidSize = sizeof(Tag);
+  static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
+  static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
+  static const Tag *end = start + numDeIds;
+
+  bool found = false;
+  for(const Tag *ptr = start ; ptr != end && !found ; ++ptr)
+    {
+    const Tag& tag = *ptr;
+    found = sqi->FindDataElement( tag );
+    }
+  // ok we can exit.
+  if( found ) return true;
+
+  // now look into sub-sequence:
+  unsigned int n = sqi->GetNumberOfItems();
+  for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+    {
+    Item &item = sqi->GetItem( i );
+    DataSet &nested = item.GetNestedDataSet();
+    DataSet::Iterator it = nested.Begin();
+    for( ; it != nested.End() && !found; ++it)
+      {
+      const DataElement &de = *it;
+      VR vr = DataSetHelper::ComputeVR(file, nested, de.GetTag() );
+      SmartPointer<SequenceOfItems> sqi = 0;
+      if( vr == VR::SQ )
+        {
+        sqi = de.GetValueAsSQ();
+        }
+      if( sqi )
+        {
+        found = CheckIfSequenceContainsAttributeToAnonymize(file, sqi);
+        }
+      }
+    }
+
+  return found;
+}
+
 // Implementation note:
 // This function trigger:
 // 1 StartEvent
@@ -460,7 +502,6 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     {
     const DataElement &de = *it;
     //const SequenceOfItems *sqi = de.GetSequenceOfItems();
-    const ByteValue *bv = de.GetByteValue();
     SmartPointer<SequenceOfItems> sqi = 0;
     VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
     if( vr == VR::SQ )
@@ -469,16 +510,21 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
       }
     if( sqi )
       {
-      bool found = false;
-      for(const Tag *ptr = start ; ptr != end && !found ; ++ptr)
-        {
-        const Tag& tag = *ptr;
-        found = sqi->FindDataElement( tag );
-        }
+      bool found
+        = CheckIfSequenceContainsAttributeToAnonymize(*F, sqi);
       if( found )
         {
-        // A special Tag was found let's store the entire Sequence of Item:
-        encryptedds.Insert( de );
+        // A special Tag was found within the SQ,let's store the entire Sequence of Item:
+        if( !encryptedds.FindDataElement( de.GetTag() ) )
+          {
+          // What if we found a Patient Name within a Content Sequence
+          // we do not need to insert twice this DICOM Attribute
+          encryptedds.Insert( de );
+          }
+        else
+          {
+          assert( de == encryptedds.GetDataElement( de.GetTag() ) );
+          }
         }
       }
     }
