@@ -27,7 +27,7 @@ ENDIF(GDCM_BINARY_DIR)
 SET(EXAMPLES_SRCS
   GenAllVR
   LargeVRDSExplicit
-    ReadAndDumpDICOMDIR
+  ReadAndDumpDICOMDIR
   GenerateStandardSOPClasses
   ClinicalTrialAnnotate
   CheckBigEndianBug
@@ -37,6 +37,7 @@ SET(EXAMPLES_SRCS
   CompressImage
   FixBrokenJ2K
   GenFakeImage
+  GenFakeIdentifyFile
   HelloVizWorld
   HelloWorld
   MergeTwoFiles

@@ -136,7 +136,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
         gdcmWarningMacro( "Unhandled" );
         vr = VR::INVALID;
         }
-      assert( at.GetValue() == 0 || at.GetValue() == 1 );
+      //assert( at.GetValue() == 0 || at.GetValue() == 1 );
       if( at.GetValue() )
         {
         vr = VR::SS;
@@ -159,8 +159,11 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     Tag waveformdata(0x5400,0x1010);
     Tag overlaydata(0x6000,0x3000);
     Tag curvedata(0x5000,0x3000);
+    Tag audiodata(0x5000,0x200c);
     Tag variablepixeldata(0x7f00,0x0010);
     Tag bitsallocated(0x0028,0x0100);
+    Tag channelminval(0x5400,0x0110);
+    Tag channelmaxval(0x5400,0x0112);
     //assert( ds.FindDataElement( pixeldata ) );
     int v = -1;
     if( waveformdata == t || waveformpaddingvalue == t )
@@ -187,14 +190,22 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       }
     else if( waveformdata == t || waveformpaddingvalue == t )
       {
-      assert( v == 8 || v == 16 );
+      //assert( v == 8 || v == 16 );
       vr = VR::OW;
+      }
+    else if ( t.IsGroupXX(audiodata) )
+      {
+      vr = VR::OB;
       }
     else if ( t.IsGroupXX(curvedata) )
       {
       vr = VR::OB;
       }
     else if ( t.IsGroupXX(variablepixeldata) )
+      {
+      vr = VR::OB;
+      }
+    else if ( t == channelminval || t == channelmaxval )
       {
       vr = VR::OB;
       }

@@ -163,12 +163,14 @@ public:
   const std::ostream &Write(std::ostream &os) const
     {
     VRType vrfield = VRField;
+    gdcmAssertAlwaysMacro( !IsDual() );
     if( vrfield == VR::INVALID )
       {
       //vrfield = VR::UN;
       }
     const char *vr = GetVRString(vrfield);
-    assert( strlen( vr ) == 2 );
+    //assert( strlen( vr ) == 2 );
+    assert( vr[0] && vr[1] && vr[2] == 0 );
     os.write(vr, 2);
     // See PS 3.5, Data Element Structure With Explicit VR
     if( vrfield & VL32 )

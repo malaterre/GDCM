@@ -264,6 +264,10 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     // Very bad !!
     //throw Exception( "No (0002,0010) element found" );
     // Constuct it from DataSetTS
+    if( DataSetTS == TransferSyntax::TS_END )
+      {
+      throw gdcm::Exception( "No TransferSyntax specified." );
+      }
     const char* str = TransferSyntax::GetTSString(DataSetTS);
     xde.SetByteValue(str,strlen(str));
     xde.SetVR( VR::UI );

@@ -125,6 +125,8 @@ public:
   /// for wrapped language: instanciate a reference counted object
   static SmartPointer<Anonymizer> New() { return new Anonymizer; }
 
+  static std::vector<Tag> GetBasicApplicationLevelConfidentialityProfileAttributes();
+
 protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
   bool BALCPProtect(DataSet &ds, Tag const & tag);

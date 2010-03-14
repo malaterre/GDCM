@@ -131,7 +131,16 @@ public:
     // $ gdcmdump --csa gdcmData/SIEMENS-JPEG-CorruptFrag.dcm 
     if( de.GetTag().GetGroup() >= 0x0008 || de.GetTag().GetGroup() == 0x4 )
       {
-      InsertDataElement( de );
+      // prevent user error:
+      if( de.GetTag() == Tag(0xfffe,0xe00d) 
+      || de.GetTag() == Tag(0xfffe,0xe0dd) 
+      || de.GetTag() == Tag(0xfffe,0xe000) )
+        {
+        }
+      else
+        {
+        InsertDataElement( de );
+        }
       }
     else
       {
