@@ -28,6 +28,7 @@
 #include "sqlite3.h"
 
 #include <stdio.h>
+#include <time.h>
 
 int main(int argc, char *argv[])
 {
@@ -35,6 +36,8 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
+  time_t time_start = time(0);
+
   gdcm::Trace::SetDebug( false );
   gdcm::Trace::SetWarning( false );
   const char *inputdirectory = argv[1];
@@ -49,6 +52,7 @@ int main(int argc, char *argv[])
 
   bool b = s.Scan( d.GetFilenames() );
   if( !b ) return 1;
+  time_t time_scanner = time(0);
 
   std::cout << "Finished loading data from : " << nfiles << " files" << std::endl;
 
@@ -132,6 +136,12 @@ int main(int argc, char *argv[])
     }
 
   sqlite3_close(db);
+
+  time_t time_sqlite = time(0);
+
+  std::cout << "Time to scan DICOM files: " << (time_scanner - time_start) << std::endl;
+  std::cout << "Time to build SQLITE3: " << (time_sqlite - time_scanner) << std::endl;
+
   return 0;
 }
 
