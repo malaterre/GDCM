@@ -43,14 +43,23 @@ static void PrintVersion()
 
 
 static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, const char *outfilename,
-  std::vector<gdcm::Tag> const &empty_tags, std::vector<gdcm::Tag> const &remove_tags, std::vector< std::pair<gdcm::Tag, std::string> > const & replace_tags)
+  std::vector<gdcm::Tag> const &empty_tags, std::vector<gdcm::Tag> const &remove_tags, std::vector< std::pair<gdcm::Tag, std::string> > const & replace_tags, bool continuemode = false)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
     std::cerr << "Could not read : " << filename << std::endl;
-    return false;
+    if( continuemode )
+      {
+      std::cerr << "Skipping from anonymization process (continue mode)." << std::endl;
+      return true;
+      }
+    else
+      {
+      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      return false;
+      }
     }
   gdcm::File &file = reader.GetFile();
 
@@ -99,14 +108,23 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
   return true;
 }
 
-static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename)
+static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename, bool continuemode = false)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
     std::cerr << "Could not read : " << filename << std::endl;
-    return false;
+    if( continuemode )
+      {
+      std::cerr << "Skipping from anonymization process (continue mode)." << std::endl;
+      return true;
+      }
+    else
+      {
+      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      return false;
+      }
     }
   gdcm::File &file = reader.GetFile();
   gdcm::MediaStorage ms;
@@ -204,7 +222,8 @@ static void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "  -i --input                  DICOM filename / directory" << std::endl;
   std::cout << "  -o --output                 DICOM filename / directory" << std::endl;
-  std::cout << "  -r --recursive              recursive." << std::endl;
+  std::cout << "  -r --recursive              recursively process (sub-)directories." << std::endl;
+  std::cout << "     --continue               Do not stop when file found is not DICOM." << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "  -k --key                    Path to RSA Private Key." << std::endl;
@@ -292,6 +311,7 @@ int main(int argc, char *argv[])
   int help = 0;
   int version = 0;
   int recursive = 0;
+  int continuemode = 0;
   int empty_tag = 0;
   int remove_tag = 0;
   int replace_tag = 0;
@@ -322,6 +342,7 @@ int main(int argc, char *argv[])
         {"empty", 1, &empty_tag, 1}, // 15
         {"remove", 1, &remove_tag, 1},
         {"replace", 1, &replace_tag, 1},
+        {"continue", 0, &continuemode, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -750,7 +771,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value) )
+      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, continuemode) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;
@@ -763,7 +784,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFile(anon, in, out) )
+      if( !AnonymizeOneFile(anon, in, out, continuemode) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;

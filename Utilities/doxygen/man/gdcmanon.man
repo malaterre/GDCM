@@ -68,6 +68,8 @@ do, such as 'remove' or 'empty' a tag, see below the dumb mode options.
 \verbatim
   -i --input                  DICOM filename / directory
   -o --output                 DICOM filename / directory
+  -r --recursive              recursively process (sub-)directories.
+     --continue               Do not stop when file found is not DICOM.
      --root-uid               Root UID.
      --resources-path         Resources path.
   -k --key                    Path to RSA Private Key.
