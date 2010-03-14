@@ -408,25 +408,33 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     }
   if( ValueLengthField )
     {
-#ifndef NDEBUG
+    // Special case, check SQ
+    if ( GetVR() == VR::SQ )
+      {
+      gdcmAssertAlwaysMacro( dynamic_cast<const SequenceOfItems*>(&GetValue()) );
+      }
+//#ifndef NDEBUG
+    // check consistency in Length:
     if( GetByteValue() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
     //else if( GetSequenceOfItems() )
-    else if( dynamic_cast<const SequenceOfItems*>(&GetValue()) )
+    else if( const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&GetValue()) )
       {
       assert( ValueField->GetLength() == ValueLengthField );
-      //const SequenceOfItems *sq = GetSequenceOfItems();
-      SmartPointer<SequenceOfItems> sq = GetValueAsSQ();
-      VL dummy = sq->template ComputeLength<ExplicitDataElement>();
-      gdcmAssertAlwaysMacro( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
+      // Recompute the total length:
+      if( !ValueLengthField.IsUndefined() )
+        {
+        VL dummy = sqi->template ComputeLength<ExplicitDataElement>();
+        gdcmAssertAlwaysMacro( dummy == ValueLengthField );
+        }
       }
     else if( GetSequenceOfFragments() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
-#endif
+//#endif
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {
@@ -464,7 +472,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
         assert( VRField & VR::VRBINARY );
         unsigned int vrsize = VRField.GetSize();
         assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
-        if(VRField==VR::AT) vrsize = 2;
+        if(VRField == VR::AT) vrsize = 2;
         switch(vrsize)
           {
         case 1:
