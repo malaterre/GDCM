@@ -78,19 +78,35 @@ select="substring-after($text,$replace)"/>
       <xsl:variable name="apos">'</xsl:variable>
 
       <!--translating an apostrophe is a pain ... better solution ? -->
-      <xsl:variable name="description_apos">
+      <xsl:variable name="description_apos3">
         <!--xsl:value-of select="translate($textToTransform, $apos, '')"/-->
 <xsl:call-template name="replace-string">
 <xsl:with-param name="text" select="$textToTransform"/>
+<xsl:with-param name="replace">De-identification</xsl:with-param>
+<xsl:with-param name="with" select="'Deidentification'"/>
+</xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="description_apos2">
+        <!--xsl:value-of select="translate($textToTransform, $apos, '')"/-->
+<xsl:call-template name="replace-string">
+<xsl:with-param name="text" select="$description_apos3"/>
 <xsl:with-param name="replace">'s</xsl:with-param>
 <xsl:with-param name="with" select="' '"/>
 </xsl:call-template>
       </xsl:variable>
+      <xsl:variable name="description_apos">
+        <!--xsl:value-of select="translate($textToTransform, $apos, '')"/-->
+<xsl:call-template name="replace-string">
+<xsl:with-param name="text" select="$description_apos2"/>
+<xsl:with-param name="replace">Sub-operations</xsl:with-param>
+<xsl:with-param name="with" select="'Suboperations'"/>
+</xsl:call-template>
+      </xsl:variable>
       <xsl:variable name="description_dash2">
-        <xsl:value-of select="translate($description_apos,'-','')"/>
+        <xsl:value-of select="translate($description_apos,'-/','  ')"/>
       </xsl:variable>
       <xsl:variable name="description_dash">
-        <xsl:value-of select="translate($description_dash2,'/',' ')"/>
+        <xsl:value-of select="translate($description_dash2,$apos,'')"/>
       </xsl:variable>
       <xsl:variable name="description_cap">
         <xsl:call-template name="upperCase">
