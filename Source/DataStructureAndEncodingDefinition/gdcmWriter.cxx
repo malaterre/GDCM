@@ -105,7 +105,11 @@ if( DS.IsEmpty() )
     }
 
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
-  assert( ts.IsValid() );
+  if( !ts.IsValid() )
+    {
+    gdcmErrorMacro( "Invalid Transfer Syntax" );
+    return false;
+    }
 
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
