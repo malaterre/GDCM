@@ -204,6 +204,7 @@ static void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "  -i --input                  DICOM filename / directory" << std::endl;
   std::cout << "  -o --output                 DICOM filename / directory" << std::endl;
+  std::cout << "  -r --recursive              recursive." << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "  -k --key                    Path to RSA Private Key." << std::endl;
@@ -332,7 +333,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:dek:c:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:rdek:c:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -622,26 +623,36 @@ int main(int argc, char *argv[])
         return 1;
         }
 
-      //std::cout << "Making directory: " << outfilename << std::endl;
-      if( !gdcm::System::MakeDirectory( outfilename.c_str() ) )
-        {
-        std::cerr << "Could not create directory: " << outfilename << std::endl;
-        return 1;
-        }
       }
     // For now avoid user mistake
     if( filename == outfilename )
       {
+      std::cerr << "Input directory should be different from output directory" << std::endl;
       return 1;
       }
     nfiles = dir.Load(filename, recursive);
     filenames = dir.GetFilenames();
     gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+    // Prepare outfilenames
     for( ; it != filenames.end(); ++it )
       {
-      std::string dup = *it;
-      std::string out = dup.replace(0, filename.size(), outfilename );
+      std::string dup = *it; // make a copy
+      std::string &out = dup.replace(0, filename.size(), outfilename );
       outfilenames.push_back( out );
+      }
+    // Prepare outdirectory
+    gdcm::Directory::FilenamesType const &dirs = dir.GetDirectories();
+    gdcm::Directory::FilenamesType::const_iterator itdir = dirs.begin();
+    for( ; itdir != dirs.end(); ++itdir )
+      {
+      std::string dirdup = *itdir; // make a copy
+      std::string &dirout = dirdup.replace(0, filename.size(), outfilename );
+      //std::cout << "Making directory: " << dirout << std::endl;
+      if( !gdcm::System::MakeDirectory( dirout.c_str() ) )
+        {
+        std::cerr << "Could not create directory: " << dirout << std::endl;
+        return 1;
+        }
       }
     }
   else
@@ -691,6 +702,7 @@ int main(int argc, char *argv[])
   // All set, then load the XML files:
   if( !g.LoadResourcesFiles() )
     {
+    std::cerr << "Could not load XML file from specified path" << std::endl;
     return 1;
     }
   const gdcm::Defs &defs = g.GetDefs(); (void)defs;
