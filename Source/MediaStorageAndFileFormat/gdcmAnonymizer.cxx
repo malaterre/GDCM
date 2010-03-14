@@ -295,9 +295,9 @@ static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
   for( ; it != ds.End(); )
     {
     const DataElement &de1 = *it;
-      // std::set::erase invalidate iterator, so we need to make a copy first:
-      DataSet::Iterator dup = it;
-      ++it;
+    // std::set::erase invalidate iterator, so we need to make a copy first:
+    DataSet::Iterator dup = it;
+    ++it;
     if( de1.GetTag().IsGroupLength() )
       {
       ds.GetDES().erase(dup);
