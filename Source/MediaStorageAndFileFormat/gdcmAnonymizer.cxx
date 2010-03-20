@@ -565,6 +565,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
   size_t encrypted_len2 = encrypted_len;
   bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
+  if( !b ) return false;
   assert( encrypted_len <= encrypted_len2 );
 
     {
@@ -573,7 +574,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     sq->SetLengthToUndefined();
 
     // FIXME: should be user configurable:
-    TransferSyntax encrypted_ts = TransferSyntax::ImplicitVRLittleEndian;
+    //TransferSyntax encrypted_ts = TransferSyntax::ImplicitVRLittleEndian;
+    TransferSyntax encrypted_ts = TransferSyntax::ExplicitVRLittleEndian;
     // <entry group="0400" element="0510" vr="UI" vm="1" name="Encrypted Content Transfer Syntax UID"/>
     DataElement encrypted_ts_de( Tag(0x400,0x510) );
     encrypted_ts_de.SetVR( Attribute<0x0400, 0x0510>::GetVR() );
@@ -878,6 +880,31 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   SmartPointer<SequenceOfItems> sq = EncryptedAttributesSequence.GetValueAsSQ();
   const Item &item = sq->GetItem(1);
   const DataSet &nds1 = item.GetNestedDataSet();
+  if( !nds1.FindDataElement( Tag(0x0400,0x0510) ) 
+    || nds1.GetDataElement( Tag(0x0400,0x0510) ).IsEmpty() )
+    {
+    gdcmDebugMacro( "Missing EncryptedContentTransferSyntax Attribute" );
+    return false;
+    }
+
+  const DataElement &EncryptedContentTransferSyntax = nds1.GetDataElement( Tag(0x0400,0x0510) );
+
+  std::string ts( EncryptedContentTransferSyntax.GetByteValue()->GetPointer(),
+    EncryptedContentTransferSyntax.GetByteValue()->GetLength() );
+
+  if( TransferSyntax::GetTSType( ts.c_str() ) != TransferSyntax::ExplicitVRLittleEndian )
+    {
+    gdcmDebugMacro( "Only ExplicitVRLittleEndian is supported" );
+    return false;
+    }
+
+  if( !nds1.FindDataElement( Tag(0x0400,0x0520) ) 
+    || nds1.GetDataElement( Tag(0x0400,0x0520) ).IsEmpty() )
+    {
+    gdcmDebugMacro( "Missing EncryptedContent Attribute" );
+    return false;
+    }
+
   const DataElement &EncryptedContent = nds1.GetDataElement( Tag(0x0400,0x0520) );
   const ByteValue *bv = EncryptedContent.GetByteValue();
   
@@ -953,7 +980,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   return true;
 }
 
-void Anonymizer::SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms)
+void Anonymizer::SetCryptographicMessageSyntax(CryptographicMessageSyntax *cms)
 {
   CMS = cms;
 }
