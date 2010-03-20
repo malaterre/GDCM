@@ -4,7 +4,7 @@ SET(MSFF_TEST_SRCS
   TestAnonymizer
   TestValidate
   TestAnonymizeEvent
-  #TestAnonymizer2
+  TestAnonymizer2
   TestFileDerivation
   TestSegmentedPaletteColorLookupTable
   TestPNMCodec
