@@ -221,7 +221,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     bool dicomdir = (ms == MediaStorage::MediaStorageDirectoryStorage && dirrecsq);
     if( !dicomdir )
       {
-      if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+      if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) || ds.GetDataElement( Tag(0x0008, 0x0018) ).IsEmpty() )
         {
         throw gdcm::Exception( "No 8,18 element sorry" );
         //assert(0);

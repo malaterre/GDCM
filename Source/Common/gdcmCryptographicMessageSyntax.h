@@ -49,7 +49,9 @@ public :
     AES256_CIPHER  // '   '
   } CipherTypes;
 
-  void SetCipherType( CipherTypes type);
+  /// Set Cipher Type.
+  /// Default is: AES256_CIPHER
+  void SetCipherType(CipherTypes type);
   CipherTypes GetCipherType() const;
 
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
