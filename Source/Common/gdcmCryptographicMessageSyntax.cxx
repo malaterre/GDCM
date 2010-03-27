@@ -158,12 +158,20 @@ public:
     if( !Initialized )
       {
       bool b = Initialize();
-      if ( !b ) return false;
+      if ( !b )
+        {
+        gdcmErrorMacro( "Initialize" );
+        return false;
+        }
       Initialized = true;
       }
 
     BIO *data = BIO_new_mem_buf((void*)array, len);
-    if(!data) return false;
+    if(!data) 
+      {
+      gdcmErrorMacro( "BIO_new_mem_buf" );
+      return false;
+      }
 
     char buf[1024*4];
     for (;;)
@@ -176,6 +184,16 @@ public:
 
     if (!PKCS7_dataFinal(p7,p7bio))
       {
+      gdcmErrorMacro( "PKCS7_dataFinal" );
+      return false;
+      }
+
+    // WARNING:
+    // BIO_reset() normally returns 1 for success and 0 or -1 for failure. File
+    // BIOs are an exception, they return 0 for success and -1 for failure. 
+    if( BIO_reset(bio_buffer) != 1 )
+      {
+      gdcmErrorMacro( "BIO_reset" );
       return false;
       }
 
@@ -184,7 +202,11 @@ public:
 
     char *binary;
     long biolen = BIO_get_mem_data(bio_buffer,&binary);
-    if ( outlen < biolen ) return false;
+    if ( outlen < biolen ) 
+      {
+      gdcmErrorMacro( "Allocation issue: " << outlen << " vs " << biolen << " from " << len );
+      return false;
+      }
     outlen = biolen;
     memcpy( output, binary, outlen );
 

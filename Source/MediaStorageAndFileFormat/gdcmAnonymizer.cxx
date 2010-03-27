@@ -565,7 +565,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
   size_t encrypted_len2 = encrypted_len;
   bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
-  if( !b ) return false;
+  if( !b ) 
+  {
+    gdcmErrorMacro( "Problem with Encrypt" );
+    return false;
+  }
   assert( encrypted_len <= encrypted_len2 );
 
     {
