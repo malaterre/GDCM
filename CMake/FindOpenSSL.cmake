@@ -21,8 +21,22 @@
 #  License text for the above reference.)
 
 # http://www.slproweb.com/products/Win32OpenSSL.html
+SET(_OPENSSL_ROOT_HINTS
+  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]"
+  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (64-bit)_is1;Inno Setup: App Path]"
+  )
+SET(_OPENSSL_ROOT_PATHS
+  "C:/OpenSSL/"
+  )
+FIND_PATH(_OPENSSL_ROOT_DIR
+  NAMES include/openssl/ssl.h
+  HINTS ${_OPENSSL_HINTS}
+  PATHS ${_OPENSSL_PATHS}
+)
+
+# Re-use the previous path:
 FIND_PATH(OPENSSL_INCLUDE_DIR openssl/ssl.h
-  PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/include"
+  ${_OPENSSL_ROOT_DIR}/include
 )
 
 IF(WIN32 AND NOT CYGWIN)
@@ -43,16 +57,16 @@ IF(WIN32 AND NOT CYGWIN)
     # libeay32MD.lib is identical to ../libeay32.lib, and
     # ssleay32MD.lib is identical to ../ssleay32.lib
     FIND_LIBRARY(LIB_EAY_DEBUG NAMES libeay32MDd libeay32
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+      ${_OPENSSL_ROOT_DIR}/lib/VC
       )
     FIND_LIBRARY(LIB_EAY_RELEASE NAMES libeay32MD libeay32
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+      ${_OPENSSL_ROOT_DIR}/lib/VC
       )
     FIND_LIBRARY(SSL_EAY_DEBUG NAMES ssleay32MDd ssleay32 ssl
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+      ${_OPENSSL_ROOT_DIR}/lib/VC
       )
     FIND_LIBRARY(SSL_EAY_RELEASE NAMES ssleay32MD ssleay32 ssl
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/VC"
+      ${_OPENSSL_ROOT_DIR}/lib/VC
       )
     if( CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE )
       set( OPENSSL_LIBRARIES
@@ -67,20 +81,20 @@ IF(WIN32 AND NOT CYGWIN)
   ELSEIF(MINGW)
     # same player, for MingW
     FIND_LIBRARY(LIB_EAY NAMES libeay32
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/MinGW"
+      ${_OPENSSL_ROOT_DIR}/lib/MinGW
       )
     FIND_LIBRARY(SSL_EAY NAMES ssleay32
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib/MinGW"
+      ${_OPENSSL_ROOT_DIR}/lib/MinGW
       )
     MARK_AS_ADVANCED(SSL_EAY LIB_EAY)
     set( OPENSSL_LIBRARIES ${SSL_EAY} ${LIB_EAY} )
   ELSE(MSVC)
     # Not sure what to pick for -say- intel, let's use the toplevel ones and hope someone report issues:
     FIND_LIBRARY(LIB_EAY NAMES libeay32
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib"
+      ${_OPENSSL_ROOT_DIR}/lib
       )
     FIND_LIBRARY(SSL_EAY NAMES ssleay32
-      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]/lib"
+      ${_OPENSSL_ROOT_DIR}/lib
       )
     MARK_AS_ADVANCED(SSL_EAY LIB_EAY)
     set( OPENSSL_LIBRARIES ${SSL_EAY} ${LIB_EAY} )
