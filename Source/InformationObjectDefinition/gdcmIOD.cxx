@@ -21,5 +21,31 @@
 namespace gdcm
 {
 
+Type IOD::GetTypeFromTag(const Modules &modules, const Tag& tag) const
+{
+  Type ret;
+  const IOD &iod = *this;
+
+  const unsigned int niods = iod.GetNumberOfIODs();
+  // Iterate over each iod entry in order:
+  bool found = false;
+  for(unsigned int idx = 0; !found && idx < niods; ++idx)
+    {
+    const IODEntry &iodentry = iod.GetIODEntry(idx);
+    const char *ref = iodentry.GetRef();
+    //Usage::UsageType ut = iodentry.GetUsageType();
+
+    const Module &module = modules.GetModule( ref );
+    if( module.FindModuleEntry( tag ) )
+      {
+      const ModuleEntry &module_entry = module.GetModuleEntry(tag);
+      ret = module_entry.GetType();
+      found = true;
+      }
+    }
+
+  return ret;
+}
+
 }
 

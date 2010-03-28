@@ -636,7 +636,15 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   //  if( ds.FindDataElement( tag ) ) BALCPProtect(F->GetDataSet(), tag);
   //  }
   // Check that root level sequence do not contains any of those attributes
-  RecurseDataSet( F->GetDataSet() );
+  try
+  {
+    RecurseDataSet( F->GetDataSet() );
+  }
+  catch(std::exception &ex)
+  {
+  gdcmDebugMacro( "Problem during RecurseDataSet" );
+  return false;
+  }
 
   this->InvokeEvent( IterationEvent() );
 
@@ -688,13 +696,17 @@ static const Tag SpecialTypeTags[] = {
 /*              Series Number                                         */ Tag(0x0020,0x0011)
 };
 
-bool Anonymizer::CanEmptyTag(Tag const &tag)
+bool Anonymizer::CanEmptyTag(Tag const &tag, const IOD &iod) const
 {
   static const Global &g = Global::GetInstance();
   //static const Dicts &dicts = g.GetDicts();
   static const Defs &defs = g.GetDefs();
-  DataSet &ds = F->GetDataSet();
-  Type t = defs.GetTypeFromTag(*F, tag);
+  static const Modules &modules = defs.GetModules();
+  const DataSet &ds = F->GetDataSet();
+  //Type told = defs.GetTypeFromTag(*F, tag);
+  Type t = iod.GetTypeFromTag(modules, tag);
+  //assert( t == told );
+
   gdcmDebugMacro( "Type for tag=" << tag << " is " << t );
 
   //assert( t != Type::UNKNOWN );
@@ -741,7 +753,7 @@ generate a DICOMDIR
   return !b;
 }
 
-bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
+bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
 {
   // \precondition
   assert( ds.FindDataElement(tag) );
@@ -757,7 +769,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag)
 
   //DataSet &ds = F->GetDataSet();
 
-  bool canempty = CanEmptyTag( tag );
+  bool canempty = CanEmptyTag( tag, iod );
   if( !canempty )
     {
     TagValueKey tvk;
@@ -815,13 +827,17 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
 
+  static const Global &g = Global::GetInstance();
+  static const Defs &defs = g.GetDefs();
+  const IOD& iod = defs.GetIODFromFile(*F);
+
   for(const Tag *ptr = start ; ptr != end ; ++ptr)
     {
     const Tag& tag = *ptr;
     // FIXME Type 1 !
     if( ds.FindDataElement( tag ) )
       {
-      BALCPProtect(ds, tag);
+      BALCPProtect(ds, tag, iod);
       }
     }
 

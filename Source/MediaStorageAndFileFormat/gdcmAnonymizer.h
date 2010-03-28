@@ -23,6 +23,7 @@
 namespace gdcm
 {
 class TagPath;
+class IOD;
 class CryptographicMessageSyntax;
 
 /**
@@ -129,8 +130,8 @@ public:
 
 protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
-  bool BALCPProtect(DataSet &ds, Tag const & tag);
-  bool CanEmptyTag(Tag const &tag);
+  bool BALCPProtect(DataSet &ds, Tag const & tag, const IOD &iod);
+  bool CanEmptyTag(Tag const &tag, const IOD &iod) const;
   void RecurseDataSet( DataSet & ds );
 
 private:

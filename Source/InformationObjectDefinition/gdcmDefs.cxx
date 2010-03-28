@@ -217,6 +217,22 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
   return iodname;
 }
 
+const IOD& Defs::GetIODFromFile(const File& file) const
+{
+  MediaStorage ms;
+  ms.SetFromFile(file); // SetFromDataSet does not handle DICOMDIR
+
+  const IODs &iods = GetIODs();
+  const char *iodname = GetIODNameFromMediaStorage( ms );
+  if( !iodname )
+    {
+    gdcmErrorMacro( "Not implemented: " << ms );
+    throw "Not Implemented";
+    }
+  const IOD &iod = iods.GetIOD( iodname );
+  return iod;
+}
+
 Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
 {
   Type ret;

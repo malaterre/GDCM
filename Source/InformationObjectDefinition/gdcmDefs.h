@@ -56,6 +56,8 @@ public:
 
   static const char *GetIODNameFromMediaStorage(MediaStorage const &ms);
 
+  const IOD& GetIODFromFile(const File& file) const;
+
 protected:
   friend class Global;
   void LoadDefaults();
