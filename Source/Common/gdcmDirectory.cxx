@@ -53,7 +53,9 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
     if ( fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
       {
       // Need to check for . and .. to avoid infinite loop
-      if ( fileName != "." && fileName != ".." && recursive )
+      if ( fileName != "." && fileName != ".." 
+        && fileName[0] != '.' // discard any hidden dir
+        && recursive )
         {
         nFiles += Explore(dirName+fileName,recursive);
         }
