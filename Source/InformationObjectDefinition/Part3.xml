@@ -1727,7 +1727,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
-    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4b" usage="C - Required if contrast was administered, see A.41.4.2"/>
+    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C - Required if contrast was administered, see A.41.4.2"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -1751,7 +1751,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
-    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4b" usage="C - Required if contrast was administered; see A.42.4.2"/>
+    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C - Required if contrast was administered; see A.42.4.2"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -1820,7 +1820,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Real World Value Mapping Series" ref="C.25.1" usage="M"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
-    <entry ie="Real World Value Mapping" name="Real World Value Mapping" ref="C.25.22" usage="M"/>
+    <entry ie="Real World Value Mapping" name="Real World Value Mapping" ref="C.25.2" usage="M"/>
     <entry ie="Real World Value Mapping" name="Common Instance Reference" ref="C.12.2" usage="M"/>
     <entry ie="Real World Value Mapping" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
@@ -1963,7 +1963,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Equipment" name="Enhanced General Equipment" ref="C.7.5.2" usage="M"/>
     <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
-    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4b" usage="C - Required if contrast was administered"/>
+    <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C - Required if contrast was administered"/>
     <entry ie="Image" name="Multi-frame Functional Groups" ref="C.7.6.16" usage="M"/>
     <entry ie="Image" name="Multi-frame Dimension" ref="C.7.6.17" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
@@ -2074,7 +2074,7 @@ Note:	This allows the specification of clinical, acquisition, or procedural qual
   </iod>
   <iod table="B.20-1" name="Printer Configuration IOD Modules">
     <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common Information"/>
-    <entry name="Printer" ref="C13.9" description="Contains information about the printer"/>
+    <entry name="Printer" ref="C.13.9" description="Contains information about the printer"/>
     <entry name="Printer Configuration" ref="C.13.13" description="Contains Printer Configuration Information"/>
   </iod>
   <iod table="B.22.2-1" name="General Purpose Scheduled Procedure Step IOD Modules">
@@ -21899,6 +21899,9 @@ YES
 NO</description>
     </entry>
   </module>
+  <module ref="C.8.17.3" table="C.8.17.3-1" name="Ophthalmic PHOTOGRAPHIC PARAMETERS MODULE ATTRIBUTES">
+    <!-- FIXME -->
+  </module>
   <module ref="C.8.17.4" table="C.8.17.4-1" name="Ophthalmic Photography Acquisition Parameters Module Attributes">
     <entry group="0022" element="0005" name="Patient Eye Movement Commanded" type="2">
       <description>Enumerated Values:
@@ -22257,7 +22260,7 @@ Required if the Modality Performed Procedure Step SOP Class, General Purpose Per
     </entry>
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
   </module>
-  <macro table="C.8.19.2-1" name="Enhanced XA/XRF Image Module Table">
+  <module ref="C.8.19.2" table="C.8.19.2-1" name="Enhanced XA/XRF Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.19.2.1.1 for specialization.</description>
@@ -22501,7 +22504,7 @@ Enumerated Values:
 IDENTITY - output is in P-Values - shall be used if Photometric Interpretation (0028,0004) is MONOCHROME2
 INVERSE - output after inversion is in P-Values - shall be used if Photometric Interpretation (0028,0004) is MONOCHROME1.</description>
     </entry>
-  </macro>
+  </module>
   <module ref="C.8.19.3" table="C.8.19.3-1" name="XA/XRF Acquisition Module Attributes">
     <entry group="0018" element="0060" name="KVP" type="1">
       <description>Average of the peak kilo voltage outputs of the X-Ray generator used for all frames.</description>
@@ -25017,7 +25020,7 @@ When defined, each descriptor must provide the functional relationship between t
 </section>
     </entry>
   </macro>
-  <macro table="C.11-4" name="Presentation LUT Module">
+  <module ref="C.11.4" table="C.11-4" name="Presentation LUT Module Attributes">
     <entry group="2050" element="0010" name="Presentation LUT Sequence">
       <description>Defines a sequence of Presentation LUTs. Only a single item shall be included in this sequence.</description>
     </entry>
@@ -25050,7 +25053,7 @@ IDENTITY = input to the Presentation LUT is in P-Values, no further translation 
 LIN OD = input to Presentation LUT is in linear optical density over the range of Min Density (2010,0120) and Max Density (2010,1030).
 Note: LIN OD is only defined for hardcopy devices and is not applicable to softcopy devices.</description>
     </entry>
-  </macro>
+  </module>
   <module ref="C.11.5" table="C.11.5-1" name="Image Histogram Module Attributes">
     <entry group="0060" element="3000" name="Histogram Sequence" type="1">
       <description>Defines a sequence of Histograms.
@@ -26217,7 +26220,7 @@ See Section C.13.9.1 for Defined Terms when the Printer Status is equal to WARNI
       <description>Time when the printer was last calibrated.</description>
     </entry>
   </module>
-  <macro table="C.13-13" name="Printer Configuration Module">
+  <module ref="C.13.13" table="C.13-13" name="Printer Configuration Module">
     <entry group="2000" element="001E" name="Printer Configuration Sequence">
       <description>Contains printer configuration information for a single Application Entity title. See Print Management Service Class Structure in PS 3.4. The sequence shall contain one item for each physical printer/Meta SOP Class combination supported by the Application Entity title.</description>
     </entry>
@@ -26393,7 +26396,7 @@ Note:	Referenced Image Overlay Box Sequence (2020,0130) and Original Image Seque
 
 </section>
     </entry>
-  </macro>
+  </module>
   <module ref="C.14" table="C.14-1" name="Storage Commitment Module Attributes">
     <entry group="0008" element="1195" name="Transaction UID">
       <description>Uniquely identifies this Storage Commitment transaction.</description>

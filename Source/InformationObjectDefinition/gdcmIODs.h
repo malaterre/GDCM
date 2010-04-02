@@ -30,7 +30,8 @@ namespace gdcm
 class GDCM_EXPORT IODs
 {
 public:
-  typedef std::map<std::string, IOD> IODMapType;
+  typedef std::string IODName;
+  typedef std::map<IODName, IOD> IODMapType;
 
   IODs() {}
   friend std::ostream& operator<<(std::ostream& _os, const IODs &_val);
@@ -50,6 +51,10 @@ public:
     assert( it->first == name );
     return it->second;
     }
+
+  typedef IODMapType::const_iterator IODMapTypeConstIterator;
+  IODMapTypeConstIterator Begin() const { return IODsInternal.begin(); }
+  IODMapTypeConstIterator End() const { return IODsInternal.end(); }
 
 private:
   IODMapType IODsInternal;
