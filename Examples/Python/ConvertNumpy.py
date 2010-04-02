@@ -48,15 +48,16 @@ def get_numpy_array_type(gdcm_pixel_format):
 def gdcm_to_numpy(image):
     """Converts a GDCM image to a numpy array.
     """
-    pf = image.GetPixelFormat().GetScalarType()
-    assert pf in get_gdcm_to_numpy_typemap().keys(), \
+    pf = image.GetPixelFormat()
+    
+    assert pf.GetScalarType() in get_gdcm_to_numpy_typemap().keys(), \
            "Unsupported array type %s"%pf
 
     shape = image.GetDimension(0) * image.GetDimension(1), pf.GetSamplesPerPixel()
     if image.GetNumberOfDimensions() == 3:
       shape = shape[0] * image.GetDimension(2), shape[1]
 
-    dtype = get_numpy_array_type(pf)
+    dtype = get_numpy_array_type(pf.GetScalarType())
     gdcm_array = image.GetBuffer()
     result = numpy.frombuffer(gdcm_array, dtype=dtype)
     result.shape = shape
@@ -71,4 +72,5 @@ if __name__ == "__main__":
     sys.exit(1)
 
   numpy_array = gdcm_to_numpy( r.GetImage() )
+  print numpy_array
 
