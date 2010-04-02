@@ -37,7 +37,7 @@ class CryptographicMessageSyntax;
  *
  * Tag based functions:
  * - complete removal of DICOM attribute (Remove)
- * - make a take empty, ie make it's length 0 (Empty)
+ * - make a tag empty, ie make it's length 0 (Empty)
  * - replace with another string-based value (Replace)
  * 
  * DataSet based functions:
@@ -126,6 +126,7 @@ public:
   /// for wrapped language: instanciate a reference counted object
   static SmartPointer<Anonymizer> New() { return new Anonymizer; }
 
+  /// Return the list of Tag that will be considered when anonymizing a DICOM file.
   static std::vector<Tag> GetBasicApplicationLevelConfidentialityProfileAttributes();
 
 protected:
