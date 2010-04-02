@@ -39,6 +39,8 @@ public:
   const Modules &GetModules() const { return Part3Modules; }
   Modules &GetModules() { return Part3Modules; }
 
+  /// Users should not directly use Macro. Macro are simply a way for DICOM WG to re-use Tables.
+  /// Macros are conviently wraped within Modules. See gdcm::Module API directly
   const Macros &GetMacros() const { return Part3Macros; }
   Macros &GetMacros() { return Part3Macros; }
 

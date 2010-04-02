@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     {
     const Tag &tag = *tit;
     const DictEntry &dictentry = dicts.GetDictEntry(tag);
-    std::cout << "Processing Attribute: " << dictentry << std::endl;
+    std::cout << "Processing Attribute: " << tag << " " << dictentry << std::endl;
 
     IODs::IODMapTypeConstIterator it = iods.Begin();
     for( ; it != iods.End(); ++it )

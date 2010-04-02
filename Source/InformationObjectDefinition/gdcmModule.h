@@ -37,34 +37,34 @@ class GDCM_EXPORT Module
 {
 public:
   typedef std::map<Tag, ModuleEntry> MapModuleEntry;
-  typedef MapModuleEntry::const_iterator ConstIterator;
-  typedef MapModuleEntry::iterator Iterator;
-  ConstIterator Begin() const { return ModuleInternal.begin(); }
-  Iterator Begin() { return ModuleInternal.begin(); }
-  ConstIterator End() const { return ModuleInternal.end(); }
-  Iterator End() { return ModuleInternal.end(); }
+  typedef std::vector<std::string> ArrayIncludeMacrosType;
+
+  //typedef MapModuleEntry::const_iterator ConstIterator;
+  //typedef MapModuleEntry::iterator Iterator;
+  //ConstIterator Begin() const { return ModuleInternal.begin(); }
+  //Iterator Begin() { return ModuleInternal.begin(); }
+  //ConstIterator End() const { return ModuleInternal.end(); }
+  //Iterator End() { return ModuleInternal.end(); }
 
   Module() {}
   friend std::ostream& operator<<(std::ostream& _os, const Module &_val);
 
   void Clear() { ModuleInternal.clear(); }
 
-  void AddModuleEntry(const Tag& tag, const ModuleEntry & module )
+  /// Will add a ModuleEntry direcly at root-level. See Macro for nested-included level.
+  void AddModuleEntry(const Tag& tag, const ModuleEntry & module)
     {
     ModuleInternal.insert(
       MapModuleEntry::value_type(tag, module));
     }
-  bool FindModuleEntry(const Tag &tag) const 
-    {
-    MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
-    return it != ModuleInternal.end();
-    }
-  const ModuleEntry& GetModuleEntry(const Tag &tag) const 
-    {
-    MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
-    assert( it->first == tag );
-    return it->second;
-    }
+
+  void AddMacro(const char *) {}
+
+  /// Find or Get a ModuleEntry. ModuleEntry are either search are root-level
+  /// or within nested-macro included in module.
+  bool FindModuleEntry(const Tag &tag) const;
+  const ModuleEntry& GetModuleEntry(const Tag &tag) const;
+
   void SetName( const char *name) { Name = name; }
   const char *GetName() const { return Name.c_str(); }
 
@@ -78,6 +78,7 @@ private:
 
   MapModuleEntry ModuleInternal;
   std::string Name;
+  ArrayIncludeMacrosType ArrayIncludeMacros;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
