@@ -20,11 +20,17 @@
 #include "gdcmAttribute.h"
 #include "gdcmSystem.h"
 
+#ifdef GDCM_USE_SYSTEM_PODOFO
+#include <podofo/podofo.h>
+#endif
+
+#ifdef GDCM_USE_SYSTEM_POPPLER
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
 #include <poppler/UnicodeMap.h>
 #include <poppler/PDFDocEncoding.h>
 #include <poppler/GlobalParams.h>
+#endif
 
 #include <string>
 
