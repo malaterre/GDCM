@@ -38,6 +38,10 @@ TODO:
 Usage: (you need a XSLT 2.0 processor)
 
 $ java -jar ~/Software/saxon/saxon8.jar  08_03pu.xml Part3.xsl > ModuleAttributes.xml
+
+or on debian
+
+saxonb-xslt -o Part3.xml -s 09_03pu3.xml -xsl Part3.xsl
 -->
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
   <xsl:strip-space elements="*"/>
@@ -139,9 +143,8 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
                 <entry group="{$group}" element="{$element}" name="{$name_translate}" type="{normalize-space($type)}">
                   <xsl:variable name="n_description" select="my:normalize-paragraph($description)"/>
                   <xsl:call-template name="description-extractor">
-                          <xsl:with-param name="desc" select="$n_description"/>
+                    <xsl:with-param name="desc" select="$n_description"/>
                   </xsl:call-template>
-
                   <!--description>
                     <xsl:value-of select="$n_description"/>
                   </description-->
@@ -611,7 +614,7 @@ att name=</xsl:text>
   </xsl:template>
   <!-- TODO need work on tables to parse defined terms / enumerated-->
   <xsl:template match="informaltable" mode="new">
-          <xsl:param name="entry"/>
+    <xsl:param name="entry"/>
     <!-- iterate over all rows -->
     <xsl:for-each select="tgroup/tbody/row/entry">
       <!-- output define term and description -->
@@ -624,7 +627,8 @@ FIXME:
 See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly defined terms... pffff
 -->
       <!-- output defined term only -->
-      <xsl:element name="{$entry}"><xsl:attribute name="value" select="para"/>
+      <xsl:element name="{$entry}">
+        <xsl:attribute name="value" select="para"/>
       </xsl:element>
       <!--xsl:value-of select="para"/-->
       <!-- output newline -->
@@ -634,7 +638,7 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="informaltable" mode="old">
-          <xsl:param name="entry"/>
+    <xsl:param name="entry"/>
     <!-- iterate over all rows -->
     <xsl:for-each select="tgroup/tbody/row">
       <xsl:choose>
@@ -648,30 +652,30 @@ FIXME:
 See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly defined terms... pffff
 -->
         <xsl:when test="count(entry)&gt;1 and string(entry[2])">
-                <xsl:variable name="dummy">
-          <xsl:value-of select="concat(entry[1]/para[1],' ')"/>
-          <xsl:if test="not(matches(entry[1]/para[1],'= *$') or matches(entry[2]/para[1],'^ *='))">
-            <xsl:value-of select="'= '"/>
-          </xsl:if>
-          <xsl:value-of select="entry[2]/para[1]"/>
-  </xsl:variable>
-                  <xsl:analyze-string select="$dummy" regex="(.*)=(.*)">
-          <xsl:matching-substring>
-                  <xsl:element name="{$entry}">
-                          <xsl:attribute name="value" select="normalize-space(regex-group(1))" />
-                          <xsl:attribute name="meaning" select="normalize-space(regex-group(2))"/>
-     </xsl:element>
-          </xsl:matching-substring>
-        <xsl:non-matching-substring>
-             <!--impossible-happen/-->
-        </xsl:non-matching-substring>
-        </xsl:analyze-string>
+          <xsl:variable name="dummy">
+            <xsl:value-of select="concat(entry[1]/para[1],' ')"/>
+            <xsl:if test="not(matches(entry[1]/para[1],'= *$') or matches(entry[2]/para[1],'^ *='))">
+              <xsl:value-of select="'= '"/>
+            </xsl:if>
+            <xsl:value-of select="entry[2]/para[1]"/>
+          </xsl:variable>
+          <xsl:analyze-string select="$dummy" regex="(.*)=(.*)">
+            <xsl:matching-substring>
+              <xsl:element name="{$entry}">
+                <xsl:attribute name="value" select="normalize-space(regex-group(1))"/>
+                <xsl:attribute name="meaning" select="normalize-space(regex-group(2))"/>
+              </xsl:element>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring>
+              <!--impossible-happen/-->
+            </xsl:non-matching-substring>
+          </xsl:analyze-string>
         </xsl:when>
         <!-- output defined term only -->
         <xsl:otherwise>
-                  <xsl:element name="{$entry}">
-          <xsl:attribute name="value" select="entry[1]/para[1]"/>
-     </xsl:element>
+          <xsl:element name="{$entry}">
+            <xsl:attribute name="value" select="entry[1]/para[1]"/>
+          </xsl:element>
           <!--xsl:value-of select="entry[1]/para[1]"/-->
         </xsl:otherwise>
       </xsl:choose>
@@ -687,38 +691,38 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
             PREC PARA:<xsl:value-of select="$prevpara"/>
     </xsl:message-->
     <xsl:variable name="tabletype">
-            <xsl:choose>
-                    <xsl:when test="matches($prevpara,'Retired Defined Terms')">
-                            <xsl:value-of select="'retired-defined-terms'"/>
-                    </xsl:when>
-                     <xsl:when test="matches($prevpara,'Defined Terms') and not(matches($prevpara,'Retired'))">
-                            <xsl:value-of select="'defined-terms'"/>
-                    </xsl:when>
-                    <xsl:when test="matches($prevpara,'Enumerated Values')">
-                            <xsl:value-of select="'enumerated-values'"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                            <xsl:value-of select="'unrecognized-rows'"/>
-                    </xsl:otherwise>
-             </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="matches($prevpara,'Retired Defined Terms')">
+          <xsl:value-of select="'retired-defined-terms'"/>
+        </xsl:when>
+        <xsl:when test="matches($prevpara,'Defined Terms') and not(matches($prevpara,'Retired'))">
+          <xsl:value-of select="'defined-terms'"/>
+        </xsl:when>
+        <xsl:when test="matches($prevpara,'Enumerated Values')">
+          <xsl:value-of select="'enumerated-values'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'unrecognized-rows'"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
     <!--xsl:message>
             PREC PARA TYPE:<xsl:value-of select="$tabletype"/>
     </xsl:message-->
     <!--xsl:variable name="entryname" select=""/-->
     <xsl:element name="{$tabletype}">
-    <xsl:choose>
-      <xsl:when test="tgroup/colspec">
-        <xsl:apply-templates select="." mode="new">
-                <xsl:with-param name="entry" select="'term'"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="old">
-                <xsl:with-param name="entry" select="'term'"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="tgroup/colspec">
+          <xsl:apply-templates select="." mode="new">
+            <xsl:with-param name="entry" select="'term'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="old">
+            <xsl:with-param name="entry" select="'term'"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:element>
   </xsl:template>
   <xsl:template name="copy-section-paragraphs">
@@ -748,7 +752,7 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
     <enumerated-values>
       <xsl:analyze-string select="$text" regex="\n">
         <xsl:matching-substring>
-<!--do nothing -->
+          <!--do nothing -->
         </xsl:matching-substring>
         <xsl:non-matching-substring>
           <xsl:element name="term">
@@ -761,18 +765,18 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
                   <xsl:value-of select="regex-group(2)"/>
                 </xsl:attribute>
               </xsl:matching-substring>
-                    <xsl:non-matching-substring>
+              <xsl:non-matching-substring>
                 <xsl:attribute name="dummy">
-                      <xsl:value-of select="'IMPOSSIBLE ENUM'"/>
-            </xsl:attribute>
-                    </xsl:non-matching-substring>
-             </xsl:analyze-string>
+                  <xsl:value-of select="'IMPOSSIBLE ENUM'"/>
+                </xsl:attribute>
+              </xsl:non-matching-substring>
+            </xsl:analyze-string>
           </xsl:element>
         </xsl:non-matching-substring>
       </xsl:analyze-string>
     </enumerated-values>
   </xsl:template>
-<!--
+  <!--
 
 -->
   <xsl:template name="parse-defined">
@@ -780,7 +784,7 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
     <defined-terms>
       <xsl:analyze-string select="$text" regex="\n">
         <xsl:matching-substring>
-<!--do nothing -->
+          <!--do nothing -->
         </xsl:matching-substring>
         <xsl:non-matching-substring>
           <xsl:element name="term">
@@ -811,42 +815,41 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
       </xsl:analyze-string>
     </defined-terms>
   </xsl:template>
-<!--
+  <!--
 
 -->
- <xsl:template name="description-extractor">
-         <xsl:param name="desc"/>
-         <xsl:variable name="evregex">(.*Enumerated [Vv]alue[s]?\s*(are)*\s*:)(.*)</xsl:variable>
-         <xsl:variable name="dtregex">(.*Defined [Tt]erm[s]?\s*(are)*\s*:)(.*)</xsl:variable>
+  <xsl:template name="description-extractor">
+    <xsl:param name="desc"/>
+    <xsl:variable name="evregex">(.*Enumerated [Vv]alue[s]?\s*(are)*\s*:)(.*)</xsl:variable>
+    <xsl:variable name="dtregex">(.*Defined [Tt]erm[s]?\s*(are)*\s*:)(.*)</xsl:variable>
     <description>
-            <xsl:choose>
-      <xsl:when test="matches($desc,$evregex)">
-           <xsl:analyze-string select="$desc" regex="{$evregex}" flags="s">
-        <xsl:matching-substring>
-          <xsl:value-of select="regex-group(1)"/>
-          <xsl:call-template name="parse-enum">
-            <xsl:with-param name="text" select="regex-group(3)"/>
-          </xsl:call-template>
-        </xsl:matching-substring>
-      </xsl:analyze-string>
-      </xsl:when>
-      <xsl:when test="matches($desc,$dtregex)">
-              <xsl:analyze-string select="$desc" regex="{$dtregex}" flags="s">
-        <xsl:matching-substring>
-          <xsl:value-of select="regex-group(1)"/>
-          <xsl:call-template name="parse-defined">
-            <xsl:with-param name="text" select="regex-group(3)"/>
-          </xsl:call-template>
-        </xsl:matching-substring>
-      </xsl:analyze-string>
-      </xsl:when>
-      <xsl:otherwise>
-              <xsl:value-of select="$desc"/>
-      </xsl:otherwise>
-           </xsl:choose>
-     </description>
+      <xsl:choose>
+        <xsl:when test="matches($desc,$evregex)">
+          <xsl:analyze-string select="$desc" regex="{$evregex}" flags="s">
+            <xsl:matching-substring>
+              <xsl:value-of select="regex-group(1)"/>
+              <xsl:call-template name="parse-enum">
+                <xsl:with-param name="text" select="regex-group(3)"/>
+              </xsl:call-template>
+            </xsl:matching-substring>
+          </xsl:analyze-string>
+        </xsl:when>
+        <xsl:when test="matches($desc,$dtregex)">
+          <xsl:analyze-string select="$desc" regex="{$dtregex}" flags="s">
+            <xsl:matching-substring>
+              <xsl:value-of select="regex-group(1)"/>
+              <xsl:call-template name="parse-defined">
+                <xsl:with-param name="text" select="regex-group(3)"/>
+              </xsl:call-template>
+            </xsl:matching-substring>
+          </xsl:analyze-string>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$desc"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </description>
   </xsl:template>
- 
   <!-- main template -->
   <xsl:template match="/">
     <xsl:processing-instruction name="xml-stylesheet">
