@@ -645,6 +645,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   gdcmDebugMacro( "Problem during RecurseDataSet" );
   return false;
   }
+catch(...)
+{
+  gdcmDebugMacro( "Unknown Problem during RecurseDataSet" );
+  return false;
+}
 
   this->InvokeEvent( IterationEvent() );
 
@@ -690,10 +695,10 @@ bool IsVRUI(Tag const &tag)
 }
 
 static const Tag SpecialTypeTags[] = {
-/*              Patient's Name                                        */ Tag(0x0010,0x0010),
-/*              Patient ID                                            */ Tag(0x0010,0x0020),
-/*              Study ID                                              */ Tag(0x0020,0x0010),
-/*              Series Number                                         */ Tag(0x0020,0x0011)
+/*   Patient's Name          */ Tag(0x0010,0x0010),
+/*   Patient ID              */ Tag(0x0010,0x0020),
+/*   Study ID                */ Tag(0x0020,0x0010),
+/*   Series Number           */ Tag(0x0020,0x0011)
 };
 
 bool Anonymizer::CanEmptyTag(Tag const &tag, const IOD &iod) const
