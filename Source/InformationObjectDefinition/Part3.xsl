@@ -73,7 +73,8 @@ Weird camel case function to get closer to docbook version
 
 -->
   <xsl:function name="my:camel-case" as="xs:string*">
-    <xsl:param name="string" as="xs:string*"/>
+    <xsl:param name="stringraw" as="xs:string*"/>
+    <xsl:variable name="string" select="normalize-space(translate($stringraw,'&#160;&#173;','  '))"/>
     <xsl:variable name="tmp0">
       <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, '-| ') return concat( upper-case(substring($word, 1, 1)), lower-case(substring($word, 2))) , ' ')"/>
     </xsl:variable>
@@ -142,12 +143,12 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
               <xsl:when test="$group != '' and $element != ''">
                 <entry group="{$group}" element="{$element}" name="{$name_translate}" type="{normalize-space($type)}">
                   <xsl:variable name="n_description" select="my:normalize-paragraph($description)"/>
-                  <xsl:call-template name="description-extractor">
+                  <!--xsl:call-template name="description-extractor">
                     <xsl:with-param name="desc" select="$n_description"/>
-                  </xsl:call-template>
-                  <!--description>
+                  </xsl:call-template-->
+                  <description>
                     <xsl:value-of select="$n_description"/>
-                  </description-->
+                  </description>
                   <xsl:variable name="dummy">
                     <xsl:call-template name="get-description-reference">
                       <xsl:with-param name="description" select="$n_description"/>
