@@ -131,7 +131,11 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
         DataElement de ( ds.GetDataElement(t) );
         if ( de.GetVR() != VR::INVALID )
           {
-          assert( de.GetVR() != VR::SQ );
+          if( de.GetVR() == VR::SQ )
+            {
+            gdcmDebugMacro( "Cannot replace a VR:SQ" );
+            return false;
+            }
           }
         de.SetByteValue( "", vl );
         ds.Insert( de );

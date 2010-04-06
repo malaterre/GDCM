@@ -140,7 +140,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   // Fragments...
   const SequenceOfFragments *sf = in.GetSequenceOfFragments();
   const ByteValue *jpegbv = in.GetByteValue();
-  assert( sf || jpegbv );
+  if( !sf && !jpegbv ) return false;
   std::stringstream os;
   if( sf )
     {

@@ -221,6 +221,13 @@ public:
   void Set(DataSet const &ds) {
     SetFromDataElement( ds.GetDataElement( GetTag() ) );
   }
+  void SetFromDataSet(DataSet const &ds) {
+    if( ds.FindDataElement( GetTag() ) &&
+      !ds.GetDataElement( GetTag() ).IsEmpty() )
+      {
+      SetFromDataElement( ds.GetDataElement( GetTag() ) );
+      }
+  }
 protected:
   void SetByteValueNoSwap(const ByteValue *bv) {
     if( !bv ) return; // That would be bad...

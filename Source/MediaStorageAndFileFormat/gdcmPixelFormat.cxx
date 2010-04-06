@@ -32,6 +32,7 @@ static const char *ScalarTypeStrings[] = {
 
 PixelFormat::PixelFormat(ScalarType st)
 {
+  SamplesPerPixel = 1;
   SetScalarType( st );
 }
 
@@ -146,34 +147,37 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
     type = PixelFormat::UNKNOWN;
     //assert(0);
     }
-  if( PixelRepresentation == 0 )
+  if( type != PixelFormat::UNKNOWN )
     {
-    // all set !
-    }
-  else if( PixelRepresentation == 1 )
-    {
-    assert( type <= INT32 );
-    // That's why you need to order properly type in ScalarType
-    type = ScalarType(int(type)+1);
-    }
-  else if( PixelRepresentation == 2 )
-    {
-    assert( BitsAllocated == 16 );
-    return FLOAT16;
-    }
-  else if( PixelRepresentation == 3 )
-    {
-    assert( BitsAllocated == 32 );
-    return FLOAT32;
-    }
-  else if( PixelRepresentation == 4 )
-    {
-    assert( BitsAllocated == 64 );
-    return FLOAT64;
-    }
-  else
-    {
-    assert(0);
+    if( PixelRepresentation == 0 )
+      {
+      // all set !
+      }
+    else if( PixelRepresentation == 1 )
+      {
+      assert( type <= INT32 );
+      // That's why you need to order properly type in ScalarType
+      type = ScalarType(int(type)+1);
+      }
+    else if( PixelRepresentation == 2 )
+      {
+      assert( BitsAllocated == 16 );
+      return FLOAT16;
+      }
+    else if( PixelRepresentation == 3 )
+      {
+      assert( BitsAllocated == 32 );
+      return FLOAT32;
+      }
+    else if( PixelRepresentation == 4 )
+      {
+      assert( BitsAllocated == 64 );
+      return FLOAT64;
+      }
+    else
+      {
+      assert(0);
+      }
     }
   return type;
 }
@@ -251,8 +255,8 @@ int64_t PixelFormat::GetMax() const
 
 bool PixelFormat::Validate()
 {
-  assert( BitsAllocated >= BitsStored );
-  assert( BitsAllocated >= HighBit );
+  if( BitsAllocated < BitsStored ) return false;
+  if( BitsAllocated < HighBit ) return false;
   //assert( BitsStored    >= HighBit ); // DigitexAlpha_no_7FE0.dcm
   assert( PixelRepresentation == 0 || PixelRepresentation == 1 );
   assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );

@@ -206,6 +206,8 @@ bool Bitmap::GetBuffer(char *buffer) const
 
 unsigned long Bitmap::GetBufferLength() const
 {
+  if( PF == PixelFormat::UNKNOWN ) return 0;
+
   assert( NumberOfDimensions );
   //assert( NumberOfDimensions == Dimensions.size() );
   if( NumberOfDimensions != Dimensions.size() )
