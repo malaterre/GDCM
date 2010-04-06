@@ -54,12 +54,14 @@ int TestImageReaderRandomEmptyFunc(const char *subdir, const char* filename, boo
   int i = 0;
   for( ; it != ds.End(); ++it, ++i )
     {
-    std::cout << "Processing Tag: " << *it << std::endl;
-    gdcm::SmartPointer<gdcm::File> filecopy = new gdcm::File;
-    filecopy->SetDataSet( ds );
-    filecopy->SetHeader( fmi );
+    //std::cout << "Processing Tag: " << *it << std::endl;
+    gdcm::Writer writer;
+    gdcm::File &filecopy = writer.GetFile();
+    filecopy.SetDataSet( ds );
+    filecopy.SetHeader( fmi );
+
     gdcm::Anonymizer ano;
-    ano.SetFile( *filecopy );
+    ano.SetFile( filecopy );
     ano.Empty( it->GetTag() );
 
     //std::ostringstream os;
@@ -68,7 +70,6 @@ int TestImageReaderRandomEmptyFunc(const char *subdir, const char* filename, boo
     //os << ".dcm";
     //std::string outfn = os.str();
     std::string outfn = outfilename;
-    gdcm::Writer writer;
     writer.SetFile( ano.GetFile() );
     writer.SetFileName( outfn.c_str() );
     if( !writer.Write() )
