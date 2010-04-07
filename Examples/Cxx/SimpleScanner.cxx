@@ -18,6 +18,10 @@
  *  - DICOM Attribute is present and has a value
  *  - DICOM Attribute is present and has no value
  *  - DICOM Attribute is not present at all
+ * It also shows the purpose of the function 'IsKey' to detect whether or
+ * not the file has been read by the gdcm::Scanner. Technically most of the time
+ * if a file is not a 'Key' this is because it is not a DICOM file. You need to use
+ * gdcm::System::FileExists to decide wether or not the file actually exist on the disk.
  *
  * It was tested on this particular image:
  * ./SimpleScanner gdcmData/012345.002.050.dcm
