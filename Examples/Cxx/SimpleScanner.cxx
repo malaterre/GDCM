@@ -21,7 +21,7 @@
  * It also shows the purpose of the function 'IsKey' to detect whether or
  * not the file has been read by the gdcm::Scanner. Technically most of the time
  * if a file is not a 'Key' this is because it is not a DICOM file. You need to use
- * gdcm::System::FileExists to decide wether or not the file actually exist on the disk.
+ * gdcm::System::FileExists to decide whether or not the file actually exist on the disk.
  *
  * It was tested on this particular image:
  * ./SimpleScanner gdcmData/012345.002.050.dcm
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
       std::cout << *ptag << " was properly found in this file" << std::endl;
       // it contains a pair of value. the first one is the actual tag, so the following is always true:
       //  *ptag == it->first 
-      // The second part is the actual value (stored as RAW strings). You will have to reintrepret this string
+      // The second part is the actual value (stored as RAW strings). You will have to reinterpret this string
       // if VR for *ptag is not VR::VRASCII !
       const char *value = it->second;
       if( *value )
