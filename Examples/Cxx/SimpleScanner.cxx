@@ -14,7 +14,12 @@
 =========================================================================*/
 /* 
  * Simple example to show how to use Scanner API.
+ * It exposes the three different cases:
+ *  - DICOM Attribute is present and has a value
+ *  - DICOM Attribute is present and has no value
+ *  - DICOM Attribute is not present at all
  *
+ * It was tested on this particular image:
  * ./SimpleScanner gdcmData/012345.002.050.dcm
  */
 
@@ -67,7 +72,6 @@ int main(int argc, char *argv[])
   const gdcm::Tag *ptag = tag_array;
   for( ; ptag != tag_array + 3; ++ptag )
     {
-    //std::cout << *ptag << std::endl;
     if( ttv.find( *ptag ) != ttv.end() )
       {
       std::cout << *ptag << " was properly found in this file" << std::endl;
