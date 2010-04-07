@@ -76,11 +76,14 @@ int main(int argc, char *argv[])
   const gdcm::Tag *ptag = tag_array;
   for( ; ptag != tag_array + 3; ++ptag )
     {
-    if( ttv.find( *ptag ) != ttv.end() )
+    gdcm::Scanner::TagToValue::const_iterator it = ttv.find( *ptag );
+    if( it != ttv.end() )
       {
       std::cout << *ptag << " was properly found in this file" << std::endl;
-      gdcm::Scanner::TagToValue::const_iterator it = ttv.find( *ptag );
-      // assert( *patg == it->first );
+      // it contains a pair of value. the first one is the actual tag, so the following is always true:
+      //  *ptag == it->first 
+      // The second part is the actual value (stored as RAW strings). You will have to reintrepret this string
+      // if VR for *ptag is not VR::VRASCII !
       const char *value = it->second;
       if( *value )
         {
