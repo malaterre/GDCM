@@ -56,6 +56,12 @@ saxonb-xslt -o Part3.xml -s 09_03pu3.xml -xsl Part3.xsl
 Special normalize-space
 
 -->
+  <xsl:function name="my:normalize-space" as="xs:string*">
+    <xsl:param name="string" as="xs:string*"/>
+    <xsl:value-of select="normalize-space(translate($string,'&#160;',' '))"/>
+  </xsl:function>
+<!--
+-->
   <xsl:function name="my:normalize-paragraph" as="xs:string*">
     <xsl:param name="string" as="xs:string*"/>
     <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, $linebreak) return normalize-space($word), $linebreak)"/>
@@ -302,7 +308,7 @@ Take the ie name as input
     <xsl:for-each select="entry">
       <xsl:if test="(position() mod 3 = 1)">
         <xsl:variable name="usage" select="translate(normalize-space(following-sibling::entry[2]/para),'– ','- ')"/>
-        <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
+        <xsl:variable name="usage_required" select="my:normalize-space(replace($usage,'required','Required'))"/>
         <entry ie="{$ie_name}" name="{normalize-space(para)}" ref="{normalize-space(following-sibling::entry[1]/para)}" usage="{$usage_required}"/>
       </xsl:if>
     </xsl:for-each>
@@ -314,7 +320,7 @@ Take the ie name as input
   <xsl:template match="entry" mode="iod2">
     <xsl:for-each select="entry">
       <xsl:variable name="usage" select="translate(entry[3]/para,'– ','- ')"/>
-      <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
+      <xsl:variable name="usage_required" select="my:normalize-space(replace($usage,'required','Required'))"/>
       <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage_required}"/>
     </xsl:for-each>
   </xsl:template>
@@ -354,7 +360,7 @@ over and over. We need to get the last ie name we found to fill in the blank:
           <xsl:value-of select="entry[4]/para" separator=" "/>
         </xsl:variable>
         <xsl:variable name="usage" select="normalize-space(translate($usage_joined,'–','-'))"/>
-        <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
+        <xsl:variable name="usage_required" select="my:normalize-space(replace($usage,'required','Required'))"/>
         <xsl:variable name="ie" select="normalize-space((entry[1]/para[. != ''] , reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])[1])"/>
         <xsl:choose>
           <xsl:when test="count(entry) = 4">
@@ -538,25 +544,28 @@ Function to remove the dash from a text:
     <!-- most of the time it should be equal to 4: -->
     <xsl:variable name="tgroup_cols" select="tgroup/@cols"/>
     <!--xsl:for-each select="tgroup/thead"-->
+    <!--xsl:for-each select="tgroup/thead|tgroup/tbody"-->
+    <xsl:variable name="attribute_name_head" select="normalize-space(string-join(tgroup/thead/row[1]/entry[1]/para,' '))"/>
     <xsl:for-each select="tgroup/tbody">
       <xsl:variable name="attribute_name" select="normalize-space(string-join(row[1]/entry[1]/para,' '))"/>
       <xsl:choose>
-        <xsl:when test="$attribute_name = 'Key' or ends-with(my:camel-case($table_name),'Module Attributes')">
-          <!-- module are referenced by section idx -->
-          <module ref="{$section_ref}" table="{$table_ref}" name="{my:camel-case($table_name)}">
-            <xsl:apply-templates select="row" mode="macro"/>
-          </module>
-        </xsl:when>
-        <xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (contains($table_name,'MACRO') and ends-with($table_name,'ATTRIBUTES') and not(contains($table_name,'Module')) )">
+        <!--xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (contains($table_name,'MACRO') and ends-with($table_name,'ATTRIBUTES') and not(contains($table_name,'Module')) )"-->
+        <xsl:when test="contains(my:camel-case($table_name),'Macro')">
           <!-- macro are referenced by table idx -->
           <macro table="{$table_ref}" name="{my:camel-case($table_name)}">
             <xsl:apply-templates select="row" mode="macro"/>
           </macro>
         </xsl:when>
+        <xsl:when test="($attribute_name_head = 'Attribute Name' or $attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or $attribute_name = 'Key') and (contains(my:camel-case($table_name),'Module') or ends-with(my:camel-case($table_name),'Keys'))">
+          <!-- module are referenced by section idx -->
+          <module ref="{$section_ref}" table="{$table_ref}" name="{my:camel-case($table_name)}">
+            <xsl:apply-templates select="row" mode="macro"/>
+          </module>
+        </xsl:when>
         <!--
 Table A.2-1 (CR Image IOD Modules) to A.51-1 (Segmentation IOD Modules).
 -->
-        <xsl:when test="$attribute_name = 'IE' or $attribute_name = 'Module'">
+        <xsl:when test="$attribute_name = 'IE' or $attribute_name = 'Module' or contains($table_name,'IOD')">
           <!-- I think we do not need the section number for iod -->
           <iod table="{$table_ref}" name="{my:camel-case($table_name)}">
             <xsl:apply-templates select="row" mode="iod"/>
@@ -565,7 +574,7 @@ Table A.2-1 (CR Image IOD Modules) to A.51-1 (Segmentation IOD Modules).
         <xsl:otherwise>
           <xsl:message>
             <xsl:text>
-ref=</xsl:text>
+NOT IOD/Macro or Module ref=</xsl:text>
             <xsl:value-of select="$table_ref_raw"/>
             <xsl:text>
 name=</xsl:text>
@@ -584,8 +593,8 @@ att name=</xsl:text>
     <xsl:param name="extractsection"/>
     <xsl:variable name="extract-section" select="$extractsection"/>
     <xsl:variable name="section-number" select="concat($extract-section,' ')"/>
-    <xsl:variable name="section-anchor" select="$article/para[starts-with(normalize-space(.),$section-number)]"/>
-    <xsl:variable name="section-name" select="substring-after(para[starts-with(normalize-space(.),$section-number)],$extract-section)"/>
+    <xsl:variable name="section-anchor" select="$article/para[starts-with(my:normalize-space(.),$section-number)]"/>
+    <xsl:variable name="section-name" select="substring-after(para[starts-with(my:normalize-space(.),$section-number)],$extract-section)"/>
     <!--xsl:message>
 <xsl:value-of select="$article/para[1]"/>
 </xsl:message-->
