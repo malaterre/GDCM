@@ -368,7 +368,20 @@ over and over. We need to get the last ie name we found to fill in the blank:
           </xsl:when>
           <xsl:when test="count(entry) = 3">
             <xsl:if test="entry[2]/para != ''">
-              <entry name="{translate($ie,'­','')}" ref="{normalize-space(entry[2]/para)}" description="{normalize-space(translate($ref_joined,'­',''))}"/>
+              <xsl:variable name="basic_film" select="normalize-space(translate($ref_joined,'­',''))"/>
+              <xsl:choose>
+              <xsl:when test="starts-with($basic_film, 'Contains') or starts-with($basic_film, 'References') or starts-with($basic_film, 'Includes') or starts-with($basic_film, 'Identifies')">
+                <entry name="{translate($ie,'­','')}" ref="{normalize-space(entry[2]/para)}" description="{normalize-space(translate($ref_joined,'­',''))}"/>
+              </xsl:when>
+              <xsl:when test="starts-with($basic_film, 'C-') or starts-with($basic_film, 'C -') or $basic_film = 'U' or $basic_film = 'M'">
+                <xsl:variable name="ie_prev" select="normalize-space(reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])"/>
+                <entry ie="FIXME" name="{translate($ie,'­','')}" ref="{normalize-space(entry[2]/para)}" usage="{normalize-space(translate($ref_joined,'­',''))}"/>
+                <xsl:message>Error: FIXME <xsl:value-of select="preceding-sibling::row/entry[1]/para[. != '']"/></xsl:message>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:message>Error: could not MATCH <xsl:value-of select="$basic_film"/></xsl:message>
+              </xsl:otherwise>
+              </xsl:choose>
             </xsl:if>
           </xsl:when>
           <!-- Table B.18.2 IOD Modules -->
