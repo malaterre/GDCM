@@ -48,9 +48,10 @@
 #cmakedefine GDCM_USE_SYSTEM_EXPAT
 #cmakedefine GDCM_USE_SYSTEM_LJPEG
 #cmakedefine GDCM_USE_SYSTEM_OPENJPEG
-#cmakedefine GDCM_USE_SYSTEM_PVRG
+#cmakedefine GDCM_USE_SYSTEM_KAKADU
 
 #cmakedefine GDCM_USE_PVRG
+#cmakedefine GDCM_USE_KAKADU
 #cmakedefine GDCM_USE_JPEGLS
 
 /* For older gcc / broken plateform */
@@ -130,6 +131,7 @@
 #cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 
 #define GDCM_PVRG_JPEG_EXECUTABLE "@PVRGJPEG_EXECUTABLE@"
+#define GDCM_KAKADU_EXPAND_EXECUTABLE "@KDU_EXPAND_EXECUTABLE@"
 
 /* Undocumented on purpose :-P */
 #cmakedefine GDCM_WRITE_ODD_LENGTH
