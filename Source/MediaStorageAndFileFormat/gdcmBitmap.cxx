@@ -17,6 +17,7 @@
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmPVRGCodec.h"
+#include "gdcmKAKADUCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
@@ -442,6 +443,44 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
   return false;
 }
 
+bool Bitmap::TryKAKADUCodec(char *buffer, bool &lossyflag) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  KAKADUCodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    codec.SetPixelFormat( GetPixelFormat() );
+    //codec.SetBufferLength( len );
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    codec.SetDimensions( GetDimensions() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    if( !r ) return false;
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    assert( len <= outbv->GetLength() );
+    // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    assert( len <= outbv->GetLength() );
+    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+
+    //assert( codec.IsLossy() == ts.IsLossy() );
+    lossyflag = codec.IsLossy();
+    if( codec.IsLossy() != ts.IsLossy() )
+      {
+      gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
+      }
+
+    return r;
+    }
+  return false;
+}
+
 bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
 {
   unsigned long len = GetBufferLength();
@@ -609,6 +648,7 @@ bool Bitmap::GetBufferInternal(char *buffer, bool &lossyflag) const
   if( !success ) success = TryRAWCodec(buffer, lossyflag);
   if( !success ) success = TryJPEGCodec(buffer, lossyflag);
   if( !success ) success = TryPVRGCodec(buffer, lossyflag); // AFTER IJG trial !
+  if( !success ) success = TryKAKADUCodec(buffer, lossyflag);
   if( !success ) success = TryJPEG2000Codec(buffer, lossyflag);
   if( !success ) success = TryJPEGLSCodec(buffer, lossyflag);
   if( !success ) success = TryRLECodec(buffer, lossyflag);

@@ -59,6 +59,7 @@ SET(MSFF_SRCS
   gdcmJPEG8Codec.cxx
   gdcmJPEGCodec.cxx
   gdcmPVRGCodec.cxx
+  gdcmKAKADUCodec.cxx
   gdcmPNMCodec.cxx
   gdcmRAWCodec.cxx
   gdcmLookupTable.cxx

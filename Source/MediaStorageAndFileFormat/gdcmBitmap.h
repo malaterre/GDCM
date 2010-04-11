@@ -141,6 +141,7 @@ protected:
   bool TryRAWCodec(char *buffer, bool &lossyflag) const;
   bool TryJPEGCodec(char *buffer, bool &lossyflag) const;
   bool TryPVRGCodec(char *buffer, bool &lossyflag) const;
+  bool TryKAKADUCodec(char *buffer, bool &lossyflag) const;
   bool TryJPEGLSCodec(char *buffer, bool &lossyflag) const;
   bool TryJPEG2000Codec(char *buffer, bool &lossyflag) const;
   bool TryRLECodec(char *buffer, bool &lossyflag) const;
