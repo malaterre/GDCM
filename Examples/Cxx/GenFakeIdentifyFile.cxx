@@ -20,6 +20,7 @@
 #include "gdcmItem.h"
 #include "gdcmImageReader.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmAttribute.h"
 #include "gdcmFile.h"
 #include "gdcmTag.h"
 #include "gdcmDict.h"
@@ -97,6 +98,11 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
       nds.Insert( CreateFakeElement( balcptags[count], true ) );
       countglobal++;
       }
+    else
+      {
+      gdcm::Attribute<0x0008,0x0000> at = { 0 }; // This element has no reason to be 'anonymized'...
+      nds.Insert( at.GetAsDataElement() );
+      }
     sq->AddItem(it);
     }
   return de;
@@ -143,6 +149,9 @@ int main(int argc, char *argv[])
     const gdcm::DictEntry &dictentry = dictit->second;
     ds.Insert( CreateFakeElement( dicttag, false ) );
     }
+  ds.Remove( gdcm::Tag(0x400,0x500) );
+  ds.Remove( gdcm::Tag(0x12,0x62) );
+  ds.Remove( gdcm::Tag(0x12,0x63) );
 
   // Make sure to override any UID stuff
   gdcm::UIDGenerator uid;

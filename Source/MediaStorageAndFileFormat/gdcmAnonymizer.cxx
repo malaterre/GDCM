@@ -474,6 +474,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
+  if( ds.FindDataElement( Tag(0x0400,0x0500) ) )
+    {
+    gdcmDebugMacro( "EncryptedContentTransferSyntax Attribute is present !" );
+    return false;
+    }
 
   // PS 3.15
   // E.1 BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE
@@ -904,6 +909,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
+  if( !ds.FindDataElement( Tag(0x0400,0x0500) ) )
+    {
+    gdcmDebugMacro( "Could not find EncryptedAttributesSQ" );
+    return false;
+    }
   const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
   //const SequenceOfItems *sq = EncryptedAttributesSequence.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sq = EncryptedAttributesSequence.GetValueAsSQ();
