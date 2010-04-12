@@ -37,6 +37,10 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
   static const gdcm::Global &g = gdcm::Global::GetInstance();
   static const gdcm::Dicts &dicts = g.GetDicts();
   static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+  static size_t countglobal = 0;
+  static std::vector<gdcm::Tag> balcptags = 
+    gdcm::Anonymizer::GetBasicApplicationLevelConfidentialityProfileAttributes();
+  size_t count = countglobal % balcptags.size();
 
   const gdcm::DictEntry &dictentry = pubdict.GetDictEntry(tag);
 
@@ -76,6 +80,24 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
     }
   else
     {
+    // Create an item
+    gdcm::Item it;
+    it.SetVLToUndefined();
+    gdcm::DataSet &nds = it.GetNestedDataSet();
+    // Insert sequence into data set
+    assert(de.GetVR() == gdcm::VR::SQ );
+    gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
+    sq->SetLengthToUndefined();
+    de.SetValue(*sq);
+    de.SetVLToUndefined();
+    //ds.Insert(de);
+
+    if( !toremove )
+      {
+      nds.Insert( CreateFakeElement( balcptags[count], true ) );
+      countglobal++;
+      }
+    sq->AddItem(it);
     }
   return de;
 }
