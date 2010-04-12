@@ -975,8 +975,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //catch( std::Exception  & e)
   catch( ... )
     {
-  delete[] buf;
-  delete[] orig;
+    delete[] buf;
+    delete[] orig;
 
     return false;
     }
