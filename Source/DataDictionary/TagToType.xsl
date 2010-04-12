@@ -38,8 +38,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmTagToType_h
-#define __gdcmTagToType_h
+#ifndef GDCMTAGTOTYPE_H
+#define GDCMTAGTOTYPE_H
 
 #include "gdcmVR.h"
 #include "gdcmVM.h"
@@ -48,7 +48,7 @@
 namespace gdcm {
 // default template: the compiler should only pick it up when the element is private:
 template &lt;uint16_t group,uint16_t element&gt; struct TagToType {
-GDCM_STATIC_ASSERT( group % 2 );
+//GDCM_STATIC_ASSERT( group % 2 );
 enum { VRType = VR::VRALL };
 enum { VMType = VM::VM1_n };
 };
@@ -115,7 +115,7 @@ static const char* GetVMString() { return "1"; }
     </xsl:for-each>
     <xsl:text>
 } // end namespace gdcm
-#endif // __gdcmTagToType_h
+#endif // GDCMTAGTOTYPE_H
 </xsl:text>
   </xsl:template>
 </xsl:stylesheet>
