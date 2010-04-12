@@ -100,8 +100,10 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
       }
     else
       {
-      gdcm::Attribute<0x0008,0x0000> at = { 0 }; // This element has no reason to be 'anonymized'...
-      nds.Insert( at.GetAsDataElement() );
+      gdcm::Attribute<0x0008,0x0000> at1 = { 0 }; // This element has no reason to be 'anonymized'...
+      nds.Insert( at1.GetAsDataElement() );
+      gdcm::Attribute<0x000a,0x0000> at2 = { 0 };
+      nds.Insert( at2.GetAsDataElement() );
       }
     sq->AddItem(it);
     }

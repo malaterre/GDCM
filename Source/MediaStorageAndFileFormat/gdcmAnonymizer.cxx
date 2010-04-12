@@ -474,7 +474,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
-  if( ds.FindDataElement( Tag(0x0400,0x0500) ) )
+  if(  ds.FindDataElement( Tag(0x0400,0x0500) ) 
+    || ds.FindDataElement( Tag(0x0012,0x0062) ) 
+    || ds.FindDataElement( Tag(0x0012,0x0063) ) )
     {
     gdcmDebugMacro( "EncryptedContentTransferSyntax Attribute is present !" );
     return false;
