@@ -82,6 +82,7 @@ blacklist = (
 "EncapsulatedDocument"
 "JPEGCodec"
 "PVRGCodec"
+"KAKADUCodec"
 "JPEGLSCodec"
 "PNMCodec"
 "PDFCodec"
