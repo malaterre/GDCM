@@ -203,6 +203,13 @@ public:
       os << "\t" << zero;
       }
   }
+  bool operator==(const Value &val) const
+    {
+    const SequenceOfFragments &sqf = dynamic_cast<const SequenceOfFragments&>(val);
+    return Table == sqf.Table &&
+      SequenceLengthField == sqf.SequenceLengthField &&
+      Fragments == sqf.Fragments;
+    }
 
 private:
 public:

@@ -37,6 +37,9 @@ public:
   virtual void SetLength(VL l) = 0;
 
   virtual void Clear() = 0;
+
+  virtual bool operator==(const Value &val) const = 0;
+
 };
 
 

@@ -119,6 +119,12 @@ public:
       return true;
     return false;
     }
+  bool operator==(const Value &val) const
+    {
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(val);
+    return Length == bv.Length && Internal == bv.Internal;
+    }
+
 
   void Clear() {
     Internal.clear();

@@ -26,6 +26,7 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   GenAllVR
+  DiffFile
   SimpleScanner
   TraverseModules
   GetSequenceUltrasound

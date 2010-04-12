@@ -213,6 +213,13 @@ public:
   }
   bool FindDataElement(const Tag &t) const;
 
+  bool operator==(const Value &val) const
+    {
+    const SequenceOfItems &sqi = dynamic_cast<const SequenceOfItems&>(val);
+    return SequenceLengthField == sqi.SequenceLengthField &&
+      Items == sqi.Items;
+    }
+
 private:
 public:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined

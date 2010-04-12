@@ -190,10 +190,19 @@ public:
 
   bool operator==(const DataElement &de) const
     {
-    return TagField == de.TagField
+    bool b = TagField == de.TagField
       && ValueLengthField == de.ValueLengthField
-      && VRField == de.VRField
-      && ValueField == de.ValueField;
+      && VRField == de.VRField;
+    if( !ValueField && !de.ValueField )
+      {
+      return b;
+      }
+    if( ValueField && de.ValueField )
+      {
+      return b && (*ValueField == *de.ValueField);
+      }
+    // ValueField != de.ValueField
+    return false;
     }
 
   // The following fonctionalities are dependant on:
