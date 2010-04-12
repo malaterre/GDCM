@@ -40,11 +40,14 @@ public:
   // A Module is inserted based on it's ref
   void AddModule(const char *ref, const Module & module )
     {
+    assert( ref && *ref );
+    assert( ModulesInternal.find( ref ) == ModulesInternal.end() );
     ModulesInternal.insert(
       ModuleMapType::value_type(ref, module));
     }
   const Module &GetModule(const char *name) const
     {
+    assert( name && *name );
     ModuleMapType::const_iterator it = ModulesInternal.find( name );
     assert( it != ModulesInternal.end() );
     assert( it->first == name );

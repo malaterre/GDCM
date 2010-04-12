@@ -58,7 +58,10 @@ public:
       MapModuleEntry::value_type(tag, module));
     }
 
-  void AddMacro(const char *) {}
+  void AddMacro(const char *include)
+    {
+    ArrayIncludeMacros.push_back( include );
+    }
 
   /// Find or Get a ModuleEntry. ModuleEntry are either search are root-level
   /// or within nested-macro included in module.
@@ -83,6 +86,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
 {
+  _os << _val.Name << '\n';
   Module::MapModuleEntry::const_iterator it = _val.ModuleInternal.begin();
   for(;it != _val.ModuleInternal.end(); ++it)
     {

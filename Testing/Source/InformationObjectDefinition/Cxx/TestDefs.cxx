@@ -29,6 +29,7 @@ int TestDefs(int, char *[])
     }
 
   const gdcm::Defs &defs = g.GetDefs();
+  //std::cout << defs.GetMacros() << std::endl;
 
   int ret = 0;
   gdcm::MediaStorage::MSType mst;

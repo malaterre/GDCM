@@ -63,6 +63,7 @@ void HandleModuleEntryDescription(const char **atts);
 void HandleMacroEntry(const char **atts);
 void HandleMacro(const char **atts);
 void HandleMacroEntryDescription(const char **atts);
+void HandleModuleInclude(const char **atts);
 void HandleIODEntry(const char **atts);
 void HandleIOD(const char **atts);
 

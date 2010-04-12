@@ -65,6 +65,15 @@ void TableReader::HandleMacroEntryDescription(const char **atts)
   assert( Description == "" );
 }
 
+void TableReader::HandleModuleInclude(const char **atts)
+{
+  const char *ref = *atts;
+  assert( strcmp(ref, "ref") == 0 );
+  const char *include = *(atts+1);
+  CurrentModule.AddMacro( include );
+  assert( *(atts+2) == 0 ); // description ?
+}
+
 void TableReader::HandleModuleEntryDescription(const char **atts)
 {
   assert( ParsingModuleEntryDescription == false );
@@ -235,8 +244,8 @@ void TableReader::HandleModule(const char **atts)
       }
     else if( strtable == *current )
       {
-      // ref to table is absolutely not useful :(
-      // simply discard
+      // ref to table is needed for referencing Macro
+      CurrentModuleRef = *(current+1);
       }
     else if( strname == *current )
       {
@@ -318,6 +327,7 @@ void TableReader::StartElement(const char *name, const char **atts)
   else if( strcmp(name, "include" ) == 0 )
     {
     // TODO !
+    HandleModuleInclude(atts);
     }
   else if ( strcmp(name,"standard-sop-classes") == 0 )
     {
@@ -486,6 +496,7 @@ void TableReader::EndElement(const char *name)
       }
     else if( ParsingMacro )
       {
+      //abort();
       }
     else
       {
