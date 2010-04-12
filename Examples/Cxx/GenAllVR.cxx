@@ -98,12 +98,12 @@ int main(int argc, char *argv[])
   owner.SetByteValue(owner_str, strlen(owner_str));
   owner.SetVR( gdcm::VR::LO );
 
-    // Create an item
-    gdcm::Item it;
-    it.SetVLToUndefined();
-    gdcm::DataSet &nds = it.GetNestedDataSet();
-//    nds.Insert(owner);
-//    nds.Insert(de);
+  // Create an item
+  gdcm::Item it;
+  it.SetVLToUndefined();
+  gdcm::DataSet &nds = it.GetNestedDataSet();
+  //    nds.Insert(owner);
+  //    nds.Insert(de);
 
   // Insert sequence into data set
   gdcm::DataElement des( gdcm::Tag(0x4d4d,0x1001) );
