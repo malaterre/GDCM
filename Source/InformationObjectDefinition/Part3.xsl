@@ -375,8 +375,8 @@ over and over. We need to get the last ie name we found to fill in the blank:
               </xsl:when>
               <xsl:when test="starts-with($basic_film, 'C-') or starts-with($basic_film, 'C -') or $basic_film = 'U' or $basic_film = 'M'">
                 <!--xsl:variable name="ie_prev" select="normalize-space(reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])"/-->
-                <xsl:variable name="ie_prev" select="preceding-sibling::row[count(entry) = 4 and not(entry/@morerows = '')][1]/entry"/>
-                <entry ie="$ie_prev" name="{translate($ie,'­','')}" ref="{normalize-space(entry[2]/para)}" usage="{normalize-space(translate($ref_joined,'­',''))}"/>
+                <xsl:variable name="ie_prev" select="preceding-sibling::row[count(entry) = 4 and not(entry/@morerows = '')][1]/entry[1]"/>
+                <entry ie="{$ie_prev}" name="{translate($ie,'­','')}" ref="{normalize-space(entry[2]/para)}" usage="{normalize-space(translate($ref_joined,'­',''))}"/>
                 <!--xsl:message>Error: FIXME <xsl:value-of select="preceding-sibling::row/entry[1]/para[. != '']"/></xsl:message-->
               </xsl:when>
               <xsl:otherwise>
