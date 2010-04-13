@@ -82,8 +82,8 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
   sf->WriteBuffer(outfile);
   outfile.close(); // flush !
 
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string executable_path = fn.GetPath();
+  //gdcm::Filename fn( System::GetCurrentProcessFileName() );
+  //std::string executable_path = fn.GetPath();
 #ifdef GDCM_USE_SYSTEM_KAKADU
   std::string kakadu_command = GDCM_KAKADU_EXPAND_EXECUTABLE;
   kakadu_command += " -quiet";
@@ -96,7 +96,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
   kakadu_command += " -o ";
   kakadu_command += output;
 
-  std::cerr << kakadu_command << std::endl;
+  //std::cerr << kakadu_command << std::endl;
   gdcmDebugMacro( kakadu_command );
   int ret = system(kakadu_command.c_str());
   //std::cerr << "system: " << ret << std::endl;
