@@ -71,7 +71,7 @@ void TableReader::HandleModuleInclude(const char **atts)
   assert( strcmp(ref, "ref") == 0 );
   const char *include = *(atts+1);
   CurrentModule.AddMacro( include );
-  assert( *(atts+2) == 0 ); // description ?
+  //assert( *(atts+2) == 0 ); // description ?
 }
 
 void TableReader::HandleModuleEntryDescription(const char **atts)
