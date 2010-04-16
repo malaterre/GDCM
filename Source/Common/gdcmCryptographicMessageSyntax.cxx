@@ -454,7 +454,7 @@ bool CryptographicMessageSyntax::ParseKeyFile( const char *keyfile)
 bool CryptographicMessageSyntax::ParseCertificateFile( const char *keyfile)
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  ::STACK_OF(X509) *recips = Internals->GetRecipients();
+  STACK_OF(X509) *recips = Internals->GetRecipients();
   assert( recips );
   ::X509 *x509 = NULL;
 
