@@ -245,7 +245,7 @@ void TableReader::HandleModule(const char **atts)
     else if( strtable == *current )
       {
       // ref to table is needed for referencing Macro
-      CurrentModuleRef = *(current+1);
+      CurrentMacroRef = *(current+1);
       }
     else if( strname == *current )
       {
@@ -386,7 +386,8 @@ void TableReader::EndElement(const char *name)
     {
     //std::cout << "Start Macro" << std::endl;
     CurrentMacro.SetName( CurrentModuleName.c_str() );
-    CurrentDefs.GetMacros().AddModule( CurrentModuleRef.c_str(), CurrentMacro);
+    CurrentDefs.GetMacros().AddModule( CurrentMacroRef.c_str(), CurrentMacro);
+    CurrentMacroRef.clear();
     CurrentModuleName.clear();
     CurrentMacro.Clear();
     ParsingMacro = false;
@@ -395,7 +396,8 @@ void TableReader::EndElement(const char *name)
     {
     CurrentModule.SetName( CurrentModuleName.c_str() );
     CurrentDefs.GetModules().AddModule( CurrentModuleRef.c_str(), CurrentModule);
-    //std::cout << "End Module:" << CurrentModuleName << std::endl;
+    //std::cout << "End Module: " << CurrentModuleRef << "," << CurrentModuleName << std::endl;
+    CurrentModuleRef.clear();
     CurrentModuleName.clear();
     CurrentModule.Clear();
     ParsingModule = false;

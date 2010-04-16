@@ -86,6 +86,7 @@ private:
   IODEntry CurrentIODEntry;
   std::string CurrentModuleName;
   std::string CurrentModuleRef;
+  std::string CurrentMacroRef;
   bool ParsingModule;
   bool ParsingModuleEntry;
   bool ParsingModuleEntryDescription;
