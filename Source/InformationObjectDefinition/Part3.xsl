@@ -431,7 +431,8 @@ over and over. We need to get the last ie name we found to fill in the blank:
     </xsl:analyze-string>
   </xsl:template>
   <!-- function to extract the table ref (ie: Table C.2-1) -->
-  <xsl:variable name="myregex">^([CF]\.[0-9\.]+)\s*(.*)$</xsl:variable>
+  <!-- Table C.7-12b -->
+  <xsl:variable name="myregex">^([CF]\.[0-9a-z\.]+)\s*(.*)$</xsl:variable>
   <!-- extract a See C.X.Y from a description string -->
   <xsl:template name="get-description-reference">
     <xsl:param name="description"/>
