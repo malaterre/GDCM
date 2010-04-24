@@ -50,7 +50,7 @@ Bitmap::Bitmap():
   PI(),
   Dimensions(),
   PixelData(),
-  LUT(0),
+  LUT(new LookupTable),
   NeedByteSwap(false),
   LossyFlag(false)
 {}

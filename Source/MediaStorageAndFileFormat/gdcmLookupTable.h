@@ -88,6 +88,9 @@ public:
   /// return the bit sample
   unsigned short GetBitSample() const { return BitSample; }
 
+  /// return whether the LUT has been initialized
+  bool Initialized() const;
+
 private:
 protected:
   LookupTableInternal *Internal;

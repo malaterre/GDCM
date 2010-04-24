@@ -47,6 +47,11 @@ LookupTable::~LookupTable()
   delete Internal;
 }
 
+bool LookupTable::Initialized() const
+{
+  return BitSample != 0;
+}
+
 void LookupTable::Clear()
 {
   BitSample = 0;

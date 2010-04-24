@@ -502,6 +502,7 @@ bool PixmapWriter::PrepareWrite()
     if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = PixelData->GetLUT();
+      assert( lut.Initialized() );
       assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
            || (pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0) );
       // lut descriptor:
