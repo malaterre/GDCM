@@ -950,6 +950,10 @@ int main (int argc, char *argv[])
       }
     image->SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
     image->SetPixelFormat( imageori.GetPixelFormat() );
+    image->SetPlanarConfiguration( imageori.GetPlanarConfiguration() );
+    image->SetLUT( imageori.GetLUT() );
+    image->SetLossyFlag( imageori.IsLossy() );
+    // FIXME what is overlay is in pixel data ?
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     bv->SetLength( len );
