@@ -95,10 +95,15 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   // -u -> set Notify to 0 (less verbose)
 #ifdef GDCM_USE_SYSTEM_PVRG
   std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
-  pvrg_command += " -ci 0 -d -u ";
 #else
-  std::string pvrg_command = executable_path + "/gdcmjpeg -ci 0 -d -u ";
+  std::string pvrg_command = executable_path + "/gdcmjpeg";
 #endif
+  if( !System::FileExists( pvrg_command.c_str() ) )
+    {
+    gdcmErrorMacro( "Could not find: " << pvrg_command );
+    return false;
+    }
+  pvrg_command += " -ci 0 -d -u ";
   // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw  
   pvrg_command += "-s ";
   pvrg_command += input;

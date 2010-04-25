@@ -37,7 +37,8 @@ bool Module::FindModuleEntry(const Tag &tag) const
   static const Defs &defs = g.GetDefs();
   static const Macros &macros = defs.GetMacros();
 
-  for( ArrayIncludeMacrosType::const_iterator it = ArrayIncludeMacros.begin(); it != ArrayIncludeMacros.end(); ++it)
+  for( ArrayIncludeMacrosType::const_iterator it = ArrayIncludeMacros.begin();
+    it != ArrayIncludeMacros.end(); ++it)
     {
     const std::string &name = *it;
     const Macro &module = macros.GetModule( name.c_str() );
