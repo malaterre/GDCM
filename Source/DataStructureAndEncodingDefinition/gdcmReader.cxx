@@ -190,7 +190,7 @@ TransferSyntax Reader::GuessTransferSyntax()
   return ts;
 }
 
-namespace
+namespace details
 {
   class DefaultCaller
   {
@@ -268,19 +268,19 @@ namespace
 
 bool Reader::Read()
 {
-  DefaultCaller caller(F->GetDataSet());
+  details::DefaultCaller caller(F->GetDataSet());
   return InternalReadCommon(caller);
 }
 
 bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
 {
-  ReadUpToTagCaller caller(F->GetDataSet(),tag,skiptags);
+  details::ReadUpToTagCaller caller(F->GetDataSet(),tag,skiptags);
   return InternalReadCommon(caller);
 }
 
 bool Reader::ReadSelectedTags( std::set<Tag> const & selectedTags )
 {
-  ReadSelectedTagsCaller caller(F->GetDataSet(), selectedTags);
+  details::ReadSelectedTagsCaller caller(F->GetDataSet(), selectedTags);
   return InternalReadCommon(caller);
 }
 
