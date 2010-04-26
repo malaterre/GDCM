@@ -19,6 +19,7 @@
 #include "gdcmGlobal.h"
 #include "gdcmIODs.h"
 #include "gdcmIOD.h"
+#include "gdcmMacros.h"
 #include "gdcmIODEntry.h"
 #include "gdcmModules.h"
 #include "gdcmModule.h"
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
   static const Defs &defs = g.GetDefs();
   static const Modules &modules = defs.GetModules();
   static const IODs &iods = defs.GetIODs();
+  static const Macros &macros = defs.GetMacros();
   static const Dicts &dicts = g.GetDicts();
 
   std::vector<Tag> tags = gdcm::Anonymizer::GetBasicApplicationLevelConfidentialityProfileAttributes();
@@ -62,9 +64,9 @@ int main(int argc, char *argv[])
         //Usage::UsageType ut = iodentry.GetUsageType();
 
         const Module &module = modules.GetModule( ref );
-        if( module.FindModuleEntry( tag ) )
+        if( module.FindModuleEntryInMacros(macros, tag ) )
           {
-          const ModuleEntry &module_entry = module.GetModuleEntry(tag);
+          const ModuleEntry &module_entry = module.GetModuleEntryInMacros(macros,tag);
           Type type = module_entry.GetType();
           std::cout << "IOD Name: " << name << std::endl;
           std::cout << "Type: " << type << std::endl;
