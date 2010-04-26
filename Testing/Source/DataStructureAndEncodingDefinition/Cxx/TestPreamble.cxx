@@ -13,10 +13,21 @@
 
 =========================================================================*/
 #include "gdcmPreamble.h"
+#include "gdcmFileMetaInformation.h"
 
 int TestPreamble(int, char *[])
 {
+{
   gdcm::Preamble p;
+}
+  gdcm::FileMetaInformation * m_pFileMetaInformation = new gdcm::FileMetaInformation();
+  gdcm::Preamble *p = new gdcm::Preamble();
+
+  m_pFileMetaInformation->SetPreamble( *p );
+  m_pFileMetaInformation->Clear();
+  delete m_pFileMetaInformation;
+  m_pFileMetaInformation = NULL ;
+    delete p;
   return 0;
 }
 

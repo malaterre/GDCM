@@ -55,9 +55,13 @@ public:
 
   VL GetLength() const { return 128 + 4; }
 
-  Preamble(Preamble const &preamble)
+  Preamble(Preamble const &)
     {
-    (void)preamble;
+    Create();
+    }
+  Preamble& operator=(Preamble const &)
+    {
+    Create();
     }
 protected:
   //
