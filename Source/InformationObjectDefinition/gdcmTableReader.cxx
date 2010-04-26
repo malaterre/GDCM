@@ -386,7 +386,7 @@ void TableReader::EndElement(const char *name)
     {
     //std::cout << "Start Macro" << std::endl;
     CurrentMacro.SetName( CurrentModuleName.c_str() );
-    CurrentDefs.GetMacros().AddModule( CurrentMacroRef.c_str(), CurrentMacro);
+    CurrentDefs.GetMacros().AddMacro( CurrentMacroRef.c_str(), CurrentMacro);
     CurrentMacroRef.clear();
     CurrentModuleName.clear();
     CurrentMacro.Clear();
@@ -419,7 +419,7 @@ void TableReader::EndElement(const char *name)
     else if( ParsingMacro ) 
       {
       ParsingMacroEntry = false;
-      CurrentMacro.AddModuleEntry( CurrentTag, CurrentMacroEntry);
+      CurrentMacro.AddMacroEntry( CurrentTag, CurrentMacroEntry);
       }
     else if( ParsingIOD ) 
       {

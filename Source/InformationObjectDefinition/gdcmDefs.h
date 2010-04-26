@@ -16,7 +16,7 @@
 #define GDCMDEFS_H
 
 #include "gdcmModules.h"
-//#include "gdcmMacros.h"
+#include "gdcmMacros.h"
 #include "gdcmIODs.h"
 
 #include <string>

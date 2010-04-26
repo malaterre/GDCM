@@ -2,7 +2,9 @@
 # IOD
 SET(IOD_SRCS
   gdcmModule.cxx
+  gdcmMacro.cxx
   gdcmModules.cxx
+  gdcmMacros.cxx
   gdcmNestedModuleEntries.cxx
   gdcmIODEntry.cxx
   gdcmTableReader.cxx

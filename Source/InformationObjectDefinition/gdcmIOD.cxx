@@ -23,6 +23,7 @@ namespace gdcm
 
 Type IOD::GetTypeFromTag(const Modules &modules, const Tag& tag) const
 {
+  throw "FIXME";
   Type ret;
   const IOD &iod = *this;
 
@@ -36,12 +37,12 @@ Type IOD::GetTypeFromTag(const Modules &modules, const Tag& tag) const
     //Usage::UsageType ut = iodentry.GetUsageType();
 
     const Module &module = modules.GetModule( ref );
-    if( module.FindModuleEntry( tag ) )
-      {
-      const ModuleEntry &module_entry = module.GetModuleEntry(tag);
-      ret = module_entry.GetType();
-      found = true;
-      }
+    //if( module.FindModuleEntry( tag ) )
+    //  {
+    //  const ModuleEntry &module_entry = module.GetModuleEntry(tag);
+    //  ret = module_entry.GetType();
+    //  found = true;
+    //  }
     }
 
   return ret;

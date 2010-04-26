@@ -12,12 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMMODULE_H
-#define GDCMMODULE_H
+#ifndef GDCMMACR_H
+#define GDCMMACR_H
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
-#include "gdcmModuleEntry.h"
+#include "gdcmMacroEntry.h"
 
 #include <map>
 
@@ -26,7 +26,6 @@ namespace gdcm
 
 class DataSet;
 class Usage;
-class Macros;
 /**
  * \brief Class for representing a Module
  * \note bla
@@ -34,10 +33,10 @@ class Macros;
  * are logically related to each other.
  * \sa Dict
  */
-class GDCM_EXPORT Module
+class GDCM_EXPORT Macro
 {
 public:
-  typedef std::map<Tag, ModuleEntry> MapModuleEntry;
+  typedef std::map<Tag, MacroEntry> MapModuleEntry;
   typedef std::vector<std::string> ArrayIncludeMacrosType;
 
   //typedef MapModuleEntry::const_iterator ConstIterator;
@@ -47,27 +46,22 @@ public:
   //ConstIterator End() const { return ModuleInternal.end(); }
   //Iterator End() { return ModuleInternal.end(); }
 
-  Module() {}
-  friend std::ostream& operator<<(std::ostream& _os, const Module &_val);
+  Macro() {}
+  friend std::ostream& operator<<(std::ostream& _os, const Macro&_val);
 
   void Clear() { ModuleInternal.clear(); }
 
   /// Will add a ModuleEntry direcly at root-level. See Macro for nested-included level.
-  void AddModuleEntry(const Tag& tag, const ModuleEntry & module)
+  void AddMacroEntry(const Tag& tag, const MacroEntry & module)
     {
     ModuleInternal.insert(
       MapModuleEntry::value_type(tag, module));
     }
 
-  void AddMacro(const char *include)
-    {
-    ArrayIncludeMacros.push_back( include );
-    }
-
   /// Find or Get a ModuleEntry. ModuleEntry are either search are root-level
   /// or within nested-macro included in module.
-  bool FindModuleEntryInMacros(Macros const &macros, const Tag &tag) const;
-  const ModuleEntry& GetModuleEntryInMacros(Macros const &macros, const Tag &tag) const;
+  bool FindMacroEntry(const Tag &tag) const;
+  const MacroEntry& GetMacroEntry(const Tag &tag) const;
 
   void SetName( const char *name) { Name = name; }
   const char *GetName() const { return Name.c_str(); }
@@ -82,17 +76,16 @@ private:
 
   MapModuleEntry ModuleInternal;
   std::string Name;
-  ArrayIncludeMacrosType ArrayIncludeMacros;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
+inline std::ostream& operator<<(std::ostream& _os, const Macro &_val)
 {
   _os << _val.Name << '\n';
-  Module::MapModuleEntry::const_iterator it = _val.ModuleInternal.begin();
+  Macro::MapModuleEntry::const_iterator it = _val.ModuleInternal.begin();
   for(;it != _val.ModuleInternal.end(); ++it)
     {
     const Tag &t = it->first;
-    const ModuleEntry &de = it->second;
+    const MacroEntry &de = it->second;
     _os << t << " " << de << '\n';
     }
 

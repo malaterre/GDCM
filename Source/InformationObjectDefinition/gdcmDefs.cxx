@@ -248,6 +248,7 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
     return ret;
     }
   const IOD &iod = iods.GetIOD( iodname );
+  const Macros &macros = GetMacros();
 
   unsigned int niods = iod.GetNumberOfIODs();
   // Iterate over each iod entry in order:
@@ -258,9 +259,9 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
     //Usage::UsageType ut = iodentry.GetUsageType();
 
     const Module &module = modules.GetModule( ref );
-    if( module.FindModuleEntry( tag ) )
+    if( module.FindModuleEntryInMacros(macros, tag ) )
       {
-      const ModuleEntry &module_entry = module.GetModuleEntry(tag);
+      const ModuleEntry &module_entry = module.GetModuleEntryInMacros(macros,tag);
       ret = module_entry.GetType();
       }
     }
