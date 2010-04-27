@@ -29,10 +29,10 @@ class Usage;
 class Macros;
 /**
  * \brief Class for representing a Module
- * \note bla
+ * \note
  * Module: A set of Attributes within an Information Entity or Normalized IOD which
  * are logically related to each other.
- * \sa Dict
+ * \sa Macro
  */
 class GDCM_EXPORT Module
 {

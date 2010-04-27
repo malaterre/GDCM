@@ -17,15 +17,17 @@
 #include "gdcmDataSet.h"
 #include "gdcmModule.h"
 #include "gdcmModules.h"
+#include "gdcmDefs.h"
 
 namespace gdcm
 {
 
-Type IOD::GetTypeFromTag(const Modules &modules, const Tag& tag) const
+Type IOD::GetTypeFromTag(const Defs &defs, const Tag& tag) const
 {
-  throw "FIXME";
   Type ret;
   const IOD &iod = *this;
+  static const Modules &modules = defs.GetModules();
+  static const Macros &macros = defs.GetMacros();
 
   const unsigned int niods = iod.GetNumberOfIODs();
   // Iterate over each iod entry in order:
@@ -37,12 +39,12 @@ Type IOD::GetTypeFromTag(const Modules &modules, const Tag& tag) const
     //Usage::UsageType ut = iodentry.GetUsageType();
 
     const Module &module = modules.GetModule( ref );
-    //if( module.FindModuleEntry( tag ) )
-    //  {
-    //  const ModuleEntry &module_entry = module.GetModuleEntry(tag);
-    //  ret = module_entry.GetType();
-    //  found = true;
-    //  }
+    if( module.FindModuleEntryInMacros(macros, tag ) )
+      {
+      const ModuleEntry &module_entry = module.GetModuleEntryInMacros(macros,tag);
+      ret = module_entry.GetType();
+      found = true;
+      }
     }
 
   return ret;

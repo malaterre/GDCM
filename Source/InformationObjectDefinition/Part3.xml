@@ -49,7 +49,6 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     </entry>
   </macro-->
   <macro table="8.8-1" name="Common Attribute Set For Code Sequence Attributes (invoked AS “code Sequence Macro”)">
-    <include ref="BASIC CODED ENTRY ATTRIBUTES"/>
     <entry group="0008" element="0100" name="Code Value" type="1">
       <description>See Section 8.1.</description>
     </entry>
@@ -62,7 +61,6 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0008" element="0104" name="Code Meaning" type="1">
       <description>See Section 8.3.</description>
     </entry>
-    <include ref="ENHANCED ENCODING MODE"/>
     <entry group="0008" element="010F" name="Context Identifier" type="3">
       <description>See Section 8.6.</description>
     </entry>

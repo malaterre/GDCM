@@ -27,11 +27,11 @@ namespace gdcm
 class DataSet;
 class Usage;
 /**
- * \brief Class for representing a Module
- * \note bla
- * Module: A set of Attributes within an Information Entity or Normalized IOD which
- * are logically related to each other.
- * \sa Dict
+ * \brief Class for representing a Macro
+ * \note Attribute Macro: 
+ * a set of Attributes that are described in a single table that is referenced
+ * by multiple Module or other tables.
+ * \sa Module
  */
 class GDCM_EXPORT Macro
 {

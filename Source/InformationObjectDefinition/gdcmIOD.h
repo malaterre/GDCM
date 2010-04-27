@@ -24,7 +24,7 @@
 namespace gdcm
 {
 class DataSet;
-class Modules;
+class Defs;
 
 /**
  * \brief Class for representing a IOD
@@ -56,7 +56,7 @@ public:
     return IODInternal[idx];
     }
 
-  Type GetTypeFromTag(const Modules &modules, const Tag& tag) const;
+  Type GetTypeFromTag(const Defs &defs, const Tag& tag) const;
 
 private:
   //IOD &operator=(const IOD &_val); // purposely not implemented
