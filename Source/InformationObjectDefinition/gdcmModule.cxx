@@ -38,6 +38,7 @@ bool Module::FindModuleEntryInMacros(Macros const &macros, const Tag &tag) const
   //static const Defs &defs = g.GetDefs();
   //static const Macros &macros = defs.GetMacros();
 
+#if 0
   for( ArrayIncludeMacrosType::const_iterator it = ArrayIncludeMacros.begin();
     it != ArrayIncludeMacros.end(); ++it)
     {
@@ -48,6 +49,7 @@ bool Module::FindModuleEntryInMacros(Macros const &macros, const Tag &tag) const
       return true;
       }
     }
+#endif
   // Not found anywhere :(
   return false;
 }
