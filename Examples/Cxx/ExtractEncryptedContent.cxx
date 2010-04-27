@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
   gdcm::SequenceOfItems *sqi = EncryptedAttributesSequence.GetValueAsSQ();
 
-  if ( sqi->GetNumberOfItems() != 1 ) return 1;
+  if ( !sqi || sqi->GetNumberOfItems() != 1 ) return 1;
 
   gdcm::Item &item = sqi->GetItem(1);
 
