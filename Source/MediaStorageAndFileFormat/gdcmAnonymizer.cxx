@@ -717,10 +717,9 @@ bool Anonymizer::CanEmptyTag(Tag const &tag, const IOD &iod) const
   static const Global &g = Global::GetInstance();
   //static const Dicts &dicts = g.GetDicts();
   static const Defs &defs = g.GetDefs();
-  static const Modules &modules = defs.GetModules();
   const DataSet &ds = F->GetDataSet();
   //Type told = defs.GetTypeFromTag(*F, tag);
-  Type t = iod.GetTypeFromTag(modules, tag);
+  Type t = iod.GetTypeFromTag(defs, tag);
   //assert( t == told );
 
   gdcmDebugMacro( "Type for tag=" << tag << " is " << t );
