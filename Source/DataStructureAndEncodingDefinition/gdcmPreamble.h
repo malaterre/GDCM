@@ -62,6 +62,7 @@ public:
   Preamble& operator=(Preamble const &)
     {
     Create();
+    return *this;
     }
 protected:
   //
