@@ -120,6 +120,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.77.1.4", // "VL Photographic Image Storage",
   "1.2.840.10008.5.1.4.1.1.66.4", // Segmentation Storage 
   "1.2.840.10008.5.1.4.1.1.481.8", // RT Ion Plan Storage
+  "1.2.840.10008.5.1.4.1.1.13.1.1", // XRay3DAngiographicImageStorage,
+  "1.2.840.10008.5.1.4.1.1.12.1.1", // Enhanced XA Image Storage
   0
 };
 
@@ -276,6 +278,9 @@ static MSModalityType MSModalityTypes[] = {
   {"XC", 2},//VLPhotographicImageStorage
   {"  ", 2},// Segmentation Storage 
   {"  ", 2},// RT Ion Plan Storage
+  {"XA", 3},// XRay3DAngiographicImageStorage,
+  {"XA", 3},// Enhanced XA Image Storage
+
   {NULL, 0} //MS_END
 };
 
