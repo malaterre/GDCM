@@ -192,6 +192,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == RawDataStorage
     || ms == RTIonPlanStorage
     || ms == LeadECGWaveformStorage
+    || ms == GeneralECGWaveformStorage
     || ms == RTStructureSetStorage )
     {
     return false;
