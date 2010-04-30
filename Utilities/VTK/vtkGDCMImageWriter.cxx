@@ -688,13 +688,18 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
 
   unsigned long len = image.GetBufferLength();
-  //vtkIdType npts = (vtkIdType)(inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
-  vtkIdType npts = (inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
-  assert( npts >= 0 );
+  vtkIdType npts = (vtkIdType)(inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
+  if( npts < 0 )
+    {
+    vtkErrorMacro( "Could not Get number of points" );
+    return 0;
+    }
+  //assert( npts >= 0 );
   //assert( npts == data->GetNumberOfPoints() );
   int ssize = data->GetScalarSize();
   unsigned long vtklen = npts * ssize;
-  //assert( vtklen == len );
+  assert( vtklen >= npts );
+  assert( vtklen == len * ssize );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
