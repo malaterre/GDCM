@@ -54,7 +54,10 @@ public :
   void SetCipherType(CipherTypes type);
   CipherTypes GetCipherType() const;
 
+  /// create a PKCS#7 envelopedData structure 
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
+
+  /// decrypt content from a PKCS#7 envelopedData structure 
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
 
 private:

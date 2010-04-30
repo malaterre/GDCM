@@ -29,6 +29,8 @@
 #endif
 
 /*
+ * http://en.wikipedia.org/wiki/PKCS
+ * PKCS#7 <=> Cryptographic Message Syntax Standard
  */
 namespace gdcm
 {
@@ -39,8 +41,8 @@ namespace gdcm
  * openssl req -new -key CA_key.pem -x509 -days 365 -out CA_cert.cer
  */
 /*
-openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
-*/
+ * openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
+ */
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype)
 {
@@ -74,31 +76,17 @@ public:
   CryptographicMessageSyntaxInternals():recips(NULL),pkey(NULL),CipherType( CryptographicMessageSyntax::AES256_CIPHER ),cipher(NULL),p7(PKCS7_new()),p7bio(NULL) {
     recips = sk_X509_new_null();
     PKCS7_set_type(p7,NID_pkcs7_enveloped);
-
-//    time_t t;
-//    t = time(NULL);
-//    RAND_seed(&t,sizeof(t));
-//#ifdef _WIN32
-//    RAND_screen(); /* Loading video display memory into random state */
-//#endif
-  bio_buffer = BIO_new(BIO_s_mem());
-  Initialized = false;
-
+    bio_buffer = BIO_new(BIO_s_mem());
+    Initialized = false;
   }
   ~CryptographicMessageSyntaxInternals() {
-//  t = time(NULL);
-//  RAND_seed(&t,sizeof(t));
-
-    //sk_X509_pop_free(recips, X509_free);
     EVP_PKEY_free(pkey);
-  PKCS7_free(p7);
-  p7 = NULL;
+    PKCS7_free(p7);
+    p7 = NULL;
+    BIO_free_all(bio_buffer);
 
-	BIO_free_all(bio_buffer);
-
-  if(p7bio)
-  BIO_free_all(p7bio);
-
+    if(p7bio)
+      BIO_free_all(p7bio);
   }
   unsigned int GetNumberOfRecipients() const {
     //::STACK_OF(X509) *recips = recips;
@@ -239,10 +227,12 @@ CryptographicMessageSyntax::~CryptographicMessageSyntax()
   delete Internals;
 }
 
-void CryptographicMessageSyntax::SetCipherType( CipherTypes type)
+void CryptographicMessageSyntax::SetCipherType( CipherTypes type )
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   Internals->SetCipherType( type );
+#else
+  (void)type;
 #endif
 }
 
@@ -255,16 +245,6 @@ CryptographicMessageSyntax::CipherTypes CryptographicMessageSyntax::GetCipherTyp
 #endif
 }
 
-//void CryptographicMessageSyntax::SetCertificate( X509 *cert )
-//{
-//  Internals->x509 = cert;
-//}
-//
-//const X509 *CryptographicMessageSyntax::GetCertificate( ) const
-//{
-//  return Internals->x509;
-//}
-
 bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
@@ -273,33 +253,10 @@ bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const cha
   if( !RAND_status() )
     {
     gdcmErrorMacro( "PRNG was not seeded properly" );
+    outlen = 0;
     return false;
     }
-  CryptographicMessageSyntaxInternals *x509 = Internals;
-  //x509->Initialize();
-
-  return x509->Encrypt(output, outlen, array, len);
-/*
-
-	::PKCS7 *p7 = x509->GetP7();
-
-  BIO* wbio = NULL;
-  if (!(wbio = BIO_new(BIO_s_mem()))) goto err;
-  i2d_PKCS7_bio(wbio,p7);
-  (void)BIO_flush(wbio);
-
-  char *binary;
-  outlen = BIO_get_mem_data(wbio,&binary);
-  memcpy( output, binary, outlen );
-
-  BIO_free_all(wbio);  // also frees b64 
-
-  return true;
-err:
-  ERR_load_crypto_strings();
-  ERR_print_errors_fp(stderr);
-  return false;
-*/
+  return Internals->Encrypt(output, outlen, array, len);
 #else
   outlen = 0;
   return false;
