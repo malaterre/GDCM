@@ -699,7 +699,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   int ssize = data->GetScalarSize();
   unsigned long vtklen = npts * ssize;
   assert( vtklen >= npts );
-  assert( vtklen == len * ssize );
+  //assert( vtklen == len * ssize );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
