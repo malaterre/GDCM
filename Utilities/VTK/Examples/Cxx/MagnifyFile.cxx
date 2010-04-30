@@ -16,6 +16,7 @@
 #include "vtkGDCMImageWriter.h"
 #include "vtkImageData.h"
 #include "vtkImageMagnify.h"
+#include "vtkImageCast.h"
 
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
@@ -35,11 +36,15 @@ int main(int, char *[])
   reader->Update();
   //reader->GetOutput()->Print( std::cout );
 
+  vtkImageCast *cast = vtkImageCast::New();
+  cast->SetInput( reader->GetOutput() );
+  cast->SetOutputScalarTypeToUnsignedShort();
+
   vtkImageMagnify *magnify = vtkImageMagnify::New();
-  magnify->SetInput( reader->GetOutput() );
+  magnify->SetInput( cast->GetOutput() );
   magnify->SetInterpolate( 1 );
   magnify->SetInterpolate( 0 );
-  int factor = 80;
+  int factor = 100;
   magnify->SetMagnificationFactors (factor, factor, 1);
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
