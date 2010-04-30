@@ -688,10 +688,13 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
 
   unsigned long len = image.GetBufferLength();
+  //vtkIdType npts = (vtkIdType)(inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
   vtkIdType npts = (inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
-  //data->GetNumberOfPoints();
+  assert( npts >= 0 );
+  //assert( npts == data->GetNumberOfPoints() );
   int ssize = data->GetScalarSize();
   unsigned long vtklen = npts * ssize;
+  //assert( vtklen == len );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
@@ -802,7 +805,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
 
   int year, month, day;
-  int hour, minute, second;
   gdcm::File& file = writer.GetFile();
   gdcm::DataSet& ds = file.GetDataSet();
   vtkGDCMMedicalImageProperties *gdcmmip = 
@@ -837,6 +839,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
     // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 4 )
+    int hour, minute, second;
     if( vtkMedicalImageProperties::GetTimeAsFields( this->MedicalImageProperties->GetStudyTime(), hour, minute, second ) )
 #endif
       SetStringValueFromTag( this->MedicalImageProperties->GetStudyTime(), gdcm::Tag(0x0008,0x0030), ano);

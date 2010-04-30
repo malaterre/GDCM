@@ -38,8 +38,13 @@ SET(vtkgdcm_LIBS
   vtkCommon
   vtkIO
   vtkImaging
-  vtkRendering
 )
+IF(VTK_USE_RENDERING)
+  SET(vtkgdcm_LIBS
+    ${vtkgdcm_LIBS}
+    vtkRendering
+    )
+ENDIF(VTK_USE_RENDERING)
 
 # Use wrapping hints for this project.
 #SET(VTK_WRAP_HINTS "${PROJECT_SOURCE_DIR}/hints")
@@ -69,7 +74,6 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   )
 ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToWindowLevelColors2.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageYBRToRGB.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
@@ -78,6 +82,12 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx
     #${CMAKE_CURRENT_SOURCE_DIR}/vtkImagePlanarComponentsToComponents.cxx
   )
+  IF(VTK_USE_RENDERING)
+  SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
+    )
+  ENDIF(VTK_USE_RENDERING)
+
   #IF(CMAKE_HAVE_PTHREAD_H)
     SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     vtkGDCMThreadedImageReader2.cxx
