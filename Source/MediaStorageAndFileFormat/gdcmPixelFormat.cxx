@@ -27,6 +27,10 @@ static const char *ScalarTypeStrings[] = {
   "INT16",
   "UINT32",
   "INT32",
+  "FLOAT16",
+  "FLOAT32",
+  "FLOAT64",
+  "SINGLEBIT",
   NULL,
 };
 
@@ -101,6 +105,10 @@ void PixelFormat::SetScalarType(ScalarType st)
     // secret code:
     PixelRepresentation = 4;
     break;
+  case PixelFormat::SINGLEBIT:
+    BitsAllocated = 1;
+    PixelRepresentation = 0;
+    break;
   case PixelFormat::UNKNOWN:
     BitsAllocated = 0;
     PixelRepresentation = 0;
@@ -120,6 +128,9 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
     {
   case 0:
     type = PixelFormat::UNKNOWN;
+    break;
+  case 1:
+    type = PixelFormat::SINGLEBIT;
     break;
   case 8:
     type = PixelFormat::UINT8;

@@ -52,6 +52,7 @@ public:
     FLOAT16, // sure why not...
     FLOAT32, // good ol' 'float'
     FLOAT64, // aka 'double'
+    SINGLEBIT, // bool / monochrome
     UNKNOWN // aka BitsAllocated == 0 && PixelRepresentation == 0
   } ScalarType;
 

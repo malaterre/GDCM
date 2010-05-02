@@ -182,9 +182,11 @@ PixelFormat::ScalarType Rescaler::ComputeInterceptSlopePixelType()
 {
   assert( PF != PixelFormat::UNKNOWN );
   PixelFormat::ScalarType output = PixelFormat::UNKNOWN;
+  if( PF == PixelFormat::SINGLEBIT ) return PixelFormat::SINGLEBIT;
   if( Slope != (int)Slope || Intercept != (int)Intercept)
     {
     //assert( PF != PixelFormat::INT8 && PF != PixelFormat::UINT8 ); // Is there any Object that have Rescale on char ?
+    assert( PF != PixelFormat::SINGLEBIT );
     return PixelFormat::FLOAT64;
     }
   double intercept = Intercept;
@@ -206,6 +208,9 @@ void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
     }
   switch(output)
     {
+  case PixelFormat::SINGLEBIT:
+    assert(0);
+    break;
   case PixelFormat::UINT8:
     RescaleFunction<uint8_t,TIn>((uint8_t*)out,in,intercept,slope,n);
     break;
@@ -245,6 +250,9 @@ void Rescaler::InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_
   PixelFormat output = ComputePixelTypeFromMinMax();
   switch(output)
     {
+  case PixelFormat::SINGLEBIT:
+    assert(0);
+    break;
   case PixelFormat::UINT8:
     InverseRescaleFunction<uint8_t,TIn>((uint8_t*)out,in,intercept,slope,n);
     break;
@@ -329,7 +337,7 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
   if( UseTargetPixelType == false )
     {
     // fast path:
-    if( Slope == 1 && Intercept == 0 ) 
+    if( Slope == 1 && Intercept == 0 )
       {
       memcpy(out,in,n);
       return true;
@@ -344,6 +352,9 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
   // else integral type
   switch(PF)
     {
+  case PixelFormat::SINGLEBIT:
+    memcpy(out,in,n);
+    break;
   case PixelFormat::UINT8:
     RescaleFunctionIntoBestFit<uint8_t>(out,(uint8_t*)in,n);
     break;

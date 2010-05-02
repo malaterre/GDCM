@@ -457,6 +457,7 @@ bool PixmapWriter::PrepareWrite()
     {
     switch ( pf.GetBitsAllocated() )
       {
+      case 1:
       case 8:
         de.SetVR( VR::OB );
         break;

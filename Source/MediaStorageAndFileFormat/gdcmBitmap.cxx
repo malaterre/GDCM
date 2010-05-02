@@ -238,6 +238,14 @@ unsigned long Bitmap::GetBufferLength() const
     mul = save;
 #endif
     }
+  else if( PF == PixelFormat::SINGLEBIT )
+    {
+    assert( PF.GetSamplesPerPixel() == 1 );
+    unsigned int save = mul;
+    save /= 8;
+    assert( save * 8 == mul );
+    mul = save;
+    }
   else if( PF.GetBitsAllocated() % 8 != 0 )
     {
     // gdcmDataExtra/gdcmSampleData/images_of_interest/USBitsAllocated14.dcm
