@@ -32,21 +32,8 @@ get_filename_component(SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 if(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
   # This is an install tree
   include(${SELF_DIR}/GDCMTargets.cmake)
-  #get_filename_component(GDCM_INCLUDE_DIRS "${SELF_DIR}/../../@GDCM_INSTALL_INCLUDE_DIR@" ABSOLUTE)
   get_filename_component(GDCM_INCLUDE_ROOT "${SELF_DIR}/../../@GDCM_INSTALL_INCLUDE_DIR@" ABSOLUTE)
-  set(GDCM_ENVIRONMENTS ${GDCM_INCLUDE_ROOT}/Environments)
-  #set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_DIRS} ${GDCM_INCLUDE_DIRS}/csmML)
   set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_ROOT})
-  foreach(subdir csmML Common Environments Builders IO Concepts)
-    set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_DIRS} ${GDCM_INCLUDE_ROOT}/${subdir})
-  endforeach()
-  #set(CODEGENERATOR_EXECUTABLE CodeGenerator)
-  GET_TARGET_PROPERTY( CodeGenerator_PATH
-    CodeGenerator
-    LOCATION
-    )
-  set(CODEGENERATOR_EXECUTABLE ${CodeGenerator_PATH})
-  SET(GDCM_USECMAKE_DIRS    "@CMAKE_INSTALL_PREFIX@/@GDCM_INSTALL_CMAKE_DIR@")
 
 else(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
   if(EXISTS ${SELF_DIR}/GDCMExports.cmake)
@@ -54,14 +41,6 @@ else(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
     SET( GDCM_INCLUDE_DIRS @GDCM_INCLUDE_PATH@)
 
     include(${SELF_DIR}/GDCMExports.cmake)
-
-    GET_TARGET_PROPERTY( CodeGenerator_PATH
-      CodeGenerator
-      LOCATION
-      )
-    set(CODEGENERATOR_EXECUTABLE ${CodeGenerator_PATH})
-    set(GDCM_USECMAKE_DIRS    "@GDCM_BINARY_DIR@")
-    set(GDCM_ENVIRONMENTS "@GDCM_SOURCE_DIR@/Code/Environments")
 
   else(EXISTS ${SELF_DIR}/GDCMExports.cmake)
     message(FATAL_ERROR "ooops")

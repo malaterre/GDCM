@@ -25,17 +25,37 @@ INSTALL( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
 install(EXPORT GDCMTargets DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
 #get_target_property(VAR target property)
 #export(TARGETS ${GDCM_LIBRARIES} FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake)
-file(WRITE ${GDCM_BINARY_DIR}/GDCMExports.cmake "")
 
-#message( ${GDCM_EXECUTABLES} )
-SET( targets ${GDCM_LIBRARIES} ${GDCM_EXECUTABLES} )
+# [Prevent viral CMake dep]
+# See the following ref, which explain this mess.
+# http://cmake.org/Bug/view.php?id=9822
+# 0009822: Please expose: cmGlobalGenerator::GetExportSet at cmake level 
+
+# I cannot retrieve the lists of exported targets, so read them from the file instead
+SET( targets )
+
+if(EXISTS
+    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake
+    )
+  file(READ
+    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake
+    ENT
+    )
+  #message(${ENT})
+  STRING(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
+  foreach(line ${ENT})
+    #message("L: ${line}")
+    string(REGEX MATCH "ADD_LIBRARY\\(.*SHARED IMPORTED\\)" m ${line})
+    if( m )
+      # message("M: ${m}")
+      string(REGEX REPLACE "ADD_LIBRARY\\((.*) SHARED IMPORTED\\)" "\\1" out ${m})
+      #message("O: ${out}")
+      list(APPEND targets ${out})
+    endif()
+  endforeach(line)
+endif()
 
 foreach(target ${targets})
   export(TARGETS ${target} APPEND FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake)
 endforeach(target)
-
-
-# Ref:
-# http://cmake.org/Bug/view.php?id=9822
-# 0009822: Please expose: cmGlobalGenerator::GetExportSet at cmake level 
 
