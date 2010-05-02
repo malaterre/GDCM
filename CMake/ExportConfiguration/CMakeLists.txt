@@ -21,10 +21,8 @@ INSTALL( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
   DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
 )
 
-# install all target referenced as GDCMTargets
+# install all targets referenced as GDCMTargets
 install(EXPORT GDCMTargets DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
-#get_target_property(VAR target property)
-#export(TARGETS ${GDCM_LIBRARIES} FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake)
 
 # [Prevent viral CMake dep]
 # See the following ref, which explain this mess.
@@ -34,22 +32,15 @@ install(EXPORT GDCMTargets DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
 # I cannot retrieve the lists of exported targets, so read them from the file instead
 SET( targets )
 
-if(EXISTS
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake
-    )
-  file(READ
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake
-    ENT
-    )
-  #message(${ENT})
+set(gdcmtarget_cmake
+  "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake")
+if(EXISTS ${gdcmtarget_cmake})
+  file(READ ${gdcmtarget_cmake} ENT)
   STRING(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
   foreach(line ${ENT})
-    #message("L: ${line}")
     string(REGEX MATCH "ADD_LIBRARY\\(.*SHARED IMPORTED\\)" m ${line})
     if( m )
-      # message("M: ${m}")
       string(REGEX REPLACE "ADD_LIBRARY\\((.*) SHARED IMPORTED\\)" "\\1" out ${m})
-      #message("O: ${out}")
       list(APPEND targets ${out})
     endif()
   endforeach(line)
