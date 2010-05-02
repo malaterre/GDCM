@@ -895,6 +895,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::FLOAT64:
     this->DataScalarType = VTK_DOUBLE;
     break;
+  case gdcm::PixelFormat::SINGLEBIT:
+    this->DataScalarType = VTK_BIT;
+    break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType()
       << " with " << outputpt  );
@@ -980,10 +983,12 @@ void InPlaceYFlipImage(vtkImageData* data)
   switch (data->GetScalarType())
     {
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+    case VTK_BIT: { outsize /= 8; }; break;
     vtkTemplateMacro(
       outsize *= vtkImageDataGetTypeSize(static_cast<VTK_TT*>(0))
     );
 #else
+    case VTK_BIT: { outsize /= 8; }; break;
     vtkTemplateMacro3(
       outsize *= vtkImageDataGetTypeSize, static_cast<VTK_TT*>(0), 0, 0
     );
@@ -1123,6 +1128,9 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     break;
   case VTK_DOUBLE:
     targetpixeltype = gdcm::PixelFormat::FLOAT64;
+    break;
+  case VTK_BIT:
+    targetpixeltype = gdcm::PixelFormat::SINGLEBIT;
     break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
@@ -1332,7 +1340,16 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
   //assert( this->ImageFormat );
 
-  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  long outsize;
+  if( data->GetScalarType() == VTK_BIT )
+    {
+    outsize = (dext[1] - dext[0] + 1) / 8;
+    }
+  else
+    {
+    outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+    }
+
   if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   if( this->FileName) assert( (unsigned long)outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 

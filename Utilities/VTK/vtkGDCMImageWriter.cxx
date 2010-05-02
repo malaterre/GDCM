@@ -507,6 +507,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UNKNOWN;
   switch( scalarType )
     {
+  case VTK_BIT:
+    pixeltype = gdcm::PixelFormat::SINGLEBIT;
+    break;
   case VTK_CHAR:
     if( vtkGDCMImageWriter_IsCharTypeSigned() )
       pixeltype = gdcm::PixelFormat::INT8;
@@ -698,7 +701,17 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //assert( npts == data->GetNumberOfPoints() );
   int ssize = data->GetScalarSize();
   unsigned long vtklen = npts * ssize;
-  assert( vtklen >= npts );
+  if( ssize == 0 )
+    {
+    assert( data->GetScalarType() == VTK_BIT );
+    vtklen = npts / 8;
+    }
+  else
+    {
+    vtklen = npts * ssize;
+    assert( vtklen >= npts );
+    }
+  //unsigned long vtklen = npts * ssize;
   //assert( vtklen == len * ssize );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
@@ -715,7 +728,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   const char *tempimage = (char*)data->GetScalarPointerForExtent(inExt);
   //std::cerr << "Pointer:" << (unsigned int)tempimage << std::endl;
   int *dext = data->GetExtent();
-  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  long outsize;
+  if( data->GetScalarType() == VTK_BIT )
+    {
+    outsize = (dext[1] - dext[0] + 1) / 8;
+    }
+  else
+    {
+    outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+    }
   int j = dext[4];
 
 
@@ -984,6 +1005,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         {
         // Table C.8-25b SC MULTI-FRAME IMAGE MODULE ATTRIBUTES
         // Note: This specifies an identity Modality LUT transformation.
+        vtkErrorMacro( "Cannot have shift/scale" );
+        return 0;
+        }
+      }
+    else if( this->FileDimensionality == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 1 &&
+      pixeltype.GetBitsStored() == 1 &&
+      pixeltype.GetHighBit() == 0 &&
+      pixeltype.GetPixelRepresentation() == 0 
+      // image.GetPlanarConfiguration()
+    )
+      {
+      ms = gdcm::MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage;
+      if( this->Shift != 0 || this->Scale != 1 )
+        {
         vtkErrorMacro( "Cannot have shift/scale" );
         return 0;
         }
