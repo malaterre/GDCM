@@ -17,7 +17,7 @@
 #define GDCMWIN32_H
 
 #if !defined(GDCMTYPES_H)
-#error you need to include gdcmType.h instead
+#error you need to include gdcmTypes.h instead
 #endif
 //-----------------------------------------------------------------------------
 #if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)

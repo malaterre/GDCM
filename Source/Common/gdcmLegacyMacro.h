@@ -12,8 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMMACRO_H
-#define GDCMMACRO_H
+#ifndef GDCMLEGACYMACRO_H
+#define GDCMLEGACYMACRO_H
+
+#if !defined(GDCMTYPES_H)
+#error you need to include gdcmTypes.h instead
+#endif
 
 #include "gdcmException.h"
 #include "gdcmTrace.h"
@@ -71,4 +75,4 @@
 #endif
 
 
-#endif // GDCMMACRO_H
+#endif // GDCMLEGACYMACRO_H

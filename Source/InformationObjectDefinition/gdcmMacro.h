@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMMACR_H
-#define GDCMMACR_H
+#ifndef GDCMMACRO_H
+#define GDCMMACRO_H
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
@@ -94,5 +94,5 @@ inline std::ostream& operator<<(std::ostream& _os, const Macro &_val)
 
 } // end namespace gdcm
 
-#endif //GDCMMODULE_H
+#endif //GDCMMACRO_H
 

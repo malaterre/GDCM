@@ -17,7 +17,7 @@
 
 #include "gdcmConfigure.h"
 #include "gdcmWin32.h"
-#include "gdcmMacro.h"
+#include "gdcmLegacyMacro.h"
 
 //-----------------------------------------------------------------------------
 #ifdef CMAKE_HAVE_STDINT_H
