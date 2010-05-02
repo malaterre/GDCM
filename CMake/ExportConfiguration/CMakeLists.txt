@@ -34,6 +34,17 @@ SET( targets )
 
 set(gdcmtarget_cmake
   "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake")
+
+# CMake Error at CMake/ExportConfiguration/CMakeLists.txt:59 (export):
+#   export given target "gdcmopenjpeg" which is not built by this project.
+#add_custom_command(
+#  OUTPUT "${gdcmtarget_cmake}.tmp"
+#  COMMAND echo "Execute"
+#  COMMAND ${CMAKE_COMMAND} -E remove ${gdcmtarget_cmake}
+#  DEPENDS ${GDCM_BINARY_DIR}/CMakeCache.txt
+#)
+
+
 if(EXISTS ${gdcmtarget_cmake})
   file(READ ${gdcmtarget_cmake} ENT)
   STRING(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
