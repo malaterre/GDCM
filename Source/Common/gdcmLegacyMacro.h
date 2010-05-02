@@ -15,7 +15,7 @@
 #ifndef GDCMLEGACYMACRO_H
 #define GDCMLEGACYMACRO_H
 
-#if !defined(GDCMTYPES_H)
+#if !defined(GDCMTYPES_H) && !defined(SWIG)
 #error you need to include gdcmTypes.h instead
 #endif
 

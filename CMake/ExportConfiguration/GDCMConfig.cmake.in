@@ -20,60 +20,56 @@ SET(GDCM_CMAKE_DIR "@GDCM_CMAKE_DIR_CONFIG@")
 SET(GDCM_BUILD_SHARED_LIBS "@GDCM_BUILD_SHARED_LIBS@")
 SET(GDCM_USE_VTK "@GDCM_USE_VTK@")
 
-# The C and C++ flags added to the cmake-configured flags.
-SET(GDCM_REQUIRED_C_FLAGS
-  "@GDCM_REQUIRED_C_FLAGS@")
-SET(GDCM_REQUIRED_CXX_FLAGS
-  "@GDCM_REQUIRED_CXX_FLAGS@")
-SET(GDCM_REQUIRED_EXE_LINKER_FLAGS
-  "@GDCM_REQUIRED_EXE_LINKER_FLAGS@")
-SET(GDCM_REQUIRED_SHARED_LINKER_FLAGS
-  "@GDCM_REQUIRED_SHARED_LINKER_FLAGS@")
-SET(GDCM_REQUIRED_MODULE_LINKER_FLAGS
-  "@GDCM_REQUIRED_MODULE_LINKER_FLAGS@")
-
 # The "use" file.
 SET(GDCM_USE_FILE "@GDCM_USE_FILE_CONFIG@")
-
-# The build settings file.
-SET(GDCM_BUILD_SETTINGS_FILE "@GDCM_BUILD_SETTINGS_FILE_CONFIG@")
-
-# The library directories.
-SET(GDCM_LIBRARY_DIRS "@GDCM_LIBRARY_DIRS_CONFIG@")
-
-# The runtime directories.
-# Note that if GDCM_CONFIGURATION_TYPES is set (see below) then
-# these directories will be the parent directories under which there will
-# be a directory of runtime binaries for each configuration type.
-SET(GDCM_RUNTIME_DIRS "@GDCM_RUNTIME_DIRS_CONFIG@")
-
-# The include directories.
-SET(GDCM_INCLUDE_DIRS "@GDCM_INCLUDE_DIRS_CONFIG@")
-
-# The library dependencies file.
-IF(NOT GDCM_NO_LIBRARY_DEPENDS AND 
-    EXISTS "@GDCM_LIBRARY_DEPENDS_FILE@")
-  INCLUDE("@GDCM_LIBRARY_DEPENDS_FILE@")
-ENDIF(NOT GDCM_NO_LIBRARY_DEPENDS AND 
-  EXISTS "@GDCM_LIBRARY_DEPENDS_FILE@")
 
 # The VTK options.
 IF(GDCM_USE_VTK)
   SET(GDCM_VTK_DIR "@GDCM_VTK_DIR_CONFIG@")
 ENDIF(GDCM_USE_VTK)
 
-# An install tree always provides one build configuration.
-# A build tree may provide either one or multiple build
-# configurations depending on the CMake generator used. Since
-# this project can be used either from a build tree or an install tree it
-# is useful for outside projects to know the configurations available.
-# If this GDCMConfig.cmake is in an install tree
-# GDCM_CONFIGURATION_TYPES will be empty and GDCM_BUILD_TYPE
-# will be set to the value of CMAKE_BUILD_TYPE used to build
-# GDCM. If GDCMConfig.cmake is in a build tree
-# then GDCM_CONFIGURATION_TYPES and GDCM_BUILD_TYPE will
-# have values matching CMAKE_CONFIGURATION_TYPES and CMAKE_BUILD_TYPE
-# for that build tree (only one will ever be set).
-SET(GDCM_CONFIGURATION_TYPES @GDCM_CONFIGURATION_TYPES_CONFIG@)
-SET(GDCM_BUILD_TYPE @GDCM_BUILD_TYPE_CONFIG@)
+get_filename_component(SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+if(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
+  # This is an install tree
+  include(${SELF_DIR}/GDCMTargets.cmake)
+  #get_filename_component(GDCM_INCLUDE_DIRS "${SELF_DIR}/../../@GDCM_INSTALL_INCLUDE_DIR@" ABSOLUTE)
+  get_filename_component(GDCM_INCLUDE_ROOT "${SELF_DIR}/../../@GDCM_INSTALL_INCLUDE_DIR@" ABSOLUTE)
+  set(GDCM_ENVIRONMENTS ${GDCM_INCLUDE_ROOT}/Environments)
+  #set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_DIRS} ${GDCM_INCLUDE_DIRS}/csmML)
+  set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_ROOT})
+  foreach(subdir csmML Common Environments Builders IO Concepts)
+    set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_DIRS} ${GDCM_INCLUDE_ROOT}/${subdir})
+  endforeach()
+  #set(CODEGENERATOR_EXECUTABLE CodeGenerator)
+  GET_TARGET_PROPERTY( CodeGenerator_PATH
+    CodeGenerator
+    LOCATION
+    )
+  set(CODEGENERATOR_EXECUTABLE ${CodeGenerator_PATH})
+  SET(GDCM_USECMAKE_DIRS    "@CMAKE_INSTALL_PREFIX@/@GDCM_INSTALL_CMAKE_DIR@")
+
+else(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
+  if(EXISTS ${SELF_DIR}/GDCMExports.cmake)
+    # This is a build tree
+    SET( GDCM_INCLUDE_DIRS @GDCM_INCLUDE_PATH@)
+
+    include(${SELF_DIR}/GDCMExports.cmake)
+
+    GET_TARGET_PROPERTY( CodeGenerator_PATH
+      CodeGenerator
+      LOCATION
+      )
+    set(CODEGENERATOR_EXECUTABLE ${CodeGenerator_PATH})
+    set(GDCM_USECMAKE_DIRS    "@GDCM_BINARY_DIR@")
+    set(GDCM_ENVIRONMENTS "@GDCM_SOURCE_DIR@/Code/Environments")
+
+  else(EXISTS ${SELF_DIR}/GDCMExports.cmake)
+    message(FATAL_ERROR "ooops")
+  endif(EXISTS ${SELF_DIR}/GDCMExports.cmake)
+endif(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
+
+set(GDCM_USE_FILE ${SELF_DIR}/UseGDCM.cmake)
+
+# Backward compatible part:
+SET(GDCM_FOUND       TRUE)
 
