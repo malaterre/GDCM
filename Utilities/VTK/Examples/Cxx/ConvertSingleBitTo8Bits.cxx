@@ -24,7 +24,12 @@
 
 int main(int argc, char *argv[])
 {
+  if( argc < 3 )
+    {
+    return 1;
+    }
   const char *filename = argv[1];
+  const char *outfilename = argv[2];
 
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   reader->SetFileName( filename );
@@ -47,13 +52,13 @@ int main(int argc, char *argv[])
   copy->SetExtent( reader->GetOutput()->GetExtent() );
   copy->AllocateScalars();
 
-  uarray->Print( std::cout );
-  copy->GetPointData()->GetScalars()->Print( std::cout );
+  //uarray->Print( std::cout );
+  //copy->GetPointData()->GetScalars()->Print( std::cout );
   copy->GetPointData()->SetScalars( uarray );
-
+  uarray->Delete();
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
-  writer->SetFileName( "/tmp/cast.dcm" );
+  writer->SetFileName( outfilename );
   //writer->SetInput( cast->GetOutput() );
   writer->SetInput( copy );
   writer->SetImageFormat( reader->GetImageFormat() );
@@ -65,7 +70,7 @@ int main(int argc, char *argv[])
   writer->Write();
 
   reader->Delete();
-  //cast->Delete();
+  copy->Delete();
   writer->Delete();
 
   return 0;
