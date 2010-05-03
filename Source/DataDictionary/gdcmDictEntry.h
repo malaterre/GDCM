@@ -37,7 +37,7 @@ namespace gdcm
 class GDCM_EXPORT DictEntry
 {
 public:
-  DictEntry(const char *name = "", const char *keyword = "", VR const &vr = VR::INVALID, VM const &vm = VM::VM0, bool ret = false):Name(name),Keyword(keyword),ValueRepresentation(vr),ValueMultiplicity(vm),Retired(ret),GroupXX(false),ElementXX(false) {
+  DictEntry(const char *name = "", VR const &vr = VR::INVALID, VM const &vm = VM::VM0, bool ret = false):Name(name),ValueRepresentation(vr),ValueMultiplicity(vm),Retired(ret),GroupXX(false),ElementXX(false) {
     //if(name && *name) Name = name;
     //ValueRepresentation = vr;
     //ValueMultiplicity = vm;
@@ -73,9 +73,8 @@ public:
   const char *GetName() const { return Name.c_str(); }
   void SetName(const char* name) { Name = name; }
 
-  /// Set/Get Keyword
-  const char *GetKeyword() const { return Keyword.c_str(); }
-  void SetKeyword(const char* name) { Keyword = name; }
+  /// same as GetName but without spaces
+  const char *GetKeyword() const { return ""; }
 
   /// Set/Get Retired flag
   bool GetRetired() const { return Retired; }
@@ -95,7 +94,6 @@ public:
 
 private:
   std::string Name;
-  std::string Keyword;
   VR ValueRepresentation;
   VM ValueMultiplicity;
   bool Retired : 1;
@@ -129,14 +127,6 @@ inline std::ostream& operator<<(std::ostream& os, const DictEntry &val)
   else
     {
     os << val.Name;
-    }
-  if( val.Keyword.empty() )
-    {
-    os << "[No keyword]";
-    }
-  else
-    {
-    os << val.Keyword;
     }
   os << "\t" << val.ValueRepresentation << "\t" << val.ValueMultiplicity;
   if( val.Retired )
