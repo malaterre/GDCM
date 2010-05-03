@@ -208,6 +208,10 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0,"PHILIPS_GDCM12xBug.dcm"},
 { 0,"PHILIPS_GDCM12xBug2.dcm"},
 { 0,"TestVRSQUN1.dcm"} ,
+{ 1,"multiframegrayscalebytescis.dcm" },
+{ 1,"multiframegrayscalewordscis.dcm" },
+{ 1,"multiframesinglebitscis.dcm" },
+{ 1,"multiframetruecolorscis.dcm" },
 { 0, NULL }
 };
 
