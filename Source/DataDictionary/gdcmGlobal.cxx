@@ -104,7 +104,8 @@ bool Global::LoadResourcesFiles()
   const char *filename = Locate( "Part3.xml" );
   if( filename )
     {
-    Internals->GlobalDefs.LoadFromFile(filename);
+    if( Internals->GlobalDefs.IsEmpty() )
+      Internals->GlobalDefs.LoadFromFile(filename);
     return true;
     }
   // resource manager was not set properly
