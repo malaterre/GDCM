@@ -656,7 +656,7 @@ bool Bitmap::GetBufferInternal(char *buffer, bool &lossyflag) const
   if( !success ) success = TryRAWCodec(buffer, lossyflag);
   if( !success ) success = TryJPEGCodec(buffer, lossyflag);
   if( !success ) success = TryPVRGCodec(buffer, lossyflag); // AFTER IJG trial !
-  if( !success ) success = TryKAKADUCodec(buffer, lossyflag);
+  //if( !success ) success = TryKAKADUCodec(buffer, lossyflag);
   if( !success ) success = TryJPEG2000Codec(buffer, lossyflag);
   if( !success ) success = TryJPEGLSCodec(buffer, lossyflag);
   if( !success ) success = TryRLECodec(buffer, lossyflag);

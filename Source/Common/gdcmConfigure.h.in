@@ -49,6 +49,7 @@
 #cmakedefine GDCM_USE_SYSTEM_LJPEG
 #cmakedefine GDCM_USE_SYSTEM_OPENJPEG
 #cmakedefine GDCM_USE_SYSTEM_KAKADU
+#cmakedefine GDCM_USE_SYSTEM_PVRG
 
 #cmakedefine GDCM_USE_PVRG
 #cmakedefine GDCM_USE_KAKADU
