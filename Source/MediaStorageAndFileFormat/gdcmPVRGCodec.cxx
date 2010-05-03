@@ -72,8 +72,22 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #else
   // First thing create a jpegls file from the fragment:
   const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  if(!sf) return false;
-  assert(sf);
+  if(!sf)
+    {
+    gdcmDebugMacro( "Could not find SequenceOfFragments" );
+    return false;
+    }
+
+#ifdef GDCM_USE_SYSTEM_PVRG
+  std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
+#else
+  std::string pvrg_command = executable_path + "/gdcmjpeg";
+#endif
+  if( !System::FileExists( pvrg_command.c_str() ) )
+    {
+    gdcmErrorMacro( "Could not find: " << pvrg_command );
+    return false;
+    }
 
   // http://msdn.microsoft.com/en-us/library/hs3e7355.aspx
   // -> check if tempnam needs the 'free'
@@ -93,16 +107,6 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   gdcm::Filename fn( System::GetCurrentProcessFileName() );
   std::string executable_path = fn.GetPath();
   // -u -> set Notify to 0 (less verbose)
-#ifdef GDCM_USE_SYSTEM_PVRG
-  std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
-#else
-  std::string pvrg_command = executable_path + "/gdcmjpeg";
-#endif
-  if( !System::FileExists( pvrg_command.c_str() ) )
-    {
-    gdcmErrorMacro( "Could not find: " << pvrg_command );
-    return false;
-    }
   pvrg_command += " -ci 0 -d -u ";
   // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw  
   pvrg_command += "-s ";
@@ -116,8 +120,10 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   //std::cerr << "system: " << ret << std::endl;
 
   size_t len = gdcm::System::FileSize(output);
-  if(!len) return false;
-  assert( len );
+  if(!len)
+    {
+    return false;
+    }
 
   std::ifstream is(output);
   char * buf = new char[len];
