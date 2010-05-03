@@ -89,6 +89,7 @@ template for a row in data-elements mode. Should be:
   <xsl:template match="row" mode="data-elements-part7">
     <xsl:param name="retired" select="0"/>
     <xsl:if test="entry[1]/para != 'Message Field'">
+      <xsl:variable name="keyword_value" select="normalize-space(entry[2]/para)"/>
       <xsl:variable name="tag_value" select="translate(entry[3]/para,'ABCDEF','abcdef')"/>
       <xsl:variable name="group_value" select="substring-after(substring-before($tag_value,','), '(')"/>
       <xsl:variable name="element_value" select="substring-after(substring-before($tag_value,')'), ',')"/>
@@ -100,7 +101,7 @@ template for a row in data-elements mode. Should be:
       <xsl:variable name="vm" select="normalize-space(entry[5]/para)"/>
       <xsl:variable name="name" select="normalize-space(entry[1]/para)"/>
       <xsl:variable name="description" select="entry[6]"/>
-      <entry group="{$group_value}" element="{$element_value}" vr="{$vr}" vm="{$vm}" name="{$name}">
+      <entry group="{$group_value}" element="{$element_value}" vr="{$vr}" vm="{$vm}" keyword="{$keyword_value}" name="{$name}">
         <xsl:if test="$retired = 1">
           <xsl:attribute name="retired">true</xsl:attribute>
         </xsl:if>
@@ -116,6 +117,7 @@ template for a row in data-elements mode. Should be:
     <xsl:if test="entry[1]/para != 'Tag'">
 <!-- skip the table header -->
       <xsl:variable name="tag_value" select="translate(entry[1]/para,'ABCDEF','abcdef')"/>
+      <xsl:variable name="keyword_value" select="normalize-space(entry[3]/para)"/>
       <xsl:variable name="group_value" select="substring-after(substring-before($tag_value,','), '(')"/>
       <xsl:variable name="element_value">
         <xsl:variable name="tmp" select="substring-after(substring-before($tag_value,')'), ',')"/>
@@ -160,7 +162,7 @@ template for a row in data-elements mode. Should be:
           </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <entry group="{ $group_value }" element="{ $element_value }">
+        <entry group="{ $group_value }" element="{ $element_value }" keyword="{$keyword_value}">
           <xsl:if test="$vr != ''">
             <xsl:attribute name="vr">
               <xsl:value-of select="$vr"/>

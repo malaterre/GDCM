@@ -54,6 +54,7 @@ typedef struct
   VR::VRType vr;
   VM::VMType vm;
   const char *name;
+  const char *keyword;
   bool ret;
 } DICT_ENTRY;
 
@@ -74,6 +75,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
             <xsl:with-param name="name" select="@name"/>
+            <xsl:with-param name="keyword" select="@keyword"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="substring(@group,3) = 'xx' and contains(@element,'x') = false ">
@@ -87,6 +89,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
             <xsl:with-param name="name" select="@name"/>
+            <xsl:with-param name="keyword" select="@keyword"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="contains(@group,'x') = false and contains(@element,'x') = false">
@@ -99,6 +102,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
             <xsl:with-param name="name" select="@name"/>
+            <xsl:with-param name="keyword" select="@keyword"/>
           </xsl:call-template>
         </xsl:when>
         <!-- Private element e.g (0019,xx26) -->
@@ -112,6 +116,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
             <xsl:with-param name="name" select="@name"/>
+            <xsl:with-param name="keyword" select="@keyword"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="contains(@group,'x') = false and @element = '00xx'">
@@ -124,6 +129,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
             <xsl:with-param name="name" select="@name"/>
+            <xsl:with-param name="keyword" select="@keyword"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -154,7 +160,9 @@ generating group length for arbitrary even group number seems to get my xsltproc
       </xsl:if>
     </xsl:for-each>
     <xsl:text>
-  {0xffff,0xffff,0,VR::INVALID,VM::VM0,0,true } // Gard
+ // FIXME: need a dummy element
+  {0xffff,0xffff,VR::INVALID,VM::VM0,"","",true }, // dummy
+  {0xffff,0xffff,VR::INVALID,VM::VM0,0,0,true } // Gard
 };
 
 void Dict::LoadDefault()
@@ -163,33 +171,19 @@ void Dict::LoadDefault()
    DICT_ENTRY n = DICOMV3DataDict[i];
    while( n.name != 0 )
    {
-   if( n.group % 2 == 0 )
-     {
-     assert( n.owner == 0 );
-     Tag t(n.group, n.element);
-     DictEntry e( n.name, n.vr, n.vm, n.ret );
-     AddDictEntry( t, e );
-     }
-     n = DICOMV3DataDict[++i];
+      Tag t(n.group, n.element);
+      DictEntry e( n.name, n.keyword, n.vr, n.vm, n.ret );
+      AddDictEntry( t, e );
+      n = DICOMV3DataDict[++i];
    }
 }
 
+/*
 void PrivateDict::LoadDefault()
 {
-   unsigned int i = 0;
-   DICT_ENTRY n = DICOMV3DataDict[i];
-   while( n.name != 0 )
-   {
-   if( n.group % 2 != 0 )
-     {
-     assert( n.owner != 0 );
-     PrivateTag t(n.group, n.element,n.owner);
-     DictEntry e( n.name, n.vr, n.vm, n.ret );
-     AddDictEntry( t, e );
-     }
-     n = DICOMV3DataDict[++i];
-   }
+  // TODO
 }
+*/
 
 } // end namespace gdcm
 #endif // __gdcmDefaultDicts_cxx
@@ -227,6 +221,7 @@ void PrivateDict::LoadDefault()
     <xsl:param name="vm"/>
     <xsl:param name="retired"/>
     <xsl:param name="name"/>
+    <xsl:param name="keyword"/>
     <xsl:if test="$count &lt; 256">
       <xsl:text>  {0x</xsl:text>
       <xsl:value-of select="$group"/>
@@ -250,6 +245,8 @@ void PrivateDict::LoadDefault()
       </xsl:call-template>
       <xsl:text>,"</xsl:text>
       <xsl:value-of select="$name"/>
+      <xsl:text>","</xsl:text>
+      <xsl:value-of select="$keyword"/>
       <xsl:text>",</xsl:text>
       <xsl:value-of select="$retired = 'true'"/>
       <xsl:text> },</xsl:text>
@@ -284,6 +281,7 @@ void PrivateDict::LoadDefault()
           <!--xsl:with-param name="owner" select="$owner"/-->
           <xsl:with-param name="retired" select="$retired"/>
           <xsl:with-param name="name" select="$name"/>
+          <xsl:with-param name="keyword" select="$keyword"/>
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="$do-element != '0'">
@@ -312,6 +310,7 @@ void PrivateDict::LoadDefault()
           <!--xsl:with-param name="owner" select="$owner"/-->
           <xsl:with-param name="retired" select="$retired"/>
           <xsl:with-param name="name" select="$name"/>
+          <xsl:with-param name="keyword" select="$keyword"/>
         </xsl:call-template>
       </xsl:if>
     </xsl:if>
