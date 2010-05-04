@@ -264,21 +264,32 @@ int64_t PixelFormat::GetMax() const
   return 0;
 }
 
-bool PixelFormat::Validate()
+bool PixelFormat::IsValid()
 {
   if( BitsAllocated < BitsStored ) return false;
   if( BitsAllocated < HighBit ) return false;
+  return true;
+}
+
+bool PixelFormat::Validate()
+{
+  if( !IsValid() ) return false;
   //assert( BitsStored    >= HighBit ); // DigitexAlpha_no_7FE0.dcm
   assert( PixelRepresentation == 0 || PixelRepresentation == 1 );
   assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
+  if ( BitsStored == 0 )
+    {
+    gdcmDebugMacro( "Bits Stored is 0. Setting is to max value" );
+    BitsStored = BitsAllocated;
+    }
   if ( BitsAllocated == 24 )
     {
+    gdcmDebugMacro( "ACR-NEMA way of storing RGB data. Updating" );
     assert( BitsStored == 24 && HighBit == 23 && SamplesPerPixel == 1 );
     BitsAllocated = 8;
     BitsStored = 8;
     HighBit = 7;
     SamplesPerPixel = 3;
-    return false;
     }
   return true;
 }

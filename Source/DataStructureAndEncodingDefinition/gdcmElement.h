@@ -85,7 +85,7 @@ public:
 
   void SetFromDataElement(DataElement const &de) {
     const ByteValue *bv = de.GetByteValue();
-    assert( bv );
+    if( !bv ) return;
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
       {
       Set(de.GetValue());

@@ -148,6 +148,9 @@ public:
   /// return the max possible of the pixel
   int64_t GetMax() const;
 
+  /// return IsValid
+  bool IsValid();
+
 protected:
   /// When image with 24/24/23 was read, need to validate
   bool Validate();

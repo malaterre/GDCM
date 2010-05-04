@@ -49,14 +49,20 @@ LookupTable::~LookupTable()
 
 bool LookupTable::Initialized() const
 {
-  return BitSample != 0;
+  bool b1 = BitSample != 0;
+  bool b2 =
+    Internal->BitSize[0] != 0 &&
+    Internal->BitSize[1] != 0 &&
+    Internal->BitSize[2] != 0;
+  return b1 && b2;
 }
 
 void LookupTable::Clear()
 {
   BitSample = 0;
+  IncompleteLUT = false;
   delete Internal;
-  Internal = 0; // important
+  Internal = new LookupTableInternal;
 }
 
 void LookupTable::Allocate( unsigned short bitsample )
@@ -79,6 +85,10 @@ void LookupTable::Allocate( unsigned short bitsample )
 void LookupTable::InitializeLUT(LookupTableType type, unsigned short length,
   unsigned short subscript, unsigned short bitsize)
 {
+  if( bitsize != 8 && bitsize != 16 )
+    {
+    return;
+    }
   assert( type >= RED && type <= BLUE );
   assert( subscript == 0 );
   assert( bitsize == 8 || bitsize == 16 );
@@ -106,6 +116,7 @@ unsigned int LookupTable::GetLUTLength(LookupTableType type) const
 void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
   unsigned int length)
 {
+  if( !Initialized() ) return;
   if( !IncompleteLUT )
     {
     assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );

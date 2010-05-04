@@ -559,7 +559,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     {
     out = in;
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
+    if( !sf ) return false;
     unsigned long len = GetBufferLength();
     //char *buffer = new char[len];
     std::stringstream is;
@@ -578,7 +578,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     {
     out = in;
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
+    if( !sf ) return false;
     unsigned long len = GetBufferLength();
     char *buffer = new char[len];
     unsigned long pos = 0;

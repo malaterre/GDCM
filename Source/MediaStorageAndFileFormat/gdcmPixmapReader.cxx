@@ -873,7 +873,11 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
 
   // Very important to set the PixelFormat here before PlanarConfiguration
   PixelData->SetPixelFormat( pf );
-
+  pf = PixelData->GetPixelFormat();
+  if( !pf.IsValid() )
+    {
+    return false;
+    }
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
@@ -992,7 +996,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       // (0028,1103) US 0\0\16
       const Tag tdescriptor(0x0028, (0x1101 + i));
       //const Tag tdescriptor(0x0028, 0x3002);
-      Element<VR::US,VM::VM3> el_us3;
+      Element<VR::US,VM::VM3> el_us3 = {};
       // Now pass the byte array to a DICOMizer:
       el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
@@ -1012,16 +1016,22 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       if( ds.FindDataElement( tlut ) )
         {
         const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
-        assert( lut_raw );
-        // LookupTableType::RED == 0
-        lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        if( lut_raw )
+          {
+          // LookupTableType::RED == 0
+          lut->SetLUT( LookupTable::LookupTableType(i),
+            (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+          }
+        else
+          {
+          lut->Clear();
+          }
 
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
           * el_us3.GetValue(2) / 8;
-        assert( check == lut_raw->GetLength() ); (void)check;
+        assert( !lut->Initialized() || check == lut_raw->GetLength() ); (void)check;
         }
       else if( ds.FindDataElement( seglut ) )
         {
@@ -1041,6 +1051,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
         assert(0);
         }
       }
+    if( ! lut->Initialized() ) return false;
     PixelData->SetLUT(*lut);
     }
   // TODO
@@ -1093,7 +1104,8 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   if( dims[0] == 0 || dims[1] == 0 )
     {
     // Pseudo-declared JPEG SC image storage. Let's fix col/row/pf/pi
-    if( PixelData->GetTransferSyntax().IsEncapsulated() )
+    gdcm::JPEGCodec jpeg;
+    if( jpeg.CanDecode( PixelData->GetTransferSyntax() ) )
       {
       std::stringstream ss;
       const DataElement &de = PixelData->GetDataElement();
@@ -1102,7 +1114,6 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       sqf->WriteBuffer( ss );
       //std::string s( bv->GetPointer(), bv->GetLength() );
       //is.str( s );
-      gdcm::JPEGCodec jpeg;
       gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
       jpeg.SetPixelFormat( pf );
       gdcm::TransferSyntax ts;
@@ -1114,6 +1125,11 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
         PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
         assert( PixelData->GetTransferSyntax() == ts );
         }
+      }
+    else
+      {
+      gdcmDebugMacro( "Columns or Row was found to be 0. Cannot compute dimension." );
+      return false;
       }
     }
 

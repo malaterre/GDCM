@@ -221,6 +221,7 @@ unsigned long Bitmap::GetBufferLength() const
   std::vector<unsigned int>::const_iterator it = Dimensions.begin();
   for(; it != Dimensions.end(); ++it)
     {
+    assert( *it );
     mul *= *it;
     }
   // Multiply by the pixel size:
@@ -631,7 +632,7 @@ bool Bitmap::TryRLECodec(char *buffer, bool &lossyflag ) const
     codec.SetBufferLength( len );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-    assert( r );
+    if( !r ) return false;
     const ByteValue *outbv = out.GetByteValue();
     //unsigned long check = outbv->GetLength();  // FIXME
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
