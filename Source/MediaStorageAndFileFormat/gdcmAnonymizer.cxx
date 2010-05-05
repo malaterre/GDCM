@@ -93,6 +93,7 @@ Anonymizer::~Anonymizer()
 
 bool Anonymizer::Empty( Tag const &t)
 {
+  // There is a secret code path to make it work for VR::SQ since operation is just 'make empty'
   return Replace(t, "", 0);
 }
 
@@ -159,8 +160,19 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       || dictentry.GetVR() == VR::SQ
     )
       {
-      // Let's give up !
-      gdcmWarningMacro( "Cannot process tag: " << t << " with vr: " << dictentry.GetVR() );
+      // Make the VR::SQ empty
+      if( dictentry.GetVR() == VR::SQ && vl == 0 && value && *value == 0 )
+        {
+        DataElement de( t );
+        de.SetVR( VR::SQ );
+        //de.SetByteValue( "", 0 );
+        ds.Replace( de );
+        }
+      else
+        {
+        // Let's give up !
+        gdcmWarningMacro( "Cannot process tag: " << t << " with vr: " << dictentry.GetVR() );
+        }
       //ret = false;
       }
     else if ( dictentry.GetVR() & VR::VRBINARY )
@@ -207,34 +219,36 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       {
       // vr from dict seems to be ascii, so it seems resonable to write a ByteValue here:
       assert( dictentry.GetVR() & VR::VRASCII );
-      assert( value );
-      std::string padded( value, vl );
-      // All ASCII VR needs to be padded with a space
-      if( vl.IsOdd() )
+      if( value )
         {
-        if( dictentry.GetVR() == VR::UI )
+        std::string padded( value, vl );
+        // All ASCII VR needs to be padded with a space
+        if( vl.IsOdd() )
           {
-          // \0 is automatically added when using a ByteValue
+          if( dictentry.GetVR() == VR::UI )
+            {
+            // \0 is automatically added when using a ByteValue
+            }
+          else
+            {
+            padded += " ";
+            }
+          }
+        // Hum, we could have cases where a public element would not be known, in which case
+        // it is a good idea to first check for the VR as found in the file:
+        DataElement de( t );
+        if( ds.FindDataElement( t ) )
+          {
+          de.SetVR( ds.GetDataElement(t).GetVR() );
           }
         else
           {
-          padded += " ";
+          de.SetVR( dictentry.GetVR() );
           }
+        de.SetByteValue( padded.c_str(), padded.size() );
+        ds.Replace( de );
+        ret = true;
         }
-      // Hum, we could have cases where a public element would not be known, in which case
-      // it is a good idea to first check for the VR as found in the file:
-      DataElement de( t );
-      if( ds.FindDataElement( t ) )
-        {
-        de.SetVR( ds.GetDataElement(t).GetVR() );
-        }
-      else
-        {
-        de.SetVR( dictentry.GetVR() );
-        }
-      de.SetByteValue( padded.c_str(), padded.size() );
-      ds.Replace( de );
-      ret = true;
       }
     }
   return ret;
@@ -717,7 +731,7 @@ bool Anonymizer::CanEmptyTag(Tag const &tag, const IOD &iod) const
   static const Global &g = Global::GetInstance();
   //static const Dicts &dicts = g.GetDicts();
   static const Defs &defs = g.GetDefs();
-  const DataSet &ds = F->GetDataSet();
+  const DataSet &ds = F->GetDataSet(); (void)ds;
   //Type told = defs.GetTypeFromTag(*F, tag);
   Type t = iod.GetTypeFromTag(defs, tag);
   //assert( t == told );
