@@ -310,32 +310,21 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         {
         //assert(0); // Outside buffer will be too small
         }
-      this->BitSample = Internal->BitSample; // Store the value found before destroying Internal
-      delete Internal; Internal = 0; // Do not attempt to reuse the pointer
       is.seekg(0, std::ios::beg);
-      switch( this->BitSample )
+      SetupJPEGBitCodec( Internal->BitSample );
+      if( Internal )
         {
-      case 8:
-        Internal = new JPEG8Codec;
-        break;
-      case 12:
-        Internal = new JPEG12Codec;
-        break;
-      case 16:
-        Internal = new JPEG16Codec;
-        break;
-      default:
-        assert(0);
-        }
-      Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaning less ?
-      Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
-      if( Internal->Decode(is,tmpos) )
-        {
-        return ImageCodec::Decode(tmpos,os);
-        }
-      else
-        {
-        assert(0); // FATAL ERROR
+        //Internal->SetPixelFormat( this->GetPixelFormat() ); // FIXME
+        Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaningless ?
+        Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
+        if( Internal->Decode(is,tmpos) )
+          {
+          return ImageCodec::Decode(tmpos,os);
+          }
+        else
+          {
+          gdcmErrorMacro( "Could not succeed after 2 tries" );
+          }
         }
       }
 #endif
