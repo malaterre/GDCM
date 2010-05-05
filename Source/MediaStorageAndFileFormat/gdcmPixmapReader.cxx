@@ -710,7 +710,8 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     gdcmDebugMacro( "Mixture of ACR NEMA and DICOM file" );
     isacrnema = true;
     const char *str = ds.GetDataElement( trecognitioncode ).GetByteValue()->GetPointer();
-    assert( strncmp( str, "ACR-NEMA", strlen( "ACR-NEMA" ) ) == 0 );
+    assert( strncmp( str, "ACR-NEMA", strlen( "ACR-NEMA" ) ) == 0 ||
+      strncmp( str, "ACRNEMA", strlen( "ACRNEMA" ) ) == 0 );
     }
 
   // Ok we have the dataset let's feed the Image (PixelData)
