@@ -90,7 +90,7 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
   SetBitSample( pt.GetBitsStored() );
 }
 
-void JPEGCodec::SetBitSample(int bit)
+void JPEGCodec::SetupJPEGBitCodec(int bit)
 {
   BitSample = bit;
   delete Internal; Internal = NULL;
@@ -117,14 +117,20 @@ void JPEGCodec::SetBitSample(int bit)
     // Clearly make sure Internal will not be used
     delete Internal;
     Internal = NULL;
-    return;
     }
-  Internal->SetDimensions( this->GetDimensions() );
-  Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
-  Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
-  Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
-  //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
-  assert( Internal != NULL );
+}
+
+void JPEGCodec::SetBitSample(int bit)
+{
+  SetupJPEGBitCodec(bit);
+  if( Internal )
+    {
+    Internal->SetDimensions( this->GetDimensions() );
+    Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
+    Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
+    Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
+    //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
+    }
 }
 
 /*
@@ -191,6 +197,7 @@ void JPEGCodec::ComputeOffsetTable(bool b)
 
 bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
 {
+  assert( Internal );
   if ( !Internal->GetHeaderInfo(is, ts) )
     {
     // let's check if this is one of those buggy lossless JPEG
@@ -204,24 +211,9 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         {
         //assert(0); // Outside buffer will be too small
         }
-      this->BitSample = Internal->BitSample; // Store the value found before destroying Internal
-      delete Internal; Internal = 0; // Do not attempt to reuse the pointer
       is.seekg(0, std::ios::beg);
-      switch( this->BitSample )
-        {
-      case 8:
-        Internal = new JPEG8Codec;
-        break;
-      case 12:
-        Internal = new JPEG12Codec;
-        break;
-      case 16:
-        Internal = new JPEG16Codec;
-        break;
-      default:
-        assert(0);
-        }
-      if( Internal->GetHeaderInfo(is, ts) )
+      SetupJPEGBitCodec( Internal->BitSample );
+      if( Internal && Internal->GetHeaderInfo(is, ts) )
         {
         // Foward everything back to meta jpeg codec:
         this->SetDimensions( Internal->GetDimensions() );

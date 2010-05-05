@@ -581,6 +581,11 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       {
       gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
       }
+    if( codec.GetPixelFormat() != GetPixelFormat() )
+      {
+      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      i->SetPixelFormat( codec.GetPixelFormat() );
+      }
     return r;
     }
   return false;
@@ -688,6 +693,20 @@ bool Bitmap::GetBuffer2(std::ostream &os) const
   return success;
 }
 
+bool Bitmap::IsTransferSyntaxCompatible( TransferSyntax const & ts ) const
+{
+  if( GetTransferSyntax() == ts ) return true;
+  // Special cases:
+  if( GetTransferSyntax() == TransferSyntax::JPEGExtendedProcess2_4 )
+    {
+    if( GetPixelFormat().GetBitsAllocated() == 8 )
+      {
+      if( ts == TransferSyntax::JPEGBaselineProcess1 ) return true;
+      }
+    }
+  // default:
+  return false;
+}
 
 
 }

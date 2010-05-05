@@ -701,12 +701,16 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   std::stringstream ss;
   std::string conversion;
 
+  bool isacrnema = false;
   const Tag trecognitioncode(0x0008,0x0010);
-  if( ds.FindDataElement( trecognitioncode ) )
+  if( ds.FindDataElement( trecognitioncode ) && !ds.GetDataElement( trecognitioncode ).IsEmpty() )
     {
     // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
     // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
     gdcmDebugMacro( "Mixture of ACR NEMA and DICOM file" );
+    isacrnema = true;
+    const char *str = ds.GetDataElement( trecognitioncode ).GetByteValue()->GetPointer();
+    assert( strncmp( str, "ACR-NEMA", strlen( "ACR-NEMA" ) ) == 0 );
     }
 
   // Ok we have the dataset let's feed the Image (PixelData)
@@ -806,7 +810,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     //pf.SetSamplesPerPixel(
     //  ReadUSFromTag( samplesperpixel, ss, conversion ) );
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
-    Attribute<0x0028,0x0002> at = { 1 };
+    Attribute<0x0028,0x0002> at = { 0 };
     at.SetFromDataSet( ds );
     pf.SetSamplesPerPixel( at.GetValue() );
     }
@@ -871,6 +875,58 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
 //      }
     }
 
+  // 5. Photometric Interpretation
+  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+  const Tag tphotometricinterpretation(0x0028, 0x0004);
+  const ByteValue *photometricinterpretation
+    = GetPointerFromElement( tphotometricinterpretation );
+  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
+  if( photometricinterpretation )
+    {
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
+    }
+  else
+    {
+    if( pf.GetSamplesPerPixel() == 1 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
+      pi = PhotometricInterpretation::MONOCHROME2;
+      }
+    else if( pf.GetSamplesPerPixel() == 3 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      pi = PhotometricInterpretation::RGB;
+      }
+    else if( pf.GetSamplesPerPixel() == 4 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      pi = PhotometricInterpretation::ARGB;
+      }
+    }
+
+  if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
+    {
+    if( pi != PhotometricInterpretation::UNKNOW )
+      {
+      pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
+      }
+    else if ( isacrnema ) 
+      {
+      assert ( pf.GetSamplesPerPixel() == 0 );
+      assert ( pi == PhotometricInterpretation::UNKNOW );
+      pf.SetSamplesPerPixel( 1 );
+      pi = PhotometricInterpretation::MONOCHROME2;
+      }
+    else
+      {
+      gdcmWarningMacro( "Cannot recognize image type. Does not looks like ACR-NEMA and is missing both Sample Per Pixel AND PhotometricInterpretation. Please report" );
+      return false;
+      }
+    }
+  assert ( pf.GetSamplesPerPixel() != 0 );
   // Very important to set the PixelFormat here before PlanarConfiguration
   PixelData->SetPixelFormat( pf );
   pf = PixelData->GetPixelFormat();
@@ -878,6 +934,9 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     {
     return false;
     }
+  if( pi == PhotometricInterpretation::UNKNOW ) return false;
+  PixelData->SetPhotometricInterpretation( pi );
+
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
@@ -886,7 +945,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
     const DataElement& de = ds.GetDataElement( planarconfiguration );
-    Attribute<0x0028,0x0006> at;
+    Attribute<0x0028,0x0006> at = { 0 };
     at.SetFromDataElement( de );
 
     //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
@@ -899,26 +958,6 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     PixelData->SetPlanarConfiguration( pc );
     }
 
-  // 5. Photometric Interpretation
-  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
-  const Tag tphotometricinterpretation(0x0028, 0x0004);
-  const ByteValue *photometricinterpretation
-    = GetPointerFromElement( tphotometricinterpretation );
-  PhotometricInterpretation pi = PhotometricInterpretation::MONOCHROME2;
-  if( photometricinterpretation )
-    {
-    std::string photometricinterpretation_str(
-      photometricinterpretation->GetPointer(),
-      photometricinterpretation->GetLength() );
-    pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
-    }
-  else
-    {
-    assert( pf.GetSamplesPerPixel() == 1 );
-    gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
-    }
-  assert( pi != PhotometricInterpretation::UNKNOW );
-  PixelData->SetPhotometricInterpretation( pi );
 
   // Do the Palette Color:
   // 1. Modality LUT Sequence
@@ -1036,10 +1075,16 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       else if( ds.FindDataElement( seglut ) )
         {
         const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
-        assert( lut_raw );
-        lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        if( lut_raw )
+          {
+          lut->SetLUT( LookupTable::LookupTableType(i),
+            (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+          }
+        else
+          {
+          lut->Clear();
+          }
 
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
@@ -1120,10 +1165,18 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       bool b = jpeg.GetHeaderInfo( ss, ts );
       if( b )
         {
-        PixelData->SetDimensions( jpeg.GetDimensions() );
-        PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
-        PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
-        assert( PixelData->GetTransferSyntax() == ts );
+        std::vector<unsigned int> v(3);
+        v[0] = PixelData->GetDimensions()[0];
+        v[1] = PixelData->GetDimensions()[1];
+        v[2] = PixelData->GetDimensions()[2];
+        assert( jpeg.GetDimensions()[0] );
+        assert( jpeg.GetDimensions()[1] );
+        v[0] = jpeg.GetDimensions()[0];
+        v[1] = jpeg.GetDimensions()[1];
+        PixelData->SetDimensions( &v[0] );
+        //PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
+        //PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+        assert( PixelData->IsTransferSyntaxCompatible( ts ) );
         }
       }
     else
@@ -1151,7 +1204,7 @@ bool PixmapReader::ReadACRNEMAImage()
   if( ds.FindDataElement( timagedimensions ) )
     {
     const DataElement& de = ds.GetDataElement( timagedimensions );
-    Attribute<0x0028,0x0005> at;
+    Attribute<0x0028,0x0005> at = { 0 };
     at.SetFromDataElement( de );
     assert( at.GetNumberOfValues() == 1 );
     unsigned short imagedimensions = at.GetValue();
@@ -1161,7 +1214,7 @@ bool PixmapReader::ReadACRNEMAImage()
       PixelData->SetNumberOfDimensions(3);
       // D 0028|0012 [US] [Planes] [262]
       const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0012) );
-      Attribute<0x0028,0x0012> at;
+      Attribute<0x0028,0x0012> at = { 0 };
       at.SetFromDataElement( de );
       assert( at.GetNumberOfValues() == 1 );
       PixelData->SetDimension(2, at.GetValue() );
@@ -1187,7 +1240,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0011 [US] [Columns] [512]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
-    Attribute<0x0028,0x0011> at;
+    Attribute<0x0028,0x0011> at = { 0 };
     at.SetFromDataElement( de );
     PixelData->SetDimension(0, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
@@ -1196,7 +1249,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0010 [US] [Rows] [512]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-    Attribute<0x0028,0x0010> at;
+    Attribute<0x0028,0x0010> at = { 0 };
     at.SetFromDataElement( de );
     PixelData->SetDimension(1, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
@@ -1207,7 +1260,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // LIBIDO compatible code:
   // D 0008|0010 [LO] [Recognition Code (RET)] [ACRNEMA_LIBIDO_1.1]
   const Tag trecognitioncode(0x0008,0x0010);
-  if( ds.FindDataElement( trecognitioncode ) )
+  if( ds.FindDataElement( trecognitioncode ) && !ds.GetDataElement( trecognitioncode ).IsEmpty() )
     {
     const ByteValue *libido = ds.GetDataElement(trecognitioncode).GetByteValue();
     assert( libido );
@@ -1241,7 +1294,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0100 [US] [Bits Allocated] [16]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-    Attribute<0x0028,0x0100> at;
+    Attribute<0x0028,0x0100> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetBitsAllocated( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
@@ -1250,7 +1303,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0101 [US] [Bits Stored] [12]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-    Attribute<0x0028,0x0101> at;
+    Attribute<0x0028,0x0101> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetBitsStored( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
@@ -1259,7 +1312,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0102 [US] [High Bit] [11]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-    Attribute<0x0028,0x0102> at;
+    Attribute<0x0028,0x0102> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetHighBit( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
@@ -1268,7 +1321,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0103 [US] [Pixel Representation] [0]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
-    Attribute<0x0028,0x0103> at;
+    Attribute<0x0028,0x0103> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetPixelRepresentation( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
@@ -1301,10 +1354,25 @@ bool PixmapReader::ReadACRNEMAImage()
     PhotometricInterpretation::MONOCHROME2 );
   PixelData->SetPlanarConfiguration(0);
   const Tag planarconfiguration(0x0028, 0x0006);
-  assert( !ds.FindDataElement( planarconfiguration ) );
+  if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
+    {
+    const DataElement& de = ds.GetDataElement( planarconfiguration );
+    Attribute<0x0028,0x0006> at = { 0 };
+    at.SetFromDataElement( de );
+
+    //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
+    unsigned int pc = at.GetValue();
+    if( pc && PixelData->GetPixelFormat().GetSamplesPerPixel() != 3 )
+      {
+      gdcmDebugMacro( "Cannot have PlanarConfiguration=1, when Sample Per Pixel != 3" );
+      pc = 0;
+      }
+    PixelData->SetPlanarConfiguration( pc );
+    }
+
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   // Some funny ACR NEMA file have PhotometricInterpretation ...
-  if( ds.FindDataElement( tphotometricinterpretation ) )
+  if( ds.FindDataElement( tphotometricinterpretation ) && !ds.GetDataElement( tphotometricinterpretation ).IsEmpty() )
     {
     const ByteValue *photometricinterpretation
       = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
@@ -1315,7 +1383,6 @@ bool PixmapReader::ReadACRNEMAImage()
     PhotometricInterpretation pi(
       PhotometricInterpretation::GetPIType(
         photometricinterpretation_str.c_str()));
-    assert( pi == PhotometricInterpretation::MONOCHROME2 );
     }
   else
     {

@@ -51,6 +51,7 @@ public:
 
   /// return the planar configuration
   unsigned int GetPlanarConfiguration() const;
+  /// \warning you need to call SetPixelFormat first (before SetPlanarConfiguration) for consistency checking
   void SetPlanarConfiguration(unsigned int pc);
 
   bool GetNeedByteSwap() const
@@ -70,6 +71,7 @@ public:
   const TransferSyntax &GetTransferSyntax() const {
     return TS;
   }
+  bool IsTransferSyntaxCompatible( TransferSyntax const & ts ) const;
   void SetDataElement(DataElement const &de) {
     PixelData = de;
   }

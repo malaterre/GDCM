@@ -39,7 +39,7 @@ public:
   /// Code
   virtual bool Code(DataElement const &in_, DataElement &out_) { (void)in_; (void)out_; return false; }
 protected:
-  virtual bool InternalCode(const char *bv, unsigned long len, std::ostream &os) { (void)bv;(void)os;return false; } 
+  virtual bool InternalCode(const char *bv, unsigned long len, std::ostream &os) { (void)bv;(void)os;(void)len;return false; } 
 };
 
 } // end namespace gdcm

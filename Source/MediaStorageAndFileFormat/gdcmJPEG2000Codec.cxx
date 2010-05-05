@@ -75,7 +75,7 @@ public:
 void JPEG2000Codec::SetRate(unsigned int idx, double rate)
 {
   Internals->coder_param.tcp_rates[idx] = rate;
-  if( Internals->coder_param.tcp_numlayers <= idx )
+  if( Internals->coder_param.tcp_numlayers <= (int)idx )
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
     }
@@ -90,7 +90,7 @@ double JPEG2000Codec::GetRate(unsigned int idx ) const
 void JPEG2000Codec::SetQuality(unsigned int idx, double q)
 {
   Internals->coder_param.tcp_distoratio[idx] = q;
-  if( Internals->coder_param.tcp_numlayers <= idx )
+  if( Internals->coder_param.tcp_numlayers <= (int)idx )
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
     }
@@ -156,7 +156,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
   if( NumberOfDimensions == 2 )
     {
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
+    if( !sf ) return false;
     std::stringstream is;
     unsigned long totalLen = sf->ComputeByteLength();
     char *buffer = new char[totalLen];
@@ -182,7 +182,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
      */
     //#ifdef SUPPORT_MULTIFRAMESJ2K_ONLY
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
+    if( !sf ) return false;
     std::stringstream os;
     assert( sf->GetNumberOfFragments() == Dimensions[2] );
     for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
@@ -384,12 +384,21 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       {
       gdcmWarningMacro( "BPP = " << comp->bpp << " vs BitsAllocated = " << PF.GetBitsAllocated() );
       }
-    assert( comp->sgnd == PF.GetPixelRepresentation() );
+    if( comp->sgnd != PF.GetPixelRepresentation() )
+      {
+      PF.SetPixelRepresentation( comp->sgnd );
+      }
 #ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     assert( comp->prec == PF.GetBitsStored()); // D_CLUNIE_RG3_JPLY.dcm
     assert( comp->prec - 1 == PF.GetHighBit());
 #endif
-    assert( comp->prec >= PF.GetBitsStored());
+    //assert( comp->prec >= PF.GetBitsStored());
+    if( comp->prec != PF.GetBitsStored() )
+      {
+      PF.SetBitsStored( comp->prec );
+      PF.SetHighBit( comp->prec - 1 ); // ??
+      }
+    assert( PF.IsValid() );
     assert( comp->prec <= 32 );
 
     if (comp->prec <= 8)

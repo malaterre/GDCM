@@ -71,6 +71,7 @@ int TestImageReaderRandomEmptyFunc(const char *subdir, const char* filename, boo
     //std::string outfn = os.str();
     std::string outfn = outfilename;
     writer.SetFile( ano.GetFile() );
+    writer.CheckFileMetaInformationOff(); // FIXME ?
     writer.SetFileName( outfn.c_str() );
     if( !writer.Write() )
       {

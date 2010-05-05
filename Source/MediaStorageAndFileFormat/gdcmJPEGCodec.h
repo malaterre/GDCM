@@ -79,6 +79,7 @@ protected:
   int Quality;
 
 private:
+  void SetupJPEGBitCodec(int bit);
   JPEGCodec *Internal;
 };
 
