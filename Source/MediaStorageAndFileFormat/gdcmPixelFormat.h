@@ -151,6 +151,33 @@ public:
   /// return IsValid
   bool IsValid();
 
+  bool operator==(ScalarType st) const
+    {
+    return GetScalarType() == st;
+    }
+  bool operator!=(ScalarType st) const
+    {
+    return GetScalarType() != st;
+    }
+  bool operator==(const PixelFormat &pf) const
+    {
+    return 
+      SamplesPerPixel     == pf.SamplesPerPixel &&
+      BitsAllocated       == pf.BitsAllocated &&
+      BitsStored          == pf.BitsStored &&
+      HighBit             == pf.HighBit &&
+      PixelRepresentation == pf.PixelRepresentation;
+    }
+  bool operator!=(const PixelFormat &pf) const
+    {
+    return 
+      SamplesPerPixel     != pf.SamplesPerPixel ||
+      BitsAllocated       != pf.BitsAllocated ||
+      BitsStored          != pf.BitsStored ||
+      HighBit             != pf.HighBit ||
+      PixelRepresentation != pf.PixelRepresentation;
+    }
+
 protected:
   /// When image with 24/24/23 was read, need to validate
   bool Validate();
