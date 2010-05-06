@@ -82,11 +82,11 @@ int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose 
     }
   else
     {
-  if(verbose)
-{
-    std::cerr << "input file contained wrong VR: " << filename << std::endl;
-    std::cerr << "see: " << outfilename << std::endl;
-}
+    if(verbose)
+      {
+      std::cerr << "input file contained wrong VR: " << filename << std::endl;
+      std::cerr << "see: " << outfilename << std::endl;
+      }
     }
 
   return 0;

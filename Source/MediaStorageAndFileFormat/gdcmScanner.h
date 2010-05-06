@@ -113,7 +113,7 @@ public:
     {
     bool operator()(const char* s1, const char* s2) const
       {
-      return strcmp(s1, s2) < 0;
+      return s1 && s2 && strcmp(s1, s2) < 0;
       }
     };
   typedef std::map<const char *,TagToValue, ltstr> MappingType;

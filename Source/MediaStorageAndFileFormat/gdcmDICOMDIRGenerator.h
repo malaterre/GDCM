@@ -58,11 +58,14 @@ class GDCM_EXPORT DICOMDIRGenerator
 {
 public:
   typedef Directory::FilenamesType  FilenamesType;
+  typedef Directory::FilenameType  FilenameType;
   DICOMDIRGenerator();
   ~DICOMDIRGenerator();
 
   /// Set the list of filenames from which the DICOMDIR should be generated from
   void SetFilenames( FilenamesType const & fns );
+
+  void SetRootDirectory( FilenameType const & root );
 
   /// Set the File Set ID. 
   /// \warning this need to be a valid VR::CS value
@@ -83,6 +86,7 @@ protected:
   bool AddImageDirectoryRecord();
 
 private:
+  const char *ComputeFileID(const char *);
   bool TraverseDirectoryRecords(VL start );
   bool ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi, VL start);
   unsigned int FindNextDirectoryRecord( unsigned int item1, const char *directorytype );

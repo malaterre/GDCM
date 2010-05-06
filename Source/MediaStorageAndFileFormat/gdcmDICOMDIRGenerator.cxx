@@ -38,6 +38,8 @@ public:
   SmartPointer<File> F;
   typedef Directory::FilenamesType  FilenamesType;
   FilenamesType fns;
+  typedef Directory::FilenameType  FilenameType;
+  FilenameType rootdir;
   Scanner scanner;
   std::vector<uint32_t> OffsetTable;
   std::string FileSetID;
@@ -55,7 +57,7 @@ bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi
     offsets[i] = offsets[i-1] + item.GetLength<ExplicitDataElement>(); 
     }
 
-#define MDEBUG
+//#define MDEBUG
 #ifdef MDEBUG
   for(unsigned int i = 0; i <= nitems; ++i)
     {
@@ -329,7 +331,7 @@ bool DICOMDIRGenerator::TraverseDirectoryRecords(VL start )
     DataSet &ds = item.GetNestedDataSet();
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.Set( ds );
-    std::cout << "FOUND DIRECTORY TYPE:" << directoryrecordtype.GetValue() << std::endl;
+    //std::cout << "FOUND DIRECTORY TYPE:" << directoryrecordtype.GetValue() << std::endl;
     unsigned int next = FindNextDirectoryRecord( i, directoryrecordtype.GetValue() );
     if( next )
       {
@@ -624,6 +626,9 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
   gdcm::Scanner::ValuesType::const_iterator it = sopinstanceuids.begin();
+  gdcm::Filename rootdir = Internals->rootdir.c_str();
+  const char *rd = rootdir.ToWindowsSlashes();
+  size_t strlen_rd = strlen( rd );
   for( ; it  != sopinstanceuids.end(); ++it)
     {
     Item item;
@@ -646,6 +651,14 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
     const char *fn_str = scanner.GetFilenameFromTagToValue(sopinstanceuid.GetTag(), sopuid);
     referencedfileid.SetNumberOfValues( 1 );
     gdcm::Filename fn = fn_str;
+    std::string relative = fn.ToWindowsSlashes();
+    std::string::size_type l = relative.find( rd );
+    if( l != std::string::npos )
+      {
+      assert( l == 0 ); // FIXME
+      relative.replace( l, strlen_rd, "" );
+      fn = relative.c_str() + 1;
+      }
     referencedfileid.SetValue( fn.ToWindowsSlashes() );
     ds.Insert( referencedfileid.GetAsDataElement() );
     Attribute<0x0004,0x1510> referencedsopclassuidinfile;
@@ -749,6 +762,11 @@ void DICOMDIRGenerator::SetFilenames( FilenamesType const & fns )
   Internals->fns = fns;
 }
 
+void DICOMDIRGenerator::SetRootDirectory( FilenameType const & root )
+{
+  Internals->rootdir = root;
+}
+
 bool DICOMDIRGenerator::Generate()
 {
   gdcm::Scanner &scanner = GetScanner();
@@ -800,6 +818,9 @@ bool DICOMDIRGenerator::Generate()
   scanner.AddTag( Tag(0x8,0x8) );
 
   FilenamesType const &filenames = Internals->fns;
+  gdcm::Filename rootdir = Internals->rootdir.c_str();
+  const char *rd = rootdir.ToWindowsSlashes();
+  size_t strlen_rd = strlen( rd );
 
   // Let's check that filenames are ok for iso9660 + compatible with VR:CS
 {
@@ -808,6 +829,14 @@ bool DICOMDIRGenerator::Generate()
     {
     gdcm::Filename fn = it->c_str();
     const char *f = fn.ToWindowsSlashes();
+    std::string relative = f;
+    std::string::size_type l = relative.find( rd );
+    if( l != std::string::npos )
+      {
+      assert( l == 0 ); // FIXME
+      relative.replace( l, strlen_rd, "" );
+      f = relative.c_str() + 1;
+      }
     if( !IsCompatibleWithISOIEC9660MediaFormat( f ) )
       {
       gdcmErrorMacro( "Invalid file name: " << f );
@@ -821,7 +850,7 @@ bool DICOMDIRGenerator::Generate()
     return false;
     }
 
-  scanner.Print( std::cout );
+  //scanner.Print( std::cout );
 
   Scanner::ValuesType vt = scanner.GetValues( Tag(0x2,0x10) );
   Scanner::ValuesType vtref;
@@ -907,8 +936,8 @@ the File-set.
   gdcm::TransferSyntax ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
   h.SetDataSetTransferSyntax( ts );
 
-  std::cout << ds << std::endl;
-  std::cout << h << std::endl;
+  //std::cout << ds << std::endl;
+  //std::cout << h << std::endl;
 
 
   /* Very important step it should be the *VERY* last one */
@@ -981,6 +1010,12 @@ SequenceOfItems *DICOMDIRGenerator::GetDirectoryRecordSequence()
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
   return sqi;
+}
+
+const char *DICOMDIRGenerator::ComputeFileID(const char *input)
+{
+  assert( 0 ); (void)input;
+  return NULL;
 }
 
 void DICOMDIRGenerator::SetDescriptor( const char *d )

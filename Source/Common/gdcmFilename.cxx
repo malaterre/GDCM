@@ -66,7 +66,7 @@ const char *Filename::GetName()
 const char *Filename::ToWindowsSlashes()
 {
   Conversion = FileName;
-  assert( !Conversion.empty() );
+  //assert( !Conversion.empty() );
   for (std::string::iterator it = Conversion.begin(); it != Conversion.end(); ++it )
     {
     if( *it == '/' )

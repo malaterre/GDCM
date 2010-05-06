@@ -208,6 +208,7 @@ public:
     assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 || GetTag().GetGroup() == 0x5000 );
     assert( GetVR() != VR::INVALID );
     assert( GetVR().Compatible( de.GetVR() ) || de.GetVR() == VR::INVALID ); // In case of VR::INVALID cannot use the & operator
+    if( de.IsEmpty() ) return;
     const ByteValue *bv = de.GetByteValue();
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
       {
