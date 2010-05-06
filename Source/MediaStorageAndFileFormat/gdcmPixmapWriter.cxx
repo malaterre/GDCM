@@ -757,8 +757,7 @@ Attribute<0x0028,0x0004> piat;
     DataElement de( Tag(0x0008,0x0018) );
     de.SetByteValue( sop, strlen(sop) );
     de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
-    // FIXME: Right now we are not actually 'replacing' the value
-    ds.Insert( de );
+    ds.ReplaceEmpty( de );
     }
 
   // Are we on a particular Study ? If not create a new UID
@@ -768,7 +767,7 @@ Attribute<0x0028,0x0004> piat;
     DataElement de( Tag(0x0020,0x000d) );
     de.SetByteValue( study, strlen(study) );
     de.SetVR( Attribute<0x0020, 0x000d>::GetVR() );
-    ds.Insert( de );
+    ds.ReplaceEmpty( de );
     }
 
   // Are we on a particular Series ? If not create a new UID
@@ -778,7 +777,7 @@ Attribute<0x0028,0x0004> piat;
     DataElement de( Tag(0x0020,0x000e) );
     de.SetByteValue( series, strlen(series) );
     de.SetVR( Attribute<0x0020, 0x000e>::GetVR() );
-    ds.Insert( de );
+    ds.ReplaceEmpty( de );
     }
 
   FileMetaInformation &fmi = file.GetHeader();

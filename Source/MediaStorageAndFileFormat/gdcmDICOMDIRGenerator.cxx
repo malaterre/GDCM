@@ -68,7 +68,7 @@ bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi
   return true;
 }
 
-const char *GetLowerLevelDirectoryRecord(const char *input)
+static const char *GetLowerLevelDirectoryRecord(const char *input)
 {
   if( !input ) return NULL;
 
@@ -120,6 +120,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute<0x10,0x20> patientid;
     patientid.Set( ds );
+    assert( patientid.GetValue() );
     ret.first = patientid.GetValue();
     ret.second = patientid.GetTag();
     }
@@ -127,6 +128,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute <0x20,0xd> studyuid;
     studyuid.Set( ds );
+    assert( studyuid.GetValue() );
     ret.first = studyuid.GetValue();
     ret.second = studyuid.GetTag();
     }
@@ -134,6 +136,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute <0x20,0xe> seriesuid;
     seriesuid.Set( ds );
+    assert( seriesuid.GetValue() );
     ret.first = seriesuid.GetValue();
     ret.second = seriesuid.GetTag();
     }
@@ -141,6 +144,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute <0x04,0x1511> sopuid;
     sopuid.Set( ds );
+    assert( sopuid.GetValue() );
     ret.first = sopuid.GetValue();
     ret.second = Tag(0x8,0x18); // watch out !
     }
@@ -151,7 +155,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
   return ret;
 }
 
-Tag GetParentTag(Tag const &t)
+static Tag GetParentTag(Tag const &t)
 {
   Tag ret;
   if( t == Tag(0x8,0x18) )
@@ -409,10 +413,11 @@ bool DICOMDIRGenerator::AddPatientDirectoryRecord()
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.SetValue( "PATIENT" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
-    patientid.SetValue( it->c_str() );
+    const char *pid = it->c_str();
+    gdcmAssertAlwaysMacro( pid && *pid );
+    patientid.SetValue( pid );
     ds.Insert( patientid.GetAsDataElement() );
 
-    const char *pid = it->c_str();
     gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(patientid.GetTag(), pid);
     Attribute<0x10,0x10> patientsname;
     if( ttv.find( patientsname.GetTag() ) != ttv.end() )
@@ -476,7 +481,9 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.SetValue( "STUDY" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
-    studyinstanceuid.SetValue( it->c_str() );
+    const char *studyuid = it->c_str();
+    gdcmAssertAlwaysMacro( studyuid && *studyuid );
+    studyinstanceuid.SetValue( studyuid );
     ds.Insert( studyinstanceuid.GetAsDataElement() );
 
     //SingleDataElementInserter<0x20,0xd>(ds, scanner);
@@ -485,7 +492,6 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
     //SingleDataElementInserter<0x8,0x1030>(ds, scanner);
     //SingleDataElementInserter<0x8,0x50>(ds, scanner);
     //SingleDataElementInserter<0x20,0x10>(ds, scanner);
-    const char *studyuid = it->c_str();
     gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(studyinstanceuid.GetTag(), studyuid);
 
     Attribute<0x8,0x20> studydate;
@@ -570,10 +576,11 @@ bool DICOMDIRGenerator::AddSeriesDirectoryRecord()
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.SetValue( "SERIES" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
-    seriesinstanceuid.SetValue( it->c_str() );
+    const char *seriesuid = it->c_str();
+    gdcmAssertAlwaysMacro( seriesuid && *seriesuid );
+    seriesinstanceuid.SetValue( seriesuid );
     ds.Insert( seriesinstanceuid.GetAsDataElement() );
 
-    const char *seriesuid = it->c_str();
     gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(seriesinstanceuid.GetTag(), seriesuid);
     Attribute<0x8,0x60> modality;
     if( ttv.find( modality.GetTag() ) != ttv.end() )

@@ -180,6 +180,7 @@ void Scanner::Print( std::ostream & os ) const
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
+    assert( filename && *filename );
     bool b = IsKey(filename);
     const char *comment = !b ? "could not be read" : "could be read";
     os << "Filename: " << filename << " (" << comment << ")\n";
@@ -201,6 +202,7 @@ void Scanner::Print( std::ostream & os ) const
 Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
 {
 //  assert( Mappings.find(filename) != Mappings.end() );
+  assert( filename && *filename );
   if( Mappings.find(filename) != Mappings.end() )
     return Mappings.find(filename)->second;
   return Mappings.find("")->second; // dummy file could not be found
@@ -218,6 +220,7 @@ bool Scanner::IsKey( const char * filename ) const
     }
 */
   // Look for the file in Mappings table:
+  assert( filename && *filename );
   MappingType::const_iterator it2 = Mappings.find(filename);
   return it2 != Mappings.end();
 }
@@ -259,11 +262,16 @@ const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valuere
   if( valueref )
     {
     Directory::FilenamesType::const_iterator file = Filenames.begin();
+    size_t len = strlen( valueref );
+    if( len && valueref[ len - 1 ] == ' ' )
+      {
+      --len;
+      }
     for(; file != Filenames.end() && !filenameref; ++file)
       {
       const char *filename = file->c_str();
       const char * value = GetValue(filename, t);
-      if( value && strcmp(value, valueref ) == 0 )
+      if( value && strncmp(value, valueref, len ) == 0 )
         {
         filenameref = filename;
         }
@@ -295,63 +303,64 @@ Scanner::ValuesType Scanner::GetValues(Tag const &t) const
 
 void Scanner::ProcessPublicTag(StringFilter &sf, const char *filename)
 {
-        TagToValue &mapping = Mappings[filename];
-        const File& file = sf.GetFile();
+  assert( filename );
+  TagToValue &mapping = Mappings[filename];
+  const File& file = sf.GetFile();
 
-        const FileMetaInformation & header = file.GetHeader();
-        const DataSet & ds = file.GetDataSet();
-        TagsType::const_iterator tag = Tags.begin();
-        for( ; tag != Tags.end(); ++tag )
-          {
-          if( tag->GetGroup() == 0x2 )
-            {
-            if( header.FindDataElement( *tag ) )
-              {
-              //std::string s;
-              DataElement const & de = header.GetDataElement( *tag );
-              //const ByteValue *bv = de.GetByteValue();
-              ////assert( VR::IsASCII( vr ) );
-              //if( bv ) // Hum, should I store an empty string or what ?
-              //  {
-              //  s = std::string( bv->GetPointer(), bv->GetLength() );
-              //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-              //  }
-              std::string s = sf.ToString(de.GetTag());
+  const FileMetaInformation & header = file.GetHeader();
+  const DataSet & ds = file.GetDataSet();
+  TagsType::const_iterator tag = Tags.begin();
+  for( ; tag != Tags.end(); ++tag )
+    {
+    if( tag->GetGroup() == 0x2 )
+      {
+      if( header.FindDataElement( *tag ) )
+        {
+        //std::string s;
+        DataElement const & de = header.GetDataElement( *tag );
+        //const ByteValue *bv = de.GetByteValue();
+        ////assert( VR::IsASCII( vr ) );
+        //if( bv ) // Hum, should I store an empty string or what ?
+        //  {
+        //  s = std::string( bv->GetPointer(), bv->GetLength() );
+        //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+        //  }
+        std::string s = sf.ToString(de.GetTag());
 
-              // Store the potentially new value:
-              Values.insert( s );
-              assert( Values.find( s ) != Values.end() );
-              const char *value = Values.find( s )->c_str();
-              assert( value );
-              mapping.insert(
-                TagToValue::value_type(*tag, value));
-              }
-            }
-          else
-            {
-            if( ds.FindDataElement( *tag ) )
-              {
-              //std::string s;
-              DataElement const & de = ds.GetDataElement( *tag );
-              //const ByteValue *bv = de.GetByteValue();
-              ////assert( VR::IsASCII( vr ) );
-              //if( bv ) // Hum, should I store an empty string or what ?
-              //  {
-              //  s = std::string( bv->GetPointer(), bv->GetLength() );
-              //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-              //  }
-              std::string s = sf.ToString(de.GetTag());
+        // Store the potentially new value:
+        Values.insert( s );
+        assert( Values.find( s ) != Values.end() );
+        const char *value = Values.find( s )->c_str();
+        assert( value );
+        mapping.insert(
+          TagToValue::value_type(*tag, value));
+        }
+      }
+    else
+      {
+      if( ds.FindDataElement( *tag ) )
+        {
+        //std::string s;
+        DataElement const & de = ds.GetDataElement( *tag );
+        //const ByteValue *bv = de.GetByteValue();
+        ////assert( VR::IsASCII( vr ) );
+        //if( bv ) // Hum, should I store an empty string or what ?
+        //  {
+        //  s = std::string( bv->GetPointer(), bv->GetLength() );
+        //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+        //  }
+        std::string s = sf.ToString(de.GetTag());
 
-              // Store the potentially new value:
-              Values.insert( s );
-              assert( Values.find( s ) != Values.end() );
-              const char *value = Values.find( s )->c_str();
-              assert( value );
-              mapping.insert(
-                TagToValue::value_type(*tag, value));
-              }
-            }
-          } // end for
+        // Store the potentially new value:
+        Values.insert( s );
+        assert( Values.find( s ) != Values.end() );
+        const char *value = Values.find( s )->c_str();
+        assert( value );
+        mapping.insert(
+          TagToValue::value_type(*tag, value));
+        }
+      }
+    } // end for
 }
 
 } // end namespace gdcm

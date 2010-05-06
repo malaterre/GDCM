@@ -152,6 +152,13 @@ public:
     if( DES.find(de) != DES.end() ) DES.erase(de);
     Insert(de);
   }
+  /// Only replace a DICOM attribute when it is missing or empty
+  void ReplaceEmpty(const DataElement& de) {
+    ConstIterator it = DES.find(de);
+    if( it != DES.end() && it->IsEmpty() )
+      DES.erase(de);
+    Insert(de);
+  }
   /// Completely remove a dataelement from the dataset
   SizeType Remove(const Tag& tag) {
     DataElementSet::size_type count = DES.erase(tag);
