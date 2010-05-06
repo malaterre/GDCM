@@ -729,7 +729,7 @@ DICOMDIRGenerator::~DICOMDIRGenerator(  )
   delete Internals;
 }
 
-bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
+static bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
 {
   if(!filename) return false;
   // (0004,1500) CS [IMG001]                                 #   6, 1 ReferencedFileID
