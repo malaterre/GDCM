@@ -25,9 +25,8 @@
 #define VTKIMAGEYBRTORGB_H
 
 #include "vtkThreadedImageAlgorithm.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
-class GDCM_EXPORT vtkImageYBRToRGB : public vtkThreadedImageAlgorithm
+class VTK_EXPORT vtkImageYBRToRGB : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageYBRToRGB *New();

@@ -45,10 +45,9 @@
 #define VTKGDCMTHREADEDIMAGEREADER2_H
 
 #include "vtkThreadedImageAlgorithm.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 class vtkStringArray;
-class GDCM_EXPORT vtkGDCMThreadedImageReader2 : public vtkThreadedImageAlgorithm
+class VTK_EXPORT vtkGDCMThreadedImageReader2 : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkGDCMThreadedImageReader2 *New();

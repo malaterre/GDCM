@@ -15,6 +15,8 @@
 #include "vtkLookupTable16.h"
 #include "vtkObjectFactory.h"
 
+#include <cassert>
+
 vtkCxxRevisionMacro(vtkLookupTable16, "$Revision: 1.107 $")
 vtkStandardNewMacro(vtkLookupTable16)
 

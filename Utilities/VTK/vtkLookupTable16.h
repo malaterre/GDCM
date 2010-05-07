@@ -25,9 +25,8 @@
 
 #include "vtkLookupTable.h"
 #include "vtkUnsignedShortArray.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
-class GDCM_EXPORT vtkLookupTable16 : public vtkLookupTable
+class VTK_EXPORT vtkLookupTable16 : public vtkLookupTable
 {
 public:
   static vtkLookupTable16 *New();

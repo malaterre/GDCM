@@ -23,7 +23,6 @@
 #define VTKGDCMTESTING_H
 
 #include "vtkObject.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 class VTK_EXPORT vtkGDCMTesting : public vtkObject
 {

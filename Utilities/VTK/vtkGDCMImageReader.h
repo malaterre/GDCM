@@ -67,7 +67,6 @@
 
 #include "vtkMedicalImageReader2.h"
 #include "vtkImageData.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
