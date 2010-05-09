@@ -121,6 +121,7 @@ const char * const * Testing::GetMD5DataImage(unsigned int file)
 
 const char * Testing::GetMD5FromFile(const char *filepath)
 {
+  if(!filepath) return NULL;
   unsigned int i = 0;
   MD5DataImagesType md5s = GetMD5DataImages();
   const char *p = md5s[i][1];

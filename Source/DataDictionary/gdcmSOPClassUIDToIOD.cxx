@@ -16,7 +16,7 @@
 
 namespace gdcm
 {
-  static const char * const SOPClassToIOD[][2] = {
+  static const char * const SOPClassUIDToIODStrings[][2] = {
 {"1.2.840.10008.1.3.10" , "Basic Directory IOD Modules"}, // IOD defined in PS 3.3
 {"1.2.840.10008.5.1.4.1.1.1" , "CR Image IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.1.1" , "Digital X Ray Image IOD Modules"}, //  DX IOD (see B.5.1.1)
@@ -123,7 +123,7 @@ namespace gdcm
 
 unsigned int SOPClassUIDToIOD::GetNumberOfSOPClassToIOD()
 {
-  static const unsigned int n = sizeof( SOPClassToIOD ) / sizeof( *SOPClassToIOD );
+  static const unsigned int n = sizeof( SOPClassUIDToIODStrings ) / sizeof( *SOPClassUIDToIODStrings );
   assert( n > 0 );
   return n - 1;
 }
@@ -155,8 +155,8 @@ const char *SOPClassUIDToIOD::GetIOD(UIDs const & uid)
 //  } while (!done);
 //  XML_ParserFree(parser);
 //  is.close();
-  typedef const char* const (*SOPClassUIDToIODType)[2];
-  SOPClassUIDToIODType p = SOPClassToIOD;
+  //typedef const char* const (*SOPClassUIDToIODType)[2];
+  SOPClassUIDToIOD::SOPClassUIDToIODType *p = SOPClassUIDToIODStrings;
   const char *sopclassuid = uid.GetString();
   
   // FIXME I think we can do binary search
@@ -165,6 +165,61 @@ const char *SOPClassUIDToIOD::GetIOD(UIDs const & uid)
     ++p;
     }
   return (*p)[1];
+}
+
+SOPClassUIDToIOD::SOPClassUIDToIODType *SOPClassUIDToIOD::GetSOPClassUIDToIODs()
+{
+  return SOPClassUIDToIODStrings;
+}
+
+SOPClassUIDToIOD::SOPClassUIDToIODType& SOPClassUIDToIOD::GetSOPClassUIDToIOD(unsigned int i)
+{
+  if( i < SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ) 
+    return SOPClassUIDToIODStrings[i];
+  // else return the {0x0, 0x0} sentinel:
+  assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == 0 );
+  return SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ];
+
+}
+
+const char *SOPClassUIDToIOD::GetSOPClassUIDFromIOD(const char *iod)
+{
+  if(!iod) return NULL;
+  unsigned int i = 0;
+  SOPClassUIDToIODType *sopclassuidtoiods = GetSOPClassUIDToIODs();
+  const char *p = sopclassuidtoiods[i][1];
+  while( p != 0 )
+    {
+    if( strcmp( iod, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = sopclassuidtoiods[i][1];
+    }
+  // \postcondition always valid (before sentinel)
+  assert( i <= GetNumberOfSOPClassToIOD() );
+  return sopclassuidtoiods[i][0];
+}
+
+const char *SOPClassUIDToIOD::GetIODFromSOPClassUID(const char *sopclassuid)
+{
+  if(!sopclassuid) return NULL;
+  unsigned int i = 0;
+  SOPClassUIDToIODType *sopclassuidtoiods = GetSOPClassUIDToIODs();
+  const char *p = sopclassuidtoiods[i][0];
+  while( p != 0 )
+    {
+    if( strcmp( sopclassuid, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = sopclassuidtoiods[i][0];
+    }
+  // \postcondition always valid (before sentinel)
+  assert( i <= GetNumberOfSOPClassToIOD() );
+  return sopclassuidtoiods[i][1];
 }
 
 }

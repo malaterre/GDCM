@@ -35,6 +35,14 @@ public:
 
   /// Return the number of SOP Class UID listed internally
   static unsigned int GetNumberOfSOPClassToIOD();
+
+  typedef const char* const (SOPClassUIDToIODType)[2];
+  static SOPClassUIDToIODType* GetSOPClassUIDToIODs();
+
+  static SOPClassUIDToIODType& GetSOPClassUIDToIOD(unsigned int i);
+
+  static const char *GetSOPClassUIDFromIOD(const char *iod);
+  static const char *GetIODFromSOPClassUID(const char *sopclassuid);
 };
 
 } // end namespace gdcm
