@@ -67,11 +67,11 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
   switch(pf)
     {
   case PixelFormat::UINT8:
-  case PixelFormat::INT8:
+  //case PixelFormat::INT8:
     os << "255";
     break;
   case PixelFormat::UINT16:
-  case PixelFormat::INT16:
+  //case PixelFormat::INT16:
     os << "65535";
     break;
   default:
@@ -193,65 +193,65 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   is.seekg( 0, std::ios::end );
   size_t len = is.tellg();
   is.seekg( 0, std::ios::beg );
-  
-      std::string type, str;
-      std::getline(is,type);
-      gdcm::PhotometricInterpretation pi;
-      if( type == "P5" )
-        pi = gdcm::PhotometricInterpretation::MONOCHROME2;
-      else if( type == "P6" )
-        pi = gdcm::PhotometricInterpretation::RGB;
-      else 
-        {
-        std::cerr << "Unhandled PGM type: " << type << std::endl;
-        return false;
-        }
 
-      // skip comments:
-      while( is.peek() == '#' )
-        {
-        std::getline(is, str);
-        //std::cout << str << std::endl;
-        }
-      unsigned int dims[3] = {};
-      is >> dims[0]; is >> dims[1];
-      unsigned int maxval;
-      is >> maxval;
-      // some kind of empty line...
-      while( is.peek() == '\n' )
-        {
-        is.get();
-        }
-      std::streampos pos = is.tellg();
-      size_t m = (len - pos ) / ( dims[0]*dims[1] );
-      if( m * dims[0] * dims[1] != len - pos )
-        {
-        std::cerr << "Problem computing length" << std::endl;
-        return false;
-        }
-      gdcm::PixelFormat pf;
-      switch(maxval)
-        {
-      case 255:
-        pf = gdcm::PixelFormat::UINT8;
-        break;
-      case 65535:
-        pf = gdcm::PixelFormat::UINT16;
-        break;
-      default:
-        std::cerr << "Unhandled max val: " << maxval << std::endl;
-        return false;
-        }
-      if( pi == gdcm::PhotometricInterpretation::RGB )
-        {
-        pf.SetSamplesPerPixel( 3 );
-        }
-      //if ( maxval * 8 != bpp ) return 1;
+  std::string type, str;
+  std::getline(is,type);
+  gdcm::PhotometricInterpretation pi;
+  if( type == "P5" )
+    pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+  else if( type == "P6" ) // P3 => ASCII
+    pi = gdcm::PhotometricInterpretation::RGB;
+  else 
+    {
+    std::cerr << "Unhandled PGM type: " << type << std::endl;
+    return false;
+    }
 
-      //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
-      //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
-      //image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
-      ts = gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE;
+  // skip comments:
+  while( is.peek() == '#' )
+    {
+    std::getline(is, str);
+    //std::cout << str << std::endl;
+    }
+  unsigned int dims[3] = {};
+  is >> dims[0]; is >> dims[1];
+  unsigned int maxval;
+  is >> maxval;
+  // some kind of empty line...
+  while( is.peek() == '\n' )
+    {
+    is.get();
+    }
+  std::streampos pos = is.tellg();
+  size_t m = (len - pos ) / ( dims[0]*dims[1] );
+  if( m * dims[0] * dims[1] != len - pos )
+    {
+    std::cerr << "Problem computing length" << std::endl;
+    return false;
+    }
+  gdcm::PixelFormat pf;
+  switch(maxval)
+    {
+  case 255:
+    pf = gdcm::PixelFormat::UINT8;
+    break;
+  case 65535:
+    pf = gdcm::PixelFormat::UINT16;
+    break;
+  default:
+    std::cerr << "Unhandled max val: " << maxval << std::endl;
+    return false;
+    }
+  if( pi == gdcm::PhotometricInterpretation::RGB )
+    {
+    pf.SetSamplesPerPixel( 3 );
+    }
+  //if ( maxval * 8 != bpp ) return 1;
+
+  //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
+  //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
+  //image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
+  ts = gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE;
 
   SetPhotometricInterpretation( pi );
   SetPixelFormat( pf );
