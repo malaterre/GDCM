@@ -96,17 +96,17 @@ void JPEGCodec::SetupJPEGBitCodec(int bit)
   delete Internal; Internal = NULL;
   assert( Internal == NULL );
   // what should I do with those single bit images ?
-  if ( BitSample == 8 )
+  if ( BitSample <= 8 )
     {
     gdcmDebugMacro( "Using JPEG8" );
     Internal = new JPEG8Codec;
     }
-  else if ( BitSample > 8 && BitSample <= 12 )
+  else if ( /*BitSample > 8 &&*/ BitSample <= 12 )
     {
     gdcmDebugMacro( "Using JPEG12" );
     Internal = new JPEG12Codec;
     }
-  else if ( BitSample > 12 && BitSample <= 16 )
+  else if ( /*BitSample > 12 &&*/ BitSample <= 16 )
     {
     gdcmDebugMacro( "Using JPEG16" );
     Internal = new JPEG16Codec;
