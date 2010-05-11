@@ -159,6 +159,7 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "     --quiet      do not print to stdout." << std::endl;
   std::cout << "JPEG Options:" << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
   std::cout << "JPEG-LS Options:" << std::endl;
@@ -430,6 +431,7 @@ int main (int argc, char *argv[])
   std::string root;
   int explicitts = 0; // explicit is a reserved keyword
   int implicit = 0;
+  int quiet = 0;
   int lut = 0;
   int raw = 0;
   int deflated = 0;
@@ -533,6 +535,7 @@ int main (int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
         {"ignore-errors", 0, &ignoreerrors, 1},
+        {"quiet", 0, &quiet, 1},
 
         {0, 0, 0, 0}
     };
@@ -1237,6 +1240,7 @@ int main (int argc, char *argv[])
       }
     if( lossy )
       {
+      if(!quiet)
       PrintLossyWarning();
       if( !gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() ) )
         {
