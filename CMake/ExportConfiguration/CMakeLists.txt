@@ -30,22 +30,39 @@ install(EXPORT GDCMTargets DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
 # 0009822: Please expose: cmGlobalGenerator::GetExportSet at cmake level 
 
 # I cannot retrieve the lists of exported targets, so read them from the file instead
-SET( targets )
 
 set(gdcmtarget_cmake
   "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake")
 
+#CONFIGURE_FILE(
+# ${GDCM_BINARY_DIR}/CMakeCache.txt
+#  ${CMAKE_CURRENT_BINARY_DIR}/gdcmtarget_cmake.dep
+#COPYONLY
+#)
 # CMake Error at CMake/ExportConfiguration/CMakeLists.txt:59 (export):
 #   export given target "gdcmopenjpeg" which is not built by this project.
 #add_custom_command(
-#  OUTPUT "${gdcmtarget_cmake}.tmp"
-#  COMMAND echo "Execute"
+#  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcmtarget_cmake.dep
+#  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${GDCM_BINARY_DIR}/CMakeCache.txt ${CMAKE_CURRENT_BINARY_DIR}/gdcmtarget_cmake.dep
 #  COMMAND ${CMAKE_COMMAND} -E remove ${gdcmtarget_cmake}
-#  DEPENDS ${GDCM_BINARY_DIR}/CMakeCache.txt
+#  COMMAND ${CMAKE_COMMAND} -E remove ${GDCM_BINARY_DIR}/GDCMExports.cmake
+#  #DEPENDS ${GDCM_BINARY_DIR}/CMakeCache.txt
+#  #DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcmtarget_cmake.dep
+#  DEPENDS ${gdcmtarget_cmake}
+#)
+#add_custom_target(clean_t ALL
+#  COMMAND echo "Execute"
+#  #COMMAND ${CMAKE_COMMAND} -E remove ${gdcmtarget_cmake}
+#  COMMAND ${CMAKE_COMMAND} -E remove ${GDCM_BINARY_DIR}/GDCMExports.cmake
+#  DEPENDS ${gdcmtarget_cmake} ${GDCM_BINARY_DIR}/GDCMExports.cmake
+#  COMMENT "Crazy"
 #)
 
 
+SET( targets )
+#file(REMOVE ${gdcmtarget_cmake})
 if(EXISTS ${gdcmtarget_cmake})
+  #message( "reading: ${gdcmtarget_cmake}" )
   file(READ ${gdcmtarget_cmake} ENT)
   STRING(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
   foreach(line ${ENT})
@@ -57,7 +74,32 @@ if(EXISTS ${gdcmtarget_cmake})
   endforeach(line)
 endif()
 
+SET( exports )
+set(gdcmexport_cmake ${GDCM_BINARY_DIR}/GDCMExports.cmake)
+if(EXISTS ${gdcmexport_cmake})
+  file(READ ${gdcmexport_cmake} ENT)
+  STRING(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
+  foreach(line ${ENT})
+    string(REGEX MATCH "ADD_LIBRARY\\(.*SHARED IMPORTED\\)" m ${line})
+    if( m )
+      string(REGEX REPLACE "ADD_LIBRARY\\((.*) SHARED IMPORTED\\)" "\\1" out ${m})
+      list(APPEND exports ${out})
+    endif()
+  endforeach(line)
+endif()
+
+#message( ${targets} )
+#message( ${exports} )
+list(LENGTH targets targets_len)
+list(LENGTH exports exports_len)
+if( ${targets_len} EQUAL ${exports_len} )
+ message("equal")
+else()
+ message("diff")
+endif()
+
+file(WRITE ${GDCM_BINARY_DIR}/GDCMExports.cmake "")
 foreach(target ${targets})
-  export(TARGETS ${target} APPEND FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake)
+  export(TARGETS ${target} FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake APPEND)
 endforeach(target)
 
