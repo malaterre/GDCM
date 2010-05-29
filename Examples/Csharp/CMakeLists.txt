@@ -2,6 +2,7 @@
 #TARGET_LINK_LIBRARIES(ManipulateFile gdcm-sharp)
 
 SET(CSHARP_EXAMPLES
+  SimplePrintPatientName
   ManipulateFile
   RescaleImage
   ExtractEncapsulatedFile
