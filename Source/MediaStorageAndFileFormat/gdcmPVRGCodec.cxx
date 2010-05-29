@@ -81,7 +81,9 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #ifdef GDCM_USE_SYSTEM_PVRG
   std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
 #else
-  std::string pvrg_command = executable_path + "/gdcmjpeg";
+  std::string executable_path = GDCM_EXECUTABLE_OUTPUT_PATH;
+  if( !executable_path.empty() ) executable_path += '/';
+  std::string pvrg_command = executable_path + "gdcmjpeg";
 #endif
   if( !System::FileExists( pvrg_command.c_str() ) )
     {
