@@ -81,8 +81,9 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #ifdef GDCM_USE_SYSTEM_PVRG
   std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
 #else
-  std::string executable_path = GDCM_EXECUTABLE_OUTPUT_PATH;
-  if( !executable_path.empty() ) executable_path += '/';
+  gdcm::Filename fn( System::GetCurrentProcessFileName() );
+  std::string executable_path = fn.GetPath();
+
   std::string pvrg_command = executable_path + "gdcmjpeg";
 #endif
   if( !System::FileExists( pvrg_command.c_str() ) )
@@ -106,8 +107,6 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   sf->WriteBuffer(outfile);
   outfile.close(); // flush !
 
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string executable_path = fn.GetPath();
   // -u -> set Notify to 0 (less verbose)
   //pvrg_command += " -ci 0 -d -u ";
   pvrg_command += " -d -u ";
