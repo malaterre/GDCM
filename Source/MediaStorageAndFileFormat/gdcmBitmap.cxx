@@ -327,12 +327,35 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
 
 bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
 {
-  unsigned long len = GetBufferLength();
-  const TransferSyntax &ts = GetTransferSyntax();
-
   JPEGCodec codec;
+  const TransferSyntax &ts = GetTransferSyntax();
+  if(!buffer)
+    {
+    if( codec.CanDecode( ts ) ) // short path
+      {
+      TransferSyntax ts2;
+      const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
+      assert( sf );
+      const Fragment &frag = sf->GetFragment(0);
+      const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
+      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
+      codec.SetPixelFormat( pf );
+
+      std::stringstream ss;
+      ss.write( bv2.GetPointer(), bv2.GetLength() );
+      bool b = codec.GetHeaderInfo( ss, ts2 );
+      //bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
+      assert( b );
+      lossyflag = codec.IsLossy();
+      abort();
+      return true;
+      }
+    return false;
+    }
+
   if( codec.CanDecode( ts ) )
     {
+    unsigned long len = GetBufferLength();
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetPixelFormat( GetPixelFormat() );
@@ -554,12 +577,29 @@ bool Bitmap::ComputeLossyFlag()
 
 bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
 {
-  unsigned long len = GetBufferLength();
-  const TransferSyntax &ts = GetTransferSyntax();
-
   JPEG2000Codec codec;
+  const TransferSyntax &ts = GetTransferSyntax();
+  if(!buffer)
+    {
+    if( codec.CanDecode( ts ) ) // short path
+      {
+      TransferSyntax ts2;
+      const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
+      assert( sf );
+      const Fragment &frag = sf->GetFragment(0);
+      const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
+
+      bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
+      assert( b );
+      lossyflag = codec.IsLossy();
+      return true;
+      }
+    return false;
+    }
+
   if( codec.CanDecode( ts ) )
     {
+  unsigned long len = GetBufferLength();
     codec.SetPixelFormat( GetPixelFormat() );
     codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
@@ -577,8 +617,10 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
     if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     lossyflag = codec.IsLossy();
-    if( codec.IsLossy() != ts.IsLossy() )
+    if( codec.IsLossy() && !ts.IsLossy() )
       {
+      assert( codec.IsLossy() );
+      assert( !ts.IsLossy() );
       gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
       }
     if( codec.GetPixelFormat() != GetPixelFormat() )

@@ -53,6 +53,16 @@ bool ImageCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   return false;
 }
 
+void ImageCodec::SetLossyFlag(bool l)
+{
+  LossyFlag = l;
+}
+
+bool ImageCodec::GetLossyFlag() const
+{
+  return LossyFlag;
+}
+
 bool ImageCodec::IsLossy() const
 {
   return LossyFlag;

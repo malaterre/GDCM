@@ -30,6 +30,7 @@ class JPEG2000Internals;
  */
 class GDCM_EXPORT JPEG2000Codec : public ImageCodec
 {
+  friend class Bitmap;
 public:
   JPEG2000Codec();
   ~JPEG2000Codec();

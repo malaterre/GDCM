@@ -217,6 +217,7 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
       if( Internal && Internal->GetHeaderInfo(is, ts) )
         {
         // Foward everything back to meta jpeg codec:
+        this->SetLossyFlag( Internal->GetLossyFlag() );
         this->SetDimensions( Internal->GetDimensions() );
         this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
         int prep = this->GetPixelFormat().GetPixelRepresentation();

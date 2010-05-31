@@ -876,6 +876,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
+  LossyFlag = !reversible;
 #if 0
 #ifndef GDCM_USE_SYSTEM_OPENJPEG
   if( j2k )

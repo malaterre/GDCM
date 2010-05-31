@@ -504,6 +504,14 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     {
     assert(0); // TODO
     }
+  if( cinfo.process == JPROC_LOSSLESS )
+    {
+    LossyFlag = false;
+    }
+  else
+    {
+    LossyFlag = true;
+    }
 
   // Pixel density stuff:
 /*

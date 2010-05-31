@@ -38,6 +38,8 @@ public:
   bool CanDecode(TransferSyntax const &) const { return false; }
   bool Decode(DataElement const &is_, DataElement &os);
   bool IsLossy() const;
+  void SetLossyFlag(bool l);
+  bool GetLossyFlag() const;
 
   virtual bool GetHeaderInfo(std::istream &is_, TransferSyntax &ts);
 
