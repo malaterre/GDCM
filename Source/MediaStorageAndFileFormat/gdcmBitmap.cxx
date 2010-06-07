@@ -347,7 +347,6 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       //bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
       assert( b );
       lossyflag = codec.IsLossy();
-      abort();
       return true;
       }
     return false;
