@@ -184,7 +184,11 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
     if( !sf ) return false;
     std::stringstream os;
-    assert( sf->GetNumberOfFragments() == Dimensions[2] );
+    if( sf->GetNumberOfFragments() != Dimensions[2] )
+      {
+      gdcmErrorMacro( "Not handled" );
+      return false;
+      }
     for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
       {
       std::stringstream is;
