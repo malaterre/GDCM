@@ -345,6 +345,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       ss.write( bv2.GetPointer(), bv2.GetLength() );
       bool b = codec.GetHeaderInfo( ss, ts2 );
       //bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
+      if(!b) return false;
       assert( b );
       lossyflag = codec.IsLossy();
       return true;
@@ -380,7 +381,8 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
-    if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
+    if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
