@@ -227,13 +227,16 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         }
       else
         {
-        assert(0); // FATAL ERROR
+        //assert(0); // FATAL ERROR
+        gdcmErrorMacro( "Do not support this JPEG Type" );
+        return false;
         }
       }
     return false;
     }
   // else
   // Foward everything back to meta jpeg codec:
+  this->SetLossyFlag( Internal->GetLossyFlag() );
   this->SetDimensions( Internal->GetDimensions() );
   this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
   this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
