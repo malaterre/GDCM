@@ -337,7 +337,7 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       if ( jerr.pub.msg_code == JERR_BAD_PRECISION /* 18 */ )
         {
         this->BitSample = jerr.pub.msg_parm.i[0];
-        assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        assert( this->BitSample == 1 || this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
         assert( this->BitSample == cinfo.data_precision );
         }
       jpeg_destroy_decompress(&cinfo);
@@ -499,6 +499,15 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       ts = TransferSyntax::JPEGBaselineProcess1;
     else if( this->BitSample == 12 )
       ts = TransferSyntax::JPEGExtendedProcess2_4;
+    }
+  else if( cinfo.process == JPROC_PROGRESSIVE )
+    {
+    if( this->BitSample == 12 )
+      ts = TransferSyntax::JPEGFullProgressionProcess10_12;
+    else
+      {
+    assert(0); // TODO
+      }
     }
   else
     {
@@ -807,17 +816,24 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         }
       if ( cinfo.process == JPROC_LOSSLESS )
         {
-        cinfo.jpeg_color_space = JCS_UNKNOWN;
-        cinfo.out_color_space = JCS_UNKNOWN;
+        //cinfo.jpeg_color_space = JCS_UNKNOWN;
+        //cinfo.out_color_space = JCS_UNKNOWN;
         }
       break;
     case JCS_CMYK:
       assert( GetPhotometricInterpretation() == PhotometricInterpretation::CMYK );
-        if ( cinfo.process == JPROC_LOSSLESS )
-          {
-          cinfo.jpeg_color_space = JCS_UNKNOWN;
-          cinfo.out_color_space = JCS_UNKNOWN;
-          }
+      if ( cinfo.process == JPROC_LOSSLESS )
+        {
+        cinfo.jpeg_color_space = JCS_UNKNOWN;
+        cinfo.out_color_space = JCS_UNKNOWN;
+        }
+      break;
+    case JCS_UNKNOWN:
+      if ( cinfo.process == JPROC_LOSSLESS )
+        {
+        cinfo.jpeg_color_space = JCS_UNKNOWN;
+        cinfo.out_color_space = JCS_UNKNOWN;
+        }
       break;
     default:
       assert(0);
