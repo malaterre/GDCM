@@ -33,46 +33,46 @@
 #
 
 if(NOT DCMTK_FOUND AND NOT DCMTK_DIR)
-       set(DCMTK_DIR
-               "/usr/include/dcmtk/"
-               CACHE
-               PATH
-               "Root of DCMTK source tree (optional).")
-       mark_as_advanced(DCMTK_DIR)
+  set(DCMTK_DIR
+    "/usr/include/dcmtk/"
+    CACHE
+    PATH
+    "Root of DCMTK source tree (optional).")
+  mark_as_advanced(DCMTK_DIR)
 endif()
 
 
 foreach(lib
-       dcmdata
-       dcmimage
-       dcmimgle
-       dcmjpeg
-       dcmnet
-       dcmpstat
-       dcmqrdb
-       dcmsign
-       dcmsr
-       dcmtls
-       ijg12
-       ijg16
-       ijg8
-       ofstd)
+    dcmdata
+    dcmimage
+    dcmimgle
+    dcmjpeg
+    dcmnet
+    dcmpstat
+    dcmqrdb
+    dcmsign
+    dcmsr
+    dcmtls
+    ijg12
+    ijg16
+    ijg8
+    ofstd)
 
-       find_library(DCMTK_${lib}_LIBRARY
-               ${lib}
-               PATHS
-               ${DCMTK_DIR}/${lib}/libsrc
-               ${DCMTK_DIR}/${lib}/libsrc/Release
-               ${DCMTK_DIR}/${lib}/libsrc/Debug
-               ${DCMTK_DIR}/${lib}/Release
-               ${DCMTK_DIR}/${lib}/Debug
-               ${DCMTK_DIR}/lib)
+  find_library(DCMTK_${lib}_LIBRARY
+    ${lib}
+    PATHS
+    ${DCMTK_DIR}/${lib}/libsrc
+    ${DCMTK_DIR}/${lib}/libsrc/Release
+    ${DCMTK_DIR}/${lib}/libsrc/Debug
+    ${DCMTK_DIR}/${lib}/Release
+    ${DCMTK_DIR}/${lib}/Debug
+    ${DCMTK_DIR}/lib)
 
-       mark_as_advanced(DCMTK_${lib}_LIBRARY)
+  mark_as_advanced(DCMTK_${lib}_LIBRARY)
 
-       if(DCMTK_${lib}_LIBRARY)
-               list(APPEND DCMTK_LIBRARIES ${DCMTK_${lib}_LIBRARY})
-       endif()
+  if(DCMTK_${lib}_LIBRARY)
+    list(APPEND DCMTK_LIBRARIES ${DCMTK_${lib}_LIBRARY})
+  endif()
 
 endforeach()
 
@@ -91,55 +91,56 @@ set(DCMTK_dcmtls_TEST_HEADER tlslayer.h)
 set(DCMTK_ofstd_TEST_HEADER ofstdinc.h)
 
 foreach(dir
-       config
-       dcmdata
-       dcmimage
-       dcmimgle
-       dcmjpeg
-       dcmnet
-       dcmpstat
-       dcmqrdb
-       dcmsign
-       dcmsr
-       dcmtls
-       ofstd)
-       find_path(DCMTK_${dir}_INCLUDE_DIR
-               ${DCMTK_${dir}_TEST_HEADER}
-               PATHS
-               ${DCMTK_DIR}/${dir}/include
-               ${DCMTK_DIR}/${dir}
-               ${DCMTK_DIR}/include/${dir})
+    config
+    dcmdata
+    dcmimage
+    dcmimgle
+    dcmjpeg
+    dcmnet
+    dcmpstat
+    dcmqrdb
+    dcmsign
+    dcmsr
+    dcmtls
+    ofstd)
+  find_path(DCMTK_${dir}_INCLUDE_DIR
+    ${DCMTK_${dir}_TEST_HEADER}
+    PATHS
+    ${DCMTK_DIR}/${dir}/include
+    ${DCMTK_DIR}/${dir}
+    ${DCMTK_DIR}/include/${dir})
 
-       mark_as_advanced(DCMTK_${dir}_INCLUDE_DIR)
+  mark_as_advanced(DCMTK_${dir}_INCLUDE_DIR)
 
-       if(DCMTK_${dir}_INCLUDE_DIR)
-               list(APPEND
-                       DCMTK_INCLUDE_DIRS
-                       ${DCMTK_${dir}_INCLUDE_DIR})
-       endif()
+  if(DCMTK_${dir}_INCLUDE_DIR)
+    list(APPEND
+      DCMTK_INCLUDE_DIRS
+      ${DCMTK_${dir}_INCLUDE_DIR})
+  endif()
 endforeach()
 
 if(WIN32)
-       list(APPEND DCMTK_LIBRARIES netapi32)
+  list(APPEND DCMTK_LIBRARIES netapi32)
 endif()
 
 if(DCMTK_ofstd_INCLUDE_DIR)
-       get_filename_component(DCMTK_dcmtk_INCLUDE_DIR
-               ${DCMTK_ofstd_INCLUDE_DIR}
-               PATH
-               CACHE)
-       list(APPEND DCMTK_INCLUDE_DIRS ${DCMTK_dcmtk_INCLUDE_DIR})
+  get_filename_component(DCMTK_dcmtk_INCLUDE_DIR
+    ${DCMTK_ofstd_INCLUDE_DIR}
+    PATH
+    CACHE)
+  list(APPEND DCMTK_INCLUDE_DIRS ${DCMTK_dcmtk_INCLUDE_DIR})
+  mark_as_advanced(DCMTK_dcmtk_INCLUDE_DIR)
 endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(DCMTK DEFAULT_MSG
-       DCMTK_config_INCLUDE_DIR
-       DCMTK_ofstd_INCLUDE_DIR
-       DCMTK_ofstd_LIBRARY
-       DCMTK_dcmdata_INCLUDE_DIR
-       DCMTK_dcmdata_LIBRARY
-       DCMTK_dcmimgle_INCLUDE_DIR
-       DCMTK_dcmimgle_LIBRARY)
+  DCMTK_config_INCLUDE_DIR
+  DCMTK_ofstd_INCLUDE_DIR
+  DCMTK_ofstd_LIBRARY
+  DCMTK_dcmdata_INCLUDE_DIR
+  DCMTK_dcmdata_LIBRARY
+  DCMTK_dcmimgle_INCLUDE_DIR
+  DCMTK_dcmimgle_LIBRARY)
 
 # Compatibility: This variable is deprecated
 set(DCMTK_INCLUDE_DIR ${DCMTK_INCLUDE_DIRS})
