@@ -120,7 +120,7 @@ foreach(dir
 endforeach()
 
 if(WIN32)
-  list(APPEND DCMTK_LIBRARIES netapi32)
+  list(APPEND DCMTK_LIBRARIES netapi32 wsock32)
 endif()
 
 if(DCMTK_ofstd_INCLUDE_DIR)
