@@ -116,7 +116,7 @@ unsigned int LookupTable::GetLUTLength(LookupTableType type) const
 void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
   unsigned int length)
 {
-  if( !Initialized() ) return;
+  //if( !Initialized() ) return;
   if( !IncompleteLUT )
     {
     assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );
