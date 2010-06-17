@@ -30,6 +30,7 @@ SET(EXAMPLES_SRCS
   SimpleScanner
   TraverseModules
   GetSequenceUltrasound
+  ChangeSequenceUltrasound
   LargeVRDSExplicit
   ExtractEncryptedContent
   ReadAndDumpDICOMDIR
