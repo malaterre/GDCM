@@ -46,7 +46,7 @@ if os.name == 'posix':
     try:
       import DLFCN as dl
     except ImportError:
-      print "Could not import dl"
+      #print "Could not import dl"
       dl = None
   if dl:
     #print "dl was imported"
