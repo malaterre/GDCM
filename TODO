@@ -395,3 +395,5 @@ passepartout-0.6› src› ps› pdfparser.ccC
 http://www.cocoabuilder.com/archive/cocoa/114723-pdf-meta-data.html#115418
 http://blog.didierstevens.com/programs/pdf-tools/
 http://sourceforge.net/projects/pdfsqueezer/develop
+-----------------------------------------------------------------------
+FIX Iterator in gdcm::Dict
