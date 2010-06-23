@@ -85,14 +85,14 @@ int main(int argc, char *argv[])
   gdcm::File &f = w.GetFile();
   gdcm::DataSet &ds = f.GetDataSet();
 
-      gdcm::FileExplicitFilter fef;
-      fef.SetChangePrivateTags( changeprivatetags );
-      fef.SetFile( w.GetFile() );
-      if( !fef.Change() )
-        {
-        std::cerr << "Failed to change: " << filename << std::endl;
-        return 1;
-        }
+  gdcm::FileExplicitFilter fef;
+  //fef.SetChangePrivateTags( true );
+  fef.SetFile( w.GetFile() );
+  if( !fef.Change() )
+    {
+    std::cerr << "Failed to change" << std::endl;
+    return 1;
+    }
 
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
