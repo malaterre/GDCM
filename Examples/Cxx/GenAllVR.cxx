@@ -27,6 +27,7 @@
 #include "gdcmDicts.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmFileExplicitFilter.h"
 
 #include <cstdlib>
 #include <cstring>
@@ -83,6 +84,15 @@ int main(int argc, char *argv[])
 
   gdcm::File &f = w.GetFile();
   gdcm::DataSet &ds = f.GetDataSet();
+
+      gdcm::FileExplicitFilter fef;
+      fef.SetChangePrivateTags( changeprivatetags );
+      fef.SetFile( w.GetFile() );
+      if( !fef.Change() )
+        {
+        std::cerr << "Failed to change: " << filename << std::endl;
+        return 1;
+        }
 
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
