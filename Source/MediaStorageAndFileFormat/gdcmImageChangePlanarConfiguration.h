@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageChangePlanarConfiguration_h
-#define __gdcmImageChangePlanarConfiguration_h
+#ifndef GDCMIMAGECHANGEPLANARCONFIGURATION_H
+#define GDCMIMAGECHANGEPLANARCONFIGURATION_H
 
 #include "gdcmImageToImageFilter.h"
 
@@ -88,5 +88,5 @@ size_t ImageChangePlanarConfiguration::RGBPixelsToRGBPlanes(T *r, T *g, T *b, co
 
 } // end namespace gdcm
 
-#endif //__gdcmImageChangePlanarConfiguration_h
+#endif //GDCMIMAGECHANGEPLANARCONFIGURATION_H
 

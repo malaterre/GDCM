@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -51,6 +51,16 @@ bool ImageCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
   assert( 0 );
   return false;
+}
+
+void ImageCodec::SetLossyFlag(bool l)
+{
+  LossyFlag = l;
+}
+
+bool ImageCodec::GetLossyFlag() const
+{
+  return LossyFlag;
 }
 
 bool ImageCodec::IsLossy() const
@@ -203,6 +213,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   delete[] dummy_buffer /*copy*/;
 
   os.write(copy /*dummy_buffer*/, buf_size);
+  delete[] copy;
   return true;
 }
 

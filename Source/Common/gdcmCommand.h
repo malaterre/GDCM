@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,19 +12,18 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCommand_h
-#define __gdcmCommand_h
+#ifndef GDCMCOMMAND_H
+#define GDCMCOMMAND_H
 
 #include "gdcmSubject.h"
 
 namespace gdcm
 {
 class Event;
-//-----------------------------------------------------------------------------
+
 /**
- * \class Command
- * \brief superclass for callback/observer methods
- *
+ * \brief Command superclass for callback/observer methods
+ * \see Subject
  */
 class GDCM_EXPORT Command : public Subject
 {
@@ -34,7 +33,8 @@ public :
 
   /** Abstract method that defines the action to be taken by the command.
    * This variant is expected to be used when requests comes from a 
-   * const Object */
+   * const Object 
+   */
   virtual void Execute(const Subject *caller, const Event & event ) = 0;
 
 protected:
@@ -67,14 +67,13 @@ public:
   //typedef SmartPointer<Self>  Pointer;
   
   /** Method for creation through the object factory. */
-  //itkNewMacro(Self);
   static SmartPointer<MemberCommand> New()
     {
     return new MemberCommand;
     }
  
   /** Run-time type information (and related methods). */
-  //itkTypeMacro(MemberCommand,Command);
+  //gdcmTypeMacro(MemberCommand,Command);
 
   /**  Set the callback function along with the object that it will
    *  be invoked on. */
@@ -141,7 +140,7 @@ public:
   //typedef SmartPointer<Self>    Pointer;
   
   /** Run-time type information (and related methods). */
-  //itkTypeMacro(SimpleMemberCommand,Command);
+  //gdcmTypeMacro(SimpleMemberCommand,Command);
 
   /** Method for creation through the object factory. */
   static SmartPointer<SimpleMemberCommand> New()
@@ -186,4 +185,4 @@ private:
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmCommand_h
+#endif //GDCMCOMMAND_H

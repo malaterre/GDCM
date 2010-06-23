@@ -20,14 +20,13 @@
 // .SECTION See Also
 // vtkLookupTable 
 
-#ifndef __vtkLookupTable16_h
-#define __vtkLookupTable16_h
+#ifndef VTKLOOKUPTABLE16_H
+#define VTKLOOKUPTABLE16_H
 
 #include "vtkLookupTable.h"
 #include "vtkUnsignedShortArray.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
-class GDCM_EXPORT vtkLookupTable16 : public vtkLookupTable
+class VTK_EXPORT vtkLookupTable16 : public vtkLookupTable
 {
 public:
   static vtkLookupTable16 *New();

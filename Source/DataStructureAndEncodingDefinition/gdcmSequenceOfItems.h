@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmSequenceOfItems_h
-#define __gdcmSequenceOfItems_h
+#ifndef GDCMSEQUENCEOFITEMS_H
+#define GDCMSEQUENCEOFITEMS_H
 
 #include "gdcmValue.h"
 #include "gdcmItem.h"
@@ -213,6 +213,13 @@ public:
   }
   bool FindDataElement(const Tag &t) const;
 
+  bool operator==(const Value &val) const
+    {
+    const SequenceOfItems &sqi = dynamic_cast<const SequenceOfItems&>(val);
+    return SequenceLengthField == sqi.SequenceLengthField &&
+      Items == sqi.Items;
+    }
+
 private:
 public:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
@@ -225,5 +232,5 @@ public:
 
 #include "gdcmSequenceOfItems.txx"
 
-#endif //__gdcmSequenceOfItems_h
+#endif //GDCMSEQUENCEOFITEMS_H
 

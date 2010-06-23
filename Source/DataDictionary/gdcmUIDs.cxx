@@ -7,7 +7,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -183,6 +183,7 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.66.2","Spatial Fiducials Storage"},
 {"1.2.840.10008.5.1.4.1.1.66.3","Deformable Spatial Registration Storage"},
 {"1.2.840.10008.5.1.4.1.1.66.4","Segmentation Storage"},
+{"1.2.840.10008.5.1.4.1.1.66.5","Surface Segmentation Storage"}, // Sup 132
 {"1.2.840.10008.5.1.4.1.1.67","Real World Value Mapping Storage"},
 {"1.2.840.10008.5.1.4.1.1.77.1","VL Image Storage - Trial"},
 {"1.2.840.10008.5.1.4.1.1.77.2","VL Multi-frame Image Storage - Trial"},
@@ -323,6 +324,8 @@ namespace gdcm
 {"2.16.840.1.113709.1.2.2" , "COMPRESS_EXPRESS TRANSFER SYNTAX" },
 {"1.2.840.113543.6.6.1.3.10002", "Unregistred (?) Philips3D" },
 {"1.2.392.200036.9116.7.8.1.1.1", "Toshiba Private Data Storage" },
+// business.fujifilm.co.uk/medical/downloads/DICOM_xg1.pdf
+{"1.2.392.200036.9125.1.1.2" , "Fuji Private CR Image Storage"},
 /* CREF4.09-80_iSite4.1DICOMConformance.pdf 
 Correction: 1.2.840113619.4.27 -> 1.2.840.113619.4.27 ... sigh
 DICOM_Conformance_Statement_MR_R2.6.pdf

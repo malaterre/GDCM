@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -57,7 +57,8 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {
-assert(0);
+  assert(0);
+  (void)imp;
 }
 
 void FileMetaInformation::AppendImplementationClassUID(const char * imp)
@@ -159,6 +160,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   else // Ok there is a value in (0002,0002) let see if it match (0008,0016)
     {
     bool dicomdir = ds.FindDataElement( Tag(0x0004, 0x1220) ); // Directory Record Sequence
+    (void)dicomdir;
     //if( !dicomdir )
       {
       if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
@@ -219,7 +221,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     bool dicomdir = (ms == MediaStorage::MediaStorageDirectoryStorage && dirrecsq);
     if( !dicomdir )
       {
-      if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+      if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) || ds.GetDataElement( Tag(0x0008, 0x0018) ).IsEmpty() )
         {
         throw gdcm::Exception( "No 8,18 element sorry" );
         //assert(0);
@@ -262,6 +264,10 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     // Very bad !!
     //throw Exception( "No (0002,0010) element found" );
     // Constuct it from DataSetTS
+    if( DataSetTS == TransferSyntax::TS_END )
+      {
+      throw gdcm::Exception( "No TransferSyntax specified." );
+      }
     const char* str = TransferSyntax::GetTSString(DataSetTS);
     xde.SetByteValue(str,strlen(str));
     xde.SetVR( VR::UI );

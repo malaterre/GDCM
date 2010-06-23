@@ -19,11 +19,10 @@
 // .SECTION See Also
 // vtkTesting
 
-#ifndef __vtkGDCMTesting_h
-#define __vtkGDCMTesting_h
+#ifndef VTKGDCMTESTING_H
+#define VTKGDCMTESTING_H
 
 #include "vtkObject.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 class VTK_EXPORT vtkGDCMTesting : public vtkObject
 {

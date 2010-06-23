@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -19,11 +19,13 @@
 #include "gdcmSystem.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTesting.h"
+#include "gdcmByteSwap.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 namespace gdcm
 {
 
-int TestImageChangeTransferSyntaxJ2K(const char *filename)
+int TestImageChangeTransferSyntaxJ2K(const char *filename, bool verbose = false)
 {
   ImageReader reader;
   reader.SetFileName( filename );
@@ -47,6 +49,7 @@ int TestImageChangeTransferSyntaxJ2K(const char *filename)
     }
 
   const gdcm::Image &image = reader.GetImage();
+  int pc = image.GetPlanarConfiguration();
 
   gdcm::ImageChangeTransferSyntax change;
   change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
@@ -83,7 +86,6 @@ int TestImageChangeTransferSyntaxJ2K(const char *filename)
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
     }
-  std::cout << "success: " << outfilename << std::endl;
 
   // Let's read that file back in !
   ImageReader reader2;
@@ -91,10 +93,74 @@ int TestImageChangeTransferSyntaxJ2K(const char *filename)
   reader2.SetFileName( outfilename.c_str() );
   if ( !reader2.Read() )
     {
+    std::cerr << "Could not even reread our generated file : " << outfilename << std::endl;
     return 1;
     }
-  // TODO: need to check decompression equal initial buffer !
-  return 0;
+  // Check that after decompression we still find the same thing:
+  int res = 0;
+  gdcm::Image img = reader2.GetImage();
+  // When recompressing: US-RGB-8-epicard.dcm, make sure to compute the md5 using the
+  // same original Planar Configuration...
+  if( img.GetPlanarConfiguration() !=  pc )
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetInput( reader2.GetImage() );
+    icpc.SetPlanarConfiguration( pc );
+    icpc.Change();
+    img = icpc.GetOutput();
+    }
+  //std::cerr << "Success to read image from file: " << filename << std::endl;
+  unsigned long len = img.GetBufferLength();
+  char* buffer = new char[len];
+  bool res2 = img.GetBuffer(buffer);
+  if( !res2 )
+    {
+    std::cerr << "could not get buffer: " << outfilename << std::endl;
+    return 1;
+    }
+  // On big Endian system we have byteswapped the buffer (duh!)
+  // Since the md5sum is byte based there is now way it would detect
+  // that the file is written in big endian word, so comparing against
+  // a md5sum computed on LittleEndian would fail. Thus we need to
+  // byteswap (again!) here:
+#ifdef GDCM_WORDS_BIGENDIAN
+  if( img.GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    assert( !(len % 2) );
+    assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
+      || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
+    gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
+      (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
+    }
+#endif
+  const char *ref = gdcm::Testing::GetMD5FromFile(filename);
+
+  char digest[33];
+  gdcm::Testing::ComputeMD5(buffer, len, digest);
+  if( !ref )
+    {
+    // new regression image needs a md5 sum
+    std::cerr << "Missing md5 " << digest << " for: " << filename <<  std::endl;
+    //assert(0);
+    res = 1;
+    }
+  else if( strcmp(digest, ref) )
+    {
+    std::cerr << "Problem reading image from: " << filename << std::endl;
+    std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+    res = 1;
+    }
+  if(res)
+    {
+    std::cerr << "problem with: " << outfilename << std::endl;
+    }
+  if( verbose )
+    {
+    std::cout << "file was written in: " << outfilename << std::endl;
+    }
+
+  delete[] buffer;
+  return res;
 }
 
 } // end namespace gdcm
@@ -104,7 +170,7 @@ int TestImageChangeTransferSyntax2(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestImageChangeTransferSyntaxJ2K(filename);
+    return gdcm::TestImageChangeTransferSyntaxJ2K(filename, true);
     }
 
   // else

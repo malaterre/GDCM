@@ -26,8 +26,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef __JP2_H
-#define __JP2_H
+#ifndef GDCM_JP2_H
+#define GDCM_JP2_H
 /**
 @file jp2.h
 @brief The JPEG-2000 file format Reader/Writer (JP2)
@@ -173,5 +173,5 @@ bool jp2_encode(opj_jp2_t *jp2, opj_cio_t *cio, opj_image_t *image, opj_codestre
 
 /*@}*/
 
-#endif /* __JP2_H */
+#endif /* GDCM_JP2_H */
 

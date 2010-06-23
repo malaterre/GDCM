@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmRescaler.h"
+#include <limits>
 
 #include <stdlib.h> // atof
 
@@ -50,17 +51,17 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   ir.SetMinMaxForPixelType( smin, smax );
   
   double outref[] = { 0 };
-{
-  char *copy = (char*)outref;
-  const uint16_t in[] = { 1. };
-  const char *tempimage = (char*)in;
-  size_t vtklen = sizeof(in);
-  ir.SetPixelFormat( gdcm::PixelFormat::UINT16 );
-  bool b = ir.Rescale(copy,tempimage,vtklen);
-  if( !b ) return 1;
+    {
+    char *copy = (char*)outref;
+    const uint16_t in[] = { 1. };
+    const char *tempimage = (char*)in;
+    size_t vtklen = sizeof(in);
+    ir.SetPixelFormat( gdcm::PixelFormat::UINT16 );
+    bool b = ir.Rescale(copy,tempimage,vtklen);
+    if( !b ) return 1;
 
-  std::cout << outref[0] << std::endl;
-}
+    std::cout << outref[0] << std::endl;
+    }
 
   ir.SetPixelFormat( gdcm::PixelFormat::FLOAT64 );
   uint16_t out[] = { 0 };
@@ -68,12 +69,12 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   //const double in[] = { 3.77417493 };
   const double in[] = { 3.774175 };
   if( outref[0] != in[0] )
-  {
+    {
     std::cerr << "Wrong input/output:" << std::endl;
     std::cerr << outref[0] << " vs " << in[0] << std::endl;
     std::cerr << (outref[0] - in[0]) << std::endl;
     return 1;
-  }
+    }
   const char *tempimage = (char*)in;
   size_t vtklen = sizeof(in);
   ir.InverseRescale(copy,tempimage,vtklen);
@@ -83,6 +84,53 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
     {
     return 1;
     }
+
+  // Let's make sure that rescaler works in the simpliest case
+  // it should be idempotent:
+  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16;
+  gdcm::Rescaler r;
+  r.SetIntercept( 0.0 );
+  r.SetSlope( 1.0 );
+  r.SetPixelFormat( pixeltype );
+  gdcm::PixelFormat::ScalarType outputpt;
+  outputpt = r.ComputeInterceptSlopePixelType();
+
+  if( outputpt != pixeltype )
+    {
+    return 1;
+    }
+  if( ! (outputpt == pixeltype) )
+    {
+    return 1;
+    }
+
+{
+  gdcm::PixelFormat::ScalarType outputpt ;
+  double shift = -1024;
+  double scale = 1;
+  // gdcmData/CT-MONO2-16-ort.dcm
+  gdcm::PixelFormat pixeltype( 1, 16, 16, 15, 1 );
+  gdcm::Rescaler r;
+  r.SetIntercept( shift );
+  r.SetSlope( scale );
+  r.SetPixelFormat( pixeltype );
+  outputpt = r.ComputeInterceptSlopePixelType();
+  // min,max = [-33792, 31743]
+  // we need at least int32 to store that
+  if( outputpt != gdcm::PixelFormat::INT32 ) 
+    {
+    return  1;
+    }
+  // let's pretend image is really the full range:
+  // FIXME: I think it is ok to compute this way since shift is double anyway:
+  r.SetMinMaxForPixelType(std::numeric_limits<int16_t>::min() + shift,std::numeric_limits<int16_t>::max() + shift );
+
+  gdcm::PixelFormat pf2 = r.ComputePixelTypeFromMinMax();
+  if( pf2 != pixeltype )
+    {
+    return 1;
+    }
+}
 
   return 0;
 }

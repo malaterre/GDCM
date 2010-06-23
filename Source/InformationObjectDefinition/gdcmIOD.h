@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmIOD_h
-#define __gdcmIOD_h
+#ifndef GDCMIOD_H
+#define GDCMIOD_H
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
@@ -24,6 +24,7 @@
 namespace gdcm
 {
 class DataSet;
+class Defs;
 
 /**
  * \brief Class for representing a IOD
@@ -55,6 +56,8 @@ public:
     return IODInternal[idx];
     }
 
+  Type GetTypeFromTag(const Defs &defs, const Tag& tag) const;
+
 private:
   //IOD &operator=(const IOD &_val); // purposely not implemented
   //IOD(const IOD &_val); // purposely not implemented
@@ -75,5 +78,5 @@ inline std::ostream& operator<<(std::ostream& _os, const IOD &_val)
 
 } // end namespace gdcm
 
-#endif //__gdcmIOD_h
+#endif //GDCMIOD_H
 

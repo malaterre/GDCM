@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -337,7 +337,8 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       if ( jerr.pub.msg_code == JERR_BAD_PRECISION /* 18 */ )
         {
         this->BitSample = jerr.pub.msg_parm.i[0];
-        assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        assert( this->BitSample == 1 || this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        assert( this->BitSample == cinfo.data_precision );
         }
       jpeg_destroy_decompress(&cinfo);
       // TODO: www.dcm4che.org/jira/secure/attachment/10185/ct-implicit-little.dcm
@@ -385,16 +386,25 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     this->Dimensions[0] = cinfo.image_width;		/* Number of columns in image */
 
     int prep = this->PF.GetPixelRepresentation();
-    if( this->BitSample == 8 )
+    //this->BitSample = cinfo.data_precision;
+    int precision = cinfo.data_precision;
+    // if lossy it should only be 8 or 12, but for lossless it can be [2-16]
+    if( precision == 1 )
+      {
+      // lossless !
+      this->PF = PixelFormat( PixelFormat::SINGLEBIT );
+      }
+    else if( precision <= 8 )
       {
       this->PF = PixelFormat( PixelFormat::UINT8 );
       }
-    else if( this->BitSample == 12 )
+    else if( precision <= 12 )
       {
       this->PF = PixelFormat( PixelFormat::UINT12 );
       }
-    else if( this->BitSample == 16 )
+    else if( precision <= 16 )
       {
+      // lossless !
       this->PF = PixelFormat( PixelFormat::UINT16 );
       }
     else
@@ -402,6 +412,9 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       assert( 0 );
       }
     this->PF.SetPixelRepresentation( prep );
+    this->PF.SetBitsStored( precision );
+    assert( (precision - 1) >= 0 );
+    this->PF.SetHighBit( precision - 1 );
 
     // Let's check the color space:
     //  JCS_UNKNOWN    -> 0
@@ -487,9 +500,26 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     else if( this->BitSample == 12 )
       ts = TransferSyntax::JPEGExtendedProcess2_4;
     }
+  else if( cinfo.process == JPROC_PROGRESSIVE )
+    {
+    if( this->BitSample == 12 )
+      ts = TransferSyntax::JPEGFullProgressionProcess10_12;
+    else
+      {
+    assert(0); // TODO
+      }
+    }
   else
     {
     assert(0); // TODO
+    }
+  if( cinfo.process == JPROC_LOSSLESS )
+    {
+    LossyFlag = false;
+    }
+  else
+    {
+    LossyFlag = true;
     }
 
   // Pixel density stuff:
@@ -686,7 +716,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
       if ( jerr.pub.msg_code == JERR_BAD_PRECISION /* 18 */ )
         {
         this->BitSample = jerr.pub.msg_parm.i[0];
-        assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
+        //assert( this->BitSample == 8 || this->BitSample == 12 || this->BitSample == 16 );
         }
       jpeg_destroy_decompress(&cinfo);
       // TODO: www.dcm4che.org/jira/secure/attachment/10185/ct-implicit-little.dcm
@@ -786,17 +816,24 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         }
       if ( cinfo.process == JPROC_LOSSLESS )
         {
-        cinfo.jpeg_color_space = JCS_UNKNOWN;
-        cinfo.out_color_space = JCS_UNKNOWN;
+        //cinfo.jpeg_color_space = JCS_UNKNOWN;
+        //cinfo.out_color_space = JCS_UNKNOWN;
         }
       break;
     case JCS_CMYK:
       assert( GetPhotometricInterpretation() == PhotometricInterpretation::CMYK );
-        if ( cinfo.process == JPROC_LOSSLESS )
-          {
-          cinfo.jpeg_color_space = JCS_UNKNOWN;
-          cinfo.out_color_space = JCS_UNKNOWN;
-          }
+      if ( cinfo.process == JPROC_LOSSLESS )
+        {
+        cinfo.jpeg_color_space = JCS_UNKNOWN;
+        cinfo.out_color_space = JCS_UNKNOWN;
+        }
+      break;
+    case JCS_UNKNOWN:
+      if ( cinfo.process == JPROC_LOSSLESS )
+        {
+        cinfo.jpeg_color_space = JCS_UNKNOWN;
+        cinfo.out_color_space = JCS_UNKNOWN;
+        }
       break;
     default:
       assert(0);

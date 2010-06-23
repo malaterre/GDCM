@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSimpleSubjectWatcher_h
-#define __gdcmSimpleSubjectWatcher_h
+#ifndef GDCMSIMPLESUBJECTWATCHER_H
+#define GDCMSIMPLESUBJECTWATCHER_H
 
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
@@ -25,8 +25,8 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 class Event;
 /**
- * \class SimpleSubjectWatcher
- *
+ * \brief SimpleSubjectWatcher
+ * This is a typical Subject Watcher class. It will observe all events.
  */
 class GDCM_EXPORT SimpleSubjectWatcher
 {
@@ -37,7 +37,7 @@ public:
 protected:
   virtual void StartFilter();
   virtual void EndFilter();
-  virtual void ShowProgress();
+  virtual void ShowProgress(Subject *caller, const Event &evt);
   virtual void ShowIteration();
   virtual void ShowAnonymization(Subject *caller, const Event &evt);
   virtual void ShowAbort();
@@ -52,13 +52,13 @@ private:
   std::string m_Comment;
 
   typedef SimpleMemberCommand<SimpleSubjectWatcher> SimpleCommandType;
+  typedef MemberCommand<SimpleSubjectWatcher> CommandType;
+
   SmartPointer<SimpleCommandType> m_StartFilterCommand;
   SmartPointer<SimpleCommandType> m_EndFilterCommand;
-  SmartPointer<SimpleCommandType> m_ProgressFilterCommand;
+  SmartPointer<CommandType> m_ProgressFilterCommand;
   SmartPointer<SimpleCommandType> m_IterationFilterCommand;
   SmartPointer<SimpleCommandType> m_AbortFilterCommand;
-
-  typedef MemberCommand<SimpleSubjectWatcher> CommandType;
   SmartPointer<CommandType> m_AnonymizeFilterCommand;
 
   unsigned long m_StartTag;
@@ -75,4 +75,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmSimpleSubjectWatcher_h
+#endif //GDCMSIMPLESUBJECTWATCHER_H

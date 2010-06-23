@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -82,6 +82,7 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
       iodname = "CR Image IOD Modules";
       break;
     case MediaStorage::XRayAngiographicImageStorage:
+    //case MediaStorage::XRayAngiographicBiPlaneImageStorageRetired: // FIXME ???
       iodname = "X Ray Angiographic Image IOD Modules";
       break;
     case MediaStorage::UltrasoundImageStorageRetired:
@@ -94,9 +95,6 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
       break;
     case MediaStorage::SecondaryCaptureImageStorage:
       iodname = "SC Image IOD Modules";
-      break;
-    case MediaStorage::DigitalXRayImageStorageForPresentation:
-      iodname = "Digital X Ray Image IOD Modules";
       break;
     case MediaStorage::XRayRadiofluoroscopingImageStorage:
       iodname = "XRF Image IOD Modules";
@@ -123,14 +121,122 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::EncapsulatedPDFStorage:
       iodname = "Encapsulated PDF IOD Modules";
       break;
+    case MediaStorage::VLPhotographicImageStorage:
+      iodname = "VL Photographic Image IOD Modules";
+      break;
+    case MediaStorage::SegmentationStorage:
+      iodname = "Segmentation IOD Modules";
+      break;
+    case MediaStorage::RawDataStorage:
+      iodname = "Raw Data IOD Modules";
+      break;
+    case MediaStorage::MammographyCADSR:
+      iodname = "Mammography CAD SR IOD Modules";
+      break;
+    case MediaStorage::VideoEndoscopicImageStorage:
+      iodname = "Video Endoscopic Image IOD Modules";
+      break;
+    case MediaStorage::RTImageStorage:
+      iodname = "RT Image IOD Modules";
+      break;
+    case MediaStorage::RTDoseStorage:
+      iodname = "RT Dose IOD Modules";
+      break;
+    case MediaStorage::RTStructureSetStorage:
+      iodname = "RT Structure Set IOD Modules";
+      break;
+    case MediaStorage::RTPlanStorage:
+      iodname = "RT Plan IOD Modules";
+      break;
+    case MediaStorage::ModalityPerformedProcedureStepSOPClass:
+      iodname = "Modality Performed Procedure Step IOD Modules";
+      break;
+    case MediaStorage::HangingProtocolStorage:
+      iodname = "Hanging Protocol IOD Modules";
+      break;
+    case MediaStorage::KeyObjectSelectionDocument:
+      iodname = "Key Object Selection Document IOD Modules";
+      break;
+    case MediaStorage::ComprehensiveSR:
+      iodname = "Comprehensive SR IOD Modules";
+      break;
+    case MediaStorage::HemodynamicWaveformStorage:
+      iodname = "Hemodynamic IOD Modules";
+      break;
+    case MediaStorage::DigitalIntraoralXrayImageStorageForPresentation:
+    case MediaStorage::DigitalIntraoralXRayImageStorageForProcessing:
+      iodname = "Digital Intra Oral X Ray Image IOD Modules";
+      break;
+    case MediaStorage::DigitalXRayImageStorageForPresentation:
+    case MediaStorage::DigitalXRayImageStorageForProcessing:
+      iodname = "Digital X Ray Image IOD Modules";
+      break;
     case MediaStorage::DigitalMammographyImageStorageForPresentation:
     case MediaStorage::DigitalMammographyImageStorageForProcessing:
       iodname = "Digital Mammography X Ray Image IOD Modules";
+      break;
+    case MediaStorage::GrayscaleSoftcopyPresentationStateStorageSOPClass:
+      iodname = "Grayscale Softcopy Presentation State IOD Modules";
+      break;
+    case MediaStorage::LeadECGWaveformStorage:
+      iodname = "12 Lead ECG IOD Modules";
+      break;
+    case MediaStorage::GeneralECGWaveformStorage:
+      iodname = "General ECG IOD Modules";
+      break;
+    case MediaStorage::AmbulatoryECGWaveformStorage:
+      iodname = "Ambulatory ECG IOD Modules";
+      break;
+    case MediaStorage::BasicVoiceAudioWaveformStorage:
+      iodname = "Basic Voice Audio IOD Modules";
+      break;
+    case MediaStorage::SpacialFiducialsStorage:
+      iodname = "Spatial Fiducials IOD Modules";
+      break;
+    case MediaStorage::BasicTextSR:
+      iodname = "Basic Text SR IOD Modules";
+      break;
+    case MediaStorage::CardiacElectrophysiologyWaveformStorage:
+      iodname = "Basic Cardiac EP IOD Modules";
+      break;
+    case MediaStorage::PETImageStorage:
+      iodname = "PET Image IOD Modules";
+      break;
+    case MediaStorage::EnhancedSR:
+      iodname = "Enhanced SR IOD Modules";
+      break;
+    case MediaStorage::SpacialRegistrationStorage:
+      iodname = "Spatial Registration IOD Modules";
+      break;
+    case MediaStorage::RTIonPlanStorage:
+      iodname = "RT Ion Plan IOD Modules";
+      break;
+    case MediaStorage::XRay3DAngiographicImageStorage:
+      iodname = "X Ray 3D Angiographic Image IOD Modules";
+      break;
+    case MediaStorage::EnhancedXAImageStorage:
+      iodname = "Enhanced X Ray Angiographic Image IOD Modules";
       break;
     default:
       iodname = 0;
     }
   return iodname;
+}
+
+const IOD& Defs::GetIODFromFile(const File& file) const
+{
+  MediaStorage ms;
+  ms.SetFromFile(file); // SetFromDataSet does not handle DICOMDIR
+
+  const IODs &iods = GetIODs();
+  const char *iodname = GetIODNameFromMediaStorage( ms );
+  if( !iodname )
+    {
+    gdcmErrorMacro( "Not implemented: " << ms );
+    throw "Not Implemented";
+    }
+  const IOD &iod = iods.GetIOD( iodname );
+  return iod;
 }
 
 Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
@@ -148,6 +254,7 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
     return ret;
     }
   const IOD &iod = iods.GetIOD( iodname );
+  const Macros &macros = GetMacros();
 
   unsigned int niods = iod.GetNumberOfIODs();
   // Iterate over each iod entry in order:
@@ -158,9 +265,9 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
     //Usage::UsageType ut = iodentry.GetUsageType();
 
     const Module &module = modules.GetModule( ref );
-    if( module.FindModuleEntry( tag ) )
+    if( module.FindModuleEntryInMacros(macros, tag ) )
       {
-      const ModuleEntry &module_entry = module.GetModuleEntry(tag);
+      const ModuleEntry &module_entry = module.GetModuleEntryInMacros(macros,tag);
       ret = module_entry.GetType();
       }
     }

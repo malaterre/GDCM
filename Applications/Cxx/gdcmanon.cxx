@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -43,14 +43,23 @@ static void PrintVersion()
 
 
 static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, const char *outfilename,
-  std::vector<gdcm::Tag> const &empty_tags, std::vector<gdcm::Tag> const &remove_tags, std::vector< std::pair<gdcm::Tag, std::string> > const & replace_tags)
+  std::vector<gdcm::Tag> const &empty_tags, std::vector<gdcm::Tag> const &remove_tags, std::vector< std::pair<gdcm::Tag, std::string> > const & replace_tags, bool continuemode = false)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
     std::cerr << "Could not read : " << filename << std::endl;
-    return false;
+    if( continuemode )
+      {
+      std::cerr << "Skipping from anonymization process (continue mode)." << std::endl;
+      return true;
+      }
+    else
+      {
+      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      return false;
+      }
     }
   gdcm::File &file = reader.GetFile();
 
@@ -85,19 +94,37 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
   if( !writer.Write() )
     {
     std::cerr << "Could not Write : " << outfilename << std::endl;
+    if( strcmp(filename,outfilename) != 0 )
+      {
+      gdcm::System::RemoveFile( outfilename );
+      }
+    else
+      {
+      std::cerr << "gdcmanon just corrupted: " << filename << " for you (data lost)." << std::endl;
+      }
+
     return false;
     }
   return true;
 }
 
-static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename)
+static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename, bool continuemode = false)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
     std::cerr << "Could not read : " << filename << std::endl;
-    return false;
+    if( continuemode )
+      {
+      std::cerr << "Skipping from anonymization process (continue mode)." << std::endl;
+      return true;
+      }
+    else
+      {
+      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      return false;
+      }
     }
   gdcm::File &file = reader.GetFile();
   gdcm::MediaStorage ms;
@@ -127,6 +154,8 @@ static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const
     fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
     fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
     fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
+    fmi.Remove( gdcm::Tag(0x0002,0x0100) ); //  '   '    ' // PrivateInformationCreatorUID
+    fmi.Remove( gdcm::Tag(0x0002,0x0102) ); //  '   '    ' // PrivateInformation
 
     }
   else if ( reidentify )
@@ -144,6 +173,15 @@ static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const
   if( !writer.Write() )
     {
     std::cerr << "Could not Write : " << outfilename << std::endl;
+    if( strcmp(filename,outfilename) != 0 )
+      {
+      gdcm::System::RemoveFile( outfilename );
+      }
+    else
+      {
+      std::cerr << "gdcmanon just corrupted: " << filename << " for you (data lost)." << std::endl;
+      }
+
     return false;
     }
   return true;
@@ -184,6 +222,8 @@ static void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "  -i --input                  DICOM filename / directory" << std::endl;
   std::cout << "  -o --output                 DICOM filename / directory" << std::endl;
+  std::cout << "  -r --recursive              recursively process (sub-)directories." << std::endl;
+  std::cout << "     --continue               Do not stop when file found is not DICOM." << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "  -k --key                    Path to RSA Private Key." << std::endl;
@@ -271,6 +311,7 @@ int main(int argc, char *argv[])
   int help = 0;
   int version = 0;
   int recursive = 0;
+  int continuemode = 0;
   int empty_tag = 0;
   int remove_tag = 0;
   int replace_tag = 0;
@@ -301,6 +342,7 @@ int main(int argc, char *argv[])
         {"empty", 1, &empty_tag, 1}, // 15
         {"remove", 1, &remove_tag, 1},
         {"replace", 1, &replace_tag, 1},
+        {"continue", 0, &continuemode, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -312,7 +354,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:dek:c:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:rdek:c:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -366,27 +408,43 @@ int main(int argc, char *argv[])
           else if( option_index == 15 ) /* empty */
             {
             assert( strcmp(s, "empty") == 0 );
-            tag.ReadFromCommaSeparatedString(optarg);
+            if( !tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              return 1;
+              }
             empty_tags.push_back( tag );
             }
           else if( option_index == 16 ) /* remove */
             {
             assert( strcmp(s, "remove") == 0 );
-            tag.ReadFromCommaSeparatedString(optarg);
+            if( !tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              return 1;
+              }
             remove_tags.push_back( tag );
             }
           else if( option_index == 17 ) /* replace */
             {
             assert( strcmp(s, "replace") == 0 );
-            tag.ReadFromCommaSeparatedString(optarg);
+            if( !tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              return 1;
+              }
             std::stringstream ss;
             ss.str( optarg );
-            int dummy;
-            char cdummy;
-            ss >> dummy;
+            uint16_t dummy;
+            char cdummy; // comma
+            ss >> std::hex >> dummy;
+            assert( tag.GetGroup() == dummy );
             ss >> cdummy;
-            ss >> dummy;
+            assert( cdummy == ',' );
+            ss >> std::hex >> dummy;
+            assert( tag.GetElement() == dummy );
             ss >> cdummy;
+            assert( cdummy == ',' );
             std::string str;
             ss >> str;
             replace_tags_value.push_back( std::make_pair(tag, str) );
@@ -580,26 +638,42 @@ int main(int argc, char *argv[])
     {
     if( !gdcm::System::FileIsDirectory(outfilename.c_str()) )
       {
-      //std::cout << "Making directory: " << outfilename << std::endl;
-      if( !gdcm::System::MakeDirectory( outfilename.c_str() ) )
+      if( gdcm::System::FileExists( outfilename.c_str() ) )
         {
-        std::cerr << "Could not create directory: " << outfilename << std::endl;
+        std::cerr << "Could not create directory since " << outfilename << " is already a file" << std::endl;
         return 1;
         }
+
       }
     // For now avoid user mistake
     if( filename == outfilename )
       {
+      std::cerr << "Input directory should be different from output directory" << std::endl;
       return 1;
       }
     nfiles = dir.Load(filename, recursive);
     filenames = dir.GetFilenames();
     gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+    // Prepare outfilenames
     for( ; it != filenames.end(); ++it )
       {
-      std::string dup = *it;
-      std::string out = dup.replace(0, filename.size(), outfilename );
+      std::string dup = *it; // make a copy
+      std::string &out = dup.replace(0, filename.size(), outfilename );
       outfilenames.push_back( out );
+      }
+    // Prepare outdirectory
+    gdcm::Directory::FilenamesType const &dirs = dir.GetDirectories();
+    gdcm::Directory::FilenamesType::const_iterator itdir = dirs.begin();
+    for( ; itdir != dirs.end(); ++itdir )
+      {
+      std::string dirdup = *itdir; // make a copy
+      std::string &dirout = dirdup.replace(0, filename.size(), outfilename );
+      //std::cout << "Making directory: " << dirout << std::endl;
+      if( !gdcm::System::MakeDirectory( dirout.c_str() ) )
+        {
+        std::cerr << "Could not create directory: " << dirout << std::endl;
+        return 1;
+        }
       }
     }
   else
@@ -649,6 +723,7 @@ int main(int argc, char *argv[])
   // All set, then load the XML files:
   if( !g.LoadResourcesFiles() )
     {
+    std::cerr << "Could not load XML file from specified path" << std::endl;
     return 1;
     }
   const gdcm::Defs &defs = g.GetDefs(); (void)defs;
@@ -696,7 +771,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value) )
+      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, continuemode) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;
@@ -709,7 +784,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFile(anon, in, out) )
+      if( !AnonymizeOneFile(anon, in, out, continuemode) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;

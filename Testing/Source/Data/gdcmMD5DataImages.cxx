@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -640,6 +640,14 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "c57035e2dac52e339b27e8c965251b3d" , "DCMTK_JPEGExt_12Bits.dcm" }, // checked with dcmdjpeg v3.5.4+ 2009-05-07
 
+{ "d7673c8575cb2765f8ae25aa3899c77e","PHILIPS_GDCM12xBug.dcm"},
+{ "a597540a79306be4710f4f04497fc23a","PHILIPS_GDCM12xBug2.dcm"},
+
+{ "1e8843c2d247f9e9e7a44c9c6de43f6d", "multiframegrayscalewordscis.dcm" },
+{ "928b41468193f0eecaea216866bbe735", "signedtruecoloroldsc.dcm" },
+{ "209bc9b02004a712f0436a1ca5e676b4", "multiframesinglebitscis.dcm" },
+{ "c8698fa1ec0b227113f244954b8e88f4", "multiframegrayscalebytescis.dcm" },
+{ "dce1513162a762bf43dcc3c9d5c5c3f7", "multiframetruecolorscis.dcm" },
 
 
 /* Stopping condition */

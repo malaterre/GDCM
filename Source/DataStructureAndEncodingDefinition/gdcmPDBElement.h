@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPDBElement_h
-#define __gdcmPDBElement_h
+#ifndef GDCMPDBELEMENT_H
+#define GDCMPDBELEMENT_H
 
 #include "gdcmTag.h"
 #include "gdcmVM.h"
@@ -25,8 +25,8 @@ namespace gdcm
 {
 /**
  * \brief Class to represent a PDB Element
+ * \see PDBHeader
  */
-
 class GDCM_EXPORT PDBElement
 {
 public:
@@ -65,5 +65,5 @@ inline std::ostream& operator<<(std::ostream &os, const PDBElement &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmPDBElement_h
+#endif //GDCMPDBELEMENT_H
 

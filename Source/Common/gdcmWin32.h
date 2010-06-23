@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,11 +13,11 @@
 
 =========================================================================*/
 
-#ifndef __gdcmWin32_h
-#define __gdcmWin32_h
+#ifndef GDCMWIN32_H
+#define GDCMWIN32_H
 
-#if !defined(__gdcmTypes_h)
-#error you need to include gdcmType.h instead
+#if !defined(GDCMTYPES_H)
+#error you need to include gdcmTypes.h instead
 #endif
 //-----------------------------------------------------------------------------
 #if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
@@ -38,7 +38,7 @@
 // make[1]: *** [Utilities/VTK/CMakeFiles/vtkgdcmPythonD.dir/all] Error 2
 // make: *** [all] Error 2
 
-#if ( VTK_MAJOR_VERSION == 4 )
+#if defined(VTK_MAJOR_VERSION) && ( VTK_MAJOR_VERSION == 4 )
 #undef VTK_EXPORT
 #define VTK_EXPORT GDCM_EXPORT
 #endif
@@ -70,4 +70,4 @@
 #endif //_MSC_VER
 
 //-----------------------------------------------------------------------------
-#endif //__gdcmWin32_h
+#endif //GDCMWIN32_H

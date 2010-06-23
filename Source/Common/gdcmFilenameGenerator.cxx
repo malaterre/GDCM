@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,19 +24,19 @@ namespace gdcm
 {
 
 //-----------------------------------------------------------------------------
-unsigned int FilenameGenerator::GetNumberOfFilenames() const
+FilenameGenerator::SizeType FilenameGenerator::GetNumberOfFilenames() const
 {
   return Filenames.size();
 }
 
 //-----------------------------------------------------------------------------
-void FilenameGenerator::SetNumberOfFilenames(unsigned int nfiles)
+void FilenameGenerator::SetNumberOfFilenames(SizeType nfiles)
 {
   Filenames.resize( nfiles );
 }
 
 //-----------------------------------------------------------------------------
-const char * FilenameGenerator::GetFilename(unsigned int n) const
+const char * FilenameGenerator::GetFilename(SizeType n) const
 {
   assert( n < Filenames.size() );
   return Filenames[n].c_str();
@@ -51,8 +51,8 @@ bool FilenameGenerator::Generate()
     }
   else if( Pattern.empty() && !Prefix.empty() ) // no pattern but a prefix
     {
-    const unsigned int numfiles = Filenames.size();
-    for( unsigned int i = 0; i < numfiles; ++i)
+    const SizeType numfiles = Filenames.size();
+    for( SizeType i = 0; i < numfiles; ++i)
       {
       std::ostringstream os;
       os << Prefix;
@@ -64,9 +64,9 @@ bool FilenameGenerator::Generate()
   else if( !Pattern.empty() )
     {
     std::string::size_type pat_len = Pattern.size();
-    const unsigned int padding = 10; // FIXME is this large enough for all cases ?
-    const unsigned int internal_len = pat_len + padding;
-    const unsigned int numfiles = Filenames.size();
+    const SizeType padding = 10; // FIXME is this large enough for all cases ?
+    const SizeType internal_len = pat_len + padding;
+    const SizeType numfiles = Filenames.size();
     if( numfiles == 0 )
       {
       gdcmDebugMacro( "Need to specify the number of files" );
@@ -88,11 +88,11 @@ bool FilenameGenerator::Generate()
       }
     bool success = true;
     char *internal = new char[internal_len];
-    for( unsigned int i = 0; i < numfiles && success; ++i)
+    for( SizeType i = 0; i < numfiles && success; ++i)
       {
       int res = snprintf( internal, internal_len, Pattern.c_str(), i );
       assert( res >= 0 );
-      success = (unsigned int)res < internal_len;
+      success = (SizeType)res < internal_len;
       if( Pattern.empty() )
         {
         Filenames[i] = internal;

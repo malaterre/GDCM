@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFile_h
-#define __gdcmFile_h
+#ifndef GDCMFILE_H
+#define GDCMFILE_H
 
 #include "gdcmObject.h"
 #include "gdcmDataSet.h"
@@ -24,10 +24,12 @@ namespace gdcm
 
 /**
  * \brief a DICOM File
- * See PS 3.10
- * File: A File is an ordered string of zero or more bytes, where the first byte is 
- * at the beginning of the file and the last byte at the end of the File. Files are 
- * identified by a unique File ID and may by written, read and/or deleted.
+ * See PS 3.10 File: A File is an ordered string of zero or more bytes, where
+ * the first byte is at the beginning of the file and the last byte at the end
+ * of the File. Files are identified by a unique File ID and may by written,
+ * read and/or deleted.
+ *
+ * \see Reader Writer
  */
 class GDCM_EXPORT File : public Object
 {
@@ -37,17 +39,28 @@ public:
 
   friend std::ostream &operator<<(std::ostream &os, const File &val);
 
-  // Read
+  /// Read
   std::istream &Read(std::istream &is);
 
-  // Write
+  /// Write
   std::ostream const &Write(std::ostream &os) const;
 
+  /// Get File Meta Information
   const FileMetaInformation &GetHeader() const { return Header; }
+
+  /// Get File Meta Information
   FileMetaInformation &GetHeader() { return Header; }
+
+  /// Set File Meta Information
   void SetHeader( const FileMetaInformation &fmi ) { Header = fmi; }
+
+  /// Get Data Set
   const DataSet &GetDataSet() const { return DS; }
+
+  /// Get Data Set
   DataSet &GetDataSet() { return DS; }
+
+  /// Set Data Set
   void SetDataSet( const DataSet &ds) { DS = ds; }
 
 private:
@@ -65,5 +78,5 @@ inline std::ostream& operator<<(std::ostream &os, const File &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmFile_h
+#endif //GDCMFILE_H
 

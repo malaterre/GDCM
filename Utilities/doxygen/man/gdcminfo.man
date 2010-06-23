@@ -104,13 +104,60 @@ PixelRepresentation:1
 Orientation Label: SAGITTAL
 \endverbatim
 
+\subsection md5sum Checking the md5sum of the Pixel Data
+
+After compressing a DICOM file (see gdcmconv) using a lossless compression
+algorithm, it is fairly easy to compare the two files for differences at DICOM
+attribute level.  However one operation is slightly easier to do: how to make
+sure the compression was actually lossless ? In this case one could use the
+--md5sum operation.
+
+Take an uncompressed DICOM image file:
+
+\verbatim
+$ gdcminfo --md5sum SIEMENS_ImageLocationUN.dcm
+\endverbatim
+
+The tool return: 0621954acd5815e0b4f7b65fcc6506b1
+
+Now compress this file:
+
+\verbatim
+$ gdcmconv --jpegls SIEMENS_ImageLocationUN.dcm lossless_compressed.dcm
+\endverbatim
+
+and then check again the md5sum:
+
+\verbatim
+$ gdcminfo --md5sum lossless_compressed.dcm
+\endverbatim
+
+The tool return: 0621954acd5815e0b4f7b65fcc6506b1
+
+\subsection checking_lossless Checking if Pixel Data is lossless
+
+In come environment one wish to check whether or not the DICOM file is lossless
+or not. It is fairly easy to do that in most cases. Only in two occasion this
+is not clear from the sole DICOM Attribute. When the Transfer Syntax is JPEG
+2000 Image Compression (1.2.840.10008.1.2.4.91) and when the Transfer Syntax is
+JPEG-LS Lossy (Near-Lossless) Image Compression (1.2.840.10008.1.2.4.81).
+
+In this case, the only solution is to open the Pixel Data element, read the
+specific JPEG header and check whether or not the JPEG transformation was
+lossless or not:
+
+\verbatim
+$ gdcminfo --check-compression gdcmData/MAROTECH_CT_JP2Lossy.dcm
+\endverbatim
+
+The tool returns: "Encapsulated Stream was found to be: lossy"
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmraw</b>(1)
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>gdcmconv</b>(1)
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2009 Mathieu Malaterre
+Copyright (c) 2006-2010 Mathieu Malaterre
 
 */

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAnonymizer_h
-#define __gdcmAnonymizer_h
+#ifndef GDCMANONYMIZER_H
+#define GDCMANONYMIZER_H
 
 #include "gdcmFile.h"
 #include "gdcmSubject.h"
@@ -23,6 +23,7 @@
 namespace gdcm
 {
 class TagPath;
+class IOD;
 class CryptographicMessageSyntax;
 
 /**
@@ -33,14 +34,16 @@ class CryptographicMessageSyntax;
  * 
  * 1. dumb mode
  * This is a dumb anonymizer implementation. All it allows user is simple operation such as:
+ *
  * Tag based functions:
  * - complete removal of DICOM attribute (Remove)
- * - make a take empty, ie make it's length 0 (Empty)
+ * - make a tag empty, ie make it's length 0 (Empty)
  * - replace with another string-based value (Replace)
  * 
- * DataSet function:
+ * DataSet based functions:
  * - Remove all group length attribute from a DICOM dataset (Group Length element are deprecated, DICOM 2008)
  * - Remove all private attributes
+ * - Remove all retired attributes
  *
  * All function calls actually execute the user specified request. Previous implementation were calling 
  * a general Anonymize function but traversing a std::set is O(n) operation, while a simple user specified
@@ -57,6 +60,12 @@ class CryptographicMessageSyntax;
  * (compared to md5sum) so that we meet the following two conditions:
  *  - Produce the same dummy value for the same input value
  *  - do not provide an easy way to retrieve the original value from the sha1 generated value
+ *
+ * This class implement the Subject/Observer pattern trigger the following event:
+ * \li AnonymizeEvent
+ * \li IterationEvent
+ * \li StartEvent
+ * \li EndEvent
  *
  * \see CryptographicMessageSyntax
  */
@@ -117,15 +126,19 @@ public:
   /// for wrapped language: instanciate a reference counted object
   static SmartPointer<Anonymizer> New() { return new Anonymizer; }
 
+  /// Return the list of Tag that will be considered when anonymizing a DICOM file.
+  static std::vector<Tag> GetBasicApplicationLevelConfidentialityProfileAttributes();
+
 protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
-  bool BALCPProtect(DataSet &ds, Tag const & tag);
-  bool CanEmptyTag(Tag const &tag);
+  bool BALCPProtect(DataSet &ds, Tag const & tag, const IOD &iod);
+  bool CanEmptyTag(Tag const &tag, const IOD &iod) const;
   void RecurseDataSet( DataSet & ds );
 
 private:
   bool BasicApplicationLevelConfidentialityProfile1();
   bool BasicApplicationLevelConfidentialityProfile2();
+  bool CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const;
 
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
@@ -141,4 +154,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmAnonymizer_h
+#endif //GDCMANONYMIZER_H

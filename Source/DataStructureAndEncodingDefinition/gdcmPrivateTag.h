@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPrivateTag_h
-#define __gdcmPrivateTag_h
+#ifndef GDCMPRIVATETAG_H
+#define GDCMPRIVATETAG_H
 
 #include "gdcmTag.h"
 #include "gdcmSystem.h" // FIXME
@@ -72,6 +72,8 @@ assert(0);
     else return t1 < t2;
     }
 
+  bool ReadFromCommaSeparatedString(const char *str);
+
 private:
   // SIEMENS MED, GEMS_PETD_01 ...
   std::string Owner;
@@ -90,5 +92,5 @@ inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmPrivateTag_h
+#endif //GDCMPRIVATETAG_H
 

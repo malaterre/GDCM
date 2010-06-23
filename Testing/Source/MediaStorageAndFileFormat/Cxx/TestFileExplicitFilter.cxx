@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -82,11 +82,11 @@ int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose 
     }
   else
     {
-  if(verbose)
-{
-    std::cerr << "input file contained wrong VR: " << filename << std::endl;
-    std::cerr << "see: " << outfilename << std::endl;
-}
+    if(verbose)
+      {
+      std::cerr << "input file contained wrong VR: " << filename << std::endl;
+      std::cerr << "see: " << outfilename << std::endl;
+      }
     }
 
   return 0;

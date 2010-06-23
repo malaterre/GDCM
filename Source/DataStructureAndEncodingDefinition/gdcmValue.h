@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,9 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef __gdcmValue_h
-#define __gdcmValue_h
+#ifndef GDCMVALUE_H
+#define GDCMVALUE_H
 
 #include "gdcmObject.h"
 
@@ -38,6 +37,9 @@ public:
   virtual void SetLength(VL l) = 0;
 
   virtual void Clear() = 0;
+
+  virtual bool operator==(const Value &val) const = 0;
+
 };
 
 
@@ -45,5 +47,5 @@ public:
 
 #include "gdcmValue.txx"
 
-#endif //__gdcmValue_h
+#endif //GDCMVALUE_H
 

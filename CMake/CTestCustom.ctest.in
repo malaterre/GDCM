@@ -13,6 +13,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "Utilities.gdcmopenjpeg.*warning C4101: '.*' : unreferenced local variable"
   "gdcm.*.cxx.obj : warning LNK4221: no public symbols found; archive member will be inaccessible"
   "/usr/bin/ranlib: for architecture: .* file: .* has no symbols"
+  "gdcmcharls"
   )
 
 # Disable dynamic analysis on some tests:

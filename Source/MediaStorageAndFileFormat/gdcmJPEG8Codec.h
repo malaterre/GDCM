@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmJPEG8Codec_h
-#define __gdcmJPEG8Codec_h
+#ifndef GDCMJPEG8CODEC_H
+#define GDCMJPEG8CODEC_H
 
 #include "gdcmJPEGCodec.h"
 
@@ -43,4 +43,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmJPEG8Codec_h
+#endif //GDCMJPEG8CODEC_H

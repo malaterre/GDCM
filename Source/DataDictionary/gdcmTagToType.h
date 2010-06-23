@@ -5,9 +5,9 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
+  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmTagToType_h
-#define __gdcmTagToType_h
+#ifndef GDCMTAGTOTYPE_H
+#define GDCMTAGTOTYPE_H
 
 #include "gdcmVR.h"
 #include "gdcmVM.h"
@@ -578,6 +578,13 @@ enum { VRType = VR::CS };
 enum { VMType = VM::VM1_n };
 static const char* GetVMString() { return "1-n"; }
 };
+template <> struct TagToType<0x0008,0x0006> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0008,0x0008> {
 static const char* GetVRString() { return "CS"; }
 typedef VRToType<VR::CS>::Type Type;
@@ -757,6 +764,13 @@ template <> struct TagToType<0x0008,0x0050> {
 static const char* GetVRString() { return "SH"; }
 typedef VRToType<VR::SH>::Type Type;
 enum { VRType = VR::SH };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0008,0x0051> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -991,6 +1005,13 @@ enum { VRType = VR::ST };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0008,0x0117> {
+static const char* GetVRString() { return "UI"; }
+typedef VRToType<VR::UI>::Type Type;
+enum { VRType = VR::UI };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0008,0x0201> {
 static const char* GetVRString() { return "SH"; }
 typedef VRToType<VR::SH>::Type Type;
@@ -1030,6 +1051,13 @@ template <> struct TagToType<0x0008,0x103e> {
 static const char* GetVRString() { return "LO"; }
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0008,0x103f> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -1166,6 +1194,13 @@ enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0008,0x1134> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0008,0x113a> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
@@ -1228,6 +1263,41 @@ typedef VRToType<VR::IS>::Type Type;
 enum { VRType = VR::IS };
 enum { VMType = VM::VM1_n };
 static const char* GetVMString() { return "1-n"; }
+};
+template <> struct TagToType<0x0008,0x1161> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1_n };
+static const char* GetVMString() { return "1-n"; }
+};
+template <> struct TagToType<0x0008,0x1162> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM3_3n };
+static const char* GetVMString() { return "3-3n"; }
+};
+template <> struct TagToType<0x0008,0x1163> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM2 };
+static const char* GetVMString() { return "2"; }
+};
+template <> struct TagToType<0x0008,0x1164> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0008,0x1167> {
+static const char* GetVRString() { return "UI"; }
+typedef VRToType<VR::UI>::Type Type;
+enum { VRType = VR::UI };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x0008,0x1195> {
 static const char* GetVRString() { return "UI"; }
@@ -1354,6 +1424,27 @@ typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
 enum { VMType = VM::VM1_n };
 static const char* GetVMString() { return "1-n"; }
+};
+template <> struct TagToType<0x0008,0x2133> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0008,0x2134> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0008,0x2135> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x0008,0x2142> {
 static const char* GetVRString() { return "IS"; }
@@ -1691,6 +1782,13 @@ enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0010,0x0024> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0010,0x0030> {
 static const char* GetVRString() { return "DA"; }
 typedef VRToType<VR::DA>::Type Type;
@@ -1929,6 +2027,13 @@ enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0010,0x2210> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0010,0x2292> {
 static const char* GetVRString() { return "LO"; }
 typedef VRToType<VR::LO>::Type Type;
@@ -2101,6 +2206,41 @@ template <> struct TagToType<0x0012,0x0072> {
 static const char* GetVRString() { return "LO"; }
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0012,0x0081> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0012,0x0082> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0012,0x0083> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0012,0x0084> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0012,0x0085> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -2290,6 +2430,13 @@ template <> struct TagToType<0x0018,0x0040> {
 static const char* GetVRString() { return "IS"; }
 typedef VRToType<VR::IS>::Type Type;
 enum { VRType = VR::IS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x0042> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -3816,8 +3963,8 @@ template <> struct TagToType<0x0018,0x5010> {
 static const char* GetVRString() { return "LO"; }
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
-enum { VMType = VM::VM3 };
-static const char* GetVMString() { return "3"; }
+enum { VMType = VM::VM1_n };
+static const char* GetVMString() { return "1-n"; }
 };
 template <> struct TagToType<0x0018,0x5012> {
 static const char* GetVRString() { return "DS"; }
@@ -4509,6 +4656,20 @@ template <> struct TagToType<0x0018,0x7054> {
 static const char* GetVRString() { return "DS"; }
 typedef VRToType<VR::DS>::Type Type;
 enum { VRType = VR::DS };
+enum { VMType = VM::VM1_n };
+static const char* GetVMString() { return "1-n"; }
+};
+template <> struct TagToType<0x0018,0x7056> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1_n };
+static const char* GetVMString() { return "1-n"; }
+};
+template <> struct TagToType<0x0018,0x7058> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
 enum { VMType = VM::VM1_n };
 static const char* GetVMString() { return "1-n"; }
 };
@@ -5856,6 +6017,13 @@ enum { VRType = VR::FL };
 enum { VMType = VM::VM3 };
 static const char* GetVMString() { return "3"; }
 };
+template <> struct TagToType<0x0018,0x9353> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0018,0x9360> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
@@ -6409,6 +6577,398 @@ enum { VRType = VR::FD };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0018,0x9701> {
+static const char* GetVRString() { return "DT"; }
+typedef VRToType<VR::DT>::Type Type;
+enum { VRType = VR::DT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9715> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9716> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9717> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9718> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9719> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9720> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9721> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9722> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9723> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9724> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9725> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9726> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9727> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9729> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9732> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9733> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9734> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9735> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9736> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9737> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9738> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9739> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9740> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9749> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9751> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9755> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9756> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9758> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9759> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9760> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9761> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9762> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9763> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9764> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9765> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9766> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9767> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9768> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9769> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9770> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9771> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9772> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9801> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1_n };
+static const char* GetVMString() { return "1-n"; }
+};
+template <> struct TagToType<0x0018,0x9803> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9804> {
+static const char* GetVRString() { return "DT"; }
+typedef VRToType<VR::DT>::Type Type;
+enum { VRType = VR::DT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9805> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9806> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9807> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9808> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x9809> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x980b> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x980c> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x980d> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x980e> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0018,0x980f> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0018,0xa001> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
@@ -6634,6 +7194,13 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x0020,0x0200> {
+static const char* GetVRString() { return "UI"; }
+typedef VRToType<VR::UI>::Type Type;
+enum { VRType = VR::UI };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x0242> {
 static const char* GetVRString() { return "UI"; }
 typedef VRToType<VR::UI>::Type Type;
 enum { VRType = VR::UI };
@@ -7071,6 +7638,104 @@ template <> struct TagToType<0x0020,0x9257> {
 static const char* GetVRString() { return "FD"; }
 typedef VRToType<VR::FD>::Type Type;
 enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x9301> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0020,0x9302> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM6 };
+static const char* GetVMString() { return "6"; }
+};
+template <> struct TagToType<0x0020,0x9307> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x9308> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0020,0x9309> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM16 };
+static const char* GetVMString() { return "16"; }
+};
+template <> struct TagToType<0x0020,0x930a> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM16 };
+static const char* GetVMString() { return "16"; }
+};
+template <> struct TagToType<0x0020,0x930c> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x930d> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x930e> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x930f> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x9310> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x9311> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x9312> {
+static const char* GetVRString() { return "UI"; }
+typedef VRToType<VR::UI>::Type Type;
+enum { VRType = VR::UI };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0020,0x9313> {
+static const char* GetVRString() { return "UI"; }
+typedef VRToType<VR::UI>::Type Type;
+enum { VRType = VR::UI };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -7949,6 +8614,13 @@ enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0028,0x1104> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
 template <> struct TagToType<0x0028,0x1199> {
 static const char* GetVRString() { return "UI"; }
 typedef VRToType<VR::UI>::Type Type;
@@ -7971,6 +8643,13 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x0028,0x1203> {
+static const char* GetVRString() { return "OW"; }
+typedef VRToType<VR::OW>::Type Type;
+enum { VRType = VR::OW };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1204> {
 static const char* GetVRString() { return "OW"; }
 typedef VRToType<VR::OW>::Type Type;
 enum { VRType = VR::OW };
@@ -8055,6 +8734,104 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x0028,0x135a> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1401> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1402> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1403> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1404> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1405> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1406> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1407> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0028,0x1408> {
+static const char* GetVRString() { return "OW"; }
+typedef VRToType<VR::OW>::Type Type;
+enum { VRType = VR::OW };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x140b> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x140c> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x140d> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x140e> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x140f> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x1410> {
 static const char* GetVRString() { return "CS"; }
 typedef VRToType<VR::CS>::Type Type;
 enum { VRType = VR::CS };
@@ -8376,6 +9153,55 @@ enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0028,0x9478> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x9501> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x9502> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x9503> {
+static const char* GetVRString() { return "SS"; }
+typedef VRToType<VR::SS>::Type Type;
+enum { VRType = VR::SS };
+enum { VMType = VM::VM2_2n };
+static const char* GetVMString() { return "2-2n"; }
+};
+template <> struct TagToType<0x0028,0x9505> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0028,0x9506> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM2_2n };
+static const char* GetVMString() { return "2-2n"; }
+};
+template <> struct TagToType<0x0028,0x9507> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM2_2n };
+static const char* GetVMString() { return "2-2n"; }
+};
 template <> struct TagToType<0x0028,0x9520> {
 static const char* GetVRString() { return "DS"; }
 typedef VRToType<VR::DS>::Type Type;
@@ -8509,6 +9335,13 @@ enum { VRType = VR::LO };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0032,0x1034> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0032,0x1040> {
 static const char* GetVRString() { return "DA"; }
 typedef VRToType<VR::DA>::Type Type;
@@ -8597,6 +9430,13 @@ template <> struct TagToType<0x0038,0x0011> {
 static const char* GetVRString() { return "LO"; }
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0038,0x0014> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -8709,6 +9549,13 @@ template <> struct TagToType<0x0038,0x0062> {
 static const char* GetVRString() { return "LO"; }
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0038,0x0064> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -9125,6 +9972,69 @@ enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0040,0x0026> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0027> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0031> {
+static const char* GetVRString() { return "UT"; }
+typedef VRToType<VR::UT>::Type Type;
+enum { VRType = VR::UT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0032> {
+static const char* GetVRString() { return "UT"; }
+typedef VRToType<VR::UT>::Type Type;
+enum { VRType = VR::UT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0033> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0035> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0036> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0039> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x003a> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0040,0x0100> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
@@ -9220,6 +10130,13 @@ template <> struct TagToType<0x0040,0x0260> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0261> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -9419,10 +10336,59 @@ enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0040,0x0500> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0040,0x050a> {
 static const char* GetVRString() { return "LO"; }
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0512> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0513> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0515> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0518> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x051a> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0520> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -9454,6 +10420,13 @@ enum { VRType = VR::ST };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0040,0x0554> {
+static const char* GetVRString() { return "UI"; }
+typedef VRToType<VR::UI>::Type Type;
+enum { VRType = VR::UI };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0040,0x0555> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
@@ -9468,7 +10441,56 @@ enum { VRType = VR::ST };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0040,0x0560> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0562> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0040,0x059a> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0600> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0602> {
+static const char* GetVRString() { return "UT"; }
+typedef VRToType<VR::UT>::Type Type;
+enum { VRType = VR::UT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0610> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0612> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x0620> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
@@ -9616,6 +10638,13 @@ enum { VMType = VM::VM1_n };
 static const char* GetVMString() { return "1-n"; }
 };
 template <> struct TagToType<0x0040,0x1011> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0x1012> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
@@ -9951,6 +10980,13 @@ enum { VRType = VR::PN };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0040,0x4040> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0040,0x8302> {
 static const char* GetVRString() { return "DS"; }
 typedef VRToType<VR::DS>::Type Type;
@@ -10168,6 +11204,13 @@ enum { VRType = VR::UI };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0040,0xa125> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM2 };
+static const char* GetVMString() { return "2"; }
+};
 template <> struct TagToType<0x0040,0xa130> {
 static const char* GetVRString() { return "CS"; }
 typedef VRToType<VR::CS>::Type Type;
@@ -10343,6 +11386,13 @@ enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0040,0xa496> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0040,0xa504> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
@@ -10445,6 +11495,13 @@ template <> struct TagToType<0x0040,0xe010> {
 static const char* GetVRString() { return "UT"; }
 typedef VRToType<VR::UT>::Type Type;
 enum { VRType = VR::UT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0040,0xe011> {
+static const char* GetVRString() { return "UI"; }
+typedef VRToType<VR::UI>::Type Type;
+enum { VRType = VR::UI };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -10581,6 +11638,349 @@ enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0046,0x0012> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0014> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0015> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0016> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0018> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0028> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0030> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0032> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0034> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0036> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0038> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0040> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0042> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0044> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0046> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0050> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0052> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0060> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0062> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0063> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0064> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0070> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0071> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0074> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0075> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0076> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0077> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0080> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0092> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0094> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0095> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0097> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0098> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0100> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0101> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0102> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0104> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0106> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0121> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0122> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0123> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0124> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0125> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0135> {
+static const char* GetVRString() { return "SS"; }
+typedef VRToType<VR::SS>::Type Type;
+enum { VRType = VR::SS };
+enum { VMType = VM::VM2 };
+static const char* GetVMString() { return "2"; }
+};
+template <> struct TagToType<0x0046,0x0137> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0139> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0145> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0146> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0046,0x0147> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0050,0x0004> {
 static const char* GetVRString() { return "CS"; }
 typedef VRToType<VR::CS>::Type Type;
@@ -10595,10 +11995,31 @@ enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0050,0x0012> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0050,0x0013> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0050,0x0014> {
 static const char* GetVRString() { return "DS"; }
 typedef VRToType<VR::DS>::Type Type;
 enum { VRType = VR::DS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0050,0x0015> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -10627,6 +12048,41 @@ template <> struct TagToType<0x0050,0x0019> {
 static const char* GetVRString() { return "DS"; }
 typedef VRToType<VR::DS>::Type Type;
 enum { VRType = VR::DS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0050,0x001a> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0050,0x001b> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0050,0x001c> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0050,0x001d> {
+static const char* GetVRString() { return "FD"; }
+typedef VRToType<VR::FD>::Type Type;
+enum { VRType = VR::FD };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0050,0x001e> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -11386,6 +12842,321 @@ enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0066,0x0001> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0002> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0003> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0004> {
+static const char* GetVRString() { return "LT"; }
+typedef VRToType<VR::LT>::Type Type;
+enum { VRType = VR::LT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0009> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x000a> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x000b> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x000c> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x000d> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x000e> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0010> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0011> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0012> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0013> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0015> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0016> {
+static const char* GetVRString() { return "OF"; }
+typedef VRToType<VR::OF>::Type Type;
+enum { VRType = VR::OF };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0017> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0066,0x0018> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0019> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x001a> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM6 };
+static const char* GetVMString() { return "6"; }
+};
+template <> struct TagToType<0x0066,0x001b> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0066,0x001c> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0066,0x001e> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x001f> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0020> {
+static const char* GetVRString() { return "FL"; }
+typedef VRToType<VR::FL>::Type Type;
+enum { VRType = VR::FL };
+enum { VMType = VM::VM1_n };
+static const char* GetVMString() { return "1-n"; }
+};
+template <> struct TagToType<0x0066,0x0021> {
+static const char* GetVRString() { return "OF"; }
+typedef VRToType<VR::OF>::Type Type;
+enum { VRType = VR::OF };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0023> {
+static const char* GetVRString() { return "OW"; }
+typedef VRToType<VR::OW>::Type Type;
+enum { VRType = VR::OW };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0024> {
+static const char* GetVRString() { return "OW"; }
+typedef VRToType<VR::OW>::Type Type;
+enum { VRType = VR::OW };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0025> {
+static const char* GetVRString() { return "OW"; }
+typedef VRToType<VR::OW>::Type Type;
+enum { VRType = VR::OW };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0026> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0027> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0028> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0029> {
+static const char* GetVRString() { return "OW"; }
+typedef VRToType<VR::OW>::Type Type;
+enum { VRType = VR::OW };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x002a> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x002b> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x002c> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x002d> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x002e> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x002f> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0030> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0031> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0032> {
+static const char* GetVRString() { return "LT"; }
+typedef VRToType<VR::LT>::Type Type;
+enum { VRType = VR::LT };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0034> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0035> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0066,0x0036> {
+static const char* GetVRString() { return "LO"; }
+typedef VRToType<VR::LO>::Type Type;
+enum { VRType = VR::LO };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0070,0x0001> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
@@ -11639,6 +13410,13 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x0070,0x0086> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0070,0x0087> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
@@ -12360,6 +14138,62 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x0072,0x0406> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0072,0x0420> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0072,0x0421> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM3 };
+static const char* GetVMString() { return "3"; }
+};
+template <> struct TagToType<0x0072,0x0422> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0072,0x0424> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0072,0x0427> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0072,0x0430> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0072,0x0432> {
+static const char* GetVRString() { return "US"; }
+typedef VRToType<VR::US>::Type Type;
+enum { VRType = VR::US };
+enum { VMType = VM::VM2_n };
+static const char* GetVMString() { return "2-n"; }
+};
+template <> struct TagToType<0x0072,0x0434> {
 static const char* GetVRString() { return "CS"; }
 typedef VRToType<VR::CS>::Type Type;
 enum { VRType = VR::CS };
@@ -14022,6 +15856,27 @@ template <> struct TagToType<0x3002,0x0042> {
 static const char* GetVRString() { return "DS"; }
 typedef VRToType<VR::DS>::Type Type;
 enum { VRType = VR::DS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x3002,0x0050> {
+static const char* GetVRString() { return "SQ"; }
+typedef VRToType<VR::SQ>::Type Type;
+enum { VRType = VR::SQ };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x3002,0x0051> {
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x3002,0x0052> {
+static const char* GetVRString() { return "SH"; }
+typedef VRToType<VR::SH>::Type Type;
+enum { VRType = VR::SH };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -17505,9 +19360,9 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x300a,0x0421> {
-static const char* GetVRString() { return "CS"; }
-typedef VRToType<VR::CS>::Type Type;
-enum { VRType = VR::CS };
+static const char* GetVRString() { return "SH"; }
+typedef VRToType<VR::SH>::Type Type;
+enum { VRType = VR::SH };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -17519,9 +19374,9 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 template <> struct TagToType<0x300a,0x0423> {
-static const char* GetVRString() { return "SH"; }
-typedef VRToType<VR::SH>::Type Type;
-enum { VRType = VR::SH };
+static const char* GetVRString() { return "CS"; }
+typedef VRToType<VR::CS>::Type Type;
+enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
@@ -18542,4 +20397,4 @@ static const char* GetVMString() { return "1"; }
 };
 
 } // end namespace gdcm
-#endif // __gdcmTagToType_h
+#endif // GDCMTAGTOTYPE_H

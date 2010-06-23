@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -19,6 +19,7 @@
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
 #include "gdcmStringFilter.h"
+#include "gdcmProgressEvent.h"
 
 #include <algorithm> // std::find
 
@@ -47,6 +48,29 @@ void Scanner::AddSkipTag( Tag const & t )
 }
 
 // Warning: API is passing a public tag (no way to specify private tag)
+void Scanner::AddPrivateTag( PrivateTag const & t )
+{
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
+  const DictEntry &entry = dicts.GetDictEntry( t );
+  //std::cout << "Debug: " << entry << std::endl;
+  // Is this tag an ASCII on ?
+  if( entry.GetVR() & VR::VRASCII )
+    {
+    PrivateTags.insert( t );
+    }
+  else if( entry.GetVR() == VR::INVALID )
+    {
+    gdcmWarningMacro( "Only tag with known VR are allowed. Tag " << t << " will be discarded" );
+    }
+  else
+    {
+    assert( entry.GetVR() & VR::VRBINARY );
+    //gdcmWarningMacro( "Only ASCII VR are supported for now. Tag " << t << " will be discarded" );
+    PrivateTags.insert( t );
+    }
+}
+
 void Scanner::AddTag( Tag const & t )
 {
   static const Global &g = GlobalInstance;
@@ -71,109 +95,75 @@ void Scanner::AddTag( Tag const & t )
 
 bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
+  this->InvokeEvent( StartEvent() );
+
   // Is there at least one tag ?
-  if( Tags.empty() ) return true;
-  //if( filenames.empty() ) return true;
-
-  // Prepare hash table:
-  Mappings.clear();
-  Mappings[""]; // Create a fake table for dummy file
-
-  // Make our own copy:
-  Filenames = filenames;
-
-  // Find the tag with the highest value (get the one from the end of the std::set)
-  TagsType::const_reverse_iterator it1 = Tags.rbegin();
-  const Tag & last = *it1;
-
-  StringFilter sf;
-  Directory::FilenamesType::const_iterator it = Filenames.begin();
-  const double progresstick = 1. / Filenames.size();
-  Progress = 0;
-  for(; it != Filenames.end(); ++it)
+  if( !Tags.empty() || !PrivateTags.empty() )
     {
-    Reader reader;
-    const char *filename = it->c_str();
-    assert( filename );
-    reader.SetFileName( filename );
-    bool read = false;
-    try
-      {
-      // Start reading all tags, including the 'last' one:
-      read = reader.ReadUpToTag(last, SkipTags);
-      }
-    catch(std::exception & ex)
-      {
-      (void)ex;
-      gdcmWarningMacro( "Failed to read:" << filename << " with ex:" << ex.what() );
-      }
-    catch(...)
-      {
-      gdcmWarningMacro( "Failed to read:" << filename  << " with unknown error" );
-      }
-    if( read )
-      {
-      // Keep the mapping:
-      TagToValue &mapping = Mappings[filename];
-      sf.SetFile( reader.GetFile() );
+    //if( filenames.empty() ) return true;
 
-      const FileMetaInformation & header = reader.GetFile().GetHeader();
-      const DataSet & ds = reader.GetFile().GetDataSet();
-      TagsType::const_iterator tag = Tags.begin();
-      for( ; tag != Tags.end(); ++tag )
+    // Prepare hash table:
+    Mappings.clear();
+    Mappings[""]; // Create a fake table for dummy file
+
+    // Make our own copy:
+    Filenames = filenames;
+
+    // Find the tag with the highest value (get the one from the end of the std::set)
+    Tag last;
+    if( !Tags.empty() )
+      {
+      TagsType::const_reverse_iterator it1 = Tags.rbegin();
+      const Tag & publiclast = *it1;
+      last = publiclast;
+      }
+    if( !PrivateTags.empty() )
+      {
+      PrivateTagsType::const_reverse_iterator pit1 = PrivateTags.rbegin();
+      Tag privatelast = *pit1;
+      if( last < privatelast ) last = privatelast;
+      }
+
+    StringFilter sf;
+    Directory::FilenamesType::const_iterator it = Filenames.begin();
+    const double progresstick = 1. / Filenames.size();
+    Progress = 0;
+    for(; it != Filenames.end(); ++it)
+      {
+      Reader reader;
+      const char *filename = it->c_str();
+      assert( filename );
+      reader.SetFileName( filename );
+      bool read = false;
+      try
         {
-        if( tag->GetGroup() == 0x2 )
-          {
-          if( header.FindDataElement( *tag ) )
-            {
-            //std::string s;
-            DataElement const & de = header.GetDataElement( *tag );
-            //const ByteValue *bv = de.GetByteValue();
-            ////assert( VR::IsASCII( vr ) );
-            //if( bv ) // Hum, should I store an empty string or what ?
-            //  {
-            //  s = std::string( bv->GetPointer(), bv->GetLength() );
-            //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-            //  }
-            std::string s = sf.ToString(de.GetTag());
-
-            // Store the potentially new value:
-            Values.insert( s );
-            assert( Values.find( s ) != Values.end() );
-            const char *value = Values.find( s )->c_str();
-            assert( value );
-            mapping.insert(
-              TagToValue::value_type(*tag, value));
-            }
-          }
-        else
-          {
-          if( ds.FindDataElement( *tag ) )
-            {
-            //std::string s;
-            DataElement const & de = ds.GetDataElement( *tag );
-            //const ByteValue *bv = de.GetByteValue();
-            ////assert( VR::IsASCII( vr ) );
-            //if( bv ) // Hum, should I store an empty string or what ?
-            //  {
-            //  s = std::string( bv->GetPointer(), bv->GetLength() );
-            //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-            //  }
-            std::string s = sf.ToString(de.GetTag());
-
-            // Store the potentially new value:
-            Values.insert( s );
-            assert( Values.find( s ) != Values.end() );
-            const char *value = Values.find( s )->c_str();
-            assert( value );
-            mapping.insert(
-              TagToValue::value_type(*tag, value));
-            }
-          }
+        // Start reading all tags, including the 'last' one:
+        read = reader.ReadUpToTag(last, SkipTags);
         }
+      catch(std::exception & ex)
+        {
+        (void)ex;
+        gdcmWarningMacro( "Failed to read:" << filename << " with ex:" << ex.what() );
+        }
+      catch(...)
+        {
+        gdcmWarningMacro( "Failed to read:" << filename  << " with unknown error" );
+        }
+      if( read )
+        {
+        // Keep the mapping:
+        sf.SetFile( reader.GetFile() );
+        Scanner::ProcessPublicTag(sf, filename);
+        //Scanner::ProcessPrivateTag(sf, filename);
+        }
+      Progress += progresstick;
+      ProgressEvent pe;
+      pe.SetProgress( Progress );
+      this->InvokeEvent( pe );
       }
-    Progress += progresstick;
     }
+
+  this->InvokeEvent( EndEvent() );
   return true;
 }
 
@@ -190,6 +180,7 @@ void Scanner::Print( std::ostream & os ) const
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
+    assert( filename && *filename );
     bool b = IsKey(filename);
     const char *comment = !b ? "could not be read" : "could be read";
     os << "Filename: " << filename << " (" << comment << ")\n";
@@ -211,6 +202,7 @@ void Scanner::Print( std::ostream & os ) const
 Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
 {
 //  assert( Mappings.find(filename) != Mappings.end() );
+  assert( filename && *filename );
   if( Mappings.find(filename) != Mappings.end() )
     return Mappings.find(filename)->second;
   return Mappings.find("")->second; // dummy file could not be found
@@ -228,6 +220,7 @@ bool Scanner::IsKey( const char * filename ) const
     }
 */
   // Look for the file in Mappings table:
+  assert( filename && *filename );
   MappingType::const_iterator it2 = Mappings.find(filename);
   return it2 != Mappings.end();
 }
@@ -269,11 +262,16 @@ const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valuere
   if( valueref )
     {
     Directory::FilenamesType::const_iterator file = Filenames.begin();
+    size_t len = strlen( valueref );
+    if( len && valueref[ len - 1 ] == ' ' )
+      {
+      --len;
+      }
     for(; file != Filenames.end() && !filenameref; ++file)
       {
       const char *filename = file->c_str();
       const char * value = GetValue(filename, t);
-      if( value && strcmp(value, valueref ) == 0 )
+      if( value && strncmp(value, valueref, len ) == 0 )
         {
         filenameref = filename;
         }
@@ -301,6 +299,68 @@ Scanner::ValuesType Scanner::GetValues(Tag const &t) const
       }
     }
   return vt;
+}
+
+void Scanner::ProcessPublicTag(StringFilter &sf, const char *filename)
+{
+  assert( filename );
+  TagToValue &mapping = Mappings[filename];
+  const File& file = sf.GetFile();
+
+  const FileMetaInformation & header = file.GetHeader();
+  const DataSet & ds = file.GetDataSet();
+  TagsType::const_iterator tag = Tags.begin();
+  for( ; tag != Tags.end(); ++tag )
+    {
+    if( tag->GetGroup() == 0x2 )
+      {
+      if( header.FindDataElement( *tag ) )
+        {
+        //std::string s;
+        DataElement const & de = header.GetDataElement( *tag );
+        //const ByteValue *bv = de.GetByteValue();
+        ////assert( VR::IsASCII( vr ) );
+        //if( bv ) // Hum, should I store an empty string or what ?
+        //  {
+        //  s = std::string( bv->GetPointer(), bv->GetLength() );
+        //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+        //  }
+        std::string s = sf.ToString(de.GetTag());
+
+        // Store the potentially new value:
+        Values.insert( s );
+        assert( Values.find( s ) != Values.end() );
+        const char *value = Values.find( s )->c_str();
+        assert( value );
+        mapping.insert(
+          TagToValue::value_type(*tag, value));
+        }
+      }
+    else
+      {
+      if( ds.FindDataElement( *tag ) )
+        {
+        //std::string s;
+        DataElement const & de = ds.GetDataElement( *tag );
+        //const ByteValue *bv = de.GetByteValue();
+        ////assert( VR::IsASCII( vr ) );
+        //if( bv ) // Hum, should I store an empty string or what ?
+        //  {
+        //  s = std::string( bv->GetPointer(), bv->GetLength() );
+        //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+        //  }
+        std::string s = sf.ToString(de.GetTag());
+
+        // Store the potentially new value:
+        Values.insert( s );
+        assert( Values.find( s ) != Values.end() );
+        const char *value = Values.find( s )->c_str();
+        assert( value );
+        mapping.insert(
+          TagToValue::value_type(*tag, value));
+        }
+      }
+    } // end for
 }
 
 } // end namespace gdcm

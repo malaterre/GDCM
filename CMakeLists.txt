@@ -37,8 +37,8 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
-SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 14)
+SET(GDCM_MINOR_VERSION 1)
+SET(GDCM_BUILD_VERSION 0)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_API_VERSION
@@ -275,6 +275,15 @@ IF(GDCM_USE_SYSTEM_POPPLER)
 ENDIF(GDCM_USE_SYSTEM_POPPLER)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_POPPLER)
 
+OPTION(GDCM_USE_SYSTEM_PODOFO "Use system podofo (pdf)" OFF)
+IF(GDCM_USE_SYSTEM_PODOFO)
+  #FIND_PACKAGE(PODOFO REQUIRED)
+  IF(GDCM_USE_SYSTEM_POPPLER)
+    MESSAGE(FATAL_ERROR "Choose only one podofo vs poppler")
+  ENDIF(GDCM_USE_SYSTEM_POPPLER)
+ENDIF(GDCM_USE_SYSTEM_PODOFO)
+MARK_AS_ADVANCED(GDCM_USE_SYSTEM_PODOFO)
+
 IF(GDCM_USE_SYSTEM_LJPEG)
   FIND_PACKAGE(LJPEG REQUIRED)
   SET(GDCM_LJPEG_LIBRARIES ${LJPEG_LIBRARIES})
@@ -294,14 +303,26 @@ ENDIF(GDCM_USE_SYSTEM_OPENJPEG)
 OPTION(GDCM_USE_PVRG "Use pvrg lib, only turn it on if you know what you are doing." OFF)
 MARK_AS_ADVANCED(GDCM_USE_PVRG)
 
+OPTION(GDCM_USE_KAKADU "Use kakadu lib, only turn it on if you know what you are doing." OFF)
+MARK_AS_ADVANCED(GDCM_USE_KAKADU)
+
 IF(GDCM_USE_PVRG)
   OPTION(GDCM_USE_SYSTEM_PVRG "Use system PVRG" OFF)
   MARK_AS_ADVANCED(GDCM_USE_SYSTEM_PVRG)
   IF(GDCM_USE_SYSTEM_PVRG)
     FIND_PACKAGE(PVRGJPEG REQUIRED)
   ENDIF(GDCM_USE_SYSTEM_PVRG)
-
 ENDIF(GDCM_USE_PVRG)
+
+IF(GDCM_USE_KAKADU)
+  OPTION(GDCM_USE_SYSTEM_KAKADU "Use system KAKADU " ON)
+  MARK_AS_ADVANCED(GDCM_USE_SYSTEM_KAKADU)
+  IF(GDCM_USE_SYSTEM_KAKADU)
+    FIND_PACKAGE(KAKADU REQUIRED)
+  ELSE(GDCM_USE_SYSTEM_KAKADU)
+    MESSAGE(FATAL_ERROR "Not Implemented")
+  ENDIF(GDCM_USE_SYSTEM_KAKADU)
+ENDIF(GDCM_USE_KAKADU)
 
 IF(GDCM_USE_SYSTEM_ZLIB)
   # If user say so, then this is a requirement !
@@ -352,6 +373,13 @@ SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 # Hide BUILD_TESTING as user tend to always turn all options on and then complains when something
 # does not work 'by default'
 MARK_AS_ADVANCED(BUILD_TESTING) # GDCM_BUILD_TESTING)
+
+#-----------------------------------------------------------------------------
+IF(GDCM_TESTING_USE_LC_NUMERIC)
+  SET(CMAKE_TESTDRIVER_BEFORE_TESTMAIN 
+    "setlocale(LC_ALL,\"fr_FR.UTF-8\");std::locale::global(std::locale(\"fr_FR.UTF-8\"));"
+    )
+ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
 
 #-----------------------------------------------------------------------------
 # Python install
@@ -470,8 +498,9 @@ IF(BUILD_TESTING)
   INCLUDE(CTest)
   SUBDIRS(Testing)
   IF(NOT GDCM_DATA_ROOT)
-    # http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F
-    MESSAGE("If you want to build the test suite, you must set the path to GDCM_DATA_ROOT (advanced option); if you don't want, disable GDCM_BUILD_TESTING (advanced option) .")
+    MESSAGE("If you want to build the test suite, you must set GDCM_DATA_ROOT (advanced option) "
+    "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
+    "What is gdcmData? Please read: http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=General_questions#What_is_gdcmData_.3F")
   ENDIF(NOT GDCM_DATA_ROOT)
 ENDIF(BUILD_TESTING)
 

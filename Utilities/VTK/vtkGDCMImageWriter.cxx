@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -507,6 +507,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UNKNOWN;
   switch( scalarType )
     {
+  case VTK_BIT:
+    pixeltype = gdcm::PixelFormat::SINGLEBIT;
+    break;
   case VTK_CHAR:
     if( vtkGDCMImageWriter_IsCharTypeSigned() )
       pixeltype = gdcm::PixelFormat::INT8;
@@ -688,10 +691,28 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
 
   unsigned long len = image.GetBufferLength();
-  vtkIdType npts = (inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
-  //data->GetNumberOfPoints();
+  vtkIdType npts = (vtkIdType)(inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
+  if( npts < 0 )
+    {
+    vtkErrorMacro( "Could not Get number of points" );
+    return 0;
+    }
+  //assert( npts >= 0 );
+  //assert( npts == data->GetNumberOfPoints() );
   int ssize = data->GetScalarSize();
   unsigned long vtklen = npts * ssize;
+  if( ssize == 0 )
+    {
+    assert( data->GetScalarType() == VTK_BIT );
+    vtklen = npts / 8;
+    }
+  else
+    {
+    vtklen = npts * ssize;
+    assert( vtklen >= npts );
+    }
+  //unsigned long vtklen = npts * ssize;
+  //assert( vtklen == len * ssize );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
@@ -707,7 +728,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   const char *tempimage = (char*)data->GetScalarPointerForExtent(inExt);
   //std::cerr << "Pointer:" << (unsigned int)tempimage << std::endl;
   int *dext = data->GetExtent();
-  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  long outsize;
+  if( data->GetScalarType() == VTK_BIT )
+    {
+    outsize = (dext[1] - dext[0] + 1) / 8;
+    }
+  else
+    {
+    outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+    }
   int j = dext[4];
 
 
@@ -802,7 +831,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
 
   int year, month, day;
-  int hour, minute, second;
   gdcm::File& file = writer.GetFile();
   gdcm::DataSet& ds = file.GetDataSet();
   vtkGDCMMedicalImageProperties *gdcmmip = 
@@ -837,6 +865,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
     // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 4 )
+    int hour, minute, second;
     if( vtkMedicalImageProperties::GetTimeAsFields( this->MedicalImageProperties->GetStudyTime(), hour, minute, second ) )
 #endif
       SetStringValueFromTag( this->MedicalImageProperties->GetStudyTime(), gdcm::Tag(0x0008,0x0030), ano);
@@ -976,6 +1005,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         {
         // Table C.8-25b SC MULTI-FRAME IMAGE MODULE ATTRIBUTES
         // Note: This specifies an identity Modality LUT transformation.
+        vtkErrorMacro( "Cannot have shift/scale" );
+        return 0;
+        }
+      }
+    else if( this->FileDimensionality == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 1 &&
+      pixeltype.GetBitsStored() == 1 &&
+      pixeltype.GetHighBit() == 0 &&
+      pixeltype.GetPixelRepresentation() == 0 
+      // image.GetPlanarConfiguration()
+    )
+      {
+      ms = gdcm::MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage;
+      if( this->Shift != 0 || this->Scale != 1 )
+        {
         vtkErrorMacro( "Cannot have shift/scale" );
         return 0;
         }

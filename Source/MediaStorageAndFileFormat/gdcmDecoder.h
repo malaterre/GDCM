@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmDecoder_h
-#define __gdcmDecoder_h
+#ifndef GDCMDECODER_H
+#define GDCMDECODER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDataElement.h" // FIXME
@@ -36,11 +36,11 @@ public:
   virtual bool CanDecode(TransferSyntax const &) const = 0;
 
   /// Decode 
-  virtual bool Decode(DataElement const &is, DataElement &os) { (void)is;(void)os;return false; }
+  virtual bool Decode(DataElement const &is_, DataElement &os) { (void)is_;(void)os;return false; }
 protected:
-  virtual bool Decode(std::istream &is, std::ostream &os) { (void)is; (void)os;return false; }
+  virtual bool Decode(std::istream &is_, std::ostream &os) { (void)is_; (void)os;return false; }
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmDecoder_h
+#endif //GDCMDECODER_H

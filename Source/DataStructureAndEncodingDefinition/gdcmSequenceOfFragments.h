@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSequenceOfFragments_h
-#define __gdcmSequenceOfFragments_h
+#ifndef GDCMSEQUENCEOFFRAGMENTS_H
+#define GDCMSEQUENCEOFFRAGMENTS_H
 
 #include "gdcmValue.h"
 #include "gdcmVL.h"
@@ -203,6 +203,13 @@ public:
       os << "\t" << zero;
       }
   }
+  bool operator==(const Value &val) const
+    {
+    const SequenceOfFragments &sqf = dynamic_cast<const SequenceOfFragments&>(val);
+    return Table == sqf.Table &&
+      SequenceLengthField == sqf.SequenceLengthField &&
+      Fragments == sqf.Fragments;
+    }
 
 private:
 public:
@@ -219,4 +226,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmSequenceOfFragments_h
+#endif //GDCMSEQUENCEOFFRAGMENTS_H

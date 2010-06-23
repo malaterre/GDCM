@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,6 +13,13 @@
 
 =========================================================================*/
 
+/**
+ * This is a minimal Anonymizer. All it does is anonymize a single file.
+ * When anonymizing more than a single file, one should be really careful
+ * to only create one single instance of a gdcm.Anonymizer and reuse it
+ * for the entire Series.
+ * See ClinicalTrialIdentificationWorkflow.cs for a more complex example
+ */
 /*
  * Usage: 
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
@@ -30,8 +37,9 @@ public class MyWatcher : SimpleSubjectWatcher
   protected override void EndFilter(){
     System.Console.WriteLine( "This is my end" );
   }
-  protected override void ShowProgress(){
-    System.Console.WriteLine( "This is my progress" );
+  protected override void ShowProgress(Subject caller, Event evt){
+    ProgressEvent pe = ProgressEvent.Cast(evt);
+    System.Console.WriteLine( "This is my progress: " + pe.GetProgress() );
   }
   protected override void ShowIteration(){
     System.Console.WriteLine( "This is my iteration" );

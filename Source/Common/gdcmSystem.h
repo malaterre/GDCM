@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSystem_h
-#define __gdcmSystem_h
+#ifndef GDCMSYSTEM_H
+#define GDCMSYSTEM_H
 
 #include "gdcmTypes.h"
 
@@ -28,7 +28,7 @@ class GDCM_EXPORT System
 {
 public:
   /// Create a directory
-  static bool MakeDirectory(const char *path); 
+  static bool MakeDirectory(const char *path);
   /// Check whether the specified file exist on the sytem
   static bool FileExists(const char* filename);
   /// Check whether the file specified is a directory:
@@ -126,4 +126,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSystem_h
+#endif //GDCMSYSTEM_H

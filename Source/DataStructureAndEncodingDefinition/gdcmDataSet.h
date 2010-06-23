@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataSet_h
-#define __gdcmDataSet_h
+#ifndef GDCMDATASET_H
+#define GDCMDATASET_H
 
 #include "gdcmDataElement.h"
 #include "gdcmTag.h"
@@ -49,8 +49,8 @@ class PrivateTag;
  * or defined length (different from 0) means nested dataset with defined
  * length.
  *
- * TODO:
- * a DataSet DOES NOT have a TS type... a file does !
+ * \warning
+ * a DataSet does not have a Transfer Syntax type, only a File does.
  */
 class GDCM_EXPORT DataSet
 {
@@ -131,16 +131,32 @@ public:
     // $ gdcmdump --csa gdcmData/SIEMENS-JPEG-CorruptFrag.dcm 
     if( de.GetTag().GetGroup() >= 0x0008 || de.GetTag().GetGroup() == 0x4 )
       {
-      InsertDataElement( de );
+      // prevent user error:
+      if( de.GetTag() == Tag(0xfffe,0xe00d) 
+      || de.GetTag() == Tag(0xfffe,0xe0dd) 
+      || de.GetTag() == Tag(0xfffe,0xe000) )
+        {
+        }
+      else
+        {
+        InsertDataElement( de );
+        }
       }
     else
       {
-      gdcmErrorMacro( "Cannot add element with group < 0x0008 and != 0x4 in the dataset" );
+      gdcmErrorMacro( "Cannot add element with group < 0x0008 and != 0x4 in the dataset: " << de.GetTag() );
       }
   }
   /// Replace a dataelement with another one
   void Replace(const DataElement& de) {
     if( DES.find(de) != DES.end() ) DES.erase(de);
+    Insert(de);
+  }
+  /// Only replace a DICOM attribute when it is missing or empty
+  void ReplaceEmpty(const DataElement& de) {
+    ConstIterator it = DES.find(de);
+    if( it != DES.end() && it->IsEmpty() )
+      DES.erase(de);
     Insert(de);
   }
   /// Completely remove a dataelement from the dataset
@@ -234,6 +250,11 @@ public:
   std::istream &ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length);
 
   template <typename TDE, typename TSwap>
+  std::istream &ReadSelectedTags(std::istream &is, const std::set<Tag> & tags);
+  template <typename TDE, typename TSwap>
+  std::istream &ReadSelectedTagsWithLength(std::istream &is, const std::set<Tag> & tags, VL & length);
+
+  template <typename TDE, typename TSwap>
   std::ostream const &Write(std::ostream &os) const;
 
   template <typename TDE, typename TSwap>
@@ -260,6 +281,7 @@ protected:
         "Original entry kept is: " << *pr.first );
       }
 #endif
+    assert( de.IsEmpty() || de.GetVL() == de.GetValue().GetLength() );
     }
 
 protected:
@@ -307,5 +329,5 @@ private:
 
 #include "gdcmDataSet.txx"
 
-#endif //__gdcmDataSet_h
+#endif //GDCMDATASET_H
 

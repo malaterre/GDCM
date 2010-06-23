@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmPreamble_h
-#define __gdcmPreamble_h
+#ifndef GDCMPREAMBLE_H
+#define GDCMPREAMBLE_H
 
 #include "gdcmTypes.h"
 #include "gdcmVL.h"
@@ -55,9 +55,14 @@ public:
 
   VL GetLength() const { return 128 + 4; }
 
-  Preamble(Preamble const &preamble)
+  Preamble(Preamble const &)
     {
-    (void)preamble;
+    Create();
+    }
+  Preamble& operator=(Preamble const &)
+    {
+    Create();
+    return *this;
     }
 protected:
   //
@@ -80,5 +85,5 @@ inline std::ostream& operator<<(std::ostream &os, const Preamble &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmPreamble_h
+#endif //GDCMPREAMBLE_H
 

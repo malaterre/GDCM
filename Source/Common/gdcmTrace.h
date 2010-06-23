@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTrace_h
-#define __gdcmTrace_h
+#ifndef GDCMTRACE_H
+#define GDCMTRACE_H
 
 #include "gdcmTypes.h"
 
@@ -184,6 +184,31 @@ private:
 }
 #endif //NDEBUG
 
+/**
+ * \brief   AssertAlways 
+ * @param arg argument to test
+ *        An easy solution to pass also a message is to do:
+ *        gdcmAssertMacro( "my message" && 2 < 3 )
+ */
+#ifdef NDEBUG
+// User asked for release compilation, but still need to report
+// if grave issue.
+#define gdcmAssertAlwaysMacro(arg) \
+{                                                           \
+   if( !(arg) )                                             \
+   {                                                        \
+   std::ostringstream osmacro;                              \
+   osmacro << "Assert: In " __FILE__ ", line " << __LINE__  \
+           << ", function " << GDCM_FUNCTION                \
+           << "\n\n";                                       \
+   throw osmacro.str();                                          \
+   }                                                        \
+}
+#else
+// Simply reproduce gdcmAssertMacro behavior:
+#define gdcmAssertAlwaysMacro(arg) gdcmAssertMacro(arg)
+#endif //NDEBUG
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmTrace_h
+#endif //GDCMTRACE_H

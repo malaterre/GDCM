@@ -4,7 +4,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,7 +21,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -29,7 +29,8 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
-    <dicts edition="2008">
+    <dicts edition="2009">
+      <xsl:apply-templates select="article/informaltable"/>
       <xsl:apply-templates select="article/sect1/informaltable"/>
       <xsl:apply-templates select="article/sect1/sect2/informaltable"/>
     </dicts>
@@ -41,6 +42,24 @@
 <!-- Get the table name -->
       </xsl:apply-templates>
     </xsl:if>
+  </xsl:template>
+  <xsl:template match="article/informaltable">
+<!--xsl:for-each select="article/sect1/informaltable"-->
+    <xsl:if test="tgroup/tbody/row/entry[1]/para = 'Tag'">
+<!-- Does the table header contains ... -->
+      <xsl:apply-templates select="." mode="data-elements">
+        <xsl:with-param name="title" select="preceding::title[1]"/>
+<!-- Get the table name -->
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="tgroup/tbody/row/entry[1]/para = 'UID Value'">
+<!-- Does the table header contains ... -->
+      <xsl:apply-templates select="." mode="uid">
+        <xsl:with-param name="title" select="preceding::para[1]"/>
+<!-- Get the table name -->
+      </xsl:apply-templates>
+    </xsl:if>
+<!--/xsl:for-each-->
   </xsl:template>
   <xsl:template match="article/sect1/informaltable">
 <!--xsl:for-each select="article/sect1/informaltable"-->
@@ -70,18 +89,19 @@ template for a row in data-elements mode. Should be:
   <xsl:template match="row" mode="data-elements-part7">
     <xsl:param name="retired" select="0"/>
     <xsl:if test="entry[1]/para != 'Message Field'">
-      <xsl:variable name="tag_value" select="translate(entry[2]/para,'ABCDEF','abcdef')"/>
+      <xsl:variable name="keyword_value" select="normalize-space(entry[2]/para)"/>
+      <xsl:variable name="tag_value" select="translate(entry[3]/para,'ABCDEF','abcdef')"/>
       <xsl:variable name="group_value" select="substring-after(substring-before($tag_value,','), '(')"/>
       <xsl:variable name="element_value" select="substring-after(substring-before($tag_value,')'), ',')"/>
       <xsl:variable name="vr">
         <xsl:call-template name="process-vr">
-          <xsl:with-param name="text" select="normalize-space(entry[3]/para)"/>
+          <xsl:with-param name="text" select="normalize-space(entry[4]/para)"/>
         </xsl:call-template>
       </xsl:variable>
-      <xsl:variable name="vm" select="normalize-space(entry[4]/para)"/>
+      <xsl:variable name="vm" select="normalize-space(entry[5]/para)"/>
       <xsl:variable name="name" select="normalize-space(entry[1]/para)"/>
-      <xsl:variable name="description" select="entry[5]"/>
-      <entry group="{$group_value}" element="{$element_value}" vr="{$vr}" vm="{$vm}" name="{$name}">
+      <xsl:variable name="description" select="entry[6]"/>
+      <entry group="{$group_value}" element="{$element_value}" vr="{$vr}" vm="{$vm}" keyword="{$keyword_value}" name="{$name}">
         <xsl:if test="$retired = 1">
           <xsl:attribute name="retired">true</xsl:attribute>
         </xsl:if>
@@ -97,6 +117,7 @@ template for a row in data-elements mode. Should be:
     <xsl:if test="entry[1]/para != 'Tag'">
 <!-- skip the table header -->
       <xsl:variable name="tag_value" select="translate(entry[1]/para,'ABCDEF','abcdef')"/>
+      <xsl:variable name="keyword_value" select="normalize-space(entry[3]/para)"/>
       <xsl:variable name="group_value" select="substring-after(substring-before($tag_value,','), '(')"/>
       <xsl:variable name="element_value">
         <xsl:variable name="tmp" select="substring-after(substring-before($tag_value,')'), ',')"/>
@@ -110,12 +131,12 @@ template for a row in data-elements mode. Should be:
 <!--xsl:sort select="concat(@group_value,',',@element_value)"/-->
       <xsl:variable name="vr">
         <xsl:call-template name="process-vr">
-          <xsl:with-param name="text" select="normalize-space(entry[3]/para)"/>
+          <xsl:with-param name="text" select="normalize-space(entry[4]/para)"/>
         </xsl:call-template>
       </xsl:variable>
       <xsl:if test="$group_value != '' and $element_value != ''">
         <xsl:variable name="name">
-          <xsl:variable name="desc_value" select="normalize-space(entry[2]/para)"/>
+          <xsl:variable name="desc_value" select="normalize-space(translate(entry[2]/para,'&#160;',' '))"/>
           <xsl:if test="$desc_value != ''">
             <description>
 <!-- some funny quote is in the way, replace it: -->
@@ -126,16 +147,22 @@ template for a row in data-elements mode. Should be:
           </xsl:if>
         </xsl:variable>
         <xsl:variable name="vm">
-          <xsl:variable name="tmp" select="normalize-space(entry[4]/para[1])"/>
-          <xsl:if test="$tmp = '1-n 1'">
+          <xsl:variable name="tmp" select="normalize-space(entry[5]/para[1])"/>
+          <xsl:choose>
+          <xsl:when test="$tmp = '1-n1'">
 <!-- Special handling of LUT Data -->
             <xsl:value-of select="'1-n'"/>
-          </xsl:if>
-          <xsl:if test="$tmp != '1-n 1'">
+          </xsl:when>
+          <xsl:when test="$tmp = '1-n 1'">
+<!-- Special handling of LUT Data -->
+            <xsl:value-of select="'1-n'"/>
+          </xsl:when>
+          <xsl:otherwise>
             <xsl:value-of select="$tmp"/>
-          </xsl:if>
+          </xsl:otherwise>
+          </xsl:choose>
         </xsl:variable>
-        <entry group="{ $group_value }" element="{ $element_value }">
+        <entry group="{ $group_value }" element="{ $element_value }" keyword="{$keyword_value}">
           <xsl:if test="$vr != ''">
             <xsl:attribute name="vr">
               <xsl:value-of select="$vr"/>
@@ -146,7 +173,7 @@ template for a row in data-elements mode. Should be:
               <xsl:value-of select="$vm"/>
             </xsl:attribute>
           </xsl:if>
-          <xsl:if test="normalize-space(entry[5]/para) = 'RET'">
+          <xsl:if test="normalize-space(entry[6]/para) = 'RET'">
             <xsl:attribute name="retired">
               <xsl:value-of select="'true'"/>
             </xsl:attribute>
@@ -191,9 +218,16 @@ template for a row in UID mode. Should be:
   <xsl:template match="row" mode="uid">
     <xsl:if test="entry[1]/para != 'UID Value'">
 <!-- skip the table header -->
-      <xsl:variable name="value" select="translate(entry[1]/para,'&#10;&#9;','')"/>
-      <xsl:variable name="name" select="translate(entry[2]/para,'–&#9;','-')"/>
-      <xsl:variable name="type" select="translate(entry[3]/para,'&#9;','')"/>
+      <xsl:variable name="value" select="normalize-space(translate(entry[1]/para,'&#10;&#9;&#173;&#160;',''))"/>
+      <!--xsl:variable name="garbage" select="&#160;"/--> <!-- pair C2 A0, non-breaking space -->
+      <xsl:variable name="garbage1">&#160;</xsl:variable>
+      <xsl:variable name="garbage2">&#173;</xsl:variable> <!-- C2 AD -->
+      <xsl:variable name="name1" select="translate(entry[2]/para,'–&#9;','-')"/>
+      <xsl:variable name="name2" select="translate($name1,$garbage1,' ')"/>
+      <xsl:variable name="name3" select="translate($name2,$garbage2,' ')"/>
+      <xsl:variable name="name" select="normalize-space($name3)"/>
+      <xsl:variable name="type" select="normalize-space(translate(entry[3]/para,'&#9;&#160;',''))"/>
+
       <xsl:choose>
         <xsl:when test="contains(entry[2]/para,'(Retired)')">
           <xsl:variable name="name-retired">
@@ -228,7 +262,7 @@ template to split table into two cases: UIDs or Normative Reference:
     <xsl:variable name="name" select="substring-after($title,'&#9;')"/>
     <dict ref="{$ref}" name="{$name}">
       <xsl:choose>
-        <xsl:when test="tgroup/tbody/row/entry[3]/para = 'VR'">
+        <xsl:when test="tgroup/tbody/row/entry[4]/para = 'VR'">
           <xsl:choose>
             <!-- PS 3.7 -->
             <xsl:when test="tgroup/tbody/row/entry[1]/para = 'Message Field'">

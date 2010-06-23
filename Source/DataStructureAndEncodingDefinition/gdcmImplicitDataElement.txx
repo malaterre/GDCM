@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,11 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImplicitDataElement_txx
-#define __gdcmImplicitDataElement_txx
+#ifndef GDCMIMPLICITDATAELEMENT_TXX
+#define GDCMIMPLICITDATAELEMENT_TXX
 
 #include "gdcmSequenceOfItems.h"
-
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
 
@@ -48,8 +47,8 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     }
 
   /*
-   * technically this should not be needed, but what if an implementor, forgot to set
-   * VL = 0, then we should make sure to exit early
+   * technically this should not be needed, but what if an implementor, forgot
+   * to set VL = 0, then we should make sure to exit early
    */
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
@@ -62,6 +61,11 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     return is;
     }
   //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
+  //if( ValueLengthField > length && !ValueLengthField.IsUndefined() )
+  //  {
+  //  gdcmWarningMacro( "Cannot read more length than what is remaining in the file" );
+  //  throw Exception( "Impossible" );
+  //  }
   if( ValueLengthField == 0 )
     {
     // Simple fast path
@@ -117,21 +121,33 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       else if ( item == itemPMSStart )
         {
         // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
-        gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
-          "TransferSyntax=Implicit for tag: " << TagField );
+        gdcmWarningMacro( "Illegal Tag for Item starter: " << TagField << " should be: " << itemStart );
         // TODO: We READ Explicit ok...but we store Implicit !
         // Indeed when copying the VR will be saved... pretty cool eh ?
         ValueField = new SequenceOfItems;
         ValueField->SetLength(ValueLengthField); // perform realloc
+        std::streampos start = is.tellg();
         try
           {
           if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
             {
             assert(0 && "Should not happen");
             }
+          gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
+            "TransferSyntax=Implicit for tag: " << TagField );
+          }
+        catch( Exception &ex )
+          {
+          // MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm
+          std::streampos current = is.tellg();
+          int diff = start - current;
+          is.seekg( diff, std::ios::cur );
+          assert( diff == -14 );
+          ValueIO<ImplicitDataElement,SwapperDoOp>::Read(is,*ValueField);
           }
         catch( std::exception &ex )
           {
+          (void)ex;
           ValueLengthField = ValueField->GetLength();
           }
         return is;
@@ -217,6 +233,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   return is;
 }
 
+//-----------------------------------------------------------------------------
 template <typename TSwap>
 std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
 {
@@ -235,10 +252,26 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
   // Read Value Length
   if( !ValueLengthField.Read<TSwap>(is) )
     {
-    assert(0 && "Should not happen");
+    //assert(0 && "Should not happen");
+    throw Exception("Impossible");
     return is;
     }
-  //std::cout << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
+
+  /*
+   * technically this should not be needed, but what if an implementor, forgot
+   * to set VL = 0, then we should make sure to exit early
+   */
+  const Tag itemDelItem(0xfffe,0xe00d);
+  if( TagField == itemDelItem )
+    {
+    if( ValueLengthField != 0 )
+      {
+      gdcmWarningMacro( "VL should be set to 0" );
+      }
+    ValueField = 0;
+    return is;
+    }
+  //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
   if( ValueLengthField > length && !ValueLengthField.IsUndefined() )
     {
     gdcmWarningMacro( "Cannot read more length than what is remaining in the file" );
@@ -254,8 +287,16 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
     {
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
-    assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems;
+    //assert( TagField != Tag(0x7fe0,0x0010) );
+    if( TagField != Tag(0x7fe0,0x0010) )
+      {
+      ValueField = new SequenceOfItems;
+      }
+    else
+      {
+      gdcmErrorMacro( "Undefined value length is impossible in non-encapsulated Transfer Syntax. Proceeding with caution" );
+      ValueField = new SequenceOfFragments;
+      }
     //VRField = VR::SQ;
     }
   else
@@ -324,6 +365,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
         }
       else if ( item == itemPMSStart2 )
         {
+        assert( 0 ); // FIXME: Sync Read/ReadWithLength
         gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
           << " instead of " << itemStart << " for tag: " << TagField );
         ValueField = new SequenceOfItems;
@@ -381,7 +423,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
     else
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       {
-      throw Exception("Should not happen (imp2)");
+      throw Exception("Should not happen (imp)");
       }
     return is;
     }
@@ -442,7 +484,7 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
   if( ValueLengthField )
     {
     assert( ValueField );
-    assert( ValueLengthField == ValueField->GetLength() );
+    gdcmAssertAlwaysMacro( ValueLengthField == ValueField->GetLength() );
     assert( TagField != Tag(0xfffe, 0xe00d)
          && TagField != Tag(0xfffe, 0xe0dd) );
     if( !ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField) )
@@ -458,4 +500,4 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
 } // end namespace gdcm
 
 
-#endif // __gdcmImplicitDataElement_txx
+#endif // GDCMIMPLICITDATAELEMENT_TXX

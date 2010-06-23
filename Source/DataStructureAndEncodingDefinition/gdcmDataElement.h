@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataElement_h
-#define __gdcmDataElement_h
+#ifndef GDCMDATAELEMENT_H
+#define GDCMDATAELEMENT_H
 
 #include "gdcmTag.h"
 #include "gdcmVL.h"
@@ -33,26 +33,26 @@ namespace gdcm
 // -> Value
 // TODO: This class SHOULD be pure virtual. I dont want a user
 // to shoot himself in the foot.
-//class Value;
 
 class SequenceOfItems;
 class SequenceOfFragments;
 /**
  * \brief Class to represent a Data Element
  * either Implicit or Explicit
+ *
  * \details
  * DATA ELEMENT: 
  * A unit of information as defined by a single entry in the data dictionary.
  * An encoded Information Object Definition (IOD) Attribute that is composed
- * of, at a minimum, three fields: a Data Element Tag, a Value Length, 
- * and a Value Field. For some specific Transfer Syntaxes, a Data Element
- * also contains a VR Field where the Value Representation of that Data 
- * Element is specified explicitly.
+ * of, at a minimum, three fields: a Data Element Tag, a Value Length, and a
+ * Value Field. For some specific Transfer Syntaxes, a Data Element also
+ * contains a VR Field where the Value Representation of that Data Element is
+ * specified explicitly.
  *
- * \section Design:
- * - A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
- * - A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
- * - For Item start/end (See 0xfffe tags), Value is NULL
+ * Design:
+ * \li A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
+ * \li A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
+ * \li For Item start/end (See 0xfffe tags), Value is NULL
  *
  * \see ExplicitDataElement ImplicitDataElement
  */
@@ -190,10 +190,19 @@ public:
 
   bool operator==(const DataElement &de) const
     {
-    return TagField == de.TagField
+    bool b = TagField == de.TagField
       && ValueLengthField == de.ValueLengthField
-      && VRField == de.VRField
-      && ValueField == de.ValueField;
+      && VRField == de.VRField;
+    if( !ValueField && !de.ValueField )
+      {
+      return b;
+      }
+    if( ValueField && de.ValueField )
+      {
+      return b && (*ValueField == *de.ValueField);
+      }
+    // ValueField != de.ValueField
+    return false;
     }
 
   // The following fonctionalities are dependant on:
@@ -258,5 +267,5 @@ inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmDataElement_h
+#endif //GDCMDATAELEMENT_H
 

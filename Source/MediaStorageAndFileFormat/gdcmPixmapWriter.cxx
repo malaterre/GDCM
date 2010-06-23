@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -266,7 +266,8 @@ bool PixmapWriter::PrepareWrite()
   PhotometricInterpretation pi = PixelData->GetPhotometricInterpretation();
   if( pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel() )
     {
-    gdcmWarningMacro( "Photometric Interpretation and Pixel format are not compatible: " << pi.GetSamplesPerPixel() << " vs " << pf.GetSamplesPerPixel() );
+    gdcmWarningMacro( "Photometric Interpretation and Pixel format are not compatible: " 
+      << pi.GetSamplesPerPixel() << " vs " << pf.GetSamplesPerPixel() );
     return false;
     }
 
@@ -456,6 +457,7 @@ bool PixmapWriter::PrepareWrite()
     {
     switch ( pf.GetBitsAllocated() )
       {
+      case 1:
       case 8:
         de.SetVR( VR::OB );
         break;
@@ -501,6 +503,7 @@ bool PixmapWriter::PrepareWrite()
     if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = PixelData->GetLUT();
+      assert( lut.Initialized() );
       assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
            || (pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0) );
       // lut descriptor:
@@ -754,8 +757,7 @@ Attribute<0x0028,0x0004> piat;
     DataElement de( Tag(0x0008,0x0018) );
     de.SetByteValue( sop, strlen(sop) );
     de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
-    // FIXME: Right now we are not actually 'replacing' the value
-    ds.Insert( de );
+    ds.ReplaceEmpty( de );
     }
 
   // Are we on a particular Study ? If not create a new UID
@@ -765,7 +767,7 @@ Attribute<0x0028,0x0004> piat;
     DataElement de( Tag(0x0020,0x000d) );
     de.SetByteValue( study, strlen(study) );
     de.SetVR( Attribute<0x0020, 0x000d>::GetVR() );
-    ds.Insert( de );
+    ds.ReplaceEmpty( de );
     }
 
   // Are we on a particular Series ? If not create a new UID
@@ -775,7 +777,7 @@ Attribute<0x0028,0x0004> piat;
     DataElement de( Tag(0x0020,0x000e) );
     de.SetByteValue( series, strlen(series) );
     de.SetVR( Attribute<0x0020, 0x000e>::GetVR() );
-    ds.Insert( de );
+    ds.ReplaceEmpty( de );
     }
 
   FileMetaInformation &fmi = file.GetHeader();

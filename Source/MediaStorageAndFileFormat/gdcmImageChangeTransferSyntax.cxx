@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -92,6 +92,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap c
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::ARGB
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
     return true;
     }

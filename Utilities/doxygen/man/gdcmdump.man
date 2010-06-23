@@ -5,7 +5,8 @@
 \section synopsis SYNOPSIS
 
 \verbatim
-gdcmdump [options] file-in file-out
+gdcmdump [options] dcm_file
+gdcmdump [options] dcm_directory
 \endverbatim
 
 \section description DESCRIPTION
@@ -19,7 +20,8 @@ gdcmdump has a limited private dictionary that is used to lookup private element
 \section parameters PARAMETERS
 
 \verbatim
-file-in   DICOM input filename
+dcm_file        DICOM input filename
+dcm_directory   DICOM input directory
 \endverbatim
 
 \section options OPTIONS
@@ -27,7 +29,7 @@ file-in   DICOM input filename
 \subsection options options
 \verbatim
   -x --xml-dict  generate the XML dict (only private elements for now).
-  -r --recursive recursive.
+  -r --recursive recursive (input is a directory)
   -d --dump      dump value (limited use).
   -p --print     print value instead of simply dumping (default).
   -c --color     print in color.
@@ -59,7 +61,7 @@ file-in   DICOM input filename
 
 \subsection special_options special options
 \verbatim
-  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
+  -I --ignore-errors   dumps even if file is corrupted (advanced users only, see disclaimers).
 \endverbatim
 
 \section usage Typical usage
@@ -254,6 +256,6 @@ $ gdcmdump --asn1 encrypted.dcm
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2009 Mathieu Malaterre
+Copyright (c) 2006-2010 Mathieu Malaterre
 
 */

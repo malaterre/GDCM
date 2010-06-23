@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -125,7 +125,7 @@ void PrintHelp()
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "     --endian %s       Endianess (LSB/MSB)." << std::endl;
+  std::cout << "     --endian %s       Endianness (LSB/MSB)." << std::endl;
   std::cout << "  -d --depth %d        Depth (8/16/32)." << std::endl;
   std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
@@ -394,8 +394,9 @@ int main (int argc, char *argv[])
   int version = 0;
 
   gdcm::UIDGenerator uid;
-  std::string series_uid = uid.Generate();
-  std::string study_uid = uid.Generate();
+  // Too early for UID Generation
+  std::string series_uid; // = uid.Generate();
+  std::string study_uid; // = uid.Generate();
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -638,18 +639,6 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
-    {
-    std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;
-    return 1;
-    }
-
-  if( !gdcm::UIDGenerator::IsValid( series_uid.c_str() ) )
-    {
-    std::cerr << "Invalid UID for Series UID: " << series_uid << std::endl;
-    return 1;
-    }
-
   // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
   if( !rootuid )
@@ -672,6 +661,26 @@ int main (int argc, char *argv[])
       }
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
+  if( study_uid.empty() )
+    {
+    study_uid = uid.Generate();
+    }
+  if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;
+    return 1;
+    }
+
+  if( series_uid.empty() )
+    {
+    series_uid  = uid.Generate();
+    }
+  if( !gdcm::UIDGenerator::IsValid( series_uid.c_str() ) )
+    {
+    std::cerr << "Invalid UID for Series UID: " << series_uid << std::endl;
+    return 1;
+    }
+
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
   gdcm::Trace::SetWarning( warning );
@@ -941,6 +950,10 @@ int main (int argc, char *argv[])
       }
     image->SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
     image->SetPixelFormat( imageori.GetPixelFormat() );
+    image->SetPlanarConfiguration( imageori.GetPlanarConfiguration() );
+    image->SetLUT( imageori.GetLUT() );
+    image->SetLossyFlag( imageori.IsLossy() );
+    // FIXME what is overlay is in pixel data ?
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     bv->SetLength( len );

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPixmapReader_h
-#define __gdcmPixmapReader_h
+#ifndef GDCMPIXMAPREADER_H
+#define GDCMPIXMAPREADER_H
 
 #include "gdcmReader.h"
 #include "gdcmPixmap.h"
@@ -27,11 +27,13 @@ class MediaStorage;
  * \brief PixmapReader
  * \note its role is to convert the DICOM DataSet into a gdcm::Pixmap
  * representation
- * By default it is also loading the lookup table and overlay when found as they impact the rendering or the image
+ * By default it is also loading the lookup table and overlay when found as
+ * they impact the rendering or the image
  *
- * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of attribute that belong to
- * what gdcm calls a 'Pixmap'
+ * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of
+ * attribute that belong to what gdcm calls a 'Pixmap'
  * 
+ * \see Pixmap
  */
 class GDCM_EXPORT PixmapReader : public Reader
 {
@@ -57,14 +59,6 @@ protected:
   virtual bool ReadImage(MediaStorage const &ms);
   virtual bool ReadACRNEMAImage();
   
-  // ugliest thing ever:
-  signed short ReadSSFromTag( Tag const &t, std::stringstream &ss,
-    std::string &conversion );
-  unsigned short ReadUSFromTag( Tag const &t, std::stringstream &ss,
-    std::string &conversion );
-  int ReadISFromTag( Tag const &t, std::stringstream &ss,
-    std::string &conversion );
-
   SmartPointer<Pixmap> PixelData;
 };
 
@@ -75,5 +69,5 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmPixmapReader_h
+#endif //GDCMPIXMAPREADER_H
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -23,13 +23,16 @@
 namespace gdcm
 {
   void DataElement::SetVLToUndefined() { 
-    assert( VRField == VR::SQ || VRField == VR::INVALID );
+    assert( VRField == VR::SQ || VRField == VR::INVALID 
+      || (VRField == VR::UN && IsUndefinedLength() ) );
     //SequenceOfItems *sqi = GetSequenceOfItems();
-    SmartPointer<SequenceOfItems> sqi = GetValueAsSQ();
+    SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
+    //SmartPointer<SequenceOfItems> sqi2 = GetValueAsSQ();
     //SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&GetValue());
     if( sqi )
       {
       sqi->SetLengthToUndefined();
+      assert( GetValueAsSQ()->IsUndefinedLength() );
       }
     ValueLengthField.SetToUndefined();
   }

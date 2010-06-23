@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2006-2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
@@ -34,7 +34,7 @@ ENDIF (MAGIC_LIBRARY AND MAGIC_INCLUDE_DIR)
 
 IF (MAGIC_FOUND)
    IF (NOT MAGIC_FIND_QUIETLY)
-      MESSAGE(STATUS "Found MAGIC: ${MAGIC_LIBRARIES}")
+      MESSAGE(STATUS "Found MAGIC: ${MAGIC_LIBRARIES} ${MAGIC_INCLUDE_DIR}")
    ENDIF (NOT MAGIC_FIND_QUIETLY)
 ELSE (MAGIC_FOUND)
    IF (MAGIC_FIND_REQUIRED)

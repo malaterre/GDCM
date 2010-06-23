@@ -4,7 +4,7 @@
 # Should I inspect the ENV{CSC} var first ?
 #
 #
-#  Copyright (c) 2006-2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.

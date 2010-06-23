@@ -3,7 +3,7 @@
 #  Program: GDCM (Grassroots DICOM). A DICOM library
 #  Module:  $URL$
 #
-#  Copyright (c) 2006-2009 Mathieu Malaterre
+#  Copyright (c) 2006-2010 Mathieu Malaterre
 #  All rights reserved.
 #  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 #
@@ -47,14 +47,16 @@ gdcm.Tag(0x0028,0x0030),
 
 for tag in tags:
   print tag
-  pixelspacing = dataset.GetDataElement( tag )
-  #print pixelspacing
-  bv = pixelspacing.GetByteValue()
-  str = bv.GetPointer() # return a pointer and not a PyString !
-  #print bv.GetLength()
-  new_str = str.replace(",",".")
-  # Need to explicitly pass bv.GetLength() to remove any trailing garbage
-  ano.Replace( tag, new_str, bv.GetLength() )
+  if dataset.FindDataElement( tag ):
+    pixelspacing = dataset.GetDataElement( tag )
+    #print pixelspacing
+    bv = pixelspacing.GetByteValue()
+    str = bv.GetBuffer()
+    #print bv.GetLength()
+    #print len(str)
+    new_str = str.replace(",",".")
+    # Need to explicitly pass bv.GetLength() to remove any trailing garbage
+    ano.Replace( tag, new_str, bv.GetLength() )
 
 #print dataset
 

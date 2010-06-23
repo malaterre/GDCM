@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmExplicitDataElement_txx
-#define __gdcmExplicitDataElement_txx
+#ifndef GDCMEXPLICITDATAELEMENT_TXX
+#define GDCMEXPLICITDATAELEMENT_TXX
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
@@ -83,6 +83,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
     bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+    (void)failed;
     return is;
     //throw Exception( "Unhandled" );
     }
@@ -407,25 +408,33 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     }
   if( ValueLengthField )
     {
-#ifndef NDEBUG
+    // Special case, check SQ
+    if ( GetVR() == VR::SQ )
+      {
+      gdcmAssertAlwaysMacro( dynamic_cast<const SequenceOfItems*>(&GetValue()) );
+      }
+//#ifndef NDEBUG
+    // check consistency in Length:
     if( GetByteValue() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
     //else if( GetSequenceOfItems() )
-    else if( dynamic_cast<const SequenceOfItems*>(&GetValue()) )
+    else if( const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&GetValue()) )
       {
       assert( ValueField->GetLength() == ValueLengthField );
-      //const SequenceOfItems *sq = GetSequenceOfItems();
-      SmartPointer<SequenceOfItems> sq = GetValueAsSQ();
-      VL dummy = sq->template ComputeLength<ExplicitDataElement>();
-      assert( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
+      // Recompute the total length:
+      if( !ValueLengthField.IsUndefined() )
+        {
+        VL dummy = sqi->template ComputeLength<ExplicitDataElement>();
+        gdcmAssertAlwaysMacro( dummy == ValueLengthField );
+        }
       }
     else if( GetSequenceOfFragments() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
-#endif
+//#endif
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {
@@ -463,7 +472,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
         assert( VRField & VR::VRBINARY );
         unsigned int vrsize = VRField.GetSize();
         assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
-        if(VRField==VR::AT) vrsize = 2;
+        if(VRField == VR::AT) vrsize = 2;
         switch(vrsize)
           {
         case 1:
@@ -496,4 +505,4 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
 
 } // end namespace gdcm
 
-#endif // __gdcmExplicitDataElement_txx
+#endif // GDCMEXPLICITDATAELEMENT_TXX

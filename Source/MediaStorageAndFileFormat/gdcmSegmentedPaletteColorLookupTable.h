@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmSegmentedPaletteColorLookupTable_h
-#define __gdcmSegmentedPaletteColorLookupTable_h
+#ifndef GDCMSEGMENTEDPALETTECOLORLOOKUPTABLE_H
+#define GDCMSEGMENTEDPALETTECOLORLOOKUPTABLE_H
 
 #include "gdcmLookupTable.h"
 
@@ -39,4 +39,4 @@ public:
 
 } // end namespace gdcm
 
-#endif //__gdcmSegmentedPaletteColorLookupTable_h
+#endif //GDCMSEGMENTEDPALETTECOLORLOOKUPTABLE_H

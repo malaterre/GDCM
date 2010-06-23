@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmElement_h
-#define __gdcmElement_h
+#ifndef GDCMELEMENT_H
+#define GDCMELEMENT_H
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"
@@ -85,7 +85,7 @@ public:
 
   void SetFromDataElement(DataElement const &de) {
     const ByteValue *bv = de.GetByteValue();
-    assert( bv );
+    if( !bv ) return;
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
       {
       Set(de.GetValue());
@@ -618,4 +618,4 @@ template <int TVM> class Element<VR::OW, TVM>;
 
 } // namespace gdcm
 
-#endif //__gdcmElement_h
+#endif //GDCMELEMENT_H

@@ -40,6 +40,22 @@ CHECK_FUNCTION_EXISTS(_snprintf   HAVE__SNPRINTF)
 #INCLUDE(CheckSymbolExists)
 CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 
+INCLUDE(CheckCXXSourceCompiles)
+CHECK_CXX_SOURCE_COMPILES(
+  "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); return 0;}"
+  HAVE_WCHAR_IFSTREAM)
+IF(GDCM_USE_SYSTEM_OPENSSL)
+SET(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
+SET(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES}
+  ${CMAKE_DL_LIBS} # FIXME ??
+  )
+CHECK_CXX_SOURCE_COMPILES(
+  #  "\#include <openssl/cms.h>\nint main() { CMS_add0_recipient_key(0); return 0;}"
+  #HAVE_CMS_RECIPIENT_KEY)
+    "\#include <openssl/cms.h>\nint main() { CMS_add0_recipient_password(0,0,0,0,0,0,0); return 0;}"
+  HAVE_CMS_RECIPIENT_PASSWORD)
+ENDIF(GDCM_USE_SYSTEM_OPENSSL)
+
 #-----------------------------------------------------------------------------
 # Provide compatibility options.
 OPTION(GDCM_LEGACY_REMOVE "Remove all legacy code completely." OFF)
@@ -84,6 +100,7 @@ ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 SET(Common_SRCS
   gdcmVersion.cxx
   gdcmEvent.cxx
+  gdcmProgressEvent.cxx
   gdcmCommand.cxx
   gdcmMD5.cxx
   gdcmBase64.cxx
@@ -140,6 +157,7 @@ ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   # Runtime
   INSTALL(TARGETS gdcmCommon
+    EXPORT GDCMTargets
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
@@ -147,6 +165,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   #Development
   if(NAMELINK_ONLY)
     INSTALL(TARGETS gdcmCommon
+      EXPORT GDCMTargets
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
     )
   endif(NAMELINK_ONLY)

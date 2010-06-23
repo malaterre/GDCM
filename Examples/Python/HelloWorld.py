@@ -3,7 +3,7 @@
 #  Program: GDCM (Grassroots DICOM). A DICOM library
 #  Module:  $URL$
 #
-#  Copyright (c) 2006-2009 Mathieu Malaterre
+#  Copyright (c) 2006-2010 Mathieu Malaterre
 #  All rights reserved.
 #  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 #
@@ -48,4 +48,14 @@ if __name__ == "__main__":
 
   # Ok let's print it !
   print dataset
+
+  # Use StringFilter to print a particular Tag:
+  sf = gdcm.StringFilter()
+  sf.SetFile(r.GetFile())
+
+  # Check if Attribute exist
+  print dataset.FindDataElement( gdcm.Tag(0x0028,0x0010))
+
+  # Let's print it as string pair:
+  print sf.ToStringPair(gdcm.Tag(0x0028,0x0010))
 

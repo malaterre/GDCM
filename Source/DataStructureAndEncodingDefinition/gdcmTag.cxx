@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -22,9 +22,9 @@ namespace gdcm
   bool Tag::ReadFromCommaSeparatedString(const char *str)
     {
     unsigned int group = 0, element = 0;
-    if( sscanf(str, "%04x,%04x", &group , &element) != 2 )
+    if( !str || sscanf(str, "%04x,%04x", &group , &element) != 2 )
       {
-      gdcmDebugMacro( "Problem reading the Tag: " << str );
+      gdcmDebugMacro( "Problem reading Tag: " << str );
       return false;
       }
     SetGroup( group );
@@ -34,9 +34,9 @@ namespace gdcm
   bool Tag::ReadFromPipeSeparatedString(const char *str)
     {
     unsigned int group = 0, element = 0;
-    if( sscanf(str, "%04x|%04x", &group , &element) != 2 )
+    if( !str || sscanf(str, "%04x|%04x", &group , &element) != 2 )
       {
-      gdcmDebugMacro( "Problem reading the Tag: " << str );
+      gdcmDebugMacro( "Problem reading Tag: " << str );
       return false;
       }
     SetGroup( group );

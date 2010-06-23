@@ -25,13 +25,12 @@
 // .SECTION See Also
 // vtkLookupTable vtkScalarsToColors
 
-#ifndef __vtkImageMapToWindowLevelColors2_h
-#define __vtkImageMapToWindowLevelColors2_h
+#ifndef VTKIMAGEMAPTOWINDOWLEVELCOLORS2_H
+#define VTKIMAGEMAPTOWINDOWLEVELCOLORS2_H
 
 #include "vtkImageMapToColors.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
-class GDCM_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
+class VTK_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
 {
 public:
   static vtkImageMapToWindowLevelColors2 *New();

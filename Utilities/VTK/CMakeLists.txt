@@ -38,8 +38,13 @@ SET(vtkgdcm_LIBS
   vtkCommon
   vtkIO
   vtkImaging
-  vtkRendering
 )
+IF(VTK_USE_RENDERING)
+  SET(vtkgdcm_LIBS
+    ${vtkgdcm_LIBS}
+    vtkRendering
+    )
+ENDIF(VTK_USE_RENDERING)
 
 # Use wrapping hints for this project.
 #SET(VTK_WRAP_HINTS "${PROJECT_SOURCE_DIR}/hints")
@@ -69,7 +74,6 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   )
 ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToWindowLevelColors2.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageYBRToRGB.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
@@ -78,6 +82,12 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx
     #${CMAKE_CURRENT_SOURCE_DIR}/vtkImagePlanarComponentsToComponents.cxx
   )
+  IF(VTK_USE_RENDERING)
+  SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
+    )
+  ENDIF(VTK_USE_RENDERING)
+
   #IF(CMAKE_HAVE_PTHREAD_H)
     SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     vtkGDCMThreadedImageReader2.cxx
@@ -103,25 +113,32 @@ ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 #ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 
 SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-  IF(GDCM_USE_ACTIVIZ)
-    get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
-                                PATH)
+IF(GDCM_USE_ACTIVIZ AND UNIX)
+  # the following only works with Activiz VTK 5.4.2. The pure VTK lib are now shipped as separate libs.
+  # so one can safely link to them, instead of having to build a VTK by hand, link vtkgdcm to it
+  # and hope compiler configuration are compatible.
+  # if you use Activiz/VTK 5.2.1 you are on your own (see gdcm 2.0.12 which supports Activiz 5.2.1)
+  FIND_PACKAGE(ACTIVIZ REQUIRED)
+  #message(${ACTIVIZ_KITWARE_VTK_LIBRARY})
+  get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
+    PATH)
 
-                              LINK_DIRECTORIES(${bla})
-TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
-  ${bla}/libvtkCommon.so
-  #${bla}/libvtkIO.so
-  ${bla}/libvtkImaging.so
-  ${bla}/libvtkRendering.so
-  )
-  ELSE(GDCM_USE_ACTIVIZ)
-TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
-  ENDIF(GDCM_USE_ACTIVIZ)
+  LINK_DIRECTORIES(${bla})
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
+    ${bla}/libvtkCommon.so
+    #${bla}/libvtkIO.so
+    ${bla}/libvtkImaging.so
+    ${bla}/libvtkRendering.so
+    )
+ELSE(GDCM_USE_ACTIVIZ AND UNIX)
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
+ENDIF(GDCM_USE_ACTIVIZ AND UNIX)
 
-# this need to be set on the vtkIO lib directly
-#  SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
+# prevent viral dep of vtkgdcm
+SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${VTKGDCM_NAME}
+    EXPORT GDCMTargets
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKLibraries
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKLibraries #${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKDevelopment
@@ -175,6 +192,7 @@ IF(GDCM_WRAP_CSHARP)
 
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
+      EXPORT GDCMTargets
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries #${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
@@ -213,17 +231,17 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
   ENDIF(GDCM_USE_ACTIVIZ)
 
-  ADD_CUSTOM_COMMAND(
-    OUTPUT  ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config
-    COMMENT "Copying vtkgdcm-sharp.dll.config"
-  )
+  #ADD_CUSTOM_COMMAND(
+  #  OUTPUT  ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
+  #  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
+  #  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config
+  #  COMMENT "Copying vtkgdcm-sharp.dll.config"
+  #)
 
 ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
   DEPENDS 
     ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
-    ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
+    #${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
     #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
   COMMENT "building vtkgdcm-sharp.dll"
 )
@@ -232,7 +250,7 @@ ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
   INSTALL(FILES 
     ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
-    ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
+    #${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
   )
 
@@ -242,6 +260,7 @@ IF(GDCM_WRAP_JAVA)
   IF(VTK_WRAP_JAVA)
     FIND_PACKAGE(Java 1.5 REQUIRED) # javac, jar
     FIND_PACKAGE(JNI REQUIRED)
+    INCLUDE_DIRECTORIES(${JNI_INCLUDE_DIRS})
     SET(VTK_WRAP_JAVA3_INIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
     # Lars Matthäus patch (package vtk => imply vtk subdir )
     SET(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/vtk)
@@ -255,17 +274,16 @@ IF(GDCM_WRAP_JAVA)
     if(EXISTS ${VTK_JAVA_JAR})
       # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
       set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
-    else(EXISTS ${VTK_JAVA_JAR})
-      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533198
-      if(EXISTS /usr/lib/jni/libvtkCommonJava.so)
-        message("Implicitely adding debian package layout...")
-        link_directories("/usr/lib/jni")
-      endif()
     endif(EXISTS ${VTK_JAVA_JAR})
+    if(EXISTS /usr/lib/jni/libvtkCommonJava.so)
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533198
+      message("Implicitely adding debian package layout...")
+      link_directories("/usr/lib/jni")
+    endif()
     MARK_AS_ADVANCED(GDCM_VTK_JAVA_JAR)
     if(EXISTS ${GDCM_VTK_JAVA_JAR})
     else(EXISTS ${GDCM_VTK_JAVA_JAR})
-      message(FATAL_ERROR "Could not find vtk.jar file, VTK_JAVA_JAR is wrong, please set proper GDCM_VTK_JAVA_JAR replacement var")
+      message(FATAL_ERROR "Could not find vtk.jar file, VTK_JAVA_JAR is wrong: ${VTK_JAVA_JAR}, please set proper GDCM_VTK_JAVA_JAR: ${GDCM_VTK_JAVA_JAR} replacement var")
     endif(EXISTS ${GDCM_VTK_JAVA_JAR})
     ADD_LIBRARY(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
@@ -298,6 +316,7 @@ IF(GDCM_WRAP_JAVA)
     # Install rules:
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
       INSTALL(TARGETS ${VTKGDCM_NAME}Java
+      EXPORT GDCMTargets
         RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKJavaModule
         LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule #${NAMELINK_SKIP}
         ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule
@@ -360,11 +379,13 @@ IF(GDCM_WRAP_PYTHON)
     )
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
         INSTALL(TARGETS ${VTKGDCM_NAME}Python
+      EXPORT GDCMTargets
           RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT                        VTKPythonModule
           LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule #${NAMELINK_SKIP}
           ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule
         )
         INSTALL(TARGETS ${VTKGDCM_NAME}PythonD
+      EXPORT GDCMTargets
           RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKPythonModule
           LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule #${NAMELINK_ONLY}
           ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule

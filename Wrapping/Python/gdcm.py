@@ -3,7 +3,7 @@
 #  Program: GDCM (Grassroots DICOM). A DICOM library
 #  Module:  $URL$
 #
-#  Copyright (c) 2006-2009 Mathieu Malaterre
+#  Copyright (c) 2006-2010 Mathieu Malaterre
 #  All rights reserved.
 #  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 #
@@ -46,7 +46,7 @@ if os.name == 'posix':
     try:
       import DLFCN as dl
     except ImportError:
-      print "Could not import dl"
+      #print "Could not import dl"
       dl = None
   if dl:
     #print "dl was imported"

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmEvent_h
-#define __gdcmEvent_h
+#ifndef GDCMEVENT_H
+#define GDCMEVENT_H
 
 #include "gdcmTypes.h"
 
@@ -21,9 +21,8 @@ namespace gdcm
 {
 //-----------------------------------------------------------------------------
 /**
- * \class Event
  * \brief superclass for callback/observer methods
- *
+ * \see Command Subject
  */
 class GDCM_EXPORT Event
 {
@@ -63,7 +62,7 @@ inline std::ostream& operator<<(std::ostream& os, Event &e)
  *  Macro for creating new Events
  */
 #define gdcmEventMacro( classname , super ) \
- /** \class classname */  \
+ /** \brief classname */  \
  class  classname : public super { \
    public: \
      typedef classname Self; \
@@ -87,7 +86,7 @@ gdcmEventMacro( NoEvent            , Event );
 gdcmEventMacro( AnyEvent           , Event );
 gdcmEventMacro( StartEvent         , AnyEvent );
 gdcmEventMacro( EndEvent           , AnyEvent );
-gdcmEventMacro( ProgressEvent      , AnyEvent );
+//gdcmEventMacro( ProgressEvent      , AnyEvent );
 gdcmEventMacro( ExitEvent          , AnyEvent );
 gdcmEventMacro( AbortEvent         , AnyEvent );
 gdcmEventMacro( ModifiedEvent      , AnyEvent );
@@ -99,4 +98,4 @@ gdcmEventMacro( UserEvent          , AnyEvent );
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmEvent_h
+#endif //GDCMEVENT_H

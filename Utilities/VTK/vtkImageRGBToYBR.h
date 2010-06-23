@@ -21,13 +21,12 @@
 // .SECTION See Also
 // vtkImageRGBToHSV
 
-#ifndef __vtkImageRGBToYBR_h
-#define __vtkImageRGBToYBR_h
+#ifndef VTKIMAGERGBTOYBR_H
+#define VTKIMAGERGBTOYBR_H
 
 #include "vtkThreadedImageAlgorithm.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
-class GDCM_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
+class VTK_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageRGBToYBR *New();

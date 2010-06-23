@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -15,6 +15,7 @@
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmEvent.h"
 #include "gdcmAnonymizeEvent.h"
+#include "gdcmProgressEvent.h"
 
 namespace gdcm
 {
@@ -24,7 +25,7 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
   // Create a series of commands
   m_StartFilterCommand =      SimpleCommandType::New();
   m_EndFilterCommand =        SimpleCommandType::New();
-  m_ProgressFilterCommand =   SimpleCommandType::New();
+  m_ProgressFilterCommand =   CommandType::New();
   m_IterationFilterCommand =  SimpleCommandType::New();
   m_AbortFilterCommand =      SimpleCommandType::New();
 
@@ -100,9 +101,10 @@ void SimpleSubjectWatcher::EndFilter()
 {
   std::cout << "End" << std::endl;
 }
-void SimpleSubjectWatcher::ShowProgress()
+void SimpleSubjectWatcher::ShowProgress(Subject *caller, const Event &evt)
 {
-  std::cout << "Progress" << std::endl;
+  const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
+  std::cout << "Progress: " << pe.GetProgress() << std::endl;
 }
 void SimpleSubjectWatcher::ShowIteration()
 {

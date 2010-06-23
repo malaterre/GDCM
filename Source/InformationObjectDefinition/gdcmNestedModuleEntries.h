@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmNestedModuleEntries_h
-#define __gdcmNestedModuleEntries_h
+#ifndef GDCMNESTEDMODULEENTRIES_H
+#define GDCMNESTEDMODULEENTRIES_H
 
 #include "gdcmModuleEntry.h"
 #include <vector>
@@ -53,4 +53,4 @@ typedef NestedModuleEntries NestedMacroEntries;
 
 } // end namespace gdcm
 
-#endif //__gdcmNestedModuleEntries_h
+#endif //GDCMNESTEDMODULEENTRIES_H

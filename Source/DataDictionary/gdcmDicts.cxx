@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -109,6 +109,12 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
       }
   }
 }
+
+const DictEntry &Dicts::GetDictEntry(const PrivateTag& tag) const
+{
+  return GetDictEntry(tag, tag.GetOwner() );
+}
+
 
 const char *Dicts::GetConstructorString(ConstructorType type)
 {

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,8 +21,8 @@
 // .SECTION See Also
 // vtkMedicalImageReader2
 
-#ifndef __vtkGDCMMedicalImageProperties_h
-#define __vtkGDCMMedicalImageProperties_h
+#ifndef VTKGDCMMEDICALIMAGEPROPERTIES_H
+#define VTKGDCMMEDICALIMAGEPROPERTIES_H
 
 #include "vtkMedicalImageProperties.h"
 

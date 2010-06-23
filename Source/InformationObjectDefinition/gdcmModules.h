@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmModules_h
-#define __gdcmModules_h
+#ifndef GDCMMODULES_H
+#define GDCMMODULES_H
 
 #include "gdcmTypes.h"
 #include "gdcmModule.h"
@@ -40,11 +40,14 @@ public:
   // A Module is inserted based on it's ref
   void AddModule(const char *ref, const Module & module )
     {
+    assert( ref && *ref );
+    assert( ModulesInternal.find( ref ) == ModulesInternal.end() );
     ModulesInternal.insert(
       ModuleMapType::value_type(ref, module));
     }
   const Module &GetModule(const char *name) const
     {
+    assert( name && *name );
     ModuleMapType::const_iterator it = ModulesInternal.find( name );
     assert( it != ModulesInternal.end() );
     assert( it->first == name );
@@ -70,10 +73,9 @@ inline std::ostream& operator<<(std::ostream& _os, const Modules &_val)
   return _os;
 }
 
-typedef Modules Macros;
 
 
 } // end namespace gdcm
 
-#endif //__gdcmModules_h
+#endif //GDCMMODULES_H
 

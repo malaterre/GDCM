@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -390,19 +390,19 @@ bool VM::Compatible(VM const &vm) const
   switch(VMField)
     {
   case VM1_2:
-    r = vm.VMField >= VM::VM1 || vm.VMField <= VM::VM2;
+    r = vm.VMField >= VM::VM1 && vm.VMField <= VM::VM2;
     break;
   case VM1_3:
-    r = vm.VMField >= VM::VM1 || vm.VMField <= VM::VM3;
+    r = vm.VMField >= VM::VM1 && vm.VMField <= VM::VM3;
     break;
   case VM1_8:
-    r = vm.VMField >= VM::VM1 || vm.VMField <= VM::VM8;
+    r = vm.VMField >= VM::VM1 && vm.VMField <= VM::VM8;
     break;
   case VM1_32:
-    r = vm.VMField >= VM::VM1 || vm.VMField <= VM::VM32;
+    r = vm.VMField >= VM::VM1 && vm.VMField <= VM::VM32;
     break;
   case VM1_99:
-    r = vm.VMField >= VM::VM1 || vm.VMField <= VM::VM99;
+    r = vm.VMField >= VM::VM1 && vm.VMField <= VM::VM99;
     break;
   case VM1_n:
     r = vm.VMField >= VM::VM1;
@@ -420,7 +420,7 @@ bool VM::Compatible(VM const &vm) const
     r = vm.VMField == VM::VM3 || vm.VMField == VM::VM4;
     break;
   case VM3_3n:
-    r = vm.VMField >= VM::VM3 /*&& !(vm.GetLength() % 3)*/;
+    r = vm.VMField >= VM::VM3 && !(vm.GetLength() % 3);
     break;
   case VM3_n:
     r = vm.VMField >= VM::VM3;
@@ -428,7 +428,10 @@ bool VM::Compatible(VM const &vm) const
   default:
     r = VMField == vm.VMField;
     }
-  if( r ) assert( VMField & vm.VMField );
+  if( r )
+    {
+    assert( VMField & vm.VMField );
+    }
   return r;
 }
 

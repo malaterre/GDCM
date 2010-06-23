@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPixmap_h
-#define __gdcmPixmap_h
+#ifndef GDCMPIXMAP_H
+#define GDCMPIXMAP_H
 
 #include "gdcmBitmap.h"
 #include "gdcmCurve.h"
@@ -27,6 +27,8 @@ namespace gdcm
  * \brief Pixmap class
  * A bitmap based image. Used as parent for both IconImage and the main Pixel Data Image
  * It does not contains any World Space information (IPP, IOP)
+ *
+ * \see PixmapReader
  */
 class GDCM_EXPORT Pixmap : public Bitmap
 {
@@ -75,4 +77,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmPixmap_h
+#endif //GDCMPIXMAP_H

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -72,8 +72,25 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #else
   // First thing create a jpegls file from the fragment:
   const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  if(!sf) return false;
-  assert(sf);
+  if(!sf)
+    {
+    gdcmDebugMacro( "Could not find SequenceOfFragments" );
+    return false;
+    }
+
+#ifdef GDCM_USE_SYSTEM_PVRG
+  std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
+#else
+  gdcm::Filename fn( System::GetCurrentProcessFileName() );
+  std::string executable_path = fn.GetPath();
+
+  std::string pvrg_command = executable_path + "gdcmjpeg";
+#endif
+  if( !System::FileExists( pvrg_command.c_str() ) )
+    {
+    gdcmErrorMacro( "Could not find: " << pvrg_command );
+    return false;
+    }
 
   // http://msdn.microsoft.com/en-us/library/hs3e7355.aspx
   // -> check if tempnam needs the 'free'
@@ -90,15 +107,9 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   sf->WriteBuffer(outfile);
   outfile.close(); // flush !
 
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string executable_path = fn.GetPath();
   // -u -> set Notify to 0 (less verbose)
-#ifdef GDCM_USE_SYSTEM_PVRG
-  std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
-  pvrg_command += " -ci 0 -d -u ";
-#else
-  std::string pvrg_command = executable_path + "/gdcmjpeg -ci 0 -d -u ";
-#endif
+  //pvrg_command += " -ci 0 -d -u ";
+  pvrg_command += " -d -u ";
   // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw  
   pvrg_command += "-s ";
   pvrg_command += input;
@@ -111,8 +122,10 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   //std::cerr << "system: " << ret << std::endl;
 
   size_t len = gdcm::System::FileSize(output);
-  if(!len) return false;
-  assert( len );
+  if(!len)
+    {
+    return false;
+    }
 
   std::ifstream is(output);
   char * buf = new char[len];

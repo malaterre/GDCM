@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -90,22 +90,23 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
   SetBitSample( pt.GetBitsStored() );
 }
 
-void JPEGCodec::SetBitSample(int bit)
+void JPEGCodec::SetupJPEGBitCodec(int bit)
 {
   BitSample = bit;
   delete Internal; Internal = NULL;
   assert( Internal == NULL );
+  // what should I do with those single bit images ?
   if ( BitSample <= 8 )
     {
     gdcmDebugMacro( "Using JPEG8" );
     Internal = new JPEG8Codec;
     }
-  else if ( BitSample <= 12 )
+  else if ( /*BitSample > 8 &&*/ BitSample <= 12 )
     {
     gdcmDebugMacro( "Using JPEG12" );
     Internal = new JPEG12Codec;
     }
-  else if ( BitSample <= 16 )
+  else if ( /*BitSample > 12 &&*/ BitSample <= 16 )
     {
     gdcmDebugMacro( "Using JPEG16" );
     Internal = new JPEG16Codec;
@@ -117,14 +118,20 @@ void JPEGCodec::SetBitSample(int bit)
     // Clearly make sure Internal will not be used
     delete Internal;
     Internal = NULL;
-    return;
     }
-  Internal->SetDimensions( this->GetDimensions() );
-  Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
-  Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
-  Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
-  //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
-  assert( Internal != NULL );
+}
+
+void JPEGCodec::SetBitSample(int bit)
+{
+  SetupJPEGBitCodec(bit);
+  if( Internal )
+    {
+    Internal->SetDimensions( this->GetDimensions() );
+    Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
+    Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
+    Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
+    //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
+    }
 }
 
 /*
@@ -140,7 +147,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   // Fragments...
   const SequenceOfFragments *sf = in.GetSequenceOfFragments();
   const ByteValue *jpegbv = in.GetByteValue();
-  assert( sf || jpegbv );
+  if( !sf && !jpegbv ) return false;
   std::stringstream os;
   if( sf )
     {
@@ -191,6 +198,7 @@ void JPEGCodec::ComputeOffsetTable(bool b)
 
 bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
 {
+  assert( Internal );
   if ( !Internal->GetHeaderInfo(is, ts) )
     {
     // let's check if this is one of those buggy lossless JPEG
@@ -204,26 +212,12 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         {
         //assert(0); // Outside buffer will be too small
         }
-      this->BitSample = Internal->BitSample; // Store the value found before destroying Internal
-      delete Internal; Internal = 0; // Do not attempt to reuse the pointer
       is.seekg(0, std::ios::beg);
-      switch( this->BitSample )
-        {
-      case 8:
-        Internal = new JPEG8Codec;
-        break;
-      case 12:
-        Internal = new JPEG12Codec;
-        break;
-      case 16:
-        Internal = new JPEG16Codec;
-        break;
-      default:
-        assert(0);
-        }
-      if( Internal->GetHeaderInfo(is, ts) )
+      SetupJPEGBitCodec( Internal->BitSample );
+      if( Internal && Internal->GetHeaderInfo(is, ts) )
         {
         // Foward everything back to meta jpeg codec:
+        this->SetLossyFlag( Internal->GetLossyFlag() );
         this->SetDimensions( Internal->GetDimensions() );
         this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
         int prep = this->GetPixelFormat().GetPixelRepresentation();
@@ -233,13 +227,16 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         }
       else
         {
-        assert(0); // FATAL ERROR
+        //assert(0); // FATAL ERROR
+        gdcmErrorMacro( "Do not support this JPEG Type" );
+        return false;
         }
       }
     return false;
     }
   // else
   // Foward everything back to meta jpeg codec:
+  this->SetLossyFlag( Internal->GetLossyFlag() );
   this->SetDimensions( Internal->GetDimensions() );
   this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
   this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
@@ -318,32 +315,21 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         {
         //assert(0); // Outside buffer will be too small
         }
-      this->BitSample = Internal->BitSample; // Store the value found before destroying Internal
-      delete Internal; Internal = 0; // Do not attempt to reuse the pointer
       is.seekg(0, std::ios::beg);
-      switch( this->BitSample )
+      SetupJPEGBitCodec( Internal->BitSample );
+      if( Internal )
         {
-      case 8:
-        Internal = new JPEG8Codec;
-        break;
-      case 12:
-        Internal = new JPEG12Codec;
-        break;
-      case 16:
-        Internal = new JPEG16Codec;
-        break;
-      default:
-        assert(0);
-        }
-      Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaning less ?
-      Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
-      if( Internal->Decode(is,tmpos) )
-        {
-        return ImageCodec::Decode(tmpos,os);
-        }
-      else
-        {
-        assert(0); // FATAL ERROR
+        //Internal->SetPixelFormat( this->GetPixelFormat() ); // FIXME
+        Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaningless ?
+        Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
+        if( Internal->Decode(is,tmpos) )
+          {
+          return ImageCodec::Decode(tmpos,os);
+          }
+        else
+          {
+          gdcmErrorMacro( "Could not succeed after 2 tries" );
+          }
         }
       }
 #endif

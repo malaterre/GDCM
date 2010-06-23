@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -16,6 +16,7 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#include "vtkMath.h"
 #include "vtkPolyData.h"
 #include "vtkCellArray.h"
 #include "vtkPoints.h"
@@ -78,12 +79,19 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   // vtkMedicalImageProperties is in the parent class
   //this->FileLowerLeft = 1;
   this->DirectionCosines = vtkMatrix4x4::New();
-  this->DirectionCosines->SetElement(0,0,1);
-  this->DirectionCosines->SetElement(1,0,0);
-  this->DirectionCosines->SetElement(2,0,0);
-  this->DirectionCosines->SetElement(0,1,0);
-  this->DirectionCosines->SetElement(1,1,1);
-  this->DirectionCosines->SetElement(2,1,0);
+  this->DirectionCosines->Identity();
+  //this->DirectionCosines->SetElement(0,0,1); // x0
+  //this->DirectionCosines->SetElement(1,0,0); // x1
+  //this->DirectionCosines->SetElement(2,0,0); // x2
+  //this->DirectionCosines->SetElement(3,0,0); // 
+  //this->DirectionCosines->SetElement(0,1,0); // y0
+  //this->DirectionCosines->SetElement(1,1,1); // y1
+  //this->DirectionCosines->SetElement(2,1,0); // y2
+  //this->DirectionCosines->SetElement(3,1,0); // 
+  //this->DirectionCosines->SetElement(0,2,0); // y0
+  //this->DirectionCosines->SetElement(1,2,0); // y1
+  //this->DirectionCosines->SetElement(2,2,1); // y2
+  //this->DirectionCosines->SetElement(3,2,0); // 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
@@ -120,6 +128,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->SetImageOrientationPatient(1,0,0,0,1,0);
 
 //  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
+    this->ForceRescale = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -576,6 +585,94 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 }
 #endif
 
+gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames)
+{
+  gdcm::PixelFormat::ScalarType outputpt ;
+  outputpt = gdcm::PixelFormat::UNKNOWN;
+  // there is a very subbtle bug here. Let's imagine we have a collection of file
+  // they can all have different Rescale Slope / Intercept. In this case we should:
+  // 1. Make sure to read each Rescale Slope / Intercept individually
+  // 2. Make sure to decide which Pixel Type to use using *all* slices:
+  if( inputfilename )
+    {
+      gdcm::ImageReader reader;
+      reader.SetFileName( inputfilename );
+      if( !reader.Read() )
+        {
+        //vtkErrorMacro( "ImageReader failed" );
+        return gdcm::PixelFormat::UNKNOWN;
+        }
+      const gdcm::Image &image = reader.GetImage();
+      const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+      double shift = image.GetIntercept();
+      double scale = image.GetSlope();
+
+      gdcm::Rescaler r;
+      r.SetIntercept( shift );
+      r.SetSlope( scale );
+      r.SetPixelFormat( pixeltype );
+      outputpt = r.ComputeInterceptSlopePixelType();
+    }
+  else if ( filenames && filenames->GetNumberOfValues() > 0 )
+    {
+    std::set< gdcm::PixelFormat::ScalarType > pixeltypes;
+    for(int i = 0; i < filenames->GetNumberOfValues(); ++i )
+      {
+      const char *filename = filenames->GetValue( i );
+      gdcm::ImageReader reader;
+      reader.SetFileName( filename );
+      if( !reader.Read() )
+        {
+        vtkGenericWarningMacro( "ImageReader failed: " << filename );
+        return gdcm::PixelFormat::UNKNOWN;
+        }
+      const gdcm::Image &image = reader.GetImage();
+      const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+      double shift = image.GetIntercept();
+      double scale = image.GetSlope();
+
+      gdcm::PixelFormat::ScalarType outputpt2 = pixeltype;
+      gdcm::Rescaler r;
+      r.SetIntercept( shift );
+      r.SetSlope( scale );
+      r.SetPixelFormat( pixeltype );
+      outputpt2 = r.ComputeInterceptSlopePixelType();
+      //std::cout << "Found: " << outputpt << std::endl;
+      pixeltypes.insert( outputpt2 );
+      }
+    if( pixeltypes.size() == 1 )
+      {
+      // Ok easy case
+      outputpt = *pixeltypes.begin();
+      }
+    else
+      {
+      // Hardcoded. If Pixel Type found is the maximum (as of PS 3.5 - 2008)
+      // There is nothing bigger that FLOAT64
+      if( pixeltypes.count( gdcm::PixelFormat::FLOAT64 ) != 0 )
+        {
+        outputpt = gdcm::PixelFormat::FLOAT64;
+        }
+      else
+        {
+        // should I just take the biggest value ? 
+        // MM: I am not sure UINT16 and INT16 are really compatible
+        // so taking the biggest value might not be the solution
+        // In this case we could use INT32, but FLOAT64 also works...
+        // oh well, let's just use FLOAT64 always.
+        vtkGenericWarningMacro( "This may not always be optimized. Sorry" );
+        outputpt = gdcm::PixelFormat::FLOAT64;
+        }
+      }
+    }
+  else
+    {
+    assert( 0 ); // I do not think this is possible
+    }
+
+  return outputpt;
+}
+
 //----------------------------------------------------------------------------
 int vtkGDCMImageReader::RequestInformationCompat()
 {
@@ -634,7 +731,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   this->DataExtent[3] = dims[1] - 1;
   if( image.GetNumberOfDimensions() == 2 )
     {
-    // This is just so much painfull to deal with DICOM / VTK
+    // This is just so much painful to deal with DICOM / VTK
     // they simply assume that number of file is equal to the dimension
     // of the last axe (see vtkImageReader2::SetFileNames )
     if ( this->FileNames && this->FileNames->GetNumberOfValues() > 1 )
@@ -669,74 +766,92 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DataSpacing[2] = image.GetSpacing(2);
     }
 
-    const double *origin = image.GetOrigin();
-    if( origin )
-      {
-      this->ImagePositionPatient[0] = image.GetOrigin(0);
-      this->ImagePositionPatient[1] = image.GetOrigin(1);
-      this->ImagePositionPatient[2] = image.GetOrigin(2);
-      }
+  const double *origin = image.GetOrigin();
+  if( origin )
+    {
+    this->ImagePositionPatient[0] = image.GetOrigin(0);
+    this->ImagePositionPatient[1] = image.GetOrigin(1);
+    this->ImagePositionPatient[2] = image.GetOrigin(2);
+    }
 
-    const double *dircos = image.GetDirectionCosines();
-    if( dircos )
-      {
-      this->DirectionCosines->SetElement(0,0, dircos[0]);
-      this->DirectionCosines->SetElement(1,0, dircos[1]);
-      this->DirectionCosines->SetElement(2,0, dircos[2]);
-      this->DirectionCosines->SetElement(0,1, dircos[3]);
-      this->DirectionCosines->SetElement(1,1, dircos[4]);
-      this->DirectionCosines->SetElement(2,1, dircos[5]);
-      for(int i=0;i<6;++i)
-        this->ImageOrientationPatient[i] = dircos[i];
+  const double *dircos = image.GetDirectionCosines();
+  if( dircos )
+    {
+    this->DirectionCosines->SetElement(0,0, dircos[0]);
+    this->DirectionCosines->SetElement(1,0, dircos[1]);
+    this->DirectionCosines->SetElement(2,0, dircos[2]);
+    this->DirectionCosines->SetElement(3,0, 0);
+    this->DirectionCosines->SetElement(0,1, dircos[3]);
+    this->DirectionCosines->SetElement(1,1, dircos[4]);
+    this->DirectionCosines->SetElement(2,1, dircos[5]);
+    this->DirectionCosines->SetElement(3,1, 0);
+    double dircosz[3];
+    vtkMath::Cross(dircos, dircos+3, dircosz);
+    this->DirectionCosines->SetElement(0,2, dircosz[0]);
+    this->DirectionCosines->SetElement(1,2, dircosz[1]);
+    this->DirectionCosines->SetElement(2,2, dircosz[2]);
+    this->DirectionCosines->SetElement(3,2, 0);
+    //std::cout << "Det: " << this->DirectionCosines->Determinant() << std::endl;
+
+    for(int i=0;i<6;++i)
+      this->ImageOrientationPatient[i] = dircos[i];
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
-      this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
+    this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
 #endif
-      }
-    // Apply transform:
-    if( dircos && origin )
+    }
+  // Apply transform:
+  if( dircos && origin )
+    {
+    if( this->FileLowerLeft )
       {
-      if( this->FileLowerLeft )
-        {
-        // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
-        // are the same:
-        this->DataOrigin[0] = origin[0];
-        this->DataOrigin[1] = origin[1];
-        this->DataOrigin[2] = origin[2];
-        }
-      else
-        {
-        // We are doing the Y-flip:
-        // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
-        // Step 1: Compute norm of translation vector:
-        // Because position is in the center of the pixel, we need to substract 1 to the dimY:
-        assert( dims[1] >=1 );
-        double norm = (dims[1] - 1) * this->DataSpacing[1];
-        // Step 2: translate:
-        this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
-        this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
-        this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
-        }
+      // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
+      // are the same:
+      this->DataOrigin[0] = origin[0];
+      this->DataOrigin[1] = origin[1];
+      this->DataOrigin[2] = origin[2];
       }
-    // Need to set the rest to 0 ???
+    else
+      {
+      // We are doing the Y-flip:
+      // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
+      // Step 1: Compute norm of translation vector:
+      // Because position is in the center of the pixel, we need to substract 1 to the dimY:
+      assert( dims[1] >=1 );
+      double norm = (dims[1] - 1) * this->DataSpacing[1];
+      // Step 2: translate:
+      this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
+      this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
+      this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
+      }
+    }
+  // Need to set the rest to 0 ???
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
-  gdcm::PixelFormat::ScalarType outputpt = pixeltype;
+
+  //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
+  gdcm::PixelFormat::ScalarType outputpt = ComputePixelTypeFromFiles(this->FileName, this->FileNames);
+
   // Compute output pixel format when Rescaling:
-  if( this->Shift != 0 || this->Scale != 1. )
-    {
-    gdcm::Rescaler r;
-    r.SetIntercept( this->Shift );
-    r.SetSlope( this->Scale );
-    r.SetPixelFormat( pixeltype );
-    outputpt = r.ComputeInterceptSlopePixelType();
-    assert( pixeltype <= outputpt );
-    assert( pixeltype.GetSamplesPerPixel() == 1 && image.GetPhotometricInterpretation().GetSamplesPerPixel() == 1 );
-    assert( image.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::PALETTE_COLOR );
-    }
+//  if( this->Shift != 0 || this->Scale != 1. )
+//    {
+//    gdcm::Rescaler r;
+//    r.SetIntercept( this->Shift );
+//    r.SetSlope( this->Scale );
+//    r.SetPixelFormat( pixeltype );
+//    outputpt = r.ComputeInterceptSlopePixelType();
+//    assert( pixeltype <= outputpt );
+//    assert( pixeltype.GetSamplesPerPixel() == 1 && image.GetPhotometricInterpretation().GetSamplesPerPixel() == 1 );
+//    assert( image.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::PALETTE_COLOR );
+//    }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
-  //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
+
+  this->ForceRescale = 0; // always reset this thing
+  if( pixeltype != outputpt )
+    {
+    this->ForceRescale = 1;
+    }
 
   switch( outputpt )
     {
@@ -780,8 +895,12 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::FLOAT64:
     this->DataScalarType = VTK_DOUBLE;
     break;
+  case gdcm::PixelFormat::SINGLEBIT:
+    this->DataScalarType = VTK_BIT;
+    break;
   default:
-    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType() );
+    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType()
+      << " with " << outputpt  );
     return 0;
     }
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
@@ -864,10 +983,12 @@ void InPlaceYFlipImage(vtkImageData* data)
   switch (data->GetScalarType())
     {
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+    case VTK_BIT: { outsize /= 8; }; break;
     vtkTemplateMacro(
       outsize *= vtkImageDataGetTypeSize(static_cast<VTK_TT*>(0))
     );
 #else
+    case VTK_BIT: { outsize /= 8; }; break;
     vtkTemplateMacro3(
       outsize *= vtkImageDataGetTypeSize, static_cast<VTK_TT*>(0), 0, 0
     );
@@ -965,12 +1086,60 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
 
-  if( Scale != 1.0 || Shift != 0.0 )
+  if( Scale != 1.0 || Shift != 0.0 || this->ForceRescale )
   {
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
-    r.SetIntercept( Shift );
-    r.SetSlope( Scale );
+    r.SetIntercept( Shift ); // FIXME
+    r.SetSlope( Scale ); // FIXME
+    gdcm::PixelFormat::ScalarType targetpixeltype = gdcm::PixelFormat::UNKNOWN;
+    // r.SetTargetPixelType( gdcm::PixelFormat::FLOAT64 );
+    int scalarType = data->GetScalarType();
+   switch( scalarType )
+    {
+  case VTK_CHAR:
+    if( vtkGDCMImageReader_IsCharTypeSigned() )
+      targetpixeltype = gdcm::PixelFormat::INT8;
+    else
+      targetpixeltype = gdcm::PixelFormat::UINT8;
+    break;
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+  case VTK_SIGNED_CHAR:
+    targetpixeltype = gdcm::PixelFormat::INT8;
+    break;
+#endif
+  case VTK_UNSIGNED_CHAR:
+    targetpixeltype = gdcm::PixelFormat::UINT8;
+    break;
+  case VTK_SHORT:
+    targetpixeltype = gdcm::PixelFormat::INT16;
+    break;
+  case VTK_UNSIGNED_SHORT:
+    targetpixeltype = gdcm::PixelFormat::UINT16;
+    break;
+  case VTK_INT:
+    targetpixeltype = gdcm::PixelFormat::INT32;
+    break;
+  case VTK_UNSIGNED_INT:
+    targetpixeltype = gdcm::PixelFormat::UINT32;
+    break;
+  case VTK_FLOAT:
+    targetpixeltype = gdcm::PixelFormat::FLOAT32;
+    break;
+  case VTK_DOUBLE:
+    targetpixeltype = gdcm::PixelFormat::FLOAT64;
+    break;
+  case VTK_BIT:
+    targetpixeltype = gdcm::PixelFormat::SINGLEBIT;
+    break;
+  default:
+    vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
+    assert( 0 );
+    return 0;
+    }
+    r.SetTargetPixelType( targetpixeltype );
+
+    r.SetUseTargetPixelType(true);
     r.SetPixelFormat( pixeltype );
     char * copy = new char[len];
     memcpy(copy, pointer, len);
@@ -1171,7 +1340,16 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
   //assert( this->ImageFormat );
 
-  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  long outsize;
+  if( data->GetScalarType() == VTK_BIT )
+    {
+    outsize = (dext[1] - dext[0] + 1) / 8;
+    }
+  else
+    {
+    outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+    }
+
   if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   if( this->FileName) assert( (unsigned long)outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 
@@ -1244,6 +1422,7 @@ int vtkGDCMImageReader::RequestDataCompat()
     unsigned long len = 0;
     for(int j = dext[4]; j <= dext[5]; ++j)
       {
+      assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
       const char *filename = this->FileNames->GetValue( j );
       int load = this->LoadSingleFile( filename, pointer, len );
       if( !load )

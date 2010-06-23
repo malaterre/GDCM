@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,11 +12,14 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmScanner_h
-#define __gdcmScanner_h
+#ifndef GDCMSCANNER_H
+#define GDCMSCANNER_H
 
 #include "gdcmDirectory.h"
+#include "gdcmSubject.h"
 #include "gdcmTag.h"
+#include "gdcmPrivateTag.h"
+#include "gdcmSmartPointer.h"
 
 #include <map>
 #include <set>
@@ -26,17 +29,31 @@
 
 namespace gdcm
 {
+class StringFilter;
+
 /**
  * \brief Scanner
- * \todo
- * This filter is dealing with both VRASCII and VRBINARY element, thanks to the help of gdcm::StringFilter
- * 
- * \warning: IMPORTANT In case of file where tags are not ordered, the output will be garbage
+ * This filter is meant for quickly browsing a FileSet (a set of files on
+ * disk). Special consideration are taken so as to read the mimimum amount of
+ * information in each file in order to retrieve the user specified set of
+ * DICOM Attribute.
  *
- * \note: implementation details. All values are stored in a std::set of std::string. Then the *address*
- * of the cstring underlying the std::string is used in the std::map
+ * This filter is dealing with both VRASCII and VRBINARY element, thanks to the
+ * help of gdcm::StringFilter
+ * 
+ * \warning IMPORTANT In case of file where tags are not ordered (illegal as
+ * per DICOM specification), the output will be missing information
+ *
+ * \note implementation details. All values are stored in a std::set of
+ * std::string. Then the address of the cstring underlying the std::string is
+ * used in the std::map.
+ *
+ * This class implement the Subject/Observer pattern trigger the following events:
+ * \li ProgressEvent
+ * \li StartEvent
+ * \li EndEvent
  */
-class GDCM_EXPORT Scanner
+class GDCM_EXPORT Scanner : public Subject
 {
   friend std::ostream& operator<<(std::ostream &_os, const Scanner &s);
 public:
@@ -57,6 +74,9 @@ public:
   /// Add a tag that will need to be read. Those are root level skip tags
   void AddTag( Tag const & t );
   void ClearTags();
+
+  // Work in progress do not use:
+  void AddPrivateTag( PrivateTag const & t );
 
   /// Add a tag that will need to be skipped. Those are root level skip tags
   void AddSkipTag( Tag const & t );
@@ -93,6 +113,7 @@ public:
     {
     bool operator()(const char* s1, const char* s2) const
       {
+      assert( s1 && s2 );
       return strcmp(s1, s2) < 0;
       }
     };
@@ -122,10 +143,17 @@ public:
   /// \warning Tag 't' should have been added via AddTag() prior to the Scan() call !
   const char* GetValue(const char *filename, Tag const &t) const;
 
+  /// for wrapped language: instanciate a reference counted object
+  static SmartPointer<Scanner> New() { return new Scanner; }
+
+protected:
+  void ProcessPublicTag(StringFilter &sf, const char *filename);
 private:
   // struct to store all uniq tags in ascending order:
   typedef std::set< Tag > TagsType;
+  typedef std::set< PrivateTag > PrivateTagsType;
   std::set< Tag > Tags;
+  std::set< PrivateTag > PrivateTags;
   std::set< Tag > SkipTags;
   ValuesType Values;
   Directory::FilenamesType Filenames;
@@ -170,4 +198,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmScanner_h
+#endif //GDCMSCANNER_H

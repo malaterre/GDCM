@@ -23,16 +23,15 @@
 // .SECTION See Also
 // vtkLookupTable vtkScalarsToColors
 
-#ifndef __vtkImageMapToColors16_h
-#define __vtkImageMapToColors16_h
+#ifndef VTKIMAGEMAPTOCOLORS16_H
+#define VTKIMAGEMAPTOCOLORS16_H
 
 
 #include "vtkThreadedImageAlgorithm.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 class vtkScalarsToColors;
 
-class GDCM_EXPORT vtkImageMapToColors16 : public vtkThreadedImageAlgorithm
+class VTK_EXPORT vtkImageMapToColors16 : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageMapToColors16 *New();

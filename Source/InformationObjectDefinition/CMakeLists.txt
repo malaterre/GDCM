@@ -2,7 +2,9 @@
 # IOD
 SET(IOD_SRCS
   gdcmModule.cxx
+  gdcmMacro.cxx
   gdcmModules.cxx
+  gdcmMacros.cxx
   gdcmNestedModuleEntries.cxx
   gdcmIODEntry.cxx
   gdcmTableReader.cxx
@@ -43,6 +45,7 @@ SET_TARGET_PROPERTIES(gdcmIOD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFA
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   # Runtime
   INSTALL(TARGETS gdcmIOD
+    EXPORT GDCMTargets
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
@@ -50,6 +53,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   #Development
   if(NAMELINK_ONLY)
     INSTALL(TARGETS gdcmIOD
+    EXPORT GDCMTargets
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
       )
   endif(NAMELINK_ONLY)
@@ -63,8 +67,9 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
 #-----------------------------------------------------------------------------
-# Install Part3.xml
+# Install Part3.xml / Part4.xml
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
+              ${CMAKE_CURRENT_SOURCE_DIR}/Part4.xml
   DESTINATION ${GDCM_INSTALL_DATA_DIR}/XML COMPONENT Libraries
 )
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -80,6 +80,7 @@ public class";
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
 #include "gdcmEvent.h"
+#include "gdcmProgressEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -182,6 +183,13 @@ public class";
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
+#include "gdcmCoder.h"
+#include "gdcmDecoder.h"
+#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
+#include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
+#include "gdcmJPEG2000Codec.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
@@ -247,7 +255,7 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 //%include "gdcmWin32.h"
 // I cannot include gdcmWin32.h without gdcmTypes.h, first. But gdcmTypes.h needs to know _MSC_VER at swig time...
 #define GDCM_EXPORT
-%include "gdcmMacro.h"
+%include "gdcmLegacyMacro.h"
 
 // The following must be define early on as gdcmVL.h get included real early
 %rename(GetValueLength) gdcm::VL::operator uint32_t;
@@ -275,6 +283,12 @@ EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 
+%include "gdcmProgressEvent.h"
+%extend gdcm::ProgressEvent {
+  static ProgressEvent *Cast(Event *event) {
+    return dynamic_cast<ProgressEvent*>(event);
+  }
+};
 //%feature("director") AnonymizeEvent;
 %include "gdcmAnonymizeEvent.h"
 %extend gdcm::AnonymizeEvent {
@@ -682,6 +696,17 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
+//%feature("director") Coder;
+//%include "gdcmCoder.h"
+//%feature("director") Decoder;
+//%include "gdcmDecoder.h"
+//%feature("director") Codec;
+//%include "gdcmCodec.h"
+%feature("director") ImageCodec;
+%include "gdcmImageCodec.h"
+%include "gdcmJPEGCodec.h"
+%include "gdcmJPEGLSCodec.h"
+%include "gdcmJPEG2000Codec.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmMediaStorage_h
-#define __gdcmMediaStorage_h
+#ifndef GDCMMEDIASTORAGE_H
+#define GDCMMEDIASTORAGE_H
 
 #include "gdcmTransferSyntax.h"
 
@@ -24,6 +24,10 @@ class DataSet;
 class Tag;
 class FileMetaInformation;
 class File;
+
+// WARNING: This class will be deprecated in the future. There is no reason to extend this class.
+// Please check the gdcm::UIDs class if adding new well known UID.
+
 /**
  * \brief MediaStorage
  *
@@ -32,6 +36,8 @@ class File;
  * Only the codec can answer yes I support this Media Storage or not...
  * For instance an ImageCodec will answer yes to most of them
  * while a PDFCodec will answer only for the Encapsulated PDF
+ *
+ * \see UIDs
  */
 class GDCM_EXPORT MediaStorage
 {
@@ -76,8 +82,8 @@ public:
     XRayAngiographicBiPlaneImageStorageRetired,
     NuclearMedicineImageStorage,
     RawDataStorage,
-    SpacialRegistrationStorage,
-    SpacialFiducialsStorage,
+    SpacialRegistrationStorage, // Spatial
+    SpacialFiducialsStorage, // Spatial..
     PETImageStorage,
     RTImageStorage,
     RTDoseStorage,
@@ -103,6 +109,11 @@ public:
     HangingProtocolStorage,
     ModalityPerformedProcedureStepSOPClass,
     PhilipsPrivateMRSyntheticImageStorage,
+    VLPhotographicImageStorage,
+    SegmentationStorage, // "1.2.840.10008.5.1.4.1.1.66.4"
+    RTIonPlanStorage, // 1.2.840.10008.5.1.4.1.1.481.8
+    XRay3DAngiographicImageStorage, // 1.2.840.10008.5.1.4.1.1.13.1.1
+    EnhancedXAImageStorage,
     MS_END
   } MSType; // Media Storage Type
 
@@ -131,6 +142,11 @@ typedef enum {
 
   const char *GetModality() const;
 
+  static unsigned int GetNumberOfMSType();
+  static unsigned int GetNumberOfMSString();
+  static unsigned int GetNumberOfModality();
+
+
   /// Attempt to set the MediaStorage from a file:
   /// WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
   /// then MediaStorage is set to the default SecondaryCaptureImageStorage (return value is 
@@ -153,8 +169,11 @@ protected:
 
 private:
   bool SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
+  /// NOT THREAD SAFE
   const char* GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
+  /// NOT THREAD SAFE
   const char* GetFromHeader(FileMetaInformation const &fmi);
+  /// NOT THREAD SAFE
   const char* GetFromDataSet(DataSet const &ds);
 
 private:
@@ -170,4 +189,4 @@ inline std::ostream &operator<<(std::ostream &_os, const MediaStorage &ms)
 
 } // end namespace gdcm
 
-#endif // __gdcmMediaStorage_h
+#endif // GDCMMEDIASTORAGE_H

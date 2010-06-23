@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmPixelFormat_h
-#define __gdcmPixelFormat_h
+#ifndef GDCMPIXELFORMAT_H
+#define GDCMPIXELFORMAT_H
 
 #include "gdcmTypes.h"
 #include <iostream>
@@ -52,6 +52,7 @@ public:
     FLOAT16, // sure why not...
     FLOAT32, // good ol' 'float'
     FLOAT64, // aka 'double'
+    SINGLEBIT, // bool / monochrome
     UNKNOWN // aka BitsAllocated == 0 && PixelRepresentation == 0
   } ScalarType;
 
@@ -147,6 +148,36 @@ public:
   /// return the max possible of the pixel
   int64_t GetMax() const;
 
+  /// return IsValid
+  bool IsValid();
+
+  bool operator==(ScalarType st) const
+    {
+    return GetScalarType() == st;
+    }
+  bool operator!=(ScalarType st) const
+    {
+    return GetScalarType() != st;
+    }
+  bool operator==(const PixelFormat &pf) const
+    {
+    return 
+      SamplesPerPixel     == pf.SamplesPerPixel &&
+      BitsAllocated       == pf.BitsAllocated &&
+      BitsStored          == pf.BitsStored &&
+      HighBit             == pf.HighBit &&
+      PixelRepresentation == pf.PixelRepresentation;
+    }
+  bool operator!=(const PixelFormat &pf) const
+    {
+    return 
+      SamplesPerPixel     != pf.SamplesPerPixel ||
+      BitsAllocated       != pf.BitsAllocated ||
+      BitsStored          != pf.BitsStored ||
+      HighBit             != pf.HighBit ||
+      PixelRepresentation != pf.PixelRepresentation;
+    }
+
 protected:
   /// When image with 24/24/23 was read, need to validate
   bool Validate();
@@ -172,5 +203,5 @@ inline std::ostream& operator<<(std::ostream &os, const PixelFormat &pf)
 
 } // end namespace gdcm
 
-#endif //__gdcmPixelFormat_h
+#endif //GDCMPIXELFORMAT_H
 

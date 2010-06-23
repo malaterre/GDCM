@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmExplicitImplicitDataElement_h
-#define __gdcmExplicitImplicitDataElement_h
+#ifndef GDCMEXPLICITIMPLICITDATAELEMENT_H
+#define GDCMEXPLICITIMPLICITDATAELEMENT_H
 
 #include "gdcmDataElement.h"
 
@@ -50,5 +50,5 @@ std::istream &ReadWithLength(std::istream &is, VL & length)
 
 #include "gdcmExplicitImplicitDataElement.txx"
 
-#endif //__gdcmExplicitImplicitDataElement_h
+#endif //GDCMEXPLICITIMPLICITDATAELEMENT_H
 

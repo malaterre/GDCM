@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageReader_h
-#define __gdcmImageReader_h
+#ifndef GDCMIMAGEREADER_H
+#define GDCMIMAGEREADER_H
 
 #include "gdcmPixmapReader.h"
 #include "gdcmImage.h"
@@ -26,11 +26,10 @@ class MediaStorage;
  * \brief ImageReader
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
  * representation
- * By default it is also loading the lookup table and overlay when found as they impact the rendering or the image
+ * Image is different from Pixmap has it has a position and a direction in
+ * Space.
  *
- * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of attribute that belong to
- * what gdcm calls a 'Image'
- * 
+ * \see Image
  */
 class GDCM_EXPORT ImageReader : public PixmapReader
 {
@@ -58,5 +57,5 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageReader_h
+#endif //GDCMIMAGEREADER_H
 

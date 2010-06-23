@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataSetHelper_h
-#define __gdcmDataSetHelper_h
+#ifndef GDCMDATASETHELPER_H
+#define GDCMDATASETHELPER_H
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"
@@ -36,7 +36,6 @@ public:
   /// ds -> current dataset, which is not the same as the root dataset
   /// return VR::INVALID in case of error
   static VR ComputeVR(File const & file, DataSet const &ds, const Tag& tag);
-
 
   //static SequenceOfItems* ComputeSQFromByteValue(File const & file, DataSet const &ds, const Tag &tag);
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmModule_h
-#define __gdcmModule_h
+#ifndef GDCMMODULE_H
+#define GDCMMODULE_H
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
@@ -26,45 +26,49 @@ namespace gdcm
 
 class DataSet;
 class Usage;
+class Macros;
 /**
  * \brief Class for representing a Module
- * \note bla
+ * \note
  * Module: A set of Attributes within an Information Entity or Normalized IOD which
  * are logically related to each other.
- * \sa Dict
+ * \sa Macro
  */
 class GDCM_EXPORT Module
 {
 public:
   typedef std::map<Tag, ModuleEntry> MapModuleEntry;
-  typedef MapModuleEntry::const_iterator ConstIterator;
-  typedef MapModuleEntry::iterator Iterator;
-  ConstIterator Begin() const { return ModuleInternal.begin(); }
-  Iterator Begin() { return ModuleInternal.begin(); }
-  ConstIterator End() const { return ModuleInternal.end(); }
-  Iterator End() { return ModuleInternal.end(); }
+  typedef std::vector<std::string> ArrayIncludeMacrosType;
+
+  //typedef MapModuleEntry::const_iterator ConstIterator;
+  //typedef MapModuleEntry::iterator Iterator;
+  //ConstIterator Begin() const { return ModuleInternal.begin(); }
+  //Iterator Begin() { return ModuleInternal.begin(); }
+  //ConstIterator End() const { return ModuleInternal.end(); }
+  //Iterator End() { return ModuleInternal.end(); }
 
   Module() {}
   friend std::ostream& operator<<(std::ostream& _os, const Module &_val);
 
   void Clear() { ModuleInternal.clear(); }
 
-  void AddModuleEntry(const Tag& tag, const ModuleEntry & module )
+  /// Will add a ModuleEntry direcly at root-level. See Macro for nested-included level.
+  void AddModuleEntry(const Tag& tag, const ModuleEntry & module)
     {
     ModuleInternal.insert(
       MapModuleEntry::value_type(tag, module));
     }
-  bool FindModuleEntry(const Tag &tag) const 
+
+  void AddMacro(const char *include)
     {
-    MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
-    return it != ModuleInternal.end();
+    ArrayIncludeMacros.push_back( include );
     }
-  const ModuleEntry& GetModuleEntry(const Tag &tag) const 
-    {
-    MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
-    assert( it->first == tag );
-    return it->second;
-    }
+
+  /// Find or Get a ModuleEntry. ModuleEntry are either search are root-level
+  /// or within nested-macro included in module.
+  bool FindModuleEntryInMacros(Macros const &macros, const Tag &tag) const;
+  const ModuleEntry& GetModuleEntryInMacros(Macros const &macros, const Tag &tag) const;
+
   void SetName( const char *name) { Name = name; }
   const char *GetName() const { return Name.c_str(); }
 
@@ -78,10 +82,12 @@ private:
 
   MapModuleEntry ModuleInternal;
   std::string Name;
+  ArrayIncludeMacrosType ArrayIncludeMacros;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
 {
+  _os << _val.Name << '\n';
   Module::MapModuleEntry::const_iterator it = _val.ModuleInternal.begin();
   for(;it != _val.ModuleInternal.end(); ++it)
     {
@@ -93,10 +99,7 @@ inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
   return _os;
 }
 
-typedef Module Macro;
-//class GDCM_EXPORT Macro : public Module {};
-
 } // end namespace gdcm
 
-#endif //__gdcmModule_h
+#endif //GDCMMODULE_H
 

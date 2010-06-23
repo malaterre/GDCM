@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -34,8 +34,9 @@ ByteSwapFilter::~ByteSwapFilter()
 
 bool ByteSwapFilter::ByteSwap()
 {
-  DataSet::ConstIterator it = DS.Begin();
-  for( ; it != DS.End(); ++it)
+  for(
+    DataSet::ConstIterator it = DS.Begin(); 
+    it != DS.End(); ++it)
     {
     const DataElement &de = *it;
     VR const & vr = de.GetVR();

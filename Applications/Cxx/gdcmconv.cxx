@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -62,7 +62,7 @@
 /*
  check-meta is ideal for image like:
 
-  make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
+  gdcmconv -C gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm bla.dcm 
 */
 #include "gdcmReader.h"
 #include "gdcmFileDerivation.h"
@@ -159,6 +159,7 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "     --quiet      do not print to stdout." << std::endl;
   std::cout << "JPEG Options:" << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
   std::cout << "JPEG-LS Options:" << std::endl;
@@ -203,12 +204,25 @@ static bool derives( File & file, const Pixmap& compressed_image )
   DataSet &ds = file.GetDataSet();
 
   DataElement sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+  if( !ds.FindDataElement( Tag(0x0008,0x0016) ) )
+    {
+    assert(0);
+    return false;
+    }
   DataElement sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) ) )
+    {
+    assert(0);
+    return false;
+    }
+  // Make sure that const char* pointer will be properly padded with \0 char:
+  std::string sopclassuid_str( sopclassuid.GetByteValue()->GetPointer(), sopclassuid.GetByteValue()->GetLength() );
+  std::string sopinstanceuid_str( sopinstanceuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetLength() );
   ds.Remove( Tag(0x8,0x18) );
 
   FileDerivation fd;
   fd.SetFile( file );
-  fd.AddReference( sopclassuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetPointer() );
+  fd.AddReference( sopclassuid_str.c_str(), sopinstanceuid_str.c_str() );
 
   // CID 7202 Source Image Purposes of Reference
   // {"DCM",121320,"Uncompressed predecessor"},
@@ -221,7 +235,7 @@ static bool derives( File & file, const Pixmap& compressed_image )
   if( !fd.Derive() )
     {
     std::cerr << "Sorry could not derive using input info" << std::endl;
-    return 1;
+    return false;
     }
 
 
@@ -417,6 +431,7 @@ int main (int argc, char *argv[])
   std::string root;
   int explicitts = 0; // explicit is a reserved keyword
   int implicit = 0;
+  int quiet = 0;
   int lut = 0;
   int raw = 0;
   int deflated = 0;
@@ -520,6 +535,7 @@ int main (int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
         {"ignore-errors", 0, &ignoreerrors, 1},
+        {"quiet", 0, &quiet, 1},
 
         {0, 0, 0, 0}
     };
@@ -927,7 +943,10 @@ int main (int argc, char *argv[])
     fmi.Replace( de );
     fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
     fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
-    //fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
+    fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
+    fmi.Remove( gdcm::Tag(0x0002,0x0100) ); //  '   '    ' // PrivateInformationCreatorUID
+    fmi.Remove( gdcm::Tag(0x0002,0x0102) ); //  '   '    ' // PrivateInformation
+
     fmi.SetDataSetTransferSyntax(ts);
 
     if( explicitts || deflated )
@@ -1221,6 +1240,7 @@ int main (int argc, char *argv[])
       }
     if( lossy )
       {
+      if(!quiet)
       PrintLossyWarning();
       if( !gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() ) )
         {

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,6 +24,8 @@
 #include "vtkImageData.h"
 #include "vtkMetaImageReader.h"
 #include "vtkMetaImageWriter.h"
+#include "vtkTIFFWriter.h"
+#include "vtkPNGWriter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMINCImageReader.h"
 #include "vtkMINCImageAttributes.h"
@@ -350,6 +352,23 @@ int main(int argc, char *argv[])
       vtkStructuredPointsWriter * writer = vtkStructuredPointsWriter::New();
       writer->SetFileName( outfilename );
       writer->SetFileTypeToBinary();
+      writer->SetInput( imgdata );
+      writer->Write();
+      return 0;
+      }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".png") == 0 )
+      {
+      vtkPNGWriter * writer = vtkPNGWriter::New();
+      writer->SetFileName( outfilename );
+      writer->SetInput( imgdata );
+      writer->Write();
+      return 0;
+      }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".tif") == 0  
+      ||  gdcm::System::StrCaseCmp(outputextension,".tiff") == 0  ) // 
+      {
+      vtkTIFFWriter * writer = vtkTIFFWriter::New();
+      writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
       return 0;

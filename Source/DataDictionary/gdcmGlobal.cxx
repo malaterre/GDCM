@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -104,7 +104,8 @@ bool Global::LoadResourcesFiles()
   const char *filename = Locate( "Part3.xml" );
   if( filename )
     {
-    Internals->GlobalDefs.LoadFromFile(filename);
+    if( Internals->GlobalDefs.IsEmpty() )
+      Internals->GlobalDefs.LoadFromFile(filename);
     return true;
     }
   // resource manager was not set properly

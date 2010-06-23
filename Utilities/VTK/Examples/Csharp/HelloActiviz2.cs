@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -14,6 +14,13 @@
 =========================================================================*/
 using Kitware.VTK;
 using vtkgdcm;
+
+/*
+ * Usage:
+ * export LD_LIBRARY_PATH=/home/mathieu/Perso/gdcm/debug-activiz/bin:/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
+ * export MONO_PATH=/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
+ * $ mono ./bin/HelloActiviz2.exe gdcmData/test.acr bla.png bla2.dcm        
+ */
 
 /*
  * From the outside view, no-one can detect that object pass to/from 

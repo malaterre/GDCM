@@ -37,13 +37,14 @@
 <!-- MAIN -->
 
 <xsl:template match="/dicts">
-  <xsl:call-template name="add-copyright-note"/>
-  <xsl:call-template name="add-generator-note"/>
+  <!--xsl:call-template name="add-copyright-note"/-->
+  <!--xsl:call-template name="add-generator-note"/-->
   <!-- iterate over all entries -->
   <xsl:for-each select="dict/entry">
     <xsl:sort select="@group"/>
     <xsl:sort select="@element"/>
-    <xsl:variable name="attribute-name" select="ics:to-camel-case(ics:convert-chars(description))"/>
+    <!--xsl:variable name="attribute-name" select="ics:to-camel-case(ics:convert-chars(description))"/-->
+    <xsl:variable name="attribute-name" select="ics:to-camel-case(ics:convert-chars(@name))"/>
     <!-- output tag -->
     <xsl:choose>
       <!-- repeating group -->

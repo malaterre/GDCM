@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDummyValueGenerator_h
-#define __gdcmDummyValueGenerator_h
+#ifndef GDCMDUMMYVALUEGENERATOR_H
+#define GDCMDUMMYVALUEGENERATOR_H
 
 #include "gdcmTypes.h"
 
@@ -22,17 +22,17 @@ namespace gdcm
 
 /**
  * \brief Class for generating dummy value
- * \note bla
+ * \see Anonymizer
  */
 class GDCM_EXPORT DummyValueGenerator
 {
 public:
-//  DummyValueGenerator();
 
-  /// Generate a dummy value from an input value. This is guarantee to always return the same output value
-  /// when input is identical.
-  /// Return an array of bytes that can be used for anonymization purpose, return NULL on error
-  /// NOT THREAD SAFE:
+  /** Generate a dummy value from an input value. This is guarantee to always
+   * return the same output value when input is identical.  Return an array of
+   * bytes that can be used for anonymization purpose, return NULL on error 
+   * NOT THREAD SAFE
+   */
   static const char* Generate(const char *input);
 
 private:
@@ -41,4 +41,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDummyValueGenerator_h
+#endif //GDCMDUMMYVALUEGENERATOR_H

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -38,6 +38,7 @@ bool ImageChangePlanarConfiguration::Change()
     }
   assert( Input->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
     || Input->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
+    || Input->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || Input->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
   if( Input->GetPlanarConfiguration() == PlanarConfiguration )
     {

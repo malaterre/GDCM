@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmLookupTable_h
-#define __gdcmLookupTable_h
+#ifndef GDCMLOOKUPTABLE_H
+#define GDCMLOOKUPTABLE_H
 
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
@@ -88,6 +88,9 @@ public:
   /// return the bit sample
   unsigned short GetBitSample() const { return BitSample; }
 
+  /// return whether the LUT has been initialized
+  bool Initialized() const;
+
 private:
 protected:
   LookupTableInternal *Internal;
@@ -97,4 +100,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmLookupTable_h
+#endif //GDCMLOOKUPTABLE_H

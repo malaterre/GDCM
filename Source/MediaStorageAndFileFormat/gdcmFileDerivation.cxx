@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -202,6 +202,7 @@ FileDerivation::FileDerivation():F(new File),Internals(new FileDerivationInterna
 
 FileDerivation::~FileDerivation()
 {
+  delete Internals;
 }
 
 const CodeDefinition * GetCodeDefinition( unsigned int codevalue, const CodeDefinition list[] )
@@ -456,7 +457,8 @@ bool FileDerivation::Derive()
     if( ds.FindDataElement( at3.GetTag() ) )
       {
       const gdcm::DataElement &de = ds.GetDataElement( at3.GetTag() );
-      at3.SetFromDataElement( de );
+      if( !de.IsEmpty() )
+        at3.SetFromDataElement( de );
       // Make sure that value #1 is at least 'DERIVED', so override in all cases:
       at3.SetValue( 0, values[0] );
       }

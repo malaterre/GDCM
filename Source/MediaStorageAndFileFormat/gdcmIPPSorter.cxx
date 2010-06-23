@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -69,7 +69,8 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   Scanner::ValuesType frames = scanner.GetValues(frame);
   if( iops.size() != 1 )
     {
-    gdcmDebugMacro( "More than one IOP (or no IOP)" );
+    gdcmDebugMacro( "More than one IOP (or no IOP): " << iops.size() );
+    //std::copy(iops.begin(), iops.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
     return false;
     }
   if( frames.size() > 1 ) // Should I really tolerate no Frame of Reference UID ?
@@ -128,28 +129,36 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   for(; it != filenames.end(); ++it)
     {
     const char *filename = it->c_str();
-    const char *value =  scanner.GetValue(filename, ipp);
-    if( value )
+    bool iskey = scanner.IsKey(filename);
+    if( iskey )
       {
-      //gdcmDebugMacro( filename << " has " << ipp << " = " << value );
-      Element<VR::DS,VM::VM3> ipp;
-      std::stringstream ss;
-      ss.str( value );
-      ipp.Read( ss );
-      double dist = 0;
-      for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
-      // FIXME: This test is weak, since implicitely we are doing a != on floating point value
-      if( sorted.find(dist) != sorted.end() )
+      const char *value =  scanner.GetValue(filename, ipp);
+      if( value )
         {
-        gdcmDebugMacro( "dist: " << dist << " already found" );
-        return false;
+        //gdcmDebugMacro( filename << " has " << ipp << " = " << value );
+        Element<VR::DS,VM::VM3> ipp;
+        std::stringstream ss;
+        ss.str( value );
+        ipp.Read( ss );
+        double dist = 0;
+        for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
+        // FIXME: This test is weak, since implicitely we are doing a != on floating point value
+        if( sorted.find(dist) != sorted.end() )
+          {
+          gdcmDebugMacro( "dist: " << dist << " already found" );
+          return false;
+          }
+        sorted.insert(
+          SortedFilenames::value_type(dist,filename) );
         }
-      sorted.insert(
-            SortedFilenames::value_type(dist,filename) );
+      else
+        {
+        gdcmDebugMacro( "File: " << filename << " has no Tag" << ipp << ". Skipping." );
+        }
       }
     else
       {
-      assert(0);
+      gdcmDebugMacro( "File: " << filename << " could not be read. Skipping." );
       }
     }
 }

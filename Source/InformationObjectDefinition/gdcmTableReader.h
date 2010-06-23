@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTableReader_h
-#define __gdcmTableReader_h
+#ifndef GDCMTABLEREADER_H
+#define GDCMTABLEREADER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDefs.h"
@@ -63,6 +63,7 @@ void HandleModuleEntryDescription(const char **atts);
 void HandleMacroEntry(const char **atts);
 void HandleMacro(const char **atts);
 void HandleMacroEntryDescription(const char **atts);
+void HandleModuleInclude(const char **atts);
 void HandleIODEntry(const char **atts);
 void HandleIOD(const char **atts);
 
@@ -85,6 +86,7 @@ private:
   IODEntry CurrentIODEntry;
   std::string CurrentModuleName;
   std::string CurrentModuleRef;
+  std::string CurrentMacroRef;
   bool ParsingModule;
   bool ParsingModuleEntry;
   bool ParsingModuleEntryDescription;
@@ -99,4 +101,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmTableReader_h
+#endif //GDCMTABLEREADER_H

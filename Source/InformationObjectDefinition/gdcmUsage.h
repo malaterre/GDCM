@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmUsage_h
-#define __gdcmUsage_h
+#ifndef GDCMUSAGE_H
+#define GDCMUSAGE_H
 
 #include "gdcmTypes.h"
 
@@ -76,4 +76,4 @@ inline std::ostream &operator<<(std::ostream &_os, const Usage &val)
 
 } // end namespace gdcm
 
-#endif //__gdcmUsage_h
+#endif //GDCMUSAGE_H

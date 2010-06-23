@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -63,6 +63,15 @@ void TableReader::HandleMacroEntryDescription(const char **atts)
   ParsingMacroEntryDescription = true;
   assert( *atts == NULL );
   assert( Description == "" );
+}
+
+void TableReader::HandleModuleInclude(const char **atts)
+{
+  const char *ref = *atts;
+  assert( strcmp(ref, "ref") == 0 );
+  const char *include = *(atts+1);
+  CurrentModule.AddMacro( include );
+  //assert( *(atts+2) == 0 ); // description ?
 }
 
 void TableReader::HandleModuleEntryDescription(const char **atts)
@@ -235,8 +244,8 @@ void TableReader::HandleModule(const char **atts)
       }
     else if( strtable == *current )
       {
-      // ref to table is absolutely not useful :(
-      // simply discard
+      // ref to table is needed for referencing Macro
+      CurrentMacroRef = *(current+1);
       }
     else if( strname == *current )
       {
@@ -318,6 +327,7 @@ void TableReader::StartElement(const char *name, const char **atts)
   else if( strcmp(name, "include" ) == 0 )
     {
     // TODO !
+    HandleModuleInclude(atts);
     }
   else if ( strcmp(name,"standard-sop-classes") == 0 )
     {
@@ -347,6 +357,18 @@ void TableReader::StartElement(const char *name, const char **atts)
     {
     // TODO !
     }
+  else if ( strcmp(name,"sop-classes") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"standard-and-related-general-sop-classes") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"media-storage-standard-sop-classes") == 0 )
+    {
+    // TODO !
+    }
   else
     {
     assert(0);
@@ -364,7 +386,8 @@ void TableReader::EndElement(const char *name)
     {
     //std::cout << "Start Macro" << std::endl;
     CurrentMacro.SetName( CurrentModuleName.c_str() );
-    CurrentDefs.GetMacros().AddModule( CurrentModuleRef.c_str(), CurrentMacro);
+    CurrentDefs.GetMacros().AddMacro( CurrentMacroRef.c_str(), CurrentMacro);
+    CurrentMacroRef.clear();
     CurrentModuleName.clear();
     CurrentMacro.Clear();
     ParsingMacro = false;
@@ -373,7 +396,8 @@ void TableReader::EndElement(const char *name)
     {
     CurrentModule.SetName( CurrentModuleName.c_str() );
     CurrentDefs.GetModules().AddModule( CurrentModuleRef.c_str(), CurrentModule);
-    //std::cout << "End Module:" << CurrentModuleName << std::endl;
+    //std::cout << "End Module: " << CurrentModuleRef << "," << CurrentModuleName << std::endl;
+    CurrentModuleRef.clear();
     CurrentModuleName.clear();
     CurrentModule.Clear();
     ParsingModule = false;
@@ -395,7 +419,7 @@ void TableReader::EndElement(const char *name)
     else if( ParsingMacro ) 
       {
       ParsingMacroEntry = false;
-      CurrentMacro.AddModuleEntry( CurrentTag, CurrentMacroEntry);
+      CurrentMacro.AddMacroEntry( CurrentTag, CurrentMacroEntry);
       }
     else if( ParsingIOD ) 
       {
@@ -431,6 +455,14 @@ void TableReader::EndElement(const char *name)
     {
     // TODO !
     }
+  else if ( strcmp(name,"standard-and-related-general-sop-classes") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"media-storage-standard-sop-classes") == 0 )
+    {
+    // TODO !
+    }
   else if( strcmp(name, "section" ) == 0 )
     {
     // TODO !
@@ -455,6 +487,10 @@ void TableReader::EndElement(const char *name)
     {
     // TODO !
     }
+  else if( strcmp(name, "sop-classes" ) == 0 )
+    {
+    // TODO !
+    }
   else if( strcmp(name, "include" ) == 0 )
     {
     if( ParsingModule )
@@ -462,6 +498,7 @@ void TableReader::EndElement(const char *name)
       }
     else if( ParsingMacro )
       {
+      //abort();
       }
     else
       {
@@ -479,13 +516,13 @@ void TableReader::CharacterDataHandler(const char *data, int length)
   if( ParsingModuleEntryDescription )
     {
     std::string name( data, length);
-    assert( length == strlen( name.c_str() ) );
+    assert( (unsigned int)length == strlen( name.c_str() ) );
     Description.append( name );
     }
   else if( ParsingMacroEntryDescription )
     {
     std::string name( data, length);
-    assert( length == strlen( name.c_str() ) );
+    assert( (unsigned int)length == strlen( name.c_str() ) );
     Description.append( name );
     }
   else

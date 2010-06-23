@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -336,6 +336,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
     {
     bufferrgb = new char [ image_len ];
@@ -361,6 +362,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
     {
     MaxNumSegments *= 3;
@@ -373,11 +375,8 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     assert( MaxNumSegments % 3 == 0 );
     }
 
-  RLEHeader header;
-  header.NumSegments = MaxNumSegments;
-  for(int i = 0; i < 16;++i)
-    header.Offset[i] = 0;
-  header.Offset[0] = 64; // there cannot be any space in between the end of the RLE header and the start
+  RLEHeader header = { MaxNumSegments, { 64 } };
+  // there cannot be any space in between the end of the RLE header and the start
   // of the first RLE segment
   //
   // Create a RLE Frame for each frame:
@@ -560,7 +559,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     {
     out = in;
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
+    if( !sf ) return false;
     unsigned long len = GetBufferLength();
     //char *buffer = new char[len];
     std::stringstream is;
@@ -579,7 +578,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     {
     out = in;
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
+    if( !sf ) return false;
     unsigned long len = GetBufferLength();
     char *buffer = new char[len];
     unsigned long pos = 0;

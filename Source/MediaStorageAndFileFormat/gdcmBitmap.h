@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmBitmap_h
-#define __gdcmBitmap_h
+#ifndef GDCMBITMAP_H
+#define GDCMBITMAP_H
 
 #include "gdcmObject.h"
 #include "gdcmCurve.h"
@@ -51,6 +51,7 @@ public:
 
   /// return the planar configuration
   unsigned int GetPlanarConfiguration() const;
+  /// \warning you need to call SetPixelFormat first (before SetPlanarConfiguration) for consistency checking
   void SetPlanarConfiguration(unsigned int pc);
 
   bool GetNeedByteSwap() const
@@ -70,6 +71,7 @@ public:
   const TransferSyntax &GetTransferSyntax() const {
     return TS;
   }
+  bool IsTransferSyntaxCompatible( TransferSyntax const & ts ) const;
   void SetDataElement(DataElement const &de) {
     PixelData = de;
   }
@@ -141,6 +143,7 @@ protected:
   bool TryRAWCodec(char *buffer, bool &lossyflag) const;
   bool TryJPEGCodec(char *buffer, bool &lossyflag) const;
   bool TryPVRGCodec(char *buffer, bool &lossyflag) const;
+  bool TryKAKADUCodec(char *buffer, bool &lossyflag) const;
   bool TryJPEGLSCodec(char *buffer, bool &lossyflag) const;
   bool TryJPEG2000Codec(char *buffer, bool &lossyflag) const;
   bool TryRLECodec(char *buffer, bool &lossyflag) const;
@@ -178,4 +181,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmBitmap_h
+#endif //GDCMBITMAP_H

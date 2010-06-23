@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -68,6 +68,7 @@ int TestImageWriter2(int argc, char *argv[])
   // We should never authorized writing of image that was lossy compress and declare as lossless
   if( writer.Write() )
     {
+    std::cerr << "We should never authorized writing of image that was lossy compress and declare as lossless" << std::endl;
     return 1;
     }
 }

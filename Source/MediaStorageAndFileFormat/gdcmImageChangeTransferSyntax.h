@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageChangeTransferSyntax_h
-#define __gdcmImageChangeTransferSyntax_h
+#ifndef GDCMIMAGECHANGETRANSFERSYNTAX_H
+#define GDCMIMAGECHANGETRANSFERSYNTAX_H
 
 #include "gdcmImageToImageFilter.h"
 #include "gdcmTransferSyntax.h"
@@ -29,6 +29,12 @@ class ImageCodec;
  *
  * If only Force param is set but no input TransferSyntax is set, it is assumed that user only wants
  * to inspect encapsulated stream (advanced dev. option).
+ *
+ * When using UserCodec it is very important that the TransferSyntax (as set in SetTransferSyntax)
+ * is actually understood by UserCodec (ie. UserCodec->CanCode( TransferSyntax ) ). Otherwise
+ * the behavior is to use a default codec.
+ *
+ * \sa JPEGCodec JPEGLSCodec JPEG2000Codec
  */
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
@@ -54,6 +60,10 @@ public:
   /// a JPEG (for example) image
   void SetForce( bool f ) { Force = f; }
 
+  /// Allow user to specify exactly which codec to use. this is needed to specify special qualities
+  /// or compression option.
+  /// \warning is the codec 'ic' is not compatible with the TransferSyntax requested, it will
+  /// not be used. It is the user responsability to check that UserCodec->CanCode( TransferSyntax )
   void SetUserCodec(ImageCodec *ic) { UserCodec = ic; }
 
 protected:
@@ -78,5 +88,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageChangeTransferSyntax_h
+#endif //GDCMIMAGECHANGETRANSFERSYNTAX_H
 

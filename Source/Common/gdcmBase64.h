@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmBase64_h
-#define __gdcmBase64_h
+#ifndef GDCMBASE64_H
+#define GDCMBASE64_H
 
 #include "gdcmTypes.h"
 
@@ -45,7 +45,7 @@ static int GetEncodeLength(const char *src, int  slen );
  * \param src      source buffer
  * \param slen     amount of data to be encoded
  *
- * \return         0 if successful, or POLARSSL_ERR_BASE64_BUFFER_TOO_SMALL.
+ * \return         0 if successful
  *
  */
 static int Encode( char *dst, int dlen,
@@ -65,10 +65,7 @@ static int GetDecodeLength( const char *src, int  slen );
  * \param src      source buffer
  * \param slen     amount of data to be decoded
  *
- * \return         0 if successful, POLARSSL_ERR_BASE64_BUFFER_TOO_SMALL, or
- *                 POLARSSL_ERR_BASE64_INVALID_DATA if the input data is not
- *                 correct.
- *
+ * \return         0 if successful
  */
 static int Decode( char *dst, int dlen,
                    const char *src, int  slen );
@@ -81,4 +78,4 @@ private:
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmBase64_h
+#endif //GDCMBASE64_H

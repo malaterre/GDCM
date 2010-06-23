@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAnonymizeEvent_h
-#define __gdcmAnonymizeEvent_h
+#ifndef GDCMANONYMIZEEVENT_H
+#define GDCMANONYMIZEEVENT_H
 
 #include "gdcmEvent.h"
 #include "gdcmTag.h"
@@ -27,7 +27,7 @@ namespace gdcm
  *
  * \see Anonymizer
  */
-class  AnonymizeEvent : public AnyEvent
+class AnonymizeEvent : public AnyEvent
 {
 public:
   typedef AnonymizeEvent Self;
@@ -51,4 +51,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmAnonymizeEvent_h
+#endif //GDCMANONYMIZEEVENT_H

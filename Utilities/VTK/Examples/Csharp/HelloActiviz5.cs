@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,7 +21,9 @@ using vtkgdcm;
 // -D <path> => path to the data; the data should be in <path>/Data/
 
 /*
- * $ MONO_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/ LD_LIBRARY_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ mono ./bin/HelloActiviz5.exe ~/Creatis/gdcmData/test.acr
+ * $ export MONO_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/ 
+ * $ export LD_LIBRARY_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ 
+ * $ mono ./bin/HelloActiviz5.exe -I
  *
  */
 public class HelloActiviz5

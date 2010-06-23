@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -28,6 +28,7 @@ Validate::~Validate()
 //-----------------------------------------------------------------------------
 void Validate::Validation()
 {
+  if(!F) return;
   V.GetHeader().SetPreamble( F->GetHeader().GetPreamble() );
   //FileMetaInformation &fmi = F.GetHeader();
   FileMetaInformation fmi( F->GetHeader() );

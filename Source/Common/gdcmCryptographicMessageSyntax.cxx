@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -29,6 +29,8 @@
 #endif
 
 /*
+ * http://en.wikipedia.org/wiki/PKCS
+ * PKCS#7 <=> Cryptographic Message Syntax Standard
  */
 namespace gdcm
 {
@@ -38,90 +40,9 @@ namespace gdcm
  *
  * openssl req -new -key CA_key.pem -x509 -days 365 -out CA_cert.cer
  */
-class CryptographicMessageSyntaxInternals
-{
-#ifdef GDCM_USE_SYSTEM_OPENSSL
-public:
-  CryptographicMessageSyntaxInternals():recips(NULL),pkey(NULL),CipherType( CryptographicMessageSyntax::AES256_CIPHER ) {
-    recips = sk_X509_new_null();
-  }
-  ~CryptographicMessageSyntaxInternals() {
-    sk_X509_pop_free(recips, X509_free);
-    EVP_PKEY_free(pkey);
-  }
-  unsigned int GetNumberOfRecipients() const {
-    //::STACK_OF(X509) *recips = recips;
-    if(!recips) {
-      return 0;
-    }
-    return ::sk_X509_num(recips);
-    }
-  ::STACK_OF(X509)* GetRecipients( ) const {
-    return recips;
-  }
-  ::X509* GetRecipient( unsigned int i ) const {
-    //::STACK_OF(X509) *recips = Internals->recips;
-    ::X509 *ret = sk_X509_value(recips, i);
-    return ret;
-  }
-  void SetPrivateKey(::EVP_PKEY* pkey) {
-    this->pkey = pkey;
-  }
-  ::EVP_PKEY* GetPrivateKey() const {
-    return pkey;
-  }
-  void SetCipherType(CryptographicMessageSyntax::CipherTypes ciphertype) {
-    CipherType = ciphertype;
-  }
-  CryptographicMessageSyntax::CipherTypes GetCipherType() {
-    return CipherType;
-  }
-private:
-  ::STACK_OF(X509) *recips;
-  ::EVP_PKEY *pkey;
-  CryptographicMessageSyntax::CipherTypes CipherType;
-#endif
-};
-
-CryptographicMessageSyntax::CryptographicMessageSyntax()
-{
-  Internals = new CryptographicMessageSyntaxInternals;
-}
-
-CryptographicMessageSyntax::~CryptographicMessageSyntax()
-{
-  delete Internals;
-}
-
-void CryptographicMessageSyntax::SetCipherType( CipherTypes type)
-{
-#ifdef GDCM_USE_SYSTEM_OPENSSL
-  Internals->SetCipherType( type );
-#endif
-}
-
-CryptographicMessageSyntax::CipherTypes CryptographicMessageSyntax::GetCipherType() const
-{
-#ifdef GDCM_USE_SYSTEM_OPENSSL
-  return Internals->GetCipherType();
-#else
-  return AES256_CIPHER; // why not :)
-#endif
-}
-
-//void CryptographicMessageSyntax::SetCertificate( X509 *cert )
-//{
-//  Internals->x509 = cert;
-//}
-//
-//const X509 *CryptographicMessageSyntax::GetCertificate( ) const
-//{
-//  return Internals->x509;
-//}
-
 /*
-openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
-*/
+ * openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
+ */
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype)
 {
@@ -148,86 +69,194 @@ const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes cipherty
 }
 #endif
 
+class CryptographicMessageSyntaxInternals
+{
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+public:
+  CryptographicMessageSyntaxInternals():recips(NULL),pkey(NULL),CipherType( CryptographicMessageSyntax::AES256_CIPHER ),cipher(NULL),p7(PKCS7_new()),p7bio(NULL) {
+    recips = sk_X509_new_null();
+    PKCS7_set_type(p7,NID_pkcs7_enveloped);
+    bio_buffer = BIO_new(BIO_s_mem());
+    Initialized = false;
+  }
+  ~CryptographicMessageSyntaxInternals() {
+    EVP_PKEY_free(pkey);
+    PKCS7_free(p7);
+    p7 = NULL;
+    BIO_free_all(bio_buffer);
+
+    if(p7bio)
+      BIO_free_all(p7bio);
+  }
+  unsigned int GetNumberOfRecipients() const {
+    //::STACK_OF(X509) *recips = recips;
+    if(!recips) {
+      return 0;
+    }
+    return ::sk_X509_num(recips);
+    }
+  STACK_OF(X509)* GetRecipients( ) const {
+    return recips;
+  }
+  ::X509* GetRecipient( unsigned int i ) const {
+    //::STACK_OF(X509) *recips = Internals->recips;
+    ::X509 *ret = sk_X509_value(recips, i);
+    return ret;
+  }
+  void SetPrivateKey(::EVP_PKEY* pkey) {
+    this->pkey = pkey;
+  }
+  ::EVP_PKEY* GetPrivateKey() const {
+    return pkey;
+  }
+  void SetCipherType(CryptographicMessageSyntax::CipherTypes ciphertype) {
+    CipherType = ciphertype;
+  }
+  bool Initialize()
+    {
+    if(!cipher) 
+      {
+      cipher = CreateCipher( GetCipherType() );
+      }
+    if(!cipher) return false;
+    // The following is inspired by PKCS7_encrypt
+    // and openssl/crypto/pkcs7/enc.c
+    if( !PKCS7_set_cipher(p7,cipher) ) return false;
+
+    for(int i = 0; i < GetNumberOfRecipients(); i++) {
+      ::X509* recip = GetRecipient(i);
+      if (!PKCS7_add_recipient(p7,recip)) return false;
+    }
+    sk_X509_pop_free(recips, X509_free);
+
+    /* Set the content of the signed to 'data' */
+    /* PKCS7_content_new(p7,NID_pkcs7_data); not used in envelope */
+
+    /* could be used, but not in this version :-)
+       if (!nodetach) PKCS7_set_detached(p7,1);
+     */
+
+    if ((p7bio=PKCS7_dataInit(p7,NULL)) == NULL) return false;
+
+    return true;
+    }
+
+  bool Encrypt(char *output, size_t &outlen, const char *array, size_t len)
+    {
+    if( !Initialized )
+      {
+      bool b = Initialize();
+      if ( !b )
+        {
+        gdcmErrorMacro( "Initialize" );
+        return false;
+        }
+      Initialized = true;
+      }
+
+    BIO *data = BIO_new_mem_buf((void*)array, len);
+    if(!data) 
+      {
+      gdcmErrorMacro( "BIO_new_mem_buf" );
+      return false;
+      }
+
+    char buf[1024*4];
+    for (;;)
+      {
+      int i = BIO_read(data,buf,sizeof(buf));
+      if (i <= 0) break;
+      BIO_write(p7bio,buf,i);
+      }
+    BIO_flush(p7bio);
+
+    if (!PKCS7_dataFinal(p7,p7bio))
+      {
+      gdcmErrorMacro( "PKCS7_dataFinal" );
+      return false;
+      }
+
+    // WARNING:
+    // BIO_reset() normally returns 1 for success and 0 or -1 for failure. File
+    // BIOs are an exception, they return 0 for success and -1 for failure. 
+    if( BIO_reset(bio_buffer) != 1 )
+      {
+      gdcmErrorMacro( "BIO_reset" );
+      return false;
+      }
+
+    i2d_PKCS7_bio(bio_buffer,p7);
+    // (void)BIO_flush(wbio);
+
+    char *binary;
+    long biolen = BIO_get_mem_data(bio_buffer,&binary);
+    if ( outlen < biolen ) 
+      {
+      gdcmErrorMacro( "Allocation issue: " << outlen << " vs " << biolen << " from " << len );
+      return false;
+      }
+    outlen = biolen;
+    memcpy( output, binary, outlen );
+
+    BIO_free(data);
+    return true;
+    }
+  CryptographicMessageSyntax::CipherTypes GetCipherType() const {
+    return CipherType;
+  }
+	::PKCS7 *GetP7() const { return p7; }
+private:
+  STACK_OF(X509) *recips;
+  ::EVP_PKEY *pkey;
+  CryptographicMessageSyntax::CipherTypes CipherType;
+  const EVP_CIPHER *cipher;
+	::PKCS7 *p7;
+  BIO *p7bio;
+  BIO *bio_buffer;
+  bool Initialized;
+#endif
+};
+
+CryptographicMessageSyntax::CryptographicMessageSyntax()
+{
+  Internals = new CryptographicMessageSyntaxInternals;
+}
+
+CryptographicMessageSyntax::~CryptographicMessageSyntax()
+{
+  delete Internals;
+}
+
+void CryptographicMessageSyntax::SetCipherType( CipherTypes type )
+{
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  Internals->SetCipherType( type );
+#else
+  (void)type;
+#endif
+}
+
+CryptographicMessageSyntax::CipherTypes CryptographicMessageSyntax::GetCipherType() const
+{
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  return Internals->GetCipherType();
+#else
+  return AES256_CIPHER; // why not :)
+#endif
+}
+
 bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-	::PKCS7 *p7;
-  BIO *data,*p7bio;
-  char buf[1024*4];
-  int i;
-  int nodetach=1;
-  const EVP_CIPHER *cipher=NULL;
-  BIO*  wbio = NULL;
-  time_t t;
-
-  t = time(NULL);
-  RAND_seed(&t,sizeof(t));
-#ifdef _WIN32
-  RAND_screen(); /* Loading video display memory into random state */
-#endif
-  CryptographicMessageSyntaxInternals *x509 = Internals;
-
-  //OpenSSL_add_all_algorithms();
-
-  //if (!BIO_read_filename(data,argv[1])) goto err;
-  data = BIO_new_mem_buf((void*)array, len);
-  if(!data) goto err;
-
-  if(!cipher)  {
-    cipher = CreateCipher( Internals->GetCipherType() );
-  }
-  if(!cipher)
+  // RAND_status() and RAND_event() return 1 if the PRNG has been seeded with
+  // enough data, 0 otherwise. 
+  if( !RAND_status() )
     {
+    gdcmErrorMacro( "PRNG was not seeded properly" );
+    outlen = 0;
     return false;
     }
-
-  // The following is inspired by PKCS7_encrypt
-  // and openssl/crypto/pkcs7/enc.c
-  p7=PKCS7_new();
-  PKCS7_set_type(p7,NID_pkcs7_enveloped);
-  //PKCS7_set_type(p7,NID_pkcs7_encrypted);
-
-
-  if (!PKCS7_set_cipher(p7,cipher)) goto err;
-  for(i = 0; i < x509->GetNumberOfRecipients(); i++) {
-	  ::X509* recip = x509->GetRecipient(i);
-    if (!PKCS7_add_recipient(p7,recip)) goto err;
-  }
-
-  if ((p7bio=PKCS7_dataInit(p7,NULL)) == NULL) goto err;
-
-  for (;;)
-    {
-    i=BIO_read(data,buf,sizeof(buf));
-    if (i <= 0) break;
-    BIO_write(p7bio,buf,i);
-    }
-  (void)BIO_flush(p7bio);
-  BIO_free(data);
-
-  if (!PKCS7_dataFinal(p7,p7bio)) goto err;
-  BIO_free_all(p7bio);
-
-  if (!(wbio = BIO_new(BIO_s_mem()))) goto err;
-  i2d_PKCS7_bio(wbio,p7);
-  (void)BIO_flush(wbio);
-  PKCS7_free(p7);
-  p7 = NULL;
-
-  char *binary;
-  outlen = BIO_get_mem_data(wbio,&binary);
-  memcpy( output, binary, outlen );
-
-  BIO_free_all(wbio);  /* also frees b64 */
-
-  t = time(NULL);
-  RAND_seed(&t,sizeof(t));
-
-  return true;
-err:
-  ERR_load_crypto_strings();
-  ERR_print_errors_fp(stderr);
-  return false;
+  return Internals->Encrypt(output, outlen, array, len);
 #else
   outlen = 0;
   return false;
@@ -261,7 +290,6 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
 
   EVP_PKEY *pkey = x509->GetPrivateKey();
 
-   //if (!BIO_read_filename(data,argv[0])) goto err; 
   data = BIO_new_mem_buf((void*)array, len);
   if(!data) goto err;
 
@@ -383,7 +411,7 @@ bool CryptographicMessageSyntax::ParseKeyFile( const char *keyfile)
 bool CryptographicMessageSyntax::ParseCertificateFile( const char *keyfile)
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  ::STACK_OF(X509) *recips = Internals->GetRecipients();
+  STACK_OF(X509) *recips = Internals->GetRecipients();
   assert( recips );
   ::X509 *x509 = NULL;
 

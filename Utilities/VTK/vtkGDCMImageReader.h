@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -62,12 +62,11 @@
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
 // vtkDICOMImageReader
 
-#ifndef __vtkGDCMImageReader_h
-#define __vtkGDCMImageReader_h
+#ifndef VTKGDCMIMAGEREADER_H
+#define VTKGDCMIMAGEREADER_H
 
 #include "vtkMedicalImageReader2.h"
 #include "vtkImageData.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
@@ -300,6 +299,7 @@ protected:
   int IconNumberOfScalarComponents;
   int PlanarConfiguration;
   int LossyFlag;
+  int ForceRescale;
 
 protected:
   // TODO / FIXME

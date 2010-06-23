@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmScanner.h"
 #include "gdcmDirectory.h"
+#include "gdcmSystem.h"
 #include "gdcmTesting.h"
 #include "gdcmTrace.h"
 
@@ -26,6 +27,11 @@ int TestScannerExtra()
   const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
   if( !extradataroot )
     {
+    return 1;
+    }
+  if( !gdcm::System::FileIsDirectory(extradataroot) )
+    {
+    std::cerr << "No such directory: " << extradataroot <<  std::endl;
     return 1;
     }
 
@@ -65,6 +71,13 @@ int TestScanner(int argc, char *argv[])
     {
     directory = argv[1];
     }
+
+  if( !gdcm::System::FileIsDirectory(directory) )
+    {
+    std::cerr << "No such directory: " << directory <<  std::endl;
+    return 1;
+    }
+
   gdcm::Directory d;
   unsigned int nfiles = d.Load( directory ); // no recursion
   d.Print( std::cout );
@@ -164,7 +177,9 @@ int TestScanner(int argc, char *argv[])
     }
 }
 */
-  //int b2 = TestScannerExtra(); (void)b2;
+
+  // puposely discard gdcmDataExtra test, this is just an 'extra' test...
+  int b2 = TestScannerExtra(); (void)b2;
   
 
   return 0;

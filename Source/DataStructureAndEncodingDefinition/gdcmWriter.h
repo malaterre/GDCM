@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmWriter_h
-#define __gdcmWriter_h
+#ifndef GDCMWRITER_H
+#define GDCMWRITER_H
 
 #include "gdcmFile.h"
 
@@ -27,7 +27,7 @@ class FileMetaInformation;
  * This class is a non-validating writer, it will only performs well-
  * formedness check only.
  *
- * Detailled description here
+ * \details Detailled description here
  * To avoid GDCM being yet another broken DICOM lib we try to 
  * be user level and avoid writing illegal stuff (odd length,
  * non-zero value for Item start/end length ...)
@@ -40,8 +40,10 @@ class FileMetaInformation;
  * - Alphabetical order for elements (garanteed by design of internals)
  * - 32bits VR will be rewritten with 00
  *
+ * \warning
+ * gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
  *
- * WARNING: gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
+ * \see Reader DataSet File
  */
 class GDCM_EXPORT Writer
 {
@@ -96,4 +98,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmWriter_h
+#endif //GDCMWRITER_H

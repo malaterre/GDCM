@@ -32,8 +32,14 @@ IF(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Examples/*.java"
     "${GDCM_SOURCE_DIR}/Examples/*.py"
     )
+  FILE(GLOB_RECURSE vtkexamplefiles
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.cxx"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.cs"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.java"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/Examples/*.py"
+    )
   SET(DOXYFILE_EXAMPLES)
-  foreach(file ${examplefiles})
+  foreach(file ${examplefiles} ${vtkexamplefiles})
     get_filename_component(f ${file} NAME)
     set(DOXYFILE_EXAMPLES "${DOXYFILE_EXAMPLES}\n\\example ${f}")
   endforeach(file)
@@ -110,7 +116,7 @@ IF(GDCM_DOCUMENTATION)
                ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf # output #2
       # Command #1
       COMMAND  ${SED_EXECUTABLE}
-      ARGS     -i.tmp -e "'s/]{hyperref}/]{hyperref}\\\\hypersetup{pdftitle={GDCM Reference Manual},pdfauthor={Mathieu Malaterre and co.},pdfsubject={Grassroots DICOM API reference},pdfkeywords={GDCM,DICOM,JPEG,Lossless JPEG,JPEG-LS,J2K,JPEG 2000,RLE},pdfpagemode={UseOutlines},bookmarks,bookmarksopen,pdfstartview={FitH},backref,colorlinks,linkcolor={black},citecolor={black},urlcolor={black},baseurl={http:\\/\\/gdcm.sourceforge.net}}\\\\hyperbaseurl{http:\\/\\/gdcm.sourceforge.net}/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
+      ARGS     -i.tmp -e "'s/]{hyperref}/]{hyperref}\\\\hypersetup{pdftitle={GDCM ${GDCM_VERSION} Reference Manual},pdfauthor={Mathieu Malaterre and co.},pdfsubject={Grassroots DICOM API reference},pdfkeywords={GDCM,DICOM,JPEG,Lossless JPEG,JPEG-LS,J2K,JPEG 2000,RLE},pdfpagemode={UseOutlines},bookmarks,bookmarksopen,pdfstartview={FitH},backref,colorlinks,linkcolor={black},citecolor={black},urlcolor={black},baseurl={http:\\/\\/gdcm.sourceforge.net}}\\\\hyperbaseurl{http:\\/\\/gdcm.sourceforge.net}/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
       # Command #2
       COMMAND  ${SED_EXECUTABLE}
       ARGS     -i.tmp -e "'s/${sed_gdcm_source_dir}/gdcm/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/*.tex

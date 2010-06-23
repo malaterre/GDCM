@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,7 +24,7 @@ SplitMosaicFilter::SplitMosaicFilter():F(new File),I(new Image) {}
 SplitMosaicFilter::~SplitMosaicFilter() {}
 
 /*
- *  gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm  
+ *  gdcmDataExtra/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm  
  */
 bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims, unsigned int square,
   const unsigned int *outputdims, unsigned short *output )

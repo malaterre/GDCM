@@ -51,11 +51,10 @@
 // .SECTION See Also
 // vtkRenderWindow vtkRenderer vtkImageActor vtkImageMapToWindowLevelColors
 
-#ifndef __vtkImageColorViewer_h
-#define __vtkImageColorViewer_h
+#ifndef VTKIMAGECOLORVIEWER_H
+#define VTKIMAGECOLORVIEWER_H
 
 #include "vtkObject.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 class vtkAlgorithmOutput;
 class vtkImageActor;
@@ -67,7 +66,7 @@ class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkPolyData;
 
-class GDCM_EXPORT vtkImageColorViewer : public vtkObject 
+class VTK_EXPORT vtkImageColorViewer : public vtkObject 
 {
 public:
   static vtkImageColorViewer *New();

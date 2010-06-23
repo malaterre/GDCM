@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPixmapToPixmapFilter_h
-#define __gdcmPixmapToPixmapFilter_h
+#ifndef GDCMPIXMAPTOPIXMAPFILTER_H
+#define GDCMPIXMAPTOPIXMAPFILTER_H
 
 #include "gdcmPixmap.h"
 
@@ -43,5 +43,5 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmPixmapToPixmapFilter_h
+#endif //GDCMPIXMAPTOPIXMAPFILTER_H
 

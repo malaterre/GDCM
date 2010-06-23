@@ -6,23 +6,35 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
 IF(GDCM_BINARY_DIR)
+FIND_PACKAGE(SQLITE3)
+
 FIND_PACKAGE(MAGIC)
 
-find_package(Qt4 4.4.3 COMPONENTS QtGUI)
+find_package(Qt4 4.4.3 COMPONENTS QtCore QtGui)
 # cmake 2.6.4 does not set it to advanced
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
 
 ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
+  GenAllVR
+  DiffFile
+  SimpleScanner
+  TraverseModules
+  GetSequenceUltrasound
+  ChangeSequenceUltrasound
   LargeVRDSExplicit
-  #AnonymizeAES
+  ExtractEncryptedContent
+  ReadAndDumpDICOMDIR
+  GenerateStandardSOPClasses
   ClinicalTrialAnnotate
   CheckBigEndianBug
   DuplicatePCDE
@@ -31,6 +43,7 @@ SET(EXAMPLES_SRCS
   CompressImage
   FixBrokenJ2K
   GenFakeImage
+  GenFakeIdentifyFile
   HelloVizWorld
   HelloWorld
   MergeTwoFiles
@@ -49,6 +62,8 @@ SET(EXAMPLES_SRCS
 IF(QT4_FOUND)
   INCLUDE(${QT_USE_FILE})
   ADD_EXECUTABLE(ConvertToQImage ConvertToQImage.cxx)
+  # qtGUI will resolved QImage symbol
+  # qtcore will resolve qstring symbols
   TARGET_LINK_LIBRARIES(ConvertToQImage gdcmMSFF ${QT_LIBRARIES})
 ENDIF(QT4_FOUND)
 
@@ -57,6 +72,12 @@ IF(MAGIC_FOUND)
   ADD_EXECUTABLE(EncapsulateFileInRawData EncapsulateFileInRawData.cxx)
   TARGET_LINK_LIBRARIES(EncapsulateFileInRawData gdcmMSFF ${MAGIC_LIBRARIES})
 ENDIF(MAGIC_FOUND)
+
+IF(SQLITE3_FOUND)
+  INCLUDE_DIRECTORIES(${SQLITE3_INCLUDE_DIRS})
+  ADD_EXECUTABLE(DumpToSQLITE3 DumpToSQLITE3.cxx)
+  TARGET_LINK_LIBRARIES(DumpToSQLITE3 gdcmMSFF ${SQLITE3_LIBRARIES})
+ENDIF(SQLITE3_FOUND)
 
 IF(GDCM_BUILD_TESTING)
 SET(EXAMPLES_SRCS

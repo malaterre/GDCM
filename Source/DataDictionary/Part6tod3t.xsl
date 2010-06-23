@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="text" indent="yes"/>
 <!-- XSL to convert XML GDCM2 data dictionay into
@@ -10,7 +10,7 @@ Checked against:
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -60,15 +60,11 @@ http://www.thescripts.com/forum/thread86881.html
       <xsl:value-of select="translate(@element,'abcdef','ABCDEF')"/>
       <xsl:text>) VERS="</xsl:text>
       <xsl:choose>
-        <xsl:when test="@version = 2">
+        <xsl:when test="@retired = 'true'">
           <xsl:text>2</xsl:text>
         </xsl:when>
-        <xsl:when test="@version = 3">
-          <xsl:text>3</xsl:text>
-        </xsl:when>
         <xsl:otherwise>
-          <!--message-->
-          <xsl:text>1</xsl:text>
+          <xsl:text>3</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="@retired != &quot;false&quot;">
@@ -82,7 +78,7 @@ http://www.thescripts.com/forum/thread86881.html
       <xsl:variable name="apos">'</xsl:variable>
       <!--translating an apostrophe is a pain ... better solution ? -->
       <xsl:variable name="description_apos">
-        <xsl:value-of select="translate(description, $apos, '')"/>
+        <xsl:value-of select="translate(@name, $apos, '')"/>
       </xsl:variable>
       <xsl:variable name="description_dash">
         <!-- the dicom3tools is not always consistant with capitalization. 
@@ -97,7 +93,7 @@ http://www.thescripts.com/forum/thread86881.html
       <!-- remove remaining extra character -->
       <xsl:value-of select="translate($description_cap,'/(),','')"/>
       <xsl:text>" Name="</xsl:text>
-      <xsl:value-of select="description"/>
+      <xsl:value-of select="@name"/>
       <xsl:text>"</xsl:text>
       <xsl:text>
 </xsl:text>

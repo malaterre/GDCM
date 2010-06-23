@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -105,7 +105,11 @@ if( DS.IsEmpty() )
     }
 
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
-  assert( ts.IsValid() );
+  if( !ts.IsValid() )
+    {
+    gdcmErrorMacro( "Invalid Transfer Syntax" );
+    return false;
+    }
 
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="text" indent="yes"/>
 <!-- XSL to convert XML GDCM2 data dictionay into
@@ -8,7 +8,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -28,7 +28,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -38,8 +38,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmTagToType_h
-#define __gdcmTagToType_h
+#ifndef GDCMTAGTOTYPE_H
+#define GDCMTAGTOTYPE_H
 
 #include "gdcmVR.h"
 #include "gdcmVM.h"
@@ -48,7 +48,7 @@
 namespace gdcm {
 // default template: the compiler should only pick it up when the element is private:
 template &lt;uint16_t group,uint16_t element&gt; struct TagToType {
-GDCM_STATIC_ASSERT( group % 2 );
+//GDCM_STATIC_ASSERT( group % 2 );
 enum { VRType = VR::VRALL };
 enum { VMType = VM::VM1_n };
 };
@@ -115,7 +115,7 @@ static const char* GetVMString() { return "1"; }
     </xsl:for-each>
     <xsl:text>
 } // end namespace gdcm
-#endif // __gdcmTagToType_h
+#endif // GDCMTAGTOTYPE_H
 </xsl:text>
   </xsl:template>
 </xsl:stylesheet>

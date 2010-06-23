@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -66,7 +66,7 @@ const char *Filename::GetName()
 const char *Filename::ToWindowsSlashes()
 {
   Conversion = FileName;
-  assert( !Conversion.empty() );
+  //assert( !Conversion.empty() );
   for (std::string::iterator it = Conversion.begin(); it != Conversion.end(); ++it )
     {
     if( *it == '/' )
@@ -89,7 +89,7 @@ const char *Filename::ToUnixSlashes()
     {
     if( *it == '\\' )
       {
-      assert( it+1 != Conversion.end() && *(it+1) != ' ' ); // is it an escaped space ?
+      assert( it+1 == Conversion.end() || *(it+1) != ' ' ); // is it an escaped space ?
       *it = '/';
       }
     }
@@ -164,7 +164,7 @@ bool Filename::IsIdentical(Filename const &fn) const
 
 const char *Filename::Join(const char *path, const char *filename)
 {
-  static std::string s;
+  static std::string s; // warning C4640: 's' : construction of local static object is not thread-safe
   s = path;
   s += '/';
   s += filename;

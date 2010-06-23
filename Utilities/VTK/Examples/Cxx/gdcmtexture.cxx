@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -15,7 +15,15 @@
 #include "vtkGDCMImageReader.h"
 
 #include "vtkRenderer.h"
+#include "vtkAssembly.h"
 #include "vtkRenderWindow.h"
+#include "vtkAnnotatedCubeActor.h"
+#include "vtkTransform.h"
+#include "vtkAxesActor.h"
+#include "vtkTextProperty.h"
+#include "vtkCaptionActor2D.h"
+#include "vtkPropAssembly.h"
+#include "vtkOrientationMarkerWidget.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkActor.h"
@@ -71,6 +79,41 @@ int main( int argc, char *argv[] )
   iren->SetRenderWindow(renwin);
   ren->AddActor(planeActor);
   ren->SetBackground(0,0,0.5);
+
+  vtkAnnotatedCubeActor* cube = vtkAnnotatedCubeActor::New();
+  cube->SetXPlusFaceText ( "L" );
+  cube->SetXMinusFaceText( "R" );
+  cube->SetYPlusFaceText ( "A" );
+  cube->SetYMinusFaceText( "P" );
+  cube->SetZPlusFaceText ( "H" );
+  cube->SetZMinusFaceText( "F" );
+
+  vtkAxesActor* axes2 = vtkAxesActor::New();
+  // simulate a left-handed coordinate system
+  //
+  vtkTransform *transform = vtkTransform::New();
+  transform->Identity();
+  //transform->RotateY(180);
+  reader->GetDirectionCosines()->Print(std::cout);
+  transform->Concatenate(reader->GetDirectionCosines());
+  //axes2->SetShaftTypeToCylinder();
+  axes2->SetUserTransform( transform );
+  //cube->SetUserTransform( transform ); // cant get it to work
+  cube->GetAssembly()->SetUserTransform( transform ); // cant get it to work
+
+  vtkPropAssembly* assembly = vtkPropAssembly::New();
+  assembly->AddPart( axes2 );
+  assembly->AddPart( cube );
+
+  vtkOrientationMarkerWidget* widget = vtkOrientationMarkerWidget::New();
+  //widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
+  widget->SetOrientationMarker( assembly );
+  widget->SetInteractor( iren );
+  //widget->SetViewport( 0.0, 0.0, 0.4, 0.4 );
+  widget->SetEnabled( 1 );
+  widget->InteractiveOff();
+  widget->InteractiveOn();
+
   renwin->Render();
   iren->Start();
 

@@ -18,6 +18,7 @@ SET(IOD_TEST_SRCS
   TestStudy
   TestDefinedTerms
   TestEnumeratedValues
+  TestUsage
   #TestXMLDictReader
   #TestXMLPrivateDictReader
   )
@@ -32,9 +33,11 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/InformationObjectDefinition" # gdcmTables.h
   )
 
-CREATE_TEST_SOURCELIST(IODTests gdcmIODTests.cxx ${IOD_TEST_SRCS})
+CREATE_TEST_SOURCELIST(IODTests gdcmIODTests.cxx ${IOD_TEST_SRCS}
+  EXTRA_INCLUDE gdcmTestDriver.h
+  )
 ADD_EXECUTABLE(gdcmIODTests ${IODTests})
-TARGET_LINK_LIBRARIES(gdcmIODTests gdcmIOD)
+TARGET_LINK_LIBRARIES(gdcmIODTests gdcmIOD gdcmMSFF)
 
 #Don't understand why I need that ??
 SET(GDCM_IOD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmIODTests")

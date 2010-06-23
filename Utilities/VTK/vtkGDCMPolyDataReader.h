@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -26,17 +26,16 @@
 // vtkGDCMImageReader vtkMedicalImageReader2 vtkMedicalImageProperties
 
 
-#ifndef __vtkGDCMPolyDataReader_h
-#define __vtkGDCMPolyDataReader_h
+#ifndef VTKGDCMPOLYDATAREADER_H
+#define VTKGDCMPOLYDATAREADER_H
 
 #include "vtkPolyDataAlgorithm.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 class vtkMedicalImageProperties;
 //BTX
 namespace gdcm { class Reader; }
 //ETX
-class GDCM_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
 {
 public:
   static vtkGDCMPolyDataReader *New();

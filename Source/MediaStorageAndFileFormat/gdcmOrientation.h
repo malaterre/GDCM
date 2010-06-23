@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmOrientation_h
-#define __gdcmOrientation_h
+#ifndef GDCMORIENTATION_H
+#define GDCMORIENTATION_H
 
 #include "gdcmTypes.h"
 
@@ -67,4 +67,4 @@ inline std::ostream& operator<<(std::ostream &os, const Orientation &o)
 
 } // end namespace gdcm
 
-#endif //__gdcmOrientation_h
+#endif //GDCMORIENTATION_H

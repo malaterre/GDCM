@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -38,6 +38,8 @@ public:
   SmartPointer<File> F;
   typedef Directory::FilenamesType  FilenamesType;
   FilenamesType fns;
+  typedef Directory::FilenameType  FilenameType;
+  FilenameType rootdir;
   Scanner scanner;
   std::vector<uint32_t> OffsetTable;
   std::string FileSetID;
@@ -47,7 +49,7 @@ bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi
 {
   unsigned int nitems = sqi->GetNumberOfItems();
   std::vector<uint32_t> &offsets = Internals->OffsetTable;
-  Internals->OffsetTable.resize( nitems );
+  Internals->OffsetTable.resize( nitems + 1 );
   offsets[0] = start;
   for(unsigned int i = 1; i <= nitems; ++i)
     {
@@ -55,7 +57,7 @@ bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi
     offsets[i] = offsets[i-1] + item.GetLength<ExplicitDataElement>(); 
     }
 
-#define MDEBUG
+//#define MDEBUG
 #ifdef MDEBUG
   for(unsigned int i = 0; i <= nitems; ++i)
     {
@@ -66,7 +68,7 @@ bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi
   return true;
 }
 
-const char *GetLowerLevelDirectoryRecord(const char *input)
+static const char *GetLowerLevelDirectoryRecord(const char *input)
 {
   if( !input ) return NULL;
 
@@ -118,6 +120,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute<0x10,0x20> patientid;
     patientid.Set( ds );
+    assert( patientid.GetValue() );
     ret.first = patientid.GetValue();
     ret.second = patientid.GetTag();
     }
@@ -125,6 +128,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute <0x20,0xd> studyuid;
     studyuid.Set( ds );
+    assert( studyuid.GetValue() );
     ret.first = studyuid.GetValue();
     ret.second = studyuid.GetTag();
     }
@@ -132,6 +136,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute <0x20,0xe> seriesuid;
     seriesuid.Set( ds );
+    assert( seriesuid.GetValue() );
     ret.first = seriesuid.GetValue();
     ret.second = seriesuid.GetTag();
     }
@@ -139,6 +144,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
     {
     Attribute <0x04,0x1511> sopuid;
     sopuid.Set( ds );
+    assert( sopuid.GetValue() );
     ret.first = sopuid.GetValue();
     ret.second = Tag(0x8,0x18); // watch out !
     }
@@ -149,7 +155,7 @@ DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(u
   return ret;
 }
 
-Tag GetParentTag(Tag const &t)
+static Tag GetParentTag(Tag const &t)
 {
   Tag ret;
   if( t == Tag(0x8,0x18) )
@@ -329,7 +335,7 @@ bool DICOMDIRGenerator::TraverseDirectoryRecords(VL start )
     DataSet &ds = item.GetNestedDataSet();
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.Set( ds );
-    std::cout << "FOUND DIRECTORY TYPE:" << directoryrecordtype.GetValue() << std::endl;
+    //std::cout << "FOUND DIRECTORY TYPE:" << directoryrecordtype.GetValue() << std::endl;
     unsigned int next = FindNextDirectoryRecord( i, directoryrecordtype.GetValue() );
     if( next )
       {
@@ -407,10 +413,11 @@ bool DICOMDIRGenerator::AddPatientDirectoryRecord()
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.SetValue( "PATIENT" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
-    patientid.SetValue( it->c_str() );
+    const char *pid = it->c_str();
+    gdcmAssertAlwaysMacro( pid && *pid );
+    patientid.SetValue( pid );
     ds.Insert( patientid.GetAsDataElement() );
 
-    const char *pid = it->c_str();
     gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(patientid.GetTag(), pid);
     Attribute<0x10,0x10> patientsname;
     if( ttv.find( patientsname.GetTag() ) != ttv.end() )
@@ -474,7 +481,9 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.SetValue( "STUDY" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
-    studyinstanceuid.SetValue( it->c_str() );
+    const char *studyuid = it->c_str();
+    gdcmAssertAlwaysMacro( studyuid && *studyuid );
+    studyinstanceuid.SetValue( studyuid );
     ds.Insert( studyinstanceuid.GetAsDataElement() );
 
     //SingleDataElementInserter<0x20,0xd>(ds, scanner);
@@ -483,7 +492,6 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
     //SingleDataElementInserter<0x8,0x1030>(ds, scanner);
     //SingleDataElementInserter<0x8,0x50>(ds, scanner);
     //SingleDataElementInserter<0x20,0x10>(ds, scanner);
-    const char *studyuid = it->c_str();
     gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(studyinstanceuid.GetTag(), studyuid);
 
     Attribute<0x8,0x20> studydate;
@@ -568,10 +576,11 @@ bool DICOMDIRGenerator::AddSeriesDirectoryRecord()
     Attribute<0x4,0x1430> directoryrecordtype;
     directoryrecordtype.SetValue( "SERIES" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
-    seriesinstanceuid.SetValue( it->c_str() );
+    const char *seriesuid = it->c_str();
+    gdcmAssertAlwaysMacro( seriesuid && *seriesuid );
+    seriesinstanceuid.SetValue( seriesuid );
     ds.Insert( seriesinstanceuid.GetAsDataElement() );
 
-    const char *seriesuid = it->c_str();
     gdcm::Scanner::TagToValue const &ttv = scanner.GetMappingFromTagToValue(seriesinstanceuid.GetTag(), seriesuid);
     Attribute<0x8,0x60> modality;
     if( ttv.find( modality.GetTag() ) != ttv.end() )
@@ -624,6 +633,9 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
   gdcm::Scanner::ValuesType::const_iterator it = sopinstanceuids.begin();
+  gdcm::Filename rootdir = Internals->rootdir.c_str();
+  const char *rd = rootdir.ToWindowsSlashes();
+  size_t strlen_rd = strlen( rd );
   for( ; it  != sopinstanceuids.end(); ++it)
     {
     Item item;
@@ -646,6 +658,14 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
     const char *fn_str = scanner.GetFilenameFromTagToValue(sopinstanceuid.GetTag(), sopuid);
     referencedfileid.SetNumberOfValues( 1 );
     gdcm::Filename fn = fn_str;
+    std::string relative = fn.ToWindowsSlashes();
+    std::string::size_type l = relative.find( rd );
+    if( l != std::string::npos )
+      {
+      assert( l == 0 ); // FIXME
+      relative.replace( l, strlen_rd, "" );
+      fn = relative.c_str() + 1;
+      }
     referencedfileid.SetValue( fn.ToWindowsSlashes() );
     ds.Insert( referencedfileid.GetAsDataElement() );
     Attribute<0x0004,0x1510> referencedsopclassuidinfile;
@@ -709,7 +729,7 @@ DICOMDIRGenerator::~DICOMDIRGenerator(  )
   delete Internals;
 }
 
-bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
+static bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
 {
   if(!filename) return false;
   // (0004,1500) CS [IMG001]                                 #   6, 1 ReferencedFileID
@@ -724,14 +744,20 @@ bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
   de.SetByteValue( copy.c_str(), copy.size() ) ;
   at.SetFromDataElement( de );
   unsigned int n = at.GetNumberOfValues();
-  // A volume may have at most 8 levels of directories, where the root directory is defined as level 1.
-  if( n > 8 ) return false;
+  // A volume may have at most 8 levels of directories, where the root
+  // directory is defined as level 1.
+  if( n > 8 )
+    {
+    gdcmDebugMacro( "8 Levels of directories" );
+    return false;
+    }
 
   for( unsigned int i = 0; i < n; ++i)
     {
     gdcm::CodeString cs = at.GetValue( i );
     if( !cs.IsValid() || cs.size() > 8 )
       {
+      gdcmDebugMacro( "Problem with CS: " << cs );
       return false;
       }
     }
@@ -741,6 +767,11 @@ bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
 void DICOMDIRGenerator::SetFilenames( FilenamesType const & fns )
 {
   Internals->fns = fns;
+}
+
+void DICOMDIRGenerator::SetRootDirectory( FilenameType const & root )
+{
+  Internals->rootdir = root;
 }
 
 bool DICOMDIRGenerator::Generate()
@@ -794,6 +825,9 @@ bool DICOMDIRGenerator::Generate()
   scanner.AddTag( Tag(0x8,0x8) );
 
   FilenamesType const &filenames = Internals->fns;
+  gdcm::Filename rootdir = Internals->rootdir.c_str();
+  const char *rd = rootdir.ToWindowsSlashes();
+  size_t strlen_rd = strlen( rd );
 
   // Let's check that filenames are ok for iso9660 + compatible with VR:CS
 {
@@ -802,6 +836,14 @@ bool DICOMDIRGenerator::Generate()
     {
     gdcm::Filename fn = it->c_str();
     const char *f = fn.ToWindowsSlashes();
+    std::string relative = f;
+    std::string::size_type l = relative.find( rd );
+    if( l != std::string::npos )
+      {
+      assert( l == 0 ); // FIXME
+      relative.replace( l, strlen_rd, "" );
+      f = relative.c_str() + 1;
+      }
     if( !IsCompatibleWithISOIEC9660MediaFormat( f ) )
       {
       gdcmErrorMacro( "Invalid file name: " << f );
@@ -815,7 +857,7 @@ bool DICOMDIRGenerator::Generate()
     return false;
     }
 
-  scanner.Print( std::cout );
+  //scanner.Print( std::cout );
 
   Scanner::ValuesType vt = scanner.GetValues( Tag(0x2,0x10) );
   Scanner::ValuesType vtref;
@@ -901,8 +943,8 @@ the File-set.
   gdcm::TransferSyntax ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
   h.SetDataSetTransferSyntax( ts );
 
-  std::cout << ds << std::endl;
-  std::cout << h << std::endl;
+  //std::cout << ds << std::endl;
+  //std::cout << h << std::endl;
 
 
   /* Very important step it should be the *VERY* last one */
@@ -975,6 +1017,12 @@ SequenceOfItems *DICOMDIRGenerator::GetDirectoryRecordSequence()
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
   return sqi;
+}
+
+const char *DICOMDIRGenerator::ComputeFileID(const char *input)
+{
+  assert( 0 ); (void)input;
+  return NULL;
 }
 
 void DICOMDIRGenerator::SetDescriptor( const char *d )

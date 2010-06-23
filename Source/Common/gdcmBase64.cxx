@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -71,6 +71,9 @@ int Base64::GetEncodeLength(const char *src, int slen )
   int dlen = bptr->length;
   BIO_free_all(b64);
   return dlen;
+#else
+  (void)src;
+  (void)slen;
 #endif
   return -1;
 }
@@ -106,7 +109,11 @@ int Base64::Encode( char *dst, int dlen,
   BIO_free_all(mem);
   return 0;
 #else
- return -1;
+  (void)dst;
+  (void)dlen;
+  (void)src;
+  (void)slen;
+  return -1;
 #endif
 }
 
@@ -139,6 +146,8 @@ int Base64::GetDecodeLength( const char *src, int  slen )
 
   return len;
 #else
+  (void)src;
+  (void)slen;
   return -1;
 #endif
 }
@@ -173,6 +182,10 @@ int Base64::Decode( char *dst, int dlen,
   BIO_free_all(mem);
   return 0;
 #else
+  (void)dst;
+  (void)dlen;
+  (void)src;
+  (void)slen;
   return -1;
 #endif
 }

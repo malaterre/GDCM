@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,23 +12,31 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/*
-PS 3.17 - 2008
-Annex H. Clinical Trial Identification Workflow Examples
-(Informative)
-This Annex was formerly located in Annex O of PS 3.3 in the 2003 and earlier revisions of the standard.
-The Clinical Trial Identification modules are optional. As such, there are several points in the workflow of
-clinical trial data at which the Clinical Trial Identification attributes may be added to the data. At the
-Clinical Trial Site, the attributes may be added at the scanner, a PACS system, a site workstation, or a
-workstation provided to the site by a Clinical Trial Coordinating Center. If not added at the site, the
-Clinical Trial Identification attributes may be added to the data after receipt by the Clinical Trial
-Coordinating Center. The addition of clinical trial attributes does not itself require changes to the SOP
-Instance UID. However, the clinical trial protocol or the process of de-identification may require such a
-change.
-*/
+/**
+ * This is a simple example that show typical pipeline to setup when 
+ * preprocessing incoming DICOM file from around the round, and making
+ * sur eto remove any Patient Information.
+ * This is actually identical to running the C++ command line tool: gdcmanon,
+ * except this is easily integrated into another C# environment.
+ *
+ * PS 3.17 - 2008 Annex H. 
+ * Clinical Trial Identification Workflow Examples (Informative)
+ * 
+ * This Annex was formerly located in Annex O of PS 3.3 in the 2003 and earlier
+ * revisions of the standard.  The Clinical Trial Identification modules are
+ * optional. As such, there are several points in the workflow of clinical trial
+ * data at which the Clinical Trial Identification attributes may be added to the
+ * data. At the Clinical Trial Site, the attributes may be added at the scanner, a
+ * PACS system, a site workstation, or a workstation provided to the site by a
+ * Clinical Trial Coordinating Center. If not added at the site, the Clinical
+ * Trial Identification attributes may be added to the data after receipt by the
+ * Clinical Trial Coordinating Center. The addition of clinical trial attributes
+ * does not itself require changes to the SOP Instance UID. However, the clinical
+ * trial protocol or the process of de-identification may require such a change.
+ */
 
 /*
- * Usage: 
+ * Typical usage on UNIX:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/ClinicalTrialIdentificationWorkflow.exe input_dir output_dir
  */
@@ -44,8 +52,9 @@ public class MyWatcher : SimpleSubjectWatcher
   protected override void EndFilter(){
     System.Console.WriteLine( "This is my end" );
   }
-  protected override void ShowProgress(){
-    System.Console.WriteLine( "This is my progress" );
+  protected override void ShowProgress(Subject caller, Event evt){
+    ProgressEvent pe = ProgressEvent.Cast(evt);
+    System.Console.WriteLine( "This is my progress: " + pe.GetProgress() );
   }
   protected override void ShowIteration(){
     System.Console.WriteLine( "This is my iteration" );
@@ -166,6 +175,12 @@ public class ClinicalTrialIdentificationWorkflow
       return 1;
       }
 
+    if( args.Length != 2 )
+      {
+      System.Console.WriteLine( "Usage:" );
+      System.Console.WriteLine( "ClinicalTrialIdentificationWorkflow input_dir output_dir" );
+      return 1;
+      }
     string dir1 = args[0];
     string dir2 = args[1];
 
@@ -181,24 +196,29 @@ public class ClinicalTrialIdentificationWorkflow
       return 1;
       }
 
+    // Recursively search all file within this toplevel directory:
     Directory d = new Directory();
     uint nfiles = d.Load( dir1, true );
     if(nfiles == 0) return 1;
 
+    // Let's use the pre-shipped certificate of GDCM.
     string certpath = gdcm.Filename.Join(gdcm.Testing.GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
     gdcm.CryptographicMessageSyntax cms = new gdcm.CryptographicMessageSyntax();
     if( !cms.ParseCertificateFile( certpath ) )
       {
+      System.Console.WriteLine( "PEM Certificate : " + certpath + " could not be read. Sorry" );
       return 1;
       }
 
     //Anonymizer ano = new Anonymizer();
+    // A reference to an actual C++ instance is required here:
     SmartPtrAno sano = Anonymizer.New();
     Anonymizer ano = sano.__ref__();
 
     //SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(ano, "Anonymizer");
     MyWatcher watcher = new MyWatcher(ano);
 
+    // Explicitely specify the Cryptographic Message Syntax to use:
     ano.SetCryptographicMessageSyntax( cms );
 
     // Process all filenames:

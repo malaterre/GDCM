@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,19 +12,15 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef __gdcmValueIO_h
-#define __gdcmValueIO_h
+#ifndef GDCMVALUEIO_H
+#define GDCMVALUEIO_H
 
 #include "gdcmTypes.h"
 
 namespace gdcm
 {
 /**
- * \brief Class to represent the value of a Data Element.
- * \note
- * VALUE: A component of a Value Field. A Value Field may consist of one
- * or more of these components.
+ * \brief Class to dispatch template calls
  */
 template <typename TDE, typename TSwap, typename TType=uint8_t>
 class /*GDCM_EXPORT*/ ValueIO
@@ -34,7 +30,6 @@ public:
 
   static const std::ostream &Write(std::ostream &os, const Value& v);
 };
-
 
 } // end namespace gdcm
 

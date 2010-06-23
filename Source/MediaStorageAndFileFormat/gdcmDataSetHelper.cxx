@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,6 +24,56 @@
 
 namespace gdcm
 {
+/*
+    See PS 3.5 - 2008
+    Annex A (Normative) Transfer Syntax Specifications
+*/
+
+VR ComputeVRImplicitLittleEndian(DataSet const &ds, const Tag& tag)
+{
+    /*
+    A.1 DICOM IMPLICIT VR LITTLE ENDIAN TRANSFER SYNTAX
+    a) The Data Elements contained in the Data Set structure shall be encoded with Implicit VR
+    (without a VR Field) as specified in Section 7.1.3.
+    b) The encoding of the overall Data Set structure (Data Element Tags, Value Length, and Value)
+    shall be in Little Endian as specified in Section 7.3.
+    c) The encoding of the Data Elements of the Data Set shall be as follows according to their Value
+    Representations:
+      - For all Value Representations defined in this part, except for the Value Representations
+      OB and OW, the encoding shall be in Little Endian as specified in Section 7.3
+      - For the Value Representations OB and OW, the encoding shall meet the following
+      specification depending on the Data Element Tag:
+        - Data Element (7FE0,0010) Pixel Data has the Value Representation OW and shall
+        be encoded in Little Endian.
+        - Data Element (60xx,3000) Overlay Data has the Value Representation OW and shall
+        be encoded in Little Endian.
+        - Data Element (5400,1010) Waveform Data shall have Value Representation OW
+        and shall be encoded in Little Endian.
+        - Data Elements (0028,1201), (0028,1202),(0028,1203) Red, Green, Blue Palette
+        Lookup Table Data have the Value Representation OW and shall be encoded in
+        Little Endian.
+        Note: Previous versions of the Standard either did not specify the encoding of these Data
+        Elements in this Part, but specified a VR of US or SS in PS 3.6 (1993), or specified
+        OW in this Part but a VR of US, SS or OW in PS 3.6 (1996). The actual encoding
+        of the values and their byte order would be identical in each case.
+        - Data Elements (0028,1101), (0028,1102),(0028,1103) Red, Green, Blue Palette
+        Lookup Table Descriptor have the Value Representation SS or US (depending on
+        rules specified in the IOD in PS 3.3), and shall be encoded in Little Endian. The first
+        and third values are always interpreted as unsigned, regardless of the Value
+        Representation.
+        - Data Elements (0028,1221),(0028,1222),(0028,1223) Segmented Red, Green, Blue
+        Palette Color Lookup table Data have the Value Representation OW and shall be
+        encoded in Little Endian.
+        - Data Element (0028,3006) Lookup Table Data has the Value Representation US, SS
+        or OW and shall be encoded in Little Endian.
+        - Data Element (0028,3002) Lookup Table Descriptor has the Value Representation
+        SS or US (depending on rules specified in the IOD in PS 3.3), and shall be encoded
+        in Little Endian. The first and third values are always interpreted as unsigned,
+        regardless of the Value Representation.
+    */
+  VR vr = VR::INVALID;
+  return vr;
+}
 
 VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
 {
@@ -86,7 +136,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
         gdcmWarningMacro( "Unhandled" );
         vr = VR::INVALID;
         }
-      assert( at.GetValue() == 0 || at.GetValue() == 1 );
+      //assert( at.GetValue() == 0 || at.GetValue() == 1 );
       if( at.GetValue() )
         {
         vr = VR::SS;
@@ -104,39 +154,58 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     }
   else if( vr == VR::OB_OW )
     {
-    /*
-    For the Value Representations OB and OW, the encoding shall meet the following
-    specification depending on the Data Element Tag:
-    - Data Element (7FE0,0010) Pixel Data has the Value Representation OW and shall
-    be encoded in Little Endian.
-    - Data Element (60xx,3000) Overlay Data has the Value Representation OW and shall
-    be encoded in Little Endian.
-
-    See PS 3.5 - 2004
-    - Data Element (50xx,3000) Curve Data has the Value Representation OB with its
-    component points (n-tuples) having the Value Representation specified in Data
-    Value Representation (50xx,0103). The component points shall be encoded in Little
-    Endian.
-    */
     Tag pixeldata(0x7fe0,0x0010);
+    Tag waveformpaddingvalue(0x5400,0x100a);
+    Tag waveformdata(0x5400,0x1010);
     Tag overlaydata(0x6000,0x3000);
     Tag curvedata(0x5000,0x3000);
+    Tag audiodata(0x5000,0x200c);
     Tag variablepixeldata(0x7f00,0x0010);
     Tag bitsallocated(0x0028,0x0100);
+    Tag channelminval(0x5400,0x0110);
+    Tag channelmaxval(0x5400,0x0112);
     //assert( ds.FindDataElement( pixeldata ) );
-    assert( ds.FindDataElement( bitsallocated ) );
-    Attribute<0x0028,0x0100> at;
-    at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
+    int v = -1;
+    if( waveformdata == t || waveformpaddingvalue == t )
+      {
+      Tag waveformbitsallocated(0x5400,0x1004);
+      // For Waveform Data:
+      // (5400,1004) US 16                                             # 2,1 Waveform Bits Allocated
+      assert( ds.FindDataElement( waveformbitsallocated ) );
+      Attribute<0x5400,0x1004> at;
+      at.SetFromDataElement( ds.GetDataElement( waveformbitsallocated ) );
+      v = at.GetValue();
+      }
+    else // ( pixeldata == t  )
+      {
+      // For Pixel Data:
+      assert( ds.FindDataElement( bitsallocated ) );
+      Attribute<0x0028,0x0100> at;
+      at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
+      }
 
     if( pixeldata == t || t.IsGroupXX(overlaydata) )
       {
       vr = VR::OW;
+      }
+    else if( waveformdata == t || waveformpaddingvalue == t )
+      {
+      //assert( v == 8 || v == 16 );
+      vr = VR::OW;
+      }
+    else if ( t.IsGroupXX(audiodata) )
+      {
+      vr = VR::OB;
       }
     else if ( t.IsGroupXX(curvedata) )
       {
       vr = VR::OB;
       }
     else if ( t.IsGroupXX(variablepixeldata) )
+      {
+      vr = VR::OB;
+      }
+    else if ( t == channelminval || t == channelmaxval )
       {
       vr = VR::OB;
       }

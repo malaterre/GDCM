@@ -2,6 +2,8 @@
 # Common
 SET(Common_TEST_SRCS
   TestVersion
+  TestCommand
+  TestCryptographicMessageSyntax
   TestDummyValueGenerator
   TestASN1
   TestTesting
@@ -43,7 +45,9 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   )
 
-CREATE_TEST_SOURCELIST(CommonTests gdcmCommonTests.cxx ${Common_TEST_SRCS})
+CREATE_TEST_SOURCELIST(CommonTests gdcmCommonTests.cxx ${Common_TEST_SRCS}
+  EXTRA_INCLUDE gdcmTestDriver.h
+  )
 ADD_EXECUTABLE(gdcmCommonTests ${CommonTests})
 TARGET_LINK_LIBRARIES(gdcmCommonTests gdcmCommon)
 

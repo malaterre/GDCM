@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __rlelib_h
-#define __rlelib_h
+#ifndef RLELIB_H
+#define RLELIB_H
 
 #include <stdint.h>
 #include <stdio.h>
@@ -65,5 +65,5 @@ int rle_read_scanlines(rle_decompress_struct *cinfo, char *buffer, int f);
 int rle_finish_decompress(rle_decompress_struct *cinfo);
 void rle_destroy_decompress(rle_decompress_struct *cinfo);
 
-#endif /* __rlelib_h */
+#endif /* RLELIB_H */
 

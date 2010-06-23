@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,19 +12,16 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmParseException_h
-#define __gdcmParseException_h
-
+#ifndef GDCMPARSEEXCEPTION_H
+#define GDCMPARSEEXCEPTION_H
 
 #include "gdcmException.h"
 #include "gdcmDataElement.h"
 
-
 namespace gdcm
 {
-
-/** \class ParseException
- * \brief Standard exception handling object.
+/**
+ * \brief ParseException Standard exception handling object.
  *
  */
 class ParseException : public Exception

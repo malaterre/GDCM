@@ -3,7 +3,7 @@
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -37,7 +37,7 @@ This file was generated using the following commands:
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2008 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -46,7 +46,7 @@ This file was generated using the following commands:
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
     <xsl:element name="dict">
-      <xsl:attribute name="edition">2008</xsl:attribute>
+      <xsl:attribute name="edition">2009</xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDataSet_txx
-#define __gdcmDataSet_txx
+#ifndef GDCMDATASET_TXX
+#define GDCMDATASET_TXX
 
 #include "gdcmByteValue.h"
 #include "gdcmParseException.h"
@@ -89,6 +89,83 @@ namespace gdcm
       if ( t <= de.GetTag() ) break;
       }
     return is;
+  }
+
+  template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadSelectedTags(std::istream &inputStream, const std::set<Tag> & selectedTags) {
+    if ( ! selectedTags.empty() )
+    {
+      const Tag maxTag = *(selectedTags.rbegin());
+      std::set<Tag> tags = selectedTags;
+      DataElement dataElem;
+
+      // TODO There's an optimization opportunity here:
+      // dataElem.Read only needs to read the value if the tag is selected!
+      // Niels Dekker, LKEB, Jan 2010.
+      while( !inputStream.eof() && dataElem.template Read<TDE,TSwap>(inputStream) )
+      {
+        const Tag tag = dataElem.GetTag();
+        const std::set<Tag>::iterator found = tags.find(tag);
+
+        if ( found != tags.end() )
+        {
+          InsertDataElement( dataElem );
+          tags.erase(found);
+
+          if ( tags.empty() )
+          {
+            // All selected tags were found, we can exit the loop:
+            break;
+          }
+        }
+        if ( ! (tag < maxTag ) )
+        {
+          // The maximum tag was encountered, and as we assume
+          // ascending tag ordering, we can exit the loop:
+          break;
+        }
+      }
+    }
+    return inputStream;
+  }
+
+
+  template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadSelectedTagsWithLength(std::istream &inputStream, const std::set<Tag> & selectedTags, VL & length) {
+    if ( ! selectedTags.empty() )
+    {
+      const Tag maxTag = *(selectedTags.rbegin());
+      std::set<Tag> tags = selectedTags;
+      DataElement dataElem;
+
+      // TODO There's an optimization opportunity here:
+      // dataElem.ReadWithLength only needs to read the value if the tag is selected!
+      // Niels Dekker, LKEB, Jan 2010.
+      while( !inputStream.eof() && dataElem.template ReadWithLength<TDE,TSwap>(inputStream, length) )
+      {
+        const Tag tag = dataElem.GetTag();
+        const std::set<Tag>::iterator found = tags.find(tag);
+
+        if ( found != tags.end() )
+        {
+          InsertDataElement( dataElem );
+          tags.erase(found);
+
+          if ( tags.empty() )
+          {
+            // All selected tags were found, we can exit the loop:
+            break;
+          }
+        }
+        if ( ! (tag < maxTag ) )
+        {
+          // The maximum tag was encountered, and as we assume
+          // ascending tag ordering, we can exit the loop:
+          break;
+        }
+      }
+    }
+    return inputStream;
   }
 
   template <typename TDE, typename TSwap>
@@ -205,5 +282,5 @@ namespace gdcm
   }
 } // end namespace gdcm
 
-#endif // __gdcmDataSet_txx
+#endif // GDCMDATASET_TXX
 

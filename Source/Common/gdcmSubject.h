@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSubject_h
-#define __gdcmSubject_h
+#ifndef GDCMSUBJECT_H
+#define GDCMSUBJECT_H
 
 #include "gdcmObject.h"
 
@@ -24,6 +24,7 @@ class Command;
 class SubjectInternals;
 /**
  * \brief Subject
+ * \see Command Event
  */
 class GDCM_EXPORT Subject : public Object
 {
@@ -74,5 +75,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSubject_h
+#endif //GDCMSUBJECT_H
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmByteValue_h
-#define __gdcmByteValue_h
+#ifndef GDCMBYTEVALUE_H
+#define GDCMBYTEVALUE_H
 
 #include "gdcmValue.h"
 #include "gdcmTrace.h"
@@ -119,6 +119,12 @@ public:
       return true;
     return false;
     }
+  bool operator==(const Value &val) const
+    {
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(val);
+    return Length == bv.Length && Internal == bv.Internal;
+    }
+
 
   void Clear() {
     Internal.clear();
@@ -247,5 +253,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmByteValue_h
+#endif //GDCMBYTEVALUE_H
 

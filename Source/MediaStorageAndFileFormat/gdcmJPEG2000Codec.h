@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmJPEG2000codec_h
-#define __gdcmJPEG2000codec_h
+#ifndef GDCMJPEG2000CODEC_H
+#define GDCMJPEG2000CODEC_H
 
 #include "gdcmImageCodec.h"
 
@@ -30,6 +30,7 @@ class JPEG2000Internals;
  */
 class GDCM_EXPORT JPEG2000Codec : public ImageCodec
 {
+  friend class Bitmap;
 public:
   JPEG2000Codec();
   ~JPEG2000Codec();
@@ -65,4 +66,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmJPEG2000codec_h
+#endif //GDCMJPEG2000CODEC_H

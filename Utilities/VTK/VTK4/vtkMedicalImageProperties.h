@@ -21,8 +21,12 @@
 // .SECTION See Also
 // vtkMedicalImageReader2
 
-#ifndef __vtkMedicalImageProperties_h
-#define __vtkMedicalImageProperties_h
+#ifndef VTKMEDICALIMAGEPROPERTIES_H
+#define VTKMEDICALIMAGEPROPERTIES_H
+
+#ifdef __vtkMedicalImageProperties_h
+#error Something went terribly wrong
+#endif
 
 #include "vtkObject.h"
 

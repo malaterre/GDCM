@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,6 +17,7 @@
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmPVRGCodec.h"
+#include "gdcmKAKADUCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
@@ -47,11 +48,12 @@ Bitmap::Bitmap():
   TS(),
   PF(),
   PI(),
-  NeedByteSwap(false),
-  LossyFlag(false),
   Dimensions(),
-  LUT(0),
-  PixelData() {}
+  PixelData(),
+  LUT(new LookupTable),
+  NeedByteSwap(false),
+  LossyFlag(false)
+{}
 
 Bitmap::~Bitmap() {}
 
@@ -205,6 +207,8 @@ bool Bitmap::GetBuffer(char *buffer) const
 
 unsigned long Bitmap::GetBufferLength() const
 {
+  if( PF == PixelFormat::UNKNOWN ) return 0;
+
   assert( NumberOfDimensions );
   //assert( NumberOfDimensions == Dimensions.size() );
   if( NumberOfDimensions != Dimensions.size() )
@@ -217,6 +221,7 @@ unsigned long Bitmap::GetBufferLength() const
   std::vector<unsigned int>::const_iterator it = Dimensions.begin();
   for(; it != Dimensions.end(); ++it)
     {
+    assert( *it );
     mul *= *it;
     }
   // Multiply by the pixel size:
@@ -233,6 +238,14 @@ unsigned long Bitmap::GetBufferLength() const
     assert( save * 8 / 12 == mul );
     mul = save;
 #endif
+    }
+  else if( PF == PixelFormat::SINGLEBIT )
+    {
+    assert( PF.GetSamplesPerPixel() == 1 );
+    unsigned int save = mul;
+    save /= 8;
+    assert( save * 8 == mul );
+    mul = save;
     }
   else if( PF.GetBitsAllocated() % 8 != 0 )
     {
@@ -290,6 +303,9 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     if( len != bv->GetLength() )
       {
       // SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+      // This is also handling the famous DermaColorLossLess.dcm issue
+      // where RGB image is odd length (GetBufferLength()) but 
+      // ByteValue::GetLength is rounded up to the next even byte length
       gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
         " is different from computed value " << len );
       ((ByteValue*)outbv)->SetLength( len );
@@ -311,12 +327,35 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
 
 bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
 {
-  unsigned long len = GetBufferLength();
-  const TransferSyntax &ts = GetTransferSyntax();
-
   JPEGCodec codec;
+  const TransferSyntax &ts = GetTransferSyntax();
+  if(!buffer)
+    {
+    if( codec.CanDecode( ts ) ) // short path
+      {
+      TransferSyntax ts2;
+      const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
+      assert( sf );
+      const Fragment &frag = sf->GetFragment(0);
+      const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
+      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
+      codec.SetPixelFormat( pf );
+
+      std::stringstream ss;
+      ss.write( bv2.GetPointer(), bv2.GetLength() );
+      bool b = codec.GetHeaderInfo( ss, ts2 );
+      //bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
+      if(!b) return false;
+      assert( b );
+      lossyflag = codec.IsLossy();
+      return true;
+      }
+    return false;
+    }
+
   if( codec.CanDecode( ts ) )
     {
+    unsigned long len = GetBufferLength();
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetPixelFormat( GetPixelFormat() );
@@ -342,7 +381,8 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
-    if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
+    if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
@@ -425,7 +465,8 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
-    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    assert( len <= outbv->GetLength() );
+    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     lossyflag = codec.IsLossy();
     //assert( codec.IsLossy() == ts.IsLossy() );
@@ -434,7 +475,45 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
     }
   return false;
 }
-   
+
+bool Bitmap::TryKAKADUCodec(char *buffer, bool &lossyflag) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  KAKADUCodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    codec.SetPixelFormat( GetPixelFormat() );
+    //codec.SetBufferLength( len );
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    codec.SetDimensions( GetDimensions() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    if( !r ) return false;
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    assert( len <= outbv->GetLength() );
+    // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    assert( len <= outbv->GetLength() );
+    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+
+    //assert( codec.IsLossy() == ts.IsLossy() );
+    lossyflag = codec.IsLossy();
+    if( codec.IsLossy() != ts.IsLossy() )
+      {
+      gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
+      }
+
+    return r;
+    }
+  return false;
+}
+
 bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
 {
   unsigned long len = GetBufferLength();
@@ -456,7 +535,10 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
-    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    assert( len <= outbv->GetLength() );
+    // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    assert( len <= outbv->GetLength() );
+    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     //assert( codec.IsLossy() == ts.IsLossy() );
     lossyflag = codec.IsLossy();
@@ -496,12 +578,29 @@ bool Bitmap::ComputeLossyFlag()
 
 bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
 {
-  unsigned long len = GetBufferLength();
-  const TransferSyntax &ts = GetTransferSyntax();
-
   JPEG2000Codec codec;
+  const TransferSyntax &ts = GetTransferSyntax();
+  if(!buffer)
+    {
+    if( codec.CanDecode( ts ) ) // short path
+      {
+      TransferSyntax ts2;
+      const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
+      assert( sf );
+      const Fragment &frag = sf->GetFragment(0);
+      const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
+
+      bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
+      assert( b );
+      lossyflag = codec.IsLossy();
+      return true;
+      }
+    return false;
+    }
+
   if( codec.CanDecode( ts ) )
     {
+  unsigned long len = GetBufferLength();
     codec.SetPixelFormat( GetPixelFormat() );
     codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
@@ -515,12 +614,20 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
-    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    assert( len <= outbv->GetLength() );
+    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     lossyflag = codec.IsLossy();
-    if( codec.IsLossy() != ts.IsLossy() )
+    if( codec.IsLossy() && !ts.IsLossy() )
       {
+      assert( codec.IsLossy() );
+      assert( !ts.IsLossy() );
       gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
+      }
+    if( codec.GetPixelFormat() != GetPixelFormat() )
+      {
+      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      i->SetPixelFormat( codec.GetPixelFormat() );
       }
     return r;
     }
@@ -573,10 +680,12 @@ bool Bitmap::TryRLECodec(char *buffer, bool &lossyflag ) const
     codec.SetBufferLength( len );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-    assert( r );
+    if( !r ) return false;
     const ByteValue *outbv = out.GetByteValue();
     //unsigned long check = outbv->GetLength();  // FIXME
-    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    assert( len <= outbv->GetLength() );
+    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
     lossyflag = false;
     return true;
     }
@@ -596,6 +705,7 @@ bool Bitmap::GetBufferInternal(char *buffer, bool &lossyflag) const
   if( !success ) success = TryRAWCodec(buffer, lossyflag);
   if( !success ) success = TryJPEGCodec(buffer, lossyflag);
   if( !success ) success = TryPVRGCodec(buffer, lossyflag); // AFTER IJG trial !
+  //if( !success ) success = TryKAKADUCodec(buffer, lossyflag);
   if( !success ) success = TryJPEG2000Codec(buffer, lossyflag);
   if( !success ) success = TryJPEGLSCodec(buffer, lossyflag);
   if( !success ) success = TryRLECodec(buffer, lossyflag);
@@ -626,6 +736,20 @@ bool Bitmap::GetBuffer2(std::ostream &os) const
   return success;
 }
 
+bool Bitmap::IsTransferSyntaxCompatible( TransferSyntax const & ts ) const
+{
+  if( GetTransferSyntax() == ts ) return true;
+  // Special cases:
+  if( GetTransferSyntax() == TransferSyntax::JPEGExtendedProcess2_4 )
+    {
+    if( GetPixelFormat().GetBitsAllocated() == 8 )
+      {
+      if( ts == TransferSyntax::JPEGBaselineProcess1 ) return true;
+      }
+    }
+  // default:
+  return false;
+}
 
 
 }

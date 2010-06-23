@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmParser_h
-#define __gdcmParser_h
+#ifndef GDCMPARSER_H
+#define GDCMPARSER_H
 
 #include "gdcmTag.h"
 #error do not use
@@ -118,4 +118,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmParser_h
+#endif //GDCMPARSER_H

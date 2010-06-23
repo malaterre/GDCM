@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmFileMetaInformation_h
-#define __gdcmFileMetaInformation_h
+#ifndef GDCMFILEMETAINFORMATION_H
+#define GDCMFILEMETAINFORMATION_H
 
 #include "gdcmPreamble.h"
 #include "gdcmDataSet.h"
@@ -26,17 +26,17 @@ namespace gdcm
 {
 /**
  * \brief Class to represent a File Meta Information
- * \note
- * FileMetaInformation is a Explicit Structured Set.
- * Whenever the file contains an ImplicitDataElement DataSet, a conversion
- * will take place.
- * \todo
- * If user adds an element with group != 0x0002 it will be written...
- * Definition:
  *
- * The File Meta Information includes identifying information on the encapsulated Data Set. This header
- * consists of a 128 byte File Preamble, followed by a 4 byte DICOM prefix, followed by the File Meta
- * Elements shown in Table 7.1-1. This header shall be present in every DICOM file.
+ * \details FileMetaInformation is a Explicit Structured Set.  Whenever the
+ * file contains an ImplicitDataElement DataSet, a conversion will take place.
+ *
+ * Definition:
+ * The File Meta Information includes identifying information on the
+ * encapsulated Data Set. This header consists of a 128 byte File Preamble,
+ * followed by a 4 byte DICOM prefix, followed by the File Meta Elements shown
+ * in Table 7.1-1. This header shall be present in every DICOM file.
+ *
+ * \see Writer Reader
  */
 class GDCM_EXPORT FileMetaInformation : public DataSet
 {
@@ -146,5 +146,5 @@ inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val
 
 } // end namespace gdcm
 
-#endif //__gdcmFileMetaInformation_h
+#endif //GDCMFILEMETAINFORMATION_H
 

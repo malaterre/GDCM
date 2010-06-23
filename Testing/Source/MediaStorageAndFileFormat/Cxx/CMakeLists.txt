@@ -2,8 +2,14 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
-  #TestAnonymizer2
+  TestValidate
+  TestAnonymizeEvent
+  TestAnonymizer2
+  TestFileDerivation
+  TestSegmentedPaletteColorLookupTable
+  TestPNMCodec
   TestSpacing
+  TestSerieHelper
   TestFileExplicitFilter
   TestImageFragmentSplitter
   TestTagPath
@@ -11,7 +17,7 @@ SET(MSFF_TEST_SRCS
   TestIconImage
   TestImageHelper
   TestImageToImageFilter
-  TestImageChangeTransferSyntax
+  TestImageChangeTransferSyntax1
   TestImageChangePhotometricInterpretation
   #TestImageChangePhotometricInterpretation2 # does not compile on mingw...
   TestImageChangeTransferSyntax2
@@ -35,6 +41,7 @@ SET(MSFF_TEST_SRCS
   TestPrint
   TestSorter
   TestImageReader
+  TestImageReaderRandomEmpty
   TestDirectionCosines
   TestImageWriter
   TestCodec
@@ -68,8 +75,16 @@ IF(GDCM_DATA_ROOT)
   TestCopyDataSet
   TestDataElementValueAsSQ
   TestImageWriter2
+  TestDICOMDIRGenerator # Must be after TestImageChangeTransferSyntax4
       )
 ENDIF(GDCM_DATA_ROOT)
+# gdcmDataExtra
+IF(GDCM_DATA_EXTRA_ROOT)
+  SET(MSFF_TEST_SRCS
+      ${MSFF_TEST_SRCS}
+  TestSplitMosaicFilter
+)
+ENDIF(GDCM_DATA_EXTRA_ROOT)
 
 IF(GDCM_USE_JPEGLS)
   SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
@@ -101,7 +116,9 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   )
 
-CREATE_TEST_SOURCELIST(MSFFTests gdcmMSFFTests.cxx ${MSFF_TEST_SRCS})
+CREATE_TEST_SOURCELIST(MSFFTests gdcmMSFFTests.cxx ${MSFF_TEST_SRCS}
+  EXTRA_INCLUDE gdcmTestDriver.h
+  )
 ADD_EXECUTABLE(gdcmMSFFTests ${MSFFTests})
 TARGET_LINK_LIBRARIES(gdcmMSFFTests gdcmMSFF)
 IF(CMAKE_HAVE_PTHREAD_H)

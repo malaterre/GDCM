@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPDBHeader_h
-#define __gdcmPDBHeader_h
+#ifndef GDCMPDBHEADER_H
+#define GDCMPDBHEADER_H
 
 #include "gdcmTypes.h"
 #include "gdcmDataSet.h"
@@ -36,17 +36,18 @@ class PrivateTag;
 /**
  * \brief Class for PDBHeader
  *
- * GEMS MR Image have an Attribute (0025,1b,GEMS_SERS_01) which store the Acquisition
- * parameter of the MR Image. It is compressed and can therefore not be used as is.
- * This class de-encapsulated the Protocol Data Block and allow users to query
- * element by name.
+ * GEMS MR Image have an Attribute (0025,1b,GEMS_SERS_01) which store the
+ * Acquisition parameter of the MR Image. It is compressed and can therefore
+ * not be used as is. This class de-encapsulated the Protocol Data Block and
+ * allow users to query element by name.
  *
- * \warning:
+ * \warning
  * Everything you do with this code is at your own risk, since decoding process
  * was not written from specification documents.
  *
- * \WARNING: the API of this class might change.
+ * \warning: the API of this class might change.
  *
+ * \see CSAHeader
  */
 class GDCM_EXPORT PDBHeader
 {
@@ -88,4 +89,4 @@ inline std::ostream& operator<<(std::ostream &os, const PDBHeader &d)
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmPDBHeader_h
+#endif //GDCMPDBHEADER_H

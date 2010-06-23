@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAttribute_h
-#define __gdcmAttribute_h
+#ifndef GDCMATTRIBUTE_H
+#define GDCMATTRIBUTE_H
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"
@@ -208,6 +208,7 @@ public:
     assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 || GetTag().GetGroup() == 0x5000 );
     assert( GetVR() != VR::INVALID );
     assert( GetVR().Compatible( de.GetVR() ) || de.GetVR() == VR::INVALID ); // In case of VR::INVALID cannot use the & operator
+    if( de.IsEmpty() ) return;
     const ByteValue *bv = de.GetByteValue();
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
       {
@@ -220,6 +221,13 @@ public:
   }
   void Set(DataSet const &ds) {
     SetFromDataElement( ds.GetDataElement( GetTag() ) );
+  }
+  void SetFromDataSet(DataSet const &ds) {
+    if( ds.FindDataElement( GetTag() ) &&
+      !ds.GetDataElement( GetTag() ).IsEmpty() )
+      {
+      SetFromDataElement( ds.GetDataElement( GetTag() ) );
+      }
   }
 protected:
   void SetByteValueNoSwap(const ByteValue *bv) {
@@ -782,4 +790,4 @@ public:
 
 } // namespace gdcm
 
-#endif //__gdcmAttribute_h
+#endif //GDCMATTRIBUTE_H

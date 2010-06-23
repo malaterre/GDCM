@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -318,22 +318,24 @@ int main(int argc, char *argv[])
 
   int res = 0;
   unsigned int nfiles = 1;
+  gdcm::DICOMDIRGenerator gen;
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     gdcm::Directory dir;
     nfiles = dir.Load(filename, recursive);
     filenames = dir.GetFilenames();
+    gen.SetRootDirectory( filename );
     }
   else
     {
     // should be all set !
     }
 
-  gdcm::DICOMDIRGenerator gen;
   gen.SetFilenames( filenames );
   gen.SetDescriptor( descriptor_str.c_str() );
   if( !gen.Generate() )
     {
+    std::cerr << "Problem during generation" << std::endl;
     return 1;
     }
 

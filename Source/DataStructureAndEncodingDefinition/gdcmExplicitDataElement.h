@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,14 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmExplicitDataElement_h
-#define __gdcmExplicitDataElement_h
+#ifndef GDCMEXPLICITDATAELEMENT_H
+#define GDCMEXPLICITDATAELEMENT_H
 
 #include "gdcmDataElement.h"
 
 namespace gdcm
 {
-// Data Element (Explicit)
 /**
  * \brief Class to read/write a DataElement as Explicit Data Element
  * \note bla
@@ -43,5 +42,5 @@ public:
 
 #include "gdcmExplicitDataElement.txx"
 
-#endif //__gdcmExplicitDataElement_h
+#endif //GDCMEXPLICITDATAELEMENT_H
 

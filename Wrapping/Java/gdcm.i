@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -212,7 +212,7 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 //%include "gdcmWin32.h"
 // I cannot include gdcmWin32.h without gdcmTypes.h, first. But gdcmTypes.h needs to know _MSC_VER at swig time...
 #define GDCM_EXPORT
-%include "gdcmMacro.h"
+%include "gdcmLegacyMacro.h"
 
 %include "gdcmSwapCode.h"
 

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -15,6 +15,9 @@
 
 #include "vtkActor.h"
 #include "vtkCamera.h"
+#include "vtkMatrix4x4.h"
+#include "vtkTransform.h"
+#include "vtkAssembly.h"
 #include "vtkCellPicker.h"
 #include "vtkCommand.h"
 #include "vtkImageActor.h"
@@ -152,6 +155,8 @@ int main( int argc, char *argv[] )
     //names->Print( std::cout );
     }
 
+  //gdcm::Trace::DebugOn();
+  //gdcm::Trace::WarningOn();
   gdcm::IPPSorter s;
   s.SetComputeZSpacing( true );
   s.SetZSpacingTolerance( 1e-3 );
@@ -183,6 +188,9 @@ int main( int argc, char *argv[] )
   reader->SetFileNames( files );
   reader->Update(); // important
   //reader->GetOutput()->Print( std::cout );
+  //vtkFloatingPointType range[2];
+  //reader->GetOutput()->GetScalarRange(range);
+  //std::cout << "Range: " << range[0] << " " << range[1] << std::endl;
 
   const vtkFloatingPointType *spacing = reader->GetOutput()->GetSpacing();
 
@@ -343,25 +351,29 @@ int main( int argc, char *argv[] )
   ren1->ResetCameraClippingRange();
 
   vtkAnnotatedCubeActor* cube = vtkAnnotatedCubeActor::New();
-  cube->SetXPlusFaceText ( "V" );
-  cube->SetXMinusFaceText( "K" );
-  cube->SetYPlusFaceText ( "T" );
-  cube->SetZPlusFaceText ( "" );
-  cube->SetZMinusFaceText( "" );
-  cube->SetYMinusFaceText( "" );
+  cube->SetXPlusFaceText ( "R" );
+  cube->SetXMinusFaceText( "L" );
+  cube->SetYPlusFaceText ( "A" );
+  cube->SetYMinusFaceText( "P" );
+  cube->SetZPlusFaceText ( "H" );
+  cube->SetZMinusFaceText( "F" );
   cube->SetFaceTextScale( 0.666667 );
 
   vtkAxesActor* axes2 = vtkAxesActor::New();
 
+  vtkMatrix4x4 *invert = vtkMatrix4x4::New();
+  invert->DeepCopy( reader->GetDirectionCosines() );
+  invert->Invert();
+
   // simulate a left-handed coordinate system
   //
-  //transform->Identity();
+  vtkTransform *transform = vtkTransform::New();
+  transform->Identity();
   //transform->RotateY(90);
+  transform->Concatenate(invert);
   axes2->SetShaftTypeToCylinder();
-  //axes2->SetUserTransform( transform );
-  axes2->SetXAxisLabelText( "w" );
-  axes2->SetYAxisLabelText( "v" );
-  axes2->SetZAxisLabelText( "u" );
+  axes2->SetUserTransform( transform );
+  cube->GetAssembly()->SetUserTransform( transform );
 
   axes2->SetTotalLength( 1.5, 1.5, 1.5 );
   axes2->SetCylinderRadius( 0.500 * axes2->GetCylinderRadius() );

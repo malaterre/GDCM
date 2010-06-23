@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -33,6 +33,15 @@ VL ImplicitDataElement::GetLength() const
       return TagField.GetLength() + ValueLengthField.GetLength() 
         + sq->ComputeLength<ImplicitDataElement>();
       }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+    if( sf )
+      {
+      //assert( VRField & VR::OB_OW ); // VR::INVALID is not possible AFAIK...
+      return TagField.GetLength() /*+ VRField.GetLength()*/ 
+        + ValueLengthField.GetLength() + sf->ComputeLength();
+      }
+#endif
     assert( !ValueLengthField.IsUndefined() );
     return ValueLengthField;
     }

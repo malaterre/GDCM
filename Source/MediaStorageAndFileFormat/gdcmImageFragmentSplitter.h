@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageFragmentSplitter_h
-#define __gdcmImageFragmentSplitter_h
+#ifndef GDCMIMAGEFRAGMENTSPLITTER_H
+#define GDCMIMAGEFRAGMENTSPLITTER_H
 
 #include "gdcmImageToImageFilter.h"
 
@@ -51,5 +51,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImageFragmentSplitter_h
+#endif //GDCMIMAGEFRAGMENTSPLITTER_H
 

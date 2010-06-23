@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,11 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDefs_h
-#define __gdcmDefs_h
+#ifndef GDCMDEFS_H
+#define GDCMDEFS_H
 
 #include "gdcmModules.h"
-//#include "gdcmMacros.h"
+#include "gdcmMacros.h"
 #include "gdcmIODs.h"
 
 #include <string>
@@ -39,6 +39,8 @@ public:
   const Modules &GetModules() const { return Part3Modules; }
   Modules &GetModules() { return Part3Modules; }
 
+  /// Users should not directly use Macro. Macro are simply a way for DICOM WG to re-use Tables.
+  /// Macros are conviently wraped within Modules. See gdcm::Module API directly
   const Macros &GetMacros() const { return Part3Macros; }
   Macros &GetMacros() { return Part3Macros; }
 
@@ -55,6 +57,8 @@ public:
   Type GetTypeFromTag(const File& file, const Tag& tag) const;
 
   static const char *GetIODNameFromMediaStorage(MediaStorage const &ms);
+
+  const IOD& GetIODFromFile(const File& file) const;
 
 protected:
   friend class Global;
@@ -74,5 +78,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDefs_h
+#endif //GDCMDEFS_H
 

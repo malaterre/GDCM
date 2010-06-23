@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDICOMDIRGenerator_h
-#define __gdcmDICOMDIRGenerator_h
+#ifndef GDCMDICOMDIRGENERATOR_H
+#define GDCMDICOMDIRGENERATOR_H
 
 #include "gdcmDirectory.h"
 #include "gdcmTag.h"
@@ -58,11 +58,14 @@ class GDCM_EXPORT DICOMDIRGenerator
 {
 public:
   typedef Directory::FilenamesType  FilenamesType;
+  typedef Directory::FilenameType  FilenameType;
   DICOMDIRGenerator();
   ~DICOMDIRGenerator();
 
   /// Set the list of filenames from which the DICOMDIR should be generated from
   void SetFilenames( FilenamesType const & fns );
+
+  void SetRootDirectory( FilenameType const & root );
 
   /// Set the File Set ID. 
   /// \warning this need to be a valid VR::CS value
@@ -83,6 +86,7 @@ protected:
   bool AddImageDirectoryRecord();
 
 private:
+  const char *ComputeFileID(const char *);
   bool TraverseDirectoryRecords(VL start );
   bool ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi, VL start);
   unsigned int FindNextDirectoryRecord( unsigned int item1, const char *directorytype );
@@ -104,4 +108,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDICOMDIRGenerator_h
+#endif //GDCMDICOMDIRGENERATOR_H

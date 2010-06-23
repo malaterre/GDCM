@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,16 +12,14 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmString_h
-#define __gdcmString_h
+#ifndef GDCMSTRING_H
+#define GDCMSTRING_H
 
 #include "gdcmTypes.h"
 #include "gdcmStaticAssert.h"
 
 namespace gdcm
 {
-template <char TDelimiter, unsigned int TMaxLength, char TPadChar> class String;
-template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar>& ms);
 
 /**
  * \brief String
@@ -36,7 +34,6 @@ class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
   // UI wants \0 for pad character, while ASCII ones wants space char... do not allow anything else
   GDCM_STATIC_ASSERT( TPadChar == ' ' || TPadChar == 0 );
 
-  friend std::istream& operator>> <TDelimiter>(std::istream &is, String<TDelimiter>& ms);
 public:
   // typedef are not inherited:
   typedef std::string::value_type             value_type;
@@ -128,5 +125,5 @@ inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,T
 
 } // end namespace gdcm
 
-#endif //__gdcmString_h
+#endif //GDCMSTRING_H
 

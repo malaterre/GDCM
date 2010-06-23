@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -29,9 +29,8 @@
 
 namespace gdcm
 {
-PixmapReader::PixmapReader()/*:PixelData(new Pixmap)*/
+PixmapReader::PixmapReader():PixelData(new Pixmap)
 {
-  if( !PixelData ) PixelData = new Pixmap;
 }
 
 PixmapReader::~PixmapReader()
@@ -121,7 +120,7 @@ bool PixmapReader::Read()
       // D 0008|0016 [UI] [SOP Class UID] [1.2.840.10008.5.1.4.1.1.7 ]
       // ==> [Secondary Capture Image Storage]
       const Tag tsopclassuid(0x0008, 0x0016);
-      if( ds.FindDataElement( tsopclassuid) )
+      if( ds.FindDataElement( tsopclassuid) && !ds.GetDataElement( tsopclassuid).IsEmpty() )
         {
         const ByteValue *sopclassuid
           = GetPointerFromElement( tsopclassuid );
@@ -212,56 +211,56 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
 
     // D 0028|0011 [US] [Columns] [512]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
-      Attribute<0x0028,0x0011> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+      Attribute<0x0028,0x0011> at = { 0 };
+      at.SetFromDataSet( ds );
       pixeldata.SetDimension(0, at.GetValue() );
       }
 
     // D 0028|0010 [US] [Rows] [512]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-      Attribute<0x0028,0x0010> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+      Attribute<0x0028,0x0010> at = { 0 };
+      at.SetFromDataSet( ds );
       pixeldata.SetDimension(1, at.GetValue() );
       }
 
     PixelFormat pf;
     // D 0028|0100 [US] [Bits Allocated] [16]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-      Attribute<0x0028,0x0100> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+      Attribute<0x0028,0x0100> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetBitsAllocated( at.GetValue() );
       }
     // D 0028|0101 [US] [Bits Stored] [12]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-      Attribute<0x0028,0x0101> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+      Attribute<0x0028,0x0101> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetBitsStored( at.GetValue() );
       }
     // D 0028|0102 [US] [High Bit] [11]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-      Attribute<0x0028,0x0102> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+      Attribute<0x0028,0x0102> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetHighBit( at.GetValue() );
       }
     // D 0028|0103 [US] [Pixel Representation] [0]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
-      Attribute<0x0028,0x0103> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+      Attribute<0x0028,0x0103> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetPixelRepresentation( at.GetValue() );
       }
     // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
       {
-	  if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
+	  //if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
 	  {
-	  const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
-      Attribute<0x0028,0x0002> at;
-      at.SetFromDataElement( de );
+	  //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+      Attribute<0x0028,0x0002> at = { 1 };
+      at.SetFromDataSet( ds );
       pf.SetSamplesPerPixel( at.GetValue() );
 	  }
 	  // else pf will default to 1...
@@ -279,84 +278,86 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
         photometricinterpretation_str.c_str()));
     assert( pi != PhotometricInterpretation::UNKNOW);
     pixeldata.SetPhotometricInterpretation( pi );
-   
+
     // 
-  if ( pi == PhotometricInterpretation::PALETTE_COLOR )
+    if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
-    SmartPointer<LookupTable> lut = new LookupTable;
-    const Tag testseglut(0x0028, (0x1221 + 0));
-    if( ds.FindDataElement( testseglut ) )
-      {
-assert(0);
-      lut = new SegmentedPaletteColorLookupTable;
-      }
-    //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
-    lut->Allocate( pf.GetBitsAllocated() );
-
-    // for each red, green, blue:
-    for(int i=0; i<3; ++i)
-      {
-      // (0028,1101) US 0\0\16
-      // (0028,1102) US 0\0\16
-      // (0028,1103) US 0\0\16
-      const Tag tdescriptor(0x0028, (0x1101 + i));
-      //const Tag tdescriptor(0x0028, 0x3002);
-      Element<VR::US,VM::VM3> el_us3;
-      // Now pass the byte array to a DICOMizer:
-      el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
-      lut->InitializeLUT( LookupTable::LookupTableType(i),
-        el_us3[0], el_us3[1], el_us3[2] );
-
-      // (0028,1201) OW 
-      // (0028,1202) OW
-      // (0028,1203) OW 
-      const Tag tlut(0x0028, (0x1201 + i));
-      //const Tag tlut(0x0028, 0x3006);
-      
-      // Segmented LUT
-      // (0028,1221) OW 
-      // (0028,1222) OW
-      // (0028,1223) OW 
-      const Tag seglut(0x0028, (0x1221 + i));
-      if( ds.FindDataElement( tlut ) )
+      SmartPointer<LookupTable> lut = new LookupTable;
+      const Tag testseglut(0x0028, (0x1221 + 0));
+      if( ds.FindDataElement( testseglut ) )
         {
-        const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
-        assert( lut_raw );
-        // LookupTableType::RED == 0
-        lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
-
-        unsigned long check =
-          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
-          * el_us3.GetValue(2) / 8;
-        assert( check == lut_raw->GetLength() ); (void)check;
+        assert(0 && "Please report this image");
+        lut = new SegmentedPaletteColorLookupTable;
         }
-      else if( ds.FindDataElement( seglut ) )
+      //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
+      lut->Allocate( pf.GetBitsAllocated() );
+
+      // for each red, green, blue:
+      for(int i=0; i<3; ++i)
         {
-        const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
-        assert( lut_raw );
-        lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        // (0028,1101) US 0\0\16
+        // (0028,1102) US 0\0\16
+        // (0028,1103) US 0\0\16
+        const Tag tdescriptor(0x0028, (0x1101 + i));
+        //const Tag tdescriptor(0x0028, 0x3002);
+        Element<VR::US,VM::VM3> el_us3;
+        // Now pass the byte array to a DICOMizer:
+        el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
+        lut->InitializeLUT( LookupTable::LookupTableType(i),
+          el_us3[0], el_us3[1], el_us3[2] );
 
-        unsigned long check =
-          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
-          * el_us3.GetValue(2) / 8;
-        //assert( check == lut_raw->GetLength() ); (void)check;
-        }
-      else
-        {
-        assert(0);
-        }
-      }
-    pixeldata.SetLUT(*lut);
+        // (0028,1201) OW 
+        // (0028,1202) OW
+        // (0028,1203) OW 
+        const Tag tlut(0x0028, (0x1201 + i));
+        //const Tag tlut(0x0028, 0x3006);
 
+        // Segmented LUT
+        // (0028,1221) OW 
+        // (0028,1222) OW
+        // (0028,1223) OW 
+        const Tag seglut(0x0028, (0x1221 + i));
+        if( ds.FindDataElement( tlut ) )
+          {
+          const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
+          assert( lut_raw );
+          // LookupTableType::RED == 0
+          lut->SetLUT( LookupTable::LookupTableType(i),
+            (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+          unsigned long check =
+            (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+            * el_us3.GetValue(2) / 8;
+          assert( check == lut_raw->GetLength() ); (void)check;
+          }
+        else if( ds.FindDataElement( seglut ) )
+          {
+          const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
+          assert( lut_raw );
+          lut->SetLUT( LookupTable::LookupTableType(i),
+            (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+          unsigned long check =
+            (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+            * el_us3.GetValue(2) / 8;
+          //assert( check == lut_raw->GetLength() ); (void)check;
+          }
+        else
+          {
+          gdcmWarningMacro( "Icon Sequence is incomplete. Giving up" );
+          pixeldata.Clear();
+          return;
+          }
+        }
+      pixeldata.SetLUT(*lut);
       }
 
     const Tag tpixeldata = Tag(0x7fe0, 0x0010);
     if( !ds.FindDataElement( tpixeldata ) )
       {
+      gdcmWarningMacro( "Icon Sequence is incomplete. Giving up" );
       pixeldata.Clear();
       return;
       }
@@ -378,54 +379,54 @@ assert(0);
 
     // D 0028|0011 [US] [Columns] [512]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
-      Attribute<0x0028,0x0011> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+      Attribute<0x0028,0x0011> at = { 0 };
+      at.SetFromDataSet( ds );
       pixeldata.SetDimension(0, at.GetValue() );
       }
 
     // D 0028|0010 [US] [Rows] [512]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-      Attribute<0x0028,0x0010> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+      Attribute<0x0028,0x0010> at = { 0 };
+      at.SetFromDataSet( ds );
       pixeldata.SetDimension(1, at.GetValue() );
       }
 
     PixelFormat pf;
     // D 0028|0100 [US] [Bits Allocated] [16]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-      Attribute<0x0028,0x0100> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+      Attribute<0x0028,0x0100> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetBitsAllocated( at.GetValue() );
       }
     // D 0028|0101 [US] [Bits Stored] [12]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-      Attribute<0x0028,0x0101> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+      Attribute<0x0028,0x0101> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetBitsStored( at.GetValue() );
       }
     // D 0028|0102 [US] [High Bit] [11]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-      Attribute<0x0028,0x0102> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+      Attribute<0x0028,0x0102> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetHighBit( at.GetValue() );
       }
     // D 0028|0103 [US] [Pixel Representation] [0]
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
-      Attribute<0x0028,0x0103> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+      Attribute<0x0028,0x0103> at = { 0 };
+      at.SetFromDataSet( ds );
       pf.SetPixelRepresentation( at.GetValue() );
       }
     // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
-      Attribute<0x0028,0x0002> at;
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+      Attribute<0x0028,0x0002> at = { 1 };
+      at.SetFromDataSet( ds );
       pf.SetSamplesPerPixel( at.GetValue() );
       }
     pixeldata.SetPixelFormat( pf );
@@ -540,22 +541,22 @@ assert(0);
     assert( ds.FindDataElement( tpixeldata ) );
       {
       const DataElement& de = ds.GetDataElement( tpixeldata );
-    pixeldata.SetDataElement( de );
-/*
+      pixeldata.SetDataElement( de );
+      /*
       JPEGCodec jpeg;
       jpeg.SetPhotometricInterpretation( pixeldata.GetPhotometricInterpretation() );
       jpeg.SetPlanarConfiguration( 0 );
       PixelFormat pf = pixeldata.GetPixelFormat();
       // Apparently bits stored can only be 8 or 12:
       if( pf.GetBitsStored() == 16 )
-        {
-        pf.SetBitsStored( 12 );
-        }
+      {
+      pf.SetBitsStored( 12 );
+      }
       jpeg.SetPixelFormat( pf );
       DataElement de2;
       jpeg.Decode( de, de2);
       pixeldata.SetDataElement( de2 );
-*/
+       */
       }
     }
   else
@@ -564,6 +565,7 @@ assert(0);
     }
 }
 
+// GE_DLX-8-MONO2-Multiframe.dcm
 void DoCurves(const DataSet& ds, Pixmap& pixeldata)
 {
   unsigned int numcurves;
@@ -699,23 +701,28 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   std::stringstream ss;
   std::string conversion;
 
+  bool isacrnema = false;
   const Tag trecognitioncode(0x0008,0x0010);
-  if( ds.FindDataElement( trecognitioncode ) )
+  if( ds.FindDataElement( trecognitioncode ) && !ds.GetDataElement( trecognitioncode ).IsEmpty() )
     {
     // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
     // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
     gdcmDebugMacro( "Mixture of ACR NEMA and DICOM file" );
+    isacrnema = true;
+    const char *str = ds.GetDataElement( trecognitioncode ).GetByteValue()->GetPointer();
+    assert( strncmp( str, "ACR-NEMA", strlen( "ACR-NEMA" ) ) == 0 ||
+      strncmp( str, "ACRNEMA", strlen( "ACRNEMA" ) ) == 0 );
     }
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
   // D 0028|0008 [IS] [Number of Frames] [8 ]
   const Tag tnumberofframes = Tag(0x0028, 0x0008);
-  if( ds.FindDataElement( tnumberofframes ) /*&& ms != MediaStorage::SecondaryCaptureImageStorage*/ )
+  //if( ds.FindDataElement( tnumberofframes ) /*&& ms != MediaStorage::SecondaryCaptureImageStorage*/ )
     {
-    const DataElement& de = ds.GetDataElement( tnumberofframes );
+    //const DataElement& de = ds.GetDataElement( tnumberofframes );
     Attribute<0x0028,0x0008> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     int numberofframes = at.GetValue();
     // What should I do when numberofframes == 0 ?
     if( numberofframes > 1 )
@@ -730,60 +737,60 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       PixelData->SetNumberOfDimensions(2);
       }
     }
-  else
-    {
-    gdcmDebugMacro( "Attempting a guess for the number of dimensions" ); // FIXME
-    PixelData->SetNumberOfDimensions(2);
-    }
+  //else
+  //  {
+  //  gdcmDebugMacro( "Attempting a guess for the number of dimensions" ); // FIXME
+  //  PixelData->SetNumberOfDimensions(2);
+  //  }
 
  
   // 2. What are the col & rows:
   // D 0028|0011 [US] [Columns] [512]
-  const Tag tcolumns(0x0028, 0x0011);
-  if( ds.FindDataElement( tcolumns ) )
+  //const Tag tcolumns(0x0028, 0x0011);
+  //if( ds.FindDataElement( tcolumns ) )
     {
     //PixelData->SetDimension(0,
     //  ReadUSFromTag( tcolumns, ss, conversion ) );
-    const DataElement& de = ds.GetDataElement( tcolumns );
-    Attribute<0x0028,0x0011> at;
-    at.SetFromDataElement( de );
+    //const DataElement& de = ds.GetDataElement( tcolumns );
+    Attribute<0x0028,0x0011> at = { 0 };
+    at.SetFromDataSet( ds );
     PixelData->SetDimension(0, at.GetValue() );
     }
-  else
-    {
-    const TransferSyntax &ts = PixelData->GetTransferSyntax();
-    gdcmWarningMacro( "This should not happen: No Columns found." );
-    if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
-      {
-      // Pretty bad we really need this information. Should not 
-      // happen in theory. Maybe papyrus files ??
-      return false;
-      }
-    }
+  //else
+  //  {
+  //  const TransferSyntax &ts = PixelData->GetTransferSyntax();
+  //  gdcmWarningMacro( "This should not happen: No Columns found." );
+  //  if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
+  //    {
+  //    // Pretty bad we really need this information. Should not 
+  //    // happen in theory. Maybe papyrus files ??
+  //    return false;
+  //    }
+  //  }
 
   // D 0028|0010 [US] [Rows] [512]
   //PixelData->SetDimension(1,
   //  ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     {
-    Attribute<0x0028,0x0010> at;
-    if( ds.FindDataElement( at.GetTag() ) )
+    Attribute<0x0028,0x0010> at = { 0 };
+    //if( ds.FindDataElement( at.GetTag() ) )
       {
-      const DataElement& de = ds.GetDataElement( at.GetTag() );
-      at.SetFromDataElement( de );
+      //const DataElement& de = ds.GetDataElement( at.GetTag() );
+      at.SetFromDataSet( ds );
       PixelData->SetDimension(1, at.GetValue() );
       //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
       }
-    else
-      {
-      const TransferSyntax &ts = PixelData->GetTransferSyntax();
-      gdcmWarningMacro( "This should not happen: No Rows found." );
-      if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
-        {
-        // Pretty bad we really need this information. Should not 
-        // happen in theory. Maybe papyrus files ??
-        return false;
-        }
-      }
+    //else
+    //  {
+    //  const TransferSyntax &ts = PixelData->GetTransferSyntax();
+    //  gdcmWarningMacro( "This should not happen: No Rows found." );
+    //  if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
+    //    {
+    //    // Pretty bad we really need this information. Should not 
+    //    // happen in theory. Maybe papyrus files ??
+    //    return false;
+    //    }
+    //  }
     }
 
   // Dummy check
@@ -799,13 +806,13 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   PixelFormat pf;
   // D 0028|0002 [US] [Samples per Pixel] [1]
   const Tag samplesperpixel = Tag(0x0028, 0x0002);
-  if( ds.FindDataElement( samplesperpixel ) )
+  //if( ds.FindDataElement( samplesperpixel ) )
     {
     //pf.SetSamplesPerPixel(
     //  ReadUSFromTag( samplesperpixel, ss, conversion ) );
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
-    Attribute<0x0028,0x0002> at;
-    at.SetFromDataElement( de );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+    Attribute<0x0028,0x0002> at = { 0 };
+    at.SetFromDataSet( ds );
     pf.SetSamplesPerPixel( at.GetValue() );
     }
 
@@ -820,9 +827,9 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     //pf.SetBitsAllocated(
     //  ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-    Attribute<0x0028,0x0100> at;
-    at.SetFromDataElement( de );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+    Attribute<0x0028,0x0100> at = { 0 };
+    at.SetFromDataSet( ds );
     pf.SetBitsAllocated( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     }
@@ -831,9 +838,9 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     //pf.SetBitsStored(
     //  ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-    Attribute<0x0028,0x0101> at;
-    at.SetFromDataElement( de );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+    Attribute<0x0028,0x0101> at = { 0 };
+    at.SetFromDataSet( ds );
     pf.SetBitsStored( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     }
@@ -842,35 +849,94 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     //pf.SetHighBit(
     //  ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-    Attribute<0x0028,0x0102> at;
-    at.SetFromDataElement( de );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+    Attribute<0x0028,0x0102> at = { 0 };
+    at.SetFromDataSet( ds );
     pf.SetHighBit( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     }
 
     // D 0028|0103 [US] [Pixel Representation] [0]
-    Tag tpixelrep(0x0028, 0x0103);
-    if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
+    //Tag tpixelrep(0x0028, 0x0103);
+    //if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
       {
       //pf.SetPixelRepresentation(
       //  ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
-    Attribute<0x0028,0x0103> at;
-    at.SetFromDataElement( de );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+    Attribute<0x0028,0x0103> at = { 0 };
+    at.SetFromDataSet( ds );
     pf.SetPixelRepresentation( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
 
       }
-    else
+//    else
+//      {
+//      gdcmWarningMacro( "Pixel Representation was not found. Default to Unsigned Pixel Representation" );
+//      pf.SetPixelRepresentation( 0 );
+//      }
+    }
+
+  // 5. Photometric Interpretation
+  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+  const Tag tphotometricinterpretation(0x0028, 0x0004);
+  const ByteValue *photometricinterpretation
+    = GetPointerFromElement( tphotometricinterpretation );
+  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
+  if( photometricinterpretation )
+    {
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
+    }
+  else
+    {
+    if( pf.GetSamplesPerPixel() == 1 )
       {
-      gdcmWarningMacro( "Pixel Representation was not found. Default to Unsigned Pixel Representation" );
-      pf.SetPixelRepresentation( 0 );
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
+      pi = PhotometricInterpretation::MONOCHROME2;
+      }
+    else if( pf.GetSamplesPerPixel() == 3 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      pi = PhotometricInterpretation::RGB;
+      }
+    else if( pf.GetSamplesPerPixel() == 4 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      pi = PhotometricInterpretation::ARGB;
       }
     }
 
+  if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
+    {
+    if( pi != PhotometricInterpretation::UNKNOW )
+      {
+      pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
+      }
+    else if ( isacrnema ) 
+      {
+      assert ( pf.GetSamplesPerPixel() == 0 );
+      assert ( pi == PhotometricInterpretation::UNKNOW );
+      pf.SetSamplesPerPixel( 1 );
+      pi = PhotometricInterpretation::MONOCHROME2;
+      }
+    else
+      {
+      gdcmWarningMacro( "Cannot recognize image type. Does not looks like ACR-NEMA and is missing both Sample Per Pixel AND PhotometricInterpretation. Please report" );
+      return false;
+      }
+    }
+  assert ( pf.GetSamplesPerPixel() != 0 );
   // Very important to set the PixelFormat here before PlanarConfiguration
   PixelData->SetPixelFormat( pf );
+  pf = PixelData->GetPixelFormat();
+  if( !pf.IsValid() )
+    {
+    return false;
+    }
+  if( pi == PhotometricInterpretation::UNKNOW ) return false;
+  PixelData->SetPhotometricInterpretation( pi );
 
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
@@ -880,7 +946,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
     const DataElement& de = ds.GetDataElement( planarconfiguration );
-    Attribute<0x0028,0x0006> at;
+    Attribute<0x0028,0x0006> at = { 0 };
     at.SetFromDataElement( de );
 
     //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
@@ -893,26 +959,6 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     PixelData->SetPlanarConfiguration( pc );
     }
 
-  // 5. Photometric Interpretation
-  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
-  const Tag tphotometricinterpretation(0x0028, 0x0004);
-  const ByteValue *photometricinterpretation
-    = GetPointerFromElement( tphotometricinterpretation );
-  PhotometricInterpretation pi = PhotometricInterpretation::MONOCHROME2;
-  if( photometricinterpretation )
-    {
-    std::string photometricinterpretation_str(
-      photometricinterpretation->GetPointer(),
-      photometricinterpretation->GetLength() );
-    pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
-    }
-  else
-    {
-    assert( pf.GetSamplesPerPixel() == 1 );
-    gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
-    }
-  assert( pi != PhotometricInterpretation::UNKNOW );
-  PixelData->SetPhotometricInterpretation( pi );
 
   // Do the Palette Color:
   // 1. Modality LUT Sequence
@@ -990,7 +1036,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       // (0028,1103) US 0\0\16
       const Tag tdescriptor(0x0028, (0x1101 + i));
       //const Tag tdescriptor(0x0028, 0x3002);
-      Element<VR::US,VM::VM3> el_us3;
+      Element<VR::US,VM::VM3> el_us3 = {};
       // Now pass the byte array to a DICOMizer:
       el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
@@ -1010,24 +1056,36 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       if( ds.FindDataElement( tlut ) )
         {
         const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
-        assert( lut_raw );
-        // LookupTableType::RED == 0
-        lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        if( lut_raw )
+          {
+          // LookupTableType::RED == 0
+          lut->SetLUT( LookupTable::LookupTableType(i),
+            (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+          }
+        else
+          {
+          lut->Clear();
+          }
 
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
           * el_us3.GetValue(2) / 8;
-        assert( check == lut_raw->GetLength() ); (void)check;
+        assert( !lut->Initialized() || check == lut_raw->GetLength() ); (void)check;
         }
       else if( ds.FindDataElement( seglut ) )
         {
         const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
-        assert( lut_raw );
-        lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        if( lut_raw )
+          {
+          lut->SetLUT( LookupTable::LookupTableType(i),
+            (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+          }
+        else
+          {
+          lut->Clear();
+          }
 
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
@@ -1039,6 +1097,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
         assert(0);
         }
       }
+    if( ! lut->Initialized() ) return false;
     PixelData->SetLUT(*lut);
     }
   // TODO
@@ -1091,7 +1150,8 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   if( dims[0] == 0 || dims[1] == 0 )
     {
     // Pseudo-declared JPEG SC image storage. Let's fix col/row/pf/pi
-    if( PixelData->GetTransferSyntax().IsEncapsulated() )
+    gdcm::JPEGCodec jpeg;
+    if( jpeg.CanDecode( PixelData->GetTransferSyntax() ) )
       {
       std::stringstream ss;
       const DataElement &de = PixelData->GetDataElement();
@@ -1100,18 +1160,30 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       sqf->WriteBuffer( ss );
       //std::string s( bv->GetPointer(), bv->GetLength() );
       //is.str( s );
-      gdcm::JPEGCodec jpeg;
       gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
       jpeg.SetPixelFormat( pf );
       gdcm::TransferSyntax ts;
       bool b = jpeg.GetHeaderInfo( ss, ts );
       if( b )
         {
-        PixelData->SetDimensions( jpeg.GetDimensions() );
-        PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
-        PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
-        assert( PixelData->GetTransferSyntax() == ts );
+        std::vector<unsigned int> v(3);
+        v[0] = PixelData->GetDimensions()[0];
+        v[1] = PixelData->GetDimensions()[1];
+        v[2] = PixelData->GetDimensions()[2];
+        assert( jpeg.GetDimensions()[0] );
+        assert( jpeg.GetDimensions()[1] );
+        v[0] = jpeg.GetDimensions()[0];
+        v[1] = jpeg.GetDimensions()[1];
+        PixelData->SetDimensions( &v[0] );
+        //PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
+        //PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+        assert( PixelData->IsTransferSyntaxCompatible( ts ) );
         }
+      }
+    else
+      {
+      gdcmDebugMacro( "Columns or Row was found to be 0. Cannot compute dimension." );
+      return false;
       }
     }
 
@@ -1133,7 +1205,7 @@ bool PixmapReader::ReadACRNEMAImage()
   if( ds.FindDataElement( timagedimensions ) )
     {
     const DataElement& de = ds.GetDataElement( timagedimensions );
-    Attribute<0x0028,0x0005> at;
+    Attribute<0x0028,0x0005> at = { 0 };
     at.SetFromDataElement( de );
     assert( at.GetNumberOfValues() == 1 );
     unsigned short imagedimensions = at.GetValue();
@@ -1143,7 +1215,7 @@ bool PixmapReader::ReadACRNEMAImage()
       PixelData->SetNumberOfDimensions(3);
       // D 0028|0012 [US] [Planes] [262]
       const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0012) );
-      Attribute<0x0028,0x0012> at;
+      Attribute<0x0028,0x0012> at = { 0 };
       at.SetFromDataElement( de );
       assert( at.GetNumberOfValues() == 1 );
       PixelData->SetDimension(2, at.GetValue() );
@@ -1169,7 +1241,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0011 [US] [Columns] [512]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
-    Attribute<0x0028,0x0011> at;
+    Attribute<0x0028,0x0011> at = { 0 };
     at.SetFromDataElement( de );
     PixelData->SetDimension(0, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
@@ -1178,7 +1250,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0010 [US] [Rows] [512]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-    Attribute<0x0028,0x0010> at;
+    Attribute<0x0028,0x0010> at = { 0 };
     at.SetFromDataElement( de );
     PixelData->SetDimension(1, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
@@ -1189,7 +1261,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // LIBIDO compatible code:
   // D 0008|0010 [LO] [Recognition Code (RET)] [ACRNEMA_LIBIDO_1.1]
   const Tag trecognitioncode(0x0008,0x0010);
-  if( ds.FindDataElement( trecognitioncode ) )
+  if( ds.FindDataElement( trecognitioncode ) && !ds.GetDataElement( trecognitioncode ).IsEmpty() )
     {
     const ByteValue *libido = ds.GetDataElement(trecognitioncode).GetByteValue();
     assert( libido );
@@ -1223,7 +1295,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0100 [US] [Bits Allocated] [16]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-    Attribute<0x0028,0x0100> at;
+    Attribute<0x0028,0x0100> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetBitsAllocated( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
@@ -1232,7 +1304,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0101 [US] [Bits Stored] [12]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-    Attribute<0x0028,0x0101> at;
+    Attribute<0x0028,0x0101> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetBitsStored( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
@@ -1241,7 +1313,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0102 [US] [High Bit] [11]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-    Attribute<0x0028,0x0102> at;
+    Attribute<0x0028,0x0102> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetHighBit( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
@@ -1250,7 +1322,7 @@ bool PixmapReader::ReadACRNEMAImage()
   // D 0028|0103 [US] [Pixel Representation] [0]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
-    Attribute<0x0028,0x0103> at;
+    Attribute<0x0028,0x0103> at = { 0 };
     at.SetFromDataElement( de );
     pf.SetPixelRepresentation( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
@@ -1283,10 +1355,25 @@ bool PixmapReader::ReadACRNEMAImage()
     PhotometricInterpretation::MONOCHROME2 );
   PixelData->SetPlanarConfiguration(0);
   const Tag planarconfiguration(0x0028, 0x0006);
-  assert( !ds.FindDataElement( planarconfiguration ) );
+  if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
+    {
+    const DataElement& de = ds.GetDataElement( planarconfiguration );
+    Attribute<0x0028,0x0006> at = { 0 };
+    at.SetFromDataElement( de );
+
+    //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
+    unsigned int pc = at.GetValue();
+    if( pc && PixelData->GetPixelFormat().GetSamplesPerPixel() != 3 )
+      {
+      gdcmDebugMacro( "Cannot have PlanarConfiguration=1, when Sample Per Pixel != 3" );
+      pc = 0;
+      }
+    PixelData->SetPlanarConfiguration( pc );
+    }
+
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   // Some funny ACR NEMA file have PhotometricInterpretation ...
-  if( ds.FindDataElement( tphotometricinterpretation ) )
+  if( ds.FindDataElement( tphotometricinterpretation ) && !ds.GetDataElement( tphotometricinterpretation ).IsEmpty() )
     {
     const ByteValue *photometricinterpretation
       = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
@@ -1297,7 +1384,6 @@ bool PixmapReader::ReadACRNEMAImage()
     PhotometricInterpretation pi(
       PhotometricInterpretation::GetPIType(
         photometricinterpretation_str.c_str()));
-    assert( pi == PhotometricInterpretation::MONOCHROME2 );
     }
   else
     {

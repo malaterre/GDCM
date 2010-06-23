@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -54,7 +54,8 @@ int TestImageChangeTransferSyntaxRAW(const char *filename, bool verbose = false)
   if( ts == gdcm::TransferSyntax::ExplicitVRLittleEndian )
     {
     // TODO: I think that duplicate goals of TestImageWriter2  ...
-    change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+    //change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+    change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
     }
   else
     {

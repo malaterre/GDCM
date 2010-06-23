@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -117,6 +117,11 @@ static const char *MSStrings[] = {
   "1.2.840.10008.3.1.2.3.3",
   // Philips Private MR Synthetic Image Storage
   "1.3.46.670589.5.0.10",
+  "1.2.840.10008.5.1.4.1.1.77.1.4", // "VL Photographic Image Storage",
+  "1.2.840.10008.5.1.4.1.1.66.4", // Segmentation Storage 
+  "1.2.840.10008.5.1.4.1.1.481.8", // RT Ion Plan Storage
+  "1.2.840.10008.5.1.4.1.1.13.1.1", // XRay3DAngiographicImageStorage,
+  "1.2.840.10008.5.1.4.1.1.12.1.1", // Enhanced XA Image Storage
   0
 };
 
@@ -186,6 +191,10 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == HangingProtocolStorage
     || ms == MRSpectroscopyStorage
     || ms == ModalityPerformedProcedureStepSOPClass
+    || ms == RawDataStorage
+    || ms == RTIonPlanStorage
+    || ms == LeadECGWaveformStorage
+    || ms == GeneralECGWaveformStorage
     || ms == RTStructureSetStorage )
     {
     return false;
@@ -266,8 +275,35 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//HangingProtocolStorage
   {"  ", 2},//ModalityPerformedProcedureStepSOPClass
   {"  ", 2},//PhilipsPrivateMRSyntheticImageStorage
+  {"XC", 2},//VLPhotographicImageStorage
+  {"  ", 2},// Segmentation Storage 
+  {"  ", 2},// RT Ion Plan Storage
+  {"XA", 3},// XRay3DAngiographicImageStorage,
+  {"XA", 3},// Enhanced XA Image Storage
+
   {NULL, 0} //MS_END
 };
+
+unsigned int MediaStorage::GetNumberOfMSType()
+{
+  const unsigned int n = MS_END; 
+  assert( n > 0 );
+  return n;
+}
+
+unsigned int MediaStorage::GetNumberOfMSString()
+{
+  static const unsigned int n = sizeof( MSStrings ) / sizeof( *MSStrings );
+  assert( n > 0 );
+  return n - 1;
+}
+
+unsigned int MediaStorage::GetNumberOfModality()
+{
+  static const unsigned int n = sizeof( MSModalityTypes ) / sizeof( *MSModalityTypes );
+  assert( n > 0 );
+  return n - 1;
+}
 
 const char *MediaStorage::GetModality() const
 {

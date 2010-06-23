@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -205,6 +205,13 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0,"SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm" },
 { 0,"00191113.dcm" },
 { 0,"TestVRSQUN2.dcm" },
+{ 0,"PHILIPS_GDCM12xBug.dcm"},
+{ 0,"PHILIPS_GDCM12xBug2.dcm"},
+{ 0,"TestVRSQUN1.dcm"} ,
+{ 1,"multiframegrayscalebytescis.dcm" },
+{ 1,"multiframegrayscalewordscis.dcm" },
+{ 1,"multiframesinglebitscis.dcm" },
+{ 1,"multiframetruecolorscis.dcm" },
 { 0, NULL }
 };
 

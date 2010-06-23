@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmConfigure_h
-#define __gdcmConfigure_h
+#ifndef GDCMCONFIGURE_H
+#define GDCMCONFIGURE_H
 
 /* This header is configured by GDCM's build process.  */
 
@@ -40,16 +40,19 @@
 
 #cmakedefine GDCM_USE_SYSTEM_ZLIB
 #cmakedefine GDCM_USE_SYSTEM_UUID
-#cmakedefine GDCM_USE_SYSTEM_POLARSSL
+//#cmakedefine GDCM_USE_SYSTEM_POLARSSL
 #cmakedefine GDCM_USE_SYSTEM_POPPLER
+#cmakedefine GDCM_USE_SYSTEM_PODOFO
 #cmakedefine GDCM_USE_SYSTEM_OPENSSL
 #cmakedefine GDCM_USE_SYSTEM_MD5
 #cmakedefine GDCM_USE_SYSTEM_EXPAT
 #cmakedefine GDCM_USE_SYSTEM_LJPEG
 #cmakedefine GDCM_USE_SYSTEM_OPENJPEG
+#cmakedefine GDCM_USE_SYSTEM_KAKADU
 #cmakedefine GDCM_USE_SYSTEM_PVRG
 
 #cmakedefine GDCM_USE_PVRG
+#cmakedefine GDCM_USE_KAKADU
 #cmakedefine GDCM_USE_JPEGLS
 
 /* For older gcc / broken plateform */
@@ -100,6 +103,8 @@
 #cmakedefine CMAKE_HAVE_NET_IF_DL_H
 #cmakedefine CMAKE_HAVE_NET_IF_ARP_H
 #cmakedefine HAVE_SA_LEN
+// CMS with PBE (added in OpenSSL 1.0.0 ~ Fri Nov 27 15:33:25 CET 2009)
+#cmakedefine HAVE_CMS_RECIPIENT_PASSWORD
 
 #cmakedefine HAVE_STRCASECMP
 #cmakedefine HAVE_STRNCASECMP
@@ -113,6 +118,12 @@
 #cmakedefine HAVE_GETTIMEOFDAY
 #endif
 
+// MM: I have a feeling that if HAVE_WCHAR_IFSTREAM, then UNICODE filename 
+// are expected to be specified as UTF-16, but if no API exist for UTF-16
+// at std::ifstream level, then const char* of std::ifstream might accept
+// UTF-8
+#cmakedefine HAVE_WCHAR_IFSTREAM
+
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
 /* To Remove code that support broken DICOM implementation and therefore
@@ -121,6 +132,7 @@
 #cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 
 #define GDCM_PVRG_JPEG_EXECUTABLE "@PVRGJPEG_EXECUTABLE@"
+#define GDCM_KAKADU_EXPAND_EXECUTABLE "@KDU_EXPAND_EXECUTABLE@"
 
 /* Undocumented on purpose :-P */
 #cmakedefine GDCM_WRITE_ODD_LENGTH

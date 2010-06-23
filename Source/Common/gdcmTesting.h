@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTesting_h
-#define __gdcmTesting_h
+#ifndef GDCMTESTING_H
+#define GDCMTESTING_H
 
 #include "gdcmTypes.h"
 
@@ -81,10 +81,16 @@ public :
   static const char * GetTempDirectory(const char * subdir = 0);
 
   /// NOT THREAD SAFE
+  static const wchar_t *GetTempDirectoryW(const wchar_t * subdir = 0);
+
+  /// NOT THREAD SAFE
   static const char * GetTempFilename(const char *filename, const char * subdir = 0);
+
+  /// NOT THREAD SAFE
+  static const wchar_t* GetTempFilenameW(const wchar_t *filename, const wchar_t* subdir = 0);
 
   static const char *GetSourceDirectory();
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmTesting_h
+#endif //GDCMTESTING_H

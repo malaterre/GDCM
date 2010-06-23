@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStaticAssert_h
-#define __gdcmStaticAssert_h
+#ifndef GDCMSTATICASSERT_H
+#define GDCMSTATICASSERT_H
 
 
 // the following was shamelessly borowed from BOOST static assert:
@@ -50,5 +50,5 @@ namespace gdcm
  * };
  * 
  */
-#endif // __gdcmStaticAssert_h
+#endif // GDCMSTATICASSERT_H
 

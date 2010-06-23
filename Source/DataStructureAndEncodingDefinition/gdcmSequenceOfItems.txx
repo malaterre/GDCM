@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSequenceOfItems_txx
-#define __gdcmSequenceOfItems_txx
+#ifndef GDCMSEQUENCEOFITEMS_TXX
+#define GDCMSEQUENCEOFITEMS_TXX
 
 namespace gdcm
 {
@@ -40,4 +40,4 @@ VL SequenceOfItems::ComputeLength() const
 
 } // end namespace gdcm
 
-#endif // __gdcmSequenceOfItems_txx
+#endif // GDCMSEQUENCEOFITEMS_TXX

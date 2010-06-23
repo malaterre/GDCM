@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,15 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef __gdcmTypes_h
-#define __gdcmTypes_h
+#ifndef GDCMTYPES_H
+#define GDCMTYPES_H
 
 #include "gdcmConfigure.h"
-
 #include "gdcmWin32.h"
-
-#include "gdcmMacro.h"
+#include "gdcmLegacyMacro.h"
 
 //-----------------------------------------------------------------------------
 #ifdef CMAKE_HAVE_STDINT_H
@@ -58,4 +55,4 @@ typedef  unsigned __int64    uint64_t;
 #endif
 
 //-----------------------------------------------------------------------------
-#endif //__gdcmTypes_h
+#endif //GDCMTYPES_H

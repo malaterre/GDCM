@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -121,6 +121,7 @@ const char * const * Testing::GetMD5DataImage(unsigned int file)
 
 const char * Testing::GetMD5FromFile(const char *filepath)
 {
+  if(!filepath) return NULL;
   unsigned int i = 0;
   MD5DataImagesType md5s = GetMD5DataImages();
   const char *p = md5s[i][1];
@@ -167,6 +168,24 @@ const char *Testing::GetTempDirectory(const char * subdir)
   return buffer.c_str();
 }
 
+const wchar_t *Testing::GetTempDirectoryW(const wchar_t * subdir)
+{
+  static std::wstring buffer;
+  wchar_t wname[4096]; // FIXME
+  size_t len = mbstowcs(wname,GDCM_TEMP_DIRECTORY,sizeof(wname));
+  if( !subdir )
+    {
+    buffer = wname;
+    return buffer.c_str();
+    }
+  // else
+  std::wstring tmpdir = wname;
+  tmpdir += L"/";
+  tmpdir += subdir;
+  buffer = tmpdir;
+  return buffer.c_str();
+}
+
 const char * Testing::GetTempFilename(const char *filename, const char * subdir)
 {
   if( !filename ) return 0;
@@ -198,6 +217,24 @@ void Testing::Print(std::ostream &os)
     os << (*md5s)[0] << " -> " << (*md5s)[1] << "\n";
     ++md5s;
     }
+}
+
+const wchar_t* Testing::GetTempFilenameW(const wchar_t *filename, const wchar_t* subdir)
+{
+  // mbsrtowcs
+  // mbstowcs
+  if( !filename ) return 0;
+
+  static std::wstring buffer;
+  std::wstring outfilename = GetTempDirectoryW(subdir);
+  outfilename += L"/";
+
+  //gdcm::Filename out(filename);
+  //outfilename += out.GetName();
+  buffer = outfilename;
+  buffer += filename;
+
+  return buffer.c_str();
 }
 
 const char *Testing::GetSourceDirectory()

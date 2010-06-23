@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -31,6 +31,7 @@
 #include "gdcmScanner.h"
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
+#include "gdcmSimpleSubjectWatcher.h"
 
 #include <string>
 #include <iostream>
@@ -56,6 +57,7 @@ void PrintHelp()
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -d --dir       DICOM directory" << std::endl;
   std::cout << "  -t --tag %d,%d DICOM tag(s) to look for" << std::endl;
+  std::cout << "  -P --private-tag %d,%d,%s DICOM private tag(s) to look for" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -p --print      Print output." << std::endl;
   std::cout << "  -r --recursive  Recusively descend directory." << std::endl;
@@ -77,8 +79,11 @@ int main(int argc, char *argv[])
   bool recursive = false;
   std::string dirname;
   typedef std::vector<gdcm::Tag> VectorTags;
+  typedef std::vector<gdcm::PrivateTag> VectorPrivateTags;
   VectorTags tags;
+  VectorPrivateTags privatetags;
   gdcm::Tag tag;
+  gdcm::PrivateTag privatetag;
 
   int verbose = 0;
   int warning = 0;
@@ -95,6 +100,7 @@ int main(int argc, char *argv[])
         {"tag", 1, 0, 0},
         {"recursive", 1, 0, 0},
         {"print", 1, 0, 0},
+        {"private-tag", 1, 0, 0},
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -107,7 +113,7 @@ int main(int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "d:t:rpVWDEhv",
+    c = getopt_long (argc, argv, "d:t:rpP:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -139,6 +145,12 @@ int main(int argc, char *argv[])
     case 't':
       tag.ReadFromCommaSeparatedString(optarg);
       tags.push_back( tag );
+      //std::cerr << optarg << std::endl;
+      break;
+
+    case 'P':
+      privatetag.ReadFromCommaSeparatedString(optarg);
+      privatetags.push_back( privatetag );
       //std::cerr << optarg << std::endl;
       break;
 
@@ -216,7 +228,7 @@ int main(int argc, char *argv[])
     PrintHelp();
     return 1;
     }
-  if( tags.empty() )
+  if( tags.empty() && privatetags.empty() )
     {
     //std::cerr << "Need tags (-t)\n";
     PrintHelp();
@@ -239,6 +251,8 @@ int main(int argc, char *argv[])
     std::cout << "Looking for tags: \n";
     std::copy(tags.begin(), tags.end(), 
       std::ostream_iterator<gdcm::Tag>( std::cout, "\n"));
+    std::copy(privatetags.begin(), privatetags.end(), 
+      std::ostream_iterator<gdcm::PrivateTag>( std::cout, "\n"));
     //std::cout << std::endl;
     }
 
@@ -247,10 +261,16 @@ int main(int argc, char *argv[])
   if( verbose ) d.Print( std::cout );
   std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
 
-  gdcm::Scanner s;
+  gdcm::SmartPointer<gdcm::Scanner> ps = new gdcm::Scanner;
+  gdcm::Scanner &s = *ps;
+  //gdcm::SimpleSubjectWatcher watcher(ps, "Scanner");
   for( VectorTags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
     s.AddTag( *it );
+    }
+  for( VectorPrivateTags::const_iterator it = privatetags.begin(); it != privatetags.end(); ++it)
+    {
+    s.AddPrivateTag( *it );
     }
   bool b = s.Scan( d.GetFilenames() );
   if( !b )

@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -55,6 +55,16 @@ int TestMediaStorage(int argc, char *argv[])
   gdcm::MediaStorage ms2;
   if ( ms2.GetModality() )
     {
+    return 1;
+    }
+
+  // MediaStorage is really poorly implemented. We need to add a test to avoid dev shooting themself in the foot.
+  unsigned int nMSType = gdcm::MediaStorage::GetNumberOfMSType();
+  unsigned int nMSString = gdcm::MediaStorage::GetNumberOfMSString();
+  unsigned int nMSMod = gdcm::MediaStorage::GetNumberOfModality();
+  if( nMSType != nMSString || nMSType != nMSMod ) 
+    {
+    std::cerr << "you are shooting yourself in the foot, dear.: " << nMSType << "," << nMSString << "," << nMSMod << std::endl;
     return 1;
     }
 

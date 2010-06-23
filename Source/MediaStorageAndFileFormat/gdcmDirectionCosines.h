@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDirectionCosines_h
-#define __gdcmDirectionCosines_h
+#ifndef GDCMDIRECTIONCOSINES_H
+#define GDCMDIRECTIONCOSINES_H
 
 #include "gdcmTypes.h"
 
@@ -50,10 +50,14 @@ public:
   /// Return whether or not this is a valid direction cosines
   bool IsValid() const;
 
+  /// Initialize from string str. It requires 6 floating point separated by a
+  /// backslash character.
   bool SetFromString(const char *str);
 
+  /// Compute the Dot product of the two cross vector of both DirectionCosines object
   double CrossDot(DirectionCosines const &dc) const;
 
+  /// Compute the distance along the normal
   double ComputeDistAlongNormal(const double ipp[3]) const;
 
 private:
@@ -62,4 +66,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmDirectionCosines_h
+#endif //GDCMDIRECTIONCOSINES_H

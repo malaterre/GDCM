@@ -19,11 +19,10 @@
 // TODO: Can I make this filter threaded ?
 // TODO: How do I handle the VTK-flipping (FileLowerLeft)?
 
-#ifndef __vtkImagePlanarComponentsToComponents_h
-#define __vtkImagePlanarComponentsToComponents_h
+#ifndef VTKIMAGEPLANARCOMPONENTSTOCOMPONENTS_H
+#define VTKIMAGEPLANARCOMPONENTSTOCOMPONENTS_H
 
 #include "vtkImageAlgorithm.h"
-#include "gdcmTypes.h" // GDCM_EXPORT
 
 // everything is now handled within the vtkGDCMImageReader as Planar Configuration can not
 // be externalized (conflict with file lower left)
@@ -31,7 +30,7 @@
 #error do not use this class 
 
 //class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
-class GDCM_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
+class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
 {
 public:
   static vtkImagePlanarComponentsToComponents *New();

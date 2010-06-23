@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -18,6 +18,11 @@
 #include <string>
 #include <set>
 
+/**
+  This is a toy program just to check how good the UID are uniq.
+  The rule of thumb is that you should not have a long Root UID otherwise the
+  algorithm might find twice the same UID...
+ */
 int main()
 {
   gdcm::UIDGenerator uid;

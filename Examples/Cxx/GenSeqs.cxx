@@ -3,7 +3,7 @@
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2009 Mathieu Malaterre
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -33,6 +33,7 @@
  * nicely compressed using this transfer syntax.
  *
  * Warning: do not try to compute the group length elements !
+ * Warning: You may need a 64bits machine for this example to work.
  */
 int main(int argc, char *argv[])
 {
