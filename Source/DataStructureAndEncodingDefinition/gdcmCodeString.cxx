@@ -17,7 +17,7 @@
 namespace gdcm
 {
   bool CodeString::IsValid() const {
-    if( !Superclass::IsValid() ) return false;
+    if( !Internal.IsValid() ) return false;
     // Implementation specific:
 
 /*
@@ -30,8 +30,8 @@ the Default
 Character
 Repertoire
 */
-    const_iterator it = begin();
-    for( ; it != end(); ++it )
+    const_iterator it = Internal.begin();
+    for( ; it != Internal.end(); ++it )
       {
       int c = *it;
       if( !isupper(c) && !isdigit(c) && c != ' ' && c != '_' )

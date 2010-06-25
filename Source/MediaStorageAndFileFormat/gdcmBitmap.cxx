@@ -586,12 +586,12 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       {
       TransferSyntax ts2;
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
-      assert( sf );
+      if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
 
       bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
-      assert( b );
+      if( !b ) return false;
       lossyflag = codec.IsLossy();
       return true;
       }

@@ -25,10 +25,10 @@ namespace gdcm
  *
  * \note TODO
  */
-class GDCM_EXPORT CodeString : public String<'\\',16> /* PLEASE do not export me */
+class CodeString 
 {
+  friend std::ostream& operator<< (std::ostream& os, const CodeString& str);
 public:
-  // typedef are not inherited:
   typedef String<'\\',16> Superclass;
   typedef Superclass::value_type             value_type;
   typedef Superclass::pointer                pointer;
@@ -42,14 +42,28 @@ public:
   typedef Superclass::const_reverse_iterator const_reverse_iterator;
 
   // CodeString constructors.
-  CodeString(): Superclass() {}
-  CodeString(const value_type* s): Superclass(s) {}
-  CodeString(const value_type* s, size_type n): Superclass(s, n) {}
-  CodeString(const Superclass& s, size_type pos=0, size_type n=npos):
-    Superclass(s, pos, n) {}
+  CodeString(): Internal() {}
+  CodeString(const value_type* s): Internal(s) {}
+  CodeString(const value_type* s, size_type n): Internal(s, n) {}
+  CodeString(const Superclass& s, size_type pos=0, size_type n=Superclass::npos):
+    Internal(s, pos, n) {}
 
+  // CodeString constructors.
   bool IsValid() const;
+
+  std::string Trim() const {
+    return Internal.Trim();
+  }
+  size_type size() { return Internal.size(); }
+
+private:
+  String<'\\',16> Internal;
 };
+
+inline std::ostream& operator<< (std::ostream& os, const CodeString& str)
+{
+  os << str.Internal;
+}
 
 } // end namespace gdcm
 
