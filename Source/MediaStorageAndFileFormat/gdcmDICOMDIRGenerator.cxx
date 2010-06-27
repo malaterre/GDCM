@@ -414,6 +414,12 @@ bool DICOMDIRGenerator::AddPatientDirectoryRecord()
     directoryrecordtype.SetValue( "PATIENT" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
     const char *pid = it->c_str();
+    if( ! (pid && *pid) )
+      {
+      const char *fn = scanner.GetFilenameFromTagToValue(patientid.GetTag(), pid);
+      gdcmErrorMacro( "Missing Patient ID from file: " << fn );
+      return false;
+      }
     gdcmAssertAlwaysMacro( pid && *pid );
     patientid.SetValue( pid );
     ds.Insert( patientid.GetAsDataElement() );
@@ -482,6 +488,12 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
     directoryrecordtype.SetValue( "STUDY" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
     const char *studyuid = it->c_str();
+    if( ! (studyuid && *studyuid) )
+      {
+      const char *fn = scanner.GetFilenameFromTagToValue(studyinstanceuid.GetTag(), studyuid);
+      gdcmErrorMacro( "Missing Study Instance UID from file: " << fn );
+      return false;
+      }
     gdcmAssertAlwaysMacro( studyuid && *studyuid );
     studyinstanceuid.SetValue( studyuid );
     ds.Insert( studyinstanceuid.GetAsDataElement() );
@@ -577,6 +589,12 @@ bool DICOMDIRGenerator::AddSeriesDirectoryRecord()
     directoryrecordtype.SetValue( "SERIES" );
     ds.Insert( directoryrecordtype.GetAsDataElement() );
     const char *seriesuid = it->c_str();
+    if( ! (seriesuid && *seriesuid) )
+      {
+      const char *fn = scanner.GetFilenameFromTagToValue(seriesinstanceuid.GetTag(), seriesuid);
+      gdcmErrorMacro( "Missing Study Instance UID from file: " << fn );
+      return false;
+      }
     gdcmAssertAlwaysMacro( seriesuid && *seriesuid );
     seriesinstanceuid.SetValue( seriesuid );
     ds.Insert( seriesinstanceuid.GetAsDataElement() );
@@ -907,9 +925,13 @@ bool DICOMDIRGenerator::Generate()
 
   bool b;
   b = AddPatientDirectoryRecord();
+  if( !b ) return false;
   b = AddStudyDirectoryRecord();
+  if( !b ) return false;
   b = AddSeriesDirectoryRecord();
+  if( !b ) return false;
   b = AddImageDirectoryRecord();
+  if( !b ) return false;
 
 /*
 The DICOMDIR File shall use the Explicit VR Little Endian Transfer Syntax (UID=1.2.840.10008.1.2.1) to
