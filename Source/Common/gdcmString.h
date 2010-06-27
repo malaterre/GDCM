@@ -93,7 +93,7 @@ public:
   }
 
   /// Trim function is required to return a std::string object, otherwise we
-  /// could not create / a gdcm::String object with an odd number of bytes...
+  /// could not create a gdcm::String object with an odd number of bytes...
   std::string Trim() const {
     std::string str = *this; // copy
     std::string::size_type pos1 = str.find_first_not_of(' ');
