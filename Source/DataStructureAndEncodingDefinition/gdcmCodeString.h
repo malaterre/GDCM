@@ -63,6 +63,7 @@ private:
 inline std::ostream& operator<< (std::ostream& os, const CodeString& str)
 {
   os << str.Internal;
+  return os;
 }
 
 } // end namespace gdcm
