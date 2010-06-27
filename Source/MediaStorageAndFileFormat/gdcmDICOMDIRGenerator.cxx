@@ -755,7 +755,7 @@ static bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
   for( unsigned int i = 0; i < n; ++i)
     {
     gdcm::CodeString cs = at.GetValue( i );
-    if( !cs.IsValid() || cs.size() > 8 )
+    if( !cs.IsValid() || cs.Size() > 8 )
       {
       gdcmDebugMacro( "Problem with CS: " << cs );
       return false;

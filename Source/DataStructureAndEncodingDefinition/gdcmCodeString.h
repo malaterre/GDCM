@@ -22,9 +22,23 @@ namespace gdcm
 
 /**
  * \brief CodeString
+ * This is an implementation of DICOM VR: CS
+ * The cstor will properly Trim so that operator== is correct.
  *
- * \note TODO
+ * \note the cstor of CodeString will Trim the string on the fly so as
+ * to remove the extra leading and ending spaces. However it will not
+ * perform validation on the fly (CodeString obj can contains invalid
+ * char such as lower cases). This design was chosen to be a little toleran
+ * to broken DICOM implementation, and thus allow user to compare lower
+ * case CS from there input file without the need to first rewrite them
+ * to get rid of invalid character (validation is a different operation from
+ * searching, querying).
+ * \warning when writing out DICOM file it is highly recommended to perform
+ * the IsValid() call, at least to check that the length of the string match
+ * the definition in the standard.
  */
+// Note to myself: because note all wrapped language support exception
+// we could not support throwing an exception during object construction.
 class CodeString 
 {
   friend std::ostream& operator<< (std::ostream& os, const CodeString& str);
@@ -41,20 +55,33 @@ public:
   typedef Superclass::reverse_iterator       reverse_iterator;
   typedef Superclass::const_reverse_iterator const_reverse_iterator;
 
-  // CodeString constructors.
+  /// CodeString constructors.
   CodeString(): Internal() {}
-  CodeString(const value_type* s): Internal(s) {}
-  CodeString(const value_type* s, size_type n): Internal(s, n) {}
+  CodeString(const value_type* s): Internal(s) { Internal = Internal.Trim(); }
+  CodeString(const value_type* s, size_type n): Internal(s, n) {
+    Internal = Internal.Trim(); }
   CodeString(const Superclass& s, size_type pos=0, size_type n=Superclass::npos):
-    Internal(s, pos, n) {}
+    Internal(s, pos, n) { Internal = Internal.Trim(); }
 
-  // CodeString constructors.
+  /// Check if CodeString obj is correct..
   bool IsValid() const;
 
+  /// Remove extra leading and ending spaces.
   std::string Trim() const {
     return Internal.Trim();
   }
-  size_type size() { return Internal.size(); }
+  /// Return the size of the string
+  size_type Size() const { return Internal.size(); }
+
+  /// deprecated:
+  GDCM_LEGACY(size_type size() const)
+
+  bool operator==(const CodeString& cs) const {
+    return Internal == cs.Internal;
+    }
+  bool operator!=(const CodeString& cs) const {
+    return Internal != cs.Internal;
+    }
 
 private:
   String<'\\',16> Internal;

@@ -20,27 +20,22 @@ namespace gdcm
     if( !Internal.IsValid() ) return false;
     // Implementation specific:
 
-/*
-Uppercase
-characters, ¿0¿-
-¿9¿, the SPACE
-character, and
-underscore ¿_¿, of
-the Default
-Character
-Repertoire
-*/
+    /*
+     * Uppercase characters, 0-9, the SPACE character, and underscore _, of the
+     * Default Character Repertoire
+     */
     const_iterator it = Internal.begin();
     for( ; it != Internal.end(); ++it )
       {
       int c = *it;
       if( !isupper(c) && !isdigit(c) && c != ' ' && c != '_' )
         {
-        // char dummy = c;
         return false;
         }
       }
     return true;
   }
 
-}
+  CodeString::size_type CodeString::size() const { return Internal.size(); }
+
+} // end namespace gdcm
