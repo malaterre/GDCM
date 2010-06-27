@@ -335,7 +335,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       {
       TransferSyntax ts2;
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
-      assert( sf );
+      if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
