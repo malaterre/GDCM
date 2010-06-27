@@ -22,7 +22,7 @@ int TestGlobal(int, char *[])
   // case 1
   // Get the global singleton:
   gdcm::Global& g = gdcm::Global::GetInstance();
-  if( g.LoadResourcesFiles() )
+  if( !g.LoadResourcesFiles() )
     {
     std::cerr << "Could not LoadResourcesFiles" << std::endl;
     return 1;
