@@ -39,7 +39,7 @@ namespace gdcm
  */
 // Note to myself: because note all wrapped language support exception
 // we could not support throwing an exception during object construction.
-class CodeString 
+class GDCM_EXPORT CodeString 
 {
   friend std::ostream& operator<< (std::ostream& os, const CodeString& str);
 public:
