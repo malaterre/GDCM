@@ -276,7 +276,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//ModalityPerformedProcedureStepSOPClass
   {"  ", 2},//PhilipsPrivateMRSyntheticImageStorage
   {"XC", 2},//VLPhotographicImageStorage
-  {"  ", 2},// Segmentation Storage 
+  {"SEG ", 3},// Segmentation Storage 
   {"  ", 2},// RT Ion Plan Storage
   {"XA", 3},// XRay3DAngiographicImageStorage,
   {"XA", 3},// Enhanced XA Image Storage
