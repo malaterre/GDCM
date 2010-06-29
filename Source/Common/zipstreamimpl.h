@@ -57,6 +57,7 @@ zran.c
 #include <streambuf>
 #include <sstream>
 #include <iostream>
+#include <iomanip> // clang - setp function
 #include <algorithm>
 
 #include <string.h> // memcpy
