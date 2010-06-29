@@ -295,6 +295,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
       break;
     default:
+	  failed = true;
       assert(0);
       }
     }
