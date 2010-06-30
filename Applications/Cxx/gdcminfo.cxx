@@ -112,7 +112,7 @@ int checkdeflated(const char *name)
   if (buf != NULL && (size1 = fread(buf, 1, size, in)) != size) {
     free(buf);
     buf = NULL;
-    fprintf( stderr, "could not fread: %u bytes != %u\n", size, size1 );
+    fprintf( stderr, "could not fread: %lu bytes != %lu\n", size, size1 );
     fprintf( stderr, "feof: %i ferror %i\n", feof(in), ferror(in) );
   }
   fclose(in);
@@ -163,11 +163,11 @@ int checkdeflated(const char *name)
   len = sourcelen;
   if( len % 2 )
     {
-    printf( "len of bit stream is odd: %d. Continuing anyway\n", len );
+    printf( "len of bit stream is odd: %lu. Continuing anyway\n", len );
     }
   else
     {
-    printf( "deflate stream has proper length: %d\n", len );
+    printf( "deflate stream has proper length: %lu\n", len );
     }
 
   ret = puff(NULL, &destlen, source, &sourcelen);
