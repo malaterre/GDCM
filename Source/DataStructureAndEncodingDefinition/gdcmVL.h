@@ -29,8 +29,8 @@ namespace gdcm
  */
 class GDCM_EXPORT VL
 {
-  typedef uint32_t Type;
 public:
+  typedef uint32_t Type;
   VL(uint32_t vl = 0) : ValueLength(vl) { }
 
   // FIXME: ugly
