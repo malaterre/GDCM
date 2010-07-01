@@ -128,7 +128,10 @@ typedef enum {
 	  ObjectEnd
   } ObjectType;
 
+  /// Return the Media String associated. Will return NULL for MS_END
   static const char* GetMSString(MSType ts);
+
+  /// Return the Media String of the object.
   const char* GetString() const;
   static MSType GetMSType(const char *str);
 
@@ -182,7 +185,8 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &_os, const MediaStorage &ms)
 {
-  _os << MediaStorage::GetMSString(ms);
+  const char *msstring = MediaStorage::GetMSString(ms);
+  _os << (msstring ? msstring : "INVALID MEDIA STORAGE");
   return _os;
 
 }
