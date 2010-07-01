@@ -28,7 +28,7 @@ namespace gdcm
  * \note the cstor of CodeString will Trim the string on the fly so as
  * to remove the extra leading and ending spaces. However it will not
  * perform validation on the fly (CodeString obj can contains invalid
- * char such as lower cases). This design was chosen to be a little toleran
+ * char such as lower cases). This design was chosen to be a little tolerant
  * to broken DICOM implementation, and thus allow user to compare lower
  * case CS from there input file without the need to first rewrite them
  * to get rid of invalid character (validation is a different operation from
@@ -42,25 +42,25 @@ namespace gdcm
 class GDCM_EXPORT CodeString 
 {
   friend std::ostream& operator<< (std::ostream& os, const CodeString& str);
+  typedef String<'\\',16> InternalClass;
 public:
-  typedef String<'\\',16> Superclass;
-  typedef Superclass::value_type             value_type;
-  typedef Superclass::pointer                pointer;
-  typedef Superclass::reference              reference;
-  typedef Superclass::const_reference        const_reference;
-  typedef Superclass::size_type              size_type;
-  typedef Superclass::difference_type        difference_type;
-  typedef Superclass::iterator               iterator;
-  typedef Superclass::const_iterator         const_iterator;
-  typedef Superclass::reverse_iterator       reverse_iterator;
-  typedef Superclass::const_reverse_iterator const_reverse_iterator;
+  typedef InternalClass::value_type             value_type;
+  typedef InternalClass::pointer                pointer;
+  typedef InternalClass::reference              reference;
+  typedef InternalClass::const_reference        const_reference;
+  typedef InternalClass::size_type              size_type;
+  typedef InternalClass::difference_type        difference_type;
+  typedef InternalClass::iterator               iterator;
+  typedef InternalClass::const_iterator         const_iterator;
+  typedef InternalClass::reverse_iterator       reverse_iterator;
+  typedef InternalClass::const_reverse_iterator const_reverse_iterator;
 
   /// CodeString constructors.
   CodeString(): Internal() {}
   CodeString(const value_type* s): Internal(s) { Internal = Internal.Trim(); }
   CodeString(const value_type* s, size_type n): Internal(s, n) {
     Internal = Internal.Trim(); }
-  CodeString(const Superclass& s, size_type pos=0, size_type n=Superclass::npos):
+  CodeString(const InternalClass& s, size_type pos=0, size_type n=InternalClass::npos):
     Internal(s, pos, n) { Internal = Internal.Trim(); }
 
   /// Check if CodeString obj is correct..
