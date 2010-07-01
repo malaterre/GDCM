@@ -65,6 +65,7 @@ public:
   /// Set the list of filenames from which the DICOMDIR should be generated from
   void SetFilenames( FilenamesType const & fns );
 
+  /// Set the root directory from which the filenames should be considered.
   void SetRootDirectory( FilenameType const & root );
 
   /// Set the File Set ID. 
