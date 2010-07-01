@@ -1246,6 +1246,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       //memset(overlaypointer,0,overlaylen); // FIXME: can be optimized
       ov1.GetUnpackBuffer( overlaypointer );
       }
+    if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
     }
 
   //const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
@@ -1356,7 +1357,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
     }
 
-  if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   if( this->FileName) assert( (unsigned long)outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 
   return 1; // success
