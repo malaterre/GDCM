@@ -1151,28 +1151,31 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   }
 
   // Do the Icon Image:
-  this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
-  if( this->NumberOfIconImages )
+  if( this->LoadIconImage )
     {
-    char * iconpointer = static_cast<char*>(this->GetOutput(ICONIMAGEPORTNUMBER)->GetScalarPointer());
-    assert( iconpointer );
-    image.GetIconImage().GetBuffer( iconpointer );
-    if ( image.GetIconImage().GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
+    if( this->NumberOfIconImages )
       {
-      const gdcm::LookupTable &lut = image.GetIconImage().GetLUT();
-      assert( lut.GetBitSample() == 8 );
+      char * iconpointer = static_cast<char*>(this->GetOutput(ICONIMAGEPORTNUMBER)->GetScalarPointer());
+      assert( iconpointer );
+      image.GetIconImage().GetBuffer( iconpointer );
+      if ( image.GetIconImage().GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
         {
-        vtkLookupTable *vtklut = vtkLookupTable::New();
-        vtklut->SetNumberOfTableValues(256);
-        // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
-        if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+        const gdcm::LookupTable &lut = image.GetIconImage().GetLUT();
+        assert( lut.GetBitSample() == 8 );
           {
-          vtkWarningMacro( "Could not get values from LUT" );
-          return 0;
+          vtkLookupTable *vtklut = vtkLookupTable::New();
+          vtklut->SetNumberOfTableValues(256);
+          // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
+          if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+            {
+            vtkWarningMacro( "Could not get values from LUT" );
+            return 0;
+            }
+          vtklut->SetRange(0,255);
+          this->GetOutput(ICONIMAGEPORTNUMBER)->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+          vtklut->Delete();
           }
-        vtklut->SetRange(0,255);
-        this->GetOutput(ICONIMAGEPORTNUMBER)->GetPointData()->GetScalars()->SetLookupTable( vtklut );
-        vtklut->Delete();
         }
       }
     }
@@ -1205,41 +1208,44 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
 
   // Do the Overlay:
-  unsigned int numoverlays = image.GetNumberOfOverlays();
-  long overlayoutsize = (dext[1] - dext[0] + 1);
-  //this->NumberOfOverlays = numoverlays;
-  //if( numoverlays )
-  if( !this->LoadOverlays ) assert( this->NumberOfOverlays == 0 );
-  for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
+  if( this->LoadOverlays )
     {
-    vtkImageData *vtkimage = this->GetOutput(OVERLAYPORTNUMBER + ovidx);
-    // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
-    // we have to decompress the bit overlay into an unsigned char array to please everybody:
-    const gdcm::Overlay& ov1 = image.GetOverlay(ovidx);
-    vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
-    chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
-    overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
-    assert( (unsigned long)ov1.GetRows()*ov1.GetColumns() <= overlaylen );
-    const signed short *origin = ov1.GetOrigin();
-    if( (unsigned long)ov1.GetRows()*ov1.GetColumns() != overlaylen )
+    unsigned int numoverlays = image.GetNumberOfOverlays();
+    long overlayoutsize = (dext[1] - dext[0] + 1);
+    //this->NumberOfOverlays = numoverlays;
+    //if( numoverlays )
+    if( !this->LoadOverlays ) assert( this->NumberOfOverlays == 0 );
+    for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
       {
-      vtkWarningMacro( "vtkImageData Overlay have an extent that do not match the one of the image" );
-      }
-    if( origin[0] != 0 || origin[1] != 0 )
-      {
-      vtkWarningMacro( "Overlay with origin are not supported right now" );
-      }
-    vtkimage->GetPointData()->SetScalars( chararray );
-    vtkimage->GetPointData()->GetScalars()->SetName( ov1.GetDescription() );
-    chararray->Delete();
+      vtkImageData *vtkimage = this->GetOutput(OVERLAYPORTNUMBER + ovidx);
+      // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
+      // we have to decompress the bit overlay into an unsigned char array to please everybody:
+      const gdcm::Overlay& ov1 = image.GetOverlay(ovidx);
+      vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
+      chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
+      overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
+      assert( (unsigned long)ov1.GetRows()*ov1.GetColumns() <= overlaylen );
+      const signed short *origin = ov1.GetOrigin();
+      if( (unsigned long)ov1.GetRows()*ov1.GetColumns() != overlaylen )
+        {
+        vtkWarningMacro( "vtkImageData Overlay have an extent that do not match the one of the image" );
+        }
+      if( origin[0] != 0 || origin[1] != 0 )
+        {
+        vtkWarningMacro( "Overlay with origin are not supported right now" );
+        }
+      vtkimage->GetPointData()->SetScalars( chararray );
+      vtkimage->GetPointData()->GetScalars()->SetName( ov1.GetDescription() );
+      chararray->Delete();
 
-    assert( vtkimage->GetScalarType() == VTK_UNSIGNED_CHAR );
-    unsigned char * overlaypointer = static_cast<unsigned char*>(vtkimage->GetScalarPointer());
-    assert( overlaypointer );
-    //assert( image->GetPointData()->GetScalars() != 0 );
+      assert( vtkimage->GetScalarType() == VTK_UNSIGNED_CHAR );
+      unsigned char * overlaypointer = static_cast<unsigned char*>(vtkimage->GetScalarPointer());
+      assert( overlaypointer );
+      //assert( image->GetPointData()->GetScalars() != 0 );
 
-    //memset(overlaypointer,0,overlaylen); // FIXME: can be optimized
-    ov1.GetUnpackBuffer( overlaypointer );
+      //memset(overlaypointer,0,overlaylen); // FIXME: can be optimized
+      ov1.GetUnpackBuffer( overlaypointer );
+      }
     }
 
   //const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();

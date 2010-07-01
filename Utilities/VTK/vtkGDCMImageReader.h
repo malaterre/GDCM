@@ -165,10 +165,12 @@ public:
 
   // Description:
   // Read only: number of overlays as found in this image (multiple overlays per slice is allowed)
+  // Only valid when LoadOverlays is true
   vtkGetMacro(NumberOfOverlays,int);
 
   // Description:
   // Read only: number of icon image (there can only be zero or one icon per file)
+  // Only valid when LoadIconImage is true
   vtkGetMacro(NumberOfIconImages,int);
 
   // Description:
