@@ -33,6 +33,7 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
 #include "gdcmEvent.h"
+#include "gdcmProgressEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -115,8 +116,11 @@
 #include "gdcmPatient.h"
 #include "gdcmStudy.h"
 #include "gdcmUsage.h"
+#include "gdcmMacroEntry.h"
 #include "gdcmModuleEntry.h"
 #include "gdcmNestedModuleEntries.h"
+#include "gdcmMacro.h"
+#include "gdcmMacros.h"
 #include "gdcmModule.h"
 #include "gdcmModules.h"
 #include "gdcmDefs.h"
@@ -135,6 +139,14 @@
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
+#include "gdcmCoder.h"
+#include "gdcmDecoder.h"
+#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
+#include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
+#include "gdcmJPEG2000Codec.h"
+#include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
@@ -156,7 +168,6 @@
 
 using namespace gdcm;
 %}
-
 
 // http://www.swig.org/Doc1.3/Java.html#imclass_pragmas
 
@@ -231,6 +242,12 @@ EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 
+%include "gdcmProgressEvent.h"
+%extend gdcm::ProgressEvent {
+  static ProgressEvent *Cast(Event *event) {
+    return dynamic_cast<ProgressEvent*>(event);
+  }
+};
 //%feature("director") AnonymizeEvent;
 %include "gdcmAnonymizeEvent.h"
 %extend gdcm::AnonymizeEvent {
@@ -535,9 +552,12 @@ EXTEND_CLASS_PRINT(gdcm::Version)
 %include "gdcmPatient.h"
 %include "gdcmStudy.h"
 %include "gdcmUsage.h"
+%include "gdcmMacroEntry.h"
 %include "gdcmModuleEntry.h"
 EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmNestedModuleEntries.h"
+%include "gdcmMacro.h"
+%include "gdcmMacros.h"
 %include "gdcmModule.h"
 %include "gdcmModules.h"
 %include "gdcmDefs.h"
@@ -571,6 +591,17 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 //%ignore gdcm::ImageToImageFilter::GetOutput() const;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
+//%feature("director") Coder;
+//%include "gdcmCoder.h"
+//%feature("director") Decoder;
+//%include "gdcmDecoder.h"
+//%feature("director") Codec;
+//%include "gdcmCodec.h"
+%feature("director") ImageCodec;
+%include "gdcmImageCodec.h"
+%include "gdcmJPEGCodec.h"
+%include "gdcmJPEGLSCodec.h"
+%include "gdcmJPEG2000Codec.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
