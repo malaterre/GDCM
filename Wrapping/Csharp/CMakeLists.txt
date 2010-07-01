@@ -34,6 +34,7 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 # Some old swig 1.3 did not support this option:
 #SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
 
+# See sf.net bug #2895067
 SET(CMAKE_SWIG_FLAGS "-namespace gdcm -dllimport gdcmsharpglue")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # libgdksharpglue.so
