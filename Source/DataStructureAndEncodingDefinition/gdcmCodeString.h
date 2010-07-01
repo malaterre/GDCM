@@ -42,6 +42,8 @@ namespace gdcm
 class GDCM_EXPORT CodeString 
 {
   friend std::ostream& operator<< (std::ostream& os, const CodeString& str);
+  friend bool operator==(const CodeString &ref, const CodeString& cs);
+  friend bool operator!=(const CodeString &ref, const CodeString& cs);
   typedef String<'\\',16> InternalClass;
 public:
   typedef InternalClass::value_type             value_type;
@@ -76,13 +78,6 @@ public:
   /// deprecated:
   GDCM_LEGACY(size_type size() const)
 
-  bool operator==(const CodeString& cs) const {
-    return Internal == cs.Internal;
-    }
-  bool operator!=(const CodeString& cs) const {
-    return Internal != cs.Internal;
-    }
-
 private:
   String<'\\',16> Internal;
 };
@@ -92,6 +87,16 @@ inline std::ostream& operator<< (std::ostream& os, const CodeString& str)
   os << str.Internal;
   return os;
 }
+
+inline bool operator==(const CodeString &ref, const CodeString& cs)
+{
+  return ref.Internal == cs.Internal;
+}
+inline bool operator!=(const CodeString &ref, const CodeString& cs)
+{
+  return ref.Internal != cs.Internal;
+}
+
 
 } // end namespace gdcm
 

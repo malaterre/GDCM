@@ -132,6 +132,8 @@ int TestCodeString(int , char *[])
 
     if( !(cs3 == cs4) ) return 1;
 
+    if( cs3 != cs4 ) return 1;
+
     // Begin ugly internals.
 
 }
