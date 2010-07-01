@@ -48,8 +48,8 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSystem.h"
 #include "gdcmReader.h"
-#include "gdcmImageWriter.h"
-#include "gdcmImageReader.h"
+#include "gdcmPixmapWriter.h"
+#include "gdcmPixmapReader.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
@@ -254,13 +254,13 @@ bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & 
   return true;
 }
 
-bool PopulateSingeFile( gdcm::ImageWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename )
+bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename )
 {
-      /*
-       * FIXME: when JPEG contains JFIF marker, we should only read them
-       * during header parsing but discard them when copying the JPG byte stream into 
-       * the encapsulated Pixel Data Element...
-       */
+  /*
+   * FIXME: when JPEG contains JFIF marker, we should only read them
+   * during header parsing but discard them when copying the JPG byte stream into 
+   * the encapsulated Pixel Data Element...
+   */
   std::ifstream is(filename);
   gdcm::TransferSyntax ts;
   bool b = jpeg.GetHeaderInfo( is, ts );
@@ -269,7 +269,7 @@ bool PopulateSingeFile( gdcm::ImageWriter & writer, gdcm::SequenceOfFragments *s
     return false;
     }
 
-  gdcm::Image &image = writer.GetImage();
+  gdcm::Pixmap &image = writer.GetPixmap();
   image.SetDimensions( jpeg.GetDimensions() );
   image.SetPixelFormat( jpeg.GetPixelFormat() );
   image.SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
@@ -308,11 +308,11 @@ bool PopulateSingeFile( gdcm::ImageWriter & writer, gdcm::SequenceOfFragments *s
   return true;
 }
 
-bool Populate( gdcm::ImageWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames )
+bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames )
 {
   std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
-  gdcm::Image &image = writer.GetImage();
+  gdcm::Pixmap &image = writer.GetPixmap();
   image.SetNumberOfDimensions( 2 );
   if( filenames.size() > 1 )
     {
@@ -714,7 +714,7 @@ int main (int argc, char *argv[])
         return 1;
         }
       gdcm::RAWCodec raw;
-      gdcm::ImageWriter writer;
+      gdcm::PixmapWriter writer;
       // Because the RAW stream is not self sufficient, we need to pass in some extra
       // user info:
       unsigned int dims[3] = {};
@@ -763,7 +763,7 @@ int main (int argc, char *argv[])
         return 1;
         }
       gdcm::RLECodec rle;
-      gdcm::ImageWriter writer;
+      gdcm::PixmapWriter writer;
       // Because the RLE stream is not self sufficient, we need to pass in some extra
       // user info:
       unsigned int dims[3] = {};
@@ -793,7 +793,7 @@ int main (int argc, char *argv[])
       || gdcm::System::StrCaseCmp(inputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
-      gdcm::ImageWriter writer;
+      gdcm::PixmapWriter writer;
       if( !Populate( writer, pnm, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
@@ -809,7 +809,7 @@ int main (int argc, char *argv[])
     if(  gdcm::System::StrCaseCmp(inputextension,".jls") == 0 )
       {
       gdcm::JPEGLSCodec jpeg;
-      gdcm::ImageWriter writer;
+      gdcm::PixmapWriter writer;
       if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
@@ -832,7 +832,7 @@ int main (int argc, char *argv[])
        * need to chop off all extra header information...
        */
       gdcm::JPEG2000Codec jpeg;
-      gdcm::ImageWriter writer;
+      gdcm::PixmapWriter writer;
       if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
@@ -856,7 +856,7 @@ int main (int argc, char *argv[])
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
       jpeg.SetPixelFormat( pf );
-      gdcm::ImageWriter writer;
+      gdcm::PixmapWriter writer;
       if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
 
@@ -872,7 +872,7 @@ int main (int argc, char *argv[])
     }
 // else safely assume that if no inputextension matched then it is a DICOM file
 
-  gdcm::ImageReader reader;
+  gdcm::PixmapReader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
@@ -880,7 +880,7 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  const gdcm::Image &imageori = reader.GetImage();
+  const gdcm::Pixmap &imageori = reader.GetPixmap();
   const gdcm::File &file = reader.GetFile();
 
   if ( outputextension )
@@ -907,7 +907,7 @@ int main (int argc, char *argv[])
 
 // else safely assume that if no outputextension matched then it is a DICOM file
 
-  gdcm::ImageWriter writer;
+  gdcm::PixmapWriter writer;
   writer.SetFile( file );
   writer.SetImage( imageori );
   writer.SetFileName( outfilename );
@@ -919,7 +919,7 @@ int main (int argc, char *argv[])
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
     assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
-    gdcm::SmartPointer<gdcm::Image> image = new gdcm::Image;
+    gdcm::SmartPointer<gdcm::Pixmap> image = new gdcm::Pixmap;
     image->SetNumberOfDimensions( 2 ); // good default
     const unsigned int *dims = imageori.GetDimensions();
     if ( region[0] > region[1] 
@@ -982,8 +982,6 @@ int main (int argc, char *argv[])
 
     pixeldata.SetValue( *bv );
     image->SetDataElement( pixeldata );
-    image->SetSpacing( imageori.GetSpacing() );
-    image->SetSpacing(2, imageori.GetSpacing()[2] );
     const gdcm::TransferSyntax &ts = imageori.GetTransferSyntax();
     // FIXME: for now we do not know how to recompress the image...
     if( ts.IsExplicit() )
