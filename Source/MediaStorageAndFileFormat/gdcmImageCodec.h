@@ -102,6 +102,8 @@ public:
     }
   const unsigned int *GetDimensions() const { return Dimensions; }
   void SetNumberOfDimensions(unsigned int dim);
+  unsigned int GetNumberOfDimensions() const;
+
 protected:
   bool RequestPlanarConfiguration;
   bool RequestPaddedCompositePixelCode;
