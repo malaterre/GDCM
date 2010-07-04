@@ -508,6 +508,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     }
   if( bitsallocated % 8 != 0 )
     {
+    gdcmDebugMacro( "BitsAllocated is not % 8" );
     return 0;
     }
   assert( bitsallocated % 8 == 0 );
@@ -595,8 +596,6 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
   //
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
-  const Tag itemStart(0xfffe, 0xe000);
-  //sq->GetTable().SetTag( itemStart );
 
   const unsigned int *dims = this->GetDimensions();
 
@@ -760,7 +759,6 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     std::string str = os.str();
     assert( str.size() );
     Fragment frag;
-    //frag.SetTag( itemStart );
     frag.SetByteValue( &str[0], str.size() );
     sq->AddFragment( frag );
     }
@@ -949,23 +947,27 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     assert( image->color_space == 0 );
     //PI = PhotometricInterpretation::RGB;
     /*
-    8.2.4 JPEG 2000 IMAGE COMPRESSION
-    The JPEG 2000 bit stream specifies whether or not a reversible or irreversible multi-component (color)
-    transformation, if any, has been applied. If no multi-component transformation has been applied, then the
-    components shall correspond to those specified by the DICOM Attribute Photometric Interpretation
-    (0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation has been applied then
-    the DICOM Attribute Photometric Interpretation (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1
-    irreversible multi-component transformation has been applied then the DICOM Attribute Photometric
-    Interpretation (0028,0004) shall be YBR_ICT.
-    Notes: 1. For example, single component may be present, and the Photometric Interpretation (0028,0004) may
-    be MONOCHROME2.
-    2. Though it would be unusual, would not take advantage of correlation between the red, green and blue
-    components, and would not achieve effective compression, a Photometric Interpretation of RGB could
-    be specified as long as no multi-component transformation was specified by the JPEG 2000 bit stream.
-    3. Despite the application of a multi-component color transformation and its reflection in the Photometric
-    Interpretation attribute, the ¿color space¿ remains undefined. There is currently no means of conveying
-    ¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC profiles. Note in particular that
-    the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated in DICOM.
+    8.2.4 JPEG 2000 IMAGE COMPRESSION 
+    The JPEG 2000 bit stream specifies whether or not a reversible or irreversible
+    multi-component (color) transformation, if any, has been applied. If no
+    multi-component transformation has been applied, then the components shall
+    correspond to those specified by the DICOM Attribute Photometric Interpretation
+    (0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation
+    has been applied then the DICOM Attribute Photometric Interpretation
+    (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1 irreversible
+    multi-component transformation has been applied then the DICOM Attribute
+    Photometric Interpretation (0028,0004) shall be YBR_ICT.  Notes: 1. For
+    example, single component may be present, and the Photometric Interpretation
+    (0028,0004) may be MONOCHROME2.  2. Though it would be unusual, would not take
+    advantage of correlation between the red, green and blue components, and would
+    not achieve effective compression, a Photometric Interpretation of RGB could be
+    specified as long as no multi-component transformation was specified by the
+    JPEG 2000 bit stream.  3. Despite the application of a multi-component color
+    transformation and its reflection in the Photometric Interpretation attribute,
+    the ¿color space¿ remains undefined.  There is currently no means of conveying
+    ¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC
+    profiles. Note in particular that the JP2 file header is not sent in the JPEG
+    2000 bitstream that is encapsulated in DICOM.
      */
     PI = PhotometricInterpretation::YBR_RCT;
     this->PF.SetSamplesPerPixel( 3 );
