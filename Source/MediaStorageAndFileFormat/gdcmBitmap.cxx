@@ -101,6 +101,7 @@ void Bitmap::SetDimensions(const unsigned int *dims)
 
 void Bitmap::SetDimension(unsigned int idx, unsigned int dim)
 {
+  //assert( dim );
   assert( NumberOfDimensions );
   assert( idx < NumberOfDimensions );
   Dimensions.resize( 3 /*NumberOfDimensions*/ );

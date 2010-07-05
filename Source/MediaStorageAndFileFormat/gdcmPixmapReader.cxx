@@ -1179,6 +1179,11 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
         //PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
         assert( PixelData->IsTransferSyntaxCompatible( ts ) );
         }
+      else
+        {
+        gdcmDebugMacro( "Columns or Row was found to be 0. Cannot compute dimension." );
+        return false;
+        }
       }
     else
       {
