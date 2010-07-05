@@ -134,6 +134,11 @@ int TestCodeString(int , char *[])
 
     if( cs3 != cs4 ) return 1;
 
+    gdcm::CodeString cs5 = "IMG";
+    if( cs5 != "IMG ")
+      return 1;
+
+
     // Begin ugly internals.
 
 }

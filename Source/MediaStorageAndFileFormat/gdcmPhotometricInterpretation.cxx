@@ -72,7 +72,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
 
   // The following code allows use to handle whitespace and invalid padding:
   CodeString codestring = inputpi;
-  CSComp cs = codestring.Trim();
+  CSComp cs = codestring.GetAsString();
   const char *pi = cs.c_str();
   for( unsigned int i = 1; PIStrings[i] != 0; ++i )
     {

@@ -140,7 +140,7 @@ MediaStorage::MSType MediaStorage::GetMSType(const char *str)
   // the toolkit which wrote the image is buggy and tolerate space padded binary
   // string
   CodeString codestring = str;
-  std::string cs = codestring.Trim();
+  std::string cs = codestring.GetAsString();
   for(unsigned int i = 0; MSStrings[i] != 0; ++i)
     {
     if( strcmp(cs.c_str(), MSStrings[i]) == 0 )

@@ -39,7 +39,7 @@ namespace gdcm
  */
 // Note to myself: because note all wrapped language support exception
 // we could not support throwing an exception during object construction.
-class GDCM_EXPORT CodeString 
+class GDCM_EXPORT CodeString
 {
   friend std::ostream& operator<< (std::ostream& os, const CodeString& str);
   friend bool operator==(const CodeString &ref, const CodeString& cs);
@@ -68,15 +68,25 @@ public:
   /// Check if CodeString obj is correct..
   bool IsValid() const;
 
-  /// Remove extra leading and ending spaces.
-  std::string Trim() const {
-    return Internal.Trim();
+  /// Return the full code string as std::string
+  std::string GetAsString() const {
+    return Internal;
   }
+
+  /// \deprecated Remove extra leading and ending spaces.
+  GDCM_LEGACY(std::string Trim() const)
+
   /// Return the size of the string
   size_type Size() const { return Internal.size(); }
 
-  /// deprecated:
+  /// \deprecated
+  /// Return the size of the string
   GDCM_LEGACY(size_type size() const)
+
+protected:
+  std::string TrimInternal() const {
+    return Internal.Trim();
+  }
 
 private:
   String<'\\',16> Internal;
