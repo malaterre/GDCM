@@ -53,10 +53,11 @@ gdcm::AnonymizeEvent::SetTag(const Tag &t) ";
 %feature("docstring") gdcm::Anonymizer "
 
 Anonymizer This class is a multi purpose anonymizer. It can work in 2
-mode: dumb mode
+mode: Full (irreversible) anonymizer (aka dumb mode)
 
-smart mode (implement the Basic Application Level Confidentiality
-Profile, DICOM PS 3.15-2008).
+reversible de-identifier/re-identifier (aka smart mode). This
+implements the Basic Application Level Confidentiality Profile, DICOM
+PS 3.15-2009.
 
 1. dumb mode This is a dumb anonymizer implementation. All it allows
 user is simple operation such as:
@@ -883,23 +884,59 @@ Code. ";
 // File: classgdcm_1_1CodeString.xml
 %feature("docstring") gdcm::CodeString "
 
-CodeString.
+CodeString This is an implementation of DICOM VR: CS The cstor will
+properly Trim so that operator== is correct.
 
-TODO
+the cstor of CodeString will Trim the string on the fly so as to
+remove the extra leading and ending spaces. However it will not
+perform validation on the fly ( CodeString obj can contains invalid
+char such as lower cases). This design was chosen to be a little
+tolerant to broken DICOM implementation, and thus allow user to
+compare lower case CS from there input file without the need to first
+rewrite them to get rid of invalid character (validation is a
+different operation from searching, querying).
+
+WARNING:  when writing out DICOM file it is highly recommended to
+perform the IsValid() call, at least to check that the length of the
+string match the definition in the standard.
 
 C++ includes: gdcmCodeString.h ";
 
-%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString(const Superclass &s, size_type pos=0,
-size_type n=npos) ";
+%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString(const InternalClass &s, size_type pos=0,
+size_type n=InternalClass::npos) ";
 
 %feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString(const value_type *s, size_type n) ";
 
 %feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString(const value_type *s) ";
 
-%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString() ";
+%feature("docstring")  gdcm::CodeString::CodeString "gdcm::CodeString::CodeString()
+
+CodeString constructors. ";
+
+%feature("docstring")  gdcm::CodeString::GetAsString "std::string
+gdcm::CodeString::GetAsString() const
+
+Return the full code string as std::string. ";
 
 %feature("docstring")  gdcm::CodeString::IsValid "bool
-gdcm::CodeString::IsValid() const ";
+gdcm::CodeString::IsValid() const
+
+Check if CodeString obj is correct.. ";
+
+%feature("docstring")  gdcm::CodeString::size "size_type
+gdcm::CodeString::size() const
+
+Deprecated Return the size of the string ";
+
+%feature("docstring")  gdcm::CodeString::Size "size_type
+gdcm::CodeString::Size() const
+
+Return the size of the string. ";
+
+%feature("docstring")  gdcm::CodeString::Trim "std::string
+gdcm::CodeString::Trim() const
+
+Deprecated Remove extra leading and ending spaces. ";
 
 
 // File: classgdcm_1_1Command.xml
@@ -1965,7 +2002,10 @@ Set the list of filenames from which the DICOMDIR should be generated
 from. ";
 
 %feature("docstring")  gdcm::DICOMDIRGenerator::SetRootDirectory "void gdcm::DICOMDIRGenerator::SetRootDirectory(FilenameType const
-&root) ";
+&root)
+
+Set the root directory from which the filenames should be considered.
+";
 
 
 // File: classgdcm_1_1Dict.xml
@@ -3708,6 +3748,8 @@ gdcm::ImageCodec::GetLUT() const ";
 %feature("docstring")  gdcm::ImageCodec::GetNeedByteSwap "bool
 gdcm::ImageCodec::GetNeedByteSwap() const ";
 
+%feature("docstring")  gdcm::ImageCodec::GetNumberOfDimensions "unsigned int gdcm::ImageCodec::GetNumberOfDimensions() const ";
+
 %feature("docstring")  gdcm::ImageCodec::GetPhotometricInterpretation
 "const PhotometricInterpretation&
 gdcm::ImageCodec::GetPhotometricInterpretation() const ";
@@ -4243,12 +4285,6 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1multiset_1_1iterator.xml
-%feature("docstring") std::multiset::iterator "
-
-STL iterator class. ";
-
-
 // File: classstd_1_1deque_1_1iterator.xml
 %feature("docstring") std::deque::iterator "
 
@@ -4267,14 +4303,20 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classstd_1_1multimap_1_1iterator.xml
+%feature("docstring") std::multimap::iterator "
+
+STL iterator class. ";
+
+
 // File: classstd_1_1set_1_1iterator.xml
 %feature("docstring") std::set::iterator "
 
 STL iterator class. ";
 
 
-// File: classstd_1_1multimap_1_1iterator.xml
-%feature("docstring") std::multimap::iterator "
+// File: classstd_1_1multiset_1_1iterator.xml
+%feature("docstring") std::multiset::iterator "
 
 STL iterator class. ";
 
@@ -4853,7 +4895,9 @@ C++ includes: gdcmMediaStorage.h ";
 gdcm::MediaStorage::GetModality() const ";
 
 %feature("docstring")  gdcm::MediaStorage::GetString "const char*
-gdcm::MediaStorage::GetString() const ";
+gdcm::MediaStorage::GetString() const
+
+Return the Media String of the object. ";
 
 %feature("docstring")  gdcm::MediaStorage::GuessFromModality "void
 gdcm::MediaStorage::GuessFromModality(const char *modality, unsigned
@@ -5113,6 +5157,15 @@ gdcm::Object::Print(std::ostream &) const ";
 %feature("docstring") std::ofstream "
 
 STL class. ";
+
+
+// File: classgdcm_1_1OpenJPEG2Codec.xml
+%feature("docstring") gdcm::OpenJPEG2Codec "C++ includes:
+gdcmOpenJPEG2Codec.h ";
+
+%feature("docstring")  gdcm::OpenJPEG2Codec::OpenJPEG2Codec "gdcm::OpenJPEG2Codec::OpenJPEG2Codec() ";
+
+%feature("docstring")  gdcm::OpenJPEG2Codec::~OpenJPEG2Codec "gdcm::OpenJPEG2Codec::~OpenJPEG2Codec() ";
 
 
 // File: classgdcm_1_1Orientation.xml
@@ -6320,8 +6373,8 @@ gdcm::Rescaler::SetUseTargetPixelType(bool b)
 Override default behavior of Rescale. ";
 
 
-// File: classstd_1_1multimap_1_1reverse__iterator.xml
-%feature("docstring") std::multimap::reverse_iterator "
+// File: classstd_1_1list_1_1reverse__iterator.xml
+%feature("docstring") std::list::reverse_iterator "
 
 STL iterator class. ";
 
@@ -6356,6 +6409,12 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classstd_1_1multimap_1_1reverse__iterator.xml
+%feature("docstring") std::multimap::reverse_iterator "
+
+STL iterator class. ";
+
+
 // File: classstd_1_1set_1_1reverse__iterator.xml
 %feature("docstring") std::set::reverse_iterator "
 
@@ -6364,12 +6423,6 @@ STL iterator class. ";
 
 // File: classstd_1_1multiset_1_1reverse__iterator.xml
 %feature("docstring") std::multiset::reverse_iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1list_1_1reverse__iterator.xml
-%feature("docstring") std::list::reverse_iterator "
 
 STL iterator class. ";
 
@@ -7101,12 +7154,6 @@ gdcmStaticAssert.h ";
 includes: gdcmStaticAssert.h ";
 
 
-// File: classstd_1_1string.xml
-%feature("docstring") std::string "
-
-STL class. ";
-
-
 // File: classgdcm_1_1String.xml
 %feature("docstring") gdcm::String "
 
@@ -7148,6 +7195,12 @@ could not create a gdcm::String object with an odd number of bytes...
 
 %feature("docstring")  gdcm::String::Truncate "gdcm::String<TDelimiter, TMaxLength, TPadChar> gdcm::String<
 TDelimiter, TMaxLength, TPadChar >::Truncate() const ";
+
+
+// File: classstd_1_1string.xml
+%feature("docstring") std::string "
+
+STL class. ";
 
 
 // File: classgdcm_1_1StringFilter.xml
@@ -7960,7 +8013,8 @@ C++ includes: gdcmVL.h ";
 const ";
 
 %feature("docstring")  gdcm::VL::IsOdd "bool gdcm::VL::IsOdd() const
-";
+
+Return whether or not the VL is odd or not. ";
 
 %feature("docstring")  gdcm::VL::IsUndefined "bool
 gdcm::VL::IsUndefined() const ";
@@ -9228,6 +9282,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmObject_8h.xml
 
 
+// File: gdcmOpenJPEG2Codec_8h.xml
+
+
 // File: gdcmOrientation_8h.xml
 
 
@@ -9576,46 +9633,46 @@ gdcm::terminal::setmode(Mode m) ";
 // File: bug.xml
 
 
-// File: dir_dd59ae63638f8e6db74ff814cdd2ba11.xml
+// File: dir_c2dc2be3c63d378808e4d0c44a141bd3.xml
 
 
-// File: dir_e7b582419e9f4d1bcff689e9160d1361.xml
+// File: dir_d826883898cbd18eece9ea264521ff67.xml
 
 
-// File: dir_459e28d93f5ebf5b3684e94c5d9ba73d.xml
+// File: dir_ac94b469fdb7c024da1339f1e47eb47b.xml
 
 
-// File: dir_5c1883c313124ad0e0e15c4907881b94.xml
+// File: dir_3cc24ff049e9eb1dd4f35fdf77a05032.xml
 
 
-// File: dir_e5e1d895860d543682344cfe846a8645.xml
+// File: dir_23291e2ce89e6da458d132c1d4fb42d6.xml
 
 
-// File: dir_00520f4d2c84efa57087f737b7c31a4f.xml
+// File: dir_c937aa90a9051470be4bd6d9f3a4ae47.xml
 
 
-// File: dir_9762a725c19705dcf09e95e0e6a7fb60.xml
+// File: dir_ec173e17422adc3ef2d92ffc98332323.xml
 
 
-// File: dir_b1a61b85603322114a4d67f297157536.xml
+// File: dir_f993b890798771263742f769a3214342.xml
 
 
-// File: dir_a8a1bfac2362da979ebe0dcfe92dd280.xml
+// File: dir_b202a1cb020555bd5dc454fa27641b4d.xml
 
 
-// File: dir_cfbfd92620afda625b29141aadd082a3.xml
+// File: dir_5a781b486b86cff4067b42bfc51d8164.xml
 
 
-// File: dir_a63deea8f06ac7f10e7efc245054e3d5.xml
+// File: dir_1cd2090f3fcb99b2db17fc9570e0211d.xml
 
 
-// File: dir_b336d89c9391e489f87cbe7093b285b6.xml
+// File: dir_436b3704b5d7a05884b72ba9b61b07b9.xml
 
 
-// File: dir_75b216805bef13d65f8a18612cb2c772.xml
+// File: dir_7f76e191aae5e6633dd9eb3cf2c1e74c.xml
 
 
-// File: dir_7a30e06ad4a2057c903cecd8b9784acb.xml
+// File: dir_81c24e40aa7b22441c095d24435a1a68.xml
 
 
 // File: BasicAnonymizer.cs-example.xml
@@ -9805,6 +9862,9 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: HelloWorld.py-example.xml
+
+
+// File: iod.cxx-example.xml
 
 
 // File: LargeVRDSExplicit.cxx-example.xml
