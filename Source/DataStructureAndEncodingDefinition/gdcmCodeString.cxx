@@ -17,30 +17,38 @@
 namespace gdcm
 {
   bool CodeString::IsValid() const {
-    if( !Superclass::IsValid() ) return false;
+    if( !Internal.IsValid() ) return false;
     // Implementation specific:
 
-/*
-Uppercase
-characters, ¿0¿-
-¿9¿, the SPACE
-character, and
-underscore ¿_¿, of
-the Default
-Character
-Repertoire
-*/
-    const_iterator it = begin();
-    for( ; it != end(); ++it )
+    /*
+     * Uppercase characters, 0-9, the SPACE character, and underscore _, of the
+     * Default Character Repertoire
+     */
+    const_iterator it = Internal.begin();
+    for( ; it != Internal.end(); ++it )
       {
       int c = *it;
       if( !isupper(c) && !isdigit(c) && c != ' ' && c != '_' )
         {
-        // char dummy = c;
         return false;
         }
       }
     return true;
   }
 
-}
+#if !defined(GDCM_LEGACY_REMOVE)
+  CodeString::size_type CodeString::size() const
+    {
+    GDCM_LEGACY_REPLACED_BODY(CodeString::size, "GDCM 2.2",
+                              CodeString::size);
+    return Internal.size();
+    }
+  std::string CodeString::Trim() const
+    {
+    GDCM_LEGACY_REPLACED_BODY(CodeString::Trim, "GDCM 2.2",
+                              CodeString::Trim);
+    return Internal;
+    }
+#endif
+
+} // end namespace gdcm

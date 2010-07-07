@@ -54,7 +54,6 @@ SET(MSFF_SRCS
   gdcmPDFCodec.cxx
   gdcmAudioCodec.cxx
   gdcmJPEG16Codec.cxx
-  gdcmJPEG2000Codec.cxx
   gdcmJPEGLSCodec.cxx
   gdcmJPEG8Codec.cxx
   gdcmJPEGCodec.cxx
@@ -69,6 +68,15 @@ SET(MSFF_SRCS
   gdcmPixelFormat.cxx
   gdcmSegmentedPaletteColorLookupTable.cxx
   )
+if(OPENJPEG_VERSION VERSION_LESS 2.0)
+  list(APPEND MSFF_SRCS
+    gdcmJPEG2000Codec.cxx
+  )
+else ()
+  list(APPEND MSFF_SRCS
+    gdcmOpenJPEG2Codec.cxx
+  )
+endif()
 
 # Do the proper thing when building static...if only there was configured
 # headers or def files instead

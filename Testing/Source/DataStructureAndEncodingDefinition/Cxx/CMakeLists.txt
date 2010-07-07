@@ -11,7 +11,6 @@ SET(DSED_TEST_SRCS
   #TestByteBuffer
   #TestByteValue
   TestPreamble
-  TestLCNumeric
   TestReader
   TestWriter
   TestWriter2
@@ -49,7 +48,14 @@ SET(DSED_TEST_SRCS
   TestElement4
   TestElement5
   )
-
+IF(GDCM_TESTING_USE_LC_NUMERIC)
+# The test expect to be able to set fr as locale only turn if user
+# set the appropriate & hidden cmake variable
+SET(DSED_TEST_SRCS
+  ${DSED_TEST_SRCS}
+  TestLCNumeric
+)
+ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
 IF(GDCM_DATA_ROOT)
 SET(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}

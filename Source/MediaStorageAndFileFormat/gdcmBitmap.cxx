@@ -101,6 +101,7 @@ void Bitmap::SetDimensions(const unsigned int *dims)
 
 void Bitmap::SetDimension(unsigned int idx, unsigned int dim)
 {
+  //assert( dim );
   assert( NumberOfDimensions );
   assert( idx < NumberOfDimensions );
   Dimensions.resize( 3 /*NumberOfDimensions*/ );
@@ -335,7 +336,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       {
       TransferSyntax ts2;
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
-      assert( sf );
+      if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;

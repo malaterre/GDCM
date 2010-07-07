@@ -117,14 +117,18 @@ int TestSystem(int, char *[])
 //std::cerr << path << std::endl;
   if( strncmp(GDCM_EXECUTABLE_OUTPUT_PATH, fn.GetPath(), strlen(GDCM_EXECUTABLE_OUTPUT_PATH)) != 0 )
     {
-    std::cerr << GDCM_EXECUTABLE_OUTPUT_PATH << "!=" << fn.GetPath() << std::endl;
+    std::cerr << GDCM_EXECUTABLE_OUTPUT_PATH << " != " << fn.GetPath() << std::endl;
+    gdcm::Filename fn_debug1( GDCM_EXECUTABLE_OUTPUT_PATH );
+    gdcm::Filename fn_debug2( fn.GetPath() );
+    std::cerr << fn_debug1.GetFileName() << " , " << fn_debug2.GetFileName() << std::endl;
+    std::cerr << std::boolalpha << fn_debug1.IsIdentical( fn_debug2 ) << std::endl;
     return 1;
     }
   // gdcmCommonTests
   const char exename[] = "gdcmCommonTests";
   if( strncmp(exename, fn.GetName(), strlen(exename)) != 0 )
     {
-    std::cerr << exename << "!=" << fn.GetName() << std::endl;
+    std::cerr << exename << " != " << fn.GetName() << std::endl;
     return 1;
     }
 

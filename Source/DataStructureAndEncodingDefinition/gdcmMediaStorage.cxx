@@ -140,7 +140,7 @@ MediaStorage::MSType MediaStorage::GetMSType(const char *str)
   // the toolkit which wrote the image is buggy and tolerate space padded binary
   // string
   CodeString codestring = str;
-  std::string cs = codestring.Trim();
+  std::string cs = codestring.GetAsString();
   for(unsigned int i = 0; MSStrings[i] != 0; ++i)
     {
     if( strcmp(cs.c_str(), MSStrings[i]) == 0 )
@@ -276,7 +276,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//ModalityPerformedProcedureStepSOPClass
   {"  ", 2},//PhilipsPrivateMRSyntheticImageStorage
   {"XC", 2},//VLPhotographicImageStorage
-  {"  ", 2},// Segmentation Storage 
+  {"SEG ", 3},// Segmentation Storage 
   {"  ", 2},// RT Ion Plan Storage
   {"XA", 3},// XRay3DAngiographicImageStorage,
   {"XA", 3},// Enhanced XA Image Storage

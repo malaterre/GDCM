@@ -21,8 +21,14 @@ int TestGlobal(int, char *[])
 {
   // case 1
   // Get the global singleton:
+  gdcm::Trace::DebugOn();
   gdcm::Global& g = gdcm::Global::GetInstance();
-  g.LoadResourcesFiles();
+  if( !g.LoadResourcesFiles() )
+    {
+    std::cerr << "Could not LoadResourcesFiles" << std::endl;
+    return 1;
+    }
+  gdcm::Trace::DebugOff();
   // get the Part 6 dicts from it:
   const gdcm::Dicts &ds = g.GetDicts();
   const gdcm::Dict &pub = ds.GetPublicDict();

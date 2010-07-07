@@ -23,7 +23,7 @@
 // http://matt.eifelle.com/2008/11/04/exposing-an-array-interface-with-swig-for-a-cc-structure/
 
 %module(docstring="A DICOM library",directors=1) gdcmswig
-#pragma SWIG nowarn=504,510
+#pragma SWIG nowarn=302,504,510
 %{
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
@@ -113,8 +113,11 @@
 #include "gdcmPatient.h"
 #include "gdcmStudy.h"
 #include "gdcmUsage.h"
+#include "gdcmMacroEntry.h"
 #include "gdcmModuleEntry.h"
 #include "gdcmNestedModuleEntries.h"
+#include "gdcmMacro.h"
+#include "gdcmMacros.h"
 #include "gdcmModule.h"
 #include "gdcmModules.h"
 #include "gdcmDefs.h"
@@ -133,6 +136,13 @@
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
+#include "gdcmCoder.h"
+#include "gdcmDecoder.h"
+#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
+#include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
+#include "gdcmJPEG2000Codec.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
@@ -604,9 +614,12 @@ EXTEND_CLASS_PRINT(gdcm::Version)
 %include "gdcmPatient.h"
 %include "gdcmStudy.h"
 %include "gdcmUsage.h"
+%include "gdcmMacroEntry.h"
 %include "gdcmModuleEntry.h"
 EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmNestedModuleEntries.h"
+%include "gdcmMacro.h"
+%include "gdcmMacros.h"
 %include "gdcmModule.h"
 %include "gdcmModules.h"
 %include "gdcmDefs.h"
@@ -644,6 +657,17 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
+//%feature("director") Coder;
+//%include "gdcmCoder.h"
+//%feature("director") Decoder;
+//%include "gdcmDecoder.h"
+//%feature("director") Codec;
+//%include "gdcmCodec.h"
+%feature("director") ImageCodec;
+%include "gdcmImageCodec.h"
+%include "gdcmJPEGCodec.h"
+%include "gdcmJPEGLSCodec.h"
+%include "gdcmJPEG2000Codec.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"

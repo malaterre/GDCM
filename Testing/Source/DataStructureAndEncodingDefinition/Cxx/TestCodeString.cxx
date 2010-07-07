@@ -112,6 +112,37 @@ int TestCodeString(int , char *[])
     }
 }
 
+{
+    gdcm::CodeString cs0 = " SUB\\DIR ";
+    if(  cs0.IsValid() ) return 1;
+
+    gdcm::CodeString cs1 = " SUBDIR ";
+    if( !cs1.IsValid() ) return 1;
+
+    gdcm::CodeString cs2 = " SUBDIR_0123456789 ";
+    // len == 19 => invalid
+    if( cs2.IsValid() ) return 1;
+
+    gdcm::CodeString cs3 = " IMG_0123456789 ";
+    if( !cs3.IsValid() ) return 1;
+
+    // cstor should trim on the fly:
+    gdcm::CodeString cs4 = "  IMG_0123456789  ";
+    if( !cs4.IsValid() ) return 1;
+
+    if( !(cs3 == cs4) ) return 1;
+
+    if( cs3 != cs4 ) return 1;
+
+    gdcm::CodeString cs5 = "IMG";
+    if( cs5 != "IMG ")
+      return 1;
+
+
+    // Begin ugly internals.
+
+}
+
   return 0;
 }
 

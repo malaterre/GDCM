@@ -126,7 +126,7 @@ basic_zip_streambuf<charT, traits>::overflow(int_type c)
     }
     if (zip_to_stream(this->pbase(), w))
     {
-        setp(this->pbase(), this->epptr() - 1);
+        this->setp(this->pbase(), this->epptr() - 1);
         return c;
     }
     else

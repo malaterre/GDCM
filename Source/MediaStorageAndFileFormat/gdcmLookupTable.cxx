@@ -77,7 +77,7 @@ void LookupTable::Allocate( unsigned short bitsample )
     }
   else
     {
-    assert(0);
+    gdcmAssertAlwaysMacro(0);
     }
   BitSample = bitsample;
 }
@@ -117,6 +117,12 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
   unsigned int length)
 {
   //if( !Initialized() ) return;
+  if( !Internal->Length[type] )
+    {
+    gdcmDebugMacro( "Need to set length first" );
+    return;
+    }
+
   if( !IncompleteLUT )
     {
     assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );
@@ -140,7 +146,7 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
       Internal->RGB[3*i+type] = array[i*mult+offset];
       }
     }
-  else
+  else if( BitSample == 16 )
     {
     assert( Internal->Length[type]*(BitSample/8) == length );
     uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
@@ -172,9 +178,8 @@ void LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned in
       array[i*mult+offset] = Internal->RGB[3*i+type];
       }
     }
-  else
+  else if( BitSample == 16 )
     {
-    assert( BitSample == 16 );
     length = Internal->Length[type]*(BitSample/8);
     uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
     uint16_t *array16 = (uint16_t*)array;
@@ -268,7 +273,7 @@ void LookupTable::Decode(std::istream &is, std::ostream &os) const
       os.write((char*)rgb, 3 );
       }
     }
-  else
+  else if ( BitSample == 16 )
     {
     const uint16_t *rgb16 = (uint16_t*)&Internal->RGB[0];
     while( !is.eof() )
@@ -321,7 +326,7 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
       }
     ret = true;
     }
-  else
+  else if ( BitSample == 16 )
     {
 /*
     assert( Internal->Length[type]*(BitSample/8) == length );
@@ -380,7 +385,7 @@ bool LookupTable::WriteBufferAsRGBA(const unsigned char *rgba)
       }
     ret = true;
     }
-  else
+  else if ( BitSample == 16 )
     {
     //assert( Internal->Length[type]*(BitSample/8) == length );
     uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];

@@ -73,6 +73,11 @@ void ImageCodec::SetNumberOfDimensions(unsigned int dim)
   NumberOfDimensions = dim;
 }
 
+unsigned int ImageCodec::GetNumberOfDimensions() const
+{
+  return NumberOfDimensions;
+}
+
 
 const PhotometricInterpretation &ImageCodec::GetPhotometricInterpretation() const
 {

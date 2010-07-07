@@ -64,7 +64,7 @@ public class";
 */
 
 %module(docstring="A DICOM library",directors=1) gdcm
-#pragma SWIG nowarn=504,510
+#pragma SWIG nowarn=302,504,510
 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
 // I need to redefine it myself... seems to be solved in later revision
@@ -163,8 +163,11 @@ public class";
 #include "gdcmPatient.h"
 #include "gdcmStudy.h"
 #include "gdcmUsage.h"
+#include "gdcmMacroEntry.h"
 #include "gdcmModuleEntry.h"
 #include "gdcmNestedModuleEntries.h"
+#include "gdcmMacro.h"
+#include "gdcmMacros.h"
 #include "gdcmModule.h"
 #include "gdcmModules.h"
 #include "gdcmDefs.h"
@@ -648,9 +651,12 @@ EXTEND_CLASS_PRINT(gdcm::Version)
 %include "gdcmPatient.h"
 %include "gdcmStudy.h"
 %include "gdcmUsage.h"
+%include "gdcmMacroEntry.h"
 %include "gdcmModuleEntry.h"
 EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmNestedModuleEntries.h"
+%include "gdcmMacro.h"
+%include "gdcmMacros.h"
 %include "gdcmModule.h"
 %include "gdcmModules.h"
 %include "gdcmDefs.h"

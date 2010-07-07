@@ -43,6 +43,7 @@ VL UNExplicitImplicitDataElement::GetLength() const
         + ValueLengthField.GetLength() + sf->ComputeLength();
       }
     assert(0);
+	return 0;
     }
   else
     {

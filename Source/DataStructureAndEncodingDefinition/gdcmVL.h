@@ -30,6 +30,7 @@ namespace gdcm
 class GDCM_EXPORT VL
 {
 public:
+  typedef uint32_t Type;
   VL(uint32_t vl = 0) : ValueLength(vl) { }
 
   // FIXME: ugly
@@ -43,10 +44,12 @@ public:
     ValueLength = 0xFFFFFFFF;
   }
 
+  /// Return whether or not the VL is odd or not.
   bool IsOdd() const {
     return !IsUndefined() && ValueLength % 2;
   }
 
+  /// += operator
   VL& operator+=(VL const &vl) {
     ValueLength += vl.ValueLength;
     return *this;

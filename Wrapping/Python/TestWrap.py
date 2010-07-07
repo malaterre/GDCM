@@ -54,7 +54,7 @@ blacklist = (
 "Table"
 "XMLPrivateDictReader"
 # Common
-"Macro"
+"LegacyMacro"
 "Swapper"
 "SmartPointer"
 "Win32"

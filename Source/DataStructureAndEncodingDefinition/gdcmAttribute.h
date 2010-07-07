@@ -452,7 +452,7 @@ protected:
       }
     else
       {
-      internal = new ArrayType[bv->GetLength()]; // over allocation
+      internal = new ArrayType[(VL::Type)bv->GetLength()]; // over allocation
       }
     EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(internal, Length, ss);
     SetValues( internal, Length, true );
