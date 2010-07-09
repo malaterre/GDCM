@@ -40,7 +40,7 @@ MARK_AS_ADVANCED(OPENSSL_ROOT_DIR)
 
 # Re-use the previous path:
 FIND_PATH(OPENSSL_INCLUDE_DIR openssl/ssl.h
-  ${OPENSSL_ROOT_DIR}/include
+  PATHS ${OPENSSL_ROOT_DIR}/include
 )
 
 IF(WIN32 AND NOT CYGWIN)
