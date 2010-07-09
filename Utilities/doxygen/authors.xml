@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is used for svn2cl script
+it maps sf.net user account (login) to actual name
+-->
+<authors xmlns:html="http://www.w3.org/1999/xhtml">
+  <author uid="bellet">
+    Fabrice Bellet
+  </author>
+  <author uid="chrrossmanith">
+    Christina Roßmanith
+  </author>
+  <author uid="chuckdawit">
+    Charles Pareto
+  </author>
+  <author uid="cpbotha">
+    Charl P. Botha
+  </author>
+  <author uid="deaninglis">
+    Dean Inglis
+  </author>
+  <author uid="drdanz">
+    Daniele E. Domenichelli
+  </author>
+  <author uid="jprx">
+    Jean-Pierre Roux
+  </author>
+  <author uid="malat">
+    Mathieu Malaterre
+  </author>
+  <author uid="niels_dekker">
+    Niels Dekker
+  </author>
+  <author uid="rogueresearch">
+    Rogue Research
+  </author>
+  <author uid="sablackett">
+    Shane Blackett
+  </author>
+  <author uid="spalte">
+    Joel Spaltenstein
+  </author>
+</authors>
