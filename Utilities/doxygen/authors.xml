@@ -1,42 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Program: GDCM (Grassroots DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2010 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+-->
 <!-- This file is used for svn2cl script
 it maps sf.net user account (login) to actual name
+
+apt-get install subversion-tools
+svn2cl - -reparagraph - -include-rev - -authors=Utilities/doxygen/authors.xml
 -->
 <authors xmlns:html="http://www.w3.org/1999/xhtml">
   <author uid="bellet">
-    Fabrice Bellet
+    Fabrice Bellet &lt;bellet@users.sourceforge.net&gt;
   </author>
   <author uid="chrrossmanith">
-    Christina Roßmanith
+    Christina Roßmanith &lt;chrrossmanith@users.sourceforge.net&gt;
   </author>
   <author uid="chuckdawit">
-    Charles Pareto
+    Charles Pareto &lt;chuckdawit@users.sourceforge.net&gt;
   </author>
   <author uid="cpbotha">
-    Charl P. Botha
+    Charl P. Botha &lt;cpbotha@users.sourceforge.net&gt;
   </author>
   <author uid="deaninglis">
-    Dean Inglis
+    Dean Inglis &lt;deaninglis@users.sourceforge.net&gt;
   </author>
   <author uid="drdanz">
-    Daniele E. Domenichelli
+    Daniele E. Domenichelli &lt;drdanz@users.sourceforge.net&gt;
   </author>
   <author uid="jprx">
-    Jean-Pierre Roux
+    Jean-Pierre Roux &lt;jprx@users.sourceforge.net&gt;
   </author>
   <author uid="malat">
-    Mathieu Malaterre
+    Mathieu Malaterre &lt;malat@users.sourceforge.net&gt;
   </author>
   <author uid="niels_dekker">
-    Niels Dekker
+    Niels Dekker &lt;niels_dekker@users.sourceforge.net&gt;
   </author>
   <author uid="rogueresearch">
-    Rogue Research
+    Rogue Research &lt;rogueresearch@users.sourceforge.net&gt;
   </author>
   <author uid="sablackett">
-    Shane Blackett
+    Shane Blackett &lt;sablackett@users.sourceforge.net&gt;
   </author>
   <author uid="spalte">
-    Joel Spaltenstein
+    Joel Spaltenstein &lt;spalte@users.sourceforge.net&gt;
   </author>
 </authors>
