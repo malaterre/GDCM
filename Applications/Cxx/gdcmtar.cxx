@@ -422,7 +422,7 @@ if( unenhance && false )
         return 1;
         }
       }
-    
+
     return 0;
     }
   else if ( unenhance )
