@@ -45,7 +45,7 @@ svn2cl - -reparagraph - -include-rev - -authors=Utilities/doxygen/authors.xml
     Mathieu Malaterre &lt;malat@users.sourceforge.net&gt;
   </author>
   <author uid="niels_dekker">
-    Niels Dekker &lt;niels_dekker@users.sourceforge.net&gt;
+    Niels Dekker
   </author>
   <author uid="rogueresearch">
     Rogue Research &lt;rogueresearch@users.sourceforge.net&gt;
