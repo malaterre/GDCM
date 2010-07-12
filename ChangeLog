@@ -1257,7 +1257,7 @@
 
 	* [r6509] Applications/Cxx/gdcmimg.cxx: BUG: 2933869 Fix it
 
-2010-01-15 10:10  Niels Dekker <niels_dekker@users.sourceforge.net>
+2010-01-15 10:10  Niels Dekker
 
 	* [r6508] Source/DataStructureAndEncodingDefinition/gdcmDataSet.h,
 	  Source/DataStructureAndEncodingDefinition/gdcmDataSet.txx,
@@ -2052,13 +2052,13 @@
 	* [r6496] Source/DataStructureAndEncodingDefinition/gdcmReader.cxx:
 	  Lets be a litte more exlicit for gcc3.3 compilers
 
-2010-01-11 16:43  Niels Dekker <niels_dekker@users.sourceforge.net>
+2010-01-11 16:43  Niels Dekker
 
 	* [r6495] Source/DataStructureAndEncodingDefinition/gdcmReader.cxx:
 	  COMP: Oops, my previous commit missed some gdcm namespace
 	  specifiers in Caller classes.
 
-2010-01-10 20:46  Niels Dekker <niels_dekker@users.sourceforge.net>
+2010-01-10 20:46  Niels Dekker
 
 	* [r6494] Source/DataStructureAndEncodingDefinition/gdcmReader.cxx,
 	  Source/DataStructureAndEncodingDefinition/gdcmReader.h: STYLE:
@@ -2383,7 +2383,7 @@
 	  Source/MediaStorageAndFileFormat/gdcmSplitMosaicFilter.cxx:
 	  Explicit location
 
-2009-12-16 15:30  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-12-16 15:30  Niels Dekker
 
 	* [r6441] Source/Common/gdcmString.h: COMP: Removed unnecessary
 	  friend declaration of inline function, operator>>, according to
@@ -2442,7 +2442,7 @@
 	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestMediaStorage.cxx:
 	  Did the implementation backward...sigh
 
-2009-12-15 09:52  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-12-15 09:52  Niels Dekker
 
 	* [r6430] Source/Common/gdcmWin32.h: COMP: Avoided a warning,
 	  "VTK_MAJOR_VERSION is not defined", according to
@@ -2459,7 +2459,7 @@
 
 	* [r6427] TODO: todo
 
-2009-12-14 21:03  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-12-14 21:03  Niels Dekker
 
 	* [r6426] Source/Common/gdcmFilename.cxx: BUG: Fixed assert in
 	  Filename::ToUnixSlashes(), according to
@@ -2528,14 +2528,14 @@
 
 	* [r6414] Wrapping/Python/gdcmswig.i: Wrap ProgressEvent
 
-2009-12-13 21:28  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-12-13 21:28  Niels Dekker
 
 	* [r6413]
 	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestMediaStorage.cxx:
 	  BUG: Fixed copy-and-paste bug in TestMediaStorage, according to
 	  https://sourceforge.net/tracker/?func=detail&atid=739587&aid=2913284&group_id=137895
 
-2009-12-13 21:05  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-12-13 21:05  Niels Dekker
 
 	* [r6412] Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx: BUG:
 	  Fixed RLECodec::Code buffer overrun RLEHeader::Offset, according
@@ -3055,7 +3055,7 @@
 	* [r6359] Source/Common/gdcmException.h: now is the good time to
 	  reactivate function
 
-2009-12-01 09:53  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-12-01 09:53  Niels Dekker
 
 	* [r6358] Source/Common/gdcmException.h: BUG: Improved
 	  gdcm::Exception, applying proposed change 1 to 5, and 7, from
@@ -3264,7 +3264,7 @@
 	* [r6318] Testing/Source/Data/gdcmMD5DataImages.cxx: New files in
 	  gdcmData CVS HEAD
 
-2009-11-24 15:02  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-11-24 15:02  Niels Dekker
 
 	* [r6313] CMakeLists.txt: ENH: Added URL of "What is gdcmData?" to
 	  CMake GDCM_DATA_ROOT message, according to report #2903154, as
@@ -3684,13 +3684,13 @@
 	  BUG: Fix init problem as reported by Niels Dekker on mailing
 	  list.
 
-2009-11-05 19:30  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-11-05 19:30  Niels Dekker
 
 	* [r6205] Testing/Source/Common/Cxx/TestVersion.cxx: ENH: Added
 	  tests whether the static gdcm::Version member functions are
 	  "callable" without compile or linking errors.
 
-2009-11-05 19:25  Niels Dekker <niels_dekker@users.sourceforge.net>
+2009-11-05 19:25  Niels Dekker
 
 	* [r6204] Source/Common/gdcmVersion.cxx,
 	  Source/Common/gdcmVersion.h: ENH: Moved implementation of static
