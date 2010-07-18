@@ -814,13 +814,20 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         // correct DICOM file.
         // FIXME FIXME
         /* prevent the library from performing any color space conversion */
+        cinfo.jpeg_color_space = JCS_UNKNOWN;
+        cinfo.out_color_space = JCS_UNKNOWN;
         }
       if ( cinfo.process == JPROC_LOSSLESS )
         {
         //cinfo.jpeg_color_space = JCS_UNKNOWN;
         //cinfo.out_color_space = JCS_UNKNOWN;
         }
-  this->PlanarConfiguration = 1;
+      if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
+        {
+        cinfo.jpeg_color_space = JCS_UNKNOWN;
+        cinfo.out_color_space = JCS_UNKNOWN;
+        //this->PlanarConfiguration = 1;
+        }
       break;
     case JCS_CMYK:
       assert( GetPhotometricInterpretation() == PhotometricInterpretation::CMYK );

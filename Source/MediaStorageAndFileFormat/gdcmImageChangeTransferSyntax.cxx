@@ -90,6 +90,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap c
       }
     assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::ARGB

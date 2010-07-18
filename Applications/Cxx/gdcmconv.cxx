@@ -1264,6 +1264,12 @@ int main (int argc, char *argv[])
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
     //writer.SetFile( fef.GetFile() );
+
+    gdcm::File & file = writer.GetFile();
+    gdcm::FileMetaInformation &fmi = file.GetHeader();
+    fmi.Remove( gdcm::Tag(0x0002,0x0100) ); //  '   '    ' // PrivateInformationCreatorUID
+    fmi.Remove( gdcm::Tag(0x0002,0x0102) ); //  '   '    ' // PrivateInformation
+
     const gdcm::Pixmap &pixout = change.PixmapToPixmapFilter::GetOutput();
     writer.SetPixmap( pixout );
     if( !writer.Write() )
