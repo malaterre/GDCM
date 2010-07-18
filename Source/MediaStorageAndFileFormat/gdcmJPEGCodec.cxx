@@ -335,6 +335,11 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
 #endif
     return false;
     }
+  if( this->PlanarConfiguration != Internal->PlanarConfiguration )
+    {
+    gdcmWarningMacro( "PlanarConfiguration issue" );
+    this->PlanarConfiguration = Internal->PlanarConfiguration;
+    }
   if( this->PI != Internal->PI )
     {
     gdcmWarningMacro( "PhotometricInterpretation issue" );

@@ -416,6 +416,7 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     assert( (precision - 1) >= 0 );
     this->PF.SetHighBit( precision - 1 );
 
+  this->PlanarConfiguration = 0;
     // Let's check the color space:
     //  JCS_UNKNOWN    -> 0
     //  JCS_GRAYSCALE,    /* monochrome */
@@ -459,6 +460,7 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       assert( cinfo.num_components == 3 );
       PI = PhotometricInterpretation::YBR_FULL_422;
       this->PF.SetSamplesPerPixel( 3 );
+  this->PlanarConfiguration = 1;
       }
     else if( cinfo.jpeg_color_space == JCS_CMYK )
       {
@@ -478,7 +480,6 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       assert( 0 ); //TODO
       }
     }
-  this->PlanarConfiguration = 0;
   if( cinfo.process == JPROC_LOSSLESS )
     {
     int predictor = cinfo.Ss;
@@ -819,6 +820,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         //cinfo.jpeg_color_space = JCS_UNKNOWN;
         //cinfo.out_color_space = JCS_UNKNOWN;
         }
+  this->PlanarConfiguration = 1;
       break;
     case JCS_CMYK:
       assert( GetPhotometricInterpretation() == PhotometricInterpretation::CMYK );

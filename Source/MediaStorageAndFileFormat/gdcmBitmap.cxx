@@ -370,6 +370,11 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       }
     // FIXME ! This should be done all the time for all codec:
     // Did PI change or not ?
+    if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
+      {
+      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      //i->SetPlanarConfiguration( codec.GetPlanarConfiguration() );
+      }
     if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
       {
       // HACK
@@ -382,12 +387,12 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
-    if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 
-    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
-      {
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
-      i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
-      }
+    //if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 
+    //|| GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
+    //  {
+    //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+    //  i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+    //  }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
