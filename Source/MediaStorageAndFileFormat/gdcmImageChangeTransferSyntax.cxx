@@ -183,7 +183,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
         "Some validator may complains this image is invalid, but would be wrong.");
       }
 
-    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
     if( !r )
       {
       return false;
@@ -197,6 +197,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
       }
     assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
