@@ -288,7 +288,7 @@ bool PixmapWriter::PrepareWrite()
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );
     de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
-    ds.Insert( de );
+    ds.Replace( de );
     }
 
   // Pixel Format :
@@ -676,8 +676,8 @@ bool PixmapWriter::PrepareWrite()
     fmi.SetDataSetTransferSyntax(ts);
     }
   fmi.Remove( Tag(0x0002,0x0012) ); // Set the Implementation Class UID properly
-  fmi.Remove( Tag(0x0002,0x0013) ); // 
-  fmi.Remove( Tag(0x0002,0x0016) ); // 
+  fmi.Remove( Tag(0x0002,0x0013) ); //
+  fmi.Remove( Tag(0x0002,0x0016) ); //
   fmi.FillFromDataSet( ds );
 
 

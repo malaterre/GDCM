@@ -58,6 +58,27 @@ bool ImageChangeTransferSyntax::TryRAWCodecIcon(const DataElement &pixelde)
 }
 */
 
+void UpdatePhotometricInterpretation( Bitmap const &input, Bitmap &output )
+{
+  // when decompressing J2K, need to revert to proper photo inter in uncompressed TS:
+  if( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
+    || input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
+    {
+    output.SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+    }
+  // when decompressing loss jpeg, need to revert to proper photo inter in uncompressed TS:
+  if( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
+    {
+    output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_FULL );
+    }
+  assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
+    || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+    || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
+    || output.GetPhotometricInterpretation() == PhotometricInterpretation::ARGB
+    || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
+}
+
 bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
   unsigned long len = input.GetBufferLength();
@@ -82,19 +103,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap c
       }
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
-    // when decompressing J2K, need to revert to proper photo inter in uncompressed TS:
-    if( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
-      || input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
-      {
-      output.SetPhotometricInterpretation( PhotometricInterpretation::RGB );
-      }
-    assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::ARGB
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
+    UpdatePhotometricInterpretation( input, output );
     return true;
     }
   return false;
@@ -124,18 +133,7 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap c
       }
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
-    // when decompressing J2K, need to revert to proper photo inter in uncompressed TS:
-    if( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
-      || input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
-      {
-      output.SetPhotometricInterpretation( PhotometricInterpretation::RGB );
-      }
-    assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
+    UpdatePhotometricInterpretation( input, output );
     return true;
     }
   return false;
@@ -191,17 +189,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
       }
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
-    if( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
-     || input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
-      {
-      output.SetPhotometricInterpretation( PhotometricInterpretation::RGB );
-      }
-    assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
+    UpdatePhotometricInterpretation( input, output );
     // When compressing with JPEG I think planar should always be:
     //output.SetPlanarConfiguration(0);
     // FIXME ! This should be done all the time for all codec:
@@ -211,7 +199,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
       // HACK
       //gdcm::Image *i = (gdcm::Image*)this;
       //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
-assert(0);
+      assert(0);
       }
     return true;
     }
@@ -241,17 +229,7 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitma
 
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
-    if( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
-     || input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
-      {
-      output.SetPhotometricInterpretation( PhotometricInterpretation::RGB );
-      }
-    assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
-      || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
- 
+    UpdatePhotometricInterpretation( input, output );
     return r;
     }
   return false;
@@ -328,6 +306,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bit
     if( !r ) return false;
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
+    UpdatePhotometricInterpretation( input, output );
     return r;
     }
   return false;
