@@ -132,6 +132,7 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap c
       }
     assert( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+      || output.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
       || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
@@ -268,7 +269,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bit
     {
     codec = UserCodec;
     }
-  
+
   if( codec->CanCode( ts ) )
     {
     codec->SetDimensions( input.GetDimensions() );
@@ -293,7 +294,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bit
           {
           output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_RCT );
           }
-        else 
+        else
           {
           assert( ts == TransferSyntax::JPEG2000 );
           output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_ICT );
