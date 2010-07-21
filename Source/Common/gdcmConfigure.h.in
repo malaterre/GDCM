@@ -106,7 +106,9 @@
 // CMS with PBE (added in OpenSSL 1.0.0 ~ Fri Nov 27 15:33:25 CET 2009)
 #cmakedefine HAVE_CMS_RECIPIENT_PASSWORD
 
+#ifndef HAVE_STRCASECMP
 #cmakedefine HAVE_STRCASECMP
+#endif HAVE_STRCASECMP
 #cmakedefine HAVE_STRNCASECMP
 #ifndef HAVE_SNPRINTF
 #cmakedefine HAVE_SNPRINTF
