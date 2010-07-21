@@ -22,8 +22,8 @@ namespace gdcm
 
 PixmapToPixmapFilter::PixmapToPixmapFilter()
 {
-if(!Input) Input = new Pixmap;
-if(!Output) Output = new Pixmap;
+  if(!Input) Input = new Pixmap;
+  if(!Output) Output = new Pixmap;
 }
 
 void PixmapToPixmapFilter::SetInput(const Pixmap& image)

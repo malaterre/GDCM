@@ -190,6 +190,12 @@ bool PhotometricInterpretation::IsSameColorSpace( PhotometricInterpretation cons
     if( pi == RGB || pi == YBR_RCT || pi == YBR_ICT ) return true;
     }
 
+  if( PIField == YBR_FULL 
+   || PIField == YBR_FULL_422 )
+    {
+    if( pi == YBR_FULL || pi == YBR_FULL_422 ) return true;
+    }
+
   return false;
 }
 

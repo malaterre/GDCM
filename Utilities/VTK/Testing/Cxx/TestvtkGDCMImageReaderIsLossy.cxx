@@ -212,6 +212,8 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 1,"multiframegrayscalewordscis.dcm" },
 { 1,"multiframesinglebitscis.dcm" },
 { 1,"multiframetruecolorscis.dcm" },
+{ 1, "SinglePrecisionSC.dcm" },
+{ 0, "signedtruecoloroldsc.dcm" },
 { 0, NULL }
 };
 
