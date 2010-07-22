@@ -109,7 +109,7 @@ Attribute<0x0028,0x0004> piat;
     if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = icon.GetLUT();
-      assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
+      assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0)
            || (pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0) );
       // lut descriptor:
       // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor

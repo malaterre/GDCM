@@ -1,0 +1,40 @@
+<!--
+  Program: GDCM (Grassroots DICOM). A DICOM library
+  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/DefaultDicts.xsl $
+
+  Copyright (c) 2006-2010 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<ServerManagerConfiguration>
+  <ProxyGroup name="sources">
+    <!-- ================================================================== -->
+    <SourceProxy name="PTXReader" class="vtkGDCMImageReader" label="GDCMImageReader">
+      <Documentation
+         long_help="Read a DICOM Image file."
+         short_help="Read a DICOM Image file.">
+      </Documentation>
+      <StringVectorProperty
+            name="FileName"
+            animateable="0"
+            command="SetFileName"
+            number_of_elements="1">
+        <FileListDomain name="files"/>
+        <Documentation>
+          This property specifies the file name for the GDCM reader.
+        </Documentation>
+      </StringVectorProperty>
+
+      <Hints>
+        <ReaderFactory extensions="dcm"
+                       file_description="DICOM File Format" />
+     </Hints>
+    </SourceProxy>
+    <!-- End PTXReader -->
+  </ProxyGroup>
+  <!-- End Filters Group -->
+</ServerManagerConfiguration>
