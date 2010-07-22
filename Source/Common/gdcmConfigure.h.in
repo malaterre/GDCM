@@ -118,7 +118,7 @@
 
 #ifndef HAVE_STRCASECMP
 #cmakedefine HAVE_STRCASECMP
-#endif HAVE_STRCASECMP
+#endif
 #cmakedefine HAVE_STRNCASECMP
 #ifndef HAVE_SNPRINTF
 #cmakedefine HAVE_SNPRINTF
