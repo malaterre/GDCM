@@ -36,7 +36,7 @@ public:
   virtual ~ProgressEvent() {}
   virtual const char * GetEventName() const { return "ProgressEvent"; }
   virtual bool CheckEvent(const ::gdcm::Event* e) const
-    { return dynamic_cast<const Self*>(e); }
+    { return dynamic_cast<const Self*>(e) ? true : false; }
   virtual ::gdcm::Event* MakeObject() const
     { return new Self; }
   ProgressEvent(const Self&s) : AnyEvent(s){};
