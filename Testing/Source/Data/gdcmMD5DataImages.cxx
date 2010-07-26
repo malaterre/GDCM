@@ -222,7 +222,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 800 535 1 8 3 */
 { "279e2b0363394a553ff8571cf3540c6c" , "LEADTOOLS_FLOWERS-24-RGB-JpegLossless.dcm" },
 /* gdcm 800 535 1 8 3 */
-{ "6224dc57584aa545a62303f270be44d2" , "LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm" },
+{ "38c2784aa485733fef45b6517479a4f5" , "LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm" },
 /* gdcm 800 535 1 8 3 */
 { "279e2b0363394a553ff8571cf3540c6c" , "LEADTOOLS_FLOWERS-24-RGB-Uncompressed.dcm" },
 /* gdcm 800 535 1 8 1 */
@@ -387,7 +387,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "938ac04374eadbe6ac4d7df80e5aa178" , "JDDICOM_Sample1.dcm" },
 // This one can not be decompressed properly with dcmdjpeg. Until
 // they fix dcmdjpeg I'll assume decompression went right
-{ "c40f979bca11742e697d9451c60691e5" , "JDDICOM_Sample2.dcm" },
+{ "33aa469ec024188d692262d03e7108a0" , "JDDICOM_Sample2.dcm" },
 // Same problem
 { "308b1b6fbc01df4dc3fb168830777cb1" , "JDDICOM_Sample3.dcm" },
 // Same thing
@@ -628,7 +628,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "6396332b75b15bf30b1dd1cd0f212691" , "SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm" },
 { "ba8dae4b43075c7e8562f5addf5f95c3" , "DX_GE_FALCON_SNOWY-VOI.dcm" },
-{ "a03fa65f1a64b40ed62babe0ab5e4f0c" , "JPEG_LossyYBR.dcm" },
+{ "d6fb1fb06318dd305a461db9c84cf825" , "JPEG_LossyYBR.dcm" },
 { "43f33c06d56f239ce9ed5ca0d66a69d2" , "PHILIPS_Brilliance_ExtraBytesInOverlay.dcm" },
 { "dae9d2e2b412646fd0a0f31dc2d17aa4" , "BugGDCM2_UndefItemWrongVL.dcm" },
 
