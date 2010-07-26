@@ -181,7 +181,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
-  const DataElement &dummy = GetDataElement(Tag(0x0002,0x0003));
+  const DataElement &dummy = GetDataElement(Tag(0x0002,0x0003)); (void)dummy;
   if( !FindDataElement( Tag(0x0002, 0x0003) ) || GetDataElement( Tag(0x0002,0x0003) ).IsEmpty() )
     {
     if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )

@@ -147,16 +147,6 @@ static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const
       std::cerr << "Could not De-indentify : " << filename << std::endl;
       return false;
       }
-
-    // FIXME:
-    gdcm::FileMetaInformation &fmi = file.GetHeader();
-    //fmi.Remove( gdcm::Tag(0x0002,0x0003) ); // will be regenerated
-    fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
-    fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
-    fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
-    fmi.Remove( gdcm::Tag(0x0002,0x0100) ); //  '   '    ' // PrivateInformationCreatorUID
-    fmi.Remove( gdcm::Tag(0x0002,0x0102) ); //  '   '    ' // PrivateInformation
-
     }
   else if ( reidentify )
     {
@@ -166,6 +156,9 @@ static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const
       return false;
       }
     }
+
+  gdcm::FileMetaInformation &fmi = file.GetHeader();
+  fmi.Clear();
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename );

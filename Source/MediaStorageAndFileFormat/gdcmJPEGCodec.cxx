@@ -113,7 +113,7 @@ void JPEGCodec::SetupJPEGBitCodec(int bit)
     }
   else
     {
-    // gdcmNonImageData/RT/RTDOSE.dcm 
+    // gdcmNonImageData/RT/RTDOSE.dcm
     gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
     // Clearly make sure Internal will not be used
     delete Internal;
@@ -163,7 +163,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       is.write(mybuffer, bv.GetLength());
       delete[] mybuffer;
       bool r = Decode(is, os);
-      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
       if( !r )
         {
         return false;
@@ -192,7 +192,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 
 void JPEGCodec::ComputeOffsetTable(bool b)
 {
-  // Not implemented 
+  (void)b;
+  // Not implemented
   assert(0);
 }
 
@@ -290,7 +291,7 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
     sq->AddFragment( frag );
 
     }
-  unsigned int n = sq->GetNumberOfFragments();
+  //unsigned int n = sq->GetNumberOfFragments();
   assert( sq->GetNumberOfFragments() == dims[2] );
   out.SetValue( *sq );
 

@@ -155,10 +155,55 @@ bool ImageWriter::Write()
     de.SetVR( Attribute<0x0020,0x0020>::GetVR() );
     ds.Insert( de );
     }
-  //const char dummy[] = "dummy";
-  //assert( Stream.is_open() );
-  //Stream << dummy;
 
+  // (re)Compute MediaStorage:
+  if( !ds.FindDataElement( Tag(0x0008, 0x0060) ) )
+    {
+    const char *modality = ms.GetModality();
+    DataElement de( Tag(0x0008, 0x0060 ) );
+    de.SetByteValue( modality, strlen(modality) );
+    de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
+    ds.Insert( de );
+    }
+  else
+    {
+    const ByteValue *bv = ds.GetDataElement( Tag(0x0008, 0x0060 ) ).GetByteValue();
+    std::string modality2;
+    if( bv )
+      {
+      modality2 = std::string( bv->GetPointer(), bv->GetLength() );
+      //assert( modality2.find( ' ' ) == std::string::npos ); // no space ...
+      }
+    else
+      {
+      // remove empty Modality, and set a new one...
+      ds.Remove( Tag(0x0008, 0x0060 ) ); // Modality is Type 1 !
+      assert( ms != MediaStorage::MS_END );
+      }
+/*
+    if( modality2 != ms.GetModality() )
+      {
+      assert( std::string(ms.GetModality()).find( ' ' ) == std::string::npos ); // no space ...
+      DataElement de( Tag(0x0008, 0x0060 ) );
+      de.SetByteValue( ms.GetModality(), strlen(ms.GetModality()) );
+      de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
+      ds.Insert( de ); // FIXME: should we always replace ?
+      // Well technically you could have a SecondaryCaptureImageStorage with a modality of NM...
+      }
+*/
+    }
+  if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
+    {
+    if( ms == MediaStorage::SecondaryCaptureImageStorage )
+      {
+      // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
+      const char conversion[] = "WSD "; // FIXME
+      DataElement de( Tag(0x0008, 0x0064 ) );
+      de.SetByteValue( conversion, strlen(conversion) );
+      de.SetVR( Attribute<0x0008, 0x0064>::GetVR() );
+      ds.Insert( de );
+      }
+    }
 
 
   Image & pixeldata = GetImage();

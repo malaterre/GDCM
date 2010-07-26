@@ -86,7 +86,6 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       }
     const DictEntry &entry = dicts.GetDictEntry(t,owner);
     const VR &vr = entry.GetVR();
-    const VM &vm = entry.GetVM();
 
     //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
@@ -194,7 +193,6 @@ bool FileExplicitFilter::Change()
   //  }
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
 
   DataSet &ds = F->GetDataSet();
 
