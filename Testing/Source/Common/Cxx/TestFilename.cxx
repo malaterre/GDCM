@@ -92,7 +92,7 @@ int TestFilename(int argc, char *argv[])
   }
 
 {
-#ifdef HAVE_WCHAR_IFSTREAM
+#ifdef GDCM_HAVE_WCHAR_IFSTREAM
   const wchar_t ifn[] = L"UnicodeFileName.dcm"; 
   const wchar_t* fn = gdcm::Testing::GetTempFilenameW(ifn);
   std::ofstream outputFileStream( fn );

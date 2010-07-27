@@ -29,17 +29,17 @@
 #include <limits.h> // PATH_MAX
 
 // gettimeofday
-#ifdef HAVE_SYS_TIME_H
+#ifdef GDCM_HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
 #include <time.h>
-#ifdef HAVE_WINSOCK_H
+#ifdef GDCM_HAVE_WINSOCK_H
 #include <winsock.h>
 #endif
 #include <stdio.h> // snprintf
-#if defined(HAVE_SNPRINTF)
+#if defined(GDCM_HAVE_SNPRINTF)
 // ok nothing to do
-#elif defined(HAVE__SNPRINTF)
+#elif defined(GDCM_HAVE__SNPRINTF)
 #define snprintf _snprintf
 #endif
 #ifdef __APPLE__
@@ -536,7 +536,7 @@ bool System::GetHardwareAddress(unsigned char addr[6])
   return false;
 }
 
-#if defined(_WIN32) && !defined(HAVE_GETTIMEOFDAY)
+#if defined(_WIN32) && !defined(GDCM_HAVE_GETTIMEOFDAY)
 #include <stdio.h>
 
 // http://www.openasthra.com/c-tidbits/gettimeofday-function-for-windows/
@@ -785,9 +785,9 @@ bool System::GetCurrentDateTime(char date[22])
 
 int System::StrNCaseCmp(const char *s1, const char *s2, size_t n)
 {
-#if defined(HAVE_STRNCASECMP)
+#if defined(GDCM_HAVE_STRNCASECMP)
   return strncasecmp(s1,s2,n);
-#elif defined(HAVE__STRNICMP)
+#elif defined(GDCM_HAVE__STRNICMP)
   return _strnicmp(s1,s2,n);
 #else // default implementation
 #error
@@ -804,9 +804,9 @@ int System::StrNCaseCmp(const char *s1, const char *s2, size_t n)
 
 int System::StrCaseCmp(const char *s1, const char *s2)
 {
-#if defined(HAVE_STRCASECMP)
+#if defined(GDCM_HAVE_STRCASECMP)
   return strcasecmp(s1,s2);
-#elif defined(HAVE__STRNICMP)
+#elif defined(GDCM_HAVE__STRNICMP)
   return _stricmp(s1,s2);
 #else // default implementation
 #error

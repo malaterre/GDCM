@@ -29,7 +29,7 @@
 #include "gdcm_uuid.h"
 #endif
 
-#ifdef HAVE_RPC_H
+#ifdef GDCM_HAVE_RPC_H
 #include <rpc.h>
 #endif
 
