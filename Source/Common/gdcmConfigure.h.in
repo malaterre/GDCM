@@ -91,9 +91,7 @@
 #define GDCM_SIZEOF_LONG @GDCM_SIZEOF_LONG@
 
 /* Special time structure support */
-#ifndef GDCM_HAVE_SYS_TIME_H
 #cmakedefine GDCM_HAVE_SYS_TIME_H
-#endif
 #cmakedefine GDCM_HAVE_WINSOCK_H
 #cmakedefine GDCM_HAVE_BYTESWAP_H
 #cmakedefine GDCM_HAVE_RPC_H
@@ -116,19 +114,13 @@
 // CMS with PBE (added in OpenSSL 1.0.0 ~ Fri Nov 27 15:33:25 CET 2009)
 #cmakedefine GDCM_HAVE_CMS_RECIPIENT_PASSWORD
 
-#ifndef GDCM_HAVE_STRCASECMP
 #cmakedefine GDCM_HAVE_STRCASECMP
-#endif
 #cmakedefine GDCM_HAVE_STRNCASECMP
-#ifndef GDCM_HAVE_SNPRINTF
 #cmakedefine GDCM_HAVE_SNPRINTF
-#endif
 #cmakedefine GDCM_HAVE__STRICMP
 #cmakedefine GDCM_HAVE__STRNICMP
 #cmakedefine GDCM_HAVE__SNPRINTF
-#ifndef GDCM_HAVE_GETTIMEOFDAY
 #cmakedefine GDCM_HAVE_GETTIMEOFDAY
-#endif
 
 // MM: I have a feeling that if GDCM_HAVE_WCHAR_IFSTREAM, then UNICODE filename 
 // are expected to be specified as UTF-16, but if no API exist for UTF-16
