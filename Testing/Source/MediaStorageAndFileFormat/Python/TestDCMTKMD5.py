@@ -80,7 +80,9 @@ def TestDCMTKMD5( filename, verbose = False ):
   #print ret.__class__
   elif( jpegre.match( ret ) or jpegre2.match(ret) or jpegre3.match(ret) ):
     #print "jpeg: ",filename
-    dcmdjpeg_exec = "dcmdjpeg " + filename + " " + outputfilename
+    # +cn : conv-never
+    # +px : color by pixel
+    dcmdjpeg_exec = "dcmdjpeg +cn +px " + filename + " " + outputfilename
     ret = os.system( dcmdjpeg_exec )
     if ret:
       print "dcmdjpeg failed to decompress file. giving up"
