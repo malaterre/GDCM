@@ -36,12 +36,12 @@ namespace gdcm
 {
 
 /*
- * openssl genrsa -out CA_key.pem 2048 
+ * openssl genrsa -out CA_key.pem 2048
  *
  * openssl req -new -key CA_key.pem -x509 -days 365 -out CA_cert.cer
  */
 /*
- * openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
+ * openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem
  */
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype)
@@ -114,7 +114,7 @@ public:
   }
   bool Initialize()
     {
-    if(!cipher) 
+    if(!cipher)
       {
       cipher = CreateCipher( GetCipherType() );
       }
@@ -155,7 +155,7 @@ public:
       }
 
     BIO *data = BIO_new_mem_buf((void*)array, len);
-    if(!data) 
+    if(!data)
       {
       gdcmErrorMacro( "BIO_new_mem_buf" );
       return false;
@@ -178,7 +178,7 @@ public:
 
     // WARNING:
     // BIO_reset() normally returns 1 for success and 0 or -1 for failure. File
-    // BIOs are an exception, they return 0 for success and -1 for failure. 
+    // BIOs are an exception, they return 0 for success and -1 for failure.
     if( BIO_reset(bio_buffer) != 1 )
       {
       gdcmErrorMacro( "BIO_reset" );
@@ -190,7 +190,7 @@ public:
 
     char *binary;
     long biolen = BIO_get_mem_data(bio_buffer,&binary);
-    if ( outlen < biolen ) 
+    if ( outlen < biolen )
       {
       gdcmErrorMacro( "Allocation issue: " << outlen << " vs " << biolen << " from " << len );
       return false;
@@ -249,7 +249,7 @@ bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const cha
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   // RAND_status() and RAND_event() return 1 if the PRNG has been seeded with
-  // enough data, 0 otherwise. 
+  // enough data, 0 otherwise.
   if( !RAND_status() )
     {
     gdcmErrorMacro( "PRNG was not seeded properly" );
@@ -258,13 +258,17 @@ bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const cha
     }
   return Internals->Encrypt(output, outlen, array, len);
 #else
+  (void)output;
+  (void)array;
+  (void)len;
   outlen = 0;
+  gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif /* GDCM_USE_SYSTEM_OPENSSL */
 }
 
 /*
- $ openssl smime -decrypt -in /tmp/debug.der -inform DER -recip /tmp/server.pem -inkey CA_key.pem   
+ $ openssl smime -decrypt -in /tmp/debug.der -inform DER -recip /tmp/server.pem -inkey CA_key.pem
 */
 bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
@@ -314,7 +318,7 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
 
 
   /* This stuff is being setup for certificate verification.
-   * When using SSL, it could be replaced with a 
+   * When using SSL, it could be replaced with a
    * cert_stre=SSL_CTX_get_cert_store(ssl_ctx); */
   cert_store=X509_STORE_new();
   X509_STORE_set_default_paths(cert_store);
@@ -378,7 +382,11 @@ err:
   ERR_print_errors_fp(stderr);
   return false;
 #else
+  (void)output;
+  (void)array;
+  (void)len;
   outlen = 0;
+  gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif /* GDCM_USE_SYSTEM_OPENSSL */
 }
@@ -403,6 +411,7 @@ bool CryptographicMessageSyntax::ParseKeyFile( const char *keyfile)
   Internals->SetPrivateKey( pkey );
   return true;
 #else
+  (void)keyfile;
   gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif
@@ -429,6 +438,7 @@ bool CryptographicMessageSyntax::ParseCertificateFile( const char *keyfile)
   ::sk_X509_push(recips, x509);
   return true;
 #else
+  (void)keyfile;
   gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif
