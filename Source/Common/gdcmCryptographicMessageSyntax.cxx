@@ -123,7 +123,7 @@ public:
     // and openssl/crypto/pkcs7/enc.c
     if( !PKCS7_set_cipher(p7,cipher) ) return false;
 
-    for(int i = 0; i < GetNumberOfRecipients(); i++) {
+    for(unsigned int i = 0; i < GetNumberOfRecipients(); i++) {
       ::X509* recip = GetRecipient(i);
       if (!PKCS7_add_recipient(p7,recip)) return false;
     }
@@ -168,7 +168,12 @@ public:
       if (i <= 0) break;
       BIO_write(p7bio,buf,i);
       }
-    BIO_flush(p7bio);
+    // BIO_flush() returns 1 for success and 0 or -1 for failure.
+    if( BIO_flush(p7bio) != 1 )
+      {
+      gdcmErrorMacro( "BIO_flush" );
+      return false;
+      }
 
     if (!PKCS7_dataFinal(p7,p7bio))
       {
@@ -190,7 +195,8 @@ public:
 
     char *binary;
     long biolen = BIO_get_mem_data(bio_buffer,&binary);
-    if ( outlen < biolen )
+    gdcmAssertMacro( biolen >= 0 );
+    if ( outlen < (size_t)biolen )
       {
       gdcmErrorMacro( "Allocation issue: " << outlen << " vs " << biolen << " from " << len );
       return false;
@@ -282,9 +288,10 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
   BIO *data,*detached=NULL,*p7bio=NULL;
   char buf[1024*4];
   unsigned char *pp;
-  int i,printit=0;
+  int i;
   STACK_OF(PKCS7_SIGNER_INFO) *sk;
   char * ptr = output;
+  outlen = 0;
 
   OpenSSL_add_all_algorithms();
   //bio_err=BIO_new_fp(stderr,BIO_NOCLOSE);
@@ -346,6 +353,7 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
     //fwrite(buf,1, i, stdout);
     memcpy(ptr, buf, i);
     ptr += i;
+    outlen += i;
     }
 
   /* We can now verify signatures */
