@@ -1116,7 +1116,8 @@ jpeg_stdio_dest (j_compress_ptr cinfo, /*FILE * */ std::ostream * outfile)
 
 bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostream &os)
 {
-  int quality = 100;
+  int quality = 100; (void)len;
+  (void)quality;
   JSAMPLE * image_buffer = (JSAMPLE*)input;	/* Points to large array of R,G,B-order data */
   const unsigned int *dims = this->GetDimensions();
   int image_height = dims[1];	/* Number of rows in image */
