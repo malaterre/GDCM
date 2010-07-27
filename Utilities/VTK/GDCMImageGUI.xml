@@ -1,4 +1,4 @@
-  <!--
+<!--
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/DefaultDicts.xsl $
 
@@ -11,7 +11,8 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <ParaViewReaders>
-  <Reader name="GDCMImageReader" extensions="dcm"
+  <Reader name="GDCMImageReader"
+          extensions="dcm"
           file_description="DICOM Files">
   </Reader>
 </ParaViewReaders>
