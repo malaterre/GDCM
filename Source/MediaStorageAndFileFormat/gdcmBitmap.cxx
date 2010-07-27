@@ -339,7 +339,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
-      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
+      gdcm::PixelFormat pf = GetPixelFormat(); // gdcm::PixelFormat::UINT8;
       codec.SetPixelFormat( pf );
 
       std::stringstream ss;

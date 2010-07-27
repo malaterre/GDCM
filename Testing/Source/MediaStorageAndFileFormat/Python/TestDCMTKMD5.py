@@ -34,11 +34,11 @@ def TestDCMTKMD5( filename, verbose = False ):
   'MR_Spectroscopy_SIEMENS_OF.dcm',
   'ELSCINT1_PMSCT_RLE1.dcm',
   'SignedShortLosslessBug.dcm',
-  'JDDICOM_Sample2.dcm',
+  #'JDDICOM_Sample2.dcm',
   'GE_DLX-8-MONO2-PrivateSyntax.dcm',
   'PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm',
-  'DermaColorLossLess.dcm', # technically I could support this one...
-  'LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm', # idem
+  #'DermaColorLossLess.dcm', # technically I could support this one...
+  #'LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm', # idem
   'ALOKA_SSD-8-MONO2-RLE-SQ.dcm'] # this one is not supported by dcmtk 3.5.4
   for f in blacklist:
     if f in filename:
@@ -92,7 +92,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     gdcmraw += gdcmraw_args
     #print gdcmraw
     ret = os.system( gdcmraw )
-    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
     retval  = 0
@@ -113,7 +113,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     gdcmraw += gdcmraw_args
     #print gdcmraw
     ret = os.system( gdcmraw )
-    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
     retval  = 0
@@ -136,7 +136,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     if ret:
       print "failed with: ", gdcmraw
       return 1
-    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
     retval  = 0
@@ -163,9 +163,7 @@ if __name__ == "__main__":
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
       sucess += TestDCMTKMD5( filename )
-  
-  
+
   # Test succeed ?
   sys.exit(sucess)
-
 

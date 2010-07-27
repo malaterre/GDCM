@@ -664,6 +664,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
       list(APPEND components VTK${comp})
     endforeach(comp)
   endif(GDCM_USE_VTK)
+  if(GDCM_USE_PARAVIEW)
+    list(APPEND components ParaViewModule)
+  endif(GDCM_USE_PARAVIEW)
   # Ok this is the complete list of all components:
   set(CPACK_COMPONENTS_ALL ${components})
   
@@ -681,6 +684,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKPYTHONMODULE_DISPLAY_NAME "VTK/GDCM Python Module")
   set(CPACK_COMPONENT_VTKCSHARPMODULE_DISPLAY_NAME "VTK/GDCM C# Module")
   set(CPACK_COMPONENT_VTKJAVAMODULE_DISPLAY_NAME "VTK/GDCM Java Module")
+  set(CPACK_COMPONENT_PARAVIEWMODULE_DISPLAY_NAME "ParaView Module")
   
   # Provide descriptions for each of the components to install.
   # When the user hovers the mouse over the name of a component,
@@ -711,6 +715,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     "C# Module for VTK/GDCM")
   set(CPACK_COMPONENT_VTKJAVAMODULE_DESCRIPTION
     "Java Module for VTK/GDCM")
+  set(CPACK_COMPONENT_PARAVIEWMODULE_DESCRIPTION
+    "ParaView Module for VTK/GDCM")
 
 
   # Put the components into two different groups: "Runtime" and "Development"
@@ -726,6 +732,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKJAVAMODULE_GROUP "Development")
   set(CPACK_COMPONENT_VTKLIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_VTKHEADERS_GROUP "Development")
+  set(CPACK_COMPONENT_PARAVIEWMODULE_GROUP "Runtime")
   # Expand the "Development" group by default, since we have so few components.
   # Also, provide this group with a description.
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
@@ -746,6 +753,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKPYTHONMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKCSHARPMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKJAVAMODULE_DEPENDS VTKLibraries)
+  set(CPACK_COMPONENT_PARAVIEWMODULE_DEPENDS VTKLibraries)
   
   # Create two installation types with pre-selected components.
   # The "Developer" installation has just the library and headers,
@@ -764,6 +772,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKPYTHONMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKCSHARPMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKJAVAMODULE_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_PARAVIEWMODULE_INSTALL_TYPES Developer Full)
 
   INCLUDE(CPack)
 

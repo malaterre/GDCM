@@ -124,7 +124,7 @@ IF(GDCM_USE_ACTIVIZ AND UNIX)
     PATH)
 
   LINK_DIRECTORIES(${bla})
-  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF
     ${bla}/libvtkCommon.so
     #${bla}/libvtkIO.so
     ${bla}/libvtkImaging.so
@@ -211,8 +211,8 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
   IF(GDCM_USE_ACTIVIZ)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -221,8 +221,8 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
   ELSE(GDCM_USE_ACTIVIZ)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -239,7 +239,7 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
   #)
 
 ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
-  DEPENDS 
+  DEPENDS
     ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
     #${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
     #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
@@ -248,7 +248,7 @@ ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
 
   # because vtkgdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-  INSTALL(FILES 
+  INSTALL(FILES
     ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
     #${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
@@ -355,9 +355,10 @@ IF(GDCM_WRAP_PYTHON)
     ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ADD_LIBRARY(${VTKGDCM_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
     # this is a library set the version:
-    SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-    ADD_LIBRARY(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
     # do not set the version on the Python module:
+    #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    ADD_LIBRARY(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
+    # do not set the version on the PythonD module:
     #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME})
     FOREACH(c ${vtkgdcm_LIBS})
@@ -397,7 +398,7 @@ IF(GDCM_WRAP_PYTHON)
       #        )
       #  endif(NAMELINK_ONLY)
     # the python file is not a dev file, but part of the gdcm module...
-      INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py 
+      INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py
         DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule
       )
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
