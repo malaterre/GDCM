@@ -32,6 +32,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   'dicomdir_With_embedded_icons',
   # Unsupported file:
   'MR_Spectroscopy_SIEMENS_OF.dcm',
+  'gdcm-CR-DCMTK-16-NonSamplePerPix.dcm', # this is not an image
   'ELSCINT1_PMSCT_RLE1.dcm',
   'SignedShortLosslessBug.dcm',
   #'JDDICOM_Sample2.dcm',
@@ -68,7 +69,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   gdcm.System.MakeDirectory( outputdir )
   outputfilename = testing.GetTempFilename( filename, "TestDCMTKMD5" )
   executable_output_path = gdcm.GDCM_EXECUTABLE_OUTPUT_PATH
-  gdcmraw = executable_output_path + '/gdcmraw'
+  gdcmraw = executable_output_path + '/gdcmraw -P'
 
   if not ret:
     #print "empty, problem with:", filename

@@ -822,7 +822,8 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         //cinfo.jpeg_color_space = JCS_UNKNOWN;
         //cinfo.out_color_space = JCS_UNKNOWN;
         }
-      if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
+      if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL 
+      || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
         {
         cinfo.jpeg_color_space = JCS_UNKNOWN;
         cinfo.out_color_space = JCS_UNKNOWN;
