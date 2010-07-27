@@ -1307,8 +1307,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL_422 )
     {
-    assert( image.GetPixelFormat().GetSamplesPerPixel() == 3 );
-    this->ImageFormat = VTK_RGB;
+    this->ImageFormat = VTK_YBR;
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL )
     {
