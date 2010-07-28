@@ -155,9 +155,9 @@ MACRO(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   ENDIF(${VARIABLE})
 ENDMACRO(CHECK_INCLUDE_FILE_CONCAT)
 
-CHECK_INCLUDE_FILE("stdint.h"       CMAKE_HAVE_STDINT_H)
+CHECK_INCLUDE_FILE("stdint.h"       GDCM_HAVE_STDINT_H)
 IF(UNIX) #Avoid polluting Win32 cmakecache
-  CHECK_INCLUDE_FILE("inttypes.h"     CMAKE_HAVE_INTTYPES_H)
+  CHECK_INCLUDE_FILE("inttypes.h"     GDCM_HAVE_INTTYPES_H)
 ENDIF(UNIX)
 
 #INCLUDE(${GDCM_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cmake)
@@ -477,7 +477,7 @@ ENDIF(BUILD_TESTING AND GDCM_WRAP_JAVA)
 
 #-----------------------------------------------------------------------------
 # Need pthread for the following class:
-CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)
+CHECK_INCLUDE_FILE("pthread.h"      GDCM_HAVE_PTHREAD_H)
 
 # Big endian thing:
 INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
