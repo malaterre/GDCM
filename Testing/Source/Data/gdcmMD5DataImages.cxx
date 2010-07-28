@@ -346,7 +346,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 16 1 */
 { "09661bd8516aeb5a6f09239f9ca1b092" , "TOSHIBA_MRT150-16-MONO2-ACR_NEMA_2.dcm" },
 /* gdcm 636 434 1 8 3 */
-{ "437b3b7516a4c91a29edeb5846ec826b" , "US-GE-4AICL142.dcm" },
+{ "23ec8ed09e1ecc353c2e6436a1de6cb2" , "US-GE-4AICL142.dcm" },
 /* gdcm 640 480 1 8 1 */
 { "ba092234639594ee9091b46997532cce" , "US-IRAD-NoPreambleStartWith0003.dcm" },
 /* gdcm 640 480 1 8 1 */
@@ -648,6 +648,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "209bc9b02004a712f0436a1ca5e676b4", "multiframesinglebitscis.dcm" },
 { "c8698fa1ec0b227113f244954b8e88f4", "multiframegrayscalebytescis.dcm" },
 { "dce1513162a762bf43dcc3c9d5c5c3f7", "multiframetruecolorscis.dcm" },
+
+{ "6bf95a48f366bdf8af3a198c7b723c77", "SinglePrecisionSC.dcm" },
 
 
 /* Stopping condition */
