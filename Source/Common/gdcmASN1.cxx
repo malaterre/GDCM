@@ -72,7 +72,7 @@ bool ASN1::ParseDump(const char *array, size_t length)
   int indent = 1; // 0 is not visually nice
   int dump = 0; // -1 => will print hex stuff
 	BIO *out=NULL;
-  
+
 	out=BIO_new(BIO_s_file());
   assert( out );
 	BIO_set_fp(out,stdout,BIO_NOCLOSE|BIO_FP_TEXT);
@@ -83,10 +83,14 @@ bool ASN1::ParseDump(const char *array, size_t length)
 
   return true;
 #else
+  (void)array;
+  (void)length;
+  gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif
 }
 
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 static int print_hex(unsigned char *buf, int len)
 {
 	int i;
@@ -104,6 +108,7 @@ static int print_hex(unsigned char *buf, int len)
 
 	return(0);
 }
+#endif
 
 
 int ASN1::TestPBKDF2()

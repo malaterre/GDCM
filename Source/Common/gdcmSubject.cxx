@@ -200,7 +200,7 @@ PrintObservers(std::ostream& os, std::string indent) const
       i != m_Observers.end(); ++i)
     {
     const Event * e =  (*i)->m_Event;
-    const Command* c = (*i)->m_Command;
+    const Command* c = (*i)->m_Command; (void)c;
     os << indent << e->GetEventName() << "(" /*<< c->GetNameOfClass()*/ << ")\n";
     }
   return true;

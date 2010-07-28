@@ -215,9 +215,9 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
             assert(0 && "Should not happen");
             }
           }
-        catch( std::exception &ex )
+        catch( std::exception &ex2 )
           {
-          (void)ex;
+          (void)ex2;
           ValueLengthField = ValueField->GetLength();
           }
         return is;
