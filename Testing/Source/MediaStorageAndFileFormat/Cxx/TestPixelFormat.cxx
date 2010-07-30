@@ -47,9 +47,11 @@ int TestPixelFormat(int , char *[])
     {
     PixelFormat::ScalarType st = (PixelFormat::ScalarType)i;
     pf.SetScalarType( st );
+    gdcm::PixelFormat pf2 = st;
     std::cout << pf << std::endl;
     std::cout << pf.GetPixelRepresentation() << std::endl;
     std::cout << pf.GetScalarTypeAsString() << std::endl;
+    if( pf2 != pf ) return 1;
     }
   return 0;
 }
