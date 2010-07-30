@@ -75,14 +75,16 @@ public:
   // For transparency of use
   operator ScalarType() const { return GetScalarType(); }
 
-  /// Samples Per Pixel
+  /// Samples Per Pixel see (0028,0002) US Samples Per Pixel
   unsigned short GetSamplesPerPixel() const;
   void SetSamplesPerPixel(unsigned short spp)
     {
+    gdcmAssertMacro( spp <= 4 );
     SamplesPerPixel = spp;
+    assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
     }
 
-  /// BitsAllocated
+  /// BitsAllocated see Tag (0028,0100) US Bits Allocated
   unsigned short GetBitsAllocated() const
     {
     return BitsAllocated;
@@ -92,7 +94,7 @@ public:
     BitsAllocated = ba;
     }
 
-  /// BitsStored
+  /// BitsStored see Tag (0028,0101) US Bits Stored
   unsigned short GetBitsStored() const
     {
     return BitsStored;
@@ -102,7 +104,7 @@ public:
     BitsStored = bs;
     }
 
-  /// HighBit
+  /// HighBit see Tag (0028,0102) US High Bit
   unsigned short GetHighBit() const
     {
     return HighBit;
@@ -112,23 +114,21 @@ public:
     HighBit = hb;
     }
 
-  /// PixelRepresentation
+  /// PixelRepresentation: 0 or 1, see Tag (0028,0103) US Pixel Representation
   unsigned short GetPixelRepresentation() const
     {
-    assert( PixelRepresentation == 0
-         || PixelRepresentation == 1 );
-    return PixelRepresentation;
+    return PixelRepresentation ? 1 : 0;
     }
   void SetPixelRepresentation(unsigned short pr)
     {
-    assert( PixelRepresentation == 0
-         || PixelRepresentation == 1 );
-    PixelRepresentation = pr;
+    PixelRepresentation = (pr ? 1 : 0);
     }
 
   /// ScalarType does not take into account the sample per pixel
   ScalarType GetScalarType() const;
-  // BUG: You need to call SetScalarType *before* SetSamplesPerPixel
+
+  /// Set PixelFormat based only on the ScalarType
+  /// \warning: You need to call SetScalarType *before* SetSamplesPerPixel
   void SetScalarType(ScalarType st);
   const char *GetScalarTypeAsString() const;
 
