@@ -119,8 +119,9 @@ bool VR::IsVRFile() const
   case VR::US:
   case VR::UT:
     return true;
+  default:
+    return false;
     }
-  return false;
 }
 
 
@@ -540,8 +541,9 @@ bool VR::IsDual() const
   case US_SS :
   case US_SS_OW :
     return true;
+  default:
+    return false;
     }
-  return false;
 }
 
 
