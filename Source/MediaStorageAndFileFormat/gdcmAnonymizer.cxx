@@ -456,14 +456,14 @@ bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, S
       {
       const DataElement &de = *it;
       VR vr = DataSetHelper::ComputeVR(file, nested, de.GetTag() );
-      SmartPointer<SequenceOfItems> sqi = 0;
+      SmartPointer<SequenceOfItems> sqi2 = 0;
       if( vr == VR::SQ )
         {
-        sqi = de.GetValueAsSQ();
+        sqi2 = de.GetValueAsSQ();
         }
-      if( sqi )
+      if( sqi2 )
         {
-        found = CheckIfSequenceContainsAttributeToAnonymize(file, sqi);
+        found = CheckIfSequenceContainsAttributeToAnonymize(file, sqi2);
         }
       }
     }
@@ -518,9 +518,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   sq1->SetLengthToUndefined();
 
   // Create a *single* item
-  Item it;
-  it.SetVLToUndefined();
-  DataSet &encryptedds = it.GetNestedDataSet();
+  Item item;
+  item.SetVLToUndefined();
+  DataSet &encryptedds = item.GetNestedDataSet();
   // Loop over root level attributes:
   for(const Tag *ptr = start ; ptr != end ; ++ptr)
     {
@@ -565,7 +565,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 }
 
   this->InvokeEvent( IterationEvent() );
-  sq1->AddItem(it);
+  sq1->AddItem(item);
 
   DataElement des( Tag(0x0400,0x0550) );
   des.SetVR(VR::SQ);
@@ -617,13 +617,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     delete[] orig;
 
     // Create an item
-    Item it;
-    it.SetVLToUndefined();
-    DataSet &nds = it.GetNestedDataSet();
+    Item item;
+    item.SetVLToUndefined();
+    DataSet &nds = item.GetNestedDataSet();
     nds.Insert(encrypted_ts_de);
     nds.Insert(encrypted_de);
 
-    sq->AddItem(it);
+    sq->AddItem(item);
 
     // 4. All instances of the Encrypted Attributes Data Set shall be encoded with a DICOM Transfer Syntax,
     // encrypted, and stored in the dataset to be protected as an Item of the Encrypted Attributes Sequence
