@@ -158,6 +158,7 @@ PDBElement PDBHeader::PDBEEnd = PDBElement( );
 
 int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
 {
+  (void)verbose;
   // First 4 bytes are the length (again)
   uint32_t len = *(uint32_t*)input;
   //if( verbose )
