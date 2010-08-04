@@ -638,7 +638,7 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
   gdcm::DataSet &rootds = GetFile().GetDataSet();
   gdcm::Scanner const & scanner = GetScanner();
 
-  const Attribute<0x8,0x18> sopinstanceuid;
+  const Attribute<0x8,0x18> sopinstanceuid = {0};
   gdcm::Scanner::ValuesType sopinstanceuids = scanner.GetValues( sopinstanceuid.GetTag() );
   unsigned int ninstance = sopinstanceuids.size();
 
