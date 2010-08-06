@@ -703,7 +703,7 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
       }
     ds.Insert( referencedtransfersyntaxuidinfile.GetAsDataElement() );
 
-    Attribute<0x20,0x13> instancenumber;
+    Attribute<0x20,0x13> instancenumber = { 0 };
     if( ttv.find( instancenumber.GetTag() ) != ttv.end() )
       {
       instancenumber.SetValue( atoi(ttv.find(instancenumber.GetTag())->second) );
