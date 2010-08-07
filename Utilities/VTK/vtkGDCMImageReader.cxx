@@ -44,6 +44,7 @@
 #include "gdcmUnpacker12Bits.h"
 #include "gdcmRescaler.h"
 #include "gdcmOrientation.h"
+#include "gdcmTrace.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 
 #include <sstream>
@@ -97,6 +98,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
 #endif
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+  //this->SetNumberOfInputPorts(0);
 #else
   this->FileNames = NULL; //vtkStringArray::New();
 #endif
@@ -585,11 +587,11 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 }
 #endif
 
-gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames)
+gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames, gdcm::PixelFormat const & pixeltype_ref)
 {
   gdcm::PixelFormat::ScalarType outputpt ;
   outputpt = gdcm::PixelFormat::UNKNOWN;
-  // there is a very subbtle bug here. Let's imagine we have a collection of files
+  // there is a very subtle bug here. Let's imagine we have a collection of files
   // they can all have different Rescale Slope / Intercept. In this case we should:
   // 1. Make sure to read each Rescale Slope / Intercept individually
   // 2. Make sure to decide which Pixel Type to use using *all* slices:
@@ -669,6 +671,7 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
     {
     assert( 0 ); // I do not think this is possible
     }
+  gdcmAssertMacro( outputpt >= pixeltype_ref );
 
   return outputpt;
 }
@@ -831,7 +834,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   this->Scale = image.GetSlope();
 
   //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
-  gdcm::PixelFormat::ScalarType outputpt = ComputePixelTypeFromFiles(this->FileName, this->FileNames);
+  gdcm::PixelFormat::ScalarType outputpt = ComputePixelTypeFromFiles(this->FileName, this->FileNames, pixeltype);
 
   // Compute output pixel format when Rescaling:
 //  if( this->Shift != 0 || this->Scale != 1. )
