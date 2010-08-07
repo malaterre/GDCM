@@ -518,9 +518,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   sq1->SetLengthToUndefined();
 
   // Create a *single* item
-  Item item;
-  item.SetVLToUndefined();
-  DataSet &encryptedds = item.GetNestedDataSet();
+  Item item1;
+  item1.SetVLToUndefined();
+  DataSet &encryptedds = item1.GetNestedDataSet();
   // Loop over root level attributes:
   for(const Tag *ptr = start ; ptr != end ; ++ptr)
     {
@@ -565,7 +565,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 }
 
   this->InvokeEvent( IterationEvent() );
-  sq1->AddItem(item);
+  sq1->AddItem(item1);
 
   DataElement des( Tag(0x0400,0x0550) );
   des.SetVR(VR::SQ);
@@ -617,13 +617,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     delete[] orig;
 
     // Create an item
-    Item item;
-    item.SetVLToUndefined();
-    DataSet &nds = item.GetNestedDataSet();
+    Item item2;
+    item2.SetVLToUndefined();
+    DataSet &nds = item2.GetNestedDataSet();
     nds.Insert(encrypted_ts_de);
     nds.Insert(encrypted_de);
 
-    sq->AddItem(item);
+    sq->AddItem(item2);
 
     // 4. All instances of the Encrypted Attributes Data Set shall be encoded with a DICOM Transfer Syntax,
     // encrypted, and stored in the dataset to be protected as an Item of the Encrypted Attributes Sequence
