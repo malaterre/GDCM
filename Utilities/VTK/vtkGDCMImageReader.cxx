@@ -671,7 +671,7 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
     {
     assert( 0 ); // I do not think this is possible
     }
-  gdcmAssertMacro( outputpt >= pixeltype_ref );
+  //gdcmAssertMacro( outputpt >= pixeltype_ref );
 
   return outputpt;
 }
@@ -1068,17 +1068,19 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
-  unsigned long len = image.GetBufferLength();
+  /*const*/ unsigned long len = image.GetBufferLength();
   outlen = len;
   unsigned long overlaylen = 0;
-  image.GetBuffer(pointer);
+  //image.GetBuffer(pointer);
   if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
   {
-    assert( Scale == 1.0 && Shift == 0.0 );
+    assert( this->Scale == 1.0 && this->Shift == 0.0 );
+    assert( !this->ForceRescale );
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     // FIXME: I could avoid this extra copy:
     char * copy = new char[len];
-    memcpy(copy, pointer, len);
+    //memcpy(copy, pointer, len);
+    image.GetBuffer(pointer);
     gdcm::Unpacker12Bits u12;
     u12.Unpack(pointer, copy, len);
     // update len just in case:
@@ -1089,7 +1091,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
 
-  if( Scale != 1.0 || Shift != 0.0 || this->ForceRescale )
+  if( this->Scale != 1.0 || this->Shift != 0.0 || this->ForceRescale )
   {
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
@@ -1145,13 +1147,18 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     r.SetUseTargetPixelType(true);
     r.SetPixelFormat( pixeltype );
     char * copy = new char[len];
-    memcpy(copy, pointer, len);
+    //memcpy(copy, pointer, len);
+    image.GetBuffer(copy);
     r.Rescale(pointer,copy,len);
     delete[] copy;
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
     assert( data->GetNumberOfScalarComponents() == 1 );
   }
+  else
+    {
+    image.GetBuffer(pointer);
+    }
 
   // Do the Icon Image:
   if( this->LoadIconImage )
