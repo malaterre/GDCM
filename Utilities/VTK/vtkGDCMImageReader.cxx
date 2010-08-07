@@ -1072,6 +1072,10 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   outlen = len;
   unsigned long overlaylen = 0;
   //image.GetBuffer(pointer);
+  // HACK: Make sure that Shift/Scale are the one from the file:
+  this->Shift = image.GetIntercept();
+  this->Scale = image.GetSlope();
+
   if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
   {
     assert( this->Scale == 1.0 && this->Shift == 0.0 );
@@ -1087,11 +1091,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     len = 16 * len / 12;
     delete[] copy;
   }
-  // HACK: Make sure that Shift/Scale are the one from the file:
-  this->Shift = image.GetIntercept();
-  this->Scale = image.GetSlope();
-
-  if( this->Scale != 1.0 || this->Shift != 0.0 || this->ForceRescale )
+  else if( this->Scale != 1.0 || this->Shift != 0.0 || this->ForceRescale )
   {
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
