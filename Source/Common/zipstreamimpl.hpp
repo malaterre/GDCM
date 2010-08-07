@@ -735,7 +735,7 @@ int
 basic_zip_istream<charT, traits>::check_header(void)
 {
     int method; /* method byte */
-    int flags;  /* flags byte */
+    int flagsbyte;  /* flags byte */
     uInt len;
     int c;
     int err=0;
@@ -762,8 +762,8 @@ basic_zip_istream<charT, traits>::check_header(void)
     
     _is_gzip = true;
     method = (int)this->get_istream().get();
-    flags = (int)this->get_istream().get();
-    if (method != Z_DEFLATED || (flags & detail::gz_reserved) != 0) 
+    flagsbyte = (int)this->get_istream().get();
+    if (method != Z_DEFLATED || (flagsbyte & detail::gz_reserved) != 0) 
     {
         err = Z_DATA_ERROR;
         return err;
@@ -773,7 +773,7 @@ basic_zip_istream<charT, traits>::check_header(void)
     for (len = 0; len < 6; len++) 
         this->get_istream().get();
     
-    if ((flags & detail::gz_extra_field) != 0) 
+    if ((flagsbyte & detail::gz_extra_field) != 0) 
     { 
         /* skip the extra field */
         len  =  (uInt)this->get_istream().get();
@@ -781,17 +781,17 @@ basic_zip_istream<charT, traits>::check_header(void)
         /* len is garbage if EOF but the loop below will quit anyway */
         while (len-- != 0 && this->get_istream().get() != EOF) ;
     }
-    if ((flags & detail::gz_orig_name) != 0) 
+    if ((flagsbyte & detail::gz_orig_name) != 0) 
     { 
         /* skip the original file name */
         while ((c = this->get_istream().get()) != 0 && c != EOF) ;
     }
-    if ((flags & detail::gz_comment) != 0) 
+    if ((flagsbyte & detail::gz_comment) != 0) 
     {   
         /* skip the .gz file comment */
         while ((c = this->get_istream().get()) != 0 && c != EOF) ;
     }
-    if ((flags & detail::gz_head_crc) != 0) 
+    if ((flagsbyte & detail::gz_head_crc) != 0) 
     {  /* skip the header crc */
         for (len = 0; len < 2; len++) 
             this->get_istream().get();
