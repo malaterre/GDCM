@@ -31,21 +31,21 @@ int TestDICOMDIRGenerator(int argc, char *argv[])
   int recursive = 0;
   unsigned int nfiles = 1;
 
-    const char subdir[] = "TestImageChangeTransferSyntax4";
-    std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
-    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
-      {
-      std::cerr << "Need to run TestImageChangeTransferSyntax4 before" << std::endl;
-      return 1;
-      }
-    directory = tmpdir.c_str();
+  const char subdir[] = "TestImageChangeTransferSyntax4";
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+    {
+    std::cerr << "Need to run TestImageChangeTransferSyntax4 before" << std::endl;
+    return 1;
+    }
+  directory = tmpdir.c_str();
 
-    const char outsubdir[] = "TestDICOMDIRGenerator";
-    std::string outtmpdir = gdcm::Testing::GetTempDirectory( outsubdir );
-    if( !gdcm::System::FileIsDirectory( outtmpdir.c_str() ) )
-      {
-      gdcm::System::MakeDirectory( outtmpdir.c_str() );
-      }
+  const char outsubdir[] = "TestDICOMDIRGenerator";
+  std::string outtmpdir = gdcm::Testing::GetTempDirectory( outsubdir );
+  if( !gdcm::System::FileIsDirectory( outtmpdir.c_str() ) )
+    {
+    gdcm::System::MakeDirectory( outtmpdir.c_str() );
+    }
 
   nfiles = dir.Load(directory, recursive);
 
