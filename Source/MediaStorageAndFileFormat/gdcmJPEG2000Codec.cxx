@@ -938,7 +938,10 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 
   if( image->numcomps == 1 )
     {
-    assert( image->color_space == 0 );
+    // normally we have codec only, but in some case we have a JP2 with
+    // color space info:
+    // - gdcmData/MAROTECH_CT_JP2Lossy.dcm
+    assert( image->color_space == 0 || image->color_space == CLRSPC_GRAY );
     PI = PhotometricInterpretation::MONOCHROME2;
     this->PF.SetSamplesPerPixel( 1 );
     }
