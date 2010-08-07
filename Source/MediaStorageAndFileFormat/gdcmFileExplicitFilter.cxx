@@ -156,11 +156,11 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       de.SetVLToUndefined();
       assert( sqi->GetLength().IsUndefined() );
       // recursive
-      SequenceOfItems::ItemVector::iterator it = sqi->Items.begin();
-      for(; it != sqi->Items.end(); ++it)
+      SequenceOfItems::ItemVector::iterator sit = sqi->Items.begin();
+      for(; sit != sqi->Items.end(); ++sit)
         {
-        //Item &item = const_cast<Item&>(*it);
-        Item &item = *it;
+        //Item &item = const_cast<Item&>(*sit);
+        Item &item = *sit;
         item.SetVLToUndefined();
         DataSet &nds = item.GetNestedDataSet();
         //const DataElement &deitem = item;
