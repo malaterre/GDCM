@@ -941,13 +941,14 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     // normally we have codec only, but in some case we have a JP2 with
     // color space info:
     // - gdcmData/MAROTECH_CT_JP2Lossy.dcm
-    assert( image->color_space == 0 || image->color_space == CLRSPC_GRAY );
+    // - gdcmData/D_CLUNIE_CT1_J2KI.dcm -> color_space = 32767
+    //assert( image->color_space == 0 || image->color_space == CLRSPC_GRAY );
     PI = PhotometricInterpretation::MONOCHROME2;
     this->PF.SetSamplesPerPixel( 1 );
     }
   else if( image->numcomps == 3 )
     {
-    assert( image->color_space == 0 );
+    //assert( image->color_space == 0 );
     //PI = PhotometricInterpretation::RGB;
     /*
     8.2.4 JPEG 2000 IMAGE COMPRESSION 
