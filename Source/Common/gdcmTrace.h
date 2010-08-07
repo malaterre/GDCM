@@ -94,20 +94,20 @@ private:
 #ifdef NDEBUG
 #define gdcmDebugMacro(msg) {}
 #else
-#define gdcmDebugMacro(msg)                                 \
-{                                                           \
-   if( Trace::GetDebugFlag() )                              \
-   {                                                        \
-   std::ostringstream osmacro;                              \
-   osmacro << "Debug: In " __FILE__ ", line " << __LINE__   \
-           << ", function " << GDCM_FUNCTION << '\n'        \
-           << "Last system error was: " << strerror(errno)  \
-           << '\n' << msg << "\n\n";                        \
-   if( Trace::GetDebugToFile() )                            \
-      Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                     \
-      std::cerr << osmacro.str() << std::endl;              \
-   }                                                        \
+#define gdcmDebugMacro(msg)                                       \
+{                                                                 \
+   if( gdcm::Trace::GetDebugFlag() )                              \
+   {                                                              \
+   std::ostringstream osmacro;                                    \
+   osmacro << "Debug: In " __FILE__ ", line " << __LINE__         \
+           << ", function " << GDCM_FUNCTION << '\n'              \
+           << "Last system error was: " << strerror(errno)        \
+           << '\n' << msg << "\n\n";                              \
+   if( gdcm::Trace::GetDebugToFile() )                            \
+      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
+   else                                                           \
+      std::cerr << osmacro.str() << std::endl;                    \
+   }                                                              \
 }
 #endif //NDEBUG
 
@@ -118,19 +118,19 @@ private:
 #ifdef NDEBUG
 #define gdcmWarningMacro(msg) {}
 #else
-#define gdcmWarningMacro(msg)                               \
-{                                                           \
-   if( Trace::GetWarningFlag() )                            \
-   {                                                        \
-   std::ostringstream osmacro;                              \
-   osmacro << "Warning: In " __FILE__ ", line " << __LINE__ \
-           << ", function " << GDCM_FUNCTION << "\n"        \
-           << msg << "\n\n";                                \
-   if( Trace::GetDebugToFile() )                            \
-      Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                     \
-      std::cerr << osmacro.str() << std::endl;              \
-   }                                                        \
+#define gdcmWarningMacro(msg)                                     \
+{                                                                 \
+   if( gdcm::Trace::GetWarningFlag() )                            \
+   {                                                              \
+   std::ostringstream osmacro;                                    \
+   osmacro << "Warning: In " __FILE__ ", line " << __LINE__       \
+           << ", function " << GDCM_FUNCTION << "\n"              \
+           << msg << "\n\n";                                      \
+   if( gdcm::Trace::GetDebugToFile() )                            \
+      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
+   else                                                           \
+      std::cerr << osmacro.str() << std::endl;                    \
+   }                                                              \
 }
 #endif //NDEBUG
 
@@ -142,19 +142,19 @@ private:
 #ifdef NDEBUG
 #define gdcmErrorMacro(msg) {}
 #else
-#define gdcmErrorMacro(msg)                                 \
-{                                                           \
-   if( Trace::GetErrorFlag() )                              \
-   {                                                        \
-   std::ostringstream osmacro;                              \
-   osmacro << "Error: In " __FILE__ ", line " << __LINE__   \
-           << ", function " << GDCM_FUNCTION << '\n'        \
-           << msg << "\n\n";                                \
-   if( Trace::GetDebugToFile() )                            \
-      Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                     \
-      std::cerr << osmacro.str() << std::endl;              \
-   }                                                        \
+#define gdcmErrorMacro(msg)                                       \
+{                                                                 \
+   if( gdcm::Trace::GetErrorFlag() )                              \
+   {                                                              \
+   std::ostringstream osmacro;                                    \
+   osmacro << "Error: In " __FILE__ ", line " << __LINE__         \
+           << ", function " << GDCM_FUNCTION << '\n'              \
+           << msg << "\n\n";                                      \
+   if( gdcm::Trace::GetDebugToFile() )                            \
+      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
+   else                                                           \
+      std::cerr << osmacro.str() << std::endl;                    \
+   }                                                              \
 }
 #endif //NDEBUG
 
@@ -167,20 +167,20 @@ private:
 #ifdef NDEBUG
 #define gdcmAssertMacro(arg) {}
 #else
-#define gdcmAssertMacro(arg)                                \
-{                                                           \
-   if( !(arg) )                                             \
-   {                                                        \
-   std::ostringstream osmacro;                              \
-   osmacro << "Assert: In " __FILE__ ", line " << __LINE__  \
-           << ", function " << GDCM_FUNCTION                \
-           << "\n\n";                                       \
-   if( Trace::GetDebugToFile() )                            \
-      Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                     \
-      std::cerr << osmacro.str() << std::endl;              \
-   assert ( arg );                                          \
-   }                                                        \
+#define gdcmAssertMacro(arg)                                      \
+{                                                                 \
+   if( !(arg) )                                                   \
+   {                                                              \
+   std::ostringstream osmacro;                                    \
+   osmacro << "Assert: In " __FILE__ ", line " << __LINE__        \
+           << ", function " << GDCM_FUNCTION                      \
+           << "\n\n";                                             \
+   if( gdcm::Trace::GetDebugToFile() )                            \
+      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
+   else                                                           \
+      std::cerr << osmacro.str() << std::endl;                    \
+   assert ( arg );                                                \
+   }                                                              \
 }
 #endif //NDEBUG
 
@@ -194,15 +194,15 @@ private:
 // User asked for release compilation, but still need to report
 // if grave issue.
 #define gdcmAssertAlwaysMacro(arg) \
-{                                                           \
-   if( !(arg) )                                             \
-   {                                                        \
-   std::ostringstream osmacro;                              \
-   osmacro << "Assert: In " __FILE__ ", line " << __LINE__  \
-           << ", function " << GDCM_FUNCTION                \
-           << "\n\n";                                       \
-   throw osmacro.str();                                          \
-   }                                                        \
+{                                                                 \
+   if( !(arg) )                                                   \
+   {                                                              \
+   std::ostringstream osmacro;                                    \
+   osmacro << "Assert: In " __FILE__ ", line " << __LINE__        \
+           << ", function " << GDCM_FUNCTION                      \
+           << "\n\n";                                             \
+   throw osmacro.str();                                           \
+   }                                                              \
 }
 #else
 // Simply reproduce gdcmAssertMacro behavior:
