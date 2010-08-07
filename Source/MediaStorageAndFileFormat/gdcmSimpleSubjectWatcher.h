@@ -32,7 +32,7 @@ class GDCM_EXPORT SimpleSubjectWatcher
 {
 public:
   SimpleSubjectWatcher(Subject * s, const char *comment = "");
-  ~SimpleSubjectWatcher();
+  virtual ~SimpleSubjectWatcher();
 
 protected:
   virtual void StartFilter();
