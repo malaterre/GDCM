@@ -1186,6 +1186,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             std::stringstream os;
             el.Write( os );
             de.SetVR( VR::DS );
+            if( os.str().size() % 2 ) os << " ";
             de.SetByteValue( os.str().c_str(), os.str().size() );
             ds.Replace( de );
             }
