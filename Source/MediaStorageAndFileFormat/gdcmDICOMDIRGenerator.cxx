@@ -970,8 +970,9 @@ the File-set.
   h.FillFromDataSet( ds );
   VL fmi_len = h.GetFullLength();
   VL fmi_len_offset = 0;
-  gdcm::DataSet::ConstIterator it = ds.Begin();
-  for( ; it != ds.End() && it->GetTag() != Tag(0x0004,0x1220); ++it)
+{
+  gdcm::DataSet::ConstIterator it = ds.Begin(); 
+  for(; it != ds.End() && it->GetTag() != Tag(0x0004,0x1220); ++it)
     {
     const DataElement &de = *it;
     fmi_len_offset += de.GetLength<ExplicitDataElement>();
@@ -980,6 +981,7 @@ the File-set.
   fmi_len_offset += it->GetTag().GetLength();
   fmi_len_offset += it->GetVR().GetLength();
   fmi_len_offset += it->GetVR().GetLength();
+}
   //std::cerr << fmi_len << " and " << fmi_len_offset << std::endl;
   offsetofthefirstdirectoryrecordoftherootdirectoryentity.SetValue( fmi_len + fmi_len_offset );
   ds.Replace( offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetAsDataElement() );
