@@ -81,7 +81,7 @@ void UpdatePhotometricInterpretation( Bitmap const &input, Bitmap &output )
 
 bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
-  unsigned long len = input.GetBufferLength();
+  unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
