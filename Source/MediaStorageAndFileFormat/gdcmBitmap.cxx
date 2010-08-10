@@ -372,16 +372,18 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     // Did PI change or not ?
     if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
       {
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      gdcm::Bitmap *i = (gdcm::Bitmap*)this; (void)i;
       //i->SetPlanarConfiguration( codec.GetPlanarConfiguration() );
       }
-    if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
-      {
-      // HACK
-      // YBRisGray.dcm 
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
-      i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
-      }
+    // I cannot re-activate the following since I would loose the palette color information
+    // (this is not stored in the JPEG header).
+    //if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
+    //  {
+    //  // HACK
+    //  // YBRisGray.dcm 
+    //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+    //  i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+    //  }
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
@@ -396,6 +398,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
+    (void)check;
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
     assert( len <= outbv->GetLength() );
     if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
@@ -439,6 +442,7 @@ bool Bitmap::TryJPEGCodec2(std::ostream &os) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
+    (void)check;
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
     assert( outbv->GetLength() < len );
     //memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );
@@ -471,6 +475,7 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
+    (void)check;
     assert( len <= outbv->GetLength() );
     if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
@@ -503,6 +508,7 @@ bool Bitmap::TryKAKADUCodec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
+    (void)check;
     assert( len <= outbv->GetLength() );
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
     assert( len <= outbv->GetLength() );
@@ -541,6 +547,7 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
+    (void)check;
     assert( len <= outbv->GetLength() );
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
     assert( len <= outbv->GetLength() );
@@ -620,6 +627,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
+    (void)check;
     assert( len <= outbv->GetLength() );
     if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
@@ -643,6 +651,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
 bool Bitmap::TryJPEG2000Codec2(std::ostream &os) const
 {
   unsigned long len = GetBufferLength();
+  (void)len;
   const TransferSyntax &ts = GetTransferSyntax();
 
   JPEG2000Codec codec;
@@ -660,6 +669,7 @@ bool Bitmap::TryJPEG2000Codec2(std::ostream &os) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
+    (void)check;
     //memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     os.write(outbv->GetPointer(), outbv->GetLength() );
     return r;

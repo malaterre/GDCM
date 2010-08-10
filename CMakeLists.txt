@@ -13,15 +13,15 @@ SET(GDCM_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM. GDCM is yet anoth
 SET(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net>")
 
 # TODO
-# http://www.vtk.org/pipermail/vtkusers/2007-May/090968.html 
-# 
+# http://www.vtk.org/pipermail/vtkusers/2007-May/090968.html
+#
 # False memory leak reports are caused by VTK dlls loading *before* MFC dlls.
 # You have to use the linker's /delayload flag to avoid this issue.
-# 
+#
 # The /delayload flag should be correct by default in the MFC examples if you
 # are using CVS VTK... If you are using a previous version of VTK (5.0 or
 # earlier) then you will have to figure out a way to link with that flag.
-# 
+#
 # See the CVS version of files in VTK/GUISupport/MFC for details. Or grep the
 # VTK source tree for "DELAYLOAD"
 
@@ -87,8 +87,8 @@ ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
 # and later
 IF(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400)
   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
-  ADD_DEFINITIONS(-D_SCL_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS) 
-ENDIF(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400) 
+  ADD_DEFINITIONS(-D_SCL_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS)
+ENDIF(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400)
 
 #-----------------------------------------------------------------------------
 # Build shared lib by default
@@ -377,7 +377,7 @@ MARK_AS_ADVANCED(BUILD_TESTING) # GDCM_BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 IF(GDCM_TESTING_USE_LC_NUMERIC)
-  SET(CMAKE_TESTDRIVER_BEFORE_TESTMAIN 
+  SET(CMAKE_TESTDRIVER_BEFORE_TESTMAIN
     "setlocale(LC_ALL,\"fr_FR.UTF-8\");std::locale::global(std::locale(\"fr_FR.UTF-8\"));"
     )
 ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
@@ -387,11 +387,11 @@ ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
 #FIND_PACKAGE(PythonInterp REQUIRED)
 #MACRO(GET_PYTHON_SITE_PACKAGE dir)
 #  EXECUTE_PROCESS(
-#  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
-#  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
-#  	RESULT_VARIABLE import_res
-#  	OUTPUT_VARIABLE import_output
-#  	ERROR_VARIABLE  import_error
+#  COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
+#  #WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
+#  RESULT_VARIABLE import_res
+#  OUTPUT_VARIABLE import_output
+#  ERROR_VARIABLE  import_error
 #    OUTPUT_STRIP_TRAILING_WHITESPACE
 #  )
 #  #SET(dir ${import_output})
@@ -402,7 +402,7 @@ ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
 #IF(import_output)
 #STRING(LENGTH ${import_output} len)
 ## let's remove the "/usr/lib" part...
-#MATH(EXPR fileend "${len} - 9") 
+#MATH(EXPR fileend "${len} - 9")
 #STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
 #IF(UNIX)
 #  SET(python_site_package ${dummy1})
@@ -583,7 +583,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     STRING(REPLACE ${PROJECT_NAME} ${CPACK_PACKAGE_INSTALL_DIRECTORY} dummy ${CMAKE_INSTALL_PREFIX} )
     SET(CMAKE_INSTALL_PREFIX ${dummy} CACHE PATH "" FORCE)
     ENDIF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
-    
+
   ELSE(WIN32 AND NOT UNIX)
     # http://www.vtk.org/Wiki/CMake:CPackConfiguration
     # List of files to be stripped. Starting with CMake 2.6.0 CPACK_STRIP_FILES will be a boolean variable which enables
@@ -669,7 +669,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   endif(GDCM_USE_PARAVIEW)
   # Ok this is the complete list of all components:
   set(CPACK_COMPONENTS_ALL ${components})
-  
+
   # Set the displayed names for each of the components to install.
   # These will be displayed in the list of components inside the installer.
   set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "GDCM Applications")
@@ -685,7 +685,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKCSHARPMODULE_DISPLAY_NAME "VTK/GDCM C# Module")
   set(CPACK_COMPONENT_VTKJAVAMODULE_DISPLAY_NAME "VTK/GDCM Java Module")
   set(CPACK_COMPONENT_PARAVIEWMODULE_DISPLAY_NAME "ParaView Module")
-  
+
   # Provide descriptions for each of the components to install.
   # When the user hovers the mouse over the name of a component,
   # the description will be shown in the "Description" box in the
@@ -738,7 +738,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
     "All of the tools you'll ever need to develop software using GDCM")
-  
+
   # It doesn't make sense to install the headers without the libraries
   # (because you could never use the headers!), so make the headers component
   # depend on the libraries component.
@@ -754,7 +754,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKCSHARPMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKJAVAMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_PARAVIEWMODULE_DEPENDS VTKLibraries)
-  
+
   # Create two installation types with pre-selected components.
   # The "Developer" installation has just the library and headers,
   # while the "Full" installation has everything.
