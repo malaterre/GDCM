@@ -86,8 +86,12 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
   // So what if we are dealing with image such as: SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm
   // which is also a 12Bits Stored / 16 Bits Allocated image
   // however the jpeg encapsulated is now a 16 Sample Precision
-  //SetBitSample( pt.GetBitsAllocated() );
-  SetBitSample( pt.GetBitsStored() );
+
+  // We have the choice to decide to use Bits Stored or Bits Allocated, however in the case of
+  // such an image as: gdcmData/MR16BitsAllocated_8BitsStored.dcm we are required to use
+  // bits allocated to deal with the logic to decide withe the encoder
+  SetBitSample( pt.GetBitsAllocated() );
+  //SetBitSample( pt.GetBitsStored() );
 }
 
 void JPEGCodec::SetupJPEGBitCodec(int bit)
