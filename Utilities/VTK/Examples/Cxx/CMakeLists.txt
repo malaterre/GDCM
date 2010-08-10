@@ -27,10 +27,12 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
       MagnifyFile
       )
     IF(GDCM_DATA_EXTRA_ROOT)
-    SET(GDCM_VTK_APPS
-      ${GDCM_VTK_APPS}
-      reslicesphere
-      )
+      IF(VTK_USE_RENDERING)
+        SET(GDCM_VTK_APPS
+          ${GDCM_VTK_APPS}
+          reslicesphere
+          )
+      ENDIF(VTK_USE_RENDERING)
     ENDIF(GDCM_DATA_EXTRA_ROOT)
   ENDIF(GDCM_BUILD_TESTING)
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
