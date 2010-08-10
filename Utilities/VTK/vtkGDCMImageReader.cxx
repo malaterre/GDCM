@@ -672,6 +672,7 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
     assert( 0 ); // I do not think this is possible
     }
   //gdcmAssertMacro( outputpt >= pixeltype_ref );
+  (void)pixeltype_ref;
 
   return outputpt;
 }
