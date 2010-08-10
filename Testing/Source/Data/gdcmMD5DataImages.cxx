@@ -651,6 +651,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "6bf95a48f366bdf8af3a198c7b723c77", "SinglePrecisionSC.dcm" },
 
+{ "a870a7a7cab8c17646d118ae146be588" , "MR16BitsAllocated_8BitsStored.dcm" },
+
 
 /* Stopping condition */
 { 0 ,0 }
