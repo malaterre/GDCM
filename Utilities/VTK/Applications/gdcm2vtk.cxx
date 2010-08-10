@@ -19,6 +19,8 @@
 #include "vtkGDCMImageWriter.h"
 
 #include "vtkVersion.h"
+#include "vtkErrorCode.h"
+//#include "vtkImageCast.h" // DEBUG
 #include "vtkImageReader2Factory.h"
 #include "vtkImageReader2.h"
 #include "vtkImageData.h"
@@ -26,6 +28,7 @@
 #include "vtkMetaImageWriter.h"
 #include "vtkTIFFWriter.h"
 #include "vtkPNGWriter.h"
+#include "vtkDICOMImageReader.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMINCImageReader.h"
 #include "vtkMINCImageAttributes.h"
@@ -74,6 +77,8 @@ void PrintHelp()
   std::cout << "     --force-spacing    force spacing." << std::endl;
   std::cout << "     --palette-color    when supported generate a PALETTE COLOR file." << std::endl;
   std::cout << "     --argb             when supported generate a ARGB file." << std::endl;
+  std::cout << "     --compress         when supported generate a compressed file." << std::endl;
+  std::cout << "     --use-vtkdicom     Use vtkDICOMImageReader (instead of GDCM)." << std::endl;
   std::cout << "     --modality         set Modality." << std::endl;
   std::cout << "  -T --study-uid        Study UID." << std::endl;
   std::cout << "  -S --series-uid       Series UID." << std::endl;
@@ -115,6 +120,8 @@ int main(int argc, char *argv[])
   int jpegls = 0;
   int j2k = 0;
   int rle = 0;
+  int usevtkdicom = 0;
+  int compress = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -142,6 +149,8 @@ int main(int argc, char *argv[])
         {"jpegls", 0, &jpegls, 1}, // JPEG-LS: lossy / lossless
         {"j2k", 0, &j2k, 1}, // J2K: lossy / lossless
         {"rle", 0, &rle, 1}, // lossless !
+        {"compress", 0, &compress, 1}, // compress with using MetaIO
+        {"use-vtkdicom", 0, &usevtkdicom, 1}, // use vtkDICOMImageReader
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -308,9 +317,20 @@ int main(int argc, char *argv[])
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  //reader->FileLowerLeftOn();
+
+  vtkDICOMImageReader *dicomreader = vtkDICOMImageReader::New();
+  if( debug )
+    {
+    reader->DebugOn();
+    dicomreader->DebugOn();
+    }
 
   vtkImageReader2Factory* imgfactory = vtkImageReader2Factory::New();
-  imgfactory->RegisterReader( reader );
+  if( usevtkdicom )
+    imgfactory->RegisterReader( dicomreader );
+  else
+    imgfactory->RegisterReader( reader );
   vtkImageReader2* imgreader =
     imgfactory->CreateImageReader2(filename);
   vtkStructuredPointsReader *datareader = vtkStructuredPointsReader::New();
@@ -325,20 +345,30 @@ int main(int argc, char *argv[])
       return 1;
       }
     }
-  imgfactory->Delete(); 
+  imgfactory->Delete();
 
   vtkImageData *imgdata;
   if( imgreader )
     {
     imgreader->SetFileName(filename);
     imgreader->Update();
+    if( imgreader->GetErrorCode() )
+      {
+      std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(imgreader->GetErrorCode()) << std::endl;
+      return 1;
+      }
     imgdata = imgreader->GetOutput();
     if( verbose )
-      std::cout << imgreader->GetClassName() << std::endl;
+      std::cout << "imgreader classname: " << imgreader->GetClassName() << std::endl;
     }
   else if( res )
     {
     datareader->Update();
+    if( datareader->GetErrorCode() )
+      {
+      std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(datareader->GetErrorCode()) << std::endl;
+      return 1;
+      }
     imgdata = datareader->GetOutput();
     }
 
@@ -354,6 +384,11 @@ int main(int argc, char *argv[])
       writer->SetFileTypeToBinary();
       writer->SetInput( imgdata );
       writer->Write();
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        return 1;
+        }
       return 0;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".png") == 0 )
@@ -362,6 +397,11 @@ int main(int argc, char *argv[])
       writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        return 1;
+        }
       return 0;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".tif") == 0  
@@ -371,6 +411,11 @@ int main(int argc, char *argv[])
       writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        return 1;
+        }
       return 0;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  ) // vtkXMLImageDataWriter::GetDefaultFileExtension()
@@ -380,17 +425,34 @@ int main(int argc, char *argv[])
       writer->SetDataModeToBinary();
       writer->SetInput( imgdata );
       writer->Write();
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        return 1;
+        }
       return 0;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".mha") == 0 ||
               gdcm::System::StrCaseCmp(outputextension,".mhd") == 0  ) // vtkMetaImageReader::GetFileExtensions()
       {
+      //vtkImageCast * cast = vtkImageCast::New();
+      //cast->SetInput( imgdata );
+      //cast->SetOutputScalarTypeToShort ();
+
       // Weird, the writer does not offer the same API as the Reader, for instance
       // One cannot set the patient name to store (see vtkMetaImageReader::GetPatientName ...)
       vtkMetaImageWriter * writer = vtkMetaImageWriter::New();
       writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
+      //writer->SetInput( cast->GetOutput() );
+      writer->SetCompression( compress );
+      //writer->FileLowerLeftOff(); // not used in the implementation
       writer->Write();
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        return 1;
+        }
       return 0;
       }
     }
@@ -505,8 +567,34 @@ int main(int argc, char *argv[])
         reader->GetMedicalImageProperties()->Print( std::cout );
         }
       }
+    else if( vtkDICOMImageReader * reader = vtkDICOMImageReader::SafeDownCast(imgreader) )
+      {
+      const float* iop = reader->GetImageOrientationPatient();
+      double dircos[6];
+      for(int i = 0; i < 6; ++i)
+        dircos[i] = iop[i];
+      writer->SetDirectionCosinesFromImageOrientationPatient( dircos );
+
+      writer->GetMedicalImageProperties()->SetModality( "MR" ); // FIXME
+      writer->GetMedicalImageProperties()->SetPatientName( reader->GetPatientName() );
+      //writer->GetMedicalImageProperties()->SetStudyUID( reader->GetStudyUID() ); // TODO
+      writer->GetMedicalImageProperties()->SetStudyID( reader->GetStudyID() );
+      //writer->GetMedicalImageProperties()->SetGantryTilt( reader->GetGantryAngle() ); // TODO
+      writer->GetMedicalImageProperties()->SetDirectionCosine( dircos[0], 
+        dircos[1],
+        dircos[2],
+        dircos[3],
+        dircos[4],
+        dircos[5]
+      );
+      writer->SetShift( reader->GetRescaleOffset() );
+      writer->SetScale( reader->GetRescaleSlope() );
+      //writer->SetImageFormat( reader->GetImageFormat() );
+      //writer->SetLossyFlag( reader->GetLossyFlag() );
+      }
     else if( vtkJPEGReader * reader = vtkJPEGReader::SafeDownCast(imgreader) )
       {
+      (void)reader;
       // vtk JPEG reader only read 8bits lossy file
       writer->SetLossyFlag( 1 );
       // TODO: It would be nice to specify the original encoder was JPEG -> ISO_10918_1
@@ -608,6 +696,11 @@ int main(int argc, char *argv[])
     }
 
   writer->Write();
+  if( writer->GetErrorCode() )
+    {
+    std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+    return 1;
+    }
 
   if( verbose )
     writer->GetInput()->Print( std::cout );
