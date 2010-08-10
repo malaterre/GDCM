@@ -828,8 +828,6 @@ SET(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
-  #"${GDCM_SOURCE_DIR}/Utilities"
-  #"${GDCM_BINARY_DIR}/Utilities/openjpeg"
   )
 IF(MSVC)
   SET(GDCM_INCLUDE_PATH
