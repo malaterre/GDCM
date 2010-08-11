@@ -23,7 +23,7 @@
 // http://matt.eifelle.com/2008/11/04/exposing-an-array-interface-with-swig-for-a-cc-structure/
 
 %module(docstring="A DICOM library",directors=1) gdcmswig
-#pragma SWIG nowarn=302,504,510
+#pragma SWIG nowarn=302,303,312,401,503,504,510,516
 %{
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
