@@ -40,6 +40,7 @@ void Sorter::SetSortFunction( SortFunction f )
 }
 
 
+namespace {
 class SortFunctor
 {
 public:
@@ -61,6 +62,7 @@ public:
     SortFunc = sf;
     }
 };
+}
 
 bool Sorter::StableSort(std::vector<std::string> const & filenames)
 {
