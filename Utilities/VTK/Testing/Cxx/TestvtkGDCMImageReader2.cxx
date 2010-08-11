@@ -33,7 +33,7 @@
  * Test to show the pipeline for 
  * IPPSorter -> vtkGDCMImageReader -> vtkImageChangeInformation
  */
-int TestvtkGDCMImageReader2(int argc, char *argv[])
+int TestvtkGDCMImageReader2(int , char *[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   std::vector<std::string> filenames;
@@ -148,7 +148,7 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
     wfilenames->InsertNextValue( fg.GetFilename(i) );
     std::cerr << fg.GetFilename(i) << std::endl;
     }
-  assert( wfilenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
+  assert( (gdcm::FilenameGenerator::SizeType)wfilenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
   writer->SetFileNames( wfilenames );
   wfilenames->Delete();
   writer->Write();
