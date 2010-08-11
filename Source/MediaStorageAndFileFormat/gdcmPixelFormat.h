@@ -76,6 +76,7 @@ public:
   operator ScalarType() const { return GetScalarType(); }
 
   /// Samples Per Pixel see (0028,0002) US Samples Per Pixel
+  /// DICOM - only allows 1, 3 and 4 as valid value. Other value are undefined behavior.
   unsigned short GetSamplesPerPixel() const;
   void SetSamplesPerPixel(unsigned short spp)
     {

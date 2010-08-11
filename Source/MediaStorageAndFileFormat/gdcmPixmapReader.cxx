@@ -806,12 +806,8 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   PixelFormat pf;
   // D 0028|0002 [US] [Samples per Pixel] [1]
   const Tag samplesperpixel = Tag(0x0028, 0x0002);
-  //if( ds.FindDataElement( samplesperpixel ) )
     {
-    //pf.SetSamplesPerPixel(
-    //  ReadUSFromTag( samplesperpixel, ss, conversion ) );
-    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
-    Attribute<0x0028,0x0002> at = { 0 };
+    Attribute<0x0028,0x0002> at = { 1 }; // By default assume 1 Samples Per Pixel
     at.SetFromDataSet( ds );
     pf.SetSamplesPerPixel( at.GetValue() );
     }
