@@ -12,7 +12,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMAPPLICATIONENTITY_H
 #define GDCMAPPLICATIONENTITY_H
 

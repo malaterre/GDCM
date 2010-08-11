@@ -24,16 +24,16 @@ namespace gdcm
 {
 /**
  * \brief IPPSorter
- * Implement a simple Image Position (Patient) sorter, along the Image Orientation 
- * (Patient) direction.
+ * Implement a simple Image Position (Patient) sorter, along the Image
+ * Orientation (Patient) direction.
  * This algorithm does NOT support duplicate and will FAIL in case of duplicate
  * IPP.
- * \warning See special note for SetZSpacingTolerance when computing the ZSpacing
- * from the IPP of each DICOM files (default tolerance for consistant spacing is: 
- * 1e-6mm)
+ * \warning See special note for SetZSpacingTolerance when computing the
+ * ZSpacing from the IPP of each DICOM files (default tolerance for consistant
+ * spacing is: 1e-6mm)
  * 
- * For more information on Spacing, and how it is defined in DICOM, advanced user
- * may refers to:
+ * For more information on Spacing, and how it is defined in DICOM, advanced
+ * users may refers to:
  *
  * http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
  *
