@@ -62,10 +62,10 @@ SET(BLACK_LIST_READER
 # I do not even believe there is a pattern
   WeirdToshibaTS.dcm
 # Pixel Data is not were it should be :)
-  3DDCM011.dcm 
+  3DDCM011.dcm
 
 # Name says it all
-BogusItemStartItemEnd.dcm 
+BogusItemStartItemEnd.dcm
 
 # Overlay Data in Unused bit are not passed in TestImageWriter:
 #  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
@@ -92,7 +92,6 @@ BogusItemStartItemEnd.dcm
 # Recent issue with compression/decompression (overlay in pixel data not handled)
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
-  #MR-MONO2-12-angio-an1.acr
   image.acr
   PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm # ???
   MergeCOM3_330_IM50.dcm
@@ -103,7 +102,6 @@ BogusItemStartItemEnd.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
-  #  MR-MONO2-12-angio-an1.acr
 
 # This image has an unknown Media Storage UID, when looking in Modality 'CR' is found;
 # but at the same time, there is no such thing as IPP/IOP in a ComputedRadiographyImageStorage ...
@@ -116,9 +114,6 @@ BogusItemStartItemEnd.dcm
 # buggy dcm4che
   kos.dcm
 
-  # It started failing in ~2009
-  #MR-MONO2-12-shoulder.dcm
-  MR-MONO2-12-angio-an1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

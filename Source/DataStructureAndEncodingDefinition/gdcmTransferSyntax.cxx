@@ -146,7 +146,7 @@ bool TransferSyntax::IsLossy() const
     TSField == JPEGFullProgressionProcess10_12 ||
     TSField == JPEGLSNearLossless ||
     TSField == JPEG2000 ||
-    TSField == MPEG2MainProfile 
+    TSField == MPEG2MainProfile
   )
     {
     return true;
@@ -165,7 +165,7 @@ bool TransferSyntax::IsLossless() const
     TSField == JPEGFullProgressionProcess10_12 ||
     // TSField == JPEGLSNearLossless || -> can be lossy & lossless
     // TSField == JPEG2000 || -> can be lossy & lossless
-    TSField == MPEG2MainProfile 
+    TSField == MPEG2MainProfile
   )
     {
     return false;

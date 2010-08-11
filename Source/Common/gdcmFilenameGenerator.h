@@ -30,7 +30,7 @@ namespace gdcm
  *
  * for i = 0, number of filenames:
  *   outfilename[i] = prefix + (pattern % i)
- *   
+ *
  * where pattern % i means C-style snprintf of Pattern using value 'i'
  */
 
@@ -62,7 +62,7 @@ public:
   /// Get a particular filename (call after Generate)
   const char * GetFilename(SizeType n) const;
 
-  /// Return all filenames 
+  /// Return all filenames
   FilenamesType const & GetFilenames() const { assert( !Pattern.empty() ); return Filenames; }
 
 private:

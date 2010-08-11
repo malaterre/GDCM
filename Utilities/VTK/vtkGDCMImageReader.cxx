@@ -852,7 +852,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
 
   this->ForceRescale = 0; // always reset this thing
-  if( pixeltype != outputpt )
+  // gdcmData/DCMTK_JPEGExt_12Bits.dcm
+  if( pixeltype != outputpt && pixeltype.GetBitsAllocated() != 12 )
     {
     this->ForceRescale = 1;
     }
@@ -1077,22 +1078,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
 
-  if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
-  {
-    assert( this->Scale == 1.0 && this->Shift == 0.0 );
-    assert( !this->ForceRescale );
-    assert( pixeltype.GetSamplesPerPixel() == 1 );
-    // FIXME: I could avoid this extra copy:
-    char * copy = new char[len];
-    //memcpy(copy, pointer, len);
-    image.GetBuffer(pointer);
-    gdcm::Unpacker12Bits u12;
-    u12.Unpack(pointer, copy, len);
-    // update len just in case:
-    len = 16 * len / 12;
-    delete[] copy;
-  }
-  else if( this->Scale != 1.0 || this->Shift != 0.0 || this->ForceRescale )
+  if( (this->Scale != 1.0 || this->Shift != 0.0) || this->ForceRescale )
   {
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
