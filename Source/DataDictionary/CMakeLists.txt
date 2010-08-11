@@ -84,6 +84,7 @@ INCLUDE_DIRECTORIES(
 SET(DICT_SRCS
   #${DICT_SRCS} # All the dicts cxx resources
   gdcmDicts.cxx
+  gdcmDictEntry.cxx
   gdcmDefaultDicts.cxx # pseudo generated file
   gdcmPrivateDefaultDicts.cxx # pseudo generated file
   gdcmGlobal.cxx

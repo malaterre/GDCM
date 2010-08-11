@@ -8421,7 +8421,7 @@ void PrivateDict::LoadDefault()
      assert( n.group % 2 != 0 || n.group == 0xffff );
      assert( n.element <= 0xff || n.element == 0xffff );
      PrivateTag t(n.group, n.element,n.owner);
-     DictEntry e( n.name, n.vr, n.vm, n.ret );
+     DictEntry e( n.name, "", n.vr, n.vm, n.ret );
      AddDictEntry( t, e );
      }
    n = DICOMV3DataDict[++i];
