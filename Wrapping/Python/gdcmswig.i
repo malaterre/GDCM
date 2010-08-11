@@ -23,7 +23,9 @@
 // http://matt.eifelle.com/2008/11/04/exposing-an-array-interface-with-swig-for-a-cc-structure/
 
 %module(docstring="A DICOM library",directors=1) gdcmswig
-#pragma SWIG nowarn=302,303,312,401,503,504,510,516
+// http://www.swig.org/Doc1.3/Warnings.html
+// "There is no option to suppress all SWIG warning messages."
+#pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516
 %{
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"

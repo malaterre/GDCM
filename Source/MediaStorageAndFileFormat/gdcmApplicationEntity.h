@@ -50,9 +50,12 @@ public:
     // trim leading and trailing white spaces
   }
   void SetBlob(const std::vector<char>& v) {
-    abort(); //TODO
+    (void)v;
+    assert(0); //TODO
   }
   void Print(std::ostream &os) const {
+  (void)os;
+    assert(0); //TODO
   }
 };
 
