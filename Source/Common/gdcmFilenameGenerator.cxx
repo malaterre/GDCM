@@ -38,8 +38,9 @@ void FilenameGenerator::SetNumberOfFilenames(SizeType nfiles)
 //-----------------------------------------------------------------------------
 const char * FilenameGenerator::GetFilename(SizeType n) const
 {
-  assert( n < Filenames.size() );
-  return Filenames[n].c_str();
+  if( n < Filenames.size() )
+    return Filenames[n].c_str();
+  return NULL;
 }
 
 //-----------------------------------------------------------------------------
