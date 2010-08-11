@@ -106,19 +106,21 @@ OPJ_UINT32 opj_write_from_memory (void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile
 {
 	//return fwrite(p_buffer,1,p_nb_bytes,p_file);
 	OPJ_UINT32 l_nb_write;
-  if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
-    {
-    l_nb_write = 1*p_nb_bytes;
-    }
-  else
-    {
-    l_nb_write = p_file->mem + p_file->len - p_file->cur;
-    assert( l_nb_write < p_nb_bytes );
-    }
-  memcpy(p_buffer,p_file->cur,l_nb_write);
+  //if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
+  //  {
+  //  l_nb_write = 1*p_nb_bytes;
+  //  }
+  //else
+  //  {
+  //  l_nb_write = p_file->mem + p_file->len - p_file->cur;
+  //  assert( l_nb_write < p_nb_bytes );
+  //  }
+  memcpy(p_file->cur,p_buffer,l_nb_write);
   p_file->cur += l_nb_write;
-  assert( p_file->cur < p_file->mem + p_file->len );
-	return l_nb_write;
+  p_file->len += l_nb_write;
+  //assert( p_file->cur < p_file->mem + p_file->len );
+	//return l_nb_write;
+	return p_nb_bytes;
 }
 
 OPJ_SIZE_T opj_skip_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
@@ -795,7 +797,6 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
-
     std::ostringstream os;
     std::ostream *fp = &os;
     const char *inputdata = input + dim * image_len; //bv->GetPointer();
@@ -907,6 +908,43 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       return false;
     }
     codestream_length = cio_tell(cio);
+#elif OPENJPEG_MAJOR_VERSION == 2
+    opj_codec_t* cinfo = 00;
+    opj_stream_t *cio = 00;
+
+    /* get a J2K compressor handle */
+    cinfo = opj_create_compress(CODEC_J2K);
+
+    /* setup the encoder parameters using the current image and using user parameters */
+    opj_setup_encoder(cinfo, &parameters, image);
+
+    myfile mysrc;
+    myfile *fsrc = &mysrc;
+    char *buffer_j2k = new char[image_len]; // overallocated
+    fsrc->mem = fsrc->cur = buffer_j2k;
+    fsrc->len = 0;
+
+    /* open a byte stream for writing */
+    /* allocate memory for all tiles */
+    cio = opj_stream_create_memory_stream(fsrc,J2K_STREAM_CHUNK_SIZE,false);
+    if (! cio)
+      {
+      return false;
+      }
+    /* encode the image */
+    /*if (*indexfilename)					// If need to extract codestream information
+      bSuccess = opj_encode_with_info(cinfo, cio, image, &cstr_info);
+      else*/
+    bSuccess = opj_start_compress(cinfo,image,cio);				
+    bSuccess = bSuccess && opj_encode(cinfo, cio);
+    bSuccess = bSuccess && opj_end_compress(cinfo, cio);
+
+    if (!bSuccess) 
+      {
+      opj_stream_destroy(cio);
+      return false;
+      }
+    codestream_length = mysrc.len;
 #endif // OPENJPEG_MAJOR_VERSION == 1
 
     /* write the buffer to disk */
@@ -937,6 +975,15 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 
     /* free remaining compression structures */
     opj_destroy_compress(cinfo);
+#elif OPENJPEG_MAJOR_VERSION == 2
+    fp->write((char*)(mysrc.mem), codestream_length);
+    delete [] buffer_j2k;
+
+    /* close and free the byte stream */
+    opj_stream_destroy(cio);
+
+    /* free remaining compression structures */
+    opj_destroy_codec(cinfo);
 #endif // OPENJPEG_MAJOR_VERSION == 1
 
     /* free user parameters structure */
@@ -947,8 +994,6 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 
     /* free image data */
     opj_image_destroy(image);
-
-
 
     std::string str = os.str();
     assert( str.size() );
