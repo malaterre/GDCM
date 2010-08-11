@@ -18,7 +18,7 @@
 /* Use the openjpeg library configured for gdcm.  */
 #include "gdcmTypes.h"
 #ifdef GDCM_USE_SYSTEM_OPENJPEG
-#include <openjpeg-2.0/openjpeg.h>
+#include <openjpeg.h>
 // MM:
 // See openjpeg issue #3:
 // http://code.google.com/p/openjpeg/issues/detail?id=3
