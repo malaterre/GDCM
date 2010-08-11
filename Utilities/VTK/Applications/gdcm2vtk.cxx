@@ -709,6 +709,7 @@ int main(int argc, char *argv[])
   if( imgreader ) imgreader->Delete();
   datareader->Delete();
   reader->Delete();
+  dicomreader->Delete();
 
   return 0;
 }
