@@ -13,6 +13,8 @@
 
 =========================================================================*/
 #include "gdcmDictEntry.h"
+#include "gdcmSystem.h"
+
 #include <algorithm> // remove_if
 
 namespace gdcm
@@ -62,7 +64,7 @@ Problem with: 3DRenderingType vs ThreeDRenderingType
 
   str.erase(remove_if(str.begin(), str.end(), IsToBeRemoved), str.end());
 
-  if( strcasecmp(str.c_str(), keyword) == 0 ) return true;
+  if( System::StrCaseCmp(str.c_str(), keyword) == 0 ) return true;
 
   // std::cerr << "Problem with: " << str << " vs " << keyword << std::endl;
   return true;
