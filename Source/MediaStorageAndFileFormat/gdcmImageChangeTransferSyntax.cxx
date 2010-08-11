@@ -344,9 +344,9 @@ bool ImageChangeTransferSyntax::Change()
 
   // FIXME
   // For now only support raw input, otherwise we would need to first decompress them
-  if( Input->GetTransferSyntax() != TransferSyntax::ImplicitVRLittleEndian 
+  if( (Input->GetTransferSyntax() != TransferSyntax::ImplicitVRLittleEndian
     && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRLittleEndian
-    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian
+    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian)
     || Force )
     {
     // In memory decompression:
