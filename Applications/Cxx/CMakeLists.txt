@@ -22,6 +22,8 @@ INCLUDE_DIRECTORIES(
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
+
+  "${GDCM_SOURCE_DIR}/Utilities/socketxx"
   )
 
 IF(WIN32)
@@ -42,6 +44,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmconv
   gdcmtar
   gdcminfo
+  gdcmscu
   )
 # poppler people have the worse API backward compatibility I know of.
 # there is absolutely no way to check the version of poppler
@@ -87,6 +90,8 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
   IF(${exename} STREQUAL "gdcmpdf")
     TARGET_LINK_LIBRARIES(${exename} ${POPPLER_LIBRARIES})
+  ELSEIF(${exename} STREQUAL "gdcmscu")
+    TARGET_LINK_LIBRARIES(${exename} socketxx)
   ELSEIF(${exename} STREQUAL "gdcminfo")
     IF(GDCM_USE_SYSTEM_PODOFO)
       TARGET_LINK_LIBRARIES(${exename} ${PODOFO_LIBRARIES})
