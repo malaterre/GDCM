@@ -47,9 +47,6 @@ SET(DSED_TEST_SRCS
   TestElement2
   TestElement4
   TestElement5
-  TestInvalidDICOMFiles
-  #TestVR16ExplicitDataElement
-  #TestExplicitImplicitDataElement
   )
 IF(GDCM_TESTING_USE_LC_NUMERIC)
 # The test expect to be able to set fr as locale only turn if user
@@ -67,6 +64,12 @@ SET(DSED_TEST_SRCS
   TestPDBHeader
   )
 ENDIF(GDCM_DATA_ROOT)
+IF(GDCM_DATA_EXTRA_ROOT)
+SET(DSED_TEST_SRCS
+  ${DSED_TEST_SRCS}
+  TestInvalidDICOMFiles
+  )
+ENDIF(GDCM_DATA_EXTRA_ROOT)
 
 CHECK_INCLUDE_FILE("sys/mman.h"   GDCM_HAVE_SYS_MMAN_H)
 
