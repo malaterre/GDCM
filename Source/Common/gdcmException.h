@@ -60,7 +60,7 @@ public:
   /// \note The last parameter is ignored for the time being.
   /// It may be used to specify the function where the exception
   /// was thrown.
-  explicit Exception(const char *desc = "None", 
+  explicit Exception(const char *desc = "None",
             const char *file = __FILE__,
             unsigned int lineNumber = __LINE__,
             // FIXME:  __PRETTY_FUNCTION__ is the non-mangled version for __GNUC__ compiler
@@ -70,12 +70,12 @@ public:
   Description(desc)
   {
   }
-  
+
   virtual ~Exception() throw() {}
-         
+
   /// what implementation
   const char* what() const throw()
-    { 
+    {
     return What.what();
     }
 
