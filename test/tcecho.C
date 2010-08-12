@@ -30,7 +30,7 @@ int main (int ac, char** av)
 
   cout << e->rfc_name () << ' ' << e->rfc_doc () << endl;
 
-  for (int i = 0; i < ac; i++) {
+  for (int i = 3; i < ac; i++) {
     char buf [256];
 
     cout << "sending: " << av [i] << endl;
@@ -38,6 +38,7 @@ int main (int ac, char** av)
     e << av [i] << endl;
 
     e.getline (buf, 255);
+    buf [255] = 0;
 
     cout << "got back: " << buf << endl;
   }
