@@ -1,0 +1,193 @@
+dnl Use autoconf on this directory to produce configure script
+dnl Use autoheader on this file to produce config.h.in
+dnl Then use configure script to generate makefile from Makefile.in
+
+dnl a distinct socket++ file
+AC_INIT(configure.in)
+
+# Details: http://sources.redhat.com/autobook/autobook/autobook_91.html
+# +1 : ? : +1  == new interface that does not break old one
+# +1 : ? : 0   == new interface that breaks old one
+#  ? : ? : 0   == no new interfaces, but breaks apps
+#  ? :+1 : ?   == just some internal changes, nothing breaks but might work 
+#                 better
+# CURRENT : REVISION : AGE
+LIBSOCKET_SO_VERSION=1:2:0
+
+SOCKET_VERSION=1.12.12
+AC_SUBST(SOCKET_VERSION)
+AC_SUBST(LIBSOCKET_SO_VERSION)
+
+dnl For automake
+VERSION=$SOCKET_VERSION
+PACKAGE=socket
+
+dnl Inititalize automake stuff
+AM_INIT_AUTOMAKE(socket++,$SOCKET_VERSION)
+
+dnl Specify a configuration file
+AM_CONFIG_HEADER(socket++/config.h)
+
+dnl check for programs
+AC_PROG_MAKE_SET
+AC_LANG_CPLUSPLUS
+AC_PROG_CXX
+AM_PROG_LIBTOOL
+AC_PROG_INSTALL
+
+AC_CHECK_PROG(MAKEDEPEND, makedepend, makedepend, :) dnl not a smiley :(
+dnl AC_PROG_CPP                      dnl later macros will use it
+dnl AC_PROG_CXXCPP                   dnl later macros will use it
+
+CXXFLAGS="-Wall ${CXXFLAGS}"
+dnl Configuration Options
+AC_ARG_ENABLE(debug, [  --enable-debug          turn on verbosity [default=no]],
+if eval "test x$enable_debug = xyes"; then
+  AC_DEFINE(ENABLE_DEBUG)
+  CXXFLAGS="${CXXFLAGS} -g -O0"
+fi,
+)
+
+dnl check for libraries
+AC_CHECK_LIB(nsl, t_accept, NETWORK_LIBS="$NETWORK_LIBS -lnsl")
+AC_CHECK_LIB(socket, socket, NETWORK_LIBS="$NETWORK_LIBS -lsocket")
+AC_SUBST(NETWORK_LIBS)
+
+dnl check for header files
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_CHECK_HEADERS(string.h memory.h sstream string)
+AC_CHECK_HEADER(_G_config.h, AC_DEFINE(_S_LIBGXX))
+AC_LANG_RESTORE
+AC_HEADER_SYS_WAIT
+
+dnl check for typedefs
+AC_PID_T
+
+dnl check for structures
+
+dnl check for compiler characteristics
+AC_SUBST(CXX_INCLUDE_PATH)
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(LDFLAGS)
+
+dnl check for library functions and global variables
+AC_RETSIGTYPE
+AC_FUNC_VFORK
+AC_HAVE_FUNCS(select)
+
+AC_MSG_CHECKING(for sys_siglist)
+AC_CACHE_VAL(socketxx_cv_siglist, [
+AC_TRY_LINK([
+# include <unistd.h>
+# include <sys/signal.h>
+], [
+#ifndef _sys_siglist
+  extern char* _sys_siglist[];
+#endif
+  puts(*_sys_siglist);
+],
+socketxx_cv_siglist=_sys_siglist,
+socketxx_cv_siglist=sys_siglist) ])
+AC_DEFINE_UNQUOTED(SYS_SIGLIST, $socketxx_cv_siglist)
+AC_MSG_RESULT($socketxx_cv_siglist)
+
+AC_MSG_CHECKING(for sys_errlist)
+AC_CACHE_VAL(socketxx_cv_errlist, [
+AC_TRY_LINK([
+# include <errno.h>
+# include <unistd.h>
+], [
+#ifndef _sys_errlist
+  extern char* _sys_errlist[];
+#endif
+  puts(*_sys_errlist);
+],
+socketxx_cv_errlist=_sys_errlist,
+socketxx_cv_errlist=sys_errlist) ])
+AC_DEFINE_UNQUOTED(SYS_ERRLIST, $socketxx_cv_errlist)
+AC_MSG_RESULT($socketxx_cv_errlist)
+
+AC_MSG_CHECKING(for sys_errlist prototype)
+AC_CACHE_VAL(socketxx_cv_errlist_proto, [
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE( [
+#include <errno.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+], [
+  puts (*$socketxx_cv_errlist);
+],
+socketxx_cv_errlist_proto=yes,
+socketxx_cv_errlist_proto=no) ])
+AC_LANG_RESTORE
+if test $socketxx_cv_errlist_proto = yes; then
+  AC_DEFINE(SYS_ERRLIST_DECLARED)
+fi
+AC_MSG_RESULT($socketxx_cv_errlist_proto)
+
+AC_MSG_CHECKING(for signal handler arg type)
+AC_CACHE_VAL(socketxx_cv_sighnd_argtype, [
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+# include <unistd.h>
+# include <sys/signal.h>
+
+  void sigh (int s, int c, void* p, void* a) {}
+  ], [
+  typedef RETSIGTYPE (*funcptr) (...);
+  struct sigaction sa;
+  sa.sa_handler = funcptr (&sigh);
+  ],
+  socketxx_cv_sighnd_argtype=...,
+  AC_TRY_COMPILE([
+#   include <unistd.h>
+#   include <sys/signal.h>
+
+    void sigh (int s, int c, void* p, void* a);
+    ], [
+    typedef RETSIGTYPE (*funcptr) (int);
+    struct sigaction sa;
+    sa.sa_handler = funcptr (&sigh);
+    ],
+    socketxx_cv_sighnd_argtype=int,
+    socketxx_cv_sighnd_argtype=void)) ])
+AC_LANG_RESTORE
+AC_DEFINE_UNQUOTED(SIGHND_ARGTYPE, $socketxx_cv_sighnd_argtype)
+AC_MSG_RESULT($socketxx_cv_sighnd_argtype)
+
+dnl the following check was provided by
+dnl Blair Zajac <blair@olympia.gps.caltech.edu>
+AC_MSG_CHECKING(if extern \"C\" wrappers are needed)
+AC_CACHE_VAL(bz_cv_cplusplus_needexternCwrapper, [
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_LINK([
+# include <string.h>
+# include <stdio.h>
+], [
+  char buf[100];
+  strcpy(buf, "Hello world\n");
+],
+  bz_cv_cplusplus_needexternCwrapper=no,
+  bz_cv_cplusplus_needexternCwrapper=yes)
+])
+AC_LANG_RESTORE
+
+if test $bz_cv_cplusplus_needexternCwrapper = no; then
+  AC_DEFINE(EXTERN_C_BEGIN,)
+  AC_DEFINE(EXTERN_C_END,)
+else
+  AC_DEFINE(EXTERN_C_BEGIN, extern "C" {)
+  AC_DEFINE(EXTERN_C_END, })
+fi
+AC_MSG_RESULT($bz_cv_cplusplus_needexternCwrapper)
+
+dnl check for system
+
+dnl generate output files
+AC_OUTPUT(Makefile socket++/Makefile doc/Makefile test/Makefile)

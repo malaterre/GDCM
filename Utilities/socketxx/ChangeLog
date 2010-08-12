@@ -1,0 +1,183 @@
+2004-09-30  Herbert Straub <herbert@linuxhacker.at>
+	* New Version: 1.12.12
+
+2004-08-12  Herbert Straub <herbert@linuxhacker.at>
+	* Bugfix: sig.cpp changing sighnd_type typedef, compiling error with
+	g++ V3.4; reported by Tilman Linneweh
+
+2004-05-06  Herbert Straub <herbert@linuxhacker.at>
+	* Bugfix: test/tcftp.C -> include <unistd.h> getpass(...)
+
+2004-07-05  Herbert Straub <herbert@linuxhacker.at
+	* Version 1.12.12pre1
+	* Library Version: 1:2:0
+
+2004-06-28  Herbert Straub <herbert@linuxhacker.at>
+	* Bugfix: removing "using namespace std" from sockstream.h
+	and change all .cpp files. Reported by Georg Baum
+	<gb@ithe.rwth-aachen.de>. Also all test/*.C
+
+2003-11-29  Herbert Straub <h.straub@aon.at>
+	* Bugfix: ::write writing wrong buffer segements (if
+	the write operation is splitted).  reported by
+	Dan Muller <dan@verliba.cz> methods: sockbuf::write,
+	sockbuf::send, sockbuf::sendto
+	
+2003-11-10  Herbert Straub <h.straub@aon.at>
+	* Feature: -Wall compiler options is default
+
+	* Bugfix: change initialization order in constructor
+	isockstream, osockstream, iosockstream
+
+	* Bugfix: Tilman Linneweh <arved@freebsd.org> Patch: local.h
+	preprocessor condition for FreeBSD (gethostname)
+
+	* Bugfix: change incompatible license from GNU/GPL to the original
+	license terms for the following files: test/simple_http.C,
+	test/test_sockerr.C, test/thostnames.C. Reported by Matthew Faupel
+	<matthew.faupel@micropraxis.com>
+	
+2003-04-26  Herbert Straub <h.straub@aon.at>
+	* Bugfix: sockerr contructor doesn't initialize the class variable
+	err. This can lead in a segmentation fault, if errstr () will called.
+
+	* Feature: new configuration option --enable-debug
+	
+	* New Version: 1.12.10
+	* New Library Version 1:1:0
+
+2003-03-14  Herbert Straub <h.straub@aon.at>
+	* New Version: 1.12.9
+	* New Library Version: 1:0:0
+
+2003-03-10  Herbert Straub <h.straub@aon.at>
+	* Mac OS X Porting Patch: from Jason Toffaletti <catalyst@mac.com>
+	
+2003-03-06  Herbert Straub <h.straub@aon.at>
+	* Feature: class sockbuf new methods: setname(sockname), getname
+
+	* Feature: all methods of class sockbuf throw error description:
+	method name and sockname
+
+	* Bugfix: fixing include errors (scket++/... wrong). 
+
+2003-04-05  Herbert Straub <h.straub@aon.at
+	* Mac OS X Porting Patch: from Jason Toffaletti <catalyst@mac.com>
+	
+2002-12-06  Herbert Straub <h.straub@aon.at>
+	* Bugfix: correcting the COPYING, NEWS and README3 file
+
+	* New socket++.spec: from Carles Arjona <nospammer@bigfoot.com>
+
+	* socket++.spec: correcting the Source URL to: *
+	http://www.hstraub.at/linux/downloads/src/
+
+	* New Version: 1.12.8
+	
+2002-11-25  Herbert Straub <h.straub@aon.at>
+	* Bugfix: *.h files not installed (thanks to Tilman Linneweh 
+	<tilman@arved.de>) changing Makefile.am
+
+	* include files: now in ${prefix}/include/socket++
+
+	* Change: all #includes to #include <socket++/...>
+	
+	* Bufgix: removing test/thostnames.STATIC testprogram,
+	Makefile.in, config.cache, configure, config.h, config.log,
+	config.h.in
+	
+	* Bugfix configure.in: -> AC_INIT(configure.in)
+
+	* Bugfix: Fork.* to fork.*
+
+	* Bugfix: installing socket++.info (thanks to Tilman Linneweh)
+
+	* New Version: 1.12.7
+
+2002-11-23  Herbert Straub <h.straub@aon.at>
+	* adding: absent Makefile.am, configure.in, autogen, 
+	AUTHORS, COPYING, NEWS, THANKS files
+
+	* New Version: 1.12.6
+	
+2002-11-15  Herbert Straub <h.straub@aon.at>
+	* Now using libtool and libtool versioning
+	modify configure.in, create Makefile.am
+	http://sources.redhat.com/autobook/autobook/autobook_91.html
+	http://www.gnu.org/software/libtool/manual.html#SEC34
+	
+	* test/tsig-0.C: Changing struct hnd to class hnd and moving it from
+	main. Link Error with gcc 2.95.4
+
+	* RPM: Thanks to Carles Arjona <nospammer@bigfoot.com> for a working RPM
+	SpecFile for this version
+
+	* New Version: 1.12.5
+
+2002-10-13  Herbert Straub <h.straub@aon.at>
+	* New Version: 1.12.4
+
+2002-10-08  Herbert Straub <h.straub@aon.at>
+	* FreeBSD Port Patch: from Tilman Linneweh <tilman@arved.de>
+	for sig.cpp same for Linux (SA_INTERRUPT)
+
+	* configure: Change Compilertest from
+	c++ g++ gcc CC cxx cc++ cl to g++ c++ gcc CC cxx cc++ cl
+	No Exception Handling on Linux, if compiled with c++
+
+	* configure: removed compiler flag: --no-rtti
+
+	* test/tsig-0.C: some changes
+
+	* sig.cpp: removing static sigerr se;
+
+2002-10-08  Herbert Straub <h.straub@aon.at>
+	* FreeBSD Port Patch: from Tilman Linneweh <tilman@arved.de>
+	for sockstream.cpp
+	
+2002-10-08  Herbert Straub <h.straub@aon.at>
+	* New Version: 1.12.3
+
+2002-10-08  Herbert Straub <h.straub@aon.at>
+	* FreeBSD Port Patches: from Tilman Linneweh <tilman@arved.de>
+	1. local.h: SYS_SIGLIST
+	2. sockstream.h: msg_maxiovlen
+	3. Adding description text in socket++.texi
+	
+2002-09-28  Herbert Straub <h.straub@aon.at>
+	* Renaming Version to: 1.12.1
+	
+	* Removing check compiler version code (Troubles with Debian g++ 3.2)
+	* in configure.in
+
+	* Removing -fno-rtti and -fexceptions in configure.in
+
+	* Create the small testprogram test/test_sockerr.cxx
+
+2002-09-27  Herbert Straub <h.straub@aon.at>
+	* Test compatibility with NewsCache
+
+	* Adding INSTALL Instruction, TODO
+
+	* Version: 1.2.3
+
+2002-07-28  Herbert Straub <h.straub@aon.at>
+	* Improvement: Eliminating sorry_about_global_temp inititialisation.
+	This don't work in combination with NewsCache.
+	My idea is: initializing the classes with (0) and in the second
+	step call ios::init (sockinetbuf *) and iosockstream::init ...
+	The constructors of isockinet, osockinet and iosockinet are changed.
+
+	* Improvement: same in sockunix.cpp
+
+	* Improvement: same in pipestream.cpp
+
+	* Bugfix: g++ 3.1 Compatibility in directory test for: 
+	tpopentest.C, tsendfile.C, tfork.C, tfork0.C, tsig-0.C
+
+2002-07-25  Herbert Straub <h.straub@aon.at>
+	* Improvement: Adding improved error Handling in sockerr class
+
+	* Improvement sockinetaddr::setport: If the first character of the
+	port parameter is a digit, then the parameter is interpreted as a 
+	number.

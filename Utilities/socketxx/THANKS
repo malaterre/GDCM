@@ -1,0 +1,14 @@
+Thanks to:
+
+* Dan Muller <dan@verliba.cz> writing wrong buffer segements error
+
+* Jason Toffaletti <catalyst@mac.com> Mac OS X Porting Patch
+
+* Carles Arjona <nospammer@bigfoot.com> RPM Packager
+
+* Tilman Linneweh <tilman@arved.de> FreeBSD Port and many patches
+
+* Matthew Faupel <matthew.faupel@micropraxis.com> report incomatible licencse 
+  terms
+
+If I forgot somebody, please send an email to me and accept my apologies.

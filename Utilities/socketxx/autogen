@@ -1,0 +1,27 @@
+#!/bin/sh
+# Copyright 2002, 2003 Herbert Straub
+
+if [ -f config.cache ]; then
+	rm config.cache
+fi
+if [ -f Makefile ]; then
+	make clean
+fi
+
+echo "libtoolize..."
+if test `uname -s` = Darwin; then
+	glibtoolize --automake
+else
+ 	libtoolize --automake
+fi 
+echo "aclocal..."
+aclocal
+echo "autoheader..."
+autoheader
+echo "automake..."
+automake --add-missing
+echo "autoconf..."
+autoconf
+
+echo "Next run ./configure"
+echo "Next run make"

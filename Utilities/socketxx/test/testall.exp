@@ -1,0 +1,62 @@
+Socket name = /tmp/soc
+./tdunread: 7 strings: ./tdunwrite /tmp/soc mary had a little lamb 
+
+./tdinread: mary had a little lamb 
+socket type = 2
+socket linger time = 0
+socket linger time = 10
+socket linger time = 0
+socket keepalive  = 0
+socket keepalive  = 1
+socket clearerror = 0
+socket debug = 0
+socket debug = 1
+socket reuse = 0
+socket reuse = 1
+
+Socket name = /tmp/soc
+./tsunread: ./tsunwrite
+./tsunread: /tmp/soc
+./tsunread: mary
+./tsunread: had
+./tsunread: a
+./tsunread: little
+./tsunread: lamb
+
+sleeping for 3 sec
+tsinread: 356 haha 23.5 
+tsinread: oooiiii ! 
+tsinwrite1: INT STRING DOUBLE received 
+tsinwrite2: STRING CHAR received 
+
+tpipe parent got: lamb little a had mary ./tpipe 
+tpipe child got: 5 4 3 2 1 0 
+
+tsockpair Child: 6: ./tsockpair mary had a little lamb 
+tsockpair Parent: Child received 6 strings
+
+tpopen Got from ipopen: ./tpopentest -o: Hello O world!!! 
+tpopen ./tpopentest -i: this is sent to tpopentest
+tpopen Result from iopopen: echo test one two three test one two three 
+
+twhois:
+Knuth, Donald E. (DEK)
+   Stanford University
+   Computer Science Department
+   Stanford, CA 94305-2140
+
+   (415) 723-4367
+
+   DEK@SAIL.STANFORD.EDU
+
+
+   Record last updated on 02-Apr-96.
+
+Please be advised that this whois server only contains DOD Information.
+All INTERNET Domain, IP Network Number, and ASN records are kept in
+the Internet Registry, RS.INTERNIC.NET.
+
+
+thostnames:
+h  : 128.143.2.7 : UVAARPA.VIRGINIA.EDU :  :  :  :
+
