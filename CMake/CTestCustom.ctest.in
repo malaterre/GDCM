@@ -15,6 +15,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "/usr/bin/ranlib: for architecture: .* file: .* has no symbols"
   "gdcmcharls"
   "gdcmexpat"
+  "warning CS0114:"
   )
 
 # Disable dynamic analysis on some tests:
