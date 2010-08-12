@@ -31,6 +31,8 @@ namespace gdcm
 
 VR ComputeVRImplicitLittleEndian(DataSet const &ds, const Tag& tag)
 {
+  (void)ds;
+  (void)tag;
     /*
     A.1 DICOM IMPLICIT VR LITTLE ENDIAN TRANSFER SYNTAX
     a) The Data Elements contained in the Data Set structure shall be encoded with Implicit VR
@@ -79,7 +81,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
+  //const Dict &d = dicts.GetPublicDict();
 
   std::string strowner;
   const char *owner = 0;

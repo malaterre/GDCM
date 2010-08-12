@@ -125,10 +125,10 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   typedef std::map<double, const char*> SortedFilenames;
   SortedFilenames sorted;
 {
-  std::vector<std::string>::const_iterator it = filenames.begin();
-  for(; it != filenames.end(); ++it)
+  std::vector<std::string>::const_iterator it1 = filenames.begin();
+  for(; it1 != filenames.end(); ++it1)
     {
-    const char *filename = it->c_str();
+    const char *filename = it1->c_str();
     bool iskey = scanner.IsKey(filename);
     if( iskey )
       {
@@ -164,20 +164,20 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 }
   assert( !sorted.empty() );
 {
-  SortedFilenames::const_iterator it = sorted.begin();
-  double prev = it->first;
-  Filenames.push_back( it->second );
+  SortedFilenames::const_iterator it2 = sorted.begin();
+  double prev = it2->first;
+  Filenames.push_back( it2->second );
   if( sorted.size() > 1 )
     {
     bool spacingisgood = true;
-    ++it;
-    double current = it->first;
+    ++it2;
+    double current = it2->first;
     double zspacing = current - prev;
-    for( ; it != sorted.end(); ++it)
+    for( ; it2 != sorted.end(); ++it2)
       {
-      //std::cout << it->first << " " << it->second << std::endl;
-      current = it->first;
-      Filenames.push_back( it->second );
+      //std::cout << it2->first << " " << it2->second << std::endl;
+      current = it2->first;
+      Filenames.push_back( it2->second );
       if( fabs((current - prev) - zspacing) > ZTolerance )
         {
         gdcmDebugMacro( "ZTolerance test failed. You need to decrease ZTolerance." );
@@ -191,7 +191,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       {
       // If user ask for a ZTolerance of 1e-4, there is no need for us to 
       // store the extra digits... this will make sure to return 2.2 from a 2.1999938551239993 value
-      const int l = -log10(ZTolerance);
+      const int l = (int)( -log10(ZTolerance) );
       ZSpacing = spacing_round(zspacing, l);
       }
     assert( spacingisgood == false ||  (ZSpacing > ZTolerance && ZTolerance > 0) );

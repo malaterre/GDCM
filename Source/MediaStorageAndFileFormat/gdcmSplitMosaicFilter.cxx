@@ -58,7 +58,7 @@ bool SplitMosaicFilter::Split()
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   //std::cout << t1 << std::endl;
-  const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
+  //const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
   if( ds.FindDataElement( t1 ) )
     {
@@ -103,7 +103,7 @@ bool SplitMosaicFilter::Split()
   //std::cout << "NumberOfImagesInMosaic:" << numberOfImagesInMosaic << std::endl;
 
   const gdcm::Image &inputimage = GetImage();
-  const double *spacing = inputimage.GetSpacing();
+  //const double *spacing = inputimage.GetSpacing();
   unsigned long l = inputimage.GetBufferLength();
   std::vector<char> buf;
   buf.resize(l);
@@ -115,12 +115,14 @@ bool SplitMosaicFilter::Split()
   //outbuf = buf;
 
   bool b = reorganize_mosaic((unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims, (unsigned short*)&outbuf[0] );
+  (void)b;
 
   pixeldata.SetByteValue( &outbuf[0], outbuf.size() );
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe1,0x1010) );
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
   //const gdcm::VL &l = pixeldata.GetVL();
   const int p =  l / (dims[0] * dims[1]);
+  (void)p;
   //std::cout << "VL:" << l << std::endl;
   //std::cout << "pixel:" << p << std::endl;
 
