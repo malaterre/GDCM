@@ -41,6 +41,9 @@ protected:
   // then cpid is significant. Otherwise it is set to -1.
   //   cpid is child pid if this is parent
   //   cpid is 0 if this is child
+#ifdef _WIN32
+  typedef int pid_t;
+#endif
   pid_t	        cpid;
   iopipestream* next;  // next in the chain. Used only by
                        // iopipstream (sockbuf::type, int)

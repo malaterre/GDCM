@@ -30,13 +30,23 @@
 //  and in the second step call ios::init (sockbuf *) and iosockstream::init ...
 //  The constructors of ipipestream, opipestream and iopipestream are changed.
 
-using namespace std;
 
 #include <config.h>
 
 #include <pipestream.h>
-#include <unistd.h>
-#include <sys/socket.h>
+//#include <unistd.h>
+//#include <sys/socket.h>
+#include <iostream> // ios
+using namespace std;
+
+#ifdef _WIN32
+# include <winsock2.h>
+# include <windows.h>
+# include <io.h>
+#else
+# include <sys/types.h>
+# include <sys/socket.h>
+#endif
 
 // environ is not given a declaration in sun's <unistd.h>
 extern char** environ;

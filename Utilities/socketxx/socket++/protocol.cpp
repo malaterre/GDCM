@@ -17,7 +17,7 @@
 
 const char* protocol::protocolbuf::protocol_name () const
 {
-  char* ret = "";
+  const char* ret = "";
   if (pn == protocol::tcp)
     ret = "tcp";
   if (pn == protocol::udp)
