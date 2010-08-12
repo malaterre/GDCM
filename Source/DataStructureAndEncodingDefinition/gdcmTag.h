@@ -28,7 +28,7 @@ namespace gdcm
  * Basically an uint32_t which can also be expressed as two uint16_t (group and
  * element)
  * \note
- * DATA ELEMENT TAG: 
+ * DATA ELEMENT TAG:
  * A unique identifier for a Data Element composed of an ordered pair of
  * numbers (a Group Number followed by an Element Number).  GROUP NUMBER: The
  * first number in the ordered pair of numbers that makes up a Data Element
@@ -39,24 +39,24 @@ namespace gdcm
 class GDCM_EXPORT Tag
 {
 public:
-  /// \brief Constructor with 2*uint16_t 
+  /// \brief Constructor with 2*uint16_t
   Tag(uint16_t group, uint16_t element) {
     ElementTag.tags[0] = group; ElementTag.tags[1] = element;
   }
-  /// \brief Constructor with 1*uint32_t  
+  /// \brief Constructor with 1*uint32_t
   /// Prefer the cstor that takes two uint16_t
   Tag(uint32_t tag = 0) {
     SetElementTag(tag);
-  } 
+  }
 
   friend std::ostream& operator<<(std::ostream &_os, const Tag &_val);
   friend std::istream& operator>>(std::istream &_is, Tag &_val);
 
   /// \brief Returns the 'Group number' of the given Tag
   uint16_t GetGroup() const { return ElementTag.tags[0]; }
-  /// \brief Returns the 'Element number' of the given Tag  
+  /// \brief Returns the 'Element number' of the given Tag
   uint16_t GetElement() const { return ElementTag.tags[1]; }
-  /// \brief Sets the 'Group number' of the given Tag  
+  /// \brief Sets the 'Group number' of the given Tag
   void SetGroup(uint16_t group) { ElementTag.tags[0] = group; }
   /// \brief Sets the 'Element number' of the given Tag
   void SetElement(uint16_t element) { ElementTag.tags[1] = element; }
@@ -66,14 +66,14 @@ public:
   }
 
   /// \brief Returns the full tag value of the given Tag
-  uint32_t GetElementTag() const { 
-#ifndef GDCM_WORDS_BIGENDIAN	  
+  uint32_t GetElementTag() const {
+#ifndef GDCM_WORDS_BIGENDIAN
     return (ElementTag.tag<<16) | (ElementTag.tag>>16);
 #else
     return ElementTag.tag;
 #endif
   }
- 
+
   /// \brief Sets the full tag value of the given Tag
   void SetElementTag(uint32_t tag) {
 #ifndef GDCM_WORDS_BIGENDIAN
@@ -82,13 +82,13 @@ public:
     ElementTag.tag = tag;
   }
 
-  // \brief Returns the Group or Element of the given Tag, depending on id (0/1)
+  /// Returns the Group or Element of the given Tag, depending on id (0/1)
   const uint16_t &operator[](const unsigned int &_id) const
     {
     assert(_id<2);
     return ElementTag.tags[_id];
     }
-  // \brief Returns the Group or Element of the given Tag, depending on id (0/1)    
+  /// Returns the Group or Element of the given Tag, depending on id (0/1)
   uint16_t &operator[](const unsigned int &_id)
     {
     assert(_id<2);
@@ -123,14 +123,14 @@ public:
     if( ElementTag.tags[0] < _val.ElementTag.tags[0] )
       return true;
     if( ElementTag.tags[0] == _val.ElementTag.tags[0]
-     && ElementTag.tags[1] <  _val.ElementTag.tags[1] )
+      && ElementTag.tags[1] <  _val.ElementTag.tags[1] )
       return true;
     return false;
 #else
-     // Plain comparison is enough!
-     return ( ElementTag.tag < _val.ElementTag.tag );
+    // Plain comparison is enough!
+    return ( ElementTag.tag < _val.ElementTag.tag );
 #endif
-   }      
+    }
   bool operator<=(const Tag &t2) const
     {
     const Tag &t1 = *this;
@@ -150,8 +150,8 @@ public:
   /// it does not prove the element is indeed in the dict...
   bool IsPublic() const { return !(ElementTag.tags[0] % 2); }
 
-  /// PRIVATE DATA ELEMENT: Additional Data Element, defined by an 
-  /// implementor, to communicate information that is not contained in 
+  /// PRIVATE DATA ELEMENT: Additional Data Element, defined by an
+  /// implementor, to communicate information that is not contained in
   /// Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
@@ -205,7 +205,7 @@ public:
     }
 
   /// return if the tag is considered to be an illegal tag
-  bool IsIllegal() const 
+  bool IsIllegal() const
     {
     // DICOM reserved those groups:
     return GetGroup() == 0x0001 || GetGroup() == 0x0003 || GetGroup() == 0x0005 || GetGroup() == 0x0007
