@@ -16,7 +16,8 @@
 //  and in the second step call ios::init (sockinetbuf *) and iosockstream::init ...
 //  The constructors of isockunix, osockunix and iosockunix are changed.
 
-using namespace std;
+//#include <windows.h>
+//using namespace std;
 
 #include <sockunix.h>
 #include <sys/socket.h>

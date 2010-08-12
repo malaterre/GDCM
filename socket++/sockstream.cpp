@@ -45,7 +45,6 @@
 // Version: 1.2 2002-07-25 Herbert Straub 
 // 	Improved Error Handling - extending the sockerr class by cOperation
 
-using namespace std;
 
 #include <config.h>
 #include <socket++/sockstream.h>
@@ -58,6 +57,7 @@ using namespace std;
 #if defined(__APPLE__)
 #typedef int socklen_t;
 #endif
+using namespace std;
 
 #ifndef WIN32
 	EXTERN_C_BEGIN
