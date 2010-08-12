@@ -640,7 +640,7 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
 
   const Attribute<0x8,0x18> sopinstanceuid = {0};
   gdcm::Scanner::ValuesType sopinstanceuids = scanner.GetValues( sopinstanceuid.GetTag() );
-  unsigned int ninstance = sopinstanceuids.size();
+  //unsigned int ninstance = sopinstanceuids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
@@ -908,15 +908,14 @@ bool DICOMDIRGenerator::Generate()
   ds.Insert( filesetconsistencyflag.GetAsDataElement() );
 
 
-  gdcm::DataElement de( Tag(0x4,0x1220) );
+  gdcm::DataElement de_drs( Tag(0x4,0x1220) ); // DirectoryRecordSequence
 
   SequenceOfItems * sqi = new SequenceOfItems;
-  //DataElement de( sisq );
-  de.SetVR( VR::SQ );
-  de.SetValue( *sqi );
-  de.SetVLToUndefined();
+  de_drs.SetVR( VR::SQ );
+  de_drs.SetValue( *sqi );
+  de_drs.SetVLToUndefined();
 
-  ds.Insert( de );
+  ds.Insert( de_drs );
 
   bool b;
   b = AddPatientDirectoryRecord();
@@ -974,8 +973,8 @@ the File-set.
   gdcm::DataSet::ConstIterator it = ds.Begin(); 
   for(; it != ds.End() && it->GetTag() != Tag(0x0004,0x1220); ++it)
     {
-    const DataElement &de = *it;
-    fmi_len_offset += de.GetLength<ExplicitDataElement>();
+    const DataElement &detmp = *it;
+    fmi_len_offset += detmp.GetLength<ExplicitDataElement>();
     }
   // Now add the partial length for attribute 0004,1220:
   fmi_len_offset += it->GetTag().GetLength();
@@ -991,15 +990,14 @@ the File-set.
   gdcm::DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End() && it->GetTag() <= Tag(0x0004,0x1220); ++it)
     {
-    const DataElement &de = *it;
-    fmi_len_offset2 += de.GetLength<ExplicitDataElement>();
+    const DataElement &detmp = *it;
+    fmi_len_offset2 += detmp.GetLength<ExplicitDataElement>();
     }
 }
 
 {
-  const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
-  //const SequenceOfItems * sqi = de.GetSequenceOfItems();
-  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+  //const gdcm::DataElement &de_drs = ds.GetDataElement( Tag(0x4,0x1220) ); // DirectoryRecordSequence
+  SmartPointer<SequenceOfItems> sqi = de_drs.GetValueAsSQ();
   unsigned int n = sqi->GetNumberOfItems();
   const Item &item = sqi->GetItem( n ); // last item
   VL sub = item.GetLength<ExplicitDataElement>(); 
