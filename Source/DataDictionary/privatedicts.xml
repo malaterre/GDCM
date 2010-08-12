@@ -772,6 +772,7 @@
   <entry owner="ELSCINT1" group="00e1" element="xx23" vr="DS" vm="2" name="Presentation Relative Part"/>
   <entry owner="ELSCINT1" group="00e1" element="xx24" vr="CS" vm="1" name="Presentation Horizontal Invert"/>
   <entry owner="ELSCINT1" group="00e1" element="xx25" vr="CS" vm="1" name="?"/>
+  <entry owner="ELSCINT1" group="00e1" element="xx2a" vr="DS" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="00e1" element="xx30" vr="UI" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="00e1" element="xx31" vr="CS" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="00e1" element="xx32" vr="US" vm="2" name="?"/>
@@ -793,6 +794,9 @@
   <entry owner="ELSCINT1" group="00e1" element="xx6b" vr="IS" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="00e1" element="xxa0" vr="LO" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="00e1" element="xxc2" vr="UI" vm="1" name="?"/>
+  <entry owner="ELSCINT1" group="00e3" element="xx00" vr="OB" vm="1" name="?"/>
+  <entry owner="ELSCINT1" group="00e3" element="xx18" vr="OB" vm="1" name="?"/>
+  <entry owner="ELSCINT1" group="00e3" element="xx1f" vr="OB" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="01e1" element="xx18" vr="OB" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="01e1" element="xx21" vr="ST" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="01e1" element="xx34" vr="IS" vm="1" name="?"/>
@@ -801,9 +805,11 @@
   <entry owner="ELSCINT1" group="01f1" element="xx03" vr="CS" vm="1" name="Concurrent Slices Generation"/>
   <entry owner="ELSCINT1" group="01f1" element="xx04" vr="CS" vm="1" name="Angular Sampling Density"/>
   <entry owner="ELSCINT1" group="01f1" element="xx05" vr="DS" vm="1" name="Reconstruction Arc"/>
+  <entry owner="ELSCINT1" group="01f1" element="xx06" vr="DS" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="01f1" element="xx07" vr="DS" vm="1" name="Table Velocity"/>
   <entry owner="ELSCINT1" group="01f1" element="xx08" vr="DS" vm="1" name="Acquisition Length"/>
   <entry owner="ELSCINT1" group="01f1" element="xx0a" vr="US" vm="1" name="Edge Enhancement Weight"/>
+  <entry owner="ELSCINT1" group="01f1" element="xx0b" vr="CS" vm="2" name="?"/>
   <entry owner="ELSCINT1" group="01f1" element="xx0c" vr="DS" vm="2" name="Scanner Relative Center"/>
   <entry owner="ELSCINT1" group="01f1" element="xx0d" vr="DS" vm="1" name="Rotation Angle"/>
   <entry owner="ELSCINT1" group="01f1" element="xx0e" vr="FL" vm="1" name="?"/>
@@ -3337,6 +3343,9 @@
   <entry owner="IDEXX" group="0011" element="xx00" vr="LO" vm="1" name="Breed Name"/>
   <entry owner="IDEXX" group="0011" element="xx01" vr="LO" vm="1" name="Species Name"/>
   <entry owner="IDEXX" group="0011" element="xx02" vr="PN" vm="1" name="Owner"/>
+  <entry owner="IMPAC" group="300b" element="xx02" vr="FL" vm="1" name="?"/>
+  <entry owner="IMPAC" group="300b" element="xx04" vr="FL" vm="1" name="?"/>
+  <entry owner="IMPAC" group="300b" element="xx0e" vr="FL" vm="1" name="?"/>
   <entry owner="IMS s.r.l. Biopsy Private Code" group="1269" element="xx01" vr="IS" vm="1" name="Biopsy Image"/>
   <entry owner="IMS s.r.l. Biopsy Private Code" group="1269" element="xx10" vr="IS" vm="1-n" name="Biopsy Markers X"/>
   <entry owner="IMS s.r.l. Biopsy Private Code" group="1269" element="xx11" vr="IS" vm="1-n" name="Biopsy Markers Y"/>
@@ -6386,6 +6395,48 @@
   <entry owner="SIEMENS MED SMS USG ANTARES 3D VOLUME" group="0039" element="xxe7" vr="UN" vm="1" name="DICOMAttrNameVoiPivotY"/>
   <entry owner="SIEMENS MED SMS USG ANTARES 3D VOLUME" group="0039" element="xxe8" vr="UN" vm="1" name="DICOMAttrNameVoiPivotZ"/>
   <entry owner="SIEMENS MED SMS USG ANTARES 3D VOLUME" group="0039" element="xxe9" vr="UN" vm="1" name="DICOMAttrNameCTopVoiQuad"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx00" vr="UN" vm="1" name="Private Creator Version"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx03" vr="UN" vm="1" name="Frame Rate"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx0c" vr="UN" vm="1" name="Burned in Graphics"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx0d" vr="UN" vm="1" name="SieClear Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx20" vr="UN" vm="1" name="B-Mode Submode"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx21" vr="UN" vm="1" name="B-Mode Dynamic Range"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx22" vr="UN" vm="1" name="B-Mode Overall Gain"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx23" vr="UN" vm="1" name="B-Mode Res/Speed Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx24" vr="UN" vm="1" name="B-Mode Edge Enhance Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx25" vr="UN" vm="1" name="B-Mode Persistence Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx26" vr="UN" vm="1" name="B-Mode Map Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2a" vr="UN" vm="1" name="B-Mode Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2d" vr="UN" vm="1" name="B-Mode Tint Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2e" vr="UN" vm="1" name="ClarifyVE Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3a" vr="UN" vm="1" name="Image Flag"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx40" vr="UN" vm="1" name="Color Flow state"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx41" vr="UN" vm="1" name="Color Flow Wall Filter Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx42" vr="UN" vm="1" name="Color Flow Submode"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx43" vr="UN" vm="1" name="Color Flow Overall Gain"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx44" vr="UN" vm="1" name="Color Flow Res/Speed Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx46" vr="UN" vm="1" name="Color Flow Smooth Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx47" vr="UN" vm="1" name="Color Flow Persistence Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx48" vr="UN" vm="1" name="Color Flow Map Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx49" vr="UN" vm="1" name="Color Flow Priority Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx54" vr="UN" vm="1" name="Color Flow Maximum Velocity"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx60" vr="UN" vm="1" name="Doppler Dynamic Range"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx61" vr="UN" vm="1" name="Doppler Overall Gain"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx62" vr="UN" vm="1" name="S2000 Private Doppler Wall Filter"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx63" vr="UN" vm="1" name="Attributes Doppler Gate Size"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx65" vr="UN" vm="1" name="Doppler Map Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx66" vr="UN" vm="1" name="Doppler Submode"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx69" vr="UN" vm="1" name="Doppler Time/Freq Res Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx6a" vr="UN" vm="1" name="Doppler Trace Inverted"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx6c" vr="UN" vm="1" name="Doppler Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx72" vr="UN" vm="1" name="Doppler Tint Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx80" vr="UN" vm="1" name="M-Mode Dynamic Range"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx81" vr="UN" vm="1" name="M-Mode Overall Gain"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx82" vr="UN" vm="1" name="M-Mode Edge Enhance Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx83" vr="UN" vm="1" name="M-Mode Map Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx86" vr="UN" vm="1" name="M-Mode Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx87" vr="UN" vm="1" name="M-Mode Submode"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx88" vr="UN" vm="1" name="M-Mode Tint Index"/>
   <entry owner="SIEMENS MED SP DXMG WH AWS 1" group="0019" element="xx01" vr="UL" vm="1-n" name="?"/>
   <entry owner="SIEMENS MED SP DXMG WH AWS 1" group="0019" element="xx02" vr="US" vm="2" name="?"/>
   <entry owner="SIEMENS MED SP DXMG WH AWS 1" group="0041" element="xx02" vr="SH" vm="1" name="Reason for the Requested Procedure"/>
@@ -7527,8 +7578,10 @@
   <entry owner="SPI-P-XSB-VISUB Release 1" group="0029" element="xx32" vr="CS" vm="1" name="?"/>
   <entry owner="SPI-P-XSB-VISUB Release 1" group="0029" element="xx3f" vr="CS" vm="1" name="?"/>
   <entry owner="STENTOR" group="0073" element="xx01" vr="ST" vm="1" name="?"/>
-  <entry owner="STENTOR" group="0073" element="xx02" vr="ST" vm="1" name="?"/>
-  <entry owner="STENTOR" group="0073" element="xx03" vr="ST" vm="1" name="?"/>
+  <entry owner="STENTOR" group="0073" element="xx02" vr="LT" vm="1" name="Private Creator"/>
+  <entry owner="STENTOR" group="0073" element="xx03" vr="UT" vm="1" name="Stentor Remote AETitle Element"/>
+  <entry owner="STENTOR" group="0073" element="xx04" vr="UT" vm="1" name="Stentor Local AETitle Element"/>
+  <entry owner="STENTOR" group="0073" element="xx06" vr="UT" vm="1" name="Stentor Transfer Syntax Value"/>
   <entry owner="SVISION" group="0017" element="xx00" vr="LO" vm="1" name="Extended Body Part"/>
   <entry owner="SVISION" group="0017" element="xx10" vr="LO" vm="1" name="Extended View Position"/>
   <entry owner="SVISION" group="0017" element="xx20" vr="SQ" vm="1" name="Scheduled Procedure Step"/>

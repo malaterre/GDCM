@@ -21,7 +21,7 @@
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc DefaultDicts.xsl DICOMV3.xml &gt; gdcmDefaultDicts.cxx
+// $ xsltproc DefaultPrivateDicts.xsl privatedicts.xml &gt; gdcmPrivateDefaultDicts.cxx
 
 /*=========================================================================
 
