@@ -19,7 +19,7 @@
 #include "gdcmSystem.h"
 #include "gdcmFilenameGenerator.h"
 
-int TestDICOMDIRGenerator(int argc, char *argv[])
+int TestDICOMDIRGenerator2(int argc, char *argv[])
 {
   (void)argc;
   const char *directory = gdcm::Testing::GetDataRoot();
@@ -40,7 +40,7 @@ int TestDICOMDIRGenerator(int argc, char *argv[])
     }
   directory = tmpdir.c_str();
 
-  const char outsubdir[] = "TestDICOMDIRGenerator";
+  const char outsubdir[] = "TestDICOMDIRGenerator2";
   std::string outtmpdir = gdcm::Testing::GetTempDirectory( outsubdir );
   if( !gdcm::System::FileIsDirectory( outtmpdir.c_str() ) )
     {

@@ -75,7 +75,8 @@ IF(GDCM_DATA_ROOT)
   TestCopyDataSet
   TestDataElementValueAsSQ
   TestImageWriter2
-  TestDICOMDIRGenerator # Must be after TestImageChangeTransferSyntax4
+  TestDICOMDIRGenerator1 # Must be after TestImageChangeTransferSyntax4
+  TestDICOMDIRGenerator2 # Must be after TestImageChangeTransferSyntax4
       )
 ENDIF(GDCM_DATA_ROOT)
 # gdcmDataExtra
