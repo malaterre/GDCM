@@ -35,11 +35,13 @@ USER INFORMATION ITEM FIELDS
 class UserInformation
 {
 public:
-static const uint8_t ItemType = 0x50;
-static const uint8_t Reserved2 = 0x00;
+UserInformation();
+const std::ostream &Write(std::ostream &os) const;
+private:
+static const uint8_t ItemType;
+static const uint8_t Reserved2;
 uint16_t ItemLength; // len of
 std::string /*UserInformation*/ Data; // ??
-private:
 };
 
 } // end namespace network

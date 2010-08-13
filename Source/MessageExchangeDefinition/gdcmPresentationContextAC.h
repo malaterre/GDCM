@@ -31,15 +31,17 @@ PRESENTATION CONTEXT ITEM FIELDS
 class PresentationContextAC
 {
 public:
-static const uint8_t ItemType = 0x21;
-static const uint8_t Reserved2 = 0x00;
+  PresentationContextAC();
+  const std::ostream &Write(std::ostream &os) const;
+private:
+static const uint8_t ItemType;
+static const uint8_t Reserved2;
 uint16_t ItemLength; // len of last transfer syntax
 uint8_t /*PresentationContext*/ID;
-static const uint8_t Reserved6 = 0x00;
+static const uint8_t Reserved6;
 uint8_t /*Reason*/Result;
-static const uint8_t Reserved8 = 0x00;
+static const uint8_t Reserved8;
 TransferSyntax_ SubItems;
-private:
 };
 
 } // end namespace network
