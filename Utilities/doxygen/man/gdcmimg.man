@@ -171,7 +171,7 @@ Recognized extensions are .j2k, .jp2, .jpc (case insensitive)
 $ gdcmimg -i input.j2k -o output.dcm
 \endverbatim
 
-the image will be a Secondary Capture 
+the image will be a Secondary Capture
 
 \subsection sopclassuid Specifying a SOP Class UID
 
@@ -179,7 +179,15 @@ Instead of the default Secondary Capture Image Storage, one may want to
 specify, say VL Photographic Image Storage.
 
 \verbatim
-$ gdcmimg --sop-class-uid 1.2.840.10008.5.1.4.1.1.77.1.4 input.jpg output.dcm 
+$ gdcmimg --sop-class-uid 1.2.840.10008.5.1.4.1.1.77.1.4 input.jpg output.dcm
+\endverbatim
+
+\section multiple_files Multiple Files
+
+gdcmimg handle nicely a set of files (for instance jpeg):
+
+\verbatim
+$ gdcmimg 1.jpg 2.jpg 3.jpg 4.jpg output.dcm
 \endverbatim
 
 \section warning Warning
