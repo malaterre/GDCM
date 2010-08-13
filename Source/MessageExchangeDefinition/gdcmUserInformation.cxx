@@ -18,5 +18,26 @@ namespace gdcm
 {
 namespace network
 {
+
+const uint8_t UserInformation::ItemType = 0x50;
+const uint8_t UserInformation::Reserved2 = 0x00;
+
+UserInformation::UserInformation()
+{
+ItemLength = 0; // len of
+Data= "bla"; // ??
+
+}
+
+const std::ostream &UserInformation::Write(std::ostream &os) const
+{
+  os.write( (char*)&ItemType, sizeof(ItemType) );
+  os.write( (char*)&Reserved2, sizeof(Reserved2) );
+  os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  os.write( Data.c_str(), Data.size() );
+
+  return os;
+}
+
 } // end namespace network
 } // end namespace gdcm

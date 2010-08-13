@@ -26,5 +26,45 @@ Items.
 */
 namespace network
 {
+const uint8_t AAssociateRQPDU::ItemType = 0x1; // PDUType ?
+const uint8_t AAssociateRQPDU::Reserved2 = 0x0;
+const uint16_t AAssociateRQPDU::ProtocolVersion = 0x100; // big - endian ?
+const uint16_t AAssociateRQPDU::Reserved9_10 = 0x0;
+const uint8_t AAssociateRQPDU::Reserved43_74[32] = {};
+
+AAssociateRQPDU::AAssociateRQPDU()
+{
+  ItemLength = 0;
+  memset(CalledAETitle, ' ', sizeof(CalledAETitle));
+  const char called[] = "ANY-SCP";
+  strncpy(CalledAETitle, called, strlen(called) );
+  memset(CallingAETitle, ' ', sizeof(CallingAETitle));
+  const char calling[] = "ECHOSCU";
+  strncpy(CallingAETitle, calling, strlen(calling) );
+
+  PresContextAC.push_back( PresentationContextAC() );
+}
+
+const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
+{
+  os.write( (char*)&ItemType, sizeof(ItemType) );
+  os.write( (char*)&Reserved2, sizeof(Reserved2) );
+  os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  os.write( (char*)&ProtocolVersion, sizeof(ProtocolVersion) );
+  os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
+  os.write( CalledAETitle, 16 );
+  os.write( CallingAETitle, 16 );
+  os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
+  AppContext.Write(os);
+  std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
+  for( ; it != PresContextAC.end(); ++it)
+    {
+    it->Write(os);
+    }
+  UserInfo.Write(os);
+
+  return os;
+}
+
 } // end namespace network
 } // end namespace gdcm

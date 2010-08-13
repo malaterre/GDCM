@@ -19,6 +19,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
@@ -91,7 +92,7 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   IF(${exename} STREQUAL "gdcmpdf")
     TARGET_LINK_LIBRARIES(${exename} ${POPPLER_LIBRARIES})
   ELSEIF(${exename} STREQUAL "gdcmscu")
-    TARGET_LINK_LIBRARIES(${exename} socketxx)
+    TARGET_LINK_LIBRARIES(${exename} gdcmMEXD socketxx)
   ELSEIF(${exename} STREQUAL "gdcminfo")
     IF(GDCM_USE_SYSTEM_PODOFO)
       TARGET_LINK_LIBRARIES(${exename} ${PODOFO_LIBRARIES})
