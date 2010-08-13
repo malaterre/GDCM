@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPresentationDataValue.h"
+#include "gdcmAbstractSyntax.h"
 
 namespace gdcm
 {

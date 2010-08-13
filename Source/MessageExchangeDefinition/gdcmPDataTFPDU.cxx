@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPDataPDU.h"
+#include "gdcmPDataTFPDU.h"
 
 namespace gdcm
 {

@@ -16,6 +16,7 @@
 #define GDCMPRESENTATIONCONTEXT_H
 
 #include "gdcmTypes.h"
+#include "gdcmAbstractSyntax.h"
 
 namespace gdcm
 {

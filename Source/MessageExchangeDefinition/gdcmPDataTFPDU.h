@@ -16,6 +16,7 @@
 #define GDCMPDATATFPDU_H
 
 #include "gdcmTypes.h"
+#include "gdcmPresentationDataValue.h"
 
 namespace gdcm
 {
