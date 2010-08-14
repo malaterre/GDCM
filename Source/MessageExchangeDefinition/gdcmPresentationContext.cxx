@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmPresentationContext.h"
+#include "gdcmUIDs.h"
 
 namespace gdcm
 {
@@ -28,7 +29,17 @@ PresentationContext::PresentationContext()
 {
   ItemLength = 0;
   ID = 0;
-  TransferSyntaxes.push_back( TransferSyntax_() );
+  TransferSyntax_ t1;
+  t1.SetFromUID( gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass ) );
+  //TransferSyntaxes.push_back( t1 );
+
+  TransferSyntax_ t2;
+  t2.SetFromUID( gdcm::UIDs::GetUIDString( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM ) );
+  TransferSyntaxes.push_back( t2 );
+
+  TransferSyntax_ t3;
+  t3.SetFromUID( "1.2.2.276.0.7230010.3.0.3.5.5" );
+  //TransferSyntaxes.push_back( t3 );
 }
 
 const std::ostream &PresentationContext::Write(std::ostream &os) const

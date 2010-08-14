@@ -16,6 +16,7 @@
 #define GDCMUSERINFORMATION_H
 
 #include "gdcmTypes.h"
+#include "gdcmMaximumLengthSub.h"
 
 namespace gdcm
 {
@@ -41,6 +42,7 @@ private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
   uint16_t ItemLength; // len of
+  MaximumLengthSub MLS;
   std::string /*UserInformation*/ Data; // ??
 };
 
