@@ -34,14 +34,14 @@ public:
   PresentationContextAC();
   const std::ostream &Write(std::ostream &os) const;
 private:
-static const uint8_t ItemType;
-static const uint8_t Reserved2;
-uint16_t ItemLength; // len of last transfer syntax
-uint8_t /*PresentationContext*/ID;
-static const uint8_t Reserved6;
-uint8_t /*Reason*/Result;
-static const uint8_t Reserved8;
-TransferSyntax_ SubItems;
+  static const uint8_t ItemType;
+  static const uint8_t Reserved2;
+  uint16_t ItemLength; // len of last transfer syntax
+  uint8_t /*PresentationContext*/ID;
+  static const uint8_t Reserved6;
+  uint8_t /*Reason*/Result;
+  static const uint8_t Reserved8;
+  TransferSyntax_ SubItems;
 };
 
 } // end namespace network

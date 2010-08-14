@@ -23,8 +23,8 @@ const uint8_t ApplicationContext::Reserved2 = 0x00;
 
 ApplicationContext::ApplicationContext()
 {
-  ItemLength = 0;
   Name = "1.2.840.10008.3.1.1.1";
+  ItemLength = Name.size();
 }
 
 const std::ostream &ApplicationContext::Write(std::ostream &os) const

@@ -42,7 +42,7 @@ AAssociateRQPDU::AAssociateRQPDU()
   const char calling[] = "ECHOSCU";
   strncpy(CallingAETitle, calling, strlen(calling) );
 
-  PresContextAC.push_back( PresentationContextAC() );
+  PresContext.push_back( PresentationContext() );
 }
 
 const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
@@ -56,8 +56,8 @@ const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
   os.write( CallingAETitle, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write(os);
-  std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
-  for( ; it != PresContextAC.end(); ++it)
+  std::vector<PresentationContext>::const_iterator it = PresContext.begin();
+  for( ; it != PresContext.end(); ++it)
     {
     it->Write(os);
     }

@@ -24,9 +24,8 @@ const uint8_t UserInformation::Reserved2 = 0x00;
 
 UserInformation::UserInformation()
 {
-ItemLength = 0; // len of
-Data= "bla"; // ??
-
+  Data= "OFFIS_DCMTK_355";
+  ItemLength = Data.size();
 }
 
 const std::ostream &UserInformation::Write(std::ostream &os) const
