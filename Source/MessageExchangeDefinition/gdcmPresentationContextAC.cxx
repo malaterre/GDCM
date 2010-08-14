@@ -26,7 +26,7 @@ const uint8_t PresentationContextAC::Reserved8 = 0x00;
 PresentationContextAC::PresentationContextAC()
 {
   ItemLength = 0; // len of last transfer syntax
-  ID = 0;
+  ID = 1; // odd [1-255]
   Result = 0;
 }
 
@@ -39,7 +39,7 @@ const std::ostream &PresentationContextAC::Write(std::ostream &os) const
   os.write( (char*)&Reserved6, sizeof(Reserved6) );
   os.write( (char*)&Result, sizeof(Result) );
   os.write( (char*)&Reserved8, sizeof(Reserved8) );
-  //SubItems.Write(os);
+  SubItems.Write(os);
 
   return os;
 }

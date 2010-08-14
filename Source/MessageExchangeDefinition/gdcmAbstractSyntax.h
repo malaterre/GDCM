@@ -30,11 +30,13 @@ ABSTRACT SYNTAX SUB-ITEM FIELDS
 class AbstractSyntax
 {
 public:
-static const uint8_t ItemType = 0x30;
-static const uint8_t Reserved2 = 0x00;
-uint16_t ItemLength; // len of
-std::string /*AbstractSyntax*/ Name; // UID
+  AbstractSyntax();
+  const std::ostream &Write(std::ostream &os) const;
 private:
+  static const uint8_t ItemType;
+  static const uint8_t Reserved2;
+  uint16_t ItemLength; // len of
+  std::string /*AbstractSyntax*/ Name; // UID
 };
 
 } // end namespace network

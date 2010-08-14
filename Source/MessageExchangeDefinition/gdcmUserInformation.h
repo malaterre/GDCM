@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMABSTRACTSYNTAX_H
-#define GDCMABSTRACTSYNTAX_H
+#ifndef GDCMUSERINFORMATION_H
+#define GDCMUSERINFORMATION_H
 
 #include "gdcmTypes.h"
 
@@ -35,17 +35,17 @@ USER INFORMATION ITEM FIELDS
 class UserInformation
 {
 public:
-UserInformation();
-const std::ostream &Write(std::ostream &os) const;
+  UserInformation();
+  const std::ostream &Write(std::ostream &os) const;
 private:
-static const uint8_t ItemType;
-static const uint8_t Reserved2;
-uint16_t ItemLength; // len of
-std::string /*UserInformation*/ Data; // ??
+  static const uint8_t ItemType;
+  static const uint8_t Reserved2;
+  uint16_t ItemLength; // len of
+  std::string /*UserInformation*/ Data; // ??
 };
 
 } // end namespace network
 
 } // end namespace gdcm
 
-#endif //GDCMABSTRACTSYNTAX_H
+#endif //GDCMUSERINFORMATION_H

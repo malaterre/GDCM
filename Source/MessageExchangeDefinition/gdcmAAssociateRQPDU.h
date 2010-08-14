@@ -18,7 +18,7 @@
 #include "gdcmTypes.h"
 #include "gdcmVR.h" // AEComp
 #include "gdcmApplicationContext.h"
-#include "gdcmPresentationContextAC.h"
+#include "gdcmPresentationContext.h"
 #include "gdcmUserInformation.h"
 
 namespace gdcm
@@ -31,6 +31,7 @@ namespace network
 {
 
 /**
+Table 9-11 ASSOCIATE-RQ PDU fields
  */
 class AAssociateRQPDU
 {
@@ -38,7 +39,6 @@ public:
   AAssociateRQPDU();
   const std::ostream &Write(std::ostream &os) const;
 /*
-Table 9-11 ASSOCIATE-RQ PDU fields
 */
 private:
 // 1 PDU-type 01H
@@ -93,7 +93,7 @@ Information Item. For a complete description of the use of these items
 see Sections 7.1.1.2, 7.1.1.13, and 7.1.1.6.
 */
 ApplicationContext AppContext;
-std::vector<PresentationContextAC> PresContextAC;
+std::vector<PresentationContext> PresContext;
 UserInformation UserInfo;
 
 };

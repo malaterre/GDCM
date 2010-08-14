@@ -17,6 +17,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmAbstractSyntax.h"
+#include "gdcmTransferSyntax_.h"
 
 namespace gdcm
 {
@@ -31,15 +32,25 @@ namespace network
 class PresentationContext
 {
 public:
-static const uint8_t ItemType = 0x20;
-static const uint8_t Reserved2 = 0x00;
-uint16_t ItemLength; // len of last transfer syntax
-uint8_t /*PresentationContext*/ID;
-static const uint8_t Reserved6 = 0x00;
-static const uint8_t Reserved7 = 0x00;
-static const uint8_t Reserved8 = 0x00;
-AbstractSyntax SubItems;
+  PresentationContext();
+  const std::ostream &Write(std::ostream &os) const;
 private:
+  static const uint8_t ItemType;
+  static const uint8_t Reserved2;
+  uint16_t ItemLength; // len of last transfer syntax
+  uint8_t /*PresentationContext*/ID;
+  static const uint8_t Reserved6;
+  static const uint8_t Reserved7;
+  static const uint8_t Reserved8;
+/*
+This variable field shall contain the following sub-items: one Abstract
+Syntax and one or more Transfer Syntax(es). For a complete
+description of the use and encoding of these sub-items see Sections
+9.3.2.2.1 and 9.3.2.2.2.
+*/
+
+  AbstractSyntax SubItems;
+  std::vector<TransferSyntax_> TransferSyntaxes;
 };
 
 } // end namespace network
