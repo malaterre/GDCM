@@ -12,33 +12,27 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmUserInformation.h"
+#include "gdcmImplementationClassUIDSub.h"
 
 namespace gdcm
 {
 namespace network
 {
+const uint8_t ImplementationClassUIDSub::ItemType = 0x52;
+const uint8_t ImplementationClassUIDSub::Reserved2 = 0x00;
 
-const uint8_t UserInformation::ItemType = 0x50;
-const uint8_t UserInformation::Reserved2 = 0x00;
-
-UserInformation::UserInformation()
+ImplementationClassUIDSub::ImplementationClassUIDSub()
 {
-  //Data = ( "1.2.2.276.0.7230010.3.0.3.5.5" );
-  //Data += "OFFIS_DCMTK_355";
-  //ItemLength = Data.size();
-  ItemLength = 0;
+  ImplementationClassUID = "1.2.276.0.7230010.3.0.3.5.5";
+  ItemLength = ImplementationClassUID.size();
 }
 
-const std::ostream &UserInformation::Write(std::ostream &os) const
+const std::ostream &ImplementationClassUIDSub::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
   os.write( (char*)&ItemLength, sizeof(ItemLength) );
-  MLS.Write(os);
-  //os.write( Data.c_str(), Data.size() );
-  ICUID.Write(os);
-  IVNS.Write(os);
+  os.write( ImplementationClassUID.c_str(), ImplementationClassUID.size() );
 
   return os;
 }
