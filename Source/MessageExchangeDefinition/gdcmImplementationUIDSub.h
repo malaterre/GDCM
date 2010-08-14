@@ -1,4 +1,5 @@
 /*=========================================================================
+:w
 
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
@@ -12,13 +13,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMUSERINFORMATION_H
-#define GDCMUSERINFORMATION_H
+#ifndef GDCMIMPLEMENTATIONUIDSUB_H
+#define GDCMIMPLEMENTATIONUIDSUB_H
 
 #include "gdcmTypes.h"
-#include "gdcmMaximumLengthSub.h"
-#include "gdcmImplementationVersionNameSub.h"
-#include "gdcmImplementationClassUIDSub.h"
 
 namespace gdcm
 {
@@ -27,31 +25,23 @@ namespace network
 {
 
 /**
-Table 9-16
-USER INFORMATION ITEM FIELDS
-
-TODO what is the goal of :
-
-Table 9-20
-USER INFORMATION ITEM FIELDS
+Table D.3-2
+IMPLEMENTATION UID SUB-ITEM FIELDS (A-ASSOCIATE-AC)
  */
-class UserInformation
+class ImplementationUIDSub
 {
 public:
-  UserInformation();
+  ImplementationUIDSub();
   const std::ostream &Write(std::ostream &os) const;
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
-  uint16_t ItemLength; // len of
-  MaximumLengthSub MLS;
-  //std::string /*UserInformation*/ Data; // ??
-  ImplementationClassUIDSub ICUID;
-  ImplementationVersionNameSub IVNS;
+  uint16_t ItemLength;
+  std::string ImplementationClassUID;
 };
 
 } // end namespace network
 
 } // end namespace gdcm
 
-#endif //GDCMUSERINFORMATION_H
+#endif //GDCMMAXIMUMLENGTHSUB_H
