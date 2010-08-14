@@ -1,4 +1,5 @@
 /*=========================================================================
+:w
 
   Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
@@ -12,35 +13,39 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmTransferSyntax_.h"
+#ifndef GDCMMAXIMUMLENGTHSUB_H
+#define GDCMMAXIMUMLENGTHSUB_H
+
+#include "gdcmTypes.h"
 
 namespace gdcm
 {
+
 namespace network
 {
-const uint8_t TransferSyntax_::ItemType = 0x40;
-const uint8_t TransferSyntax_::Reserved2 = 0x00;
 
-TransferSyntax_::TransferSyntax_()
-{
-  Name = "1.2.840.10008.1.1";
-  ItemLength = Name.size();
-}
+/**
+Annex D
+Table D.1-1
+MAXIMUM LENGTH SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
 
-void TransferSyntax_::SetFromUID( const char *uid )
+Table D.1-2
+Maximum length sub-item fields (A-ASSOCIATE-AC)
+ */
+class MaximumLengthSub
 {
-  Name = uid;
-  ItemLength = Name.size();
-}
-
-const std::ostream &TransferSyntax_::Write(std::ostream &os) const
-{
-  os.write( (char*)&ItemType, sizeof(ItemType) );
-  os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  os.write( (char*)&ItemLength, sizeof(ItemLength) );
-  os.write( Name.c_str(), Name.size() );
-  return os;
-}
+public:
+  MaximumLengthSub();
+  const std::ostream &Write(std::ostream &os) const;
+private:
+  static const uint8_t ItemType;
+  static const uint8_t Reserved2;
+  uint16_t ItemLength;
+  uint32_t MaximumLength;
+};
 
 } // end namespace network
+
 } // end namespace gdcm
+
+#endif //GDCMMAXIMUMLENGTHSUB_H

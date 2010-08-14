@@ -12,33 +12,28 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmTransferSyntax_.h"
+#include "gdcmMaximumLengthSub.h"
 
 namespace gdcm
 {
 namespace network
 {
-const uint8_t TransferSyntax_::ItemType = 0x40;
-const uint8_t TransferSyntax_::Reserved2 = 0x00;
+const uint8_t MaximumLengthSub::ItemType = 0x51;
+const uint8_t MaximumLengthSub::Reserved2 = 0x00;
 
-TransferSyntax_::TransferSyntax_()
+MaximumLengthSub::MaximumLengthSub()
 {
-  Name = "1.2.840.10008.1.1";
-  ItemLength = Name.size();
+  ItemLength = 0;
+  MaximumLength = 0;
 }
 
-void TransferSyntax_::SetFromUID( const char *uid )
-{
-  Name = uid;
-  ItemLength = Name.size();
-}
-
-const std::ostream &TransferSyntax_::Write(std::ostream &os) const
+const std::ostream &MaximumLengthSub::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
   os.write( (char*)&ItemLength, sizeof(ItemLength) );
-  os.write( Name.c_str(), Name.size() );
+  os.write( (char*)&MaximumLength, sizeof(MaximumLength) );
+
   return os;
 }
 
