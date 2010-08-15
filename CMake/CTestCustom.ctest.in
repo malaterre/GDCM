@@ -16,6 +16,9 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "gdcmcharls"
   "gdcmexpat"
   "warning CS0114:"
+  "warning CS0108:"
+  "warning CS0109:"
+  "warning CS1591:"
   )
 
 # Disable dynamic analysis on some tests:
