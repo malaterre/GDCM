@@ -48,7 +48,7 @@ blacklist = (
 "GroupDict"
 "DictConverter"
 # Information thingy :
-
+"MacroEntry"
 "XMLDictReader"
 "TableReader"
 "Table"
