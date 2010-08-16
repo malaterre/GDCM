@@ -24,9 +24,7 @@ const uint8_t ApplicationContext::Reserved2 = 0x00;
 
 ApplicationContext::ApplicationContext()
 {
-  Name = "1.2.840.10008.3.1.1.1"; // DICOMApplicationContextName = 68, // DICOM Application Context Name
-  ItemLength = Name.size();
-  assert( ItemLength + 4 == Size() );
+  UpdateName( "1.2.840.10008.3.1.1.1" ); // DICOMApplicationContextName = 68, // DICOM Application Context Name
 }
 
 std::istream &ApplicationContext::Read(std::istream &is)
@@ -53,7 +51,6 @@ const std::ostream &ApplicationContext::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
   uint16_t copy = ItemLength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
@@ -71,6 +68,13 @@ size_t ApplicationContext::Size() const
   ret += sizeof(ItemLength);
   ret += ItemLength;
   return ret;
+}
+
+void ApplicationContext::UpdateName( const char *name )
+{
+  Name = name;
+  ItemLength = Name.size();
+  assert( ItemLength + 4 == Size() );
 }
 
 } // end namespace network

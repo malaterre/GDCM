@@ -34,11 +34,12 @@ public:
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
 
-  void SetName( const char *name ) { Name = name; }
+  void SetName( const char *name ) { UpdateName( name ); }
   const char *GetName() const { return Name.c_str(); }
   size_t Size() const;
 
 private:
+  void UpdateName( const char *name );
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
   uint16_t ItemLength; // len of application context name
