@@ -42,6 +42,8 @@ public:
 
   void AddTransferSyntax( TransferSyntax_ const &ts );
 
+  void SetPresentationContextID( uint8_t id );
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;

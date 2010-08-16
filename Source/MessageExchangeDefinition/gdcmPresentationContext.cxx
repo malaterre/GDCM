@@ -31,10 +31,6 @@ PresentationContext::PresentationContext()
 {
   ID = 0x01;
 
-  TransferSyntax_ t;
-  t.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-  TransferSyntaxes.push_back( t );
-
   ItemLength = Size() - 4;
   assert( ItemLength + 4 == Size() );
 }
@@ -93,13 +89,20 @@ size_t PresentationContext::Size() const
 void PresentationContext::SetAbstractSyntax( AbstractSyntax const & as )
 {
   SubItems = as;
+  ItemLength = Size() - 4;
   assert( ItemLength + 4 == Size() );
 }
 
 void PresentationContext::AddTransferSyntax( TransferSyntax_ const &ts )
 {
   TransferSyntaxes.push_back( ts );
+  ItemLength = Size() - 4;
   assert( ItemLength + 4 == Size() );
+}
+
+void PresentationContext::SetPresentationContextID( uint8_t id )
+{
+  ID = id;
 }
 
 } // end namespace network

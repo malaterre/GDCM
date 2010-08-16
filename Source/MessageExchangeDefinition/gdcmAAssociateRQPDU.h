@@ -42,6 +42,8 @@ public:
   size_t Size() const;
   void AddPresentationContext( PresentationContext const &pc );
 
+  void SetCallingAETitle(const char callingaetitle[16]);
+
 private:
   // 1 PDU-type 01H
   static const uint8_t ItemType; // PDUType ?

@@ -24,7 +24,7 @@ const uint8_t TransferSyntax_::Reserved2 = 0x00;
 
 TransferSyntax_::TransferSyntax_()
 {
-  UpdateName( "1.2.840.10008.1.1" );
+  //UpdateName( "1.2.840.10008.1.1" );
 }
 
 void TransferSyntax_::SetName( const char *name )

@@ -107,5 +107,16 @@ void AAssociateRQPDU::AddPresentationContext( PresentationContext const &pc )
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
+void AAssociateRQPDU::SetCallingAETitle(const char callingaetitle[16])
+{
+  size_t len = strlen( callingaetitle );
+  if( len <= 16 )
+    {
+    memset(CallingAETitle, ' ', sizeof(CallingAETitle));
+    strncpy(CallingAETitle, callingaetitle, len );
+    }
+  // FIXME Need to check upper case
+}
+
 } // end namespace network
 } // end namespace gdcm
