@@ -32,6 +32,7 @@ class AbstractSyntax
 public:
   AbstractSyntax();
   const std::ostream &Write(std::ostream &os) const;
+size_t Size() const;
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;

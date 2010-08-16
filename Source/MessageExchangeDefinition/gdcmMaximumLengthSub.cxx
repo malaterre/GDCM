@@ -26,6 +26,7 @@ MaximumLengthSub::MaximumLengthSub()
 {
   ItemLength = 0x4;
   MaximumLength = 0x4000;
+  assert( (ItemLength + 4) == Size() );
 }
 
 std::istream &MaximumLengthSub::Read(std::istream &is)
@@ -67,6 +68,17 @@ const std::ostream &MaximumLengthSub::Write(std::ostream &os) const
   }
 
   return os;
+}
+
+size_t MaximumLengthSub::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  ret += sizeof(MaximumLength);
+
+  return ret;
 }
 
 } // end namespace network

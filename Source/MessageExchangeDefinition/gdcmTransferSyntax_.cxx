@@ -26,6 +26,7 @@ TransferSyntax_::TransferSyntax_()
 {
   Name = "1.2.840.10008.1.1";
   ItemLength = Name.size();
+  assert( ItemLength + 4 == Size() );
 }
 
 void TransferSyntax_::SetFromUID( const char *uid )
@@ -65,6 +66,17 @@ const std::ostream &TransferSyntax_::Write(std::ostream &os) const
 
   os.write( Name.c_str(), Name.size() );
   return os;
+}
+
+size_t TransferSyntax_::Size() const
+{
+  size_t ret = 0;
+  assert( Name.size() == ItemLength );
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  ret += ItemLength;
+  return ret;
 }
 
 } // end namespace network

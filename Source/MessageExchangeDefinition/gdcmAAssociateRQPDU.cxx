@@ -44,7 +44,15 @@ AAssociateRQPDU::AAssociateRQPDU()
 
   PresContext.push_back( PresentationContext() );
 
-  ItemLength = 0xcd;
+  ItemLength = 0xcd; // 205
+  ItemLength = Size() - 6;
+  assert( (ItemLength + 4 + 1 + 1) == Size() );
+}
+
+std::istream &AAssociateRQPDU::Read(std::istream &is)
+{
+  assert( 0 );
+  return is;
 }
 
 const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
@@ -69,6 +77,28 @@ const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
   UserInfo.Write(os);
 
   return os;
+}
+
+size_t AAssociateRQPDU::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  ret += sizeof(ProtocolVersion);
+  ret += sizeof(Reserved9_10);
+  ret += sizeof(CalledAETitle);
+  ret += sizeof(CallingAETitle);
+  ret += sizeof(Reserved43_74);
+  ret += AppContext.Size();
+  std::vector<PresentationContext>::const_iterator it = PresContext.begin();
+  for( ; it != PresContext.end(); ++it)
+    {
+    ret += it->Size();
+    }
+  ret += UserInfo.Size();
+
+  return ret;
 }
 
 } // end namespace network

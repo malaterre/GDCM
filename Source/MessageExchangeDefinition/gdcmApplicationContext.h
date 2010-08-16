@@ -36,6 +36,7 @@ public:
 
   void SetName( const char *name ) { Name = name; }
   const char *GetName() const { return Name.c_str(); }
+  size_t Size() const;
 
 private:
   static const uint8_t ItemType;
