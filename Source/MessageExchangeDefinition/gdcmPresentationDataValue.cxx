@@ -34,7 +34,7 @@ PresentationDataValue::PresentationDataValue()
   const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
   std::string suid = uid;
   suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue(  suid.c_str(), suid.size()  );
+  de.SetByteValue( suid.c_str(), suid.size()  );
   ds.Insert( de );
     {
     gdcm::Attribute<0x0,0x100> at = { 48 };

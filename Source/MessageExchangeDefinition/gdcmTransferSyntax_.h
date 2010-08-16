@@ -17,6 +17,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmTransferSyntax.h"
+#include "gdcmUIDs.h"
 
 namespace gdcm
 {
@@ -38,11 +39,18 @@ class TransferSyntax_
 {
 public:
   TransferSyntax_();
-  void SetFromUID( const char *uid );
+  void SetName( const char *name );
+  const char *GetName() const { return Name.c_str(); }
+
+  // accept a gdcm::UIDs::TSType also... 
+  void SetNameFromUID( gdcm::UIDs::TSName tsname );
+
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
-size_t Size() const;
+  size_t Size() const;
 private:
+  void UpdateName( const char *name );
+
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
   uint16_t ItemLength; // len of

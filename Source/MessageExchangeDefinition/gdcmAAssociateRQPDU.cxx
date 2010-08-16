@@ -42,7 +42,7 @@ AAssociateRQPDU::AAssociateRQPDU()
   const char calling[] = "ECHOSCU";
   strncpy(CallingAETitle, calling, strlen(calling) );
 
-  PresContext.push_back( PresentationContext() );
+//  PresContext.push_back( PresentationContext() );
 
   ItemLength = Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
@@ -98,6 +98,13 @@ size_t AAssociateRQPDU::Size() const
   ret += UserInfo.Size();
 
   return ret;
+}
+
+void AAssociateRQPDU::AddPresentationContext( PresentationContext const &pc )
+{
+  PresContext.push_back( pc );
+  ItemLength = Size() - 6;
+  assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
 } // end namespace network

@@ -23,24 +23,18 @@
 
 // Execute like this:
 // ./bin/gdcmscu www.dicomserver.co.uk 11112 toto 
-int main(int argc, char *argv[])
+void CEcho( const char *remote, int portno )
 {
- if (argc < 3)
-   {
-   std::cerr << "Usage: " << argv [0] << " remote-host portno" << std::endl;
-   return 1;
-   }
-
-  int portno = atoi (argv [2]);
-
   echo e(protocol::tcp);
 
   if (portno == 0)
-    e->connect (argv [1]);
+    e->connect ( remote );
   else
-    e->connect (argv [1], portno);
+    e->connect ( remote, portno);
 
   gdcm::network::AAssociateRQPDU cecho;
+  gdcm::network::PresentationContext pc;
+  cecho.AddPresentationContext( pc );
   cecho.Write(e);
   e.flush();
 
@@ -61,6 +55,56 @@ int main(int argc, char *argv[])
   // send release:
   gdcm::network::AReleaseRQPDU rel;
   rel.Write( e );
+
+}
+
+void CStore( const char *remote, int portno )
+{
+  echo e(protocol::tcp);
+
+  if (portno == 0)
+    e->connect ( remote );
+  else
+    e->connect ( remote, portno);
+
+  gdcm::network::AAssociateRQPDU cecho;
+  cecho.Write(e);
+  e.flush();
+
+  /*
+  gdcm::network::AAssociateACPDU acpdu;
+  acpdu.Read( e );
+
+  gdcm::network::PDataTPPDU pdata;
+  pdata.Write( e );
+  e.flush();
+
+  // listen back
+  gdcm::network::PDataTPPDU pdata2;
+  pdata2.Read( e );
+
+  // Print output DataSet:
+  pdata2.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
+
+  // send release:
+  gdcm::network::AReleaseRQPDU rel;
+  rel.Write( e );
+  */
+
+}
+
+int main(int argc, char *argv[])
+{
+ if (argc < 3)
+   {
+   std::cerr << "Usage: " << argv [0] << " remote-host portno" << std::endl;
+   return 1;
+   }
+
+  int portno = atoi (argv [2]);
+
+  CEcho( argv[1], portno );
+  //CStore( argv[1], portno );
 
   return 0;
 }

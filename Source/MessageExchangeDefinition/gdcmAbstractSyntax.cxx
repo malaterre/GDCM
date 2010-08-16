@@ -24,8 +24,13 @@ const uint8_t AbstractSyntax::Reserved2 = 0x00;
 
 AbstractSyntax::AbstractSyntax()
 {
-  Name = "1.2.840.10008.1.1";
-  ItemLength = Name.size();
+  UpdateName ( "1.2.840.10008.1.1" ); // Verification SOP Class
+}
+
+std::istream &AbstractSyntax::Read(std::istream &is)
+{
+  assert( 0 );
+  return is;
 }
 
 const std::ostream &AbstractSyntax::Write(std::ostream &os) const
@@ -51,6 +56,32 @@ size_t AbstractSyntax::Size() const
   ret += ItemLength;
   return ret;
 }
+
+void AbstractSyntax::UpdateName( const char *name )
+{
+  if( name )
+    {
+    gdcm::UIDs uids;
+    bool b = uids.SetFromUID( name );
+    if( b )
+      {
+      Name = name;
+      ItemLength = Name.size();
+      assert( ItemLength + 4 == Size() );
+      return;
+      }
+    }
+
+  gdcmErrorMacro( "Invalid Name: " << name );
+  throw "Invalid Name";
+}
+
+void AbstractSyntax::SetNameFromUID( gdcm::UIDs::TSName tsname )
+{
+  const char *name = gdcm::UIDs::GetUIDString( tsname );
+  UpdateName( name );
+}
+
 
 } // end namespace network
 } // end namespace gdcm

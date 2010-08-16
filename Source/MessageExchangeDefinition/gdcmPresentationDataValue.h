@@ -37,8 +37,11 @@ public:
   PresentationDataValue();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
+
+  /// \internal Compute Size
   size_t Size() const;
 
+  /// Get DataSet
   DataSet const &GetDataSet() const { return DS; }
 
 private:

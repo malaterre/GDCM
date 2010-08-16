@@ -38,9 +38,11 @@ public:
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
 
+  /// \internal Compute Size
   size_t Size() const;
 
   PresentationDataValue const &GetPresentationDataValue(unsigned int i) {
+    assert( !V.empty() && i < V.size() );
     return V[i];
   }
 

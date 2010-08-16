@@ -24,14 +24,12 @@ const uint8_t TransferSyntax_::Reserved2 = 0x00;
 
 TransferSyntax_::TransferSyntax_()
 {
-  Name = "1.2.840.10008.1.1";
-  ItemLength = Name.size();
-  assert( ItemLength + 4 == Size() );
+  UpdateName( "1.2.840.10008.1.1" );
 }
 
-void TransferSyntax_::SetFromUID( const char *uid )
+void TransferSyntax_::SetName( const char *name )
 {
-  Name = uid;
+  Name = name;
   ItemLength = Name.size();
 }
 
@@ -77,6 +75,31 @@ size_t TransferSyntax_::Size() const
   ret += sizeof(ItemLength);
   ret += ItemLength;
   return ret;
+}
+
+void TransferSyntax_::UpdateName( const char *name )
+{
+  if( name )
+    {
+    gdcm::UIDs uids;
+    bool b = uids.SetFromUID( name );
+    if( b )
+      {
+      Name = name;
+      ItemLength = Name.size();
+      assert( ItemLength + 4 == Size() );
+      return;
+      }
+    }
+
+  gdcmErrorMacro( "Invalid Name: " << name );
+  throw "Invalid Name";
+}
+
+void TransferSyntax_::SetNameFromUID( gdcm::UIDs::TSName tsname )
+{
+  const char *name = gdcm::UIDs::GetUIDString( tsname );
+  UpdateName( name );
 }
 
 } // end namespace network

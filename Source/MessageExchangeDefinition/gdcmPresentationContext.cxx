@@ -32,7 +32,7 @@ PresentationContext::PresentationContext()
   ID = 0x01;
 
   TransferSyntax_ t;
-  t.SetFromUID( gdcm::UIDs::GetUIDString( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM ) );
+  t.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   TransferSyntaxes.push_back( t );
 
   ItemLength = Size() - 4;
@@ -41,11 +41,14 @@ PresentationContext::PresentationContext()
 
 std::istream &PresentationContext::Read(std::istream &is)
 {
+  assert( 0 );
+  assert( ItemLength + 4 == Size() );
   return is;
 }
 
 const std::ostream &PresentationContext::Write(std::ostream &os) const
 {
+  assert( ItemLength + 4 == Size() );
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
   //os.write( (char*)&ItemLength, sizeof(ItemLength) );
@@ -85,6 +88,18 @@ size_t PresentationContext::Size() const
     }
 
   return ret;
+}
+
+void PresentationContext::SetAbstractSyntax( AbstractSyntax const & as )
+{
+  SubItems = as;
+  assert( ItemLength + 4 == Size() );
+}
+
+void PresentationContext::AddTransferSyntax( TransferSyntax_ const &ts )
+{
+  TransferSyntaxes.push_back( ts );
+  assert( ItemLength + 4 == Size() );
 }
 
 } // end namespace network

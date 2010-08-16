@@ -35,7 +35,13 @@ public:
   PresentationContext();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
-size_t Size() const;
+  size_t Size() const;
+
+  void SetAbstractSyntax( AbstractSyntax const & as );
+  AbstractSyntax const &GetAbstractSyntax() const { return SubItems; }
+
+  void AddTransferSyntax( TransferSyntax_ const &ts );
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
