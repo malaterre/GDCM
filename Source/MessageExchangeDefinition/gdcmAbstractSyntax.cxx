@@ -24,7 +24,8 @@ const uint8_t AbstractSyntax::Reserved2 = 0x00;
 
 AbstractSyntax::AbstractSyntax()
 {
-  UpdateName ( "1.2.840.10008.1.1" ); // Verification SOP Class
+  //UpdateName ( "1.2.840.10008.1.1" ); // Verification SOP Class
+  ItemLength = 0;
 }
 
 std::istream &AbstractSyntax::Read(std::istream &is)
