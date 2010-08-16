@@ -34,7 +34,9 @@ AAssociateACPDU::AAssociateACPDU()
 
 std::istream &AAssociateACPDU::Read(std::istream &is)
 {
-  // itemtype
+  uint8_t itemtype = 0;
+  is.read( (char*)&itemtype, sizeof(ItemType) );
+  assert( itemtype == ItemType );
   uint8_t reserved2;
   is >> reserved2;
   uint32_t pdulength;

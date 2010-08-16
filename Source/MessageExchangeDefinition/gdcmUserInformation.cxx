@@ -28,9 +28,7 @@ UserInformation::UserInformation()
   size_t t0 = MLS.Size();
   size_t t1 = ICUID.Size();
   size_t t2 = IVNS.Size();
-  //ItemLength = 58;
   ItemLength = t0 + t1 + t2;
-  //assert( (ItemLength+4) == (t0 + t1 + t2) );
   assert( ItemLength + 4 == Size() );
 }
 

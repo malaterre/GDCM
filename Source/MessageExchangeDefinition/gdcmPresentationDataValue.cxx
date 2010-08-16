@@ -16,6 +16,8 @@
 #include "gdcmSwapper.h"
 #include "gdcmDataSet.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmUIDs.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -27,6 +29,38 @@ PresentationDataValue::PresentationDataValue()
   ItemLength = 0;
   PresentationContextID = 1;
   ItemLength = 70;
+
+  DataSet &ds = DS;
+    DataElement de( Tag(0x0,0x2) );
+    de.SetVR( VR::UI );
+    const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
+    std::string suid = uid;
+    suid.push_back( ' ' );
+    //de.SetByteValue(  uid, strlen(uid)  );
+    de.SetByteValue(  suid.c_str(), suid.size()  );
+    ds.Insert( de );
+{
+    gdcm::Attribute<0x0,0x100> at = { 48 };
+    ds.Insert( at.GetAsDataElement() );
+}
+{
+    gdcm::Attribute<0x0,0x110> at = { 1 };
+    ds.Insert( at.GetAsDataElement() );
+}
+{
+    gdcm::Attribute<0x0,0x800> at = { 257 };
+    ds.Insert( at.GetAsDataElement() );
+}
+{
+    gdcm::Attribute<0x0,0x0> at = { 0 };
+    unsigned int glen = ds.GetLength<ImplicitDataElement>();
+    assert( (glen % 2) == 0 );
+    at.SetValue( glen );
+    ds.Insert( at.GetAsDataElement() );
+}
+
+  assert (ItemLength + 4 == Size() );
+
 }
 
 std::istream &PresentationDataValue::Read(std::istream &is)
@@ -62,7 +96,25 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   os.write( (char*)&copy, sizeof(ItemLength) );
   os.write( (char*)&PresentationContextID, sizeof(PresentationContextID) );
 
+   uint8_t t;
+   t = 3; // E.2 MESSAGE CONTROL HEADER ENCODING
+   os.write( (char*)&t, 1 );
+   DS.Write<ImplicitDataElement,SwapperNoOp>( os );
+
   return os;
+}
+
+size_t PresentationDataValue::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemLength);
+  ret += sizeof(PresentationContextID);
+  ret += 1; // MESSAGE CONTROL HEADER ENCODING
+
+  VL vl = DS.GetLength<ImplicitDataElement>();
+  ret += vl;
+
+  return ret;
 }
 
 } // end namespace network

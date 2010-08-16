@@ -23,26 +23,19 @@ namespace network
 const uint8_t PresentationContext::ItemType = 0x20;
 const uint8_t PresentationContext::Reserved2 = 0x00;
 const uint8_t PresentationContext::Reserved6 = 0x00;
-//const uint8_t PresentationContext::Reserved7 = 0x00;
-const uint8_t PresentationContext::Reserved7 = 0xff; // DCMTK ??
+const uint8_t PresentationContext::Reserved7 = 0x00;
+//const uint8_t PresentationContext::Reserved7 = 0xff; // DCMTK ??
 const uint8_t PresentationContext::Reserved8 = 0x00;
 
 PresentationContext::PresentationContext()
 {
   ID = 0x01;
-  TransferSyntax_ t1;
-  t1.SetFromUID( gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass ) );
-  //TransferSyntaxes.push_back( t1 );
 
-  TransferSyntax_ t2;
-  t2.SetFromUID( gdcm::UIDs::GetUIDString( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM ) );
-  TransferSyntaxes.push_back( t2 );
+  TransferSyntax_ t;
+  t.SetFromUID( gdcm::UIDs::GetUIDString( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM ) );
+  TransferSyntaxes.push_back( t );
 
-  TransferSyntax_ t3;
-  t3.SetFromUID( "1.2.2.276.0.7230010.3.0.3.5.5" );
-  //TransferSyntaxes.push_back( t3 );
-
-  ItemLength = 0x2e;
+  ItemLength = Size() - 4;
   assert( ItemLength + 4 == Size() );
 }
 

@@ -44,7 +44,6 @@ AAssociateRQPDU::AAssociateRQPDU()
 
   PresContext.push_back( PresentationContext() );
 
-  ItemLength = 0xcd; // 205
   ItemLength = Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
