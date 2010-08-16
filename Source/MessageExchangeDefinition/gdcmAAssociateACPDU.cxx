@@ -66,6 +66,10 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   //  }
   UserInfo.Read( is );
 
+  // FIXME : we need to merge AppContext / PresContextAC and UserInfo in a single base class
+  // otherwise we cannot read them with an unnumberred
+  // or change UserInfo::Read to skip the first bytes...
+
   return is;
 }
 
