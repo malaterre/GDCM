@@ -24,10 +24,11 @@ const uint8_t PDataTPPDU::Reserved2 = 0x00;
 
 PDataTPPDU::PDataTPPDU()
 {
-  ItemLength = 0;
-  ItemLength = 74;
+  PresentationDataValue pdv;
+  V.push_back( pdv );
 
-  V.push_back( PresentationDataValue() );
+  ItemLength = Size() - 6;
+  assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
 std::istream &PDataTPPDU::Read(std::istream &is)
@@ -69,6 +70,21 @@ const std::ostream &PDataTPPDU::Write(std::ostream &os) const
     }
 
   return os;
+}
+
+size_t PDataTPPDU::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  std::vector<PresentationDataValue>::const_iterator it = V.begin();
+  for( ; it != V.end(); ++it )
+    {
+    ret += it->Size( );
+    }
+
+  return ret;
 }
 
 } // end namespace network

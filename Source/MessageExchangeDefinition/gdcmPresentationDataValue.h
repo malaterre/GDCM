@@ -16,6 +16,7 @@
 #define GDCMPRESENTATIONDATAVALUE_H
 
 #include "gdcmTypes.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -36,10 +37,13 @@ public:
   PresentationDataValue();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
+  size_t Size() const;
+
 private:
   uint32_t ItemLength;
   uint8_t PresentationContextID;
-  std::string PresDataValue;
+  //std::string PresDataValue;
+  DataSet DS;
 };
 
 } // end namespace network
