@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmAAssociateRQPDU.h"
+#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -34,7 +35,6 @@ const uint8_t AAssociateRQPDU::Reserved43_74[32] = {};
 
 AAssociateRQPDU::AAssociateRQPDU()
 {
-  ItemLength = 0;
   memset(CalledAETitle, ' ', sizeof(CalledAETitle));
   const char called[] = "ANY-SCP";
   strncpy(CalledAETitle, called, strlen(called) );
@@ -43,13 +43,18 @@ AAssociateRQPDU::AAssociateRQPDU()
   strncpy(CallingAETitle, calling, strlen(calling) );
 
   PresContext.push_back( PresentationContext() );
+
+  ItemLength = 0xcd;
 }
 
 const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  uint32_t copy = ItemLength;
+  SwapperDoOp::SwapArray(&copy,1);
+  os.write( (char*)&copy, sizeof(ItemLength) );
   os.write( (char*)&ProtocolVersion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
   os.write( CalledAETitle, 16 );

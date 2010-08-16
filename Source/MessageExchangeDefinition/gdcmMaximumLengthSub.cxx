@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmMaximumLengthSub.h"
+#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -23,16 +24,47 @@ const uint8_t MaximumLengthSub::Reserved2 = 0x00;
 
 MaximumLengthSub::MaximumLengthSub()
 {
-  ItemLength = 0;
-  MaximumLength = 0;
+  ItemLength = 0x4;
+  MaximumLength = 0x4000;
+}
+
+std::istream &MaximumLengthSub::Read(std::istream &is)
+{
+  uint8_t itemtype = 0x0;
+  is.read( (char*)&itemtype, sizeof(ItemType) );
+  assert( itemtype == ItemType );
+  uint8_t reserved2;
+  is.read( (char*)&reserved2, sizeof(Reserved2) );
+  uint16_t itemlength;
+  is.read( (char*)&itemlength, sizeof(ItemLength) );
+  SwapperDoOp::SwapArray(&itemlength,1);
+  ItemLength = itemlength;
+
+  uint32_t maximumlength;
+  is.read( (char*)&maximumlength, sizeof(MaximumLength) );
+  SwapperDoOp::SwapArray(&maximumlength,1);
+  MaximumLength = maximumlength; // 16384 == max possible (0x4000)
+
+  return is;
 }
 
 const std::ostream &MaximumLengthSub::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  os.write( (char*)&ItemLength, sizeof(ItemLength) );
-  os.write( (char*)&MaximumLength, sizeof(MaximumLength) );
+  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  {
+  uint16_t copy = ItemLength;
+  SwapperDoOp::SwapArray(&copy,1);
+  os.write( (char*)&copy, sizeof(ItemLength) );
+  }
+
+  //os.write( (char*)&MaximumLength, sizeof(MaximumLength) );
+  {
+  uint32_t copy = MaximumLength;
+  SwapperDoOp::SwapArray(&copy,1);
+  os.write( (char*)&copy, sizeof(MaximumLength) );
+  }
 
   return os;
 }

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmAbstractSyntax.h"
+#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -31,7 +32,11 @@ const std::ostream &AbstractSyntax::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  uint16_t copy = ItemLength;
+  SwapperDoOp::SwapArray(&copy,1);
+  os.write( (char*)&copy, sizeof(ItemLength) );
+
   os.write( Name.c_str(), Name.size() );
   return os;
 }

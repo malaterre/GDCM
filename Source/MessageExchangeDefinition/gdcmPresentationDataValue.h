@@ -27,14 +27,19 @@ namespace network
 {
 
 /**
+ Table 9-23
+PRESENTATION-DATA-VALUE ITEM FIELDS
  */
 class PresentationDataValue
 {
 public:
-uint32_t ItemLength;
-uint8_t PresentationContextID;
-std::string PresentationDataValue;
+  PresentationDataValue();
+  std::istream &Read(std::istream &is);
+  const std::ostream &Write(std::ostream &os) const;
 private:
+  uint32_t ItemLength;
+  uint8_t PresentationContextID;
+  std::string PresDataValue;
 };
 
 } // end namespace network

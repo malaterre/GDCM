@@ -28,15 +28,20 @@ namespace network
 {
 
 /**
+Table 9-22
+P-DATA-TF PDU FIELDS
  */
 class PDataTPPDU
 {
 public:
-static const uint8_t ItemType = 0x04; // PDUType ?
-static const uint8_t Reserved2 = 0x00;
-uint32_t ItemLength; // PDU Length ?
-std::vector<PresentationDataValue> V;
+  PDataTPPDU();
+  std::istream &Read(std::istream &is);
+  const std::ostream &Write(std::ostream &os) const;
 private:
+  static const uint8_t ItemType; // PDUType ?
+  static const uint8_t Reserved2;
+  uint32_t ItemLength; // PDU Length ?
+  std::vector<PresentationDataValue> V;
 };
 
 } // end namespace network

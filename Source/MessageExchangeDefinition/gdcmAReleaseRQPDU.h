@@ -27,16 +27,20 @@ namespace network
 {
 
 /**
+Table 9-24
+A-RELEASE-RQ PDU FIELDS
  */
 class AReleaseRQPDU
 {
 public:
-static const uint8_t ItemType = 0x5; // PDUType ?
-static const uint8_t Reserved2 = 0x0;
-uint32_t ItemLength; // PDU Length
-static const uint32_t Reserved7_10 = 0x0;
-
+  AReleaseRQPDU();
+  std::istream &Read(std::istream &is);
+  const std::ostream &Write(std::ostream &os) const;
 private:
+  static const uint8_t ItemType; // PDUType ?
+  static const uint8_t Reserved2;
+  uint32_t ItemLength; // PDU Length
+  static const uint32_t Reserved7_10;
 };
 
 } // end namespace network

@@ -30,13 +30,18 @@ APPLICATION CONTEXT ITEM FIELDS
 class ApplicationContext
 {
 public:
-ApplicationContext();
-const std::ostream &Write(std::ostream &os) const;
+  ApplicationContext();
+  std::istream &Read(std::istream &is);
+  const std::ostream &Write(std::ostream &os) const;
+
+  void SetName( const char *name ) { Name = name; }
+  const char *GetName() const { return Name.c_str(); }
+
 private:
-static const uint8_t ItemType;
-static const uint8_t Reserved2;
-uint16_t ItemLength; // len of application context name
-std::string /*ApplicationContext*/ Name; // UID
+  static const uint8_t ItemType;
+  static const uint8_t Reserved2;
+  uint16_t ItemLength; // len of application context name
+  std::string /*ApplicationContext*/ Name; // UID
 };
 
 } // end namespace network

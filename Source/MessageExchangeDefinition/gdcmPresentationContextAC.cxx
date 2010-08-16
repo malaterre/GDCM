@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmPresentationContextAC.h"
+#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -28,6 +29,31 @@ PresentationContextAC::PresentationContextAC()
   ItemLength = 0; // len of last transfer syntax
   ID = 1; // odd [1-255]
   Result = 0;
+}
+
+std::istream &PresentationContextAC::Read(std::istream &is)
+{
+  uint8_t itemtype = 0x0;
+  is.read( (char*)&itemtype, sizeof(ItemType) );
+  assert( itemtype == ItemType );
+  uint8_t reserved2;
+  is.read( (char*)&reserved2, sizeof(Reserved2) );
+  uint16_t itemlength;
+  is.read( (char*)&itemlength, sizeof(ItemLength) );
+  SwapperDoOp::SwapArray(&itemlength,1);
+  ItemLength = itemlength;
+  uint8_t id;
+  is.read( (char*)&id, sizeof(ID) );
+  ID = id;
+  uint8_t reserved6;
+  is.read( (char*)&reserved6, sizeof(Reserved6) );
+  uint8_t result;
+  is.read( (char*)&result, sizeof(Result) );
+  Result = result; // 0-4
+  uint8_t reserved8;
+  is.read( (char*)&reserved8, sizeof(Reserved6) );
+  TransferSyntax_ ts;
+  ts.Read( is );
 }
 
 const std::ostream &PresentationContextAC::Write(std::ostream &os) const

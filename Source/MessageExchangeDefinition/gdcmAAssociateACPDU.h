@@ -36,24 +36,27 @@ ASSOCIATE-AC PDU fields
 class AAssociateACPDU
 {
 public:
-static const uint8_t ItemType = 0x02; // PDUType ?
-static const uint8_t Reserved2 = 0x00;
-uint16_t PDULength; // len of 
-static const uint16_t ProtocolVersion = 0x01;
-static const uint16_t Reserved9_10 = 0x0000;
-static const uint8_t Reserved11_26[16]; // = { 0x0 };
-static const uint8_t Reserved27_42[16]; // = { 0x0 };
-static const uint8_t Reserved43_74[32]; // = { 0x0 };
-/*
-75-xxx Variable items This variable field shall contain the following items: one Application
-Context Item, one or more Presentation Context Item(s) and one User
-Information Item. For a complete description of these items see Sections
-7.1.1.2, 7.1.1.14, and 7.1.1.6.
-*/
-ApplicationContext AppContext;
-std::vector<PresentationContextAC>	PresContextAC;
-UserInformation UserInfo;
+  AAssociateACPDU();
+  std::istream &Read(std::istream &is);
+  const std::ostream &Write(std::ostream &os) const;
 private:
+  static const uint8_t ItemType; // PDUType ?
+  static const uint8_t Reserved2;
+  uint32_t PDULength; // len of 
+  static const uint16_t ProtocolVersion;
+  static const uint16_t Reserved9_10;
+  static const uint8_t Reserved11_26[16];
+  static const uint8_t Reserved27_42[16];
+  static const uint8_t Reserved43_74[32];
+  /*
+  75-xxx Variable items This variable field shall contain the following items: one Application
+  Context Item, one or more Presentation Context Item(s) and one User
+  Information Item. For a complete description of these items see Sections
+  7.1.1.2, 7.1.1.14, and 7.1.1.6.
+   */
+  ApplicationContext AppContext;
+  std::vector<PresentationContextAC>	PresContextAC;
+  UserInformation UserInfo;
 };
 
 } // end namespace network

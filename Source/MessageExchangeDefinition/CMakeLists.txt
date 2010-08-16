@@ -13,7 +13,9 @@ INCLUDE_DIRECTORIES(
 
 SET(MessageExchangeDefinition_SRCS
 
-  gdcmAAbortPDU.cxx        gdcmAAssociateRJPDU.cxx  gdcmAbstractSyntax.cxx      gdcmAReleaseRPPDU.cxx  gdcmPDataPDU.cxx    gdcmPresentationContextAC.cxx  gdcmPresentationDataValue.cxx  gdcmUserInformation.cxx
+  gdcmAAbortPDU.cxx        gdcmAAssociateRJPDU.cxx  gdcmAbstractSyntax.cxx      gdcmAReleaseRPPDU.cxx  
+  #gdcmPDataPDU.cxx
+  gdcmPresentationContextAC.cxx  gdcmPresentationDataValue.cxx  gdcmUserInformation.cxx
 gdcmAAssociateACPDU.cxx  gdcmAAssociateRQPDU.cxx  gdcmApplicationContext.cxx  gdcmAReleaseRQPDU.cxx  gdcmPDataTFPDU.cxx  gdcmPresentationContext.cxx    gdcmTransferSyntax_.cxx
 gdcmMaximumLengthSub.cxx
 gdcmImplementationClassUIDSub.cxx

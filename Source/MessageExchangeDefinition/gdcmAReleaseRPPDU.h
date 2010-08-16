@@ -27,6 +27,8 @@ namespace network
 {
 
 /**
+Table 9-25
+A-RELEASE-RP PDU fields
  */
 class AReleaseRPPDU
 {

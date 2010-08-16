@@ -17,10 +17,20 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "gdcmAAssociateRQPDU.h"
+#include "gdcmAttribute.h"
+#include "gdcmDataSet.h"
+#include "gdcmExplicitDataElement.h"
+#include "gdcmUIDs.h"
+#include "gdcmAAssociateACPDU.h"
+#include "gdcmPDataTFPDU.h"
+#include "gdcmAReleaseRQPDU.h"
 
+// Execute like this:
+// ./bin/gdcmscu www.dicomserver.co.uk 11112 toto 
 int main(int ac, char *av[])
 {
  using namespace std;
+ using namespace gdcm;
 
   if (ac < 3) {
     cerr << "USAGE: " << av [0] << " remote-host portno string...\n";
@@ -64,10 +74,57 @@ int main(int ac, char *av[])
 
    gdcm::network::AAssociateRQPDU cecho;
 
+      DataSet ds;
+/*
+D: # Dicom-Data-Set
+D: # Used TransferSyntax: Unknown Transfer Syntax
+D: (0000,0000) UL 0                                        #   4, 1 CommandGroupLength
+D: (0000,0002) UI =VerificationSOPClass                    #  18, 1 AffectedSOPClassUID
+D: (0000,0100) US 48                                       #   2, 1 CommandField
+D: (0000,0110) US 1                                        #   2, 1 MessageID
+D: (0000,0800) US 257                                      #   2, 1 DataSetType
+*/
+
+    DataElement de( Tag(0x0,0x2) );
+    de.SetVR( VR::UI );
+    const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
+    std::string suid = uid;
+    suid.push_back( ' ' );
+    //de.SetByteValue(  uid, strlen(uid)  );
+    de.SetByteValue(  suid.c_str(), suid.size()  );
+    ds.Insert( de );
+{
+    gdcm::Attribute<0x0,0x100> at = { 48 };
+    ds.Insert( at.GetAsDataElement() );
+}
+{
+    gdcm::Attribute<0x0,0x110> at = { 1 };
+    ds.Insert( at.GetAsDataElement() );
+}
+{
+    gdcm::Attribute<0x0,0x800> at = { 257 };
+    ds.Insert( at.GetAsDataElement() );
+}
+{
+    gdcm::Attribute<0x0,0x0> at = { 0 };
+    unsigned int glen = ds.GetLength<ImplicitDataElement>();
+    assert( (glen % 2) == 0 );
+    at.SetValue( glen );
+    ds.Insert( at.GetAsDataElement() );
+}
+
+
+/*
+D: (0000,0002) UI =VerificationSOPClass                    #  18, 1 AffectedSOPClassUID
+D: (0000,0100) US 48                                       #   2, 1 CommandField
+D: (0000,0110) US 1                                        #   2, 1 MessageID
+D: (0000,0800) US 257                                      #   2, 1 DataSetType
+*/
+
+
    std::ofstream b( "/tmp/out");
    //b.write( echoscu, sizeof(echoscu) );
    cecho.Write( b );
-   b.close();
 
   const char msg[] = { 0x01  , 0x00  , 0x00  ,0x00  ,0x00  ,0x1  ,0x00  ,0x01  ,0x00  ,0x00  ,0x41  ,0x4e  ,0x59  ,0x2d  ,0x53  ,0x43 };
 //  for (int i = 3; i < ac; i++) {
@@ -82,7 +139,47 @@ int main(int ac, char *av[])
    //   e << (j+10); // << endl;
    // }
       uint8_t t;
-   //   cecho.Write(e);
+      cecho.Write(e);
+      //e << endl;
+      e.flush();
+      e >> t;
+      std::cout << "response: " << (int)t << std::endl;
+    //e.getline (buf, 255);
+gdcm::network::AAssociateACPDU acpdu;
+acpdu.Read( e );
+    //  e >> t;
+    //cout << "left over: " << t << endl;
+    //e.getline (buf, 255);
+gdcm::network::PDataTPPDU pdata;
+//  const char msg2[] = { 0x00, 0x00, 0x00, 0x00 };
+
+//e.write( msg2, sizeof(msg2) );
+pdata.Write( e );
+
+//    buf [255] = 0;
+
+    //cout << "left over: " << buf << endl;
+
+   t = 3; // E.2 MESSAGE CONTROL HEADER ENCODING
+   e.write( (char*)&t, 1 );
+   ds.Write<ImplicitDataElement,SwapperNoOp>( e );
+   e.flush();
+
+   // listen back
+gdcm::network::PDataTPPDU pdata2;
+pdata2.Read( e );
+//e.getline( buf , 1);
+//cout << "left over: " << buf << endl;
+
+
+// send release:
+gdcm::network::AReleaseRQPDU rel;
+rel.Write( e );
+
+pdata.Write( b );
+   ds.Write<ImplicitDataElement,SwapperNoOp>( b );
+   b.close();
+
       //std::vector<char> v = cecho.GetBytes();
       //e.write(msg, sizeof(msg) );
       //e.write(echoscu,sizeof(echoscu)/2  );
@@ -104,9 +201,9 @@ int main(int ac, char *av[])
 //      e << endl;
 //
 //    e.getline (buf, 255);
-    buf [255] = 0;
+//    buf [255] = 0;
 
-    cout << "got back: " << buf << endl;
+//    cout << "got back: " << buf << endl;
 //  }
 
   return 0;
