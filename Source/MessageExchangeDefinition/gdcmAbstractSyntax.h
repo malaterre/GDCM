@@ -16,6 +16,7 @@
 #define GDCMABSTRACTSYNTAX_H
 
 #include "gdcmTypes.h"
+#include "gdcmUIDs.h"
 
 namespace gdcm
 {
@@ -31,9 +32,18 @@ class AbstractSyntax
 {
 public:
   AbstractSyntax();
+  std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
-size_t Size() const;
+
+  void SetName( const char *name ) { UpdateName( name ); }
+  const char *GetName() const { return Name.c_str(); }
+
+  // accept a gdcm::UIDs::TSType also... 
+  void SetNameFromUID( gdcm::UIDs::TSName tsname );
+
+  size_t Size() const;
 private:
+  void UpdateName( const char *name );
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
   uint16_t ItemLength; // len of
@@ -41,7 +51,6 @@ private:
 };
 
 } // end namespace network
-
 } // end namespace gdcm
 
-#endif //GDCMAPPLICATIONCONTEXT_H
+#endif //GDCMABSTRACTSYNTAX_H
