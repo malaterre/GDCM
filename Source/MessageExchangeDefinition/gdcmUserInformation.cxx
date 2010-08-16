@@ -25,10 +25,13 @@ const uint8_t UserInformation::Reserved2 = 0x00;
 
 UserInformation::UserInformation()
 {
-  //Data = ( "1.2.2.276.0.7230010.3.0.3.5.5" );
-  //Data += "OFFIS_DCMTK_355";
-  //ItemLength = Data.size();
-  ItemLength = 0x3a;
+  size_t t0 = MLS.Size();
+  size_t t1 = ICUID.Size();
+  size_t t2 = IVNS.Size();
+  //ItemLength = 58;
+  ItemLength = t0 + t1 + t2;
+  //assert( (ItemLength+4) == (t0 + t1 + t2) );
+  assert( ItemLength + 4 == Size() );
 }
 
 std::istream &UserInformation::Read(std::istream &is)
@@ -65,6 +68,19 @@ const std::ostream &UserInformation::Write(std::ostream &os) const
   IVNS.Write(os);
 
   return os;
+}
+
+size_t UserInformation::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength); // len of
+  ret += MLS.Size();
+  ret += ICUID.Size();
+  ret += IVNS.Size();
+
+  return ret;
 }
 
 } // end namespace network

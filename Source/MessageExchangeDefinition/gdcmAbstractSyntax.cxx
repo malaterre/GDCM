@@ -41,5 +41,16 @@ const std::ostream &AbstractSyntax::Write(std::ostream &os) const
   return os;
 }
 
+size_t AbstractSyntax::Size() const
+{
+  size_t ret = 0;
+  assert( Name.size() == ItemLength );
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  ret += ItemLength;
+  return ret;
+}
+
 } // end namespace network
 } // end namespace gdcm

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmImplementationClassUIDSub.h"
+#include "gdcmFileMetaInformation.h"
 #include "gdcmSwapper.h"
 
 namespace gdcm
@@ -24,8 +25,10 @@ const uint8_t ImplementationClassUIDSub::Reserved2 = 0x00;
 
 ImplementationClassUIDSub::ImplementationClassUIDSub()
 {
-  ImplementationClassUID = "1.2.276.0.7230010.3.0.3.5.5";
+  ImplementationClassUID = FileMetaInformation::GetImplementationClassUID();
+
   ItemLength = ImplementationClassUID.size();
+  assert( (ItemLength + 4) == Size() );
 }
 
 std::istream &ImplementationClassUIDSub::Read(std::istream &is)
@@ -60,6 +63,17 @@ const std::ostream &ImplementationClassUIDSub::Write(std::ostream &os) const
   os.write( ImplementationClassUID.c_str(), ImplementationClassUID.size() );
 
   return os;
+}
+
+size_t ImplementationClassUIDSub::Size() const
+{
+  size_t ret = 0;
+  assert( ImplementationClassUID.size() == ItemLength );
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  ret += ItemLength;
+  return ret;
 }
 
 } // end namespace network

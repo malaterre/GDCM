@@ -37,9 +37,9 @@ class AAssociateRQPDU
 {
 public:
   AAssociateRQPDU();
+  std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
-/*
-*/
+  size_t Size() const;
 private:
 // 1 PDU-type 01H
 static const uint8_t ItemType; // PDUType ?

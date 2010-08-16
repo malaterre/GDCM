@@ -176,8 +176,8 @@ pdata2.Read( e );
 gdcm::network::AReleaseRQPDU rel;
 rel.Write( e );
 
-pdata.Write( b );
-   ds.Write<ImplicitDataElement,SwapperNoOp>( b );
+//pdata.Write( b );
+//   ds.Write<ImplicitDataElement,SwapperNoOp>( b );
    b.close();
 
       //std::vector<char> v = cecho.GetBytes();

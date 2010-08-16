@@ -43,6 +43,7 @@ PresentationContext::PresentationContext()
   //TransferSyntaxes.push_back( t3 );
 
   ItemLength = 0x2e;
+  assert( ItemLength + 4 == Size() );
 }
 
 std::istream &PresentationContext::Read(std::istream &is)
@@ -71,6 +72,26 @@ const std::ostream &PresentationContext::Write(std::ostream &os) const
     }
 
   return os;
+}
+
+size_t PresentationContext::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  ret += sizeof(ID);
+  ret += sizeof(Reserved6);
+  ret += sizeof(Reserved7);
+  ret += sizeof(Reserved8);
+  ret += SubItems.Size();
+  std::vector<TransferSyntax_>::const_iterator it = TransferSyntaxes.begin();
+  for( ; it != TransferSyntaxes.end(); ++it )
+    {
+    ret += it->Size();
+    }
+
+  return ret;
 }
 
 } // end namespace network
