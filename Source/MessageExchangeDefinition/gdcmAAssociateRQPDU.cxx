@@ -38,9 +38,9 @@ AAssociateRQPDU::AAssociateRQPDU()
   memset(CalledAETitle, ' ', sizeof(CalledAETitle));
   const char called[] = "ANY-SCP";
   strncpy(CalledAETitle, called, strlen(called) );
-  memset(CallingAETitle, ' ', sizeof(CallingAETitle));
-  const char calling[] = "ECHOSCU";
-  strncpy(CallingAETitle, calling, strlen(calling) );
+  //memset(CallingAETitle, ' ', sizeof(CallingAETitle));
+  //const char calling[] = "ECHOSCU";
+  //strncpy(CallingAETitle, calling, strlen(calling) );
 
 //  PresContext.push_back( PresentationContext() );
 
@@ -107,6 +107,18 @@ void AAssociateRQPDU::AddPresentationContext( PresentationContext const &pc )
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
+void AAssociateRQPDU::SetCalledAETitle(const char calledaetitle[16])
+{
+  size_t len = strlen( calledaetitle );
+  if( len <= 16 )
+    {
+    memset(CalledAETitle, ' ', sizeof(CalledAETitle));
+    strncpy(CalledAETitle, calledaetitle, len );
+    }
+  // FIXME Need to check upper case
+  // FIXME cannot set to only whitespaces
+}
+
 void AAssociateRQPDU::SetCallingAETitle(const char callingaetitle[16])
 {
   size_t len = strlen( callingaetitle );
@@ -116,6 +128,7 @@ void AAssociateRQPDU::SetCallingAETitle(const char callingaetitle[16])
     strncpy(CallingAETitle, callingaetitle, len );
     }
   // FIXME Need to check upper case
+  // FIXME cannot set to only whitespaces
 }
 
 } // end namespace network

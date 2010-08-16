@@ -168,6 +168,9 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   cstore.Write(e);
   e.flush();
 
+  gdcm::network::AAssociateACPDU acpdu;
+  acpdu.Read( e );
+
 }
 
 int main(int argc, char *argv[])

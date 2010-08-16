@@ -42,7 +42,10 @@ public:
   size_t Size() const;
   void AddPresentationContext( PresentationContext const &pc );
 
+  void SetCalledAETitle(const char calledaetitle[16]);
+  const char *GetCalledAETitle() const { return CalledAETitle; }
   void SetCallingAETitle(const char callingaetitle[16]);
+  const char *GetCallingAETitle() const { return CallingAETitle; }
 
 private:
   // 1 PDU-type 01H
