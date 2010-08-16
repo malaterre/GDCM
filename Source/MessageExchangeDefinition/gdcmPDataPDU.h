@@ -14,7 +14,7 @@
 =========================================================================*/
 #ifndef GDCMPDATAPDU_H
 #define GDCMPDATAPDU_H
-
+#error ??
 #include "gdcmTypes.h"
 
 namespace gdcm

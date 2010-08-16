@@ -39,6 +39,7 @@ class TransferSyntax_
 public:
   TransferSyntax_();
   void SetFromUID( const char *uid );
+  std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
 private:
   static const uint8_t ItemType;

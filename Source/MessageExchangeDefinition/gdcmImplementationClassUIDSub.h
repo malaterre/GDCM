@@ -33,6 +33,7 @@ class ImplementationClassUIDSub
 {
 public:
   ImplementationClassUIDSub();
+  std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
 private:
   static const uint8_t ItemType;
