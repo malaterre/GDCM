@@ -39,6 +39,11 @@ public:
   const std::ostream &Write(std::ostream &os) const;
 
   size_t Size() const;
+
+  PresentationDataValue const &GetPresentationDataValue(unsigned int i) {
+    return V[i];
+  }
+
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;

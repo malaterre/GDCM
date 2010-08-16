@@ -26,41 +26,38 @@ namespace network
 
 PresentationDataValue::PresentationDataValue()
 {
-  ItemLength = 0;
   PresentationContextID = 1;
-  ItemLength = 70;
 
   DataSet &ds = DS;
-    DataElement de( Tag(0x0,0x2) );
-    de.SetVR( VR::UI );
-    const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
-    std::string suid = uid;
-    suid.push_back( ' ' );
-    //de.SetByteValue(  uid, strlen(uid)  );
-    de.SetByteValue(  suid.c_str(), suid.size()  );
-    ds.Insert( de );
-{
+  DataElement de( Tag(0x0,0x2) );
+  de.SetVR( VR::UI );
+  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
+  std::string suid = uid;
+  suid.push_back( ' ' ); // no \0 !
+  de.SetByteValue(  suid.c_str(), suid.size()  );
+  ds.Insert( de );
+    {
     gdcm::Attribute<0x0,0x100> at = { 48 };
     ds.Insert( at.GetAsDataElement() );
-}
-{
+    }
+    {
     gdcm::Attribute<0x0,0x110> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
-}
-{
+    }
+    {
     gdcm::Attribute<0x0,0x800> at = { 257 };
     ds.Insert( at.GetAsDataElement() );
-}
-{
+    }
+    {
     gdcm::Attribute<0x0,0x0> at = { 0 };
     unsigned int glen = ds.GetLength<ImplicitDataElement>();
     assert( (glen % 2) == 0 );
     at.SetValue( glen );
     ds.Insert( at.GetAsDataElement() );
-}
+    }
 
+  ItemLength = Size() - 4;
   assert (ItemLength + 4 == Size() );
-
 }
 
 std::istream &PresentationDataValue::Read(std::istream &is)
@@ -73,18 +70,11 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   
   uint8_t mh;
   is.read( (char*)&mh, 1 );
+  //assert( mh == 0 ); // bitwise stuff...
 
-#if 0
-  char buf[256];
-  is.read( buf, ItemLength - 2 );
-#else
   DataSet ds;
   VL vl = ItemLength - 2;
   ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
-
-  std::cout << "DEBUG" << std::endl;
-  std::cout << ds << std::endl;
-#endif
 
   return is;
 }

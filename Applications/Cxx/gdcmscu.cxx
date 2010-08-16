@@ -23,24 +23,22 @@
 
 // Execute like this:
 // ./bin/gdcmscu www.dicomserver.co.uk 11112 toto 
-int main(int ac, char *av[])
+int main(int argc, char *argv[])
 {
- using namespace std;
- using namespace gdcm;
+ if (argc < 3)
+   {
+   std::cerr << "Usage: " << argv [0] << " remote-host portno" << std::endl;
+   return 1;
+   }
 
-  if (ac < 3) {
-    cerr << "USAGE: " << av [0] << " remote-host portno string...\n";
-    return 1;
-  }
-
-  int portno = atoi (av [2]);
+  int portno = atoi (argv [2]);
 
   echo e(protocol::tcp);
 
   if (portno == 0)
-    e->connect (av [1]);
+    e->connect (argv [1]);
   else
-    e->connect (av [1], portno);
+    e->connect (argv [1], portno);
 
   gdcm::network::AAssociateRQPDU cecho;
   cecho.Write(e);
@@ -56,6 +54,9 @@ int main(int ac, char *av[])
   // listen back
   gdcm::network::PDataTPPDU pdata2;
   pdata2.Read( e );
+
+  // Print output DataSet:
+  pdata2.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
 
   // send release:
   gdcm::network::AReleaseRQPDU rel;
