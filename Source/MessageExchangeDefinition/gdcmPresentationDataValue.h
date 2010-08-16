@@ -39,10 +39,11 @@ public:
   const std::ostream &Write(std::ostream &os) const;
   size_t Size() const;
 
+  DataSet const &GetDataSet() const { return DS; }
+
 private:
   uint32_t ItemLength;
   uint8_t PresentationContextID;
-  //std::string PresDataValue;
   DataSet DS;
 };
 
