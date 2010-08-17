@@ -31,10 +31,10 @@ namespace network
 Table 9-22
 P-DATA-TF PDU FIELDS
  */
-class PDataTPPDU
+class PDataTFPDU
 {
 public:
-  PDataTPPDU();
+  PDataTFPDU();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
 

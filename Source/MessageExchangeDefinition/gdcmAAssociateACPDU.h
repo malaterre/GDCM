@@ -40,7 +40,12 @@ public:
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
 
+  void AddPresentationContextAC( PresentationContextAC const &pcac );
+
   size_t Size() const;
+
+  void Print(std::ostream &os) const;
+
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;

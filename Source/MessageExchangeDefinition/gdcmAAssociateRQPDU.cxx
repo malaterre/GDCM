@@ -50,7 +50,65 @@ AAssociateRQPDU::AAssociateRQPDU()
 
 std::istream &AAssociateRQPDU::Read(std::istream &is)
 {
-  assert( 0 );
+  uint8_t itemtype = 0;
+  is.read( (char*)&itemtype, sizeof(ItemType) );
+  assert( itemtype == ItemType );
+  uint8_t reserved2;
+  is >> reserved2;
+  uint32_t itemlength;
+  is.read( (char*)&itemlength, sizeof(ItemLength) );
+  SwapperDoOp::SwapArray(&itemlength,1);
+  ItemLength = itemlength;
+  uint16_t protocolversion;
+  is.read( (char*)&protocolversion, sizeof(ProtocolVersion) );
+  SwapperDoOp::SwapArray(&protocolversion,1);
+  uint16_t reserved9_10;
+  is.read( (char*)&reserved9_10, sizeof(Reserved9_10) );
+  SwapperDoOp::SwapArray(&reserved9_10,1);
+  char calledaetitle[16];
+  is.read( (char*)&calledaetitle, sizeof(CalledAETitle) ); // called
+  char callingaetitle[16];
+  is.read( (char*)&callingaetitle, sizeof(CallingAETitle) ); // calling
+  uint8_t reserved43_74[32] = {  };
+  is.read( (char*)&reserved43_74, sizeof(Reserved43_74) ); // 0 (32 times)
+
+  uint8_t itemtype2 = 0x0;
+  size_t curlen = 0;
+  while( curlen + 68 < ItemLength )
+    {
+    is.read( (char*)&itemtype2, sizeof(ItemType) );
+    switch ( itemtype2 )
+      {
+    case 0x10: // ApplicationContext ItemType
+      AppContext.Read( is );
+      curlen += AppContext.Size();
+      break;
+    case 0x20: // PresentationContext ItemType
+        {
+        PresentationContext pc;
+        pc.Read( is );
+        PresContext.push_back( pc );
+        curlen += pc.Size();
+        }
+      break;
+    case 0x50: // UserInformation ItemType
+      UserInfo.Read( is );
+      curlen += UserInfo.Size();
+      break;
+    default:
+      gdcmErrorMacro( "Unknown ItemType: " << std::hex << (int) itemtype2 );
+      curlen = ItemLength; // make sure to exit
+      break;
+      }
+    // WARNING: I cannot simply call Size() since UserInfo is initialized with GDCM
+    // own parameter, this will bias the computation. Instead compute relative
+    // length of remaining bytes to read.
+    //curlen = Size();
+    }
+  assert( curlen + 68 == ItemLength );
+
+  assert( ItemLength + 4 + 1 + 1 == Size() );
+
   return is;
 }
 
