@@ -78,11 +78,6 @@ void CEcho( const char *remote, int portno )
 
 static void process_input(iosockinet& sio)
 {
-  using std::cout;
-  using std::endl;
-  //char	buf[256];
-  //char*	p = buf;
-
   gdcm::network::AAssociateRQPDU rqpdu;
   rqpdu.Read( sio );
 
@@ -309,6 +304,60 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
 
 }
 
+static void process_input2(iosockinet& sio)
+{
+  gdcm::network::AAssociateRQPDU rqpdu;
+  rqpdu.Read( sio );
+
+  std::cout << "done AAssociateRQPDU !" << std::endl;
+
+  gdcm::network::PresentationContextAC pcac;
+  gdcm::network::TransferSyntax_ ts;
+  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  pcac.SetTransferSyntax( ts );
+
+  gdcm::network::AAssociateACPDU acpdu;
+  acpdu.AddPresentationContextAC( pcac );
+  acpdu.Write( sio );
+  sio.flush();
+
+  std::cout << "done AAssociateACPDU !" << std::endl;
+
+  gdcm::network::PDataTFPDU pdata;
+  //pdata.Read( sio );
+
+  std::ofstream out("/tmp/storescu");
+  char b;
+  while( sio >> b )
+    {
+    out.write( &b, 1 );
+    out.flush();
+    std::cout << "Found: " << (int)b << std::endl;
+    }
+
+  std::cout << "done PDataTFPDU!" << std::endl;
+
+}
+
+void CStoreServer( int portno )
+{
+  sockinetbuf sin (sockbuf::sock_stream);
+    
+  //sin.bind( );
+  sin.bind( portno );
+    
+  std::cout << "localhost = " << sin.localhost() << std::endl
+       << "localport = " << sin.localport() << std::endl;
+    
+  sin.listen();
+    
+  for(;;)
+    {
+      iosockinet s (sin.accept());
+      process_input2(s);
+    }
+}
+
 int main(int argc, char *argv[])
 {
  if (argc < 3)
@@ -327,12 +376,13 @@ int main(int argc, char *argv[])
 
   if ( mode == "server" )
     {
-    CEchoServer( portno );
+    //CEchoServer( portno );
+    CStoreServer( portno );
     }
   else
     {
-    CEcho( argv[1], portno );
-    //CStore( argv[1], portno );
+    //CEcho( argv[1], portno );
+    CStore( argv[1], portno );
     }
   return 0;
 }

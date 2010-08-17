@@ -57,9 +57,16 @@ std::istream &PresentationContext::Read(std::istream &is)
   is.read( (char*)&reserved8, sizeof(Reserved6) );
   SubItems.Read( is );
 
-  TransferSyntax_ ts;
-  ts.Read( is );
-  TransferSyntaxes.push_back( ts );
+  size_t curlen = 0;
+  size_t offset = SubItems.Size() + 4;
+  while( curlen + offset < ItemLength )
+    {
+    TransferSyntax_ ts;
+    ts.Read( is );
+    TransferSyntaxes.push_back( ts );
+    curlen += ts.Size();
+    }
+  assert( curlen + offset == ItemLength );
 
   assert( ItemLength + 4 == Size() );
   return is;
