@@ -38,6 +38,7 @@ public:
   size_t Size() const;
 
   void SetTransferSyntax( TransferSyntax_ const &ts );
+  void SetPresentationContextID( uint8_t id );
 
   void Print(std::ostream &os) const;
 

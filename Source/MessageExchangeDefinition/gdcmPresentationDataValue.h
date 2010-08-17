@@ -47,6 +47,7 @@ public:
   DataSet const &GetDataSet() const { return DS; }
 
   void MyInit(File const &file);
+  void MyInit2(File const &file);
 
   uint8_t GetPresentationContextID() const { return PresentationContextID; }
   void SetPresentationContextID(uint8_t id) {
