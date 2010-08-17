@@ -43,6 +43,7 @@ public:
 
   void AddPresentationDataValue( PresentationDataValue const &pdv ) {
     V.push_back( pdv );
+    ItemLength = Size() - 6;
   }
   PresentationDataValue const &GetPresentationDataValue(unsigned int i) const {
     assert( !V.empty() && i < V.size() );

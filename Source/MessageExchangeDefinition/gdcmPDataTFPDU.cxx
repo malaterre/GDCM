@@ -24,9 +24,6 @@ const uint8_t PDataTPPDU::Reserved2 = 0x00;
 
 PDataTPPDU::PDataTPPDU()
 {
-  PresentationDataValue pdv;
-  V.push_back( pdv );
-
   ItemLength = Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
@@ -43,14 +40,16 @@ std::istream &PDataTPPDU::Read(std::istream &is)
   SwapperDoOp::SwapArray(&itemlength,1);
   ItemLength = itemlength;
 
-  PresentationDataValue pdv;
-  pdv.Read( is );
-  V.push_back( pdv );
-//  std::vector<PresentationDataValue>::const_iterator it = V.begin();
-//  for( ; it != V.end(); ++it )
-//    {
-//    it->Write( os );
-//    }
+  size_t curlen = 0;
+  while( curlen < ItemLength )
+    {
+    PresentationDataValue pdv;
+    pdv.Read( is );
+    V.push_back( pdv );
+    curlen += pdv.Size();
+    }
+  assert( curlen == ItemLength );
+  assert( (ItemLength + 4 + 1 + 1) == Size() );
 
   return is;
 }
