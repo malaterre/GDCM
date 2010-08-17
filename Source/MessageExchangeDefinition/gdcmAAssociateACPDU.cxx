@@ -21,7 +21,7 @@ namespace network
 {
 const uint8_t AAssociateACPDU::ItemType = 0x02; // PDUType ?
 const uint8_t AAssociateACPDU::Reserved2 = 0x00;
-const uint16_t AAssociateACPDU::ProtocolVersion = 0x01;
+const uint16_t AAssociateACPDU::ProtocolVersion = 0x0100; // big endian
 const uint16_t AAssociateACPDU::Reserved9_10 = 0x0000;
 const uint8_t AAssociateACPDU::Reserved11_26[16] = {  };
 const uint8_t AAssociateACPDU::Reserved27_42[16] = {  };
@@ -106,8 +106,13 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   os.write( (char*)&copy, sizeof(PDULength) );
   os.write( (char*)&ProtocolVersion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
-  os.write( (char*)&Reserved11_26, sizeof(Reserved11_26) );
-  os.write( (char*)&Reserved27_42, sizeof(Reserved27_42) );
+  //os.write( (char*)&Reserved11_26, sizeof(Reserved11_26) );
+  const char calling[] = "ANY-SCP         ";
+  os.write( calling, 16 );
+
+  //os.write( (char*)&Reserved27_42, sizeof(Reserved27_42) );
+  const char called[] = "STORESCU        ";
+  os.write( called, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();

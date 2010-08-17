@@ -105,5 +105,10 @@ void PresentationContextAC::Print(std::ostream &os) const
   os << "Result: " << (int)Result << std::endl;
 }
 
+void PresentationContextAC::SetPresentationContextID( uint8_t id )
+{
+  ID = id;
+}
+
 } // end namespace network
 } // end namespace gdcm

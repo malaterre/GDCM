@@ -76,14 +76,33 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   MessageHeader = mh;
 
   DS.Clear();
-  DataSet &ds = DS;
-  VL vl = ItemLength - 2;
-  ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
+  if( MessageHeader ==  3 )
+    {
+    DataSet &ds = DS;
+    VL vl = ItemLength - 2;
+    ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
 
-  //ds.Print( std::cout );
+    //ds.Print( std::cout );
 
-  VL debug = DS.GetLength<ImplicitDataElement>();
-  assert( debug == vl );
+    VL debug = DS.GetLength<ImplicitDataElement>();
+    assert( debug == vl );
+    }
+  else if ( MessageHeader == 2 )
+    {
+    char *buf = new char[ ItemLength - 2 ];
+    is.read( buf, ItemLength - 2 );
+
+    std::ofstream bug( "/tmp/bug1" );
+    bug.write( buf, ItemLength - 2 );
+    bug.close();
+
+    delete buf;
+
+    }
+  else 
+    {
+    assert( 0 );
+    }
 
   assert (ItemLength + 4 == Size() );
   return is;
@@ -116,8 +135,15 @@ size_t PresentationDataValue::Size() const
   ret += sizeof(PresentationContextID);
   ret += 1; // MESSAGE CONTROL HEADER ENCODING
 
-  VL vl = DS.GetLength<ImplicitDataElement>();
-  ret += vl;
+  if( MessageHeader == 3 )
+    {
+    VL vl = DS.GetLength<ImplicitDataElement>();
+    ret += vl;
+    }
+  else
+    {
+    ret += ItemLength - 2;
+    }
 
   return ret;
 }
@@ -158,7 +184,7 @@ D:
   }
 
   {
-  const char a[] = "1.2.826.0.1.3680043.2.1125.4986931123241056575784008796031983649";
+  const char a[] = "1.2.826.0.1.3680043.2.1125.7445042278205614490601873384971697089";
   DataElement de( Tag(0x0,0x1000) );
   de.SetVR( VR::UI );
   std::string suid = a;
@@ -169,19 +195,79 @@ D:
   }
 
     {
-    gdcm::Attribute<0x0,0x100> at = { 1 };
+    gdcm::Attribute<0x0,0x100> at = { 32769 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x110> at = { 1 };
+    gdcm::Attribute<0x0,0x120> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x700> at = { 2 };
+    gdcm::Attribute<0x0,0x800> at = { 257 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x800> at = { 1 };
+    gdcm::Attribute<0x0,0x900> at = { 1 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x0> at = { 0 };
+    unsigned int glen = ds.GetLength<ImplicitDataElement>();
+    assert( (glen % 2) == 0 );
+    at.SetValue( glen );
+    ds.Insert( at.GetAsDataElement() );
+    }
+
+  ItemLength = Size() - 4;
+  assert (ItemLength + 4 == Size() );
+
+  ds.Print( std::cout );
+
+  std::ofstream b( "/tmp/debug1" );
+  ds.Write<ImplicitDataElement,SwapperNoOp>( b );
+  b.close();
+}
+
+void PresentationDataValue::MyInit2(File const &file)
+{
+  DS.Clear();
+  DataSet &ds = DS;
+  {
+  DataElement de( Tag(0x0,0x2) );
+  de.SetVR( VR::UI );
+  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::SecondaryCaptureImageStorage );
+  std::string suid = uid;
+  if( suid.size() % 2 )
+    suid.push_back( ' ' ); // no \0 !
+  de.SetByteValue( suid.c_str(), suid.size()  );
+  ds.Insert( de );
+  }
+
+  {
+  const char a[] = "1.2.826.0.1.3680043.2.1125.7445042278205614490601873384971697089";
+  DataElement de( Tag(0x0,0x1000) );
+  de.SetVR( VR::UI );
+  std::string suid = a;
+  if( suid.size() % 2 )
+    suid.push_back( ' ' ); // no \0 !
+  de.SetByteValue( suid.c_str(), suid.size()  );
+  ds.Insert( de );
+  }
+
+    {
+    gdcm::Attribute<0x0,0x100> at = { 32769 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x120> at = { 1 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x800> at = { 257 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x900> at = { 0 };
     ds.Insert( at.GetAsDataElement() );
     }
     {

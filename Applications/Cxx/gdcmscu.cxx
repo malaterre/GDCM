@@ -16,6 +16,7 @@
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmPDataTFPDU.h"
 #include "gdcmAReleaseRQPDU.h"
+#include "gdcmAReleaseRPPDU.h"
 #include "gdcmAAbortPDU.h"
 #include "gdcmReader.h"
 
@@ -307,35 +308,84 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
 static void process_input2(iosockinet& sio)
 {
   gdcm::network::AAssociateRQPDU rqpdu;
+  rqpdu.SetCallingAETitle( "STORESCU" );
   rqpdu.Read( sio );
 
   std::cout << "done AAssociateRQPDU !" << std::endl;
 
-  gdcm::network::PresentationContextAC pcac;
-  gdcm::network::TransferSyntax_ ts;
-  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-  pcac.SetTransferSyntax( ts );
+  gdcm::network::TransferSyntax_ ts1;
+  ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+
+  gdcm::network::TransferSyntax_ ts2;
+  ts2.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
+
+  gdcm::network::TransferSyntax_ ts3;
+  ts3.SetNameFromUID( gdcm::UIDs::ExplicitVRBigEndian );
 
   gdcm::network::AAssociateACPDU acpdu;
-  acpdu.AddPresentationContextAC( pcac );
+  for( unsigned int id = 1; id < 252; id += 4  )
+    {
+    gdcm::network::PresentationContextAC pcac1;
+    pcac1.SetPresentationContextID( id );
+    pcac1.SetTransferSyntax( ts2 );
+    acpdu.AddPresentationContextAC( pcac1 );
+
+    gdcm::network::PresentationContextAC pcac2;
+    pcac2.SetPresentationContextID( id + 2 );
+    pcac2.SetTransferSyntax( ts3 );
+    acpdu.AddPresentationContextAC( pcac2 );
+    }
+
   acpdu.Write( sio );
   sio.flush();
 
   std::cout << "done AAssociateACPDU !" << std::endl;
 
+  //std::ofstream out("/tmp/storescu");
+  //char b;
+  //while( sio >> b )
+  //  {
+  //  out.write( &b, 1 );
+  //  out.flush();
+  //  std::cout << "Found: " << (int)b << std::endl;
+  //  }
+  //gdcm::network::AAbortPDU ab;
+  //ab.Read( sio );
   gdcm::network::PDataTFPDU pdata;
-  //pdata.Read( sio );
+  pdata.Read( sio );
 
-  std::ofstream out("/tmp/storescu");
-  char b;
-  while( sio >> b )
-    {
-    out.write( &b, 1 );
-    out.flush();
-    std::cout << "Found: " << (int)b << std::endl;
-    }
+  gdcm::network::PDataTFPDU pdata2;
+  pdata2.Read( sio );
+
+  //std::ofstream out("/tmp/storescu");
+  //pdata.Write( out );
+  //out.close();
 
   std::cout << "done PDataTFPDU!" << std::endl;
+
+  gdcm::network::PresentationDataValue pdv;
+  pdv.SetPresentationContextID( 197 );
+  gdcm::File f;
+  pdv.MyInit2( f );
+
+  gdcm::network::PDataTFPDU pdata3;
+  pdata3.AddPresentationDataValue( pdv );
+  pdata3.Write( sio );
+
+  // send release:
+  // SHOULD NOT:
+  // E: Association Release Failed: 0006:0319 DUL Peer Requested Release
+  //gdcm::network::AReleaseRQPDU rel;
+  gdcm::network::AReleaseRPPDU rel;
+  rel.Write( sio );
+
+  //char b = 0x6;
+  //sio.write(&b, 1);
+  //b = 0x0;
+  //sio.write(&b, 1);
+
+  //std::cout << "Extra:" << (int)b << std::endl;
+  std::cout << "done Extra!" << std::endl;
 
 }
 

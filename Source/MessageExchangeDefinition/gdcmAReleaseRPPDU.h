@@ -33,12 +33,14 @@ A-RELEASE-RP PDU fields
 class AReleaseRPPDU
 {
 public:
-static const uint8_t ItemType = 0x6; // PDUType ?
-static const uint8_t Reserved2 = 0x0;
-uint32_t ItemLength; // PDU Length
-static const uint32_t Reserved7_10 = 0x0;
-
+  AReleaseRPPDU();
+  std::istream &Read(std::istream &is);
+  const std::ostream &Write(std::ostream &os) const;
 private:
+  static const uint8_t ItemType; // PDUType ?
+  static const uint8_t Reserved2;
+  uint32_t ItemLength; // PDU Length
+  static const uint32_t Reserved7_10;
 };
 
 } // end namespace network
