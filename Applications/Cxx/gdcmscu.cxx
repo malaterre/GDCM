@@ -16,6 +16,7 @@
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmPDataTFPDU.h"
 #include "gdcmAReleaseRQPDU.h"
+#include "gdcmReader.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -52,8 +53,8 @@ void CEcho( const char *remote, int portno )
   acpdu.Read( e );
 
   gdcm::network::PDataTPPDU pdata;
-  //gdcm::network::PresentationDataValue pdv;
-  //pdata.AddPresentationDataValue( pdv );
+  gdcm::network::PresentationDataValue pdv;
+  pdata.AddPresentationDataValue( pdv );
   pdata.Write( e );
   e.flush();
 
@@ -172,6 +173,20 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
 
   gdcm::network::AAssociateACPDU acpdu;
   acpdu.Read( e );
+
+  gdcm::Reader r;
+  r.SetFileName( "/tmp/send.dcm" );
+  r.Read();
+
+  gdcm::network::PresentationDataValue pdv;
+  //pdv.SetDataSet( r.GetFile().GetDataSet() );
+  pdv.SetPresentationContextID( 197 );
+  pdv.MyInit( r.GetFile() );
+
+  gdcm::network::PDataTPPDU pdata;
+  pdata.AddPresentationDataValue( pdv );
+  pdata.Write( e );
+  e.flush();
 
 }
 

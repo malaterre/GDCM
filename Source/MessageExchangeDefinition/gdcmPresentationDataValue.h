@@ -20,6 +20,7 @@
 
 namespace gdcm
 {
+class File;
 
 // TODO: MM : does swig handle nested namespace
 // I would like to avoid polluting gdcm namespace with such low level details the networ
@@ -42,7 +43,15 @@ public:
   size_t Size() const;
 
   /// Get DataSet
+  void SetDataSet(const DataSet & ds);
   DataSet const &GetDataSet() const { return DS; }
+
+  void MyInit(File const &file);
+
+  uint8_t GetPresentationContextID() const { return PresentationContextID; }
+  void SetPresentationContextID(uint8_t id) {
+    PresentationContextID = id;
+  }
 
 private:
   uint32_t ItemLength;
