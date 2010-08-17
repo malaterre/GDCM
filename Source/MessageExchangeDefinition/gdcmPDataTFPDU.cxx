@@ -19,16 +19,16 @@ namespace gdcm
 {
 namespace network
 {
-const uint8_t PDataTPPDU::ItemType = 0x04; // PDUType ?
-const uint8_t PDataTPPDU::Reserved2 = 0x00;
+const uint8_t PDataTFPDU::ItemType = 0x04; // PDUType ?
+const uint8_t PDataTFPDU::Reserved2 = 0x00;
 
-PDataTPPDU::PDataTPPDU()
+PDataTFPDU::PDataTFPDU()
 {
   ItemLength = Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
-std::istream &PDataTPPDU::Read(std::istream &is)
+std::istream &PDataTFPDU::Read(std::istream &is)
 {
   uint8_t itemtype = 0;
   is.read( (char*)&itemtype, sizeof(ItemType) );
@@ -54,7 +54,7 @@ std::istream &PDataTPPDU::Read(std::istream &is)
   return is;
 }
 
-const std::ostream &PDataTPPDU::Write(std::ostream &os) const
+const std::ostream &PDataTFPDU::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
@@ -71,7 +71,7 @@ const std::ostream &PDataTPPDU::Write(std::ostream &os) const
   return os;
 }
 
-size_t PDataTPPDU::Size() const
+size_t PDataTFPDU::Size() const
 {
   size_t ret = 0;
   ret += sizeof(ItemType);

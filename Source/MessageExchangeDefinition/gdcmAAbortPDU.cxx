@@ -24,6 +24,30 @@ const uint8_t AAbortPDU::Reserved2 = 0x0;
 const uint8_t AAbortPDU::Reserved7 = 0x0;
 const uint8_t AAbortPDU::Reserved8 = 0x0;
 
+/*
+This Source field shall contain an integer value encoded as an
+unsigned binary number. One of the following values shall be used:
+0 - DICOM UL service-user (initiated abort)
+1 - reserved
+2 - DICOM UL service-provider (initiated abort)
+*/
+/*
+This field shall contain an integer value encoded as an unsigned
+binary number. If the Source field has the value (2) “DICOM UL
+service-provider,” it shall take one of the following:
+0 - reason-not-specified
+1 - unrecognized-PDU
+2 - unexpected-PDU
+3 - reserved
+4 - unrecognized-PDU parameter
+5 - unexpected-PDU parameter
+6 - invalid-PDU-parameter value
+If the Source field has the value (0) “DICOM UL service-user,” this
+reason field shall not be significant. It shall be sent with a value 00H
+but not tested to this value when received.
+Note: The reserved fields are used to preserve symmetry with OSI
+ACSE/Presentation Services and Protocol.
+*/
 AAbortPDU::AAbortPDU()
 {
   ItemLength = 0;
@@ -77,6 +101,49 @@ size_t AAbortPDU::Size() const
   ret += sizeof(Reason);
 
   return ret;
+}
+
+static const char *PrintSourceAsString( uint8_t source )
+{
+  switch( source )
+    {
+  case 0x0:
+    return "DICOM UL service-user (initiated abort)";
+  case 0x1:
+    return "reserved";
+  case 0x2:
+    return "DICOM UL service-provider (initiated abort)";
+    }
+  return NULL;
+}
+
+static const char *PrintReasonAsString( uint8_t reason )
+{
+  switch( reason )
+    {
+  case 0x0:
+    return "reason-not-specified";
+  case 0x1:
+    return "unrecognized-PDU";
+  case 0x2:
+    return "unexpected-PDU";
+  case 0x3:
+    return "reserved";
+  case 0x4:
+    return "unrecognized-PDU parameter";
+  case 0x5:
+    return "unexpected-PDU parameter";
+  case 0x6:
+    return "invalid-PDU-parameter value";
+    }
+  return NULL;
+}
+
+void AAbortPDU::Print(std::ostream &os) const
+{
+  os << "PDULength: " << ItemLength << std::endl;
+  os << "Source: " << PrintSourceAsString( Source ) << std::endl;
+  os << "Reason: " << PrintReasonAsString( Reason ) << std::endl;
 }
 
 } // end namespace network

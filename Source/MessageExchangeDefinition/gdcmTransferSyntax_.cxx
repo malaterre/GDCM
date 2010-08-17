@@ -36,7 +36,7 @@ void TransferSyntax_::SetName( const char *name )
 
 std::istream &TransferSyntax_::Read(std::istream &is)
 {
-  uint8_t itemtype = 0x0;
+  uint8_t itemtype = 0xf;
   is.read( (char*)&itemtype, sizeof(ItemType) );
   assert( itemtype == ItemType );
   uint8_t reserved2;

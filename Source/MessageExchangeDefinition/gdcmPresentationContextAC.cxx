@@ -29,6 +29,7 @@ PresentationContextAC::PresentationContextAC()
   ItemLength = 0; // len of last transfer syntax
   ID = 1; // odd [1-255]
   Result = 0;
+  //assert( ItemLength + 4 == Size() );
 }
 
 std::istream &PresentationContextAC::Read(std::istream &is)
@@ -45,6 +46,7 @@ std::istream &PresentationContextAC::Read(std::istream &is)
   uint8_t id;
   is.read( (char*)&id, sizeof(ID) );
   ID = id;
+  assert (ID == 1);
   uint8_t reserved6;
   is.read( (char*)&reserved6, sizeof(Reserved6) );
   uint8_t result;
@@ -62,13 +64,17 @@ const std::ostream &PresentationContextAC::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
+  uint16_t copy = ItemLength;
+  SwapperDoOp::SwapArray(&copy,1);
+  os.write( (char*)&copy, sizeof(ItemLength) );
   os.write( (char*)&ID, sizeof(ID) );
   os.write( (char*)&Reserved6, sizeof(Reserved6) );
   os.write( (char*)&Result, sizeof(Result) );
   os.write( (char*)&Reserved8, sizeof(Reserved8) );
   SubItems.Write(os);
 
+  assert( ItemLength + 4 == Size() );
   return os;
 }
 
@@ -84,6 +90,19 @@ size_t PresentationContextAC::Size() const
   ret += sizeof(Reserved8);
   ret += SubItems.Size();
   return ret;
+}
+
+void PresentationContextAC::SetTransferSyntax( TransferSyntax_ const &ts )
+{
+  SubItems = ts;
+  ItemLength = Size() - 4;
+  assert( ItemLength + 4 == Size() );
+}
+
+void PresentationContextAC::Print(std::ostream &os) const
+{
+  os << "ID: " << (int)ID << std::endl;
+  os << "Result: " << (int)Result << std::endl;
 }
 
 } // end namespace network

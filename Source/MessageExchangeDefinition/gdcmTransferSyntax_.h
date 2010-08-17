@@ -50,7 +50,6 @@ public:
   size_t Size() const;
 private:
   void UpdateName( const char *name );
-
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
   uint16_t ItemLength; // len of

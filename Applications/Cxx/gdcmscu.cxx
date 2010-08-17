@@ -52,15 +52,19 @@ void CEcho( const char *remote, int portno )
 
   gdcm::network::AAssociateACPDU acpdu;
   acpdu.Read( e );
+  acpdu.Print( std::cout );
+  //std::ofstream b( "/tmp/d1234" );
+  //acpdu.Write( b );
+  //b.close();
 
-  gdcm::network::PDataTPPDU pdata;
+  gdcm::network::PDataTFPDU pdata;
   gdcm::network::PresentationDataValue pdv;
   pdata.AddPresentationDataValue( pdv );
   pdata.Write( e );
   e.flush();
 
   // listen back
-  gdcm::network::PDataTPPDU pdata2;
+  gdcm::network::PDataTFPDU pdata2;
   pdata2.Read( e );
 
   // Print output DataSet:
@@ -70,6 +74,77 @@ void CEcho( const char *remote, int portno )
   gdcm::network::AReleaseRQPDU rel;
   rel.Write( e );
 
+}
+
+static void process_input(iosockinet& sio)
+{
+  using std::cout;
+  using std::endl;
+  char	buf[256];
+  char*	p = buf;
+
+  gdcm::network::AAssociateRQPDU rqpdu;
+  rqpdu.Read( sio );
+
+  std::cout << "done AAssociateRQPDU !" << std::endl;
+
+  gdcm::network::PresentationContextAC pcac;
+  gdcm::network::TransferSyntax_ ts;
+  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  pcac.SetTransferSyntax( ts );
+
+  {
+  std::ofstream b( "/tmp/dummys" );
+  pcac.Write( b );
+  b.close();
+  }
+  {
+  std::ifstream b( "/tmp/dummys" );
+  uint8_t itemtype = 0x0;
+  b.read( (char*)&itemtype, 1 );
+  assert( itemtype == 0x21 );
+  pcac.Read( b );
+  b.close();
+  }
+
+  gdcm::network::AAssociateACPDU acpdu;
+  acpdu.AddPresentationContextAC( pcac );
+  acpdu.Write( sio );
+  std::ofstream b( "/tmp/d1234-bis" );
+  acpdu.Write( b );
+  b.close();
+  sio.flush();
+  std::cout << "done AAssociateACPDU!" << std::endl;
+
+  gdcm::network::PDataTFPDU pdata;
+  pdata.Read( sio );
+
+  std::cout << "done PDataTFPDU!" << std::endl;
+
+}
+
+void CEchoServer( int portno )
+{
+  /*
+  echo server (protocol::tcp);
+  server->serve_clients ( portno );
+  */
+
+  sockinetbuf sin (sockbuf::sock_stream);
+    
+  //sin.bind( );
+  sin.bind( portno );
+    
+  std::cout << "localhost = " << sin.localhost() << std::endl
+       << "localport = " << sin.localport() << std::endl;
+    
+  sin.listen();
+    
+  for(;;)
+    {
+      iosockinet s (sin.accept());
+      process_input(s);
+    }
 }
 
 void CStore( const char *remote, int portno )
@@ -147,15 +222,17 @@ I:     Abstract Syntax: =XRayFluoroscopyImageStorage
 I:     Abstract Syntax: =XRayRadiationDoseSR
 */
   gdcm::network::TransferSyntax_ ts;
-  //ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-  ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
+  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  //ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
 
   gdcm::network::AAssociateRQPDU cstore;
   cstore.SetCallingAETitle( "STORESCU" );
 
-  gdcm::UIDs::TSName begin = gdcm::UIDs::AmbulatoryECGWaveformStorage; // 136
+  //gdcm::UIDs::TSName begin = gdcm::UIDs::AmbulatoryECGWaveformStorage; // 136
+  gdcm::UIDs::TSName begin = gdcm::UIDs::ComputedRadiographyImageStorage; // 109
   //gdcm::UIDs::TSName end   = gdcm::UIDs::HemodynamicWaveformStorage;
-  gdcm::UIDs::TSName end   = gdcm::UIDs::BasicTextSRStorage; // 177
+  //gdcm::UIDs::TSName end   = gdcm::UIDs::BasicTextSRStorage; // 177
+  gdcm::UIDs::TSName end   = gdcm::UIDs::RTIonBeamsTreatmentRecordStorage; // 197
   unsigned int id = 1;
   for( unsigned int tsname = begin; tsname <= end; ++tsname, id +=2  )
     {
@@ -176,30 +253,40 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   acpdu.Read( e );
 
   gdcm::Reader r;
-  r.SetFileName( "/tmp/send.dcm" );
+  r.SetFileName( "/tmp/send3.dcm" );
   r.Read();
 
   gdcm::network::PresentationDataValue pdv;
-  //pdv.SetDataSet( r.GetFile().GetDataSet() );
   pdv.SetPresentationContextID( 197 );
   pdv.MyInit( r.GetFile() );
 
-  gdcm::network::PDataTPPDU pdata;
+  gdcm::network::PresentationDataValue pdv2;
+  pdv2.SetPresentationContextID( 197 );
+  pdv2.SetDataSet( r.GetFile().GetDataSet() );
+
+  gdcm::network::PDataTFPDU pdata;
   pdata.AddPresentationDataValue( pdv );
+  //pdata.AddPresentationDataValue( pdv2 );
   pdata.Write( e );
+  e.flush();
+
+  gdcm::network::PDataTFPDU pdata2;
+  pdata2.AddPresentationDataValue( pdv2 );
+  pdata.Write( e );
+
   e.flush();
 
   // listen back
   gdcm::network::AAbortPDU ab;
   ab.Read( e );
 
-  //abort.Print( std::cout );
+  //ab.Print( std::cout );
 
-//  gdcm::network::PDataTPPDU pdata2;
-//  pdata2.Read( e );
+//  gdcm::network::PDataTFPDU pdata3;
+//  pdata3.Read( e );
 //
 //  // Print output DataSet:
-//  pdata2.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
+//  pdata3.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
 //
 //  // send release:
 //  gdcm::network::AReleaseRQPDU rel;
@@ -218,7 +305,8 @@ int main(int argc, char *argv[])
   int portno = atoi (argv [2]);
 
   //CEcho( argv[1], portno );
-  CStore( argv[1], portno );
+  CEchoServer( portno );
+  //CStore( argv[1], portno );
 
   return 0;
 }

@@ -57,6 +57,8 @@ private:
   uint32_t ItemLength;
   uint8_t PresentationContextID;
   DataSet DS;
+
+  uint8_t MessageHeader;
 };
 
 } // end namespace network

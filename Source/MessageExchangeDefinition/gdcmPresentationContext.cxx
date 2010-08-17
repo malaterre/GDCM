@@ -37,7 +37,30 @@ PresentationContext::PresentationContext()
 
 std::istream &PresentationContext::Read(std::istream &is)
 {
-  assert( 0 );
+  //uint8_t itemtype = 0x0;
+  //is.read( (char*)&itemtype, sizeof(ItemType) );
+  //assert( itemtype == ItemType );
+  uint8_t reserved2;
+  is.read( (char*)&reserved2, sizeof(Reserved2) );
+  uint16_t itemlength;
+  is.read( (char*)&itemlength, sizeof(ItemLength) );
+  SwapperDoOp::SwapArray(&itemlength,1);
+  ItemLength = itemlength;
+  uint8_t id;
+  is.read( (char*)&id, sizeof(ID) );
+  ID = id;
+  uint8_t reserved6;
+  is.read( (char*)&reserved6, sizeof(Reserved6) );
+  uint8_t reserved7;
+  is.read( (char*)&reserved7, sizeof(Reserved7) );
+  uint8_t reserved8;
+  is.read( (char*)&reserved8, sizeof(Reserved6) );
+  SubItems.Read( is );
+
+  TransferSyntax_ ts;
+  ts.Read( is );
+  TransferSyntaxes.push_back( ts );
+
   assert( ItemLength + 4 == Size() );
   return is;
 }

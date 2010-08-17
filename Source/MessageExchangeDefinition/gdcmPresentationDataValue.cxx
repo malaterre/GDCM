@@ -57,6 +57,7 @@ PresentationDataValue::PresentationDataValue()
     ds.Insert( at.GetAsDataElement() );
     }
 
+  MessageHeader = 3;
   ItemLength = Size() - 4;
   assert (ItemLength + 4 == Size() );
 }
@@ -72,6 +73,7 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   uint8_t mh;
   is.read( (char*)&mh, 1 );
   //assert( mh == 0 ); // bitwise stuff...
+  MessageHeader = mh;
 
   DS.Clear();
   DataSet &ds = DS;
@@ -94,7 +96,7 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   os.write( (char*)&copy, sizeof(ItemLength) );
   os.write( (char*)&PresentationContextID, sizeof(PresentationContextID) );
 
-  uint8_t t;
+  uint8_t t = MessageHeader;
   t = 3; // E.2 MESSAGE CONTROL HEADER ENCODING
   os.write( (char*)&t, 1 );
 
@@ -123,6 +125,7 @@ size_t PresentationDataValue::Size() const
 void PresentationDataValue::SetDataSet(const DataSet & ds)
 {
   DS = ds;
+  MessageHeader = 0;
   ItemLength = Size() - 4;
   assert (ItemLength + 4 == Size() );
 }

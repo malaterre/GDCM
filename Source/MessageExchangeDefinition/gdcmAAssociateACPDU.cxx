@@ -101,7 +101,7 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
   //os.write( (char*)&PDULength, sizeof(PDULength) );
-  uint16_t copy = PDULength;
+  uint32_t copy = PDULength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(PDULength) );
   os.write( (char*)&ProtocolVersion, sizeof(ProtocolVersion) );
@@ -139,6 +139,22 @@ size_t AAssociateACPDU::Size() const
     }
   ret += UserInfo.Size();
   return ret;
+}
+
+void AAssociateACPDU::AddPresentationContextAC( PresentationContextAC const &pcac )
+{
+  PresContextAC.push_back( pcac );
+  PDULength = Size() - 6;
+  assert( PDULength + 4 + 1 + 1 == Size() );
+}
+
+void AAssociateACPDU::Print(std::ostream &os) const
+{
+  std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
+  for( ; it != PresContextAC.end(); ++it )
+    {
+    it->Print(os);
+    }
 }
 
 } // end namespace network
