@@ -286,38 +286,40 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   pdata.Write( e );
   e.flush();
   }
+  std::cout << "done PDataTFPDU 1!" << std::endl;
 
   {
   gdcm::network::PresentationDataValue pdv2;
   pdv2.SetPresentationContextID( 197 );
-  pdv2.SetMessageHeader( 2 );
   pdv2.SetDataSet( r.GetFile().GetDataSet() );
+  pdv2.SetMessageHeader( 2 );
 
   gdcm::network::PDataTFPDU pdata2;
   pdata2.AddPresentationDataValue( pdv2 );
   pdata2.Write( e );
   e.flush();
   }
+  std::cout << "done PDataTFPDU 2!" << std::endl;
 
-  {
-  gdcm::network::PresentationDataValue pdv;
-  pdv.SetPresentationContextID( 197 );
-  pdv.MyInit( r.GetFile() );
-
-  gdcm::network::PDataTFPDU pdata;
-  pdata.AddPresentationDataValue( pdv );
-  pdata.Write( e );
-  e.flush();
-  }
+//  {
+//  gdcm::network::PresentationDataValue pdv;
+//  pdv.SetPresentationContextID( 197 );
+//  pdv.MyInit( r.GetFile() );
+//
+//  gdcm::network::PDataTFPDU pdata;
+//  pdata.AddPresentationDataValue( pdv );
+//  pdata.Write( e );
+//  e.flush();
+//  }
 
   // listen back
-  gdcm::network::AAbortPDU ab;
-  ab.Read( e );
+  //gdcm::network::AAbortPDU ab;
+  //ab.Read( e );
 
   //ab.Print( std::cout );
 
-//  gdcm::network::PDataTFPDU pdata3;
-//  pdata3.Read( e );
+  gdcm::network::PDataTFPDU pdata3;
+  pdata3.Read( e );
 //
 //  // Print output DataSet:
 //  pdata3.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
@@ -377,10 +379,12 @@ static void process_input2(iosockinet& sio)
   gdcm::network::PDataTFPDU pdata;
   pdata.Read( sio );
 
+  std::cout << "done PDataTFPDU 1!" << std::endl;
+
   gdcm::network::PDataTFPDU pdata2;
   pdata2.Read( sio );
 
-  std::cout << "done PDataTFPDU!" << std::endl;
+  std::cout << "done PDataTFPDU 2!" << std::endl;
 
   gdcm::network::PresentationDataValue pdv;
   pdv.SetPresentationContextID( 197 );

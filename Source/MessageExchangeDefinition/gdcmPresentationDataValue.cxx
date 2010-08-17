@@ -124,6 +124,15 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   //b.close();
 
   DS.Write<ImplicitDataElement,SwapperNoOp>( os );
+  VL debug = DS.GetLength<ImplicitDataElement>();
+
+  assert( debug == ItemLength - 2 );
+
+  std::cout << "BEFORE" << std::endl;
+  DS.Print( std::cout );
+  std::cout << "AFTER" << std::endl;
+
+  assert (ItemLength + 4 == Size() );
 
   return os;
 }
@@ -150,9 +159,10 @@ size_t PresentationDataValue::Size() const
 
 void PresentationDataValue::SetDataSet(const DataSet & ds)
 {
+  DS.Clear();
   DS = ds;
-  MessageHeader = 0;
   ItemLength = Size() - 4;
+  //MessageHeader = 0;
   assert (ItemLength + 4 == Size() );
 }
 
