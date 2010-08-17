@@ -46,8 +46,9 @@ std::istream &ImplementationClassUIDSub::Read(std::istream &is)
   char name[256];
   assert( itemlength < 256 );
   is.read( name, itemlength );
-  ImplementationClassUID = name;
+  ImplementationClassUID = std::string(name, itemlength);
 
+  assert( (ItemLength + 4) == Size() );
   return is;
 }
 

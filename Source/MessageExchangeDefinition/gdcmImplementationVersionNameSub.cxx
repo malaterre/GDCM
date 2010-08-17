@@ -45,7 +45,7 @@ std::istream &ImplementationVersionNameSub::Read(std::istream &is)
   char name[256];
   assert( itemlength < 256 );
   is.read( name, itemlength );
-  ImplementationVersionName = name;
+  ImplementationVersionName = std::string(name,itemlength);
 
   return is;
 }

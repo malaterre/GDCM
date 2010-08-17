@@ -25,6 +25,7 @@ const uint8_t TransferSyntax_::Reserved2 = 0x00;
 TransferSyntax_::TransferSyntax_()
 {
   //UpdateName( "1.2.840.10008.1.1" );
+  ItemLength = 0;
 }
 
 void TransferSyntax_::SetName( const char *name )
@@ -48,7 +49,7 @@ std::istream &TransferSyntax_::Read(std::istream &is)
   char name[256];
   assert( itemlength < 256 );
   is.read( name, itemlength );
-  Name = name;
+  Name = std::string(name,itemlength);
 
   return is;
 }

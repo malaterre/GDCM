@@ -38,6 +38,8 @@ public:
   const char *GetName() const { return Name.c_str(); }
   size_t Size() const;
 
+  //static const uint8_t GetItemType() { return ItemType; }
+
 private:
   void UpdateName( const char *name );
   static const uint8_t ItemType;
