@@ -46,7 +46,6 @@ std::istream &PresentationContextAC::Read(std::istream &is)
   uint8_t id;
   is.read( (char*)&id, sizeof(ID) );
   ID = id;
-  assert (ID == 1);
   uint8_t reserved6;
   is.read( (char*)&reserved6, sizeof(Reserved6) );
   uint8_t result;
