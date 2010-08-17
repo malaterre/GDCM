@@ -16,6 +16,7 @@
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmPDataTFPDU.h"
 #include "gdcmAReleaseRQPDU.h"
+#include "gdcmAAbortPDU.h"
 #include "gdcmReader.h"
 
 #include <fstream>
@@ -187,6 +188,22 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   pdata.AddPresentationDataValue( pdv );
   pdata.Write( e );
   e.flush();
+
+  // listen back
+  gdcm::network::AAbortPDU ab;
+  ab.Read( e );
+
+  //abort.Print( std::cout );
+
+//  gdcm::network::PDataTPPDU pdata2;
+//  pdata2.Read( e );
+//
+//  // Print output DataSet:
+//  pdata2.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
+//
+//  // send release:
+//  gdcm::network::AReleaseRQPDU rel;
+//  rel.Write( e );
 
 }
 
