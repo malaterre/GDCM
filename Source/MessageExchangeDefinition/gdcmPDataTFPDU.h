@@ -41,7 +41,10 @@ public:
   /// \internal Compute Size
   size_t Size() const;
 
-  PresentationDataValue const &GetPresentationDataValue(unsigned int i) {
+  void AddPresentationDataValue( PresentationDataValue const &pdv ) {
+    V.push_back( pdv );
+  }
+  PresentationDataValue const &GetPresentationDataValue(unsigned int i) const {
     assert( !V.empty() && i < V.size() );
     return V[i];
   }

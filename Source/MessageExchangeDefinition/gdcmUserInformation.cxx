@@ -34,9 +34,9 @@ UserInformation::UserInformation()
 
 std::istream &UserInformation::Read(std::istream &is)
 {
-  uint8_t itemtype = 0x0;
-  is.read( (char*)&itemtype, sizeof(ItemType) );
-  assert( itemtype == ItemType );
+  //uint8_t itemtype = 0x0;
+  //is.read( (char*)&itemtype, sizeof(ItemType) );
+  //assert( itemtype == ItemType );
   uint8_t reserved2;
   is.read( (char*)&reserved2, sizeof(Reserved2) );
   uint16_t itemlength;
@@ -48,6 +48,7 @@ std::istream &UserInformation::Read(std::istream &is)
   ICUID.Read(is);
   IVNS.Read(is);
 
+  assert( ItemLength + 4 == Size() );
   return is;
 }
 

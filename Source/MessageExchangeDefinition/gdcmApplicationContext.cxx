@@ -29,9 +29,9 @@ ApplicationContext::ApplicationContext()
 
 std::istream &ApplicationContext::Read(std::istream &is)
 {
-  uint8_t itemtype = 0x0;
-  is.read( (char*)&itemtype, sizeof(ItemType) );
-  assert( itemtype == ItemType );
+  //uint8_t itemtype = 0x0;
+  //is.read( (char*)&itemtype, sizeof(ItemType) );
+  //assert( itemtype == ItemType );
   uint8_t reserved2 = 0x0;
   is.read( (char*)&reserved2, sizeof(Reserved2) );
   uint16_t itemlength;
@@ -42,7 +42,7 @@ std::istream &ApplicationContext::Read(std::istream &is)
   char name[256];
   assert( itemlength < 256 );
   is.read( name, ItemLength );
-  Name = name;
+  Name = std::string(name,itemlength);
 
   return is;
 }

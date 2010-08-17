@@ -33,9 +33,9 @@ PresentationContextAC::PresentationContextAC()
 
 std::istream &PresentationContextAC::Read(std::istream &is)
 {
-  uint8_t itemtype = 0x0;
-  is.read( (char*)&itemtype, sizeof(ItemType) );
-  assert( itemtype == ItemType );
+  //uint8_t itemtype = 0x0;
+  //is.read( (char*)&itemtype, sizeof(ItemType) );
+  //assert( itemtype == ItemType );
   uint8_t reserved2;
   is.read( (char*)&reserved2, sizeof(Reserved2) );
   uint16_t itemlength;
@@ -52,8 +52,10 @@ std::istream &PresentationContextAC::Read(std::istream &is)
   Result = result; // 0-4
   uint8_t reserved8;
   is.read( (char*)&reserved8, sizeof(Reserved6) );
-  TransferSyntax_ ts;
-  ts.Read( is );
+  SubItems.Read( is );
+
+  assert( ItemLength + 4 == Size() );
+  return is;
 }
 
 const std::ostream &PresentationContextAC::Write(std::ostream &os) const
@@ -68,6 +70,20 @@ const std::ostream &PresentationContextAC::Write(std::ostream &os) const
   SubItems.Write(os);
 
   return os;
+}
+
+size_t PresentationContextAC::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength);
+  ret += sizeof(ID);
+  ret += sizeof(Reserved6);
+  ret += sizeof(Result);
+  ret += sizeof(Reserved8);
+  ret += SubItems.Size();
+  return ret;
 }
 
 } // end namespace network

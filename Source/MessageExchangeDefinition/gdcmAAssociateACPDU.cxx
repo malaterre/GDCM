@@ -56,19 +56,42 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   uint8_t reserved43_74[32] = {  };
   is.read( (char*)&reserved43_74, sizeof(Reserved43_74) ); // 0 (32 times)
 
-  AppContext.Read( is );
-  PresentationContextAC pcac;
-  pcac.Read( is );
-  //std::vector<PresentationContextAC>::iterator it = PresContextAC.begin();
-  //for( ; it != PresContextAC.end(); ++it )
-  //  {
-  //  it->Read( is );
-  //  }
-  UserInfo.Read( is );
+  uint8_t itemtype2 = 0x0;
+  size_t curlen = 0;
+  while( curlen + 68 < PDULength )
+    {
+    is.read( (char*)&itemtype2, sizeof(ItemType) );
+    switch ( itemtype2 )
+      {
+    case 0x10: // ApplicationContext ItemType
+      AppContext.Read( is );
+      curlen += AppContext.Size();
+      break;
+    case 0x21: // PresentationContextAC ItemType
+        {
+        PresentationContextAC pcac;
+        pcac.Read( is );
+        PresContextAC.push_back( pcac );
+        curlen += pcac.Size();
+        }
+      break;
+    case 0x50: // UserInformation ItemType
+      UserInfo.Read( is );
+      curlen += UserInfo.Size();
+      break;
+    default:
+      gdcmErrorMacro( "Unknown ItemType: " << std::hex << (int) itemtype2 );
+      curlen = PDULength; // make sure to exit
+      break;
+      }
+    // WARNING: I cannot simply call Size() since UserInfo is initialized with GDCM
+    // own parameter, this will bias the computation. Instead compute relative
+    // length of remaining bytes to read.
+    //curlen = Size();
+    }
+  assert( curlen + 68 == PDULength );
 
-  // FIXME : we need to merge AppContext / PresContextAC and UserInfo in a single base class
-  // otherwise we cannot read them with an unnumberred
-  // or change UserInfo::Read to skip the first bytes...
+  assert( PDULength + 4 + 1 + 1 == Size() );
 
   return is;
 }
@@ -95,6 +118,27 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   UserInfo.Write( os );
 
   return os;
+}
+
+size_t AAssociateACPDU::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(PDULength);
+  ret += sizeof(ProtocolVersion);
+  ret += sizeof(Reserved9_10);
+  ret += sizeof(Reserved11_26);
+  ret += sizeof(Reserved27_42);
+  ret += sizeof(Reserved43_74);
+  ret += AppContext.Size();
+  std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
+  for( ; it != PresContextAC.end(); ++it )
+    {
+    ret += it->Size();
+    }
+  ret += UserInfo.Size();
+  return ret;
 }
 
 } // end namespace network

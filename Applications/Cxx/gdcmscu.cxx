@@ -52,6 +52,8 @@ void CEcho( const char *remote, int portno )
   acpdu.Read( e );
 
   gdcm::network::PDataTPPDU pdata;
+  //gdcm::network::PresentationDataValue pdv;
+  //pdata.AddPresentationDataValue( pdv );
   pdata.Write( e );
   e.flush();
 
