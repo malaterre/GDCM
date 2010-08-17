@@ -244,18 +244,27 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   //gdcm::UIDs::TSName end   = gdcm::UIDs::HemodynamicWaveformStorage;
   //gdcm::UIDs::TSName end   = gdcm::UIDs::BasicTextSRStorage; // 177
   gdcm::UIDs::TSName end   = gdcm::UIDs::RTIonBeamsTreatmentRecordStorage; // 197
-  unsigned int id = 1;
-  for( unsigned int tsname = begin; tsname <= end; ++tsname, id +=2  )
-    {
+//  unsigned int id = 1;
+//  for( unsigned int tsname = begin; tsname <= end; ++tsname, id +=2  )
+//    {
+//    gdcm::network::AbstractSyntax as;
+//    as.SetNameFromUID( (gdcm::UIDs::TSName)tsname );
+//
+//    gdcm::network::PresentationContext pc;
+//    pc.SetPresentationContextID( id );
+//    pc.SetAbstractSyntax( as );
+//    pc.AddTransferSyntax( ts );
+//    cstore.AddPresentationContext( pc );
+//    }
+
     gdcm::network::AbstractSyntax as;
-    as.SetNameFromUID( (gdcm::UIDs::TSName)tsname );
+    as.SetNameFromUID( gdcm::UIDs::SecondaryCaptureImageStorage );
 
     gdcm::network::PresentationContext pc;
-    pc.SetPresentationContextID( id );
+    pc.SetPresentationContextID( 197 );
     pc.SetAbstractSyntax( as );
     pc.AddTransferSyntax( ts );
     cstore.AddPresentationContext( pc );
-    }
 
   cstore.Write(e);
   e.flush();
@@ -267,25 +276,39 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   r.SetFileName( "/tmp/send3.dcm" );
   r.Read();
 
+  {
   gdcm::network::PresentationDataValue pdv;
   pdv.SetPresentationContextID( 197 );
   pdv.MyInit( r.GetFile() );
 
-  gdcm::network::PresentationDataValue pdv2;
-  pdv2.SetPresentationContextID( 197 );
-  pdv2.SetDataSet( r.GetFile().GetDataSet() );
-
   gdcm::network::PDataTFPDU pdata;
   pdata.AddPresentationDataValue( pdv );
-  //pdata.AddPresentationDataValue( pdv2 );
   pdata.Write( e );
   e.flush();
+  }
+
+  {
+  gdcm::network::PresentationDataValue pdv2;
+  pdv2.SetPresentationContextID( 197 );
+  pdv2.SetMessageHeader( 2 );
+  pdv2.SetDataSet( r.GetFile().GetDataSet() );
 
   gdcm::network::PDataTFPDU pdata2;
   pdata2.AddPresentationDataValue( pdv2 );
-  pdata.Write( e );
-
+  pdata2.Write( e );
   e.flush();
+  }
+
+  {
+  gdcm::network::PresentationDataValue pdv;
+  pdv.SetPresentationContextID( 197 );
+  pdv.MyInit( r.GetFile() );
+
+  gdcm::network::PDataTFPDU pdata;
+  pdata.AddPresentationDataValue( pdv );
+  pdata.Write( e );
+  e.flush();
+  }
 
   // listen back
   gdcm::network::AAbortPDU ab;
@@ -357,10 +380,6 @@ static void process_input2(iosockinet& sio)
   gdcm::network::PDataTFPDU pdata2;
   pdata2.Read( sio );
 
-  //std::ofstream out("/tmp/storescu");
-  //pdata.Write( out );
-  //out.close();
-
   std::cout << "done PDataTFPDU!" << std::endl;
 
   gdcm::network::PresentationDataValue pdv;
@@ -373,20 +392,10 @@ static void process_input2(iosockinet& sio)
   pdata3.Write( sio );
 
   // send release:
-  // SHOULD NOT:
-  // E: Association Release Failed: 0006:0319 DUL Peer Requested Release
-  //gdcm::network::AReleaseRQPDU rel;
   gdcm::network::AReleaseRPPDU rel;
   rel.Write( sio );
 
-  //char b = 0x6;
-  //sio.write(&b, 1);
-  //b = 0x0;
-  //sio.write(&b, 1);
-
-  //std::cout << "Extra:" << (int)b << std::endl;
-  std::cout << "done Extra!" << std::endl;
-
+  std::cout << "done AReleaseRPPDU!" << std::endl;
 }
 
 void CStoreServer( int portno )

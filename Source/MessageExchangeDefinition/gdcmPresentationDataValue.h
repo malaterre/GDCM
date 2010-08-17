@@ -53,6 +53,9 @@ public:
   void SetPresentationContextID(uint8_t id) {
     PresentationContextID = id;
   }
+  void SetMessageHeader(uint8_t messageheader) {
+    MessageHeader = messageheader;
+  }
 
 private:
   uint32_t ItemLength;

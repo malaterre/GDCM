@@ -195,19 +195,19 @@ D:
   }
 
     {
-    gdcm::Attribute<0x0,0x100> at = { 32769 };
+    gdcm::Attribute<0x0,0x100> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x120> at = { 1 };
+    gdcm::Attribute<0x0,0x110> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x800> at = { 257 };
+    gdcm::Attribute<0x0,0x700> at = { 2 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x900> at = { 1 };
+    gdcm::Attribute<0x0,0x800> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
