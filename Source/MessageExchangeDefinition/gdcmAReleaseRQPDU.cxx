@@ -30,6 +30,17 @@ AReleaseRQPDU::AReleaseRQPDU()
 
 std::istream &AReleaseRQPDU::Read(std::istream &is)
 {
+  uint8_t itemtype = 0;
+  is.read( (char*)&itemtype, sizeof(ItemType) );
+  assert( itemtype == ItemType );
+  uint8_t reserved2 = 0;
+  is.read( (char*)&reserved2, sizeof(Reserved2) );
+  uint32_t itemlength = ItemLength;
+  is.read( (char*)&itemlength, sizeof(ItemLength) );
+  SwapperDoOp::SwapArray(&itemlength,1);
+  ItemLength = itemlength;
+  uint32_t reserved7_10;
+  is.read( (char*)&reserved7_10, sizeof(Reserved7_10) );
   return is;
 }
 

@@ -24,7 +24,7 @@
 #include <stdlib.h>
 
 // Execute like this:
-// ./bin/gdcmscu www.dicomserver.co.uk 11112 toto 
+// ./bin/gdcmscu www.dicomserver.co.uk 11112
 void CEcho( const char *remote, int portno )
 {
   echo e(protocol::tcp);
@@ -80,8 +80,8 @@ static void process_input(iosockinet& sio)
 {
   using std::cout;
   using std::endl;
-  char	buf[256];
-  char*	p = buf;
+  //char	buf[256];
+  //char*	p = buf;
 
   gdcm::network::AAssociateRQPDU rqpdu;
   rqpdu.Read( sio );
@@ -121,8 +121,23 @@ static void process_input(iosockinet& sio)
 
   std::cout << "done PDataTFPDU!" << std::endl;
 
+  gdcm::network::PDataTFPDU pdata2;
+  gdcm::network::PresentationDataValue pdv;
+  pdata2.AddPresentationDataValue( pdv );
+  pdata2.Write( sio );
+  sio.flush();
+
+  std::cout << "done PDataTFPDU 2!" << std::endl;
+
+  gdcm::network::AReleaseRQPDU rel;
+  rel.Read( sio );
+
+  std::cout << "done AReleaseRQPDU " << std::endl;
+
 }
 
+// Execute like this:
+// ./bin/gdcmscu www.dicomserver.co.uk 11112 server
 void CEchoServer( int portno )
 {
   /*
@@ -304,9 +319,20 @@ int main(int argc, char *argv[])
 
   int portno = atoi (argv [2]);
 
-  //CEcho( argv[1], portno );
-  CEchoServer( portno );
-  //CStore( argv[1], portno );
+  std::string mode;
+  if (argc == 4)
+    {
+    mode = argv[3];
+    }
 
+  if ( mode == "server" )
+    {
+    CEchoServer( portno );
+    }
+  else
+    {
+    CEcho( argv[1], portno );
+    //CStore( argv[1], portno );
+    }
   return 0;
 }
