@@ -1,3 +1,14 @@
+2010-08-18 10:16  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6972] Utilities/VTK/Applications/gdcm2vtk.cxx,
+	  Utilities/VTK/Testing/Cxx/CMakeLists.txt,
+	  Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader2.cxx:
+	  Make sure to compile with VTK 4.2.
+
+2010-08-18 09:12  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6968] ChangeLog: update changelog before gdcm 2.0.16 (again)
+
 2010-08-18 08:59  Mathieu Malaterre <malat@users.sourceforge.net>
 
 	* [r6967] Utilities/VTK/CMakeLists.txt: revert change. Leave a
