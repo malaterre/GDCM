@@ -26,6 +26,9 @@ namespace network
 /**
  Table 9-12
 APPLICATION CONTEXT ITEM FIELDS
+
+ FIXME:
+ Looks like Application Context can only be 64 bytes at max (see Figure 9-1 / PS 3.8 - 2009 )
  */
 class ApplicationContext
 {

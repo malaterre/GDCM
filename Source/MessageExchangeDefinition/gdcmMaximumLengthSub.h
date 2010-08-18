@@ -29,6 +29,8 @@ Annex D
 Table D.1-1
 MAXIMUM LENGTH SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
 
+or
+
 Table D.1-2
 Maximum length sub-item fields (A-ASSOCIATE-AC)
  */
