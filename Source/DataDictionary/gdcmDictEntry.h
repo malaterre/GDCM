@@ -37,25 +37,16 @@ namespace gdcm
 class GDCM_EXPORT DictEntry
 {
 public:
-  DictEntry(const char *name = "", VR const &vr = VR::INVALID, VM const &vm = VM::VM0, bool ret = false):Name(name),ValueRepresentation(vr),ValueMultiplicity(vm),Retired(ret),GroupXX(false),ElementXX(false) {
-    //if(name && *name) Name = name;
-    //ValueRepresentation = vr;
-    //ValueMultiplicity = vm;
-    //Retired = ret;
-    //GroupXX = false;
-    //ElementXX = false;
+  DictEntry(const char *name = "", const char *keyword = "", VR const &vr = VR::INVALID, VM const &vm = VM::VM0, bool ret = false):
+    Name(name),
+    Keyword(keyword),
+    ValueRepresentation(vr),
+    ValueMultiplicity(vm),
+    Retired(ret),
+    GroupXX(false),
+    ElementXX(false)
+  {
   }
-#if 0
-  // FIXME
-  DictEntry(const char *name, const char *vr, const char *vm) {
-    if(name) Name = name;
-    ValueRepresentation = VR::GetVRType(vr);
-    ValueMultiplicity = VM::GetVMType(vm);
-    Retired = false;
-    GroupXX = false;
-    ElementXX = false;
-  }
-#endif
 
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
 
@@ -73,8 +64,9 @@ public:
   const char *GetName() const { return Name.c_str(); }
   void SetName(const char* name) { Name = name; }
 
-  /// same as GetName but without spaces
-  const char *GetKeyword() const { return ""; }
+  /// same as GetName but without spaces...
+  const char *GetKeyword() const { return Keyword.c_str(); }
+  void SetKeyword(const char* keyword) { Keyword = keyword; }
 
   /// Set/Get Retired flag
   bool GetRetired() const { return Retired; }
@@ -93,7 +85,12 @@ public:
   bool IsUnique() const { return ElementXX == false && GroupXX == false; }
 
 private:
+  //
+  static bool CheckKeywordAgainstName(const char *name, const char *keyword);
+
+private:
   std::string Name;
+  std::string Keyword;
   VR ValueRepresentation;
   VM ValueMultiplicity;
   bool Retired : 1;

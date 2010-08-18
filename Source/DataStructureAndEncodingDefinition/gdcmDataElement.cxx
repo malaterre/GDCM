@@ -22,8 +22,8 @@
 
 namespace gdcm
 {
-  void DataElement::SetVLToUndefined() { 
-    assert( VRField == VR::SQ || VRField == VR::INVALID 
+  void DataElement::SetVLToUndefined() {
+    assert( VRField == VR::SQ || VRField == VR::INVALID
       || (VRField == VR::UN && IsUndefinedLength() ) );
     //SequenceOfItems *sqi = GetSequenceOfItems();
     SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
@@ -134,11 +134,11 @@ namespace gdcm
           return sqi;
           }
         else
-{
-assert( GetVR().IsVRFile() );
-assert( GetByteValue() );
-return 0;
-}
+          {
+          assert( GetVR().IsVRFile() );
+          assert( GetByteValue() );
+          return 0;
+          }
         }
       }
     //    catch( ParseException &pex )

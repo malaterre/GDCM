@@ -14,6 +14,11 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "gdcm.*.cxx.obj : warning LNK4221: no public symbols found; archive member will be inaccessible"
   "/usr/bin/ranlib: for architecture: .* file: .* has no symbols"
   "gdcmcharls"
+  "gdcmexpat"
+  "warning CS0114:"
+  "warning CS0108:"
+  "warning CS0109:"
+  "warning CS1591:"
   )
 
 # Disable dynamic analysis on some tests:

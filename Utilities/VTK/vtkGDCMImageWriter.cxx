@@ -709,7 +709,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   else
     {
     vtklen = npts * ssize;
-    assert( vtklen >= npts );
+    assert( vtklen >= (unsigned long)npts );
     }
   //unsigned long vtklen = npts * ssize;
   //assert( vtklen == len * ssize );
@@ -1260,6 +1260,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 //    JPEGLS_COMPRESSION,   // JPEG-LS
 //    RLE_COMPRESSION       // RLE
 //}
+void vtkGDCMImageWriter::SetDirectionCosinesFromImageOrientationPatient(const double dircos[6])
+{
+  this->DirectionCosines->SetElement(0,0, dircos[0]);
+  this->DirectionCosines->SetElement(1,0, dircos[1]);
+  this->DirectionCosines->SetElement(2,0, dircos[2]);
+  this->DirectionCosines->SetElement(3,0, 0);
+  this->DirectionCosines->SetElement(0,1, dircos[3]);
+  this->DirectionCosines->SetElement(1,1, dircos[4]);
+  this->DirectionCosines->SetElement(2,1, dircos[5]);
+  this->DirectionCosines->SetElement(3,1, 0);
+  double dircosz[3];
+  vtkMath::Cross(dircos, dircos+3, dircosz);
+  this->DirectionCosines->SetElement(0,2, dircosz[0]);
+  this->DirectionCosines->SetElement(1,2, dircosz[1]);
+  this->DirectionCosines->SetElement(2,2, dircosz[2]);
+  this->DirectionCosines->SetElement(3,2, 0);
+}
 
 //----------------------------------------------------------------------------
 void vtkGDCMImageWriter::PrintSelf(ostream& os, vtkIndent indent)

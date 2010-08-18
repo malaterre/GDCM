@@ -109,7 +109,7 @@ Attribute<0x0028,0x0004> piat;
     if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = icon.GetLUT();
-      assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
+      assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0)
            || (pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0) );
       // lut descriptor:
       // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor
@@ -117,13 +117,17 @@ Attribute<0x0028,0x0004> piat;
       // (0028,1103) US 256\0\16                                 #   6, 3 BluePaletteColorLookupTableDescriptor
       // lut data:
       unsigned short length, subscript, bitsize;
-      unsigned short rawlut8[256];
-      unsigned short rawlut16[65536];
-      unsigned short *rawlut = rawlut8;
+      //unsigned short rawlut8[256];
+      std::vector<unsigned short> rawlut8;
+      rawlut8.resize(256);
+      //unsigned short rawlut16[65536];
+      std::vector<unsigned short> rawlut16;
+      unsigned short *rawlut = &rawlut8[0];
       unsigned int lutlen = 256;
       if( pf.GetBitsAllocated() == 16 )
         {
-        rawlut = rawlut16;
+        rawlut16.resize(65536);
+        rawlut = &rawlut16[0];
         lutlen = 65536;
         }
       unsigned int l;
@@ -230,7 +234,6 @@ Attribute<0x0028,0x0004> piat;
 
 bool PixmapWriter::PrepareWrite()
 {
-  //assert( Stream.is_open() );
   File& file = GetFile();
   DataSet& ds = file.GetDataSet();
 
@@ -269,17 +272,6 @@ bool PixmapWriter::PrepareWrite()
     gdcmWarningMacro( "Photometric Interpretation and Pixel format are not compatible: " 
       << pi.GetSamplesPerPixel() << " vs " << pf.GetSamplesPerPixel() );
     return false;
-    }
-
-  // FIXME HACK !
-  if( pf.GetBitsAllocated() == 24 )
-    {
-    assert(0);
-    pi = PhotometricInterpretation::RGB;
-    pf.SetBitsAllocated( 8 );
-    pf.SetBitsStored( 8 );
-    pf.SetHighBit( 7 );
-    pf.SetSamplesPerPixel( 3 );
     }
 
     {
@@ -322,7 +314,6 @@ bool PixmapWriter::PrepareWrite()
     planarconf.SetValue( PixelData->GetPlanarConfiguration() );
     ds.Replace( planarconf.GetAsDataElement() );
     }
-
 
   // Overlay Data 60xx
   unsigned int nOv = PixelData->GetNumberOfOverlays();
@@ -488,7 +479,6 @@ bool PixmapWriter::PrepareWrite()
   de.SetVL( vl );
   ds.Replace( de );
 
-
   // Do Icon Image
   DoIconImage(ds, GetPixmap());
 
@@ -518,68 +508,6 @@ bool PixmapWriter::PrepareWrite()
       assert( bv->GetLength() == strlen( msstr ) || bv->GetLength() == strlen(msstr) + 1 );
       }
     }
-
-  // (re)Compute MediaStorage:
-  if( !ds.FindDataElement( Tag(0x0008, 0x0060) ) )
-    {
-    const char *modality = ms.GetModality();
-    DataElement de( Tag(0x0008, 0x0060 ) );
-    de.SetByteValue( modality, strlen(modality) );
-    de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
-    ds.Insert( de );
-    }
-  else
-    {
-    const ByteValue *bv = ds.GetDataElement( Tag(0x0008, 0x0060 ) ).GetByteValue();
-    std::string modality2;
-    if( bv )
-      {
-      modality2 = std::string( bv->GetPointer(), bv->GetLength() );
-      //assert( modality2.find( ' ' ) == std::string::npos ); // no space ...
-      }
-    else
-      {
-      // remove empty Modality, and set a new one...
-      ds.Remove( Tag(0x0008, 0x0060 ) ); // Modality is Type 1 !
-      assert( ms != MediaStorage::MS_END );
-      }
-/*
-    if( modality2 != ms.GetModality() )
-      {
-      assert( std::string(ms.GetModality()).find( ' ' ) == std::string::npos ); // no space ...
-      DataElement de( Tag(0x0008, 0x0060 ) );
-      de.SetByteValue( ms.GetModality(), strlen(ms.GetModality()) );
-      de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
-      ds.Insert( de ); // FIXME: should we always replace ?
-      // Well technically you could have a SecondaryCaptureImageStorage with a modality of NM...
-      }
-*/
-    }
-  if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
-    {
-    if( ms == MediaStorage::SecondaryCaptureImageStorage )
-      {
-      // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
-      const char conversion[] = "WSD "; // FIXME
-      DataElement de( Tag(0x0008, 0x0064 ) );
-      de.SetByteValue( conversion, strlen(conversion) );
-      de.SetVR( Attribute<0x0008, 0x0064>::GetVR() );
-      ds.Insert( de );
-      }
-    }
-  //if( !ds.FindDataElement( Tag(0x0020, 0x0062) ) )
-  //  {
-  //  if( ms == MediaStorage::SecondaryCaptureImageStorage )
-  //    {
-  //    const char laterality[] = "U "; // FIXME
-  //    DataElement de( Tag(0x0020, 0x0062 ) );
-  //    de.SetByteValue( laterality, strlen(laterality) );
-  //    de.SetVR( Attribute<0x0020, 0x0062>::GetVR() );
-  //    ds.Insert( de );
-  //    }
-  //  }
-
-
 
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
@@ -665,7 +593,7 @@ bool PixmapWriter::PrepareWrite()
     }
 
   FileMetaInformation &fmi = file.GetHeader();
-
+  fmi.Clear();
   //assert( ts == TransferSyntax::ImplicitVRLittleEndian );
     {
     const char *tsuid = TransferSyntax::GetTSString( ts );
@@ -675,9 +603,6 @@ bool PixmapWriter::PrepareWrite()
     fmi.Replace( de );
     fmi.SetDataSetTransferSyntax(ts);
     }
-  fmi.Remove( Tag(0x0002,0x0012) ); // Set the Implementation Class UID properly
-  fmi.Remove( Tag(0x0002,0x0013) ); //
-  fmi.Remove( Tag(0x0002,0x0016) ); //
   fmi.FillFromDataSet( ds );
 
 

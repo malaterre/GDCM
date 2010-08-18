@@ -1,6 +1,6 @@
 /*!
 
-\page gdcm2vtk Convert a file supported by VTK into DICOM. 
+\page gdcm2vtk Convert a file supported by VTK into DICOM.
 
 \section synopsis SYNOPSIS
 
@@ -29,6 +29,20 @@ file-out  DICOM output filename
      --force-spacing    force spacing.
      --palette-color    when supported generate a PALETTE COLOR file.
      --argb             when supported generate a ARGB file.
+     --compress         when supported generate a compressed file.
+     --use-vtkdicom     Use vtkDICOMImageReader (instead of GDCM).
+     --modality         set Modality.
+  -T --study-uid        Study UID.
+  -S --series-uid       Series UID.
+     --root-uid         Root UID.
+\endverbatim
+
+\subsection compression_options compression options
+\verbatim
+  -J --jpeg             Compress image in jpeg.
+  -K --j2k              Compress image in j2k.
+  -L --jpegls           Compress image in jpeg-ls.
+  -R --rle              Compress image in rle (lossless only).
 \endverbatim
 
 \subsection general_options general options
@@ -50,6 +64,11 @@ file-out  DICOM output filename
 
   -D   --debug
          debug mode, print debug information
+\endverbatim
+
+\subsection environment_variable environment variable
+\verbatim
+  GDCM_ROOT_UID Root UID
 \endverbatim
 
 \section description DESCRIPTION
@@ -74,7 +93,7 @@ Special care was taken for the following file format:
    2. BMP: The file can be saved with a Lookup Table (see --palette-color)
    3. GE Signa: vtkMedicalImageProperties is passed to the output
    4. MINC: Direction Cosines is passed to the output
-   5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and CVS). Only use it, if you know what you are doing. 
+   5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and CVS). Only use it, if you know what you are doing.
 \endverbatim
 
 \subsection convert_meta CONVERT MetaImage (mhd, mha)
@@ -124,6 +143,8 @@ vtkGDCMImageReader will be used to read in a DICOM file, not the default vtkDICO
 IMPORTANT NOTE: The internal VTK structured will be filled from the input DICOM, and then pass to the output DICOM writer. Some information might be lost during the conversion DICOM to VTK to DICOM. This option is mostly used to test the vtkGDCMImageReader/vtkGDCMImageWriter combination.
 
 IMPORTANT NOTE: When converting from a lossy format such as JPEG, the information of lossiness is important. The output DICOM will contains the required Lossy Image Compression attribute that indicates that image was lossy-compressed somewhere along the pipeline. See also gdcmimg (better handling of JPEG in general).
+
+IMPORTANT NOTE: When using --use-vtkdicom the output DICOM file will always be written as MR Image Storage as this information is not available from the reader itself. This allow setting the Image Orientation (Patient) properly.
 
 \section see_also SEE ALSO
 

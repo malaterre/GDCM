@@ -12,11 +12,11 @@ SET(vtkgdcm_SRCS
   vtkGDCMMedicalImageProperties.cxx
   )
 
-IF(CMAKE_HAVE_PTHREAD_H)
+IF(GDCM_HAVE_PTHREAD_H)
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
   vtkGDCMThreadedImageReader.cxx
   )
-ENDIF(CMAKE_HAVE_PTHREAD_H)
+ENDIF(GDCM_HAVE_PTHREAD_H)
 
 INCLUDE(${VTK_USE_FILE})
 INCLUDE_DIRECTORIES(
@@ -88,11 +88,11 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     )
   ENDIF(VTK_USE_RENDERING)
 
-  #IF(CMAKE_HAVE_PTHREAD_H)
+  #IF(GDCM_HAVE_PTHREAD_H)
     SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     vtkGDCMThreadedImageReader2.cxx
     )
-  #ENDIF(CMAKE_HAVE_PTHREAD_H)
+  #ENDIF(GDCM_HAVE_PTHREAD_H)
 
   SET(VTK_USE_INSTANTIATOR_NEW 1)
   VTK_MAKE_INSTANTIATOR3(
@@ -124,7 +124,7 @@ IF(GDCM_USE_ACTIVIZ AND UNIX)
     PATH)
 
   LINK_DIRECTORIES(${bla})
-  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF 
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF
     ${bla}/libvtkCommon.so
     #${bla}/libvtkIO.so
     ${bla}/libvtkImaging.so
@@ -211,8 +211,8 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
   IF(GDCM_USE_ACTIVIZ)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -221,8 +221,8 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
   ELSE(GDCM_USE_ACTIVIZ)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs" 
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
@@ -239,7 +239,7 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
   #)
 
 ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
-  DEPENDS 
+  DEPENDS
     ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
     #${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
     #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
@@ -248,7 +248,7 @@ ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
 
   # because vtkgdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-  INSTALL(FILES 
+  INSTALL(FILES
     ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
     #${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
@@ -355,9 +355,10 @@ IF(GDCM_WRAP_PYTHON)
     ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ADD_LIBRARY(${VTKGDCM_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
     # this is a library set the version:
-    SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-    ADD_LIBRARY(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
     # do not set the version on the Python module:
+    #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    ADD_LIBRARY(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
+    # do not set the version on the PythonD module:
     #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME})
     FOREACH(c ${vtkgdcm_LIBS})
@@ -397,7 +398,7 @@ IF(GDCM_WRAP_PYTHON)
       #        )
       #  endif(NAMELINK_ONLY)
     # the python file is not a dev file, but part of the gdcm module...
-      INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py 
+      INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py
         DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule
       )
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -418,4 +419,22 @@ ENDIF(BUILD_APPLICATIONS)
 IF(BUILD_EXAMPLES)
   SUBDIRS(Examples)
 ENDIF(BUILD_EXAMPLES)
+
+IF(GDCM_USE_PARAVIEW)
+  # http://www.cmake.org/Wiki/Plugin_HowTo#Adding_a_Reader
+  FIND_PACKAGE(ParaView REQUIRED)
+  INCLUDE(${PARAVIEW_USE_FILE})
+  ADD_PARAVIEW_PLUGIN(GDCMImageReader "1.0"
+    SERVER_MANAGER_SOURCES vtkGDCMImageReader.cxx
+    SERVER_MANAGER_XML GDCMImageReader.xml
+    GUI_RESOURCE_FILES GDCMImageGUI.xml)
+  TARGET_LINK_LIBRARIES(GDCMImageReader ${VTKGDCM_NAME})
+  INSTALL(TARGETS GDCMImageReader
+    EXPORT GDCMTargets
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT ParaViewModule
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ParaViewModule
+    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ParaViewModule
+    )
+
+ENDIF(GDCM_USE_PARAVIEW)
 

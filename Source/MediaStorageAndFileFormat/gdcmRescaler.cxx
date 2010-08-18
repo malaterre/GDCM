@@ -33,6 +33,11 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
     out[i] = (TOut)(slope * in[i] + intercept);
     //assert( out[i] == (TOut)(slope * in[i] + intercept) ); // will really slow down stuff...
     //assert( in[i] == (TIn)(((double)out[i] - intercept) / slope + 0.5) );
+
+    // For image such as: gdcmData/MR16BitsAllocated_8BitsStored.dcm, the following line will not work:
+    // Indeed the pixel declares itself as 16/8/7 with pixel representation of 1. In this case
+    // anything outside the range [-127,128] is required to be discarded !
+    //assert( (TIn)out[i] == in[i] );
     }
 }
 

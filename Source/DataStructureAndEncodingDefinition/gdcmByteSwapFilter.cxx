@@ -107,10 +107,10 @@ bool ByteSwapFilter::ByteSwap()
       //if( de.GetTag().IsPrivate() )
         {
         //std::cerr << "ByteSwap SQ:" << de.GetTag() << std::endl;
-        SequenceOfItems::ConstIterator it = si->Begin();
-        for( ; it != si->End(); ++it)
+        SequenceOfItems::ConstIterator it2 = si->Begin();
+        for( ; it2 != si->End(); ++it2)
           {
-          const Item &item = *it;
+          const Item &item = *it2;
           DataSet &ds = const_cast<DataSet&>(item.GetNestedDataSet()); // FIXME
           ByteSwapFilter bsf(ds);
           bsf.ByteSwap();

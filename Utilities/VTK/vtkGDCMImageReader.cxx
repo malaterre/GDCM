@@ -44,6 +44,7 @@
 #include "gdcmUnpacker12Bits.h"
 #include "gdcmRescaler.h"
 #include "gdcmOrientation.h"
+#include "gdcmTrace.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 
 #include <sstream>
@@ -83,20 +84,21 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   //this->DirectionCosines->SetElement(0,0,1); // x0
   //this->DirectionCosines->SetElement(1,0,0); // x1
   //this->DirectionCosines->SetElement(2,0,0); // x2
-  //this->DirectionCosines->SetElement(3,0,0); // 
+  //this->DirectionCosines->SetElement(3,0,0); //
   //this->DirectionCosines->SetElement(0,1,0); // y0
   //this->DirectionCosines->SetElement(1,1,1); // y1
   //this->DirectionCosines->SetElement(2,1,0); // y2
-  //this->DirectionCosines->SetElement(3,1,0); // 
+  //this->DirectionCosines->SetElement(3,1,0); //
   //this->DirectionCosines->SetElement(0,2,0); // y0
   //this->DirectionCosines->SetElement(1,2,0); // y1
   //this->DirectionCosines->SetElement(2,2,1); // y2
-  //this->DirectionCosines->SetElement(3,2,0); // 
+  //this->DirectionCosines->SetElement(3,2,0); //
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
 #endif
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+  //this->SetNumberOfInputPorts(0);
 #else
   this->FileNames = NULL; //vtkStringArray::New();
 #endif
@@ -127,8 +129,8 @@ vtkGDCMImageReader::vtkGDCMImageReader()
 #endif
   this->SetImageOrientationPatient(1,0,0,0,1,0);
 
-//  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
-    this->ForceRescale = 0;
+  //  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
+  this->ForceRescale = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -362,7 +364,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = file.GetDataSet();
 
-  // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h 
+  // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h
   // For ex: DICOM (0010,0010) = DOE,JOHN
   this->MedicalImageProperties->SetPatientName( GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds) );
   // For ex: DICOM (0010,0020) = 1933197
@@ -494,7 +496,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
     }
 
 #if 0
-  // gdcmData/JDDICOM_Sample4.dcm 
+  // gdcmData/JDDICOM_Sample4.dcm
   // -> (0008,0060) CS [DM  Digital microscopy]                 #  24, 1 Modality
   gdcm::MediaStorage ms1 = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   ms1.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality );
@@ -502,14 +504,14 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   ms2.SetFromFile( reader.GetFile() );
   if( ms2 != ms1 && ms2 != gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
-    vtkWarningMacro( "SHOULD NOT HAPPEN. Unrecognized Modality: " << this->MedicalImageProperties->GetModality() 
+    vtkWarningMacro( "SHOULD NOT HAPPEN. Unrecognized Modality: " << this->MedicalImageProperties->GetModality()
       << " Will be set instead to the known one: " << ms2.GetModality() )
     this->MedicalImageProperties->SetModality( ms2.GetModality() );
     }
 #endif
- 
+
   // Add more info:
-  vtkGDCMMedicalImageProperties *gdcmmip = 
+  vtkGDCMMedicalImageProperties *gdcmmip =
     dynamic_cast<vtkGDCMMedicalImageProperties*>( this->MedicalImageProperties );
   if( gdcmmip )
     {
@@ -571,8 +573,8 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     // Overlays:
     //case OVERLAYPORTNUMBER:
     default:
-      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), 
-        this->DataExtent[0], this->DataExtent[1], 
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
+        this->DataExtent[0], this->DataExtent[1],
         this->DataExtent[2], this->DataExtent[3],
         0,0 );
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
@@ -585,33 +587,33 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 }
 #endif
 
-gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames)
+gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames, gdcm::PixelFormat const & pixeltype_ref)
 {
   gdcm::PixelFormat::ScalarType outputpt ;
   outputpt = gdcm::PixelFormat::UNKNOWN;
-  // there is a very subbtle bug here. Let's imagine we have a collection of file
+  // there is a very subtle bug here. Let's imagine we have a collection of files
   // they can all have different Rescale Slope / Intercept. In this case we should:
   // 1. Make sure to read each Rescale Slope / Intercept individually
   // 2. Make sure to decide which Pixel Type to use using *all* slices:
   if( inputfilename )
     {
-      gdcm::ImageReader reader;
-      reader.SetFileName( inputfilename );
-      if( !reader.Read() )
-        {
-        //vtkErrorMacro( "ImageReader failed" );
-        return gdcm::PixelFormat::UNKNOWN;
-        }
-      const gdcm::Image &image = reader.GetImage();
-      const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-      double shift = image.GetIntercept();
-      double scale = image.GetSlope();
+    gdcm::ImageReader reader;
+    reader.SetFileName( inputfilename );
+    if( !reader.Read() )
+      {
+      //vtkErrorMacro( "ImageReader failed" );
+      return gdcm::PixelFormat::UNKNOWN;
+      }
+    const gdcm::Image &image = reader.GetImage();
+    const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+    double shift = image.GetIntercept();
+    double scale = image.GetSlope();
 
-      gdcm::Rescaler r;
-      r.SetIntercept( shift );
-      r.SetSlope( scale );
-      r.SetPixelFormat( pixeltype );
-      outputpt = r.ComputeInterceptSlopePixelType();
+    gdcm::Rescaler r;
+    r.SetIntercept( shift );
+    r.SetSlope( scale );
+    r.SetPixelFormat( pixeltype );
+    outputpt = r.ComputeInterceptSlopePixelType();
     }
   else if ( filenames && filenames->GetNumberOfValues() > 0 )
     {
@@ -655,7 +657,7 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
         }
       else
         {
-        // should I just take the biggest value ? 
+        // should I just take the biggest value ?
         // MM: I am not sure UINT16 and INT16 are really compatible
         // so taking the biggest value might not be the solution
         // In this case we could use INT32, but FLOAT64 also works...
@@ -669,6 +671,8 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
     {
     assert( 0 ); // I do not think this is possible
     }
+  //gdcmAssertMacro( outputpt >= pixeltype_ref );
+  (void)pixeltype_ref;
 
   return outputpt;
 }
@@ -831,7 +835,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   this->Scale = image.GetSlope();
 
   //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
-  gdcm::PixelFormat::ScalarType outputpt = ComputePixelTypeFromFiles(this->FileName, this->FileNames);
+  gdcm::PixelFormat::ScalarType outputpt = ComputePixelTypeFromFiles(this->FileName, this->FileNames, pixeltype);
 
   // Compute output pixel format when Rescaling:
 //  if( this->Shift != 0 || this->Scale != 1. )
@@ -848,7 +852,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
 
   this->ForceRescale = 0; // always reset this thing
-  if( pixeltype != outputpt )
+  // gdcmData/DCMTK_JPEGExt_12Bits.dcm
+  if( pixeltype != outputpt && pixeltype.GetBitsAllocated() != 12 )
     {
     this->ForceRescale = 1;
     }
@@ -916,7 +921,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->IconImageDataExtent[1] = icon.GetColumns() - 1;
     this->IconImageDataExtent[2] = 0;
     this->IconImageDataExtent[3] = icon.GetRows() - 1;
-    // 
+    //
     const gdcm::PixelFormat &iconpixelformat = icon.GetPixelFormat();
     switch(iconpixelformat)
       {
@@ -1009,7 +1014,7 @@ void InPlaceYFlipImage(vtkImageData* data)
     char *start = pointer;
     assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) );
     // Swap two-lines at a time
-    // when Rows is odd number (359) then dext[3] == 178 
+    // when Rows is odd number (359) then dext[3] == 178
     // so we should avoid copying the line right in the center of the image
     // since memcpy does not like copying on itself...
     for(int i = dext[2]; i < (dext[3]+1) / 2; ++i)
@@ -1065,28 +1070,15 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
-  unsigned long len = image.GetBufferLength();
+  /*const*/ unsigned long len = image.GetBufferLength();
   outlen = len;
   unsigned long overlaylen = 0;
-  image.GetBuffer(pointer);
-  if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
-  {
-    assert( Scale == 1.0 && Shift == 0.0 );
-    assert( pixeltype.GetSamplesPerPixel() == 1 );
-    // FIXME: I could avoid this extra copy:
-    char * copy = new char[len];
-    memcpy(copy, pointer, len);
-    gdcm::Unpacker12Bits u12;
-    u12.Unpack(pointer, copy, len);
-    // update len just in case:
-    len = 16 * len / 12;
-    delete[] copy;
-  }
+  //image.GetBuffer(pointer);
   // HACK: Make sure that Shift/Scale are the one from the file:
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
 
-  if( Scale != 1.0 || Shift != 0.0 || this->ForceRescale )
+  if( (this->Scale != 1.0 || this->Shift != 0.0) || this->ForceRescale )
   {
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
@@ -1142,13 +1134,18 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     r.SetUseTargetPixelType(true);
     r.SetPixelFormat( pixeltype );
     char * copy = new char[len];
-    memcpy(copy, pointer, len);
+    //memcpy(copy, pointer, len);
+    image.GetBuffer(copy);
     r.Rescale(pointer,copy,len);
     delete[] copy;
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
     assert( data->GetNumberOfScalarComponents() == 1 );
   }
+  else
+    {
+    image.GetBuffer(pointer);
+    }
 
   // Do the Icon Image:
   if( this->LoadIconImage )
@@ -1296,7 +1293,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     // Technically we could also use the first of the Window Width / Window Center
     // oh well, if they are missing let's just compute something:
     int64_t min = pixeltype.GetMin();
-    int64_t max = pixeltype.GetMax(); 
+    int64_t max = pixeltype.GetMax();
     vtklut->SetWindow( max - min );
     vtklut->SetLevel( 0.5 * (max + min) );
     //vtklut->SetWindow(1024); // WindowWidth
@@ -1307,8 +1304,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL_422 )
     {
-    assert( image.GetPixelFormat().GetSamplesPerPixel() == 3 );
-    this->ImageFormat = VTK_RGB;
+    this->ImageFormat = VTK_YBR;
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL )
     {
@@ -1375,9 +1371,9 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
   // Make sure the output dimension is OK, and allocate its scalars
 
   for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
-  {
-  // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
-    vtkStreamingDemandDrivenPipeline *sddp = 
+    {
+    // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
+    vtkStreamingDemandDrivenPipeline *sddp =
       vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
     if (sddp)
       {
@@ -1386,7 +1382,7 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
       this->GetOutput(i)->SetExtent(extent);
       }
     this->GetOutput(i)->AllocateScalars();
-  }
+    }
   int res = RequestDataCompat();
   return res;
 }
@@ -1424,7 +1420,7 @@ int vtkGDCMImageReader::RequestDataCompat()
     // Load each 2D files
     int *dext = this->GetDataExtent();
     // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
-    // the len of the buffer...technically all file should have the same len (not checked for now)
+    // the len of the buffer...technically all files should have the same len (not checked for now)
     unsigned long len = 0;
     for(int j = dext[4]; j <= dext[5]; ++j)
       {

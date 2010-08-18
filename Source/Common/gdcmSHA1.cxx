@@ -69,6 +69,8 @@ bool SHA1::Compute(const char *buffer, unsigned long buf_len, char digest[])
 
   return true;
 #else
+  (void)buffer;
+  (void)buf_len;
   digest = 0;
   return false;
 #endif
@@ -80,7 +82,7 @@ inline bool process_file(const char *filename, unsigned char *digest)
   if( !filename || !digest ) return false;
 
   FILE *file = fopen(filename, "rb");
-  if(!file) 
+  if(!file)
     {
     return false;
     }
@@ -132,6 +134,7 @@ bool SHA1::ComputeFile(const char *filename, char digest_str[20*2+1])
   digest_str[2*20] = '\0';
   return true;
 #else
+  (void)filename;
   digest_str = 0;
   return false;
 #endif

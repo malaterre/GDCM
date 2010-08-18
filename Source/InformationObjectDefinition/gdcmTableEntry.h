@@ -30,7 +30,7 @@ class TableEntry
 public:
   TableEntry(const char *attribute = 0,
     Type const &type = Type(), const char * des = 0 ) :
-    Attribute(""),TypeField(type),Description("") {}
+    Attribute(attribute ? attribute : ""),TypeField(type),Description(des ? des : "") {}
   ~TableEntry() {}
 
 private:

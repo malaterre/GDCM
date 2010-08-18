@@ -575,9 +575,9 @@ std::istream &is = *Stream;
             //F->GetDataSet().template Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
             caller.template ReadCommon<ExplicitImplicitDataElement,SwapperNoOp>(is);
             }
-          catch ( Exception &ex )
+          catch ( Exception &ex2 )
             {
-            (void)ex;
+            (void)ex2;
             is.clear();
             if( haspreamble )
               {

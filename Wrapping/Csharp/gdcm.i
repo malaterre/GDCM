@@ -64,7 +64,7 @@ public class";
 */
 
 %module(docstring="A DICOM library",directors=1) gdcm
-#pragma SWIG nowarn=302,504,510
+#pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516,842
 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
 // I need to redefine it myself... seems to be solved in later revision

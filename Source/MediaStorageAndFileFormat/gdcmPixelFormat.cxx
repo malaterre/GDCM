@@ -42,14 +42,8 @@ PixelFormat::PixelFormat(ScalarType st)
 
 unsigned short PixelFormat::GetSamplesPerPixel() const
 {
-  if ( BitsAllocated == 24 )
-    {
-    gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
-    assert(0);
-    return 3;
-    }
   // \postcondition
-  //assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
+  assert( SamplesPerPixel == 1 || SamplesPerPixel == 3 || SamplesPerPixel == 4 );
   return SamplesPerPixel;
 }
 

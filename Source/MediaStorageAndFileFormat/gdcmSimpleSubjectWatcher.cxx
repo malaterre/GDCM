@@ -104,6 +104,7 @@ void SimpleSubjectWatcher::EndFilter()
 void SimpleSubjectWatcher::ShowProgress(Subject *caller, const Event &evt)
 {
   const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
+  (void)caller;
   std::cout << "Progress: " << pe.GetProgress() << std::endl;
 }
 void SimpleSubjectWatcher::ShowIteration()
@@ -117,6 +118,7 @@ void SimpleSubjectWatcher::ShowAbort()
 void SimpleSubjectWatcher::ShowAnonymization(Subject *caller, const Event &evt)
 {
   const AnonymizeEvent &ae = dynamic_cast<const AnonymizeEvent&>(evt);
+  (void)caller;
   std::cout << "AnonymizeEvent: " << ae.GetTag() << std::endl;
 }
 

@@ -81,7 +81,7 @@ void UpdatePhotometricInterpretation( Bitmap const &input, Bitmap &output )
 
 bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
-  unsigned long len = input.GetBufferLength();
+  unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
@@ -111,7 +111,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap c
 
 bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
-  unsigned long len = input.GetBufferLength();
+  unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
@@ -141,7 +141,7 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap c
 
 bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
-  unsigned long len = input.GetBufferLength();
+  unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
@@ -208,7 +208,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
 
 bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
-  unsigned long len = input.GetBufferLength();
+  unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
@@ -237,7 +237,7 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitma
 
 bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
 {
-  unsigned long len = input.GetBufferLength();
+  unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
@@ -344,9 +344,9 @@ bool ImageChangeTransferSyntax::Change()
 
   // FIXME
   // For now only support raw input, otherwise we would need to first decompress them
-  if( Input->GetTransferSyntax() != TransferSyntax::ImplicitVRLittleEndian 
+  if( (Input->GetTransferSyntax() != TransferSyntax::ImplicitVRLittleEndian
     && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRLittleEndian
-    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian
+    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian)
     || Force )
     {
     // In memory decompression:
@@ -382,8 +382,8 @@ bool ImageChangeTransferSyntax::Change()
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     unsigned long len = Input->GetIconImage().GetBufferLength();
     bv->SetLength( len );
-    bool b = Input->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
-    if( !b )
+    bool bb = Input->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
+    if( !bb )
       {
       return false;
       }

@@ -273,6 +273,8 @@ Using another DICOM implementation such as the one from DCMTK or dicom3tools can
 \li For DCMTK use: dcmdump
 \li For dicom3tools use: dcdump
 
+For reference, gdcmconv --raw will act as dcmdjpeg +cn +px, since it never tries to convert color space.
+
 \subsection vim VIM: vimdiff
 
 You can setup your favorite editor to compare the output, for instance in vim:

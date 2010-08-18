@@ -1,50 +1,53 @@
+# - Try to find the OpenJPEG (JPEG 2000) library
 #
-#  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
-#
-#  Redistribution and use is allowed according to the terms of the New
-#  BSD license.
-#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-#
-# Apparently libopenjpeg-dev finally made it into debian.
-# Installation is:
-# 
-# /usr/lib/libopenjpeg.a
-# /usr/include/openjpeg.h
-# /usr/lib/libopenjpeg.so
+# Read-Only variables:
+#  OPENJPEG_FOUND - system has the OpenJPEG library
+#  OPENJPEG_INCLUDE_DIR - the OpenJPEG include directory
+#  OPENJPEG_LIBRARIES - The libraries needed to use OpenJPEG
 
+#=============================================================================
+# Copyright 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distribute this file outside of CMake, substitute the full
+#  License text for the above reference.)
 
-FIND_PATH(OPENJPEG_INCLUDE_DIR openjpeg.h #openjpeg-1.0/openjpeg.h
-/usr/local/include
-/usr/local/include/openjpeg-1.0
-/usr/include
-/usr/include/openjpeg-1.0
-)
+# Try first to locate a cmake config file
+FIND_PACKAGE(OpenJPEG QUIET NO_MODULE)
+
+if( NOT OpenJPEG_DIR )
+SET(OPENJPEG_MAJOR_VERSION 1) # FIXME ?
+FIND_PATH(OPENJPEG_INCLUDE_DIR
+  NAMES openjpeg.h #openjpeg-1.0/openjpeg.h
+  PATHS /usr/local/include
+  /usr/local/include/openjpeg-1.0
+  /usr/include
+  /usr/include/openjpeg-1.0
+  )
 
 FIND_LIBRARY(OPENJPEG_LIBRARY
   NAMES openjpeg
-  PATHS /usr/lib /usr/local/lib
   )
 
-IF (OPENJPEG_LIBRARY AND OPENJPEG_INCLUDE_DIR)
-    SET(OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARY})
-    SET(OPENJPEG_INCLUDE_DIRS ${OPENJPEG_INCLUDE_DIR})
-    SET(OPENJPEG_FOUND "YES")
-ELSE (OPENJPEG_LIBRARY AND OPENJPEG_INCLUDE_DIR)
-  SET(OPENJPEG_FOUND "NO")
-ENDIF (OPENJPEG_LIBRARY AND OPENJPEG_INCLUDE_DIR)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(OpenJPEG DEFAULT_MSG
+  OPENJPEG_LIBRARY
+  OPENJPEG_INCLUDE_DIR
+)
 
-
-IF (OPENJPEG_FOUND)
-   IF (NOT OPENJPEG_FIND_QUIETLY)
-      MESSAGE(STATUS "Found OPENJPEG: ${OPENJPEG_LIBRARIES}")
-   ENDIF (NOT OPENJPEG_FIND_QUIETLY)
-ELSE (OPENJPEG_FOUND)
-   IF (OPENJPEG_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "Could not find OPENJPEG library")
-   ENDIF (OPENJPEG_FIND_REQUIRED)
-ENDIF (OPENJPEG_FOUND)
+IF(OPENJPEG_FOUND)
+  SET(OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARY})
+  SET(OPENJPEG_INCLUDE_DIRS ${OPENJPEG_INCLUDE_DIR})
+ENDIF()
 
 MARK_AS_ADVANCED(
   OPENJPEG_LIBRARY
   OPENJPEG_INCLUDE_DIR
   )
+endif()

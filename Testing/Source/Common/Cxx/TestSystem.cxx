@@ -167,7 +167,7 @@ int TestSystem(int, char *[])
     }
   date[14] = 0;
   std::cout << date << std::endl;
-  time_t timep; long milliseconds;
+  time_t timep;
   if( !gdcm::System::ParseDateTime(timep, date) )
     {
     std::cerr << "ParseDateTime" << std::endl;

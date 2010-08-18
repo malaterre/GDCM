@@ -248,38 +248,9 @@ FileList *SerieHelper::GetNextSingleSerieUIDFileSet()
   return NULL;
 }
 
-class SortFunctor
-{
-public:
-  bool operator() (File *file1, File *file2)
-    {
-    return (SortFunction)(file1, file2);
-    }
-  BOOL_FUNCTION_PFILE_PFILE_POINTER SortFunction;
-  SortFunctor()
-    {
-    SortFunction = 0;
-    }
-  SortFunctor(SortFunctor const &sf)
-    {
-    SortFunction = sf.SortFunction;
-    }
-  void operator=(BOOL_FUNCTION_PFILE_PFILE_POINTER sf)
-    {
-    SortFunction = sf;
-    }
-};
-
-static void Sort(FileList *fileList, SortFunctor &sf)
-{
-  std::sort(fileList->begin(), fileList->end(), sf );
-}
-
 bool SerieHelper::UserOrdering(FileList *fileList)
 {
-  SortFunctor sf;
-  sf = SerieHelper::UserLessThanFunction;
-  Sort(fileList,sf);
+  std::sort(fileList->begin(), fileList->end(), SerieHelper::UserLessThanFunction);
   if (!DirectOrder) 
     {
     std::reverse(fileList->begin(), fileList->end());

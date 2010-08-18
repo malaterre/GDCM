@@ -24,6 +24,7 @@ namespace gdcm
 
 bool Module::FindModuleEntryInMacros(Macros const &macros, const Tag &tag) const 
 {
+  (void)macros;
   MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
   if( it != ModuleInternal.end() )
     {
@@ -74,10 +75,10 @@ const ModuleEntry& Module::GetModuleEntryInMacros(Macros const &macros, const Ta
   //static const Defs &defs = g.GetDefs();
   //static const Macros &macros = defs.GetMacros();
 
-  for( ArrayIncludeMacrosType::const_iterator it = ArrayIncludeMacros.begin();
-    it != ArrayIncludeMacros.end(); ++it)
+  for( ArrayIncludeMacrosType::const_iterator it2 = ArrayIncludeMacros.begin();
+    it2 != ArrayIncludeMacros.end(); ++it2)
     {
-    const std::string &name = *it;
+    const std::string &name = *it2;
     const Macro &macro= macros.GetMacro( name.c_str() );
     if( macro.FindMacroEntry( tag ) )
       {

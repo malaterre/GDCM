@@ -262,7 +262,7 @@ void TableReader::HandleModule(const char **atts)
 
 void TableReader::StartElement(const char *name, const char **atts)
 {
-  int i;
+  //int i;
   //int *depthPtr = (int *)userData;
 //  for (i = 0; i < *depthPtr; i++)
 //    putchar('\t');

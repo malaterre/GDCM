@@ -173,6 +173,7 @@ const wchar_t *Testing::GetTempDirectoryW(const wchar_t * subdir)
   static std::wstring buffer;
   wchar_t wname[4096]; // FIXME
   size_t len = mbstowcs(wname,GDCM_TEMP_DIRECTORY,sizeof(wname));
+  (void)len;
   if( !subdir )
     {
     buffer = wname;

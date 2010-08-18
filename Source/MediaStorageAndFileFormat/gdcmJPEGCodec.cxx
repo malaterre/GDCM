@@ -86,8 +86,12 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
   // So what if we are dealing with image such as: SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm
   // which is also a 12Bits Stored / 16 Bits Allocated image
   // however the jpeg encapsulated is now a 16 Sample Precision
-  //SetBitSample( pt.GetBitsAllocated() );
-  SetBitSample( pt.GetBitsStored() );
+
+  // We have the choice to decide to use Bits Stored or Bits Allocated, however in the case of
+  // such an image as: gdcmData/MR16BitsAllocated_8BitsStored.dcm we are required to use
+  // bits allocated to deal with the logic to decide withe the encoder
+  SetBitSample( pt.GetBitsAllocated() );
+  //SetBitSample( pt.GetBitsStored() );
 }
 
 void JPEGCodec::SetupJPEGBitCodec(int bit)
@@ -113,7 +117,7 @@ void JPEGCodec::SetupJPEGBitCodec(int bit)
     }
   else
     {
-    // gdcmNonImageData/RT/RTDOSE.dcm 
+    // gdcmNonImageData/RT/RTDOSE.dcm
     gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
     // Clearly make sure Internal will not be used
     delete Internal;
@@ -163,7 +167,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       is.write(mybuffer, bv.GetLength());
       delete[] mybuffer;
       bool r = Decode(is, os);
-      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
       if( !r )
         {
         return false;
@@ -192,7 +196,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 
 void JPEGCodec::ComputeOffsetTable(bool b)
 {
-  // Not implemented 
+  (void)b;
+  // Not implemented
   assert(0);
 }
 
@@ -290,7 +295,7 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
     sq->AddFragment( frag );
 
     }
-  unsigned int n = sq->GetNumberOfFragments();
+  //unsigned int n = sq->GetNumberOfFragments();
   assert( sq->GetNumberOfFragments() == dims[2] );
   out.SetValue( *sq );
 

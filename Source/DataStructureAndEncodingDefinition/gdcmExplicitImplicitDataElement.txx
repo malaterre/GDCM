@@ -86,6 +86,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
     ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
     bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+    gdcmAssertAlwaysMacro( !failed );
     return is;
     //throw Exception( "Unhandled" );
     }
@@ -214,9 +215,9 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
             assert(0 && "Should not happen");
             }
           }
-        catch( std::exception &ex )
+        catch( std::exception &ex2 )
           {
-          (void)ex;
+          (void)ex2;
           ValueLengthField = ValueField->GetLength();
           }
         return is;

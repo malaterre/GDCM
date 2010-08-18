@@ -27,10 +27,12 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
       MagnifyFile
       )
     IF(GDCM_DATA_EXTRA_ROOT)
-    SET(GDCM_VTK_APPS
-      ${GDCM_VTK_APPS}
-      reslicesphere
-      )
+      IF(VTK_USE_RENDERING)
+        SET(GDCM_VTK_APPS
+          ${GDCM_VTK_APPS}
+          reslicesphere
+          )
+      ENDIF(VTK_USE_RENDERING)
     ENDIF(GDCM_DATA_EXTRA_ROOT)
   ENDIF(GDCM_BUILD_TESTING)
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
@@ -46,11 +48,11 @@ FOREACH(app ${GDCM_VTK_APPS})
   ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
 ENDFOREACH(app)
 
-IF(CMAKE_HAVE_PTHREAD_H)
+IF(GDCM_HAVE_PTHREAD_H)
 # Dev only: I dont need to install that one:
   ADD_EXECUTABLE(threadgdcm threadgdcm.cxx)
   TARGET_LINK_LIBRARIES(threadgdcm gdcmMSFF pthread vtkIO)
-ENDIF(CMAKE_HAVE_PTHREAD_H)
+ENDIF(GDCM_HAVE_PTHREAD_H)
 
 #ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
 #TARGET_LINK_LIBRARIES(gdcm2vtk gdcmMSFF pthread)

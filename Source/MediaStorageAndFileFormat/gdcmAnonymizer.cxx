@@ -456,14 +456,14 @@ bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, S
       {
       const DataElement &de = *it;
       VR vr = DataSetHelper::ComputeVR(file, nested, de.GetTag() );
-      SmartPointer<SequenceOfItems> sqi = 0;
+      SmartPointer<SequenceOfItems> sqi2 = 0;
       if( vr == VR::SQ )
         {
-        sqi = de.GetValueAsSQ();
+        sqi2 = de.GetValueAsSQ();
         }
-      if( sqi )
+      if( sqi2 )
         {
-        found = CheckIfSequenceContainsAttributeToAnonymize(file, sqi);
+        found = CheckIfSequenceContainsAttributeToAnonymize(file, sqi2);
         }
       }
     }
@@ -518,9 +518,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   sq1->SetLengthToUndefined();
 
   // Create a *single* item
-  Item it;
-  it.SetVLToUndefined();
-  DataSet &encryptedds = it.GetNestedDataSet();
+  Item item1;
+  item1.SetVLToUndefined();
+  DataSet &encryptedds = item1.GetNestedDataSet();
   // Loop over root level attributes:
   for(const Tag *ptr = start ; ptr != end ; ++ptr)
     {
@@ -565,7 +565,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 }
 
   this->InvokeEvent( IterationEvent() );
-  sq1->AddItem(it);
+  sq1->AddItem(item1);
 
   DataElement des( Tag(0x0400,0x0550) );
   des.SetVR(VR::SQ);
@@ -617,13 +617,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     delete[] orig;
 
     // Create an item
-    Item it;
-    it.SetVLToUndefined();
-    DataSet &nds = it.GetNestedDataSet();
+    Item item2;
+    item2.SetVLToUndefined();
+    DataSet &nds = item2.GetNestedDataSet();
     nds.Insert(encrypted_ts_de);
     nds.Insert(encrypted_de);
 
-    sq->AddItem(it);
+    sq->AddItem(item2);
 
     // 4. All instances of the Encrypted Attributes Data Set shall be encoded with a DICOM Transfer Syntax,
     // encrypted, and stored in the dataset to be protected as an Item of the Encrypted Attributes Sequence
@@ -932,8 +932,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   const DataElement &EncryptedAttributesSequence = ds.GetDataElement( Tag(0x0400,0x0500) );
   //const SequenceOfItems *sq = EncryptedAttributesSequence.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sq = EncryptedAttributesSequence.GetValueAsSQ();
-  const Item &item = sq->GetItem(1);
-  const DataSet &nds1 = item.GetNestedDataSet();
+  const Item &item1 = sq->GetItem(1);
+  const DataSet &nds1 = item1.GetNestedDataSet();
   if( !nds1.FindDataElement( Tag(0x0400,0x0510) ) 
     || nds1.GetDataElement( Tag(0x0400,0x0510) ).IsEmpty() )
     {
@@ -1013,8 +1013,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //const SequenceOfItems *sqi = dummy.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = dummy.GetValueAsSQ();
   assert( sqi && sqi->GetNumberOfItems() == 1 );
-  Item const & item = sqi->GetItem( 1 );
-  const DataSet &nds2 = item.GetNestedDataSet();
+  Item const & item2 = sqi->GetItem( 1 );
+  const DataSet &nds2 = item2.GetNestedDataSet();
   DataSet::ConstIterator it = nds2.Begin();
   for( ; it != nds2.End(); ++it )
     {

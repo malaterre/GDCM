@@ -30,12 +30,12 @@ IF(VTK_USE_RENDERING)
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMThreadedImageReader2
     )
-  IF(CMAKE_HAVE_PTHREAD_H)
+  IF(GDCM_HAVE_PTHREAD_H)
     SET(VTK_GDCM_TEST_SRCS
       ${VTK_GDCM_TEST_SRCS}
       TestvtkGDCMThreadedImageReader
     )
-  ENDIF(CMAKE_HAVE_PTHREAD_H)
+  ENDIF(GDCM_HAVE_PTHREAD_H)
 ENDIF(VTK_USE_RENDERING)
 
 # Add the include paths

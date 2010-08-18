@@ -20,14 +20,14 @@
 #include "gdcmLegacyMacro.h"
 
 //-----------------------------------------------------------------------------
-#ifdef CMAKE_HAVE_STDINT_H
+#ifdef GDCM_HAVE_STDINT_H
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS
 #endif // __STDC_LIMIT_MACROS
 #include <stdint.h>
 //#undef __STDC_LIMIT_MACROS
 #else
-#ifdef CMAKE_HAVE_INTTYPES_H
+#ifdef GDCM_HAVE_INTTYPES_H
 // Old system only have this
 #include <inttypes.h>   // For uint8_t uint16_t and uint32_t
 #else
@@ -46,8 +46,8 @@ typedef  unsigned __int64    uint64_t;
 #else
 #error "Sorry your plateform is not supported"
 #endif // defined(_MSC_VER) || defined(__BORLANDC__) && (__BORLANDC__ < 0x0560)  || defined(__MINGW32__)
-#endif // CMAKE_HAVE_INTTYPES_H
-#endif // CMAKE_HAVE_STDINT_H
+#endif // GDCM_HAVE_INTTYPES_H
+#endif // GDCM_HAVE_STDINT_H
 
 // Basically for VS6 and bcc 5.5.1:
 #ifndef UINT32_MAX

@@ -15,7 +15,7 @@
 #ifndef GDCMSWAPPER_TXX
 #define GDCMSWAPPER_TXX
 
-#ifdef HAVE_BYTESWAP_H
+#ifdef GDCM_HAVE_BYTESWAP_H
 // TODO: not cross platform...
 #include <byteswap.h>
 #endif
@@ -30,7 +30,7 @@ namespace gdcm
 #ifdef GDCM_WORDS_BIGENDIAN
   template <> inline uint16_t SwapperNoOp::Swap<uint16_t>(uint16_t val)
     {
-#ifdef HAVE_BYTESWAP_H
+#ifdef GDCM_HAVE_BYTESWAP_H
     return bswap_16(val);
 #else
     return (val>>8) | (val<<8);
@@ -43,7 +43,7 @@ namespace gdcm
     
   template <> inline uint32_t SwapperNoOp::Swap<uint32_t>(uint32_t val)
     {
-#ifdef HAVE_BYTESWAP_H
+#ifdef GDCM_HAVE_BYTESWAP_H
     return bswap_32(val);
 #else
     val= ((val<<8)&0xFF00FF00) | ((val>>8)&0x00FF00FF);
@@ -61,7 +61,7 @@ namespace gdcm
     }
   template <> inline uint64_t SwapperNoOp::Swap<uint64_t>(uint64_t val)
     {
-#ifdef HAVE_BYTESWAP_H
+#ifdef GDCM_HAVE_BYTESWAP_H
     return bswap_64(val);
 #else
     val= ((val<< 8)&0xFF00FF00FF00FF00ULL) | ((val>> 8)&0x00FF00FF00FF00FFULL);
@@ -112,7 +112,7 @@ namespace gdcm
 #else
   template <> inline uint16_t SwapperDoOp::Swap<uint16_t>(uint16_t val)
     {
-#ifdef HAVE_BYTESWAP_H
+#ifdef GDCM_HAVE_BYTESWAP_H
     return bswap_16(val);
 #else
     return (val>>8) | (val<<8);
@@ -125,7 +125,7 @@ namespace gdcm
 
   template <> inline uint32_t SwapperDoOp::Swap<uint32_t>(uint32_t val)
     {
-#ifdef HAVE_BYTESWAP_H
+#ifdef GDCM_HAVE_BYTESWAP_H
     return bswap_32(val);
 #else
     val= ((val<<8)&0xFF00FF00) | ((val>>8)&0x00FF00FF);
@@ -143,7 +143,7 @@ namespace gdcm
     }
   template <> inline uint64_t SwapperDoOp::Swap<uint64_t>(uint64_t val)
     {
-#ifdef HAVE_BYTESWAP_H
+#ifdef GDCM_HAVE_BYTESWAP_H
     return bswap_64(val);
 #else
     val= ((val<< 8)&0xFF00FF00FF00FF00ULL) | ((val>> 8)&0x00FF00FF00FF00FFULL);

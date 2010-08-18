@@ -84,7 +84,7 @@ public:
   const Preamble &GetPreamble() const { return P; }
   Preamble &GetPreamble() { return P; }
   void SetPreamble(const Preamble &p) { P = p; }
- 
+
   /// Override the GDCM default values:
   static void SetImplementationClassUID(const char * imp);
   static void AppendImplementationClassUID(const char * imp);

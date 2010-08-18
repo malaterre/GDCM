@@ -214,17 +214,24 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 1,"multiframetruecolorscis.dcm" },
 { 1, "SinglePrecisionSC.dcm" },
 { 0, "signedtruecoloroldsc.dcm" },
+{ 0, "o.dcm" },
 { 0, NULL }
 };
 
 static int GetLossyFlagFromFilename(const char *filename)
 {
+  if( !filename ) return 0;
   gdcm::Filename fn = filename;
   const char *file = fn.GetName();
   const LossyFile *pfiles = gdcmLossyFilenames;
   while( pfiles->filename && strcmp(pfiles->filename, file) != 0 )
     {
     ++pfiles;
+    }
+  if( !(pfiles->filename) )
+    {
+    std::cerr << "Error: No ref table for: " << filename << std::endl;
+    return 0;
     }
   assert( pfiles->filename ); // need to update ref table
   return pfiles->lossyflag;

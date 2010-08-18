@@ -326,8 +326,6 @@ bool DICOMDIRGenerator::TraverseDirectoryRecords(VL start )
 
   ComputeDirectoryRecordsOffset(sqi, start);
 
-  Scanner &scanner = GetScanner();
-
   unsigned int nitems = sqi->GetNumberOfItems();
   for(unsigned int i = 1; i <= nitems; ++i)
     {
@@ -387,7 +385,7 @@ bool DICOMDIRGenerator::AddPatientDirectoryRecord()
 
   Attribute<0x10,0x20> patientid;
   gdcm::Scanner::ValuesType patientids = scanner.GetValues( patientid.GetTag() );
-  unsigned int npatients = patientids.size();
+  //unsigned int npatients = patientids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
@@ -465,7 +463,6 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
 
   Attribute<0x20,0xd> studyinstanceuid;
   gdcm::Scanner::ValuesType studyinstanceuids = scanner.GetValues( studyinstanceuid.GetTag() );
-  unsigned int nstudy = studyinstanceuids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
@@ -566,7 +563,6 @@ bool DICOMDIRGenerator::AddSeriesDirectoryRecord()
 
   Attribute<0x20,0xe> seriesinstanceuid;
   gdcm::Scanner::ValuesType seriesinstanceuids = scanner.GetValues( seriesinstanceuid.GetTag() );
-  unsigned int nseries = seriesinstanceuids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
@@ -642,9 +638,9 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
   gdcm::DataSet &rootds = GetFile().GetDataSet();
   gdcm::Scanner const & scanner = GetScanner();
 
-  Attribute<0x8,0x18> sopinstanceuid;
+  const Attribute<0x8,0x18> sopinstanceuid = { "" };
   gdcm::Scanner::ValuesType sopinstanceuids = scanner.GetValues( sopinstanceuid.GetTag() );
-  unsigned int ninstance = sopinstanceuids.size();
+  //unsigned int ninstance = sopinstanceuids.size();
 
   const gdcm::DataElement &de = rootds.GetDataElement( Tag(0x4,0x1220) );
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
@@ -694,7 +690,6 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
       }
     ds.Insert( referencedsopclassuidinfile.GetAsDataElement() );
     Attribute<0x0004,0x1511> referencedsopinstanceuidinfile;
-    Attribute<0x8,0x18> sopinstanceuid;
     if( ttv.find( sopinstanceuid.GetTag() ) != ttv.end() )
       {
       referencedsopinstanceuidinfile.SetValue( ttv.find(sopinstanceuid.GetTag())->second );
@@ -708,7 +703,7 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
       }
     ds.Insert( referencedtransfersyntaxuidinfile.GetAsDataElement() );
 
-    Attribute<0x20,0x13> instancenumber;
+    Attribute<0x20,0x13> instancenumber = { 0 };
     if( ttv.find( instancenumber.GetTag() ) != ttv.end() )
       {
       instancenumber.SetValue( atoi(ttv.find(instancenumber.GetTag())->second) );
@@ -722,14 +717,14 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
     //imagetype.SetNumberOfValues( 1 );
     //imagetype.SetValue( it->c_str() );
     //ds.Replace( imagetype.GetAsDataElement() );
-    DataElement de( imagetype.GetTag() );
-    de.SetVR( imagetype.GetVR() );
+    DataElement de2( imagetype.GetTag() );
+    de2.SetVR( imagetype.GetVR() );
     if( ttv.find( imagetype.GetTag() ) != ttv.end() )
       {
       const char *v = ttv.find(imagetype.GetTag())->second;
-      de.SetByteValue( v, strlen(v) );
+      de2.SetByteValue( v, strlen(v) );
       }
-    ds.Insert( de );
+    ds.Insert( de2 );
 
     sqi->AddItem( item );
     }
@@ -913,15 +908,14 @@ bool DICOMDIRGenerator::Generate()
   ds.Insert( filesetconsistencyflag.GetAsDataElement() );
 
 
-  gdcm::DataElement de( Tag(0x4,0x1220) );
+  gdcm::DataElement de_drs( Tag(0x4,0x1220) ); // DirectoryRecordSequence
 
   SequenceOfItems * sqi = new SequenceOfItems;
-  //DataElement de( sisq );
-  de.SetVR( VR::SQ );
-  de.SetValue( *sqi );
-  de.SetVLToUndefined();
+  de_drs.SetVR( VR::SQ );
+  de_drs.SetValue( *sqi );
+  de_drs.SetVLToUndefined();
 
-  ds.Insert( de );
+  ds.Insert( de_drs );
 
   bool b;
   b = AddPatientDirectoryRecord();
@@ -975,16 +969,18 @@ the File-set.
   h.FillFromDataSet( ds );
   VL fmi_len = h.GetFullLength();
   VL fmi_len_offset = 0;
-  gdcm::DataSet::ConstIterator it = ds.Begin();
-  for( ; it != ds.End() && it->GetTag() != Tag(0x0004,0x1220); ++it)
+{
+  gdcm::DataSet::ConstIterator it = ds.Begin(); 
+  for(; it != ds.End() && it->GetTag() != Tag(0x0004,0x1220); ++it)
     {
-    const DataElement &de = *it;
-    fmi_len_offset += de.GetLength<ExplicitDataElement>();
+    const DataElement &detmp = *it;
+    fmi_len_offset += detmp.GetLength<ExplicitDataElement>();
     }
   // Now add the partial length for attribute 0004,1220:
   fmi_len_offset += it->GetTag().GetLength();
   fmi_len_offset += it->GetVR().GetLength();
   fmi_len_offset += it->GetVR().GetLength();
+}
   //std::cerr << fmi_len << " and " << fmi_len_offset << std::endl;
   offsetofthefirstdirectoryrecordoftherootdirectoryentity.SetValue( fmi_len + fmi_len_offset );
   ds.Replace( offsetofthefirstdirectoryrecordoftherootdirectoryentity.GetAsDataElement() );
@@ -994,15 +990,14 @@ the File-set.
   gdcm::DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End() && it->GetTag() <= Tag(0x0004,0x1220); ++it)
     {
-    const DataElement &de = *it;
-    fmi_len_offset2 += de.GetLength<ExplicitDataElement>();
+    const DataElement &detmp = *it;
+    fmi_len_offset2 += detmp.GetLength<ExplicitDataElement>();
     }
 }
 
 {
-  const gdcm::DataElement &de = ds.GetDataElement( Tag(0x4,0x1220) );
-  //const SequenceOfItems * sqi = de.GetSequenceOfItems();
-  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+  //const gdcm::DataElement &de_drs = ds.GetDataElement( Tag(0x4,0x1220) ); // DirectoryRecordSequence
+  SmartPointer<SequenceOfItems> sqi = de_drs.GetValueAsSQ();
   unsigned int n = sqi->GetNumberOfItems();
   const Item &item = sqi->GetItem( n ); // last item
   VL sub = item.GetLength<ExplicitDataElement>(); 

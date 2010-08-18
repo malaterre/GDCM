@@ -75,7 +75,8 @@ IF(GDCM_DATA_ROOT)
   TestCopyDataSet
   TestDataElementValueAsSQ
   TestImageWriter2
-  TestDICOMDIRGenerator # Must be after TestImageChangeTransferSyntax4
+  TestDICOMDIRGenerator1 # Must be after TestImageChangeTransferSyntax4
+  TestDICOMDIRGenerator2 # Must be after TestImageChangeTransferSyntax4
       )
 ENDIF(GDCM_DATA_ROOT)
 # gdcmDataExtra
@@ -92,11 +93,11 @@ IF(GDCM_USE_JPEGLS)
   )
 ENDIF(GDCM_USE_JPEGLS)
 
-IF(CMAKE_HAVE_PTHREAD_H)
+IF(GDCM_HAVE_PTHREAD_H)
 SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
   TestUIDGenerator2
   )
-ENDIF(CMAKE_HAVE_PTHREAD_H)
+ENDIF(GDCM_HAVE_PTHREAD_H)
 IF(GDCM_PIXEL_SPACING_DATA_ROOT)
   SET(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
@@ -121,9 +122,9 @@ CREATE_TEST_SOURCELIST(MSFFTests gdcmMSFFTests.cxx ${MSFF_TEST_SRCS}
   )
 ADD_EXECUTABLE(gdcmMSFFTests ${MSFFTests})
 TARGET_LINK_LIBRARIES(gdcmMSFFTests gdcmMSFF)
-IF(CMAKE_HAVE_PTHREAD_H)
+IF(GDCM_HAVE_PTHREAD_H)
 TARGET_LINK_LIBRARIES(gdcmMSFFTests pthread)
-ENDIF(CMAKE_HAVE_PTHREAD_H)
+ENDIF(GDCM_HAVE_PTHREAD_H)
 
 #Don't understand why I need that ??
 SET(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")

@@ -32,13 +32,14 @@ def TestDCMTKMD5( filename, verbose = False ):
   'dicomdir_With_embedded_icons',
   # Unsupported file:
   'MR_Spectroscopy_SIEMENS_OF.dcm',
+  'gdcm-CR-DCMTK-16-NonSamplePerPix.dcm', # this is not an image
   'ELSCINT1_PMSCT_RLE1.dcm',
   'SignedShortLosslessBug.dcm',
-  'JDDICOM_Sample2.dcm',
+  #'JDDICOM_Sample2.dcm',
   'GE_DLX-8-MONO2-PrivateSyntax.dcm',
   'PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm',
-  'DermaColorLossLess.dcm', # technically I could support this one...
-  'LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm', # idem
+  #'DermaColorLossLess.dcm', # technically I could support this one...
+  #'LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm', # idem
   'ALOKA_SSD-8-MONO2-RLE-SQ.dcm'] # this one is not supported by dcmtk 3.5.4
   for f in blacklist:
     if f in filename:
@@ -68,7 +69,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   gdcm.System.MakeDirectory( outputdir )
   outputfilename = testing.GetTempFilename( filename, "TestDCMTKMD5" )
   executable_output_path = gdcm.GDCM_EXECUTABLE_OUTPUT_PATH
-  gdcmraw = executable_output_path + '/gdcmraw'
+  gdcmraw = executable_output_path + '/gdcmraw -P'
 
   if not ret:
     #print "empty, problem with:", filename
@@ -80,7 +81,9 @@ def TestDCMTKMD5( filename, verbose = False ):
   #print ret.__class__
   elif( jpegre.match( ret ) or jpegre2.match(ret) or jpegre3.match(ret) ):
     #print "jpeg: ",filename
-    dcmdjpeg_exec = "dcmdjpeg " + filename + " " + outputfilename
+    # +cn : conv-never
+    # +px : color by pixel
+    dcmdjpeg_exec = "dcmdjpeg +cn +px " + filename + " " + outputfilename
     ret = os.system( dcmdjpeg_exec )
     if ret:
       print "dcmdjpeg failed to decompress file. giving up"
@@ -90,7 +93,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     gdcmraw += gdcmraw_args
     #print gdcmraw
     ret = os.system( gdcmraw )
-    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
     retval  = 0
@@ -111,7 +114,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     gdcmraw += gdcmraw_args
     #print gdcmraw
     ret = os.system( gdcmraw )
-    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
     retval  = 0
@@ -134,7 +137,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     if ret:
       print "failed with: ", gdcmraw
       return 1
-    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
     retval  = 0
@@ -161,9 +164,7 @@ if __name__ == "__main__":
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
       sucess += TestDCMTKMD5( filename )
-  
-  
+
   # Test succeed ?
   sys.exit(sucess)
-
 

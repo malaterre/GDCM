@@ -12,32 +12,32 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmOpenJPEG2Codec.h"
+#ifndef GDCM_OPENJPEG2_H
+#define GDCM_OPENJPEG2_H
 
-#include "gdcm_openjpeg2.h"
+/* Use the openjpeg library configured for gdcm.  */
+#include "gdcmTypes.h"
+#ifdef GDCM_USE_SYSTEM_OPENJPEG
+#include <openjpeg.h>
+// MM:
+// See openjpeg issue #3:
+// http://code.google.com/p/openjpeg/issues/detail?id=3
+//#include <j2k.h>
+//#include <jp2.h>
 
-namespace gdcm
-{
-
-class OpenJPEG2Internals
-{
-public:
-  OpenJPEG2Internals()
-    {
-    opj_set_default_encoder_parameters(&parameters);
-    }
-	opj_cparameters_t parameters;
-
-};
-
-OpenJPEG2Codec::OpenJPEG2Codec()
-{
-  Internals = new OpenJPEG2Internals;
+// Instead duplicate header (I know this is bad)
+extern "C" {
+//#include "gdcm_j2k.h"
+//#include "gdcm_jp2.h"
 }
 
-OpenJPEG2Codec::~OpenJPEG2Codec()
-{
-  delete Internals;
+#else
+extern "C" {
+#include <gdcmopenjpeg/libopenjpeg/openjpeg.h>
+#include <gdcmopenjpeg/libopenjpeg/j2k.h>
+#include <gdcmopenjpeg/libopenjpeg/jp2.h>
 }
+#endif
 
-} // end namespace gdcm
+#endif
+

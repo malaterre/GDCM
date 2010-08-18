@@ -86,7 +86,6 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       }
     const DictEntry &entry = dicts.GetDictEntry(t,owner);
     const VR &vr = entry.GetVR();
-    const VM &vm = entry.GetVM();
 
     //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
@@ -157,11 +156,11 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       de.SetVLToUndefined();
       assert( sqi->GetLength().IsUndefined() );
       // recursive
-      SequenceOfItems::ItemVector::iterator it = sqi->Items.begin();
-      for(; it != sqi->Items.end(); ++it)
+      SequenceOfItems::ItemVector::iterator sit = sqi->Items.begin();
+      for(; sit != sqi->Items.end(); ++sit)
         {
-        //Item &item = const_cast<Item&>(*it);
-        Item &item = *it;
+        //Item &item = const_cast<Item&>(*sit);
+        Item &item = *sit;
         item.SetVLToUndefined();
         DataSet &nds = item.GetNestedDataSet();
         //const DataElement &deitem = item;
@@ -194,7 +193,6 @@ bool FileExplicitFilter::Change()
   //  }
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
 
   DataSet &ds = F->GetDataSet();
 

@@ -36,12 +36,12 @@ namespace gdcm
 {
 
 /*
- * openssl genrsa -out CA_key.pem 2048 
+ * openssl genrsa -out CA_key.pem 2048
  *
  * openssl req -new -key CA_key.pem -x509 -days 365 -out CA_cert.cer
  */
 /*
- * openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem 
+ * openssl smime -encrypt -aes256 -in inputfile.txt -out outputfile.txt -outform DER /tmp/server.pem
  */
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype)
@@ -114,7 +114,7 @@ public:
   }
   bool Initialize()
     {
-    if(!cipher) 
+    if(!cipher)
       {
       cipher = CreateCipher( GetCipherType() );
       }
@@ -123,7 +123,7 @@ public:
     // and openssl/crypto/pkcs7/enc.c
     if( !PKCS7_set_cipher(p7,cipher) ) return false;
 
-    for(int i = 0; i < GetNumberOfRecipients(); i++) {
+    for(unsigned int i = 0; i < GetNumberOfRecipients(); i++) {
       ::X509* recip = GetRecipient(i);
       if (!PKCS7_add_recipient(p7,recip)) return false;
     }
@@ -155,7 +155,7 @@ public:
       }
 
     BIO *data = BIO_new_mem_buf((void*)array, len);
-    if(!data) 
+    if(!data)
       {
       gdcmErrorMacro( "BIO_new_mem_buf" );
       return false;
@@ -168,7 +168,12 @@ public:
       if (i <= 0) break;
       BIO_write(p7bio,buf,i);
       }
-    BIO_flush(p7bio);
+    // BIO_flush() returns 1 for success and 0 or -1 for failure.
+    if( BIO_flush(p7bio) != 1 )
+      {
+      gdcmErrorMacro( "BIO_flush" );
+      return false;
+      }
 
     if (!PKCS7_dataFinal(p7,p7bio))
       {
@@ -178,7 +183,7 @@ public:
 
     // WARNING:
     // BIO_reset() normally returns 1 for success and 0 or -1 for failure. File
-    // BIOs are an exception, they return 0 for success and -1 for failure. 
+    // BIOs are an exception, they return 0 for success and -1 for failure.
     if( BIO_reset(bio_buffer) != 1 )
       {
       gdcmErrorMacro( "BIO_reset" );
@@ -190,7 +195,8 @@ public:
 
     char *binary;
     long biolen = BIO_get_mem_data(bio_buffer,&binary);
-    if ( outlen < biolen ) 
+    gdcmAssertMacro( biolen >= 0 );
+    if ( outlen < (size_t)biolen )
       {
       gdcmErrorMacro( "Allocation issue: " << outlen << " vs " << biolen << " from " << len );
       return false;
@@ -249,7 +255,7 @@ bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const cha
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   // RAND_status() and RAND_event() return 1 if the PRNG has been seeded with
-  // enough data, 0 otherwise. 
+  // enough data, 0 otherwise.
   if( !RAND_status() )
     {
     gdcmErrorMacro( "PRNG was not seeded properly" );
@@ -258,13 +264,17 @@ bool CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const cha
     }
   return Internals->Encrypt(output, outlen, array, len);
 #else
+  (void)output;
+  (void)array;
+  (void)len;
   outlen = 0;
+  gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif /* GDCM_USE_SYSTEM_OPENSSL */
 }
 
 /*
- $ openssl smime -decrypt -in /tmp/debug.der -inform DER -recip /tmp/server.pem -inkey CA_key.pem   
+ $ openssl smime -decrypt -in /tmp/debug.der -inform DER -recip /tmp/server.pem -inkey CA_key.pem
 */
 bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
@@ -278,9 +288,10 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
   BIO *data,*detached=NULL,*p7bio=NULL;
   char buf[1024*4];
   unsigned char *pp;
-  int i,printit=0;
+  int i;
   STACK_OF(PKCS7_SIGNER_INFO) *sk;
   char * ptr = output;
+  outlen = 0;
 
   OpenSSL_add_all_algorithms();
   //bio_err=BIO_new_fp(stderr,BIO_NOCLOSE);
@@ -314,7 +325,7 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
 
 
   /* This stuff is being setup for certificate verification.
-   * When using SSL, it could be replaced with a 
+   * When using SSL, it could be replaced with a
    * cert_stre=SSL_CTX_get_cert_store(ssl_ctx); */
   cert_store=X509_STORE_new();
   X509_STORE_set_default_paths(cert_store);
@@ -342,6 +353,7 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
     //fwrite(buf,1, i, stdout);
     memcpy(ptr, buf, i);
     ptr += i;
+    outlen += i;
     }
 
   /* We can now verify signatures */
@@ -378,7 +390,11 @@ err:
   ERR_print_errors_fp(stderr);
   return false;
 #else
+  (void)output;
+  (void)array;
+  (void)len;
   outlen = 0;
+  gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif /* GDCM_USE_SYSTEM_OPENSSL */
 }
@@ -403,6 +419,7 @@ bool CryptographicMessageSyntax::ParseKeyFile( const char *keyfile)
   Internals->SetPrivateKey( pkey );
   return true;
 #else
+  (void)keyfile;
   gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif
@@ -429,6 +446,7 @@ bool CryptographicMessageSyntax::ParseCertificateFile( const char *keyfile)
   ::sk_X509_push(recips, x509);
   return true;
 #else
+  (void)keyfile;
   gdcmDebugMacro( "GDCM_USE_SYSTEM_OPENSSL is OFF" );
   return false;
 #endif

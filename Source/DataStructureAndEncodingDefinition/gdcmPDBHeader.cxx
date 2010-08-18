@@ -158,6 +158,7 @@ PDBElement PDBHeader::PDBEEnd = PDBElement( );
 
 int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
 {
+  (void)verbose;
   // First 4 bytes are the length (again)
   uint32_t len = *(uint32_t*)input;
   //if( verbose )
@@ -242,7 +243,7 @@ int DumpProtocolDataBlock(const std::string & filename, bool verbose)
 
 bool PDBHeader::LoadFromDataElement(DataElement const &protocoldatablock)
 {
-   InternalPDBDataSet.clear();
+  InternalPDBDataSet.clear();
   if ( protocoldatablock.IsEmpty() ) return false;
   const gdcm::ByteValue * bv = protocoldatablock.GetByteValue();
 
@@ -259,7 +260,7 @@ void PDBHeader::Print(std::ostream &os) const
 
   for(; it != InternalPDBDataSet.end(); ++it)
     {
-    std::cout << *it << std::endl;
+    os << *it << std::endl;
     }
 }
 

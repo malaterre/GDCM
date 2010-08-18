@@ -940,12 +940,8 @@ int main (int argc, char *argv[])
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
     de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
+    fmi.Clear();
     fmi.Replace( de );
-    fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
-    fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
-    fmi.Remove( gdcm::Tag(0x0002,0x0016) ); //  '   '    '
-    fmi.Remove( gdcm::Tag(0x0002,0x0100) ); //  '   '    ' // PrivateInformationCreatorUID
-    fmi.Remove( gdcm::Tag(0x0002,0x0102) ); //  '   '    ' // PrivateInformation
 
     fmi.SetDataSetTransferSyntax(ts);
 
@@ -1333,9 +1329,6 @@ int main (int argc, char *argv[])
     writer.SetPixmap( image );
     writer.SetFileName( outfilename.c_str() );
 
-    gdcm::File& file = writer.GetFile();
-    gdcm::DataSet& ds = file.GetDataSet();
-
     if( !writer.Write() )
       {
       std::cerr << "could not write: " << outfilename << std::endl;
@@ -1382,8 +1375,8 @@ int main (int argc, char *argv[])
     f.SetDataSet(ds);
 #endif
 
-    gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 #if 0
+    gdcm::DataSet& ds = reader.GetFile().GetDataSet();
     gdcm::DataElement de = ds.GetDataElement( gdcm::Tag(0x0010,0x0010) );
     const char patname[] = "John^Doe";
     de.SetByteValue(patname, strlen(patname));

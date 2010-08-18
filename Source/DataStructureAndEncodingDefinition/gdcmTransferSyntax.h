@@ -58,7 +58,7 @@ public:
   } ImageSpacingType;
   ImageSpacingType GetImageSpacing();
 #endif
-  
+
   typedef enum {
     ImplicitVRLittleEndian = 0,
     ImplicitVRBigEndianPrivateGE,
@@ -92,13 +92,10 @@ public:
 
   NegociatedType GetNegociatedType() const;
 
-  // Return the SwapCode associated with the Transfer Syntax. Be carefull
-  // with the special GE private syntax the DataSet is written in little
-  // endian but the Pixel Data is in Big Endian.
+  /// \deprecated Return the SwapCode associated with the Transfer Syntax. Be careful with
+  /// the special GE private syntax the DataSet is written in little endian but
+  /// the Pixel Data is in Big Endian.
   SwapCode GetSwapCode() const;
-
-  // TODO
-  //SwapCode GetPixelDataSwapCode() const { assert(0); };
 
   bool IsValid() const { return TSField != TS_END; }
 

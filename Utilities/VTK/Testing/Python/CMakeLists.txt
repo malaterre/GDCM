@@ -29,12 +29,12 @@ IF(GDCM_WRAP_PYTHON)
     TestvtkGDCMImageWriter
     TestMultiframeGrayscaleWordSecondaryCaptureImageStorage
   )
-  IF(CMAKE_HAVE_PTHREAD_H)
+  IF(GDCM_HAVE_PTHREAD_H)
     SET(VTK_PYTHON_TESTS ${VTK_PYTHON_TESTS}
       #TestvtkGDCMThreadedImageReader
       TestvtkGDCMThreadedImageReader2
     )
-  ENDIF(CMAKE_HAVE_PTHREAD_H)
+  ENDIF(GDCM_HAVE_PTHREAD_H)
 
   FOREACH(test ${VTK_PYTHON_TESTS})
           #MESSAGE(${UNIX_VTK_PYTHONPATH_DIRS})

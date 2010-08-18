@@ -87,6 +87,7 @@ public:
   // since vtkImageData do not contains one (eg. MR Image Storage, CT Image Storage...)
   virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
+  virtual void SetDirectionCosinesFromImageOrientationPatient(const double dircos[6]);
 
   // Description:
   // Modality LUT
