@@ -30,15 +30,6 @@
 #include "vtkVolumeTextureMapper3D.h"
 #endif
 
-#include "vtkPiecewiseFunction.h"
-#include "vtkColorTransferFunction.h"
-#include "vtkVolumeProperty.h"
-#include "vtkVolume.h"
-#include "vtkRenderer.h"
-#include "vtkRenderWindow.h"
-#include "vtkRenderWindowInteractor.h"
-
-
 class ProgressObserver : public vtkCommand
 {
 public:
