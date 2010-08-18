@@ -24,12 +24,12 @@
 #include "vtkImageReader2Factory.h"
 #include "vtkImageReader2.h"
 #include "vtkImageData.h"
-#include "vtkMetaImageReader.h"
-#include "vtkMetaImageWriter.h"
 #include "vtkTIFFWriter.h"
 #include "vtkPNGWriter.h"
-#include "vtkDICOMImageReader.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#include "vtkMetaImageReader.h"
+#include "vtkMetaImageWriter.h"
+#include "vtkDICOMImageReader.h"
 #include "vtkMINCImageReader.h"
 #include "vtkMINCImageAttributes.h"
 #include "vtk_tiff.h" // ORIENTATION_BOTLEFT
@@ -319,16 +319,24 @@ int main(int argc, char *argv[])
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   //reader->FileLowerLeftOn();
 
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   vtkDICOMImageReader *dicomreader = vtkDICOMImageReader::New();
+#endif
   if( debug )
     {
     reader->DebugOn();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     dicomreader->DebugOn();
+#endif
     }
 
   vtkImageReader2Factory* imgfactory = vtkImageReader2Factory::New();
   if( usevtkdicom )
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     imgfactory->RegisterReader( dicomreader );
+#else
+    (void)0;
+#endif
   else
     imgfactory->RegisterReader( reader );
   vtkImageReader2* imgreader =
@@ -384,11 +392,13 @@ int main(int argc, char *argv[])
       writer->SetFileTypeToBinary();
       writer->SetInput( imgdata );
       writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
         return 1;
         }
+#endif
       return 0;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".png") == 0 )
@@ -397,11 +407,13 @@ int main(int argc, char *argv[])
       writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
         return 1;
         }
+#endif
       return 0;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".tif") == 0  
@@ -411,11 +423,13 @@ int main(int argc, char *argv[])
       writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
         return 1;
         }
+#endif
       return 0;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  ) // vtkXMLImageDataWriter::GetDefaultFileExtension()
@@ -425,13 +439,16 @@ int main(int argc, char *argv[])
       writer->SetDataModeToBinary();
       writer->SetInput( imgdata );
       writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
         return 1;
         }
+#endif
       return 0;
       }
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     else if(  gdcm::System::StrCaseCmp(outputextension,".mha") == 0 ||
               gdcm::System::StrCaseCmp(outputextension,".mhd") == 0  ) // vtkMetaImageReader::GetFileExtensions()
       {
@@ -455,6 +472,7 @@ int main(int argc, char *argv[])
         }
       return 0;
       }
+#endif
     }
   // else
 
@@ -567,6 +585,7 @@ int main(int argc, char *argv[])
         reader->GetMedicalImageProperties()->Print( std::cout );
         }
       }
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     else if( vtkDICOMImageReader * reader = vtkDICOMImageReader::SafeDownCast(imgreader) )
       {
       const float* iop = reader->GetImageOrientationPatient();
@@ -580,6 +599,7 @@ int main(int argc, char *argv[])
       //writer->GetMedicalImageProperties()->SetStudyUID( reader->GetStudyUID() ); // TODO
       writer->GetMedicalImageProperties()->SetStudyID( reader->GetStudyID() );
       //writer->GetMedicalImageProperties()->SetGantryTilt( reader->GetGantryAngle() ); // TODO
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 2
       writer->GetMedicalImageProperties()->SetDirectionCosine( dircos[0], 
         dircos[1],
         dircos[2],
@@ -587,11 +607,13 @@ int main(int argc, char *argv[])
         dircos[4],
         dircos[5]
       );
+#endif
       writer->SetShift( reader->GetRescaleOffset() );
       writer->SetScale( reader->GetRescaleSlope() );
       //writer->SetImageFormat( reader->GetImageFormat() );
       //writer->SetLossyFlag( reader->GetLossyFlag() );
       }
+#endif
     else if( vtkJPEGReader * reader = vtkJPEGReader::SafeDownCast(imgreader) )
       {
       (void)reader;
@@ -640,6 +662,7 @@ int main(int argc, char *argv[])
       reader->SetOrientationType( ORIENTATION_BOTLEFT );
 #endif
       }
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     else if( vtkMetaImageReader *reader = vtkMetaImageReader::SafeDownCast( imgreader ) )
       {
 //  vtkGetMacro(RescaleSlope, double);
@@ -666,6 +689,7 @@ int main(int argc, char *argv[])
 //  vtkGetStringMacro(StudyUID);
 //  vtkGetStringMacro(TransferSyntaxUID);
       }
+#endif
     }
   // nothing special need to be done for vtkStructuredPointsReader 
 
@@ -696,11 +720,13 @@ int main(int argc, char *argv[])
     }
 
   writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   if( writer->GetErrorCode() )
     {
     std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
     return 1;
     }
+#endif
 
   if( verbose )
     writer->GetInput()->Print( std::cout );
@@ -709,7 +735,9 @@ int main(int argc, char *argv[])
   if( imgreader ) imgreader->Delete();
   datareader->Delete();
   reader->Delete();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   dicomreader->Delete();
+#endif
 
   return 0;
 }
