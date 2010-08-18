@@ -1,3 +1,12 @@
+2010-08-18 08:59  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6967] Utilities/VTK/CMakeLists.txt: revert change. Leave a
+	  version number on the pythond library.
+
+2010-08-18 08:41  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6966] ChangeLog: update changelog before gdcm 2.0.16
+
 2010-08-18 08:28  Mathieu Malaterre <malat@users.sourceforge.net>
 
 	* [r6965] Wrapping/Python/docstrings.i: update docstrings for
