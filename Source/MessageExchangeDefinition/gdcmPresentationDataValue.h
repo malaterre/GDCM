@@ -22,9 +22,6 @@ namespace gdcm
 {
 class File;
 
-// TODO: MM : does swig handle nested namespace
-// I would like to avoid polluting gdcm namespace with such low level details the networ
-// primitives:
 namespace network
 {
 
