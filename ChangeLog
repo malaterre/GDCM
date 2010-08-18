@@ -1,3 +1,689 @@
+2010-08-16 07:03  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6962] Wrapping/Csharp/gdcm.i: remove Warning(842): Covariant
+	  return types not supported in C#.
+
+2010-08-15 23:19  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6961] Source/MediaStorageAndFileFormat/gdcmOpenJPEG1Codec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmOpenJPEG1Codec.h,
+	  Source/MediaStorageAndFileFormat/gdcmOpenJPEG2Codec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmOpenJPEG2Codec.h,
+	  Wrapping/Python/TestWrap.py: remove unused class. Fix
+	  TestWrapPython
+
+2010-08-15 23:11  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6960] CMake/CTestCustom.ctest.in: remove more warnings
+
+2010-08-13 09:30  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6959] Utilities/doxygen/man/gdcmimg.man: document multiple
+	  files
+
+2010-08-12 14:49  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6958] Source/Common/gdcmException.h: minor
+
+2010-08-12 13:22  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6957]
+	  Testing/Source/InformationObjectDefinition/Cxx/TestIOD.cxx:
+	  execrise GetTypeFromTag
+
+2010-08-12 13:04  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6956]
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/CMakeLists.txt,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestCP246ExplicitDataElement.cxx,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestExplicitImplicitDataElement.cxx,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestVR16ExplicitDataElement.cxx:
+	  data extra is required for this test...
+
+2010-08-12 13:02  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6955]
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/CMakeLists.txt,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestCP246ExplicitDataElement.cxx,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestExplicitImplicitDataElement.cxx,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestInvalidDICOMFiles.cxx,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/TestVR16ExplicitDataElement.cxx:
+	  Increase coverage and execercise obscur section of code
+
+2010-08-12 11:50  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6954]
+	  Source/MediaStorageAndFileFormat/gdcmDICOMDIRGenerator.cxx,
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/CMakeLists.txt,
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/TestDICOMDIRGenerator.cxx,
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/TestDICOMDIRGenerator1.cxx,
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/TestDICOMDIRGenerator2.cxx:
+	  increase coverage
+
+2010-08-12 11:40  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6953] Source/MediaStorageAndFileFormat/gdcmDataSetHelper.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmIPPSorter.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmSplitMosaicFilter.cxx: Fix
+	  some more warnings
+
+2010-08-12 11:33  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6952]
+	  Source/DataStructureAndEncodingDefinition/gdcmDataElement.cxx,
+	  Source/DataStructureAndEncodingDefinition/gdcmDataElement.h,
+	  Source/MediaStorageAndFileFormat/gdcmAnonymizer.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmDICOMDIRGenerator.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmImageChangeTransferSyntax.cxx:
+	  Fix some warnings
+
+2010-08-12 10:11  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6951] Source/DataDictionary/DefaultPrivateDicts.xsl,
+	  Source/DataDictionary/gdcmPrivateDefaultDicts.cxx,
+	  Source/DataDictionary/privatedicts.xml: update private dicts:
+	  with STENTOR Att and S2000 Atts (siemens)
+
+2010-08-12 08:14  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6950] Source/DataStructureAndEncodingDefinition/gdcmTag.h:
+	  doxygen cleanup
+
+2010-08-12 08:12  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6949] CMake/CTestCustom.ctest.in: remove a C# warning
+
+2010-08-11 20:44  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6948] Source/DataDictionary/gdcmDictEntry.cxx: Fix compilation.
+	  Thanks to Niels for quick report
+
+2010-08-11 20:25  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6947] AUTHORS: synchronize author from changelog... sorry Niels
+	  for this mistake.
+
+2010-08-11 20:09  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6946] Source/DataDictionary/gdcmDictEntry.cxx: add missing file
+
+2010-08-11 17:06  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6945] Source/DataDictionary/CMakeLists.txt,
+	  Source/DataDictionary/gdcmDefaultDicts.cxx,
+	  Source/DataDictionary/gdcmDictEntry.h,
+	  Source/DataDictionary/gdcmPrivateDefaultDicts.cxx: BUG: 3030751
+	  Fix DictEntry::GetKeyword() does not work
+
+2010-08-11 15:56  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6944] Source/MediaStorageAndFileFormat/gdcmPixmapWriter.cxx:
+	  BUG: 3032015 Fix issue with large stack comsumption. At least the
+	  one reported n the bug. Hopefully there are not that many.
+
+2010-08-11 15:52  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6943] Source/MediaStorageAndFileFormat/gdcmSerieHelper.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmSorter.cxx: BUG: 3036142
+	  Apply patch from Niels D. Thanks. Also move SortFunctor in empty
+	  namespace to avoid any further issue -hopefully-.
+
+2010-08-11 15:37  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6942] Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx:
+	  BUG: 3043121 Finish up implementation of DICOM using openjpeg v2
+
+2010-08-11 15:00  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6941] Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx:
+	  Toward a working implementation with openjpeg v2
+
+2010-08-11 13:02  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6940] Source/Common/gdcmFilenameGenerator.h,
+	  Source/Common/gdcmUnpacker12Bits.cxx,
+	  Source/DataStructureAndEncodingDefinition/gdcmTransferSyntax.cxx,
+	  Source/DataStructureAndEncodingDefinition/gdcmTransferSyntax.h,
+	  Testing/Source/Data/CMakeLists.txt,
+	  Utilities/VTK/vtkGDCMImageReader.cxx: reactivate support for
+	  12bits data
+
+2010-08-11 13:01  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6939] Source/Common/gdcmFilenameGenerator.cxx: Better error
+	  handling
+
+2010-08-11 12:55  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6938] Utilities/VTK/Testing/Cxx/TestvtkGDCMImageReader2.cxx:
+	  Fix warnings
+
+2010-08-11 12:54  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6937] Utilities/VTK/Applications/gdcm2vtk.cxx: Fix mem leak
+
+2010-08-11 12:05  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6936]
+	  Source/MediaStorageAndFileFormat/gdcmImageChangeTransferSyntax.cxx:
+	  comp warning
+
+2010-08-11 11:53  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6935] Source/MediaStorageAndFileFormat/gdcmPixelFormat.h,
+	  Source/MediaStorageAndFileFormat/gdcmPixmapReader.cxx: Add
+	  documentation for SetSamplesPerPixel and change default Samples
+	  Per Pixel to better one
+
+2010-08-11 10:07  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6934] Source/MediaStorageAndFileFormat/gdcmApplicationEntity.h,
+	  Source/MediaStorageAndFileFormat/gdcmIPPSorter.h: minor tweaks
+
+2010-08-11 10:00  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6933] Source/MediaStorageAndFileFormat/gdcmApplicationEntity.h,
+	  Wrapping/Csharp/gdcm.i, Wrapping/Java/gdcm.i,
+	  Wrapping/Python/gdcmswig.i: remove all swig warnings for now
+
+2010-08-11 09:55  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6932] Wrapping/Csharp/gdcm.i, Wrapping/Java/gdcm.i,
+	  Wrapping/Python/gdcmswig.i: remove some swig warnings
+
+2010-08-11 09:45  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6931] CMake/FindOpenJPEG.cmake,
+	  Source/Common/gdcmConfigure.h.in,
+	  Source/MediaStorageAndFileFormat/gdcmImageCodec.h,
+	  Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmOpenJPEG1Codec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmOpenJPEG1Codec.h: Handle
+	  openjpeg v1 and openjpeg v2
+
+2010-08-11 09:14  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6930] Utilities/gdcm_openjpeg2.h: fix compilation with new
+	  opnejpeg config file
+
+2010-08-11 08:53  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6929] CMakeLists.txt: update openjpeg
+
+2010-08-11 08:43  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6928] CMake/FindOpenJPEG.cmake: Redo the findpackage openjpeg
+	  to cope with new cmake installation
+
+2010-08-10 22:14  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6927] Source/DataDictionary/txt2xml.py: update
+
+2010-08-10 17:10  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6923] CMakeLists.txt: remove message
+
+2010-08-10 17:09  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6922] CMakeLists.txt: minor cleanup
+
+2010-08-10 16:57  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6921]
+	  Source/MediaStorageAndFileFormat/gdcmImageChangeTransferSyntax.cxx:
+	  minor comp warning
+
+2010-08-10 16:57  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6920] Utilities/gdcm_openjpeg2.h: very early support for ojv2
+
+2010-08-10 16:56  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6919] Testing/Source/Common/Cxx/TestSystem.cxx: minor comp
+	  warning
+
+2010-08-10 15:58  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6918] CMakeLists.txt,
+	  Source/MediaStorageAndFileFormat/gdcmBitmap.cxx: BUG: 3042605
+	  Prepare initial fix
+
+2010-08-10 14:11  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6917] Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx:
+	  Properly handle gdcmData/MR16BitsAllocated_8BitsStored.dcm now
+
+2010-08-10 13:56  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6916] Source/MediaStorageAndFileFormat/gdcmRescaler.cxx: More
+	  info on technical details
+
+2010-08-10 13:55  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6915] Utilities/doxygen/man/gdcm2vtk.man: document new options
+	  in gdcm2vtk
+
+2010-08-10 13:55  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6914] Utilities/VTK/Applications/gdcm2vtk.cxx: Properly check
+	  for error. Add support for vtkDICOMImageReader.
+
+2010-08-10 13:54  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6913] Utilities/VTK/Examples/Cxx/threadgdcm.cxx: simple warning
+
+2010-08-10 13:51  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6912] Utilities/VTK/vtkGDCMImageWriter.cxx,
+	  Utilities/VTK/vtkGDCMImageWriter.h: Allow setting dircos from the
+	  iop directly
+
+2010-08-10 13:23  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6911] Utilities/VTK/vtkGDCMImageReader.cxx: simple warning
+
+2010-08-10 12:30  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6910] Utilities/VTK/Examples/Cxx/CMakeLists.txt: Fix
+	  compilation when vtk is not build with rendering
+
+2010-08-10 09:54  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6909] Testing/Source/Data/gdcmMD5DataImages.cxx: missing md5
+
+2010-08-07 18:23  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6908]
+	  Source/MediaStorageAndFileFormat/gdcmSimpleSubjectWatcher.h: fix
+	  warning
+
+2010-08-07 18:22  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6907]
+	  Source/MediaStorageAndFileFormat/gdcmFileExplicitFilter.cxx: fix
+	  warning
+
+2010-08-07 18:20  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6906]
+	  Source/MediaStorageAndFileFormat/gdcmDICOMDIRGenerator.cxx: fix
+	  warning
+
+2010-08-07 18:16  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6905] Source/MediaStorageAndFileFormat/gdcmAnonymizer.cxx:
+	  minor warning
+
+2010-08-07 18:14  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6904] Source/InformationObjectDefinition/gdcmTableEntry.h:
+	  minor warning
+
+2010-08-07 18:12  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6903] Source/InformationObjectDefinition/gdcmTableEntry.h:
+	  minor warning
+
+2010-08-07 18:10  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6902] Source/Common/zipstreamimpl.hpp: fix warnings
+
+2010-08-07 18:07  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6901]
+	  Source/DataStructureAndEncodingDefinition/gdcmCSAHeader.cxx:
+	  COMP: fix warning
+
+2010-08-07 17:04  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6900] Source/Common/gdcmTrace.h: Make the macro useable from
+	  outside gdcm namespace.
+
+2010-08-07 17:00  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6899] Source/MediaStorageAndFileFormat/gdcmImageHelper.cxx:
+	  Properly pad spacing
+
+2010-08-07 17:00  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6898] Utilities/VTK/vtkGDCMImageReader.cxx: Make the code a
+	  little more robust.
+
+2010-08-07 16:58  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6897] Utilities/VTK/vtkGDCMImageReader.cxx: BUG: 3039334 Do not
+	  assume that pointer (VTK) can hold the entire image.
+
+2010-08-07 16:34  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6896] Utilities/VTK/vtkGDCMImageReader.cxx: BUG: 3039334 Work
+	  toward a fix.
+
+2010-08-07 16:31  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6895]
+	  Utilities/VTK/Testing/Cxx/TestvtkGDCMImageReaderIsLossy.cxx:
+	  minor tweaks
+
+2010-08-07 16:30  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6894]
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/TestDICOMDIRGenerator.cxx:
+	  minor style
+
+2010-08-07 16:30  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6893] Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx:
+	  revert previous patch
+
+2010-08-07 16:20  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6892] Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx:
+	  Let's allow some JP2 encapsulated file
+
+2010-08-06 09:06  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6891]
+	  Source/MediaStorageAndFileFormat/gdcmDICOMDIRGenerator.cxx: fix
+	  compilation warning
+
+2010-08-04 09:46  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6890]
+	  Source/MediaStorageAndFileFormat/gdcmDICOMDIRGenerator.cxx: COMP:
+	  Fix compilation
+
+2010-08-02 20:29  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6889]
+	  Source/MediaStorageAndFileFormat/gdcmDICOMDIRGenerator.cxx:
+	  remove some warnings
+
+2010-08-02 20:24  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6888] Source/InformationObjectDefinition/gdcmModule.cxx,
+	  Source/InformationObjectDefinition/gdcmTableReader.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmAnonymizer.cxx: remove some
+	  warnings
+
+2010-08-02 20:19  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6887]
+	  Source/DataStructureAndEncodingDefinition/gdcmPDBHeader.cxx:
+	  remove a warning
+
+2010-08-02 20:17  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6886]
+	  Source/DataStructureAndEncodingDefinition/gdcmPDBHeader.cxx:
+	  remove a warning
+
+2010-07-30 10:07  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6885] Source/DataStructureAndEncodingDefinition/gdcmVR.cxx:
+	  Please picky compiler warning
+
+2010-07-30 09:50  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6884] CMake/CTestCustom.ctest.in: remove warnigs
+
+2010-07-30 09:27  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6883] Utilities/VTK/vtkGDCMImageReader.cxx: fix typos
+
+2010-07-30 09:17  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6882]
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/TestPixelFormat.cxx:
+	  more test
+
+2010-07-30 09:00  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6881] Source/MediaStorageAndFileFormat/gdcmPixelFormat.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmPixelFormat.h,
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/TestPixelFormat.cxx:
+	  BUG: 3036775 Add documentation to avoid this kind of mistake in
+	  the future.
+
+2010-07-28 13:58  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6880] CMakeLists.txt, Source/Common/gdcmConfigure.h.in,
+	  Source/Common/gdcmTypes.h,
+	  Testing/Source/DataStructureAndEncodingDefinition/Cxx/CMakeLists.txt,
+	  Testing/Source/MediaStorageAndFileFormat/Cxx/CMakeLists.txt,
+	  Utilities/VTK/CMakeLists.txt,
+	  Utilities/VTK/Examples/Cxx/CMakeLists.txt,
+	  Utilities/VTK/Testing/Cxx/CMakeLists.txt,
+	  Utilities/VTK/Testing/Python/CMakeLists.txt: BUG: 3035308 More
+	  cleanup. Make sure all check_include_file actualy use GDCM_
+	  namespace for consistancy. remove some old stuff
+
+2010-07-28 08:27  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6879] Source/Common/gdcmASN1.cxx,
+	  Source/Common/gdcmSubject.cxx,
+	  Source/DataStructureAndEncodingDefinition/gdcmByteSwapFilter.cxx,
+	  Source/DataStructureAndEncodingDefinition/gdcmExplicitImplicitDataElement.txx,
+	  Source/DataStructureAndEncodingDefinition/gdcmReader.cxx: Some
+	  minor compilation warnings
+
+2010-07-28 08:14  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6878] Testing/Source/Data/gdcmMD5DataImages.cxx: Update the md5
+	  for ybr_full_422 image. upload the one for single bit image
+
+2010-07-27 20:06  Niels Dekker
+
+	* [r6877] Source/Common/gdcmConfigure.h.in: STYLE: Removed
+	  redundant #ifndef GDCM_HAVE_XXX statements, as suggested by Andy
+	  Buckle, "Re: [Gdcm2] What about a GDCM prefix for HAVE_STRCASECMP
+	  and other macro's?"
+
+2010-07-27 18:23  Niels Dekker
+
+	* [r6876] Source/Common/CMakeLists.txt,
+	  Source/Common/gdcmConfigure.h.in, Source/Common/gdcmSwapper.txx,
+	  Source/Common/gdcmSystem.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmUIDGenerator.cxx,
+	  Testing/Source/Common/Cxx/TestFilename.cxx: STYLE: Fixed issue
+	  3035308, "HAVE_XXX macro's should have a GDCM_ prefix",
+	  http://sourceforge.net/tracker/index.php?func=detail&aid=3035308&group_id=137895&atid=739587
+
+2010-07-27 16:53  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6875] Source/Common/gdcmCryptographicMessageSyntax.cxx: more
+	  warnings
+
+2010-07-27 16:48  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6874] Source/Common/gdcmCryptographicMessageSyntax.cxx: remove
+	  warnings
+
+2010-07-27 16:45  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6873] Source/Common/gdcmSHA1.cxx: some warnings
+
+2010-07-27 16:21  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6872] Utilities/VTK/vtkGDCMImageReader.cxx: ybr is now ybr...
+
+2010-07-27 16:15  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6871] Source/MediaStorageAndFileFormat/gdcmJPEGBITSCodec.cxx:
+	  minor comp
+
+2010-07-27 16:14  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6870] Source/MediaStorageAndFileFormat/gdcmJPEGBITSCodec.cxx,
+	  Testing/Source/MediaStorageAndFileFormat/Python/TestDCMTKMD5.py:
+	  I said do not do color space conversion
+
+2010-07-27 15:46  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6869] CMakeLists.txt,
+	  Source/MediaStorageAndFileFormat/gdcmBitmap.cxx,
+	  Testing/Source/MediaStorageAndFileFormat/Python/TestDCMTKMD5.py,
+	  Utilities/VTK/CMakeLists.txt: Package paraview module
+
+2010-07-27 11:16  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6867] Utilities/VTK/CMakeLists.txt,
+	  Utilities/VTK/GDCMImageGUI.xml,
+	  Utilities/VTK/GDCMImageReader.xml: finish implementation of
+	  paraview plugin.
+
+2010-07-27 07:57  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6866]
+	  Testing/Source/MediaStorageAndFileFormat/Python/TestDCMTKMD5.py:
+	  update test
+
+2010-07-26 16:51  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6865] Source/Common/gdcmProgressEvent.h,
+	  Source/MediaStorageAndFileFormat/gdcmSimpleSubjectWatcher.cxx:
+	  fix some warnings
+
+2010-07-26 16:47  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6864] Source/Common/gdcmTesting.cxx,
+	  Testing/Source/Data/gdcmMD5DataImages.cxx: update md5sum + fix
+	  warning
+
+2010-07-26 16:47  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6863] Utilities/doxygen/man/gdcmconv.man: add reference
+
+2010-07-26 10:10  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6862] Applications/Cxx/gdcmanon.cxx,
+	  Applications/Cxx/gdcmconv.cxx,
+	  Source/DataStructureAndEncodingDefinition/gdcmExplicitImplicitDataElement.txx,
+	  Source/DataStructureAndEncodingDefinition/gdcmFileMetaInformation.cxx,
+	  Source/DataStructureAndEncodingDefinition/gdcmFileMetaInformation.h,
+	  Source/MediaStorageAndFileFormat/gdcmFileExplicitFilter.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmImageWriter.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmPixmapWriter.cxx: Make sure
+	  PixmapWriter does not add Modality or ConversionType. Use
+	  FMI::Clear for homogenity. Minor cleanups
+
+2010-07-22 14:40  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6861] Utilities/VTK/CMakeLists.txt: doc
+
+2010-07-22 14:38  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6860] Utilities/VTK/CMakeLists.txt: Update paraview plugin
+
+2010-07-22 14:18  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6859] CMakeLists.txt,
+	  Source/MediaStorageAndFileFormat/gdcmPixmapWriter.cxx,
+	  Utilities/VTK/CMakeLists.txt, Utilities/VTK/GDCMImageGUI.xml,
+	  Utilities/VTK/GDCMImageReader.xml: Add option GDCM_USE_PARAVIEW
+
+2010-07-22 14:04  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6858] Source/Common/gdcmConfigure.h.in: remove warning
+
+2010-07-21 17:55  Rogue Research <rogueresearch@users.sourceforge.net>
+
+	* [r6857] Source/Common/gdcmConfigure.h.in: fixed a bug building as
+	  a Universal Binary on Mac OS X. Remove assumption that the build
+	  machine's endianness is the same as the target machine's
+	  endianness.
+
+2010-07-21 15:27  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6856] Utilities/doxygen/man/gdcmviewer.man: update
+
+2010-07-21 03:46  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6855] Source/Common/gdcmConfigure.h.in: BUG: 3030729 Fix
+	  pre-processor warnings caused by gdcmConfigure.h
+
+2010-07-20 09:40  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6852]
+	  Utilities/VTK/Testing/Cxx/TestvtkGDCMImageReaderIsLossy.cxx:
+	  update test
+
+2010-07-20 08:24  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6851]
+	  Source/MediaStorageAndFileFormat/gdcmImageChangeTransferSyntax.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmPixmapWriter.cxx: Make sure
+	  to handle YBR_FULL_422 the proper way
+
+2010-07-20 08:11  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6850]
+	  Source/MediaStorageAndFileFormat/gdcmImageChangeTransferSyntax.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmPhotometricInterpretation.cxx:
+	  Fix issue with YBR_FULL_422
+
+2010-07-19 08:28  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6849]
+	  Source/MediaStorageAndFileFormat/gdcmImageChangeTransferSyntax.cxx:
+	  Fix issue with YBR_FULL_422
+
+2010-07-18 14:30  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6848] Applications/Cxx/gdcmconv.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmImageChangeTransferSyntax.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmJPEGBITSCodec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmPixmapToPixmapFilter.cxx:
+	  Better handling of ybr_full and ybr_full_422
+
+2010-07-18 13:41  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6847] Source/MediaStorageAndFileFormat/gdcmBitmap.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmImageWriter.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmJPEGBITSCodec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx,
+	  Source/MediaStorageAndFileFormat/gdcmPixmapWriter.cxx: Make sure
+	  pixmapwriter does not add new elements.
+
+2010-07-15 20:40  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6846] Utilities/VTK/CMakeLists.txt: Fix compilation
+
+2010-07-14 15:31  Rogue Research <rogueresearch@users.sourceforge.net>
+
+	* [r6845] Source/DataDictionary/gdcmUIDs.h: fixed compiler warning
+	  generated by clang
+
+2010-07-12 10:22  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6844] Utilities/gdcmjpeg/README.GDCM.txt: Document DCMTK
+	  copyright coming from
+
+2010-07-12 07:52  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6841] ChangeLog, Utilities/doxygen/authors.xml: obfuscate niels
+	  emails...totally
+
+2010-07-09 13:30  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6836] CMakeLists.txt: Do not remove .NoDartCoverage files
+
+2010-07-09 13:14  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6835] ChangeLog: svn2cl --reparagraph --include-rev
+	  --authors=Utilities/doxygen/authors.xml
+
+2010-07-09 12:40  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6834] Utilities/doxygen/authors.xml: Add emails
+
+2010-07-09 12:33  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6833] Applications/Cxx/gdcmtar.cxx,
+	  Utilities/doxygen/authors.xml: Add author file for svn2cl
+
 2010-07-09 08:11  Mathieu Malaterre <malat@users.sourceforge.net>
 
 	* [r6829] CMake/FindOpenSSL.cmake: more fix
