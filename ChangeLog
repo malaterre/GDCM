@@ -1,3 +1,12 @@
+2010-08-18 08:28  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6965] Wrapping/Python/docstrings.i: update docstrings for
+	  python documentation
+
+2010-08-18 08:26  Mathieu Malaterre <malat@users.sourceforge.net>
+
+	* [r6964] ChangeLog: update changelog
+
 2010-08-16 07:03  Mathieu Malaterre <malat@users.sourceforge.net>
 
 	* [r6962] Wrapping/Csharp/gdcm.i: remove Warning(842): Covariant
