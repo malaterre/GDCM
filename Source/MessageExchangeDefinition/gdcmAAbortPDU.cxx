@@ -103,6 +103,7 @@ size_t AAbortPDU::Size() const
   return ret;
 }
 
+namespace {
 static const char *PrintSourceAsString( uint8_t source )
 {
   switch( source )
@@ -114,6 +115,7 @@ static const char *PrintSourceAsString( uint8_t source )
   case 0x2:
     return "DICOM UL service-provider (initiated abort)";
     }
+  assert( 0 );
   return NULL;
 }
 
@@ -136,7 +138,9 @@ static const char *PrintReasonAsString( uint8_t reason )
   case 0x6:
     return "invalid-PDU-parameter value";
     }
+  assert( 0 );
   return NULL;
+}
 }
 
 void AAbortPDU::Print(std::ostream &os) const

@@ -19,6 +19,10 @@
 #include "gdcmAReleaseRPPDU.h"
 #include "gdcmAAbortPDU.h"
 #include "gdcmReader.h"
+#include "gdcmAAssociateRJPDU.h"
+#include "gdcmAssociationEstablishment.h"
+#include "gdcmDataTransfer.h"
+#include "gdcmAssociationRelease.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -35,45 +39,14 @@ void CEcho( const char *remote, int portno )
   else
     e->connect ( remote, portno);
 
-  gdcm::network::AAssociateRQPDU cecho;
-  cecho.SetCallingAETitle( "ECHOSCU" );
+  gdcm::network::AssociationEstablishment ae;
+  ae.Run(e);
 
-  gdcm::network::PresentationContext pc;
-  gdcm::network::AbstractSyntax as;
-  as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
-  pc.SetAbstractSyntax( as );
+  gdcm::network::DataTransfer dt;
+  dt.Run(e);
 
-  gdcm::network::TransferSyntax_ ts;
-  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-  pc.AddTransferSyntax( ts );
-
-  cecho.AddPresentationContext( pc );
-  cecho.Write(e);
-  e.flush();
-
-  gdcm::network::AAssociateACPDU acpdu;
-  acpdu.Read( e );
-  acpdu.Print( std::cout );
-  //std::ofstream b( "/tmp/d1234" );
-  //acpdu.Write( b );
-  //b.close();
-
-  gdcm::network::PDataTFPDU pdata;
-  gdcm::network::PresentationDataValue pdv;
-  pdata.AddPresentationDataValue( pdv );
-  pdata.Write( e );
-  e.flush();
-
-  // listen back
-  gdcm::network::PDataTFPDU pdata2;
-  pdata2.Read( e );
-
-  // Print output DataSet:
-  pdata2.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
-
-  // send release:
-  gdcm::network::AReleaseRQPDU rel;
-  rel.Write( e );
+  gdcm::network::AssociationRelease ar;
+  ar.Run(e);
 
 }
 
@@ -444,8 +417,8 @@ int main(int argc, char *argv[])
     }
   else
     {
-    //CEcho( argv[1], portno );
-    CStore( argv[1], portno );
+    CEcho( argv[1], portno );
+    //CStore( argv[1], portno );
     }
   return 0;
 }

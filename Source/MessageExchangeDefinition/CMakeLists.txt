@@ -21,6 +21,9 @@ gdcmMaximumLengthSub.cxx
 gdcmImplementationClassUIDSub.cxx
 gdcmImplementationUIDSub.cxx
 gdcmImplementationVersionNameSub.cxx
+gdcmAssociationEstablishment.cxx
+gdcmAssociationRelease.cxx
+gdcmDataTransfer.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})

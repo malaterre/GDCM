@@ -12,43 +12,36 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMAASSOCIATERJPDU_H
-#define GDCMAASSOCIATERJPDU_H
+#ifndef GDCMASSOCIATIONESTABLISHMENT_H
+#define GDCMASSOCIATIONESTABLISHMENT_H
 
 #include "gdcmTypes.h"
 
 namespace gdcm
 {
 
-// TODO: MM : does swig handle nested namespace
-// I would like to avoid polluting gdcm namespace with such low level details the networ
-// primitives:
 namespace network
 {
 
 /**
-Table 9-21
-ASSOCIATE-RJ PDU FIELDS
+ Table 9-2
+ASSOCIATION ESTABLISHMENT
  */
-class AAssociateRJPDU
+class AssociationEstablishment
 {
 public:
-  AAssociateRJPDU();
-  std::istream &Read(std::istream &is);
-  const std::ostream &Write(std::ostream &os) const;
-  void Print(std::ostream &os) const;
+  AssociationEstablishment();
+  std::iostream &Run(std::iostream &is);
+
+  /// \internal Compute Size
+  //size_t Size() const;
+  //void Print(std::ostream &os) const;
+
 private:
-  static const uint8_t ItemType; // PDUType ?
-  static const uint8_t Reserved2;
-  uint32_t ItemLength; // PDU Length ?
-  static const uint8_t Reserved8;
-  uint8_t Result;
-  uint8_t Source;
-  uint8_t Reason; // diag ?
 };
 
 } // end namespace network
 
 } // end namespace gdcm
 
-#endif //GDCMAASSOCIATERJPDU_H
+#endif //GDCMASSOCIATIONESTABLISHMENT_H
