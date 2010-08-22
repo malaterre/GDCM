@@ -44,6 +44,7 @@ public:
   void AddTransferSyntax( TransferSyntax_ const &ts );
 
   void SetPresentationContextID( uint8_t id );
+  uint8_t GetPresentationContextID() const;
 
   void Print(std::ostream &os) const;
 
