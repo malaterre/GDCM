@@ -49,6 +49,12 @@ public:
 
   void Print(std::ostream &os) const;
 
+  PresentationContext const &GetPresentationContext(unsigned int i) const {
+    assert( !PresContext.empty() && i < PresContext.size() );
+    return PresContext[i];
+  }
+  const PresentationContext *GetPresentationContextByID(unsigned int i) const;
+
 private:
   // 1 PDU-type 01H
   static const uint8_t ItemType; // PDUType ?

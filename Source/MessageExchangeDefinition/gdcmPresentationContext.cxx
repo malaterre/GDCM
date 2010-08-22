@@ -135,6 +135,11 @@ void PresentationContext::SetPresentationContextID( uint8_t id )
   ID = id;
 }
 
+uint8_t PresentationContext::GetPresentationContextID() const
+{
+  return ID;
+}
+
 void PresentationContext::Print(std::ostream &os) const
 {
   //static const uint8_t ItemType;

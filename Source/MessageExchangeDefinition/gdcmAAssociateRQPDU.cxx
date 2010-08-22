@@ -214,5 +214,17 @@ void AAssociateRQPDU::Print(std::ostream &os) const
   os << std::endl;
 }
 
+const PresentationContext *AAssociateRQPDU::GetPresentationContextByID(unsigned int id) const {
+    std::vector<PresentationContext>::const_iterator it = PresContext.begin();
+    for( ; it != PresContext.end(); ++it)
+      {
+      if( it->GetPresentationContextID() == id )
+        {
+        return &*it;
+        }
+      }
+    return NULL;
+  }
+
 } // end namespace network
 } // end namespace gdcm
