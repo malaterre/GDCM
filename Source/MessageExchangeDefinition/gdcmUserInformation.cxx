@@ -66,6 +66,8 @@ const std::ostream &UserInformation::Write(std::ostream &os) const
   ICUID.Write(os);
   IVNS.Write(os);
 
+  assert( ItemLength + 4 == Size() );
+
   return os;
 }
 
@@ -80,6 +82,10 @@ size_t UserInformation::Size() const
   ret += IVNS.Size();
 
   return ret;
+}
+
+void UserInformation::Print(std::ostream &os) const
+{
 }
 
 } // end namespace network

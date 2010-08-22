@@ -77,5 +77,9 @@ void ApplicationContext::UpdateName( const char *name )
   assert( ItemLength + 4 == Size() );
 }
 
+void ApplicationContext::Print(std::ostream &os) const
+{
+}
+
 } // end namespace network
 } // end namespace gdcm

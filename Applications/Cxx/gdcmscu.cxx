@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmAAssociateRQPDU.h"
+#include "gdcmAReleaseRPPDU.h"
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmPDataTFPDU.h"
 #include "gdcmAReleaseRQPDU.h"
@@ -54,6 +55,7 @@ static void process_input(iosockinet& sio)
 {
   gdcm::network::AAssociateRQPDU rqpdu;
   rqpdu.Read( sio );
+  rqpdu.Print( std::cout );
 
   std::cout << "done AAssociateRQPDU !" << std::endl;
 
@@ -79,22 +81,28 @@ static void process_input(iosockinet& sio)
   gdcm::network::AAssociateACPDU acpdu;
   acpdu.AddPresentationContextAC( pcac );
   acpdu.Write( sio );
-  std::ofstream b( "/tmp/d1234-bis" );
-  acpdu.Write( b );
-  b.close();
+//  std::ofstream b( "/tmp/d1234-bis" );
+//  acpdu.Write( b );
+//  b.close();
   sio.flush();
   std::cout << "done AAssociateACPDU!" << std::endl;
 
   gdcm::network::PDataTFPDU pdata;
   pdata.Read( sio );
+  pdata.Print( std::cout );
 
   std::cout << "done PDataTFPDU!" << std::endl;
 
   gdcm::network::PDataTFPDU pdata2;
   gdcm::network::PresentationDataValue pdv;
+  pdv.MyInit3();
   pdata2.AddPresentationDataValue( pdv );
   pdata2.Write( sio );
   sio.flush();
+
+//std::ofstream d( "/tmp/debug" );
+//pdata2.Write( d );
+//d.close();
 
   std::cout << "done PDataTFPDU 2!" << std::endl;
 
@@ -102,6 +110,10 @@ static void process_input(iosockinet& sio)
   rel.Read( sio );
 
   std::cout << "done AReleaseRQPDU " << std::endl;
+
+  gdcm::network::AReleaseRPPDU rel2;
+  rel2.Write( sio );
+  sio.flush();
 
 }
 
@@ -412,8 +424,8 @@ int main(int argc, char *argv[])
 
   if ( mode == "server" )
     {
-    //CEchoServer( portno );
-    CStoreServer( portno );
+    CEchoServer( portno );
+    //CStoreServer( portno );
     }
   else
     {

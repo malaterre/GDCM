@@ -45,6 +45,8 @@ public:
 
   void SetPresentationContextID( uint8_t id );
 
+  void Print(std::ostream &os) const;
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;

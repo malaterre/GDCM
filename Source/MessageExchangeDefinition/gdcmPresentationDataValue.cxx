@@ -128,9 +128,9 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
 
   assert( debug == ItemLength - 2 );
 
-  std::cout << "BEFORE" << std::endl;
-  DS.Print( std::cout );
-  std::cout << "AFTER" << std::endl;
+//  std::cout << "BEFORE" << std::endl;
+//  DS.Print( std::cout );
+//  std::cout << "AFTER" << std::endl;
 
   assert (ItemLength + 4 == Size() );
 
@@ -296,6 +296,55 @@ void PresentationDataValue::MyInit2(File const &file)
   std::ofstream b( "/tmp/debug1" );
   ds.Write<ImplicitDataElement,SwapperNoOp>( b );
   b.close();
+}
+
+void PresentationDataValue::MyInit3()
+{
+  DS.Clear();
+  DataSet &ds = DS;
+  DataElement de( Tag(0x0,0x2) );
+  de.SetVR( VR::UI );
+  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
+  std::string suid = uid;
+  suid.push_back( ' ' ); // no \0 !
+  de.SetByteValue( suid.c_str(), suid.size()  );
+  ds.Insert( de );
+    {
+    gdcm::Attribute<0x0,0x100> at = { 32816 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x120> at = { 1 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x800> at = { 257 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x900> at = { 0 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x0> at = { 0 };
+    unsigned int glen = ds.GetLength<ImplicitDataElement>();
+    assert( (glen % 2) == 0 );
+    at.SetValue( glen );
+    ds.Insert( at.GetAsDataElement() );
+    }
+
+  MessageHeader = 3;
+  ItemLength = Size() - 4;
+  assert (ItemLength + 4 == Size() );
+}
+
+void PresentationDataValue::Print(std::ostream &os) const
+{
+  os << "ItemLength: " << ItemLength << std::endl;
+  os << "PresentationContextID: " << (int)PresentationContextID << std::endl;
+  os << "DataSet:" << std::endl;
+  DS.Print( os );
+  os << "MessageHeader: " << (int)MessageHeader << std::endl;
 }
 
 } // end namespace network
