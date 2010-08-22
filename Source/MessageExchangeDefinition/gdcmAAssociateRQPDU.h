@@ -47,6 +47,8 @@ public:
   void SetCallingAETitle(const char callingaetitle[16]);
   const char *GetCallingAETitle() const { return CallingAETitle; }
 
+  void Print(std::ostream &os) const;
+
 private:
   // 1 PDU-type 01H
   static const uint8_t ItemType; // PDUType ?

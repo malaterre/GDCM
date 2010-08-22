@@ -49,6 +49,7 @@ public:
     assert( !V.empty() && i < V.size() );
     return V[i];
   }
+  void Print(std::ostream &os) const;
 
 private:
   static const uint8_t ItemType; // PDUType ?

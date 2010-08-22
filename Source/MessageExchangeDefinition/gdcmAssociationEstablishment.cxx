@@ -47,7 +47,9 @@ std::iostream &AssociationEstablishment::Run(std::iostream &ios)
   gdcm::network::AAssociateRQPDU cecho;
   //cecho.SetCallingAETitle( "ECHOSCU" );
   cecho.SetCallingAETitle( "ACME1" );
-  cecho.SetCalledAETitle( "ACME_STORE" );
+  //cecho.SetCallingAETitle( "MI2B2" );
+  //cecho.SetCalledAETitle( "ACME_STORE" );
+  cecho.SetCalledAETitle( "MI2B2" );
 
   gdcm::network::PresentationContext pc;
   gdcm::network::AbstractSyntax as;

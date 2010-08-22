@@ -45,6 +45,7 @@ public:
 
   void MyInit(File const &file);
   void MyInit2(File const &file);
+  void MyInit3();
 
   uint8_t GetPresentationContextID() const { return PresentationContextID; }
   void SetPresentationContextID(uint8_t id) {
@@ -53,6 +54,7 @@ public:
   void SetMessageHeader(uint8_t messageheader) {
     MessageHeader = messageheader;
   }
+  void Print(std::ostream &os) const;
 
 private:
   uint32_t ItemLength;

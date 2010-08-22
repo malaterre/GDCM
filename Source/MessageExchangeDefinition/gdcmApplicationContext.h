@@ -42,6 +42,7 @@ public:
   size_t Size() const;
 
   //static const uint8_t GetItemType() { return ItemType; }
+  void Print(std::ostream &os) const;
 
 private:
   void UpdateName( const char *name );

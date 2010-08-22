@@ -25,7 +25,8 @@ const uint32_t AReleaseRPPDU::Reserved7_10 = 0x0;
 
 AReleaseRPPDU::AReleaseRPPDU()
 {
-  ItemLength = 0; // PDU Length
+  ItemLength = Size() - 6; // PDU Length
+  assert( ItemLength + 6 == Size() );
 }
 
 std::istream &AReleaseRPPDU::Read(std::istream &is)
@@ -41,6 +42,8 @@ std::istream &AReleaseRPPDU::Read(std::istream &is)
   ItemLength = itemlength;
   uint32_t reserved7_10;
   is.read( (char*)&reserved7_10, sizeof(Reserved7_10) );
+
+  assert( ItemLength + 6 == Size() );
   return is;
 }
 
@@ -53,7 +56,20 @@ const std::ostream &AReleaseRPPDU::Write(std::ostream &os) const
   os.write( (char*)&copy, sizeof(ItemLength) );
   os.write( (char*)&Reserved7_10, sizeof(Reserved7_10) );
 
+  assert( ItemLength + 6 == Size() );
+
   return os;
+}
+
+size_t AReleaseRPPDU::Size() const
+{
+  size_t ret = 0;
+  ret += sizeof(ItemType);
+  ret += sizeof(Reserved2);
+  ret += sizeof(ItemLength); // len of
+  ret += sizeof(Reserved7_10);
+
+  return ret;
 }
 
 } // end namespace network

@@ -189,5 +189,30 @@ void AAssociateRQPDU::SetCallingAETitle(const char callingaetitle[16])
   // FIXME cannot set to only whitespaces
 }
 
+void AAssociateRQPDU::Print(std::ostream &os) const
+{
+  //static const uint8_t ItemType; // PDUType ?
+  //static const uint8_t Reserved2;
+  //uint32_t ItemLength; // PDU Length
+  //static const uint16_t ProtocolVersion;
+  //static const uint16_t Reserved9_10;
+  //char CalledAETitle[16];
+  //char CallingAETitle[16];
+  //static const uint8_t Reserved43_74[32]; // { 0 }
+  os << "ApplicationContext: ";
+  AppContext.Print( os );
+  os << std::endl;
+  //std::vector<PresentationContext> PresContext;
+  os << "PresentationContext(s): ";
+  std::vector<PresentationContext>::const_iterator it = PresContext.begin();
+  for( ; it != PresContext.end(); ++it)
+    {
+    it->Print( os << std::endl );
+    }
+  os << "UserInformation: ";
+  UserInfo.Print( os );
+  os << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm

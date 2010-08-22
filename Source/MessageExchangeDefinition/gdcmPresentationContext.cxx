@@ -135,5 +135,17 @@ void PresentationContext::SetPresentationContextID( uint8_t id )
   ID = id;
 }
 
+void PresentationContext::Print(std::ostream &os) const
+{
+  //static const uint8_t ItemType;
+  //static const uint8_t Reserved2;
+  os << "ItemLength: " << ItemLength << std::endl; // len of last transfer syntax
+  os << "PresentationContextID: " << (int)ID << std::endl;
+  //static const uint8_t Reserved6;
+  //static const uint8_t Reserved7;
+  //static const uint8_t Reserved8;
+
+}
+
 } // end namespace network
 } // end namespace gdcm

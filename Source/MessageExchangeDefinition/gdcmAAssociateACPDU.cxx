@@ -111,7 +111,8 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   os.write( calling, 16 );
 
   //os.write( (char*)&Reserved27_42, sizeof(Reserved27_42) );
-  const char called[] = "STORESCU        ";
+  //const char called[] = "STORESCU        ";
+  const char called[] = "ECHOSCU        ";
   os.write( called, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
