@@ -99,7 +99,19 @@ std::istream &PresentationDataValue::Read(std::istream &is)
     delete buf;
 
     }
-  else 
+  else if ( MessageHeader == 0 )
+    {
+    //assert( 0 );
+    char *buf = new char[ ItemLength - 2 ];
+    is.read( buf, ItemLength - 2 );
+
+    std::ofstream bug( "/tmp/msg0-1" );
+    bug.write( buf, ItemLength - 2 );
+    bug.close();
+
+    delete buf;
+    }
+  else
     {
     assert( 0 );
     }

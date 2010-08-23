@@ -51,6 +51,9 @@ public:
   void SetPresentationContextID(uint8_t id) {
     PresentationContextID = id;
   }
+  uint8_t GetMessageHeader() const {
+    return MessageHeader;
+  }
   void SetMessageHeader(uint8_t messageheader) {
     MessageHeader = messageheader;
   }
