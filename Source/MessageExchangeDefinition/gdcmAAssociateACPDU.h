@@ -42,6 +42,15 @@ public:
 
   void AddPresentationContextAC( PresentationContextAC const &pcac );
 
+  const PresentationContextAC &GetPresentationContextAC( unsigned int i ) {
+    assert( !PresContextAC.empty() && i < PresContextAC.size() );
+    return PresContextAC[i];
+  }
+  typedef std::vector<PresentationContextAC>::size_type SizeType;
+  SizeType GetNumberOfPresentationContextAC() const {
+    return PresContextAC.size();
+  }
+
   size_t Size() const;
 
   void Print(std::ostream &os) const;

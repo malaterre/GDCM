@@ -60,9 +60,9 @@ AAbortPDU::AAbortPDU()
 
 std::istream &AAbortPDU::Read(std::istream &is)
 {
-  uint8_t itemtype = 0;
-  is.read( (char*)&itemtype, sizeof(ItemType) );
-  assert( itemtype == ItemType );
+  //uint8_t itemtype = 0;
+  //is.read( (char*)&itemtype, sizeof(ItemType) );
+  //assert( itemtype == ItemType );
   uint8_t reserved2 = 0;
   is.read( (char*)&reserved2, sizeof(Reserved2) );
   uint32_t itemlength = ItemLength;

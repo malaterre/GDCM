@@ -32,6 +32,7 @@ std::iostream &AssociationRelease::Run(std::iostream &ios)
   // send release:
   gdcm::network::AReleaseRQPDU rel;
   rel.Write( ios );
+  //ios.flush();
 
   return ios;
 }

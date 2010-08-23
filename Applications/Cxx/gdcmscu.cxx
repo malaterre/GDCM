@@ -23,6 +23,7 @@
 #include "gdcmAAssociateRJPDU.h"
 #include "gdcmAssociationEstablishment.h"
 #include "gdcmDataTransfer.h"
+#include "gdcmAttribute.h"
 #include "gdcmAssociationRelease.h"
 
 #include <fstream>
@@ -45,95 +46,14 @@ void CEcho( const char *remote, int portno )
 
   gdcm::network::DataTransfer dt;
   dt.Run(e);
+  e.flush();
 
   gdcm::network::AssociationRelease ar;
   ar.Run(e);
 
 }
 
-static void process_input(iosockinet& sio)
-{
-  gdcm::network::AAssociateRQPDU rqpdu;
-  rqpdu.SetCallingAETitle( "ECHOSCU" );
-  rqpdu.Read( sio );
-  rqpdu.Print( std::cout );
-
-  std::cout << "done AAssociateRQPDU !" << std::endl;
-
-  gdcm::network::TransferSyntax_ ts;
-  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-
-  gdcm::network::PresentationContextAC pcac;
-  pcac.SetTransferSyntax( ts );
-
-  gdcm::network::AAssociateACPDU acpdu;
-  acpdu.AddPresentationContextAC( pcac );
-  acpdu.Write( sio );
-  sio.flush();
-  std::cout << "done AAssociateACPDU!" << std::endl;
-
-  {
-  gdcm::network::PDataTFPDU pdata;
-  pdata.Read( sio );
-  pdata.Print( std::cout );
-  }
-
-  std::cout << "done PDataTFPDU 1!" << std::endl;
-
-//  {
-//  gdcm::network::PDataTFPDU pdata;
-//  pdata.Read( sio );
-//  pdata.Print( std::cout );
-//  }
-//
-//  std::cout << "done PDataTFPDU 1 (bis)!" << std::endl;
-
-  gdcm::network::PDataTFPDU pdata2;
-  gdcm::network::PresentationDataValue pdv;
-  pdv.MyInit3();
-  pdata2.AddPresentationDataValue( pdv );
-  pdata2.Write( sio );
-  sio.flush();
-
-  std::cout << "done PDataTFPDU 2!" << std::endl;
-
-  gdcm::network::AReleaseRQPDU rel;
-  rel.Read( sio );
-
-  std::cout << "done AReleaseRQPDU " << std::endl;
-
-  gdcm::network::AReleaseRPPDU rel2;
-  rel2.Write( sio );
-  sio.flush();
-}
-
-// Execute like this:
-// ./bin/gdcmscu www.dicomserver.co.uk 11112 server
-void CEchoServer( int portno )
-{
-  /*
-  echo server (protocol::tcp);
-  server->serve_clients ( portno );
-  */
-
-  sockinetbuf sin (sockbuf::sock_stream);
-
-  //sin.bind( );
-  sin.bind( portno );
-
-  std::cout << "localhost = " << sin.localhost() << std::endl
-    << "localport = " << sin.localport() << std::endl;
-
-  sin.listen();
-
-  for(;;)
-    {
-    iosockinet s (sin.accept());
-    process_input(s);
-    }
-}
-
-void CStore( const char *remote, int portno )
+void CStore( const char *remote, int portno, std::string const & filename )
 {
   echo e(protocol::tcp);
 
@@ -244,11 +164,26 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   cstore.Write(e);
   e.flush();
 
+  uint8_t itemtype = 0;
+  e.read( (char*)&itemtype, 1 );
   gdcm::network::AAssociateACPDU acpdu;
-  acpdu.Read( e );
+  switch ( itemtype )
+    {
+  case 0x2:
+    acpdu.Read( e );
+    break;
+  default:
+    assert( 0 );
+    throw "Unimplemented";
+    }
+
+  gdcm::network::AAssociateACPDU::SizeType s = acpdu.GetNumberOfPresentationContextAC();
+  std::cout << "BEGIN AAssociateACPDU: " << std::endl;
+  acpdu.Print( std::cout );
+  std::cout << "END AAssociateACPDU: " << std::endl;
 
   gdcm::Reader r;
-  r.SetFileName( "/tmp/send3.dcm" );
+  r.SetFileName( "/tmp/send3.dcm" ); // FIXME: use 'filename'
   r.Read();
 
   {
@@ -276,41 +211,21 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
   }
   std::cout << "done PDataTFPDU 2!" << std::endl;
 
-//  {
-//  gdcm::network::PresentationDataValue pdv;
-//  pdv.SetPresentationContextID( 197 );
-//  pdv.MyInit( r.GetFile() );
-//
-//  gdcm::network::PDataTFPDU pdata;
-//  pdata.AddPresentationDataValue( pdv );
-//  pdata.Write( e );
-//  e.flush();
-//  }
-
-  // listen back
-  //gdcm::network::AAbortPDU ab;
-  //ab.Read( e );
-
-  //ab.Print( std::cout );
-
   gdcm::network::PDataTFPDU pdata3;
   pdata3.Read( e );
-//
-//  // Print output DataSet:
-//  pdata3.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
-//
-//  // send release:
-//  gdcm::network::AReleaseRQPDU rel;
-//  rel.Write( e );
+  pdata3.Print( std::cout );
+
+  gdcm::network::AssociationRelease ar;
+  ar.Run(e);
 
 }
 
-static void process_input2(iosockinet& sio)
+static void process_input(iosockinet& sio)
 {
   gdcm::network::AAssociateRQPDU rqpdu;
   rqpdu.SetCallingAETitle( "STORESCU" );
   rqpdu.Read( sio );
-  rqpdu.Print( std::cout );
+  //rqpdu.Print( std::cout );
 
   std::cout << "done AAssociateRQPDU !" << std::endl;
 
@@ -344,7 +259,7 @@ static void process_input2(iosockinet& sio)
 
   gdcm::network::PDataTFPDU pdata;
   pdata.Read( sio );
-  pdata.Print( std::cout );
+  //pdata.Print( std::cout );
   // pick the first one:
   gdcm::network::PresentationDataValue const &input_pdv = pdata.GetPresentationDataValue(0);
 
@@ -354,38 +269,79 @@ static void process_input2(iosockinet& sio)
   messageheader = input_pdv.GetMessageHeader();
 
   std::cout << "Start with MessageHeader : " << (int)messageheader << std::endl;
+  //input_pdv.GetDataSet().Print (std::cout);
 
-  int i = 0;
-  do
+  gdcm::Attribute<0x0,0x800> at = { 0 };
+  at.SetFromDataSet( input_pdv.GetDataSet() );
+  unsigned short commanddatasettype = at.GetValue();
+  std::cout << "CommandDataSetType: " << at.GetValue() << std::endl;
+  assert( messageheader == 3 );
+
+  // C-STORE
+  if( commanddatasettype == 1 )
+    {
+    std::ofstream out( "/tmp/storescu.dcm" );
+    int i = 0;
+    do
+      {
+      gdcm::network::PDataTFPDU pdata2;
+      pdata2.ReadInto( sio, out );
+      //pdata2.Print( std::cout );
+      gdcm::network::PresentationDataValue const &pdv = pdata2.GetPresentationDataValue(0);
+      messageheader = pdv.GetMessageHeader();
+      std::cout << "---------------- done PDataTFPDU: " << i << std::endl;
+      std::cout << "---------------- done MessageHeader: " << (int)messageheader << std::endl;
+      ++i;
+      }
+    while( messageheader == 0 );
+    assert( messageheader == 2 ); // end of data
+
+    //gdcm::network::PDataTFPDU pdata3;
+    //pdata3.ReadInto( sio, out );
+    //pdata3.Print( std::cout );
+    //gdcm::network::PresentationDataValue const &pdv3 = pdata3.GetPresentationDataValue(0);
+    //messageheader = pdv3.GetMessageHeader();
+    //std::cout << "---------------- done PDataTFPDU: " << i << std::endl;
+    //std::cout << "---------------- done MessageHeader: " << (int)messageheader << std::endl;
+
+    out.close();
+
+    gdcm::network::PresentationDataValue pdv;
+    pdv.SetPresentationContextID( input_pdv.GetPresentationContextID() );
+    gdcm::File f;
+    pdv.MyInit2( f );
+
+    //std::cout << "Compare:" << std::endl;
+    //input_pdv.Print( std::cout );
+    //std::cout << "To:" << std::endl;
+    //pdv.Print( std::cout );
+
+    gdcm::network::PDataTFPDU pdata4;
+    pdata4.AddPresentationDataValue( pdv );
+    pdata4.Write( sio );
+
+    }
+  // C-ECHO
+  else if( commanddatasettype == 257 )
     {
     gdcm::network::PDataTFPDU pdata2;
-    pdata2.Read( sio );
-    pdata2.Print( std::cout );
-    gdcm::network::PresentationDataValue const &pdv = pdata2.GetPresentationDataValue(0);
-    messageheader = pdv.GetMessageHeader();
-    std::cout << "---------------- done PDataTFPDU: " << i << std::endl;
-    std::cout << "---------------- done MessageHeader: " << (int)messageheader << std::endl;
-    ++i;
+    gdcm::network::PresentationDataValue pdv;
+    pdv.MyInit3();
+    pdata2.AddPresentationDataValue( pdv );
+    pdata2.Write( sio );
+    sio.flush();
+
     }
-  while( messageheader == 0 );
+  else 
+    {
+    assert( 0 );
+    }
 
-  gdcm::network::PresentationDataValue pdv;
-  pdv.SetPresentationContextID( input_pdv.GetPresentationContextID() );
-  gdcm::File f;
-  pdv.MyInit2( f );
-
-  std::cout << "Compare:" << std::endl;
-  input_pdv.Print( std::cout );
-  std::cout << "To:" << std::endl;
-  pdv.Print( std::cout );
-
-  gdcm::network::PDataTFPDU pdata3;
-  pdata3.AddPresentationDataValue( pdv );
-  pdata3.Write( sio );
 
   // send release:
   gdcm::network::AReleaseRPPDU rel;
   rel.Write( sio );
+  sio.flush();
 
   std::cout << "done AReleaseRPPDU!" << std::endl;
 
@@ -409,7 +365,7 @@ void CStoreServer( int portno )
   for(;;)
     {
     iosockinet s (sin.accept());
-    process_input2(s);
+    process_input(s);
     }
 }
 
@@ -431,13 +387,16 @@ int main(int argc, char *argv[])
 
   if ( mode == "server" )
     {
-    //CEchoServer( portno );
     CStoreServer( portno );
+    }
+  else if ( mode == "echo" )
+    {
+    CEcho( argv[1], portno );
     }
   else
     {
-    //CEcho( argv[1], portno );
-    CStore( argv[1], portno );
+    // mode == filename
+    CStore( argv[1], portno, mode );
     }
   return 0;
 }

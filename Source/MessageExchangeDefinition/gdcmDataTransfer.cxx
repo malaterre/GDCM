@@ -39,6 +39,11 @@ std::iostream &DataTransfer::Run(std::iostream &ios)
   pdata.Write( ios );
   ios.flush();
 
+  // listen back
+  gdcm::network::PDataTFPDU pdata2;
+  pdata2.Read( ios );
+  pdata2.Print( std::cout );
+
   return ios;
 }
 

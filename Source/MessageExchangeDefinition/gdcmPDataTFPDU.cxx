@@ -54,6 +54,32 @@ std::istream &PDataTFPDU::Read(std::istream &is)
   return is;
 }
 
+std::istream &PDataTFPDU::ReadInto(std::istream &is, std::ostream &os)
+{
+  uint8_t itemtype = 0;
+  is.read( (char*)&itemtype, sizeof(ItemType) );
+  assert( itemtype == ItemType );
+  uint8_t reserved2 = 0;
+  is.read( (char*)&reserved2, sizeof(Reserved2) );
+  uint32_t itemlength = ItemLength;
+  is.read( (char*)&itemlength, sizeof(ItemLength) );
+  SwapperDoOp::SwapArray(&itemlength,1);
+  ItemLength = itemlength;
+
+  size_t curlen = 0;
+  while( curlen < ItemLength )
+    {
+    PresentationDataValue pdv;
+    pdv.ReadInto( is, os );
+    V.push_back( pdv );
+    curlen += pdv.Size();
+    }
+  assert( curlen == ItemLength );
+  assert( (ItemLength + 4 + 1 + 1) == Size() );
+
+  return is;
+}
+
 const std::ostream &PDataTFPDU::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
