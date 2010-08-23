@@ -120,6 +120,59 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   return is;
 }
 
+std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os)
+{
+  uint32_t itemlength = ItemLength;
+  is.read( (char*)&itemlength, sizeof(ItemLength) );
+  SwapperDoOp::SwapArray(&itemlength,1);
+  ItemLength = itemlength;
+  is.read( (char*)&PresentationContextID, sizeof(PresentationContextID) );
+  
+  uint8_t mh;
+  is.read( (char*)&mh, 1 );
+  //assert( mh == 0 ); // bitwise stuff...
+  MessageHeader = mh;
+
+  DS.Clear();
+//  if( MessageHeader ==  3 )
+//    {
+//    DataSet &ds = DS;
+//    VL vl = ItemLength - 2;
+//    ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
+//
+//    //ds.Print( std::cout );
+//
+//    VL debug = DS.GetLength<ImplicitDataElement>();
+//    assert( debug == vl );
+//    }
+//  else if ( MessageHeader == 2 )
+//    {
+//    char *buf = new char[ ItemLength - 2 ];
+//    is.read( buf, ItemLength - 2 );
+//
+//    std::ofstream bug( "/tmp/bug1" );
+//    bug.write( buf, ItemLength - 2 );
+//    bug.close();
+//
+//    delete buf;
+//    }
+//  else if ( MessageHeader == 0 )
+    {
+    char *buf = new char[ ItemLength - 2 ];
+    is.read( buf, ItemLength - 2 );
+    os.write( buf, ItemLength - 2 );
+
+    delete buf;
+    }
+//  else
+//    {
+//    assert( 0 );
+//    }
+
+  assert (ItemLength + 4 == Size() );
+  return is;
+}
+
 const std::ostream &PresentationDataValue::Write(std::ostream &os) const
 {
   uint32_t copy = ItemLength;
@@ -128,7 +181,7 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   os.write( (char*)&PresentationContextID, sizeof(PresentationContextID) );
 
   uint8_t t = MessageHeader;
-  t = 3; // E.2 MESSAGE CONTROL HEADER ENCODING
+  //t = 3; // E.2 MESSAGE CONTROL HEADER ENCODING
   os.write( (char*)&t, 1 );
 
   //std::ofstream b("/tmp/debug");

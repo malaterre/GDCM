@@ -36,6 +36,7 @@ class PDataTFPDU
 public:
   PDataTFPDU();
   std::istream &Read(std::istream &is);
+  std::istream &ReadInto(std::istream &is, std::ostream &os);
   const std::ostream &Write(std::ostream &os) const;
 
   /// \internal Compute Size

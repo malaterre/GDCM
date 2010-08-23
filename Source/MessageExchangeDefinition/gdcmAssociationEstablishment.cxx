@@ -83,24 +83,27 @@ std::iostream &AssociationEstablishment::Run(std::iostream &ios)
       return ios; // idle 
       }
     break;
+  default:
+    assert( 0 );
+    throw "Unimplemented";
     }
 
-  gdcm::network::PDataTFPDU pdata;
-  gdcm::network::PresentationDataValue pdv;
-  pdata.AddPresentationDataValue( pdv );
-  pdata.Write( ios );
-  ios.flush();
+  //gdcm::network::PDataTFPDU pdata;
+  //gdcm::network::PresentationDataValue pdv;
+  //pdata.AddPresentationDataValue( pdv );
+  //pdata.Write( ios );
+  //ios.flush();
 
-  // listen back
-  gdcm::network::PDataTFPDU pdata2;
-  pdata2.Read( ios );
+  //// listen back
+  //gdcm::network::PDataTFPDU pdata2;
+  //pdata2.Read( ios );
 
-  // Print output DataSet:
-  pdata2.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
+  //// Print output DataSet:
+  //pdata2.GetPresentationDataValue(0).GetDataSet().Print( std::cout );
 
-  // send release:
-  gdcm::network::AReleaseRQPDU rel;
-  rel.Write( ios );
+  //// send release:
+  //gdcm::network::AReleaseRQPDU rel;
+  //rel.Write( ios );
 
   return ios;
 }
