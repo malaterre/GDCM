@@ -385,15 +385,15 @@ int main(int argc, char *argv[])
     mode = argv[3];
     }
 
-  if ( mode == "server" )
+  if ( mode == "server" ) // C-STORE SCP
     {
     CStoreServer( portno );
     }
-  else if ( mode == "echo" )
+  else if ( mode == "echo" ) // C-ECHO SCU
     {
     CEcho( argv[1], portno );
     }
-  else
+  else // C-STORE SCU
     {
     // mode == filename
     CStore( argv[1], portno, mode );
