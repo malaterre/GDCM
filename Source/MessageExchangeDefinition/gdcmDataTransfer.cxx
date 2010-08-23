@@ -13,7 +13,6 @@
 
 =========================================================================*/
 #include "gdcmDataTransfer.h"
-//#include "gdcmSwapper.h"
 #include "gdcmPDataTFPDU.h"
 
 namespace gdcm

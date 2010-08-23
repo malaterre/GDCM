@@ -72,11 +72,21 @@ static void process_input(iosockinet& sio)
   sio.flush();
   std::cout << "done AAssociateACPDU!" << std::endl;
 
+  {
   gdcm::network::PDataTFPDU pdata;
   pdata.Read( sio );
   pdata.Print( std::cout );
+  }
 
   std::cout << "done PDataTFPDU 1!" << std::endl;
+
+//  {
+//  gdcm::network::PDataTFPDU pdata;
+//  pdata.Read( sio );
+//  pdata.Print( std::cout );
+//  }
+//
+//  std::cout << "done PDataTFPDU 1 (bis)!" << std::endl;
 
   gdcm::network::PDataTFPDU pdata2;
   gdcm::network::PresentationDataValue pdv;
@@ -107,19 +117,19 @@ void CEchoServer( int portno )
   */
 
   sockinetbuf sin (sockbuf::sock_stream);
-    
+
   //sin.bind( );
   sin.bind( portno );
-    
+
   std::cout << "localhost = " << sin.localhost() << std::endl
-       << "localport = " << sin.localport() << std::endl;
-    
+    << "localport = " << sin.localport() << std::endl;
+
   sin.listen();
-    
+
   for(;;)
     {
-      iosockinet s (sin.accept());
-      process_input(s);
+    iosockinet s (sin.accept());
+    process_input(s);
     }
 }
 
@@ -340,11 +350,24 @@ static void process_input2(iosockinet& sio)
 
   std::cout << "done PDataTFPDU 1!" << std::endl;
 
-  gdcm::network::PDataTFPDU pdata2;
-  pdata2.Read( sio );
-  pdata2.Print( std::cout );
+  uint8_t messageheader;
+  messageheader = input_pdv.GetMessageHeader();
 
-  std::cout << "done PDataTFPDU 2!" << std::endl;
+  std::cout << "Start with MessageHeader : " << (int)messageheader << std::endl;
+
+  int i = 0;
+  do
+    {
+    gdcm::network::PDataTFPDU pdata2;
+    pdata2.Read( sio );
+    pdata2.Print( std::cout );
+    gdcm::network::PresentationDataValue const &pdv = pdata2.GetPresentationDataValue(0);
+    messageheader = pdv.GetMessageHeader();
+    std::cout << "---------------- done PDataTFPDU: " << i << std::endl;
+    std::cout << "---------------- done MessageHeader: " << (int)messageheader << std::endl;
+    ++i;
+    }
+  while( messageheader == 0 );
 
   gdcm::network::PresentationDataValue pdv;
   pdv.SetPresentationContextID( input_pdv.GetPresentationContextID() );
@@ -374,15 +397,15 @@ static void process_input2(iosockinet& sio)
 void CStoreServer( int portno )
 {
   sockinetbuf sin (sockbuf::sock_stream);
- 
+
   //sin.bind( );
   sin.bind( portno );
-    
+
   std::cout << "localhost = " << sin.localhost() << std::endl
-       << "localport = " << sin.localport() << std::endl;
-    
+    << "localport = " << sin.localport() << std::endl;
+
   sin.listen();
-    
+
   for(;;)
     {
     iosockinet s (sin.accept());
