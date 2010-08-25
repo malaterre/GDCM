@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
   anon.SetFile( file );
 
   gdcm::MediaStorage ms = gdcm::MediaStorage::RawDataStorage;
-  
+
   gdcm::UIDGenerator gen;
   anon.Replace( gdcm::Tag(0x0008,0x16), ms.GetString() );
   std::cout << ms.GetString() << std::endl;
@@ -78,4 +78,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

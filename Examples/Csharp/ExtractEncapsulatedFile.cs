@@ -14,11 +14,11 @@
 =========================================================================*/
 
 /*
- * This example shows how one from C# context can extract a binary blob 
+ * This example shows how one from C# context can extract a binary blob
  * and write out as a file.
  * This example is meant for pdf encapsulated file, but can be adapted for other type
  * of binary blob.
- * 
+ *
  * DICOM file is:
  * ...
  * (0042,0010) ST (no value available)                     #   0, 0 DocumentTitle
@@ -26,7 +26,7 @@
  * (0042,0012) LO [application/pdf]                        #  16, 1 MIMETypeOfEncapsulatedDocument
  * ...
  *
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/ExtractEncapsulatedFile.exe some_pdf_encapsulated.dcm
  */
@@ -70,8 +70,7 @@ public class ExtractEncapsulatedFile
       writer.Write( encapsulated_stream );
       }
 
-    
+
     return 0;
     }
 }
-

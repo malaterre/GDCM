@@ -12,10 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * http://www.w3.org/Graphics/PNG/inline-alpha.html
  * alphatest.png: PNG image data, 380 x 287, 8-bit/color RGBA, non-interlaced
- * 
+ *
  * $ convert alphatest.png alphatest.rgba
  */
 
@@ -71,4 +71,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

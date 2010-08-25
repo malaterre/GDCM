@@ -485,10 +485,10 @@ adFlipAngleDegree[0]                     = 30
 One can find it also in the protocol:
 
 ...
-      <ParamFunctor.""T1mapFunctor""> 
+      <ParamFunctor.""T1mapFunctor"">
       {
-        <Class> ""T1mapFunctor@IceImagePostProcFunctors"" 
-        
+        <Class> ""T1mapFunctor@IceImagePostProcFunctors""
+
         <ParamBool.""EXECUTE"">  { }
         <ParamDouble.""Flip1_deg"">  { <Precision> 16  14.7378520000000000  }
 ...
@@ -508,4 +508,3 @@ One can find it also in the protocol:
 
   return 0;
 }
-

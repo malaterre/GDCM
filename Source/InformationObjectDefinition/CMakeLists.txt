@@ -25,7 +25,7 @@ SET(IOD_SRCS
 # expat stuff
 IF(NOT BUILD_SHARED_LIBS)
   SET_SOURCE_FILES_PROPERTIES(gdcmTableReader.cxx
-                              PROPERTIES 
+                              PROPERTIES
                               COMPILE_FLAGS -DXML_STATIC
                               )
 ENDIF(NOT BUILD_SHARED_LIBS)
@@ -88,4 +88,3 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/gdcmTables.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/gdcmTables.h"
   )
-

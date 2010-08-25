@@ -32,4 +32,3 @@ Tag="(0028,0103)" Attribute="Pixel Representation" Type="1" Description="Data re
 	<Required "if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR. See C.7.6.3.1.5 for further explanation."/>
 </Entry>
 </Table>
-

@@ -23,7 +23,7 @@ Footnote:
   the issues to recreate a MultiframeGrayscaleByteSecondaryCaptureImageStorage file.
   e.g:
 
-  python ManipulateFile.py Insight/Testing/Temporary/itkGDCMImageIOTest5-j2k.dcm manipulated.dcm 
+  python ManipulateFile.py Insight/Testing/Temporary/itkGDCMImageIOTest5-j2k.dcm manipulated.dcm
 """
 
 import sys
@@ -38,7 +38,7 @@ if __name__ == "__main__":
   r.SetFileName( file1 )
   if not r.Read():
     sys.exit(1)
-  
+
   ano = gdcm.Anonymizer()
   ano.SetFile( r.GetFile() )
   ano.RemovePrivateTags()
@@ -81,24 +81,24 @@ if __name__ == "__main__":
   ano.Remove( gdcm.Tag(0x0018,0x0088) ) # SpacingBetweenSlices
   ano.Remove( gdcm.Tag(0x0018,0x0091) ) # EchoTrainLength
   ano.Remove( gdcm.Tag(0x0018,0x1164) ) # ImagerPixelSpacing
-  
+
   ano.Remove( gdcm.Tag(0x0020,0x0032) ) # Image Position (Patient)
   ano.Remove( gdcm.Tag(0x0020,0x0037) ) # Image Orientation (Patient)
   ano.Remove( gdcm.Tag(0x0020,0x0052) ) # Frame of Reference UID
   ano.Remove( gdcm.Tag(0x0020,0x1040) ) # Position Reference Indicator
-  
+
   ano.Replace( gdcm.Tag(0x0028,0x0301), "NO" ) # Burned In Annotation
-  
+
   ano.Empty( gdcm.Tag(0x0020,0x0020) )
-  
+
   ano.Remove( gdcm.Tag(0x7fe0,0x0000) )
-  
+
   #ano.Empty( gdcm.Tag(0x0028,0x0009) ) # Frame Increment Pointer
-  
+
   #ano.Empty( gdcm.Tag(0x0028,0x1052) )  #<entry group="0028" element="1052" vr="DS" vm="1" name="Rescale Intercept"/>
   #ano.Empty( gdcm.Tag(0x0028,0x1053) )  #<entry group="0028" element="1053" vr="DS" vm="1" name="Rescale Slope"/>
   #ano.Replace( gdcm.Tag(0x0028,0x1054), "US" )  #<entry group="0028" element="1054" vr="LO" vm="1" name="Rescale Type"/>
-  
+
   ano.Replace( gdcm.Tag(0x2050, 0x0020), "IDENTITY")
   """
 
@@ -107,4 +107,3 @@ if __name__ == "__main__":
   w.SetFileName( file2 )
   if not w.Write():
     sys.exit(1)
- 

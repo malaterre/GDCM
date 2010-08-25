@@ -90,4 +90,3 @@ elif sys.platform.find('linux')>-1:
    s.close()
    dsp.write(data)
    dsp.close()
-

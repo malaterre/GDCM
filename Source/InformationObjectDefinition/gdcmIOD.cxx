@@ -51,4 +51,3 @@ Type IOD::GetTypeFromTag(const Defs &defs, const Tag& tag) const
 }
 
 }
-

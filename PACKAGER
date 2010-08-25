@@ -13,7 +13,7 @@ GDCM_DOCUMENTATION:BOOL=ON
 
 You should really consider:
 GDCM_BUILD_TESTING:BOOL=OFF
-Otherwise it build extra code only needed to run the unit test of gdcm... 
+Otherwise it build extra code only needed to run the unit test of gdcm...
 
 unless you have some specific compiler optimization technique you should use the cmake default one:
 CMAKE_BUILD_TYPE:STRING=Release
@@ -45,4 +45,3 @@ Examples:
 GDCM comes with some examples for user, but setting the following:
 GDCM_BUILD_EXAMPLES:BOOL=ON
 will not do anything since there is no install rule for examples...
-

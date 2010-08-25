@@ -39,7 +39,7 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
   static const gdcm::Dicts &dicts = g.GetDicts();
   static const gdcm::Dict &pubdict = dicts.GetPublicDict();
   static size_t countglobal = 0;
-  static std::vector<gdcm::Tag> balcptags = 
+  static std::vector<gdcm::Tag> balcptags =
     gdcm::Anonymizer::GetBasicApplicationLevelConfidentialityProfileAttributes();
   size_t count = countglobal % balcptags.size();
 
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
   using gdcm::VR;
   const char *outfilename = argv[1];
 
-  std::vector<gdcm::Tag> balcptags = 
+  std::vector<gdcm::Tag> balcptags =
     gdcm::Anonymizer::GetBasicApplicationLevelConfidentialityProfileAttributes();
 
   gdcm::Writer w;
@@ -183,4 +183,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

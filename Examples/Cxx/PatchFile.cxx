@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * The image was a broken file where the Pixel Data element was 8 times too big
  * Apparently multiplying the BitsAllocated to 4 and multiplying the number of
  * frames by 2 would solve the problem
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
   // (0028,0100) US 16                                       #   2, 1 BitsAllocated
   // (0028,0101) US 16                                       #   2, 1 BitsStored
   // (0028,0102) US 15                                       #   2, 1 HighBit
-  // 
+  //
     {
     gdcm::Attribute<0x28,0x100> at;
     at.SetFromDataElement( ds.GetDataElement( at.GetTag() ) );
@@ -115,4 +115,3 @@ int main(int argc, char *argv[])
   image.Print( std::cout );
   return 0;
 }
-

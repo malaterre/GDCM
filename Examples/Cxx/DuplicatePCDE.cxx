@@ -102,7 +102,7 @@ E.g.:
 would be illegal because even though they are assigned different
 (completely arbitrary) blocks, with the same group, element
 number and private creator, (0019,3015) and (0019,3215) are the
-"same" data element. 
+"same" data element.
 
 */
 
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
       gdcm::DataElement duplicate = de;
       duplicate.GetTag().SetElement( t.GetElement() + 1 );
       dup.Insert( duplicate );
-      new_private = duplicate.GetTag();  
+      new_private = duplicate.GetTag();
       }
     else if( t.IsPrivate() && !t.IsPrivateCreator() )
       {
@@ -195,4 +195,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

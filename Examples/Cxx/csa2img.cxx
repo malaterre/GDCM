@@ -85,7 +85,7 @@ int main(int argc, char *argv [])
   //const gdcm::Image &inputimage = reader.GetImage();
 #if 1
   int dims[2];
-	const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
+  const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
   std::cout << csael << std::endl;
   const gdcm::ByteValue *bv = csael.GetByteValue();
   gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el;
@@ -93,14 +93,14 @@ int main(int argc, char *argv [])
   dims[0] = el.GetValue();
   std::cout << "Columns:" << el.GetValue() << std::endl;
 
- 	const gdcm::CSAElement &csael2 = csa.GetCSAElementByName( "Rows" );
+   const gdcm::CSAElement &csael2 = csa.GetCSAElementByName( "Rows" );
   std::cout << csael2 << std::endl;
   gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el2;
   el2.Set( csael2.GetValue() );
   dims[1] = el2.GetValue();
   std::cout << "Rows:" << el2.GetValue() << std::endl;
 
- 	const gdcm::CSAElement &csael3 = csa.GetCSAElementByName( "PixelSpacing" );
+   const gdcm::CSAElement &csael3 = csa.GetCSAElementByName( "PixelSpacing" );
   std::cout << csael3 << std::endl;
   gdcm::Element<gdcm::VR::DS, gdcm::VM::VM2> el3;
   el3.Set( csael3.GetValue() );
@@ -176,7 +176,7 @@ int main(int argc, char *argv [])
 
 
   // SliceThickness ??
- 	const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
+   const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
   std::cout << csael4 << std::endl;
   gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4;
   el4.Set( csael4.GetValue() );

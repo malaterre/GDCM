@@ -14,7 +14,7 @@
 =========================================================================*/
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/ScanDirectory.exe /path/to/gdcmData/
  */
@@ -39,9 +39,8 @@ public class ScanDirectory
     if(!b) return 1;
 
     System.Console.WriteLine( "Scan:\n" + s.toString() );
-    
+
     System.Console.WriteLine( "success" );
     return 0;
     }
 }
-

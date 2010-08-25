@@ -57,7 +57,7 @@ protected:
   // for now we will not use this info, but instead access the DataDict instead
   std::string Name;
 
-  // An attribute, encoded as a Data Element, may or may not be required in a 
+  // An attribute, encoded as a Data Element, may or may not be required in a
   // Data Set, depending on that Attribute's Data Element Type.
   Type DataElementType;
 
@@ -81,4 +81,3 @@ inline std::ostream& operator<<(std::ostream& _os, const MacroEntry &_val)
 #define GDCMMACROENTRY_H
 #include "gdcmModuleEntry.h"
 #endif
-

@@ -17,10 +17,10 @@
  * This example will take in a DICOM file, and tries to decompress it (actually write it
  * as ImplicitVRLittleEndian Transfer Syntax).
  *
- * Compilation: 
+ * Compilation:
  * $ CLASSPATH=gdcm.jar javac -source 1.5 ../../trunk/Examples/Java/DecompressPixmap.java -d .
  *
- * Usage: 
+ * Usage:
  * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java DecompressPixmap ~/Creatis/gdcmData/012345.002.050.dcm  out.dcm
  */
 import gdcm.*;
@@ -67,7 +67,6 @@ public class DecompressPixmap
       {
       throw new Exception("Could not write: " + file2 );
       }
-    
+
     }
 }
-

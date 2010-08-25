@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
- * Basic example for dealing with a DICOM file that contains an Image 
+/*
+ * Basic example for dealing with a DICOM file that contains an Image
  * (read: Pixel Data element)
  */
 
@@ -83,4 +83,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

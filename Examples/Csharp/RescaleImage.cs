@@ -14,9 +14,9 @@
 =========================================================================*/
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/DecompressImage.exe gdcmData/012345.002.050.dcm rescaled.dcm 
+ * $ mono bin/DecompressImage.exe gdcmData/012345.002.050.dcm rescaled.dcm
  */
 using System;
 using gdcm;
@@ -65,4 +65,3 @@ public class DecompressImage
     return 0;
     }
 }
-

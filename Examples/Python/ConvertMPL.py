@@ -64,7 +64,7 @@ def gdcm_to_numpy(image):
     result = numpy.frombuffer(gdcm_array, dtype=dtype).astype(float)
     ## optional gamma scaling
     #maxV = float(result[result.argmax()])
-    #result = result + .5*(maxV-result) 
+    #result = result + .5*(maxV-result)
     #result = numpy.log(result+50) ## apprx background level
     result.shape = d
     return result
@@ -88,5 +88,3 @@ if __name__ == "__main__":
   title('values')
   get_current_fig_manager().window.title('plot')
   show()
-  
-

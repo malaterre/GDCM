@@ -158,4 +158,3 @@ if __name__ == "__main__":
   writer.SetFile( ano.GetFile() )
   writer.SetFileName( "rawstorage.dcm" );
   writer.Write()
-

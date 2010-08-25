@@ -19,7 +19,7 @@ This class becomes really handy when one knows which particular tag to fill in.
 
 Usage:
 
- python DumbAnonymizer.py gdcmData/012345.002.050.dcm out.dcm   
+ python DumbAnonymizer.py gdcmData/012345.002.050.dcm out.dcm
 
 """
 
@@ -112,7 +112,7 @@ if __name__ == "__main__":
       print tag,rule
       # result = locals()[rule[1]]()
       methodname = rule[1]
-      if hasattr(obj, methodname): 
+      if hasattr(obj, methodname):
         _member = getattr(obj, methodname)
         result = _member()
         ano.Replace( gdcm.Tag( tag[0], tag[1] ), result )
@@ -123,4 +123,3 @@ if __name__ == "__main__":
   w.SetFileName( outfilename )
   w.SetFile( ano.GetFile() )
   if not w.Write(): sys.exit(1)
-

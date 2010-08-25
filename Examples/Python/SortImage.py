@@ -29,7 +29,7 @@ def PrintProgress(object, event):
 def MySort(ds1, ds2):
   # compare ds1
   return False
-  
+
 if __name__ == "__main__":
 
   dirname = sys.argv[1]
@@ -45,4 +45,3 @@ if __name__ == "__main__":
 
   print "Sorter:"
   print sorter
-

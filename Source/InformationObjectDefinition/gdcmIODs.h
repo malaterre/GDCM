@@ -77,4 +77,3 @@ inline std::ostream& operator<<(std::ostream& _os, const IODs &_val)
 } // end namespace gdcm
 
 #endif //GDCMIODS_H
-

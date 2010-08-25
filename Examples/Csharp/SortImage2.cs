@@ -14,9 +14,9 @@
 =========================================================================*/
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/SortImage.exe gdcmData/012345.002.050.dcm out.dcm 
+ * $ mono bin/SortImage.exe gdcmData/012345.002.050.dcm out.dcm
  */
 using System;
 using gdcm;
@@ -32,8 +32,7 @@ public class SortImage2
     {
     Sorter sorter = new Sorter();
     sorter.SetSortFunction( mysort );
-    
+
     return 0;
     }
 }
-

@@ -813,4 +813,3 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
 %include "gdcmSHA1.h"
 //%include "gdcmBase64.h"
 %include "gdcmSpacing.h"
-

@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * Dummy example to show GDCM Dict(s) API (Part 6) + Collected Private Attributes:
  */
 
@@ -64,4 +64,3 @@ int main(int , char *[])
 
   return 0;
 }
-
