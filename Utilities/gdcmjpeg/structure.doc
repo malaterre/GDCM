@@ -277,7 +277,7 @@ responsibilities:
    which it will select among when given its initialization call.  The master
    control code need only be concerned with decisions that affect more than
    one module.
- 
+
 2. Data buffering control.  A separate control module exists for each
    inter-processing-step data buffer.  This module is responsible for
    invoking the processing steps that write or read that data buffer.
@@ -324,7 +324,7 @@ JPEG processes.  Because these processes have little in common with one another
 (and their implementations share very little code), we need to provide a way to
 isloate the underlying JPEG process from the rest of the library.  This is
 accomplished by introducing an abstract "codec object" which acts a generic
-interface to the JPEG (de)compressor proper.  
+interface to the JPEG (de)compressor proper.
 
 Using the power of the object-oriented scheme described above, we build the
 lossy and lossless modules as two separate implementations of the codec object.

@@ -2905,7 +2905,7 @@ functions.  To do this, undefine xxx_SUPPORTED symbols as necessary.
 
 You can also save a few K by not having text error messages in the library;
 the standard error message table occupies about 5Kb.  This is particularly
-reasonable for embedded applications where there's no good way to display 
+reasonable for embedded applications where there's no good way to display
 a message anyway.  To do this, remove the creation of the message table
 (jpeg_std_message_table[]) from jerror.c, and alter format_message to do
 something reasonable without it.  You could output the numeric value of the

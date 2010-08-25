@@ -587,7 +587,7 @@ manager, with temporary files being created on the device named by
 
 
 Atari ST/STE/TT:
- 
+
 Copy the project files makcjpeg.st, makdjpeg.st, maktjpeg.st, and makljpeg.st
 to cjpeg.prj, djpeg.prj, jpegtran.prj, and libjpeg.prj respectively.  The
 project files should work as-is with Pure C.  For Turbo C, change library
@@ -985,7 +985,7 @@ Pentium-optimized version of the compiler).
 
 Another report from a user of Borland C 4.5 was that incorrect code (leading
 to a color shift in processed images) was produced if any of the following
-optimization switch combinations were used: 
+optimization switch combinations were used:
 	-Ot -Og
 	-Ot -Op
 	-Ot -Om

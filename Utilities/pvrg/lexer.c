@@ -954,7 +954,7 @@ yy_find_action:
       int yyl;
       for ( yyl = 0; yyl < yyleng; ++yyl )
         if ( yytext[yyl] == '\n' )
-          
+
     yylineno++;
 ;
       }
@@ -1611,7 +1611,7 @@ static int yy_get_next_buffer (void)
   (yy_hold_char) = *++(yy_c_buf_p);
 
   if ( c == '\n' )
-    
+
     yylineno++;
 ;
 
@@ -1857,9 +1857,9 @@ static void yyensure_buffer_stack (void)
     (yy_buffer_stack) = (struct yy_buffer_state**)yyalloc
                 (num_to_alloc * sizeof(struct yy_buffer_state*)
                 );
-    
+
     memset((yy_buffer_stack), 0, num_to_alloc * sizeof(struct yy_buffer_state*));
-        
+
     (yy_buffer_stack_max) = num_to_alloc;
     (yy_buffer_stack_top) = 0;
     return;

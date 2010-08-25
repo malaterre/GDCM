@@ -484,7 +484,7 @@ markers, such as comment blocks:
 			present in the source file.
 	-copy comments	Copy only comment markers.  This setting copies
 			comments from the source file, but discards
-			any other inessential data. 
+			any other inessential data.
 	-copy all	Copy all extra markers.  This setting preserves
 			miscellaneous markers found in the source file, such
 			as JFIF thumbnails and Photoshop settings.  In some
