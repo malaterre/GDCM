@@ -66,4 +66,3 @@ int rle_finish_decompress(rle_decompress_struct *cinfo);
 void rle_destroy_decompress(rle_decompress_struct *cinfo);
 
 #endif /* RLELIB_H */
-

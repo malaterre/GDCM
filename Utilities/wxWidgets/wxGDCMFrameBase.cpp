@@ -77,4 +77,3 @@ void wxGDCMFrameBase::do_layout()
     Layout();
     // end wxGlade
 }
-

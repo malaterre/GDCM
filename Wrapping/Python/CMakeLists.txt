@@ -177,5 +177,3 @@ ENDIF(BUILD_TESTING)
 # TODO
 # python -c "from distutils import sysconfig; print sysconfig.get_python_lib()"
 # /usr/lib/python2.4/site-packages
-
-

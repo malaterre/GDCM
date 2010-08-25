@@ -22,7 +22,7 @@ Stanford University) name.
 
 /*
  * flex command was run this way:
- * 
+ *
  *  $ lex -olexer.c lexer.l
  */
 
@@ -201,7 +201,7 @@ String		\"([^\"]|\\\")*\"
 
 <NORMAL>{WhiteSpace}	{}
 
-<NORMAL>{Id}	{struct id *temp; temp = enter(0,yytext,yyleng); 
+<NORMAL>{Id}	{struct id *temp; temp = enter(0,yytext,yyleng);
 		 if (LexDebug)
 		   {
 		     printf("%s : %s (%d)\n",
@@ -224,7 +224,7 @@ String		\"([^\"]|\\\")*\"
 			   }
 		       }
 <NORMAL>{DecInteger}	{if (LexDebug)
-			   {             
+			   {
 			     printf("%s : %s\n", yytext, "INTEGER");
 			   }
 			 yyint = atoi(yytext);
@@ -353,7 +353,7 @@ void initparser()
   char i,**sptr;
   BEGIN NORMAL;
 
-  for(i=1,sptr=ReservedWords;**sptr!='\0';i++,sptr++) 
+  for(i=1,sptr=ReservedWords;**sptr!='\0';i++,sptr++)
     {     /* Add Reserved Words */
       enter(i,*sptr,strlen(*sptr));        /* Put reserved words in */
     }                                      /* hash table */
@@ -411,7 +411,7 @@ static LINK *MakeLink(tokentype,str,len)
 {
   BEGIN("MakeLink")
   LINK *temp;
-  
+
   if (!(temp = MakeStructure(LINK)))            /* Make link */
     {
       WHEREAMI();
@@ -431,7 +431,7 @@ static LINK *MakeLink(tokentype,str,len)
     }
   strcpy(temp->lid->name,str);                 /* Copy key */
   temp->lid->tokentype = tokentype;
-  temp->lid->count = 1; 
+  temp->lid->count = 1;
   return(temp);
 }
 
@@ -1067,7 +1067,7 @@ void parser()
 	    }
 	  MakeHuffman(ptr);
 	  SetACHuffman(dest);
-	  CImage->NumberACTables = 
+	  CImage->NumberACTables =
 	    MAX(CImage->NumberACTables,(dest+1));
 	  ARRAYEND;
 	  break;
@@ -1109,7 +1109,7 @@ void parser()
 	    }
 	  MakeHuffman(ptr);
 	  SetDCHuffman(dest);
-	  CImage->NumberDCTables = 
+	  CImage->NumberDCTables =
 	    MAX(CImage->NumberDCTables,(dest+1));
 	  ARRAYEND;
 	  break;
@@ -1202,7 +1202,7 @@ void parser()
 	      break;
 	    }
 	  SetACHuffman(dest);
-	  CImage->NumberACTables = 
+	  CImage->NumberACTables =
 	    MAX(CImage->NumberACTables,(dest+1));
 	  ARRAYEND;
 	  break;
@@ -1295,7 +1295,7 @@ void parser()
 	      break;
 	    }
 	  SetDCHuffman(dest);
-	  CImage->NumberDCTables = 
+	  CImage->NumberDCTables =
 	    MAX(CImage->NumberDCTables,(dest+1));
 	  ARRAYEND;
 	  break;

@@ -52,7 +52,7 @@ unnecessary for decoding.
 option specifies a multiplicative factor for the quantization: each
 quantization coefficient of the default matrix is scaled by
 (Q-Factor/50). A Q-Factor of 0 is the same thing as a Q-Factor of 50
-because it disables this function. 
+because it disables this function.
 .B -q
 specifies an 8 bit
 quantization matrix;
@@ -71,7 +71,7 @@ enables the Lee DCT.  (Default is Chen DCT.)
 enables decoding.  See below.
 .TP
 .B -k predictortype
-The lossless predictor type, specified as an integer between 1-7. 
+The lossless predictor type, specified as an integer between 1-7.
 If specified, then lossless mode is used.
 .TP
 .B -n
@@ -94,7 +94,7 @@ upon writing input.  Generally used by the lossless mode only.  Can
 be used by the DCT mode to add or subtract bits.
 .TP
 .B -y
-for decoding only, signals that 
+for decoding only, signals that
 .I no
 resynchronization is enabled,
 thus ignore any markers found in the data stream.
@@ -128,7 +128,7 @@ describes the component index where the file data should be associated
 with.  The possible values are between 0 and 255.  As a rule Y is in
 1; U is in 2; V is in 3.  The file specfications, if left undisturbed,
 will result in component location of 1 for the first component file, 2
-for the second component file, and so on.  If 
+for the second component file, and so on.  If
 .B -ci
 is specified for the
 previous component file, then the next component index defaults to the
@@ -202,7 +202,7 @@ program.
 The images can also be converted to ppm and back through
 the programs
 .I cyuv2ppm
-and 
+and
 .I ppm2cyuv
 Those utility programs available by anonymous ftp from
 .I havefun.stanford.edu:pub/cv/CVv1.2.1.tar.Z.

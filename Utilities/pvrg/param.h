@@ -110,4 +110,3 @@ in per scan */
 #define LEE_DCT
 
 #endif
-

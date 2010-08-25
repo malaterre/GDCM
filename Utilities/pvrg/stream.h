@@ -38,4 +38,3 @@ int brtell();
 int brseek(int offset,int ptr);
 
 #endif
-

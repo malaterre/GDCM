@@ -53,7 +53,7 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
   cinfo->output_height = dims[1];
 }
 
-/* 
+/*
  * G.3.2 The RLE decoder
  * Pseudo code for the RLE decoder is shown below:
  * Loop until the number of output bytes equals the uncompressed segment size
@@ -134,7 +134,7 @@ int rle_read_scanlines(rle_decompress_struct *cinfo, char *buffer, int f)
   cinfo->output_scanline++;
 
   assert( cinfo->current_pos <= length );
-  if( cinfo->current_pos >= length ) 
+  if( cinfo->current_pos >= length )
     {
    /* if( cinfo->current_segment > cinfo->header->num_segments )
       {
@@ -161,4 +161,3 @@ void rle_destroy_decompress(rle_decompress_struct *cinfo)
   cinfo->output_height = 0; /* why not*/
   free(cinfo->header);
 }
-

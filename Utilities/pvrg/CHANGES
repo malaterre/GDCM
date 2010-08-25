@@ -61,4 +61,3 @@ accuracy is attained.  Some problems occurred with improper modulo
 arithmetic when full 16 bits were used with certain predictors.  The
 changes were in codec.c Lossless*() and a couple of lines in jpeg.c
 which used &0xffff to properly trim the values.
-

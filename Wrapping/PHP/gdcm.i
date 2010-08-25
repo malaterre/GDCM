@@ -49,7 +49,7 @@ using namespace gdcm;
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
 
-// gdcm does not use std::string in its interface, but we do need it for the 
+// gdcm does not use std::string in its interface, but we do need it for the
 // %extend (see below)
 %include "std_string.i"
 //%include "std_set.i"
@@ -175,4 +175,3 @@ using namespace gdcm;
 %template (FilenamesType) std::vector<std::string>;
 //%include "gdcmTesting.h"
 %include "gdcmUIDGenerator.h"
-

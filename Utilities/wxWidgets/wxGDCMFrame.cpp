@@ -110,5 +110,3 @@ void wxGDCMFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 */
 
 }
-
-

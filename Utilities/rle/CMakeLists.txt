@@ -5,7 +5,7 @@ ADD_LIBRARY(rle rle.c rlelib.c)
 
 ADD_EXECUTABLE(example example.c)
 TARGET_LINK_LIBRARIES(example rle)
-INSTALL(TARGETS rle example 
+INSTALL(TARGETS rle example
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/static
@@ -14,4 +14,3 @@ INSTALL(TARGETS rle example
 
 ADD_EXECUTABLE(rledump rledump.c)
 TARGET_LINK_LIBRARIES(rledump rle)
-
