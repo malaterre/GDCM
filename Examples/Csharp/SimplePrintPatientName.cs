@@ -13,7 +13,7 @@
 
 =========================================================================*/
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Perso/gdcm/debug-gcc/bin
  * $ mono bin/SimplePrintPatientName.exe gdcmData/012345.002.050.dcm
  */

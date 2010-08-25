@@ -13,15 +13,15 @@
 
 =========================================================================*/
 /**
- * This is a simple example that show typical pipeline to setup when 
+ * This is a simple example that show typical pipeline to setup when
  * preprocessing incoming DICOM file from around the round, and making
  * sur eto remove any Patient Information.
  * This is actually identical to running the C++ command line tool: gdcmanon,
  * except this is easily integrated into another C# environment.
  *
- * PS 3.17 - 2008 Annex H. 
+ * PS 3.17 - 2008 Annex H.
  * Clinical Trial Identification Workflow Examples (Informative)
- * 
+ *
  * This Annex was formerly located in Annex O of PS 3.3 in the 2003 and earlier
  * revisions of the standard.  The Clinical Trial Identification modules are
  * optional. As such, there are several points in the workflow of clinical trial
@@ -100,14 +100,14 @@ public class ClinicalTrialIdentificationWorkflow
     // Pass in the file:
     ano.SetFile( reader.GetFile() );
 
-    // First step, let's protect all Patient information as per 
+    // First step, let's protect all Patient information as per
     // PS 3.15 / E.1 / Basic Application Level Confidentiality Profile
     if( !ano.BasicApplicationLevelConfidentialityProfile() )
       {
       return false;
       }
 
-    // Now let's pass in all Clinical Trial fields 
+    // Now let's pass in all Clinical Trial fields
     // PS 3.3 - 2008 / C.7.1.3 Clinical Trial Subject Module
     /*
     Clinical Trial Sponsor Name (0012,0010) 1 The name of the clinical trial sponsor. See C.7.1.3.1.1.
@@ -155,7 +155,7 @@ public class ClinicalTrialIdentificationWorkflow
       {
       return false;
       }
-    
+
     return true;
     }
 

@@ -55,9 +55,9 @@
 
 int checkmagick(unsigned char *input)
 {
-  if( input[128+0] == 'D' 
-   && input[128+1] == 'I' 
-   && input[128+2] == 'C' 
+  if( input[128+0] == 'D'
+   && input[128+1] == 'I'
+   && input[128+2] == 'C'
    && input[128+3] == 'M' )
     {
     return 1;
@@ -86,24 +86,24 @@ int checkdeflated(const char *name)
   //name = argv[1];
 
   len = 0;
-  if (stat(name, &s)) 
+  if (stat(name, &s))
     {
     fprintf( stderr, "Cannot stat: %s\n", name );
     return 1;
     }
-  if ((s.st_mode & S_IFMT) != S_IFREG) 
+  if ((s.st_mode & S_IFMT) != S_IFREG)
     {
     fprintf( stderr, "not a regular file\n" );
     return 1;
     }
   size = (unsigned long)(s.st_size);
-  if (size == 0 || (off_t)size != s.st_size) 
+  if (size == 0 || (off_t)size != s.st_size)
     {
     fprintf( stderr, "size mismatch\n" );
     return 1;
     }
   in = fopen(name, "r");
-  if (in == NULL) 
+  if (in == NULL)
     {
     fprintf( stderr, "in is NULL\n" );
     return 1;
@@ -264,7 +264,7 @@ std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
       isUnicode = gTrue;
       i = 2;
       }
-    else 
+    else
       {
       isUnicode = gFalse;
       i = 0;
@@ -338,7 +338,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
     {
     return checkdeflated(filename.c_str());
     }
- 
+
   //const char *filename = argv[1];
   //std::cout << "filename: " << filename << std::endl;
   gdcm::Reader reader;
@@ -403,7 +403,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
       delete[] buffer;
       }
     }
-  else if ( ms == gdcm::MediaStorage::EncapsulatedPDFStorage ) 
+  else if ( ms == gdcm::MediaStorage::EncapsulatedPDFStorage )
     {
 #ifdef GDCM_USE_SYSTEM_POPPLER
     const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x42,0x11) );
@@ -670,7 +670,7 @@ int main(int argc, char *argv[])
     PrintHelp();
     return 1;
     }
-  
+
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
   gdcm::Trace::SetWarning( warning );

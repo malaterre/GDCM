@@ -80,6 +80,6 @@ int main(int argc, char *argv[])
     res += DoOperation(filename);
     }
 
-  return res; 
+  return res;
 }
 

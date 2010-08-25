@@ -37,7 +37,7 @@ void Defs::LoadDefaults()
 //  TableReader tr(*this);
 //  const Global &g = Global::GetInstance();
 //  const char *filename = g.Locate( "Part3.xml" );
-//  
+//
 //  if( filename )
 //    {
 //    tr.SetFilename(filename);

@@ -25,7 +25,7 @@ namespace gdcm
 class GDCM_EXPORT Series
 {
 public:
-  Series() { 
+  Series() {
   }
 private:
   // Image, Waveform...

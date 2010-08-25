@@ -38,7 +38,7 @@
  *   DICOM avi  <->  avi
  *   DICOM wav  <->  wav
  *   DICOM pdf  <->  pdf
- * Todo: check compat API with jhead 
+ * Todo: check compat API with jhead
  */
 #include "gdcmFilename.h"
 #include "gdcmDirectory.h"
@@ -145,7 +145,7 @@ void PrintHelp()
   std::cout << "  -v --version   print version." << std::endl;
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
-/* 
+/*
  * Default behavior for root UID is:
  * By default the GDCM one is used
  * If GDCM_ROOT_UID is set, then use this one instead
@@ -258,7 +258,7 @@ bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *
 {
   /*
    * FIXME: when JPEG contains JFIF marker, we should only read them
-   * during header parsing but discard them when copying the JPG byte stream into 
+   * during header parsing but discard them when copying the JPG byte stream into
    * the encapsulated Pixel Data Element...
    */
   std::ifstream is(filename);
@@ -412,8 +412,8 @@ int main (int argc, char *argv[])
         {"series-uid", 1, &seriesuid, 1},
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"sop-class-uid", 1, &sopclassuid, 1}, // specific SOP Class UID
-        {"endian", 1, &endian, 1}, // 
-        {"sign", 1, &sign, 1}, // 
+        {"endian", 1, &endian, 1}, //
+        {"sign", 1, &sign, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -595,9 +595,9 @@ int main (int argc, char *argv[])
       files.push_back( argv[optind++] );
       }
     //printf ("\n");
-    if( files.size() >= 2 
+    if( files.size() >= 2
       && filename.IsEmpty()
-      && outfilename.IsEmpty() 
+      && outfilename.IsEmpty()
     )
       {
       filename = files[0].c_str();
@@ -700,7 +700,7 @@ int main (int argc, char *argv[])
     {
     if( pixelsign != 0 && pixelsign != 1 ) return 1;
     }
- 
+
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
   //if( !inputextension || !outputextension ) return 1;
@@ -788,8 +788,8 @@ int main (int argc, char *argv[])
       return 0;
       }
 
-    if(  gdcm::System::StrCaseCmp(inputextension,".pgm") == 0 
-      || gdcm::System::StrCaseCmp(inputextension,".pnm") == 0 
+    if(  gdcm::System::StrCaseCmp(inputextension,".pgm") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".pnm") == 0
       || gdcm::System::StrCaseCmp(inputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
@@ -822,7 +822,7 @@ int main (int argc, char *argv[])
       return 0;
       }
 
-    if(  gdcm::System::StrCaseCmp(inputextension,".jp2") == 0 
+    if(  gdcm::System::StrCaseCmp(inputextension,".jp2") == 0
       || gdcm::System::StrCaseCmp(inputextension,".j2k") == 0
       || gdcm::System::StrCaseCmp(inputextension,".j2c") == 0
       || gdcm::System::StrCaseCmp(inputextension,".jpc") == 0 )
@@ -846,7 +846,7 @@ int main (int argc, char *argv[])
 
       }
 
-    if(  gdcm::System::StrCaseCmp(inputextension,".jpg") == 0 
+    if(  gdcm::System::StrCaseCmp(inputextension,".jpg") == 0
       || gdcm::System::StrCaseCmp(inputextension,".jpeg") == 0
       || gdcm::System::StrCaseCmp(inputextension,".ljpg") == 0
       || gdcm::System::StrCaseCmp(inputextension,".ljpeg") == 0 )
@@ -885,8 +885,8 @@ int main (int argc, char *argv[])
 
   if ( outputextension )
     {
-    if(  gdcm::System::StrCaseCmp(outputextension,".pgm") == 0 
-      || gdcm::System::StrCaseCmp(outputextension,".pnm") == 0 
+    if(  gdcm::System::StrCaseCmp(outputextension,".pgm") == 0
+      || gdcm::System::StrCaseCmp(outputextension,".pnm") == 0
       || gdcm::System::StrCaseCmp(outputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
@@ -922,7 +922,7 @@ int main (int argc, char *argv[])
     gdcm::SmartPointer<gdcm::Pixmap> image = new gdcm::Pixmap;
     image->SetNumberOfDimensions( 2 ); // good default
     const unsigned int *dims = imageori.GetDimensions();
-    if ( region[0] > region[1] 
+    if ( region[0] > region[1]
       || region[2] > region[3]
       || region[4] > region[5]
       || region[1] > dims[0]
@@ -931,12 +931,12 @@ int main (int argc, char *argv[])
       {
       if( imageori.GetNumberOfDimensions() == 2 )
         {
-        std::cerr << "bogus region. Should be at most: (" << dims[0] << "," << dims[1] << "," 
+        std::cerr << "bogus region. Should be at most: (" << dims[0] << "," << dims[1] << ","
           /*<< dims[2]*/ << ")" << std::endl;
         }
       else
         {
-        std::cerr << "bogus region. Should be at most: (" << dims[0] << "," << dims[1] << "," 
+        std::cerr << "bogus region. Should be at most: (" << dims[0] << "," << dims[1] << ","
           << dims[2] << ")" << std::endl;
         }
       return 1;
@@ -988,7 +988,7 @@ int main (int argc, char *argv[])
       {
       image->SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
       }
-    else 
+    else
       {
       assert( ts.IsImplicit() );
       image->SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
@@ -1006,7 +1006,7 @@ int main (int argc, char *argv[])
     // (0008,2111) ST [MedCom Resample v]                      #  18, 1 DerivationDescriptio
     gdcm::Attribute<0x0008,0x2111> at2;
     std::ostringstream os;
-    os << "Fill Region [" 
+    os << "Fill Region ["
       << region[0] << "," << region[1] << ","
       << region[2] << "," << region[3] << ","
       << region[4] << "," << region[5] << "] with color value=" << std::hex << (int)color;
@@ -1018,12 +1018,12 @@ int main (int argc, char *argv[])
 > 1. Replace Value #1 of Image Type by 'DERIVED'
 
 Don't do that ... leave Image Type alone (unless you are changing
-the UID ... vide infra). 
+the UID ... vide infra).
 */
 #if 0
     // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
     gdcm::Attribute<0x0008,0x0008> at3;
-    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"}; 
+    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"};
     at3.SetValues( values, 2, true ); // true => copy data !
     if( ds.FindDataElement( at3.GetTag() ) )
       {

@@ -62,7 +62,7 @@
 /*
  check-meta is ideal for image like:
 
-  gdcmconv -C gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm bla.dcm 
+  gdcmconv -C gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm bla.dcm
 */
 #include "gdcmReader.h"
 #include "gdcmFileDerivation.h"
@@ -174,7 +174,7 @@ void PrintHelp()
   std::cout << "  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
-/* 
+/*
  * Default behavior for root UID is:
  * By default the GDCM one is used
  * If GDCM_ROOT_UID is set, then use this one instead
@@ -269,7 +269,7 @@ static bool derives( File & file, const Pixmap& compressed_image )
 {
     // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
     gdcm::Attribute<0x0008,0x0008> at3;
-    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"}; 
+    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"};
     at3.SetValues( values, 2, true ); // true => copy data !
     if( ds.FindDataElement( at3.GetTag() ) )
       {
@@ -489,7 +489,7 @@ int main (int argc, char *argv[])
         {"iod", 1, 0, 0}, // valid
         {"meta", 1, 0, 0}, // valid / create / remove
         {"dataset", 1, 0, 0}, // valid / create / remove?
-        {"sequence", 1, 0, 0}, // defined / undefined 
+        {"sequence", 1, 0, 0}, // defined / undefined
         {"deflate", 1, 0, 0}, // 1 - 9 / best = 9 / fast = 1
         {"tag", 1, 0, 0}, // need to specify a tag xxxx,yyyy = value to override default
         {"name", 1, 0, 0}, // same as tag but explicit use of name
@@ -510,22 +510,22 @@ int main (int argc, char *argv[])
         {"jpip", 0, 0, 0}, // ??
         {"split", 1, &split, 1}, // split fragments
         {"planar-configuration", 1, &planarconf, 1}, // Planar Configuration
-        {"explicit", 0, &explicitts, 1}, // 
-        {"implicit", 0, &implicit, 1}, // 
-        {"use-dict", 0, &usedict, 1}, // 
-        {"compress-icon", 0, &compressicon, 1}, // 
-        {"remove-gl", 0, &removegrouplength, 1}, // 
-        {"remove-private-tags", 0, &removeprivate, 1}, // 
-        {"remove-retired", 0, &removeretired, 1}, // 
-        {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
-        {"with-private-dict", 0, &changeprivatetags, 1}, // 
+        {"explicit", 0, &explicitts, 1}, //
+        {"implicit", 0, &implicit, 1}, //
+        {"use-dict", 0, &usedict, 1}, //
+        {"compress-icon", 0, &compressicon, 1}, //
+        {"remove-gl", 0, &removegrouplength, 1}, //
+        {"remove-private-tags", 0, &removeprivate, 1}, //
+        {"remove-retired", 0, &removeretired, 1}, //
+        {"photometric-interpretation", 1, &photometricinterpretation, 1}, //
+        {"with-private-dict", 0, &changeprivatetags, 1}, //
 // j2k :
-        {"rate", 1, &rate, 1}, // 
+        {"rate", 1, &rate, 1}, //
         {"quality", 1, &quality, 1}, // will also work for regular jpeg compressor
-        {"tile", 1, &tile, 1}, // 
-        {"number-resolution", 1, &nres, 1}, // 
-        {"irreversible", 0, &irreversible, 1}, // 
-        {"allowed-error", 1, &jpeglserror, 1}, // 
+        {"tile", 1, &tile, 1}, //
+        {"number-resolution", 1, &nres, 1}, //
+        {"irreversible", 0, &irreversible, 1}, //
+        {"allowed-error", 1, &jpeglserror, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -763,9 +763,9 @@ int main (int argc, char *argv[])
       files.push_back( argv[optind++] );
       }
     //printf ("\n");
-    if( files.size() == 2 
+    if( files.size() == 2
       && filename.empty()
-      && outfilename.empty() 
+      && outfilename.empty()
     )
       {
       filename = files[0];
@@ -815,7 +815,7 @@ int main (int argc, char *argv[])
     gdcm::Trace::SetWarning( verbose );
     gdcm::Trace::SetError( verbose);
     }
- 
+
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
   if( !rootuid )
     {
@@ -962,7 +962,7 @@ int main (int argc, char *argv[])
       std::cerr << "Failed to write: " << outfilename << std::endl;
       return 1;
       }
- 
+
     return 0;
     }
 
@@ -1010,7 +1010,7 @@ int main (int argc, char *argv[])
     const gdcm::Pixmap &image = reader.GetPixmap();
 
     // Just in case:
-    if( gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) 
+    if( gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str())
       == gdcm::PhotometricInterpretation::PI_END )
       {
       std::cerr << "Do not handle PhotometricInterpretation: " << photometricinterpretation_str << std::endl;

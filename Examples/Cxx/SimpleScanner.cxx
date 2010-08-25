@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * Simple example to show how to use Scanner API.
  * It exposes the three different cases:
  *  - DICOM Attribute is present and has a value
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
   const char filename_invalid[] = "this is a file that may not exist on this disk.dcm";
 
   gdcm::Scanner s;
-  
+
   const gdcm::Tag tag_array[] = {
     gdcm::Tag(0x8,0x50),
     gdcm::Tag(0x8,0x51),
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
       {
       std::cout << *ptag << " was properly found in this file" << std::endl;
       // it contains a pair of value. the first one is the actual tag, so the following is always true:
-      //  *ptag == it->first 
+      //  *ptag == it->first
       // The second part is the actual value (stored as RAW strings). You will have to reinterpret this string
       // if VR for *ptag is not VR::VRASCII !
       const char *value = it->second;

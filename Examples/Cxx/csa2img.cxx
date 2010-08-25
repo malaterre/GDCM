@@ -19,12 +19,12 @@
  *
  * This example is an attempt at understanding the format used by SIEMENS
  * their "SIEMENS CSA NON-IMAGE" DICOM file (1.3.12.2.1107.5.9.1)
- * 
- * Everything done in this code is for the sole purpose of writing interoperable 
+ *
+ * Everything done in this code is for the sole purpose of writing interoperable
  * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
- * If you believe anything in this code violates any law or any of your rights, 
- * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
- * find a solution. 
+ * If you believe anything in this code violates any law or any of your rights,
+ * please contact us (gdcm-developers@lists.sourceforge.net) so that we can
+ * find a solution.
  *
  */
 #include "gdcmReader.h"
@@ -37,7 +37,7 @@
 #include <math.h>
 
 /*
- *  gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm  
+ *  gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
  */
 bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims, unsigned int square,
   const unsigned int *outputdims, unsigned short *output )
@@ -48,7 +48,7 @@ bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdim
       {
       for(unsigned z = 0; z < outputdims[2]; ++z)
         {
-        output[ x + y*outputdims[0] + z*outputdims[0]*outputdims[1] ] = 
+        output[ x + y*outputdims[0] + z*outputdims[0]*outputdims[1] ] =
           input[ (x + z * outputdims[0]) + (y + (z/square)*outputdims[0])*inputdims[0] ];
         }
       }

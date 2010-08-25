@@ -233,24 +233,24 @@ void WriteDqt()
     {
       qmatrix = CImage->QuantizationMatrices[CScan->sq[i]];
       for(bignum_p=0,j=63;j>=0;j--)
-	{
-	  if(qmatrix[j]>255)
-	    {
-	      bignum_p=0x10;
-	      break;
-	    }
-	}
+  {
+    if(qmatrix[j]>255)
+      {
+        bignum_p=0x10;
+        break;
+      }
+  }
       bputc((bignum_p|CScan->sq[i])); /* Precision defined for big numbers */
       if (bignum_p)
-	{
-	  for(j=0;j<64;j++)
-	    bputw(qmatrix[Zigzag(j)]);
-	}
+  {
+    for(j=0;j<64;j++)
+      bputw(qmatrix[Zigzag(j)]);
+  }
       else
-	{
-	  for(j=0;j<64;j++)
-	    bputc(qmatrix[Zigzag(j)]);
-	}
+  {
+    for(j=0;j<64;j++)
+      bputc(qmatrix[Zigzag(j)]);
+  }
     }
   CScan->NumberQTablesSend=0; /* Clear out queue */
   End = swtell();       /* Assume a marker code will follow.*/
@@ -417,58 +417,58 @@ void ReadDqt()
       Index = Qget & 0xf;
       Precision = (Qget >> 4)&0xf;
       if (Precision > 1)
-	{
-	  printf("Bad Precision: %d  in Quantization Download\n",
-		 Precision);
-	  printf("*** Dumping Image ***\n");
-	  PrintImage();
-	  printf("*** Dumping Frame ***\n");
-	  PrintFrame();
-	  exit(ERROR_MARKER);
-	}                             /* Load in q-matrices */
+  {
+    printf("Bad Precision: %d  in Quantization Download\n",
+     Precision);
+    printf("*** Dumping Image ***\n");
+    PrintImage();
+    printf("*** Dumping Frame ***\n");
+    PrintFrame();
+    exit(ERROR_MARKER);
+  }                             /* Load in q-matrices */
       CImage->QuantizationMatrices[Index] = (int *) calloc(65,sizeof(int));
       if (Precision)               /* If precision then word quantization*/
-	{
-	  for(i=0;i<64;i++)
-	    {
-	      if (!(CImage->QuantizationMatrices[Index][Zigzag(i)]=bgetw()))
-		{
-		  printf("marker.c:ReadDqt: Quantization value of zero.\n");
-		  if (i)
-		    {
-		      printf("marker.c:ReadDqt: Changing to i-1.\n");
-		      CImage->QuantizationMatrices[Index][Zigzag(i)]=
-			CImage->QuantizationMatrices[Index][Zigzag(i-1)];
-		    }
-		  else
-		    {		
-		      printf("marker.c:ReadDqt: Changing to 16.\n");
-		      CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
-		    }
-		}
-	    }
-	}
+  {
+    for(i=0;i<64;i++)
+      {
+        if (!(CImage->QuantizationMatrices[Index][Zigzag(i)]=bgetw()))
+    {
+      printf("marker.c:ReadDqt: Quantization value of zero.\n");
+      if (i)
+        {
+          printf("marker.c:ReadDqt: Changing to i-1.\n");
+          CImage->QuantizationMatrices[Index][Zigzag(i)]=
+      CImage->QuantizationMatrices[Index][Zigzag(i-1)];
+        }
+      else
+        {    
+          printf("marker.c:ReadDqt: Changing to 16.\n");
+          CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
+        }
+    }
+      }
+  }
       else                       /* Otherwise byte quantization */
-	{
-	  for(i=0;i<64;i++)
-	    {
-	      if (!(CImage->QuantizationMatrices[Index][Zigzag(i)]=bgetc()))
-		{
-		  printf("marker.c:ReadDqt: Quantization value of zero.\n");
-		  if (i)
-		    {
-		      printf("marker.c:ReadDqt: Changing to i-1.\n");
-		      CImage->QuantizationMatrices[Index][Zigzag(i)]=
-			CImage->QuantizationMatrices[Index][Zigzag(i-1)];
-		    }
-		  else
-		    {		
-		      printf("marker.c:ReadDqt: Changing to 16.\n");
-		      CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
-		    }
-		}
-	    }
-	}
+  {
+    for(i=0;i<64;i++)
+      {
+        if (!(CImage->QuantizationMatrices[Index][Zigzag(i)]=bgetc()))
+    {
+      printf("marker.c:ReadDqt: Quantization value of zero.\n");
+      if (i)
+        {
+          printf("marker.c:ReadDqt: Changing to i-1.\n");
+          CImage->QuantizationMatrices[Index][Zigzag(i)]=
+      CImage->QuantizationMatrices[Index][Zigzag(i-1)];
+        }
+      else
+        {    
+          printf("marker.c:ReadDqt: Changing to 16.\n");
+          CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
+        }
+    }
+      }
+  }
     }
   bpushc(END_QUANTIZATION_TABLE);
   End = srtell();
@@ -509,15 +509,15 @@ void ReadDht()
       MakeDhuff();
       ReadHuffman();
       if (Where)
-	{
-	  SetACHuffman(Index);           /* Set current Huffman limit */
-	  CImage->NumberACTables = MAX(CImage->NumberACTables,(Index+1));
-	}
+  {
+    SetACHuffman(Index);           /* Set current Huffman limit */
+    CImage->NumberACTables = MAX(CImage->NumberACTables,(Index+1));
+  }
       else
-	{
-	  SetDCHuffman(Index);
-	  CImage->NumberDCTables = MAX(CImage->NumberDCTables,(Index+1));
-	}
+  {
+    SetDCHuffman(Index);
+    CImage->NumberDCTables = MAX(CImage->NumberDCTables,(Index+1));
+  }
     }
   bpushc(END_CODE_TABLE);
   End = srtell();
@@ -571,15 +571,15 @@ void ReadDnl()
       CheckScan();
       ResizeIob();
       if (CFrame->GlobalHeight)
-	{
-	  InstallIob(0);
-	  if (CFrame->Type==3)
-	    NumberMDU = CScan->MDUWide*CScan->MDUHigh;
-	  else
-	    NumberMDU = CScan->MDUWide*CScan->MDUHigh;
-	}
+  {
+    InstallIob(0);
+    if (CFrame->Type==3)
+      NumberMDU = CScan->MDUWide*CScan->MDUHigh;
+    else
+      NumberMDU = CScan->MDUWide*CScan->MDUHigh;
+  }
       else
-	NumberMDU = -1;
+  NumberMDU = -1;
     }
 }
 
@@ -659,23 +659,23 @@ void ReadSos()
   if (CFrame->Type==3)
     {
       MakeIob(IOB_LINE,O_RDWR | O_CREAT,
-	      ((CFrame->DataPrecision>8)?2:1));
+        ((CFrame->DataPrecision>8)?2:1));
       if (CFrame->GlobalHeight)
-	{
-	  InstallIob(0);
-	  NumberMDU = CScan->MDUWide*CScan->MDUHigh;
-	}
+  {
+    InstallIob(0);
+    NumberMDU = CScan->MDUWide*CScan->MDUHigh;
+  }
       else NumberMDU = -1;
     }
   else
     {
       MakeIob(IOB_BLOCK,O_RDWR | O_CREAT | O_TRUNC,
-	      ((CFrame->DataPrecision>8)?2:1));
+        ((CFrame->DataPrecision>8)?2:1));
       if (CFrame->GlobalHeight)
-	{
-	  InstallIob(0);
-	  NumberMDU = CScan->MDUWide*CScan->MDUHigh;
-	}
+  {
+    InstallIob(0);
+    NumberMDU = CScan->MDUWide*CScan->MDUHigh;
+  }
       else NumberMDU = -1;
     }
 
@@ -702,12 +702,12 @@ void CheckScan()
     {
       i = (((CFrame->GlobalWidth*CFrame->hf[CScan->ci[0]])-1)/CFrame->Maxh)+1;
       if (CFrame->Type!=3)
-	i = ((i-1)/8)+1;
+  i = ((i-1)/8)+1;
       CScan->MDUWide = i;
 
       i = (((CFrame->GlobalHeight*CFrame->vf[CScan->ci[0]])-1)/CFrame->Maxv)+1;
       if (CFrame->Type!=3)
-	i = ((i-1)/8)+1;
+  i = ((i-1)/8)+1;
       CScan->MDUHigh = i;
     }
   else
@@ -734,22 +734,22 @@ void MakeConsistentFrameSize()
   for(i=0;i<MAXIMUM_COMPONENTS;i++)
     {
       if (CFrame->vf[i] > Maxv)
-	Maxv = CFrame->vf[i];
+  Maxv = CFrame->vf[i];
       if (CFrame->hf[i] > Maxh)
-	Maxh = CFrame->hf[i];
+  Maxh = CFrame->hf[i];
     }
 
   for(i=0;i<MAXIMUM_COMPONENTS;i++)       /* Define estimated actual width */
     {                                     /* ignoring replications */
       if (CFrame->hf[i])
-	{
-	  if (!CFrame->Width[i])
-	    CFrame->Width[i] =
-	      (((CFrame->GlobalWidth*CFrame->hf[i])-1)/Maxh)+1;
-	  if (!CFrame->Height[i])
-	    CFrame->Height[i] =
-	      (((CFrame->GlobalHeight*CFrame->vf[i])-1)/Maxv)+1;
-	}
+  {
+    if (!CFrame->Width[i])
+      CFrame->Width[i] =
+        (((CFrame->GlobalWidth*CFrame->hf[i])-1)/Maxh)+1;
+    if (!CFrame->Height[i])
+      CFrame->Height[i] =
+        (((CFrame->GlobalHeight*CFrame->vf[i])-1)/Maxv)+1;
+  }
     }
 
   CFrame->Maxv = Maxv;  CFrame->Maxh = Maxh;
@@ -764,40 +764,40 @@ void MakeConsistentFrameSize()
     {
       CFrame->MDUWide= (CFrame->MDUWide-1)/8 +1;
       if (CFrame->MDUHigh)
-	CFrame->MDUHigh= (CFrame->MDUHigh-1)/8 +1;
+  CFrame->MDUHigh= (CFrame->MDUHigh-1)/8 +1;
     }
 
   for(i=0;i<MAXIMUM_COMPONENTS;i++)
     {
       if (CFrame->hf[i])
-	{
-	  TestWide = ((CFrame->Width[i]-1)/(CFrame->hf[i]))+1;
-	  if (CFrame->Type!=3) TestWide= (TestWide-1)/8 +1;
+  {
+    TestWide = ((CFrame->Width[i]-1)/(CFrame->hf[i]))+1;
+    if (CFrame->Type!=3) TestWide= (TestWide-1)/8 +1;
 
-	  if (CFrame->MDUWide!=TestWide)
-	    {
-	      WHEREAMI();
-	      printf("Inconsistent frame width.\n");
-	      printf("Component[%dx%d]\n",
-		     CFrame->Width[i],CFrame->Height[i]);
-	      printf("MDU Wide: Image, Component %d!= %d.\n",
-		     CFrame->MDUWide,TestWide);
-	    }
-	  if (CFrame->MDUHigh)
-	    {
-	      TestHigh = ((CFrame->Height[i]-1)/(CFrame->vf[i]))+1;
-	      if (CFrame->Type!=3) TestHigh= (TestHigh-1)/8 +1;
-	      if (CFrame->MDUHigh!=TestHigh)
-		{
-		  WHEREAMI();
-		  printf("Inconsistent frame height.\n");
-		  printf("Component[%dx%d]\n",
-			 CFrame->Width[i],CFrame->Height[i]);
-		  printf("MDU High: Image, Component %d!= %d.\n",
-			 CFrame->MDUHigh,TestHigh);
-		}
-	    }
-	}
+    if (CFrame->MDUWide!=TestWide)
+      {
+        WHEREAMI();
+        printf("Inconsistent frame width.\n");
+        printf("Component[%dx%d]\n",
+         CFrame->Width[i],CFrame->Height[i]);
+        printf("MDU Wide: Image, Component %d!= %d.\n",
+         CFrame->MDUWide,TestWide);
+      }
+    if (CFrame->MDUHigh)
+      {
+        TestHigh = ((CFrame->Height[i]-1)/(CFrame->vf[i]))+1;
+        if (CFrame->Type!=3) TestHigh= (TestHigh-1)/8 +1;
+        if (CFrame->MDUHigh!=TestHigh)
+    {
+      WHEREAMI();
+      printf("Inconsistent frame height.\n");
+      printf("Component[%dx%d]\n",
+       CFrame->Width[i],CFrame->Height[i]);
+      printf("MDU High: Image, Component %d!= %d.\n",
+       CFrame->MDUHigh,TestHigh);
+    }
+      }
+  }
     }
 }
 

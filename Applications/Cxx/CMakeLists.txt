@@ -44,7 +44,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcminfo
   )
 # poppler people have the worse API backward compatibility I know of.
-# there is absolutely no way to check the version of poppler 
+# there is absolutely no way to check the version of poppler
 # they change the API during a minor change of the version
 IF(GDCM_USE_SYSTEM_POPPLER)
   INCLUDE(CheckCXXSourceCompiles)
@@ -118,4 +118,3 @@ ENDFOREACH(exename)
 
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
-

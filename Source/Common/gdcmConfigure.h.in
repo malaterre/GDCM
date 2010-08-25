@@ -115,7 +115,7 @@
 #cmakedefine GDCM_HAVE__SNPRINTF
 #cmakedefine GDCM_HAVE_GETTIMEOFDAY
 
-// MM: I have a feeling that if GDCM_HAVE_WCHAR_IFSTREAM, then UNICODE filename 
+// MM: I have a feeling that if GDCM_HAVE_WCHAR_IFSTREAM, then UNICODE filename
 // are expected to be specified as UTF-16, but if no API exist for UTF-16
 // at std::ifstream level, then const char* of std::ifstream might accept
 // UTF-8
@@ -124,7 +124,7 @@
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
 /* To Remove code that support broken DICOM implementation and therefore
- * add some over head. Turn Off at your own risk 
+ * add some over head. Turn Off at your own risk
  */
 #cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 

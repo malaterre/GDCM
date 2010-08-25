@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
- * Usage: 
+/*
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Perso/gdcm/debug-gcc/bin
  * $ mono bin/CompressLossyJPEG.exe input.dcm output.dcm
  */

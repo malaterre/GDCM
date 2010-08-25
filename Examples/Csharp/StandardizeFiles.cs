@@ -16,7 +16,7 @@
 /*
  * Simple C# example to show how one would 'Standardize' a DICOM File-Set
  *
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/StandardizeFiles.exe input_path output_path
  */
@@ -57,7 +57,7 @@ public class StandardizeFiles
     writer.SetFile( reader.GetFile() );
     gdcm.Pixmap pixout = ((PixmapToPixmapFilter)change).GetOutput();
     //System.Console.WriteLine( "Debug: " + pixout.toString() );
-    
+
     writer.SetPixmap( pixout );
     if( !writer.Write() )
       {

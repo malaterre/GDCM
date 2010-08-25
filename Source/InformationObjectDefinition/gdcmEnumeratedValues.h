@@ -35,7 +35,7 @@ namespace gdcm
 class GDCM_EXPORT EnumeratedValues
 {
 public:
-  EnumeratedValues() { 
+  EnumeratedValues() {
   }
 private:
 };

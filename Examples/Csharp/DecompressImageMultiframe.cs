@@ -29,21 +29,21 @@ BitsStored         :8
 HighBit            :7
 PixelRepresentation:0
 ScalarType found   :UINT8
-PhotometricInterpretation: MONOCHROME2 
+PhotometricInterpretation: MONOCHROME2
 PlanarConfiguration: 0
 TransferSyntax: 1.2.840.10008.1.2.4.50
 Orientation Label: AXIAL
 */
 
 /*
- * Description: 
+ * Description:
  *
  * Assume we have a file angiogram-06.dcm as described above.
  * the following program will decompress directly from the extracted jpeg stream.
  *
  * First step extract the jpeg stream (but not the Basic Offset Table):
  *
- * $ gdcmraw -i angiogram-06.dcm -o /tmp/output/chris --split-frags --pattern %d.jpg     
+ * $ gdcmraw -i angiogram-06.dcm -o /tmp/output/chris --split-frags --pattern %d.jpg
  *
  * Check that indeed there are 355 files, while there are 356 fragments in the original DICOM file, since
  * gdcmraw always skip the first fragment (Basic Offset Table).
@@ -51,9 +51,9 @@ Orientation Label: AXIAL
  * Now from those individual jpeg stream, recreate a fake gdcm.DataElement...
  *
  * Usage:
- * 
+ *
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono ./bin/DecompressImageMultiframe.exe /tmp/output  
+ * $ mono ./bin/DecompressImageMultiframe.exe /tmp/output
  */
 using System;
 using gdcm;
@@ -80,7 +80,7 @@ public class DecompressImageMultiframe
       {
       System.Console.WriteLine( filenames[(int)i] );
       string file = filenames[(int)i];
-      System.IO.FileStream infile = 
+      System.IO.FileStream infile =
         new System.IO.FileStream(file, System.IO.FileMode.Open, System.IO.FileAccess.Read);
       uint fsize = gdcm.PosixEmulation.FileSize(file);
 
@@ -126,7 +126,7 @@ public class DecompressImageMultiframe
       writer.Write(decompressedData);
       }
 
-    
+
     return 0;
     }
 }

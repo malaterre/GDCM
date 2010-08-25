@@ -14,9 +14,9 @@
 =========================================================================*/
 
 /*
- * Simple C# example 
+ * Simple C# example
  *
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/ReformatFile.exe input.dcm output.dcm
  */

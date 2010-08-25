@@ -234,9 +234,9 @@ int main (int argc, char *argv[])
       files.push_back( argv[optind++] );
       }
     //printf ("\n");
-    if( files.size() == 2 
+    if( files.size() == 2
       && filename.empty()
-      && outfilename.empty() 
+      && outfilename.empty()
     )
       {
       filename = files[0];
@@ -343,7 +343,7 @@ if( unenhance && false )
     const gdcm::Defs &defs = g.GetDefs();
 }
 
- 
+
   if( mosaic )
     {
     gdcm::ImageReader reader;
@@ -449,7 +449,7 @@ std::cerr << "Not implemented" << std::endl;
 
   gdcm::UIDs uid;
   uid.SetFromUID( ms.GetString() );
- 
+
   if( uid != gdcm::UIDs::EnhancedMRImageStorage )
   {
   std::cerr << "MediaStorage is not handled " << ms << " [" << uid.GetName() << "]" << std::endl;
@@ -519,7 +519,7 @@ std::cerr << "Not implemented" << std::endl;
         std::cout << "Success to write: " << outfilenamei << std::endl;
       }
        }
-    
+
     return 0;
  }
   else
@@ -597,7 +597,7 @@ std::cerr << "Not implemented" << std::endl;
         std::cout << "Success to write: " << outfilenamei << std::endl;
       }
       }
-    
+
     return 0;
      }
 

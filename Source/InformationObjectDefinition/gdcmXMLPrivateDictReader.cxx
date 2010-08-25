@@ -36,7 +36,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
 
   PrivateTag &tag = CurrentTag;
   DictEntry &de = CurrentDE;
-  
+
   int i = 0;
   const char **current = atts;
   // Supported attributes:
@@ -85,7 +85,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
       const char *raw = *(current+1);
       assert( (raw[0] == 'x' && raw[1] == 'x' )
            || (raw[2] == 'x' && raw[3] == 'x') );
-      if (raw[2] == 'x' && raw[3] == 'x') 
+      if (raw[2] == 'x' && raw[3] == 'x')
         {
         if( raw[0] == '0' && raw[1] == '0' )
           {

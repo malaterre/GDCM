@@ -24,7 +24,7 @@ namespace gdcm
 {
 /**
  * \brief Class for representing a IODEntry
- * \note 
+ * \note
 A.1.3 IOD Module Table and Functional Group Macro Table
 This Section of each IOD defines in a tabular form the Modules comprising the IOD. The following
 information must be specified for each Module in the table:

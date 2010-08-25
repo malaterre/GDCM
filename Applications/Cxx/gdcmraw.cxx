@@ -228,9 +228,9 @@ int main(int argc, char *argv[])
       files.push_back( argv[optind++] );
       }
     //printf ("\n");
-    if( files.size() == 2 
+    if( files.size() == 2
       && filename.empty()
-      && outfilename.empty() 
+      && outfilename.empty()
     )
       {
       filename = files[0];
@@ -263,7 +263,7 @@ int main(int argc, char *argv[])
     PrintHelp();
     return 1;
     }
- 
+
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
   gdcm::Trace::SetWarning( warning );
@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 
     std::ofstream output(outfilename.c_str(), std::ios::binary);
     output.write( buf, len );
-    
+
     delete[] buf;
     return 0;
     }
