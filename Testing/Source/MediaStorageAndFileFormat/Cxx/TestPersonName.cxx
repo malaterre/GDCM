@@ -26,7 +26,7 @@ int TestPersonName(int, char *[])
 	std::cout << "NumComp:" << pn0.GetNumberOfComponents() << std::endl;
 	pn0.Print( std::cout );
   std::cout << std::endl;
-  
+
 
 	PN pn00 = { "" };
 	std::cout << "NumComp:" << pn00.GetNumberOfComponents() << std::endl;

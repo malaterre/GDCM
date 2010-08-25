@@ -56,7 +56,7 @@ int TestFilename(int argc, char *argv[])
 //    {
 //    return 1;
 //    }
-  
+
   std::string dataroot = gdcm::Testing::GetDataRoot();
   std::string current = dataroot +  "/test.acr";
   if( !gdcm::System::FileExists( current.c_str() ) )
@@ -93,7 +93,7 @@ int TestFilename(int argc, char *argv[])
 
 {
 #ifdef GDCM_HAVE_WCHAR_IFSTREAM
-  const wchar_t ifn[] = L"UnicodeFileName.dcm"; 
+  const wchar_t ifn[] = L"UnicodeFileName.dcm";
   const wchar_t* fn = gdcm::Testing::GetTempFilenameW(ifn);
   std::ofstream outputFileStream( fn );
   if ( ! outputFileStream.is_open() )
@@ -167,7 +167,7 @@ int TestFilename(int argc, char *argv[])
   // http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
   // The only way to work around the 260 byte limitation it appears as if we
   // have to deal with universal naming convention (UNC) path.
-  const char subdir[] = 
+  const char subdir[] =
     "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
     "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"
     "very/long/pathname/foobar/hello_world/toreproduceabugindpkg/pleaseconsider/"

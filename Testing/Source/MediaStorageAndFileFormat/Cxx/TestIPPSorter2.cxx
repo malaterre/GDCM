@@ -22,7 +22,7 @@
 // Sort image using Instance Number:
 bool mysort(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
 {
-  gdcm::Attribute<0x0020,0x0013> at1; // Instance Number 
+  gdcm::Attribute<0x0020,0x0013> at1; // Instance Number
   at1.Set( ds1 );
   gdcm::Attribute<0x0020,0x0013> at2;
   at2.Set( ds2 );

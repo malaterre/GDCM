@@ -117,8 +117,8 @@ int TestDirectionCosines(int, char *[])
   const double cross[3] = {0,0,1};
   double z[3];
   dc.Cross(z);
-  if( z[0] != cross[0] 
-   || z[1] != cross[1] 
+  if( z[0] != cross[0]
+   || z[1] != cross[1]
    || z[2] != cross[2] )
     {
     return 1;

@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-static const char * const gdcmSHA1SumFiles[][2] = { 
+static const char * const gdcmSHA1SumFiles[][2] = {
 { "265465a2e3b204ab9a094f2de56bbec96d55ab74" , "00191113.dcm" },
 { "ab316e51539a56053e216017c8445a246a978590" , "012345.002.050.dcm" },
 { "750ff7a9df7a12c13f7149c514664db7c68c3125" , "05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm" },

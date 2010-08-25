@@ -23,10 +23,10 @@ int TestAttributeAT() { return 0; }
 
 /*
 int TestAttributeCS()
-{ 
+{
   // (0008,9007) CS [ORIGINAL\PRIMARY\T1\NONE]               #  24, 4 FrameType
   static const char* values[] = {"ORIGINAL","PRIMARY","T1","NONE"};
-  static const char* newvalues[] = {"DERIVED","SECONDARY","T2","ALL"}; 
+  static const char* newvalues[] = {"DERIVED","SECONDARY","T2","ALL"};
   const unsigned int numvalues = sizeof(values) / sizeof(values[0]);
   if( numvalues != 4 ) return 1;
 
@@ -52,12 +52,12 @@ int TestAttributeCS()
   for(unsigned int i = 0; i < numvalues; ++i)
     it.SetValue( newvalues[i], i );
   if( it.GetNumberOfValues() != numvalues ) return 1;
-    
+
   for(unsigned int i = 0; i < numvalues; ++i)
     if( it.GetValue(i) != newvalues[i] ) return 1;
 
   // const char * is not a gdcm::String, need an array of gdcm::String
-  static const gdcm::String<> newvalues2[] = {"DERIVED","SECONDARY","T2","ALL"}; 
+  static const gdcm::String<> newvalues2[] = {"DERIVED","SECONDARY","T2","ALL"};
   const unsigned int numnewvalues2 = sizeof(newvalues2) / sizeof(newvalues2[0]);
   it.SetValues( newvalues2 );
 
@@ -66,7 +66,7 @@ int TestAttributeCS()
 
   de = it.GetAsDataElement();
   std::cout << de << std::endl;
- 
+
   // (0008,0008) CS [DERIVED\PRIMARY\AXIAL]                  #  22, 3 ImageType
   gdcm::Attribute<0x0008,0x0008> it1;
   if( it1.GetVM() != gdcm::VM::VM2_n )
@@ -91,7 +91,7 @@ int TestAttributeCS()
   de = it1.GetAsDataElement();
   std::cout << de << std::endl;
 
-  return 0; 
+  return 0;
 }
 */
 
@@ -123,7 +123,7 @@ int TestAttributeDS()
   // new values:
   ipp.SetValues( newvalues );
   if( ipp.GetNumberOfValues() != numvalues ) return 1;
-    
+
   for(unsigned int i = 0; i < numvalues; ++i)
     if( fabs(ipp.GetValue(i) - newvalues[i]) > std::numeric_limits<float>::epsilon() ) return 1;
 
@@ -151,7 +151,7 @@ int TestAttributeDS()
     {
     return 1;
     }
-  
+
 
 }
 
@@ -162,7 +162,7 @@ int TestAttributeDT() { return 0; }
 int TestAttributeFL() { return 0; }
 int TestAttributeFD() { return 0; }
 int TestAttributeIS()
-{ 
+{
   // <entry group="0018" element="1182" vr="IS" vm="1-2" name="Focal Distance"/>
   // This case is slightly more complex it is up to the user to say what is the VM:
   gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM1> fd1 = {0};
@@ -175,7 +175,7 @@ int TestAttributeIS()
   //gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM3> fd3 = {0,1};
   //return 1;
 
-  return 0; 
+  return 0;
 }
 
 int TestAttributeLO() { return 0; }
@@ -195,7 +195,7 @@ int TestAttributeUL() { return 0; }
 int TestAttributeUN() { return 0; }
 int TestAttributeUS() { return 0; }
 int TestAttributeUT() { return 0; }
- 
+
 
 int TestAttribute1(int argc, char *argv[])
 {

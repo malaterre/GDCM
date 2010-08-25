@@ -38,7 +38,7 @@ namespace gdcm
 // This is the full md5 of the rewriten file. The file was manually check
 // and is (should be) exactly what should have been written in the first place
 // test was done using dcmtk 3.5.4 / dicom3tools
-static const char * const gdcmMD5DataBrokenImages[][2] = { 
+static const char * const gdcmMD5DataBrokenImages[][2] = {
 // file has some garbage at the end, replace with a trailing end item.
 { "e8ed75f5e13cc20e96ee716bcc78351b" , "gdcm-JPEG-LossLess3a.dcm" }, // size match
 
@@ -189,7 +189,7 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
       std::cerr << "incompatible ref:" << ref << " vs " << outdigest << " for file: " << filename << " & " << outfilename << std::endl;
       return 1; // ref exist but does not match, how is that possible ?
      }
-   //if( !ref ) 
+   //if( !ref )
    //  {
    //  return 1;
    //  }

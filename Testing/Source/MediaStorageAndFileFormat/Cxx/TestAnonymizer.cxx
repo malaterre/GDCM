@@ -68,7 +68,7 @@ int TestAnonymize(const char *subdir, const char* filename)
     return 1;
     }
   std::cout << "Success to write: " << outfilename << std::endl;
- 
+
   // now let's try to read it back in:
   Reader reader2;
   reader2.SetFileName( outfilename.c_str() );

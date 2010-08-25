@@ -27,7 +27,7 @@ def TestScan(dirname, recursive = False):
   d = gdcm.Directory()
   nfiles = d.Load( dirname, recursive )
   print "done retrieving all the",nfiles,"files"
-  
+
   s = gdcm.Scanner()
   t1 = gdcm.Tag(0x0020,0x000d) # VR::UI
   t2 = gdcm.Tag(0x0020,0x000e) # VR::UI
@@ -62,7 +62,7 @@ def TestScan(dirname, recursive = False):
   #for k,v in m1.iteritems():
   #  print "item", k,v
 
-  
+
   # For each file get the value for tag t1:
   for f in d.GetFilenames():
     print "Working on:",f
@@ -80,7 +80,7 @@ def TestScan(dirname, recursive = False):
       print tag,"->",value
       # increment iterator
       pttv.Next()
-  
+
 if __name__ == "__main__":
   try:
     dirname = os.sys.argv[1]
@@ -90,6 +90,6 @@ if __name__ == "__main__":
     dirname = t.GetDataRoot()
     recursive = False
   TestScan( dirname, recursive)
-  
+
   sys.exit(0)
 

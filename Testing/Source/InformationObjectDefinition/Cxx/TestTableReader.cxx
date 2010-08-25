@@ -25,7 +25,7 @@ void TestReadTable(const char *filename)
   tr.SetFilename(filename);
   tr.Read();
 
-  
+
   const gdcm::Modules &modules = defs.GetModules();
   std::cout << modules << std::endl;
 

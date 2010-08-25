@@ -20,7 +20,7 @@ int TestDummyValueGenerator(int argc, char *argv[])
   gdcm::DummyValueGenerator dvg;
   const char patientid1[] = "hello";
   const char patientid2[] = "hello ";
-  // Because patientid1 & patientid2 are equivalent in DICOM we need to be able to generate 
+  // Because patientid1 & patientid2 are equivalent in DICOM we need to be able to generate
   // identical replacement value in case of de-identifier operation:
 
   const char *ptr1 = gdcm::DummyValueGenerator::Generate( patientid1 );

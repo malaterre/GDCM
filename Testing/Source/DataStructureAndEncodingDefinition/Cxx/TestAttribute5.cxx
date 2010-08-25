@@ -15,21 +15,21 @@
 #include "gdcmAttribute.h"
 
 /*
-  (0008,0000) UL 38                        
-  (0008,0001) UL 262302                    
-  (0008,0010) LO [ACRNEMA_LIBIDO_1.1]      
-  (0028,0000) UL 100                       
-  (0028,0005) US 2                         
-  (0028,0010) US 512                       
-  (0028,0011) US 512                       
-  (0028,0015) ?? 00\00                     
-  (0028,0016) ?? 00\00                     
-  (0028,0100) US 8                         
-  (0028,0101) US 8                         
-  (0028,0102) US 7                         
-  (0028,0103) US 0                         
-  (0028,0199) ?? 70\00                     
-  (7fe0,0000) UL 262152                    
+  (0008,0000) UL 38
+  (0008,0001) UL 262302
+  (0008,0010) LO [ACRNEMA_LIBIDO_1.1]
+  (0028,0000) UL 100
+  (0028,0005) US 2
+  (0028,0010) US 512
+  (0028,0011) US 512
+  (0028,0015) ?? 00\00
+  (0028,0016) ?? 00\00
+  (0028,0100) US 8
+  (0028,0101) US 8
+  (0028,0102) US 7
+  (0028,0103) US 0
+  (0028,0199) ?? 70\00
+  (7fe0,0000) UL 262152
   (7fe0,0010) OW ea00\eaea\e9e9\e9e9\e9e9\e
 */
 
@@ -41,7 +41,7 @@ struct dummy {
 
 int TestAttribute(int argc, char *argv[])
 {
-  
+
   dummy du = { 2, "date" };
 
   const char *filename;
@@ -87,7 +87,7 @@ int TestAttribute(int argc, char *argv[])
   gdcm::Attribute<0x0028,0x0011, gdcm::VR::US, gdcm::VM::VM1> g = { 512 };
   g.Print( std::cout << std::endl );
   g.Write(os);
- 
+
 // 0028 0015 US 1 UsedNbX ACR Special (RET)
 // 0028 0016 US 1 UsedNbY ACR Special (RET)
 

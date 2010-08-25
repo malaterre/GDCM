@@ -125,16 +125,16 @@ int TestTag(int , char * [])
   if ( t1[0] != 0 )
     {
     std::cerr << "1" << std::endl;
-    return 1; 
+    return 1;
     }
   if (t1[1] != 0 )
     {std::cout << "2" << std::endl ; return 1; }
-    
+
   if (t2[0] != 0 )
     {std::cout << "3" << std::endl ; return 1; }
   if (t2[1] != 0 )
     {std::cout << "4" << std::endl ; return 1; }
-    
+
   if ( !(t1 == t2) )
     {std::cout << "5" << std::endl ; return 1; }
   if ( t1 != t2 )
@@ -145,9 +145,9 @@ int TestTag(int , char * [])
   unsigned int i;
 
   const uint32_t tag = dummy;
-  std::cout << "Just to inform : uint32_t value=" << std::hex << tag ; 
-  std::cout << " stored in RAM as :";  
-  for (i=0;i<sizeof(uint32_t);i++) 
+  std::cout << "Just to inform : uint32_t value=" << std::hex << tag ;
+  std::cout << " stored in RAM as :";
+  for (i=0;i<sizeof(uint32_t);i++)
     {
     std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&tag)[i] << "] " ;
     }
@@ -156,13 +156,13 @@ int TestTag(int , char * [])
   const uint16_t group   = 0x1234;
   const uint16_t element = 0x5678;
 
-  std::cout << "Just to inform : uint16_t values= " << group <<"," << element ; 
-  std::cout << " stored in RAM as : ";  
-  for (i=0;i<sizeof(uint16_t);i++) 
+  std::cout << "Just to inform : uint16_t values= " << group <<"," << element ;
+  std::cout << " stored in RAM as : ";
+  for (i=0;i<sizeof(uint16_t);i++)
     {
     std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&group)[i] << "] " ;
     }
-  for (i=0;i<sizeof(uint16_t);i++) 
+  for (i=0;i<sizeof(uint16_t);i++)
     {
     std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&element)[i] << "] " ;
     }
@@ -187,9 +187,9 @@ int TestTag(int , char * [])
     {std::cout << "14" << std::endl ; return 1; }
 
 
-  std::cout << "Constructor with 1x uin32_t : " << std::hex <<tag <<std::endl;  
+  std::cout << "Constructor with 1x uin32_t : " << std::hex <<tag <<std::endl;
   const gdcm::Tag t4(tag);
-  std::cout << "t4=" << t4 << std::endl;     
+  std::cout << "t4=" << t4 << std::endl;
   if( t4.GetGroup() != group )
     {std::cout << "15" << std::endl ; return 1; }
   if( t4.GetElement() != element )
@@ -207,8 +207,8 @@ int TestTag(int , char * [])
 
   if( t4.GetElementTag() != tag )
     {std::cout << "22" << std::endl;
-    std::cout << std::hex << t4.GetElementTag() << std::endl; 
-    std::cout << std::hex << tag << std::endl; 
+    std::cout << std::hex << t4.GetElementTag() << std::endl;
+    std::cout << std::hex << tag << std::endl;
     return 1;
     }
 
@@ -232,25 +232,25 @@ int TestTag(int , char * [])
   // Clearly order should be o1 < o3 < o2 < 04
   // Test o1
   if( !(o1 < o3)
-    ||!(o1 < o2) 
+    ||!(o1 < o2)
     ||!(o1 < o4) )
     {std::cout << "24" << std::endl ; return 1; }
 
   // Test o2
   if( !(o2 < o4)
-    ||!(o1 < o2) 
+    ||!(o1 < o2)
     ||!(o3 < o2) )
     {std::cout << "25" << std::endl ; return 1;}
 
   // Test o3
   if( !(o3 < o2)
-    ||!(o3 < o4) 
+    ||!(o3 < o4)
     ||!(o1 < o3) )
     {std::cout << "26" << std::endl ; return 1; }
 
   // Test o4 (I know this duplicate some tests, but we don't need to optimize a test!)
   if( !(o1 < o4)
-    ||!(o2 < o4) 
+    ||!(o2 < o4)
     ||!(o3 < o4) )
     {std::cout << "27" << std::endl ; return 1; }
 
@@ -268,25 +268,25 @@ int TestTag(int , char * [])
   // Clearly order should be O1 < O3 < O2 < 04
   // Test O1
   if( !(O1 < O3)
-    ||!(O1 < O2) 
+    ||!(O1 < O2)
     ||!(O1 < O4) )
     {std::cout << "28" << std::endl ; return 1; }
 
   // Test O2
   if( !(O2 < O4)
-    ||!(O1 < O2) 
+    ||!(O1 < O2)
     ||!(O3 < O2) )
     {std::cout << "29" << std::endl ; return 1;}
 
   // Test O3
   if( !(O3 < O2)
-    ||!(O3 < O4) 
+    ||!(O3 < O4)
     ||!(O1 < O3) )
     {std::cout << "30" << std::endl ; return 1; }
 
   // Test O4 (I know this duplicate some tests, but we don't need to optimize a test!)
   if( !(O1 < O4)
-    ||!(O2 < O4) 
+    ||!(O2 < O4)
     ||!(O3 < O4) )
     {std::cout << "31" << std::endl ; return 1; }
 

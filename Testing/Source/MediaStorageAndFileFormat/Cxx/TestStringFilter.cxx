@@ -29,7 +29,7 @@ int TestStringFilt(const char *filename)
     }
   gdcm::DataSet const& ds = r.GetFile().GetDataSet();
   sf.SetFile( r.GetFile() );
-  
+
   int ret = 0;
   gdcm::DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); ++it)

@@ -81,7 +81,7 @@ int TestSmartPointer(int, char *[])
   //std::cout << p << std::endl;
   //std::cout << p2 << std::endl;
   //std::cout << p3 << std::endl;
-  
+
   if( p == p2
    || p == p3
    || p2 == p3 )
@@ -95,7 +95,7 @@ int TestSmartPointer(int, char *[])
 
   // Pointer:
   SmartPointer<Foo> p6 = &(*p2);
-  
+
   SmartPointer<Foo> p7;
   Fill(p7);
   Foo &foo = *p7;

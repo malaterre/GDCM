@@ -62,7 +62,7 @@ int TestMediaStorage(int argc, char *argv[])
   unsigned int nMSType = gdcm::MediaStorage::GetNumberOfMSType();
   unsigned int nMSString = gdcm::MediaStorage::GetNumberOfMSString();
   unsigned int nMSMod = gdcm::MediaStorage::GetNumberOfModality();
-  if( nMSType != nMSString || nMSType != nMSMod ) 
+  if( nMSType != nMSString || nMSType != nMSMod )
     {
     std::cerr << "you are shooting yourself in the foot, dear.: " << nMSType << "," << nMSString << "," << nMSMod << std::endl;
     return 1;

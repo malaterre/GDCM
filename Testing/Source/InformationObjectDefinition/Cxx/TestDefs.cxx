@@ -41,9 +41,9 @@ int TestDefs(int, char *[])
     if( !iod )
       {
       // We do not support Private IODs (for now??)
-      if( mst != MediaStorage::PhilipsPrivateMRSyntheticImageStorage 
-        && mst != MediaStorage::ToshibaPrivateDataStorage 
-        && mst != MediaStorage::GEPrivate3DModelStorage 
+      if( mst != MediaStorage::PhilipsPrivateMRSyntheticImageStorage
+        && mst != MediaStorage::ToshibaPrivateDataStorage
+        && mst != MediaStorage::GEPrivate3DModelStorage
         && mst != MediaStorage::Philips3D
         && mst != MediaStorage::CSANonImageStorage
         && mst != MediaStorage::GeneralElectricMagneticResonanceImageStorage )
@@ -62,7 +62,7 @@ int TestDefs(int, char *[])
         std::cerr << "Could not find IOD for SOPClass: " << uid << std::endl;
         ++ret;
         }
-      else 
+      else
         {
         std::string iod_ref_str = iod_ref;
         //iod_ref_str += " IOD Modules";
@@ -80,7 +80,7 @@ int TestDefs(int, char *[])
   unsigned int nsop = gdcm::SOPClassUIDToIOD::GetNumberOfSOPClassToIOD();
   if( nm != nsop )
     {
-    std::cerr << "Incompatible MediaStorage knows: " << nm << 
+    std::cerr << "Incompatible MediaStorage knows: " << nm <<
       " SOP Classes while SOPClassUIDToIOD knows: " << nsop << " classes" << std::endl;
     ++ret;
     }

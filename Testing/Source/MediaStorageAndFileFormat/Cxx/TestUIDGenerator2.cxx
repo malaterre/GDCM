@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <iterator>
 
-#include <pthread.h> 
+#include <pthread.h>
 
 const unsigned int nuids = 100;
 
@@ -51,19 +51,19 @@ int TestUIDGenerator2(int argc, char *argv[])
   for (i = 0; i < nthreads; i++)
     ret = pthread_create (&th[i], NULL, func, (void*)(uids+i));
   for (i = 0; i < nthreads; i++)
-    pthread_join (th[i], NULL); 
+    pthread_join (th[i], NULL);
 
   std::vector<std::string> v_one(nuids*nthreads);
   std::vector<std::string>::iterator it = v_one.begin();
   for(i = 0; i < nthreads; i+=2)
     {
-    std::set_union(uids[i].begin(), uids[i].end(), 
+    std::set_union(uids[i].begin(), uids[i].end(),
       uids[i+1].begin(), uids[i+1].end(), it);
     it += nuids*2;
     }
   std::cout << v_one.size() << std::endl;
   assert( v_one.size() == nuids * nthreads ); // programmer error
-  
+
   std::copy(v_one.begin(), v_one.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 
   std::set<std::string> global;

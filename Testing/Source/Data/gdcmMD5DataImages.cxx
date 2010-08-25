@@ -22,7 +22,7 @@
 // md5sum bla.raw
 // So this md5 checksum should match the one in dcmtk...hopefully :)
 //
-static const char * const gdcmMD5DataImages[][2] = { 
+static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 4 8 1 */
 { "bfff320d1b058e91b4819aa4560c16f7" , "00191113.dcm" },
 /* gdcm 256 256 1 16 1 */
@@ -366,7 +366,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 
 // Those where added manually:
-// If you are lucky and the image is raw (MONOCHROME2) you simply need to 
+// If you are lucky and the image is raw (MONOCHROME2) you simply need to
 // do (assuming you are under UNIX)
 // $ ./bin/gdcmraw -i 42166745.dcm -o bla.raw
 // $ md5sum bla.raw
@@ -377,7 +377,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "1b0768a3518a6b6ed425c3c1d7a7ea3b" , "Image1.dcm" },
 { "a41c7f4e75cf637ae8912f5c3cd2c69d" , "Image2.dcm" },
 { "22c9be23446a7be61a90d3578f3c9739" , "deflate_image.dcm" },
-{ "d5681b156af55899835293286c57d887" , "brain.dcm" }, 
+{ "d5681b156af55899835293286c57d887" , "brain.dcm" },
 { "d4d365f0500f2ccff932317833d8804b" , "abdominal.dcm" },
 { "138d9bd642c6f1cdc427ef6f99132677" , "ankle.dcm" },
 { "ff8d450e47e8989478a1b6f19d0988cc" , "spine.dcm" },

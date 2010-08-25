@@ -25,7 +25,7 @@ int TestFile(int argc, char *argv[])
   {
   gdcm::SmartPointer<gdcm::File> other = pf;
   }
-  
+
 
   return 0;
 }

@@ -40,7 +40,7 @@ struct AS
 	unsigned short N;
 	unsigned char  Format;
   void Print(std::ostream &os) {
-	  if( N < 1000 && 
+	  if( N < 1000 &&
 	     (Format == 'D' ||
 	      Format == 'W' ||
 	      Format == 'M' ||
@@ -166,11 +166,11 @@ struct PN
 		//os << "Middle Name        : " << Component[2] << std::endl;
 		//os << "Name Suffix        : " << Component[3] << std::endl;
 		//os << "Name Prefix        : " << Component[4] << std::endl;
-		os << Component[0] << "^"; 
-		os << Component[1] << "^"; 
-		os << Component[2] << "^"; 
-		os << Component[3] << "^"; 
-		os << Component[4]; 
+		os << Component[0] << "^";
+		os << Component[1] << "^";
+		os << Component[2] << "^";
+		os << Component[3] << "^";
+		os << Component[4];
 	}
 };
 
@@ -230,7 +230,7 @@ struct DT
 	{
 		da.Print( os );
 		tm.Print( os );
-		if( OffsetSign ) 
+		if( OffsetSign )
 		{
 		if ( OffsetSign == -1 ) os << "-";
 		else if ( OffsetSign == +1 ) os << "+";
@@ -394,7 +394,7 @@ int main()
 	std::cout << std::endl;
 
 
-	UI ui = { 
+	UI ui = {
 	"1234567890.1234567890.1234567890.1234567890.1234567890.123456789" };
 	ui.Print( std::cout );
 	std::cout << std::endl;

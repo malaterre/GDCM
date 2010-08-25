@@ -25,7 +25,7 @@ int TestSorter(int argc, char *argv[])
     {
     return 1;
     }
-  
+
   // White box:
   const char *directory = gdcm::Testing::GetDataRoot();
   if( argc == 2 )

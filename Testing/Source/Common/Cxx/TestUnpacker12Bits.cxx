@@ -128,8 +128,8 @@ int TestUnpacker12Bits(int, char *[])
       ++res;
       }
     }
-  
+
 }
- 
+
   return res;
 }

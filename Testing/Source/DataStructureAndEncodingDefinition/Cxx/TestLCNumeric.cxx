@@ -37,7 +37,7 @@ int TestLCNumeric(int argc, char *argv[])
   printf("Float: %f\n", a );
 
   // The following affect all ostringstream
-  try 
+  try
     {
     //std::locale b = std::locale( "fr_FR" );
     std::locale::global( std::locale( "fr_FR.UTF-8" ) ) ;

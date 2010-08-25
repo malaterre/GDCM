@@ -20,7 +20,7 @@
 
 // dcmdump /path/to/image/*.dcm 2>&/dev/null| grep 0020 | grep "000e\|000d" | sort | uniq
 //
-// $ find   /images/ -type f -exec dcmdump -s +P 0010,0010 {} \; 
+// $ find   /images/ -type f -exec dcmdump -s +P 0010,0010 {} \;
 
 int TestScannerExtra()
 {
@@ -131,7 +131,7 @@ int TestScanner(int argc, char *argv[])
   const gdcm::Scanner::TagToValue &tv = it->second;
   //const std::string &filename = d.GetFilenames()[0];
   gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t5 );
-  if( it2 == tv.end() || t5 != it2->first ) 
+  if( it2 == tv.end() || t5 != it2->first )
     {
     std::cerr << "Could not find tag:" << t5 << std::endl;
     return 1;
@@ -164,7 +164,7 @@ int TestScanner(int argc, char *argv[])
   for( std::vector<const char *>::const_iterator it = keys.begin(); it != keys.end(); ++it)
     {
     const char *filename = *it;
-    const gdcm::Directory::FilenamesType::const_iterator it2 
+    const gdcm::Directory::FilenamesType::const_iterator it2
       = std::find(filenames.begin(), filenames.end(), filename);
     if( it2 == filenames.end() )
       {
@@ -180,7 +180,7 @@ int TestScanner(int argc, char *argv[])
 
   // puposely discard gdcmDataExtra test, this is just an 'extra' test...
   int b2 = TestScannerExtra(); (void)b2;
-  
+
 
   return 0;
 }

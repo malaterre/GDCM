@@ -51,6 +51,6 @@ int TestByteBuffer(int, char *[])
       ++r;
       }
     }
-  
+
   return r;
 }

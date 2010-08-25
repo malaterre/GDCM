@@ -58,8 +58,8 @@ if __name__ == "__main__":
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
       sucess += TestStringFilter( filename )
-  
-  
+
+
   # Test succeed ?
   sys.exit(sucess == 0)
 

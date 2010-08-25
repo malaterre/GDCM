@@ -20,7 +20,7 @@ int TestSwapper(int argc, char *argv[])
   (void)argv; (void)argc;
   int res = 0;
 
-  typedef union { 
+  typedef union {
     uint64_t v64;
     uint32_t v32[2];
     uint16_t v16[4];
@@ -28,7 +28,7 @@ int TestSwapper(int argc, char *argv[])
   } testswapper;
   testswapper t;
   for(int i = 0; i < 8; ++i) t.v8[i] = i;
-  
+
   testswapper val;
   val.v64 = gdcm::SwapperDoOp::Swap(t.v64);
   //for(int i = 0; i < 8; ++i) std::cout << (int)val.v8[i] << std::endl;
@@ -39,7 +39,7 @@ int TestSwapper(int argc, char *argv[])
       ++res;
       }
     }
-  
+
 
   return res;
 }

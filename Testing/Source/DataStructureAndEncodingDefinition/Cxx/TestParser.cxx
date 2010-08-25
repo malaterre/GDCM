@@ -54,7 +54,7 @@ int TestParser(int argc, char *argv[])
     }
   std::string filename = argv[1];
   std::ifstream is( filename.c_str() );
-  std::cout << "---------------------------Parsing file :[" << filename << "]" 
+  std::cout << "---------------------------Parsing file :[" << filename << "]"
             << std::endl;
   char buf[BUFSIZ];
   gdcm::Parser parser;
