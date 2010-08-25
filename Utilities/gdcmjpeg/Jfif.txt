@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 JPEG File Interchange Format
 Version 1.02
 
@@ -338,17 +329,3 @@ o if you only want to specify a pixel aspect ratio, put 0 for the units field in
 APP0 field. Xdensity and Ydensity can then be programmed for the desired aspect ratio.
 Xdensity = 1, Ydensity = 1 will program a 1:1 aspect ratio.  Xdensity and Ydensity should
 always be non-zero.
-
-
-
-
-
-
-
-
-
-
-
-
-
-

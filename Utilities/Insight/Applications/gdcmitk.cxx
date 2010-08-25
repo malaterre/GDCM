@@ -39,7 +39,7 @@ int main( int argc, char* argv[] )
   typedef itk::GDCMImageIO2           ImageIOType;
 
   ImageIOType::Pointer gdcmImageIO = ImageIOType::New();
-  
+
   reader->SetImageIO( gdcmImageIO );
   try
     {
@@ -70,10 +70,10 @@ int main( int argc, char* argv[] )
     return EXIT_FAILURE;
     }
   typedef unsigned char WritePixelType;
-  
+
   typedef itk::Image< WritePixelType, 2 > WriteImageType;
-  
-  typedef itk::RescaleIntensityImageFilter< 
+
+  typedef itk::RescaleIntensityImageFilter<
                InputImageType, WriteImageType > RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
@@ -85,7 +85,7 @@ int main( int argc, char* argv[] )
   Writer2Type::Pointer writer2 = Writer2Type::New();
 
   writer2->SetFileName( argv[3] );
- 
+
   rescaler->SetInput( reader->GetOutput() );
   writer2->SetInput( rescaler->GetOutput() );
 
@@ -102,7 +102,7 @@ int main( int argc, char* argv[] )
     }
 
   typedef itk::ImageFileWriter< WriteImageType >  Writer3Type;
-  
+
   Writer3Type::Pointer writer3 = Writer3Type::New();
 
   writer3->SetFileName( argv[4] );

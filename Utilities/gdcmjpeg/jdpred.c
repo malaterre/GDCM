@@ -310,4 +310,3 @@ jinit_undifferencer (j_decompress_ptr cinfo)
 }
 
 #endif /* D_LOSSLESS_SUPPORTED */
-

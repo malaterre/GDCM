@@ -298,4 +298,3 @@ jinit_differencer (j_compress_ptr cinfo)
 }
 
 #endif /* C_LOSSLESS_SUPPORTED */
-

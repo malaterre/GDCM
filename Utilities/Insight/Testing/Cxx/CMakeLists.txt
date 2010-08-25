@@ -1,5 +1,5 @@
 # Define the C++ tests for itk-gdcm
-# 
+#
 SET(ITK_GDCM_TEST_SRCS
   TestitkGDCMImageIO
 )

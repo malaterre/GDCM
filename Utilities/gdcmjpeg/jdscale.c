@@ -117,4 +117,3 @@ jinit_d_scaler (j_decompress_ptr cinfo)
 }
 
 #endif /* D_LOSSLESS_SUPPORTED */
-

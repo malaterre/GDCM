@@ -226,7 +226,3 @@ jinit_lossy_d_codec (j_decompress_ptr cinfo)
   lossyd->pub.start_input_pass = start_input_pass;
   lossyd->pub.start_output_pass = start_output_pass;
 }
-
-
-
-

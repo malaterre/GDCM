@@ -36,7 +36,7 @@ int TestitkGDCMImageIOFunc(const char *filename, bool verbose = false)
   //Extract the series UID of the selected dicom image
   typedef itk::ImageIOBase::IOComponentType  ScalarPixelType;
 
-  itk::GDCMImageIO2::Pointer imageIO = 
+  itk::GDCMImageIO2::Pointer imageIO =
                                    itk::GDCMImageIO2::New();
 
   if( !imageIO )
@@ -45,7 +45,7 @@ int TestitkGDCMImageIOFunc(const char *filename, bool verbose = false)
     return 1;
     }
 
-  // Now that we found the appropriate ImageIO class, ask it to 
+  // Now that we found the appropriate ImageIO class, ask it to
   // read the meta data from the image file.
   imageIO->SetFileName( filename );
 

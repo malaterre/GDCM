@@ -19,7 +19,7 @@
      <xsd:sequence>
       <xsd:element name="name" type="xsd:string"/>
       <xsd:element name="friend-of" type="xsd:string"
-	    minOccurs="0" maxOccurs="unbounded"/>
+      minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="since" type="xsd:date"/>
       <xsd:element name="qualification" type="xsd:string"/>
      </xsd:sequence>

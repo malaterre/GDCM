@@ -347,4 +347,3 @@ bool Defs::Verify(const DataSet& ds) const
 
 
 } // end namespace gdcm
-
