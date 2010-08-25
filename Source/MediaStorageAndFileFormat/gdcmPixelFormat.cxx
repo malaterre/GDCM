@@ -208,6 +208,7 @@ uint8_t PixelFormat::GetPixelSize() const
 
 int64_t PixelFormat::GetMin() const
 {
+  assert( BitsAllocated ); // cannot be unknown
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
     {
@@ -234,6 +235,7 @@ int64_t PixelFormat::GetMin() const
 
 int64_t PixelFormat::GetMax() const
 {
+  assert( BitsAllocated ); // cannot be unknown
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
     {
