@@ -23,8 +23,8 @@
 namespace gdcm
 {
 
-	// FIXME gdcmSequenceOfItems qnd gdcmSequenceOfFragments
-	// should be rethink (duplicate code)
+  // FIXME gdcmSequenceOfItems qnd gdcmSequenceOfFragments
+  // should be rethink (duplicate code)
 /**
  * \brief Class to represent a Sequence Of Fragments
  * \todo I do not enforce that Sequence of Fragments ends with a SQ end del
@@ -40,7 +40,7 @@ public:
 
   /// \brief Returns the SQ length, as read from disk
   VL GetLength() const {
-	  return SequenceLengthField; }
+    return SequenceLengthField; }
   /// \brief Sets the actual SQ length
   void SetLength(VL length) {
     SequenceLengthField = length;

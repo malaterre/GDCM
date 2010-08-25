@@ -49,8 +49,8 @@ class GDCM_EXPORT Writer
 {
 public:
   Writer():F(new File),CheckFileMetaInformation(true) {
-	  Stream = NULL;
-	  Ofstream = NULL;
+    Stream = NULL;
+    Ofstream = NULL;
   }
   virtual ~Writer();
 

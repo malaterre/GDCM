@@ -210,13 +210,13 @@ public:
   CryptographicMessageSyntax::CipherTypes GetCipherType() const {
     return CipherType;
   }
-	::PKCS7 *GetP7() const { return p7; }
+  ::PKCS7 *GetP7() const { return p7; }
 private:
   STACK_OF(X509) *recips;
   ::EVP_PKEY *pkey;
   CryptographicMessageSyntax::CipherTypes CipherType;
   const EVP_CIPHER *cipher;
-	::PKCS7 *p7;
+  ::PKCS7 *p7;
   BIO *p7bio;
   BIO *bio_buffer;
   bool Initialized;
@@ -370,7 +370,7 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
     for (i=0; i<sk_PKCS7_SIGNER_INFO_num(sk); i++)
       {
       //si=my_sk_PKCS7_SIGNER_INFO_value(sk,i);
-	        si=sk_PKCS7_SIGNER_INFO_value(sk,i);
+          si=sk_PKCS7_SIGNER_INFO_value(sk,i);
       i=PKCS7_dataVerify(cert_store,&cert_ctx,p7bio,p7,si);
       if (i <= 0)
         goto err;

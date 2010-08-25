@@ -428,7 +428,7 @@ if( unenhance && false )
   else if ( unenhance )
 {
 std::cerr << "Not implemented" << std::endl;
-	  return 1;
+    return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
@@ -453,7 +453,7 @@ std::cerr << "Not implemented" << std::endl;
   if( uid != gdcm::UIDs::EnhancedMRImageStorage )
   {
   std::cerr << "MediaStorage is not handled " << ms << " [" << uid.GetName() << "]" << std::endl;
-	  return 1;
+    return 1;
   }
 
     const gdcm::Image &image = reader.GetImage();
@@ -525,7 +525,7 @@ std::cerr << "Not implemented" << std::endl;
   else
     {
  std::cerr << "Not implemented" << std::endl;
-	  return 1;
+    return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )

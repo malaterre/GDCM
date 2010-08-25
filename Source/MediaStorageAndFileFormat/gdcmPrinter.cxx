@@ -233,8 +233,8 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     }
   else if ( lvr == VR::SQ || vl.IsUndefined() )
     {
-    //	    os << "DEBUG";
-    //	    value.Print( _os );
+    //      os << "DEBUG";
+    //      value.Print( _os );
     }
   else if ( VR::IsBinary(lvr) )
     {
@@ -297,7 +297,7 @@ inline char *bswap(char *out, const char *in, size_t length)
 }
 
 //-----------------------------------------------------------------------------
-	/*
+  /*
 void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, DictEntry const &entry)
 {
   const Tag &t = _val.GetTag();
@@ -363,7 +363,7 @@ default: assert(0); }
 
 #define PrinterTemplateSub2(type) \
 switch(vm) { \
-	PrinterTemplateSubCase1n(type, VM1) \
+  PrinterTemplateSubCase1n(type, VM1) \
 default: assert(0); }
 
 #define PrinterTemplateCase(type) \
@@ -420,8 +420,8 @@ void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v)
     }
   catch(...)
     {
-	    // Indeed a SequenceOfFragments is not handle ...
-	    std::cerr << "Problem in PrintValue" << std::endl;
+      // Indeed a SequenceOfFragments is not handle ...
+      std::cerr << "Problem in PrintValue" << std::endl;
     }
 }
 
@@ -523,7 +523,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       }
     else
     {
-	    assert(0);
+      assert(0);
     }
     }
 
@@ -561,7 +561,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
         }
       else
         {
-//		_os.flush();
+//    _os.flush();
 //        std::streampos pos = _os.tellp();
 //        streambuf *s = _os.rdbuf();
         //int pos = _os.str().size();
@@ -1152,7 +1152,7 @@ void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
       else */
       if( VR::IsASCII(vr_read) || VR::IsBinary(vr_read) )
         {
-	//	_os << de << std::endl;
+  //  _os << de << std::endl;
         PrintElement(os, de, entry);
         }
       else // INVALID case

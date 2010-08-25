@@ -156,9 +156,9 @@ static void DoubleReferenceDct1D(ivect,ovect)
   for(mptr=DctMatrix,optr=ovect;optr<ovect+BLOCKWIDTH;optr++)
     {                           /* 1d dct is just matrix multiply */
       for(*optr=0,iptr=ivect;iptr<ivect+BLOCKWIDTH;iptr++)
-	{
-	  *optr += *iptr*(*(mptr++));
-	}
+  {
+    *optr += *iptr*(*(mptr++));
+  }
     }
 }
 
@@ -220,9 +220,9 @@ static void DoubleReferenceIDct1D(ivect,ovect)
   for(mptr = IDctMatrix,optr=ovect;optr<ovect+BLOCKWIDTH;optr++)
     {
       for(*optr=0,iptr=ivect;iptr<ivect+BLOCKWIDTH;iptr++)
-	{
-	  *optr += *iptr*(*(mptr++));
-	}
+  {
+    *optr += *iptr*(*(mptr++));
+  }
     }
 }
 
@@ -288,15 +288,15 @@ void Quantize(matrix,qmatrix)
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++)
     {
       if (*mptr > 0)          /* Rounding is different for +/- coeffs */
-	{
-	  *mptr = (*mptr + *qmatrix/2)/ (*qmatrix);
-	  qmatrix++;
-	}
+  {
+    *mptr = (*mptr + *qmatrix/2)/ (*qmatrix);
+    qmatrix++;
+  }
       else
-	{
-	  *mptr = (*mptr - *qmatrix/2)/ (*qmatrix);
-	  qmatrix++;
-	}
+  {
+    *mptr = (*mptr - *qmatrix/2)/ (*qmatrix);
+    qmatrix++;
+  }
     }
 }
 
@@ -379,9 +379,9 @@ void BoundDctMatrix(matrix,Bound)
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++)
     {
       if (*mptr+Bound < 0)
-	*mptr = -Bound;
+  *mptr = -Bound;
       else if (*mptr-Bound > 0)
-	*mptr = Bound;
+  *mptr = Bound;
     }
 }
 
@@ -476,9 +476,9 @@ int *ScaleMatrix(Numerator,Denominator,LongFlag,Matrix)
     {
       *tptr = (*(Matrix++) * Numerator)/Denominator;
       if (*tptr > Limit)
-	*tptr = Limit;
+  *tptr = Limit;
       else if (*tptr < 1)
-	*tptr = 1;
+  *tptr = 1;
     }
   return(Temp);
 }
@@ -498,10 +498,10 @@ void PrintMatrix(matrix)
   if (matrix)
     {
       for(i=0;i<BLOCKHEIGHT;i++)
-	{
-	  for(j=0;j<BLOCKWIDTH;j++) {printf("%6d ",*(matrix++));}
-	  printf("\n");
-	}
+  {
+    for(j=0;j<BLOCKWIDTH;j++) {printf("%6d ",*(matrix++));}
+    printf("\n");
+  }
     }
   else {printf("Null\n");}
 }

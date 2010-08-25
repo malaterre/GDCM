@@ -279,9 +279,9 @@ TYPETOENCODING(UT,VRASCII ,UTComp)
 
 inline unsigned int VR::GetSize() const
 {
-	switch(VRField)
-	{
-		VRTypeTemplateCase(AE)
+  switch(VRField)
+  {
+    VRTypeTemplateCase(AE)
     VRTypeTemplateCase(AS)
     VRTypeTemplateCase(AT)
     VRTypeTemplateCase(CS)
@@ -310,10 +310,10 @@ inline unsigned int VR::GetSize() const
     VRTypeTemplateCase(UT)
     case VR::US_SS:
       return 2;
-		default:
-			 assert( 0 && "should not" );
-	}
-	return 0;
+    default:
+       assert( 0 && "should not" );
+  }
+  return 0;
 }
 #endif // SWIG
 

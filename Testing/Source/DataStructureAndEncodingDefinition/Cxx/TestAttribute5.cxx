@@ -69,9 +69,9 @@ int TestAttribute(int argc, char *argv[])
 // 0008 0082 SQ 1 Institution Code Sequence
   gdcm::Attribute<0x0008,0x0082, gdcm::VR::SQ, gdcm::VM::VM1,
     gdcm::Attribute<0x0008,0x0080, gdcm::VR::LO>
-	  > sq = {
+    > sq = {
   "Institution Name"
-	  };
+    };
   sq.Print( std::cout << std::endl );
   sq.Write(os);
 

@@ -57,11 +57,11 @@ typedef  unsigned __int64    uint64_t;
 #define TIME_OFFSET_LOW  0x13814000
 
 struct uuid {
-	uint32_t	time_low;
-	uint16_t	time_mid;
-	uint16_t	time_hi_and_version;
-	uint16_t	clock_seq;
-	uint8_t	node[6];
+  uint32_t  time_low;
+  uint16_t  time_mid;
+  uint16_t  time_hi_and_version;
+  uint16_t  clock_seq;
+  uint8_t  node[6];
 };
 
 

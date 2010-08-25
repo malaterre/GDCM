@@ -80,9 +80,9 @@ public:
  * Attribute<0x0018,0x1182, VR::UL, VM::VM2> fd3 = {0,1}; // UL is not valid VR
  */
 template<uint16_t Group, uint16_t Element,
-	 int TVR = TagToType<Group, Element>::VRType, // can the user override this value ?
-	 int TVM = TagToType<Group, Element>::VMType // can the user override this value ?
-	 /*typename SQAttribute = void_*/ > // if only I had variadic template...
+   int TVR = TagToType<Group, Element>::VRType, // can the user override this value ?
+   int TVM = TagToType<Group, Element>::VMType // can the user override this value ?
+   /*typename SQAttribute = void_*/ > // if only I had variadic template...
 class Attribute
 {
 public:

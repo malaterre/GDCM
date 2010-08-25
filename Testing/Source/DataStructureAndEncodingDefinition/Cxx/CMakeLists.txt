@@ -1,10 +1,10 @@
 # Define the tests for Data Structure and Encoding Definitions
 # DSED
 SET(DSED_TEST_SRCS
-	TestAttribute
+  TestAttribute
   TestCodeString
-	TestAttribute1
-	TestAttribute7
+  TestAttribute1
+  TestAttribute7
   #TestReadPatientName
   TestLO
   TestCSAElement
@@ -60,7 +60,7 @@ IF(GDCM_DATA_ROOT)
 SET(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
   TestReader2
-	TestAttribute8
+  TestAttribute8
   TestPDBHeader
   )
 ENDIF(GDCM_DATA_ROOT)

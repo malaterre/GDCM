@@ -32,7 +32,7 @@ class GDCM_EXPORT MacroEntry
 {
 public:
   MacroEntry(const char *name = "", const char *type = "3", const char *description = ""):Name(name)/*,Type(type)*/,DescriptionField(description) {
-	  DataElementType = Type::GetTypeType(type);
+    DataElementType = Type::GetTypeType(type);
   }
   virtual ~MacroEntry() {} // important
   friend std::ostream& operator<<(std::ostream& _os, const MacroEntry &_val);

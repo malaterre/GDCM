@@ -32,7 +32,7 @@ class GDCM_EXPORT PersonName
 public:
   static const unsigned int MaxNumberOfComponents = 5;
   static const unsigned int MaxLength = 64;
-	char Component[MaxNumberOfComponents][MaxLength+1];
+  char Component[MaxNumberOfComponents][MaxLength+1];
   static const char Separator = '^';
   static const char Padding   = ' ';
 
@@ -64,19 +64,19 @@ public:
       assert( strlen(Component[i]) < GetMaxLength() );
       }
   }
-	void Print(std::ostream &os) const
-	{
-		//os << "Family Name Complex: " << Component[0] << std::endl;
-		//os << "Given  Name Complex: " << Component[1] << std::endl;
-		//os << "Middle Name        : " << Component[2] << std::endl;
-		//os << "Name Suffix        : " << Component[3] << std::endl;
-		//os << "Name Prefix        : " << Component[4] << std::endl;
-		os << Component[0] << '^';
-		os << Component[1] << '^';
-		os << Component[2] << '^';
-		os << Component[3] << '^';
-		os << Component[4];
-	}
+  void Print(std::ostream &os) const
+  {
+    //os << "Family Name Complex: " << Component[0] << std::endl;
+    //os << "Given  Name Complex: " << Component[1] << std::endl;
+    //os << "Middle Name        : " << Component[2] << std::endl;
+    //os << "Name Suffix        : " << Component[3] << std::endl;
+    //os << "Name Prefix        : " << Component[4] << std::endl;
+    os << Component[0] << '^';
+    os << Component[1] << '^';
+    os << Component[2] << '^';
+    os << Component[3] << '^';
+    os << Component[4];
+  }
 };
 
 } // end namespace gdcm

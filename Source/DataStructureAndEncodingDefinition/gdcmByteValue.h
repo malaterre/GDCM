@@ -46,7 +46,7 @@ public:
   ByteValue(std::vector<char> &v):Internal(v),Length(v.size()) {}
   //ByteValue(std::ostringstream const &os) {
   //  (void)os;
-	//   assert(0); // TODO
+  //   assert(0); // TODO
   //}
   ~ByteValue() {
     Internal.clear();

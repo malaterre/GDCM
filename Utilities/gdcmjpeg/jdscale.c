@@ -13,7 +13,7 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jlossls.h"		/* Private declarations for lossless codec */
+#include "jlossls.h"    /* Private declarations for lossless codec */
 
 
 #ifdef D_LOSSLESS_SUPPORTED
@@ -35,8 +35,8 @@ typedef scaler * scaler_ptr;
 
 METHODDEF(void)
 simple_upscale(j_decompress_ptr cinfo,
-	       JDIFFROW diff_buf, JSAMPROW output_buf,
-	       JDIMENSION width)
+         JDIFFROW diff_buf, JSAMPROW output_buf,
+         JDIMENSION width)
 {
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   scaler_ptr scaler = (scaler_ptr) losslsd->scaler_private;
@@ -49,8 +49,8 @@ simple_upscale(j_decompress_ptr cinfo,
 
 METHODDEF(void)
 simple_downscale(j_decompress_ptr cinfo,
-		 JDIFFROW diff_buf, JSAMPROW output_buf,
-		 JDIMENSION width)
+     JDIFFROW diff_buf, JSAMPROW output_buf,
+     JDIMENSION width)
 {
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   scaler_ptr scaler = (scaler_ptr) losslsd->scaler_private;
@@ -64,8 +64,8 @@ simple_downscale(j_decompress_ptr cinfo,
 
 METHODDEF(void)
 noscale(j_decompress_ptr cinfo,
-	JDIFFROW diff_buf, JSAMPROW output_buf,
-	JDIMENSION width)
+  JDIFFROW diff_buf, JSAMPROW output_buf,
+  JDIMENSION width)
 {
   unsigned int xindex;
   (void)cinfo;
@@ -111,7 +111,7 @@ jinit_d_scaler (j_decompress_ptr cinfo)
 
   scaler = (scaler_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				SIZEOF(scaler));
+        SIZEOF(scaler));
   losslsd->scaler_private = (void *) scaler;
   losslsd->scaler_start_pass = scaler_start_pass;
 }

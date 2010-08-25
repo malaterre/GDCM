@@ -84,8 +84,8 @@ struct myfile
 
 OPJ_UINT32 opj_read_from_memory(void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* p_file)
 {
-	//OPJ_UINT32 l_nb_read = fread(p_buffer,1,p_nb_bytes,p_file);
-	OPJ_UINT32 l_nb_read;
+  //OPJ_UINT32 l_nb_read = fread(p_buffer,1,p_nb_bytes,p_file);
+  OPJ_UINT32 l_nb_read;
   if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
     {
     l_nb_read = 1*p_nb_bytes;
@@ -99,13 +99,13 @@ OPJ_UINT32 opj_read_from_memory(void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* 
   p_file->cur += l_nb_read;
   assert( p_file->cur <= p_file->mem + p_file->len );
   //std::cout << "l_nb_read: " << l_nb_read << std::endl;
-	return l_nb_read ? l_nb_read : -1;
+  return l_nb_read ? l_nb_read : -1;
 }
 
 OPJ_UINT32 opj_write_from_memory (void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* p_file)
 {
-	//return fwrite(p_buffer,1,p_nb_bytes,p_file);
-	OPJ_UINT32 l_nb_write;
+  //return fwrite(p_buffer,1,p_nb_bytes,p_file);
+  OPJ_UINT32 l_nb_write;
   //if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
   //  {
   //  l_nb_write = 1*p_nb_bytes;
@@ -119,8 +119,8 @@ OPJ_UINT32 opj_write_from_memory (void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile
   p_file->cur += l_nb_write;
   p_file->len += l_nb_write;
   //assert( p_file->cur < p_file->mem + p_file->len );
-	//return l_nb_write;
-	return p_nb_bytes;
+  //return l_nb_write;
+  return p_nb_bytes;
 }
 
 OPJ_SIZE_T opj_skip_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
@@ -157,24 +157,24 @@ bool opj_seek_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
 
 opj_stream_t* OPJ_CALLCONV opj_stream_create_memory_stream (myfile* p_mem,OPJ_UINT32 p_size,bool p_is_read_stream)
 {
-	opj_stream_t* l_stream = 00;
-	if
-		(! p_mem)
-	{
-		return 00;
-	}
-	l_stream = opj_stream_create(p_size,p_is_read_stream);
-	if
-		(! l_stream)
-	{
-		return 00;
-	}
-	opj_stream_set_user_data(l_stream,p_mem);
-	opj_stream_set_read_function(l_stream,(opj_stream_read_fn) opj_read_from_memory);
-	opj_stream_set_write_function(l_stream, (opj_stream_write_fn) opj_write_from_memory);
-	opj_stream_set_skip_function(l_stream, (opj_stream_skip_fn) opj_skip_from_memory);
-	opj_stream_set_seek_function(l_stream, (opj_stream_seek_fn) opj_seek_from_memory);
-	return l_stream;
+  opj_stream_t* l_stream = 00;
+  if
+    (! p_mem)
+  {
+    return 00;
+  }
+  l_stream = opj_stream_create(p_size,p_is_read_stream);
+  if
+    (! l_stream)
+  {
+    return 00;
+  }
+  opj_stream_set_user_data(l_stream,p_mem);
+  opj_stream_set_read_function(l_stream,(opj_stream_read_fn) opj_read_from_memory);
+  opj_stream_set_write_function(l_stream, (opj_stream_write_fn) opj_write_from_memory);
+  opj_stream_set_skip_function(l_stream, (opj_stream_skip_fn) opj_skip_from_memory);
+  opj_stream_set_seek_function(l_stream, (opj_stream_seek_fn) opj_seek_from_memory);
+  return l_stream;
 }
 
 #endif // OPENJPEG_MAJOR_VERSION == 2
@@ -350,8 +350,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
   opj_cio_t *cio;
 #elif OPENJPEG_MAJOR_VERSION == 2
-	opj_codec_t* dinfo = NULL;	/* handle to a decompressor */
-	opj_stream_t *cio = NULL;
+  opj_codec_t* dinfo = NULL;  /* handle to a decompressor */
+  opj_stream_t *cio = NULL;
 #endif // OPENJPEG_MAJOR_VERSION == 1
   opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
@@ -456,9 +456,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
-	bool bResult;
-	OPJ_INT32 l_tile_x0,l_tile_y0;
-	OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+  bool bResult;
+  OPJ_INT32 l_tile_x0,l_tile_y0;
+  OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
     dinfo,
     &image,
@@ -850,7 +850,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       {
       gdcmErrorMacro( "Error: options -r -q and -f cannot be used together." );
       return false;
-      }				/* mod fixed_quality */
+      }        /* mod fixed_quality */
 
     /* if no rate entered, lossless by default */
     if (parameters.tcp_numlayers == 0)
@@ -932,7 +932,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       return false;
       }
     /* encode the image */
-    /*if (*indexfilename)					// If need to extract codestream information
+    /*if (*indexfilename)          // If need to extract codestream information
       bSuccess = opj_encode_with_info(cinfo, cio, image, &cstr_info);
       else*/
     bSuccess = opj_start_compress(cinfo,image,cio);
@@ -1030,8 +1030,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
   opj_cio_t *cio;
 #elif OPENJPEG_MAJOR_VERSION == 2
-	opj_codec_t* dinfo = NULL;	/* handle to a decompressor */
-	opj_stream_t *cio = NULL;
+  opj_codec_t* dinfo = NULL;  /* handle to a decompressor */
+  opj_stream_t *cio = NULL;
 #endif // OPENJPEG_MAJOR_VERSION == 1
   opj_image_t *image = NULL;
   unsigned char *src = (unsigned char*)dummy_buffer;
@@ -1116,9 +1116,9 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
-	bool bResult;
-	OPJ_INT32 l_tile_x0,l_tile_y0;
-	OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+  bool bResult;
+  OPJ_INT32 l_tile_x0,l_tile_y0;
+  OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
     dinfo,
     &image,

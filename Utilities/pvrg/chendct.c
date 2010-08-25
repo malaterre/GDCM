@@ -252,8 +252,8 @@ void ChenIDct(x,y)
       a3 = LS(*aptr,2);
 
       /* Split into even mode  b0 = x0  b1 = x4  b2 = x2  b3 = x6.
-	 And the odd terms a0 = x1 a1 = x3 a2 = x5 a3 = x7.
-	 */
+   And the odd terms a0 = x1 a1 = x3 a2 = x5 a3 = x7.
+   */
 
       c0 = MSCALE((c7d16*a0)-(c1d16*a3));
       c1 = MSCALE((c3d16*a2)-(c5d16*a1));
@@ -318,9 +318,9 @@ void ChenIDct(x,y)
       a3 = *(aptr);
 
       /*
-	Split into even mode  b0 = x0  b1 = x4  b2 = x2  b3 = x6.
-	And the odd terms a0 = x1 a1 = x3 a2 = x5 a3 = x7.
-	*/
+  Split into even mode  b0 = x0  b1 = x4  b2 = x2  b3 = x6.
+  And the odd terms a0 = x1 a1 = x3 a2 = x5 a3 = x7.
+  */
 
       c0 = MSCALE((c7d16*a0)-(c1d16*a3));
       c1 = MSCALE((c3d16*a2)-(c5d16*a1));

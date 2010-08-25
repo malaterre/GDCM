@@ -118,14 +118,14 @@ public:
   } MSType; // Media Storage Type
 
 typedef enum {
-	  NoObject = 0, // DICOMDIR
-	  Video, // Most common, include image, video and volume
-	  Waveform, // Isn't it simply a 1D video ?
-	  Audio, // ???
-	  PDF,
-	  URI, // URL...
-	  Segmentation, // TODO
-	  ObjectEnd
+    NoObject = 0, // DICOMDIR
+    Video, // Most common, include image, video and volume
+    Waveform, // Isn't it simply a 1D video ?
+    Audio, // ???
+    PDF,
+    URI, // URL...
+    Segmentation, // TODO
+    ObjectEnd
   } ObjectType;
 
   /// Return the Media String associated. Will return NULL for MS_END

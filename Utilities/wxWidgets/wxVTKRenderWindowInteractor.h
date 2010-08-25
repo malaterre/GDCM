@@ -106,7 +106,7 @@ class wxVTKRenderWindowInteractor : public wxWindow, public vtkRenderWindowInter
     static wxVTKRenderWindowInteractor * New();
     void PrintSelf(ostream& os, vtkIndent indent);
 
-	  //destructor
+    //destructor
     ~wxVTKRenderWindowInteractor();
 
     // vtkRenderWindowInteractor overrides

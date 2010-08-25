@@ -170,10 +170,10 @@ catch(...)
   // FIXME : call this function twice...
   if (Ofstream)
   {
-	Ofstream->close();
-	delete Ofstream;
-	Ofstream = NULL;
-	Stream = NULL;
+  Ofstream->close();
+  delete Ofstream;
+  Ofstream = NULL;
+  Stream = NULL;
   }
 
   return true;

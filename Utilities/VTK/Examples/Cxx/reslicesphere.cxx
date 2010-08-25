@@ -23,9 +23,9 @@
 
 
 /*
-from	Scott Johnson /Scott Johnson neuwave com/
-to	VTK /vtkusers vtk.org/
-date	Tue, May 11, 2010 at 7:01 PM
+from  Scott Johnson /Scott Johnson neuwave com/
+to  VTK /vtkusers vtk.org/
+date  Tue, May 11, 2010 at 7:01 PM
 */
 #include <strstream>
 #include <string>
@@ -280,9 +280,9 @@ public:
         _ROIMapper = vtkPolyDataMapper2D::New();
         _ROIMapper->SetInputConnection(_polyTransform->GetOutputPort());
 
-		vtkCoordinate* coordinate = vtkCoordinate::New();
-		coordinate->SetCoordinateSystemToWorld();
-		_ROIMapper->SetTransformCoordinate(coordinate);
+    vtkCoordinate* coordinate = vtkCoordinate::New();
+    coordinate->SetCoordinateSystemToWorld();
+    _ROIMapper->SetTransformCoordinate(coordinate);
 
         _ROIActor = vtkActor2D::New();
         _ROIActor->SetMapper(_ROIMapper);
@@ -347,8 +347,8 @@ public:
         _reslice->SetResliceAxes(matrix);
         _reslice->Update();
 
-		vtkMatrix4x4* inverse = vtkMatrix4x4::New();
-		vtkMatrix4x4::Invert(matrix, inverse);
+    vtkMatrix4x4* inverse = vtkMatrix4x4::New();
+    vtkMatrix4x4::Invert(matrix, inverse);
 
         _transform->SetMatrix(inverse);
         _transform->Update();

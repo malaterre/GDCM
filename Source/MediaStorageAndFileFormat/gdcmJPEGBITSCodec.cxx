@@ -39,16 +39,16 @@ namespace gdcm
 /* Expanded data source object for stdio input */
 
 typedef struct {
-  struct jpeg_source_mgr pub;	/* public fields */
+  struct jpeg_source_mgr pub;  /* public fields */
 
-  std::istream * infile;		/* source stream */
-  JOCTET * buffer;		/* start of buffer */
-  boolean start_of_file;	/* have we gotten any data yet? */
+  std::istream * infile;    /* source stream */
+  JOCTET * buffer;    /* start of buffer */
+  boolean start_of_file;  /* have we gotten any data yet? */
 } my_source_mgr;
 
 typedef my_source_mgr * my_src_ptr;
 
-#define INPUT_BUF_SIZE  4096	/* choose an efficiently fread'able size */
+#define INPUT_BUF_SIZE  4096  /* choose an efficiently fread'able size */
 
 
 /*
@@ -131,7 +131,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
   nbytes = src->infile->gcount();
 
   if (nbytes <= 0) {
-    if (src->start_of_file)	/* Treat empty input file as fatal error */
+    if (src->start_of_file)  /* Treat empty input file as fatal error */
       ERREXIT(cinfo, JERR_INPUT_EMPTY);
     WARNMS(cinfo, JWRN_JPEG_EOF);
     /* Insert a fake EOI marker */
@@ -227,14 +227,14 @@ jpeg_stdio_src (j_decompress_ptr cinfo, std::istream & infile, bool flag)
    * This makes it unsafe to use this manager and a different source
    * manager serially with the same JPEG object.  Caveat programmer.
    */
-  if (cinfo->src == NULL) {	/* first time for this JPEG object? */
+  if (cinfo->src == NULL) {  /* first time for this JPEG object? */
     cinfo->src = (struct jpeg_source_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  SIZEOF(my_source_mgr));
+          SIZEOF(my_source_mgr));
     src = (my_src_ptr) cinfo->src;
     src->buffer = (JOCTET *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  INPUT_BUF_SIZE * SIZEOF(JOCTET));
+          INPUT_BUF_SIZE * SIZEOF(JOCTET));
   }
 
   src = (my_src_ptr) cinfo->src;
@@ -317,9 +317,9 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
    */
   my_error_mgr &jerr = Internals->jerr;
   /* More stuff */
-  //FILE * infile;		/* source file */
-  //JSAMPARRAY buffer;		/* Output row buffer */
-  //int row_stride;		/* physical row width in output buffer */
+  //FILE * infile;    /* source file */
+  //JSAMPARRAY buffer;    /* Output row buffer */
+  //int row_stride;    /* physical row width in output buffer */
 
   if( Internals->StateSuspension == 0 )
     {
@@ -382,8 +382,8 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
         assert( 0 );
         }
       }
-    this->Dimensions[1] = cinfo.image_height;	/* Number of rows in image */
-    this->Dimensions[0] = cinfo.image_width;		/* Number of columns in image */
+    this->Dimensions[1] = cinfo.image_height;  /* Number of rows in image */
+    this->Dimensions[0] = cinfo.image_width;    /* Number of columns in image */
 
     int prep = this->PF.GetPixelRepresentation();
     //this->BitSample = cinfo.data_precision;
@@ -528,10 +528,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 UINT8 density_unit
 UINT16 X_density
 UINT16 Y_density
-	The resolution information to be written into the JFIF marker;
-	not used otherwise.  density_unit may be 0 for unknown,
-	1 for dots/inch, or 2 for dots/cm.  The default values are 0,1,1
-	indicating square pixels of unknown size.
+  The resolution information to be written into the JFIF marker;
+  not used otherwise.  density_unit may be 0 for unknown,
+  1 for dots/inch, or 2 for dots/cm.  The default values are 0,1,1
+  indicating square pixels of unknown size.
 */
 
   if( cinfo.density_unit != 0
@@ -697,9 +697,9 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
    */
   my_error_mgr &jerr = Internals->jerr;
   /* More stuff */
-  //FILE * infile;		/* source file */
-  JSAMPARRAY buffer;		/* Output row buffer */
-  int row_stride;		/* physical row width in output buffer */
+  //FILE * infile;    /* source file */
+  JSAMPARRAY buffer;    /* Output row buffer */
+  int row_stride;    /* physical row width in output buffer */
 
   if( Internals->StateSuspension == 0 )
     {
@@ -976,13 +976,13 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
 typedef struct {
   struct jpeg_destination_mgr pub; /* public fields */
 
-  std::ostream * outfile;		/* target stream */
-  JOCTET * buffer;		/* start of buffer */
+  std::ostream * outfile;    /* target stream */
+  JOCTET * buffer;    /* start of buffer */
 } my_destination_mgr;
 
 typedef my_destination_mgr * my_dest_ptr;
 
-#define OUTPUT_BUF_SIZE  4096	/* choose an efficiently fwrite'able size */
+#define OUTPUT_BUF_SIZE  4096  /* choose an efficiently fwrite'able size */
 
 /*
  * Initialize destination --- called by jpeg_start_compress
@@ -997,7 +997,7 @@ init_destination (j_compress_ptr cinfo)
   /* Allocate the output buffer --- it will be released when done with image */
   dest->buffer = (JOCTET *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				  OUTPUT_BUF_SIZE * SIZEOF(JOCTET));
+          OUTPUT_BUF_SIZE * SIZEOF(JOCTET));
 
   dest->pub.next_output_byte = dest->buffer;
   dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
@@ -1096,10 +1096,10 @@ jpeg_stdio_dest (j_compress_ptr cinfo, /*FILE * */ std::ostream * outfile)
    * manager serially with the same JPEG object, because their private object
    * sizes may be different.  Caveat programmer.
    */
-  if (cinfo->dest == NULL) {	/* first time for this JPEG object? */
+  if (cinfo->dest == NULL) {  /* first time for this JPEG object? */
     cinfo->dest = (struct jpeg_destination_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  SIZEOF(my_destination_mgr));
+          SIZEOF(my_destination_mgr));
   }
 
   dest = (my_dest_ptr) cinfo->dest;
@@ -1118,10 +1118,10 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
 {
   int quality = 100; (void)len;
   (void)quality;
-  JSAMPLE * image_buffer = (JSAMPLE*)input;	/* Points to large array of R,G,B-order data */
+  JSAMPLE * image_buffer = (JSAMPLE*)input;  /* Points to large array of R,G,B-order data */
   const unsigned int *dims = this->GetDimensions();
-  int image_height = dims[1];	/* Number of rows in image */
-  int image_width = dims[0];		/* Number of columns in image */
+  int image_height = dims[1];  /* Number of rows in image */
+  int image_width = dims[0];    /* Number of columns in image */
 
   /* This struct contains the JPEG compression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).
@@ -1140,10 +1140,10 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    */
   struct jpeg_error_mgr jerr;
   /* More stuff */
-  //FILE * outfile;		/* target file */
+  //FILE * outfile;    /* target file */
   std::ostream * outfile = &os;
-  JSAMPROW row_pointer[1];	/* pointer to JSAMPLE row[s] */
-  int row_stride;		/* physical row width in image buffer */
+  JSAMPROW row_pointer[1];  /* pointer to JSAMPLE row[s] */
+  int row_stride;    /* physical row width in image buffer */
 
   /* Step 1: allocate and initialize JPEG compression object */
 
@@ -1175,7 +1175,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   /* First we supply a description of the input image.
    * Four fields of the cinfo struct must be filled in:
    */
-  cinfo.image_width = image_width; 	/* image width and height, in pixels */
+  cinfo.image_width = image_width;   /* image width and height, in pixels */
   cinfo.image_height = image_height;
 
   switch( this->GetPhotometricInterpretation() )
@@ -1189,15 +1189,15 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   case PhotometricInterpretation::RGB:
   case PhotometricInterpretation::YBR_RCT:
   case PhotometricInterpretation::YBR_ICT:
-    cinfo.input_components = 3;		/* # of color components per pixel */
-    cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
+    cinfo.input_components = 3;    /* # of color components per pixel */
+    cinfo.in_color_space = JCS_RGB;   /* colorspace of input image */
     break;
   case PhotometricInterpretation::YBR_FULL:
   case PhotometricInterpretation::YBR_FULL_422:
   case PhotometricInterpretation::YBR_PARTIAL_420:
   case PhotometricInterpretation::YBR_PARTIAL_422:
-    cinfo.input_components = 3;		/* # of color components per pixel */
-    cinfo.in_color_space = JCS_YCbCr; 	/* colorspace of input image */
+    cinfo.input_components = 3;    /* # of color components per pixel */
+    cinfo.in_color_space = JCS_YCbCr;   /* colorspace of input image */
     break;
   case PhotometricInterpretation::HSV:
   case PhotometricInterpretation::ARGB:
@@ -1264,7 +1264,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * To keep things simple, we pass one scanline per call; you can pass
    * more if you wish, though.
    */
-  row_stride = image_width * cinfo.input_components;	/* JSAMPLEs per row in image_buffer */
+  row_stride = image_width * cinfo.input_components;  /* JSAMPLEs per row in image_buffer */
 
   if( this->GetPlanarConfiguration() == 0 )
     {

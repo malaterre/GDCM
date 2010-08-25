@@ -160,8 +160,8 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
   Testing::ComputeFileMD5(outfilename.c_str(), outdigest);
   if( strcmp(digest, outdigest) )
     {
-	  if (recursing)
-		  return 1;
+    if (recursing)
+      return 1;
     // too bad the file is not identical, so let's be paranoid and
     // try to reread-rewrite this just-writen file:
     // TODO: Copy file System::CopyFile( );

@@ -41,7 +41,7 @@ jinit_lossy_c_codec (j_compress_ptr cinfo)
   /* Create subobject in permanent pool */
   lossyc = (j_lossy_c_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				SIZEOF(jpeg_lossy_c_codec));
+        SIZEOF(jpeg_lossy_c_codec));
   cinfo->codec = (struct jpeg_c_codec *) lossyc;
 
   /* Initialize sub-modules */
@@ -68,8 +68,8 @@ jinit_lossy_c_codec (j_compress_ptr cinfo)
 
   /* Need a full-image coefficient buffer in any multi-pass mode. */
   jinit_c_coef_controller(cinfo,
-			  (boolean) (cinfo->num_scans > 1 ||
-				     cinfo->optimize_coding));
+        (boolean) (cinfo->num_scans > 1 ||
+             cinfo->optimize_coding));
 
   /* Initialize method pointers.
    *

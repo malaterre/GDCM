@@ -256,14 +256,14 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
       }
     // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
       {
-	  //if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
-	  {
-	  //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+    //if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
+    {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
       Attribute<0x0028,0x0002> at = { 1 };
       at.SetFromDataSet( ds );
       pf.SetSamplesPerPixel( at.GetValue() );
-	  }
-	  // else pf will default to 1...
+    }
+    // else pf will default to 1...
       }
     pixeldata.SetPixelFormat( pf );
     // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
