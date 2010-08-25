@@ -19,14 +19,14 @@
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
 // upside down as VTK would expect, use this option only if you know what you are doing.
 // .SECTION Implementation note: when reading a series of 2D slices, user is
-// expected to provide an ordered list of filenames. No sorting will be applied afterward. 
-// .SECTION Implementation note: Although 99% of the time the Zspacing as read 
-// from a tag in a 2D DICOM file should be correct, there has been reports that this 
-// value can be missing, or incorrect, in which case users are advised to override this 
-// value using the return value from gdcm::IPPSorter::GetZSpacing() and set it via 
+// expected to provide an ordered list of filenames. No sorting will be applied afterward.
+// .SECTION Implementation note: Although 99% of the time the Zspacing as read
+// from a tag in a 2D DICOM file should be correct, there has been reports that this
+// value can be missing, or incorrect, in which case users are advised to override this
+// value using the return value from gdcm::IPPSorter::GetZSpacing() and set it via
 // vtkImageChangeInformation on the reader itself.
 // .SECTION TODO
-// This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
+// This reader does not handle a series of 3D images, only a single 3D (multi frame) or a
 // list of 2D files are supported for now.
 // .SECTION TODO
 // Did not implement SetFilePattern / SetFilePrefix API, move it to protected section for now.
@@ -43,7 +43,7 @@
 // as specified in the Image Orientation (Patient) tag. When Z-spacing is 0, this means the multi-frame object
 // contains image which do not represent uniform volume.
 // .SECTION Warning
-// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader 
+// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader
 // it is *required* that FileLowerLeft is set to ON as coordinate system
 // would be inconsistant in between the two data structures.
 // .SECTION Color Space mapping:
@@ -54,7 +54,7 @@
 // * VTK_INVERSE_LUMINANCE <-> MONOCHROME1
 // * VTK_LOOKUP_TABLE      <-> PALETTE COLOR
 // * VTK_YBR               <-> YBR_FULL
-// 
+//
 // For detailed information on color space transformation and true lossless transformation see:
 // http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Color_Space_Transformations
 
@@ -118,7 +118,7 @@ public:
     return ".dcm .DCM";
     }
 
-  // Description: 
+  // Description:
   // A descriptive name for this format
   virtual const char* GetDescriptiveName()
     {

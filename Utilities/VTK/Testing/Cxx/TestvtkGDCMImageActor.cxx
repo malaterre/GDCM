@@ -68,7 +68,7 @@ iren->Start();
 //renWin Render
 
   reader->Delete();
-  return 0; 
+  return 0;
 }
 
 int TestvtkGDCMImageActor(int argc, char *argv[])

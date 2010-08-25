@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
       //renderer->SetActiveCamera(camera);
       renderer->ResetCamera();
       renderer->SetBackground(1,1,1);
-  
+
   renWin->SetSize(300,300);
 
   // interact with data
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
   iren->Start();
 
 
-  
+
   reader->Delete();
   append->Delete();
   cubeMapper->Delete();

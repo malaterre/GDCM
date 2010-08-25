@@ -76,7 +76,7 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
   const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = file.GetDataSet();
 
-  // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h 
+  // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h
   // For ex: DICOM (0010,0010) = DOE,JOHN
   this->MedicalImageProperties->SetPatientName( GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds) );
   // For ex: DICOM (0010,0020) = 1933197
@@ -208,7 +208,7 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
     }
 
 #if 0
-  // gdcmData/JDDICOM_Sample4.dcm 
+  // gdcmData/JDDICOM_Sample4.dcm
   // -> (0008,0060) CS [DM  Digital microscopy]                 #  24, 1 Modality
   gdcm::MediaStorage ms1 = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   ms1.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality );
@@ -216,17 +216,17 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
   ms2.SetFromFile( reader.GetFile() );
   if( ms2 != ms1 && ms2 != gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
-    vtkWarningMacro( "SHOULD NOT HAPPEN. Unrecognized Modality: " << this->MedicalImageProperties->GetModality() 
+    vtkWarningMacro( "SHOULD NOT HAPPEN. Unrecognized Modality: " << this->MedicalImageProperties->GetModality()
       << " Will be set instead to the known one: " << ms2.GetModality() )
     this->MedicalImageProperties->SetModality( ms2.GetModality() );
     }
 #endif
- 
+
   // Add more info:
 
 }
 
-int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const &reader, 
+int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const &reader,
   vtkInformationVector *outputVector)
 {
 // This is done in RequestInformation
@@ -239,7 +239,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
 //    }
 
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-  // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence  
+  // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence
   // (3006,0039) SQ (Sequence with explicit length #=4)      # 24216, 1 ROIContourSequence
   gdcm::Tag troicsq(0x3006,0x0039);
   if( !ds.FindDataElement( troicsq ) )
@@ -389,7 +389,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
   return 1;
 }
 
-int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader const &reader, 
+int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader const &reader,
   vtkInformationVector *outputVector)
 {
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
@@ -527,7 +527,7 @@ int vtkGDCMPolyDataReader::RequestData(
 int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader const & reader)
 {
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-  // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence  
+  // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence
   gdcm::Tag tssroisq(0x3006,0x0020);
   if( !ds.FindDataElement( tssroisq ) )
     {
@@ -547,7 +547,7 @@ int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader
   this->SetNumberOfOutputPorts( npds );
 
   // Allocate
-  for(unsigned int i = 1; i < npds; ++i) // first output is allocated for us 
+  for(unsigned int i = 1; i < npds; ++i) // first output is allocated for us
     {
     vtkPolyData *output2 = vtkPolyData::New();
     this->GetExecutive()->SetOutputData(i, output2);

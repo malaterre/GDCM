@@ -1266,7 +1266,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
       vtklut->Delete();
       }
-    else 
+    else
       {
 #if (VTK_MAJOR_VERSION >= 5)
       assert( lut.GetBitSample() == 16 );

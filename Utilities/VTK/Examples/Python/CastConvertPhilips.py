@@ -54,7 +54,7 @@ def ProcessOneFilePublic(filename, outfilename, tmpfile):
   vtkwriter.SetInput( cast.GetOutput() )
   #vtkwriter.Update()
   vtkwriter.Write()
-  
+
   # ok now rewrite the exact same file as the original (keep all info)
   # but use the Pixel Data Element from the written file
   tmpreader = gdcm.ImageReader()
@@ -90,43 +90,43 @@ def ProcessOneFilePrivate(filename, outfilename, tmpfile):
   vtkreader = vtkgdcm.vtkGDCMImageReader()
   vtkreader.SetFileName( filename )
   vtkreader.Update()
-  
-  
+
+
   # (2005,1409)     DS      4       0.0
   # (2005,140a)     DS      16      1.52283272283272
-  
+
   # (2005,0014)     LO      26      Philips MR Imaging DD 005
   tag1 = gdcm.PrivateTag(0x2005,0x09,"Philips MR Imaging DD 005")
   tag2 = gdcm.PrivateTag(0x2005,0x0a,"Philips MR Imaging DD 005")
-  
-  
-  
+
+
+
   # Need to access some private tags, reread the file (for now):
   reader = gdcm.Reader()
   reader.SetFileName( filename )
   if not reader.Read():
     sys.exit(1)
-  
+
   ds = reader.GetFile().GetDataSet()
-  
+
   el1 = ds.GetDataElement( tag1 )
   el2 = ds.GetDataElement( tag2 )
-  
-  
+
+
   #pf = gdcm.PythonFilter()
   #pf.SetFile( reader.GetFile() )
   #print el1.GetTag()
-  
+
   print el1.GetByteValue()
   v1 = eval(el1.GetByteValue().GetBuffer())
   print el2.GetByteValue()
   v2 = eval(el2.GetByteValue().GetBuffer())
-  
+
   print v1
   shift = v1
   print v2
   scale = v2
-  
+
   ss = vtk.vtkImageShiftScale()
   ss.SetInput( vtkreader.GetOutput() )
   # because VTK image shift / scale convention is inverted from DICOM make sure shift is 0
@@ -135,7 +135,7 @@ def ProcessOneFilePrivate(filename, outfilename, tmpfile):
   ss.SetScale( scale )
   ss.SetOutputScalarTypeToUnsignedShort ()
   ss.Update()
-  
+
   # vtkGDCMImageWriter does not support Sequence, so let's write a tmp file first:
   # Some operation will actually be discarded (we simply need a temp storage)
   vtkwriter = vtkgdcm.vtkGDCMImageWriter()
@@ -147,14 +147,14 @@ def ProcessOneFilePrivate(filename, outfilename, tmpfile):
   vtkwriter.SetInput( ss.GetOutput() )
   #vtkwriter.Update()
   vtkwriter.Write()
-  
+
   # ok now rewrite the exact same file as the original (keep all info)
   # but use the Pixel Data Element from the written file
   tmpreader = gdcm.ImageReader()
   tmpreader.SetFileName( tmpfile )
   if not tmpreader.Read():
     sys.exit(1)
-  
+
   writer = gdcm.ImageWriter()
   writer.SetFileName( outfilename )
   # Pass image from vtk written file
@@ -181,7 +181,7 @@ if __name__ == "__main__":
   for f in d.GetFilenames():
     #print f
     ProcessOneFilePublic( f, f + ".bak", tmpfile )
-  
+
 
 print "success"
 

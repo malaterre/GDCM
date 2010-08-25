@@ -289,7 +289,7 @@ int main( int argc, char *argv[] )
     planeWidgetZ->DisplayTextOn();
     planeWidgetZ->On();
 
-  vtkImageOrthoPlanes *orthoPlanes = vtkImageOrthoPlanes::New(); 
+  vtkImageOrthoPlanes *orthoPlanes = vtkImageOrthoPlanes::New();
     orthoPlanes->SetPlane(0, planeWidgetX);
     orthoPlanes->SetPlane(1, planeWidgetY);
     orthoPlanes->SetPlane(2, planeWidgetZ);

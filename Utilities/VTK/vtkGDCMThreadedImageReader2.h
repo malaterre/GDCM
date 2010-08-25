@@ -20,8 +20,8 @@
 // not a bottleneck operation.
 // If looking for a single threaded class see: vtkGDCMImageReader
 //
-// .SECTION Warning: Advanced users only. Do not use this class in the general case, 
-// you have to understand how physicaly medium works first (sequencial reading for 
+// .SECTION Warning: Advanced users only. Do not use this class in the general case,
+// you have to understand how physicaly medium works first (sequencial reading for
 // instance) before playing with this class
 //
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
@@ -87,7 +87,7 @@ public:
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
 
-  int SplitExtent(int splitExt[6], int startExt[6], 
+  int SplitExtent(int splitExt[6], int startExt[6],
                   int num, int total);
 
   // Description:
@@ -117,10 +117,10 @@ protected:
 
 protected:
   void ThreadedRequestData (
-    vtkInformation * request, 
+    vtkInformation * request,
     vtkInformationVector** inputVector,
     vtkInformationVector * outputVector,
-    vtkImageData ***inData, 
+    vtkImageData ***inData,
     vtkImageData **outData,
     int outExt[6], int id);
 

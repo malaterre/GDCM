@@ -17,7 +17,7 @@
 
 """
 Usage:
- python headsq2dcm.py -D /path/to/VTKData   
+ python headsq2dcm.py -D /path/to/VTKData
 """
 
 import vtk

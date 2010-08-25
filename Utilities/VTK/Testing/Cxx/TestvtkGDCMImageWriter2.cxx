@@ -82,7 +82,7 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
       std::cerr << "FilenameGenerator::Generate() failed somehow..." << std::endl;
       return 1;
       }
-    
+
     vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
     writer->SetInput( reader->GetOutput() );
     writer->SetFileLowerLeft( reader->GetFileLowerLeft() );
@@ -132,8 +132,8 @@ FIXME: it would be nice if this test would also handle FileLowerLeftOff to do d'
 */
             vtkImageData * vtkimg = reader->GetOutput();
             const vtkFloatingPointType *vtkorigin = vtkimg->GetOrigin();
-            if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
-              || fabs(vtkorigin[1] - origin[1]) > 1.e-3 
+            if( fabs(vtkorigin[0] - origin[0]) > 1.e-3
+              || fabs(vtkorigin[1] - origin[1]) > 1.e-3
               || fabs(vtkorigin[2] - origin[2]) > 1.e-3 )
               {
               std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;

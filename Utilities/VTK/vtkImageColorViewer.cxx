@@ -118,9 +118,9 @@ void vtkImageColorViewer::SetupInteractor(vtkRenderWindowInteractor *arg)
     {
     this->Interactor->UnRegister(this);
     }
-    
+
   this->Interactor = arg;
-  
+
   if (this->Interactor)
     {
     this->Interactor->Register(this);
@@ -148,9 +148,9 @@ void vtkImageColorViewer::SetRenderWindow(vtkRenderWindow *arg)
     {
     this->RenderWindow->UnRegister(this);
     }
-    
+
   this->RenderWindow = arg;
-  
+
   if (this->RenderWindow)
     {
     this->RenderWindow->Register(this);
@@ -173,9 +173,9 @@ void vtkImageColorViewer::SetRenderer(vtkRenderer *arg)
     {
     this->Renderer->UnRegister(this);
     }
-    
+
   this->Renderer = arg;
-  
+
   if (this->Renderer)
     {
     this->Renderer->Register(this);
@@ -186,13 +186,13 @@ void vtkImageColorViewer::SetRenderer(vtkRenderer *arg)
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetSize(int a,int b) 
+void vtkImageColorViewer::SetSize(int a,int b)
 {
   this->RenderWindow->SetSize(a, b);
 }
 
 //----------------------------------------------------------------------------
-int* vtkImageColorViewer::GetSize() 
+int* vtkImageColorViewer::GetSize()
 {
   return this->RenderWindow->GetSize();
 }
@@ -223,7 +223,7 @@ int* vtkImageColorViewer::GetSliceRange()
 }
 
 //----------------------------------------------------------------------------
-int vtkImageColorViewer::GetSliceMin() 
+int vtkImageColorViewer::GetSliceMin()
 {
   int *range = this->GetSliceRange();
   if (range)
@@ -234,7 +234,7 @@ int vtkImageColorViewer::GetSliceMin()
 }
 
 //----------------------------------------------------------------------------
-int vtkImageColorViewer::GetSliceMax() 
+int vtkImageColorViewer::GetSliceMax()
 {
   int *range = this->GetSliceRange();
   if (range)
@@ -281,7 +281,7 @@ void vtkImageColorViewer::SetSliceOrientation(int orientation)
     vtkErrorMacro("Error - invalid slice orientation " << orientation);
     return;
     }
-  
+
   if (this->SliceOrientation == orientation)
     {
     return;
@@ -289,7 +289,7 @@ void vtkImageColorViewer::SetSliceOrientation(int orientation)
 
   this->SliceOrientation = orientation;
 
-  // Update the viewer 
+  // Update the viewer
 
   int *range = this->GetSliceRange();
   if (range)
@@ -325,13 +325,13 @@ void vtkImageColorViewer::UpdateOrientation()
         cam->SetPosition(0,0,1); // -1 if medical ?
         cam->SetViewUp(0,1,0);
         break;
-        
+
       case vtkImageColorViewer::SLICE_ORIENTATION_XZ:
         cam->SetFocalPoint(0,0,0);
         cam->SetPosition(0,-1,0); // 1 if medical ?
         cam->SetViewUp(0,0,1);
         break;
-        
+
       case vtkImageColorViewer::SLICE_ORIENTATION_YZ:
         cam->SetFocalPoint(0,0,0);
         cam->SetPosition(1,0,0); // -1 if medical ?
@@ -386,7 +386,7 @@ void vtkImageColorViewer::UpdateDisplayExtent()
 
   if (this->Renderer)
     {
-    if (this->InteractorStyle && 
+    if (this->InteractorStyle &&
         this->InteractorStyle->GetAutoAdjustCameraClippingRange())
       {
       this->Renderer->ResetCameraClippingRange();
@@ -402,7 +402,7 @@ void vtkImageColorViewer::UpdateDisplayExtent()
         double cpos = (double)cam->GetPosition()[this->SliceOrientation];
         double range = fabs(spos - cpos);
         double *spacing = input->GetSpacing();
-        double avg_spacing = 
+        double avg_spacing =
           ((double)spacing[0] + (double)spacing[1] + (double)spacing[2]) / 3.0;
         cam->SetClippingRange(
           range - avg_spacing * 3.0, range + avg_spacing * 3.0);
@@ -412,55 +412,55 @@ void vtkImageColorViewer::UpdateDisplayExtent()
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetPosition(int a,int b) 
+void vtkImageColorViewer::SetPosition(int a,int b)
 {
   this->RenderWindow->SetPosition(a, b);
 }
 
 //----------------------------------------------------------------------------
-int* vtkImageColorViewer::GetPosition() 
+int* vtkImageColorViewer::GetPosition()
 {
   return this->RenderWindow->GetPosition();
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetDisplayId(void *a) 
+void vtkImageColorViewer::SetDisplayId(void *a)
 {
   this->RenderWindow->SetDisplayId(a);
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetWindowId(void *a) 
+void vtkImageColorViewer::SetWindowId(void *a)
 {
   this->RenderWindow->SetWindowId(a);
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetParentId(void *a) 
+void vtkImageColorViewer::SetParentId(void *a)
 {
   this->RenderWindow->SetParentId(a);
 }
 
 //----------------------------------------------------------------------------
-double vtkImageColorViewer::GetColorWindow() 
+double vtkImageColorViewer::GetColorWindow()
 {
   return this->WindowLevel->GetWindow();
 }
 
 //----------------------------------------------------------------------------
-double vtkImageColorViewer::GetColorLevel() 
+double vtkImageColorViewer::GetColorLevel()
 {
   return this->WindowLevel->GetLevel();
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetColorWindow(double s) 
+void vtkImageColorViewer::SetColorWindow(double s)
 {
   this->WindowLevel->SetWindow(s);
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetColorLevel(double s) 
+void vtkImageColorViewer::SetColorLevel(double s)
 {
   this->WindowLevel->SetLevel(s);
 }
@@ -470,9 +470,9 @@ class vtkImageColorViewerCallback : public vtkCommand
 {
 public:
   static vtkImageColorViewerCallback *New() { return new vtkImageColorViewerCallback; }
-  
-  void Execute(vtkObject *caller, 
-               unsigned long event, 
+
+  void Execute(vtkObject *caller,
+               unsigned long event,
                void *vtkNotUsed(callData))
     {
       if (this->IV->GetInput() == NULL)
@@ -503,25 +503,25 @@ public:
         this->InitialLevel = this->IV->GetColorLevel();
         return;
         }
-      
+
       // Adjust the window level here
 
-      vtkInteractorStyleImage *isi = 
+      vtkInteractorStyleImage *isi =
         static_cast<vtkInteractorStyleImage *>(caller);
 
       int *size = this->IV->GetRenderWindow()->GetSize();
       double window = this->InitialWindow;
       double level = this->InitialLevel;
-      
+
       // Compute normalized delta
 
-      double dx = 4.0 * 
-        (isi->GetWindowLevelCurrentPosition()[0] - 
+      double dx = 4.0 *
+        (isi->GetWindowLevelCurrentPosition()[0] -
          isi->GetWindowLevelStartPosition()[0]) / size[0];
-      double dy = 4.0 * 
-        (isi->GetWindowLevelStartPosition()[1] - 
+      double dy = 4.0 *
+        (isi->GetWindowLevelStartPosition()[1] -
          isi->GetWindowLevelCurrentPosition()[1]) / size[1];
-      
+
       // Scale by current values
 
       if (fabs(window) > 0.01)
@@ -540,24 +540,24 @@ public:
         {
         dy = dy * (level < 0 ? -0.01 : 0.01);
         }
-      
+
       // Abs so that direction does not flip
 
-      if (window < 0.0) 
+      if (window < 0.0)
         {
         dx = -1*dx;
         }
-      if (level < 0.0) 
+      if (level < 0.0)
         {
         dy = -1*dy;
         }
-      
+
       // Compute new window level
 
       double newWindow = dx + window;
       double newLevel;
       newLevel = level - dy;
-      
+
       // Stay away from zero and really
 
       if (fabs(newWindow) < 0.01)
@@ -568,12 +568,12 @@ public:
         {
         newLevel = 0.01*(newLevel < 0 ? -1 : 1);
         }
-      
+
       this->IV->SetColorWindow(newWindow);
       this->IV->SetColorLevel(newLevel);
       this->IV->Render();
     }
-  
+
   vtkImageColorViewer *IV;
   double InitialWindow;
   double InitialLevel;
@@ -602,7 +602,7 @@ void vtkImageColorViewer::InstallPipeline()
         vtkCommand::ResetWindowLevelEvent, cbk);
       cbk->Delete();
       }
-    
+
     this->Interactor->SetInteractorStyle(this->InteractorStyle);
     this->Interactor->SetRenderWindow(this->RenderWindow);
     }
@@ -686,7 +686,7 @@ void vtkImageColorViewer::Render()
         this->Renderer->GetActiveCamera()->SetParallelScale(
           xs < 150 ? 75 : (xs - 1 ) / 2.0);
         }
-      this->FirstRender = 0;  
+      this->FirstRender = 0;
       }
     }
   if (this->GetInput())
@@ -696,7 +696,7 @@ void vtkImageColorViewer::Render()
 }
 
 //----------------------------------------------------------------------------
-const char* vtkImageColorViewer::GetWindowName() 
+const char* vtkImageColorViewer::GetWindowName()
 {
   return this->RenderWindow->GetWindowName();
 }
@@ -714,19 +714,19 @@ int vtkImageColorViewer::GetOffScreenRendering()
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetInput(vtkImageData *in) 
+void vtkImageColorViewer::SetInput(vtkImageData *in)
 {
   this->WindowLevel->SetInput(in);
   this->UpdateDisplayExtent();
 }
 //----------------------------------------------------------------------------
 vtkImageData* vtkImageColorViewer::GetInput()
-{ 
+{
   return vtkImageData::SafeDownCast(this->WindowLevel->GetInput());
 }
 
 //----------------------------------------------------------------------------
-void vtkImageColorViewer::SetInputConnection(vtkAlgorithmOutput* input) 
+void vtkImageColorViewer::SetInputConnection(vtkAlgorithmOutput* input)
 {
   this->WindowLevel->SetInputConnection(input);
   this->UpdateDisplayExtent();
@@ -769,7 +769,7 @@ void vtkImageColorViewer::AddInput(vtkImageData * input)
   WindowLevel->Delete();
 }
 
-void vtkImageColorViewer::AddInputConnection(vtkAlgorithmOutput* input) 
+void vtkImageColorViewer::AddInputConnection(vtkAlgorithmOutput* input)
 {
   vtkRenderWindow *renwin = this->GetRenderWindow ();
   renwin->SetNumberOfLayers(2);
@@ -792,7 +792,7 @@ double vtkImageColorViewer::GetOverlayVisibility()
   return this->OverlayImageActor->GetVisibility();
 }
 
-void vtkImageColorViewer::SetOverlayVisibility(double vis) 
+void vtkImageColorViewer::SetOverlayVisibility(double vis)
 {
   this->OverlayImageActor->SetVisibility((int)vis);
 }

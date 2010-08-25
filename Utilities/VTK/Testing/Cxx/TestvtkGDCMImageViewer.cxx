@@ -52,7 +52,7 @@ int TestvtkGDCMReadImageViewer(const char *filename)
   reader->Delete();
   iren->Delete();
 
-  return 0; 
+  return 0;
 }
 
 int TestvtkGDCMImageViewer(int argc, char *argv[])

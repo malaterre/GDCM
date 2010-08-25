@@ -45,7 +45,7 @@ int TestvtkGDCMImageRead3(const char *dir, const char *studyuid)
   const gdcm::Tag t1(0x0020,0x000d); // Study Instance UID
   const gdcm::Tag t2(0x0020,0x000e); // Series Instance UID
   const gdcm::Tag t3(0x0028,0x1052); // Rescale Intercept
-  const gdcm::Tag t4(0x0028,0x1053); // Rescale Slope 
+  const gdcm::Tag t4(0x0028,0x1053); // Rescale Slope
   s.AddTag( t1 );
   s.AddTag( t2 );
   s.AddTag( t3 );
@@ -60,7 +60,7 @@ int TestvtkGDCMImageRead3(const char *dir, const char *studyuid)
   //std::cout << dir1 << std::endl;
   //gdcm::Scanner::ValuesType const &v = s.GetValues();
   //std::cout << v.size() << std::endl;
-  //std::copy(v.begin(), v.end(), 
+  //std::copy(v.begin(), v.end(),
   //  std::ostream_iterator<std::string>(std::cout, "\n"));
 
 

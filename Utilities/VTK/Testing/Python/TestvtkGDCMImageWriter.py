@@ -27,10 +27,10 @@ if __name__ == "__main__":
     # failure
     print "Need a filename"
     sys.exit(1)
-  
+
   # setup reader
   r = vtkgdcm.vtkGDCMImageReader()
-  
+
   r.SetFileName( filename )
   r.AddObserver("ProgressEvent", PrintProgress)
   r.Update()
@@ -41,7 +41,7 @@ if __name__ == "__main__":
   writer.SetMedicalImageProperties( r.GetMedicalImageProperties() )
   writer.SetFileName( "TestvtkGDCMImageWriterPython.dcm" )
   writer.Write()
-  
+
   # Test succeed ?
   #sys.exit(sucess != 1)
 

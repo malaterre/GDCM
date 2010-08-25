@@ -87,18 +87,18 @@ class vtkAngleWidget;
 //----------------------------------------------------------------------------
 // vtkImageViewer2 new interface wants SetSlice, but vtkImageViewer does not have
 // this new interface (what a pain), so let's fake a new interface to
-// vtkImageViewer without patching VTK 
+// vtkImageViewer without patching VTK
 class vtkGDCMImageViewer : public vtkImageViewer
 {
 public:
   vtkTypeRevisionMacro(vtkGDCMImageViewer,vtkImageViewer);
 
   static vtkGDCMImageViewer *New()
-    { 
+    {
 #ifdef VTK_DEBUG_LEAKS
     vtkDebugLeaks::ConstructClass("vtkGDCMImageViewer");
 #endif
-    return new vtkGDCMImageViewer; 
+    return new vtkGDCMImageViewer;
     }
   int GetSlice() { return this->GetZSlice(); }
   void SetSlice(int s) { this->SetZSlice(s); }
@@ -125,11 +125,11 @@ public:
   vtkTypeRevisionMacro(vtkImageColorViewer,vtkImageViewer2);
 
   static vtkImageColorViewer *New()
-    { 
+    {
 #ifdef VTK_DEBUG_LEAKS
     vtkDebugLeaks::ConstructClass("vtkImageColorViewer");
 #endif
-    return new vtkImageColorViewer; 
+    return new vtkImageColorViewer;
     }
   vtkImageColorViewer() {
     OverlayImageActor = vtkImageActor::New();
@@ -170,9 +170,9 @@ template <typename TViewer>
 class vtkGDCMObserver : public vtkCommand
 {
 public:
-  static vtkGDCMObserver *New() 
-    { 
-    return new vtkGDCMObserver; 
+  static vtkGDCMObserver *New()
+    {
+    return new vtkGDCMObserver;
     }
   vtkGDCMObserver()
     {
@@ -291,7 +291,7 @@ int verbose;
 class vtkBalloonCallback : public vtkCommand
 {
 public:
-  static vtkBalloonCallback *New() 
+  static vtkBalloonCallback *New()
     { return new vtkBalloonCallback; }
   virtual void Execute(vtkObject *caller, unsigned long, void*)
     {
@@ -473,7 +473,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   if( reader->GetImageFormat() == VTK_LOOKUP_TABLE || reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
     {
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
-    assert( reader->GetOutput()->GetPointData()->GetScalars() 
+    assert( reader->GetOutput()->GetPointData()->GetScalars()
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
 #endif
     //convert to color:
@@ -535,7 +535,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     std::cerr << "Not implemented" << std::endl;
 #endif
     }
-  else if( reader->GetImageFormat() == VTK_RGB 
+  else if( reader->GetImageFormat() == VTK_RGB
     || reader->GetImageFormat() == VTK_RGBA )
     {
     // easy case !
@@ -611,7 +611,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   viewer->SetSize( dims );
 
-  // Here is where we setup the observer, 
+  // Here is where we setup the observer,
   vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
   obs->ImageViewer = viewer;
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0

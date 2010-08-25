@@ -20,17 +20,17 @@
 // .SECTION Warning: vtkLookupTable from the vtkImageData object taken into account
 // only if ImageFormat is set to VTK_LOOKUP_TABLE
 //
-// .SECTION NOTE We are not using the usual API SetFilePrefix / SetFilePattern, 
+// .SECTION NOTE We are not using the usual API SetFilePrefix / SetFilePattern,
 // but instead a list of filenames: see SetFileNames and class gdcm::FilenameGenerator
 //
 // .SECTION Warning
 // You need to specify the correct ImageFormat (taken from the reader)
 // You need to explicitely specify the DirectionCosines (taken from the reader)
-// Since VTK 5.4 vtkMedicalImageProperties has its own DirectionCosine (no 's') 
+// Since VTK 5.4 vtkMedicalImageProperties has its own DirectionCosine (no 's')
 // user need to make sure the vtkMatrix4x4 is compatible with the 6-vector DirectionCosine.
 //
 // .SECTION NOTE Shift/Scale are global to all DICOM frames (=files) written
-// as 2D slice, therefore the shift/scale operation might not be optimized for 
+// as 2D slice, therefore the shift/scale operation might not be optimized for
 // all slices. This is not recommended for image with a large dynamic range.
 //
 // .SECTION See Also
@@ -73,7 +73,7 @@ public:
   virtual void Write();
 
   // Description:
-  // Get the entension for this file format. 
+  // Get the entension for this file format.
   virtual const char* GetFileExtensions() {
     return ".dcm .DCM"; }
 

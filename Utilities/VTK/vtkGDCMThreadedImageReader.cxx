@@ -248,8 +248,8 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
     // Overlays:
     //case OverlayPortNumber:
     default:
-      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), 
-        this->DataExtent[0], this->DataExtent[1], 
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
+        this->DataExtent[0], this->DataExtent[1],
         this->DataExtent[2], this->DataExtent[3],
         0,0 );
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
@@ -328,7 +328,7 @@ void *ReadFilesThread(void *voidparams)
     // len -> sizeof stored image
     // params->len sizeof world value image (after transform)
     if( shift == 1 && scale == 0 )
-      assert( len == params->len ); // that would be very bad 
+      assert( len == params->len ); // that would be very bad
 
     char * pointer = params->scalarpointer;
     //memcpy(pointer + file*len, tempimage, len);
@@ -488,7 +488,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
 
   pthread_mutex_destroy(&lock);
   delete[] params;
- 
+
 #if 0
   // For some reason writing down the file is painfully slow...
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
@@ -517,7 +517,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
   for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
     {
     // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
-    vtkStreamingDemandDrivenPipeline *sddp = 
+    vtkStreamingDemandDrivenPipeline *sddp =
       vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
     if (sddp)
       {

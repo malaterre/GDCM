@@ -41,10 +41,10 @@ void vtkImageRGBToYBRExecute(vtkImageRGBToYBR *self,
   vtkImageIterator<T> inIt(inData, outExt);
   vtkImageProgressIterator<T> outIt(outData, outExt, self, id);
   int idxC;
-  
+
   // find the region to loop over
   int maxC = inData->GetNumberOfScalarComponents()-1;
-  
+
   // Loop through ouput pixels
   while (!outIt.IsAtEnd())
     {
@@ -67,7 +67,7 @@ void vtkImageRGBToYBRExecute(vtkImageRGBToYBR *self,
       *outSI = (T)(y); ++outSI;
       *outSI = (T)(u); ++outSI;
       *outSI = (T)(v); ++outSI;
-      
+
       for (idxC = 3; idxC <= maxC; idxC++)
         {
         *outSI++ = *inSI++;
@@ -79,13 +79,13 @@ void vtkImageRGBToYBRExecute(vtkImageRGBToYBR *self,
 }
 
 //----------------------------------------------------------------------------
-void vtkImageRGBToYBR::ThreadedExecute (vtkImageData *inData, 
+void vtkImageRGBToYBR::ThreadedExecute (vtkImageData *inData,
                                        vtkImageData *outData,
                                        int outExt[6], int id)
 {
-  vtkDebugMacro(<< "Execute: inData = " << inData 
+  vtkDebugMacro(<< "Execute: inData = " << inData
     << ", outData = " << outData);
-  
+
   // this filter expects that input is the same type as output.
   if (inData->GetScalarType() != outData->GetScalarType())
     {
@@ -97,7 +97,7 @@ void vtkImageRGBToYBR::ThreadedExecute (vtkImageData *inData,
     {
     return;
     }
-  
+
   // need three components for input and output
   if (inData->GetNumberOfScalarComponents() < 3)
     {
@@ -113,7 +113,7 @@ void vtkImageRGBToYBR::ThreadedExecute (vtkImageData *inData,
   switch (inData->GetScalarType())
     {
     vtkTemplateMacro(
-      vtkImageRGBToYBRExecute(this, inData, 
+      vtkImageRGBToYBRExecute(this, inData,
                               outData, outExt, id, static_cast<VTK_TT *>(0)));
     default:
       vtkErrorMacro(<< "Execute: Unknown ScalarType");

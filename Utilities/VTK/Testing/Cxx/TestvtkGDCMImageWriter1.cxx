@@ -90,8 +90,8 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
         {
         vtkImageData * vtkimg = reader->GetOutput();
         const vtkFloatingPointType *vtkorigin = vtkimg->GetOrigin();
-        if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
-          || fabs(vtkorigin[1] - origin[1]) > 1.e-3 
+        if( fabs(vtkorigin[0] - origin[0]) > 1.e-3
+          || fabs(vtkorigin[1] - origin[1]) > 1.e-3
           || fabs(vtkorigin[2] - origin[2]) > 1.e-3 )
           {
           std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;
@@ -195,7 +195,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
         {
         std::cerr << "Missing md5: " << digest << std::endl;
         }
-      else if( strcmp(digest, ref) != 0 
+      else if( strcmp(digest, ref) != 0
         // I do not support rewritting 12Bits pack image (illegal anyway)
         && comppf != gdcm::PixelFormat::UINT12
       )

@@ -19,11 +19,11 @@ using vtkgdcm;
  * Usage:
  * export LD_LIBRARY_PATH=/home/mathieu/Perso/gdcm/debug-activiz/bin:/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
  * export MONO_PATH=/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
- * $ mono ./bin/HelloActiviz2.exe gdcmData/test.acr bla.png bla2.dcm        
+ * $ mono ./bin/HelloActiviz2.exe gdcmData/test.acr bla.png bla2.dcm
  */
 
 /*
- * From the outside view, no-one can detect that object pass to/from 
+ * From the outside view, no-one can detect that object pass to/from
  * vtkGDCMImageWriter/vtkGDCMImageReader are not Activiz object.
  *
  * TODO: Test Command/Observer
@@ -65,7 +65,7 @@ public class HelloActiviz2
     // at that point the .Write() should have triggered an Update() on the reader:
     if( reader.GetImageFormat() == vtkgdcm.vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
       {
-      System.Console.WriteLine( "Image is MONOCHROME2" ); // 
+      System.Console.WriteLine( "Image is MONOCHROME2" ); //
       }
 
     vtkPNGReader bmpreader = new vtkPNGReader();
