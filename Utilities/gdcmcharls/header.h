@@ -29,10 +29,10 @@ class JLSOutputStream;
 template<class STRATEGY>
 class JlsCodecFactory
 {
-public:	
-	STRATEGY* GetCodec(const JlsParamaters& info, const JlsCustomParameters&);
+public:
+  STRATEGY* GetCodec(const JlsParamaters& info, const JlsCustomParameters&);
 private:
-	STRATEGY* GetCodecImpl(const JlsParamaters& info);
+  STRATEGY* GetCodecImpl(const JlsParamaters& info);
 };
 
 
@@ -42,10 +42,10 @@ private:
 class JpegSegment
 {
 protected:
-	JpegSegment() {}
+  JpegSegment() {}
 public:
-	virtual ~JpegSegment() {}
-	virtual void Write(JLSOutputStream* pstream) = 0;
+  virtual ~JpegSegment() {}
+  virtual void Write(JLSOutputStream* pstream) = 0;
 };
 
 #endif

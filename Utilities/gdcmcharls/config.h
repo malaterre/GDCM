@@ -1,4 +1,3 @@
-
 #ifndef CHARLS_CONFIG
 #define CHARLS_CONFIG
 
@@ -60,4 +59,3 @@ typedef unsigned short USHORT;
 
 
 #endif
-

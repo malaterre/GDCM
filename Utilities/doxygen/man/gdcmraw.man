@@ -72,7 +72,7 @@ $ gdcmraw -i GE_MR_0025xx1bProtocolDataBlock.dcm -t 25,101b -o pdb.raw
 If you do not specify any tag, the Pixel Data element is the default one. So for instance to grab the Pixel Data from an image:
 
 \verbatim
-$ gdcmraw -i test.acr -o test.raw 
+$ gdcmraw -i test.acr -o test.raw
 \endverbatim
 
 You can then for example compute the md5sum of this pixel data (very useful):
@@ -175,7 +175,7 @@ $ gdcmdump 00191113.dcm
 Let's try to extract those 4 individual Lossless jpeg individually:
 
 \verbatim
-$ gdcmraw --split-frags -i 00191113.dcm -o jpeg --pattern %02d.ljpeg  
+$ gdcmraw --split-frags -i 00191113.dcm -o jpeg --pattern %02d.ljpeg
 \endverbatim
 
 This will output 4 files:
@@ -191,11 +191,11 @@ This will output 4 files:
 
 It is a common misunderstanding to interchange 'JPEG 8bits lossy' with simply JPEG file. The JPEG specification is much broader than simply the common lossy 8bits file (as found on internet).
 
-You can have 
+You can have
 
 \li JPEG Lossy 8bits
 \li JPEG Lossy 12bits
-\li JPEG Lossless 2-16bits 
+\li JPEG Lossless 2-16bits
 
 Those are what is defined in ITU-T T.81, ISO/IEC IS 10918-1.
 
