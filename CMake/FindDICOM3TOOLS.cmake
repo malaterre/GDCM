@@ -1,13 +1,13 @@
-# 
+#
 # this module looks for Dicom3Tools, well right now only dciodvfy
 #
 # DCIODVFY_EXECUTABLE - the full path to the dciodvfy
 # DCIODVFY_FOUND      - If false, don't attempt to use dciodvfy
 
 # dicom3tools are funny to build you'll need imake
-# Anyway in order not to pollute your system, you can do an in-source build 
+# Anyway in order not to pollute your system, you can do an in-source build
 # and install which should be clean enough:
-# 
+#
 # ./Configure
 # imake -I./config -DInstallInTopDir
 # make World
@@ -47,4 +47,3 @@ MARK_AS_ADVANCED(
 #ELSE (NOT DCIODVFY_EXECUTABLE)
 #  SET(DCIODVFY_FOUND "YES")
 #ENDIF (NOT DCIODVFY_EXECUTABLE)
-

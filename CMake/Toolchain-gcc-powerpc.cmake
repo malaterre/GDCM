@@ -2,13 +2,13 @@
 # http://doc.cliss21.com/index.php?title=QEMU
 # Usage:
 #
-#  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake 
+#  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake
 #
 # For gdcm you need at least the following three package (2008/08/19):
 #
 # fix /etc/apt/source.lists
 #  + deb http://www.emdebian.org/debian/ unstable main
-# 
+#
 #  // prebuilt Emdebian project
 #  sudo apt-get install g++-4.1-powerpc-linux-gnu
 #
@@ -23,7 +23,7 @@
 #Two approach for solving it:
 #1.
 #CMAKE_EXE_LINKER_FLAGS:STRING=-static
-#2. 
+#2.
 #$ qemu-ppc -L /usr/powerpc-linux-gnu/ ./a.out
 #Hello cross-compiling world!
 #
@@ -49,9 +49,8 @@ SET(CMAKE_CXX_COMPILER powerpc-linux-gnu-g++)
 SET(CMAKE_FIND_ROOT_PATH   /usr/powerpc-linux-gnu )
 
 # adjust the default behaviour of the FIND_XXX() commands:
-# search headers and libraries in the target environment, search 
+# search headers and libraries in the target environment, search
 # programs in the host environment
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-

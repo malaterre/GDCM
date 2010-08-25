@@ -12,7 +12,7 @@
 #INCLUDE(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 
 # This should be included before the _INIT variables are
-# used to initialize the cache.  Since the rule variables 
+# used to initialize the cache.  Since the rule variables
 # have if blocks on them, users can still define them here.
 # But, it should still be after the platform file so changes can
 # be made to those values.
@@ -51,7 +51,7 @@ ENDIF(NOT CMAKE_CSharp_CREATE_STATIC_LIBRARY)
 IF(NOT CMAKE_CSharp_COMPILE_OBJECT)
   # there is no such thing as intermediate representation (object file) in C#.
   # Instead to avoid multiple recompilation of the same src file, I could use the .dll form, since
-  # one can add src / .dll that same way 
+  # one can add src / .dll that same way
 
   # copy src version
   SET(CMAKE_CSharp_COMPILE_OBJECT "<CMAKE_COMMAND> -E copy <SOURCE> <OBJECT>")
@@ -84,10 +84,9 @@ ENDIF(NOT CMAKE_CSharp_CREATE_SHARED_LIBRARY)
 
 SET(CMAKE_CSharp_FLAGS_INIT "$ENV{CSFLAGS} ${CMAKE_CSharp_FLAGS_INIT}")
 
-# avoid just having a space as the initial value for the cache 
+# avoid just having a space as the initial value for the cache
 IF(CMAKE_CSharp_FLAGS_INIT STREQUAL " ")
   SET(CMAKE_CSharp_FLAGS_INIT)
 ENDIF(CMAKE_CSharp_FLAGS_INIT STREQUAL " ")
 SET (CMAKE_CSharp_FLAGS "${CMAKE_CSharp_FLAGS_INIT}" CACHE STRING
      "Flags used by the compiler during all build types.")
-

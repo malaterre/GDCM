@@ -27,7 +27,7 @@ install(EXPORT GDCMTargets DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
 # [Prevent viral CMake dep]
 # See the following ref, which explain this mess.
 # http://cmake.org/Bug/view.php?id=9822
-# 0009822: Please expose: cmGlobalGenerator::GetExportSet at cmake level 
+# 0009822: Please expose: cmGlobalGenerator::GetExportSet at cmake level
 
 # I cannot retrieve the lists of exported targets, so read them from the file instead
 

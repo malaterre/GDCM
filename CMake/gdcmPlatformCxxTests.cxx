@@ -98,7 +98,7 @@ int TestFUNCTION()
   int r = strcmp( "TestFUNCTION", f);
   return r;
 }
- 
+
 int main()
 {
   return TestFUNCTION();

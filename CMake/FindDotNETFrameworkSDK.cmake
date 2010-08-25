@@ -1,6 +1,6 @@
-# - Find .NET Software Development Kit 
+# - Find .NET Software Development Kit
 # This module finds an installed .NET Software Development Kit.  It sets the following variables:
-# 
+#
 #  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
@@ -21,7 +21,7 @@
 
 # http://www.akadia.com/services/dotnet_assemblies.html
 
-# Visual C# Language Concepts 
+# Visual C# Language Concepts
 # Building from the Command Line
 # http://msdn.microsoft.com/en-us/library/1700bbwd(VS.71).aspx
 
