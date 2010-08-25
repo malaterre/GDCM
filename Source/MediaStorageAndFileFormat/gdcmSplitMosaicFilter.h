@@ -61,4 +61,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMSPLITMOSAICFILTER_H
-

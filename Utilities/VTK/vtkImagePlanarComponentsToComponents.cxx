@@ -132,4 +132,3 @@ void vtkImagePlanarComponentsToComponents::PrintSelf(ostream& os, vtkIndent inde
 {
   this->Superclass::PrintSelf(os,indent);
 }
-

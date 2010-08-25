@@ -19,4 +19,3 @@ int TestSerieHelper(int, char *[])
   gdcm::SerieHelper sh;
   return 0;
 }
-

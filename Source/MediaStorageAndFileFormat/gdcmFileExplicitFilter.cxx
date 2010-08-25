@@ -203,4 +203,3 @@ bool FileExplicitFilter::Change()
 
 
 } // end namespace gdcm
-

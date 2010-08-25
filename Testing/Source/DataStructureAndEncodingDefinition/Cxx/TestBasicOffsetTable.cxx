@@ -19,4 +19,3 @@ int TestBasicOffsetTable(int, char *[])
   gdcm::BasicOffsetTable bot;
   return 0;
 }
-

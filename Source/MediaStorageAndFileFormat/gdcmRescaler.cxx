@@ -511,4 +511,3 @@ void Rescaler::SetUseTargetPixelType(bool b)
 }
 
 } // end namespace gdcm
-

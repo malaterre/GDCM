@@ -174,4 +174,3 @@ bool jp2_encode(opj_jp2_t *jp2, opj_cio_t *cio, opj_image_t *image, opj_codestre
 /*@}*/
 
 #endif /* GDCM_JP2_H */
-

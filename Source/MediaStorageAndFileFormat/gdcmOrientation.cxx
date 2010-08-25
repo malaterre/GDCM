@@ -119,4 +119,3 @@ const char *Orientation::GetLabel(OrientationType type)
 
 
 }
-

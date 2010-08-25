@@ -204,4 +204,3 @@ void Image::Print(std::ostream &os) const
 
 
 } // end namespace gdcm
-

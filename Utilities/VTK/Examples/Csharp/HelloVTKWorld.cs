@@ -53,4 +53,3 @@ public class HelloVTKWorld
     return 0;
     }
 }
-

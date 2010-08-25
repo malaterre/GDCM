@@ -90,4 +90,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMFILEDERIVATION_H
-

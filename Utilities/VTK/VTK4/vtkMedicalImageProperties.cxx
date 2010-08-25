@@ -1003,4 +1003,3 @@ void vtkMedicalImageProperties::PrintSelf(ostream& os, vtkIndent indent)
 
   this->Internals->Print(os << "\n", indent.GetNextIndent() );
 }
-

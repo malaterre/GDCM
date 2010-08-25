@@ -56,4 +56,3 @@ int TestImageReaderPixelSpacing(int argc, char *argv[])
 
   return ret;
 }
-

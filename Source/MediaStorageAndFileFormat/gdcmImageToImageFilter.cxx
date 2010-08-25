@@ -36,4 +36,3 @@ const Image &ImageToImageFilter::GetOutput() const
 
 
 } // end namespace gdcm
-

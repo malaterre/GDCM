@@ -65,5 +65,3 @@ ADD_CUSTOM_TARGET(VTKGDCMExampleCSharp ALL
   DEPENDS ${DEP}
   COMMENT "building examples"
 )
-
-

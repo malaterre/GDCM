@@ -657,4 +657,3 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* Stopping condition */
 { 0 ,0 }
 };
-

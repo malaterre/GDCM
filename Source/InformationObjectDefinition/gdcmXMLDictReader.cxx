@@ -231,4 +231,3 @@ void XMLDictReader::CharacterDataHandler(const char *data, int length)
 }
 
 }
-

@@ -54,4 +54,3 @@ public class RefCounting
     return 0;
     }
 }
-

@@ -19,4 +19,3 @@ int TestNestedModuleEntries(int, char *[])
   gdcm::NestedModuleEntries nme;
   return 0;
 }
-

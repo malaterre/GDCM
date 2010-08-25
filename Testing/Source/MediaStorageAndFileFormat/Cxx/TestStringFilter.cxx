@@ -84,4 +84,3 @@ int TestStringFilter(int argc, char *argv[])
 
   return r;
 }
-

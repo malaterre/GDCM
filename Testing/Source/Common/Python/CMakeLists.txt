@@ -10,5 +10,3 @@ SET(GDCM_PYTHON_TEST_SRCS
 FOREACH(name ${GDCM_PYTHON_TEST_SRCS})
   ADD_PYTHON_TEST(${name}Python ${name}.py ${GDCM_DATA_ROOT}/test.acr)
 ENDFOREACH(name)
-
-

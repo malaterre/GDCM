@@ -134,4 +134,3 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
 
   return 0;
 }
-

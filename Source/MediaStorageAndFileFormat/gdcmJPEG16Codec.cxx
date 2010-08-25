@@ -20,4 +20,3 @@
 
 #define JPEGBITSCodec JPEG16Codec
 #include "gdcmJPEGBITSCodec.cxx"
-

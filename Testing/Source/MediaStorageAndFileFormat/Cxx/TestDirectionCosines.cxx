@@ -129,4 +129,3 @@ int TestDirectionCosines(int, char *[])
 
   return 0;
 }
-

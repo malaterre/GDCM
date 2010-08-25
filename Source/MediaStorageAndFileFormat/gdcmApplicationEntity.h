@@ -61,4 +61,3 @@ public:
 } // end namespace gdcm
 
 #endif //GDCMAPPLICATIONENTITY_H
-

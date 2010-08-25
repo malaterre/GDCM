@@ -82,4 +82,3 @@ public:
 } // end namespace gdcm
 
 #endif //GDCMPERSONNAME_H
-

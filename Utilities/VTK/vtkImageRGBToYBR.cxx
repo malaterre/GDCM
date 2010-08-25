@@ -126,4 +126,3 @@ void vtkImageRGBToYBR::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }
-

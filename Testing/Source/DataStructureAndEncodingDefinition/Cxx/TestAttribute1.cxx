@@ -230,4 +230,3 @@ int TestAttribute1(int argc, char *argv[])
 
   return numerrors;
 }
-

@@ -20,4 +20,3 @@ int TestByteSwapFilter(int, char *[])
   gdcm::ByteSwapFilter bsf( ds );
   return 0;
 }
-

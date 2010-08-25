@@ -160,4 +160,3 @@ double DirectionCosines::ComputeDistAlongNormal(const double ipp[3]) const
 
 
 }
-

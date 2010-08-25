@@ -251,4 +251,3 @@ int TestvtkGDCMImageWriter1(int argc, char *argv[])
 
   return r;
 }
-

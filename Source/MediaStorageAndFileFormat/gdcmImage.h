@@ -127,4 +127,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMIMAGE_H
-

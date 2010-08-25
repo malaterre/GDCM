@@ -77,4 +77,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMFILEEXPLICITFILTER_H
-

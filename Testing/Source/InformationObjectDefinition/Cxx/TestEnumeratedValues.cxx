@@ -19,4 +19,3 @@ int TestEnumeratedValues(int, char *[])
   gdcm::EnumeratedValues ev;
   return 0;
 }
-

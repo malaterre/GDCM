@@ -46,4 +46,3 @@ public class HelloVTKWorld2
     return 0;
     }
 }
-

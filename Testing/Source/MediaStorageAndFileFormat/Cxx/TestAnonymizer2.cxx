@@ -156,4 +156,3 @@ int TestAnonymizer2(int argc, char *argv[])
 
   return r;
 }
-

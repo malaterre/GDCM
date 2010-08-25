@@ -89,4 +89,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMIMAGECHANGETRANSFERSYNTAX_H
-

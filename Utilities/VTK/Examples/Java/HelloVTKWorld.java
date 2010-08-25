@@ -81,4 +81,3 @@ public class HelloVTKWorld
     System.out.println("Success reading: " + filename );
     }
 }
-

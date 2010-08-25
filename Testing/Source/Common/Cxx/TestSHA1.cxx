@@ -276,4 +276,3 @@ int TestSHA1(int argc, char *argv[])
 
   return r;
 }
-

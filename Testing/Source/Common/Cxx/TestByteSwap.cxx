@@ -144,4 +144,3 @@ int TestByteSwap(int , char *[])
 
   return 0;
 }
-

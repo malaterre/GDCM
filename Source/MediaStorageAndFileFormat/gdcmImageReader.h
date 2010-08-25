@@ -58,4 +58,3 @@ protected:
 } // end namespace gdcm
 
 #endif //GDCMIMAGEREADER_H
-

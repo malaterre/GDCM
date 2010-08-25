@@ -293,4 +293,3 @@ viewer->GetRenderer()->AddActor( cubeActor );
 
   return 0;
 }
-

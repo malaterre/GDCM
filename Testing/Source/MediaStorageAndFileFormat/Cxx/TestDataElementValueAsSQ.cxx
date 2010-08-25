@@ -62,4 +62,3 @@ int TestDataElementValueAsSQ(int argc, char *argv[])
 
   return ret;
 }
-

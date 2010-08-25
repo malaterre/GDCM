@@ -50,4 +50,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMIMAGECONVERTER_H
-

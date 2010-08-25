@@ -35,4 +35,3 @@ int TestVRLT(int, char *[])
 
   return 0;
 }
-

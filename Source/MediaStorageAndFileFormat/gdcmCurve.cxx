@@ -315,4 +315,3 @@ void Curve::GetAsPoints(float *array) const
 }
 
 }
-

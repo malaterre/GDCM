@@ -87,4 +87,3 @@ public class HelloActiviz2
     return 0;
     }
 }
-

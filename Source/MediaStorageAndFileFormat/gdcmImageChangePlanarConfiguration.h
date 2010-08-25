@@ -89,4 +89,3 @@ size_t ImageChangePlanarConfiguration::RGBPixelsToRGBPlanes(T *r, T *g, T *b, co
 } // end namespace gdcm
 
 #endif //GDCMIMAGECHANGEPLANARCONFIGURATION_H
-

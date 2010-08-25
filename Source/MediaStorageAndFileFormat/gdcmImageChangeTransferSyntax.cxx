@@ -450,4 +450,3 @@ bool ImageChangeTransferSyntax::Change()
 
 
 } // end namespace gdcm
-

@@ -92,4 +92,3 @@ if __name__ == "__main__":
   TestScan( dirname, recursive)
 
   sys.exit(0)
-

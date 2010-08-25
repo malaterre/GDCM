@@ -43,4 +43,3 @@ protected:
 } // end namespace gdcm
 
 #endif //GDCMIMAGETOIMAGEFILTER_H
-

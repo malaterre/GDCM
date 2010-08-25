@@ -19,4 +19,3 @@ int TestIODEntry(int, char *[])
   gdcm::IODEntry iode;
   return 0;
 }
-

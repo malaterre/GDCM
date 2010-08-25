@@ -115,4 +115,3 @@ int TestGlobal(int, char *[])
 
   return 0;
 }
-

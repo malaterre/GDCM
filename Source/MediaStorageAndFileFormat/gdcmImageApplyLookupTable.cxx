@@ -73,4 +73,3 @@ bool ImageApplyLookupTable::Apply()
 
 
 } // end namespace gdcm
-

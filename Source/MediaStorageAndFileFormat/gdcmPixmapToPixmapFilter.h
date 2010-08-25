@@ -44,4 +44,3 @@ protected:
 } // end namespace gdcm
 
 #endif //GDCMPIXMAPTOPIXMAPFILTER_H
-

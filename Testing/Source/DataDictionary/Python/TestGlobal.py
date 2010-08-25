@@ -33,4 +33,3 @@ if __name__ == "__main__":
 
   # Test succeed ?
   sys.exit(0)
-

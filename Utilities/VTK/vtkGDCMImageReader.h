@@ -315,4 +315,3 @@ private:
   void operator=(const vtkGDCMImageReader&);  // Not implemented.
 };
 #endif
-

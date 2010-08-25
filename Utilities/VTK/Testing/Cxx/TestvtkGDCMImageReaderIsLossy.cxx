@@ -292,4 +292,3 @@ int TestvtkGDCMImageReaderIsLossy(int argc, char *argv[])
 
   return r;
 }
-

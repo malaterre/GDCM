@@ -459,4 +459,3 @@ std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
 }
 
 } // end namespace gdcm
-

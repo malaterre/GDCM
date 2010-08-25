@@ -262,4 +262,3 @@ void XMLPrivateDictReader::CharacterDataHandler(const char *data, int length)
 }
 
 }
-

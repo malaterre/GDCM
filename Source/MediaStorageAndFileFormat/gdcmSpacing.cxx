@@ -116,4 +116,3 @@ Attribute<0x28,0x34> Spacing::ComputePixelAspectRatioFromPixelSpacing(const Attr
 
 
 } // end namespace gdcm
-

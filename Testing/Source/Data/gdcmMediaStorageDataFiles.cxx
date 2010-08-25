@@ -228,4 +228,3 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 /* Stopping condition */
 { 0 ,0 }
 };
-

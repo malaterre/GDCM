@@ -180,4 +180,3 @@ bool SplitMosaicFilter::Split()
 
 
 } // end namespace gdcm
-

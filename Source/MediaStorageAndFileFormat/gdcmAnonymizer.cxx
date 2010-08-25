@@ -1045,4 +1045,3 @@ const CryptographicMessageSyntax *Anonymizer::GetCryptographicMessageSyntax() co
 }
 
 } // end namespace gdcm
-

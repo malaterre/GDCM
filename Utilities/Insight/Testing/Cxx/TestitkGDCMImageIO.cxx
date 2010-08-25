@@ -90,4 +90,3 @@ int TestitkGDCMImageIO(int argc, char *argv[])
 
   return r;
 }
-

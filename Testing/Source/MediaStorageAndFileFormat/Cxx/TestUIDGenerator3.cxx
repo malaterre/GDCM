@@ -68,4 +68,3 @@ int TestUIDGenerator3(int argc, char *argv[])
     }
   return 0;
 }
-

@@ -105,4 +105,3 @@ int TestImageHelper(int, char *[])
 
   return 0;
 }
-

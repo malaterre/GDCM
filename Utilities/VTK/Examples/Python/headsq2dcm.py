@@ -44,4 +44,3 @@ writer.SetInput( reader.GetOutput() )
 #writer.SetInput( cast.GetOutput() )
 writer.SetFileDimensionality( 3 )
 writer.Write()
-

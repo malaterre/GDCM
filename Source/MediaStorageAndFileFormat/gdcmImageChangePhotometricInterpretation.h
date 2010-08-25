@@ -116,4 +116,3 @@ void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
 } // end namespace gdcm
 
 #endif //GDCMIMAGECHANGEPHOTOMETRICINTERPRETATION_H
-

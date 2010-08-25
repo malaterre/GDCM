@@ -1270,4 +1270,3 @@ void Printer::Print(std::ostream& os)
 }
 
 }
-

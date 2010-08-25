@@ -205,4 +205,3 @@ inline std::ostream& operator<<(std::ostream &os, const PixelFormat &pf)
 } // end namespace gdcm
 
 #endif //GDCMPIXELFORMAT_H
-

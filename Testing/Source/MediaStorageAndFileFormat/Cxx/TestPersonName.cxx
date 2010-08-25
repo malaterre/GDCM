@@ -78,4 +78,3 @@ int TestPersonName(int, char *[])
 
   return 0;
 }
-

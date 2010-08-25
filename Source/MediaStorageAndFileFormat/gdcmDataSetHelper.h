@@ -45,4 +45,3 @@ protected:
 } // end namespace gdcm
 
 #endif //__gdcmSpacing_h
-

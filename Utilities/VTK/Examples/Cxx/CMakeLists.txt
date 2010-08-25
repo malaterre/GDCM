@@ -56,5 +56,3 @@ ENDIF(GDCM_HAVE_PTHREAD_H)
 
 #ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
 #TARGET_LINK_LIBRARIES(gdcm2vtk gdcmMSFF pthread)
-
-

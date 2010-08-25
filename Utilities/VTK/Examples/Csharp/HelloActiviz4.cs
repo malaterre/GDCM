@@ -48,4 +48,3 @@ public class HelloActiviz4
     return 0;
     }
 }
-

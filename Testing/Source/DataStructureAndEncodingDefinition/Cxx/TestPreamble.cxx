@@ -30,4 +30,3 @@ int TestPreamble(int, char *[])
     delete p;
   return 0;
 }
-

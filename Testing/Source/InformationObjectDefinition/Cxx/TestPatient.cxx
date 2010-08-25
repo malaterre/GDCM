@@ -19,4 +19,3 @@ int TestPatient(int, char *[])
   gdcm::Patient pat;
   return 0;
 }
-

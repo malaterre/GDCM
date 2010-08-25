@@ -42,4 +42,3 @@ int TestIconImage(int, char *[])
   gdcm::IconImage icon;
   return 0;
 }
-

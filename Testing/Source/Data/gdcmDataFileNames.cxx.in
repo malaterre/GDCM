@@ -34,4 +34,3 @@ static const char * const gdcmBlackListReaderDataFileNames[] = {
 //const char * const gdcmBlackListWriterDataImages[] = {
 //  @GDCM_BLACK_LIST_WRITER_DATA_IMAGES@
 //0 };
-

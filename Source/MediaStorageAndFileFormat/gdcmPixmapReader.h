@@ -70,4 +70,3 @@ protected:
 } // end namespace gdcm
 
 #endif //GDCMPIXMAPREADER_H
-

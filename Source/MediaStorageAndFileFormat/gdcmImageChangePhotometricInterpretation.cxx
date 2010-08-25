@@ -122,4 +122,3 @@ bool ImageChangePhotometricInterpretation::Change()
 
 
 } // end namespace gdcm
-
