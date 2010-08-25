@@ -53,7 +53,7 @@ start_input_pass (j_decompress_ptr cinfo)
  * This is called only once, during master selection.
  */
 
-GLOBAL(void) 
+GLOBAL(void)
 jinit_lossless_d_codec(j_decompress_ptr cinfo)
 {
   j_lossless_d_ptr losslsd;

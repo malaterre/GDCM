@@ -90,7 +90,7 @@ start_input_pass (j_decompress_ptr cinfo)
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   d_diff_ptr diff = (d_diff_ptr) losslsd->diff_private;
 
-  /* Check that the restart interval is an integer multiple of the number 
+  /* Check that the restart interval is an integer multiple of the number
    * of MCU in an MCU-row.
    */
   if (cinfo->restart_interval % cinfo->MCUs_per_row != 0)

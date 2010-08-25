@@ -267,7 +267,7 @@ start_pass (j_compress_ptr cinfo)
   /* c_pred_ptr pred = (c_pred_ptr) losslsc->pred_private; */
   int ci;
 
-  /* Check that the restart interval is an integer multiple of the number 
+  /* Check that the restart interval is an integer multiple of the number
    * of MCU in an MCU-row.
    */
   if (cinfo->restart_interval % cinfo->MCUs_per_row != 0)

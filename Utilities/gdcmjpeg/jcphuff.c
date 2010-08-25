@@ -103,7 +103,7 @@ METHODDEF(void) finish_pass_gather_phuff JPP((j_compress_ptr cinfo));
 
 METHODDEF(void)
 start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
-{  
+{
   j_lossy_c_ptr lossyc = (j_lossy_c_ptr) cinfo->codec;
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) lossyc->entropy_private;
   boolean is_DC_band;
@@ -240,16 +240,16 @@ emit_bits (phuff_entropy_ptr entropy, unsigned int code, int size)
     return;			/* do nothing if we're only getting stats */
 
   put_buffer &= (((INT32) 1)<<size) - 1; /* mask off any extra bits in code */
-  
+
   put_bits += size;		/* new number of bits in buffer */
-  
+
   put_buffer <<= 24 - put_bits; /* align incoming bits */
 
   put_buffer |= entropy->put_buffer; /* and merge with old buffer contents */
 
   while (put_bits >= 8) {
     int c = (int) ((put_buffer >> 16) & 0xFF);
-    
+
     emit_byte(entropy, c);
     if (c == 0xFF) {		/* need to stuff a zero byte? */
       emit_byte(entropy, 0);
@@ -417,7 +417,7 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
       /* This code assumes we are on a two's complement machine */
       temp2--;
     }
-    
+
     /* Find the number of bits needed for the magnitude of the coefficient */
     nbits = 0;
     while (temp) {
@@ -429,10 +429,10 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
      */
     if (nbits > MAX_COEF_BITS+1)
       ERREXIT(cinfo, JERR_BAD_DCT_COEF);
-    
+
     /* Count/emit the Huffman-coded symbol for the number of bits */
     emit_symbol(entropy, compptr->dc_tbl_no, nbits);
-    
+
     /* Emit that number of bits of the value, if positive, */
     /* or the complement of its magnitude, if negative. */
     if (nbits)			/* emit_bits rejects calls with size 0 */
@@ -485,9 +485,9 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   block = MCU_data[0];
 
   /* Encode the AC coefficients per section G.1.2.2, fig. G.3 */
-  
+
   r = 0;			/* r = run length of zeros */
-   
+
   for (k = cinfo->Ss; k <= Se; k++) {
     if ((temp = (*block)[jpeg_natural_order[k]]) == 0) {
       r++;
@@ -662,7 +662,7 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   }
 
   /* Encode the AC coefficients per section G.1.2.3, fig. G.7 */
-  
+
   r = 0;			/* r = run length of zeros */
   BR = 0;			/* BR = count of buffered bits added now */
   BR_buffer = entropy->bit_buffer + entropy->BE; /* Append bits to buffer */
@@ -748,7 +748,7 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 
 METHODDEF(void)
 finish_pass_phuff (j_compress_ptr cinfo)
-{   
+{
   j_lossy_c_ptr lossyc = (j_lossy_c_ptr) cinfo->codec;
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) lossyc->entropy_private;
 

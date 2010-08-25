@@ -278,10 +278,10 @@ decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 	/* Since zeroes are skipped, output area must be cleared beforehand */
 	for (k = 1; k < DCTSIZE2; k++) {
 	  HUFF_DECODE(s, br_state, actbl, return FALSE, label2);
-      
+
 	  r = s >> 4;
 	  s &= 15;
-      
+
 	  if (s) {
 	    k += r;
 	    CHECK_BIT_BUFFER(br_state, s, return FALSE);
@@ -305,10 +305,10 @@ decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 	/* In this path we just discard the values */
 	for (k = 1; k < DCTSIZE2; k++) {
 	  HUFF_DECODE(s, br_state, actbl, return FALSE, label3);
-      
+
 	  r = s >> 4;
 	  s &= 15;
-      
+
 	  if (s) {
 	    k += r;
 	    CHECK_BIT_BUFFER(br_state, s, return FALSE);

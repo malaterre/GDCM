@@ -53,7 +53,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
 				  SIZEOF(d_derived_tbl));
   dtbl = *pdtbl;
   dtbl->pub = htbl;		/* fill in back link */
-  
+
   /* Figure C.1: make table of Huffman code length for each symbol */
 
   p = 0;
@@ -66,10 +66,10 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
   }
   huffsize[p] = 0;
   numsymbols = p;
-  
+
   /* Figure C.2: generate the codes themselves */
   /* We also validate that the counts represent a legal Huffman code tree. */
-  
+
   code = 0;
   si = huffsize[0];
   p = 0;
@@ -138,10 +138,10 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
     for (i = 0; i < numsymbols; i++) {
       int sym = htbl->huffval[i];
 /* The following file contains a value of 17 in the huffman table, which is impossible
- * according to ISO 10918-1, H.1.2.2 Huffman coding of the modulo difference 
- * and table H.2. 
+ * according to ISO 10918-1, H.1.2.2 Huffman coding of the modulo difference
+ * and table H.2.
  * PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
- * MM, 2008/08/12 I am breaking backward compatibility and decide not to support this image 
+ * MM, 2008/08/12 I am breaking backward compatibility and decide not to support this image
  * anymore. In fact the decompression using another library: PVRG was giving me
  * another result anyway.
  *

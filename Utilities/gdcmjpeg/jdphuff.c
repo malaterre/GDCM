@@ -265,7 +265,7 @@ process_restart (j_decompress_ptr cinfo)
 /*
  * Huffman MCU decoding.
  * Each of these routines decodes and returns one MCU's worth of
- * Huffman-compressed coefficients. 
+ * Huffman-compressed coefficients.
  * The coefficients are reordered from zigzag order into natural array order,
  * but are not dequantized.
  *
@@ -286,7 +286,7 @@ process_restart (j_decompress_ptr cinfo)
 
 METHODDEF(boolean)
 decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
-{   
+{
   j_lossy_d_ptr lossyd = (j_lossy_d_ptr) cinfo->codec;
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) lossyd->entropy_private;
   int Al = cinfo->Al;
@@ -358,7 +358,7 @@ decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 
 METHODDEF(boolean)
 decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
-{   
+{
   j_lossy_d_ptr lossyd = (j_lossy_d_ptr) cinfo->codec;
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) lossyd->entropy_private;
   int Se = cinfo->Se;
@@ -444,7 +444,7 @@ decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 
 METHODDEF(boolean)
 decode_mcu_DC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
-{   
+{
   j_lossy_d_ptr lossyd = (j_lossy_d_ptr) cinfo->codec;
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) lossyd->entropy_private;
   int p1 = 1 << cinfo->Al;	/* 1 in the bit position being coded */
@@ -494,7 +494,7 @@ decode_mcu_DC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 
 METHODDEF(boolean)
 decode_mcu_AC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
-{   
+{
   j_lossy_d_ptr lossyd = (j_lossy_d_ptr) cinfo->codec;
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) lossyd->entropy_private;
   int Se = cinfo->Se;
@@ -667,7 +667,7 @@ jinit_phuff_decoder (j_decompress_ptr cinfo)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				cinfo->num_components*DCTSIZE2*SIZEOF(int));
   coef_bit_ptr = & cinfo->coef_bits[0][0];
-  for (ci = 0; ci < cinfo->num_components; ci++) 
+  for (ci = 0; ci < cinfo->num_components; ci++)
     for (i = 0; i < DCTSIZE2; i++)
       *coef_bit_ptr++ = -1;
 }

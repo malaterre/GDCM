@@ -252,16 +252,16 @@ emit_bits (working_state * state, unsigned int code, int size)
     ERREXIT(state->cinfo, JERR_HUFF_MISSING_CODE);
 
   put_buffer &= (((INT32) 1)<<size) - 1; /* mask off any extra bits in code */
-  
+
   put_bits += size;		/* new number of bits in buffer */
-  
+
   put_buffer <<= 24 - put_bits; /* align incoming bits */
 
   put_buffer |= state->cur.put_buffer; /* and merge with old buffer contents */
-  
+
   while (put_bits >= 8) {
     int c = (int) ((put_buffer >> 16) & 0xFF);
-    
+
     emit_byte(state, c, return FALSE);
     if (c == 0xFF) {		/* need to stuff a zero byte? */
       emit_byte(state, 0, return FALSE);
@@ -354,9 +354,9 @@ encode_mcus_huff (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
       register int temp, temp2 /* , temp3 */ ;
       register int nbits;
       c_derived_tbl *dctbl = entropy->cur_tbls[sampn];
-  
+
       /* Encode the difference per section H.1.2.2 */
-  
+
       /* Input the sample difference */
       temp = *entropy->input_ptr[entropy->input_ptr_index[sampn]]++;
 
@@ -380,7 +380,7 @@ encode_mcus_huff (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
        */
       if (nbits > MAX_DIFF_BITS)
 	ERREXIT(cinfo, JERR_BAD_DIFF);
-  
+
       /* Emit the Huffman-coded symbol for the number of bits */
       if (! emit_bits(&state, dctbl->ehufco[nbits], dctbl->ehufsi[nbits]))
 	return mcu_num;
@@ -467,7 +467,7 @@ encode_mcus_gather (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
 {
   j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec;
   lhuff_entropy_ptr entropy = (lhuff_entropy_ptr) losslsc->entropy_private;
-  unsigned int mcu_num; 
+  unsigned int mcu_num;
   int sampn, ci, yoffset, MCU_width, ptrn;
   /* jpeg_component_info * compptr; */
 
@@ -497,9 +497,9 @@ encode_mcus_gather (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
       register int nbits;
       /* c_derived_tbl *dctbl = entropy->cur_tbls[sampn]; */
       long * counts = entropy->cur_counts[sampn];
-  
+
       /* Encode the difference per section H.1.2.2 */
-  
+
       /* Input the sample difference */
       temp = *entropy->input_ptr[entropy->input_ptr_index[sampn]]++;
 
@@ -520,7 +520,7 @@ encode_mcus_gather (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
        */
       if (nbits > MAX_DIFF_BITS)
 	ERREXIT(cinfo, JERR_BAD_DIFF);
-  
+
       /* Count the Huffman symbol for the number of bits */
       counts[nbits]++;
     }

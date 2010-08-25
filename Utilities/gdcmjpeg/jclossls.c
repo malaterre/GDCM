@@ -36,7 +36,7 @@ start_pass (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
  * This is called only once, during master selection.
  */
 
-GLOBAL(void) 
+GLOBAL(void)
 jinit_lossless_c_codec(j_compress_ptr cinfo)
 {
   j_lossless_c_ptr losslsc;
