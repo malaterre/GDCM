@@ -76,12 +76,12 @@ public:
   // somewhat UID specific:
   // In the following the size '22' is explicitely listed. You need to pass in at least 22bytes of
   // array. If the string is an output it will be automatically padded ( array[21] == 0 ) for you.
-  // Those functions: GetCurrentDateTime / FormatDateTime / ParseDateTime do not return the 
+  // Those functions: GetCurrentDateTime / FormatDateTime / ParseDateTime do not return the
   // &YYZZ part of the DT structure as defined in DICOM PS 3.5 - 2008
   // In this case it is simple to split the date[22] into a DA and TM structure !
 
   /// Return the current data time, and format it as ASCII text.
-  // That's simply a call to gettimeofday + FormatDateTime, but since WIN32 do not have an 
+  // That's simply a call to gettimeofday + FormatDateTime, but since WIN32 do not have an
   // implementation for gettimeofday this is more portable. (and time(0) is not precise)
   static bool GetCurrentDateTime(char date[22]);
 

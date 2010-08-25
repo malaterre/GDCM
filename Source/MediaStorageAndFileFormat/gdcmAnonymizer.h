@@ -31,7 +31,7 @@ class CryptographicMessageSyntax;
  * This class is a multi purpose anonymizer. It can work in 2 mode:
  * - Full (irreversible) anonymizer (aka dumb mode)
  * - reversible de-identifier/re-identifier (aka smart mode). This implements the Basic Application Level Confidentiality Profile, DICOM PS 3.15-2009
- * 
+ *
  * 1. dumb mode
  * This is a dumb anonymizer implementation. All it allows user is simple operation such as:
  *
@@ -39,19 +39,19 @@ class CryptographicMessageSyntax;
  * - complete removal of DICOM attribute (Remove)
  * - make a tag empty, ie make it's length 0 (Empty)
  * - replace with another string-based value (Replace)
- * 
+ *
  * DataSet based functions:
  * - Remove all group length attribute from a DICOM dataset (Group Length element are deprecated, DICOM 2008)
  * - Remove all private attributes
  * - Remove all retired attributes
  *
- * All function calls actually execute the user specified request. Previous implementation were calling 
+ * All function calls actually execute the user specified request. Previous implementation were calling
  * a general Anonymize function but traversing a std::set is O(n) operation, while a simple user specified
  * request is O(log(n)) operation. So 'm' user interaction is O(m*log(n)) which is < O(n) complexity.
  *
  * 2. smart mode
  * this mode implements the Basic Application Level Confidentiality Profile (DICOM PS 3.15-2008)
- * In this case it is extremely important to use the same gdcm::Anonymizer class when anonymizing 
+ * In this case it is extremely important to use the same gdcm::Anonymizer class when anonymizing
  * a FileSet. Once the gdcm::Anonymizer is destroyed its memory of known (already processed) UIDs
  * will be lost. which will make the anonymizer behaves incorrectly for attributes such as Series UID
  * Study UID where user want some consistancy.

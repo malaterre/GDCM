@@ -154,7 +154,7 @@ using namespace gdcm;
 //typedef int gdcm::DataSet::SizeType; // FIXME
 //%include "typemaps.i"
 
-// gdcm does not use std::string in its interface, but we do need it for the 
+// gdcm does not use std::string in its interface, but we do need it for the
 // %extend (see below)
 %include "std_string.i"
 %include "std_set.i"
@@ -326,8 +326,8 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-%rename (PythonDataSet) SWIGDataSet; 
-%rename (PythonTagToValue) SWIGTagToValue; 
+%rename (PythonDataSet) SWIGDataSet;
+%rename (PythonTagToValue) SWIGTagToValue;
 %include "gdcmDataSet.h"
 //namespace std {
 //  //struct lttag
@@ -621,7 +621,7 @@ using namespace gdcm;
 %include "gdcmSystem.h"
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
-//%feature("director") gdcm::IPPSorter;      
+//%feature("director") gdcm::IPPSorter;
 
 %{
 static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2)

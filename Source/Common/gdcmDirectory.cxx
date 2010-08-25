@@ -53,7 +53,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
     if ( fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
       {
       // Need to check for . and .. to avoid infinite loop
-      if ( fileName != "." && fileName != ".." 
+      if ( fileName != "." && fileName != ".."
         && fileName[0] != '.' // discard any hidden dir
         && recursive )
         {
@@ -149,7 +149,7 @@ void Directory::Print(std::ostream &_os) const
     _os << "(None)" << std::endl;
   else
     {
-    std::copy(Directories.begin(), Directories.end(), 
+    std::copy(Directories.begin(), Directories.end(),
       std::ostream_iterator<std::string>(_os << std::endl, "\n"));
     }
   _os << "Filenames: ";
@@ -157,7 +157,7 @@ void Directory::Print(std::ostream &_os) const
     _os << "(None)" << std::endl;
   else
     {
-    std::copy(Filenames.begin(), Filenames.end(), 
+    std::copy(Filenames.begin(), Filenames.end(),
       std::ostream_iterator<std::string>(_os << std::endl, "\n"));
     }
 }

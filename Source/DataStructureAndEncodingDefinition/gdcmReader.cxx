@@ -208,13 +208,13 @@ namespace details
         {
         m_dataSet.template ReadWithLength<T1,T2>(is,length);
         }
-    static void Check(bool b, std::istream &stream) 
+    static void Check(bool b, std::istream &stream)
       {
       if( b ) assert( stream.eof() );
       }
   };
 
-  class ReadUpToTagCaller 
+  class ReadUpToTagCaller
   {
   private:
     gdcm::DataSet & m_dataSet;
@@ -238,9 +238,9 @@ namespace details
         m_dataSet.template ReadUpToTagWithLength<T1,T2>(is,m_tag,length);
         }
     static void Check(bool , std::istream &)  {}
-  }; 
+  };
 
-  class ReadSelectedTagsCaller 
+  class ReadSelectedTagsCaller
   {
   private:
     DataSet & m_dataSet;
@@ -263,7 +263,7 @@ namespace details
       m_dataSet.template ReadSelectedTagsWithLength<T1,T2>(is,m_tags,length);
     }
     static void Check(bool , std::istream &)  {}
-  }; 
+  };
 }
 
 bool Reader::Read()

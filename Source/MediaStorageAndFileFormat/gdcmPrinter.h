@@ -17,7 +17,7 @@
 
 // TODO Class to implement printing
 // Since DICOM does printing ?
-// Also I would like to encapsulate the IsCharacterPrintable thing 
+// Also I would like to encapsulate the IsCharacterPrintable thing
 // (to avoid printing \0 and other weird characters)
 // \todo I still need to implement skiping of group (shadow)
 // need to implement longer field to read
@@ -34,11 +34,11 @@
  * on success ASCII mode is used, on failure the output is printed a series of bytes
  *
  * Special case when the data element is empty:
- * INVERSE << (no value) 
+ * INVERSE << (no value)
  *
  * retired public element are printed in red and underline
  * unknown private element are printed in RED followed by 'UNKNOWN'
- * 
+ *
  * Correct VR is printed in green just after the found VR
  *
  * length of data element is printed in bytes, followed by the VM, a green VM is appended

@@ -18,7 +18,7 @@
 namespace gdcm
 {
 
-std::istream &File::Read(std::istream &is) 
+std::istream &File::Read(std::istream &is)
 {
   assert(0);
   return is;

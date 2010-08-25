@@ -71,7 +71,7 @@ blacklist = (
 # Do not expose low level jpeg implementation detail
 "JPEG8Codec"
 "JPEG12Codec"
-"JPEG16Codec" 
+"JPEG16Codec"
 "JPEG2000Codec"
 # For now remove the codec part:
 "ImageCodec"

@@ -37,7 +37,7 @@ public:
   static const char Padding   = ' ';
 
   unsigned int GetNumberOfComponents() const {
-    unsigned int r = 0; 
+    unsigned int r = 0;
     for(unsigned int i = 0; i < 5; ++i) {
       if( *Component[i] != '\0' ) r = i;
       }
@@ -48,7 +48,7 @@ public:
   (void)v;
     //assert(0); //TODO
   }
-  void SetComponents(const char *comp1 = "", 
+  void SetComponents(const char *comp1 = "",
     const char *comp2 = "",
     const char *comp3 = "",
     const char *comp4 = "",
@@ -71,11 +71,11 @@ public:
 		//os << "Middle Name        : " << Component[2] << std::endl;
 		//os << "Name Suffix        : " << Component[3] << std::endl;
 		//os << "Name Prefix        : " << Component[4] << std::endl;
-		os << Component[0] << '^'; 
-		os << Component[1] << '^'; 
-		os << Component[2] << '^'; 
-		os << Component[3] << '^'; 
-		os << Component[4]; 
+		os << Component[0] << '^';
+		os << Component[1] << '^';
+		os << Component[2] << '^';
+		os << Component[3] << '^';
+		os << Component[4];
 	}
 };
 

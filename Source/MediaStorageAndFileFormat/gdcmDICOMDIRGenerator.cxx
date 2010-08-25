@@ -54,7 +54,7 @@ bool DICOMDIRGenerator::ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi
   for(unsigned int i = 1; i <= nitems; ++i)
     {
     const Item &item = sqi->GetItem(i);
-    offsets[i] = offsets[i-1] + item.GetLength<ExplicitDataElement>(); 
+    offsets[i] = offsets[i-1] + item.GetLength<ExplicitDataElement>();
     }
 
 //#define MDEBUG
@@ -970,7 +970,7 @@ the File-set.
   VL fmi_len = h.GetFullLength();
   VL fmi_len_offset = 0;
 {
-  gdcm::DataSet::ConstIterator it = ds.Begin(); 
+  gdcm::DataSet::ConstIterator it = ds.Begin();
   for(; it != ds.End() && it->GetTag() != Tag(0x0004,0x1220); ++it)
     {
     const DataElement &detmp = *it;
@@ -1000,7 +1000,7 @@ the File-set.
   SmartPointer<SequenceOfItems> sqi = de_drs.GetValueAsSQ();
   unsigned int n = sqi->GetNumberOfItems();
   const Item &item = sqi->GetItem( n ); // last item
-  VL sub = item.GetLength<ExplicitDataElement>(); 
+  VL sub = item.GetLength<ExplicitDataElement>();
   // Let's substract item length as well as the item sequence delimiter end (tag + vl => 8)
   offsetofthelastdirectoryrecordoftherootdirectoryentity.SetValue( fmi_len + fmi_len_offset2 - sub - 8 );
 

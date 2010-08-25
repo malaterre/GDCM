@@ -155,8 +155,8 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
     // Ok this is a public element
     assert( t.IsPublic() );
     const DictEntry &dictentry = dicts.GetDictEntry(t);
-    if ( dictentry.GetVR() == VR::INVALID 
-      || dictentry.GetVR() == VR::UN 
+    if ( dictentry.GetVR() == VR::INVALID
+      || dictentry.GetVR() == VR::UN
       || dictentry.GetVR() == VR::SQ
     )
       {
@@ -488,8 +488,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
-  if(  ds.FindDataElement( Tag(0x0400,0x0500) ) 
-    || ds.FindDataElement( Tag(0x0012,0x0062) ) 
+  if(  ds.FindDataElement( Tag(0x0400,0x0500) )
+    || ds.FindDataElement( Tag(0x0012,0x0062) )
     || ds.FindDataElement( Tag(0x0012,0x0063) ) )
     {
     gdcmDebugMacro( "EncryptedContentTransferSyntax Attribute is present !" );
@@ -590,7 +590,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
   size_t encrypted_len2 = encrypted_len;
   bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
-  if( !b ) 
+  if( !b )
   {
     gdcmErrorMacro( "Problem with Encrypt" );
     return false;
@@ -711,7 +711,7 @@ bool IsVRUI(Tag const &tag)
   const DictEntry &dictentry = dicts.GetDictEntry(tag);
   if( dictentry.GetVR() == VR::UI ) return true;
   //if( tag == Tag(0x0020,0x000d)   // Study Instance UID : UI
-  // || tag == Tag(0x0020,0x0052)   // 
+  // || tag == Tag(0x0020,0x0052)   //
   // || tag == Tag(0x0020,0x000e) ) // Series Instance UID : UI
   //  {
   //  return true;
@@ -767,7 +767,7 @@ I think it would also make sense to quote the following attributes:
 * Study ID,
 * Series Number.
 It is required they have consistent values when one is about to
-generate a DICOMDIR 
+generate a DICOMDIR
 
 => Sup 142
 */
@@ -775,7 +775,7 @@ generate a DICOMDIR
   static const unsigned int numDeIds = sizeof(SpecialTypeTags) / deidSize;
 
   bool b = std::binary_search(SpecialTypeTags, SpecialTypeTags + numDeIds, tag);
-  
+
   // This is a Type 3 attribute but with VR=UI
   // <entry group="0008" element="0014" vr="UI" vm="1" name="Instance Creator UID"/>
   //assert( dicts.GetDictEntry(tag).GetVR() != VR::UI );
@@ -934,7 +934,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   SmartPointer<SequenceOfItems> sq = EncryptedAttributesSequence.GetValueAsSQ();
   const Item &item1 = sq->GetItem(1);
   const DataSet &nds1 = item1.GetNestedDataSet();
-  if( !nds1.FindDataElement( Tag(0x0400,0x0510) ) 
+  if( !nds1.FindDataElement( Tag(0x0400,0x0510) )
     || nds1.GetDataElement( Tag(0x0400,0x0510) ).IsEmpty() )
     {
     gdcmDebugMacro( "Missing EncryptedContentTransferSyntax Attribute" );
@@ -952,7 +952,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
     return false;
     }
 
-  if( !nds1.FindDataElement( Tag(0x0400,0x0520) ) 
+  if( !nds1.FindDataElement( Tag(0x0400,0x0520) )
     || nds1.GetDataElement( Tag(0x0400,0x0520) ).IsEmpty() )
     {
     gdcmDebugMacro( "Missing EncryptedContent Attribute" );
@@ -961,7 +961,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 
   const DataElement &EncryptedContent = nds1.GetDataElement( Tag(0x0400,0x0520) );
   const ByteValue *bv = EncryptedContent.GetByteValue();
-  
+
   size_t encrypted_len = bv->GetLength();
   char *orig = new char[ bv->GetLength() ];
   char *buf = new char[ bv->GetLength() ];
@@ -997,9 +997,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //des.Read<ExplicitDataElement,SwapperNoOp>(ss);
   //des.ReadNested<ExplicitDataElement,SwapperNoOp>(ss);
 
-  //std::cout << des << std::endl; 
-  //std::cout << dummy << std::endl; 
-  //std::cout << ss.tellg() << std::endl; 
+  //std::cout << des << std::endl;
+  //std::cout << dummy << std::endl;
+  //std::cout << ss.tellg() << std::endl;
   assert( (size_t)ss.tellg() <= encrypted_len );
   // TODO: check that for i = ss.tellg() to encrypted_len, ss[i] == 0
   delete[] buf;

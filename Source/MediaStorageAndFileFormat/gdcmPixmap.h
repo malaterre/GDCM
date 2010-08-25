@@ -22,7 +22,7 @@
 
 namespace gdcm
 {
-  
+
 /**
  * \brief Pixmap class
  * A bitmap based image. Used as parent for both IconImage and the main Pixel Data Image
@@ -41,25 +41,25 @@ public:
   bool AreOverlaysInPixelData() const;
 
   /// Curve: group 50xx
-  Curve& GetCurve(unsigned int i = 0) { 
+  Curve& GetCurve(unsigned int i = 0) {
     assert( i < Curves.size() );
-    return Curves[i]; 
+    return Curves[i];
   }
-  const Curve& GetCurve(unsigned int i = 0) const { 
+  const Curve& GetCurve(unsigned int i = 0) const {
     assert( i < Curves.size() );
-    return Curves[i]; 
+    return Curves[i];
   }
   unsigned int GetNumberOfCurves() const { return Curves.size(); }
   void SetNumberOfCurves(unsigned int n) { Curves.resize(n); }
 
   /// Overlay: group 60xx
-  Overlay& GetOverlay(unsigned int i = 0) { 
+  Overlay& GetOverlay(unsigned int i = 0) {
     assert( i < Overlays.size() );
-    return Overlays[i]; 
+    return Overlays[i];
   }
-  const Overlay& GetOverlay(unsigned int i = 0) const { 
+  const Overlay& GetOverlay(unsigned int i = 0) const {
     assert( i < Overlays.size() );
-    return Overlays[i]; 
+    return Overlays[i];
   }
   unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
   void SetNumberOfOverlays(unsigned int n) { Overlays.resize(n); }

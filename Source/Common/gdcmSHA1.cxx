@@ -89,7 +89,7 @@ inline bool process_file(const char *filename, unsigned char *digest)
 
   size_t file_size = System::FileSize(filename);
   void *buffer = malloc(file_size);
-  if(!buffer) 
+  if(!buffer)
     {
     fclose(file);
     return false;

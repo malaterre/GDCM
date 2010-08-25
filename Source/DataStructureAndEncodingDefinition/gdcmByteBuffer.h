@@ -28,8 +28,8 @@ namespace gdcm
  * \brief ByteBuffer
  *
  * Detailled description here
- * \note 
- * looks like a std::streambuf or std::filebuf class with the get and 
+ * \note
+ * looks like a std::streambuf or std::filebuf class with the get and
  * peek pointer
  */
 class ByteBuffer
@@ -75,7 +75,7 @@ public:
           }
         Limit = newBuf + bufferSize;
 
-        if (Start) 
+        if (Start)
           {
           memcpy(newBuf, Start, End - Start);
           }

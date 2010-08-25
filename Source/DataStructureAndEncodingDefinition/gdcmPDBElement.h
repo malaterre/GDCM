@@ -59,7 +59,7 @@ inline std::ostream& operator<<(std::ostream &os, const PDBElement &val)
   os << " \"";
   os << val.ValueField;
   os << "\"";
-  
+
   return os;
 }
 

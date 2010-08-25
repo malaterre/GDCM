@@ -108,4 +108,3 @@ foreach(target ${targets})
     export(TARGETS ${target} FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake APPEND)
   endif(TARGET ${target})
 endforeach(target)
-

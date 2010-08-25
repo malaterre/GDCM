@@ -18,7 +18,7 @@
 #include "gdcmTypes.h"
 #include <iostream>
 
-namespace gdcm 
+namespace gdcm
 {
 
 /**

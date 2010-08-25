@@ -40,7 +40,7 @@ bool KAKADUCodec::CanDecode(TransferSyntax const &ts) const
 #ifndef GDCM_USE_KAKADU
   return false;
 #else
-  return ts == TransferSyntax::JPEG2000Lossless 
+  return ts == TransferSyntax::JPEG2000Lossless
       || ts == TransferSyntax::JPEG2000;
 #endif
 }
@@ -69,7 +69,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
     // -> check if tempnam needs the 'free'
     char *tempinput  = tempnam(0, "gdcminkduexp");
     char *tempoutput = tempnam(0, "gdcmoutkduexp");
-    if( !tempinput || !tempoutput ) 
+    if( !tempinput || !tempoutput )
       {
       //free(input);
       //free(output);
@@ -92,7 +92,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
 #else
 #error not implemented
 #endif
-    // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw  
+    // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw
     kakadu_command += " -i ";
     kakadu_command += input;
     kakadu_command += " -o ";
@@ -141,7 +141,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
       // -> check if tempnam needs the 'free'
       char *tempinput  = tempnam(0, "gdcminkduexp");
       char *tempoutput = tempnam(0, "gdcmoutkduexp");
-      if( !tempinput || !tempoutput ) 
+      if( !tempinput || !tempoutput )
         {
         //free(input);
         //free(output);
@@ -169,7 +169,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
 #else
 #error not implemented
 #endif
-      // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw  
+      // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw
       kakadu_command += " -i ";
       kakadu_command += input;
       kakadu_command += " -o ";

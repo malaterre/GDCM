@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 #include "stdafx.h"
 #include "header.h"
@@ -66,7 +66,7 @@ void push_back(std::vector<BYTE>& vec, USHORT value)
 {
 	vec.push_back(BYTE(value / 0x100));
 	vec.push_back(BYTE(value % 0x100));
-}				   
+}				
 
 
 //
@@ -85,7 +85,7 @@ JpegSegment* CreateMarkerStartOfFrame(Size size, LONG cbpp, LONG ccomp)
 	{
 		// rescaling
 		vec.push_back(icomp + 1);
-		vec.push_back(0x11); 
+		vec.push_back(0x11);
 		//"Tq1" reserved, 0
 		vec.push_back(0);		
 	}
@@ -211,7 +211,7 @@ void JLSInputStream::ReadPixels(void* pvoid, LONG cbyteAvailable)
 		for (LONG icomp = 0; icomp < _info.components; ++icomp)
 		{
 			ReadScan(pbyte);
-			pbyte += cbytePlane; 
+			pbyte += cbytePlane;
 		}	
 	}
 	else
@@ -394,7 +394,7 @@ void JLSInputStream::ReadJfif()
 	// thumbnail
 	_info.jfif.Xthumb = ReadByte();
 	_info.jfif.Ythumb = ReadByte();
-	if(_info.jfif.Xthumb > 0 && _info.jfif.pdataThumbnail) 
+	if(_info.jfif.Xthumb > 0 && _info.jfif.pdataThumbnail)
 	{
 		std::vector<char> tempbuff((char*)_info.jfif.pdataThumbnail, (char*)_info.jfif.pdataThumbnail+3*_info.jfif.Xthumb*_info.jfif.Ythumb);
 		ReadNBytes(tempbuff, 3*_info.jfif.Xthumb*_info.jfif.Ythumb);
@@ -424,8 +424,8 @@ JpegMarkerSegment* CreateJFIF(const JfifParamaters* jfif)
 	if(jfif->Xthumb > 0) {
 		if(jfif->pdataThumbnail)
 			throw JlsException(InvalidJlsParameters);
-		rgbyte.insert(rgbyte.end(), 
-			(BYTE*)jfif->pdataThumbnail, 
+		rgbyte.insert(rgbyte.end(),
+			(BYTE*)jfif->pdataThumbnail,
 			(BYTE*)jfif->pdataThumbnail+3*jfif->Xthumb*jfif->Ythumb
 		);
 	}
@@ -452,11 +452,11 @@ void JLSInputStream::ReadStartOfFrame()
 // ReadByte()
 //
 BYTE JLSInputStream::ReadByte()
-{  
+{
     if (_cbyteOffset >= _cbyteLength)
 	throw JlsException(InvalidCompressedData);
 
-    return _pdata[_cbyteOffset++]; 
+    return _pdata[_cbyteOffset++];
 }
 
 
@@ -470,11 +470,11 @@ int JLSInputStream::ReadWord()
 }
 
 
-void JLSInputStream::ReadScan(void* pvout) 
+void JLSInputStream::ReadScan(void* pvout)
 {
 	std::auto_ptr<DecoderStrategy> qcodec(JlsCodecFactory<DecoderStrategy>().GetCodec(_info, _info.custom));
 	Size size = Size(_info.width,_info.height);
-	_cbyteOffset += qcodec->DecodeScan(pvout, size, _pdata + _cbyteOffset, _cbyteLength - _cbyteOffset, _bCompare); 
+	_cbyteOffset += qcodec->DecodeScan(pvout, size, _pdata + _cbyteOffset, _cbyteLength - _cbyteOffset, _bCompare);
 }
 
 
@@ -495,7 +495,7 @@ public:
 		JlsParamaters info = _info;
 		info.components = _ccompScan;	
 		std::auto_ptr<EncoderStrategy> qcodec(JlsCodecFactory<EncoderStrategy>().GetCodec(info, _info.custom));
-		size_t cbyteWritten = qcodec->EncodeScan((BYTE*)_pvoidRaw, Size(_info.width, _info.height), pstream->GetPos(), pstream->GetLength(), pstream->_bCompare ? pstream->GetPos() : NULL); 
+		size_t cbyteWritten = qcodec->EncodeScan((BYTE*)_pvoidRaw, Size(_info.width, _info.height), pstream->GetPos(), pstream->GetLength(), pstream->_bCompare ? pstream->GetPos() : NULL);
 		pstream->Seek(cbyteWritten);
 	}
 
@@ -550,7 +550,7 @@ void JLSInputStream::ReadColorXForm()
 		return;
 	
 	int xform = ReadByte();
-	switch(xform) 
+	switch(xform)
 	{
 		case COLORXFORM_NONE:
 		case COLORXFORM_HP1:

@@ -4,11 +4,11 @@
   media-type="text/html" encoding="UTF-8"
 indent="no" omit-xml-declaration="yes" doctype-public="-//W3C//DTD HTML 4.01//EN" doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>
 <!--xsl:stylesheet xmlns:xsl=
-"http://www.w3.org/1999/XSL/Transform" 
+"http://www.w3.org/1999/XSL/Transform"
 xmlns=
-"http://www.w3.org/TR/xhtml1/strict" 
+"http://www.w3.org/TR/xhtml1/strict"
 version="1.0">
-<xsl:output method="xml" indent="yes" 
+<xsl:output method="xml" indent="yes"
 encoding="iso-8859-1"/-->
 
 <!-- XSL to convert XML GDCM2 data dictionay into HTML form -->

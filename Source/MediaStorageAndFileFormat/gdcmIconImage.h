@@ -26,7 +26,7 @@
 
 namespace gdcm
 {
-  
+
 /**
  * \brief IconImage class
  */

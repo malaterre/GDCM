@@ -78,7 +78,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(0)
 {
-  MaxPrintLength = 0x100; // Need to be %2 
+  MaxPrintLength = 0x100; // Need to be %2
 
 }
 //-----------------------------------------------------------------------------
@@ -90,27 +90,27 @@ void Printer::SetColor(bool c)
 {
   if( c )
     {
-    GDCM_TERMINAL_VT100_NORMAL               =  gdcm_terminal_vt100_normal              ; 
-    GDCM_TERMINAL_VT100_BOLD                 =  gdcm_terminal_vt100_bold                ; 
-    GDCM_TERMINAL_VT100_UNDERLINE            =  gdcm_terminal_vt100_underline           ; 
-    GDCM_TERMINAL_VT100_BLINK                =  gdcm_terminal_vt100_blink               ; 
-    GDCM_TERMINAL_VT100_INVERSE              =  gdcm_terminal_vt100_inverse             ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_BLACK     =  gdcm_terminal_vt100_foreground_black    ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_RED       =  gdcm_terminal_vt100_foreground_red      ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_GREEN     =  gdcm_terminal_vt100_foreground_green    ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_YELLOW    =  gdcm_terminal_vt100_foreground_yellow   ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_BLUE      =  gdcm_terminal_vt100_foreground_blue     ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA   =  gdcm_terminal_vt100_foreground_magenta  ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_CYAN      =  gdcm_terminal_vt100_foreground_cyan     ; 
-    GDCM_TERMINAL_VT100_FOREGROUND_WHITE     =  gdcm_terminal_vt100_foreground_white    ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_BLACK     =  gdcm_terminal_vt100_background_black    ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_RED       =  gdcm_terminal_vt100_background_red      ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_GREEN     =  gdcm_terminal_vt100_background_green    ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_YELLOW    =  gdcm_terminal_vt100_background_yellow   ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_BLUE      =  gdcm_terminal_vt100_background_blue     ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA   =  gdcm_terminal_vt100_background_magenta  ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_CYAN      =  gdcm_terminal_vt100_background_cyan     ; 
-    GDCM_TERMINAL_VT100_BACKGROUND_WHITE     =  gdcm_terminal_vt100_background_white    ; 
+    GDCM_TERMINAL_VT100_NORMAL               =  gdcm_terminal_vt100_normal              ;
+    GDCM_TERMINAL_VT100_BOLD                 =  gdcm_terminal_vt100_bold                ;
+    GDCM_TERMINAL_VT100_UNDERLINE            =  gdcm_terminal_vt100_underline           ;
+    GDCM_TERMINAL_VT100_BLINK                =  gdcm_terminal_vt100_blink               ;
+    GDCM_TERMINAL_VT100_INVERSE              =  gdcm_terminal_vt100_inverse             ;
+    GDCM_TERMINAL_VT100_FOREGROUND_BLACK     =  gdcm_terminal_vt100_foreground_black    ;
+    GDCM_TERMINAL_VT100_FOREGROUND_RED       =  gdcm_terminal_vt100_foreground_red      ;
+    GDCM_TERMINAL_VT100_FOREGROUND_GREEN     =  gdcm_terminal_vt100_foreground_green    ;
+    GDCM_TERMINAL_VT100_FOREGROUND_YELLOW    =  gdcm_terminal_vt100_foreground_yellow   ;
+    GDCM_TERMINAL_VT100_FOREGROUND_BLUE      =  gdcm_terminal_vt100_foreground_blue     ;
+    GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA   =  gdcm_terminal_vt100_foreground_magenta  ;
+    GDCM_TERMINAL_VT100_FOREGROUND_CYAN      =  gdcm_terminal_vt100_foreground_cyan     ;
+    GDCM_TERMINAL_VT100_FOREGROUND_WHITE     =  gdcm_terminal_vt100_foreground_white    ;
+    GDCM_TERMINAL_VT100_BACKGROUND_BLACK     =  gdcm_terminal_vt100_background_black    ;
+    GDCM_TERMINAL_VT100_BACKGROUND_RED       =  gdcm_terminal_vt100_background_red      ;
+    GDCM_TERMINAL_VT100_BACKGROUND_GREEN     =  gdcm_terminal_vt100_background_green    ;
+    GDCM_TERMINAL_VT100_BACKGROUND_YELLOW    =  gdcm_terminal_vt100_background_yellow   ;
+    GDCM_TERMINAL_VT100_BACKGROUND_BLUE      =  gdcm_terminal_vt100_background_blue     ;
+    GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA   =  gdcm_terminal_vt100_background_magenta  ;
+    GDCM_TERMINAL_VT100_BACKGROUND_CYAN      =  gdcm_terminal_vt100_background_cyan     ;
+    GDCM_TERMINAL_VT100_BACKGROUND_WHITE     =  gdcm_terminal_vt100_background_white    ;
     }
   else
     {
@@ -142,7 +142,7 @@ void Printer::SetColor(bool c)
 void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v);
 
 //-----------------------------------------------------------------------------
-void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictEntry& entry) 
+void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictEntry& entry)
 {
   assert(0);
   const Tag &t = xde.GetTag();
@@ -155,7 +155,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
   if( xde.IsEmpty() // 0xfffe item thingy
     || entry.GetVR() == VR::INVALID ) // private element with no known VR
     {
-    os << xde; 
+    os << xde;
     return;
     }
   // first of' do the VR:
@@ -170,7 +170,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
       //assert( t.IsPublic() );
       lvr = entry.GetVR();
       }
-    // Data Element (7FE0,0010) Pixel Data has the Value Representation 
+    // Data Element (7FE0,0010) Pixel Data has the Value Representation
     // OW and shall be encoded in Little Endian.
     if( t == Tag(0x7fe0,0x0010) )
       {
@@ -244,7 +244,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     //os << "]";
     os << " ";
     }
-  else 
+  else
     {
     std::cerr << "Should not happen: " << lvr << std::endl;
     }
@@ -312,7 +312,7 @@ void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, Dic
   //_os << "\tVL=" << std::dec << vl << "\tValueField=[";
   if( _val.GetVL() )
     {
-    // FIXME FIXME: 
+    // FIXME FIXME:
     // value could dereference a NULL pointer in case of 0 length...
     const Value& value = _val.GetValue();
     if( dictVR != VR::INVALID && VR::IsBinary(dictVR) )
@@ -332,8 +332,8 @@ void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, Dic
 
 //     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
 // os.flush();
-    // memcpy( (void*)(&e), array, e.GetLength() * sizeof( VRToType<VR::type>::Type) ); 
-    // bswap<VRToType<VR::type>::Type>( (char*)(&e), array, e.GetLength() * sizeof( VRToType<VR::type>::Type) ); 
+    // memcpy( (void*)(&e), array, e.GetLength() * sizeof( VRToType<VR::type>::Type) );
+    // bswap<VRToType<VR::type>::Type>( (char*)(&e), array, e.GetLength() * sizeof( VRToType<VR::type>::Type) );
 #define PrinterTemplateSubCase1n(type,rep) \
   case VM::rep: \
     {Element<VR::type, VM::rep> e; \
@@ -473,7 +473,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
         vr = entry.GetVR();
         }
   // TODO FIXME FIXME FIXME
-  // Data Element (7FE0,0010) Pixel Data has the Value Representation 
+  // Data Element (7FE0,0010) Pixel Data has the Value Representation
   // OW and shall be encoded in Little Endian.
   //VM::VMType vm = VM::VM1;
   if( t == Tag(0x7fe0,0x0010) )
@@ -484,18 +484,18 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
     }
   // RETIRED:
   // See PS 3.5 - 2004
-  // Data Element (50xx,3000) Curve Data has the Value Representation OB 
+  // Data Element (50xx,3000) Curve Data has the Value Representation OB
   // with its component points (n-tuples) having the Value Representation
-  // specified in Data Value Representation (50xx,0103). 
+  // specified in Data Value Representation (50xx,0103).
   // The component points shall be encoded in Little Endian.
   else if( t == Tag(0x5004,0x3000) ) // FIXME
     {
     assert( vr == VR::OB_OW );
     vr = VR::OB;
     }
-  // Value of pixels not present in the native image added to an image 
-  // to pad to rectangular format. See C.7.5.1.1.2 for further explanation. 
-  // Note:     The Value Representation of this Attribute is determined 
+  // Value of pixels not present in the native image added to an image
+  // to pad to rectangular format. See C.7.5.1.1.2 for further explanation.
+  // Note:     The Value Representation of this Attribute is determined
   // by the value of Pixel Representation (0028,0103).
   if( vr == VR::US_SS )
     {
@@ -512,7 +512,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       // TODO It would be nice to have a TagToVR<0x0028,0x0103>::VRType
       // and TagToVM<0x0028,0x0103>::VMType ...
       // to be able to have an independant Standard from implementation :)
-      const ImplicitDataElement &pixel_rep = 
+      const ImplicitDataElement &pixel_rep =
         ds.GetDataElement( Tag(0x0028, 0x0103) );
       const Value &value = pixel_rep.GetValue();
       const ByteValue &bv = static_cast<const ByteValue&>(value);
@@ -595,7 +595,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
     } break
 
 
-VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds, 
+VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds,
   const DataElement &de, std::ostream &out, std::string const & indent )
 {
   const ByteValue *bv = de.GetByteValue();
@@ -606,7 +606,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
   const char *owner = 0;
   const Tag& t = de.GetTag();
   if( t.IsPrivate() && !t.IsPrivateCreator() )
-    { 
+    {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
     }
@@ -725,7 +725,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
-    case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm 
+    case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm
       /*
       VR::US_SS_OW:
       undefined_length_un_vr.dcm
@@ -749,7 +749,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
           }
         else if ( sqi )
           {
-          // gdcmDataExtra/gdcmSampleData/images_of_interest/illegal_UN_stands_for_SQ.dcm  
+          // gdcmDataExtra/gdcmSampleData/images_of_interest/illegal_UN_stands_for_SQ.dcm
           gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );
           //os << *sqi;
           }
@@ -769,9 +769,9 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       if( !sqi /*!de.GetSequenceOfItems()*/ && !de.IsEmpty() && de.GetValue().GetLength() )
         {
         // This case is insane, this is an implicit file, with a defined length SQ.
-        // Since this is a private element there is no way to guess that, and to 
+        // Since this is a private element there is no way to guess that, and to
         // make it even worse the binary blob does not start with item start...
-        // Bug_Philips_ItemTag_3F3F.dcm 
+        // Bug_Philips_ItemTag_3F3F.dcm
         //os << GDCM_TERMINAL_VT100_BACKGROUND_RED;
         //bv->PrintHex(os, MaxPrintLength / 4);
         //os << GDCM_TERMINAL_VT100_NORMAL;
@@ -794,14 +794,14 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         if( bv )
           {
           VL l = std::min( bv->GetLength(), MaxPrintLength );
-          if( bv->IsPrintable(l) ) 
+          if( bv->IsPrintable(l) )
             {
             os << "[";
             bv->PrintASCII(os,l);
             os << "]";
             }
           else if( t == Tag(0xfffe,0xe000) ) bv->PrintHex(os, MaxPrintLength / 8);
-          else 
+          else
             {
             os << GDCM_TERMINAL_VT100_INVERSE;
             // << "(non-printable character found)"
@@ -1055,7 +1055,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       }
     else
       {
-      // This is a byte value, so it should have been already treated 
+      // This is a byte value, so it should have been already treated
       }
     out << os.str();
     }
@@ -1067,7 +1067,7 @@ void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
- 
+
   static const GroupDict gd; // FIXME
 //  try
     {

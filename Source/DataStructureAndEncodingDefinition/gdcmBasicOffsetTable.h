@@ -36,14 +36,14 @@ public:
   VL GetLength() const {
     assert( !ValueLengthField.IsUndefined() );
     assert( !ValueField || ValueField->GetLength() == ValueLengthField );
-    return TagField.GetLength() + ValueLengthField.GetLength() 
+    return TagField.GetLength() + ValueLengthField.GetLength()
       + ValueLengthField;
   }
 */
 
   template <typename TSwap>
   std::istream &Read(std::istream &is) {
-    // Superclass 
+    // Superclass
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
     if( !TagField.Read<TSwap>(is) )
@@ -54,7 +54,7 @@ public:
     //assert( TagField == itemStart );
     if( TagField != itemStart )
       {
-      // Bug_Siemens_PrivateIconNoItem.dcm 
+      // Bug_Siemens_PrivateIconNoItem.dcm
       throw "SIEMENS Icon thingy";
       }
     if( !ValueLengthField.Read<TSwap>(is) )

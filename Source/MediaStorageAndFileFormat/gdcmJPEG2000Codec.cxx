@@ -259,13 +259,13 @@ JPEG2000Codec::~JPEG2000Codec()
 
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
 {
-  return ts == TransferSyntax::JPEG2000Lossless 
+  return ts == TransferSyntax::JPEG2000Lossless
       || ts == TransferSyntax::JPEG2000;
 }
 
 bool JPEG2000Codec::CanCode(TransferSyntax const &ts) const
 {
-  return ts == TransferSyntax::JPEG2000Lossless 
+  return ts == TransferSyntax::JPEG2000Lossless
       || ts == TransferSyntax::JPEG2000;
 }
 
@@ -472,7 +472,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   image = opj_decode(dinfo, cio);
   bResult = bResult && (image != 00);
   bResult = bResult && opj_end_decompress(dinfo,cio);
-  if (!image) 
+  if (!image)
     {
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
@@ -486,7 +486,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     {
     if( image->color_space == CLRSPC_GRAY )
       {
-      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 
+      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
         || this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
         || this->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR );
       }
@@ -500,7 +500,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     }
 #endif
-  
+
 #if OPENJPEG_MAJOR_VERSION == 1
   int reversible;
   opj_j2k_t* j2k = NULL;
@@ -590,7 +590,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     if (comp->prec <= 8)
       {
       uint8_t *data8 = (uint8_t*)raw + compno;
-      for (int i = 0; i < wr * hr; i++) 
+      for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
         *data8 = (uint8_t)v;
@@ -601,7 +601,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       {
       // ELSCINT1_JP2vsJ2K.dcm is a 12bits image
       uint16_t *data16 = (uint16_t*)raw + compno;
-      for (int i = 0; i < wr * hr; i++) 
+      for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
         *data16 = (uint16_t)v;
@@ -611,7 +611,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     else
       {
       uint32_t *data32 = (uint32_t*)raw + compno;
-      for (int i = 0; i < wr * hr; i++) 
+      for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
         *data32 = (uint32_t)v;
@@ -631,7 +631,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   }
 #elif OPENJPEG_MAJOR_VERSION == 1
   /* free remaining structures */
-  if (dinfo) 
+  if (dinfo)
     {
     opj_destroy_codec(dinfo);
     }
@@ -853,7 +853,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       }				/* mod fixed_quality */
 
     /* if no rate entered, lossless by default */
-    if (parameters.tcp_numlayers == 0) 
+    if (parameters.tcp_numlayers == 0)
       {
       parameters.tcp_rates[0] = 0;
       parameters.tcp_numlayers = 1;
@@ -872,8 +872,8 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     /* decode the source image */
     /* ----------------------- */
 
-    image = rawtoimage((char*)inputdata, &parameters, 
-      static_cast<int>( inputlength ), 
+    image = rawtoimage((char*)inputdata, &parameters,
+      static_cast<int>( inputlength ),
       image_width, image_height,
       sample_pixel, bitsallocated, bitsstored, sign, quality, this->GetPlanarConfiguration() );
     if (!image) {
@@ -939,7 +939,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     bSuccess = bSuccess && opj_encode(cinfo, cio);
     bSuccess = bSuccess && opj_end_compress(cinfo, cio);
 
-    if (!bSuccess) 
+    if (!bSuccess)
       {
       opj_stream_destroy(cio);
       return false;
@@ -1090,7 +1090,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 
 #if OPENJPEG_MAJOR_VERSION == 1
   /* catch events using our callbacks and give a local context */
-  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
+  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
@@ -1132,7 +1132,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   //image = opj_decode(dinfo, cio);
   //bResult = bResult && (image != 00);
   //bResult = bResult && opj_end_decompress(dinfo,cio);
-  //if (!image) 
+  //if (!image)
   //  {
   //  opj_destroy_codec(dinfo);
   //  opj_stream_destroy(cio);
@@ -1245,7 +1245,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     //assert( image->color_space == 0 );
     //PI = PhotometricInterpretation::RGB;
     /*
-    8.2.4 JPEG 2000 IMAGE COMPRESSION 
+    8.2.4 JPEG 2000 IMAGE COMPRESSION
     The JPEG 2000 bit stream specifies whether or not a reversible or irreversible
     multi-component (color) transformation, if any, has been applied. If no
     multi-component transformation has been applied, then the components shall
@@ -1328,7 +1328,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   /* close the byte stream */
   opj_stream_destroy(cio);
   /* free remaining structures */
-  if (dinfo) 
+  if (dinfo)
     {
     opj_destroy_codec(dinfo);
     }

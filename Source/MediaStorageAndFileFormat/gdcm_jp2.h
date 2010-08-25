@@ -52,12 +52,12 @@
 
 /* ----------------------------------------------------------------------- */
 
-/** 
+/**
 JP2 component
 */
 typedef struct opj_jp2_comps {
-  int depth;		  
-  int sgnd;		   
+  int depth;		
+  int sgnd;		
   int bpcc;
 } opj_jp2_comps_t;
 
@@ -127,7 +127,7 @@ Destroy a JP2 decompressor handle
 void jp2_destroy_decompress(opj_jp2_t *jp2);
 /**
 Setup the decoder decoding parameters using user parameters.
-Decoding parameters are returned in jp2->j2k->cp. 
+Decoding parameters are returned in jp2->j2k->cp.
 @param jp2 JP2 decompressor handle
 @param parameters decompression parameters
 */
@@ -152,8 +152,8 @@ Destroy a JP2 compressor handle
 */
 void jp2_destroy_compress(opj_jp2_t *jp2);
 /**
-Setup the encoder parameters using the current image and using user parameters. 
-Coding parameters are returned in jp2->j2k->cp. 
+Setup the encoder parameters using the current image and using user parameters.
+Coding parameters are returned in jp2->j2k->cp.
 @param jp2 JP2 compressor handle
 @param parameters compression parameters
 @param image input filled image

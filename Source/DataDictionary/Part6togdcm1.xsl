@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="text" indent="yes"/>
-<!-- XSL to convert XML GDCM2 data dictionay into the old 
+<!-- XSL to convert XML GDCM2 data dictionay into the old
      GDCM1 data dictionary -->
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library

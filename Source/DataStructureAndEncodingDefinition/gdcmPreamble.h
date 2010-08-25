@@ -66,14 +66,14 @@ public:
     }
 protected:
   //
-  bool IsValid() const { 
+  bool IsValid() const {
     // is (IsValid == true) => Internal was read
-    return true; 
+    return true;
   }
 
- 
+
 private:
-  char *Internal; 
+  char *Internal;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const Preamble &val)

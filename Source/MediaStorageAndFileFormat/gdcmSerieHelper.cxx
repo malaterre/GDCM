@@ -46,7 +46,7 @@ void SerieHelper::AddRestriction(uint16_t group, uint16_t elem, std::string cons
   r.elem  = elem;
   r.value = value;
   r.op    = op;
-  Restrictions.push_back( r ); 
+  Restrictions.push_back( r );
 }
 
 void SerieHelper::AddRestriction(const std::string & tag)
@@ -85,7 +85,7 @@ void SerieHelper::CreateDefaultUniqueSeriesIdentifier()
   AddRestriction( Tag(0x0018, 0x0024) );
   // 0018 0050 Slice Thickness
   // On some CT systems, scout scans and subsequence volume scans will
-  //   have the same SeriesUID and Series Number - YET the slice 
+  //   have the same SeriesUID and Series Number - YET the slice
   //   thickness will differ from the scout slice and the volume slices.
   AddRestriction( Tag(0x0018, 0x0050) );
   // 0028 0010 Rows
@@ -100,13 +100,13 @@ void SerieHelper::CreateDefaultUniqueSeriesIdentifier()
 
 void SerieHelper::Clear()
 {
-  // For all the 'Single SerieUID' Filesets that may already exist 
+  // For all the 'Single SerieUID' Filesets that may already exist
   FileList *l = GetFirstSingleSerieUIDFileSet();
   while (l)
-    { 
+    {
     // For all the gdcm::File of a File set
     for (gdcm::FileList::iterator it  = l->begin();
-      it != l->end(); 
+      it != l->end();
       ++it)
       {
       //delete *it; // remove each entry
@@ -125,7 +125,7 @@ void SerieHelper::SetDirectory(std::string const &dir, bool recursive)
   unsigned int nfiles = dirList.Load(dir, recursive); (void)nfiles;
 
   Directory::FilenamesType const &filenames = dirList.GetFilenames();
-  for( Directory::FilenamesType::const_iterator it = filenames.begin(); 
+  for( Directory::FilenamesType::const_iterator it = filenames.begin();
     it != filenames.end(); ++it)
     {
     AddFileName( *it );
@@ -163,11 +163,11 @@ bool CompareDicomString(const std::string &s1, const char *s2, int op)
     {
   case GDCM_EQUAL :
     return s1_even == s2_even;
-  case GDCM_DIFFERENT :  
+  case GDCM_DIFFERENT :
     return s1_even != s2_even;
-  case GDCM_GREATER :  
-    return s1_even >  s2_even;  
-  case GDCM_GREATEROREQUAL :  
+  case GDCM_GREATER :
+    return s1_even >  s2_even;
+  case GDCM_GREATEROREQUAL :
     return s1_even >= s2_even;
   case GDCM_LESS :
     return s1_even <  s2_even;
@@ -183,7 +183,7 @@ bool SerieHelper::AddFile(FileWithName &header)
   StringFilter sf;
   sf.SetFile( header );
   int allrules = 1;
-  // First step the user has defined a set of rules for the DICOM 
+  // First step the user has defined a set of rules for the DICOM
   // he is looking for.
   // make sure the file correspond to his set of rules:
 
@@ -205,7 +205,7 @@ bool SerieHelper::AddFile(FileWithName &header)
 
   if ( allrules ) // all rules are respected:
     {
-    // Allright! we have a found a DICOM that matches the user expectation. 
+    // Allright! we have a found a DICOM that matches the user expectation.
     // Let's add it to the specific 'id' which by default is uid (Serie UID)
     // but can be `refined` by user with more paramater (see AddRestriction(g,e))
 
@@ -251,7 +251,7 @@ FileList *SerieHelper::GetNextSingleSerieUIDFileSet()
 bool SerieHelper::UserOrdering(FileList *fileList)
 {
   std::sort(fileList->begin(), fileList->end(), SerieHelper::UserLessThanFunction);
-  if (!DirectOrder) 
+  if (!DirectOrder)
     {
     std::reverse(fileList->begin(), fileList->end());
     }
@@ -270,17 +270,17 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList )
 
   std::multimap<double,SmartPointer<FileWithName> > distmultimap;
   // Use a multimap to sort the distances from 0,0,0
-  for ( FileList::const_iterator 
+  for ( FileList::const_iterator
     it = fileList->begin();
     it != fileList->end(); ++it )
     {
-    if ( first ) 
+    if ( first )
       {
       //(*it)->GetImageOrientationPatient( cosines );
       cosines = ImageHelper::GetDirectionCosinesValue( **it );
 
-      // You only have to do this once for all slices in the volume. Next, 
-      // for each slice, calculate the distance along the slice normal 
+      // You only have to do this once for all slices in the volume. Next,
+      // for each slice, calculate the distance along the slice normal
       // using the IPP ("Image Position Patient") tag.
       // ("dist" is initialized to zero before reading the first slice) :
       normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
@@ -303,7 +303,7 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList )
       max = min = dist;
       first = false;
       }
-    else 
+    else
       {
       ipp = ImageHelper::GetOriginValue( **it );
       //ipp[0] = (*it)->GetXOrigin();
@@ -356,7 +356,7 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList )
   fileList->clear();  // doesn't delete list elements, only nodes
 
   if (DirectOrder)
-    {  
+    {
     for (std::multimap<double, SmartPointer<FileWithName> >::iterator it3 = distmultimap.begin();
       it3 != distmultimap.end();
       ++it3)
@@ -386,7 +386,7 @@ void SerieHelper::OrderFileList(FileList *fileSet)
   if ( SerieHelper::UserLessThanFunction )
     {
     UserOrdering( fileSet );
-    return; 
+    return;
     }
   else if ( ImagePositionPatientOrdering( fileSet ) )
     {
@@ -397,7 +397,7 @@ void SerieHelper::OrderFileList(FileList *fileSet)
   {
   return ;
   }
-  else  
+  else
   {
   FileNameOrdering(fileSet );
   }
@@ -439,7 +439,7 @@ std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
     //   that may have been introduced by concats.
     for(size_t i=0; i<id.size(); i++)
       {
-      while(i<id.size() 
+      while(i<id.size()
         && !( id[i] == '.'
           || (id[i] >= 'a' && id[i] <= 'z')
           || (id[i] >= '0' && id[i] <= '9')

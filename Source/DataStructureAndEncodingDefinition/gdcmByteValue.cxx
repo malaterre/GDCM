@@ -28,7 +28,7 @@ namespace gdcm
         }
       }
     // I cannot check IsPrintable some file contains \2 or \0 in a VR::LO element
-    // See: acr_image_with_non_printable_in_0051_1010.acr 
+    // See: acr_image_with_non_printable_in_0051_1010.acr
     //assert( IsPrintable(length) );
     std::vector<char>::const_iterator it = Internal.begin();
     for(; it != Internal.begin()+length; ++it)

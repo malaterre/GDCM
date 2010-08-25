@@ -28,7 +28,7 @@ namespace gdcm
 {
 /**
  * \brief Class to represent the mapping from group number to its abbreviation and name
- * \note Should I rewrite this class to use a std::map instead of std::vector for problem of 
+ * \note Should I rewrite this class to use a std::map instead of std::vector for problem of
  * memory consumption ?
  */
 class GDCM_EXPORT GroupDict

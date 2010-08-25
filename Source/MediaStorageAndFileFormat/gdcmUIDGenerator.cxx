@@ -40,7 +40,7 @@ namespace gdcm
  * This is just plain bad luck. GDCM UID root is 26 byte long
  * And all implementation of the DCE UUID (Theodore Y. Ts'o)
  * are based on a uint128_t (unsigned char [16]). Which
- * means that converted to a base 10 number they require at 
+ * means that converted to a base 10 number they require at
  * least 39 bytes to fit in memory, since the highest possible
  * number is 256**16 - 1 = 340282366920938463463374607431768211455
  * Unfortunately root + '.' + suffix should be at most 64 bytes
@@ -56,9 +56,9 @@ std::string UIDGenerator::Root = GetGDCMUID();
 std::string UIDGenerator::EncodedHardwareAddress; // = System::GetHardwareAddress();
 
 const char *UIDGenerator::GetRoot() { return Root.c_str(); }
-void UIDGenerator::SetRoot(const char * root) { 
+void UIDGenerator::SetRoot(const char * root) {
   assert( IsValid( root ) );
-  Root = root; 
+  Root = root;
 }
 
 const char *UIDGenerator::GetGDCMUID()
@@ -101,7 +101,7 @@ const char* UIDGenerator::Generate2()
     return NULL;
     }
   // We need to convert a 6 digit number from base 256 to base 10, using integer
-  // would requires a 48bits one. To avoid this we have to reimplement the div + modulo 
+  // would requires a 48bits one. To avoid this we have to reimplement the div + modulo
   // with string only
   if( EncodedHardwareAddress.empty() )
     {
@@ -196,14 +196,14 @@ const char* UIDGenerator::Generate2()
 }
 
 /*
-Implementation note: You cannot set a root of more than 26 bytes (which should already 
+Implementation note: You cannot set a root of more than 26 bytes (which should already
 enough for most people).
-Since implementation is only playing with the first 8bits of the upper 
+Since implementation is only playing with the first 8bits of the upper
 */
 const char* UIDGenerator::Generate()
 {
   Unique = GetRoot();
-  // We choose here a value of 26 so that we can still have 37 bytes free to 
+  // We choose here a value of 26 so that we can still have 37 bytes free to
   // set the suffix part which is sufficient to store a 2^(128-8+1)-1 number
   if( Unique.empty() || Unique.size() > 62 ) // 62 is simply the highest possible limit
     {
@@ -237,7 +237,7 @@ const char* UIDGenerator::Generate()
         len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
         ++i;
         }
-      if( ( Unique.size() + len > 64 ) && i == 8 ) 
+      if( ( Unique.size() + len > 64 ) && i == 8 )
         {
         // too bad only reducing the 8 bits from uuid[idx] was not enought,
         // let's set to zero the following bits...

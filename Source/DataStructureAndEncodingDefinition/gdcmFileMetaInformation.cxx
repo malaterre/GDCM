@@ -113,7 +113,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     const DataElement &de = GetDataElement( Tag(0x0002,0x0001) );
     const ByteValue *bv = de.GetByteValue();
-    if( bv->GetLength() != 2 
+    if( bv->GetLength() != 2
       || memcmp( bv->GetPointer(), FileMetaInformation::GetFileMetaInformationVersion(), 2 ) != 0 )
       {
       xde.SetTag( Tag(0x0002, 0x0001) );
@@ -330,7 +330,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
 }
 
 // FIXME
-// This code should clearly be rewritten with some template meta programing to 
+// This code should clearly be rewritten with some template meta programing to
 // enable reuse of code...
 //
 // \postcondition after the file meta information (well before the dataset...)
@@ -477,12 +477,12 @@ bool ReadImplicitDataElement(std::istream &is, ImplicitDataElement &de)
 }
 
 /*
- * Except for the 128 bytes preamble and the 4 bytes prefix, the File Meta 
+ * Except for the 128 bytes preamble and the 4 bytes prefix, the File Meta
  * Information shall be encoded using the Explicit VR Little Endian Transfer
  * Syntax (UID=1.2.840.10008.1.2.1) as defined in DICOM PS 3.5.
  * Values of each File Meta Element shall be padded when necessary to achieve
  * an even length as specified in PS 3.5 by their corresponding Value
- * Representation. For compatibility with future versions of this Standard, 
+ * Representation. For compatibility with future versions of this Standard,
  * any Tag (0002,xxxx) not defined in Table 7.1-1 shall be ignored.
  * Values of all Tags (0002,xxxx) are reserved for use by this Standard and
  * later versions of DICOM.
@@ -490,8 +490,8 @@ bool ReadImplicitDataElement(std::istream &is, ImplicitDataElement &de)
  * (0005,xxxx), and (0007,xxxx) shall not be used.
  */
 /// \TODO FIXME
-/// For now I do a Seek back of 6 bytes. It would be better to finish reading 
-/// the first element of the FMI so that I can read the group length and 
+/// For now I do a Seek back of 6 bytes. It would be better to finish reading
+/// the first element of the FMI so that I can read the group length and
 /// therefore compare it against the actual value we found...
 std::istream &FileMetaInformation::Read(std::istream &is)
 {
@@ -548,7 +548,7 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     // GE_DLX-8-MONO2-PrivateSyntax.dcm is in Implicit...
     return ReadCompatInternal<SwapperNoOp>(is);
     }
-  else if( t.GetGroup() == 0x0008 ) // 
+  else if( t.GetGroup() == 0x0008 ) //
     {
     char vr_str[3];
     is.read(vr_str, 2);
@@ -716,7 +716,7 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
   const DataElement &de = GetDataElement(t);
   std::string ts;
   const ByteValue *bv = de.GetByteValue();
-  if( !bv ) 
+  if( !bv )
     {
     throw Exception( "Unknown Transfer syntax" );
     }
@@ -735,8 +735,8 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 }
 
 void FileMetaInformation::SetDataSetTransferSyntax(const TransferSyntax &ts)
-{ 
-  DataSetTS = ts; 
+{
+  DataSetTS = ts;
 }
 
 MediaStorage FileMetaInformation::GetMediaStorage() const
@@ -820,7 +820,7 @@ std::ostream &FileMetaInformation::Write(std::ostream &os) const
         SmartPointer<ByteValue> bv = new ByteValue;
         bv->SetLength( 4 );
         uint32_t len = DS->GetLength();
-        Element<VR::UL, VM::VM1> el = 
+        Element<VR::UL, VM::VM1> el =
           reinterpret_cast< Element<VR::UL, VM::VM1>& > ( len );
         std::stringstream ss;
         el.Write( ss );

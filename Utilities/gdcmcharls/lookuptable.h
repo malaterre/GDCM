@@ -1,12 +1,12 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 
 #ifndef CHARLS_LOOKUPTABLE
 #define CHARLS_LOOKUPTABLE
 
-// Tables for fast decoding of short Golomb Codes. 
+// Tables for fast decoding of short Golomb Codes.
 
 struct Code
 {
@@ -20,9 +20,9 @@ struct Code
 	{
 	}
 
-	LONG GetValue() const 
+	LONG GetValue() const
 		{ return _value; }
-	LONG GetLength() const 
+	LONG GetLength() const
 		{ return _length; }
 
 	LONG _value;

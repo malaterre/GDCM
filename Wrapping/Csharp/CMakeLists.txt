@@ -20,7 +20,7 @@ INCLUDE_DIRECTORIES(
   #${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/ 
+# $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/
 # $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
 #FIND_PACKAGE(JNI REQUIRED)
 #INCLUDE_DIRECTORIES(
@@ -43,7 +43,7 @@ SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
   #${JNI_LIBRARIES}
 #  ${JAVA_AWT_LIB_PATH}
 #  ${JAVA_JVM_LIB_PATH}
-) 
+)
 # Stupid cmake-swig module is doing that for us, when not needed
 IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
@@ -104,7 +104,7 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ##CSHARP_ADD_EXECUTABLE(HelloWorld HelloWorld.cs)
 ##CSHARP_LINK_LIBRARIES(HelloWorld gdcm-sharp)
 ##ADD_CUSTOM_TARGET(CSHARP_EXECUTABLE_HelloWorld ALL
-##    DEPENDS 
+##    DEPENDS
 ##      ${CMAKE_CURRENT_BINARY_DIR}/gdcm-sharp.dll
 ##    # CSharp_gdcm_csharp
 ##  )
@@ -112,9 +112,9 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #
 #
 ##  $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
-## $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
+## $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin
 ##ADD_CUSTOM_TARGET(GDCMCSharp ALL
-##  DEPENDS 
+##  DEPENDS
 ##    ${CMAKE_CURRENT_BINARY_DIR}/gdcm-sharp.dll
 ##    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
 ##  COMMENT "building gdcm-sharp.dll"
@@ -139,11 +139,11 @@ IF(OLDSTYLECSHARP)
 # very wrong in all cases. The CIL bytecode can be used by any language
 # that targets the CLI. To give some examples: VB.NET, Boo, Nemerle (yes,
 # those are all in debian already :)).
-# 
+#
 # There is a common prefix of nFOO (like nunit or nant) and for
 # bindings even more common is the suffix of FOO-sharp (not -csharp)
 # like gtk-sharp, gnome-sharp, evolution-sharp.
-# 
+#
 # /usr/lib/mono/gtk-sharp/gtk-sharp.dll
 # /usr/lib/mono/gtk-sharp/gdk-sharp.dll
 # /usr/lib/mono/gtk-sharp/atk-sharp.dll
@@ -151,7 +151,7 @@ IF(OLDSTYLECSHARP)
   ADD_CUSTOM_COMMAND(
     #OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
     OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs" 
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs"
 #${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
@@ -188,9 +188,9 @@ ENDIF(BUILD_EXAMPLES)
 #ENDIF(WIN32)
 
 #  $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
-# $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
+# $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
-  DEPENDS 
+  DEPENDS
     ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
     #${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.config
   COMMENT "building gdcm-sharp.dll"
@@ -198,7 +198,7 @@ ADD_CUSTOM_TARGET(GDCMCSharp ALL
 
 IF(BUILD_EXAMPLES)
 ADD_CUSTOM_TARGET(GDCMCSharpExample ALL
-  DEPENDS 
+  DEPENDS
     ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
   COMMENT "building HelloCsharpWorld.exe"
 )
@@ -227,7 +227,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   )
 SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
   # because gdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-    INSTALL(FILES 
+    INSTALL(FILES
       ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
   #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
       DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule

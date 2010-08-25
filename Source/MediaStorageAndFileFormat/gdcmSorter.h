@@ -33,7 +33,7 @@ class DataSet;
  *
  * \warning implementation details. For now there is no cache mechanism. Which means
  * that everytime you call Sort, all files specified as input paramater are *read*
- * 
+ *
  * \see Scanner
  */
 class GDCM_EXPORT Sorter

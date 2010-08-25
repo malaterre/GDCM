@@ -32,12 +32,12 @@ class PrivateTag;
  * \brief Class to represent a Data Set (which contains Data Elements)
  * A Data Set represents an instance of a real world Information Object
  * \note
- * DATA SET: 
+ * DATA SET:
  * Exchanged information consisting of a structured set of Attribute values
  * directly or indirectly related to Information Objects. The value of each
  * Attribute in a Data Set is expressed as a Data Element.
- * A collection of Data Elements ordered by increasing Data Element Tag 
- * number that is an encoding of the values of Attributes of a real world 
+ * A collection of Data Elements ordered by increasing Data Element Tag
+ * number that is an encoding of the values of Attributes of a real world
  * object.
  * \note
  * Implementation note. If one do:
@@ -80,7 +80,7 @@ public:
     // CT_Phillips_JPEG2K_Decompr_Problem.dcm has a SQ of length == 0
     //int s = DES.size();
     //assert( s );
-    //std::copy(DES.begin(), DES.end(), 
+    //std::copy(DES.begin(), DES.end(),
     //  std::ostream_iterator<DataElement>(os, "\n"));
     ConstIterator it = DES.begin();
     for( ; it != DES.end(); ++it)
@@ -128,12 +128,12 @@ public:
   /// \warning: Tag need to be >= 0x8 to be considered valid data element
   void Insert(const DataElement& de) {
     // FIXME: there is a special case where a dataset can have value < 0x8, see:
-    // $ gdcmdump --csa gdcmData/SIEMENS-JPEG-CorruptFrag.dcm 
+    // $ gdcmdump --csa gdcmData/SIEMENS-JPEG-CorruptFrag.dcm
     if( de.GetTag().GetGroup() >= 0x0008 || de.GetTag().GetGroup() == 0x4 )
       {
       // prevent user error:
-      if( de.GetTag() == Tag(0xfffe,0xe00d) 
-      || de.GetTag() == Tag(0xfffe,0xe0dd) 
+      if( de.GetTag() == Tag(0xfffe,0xe00d)
+      || de.GetTag() == Tag(0xfffe,0xe0dd)
       || de.GetTag() == Tag(0xfffe,0xe000) )
         {
         }
@@ -300,7 +300,7 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   val.Print(os);
   return os;
 }
-  	 
+  	
 #if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,

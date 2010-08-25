@@ -31,7 +31,7 @@ class GDCM_EXPORT LookupTable : public Object
 {
 public:
   typedef enum {
-    RED = 0,  // Keep RED == 0 
+    RED = 0,  // Keep RED == 0
     GREEN,
     BLUE,
     GRAY,

@@ -65,8 +65,8 @@ public:
   }
 
   bool IsEmpty() const {
-    if( Internal.empty() ) assert( Length == 0 ); 
-    return Internal.empty(); 
+    if( Internal.empty() ) assert( Length == 0 );
+    return Internal.empty();
   }
   VL GetLength() const { return Length; }
   // Does a reallocation
@@ -162,7 +162,7 @@ public:
   template <typename TSwap, typename TType>
   std::istream &Read(std::istream &is) {
     // If Length is odd we have detected that in SetLength
-    // and calling std::vector::resize make sure to allocate *AND* 
+    // and calling std::vector::resize make sure to allocate *AND*
     // initialize values to 0 so we are sure to have a \0 at the end
     // even in this case
     if(Length)

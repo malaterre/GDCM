@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 
 #ifndef CHARLS_CONTEXT
@@ -13,7 +13,7 @@
 struct JlsContext
 {
 public:
-	JlsContext() 
+	JlsContext()
 	{}
 
  	JlsContext(LONG a) :
@@ -43,14 +43,14 @@ public:
 		ASSERT(N != 0);
 
 		// For performance work on copies of A,B,N (compiler will use registers).
-		int b = B + errorValue * (2 * NEAR + 1); 
+		int b = B + errorValue * (2 * NEAR + 1);
 		int a = A + abs(errorValue);
 		int n = N;
 
 		ASSERT(a < 65536 * 256);
 		ASSERT(abs(b) < 65536 * 256);
 		
-		if (n == NRESET) 
+		if (n == NRESET)
 		{
 			a = a >> 1;
 			b = b >> 1;
@@ -59,7 +59,7 @@ public:
 
 		n = n + 1;
 		
-		if (b + n <= 0) 
+		if (b + n <= 0)
 		{
 			b = b + n;
 			if (b <= -n)
@@ -67,8 +67,8 @@ public:
 				b = -n + 1;
 			}
 			C = _tableC[C - 1];
-		} 
-		else  if (b > 0) 
+		}
+		else  if (b > 0)
 		{
 			b = b - n;				
 			if (b > 0)
@@ -90,9 +90,9 @@ public:
 		LONG Ntest	= N;
 		LONG Atest	= A;
 		LONG k = 0;
-		for(; (Ntest << k) < Atest; k++) 
-		{ 
-			ASSERT(k <= 32); 
+		for(; (Ntest << k) < Atest; k++)
+		{
+			ASSERT(k <= 32);
 		};
 		return k;
 	}

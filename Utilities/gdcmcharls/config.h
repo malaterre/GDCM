@@ -15,7 +15,7 @@
 
 #if defined(_WIN32)
 #ifndef CHARLS_IMEXPORT
-#  define CHARLS_IMEXPORT __declspec(dllexport) 
+#  define CHARLS_IMEXPORT __declspec(dllexport)
 #endif
 
 #ifdef _MSC_VER
@@ -24,8 +24,8 @@
 
 #endif
 
-// Typedef used by Charls for the default integral type. 
-// charls will work correct with 64 or 32 bit. 
+// Typedef used by Charls for the default integral type.
+// charls will work correct with 64 or 32 bit.
 typedef long LONG;
 
 enum constants
@@ -48,7 +48,7 @@ typedef unsigned short USHORT;
 #    endif
 #  elif defined(__GNUC__) && (__GNUC__ > 3 || __GNUC__ == 3 && __GNUC_MINOR__ > 0)
 #    define inlinehint inline
-#  else 
+#  else
 #    define inlinehint inline
 #  endif
 #endif

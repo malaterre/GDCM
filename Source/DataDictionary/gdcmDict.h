@@ -72,14 +72,14 @@ public:
 
   const DictEntry &GetDictEntry(const Tag &tag) const
     {
-    MapDictEntry::const_iterator it = 
+    MapDictEntry::const_iterator it =
       DictInternal.find(tag);
     if (it == DictInternal.end())
       {
 #ifdef UNKNOWNPUBLICTAG
       // test.acr
       if( tag != Tag(0x28,0x15)
-        && tag != Tag(0x28,0x16) 
+        && tag != Tag(0x28,0x16)
         && tag != Tag(0x28,0x199)
         // gdcmData/TheralysGDCM1.dcm
         && tag != Tag(0x20,0x1)
@@ -105,7 +105,7 @@ public:
   /// most of the time name is in fact uniq and can be uniquely link to a tag
   const DictEntry &GetDictEntryByName(const char *name, Tag & tag) const
     {
-    MapDictEntry::const_iterator it = 
+    MapDictEntry::const_iterator it =
       DictInternal.begin();
     if( name )
       {
@@ -186,7 +186,7 @@ public:
 #if defined(NDEBUG) && 0
     if( s == DictInternal.size() )
       {
-      MapDictEntry::iterator it = 
+      MapDictEntry::iterator it =
         DictInternal.find(tag);
       assert( it != DictInternal.end() );
       DictEntry &duplicate = it->second;
@@ -209,7 +209,7 @@ public:
   const DictEntry &GetDictEntry(const PrivateTag &tag) const
     {
     // if 0x10 -> return Private Creator
-    MapDictEntry::const_iterator it = 
+    MapDictEntry::const_iterator it =
       DictInternal.find(tag);
     if (it == DictInternal.end())
       {
@@ -232,8 +232,8 @@ public:
       const PrivateTag &t = it->first;
       const DictEntry &de = it->second;
       std::cout << "  <entry group=\"" << std::hex << std::setw(4)
-        << std::setfill('0') << t.GetGroup() << "\"" << 
-        " element=\"xx" << std::setw(2) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\"" 
+        << std::setfill('0') << t.GetGroup() << "\"" <<
+        " element=\"xx" << std::setw(2) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\""
         << de.GetVR() << "\" vm=\"" << de.GetVM() << "\" owner=\""
         << t.GetOwner();
       const char *name = de.GetName();

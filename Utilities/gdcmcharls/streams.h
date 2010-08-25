@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 #ifndef CHARLS_STREAMS
 #define CHARLS_STREAMS
 
@@ -9,7 +9,7 @@
 
 
 
-// This file defines JPEG-LS streams: The header and the actual pixel data. Header markers have fixed length, the pixeldata not. 
+// This file defines JPEG-LS streams: The header and the actual pixel data. Header markers have fixed length, the pixeldata not.
 
 
 
@@ -54,17 +54,17 @@ public:
 
 	size_t Write(BYTE* pdata, size_t cbyteLength);
 	
-	void EnableCompare(bool bCompare) 
+	void EnableCompare(bool bCompare)
 	{ _bCompare = bCompare; }
 private:
 	BYTE* GetPos() const
 		{ return _pdata + _cbyteOffset; }
 
 	void WriteByte(BYTE val)
-	{ 
+	{
 		ASSERT(!_bCompare || _pdata[_cbyteOffset] == val);
 		
-		_pdata[_cbyteOffset++] = val; 
+		_pdata[_cbyteOffset++] = val;
 	}
 
 	void WriteBytes(const std::vector<BYTE>& rgbyte)
@@ -123,10 +123,10 @@ public:
 		{ return _cbyteOffset; }
 
 	const JlsParamaters& GetMetadata() const
-		{ return _info; } 
+		{ return _info; }
 
 	const JlsCustomParameters& GetCustomPreset() const
-	{ return _info.custom; } 
+	{ return _info.custom; }
 
 	void Read(void* pvoid, LONG cbyteAvailable);
 	void ReadHeader();

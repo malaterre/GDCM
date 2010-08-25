@@ -35,7 +35,7 @@ ByteSwapFilter::~ByteSwapFilter()
 bool ByteSwapFilter::ByteSwap()
 {
   for(
-    DataSet::ConstIterator it = DS.Begin(); 
+    DataSet::ConstIterator it = DS.Begin();
     it != DS.End(); ++it)
     {
     const DataElement &de = *it;
@@ -55,42 +55,42 @@ bool ByteSwapFilter::ByteSwap()
         //assert( de.GetTag().IsPrivate() );
         switch(vr)
           {
-        case VR::AT: 
+        case VR::AT:
           assert( 0 && "Should not happen" );
           break;
-        case VR::FL: 
+        case VR::FL:
           // FIXME: Technically FL should not be byte-swapped...
           //std::cerr << "ByteSwap FL:" << de.GetTag() << std::endl;
           SwapperDoOp::SwapArray((uint32_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint32_t) );
           break;
-        case VR::FD: 
+        case VR::FD:
           assert( 0 && "Should not happen" );
           break;
-        case VR::OB: 
+        case VR::OB:
           // I think we are fine, unless this is one of those OB_OW thingy
           break;
-        case VR::OF: 
+        case VR::OF:
           assert( 0 && "Should not happen" );
           break;
-        case VR::OW: 
+        case VR::OW:
           assert( 0 && "Should not happen" );
           break;
-        case VR::SL: 
+        case VR::SL:
           SwapperDoOp::SwapArray((uint32_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint32_t) );
           break;
-        case VR::SQ: 
+        case VR::SQ:
           assert( 0 && "Should not happen" );
           break;
-        case VR::SS: 
+        case VR::SS:
           SwapperDoOp::SwapArray((uint16_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint16_t) );
           break;
-        case VR::UL: 
+        case VR::UL:
           SwapperDoOp::SwapArray((uint32_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint32_t) );
           break;
-        case VR::UN: 
+        case VR::UN:
           assert( 0 && "Should not happen" );
           break;
-        case VR::US: 
+        case VR::US:
           SwapperDoOp::SwapArray((uint16_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint16_t) );
           break;
         case VR::UT:

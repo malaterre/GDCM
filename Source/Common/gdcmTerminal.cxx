@@ -70,7 +70,7 @@ public:
     return ConsoleInfo.wAttributes;
 #endif
   }
-  
+
   void setattribute(int att) { attribute = att; }
   void setfgcolor(int col) { fgcolor = col; }
   void setbgcolor(int col) { bgcolor = col; }

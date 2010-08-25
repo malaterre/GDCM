@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="text" indent="yes"/>
 <!-- XSL to convert XML GDCM2 data dictionay into
-     David Clunie's dicom3tools data dictionary 
+     David Clunie's dicom3tools data dictionary
 Checked against:
      dicom3tools_1.00.snapshot.20061120/libsrc/standard/elmdict/dicom3.tpl
 -->
@@ -81,7 +81,7 @@ http://www.thescripts.com/forum/thread86881.html
         <xsl:value-of select="translate(@name, $apos, '')"/>
       </xsl:variable>
       <xsl:variable name="description_dash">
-        <!-- the dicom3tools is not always consistant with capitalization. 
+        <!-- the dicom3tools is not always consistant with capitalization.
              Assume that every time there is a - we want capitalization -->
         <xsl:value-of select="translate($description_apos,'-',' ')"/>
       </xsl:variable>

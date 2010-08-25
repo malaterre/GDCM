@@ -57,7 +57,7 @@
 #pragma warning ( disable : 4786 )
 //'identifier' : decorated name length exceeded, name was truncated
 #pragma warning ( disable : 4503 )
-// C++ exception specification ignored except to indicate a 
+// C++ exception specification ignored except to indicate a
 // function is not __declspec(nothrow)
 //#pragma warning ( disable : 4290 )
 // signed/unsigned mismatch

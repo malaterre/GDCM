@@ -26,7 +26,7 @@ namespace gdcm
 /*
  * Implementation detail: a tag path is simply a vector<Tag>.
  * with the following convention:
- * First tag is a valid tag, 
+ * First tag is a valid tag,
  * Second tag is an item number (or 0)
  * Third tag is a valid tag
  * ...

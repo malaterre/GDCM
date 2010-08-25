@@ -33,7 +33,7 @@
   retired="{@retired}"
   version="{@version}"
   >
- 
+
   <description><xsl:value-of select="description"/></description>
 </entry>
 </xsl:template>

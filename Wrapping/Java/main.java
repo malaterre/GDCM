@@ -25,7 +25,7 @@ public class main {
     }
   }
 
-  public static void main(String argv[]) 
+  public static void main(String argv[])
   {
     // ----- Object creation -----
     System.out.println( "Creating some objects:" );

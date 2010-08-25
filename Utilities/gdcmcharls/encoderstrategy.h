@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 #ifndef CHARLS_ENCODERSTRATEGY
 #define CHARLS_ENCODERSTRATEGY
@@ -26,7 +26,7 @@ public:
 	{
 	}
 
-	virtual ~EncoderStrategy() 
+	virtual ~EncoderStrategy()
 	{
 		delete _qdecoder;
 	    delete _processLine;
@@ -79,7 +79,7 @@ protected:
 		valcurrent |= value >> -bitpos;
 
 		Flush();
-	        
+	
 		ASSERT(bitpos >=0);
 		valcurrent |= value << bitpos;	
 
@@ -129,9 +129,9 @@ protected:
 		
 	}
 
-	size_t GetLength() 
-	{ 
-		return _cbyteWritten - (bitpos -32)/8; 
+	size_t GetLength()
+	{
+		return _cbyteWritten - (bitpos -32)/8;
 	}
 
 
@@ -141,7 +141,7 @@ protected:
 	}
 
 
-	DecoderStrategy* _qdecoder; 
+	DecoderStrategy* _qdecoder;
 
 protected:
 	JlsParamaters _info;

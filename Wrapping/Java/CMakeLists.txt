@@ -13,7 +13,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
 )
 
-# $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/ 
+# $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/
 # $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
 FIND_PACKAGE(Java 1.5 REQUIRED) # javac, jar
 FIND_PACKAGE(JNI REQUIRED)
@@ -38,7 +38,7 @@ SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
   #${JNI_LIBRARIES}
   ${JAVA_AWT_LIB_PATH}
   ${JAVA_JVM_LIB_PATH}
-) 
+)
 # Stupid cmake-swig module is doing that for us, when not needed
 IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES PREFIX "lib")
@@ -48,14 +48,14 @@ SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE
 # swig-java dummy run:
 # the following execute_process is a dummy run and generate all *.java files in a directory
 # we can then glob all *.java to build rules in case the java wrapper becomes broken
-#EXECUTE_PROCESS(COMMAND ${SWIG_EXECUTABLE} 
+#EXECUTE_PROCESS(COMMAND ${SWIG_EXECUTABLE}
 #  -java
 #  -I${GDCM_BINARY_DIR}/Source/Common
 #  -I${GDCM_SOURCE_DIR}/Source/Common
 #  -I${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
 #  -I${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat
 #  -I${GDCM_SOURCE_DIR}/Source/DataDictionary
-#  -c++ 
+#  -c++
 #  -o dummy.o
 #  ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.i
 #  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

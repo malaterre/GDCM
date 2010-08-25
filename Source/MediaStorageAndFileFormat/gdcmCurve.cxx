@@ -303,7 +303,7 @@ void Curve::GetAsPoints(float *array) const
   assert( Internal->Data.size() == (uint32_t)Internal->NumberOfPoints * 2 );
   assert( Internal->Dimensions == 1 || Internal->Dimensions == 2 );
   assert( Internal->DataValueRepresentation == 0 ); // 0 => unsigned short
-  // GE_DLX-8-MONO2-Multiframe.dcm has 969 points ! what in the *** is the last 
+  // GE_DLX-8-MONO2-Multiframe.dcm has 969 points ! what in the *** is the last
   // point doing here ?
   for(unsigned short i = 0; i < (Internal->NumberOfPoints / 2) * 2; i+=2 )
     {

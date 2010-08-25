@@ -185,7 +185,7 @@ using namespace gdcm;
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
 
-// gdcm does not use std::string in its interface, but we do need it for the 
+// gdcm does not use std::string in its interface, but we do need it for the
 // %extend (see below)
 %include "std_string.i"
 //%include "std_set.i"
@@ -344,8 +344,8 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
 EXTEND_CLASS_PRINT(gdcm::Item)
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
-%rename (JavaDataSet) SWIGDataSet; 
-%rename (JavaTagToValue) SWIGTagToValue; 
+%rename (JavaDataSet) SWIGDataSet;
+%rename (JavaTagToValue) SWIGTagToValue;
 %include "gdcmDataSet.h"
 EXTEND_CLASS_PRINT(gdcm::DataSet)
 //namespace std {
@@ -489,7 +489,7 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
 //%template (ValuesType)      std::set<std::string>;
-%rename (JavaTagToValue) SWIGTagToValue; 
+%rename (JavaTagToValue) SWIGTagToValue;
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
@@ -519,7 +519,7 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //EXTEND_CLASS_PRINT(gdcm::Trace)
 %include "gdcmUIDs.h"
 EXTEND_CLASS_PRINT(gdcm::UIDs)
-//%feature("director") gdcm::IPPSorter;      
+//%feature("director") gdcm::IPPSorter;
 %include "gdcmSorter.h"
 EXTEND_CLASS_PRINT(gdcm::Sorter)
 %include "gdcmIPPSorter.h"

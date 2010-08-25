@@ -38,7 +38,7 @@ enum LodModeType
    LD_ALL         = 0x00000000,
    LD_NOSEQ       = 0x00000001,
    LD_NOSHADOW    = 0x00000002,
-   LD_NOSHADOWSEQ = 0x00000004 
+   LD_NOSHADOWSEQ = 0x00000004
 };
 
 

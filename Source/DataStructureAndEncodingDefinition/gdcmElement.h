@@ -97,11 +97,11 @@ public:
   }
 
   void Read(std::istream &_is) {
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
 
@@ -114,7 +114,7 @@ public:
     std::stringstream ss;
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       GetLength(),ss);
   }
 protected:
@@ -125,7 +125,7 @@ protected:
     std::stringstream ss;
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal,
       GetLength(),ss);
   }
 };
@@ -142,7 +142,7 @@ ignore_char const backslash('\\');
     if (in.get() != ic.m_char)
       in.setstate(std::ios_base::failbit);
     return in;
-  } 
+  }
 
 
 // Implementation to perform formatted read and write
@@ -224,7 +224,7 @@ std::string to_string ( Float data ) {
   } else {
     throw "Impossible Conversion"; // should not happen ...
   }
-} 
+}
 
 /* Writing VR::DS is not that easy after all */
 // http://groups.google.com/group/comp.lang.c++/browse_thread/thread/69ccd26f000a0802
@@ -254,7 +254,7 @@ template<> inline void EncodingImplementation<VR::VRASCII>::Write(const double* 
 // Implementation to perform binary read and write
 // TODO rewrite operation so that either:
 // #1. dummy implementation use a pointer to Internal and do ++p (faster)
-// #2. Actually do some meta programming to unroll the loop 
+// #2. Actually do some meta programming to unroll the loop
 // (no notion of order in VM ...)
 template<> class EncodingImplementation<VR::VRBINARY> {
 public:
@@ -306,7 +306,7 @@ public:
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
-    std::ostream &_os) { 
+    std::ostream &_os) {
     const unsigned int type_size = sizeof(T);
     assert( data ); // Can we write into pointer ?
     assert( length );
@@ -326,7 +326,7 @@ public:
 };
 
 // For particular case for ASCII string
-// WARNING: This template explicitely instanciates a particular 
+// WARNING: This template explicitely instanciates a particular
 // EncodingImplementation THEREFORE it is required to be declared after the
 // EncodingImplementation is needs (doh!)
 #if 0
@@ -346,7 +346,7 @@ public:
       Internal[i++] = sarray.substr(pos1, pos2-pos1);
       pos1 = pos2+1;
       pos2 = sarray.find(sep, pos1+1);
-      } 
+      }
     Internal[i] = sarray.substr(pos1, pos2-pos1);
     // Shouldn't we do the contrary, since we know how many separators
     // (and default behavior is to discard anything after the VM declared
@@ -379,7 +379,7 @@ class Element<VR::PN, TVM> : public StringElement<TVM>
 };
 #endif
 
-// Implementation for the undefined length (dynamically allocated array) 
+// Implementation for the undefined length (dynamically allocated array)
 template<int TVR>
 class Element<TVR, VM::VM1_n>
 {
@@ -407,7 +407,7 @@ public:
         assert( (len / size) * size == len );
         Type *internal = new Type[len / size];
         assert( Save == false );
-        Save = true; // ???? 
+        Save = true; // ????
         if( Internal )
           {
           memcpy(internal, Internal, len);
@@ -420,7 +420,7 @@ public:
   }
 
   // If save is set to zero user should not delete the pointer
-  //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false) 
+  //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false)
   void SetArray(const Type *array, unsigned long len,
     bool save = false) {
     if( save ) {
@@ -494,16 +494,16 @@ public:
     }
   void Read(std::istream &_is) {
     if( !Internal ) return;
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       GetLength(),_is);
     }
   //void ReadComputeLength(std::istream &_is) {
   //  if( !Internal ) return;
-  //  EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(Internal, 
+  //  EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(Internal,
   //    Length,_is);
   //  }
   void Write(std::ostream &_os) const {
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
 
@@ -513,7 +513,7 @@ public:
     if( Internal )
       {
       std::ostringstream os;
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
         GetLength(),os);
       ret.SetByteValue( os.str().c_str(), os.str().size() );
       }

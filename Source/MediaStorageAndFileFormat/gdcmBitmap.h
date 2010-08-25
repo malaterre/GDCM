@@ -30,7 +30,7 @@
 
 namespace gdcm
 {
-  
+
 /**
  * \brief Bitmap class
  * A bitmap based image. Used as parent for both IconImage and the main Pixel Data Image

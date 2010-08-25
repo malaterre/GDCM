@@ -32,7 +32,7 @@ public class HelloWorld
       //throw new Exception("Could not read: " + filename );
       return 1;
       }
-    //std::cout << reader.GetFile() 
+    //std::cout << reader.GetFile()
     Tag t = new Tag(0x10,0x10);
     System.Console.WriteLine( "out:" + t.toString() );
     System.Console.WriteLine( "out:" + reader.GetFile().GetDataSet().toString() );
@@ -52,7 +52,7 @@ public class HelloWorld
       //throw new Exception("Could not read: " + filename );
       return 1;
       }
-    
+
     return 0;
     }
 }

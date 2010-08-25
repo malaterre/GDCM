@@ -22,7 +22,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 class SHA1Internals;
 /**
- * \brief Class for SHA1 
+ * \brief Class for SHA1
  *
  * \warning this class is able to pick from one implementation:
  *

@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 #ifndef CHARLS_DECODERSTATEGY
 #define CHARLS_DECODERSTATEGY
@@ -47,11 +47,11 @@ public:
 	  inlinehint void Skip(LONG length)
 	  {
 		  _validBits -= length;
-		  _readCache = _readCache << length; 
+		  _readCache = _readCache << length;
 	  }
 
 	
-	  void OnLineBegin(LONG /*cpixel*/, void* /*ptypeBuffer*/, LONG /*pixelStride*/) 
+	  void OnLineBegin(LONG /*cpixel*/, void* /*ptypeBuffer*/, LONG /*pixelStride*/)
 	  {}
 
 
@@ -78,7 +78,7 @@ public:
 
 	  typedef size_t bufType;
 
-	  enum { 
+	  enum {
 		  bufferbits = sizeof( bufType ) * 8
 	  };
 		
@@ -100,22 +100,22 @@ public:
 			  }
 
 			  bufType valnew	  = _pbyteCompressed[0];
-			  
+			
 			  if (valnew == 0xFF)		
 			  {
-				  // JPEG bitstream rule: no FF may be followed by 0x80 or higher	    			 
+				  // JPEG bitstream rule: no FF may be followed by 0x80 or higher	    			
 				 if (_pbyteCompressed == _pbyteCompressedEnd - 1 || (_pbyteCompressed[1] & 0x80) != 0)
 				 {
 					 if (_validBits <= 0)
 					 	throw JlsException(InvalidCompressedData);
-					 
+					
 					 return;
 			     }
 			  }
 
 			  _readCache		 |= valnew << (bufferbits - 8  - _validBits);
 			  _pbyteCompressed   += 1;				
-			  _validBits		 += 8; 
+			  _validBits		 += 8;
 
 			  if (valnew == 0xFF)		
 			  {
@@ -136,13 +136,13 @@ public:
 
 		  while (pbyteNextFF < _pbyteCompressedEnd)
 	      {
-			  if (*pbyteNextFF == 0xFF) 
-			  {				  
+			  if (*pbyteNextFF == 0xFF)
+			  {				
 				  break;
 			  }
     		  pbyteNextFF++;
 		  }
-		  
+		
 
 		  return pbyteNextFF - (sizeof(bufType)-1);
 	  }
@@ -160,7 +160,7 @@ public:
 			  if (cbitValid < cbitLast )
 				  return pbyteCompressed;
 
-			  cbitValid -= cbitLast; 
+			  cbitValid -= cbitLast;
 			  pbyteCompressed--;
 		  }	
 	  }
@@ -182,13 +182,13 @@ public:
 
 
 	  inlinehint LONG PeekByte()
-	  { 
+	  {
 		  if (_validBits < 8)
 		  {
 			  MakeValid();
 		  }
 
-		  return _readCache >> (bufferbits - 8); 
+		  return _readCache >> (bufferbits - 8);
 	  }
 
 
@@ -238,7 +238,7 @@ public:
 		  Skip(15);
 
 		  for (LONG highbits = 15; ; highbits++)
-		  { 
+		  {
 			  if (ReadBit())
 				  return highbits;
 		  }                 	

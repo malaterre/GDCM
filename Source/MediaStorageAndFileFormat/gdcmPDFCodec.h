@@ -19,7 +19,7 @@
 
 namespace gdcm
 {
-  
+
 /**
  * \brief PDFCodec class
  */

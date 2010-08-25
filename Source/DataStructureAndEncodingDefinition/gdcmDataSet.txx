@@ -186,7 +186,7 @@ namespace gdcm
         l += de.GetLength<TDE>();
         //std::cout << "l:" << l << std::endl;
         //assert( !de.GetVL().IsUndefined() );
-        //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
+        //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() <<
         //  "," << de.GetVL() << "," << l << std::endl;
         // Bug_Philips_ItemTag_3F3F
         //  (0x2005, 0x1080): for some reason computation of length fails...

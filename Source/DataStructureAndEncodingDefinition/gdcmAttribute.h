@@ -67,7 +67,7 @@ public:
 /**
  * \brief Attribute class
  * This class use template metaprograming tricks to let the user know when the template
- * instanciation does not match the public dictionary. 
+ * instanciation does not match the public dictionary.
  *
  * Typical example that compile is:
  * Attribute<0x0008,0x9007> a = {"ORIGINAL","PRIMARY","T1","NONE"};
@@ -79,8 +79,8 @@ public:
  * Attribute<0x0018,0x1182, VR::IS, VM::VM3> fd3 = {0,1,2}; // VM3 is not valid
  * Attribute<0x0018,0x1182, VR::UL, VM::VM2> fd3 = {0,1}; // UL is not valid VR
  */
-template<uint16_t Group, uint16_t Element, 
-	 int TVR = TagToType<Group, Element>::VRType, // can the user override this value ? 
+template<uint16_t Group, uint16_t Element,
+	 int TVR = TagToType<Group, Element>::VRType, // can the user override this value ?
 	 int TVM = TagToType<Group, Element>::VMType // can the user override this value ?
 	 /*typename SQAttribute = void_*/ > // if only I had variadic template...
 class Attribute
@@ -139,17 +139,17 @@ public:
   bool operator==(const Attribute &att) const
     {
     return std::equal(Internal, Internal+GetNumberOfValues(),
-      att.GetValues()); 
+      att.GetValues());
     }
   bool operator!=(const Attribute &att) const
     {
     return !std::equal(Internal, Internal+GetNumberOfValues(),
-      att.GetValues()); 
+      att.GetValues());
     }
   bool operator<(const Attribute &att) const
     {
     return std::lexicographical_compare(Internal, Internal+GetNumberOfValues(),
-      att.GetValues(), att.GetValues() + att.GetNumberOfValues() ); 
+      att.GetValues(), att.GetValues() + att.GetNumberOfValues() );
     }
 
   ArrayType &GetValue(unsigned int idx = 0) {
@@ -185,7 +185,7 @@ public:
     DataElement ret( GetTag() );
     std::ostringstream os;
     // os.imbue(std::locale::classic()); // This is not required AFAIK
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetNumberOfValues(),os);
     ret.SetVR( GetVR() );
     assert( ret.GetVR() != VR::SQ );
@@ -243,7 +243,7 @@ protected:
       std::stringstream ss;
       std::string s = std::string( bv->GetPointer(), bv->GetLength() );
       ss.str( s );
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal, 
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal,
         GetNumberOfValues(),ss);
       }
   }
@@ -260,7 +260,7 @@ protected:
       std::stringstream ss;
       std::string s = std::string( bv->GetPointer(), bv->GetLength() );
       ss.str( s );
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
         GetNumberOfValues(),ss);
       }
   }
@@ -276,7 +276,7 @@ protected:
     const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
     uint32_t l = VRVLSize< (TVR & VR::VL32) >::Read(_is);
     l /= sizeof( typename VRToType<TVR>::Type );
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       l,_is);
   }
   void Write(std::ostream &_os) const {
@@ -284,7 +284,7 @@ protected:
     _os.write((char*)&c, 4);
     uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
     _os.write((char*)&l, 4);
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
   void Read(std::istream &_is) {
@@ -295,7 +295,7 @@ protected:
     uint32_t l;
     _is.read((char*)&l, 4);
     l /= sizeof( typename VRToType<TVR>::Type );
-     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       l,_is);
     }
   void Write(std::ostream &_os) const {
@@ -303,7 +303,7 @@ protected:
     _os.write((char*)&c, 4);
     uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
     _os.write((char*)&l, 4);
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
 #endif
@@ -313,7 +313,7 @@ protected:
 
 // No need to repeat default template arg, since primary template
 // will be used to generate the default arguments
-template<uint16_t Group, uint16_t Element, int TVR > 
+template<uint16_t Group, uint16_t Element, int TVR >
 class Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
@@ -411,7 +411,7 @@ public:
     std::ostringstream os;
     if( Internal )
       {
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
         GetNumberOfValues(),os);
       if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
         {
@@ -460,7 +460,7 @@ protected:
       {
       delete[] internal;
       }
-    //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
     //  GetNumberOfValues(),ss);
   }
 
@@ -470,35 +470,35 @@ private:
   bool Own : 1;
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM1_8> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
   VM  GetVM() const { return VM::VM1_8; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM2_n> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
   VM  GetVM() const { return VM::VM2_n; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM2_2n> : public Attribute<Group,Element,TVR,VM::VM2_n>
 {
 public:
   static VM  GetVM() { return VM::VM2_2n; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM3_n> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
   static VM  GetVM() { return VM::VM3_n; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM3_3n> : public Attribute<Group,Element,TVR,VM::VM3_n>
 {
 public:
@@ -507,7 +507,7 @@ public:
 
 
 // For particular case for ASCII string
-// WARNING: This template explicitely instanciates a particular 
+// WARNING: This template explicitely instanciates a particular
 // EncodingImplementation THEREFORE it is required to be declared after the
 // EncodingImplementation is needs (doh!)
 #if 0
@@ -527,7 +527,7 @@ public:
       Internal[i++] = sarray.substr(pos1, pos2-pos1);
       pos1 = pos2+1;
       pos2 = sarray.find(sep, pos1+1);
-      } 
+      }
     Internal[i] = sarray.substr(pos1, pos2-pos1);
     // Shouldn't we do the contrary, since we know how many separators
     // (and default behavior is to discard anything after the VM declared
@@ -562,7 +562,7 @@ class Attribute<VR::PN, TVM> : public StringAttribute<TVM>
 
 #if 0
 
-// Implementation for the undefined length (dynamically allocated array) 
+// Implementation for the undefined length (dynamically allocated array)
 template<int TVR>
 class Attribute<TVR, VM::VM1_n>
 {
@@ -595,7 +595,7 @@ public:
   }
 
   // If save is set to zero user should not delete the pointer
-  //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false) 
+  //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false)
   void SetArray(const ArrayType *array, unsigned long len,
     bool save = false) {
     if( save ) {
@@ -619,11 +619,11 @@ public:
       _os << "," << Internal[i];
     }
   void Read(std::istream &_is) {
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
 

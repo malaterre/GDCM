@@ -30,11 +30,11 @@ namespace gdcm
  *
  * Typically one could do:
  *
- *   $ gdcmraw -i input.dcm -o output.raw -t 0025,101b 
+ *   $ gdcmraw -i input.dcm -o output.raw -t 0025,101b
  *
  * Skip the binary length (little endian encoding):
  *
- *   $ dd bs=4 skip=1 if=output.raw of=foo 
+ *   $ dd bs=4 skip=1 if=output.raw of=foo
  *
  * Check file type:
  *
@@ -178,7 +178,7 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
     //std::cerr << "Found the Protocol Data Block but could not read length..." << std::endl;
     return 1;
     }
-  // Alright we need to check if the binary blob was padded, if padded we need to 
+  // Alright we need to check if the binary blob was padded, if padded we need to
   // discard the trailing \0 to please gzip:
   std::string str( input + 4, input + len );
   std::istringstream is( str );
@@ -225,7 +225,7 @@ int DumpProtocolDataBlock(const std::string & filename, bool verbose)
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
   const gdcm::PrivateTag tprotocoldatablock(0x0025,0x1b,"GEMS_SERS_01");
-  if( !ds.FindDataElement( tprotocoldatablock) ) 
+  if( !ds.FindDataElement( tprotocoldatablock) )
     {
     std::cerr << "Could not find tag: " << tprotocoldatablock << std::endl;
     return 1;

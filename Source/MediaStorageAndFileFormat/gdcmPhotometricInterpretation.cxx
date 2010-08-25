@@ -25,7 +25,7 @@ namespace gdcm
 {
 /*
  * HSV/ARGB/CMYK can still be found in PS 3.3 - 2000:
- * 
+ *
  * HSV = Pixel data represent a color image described by hue, saturation, and value image planes.
  * The minimum sample value for each HSV plane represents a minimum value of each vector. This
  * value may be used only when Samples per Pixel (0028,0002) has a value of 3.
@@ -82,7 +82,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
       }
     }
 
-  // Ouch ! We did not find anything, that's pretty bad, let's hope that 
+  // Ouch ! We did not find anything, that's pretty bad, let's hope that
   // the toolkit which wrote the image is buggy and tolerate \0 padded ASCII
   // string
   // warning this piece of code will do MONOCHROME -> MONOCHROME1
@@ -95,7 +95,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
     {
     if( strncmp(pi, PIStrings[i], len ) == 0 )
       {
-      gdcmDebugMacro( "PhotometricInterpretation was found: [" << pi 
+      gdcmDebugMacro( "PhotometricInterpretation was found: [" << pi
         << "], but is invalid. It should be padded with a space" );
       return PIType(i);
       }
@@ -113,7 +113,7 @@ unsigned short PhotometricInterpretation::GetSamplesPerPixel() const
 {
   if ( PIField == UNKNOW ) return 0;
   else if( PIField == MONOCHROME1
-   || PIField == MONOCHROME2 
+   || PIField == MONOCHROME2
    || PIField == PALETTE_COLOR )
     {
     return 1;
@@ -190,7 +190,7 @@ bool PhotometricInterpretation::IsSameColorSpace( PhotometricInterpretation cons
     if( pi == RGB || pi == YBR_RCT || pi == YBR_ICT ) return true;
     }
 
-  if( PIField == YBR_FULL 
+  if( PIField == YBR_FULL
    || PIField == YBR_FULL_422 )
     {
     if( pi == YBR_FULL || pi == YBR_FULL_422 ) return true;

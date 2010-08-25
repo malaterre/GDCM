@@ -360,7 +360,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     return false;
     }
 
-  if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
+  if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
@@ -368,7 +368,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     MaxNumSegments *= 3;
     }
 
-  assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16 
+  assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16
     || GetPixelFormat().GetBitsAllocated() == 32 );
   if( GetPixelFormat().GetSamplesPerPixel() == 3 )
     {
@@ -650,7 +650,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
   unsigned long length = Length;
   // Special case:
   assert( GetPixelFormat().GetBitsAllocated() == 32 ||
-          GetPixelFormat().GetBitsAllocated() == 16 || 
+          GetPixelFormat().GetBitsAllocated() == 16 ||
           GetPixelFormat().GetBitsAllocated() == 8 );
   if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
@@ -692,7 +692,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     //std::cerr << "Length: " << Length << "\n";
     //assert( (uint32_t)is.Tellg() == frame.Header.Offset[i] );
 
-    // FIXME: ALOKA_SSD-8-MONO2-RLE-SQ.dcm 
+    // FIXME: ALOKA_SSD-8-MONO2-RLE-SQ.dcm
     // I think the RLE decoder is off by one, we are reading in 128001 byte, while only 128000
     // are present
     while( numOutBytes < length )

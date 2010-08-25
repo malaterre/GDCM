@@ -29,7 +29,7 @@ public:
     BitSize[0] = BitSize[1] = BitSize[2] = 0;
   }
   unsigned int Length[3]; // In DICOM the length is specified on a short
-  // but 65536 is expressed as 0 ... 
+  // but 65536 is expressed as 0 ...
   unsigned short Subscript[3];
   unsigned short BitSize[3];
   std::vector<unsigned char> RGB;
@@ -127,7 +127,7 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
     {
     assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );
     }
-  // Too funny: 05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm 
+  // Too funny: 05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm
   // There is pseudo PALETTE_COLOR LUT in the Icon, if one look carefully the LUT values
   // goes like this: 0, 1, 2, 3, 4, 5, 6, 7 ...
   if( BitSample == 8 )

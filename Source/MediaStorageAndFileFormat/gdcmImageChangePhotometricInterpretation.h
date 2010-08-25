@@ -85,8 +85,8 @@ void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
 #if 1
  rgb[0] = 298.082 * ((int)ybr[0]-16) +     0.    * ((int)ybr[1]-128) +   408.583 * ((int)ybr[2]-128) - 1. / 256;
  rgb[1] = 298.082 * ((int)ybr[0]-16) +  -100.291 * ((int)ybr[1]-128) +  -208.12  * ((int)ybr[2]-128) - 1. / 256;
- rgb[2] = 298.082 * ((int)ybr[0]-16) +   516.411 * ((int)ybr[1]-128) +     0.    * ((int)ybr[2]-128) - 1. / 256; 
- 
+ rgb[2] = 298.082 * ((int)ybr[0]-16) +   516.411 * ((int)ybr[1]-128) +     0.    * ((int)ybr[2]-128) - 1. / 256;
+
 #else
   const double Y  = ybr[0];
   const double Cb = ybr[1];

@@ -55,7 +55,7 @@ public:
     Pointer = 0;
   }
 
-  /// Overload operator -> 
+  /// Overload operator ->
   ObjectType *operator -> () const
     { return Pointer; }
 
@@ -63,16 +63,16 @@ public:
     { return *Pointer; }
 
   /// Return pointer to object.
-  operator ObjectType * () const 
+  operator ObjectType * () const
     { return Pointer; }
 
   /// Overload operator assignment.
   SmartPointer &operator = (SmartPointer const &r)
     { return operator = (r.Pointer); }
-  
+
   /// Overload operator assignment.
   SmartPointer &operator = (ObjectType *r)
-    {                                                              
+    {
     // http://www.parashift.com/c++-faq-lite/freestore-mgmt.html#faq-16.22
     // DO NOT CHANGE THE ORDER OF THESE STATEMENTS!
     // (This order properly handles self-assignment)

@@ -102,7 +102,7 @@ static GROUP_ENTRY groupname[] = {
 	{0xfffc,"GEN","Generic"},
 	{0x7fe0,"PXL","Pixel Data"},
 	{0xffff,"UNK","Unknown"},
-	{0,0,0} // will not be added to the dict 
+	{0,0,0} // will not be added to the dict
 };
 
 void GroupDict::FillDefaultGroupName()

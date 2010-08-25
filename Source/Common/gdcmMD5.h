@@ -22,7 +22,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 class MD5Internals;
 /**
- * \brief Class for MD5 
+ * \brief Class for MD5
  *
  * \warning this class is able to pick from two implementations:
  *

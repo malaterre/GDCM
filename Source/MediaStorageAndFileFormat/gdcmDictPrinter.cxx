@@ -77,7 +77,7 @@ VM GuessVMType(DataElement const &de)
         // Need to count \\ character
         const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
         vm = VM::VM1; // why not ?
-        if(!de.IsEmpty()) 
+        if(!de.IsEmpty())
           {
           assert( bv && "not bv" );
           const char *array = bv->GetPointer();
@@ -442,7 +442,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
   const char *owner = 0;
   const Tag& t = de.GetTag();
   if( t.IsPrivate() && !t.IsPrivateCreator() )
-    { 
+    {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
     }
@@ -468,8 +468,8 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
       }
     VM vm = GuessVMType(de);
 
-    os << 
-      "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
+    os <<
+      "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') <<
       t.GetGroup() << "\" element=\"" << std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
 
     os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
@@ -486,7 +486,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
     //os << (t.IsPrivate() ? "Private" : "Public");
     //os << " Tag & Data</description>\n";
     //os << "  <representations>\n";
-    //os << "    <representation vr=\"" << vr << "\" vm=\"" << 
+    //os << "    <representation vr=\"" << vr << "\" vm=\"" <<
     //  VM::GetVMString(vm) << "\"/>\n";
     //os << "  </representations>\n";
     //os << "</entry>\n";

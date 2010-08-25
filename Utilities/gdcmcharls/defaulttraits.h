@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 
 #ifndef CHARLS_DEFAULTTRAITS
@@ -11,10 +11,10 @@
 // This traits class is used to initialize a coder/decoder.
 // The coder/decoder also delegates some functions to the traits class.
 // This is to allow the traits class to replace the default implementation here with optimized specific implementations.
-// This is done for lossless coding/decoding: see losslesstraits.h 
+// This is done for lossless coding/decoding: see losslesstraits.h
 
 template <class sample, class pixel>
-struct DefaultTraitsT 
+struct DefaultTraitsT
 {
 public:
 	typedef sample SAMPLE;
@@ -59,7 +59,7 @@ public:
 	
 	inlinehint SAMPLE ComputeReconstructedSample(LONG Px, LONG ErrVal)
 	{
-		return FixReconstructedValue(Px + DeQuantize(ErrVal)); 
+		return FixReconstructedValue(Px + DeQuantize(ErrVal));
 	}
 
 	inlinehint bool IsNear(LONG lhs, LONG rhs) const
@@ -67,9 +67,9 @@ public:
 
 	bool IsNear(Triplet<SAMPLE> lhs, Triplet<SAMPLE> rhs) const
 	{
-		return abs(lhs.v1-rhs.v1) <=NEAR && 
-			abs(lhs.v2-rhs.v2) <=NEAR && 
-			abs(lhs.v3-rhs.v3) <=NEAR; 
+		return abs(lhs.v1-rhs.v1) <=NEAR &&
+			abs(lhs.v2-rhs.v2) <=NEAR &&
+			abs(lhs.v3-rhs.v3) <=NEAR;
 	}
 
 	inlinehint LONG CorrectPrediction(LONG Pxc) const
@@ -111,13 +111,13 @@ private:
 	}
 
 	inlinehint SAMPLE FixReconstructedValue(LONG val) const
-	{ 
+	{
 		if (val < -NEAR)
 			val = val + RANGE*(2*NEAR+1);
 		else if (val > MAXVAL + NEAR)
 			val = val - RANGE*(2*NEAR+1);
 
-		return SAMPLE(CorrectPrediction(val)); 
+		return SAMPLE(CorrectPrediction(val));
 	}
 
 };

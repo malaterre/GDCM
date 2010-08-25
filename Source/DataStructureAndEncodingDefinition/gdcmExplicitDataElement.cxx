@@ -32,14 +32,14 @@ VL ExplicitDataElement::GetLength() const
     // TODO can factor the code:
     if( sq )
       {
-      return TagField.GetLength() + VRField.GetLength() + 
+      return TagField.GetLength() + VRField.GetLength() +
         ValueLengthField.GetLength() + sq->ComputeLength<ExplicitDataElement>();
       }
     SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
     if( sf )
       {
       assert( VRField & VR::OB_OW ); // VR::INVALID is not possible AFAIK...
-      return TagField.GetLength() + VRField.GetLength() 
+      return TagField.GetLength() + VRField.GetLength()
         + ValueLengthField.GetLength() + sf->ComputeLength();
       }
     assert(0);

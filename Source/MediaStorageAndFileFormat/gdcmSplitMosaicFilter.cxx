@@ -24,7 +24,7 @@ SplitMosaicFilter::SplitMosaicFilter():F(new File),I(new Image) {}
 SplitMosaicFilter::~SplitMosaicFilter() {}
 
 /*
- *  gdcmDataExtra/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm  
+ *  gdcmDataExtra/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
  */
 bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims, unsigned int square,
   const unsigned int *outputdims, unsigned short *output )
@@ -35,7 +35,7 @@ bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdim
       {
       for(unsigned z = 0; z < outputdims[2]; ++z)
         {
-        output[ x + y*outputdims[0] + z*outputdims[0]*outputdims[1] ] = 
+        output[ x + y*outputdims[0] + z*outputdims[0]*outputdims[1] ] =
           input[ (x + z * outputdims[0]) + (y + (z/square)*outputdims[0])*inputdims[0] ];
         }
       }

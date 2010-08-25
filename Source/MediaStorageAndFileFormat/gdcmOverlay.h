@@ -20,14 +20,14 @@
 
 namespace gdcm
 {
-  
+
 class OverlayInternal;
 class ByteValue;
 class DataSet;
 class DataElement;
 /**
  * \brief Overlay class
- * \note 
+ * \note
  * see AreOverlaysInPixelData
  *
  * \todo

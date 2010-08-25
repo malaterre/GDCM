@@ -31,7 +31,7 @@ namespace gdcm
  * \warning See special note for SetZSpacingTolerance when computing the
  * ZSpacing from the IPP of each DICOM files (default tolerance for consistant
  * spacing is: 1e-6mm)
- * 
+ *
  * For more information on Spacing, and how it is defined in DICOM, advanced
  * users may refers to:
  *
@@ -60,11 +60,11 @@ public:
   /// Set to true when sort algorithm should also perform a regular
   /// Z-Spacing computation using the Image Position (Patient)
   /// Potential reason for failure:
-  /// 1. ALL slices are taken into account, if one slice if 
+  /// 1. ALL slices are taken into account, if one slice if
   /// missing then ZSpacing will be set to 0 since the spacing
   /// will not be found to be regular along the Series
   void SetComputeZSpacing(bool b) { ComputeZSpacing = b; }
-  /// 2. Another reason for failure is that that Z-Spacing is only 
+  /// 2. Another reason for failure is that that Z-Spacing is only
   /// slightly changing (eg 1e-3) along the serie, a human can determine
   /// that this is ok and change the tolerance from its default value: 1e-6
   void SetZSpacingTolerance(double tol) { ZTolerance = tol; }

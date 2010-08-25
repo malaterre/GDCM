@@ -32,8 +32,8 @@ public :
   virtual void Execute(Subject *caller, const Event & event ) = 0;
 
   /** Abstract method that defines the action to be taken by the command.
-   * This variant is expected to be used when requests comes from a 
-   * const Object 
+   * This variant is expected to be used when requests comes from a
+   * const Object
    */
   virtual void Execute(const Subject *caller, const Event & event ) = 0;
 
@@ -50,8 +50,8 @@ private:
  *  \brief Command subclass that calls a pointer to a member function
  *
  *  MemberCommand calls a pointer to a member function with the same
- *  arguments as Execute on Command.   
- * 
+ *  arguments as Execute on Command.
+ *
  */
 template <class T>
 class MemberCommand : public Command
@@ -59,41 +59,41 @@ class MemberCommand : public Command
 public:
   /** pointer to a member function that takes a Subject* and the event */
   typedef  void (T::*TMemberFunctionPointer)(Subject*, const Event &);
-  typedef  void (T::*TConstMemberFunctionPointer)(const Subject*, 
+  typedef  void (T::*TConstMemberFunctionPointer)(const Subject*,
                                                   const Event &);
-    
+
   /** Standard class typedefs. */
   typedef MemberCommand       Self;
   //typedef SmartPointer<Self>  Pointer;
-  
+
   /** Method for creation through the object factory. */
   static SmartPointer<MemberCommand> New()
     {
     return new MemberCommand;
     }
- 
+
   /** Run-time type information (and related methods). */
   //gdcmTypeMacro(MemberCommand,Command);
 
   /**  Set the callback function along with the object that it will
    *  be invoked on. */
-  void SetCallbackFunction(T* object,  
+  void SetCallbackFunction(T* object,
                            TMemberFunctionPointer memberFunction)
     {
     m_This = object;
     m_MemberFunction = memberFunction;
     }
-  void SetCallbackFunction(T* object,  
+  void SetCallbackFunction(T* object,
                            TConstMemberFunctionPointer memberFunction)
     {
     m_This = object;
     m_ConstMemberFunction = memberFunction;
     }
-  
+
   /**  Invoke the member function. */
   virtual void Execute(Subject *caller, const Event & event )
-    { 
-    if( m_MemberFunction ) 
+    {
+    if( m_MemberFunction )
       {
       ((*m_This).*(m_MemberFunction))(caller, event);
       }
@@ -101,8 +101,8 @@ public:
 
   /**  Invoke the member function with a const object. */
   virtual void Execute( const Subject *caller, const Event & event )
-    { 
-    if( m_ConstMemberFunction ) 
+    {
+    if( m_ConstMemberFunction )
       {
       ((*m_This).*(m_ConstMemberFunction))(caller, event);
       }
@@ -125,20 +125,20 @@ private:
 /** \class SimpleMemberCommand
  *  \brief Command subclass that calls a pointer to a member function
  *
- *  SimpleMemberCommand calls a pointer to a member function with no 
- *  arguments.   
+ *  SimpleMemberCommand calls a pointer to a member function with no
+ *  arguments.
  */
 template <typename T>
 class SimpleMemberCommand : public Command
-{ 
+{
 public:
   /** A method callback. */
-  typedef  void (T::*TMemberFunctionPointer)(); 
-  
+  typedef  void (T::*TMemberFunctionPointer)();
+
   /** Standard class typedefs. */
   typedef SimpleMemberCommand   Self;
   //typedef SmartPointer<Self>    Pointer;
-  
+
   /** Run-time type information (and related methods). */
   //gdcmTypeMacro(SimpleMemberCommand,Command);
 
@@ -149,29 +149,29 @@ public:
     }
 
   /** Specify the callback function. */
-  void SetCallbackFunction(T* object,  
+  void SetCallbackFunction(T* object,
                            TMemberFunctionPointer memberFunction)
     {
     m_This = object;
     m_MemberFunction = memberFunction;
     }
-  
+
   /** Invoke the callback function. */
-  virtual void Execute(Subject *,const Event & ) 
-    { 
-    if( m_MemberFunction ) 
+  virtual void Execute(Subject *,const Event & )
+    {
+    if( m_MemberFunction )
       {
       ((*m_This).*(m_MemberFunction))();
       }
     }
-  virtual void Execute(const Subject *,const Event & ) 
-    { 
-    if( m_MemberFunction ) 
+  virtual void Execute(const Subject *,const Event & )
+    {
+    if( m_MemberFunction )
       {
       ((*m_This).*(m_MemberFunction))();
       }
     }
-  
+
 protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;

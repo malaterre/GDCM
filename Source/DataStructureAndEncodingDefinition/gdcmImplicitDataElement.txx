@@ -217,7 +217,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     }
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it 
+  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it
   // as long as each of the Item lengths are correct
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
@@ -429,7 +429,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
     }
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it 
+  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it
   // as long as each of the Item lengths are correct
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
@@ -442,7 +442,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
   assert( VRField == VR::INVALID );
 #endif
 
-  return is;  
+  return is;
 }
 
 //-----------------------------------------------------------------------------

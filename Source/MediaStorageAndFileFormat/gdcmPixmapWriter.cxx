@@ -228,7 +228,7 @@ Attribute<0x0028,0x0004> piat;
     iconimagesq.SetValue( *sq );
 
     rootds.Replace( iconimagesq );
-    
+
     }
 }
 
@@ -269,7 +269,7 @@ bool PixmapWriter::PrepareWrite()
   PhotometricInterpretation pi = PixelData->GetPhotometricInterpretation();
   if( pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel() )
     {
-    gdcmWarningMacro( "Photometric Interpretation and Pixel format are not compatible: " 
+    gdcmWarningMacro( "Photometric Interpretation and Pixel format are not compatible: "
       << pi.GetSamplesPerPixel() << " vs " << pf.GetSamplesPerPixel() );
     return false;
     }
@@ -424,7 +424,7 @@ bool PixmapWriter::PrepareWrite()
         static const CSComp newvalues2[] = {"ISO_14495_1"};
         at3.SetValues(  newvalues2, 1 );
         }
-      else if ( 
+      else if (
         ts_orig == TransferSyntax::JPEGBaselineProcess1 ||
         ts_orig == TransferSyntax::JPEGExtendedProcess2_4 ||
         ts_orig == TransferSyntax::JPEGExtendedProcess3_5 ||

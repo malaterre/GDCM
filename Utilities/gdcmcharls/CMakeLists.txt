@@ -13,7 +13,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 SET(CHARLS_MAJOR_VERSION 1)
 SET(CHARLS_MINOR_VERSION 0)
 SET(CHARLS_BUILD_VERSION 0)
-SET(CHARLS_VERSION 
+SET(CHARLS_VERSION
       "${CHARLS_MAJOR_VERSION}.${CHARLS_MINOR_VERSION}.${CHARLS_BUILD_VERSION}")
 
 #-----------------------------------------------------------------------------
@@ -46,7 +46,7 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 #OPTION(charls_BUILD_SHARED_LIBS "Build CharLS with shared libraries." OFF)
 #SET(BUILD_SHARED_LIBS ${charls_BUILD_SHARED_LIBS})
 
-add_library(${CHARLS_LIBRARY_NAME} header.cpp  interface.cpp  jpegls.cpp  
+add_library(${CHARLS_LIBRARY_NAME} header.cpp  interface.cpp  jpegls.cpp
   stdafx.cpp
   )
 SET_TARGET_PROPERTIES(${CHARLS_LIBRARY_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")

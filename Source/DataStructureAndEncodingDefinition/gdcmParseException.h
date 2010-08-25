@@ -31,7 +31,7 @@ public:
   {
   }
   virtual ~ParseException() throw() {}
-  
+
   /** Assignment operator. */
   ParseException &operator= ( const ParseException &orig )
     {
@@ -39,17 +39,17 @@ public:
     //TODO
     return *this;
     }
-  
+
   /** Equivalence operator. */
 /*  virtual bool operator==( const ParseException &orig )
   {
     return true;
   }*/
-          
+
 /*
   // Multiple calls to what ??
   const char* what() const throw()
-    { 
+    {
     static std::string strwhat;
     std::ostringstream oswhat;
     oswhat << File << ":" << Line << ":\n";

@@ -552,7 +552,7 @@ UINT16 Y_density
         && GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME2 )
         {
         gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
-          GetPhotometricInterpretation() << " but JPEG says: " 
+          GetPhotometricInterpretation() << " but JPEG says: "
           << cinfo.jpeg_color_space );
         //Internals->SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
         this->PI = PhotometricInterpretation::MONOCHROME2;
@@ -608,7 +608,7 @@ UINT16 Y_density
      * output image dimensions available, as well as the output colormap
      * if we asked for color quantization.
      * In this example, we need to make an output work buffer of the right size.
-     */ 
+     */
     /* JSAMPLEs per row in output buffer */
     row_stride = cinfo.output_width * cinfo.output_components;
     row_stride *= sizeof(JSAMPLE);
@@ -783,7 +783,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         && GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME2 )
         {
         gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
-          GetPhotometricInterpretation() << " but JPEG says: " 
+          GetPhotometricInterpretation() << " but JPEG says: "
           << cinfo.jpeg_color_space );
         //Internals->SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
         this->PI = PhotometricInterpretation::MONOCHROME2;
@@ -822,7 +822,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         //cinfo.jpeg_color_space = JCS_UNKNOWN;
         //cinfo.out_color_space = JCS_UNKNOWN;
         }
-      if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL 
+      if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
       || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
         {
         cinfo.jpeg_color_space = JCS_UNKNOWN;
@@ -871,7 +871,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
      * output image dimensions available, as well as the output colormap
      * if we asked for color quantization.
      * In this example, we need to make an output work buffer of the right size.
-     */ 
+     */
     /* JSAMPLEs per row in output buffer */
     row_stride = cinfo.output_width * cinfo.output_components;
     row_stride *= sizeof(JSAMPLE);
@@ -920,7 +920,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     Internals->StateSuspension = 4;
     }
 
-  /* we are done decompressing the file, now is a good time to store the type 
+  /* we are done decompressing the file, now is a good time to store the type
      of compression used: lossless or not */
   if( cinfo.process == JPROC_LOSSLESS )
     {

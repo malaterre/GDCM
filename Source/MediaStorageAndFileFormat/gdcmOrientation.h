@@ -19,7 +19,7 @@
 
 namespace gdcm
 {
-  
+
 /**
  * \brief class to handle Orientation
  */

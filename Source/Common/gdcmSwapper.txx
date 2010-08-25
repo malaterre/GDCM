@@ -40,7 +40,7 @@ namespace gdcm
     {
     return Swap((uint16_t)val);
     }
-    
+
   template <> inline uint32_t SwapperNoOp::Swap<uint32_t>(uint32_t val)
     {
 #ifdef GDCM_HAVE_BYTESWAP_H
@@ -194,5 +194,5 @@ namespace gdcm
 
 #endif
 } // end namespace gdcm
- 
+
 #endif // GDCMSWAPPER_TXX

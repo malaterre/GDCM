@@ -22,4 +22,4 @@ namespace gdcm
 
 } // end namespace gdcm
 
-#endif // GDCMSEQUENCEOFFRAGMENTS_TXX 
+#endif // GDCMSEQUENCEOFFRAGMENTS_TXX

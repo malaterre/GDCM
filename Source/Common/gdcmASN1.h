@@ -23,7 +23,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 class ASN1Internals;
 /**
- * \brief Class for ASN1 
+ * \brief Class for ASN1
  *
  */
 class GDCM_EXPORT ASN1

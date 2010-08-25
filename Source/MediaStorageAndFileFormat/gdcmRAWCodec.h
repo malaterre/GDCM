@@ -19,7 +19,7 @@
 
 namespace gdcm
 {
-  
+
 class RAWInternals;
 /**
  * \brief RAWCodec class

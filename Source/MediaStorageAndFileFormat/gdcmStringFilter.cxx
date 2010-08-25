@@ -102,7 +102,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
   std::string strowner;
   const char *owner = 0;
   if( t.IsPrivate() && !t.IsPrivateCreator() )
-    { 
+    {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
     }
@@ -252,7 +252,7 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
   const char *owner = 0;
   const DataSet &ds = GetFile().GetDataSet();
   if( t.IsPrivate() && !t.IsPrivateCreator() )
-    { 
+    {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
     }

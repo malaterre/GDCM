@@ -25,10 +25,10 @@ namespace gdcm
 /**
  * \brief ApplicationEntity
  * - AE Application Entity
- * - A string of characters that identifies an Application Entity with leading 
- *   and trailing spaces (20H) being non-significant. A value consisting solely 
+ * - A string of characters that identifies an Application Entity with leading
+ *   and trailing spaces (20H) being non-significant. A value consisting solely
  *   of spaces shall not be used.
- * - Default Character Repertoire excluding character code 5CH (the BACKSLASH \ in 
+ * - Default Character Repertoire excluding character code 5CH (the BACKSLASH \ in
  *   ISO-IR 6), and control characters LF, FF, CR and ESC.
  * - 16 bytes maximum
  */

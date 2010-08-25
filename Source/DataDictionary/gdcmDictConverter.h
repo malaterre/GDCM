@@ -54,7 +54,7 @@ public:
 
   void Convert();
 
-  // Leaving them public for now. Not really user oriented but may be 
+  // Leaving them public for now. Not really user oriented but may be
   // usefull
   static bool ReadVR(const char *raw, VR::VRType &type);
   static bool ReadVM(const char *raw, VM::VMType &type);

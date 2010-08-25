@@ -33,7 +33,7 @@ namespace gdcm
  * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
  * \note
  * SEQUENCE OF ITEMS (VALUE REPRESENTATION SQ)
- * A Value Representation for Data Elements that contain a sequence of 
+ * A Value Representation for Data Elements that contain a sequence of
  * Data Sets. Sequence of Items allows for Nested Data Sets.
  */
 class GDCM_EXPORT SequenceOfItems : public Value

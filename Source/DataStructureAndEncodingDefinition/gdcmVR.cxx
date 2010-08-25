@@ -22,7 +22,7 @@ namespace gdcm
 
 static const char *VRStrings[] = {
   "??",        // 0
-  "AE",        // 1 
+  "AE",        // 1
   "AS",        // 2
   "AT",        // 3
   "CS",        // 4
@@ -491,7 +491,7 @@ bool VR::IsBinary(VRType vr)
 bool VR::IsBinary2(VRType vr)
 {
   //assert( vr != OF );
-  return 
+  return
     vr == OB ||
     vr == OW ||
     vr == OB_OW ||
@@ -501,7 +501,7 @@ bool VR::IsBinary2(VRType vr)
 
 bool VR::CanDisplay(VRType vr)
 {
-  return 
+  return
     vr == AE ||
     vr == AS ||
     vr == AT ||

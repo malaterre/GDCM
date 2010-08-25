@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 #include "stdafx.h"
 #include "interface.h"
@@ -37,12 +37,12 @@ JLS_ERROR CheckInput(const void* pdataCompressed, size_t cbyteCompressed, const 
 
 	switch (pparams->components)
 	{
-		case 4: return pparams->ilv == ILV_SAMPLE ? ParameterValueNotSupported : OK; 
+		case 4: return pparams->ilv == ILV_SAMPLE ? ParameterValueNotSupported : OK;
 		case 3: return OK;
 		case 1: return pparams->ilv != ILV_NONE ? ParameterValueNotSupported : OK;
 		case 0: return InvalidJlsParameters;
 
-		default: return pparams->ilv != ILV_NONE ? ParameterValueNotSupported : OK; 
+		default: return pparams->ilv != ILV_NONE ? ParameterValueNotSupported : OK;
 	}
 }
 
@@ -90,7 +90,7 @@ CHARLS_IMEXPORT JLS_ERROR JpegLsEncode(void* pdataCompressed, size_t cbyteBuffer
 			stream.AddScan(pbyteComp, &info);
 		}
 	}
-	else 
+	else
 	{
 		stream.AddScan(pdataUncompressed, &info);
 	}
@@ -152,7 +152,7 @@ CHARLS_IMEXPORT JLS_ERROR JpegLsVerifyEncode(const void* pdataUncompressed, size
 			stream.AddScan(pbyteComp, &params);
 		}
 	}
-	else 
+	else
 	{
 		stream.AddScan(pdataUncompressed, &params);
 	}

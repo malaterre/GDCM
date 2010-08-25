@@ -33,16 +33,16 @@ public :
 
   /**  Create an Event of this type This method work as a Factory for
    *  creating events of each particular type. */
-  virtual Event* MakeObject() const = 0;  
+  virtual Event* MakeObject() const = 0;
 
   /** Print Event information.  This method can be overridden by
    * specific Event subtypes.  The default is to print out the type of
    * the event. */
   virtual void Print(std::ostream& os) const;
-  
+
   /** Return the StringName associated with the event. */
   virtual const char * GetEventName(void) const = 0;
-  
+
   /** Check if given event matches or derives from this event. */
   virtual bool CheckEvent(const Event*) const = 0;
 

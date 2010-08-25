@@ -62,7 +62,7 @@ bool DirectionCosines::IsValid() const
   double norm_v1 = Values[0] * Values[0] + Values[1]*Values[1] + Values[2]*Values[2];
   double norm_v2 = Values[3] * Values[3] + Values[4]*Values[4] + Values[5]*Values[5];
   double dot = Dot();
-  
+
   bool ret = false;
   if( fabs(norm_v1 - 1) < epsilon && fabs(norm_v2 - 1) < epsilon )
     {

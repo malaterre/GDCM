@@ -40,7 +40,7 @@ class StringFilter;
  *
  * This filter is dealing with both VRASCII and VRBINARY element, thanks to the
  * help of gdcm::StringFilter
- * 
+ *
  * \warning IMPORTANT In case of file where tags are not ordered (illegal as
  * per DICOM specification), the output will be missing information
  *

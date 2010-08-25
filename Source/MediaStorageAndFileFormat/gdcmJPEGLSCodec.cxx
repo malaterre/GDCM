@@ -118,7 +118,7 @@ bool JPEGLSCodec::CanDecode(TransferSyntax const &ts) const
 #ifndef GDCM_USE_JPEGLS
   return false;
 #else
-  return ts == TransferSyntax::JPEGLSLossless 
+  return ts == TransferSyntax::JPEGLSLossless
       || ts == TransferSyntax::JPEGLSNearLossless;
 #endif
 }
@@ -128,7 +128,7 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
 #ifndef GDCM_USE_JPEGLS
   return false;
 #else
-  return ts == TransferSyntax::JPEGLSLossless 
+  return ts == TransferSyntax::JPEGLSLossless
       || ts == TransferSyntax::JPEGLSNearLossless;
 #endif
 }
@@ -347,7 +347,7 @@ Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e
 
     size_t cbyteCompressed;
     JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, inputdata, inputlength, &params);
-    if( error != OK ) 
+    if( error != OK )
       {
       gdcmErrorMacro( "Error compressing: " << error );
       return false;

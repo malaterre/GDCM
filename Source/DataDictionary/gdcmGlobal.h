@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// Implementation detail was shamelessly borowed from the VTK excellent 
+// Implementation detail was shamelessly borowed from the VTK excellent
 // implementation of debug leak manager singleton:
 /*=========================================================================
 
@@ -45,7 +45,7 @@ class Defs;
  * that will use Dict or that implements the singleton
  * pattern.  It makes sure that the Dict singleton is created
  * before and destroyed after all other singletons in GDCM.
- * 
+ *
  */
 class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
 {

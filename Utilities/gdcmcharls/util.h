@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 
 #ifndef CHARLS_UTIL
@@ -56,7 +56,7 @@ inline LONG BitWiseSign(LONG i)
 
 template<class SAMPLE>
 struct Triplet
-{ 
+{
 	Triplet() :
 		v1(0),
 		v2(0),
@@ -69,17 +69,17 @@ struct Triplet
 		v3((SAMPLE)x3)
 	{}
 
-		union 
+		union
 		{
 			SAMPLE v1;
 			SAMPLE R;
 		};
-		union 
-		{ 
+		union
+		{
 			SAMPLE v2;
 			SAMPLE G;
 		};
-		union 
+		union
 		{
 			SAMPLE v3;
 			SAMPLE B;
@@ -96,14 +96,14 @@ inline bool  operator!=(const Triplet<BYTE>& lhs, const Triplet<BYTE>& rhs)
 template<class sample>
 struct Quad : public Triplet<sample>
 {
-	Quad() : 
+	Quad() :
 		v4(0)
 		{}
 
 	Quad(Triplet<sample> triplet, LONG alpha) : Triplet<sample>(triplet), A((sample)alpha)
 		{}
 		
-	union 
+	union
 	{
 		sample v4;
 		sample A;
@@ -136,7 +136,7 @@ struct FromBigEndian<8>
 
 	inlinehint static UINT64 Read(BYTE* pbyte)
 	{
-		return  (UINT64(pbyte[0]) << 56) + (UINT64(pbyte[1]) << 48) + (UINT64(pbyte[2]) << 40) + (UINT64(pbyte[3]) << 32) + 
+		return  (UINT64(pbyte[0]) << 56) + (UINT64(pbyte[1]) << 48) + (UINT64(pbyte[2]) << 40) + (UINT64(pbyte[3]) << 32) +
 		  		(UINT64(pbyte[4]) << 24) + (UINT64(pbyte[5]) << 16) + (UINT64(pbyte[6]) <<  8) + (UINT64(pbyte[7]) << 0);
 	}
 };

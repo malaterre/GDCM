@@ -29,8 +29,8 @@ class DataSet;
  * URL: http://medical.nema.org/medical/dicom/2008/08_16pu.pdf
  *
  * DICOM Part 16 has two Context Groups CID 7202 and CID 7203 which contain a set of codes defining
- * reason for a source image reference (ie. reason code for referenced image sequence) and a coded 
- * description of the deriation applied to the new image data from the original. Both these context 
+ * reason for a source image reference (ie. reason code for referenced image sequence) and a coded
+ * description of the deriation applied to the new image data from the original. Both these context
  * groups are extensible.
  *
  * File Derivation is compulsary when creating a lossy derived image.

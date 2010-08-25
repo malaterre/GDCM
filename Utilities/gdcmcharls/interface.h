@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 
 #ifndef JLS_INTERFACE
@@ -67,7 +67,7 @@ struct JlsParamaters
 
 #if defined(_WIN32)
 #ifndef CHARLS_IMEXPORT
-#define CHARLS_IMEXPORT __declspec(dllimport) 
+#define CHARLS_IMEXPORT __declspec(dllimport)
 #pragma comment (lib,"charls.lib")
 #endif
 #else

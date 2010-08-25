@@ -81,7 +81,7 @@ public:
   /// this auto selection by switching UseTargetPixelType:true and
   /// also specifying the specifix Target Pixel Type
   void SetTargetPixelType( PixelFormat const & targetst );
-  
+
   /// Override default behavior of Rescale
   void SetUseTargetPixelType(bool b);
 
@@ -89,11 +89,11 @@ public:
   void SetPixelFormat(PixelFormat const & pf) { PF = pf; }
 
   /// Compute the Pixel Format of the output data
-  /// Used for direct transformation 
+  /// Used for direct transformation
   PixelFormat::ScalarType ComputeInterceptSlopePixelType();
 
   /// Set target interval for output data. A best match will be computed (if possible)
-  /// Used for inverse transformation 
+  /// Used for inverse transformation
   void SetMinMaxForPixelType(double min, double max)
     {
     ScalarRangeMin = min;
@@ -101,7 +101,7 @@ public:
     }
 
   /// Compute the Pixel Format of the output data
-  /// Used for inverse transformation 
+  /// Used for inverse transformation
   PixelFormat ComputePixelTypeFromMinMax();
 
 protected:

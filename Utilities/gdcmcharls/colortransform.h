@@ -1,13 +1,13 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 #ifndef CHARLS_COLORTRANSFORM
 #define CHARLS_COLORTRANSFORM
 
 //
 // This file defines simple classes that define (lossless) color transforms.
-// They are invoked in processline.h to convert between decoded values and the internal line buffers. 
-// Color transforms work best for computer generated images. 
+// They are invoked in processline.h to convert between decoded values and the internal line buffers.
+// Color transforms work best for computer generated images.
 //
 
 template<class sample>
@@ -128,7 +128,7 @@ struct TransformShifted
 
 	struct INVERSE
 	{
-		INVERSE(const TransformShifted& transform) : 
+		INVERSE(const TransformShifted& transform) :
 			_shift(transform._shift),
 			_inverseTransform(transform._colortransform)
 		{}

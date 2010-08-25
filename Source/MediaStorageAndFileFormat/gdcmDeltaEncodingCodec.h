@@ -20,7 +20,7 @@
 
 namespace gdcm
 {
-  
+
 /**
  * \brief DeltaEncodingCodec compression used by some private
  * vendor

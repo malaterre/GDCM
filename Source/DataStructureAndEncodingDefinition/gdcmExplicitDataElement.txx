@@ -103,7 +103,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
     // assert( TagField == Tag(0xfffe, 0xe000) );
     // -> For some reason VR is written as {44,0} well I guess this is a VR...
-    // Technically there is a second bug, dcmtk assume other things when reading this tag, 
+    // Technically there is a second bug, dcmtk assume other things when reading this tag,
     // so I need to change this tag too, if I ever want dcmtk to read this file. oh well
     // 0019004_Baseline_IMG1.dcm
     // -> VR is garbage also...
@@ -148,7 +148,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 #endif
     }
   //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
-  // 
+  //
   // I don't like the following 3 lines, what if 0000,0000 was indeed -wrongly- sent, we should be able to continue
   // chances is that 99% of times there is now way we can reach here, so safely throw an exception
   if( TagField == Tag(0x0000,0x0000) && ValueLengthField == 0 && VRField == VR::INVALID )
@@ -461,7 +461,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
         }
       }
 #endif
-    else 
+    else
       {
       bool failed;
       if( VRField & VR::VRASCII || VRField == VR::INVALID )

@@ -46,7 +46,7 @@ protected:
 //  ~ByteSwap() {}
 
 private:
-  
+
 };
 
 /**

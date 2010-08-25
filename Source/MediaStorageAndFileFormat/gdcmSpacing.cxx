@@ -75,7 +75,7 @@ double frap(double frac[2], double startx, double maxden = 10 )
     if(x==(double)ai) break;     // AF: division by zero
     x = 1/(x - (double) ai);
     if(x>(double)0x7FFFFFFF) break;  // AF: representation failure
-    } 
+    }
 
   /* now remaining x is between 0 and 1/ai */
   /* approx as either 0 or 1/m where m is max that will fit in maxden */

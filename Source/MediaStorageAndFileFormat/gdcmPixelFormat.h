@@ -162,7 +162,7 @@ public:
     }
   bool operator==(const PixelFormat &pf) const
     {
-    return 
+    return
       SamplesPerPixel     == pf.SamplesPerPixel &&
       BitsAllocated       == pf.BitsAllocated &&
       BitsStored          == pf.BitsStored &&
@@ -171,7 +171,7 @@ public:
     }
   bool operator!=(const PixelFormat &pf) const
     {
-    return 
+    return
       SamplesPerPixel     != pf.SamplesPerPixel ||
       BitsAllocated       != pf.BitsAllocated ||
       BitsStored          != pf.BitsStored ||

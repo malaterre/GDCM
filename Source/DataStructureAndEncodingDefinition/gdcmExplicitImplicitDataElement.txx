@@ -287,7 +287,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
     }
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it 
+  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it
   // as long as each of the Item lengths are correct
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
@@ -304,7 +304,7 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
 
     }
   //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
-  // 
+  //
   // I don't like the following 3 lines, what if 0000,0000 was indeed -wrongly- sent, we should be able to continue
   // chances is that 99% of times there is now way we can reach here, so safely throw an exception
   if( TagField == Tag(0x0000,0x0000) && ValueLengthField == 0 && VRField == VR::INVALID )

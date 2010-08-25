@@ -20,7 +20,7 @@
 namespace gdcm
 {
 /**
- * \brief Pack/Unpack 12 bits pixel into 16bits 
+ * \brief Pack/Unpack 12 bits pixel into 16bits
  * \li You can only pack an even number of 16bits, which means a multiple of 4 (expressed in bytes)
  * \li You can only unpack a multiple of 3 bytes
  *

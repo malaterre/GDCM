@@ -95,7 +95,7 @@ void Bitmap::SetDimensions(const unsigned int *dims)
 {
   assert( NumberOfDimensions );
   //assert( Dimensions.empty() );
-  Dimensions = std::vector<unsigned int>(dims, 
+  Dimensions = std::vector<unsigned int>(dims,
     dims+NumberOfDimensions);
 }
 
@@ -107,7 +107,7 @@ void Bitmap::SetDimension(unsigned int idx, unsigned int dim)
   Dimensions.resize( 3 /*NumberOfDimensions*/ );
   // Can dim be 0 ??
   // -> no !
-  //assert( dim ); // PhilipsLosslessRice.dcm 
+  //assert( dim ); // PhilipsLosslessRice.dcm
   Dimensions[idx] = dim;
   if( NumberOfDimensions == 2 )
     {
@@ -124,7 +124,7 @@ unsigned int Bitmap::GetPlanarConfiguration() const
     assert(0);
     // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm
     // User specify PlanarConfiguration whereas SamplesPerPixel != 3
-    gdcmWarningMacro( 
+    gdcmWarningMacro(
       "Can't set PlanarConfiguration if SamplesPerPixel is not 3" );
     // Let's assume it's this way...
     return 0;
@@ -136,7 +136,7 @@ void Bitmap::SetPlanarConfiguration(unsigned int pc)
 {
   // precondition
   assert( pc == 0 || pc == 1 );
-  // LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm   
+  // LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm
   if( pc ) assert( PF.GetSamplesPerPixel() == 3 ); // Please set PixelFormat first
   PlanarConfiguration = pc;
   // \postcondition
@@ -305,7 +305,7 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
       {
       // SIEMENS_GBS_III-16-ACR_NEMA_1.acr
       // This is also handling the famous DermaColorLossLess.dcm issue
-      // where RGB image is odd length (GetBufferLength()) but 
+      // where RGB image is odd length (GetBufferLength()) but
       // ByteValue::GetLength is rounded up to the next even byte length
       gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
         " is different from computed value " << len );
@@ -363,7 +363,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
     if( !r )
       {
       return false;
@@ -380,7 +380,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     //if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
     //  {
     //  // HACK
-    //  // YBRisGray.dcm 
+    //  // YBRisGray.dcm
     //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
     //  i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
     //  }
@@ -389,7 +389,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
-    //if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 
+    //if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
     //|| GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
     //  {
     //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
@@ -426,7 +426,7 @@ bool Bitmap::TryJPEGCodec2(std::ostream &os) const
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
     DataElement out;
     bool r = codec.Code(PixelData, out);
-    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
     if( !r )
       {
       return false;
@@ -586,7 +586,7 @@ bool Bitmap::ComputeLossyFlag()
     return true;
     }
   LossyFlag = false;
-  return false; 
+  return false;
 }
 
 bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const

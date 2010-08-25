@@ -81,14 +81,14 @@ inline bool process_file(const char *filename, unsigned char *digest)
   if( !filename || !digest ) return false;
 
   FILE *file = fopen(filename, "rb");
-  if(!file) 
+  if(!file)
     {
     return false;
     }
 
   size_t file_size = System::FileSize(filename);
   void *buffer = malloc(file_size);
-  if(!buffer) 
+  if(!buffer)
     {
     fclose(file);
     return false;
@@ -117,14 +117,14 @@ inline bool process_file(const char *filename, md5_byte_t *digest)
   if( !filename || !digest ) return false;
 
   FILE *file = fopen(filename, "rb");
-  if(!file) 
+  if(!file)
     {
     return false;
     }
 
   size_t file_size = System::FileSize(filename);
   void *buffer = malloc(file_size);
-  if(!buffer) 
+  if(!buffer)
     {
     fclose(file);
     return false;

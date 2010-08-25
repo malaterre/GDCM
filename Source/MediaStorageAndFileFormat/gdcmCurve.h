@@ -20,7 +20,7 @@
 
 namespace gdcm
 {
-  
+
 class CurveInternal;
 class ByteValue;
 class DataSet;
