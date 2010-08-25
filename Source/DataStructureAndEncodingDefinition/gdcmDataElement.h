@@ -268,4 +268,3 @@ inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 } // end namespace gdcm
 
 #endif //GDCMDATAELEMENT_H
-

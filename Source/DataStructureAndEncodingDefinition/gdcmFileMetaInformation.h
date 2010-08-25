@@ -147,4 +147,3 @@ inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val
 } // end namespace gdcm
 
 #endif //GDCMFILEMETAINFORMATION_H
-

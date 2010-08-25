@@ -51,4 +51,3 @@ std::istream &ReadWithLength(std::istream &is, VL & length)
 #include "gdcmExplicitImplicitDataElement.txx"
 
 #endif //GDCMEXPLICITIMPLICITDATAELEMENT_H
-

@@ -180,4 +180,3 @@ catch(...)
 }
 
 } // end namespace gdcm
-

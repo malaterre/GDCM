@@ -321,4 +321,3 @@ inline unsigned int VR::GetSize() const
 } // end namespace gdcm
 
 #endif //GDCMVR_H
-

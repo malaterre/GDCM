@@ -46,4 +46,3 @@ public:
 #include "gdcmCP246ExplicitDataElement.txx"
 
 #endif //GDCMCP246EXPLICITDATAELEMENT_H
-

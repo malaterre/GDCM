@@ -66,4 +66,3 @@ inline std::ostream& operator<<(std::ostream &os, const PDBElement &val)
 } // end namespace gdcm
 
 #endif //GDCMPDBELEMENT_H
-

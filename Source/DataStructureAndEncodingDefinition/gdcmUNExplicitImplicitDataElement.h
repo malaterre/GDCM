@@ -48,4 +48,3 @@ public:
 #include "gdcmUNExplicitImplicitDataElement.txx"
 
 #endif //GDCMUNEXPLICITIMPLICITDATAELEMENT_H
-

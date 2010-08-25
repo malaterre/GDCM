@@ -281,4 +281,3 @@ inline std::ostream& operator<<(std::ostream &_os, const Tag &_val)
 } // end namespace gdcm
 
 #endif //GDCMTAG_H
-

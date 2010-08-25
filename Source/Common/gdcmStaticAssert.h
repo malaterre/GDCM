@@ -51,4 +51,3 @@ namespace gdcm
  *
  */
 #endif // GDCMSTATICASSERT_H
-

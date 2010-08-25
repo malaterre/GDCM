@@ -79,4 +79,3 @@ inline std::ostream& operator<<(std::ostream &os, const File &val)
 } // end namespace gdcm
 
 #endif //GDCMFILE_H
-

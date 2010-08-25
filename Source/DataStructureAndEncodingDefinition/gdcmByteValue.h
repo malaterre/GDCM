@@ -254,4 +254,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMBYTEVALUE_H
-

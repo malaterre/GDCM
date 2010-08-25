@@ -126,4 +126,3 @@ inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,T
 } // end namespace gdcm
 
 #endif //GDCMSTRING_H
-

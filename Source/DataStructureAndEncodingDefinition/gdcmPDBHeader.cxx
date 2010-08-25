@@ -301,4 +301,3 @@ const PrivateTag & PDBHeader::GetPDBInfoTag()
 }
 
 } // end namespace gdcm
-

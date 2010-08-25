@@ -18,4 +18,3 @@
 #include "zipstreamimpl.h"
 
 #endif //GDCMDEFLATESTREAM_H
-

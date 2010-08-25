@@ -72,4 +72,3 @@ private:
 } // end namespace gdcm
 
 #endif
-

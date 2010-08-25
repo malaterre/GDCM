@@ -93,4 +93,3 @@ inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
 } // end namespace gdcm
 
 #endif //GDCMPRIVATETAG_H
-

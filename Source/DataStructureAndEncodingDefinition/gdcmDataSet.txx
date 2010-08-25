@@ -283,4 +283,3 @@ namespace gdcm
 } // end namespace gdcm
 
 #endif // GDCMDATASET_TXX
-

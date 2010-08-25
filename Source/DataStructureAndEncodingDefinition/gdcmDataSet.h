@@ -330,4 +330,3 @@ private:
 #include "gdcmDataSet.txx"
 
 #endif //GDCMDATASET_H
-

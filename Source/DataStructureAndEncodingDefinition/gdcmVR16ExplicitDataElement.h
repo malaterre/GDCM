@@ -47,4 +47,3 @@ public:
 #include "gdcmVR16ExplicitDataElement.txx"
 
 #endif //GDCMVR16EXPLICITDATAELEMENT_H
-

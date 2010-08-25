@@ -86,4 +86,3 @@ inline std::ostream& operator<<(std::ostream &os, const Preamble &val)
 } // end namespace gdcm
 
 #endif //GDCMPREAMBLE_H
-

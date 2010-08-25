@@ -173,4 +173,3 @@ const char *Filename::Join(const char *path, const char *filename)
 }
 
 } // end namespace gdcm
-

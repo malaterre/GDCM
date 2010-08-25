@@ -350,4 +350,3 @@ inline bool isGZip(std::istream &is)
 }
 
 #endif // _ZIPSTREAM_H_
-

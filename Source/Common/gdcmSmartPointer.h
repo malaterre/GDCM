@@ -114,4 +114,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMSMARTPOINTER_H
-

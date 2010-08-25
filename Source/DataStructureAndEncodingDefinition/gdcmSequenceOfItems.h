@@ -233,4 +233,3 @@ public:
 #include "gdcmSequenceOfItems.txx"
 
 #endif //GDCMSEQUENCEOFITEMS_H
-

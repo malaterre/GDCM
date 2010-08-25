@@ -31,4 +31,3 @@ std::ostream const &File::Write(std::ostream &os) const
 }
 
 } // end namespace gdcm
-

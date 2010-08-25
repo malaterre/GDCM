@@ -93,4 +93,3 @@ void Preamble::Print(std::ostream &os) const
 }
 
 } // end namespace gdcm
-

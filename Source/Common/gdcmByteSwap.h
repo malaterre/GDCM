@@ -59,4 +59,3 @@ private:
 #include "gdcmByteSwap.txx"
 
 #endif //GDCMBYTESWAP_H
-

@@ -257,4 +257,3 @@ bool TransferSyntax::IsEncapsulated() const
 }
 
 } // end namespace gdcm
-

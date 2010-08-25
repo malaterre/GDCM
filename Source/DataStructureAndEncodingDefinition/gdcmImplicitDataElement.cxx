@@ -61,4 +61,3 @@ VL ImplicitDataElement::GetLength() const
 }
 
 } // end namespace gdcm
-

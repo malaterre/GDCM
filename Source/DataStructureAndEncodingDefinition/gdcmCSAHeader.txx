@@ -33,4 +33,3 @@ namespace gdcm
 } // end namespace gdcm
 
 #endif // GDCMCSAHEADER_TXX
-

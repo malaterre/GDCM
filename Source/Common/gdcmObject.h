@@ -104,4 +104,3 @@ inline std::ostream& operator<<(std::ostream &os, const Object &obj)
 } // end namespace gdcm
 
 #endif //GDCMOBJECT_H
-

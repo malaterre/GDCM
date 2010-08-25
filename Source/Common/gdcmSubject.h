@@ -76,4 +76,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMSUBJECT_H
-

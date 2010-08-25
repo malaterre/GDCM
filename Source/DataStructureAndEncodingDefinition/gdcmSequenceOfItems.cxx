@@ -57,4 +57,3 @@ bool SequenceOfItems::FindDataElement(const Tag &t) const
 }
 
 } // end namespace gdcm
-

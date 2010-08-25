@@ -112,4 +112,3 @@ const char *Parser::GetErrorString(ErrorType const &err)
 }
 
 } // end namespace gdcm
-

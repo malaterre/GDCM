@@ -172,4 +172,3 @@ inline std::ostream& operator<<(std::ostream &os, const CSAElement &val)
 } // end namespace gdcm
 
 #endif //GDCMCSAELEMENT_H
-

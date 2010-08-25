@@ -105,4 +105,3 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
 }
 
 } // end namespace gdcm
-

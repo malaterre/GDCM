@@ -837,4 +837,3 @@ std::ostream &FileMetaInformation::Write(std::ostream &os) const
 }
 
 } // end namespace gdcm
-

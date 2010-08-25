@@ -43,4 +43,3 @@ public:
 #include "gdcmExplicitDataElement.txx"
 
 #endif //GDCMEXPLICITDATAELEMENT_H
-
