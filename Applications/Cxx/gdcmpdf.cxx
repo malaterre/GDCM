@@ -652,4 +652,3 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
 
   return 0;
 }
-

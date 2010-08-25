@@ -86,4 +86,3 @@ public class DecompressJPEGFile
     return 0;
     }
 }
-

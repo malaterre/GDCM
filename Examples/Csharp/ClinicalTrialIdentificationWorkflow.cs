@@ -239,4 +239,3 @@ public class ClinicalTrialIdentificationWorkflow
     return 0;
     }
 }
-

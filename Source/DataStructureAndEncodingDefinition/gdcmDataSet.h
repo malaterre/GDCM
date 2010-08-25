@@ -300,7 +300,7 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   val.Print(os);
   return os;
 }
-  	
+
 #if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,

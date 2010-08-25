@@ -441,7 +441,7 @@ void ReadDqt()
       CImage->QuantizationMatrices[Index][Zigzag(i-1)];
         }
       else
-        {    
+        {
           printf("marker.c:ReadDqt: Changing to 16.\n");
           CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
         }
@@ -462,7 +462,7 @@ void ReadDqt()
       CImage->QuantizationMatrices[Index][Zigzag(i-1)];
         }
       else
-        {    
+        {
           printf("marker.c:ReadDqt: Changing to 16.\n");
           CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
         }

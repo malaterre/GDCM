@@ -627,7 +627,7 @@ Cray:
 Should you be so fortunate as to be running JPEG on a Cray YMP, there is a
 compiler bug in old versions of Cray's Standard C (prior to 3.1).  If you
 still have an old compiler, you'll need to insert a line reading
-"#pragma novector" just before the loop  
+"#pragma novector" just before the loop
     for (i = 1; i <= (int) htbl->bits[l]; i++)
       huffsize[p++] = (char) l;
 in fix_huff_tbl (in V5beta1, line 204 of jchuff.c and line 176 of jdhuff.c).

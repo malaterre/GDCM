@@ -36,9 +36,9 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
       SET(pyenv "${pyenv};${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}")
     ELSE(pyenv)
       SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE})
-	    #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
-	    #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CONFIG_TYPE})
-	    #SET(pyenv ${LIBRARY_OUTPUT_PATH}/\${CMAKE_CONFIG_TYPE})
+      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
+      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CONFIG_TYPE})
+      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/\${CMAKE_CONFIG_TYPE})
     ENDIF(pyenv)
   ELSE(CMAKE_CONFIGURATION_TYPES)
     IF(pyenv)
@@ -57,11 +57,11 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
   MESSAGE(\"loc2: ${loc2}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   EXECUTE_PROCESS(
-  	COMMAND ${JAVA_RUNTIME} ${loc2} ${wo_semicolumn}
-  	WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
-  	RESULT_VARIABLE import_res
-  	OUTPUT_VARIABLE import_output
-  	ERROR_VARIABLE  import_output
+    COMMAND ${JAVA_RUNTIME} ${loc2} ${wo_semicolumn}
+    WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+    RESULT_VARIABLE import_res
+    OUTPUT_VARIABLE import_output
+    ERROR_VARIABLE  import_output
   )
 
   # Pass the output back to ctest

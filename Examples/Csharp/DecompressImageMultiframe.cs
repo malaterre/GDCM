@@ -130,4 +130,3 @@ public class DecompressImageMultiframe
     return 0;
     }
 }
-

@@ -82,7 +82,7 @@ endif()
 # headers or def files instead
 IF(NOT BUILD_SHARED_LIBS)
   SET_SOURCE_FILES_PROPERTIES(gdcmJPEG2000Codec.cxx
-                              PROPERTIES 
+                              PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
                               )
 ENDIF(NOT BUILD_SHARED_LIBS)

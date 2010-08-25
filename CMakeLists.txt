@@ -121,7 +121,7 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
 MARK_AS_ADVANCED(GDCM_DATA_ROOT)
 # You can define a path where you extra the famous D. Clunie spacing dataset
 # http://www.dclunie.com/images/pixelspacingtestimages.zip
-# for example: 
+# for example:
 # find $HOME/pixelspacingtestimages
 # $HOME/pixelspacingtestimages
 # $HOME/pixelspacingtestimages/DISCIMG
@@ -844,4 +844,3 @@ IF(GDCM_USE_VTK)
 ENDIF(GDCM_USE_VTK)
 SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 SUBDIRS(CMake/ExportConfiguration)
-

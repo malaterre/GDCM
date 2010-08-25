@@ -1,7 +1,7 @@
 SET(DEP)
 IF(GDCM_USE_ACTIVIZ)
   #FIND_PACKAGE(ACTIVIZ REQUIRED)
-SET(examples 
+SET(examples
 HelloActiviz2
 HelloActiviz3
 HelloActiviz4

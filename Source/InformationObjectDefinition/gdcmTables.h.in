@@ -12,6 +12,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-const char * const gdcmTables[] = { 
+const char * const gdcmTables[] = {
   @GDCM_XML_TABLES@
   0 };

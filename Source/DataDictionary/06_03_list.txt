@@ -1,5 +1,5 @@
 # Created using:
-# pdftotext -raw -nopgbrk 06_03pu.pdf 06_03.txt 
+# pdftotext -raw -nopgbrk 06_03pu.pdf 06_03.txt
 # grep -B 1 "Attribute Name Tag Type Attribute Description" 06_03.txt > log
 # cat log | grep -v "Attribute Name Tag Type Attribute Description" | grep -v "\-\-" > 06_03_list.txt
 

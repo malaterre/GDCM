@@ -23,11 +23,11 @@ static const char GDCM_PIXEL_SPACING_DATA_ROOT[] = "@GDCM_PIXEL_SPACING_DATA_ROO
 static const char GDCM_TEMP_DIRECTORY[] = "@GDCM_TEMP_DIRECTORY@";
 
 
-static const char * const gdcmDataFileNames[] = { 
+static const char * const gdcmDataFileNames[] = {
   @GDCM_DATA_FILENAMES@
 0 };
 
-static const char * const gdcmBlackListReaderDataFileNames[] = { 
+static const char * const gdcmBlackListReaderDataFileNames[] = {
   @GDCM_BLACK_LIST_READER_DATA_FILENAMES@
 0 };
 

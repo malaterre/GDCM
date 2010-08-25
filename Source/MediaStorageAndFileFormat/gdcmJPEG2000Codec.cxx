@@ -935,7 +935,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     /*if (*indexfilename)					// If need to extract codestream information
       bSuccess = opj_encode_with_info(cinfo, cio, image, &cstr_info);
       else*/
-    bSuccess = opj_start_compress(cinfo,image,cio);				
+    bSuccess = opj_start_compress(cinfo,image,cio);
     bSuccess = bSuccess && opj_encode(cinfo, cio);
     bSuccess = bSuccess && opj_end_compress(cinfo, cio);
 
