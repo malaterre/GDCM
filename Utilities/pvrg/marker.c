@@ -349,10 +349,10 @@ void WriteDht()
 
 
 /*BFUNC
-  
+
   ReadSof() reads a start of frame marker from the stream. We assume that
   the first two bytes (marker prefix) have already been stripped.
-  
+
   EFUNC*/
 
 void ReadSof(Type)
@@ -360,7 +360,7 @@ void ReadSof(Type)
 {
   BEGIN("ReadSof")
   int i,j,Length,Start,End,rb;
-  
+
   Start = srtell();
   Length = bgetw();
   if (Loud > MUTE)
@@ -369,7 +369,7 @@ void ReadSof(Type)
   CFrame->DataPrecision = bgetc();
   CFrame->GlobalHeight = bgetw();
   CFrame->GlobalWidth = bgetw();
-  
+
   for(i=0;i<MAXIMUM_COMPONENTS;i++)
     CFrame->hf[i]=CFrame->vf[i]=CFrame->tq[i]=0;
   CFrame->GlobalNumberComponents = bgetc();
@@ -397,17 +397,17 @@ void ReadSof(Type)
 }
 
 /*BFUNC
-  
+
   ReadDqt() reads a quantization table marker from the stream.
   The first two bytes have been stripped off.
-  
+
   EFUNC*/
 
 void ReadDqt()
 {
   BEGIN("ReadDqt")
   int i,Length,Qget,Index,Precision,Start,End;
-  
+
   Start = srtell();
   Length = bgetw();
   if (Loud > MUTE)
@@ -441,7 +441,7 @@ void ReadDqt()
 			CImage->QuantizationMatrices[Index][Zigzag(i-1)];
 		    }
 		  else
-		    {		    
+		    {		
 		      printf("marker.c:ReadDqt: Changing to 16.\n");
 		      CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
 		    }
@@ -462,7 +462,7 @@ void ReadDqt()
 			CImage->QuantizationMatrices[Index][Zigzag(i-1)];
 		    }
 		  else
-		    {		    
+		    {		
 		      printf("marker.c:ReadDqt: Changing to 16.\n");
 		      CImage->QuantizationMatrices[Index][Zigzag(i)]=16;
 		    }
@@ -486,17 +486,17 @@ void ReadDqt()
 
 
 /*BFUNC
-  
+
   ReadDht() reads a Huffman marker from the stream. We assume that the
   first two bytes have been stripped off.
-  
+
   EFUNC*/
 
 void ReadDht()
 {
   BEGIN("ReadDht")
   int Index,Where,Length,Start,End;
-  
+
   Start = srtell();
   Length = bgetw();
   if (Loud > MUTE)
@@ -531,17 +531,17 @@ void ReadDht()
 }
 
 /*BFUNC
-  
+
   ReadDri() reads a resync interval marker from the stream. We assume
   the first two bytes are stripped off.
-  
+
   EFUNC*/
 
 void ReadDri()
 {
   BEGIN("ReadDri")
   int Length;
-  
+
   if ((Length=bgetw())!=4)            /* Constant length of 4 */
     {
       WHEREAMI();
@@ -551,17 +551,17 @@ void ReadDri()
 }
 
 /*BFUNC
-  
+
   ReadDnl() reads a number of lines marker from the stream. The first
   two bytes should be stripped off.
-  
+
   EFUNC*/
 
 void ReadDnl()
 {
   BEGIN("ReadDnl")
   int Length;
-  
+
   if ((Length=bgetw())!=4)             /* Constant length of 4 */
     printf("marker.c:ReadDnl: Bad length %d, should be 4.\n",Length);
   CFrame->GlobalHeight = bgetw();
@@ -620,7 +620,7 @@ void ReadSos()
 {
   BEGIN("ReadSos")
   int i,Length,Start,End,rb;
-  
+
   Start = srtell();
   Length = bgetw();
   if (Loud > MUTE)
@@ -641,7 +641,7 @@ void ReadSos()
   rb = bgetc();
   CScan->SAH = hinyb(rb);
   CScan->SAL = lonyb(rb);
-  
+
   End = srtell();
   if ((End-Start) != (Length<<3))
     {
@@ -747,7 +747,7 @@ void MakeConsistentFrameSize()
 	    CFrame->Width[i] =
 	      (((CFrame->GlobalWidth*CFrame->hf[i])-1)/Maxh)+1;
 	  if (!CFrame->Height[i])
-	    CFrame->Height[i] = 
+	    CFrame->Height[i] =
 	      (((CFrame->GlobalHeight*CFrame->vf[i])-1)/Maxv)+1;
 	}
     }

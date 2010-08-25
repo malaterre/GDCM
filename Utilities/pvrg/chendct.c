@@ -104,7 +104,7 @@ void ChenDct(x,y)
   register int a[4];
   register int b[4];
   register int c[4];
-#else  
+#else
   register int a0,a1,a2,a3;
   register int b0,b1,b2,b3;
   register int c0,c1,c2,c3;
@@ -131,7 +131,7 @@ void ChenDct(x,y)
       bptr -= 8;
       a3 = LS((*aptr+*bptr),2);
       c0 = LS((*aptr-*bptr),2);
-      
+
       b0 = a0+a3;
       b1 = a1+a2;
       b2 = a1-a2;
@@ -158,7 +158,7 @@ void ChenDct(x,y)
       aptr[40] = MSCALE((c3d16*a1)+(c5d16*a2));
       aptr[56] = MSCALE((c7d16*a3)-(c1d16*a0));
     }
-  
+
   for(i=0;i<8;i++)
     {       /* Loop over rows */
       aptr = y+LS(i,3);
@@ -179,7 +179,7 @@ void ChenDct(x,y)
       b3 = a0-a3;
 
       aptr = y+LS(i,3);
-      
+
       *aptr = MSCALE(c1d4*(b0+b1));
       aptr[4] = MSCALE(c1d4*(b0-b1));
       aptr[2] = MSCALE((c3d8*b2)+(c1d8*b3));
@@ -224,7 +224,7 @@ void ChenIDct(x,y)
   register int a[4];
   register int b[4];
   register int c[4];
-#else  
+#else
   register int a0,a1,a2,a3;
   register int b0,b1,b2,b3;
   register int c0,c1,c2,c3;
@@ -250,7 +250,7 @@ void ChenIDct(x,y)
       b3 = LS(*aptr,2);
       aptr += 8;
       a3 = LS(*aptr,2);
-      
+
       /* Split into even mode  b0 = x0  b1 = x4  b2 = x2  b3 = x6.
 	 And the odd terms a0 = x1 a1 = x3 a2 = x5 a3 = x7.
 	 */
@@ -284,7 +284,7 @@ void ChenIDct(x,y)
       c1 = MSCALE(c1d4*(a2-a1));
       c2 = MSCALE(c1d4*(a2+a1));
       c3 = a3;
-      
+
       aptr = y+i;
       *aptr = b0+c3;
       aptr += 8;
@@ -303,7 +303,7 @@ void ChenIDct(x,y)
       *aptr = b0-c3;
     }
 
-  /* Loop over rows */  
+  /* Loop over rows */
 
   for(i=0;i<8;i++)
     {
@@ -316,7 +316,7 @@ void ChenIDct(x,y)
       a2 = *(aptr++);
       b3 = *(aptr++);
       a3 = *(aptr);
-      
+
       /*
 	Split into even mode  b0 = x0  b1 = x4  b2 = x2  b3 = x6.
 	And the odd terms a0 = x1 a1 = x3 a2 = x5 a3 = x7.
@@ -353,7 +353,7 @@ void ChenIDct(x,y)
       c1 = MSCALE(c1d4*(a2-a1));
       c2 = MSCALE(c1d4*(a2+a1));
       c3 = a3;
-      
+
       aptr = y+LS(i,3);
       *(aptr++) = b0+c3;
       *(aptr++) = b1+c2;
@@ -364,7 +364,7 @@ void ChenIDct(x,y)
       *(aptr++) = b1-c2;
       *(aptr) = b0-c3;
     }
-  
+
   /*
     Retrieve correct accuracy. We have additional factor
     of 16 that must be removed.

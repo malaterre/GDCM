@@ -334,7 +334,7 @@ void FrequencyDC(coef)
     }
   else
     {
-      cofac = cofac >> 8; 
+      cofac = cofac >> 8;
       s = csize[cofac] + 8;
     }
 #ifdef CODEC_DEBUG
@@ -390,7 +390,7 @@ void ResetCodec()
 {
   BEGIN("ResetCodec")
   int i;
-  
+
   for(i=0;i<CScan->NumberComponents;i++)
     {
       *CScan->LastDC[i] = 0;                /* Sets all DC predictions to 0 */
@@ -407,7 +407,7 @@ void ClearFrameFrequency()
 {
   int i;
   int *iptr;
-  
+
   for(i=0;i<CScan->NumberComponents;i++)
     {
       *CScan->LastDC[i] = 0;
@@ -438,7 +438,7 @@ void AddFrequency(ptr1,ptr2)
 {
   BEGIN("AddFrequency")
   int i;
-  
+
   for(i=0;i<256;i++)
     {
       *(ptr1) = *(ptr1) + *(ptr2);

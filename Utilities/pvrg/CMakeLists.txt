@@ -15,7 +15,7 @@ SET(
 
 
 # might not be portable, so simply rename the function in the code itself...
-#SET_SOURCE_FILES_PROPERTIES(jpeg.c 
+#SET_SOURCE_FILES_PROPERTIES(jpeg.c
 #  PROPERTIES
 #  COMPILE_FLAGS -Dmain=pvrgmain
 #)
@@ -35,9 +35,9 @@ ADD_EXECUTABLE(gdcmjpeg ${PVRG_SRCS})
 # Should you wish to modify the interpreter
 # modify this portion here.
 #
-# Make sure that you move the first comment from the start to 
+# Make sure that you move the first comment from the start to
 # within the braces %{ /* */ %} in lexer.l,
-# otherwise it will give you a error (definitions too long). 
+# otherwise it will give you a error (definitions too long).
 #
 #  Caution: Sometimes -ll is required.
 #

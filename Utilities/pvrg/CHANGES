@@ -19,7 +19,7 @@ violate logical MDU blocks will flag warnings.  The frame rounding has
 been changed from rounding down to rounding up. Rounding up preserves
 MDU properties and is consistent with the CD specs.  (We do not round
 down anymore).  The previous Framewidth and Frameheight does not work
-with values that cross MDU boundaries; It now works arbitrarily. 
+with values that cross MDU boundaries; It now works arbitrarily.
 
   1) In decoding, if any space is created, the space is set to "zero" bytes
   (depending on the implementation of disk file "holes").

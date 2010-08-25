@@ -167,7 +167,7 @@ void initstream()
       Stack_Stream_srin[i]=NULL;
     }
 }
- 
+
 /*BFUNC
 
 pushstream() pushes the currently active stream into its predefined
@@ -255,7 +255,7 @@ int brseek(offset,ptr)
 
 /*BFUNC
 
-bpushc() is used to unget a character value from the current stream. 
+bpushc() is used to unget a character value from the current stream.
 
 EFUNC*/
 
@@ -275,7 +275,7 @@ int bgetc()
 
 /*BFUNC
 
-bgetw() gets a msb word from the stream. 
+bgetw() gets a msb word from the stream.
 
 EFUNC*/
 
@@ -622,7 +622,7 @@ void meputv(n,b)
 
 /*BFUNC
 
-megetv() gets n bits from the read stream and returns it. 
+megetv() gets n bits from the read stream and returns it.
 
 EFUNC*/
 
@@ -896,9 +896,9 @@ void Resync()
   /*
     In general, we assume that we must add black space
     until resynchronization. This is consistent under both
-    byte loss, byte gain, and byte corruption. 
+    byte loss, byte gain, and byte corruption.
     We assume corruption does not create new markers with
-    an RSC value--if so, we are probably dead, anyways.    
+    an RSC value--if so, we are probably dead, anyways.
     */
   CleartoResync=1;
   ResyncCount = (LastKnownResync+1)&0x07;

@@ -73,12 +73,12 @@ extern void JpegLosslessEncodeScan();
 
 /* These variables occur in the stream definition. */
 
-extern int CleartoResync;  
+extern int CleartoResync;
 extern int LastKnownResync;
-extern int ResyncEnable;   
-extern int ResyncCount;    
-extern int EndofFile;      
-extern int EndofImage;     
+extern int ResyncEnable;
+extern int ResyncCount;
+extern int EndofFile;
+extern int EndofImage;
 
 /* Define the parameter passing structures. */
 IMAGE *CImage=NULL;           /* Current Image variables structure */
@@ -111,7 +111,7 @@ vFunc *UseDct = ChenDct;       /* This is the DCT algorithm to use */
 vFunc *UseIDct = ChenIDct;     /* This is the inverse DCT algorithm to use */
 
 /* Add some macros to ease readability. */
-#define DefaultDct (*UseDct)    
+#define DefaultDct (*UseDct)
 #define DefaultIDct (*UseIDct)
 
 /*START*/
@@ -162,12 +162,12 @@ int main(argc,argv)
 	      break;
  	    case 'd':                      /* -d Decode */
 	      CImage->JpegMode = J_DECODER;
- 	      break; 
+ 	      break;
  	    case 'k':                      /* -k Lossless mode */
 	      CImage->JpegMode = J_LOSSLESS;
 	      CFrame->Type=3;
 	      LosslessPredictorType = atoi(argv[++i]);
- 	      break; 
+ 	      break;
 	    case 'f':
  	      switch(*(++argv[i]))
  		{
@@ -187,7 +187,7 @@ int main(argc,argv)
 		  break;
 		}
 	      break;
-	    case 'i':    
+	    case 'i':
 	      switch(*(++argv[i]))
 		{
 		case 'w':                /* -iw Image width */
@@ -361,7 +361,7 @@ static void JpegEncodeFrame()
       else if (CFrame->GlobalNumberComponents-CurrentComponent <=
 	       ScanComponentThreshold)
 	{                       /* If less/equal to (SCT) components do it */
-	  CScan->NumberComponents =  
+	  CScan->NumberComponents =
 	    CFrame->GlobalNumberComponents-CurrentComponent;
 	  for(i=0;CurrentComponent<CFrame->GlobalNumberComponents;
 	      CurrentComponent++,i++)
@@ -371,7 +371,7 @@ static void JpegEncodeFrame()
 	}
       else
 	{                       /* Break into (SCT) componets */
-	  CScan->NumberComponents = ScanComponentThreshold; 
+	  CScan->NumberComponents = ScanComponentThreshold;
 	  for(i=0;i<ScanComponentThreshold;CurrentComponent++,i++)
 	    {
 	      CScan->ci[i]=CFrame->cn[CurrentComponent];
@@ -518,7 +518,7 @@ void JpegDefaultHuffmanScan()
     }
 }
 
-/*BFUNC 
+/*BFUNC
 
 JpegFrequencyScan() assembles the frequency statistics for the given
 scan, making one AC Freq, DC Freq statistic per component specified.
@@ -535,7 +535,7 @@ void JpegFrequencyScan()
 
   InstallIob(0);                 /* Zero out for fast single-component */
   InstallPrediction(0);          /* operation. */
-  InstallFrequency(0); 
+  InstallFrequency(0);
   CheckScan();
   NumberMDU = CScan->MDUWide*CScan->MDUHigh;
   ClearFrameFrequency();
@@ -599,7 +599,7 @@ void JpegCustomScan(flags)
 {
   BEGIN("JpegCustomScan")
   int i,Sumbits;
-  
+
   if ((GetFlag(CImage->JpegMode,J_FULLHUFFMAN)) ||
       (CScan->NumberComponents < 3))
     {
@@ -726,7 +726,7 @@ void JpegEncodeScan()
   int i,j,h,v,dohf,dovf;
   int input[64],output[64];
   int DCTBound,DCTShift;
-  
+
   InstallIob(0);
   CheckScan();
   NumberMDU = CScan->MDUWide*CScan->MDUHigh;
@@ -891,7 +891,7 @@ void JpegLosslessFrequencyScan()
 		  UseType=1;                     /* Reset codec */
 		  for(j=0;j<CScan->NumberComponents;j++)
 		    {
-		      InstallIob(j); 
+		      InstallIob(j);
 		      LineResetBuffers();
 		    }
 		}
@@ -910,7 +910,7 @@ void JpegLosslessFrequencyScan()
 		{
 		  InstallIob(j);                    /* Install component j */
 		  ReadLine(NumberElem,              /* Read in some elements*/
-			   CScan->LosslessBuffer[j]); 
+			   CScan->LosslessBuffer[j]);
 		}
 	    }
 	  if (CScan->NumberComponents==1)
@@ -955,7 +955,7 @@ void JpegLosslessFrequencyScan()
 	      if (Loud > NOISY)
 		printf("IN=%d  PX=%d  FRE: %d\n",
 		       input[width+1],px,value);
-	      LosslessFrequencyDC(value); 
+	      LosslessFrequencyDC(value);
 	    }
 	  else
 	    {
@@ -972,7 +972,7 @@ void JpegLosslessFrequencyScan()
 		  horfreq=CFrame->hf[CScan->ci[j]];
 		  width=horfreq*NumberElem+1;
 		  input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
-		  for(v=1;v<=height;v++) 
+		  for(v=1;v<=height;v++)
 		    {
 		      for(h=1;h<=horfreq;h++)
 			{
@@ -1016,7 +1016,7 @@ void JpegLosslessFrequencyScan()
 			  if (Loud > NOISY)
 			    printf("IN=%d  PX=%d  FRE: %d\n",
 				   input[(v*(width))+h],px,value);
-			  LosslessFrequencyDC(value); 
+			  LosslessFrequencyDC(value);
 			}
 		    }
 		}
@@ -1051,7 +1051,7 @@ void JpegLosslessEncodeScan()
   int MaxElem,CurrentElem,NumberElem;
   int StartofLine=1,UseType=1;              /* Start with type 1 coding */
   int *input;
-  
+
   CheckScan();
   for(j=0;j<CScan->NumberComponents;j++)    /* Important to rewind to start */
     {                                       /* for lossless coding... */
@@ -1122,7 +1122,7 @@ void JpegLosslessEncodeScan()
 		  UseType=1;                     /* Reset codec */
 		  for(j=0;j<CScan->NumberComponents;j++)
 		    {
-		      InstallIob(j); 
+		      InstallIob(j);
 		      LineResetBuffers();
 		    }
 		}
@@ -1141,7 +1141,7 @@ void JpegLosslessEncodeScan()
 		{
 		  InstallIob(j);                    /* Install component j */
 		  ReadLine(NumberElem,              /* Read in some elements*/
-			   CScan->LosslessBuffer[j]); 
+			   CScan->LosslessBuffer[j]);
 		}
 	    }
 	  if (CScan->NumberComponents==1)
@@ -1186,7 +1186,7 @@ void JpegLosslessEncodeScan()
 	      if (Loud > MUTE)
 		printf("IN=%d  PX=%d  FRE: %d\n",
 		       input[width+1],px,value);
-	      LosslessEncodeDC(value); 
+	      LosslessEncodeDC(value);
 	    }
 	  else
 	    {
@@ -1203,7 +1203,7 @@ void JpegLosslessEncodeScan()
 		  width=horfreq*NumberElem+1;
 		  input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
 		  UseDCHuffman(CScan->td[j]);
-		  for(v=1;v<=height;v++) 
+		  for(v=1;v<=height;v++)
 		    {
 		      for(h=1;h<=horfreq;h++)
 			{
@@ -1288,7 +1288,7 @@ static void JpegDecodeFrame()
 {
   BEGIN("JpegDecodeFrame")
   int i;
-  
+
   sropen(CImage->StreamFileName,0);   /* Zero index */
   if (ScreenAllMarker() < 0)          /* Do all markers pending */
     {
@@ -1421,13 +1421,13 @@ static void JpegLosslessDecodeScan()
 	ResyncEnable = 1;
       if (CurrentMDU && (CFrame->ResyncInterval))
 	{                                    /* If resync interval */
-	  if ((CurrentMDU % CFrame->ResyncInterval)==0) 
+	  if ((CurrentMDU % CFrame->ResyncInterval)==0)
 	    {
 	      if (!CleartoResync)               /* If not in error recovery*/
 		ReadResync();                          /* read resync. */
 	      if (CleartoResync)
 		{
-		  /* 
+		  /*
 		    Clear until we have LastKnownResync:
 		    the offset is by 1 because we add the resync i%8
 		    _after_ we code the ith resync interval...
@@ -1459,7 +1459,7 @@ static void JpegLosslessDecodeScan()
 	    {
 	      InstallIob(j);                    /* Install component j */
 	      ReadPreambleLine(NumberElem,     /* Read in some elements*/
-			       CScan->LosslessBuffer[j]); 
+			       CScan->LosslessBuffer[j]);
 	    }
 	}
       if (CScan->NumberComponents==1)
@@ -1586,7 +1586,7 @@ static void JpegLosslessDecodeScan()
 	    {
 	      InstallIob(j);                    /* Install component j */
 	      WriteLine(NumberElem,             /* Write out elements*/
-			CScan->LosslessBuffer[j]); 
+			CScan->LosslessBuffer[j]);
 	    }
 	}
       CurrentMDU++;
@@ -1630,7 +1630,7 @@ static void JpegDecodeScan()
 	}
       if (CurrentMDU && (CFrame->ResyncInterval))
 	{                                    /* If resync interval */
-	  if ((CurrentMDU % CFrame->ResyncInterval)==0) 
+	  if ((CurrentMDU % CFrame->ResyncInterval)==0)
 	    {
 	      if (!CleartoResync)               /* If not in error recovery*/
 		{                               /* read resync. */
@@ -1638,7 +1638,7 @@ static void JpegDecodeScan()
 		}
 	      if (CleartoResync)
 		{
-		  /* 
+		  /*
 		    Clear until we have LastKnownResync:
 		    the offset is by 1 because we add the resync i%8
 		    _after_ we code the ith resync interval...
@@ -1894,7 +1894,7 @@ void MakeFrame()
   for(i=0;i<MAXIMUM_COMPONENTS;i++)
     {
       CFrame->cn[i] = 0;           /* Clean out all slots */
-      CFrame->hf[i] = 0; 
+      CFrame->hf[i] = 0;
       CFrame->vf[i] = 0;
       CFrame->tq[i] = 0;
       CFrame->Height[i] = 0;
@@ -1995,14 +1995,14 @@ void MakeConsistentFileNames()
     {
       if (CImage->ImageSequence)  /* If in sequence, must add sequence */
 	{                         /* identifier */
-	  CFrame->ComponentFileName[CScan->ci[i]] = 
+	  CFrame->ComponentFileName[CScan->ci[i]] =
 	    (char *) calloc(strlen(CImage->StreamFileName)+16,sizeof(char));
 	  sprintf(CFrame->ComponentFileName[CScan->ci[i]],"%s.%d.%d",
 		  CImage->StreamFileName,CImage->ImageSequence,CScan->ci[i]);
 	}
       else if (CFrame->ComponentFileName[CScan->ci[i]] == NULL)
 	{                        /* Otherwise if none specified, create. */
-	  CFrame->ComponentFileName[CScan->ci[i]] = 
+	  CFrame->ComponentFileName[CScan->ci[i]] =
 	    (char *) calloc(strlen(CImage->StreamFileName)+8,sizeof(char));
 	  sprintf(CFrame->ComponentFileName[CScan->ci[i]],"%s.%d",
 		  CImage->StreamFileName,CScan->ci[i]);
@@ -2165,7 +2165,7 @@ void ConfirmFileSize()
 	    }                                 /* Dimensions must conform */
 	  if (FileSize !=
 	      CFrame->Width[CScan->ci[i]] * CFrame->Height[CScan->ci[i]]*
-	      ((CFrame->DataPrecision>8)?2:1)) 
+	      ((CFrame->DataPrecision>8)?2:1))
 	    {
 	      WHEREAMI();
 	      printf("File size conflict in %s, est: %d  act: %d \n",

@@ -31,7 +31,7 @@ ELSE(WIN32)
     # FindGTK.cmake update
     # http://www.cmake.org/Bug/bug.php?op=show&bugid=3582
     #FIND_PACKAGE(GTK REQUIRED)
-    #INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} 
+    #INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR}
     #  #/usr/lib/wx/include/gtk-2.4/
     #)
     FIND_PACKAGE(PkgConfig)

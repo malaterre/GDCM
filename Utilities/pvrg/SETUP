@@ -33,7 +33,7 @@ extract them, type
 jpeg -d -s nonint.jpg
 jpeg -d -s blkint.jpg
 
-The resulting files should be in 
+The resulting files should be in
 
 nonint.jpg.1 nonint.jpg.2 nonint.jpg.3
 blkint.jpg.1 blkint.jpg.2 blkint.jpg.3

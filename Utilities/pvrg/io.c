@@ -409,7 +409,7 @@ static void ReadXBuffer(len,storage,buffer)
 	{
 	  rin = (((int)*(buffer->bptr++))<<8);
 	  rin |= *(buffer->bptr++);
-	  *(storage++) = rin >> PointTransform; 
+	  *(storage++) = rin >> PointTransform;
 	}
       break;
     case 3:
@@ -447,7 +447,7 @@ static void ReadXBuffer(len,storage,buffer)
 /*BFUNC
 
 ReadResizeBuffer() reads len bytes from the stream and puts it
-into the buffer. 
+into the buffer.
 
 EFUNC*/
 
@@ -541,7 +541,7 @@ void ReadBlock(store)
   int i,voffs;
 
   voffs = (Iob->vpos % Iob->ver)*BlockHeight;  /* Find current v offset*/
-#ifdef IO_DEBUG                                
+#ifdef IO_DEBUG
   for(i=0;i<BlockHeight;i++)
     {
       printf("%d Iob %x\n",i,Iob->blist[i]->Iob);
@@ -649,7 +649,7 @@ static void BlockMoveTo()
     {
       if (Iob->height)
 	{
-	  vertical = 
+	  vertical =
 	    ((vertical < Iob->height) ?
 	     vertical : Iob->height-1);
 	}
@@ -1047,7 +1047,7 @@ void ReadPreambleLine(nelem,store)
 
 WriteLine() is used to write a particular line out to the IOB.  The
 line must be of the proper form in the array for this function to
-work. 
+work.
 
 In total, there should be (HORIZONTALFREQUENCY+1) * nelem
 (VERTICALFREQUENCY+1) elements in the *store array.  This forms a
@@ -1147,10 +1147,10 @@ static void LineMoveTo()
 	  continue;
 	}
       Iob->blist[i]->disable=0;
-      Iob->blist[i]->data_linelast=Iob->linelastdefault; 
+      Iob->blist[i]->data_linelast=Iob->linelastdefault;
       if (Iob->height)
 	{
-	  vertical = 
+	  vertical =
 	    ((vertical < Iob->height) ?
 	     vertical : Iob->height-1);
 	}
