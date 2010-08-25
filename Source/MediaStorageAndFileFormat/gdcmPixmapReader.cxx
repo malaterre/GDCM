@@ -1241,18 +1241,18 @@ bool PixmapReader::ReadACRNEMAImage()
   // 2. What are the col & rows:
   // D 0028|0011 [US] [Columns] [512]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     PixelData->SetDimension(0, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
     }
 
   // D 0028|0010 [US] [Rows] [512]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
     Attribute<0x0028,0x0010> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     PixelData->SetDimension(1, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     }
@@ -1295,36 +1295,36 @@ bool PixmapReader::ReadACRNEMAImage()
   PixelFormat pf;
   // D 0028|0100 [US] [Bits Allocated] [16]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
     Attribute<0x0028,0x0100> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetBitsAllocated( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     }
 
   // D 0028|0101 [US] [Bits Stored] [12]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
     Attribute<0x0028,0x0101> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetBitsStored( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     }
 
   // D 0028|0102 [US] [High Bit] [11]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
     Attribute<0x0028,0x0102> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetHighBit( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     }
 
   // D 0028|0103 [US] [Pixel Representation] [0]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
     Attribute<0x0028,0x0103> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetPixelRepresentation( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
     }
@@ -1358,9 +1358,9 @@ bool PixmapReader::ReadACRNEMAImage()
   const Tag planarconfiguration(0x0028, 0x0006);
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
-    const DataElement& de = ds.GetDataElement( planarconfiguration );
+    //const DataElement& de = ds.GetDataElement( planarconfiguration );
     Attribute<0x0028,0x0006> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
 
     //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
     unsigned int pc = at.GetValue();
