@@ -24,12 +24,12 @@
       <xsd:element name="qualification" type="xsd:string"/>
      </xsd:sequence>
     </xsd:complexType>
-   </xsd:element> 
+   </xsd:element>
   </xsd:sequence>
 <!-- definition of attributes -->
   <xsd:attribute name="isbn" type="xsd:string"/>
  </xsd:complexType>
-</xsd:element> 
+</xsd:element>
 
 </xsd:schema>
 -->
@@ -691,4 +691,3 @@ character set specified by value 1 of the Attribute is invoked.
   </xsd:simpleType>`
 
 </xsd:schema>
-
