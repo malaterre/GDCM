@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ############################################################################
 #
 #  Program: GDCM (Grassroots DICOM). A DICOM library

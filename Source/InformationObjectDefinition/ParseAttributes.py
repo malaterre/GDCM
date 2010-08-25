@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 # vim: set fileencoding=iso-8859-1
 
 """

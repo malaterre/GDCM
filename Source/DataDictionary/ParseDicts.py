@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 """
 WARNING: This script has no meaning today (post 2008).
 Since the standard is now available as .doc. If we assume
