@@ -39,16 +39,16 @@
 
 #define JPIP_JPIP 0x6a706970
 
-#define JP2_JP   0x6a502020		/**< JPEG 2000 signature box */
-#define JP2_FTYP 0x66747970		/**< File type box */
-#define JP2_JP2H 0x6a703268		/**< JP2 header box */
-#define JP2_IHDR 0x69686472		/**< Image header box */
-#define JP2_COLR 0x636f6c72		/**< Colour specification box */
-#define JP2_JP2C 0x6a703263		/**< Contiguous codestream box */
-#define JP2_URL  0x75726c20		/**< URL box */
-#define JP2_DBTL 0x6474626c		/**< ??? */
-#define JP2_BPCC 0x62706363		/**< Bits per component box */
-#define JP2_JP2  0x6a703220		/**< File type fields */
+#define JP2_JP   0x6a502020    /**< JPEG 2000 signature box */
+#define JP2_FTYP 0x66747970    /**< File type box */
+#define JP2_JP2H 0x6a703268    /**< JP2 header box */
+#define JP2_IHDR 0x69686472    /**< Image header box */
+#define JP2_COLR 0x636f6c72    /**< Colour specification box */
+#define JP2_JP2C 0x6a703263    /**< Contiguous codestream box */
+#define JP2_URL  0x75726c20    /**< URL box */
+#define JP2_DBTL 0x6474626c    /**< ??? */
+#define JP2_BPCC 0x62706363    /**< Bits per component box */
+#define JP2_JP2  0x6a703220    /**< File type fields */
 
 /* ----------------------------------------------------------------------- */
 
@@ -56,8 +56,8 @@
 JP2 component
 */
 typedef struct opj_jp2_comps {
-  int depth;		
-  int sgnd;		
+  int depth;
+  int sgnd;
   int bpcc;
 } opj_jp2_comps_t;
 
@@ -65,28 +65,28 @@ typedef struct opj_jp2_comps {
 JPEG-2000 file format reader/writer
 */
 typedef struct opj_jp2 {
-	/** codec context */
-	opj_common_ptr cinfo;
-	/** handle to the J2K codec  */
-	opj_j2k_t *j2k;
-	unsigned int w;
-	unsigned int h;
-	unsigned int numcomps;
-	unsigned int bpc;
-	unsigned int C;
-	unsigned int UnkC;
-	unsigned int IPR;
-	unsigned int meth;
-	unsigned int approx;
-	unsigned int enumcs;
-	unsigned int precedence;
-	unsigned int brand;
-	unsigned int minversion;
-	unsigned int numcl;
-	unsigned int *cl;
-	opj_jp2_comps_t *comps;
-	unsigned int j2k_codestream_offset;
-	unsigned int j2k_codestream_length;
+  /** codec context */
+  opj_common_ptr cinfo;
+  /** handle to the J2K codec  */
+  opj_j2k_t *j2k;
+  unsigned int w;
+  unsigned int h;
+  unsigned int numcomps;
+  unsigned int bpc;
+  unsigned int C;
+  unsigned int UnkC;
+  unsigned int IPR;
+  unsigned int meth;
+  unsigned int approx;
+  unsigned int enumcs;
+  unsigned int precedence;
+  unsigned int brand;
+  unsigned int minversion;
+  unsigned int numcl;
+  unsigned int *cl;
+  opj_jp2_comps_t *comps;
+  unsigned int j2k_codestream_offset;
+  unsigned int j2k_codestream_length;
 } opj_jp2_t;
 
 /**

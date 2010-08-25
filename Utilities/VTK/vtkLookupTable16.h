@@ -70,6 +70,3 @@ inline unsigned char *vtkLookupTable16::WritePointer(const vtkIdType id,
 }
 
 #endif
-
-
-

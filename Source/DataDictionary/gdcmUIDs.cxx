@@ -434,4 +434,3 @@ const char *UIDs::GetName() const
 } // end namespace gdcm
 
 //#endif //__gdcmUIDs_cxx
-

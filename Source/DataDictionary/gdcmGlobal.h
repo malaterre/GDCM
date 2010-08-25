@@ -105,4 +105,3 @@ static Global GlobalInstance;
 } // end namespace gdcm
 
 #endif //GDCMGLOBAL_H
-

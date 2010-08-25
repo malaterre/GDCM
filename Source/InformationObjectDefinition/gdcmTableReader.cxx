@@ -119,7 +119,7 @@ void TableReader::HandleMacroEntry(const char **atts)
     else if( strtype == *current )
       {
       const char *raw = *(current+1);
-	    moduleentry.SetType( Type::GetTypeType(raw) );
+      moduleentry.SetType( Type::GetTypeType(raw) );
       }
     else
       {
@@ -167,7 +167,7 @@ void TableReader::HandleModuleEntry(const char **atts)
     else if( strtype == *current )
       {
       const char *raw = *(current+1);
-	    moduleentry.SetType( Type::GetTypeType(raw) );
+      moduleentry.SetType( Type::GetTypeType(raw) );
       }
     else
       {
@@ -289,17 +289,17 @@ void TableReader::StartElement(const char *name, const char **atts)
     }
   else if( strcmp(name, "entry" ) == 0 )
     {
-    if( ParsingModule ) 
+    if( ParsingModule )
       {
       ParsingModuleEntry = true;
       HandleModuleEntry(atts);
       }
-    else if( ParsingMacro ) 
+    else if( ParsingMacro )
       {
       ParsingMacroEntry = true;
       HandleMacroEntry(atts);
       }
-    else if( ParsingIOD ) 
+    else if( ParsingIOD )
       {
       ParsingIODEntry = true;
       HandleIODEntry(atts);
@@ -411,17 +411,17 @@ void TableReader::EndElement(const char *name)
     }
   else if( strcmp(name, "entry" ) == 0 )
     {
-    if( ParsingModule ) 
+    if( ParsingModule )
       {
       ParsingModuleEntry = false;
       CurrentModule.AddModuleEntry( CurrentTag, CurrentModuleEntry);
       }
-    else if( ParsingMacro ) 
+    else if( ParsingMacro )
       {
       ParsingMacroEntry = false;
       CurrentMacro.AddMacroEntry( CurrentTag, CurrentMacroEntry);
       }
-    else if( ParsingIOD ) 
+    else if( ParsingIOD )
       {
       ParsingIODEntry = false;
       CurrentIOD.AddIODEntry( CurrentIODEntry);

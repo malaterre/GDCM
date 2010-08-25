@@ -223,4 +223,3 @@ const char *SOPClassUIDToIOD::GetIODFromSOPClassUID(const char *sopclassuid)
 }
 
 }
-

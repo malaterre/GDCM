@@ -147,4 +147,3 @@ void Dicts::LoadDefaults()
 }
 
 } // end namespace gdcm
-

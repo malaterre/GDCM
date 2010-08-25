@@ -394,5 +394,3 @@ if __name__ == "__main__":
   outputfilename = os.sys.argv[2]
   tp = TextParser11(inputfilename,outputfilename);
   tp.Parse()
-
-

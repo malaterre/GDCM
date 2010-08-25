@@ -660,5 +660,3 @@ inline std::ostream &operator<<(std::ostream &_os, const UIDs &uid)
 } // end namespace gdcm
 
 #endif //GDCMUIDS_H
-
-
