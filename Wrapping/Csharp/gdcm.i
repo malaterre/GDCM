@@ -734,4 +734,3 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
 %include "gdcmFileDerivation.h"
-

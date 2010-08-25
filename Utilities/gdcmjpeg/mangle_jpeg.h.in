@@ -2,14 +2,14 @@
 #ifndef @MANGLE_PREFIX@_mangle_h
 #define @MANGLE_PREFIX@_mangle_h
 
-/* 
+/*
  * This header file mangles all symbols exported from the jpeg library.
  * It is included in all files while building the jpeg library.  Due to
  * namespace pollution, no jpeg headers should be included in .h files in
  * GDCM. This also allows us to generate two jpeg library (8bits and 12bits).
- * 
+ *
  * The following command was used to obtain the symbol list:
- * 
+ *
  * nm lib@MANGLE_PREFIX@.a | grep " [R|T] " | colrm 1 11 | sort
  */
 
