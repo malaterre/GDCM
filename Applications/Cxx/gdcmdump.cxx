@@ -83,6 +83,7 @@ int DoOperation(const std::string & filename)
 
 int PrintASN1(const std::string & filename, bool verbose)
 {
+  (void)verbose;
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   if( !reader.Read() )
@@ -121,6 +122,7 @@ int PrintASN1(const std::string & filename, bool verbose)
 
 int PrintPDB(const std::string & filename, bool verbose)
 {
+  (void)verbose;
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   if( !reader.Read() )
