@@ -22,7 +22,9 @@ INSTALL( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
 )
 
 # install all targets referenced as ${GDCM_TARGETS_NAME}
-install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
+if(GDCM_STANDALONE)
+  install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
+endif(GDCM_STANDALONE)
 
 # [Prevent viral CMake dep]
 # See the following ref, which explain this mess.
