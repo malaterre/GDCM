@@ -58,6 +58,9 @@ ELSE(GDCM_NO_EXECUTABLE_PROPERTIES)
   SET(python_site_package "")
 ENDIF(GDCM_NO_EXECUTABLE_PROPERTIES)
 
+IF(NOT GDCM_TARGETS_NAME)
+  SET(GDCM_TARGETS_NAME GDCMTargets)
+ENDIF(NOT GDCM_TARGETS_NAME)
 #-----------------------------------------------------------------------------
 INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
 CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
