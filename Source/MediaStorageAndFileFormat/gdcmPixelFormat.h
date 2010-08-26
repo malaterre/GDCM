@@ -98,21 +98,25 @@ public:
   /// BitsStored see Tag (0028,0101) US Bits Stored
   unsigned short GetBitsStored() const
     {
+    assert( BitsStored <= BitsAllocated );
     return BitsStored;
     }
   void SetBitsStored(unsigned short bs)
     {
-    BitsStored = bs;
+    if( bs <= BitsAllocated )
+      BitsStored = bs;
     }
 
   /// HighBit see Tag (0028,0102) US High Bit
   unsigned short GetHighBit() const
     {
+    assert( HighBit < BitsStored );
     return HighBit;
     }
   void SetHighBit(unsigned short hb)
     {
-    HighBit = hb;
+    if( hb < BitsStored )
+      HighBit = hb;
     }
 
   /// PixelRepresentation: 0 or 1, see Tag (0028,0103) US Pixel Representation

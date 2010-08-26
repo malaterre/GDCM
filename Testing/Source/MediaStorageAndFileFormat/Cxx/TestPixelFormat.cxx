@@ -107,5 +107,16 @@ int TestPixelFormat(int , char *[])
     std::cout << pf.GetScalarTypeAsString() << std::endl;
     if( pf2 != pf ) return 1;
     }
+
+  // make to avoid user mistakes:
+  gdcm::PixelFormat pf3 = PixelFormat::UINT8;
+  if( pf3.GetBitsStored() != 8 ) return 1;
+  pf3.SetBitsStored( 32 );
+  // previous call should not execute
+  if( pf3.GetBitsStored() != 8 ) return 1;
+  pf3.SetHighBit( 8 );
+  if( pf3.GetHighBit() != 7 ) return 1;
+
   return 0;
 }
+

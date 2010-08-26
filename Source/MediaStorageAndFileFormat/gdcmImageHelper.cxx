@@ -606,6 +606,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       interceptslope[0] = 0;
       interceptslope[1] = 1;
       bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
+      gdcmAssertMacro( b ); (void)b;
       return interceptslope;
       }
     }
@@ -625,6 +626,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   )
     {
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
+    gdcmAssertMacro( b ); (void)b;
     }
 
   // \post condition slope can never be 0:
