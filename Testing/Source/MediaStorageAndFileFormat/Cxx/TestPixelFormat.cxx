@@ -23,25 +23,79 @@ int TestPixelFormat(int , char *[])
     {
     return 1;
     }
+  pf.SetScalarType( gdcm::PixelFormat::UINT32 );
+  static const int64_t values[][2] = {
+     { 0,255 },
+     { 0,4095 },
+     { 0,65535 },
+     { 0,4294967295 },
+     { -128,127 },
+     { -2048,2047 },
+     { -32768,32767 },
+     { -2147483648,2147483647 },
+  };
+  static const size_t n = sizeof( values ) / sizeof( *values );
+  size_t c = 0;
   pf.SetBitsStored( 8 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
+  ++c;
   pf.SetBitsStored( 12 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
+  ++c;
   pf.SetBitsStored( 16 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
+  ++c;
   pf.SetBitsStored( 32 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
 
   pf.SetPixelRepresentation( 1 );
 
+  ++c;
   pf.SetBitsStored( 8 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
+  ++c;
   pf.SetBitsStored( 12 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
+  ++c;
   pf.SetBitsStored( 16 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
+  ++c;
   pf.SetBitsStored( 32 );
-  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+    {
+    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+    return 1;
+    }
+  ++c;
+  if ( c != n ) return 1;
 
   for(unsigned int i = 0; i < PixelFormat::UNKNOWN; ++i)
     {
