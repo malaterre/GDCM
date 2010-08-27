@@ -78,7 +78,7 @@ http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Gdcmviewer
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcm2vtkraw</b>(1)
+<b>gdcmdump</b>(1), <b>gdcm2vtk</b>(1)
 
 \section copyright COPYRIGHT
 
