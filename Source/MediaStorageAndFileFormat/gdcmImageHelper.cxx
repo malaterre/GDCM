@@ -26,6 +26,8 @@
 #include "gdcmImage.h"
 #include "gdcmDirectionCosines.h"
 
+#include <math.h> // fabs
+
   /* TODO:
    *
    * (0028,9145) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelValueTransformationSequence
