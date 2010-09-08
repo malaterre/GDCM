@@ -331,6 +331,13 @@ int main(int argc, char *argv[])
     }
 
   vtkImageReader2Factory* imgfactory = vtkImageReader2Factory::New();
+#if VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION <= 4
+  // warning vtk 5.4 is broken metaimage are not added to factory
+  // by default
+  vtkMetaImageReader *d = vtkMetaImageReader::New();
+  imgfactory->RegisterReader( d );
+  d->Delete();
+#endif
   if( usevtkdicom )
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     imgfactory->RegisterReader( dicomreader );
