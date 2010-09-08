@@ -475,7 +475,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
     const gdcm::ByteValue *bvwe = windowexplanation.GetByteValue();
     if( bvwe ) // Can be Type 2
       {
-      int n = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
+      unsigned int n = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
       gdcm::Element<gdcm::VR::LO,gdcm::VM::VM1_n> elwe; // window explanation
       gdcm::VR vr = gdcm::VR::LO;
       std::stringstream ss;
@@ -484,11 +484,13 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size()); (void)count;
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
+      // oh wait but what if we have the countrary...
       //assert( count >= (unsigned int)n );
-      elwe.SetLength( /*count*/ n * vr.GetSizeof() );
+      elwe.SetLength( count * vr.GetSizeof() );
       ss.str( swe );
       elwe.Read( ss );
-      for(int i = 0; i < n; ++i)
+      unsigned int c = std::min(n, count);
+      for(unsigned int i = 0; i < c; ++i)
         {
         this->MedicalImageProperties->SetNthWindowLevelPresetComment(i, elwe.GetValue(i).c_str() );
         }
