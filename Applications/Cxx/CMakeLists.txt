@@ -25,8 +25,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
 
   "${GDCM_SOURCE_DIR}/Utilities/socketxx"
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++"// local.h
-  "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" // config.h
+  "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
+  "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
   )
 
 IF(WIN32)
