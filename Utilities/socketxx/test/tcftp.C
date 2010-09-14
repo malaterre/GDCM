@@ -8,7 +8,9 @@
 // Version: 12Jan97 1.11
 
 #include <socket++/ftp.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 
 using namespace std;
 
@@ -29,7 +31,9 @@ int main (int ac, char** av)
 
   // set access 
   f->user (av [2]);
+#ifndef WIN32 //FIXME!!! win32 will need another function for 'getpass'
   f->passwd (getpass ("passwd: "));
+#endif
 
   // get help
   f->help ();

@@ -9,7 +9,11 @@
 // Version: 12Jan97 1.11
 
 #include <socket++/sockinet.h>
+#ifndef WIN32
 #include <unistd.h>
+#else
+#include "winbase.h"
+#endif
 
 using namespace std;
 
@@ -35,7 +39,11 @@ int main()
     // lets use select to find out whether a socket is ready
     if (!sin.is_readready(2)) {
       // the socket is not ready. Let us sleep for 1 sec.
+#ifndef WIN32
       sleep(1);
+#else
+      Sleep(1000);
+#endif
     }
 	
     iosockinet s2 (sin.accept());

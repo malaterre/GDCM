@@ -15,7 +15,7 @@ using namespace std;
 int main(int ac, char** av)
 {
   iopipestream p(sockbuf::sock_dgram);
-
+#ifndef WIN32
   if (p.fork()) {
     // I am the Parent
     p << ac << endl;
@@ -44,5 +44,6 @@ int main(int ac, char** av)
 
     p << "Child received " << cnt << " strings\n" << flush;
   }
+#endif
   return 0;
 }
