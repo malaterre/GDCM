@@ -29,7 +29,7 @@ gdcmDataTransfer.cxx
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})
 # Let's prefer the 4 letter name: MEXD:
 ADD_LIBRARY(gdcmMEXD ${MessageExchangeDefinition_SRCS})
-TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmCommon)
-#TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmDSED)
+#TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmCommon)
+TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmDSED)
 SET_TARGET_PROPERTIES(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 
