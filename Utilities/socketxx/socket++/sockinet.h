@@ -47,7 +47,7 @@ class sockinetaddr: public sockAddr, public sockaddr_in
         const char*         gethostname() const;
 };
 
-class sockinetbuf: public sockbuf 
+class MY_API sockinetbuf: public sockbuf 
 {
     public:
         enum domain { af_inet = AF_INET };
@@ -100,7 +100,7 @@ class sockinetbuf: public sockbuf
         bool                tcpnodelay (bool set) const;
 };
 
-class isockinet: public isockstream
+class MY_API isockinet: public isockstream
 {
     public:
         isockinet (const sockbuf::sockdesc& sd);
@@ -123,7 +123,7 @@ class osockinet: public osockstream
         sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
 };
 
-class iosockinet: public iosockstream
+class MY_API iosockinet: public iosockstream
 {
     public:
         iosockinet (const sockbuf::sockdesc& sd);
