@@ -9,13 +9,16 @@
 
 #include <socket++/smtp.h>
 #include <stdio.h>
+#ifndef WIN32
 #include <pwd.h>
 #include <unistd.h>
+#endif
 
 using namespace std;
 
 int main (int ac, char** av)
 {
+#ifndef WIN32
   if (ac < 4) {
     cerr << "USAGE: " << av [0] << " host recipient files...\n";
     return 1;
@@ -45,6 +48,6 @@ int main (int ac, char** av)
 
   // finally quit
   client->quit ();
-
+#endif
   return 0;
 }

@@ -17,7 +17,7 @@ using namespace std;
 int main(int ac, char** av)
 {
   iopipestream p;
-
+#ifndef WIN32
   if ( p.fork() ) {
     // I am the parent
     cout << "parent got: ";
@@ -39,6 +39,7 @@ int main(int ac, char** av)
     }
     cout << endl;
   }
+#endif 
   return 0;
 }
 
