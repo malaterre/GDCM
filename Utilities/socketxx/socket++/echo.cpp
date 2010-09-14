@@ -8,13 +8,14 @@
 //
 // Version: 12Jan97 1.11
 
-using namespace std;
 
 #include <config.h>
 
 #include <socket++/echo.h>
 #include <socket++/fork.h>
 #include <stdlib.h>
+
+using namespace std;
 
 void echo::echobuf::serve_clients (int portno)
 {
@@ -32,14 +33,20 @@ void echo::echobuf::serve_clients (int portno)
     listen (sockbuf::somaxconn);
 
     // commit suicide when we receive SIGTERM
+    //but only if you're not on windows, which doesn't have forking
+#ifndef WIN32
     Fork::suicide_signal (SIGTERM);
+#endif
 
     for (;;) {
       sockbuf s = accept ();
-
+      //!!! FIXME this is most definitely broken for windows.
+#ifndef WIN32
         Fork f (1, 1); // kill my children when I get terminated.
-
 	if (f.is_child ()) {
+#else //win32 has no forking
+      {//if win32, no forking, in the main process
+#endif
 	  char buf [1024];
 	  int  rcnt;
 
@@ -49,8 +56,10 @@ void echo::echobuf::serve_clients (int portno)
 	      if (wcnt == -1) throw sockerr (errno);
 	      rcnt -= wcnt;
 	    }
+#ifndef WIN32
 	  sleep (300);
 	  exit (0);
+#endif
 	}
     }
   }

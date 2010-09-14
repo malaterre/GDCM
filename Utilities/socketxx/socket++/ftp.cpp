@@ -14,8 +14,12 @@
 #include <fstream>
 #include <socket++/fork.h>
 #include <fcntl.h>
+#ifndef WIN32
 #include <unistd.h>
 #include <stdlib.h>
+#else
+# define EADDRNOTAVAIL                WSAEADDRNOTAVAIL
+#endif
 #include <string.h>
 #include <stdio.h> // for sprintf
 #include <errno.h>
@@ -27,7 +31,9 @@ using namespace std;
 #    include <netdb.h>
    }
 #else 
+#ifndef WIN32
 #  include <netdb.h>
+#endif
 #endif
 
 char reptype [][8] = {

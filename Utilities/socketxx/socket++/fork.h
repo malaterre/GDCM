@@ -11,6 +11,7 @@
 #ifndef FORK_H
 #define FORK_H
 
+#ifndef WIN32
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/signal.h>
@@ -65,4 +66,5 @@ class Fork {
   static void suicide_signal (int signo = SIGTERM);
 };
 
+#endif//windows does not define fork, and never will.
 #endif // FORK_H

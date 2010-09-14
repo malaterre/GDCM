@@ -13,7 +13,9 @@
 #include <socket++/smtp.h>
 #include <socket++/fork.h>
 #include <fcntl.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 

@@ -8,6 +8,8 @@
 //
 // Version: 12Jan97 1.11
 
+#ifndef WIN32
+
 #include <config.h>
 
 #include <iostream>
@@ -187,3 +189,4 @@ void Fork::suicide_signal (int signo)
   if (sigaction (signo, &sa, 0) == -1)
     perror ("Fork: Cannot commit suicide with the specified signal");
 }
+#endif //windows does not get fork

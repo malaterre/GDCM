@@ -9,7 +9,9 @@
 // Version: 12Jan97 1.11
 
 #include <socket++/pipestream.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 
 using namespace std;
 
