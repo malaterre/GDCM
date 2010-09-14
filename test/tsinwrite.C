@@ -12,12 +12,14 @@
 
 #include <socket++/sockinet.h>
 #include <stdlib.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include <errno.h>
 
 using namespace std;
 
-int main(int ac, char** av)
+int main(int ac, const char** av)
 {
     if (ac < 3) {
 	cerr << "USAGE: " << av[0] << " machinename port "
@@ -27,7 +29,9 @@ int main(int ac, char** av)
     
     iosockinet	sio (sockbuf::sock_stream);
     try {
-    	sio->connect(av [1], atoi (av [2]));
+#ifndef WIN32
+    	sio->connect((const char*)(av [1]), atoi (av [2]));//not building on windows, but I can't see why
+#endif //win32-- but it should compile, not sure why it isn't
     }
     catch (sockerr e) {
     	    cout << "sockerr!!" << endl;

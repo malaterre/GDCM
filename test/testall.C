@@ -9,8 +9,14 @@
 // Version: 12Jan97 1.11
 
 #include <socket++/pipestream.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif 
 #include <stdio.h>
+
+#ifdef WIN32
+#include "winbase.h"//for sleep
+#endif
 
 using namespace std;
 
@@ -54,8 +60,13 @@ int main(int ac, char** av)
   ipipestream tsinwrite1(buf);
   sprintf(buf, "./tsinwrite %s %d %%s%%c oooiiii !",
 	  thostname, portno);
+
   cout << "sleeping for 3 sec\n";
+#ifndef WIN32
   sleep(3);
+#else
+  Sleep(3000);//windows sleep is in ms, not sec
+#endif
   ipipestream tsinwrite2(buf);
   while ( tsinread.getline(buf, 255) ) cout << "tsinread: " << buf << endl;
   while ( tsinwrite1.getline(buf, 255) )

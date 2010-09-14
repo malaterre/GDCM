@@ -12,7 +12,27 @@
 #include <list>
 #include <map>
 #include <algorithm>
+#ifndef WIN32
 #include <sys/signal.h>
+
+#else
+#include <windows.h>
+#include <wininet.h>
+#endif
+
+//from http://bugs.scribus.net/view.php?id=2213
+#ifndef sigset_t
+  #define sigset_t int
+#endif
+#ifndef sigemptyset
+  #define sigemptyset(sig)
+#endif
+#ifndef sigaddset
+  #define sigaddset( set, sig)
+#endif
+#ifndef sigprocmask
+  #define sigprocmask(a, b, c)
+#endif
 
 // all signal handlers must be derived from
 // class sig::hnd. class signal will

@@ -12,6 +12,7 @@
 
 using namespace std;
 
+#ifndef WIN32
 static void print (char* name, pid_t child)
 {
   if (child) {
@@ -22,9 +23,10 @@ static void print (char* name, pid_t child)
       << name << "'s child " << getpid () << ";\n";
   }
 }
-
+#endif //will need win32 tests
 int main (int ac, char** av)
 {
+#ifndef WIN32
   Fork A (1, 1);
   
   print ("A", A.process_id ());
@@ -33,6 +35,7 @@ int main (int ac, char** av)
     return 0x8;
   }
   sleep (30);
+#endif //will need win32 tests
   return 0;
 }
     
