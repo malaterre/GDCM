@@ -33,7 +33,7 @@ namespace network
 Table 9-17
 ASSOCIATE-AC PDU fields
  */
-class AAssociateACPDU
+class GDCM_EXPORT AAssociateACPDU
 {
 public:
   AAssociateACPDU();

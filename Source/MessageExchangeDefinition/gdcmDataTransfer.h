@@ -27,7 +27,7 @@ namespace network
  Table 9-3
 DATA TRANSFER
  */
-class DataTransfer
+class GDCM_EXPORT DataTransfer
 {
 public:
   DataTransfer();

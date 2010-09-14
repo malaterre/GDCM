@@ -30,7 +30,7 @@ namespace network
 Table 9-24
 A-RELEASE-RQ PDU FIELDS
  */
-class AReleaseRQPDU
+class GDCM_EXPORT AReleaseRQPDU
 {
 public:
   AReleaseRQPDU();

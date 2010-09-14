@@ -28,7 +28,7 @@ namespace network
 Table D.3-3
 IMPLEMENTATION VERSION NAME SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
  */
-class ImplementationVersionNameSub
+class GDCM_EXPORT ImplementationVersionNameSub
 {
 public:
   ImplementationVersionNameSub();

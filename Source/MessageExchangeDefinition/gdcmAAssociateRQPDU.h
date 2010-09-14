@@ -33,7 +33,7 @@ namespace network
 /**
 Table 9-11 ASSOCIATE-RQ PDU fields
  */
-class AAssociateRQPDU
+class GDCM_EXPORT AAssociateRQPDU
 {
 public:
   AAssociateRQPDU();

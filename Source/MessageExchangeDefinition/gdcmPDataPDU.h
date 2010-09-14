@@ -28,7 +28,7 @@ namespace network
 
 /**
  */
-class PDataPDU
+class GDCM_EXPORT PDataPDU
 {
 public:
 private:

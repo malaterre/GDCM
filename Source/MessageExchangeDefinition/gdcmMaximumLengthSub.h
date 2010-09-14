@@ -34,7 +34,7 @@ or
 Table D.1-2
 Maximum length sub-item fields (A-ASSOCIATE-AC)
  */
-class MaximumLengthSub
+class GDCM_EXPORT MaximumLengthSub
 {
 public:
   MaximumLengthSub();

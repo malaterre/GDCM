@@ -29,7 +29,7 @@ PS 3.7
 Table D.3-1
 IMPLEMENTATION CLASS UID SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
  */
-class ImplementationClassUIDSub
+class GDCM_EXPORT ImplementationClassUIDSub
 {
 public:
   ImplementationClassUIDSub();

@@ -28,7 +28,7 @@ namespace network
 Table D.3-2
 IMPLEMENTATION UID SUB-ITEM FIELDS (A-ASSOCIATE-AC)
  */
-class ImplementationUIDSub
+class GDCM_EXPORT ImplementationUIDSub
 {
 public:
   ImplementationUIDSub();
