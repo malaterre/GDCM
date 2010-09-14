@@ -34,9 +34,10 @@
 //  The constructors of isockinet, osockinet and iosockinet are changed.
 
 #include "sockinet.h"
+#include "config.h"
 
 #if defined(__CYGWIN__) || !defined(WIN32)
-extern "C" {
+	EXTERN_C_BEGIN
 #    include <netdb.h>
 #    include <sys/time.h>
 #    include <sys/socket.h>
@@ -47,8 +48,7 @@ extern "C" {
 #   include <netinet/in.h>
 #   include <netinet/in.h>
 #   include <arpa/inet.h>
-
-}
+	EXTERN_C_END
 #else
 # define EADDRNOTAVAIL                WSAEADDRNOTAVAIL
 # define EADDRINUSE                        WSAEADDRINUSE
@@ -105,7 +105,7 @@ sockinetaddr::sockinetaddr(const char* hn, const char* sn, const char* pn)
   setport(sn, pn);
 }
 
-sockinetaddr::sockinetaddr (const sockinetaddr& sina): sockAddr()
+sockinetaddr::sockinetaddr (const sockinetaddr& sina)
 {
   sin_family      = sockinetbuf::af_inet;
   sin_addr.s_addr = sina.sin_addr.s_addr;

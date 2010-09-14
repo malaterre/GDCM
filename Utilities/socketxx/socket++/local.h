@@ -1,6 +1,13 @@
 #ifdef _WIN32
 #	include <windows.h>
 #	include <io.h>
+
+#ifdef socketxx_EXPORTS
+#define MY_API __declspec(dllexport)
+#else
+#define MY_API __declspec(dllimport)
+#endif 
+
 #else
 
 #ifdef _S_LIBGXX
@@ -81,13 +88,15 @@ extern "C" {
 
 #if !defined (__linux__) // LN
 extern "C" int shutdown (int, int); // they have forgotten this
+#else
+#   include <arpa/inet.h>
 #endif
 
 // <arpa/inet.h> does not have a prototype for inet_addr () and gethostname()
-extern "C" unsigned long inet_addr (const char*);
+//extern "C" unsigned long inet_addr (const char*);
 
 // arpa/in.h does not provide a protype for the following
-extern "C" char* inet_ntoa (in_addr ina);
+//extern "C" char* inet_ntoa (in_addr ina);
 
 #if !(defined (__linux__) || defined(__FreeBSD__))
   extern "C" int gethostname (char* hostname, int len);
