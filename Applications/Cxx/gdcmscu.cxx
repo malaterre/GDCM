@@ -31,7 +31,7 @@
 #include <stdlib.h>
 
 // Execute like this:
-// ./bin/gdcmscu www.dicomserver.co.uk 11112
+// ./bin/gdcmscu www.dicomserver.co.uk 11112 echo
 void CEcho( const char *remote, int portno )
 {
   echo e(protocol::tcp);
