@@ -29,6 +29,8 @@
 /* Configuration Options */
 #cmakedefine ENABLE_DEBUG
 
+#cmakedefine GDCM_BUILD_SHARED_LIBS
+
 
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
