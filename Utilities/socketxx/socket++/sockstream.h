@@ -138,7 +138,7 @@ class sockAddr
 struct msghdr;
 
 // socket buffer class
-class sockbuf: public streambuf 
+class MY_API sockbuf: public streambuf 
 {
     public:
         enum type {

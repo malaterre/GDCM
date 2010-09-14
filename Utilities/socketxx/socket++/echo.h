@@ -13,7 +13,7 @@
 
 #include <socket++/protocol.h>
 
-class echo: public protocol
+class MY_API echo: public protocol
 {
 public:
   class echobuf: public protocol::protocolbuf {
