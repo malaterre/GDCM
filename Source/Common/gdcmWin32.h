@@ -21,7 +21,7 @@
 #endif
 //-----------------------------------------------------------------------------
 #if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
-  #if (defined(gdcmCommon_EXPORTS) || defined(gdcmDICT_EXPORTS) || defined(gdcmDSED_EXPORTS) || defined(gdcmIOD_EXPORTS) || defined(gdcmMSFF_EXPORTS) || defined(_gdcmswig_EXPORTS)) || defined(vtkgdcm_EXPORTS)
+  #if (defined(gdcmCommon_EXPORTS) || defined(gdcmDICT_EXPORTS) || defined(gdcmDSED_EXPORTS) || defined(gdcmIOD_EXPORTS) || defined(gdcmMSFF_EXPORTS) || defined(gdcmMEXD_EXPORTS)|| defined(_gdcmswig_EXPORTS)) || defined(vtkgdcm_EXPORTS)
     #define GDCM_EXPORT __declspec( dllexport )
   #else
     #define GDCM_EXPORT __declspec( dllimport )
