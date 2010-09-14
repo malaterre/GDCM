@@ -29,7 +29,7 @@ namespace network
 {
 const uint8_t AAssociateRQPDU::ItemType = 0x1; // PDUType ?
 const uint8_t AAssociateRQPDU::Reserved2 = 0x0;
-const uint16_t AAssociateRQPDU::ProtocolVersion = 0x100; // big - endian ?
+const uint16_t AAssociateRQPDU::ProtocolVersion = 0x1; // big - endian ?
 const uint16_t AAssociateRQPDU::Reserved9_10 = 0x0;
 const uint8_t AAssociateRQPDU::Reserved43_74[32] = {};
 
@@ -120,6 +120,8 @@ const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
   uint32_t copy = ItemLength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
+  uint16_t protocolversion = ProtocolVersion;
+  SwapperDoOp::SwapArray(&protocolversion,1);
   os.write( (char*)&ProtocolVersion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
   os.write( CalledAETitle, 16 );
