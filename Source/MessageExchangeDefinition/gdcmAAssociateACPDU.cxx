@@ -46,6 +46,10 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   uint16_t protocolversion;
   is.read( (char*)&protocolversion, sizeof(ProtocolVersion) );
   SwapperDoOp::SwapArray(&protocolversion,1);
+  if( protocolversion != ProtocolVersion )
+    {
+    assert(0 && "TODO" );
+    }
   uint16_t reserved9_10;
   is.read( (char*)&reserved9_10, sizeof(Reserved9_10) );
   SwapperDoOp::SwapArray(&reserved9_10,1);

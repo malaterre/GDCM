@@ -11,6 +11,7 @@
 #ifndef _SOCKINET_H
 #define _SOCKINET_H
 
+#include "config.h"
 #include "sockstream.h"
 
 #if defined(__CYGWIN__) || !defined(WIN32)

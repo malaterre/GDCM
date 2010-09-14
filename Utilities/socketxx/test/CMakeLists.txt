@@ -1,3 +1,7 @@
+INCLUDE_DIRECTORIES(
+	${CMAKE_CURRENT_SOURCE_DIR}/../socket++
+	${CMAKE_CURRENT_BINARY_DIR}/../socket++
+	)
 SET(TESTSRCS
   # tdunread.C:(.text+0xc8): undefined reference to `isockunix::isockunix(sockbuf::type, int)'
   # tdunread  

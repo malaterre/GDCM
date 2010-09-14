@@ -33,6 +33,8 @@
 #ifndef _SOCKSTREAM_H
 #define    _SOCKSTREAM_H
 
+#include "config.h"
+
 #include <iostream> // must be ANSI compatible
 //#include <cstddef>
 #include <ctype.h>

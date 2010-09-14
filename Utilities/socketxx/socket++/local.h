@@ -2,11 +2,6 @@
 #	include <windows.h>
 #	include <io.h>
 
-#ifdef socketxx_EXPORTS
-#define MY_API __declspec(dllexport)
-#else
-#define MY_API __declspec(dllimport)
-#endif 
 
 #else
 
@@ -50,6 +45,16 @@ EXTERN_C_BEGIN
 #endif
 
 EXTERN_C_END
+
+#if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
+#ifdef socketxx_EXPORTS
+#define MY_API __declspec(dllexport)
+#else
+#define MY_API __declspec(dllimport)
+#endif 
+#else
+  #define MY_API
+#endif
 
 #if defined (__sun__) && !defined (__svr4__) && defined (_S_LIBGXX)
 // libg++-2.6.x has stopped providing prototypes for the following
