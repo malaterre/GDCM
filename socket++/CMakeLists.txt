@@ -18,7 +18,7 @@ SET(libsocket___la_SOURCES
   echo.cpp echo.h
   smtp.cpp smtp.h
   ftp.cpp ftp.h
-  sig.cpp sig.h
+  #sig.cpp sig.h
   )
 
 IF(UNIX)
