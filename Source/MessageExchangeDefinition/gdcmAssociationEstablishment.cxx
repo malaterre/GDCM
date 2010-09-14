@@ -49,7 +49,8 @@ std::iostream &AssociationEstablishment::Run(std::iostream &ios)
   cecho.SetCallingAETitle( "ACME1" );
   //cecho.SetCallingAETitle( "MI2B2" );
   //cecho.SetCalledAETitle( "ACME_STORE" );
-  cecho.SetCalledAETitle( "MI2B2" );
+  //cecho.SetCalledAETitle( "MI2B2" );
+  cecho.SetCalledAETitle( "A" );
 
   gdcm::network::PresentationContext pc;
   gdcm::network::AbstractSyntax as;
