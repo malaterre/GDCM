@@ -30,7 +30,7 @@ namespace network
  PRESENTATION CONTEXT ITEM FIELDS
 \see PresentationContextAC
  */
-class PresentationContext
+class GDCM_EXPORT PresentationContext
 {
 public:
   PresentationContext();

@@ -35,7 +35,7 @@ TODO what is the goal of :
 Table 9-20
 USER INFORMATION ITEM FIELDS
  */
-class UserInformation
+class GDCM_EXPORT UserInformation
 {
 public:
   UserInformation();

@@ -35,7 +35,7 @@ TODO what is the goal of :
 Table 9-19
 TRANSFER SYNTAX SUB-ITEM FIELDS
  */
-class TransferSyntax_
+class GDCM_EXPORT TransferSyntax_
 {
 public:
   TransferSyntax_();

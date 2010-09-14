@@ -30,7 +30,7 @@ namespace network
 Table 9-26
 A-ABORT PDU FIELDS
  */
-class AAbortPDU
+class GDCM_EXPORT AAbortPDU
 {
 public:
   AAbortPDU();

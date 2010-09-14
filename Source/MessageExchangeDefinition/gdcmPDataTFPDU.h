@@ -31,7 +31,7 @@ namespace network
 Table 9-22
 P-DATA-TF PDU FIELDS
  */
-class PDataTFPDU
+class GDCM_EXPORT PDataTFPDU
 {
 public:
   PDataTFPDU();

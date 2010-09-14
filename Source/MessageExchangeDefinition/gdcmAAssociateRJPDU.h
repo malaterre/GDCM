@@ -30,7 +30,7 @@ namespace network
 Table 9-21
 ASSOCIATE-RJ PDU FIELDS
  */
-class AAssociateRJPDU
+class GDCM_EXPORT AAssociateRJPDU
 {
 public:
   AAssociateRJPDU();

@@ -25,7 +25,7 @@ namespace network
 
 /**
  */
-class AssociationRelease
+class GDCM_EXPORT AssociationRelease
 {
 public:
   AssociationRelease();
