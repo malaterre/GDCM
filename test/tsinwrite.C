@@ -19,7 +19,7 @@
 
 using namespace std;
 
-int main(int ac, const char** av)
+int main(int ac, char** av)
 {
     if (ac < 3) {
 	cerr << "USAGE: " << av[0] << " machinename port "
