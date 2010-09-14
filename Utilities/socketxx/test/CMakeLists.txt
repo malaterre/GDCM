@@ -3,29 +3,29 @@ SET(TESTSRCS
   # tdunread  
   # tdunwrite.C:(.text+0xc8): undefined reference to `osockunix::osockunix(sockbuf::type, int)'
   #tdunwrite
-	tdinread tdinwrite
+	tdinread #tdinwrite
   # tsunread.C:(.text+0xc5): undefined reference to `sockunixbuf::sockunixbuf(sockbuf::type, int)'
   #	tsunread 
   # tsunwrite.C:(.text+0xc8): undefined reference to `iosockunix::iosockunix(sockbuf::type, int)'
   #tsunwrite
-	tsinread tsinwrite
+	tsinread #tsinwrite
 	tpipe
 	tsockpair
 	tpopen tpopen-lpc tpopen-ftp
 	tpopentest
 	testall
-	tnntp
-	tsmtp
-	tsendfiles
+	#tnntp
+	#tsmtp
+	#tsendfiles
   # error: cast from ‘sockinetbuf*’ to ‘unsigned int’ loses precision
   # thostnames
-	twhois
+	#twhois
 	tfork tfork0
 	tsecho tcecho
 	tcsmtp
         tcftp
 	tbind-0 tbind-1
-        tsig-0
+  #      tsig-0
 	test_sockerr
   # error: ‘inet_ntoa’ was not declared in this scope
   #simple_httpd.C
