@@ -122,7 +122,7 @@ const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
   os.write( (char*)&copy, sizeof(ItemLength) );
   uint16_t protocolversion = ProtocolVersion;
   SwapperDoOp::SwapArray(&protocolversion,1);
-  os.write( (char*)&ProtocolVersion, sizeof(ProtocolVersion) );
+  os.write( (char*)&protocolversion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
   os.write( CalledAETitle, 16 );
   os.write( CallingAETitle, 16 );
