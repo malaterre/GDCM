@@ -49,7 +49,7 @@ using namespace std;
 #endif // __linux__
 
 // socket exception classes
-class sockerr 
+class MY_API sockerr 
 {
     int  err;
     string text;
