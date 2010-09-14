@@ -30,7 +30,9 @@ ENDIF(UNIX)
 
 ADD_LIBRARY(${SOCKETXX_LIBRARY_NAME} ${libsocket___la_SOURCES})
 SET_TARGET_PROPERTIES(${SOCKETXX_LIBRARY_NAME} PROPERTIES ${SOCKETXX_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
-
+if(WIN32)
+target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
+endif(WIN32)
 #libsocketincludedir=$(includedir)/socket++
 #libsocketinclude_HEADERS = \
 #	sockstream.h \
