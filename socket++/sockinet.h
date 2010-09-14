@@ -11,8 +11,6 @@
 #ifndef _SOCKINET_H
 #define _SOCKINET_H
 
-//#include <osg/Referenced>
-
 #include "sockstream.h"
 
 #if defined(__CYGWIN__) || !defined(WIN32)
@@ -114,8 +112,7 @@ class isockinet: public isockstream
         sockinetbuf* operator -> () { return rdbuf (); }
 };
 
-class osockinet: public //osg::Referenced, public 
-  osockstream
+class osockinet: public osockstream
 {
     public:
         osockinet (const sockbuf::sockdesc& sd);
@@ -126,8 +123,7 @@ class osockinet: public //osg::Referenced, public
         sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
 };
 
-class iosockinet: public //osg::Referenced, public 
-  iosockstream
+class iosockinet: public iosockstream
 {
     public:
         iosockinet (const sockbuf::sockdesc& sd);
