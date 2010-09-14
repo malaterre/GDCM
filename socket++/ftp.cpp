@@ -8,7 +8,7 @@
 //
 // Version: 12Jan97 1.11
 
-#include <config.h>
+#include "config.h"
 
 #include <socket++/ftp.h>
 #include <fstream>
