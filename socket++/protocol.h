@@ -13,7 +13,7 @@
 
 #include <socket++/sockinet.h>
 
-class protocol: public iosockstream {
+class MY_API protocol: public iosockstream {
 public:
   enum p_name {
     nil = 0,
@@ -21,7 +21,7 @@ public:
     udp = sockbuf::sock_dgram
   };
 
-  class protocolbuf: public sockinetbuf {
+  class MY_API protocolbuf: public sockinetbuf {
   private:
     p_name pn;
 
