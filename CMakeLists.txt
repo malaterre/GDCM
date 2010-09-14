@@ -40,7 +40,7 @@ INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-OPTION(BUILD_SHARED_LIBS "Build with shared libraries." ON)
+#OPTION(BUILD_SHARED_LIBS "Build with shared libraries." ON)
 
 add_subdirectory(socket++)
 add_subdirectory(doc)
