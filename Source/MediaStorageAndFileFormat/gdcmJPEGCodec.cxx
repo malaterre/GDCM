@@ -17,6 +17,7 @@
 #include "gdcmTrace.h"
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmSwapper.h"
 
 #include "gdcmJPEG8Codec.h"
 #include "gdcmJPEG12Codec.h"
@@ -163,7 +164,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       if( frag.IsEmpty() ) return false;
       const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
       char *mybuffer = new char[bv.GetLength()];
-      bv.GetBuffer(mybuffer, bv.GetLength());
+      bool b = bv.GetBuffer(mybuffer, bv.GetLength());
+      assert( b ); (void)b;
       is.write(mybuffer, bv.GetLength());
       delete[] mybuffer;
       bool r = Decode(is, os);
@@ -179,13 +181,42 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
     // GEIIS Icon:
     std::stringstream is;
     char *mybuffer = new char[jpegbv->GetLength()];
-    jpegbv->GetBuffer(mybuffer, jpegbv->GetLength());
+    bool b = jpegbv->GetBuffer(mybuffer, jpegbv->GetLength());
+    assert( b ); (void)b;
     is.write(mybuffer, jpegbv->GetLength());
     delete[] mybuffer;
     bool r = Decode(is, os);
     if( !r )
       {
-      return false;
+      // let's try another time:
+      // JPEGDefinedLengthSequenceOfFragments.dcm
+      is.seekg(0);
+      SequenceOfFragments sf_bug;
+      try {
+        sf_bug.Read<SwapperNoOp>(is);
+      } catch ( ... ) {
+        return false;
+      }
+
+      const SequenceOfFragments *sf = &sf_bug;
+      for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+        {
+        std::stringstream is;
+        const Fragment &frag = sf->GetFragment(i);
+        if( frag.IsEmpty() ) return false;
+        const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+        char *mybuffer = new char[bv.GetLength()];
+        bool b = bv.GetBuffer(mybuffer, bv.GetLength());
+        assert( b ); (void)b;
+        is.write(mybuffer, bv.GetLength());
+        delete[] mybuffer;
+        bool r2 = Decode(is, os);
+        if( !r2 )
+          {
+          return false;
+          }
+        }
+
       }
     }
   //assert( pos == len );
