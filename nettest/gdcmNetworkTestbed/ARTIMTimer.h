@@ -1,0 +1,42 @@
+/*
+
+This file contains the code for the ARTIM timer.
+
+Basically, the ARTIM timer will just get the wall time when it's started,
+and then can be queried for the current time, and then can be stopped (ie, 
+the start time reset). 
+
+Because we're trying to do this without threading, we should be able to 'start' the
+ARTIM timer by this mechanism, and then when waiting for a particular response, tight
+loop that with sleep calls and determinations of when the ARTIM timer has reached its 
+peak.  As such, this isn't a strict 'timer' in the traditional sense of the word,
+but more of a time keeper.
+
+*/
+
+namespace gdcm {
+  namespace primitives{
+    class ARTIMTimer{
+    private:
+      double mStartTime; //ms timing should be good enough, but there are also
+      //high-resolution timing options.  Those return doubles.  For now,
+      //go with integer timing solutions based on milliseconds (DWORD on windows), 
+      //but leave as doubles to ease transitions to other timing methods.
+
+      double mTimeout; 
+      //once GetCurrentTime() -mStartTime > mTimeout, GetHasExpired returns true.
+
+      double GetCurrentTime() const;//a platform-specific implementation of getting the 
+      //current time.
+
+    public:
+      void SetStart(); //'start' the timer by getting the current wall time
+      void SetTimeout(double inTimeout);
+      
+      double GetElapsedTime() const;
+
+      bool GetHasExpired() const;
+
+    }
+  }
+}
