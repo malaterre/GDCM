@@ -25,14 +25,14 @@ int TestPixelFormat(int , char *[])
     }
   pf.SetScalarType( gdcm::PixelFormat::UINT32 );
   static const int64_t values[][2] = {
-     { 0,255 },
-     { 0,4095 },
-     { 0,65535 },
-     { 0,4294967295 },
-     { -128,127 },
-     { -2048,2047 },
-     { -32768,32767 },
-     { -2147483648,2147483647 },
+     { 0LL,255LL },
+     { 0LL,4095LL },
+     { 0LL,65535LL },
+     { 0LL,4294967295LL },
+     { -128LL,127LL },
+     { -2048LL,2047LL },
+     { -32768LL,32767LL },
+     { -2147483648LL,2147483647LL },
   };
   static const size_t n = sizeof( values ) / sizeof( *values );
   size_t c = 0;
