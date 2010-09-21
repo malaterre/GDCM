@@ -97,8 +97,6 @@
 /* GDCM uses __FUNCTION__ which is not ANSI C, but C99 */
 #cmakedefine GDCM_CXX_HAS_FUNCTION
 
-#define GDCM_SIZEOF_LONG @GDCM_SIZEOF_LONG@
-
 /* Special time structure support */
 #cmakedefine GDCM_HAVE_SYS_TIME_H
 #cmakedefine GDCM_HAVE_WINSOCK_H
