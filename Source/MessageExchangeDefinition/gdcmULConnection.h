@@ -36,10 +36,10 @@ namespace gdcm{
       //destructors are virtual to prevent memory leaks by inherited classes
       virtual ~ULConnection();
 
-      EStateID GetState() const;
+      EStateID GetState() const {}
 
     };
   }
 }
 
-#endif ULCONNECTION_H
+#endif // ULCONNECTION_H

@@ -31,7 +31,7 @@ namespace gdcm {
 
     //the transition table is built on state indeces
     //this function will produce the index from the power-of-two EStateID
-    int GetStateIndex(EStateID inState){
+    inline int GetStateIndex(EStateID inState){
       switch (inState){
         case eStaDoesNotExist:
         default:
