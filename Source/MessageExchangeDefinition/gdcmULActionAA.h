@@ -6,6 +6,8 @@ Since each class is essentially a placeholder for a function pointer, I'm breaki
 each class have its own file for the sake of brevity of the number of files.
 
 */
+#ifndef ULACTIONAA_H
+#define ULACTIONAA_H
 
 #include "gdcmULAction.h"
 
@@ -72,3 +74,5 @@ namespace gdcm {
     };
   }
 }
+
+#endif

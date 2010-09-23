@@ -11,6 +11,8 @@ Then, given the current state of the connection, determines the appropriate acti
 state to transition to next.
 
 */
+#ifndef ULTRANSITIONTABLE_H
+#define ULTRANSITIONTABLE_H
 
 #include "gdcmNetworkStateID.h"
 #include "gdcmNetworkEvents.h"
@@ -71,3 +73,4 @@ namespace gdcm {
     };
   }
 }
+#endif
