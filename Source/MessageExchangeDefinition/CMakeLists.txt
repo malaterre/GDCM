@@ -24,6 +24,12 @@ gdcmImplementationVersionNameSub.cxx
 gdcmAssociationEstablishment.cxx
 gdcmAssociationRelease.cxx
 gdcmDataTransfer.cxx
+gdcmULTransitionTable.cxx
+gdcmULActionAA.cxx
+gdcmULActionAE.cxx
+gdcmULActionAR.cxx
+gdcmULActionDT.cxx
+gdcmARTIMTimer.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})
