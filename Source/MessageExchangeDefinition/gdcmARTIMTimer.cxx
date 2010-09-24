@@ -15,6 +15,7 @@ but more of a time keeper.
 */
 
 #include "gdcmARTIMTimer.h"
+#include "gdcmSystem.h"
 
 using namespace gdcm::primitives;
 
@@ -27,7 +28,7 @@ double ARTIMTimer::GetCurrentTime() const{
   return 0; //platform-specific timing functions go here...
 }
 
-void ARTIMTimer::SetStart(){
+void ARTIMTimer::Start(){
   mStartTime = GetCurrentTime();
 }
 void ARTIMTimer::SetTimeout(double inTimeOut){
@@ -49,4 +50,8 @@ bool ARTIMTimer::GetHasExpired() const{
   } else {
     return false; //not started yet
   }
+}
+
+void ARTIMTimer::Stop() {
+  mStartTime = -1;//stop the timer by resetting it.
 }

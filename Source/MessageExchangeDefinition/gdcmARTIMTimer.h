@@ -35,7 +35,8 @@ namespace gdcm {
 
     public:
       ARTIMTimer(); //initiates the start and timeout at -1;
-      void SetStart(); //'start' the timer by getting the current wall time
+      void Start(); //'start' the timer by getting the current wall time
+      void Stop();//'stop' the timer by resetting the 'start' to -1;
       void SetTimeout(double inTimeout);
       
       double GetElapsedTime() const;

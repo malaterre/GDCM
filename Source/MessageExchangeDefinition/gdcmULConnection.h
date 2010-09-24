@@ -20,14 +20,17 @@ name and date: 16 sept 2010 mmr
 */
 #ifndef ULCONNECTION_H
 #define ULCONNECTION_H
-#include <socket++/protocol.h>
+#include "gdcmNetworkStateID.h"
+#include "gdcmARTIMTimer.h"
+#include <socket++/echo.h>
 
 
 namespace gdcm{
   namespace primitives{
     class ULConnection {
 
-      protocol mSocket;
+      echo* mSocket;
+      ARTIMTimer mTimer;
 
       ULConnection(gdcm::primitives::ULConnection& inConnection){}; //no copy construction allowed
 
@@ -39,9 +42,12 @@ namespace gdcm{
       //destructors are virtual to prevent memory leaks by inherited classes
       virtual ~ULConnection();
 
-      EStateID GetState() const {}
+      EStateID GetState() const;
 
+      echo* GetProtocol();
+      void SetProtocol(echo* inProtocol);
 
+      ARTIMTimer& GetTimer();
 
     };
   }

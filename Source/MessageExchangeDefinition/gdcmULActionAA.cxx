@@ -9,17 +9,27 @@ each class have its own file for the sake of brevity of the number of files.
 
 #include "gdcmULActionAA.h"
 #include "gdcmARTIMTimer.h"
+#include "gdcmAAbortPDU.h"
 
 using namespace gdcm::primitives;
+using namespace gdcm::network;
 
 //Send A-ABORT PDU (service-user source) and start (or restart if already started) ARTIM timer
 EStateID ULActionAA1::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+
+  AAbortPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetTimer().Start();
 
   return eSta13AwaitingClose;
 }
 
 //Stop ARTIM timer if running.  Close transport connection.
 EStateID ULActionAA2::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+
+
+  inConnection.GetTimer().Stop();
+  inConnection.SetProtocol(NULL);
 
   return eSta1Idle;
 }
@@ -42,23 +52,33 @@ EStateID ULActionAA4::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Stop ARTIM timer
 EStateID ULActionAA5::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  inConnection.GetTimer().Stop();
+
   return eSta1Idle;
 }
 
 //Ignore PDU
 EStateID ULActionAA6::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
-
+  //do nothing, I guess.
   return eSta13AwaitingClose;
 }
 
 //Send A-ABORT PDU
 EStateID ULActionAA7::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  AAbortPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
+
   return eSta13AwaitingClose;
 }
 
 //Send A-ABORT PDU (service-provider source), issue an A-P-ABORT indication, and start ARTIM timer
 EStateID ULActionAA8::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+
+
+  AAbortPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetTimer().Start();
 
   return eSta13AwaitingClose;
 }

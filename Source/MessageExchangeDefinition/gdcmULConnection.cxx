@@ -25,9 +25,35 @@ using namespace gdcm::primitives;
 
 ULConnection::ULConnection(){
   mCurrentState = eSta1Idle;
+  mSocket = NULL;
 }
+
+
+ULConnection::~ULConnection(){
+  if (mSocket != NULL){
+    delete mSocket;
+    mSocket = NULL;
+  }
+}
+
 
 
 EStateID ULConnection::GetState() const{
   return mCurrentState;
+}
+
+echo* ULConnection::GetProtocol(){
+  return mSocket;
+}
+
+void ULConnection::SetProtocol(echo* inProtocol){
+  if (mSocket != NULL){
+    delete mSocket;
+    mSocket = NULL;
+  }
+  mSocket = inProtocol;
+}
+
+ARTIMTimer& ULConnection::GetTimer(){
+  return mTimer;
 }
