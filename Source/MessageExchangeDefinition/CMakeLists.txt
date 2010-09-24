@@ -35,6 +35,7 @@ gdcmULActionDT.cxx
 gdcmARTIMTimer.cxx
 gdcmULConnection.cxx
 gdcmULConnectionManager.cxx
+gdcmULConnectionInfo.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})

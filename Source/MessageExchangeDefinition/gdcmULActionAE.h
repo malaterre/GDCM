@@ -11,7 +11,7 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmULAction.h"
 
 namespace gdcm {
-  namespace primitives {
+  namespace network {
 
     //Issue TRANSPORT CONNECT request primitive to local transport service.
     class ULActionAE1 : public ULAction {

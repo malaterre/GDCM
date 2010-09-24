@@ -16,7 +16,6 @@ each class have its own file for the sake of brevity of the number of files.
 
 #include <socket++/echo.h>//for setting up the local socket
 
-using namespace gdcm::primitives;
 using namespace gdcm::network; //gonna have to collapse these namespaces at some point
 
 //Issue TRANSPORT CONNECT request primitive to local transport service.
@@ -24,6 +23,16 @@ EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   //opening a local socket
   echo* p = new echo(protocol::tcp);
+  if (inConnection.GetConnectionInfo().GetCalledIPPort() == 0){
+    if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
+      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName());
+    else 
+      (*p)->connect(inConnection.GetConnectionInfo().GetCalledIPAddress());
+  else {
+    if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
+      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName(), 
+        inConnection.GetConnectionInfo().GetCalledIPPort());
+  }
   inConnection.SetProtocol(p);
   return eSta4LocalAssocDone;
 }
@@ -37,6 +46,8 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
 //Issue A-ASSOCIATE confirmation (accept) primitive
 EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+  AAssociateACPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
 
   return eSta6TransferReady;
 }
@@ -67,7 +78,21 @@ EStateID ULActionAE5::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
   inConnection.GetTimer().Stop();
-  return eSta13AwaitingClose;
+
+  //have to determine 'acceptability'
+  //this is more server side than client, so it's a bit empty now
+  bool acceptable = true;
+  if (acceptable){
+
+    return eSta3WaitLocalAssoc;
+  } else {
+
+    AAssociateRJPDU thePDU;//for now, use Matheiu's default values
+    thePDU.Write(*inConnection.GetProtocol());
+    inConnection.GetTimer().Stop();
+    return eSta13AwaitingClose;
+  }
+
 }
 
 //Send A-ASSOCIATE-AC PDU

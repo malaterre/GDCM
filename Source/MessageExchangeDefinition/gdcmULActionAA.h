@@ -12,7 +12,7 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmULAction.h"
 
 namespace gdcm {
-  namespace primitives {
+  namespace network {
 
     //Send A-ABORT PDU (service-user source) and start (or restart if already started) ARTIM timer
     //Next State: eSta13AwaitingClose

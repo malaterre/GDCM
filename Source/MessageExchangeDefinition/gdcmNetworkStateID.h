@@ -9,7 +9,7 @@ name and date: 16 sept 2010 mmr
 #ifndef NETWORKSTATEID_H
 #define NETWORKSTATEID_H
 namespace gdcm {
-  namespace primitives {
+  namespace network {
     enum EStateID {
       eStaDoesNotExist = 0,
       eSta1Idle = 1,

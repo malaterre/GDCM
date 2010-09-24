@@ -11,7 +11,6 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmPDataTFPDU.h"
 
 using namespace gdcm::network;
-using namespace gdcm::primitives;
 
 //Send P-DATA-TF PDU
 EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection){

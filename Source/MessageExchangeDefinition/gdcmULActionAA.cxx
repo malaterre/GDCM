@@ -11,7 +11,6 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmARTIMTimer.h"
 #include "gdcmAAbortPDU.h"
 
-using namespace gdcm::primitives;
 using namespace gdcm::network;
 
 //Send A-ABORT PDU (service-user source) and start (or restart if already started) ARTIM timer

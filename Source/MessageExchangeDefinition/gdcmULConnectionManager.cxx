@@ -8,52 +8,73 @@ Its inputs are ULEvents, and it performs ULActions.
 
 */
 
-#include "gdcmULConnection.h"
-#include "gdcmARTIMTimer.h"
-#include <vector>
-#include "gdcmDataSet.h"
+#include "gdcmULConnectionManager.h"
+#include "gdcmUserInformation.h"
+#include "gdcmULEvent.h"
 
 
-namespace gdcm {
-  namespace primitives {
-    class ULConnectionManager {
-    private:
-      ULConnection* mConnection;
-      ARTIMTimer* mTimer;
+using namespace gdcm::network;
+
+
+ULConnectionManager::ULConnectionManager(){
+  mConnection = NULL;
+}
       
-      //no copying
-      ULConnectionManager(const gdcm::primitives::ULConnectionManager& inCM){};
-
-    public:
-      ULConnectionManager();
-      ~ULConnectionManager();
-
-      //returns true if a connection of the given AETitle (ie, 'this' program)
-      //is able to connect to the given AETitle and Port in a certain amount of time
-      bool EstablishConnection(const std::string& inAETitle,
-        const std::string& inConnectAETitle, 
-        const std::vector<char>& inIPAddress,
-        const short& inConnectPort,
-        const double& inTimeout);
-
-      //allows for a connection to be broken, but waits for an acknowledgement
-      //of the breaking for a certain amount of time.  Returns true of the
-      //other side acknowledges the break
-      bool BreakConnection(const double& inTimeout);
-
-      //severs the connection, if it's open, without waiting for any kind of response.
-      //typically done if the program is going down. 
-      void BreakConnectionNow();
-
-      //This function will send a given piece of data 
-      //across the network connection.  It will return true if the 
-      //sending worked, false otherwise.
-      //note that sending is asynchronous; as such, there's
-      //also a 'receive' option, but that requires a callback function.
-      bool SendData(DataSet& inDataSet);
-
-
-
-    };
+ULConnectionManager::~ULConnectionManager(){
+  if (mConnection != NULL){
+    delete mConnection;
+    mConnection = NULL;
   }
+}
+
+bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  const std::string& inConnectAETitle, 
+                                              const std::string& inComputerName, const long& inIPAddress, 
+                                              const unsigned short& inConnectPort, const double& inTimeout)
+{
+  //generate a ULConnectionInfo object
+  UserInformation userInfo;
+  ULConnectionInfo connectInfo;
+  if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
+  if (inAETitle.size() > 16) return false; //as above
+  if (!connectInfo.Initialize(userInfo, inConnectAETitle.c_str(), 
+    inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName)){
+    return false;
+  }
+
+  if (mConnection!= NULL){
+    delete mConnection;
+  }
+  mConnection = new ULConnection(connectInfo);
+
+  mConnection->GetTimer().SetTimeout(inTimeout);
+
+  //now, try to establish a connection by starting the transition table and the event loop.
+  //here's the thing
+  //if there's nothing on the event loop, assume that it's done & the function can exit.
+  //otherwise, keep rolling the event loop
+
+  
+
+  return true;
+}
+
+
+//event handler loop.
+//will just keep running until the current event is nonexistent.
+//at which point, it will return the current state of the connection
+//to do this, execute an event, and then see if there's a response on the 
+//incoming connection (with a reasonable amount of timeout).
+//if no response, assume that the connection is broken.
+//if there's a response, then yay.
+//note that this is the ARTIM timeout event
+EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
+  ULEvent currentEvent = inEvent;
+  do {
+
+    EStateID theState = mTransitions.HandleEvent(currentEvent, *mConnection);
+    
+    if (mConnection->GetTimer().GetHasExpired()){
+      currentEvent.SetEvent(eARTIMTimerExpired);
+    }
+  } while (currentEvent.GetEvent() != eEventDoesNotExist);
 }

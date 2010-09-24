@@ -31,12 +31,12 @@ name and date: 16 sept 2010 mmr
 #define ULACTION_H
 
 namespace gdcm {
-  namespace primitives {
+  namespace network {
 
     class ULAction {
     private:
       //cannot copy a ULAction
-      ULAction(const gdcm::primitives::ULAction& inAction) {};
+      ULAction(const gdcm::network::ULAction& inAction) {};
 
     protected:
       

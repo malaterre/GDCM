@@ -12,7 +12,7 @@ An event consists of the event ID and the data associated with that event.
 #define ULEVENT_H
 
 namespace gdcm {
-  namespace primitives {
+  namespace network {
 
     class ULEvent {
       EEventID mEvent;
@@ -25,6 +25,9 @@ namespace gdcm {
 
       EEventID GetEvent() const { return mEvent; }
       DataSet GetDataSet() const { return mDataSet; }
+
+      void SetEvent(const EEventID& inEvent) { mEvent = inEvent; }
+      void SetDataSet(const DataSet& inDataSet) { mDataSet = inDataSet; }
     };
   }
 }
