@@ -12,7 +12,9 @@
 #include <config.h>
 
 #include <socket++/echo.h>
+#ifndef WIN32
 #include <socket++/fork.h>
+#endif
 #include <stdlib.h>
 
 using namespace std;
