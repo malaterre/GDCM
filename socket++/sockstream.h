@@ -311,7 +311,7 @@ class MY_API sockbuf: public streambuf
 #endif
 };
 
-class isockstream: public istream 
+class MY_API isockstream: public istream 
 {
     protected:
         //isockstream (): istream(rdbuf()), ios (0) {}
@@ -335,7 +335,7 @@ class osockstream: public ostream
         sockbuf* operator -> () { return rdbuf(); }
 };
 
-class iosockstream: public iostream 
+class MY_API iosockstream: public iostream 
 {
     protected:
         iosockstream ();
