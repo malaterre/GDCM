@@ -17,7 +17,7 @@ but more of a time keeper.
 #include "gdcmARTIMTimer.h"
 #include "gdcmSystem.h"
 
-using namespace gdcm::primitives;
+using namespace gdcm::network;
 
 //initiates the start and timeout at -1;
 ARTIMTimer::ARTIMTimer(){ 

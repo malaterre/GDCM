@@ -9,7 +9,7 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmULAction.h"
 
 namespace gdcm {
-  namespace primitives {
+  namespace network {
 
     //Send A-RELEASE-RQ-PDU
     //Next State: eSta7WaitRelease

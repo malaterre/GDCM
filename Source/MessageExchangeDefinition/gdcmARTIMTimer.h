@@ -19,7 +19,7 @@ There can be only one ARTIM timer per connection.
 #define ARTIMTIMER_H
 
 namespace gdcm {
-  namespace primitives{
+  namespace network{
     class ARTIMTimer{
     private:
       double mStartTime; //ms timing should be good enough, but there are also

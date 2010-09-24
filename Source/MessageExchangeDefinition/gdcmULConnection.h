@@ -23,22 +23,26 @@ name and date: 16 sept 2010 mmr
 #include "gdcmNetworkStateID.h"
 #include "gdcmARTIMTimer.h"
 #include <socket++/echo.h>
+#include "gdcmULConnectionInfo.h"
 
 
 namespace gdcm{
-  namespace primitives{
+  namespace network{
     class ULConnection {
 
-      echo* mSocket;
+      ULConnectionInfo mInfo;
+      echo* mSocket;//of the three protocols offered by socket++-- echo, smtp, and ftp--
+      //echo most closely matches what the DICOM standard describes as a network connection
       ARTIMTimer mTimer;
 
-      ULConnection(gdcm::primitives::ULConnection& inConnection){}; //no copy construction allowed
+      ULConnection(gdcm::network::ULConnection& inConnection){}; //no copy construction allowed
 
       EStateID mCurrentState;
+  
 
     public:
   
-      ULConnection();
+      ULConnection(const ULConnectionInfo& inUserInformation);
       //destructors are virtual to prevent memory leaks by inherited classes
       virtual ~ULConnection();
 
@@ -48,6 +52,8 @@ namespace gdcm{
       void SetProtocol(echo* inProtocol);
 
       ARTIMTimer& GetTimer();
+
+      ULConnectionInfo GetConnectionInfo() const;
 
     };
   }

@@ -9,7 +9,7 @@ This file is the implementation of the ULTransitionTable class, including the ac
 #include "gdcmULActionAR.h"
 #include "gdcmULActionDT.h"
 
-using namespace gdcm::primitives;
+using namespace gdcm::network;
 
 //construct the table
 ULTransitionTable::ULTransitionTable(){

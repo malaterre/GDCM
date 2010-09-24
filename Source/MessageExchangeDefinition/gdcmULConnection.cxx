@@ -20,12 +20,13 @@ name and date: 16 sept 2010 mmr
 */
 #include "gdcmULConnection.h"
 
-using namespace gdcm::primitives;
+using namespace gdcm::network;
 
 
-ULConnection::ULConnection(){
+ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo){
   mCurrentState = eSta1Idle;
   mSocket = NULL;
+  mInfo = inConnectInfo;
 }
 
 
@@ -56,4 +57,9 @@ void ULConnection::SetProtocol(echo* inProtocol){
 
 ARTIMTimer& ULConnection::GetTimer(){
   return mTimer;
+}
+
+
+ULConnectionInfo ULConnection::GetConnectionInfo() const{
+  return mInfo;
 }

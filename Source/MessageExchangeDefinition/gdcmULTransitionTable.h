@@ -22,7 +22,7 @@ state to transition to next.
 
 
 namespace gdcm {
-  namespace primitives{
+  namespace network{
 
     //The transition dictates the action that should be taken from the start state to the end state
     struct Transition {

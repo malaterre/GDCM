@@ -7,19 +7,24 @@ timeouts of the ARTIM timer, responses from the peer across the connection, etc)
 Its inputs are ULEvents, and it performs ULActions.
 
 */
-
-#include "ULConnection.h"
-#include "ARTIMTimer.h"
+#include "gdcmULTransitionTable.h"
+#include "gdcmULConnection.h"
+#include "gdcmULConnectionInfo.h"
 
 namespace gdcm {
-  namespace primitives {
+  namespace network {
     class ULConnectionManager {
     private:
       ULConnection* mConnection;
-      ARTIMTimer* mTimer;
+      ULTransitionTable mTransitions;
       
       //no copying
-      ULConnectionManager(const gdcm::primitives::ULConnectionManager& inCM){};
+      ULConnectionManager(const gdcm::network::ULConnectionManager& inCM){};
+
+      //event handler loop.
+      //will just keep running until the current event is nonexistent.
+      //at which point, it will return the current state of the connection
+      EStateID RunEventLoop(ULEvent& inEvent);
 
     public:
       ULConnectionManager();
@@ -27,11 +32,9 @@ namespace gdcm {
 
       //returns true if a connection of the given AETitle (ie, 'this' program)
       //is able to connect to the given AETitle and Port in a certain amount of time
-      bool EstablishConnection(const std::string& inAETitle,
-        const std::string& inConnectAETitle, 
-        const std::vector<byte>& inIPAddress,
-        const short& inConnectPort,
-        const double& inTimeout);
+      bool EstablishConnection(const std::string& inAETitle, const std::string& inConnectAETitle, 
+        const std::string& inComputerName, const long& inIPAddress, 
+        const unsigned short& inConnectPort, const double& inTimeout);
 
       //allows for a connection to be broken, but waits for an acknowledgement
       //of the breaking for a certain amount of time.  Returns true of the
@@ -47,7 +50,7 @@ namespace gdcm {
       //sending worked, false otherwise.
       //note that sending is asynchronous; as such, there's
       //also a 'receive' option, but that requires a callback function.
-      bool SendData(ULActionPayload* inPayload);
+      bool SendData();
 
 
 

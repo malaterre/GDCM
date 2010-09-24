@@ -12,7 +12,7 @@ multiple simultaneous events.  Multiple state outputs in transition tables, howe
 #define NETWORKEVENTS_H
 
 namespace gdcm {
-  namespace primitives{
+  namespace network{
     enum EEventID {
       eAASSOCIATERequestLocalUser = 0,
       eTransportConnConfirmLocal,
