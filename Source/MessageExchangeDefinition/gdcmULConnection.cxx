@@ -18,33 +18,16 @@ from within the ULConnectionManager (or this class) without a wrapper.
 name and date: 16 sept 2010 mmr
 
 */
-#ifndef ULCONNECTION_H
-#define ULCONNECTION_H
-#include <socket++/echo.h>
+#include "gdcmULConnection.h"
+
+using namespace gdcm::primitives;
 
 
-namespace gdcm{
-  namespace primitives{
-    class ULConnection {
-
-      echo mSocket;
-
-      ULConnection(gdcm::primitives::ULConnection& inConnection){}; //no copy construction allowed
-
-      EStateID mCurrentState;
-
-    public:
-  
-      ULConnection();
-      //destructors are virtual to prevent memory leaks by inherited classes
-      virtual ~ULConnection();
-
-      EStateID GetState() const {}
-
-
-
-    };
-  }
+ULConnection::ULConnection(){
+  mCurrentState = eSta1Idle;
 }
 
-#endif // ULCONNECTION_H
+
+EStateID ULConnection::GetState() const{
+  return mCurrentState;
+}
