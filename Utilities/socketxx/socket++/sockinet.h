@@ -56,7 +56,7 @@ class MY_API sockinetbuf: public sockbuf
         sockinetbuf (const sockbuf::sockdesc& sd);
         sockinetbuf (const sockinetbuf& si): sockbuf (si) {}
         sockinetbuf (sockbuf::type ty, int proto=0);
-        sockinetbuf&        operator=(const sockinetbuf& si);
+        sockinetbuf& operator=(const sockinetbuf& si);
         ~sockinetbuf () {}  
 
         sockinetaddr        localaddr() const;
