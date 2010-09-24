@@ -11,12 +11,17 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmULActionAE.h"
 #include "gdcmARTIMTimer.h"
 
+#include <socket++/echo.h>//for setting up the local socket
+
 using namespace gdcm::primitives;
 
 //Issue TRANSPORT CONNECT request primitive to local transport service.
 EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
-  return eSta13AwaitingClose;
+  //opening a local socket
+  echo e(protocol::tcp);
+  inConnection.mSocket = e;
+  return eSta4LocalAssocDone;
 }
 
 //Send A-ASSOCIATE-RQ-PDU
