@@ -32,7 +32,7 @@ namespace gdcm {
       //is able to connect to the given AETitle and Port in a certain amount of time
       bool EstablishConnection(const std::string& inAETitle,
         const std::string& inConnectAETitle, 
-        const std::vector<byte>& inIPAddress,
+        const std::vector<char>& inIPAddress,
         const short& inConnectPort,
         const double& inTimeout);
 
