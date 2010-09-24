@@ -10,6 +10,9 @@ Its inputs are ULEvents, and it performs ULActions.
 
 #include "gdcmULConnection.h"
 #include "gdcmARTIMTimer.h"
+#include <vector>
+#include "gdcmDataSet.h"
+
 
 namespace gdcm {
   namespace primitives {
@@ -47,7 +50,7 @@ namespace gdcm {
       //sending worked, false otherwise.
       //note that sending is asynchronous; as such, there's
       //also a 'receive' option, but that requires a callback function.
-      bool SendData(ULActionPayload* inPayload);
+      bool SendData(DataSet& inDataSet);
 
 
 

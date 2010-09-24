@@ -10,23 +10,28 @@ each class have its own file for the sake of brevity of the number of files.
 
 #include "gdcmULActionAE.h"
 #include "gdcmARTIMTimer.h"
+#include "gdcmAAssociateRQPDU.h"
+#include "gdcmAAssociateACPDU.h"
+#include "gdcmAAssociateRJPDU.h"
 
 #include <socket++/echo.h>//for setting up the local socket
 
 using namespace gdcm::primitives;
+using namespace gdcm::network; //gonna have to collapse these namespaces at some point
 
 //Issue TRANSPORT CONNECT request primitive to local transport service.
 EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
   //opening a local socket
-  echo e(protocol::tcp);
-  inConnection.mSocket = e;
+  echo* p = new echo(protocol::tcp);
+  inConnection.SetProtocol(p);
   return eSta4LocalAssocDone;
 }
 
 //Send A-ASSOCIATE-RQ-PDU
 EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
-
+  AAssociateRQPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
   return eSta5WaitRemoteAssoc;
 }
 
@@ -38,12 +43,17 @@ EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
 //Issue A-ASSOCIATE confirmation (reject) primitive and close transport connection
 EStateID ULActionAE4::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
-
+  AAssociateRJPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
+  inConnection.SetProtocol(NULL);
   return eSta1Idle;
 }
 
 //Issue Transport connection response primitive, start ARTIM timer
 EStateID ULActionAE5::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+
+  //issue response primitive; have to set that up
+  inConnection.GetTimer().Start();
 
   return eSta2Open;
 }
@@ -56,17 +66,24 @@ EStateID ULActionAE5::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Next state: eSta13AwaitingClose
 EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  inConnection.GetTimer().Stop();
   return eSta13AwaitingClose;
 }
 
 //Send A-ASSOCIATE-AC PDU
 EStateID ULActionAE7::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  AAssociateACPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
   return eSta6TransferReady;
 }
 
 //Send A-ASSOCIATE-RJ PDU and start ARTIM timer
 EStateID ULActionAE8::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+
+  AAssociateACPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetTimer().Start();
 
   return eSta13AwaitingClose;
 }

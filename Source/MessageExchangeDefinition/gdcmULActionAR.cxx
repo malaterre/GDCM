@@ -8,11 +8,18 @@ each class have its own file for the sake of brevity of the number of files.
 
 #include "gdcmULActionAR.h"
 #include "gdcmARTIMTimer.h"
+#include "gdcmAReleaseRQPDU.h"
+#include "gdcmAReleaseRPPDU.h"
+#include "gdcmPDataTFPDU.h"
 
 using namespace gdcm::primitives;
+using namespace gdcm::network;
 
 //Send A-RELEASE-RQ-PDU
 EStateID ULActionAR1::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+
+  AReleaseRQPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
 
   return eSta7WaitRelease;
 }
@@ -32,12 +39,17 @@ EStateID ULActionAR3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Issue A-RELEASE-RP PDU and start ARTIM timer
 EStateID ULActionAR4::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  AReleaseRPPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetTimer().Start();
+
   return eSta13AwaitingClose;
 }
 
 //Stop ARTIM timer
 EStateID ULActionAR5::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  inConnection.GetTimer().Stop();
   return eSta1Idle;
 }
 
@@ -50,6 +62,8 @@ EStateID ULActionAR6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Issue P-DATA-TF PDU
 EStateID ULActionAR7::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  PDataTFPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
   return eSta8WaitLocalRelease;
 }
 
@@ -64,6 +78,8 @@ EStateID ULActionAR8::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Send A-RELEASE-RP PDU
 EStateID ULActionAR9::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
+  AReleaseRPPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
   return eSta11ReleaseCollisionRq;
 }
 
