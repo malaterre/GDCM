@@ -20,14 +20,14 @@ name and date: 16 sept 2010 mmr
 */
 #ifndef ULCONNECTION_H
 #define ULCONNECTION_H
-#include <socket++/echo.h>
+#include <socket++/protocol.h>
 
 
 namespace gdcm{
   namespace primitives{
     class ULConnection {
 
-      echo mSocket;
+      protocol mSocket;
 
       ULConnection(gdcm::primitives::ULConnection& inConnection){}; //no copy construction allowed
 

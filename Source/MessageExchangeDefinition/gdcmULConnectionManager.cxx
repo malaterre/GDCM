@@ -8,8 +8,8 @@ Its inputs are ULEvents, and it performs ULActions.
 
 */
 
-#include "ULConnection.h"
-#include "ARTIMTimer.h"
+#include "gdcmULConnection.h"
+#include "gdcmARTIMTimer.h"
 
 namespace gdcm {
   namespace primitives {
