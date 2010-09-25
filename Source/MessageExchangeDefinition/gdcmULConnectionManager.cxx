@@ -90,21 +90,22 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
       uint8_t itemtype = 0x0;
       try {
         is.read( (char*)&itemtype, 1 );
+        //what happens if nothing's read?
+        BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
+        if (thePDU != NULL){
+          currentEvent.SetPDU(thePDU);
+          thePDU->Read(is);
+        } else {
+          currentEvent.SetEvent(eEventDoesNotExist);
+        }
+        //now, we have to figure out the event that just happened based on the PDU that was received.
+        currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(thePDU));
+        if (mConnection->GetTimer().GetHasExpired()){
+          currentEvent.SetEvent(eARTIMTimerExpired);
+        }
       }
       catch (...){
         //handle the exception, which is basically that nothing came in over the pipe.
-      }
-      //what happens if nothing's read?
-      BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
-      if (thePDU != NULL){
-        currentEvent.SetPDU(thePDU);
-      } else {
-        currentEvent.SetEvent(eEventDoesNotExist);
-      }
-      //now, we have to figure out the event that just happened based on the PDU that was received.
-      currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(thePDU));
-      if (mConnection->GetTimer().GetHasExpired()){
-        currentEvent.SetEvent(eARTIMTimerExpired);
       }
     }
     //this is crude, but as a special case, force the instantiation of a local connection
