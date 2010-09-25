@@ -42,8 +42,8 @@ namespace gdcm {
         mEnd = inEndState;
         mAction = inAction;
       }
-      static Transition MakeNew(int inEndState, ULAction* inAction){
-        return Transition(inEndState, inAction);
+      static Transition* MakeNew(int inEndState, ULAction* inAction){
+        return new Transition(inEndState, inAction);
       }
     };
 
