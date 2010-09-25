@@ -38,6 +38,7 @@ namespace gdcm {
       void Start(); //'start' the timer by getting the current wall time
       void Stop();//'stop' the timer by resetting the 'start' to -1;
       void SetTimeout(double inTimeout);
+      double GetTimeout() const;
       
       double GetElapsedTime() const;
 

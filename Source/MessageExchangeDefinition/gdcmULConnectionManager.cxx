@@ -72,8 +72,8 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
   ULEvent currentEvent = inEvent;
   EStateID theState = eStaDoesNotExist;
   do {
-
-    theState = mTransitions.HandleEvent(currentEvent, *mConnection);
+    mTransitions.HandleEvent(currentEvent, *mConnection);
+    theState = mConnection->GetState();
     std::istream &is = *mConnection->GetProtocol();
     std::ostream &os = *mConnection->GetProtocol();
     
@@ -84,24 +84,34 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
     //also leave the loop if nothing's waiting.
     //use the PDUFactory to create the appropriate pdu, which has its own
     //internal mechanisms for handling itself (but will, of course, be put inside the event object).
-    uint8_t itemtype = 0x0;
-    try {
-      is.read( (char*)&itemtype, 1 );
+    //but, and here's the important thing, only read on the socket when we should.
+    if (theState == eSta5WaitRemoteAssoc || theState == eSta7WaitRelease ||
+      theState == eSta8WaitLocalRelease || theState == eSta13AwaitingClose){
+      uint8_t itemtype = 0x0;
+      try {
+        is.read( (char*)&itemtype, 1 );
+      }
+      catch (...){
+        //handle the exception, which is basically that nothing came in over the pipe.
+      }
+      //what happens if nothing's read?
+      BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
+      if (thePDU != NULL){
+        currentEvent.SetPDU(thePDU);
+      } else {
+        currentEvent.SetEvent(eEventDoesNotExist);
+      }
+      //now, we have to figure out the event that just happened based on the PDU that was received.
+      currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(thePDU));
+      if (mConnection->GetTimer().GetHasExpired()){
+        currentEvent.SetEvent(eARTIMTimerExpired);
+      }
     }
-    catch (...){
-      //handle the exception, which is basically that nothing came in over the pipe.
-    }
-    //what happens if nothing's read?
-    BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
-    if (thePDU != NULL){
-      currentEvent.SetPDU(thePDU);
-    } else {
-      currentEvent.SetEvent(eEventDoesNotExist);
-    }
-    //now, we have to figure out the event that just happened based on the PDU that was received.
-    currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(thePDU));
-    if (mConnection->GetTimer().GetHasExpired()){
-      currentEvent.SetEvent(eARTIMTimerExpired);
+    //this is crude, but as a special case, force the instantiation of a local connection
+    //that doesn't need to be 8 individual steps) into one step.
+    //so, if we're in sta4, just fire off that event
+    if (theState == eSta4LocalAssocDone){
+      currentEvent.SetEvent(eTransportConnConfirmLocal);
     }
   } while (currentEvent.GetEvent() != eEventDoesNotExist);
 

@@ -34,6 +34,9 @@ EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName().c_str(), 
         inConnection.GetConnectionInfo().GetCalledIPPort());
   }
+  //make sure to convert timeouts to platform appropriate values.
+  (*p)->recvtimeout((int)inConnection.GetTimer().GetTimeout());
+  (*p)->sendtimeout((int)inConnection.GetTimer().GetTimeout());
   inConnection.SetProtocol(p);
   return eSta4LocalAssocDone;
 }

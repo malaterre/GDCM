@@ -18,7 +18,7 @@ ULTransitionTable::ULTransitionTable(){
   mTable[eAASSOCIATERequestLocalUser].transitions[GetStateIndex(eSta1Idle)] = 
     *Transition::MakeNew(eSta4LocalAssocDone, new ULActionAE1());
   //row 2
-  mTable[eAASSOCIATERequestLocalUser].transitions[GetStateIndex(eSta4LocalAssocDone)] = 
+  mTable[eTransportConnConfirmLocal].transitions[GetStateIndex(eSta4LocalAssocDone)] = 
     *Transition::MakeNew(eSta5WaitRemoteAssoc, new ULActionAE2());
 //row 3
   mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta2Open)] = 
@@ -282,7 +282,7 @@ ULTransitionTable::ULTransitionTable(){
 }
 
 //given the event and the state of the connection, call the appropriate action
-EStateID ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection) const{
+void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection) const{
   //first, find the Event
   EEventID eventID = inEvent.GetEvent();
   if (eventID >= 0 && eventID < eEventDoesNotExist){//make sure that the event exists
@@ -290,9 +290,8 @@ EStateID ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnec
     int stateIndex = GetStateIndex(inConnection.GetState());
     if (stateIndex >= 0 && stateIndex < cMaxStateID){
       if (mTable[eventID].transitions[stateIndex].mAction != NULL){
-        return mTable[eventID].transitions[stateIndex].mAction->PerformAction(inEvent, inConnection);
+        inConnection.SetState(mTable[eventID].transitions[stateIndex].mAction->PerformAction(inEvent, inConnection));
       }
     }
   }
-  return eStaDoesNotExist;
 }

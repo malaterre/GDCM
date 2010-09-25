@@ -42,6 +42,9 @@ ULConnection::~ULConnection(){
 EStateID ULConnection::GetState() const{
   return mCurrentState;
 }
+void ULConnection::SetState(const EStateID& inState){
+  mCurrentState = inState;
+}
 
 echo* ULConnection::GetProtocol(){
   return mSocket;
