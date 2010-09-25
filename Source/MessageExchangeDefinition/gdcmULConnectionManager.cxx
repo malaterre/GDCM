@@ -53,8 +53,8 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //here's the thing
   //if there's nothing on the event loop, assume that it's done & the function can exit.
   //otherwise, keep rolling the event loop
-
-  
+  ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
+  EStateID theState = RunEventLoop(theEvent);
 
   return true;
 }
@@ -71,11 +71,11 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
   ULEvent currentEvent = inEvent;
   EStateID theState = eStaDoesNotExist;
-  std::istream &is = *mConnection->GetProtocol();
-  std::ostream &os = *mConnection->GetProtocol();
   do {
 
     theState = mTransitions.HandleEvent(currentEvent, *mConnection);
+    std::istream &is = *mConnection->GetProtocol();
+    std::ostream &os = *mConnection->GetProtocol();
     
     //read the connection, as that's an event as well.
     //waiting for an object to come back across the connection, so that it can get handled.
@@ -85,7 +85,12 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
     //use the PDUFactory to create the appropriate pdu, which has its own
     //internal mechanisms for handling itself (but will, of course, be put inside the event object).
     uint8_t itemtype = 0x0;
-    is.read( (char*)&itemtype, 1 );
+    try {
+      is.read( (char*)&itemtype, 1 );
+    }
+    catch (...){
+      //handle the exception, which is basically that nothing came in over the pipe.
+    }
     //what happens if nothing's read?
     BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
     if (thePDU != NULL){
