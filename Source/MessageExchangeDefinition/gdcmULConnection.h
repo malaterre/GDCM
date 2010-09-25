@@ -47,6 +47,7 @@ namespace gdcm{
       virtual ~ULConnection();
 
       EStateID GetState() const;
+      void SetState(const EStateID& inState);//must be able to update state...
 
       echo* GetProtocol();
       void SetProtocol(echo* inProtocol);
@@ -54,6 +55,7 @@ namespace gdcm{
       ARTIMTimer& GetTimer();
 
       ULConnectionInfo GetConnectionInfo() const;
+
 
     };
   }

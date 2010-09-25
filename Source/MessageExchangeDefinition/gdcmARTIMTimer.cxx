@@ -35,6 +35,9 @@ void ARTIMTimer::SetTimeout(double inTimeOut){
   mTimeOut = inTimeOut;
 }
 
+double ARTIMTimer::GetTimeout() const{
+  return mTimeOut;
+}
 double ARTIMTimer::GetElapsedTime() const{
   if (mStartTime > 0){
     return GetCurrentTime() - mStartTime;
