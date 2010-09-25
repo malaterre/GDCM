@@ -16,6 +16,7 @@
 #define GDCMARELEASERQPDU_H
 
 #include "gdcmTypes.h"
+#include "gdcmBasePDU.h"
 
 namespace gdcm
 {
@@ -30,13 +31,14 @@ namespace network
 Table 9-24
 A-RELEASE-RQ PDU FIELDS
  */
-class GDCM_EXPORT AReleaseRQPDU
+class GDCM_EXPORT AReleaseRQPDU : public BasePDU
 {
 public:
   AReleaseRQPDU();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
   size_t Size() const;
+  void Print(std::ostream &os) const;
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;

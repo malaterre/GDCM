@@ -20,6 +20,7 @@
 #include "gdcmApplicationContext.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmUserInformation.h"
+#include "gdcmBasePDU.h"
 
 namespace gdcm
 {
@@ -33,7 +34,7 @@ namespace network
 /**
 Table 9-11 ASSOCIATE-RQ PDU fields
  */
-class GDCM_EXPORT AAssociateRQPDU
+class GDCM_EXPORT AAssociateRQPDU : public BasePDU
 {
 public:
   AAssociateRQPDU();

@@ -16,6 +16,7 @@
 #define GDCMAASSOCIATERJPDU_H
 
 #include "gdcmTypes.h"
+#include "gdcmBasePDU.h"
 
 namespace gdcm
 {
@@ -30,13 +31,14 @@ namespace network
 Table 9-21
 ASSOCIATE-RJ PDU FIELDS
  */
-class GDCM_EXPORT AAssociateRJPDU
+class GDCM_EXPORT AAssociateRJPDU : public BasePDU
 {
 public:
   AAssociateRJPDU();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
   void Print(std::ostream &os) const;
+  size_t Size() const;
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;

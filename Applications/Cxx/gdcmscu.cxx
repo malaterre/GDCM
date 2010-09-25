@@ -25,6 +25,7 @@
 #include "gdcmDataTransfer.h"
 #include "gdcmAttribute.h"
 #include "gdcmAssociationRelease.h"
+#include "gdcmULConnectionManager.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -34,6 +35,7 @@
 // ./bin/gdcmscu www.dicomserver.co.uk 11112 echo
 void CEcho( const char *remote, int portno )
 {
+  /*
   echo e(protocol::tcp);
 
   if (portno == 0)
@@ -50,6 +52,9 @@ void CEcho( const char *remote, int portno )
 
   gdcm::network::AssociationRelease ar;
   ar.Run(e);
+*/
+  gdcm::network::ULConnectionManager theManager;
+  theManager.EstablishConnection("ACME1", "A", remote, 0, portno, 1000);
 
 }
 

@@ -13,7 +13,7 @@ Its inputs are ULEvents, and it performs ULActions.
 
 namespace gdcm {
   namespace network {
-    class ULConnectionManager {
+    class GDCM_EXPORT ULConnectionManager {
     private:
       ULConnection* mConnection;
       ULTransitionTable mTransitions;
