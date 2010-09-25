@@ -157,5 +157,11 @@ void AAssociateRJPDU::Print(std::ostream &os) const
   os << "Reason: " << PrintReasonAsString( Source, Reason ) << std::endl;
 }
 
+
+size_t AAssociateRJPDU::Size() const{
+  return sizeof(uint8_t) + sizeof(uint8_t) + sizeof(uint32_t)+
+    sizeof(uint8_t) + sizeof(uint8_t) + sizeof(uint8_t) + sizeof(uint8_t);
+}
+
 } // end namespace network
 } // end namespace gdcm

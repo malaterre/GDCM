@@ -51,19 +51,17 @@ namespace gdcm {
     //the transition table is events, then state,
     //then the transition itself (which has the event
     //and start state implied by their starting locations)
+    //don't need to store the event; that's implicitly defined in the Table itself by location
     class TableRow{
     public:
-      EEventID mEvent;
       Transition transitions[cMaxStateID];
 
-      TableRow(EEventID inEvent){
-        mEvent = inEvent;
-      }
+      //copy constructor for stl additions into the transition table below.
     };
 
     class ULTransitionTable {
     private: 
-      std::vector<TableRow> mTable;
+      TableRow mTable[cMaxEventID];
     public:
       ULTransitionTable();
 

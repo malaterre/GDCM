@@ -19,6 +19,7 @@
 #include "gdcmApplicationContext.h"
 #include "gdcmPresentationContextAC.h"
 #include "gdcmUserInformation.h"
+#include "gdcmBasePDU.h"
 
 namespace gdcm
 {
@@ -33,7 +34,7 @@ namespace network
 Table 9-17
 ASSOCIATE-AC PDU fields
  */
-class GDCM_EXPORT AAssociateACPDU
+class GDCM_EXPORT AAssociateACPDU : public BasePDU
 {
 public:
   AAssociateACPDU();

@@ -16,6 +16,7 @@
 #define GDCMAABORTPDU_H
 
 #include "gdcmTypes.h"
+#include "gdcmBasePDU.h"
 
 namespace gdcm
 {
@@ -30,7 +31,7 @@ namespace network
 Table 9-26
 A-ABORT PDU FIELDS
  */
-class GDCM_EXPORT AAbortPDU
+  class GDCM_EXPORT AAbortPDU : public BasePDU
 {
 public:
   AAbortPDU();

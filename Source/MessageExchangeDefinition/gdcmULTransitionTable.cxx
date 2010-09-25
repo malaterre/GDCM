@@ -14,295 +14,270 @@ using namespace gdcm::network;
 //construct the table
 ULTransitionTable::ULTransitionTable(){
   //row 1
-  TableRow theRow(eAASSOCIATERequestLocalUser);
-  theRow.transitions[eSta1Idle] = Transition::MakeNew(eSta4LocalAssocDone, new ULActionAE1());
-  mTable.push_back(theRow);
+
+  mTable[eAASSOCIATERequestLocalUser].transitions[GetStateIndex(eSta1Idle)] = 
+    Transition::MakeNew(eSta4LocalAssocDone, new ULActionAE1());
   //row 2
-  TableRow theRow2(eAASSOCIATERequestLocalUser);
-  theRow2.transitions[eSta4LocalAssocDone] = 
+  mTable[eAASSOCIATERequestLocalUser].transitions[GetStateIndex(eSta4LocalAssocDone)] = 
     Transition::MakeNew(eSta5WaitRemoteAssoc, new ULActionAE2());
-  mTable.push_back(theRow2);
 //row 3
-  TableRow theRow3(eASSOCIATE_ACPDUreceived);
-  theRow3.transitions[eSta2Open] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow3.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta6TransferReady, new ULActionAE3());
-  theRow3.transitions[eSta6TransferReady] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta7WaitRelease] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta8WaitLocalRelease] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow3.transitions[eSta13AwaitingClose] = 
+  mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
-  mTable.push_back(theRow3);
 
 //row 4
-  TableRow theRow4(eASSOCIATE_RJPDUreceived);
-  theRow4.transitions[eSta2Open] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow4.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAE4());
-  theRow4.transitions[eSta6TransferReady] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta7WaitRelease] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta8WaitLocalRelease] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow4.transitions[eSta13AwaitingClose] = 
+  mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
-  mTable.push_back(theRow4);
 //row 5
-  TableRow theRow5(eTransportConnIndicLocal);
-  theRow5.transitions[eSta1Idle] = Transition::MakeNew(eSta2Open, new ULActionAE5());
-  mTable.push_back(theRow5);
+  mTable[eTransportConnIndicLocal].transitions[GetStateIndex(eSta1Idle)] = 
+    Transition::MakeNew(eSta2Open, new ULActionAE5());
 //row 6
-  TableRow theRow6(eAASSOCIATE_RQPDUreceived);
-  theRow6.transitions[eSta2Open] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta3WaitLocalAssoc | eSta13AwaitingClose, new ULActionAE6());
-  theRow6.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAE4());
-  theRow6.transitions[eSta6TransferReady] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta7WaitRelease] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta8WaitLocalRelease] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow6.transitions[eSta13AwaitingClose] = 
+  mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA7());
-  mTable.push_back(theRow6);
 //row 7
-  TableRow theRow7(eAASSOCIATEresponseAccept);
-  theRow7.transitions[eSta3WaitLocalAssoc] = Transition::MakeNew(eSta7WaitRelease, new ULActionAE7());
-  mTable.push_back(theRow7);
+  mTable[eAASSOCIATEresponseAccept].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
+    Transition::MakeNew(eSta7WaitRelease, new ULActionAE7());
 //row 8
-  TableRow theRow8(eAASSOCIATEresponseReject);
-  theRow8.transitions[eSta3WaitLocalAssoc] = Transition::MakeNew(eSta7WaitRelease, new ULActionAE7());
-  mTable.push_back(theRow8);
+  mTable[eAASSOCIATEresponseReject].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
+    Transition::MakeNew(eSta7WaitRelease, new ULActionAE7());
   //Row 9
-  TableRow theRow9(ePDATArequest);
-  theRow9.transitions[eSta6TransferReady] = Transition::MakeNew(eSta6TransferReady, new ULActionDT1());
-  theRow9.transitions[eSta8WaitLocalRelease] = Transition::MakeNew(eSta8WaitLocalRelease, new ULActionAR7());
-  mTable.push_back(theRow9);
+  mTable[ePDATArequest].transitions[GetStateIndex(eSta6TransferReady)] = 
+    Transition::MakeNew(eSta6TransferReady, new ULActionDT1());
+  mTable[ePDATArequest].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
+    Transition::MakeNew(eSta8WaitLocalRelease, new ULActionAR7());
 //row 10
-  TableRow theRow10(ePDATATFPDU);
-  theRow10.transitions[eSta2Open] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow10.transitions[eSta3WaitLocalAssoc] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow10.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow10.transitions[eSta6TransferReady] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta6TransferReady, new ULActionDT2());
-  theRow10.transitions[eSta7WaitRelease] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta7WaitRelease, new ULActionAR6());
-  theRow10.transitions[eSta8WaitLocalRelease] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow10.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow10.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow10.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow10.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow10.transitions[eSta13AwaitingClose] = 
+  mTable[ePDATATFPDU].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
-  mTable.push_back(theRow10);
 //row 11
-  TableRow theRow11(eARELEASERequest);
-  theRow11.transitions[eSta6TransferReady] = Transition::MakeNew(eSta7WaitRelease, new ULActionAR1());
-  mTable.push_back(theRow11);
+  mTable[eARELEASERequest].transitions[GetStateIndex(eSta6TransferReady)] = 
+    Transition::MakeNew(eSta7WaitRelease, new ULActionAR1());
 //row 12
-  TableRow theRow12(eARELEASE_RQPDUReceivedOpen);
-  theRow12.transitions[eSta2Open] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow12.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow12.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow12.transitions[eSta6TransferReady] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta8WaitLocalRelease, new ULActionAR2());
-  theRow12.transitions[eSta7WaitRelease] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta9ReleaseCollisionRqLocal | eSta10ReleaseCollisionAc, new ULActionAR8());
-  theRow12.transitions[eSta8WaitLocalRelease] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow12.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow12.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow12.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow12.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow12.transitions[eSta13AwaitingClose] = 
+  mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
-  mTable.push_back(theRow12);
 //row 13
-  TableRow theRow13(eARELEASE_RQPDUReceived);
-  theRow13.transitions[eSta2Open] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow13.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta6TransferReady] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta7WaitRelease] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAR3());
-  theRow13.transitions[eSta8WaitLocalRelease] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow13.transitions[eSta13AwaitingClose] = 
+  mTable[eARELEASE_RQPDUReceived].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
-  mTable.push_back(theRow13);
   //Row 14
-  TableRow theRow14(eARELEASEResponse);
-  theRow14.transitions[eSta8WaitLocalRelease] = Transition::MakeNew(eSta13AwaitingClose, new ULActionAR4());
-  theRow14.transitions[eSta9ReleaseCollisionRqLocal] = Transition::MakeNew(eSta11ReleaseCollisionRq, new ULActionAR9);
-  theRow14.transitions[eSta12ReleaseCollisionAcLocal] = Transition::MakeNew(eSta13AwaitingClose, new ULActionAR4());
-  mTable.push_back(theRow14);
+  mTable[eARELEASEResponse].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
+    Transition::MakeNew(eSta13AwaitingClose, new ULActionAR4());
+  mTable[eARELEASEResponse].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
+    Transition::MakeNew(eSta11ReleaseCollisionRq, new ULActionAR9);
+  mTable[eARELEASEResponse].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
+    Transition::MakeNew(eSta13AwaitingClose, new ULActionAR4());
   //row 15
-  TableRow theRow15(eAABORTRequest);
-  theRow15.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta4LocalAssocDone] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta4LocalAssocDone)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA2());
-  theRow15.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta6TransferReady] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta7WaitRelease] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta8WaitLocalRelease] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow15.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eAABORTRequest].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  mTable.push_back(theRow15);
   //row 16
-  TableRow theRow16(eAABORTPDUReceivedOpen);
-  theRow16.transitions[eSta2Open] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA2());
-  theRow16.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta6TransferReady] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta7WaitRelease] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta8WaitLocalRelease] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA3());
-  theRow16.transitions[eSta13AwaitingClose] = 
+  mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA2());
-  mTable.push_back(theRow16);
   //row 17
-  TableRow theRow17(eTransportConnectionClosed);
-  theRow17.transitions[eSta2Open] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta2Open)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA5());
-  theRow17.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta4LocalAssocDone] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta4LocalAssocDone)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta6TransferReady] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta7WaitRelease] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta8WaitLocalRelease] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA4());
-  theRow17.transitions[eSta13AwaitingClose] = 
+  mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA5());
-  mTable.push_back(theRow17);
   //row 18
-  TableRow theRow18(eARTIMTimerExpired);
-  theRow18.transitions[eSta2Open] = Transition::MakeNew(eSta1Idle, new ULActionAA2());
-  theRow18.transitions[eSta13AwaitingClose] = Transition::MakeNew(eSta1Idle, new ULActionAA2());
-  mTable.push_back(theRow18);
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta2Open)] = 
+    Transition::MakeNew(eSta1Idle, new ULActionAA2());
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta13AwaitingClose)] = 
+    Transition::MakeNew(eSta1Idle, new ULActionAA2());
   //row 19
-  TableRow theRow19(eARTIMTimerExpired);
-  theRow19.transitions[eSta3WaitLocalAssoc] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta3WaitLocalAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  theRow19.transitions[eSta13AwaitingClose] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta13AwaitingClose)] = 
     Transition::MakeNew(eSta1Idle, new ULActionAA8());
-  theRow19.transitions[eSta5WaitRemoteAssoc] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow19.transitions[eSta6TransferReady] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta6TransferReady)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow19.transitions[eSta7WaitRelease] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta7WaitRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow19.transitions[eSta8WaitLocalRelease] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta8WaitLocalRelease)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow19.transitions[eSta9ReleaseCollisionRqLocal] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow19.transitions[eSta10ReleaseCollisionAc] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta10ReleaseCollisionAc)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow19.transitions[eSta11ReleaseCollisionRq] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta11ReleaseCollisionRq)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
-  theRow19.transitions[eSta12ReleaseCollisionAcLocal] = 
+  mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] = 
     Transition::MakeNew(eSta13AwaitingClose, new ULActionAA7());
-  mTable.push_back(theRow19);
 
 }
 
@@ -310,7 +285,7 @@ ULTransitionTable::ULTransitionTable(){
 EStateID ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection) const{
   //first, find the Event
   EEventID eventID = inEvent.GetEvent();
-  if (eventID >= 0 && eventID < mTable.size()){//make sure that the event exists
+  if (eventID >= 0 && eventID < eEventDoesNotExist){//make sure that the event exists
     //have to convert the state ID into an index
     int stateIndex = GetStateIndex(inConnection.GetState());
     if (stateIndex >= 0 && stateIndex < cMaxStateID){

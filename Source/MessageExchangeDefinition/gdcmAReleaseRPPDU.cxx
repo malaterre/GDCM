@@ -72,5 +72,12 @@ size_t AReleaseRPPDU::Size() const
   return ret;
 }
 
+
+
+void AReleaseRPPDU::Print(std::ostream &os) const
+{
+  os << "Not implemented yet" << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm

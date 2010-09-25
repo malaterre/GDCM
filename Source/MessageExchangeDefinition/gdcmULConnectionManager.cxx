@@ -11,6 +11,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmULConnectionManager.h"
 #include "gdcmUserInformation.h"
 #include "gdcmULEvent.h"
+#include "gdcmPDUFactory.h"
 
 
 using namespace gdcm::network;
@@ -69,12 +70,35 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //note that this is the ARTIM timeout event
 EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
   ULEvent currentEvent = inEvent;
+  EStateID theState = eStaDoesNotExist;
+  std::istream &is = *mConnection->GetProtocol();
+  std::ostream &os = *mConnection->GetProtocol();
   do {
 
-    EStateID theState = mTransitions.HandleEvent(currentEvent, *mConnection);
+    theState = mTransitions.HandleEvent(currentEvent, *mConnection);
     
+    //read the connection, as that's an event as well.
+    //waiting for an object to come back across the connection, so that it can get handled.
+    //ie, accept, reject, timeout, etc.
+    //of course, if the connection is down, just leave the loop.
+    //also leave the loop if nothing's waiting.
+    //use the PDUFactory to create the appropriate pdu, which has its own
+    //internal mechanisms for handling itself (but will, of course, be put inside the event object).
+    uint8_t itemtype = 0x0;
+    is.read( (char*)&itemtype, 1 );
+    //what happens if nothing's read?
+    BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
+    if (thePDU != NULL){
+      currentEvent.SetPDU(thePDU);
+    } else {
+      currentEvent.SetEvent(eEventDoesNotExist);
+    }
+    //now, we have to figure out the event that just happened based on the PDU that was received.
+    currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(thePDU));
     if (mConnection->GetTimer().GetHasExpired()){
       currentEvent.SetEvent(eARTIMTimerExpired);
     }
   } while (currentEvent.GetEvent() != eEventDoesNotExist);
+
+  return theState;
 }

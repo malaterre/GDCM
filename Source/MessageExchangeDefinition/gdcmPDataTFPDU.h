@@ -17,6 +17,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmPresentationDataValue.h"
+#include "gdcmBasePDU.h"
 
 namespace gdcm
 {
@@ -31,7 +32,7 @@ namespace network
 Table 9-22
 P-DATA-TF PDU FIELDS
  */
-class GDCM_EXPORT PDataTFPDU
+class GDCM_EXPORT PDataTFPDU : public BasePDU
 {
 public:
   PDataTFPDU();

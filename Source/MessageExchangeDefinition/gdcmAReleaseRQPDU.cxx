@@ -72,5 +72,9 @@ size_t AReleaseRQPDU::Size() const
   return ret;
 }
 
+void AReleaseRQPDU::Print(std::ostream &os) const
+{
+  os << "Not implemented yet" << std::endl;
+}
 } // end namespace network
 } // end namespace gdcm

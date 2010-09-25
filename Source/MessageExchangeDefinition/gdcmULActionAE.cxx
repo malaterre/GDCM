@@ -25,12 +25,13 @@ EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   echo* p = new echo(protocol::tcp);
   if (inConnection.GetConnectionInfo().GetCalledIPPort() == 0){
     if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
-      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName());
+      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName().c_str());
     else 
       (*p)->connect(inConnection.GetConnectionInfo().GetCalledIPAddress());
+  }
   else {
     if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
-      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName(), 
+      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName().c_str(), 
         inConnection.GetConnectionInfo().GetCalledIPPort());
   }
   inConnection.SetProtocol(p);
