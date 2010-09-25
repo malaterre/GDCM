@@ -44,7 +44,24 @@ EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Send A-ASSOCIATE-RQ-PDU
 EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
   AAssociateRQPDU thePDU;//for now, use Matheiu's default values
+
+  thePDU.SetCallingAETitle( inConnection.GetConnectionInfo().GetCallingAETitle() );
+  thePDU.SetCalledAETitle( inConnection.GetConnectionInfo().GetCalledAETitle() );
+
+  gdcm::network::PresentationContext pc;
+  gdcm::network::AbstractSyntax as;
+  as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
+  pc.SetAbstractSyntax( as );
+
+  gdcm::network::TransferSyntax_ ts;
+  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  pc.AddTransferSyntax( ts );
+
+  thePDU.AddPresentationContext( pc );
+
+
   thePDU.Write(*inConnection.GetProtocol());
+  (*(inConnection.GetProtocol())).flush();
   return eSta5WaitRemoteAssoc;
 }
 
