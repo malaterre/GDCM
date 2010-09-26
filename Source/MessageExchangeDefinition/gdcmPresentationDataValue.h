@@ -56,6 +56,7 @@ public:
   uint8_t GetMessageHeader() const {
     return MessageHeader;
   }
+  // E.2 MESSAGE CONTROL HEADER ENCODING
   void SetMessageHeader(uint8_t messageheader) {
     MessageHeader = messageheader;
   }

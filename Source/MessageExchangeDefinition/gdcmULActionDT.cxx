@@ -16,7 +16,11 @@ using namespace gdcm::network;
 EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
 
   PDataTFPDU thePDU;//for now, use Matheiu's default values
+  gdcm::network::PresentationDataValue pdv;
+  thePDU.AddPresentationDataValue( pdv );
   thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetProtocol()->flush();
+
   return eSta6TransferReady;
 }
 
