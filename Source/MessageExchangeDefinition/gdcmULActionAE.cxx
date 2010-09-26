@@ -13,6 +13,7 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmAAssociateRJPDU.h"
+#include "gdcmPDataTFPDU.h" // FIXME
 
 #include <socket++/echo.h>//for setting up the local socket
 
@@ -67,8 +68,16 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue A-ASSOCIATE confirmation (accept) primitive
+// NOTE: A-ASSOCIATE is NOT A-ASSOCIATE-AC
+// PS 3.7 / Annex D for A-ASSOCIATE definition
 EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+#if 1
+  PDataTFPDU thePDU;//for now, use Matheiu's default values
+  gdcm::network::PresentationDataValue pdv;
+  thePDU.AddPresentationDataValue( pdv );
+#else
   AAssociateACPDU thePDU;//for now, use Matheiu's default values
+#endif
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetProtocol()->flush();
 

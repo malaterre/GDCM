@@ -63,6 +63,16 @@ EEventID PDUFactory::DetermineEventByPDU(BasePDU* inPDU){
   }
   PDataTFPDU* thePDataTFPDU = dynamic_cast<PDataTFPDU*>(inPDU);
   if (thePDataTFPDU != NULL){
+  ///
+    const PresentationDataValue &pdv = thePDataTFPDU->GetPresentationDataValue(0);
+    int mh = pdv.GetMessageHeader();
+    if( mh == 3 )
+      {
+      // E.2 MESSAGE CONTROL HEADER ENCODING
+      // If bit 1 is set to 1, the following fragment shall contain the last
+      // fragment of a Message Data Set or of a Message Command.
+      std::cout << "This was the last fragment of the message data set" << std::endl;
+      }
     return ePDATATFPDU;
   }
   AReleaseRQPDU* theAReleaseRQPDU = dynamic_cast<AReleaseRQPDU*>(inPDU);
