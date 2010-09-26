@@ -61,7 +61,8 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
 
   thePDU.Write(*inConnection.GetProtocol());
-  (*(inConnection.GetProtocol())).flush();
+  inConnection.GetProtocol()->flush();
+
   return eSta5WaitRemoteAssoc;
 }
 
@@ -69,6 +70,7 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
   AAssociateACPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetProtocol()->flush();
 
   return eSta6TransferReady;
 }
