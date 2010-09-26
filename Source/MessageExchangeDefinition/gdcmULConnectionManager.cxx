@@ -95,8 +95,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
         if (thePDU != NULL){
           currentEvent.SetPDU(thePDU);
           thePDU->Read(is);
-        } else {
-          currentEvent.SetEvent(eEventDoesNotExist);
+          thePDU->Print(std::cout);
         }
         //now, we have to figure out the event that just happened based on the PDU that was received.
         currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(thePDU));

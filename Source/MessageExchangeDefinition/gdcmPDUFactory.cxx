@@ -48,6 +48,7 @@ BasePDU* PDUFactory::ConstructPDU(uint8_t itemtype){
 
 //determine which event was received by the PDU type
 EEventID PDUFactory::DetermineEventByPDU(BasePDU* inPDU){
+  if(inPDU) {
   AAssociateRQPDU* theAAssociateRQPDU = dynamic_cast<AAssociateRQPDU*>(inPDU);
   if (theAAssociateRQPDU != NULL){
     return eAASSOCIATE_RQPDUreceived;
@@ -76,5 +77,6 @@ EEventID PDUFactory::DetermineEventByPDU(BasePDU* inPDU){
   if (theAAbortPDU != NULL){
     return eAABORTPDUReceivedOpen;
   }
+}
   return eEventDoesNotExist;
 }
