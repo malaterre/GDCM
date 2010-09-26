@@ -28,8 +28,10 @@ bool ULConnectionInfo::Initialize(UserInformation inUserInformation,
   if (inCalledIPAddress == 0 && inCalledComputerName.empty()){
     return false;
   }
-  if (strcpy_s(mCalledAETitle, 16, inCalledAETitle) != 0) return false;
-  if (strcpy_s(mCallingAETitle, 16, inCallingAETitle) != 0) return false;
+  //if (strcpy_s(mCalledAETitle, 16, inCalledAETitle) != 0) return false;
+  strncpy(mCalledAETitle, inCalledAETitle, 16);
+  //if (strcpy_s(mCallingAETitle, 16, inCallingAETitle) != 0) return false;
+  strncpy(mCallingAETitle, inCallingAETitle, 16);
   mCalledComputerName = inCalledComputerName;
   mCalledIPPort = inCalledIPPort;
   mCalledIPAddress = inCalledIPAddress;
