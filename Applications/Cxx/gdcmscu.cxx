@@ -55,6 +55,8 @@ void CEcho( const char *remote, int portno )
 */
   gdcm::network::ULConnectionManager theManager;
   theManager.EstablishConnection("ACME1", "A", remote, 0, portno, 1000);
+  theManager.SendEcho();
+  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
 }
 

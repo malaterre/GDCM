@@ -65,7 +65,8 @@ namespace gdcm {
     public:
       ULTransitionTable();
 
-      void HandleEvent(ULEvent& inEvent, ULConnection& inConnection) const;
+      void HandleEvent(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent) const;
 
       void PrintTable() const; //so that the table can be printed and verified against the DICOM standard
     };

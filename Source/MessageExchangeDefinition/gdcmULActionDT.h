@@ -15,14 +15,16 @@ namespace gdcm {
     //Next state: eSta6TransferReady
     class ULActionDT1 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
     
     //Send P-DATA indication primitive
     //Next state: eSta6TransferReady
     class ULActionDT2 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
   }
 }

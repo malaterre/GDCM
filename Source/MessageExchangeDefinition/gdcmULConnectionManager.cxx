@@ -56,7 +56,37 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
   EStateID theState = RunEventLoop(theEvent);
 
-  return true;
+  return (theState == eSta6TransferReady);//ie, finished the transitions
+}
+
+
+//send the Data PDU associated with Echo (ie, a default DataPDU)
+//this lets the user confirm that the connection is alive.
+//the user should look to cout to see the response of the echo command
+bool ULConnectionManager::SendEcho(){
+
+  BasePDU* theDataPDU = PDUFactory::ConstructDataPDU(NULL);//pass NULL for C-Echo
+  ULEvent theEvent(ePDATArequest, theDataPDU);
+
+  EStateID theState = RunEventLoop(theEvent);
+  return (theState == eSta6TransferReady);//ie, finished the transitions
+}
+
+
+bool ULConnectionManager::BreakConnection(const double& inTimeOut){
+  BasePDU* thePDU = PDUFactory::ConstructReleasePDU();
+  ULEvent theEvent(eARELEASERequest, thePDU);
+  mConnection->GetTimer().SetTimeout(inTimeOut);
+
+  EStateID theState = RunEventLoop(theEvent);
+  return (theState == eSta13AwaitingClose);//ie, finished the transitions
+}
+
+void ULConnectionManager::BreakConnectionNow(){
+  BasePDU* thePDU = PDUFactory::ConstructAbortPDU();
+  ULEvent theEvent(eAABORTRequest, thePDU);
+
+  EStateID theState = RunEventLoop(theEvent);
 }
 
 
@@ -68,15 +98,18 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //if no response, assume that the connection is broken.
 //if there's a response, then yay.
 //note that this is the ARTIM timeout event
-EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
-  ULEvent currentEvent = inEvent;
+EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
   EStateID theState = eStaDoesNotExist;
+  bool waitingForEvent;
+  EEventID raisedEvent;
   do {
-    mTransitions.HandleEvent(currentEvent, *mConnection);
+    mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
     theState = mConnection->GetState();
     std::istream &is = *mConnection->GetProtocol();
     std::ostream &os = *mConnection->GetProtocol();
     
+    
+
     //read the connection, as that's an event as well.
     //waiting for an object to come back across the connection, so that it can get handled.
     //ie, accept, reject, timeout, etc.
@@ -85,8 +118,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
     //use the PDUFactory to create the appropriate pdu, which has its own
     //internal mechanisms for handling itself (but will, of course, be put inside the event object).
     //but, and here's the important thing, only read on the socket when we should.
-    if (theState == eSta5WaitRemoteAssoc || theState == eSta7WaitRelease ||
-      theState == eSta8WaitLocalRelease || theState == eSta13AwaitingClose){
+    if (waitingForEvent){
       uint8_t itemtype = 0x0;
       try {
         is.read( (char*)&itemtype, 1 );
@@ -107,13 +139,13 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& inEvent){
         //handle the exception, which is basically that nothing came in over the pipe.
       }
     }
-    //this is crude, but as a special case, force the instantiation of a local connection
-    //that doesn't need to be 8 individual steps) into one step.
-    //so, if we're in sta4, just fire off that event
-    if (theState == eSta4LocalAssocDone){
-      currentEvent.SetEvent(eTransportConnConfirmLocal);
+    else {
+      currentEvent.SetEvent(raisedEvent);//actions that cause transitions in the state table
+      //locally just raise local events that will therefore cause the trigger to be pulled.
     }
-  } while (currentEvent.GetEvent() != eEventDoesNotExist);
+  } while (currentEvent.GetEvent() != eEventDoesNotExist && theState != eStaDoesNotExist && 
+    theState != eSta13AwaitingClose && theState != eSta6TransferReady);
+  //stop when the AE is done, or when ready to connect.
 
   return theState;
 }
