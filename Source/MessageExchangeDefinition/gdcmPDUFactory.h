@@ -8,6 +8,7 @@ name and date: 25 Sept 2010 mmr
 #include "gdcmTypes.h"
 #include "gdcmBasePDU.h"
 #include "gdcmNetworkEvents.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm{
   namespace network{
@@ -15,6 +16,10 @@ namespace gdcm{
       public:
       static BasePDU* ConstructPDU(uint8_t itemtype);//eventually needs to be smartpointer'd
       static EEventID DetermineEventByPDU(BasePDU* inPDU);
+      static BasePDU* ConstructDataPDU(DataSet* inDataSet); //returns a data pdu to be filled by user information
+      //NULL for the data set returns a C-Echo PDU
+      static BasePDU* ConstructReleasePDU();
+      static BasePDU* ConstructAbortPDU();
     };
   }
 }

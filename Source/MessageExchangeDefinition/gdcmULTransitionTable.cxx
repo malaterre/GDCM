@@ -282,7 +282,8 @@ ULTransitionTable::ULTransitionTable(){
 }
 
 //given the event and the state of the connection, call the appropriate action
-void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection) const{
+void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection, 
+                                    bool& outWaitingForEvent, EEventID& outRaisedEvent) const{
   //first, find the Event
   EEventID eventID = inEvent.GetEvent();
   if (eventID >= 0 && eventID < eEventDoesNotExist){//make sure that the event exists
@@ -291,7 +292,9 @@ void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection
     if (stateIndex >= 0 && stateIndex < cMaxStateID){
       if (mTable[eventID].transitions[stateIndex].mAction != NULL){
         std::cout << "Process: Event:" << eventID << ", State:" << stateIndex << std::endl;
-        inConnection.SetState(mTable[eventID].transitions[stateIndex].mAction->PerformAction(inEvent, inConnection));
+        inConnection.SetState(mTable[eventID].transitions[stateIndex].mAction->
+          PerformAction(inEvent, inConnection, outWaitingForEvent, outRaisedEvent));
+
       }
     }
   }

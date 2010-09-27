@@ -13,19 +13,30 @@ each class have its own file for the sake of brevity of the number of files.
 using namespace gdcm::network;
 
 //Send P-DATA-TF PDU
-EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+        bool& outWaitingForEvent, EEventID& outRaisedEvent)
+{
 
-  PDataTFPDU thePDU;//for now, use Matheiu's default values
-  gdcm::network::PresentationDataValue pdv;
-  thePDU.AddPresentationDataValue( pdv );
-  thePDU.Write(*inConnection.GetProtocol());
+  PDataTFPDU* dataPDU = dynamic_cast<PDataTFPDU*>(inEvent.GetPDU());
+  if (dataPDU == NULL){
+    throw new gdcm::Exception("Data sending event PDU malformed.");
+    return eStaDoesNotExist;
+  }
+  dataPDU->Write(*inConnection.GetProtocol());
   inConnection.GetProtocol()->flush();
+
+  outWaitingForEvent = true;//wait for a response that the data got there.
+  outRaisedEvent = ePDATArequest;
 
   return eSta6TransferReady;
 }
 
 //Send P-DATA indication primitive
-EStateID ULActionDT2::PerformAction(ULEvent& inEvent, ULConnection& inConnection){
+//for now, does nothing, stops the event loop
+EStateID ULActionDT2::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+        bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
+  outWaitingForEvent = false;
+  outRaisedEvent = ePDATArequest;
   return eSta6TransferReady;
 }

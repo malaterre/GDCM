@@ -52,7 +52,10 @@ namespace gdcm {
       //also a 'receive' option, but that requires a callback function.
       bool SendData();
 
-
+      //send the Data PDU associated with Echo (ie, a default DataPDU)
+      //this lets the user confirm that the connection is alive.
+      //the user should look to cout to see the response of the echo command
+      bool SendEcho();
 
     };
   }

@@ -21,6 +21,18 @@ will be defined in the same header file.  Payloads should JUST be data (or strea
 
 name and date: 16 sept 2010 mmr
 
+27 sept 2010 mmr: update on how to handle state transitions.
+
+Some actions perform changes that should raise events on the local system, and some
+actions perform changes that will require waiting for events from the remote system.
+
+Therefore, this base action has been modified so that those events are set by each action.  
+When the event loop runs an action, it will then test to see if a local event was raised by the
+action, and if so, perform the appropriate subsequent action.  If the action requires waiting
+for a response from the remote system, then the event loop will sit there (presumably with the
+ARTIM timer running) and wait for a response from the remote system.  Once a response is
+obtained, then the the rest of the state transitions can happen.
+
 */
 
 #include "gdcmNetworkStateID.h"
@@ -39,15 +51,15 @@ namespace gdcm {
       ULAction(const gdcm::network::ULAction& inAction) {};
 
     protected:
-      
-      //each particular action will define its payload
+
 
     public:
       ULAction() {};
       //make sure destructors are virtual to avoid memory leaks
       virtual ~ULAction() {};
 
-      virtual EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection) = 0;
+      virtual EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent) = 0;
     };
   }
 }

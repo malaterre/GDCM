@@ -16,35 +16,40 @@ namespace gdcm {
     //Issue TRANSPORT CONNECT request primitive to local transport service.
     class ULActionAE1 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
     //Send A-ASSOCIATE-RQ-PDU
     //Next State: eSta5WaitRemoteAssoc
     class ULActionAE2 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
     //Issue A-ASSOCIATE confirmation (accept) primitive
     //Next State: eSta6TransferReady
     class ULActionAE3 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
     //Issue A-ASSOCIATE confirmation (reject) primitive and close transport connection
     //Next State: eSta1Idle
     class ULActionAE4 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
     //Issue Transport connection response primitive, start ARTIM timer
     //Next State: eSta2Open
     class ULActionAE5 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
     //Stop ARTIM timer and if A-ASSOCIATE-RQ acceptable by service-provider:
@@ -55,21 +60,24 @@ namespace gdcm {
     //Next state: eSta13AwaitingClose
     class ULActionAE6 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
     //Send A-ASSOCIATE-AC PDU
     //Next State: eSta6TransferReady
     class ULActionAE7 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
     //Send A-ASSOCIATE-RJ PDU and start ARTIM timer
     //Next State: eSta13AwaitingClose
     class ULActionAE8 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection);
+      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
   }
 }
