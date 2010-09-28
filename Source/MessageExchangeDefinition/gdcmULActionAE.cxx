@@ -13,11 +13,14 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmAAssociateRJPDU.h"
+#include "gdcmNetworkEvents.h"
 #include "gdcmPDataTFPDU.h" // FIXME
 
 #include <socket++/echo.h>//for setting up the local socket
 
-using namespace gdcm::network; //gonna have to collapse these namespaces at some point
+namespace gdcm
+{
+namespace network{  //gonna have to collapse these namespaces at some point
 
 //Issue TRANSPORT CONNECT request primitive to local transport service.
 EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
@@ -72,7 +75,7 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   
   outWaitingForEvent = true;
-  outRaisedEvent = EEventID::eEventDoesNotExist;
+  outRaisedEvent = eEventDoesNotExist;
 
   return eSta5WaitRemoteAssoc;
 }
@@ -83,7 +86,7 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
   outWaitingForEvent = false;
-  outRaisedEvent = EEventID::eEventDoesNotExist;//no event is raised,
+  outRaisedEvent = eEventDoesNotExist;//no event is raised,
   //wait for the user to try to send some data.
   return eSta6TransferReady;
 }
@@ -93,7 +96,7 @@ EStateID ULActionAE4::PerformAction(ULEvent& inEvent, ULConnection& inConnection
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
           
   outWaitingForEvent = false;
-  outRaisedEvent = EEventID::eASSOCIATE_RJPDUreceived;
+  outRaisedEvent = eASSOCIATE_RJPDUreceived;
   return eSta1Idle;
 }
 
@@ -105,7 +108,7 @@ EStateID ULActionAE5::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   inConnection.GetTimer().Start();
 
   outWaitingForEvent = false;
-  outRaisedEvent = EEventID::eTransportConnConfirmLocal;
+  outRaisedEvent = eTransportConnConfirmLocal;
   return eSta2Open;
 }
 
@@ -126,13 +129,13 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   if (acceptable){
     
     outWaitingForEvent = false;
-    outRaisedEvent = EEventID::eAASSOCIATEresponseAccept;
+    outRaisedEvent = eAASSOCIATEresponseAccept;
 
     return eSta3WaitLocalAssoc;
   } else {
 
     outWaitingForEvent = false;
-    outRaisedEvent = EEventID::eAASSOCIATEresponseReject;
+    outRaisedEvent = eAASSOCIATEresponseReject;
     AAssociateRJPDU thePDU;//for now, use Matheiu's default values
     thePDU.Write(*inConnection.GetProtocol());
     inConnection.GetTimer().Stop();
@@ -149,7 +152,7 @@ EStateID ULActionAE7::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   thePDU.Write(*inConnection.GetProtocol());
   
   outWaitingForEvent = true;
-  outRaisedEvent = EEventID::eEventDoesNotExist;
+  outRaisedEvent = eEventDoesNotExist;
   return eSta6TransferReady;
 }
 
@@ -161,9 +164,10 @@ EStateID ULActionAE8::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetTimer().Start();
   outWaitingForEvent = false;
-  outRaisedEvent = EEventID::eAASSOCIATEresponseReject;
+  outRaisedEvent = eAASSOCIATEresponseReject;
 
   return eSta13AwaitingClose;
 }
 
-    
+   }
+} 
