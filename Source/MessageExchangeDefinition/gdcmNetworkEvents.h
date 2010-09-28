@@ -13,7 +13,7 @@ multiple simultaneous events.  Multiple state outputs in transition tables, howe
 
 namespace gdcm {
   namespace network{
-    enum EEventID {
+    typedef enum {
       eAASSOCIATERequestLocalUser = 0,
       eTransportConnConfirmLocal,
       eASSOCIATE_ACPDUreceived,
@@ -34,7 +34,7 @@ namespace gdcm {
       eARTIMTimerExpired,
       eUnrecognizedPDUReceived,
       eEventDoesNotExist
-    };
+    } EEventID;
 
     const int cMaxEventID = eEventDoesNotExist;
   }

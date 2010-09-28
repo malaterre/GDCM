@@ -20,10 +20,11 @@ EStateID ULActionAR1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   AReleaseRQPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetProtocol()->flush(); // important
 
 
   outWaitingForEvent = true;
-  outRaisedEvent = EEventID::eARELEASERequest;
+  outRaisedEvent = eARELEASERequest;
 
   return eSta7WaitRelease;
 }
@@ -33,7 +34,7 @@ EStateID ULActionAR2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
-  outRaisedEvent = EEventID::eARELEASERequest;
+  outRaisedEvent = eARELEASERequest;
   return eSta8WaitLocalRelease;
 }
 
@@ -42,7 +43,7 @@ EStateID ULActionAR3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
-  outRaisedEvent = EEventID::eARELEASERequest;
+  outRaisedEvent = eARELEASERequest;
   return eSta1Idle;
 }
 
@@ -54,7 +55,7 @@ EStateID ULActionAR4::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetTimer().Start();
   outWaitingForEvent = false;
-  outRaisedEvent = EEventID::eARELEASERequest;
+  outRaisedEvent = eARELEASERequest;
 
   return eSta13AwaitingClose;
 }
