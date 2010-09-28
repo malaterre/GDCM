@@ -89,11 +89,17 @@ bool SplitMosaicFilter::Split()
 
 
   // SliceThickness ??
-  const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
-  //std::cout << csael4 << std::endl;
-  gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4;
-  el4.Set( csael4.GetValue() );
-  int numberOfImagesInMosaic = el4.GetValue();
+  int numberOfImagesInMosaic = 0;
+  if( csa.FindCSAElementByName( "NumberOfImagesInMosaic" ) )
+    {
+    const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
+    //std::cout << csael4 << std::endl;
+    gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4;
+    el4.Set( csael4.GetValue() );
+    numberOfImagesInMosaic = el4.GetValue();
+    }
+
+  if( !numberOfImagesInMosaic ) return false;
 
   unsigned int div = (unsigned int )ceil(sqrt( (double)numberOfImagesInMosaic ) );
   dims[0] /= div;
