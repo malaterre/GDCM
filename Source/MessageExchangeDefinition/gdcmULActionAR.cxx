@@ -24,7 +24,6 @@ EStateID ULActionAR1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
 
   outWaitingForEvent = true;
-  outRaisedEvent = eARELEASERequest;
 
   return eSta7WaitRelease;
 }
@@ -34,7 +33,7 @@ EStateID ULActionAR2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
-  outRaisedEvent = eARELEASERequest;
+  outRaisedEvent = eARELEASERequest;//here's the primitive being sent
   return eSta8WaitLocalRelease;
 }
 
@@ -44,6 +43,8 @@ EStateID ULActionAR3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   outWaitingForEvent = false;
   outRaisedEvent = eARELEASERequest;
+  //inConnection.GetProtocol()->dis
+  //I can't see a way to close this connection directly; I guess it just gets reopened elsewhere?
   return eSta1Idle;
 }
 
@@ -53,6 +54,7 @@ EStateID ULActionAR4::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   AReleaseRPPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetProtocol()->flush();
   inConnection.GetTimer().Start();
   outWaitingForEvent = false;
   outRaisedEvent = eARELEASERequest;
@@ -68,10 +70,12 @@ EStateID ULActionAR5::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   return eSta1Idle;
 }
 
-//Issue P-Data indication
+//Issue P-DATA indication
 EStateID ULActionAR6::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
+  outWaitingForEvent = true;
+  outRaisedEvent = eEventDoesNotExist;
   return eSta7WaitRelease;
 }
 
@@ -81,6 +85,7 @@ EStateID ULActionAR7::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   PDataTFPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetProtocol()->flush();
   return eSta8WaitLocalRelease;
 }
 
@@ -99,12 +104,18 @@ EStateID ULActionAR9::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   AReleaseRPPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetProtocol()->flush();
+
+  outWaitingForEvent = true;
   return eSta11ReleaseCollisionRq;
 }
 
 //Issue A-RELEASE confirmation primitive
 EStateID ULActionAR10::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
+
+  outWaitingForEvent = false;
+  outRaisedEvent = eARELEASEResponse;
 
   return eSta12ReleaseCollisionAcLocal;
 }

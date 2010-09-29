@@ -80,11 +80,11 @@ EEventID PDUFactory::DetermineEventByPDU(BasePDU* inPDU){
   }
   AReleaseRQPDU* theAReleaseRQPDU = dynamic_cast<AReleaseRQPDU*>(inPDU);
   if (theAReleaseRQPDU != NULL){
-    return eARELEASE_RQPDUReceived;
+    return eARELEASE_RQPDUReceivedOpen;
   }
   AReleaseRPPDU* theAReleaseRPPDU = dynamic_cast<AReleaseRPPDU*>(inPDU);
   if (theAReleaseRPPDU != NULL){
-    return eARELEASEResponse;
+    return eARELEASE_RPPDUReceived;
   }
   AAbortPDU* theAAbortPDU = dynamic_cast<AAbortPDU*>(inPDU);
   if (theAAbortPDU != NULL){
