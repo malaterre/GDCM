@@ -26,7 +26,7 @@ namespace gdcm {
       ePDATATFPDU,
       eARELEASERequest,
       eARELEASE_RQPDUReceivedOpen,
-      eARELEASE_RQPDUReceived,
+      eARELEASE_RPPDUReceived,
       eARELEASEResponse,
       eAABORTRequest,
       eAABORTPDUReceivedOpen,

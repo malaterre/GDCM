@@ -79,7 +79,7 @@ bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   mConnection->GetTimer().SetTimeout(inTimeOut);
 
   EStateID theState = RunEventLoop(theEvent);
-  return (theState == eSta13AwaitingClose);//ie, finished the transitions
+  return (theState == eSta1Idle);//ie, finished the transitions
 }
 
 void ULConnectionManager::BreakConnectionNow(){
@@ -144,8 +144,9 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
       //locally just raise local events that will therefore cause the trigger to be pulled.
     }
   } while (currentEvent.GetEvent() != eEventDoesNotExist && theState != eStaDoesNotExist && 
-    theState != eSta13AwaitingClose && theState != eSta6TransferReady);
-  //stop when the AE is done, or when ready to connect.
+    theState != eSta13AwaitingClose && theState != eSta6TransferReady && theState != eSta1Idle);
+  //stop when the AE is done, or when ready to transfer data (ie, the next PDU should be sent in), 
+  //or when the connection is idle after a disconnection.
 
   return theState;
 }
