@@ -16,10 +16,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef GDCMTAGTOVR_H
-#define GDCMTAGTOVR_H
-
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 #include "gdcmStaticAssert.h"
@@ -2941,4 +2937,3 @@ return VR::INVALID;
 }
     
 } // end namespace gdcm
-#endif // GDCMTAGTOVR_H

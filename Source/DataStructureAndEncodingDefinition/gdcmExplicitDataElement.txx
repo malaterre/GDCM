@@ -304,9 +304,9 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( TagField == Tag(0x7fe0,0x0010) )
       {
-      // BUG this should be moved to the ImageReader class, only this class knows
-      // what 7fe0 actually is, and should tolerate partial Pixel Data element...
-      // PMS-IncompletePixelData.dcm
+      // BUG this should be moved to the ImageReader class, only this class
+      // knows what 7fe0 actually is, and should tolerate partial Pixel Data
+      // element...  PMS-IncompletePixelData.dcm
       gdcmWarningMacro( "Incomplete Pixel Data found, use file at own risk" );
       is.clear();
       }

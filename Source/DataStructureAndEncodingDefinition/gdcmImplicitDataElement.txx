@@ -199,7 +199,12 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
+#ifdef GDCM_WORDS_BIGENDIAN
+  VR::VRType vrfield = GetVRFromTag( TagField.GetElementTag() );
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+#else
+  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+#endif
     {
     // Special handling for PixelData tag:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -217,8 +222,8 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     }
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it
-  // as long as each of the Item lengths are correct
+  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly
+  // recompute it as long as each of the Item lengths are correct
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
     {
