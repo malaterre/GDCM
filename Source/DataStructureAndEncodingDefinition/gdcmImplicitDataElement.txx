@@ -208,7 +208,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   if( vrfield & VR::VRASCII )
     {
     //assert( VRField.GetSize() == 1 );
-    failed = !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField);
+    failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
     }
   else
     {
@@ -219,16 +219,16 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     switch(vrsize)
       {
     case 1:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
       break;
     case 2:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
       break;
     case 4:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
       break;
     case 8:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
       break;
     default:
     failed = true;
