@@ -403,6 +403,7 @@ std::istream &is = *Stream;
         // There is no such thing as Implicit Big Endian... oh well
         // LIBIDO-16-ACR_NEMA-Volume.dcm
         //F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag, skiptags);
+        //caller.template ReadCommon<ImplicitDataElement,SwapperDoOp>(is);
         throw "Virtual Big Endian Implicit is not defined by DICOM";
         }
       else
