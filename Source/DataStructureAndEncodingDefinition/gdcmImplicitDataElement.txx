@@ -203,11 +203,44 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
 #ifdef GDCM_WORDS_BIGENDIAN
-  VR::VRType vrfield = GetVRFromTag( TagField.GetElementTag() );
-  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+  VR vrfield = GetVRFromTag( TagField.GetElementTag() );
+  if( VRField & VR::VRASCII )
+    {
+    //assert( VRField.GetSize() == 1 );
+    failed = !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField);
+    }
+  else
+    {
+    assert( vrfield & VR::VRBINARY );
+    unsigned int vrsize = VRField.GetSize();
+    assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+    if(VRField==VR::AT) vrsize = 2;
+    switch(vrsize)
+      {
+    case 1:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      break;
+    case 2:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      break;
+    case 4:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      break;
+    case 8:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      break;
+    default:
+    failed = true;
+      assert(0);
+      }
+    }
 #else
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+    {
+    failed = true;
+    }
 #endif
+  if( failed )
     {
     // Special handling for PixelData tag:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
