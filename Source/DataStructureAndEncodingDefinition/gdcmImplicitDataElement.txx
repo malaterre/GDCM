@@ -18,6 +18,9 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
+#ifdef GDCM_WORDS_BIGENDIAN
+#include "gdcmTagToVR.h"
+#endif
 
 namespace gdcm
 {
