@@ -202,9 +202,9 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
+  bool failed;
 #ifdef GDCM_WORDS_BIGENDIAN
   VR vrfield = GetVRFromTag( TagField.GetElementTag() );
-  bool failed;
   if( vrfield & VR::VRASCII )
     {
     //assert( VRField.GetSize() == 1 );
@@ -236,10 +236,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       }
     }
 #else
-  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
-    {
-    failed = true;
-    }
+  failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
 #endif
   if( failed )
     {

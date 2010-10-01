@@ -20,7 +20,6 @@
 namespace gdcm
 {
 
-class ExplicitImplicitDataElement;
 /**
  * \brief Class to represent an *Implicit VR* Data Element
  * \note bla
