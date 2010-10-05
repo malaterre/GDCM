@@ -67,6 +67,7 @@ switch( tag ) {
 </xsl:text>
       </xsl:if>
     </xsl:for-each>
+default:
 return VR::INVALID;
 }
 }

@@ -2932,6 +2932,7 @@ case 0x7f000040:return VR::OW;
 case 0xfffafffa:return VR::SQ;
 case 0xfffcfffc:return VR::OB;
 
+default:
 return VR::INVALID;
 }
 }
