@@ -16,10 +16,14 @@ namespace gdcm{
       public:
       static BasePDU* ConstructPDU(uint8_t itemtype);//eventually needs to be smartpointer'd
       static EEventID DetermineEventByPDU(BasePDU* inPDU);
-      static BasePDU* ConstructDataPDU(DataSet* inDataSet); //returns a data pdu to be filled by user information
-      //NULL for the data set returns a C-Echo PDU
       static BasePDU* ConstructReleasePDU();
       static BasePDU* ConstructAbortPDU();
+
+      //these are the composite PDU construction methods for the PDataPDUs.
+      //basically, builds a pdatapdu, and then puts the appropriate information in
+      //for the appropriate composite service (c-echo, c-find, c-store, c-get, c-move)
+      static BasePDU* CreateCEchoPDU();
+      static BasePDU* CreateCFindPDU(DataSet* inDataSet);
     };
   }
 }

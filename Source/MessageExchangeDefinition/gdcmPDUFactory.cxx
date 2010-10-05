@@ -94,19 +94,6 @@ EEventID PDUFactory::DetermineEventByPDU(BasePDU* inPDU){
   return eEventDoesNotExist;
 }
 
-
-BasePDU* PDUFactory::ConstructDataPDU(gdcm::DataSet* inDataSet){
-  PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
-
-  if (inDataSet == NULL){
-    gdcm::network::PresentationDataValue pdv;
-    thePDataTFPDU->AddPresentationDataValue( pdv );
-  }
-  else {
-    //do other things?
-  }
-  return thePDataTFPDU;
-}
 BasePDU* PDUFactory::ConstructReleasePDU(){
   AReleaseRQPDU* theAReleaseRQPDU = new AReleaseRQPDU();
 
@@ -116,4 +103,23 @@ BasePDU* PDUFactory::ConstructAbortPDU(){
   AAbortPDU* theAAbortPDU = new AAbortPDU();
 
   return theAAbortPDU;
+}
+BasePDU* PDUFactory::CreateCEchoPDU(){
+  
+  PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+  gdcm::network::PresentationDataValue pdv;
+  thePDataTFPDU->AddPresentationDataValue( pdv );
+  return thePDataTFPDU;
+}
+
+
+BasePDU* PDUFactory::CreateCFindPDU(gdcm::DataSet* inDataSet){
+
+  PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+  gdcm::network::PresentationDataValue pdv;
+  thePDataTFPDU->AddPresentationDataValue( pdv );
+
+  return thePDataTFPDU;
+
+
 }
