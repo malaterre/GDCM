@@ -54,9 +54,11 @@ public:
     PresentationContextID = id;
   }
   uint8_t GetMessageHeader() const {
+    assert( MessageHeader <= 0x3 );
     return MessageHeader;
   }
   // E.2 MESSAGE CONTROL HEADER ENCODING
+  // Only the first two bits are considered
   void SetMessageHeader(uint8_t messageheader) {
     MessageHeader = messageheader;
   }
