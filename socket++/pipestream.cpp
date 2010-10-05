@@ -35,7 +35,11 @@ using namespace std;
 #endif
 
 // environ is not given a declaration in sun's <unistd.h>
+#ifndef __APPLE__
 extern char** environ;
+#else
+#include <crt_externs.h>
+#endif //__APPLE__
 
 // child closes s2 and uses s1
 // parent closes s1 and uses s2
@@ -70,7 +74,11 @@ static sockbuf* createpipestream (const char* cmd, int mode)
     argv[1] = "-c";
     argv[2] = cmd;
     argv[3] = 0;
+#ifndef __APPLE__
     execve ("/bin/sh", (char**) argv, environ);
+#else
+    execve("/bin/sh", (char**)argv, *_NSGetEnviron());
+#endif
     throw sockerr (errno);
   }
 #endif //wow, none of that above code works for windows at all
