@@ -17,7 +17,8 @@
 
 namespace gdcm 
 {
-  VR::VRType GetVRFromTag( uint32_t tag );
+  class Tag;
+  VR::VRType GetVRFromTag( Tag const & tag );
 }
 
 #endif // GDCMTAGTOVR_H

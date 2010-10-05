@@ -211,8 +211,8 @@ std::istream &ImplicitDataElement::ReadValue(std::istream &is)
   ValueField->SetLength(ValueLengthField); // perform realloc
   bool failed;
 #ifdef GDCM_WORDS_BIGENDIAN
-  VR vrfield = GetVRFromTag( TagField.GetElementTag() );
-  if( vrfield & VR::VRASCII )
+  VR vrfield = GetVRFromTag( TagField );
+  if( vrfield & VR::VRASCII || vrfield == VR::INVALID )
     {
     //assert( VRField.GetSize() == 1 );
     failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
@@ -457,7 +457,44 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+  bool failed;
+#ifdef GDCM_WORDS_BIGENDIAN
+  VR vrfield = GetVRFromTag( TagField );
+  if( vrfield & VR::VRASCII || vrfield == VR::INVALID )
+    {
+    //assert( VRField.GetSize() == 1 );
+    failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
+    }
+  else
+    {
+    assert( vrfield & VR::VRBINARY );
+    unsigned int vrsize = vrfield.GetSize();
+    assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+    if(vrfield==VR::AT) vrsize = 2;
+    switch(vrsize)
+      {
+    case 1:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      break;
+    case 2:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      break;
+    case 4:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      break;
+    case 8:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      break;
+    default:
+    failed = true;
+      assert(0);
+      }
+    }
+#else
+  failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
+#endif
+  if( failed )
+  //if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     // Special handling for PixelData tag:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

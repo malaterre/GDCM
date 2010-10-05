@@ -21,7 +21,9 @@
 #include "gdcmStaticAssert.h"
 
 namespace gdcm {
-VR::VRType GetVRFromTag( uint32_t tag ) {
+VR::VRType GetVRFromTag( Tag const & t ) {
+if( t.IsGroupLength() ) return VR::UL;
+uint32_t tag = t.GetElementTag();
 switch( tag ) {
 case 0x00000000:return VR::UL;
 case 0x00000001:return VR::UL;
