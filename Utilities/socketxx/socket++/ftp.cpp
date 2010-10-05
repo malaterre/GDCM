@@ -24,6 +24,10 @@
 #include <stdio.h> // for sprintf
 #include <errno.h>
 
+#ifdef __APPLE__
+#include <arpa/inet.h> //for inet_ntoa
+#endif//__APPLE__
+
 using namespace std;
 
 #if defined (__osf__) && defined (__DECCXX)
