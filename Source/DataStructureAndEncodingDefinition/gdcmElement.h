@@ -86,7 +86,11 @@ public:
   void SetFromDataElement(DataElement const &de) {
     const ByteValue *bv = de.GetByteValue();
     if( !bv ) return;
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( de.GetVR() == VR::UN /*|| de.GetVR() == VR::INVALID*/ )
+#else
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+#endif
       {
       Set(de.GetValue());
       }
