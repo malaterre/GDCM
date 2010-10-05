@@ -59,10 +59,17 @@ public:
   template <typename TSwap>
   std::istream &Read(std::istream &is)
     {
+    TagField.Read<TSwap>(is);
+    return ReadValue<TSwap>(is);
+    }
+
+  template <typename TSwap>
+  std::istream &ReadValue(std::istream &is)
+    {
     // Superclass
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
-    if( !TagField.Read<TSwap>(is) )
+    if( !is )
       {
       //  BogusItemStartItemEnd.dcm
       throw Exception( "Problem" );

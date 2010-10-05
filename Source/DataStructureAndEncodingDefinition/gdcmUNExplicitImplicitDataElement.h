@@ -38,6 +38,9 @@ public:
   template <typename TSwap>
   std::istream &Read(std::istream &is);
 
+  template <typename TSwap>
+  std::istream &ReadValue(std::istream &is);
+
   // PURPOSELY do not provide an implementation for writing !
   //template <typename TSwap>
   //const std::ostream &Write(std::ostream &os) const;

@@ -93,18 +93,30 @@ namespace gdcm
 
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadSelectedTags(std::istream &inputStream, const std::set<Tag> & selectedTags) {
-    if ( ! selectedTags.empty() )
+    if ( ! (selectedTags.empty() || inputStream.fail()) )
     {
       const Tag maxTag = *(selectedTags.rbegin());
       std::set<Tag> tags = selectedTags;
       DataElement dataElem;
 
-      // TODO There's an optimization opportunity here:
-      // dataElem.Read only needs to read the value if the tag is selected!
-      // Niels Dekker, LKEB, Jan 2010.
-      while( !inputStream.eof() && dataElem.template Read<TDE,TSwap>(inputStream) )
+      while( !inputStream.eof() )
       {
-        const Tag tag = dataElem.GetTag();
+        Tag& tag = dataElem.GetTag();
+        tag.Read<TSwap>(inputStream);
+        if ( inputStream.fail() || maxTag < tag )
+        {
+          // Failed to read the tag, or the read tag exceeds the maximum.
+          // As we assume ascending tag ordering, we can exit the loop.
+          break;
+        }
+        static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream);
+
+        if ( inputStream.fail() )
+        {
+          // Failed to read the value.
+          break;
+        }
+
         const std::set<Tag>::iterator found = tags.find(tag);
 
         if ( found != tags.end() )

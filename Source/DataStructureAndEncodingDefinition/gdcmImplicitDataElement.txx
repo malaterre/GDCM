@@ -29,9 +29,16 @@ namespace gdcm
 template <typename TSwap>
 std::istream &ImplicitDataElement::Read(std::istream &is)
 {
+  TagField.Read<TSwap>(is);
+  return ReadValue<TSwap>(is);
+}
+
+template <typename TSwap>
+std::istream &ImplicitDataElement::ReadValue(std::istream &is)
+{
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
-  if( !TagField.Read<TSwap>(is) )
+  if( !is )
     {
     if( !is.eof() ) // FIXME This should not be needed
       assert(0 && "Should not happen");

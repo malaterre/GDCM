@@ -31,9 +31,16 @@ namespace gdcm
 template <typename TSwap>
 std::istream &CP246ExplicitDataElement::Read(std::istream &is)
 {
+  TagField.Read<TSwap>(is);
+  return ReadValue<TSwap>(is);
+}
+//-----------------------------------------------------------------------------
+template <typename TSwap>
+std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
+{
   // See PS 3.5, Data Element Structure With CP246Explicit VR
   // Read Tag
-  if( !TagField.Read<TSwap>(is) )
+  if( !is )
     {
     if( !is.eof() ) // FIXME This should not be needed
       {
