@@ -65,13 +65,12 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //the user should look to cout to see the response of the echo command
 bool ULConnectionManager::SendEcho(){
 
-  BasePDU* theDataPDU = PDUFactory::ConstructDataPDU(NULL);//pass NULL for C-Echo
+  BasePDU* theDataPDU = PDUFactory::CreateCEchoPDU();//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
-
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   BasePDU* thePDU = PDUFactory::ConstructReleasePDU();

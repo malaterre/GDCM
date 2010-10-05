@@ -57,6 +57,7 @@ namespace gdcm {
       //the user should look to cout to see the response of the echo command
       bool SendEcho();
 
+
     };
   }
 }
