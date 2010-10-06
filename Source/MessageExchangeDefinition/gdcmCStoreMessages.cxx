@@ -17,7 +17,8 @@ PresentationDataValue CStoreRQ::ConstructPDV(DataSet* inDataSet){
   thePDV.SetPresentationContextID(1);
 
   thePDV.SetCommand(true);
-  thePDV.SetLastFragment(true);
+  // FIXME how should I send multiple PDV ...
+  //thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
   DataSet ds;
