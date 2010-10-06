@@ -37,6 +37,8 @@ gdcmULConnection.cxx
 gdcmULConnectionManager.cxx
 gdcmULConnectionInfo.cxx
 gdcmPDUFactory.cxx
+gdcmCompositeMessageFactory.cxx
+gdcmCEchoMessages.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})

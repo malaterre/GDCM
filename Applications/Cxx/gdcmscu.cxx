@@ -63,6 +63,7 @@ void CEcho( const char *remote, int portno )
 
 void CStore( const char *remote, int portno, std::string const & filename )
 {
+  
   echo e(protocol::tcp);
 
   if (portno == 0)
@@ -135,6 +136,7 @@ I:     Abstract Syntax: =XRayAngiographicImageStorage
 I:     Abstract Syntax: =XRayFluoroscopyImageStorage
 I:     Abstract Syntax: =XRayRadiationDoseSR
 */
+  /*
   gdcm::network::TransferSyntax_ ts;
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   //ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
@@ -225,11 +227,12 @@ I:     Abstract Syntax: =XRayRadiationDoseSR
 
   gdcm::network::AssociationRelease ar;
   ar.Run(e);
-
+*/
 }
 
 static void process_input(iosockinet& sio)
 {
+  /*
   gdcm::network::AAssociateRQPDU rqpdu;
   rqpdu.SetCallingAETitle( "STORESCU" );
   rqpdu.Read( sio );
@@ -356,6 +359,7 @@ static void process_input(iosockinet& sio)
   gdcm::network::AReleaseRPPDU rel2;
   rel2.Write( sio );
   sio.flush();
+  */
 }
 
 void CStoreServer( int portno )
