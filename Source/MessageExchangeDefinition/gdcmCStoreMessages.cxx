@@ -19,8 +19,6 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   thePDV.SetPresentationContextID(1); // FIXME
 
   thePDV.SetCommand(true);
-  //thePDV.SetMessageHeader( 1 );
-  // FIXME how should I send multiple PDV ...
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 

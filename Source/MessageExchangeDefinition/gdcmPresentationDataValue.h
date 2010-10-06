@@ -48,7 +48,7 @@ public:
 
   /// Get DataSet
   void SetDataSet(const DataSet & ds);
-  DataSet const &GetDataSet() const { return DS; }
+  //DataSet const &GetDataSet() const { return DS; }
 
   //void MyInit(File const &file);
   //void MyInit2(File const &file);
@@ -82,7 +82,8 @@ private:
   uint8_t PresentationContextID;
 
   // FIXME this should change if the DataSet cannot fit in memory.
-  DataSet DS;
+  //DataSet DS;
+  std::string Blob; // std::vector<char> ??
 
   uint8_t MessageHeader;
 };
