@@ -26,10 +26,9 @@ PresentationDataValue CStoreRQ::ConstructPDV(DataSet* inDataSet){
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
   const DataElement& msclass = inDataSet->GetDataElement( Tag(0x0008, 0x0016) );
-  const char *uidsci = gdcm::UIDs::GetUIDString( gdcm::UIDs::SecondaryCaptureImageStorage );
   const char *uid = msclass.GetByteValue()->GetPointer();
+  assert( uid );
   std::string suid = uid;
-  assert( suid == uidsci );
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
   de.SetByteValue( suid.c_str(), suid.size()  );
@@ -37,9 +36,9 @@ PresentationDataValue CStoreRQ::ConstructPDV(DataSet* inDataSet){
   }
 
   {
-  //const char sopinstane[] = "1.2.826.0.1.3680043.2.1125.7445042278205614490601873384971697089";
   const DataElement& msinst = inDataSet->GetDataElement( Tag(0x0008, 0x0018) );
   const char *uid = msinst.GetByteValue()->GetPointer();
+  assert( uid );
   DataElement de( Tag(0x0,0x1000) );
   de.SetVR( VR::UI );
   std::string suid = uid;
