@@ -94,7 +94,6 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
     //curlen = Size();
     }
   assert( curlen + 68 == PDULength );
-
   assert( PDULength + 4 + 1 + 1 == Size() );
 
   return is;
@@ -129,6 +128,8 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
     }
   UserInfo.Write( os );
 
+  assert( PDULength + 4 + 1 + 1 == Size() );
+
   return os;
 }
 
@@ -162,6 +163,7 @@ void AAssociateACPDU::AddPresentationContextAC( PresentationContextAC const &pca
 
 void AAssociateACPDU::Print(std::ostream &os) const
 {
+  os << "List of PresentationContextAC: " << std::endl;
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
