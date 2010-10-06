@@ -12,6 +12,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmUserInformation.h"
 #include "gdcmULEvent.h"
 #include "gdcmPDUFactory.h"
+#include "gdcmReader.h"
 
 
 using namespace gdcm::network;
@@ -66,6 +67,20 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 bool ULConnectionManager::SendEcho(){
 
   BasePDU* theDataPDU = PDUFactory::CreateCEchoPDU();//pass NULL for C-Echo
+  ULEvent theEvent(ePDATArequest, theDataPDU);
+
+  EStateID theState = RunEventLoop(theEvent);
+  return (theState == eSta6TransferReady);//ie, finished the transitions
+}
+
+bool ULConnectionManager::SendStore(std::string const & filename)
+{
+  Reader reader;
+  reader.SetFileName( filename.c_str() );
+  reader.Read();
+  const DataSet &ds = reader.GetFile().GetDataSet();
+
+  BasePDU* theDataPDU = PDUFactory::CreateCStorePDU( ds );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);

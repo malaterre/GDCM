@@ -113,6 +113,13 @@ BasePDU* PDUFactory::CreateCEchoPDU(){
   return thePDataTFPDU;
 }
 
+BasePDU* PDUFactory::CreateCStorePDU(DataSet const &inDataSet)
+{
+  PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+  PresentationDataValue pdv = CompositeMessageFactory::ConstructCStoreRQ( (DataSet*)&inDataSet );
+  thePDataTFPDU->AddPresentationDataValue( pdv );
+  return thePDataTFPDU;
+}
 
 BasePDU* PDUFactory::CreateCFindPDU(gdcm::DataSet* inDataSet){
 

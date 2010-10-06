@@ -63,14 +63,19 @@ void CEcho( const char *remote, int portno )
 
 void CStore( const char *remote, int portno, std::string const & filename )
 {
+  gdcm::network::ULConnectionManager theManager;
+  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000);
+  theManager.SendStore( filename );
+  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   
+/*
   echo e(protocol::tcp);
 
   if (portno == 0)
     e->connect ( remote );
   else
     e->connect ( remote, portno);
-
+*/
 /*
 I:     Abstract Syntax: =AmbulatoryECGWaveformStorage
 I:     Abstract Syntax: =BasicTextSR
