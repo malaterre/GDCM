@@ -56,7 +56,7 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   thePDU.SetCallingAETitle( inConnection.GetConnectionInfo().GetCallingAETitle() );
   thePDU.SetCalledAETitle( inConnection.GetConnectionInfo().GetCalledAETitle() );
 
-#if 0
+#if 1
   // The following only works for C-ECHO
   gdcm::network::PresentationContext pc;
   gdcm::network::AbstractSyntax as;
@@ -80,7 +80,6 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 #endif
 
   thePDU.AddPresentationContext( pc );
-
 
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetProtocol()->flush();

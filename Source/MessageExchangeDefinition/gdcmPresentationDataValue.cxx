@@ -70,6 +70,10 @@ PresentationContextID = 1;
   assert (ItemLength + 4 == Size() );
 
   */
+
+  // postcondition
+  ItemLength = Size() - 4;
+  assert (ItemLength + 4 == Size() );
 }
 
 std::istream &PresentationDataValue::Read(std::istream &is)
@@ -221,17 +225,17 @@ size_t PresentationDataValue::Size() const
   size_t ret = 0;
   ret += sizeof(ItemLength);
   ret += sizeof(PresentationContextID);
-  ret += 1; // MESSAGE CONTROL HEADER ENCODING
+  ret += sizeof(MessageHeader); // MESSAGE CONTROL HEADER ENCODING
 
-  if( GetIsLastFragment())//not sure the logic here...
+//  if( GetIsLastFragment())//not sure the logic here...
     {
     VL vl = DS.GetLength<ImplicitDataElement>();
     ret += vl;
     }
-  else
-    {
-    ret += ItemLength - 2;
-    }
+//  else
+//    {
+//    ret += ItemLength - 2;
+//    }
 
   return ret;
 }
