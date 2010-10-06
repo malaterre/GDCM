@@ -14,10 +14,10 @@
 =========================================================================*/
 #include "gdcmPresentationDataValue.h"
 #include "gdcmSwapper.h"
-#include "gdcmDataSet.h"
-#include "gdcmImplicitDataElement.h"
-#include "gdcmUIDs.h"
-#include "gdcmAttribute.h"
+//#include "gdcmDataSet.h" //already in header
+//#include "gdcmImplicitDataElement.h"
+//#include "gdcmUIDs.h"
+//#include "gdcmAttribute.h"
 #include "gdcmFile.h"
 
 namespace gdcm
@@ -27,7 +27,15 @@ namespace network
 
 PresentationDataValue::PresentationDataValue()
 {
-  PresentationContextID = 1;
+  MessageHeader = 0;
+  PresentationContextID = 0; //MUST BE SET BY THE CALLER!
+/*  
+//this code will create a cecho-rq message, rather than just a pure
+//pdv.  PDVs need to be made to accomodate the information contained within them,
+//and so should be made directly by the calling composite message.
+//note that the message may be split into many different PDVs,
+//in which case the PDV will still have to be made when the split occurs.
+PresentationContextID = 1;
 
   DataSet &ds = DS;
   DataElement de( Tag(0x0,0x2) );
@@ -60,6 +68,8 @@ PresentationDataValue::PresentationDataValue()
   MessageHeader = 3;
   ItemLength = Size() - 4;
   assert (ItemLength + 4 == Size() );
+
+  */
 }
 
 std::istream &PresentationDataValue::Read(std::istream &is)
@@ -76,7 +86,8 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   MessageHeader = mh;
 
   DS.Clear();
-  if( MessageHeader ==  3 )
+  //not sure the logic in this next one...
+  if( GetIsLastFragment() && GetIsCommand() )
     {
     DataSet &ds = DS;
     VL vl = ItemLength - 2;
@@ -87,7 +98,7 @@ std::istream &PresentationDataValue::Read(std::istream &is)
     VL debug = DS.GetLength<ImplicitDataElement>();
     assert( debug == vl );
     }
-  else if ( MessageHeader == 2 )
+  else if (GetIsLastFragment() && !GetIsCommand()  )
     {
     char *buf = new char[ ItemLength - 2 ];
     is.read( buf, ItemLength - 2 );
@@ -99,7 +110,7 @@ std::istream &PresentationDataValue::Read(std::istream &is)
     delete buf;
 
     }
-  else if ( MessageHeader == 0 )
+  else if ( !GetIsLastFragment() && !GetIsCommand()  )
     {
     //assert( 0 );
     char *buf = new char[ ItemLength - 2 ];
@@ -116,8 +127,9 @@ std::istream &PresentationDataValue::Read(std::istream &is)
     assert( 0 );
     }
 
-  assert (ItemLength + 4 == Size() );
+  assert (ItemLength + 4 == Size() );  
   return is;
+
 }
 
 std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os)
@@ -169,8 +181,9 @@ std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os
 //    assert( 0 );
 //    }
 
-  assert (ItemLength + 4 == Size() );
+  assert (ItemLength + 4 == Size() );  
   return is;
+
 }
 
 const std::ostream &PresentationDataValue::Write(std::ostream &os) const
@@ -198,8 +211,9 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
 //  std::cout << "AFTER" << std::endl;
 
   assert (ItemLength + 4 == Size() );
-
+  
   return os;
+
 }
 
 size_t PresentationDataValue::Size() const
@@ -209,7 +223,7 @@ size_t PresentationDataValue::Size() const
   ret += sizeof(PresentationContextID);
   ret += 1; // MESSAGE CONTROL HEADER ENCODING
 
-  if( MessageHeader == 3 )
+  if( GetIsLastFragment())//not sure the logic here...
     {
     VL vl = DS.GetLength<ImplicitDataElement>();
     ret += vl;
@@ -222,6 +236,10 @@ size_t PresentationDataValue::Size() const
   return ret;
 }
 
+void PresentationDataValue::ComputeSize() {
+  ItemLength = Size() - 4;
+}
+
 void PresentationDataValue::SetDataSet(const DataSet & ds)
 {
   DS.Clear();
@@ -230,21 +248,21 @@ void PresentationDataValue::SetDataSet(const DataSet & ds)
   //MessageHeader = 0;
   assert (ItemLength + 4 == Size() );
 }
-
+/*
 void PresentationDataValue::MyInit(File const &file)
 {
   const FileMetaInformation &fmi = file.GetHeader();
-  /*
-D: # Dicom-Data-Set
-D: # Used TransferSyntax: Little Endian Implicit
-D: (0000,0002) UI =SecondaryCaptureImageStorage            #  26, 1 AffectedSOPClassUID
-D: (0000,0100) US 1                                        #   2, 1 CommandField
-D: (0000,0110) US 1                                        #   2, 1 MessageID
-D: (0000,0700) US 2                                        #   2, 1 Priority
-D: (0000,0800) US 1                                        #   2, 1 DataSetType
-D: (0000,1000) UI [1.2.826.0.1.3680043.2.1125.4986931123241056575784008796031983649] #  64, 1 AffectedSOPInstanceUID
-D: 
-*/
+  
+//D: # Dicom-Data-Set
+//D: # Used TransferSyntax: Little Endian Implicit
+//D: (0000,0002) UI =SecondaryCaptureImageStorage            #  26, 1 AffectedSOPClassUID
+//D: (0000,0100) US 1                                        #   2, 1 CommandField
+//D: (0000,0110) US 1                                        #   2, 1 MessageID
+//D: (0000,0700) US 2                                        #   2, 1 Priority
+//D: (0000,0800) US 1                                        #   2, 1 DataSetType
+//D: (0000,1000) UI [1.2.826.0.1.3680043.2.1125.4986931123241056575784008796031983649] #  64, 1 AffectedSOPInstanceUID
+//D: 
+
   DS.Clear();
   DataSet &ds = DS;
   {
@@ -402,14 +420,37 @@ void PresentationDataValue::MyInit3()
   ItemLength = Size() - 4;
   assert (ItemLength + 4 == Size() );
 }
-
+*/
 void PresentationDataValue::Print(std::ostream &os) const
 {
   os << "ItemLength: " << ItemLength << std::endl;
   os << "PresentationContextID: " << (int)PresentationContextID << std::endl;
-  os << "DataSet:" << std::endl;
-  DS.Print( os );
+//  os << "DataSet:" << std::endl;
+//  DS.Print( os );
   os << "MessageHeader: " << (int)MessageHeader << std::endl;
+}
+
+void PresentationDataValue::SetCommand(const bool& inCommand){
+  if (inCommand){
+    MessageHeader |= 1;
+  } else {
+    MessageHeader &= ~1;
+  }
+}
+void PresentationDataValue::SetLastFragment(const bool& inLast){
+
+  if (inLast){
+    MessageHeader |= 2;
+  } else {
+    MessageHeader &= ~2;//set the second field to zero
+  }
+}
+
+bool PresentationDataValue::GetIsCommand() const{
+  return ((MessageHeader & 1) == 1);
+}
+bool PresentationDataValue::GetIsLastFragment() const{
+  return ((MessageHeader & 2) == 2);
 }
 
 } // end namespace network

@@ -15,6 +15,7 @@ class to construct specific instances of PDUs, and return the BasePDU class.
 #include "gdcmAReleaseRPPDU.h"
 #include "gdcmAReleaseRQPDU.h"
 #include "gdcmPDataTFPDU.h"
+#include "gdcmCompositeMessageFactory.h"
 
 using namespace gdcm::network;
 
@@ -107,7 +108,7 @@ BasePDU* PDUFactory::ConstructAbortPDU(){
 BasePDU* PDUFactory::CreateCEchoPDU(){
   
   PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
-  gdcm::network::PresentationDataValue pdv;
+  PresentationDataValue pdv = CompositeMessageFactory::ConstructCEchoRQ();
   thePDataTFPDU->AddPresentationDataValue( pdv );
   return thePDataTFPDU;
 }
