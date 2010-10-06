@@ -14,12 +14,12 @@ name and date: 4 oct 2010 mmr
 
 namespace gdcm {
 namespace network {
-  PresentationDataValue CompositeMessageFactory::ConstructCEchoRQ(){
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCEchoRQ(const ULConnection& inConnection){
     CEchoRQ theEchoRQ;
     return theEchoRQ.ConstructPDV(NULL);
   }
 
-  PresentationDataValue CompositeMessageFactory::ConstructCStoreRQ(DataSet *inDataSet) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRQ(const ULConnection& inConnection, DataSet *inDataSet) {
     CStoreRQ theStoreRQ;
     return theStoreRQ.ConstructPDV(inDataSet);
   }

@@ -39,6 +39,8 @@ namespace gdcm {
       
       virtual size_t Size() const = 0;
       virtual void Print(std::ostream &os) const = 0;
+
+      virtual bool IsLastFragment() const = 0;
     };
   }
 }

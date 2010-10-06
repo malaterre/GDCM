@@ -9,12 +9,12 @@ namespace gdcm{
   namespace network{
     class CEchoRQ : public BaseCompositeMessage {
     public:
-      PresentationDataValue ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };
 
     class CEchoRSP : public BaseCompositeMessage {
     public:
-      PresentationDataValue ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };
   }
 }

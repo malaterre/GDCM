@@ -9,12 +9,12 @@ namespace gdcm{
   namespace network{
     class CStoreRQ : public BaseCompositeMessage {
     public:
-      PresentationDataValue ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };
 
     class CStoreRSP : public BaseCompositeMessage {
     public:
-      PresentationDataValue ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };
   }
 }

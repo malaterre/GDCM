@@ -10,6 +10,7 @@ name and date: 4 oct 2010 mmr
 
 #include "gdcmDataSet.h"
 #include "gdcmPresentationDataValue.h"
+#include "gdcmULConnection.h"
 
 namespace gdcm {
   namespace network {
@@ -19,9 +20,9 @@ namespace gdcm {
       //find, move, etc, may need something more robust, but since those are 
       //easily placed into the appropriate pdatapdu in the pdufactory,
       //this approach without a base class (but done internally) is useful.
-      static PresentationDataValue ConstructCEchoRQ();
+      static std::vector<PresentationDataValue> ConstructCEchoRQ(const ULConnection& inConnection);
 
-      static PresentationDataValue ConstructCStoreRQ(DataSet *inDataSet);
+      static std::vector<PresentationDataValue> ConstructCStoreRQ(const ULConnection& inConnection, DataSet *inDataSet);
 
 
     };

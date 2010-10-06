@@ -105,29 +105,44 @@ BasePDU* PDUFactory::ConstructAbortPDU(){
 
   return theAAbortPDU;
 }
-BasePDU* PDUFactory::CreateCEchoPDU(){
+std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(const ULConnection& inConnection){
   
-  PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
-  PresentationDataValue pdv = CompositeMessageFactory::ConstructCEchoRQ();
-  thePDataTFPDU->AddPresentationDataValue( pdv );
-  return thePDataTFPDU;
+  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCEchoRQ(inConnection);
+  std::vector<PresentationDataValue>::iterator pdvItor;
+  std::vector<BasePDU*> outVector;
+  for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
+    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    thePDataTFPDU->AddPresentationDataValue( *pdvItor );
+    outVector.push_back(thePDataTFPDU);
+  }
+  return outVector;
 }
 
-BasePDU* PDUFactory::CreateCStorePDU(DataSet *inDataSet)
+std::vector<BasePDU*> PDUFactory::CreateCStorePDU(const ULConnection& inConnection, gdcm::DataSet *inDataSet)
 {
-  PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
-  PresentationDataValue pdv = CompositeMessageFactory::ConstructCStoreRQ( inDataSet );
-  thePDataTFPDU->AddPresentationDataValue( pdv );
-  return thePDataTFPDU;
+
+  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCStoreRQ(inConnection, inDataSet );
+  std::vector<PresentationDataValue>::iterator pdvItor;
+  std::vector<BasePDU*> outVector;
+  for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
+    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    thePDataTFPDU->AddPresentationDataValue( *pdvItor );
+    outVector.push_back(thePDataTFPDU);
+  }
+  return outVector;
 }
 
-BasePDU* PDUFactory::CreateCFindPDU(gdcm::DataSet* inDataSet){
-
-  PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
-  gdcm::network::PresentationDataValue pdv;
-  thePDataTFPDU->AddPresentationDataValue( pdv );
-
-  return thePDataTFPDU;
+std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, gdcm::DataSet* inDataSet){
+//still have to build this!
+  std::vector<PresentationDataValue> pdv;// = CompositeMessageFactory::ConstructCStoreRQ(inConnection, inDataSet );
+  std::vector<PresentationDataValue>::iterator pdvItor;
+  std::vector<BasePDU*> outVector;
+  for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
+    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    thePDataTFPDU->AddPresentationDataValue( *pdvItor );
+    outVector.push_back(thePDataTFPDU);
+  }
+  return outVector;
 
 
 }

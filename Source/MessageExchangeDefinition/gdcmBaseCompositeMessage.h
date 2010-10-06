@@ -20,6 +20,7 @@ This is an abstract class.  It cannot be instantiated on its own.
 #define BASECOMPOSITEMESSSAGE_H
 #include "gdcmDataSet.h"
 #include "gdcmPresentationDataValue.h"
+#include <vector>
 
 namespace gdcm{
   namespace network{
@@ -30,7 +31,7 @@ namespace gdcm{
       //the pdv, as described in Annex E of 3.8-2009, is the first byte
       //of the message (the MessageHeader), and then the subsequent dataset
       //that describes the operation.
-      virtual PresentationDataValue ConstructPDV(DataSet* inDataSet) = 0;
+      virtual std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet) = 0;
 
     };
   }

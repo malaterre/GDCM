@@ -9,6 +9,7 @@ name and date: 25 Sept 2010 mmr
 #include "gdcmBasePDU.h"
 #include "gdcmNetworkEvents.h"
 #include "gdcmDataSet.h"
+#include "gdcmULConnection.h"
 
 namespace gdcm{
   namespace network{
@@ -22,9 +23,11 @@ namespace gdcm{
       //these are the composite PDU construction methods for the PDataPDUs.
       //basically, builds a pdatapdu, and then puts the appropriate information in
       //for the appropriate composite service (c-echo, c-find, c-store, c-get, c-move)
-      static BasePDU* CreateCEchoPDU();
-      static BasePDU* CreateCStorePDU(DataSet *inDataSet);
-      static BasePDU* CreateCFindPDU(DataSet* inDataSet);
+      //the connection is necessary to construct the stream of PDVs that will
+      //be then placed into the vector of PDUs
+      static std::vector<BasePDU*> CreateCEchoPDU(const ULConnection& inConnection);
+      static std::vector<BasePDU*> CreateCStorePDU(const ULConnection& inConnection, DataSet *inDataSet);
+      static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, DataSet* inDataSet);
     };
   }
 }

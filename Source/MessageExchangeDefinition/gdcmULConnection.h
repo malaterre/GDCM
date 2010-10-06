@@ -24,6 +24,9 @@ name and date: 16 sept 2010 mmr
 #include "gdcmARTIMTimer.h"
 #include <socket++/echo.h>
 #include "gdcmULConnectionInfo.h"
+#include "gdcmPresentationContext.h"
+#include "gdcmDataElement.h"
+#include "gdcmPresentationContext.h"
 
 
 namespace gdcm{
@@ -39,6 +42,8 @@ namespace gdcm{
 
       EStateID mCurrentState;
   
+      std::vector<PresentationContext> mPresentationContexts;
+      uint32_t mMaxPDUSize;
 
     public:
   
@@ -55,6 +60,20 @@ namespace gdcm{
       ARTIMTimer& GetTimer();
 
       ULConnectionInfo GetConnectionInfo() const;
+
+      //when the connection is first associated, the connection is told
+      //the max packet/PDU size and the way in which to present data
+      //(presentation contexts, etc).  Store that here.
+      void SetMaxPDUSize(const uint32_t& inSize);
+      uint32_t GetMaxPDUSize() const;
+
+      std::vector<PresentationContext> GetPresentationContexts() const;
+      void SetPresentationContexts(const std::vector<PresentationContext>& inContexts);
+      //given a particular data element, presumably the SOP class, 
+      //find the presentation context for that SOP
+      //NOT YET IMPLEMENTED
+      PresentationContext FindContext(const DataElement& de) const;
+
 
 
     };

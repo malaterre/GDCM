@@ -11,7 +11,7 @@ this file defines the messages for the cstore action
 namespace gdcm{
 namespace network{
 
-PresentationDataValue CStoreRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   assert( inDataSet );
   PresentationDataValue thePDV;
   thePDV.SetPresentationContextID(1);
@@ -83,12 +83,16 @@ PresentationDataValue CStoreRQ::ConstructPDV(DataSet* inDataSet){
 
   thePDV.SetDataSet(ds);
   thePDV.ComputeSize();
-  return thePDV;
+
+  //!!!Mathieu, I assume you'll want to fix this
+  std::vector<PresentationDataValue> thePDVs;
+  thePDVs.push_back(thePDV);
+  return thePDVs;
 
 }
 
-PresentationDataValue  CStoreRSP::ConstructPDV(DataSet* inDataSet){
-  PresentationDataValue thePDV;
+std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(DataSet* inDataSet){
+  std::vector<PresentationDataValue> thePDV;
   return thePDV;
 }
 
