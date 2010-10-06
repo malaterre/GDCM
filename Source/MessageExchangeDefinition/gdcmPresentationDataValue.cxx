@@ -89,42 +89,48 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   //assert( mh == 0 ); // bitwise stuff...
   MessageHeader = mh;
 
-  DS.Clear();
+  //DS.Clear();
   //not sure the logic in this next one...
   if( GetIsLastFragment() && GetIsCommand() )
     {
-    DataSet &ds = DS;
+    //DataSet &ds = DS;
     VL vl = ItemLength - 2;
-    ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
+    //ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
+    Blob.resize( vl ); // reserve ??
+    is.read( &Blob[0], vl );
 
     //ds.Print( std::cout );
 
-    VL debug = DS.GetLength<ImplicitDataElement>();
+    //VL debug = DS.GetLength<ImplicitDataElement>();
+    VL debug = Blob.size();
     assert( debug == vl );
     }
   else if (GetIsLastFragment() && !GetIsCommand()  )
     {
-    char *buf = new char[ ItemLength - 2 ];
-    is.read( buf, ItemLength - 2 );
+    //char *buf = new char[ ItemLength - 2 ];
+    VL vl = ItemLength - 2;
+    Blob.resize( vl ); // reserve ??
+    is.read( &Blob[0], ItemLength - 2 );
 
-    std::ofstream bug( "/tmp/bug1" );
-    bug.write( buf, ItemLength - 2 );
-    bug.close();
+    //std::ofstream bug( "/tmp/bug1" );
+    //bug.write( buf, ItemLength - 2 );
+    //bug.close();
 
-    delete buf;
-
+    //delete buf;
     }
   else if ( !GetIsLastFragment() && !GetIsCommand()  )
     {
     //assert( 0 );
-    char *buf = new char[ ItemLength - 2 ];
-    is.read( buf, ItemLength - 2 );
+    //char *buf = new char[ ItemLength - 2 ];
+    VL vl = ItemLength - 2;
+    Blob.resize( vl ); // reserve ??
+    is.read( &Blob[0], ItemLength - 2 );
 
-    std::ofstream bug( "/tmp/msg0-1" );
-    bug.write( buf, ItemLength - 2 );
-    bug.close();
+    //std::ofstream bug( "/tmp/msg0-1" );
+    //bug.write( buf, ItemLength - 2 );
+    //bug.close();
 
-    delete buf;
+    //delete buf;
     }
   else
     {
@@ -149,7 +155,7 @@ std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os
   //assert( mh == 0 ); // bitwise stuff...
   MessageHeader = mh;
 
-  DS.Clear();
+  //DS.Clear();
 //  if( MessageHeader ==  3 )
 //    {
 //    DataSet &ds = DS;
@@ -174,11 +180,13 @@ std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os
 //    }
 //  else if ( MessageHeader == 0 )
     {
-    char *buf = new char[ ItemLength - 2 ];
-    is.read( buf, ItemLength - 2 );
-    os.write( buf, ItemLength - 2 );
+    //char *buf = new char[ ItemLength - 2 ];
+    VL vl = ItemLength - 2;
+    Blob.resize( vl ); // reserve ??
+    is.read( &Blob[0], ItemLength - 2 );
+    os.write( &Blob[0], ItemLength - 2 );
 
-    delete buf;
+    //delete buf;
     }
 //  else
 //    {
@@ -206,8 +214,10 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   //b.close();
 
   // FIXME we cannot decide at this point to write in implicit...
-  DS.Write<ImplicitDataElement,SwapperNoOp>( os );
-  VL debug = DS.GetLength<ImplicitDataElement>();
+  //DS.Write<ImplicitDataElement,SwapperNoOp>( os );
+  os.write( Blob.c_str(), Blob.size() );
+  //VL debug = DS.GetLength<ImplicitDataElement>();
+  VL debug = Blob.size();
 
   assert( debug == ItemLength - 2 );
 
@@ -230,8 +240,9 @@ size_t PresentationDataValue::Size() const
 
 //  if( GetIsLastFragment())//not sure the logic here...
     {
-    VL vl = DS.GetLength<ImplicitDataElement>();
-    ret += vl;
+    //VL vl = DS.GetLength<ImplicitDataElement>();
+    //ret += vl;
+    ret += Blob.size();
     }
 //  else
 //    {
@@ -248,8 +259,11 @@ void PresentationDataValue::ComputeSize() {
 
 void PresentationDataValue::SetDataSet(const DataSet & ds)
 {
-  DS.Clear();
-  DS = ds;
+  //DS.Clear();
+  //DS = ds;
+  std::stringstream ss;
+  ds.Write<ImplicitDataElement,SwapperNoOp>( ss );
+  Blob = ss.str();
   ItemLength = Size() - 4;
   //MessageHeader = 0;
   assert (ItemLength + 4 == Size() );
