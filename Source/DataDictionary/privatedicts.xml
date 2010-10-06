@@ -1152,13 +1152,15 @@
   <entry owner="GE ??? From Adantage Review CS" group="0019" element="xx80" vr="LO" vm="1" name="CR Bar Code Number"/>
   <entry owner="GE ??? From Adantage Review CS" group="0019" element="xx90" vr="LO" vm="1" name="CR Film Output Exposures"/>
   <entry owner="GE LUT Asymmetry Parameter" group="0045" element="xx67" vr="DS" vm="1" name="LUT Assymetry"/>
-  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx20" vr="IS" vm="1" name="?"/>
-  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx40" vr="SH" vm="1" name="?"/>
-  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx41" vr="SH" vm="1" name="?"/>
-  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx42" vr="LO" vm="1" name="?"/>
-  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx43" vr="SH" vm="1" name="?"/>
-  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx60" vr="SH" vm="1" name="?"/>
-  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx62" vr="SH" vm="1" name="?"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx20" vr="IS" vm="1" name="ShuttleFlag"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx21" vr="IS" vm="1" name="TableSpeedNotReachesTargetFlag"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx40" vr="SH" vm="1" name="IterativeReconAnnotation"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx41" vr="SH" vm="1" name="IterativeReconMode"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx42" vr="LO" vm="1" name="IterativeReconConfiguration"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx43" vr="SH" vm="1" name="IterativeReconLevel"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx60" vr="SH" vm="1" name="reconFlipRotateAnno"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx61" vr="SH" vm="1" name="highResolutionFlag"/>
+  <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx62" vr="SH" vm="1" name="RespiratoryFlag"/>
   <entry owner="GEIIS" group="0009" element="xx10" vr="SQ" vm="1" name="GE IIS Thumbnail Sequence"/>
   <entry owner="GEIIS" group="0009" element="xx12" vr="IS" vm="1" name="?"/>
   <entry owner="GEIIS" group="0029" element="xx10" vr="UL" vm="1" name="Shift Count"/>
