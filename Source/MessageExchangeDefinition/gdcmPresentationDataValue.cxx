@@ -257,6 +257,12 @@ void PresentationDataValue::ComputeSize() {
   ItemLength = Size() - 4;
 }
 
+void PresentationDataValue::SetBlob(const std::string & partialblob)
+{
+  Blob = partialblob;
+  ItemLength = Size() - 4;
+}
+
 void PresentationDataValue::SetDataSet(const DataSet & ds)
 {
   //DS.Clear();
