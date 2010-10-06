@@ -21,6 +21,8 @@ namespace gdcm {
       //this approach without a base class (but done internally) is useful.
       static PresentationDataValue ConstructCEchoRQ();
 
+      static PresentationDataValue ConstructCStoreRQ(DataSet *inDataSet);
+
 
     };
   }

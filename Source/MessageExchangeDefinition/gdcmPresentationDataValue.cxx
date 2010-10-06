@@ -237,6 +237,7 @@ size_t PresentationDataValue::Size() const
 }
 
 void PresentationDataValue::ComputeSize() {
+  assert( ItemLength == Size() - 4);
   ItemLength = Size() - 4;
 }
 

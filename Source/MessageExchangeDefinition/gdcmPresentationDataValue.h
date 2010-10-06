@@ -43,6 +43,7 @@ public:
 
   //the size must be set before the PDV is sent, so this method will do so.
   //make sure that this is the last function called before the PDV is sent!
+  // FIXME (MM): We should not expose this to the public interface
   void ComputeSize();
 
   /// Get DataSet
@@ -79,6 +80,8 @@ public:
 private:
   uint32_t ItemLength;
   uint8_t PresentationContextID;
+
+  // FIXME this should change if the DataSet cannot fit in memory.
   DataSet DS;
 
   uint8_t MessageHeader;

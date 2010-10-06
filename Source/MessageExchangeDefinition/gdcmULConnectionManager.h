@@ -57,6 +57,8 @@ namespace gdcm {
       //the user should look to cout to see the response of the echo command
       bool SendEcho();
 
+      // API will change...
+      bool SendStore(std::string const & filename);
 
     };
   }

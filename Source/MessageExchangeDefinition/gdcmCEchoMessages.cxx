@@ -24,7 +24,8 @@ PresentationDataValue CEchoRQ::ConstructPDV(DataSet* inDataSet){
   de.SetVR( VR::UI );
   const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
   std::string suid = uid;
-  suid.push_back( ' ' ); // no \0 !
+  if( suid.size() % 2 )
+    suid.push_back( ' ' ); // no \0 !
   de.SetByteValue( suid.c_str(), suid.size()  );
   ds.Insert( de );
   {
