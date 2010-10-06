@@ -56,22 +56,22 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   thePDU.SetCallingAETitle( inConnection.GetConnectionInfo().GetCallingAETitle() );
   thePDU.SetCalledAETitle( inConnection.GetConnectionInfo().GetCalledAETitle() );
 
-#if 0
-  // The following only works for C-ECHO
-  gdcm::network::PresentationContext pc;
-  gdcm::network::AbstractSyntax as;
-  as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
-  pc.SetAbstractSyntax( as );
+  // Warning PresentationContextID is important
+  // this is a sort of uniq key used by the recevier. Eg.
+  // if one push_pack
+  //  (1, Secondary)
+  //  (1, Verification)
+  // Then the last one is prefered (DCMTK 3.5.5)
 
+  // The following only works for C-STORE / C-ECHO
+  // however it does not make much sense to add a lot of abstract syntax
+  // when doing only C-ECHO.
+  // FIXME is there a way to know here if we are in C-ECHO ?
   gdcm::network::TransferSyntax_ ts;
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-  pc.AddTransferSyntax( ts );
-#else
-  // The following only works for C-STORE
-  gdcm::network::TransferSyntax_ ts;
-  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
   gdcm::network::AbstractSyntax as;
+  // ok at least we can C-STORE SC image storage 
   as.SetNameFromUID( gdcm::UIDs::SecondaryCaptureImageStorage );
 
   gdcm::network::PresentationContext pc;
@@ -79,15 +79,10 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   pc.AddTransferSyntax( ts );
   ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
   // for now we do not support explicit
+  // if we say we do not support explicit, we can just always
+  // encode all dataset in implicit
   //pc.AddTransferSyntax( ts );
-#endif
 
-  // Warning PresentationContextID is important
-  // this is a sort of uniq key used by the recevier. Eg.
-  // if one push_pack
-  //  (1, Secondary)
-  //  (1, Verification)
-  // Then the last one is prefered (DCMTK 3.5.5)
   thePDU.AddPresentationContext( pc );
 {
   gdcm::network::PresentationContext pc;
@@ -100,7 +95,7 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
   ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
-  pc.AddTransferSyntax( ts );
+  pc.AddTransferSyntax( ts ); // VerificationSOPClass has not dataset anyway
   thePDU.AddPresentationContext( pc );
 }
 
