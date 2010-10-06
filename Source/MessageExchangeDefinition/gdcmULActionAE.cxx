@@ -56,6 +56,8 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   thePDU.SetCallingAETitle( inConnection.GetConnectionInfo().GetCallingAETitle() );
   thePDU.SetCalledAETitle( inConnection.GetConnectionInfo().GetCalledAETitle() );
 
+#if 0
+  // The following only works for C-ECHO
   gdcm::network::PresentationContext pc;
   gdcm::network::AbstractSyntax as;
   as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
@@ -64,6 +66,18 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   gdcm::network::TransferSyntax_ ts;
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
+#else
+  // The following only works for C-STORE
+  gdcm::network::TransferSyntax_ ts;
+  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+
+  gdcm::network::AbstractSyntax as;
+  as.SetNameFromUID( gdcm::UIDs::SecondaryCaptureImageStorage );
+
+  gdcm::network::PresentationContext pc;
+  pc.SetAbstractSyntax( as );
+  pc.AddTransferSyntax( ts );
+#endif
 
   thePDU.AddPresentationContext( pc );
 

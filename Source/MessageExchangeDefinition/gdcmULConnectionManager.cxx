@@ -73,14 +73,9 @@ bool ULConnectionManager::SendEcho(){
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
-bool ULConnectionManager::SendStore(std::string const & filename)
+bool ULConnectionManager::SendStore(DataSet *inDataSet)
 {
-  Reader reader;
-  reader.SetFileName( filename.c_str() );
-  reader.Read();
-  const DataSet &ds = reader.GetFile().GetDataSet();
-
-  BasePDU* theDataPDU = PDUFactory::CreateCStorePDU( ds );
+  BasePDU* theDataPDU = PDUFactory::CreateCStorePDU( inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);

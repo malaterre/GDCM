@@ -12,6 +12,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmULConnectionInfo.h"
 
 namespace gdcm {
+  class DataSet;
   namespace network {
     class GDCM_EXPORT ULConnectionManager {
     private:
@@ -58,7 +59,7 @@ namespace gdcm {
       bool SendEcho();
 
       // API will change...
-      bool SendStore(std::string const & filename);
+      bool SendStore(DataSet *inDataSet);
 
     };
   }

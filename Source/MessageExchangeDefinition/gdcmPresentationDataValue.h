@@ -29,7 +29,7 @@ namespace network
  Table 9-23
 PRESENTATION-DATA-VALUE ITEM FIELDS
  */
-class PresentationDataValue
+class GDCM_EXPORT PresentationDataValue
 {
 public:
   PresentationDataValue();

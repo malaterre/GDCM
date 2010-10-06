@@ -23,7 +23,7 @@ namespace gdcm{
       //basically, builds a pdatapdu, and then puts the appropriate information in
       //for the appropriate composite service (c-echo, c-find, c-store, c-get, c-move)
       static BasePDU* CreateCEchoPDU();
-      static BasePDU* CreateCStorePDU(DataSet const &inDataSet);
+      static BasePDU* CreateCStorePDU(DataSet *inDataSet);
       static BasePDU* CreateCFindPDU(DataSet* inDataSet);
     };
   }

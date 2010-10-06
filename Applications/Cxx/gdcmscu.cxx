@@ -26,6 +26,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmAssociationRelease.h"
 #include "gdcmULConnectionManager.h"
+#include "gdcmDataSet.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -63,9 +64,14 @@ void CEcho( const char *remote, int portno )
 
 void CStore( const char *remote, int portno, std::string const & filename )
 {
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  reader.Read();
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+
   gdcm::network::ULConnectionManager theManager;
   theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000);
-  theManager.SendStore( filename );
+  theManager.SendStore( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   
 /*
