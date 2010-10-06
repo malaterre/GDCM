@@ -11,7 +11,7 @@ this file defines the messages for the cecho action
 namespace gdcm{
 namespace network{
 
-PresentationDataValue CEchoRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(DataSet* inDataSet){
   PresentationDataValue thePDV;
   thePDV.SetPresentationContextID(1);
 
@@ -50,12 +50,15 @@ PresentationDataValue CEchoRQ::ConstructPDV(DataSet* inDataSet){
 
   thePDV.SetDataSet(ds);
   thePDV.ComputeSize();
-  return thePDV;
+  //!!!Mathieu, I assume you'll want to fix this
+  std::vector<PresentationDataValue> thePDVs;
+  thePDVs.push_back(thePDV);
+  return thePDVs;
 
 }
 
-PresentationDataValue  CEchoRSP::ConstructPDV(DataSet* inDataSet){
-  PresentationDataValue thePDV;
+std::vector<PresentationDataValue>  CEchoRSP::ConstructPDV(DataSet* inDataSet){
+  std::vector<PresentationDataValue> thePDV;
   return thePDV;
 }
 

@@ -55,6 +55,7 @@ public:
     return PresContext[i];
   }
   const PresentationContext *GetPresentationContextByID(unsigned int i) const;
+  bool IsLastFragment() const { return true; }
 
 private:
   // 1 PDU-type 01H

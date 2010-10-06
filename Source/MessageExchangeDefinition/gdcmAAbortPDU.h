@@ -42,6 +42,8 @@ public:
   size_t Size() const;
   void Print(std::ostream &os) const;
 
+  bool IsLastFragment() const { return true; }
+
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;

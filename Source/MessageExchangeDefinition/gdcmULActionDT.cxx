@@ -16,15 +16,19 @@ using namespace gdcm::network;
 EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
         bool& outWaitingForEvent, EEventID& outRaisedEvent)
 {
+  std::vector<BasePDU*> theDataPDUs = inEvent.GetPDUs();
+  std::vector<BasePDU*>::const_iterator itor = theDataPDUs.begin();
+  //they can all be sent at once because of the structure in 3.8 7.6-- pdata does not wait for a response.
+  for (itor = theDataPDUs.begin(); itor < theDataPDUs.end(); itor++) {
 
-  PDataTFPDU* dataPDU = dynamic_cast<PDataTFPDU*>(inEvent.GetPDU());
-  if (dataPDU == NULL){
-    throw new gdcm::Exception("Data sending event PDU malformed.");
-    return eStaDoesNotExist;
+    PDataTFPDU* dataPDU = dynamic_cast<PDataTFPDU*>(*itor);
+    if (dataPDU == NULL){
+      throw new gdcm::Exception("Data sending event PDU malformed.");
+      return eStaDoesNotExist;
+    }
+    dataPDU->Write(*inConnection.GetProtocol());
+    inConnection.GetProtocol()->flush();
   }
-  dataPDU->Write(*inConnection.GetProtocol());
-  inConnection.GetProtocol()->flush();
-
   outWaitingForEvent = true;//wait for a response that the data got there.
   outRaisedEvent = ePDATArequest;
 

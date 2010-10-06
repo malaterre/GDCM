@@ -66,3 +66,25 @@ ARTIMTimer& ULConnection::GetTimer(){
 ULConnectionInfo ULConnection::GetConnectionInfo() const{
   return mInfo;
 }
+
+
+void ULConnection::SetMaxPDUSize(const uint32_t& inSize){
+  mMaxPDUSize = inSize;
+}
+uint32_t ULConnection::GetMaxPDUSize() const{
+  return mMaxPDUSize;
+}
+
+std::vector<PresentationContext> ULConnection::GetPresentationContexts() const{
+  return mPresentationContexts;
+}
+void ULConnection::SetPresentationContexts(const std::vector<PresentationContext>& inContexts){
+  mPresentationContexts = inContexts;
+}
+//given a particular data element, presumably the SOP class, 
+//find the presentation context for that SOP
+//NOT YET IMPLEMENTED
+PresentationContext ULConnection::FindContext(const gdcm::DataElement& de) const{
+  PresentationContext empty;
+  return empty;
+}

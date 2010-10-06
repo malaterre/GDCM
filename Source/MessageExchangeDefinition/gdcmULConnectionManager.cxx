@@ -66,16 +66,16 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //the user should look to cout to see the response of the echo command
 bool ULConnectionManager::SendEcho(){
 
-  BasePDU* theDataPDU = PDUFactory::CreateCEchoPDU();//pass NULL for C-Echo
+  vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
-bool ULConnectionManager::SendStore(DataSet *inDataSet)
+bool ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
 {
-  BasePDU* theDataPDU = PDUFactory::CreateCStorePDU( inDataSet );
+  vector<BasePDU*> theDataPDU = PDUFactory::CreateCStorePDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);
@@ -127,26 +127,34 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
     //use the PDUFactory to create the appropriate pdu, which has its own
     //internal mechanisms for handling itself (but will, of course, be put inside the event object).
     //but, and here's the important thing, only read on the socket when we should.
+    std::vector<BasePDU*> incomingPDUs;
     if (waitingForEvent){
-      uint8_t itemtype = 0x0;
-      try {
-        is.read( (char*)&itemtype, 1 );
-        //what happens if nothing's read?
-        BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
-        if (thePDU != NULL){
-          currentEvent.SetPDU(thePDU);
-          thePDU->Read(is);
-          thePDU->Print(std::cout);
+      while (waitingForEvent){//loop for reading in the events that come down the wire
+        uint8_t itemtype = 0x0;
+        try {
+          is.read( (char*)&itemtype, 1 );
+          //what happens if nothing's read?
+          BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
+          if (thePDU != NULL){
+            incomingPDUs.push_back(thePDU);
+            thePDU->Read(is);
+            thePDU->Print(std::cout);
+            if (thePDU->IsLastFragment()) waitingForEvent = false;
+          } else {
+            waitingForEvent = false; //because no PDU means not waiting anymore
+          }
         }
-        //now, we have to figure out the event that just happened based on the PDU that was received.
-        currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(thePDU));
-        if (mConnection->GetTimer().GetHasExpired()){
-          currentEvent.SetEvent(eARTIMTimerExpired);
+        catch (...){
+          //handle the exception, which is basically that nothing came in over the pipe.
         }
       }
-      catch (...){
-        //handle the exception, which is basically that nothing came in over the pipe.
+      //now, we have to figure out the event that just happened based on the PDU that was received.
+      currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(incomingPDUs[0]));
+      currentEvent.SetPDU(incomingPDUs);
+      if (mConnection->GetTimer().GetHasExpired()){
+        currentEvent.SetEvent(eARTIMTimerExpired);
       }
+
     }
     else {
       currentEvent.SetEvent(raisedEvent);//actions that cause transitions in the state table

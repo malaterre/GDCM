@@ -52,6 +52,7 @@ public:
     return V[i];
   }
   void Print(std::ostream &os) const;
+  bool IsLastFragment() const;
 
 private:
   static const uint8_t ItemType; // PDUType ?

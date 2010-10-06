@@ -125,5 +125,11 @@ void PDataTFPDU::Print(std::ostream &os) const
   os << std::endl;
 }
 
+
+bool PDataTFPDU::IsLastFragment() const{
+  if (V.empty()) return true;
+  return V[V.size()-1].GetIsLastFragment();
+}
+
 } // end namespace network
 } // end namespace gdcm
