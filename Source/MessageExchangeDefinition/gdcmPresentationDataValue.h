@@ -49,6 +49,7 @@ public:
   /// Get DataSet
   void SetDataSet(const DataSet & ds);
   //DataSet const &GetDataSet() const { return DS; }
+  void SetBlob(const std::string & partialblob);
 
   //void MyInit(File const &file);
   //void MyInit2(File const &file);

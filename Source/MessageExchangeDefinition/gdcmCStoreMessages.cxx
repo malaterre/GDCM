@@ -91,14 +91,34 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
 
   // now let's chunk'ate the dataset:
 {
-  PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(1); // FIXME
-
   //thePDV.SetCommand(true);
-  thePDV.SetDataSet(*inDataSet);
-  thePDV.SetMessageHeader( 2 );
-  thePDVs.push_back(thePDV);
+  std::stringstream ss;
+  inDataSet->Write<ImplicitDataElement,SwapperNoOp>( ss );
+  std::string ds_copy = ss.str();
+  // E: 0006:0308 DUL Illegal PDU Length 16390.  Max expected 16384
+  //const size_t maxpdu = 16384;
+  const size_t maxpdu = 16378;
+  size_t len = ds_copy.size();
+  const char *begin = ds_copy.c_str();
+  const char *end = begin + len;
+  const char *cur = begin;
+  while( cur < end )
+    {
+    size_t remaining = std::min( maxpdu , (size_t)(end - cur) );
+    std::string sub( cur, remaining );
 
+    PresentationDataValue thePDV;
+    thePDV.SetPresentationContextID(1); // FIXME
+    thePDV.SetBlob( sub );
+    //thePDV.SetDataSet(*inDataSet);
+    if( remaining == maxpdu )
+      thePDV.SetMessageHeader( 0 );
+    else
+      thePDV.SetMessageHeader( 2 );
+    thePDVs.push_back(thePDV);
+
+    cur += remaining;
+    }
 }
 
   return thePDVs;
