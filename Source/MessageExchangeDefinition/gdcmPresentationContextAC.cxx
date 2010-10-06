@@ -102,6 +102,8 @@ void PresentationContextAC::Print(std::ostream &os) const
 {
   os << "ID: " << (int)ID << std::endl;
   os << "Result: " << (int)Result << std::endl;
+  os << "TransferSyntax: ";
+  SubItems.Print( os );
 }
 
 void PresentationContextAC::SetPresentationContextID( uint8_t id )

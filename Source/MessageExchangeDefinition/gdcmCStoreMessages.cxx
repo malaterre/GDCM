@@ -12,13 +12,16 @@ namespace gdcm{
 namespace network{
 
 std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
+  std::vector<PresentationDataValue> thePDVs;
+{
   assert( inDataSet );
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(1);
+  thePDV.SetPresentationContextID(1); // FIXME
 
   thePDV.SetCommand(true);
+  //thePDV.SetMessageHeader( 1 );
   // FIXME how should I send multiple PDV ...
-  //thePDV.SetLastFragment(true);
+  thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
   DataSet ds;
@@ -85,8 +88,21 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   thePDV.ComputeSize();
 
   //!!!Mathieu, I assume you'll want to fix this
-  std::vector<PresentationDataValue> thePDVs;
   thePDVs.push_back(thePDV);
+}
+
+  // now let's chunk'ate the dataset:
+{
+  PresentationDataValue thePDV;
+  thePDV.SetPresentationContextID(1); // FIXME
+
+  //thePDV.SetCommand(true);
+  thePDV.SetDataSet(*inDataSet);
+  thePDV.SetMessageHeader( 2 );
+  thePDVs.push_back(thePDV);
+
+}
+
   return thePDVs;
 
 }

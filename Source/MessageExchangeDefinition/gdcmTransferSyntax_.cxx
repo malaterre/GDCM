@@ -103,5 +103,16 @@ void TransferSyntax_::SetNameFromUID( gdcm::UIDs::TSName tsname )
   UpdateName( name );
 }
 
+void TransferSyntax_::Print(std::ostream &os) const
+{
+  os << "Name: " << Name;
+  UIDs uids;
+  if( uids.SetFromUID( Name.c_str() ) )
+    {
+    os << " (" << uids.GetName() << ")" << std::endl;
+    }
+  os << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm

@@ -56,7 +56,7 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   thePDU.SetCallingAETitle( inConnection.GetConnectionInfo().GetCallingAETitle() );
   thePDU.SetCalledAETitle( inConnection.GetConnectionInfo().GetCalledAETitle() );
 
-#if 1
+#if 0
   // The following only works for C-ECHO
   gdcm::network::PresentationContext pc;
   gdcm::network::AbstractSyntax as;
@@ -77,9 +77,33 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   gdcm::network::PresentationContext pc;
   pc.SetAbstractSyntax( as );
   pc.AddTransferSyntax( ts );
+  ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
+  // for now we do not support explicit
+  //pc.AddTransferSyntax( ts );
 #endif
 
+  // Warning PresentationContextID is important
+  // this is a sort of uniq key used by the recevier. Eg.
+  // if one push_pack
+  //  (1, Secondary)
+  //  (1, Verification)
+  // Then the last one is prefered (DCMTK 3.5.5)
   thePDU.AddPresentationContext( pc );
+{
+  gdcm::network::PresentationContext pc;
+  pc.SetPresentationContextID( 3 );
+  gdcm::network::AbstractSyntax as;
+  as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
+  pc.SetAbstractSyntax( as );
+
+  gdcm::network::TransferSyntax_ ts;
+  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  pc.AddTransferSyntax( ts );
+  ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
+  pc.AddTransferSyntax( ts );
+  thePDU.AddPresentationContext( pc );
+}
+
 
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetProtocol()->flush();

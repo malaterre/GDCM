@@ -205,6 +205,7 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   //DS.Write<ImplicitDataElement,SwapperNoOp>( b );
   //b.close();
 
+  // FIXME we cannot decide at this point to write in implicit...
   DS.Write<ImplicitDataElement,SwapperNoOp>( os );
   VL debug = DS.GetLength<ImplicitDataElement>();
 
