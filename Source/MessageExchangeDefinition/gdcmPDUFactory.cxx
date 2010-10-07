@@ -134,7 +134,7 @@ std::vector<BasePDU*> PDUFactory::CreateCStorePDU(const ULConnection& inConnecti
 
 std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, gdcm::DataSet* inDataSet){
 //still have to build this!
-  std::vector<PresentationDataValue> pdv;// = CompositeMessageFactory::ConstructCStoreRQ(inConnection, inDataSet );
+  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCFindRQ(inConnection, inDataSet );
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){

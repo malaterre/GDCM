@@ -72,6 +72,7 @@ namespace gdcm {
 
       // API will change...
       bool SendStore(DataSet *inDataSet);
+      bool SendFind(DataSet *inDataSet);
 
     };
   }

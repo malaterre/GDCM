@@ -12,8 +12,10 @@ namespace gdcm{
 namespace network{
 
 std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
+  std::vector<PresentationDataValue> thePDVs;
+{
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(1);
+  thePDV.SetPresentationContextID(2);
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -22,14 +24,16 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
   DataSet ds;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
+  const char *uid = gdcm::UIDs::GetUIDString( 
+    gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+
   std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
   de.SetByteValue( suid.c_str(), suid.size()  );
   ds.Insert( de );
   {
-  gdcm::Attribute<0x0,0x100> at = { 48 };
+  gdcm::Attribute<0x0,0x100> at = { 32 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
@@ -37,7 +41,11 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x800> at = { 257 };
+  gdcm::Attribute<0x0,0x700> at = { 2 };
+  ds.Insert( at.GetAsDataElement() );
+  }
+  {
+  gdcm::Attribute<0x0,0x800> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
@@ -50,9 +58,18 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
 
   thePDV.SetDataSet(ds);
   thePDV.ComputeSize();
-  //!!!Mathieu, I assume you'll want to fix this
-  std::vector<PresentationDataValue> thePDVs;
   thePDVs.push_back(thePDV);
+}
+
+{
+    PresentationDataValue thePDV;
+    thePDV.SetPresentationContextID(2); // FIXME
+    //thePDV.SetBlob( sub );
+    thePDV.SetDataSet(*inDataSet);
+      thePDV.SetMessageHeader( 2 );
+    thePDVs.push_back(thePDV);
+
+}
   return thePDVs;
 
 }

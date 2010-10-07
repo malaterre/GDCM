@@ -76,7 +76,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
   ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
-  pc.AddTransferSyntax( ts );
+  //pc.AddTransferSyntax( ts ); // we do not support explicit (mm)
   switch (inConnectionType){
     case eEcho:
         pc.SetPresentationContextID( eVerificationSOPClass );
@@ -166,6 +166,15 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 bool ULConnectionManager::SendEcho(){
 
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
+  ULEvent theEvent(ePDATArequest, theDataPDU);
+
+  EStateID theState = RunEventLoop(theEvent);
+  return (theState == eSta6TransferReady);//ie, finished the transitions
+}
+
+bool ULConnectionManager::SendFind(DataSet *inDataSet)
+{
+  vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);

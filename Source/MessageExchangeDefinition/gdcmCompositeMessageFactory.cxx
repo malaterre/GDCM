@@ -11,6 +11,7 @@ name and date: 4 oct 2010 mmr
 #include "gdcmCompositeMessageFactory.h"
 #include "gdcmCEchoMessages.h"
 #include "gdcmCStoreMessages.h"
+#include "gdcmCFindMessages.h"
 
 namespace gdcm {
 namespace network {
@@ -22,6 +23,10 @@ namespace network {
   std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRQ(const ULConnection& inConnection, DataSet *inDataSet) {
     CStoreRQ theStoreRQ;
     return theStoreRQ.ConstructPDV(inDataSet);
+  }
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCFindRQ(const ULConnection& inConnection, DataSet *inDataSet) {
+    CFindRQ theFindRQ;
+    return theFindRQ.ConstructPDV(inDataSet);
   }
 }
 }
