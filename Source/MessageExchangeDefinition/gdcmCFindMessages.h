@@ -1,3 +1,5 @@
+#ifndef CFINDMESSAGES_H
+#define CFINDMESSAGES_H
 /*
 this file defines the messages for the cfind action
 5 oct 2010 mmr
@@ -23,3 +25,4 @@ namespace gdcm{
     };
   }
 }
+#endif

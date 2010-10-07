@@ -57,7 +57,7 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
 
 }
 
-std::vector<PresentationDataValue>  CFindRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue>  CFindRSP::ConstructPDV(DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
   return thePDV;
 }
