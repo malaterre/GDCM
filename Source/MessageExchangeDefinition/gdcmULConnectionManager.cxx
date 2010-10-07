@@ -181,7 +181,7 @@ bool ULConnectionManager::SendEcho(){
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
-bool ULConnectionManager::SendMove(DataSet *inDataSet)
+bool ULConnectionManager::SendMove(gdcm::DataSet *inDataSet)
 {
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
@@ -189,7 +189,7 @@ bool ULConnectionManager::SendMove(DataSet *inDataSet)
   EStateID theState = RunEventLoop(theEvent);
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
-bool ULConnectionManager::SendFind(DataSet *inDataSet)
+bool ULConnectionManager::SendFind(gdcm::DataSet *inDataSet)
 {
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
