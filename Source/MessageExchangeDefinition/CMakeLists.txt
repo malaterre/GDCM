@@ -39,6 +39,7 @@ gdcmULConnectionInfo.cxx
 gdcmPDUFactory.cxx
 gdcmCompositeMessageFactory.cxx
 gdcmCEchoMessages.cxx
+gdcmCFindMessages.cxx
 gdcmCStoreMessages.cxx
   )
 
