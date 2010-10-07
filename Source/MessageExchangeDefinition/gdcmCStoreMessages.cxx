@@ -16,7 +16,7 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
 {
   assert( inDataSet );
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(1); // FIXME
+  thePDV.SetPresentationContextID(1); // FIXME-- should be using the enum in gdcmPresentationContext.h
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
