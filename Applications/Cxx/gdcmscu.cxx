@@ -55,7 +55,7 @@ void CEcho( const char *remote, int portno )
   ar.Run(e);
 */
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000);
+  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000, gdcm::network::eEcho);
   theManager.SendEcho();
   theManager.SendEcho();
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
@@ -70,7 +70,7 @@ void CStore( const char *remote, int portno, std::string const & filename )
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000);
+  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000, gdcm::network::eStore);
   theManager.SendStore( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   
