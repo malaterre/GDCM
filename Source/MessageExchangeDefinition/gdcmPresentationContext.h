@@ -25,6 +25,30 @@ namespace gdcm
 namespace network
 {
 
+
+//the presentation context id is arbitrary per connection
+//so, just to make life easier for now, the ID will be the same as the UID of the type
+//that way, when the return comes, the selected presentation context can be used
+//by the service by referring to the ID.
+//we cannot use the UID const directly, since that's not guaranteed to be lower
+//than 255, and the number has to be within a byte
+enum EPresentationContextID {
+  eVerificationSOPClass = 1,
+  ePatientRootQueryRetrieveInformationModelFIND,
+  eStudyRootQueryRetrieveInformationModelFIND,
+  ePatientStudyOnlyQueryRetrieveInformationModelFINDRetired,
+  eModalityWorklistInformationModelFIND,
+  eGeneralPurposeWorklistInformationModelFIND,
+  ePatientRootQueryRetrieveInformationModelMOVE,
+  eStudyRootQueryRetrieveInformationModelMOVE,
+  ePatientStudyOnlyQueryRetrieveInformationModelMOVERetired,
+  eSecondaryCaptureImageStorage,
+  eMultiframeSingleBitSecondaryCaptureImageStorage,
+  eMultiframeGrayscaleByteSecondaryCaptureImageStorage,
+  eMultiframeGrayscaleWordSecondaryCaptureImageStorage,
+  eMultiframeTrueColorSecondaryCaptureImageStorage
+};
+
 /**
  Table 9-13
  PRESENTATION CONTEXT ITEM FIELDS

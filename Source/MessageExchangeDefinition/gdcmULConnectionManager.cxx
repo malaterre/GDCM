@@ -13,6 +13,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmULEvent.h"
 #include "gdcmPDUFactory.h"
 #include "gdcmReader.h"
+#include "gdcmAAssociateRQPDU.h"
 
 
 using namespace gdcm::network;
@@ -31,7 +32,8 @@ ULConnectionManager::~ULConnectionManager(){
 
 bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  const std::string& inConnectAETitle, 
                                               const std::string& inComputerName, const long& inIPAddress, 
-                                              const unsigned short& inConnectPort, const double& inTimeout)
+                                              const unsigned short& inConnectPort, const double& inTimeout, 
+                                              const EConnectionType& inConnectionType)
 {
   //generate a ULConnectionInfo object
   UserInformation userInfo;
@@ -49,6 +51,103 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   mConnection = new ULConnection(connectInfo);
 
   mConnection->GetTimer().SetTimeout(inTimeout);
+
+
+  // Warning PresentationContextID is important
+  // this is a sort of uniq key used by the recevier. Eg.
+  // if one push_pack
+  //  (1, Secondary)
+  //  (1, Verification)
+  // Then the last one is prefered (DCMTK 3.5.5)
+
+  // The following only works for C-STORE / C-ECHO
+  // however it does not make much sense to add a lot of abstract syntax
+  // when doing only C-ECHO.
+  // FIXME is there a way to know here if we are in C-ECHO ?
+  //there is now!
+  //the presentation context will now be part of the connection, so that this 
+  //initialization for the association-rq will use parameters from the connection
+
+  gdcm::network::AbstractSyntax as;
+
+  std::vector<PresentationContext> pcVector;
+  PresentationContext pc;
+  gdcm::network::TransferSyntax_ ts;
+  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  pc.AddTransferSyntax( ts );
+  ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
+  pc.AddTransferSyntax( ts );
+  switch (inConnectionType){
+    case eEcho:
+        pc.SetPresentationContextID( eVerificationSOPClass );
+        as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+      break;
+    case eFind:
+        pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID(eStudyRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelFIND );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( ePatientStudyOnlyQueryRetrieveInformationModelFINDRetired );
+        as.SetNameFromUID( gdcm::UIDs::PatientStudyOnlyQueryRetrieveInformationModelFINDRetired );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( eModalityWorklistInformationModelFIND );
+        as.SetNameFromUID( gdcm::UIDs::ModalityWorklistInformationModelFIND );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( eGeneralPurposeWorklistInformationModelFIND );
+        as.SetNameFromUID( gdcm::UIDs::GeneralPurposeWorklistInformationModelFIND );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+      break;
+      //our spec does not require C-GET support
+//    case eGet:
+//      break;
+    case eMove:
+        pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelMOVE );
+        as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelMOVE );
+        as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelMOVE );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( ePatientStudyOnlyQueryRetrieveInformationModelMOVERetired );
+        as.SetNameFromUID( gdcm::UIDs::PatientStudyOnlyQueryRetrieveInformationModelMOVERetired );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+      break;
+    case eStore:
+        pc.SetPresentationContextID( eSecondaryCaptureImageStorage );
+        as.SetNameFromUID( gdcm::UIDs::SecondaryCaptureImageStorage );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( eMultiframeSingleBitSecondaryCaptureImageStorage );
+        as.SetNameFromUID( gdcm::UIDs::MultiframeSingleBitSecondaryCaptureImageStorage );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( eMultiframeGrayscaleByteSecondaryCaptureImageStorage );
+        as.SetNameFromUID( gdcm::UIDs::MultiframeGrayscaleByteSecondaryCaptureImageStorage );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( eMultiframeGrayscaleWordSecondaryCaptureImageStorage );
+        as.SetNameFromUID(  gdcm::UIDs::MultiframeGrayscaleWordSecondaryCaptureImageStorage );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        pc.SetPresentationContextID( eMultiframeTrueColorSecondaryCaptureImageStorage );
+        as.SetNameFromUID(  gdcm::UIDs::MultiframeTrueColorSecondaryCaptureImageStorage );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+      break;
+  }
+  mConnection->SetPresentationContexts(pcVector);
+
 
   //now, try to establish a connection by starting the transition table and the event loop.
   //here's the thing
