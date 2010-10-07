@@ -62,6 +62,28 @@ void CEcho( const char *remote, int portno )
 
 }
 
+void CMove( const char *remote, int portno, std::string const & filename )
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  reader.Read();
+  gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+
+  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
+  // Add a query:
+  gdcm::DataElement de( gdcm::Tag(0x10,0x10) );
+  de.SetVR( gdcm::VR::PN );
+  //de.SetByteValue( "X*", 2 );
+  de.SetByteValue( "F*", 2 );
+  //ds.Replace( de );
+
+  gdcm::network::ULConnectionManager theManager;
+  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove);
+  //theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eMove);
+  theManager.SendMove( (gdcm::DataSet*)&ds );
+  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+}
+
 void CFind( const char *remote, int portno, std::string const & filename )
 {
   gdcm::Reader reader;
@@ -437,6 +459,12 @@ int main(int argc, char *argv[])
   else if ( mode == "echo" ) // C-ECHO SCU
     {
     CEcho( argv[1], portno );
+    }
+  else if ( mode == "move" ) // C-FIND SCU
+    {
+  // ./bin/gdcmscu dhcp-67-183 5678 move patqry.dcm    
+  // ./bin/gdcmscu mi2b2.slicer.org 11112 move patqry.dcm 
+    CMove( argv[1], portno, argv[4] );
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
