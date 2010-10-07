@@ -57,7 +57,6 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
   }
 
   thePDV.SetDataSet(ds);
-  thePDV.ComputeSize();
   thePDVs.push_back(thePDV);
 }
 

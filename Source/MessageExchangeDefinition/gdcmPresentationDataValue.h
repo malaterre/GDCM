@@ -16,12 +16,10 @@
 #define GDCMPRESENTATIONDATAVALUE_H
 
 #include "gdcmTypes.h"
-#include "gdcmDataSet.h"
 
 namespace gdcm
 {
-class File;
-
+class DataSet;
 namespace network
 {
 
@@ -41,19 +39,10 @@ public:
   /// \internal Compute Size
   size_t Size() const;
 
-  //the size must be set before the PDV is sent, so this method will do so.
-  //make sure that this is the last function called before the PDV is sent!
-  // FIXME (MM): We should not expose this to the public interface
-  void ComputeSize();
-
-  /// Get DataSet
+  /// Set DataSet. Write DataSet in implicit. 
+  /// \warning size of dataset should be below maxpdusize
   void SetDataSet(const DataSet & ds);
-  //DataSet const &GetDataSet() const { return DS; }
   void SetBlob(const std::string & partialblob);
-
-  //void MyInit(File const &file);
-  //void MyInit2(File const &file);
-  //void MyInit3();
 
   uint8_t GetPresentationContextID() const { return PresentationContextID; }
   void SetPresentationContextID(uint8_t id) {

@@ -49,7 +49,6 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(DataSet* inDataSet){
   }
 
   thePDV.SetDataSet(ds);
-  thePDV.ComputeSize();
   //!!!Mathieu, I assume you'll want to fix this
   std::vector<PresentationDataValue> thePDVs;
   thePDVs.push_back(thePDV);

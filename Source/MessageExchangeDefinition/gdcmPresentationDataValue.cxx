@@ -14,10 +14,6 @@
 =========================================================================*/
 #include "gdcmPresentationDataValue.h"
 #include "gdcmSwapper.h"
-//#include "gdcmDataSet.h" //already in header
-//#include "gdcmImplicitDataElement.h"
-//#include "gdcmUIDs.h"
-//#include "gdcmAttribute.h"
 #include "gdcmFile.h"
 
 namespace gdcm
@@ -29,47 +25,6 @@ PresentationDataValue::PresentationDataValue()
 {
   MessageHeader = 0;
   PresentationContextID = 0; //MUST BE SET BY THE CALLER!
-/*  
-//this code will create a cecho-rq message, rather than just a pure
-//pdv.  PDVs need to be made to accomodate the information contained within them,
-//and so should be made directly by the calling composite message.
-//note that the message may be split into many different PDVs,
-//in which case the PDV will still have to be made when the split occurs.
-PresentationContextID = 1;
-
-  DataSet &ds = DS;
-  DataElement de( Tag(0x0,0x2) );
-  de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
-  std::string suid = uid;
-  suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
-  ds.Insert( de );
-    {
-    gdcm::Attribute<0x0,0x100> at = { 48 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    gdcm::Attribute<0x0,0x110> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    gdcm::Attribute<0x0,0x800> at = { 257 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    gdcm::Attribute<0x0,0x0> at = { 0 };
-    unsigned int glen = ds.GetLength<ImplicitDataElement>();
-    assert( (glen % 2) == 0 );
-    at.SetValue( glen );
-    ds.Insert( at.GetAsDataElement() );
-    }
-
-  MessageHeader = 3;
-  ItemLength = Size() - 4;
-  assert (ItemLength + 4 == Size() );
-
-  */
 
   // postcondition
   ItemLength = Size() - 4;
@@ -86,56 +41,18 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   
   uint8_t mh;
   is.read( (char*)&mh, 1 );
-  //assert( mh == 0 ); // bitwise stuff...
   MessageHeader = mh;
-
-  //DS.Clear();
-  //not sure the logic in this next one...
-  if( GetIsLastFragment() && GetIsCommand() )
+  if ( MessageHeader > 3 )
     {
-    //DataSet &ds = DS;
-    VL vl = ItemLength - 2;
-    //ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
-    Blob.resize( vl ); // reserve ??
-    is.read( &Blob[0], vl );
-
-    //ds.Print( std::cout );
-
-    //VL debug = DS.GetLength<ImplicitDataElement>();
-    VL debug = Blob.size();
-    assert( debug == vl );
+    gdcmDebugMacro( "Bizarre MessageHeader: " << MessageHeader );
     }
-  else if (GetIsLastFragment() && !GetIsCommand()  )
-    {
-    //char *buf = new char[ ItemLength - 2 ];
-    VL vl = ItemLength - 2;
-    Blob.resize( vl ); // reserve ??
-    is.read( &Blob[0], ItemLength - 2 );
 
-    //std::ofstream bug( "/tmp/bug1" );
-    //bug.write( buf, ItemLength - 2 );
-    //bug.close();
+  VL vl = ItemLength - 2;
+  Blob.resize( vl ); // reserve ??
+  is.read( &Blob[0], vl );
 
-    //delete buf;
-    }
-  else if ( !GetIsLastFragment() && !GetIsCommand()  )
-    {
-    //assert( 0 );
-    //char *buf = new char[ ItemLength - 2 ];
-    VL vl = ItemLength - 2;
-    Blob.resize( vl ); // reserve ??
-    is.read( &Blob[0], ItemLength - 2 );
-
-    //std::ofstream bug( "/tmp/msg0-1" );
-    //bug.write( buf, ItemLength - 2 );
-    //bug.close();
-
-    //delete buf;
-    }
-  else
-    {
-    assert( 0 );
-    }
+  VL debug = Blob.size();
+  assert( debug == vl );
 
   assert (ItemLength + 4 == Size() );  
   return is;
@@ -155,47 +72,13 @@ std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os
   //assert( mh == 0 ); // bitwise stuff...
   MessageHeader = mh;
 
-  //DS.Clear();
-//  if( MessageHeader ==  3 )
-//    {
-//    DataSet &ds = DS;
-//    VL vl = ItemLength - 2;
-//    ds.ReadWithLength<ImplicitDataElement,SwapperNoOp>( is, vl );
-//
-//    //ds.Print( std::cout );
-//
-//    VL debug = DS.GetLength<ImplicitDataElement>();
-//    assert( debug == vl );
-//    }
-//  else if ( MessageHeader == 2 )
-//    {
-//    char *buf = new char[ ItemLength - 2 ];
-//    is.read( buf, ItemLength - 2 );
-//
-//    std::ofstream bug( "/tmp/bug1" );
-//    bug.write( buf, ItemLength - 2 );
-//    bug.close();
-//
-//    delete buf;
-//    }
-//  else if ( MessageHeader == 0 )
-    {
-    //char *buf = new char[ ItemLength - 2 ];
-    VL vl = ItemLength - 2;
-    Blob.resize( vl ); // reserve ??
-    is.read( &Blob[0], ItemLength - 2 );
-    os.write( &Blob[0], ItemLength - 2 );
-
-    //delete buf;
-    }
-//  else
-//    {
-//    assert( 0 );
-//    }
+  VL vl = ItemLength - 2;
+  Blob.resize( vl ); // reserve ??
+  is.read( &Blob[0], ItemLength - 2 );
+  os.write( &Blob[0], ItemLength - 2 );
 
   assert (ItemLength + 4 == Size() );  
   return is;
-
 }
 
 const std::ostream &PresentationDataValue::Write(std::ostream &os) const
@@ -206,29 +89,16 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   os.write( (char*)&PresentationContextID, sizeof(PresentationContextID) );
 
   uint8_t t = MessageHeader;
-  //t = 3; // E.2 MESSAGE CONTROL HEADER ENCODING
   os.write( (char*)&t, 1 );
 
-  //std::ofstream b("/tmp/debug");
-  //DS.Write<ImplicitDataElement,SwapperNoOp>( b );
-  //b.close();
-
-  // FIXME we cannot decide at this point to write in implicit...
-  //DS.Write<ImplicitDataElement,SwapperNoOp>( os );
   os.write( Blob.c_str(), Blob.size() );
-  //VL debug = DS.GetLength<ImplicitDataElement>();
   VL debug = Blob.size();
 
   assert( debug == ItemLength - 2 );
 
-//  std::cout << "BEFORE" << std::endl;
-//  DS.Print( std::cout );
-//  std::cout << "AFTER" << std::endl;
-
   assert (ItemLength + 4 == Size() );
   
   return os;
-
 }
 
 size_t PresentationDataValue::Size() const
@@ -237,24 +107,9 @@ size_t PresentationDataValue::Size() const
   ret += sizeof(ItemLength);
   ret += sizeof(PresentationContextID);
   ret += sizeof(MessageHeader); // MESSAGE CONTROL HEADER ENCODING
-
-//  if( GetIsLastFragment())//not sure the logic here...
-    {
-    //VL vl = DS.GetLength<ImplicitDataElement>();
-    //ret += vl;
-    ret += Blob.size();
-    }
-//  else
-//    {
-//    ret += ItemLength - 2;
-//    }
+  ret += Blob.size();
 
   return ret;
-}
-
-void PresentationDataValue::ComputeSize() {
-  assert( ItemLength == Size() - 4);
-  ItemLength = Size() - 4;
 }
 
 void PresentationDataValue::SetBlob(const std::string & partialblob)
@@ -265,13 +120,10 @@ void PresentationDataValue::SetBlob(const std::string & partialblob)
 
 void PresentationDataValue::SetDataSet(const DataSet & ds)
 {
-  //DS.Clear();
-  //DS = ds;
   std::stringstream ss;
   ds.Write<ImplicitDataElement,SwapperNoOp>( ss );
   Blob = ss.str();
   ItemLength = Size() - 4;
-  //MessageHeader = 0;
   assert (ItemLength + 4 == Size() );
 }
 /*
@@ -451,8 +303,6 @@ void PresentationDataValue::Print(std::ostream &os) const
 {
   os << "ItemLength: " << ItemLength << std::endl;
   os << "PresentationContextID: " << (int)PresentationContextID << std::endl;
-//  os << "DataSet:" << std::endl;
-//  DS.Print( os );
   os << "MessageHeader: " << (int)MessageHeader << std::endl;
 }
 

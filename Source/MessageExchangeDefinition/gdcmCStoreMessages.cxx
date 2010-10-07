@@ -83,7 +83,6 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
 //  b.close();
 
   thePDV.SetDataSet(ds);
-  thePDV.ComputeSize();
 
   //!!!Mathieu, I assume you'll want to fix this
   thePDVs.push_back(thePDV);
