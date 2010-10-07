@@ -73,11 +73,13 @@ void CFind( const char *remote, int portno, std::string const & filename )
   // Add a query:
   gdcm::DataElement de( gdcm::Tag(0x10,0x10) );
   de.SetVR( gdcm::VR::PN );
-  de.SetByteValue( "X*", 2 );
+  //de.SetByteValue( "X*", 2 );
+  de.SetByteValue( "F*", 2 );
   ds.Replace( de );
 
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind);
+  //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind);
+  theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eFind);
   theManager.SendFind( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
@@ -439,6 +441,7 @@ int main(int argc, char *argv[])
   else if ( mode == "find" ) // C-FIND SCU
     {
   // ./bin/gdcmscu dhcp-67-183 5678 find patqry.dcm    
+  // ./bin/gdcmscu mi2b2.slicer.org 11112  find patqry.dcm 
     CFind( argv[1], portno, argv[4] );
     }
   else // C-STORE SCU
