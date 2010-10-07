@@ -28,6 +28,7 @@ namespace gdcm{
       static std::vector<BasePDU*> CreateCEchoPDU(const ULConnection& inConnection);
       static std::vector<BasePDU*> CreateCStorePDU(const ULConnection& inConnection, DataSet *inDataSet);
       static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, DataSet* inDataSet);
+      static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, DataSet* inDataSet);
     };
   }
 }

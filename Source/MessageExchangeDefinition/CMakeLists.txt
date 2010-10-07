@@ -41,6 +41,7 @@ gdcmCompositeMessageFactory.cxx
 gdcmCEchoMessages.cxx
 gdcmCFindMessages.cxx
 gdcmCStoreMessages.cxx
+gdcmCMoveMessages.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})

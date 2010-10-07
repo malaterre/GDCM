@@ -110,10 +110,18 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //    case eGet:
 //      break;
     case eMove:
+        // should we also send stuff from FIND ?
+        // E: Move PresCtx but no Find (accepting for now) 
+        pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
+        // move
         pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelMOVE );
         as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
+        /*
         pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelMOVE );
         as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelMOVE );
         pc.SetAbstractSyntax( as );
@@ -122,6 +130,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
         as.SetNameFromUID( gdcm::UIDs::PatientStudyOnlyQueryRetrieveInformationModelMOVERetired );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
+        */
       break;
     case eStore:
         pc.SetPresentationContextID( eSecondaryCaptureImageStorage );
@@ -172,6 +181,14 @@ bool ULConnectionManager::SendEcho(){
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
+bool ULConnectionManager::SendMove(DataSet *inDataSet)
+{
+  vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inDataSet );
+  ULEvent theEvent(ePDATArequest, theDataPDU);
+
+  EStateID theState = RunEventLoop(theEvent);
+  return (theState == eSta6TransferReady);//ie, finished the transitions
+}
 bool ULConnectionManager::SendFind(DataSet *inDataSet)
 {
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inDataSet );

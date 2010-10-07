@@ -26,6 +26,8 @@ namespace gdcm {
 
   static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, DataSet *inDataSet);
 
+  static  std::vector<PresentationDataValue> ConstructCMoveRQ(const ULConnection& inConnection, DataSet *inDataSet);
+
 
     };
   }

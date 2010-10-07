@@ -118,6 +118,19 @@ std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(const ULConnection& inConnectio
   return outVector;
 }
 
+std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnection, gdcm::DataSet *inDataSet)
+{
+  std::vector<PresentationDataValue> pdv =
+    CompositeMessageFactory::ConstructCMoveRQ(inConnection, inDataSet );
+  std::vector<PresentationDataValue>::iterator pdvItor;
+  std::vector<BasePDU*> outVector;
+  for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
+    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    thePDataTFPDU->AddPresentationDataValue( *pdvItor );
+    outVector.push_back(thePDataTFPDU);
+  }
+  return outVector;
+}
 std::vector<BasePDU*> PDUFactory::CreateCStorePDU(const ULConnection& inConnection, gdcm::DataSet *inDataSet)
 {
 
