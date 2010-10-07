@@ -62,20 +62,24 @@ void CEcho( const char *remote, int portno )
 
 }
 
-void CMove( const char *remote, int portno, std::string const & filename )
+void CMove( const char *remote, int portno )
 {
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  reader.Read();
-  gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+/*
+(0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
+(0010,0010) PN (no value available)                     #   0, 0 PatientsName
+(0010,0020) LO (no value available)                     #   0, 0 PatientID
+
+*/
+  gdcm::DataSet ds;
+  gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
+  ds.Insert( at1.GetAsDataElement() );
+  gdcm::Attribute<0x10,0x10> at2 = { "FROG^KERMIT TCH " };
+  ds.Insert( at2.GetAsDataElement() );
+  gdcm::Attribute<0x10,0x20> at3 = { "" };
+  //ds.Insert( at3.GetAsDataElement() );
 
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
   // Add a query:
-  gdcm::DataElement de( gdcm::Tag(0x10,0x10) );
-  de.SetVR( gdcm::VR::PN );
-  //de.SetByteValue( "X*", 2 );
-  de.SetByteValue( "F*", 2 );
-  //ds.Replace( de );
 
   gdcm::network::ULConnectionManager theManager;
   theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove);
@@ -84,24 +88,28 @@ void CMove( const char *remote, int portno, std::string const & filename )
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 
-void CFind( const char *remote, int portno, std::string const & filename )
+void CFind( const char *remote, int portno )
 {
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  reader.Read();
-  gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+/*
+(0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
+(0010,0010) PN (no value available)                     #   0, 0 PatientsName
+(0010,0020) LO (no value available)                     #   0, 0 PatientID
+
+*/
+  gdcm::DataSet ds;
+  gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
+  ds.Insert( at1.GetAsDataElement() );
+  gdcm::Attribute<0x10,0x10> at2 = { "F*" };
+  //Attribute<0x10,0x10> at2 = { "X*" };
+  ds.Insert( at2.GetAsDataElement() );
+  gdcm::Attribute<0x10,0x20> at3 = { "" };
+  ds.Insert( at3.GetAsDataElement() );
 
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
   // Add a query:
-  gdcm::DataElement de( gdcm::Tag(0x10,0x10) );
-  de.SetVR( gdcm::VR::PN );
-  //de.SetByteValue( "X*", 2 );
-  de.SetByteValue( "F*", 2 );
-  ds.Replace( de );
-
   gdcm::network::ULConnectionManager theManager;
-  //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind);
-  theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eFind);
+  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind);
+  //theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eFind);
   theManager.SendFind( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
@@ -462,15 +470,15 @@ int main(int argc, char *argv[])
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
-  // ./bin/gdcmscu dhcp-67-183 5678 move patqry.dcm    
-  // ./bin/gdcmscu mi2b2.slicer.org 11112 move patqry.dcm 
-    CMove( argv[1], portno, argv[4] );
+  // ./bin/gdcmscu dhcp-67-183 5678 move
+  // ./bin/gdcmscu mi2b2.slicer.org 11112 move
+    CMove( argv[1], portno );
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
-  // ./bin/gdcmscu dhcp-67-183 5678 find patqry.dcm    
-  // ./bin/gdcmscu mi2b2.slicer.org 11112  find patqry.dcm 
-    CFind( argv[1], portno, argv[4] );
+  // ./bin/gdcmscu dhcp-67-183 5678 find
+  // ./bin/gdcmscu mi2b2.slicer.org 11112  find
+    CFind( argv[1], portno );
     }
   else // C-STORE SCU
     {
