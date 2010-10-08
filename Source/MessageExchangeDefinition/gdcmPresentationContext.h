@@ -18,6 +18,7 @@
 #include "gdcmTypes.h"
 #include "gdcmAbstractSyntax.h"
 #include "gdcmTransferSyntax_.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -34,19 +35,77 @@ namespace network
 //than 255, and the number has to be within a byte
 enum EPresentationContextID {
   eVerificationSOPClass = 1,
-  ePatientRootQueryRetrieveInformationModelFIND,
-  eStudyRootQueryRetrieveInformationModelFIND,
-  ePatientStudyOnlyQueryRetrieveInformationModelFINDRetired,
-  eModalityWorklistInformationModelFIND,
-  eGeneralPurposeWorklistInformationModelFIND,
-  ePatientRootQueryRetrieveInformationModelMOVE,
-  eStudyRootQueryRetrieveInformationModelMOVE,
-  ePatientStudyOnlyQueryRetrieveInformationModelMOVERetired,
-  eSecondaryCaptureImageStorage,
-  eMultiframeSingleBitSecondaryCaptureImageStorage,
-  eMultiframeGrayscaleByteSecondaryCaptureImageStorage,
-  eMultiframeGrayscaleWordSecondaryCaptureImageStorage,
-  eMultiframeTrueColorSecondaryCaptureImageStorage
+  ePatientRootQueryRetrieveInformationModelFIND = 3,
+  eStudyRootQueryRetrieveInformationModelFIND = 5,
+  ePatientStudyOnlyQueryRetrieveInformationModelFINDRetired = 7,
+  eModalityWorklistInformationModelFIND = 9,
+  eGeneralPurposeWorklistInformationModelFIND = 11,
+  ePatientRootQueryRetrieveInformationModelMOVE = 13,
+  eStudyRootQueryRetrieveInformationModelMOVE = 15,
+  ePatientStudyOnlyQueryRetrieveInformationModelMOVERetired = 17,
+  eAmbulatoryECGWaveformStorage = 19,
+  eBasicTextSR = 21,
+  eBasicVoiceAudioWaveformStorage = 23,
+  eBlendingSoftcopyPresentationStateStorage = 25,
+  eCardiacElectrophysiologyWaveformStorage = 27,
+  eChestCADSR = 29,
+  eColorSoftcopyPresentationStateStorage = 31,
+  eComprehensiveSR = 33,
+  eComputedRadiographyImageStorage = 35,
+  eCTImageStorage = 37,
+  eDigitalIntraOralXRayImageStorageForPresentation = 39,
+  eDigitalIntraOralXRayImageStorageForProcessing = 41,
+  eDigitalMammographyXRayImageStorageForPresentation = 43,
+  eDigitalMammographyXRayImageStorageForProcessing = 45,
+  eDigitalXRayImageStorageForPresentation = 47,
+  eDigitalXRayImageStorageForProcessing = 49,
+  eEncapsulatedPDFStorage = 51,
+  eEnhancedCTImageStorage = 53,
+  eEnhancedMRImageStorage = 55,
+  eEnhancedSR = 57,
+  eEnhancedXAImageStorage = 59,
+  eEnhancedXRFImageStorage= 61,
+  eGeneralECGWaveformStorage = 63,
+  eGrayscaleSoftcopyPresentationStateStorage = 65,
+  eHemodynamicWaveformStorage = 67,
+  eKeyObjectSelectionDocument = 69,
+  eMammographyCADSR = 71,
+  eMRImageStorage = 73,
+  eMRSpectroscopyStorage = 75,
+  eMultiframeGrayscaleByteSecondaryCaptureImageStorage = 77,
+  eMultiframeGrayscaleWordSecondaryCaptureImageStorage = 79,
+  eMultiframeSingleBitSecondaryCaptureImageStorage = 81,
+  eMultiframeTrueColorSecondaryCaptureImageStorage = 83,
+  eNuclearMedicineImageStorage = 85,
+  eOphthalmicPhotography16BitImageStorage = 87,
+  eOphthalmicPhotography8BitImageStorage = 89,
+  ePETCurveStorage = 91,
+  ePETImageStorage = 93,
+  eProcedureLogStorage = 95,
+  ePseudoColorSoftcopyPresentationStateStorage = 97,
+  eRawDataStorage = 99,
+  eRealWorldValueMappingStorage = 101,
+  eRTBeamsTreatmentRecordStorage = 103,
+  eRTBrachyTreatmentRecordStorage = 105,
+  eRTDoseStorage = 107,
+  eRTImageStorage = 109,
+  eRTPlanStorage = 111,
+  eRTStructureSetStorage = 113,
+  eRTTreatmentSummaryRecordStorage = 115,
+  eSecondaryCaptureImageStorage = 117,
+  eSpatialFiducialsStorage = 119,
+  eSpatialRegistrationStorage = 121,
+  eStereometricRelationshipStorage = 123,
+  eTwelveLeadECGWaveformStorage = 125,
+  eUltrasoundImageStorage = 127,
+  eUltrasoundMultiframeImageStorage = 129,
+  eVLEndoscopicImageStorage = 131,
+  eVLMicroscopicImageStorage = 133,
+  eVLPhotographicImageStorage = 135,
+  eVLSlideCoordinatesMicroscopicImageStorage = 137,
+  eXRayAngiographicImageStorage = 139,
+  eXRayFluoroscopyImageStorage = 141,
+  eXRayRadiationDoseSR = 143
 };
 
 /**
@@ -71,6 +130,19 @@ public:
   uint8_t GetPresentationContextID() const;
 
   void Print(std::ostream &os) const;
+
+  //this function will return the appropriate ID from the above
+  //list, after querying the appropriate tag in the dataset.  If the tag above
+  //does not exist, then the result is a pure verification ID.
+  //if the operation is something other than an echo, that should be interpreted
+  //as a failure; echos themselves take a null dataset.
+  //it is assumed that Find will do the Right Thing, or that the find class is unimportant.
+  //however, this function could be extended in the future to validate that a given 
+  //dataset conforms to the expectations of a particular FIND SOP abstract syntax, if necessary.
+  //current tests (7 oct 2010) show that for our test queries, find SOP didn't 
+  //change the outcome of the search.
+  //if it's not a verification context ID, then you can also get the UID associated with the data set.
+  static EPresentationContextID AssignPresentationContextID(const DataSet& inDS, std::string& outUIDString);
 
 private:
   static const uint8_t ItemType;

@@ -33,7 +33,7 @@ ULConnectionManager::~ULConnectionManager(){
 bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  const std::string& inConnectAETitle, 
                                               const std::string& inComputerName, const long& inIPAddress, 
                                               const unsigned short& inConnectPort, const double& inTimeout, 
-                                              const EConnectionType& inConnectionType)
+                                              const EConnectionType& inConnectionType, const gdcm::DataSet& inDS)
 {
   //generate a ULConnectionInfo object
   UserInformation userInfo;
@@ -121,36 +121,19 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
         as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
-        /*
+        pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelFIND );
+        pc.SetAbstractSyntax( as );
+        pcVector.push_back(pc);
         pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelMOVE );
         as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelMOVE );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
-        pc.SetPresentationContextID( ePatientStudyOnlyQueryRetrieveInformationModelMOVERetired );
-        as.SetNameFromUID( gdcm::UIDs::PatientStudyOnlyQueryRetrieveInformationModelMOVERetired );
-        pc.SetAbstractSyntax( as );
-        pcVector.push_back(pc);
-        */
       break;
     case eStore:
-        pc.SetPresentationContextID( eSecondaryCaptureImageStorage );
-        as.SetNameFromUID( gdcm::UIDs::SecondaryCaptureImageStorage );
-        pc.SetAbstractSyntax( as );
-        pcVector.push_back(pc);
-        pc.SetPresentationContextID( eMultiframeSingleBitSecondaryCaptureImageStorage );
-        as.SetNameFromUID( gdcm::UIDs::MultiframeSingleBitSecondaryCaptureImageStorage );
-        pc.SetAbstractSyntax( as );
-        pcVector.push_back(pc);
-        pc.SetPresentationContextID( eMultiframeGrayscaleByteSecondaryCaptureImageStorage );
-        as.SetNameFromUID( gdcm::UIDs::MultiframeGrayscaleByteSecondaryCaptureImageStorage );
-        pc.SetAbstractSyntax( as );
-        pcVector.push_back(pc);
-        pc.SetPresentationContextID( eMultiframeGrayscaleWordSecondaryCaptureImageStorage );
-        as.SetNameFromUID(  gdcm::UIDs::MultiframeGrayscaleWordSecondaryCaptureImageStorage );
-        pc.SetAbstractSyntax( as );
-        pcVector.push_back(pc);
-        pc.SetPresentationContextID( eMultiframeTrueColorSecondaryCaptureImageStorage );
-        as.SetNameFromUID(  gdcm::UIDs::MultiframeTrueColorSecondaryCaptureImageStorage );
+      std::string uidName;
+        pc.SetPresentationContextID( PresentationContext::AssignPresentationContextID(inDS, uidName) );
+        as.SetNameFromUIDString( uidName );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
       break;

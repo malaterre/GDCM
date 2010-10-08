@@ -55,7 +55,8 @@ void CEcho( const char *remote, int portno )
   ar.Run(e);
 */
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eEcho);
+  gdcm::DataSet blank;
+  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eEcho, blank);
   theManager.SendEcho();
   theManager.SendEcho();
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
@@ -82,7 +83,7 @@ void CMove( const char *remote, int portno )
   // Add a query:
 
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove);
+  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
   //theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eMove);
   theManager.SendMove( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
@@ -108,7 +109,7 @@ void CFind( const char *remote, int portno )
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
   // Add a query:
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind);
+  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
   //theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eFind);
   theManager.SendFind( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
@@ -122,7 +123,7 @@ void CStore( const char *remote, int portno, std::string const & filename )
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000, gdcm::network::eStore);
+  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000, gdcm::network::eStore, ds);
   theManager.SendStore( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   

@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
 
   "${GDCM_BINARY_DIR}/Testing/Source/Data"
   "${GDCM_SOURCE_DIR}/Testing/Source/Data"
@@ -48,6 +49,6 @@ gdcmCMoveMessages.cxx
 # Let's prefer the 4 letter name: MEXD:
 ADD_LIBRARY(gdcmMEXD ${MessageExchangeDefinition_SRCS})
 #TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmCommon)
-TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmDSED socketxx)
+TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmDSED gdcmIOD socketxx)
 SET_TARGET_PROPERTIES(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 
