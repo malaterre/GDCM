@@ -7,6 +7,7 @@ this file defines the messages for the cstore action
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmPresentationContext.h"
 
 namespace gdcm{
 namespace network{
@@ -16,7 +17,8 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
 {
   assert( inDataSet );
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(1); // FIXME-- should be using the enum in gdcmPresentationContext.h
+  std::string UIDString;
+  thePDV.SetPresentationContextID(PresentationContext::AssignPresentationContextID(*inDataSet, UIDString)); 
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
