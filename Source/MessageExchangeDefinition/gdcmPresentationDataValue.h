@@ -43,6 +43,7 @@ public:
   /// \warning size of dataset should be below maxpdusize
   void SetDataSet(const DataSet & ds);
   void SetBlob(const std::string & partialblob);
+  std::string GetBlob() const;
 
   uint8_t GetPresentationContextID() const { return PresentationContextID; }
   void SetPresentationContextID(uint8_t id) {
@@ -66,6 +67,9 @@ public:
   bool GetIsLastFragment() const;
 
   void Print(std::ostream &os) const;
+
+  //NOTE that the PDVs have to be given in the order in which they were received!
+  static DataSet ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs);
 
 private:
   uint32_t ItemLength;
