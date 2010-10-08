@@ -194,7 +194,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       const int l = (int)( -log10(ZTolerance) );
       ZSpacing = spacing_round(zspacing, l);
       }
-    assert( spacingisgood == false ||  (ZSpacing > ZTolerance && ZTolerance > 0) );
+    assert( spacingisgood == false ||  (ComputeZSpacing ? (ZSpacing > ZTolerance && ZTolerance > 0) : ZTolerance > 0) );
     }
 }
 
