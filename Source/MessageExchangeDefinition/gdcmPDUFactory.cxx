@@ -159,3 +159,24 @@ std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnectio
 
 
 }
+
+
+//given data pdus, produce the presentation data values stored within.
+//all operations have these as the payload of the data sending operation
+//however, echo does not have a dataset in the pdv.
+std::vector<PresentationDataValue> PDUFactory::GetPDVs(const std::vector<BasePDU*> inDataPDUs){
+  std::vector<BasePDU*>::const_iterator itor;
+  std::vector<PresentationDataValue> outPDVs;
+  for (itor = inDataPDUs.begin(); itor < inDataPDUs.end(); itor++){
+    PDataTFPDU* thePDataTFPDU = dynamic_cast<PDataTFPDU*>(*itor);
+    if (thePDataTFPDU == NULL){
+      assert(0); //shouldn't really get here.
+      return outPDVs; //just stop now, no longer with data pdus.
+    }
+    int theNumPDVsinPDU = thePDataTFPDU->GetNumPDVs();
+    for (int i = 0; i < theNumPDVsinPDU; i++){
+      outPDVs.push_back(thePDataTFPDU->GetPresentationDataValue(i));
+    }
+  }
+  return outPDVs;
+}

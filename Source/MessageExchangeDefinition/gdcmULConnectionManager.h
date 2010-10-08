@@ -10,6 +10,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmULTransitionTable.h"
 #include "gdcmULConnection.h"
 #include "gdcmULConnectionInfo.h"
+#include "gdcmPresentationDataValue.h"
 
 namespace gdcm {
   class DataSet;
@@ -69,7 +70,9 @@ namespace gdcm {
       //send the Data PDU associated with Echo (ie, a default DataPDU)
       //this lets the user confirm that the connection is alive.
       //the user should look to cout to see the response of the echo command
-      bool SendEcho();
+      //returns the PresentationDataValue that was returned by the remote
+      //host.  Note that the PDV can be uninitialized, which would indicate failure.
+      std::vector<PresentationDataValue> SendEcho();
 
       // API will change...
       bool SendStore(DataSet *inDataSet);
