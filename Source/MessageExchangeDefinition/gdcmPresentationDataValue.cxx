@@ -121,11 +121,30 @@ void PresentationDataValue::SetBlob(const std::string & partialblob)
 void PresentationDataValue::SetDataSet(const DataSet & ds)
 {
   std::stringstream ss;
+  //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
   ds.Write<ImplicitDataElement,SwapperNoOp>( ss );
   Blob = ss.str();
   ItemLength = Size() - 4;
   assert (ItemLength + 4 == Size() );
 }
+
+std::string PresentationDataValue::GetBlob() const{
+  return Blob;
+}
+
+
+DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
+  std::stringstream ss;
+  std::vector<PresentationDataValue>::const_iterator itor;
+  for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
+    ss << itor->GetBlob();
+  }
+  DataSet ds;
+  //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
+  ds.Read<ImplicitDataElement,SwapperNoOp>(ss);
+  return ds;
+}
+
 /*
 void PresentationDataValue::MyInit(File const &file)
 {
