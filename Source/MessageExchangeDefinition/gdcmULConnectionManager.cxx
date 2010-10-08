@@ -155,13 +155,21 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //send the Data PDU associated with Echo (ie, a default DataPDU)
 //this lets the user confirm that the connection is alive.
 //the user should look to cout to see the response of the echo command
-bool ULConnectionManager::SendEcho(){
+std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);
-  return (theState == eSta6TransferReady);//ie, finished the transitions
+
+  //theEvent should contain the PDU for the echo!
+  
+  if (theState == eSta6TransferReady){//ie, finished the transitions
+    return PDUFactory::GetPDVs(theEvent.GetPDUs());
+  } else {
+    std::vector<PresentationDataValue> empty;
+    return empty;
+  }
 }
 
 bool ULConnectionManager::SendMove(gdcm::DataSet *inDataSet)
@@ -246,7 +254,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
           if (thePDU != NULL){
             incomingPDUs.push_back(thePDU);
             thePDU->Read(is);
-            thePDU->Print(std::cout);
+            //thePDU->Print(std::cout);
             if (thePDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore

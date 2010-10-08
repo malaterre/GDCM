@@ -133,16 +133,30 @@ const std::string &PresentationDataValue::GetBlob() const{
 }
 
 
-DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
+std::vector<DataSet> PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
   std::stringstream ss;
   std::vector<PresentationDataValue>::const_iterator itor;
   for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
-    ss << itor->GetBlob();
+    ss << itor->GetBlob();//this could be faster, since it's a char-by-char copy.
+    //only correct if speed is an issue.
   }
+
+  std::vector<DataSet> outDataSets;
+
+  ss.seekg(std::ios::end);
+  std::streamoff len = ss.tellg();
+
+  //start to read datasets from the beginning of the stringstream
+  ss.seekg(0,std::ios::beg);
+  //now, read datasets.
   DataSet ds;
   //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
-  ds.Read<ImplicitDataElement,SwapperNoOp>(ss);
-  return ds;
+  while (ss.tellg() < len){
+    ds.Read<ImplicitDataElement,SwapperNoOp>( ss );
+    outDataSets.push_back(ds);
+  }
+
+  return outDataSets;
 }
 
 /*

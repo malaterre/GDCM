@@ -10,6 +10,7 @@ name and date: 25 Sept 2010 mmr
 #include "gdcmNetworkEvents.h"
 #include "gdcmDataSet.h"
 #include "gdcmULConnection.h"
+#include "gdcmPresentationDataValue.h"
 
 namespace gdcm{
   namespace network{
@@ -29,6 +30,11 @@ namespace gdcm{
       static std::vector<BasePDU*> CreateCStorePDU(const ULConnection& inConnection, DataSet *inDataSet);
       static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, DataSet* inDataSet);
       static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, DataSet* inDataSet);
+
+      //given data pdus, produce the presentation data values stored within.
+      //all operations have these as the payload of the data sending operation
+      //however, echo does not have a dataset in the pdv.
+      static std::vector<PresentationDataValue> GetPDVs(const std::vector<BasePDU*> inDataPDUs);
     };
   }
 }

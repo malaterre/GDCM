@@ -51,6 +51,11 @@ public:
     assert( !V.empty() && i < V.size() );
     return V[i];
   }
+
+  size_t GetNumPDVs() const {
+    return V.size();
+  }
+
   void Print(std::ostream &os) const;
   bool IsLastFragment() const;
 
