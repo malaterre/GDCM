@@ -128,7 +128,7 @@ void PresentationDataValue::SetDataSet(const DataSet & ds)
   assert (ItemLength + 4 == Size() );
 }
 
-std::string PresentationDataValue::GetBlob() const{
+const std::string &PresentationDataValue::GetBlob() const{
   return Blob;
 }
 
