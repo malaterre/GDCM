@@ -7,6 +7,7 @@ this file defines the messages for the cfind action
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmPresentationContext.h"
 
 namespace gdcm{
 namespace network{
@@ -15,7 +16,7 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
 {
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(2);
+  thePDV.SetPresentationContextID(3);//could it be 5, if the server does study?
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -62,7 +63,7 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
 
 {
     PresentationDataValue thePDV;
-    thePDV.SetPresentationContextID(2); // FIXME
+    thePDV.SetPresentationContextID(3); // FIXME
     //thePDV.SetBlob( sub );
     thePDV.SetDataSet(*inDataSet);
       thePDV.SetMessageHeader( 2 );

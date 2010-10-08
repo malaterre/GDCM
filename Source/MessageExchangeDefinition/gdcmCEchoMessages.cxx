@@ -7,13 +7,14 @@ this file defines the messages for the cecho action
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmPresentationContext.h"
 
 namespace gdcm{
 namespace network{
 
 std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(DataSet* inDataSet){
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(1);
+  thePDV.SetPresentationContextID(eVerificationSOPClass);
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
