@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmAbstractSyntax.h"
 #include "gdcmSwapper.h"
+#include <limits>
 
 namespace gdcm
 {
@@ -81,7 +82,9 @@ void AbstractSyntax::UpdateName( const char *name )
     if( b )
       {
       Name = name;
-      ItemLength = Name.size();
+      size_t lenTemp = Name.size();
+      assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
+      ItemLength = (uint16_t)lenTemp;
       assert( ItemLength + 4 == Size() );
       return;
       }
@@ -94,6 +97,11 @@ void AbstractSyntax::UpdateName( const char *name )
 void AbstractSyntax::SetNameFromUID( gdcm::UIDs::TSName tsname )
 {
   const char *name = gdcm::UIDs::GetUIDString( tsname );
+  UpdateName( name );
+}
+void AbstractSyntax::SetNameFromUIDString( const std::string& inUIDName )
+{
+  const char *name = inUIDName.c_str();
   UpdateName( name );
 }
 

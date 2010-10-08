@@ -47,7 +47,8 @@ namespace gdcm {
       //a different connection should be established.
       bool EstablishConnection(const std::string& inAETitle, const std::string& inConnectAETitle, 
         const std::string& inComputerName, const long& inIPAddress, 
-        const unsigned short& inConnectPort, const double& inTimeout, const EConnectionType& inConnectionType);
+        const unsigned short& inConnectPort, const double& inTimeout, 
+        const EConnectionType& inConnectionType, const gdcm::DataSet& inDS);
 
       //allows for a connection to be broken, but waits for an acknowledgement
       //of the breaking for a certain amount of time.  Returns true of the

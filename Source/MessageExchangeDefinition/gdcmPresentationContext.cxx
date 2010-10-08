@@ -15,6 +15,12 @@
 #include "gdcmPresentationContext.h"
 #include "gdcmUIDs.h"
 #include "gdcmSwapper.h"
+#include "gdcmAttribute.h"
+#include "gdcmDefs.h"
+#include "gdcmGlobal.h"
+#include "gdcmMediaStorage.h"
+#include "gdcmSOPClassUIDToIOD.h"
+#include <limits>
 
 namespace gdcm
 {
@@ -31,7 +37,9 @@ PresentationContext::PresentationContext()
 {
   ID = 0x01;
 
-  ItemLength = Size() - 4;
+  size_t lenTemp = Size() - 4;
+  assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
+  ItemLength = (uint16_t)lenTemp;
   assert( ItemLength + 4 == Size() );
 }
 
@@ -119,14 +127,18 @@ size_t PresentationContext::Size() const
 void PresentationContext::SetAbstractSyntax( AbstractSyntax const & as )
 {
   SubItems = as;
-  ItemLength = Size() - 4;
+  size_t lenTemp = Size() - 4;
+  assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
+  ItemLength = (uint16_t)lenTemp;
   assert( ItemLength + 4 == Size() );
 }
 
 void PresentationContext::AddTransferSyntax( TransferSyntax_ const &ts )
 {
   TransferSyntaxes.push_back( ts );
-  ItemLength = Size() - 4;
+  size_t lenTemp = Size() - 4;
+  assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
+  ItemLength = (uint16_t)lenTemp;
   assert( ItemLength + 4 == Size() );
 }
 
@@ -150,6 +162,169 @@ void PresentationContext::Print(std::ostream &os) const
   //static const uint8_t Reserved7;
   //static const uint8_t Reserved8;
 
+}
+
+//this function will return the appropriate ID from the above
+//list, after querying the appropriate tag in the dataset.  If the tag above
+//does not exist, then the result is a pure verification ID.
+//if the operation is something other than an echo, that should be interpreted
+//as a failure; echos themselves take a null dataset.
+EPresentationContextID PresentationContext::AssignPresentationContextID(const DataSet& inDS, std::string& outUIDString){
+  //check to see if you have the 0x0008, 0x0016 tag in the dataset
+  //if not, return verification
+  DataElement de1 = inDS.FindDataElement(Tag(0x0008, 0x0016));
+  DataElement de2 = inDS.FindDataElement(Tag(0x0002, 0x0002));
+
+  if (de1.IsEmpty() && de2.IsEmpty()) {
+      return eVerificationSOPClass;
+  }
+  else {
+    using gdcm::MediaStorage;
+    gdcm::Global& g = gdcm::Global::GetInstance();  if( !g.LoadResourcesFiles() )
+    {
+      std::cerr << "Could not LoadResourcesFiles" << std::endl;
+      return eVerificationSOPClass;
+    }
+    const gdcm::Defs &defs = g.GetDefs();
+    gdcm::MediaStorage mst;
+    if (!mst.SetFromDataSet(inDS)){
+      return eVerificationSOPClass;
+    }
+    const char *iod = defs.GetIODNameFromMediaStorage(mst);
+    gdcm::UIDs uid;//want to get this as well, to set the abstract syntax properly
+    uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
+    outUIDString = std::string(gdcm::MediaStorage::GetMSString(mst));
+    switch (uid){
+      case gdcm::UIDs::AmbulatoryECGWaveformStorage:
+        return eAmbulatoryECGWaveformStorage;
+      case gdcm::UIDs::BasicTextSRStorage:
+        return eBasicTextSR;
+      case gdcm::UIDs::BasicVoiceAudioWaveformStorage:
+        return eBasicVoiceAudioWaveformStorage;
+      case gdcm::UIDs::BlendingSoftcopyPresentationStateStorageSOPClass:
+        return eBlendingSoftcopyPresentationStateStorage;
+      case gdcm::UIDs::CardiacElectrophysiologyWaveformStorage:
+        return eCardiacElectrophysiologyWaveformStorage;
+      case gdcm::UIDs::ChestCADSRStorage:
+        return eChestCADSR;
+      case gdcm::UIDs::ColorSoftcopyPresentationStateStorageSOPClass:
+        return eColorSoftcopyPresentationStateStorage;
+      case gdcm::UIDs::ComprehensiveSRStorage:
+        return eComprehensiveSR;
+      case gdcm::UIDs::ComputedRadiographyImageStorage:
+        return eComputedRadiographyImageStorage;
+      case gdcm::UIDs::CTImageStorage:
+        return eCTImageStorage;
+      case gdcm::UIDs::DigitalIntraoralXRayImageStorageForPresentation:
+        return eDigitalIntraOralXRayImageStorageForPresentation;
+      case gdcm::UIDs::DigitalIntraoralXRayImageStorageForProcessing:
+        return eDigitalIntraOralXRayImageStorageForProcessing;
+      case gdcm::UIDs::DigitalMammographyXRayImageStorageForPresentation:
+        return eDigitalMammographyXRayImageStorageForPresentation;
+      case gdcm::UIDs::DigitalMammographyXRayImageStorageForProcessing:
+        return eDigitalMammographyXRayImageStorageForProcessing;
+      case gdcm::UIDs::DigitalXRayImageStorageForPresentation:
+        return eDigitalXRayImageStorageForPresentation;
+      case gdcm::UIDs::DigitalXRayImageStorageForProcessing:
+        return eDigitalXRayImageStorageForProcessing;
+      case gdcm::UIDs::EncapsulatedPDFStorage:
+        return eEncapsulatedPDFStorage;
+      case gdcm::UIDs::EnhancedCTImageStorage:
+        return eEnhancedCTImageStorage;
+      case gdcm::UIDs::EnhancedMRImageStorage:
+        return eEnhancedMRImageStorage;
+      case gdcm::UIDs::EnhancedSRStorage:
+        return eEnhancedSR;
+      case gdcm::UIDs::EnhancedXAImageStorage:
+        return eEnhancedXAImageStorage;
+      case gdcm::UIDs::EnhancedXRFImageStorage:
+        return eEnhancedXRFImageStorage;
+      case gdcm::UIDs::GeneralECGWaveformStorage:
+        return eGeneralECGWaveformStorage;
+      case gdcm::UIDs::GrayscaleSoftcopyPresentationStateStorageSOPClass:
+        return eGrayscaleSoftcopyPresentationStateStorage;
+      case gdcm::UIDs::HemodynamicWaveformStorage:
+        return eHemodynamicWaveformStorage;
+      case gdcm::UIDs::KeyObjectSelectionDocumentStorage:
+        return eKeyObjectSelectionDocument;
+      case gdcm::UIDs::MammographyCADSRStorage:
+        return eMammographyCADSR;
+      case gdcm::UIDs::MRImageStorage:
+        return eMRImageStorage;
+      case gdcm::UIDs::MRSpectroscopyStorage:
+        return eMRSpectroscopyStorage;
+      case gdcm::UIDs::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
+        return eMultiframeGrayscaleByteSecondaryCaptureImageStorage;
+      case gdcm::UIDs::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
+        return eMultiframeGrayscaleWordSecondaryCaptureImageStorage;
+      case gdcm::UIDs::MultiframeSingleBitSecondaryCaptureImageStorage:
+        return eMultiframeSingleBitSecondaryCaptureImageStorage;
+      case gdcm::UIDs::MultiframeTrueColorSecondaryCaptureImageStorage:
+        return eMultiframeTrueColorSecondaryCaptureImageStorage;
+      case gdcm::UIDs::NuclearMedicineImageStorage:
+        return eNuclearMedicineImageStorage;
+      case gdcm::UIDs::OphthalmicPhotography16BitImageStorage:
+        return eOphthalmicPhotography16BitImageStorage;
+      case gdcm::UIDs::OphthalmicPhotography8BitImageStorage:
+        return eOphthalmicPhotography8BitImageStorage;
+      //case gdcm::UIDs::PositronEmissionTomographyImageStorage:
+      //  return ePETCurveStorage;//!!!NOTE!  This isn't right! can we handle curve storage?
+      case gdcm::UIDs::PositronEmissionTomographyImageStorage:
+        return ePETImageStorage;
+      case gdcm::UIDs::ProcedureLogStorage:
+        return eProcedureLogStorage;
+      case gdcm::UIDs::PseudoColorSoftcopyPresentationStateStorageSOPClass:
+        return ePseudoColorSoftcopyPresentationStateStorage;
+      case gdcm::UIDs::RawDataStorage:
+        return eRawDataStorage;
+      case gdcm::UIDs::RealWorldValueMappingStorage:
+        return eRealWorldValueMappingStorage;
+      case gdcm::UIDs::RTBeamsTreatmentRecordStorage:
+        return eRTBeamsTreatmentRecordStorage;
+      case gdcm::UIDs::RTBrachyTreatmentRecordStorage:
+        return eRTBrachyTreatmentRecordStorage;
+      case gdcm::UIDs::RTDoseStorage:
+        return eRTDoseStorage;
+      case gdcm::UIDs::RTImageStorage:
+        return eRTImageStorage;
+      case gdcm::UIDs::RTPlanStorage:
+        return eRTPlanStorage;
+      case gdcm::UIDs::RTStructureSetStorage:
+        return eRTStructureSetStorage;
+      case gdcm::UIDs::RTTreatmentSummaryRecordStorage:
+        return eRTTreatmentSummaryRecordStorage;
+      case gdcm::UIDs::SecondaryCaptureImageStorage:
+        return eSecondaryCaptureImageStorage;
+      case gdcm::UIDs::SpatialFiducialsStorage:
+        return eSpatialFiducialsStorage;
+      case gdcm::UIDs::SpatialRegistrationStorage:
+        return eSpatialRegistrationStorage;
+      case gdcm::UIDs::StereometricRelationshipStorage:
+        return eStereometricRelationshipStorage;
+      case gdcm::UIDs::WaveformStorageTrialRetired://!!NOTE: I'm not sure these are equivalent
+        return eTwelveLeadECGWaveformStorage;
+      case gdcm::UIDs::UltrasoundImageStorage:
+        return eUltrasoundImageStorage;
+      case gdcm::UIDs::UltrasoundMultiframeImageStorage:
+        return eUltrasoundMultiframeImageStorage;
+      case gdcm::UIDs::VLEndoscopicImageStorage:
+        return eVLEndoscopicImageStorage;
+      case gdcm::UIDs::VLMicroscopicImageStorage:
+        return eVLMicroscopicImageStorage;
+      case gdcm::UIDs::VLPhotographicImageStorage:
+        return eVLPhotographicImageStorage;
+      case gdcm::UIDs::VLSlideCoordinatesMicroscopicImageStorage:
+        return eVLSlideCoordinatesMicroscopicImageStorage;
+      case gdcm::UIDs::XRayAngiographicImageStorage:
+        return eXRayAngiographicImageStorage;
+      case gdcm::UIDs::XRayRadiofluoroscopicImageStorage:
+        return eXRayFluoroscopyImageStorage;
+      case gdcm::UIDs::XRayRadiationDoseSRStorage:
+        return eXRayRadiationDoseSR;
+      default:
+        return eVerificationSOPClass;
+    }
+  }
 }
 
 } // end namespace network

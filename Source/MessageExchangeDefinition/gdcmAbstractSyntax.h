@@ -40,6 +40,9 @@ public:
 
   // accept a gdcm::UIDs::TSType also... 
   void SetNameFromUID( gdcm::UIDs::TSName tsname );
+  //now that the PresentationContext messes around with UIDs and returns a string
+  //use that string as well.
+  void SetNameFromUIDString( const std::string& inUIDName );
 
   size_t Size() const;
 private:
