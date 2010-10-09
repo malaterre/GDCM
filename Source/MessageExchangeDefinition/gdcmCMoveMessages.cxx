@@ -15,7 +15,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
 {
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(7);
+  thePDV.SetPresentationContextID(13);
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -66,7 +66,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
 
 {
     PresentationDataValue thePDV;
-    thePDV.SetPresentationContextID(7); // FIXME
+    thePDV.SetPresentationContextID(13); // FIXME
     //thePDV.SetBlob( sub );
     thePDV.SetDataSet(*inDataSet);
       thePDV.SetMessageHeader( 2 );
