@@ -43,7 +43,7 @@ public:
   /// \warning size of dataset should be below maxpdusize
   void SetDataSet(const DataSet & ds);
   void SetBlob(const std::string & partialblob);
-  std::string const & GetBlob() const;
+  std::string GetBlob() const;
 
   uint8_t GetPresentationContextID() const { return PresentationContextID; }
   void SetPresentationContextID(uint8_t id) {

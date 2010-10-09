@@ -16,6 +16,8 @@
 #include "gdcmSwapper.h"
 #include "gdcmFile.h"
 
+
+
 namespace gdcm
 {
 namespace network
@@ -128,28 +130,30 @@ void PresentationDataValue::SetDataSet(const DataSet & ds)
   assert (ItemLength + 4 == Size() );
 }
 
-const std::string &PresentationDataValue::GetBlob() const{
+std::string PresentationDataValue::GetBlob() const{
   return Blob;
 }
 
 
 std::vector<DataSet> PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
-  std::stringstream ss;
+  std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
   std::vector<PresentationDataValue>::const_iterator itor;
   for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
-    ss << itor->GetBlob();//this could be faster, since it's a char-by-char copy.
-    //only correct if speed is an issue.
+    std::string theBlobString = itor->GetBlob();
+    theEntireBuffer.insert(theEntireBuffer.end(), theBlobString.begin(), theBlobString.end());
   }
 
   std::vector<DataSet> outDataSets;
 
-  ss.seekg(std::ios::end);
-  std::streamoff len = ss.tellg();
-
-  //start to read datasets from the beginning of the stringstream
-  ss.seekg(0,std::ios::beg);
+  std::stringstream ss;
+  ss << theEntireBuffer; //slow and inefficient, but if it works...
+//  ss.rdbuf()->pubsetbuf(&theEntireBuffer[0], theEntireBuffer.size());//does NOT copy the buffer
+  //just points it to the beginning of vector char.  It also doesn't work.
+  size_t len = theEntireBuffer.size();
   //now, read datasets.
   DataSet ds;
+  ss.seekg(std::ios::beg);
+  std::streamoff loc = ss.tellg();
   //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
   while (ss.tellg() < len){
     ds.Read<ImplicitDataElement,SwapperNoOp>( ss );
