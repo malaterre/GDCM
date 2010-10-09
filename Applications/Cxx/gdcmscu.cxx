@@ -116,9 +116,13 @@ void CFind( const char *remote, int portno )
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
   // Add a query:
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
-  //theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eFind);
-  theManager.SendFind( (gdcm::DataSet*)&ds );
+  //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
+  theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eFind, ds);
+  std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( (gdcm::DataSet*)&ds );
+  std::vector<gdcm::DataSet>::iterator itor;
+  for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
+    itor->Print(std::cout);
+  }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 

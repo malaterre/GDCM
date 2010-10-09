@@ -180,13 +180,18 @@ bool ULConnectionManager::SendMove(gdcm::DataSet *inDataSet)
   EStateID theState = RunEventLoop(theEvent);
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
-bool ULConnectionManager::SendFind(gdcm::DataSet *inDataSet)
+std::vector<gdcm::DataSet> ULConnectionManager::SendFind(gdcm::DataSet *inDataSet)
 {
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);
-  return (theState == eSta6TransferReady);//ie, finished the transitions
+  if (theState == eSta6TransferReady){//ie, finished the transitions
+    return PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theEvent.GetPDUs()));
+  } else {
+    std::vector<gdcm::DataSet> empty;
+    return empty;
+  }
 }
 
 bool ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)

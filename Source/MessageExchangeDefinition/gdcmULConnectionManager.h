@@ -11,6 +11,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmULConnection.h"
 #include "gdcmULConnectionInfo.h"
 #include "gdcmPresentationDataValue.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm {
   class DataSet;
@@ -76,7 +77,7 @@ namespace gdcm {
 
       // API will change...
       bool SendStore(DataSet *inDataSet);
-      bool SendFind(DataSet *inDataSet);
+      std::vector<DataSet> SendFind(DataSet *inDataSet);
       bool SendMove(DataSet *inDataSet);
 
     };
