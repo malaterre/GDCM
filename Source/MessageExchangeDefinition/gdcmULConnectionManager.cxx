@@ -186,8 +186,35 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendFind(gdcm::DataSet *inDataSe
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent);
+  std::vector<BasePDU*> theData;
   if (theState == eSta6TransferReady){//ie, finished the transitions
-    return PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theEvent.GetPDUs()));
+    //with find, the results now come down the wire. 
+    //the pdu we already have from the event will tell us how many to expect.
+    std::vector<gdcm::DataSet> theFindRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theEvent.GetPDUs()));
+    //theFindRSP[0].Print(std::cout);
+    std::istream &is = *mConnection->GetProtocol();
+    while (!is.eof()){
+      uint8_t itemtype = 0x0;
+      is.read( (char*)&itemtype, 1 );
+      //what happens if nothing's read?
+      BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
+      if (thePDU != NULL){
+        thePDU->Read(is);
+        theData.push_back(thePDU);
+      } else{
+        break;
+      }
+    }
+    
+    std::vector<gdcm::DataSet> theCompleteFindResponse = 
+      PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+    //note that it's the responsibility of the event to delete the PDU in theFindRSP
+    for (int i = 0; i < theData.size(); i++){
+      delete theData[i];
+    }
+    std::vector<gdcm::DataSet> final = theFindRSP;
+    final.insert(final.end(), theCompleteFindResponse.begin(), theCompleteFindResponse.end());
+    return final;
   } else {
     std::vector<gdcm::DataSet> empty;
     return empty;
@@ -232,6 +259,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent;
   EEventID raisedEvent;
+
   do {
     mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
     theState = mConnection->GetState();
