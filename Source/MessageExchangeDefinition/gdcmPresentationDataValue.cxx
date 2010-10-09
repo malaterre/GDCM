@@ -130,25 +130,39 @@ void PresentationDataValue::SetDataSet(const DataSet & ds)
   assert (ItemLength + 4 == Size() );
 }
 
-std::string PresentationDataValue::GetBlob() const{
+const std::string &PresentationDataValue::GetBlob() const{
   return Blob;
 }
 
 
 std::vector<DataSet> PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
+
+  size_t s = inPDVs.size();
+/*
   std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
   std::vector<PresentationDataValue>::const_iterator itor;
   for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
     std::string theBlobString = itor->GetBlob();
     theEntireBuffer.insert(theEntireBuffer.end(), theBlobString.begin(), theBlobString.end());
   }
-
+*/
   std::vector<DataSet> outDataSets;
 
-  std::stringstream ss;
-  ss << theEntireBuffer; //slow and inefficient, but if it works...
+  std::vector<PresentationDataValue>::const_iterator itor;
+  for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
+    const std::string &theBlobString = itor->GetBlob();
+    std::stringstream ss;
+    ss.str( theBlobString );
+    DataSet ds;
+    ds.Read<ImplicitDataElement,SwapperNoOp>( ss );
+    outDataSets.push_back(ds);
+  }
+
+  //std::stringstream ss;
+  //ss << theEntireBuffer; //slow and inefficient, but if it works...
 //  ss.rdbuf()->pubsetbuf(&theEntireBuffer[0], theEntireBuffer.size());//does NOT copy the buffer
   //just points it to the beginning of vector char.  It also doesn't work.
+#if 0
   size_t len = theEntireBuffer.size();
   //now, read datasets.
   ss.seekg(std::ios::beg);
@@ -161,6 +175,7 @@ std::vector<DataSet> PresentationDataValue::ConcatenatePDVBlobs(const std::vecto
     ds.Read<ImplicitDataElement,SwapperNoOp>( ss );
     outDataSets.push_back(ds);
   }
+#endif
 
   return outDataSets;
 }
