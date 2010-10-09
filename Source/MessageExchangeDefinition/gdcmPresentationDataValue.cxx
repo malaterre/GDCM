@@ -151,11 +151,13 @@ std::vector<DataSet> PresentationDataValue::ConcatenatePDVBlobs(const std::vecto
   //just points it to the beginning of vector char.  It also doesn't work.
   size_t len = theEntireBuffer.size();
   //now, read datasets.
-  DataSet ds;
   ss.seekg(std::ios::beg);
   std::streamoff loc = ss.tellg();
   //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
   while (ss.tellg() < len){
+    DataSet ds;
+    ds.Clear();//it may seem like we have collisions.  We do not.
+    ds.GetDES().clear();
     ds.Read<ImplicitDataElement,SwapperNoOp>( ss );
     outDataSets.push_back(ds);
   }
