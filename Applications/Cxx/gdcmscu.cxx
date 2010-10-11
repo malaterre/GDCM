@@ -719,18 +719,20 @@ int main(int argc, char *argv[])
     }
   else if ( mode == "echo" ) // C-ECHO SCU
     {
+    // ./bin/gdcmscu mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
+    // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     CEcho( hostname, port, callingaetitle, callaetitle );
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
-    // ./bin/gdcmscu dhcp-67-183 5678 move
-    // ./bin/gdcmscu mi2b2.slicer.org 11112 move
+    // ./bin/gdcmscu --move dhcp-67-183 5678 move
+    // ./bin/gdcmscu --move mi2b2.slicer.org 11112 move
     CMove( hostname, port, callingaetitle, callaetitle  );
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
-    // ./bin/gdcmscu dhcp-67-183 5678 find
-    // ./bin/gdcmscu mi2b2.slicer.org 11112  find
+    // ./bin/gdcmscu --find dhcp-67-183 5678
+    // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
     CFind( hostname, port, callingaetitle, callaetitle  );
     }
