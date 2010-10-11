@@ -68,7 +68,10 @@ std::string const &call )
 */
   gdcm::network::ULConnectionManager theManager;
   gdcm::DataSet blank;
-  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eEcho, blank);
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eEcho, blank)){
+    std::cerr << "Failed to establish connection." << std::endl;
+    exit (-1);
+  }
   std::vector<gdcm::network::PresentationDataValue> theValues1 = theManager.SendEcho();
   std::vector<gdcm::network::PresentationDataValue>::iterator itor;
   for (itor = theValues1.begin(); itor < theValues1.end(); itor++){
@@ -104,7 +107,10 @@ std::string const &call )
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
-  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eMove, ds);
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eMove, ds)){
+    std::cerr << "Failed to establish connection." << std::endl;
+    exit (-1);
+  }
   theManager.SendMove( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
@@ -131,7 +137,10 @@ std::string const &call )
   // Add a query:
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
-  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1, gdcm::network::eFind, ds);
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eFind, ds)){
+    std::cerr << "Failed to establish connection." << std::endl;
+    exit (-1);
+  }
   std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( (gdcm::DataSet*)&ds );
   std::vector<gdcm::DataSet>::iterator itor;
   int c = 0;
@@ -152,8 +161,11 @@ std::string const &call,
   reader.Read();
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
-  gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eStore, ds);
+  gdcm::network::ULConnectionManager theManager;  
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eStore, ds)){
+    std::cerr << "Failed to establish connection." << std::endl;
+    exit (-1);
+  }
   theManager.SendStore( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   
