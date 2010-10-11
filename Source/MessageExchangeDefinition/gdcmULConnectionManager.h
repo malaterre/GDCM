@@ -36,7 +36,7 @@ namespace gdcm {
       //event handler loop.
       //will just keep running until the current event is nonexistent.
       //at which point, it will return the current state of the connection
-      EStateID RunEventLoop(ULEvent& inEvent);
+      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet);
 
     public:
       ULConnectionManager();
@@ -76,9 +76,9 @@ namespace gdcm {
       std::vector<PresentationDataValue> SendEcho();
 
       // API will change...
-      bool SendStore(DataSet *inDataSet);
+      std::vector<DataSet> SendStore(DataSet *inDataSet);
       std::vector<DataSet> SendFind(DataSet *inDataSet);
-      bool SendMove(DataSet *inDataSet);
+      std::vector<DataSet> SendMove(DataSet *inDataSet);
 
     };
   }

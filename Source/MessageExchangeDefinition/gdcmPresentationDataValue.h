@@ -71,7 +71,7 @@ public:
   //NOTE that the PDVs have to be given in the order in which they were received!
   //also note that a dataset may be across multiple PDVs, or that a single PDV could have
   //many datasets.  
-  static std::vector<DataSet> ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs);
+  static DataSet ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs);
 
 private:
   uint32_t ItemLength;

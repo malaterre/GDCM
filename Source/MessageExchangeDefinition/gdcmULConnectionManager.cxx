@@ -14,6 +14,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmPDUFactory.h"
 #include "gdcmReader.h"
 #include "gdcmAAssociateRQPDU.h"
+#include "gdcmAttribute.h"
 
 
 using namespace gdcm::network;
@@ -146,7 +147,8 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //if there's nothing on the event loop, assume that it's done & the function can exit.
   //otherwise, keep rolling the event loop
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
-  EStateID theState = RunEventLoop(theEvent);
+  std::vector<gdcm::DataSet> empty;
+  EStateID theState = RunEventLoop(theEvent, empty);
 
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
@@ -160,8 +162,8 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunEventLoop(theEvent);
-
+  std::vector<gdcm::DataSet> empty;
+  EStateID theState = RunEventLoop(theEvent, empty);
   //theEvent should contain the PDU for the echo!
   
   if (theState == eSta6TransferReady){//ie, finished the transitions
@@ -172,62 +174,33 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   }
 }
 
-bool ULConnectionManager::SendMove(gdcm::DataSet *inDataSet)
+std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(gdcm::DataSet *inDataSet)
 {
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunEventLoop(theEvent);
-  return (theState == eSta6TransferReady);//ie, finished the transitions
+  std::vector<gdcm::DataSet> theResult;
+  EStateID theState = RunEventLoop(theEvent, theResult);
+  return theResult;
 }
 std::vector<gdcm::DataSet> ULConnectionManager::SendFind(gdcm::DataSet *inDataSet)
 {
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunEventLoop(theEvent);
-  std::vector<BasePDU*> theData;
-  if (theState == eSta6TransferReady){//ie, finished the transitions
-    //with find, the results now come down the wire. 
-    //the pdu we already have from the event will tell us how many to expect.
-    std::vector<gdcm::DataSet> theFindRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theEvent.GetPDUs()));
-    //theFindRSP[0].Print(std::cout);
-    std::istream &is = *mConnection->GetProtocol();
-    while (!is.eof()){
-      uint8_t itemtype = 0x0;
-      is.read( (char*)&itemtype, 1 );
-      //what happens if nothing's read?
-      BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
-      if (thePDU != NULL){
-        thePDU->Read(is);
-        theData.push_back(thePDU);
-      } else{
-        break;
-      }
-    }
-    
-    std::vector<gdcm::DataSet> theCompleteFindResponse = 
-      PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
-    //note that it's the responsibility of the event to delete the PDU in theFindRSP
-    for (int i = 0; i < theData.size(); i++){
-      delete theData[i];
-    }
-    std::vector<gdcm::DataSet> final = theFindRSP;
-    final.insert(final.end(), theCompleteFindResponse.begin(), theCompleteFindResponse.end());
-    return final;
-  } else {
-    std::vector<gdcm::DataSet> empty;
-    return empty;
-  }
+  std::vector<gdcm::DataSet> theResult;
+  EStateID theState = RunEventLoop(theEvent, theResult);
+  return theResult;
 }
 
-bool ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
+std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
 {
   vector<BasePDU*> theDataPDU = PDUFactory::CreateCStorePDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunEventLoop(theEvent);
-  return (theState == eSta6TransferReady);//ie, finished the transitions
+  std::vector<gdcm::DataSet> theResult;
+  EStateID theState = RunEventLoop(theEvent, theResult);
+  return theResult;
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
@@ -235,7 +208,8 @@ bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   ULEvent theEvent(eARELEASERequest, thePDU);
   mConnection->GetTimer().SetTimeout(inTimeOut);
 
-  EStateID theState = RunEventLoop(theEvent);
+  std::vector<gdcm::DataSet> empty;
+  EStateID theState = RunEventLoop(theEvent, empty);
   return (theState == eSta1Idle);//ie, finished the transitions
 }
 
@@ -243,7 +217,8 @@ void ULConnectionManager::BreakConnectionNow(){
   BasePDU* thePDU = PDUFactory::ConstructAbortPDU();
   ULEvent theEvent(eAABORTRequest, thePDU);
 
-  EStateID theState = RunEventLoop(theEvent);
+  std::vector<gdcm::DataSet> empty;
+  EStateID theState = RunEventLoop(theEvent, empty);
 }
 
 
@@ -255,13 +230,19 @@ void ULConnectionManager::BreakConnectionNow(){
 //if no response, assume that the connection is broken.
 //if there's a response, then yay.
 //note that this is the ARTIM timeout event
-EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
+EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gdcm::DataSet>& outDataSet){
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent;
   EEventID raisedEvent;
 
+  bool receivingData = false;
+  bool justWaiting = false;
+  //when receiving data from a find, etc, then justWaiting is true and only receiving is done
+  //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
-    mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
+    if (!justWaiting){
+      mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
+    }
     theState = mConnection->GetState();
     std::istream &is = *mConnection->GetProtocol();
     std::ostream &os = *mConnection->GetProtocol();
@@ -287,7 +268,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
           if (thePDU != NULL){
             incomingPDUs.push_back(thePDU);
             thePDU->Read(is);
-            //thePDU->Print(std::cout);
+            thePDU->Print(std::cout);
             if (thePDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
@@ -304,16 +285,75 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
       if (mConnection->GetTimer().GetHasExpired()){
         currentEvent.SetEvent(eARTIMTimerExpired);
       }
+      if (theState == eSta6TransferReady){//ie, finished the transitions
+        //with find, the results now come down the wire. 
+        //the pdu we already have from the event will tell us how many to expect.
+        uint32_t pendingDE1, pendingDE2, success, theVal;
+        pendingDE1 = 0xff01;
+        pendingDE2 = 0xff00;
+        success = 0x0000;
+        theVal = pendingDE1;
+        DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+        if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
+          gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
+          gdcm::Attribute<0x0,0x0900> at;
+          at.SetFromDataElement( de );
+          theVal = at.GetValues()[0];
+          //if theVal is Pending or Success, then we need to enter the loop below,
+          //because we need the data PDUs.
+          //so, the loop below is a do/while loop; there should be at least a second packet 
+          //with the dataset, even if the status is 'success'
+          //success == 0000H
+        }
+        receivingData = false;
+        justWaiting = false;
+        if (theVal == pendingDE1 || theVal == pendingDE2) {
+          receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
+          justWaiting = true;
+          waitingForEvent = true;
+        }
+        if (theVal == pendingDE1 || theVal == pendingDE2 || theVal == success){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
+          //first, dynamically cast that pdu in the event
+          //should be a data pdu
+          //then, look for tag 0x0,0x900
 
+          //only add datasets that are _not_ part of the network response
+          std::vector<gdcm::DataSet> final;
+          std::vector<BasePDU*> theData;
+          BasePDU* thePDU;//outside the loop for the do/while stopping condition
+          do {
+            uint8_t itemtype = 0x0;
+            is.read( (char*)&itemtype, 1 );
+            //what happens if nothing's read?
+            thePDU = PDUFactory::ConstructPDU(itemtype);
+            if (thePDU != NULL){
+              thePDU->Read(is);
+              theData.push_back(thePDU);
+            } else{
+              break;
+            }
+          } while(!is.eof() && !thePDU->IsLastFragment());
+          
+          DataSet theCompleteFindResponse = 
+            PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+          //note that it's the responsibility of the event to delete the PDU in theFindRSP
+          for (int i = 0; i < theData.size(); i++){
+            delete theData[i];
+          }
+          outDataSet.push_back(theCompleteFindResponse);
+        }
+      }
     }
     else {
       currentEvent.SetEvent(raisedEvent);//actions that cause transitions in the state table
       //locally just raise local events that will therefore cause the trigger to be pulled.
     }
-  } while (currentEvent.GetEvent() != eEventDoesNotExist && theState != eStaDoesNotExist && 
-    theState != eSta13AwaitingClose && theState != eSta6TransferReady && theState != eSta1Idle);
+  } while (currentEvent.GetEvent() != eEventDoesNotExist && 
+    theState != eStaDoesNotExist && theState != eSta13AwaitingClose && theState != eSta1Idle &&
+    (theState != eSta6TransferReady || (theState == eSta6TransferReady && receivingData )));
   //stop when the AE is done, or when ready to transfer data (ie, the next PDU should be sent in), 
   //or when the connection is idle after a disconnection.
+  //or, if in state 6 and receiving data, until all data is received.
 
   return theState;
 }

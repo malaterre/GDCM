@@ -134,50 +134,29 @@ const std::string &PresentationDataValue::GetBlob() const{
   return Blob;
 }
 
-
-std::vector<DataSet> PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
+//should only be one data set per chunk of pdvs.  So, only return one; the
+//loop that gets the results from the scp will be clever and only enter this function
+//when the pdu has its 'last bit' set to true (ie, when all the pdvs can be sent in at once,
+//but the are all part of the same data set)
+DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
 
   size_t s = inPDVs.size();
-/*
+
   std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
   std::vector<PresentationDataValue>::const_iterator itor;
   for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
     std::string theBlobString = itor->GetBlob();
     theEntireBuffer.insert(theEntireBuffer.end(), theBlobString.begin(), theBlobString.end());
   }
-*/
-  std::vector<DataSet> outDataSets;
 
-  std::vector<PresentationDataValue>::const_iterator itor;
-  for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
-    const std::string &theBlobString = itor->GetBlob();
-    std::stringstream ss;
-    ss.str( theBlobString );
-    DataSet ds;
-    ds.Read<ImplicitDataElement,SwapperNoOp>( ss );
-    outDataSets.push_back(ds);
-  }
+  DataSet outDataSet;
 
-  //std::stringstream ss;
-  //ss << theEntireBuffer; //slow and inefficient, but if it works...
-//  ss.rdbuf()->pubsetbuf(&theEntireBuffer[0], theEntireBuffer.size());//does NOT copy the buffer
-  //just points it to the beginning of vector char.  It also doesn't work.
-#if 0
-  size_t len = theEntireBuffer.size();
-  //now, read datasets.
-  ss.seekg(std::ios::beg);
-  std::streamoff loc = ss.tellg();
-  //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
-  while (ss.tellg() < len){
-    DataSet ds;
-    ds.Clear();//it may seem like we have collisions.  We do not.
-    ds.GetDES().clear();
-    ds.Read<ImplicitDataElement,SwapperNoOp>( ss );
-    outDataSets.push_back(ds);
-  }
-#endif
+  std::stringstream ss;
+  ss.str( theEntireBuffer );
+  outDataSet.Read<ImplicitDataElement,SwapperNoOp>( ss );
 
-  return outDataSets;
+
+  return outDataSet;
 }
 
 /*
