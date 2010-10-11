@@ -12,6 +12,15 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * Simple command line tool to echo/store/find/move DICOM using
+ * DICOM Query/Retrieve
+ * This is largely inspired by other tool available from other toolkit, namely:
+ * echoscu (DCMTK)
+ * findscu (DCMTK)
+ * movescu (DCMTK)
+ * storescu (DCMTK)
+ */
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAReleaseRPPDU.h"
 #include "gdcmAAssociateACPDU.h"
@@ -27,14 +36,17 @@
 #include "gdcmAssociationRelease.h"
 #include "gdcmULConnectionManager.h"
 #include "gdcmDataSet.h"
+#include "gdcmVersion.h"
 
 #include <fstream>
 #include <socket++/echo.h>
 #include <stdlib.h>
+#include <getopt.h>
 
 // Execute like this:
 // ./bin/gdcmscu www.dicomserver.co.uk 11112 echo
-void CEcho( const char *remote, int portno )
+void CEcho( const char *remote, int portno, std::string const &aetitle,
+std::string const &call )
 {
   /*
   echo e(protocol::tcp);
@@ -56,7 +68,7 @@ void CEcho( const char *remote, int portno )
 */
   gdcm::network::ULConnectionManager theManager;
   gdcm::DataSet blank;
-  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eEcho, blank);
+  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eEcho, blank);
   std::vector<gdcm::network::PresentationDataValue> theValues1 = theManager.SendEcho();
   std::vector<gdcm::network::PresentationDataValue>::iterator itor;
   for (itor = theValues1.begin(); itor < theValues1.end(); itor++){
@@ -90,8 +102,8 @@ void CMove( const char *remote, int portno )
   // Add a query:
 
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
-  //theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eMove);
+  //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
+  theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eMove, ds);
   theManager.SendMove( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
@@ -458,46 +470,269 @@ void CStoreServer( int portno )
     }
 }
 
+void PrintVersion()
+{
+  std::cout << "gdcmscu: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmscu [OPTION]...[OPERATION]...HOSTNAME...[PORT]..." << std::endl;
+  std::cout << "Execute a DICOM Q/R operation to HOSTNAME, using port PORT (104 when not specified)\n";
+  std::cout << "Parameter (required):" << std::endl;
+  std::cout << "  -i --input          DICOM filename" << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << "  -H --hostname       Hostname." << std::endl;
+  std::cout << "  -p --port           Port number." << std::endl;
+  std::cout << "     --aetitle        Set Calling AE Title." << std::endl;
+  std::cout << "     --call           Set Called AE Title." << std::endl;
+  std::cout << "Mode Options:" << std::endl;
+  std::cout << "     --echo           C-ECHO (default when none)." << std::endl;
+  std::cout << "     --store          C-STORE." << std::endl;
+  std::cout << "     --find           C-FIND." << std::endl;
+  std::cout << "     --move           C-MOVE." << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning   print warning info." << std::endl;
+  std::cout << "  -D --debug     print debug info." << std::endl;
+  std::cout << "  -E --error     print error info." << std::endl;
+  std::cout << "  -h --help      print help." << std::endl;
+  std::cout << "  -v --version   print version." << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
- if (argc < 3)
-   {
-   std::cerr << "Usage: " << argv [0] << " remote-host portno" << std::endl;
-   return 1;
-   }
+  int c;
+  //int digit_optind = 0;
 
-  int portno = atoi (argv [2]);
+  std::string shostname;
+  std::string callingaetitle = "GDCMSCU";
+  std::string callaetitle = "ANY-SCP";
+  int port = 104; // default
+  std::string filename;
+  int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
+  int echomode = 0;
+  int storemode = 0;
+  int findmode = 0;
+  int movemode = 0;
+  while (1) {
+    //int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+/*
+   struct option {
+              const char *name;
+              int has_arg;
+              int *flag;
+              int val;
+          };
+*/
+    static struct option long_options[] = {
+        {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
+        {"hostname", 1, 0, 0},     // -h
+        {"aetitle", 1, 0, 0},     // 
+        {"call", 1, 0, 0},     // 
+        {"port", 0, &port, 1}, // -p
+        {"input", 1, 0, 0}, // dcmfile-in
+        {"echo", 1, &echomode, 1}, // --echo
+        {"store", 1, &storemode, 1}, // --store
+        {"find", 1, &findmode, 1}, // --find
+        {"move", 1, &movemode, 1}, // --move
+        {0, 0, 0, 0} // required
+    };
+    static const char short_options[] = "i:H:p:VWDEhv";
+    c = getopt_long (argc, argv, short_options,
+      long_options, &option_index);
+    if (c == -1)
+      {
+      break;
+      }
 
-  std::string mode;
-  if (argc >= 4)
+    switch (c)
+      {
+    case 0:
+    case '-':
+        {
+        const char *s = long_options[option_index].name;
+        //printf ("option %s", s);
+        if (optarg)
+          {
+          if( option_index == 0 ) /* input */
+            {
+            assert( strcmp(s, "input") == 0 );
+            assert( filename.empty() );
+            filename = optarg;
+            }
+          else if( option_index == 7 ) /* calling aetitle */
+            {
+            assert( strcmp(s, "aetitle") == 0 );
+            //assert( callingaetitle.empty() );
+            callingaetitle = optarg;
+            }
+          else if( option_index == 8 ) /* called aetitle */
+            {
+            assert( strcmp(s, "call") == 0 );
+            //assert( callaetitle.empty() );
+            callaetitle = optarg;
+            }
+          //printf (" with arg %s", optarg);
+          }
+        //printf ("\n");
+        }
+      break;
+
+    case 'i':
+      //printf ("option i with value '%s'\n", optarg);
+      assert( filename.empty() );
+      filename = optarg;
+      break;
+
+    case 'H':
+      shostname = optarg;
+      break;
+
+    case 'p':
+      port = atoi( optarg );
+      break;
+
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
+      break;
+
+    case '?':
+      break;
+
+    default:
+      printf ("?? getopt returned character code 0%o ??\n", c);
+      }
+  }
+
+  if (optind < argc)
     {
-    mode = argv[3];
+    int v = argc - optind;
+    // hostname port filename
+    if( v == 1 )
+      {
+      shostname = argv[optind++];
+      }
+    else if( v == 2 )
+      {
+      shostname = argv[optind++];
+      port = atoi( argv[optind++] );
+      }
+    else if( v == 3 )
+      {
+      shostname = argv[optind++];
+      port = atoi( argv[optind++] );
+      filename = argv[optind++];
+      }
+    else
+      {
+      return 1;
+      }
+    assert( optind == argc );
+    }
+
+  if( version )
+    {
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    PrintHelp();
+    return 0;
+    }
+
+  if( shostname.empty() )
+    {
+    std::cerr << "Hostname missing" << std::endl;
+    return 1;
+    }
+  if( port == 0 )
+    {
+    std::cerr << "Problem with port number" << std::endl;
+    return 1;
+    }
+
+  const char *hostname = shostname.c_str();
+  std::string mode = "echo";
+  if ( echomode )
+    {
+    mode = "echo";
+    }
+  else if ( storemode )
+    {
+    mode = "store";
+    }
+  else if ( findmode )
+    {
+    mode = "find";
+    }
+  else if ( movemode )
+    {
+    mode = "move";
     }
 
   if ( mode == "server" ) // C-STORE SCP
     {
-    CStoreServer( portno );
+    // MM: Do not expose that to user for now (2010/10/11).
+    CStoreServer( port );
     }
   else if ( mode == "echo" ) // C-ECHO SCU
     {
-    CEcho( argv[1], portno );
+    CEcho( hostname, port, callingaetitle, callaetitle );
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
-  // ./bin/gdcmscu dhcp-67-183 5678 move
-  // ./bin/gdcmscu mi2b2.slicer.org 11112 move
-    CMove( argv[1], portno );
+    // ./bin/gdcmscu dhcp-67-183 5678 move
+    // ./bin/gdcmscu mi2b2.slicer.org 11112 move
+    CMove( hostname, port );
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
-  // ./bin/gdcmscu dhcp-67-183 5678 find
-  // ./bin/gdcmscu mi2b2.slicer.org 11112  find
-    CFind( argv[1], portno );
+    // ./bin/gdcmscu dhcp-67-183 5678 find
+    // ./bin/gdcmscu mi2b2.slicer.org 11112  find
+    // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
+    CFind( hostname, port );
     }
   else // C-STORE SCU
     {
     // mode == filename
-    CStore( argv[1], portno, mode );
+    CStore( hostname, port, filename );
     }
   return 0;
 }
