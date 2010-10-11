@@ -298,6 +298,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent){
         }
       }
       //now, we have to figure out the event that just happened based on the PDU that was received.
+      assert(!incomingPDUs.empty());
       currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(incomingPDUs[0]));
       currentEvent.SetPDU(incomingPDUs);
       if (mConnection->GetTimer().GetHasExpired()){
