@@ -82,7 +82,8 @@ std::string const &call )
 
 }
 
-void CMove( const char *remote, int portno )
+void CMove( const char *remote, int portno, std::string const &aetitle,
+std::string const &call )
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -103,12 +104,13 @@ void CMove( const char *remote, int portno )
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
-  theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1000, gdcm::network::eMove, ds);
+  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eMove, ds);
   theManager.SendMove( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 
-void CFind( const char *remote, int portno )
+void CFind( const char *remote, int portno , std::string const &aetitle,
+std::string const &call )
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -129,7 +131,7 @@ void CFind( const char *remote, int portno )
   // Add a query:
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
-  theManager.EstablishConnection("ACME1", "MI2B2", remote, 0, portno, 1, gdcm::network::eFind, ds);
+  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1, gdcm::network::eFind, ds);
   std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( (gdcm::DataSet*)&ds );
   std::vector<gdcm::DataSet>::iterator itor;
   int c = 0;
@@ -140,7 +142,10 @@ void CFind( const char *remote, int portno )
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 
-void CStore( const char *remote, int portno, std::string const & filename )
+void CStore( const char *remote, int portno,
+std::string const &aetitle,
+std::string const &call,
+ std::string const & filename )
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
@@ -148,7 +153,7 @@ void CStore( const char *remote, int portno, std::string const & filename )
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
   gdcm::network::ULConnectionManager theManager;
-  theManager.EstablishConnection("UNITED1", "COMMON", remote, 0, portno, 1000, gdcm::network::eStore, ds);
+  theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eStore, ds);
   theManager.SendStore( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   
@@ -546,10 +551,10 @@ int main(int argc, char *argv[])
         {"call", 1, 0, 0},     // 
         {"port", 0, &port, 1}, // -p
         {"input", 1, 0, 0}, // dcmfile-in
-        {"echo", 1, &echomode, 1}, // --echo
-        {"store", 1, &storemode, 1}, // --store
-        {"find", 1, &findmode, 1}, // --find
-        {"move", 1, &movemode, 1}, // --move
+        {"echo", 0, &echomode, 1}, // --echo
+        {"store", 0, &storemode, 1}, // --store
+        {"find", 0, &findmode, 1}, // --find
+        {"move", 0, &movemode, 1}, // --move
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhv";
@@ -720,19 +725,19 @@ int main(int argc, char *argv[])
     {
     // ./bin/gdcmscu dhcp-67-183 5678 move
     // ./bin/gdcmscu mi2b2.slicer.org 11112 move
-    CMove( hostname, port );
+    CMove( hostname, port, callingaetitle, callaetitle  );
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
     // ./bin/gdcmscu dhcp-67-183 5678 find
     // ./bin/gdcmscu mi2b2.slicer.org 11112  find
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
-    CFind( hostname, port );
+    CFind( hostname, port, callingaetitle, callaetitle  );
     }
   else // C-STORE SCU
     {
     // mode == filename
-    CStore( hostname, port, filename );
+    CStore( hostname, port, callingaetitle, callaetitle ,filename );
     }
   return 0;
 }
