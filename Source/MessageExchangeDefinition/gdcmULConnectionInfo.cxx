@@ -9,6 +9,7 @@
 //A connection must be established with this information, that's subsequently
 //placed into various primitives for actual communication.
 #include "gdcmULConnectionInfo.h" 
+#include <socket++/sockinet.h>//for setting up the local socket
 
 using namespace gdcm::network;
 
@@ -35,6 +36,14 @@ bool ULConnectionInfo::Initialize(UserInformation inUserInformation,
   mCalledComputerName = inCalledComputerName;
   mCalledIPPort = inCalledIPPort;
   mCalledIPAddress = inCalledIPAddress;
+
+  //test to see if the given computer name is actually an IP address
+  if (mCalledIPAddress == 0 && !mCalledComputerName.empty()){
+    mCalledIPAddress = inet_addr(mCalledComputerName.c_str());
+  //  if (mCalledIPAddress != 0)
+  //    mCalledComputerName = "";
+  }
+
   mUserInformation = inUserInformation;
   return true;
 }
