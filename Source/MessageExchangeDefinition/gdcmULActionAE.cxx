@@ -25,22 +25,28 @@ EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   //opening a local socket
-  echo* p = new echo(protocol::tcp);
-  if (inConnection.GetConnectionInfo().GetCalledIPPort() == 0){
-    if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
-      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName().c_str());
-    else 
-      (*p)->connect(inConnection.GetConnectionInfo().GetCalledIPAddress());
+  try{
+    echo* p = new echo(protocol::tcp);
+    if (inConnection.GetConnectionInfo().GetCalledIPPort() == 0){
+      if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
+        (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName().c_str());
+      else 
+        (*p)->connect(inConnection.GetConnectionInfo().GetCalledIPAddress());
+    }
+    else {
+      if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
+        (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName().c_str(), 
+          inConnection.GetConnectionInfo().GetCalledIPPort());
+    }
+    //make sure to convert timeouts to platform appropriate values.
+    (*p)->recvtimeout((int)inConnection.GetTimer().GetTimeout());
+    (*p)->sendtimeout((int)inConnection.GetTimer().GetTimeout());
+    inConnection.SetProtocol(p);
+  } catch (...){//unable to establish connection, so break off.
+     outWaitingForEvent = false;
+     outRaisedEvent = eEventDoesNotExist;
+     return eSta1Idle;
   }
-  else {
-    if (!inConnection.GetConnectionInfo().GetCalledComputerName().empty())
-      (*p)->connect(inConnection.GetConnectionInfo().GetCalledComputerName().c_str(), 
-        inConnection.GetConnectionInfo().GetCalledIPPort());
-  }
-  //make sure to convert timeouts to platform appropriate values.
-  (*p)->recvtimeout((int)inConnection.GetTimer().GetTimeout());
-  (*p)->sendtimeout((int)inConnection.GetTimer().GetTimeout());
-  inConnection.SetProtocol(p);
 
   outWaitingForEvent = false;
   outRaisedEvent = eTransportConnConfirmLocal;
