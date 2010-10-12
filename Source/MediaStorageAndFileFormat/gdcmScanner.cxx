@@ -280,6 +280,33 @@ const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valuere
   return filenameref;
 }
 
+
+  /// Will loop over all files and return a vector of std::strings of filenames
+  /// where value match the reference value 'valueref'
+Directory::FilenamesType Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref)const {
+  Directory::FilenamesType theReturn;
+  if( valueref )
+    {
+    Directory::FilenamesType::const_iterator file = Filenames.begin();
+    size_t len = strlen( valueref );
+    if( len && valueref[ len - 1 ] == ' ' )
+      {
+      --len;
+      }
+    for(; file != Filenames.end(); ++file)
+      {
+      const char *filename = file->c_str();
+      const char * value = GetValue(filename, t);
+      if( value && strncmp(value, valueref, len ) == 0 )
+        {
+        theReturn.push_back(std::string(filename));
+        }
+      }
+    }
+  return theReturn;
+
+}
+
 Scanner::TagToValue const & Scanner::GetMappingFromTagToValue(Tag const &t, const char *valueref) const
 {
   return GetMapping( GetFilenameFromTagToValue(t, valueref) );
@@ -299,6 +326,26 @@ Scanner::ValuesType Scanner::GetValues(Tag const &t) const
       }
     }
   return vt;
+}
+
+
+Directory::FilenamesType Scanner::GetOrderedValues(Tag const &t) const{
+
+  Directory::FilenamesType theReturn;
+  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  for(; file != Filenames.end(); ++file)
+    {
+    const char *filename = file->c_str();
+    TagToValue const &ttv = GetMapping(filename);
+    if( ttv.find(t) != ttv.end() )
+      {
+        std::string theVal = std::string(ttv.find(t)->second);
+        if (std::find(theReturn.begin(), theReturn.end(), theVal) == theReturn.end()){
+          theReturn.push_back( theVal );//only add new tags to the list
+        }
+      }
+    }
+  return theReturn;
 }
 
 void Scanner::ProcessPublicTag(StringFilter &sf, const char *filename)
