@@ -108,6 +108,9 @@ public:
   /// Get all the values found (in lexicographic order) associated with Tag 't'
   ValuesType GetValues(Tag const &t) const;
 
+  /// Get all the values found (in a vactor) associated with Tag 't'
+  Directory::FilenamesType GetOrderedValues(Tag const &t) const;
+
   /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
   struct ltstr
     {
@@ -131,6 +134,10 @@ public:
   /// Will loop over all files and return the first file where value match the reference value
   /// 'valueref'
   const char *GetFilenameFromTagToValue(Tag const &t, const char *valueref) const;
+
+  /// Will loop over all files and return a vector of std::strings of filenames
+  /// where value match the reference value 'valueref'
+  Directory::FilenamesType GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref) const;
 
   /// See GetFilenameFromTagToValue(). This is simply GetFilenameFromTagToValue followed
   // by a call to GetMapping()
