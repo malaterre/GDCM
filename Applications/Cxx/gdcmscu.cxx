@@ -68,7 +68,7 @@ std::string const &call )
 */
   gdcm::network::ULConnectionManager theManager;
   gdcm::DataSet blank;
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eEcho, blank)){
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eEcho, blank)){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }

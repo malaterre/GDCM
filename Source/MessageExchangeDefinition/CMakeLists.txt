@@ -49,6 +49,10 @@ gdcmCMoveMessages.cxx
 # Let's prefer the 4 letter name: MEXD:
 ADD_LIBRARY(gdcmMEXD ${MessageExchangeDefinition_SRCS})
 #TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmCommon)
-TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmDSED gdcmIOD socketxx)
 SET_TARGET_PROPERTIES(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
-
+if(WIN32)
+#target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
+target_link_libraries(gdcmMEXD gdcmDICT gdcmDSED gdcmIOD socketxx ws2_32.lib)
+else (WIN32)
+TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmDSED gdcmIOD socketxx)
+endif(WIN32)

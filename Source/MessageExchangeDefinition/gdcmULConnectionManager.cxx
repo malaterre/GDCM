@@ -279,69 +279,73 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
         }
       }
       //now, we have to figure out the event that just happened based on the PDU that was received.
-      assert(!incomingPDUs.empty());
-      currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(incomingPDUs[0]));
-      currentEvent.SetPDU(incomingPDUs);
-      if (mConnection->GetTimer().GetHasExpired()){
-        currentEvent.SetEvent(eARTIMTimerExpired);
-      }
-      if (theState == eSta6TransferReady){//ie, finished the transitions
-        //with find, the results now come down the wire. 
-        //the pdu we already have from the event will tell us how many to expect.
-        uint32_t pendingDE1, pendingDE2, success, theVal;
-        pendingDE1 = 0xff01;
-        pendingDE2 = 0xff00;
-        success = 0x0000;
-        theVal = pendingDE1;
-        DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
-        if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
-          gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
-          gdcm::Attribute<0x0,0x0900> at;
-          at.SetFromDataElement( de );
-          theVal = at.GetValues()[0];
-          //if theVal is Pending or Success, then we need to enter the loop below,
-          //because we need the data PDUs.
-          //so, the loop below is a do/while loop; there should be at least a second packet 
-          //with the dataset, even if the status is 'success'
-          //success == 0000H
+      if (!incomingPDUs.empty()){
+        currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(incomingPDUs[0]));
+        currentEvent.SetPDU(incomingPDUs);
+        if (mConnection->GetTimer().GetHasExpired()){
+          currentEvent.SetEvent(eARTIMTimerExpired);
         }
-        receivingData = false;
-        justWaiting = false;
-        if (theVal == pendingDE1 || theVal == pendingDE2) {
-          receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
-          justWaiting = true;
-          waitingForEvent = true;
-        }
-        if (theVal == pendingDE1 || theVal == pendingDE2 || theVal == success){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
-          //first, dynamically cast that pdu in the event
-          //should be a data pdu
-          //then, look for tag 0x0,0x900
-
-          //only add datasets that are _not_ part of the network response
-          std::vector<gdcm::DataSet> final;
-          std::vector<BasePDU*> theData;
-          BasePDU* thePDU;//outside the loop for the do/while stopping condition
-          do {
-            uint8_t itemtype = 0x0;
-            is.read( (char*)&itemtype, 1 );
-            //what happens if nothing's read?
-            thePDU = PDUFactory::ConstructPDU(itemtype);
-            if (thePDU != NULL){
-              thePDU->Read(is);
-              theData.push_back(thePDU);
-            } else{
-              break;
-            }
-          } while(!is.eof() && !thePDU->IsLastFragment());
-          
-          DataSet theCompleteFindResponse = 
-            PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
-          //note that it's the responsibility of the event to delete the PDU in theFindRSP
-          for (int i = 0; i < theData.size(); i++){
-            delete theData[i];
+        if (theState == eSta6TransferReady){//ie, finished the transitions
+          //with find, the results now come down the wire. 
+          //the pdu we already have from the event will tell us how many to expect.
+          uint32_t pendingDE1, pendingDE2, success, theVal;
+          pendingDE1 = 0xff01;
+          pendingDE2 = 0xff00;
+          success = 0x0000;
+          theVal = pendingDE1;
+          DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+          if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
+            gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
+            gdcm::Attribute<0x0,0x0900> at;
+            at.SetFromDataElement( de );
+            theVal = at.GetValues()[0];
+            //if theVal is Pending or Success, then we need to enter the loop below,
+            //because we need the data PDUs.
+            //so, the loop below is a do/while loop; there should be at least a second packet 
+            //with the dataset, even if the status is 'success'
+            //success == 0000H
           }
-          outDataSet.push_back(theCompleteFindResponse);
+          receivingData = false;
+          justWaiting = false;
+          if (theVal == pendingDE1 || theVal == pendingDE2) {
+            receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
+            justWaiting = true;
+            waitingForEvent = true;
+          }
+          if (theVal == pendingDE1 || theVal == pendingDE2 || theVal == success){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
+            //first, dynamically cast that pdu in the event
+            //should be a data pdu
+            //then, look for tag 0x0,0x900
+
+            //only add datasets that are _not_ part of the network response
+            std::vector<gdcm::DataSet> final;
+            std::vector<BasePDU*> theData;
+            BasePDU* thePDU;//outside the loop for the do/while stopping condition
+            do {
+              uint8_t itemtype = 0x0;
+              is.read( (char*)&itemtype, 1 );
+              //what happens if nothing's read?
+              thePDU = PDUFactory::ConstructPDU(itemtype);
+              if (thePDU != NULL){
+                thePDU->Read(is);
+                theData.push_back(thePDU);
+              } else{
+                break;
+              }
+            } while(!is.eof() && !thePDU->IsLastFragment());
+            
+            DataSet theCompleteFindResponse = 
+              PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+            //note that it's the responsibility of the event to delete the PDU in theFindRSP
+            for (int i = 0; i < theData.size(); i++){
+              delete theData[i];
+            }
+            outDataSet.push_back(theCompleteFindResponse);
+          }
         }
+      } else {
+        raisedEvent = eEventDoesNotExist;
+        waitingForEvent = false;
       }
     }
     else {
