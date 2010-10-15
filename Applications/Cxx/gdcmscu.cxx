@@ -36,13 +36,14 @@
 #include "gdcmAssociationRelease.h"
 #include "gdcmULConnectionManager.h"
 #include "gdcmDataSet.h"
+#include "gdcmStringFilter.h"
 #include "gdcmVersion.h"
 
 //for testing!  Should be put in a testing executable,
 //but it's just here now because I know this path works
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
-#include "gdcmPrivateTag.h"
+//#include "gdcmPrivateTag.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -133,10 +134,13 @@ bool CTestAllFunctions(const char* remote, int portno, const std::string& aetitl
     gdcm::DataSet query;
     gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
     query.Insert( at1.GetAsDataElement() );
-    gdcm::Attribute<0x10,0x10> at2 = {};
-    gdcm::PrivateTag t(0x10,0x10, "test");
-    query.Insert( ds.GetDataElement(t) );
+  //  gdcm::Attribute<0x10,0x10> at2 = { "test" };
+  gdcm::Attribute<0x10,0x10> at2 = { "FROG^KERMIT TCH " };
+    //gdcm::PrivateTag t(0x10,0x10, "test");
+    //query.Insert( ds.GetDataElement(t) );
+    //query.Insert( at2.GetDataElement() );
     gdcm::Attribute<0x10,0x20> at3 = { "" };
+    //query.Insert( at3.GetDataElement() );
     //store the file remotely
     if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eFind, query)){
       std::cerr << "Failed to establish c-find connection." << std::endl;
@@ -255,7 +259,7 @@ std::string const &call )
 }
 
 void CFind( const char *remote, int portno , std::string const &aetitle,
-std::string const &call )
+std::string const &call , gdcm::DataSet const &ds )
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -263,6 +267,7 @@ std::string const &call )
 (0010,0020) LO (no value available)                     #   0, 0 PatientID
 
 */
+/*
   gdcm::DataSet ds;
   gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
   ds.Insert( at1.GetAsDataElement() );
@@ -271,6 +276,7 @@ std::string const &call )
   ds.Insert( at2.GetAsDataElement() );
   gdcm::Attribute<0x10,0x20> at3 = { "" };
   ds.Insert( at3.GetAsDataElement() );
+*/
 
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
   // Add a query:
@@ -681,6 +687,10 @@ int main(int argc, char *argv[])
   int storemode = 0;
   int findmode = 0;
   int movemode = 0;
+  gdcm::Tag tag;
+  std::vector< std::pair<gdcm::Tag, std::string> > keys;
+
+  // FIXME: remove testing stuff:
   int testmode = 0;
   std::string testDir = "D:/gdcmData/scusubset";//changing the testdir doesn't work;
   //I think I'm not so good with these options
@@ -712,10 +722,11 @@ int main(int argc, char *argv[])
         {"store", 0, &storemode, 1}, // --store
         {"find", 0, &findmode, 1}, // --find
         {"move", 0, &movemode, 1}, // --move
+        {"key", 1, 0, 0}, // --key
         {"test", 0, &testmode, 1}, // --test
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:H:p:VWDEhv";
+    static const char short_options[] = "i:H:p:VWDEhvk:";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -750,7 +761,31 @@ int main(int argc, char *argv[])
             //assert( callaetitle.empty() );
             callaetitle = optarg;
             }
-          else if( option_index == 10 ) /* called aetitle */
+          else if( option_index == 16 ) /* key */
+            {
+            assert( strcmp(s, "key") == 0 );
+            if( !tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              return 1;
+              }
+            std::stringstream ss;
+            ss.str( optarg );
+            uint16_t dummy;
+            char cdummy; // comma
+            ss >> std::hex >> dummy;
+            assert( tag.GetGroup() == dummy );
+            ss >> cdummy;
+            assert( cdummy == ',' );
+            ss >> std::hex >> dummy;
+            assert( tag.GetElement() == dummy );
+            ss >> cdummy;
+            assert( cdummy == ',' );
+            std::string str;
+            ss >> str;
+            keys.push_back( std::make_pair(tag, str) );
+            }
+          else if( option_index == 11 ) /* test */
             {
             assert( strcmp(s, "testdir") == 0 );
             //assert( callaetitle.empty() );
@@ -759,6 +794,31 @@ int main(int argc, char *argv[])
           //printf (" with arg %s", optarg);
           }
         //printf ("\n");
+        }
+      break;
+
+    case 'k':
+        {
+        if( !tag.ReadFromCommaSeparatedString(optarg) )
+          {
+          std::cerr << "Could not read Tag: " << optarg << std::endl;
+          return 1;
+          }
+        std::stringstream ss;
+        ss.str( optarg );
+        uint16_t dummy;
+        char cdummy; // comma
+        ss >> std::hex >> dummy;
+        assert( tag.GetGroup() == dummy );
+        ss >> cdummy;
+        assert( cdummy == ',' );
+        ss >> std::hex >> dummy;
+        assert( tag.GetElement() == dummy );
+        ss >> cdummy;
+        assert( cdummy == ',' );
+        std::string str;
+        ss >> str;
+        keys.push_back( std::make_pair(tag, str) );
         }
       break;
 
@@ -898,10 +958,25 @@ int main(int argc, char *argv[])
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
+    // Construct C-FIND DataSet:
+    gdcm::StringFilter sf;
+    std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it = 
+      keys.begin();
+    gdcm::DataSet ds;
+    for(; it != keys.end(); ++it)
+      {
+      std::string s = sf.FromString( it->first, it->second.c_str(), it->second.size() );
+      gdcm::DataElement de( it->first );
+      de.SetByteValue ( s.c_str(), s.size() );
+      ds.Insert( de );
+      }
+
+    ds.Print( std::cout );
+
     // ./bin/gdcmscu --find dhcp-67-183 5678
     // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
-    CFind( hostname, port, callingaetitle, callaetitle  );
+    CFind( hostname, port, callingaetitle, callaetitle, ds );
     }
   if ( mode == "test" ) // Test all images
     {
