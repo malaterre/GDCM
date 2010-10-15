@@ -20,9 +20,11 @@
 
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include <algorithm>
 
 #include <string.h> // strlen
+#include <ctype.h> // tolower
 
 namespace gdcm
 {
@@ -37,7 +39,7 @@ class GDCM_EXPORT PrivateTag : public Tag
   friend std::ostream& operator<<(std::ostream &_os, const PrivateTag &_val);
 public:
   PrivateTag(uint16_t group = 0, uint16_t element = 0, const char *owner = ""):Tag(group,element),Owner(owner) {
-    std::transform(Owner.begin(), Owner.end(), Owner.begin(), tolower);
+    //std::transform(Owner.begin(), Owner.end(), Owner.begin(), tolower);
     //assert( element > 0x0010 && element < 0x100 );
   }
 
