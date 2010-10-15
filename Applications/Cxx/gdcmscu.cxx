@@ -38,10 +38,149 @@
 #include "gdcmDataSet.h"
 #include "gdcmVersion.h"
 
+//for testing!  Should be put in a testing executable,
+//but it's just here now because I know this path works
+#include "gdcmDirectory.h"
+#include "gdcmImageReader.h"
+#include "gdcmPrivateTag.h"
+
 #include <fstream>
 #include <socket++/echo.h>
 #include <stdlib.h>
 #include <getopt.h>
+
+//this should maybe override == ?
+bool AreDataSetsEqual(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2){
+  gdcm::DataSet::ConstIterator it1 = ds1.Begin();
+  gdcm::DataSet::ConstIterator it2 = ds2.Begin();
+
+  const gdcm::DataElement &de1 = *it1;
+  const gdcm::DataElement &de2 = *it2;
+  if( de1 == de2 )
+    {
+    }
+  while( it1 != ds1.End() && it2 != ds2.End() && *it1 == *it2 )
+    {
+    ++it1;
+    ++it2;
+    }
+
+  if( it1 != ds1.End() || it2 != ds2.End() )
+    {
+    std::cerr << "Problem with:" << std::endl;
+    if( it1 != ds1.End() )
+      {
+      std::cerr << "ds1: " << *it1 << std::endl;
+      }
+    if( it2 != ds2.End() )
+      {
+      std::cerr << "ds2: " << *it2 << std::endl;
+      }
+    return false;
+    }
+
+  return true;
+}
+
+bool CTestAllFunctions(const char* remote, int portno, const std::string& aetitle,
+                       const std::string& call, const std::string& gdcmDataDirectory)
+{
+  //first, run an echo, make sure that that works.
+  gdcm::network::ULConnectionManager theManager;
+  gdcm::DataSet blank;
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eEcho, blank)){
+    std::cerr << "Failed to establish connection." << std::endl;
+    return false;
+  }
+  std::vector<gdcm::network::PresentationDataValue> theValues1 = theManager.SendEcho();
+  std::vector<gdcm::network::PresentationDataValue>::iterator itor;
+  for (itor = theValues1.begin(); itor < theValues1.end(); itor++){
+    itor->Print(std::cout);
+  }
+  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+
+  //now, run the individual tests.
+  //get the filenames from the test directory
+  gdcm::Directory theDir;
+  theDir.Load(gdcmDataDirectory, false);
+
+  std::vector<std::string> theFilenames = theDir.GetFilenames();
+
+  std::vector<std::string>::iterator fitor;
+  gdcm::Reader theReader;
+  for (fitor = theFilenames.begin(); fitor < theFilenames.end(); ++fitor){
+
+    //read in the file
+    theReader.SetFileName(fitor->c_str());
+    if (!theReader.Read()) {
+      std::cerr << "Test failed, dicom file failed to load." <<std::endl;
+      return false;
+    }
+    gdcm::File theFile = theReader.GetFile();
+    gdcm::DataSet ds = theFile.GetDataSet();
+
+    //store the file remotely
+    if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eStore, ds)){
+      std::cerr << "Failed to establish c-store connection." << std::endl;
+      return false;
+    }
+
+    std::vector<gdcm::DataSet> theReturn = theManager.SendStore(&ds);
+    theManager.BreakConnection(-1);
+
+    //then search for it based on 0x20,xd and 0x20,xe, and maybe 0x8,0x18
+    //but have to construct a proper cfind query first!
+    gdcm::DataSet query;
+    gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
+    query.Insert( at1.GetAsDataElement() );
+    gdcm::Attribute<0x10,0x10> at2 = {};
+    gdcm::PrivateTag t(0x10,0x10, "test");
+    query.Insert( ds.GetDataElement(t) );
+    gdcm::Attribute<0x10,0x20> at3 = { "" };
+    //store the file remotely
+    if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eFind, query)){
+      std::cerr << "Failed to establish c-find connection." << std::endl;
+      return false;
+    }
+
+    std::vector<gdcm::DataSet> theQueryReturn = theManager.SendFind(&query);
+    theManager.BreakConnection(-1);
+
+    //now, find the dataset in theQueryReturn that corresponds to ds and then move it locally with a cmove
+    //we will actually just do an in-memory comparison of the returned result.
+    //for now, assume only one response.
+    if (theQueryReturn.empty()){
+      std::cerr << "Failed to find sent dataset." <<std::endl;
+      return false;
+    }
+
+    std::vector<gdcm::DataSet>::iterator theQueryResultItor;
+    bool foundMatch = false;
+    for (theQueryResultItor = theQueryReturn.begin(); theQueryResultItor < theQueryReturn.end(); theQueryResultItor++){
+      //check to see if any data sets match upon return.
+      theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eMove, *theQueryResultItor);
+      std::vector<gdcm::DataSet> theMoveResult = theManager.SendMove(&(*theQueryResultItor));
+      theManager.BreakConnection(-1);
+      std::vector<gdcm::DataSet>::iterator theMoveResultItor;
+      for (theMoveResultItor = theMoveResult.begin(); theMoveResultItor < theMoveResult.end(); ++theMoveResultItor){
+        //now iterate over each data element
+
+        if (AreDataSetsEqual(*theMoveResultItor, ds)){
+          foundMatch = true;//can break now
+          theQueryResultItor = theQueryReturn.end();
+          theMoveResultItor = theMoveResult.end();
+          break;
+        }
+      }
+    }
+    if (!foundMatch){
+      std::cerr << "No found dataset matches stored dataset." <<std::endl;
+      return false;
+    }
+    std::cout << fitor->c_str() << " passed scu testing." <<std::endl;
+  }
+  return true;
+}
 
 // Execute like this:
 // ./bin/gdcmscu www.dicomserver.co.uk 11112 echo
@@ -506,11 +645,13 @@ void PrintHelp()
   std::cout << "  -p --port           Port number." << std::endl;
   std::cout << "     --aetitle        Set Calling AE Title." << std::endl;
   std::cout << "     --call           Set Called AE Title." << std::endl;
+  std::cout << "  -t --testdir        Set the directory for testing images (if --test is chosen)." << std::endl;
   std::cout << "Mode Options:" << std::endl;
   std::cout << "     --echo           C-ECHO (default when none)." << std::endl;
   std::cout << "     --store          C-STORE." << std::endl;
   std::cout << "     --find           C-FIND." << std::endl;
   std::cout << "     --move           C-MOVE." << std::endl;
+  std::cout << "     --test           Test all functions agains a known working server." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -540,6 +681,9 @@ int main(int argc, char *argv[])
   int storemode = 0;
   int findmode = 0;
   int movemode = 0;
+  int testmode = 0;
+  std::string testDir = "D:/gdcmData/scusubset";//changing the testdir doesn't work;
+  //I think I'm not so good with these options
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -563,10 +707,12 @@ int main(int argc, char *argv[])
         {"call", 1, 0, 0},     // 
         {"port", 0, &port, 1}, // -p
         {"input", 1, 0, 0}, // dcmfile-in
+        {"testdir", 0, 0, 1},
         {"echo", 0, &echomode, 1}, // --echo
         {"store", 0, &storemode, 1}, // --store
         {"find", 0, &findmode, 1}, // --find
         {"move", 0, &movemode, 1}, // --move
+        {"test", 0, &testmode, 1}, // --test
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhv";
@@ -603,6 +749,12 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "call") == 0 );
             //assert( callaetitle.empty() );
             callaetitle = optarg;
+            }
+          else if( option_index == 10 ) /* called aetitle */
+            {
+            assert( strcmp(s, "testdir") == 0 );
+            //assert( callaetitle.empty() );
+            testDir = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -722,6 +874,9 @@ int main(int argc, char *argv[])
   else if ( movemode )
     {
     mode = "move";
+    }if ( testmode )
+    {
+    mode = "test";
     }
 
   if ( mode == "server" ) // C-STORE SCP
@@ -747,6 +902,11 @@ int main(int argc, char *argv[])
     // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
     CFind( hostname, port, callingaetitle, callaetitle  );
+    }
+  if ( mode == "test" ) // Test all images
+    {
+    // SHOULD USE A LOCAL SERVER!
+    CTestAllFunctions( hostname, port, callingaetitle, callaetitle, testDir  );
     }
   else // C-STORE SCU
     {
