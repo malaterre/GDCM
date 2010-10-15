@@ -785,7 +785,7 @@ int main(int argc, char *argv[])
             ss >> str;
             keys.push_back( std::make_pair(tag, str) );
             }
-          else if( option_index == 11 ) /* test */
+          else if( option_index == 17 ) /* test */
             {
             assert( strcmp(s, "testdir") == 0 );
             //assert( callaetitle.empty() );
