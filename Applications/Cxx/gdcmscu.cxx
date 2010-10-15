@@ -978,7 +978,7 @@ int main(int argc, char *argv[])
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
     CFind( hostname, port, callingaetitle, callaetitle, ds );
     }
-  if ( mode == "test" ) // Test all images
+  else if ( mode == "test" ) // Test all images
     {
     // SHOULD USE A LOCAL SERVER!
     CTestAllFunctions( hostname, port, callingaetitle, callaetitle, testDir  );
