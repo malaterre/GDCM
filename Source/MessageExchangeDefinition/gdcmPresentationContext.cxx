@@ -173,9 +173,9 @@ EPresentationContextID PresentationContext::AssignPresentationContextID(const Da
   //check to see if you have the 0x0008, 0x0016 tag in the dataset
   //if not, return verification
   assert( inDS.FindDataElement(Tag(0x0008, 0x0016)) );
-  assert( inDS.FindDataElement(Tag(0x0002, 0x0002)) );
+  assert( inDS.FindDataElement(Tag(0x0008, 0x0018)) );
   const DataElement &de1 = inDS.GetDataElement(Tag(0x0008, 0x0016));
-  const DataElement &de2 = inDS.GetDataElement(Tag(0x0002, 0x0002));
+  const DataElement &de2 = inDS.GetDataElement(Tag(0x0008, 0x0018));
 
   if (de1.IsEmpty() && de2.IsEmpty()) {
       return eVerificationSOPClass;
