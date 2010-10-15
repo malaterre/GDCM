@@ -52,6 +52,10 @@ namespace gdcm {
         const unsigned short& inConnectPort, const double& inTimeout, 
         const EConnectionType& inConnectionType, const gdcm::DataSet& inDS);
 
+
+      bool ReestablishConnection(const EConnectionType& inConnectionType, 
+        const gdcm::DataSet& inDS);
+
       //allows for a connection to be broken, but waits for an acknowledgement
       //of the breaking for a certain amount of time.  Returns true of the
       //other side acknowledges the break

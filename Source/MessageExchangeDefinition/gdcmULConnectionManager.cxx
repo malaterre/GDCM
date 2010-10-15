@@ -321,26 +321,36 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
             std::vector<gdcm::DataSet> final;
             std::vector<BasePDU*> theData;
             BasePDU* thePDU;//outside the loop for the do/while stopping condition
+            bool interrupted = false;
             do {
               uint8_t itemtype = 0x0;
               is.read( (char*)&itemtype, 1 );
               //what happens if nothing's read?
               thePDU = PDUFactory::ConstructPDU(itemtype);
+              if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
+                std::vector<BasePDU*> interruptingPDUs;
+                currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
+                currentEvent.SetPDU(interruptingPDUs);
+                interrupted= true;
+                break;
+              }
               if (thePDU != NULL){
                 thePDU->Read(is);
                 theData.push_back(thePDU);
               } else{
                 break;
               }
+              //!!!need to handle incoming PDUs that are not data, ie, an abort
             } while(!is.eof() && !thePDU->IsLastFragment());
-            
-            DataSet theCompleteFindResponse = 
-              PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
-            //note that it's the responsibility of the event to delete the PDU in theFindRSP
-            for (int i = 0; i < theData.size(); i++){
-              delete theData[i];
+            if (!interrupted){//ie, if the remote server didn't hang up 
+              DataSet theCompleteFindResponse = 
+                PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+              //note that it's the responsibility of the event to delete the PDU in theFindRSP
+              for (int i = 0; i < theData.size(); i++){
+                delete theData[i];
+              }
+              outDataSet.push_back(theCompleteFindResponse);
             }
-            outDataSet.push_back(theCompleteFindResponse);
           }
         }
       } else {
