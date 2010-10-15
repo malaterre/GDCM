@@ -312,7 +312,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
             justWaiting = true;
             waitingForEvent = true;
           }
-          if (theVal == pendingDE1 || theVal == pendingDE2 || theVal == success){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
+          if (theVal == pendingDE1 || theVal == pendingDE2 /*|| theVal == success*/){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
             //first, dynamically cast that pdu in the event
             //should be a data pdu
             //then, look for tag 0x0,0x900
@@ -341,7 +341,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                 break;
               }
               //!!!need to handle incoming PDUs that are not data, ie, an abort
-            } while(!is.eof() && !thePDU->IsLastFragment());
+            } while(/*!is.eof() &&*/ !thePDU->IsLastFragment());
             if (!interrupted){//ie, if the remote server didn't hang up 
               DataSet theCompleteFindResponse = 
                 PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
