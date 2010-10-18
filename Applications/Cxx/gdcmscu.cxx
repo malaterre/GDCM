@@ -230,7 +230,7 @@ std::string const &call )
 }
 
 void CMove( const char *remote, int portno, std::string const &aetitle,
-std::string const &call )
+std::string const &call  , gdcm::DataSet const &ds)
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -238,12 +238,14 @@ std::string const &call )
 (0010,0020) LO (no value available)                     #   0, 0 PatientID
 
 */
+/*
   gdcm::DataSet ds;
   gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
   ds.Insert( at1.GetAsDataElement() );
   gdcm::Attribute<0x10,0x10> at2 = { "FROG^KERMIT TCH " };
   ds.Insert( at2.GetAsDataElement() );
   gdcm::Attribute<0x10,0x20> at3 = { "" };
+*/
   //ds.Insert( at3.GetAsDataElement() );
 
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
@@ -255,7 +257,14 @@ std::string const &call )
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }
-  theManager.SendMove( (gdcm::DataSet*)&ds );
+  std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( (gdcm::DataSet*)&ds );
+  std::vector<gdcm::DataSet>::iterator itor;
+  int c = 0;
+  for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
+    std::cout << "Message " << c++ << std::endl;
+    itor->Print(std::cout);
+  }
+
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 
@@ -975,7 +984,22 @@ int main(int argc, char *argv[])
     {
     // ./bin/gdcmscu --move dhcp-67-183 5678 move
     // ./bin/gdcmscu --move mi2b2.slicer.org 11112 move
-    CMove( hostname, port, callingaetitle, callaetitle  );
+    gdcm::StringFilter sf;
+    std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it = 
+      keys.begin();
+    gdcm::DataSet ds;
+    for(; it != keys.end(); ++it)
+      {
+      std::string s = sf.FromString( it->first, it->second.c_str(), it->second.size() );
+      gdcm::DataElement de( it->first );
+      de.SetByteValue ( s.c_str(), s.size() );
+      ds.Insert( de );
+      }
+
+    ds.Print( std::cout );
+
+
+    CMove( hostname, port, callingaetitle, callaetitle, ds  );
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
