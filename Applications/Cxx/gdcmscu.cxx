@@ -959,6 +959,12 @@ int main(int argc, char *argv[])
   else if ( mode == "find" ) // C-FIND SCU
     {
     // Construct C-FIND DataSet:
+    // ./bin/gdcmscu --find dhcp-67-183 5678
+    // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
+    // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
+
+    // PATIENT query:
+    // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 8,52,PATIENT --key 10,10,"F*"
     gdcm::StringFilter sf;
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it = 
       keys.begin();
@@ -973,9 +979,6 @@ int main(int argc, char *argv[])
 
     ds.Print( std::cout );
 
-    // ./bin/gdcmscu --find dhcp-67-183 5678
-    // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
-    // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
     CFind( hostname, port, callingaetitle, callaetitle, ds );
     }
   else if ( mode == "test" ) // Test all images
