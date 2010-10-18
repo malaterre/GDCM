@@ -43,8 +43,7 @@
 //but it's just here now because I know this path works
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
-#include "gdcmPatientRootQuery.h"
-#include "gdcmStudyRootQuery.h"
+#include "gdcmQueryFactory.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -669,7 +668,7 @@ void PrintHelp()
   std::cout << "     --move           C-MOVE." << std::endl;
   std::cout << "     --test           Test all functions agains a known working server." << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
-  std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;
+  std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
   std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
   std::cout << "     --study          C-FIND Study Root Model." << std::endl;
   std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
@@ -710,10 +709,10 @@ int main(int argc, char *argv[])
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
 
   //if you want study or patient level query help, uncomment these lines
-  //gdcm::network::StudyRootQuery rootQuery;
-  //rootQuery.WriteHelpFile(std::cout); 
-  //gdcm::network::PatientRootQuery prootQuery;
-  //prootQuery.WriteHelpFile(std::cout); 
+  //gdcm::network::BaseRootQuery* theBase = 
+  //  gdcm::network::QueryFactory::ProduceQuery(gdcm::network::ePatientRootType);
+  //theBase->WriteHelpFile(std::cout);
+  //delete theBase;
 
 
   // FIXME: remove testing stuff:

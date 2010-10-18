@@ -8,14 +8,18 @@ name and date: 18 oct 2010 mmr
 #ifndef STUDYROOTQUERY_H
 #define STUDYROOTQUERY_H
 
-#include "gdcmPatientRootQuery.h"
+#include "gdcmBaseRootQuery.h"
 
 namespace gdcm{
   namespace network {
-    class GDCM_EXPORT StudyRootQuery : public PatientRootQuery {
+    class GDCM_EXPORT StudyRootQuery : public BaseRootQuery {
+    private: 
+      void SetParameters();
     public: 
       StudyRootQuery();
       ~StudyRootQuery();
+
+
     };
   }
 }
