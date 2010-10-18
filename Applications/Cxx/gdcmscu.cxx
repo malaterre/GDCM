@@ -138,9 +138,9 @@ bool CTestAllFunctions(const char* remote, int portno, const std::string& aetitl
   gdcm::Attribute<0x10,0x10> at2 = { "FROG^KERMIT TCH " };
     //gdcm::PrivateTag t(0x10,0x10, "test");
     //query.Insert( ds.GetDataElement(t) );
-    //query.Insert( at2.GetDataElement() );
+    //query.Insert( at2.GetAsDataElement() );
     gdcm::Attribute<0x10,0x20> at3 = { "" };
-    //query.Insert( at3.GetDataElement() );
+    //query.Insert( at3.GetAsDataElement() );
     //store the file remotely
     if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eFind, query)){
       std::cerr << "Failed to establish c-find connection." << std::endl;
@@ -658,6 +658,11 @@ void PrintHelp()
   std::cout << "     --find           C-FIND." << std::endl;
   std::cout << "     --move           C-MOVE." << std::endl;
   std::cout << "     --test           Test all functions agains a known working server." << std::endl;
+  std::cout << "C-FIND Options:" << std::endl;
+  std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;
+  std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
+  std::cout << "     --study          C-FIND Study Root Model." << std::endl;
+  std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -687,6 +692,10 @@ int main(int argc, char *argv[])
   int storemode = 0;
   int findmode = 0;
   int movemode = 0;
+  int findworklist = 0;
+  int findpatient = 0;
+  int findstudy = 0;
+  int findpsonly = 0;
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
 
@@ -724,6 +733,10 @@ int main(int argc, char *argv[])
         {"move", 0, &movemode, 1}, // --move
         {"key", 1, 0, 0}, // --key
         {"test", 0, &testmode, 1}, // --test
+        {"worklist", 0, &findworklist, 1}, // --worklist
+        {"patient", 0, &findpatient, 1}, // --patient
+        {"study", 0, &findstudy, 1}, // --study
+        {"psonly", 0, &findpsonly, 1}, // --psonly
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:";
@@ -780,7 +793,7 @@ int main(int argc, char *argv[])
             ss >> std::hex >> dummy;
             assert( tag.GetElement() == dummy );
             ss >> cdummy;
-            assert( cdummy == ',' );
+            assert( cdummy == ',' || cdummy == '=' );
             std::string str;
             ss >> str;
             keys.push_back( std::make_pair(tag, str) );
@@ -815,7 +828,7 @@ int main(int argc, char *argv[])
         ss >> std::hex >> dummy;
         assert( tag.GetElement() == dummy );
         ss >> cdummy;
-        assert( cdummy == ',' );
+        assert( cdummy == ',' || cdummy == '=' );
         std::string str;
         ss >> str;
         keys.push_back( std::make_pair(tag, str) );
