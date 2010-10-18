@@ -43,6 +43,12 @@ gdcmCEchoMessages.cxx
 gdcmCFindMessages.cxx
 gdcmCStoreMessages.cxx
 gdcmCMoveMessages.cxx
+gdcmQueryImage.cxx
+gdcmQuerySeries.cxx
+gdcmQueryStudy.cxx
+gdcmQueryPatient.cxx
+gdcmPatientRootQuery.cxx
+gdcmStudyRootQuery.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})
