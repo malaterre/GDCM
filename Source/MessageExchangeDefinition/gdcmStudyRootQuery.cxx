@@ -13,11 +13,16 @@ namespace gdcm{
 namespace network { 
 
 StudyRootQuery::StudyRootQuery() {
-  mRootType = eStudyRootType;
-  mHelpDescription = "Study-level root query";
+  SetParameters();
 }
 
 StudyRootQuery::~StudyRootQuery(){};
+
+
+void StudyRootQuery::SetParameters(){
+  mRootType = eStudyRootType;
+  mHelpDescription = "Study-level root query";
+}
 
 }
 }

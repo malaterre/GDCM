@@ -49,6 +49,8 @@ gdcmQueryStudy.cxx
 gdcmQueryPatient.cxx
 gdcmPatientRootQuery.cxx
 gdcmStudyRootQuery.cxx
+gdcmBaseRootQuery.cxx
+gdcmQueryFactory.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})
