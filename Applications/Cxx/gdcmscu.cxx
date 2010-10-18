@@ -43,7 +43,8 @@
 //but it's just here now because I know this path works
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
-//#include "gdcmPrivateTag.h"
+#include "gdcmPatientRootQuery.h"
+#include "gdcmStudyRootQuery.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -698,6 +699,13 @@ int main(int argc, char *argv[])
   int findpsonly = 0;
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
+
+  //if you want study or patient level query help, uncomment these lines
+  //gdcm::network::StudyRootQuery rootQuery;
+  //rootQuery.WriteHelpFile(std::cout); 
+  //gdcm::network::PatientRootQuery prootQuery;
+  //prootQuery.WriteHelpFile(std::cout); 
+
 
   // FIXME: remove testing stuff:
   int testmode = 0;
