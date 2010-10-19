@@ -162,7 +162,7 @@ EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   // another chanel (technically this is send to an SCP)
   // in our case we use another port to receive it.
 
-#if 1
+#if 0
   //wait for the user to try to send some data.
   sockinetbuf sin (sockbuf::sock_stream);
 

@@ -307,17 +307,21 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           }
           receivingData = false;
           justWaiting = false;
-          if( theVal == 0xa702 )
-            {
-            // PS 3.4-Table C.4-2 C-MOVE RESPONSE STATUS VALUES
-            // Refused: Out of Resources – Unable to perform sub-operations
-            assert( 0 );
-            }
           if (theVal == pendingDE1 || theVal == pendingDE2) {
             receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
             justWaiting = true;
             waitingForEvent = true;
           }
+#if 0
+          if( theVal == 0xff00 ) // MM FIX C-MOVE
+            {
+            (void)theVal;
+            receivingData = false;
+            justWaiting = false;
+
+            waitingForEvent = false;
+            }
+#endif
           if (theVal == pendingDE1 || theVal == pendingDE2 /*|| theVal == success*/){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
             //first, dynamically cast that pdu in the event
             //should be a data pdu
