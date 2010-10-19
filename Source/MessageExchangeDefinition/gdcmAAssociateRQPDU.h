@@ -50,6 +50,10 @@ public:
 
   void Print(std::ostream &os) const;
 
+  typedef std::vector<PresentationContext>::size_type SizeType;
+  SizeType GetNumberOfPresentationContext() const {
+    return PresContext.size();
+  }
   PresentationContext const &GetPresentationContext(unsigned int i) const {
     assert( !PresContext.empty() && i < PresContext.size() );
     return PresContext[i];
