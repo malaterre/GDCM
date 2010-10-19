@@ -15,8 +15,7 @@
 #include "gdcmPresentationDataValue.h"
 #include "gdcmSwapper.h"
 #include "gdcmFile.h"
-
-
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -49,8 +48,11 @@ std::istream &PresentationDataValue::Read(std::istream &is)
     gdcmDebugMacro( "Bizarre MessageHeader: " << MessageHeader );
     }
 
+  assert( ItemLength > 2 );
   VL vl = ItemLength - 2;
   Blob.resize( vl ); // reserve ??
+  assert( vl );
+  //std::cerr << "Reading Blob: " << vl << std::endl;
   is.read( &Blob[0], vl );
 
   VL debug = Blob.size();
@@ -231,15 +233,15 @@ void PresentationDataValue::MyInit(File const &file)
   ds.Write<ImplicitDataElement,SwapperNoOp>( b );
   b.close();
 }
+*/
 
-void PresentationDataValue::MyInit2(File const &file)
+void PresentationDataValue::MyInit2(const char *uid1, const char *uid2)
 {
-  DS.Clear();
-  DataSet &ds = DS;
+  DataSet ds;
   {
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::SecondaryCaptureImageStorage );
+  const char *uid = uid1;
   std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
@@ -248,10 +250,9 @@ void PresentationDataValue::MyInit2(File const &file)
   }
 
   {
-  const char a[] = "1.2.826.0.1.3680043.2.1125.7445042278205614490601873384971697089";
   DataElement de( Tag(0x0,0x1000) );
   de.SetVR( VR::UI );
-  std::string suid = a;
+  std::string suid = uid2;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
   de.SetByteValue( suid.c_str(), suid.size()  );
@@ -285,13 +286,13 @@ void PresentationDataValue::MyInit2(File const &file)
   ItemLength = Size() - 4;
   assert (ItemLength + 4 == Size() );
 
-  ds.Print( std::cout );
+  //ds.Print( std::cout );
+  SetDataSet(ds);
 
-  std::ofstream b( "/tmp/debug1" );
-  ds.Write<ImplicitDataElement,SwapperNoOp>( b );
-  b.close();
+  MessageHeader = 3;
 }
 
+/*
 void PresentationDataValue::MyInit3()
 {
   DS.Clear();
