@@ -70,8 +70,10 @@ public:
 
   //NOTE that the PDVs have to be given in the order in which they were received!
   //also note that a dataset may be across multiple PDVs, or that a single PDV could have
-  //many datasets.  
+  //many datasets.
   static DataSet ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs);
+
+void MyInit2(const char *uid1, const char *uid2); // FIXME
 
 private:
   uint32_t ItemLength;
