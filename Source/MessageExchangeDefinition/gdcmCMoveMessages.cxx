@@ -41,6 +41,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
   ds.Insert( at.GetAsDataElement() );
   }
   {
+  // FIXME !!!!
   gdcm::Attribute<0x0,0x600> at = { "ACME1" };
   ds.Insert( at.GetAsDataElement() );
   }
@@ -71,7 +72,6 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
     thePDV.SetDataSet(*inDataSet);
       thePDV.SetMessageHeader( 2 );
     thePDVs.push_back(thePDV);
-
 }
   return thePDVs;
 
