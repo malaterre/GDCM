@@ -52,6 +52,18 @@ public:
   /// of pixel size or orientation.
   void DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint16_t inYMin, uint16_t inYMax);
 
+  /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
+  /// The return amount is in bytes.  Call this function to determine the size of the char* buffer
+  /// that will need to be passed in to ReadImageSubregion().  
+  uint32_t DefineProperBufferLength() const;
+
+  /// Sets the buffer that should be the size returned by DefineProperBufferLength.
+  /// THIS CLASS IS NOT RESPONSIBLE FOR MANAGING THIS MEMORY.
+  /// It is merely a place for read image information to be placed; it is the 
+  /// responsibility of the caller to handle this memory.
+  void SetBuffer(char* inBuffer) {mReadBuffer = inBuffer;}
+  char* GetBuffer() const { return mReadBuffer; }
+
   /// Read the DICOM image. There are two reason for failure:
   /// 1. The input filename is not DICOM
   /// 2. The input DICOM file does not contains an Image.
@@ -79,7 +91,14 @@ protected:
   //for every read subregion operation.
   uint16_t mXMin, mYMin, mXMax, mYMax;
 
+  //the buffer set by SetBuffer.  THIS CLASS DOES NOT MANAGE THIS MEMORY.
+  char* mReadBuffer;
+
+  /// Using the min, max, etc set by DefinePixelExtent, this will fill the given buffer
+  ///  Make sure to call DefinePixelExtent and to initialize the buffer with the
+  /// amount given by DefineProperBufferLength prior to calling this.
   virtual bool ReadImageSubregion();
+
 };
 
 } // end namespace gdcm
