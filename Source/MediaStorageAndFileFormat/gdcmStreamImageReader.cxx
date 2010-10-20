@@ -84,7 +84,7 @@ bool StreamImageReader::ReadImageSubregion(){
   int samplesPerPixel = (int)pixelInfo[0];
   int bytesPerPixel = (int)pixelInfo[1]/sizeof(unsigned char);
   char* theBuffer = new char[(mYMax - mYMin)*(mXMax - mXMin)*samplesPerPixel*bytesPerPixel];
-  std::ifstream* theStream = GetStreamPtr();//probably going to need a copy of this
+  std::istream* theStream = GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
   for (y = mYMin; y < mYMax; ++y){
@@ -103,7 +103,7 @@ void StreamImageReader::ReadImageInformation(){
   std::set<Tag> theSkipTags;
   Tag thePixelDataTag(0x7fe0, 0x0010);
   bool read = false;
-  std::ifstream* theStream = GetStreamPtr();
+  std::istream* theStream = GetStreamPtr();
   if (theStream == NULL){
     gdcmErrorMacro("Filename was not initialized for gdcm stream mage reader.");
     return;
