@@ -64,6 +64,59 @@ bool RAWCodec::Code(DataElement const &in, DataElement &out)
   return true;
 }
 
+bool RAWCodec::DecodeBytes(const char* inBytes, const int& inBufferLength, 
+                           char* outBytes, const int& inOutBufferLength){
+
+  // First let's see if we can do a fast-path:
+  if( !NeedByteSwap &&
+    !RequestPaddedCompositePixelCode &&
+    PI == PhotometricInterpretation::MONOCHROME2 &&
+    !PlanarConfiguration && !RequestPlanarConfiguration &&
+    GetPixelFormat().GetBitsAllocated() != 12 &&
+    !NeedOverlayCleanup )
+    {
+    assert( this->GetPixelFormat() != PixelFormat::UINT12 );
+    assert( this->GetPixelFormat() != PixelFormat::INT12 );
+    memcpy_s(outBytes, inOutBufferLength, inBytes, inBufferLength);
+    return true;
+    }
+  // else
+  assert( inBytes );
+  assert( outBytes );
+  std::stringstream is;
+  is.write(inBytes, inBufferLength);
+  std::stringstream os;
+  bool r = Decode(is, os);
+  assert( r );
+  if(!r) return false;
+
+  std::string str = os.str();
+  std::string::size_type check = str.size();
+
+  
+  if( this->GetPixelFormat() == PixelFormat::UINT12 ||
+    this->GetPixelFormat() == PixelFormat::INT12 ){
+    unsigned long len = str.size() * 16 / 12;
+    char * copy = new char[len];
+    Unpacker12Bits u12;
+    bool b = u12.Unpack(copy, &str[0], str.size() );
+    assert( b );
+    assert (len == inOutBufferLength);
+    memcpy_s(outBytes, inOutBufferLength, copy, len);
+
+    delete[] copy;
+
+    this->GetPixelFormat().SetBitsAllocated( 16 );
+  }
+  else{
+    assert (check == inOutBufferLength);
+    memcpy_s(outBytes, inOutBufferLength, str.c_str(), check);
+  }
+
+
+  return r;
+}
+
 bool RAWCodec::Decode(DataElement const &in, DataElement &out)
 {
   // First let's see if we can do a fast-path:

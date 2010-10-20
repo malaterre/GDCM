@@ -19,6 +19,7 @@
 #include "gdcmMediaStorage.h"
 #include <algorithm>
 #include "gdcmImageHelper.h"
+#include "gdcmRAWCodec.h"
 
 namespace gdcm
 {
@@ -103,6 +104,8 @@ bool StreamImageReader::ReadImageSubregion(){
   std::istream* theStream = GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
+  uint32_t theProperBufferLength = DefineProperBufferLength();
+  char* tmpBuffer = new char[theProperBufferLength];
   try {
     for (y = mYMin; y < mYMax; ++y){
       theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*samplesPerPixel*bytesPerPixel; 
@@ -114,13 +117,23 @@ bool StreamImageReader::ReadImageSubregion(){
   catch (std::exception & ex){
     (void)ex;
     gdcmWarningMacro( "Failed to read:" << GetFileName() << " with ex:" << ex.what() );
+    delete [] tmpBuffer;
     return false;
   } 
   catch (...){
     gdcmWarningMacro( "Failed to read:" << GetFileName() << " with unknown error." );
+    delete [] tmpBuffer;
     return false;
-
   }
+  //now, convert that buffer.
+  RAWCodec theCodec;
+  if (!theCodec.DecodeBytes(tmpBuffer, theProperBufferLength, 
+    mReadBuffer, theProperBufferLength)){
+    delete [] tmpBuffer;
+    return false;
+  }
+
+  delete [] tmpBuffer;
   return true;
 }
 
