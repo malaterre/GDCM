@@ -584,6 +584,48 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
   return true;
 }
 
+
+  /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
+  /// rows and columns of the image in pixels (as opposed to actual distances).
+std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
+
+  const DataSet& ds = inF.GetDataSet();
+  std::vector<double> theReturn;
+  Attribute<0x0028,0x0010> at1;
+  bool intercept = ds.FindDataElement(at1.GetTag());
+  if( intercept )
+    {
+    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
+      {
+      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+      theReturn.push_back(at1.GetValue());
+      if( theReturn[0] == 0 )
+        {
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
+        theReturn[0] = 1;
+        }
+      }
+    }
+  Attribute<0x0028,0x0011> at2;
+  bool slope = ds.FindDataElement(at2.GetTag());
+  if ( slope )
+    {
+    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
+      {
+      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+      theReturn.push_back(at2.GetValue());
+      if( theReturn[1] == 0 )
+        {
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
+        theReturn[1] = 1;
+        }
+      }
+    }
+  return theReturn;
+}
+
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 {
   std::vector<double> interceptslope;

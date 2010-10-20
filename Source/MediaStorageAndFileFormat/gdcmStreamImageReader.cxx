@@ -17,15 +17,36 @@
 #include "gdcmStreamImageReader.h"
 #include "gdcmImage.h"
 #include "gdcmMediaStorage.h"
+#include <algorithm>
+#include "gdcmImageHelper.h"
 
 namespace gdcm
 {
 
 StreamImageReader::StreamImageReader(){
+  //set these values to be the opposite ends of possible,
+  //so that if the extent is not defined, read can fail properly.
+  mXMin = mYMin = std::numeric_limits<uint16_t>::max();
+  mXMax = mYMax = std::numeric_limits<uint16_t>::min();
 
 }
 StreamImageReader::~StreamImageReader(){
 
+}
+
+
+/// Defines an image extent for the Read function.
+/// DICOM states that an image can have no more than 2^16 pixels per edge (as of 2009)
+/// In this case, the pixel extents ignore the direction cosines entirely, and 
+/// assumes that the origin of the image is at location 0,0 (regardless of the definition
+/// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
+/// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
+/// of pixel size or orientation.
+void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint16_t inYMin, uint16_t inYMax){
+  mXMin = inXMin;
+  mYMin = inYMin;
+  mXMax = inXMax;
+  mYMax = inYMax;
 }
 
 /// Read the DICOM image. There are two reason for failure:
@@ -34,7 +55,19 @@ StreamImageReader::~StreamImageReader(){
 /// This method has been implemented to look similar to the metaimageio in itk
 bool StreamImageReader::Read(){
 
-  return false; //for now
+  //need to have some kind of extent defined.
+  if (mXMin > mXMax || mYMin > mYMax)
+    return false; //for now
+
+  //so we need to access the dataset now
+  //not sure if it's there?  I'm hoping so...
+  std::vector<double> spacing = ImageHelper::GetPixelExtent(*F);
+  if (mXMin == 0 && mYMin == 0 && 
+    mXMax == spacing[0] && mYMax == spacing[1]){
+      return ImageReader::Read();
+  }
+
+  return false; //add in the stuff here
 }
 
 /** Set the spacing and dimension information for the set filename. */
