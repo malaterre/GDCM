@@ -28,10 +28,13 @@ StreamImageReader::StreamImageReader(){
   //so that if the extent is not defined, read can fail properly.
   mXMin = mYMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = std::numeric_limits<uint16_t>::min();
-
+  mReadBuffer = NULL;
 }
 StreamImageReader::~StreamImageReader(){
-
+  //DO NOT DELETE mReadBuffer
+  //memory allocated in a library can be notoriously hard to clean up
+  //from the main application, especially if that memory is then used
+  //by the main app directly.  Let the main app handle.
 }
 
 
@@ -48,10 +51,15 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
   mXMax = inXMax;
   mYMax = inYMax;
 }
-///paying attention to the pixel format and so forth, define the proper buffer length for the user.
-//uint32_t StreamImageReader::DefineProperBufferLength() const{
-
-//}
+/// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
+/// The return amount is in bytes.
+uint32_t StreamImageReader::DefineProperBufferLength() const{
+  
+  PixelFormat pixelInfo = ImageHelper::GetImagePixelInformation(*F);
+  unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
+  int bytesPerPixel = pixelInfo.GetPixelSize();
+  return (mYMax - mYMin)*(mXMax - mXMin)*samplesPerPixel*bytesPerPixel;
+}
 
 /// Read the DICOM image. There are two reason for failure:
 /// 1. The input filename is not DICOM
@@ -76,27 +84,42 @@ bool StreamImageReader::Read(){
 }
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
+    Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
     */
 bool StreamImageReader::ReadImageSubregion(){
   //assumes that the file is organized in row-major format, with each row rastering across
   int y;
   std::streamoff theOffset;
-  std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
+  if (!mReadBuffer) return false;
+
   //need to get the pixel size information
   //should that come from the header?
   //most likely  that's a tag in the header
+  std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
   PixelFormat pixelInfo = ImageHelper::GetImagePixelInformation(*F);
   unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
-  char* theBuffer = new char[(mYMax - mYMin)*(mXMax - mXMin)*samplesPerPixel*bytesPerPixel];
+  int SubRowSize = mXMax - mXMin;
   std::istream* theStream = GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
-  for (y = mYMin; y < mYMax; ++y){
-    theOffset = mFileOffset + (y*(int)extent[1] + mXMin)*samplesPerPixel*bytesPerPixel; 
-    theStream->seekg(theOffset);
-    theStream->read(&(theBuffer[(mYMin*(int)extent[1] + mXMin)*samplesPerPixel*bytesPerPixel]), 
-      (mXMax - mXMin)*samplesPerPixel*bytesPerPixel);
+  try {
+    for (y = mYMin; y < mYMax; ++y){
+      theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*samplesPerPixel*bytesPerPixel; 
+      theStream->seekg(theOffset);
+      theStream->read(&(mReadBuffer[((y-mYMin)*SubRowSize)*samplesPerPixel*bytesPerPixel]), 
+        SubRowSize*samplesPerPixel*bytesPerPixel);
+    }
+  }
+  catch (std::exception & ex){
+    (void)ex;
+    gdcmWarningMacro( "Failed to read:" << GetFileName() << " with ex:" << ex.what() );
+    return false;
+  } 
+  catch (...){
+    gdcmWarningMacro( "Failed to read:" << GetFileName() << " with unknown error." );
+    return false;
+
   }
   return true;
 }
