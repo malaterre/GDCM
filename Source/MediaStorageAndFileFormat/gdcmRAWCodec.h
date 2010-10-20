@@ -36,6 +36,11 @@ public:
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
+  /// Used by the ImageStreamReader-- converts a read in 
+  /// buffer into one with the proper encodings.
+  bool DecodeBytes(const char* inBytes, const int& inBufferLength, 
+    char* outBytes, const int& inOutBufferLength);
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 
