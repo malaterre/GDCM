@@ -31,15 +31,13 @@ class MediaStorage;
  * representation via an ITK streaming (ie, multithreaded) interface
  * Image is different from Pixmap has it has a position and a direction in
  * Space.
+ * Currently, this class is threadsafe in that it can read a single extent 
+ * in a single thread.  Multiple versions can be used for multiple extents/threads.
  *
  * \see Image
  */
 class GDCM_EXPORT StreamImageReader : public ImageReader
 {
-  std::streamoff mFileOffset; //the fileoffset for getting header information
-  DataSet mHeaderInformation; //all the non-pixel information
-
-  uint16_t mXMin, mYMin, mXMax, mYMax;
 
 public:
   StreamImageReader();
@@ -73,6 +71,15 @@ public:
   //Image& GetImage();
 
 protected:
+
+  std::streamoff mFileOffset; //the fileoffset for getting header information
+  DataSet mHeaderInformation; //all the non-pixel information
+
+  //for thread safety, these should not be stored here, but should be used  
+  //for every read subregion operation.
+  uint16_t mXMin, mYMin, mXMax, mYMax;
+
+  virtual bool ReadImageSubregion();
 };
 
 } // end namespace gdcm

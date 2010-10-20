@@ -61,13 +61,39 @@ bool StreamImageReader::Read(){
 
   //so we need to access the dataset now
   //not sure if it's there?  I'm hoping so...
-  std::vector<double> spacing = ImageHelper::GetPixelExtent(*F);
+  std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
   if (mXMin == 0 && mYMin == 0 && 
-    mXMax == spacing[0] && mYMax == spacing[1]){
+    mXMax == extent[1] && mYMax == extent[0]){
       return ImageReader::Read();
   }
+  else 
+    return ReadImageSubregion();
 
-  return false; //add in the stuff here
+}
+/** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
+    This class reads uncompressed data; other subclasses will reimplement this function for compression */
+bool StreamImageReader::ReadImageSubregion(){
+  //assumes that the file is organized in row-major format, with each row rastering across
+  int y;
+  std::streamoff theOffset;
+  std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
+  //need to get the pixel size information
+  //should that come from the header?
+  //most likely  that's a tag in the header
+  std::vector<double> pixelInfo = ImageHelper::GetImagePixelInformation(*F);
+  int samplesPerPixel = (int)pixelInfo[0];
+  int bytesPerPixel = (int)pixelInfo[1]/sizeof(unsigned char);
+  char* theBuffer = new char[(mYMax - mYMin)*(mXMax - mXMin)*samplesPerPixel*bytesPerPixel];
+  std::ifstream* theStream = GetStreamPtr();//probably going to need a copy of this
+  //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
+  //that would be BAD
+  for (y = mYMin; y < mYMax; ++y){
+    theOffset = mFileOffset + (y*(int)extent[1] + mXMin)*samplesPerPixel*bytesPerPixel; 
+    theStream->seekg(theOffset);
+    theStream->read(&(theBuffer[(mYMin*(int)extent[1] + mXMin)*samplesPerPixel*bytesPerPixel]), 
+      (mXMax - mXMin)*samplesPerPixel*bytesPerPixel);
+  }
+  return true;
 }
 
 /** Set the spacing and dimension information for the set filename. */

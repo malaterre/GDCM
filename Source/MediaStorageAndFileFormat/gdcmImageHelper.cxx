@@ -585,6 +585,64 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
 }
 
 
+  /// This function returns pixel information about an image from its dataset
+  /// That includes samples per pixel and bit depth (in that order)
+std::vector<double> ImageHelper::GetImagePixelInformation(const File& inF){
+  const DataSet& ds = inF.GetDataSet();
+  std::vector<double> theReturn;
+  Attribute<0x0028,0x0002> at1;
+  bool spp = ds.FindDataElement(at1.GetTag());
+  if( spp )
+    {
+    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
+      {
+      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+      theReturn.push_back(at1.GetValue());
+      if( theReturn[0] == 0 )
+        {
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot find samples per pixel tag 0x0028, 0x0002.  Defaulting to the almost certainly wrong value of 1." );
+        theReturn[0] = 1;
+        }
+    } else {
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot find samples per pixel tag 0x0028, 0x0002.  Defaulting to the almost certainly wrong value of 1." );
+      theReturn.push_back(1);
+
+    }
+  } else {
+    // come' on ! WTF
+    gdcmWarningMacro( "Cannot find samples per pixel tag 0x0028, 0x0002.  Defaulting to the almost certainly wrong value of 1." );
+    theReturn.push_back(1);
+  }  
+  Attribute<0x0028,0x0100> at2;
+  bool bpp = ds.FindDataElement(at2.GetTag());
+  if( bpp )
+    {
+    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
+      {
+      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+      theReturn.push_back(at2.GetValue());
+      if( theReturn[1] == 0 )
+        {
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot find bits per pixel tag 0x0028, 0x0100.  Defaulting to the almost certainly wrong value of 16." );
+        theReturn[1] = 16;
+        }
+    } else {
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot find bits per pixel tag 0x0028, 0x0100.  Defaulting to the almost certainly wrong value of 16." );
+      theReturn.push_back(16);
+
+    }
+  } else {
+    // come' on ! WTF
+    gdcmWarningMacro( "Cannot find bits per pixel tag 0x0028, 0x0100.  Defaulting to the almost certainly wrong value of 16." );
+    theReturn.push_back(16);
+  }
+  return theReturn;
+
+}
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
   /// rows and columns of the image in pixels (as opposed to actual distances).
 std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
@@ -592,8 +650,8 @@ std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
   const DataSet& ds = inF.GetDataSet();
   std::vector<double> theReturn;
   Attribute<0x0028,0x0010> at1;
-  bool intercept = ds.FindDataElement(at1.GetTag());
-  if( intercept )
+  bool rows = ds.FindDataElement(at1.GetTag());
+  if( rows )
     {
     if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
       {
@@ -605,11 +663,21 @@ std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
         gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
         theReturn[0] = 1;
         }
-      }
+    } else {
+
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
+      theReturn.push_back(1);
+    }
+    }else {
+
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
+      theReturn.push_back(1);
     }
   Attribute<0x0028,0x0011> at2;
-  bool slope = ds.FindDataElement(at2.GetTag());
-  if ( slope )
+  bool cols = ds.FindDataElement(at2.GetTag());
+  if ( cols )
     {
     if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
       {
@@ -621,8 +689,18 @@ std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
         gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
         theReturn[1] = 1;
         }
-      }
-    }
+      } else 
+        {
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
+         theReturn.push_back(1);
+        }
+    } else 
+        {
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
+         theReturn.push_back(1);
+        }
   return theReturn;
 }
 
