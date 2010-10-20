@@ -63,8 +63,8 @@ uint32_t StreamImageReader::DefineProperBufferLength() const{
 }
 
 /// Read the DICOM image. There are two reason for failure:
-/// 1. The input filename is not DICOM
-/// 2. The input DICOM file does not contains an Image.
+/// 1. The extent is not set
+/// 2. The output buffer is not set
 /// This method has been implemented to look similar to the metaimageio in itk
 bool StreamImageReader::Read(){
 
@@ -131,8 +131,10 @@ bool StreamImageReader::ReadImageSubregion(){
   return true;
 }
 
-/** Set the spacing and dimension information for the set filename. */
-void StreamImageReader::ReadImageInformation(){
+/// Set the spacing and dimension information for the set filename.
+/// returns false if the file is not initialized or not an image, 
+/// with the pixel 0x7fe0, 0x0010 tag.
+bool StreamImageReader::ReadImageInformation(){
   //read up to the point in the stream where the pixel information tag is
   //store that location and keep the rest of the data as the header information dataset
   std::set<Tag> theSkipTags;
@@ -140,14 +142,15 @@ void StreamImageReader::ReadImageInformation(){
   bool read = false;
   std::istream* theStream = GetStreamPtr();
   if (theStream == NULL){
-    gdcmErrorMacro("Filename was not initialized for gdcm stream mage reader.");
-    return;
+    gdcmErrorMacro("Filename was not initialized for gdcm stream image reader.");
+    return false;
   }
   try
   {
     //ok, need to read up until I know what kind of endianness i'm dealing with?
     if (!ReadUpToTag(thePixelDataTag, theSkipTags)){
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
+      return false;
     }
     //get the file stream position
     mFileOffset = theStream->tellg();//part of the reader functionality, the really
