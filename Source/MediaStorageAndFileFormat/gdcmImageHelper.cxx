@@ -585,62 +585,54 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
 }
 
 
-  /// This function returns pixel information about an image from its dataset
-  /// That includes samples per pixel and bit depth (in that order)
-std::vector<double> ImageHelper::GetImagePixelInformation(const File& inF){
+/// This function returns pixel information about an image from its dataset
+/// That includes samples per pixel and bit depth (in that order)
+/// Returns a PixelFormat
+PixelFormat ImageHelper::GetImagePixelInformation(const File& inF){
+  // D 0028|0011 [US] [Columns] [512]
+  //[10/20/10 9:05:07 AM] Mathieu Malaterre:     
+  PixelFormat pf;
   const DataSet& ds = inF.GetDataSet();
-  std::vector<double> theReturn;
-  Attribute<0x0028,0x0002> at1;
-  bool spp = ds.FindDataElement(at1.GetTag());
-  if( spp )
-    {
-    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
-      {
-      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
-      theReturn.push_back(at1.GetValue());
-      if( theReturn[0] == 0 )
-        {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot find samples per pixel tag 0x0028, 0x0002.  Defaulting to the almost certainly wrong value of 1." );
-        theReturn[0] = 1;
-        }
-    } else {
-      // come' on ! WTF
-      gdcmWarningMacro( "Cannot find samples per pixel tag 0x0028, 0x0002.  Defaulting to the almost certainly wrong value of 1." );
-      theReturn.push_back(1);
-
-    }
-  } else {
-    // come' on ! WTF
-    gdcmWarningMacro( "Cannot find samples per pixel tag 0x0028, 0x0002.  Defaulting to the almost certainly wrong value of 1." );
-    theReturn.push_back(1);
-  }  
-  Attribute<0x0028,0x0100> at2;
-  bool bpp = ds.FindDataElement(at2.GetTag());
-  if( bpp )
-    {
-    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
-      {
-      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
-      theReturn.push_back(at2.GetValue());
-      if( theReturn[1] == 0 )
-        {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot find bits per pixel tag 0x0028, 0x0100.  Defaulting to the almost certainly wrong value of 16." );
-        theReturn[1] = 16;
-        }
-    } else {
-      // come' on ! WTF
-      gdcmWarningMacro( "Cannot find bits per pixel tag 0x0028, 0x0100.  Defaulting to the almost certainly wrong value of 16." );
-      theReturn.push_back(16);
-
-    }
-  } else {
-    // come' on ! WTF
-    gdcmWarningMacro( "Cannot find bits per pixel tag 0x0028, 0x0100.  Defaulting to the almost certainly wrong value of 16." );
-    theReturn.push_back(16);
+  // D 0028|0100 [US] [Bits Allocated] [16]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+    Attribute<0x0028,0x0100> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetBitsAllocated( at.GetValue() );
   }
-  return theReturn;
+  // D 0028|0101 [US] [Bits Stored] [12]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+    Attribute<0x0028,0x0101> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetBitsStored( at.GetValue() );
+  }
+  // D 0028|0102 [US] [High Bit] [11]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+    Attribute<0x0028,0x0102> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetHighBit( at.GetValue() );
+  }
+  // D 0028|0103 [US] [Pixel Representation] [0]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+    Attribute<0x0028,0x0103> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetPixelRepresentation( at.GetValue() );
+  }
+  // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
+  {
+  //if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+    Attribute<0x0028,0x0002> at = { 1 };
+    at.SetFromDataSet( ds );
+    pf.SetSamplesPerPixel( at.GetValue() );
+  }
+  // else pf will default to 1...
+  }
+  return pf;
 
 }
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
@@ -648,59 +640,31 @@ std::vector<double> ImageHelper::GetImagePixelInformation(const File& inF){
 std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
 
   const DataSet& ds = inF.GetDataSet();
-  std::vector<double> theReturn;
-  Attribute<0x0028,0x0010> at1;
-  bool rows = ds.FindDataElement(at1.GetTag());
-  if( rows )
-    {
-    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
-      {
-      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
-      theReturn.push_back(at1.GetValue());
-      if( theReturn[0] == 0 )
-        {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
-        theReturn[0] = 1;
-        }
-    } else {
+  std::vector<double> theReturn(2);
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+    Attribute<0x0028,0x0011> at = { 0 };
+    at.SetFromDataSet( ds );
+    theReturn[0] = at.GetValue();
+    if( theReturn[0] == 0 ){
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
+      theReturn[0] = 1;
+    }
+  }
 
+  // D 0028|0010 [US] [Rows] [512]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    Attribute<0x0028,0x0010> at = { 0 };
+    at.SetFromDataSet( ds );
+    theReturn[1] = at.GetValue();
+    if( theReturn[1] == 0 ){
       // come' on ! WTF
       gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
-      theReturn.push_back(1);
+      theReturn[1] = 1;
     }
-    }else {
-
-      // come' on ! WTF
-      gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
-      theReturn.push_back(1);
-    }
-  Attribute<0x0028,0x0011> at2;
-  bool cols = ds.FindDataElement(at2.GetTag());
-  if ( cols )
-    {
-    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
-      {
-      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
-      theReturn.push_back(at2.GetValue());
-      if( theReturn[1] == 0 )
-        {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
-        theReturn[1] = 1;
-        }
-      } else 
-        {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
-         theReturn.push_back(1);
-        }
-    } else 
-        {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
-         theReturn.push_back(1);
-        }
+  }
   return theReturn;
 }
 

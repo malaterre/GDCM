@@ -48,6 +48,10 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
   mXMax = inXMax;
   mYMax = inYMax;
 }
+///paying attention to the pixel format and so forth, define the proper buffer length for the user.
+//uint32_t StreamImageReader::DefineProperBufferLength() const{
+
+//}
 
 /// Read the DICOM image. There are two reason for failure:
 /// 1. The input filename is not DICOM
@@ -71,7 +75,8 @@ bool StreamImageReader::Read(){
 
 }
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
-    This class reads uncompressed data; other subclasses will reimplement this function for compression */
+    This class reads uncompressed data; other subclasses will reimplement this function for compression.
+    */
 bool StreamImageReader::ReadImageSubregion(){
   //assumes that the file is organized in row-major format, with each row rastering across
   int y;
@@ -80,9 +85,9 @@ bool StreamImageReader::ReadImageSubregion(){
   //need to get the pixel size information
   //should that come from the header?
   //most likely  that's a tag in the header
-  std::vector<double> pixelInfo = ImageHelper::GetImagePixelInformation(*F);
-  int samplesPerPixel = (int)pixelInfo[0];
-  int bytesPerPixel = (int)pixelInfo[1]/sizeof(unsigned char);
+  PixelFormat pixelInfo = ImageHelper::GetImagePixelInformation(*F);
+  unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
+  int bytesPerPixel = pixelInfo.GetPixelSize();
   char* theBuffer = new char[(mYMax - mYMin)*(mXMax - mXMin)*samplesPerPixel*bytesPerPixel];
   std::istream* theStream = GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
