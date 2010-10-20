@@ -65,15 +65,17 @@ public:
   char* GetBuffer() const { return mReadBuffer; }
 
   /// Read the DICOM image. There are two reason for failure:
-  /// 1. The input filename is not DICOM
-  /// 2. The input DICOM file does not contains an Image.
+  /// 1. The extent is not set
+  /// 2. The output buffer is not set
   /// This method has been implemented to look similar to the metaimageio in itk
   /// MUST have an extent defined, or else Read will return false.
   /// If no particular extent is required, use ImageReader instead.
   bool Read();
 
-  /** Set the spacing and dimension information for the set filename. */
-  virtual void ReadImageInformation();
+  /// Set the spacing and dimension information for the set filename.
+  /// returns false if the file is not initialized or not an image, 
+  /// with the pixel 0x7fe0, 0x0010 tag.
+  virtual bool ReadImageInformation();
 
   // Following methods are valid only after a call to 'Read'
 
