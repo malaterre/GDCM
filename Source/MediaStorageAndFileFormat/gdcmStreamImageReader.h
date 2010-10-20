@@ -17,7 +17,7 @@
 
 #include "gdcmPixmapReader.h"
 #include "gdcmImage.h"
-#include "gdcmImageReader.h"
+#include "gdcmReader.h"
 #include <iostream>
 #include "gdcmDataSet.h"
 
@@ -36,7 +36,7 @@ class MediaStorage;
  *
  * \see Image
  */
-class GDCM_EXPORT StreamImageReader : public ImageReader
+class GDCM_EXPORT StreamImageReader : public Reader
 {
 
 public:

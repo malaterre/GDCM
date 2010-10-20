@@ -72,15 +72,9 @@ bool StreamImageReader::Read(){
   if (mXMin > mXMax || mYMin > mYMax)
     return false; //for now
 
-  //so we need to access the dataset now
-  //not sure if it's there?  I'm hoping so...
-  std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
-  if (mXMin == 0 && mYMin == 0 && 
-    mXMax == extent[1] && mYMax == extent[0]){
-      return ImageReader::Read();
-  }
-  else 
-    return ReadImageSubregion();
+  if (!mReadBuffer) return false; //not properly initialized the buffer
+
+  return ReadImageSubregion();
 
 }
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
