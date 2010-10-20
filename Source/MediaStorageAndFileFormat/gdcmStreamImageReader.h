@@ -38,14 +38,28 @@ class GDCM_EXPORT StreamImageReader : public ImageReader
 {
   std::streamoff mFileOffset; //the fileoffset for getting header information
   DataSet mHeaderInformation; //all the non-pixel information
+
+  uint16_t mXMin, mYMin, mXMax, mYMax;
+
 public:
   StreamImageReader();
   ~StreamImageReader();
   
+  /// Defines an image extent for the Read function.
+  /// DICOM states that an image can have no more than 2^16 pixels per edge (as of 2009)
+  /// In this case, the pixel extents ignore the direction cosines entirely, and 
+  /// assumes that the origin of the image is at location 0,0 (regardless of the definition
+  /// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
+  /// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
+  /// of pixel size or orientation.
+  void DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint16_t inYMin, uint16_t inYMax);
+
   /// Read the DICOM image. There are two reason for failure:
   /// 1. The input filename is not DICOM
   /// 2. The input DICOM file does not contains an Image.
   /// This method has been implemented to look similar to the metaimageio in itk
+  /// MUST have an extent defined, or else Read will return false.
+  /// If no particular extent is required, use ImageReader instead.
   bool Read();
 
   /** Set the spacing and dimension information for the set filename. */

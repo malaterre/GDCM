@@ -61,6 +61,10 @@ public:
   static void SetForcePixelSpacing(bool);
   static bool GetForcePixelSpacing();
 
+  /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
+  /// rows and columns of the image in pixels (as opposed to actual distances).
+  static std::vector<double> GetPixelExtent(const File& inF);
+
   /// Set/Get shift/scale from/to a file
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
