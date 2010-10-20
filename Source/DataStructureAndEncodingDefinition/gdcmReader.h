@@ -108,7 +108,7 @@ protected:
   //from the tellg function, and allows for stream/pointer manip in order
   //to read the pixel data.  Note, of course, that reading pixel elements
   //will still have to be subject to endianness swaps, if necessary.
-  std::ifstream* GetStreamPtr() const { return Ifstream; }
+  std::istream* GetStreamPtr() const { return Stream; }
 
   //this function returns the filename that the reader was initialized with
   //used primarilly for debugging/exception arguments, to identify a failed 

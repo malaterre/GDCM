@@ -45,7 +45,7 @@ public:
   /// 1. The input filename is not DICOM
   /// 2. The input DICOM file does not contains an Pixmap.
 
-  bool Read();
+  virtual bool Read();
 
   // Following methods are valid only after a call to 'Read'
 
