@@ -370,17 +370,17 @@ public:
 
   bool operator==(const Attribute &att) const
     {
-    return std::equal(Internal, Internal+GetNumberOfValues(),
+    return std::equal(&Internal, &Internal+GetNumberOfValues(),
       att.GetValues());
     }
   bool operator!=(const Attribute &att) const
     {
-    return !std::equal(Internal, Internal+GetNumberOfValues(),
+    return !std::equal(&Internal, &Internal+GetNumberOfValues(),
       att.GetValues());
     }
   bool operator<(const Attribute &att) const
     {
-    return std::lexicographical_compare(Internal, Internal+GetNumberOfValues(),
+    return std::lexicographical_compare(&Internal, &Internal+GetNumberOfValues(),
       att.GetValues(), att.GetValues() + att.GetNumberOfValues() );
     }
 
@@ -408,9 +408,12 @@ public:
     // std::copy is smarted than a memcpy, and will call memcpy when POD type
     std::copy(array, array+numel, Internal);
   }
+*/
+
+  // FIXME Should we remove this function ?
   const ArrayType* GetValues() const {
-    return Internal;
-  }*/
+    return &Internal;
+  }
 
   // API to talk to the run-time layer: gdcm::DataElement
   DataElement GetAsDataElement() const {
