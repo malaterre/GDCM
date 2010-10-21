@@ -111,16 +111,16 @@ bool Region ( char* nomefile, unsigned int* X_min, unsigned int* Y_min, unsigned
   atY0.SetFromDataElement( deY0 );
   atX1.SetFromDataElement( deX1 );
   atY1.SetFromDataElement( deY1 );
-  const uint32_t* X0 = atX0.GetValues();
-  const uint32_t* Y0 = atY0.GetValues();
-  const uint32_t* X1 = atX1.GetValues();
-  const uint32_t* Y1 = atY1.GetValues();
+  uint32_t X0 = atX0.GetValue();
+  uint32_t Y0 = atY0.GetValue();
+  uint32_t X1 = atX1.GetValue();
+  uint32_t Y1 = atY1.GetValue();
   std::cout << X0 << std::endl << Y0 << std::endl << X1 << std::endl << Y1 << std::endl;
 
-  *X_min = static_cast<unsigned int>(X0[0]);
-  *Y_min = static_cast<unsigned int>(Y0[0]);
-  *X_max = static_cast<unsigned int>(X1[0]);
-  *Y_max = static_cast<unsigned int>(Y1[0]);
+  *X_min = static_cast<unsigned int>(X0);
+  *Y_min = static_cast<unsigned int>(Y0);
+  *X_max = static_cast<unsigned int>(X1);
+  *Y_max = static_cast<unsigned int>(Y1);
 
   //std::cout << "X_min = " << *X_min << std::endl;
   //std::cout << "Y_min = " << *Y_min << std::endl;
