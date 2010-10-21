@@ -57,9 +57,9 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
 uint32_t StreamImageReader::DefineProperBufferLength() const{
   
   PixelFormat pixelInfo = ImageHelper::GetImagePixelInformation(*F);
-  unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
+  //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
-  return (mYMax - mYMin)*(mXMax - mXMin)*samplesPerPixel*bytesPerPixel;
+  return (mYMax - mYMin)*(mXMax - mXMin)*bytesPerPixel;
 }
 
 /// Read the DICOM image. There are two reason for failure:
@@ -92,7 +92,7 @@ bool StreamImageReader::ReadImageSubregion(){
   //most likely  that's a tag in the header
   std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
   PixelFormat pixelInfo = ImageHelper::GetImagePixelInformation(*F);
-  unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
+  //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
   std::istream* theStream = GetStreamPtr();//probably going to need a copy of this
@@ -102,10 +102,10 @@ bool StreamImageReader::ReadImageSubregion(){
   char* tmpBuffer = new char[theProperBufferLength];
   try {
     for (y = mYMin; y < mYMax; ++y){
-      theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*samplesPerPixel*bytesPerPixel; 
+      theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*bytesPerPixel; 
       theStream->seekg(theOffset);
-      theStream->read(&(mReadBuffer[((y-mYMin)*SubRowSize)*samplesPerPixel*bytesPerPixel]), 
-        SubRowSize*samplesPerPixel*bytesPerPixel);
+      theStream->read(&(mReadBuffer[((y-mYMin)*SubRowSize)*bytesPerPixel]), 
+        SubRowSize*bytesPerPixel);
     }
   }
   catch (std::exception & ex){
