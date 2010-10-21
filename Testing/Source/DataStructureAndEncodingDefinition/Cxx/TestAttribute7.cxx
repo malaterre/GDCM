@@ -23,7 +23,7 @@ int TestAttribute7(int, char *[])
 
   gdcm::Attribute<0x28,0x9, gdcm::VR::AT, gdcm::VM::VM1 > at;
   at.SetFromDataElement( de );
-  std::cout << at.GetValue(0) << std::endl;
+  std::cout << at.GetValue() << std::endl;
 
   return 0;
 }
