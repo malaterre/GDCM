@@ -91,12 +91,10 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
   SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
 
-  //vtkIdType numPts = pts->GetNumberOfPoints();
   vtkIdType npts = 0;
   vtkIdType *indx = 0;
   double v[3];
-  std::ostringstream os;
-    std::vector<double> cellpoints;
+  std::vector<double> cellpoints;
   for (polys->InitTraversal(); polys->GetNextCell(npts,indx); )
     {
     cellpoints.resize(0);
@@ -106,9 +104,6 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
       cellpoints.push_back( v[0] );
       cellpoints.push_back( v[1] );
       cellpoints.push_back( v[2] );
-      //os << v[0] << "\\";
-      //os << v[1] << "\\";
-      //os << v[2] << "\\";
       }
     Item item;
     item.SetVLToUndefined();
@@ -132,10 +127,9 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
   de.SetVLToUndefined();
   ds.Insert( de );
 
-    Item item;
-    item.SetVLToUndefined();
-    DataSet &subds = item.GetNestedDataSet();
-
+  Item item;
+  item.SetVLToUndefined();
+  DataSet &subds = item.GetNestedDataSet();
 
   const Tag sisq2(0x3006,0x0040);
   DataElement de2( sisq2 );
