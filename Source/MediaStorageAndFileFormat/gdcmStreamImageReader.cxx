@@ -33,13 +33,8 @@ StreamImageReader::StreamImageReader(){
   //so that if the extent is not defined, read can fail properly.
   mXMin = mYMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = std::numeric_limits<uint16_t>::min();
-  mReadBuffer = NULL;
 }
 StreamImageReader::~StreamImageReader(){
-  //DO NOT DELETE mReadBuffer
-  //memory allocated in a library can be notoriously hard to clean up
-  //from the main application, especially if that memory is then used
-  //by the main app directly.  Let the main app handle.
 }
 
 
@@ -70,26 +65,29 @@ uint32_t StreamImageReader::DefineProperBufferLength() const{
 /// 1. The extent is not set
 /// 2. The output buffer is not set
 /// This method has been implemented to look similar to the metaimageio in itk
-bool StreamImageReader::Read(){
+bool StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLength){
 
   //need to have some kind of extent defined.
   if (mXMin > mXMax || mYMin > mYMax)
     return false; //for now
 
-  if (!mReadBuffer) return false; //not properly initialized the buffer
 
-  return ReadImageSubregion();
+  OneShotReadBuf osrb(inReadBuffer, inBufferLength);
+  std::ostream ostr(&osrb);
+
+  //put the codec interpretation here
+
+  return ReadImageSubregionRAW(ostr);
 
 }
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
     Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
     */
-bool StreamImageReader::ReadImageSubregion(){
+bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   //assumes that the file is organized in row-major format, with each row rastering across
   int y;
   std::streamoff theOffset;
-  if (!mReadBuffer) return false;
 
   //need to get the pixel size information
   //should that come from the header?
@@ -102,36 +100,42 @@ bool StreamImageReader::ReadImageSubregion(){
   std::istream* theStream = GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
-  uint32_t theProperBufferLength = DefineProperBufferLength();
-  char* tmpBuffer = new char[theProperBufferLength];
+  //tmpBuffer is for a single raster
+  char* tmpBuffer = new char[SubRowSize*bytesPerPixel];
+  char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
   try {
     for (y = mYMin; y < mYMax; ++y){
       theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*bytesPerPixel; 
       theStream->seekg(theOffset);
-      theStream->read(&(mReadBuffer[((y-mYMin)*SubRowSize)*bytesPerPixel]), 
-        SubRowSize*bytesPerPixel);
+      theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
+  //now, convert that buffer.
+      RAWCodec theCodec;
+      if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel, 
+        tmpBuffer2, SubRowSize*bytesPerPixel)){
+        delete [] tmpBuffer;
+        delete [] tmpBuffer2;
+        return false;
+      }
+      //this next line may require a bit of finagling...
+      std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]) + 1, std::ostream_iterator<char>(os));
     }
   }
   catch (std::exception & ex){
     (void)ex;
     gdcmWarningMacro( "Failed to read:" << GetFileName() << " with ex:" << ex.what() );
     delete [] tmpBuffer;
+    delete [] tmpBuffer2;
     return false;
   } 
   catch (...){
     gdcmWarningMacro( "Failed to read:" << GetFileName() << " with unknown error." );
     delete [] tmpBuffer;
-    return false;
-  }
-  //now, convert that buffer.
-  RAWCodec theCodec;
-  if (!theCodec.DecodeBytes(tmpBuffer, theProperBufferLength, 
-    mReadBuffer, theProperBufferLength)){
-    delete [] tmpBuffer;
+    delete [] tmpBuffer2;
     return false;
   }
 
   delete [] tmpBuffer;
+  delete [] tmpBuffer2;
   return true;
 }
 
@@ -171,7 +175,7 @@ bool StreamImageReader::ReadImageInformation(){
     gdcmWarningMacro( "Failed to read:" << GetFileName()  << " with unknown error" );
   }
 
- 
+  return true;
 }
 
 
