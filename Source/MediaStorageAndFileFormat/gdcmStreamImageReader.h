@@ -61,32 +61,19 @@ public:
   /// that will need to be passed in to ReadImageSubregion().  
   uint32_t DefineProperBufferLength() const;
 
-  /// Sets the buffer that should be the size returned by DefineProperBufferLength.
-  /// THIS CLASS IS NOT RESPONSIBLE FOR MANAGING THIS MEMORY.
-  /// It is merely a place for read image information to be placed; it is the 
-  /// responsibility of the caller to handle this memory.
-  void SetBuffer(char* inBuffer) {mReadBuffer = inBuffer;}
-  char* GetBuffer() const { return mReadBuffer; }
-
-  /// Read the DICOM image. There are two reason for failure:
+  /// Read the DICOM image. There are three reasons for failure:
   /// 1. The extent is not set
-  /// 2. The output buffer is not set
+  /// 2. the conversion from void* to std::ostream (internally) fails
+  /// 3. the given buffer isn't large enough to accomodate the desired pixel extent.
   /// This method has been implemented to look similar to the metaimageio in itk
   /// MUST have an extent defined, or else Read will return false.
   /// If no particular extent is required, use ImageReader instead.
-  bool Read();
+  bool Read(char* inReadBuffer, const std::size_t& inBufferLength);
 
   /// Set the spacing and dimension information for the set filename.
   /// returns false if the file is not initialized or not an image, 
   /// with the pixel 0x7fe0, 0x0010 tag.
   virtual bool ReadImageInformation();
-
-  // Following methods are valid only after a call to 'Read'
-
-  // Return the read image
-  // Right now, uses the base class (ImageReader's) methods
-  //const Image& GetImage() const;
-  //Image& GetImage();
 
 protected:
 
@@ -97,14 +84,19 @@ protected:
   //for every read subregion operation.
   uint16_t mXMin, mYMin, mXMax, mYMax;
 
-  //the buffer set by SetBuffer.  THIS CLASS DOES NOT MANAGE THIS MEMORY.
-  char* mReadBuffer;
-
   /// Using the min, max, etc set by DefinePixelExtent, this will fill the given buffer
   ///  Make sure to call DefinePixelExtent and to initialize the buffer with the
   /// amount given by DefineProperBufferLength prior to calling this.
-  virtual bool ReadImageSubregion();
+  /// reads by the RAW codec; other codecs are added once implemented
+  virtual bool ReadImageSubregionRAW(std::ostream& os) const;
 
+};
+//see http://stackoverflow.com/questions/1448467/initializing-a-c-stdistringstream-from-an-in-memory-buffer/1449527#1449527
+struct OneShotReadBuf : public std::streambuf
+{
+  OneShotReadBuf(char* s, std::size_t n){
+    setg(s, s, s+n);
+  }
 };
 
 } // end namespace gdcm
