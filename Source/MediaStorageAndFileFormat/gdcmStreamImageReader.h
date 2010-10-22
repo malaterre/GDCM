@@ -68,7 +68,7 @@ public:
   /// This method has been implemented to look similar to the metaimageio in itk
   /// MUST have an extent defined, or else Read will return false.
   /// If no particular extent is required, use ImageReader instead.
-  bool Read(char* inReadBuffer, const std::size_t& inBufferLength);
+  bool Read(void* inReadBuffer, const std::size_t& inBufferLength);
 
   /// Set the spacing and dimension information for the set filename.
   /// returns false if the file is not initialized or not an image, 
@@ -94,8 +94,9 @@ protected:
 //see http://stackoverflow.com/questions/1448467/initializing-a-c-stdistringstream-from-an-in-memory-buffer/1449527#1449527
 struct OneShotReadBuf : public std::streambuf
 {
-  OneShotReadBuf(char* s, std::size_t n){
-    setg(s, s, s+n);
+  OneShotReadBuf(void* s, std::size_t n){
+    char* cast = (char*)s;
+    setg(cast, cast, cast+n);
   }
 };
 
