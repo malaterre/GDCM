@@ -10,6 +10,8 @@ set(CTEST_TEST_ARGS PARALLEL_LEVEL 2)
 macro(dashboard_hook_init)
   set( dashboard_cache "
     GDCM_BUILD_SHARED_LIBS:BOOL=ON
+    GDCM_BUILD_APPLICATIONS:BOOL=ON
+    GDCM_BUILD_EXAMPLES:BOOL=ON
     "
     )
 endmacro(dashboard_hook_init)
