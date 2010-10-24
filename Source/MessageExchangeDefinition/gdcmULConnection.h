@@ -15,7 +15,23 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
+#ifndef ULCONNECTION_H
+#define ULCONNECTION_H
+
+#include "gdcmNetworkStateID.h"
+#include "gdcmARTIMTimer.h"
+#include <socket++/echo.h>
+#include "gdcmULConnectionInfo.h"
+#include "gdcmPresentationContext.h"
+#include "gdcmDataElement.h"
+#include "gdcmPresentationContext.h"
+
+
+namespace gdcm{
+  namespace network{
+
+/**
+ * \brief ULConnection
 This is the class that contains the socket to another machine, and passes data through itself, 
 as well as maintaining a sense of state.
 
@@ -32,23 +48,9 @@ For right now, this class is not directly intended to be inherited from, but the
 for future ULSecureConnection warrants the addition, rather than having everything be managed
 from within the ULConnectionManager (or this class) without a wrapper.
 
-name and date: 16 sept 2010 mmr
-
-*/
-#ifndef ULCONNECTION_H
-#define ULCONNECTION_H
-#include "gdcmNetworkStateID.h"
-#include "gdcmARTIMTimer.h"
-#include <socket++/echo.h>
-#include "gdcmULConnectionInfo.h"
-#include "gdcmPresentationContext.h"
-#include "gdcmDataElement.h"
-#include "gdcmPresentationContext.h"
-
-
-namespace gdcm{
-  namespace network{
-    class ULConnection {
+ */
+class ULConnection
+{
 
       ULConnectionInfo mInfo;
       echo* mSocket;//of the three protocols offered by socket++-- echo, smtp, and ftp--
