@@ -22,6 +22,7 @@ SET(MessageExchangeDefinition_SRCS
   gdcmPresentationContextAC.cxx  gdcmPresentationDataValue.cxx  gdcmUserInformation.cxx
 gdcmAAssociateACPDU.cxx  gdcmAAssociateRQPDU.cxx  gdcmApplicationContext.cxx  gdcmAReleaseRQPDU.cxx  gdcmPDataTFPDU.cxx  gdcmPresentationContext.cxx    gdcmTransferSyntax_.cxx
 gdcmMaximumLengthSub.cxx
+gdcmCommandDataSet.cxx
 gdcmImplementationClassUIDSub.cxx
 gdcmImplementationUIDSub.cxx
 gdcmImplementationVersionNameSub.cxx

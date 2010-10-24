@@ -25,6 +25,7 @@ this file defines the messages for the cstore action
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmPresentationContext.h"
+#include "gdcmCommandDataSet.h"
 
 namespace gdcm{
 namespace network{
@@ -41,7 +42,7 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
-  DataSet ds;
+  CommandDataSet ds;
   {
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );

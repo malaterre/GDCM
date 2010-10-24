@@ -142,10 +142,10 @@ public:
         InsertDataElement( de );
         }
       }
-    //else
-    //  {
-    //  gdcmErrorMacro( "Cannot add element with group < 0x0008 and != 0x4 in the dataset: " << de.GetTag() );
-    //  }
+    else
+      {
+      gdcmErrorMacro( "Cannot add element with group < 0x0008 and != 0x4 in the dataset: " << de.GetTag() );
+      }
   }
   /// Replace a dataelement with another one
   void Replace(const DataElement& de) {

@@ -24,6 +24,7 @@ this file defines the messages for the cfind action
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmCommandDataSet.h"
 
 namespace gdcm{
 namespace network{
@@ -38,7 +39,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
-  DataSet ds;
+  CommandDataSet ds;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
   const char *uid = gdcm::UIDs::GetUIDString( 

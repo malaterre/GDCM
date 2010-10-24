@@ -109,6 +109,12 @@ If you want to specifiy your own AE-TITLE (default is GDCMSCU), simply use:
 gdcmscu --echo dicom.example.com 11112 --call SERVSCP --aetitle MYSCU
 \endverbatim
 
+For example you could test on the DICOM server provided by DICOMObject team:
+
+\verbatim
+gdcmscu www.dicomserver.co.uk 11112
+\endverbatim
+
 \section cstore_usage C-STORE usage
 C-STORE is the operation that allow sending a DICOM file to a remote DICOM server. For instance to send a file called myfile.dcm
 
