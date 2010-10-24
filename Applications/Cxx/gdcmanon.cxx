@@ -230,7 +230,7 @@ static void PrintHelp()
   std::cout << "Dumb mode options:" << std::endl;
   std::cout << "     --empty   %d,%d           DICOM tag(s) to empty" << std::endl;
   std::cout << "     --remove  %d,%d           DICOM tag(s) to remove" << std::endl;
-  std::cout << "     --replace %d,%d,%s        DICOM tag(s) to replace" << std::endl;
+  std::cout << "     --replace %d,%d=%s        DICOM tag(s) to replace" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose                more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning                print warning info." << std::endl;
@@ -437,7 +437,7 @@ int main(int argc, char *argv[])
             ss >> std::hex >> dummy;
             assert( tag.GetElement() == dummy );
             ss >> cdummy;
-            assert( cdummy == ',' );
+            assert( cdummy == ',' || cdummy == '=' );
             std::string str;
             ss >> str;
             replace_tags_value.push_back( std::make_pair(tag, str) );

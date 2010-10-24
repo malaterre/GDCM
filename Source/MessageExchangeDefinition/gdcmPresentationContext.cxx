@@ -186,11 +186,14 @@ EPresentationContextID PresentationContext::AssignPresentationContextID(const Da
   }
   else {
     using gdcm::MediaStorage;
-    gdcm::Global& g = gdcm::Global::GetInstance();  if( !g.LoadResourcesFiles() )
-    {
+    gdcm::Global& g = gdcm::Global::GetInstance();
+#if 0
+    if( !g.LoadResourcesFiles() ) // NOT THREAD SAFE
+      {
       std::cerr << "Could not LoadResourcesFiles" << std::endl;
       return eVerificationSOPClass;
-    }
+      }
+#endif
     const gdcm::Defs &defs = g.GetDefs();
     gdcm::MediaStorage mst;
     if (!mst.SetFromDataSet(inDS)){

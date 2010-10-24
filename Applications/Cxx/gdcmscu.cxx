@@ -38,6 +38,8 @@
 #include "gdcmDataSet.h"
 #include "gdcmStringFilter.h"
 #include "gdcmVersion.h"
+#include "gdcmGlobal.h"
+#include "gdcmUIDGenerator.h"
 
 //for testing!  Should be put in a testing executable,
 //but it's just here now because I know this path works
@@ -660,13 +662,15 @@ void PrintHelp()
   std::cout << "  -p --port           Port number." << std::endl;
   std::cout << "     --aetitle        Set Calling AE Title." << std::endl;
   std::cout << "     --call           Set Called AE Title." << std::endl;
-  std::cout << "  -t --testdir        Set the directory for testing images (if --test is chosen)." << std::endl;
+//  std::cout << "  -t --testdir        Set the directory for testing images (if --test is chosen)." << std::endl;
+  std::cout << "     --root-uid               Root UID." << std::endl;
+  std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "Mode Options:" << std::endl;
   std::cout << "     --echo           C-ECHO (default when none)." << std::endl;
   std::cout << "     --store          C-STORE." << std::endl;
   std::cout << "     --find           C-FIND." << std::endl;
   std::cout << "     --move           C-MOVE." << std::endl;
-  std::cout << "     --test           Test all functions agains a known working server." << std::endl;
+//  std::cout << "     --test           Test all functions agains a known working server." << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
   std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
   std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
@@ -705,6 +709,10 @@ int main(int argc, char *argv[])
   int findpatient = 0;
   int findstudy = 0;
   int findpsonly = 0;
+  std::string xmlpath;
+  int resourcespath = 0;
+  std::string root;
+  int rootuid = 0;
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
 
@@ -935,6 +943,66 @@ int main(int argc, char *argv[])
     return 0;
     }
 
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( callaetitle.c_str() );
+  gdcm::Global& g = gdcm::Global::GetInstance();
+  if( !resourcespath )
+    {
+    const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
+    if( xmlpathenv )
+      {
+      // Make sure to look for XML dict in user explicitly specified dir first:
+      xmlpath = xmlpathenv;
+      resourcespath = 1;
+      }
+    }
+  if( resourcespath )
+    {
+    // xmlpath is set either by the cmd line option or the env var
+    if( !g.Prepend( xmlpath.c_str() ) )
+      {
+      std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
+      return 1;
+      }
+    }
+  // All set, then load the XML files:
+  if( !g.LoadResourcesFiles() )
+    {
+    std::cerr << "Could not load XML file from specified path" << std::endl;
+    return 1;
+    }
+  const gdcm::Defs &defs = g.GetDefs(); (void)defs;
+  if( !rootuid )
+    {
+    // only read the env var if no explicit cmd line option
+    // maybe there is an env var defined... let's check
+    const char *rootuid_env = getenv("GDCM_ROOT_UID");
+    if( rootuid_env )
+      {
+      rootuid = 1;
+      root = rootuid_env;
+      }
+    }
+  if( rootuid )
+    {
+    // root is set either by the cmd line option or the env var
+    if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
+      {
+      std::cerr << "specified Root UID is not valid: " << root << std::endl;
+      return 1;
+      }
+    gdcm::UIDGenerator::SetRoot( root.c_str() );
+    }
+
   if( shostname.empty() )
     {
     std::cerr << "Hostname missing" << std::endl;
@@ -963,7 +1031,8 @@ int main(int argc, char *argv[])
   else if ( movemode )
     {
     mode = "move";
-    }if ( testmode )
+    }
+  if ( testmode )
     {
     mode = "test";
     }
