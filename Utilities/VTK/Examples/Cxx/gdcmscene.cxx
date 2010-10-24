@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
   reader->Update();
 
   vtkGDCMPolyDataWriter * writer2 = vtkGDCMPolyDataWriter::New();
-  writer2->SetInput( reader->GetOutput() );
+  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
+    writer2->SetInput( num, reader->GetOutput(num) );
   writer2->SetFileName( "rtstruct.dcm" );
   writer2->Write();
 

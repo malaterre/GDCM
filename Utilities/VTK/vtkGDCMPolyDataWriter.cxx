@@ -40,34 +40,111 @@ vtkGDCMPolyDataWriter::vtkGDCMPolyDataWriter()
 {
 }
 
+using namespace gdcm;
+
 //----------------------------------------------------------------------------
 void vtkGDCMPolyDataWriter::WriteData()
 {
-  vtkPoints *pts;
-  vtkCellArray *polys;
-  vtkPolyData *input = this->GetInput();
-
-  polys = input->GetPolys();
-  pts = input->GetPoints();
-  if (pts == NULL || polys == NULL )
-    {
-    vtkErrorMacro(<<"No data to write!");
-    return;
-    }
-
   if ( this->FileName == NULL)
     {
     vtkErrorMacro(<< "Please specify FileName to write");
     this->SetErrorCode(vtkErrorCode::NoFileNameError);
     return;
     }
+  Writer writer;
+  writer.SetFileName( this->FileName );
+  File &file = writer.GetFile();
 
-  this->WriteRTSTRUCT(pts,polys);
+  this->WriteRTSTRUCTInfo(file);
+
+  int numInputs = this->GetNumberOfInputPorts();
+  for(int input = 0; input < numInputs; ++input )
+    {
+    vtkPoints *pts;
+    vtkCellArray *polys;
+    vtkPolyData *input = this->GetInput();
+
+    polys = input->GetPolys();
+    pts = input->GetPoints();
+    if (pts == NULL || polys == NULL )
+      {
+      vtkErrorMacro(<<"No data to write!");
+      return;
+      }
+
+    this->WriteRTSTRUCTData(file, pts, polys);
+    }
+
+  if( !writer.Write() )
+    {
+    }
 
 }
 
 //----------------------------------------------------------------------------
-void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
+void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
+{
+  DataSet& ds = file.GetDataSet();
+  const Tag sisq(0x3006,0x0039);
+  DataElement de( sisq );
+  de.SetVR( VR::SQ );
+  SmartPointer<SequenceOfItems> sqi1 = 0;
+  sqi1 = new SequenceOfItems;
+  de.SetValue( *sqi1 );
+  de.SetVLToUndefined();
+  ds.Insert( de );
+
+  UIDGenerator uid;
+
+    {
+    const char *sop = uid.Generate();
+    DataElement de( Tag(0x0008,0x0018) );
+    VL::Type strlenSOP = (VL::Type) strlen(sop);
+    de.SetByteValue( sop, strlenSOP );
+    de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
+    ds.ReplaceEmpty( de );
+    }
+    {
+    const char *study = uid.Generate();
+    DataElement de( Tag(0x0020,0x000d) );
+    VL::Type strlenStudy= (VL::Type)strlen(study);
+    de.SetByteValue( study, strlenStudy );
+    de.SetVR( Attribute<0x0020, 0x000d>::GetVR() );
+    ds.ReplaceEmpty( de );
+    }
+    {
+    const char *series = uid.Generate();
+    DataElement de( Tag(0x0020,0x000e) );
+    VL::Type strlenSeries= (VL::Type)strlen(series);
+    de.SetByteValue( series, strlenSeries );
+    de.SetVR( Attribute<0x0020, 0x000e>::GetVR() );
+    ds.ReplaceEmpty( de );
+    }
+
+  FileMetaInformation &fmi = file.GetHeader();
+  TransferSyntax ts = TransferSyntax::ImplicitVRLittleEndian;
+    {
+    const char *tsuid = TransferSyntax::GetTSString( ts );
+    DataElement de( Tag(0x0002,0x0010) );
+    VL::Type strlenTSUID = (VL::Type)strlen(tsuid);
+    de.SetByteValue( tsuid, strlenTSUID );
+    de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
+    fmi.Replace( de );
+    fmi.SetDataSetTransferSyntax(ts);
+    }
+  MediaStorage ms = MediaStorage::RTStructureSetStorage ;
+  const char* msstr = MediaStorage::GetMSString(ms);
+    {
+    DataElement de( Tag(0x0008, 0x0016 ) );
+    VL::Type strlenMsstr = (VL::Type)strlen(msstr);
+    de.SetByteValue( msstr, strlenMsstr);
+    de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
+    ds.Insert( de );
+    }
+
+}
+
+void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, vtkPoints *pts, vtkCellArray *polys)
 {
 /*
 (3006,0039) ?? (SQ)                                               # u/l,1 ROI Contour Sequence
@@ -87,7 +164,6 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
       (fffe,e00d)
 
 */
-  using namespace gdcm;
   SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
 
@@ -121,19 +197,12 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
 
     sqi->AddItem( item );
     }
-  Writer writer;
-  writer.SetFileName( this->FileName );
-  File &file = writer.GetFile();
   DataSet& ds = file.GetDataSet();
 {
   const Tag sisq(0x3006,0x0039);
-  DataElement de( sisq );
-  de.SetVR( VR::SQ );
-  SmartPointer<SequenceOfItems> sqi1;
-  sqi1 = new SequenceOfItems;
-  de.SetValue( *sqi1 );
-  de.SetVLToUndefined();
-  ds.Insert( de );
+  SmartPointer<SequenceOfItems> sqi1 = 0;
+  sqi1 = ds.GetDataElement( sisq ).GetValueAsSQ();
+  assert( sqi1 );
 
   Item item;
   item.SetVLToUndefined();
@@ -147,40 +216,6 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
   subds.Insert( de2 );
 
     sqi1->AddItem( item );
-}
-  UIDGenerator uid;
-
-    {
-    const char *sop = uid.Generate();
-    DataElement de( Tag(0x0008,0x0018) );
-    VL::Type strlenSOP = (VL::Type) strlen(sop);
-    de.SetByteValue( sop, strlenSOP );
-    de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
-    ds.ReplaceEmpty( de );
-    }
-  FileMetaInformation &fmi = file.GetHeader();
-  TransferSyntax ts = TransferSyntax::ImplicitVRLittleEndian;
-    {
-    const char *tsuid = TransferSyntax::GetTSString( ts );
-    DataElement de( Tag(0x0002,0x0010) );
-    VL::Type strlenTSUID = (VL::Type)strlen(tsuid);
-    de.SetByteValue( tsuid, strlenTSUID );
-    de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
-    fmi.Replace( de );
-    fmi.SetDataSetTransferSyntax(ts);
-    }
-  MediaStorage ms = MediaStorage::RTStructureSetStorage ;
-  const char* msstr = MediaStorage::GetMSString(ms);
-    {
-    DataElement de( Tag(0x0008, 0x0016 ) );
-    VL::Type strlenMsstr = (VL::Type)strlen(msstr);
-    de.SetByteValue( msstr, strlenMsstr);
-    de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
-    ds.Insert( de );
-    }
-
-if( !writer.Write() )
-{
 }
 
 }
