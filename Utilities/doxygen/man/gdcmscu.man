@@ -1,0 +1,159 @@
+/*!
+
+\page gdcmscu Tool to execute a DICOM Query/Retrieve operation
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmscu [OPTION]...[OPERATION]...HOSTNAME...[PORT]...
+\endverbatim
+Execute a DICOM Q/R operation to HOSTNAME, using port PORT (104 when not specified)
+
+\section description DESCRIPTION
+
+The \b gdcmscu command line program is the tool to execute DICOM Query/Retrieve operation.
+It supports:
+\li C-ECHO (SCU)
+\li C-FIND (SCU)
+\li C-STORE (SCU)
+\li C-MOVE (SCU/SCP)
+C-MOVE operation are executed using two different ports (one for the SCU and one for the SCP).
+
+\section parameters PARAMETERS
+
+\section options OPTIONS
+
+\subsection options options
+\verbatim
+  -H --hostname       Hostname.
+  -p --port           Port number.
+     --aetitle        Set calling AE Title.
+     --call           Set called AE Title.
+\endverbatim
+
+\subsection mode_options mode options
+\verbatim
+     --echo           C-ECHO (default when none).
+     --store          C-STORE.
+     --find           C-FIND.
+     --move           C-MOVE.
+\endverbatim
+
+\subsection cfing_options C-STORE options
+\verbatim
+  -i --input      DICOM filename
+\endverbatim
+
+\subsection cfing_options C-FIND options
+\verbatim
+     --worklist       C-FIND Worklist Model.
+     --patient        C-FIND Patient Root Model.
+     --study          C-FIND Study Root Model.
+     --psonly         C-FIND Patient/Study Only Model.
+\endverbatim
+
+\subsection cfing_options C-STORE options
+\verbatim
+  -o --output     DICOM filename
+     --port-scp   Port for incoming associations
+\endverbatim
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\subsection environment_variable environment variable
+\verbatim
+  GDCM_ROOT_UID Root UID
+\endverbatim
+
+\section cecho_usage C-ECHO usage
+\b gdcmscu is a great tool to test if a DICOM server is up. For example to send a C-ECHO to server dicom.example.com using port 104, use:
+
+\verbatim
+gdcmscu dicom.example.com
+\endverbatim
+
+or if you prefer being explicit:
+
+\verbatim
+gdcmscu --echo dicom.example.com 104
+\endverbatim
+
+Using basic security your DICOM server might require that you set the appropriate called AE-TITLE
+
+\verbatim
+gdcmscu --echo dicom.example.com 11112 --call SERVSCP
+\endverbatim
+
+If you want to specifiy your own AE-TITLE (default is GDCMSCU), simply use:
+
+\verbatim
+gdcmscu --echo dicom.example.com 11112 --call SERVSCP --aetitle MYSCU
+\endverbatim
+
+\section cstore_usage C-STORE usage
+C-STORE is the operation that allow sending a DICOM file to a remote DICOM server. For instance to send a file called myfile.dcm
+
+\verbatim
+gdcmscu --store dicom.example.com 104 myfile.dcm
+\endverbatim
+
+or if you prefer being explicit:
+
+\verbatim
+gdcmscu --store dicom.example.com 104 -i myfile.dcm
+\endverbatim
+
+\section cfind_usage C-FIND usage
+\b gdcmscu also allow querying a DICOM server. This is the C-FIND operation, for example to find all DICOM Instance where PatientsName match
+a particular pattern, usage is simply:
+
+\verbatim
+gdcmscu --find dicom.example.com 11112 --key 8,52,PATIENT --key 10,10,"F*"
+\endverbatim
+
+We also support a DCMTK compatible convention:
+
+\verbatim
+gdcmscu --find dicom.example.com 11112 --key 8,52=PATIENT --key 10,10="A*"
+\endverbatim
+
+\section cmove_usage C-MOVE usage
+C-MOVE is the operation to retrieve a DICOM instance from a remote DICOM server. Most of the time, it is a subsequent operation after a C-FIND query.
+To retrieve a DICOM instance where PatientID is ABCD1234, simply execute:
+
+gdcmscu --move --aetitle ACME1 --call ACME_STORE dicom.example.com 5678 -k 8,52=PATIENT -k 10,20="ABCD1234"
+
+WARNING For this operation to work you need information from the DICOM server you are communicating with. Only
+the DICOM server you are sending a C-MOVE query will be reponsible for sending back incoming associations (the actual C-STORE SCP).
+Therefore you need to make sure that you mapping of (AE-TITLE,PortNumber) is properly set on the DICOM server side.
+
+gdcmscu does not currently support external C-STORE association (C-STORE request sent to an external SCP application).
+
+\section see_also SEE ALSO
+
+<b>gdcmconv</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright Insight Software Consortium
+
+*/
