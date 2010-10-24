@@ -111,6 +111,14 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys)
     Attribute<0x3006,0x0050> at;
     at.SetValues( &cellpoints[0], cellpoints.size(), false );
     subds.Insert( at.GetAsDataElement() );
+
+    Attribute<0x3006,0x0046> numcontpoints;
+    numcontpoints.SetValue( npts );
+    subds.Insert( numcontpoints.GetAsDataElement() );
+    Attribute<0x3006,0x0042> contgeotype;
+    contgeotype.SetValue( "CLOSED_PLANAR " );
+    subds.Insert( contgeotype.GetAsDataElement() );
+
     sqi->AddItem( item );
     }
   Writer writer;
