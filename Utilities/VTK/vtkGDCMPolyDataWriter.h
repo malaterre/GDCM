@@ -30,7 +30,7 @@
 
 class vtkMedicalImageProperties;
 //BTX
-namespace gdcm { class Reader; }
+namespace gdcm { class File; }
 //ETX
 class VTK_EXPORT vtkGDCMPolyDataWriter : public vtkPolyDataWriter
 {
@@ -53,7 +53,8 @@ protected:
   ~vtkGDCMPolyDataWriter();
 
   void WriteData();
-  void WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys);
+  void WriteRTSTRUCTInfo(gdcm::File &file);
+  void WriteRTSTRUCTData(gdcm::File &file, vtkPoints *pts, vtkCellArray *polys);
 
 private:
   vtkGDCMPolyDataWriter(const vtkGDCMPolyDataWriter&);  // Not implemented.
