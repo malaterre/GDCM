@@ -36,7 +36,8 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   assert( inDataSet );
   PresentationDataValue thePDV;
   std::string UIDString;
-  thePDV.SetPresentationContextID(PresentationContext::AssignPresentationContextID(*inDataSet, UIDString)); 
+  thePDV.SetPresentationContextID(
+    PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -127,7 +128,10 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
     std::string sub( cur, remaining );
 
     PresentationDataValue thePDV;
-    thePDV.SetPresentationContextID(1); // FIXME
+    std::string UIDString;
+    thePDV.SetPresentationContextID(
+      PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
+
     thePDV.SetBlob( sub );
     //thePDV.SetDataSet(*inDataSet);
     if( remaining == maxpdu )
