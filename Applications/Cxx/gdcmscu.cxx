@@ -231,7 +231,7 @@ std::string const &call )
 }
 
 void CMove( const char *remote, int portno, std::string const &aetitle,
-std::string const &call  , gdcm::DataSet const &ds)
+std::string const &call, gdcm::DataSet const &ds, int portscp)
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -694,6 +694,7 @@ int main(int argc, char *argv[])
   std::string callingaetitle = "GDCMSCU";
   std::string callaetitle = "ANY-SCP";
   int port = 104; // default
+  int portscp = 0;
   std::string filename;
   int verbose = 0;
   int warning = 0;
@@ -761,6 +762,7 @@ int main(int argc, char *argv[])
         {"patient", 0, &findpatient, 1}, // --patient
         {"study", 0, &findstudy, 1}, // --study
         {"psonly", 0, &findpsonly, 1}, // --psonly
+        {"port-scp", 0, &portscp, 1}, // --port-scp
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:";
@@ -1067,7 +1069,7 @@ int main(int argc, char *argv[])
     ds.Print( std::cout );
 
 
-    CMove( hostname, port, callingaetitle, callaetitle, ds  );
+    CMove( hostname, port, callingaetitle, callaetitle, ds, portscp );
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
