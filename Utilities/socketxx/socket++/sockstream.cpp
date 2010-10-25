@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-// 
+//
 // Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
 //
 // Permission is granted to use at your own risk and distribute this software
@@ -29,34 +29,34 @@
 // through a telephone. Hence, the read and the
 // write buffers are different. That is, they do not
 // share the same memory.
-// 
+//
 // Read:
 // gptr() points to the start of the get area.
 // The unread chars are gptr() - egptr().
 // base() points to the read buffer
-// 
+//
 // eback() is set to base() so that pbackfail()
 // is called only when there is no place to
 // putback a char. And pbackfail() always returns EOF.
-// 
+//
 // Write:
 // pptr() points to the start of the put area
 // The unflushed chars are pbase() - pptr()
 // pbase() points to the write buffer.
 // epptr() points to the end of the write buffer.
-// 
+//
 // Output is flushed whenever one of the following conditions
 // holds:
 // (1) pptr() == epptr()
 // (2) EOF is written
 // (3) linebuffered and '\n' is written
-// 
+//
 // Unbuffered:
 // Input buffer size is assumed to be of size 1 and output
 // buffer is of size 0. That is, egptr() <= base()+1 and
 // epptr() == pbase().
 //
-// Version: 1.2 2002-07-25 Herbert Straub 
+// Version: 1.2 2002-07-25 Herbert Straub
 // Improved Error Handling - extending the sockerr class by cOperation
 
 
@@ -186,7 +186,7 @@ bool sockerr::arg () const
 }
 
 bool sockerr::op () const
-// operational error encountered 
+// operational error encountered
 {
   switch (err) {
   case ENETDOWN:
@@ -267,7 +267,7 @@ sockbuf::sockbuf (const sockbuf::sockdesc& sd)
   setp (pbuf, pbuf + BUFSIZ);
   rep->gend = gbuf + BUFSIZ;
   rep->pend = pbuf + BUFSIZ;
-}   
+}
 
 sockbuf::sockbuf (int domain, sockbuf::type st, int proto)
   : rep (0)
@@ -278,7 +278,7 @@ sockbuf::sockbuf (int domain, sockbuf::type st, int proto)
   WSAStartup(version, &wsaData);
 #endif
   SOCKET soc = ::socket (domain, st, proto);
-  
+
   if (soc == static_cast<SOCKET>(SOCKET_ERROR))
 #if defined(__CYGWIN__) || !defined(WIN32)
     throw sockerr (errno, "sockbuf::sockbuf");
@@ -287,7 +287,7 @@ sockbuf::sockbuf (int domain, sockbuf::type st, int proto)
 #endif
 
   rep = new sockbuf::sockcnt (soc);
-  
+
   char_type* gbuf = new char_type [BUFSIZ];
   char_type* pbuf = new char_type [BUFSIZ];
   setg (gbuf, gbuf + BUFSIZ, gbuf + BUFSIZ);
@@ -305,7 +305,7 @@ rep (sb.rep)
   // the streambuf::streambuf (const streambuf&) is assumed
   // to haved handled pbase () and gbase () correctly.
 
-  rep->cnt++; 
+  rep->cnt++;
 }
 
 /*sockbuf& sockbuf::operator = (const sockbuf& sb)
@@ -334,7 +334,7 @@ sockbuf::~sockbuf ()
     int c = closesocket(rep->sock);
 #endif
     delete rep;
-    if (c == SOCKET_ERROR) 
+    if (c == SOCKET_ERROR)
 #if defined(__CYGWIN__) || !defined(WIN32)
     throw sockerr (errno, "sockbuf::~sockbuf", sockname.c_str());
 #else
@@ -439,7 +439,7 @@ streamsize sockbuf::xsgetn (char_type* s, streamsize n)
 
   if (underflow () != eof)
     return rval + xsgetn (s + rval, n - rval);
-  
+
   return rval;
 }
 
@@ -479,7 +479,7 @@ streamsize sockbuf::xsputn (const char_type* s, streamsize n)
 
   memcpy (pptr (), s, wval * sizeof (char_type));
   pbump (wval);
-  
+
   if (overflow () != eof)
     return wval + xsputn (s + wval, n - wval);
 
@@ -508,7 +508,7 @@ sockbuf::sockdesc sockbuf::accept (sockAddr& sa)
 {
   socklen_t len = sa.size ();
   int soc = -1;
-  if ((soc = ::accept (rep->sock, sa.addr (), 
+  if ((soc = ::accept (rep->sock, sa.addr (),
                        &len)) == -1)
     throw sockerr (errno, "sockbuf::sockdesc", sockname.c_str());
   return sockdesc (soc);
@@ -527,7 +527,7 @@ int sockbuf::read (void* buf, int len)
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0) {
     throw sockerr (ETIMEDOUT, "sockbuf::read", sockname.c_str());
   }
-  
+
   if (rep->oob && atmark ())
     throw sockoob ();
 
@@ -542,7 +542,7 @@ int sockbuf::recv (void* buf, int len, int msgf)
 {
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0)
     throw sockerr (ETIMEDOUT, "sockbuf::recv", sockname.c_str());
-  
+
   if (rep->oob && atmark ())
     throw sockoob ();
 
@@ -556,7 +556,7 @@ int sockbuf::recvfrom (sockAddr& sa, void* buf, int len, int msgf)
 {
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0)
     throw sockerr (ETIMEDOUT, "sockbuf::recvfrom", sockname.c_str());
-  
+
   if (rep->oob && atmark ())
     throw sockoob ();
 
@@ -575,7 +575,7 @@ int sockbuf::write(const void* buf, int len)
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
     throw sockerr (ETIMEDOUT, "sockbuf::write", sockname.c_str());
-  
+
   int wlen=0;
   while(len>0) {
     //int wval = ::write (rep->sock, (char*) buf, len);
@@ -593,7 +593,7 @@ int sockbuf::send (const void* buf, int len, int msgf)
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
     throw sockerr (ETIMEDOUT, "sockbuf::send", sockname.c_str());
-  
+
   int wlen=0;
   while(len>0) {
     int wval = ::send (rep->sock, (char*) buf, len, msgf);
@@ -610,7 +610,7 @@ int sockbuf::sendto (sockAddr& sa, const void* buf, int len, int msgf)
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
     throw sockerr (ETIMEDOUT, "sockbuf::sendto", sockname.c_str());
-  
+
   int wlen=0;
   while(len>0) {
     int wval = ::sendto (rep->sock, (char*) buf, len, msgf,
@@ -629,7 +629,7 @@ int sockbuf::recvmsg (msghdr* msg, int msgf)
 {
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0)
     throw sockerr (ETIMEDOUT, "sockbuf::recvmsg", sockname.c_str());
-  
+
   if (rep->oob && atmark ())
     throw sockoob ();
 
@@ -644,7 +644,7 @@ int sockbuf::sendmsg (msghdr* msg, int msgf)
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
     throw sockerr (ETIMEDOUT, "sockbuf::sendmsg", sockname.c_str());
-  
+
   int wlen = ::sendmsg (rep->sock, msg, msgf);
   if (wlen == -1) throw 0;
   return wlen;
@@ -670,11 +670,11 @@ int sockbuf::is_readready (int wp_sec, int wp_usec) const
   fd_set fds;
   FD_ZERO (&fds);
   FD_SET (rep->sock, &fds);
-  
+
   timeval tv;
   tv.tv_sec  = wp_sec;
   tv.tv_usec = wp_usec;
-  
+
   int ret = select (rep->sock+1, &fds, 0, 0, (wp_sec == -1) ? 0: &tv);
   if (ret == -1) throw sockerr (errno, "sockbuf::is_readready", sockname.c_str());
   return ret;
@@ -685,11 +685,11 @@ int sockbuf::is_writeready (int wp_sec, int wp_usec) const
   fd_set fds;
   FD_ZERO (&fds);
   FD_SET (rep->sock, &fds);
-  
+
   timeval tv;
   tv.tv_sec  = wp_sec;
   tv.tv_usec = wp_usec;
-  
+
   int ret = select (rep->sock+1, 0, &fds, 0, (wp_sec == -1) ? 0: &tv);
   if (ret == -1) throw sockerr (errno, "sockbuf::is_writeready", sockname.c_str());
   return ret;
@@ -700,11 +700,11 @@ int sockbuf::is_exceptionpending (int wp_sec, int wp_usec) const
   fd_set fds;
   FD_ZERO (&fds);
   FD_SET  (rep->sock, &fds);
-  
+
   timeval tv;
   tv.tv_sec = wp_sec;
   tv.tv_usec = wp_usec;
-  
+
   int ret = select (rep->sock+1, 0, 0, &fds, (wp_sec == -1) ? 0: &tv);
   if (ret == -1) throw sockerr (errno, "sockbuf::is_exceptionpending", sockname.c_str());
   return ret;
@@ -843,7 +843,7 @@ bool sockbuf::oobinline () const
   getopt (so_oobinline, &old, sizeof (old));
   return old!=0;
 }
-    
+
 bool sockbuf::oobinline (bool set) const
 {
   int old = 0;
@@ -909,7 +909,7 @@ bool sockbuf::atmark () const
 // return true, if the read pointer for socket points to an
 // out of band data
 {
-#if !defined(WIN32) || defined(__CYGWIN__) 
+#if !defined(WIN32) || defined(__CYGWIN__)
   int arg;
   if (::ioctl (rep->sock, SIOCATMARK, &arg) == -1)
     throw sockerr (errno, "sockbuf::atmark", sockname.c_str());

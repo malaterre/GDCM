@@ -22,14 +22,14 @@ static void process_input (iosockinet& s);
 int main()
 {
   sockinetbuf sin (sockbuf::sock_stream);
-    
+
   sin.bind();
-    
+
   cout << "localhost = " << sin.localhost() << endl
        << "localport = " << sin.localport() << endl;
-    
+
   sin.listen();
-    
+
   for(;;) {
     {
       iosockinet s (sin.accept());
@@ -57,9 +57,9 @@ static void process_input(iosockinet& sio)
 {
   char	buf[256];
   char*	p = buf;
-    
+
   sio >> p;
-    
+
   while (*p) {
     if (*p != '%')
       cout << *p;
@@ -104,5 +104,3 @@ static void process_input(iosockinet& sio)
   sio << "received" << endl;
   cout << endl;
 }
-
-

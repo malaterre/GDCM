@@ -24,25 +24,25 @@ int main(int ac, char** av)
     cerr << "USAGE: " << av[0] << " hostname from to\n";
     return 1;
   }
-    
+
   try {
   iosockinet sio (sockbuf::sock_stream);
   sio.rdbuf()->setname ("smtp socket");
   string buffer;
-    
+
   sio->connect(av[1], "smtp", "tcp");
-    
+
   //send_cmd(sio, 0);
   send_cmd(sio, "HELO kelvin.seas.virginia.edu");
   send_cmd(sio, "HELP");
   buffer = "MAIL FROM: ";
   buffer += av[2];
   send_cmd(sio, buffer.c_str());
-    
+
   buffer = "RCPT TO: ";
   buffer += av[3];
   send_cmd(sio, buffer.c_str());
-    
+
   send_cmd(sio, "DATA");
   cout << "terminate your input with cntrl-D\n\n";
   while(getline(cin, buffer)) {
@@ -51,15 +51,15 @@ int main(int ac, char** av)
   }
   sio << "\r\n.\r\n" << flush;
   send_cmd(sio, 0);
-    
-    
+
+
   send_cmd(sio, "HELP");
-    
+
   send_cmd(sio, "QUIT");
   }
   catch (sockerr err) {
 	  cout << "catched"<< endl;
-	  cout << "catched sockerr: " << err.serrno() 
+	  cout << "catched sockerr: " << err.serrno()
 	       << " : " << err.operation ()
 	       << endl;
   }

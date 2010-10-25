@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-// 
+//
 // Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
 //
 // Permission is granted to use at your own risk and distribute this software
@@ -24,7 +24,7 @@
 //
 // Version: 12Jan97 1.11
 //
-// Version: 1.2 2002-07-25 Herbert Straub 
+// Version: 1.2 2002-07-25 Herbert Straub
 //     Improved Error Handling - extending the sockerr class by cOperation
 // 2003-03-06 Herbert Straub
 //     adding sockbuf::getname und setname (sockname)
@@ -52,7 +52,7 @@
 #  include <windows.h>
 #  include <wininet.h>
 #  include <errno.h>
-#ifdef _MSC_VER 
+#ifdef _MSC_VER
 #  pragma comment(lib, "Wininet")
 #endif
 #endif
@@ -65,34 +65,34 @@ using namespace std;
 #endif // __linux__
 
 // socket exception classes
-class MY_API sockerr 
+class MY_API sockerr
 {
     int  err;
     string text;
     public:
-        sockerr (int e, const char *operation = NULL): err (e) 
+        sockerr (int e, const char *operation = NULL): err (e)
         {
-            if (operation != NULL) 
+            if (operation != NULL)
             {
                 text = operation;
             }
         }
-        sockerr (int e, const char *operation, const char *specification) : err (e) 
+        sockerr (int e, const char *operation, const char *specification) : err (e)
         {
             if (operation != NULL)
                 text = operation;
-            if (specification != NULL) 
+            if (specification != NULL)
             {
                 text += "(";
                 text += specification;
                 text += ")";
             }
         }
-        sockerr (int e, const string &operation): err (e) 
+        sockerr (int e, const string &operation): err (e)
         {
             text = operation;
         }
-        sockerr (const sockerr &O) 
+        sockerr (const sockerr &O)
         {
             err = O.err;
             text = O.text;
@@ -115,16 +115,16 @@ class MY_API sockerr
         bool benign () const; // recoverable read/write error like EINTR etc.
 };
 
-class sockoob 
+class sockoob
 {
     public:
         const char* what () const { return "sockoob"; }
-};  
+};
 
 // socket address classes
 struct sockaddr;
 
-class sockAddr 
+class sockAddr
 {
     public:
         virtual ~sockAddr() {}
@@ -138,7 +138,7 @@ class sockAddr
 struct msghdr;
 
 // socket buffer class
-class MY_API sockbuf: public streambuf 
+class MY_API sockbuf: public streambuf
 {
     public:
         enum type {
@@ -160,7 +160,7 @@ class MY_API sockbuf: public streambuf
             so_rcvbuf        = SO_RCVBUF,
             so_error        = SO_ERROR,
             so_type        = SO_TYPE
-        };    
+        };
         enum level {
             sol_socket          = SOL_SOCKET
         };
@@ -209,7 +209,7 @@ class MY_API sockbuf: public streambuf
             void*        gend; // end of input buffer
             void*        pend; // end of output buffer
 
-            sockcnt(SOCKET s): 
+            sockcnt(SOCKET s):
                 sock(s), cnt(1), stmo (-1), rtmo (-1), oob (false),
                 gend (0), pend (0) {}
         };
@@ -227,7 +227,7 @@ class MY_API sockbuf: public streambuf
 #endif
 
         virtual int           sync ();
-  
+
         virtual int           showmanyc () const;
         virtual streamsize    xsgetn (char_type* s, streamsize n);
         virtual int_type      underflow ();
@@ -248,14 +248,14 @@ class MY_API sockbuf: public streambuf
         int sd () const { return rep->sock; }
         int pubsync () { return sync (); }
         virtual bool is_open () const;
-    
+
         virtual void bind    (sockAddr&);
         virtual void connect    (sockAddr&);
-    
+
         void listen    (int num=somaxconn);
         virtual sockdesc accept();
         virtual sockdesc accept(sockAddr& sa);
-    
+
         int read(void* buf, int len);
         int recv    (void* buf, int len, int msgf=0);
         int recvfrom(sockAddr& sa, void* buf, int len, int msgf=0);
@@ -264,24 +264,24 @@ class MY_API sockbuf: public streambuf
         int recvmsg(msghdr* msg, int msgf=0);
         int sendmsg(msghdr* msg, int msgf=0);
 #endif
-    
+
         int write(const void* buf, int len);
         int send(const void* buf, int len, int msgf=0);
         int sendto    (sockAddr& sa, const void* buf, int len, int msgf=0);
-    
+
         int sendtimeout (int wp=-1);
         int recvtimeout (int wp=-1);
         int is_readready (int wp_sec, int wp_usec=0) const;
         int is_writeready (int wp_sec, int wp_usec=0) const;
         int is_exceptionpending (int wp_sec, int wp_usec=0) const;
-    
+
         void shutdown (shuthow sh);
-    
+
         int getopt(int op, void* buf, int len,
                    int level=sol_socket) const;
         void setopt(int op, void* buf, int len,
                     int level=sol_socket) const;
-    
+
         type gettype () const;
         int  clearerror () const;
         bool debug      () const;
@@ -307,7 +307,7 @@ class MY_API sockbuf: public streambuf
         socklinger linger(int onoff, int tm) const
         { return linger (socklinger (onoff, tm)); }
 
-        bool atmark() const;  
+        bool atmark() const;
         long nread() const;
         long howmanyc() const;
         void nbio(bool set=true) const;
@@ -325,7 +325,7 @@ class MY_API sockbuf: public streambuf
 #endif
 };
 
-class MY_API isockstream: public istream 
+class MY_API isockstream: public istream
 {
     protected:
         //isockstream (): istream(rdbuf()), ios (0) {}
@@ -333,12 +333,12 @@ class MY_API isockstream: public istream
     public:
         isockstream(sockbuf* sb): ios (sb) , istream(sb) {}
         virtual ~isockstream () {}
-                
+
         sockbuf* rdbuf () { return (sockbuf*)ios::rdbuf(); }
         sockbuf* operator -> () { return rdbuf(); }
 };
 
-class osockstream: public ostream 
+class osockstream: public ostream
 {
     protected:
         //osockstream (): ostream(static_cast<>rdbuf()), ios (0) {}
@@ -349,7 +349,7 @@ class osockstream: public ostream
         sockbuf* operator -> () { return rdbuf(); }
 };
 
-class MY_API iosockstream: public iostream 
+class MY_API iosockstream: public iostream
 {
     protected:
         iosockstream ();

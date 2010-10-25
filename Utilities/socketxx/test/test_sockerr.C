@@ -14,7 +14,7 @@ using namespace std;
 
 void f1 ();
 
-int main (int argc, char *argv[]) 
+int main (int argc, char *argv[])
 {
 	sockerr err (4711, "Test Error");
 

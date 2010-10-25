@@ -24,21 +24,21 @@ int main(int ac, char** av)
 	cerr << "USAGE: " << av[0] << " recipient-email-addr files...\n";
 	return 1;
     }
-    
+
     char         rcpt[512];
     char         sender[512];
     iosockinet   sio(sockbuf::sock_stream);
     sio->connect(sio->localhost(), "smtp", "tcp");
-    
+
     send_cmd(sio, 0);
     send_cmd(sio, "HELO");
-    
-    
+
+
     sprintf(rcpt, "RCPT TO:%s", av[1]);
-    
+
     passwd* pw = getpwuid( getuid() );
     sprintf(sender, "MAIL FROM:<%s@%s>", pw->pw_name, sio->localhost());
-    
+
     for (int i=2; i < ac; i++) {
 	send_cmd(sio, sender);
 	send_cmd(sio, rcpt);

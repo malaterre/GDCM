@@ -29,7 +29,7 @@ int main (int ac, char** av)
   f->connect (av [1]);
   f->get_response (); // get the connection response
 
-  // set access 
+  // set access
   f->user (av [2]);
 #ifndef WIN32 //FIXME!!! win32 will need another function for 'getpass'
   f->passwd (getpass ("passwd: "));
@@ -47,4 +47,4 @@ int main (int ac, char** av)
   // quit
   f->quit ();
 }
-    
+

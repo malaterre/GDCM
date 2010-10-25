@@ -49,4 +49,3 @@ void protocol::protocolbuf::connect (const char* host, int portno)
   if (pn == protocol::nil) throw sockerr (EPROTONOSUPPORT);
   sockinetbuf::connect (host, portno);
 }
-

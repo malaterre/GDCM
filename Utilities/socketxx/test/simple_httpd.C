@@ -1,6 +1,6 @@
 /* simple_httpd.C
  * -- Copyright (C) 2003 by Herbert Straub
- *  
+ *
  * Permission is granted to use at your own risk and distribute this software
  * in source and  binary forms provided  the above copyright notice and  this
  * paragraph are  preserved on all copies.  This software is provided "as is"
@@ -62,7 +62,7 @@ int main (int argc, char **argv)
 int process_request (iosockinet *sock)
 {
 	string buffer;
-	string filename; 
+	string filename;
 	ifstream file;
 
 	try {
@@ -122,7 +122,7 @@ END:
 	try {
 		sock->rdbuf()->shutdown(sockbuf::shut_readwrite);
 	}
-	catch (...) 
+	catch (...)
 	{
 		// if the client break the connection, then
 		// the shutdown method throws sockerr
@@ -141,7 +141,7 @@ void get_filesize (const char *name, string &buffer)
       strstream sb;
 #endif
 
-	if (stat (name, &buf) == -1) 
+	if (stat (name, &buf) == -1)
 		buf.st_size = 0;
 	sb << buf.st_size;
 	buffer = sb.rdbuf()->str();

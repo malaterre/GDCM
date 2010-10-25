@@ -48,4 +48,3 @@ int main(int ac, char** av)
 	unlink (av[1]);
 	return 0;
 }
-

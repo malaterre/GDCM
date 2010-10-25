@@ -1,4 +1,4 @@
-// ftp.h 
+// ftp.h
 // Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
 //
 // Permission is granted to use at your own risk and distribute this software
@@ -134,6 +134,6 @@ public:
 
   ftpbuf* rdbuf ()       { return (ftpbuf*) protocol::rdbuf (); }
   ftpbuf* operator -> () { return rdbuf (); }
-};  
-  
+};
+
 #endif // !FTP_H

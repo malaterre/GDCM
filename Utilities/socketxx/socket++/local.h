@@ -57,14 +57,14 @@ extern "C" {
   int connect (int sock, void* addr, int addrlen);
   int listen (int sock, int num);
   int accept (int sock, void* addr, int* addrlen);
-  
+
   int recv (int sock, void* buf, int buflen, int msgflag);
   int recvfrom (int sock, void* buf, int buflen, int msgflag,
 		void* addr, int* addrlen);
   int send (int sock, void* buf, int buflen, int msgflag);
   int sendto (int sock, void* buf, int buflen, int msgflag,
 	      void* addr, int addrlen);
-  
+
   int recvmsg (int sock, struct msghdr* msg, int msgflag);
   int sendmsg (int sock, struct msghdr* msg, int msgflag);
 
@@ -79,7 +79,7 @@ extern "C" {
   int ioctl (int sock, int flag, void* arg);
   pid_t vfork ();
 }
-#endif 
+#endif
 
 #if !defined (__linux__) // LN
 extern "C" int shutdown (int, int); // they have forgotten this
@@ -124,9 +124,7 @@ typedef RETSIGTYPE (*sighnd) (SIGHND_ARGTYPE);
 #define MY_API __declspec(dllexport)
 #else
 #define MY_API __declspec(dllimport)
-#endif 
+#endif
 #else
   #define MY_API
 #endif
-
-

@@ -77,7 +77,7 @@ int main (int ac, char** av)
 
   sleep (20);
   sig::nal.unmask (SIGTERM, SIGUSR2);
-  
+
   cout << "send SIGUSR2 again\n";
   kill (pid, SIGTERM);
 

@@ -176,7 +176,7 @@ void Fork::ForkProcess::commit_suicide (int)
     p = next;
   }
 
-  exit (0x0f); 
+  exit (0x0f);
 }
 
 void Fork::suicide_signal (int signo)

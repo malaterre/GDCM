@@ -1,4 +1,4 @@
-// socket++ library. sig.C 
+// socket++ library. sig.C
 // Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
 //
 // Permission is granted to use at your own risk and distribute this software
@@ -45,7 +45,7 @@ bool sig::set (int signo, sig::hnd* hnd)
   if (hnd == 0) return false;
 
   phndlist& v = smap [signo];
-  
+
   if (v.empty ()) {
 #ifndef WIN32
     struct sigaction sa;
@@ -75,7 +75,7 @@ bool sig::set (int signo, sig::hnd* hnd)
 bool sig::unset (int signo, sig::hnd* hnd)
 {
   if (hnd == 0) return false;
-  
+
   phndlist& v = smap [signo];
 
   phndlist::iterator j = find (v.begin(), v.end (), hnd);
@@ -166,7 +166,7 @@ void sig::sysresume (int signo, bool set) const
     if (sigemptyset (&sa.sa_mask) == -1) throw sigerr();
     sa.sa_flags = 0;
   }
-  
+
 #if !(defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__sun__) || defined(__linux__) || defined(__APPLE__))
 // Early SunOS versions may have SA_INTERRUPT. I can't confirm.
   if (set == false)
@@ -190,7 +190,7 @@ void sig::kill (int signo)
   phndlist& v = smap [signo];
 
   // struct procsig used to be here // LN
-  
+
   for_each (v.begin (), v.end (), procsig (signo));
 }
 

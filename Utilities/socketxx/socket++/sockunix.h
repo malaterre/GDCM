@@ -9,7 +9,7 @@
 // Version: 12Jan97 1.11
 
 #ifndef _SOCKUNIX_H
-#define	_SOCKUNIX_H
+#define  _SOCKUNIX_H
 
 #include <socket++/sockstream.h>
 #include <sys/un.h>
@@ -17,9 +17,9 @@
 class sockunixaddr: public sockAddr, public sockaddr_un {
 public:
                      ~sockunixaddr () {}
-  		     sockunixaddr (const char* path);
-  		     sockunixaddr (const sockunixaddr& suna);
-  		     operator void* () const { return addr_un (); }
+           sockunixaddr (const char* path);
+           sockunixaddr (const sockunixaddr& suna);
+           operator void* () const { return addr_un (); }
 
   sockaddr_un*       addr_un () const { return (sockaddr_un*)this; }
   int                size () const { return sizeof (sockaddr_un); }
@@ -30,10 +30,10 @@ public:
 class sockunixbuf: public sockbuf {
 public:
   enum domain { af_unix = AF_UNIX };
-    
+
                      sockunixbuf (const sockbuf::sockdesc& sd);
-  		     sockunixbuf (const sockunixbuf& su);
-  		     sockunixbuf (sockbuf::type ty, int proto=0);
+           sockunixbuf (const sockunixbuf& su);
+           sockunixbuf (sockbuf::type ty, int proto=0);
 //  sockunixbuf&       operator = (const sockunixbuf& su);
                      ~sockunixbuf () {}
 
@@ -47,11 +47,11 @@ public:
 class isockunix: public isockstream
 {
 public:
-  		     isockunix (const sockbuf::sockdesc& sd);
+           isockunix (const sockbuf::sockdesc& sd);
                      isockunix (const sockunixbuf& sb);
-  		     isockunix (sockbuf::type ty=sockbuf::sock_stream,
-				int proto=0);
-  		     ~isockunix();      
+           isockunix (sockbuf::type ty=sockbuf::sock_stream,
+        int proto=0);
+           ~isockunix();
 
   sockunixbuf*       operator -> () { return (sockunixbuf*)rdbuf (); }
 };
@@ -59,25 +59,25 @@ public:
 class osockunix: public osockstream
 {
 public:
-  		     osockunix (const sockbuf::sockdesc& sd);
+           osockunix (const sockbuf::sockdesc& sd);
                      osockunix (const sockunixbuf& sb);
-  		     osockunix (sockbuf::type ty=sockbuf::sock_stream,
-				int proto=0);
-  		     ~osockunix ();     
+           osockunix (sockbuf::type ty=sockbuf::sock_stream,
+        int proto=0);
+           ~osockunix ();
 
-  sockunixbuf*	     operator -> () { return (sockunixbuf*)rdbuf (); }
+  sockunixbuf*       operator -> () { return (sockunixbuf*)rdbuf (); }
 };
 
 class iosockunix: public iosockstream
 {
 public:
-  		     iosockunix (const sockbuf::sockdesc& sd);
+           iosockunix (const sockbuf::sockdesc& sd);
                      iosockunix (const sockunixbuf& sb);
-  		     iosockunix (sockbuf::type ty=sockbuf::sock_stream,
-				 int proto=0);
-  		     ~iosockunix ();    
+           iosockunix (sockbuf::type ty=sockbuf::sock_stream,
+         int proto=0);
+           ~iosockunix ();
 
   sockunixbuf*       operator -> () { return (sockunixbuf*)rdbuf (); }
 };
 
-#endif	// _SOCKUNIX_H
+#endif  // _SOCKUNIX_H
