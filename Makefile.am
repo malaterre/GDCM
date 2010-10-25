@@ -1,2 +1,0 @@
-SUBDIRS = socket++ doc
-
