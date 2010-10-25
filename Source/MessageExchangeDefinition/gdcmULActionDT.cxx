@@ -35,6 +35,8 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAAssociateACPDU.h"
 
+#include <socket++/echo.h>//for setting up the local socket
+
 using namespace gdcm::network;
 
 static void process_input(iosockinet& sio)

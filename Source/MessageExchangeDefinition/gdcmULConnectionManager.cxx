@@ -34,6 +34,7 @@ Its inputs are ULEvents, and it performs ULActions.
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAttribute.h"
 
+#include <vector>
 
 using namespace gdcm::network;
 
@@ -177,7 +178,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //the user should look to cout to see the response of the echo command
 std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
-  vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> empty;
@@ -194,7 +195,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
 std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(gdcm::DataSet *inDataSet)
 {
-  vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inDataSet );
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
@@ -203,7 +204,7 @@ std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(gdcm::DataSet *inDataS
 }
 std::vector<gdcm::DataSet> ULConnectionManager::SendFind(gdcm::DataSet *inDataSet)
 {
-  vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inDataSet );
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
@@ -213,7 +214,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendFind(gdcm::DataSet *inDataSe
 
 std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
 {
-  vector<BasePDU*> theDataPDU = PDUFactory::CreateCStorePDU( *mConnection, inDataSet );
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStorePDU( *mConnection, inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
