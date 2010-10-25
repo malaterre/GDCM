@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/* 
+/*
 
 The ULConnectionManager performs actions on the ULConnection given inputs from
 the user and from the state of what's going on around the connection (ie,
@@ -46,7 +46,7 @@ namespace gdcm {
     private:
       ULConnection* mConnection;
       ULTransitionTable mTransitions;
-      
+
       //no copying
       ULConnectionManager(const gdcm::network::ULConnectionManager& inCM){};
 
@@ -64,14 +64,14 @@ namespace gdcm {
       //providing the connection type will establish the proper
       //exchange syntax with a server; if a different functionality is required,
       //a different connection should be established.
-      bool EstablishConnection(const std::string& inAETitle, const std::string& inConnectAETitle, 
-        const std::string& inComputerName, const long& inIPAddress, 
-        const unsigned short& inConnectPort, const double& inTimeout, 
+      bool EstablishConnection(const std::string& inAETitle, const std::string& inConnectAETitle,
+        const std::string& inComputerName, const long& inIPAddress,
+        const unsigned short& inConnectPort, const double& inTimeout,
         const EConnectionType& inConnectionType, const gdcm::DataSet& inDS);
 
 
-      bool ReestablishConnection(const EConnectionType& inConnectionType, 
-        const gdcm::DataSet& inDS);
+      //bool ReestablishConnection(const EConnectionType& inConnectionType,
+      //  const gdcm::DataSet& inDS);
 
       //allows for a connection to be broken, but waits for an acknowledgement
       //of the breaking for a certain amount of time.  Returns true of the
@@ -79,15 +79,15 @@ namespace gdcm {
       bool BreakConnection(const double& inTimeout);
 
       //severs the connection, if it's open, without waiting for any kind of response.
-      //typically done if the program is going down. 
+      //typically done if the program is going down.
       void BreakConnectionNow();
 
-      //This function will send a given piece of data 
-      //across the network connection.  It will return true if the 
+      //This function will send a given piece of data
+      //across the network connection.  It will return true if the
       //sending worked, false otherwise.
       //note that sending is asynchronous; as such, there's
       //also a 'receive' option, but that requires a callback function.
-      bool SendData();
+      //bool SendData();
 
       //send the Data PDU associated with Echo (ie, a default DataPDU)
       //this lets the user confirm that the connection is alive.
