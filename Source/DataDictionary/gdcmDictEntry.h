@@ -125,6 +125,14 @@ inline std::ostream& operator<<(std::ostream& os, const DictEntry &val)
     {
     os << val.Name;
     }
+  if( val.Keyword.empty() )
+    {
+    os << "[No keyword]";
+    }
+  else
+    {
+    os << val.Keyword;
+    }
   os << "\t" << val.ValueRepresentation << "\t" << val.ValueMultiplicity;
   if( val.Retired )
     {
