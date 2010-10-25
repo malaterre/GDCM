@@ -54,7 +54,7 @@ C-MOVE operation are executed using two different ports (one for the SCU and one
 
 \subsection cfing_options C-STORE options
 \verbatim
-  -o --output     DICOM filename
+  -o --output     DICOM filename / directory
      --port-scp   Port for incoming associations
 \endverbatim
 
