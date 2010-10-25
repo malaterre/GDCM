@@ -32,6 +32,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
