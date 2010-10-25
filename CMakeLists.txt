@@ -591,13 +591,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     ENDIF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
 
   ELSE(WIN32 AND NOT UNIX)
-    # http://www.vtk.org/Wiki/CMake:CPackConfiguration
-    # List of files to be stripped. Starting with CMake 2.6.0 CPACK_STRIP_FILES will be a boolean variable which enables
-    # stripping of all files (a list of files evaluates to TRUE in CMake, so this change is compatible).
-    SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmscanner;bin/gdcminfo;bin/gdcmraw;bin/gdcmimg;bin/gdcmtar")
+    SET(CPACK_STRIP_FILES TRUE)
     SET(CPACK_SOURCE_STRIP_FILES "")
     SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
-
   ENDIF(WIN32 AND NOT UNIX)
 
   # cygwin stff also copied from cmake
@@ -698,7 +694,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # installer. If no descriptions are provided, the "Description"
   # box will be removed.
   set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
-    "Command line applications that uses GDCM: gdcmconv, gdcmdump, gdcminfo, gdcmscanner, gdcmimg, gdcmanon")
+    "Command line applications that uses GDCM: gdcmconv, gdcmscu, gdcmdump, gdcminfo, gdcmscanner, gdcmimg, gdcmanon")
   set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
     "Libraries used to build programs with GDCM")
   set(CPACK_COMPONENT_HEADERS_DESCRIPTION
@@ -832,6 +828,7 @@ SET(GDCM_INCLUDE_PATH
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
