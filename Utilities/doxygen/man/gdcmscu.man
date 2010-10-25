@@ -152,7 +152,9 @@ gdcmscu --find dicom.example.com 11112 --call MI2B2 -k 8,52=PATIENT -k 10,10="A*
 C-MOVE is the operation to retrieve a DICOM instance from a remote DICOM server. Most of the time, it is a subsequent operation after a C-FIND query.
 To retrieve a DICOM instance where PatientID is ABCD1234, simply execute:
 
+\verbatim
 gdcmscu --move --aetitle ACME1 --call ACME_STORE dicom.example.com 5678 -k 8,52=PATIENT -k 10,20="ABCD1234"
+\endverbatim
 
 WARNING For this operation to work you need information from the DICOM server you are communicating with. Only
 the DICOM server you are sending a C-MOVE query will be reponsible for sending back incoming associations (the actual C-STORE SCP).
