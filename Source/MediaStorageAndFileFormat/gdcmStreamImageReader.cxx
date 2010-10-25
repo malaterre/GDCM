@@ -38,9 +38,19 @@ StreamImageReader::~StreamImageReader(){
 }
 
 
+/// One of either SetFileName or SetStream must be called prior
+/// to any other functions.
+void StreamImageReader::SetFileName(const char* inFileName){
+  mReader.SetFileName(inFileName);
+}
+void StreamImageReader::SetStream(std::istream& inStream){
+  mReader.SetStream(inStream);
+}
+
+
 /// Defines an image extent for the Read function.
 /// DICOM states that an image can have no more than 2^16 pixels per edge (as of 2009)
-/// In this case, the pixel extents ignore the direction cosines entirely, and 
+/// In this case, the pixel extents ignore the direction cosines entirely, and
 /// assumes that the origin of the image is at location 0,0 (regardless of the definition
 /// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
 /// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
@@ -55,7 +65,7 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
 /// The return amount is in bytes.
 uint32_t StreamImageReader::DefineProperBufferLength() const{
   
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(*F);
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   return (mYMax - mYMin)*(mXMax - mXMin)*bytesPerPixel;
@@ -92,12 +102,12 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   //need to get the pixel size information
   //should that come from the header?
   //most likely  that's a tag in the header
-  std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(*F);
+  std::vector<double> extent = ImageHelper::GetPixelExtent(mReader.GetFile());
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
-  std::istream* theStream = GetStreamPtr();//probably going to need a copy of this
+  std::istream* theStream = mReader.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
   //tmpBuffer is for a single raster
@@ -122,13 +132,13 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
   } 
   catch (...){
-    gdcmWarningMacro( "Failed to read:" << GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with unknown error." );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
@@ -148,7 +158,7 @@ bool StreamImageReader::ReadImageInformation(){
   std::set<Tag> theSkipTags;
   Tag thePixelDataTag(0x7fe0, 0x0010);
   bool read = false;
-  std::istream* theStream = GetStreamPtr();
+  std::istream* theStream = mReader.GetStreamPtr();
   if (theStream == NULL){
     gdcmErrorMacro("Filename was not initialized for gdcm stream image reader.");
     return false;
@@ -160,7 +170,7 @@ bool StreamImageReader::ReadImageInformation(){
   try
   {
     //ok, need to read up until I know what kind of endianness i'm dealing with?
-    if (!ReadUpToTag(thePixelDataTag, theSkipTags)){
+    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags)){
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
       return false;
     }
@@ -172,11 +182,11 @@ bool StreamImageReader::ReadImageInformation(){
   catch(std::exception & ex)
   {
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
   }
   catch(...)
   {
-    gdcmWarningMacro( "Failed to read:" << GetFileName()  << " with unknown error" );
+    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName()  << " with unknown error" );
   }
 
   return true;
