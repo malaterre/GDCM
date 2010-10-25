@@ -23,12 +23,17 @@ this file defines the messages for the cfind action
 */
 
 #include "gdcmBaseCompositeMessage.h"
+#include "gdcmBaseRootQuery.h"
 
 namespace gdcm{
   namespace network{
     class CFindRQ : public BaseCompositeMessage {
-    public:
+      //this class will fulfill the inheritance,
+      //but additional information is needed by cfind
+      //namely, the root type
       std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+    public:
+      std::vector<PresentationDataValue> ConstructPDV(BaseRootQuery* inRootQuery);
     };
 
     class CFindRSP : public BaseCompositeMessage {

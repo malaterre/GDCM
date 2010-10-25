@@ -36,6 +36,7 @@ namespace gdcm{
       std::vector<gdcm::Tag> GetOptionalTags(const ERootType& inRootType) const;
 
       std::string GetName() const { return "Composite Object Instance (Image)"; }
+      DataElement GetQueryLevel() const;
     };
   }
 }

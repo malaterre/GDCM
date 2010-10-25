@@ -65,6 +65,7 @@ namespace gdcm{
       virtual std::vector<gdcm::Tag> GetOptionalTags(const ERootType& inRootType) const = 0;
 
       virtual std::string GetName() const = 0;
+      virtual DataElement GetQueryLevel() const = 0;
     };
   }
 }
