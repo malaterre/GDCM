@@ -80,5 +80,12 @@ std::vector<gdcm::Tag> QueryPatient::GetOptionalTags(const ERootType& inRootType
   return theReturn;
 }
 
+DataElement QueryPatient::GetQueryLevel() const{
+  std::string theValue = "PATIENT";
+  DataElement de;
+  de.SetTag(Tag(0x0008,0x0052));
+  de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
+  return de;
+}
 }
 }

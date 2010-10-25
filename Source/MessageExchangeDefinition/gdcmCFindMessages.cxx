@@ -26,15 +26,25 @@ this file defines the messages for the cfind action
 #include "gdcmImplicitDataElement.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmCommandDataSet.h"
+#include "gdcmStudyRootQuery.h"
 
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CFindRQ::ConstructPDV(BaseRootQuery* inRootQuery){
   std::vector<PresentationDataValue> thePDVs;
-{
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(3);//could it be 5, if the server does study?
+  int contextID = ePatientRootQueryRetrieveInformationModelFIND;
+  const char *uid = gdcm::UIDs::GetUIDString(
+    gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+  std::string suid = uid;
+  if (dynamic_cast<StudyRootQuery*>(inRootQuery)!=NULL){
+    contextID = eStudyRootQueryRetrieveInformationModelFIND;
+    const char *uid2 = gdcm::UIDs::GetUIDString(
+      gdcm::UIDs::StudyRootQueryRetrieveInformationModelFIND );
+    suid = uid2;
+  }
+  thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -43,13 +53,10 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
   CommandDataSet ds;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString(
-    gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
 
-  std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
+  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   {
   gdcm::Attribute<0x0,0x100> at = { 32 };
@@ -77,17 +84,16 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
 
   thePDV.SetDataSet(ds);
   thePDVs.push_back(thePDV);
+  thePDV.SetDataSet(inRootQuery->GetQueryDataSet());
+  thePDV.SetMessageHeader( 2 );
+  thePDVs.push_back(thePDV);
+  return thePDVs;
 }
 
-{
-    PresentationDataValue thePDV;
-    thePDV.SetPresentationContextID(3); // FIXME
-    //thePDV.SetBlob( sub );
-    thePDV.SetDataSet(*inDataSet);
-      thePDV.SetMessageHeader( 2 );
-    thePDVs.push_back(thePDV);
-
-}
+//this is a private function, should not be callable
+//but if you manage to do call it, return a blank dataset.
+std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
+  std::vector<PresentationDataValue> thePDVs;
   return thePDVs;
 
 }
