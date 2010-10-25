@@ -100,6 +100,40 @@ public:
     return it->second;
     }
 
+  /// Lookup DictEntry by keyword. Even if DICOM standard defines keyword
+  /// as being unique. The lookup table is built on Tag. Therefore
+  /// looking up a DictEntry by Keyword is more inefficient than looking up
+  /// by Tag.
+  const DictEntry &GetDictEntryByKeyword(const char *keyword, Tag & tag) const
+    {
+    MapDictEntry::const_iterator it =
+      DictInternal.begin();
+    if( keyword )
+      {
+      for(; it != DictInternal.end(); ++it)
+        {
+        if( strcmp( keyword, it->second.GetKeyword() ) == 0 )
+          {
+          // Found a match !
+          tag = it->first;
+          break;
+          }
+        }
+      }
+    else
+      {
+      it = DictInternal.end();
+      }
+    if (it == DictInternal.end())
+      {
+      tag = Tag(0xffff,0xffff);
+      it = DictInternal.find( tag );
+      return it->second;
+      }
+    assert( DictInternal.count(tag) == 1 );
+    return it->second;
+    }
+
   /// Inefficient way of looking up tag by name. Technically DICOM
   /// does not garantee uniqueness (and Curve / Overlay are there to prove it). But
   /// most of the time name is in fact uniq and can be uniquely link to a tag
