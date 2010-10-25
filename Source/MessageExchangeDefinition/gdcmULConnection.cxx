@@ -16,6 +16,7 @@
  *
  *=========================================================================*/
 #include "gdcmULConnection.h"
+#include <socket++/echo.h>
 
 using namespace gdcm::network;
 
@@ -43,7 +44,8 @@ void ULConnection::SetState(const EStateID& inState){
   mCurrentState = inState;
 }
 
-echo* ULConnection::GetProtocol(){
+//echo* ULConnection::GetProtocol(){
+std::iostream* ULConnection::GetProtocol(){
   return mSocket;
 }
 

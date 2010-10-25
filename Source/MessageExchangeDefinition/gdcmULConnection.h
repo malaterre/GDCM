@@ -20,13 +20,13 @@
 
 #include "gdcmNetworkStateID.h"
 #include "gdcmARTIMTimer.h"
-#include <socket++/echo.h>
 #include "gdcmULConnectionInfo.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmDataElement.h"
 #include "gdcmPresentationContext.h"
 
 
+class echo;
 namespace gdcm{
   namespace network{
 
@@ -73,7 +73,8 @@ class ULConnection
       EStateID GetState() const;
       void SetState(const EStateID& inState);//must be able to update state...
 
-      echo* GetProtocol();
+      //echo* GetProtocol();
+      std::iostream* GetProtocol();
       void SetProtocol(echo* inProtocol);
 
       ARTIMTimer& GetTimer();
