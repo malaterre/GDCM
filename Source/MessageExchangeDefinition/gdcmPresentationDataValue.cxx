@@ -20,6 +20,7 @@
 #include "gdcmSwapper.h"
 #include "gdcmFile.h"
 #include "gdcmAttribute.h"
+#include "gdcmCommandDataSet.h"
 
 namespace gdcm
 {
@@ -241,7 +242,7 @@ void PresentationDataValue::MyInit(File const &file)
 
 void PresentationDataValue::MyInit2(const char *uid1, const char *uid2)
 {
-  DataSet ds;
+  CommandDataSet ds;
   {
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
