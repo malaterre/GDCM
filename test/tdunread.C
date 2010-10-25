@@ -27,18 +27,18 @@ int main(int ac, char** av)
     cerr << "USAGE: " << av[0] << " socket_path_name\n";
     return 1;
   }
-  
+
   isockunix su (sockbuf::sock_dgram);
-  
+
   su->bind(av[1]);
-  
+
   cout << "Socket name = " << av[1] << endl;
-  
+
   if (chmod (av[1], 0777) == -1) {
     perror("chmod");
     return 1;
   }
-  
+
   char buf[1024];
   int i;
   su >> i;
@@ -49,6 +49,6 @@ int main(int ac, char** av)
   }
   cout << endl;
   unlink(av[1]);
-  
+
   return 0;
 }

@@ -50,7 +50,7 @@ class smtp: public protocol {
     virtual const char* rfc_name () const { return "smtp"; }
     virtual const char* rfc_doc  () const { return "rfc821"; }
   };
-    
+
 protected:
   smtp(): std::ios (0) {}
 

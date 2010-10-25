@@ -1,6 +1,6 @@
 // tpopen.cc. Test for -*- C++ -*- socket library
 // Copyright (C) 1992,1993,1994 Gnanasekaran Swaminathan <gs4t@virginia.edu>
-// 
+//
 // Permission is granted to use at your own risk and distribute this software
 // in source and binary forms provided the above copyright
 // notice and this paragraph are preserved on all copies.

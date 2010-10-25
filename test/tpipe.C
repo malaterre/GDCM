@@ -39,7 +39,7 @@ int main(int ac, char** av)
     }
     cout << endl;
   }
-#endif 
+#endif
   return 0;
 }
 

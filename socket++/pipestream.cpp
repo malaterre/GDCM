@@ -55,10 +55,10 @@ static sockbuf* createpipestream (const char* cmd, int mode)
   //FIXME!!! this code needs to work
   if (::socketpair (af_unix, sockbuf::sock_stream, 0, sockets) == -1)
     throw sockerr (errno);
-  
+
   pid_t pid = ::vfork ();
   if (pid == -1) throw sockerr (errno);
-  
+
   if (pid == 0) {
     // child process
     if (::close (sockets[1]) == -1) throw sockerr (errno);
@@ -155,4 +155,3 @@ pid_t iopipestream::fork ()
   return pid;
 }	
 #endif
-

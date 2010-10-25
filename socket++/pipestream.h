@@ -33,7 +33,7 @@ class iopipestream: public iosockstream {
 private:
   iopipestream(const iopipestream& sp); // no defintion provided
   iopipestream&	operator = (iopipestream&); // no definition provided
-    
+
 protected:
   int		sp[2]; // socket pair
 
@@ -47,14 +47,14 @@ protected:
   pid_t	        cpid;
   iopipestream* next;  // next in the chain. Used only by
                        // iopipstream (sockbuf::type, int)
-    
+
   static iopipestream* head; // list to take care of by fork()
-    
+
 public:
   iopipestream(sockbuf::type ty=sockbuf::sock_stream, int proto=0);
   iopipestream(const char* cmd);
   ~iopipestream () { delete std::ios::rdbuf (); }
-    
+
   pid_t        pid () const { return cpid; } // returns cpid
 #ifndef WIN32
   static pid_t fork(); // sets cpid of all iopipestream* in the head

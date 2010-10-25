@@ -28,7 +28,7 @@ int main (int ac, char** av)
 {
 #ifndef WIN32
   Fork A (1, 1);
-  
+
   print ("A", A.process_id ());
   if (A.is_child ()) {
     sleep (120);
@@ -38,4 +38,4 @@ int main (int ac, char** av)
 #endif //will need win32 tests
   return 0;
 }
-    
+

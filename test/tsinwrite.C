@@ -26,7 +26,7 @@ int main(int ac, char** av)
 	     << "format-string data...\n";
 	return 1;
     }
-    
+
     iosockinet	sio (sockbuf::sock_stream);
     try {
 #ifndef WIN32
@@ -41,21 +41,21 @@ int main(int ac, char** av)
 	    return 1;
     }
     //  sio->shutdown(sockbuf::shut_read);
-    
+
     // 	cout << "local port = " << sio->localport() << endl
     // 	     << " peer port = " << sio->peerport() << endl
     // 	     << "local host = " << sio->localhost() << endl
     // 	     << " peer host = " << sio->peerhost() << endl;
-    
+
     av += 3;
     while (*av) sio << *av++ << ' '; // space is neccessary
     sio << endl; // endl to flush output
-    
+
     char buf[256];
     while (sio >> buf) cout << buf << ' ';
     cout << endl;
-    
-    
+
+
     // 	sio << "%f%d%c " // space is necessary
     // 	    << 236.9 << ' '
     // 	    << 56 << ' '

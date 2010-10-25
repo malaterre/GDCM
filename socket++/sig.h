@@ -1,6 +1,6 @@
 // socket++ library. sig.h
 // Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
-// 
+//
 // Permission is granted to use at your own risk and distribute this software
 // in source and  binary forms provided  the above copyright notice and  this
 // paragraph are  preserved on all copies.  This software is provided "as is"
@@ -50,7 +50,7 @@
 // instantiate the signal handler object,
 // and if the user wants to remove the signal
 // handler, all that needs to done is to
-// delete the object and its dtor will remove 
+// delete the object and its dtor will remove
 // itself from the signal handler list.
 
 // Note: you cannot mix sig with other means
@@ -67,7 +67,7 @@ public:
   class hnd {
     int signo;
   public:
-    hnd (int signo); 
+    hnd (int signo);
     virtual ~hnd ();
     virtual void operator () (int s) = 0;
   };
@@ -103,7 +103,7 @@ public:
   // Note: the process will see signo_b once signo_a handler
   // is finished
   void mask (int signo_a, int signo_b) const;
-  
+
   // unmask signal signo. Enable signo to be seen by
   // our process.
   void unmask (int signo) const;

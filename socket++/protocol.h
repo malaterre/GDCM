@@ -27,7 +27,7 @@ public:
 
     void bind (sockAddr& sa) { sockbuf::bind (sa); }
     void connect (sockAddr& sa) { sockbuf::connect (sa); }
-   
+
   public:
     protocolbuf (sockinetbuf& si): sockinetbuf (si), pn (protocol::nil) {}
     protocolbuf (p_name pname)

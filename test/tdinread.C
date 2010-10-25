@@ -16,13 +16,13 @@ int main(int ac, char** av)
 {
   isockinet isin (sockbuf::sock_dgram);
   isin->bind (2000);
-    
+
   cout << "localhost = " << isin->localhost() << endl
        << "localport = " << isin->localport() << endl;
-    
+
   char buf[256];
   int  n;
-    
+
   isin >> n;
   cout << av[0] << ": ";
   while(n--) {
@@ -33,5 +33,3 @@ int main(int ac, char** av)
 
   return 0;
 }
-
-

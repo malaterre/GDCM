@@ -1,4 +1,4 @@
-// ftp.h 
+// ftp.h
 // Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
 //
 // Permission is granted to use at your own risk and distribute this software
@@ -34,7 +34,7 @@ using namespace std;
    extern "C" {
 #    include <netdb.h>
    }
-#else 
+#else
 #ifndef WIN32
 #  include <netdb.h>
 #endif
@@ -74,12 +74,12 @@ ftp::replycodea ftp::ftpbuf::ftpdata (int portno, istream* i, ostream* o,
 
   sb.bind_until_success (portno);
   useraddr (sb.localaddr ());
-  
+
   sb.listen (1);
 
   if (send_cmd (cmd, arg) >= ftp::rca_error)
     return ftp::rca_error;
-  
+
   if (o) {
     sockbuf c = sb.accept ();
 
@@ -90,7 +90,7 @@ ftp::replycodea ftp::ftpbuf::ftpdata (int portno, istream* i, ostream* o,
     while ((rdsz = c.sgetn (buf, 1024)) != EOF)
       o->write (buf, rdsz);
   } else if (i) {
-    sockbuf c = sb.accept (); 
+    sockbuf c = sb.accept ();
 
     // read data from i and send it to c
     char buf [1024];
@@ -108,7 +108,7 @@ ftp::replycodea ftp::ftpbuf::ftpdata (int portno, istream* i, ostream* o,
   //       here.
 
   return get_response ();
-} 
+}
 
 ftp::replycodea ftp::ftpbuf::get_response ()
      // get all the response that one can get and send all of them to o
@@ -142,7 +142,7 @@ ftp::replycodea ftp::ftpbuf::get_response ()
       firstline = 0;
     } else if (strncmp (q, replycode, 4) == 0)
       break;
-  }  
+  }
 
   return (replycodea) replycode [0];
 }
@@ -157,7 +157,7 @@ ftp::replycodea ftp::ftpbuf::send_cmd (const char* cmd,
   }
   xsputn ("\r\n", 2);
   sync ();
-  
+
   return get_response ();
 }
 
@@ -222,12 +222,12 @@ ftp::replycodea ftp::ftpbuf::server_port (int portno)
   int hi_portno = portno >> 8;
   int lo_portno = portno & 0xff;
   char port [80];
-  
+
   sprintf (port, "%d,%d", hi_portno, lo_portno);
-  
+
   return send_cmd ("PASV", port);
 }
-  
+
 ftp::replycodea ftp::ftpbuf::rep_type (ftp::reptype rt)
 {
   return send_cmd ("TYPE", ::reptype [int(rt)]);
@@ -283,7 +283,7 @@ ftp::replycodea ftp::ftpbuf::putfile (const char* lpath)
   ifstream f(lpath);
   return ftpdata (10000, &f, 0, "STOU", lpath);
 }
-  
+
 ftp::replycodea ftp::ftpbuf::append  (const char* lpath, const char* rpath)
 {
   if (lpath == 0)
@@ -335,4 +335,3 @@ ftp::replycodea ftp::ftpbuf::mkdir  (const char* rpath)
 {
   return send_cmd ("MKD", rpath);
 }
-

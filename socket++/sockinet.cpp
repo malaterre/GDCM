@@ -11,7 +11,7 @@
 // Version: 12Jan97 1.11
 // 2002-07-25 Version 1.2 (C) Herbert Straub
 //     Adding improved Error Handling in sockerr class
-//     sockinetaddr::setport if the first character of the port parameter is a 
+//     sockinetaddr::setport if the first character of the port parameter is a
 //         digit, then the parameter is interpreted as a number
 // 2002-07-28 Version 1.2 (C) Herbert Straub
 //  Eliminating sorry_about_global_temp inititialisation. This don't work
@@ -52,10 +52,10 @@
 #define socklen_t int
 #endif
 
-// need add throw() under Linux when compile with aggressive warning 
+// need add throw() under Linux when compile with aggressive warning
 // void herror(const char*) throw();
 
-sockinetaddr::sockinetaddr () 
+sockinetaddr::sockinetaddr ()
 {
   sin_family      = sockinetbuf::af_inet;
   sin_addr.s_addr = htonl(INADDR_ANY);
@@ -96,7 +96,7 @@ sockinetaddr::sockinetaddr (const sockinetaddr& sina)
   sin_family      = sockinetbuf::af_inet;
   sin_addr.s_addr = sina.sin_addr.s_addr;
   sin_port          = sina.sin_port;
-}   
+}
 
 void sockinetaddr::setport(const char* sn, const char* pn)
 {
@@ -130,9 +130,9 @@ const char* sockinetaddr::gethostname () const
   if (sin_addr.s_addr == htonl(INADDR_ANY)) {
     static char hostname[64];
     if (::gethostname(hostname, 63) == -1) return "";
-    return hostname;        
+    return hostname;
   }
-  
+
   hostent* hp = gethostbyaddr((const char*) &sin_addr,
                   sizeof(sin_addr),
                   family());

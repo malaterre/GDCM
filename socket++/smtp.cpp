@@ -42,10 +42,10 @@ void smtp::smtpbuf::get_response ()
 	gbump (i);
 	break;
       }
-    
+
     if (q [3] != '-')
       break;
-  }  
+  }
 }
 
 void smtp::smtpbuf::send_cmd (const char* cmd, const char* s, const char* p)
@@ -57,14 +57,14 @@ void smtp::smtpbuf::send_cmd (const char* cmd, const char* s, const char* p)
     xsputn (p, ::strlen (p));
   xsputn ("\r\n", 2);
   sync ();
-  
+
   if (o)
     get_response ();
 }
 
 void smtp::smtpbuf::helo ()
 {
-  if (o) 
+  if (o)
     get_response ();
   send_cmd ("HELO ", localhost ());
 }
@@ -156,7 +156,7 @@ int smtp::get_response (char* buf, int len)
   this->getline (buf, len);
   return buf [3] == '-';
 }
-  
+
 ostream& operator << (ostream& o, smtp& s)
 {
   char buf [1024];
@@ -172,4 +172,3 @@ ostream& operator << (ostream& o, smtp& s)
 void smtp::smtpbuf::serve_clients (int portno)
 {
 }
-

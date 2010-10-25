@@ -31,7 +31,7 @@ int main (int ac, char** av)
   Fork::suicide_signal (SIGTERM);
 
   Fork a(0, 1);
-  
+
   print ("a", a.process_id ());
 
   if (a.is_child ()) {
@@ -59,4 +59,4 @@ int main (int ac, char** av)
 #endif //will need win32 tests
   return 0;
 }
-      
+

@@ -18,7 +18,7 @@
 #  include <netinet/in.h>
 #endif // !WIN32
 
-class sockinetaddr: public sockAddr, public sockaddr_in 
+class sockinetaddr: public sockAddr, public sockaddr_in
 {
     protected:
         void setport (const char* sn, const char* pn="tcp");
@@ -35,7 +35,7 @@ class sockinetaddr: public sockAddr, public sockaddr_in
         sockinetaddr (const char* host_name,
                       const char* service_name,
                       const char* protocol_name="tcp");
-        sockinetaddr (const sockinetaddr& sina);    
+        sockinetaddr (const sockinetaddr& sina);
 
         operator void* () const { return addr_in (); }
 
@@ -48,21 +48,21 @@ class sockinetaddr: public sockAddr, public sockaddr_in
         const char*         gethostname() const;
 };
 
-class MY_API sockinetbuf: public sockbuf 
+class MY_API sockinetbuf: public sockbuf
 {
     public:
         enum domain { af_inet = AF_INET };
-    
+
         sockinetbuf (const sockbuf::sockdesc& sd);
         sockinetbuf (const sockinetbuf& si): sockbuf (si) {}
         sockinetbuf (sockbuf::type ty, int proto=0);
         //sockinetbuf& operator=(const sockinetbuf& si);
-        ~sockinetbuf () {}  
+        ~sockinetbuf () {}
 
         sockinetaddr        localaddr() const;
         int                 localport() const;
         const char*         localhost() const;
-    
+
         sockinetaddr        peeraddr() const;
         int                 peerport() const;
         const char*         peerhost() const;
@@ -107,7 +107,7 @@ class MY_API isockinet: public isockstream
         isockinet (const sockbuf::sockdesc& sd);
         isockinet (const sockinetbuf& sb);
         isockinet (sockbuf::type ty=sockbuf::sock_stream, int proto=0);
-        ~isockinet ();      
+        ~isockinet ();
 
         sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
         sockinetbuf* operator -> () { return rdbuf (); }
@@ -119,7 +119,7 @@ class osockinet: public osockstream
         osockinet (const sockbuf::sockdesc& sd);
         osockinet (const sockinetbuf& sb);
         osockinet (sockbuf::type ty=sockbuf::sock_stream, int proto=0);
-        ~osockinet ();      
+        ~osockinet ();
 
         sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
 };
@@ -130,7 +130,7 @@ class MY_API iosockinet: public iosockstream
         iosockinet (const sockbuf::sockdesc& sd);
         iosockinet (const sockinetbuf& sb);
         iosockinet (sockbuf::type ty=sockbuf::sock_stream, int proto=0);
-        ~iosockinet ();     
+        ~iosockinet ();
 
         sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
 };

@@ -27,7 +27,7 @@ int main(int ac, char** av)
 		return 1;
 	    }
 	    // use local whois server
-	    sio->connect ("128.143.2.20", "whois", "tcp"); 
+	    sio->connect ("128.143.2.20", "whois", "tcp");
 	    sio << av[2] << "\r\n" << flush;
 	} else {
 	    sio->connect ("nic.ddn.mil", "whois", "tcp");
