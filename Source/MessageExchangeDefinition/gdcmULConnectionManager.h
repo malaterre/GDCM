@@ -15,20 +15,13 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
+#ifndef ULCONNECTIONMANAGER_H
+#define ULCONNECTIONMANAGER_H
 
-The ULConnectionManager performs actions on the ULConnection given inputs from
-the user and from the state of what's going on around the connection (ie,
-timeouts of the ARTIM timer, responses from the peer across the connection, etc).
-
-Its inputs are ULEvents, and it performs ULActions.
-
-*/
 #include "gdcmULTransitionTable.h"
 #include "gdcmULConnection.h"
 #include "gdcmULConnectionInfo.h"
 #include "gdcmPresentationDataValue.h"
-#include "gdcmDataSet.h"
 
 namespace gdcm {
   class DataSet;
@@ -41,7 +34,15 @@ namespace gdcm {
       eStore
     };
 
-
+/**
+ * \brief ULConnectionManager
+ * The ULConnectionManager performs actions on the ULConnection given inputs from
+ * the user and from the state of what's going on around the connection (ie,
+ * timeouts of the ARTIM timer, responses from the peer across the connection,
+ * etc).
+ *
+ * Its inputs are ULEvents, and it performs ULActions.
+ */
     class GDCM_EXPORT ULConnectionManager {
     private:
       ULConnection* mConnection;
@@ -104,3 +105,4 @@ namespace gdcm {
     };
   }
 }
+#endif //ULCONNECTIONMANAGER_H
