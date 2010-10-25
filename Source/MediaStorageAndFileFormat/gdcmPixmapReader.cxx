@@ -26,6 +26,7 @@
 #include "gdcmIconImage.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmImageHelper.h"
 
 namespace gdcm
 {
@@ -51,16 +52,6 @@ Pixmap& PixmapReader::GetPixmap()
 //  PixelData = img;
 //}
 
-const ByteValue* PixmapReader::GetPointerFromElement(Tag const &tag) const
-{
-  const DataSet &ds = F->GetDataSet();
-  if( ds.FindDataElement( tag ) )
-    {
-    const DataElement &de = ds.GetDataElement( tag );
-    return de.GetByteValue();
-    }
-  return 0;
-}
 
 bool PixmapReader::Read()
 {
@@ -123,7 +114,7 @@ bool PixmapReader::Read()
       if( ds.FindDataElement( tsopclassuid) && !ds.GetDataElement( tsopclassuid).IsEmpty() )
         {
         const ByteValue *sopclassuid
-          = GetPointerFromElement( tsopclassuid );
+          = ImageHelper::GetPointerFromElement( tsopclassuid, *F );
         std::string sopclassuid_str(
           sopclassuid->GetPointer(),
           sopclassuid->GetLength() );
@@ -877,7 +868,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation
-    = GetPointerFromElement( tphotometricinterpretation );
+    = ImageHelper::GetPointerFromElement( tphotometricinterpretation, *F );
   PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
   if( photometricinterpretation )
     {

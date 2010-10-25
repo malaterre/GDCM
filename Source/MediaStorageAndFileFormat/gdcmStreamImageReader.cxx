@@ -55,7 +55,7 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
 /// The return amount is in bytes.
 uint32_t StreamImageReader::DefineProperBufferLength() const{
   
-  PixelFormat pixelInfo = ImageHelper::GetImagePixelInformation(*F);
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(*F);
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   return (mYMax - mYMin)*(mXMax - mXMin)*bytesPerPixel;
@@ -93,7 +93,7 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   //should that come from the header?
   //most likely  that's a tag in the header
   std::vector<double> extent = ImageHelper::GetPixelExtent(*F);
-  PixelFormat pixelInfo = ImageHelper::GetImagePixelInformation(*F);
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(*F);
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
@@ -153,6 +153,10 @@ bool StreamImageReader::ReadImageInformation(){
     gdcmErrorMacro("Filename was not initialized for gdcm stream image reader.");
     return false;
   }
+  //make a reader object in readimageinformation
+  //call read up to tag
+  //then create data structures from that dataset that's been read-up-to
+
   try
   {
     //ok, need to read up until I know what kind of endianness i'm dealing with?
