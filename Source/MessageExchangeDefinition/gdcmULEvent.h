@@ -66,7 +66,7 @@ namespace gdcm {
       std::vector<BasePDU*> GetPDUs() const { return mBasePDU; }
 
       void SetEvent(const EEventID& inEvent) { mEvent = inEvent; }
-      void SetPDU(std::vector<BasePDU*> inPDU) { 
+      void SetPDU(std::vector<BasePDU*> inPDU) {
         DeletePDUVector();
         mBasePDU = inPDU;
       }

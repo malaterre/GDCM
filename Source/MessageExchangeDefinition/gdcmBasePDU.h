@@ -24,7 +24,7 @@ all PDUs start with the first ten bytes as specified:
  3-6 PDU Length (unsigned)
  7-10 variable
 
- on some, 7-10 are split (7-8 as protocol version in Associate-RQ, for instance, 
+ on some, 7-10 are split (7-8 as protocol version in Associate-RQ, for instance,
  while associate-rj splits those four bytes differently).
 
  Also common to all the PDUs is their ability to read and write to a stream.
@@ -53,7 +53,7 @@ namespace gdcm {
 
       virtual std::istream &Read(std::istream &is) = 0;
       virtual const std::ostream &Write(std::ostream &os) const = 0;
-      
+
       virtual size_t Size() const = 0;
       virtual void Print(std::ostream &os) const = 0;
 

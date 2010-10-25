@@ -42,7 +42,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
   CommandDataSet ds;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( 
+  const char *uid = gdcm::UIDs::GetUIDString(
     gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
 
   std::string suid = uid;

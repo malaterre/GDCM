@@ -32,7 +32,7 @@ using namespace gdcm::network;
 ULConnectionManager::ULConnectionManager(){
   mConnection = NULL;
 }
-      
+
 ULConnectionManager::~ULConnectionManager(){
   if (mConnection != NULL){
     delete mConnection;
@@ -40,9 +40,9 @@ ULConnectionManager::~ULConnectionManager(){
   }
 }
 
-bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  const std::string& inConnectAETitle, 
-                                              const std::string& inComputerName, const long& inIPAddress, 
-                                              const unsigned short& inConnectPort, const double& inTimeout, 
+bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  const std::string& inConnectAETitle,
+                                              const std::string& inComputerName, const long& inIPAddress,
+                                              const unsigned short& inConnectPort, const double& inTimeout,
                                               const EConnectionType& inConnectionType, const gdcm::DataSet& inDS)
 {
   //generate a ULConnectionInfo object
@@ -50,7 +50,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   ULConnectionInfo connectInfo;
   if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
   if (inAETitle.size() > 16) return false; //as above
-  if (!connectInfo.Initialize(userInfo, inConnectAETitle.c_str(), 
+  if (!connectInfo.Initialize(userInfo, inConnectAETitle.c_str(),
     inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName)){
     return false;
   }
@@ -75,7 +75,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   // when doing only C-ECHO.
   // FIXME is there a way to know here if we are in C-ECHO ?
   //there is now!
-  //the presentation context will now be part of the connection, so that this 
+  //the presentation context will now be part of the connection, so that this
   //initialization for the association-rq will use parameters from the connection
 
   gdcm::network::AbstractSyntax as;
@@ -121,7 +121,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 //      break;
     case eMove:
         // should we also send stuff from FIND ?
-        // E: Move PresCtx but no Find (accepting for now) 
+        // E: Move PresCtx but no Find (accepting for now)
         pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelFIND );
         as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
         pc.SetAbstractSyntax( as );
@@ -174,7 +174,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   std::vector<gdcm::DataSet> empty;
   EStateID theState = RunEventLoop(theEvent, empty);
   //theEvent should contain the PDU for the echo!
-  
+
   if (theState == eSta6TransferReady){//ie, finished the transitions
     return PDUFactory::GetPDVs(theEvent.GetPDUs());
   } else {
@@ -234,7 +234,7 @@ void ULConnectionManager::BreakConnectionNow(){
 //event handler loop.
 //will just keep running until the current event is nonexistent.
 //at which point, it will return the current state of the connection
-//to do this, execute an event, and then see if there's a response on the 
+//to do this, execute an event, and then see if there's a response on the
 //incoming connection (with a reasonable amount of timeout).
 //if no response, assume that the connection is broken.
 //if there's a response, then yay.
@@ -255,8 +255,8 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
     theState = mConnection->GetState();
     std::istream &is = *mConnection->GetProtocol();
     std::ostream &os = *mConnection->GetProtocol();
-    
-    
+
+
 
     //read the connection, as that's an event as well.
     //waiting for an object to come back across the connection, so that it can get handled.
@@ -295,7 +295,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           currentEvent.SetEvent(eARTIMTimerExpired);
         }
         if (theState == eSta6TransferReady){//ie, finished the transitions
-          //with find, the results now come down the wire. 
+          //with find, the results now come down the wire.
           //the pdu we already have from the event will tell us how many to expect.
           uint32_t pendingDE1, pendingDE2, success, theVal;
           pendingDE1 = 0xff01;
@@ -310,7 +310,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
             theVal = at.GetValues()[0];
             //if theVal is Pending or Success, then we need to enter the loop below,
             //because we need the data PDUs.
-            //so, the loop below is a do/while loop; there should be at least a second packet 
+            //so, the loop below is a do/while loop; there should be at least a second packet
             //with the dataset, even if the status is 'success'
             //success == 0000H
           }
@@ -361,8 +361,8 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
               }
               //!!!need to handle incoming PDUs that are not data, ie, an abort
             } while(/*!is.eof() &&*/ !thePDU->IsLastFragment());
-            if (!interrupted){//ie, if the remote server didn't hang up 
-              DataSet theCompleteFindResponse = 
+            if (!interrupted){//ie, if the remote server didn't hang up
+              DataSet theCompleteFindResponse =
                 PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
               //note that it's the responsibility of the event to delete the PDU in theFindRSP
               for (int i = 0; i < theData.size(); i++){
@@ -381,10 +381,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
       currentEvent.SetEvent(raisedEvent);//actions that cause transitions in the state table
       //locally just raise local events that will therefore cause the trigger to be pulled.
     }
-  } while (currentEvent.GetEvent() != eEventDoesNotExist && 
+  } while (currentEvent.GetEvent() != eEventDoesNotExist &&
     theState != eStaDoesNotExist && theState != eSta13AwaitingClose && theState != eSta1Idle &&
     (theState != eSta6TransferReady || (theState == eSta6TransferReady && receivingData )));
-  //stop when the AE is done, or when ready to transfer data (ie, the next PDU should be sent in), 
+  //stop when the AE is done, or when ready to transfer data (ie, the next PDU should be sent in),
   //or when the connection is idle after a disconnection.
   //or, if in state 6 and receiving data, until all data is received.
 

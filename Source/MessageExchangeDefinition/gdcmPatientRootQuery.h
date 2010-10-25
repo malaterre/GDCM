@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/* 
+/*
 file name: gdcmPatientRootQuery.h
 contains: the class which will produce a dataset for c-find and c-move with patient root
 name and date: 18 oct 2010 mmr
@@ -30,9 +30,9 @@ name and date: 18 oct 2010 mmr
 namespace gdcm{
   namespace network {
     class GDCM_EXPORT PatientRootQuery : public BaseRootQuery {
-    private: 
+    private:
       void SetParameters();
-    public: 
+    public:
       PatientRootQuery();
       ~PatientRootQuery();
     };

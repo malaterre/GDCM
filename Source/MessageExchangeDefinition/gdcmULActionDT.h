@@ -35,7 +35,7 @@ namespace gdcm {
       EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
-    
+
     //Send P-DATA indication primitive
     //Next state: eSta6TransferReady
     class ULActionDT2 : public ULAction {

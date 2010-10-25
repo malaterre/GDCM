@@ -43,7 +43,7 @@ public:
   /// \internal Compute Size
   size_t Size() const;
 
-  /// Set DataSet. Write DataSet in implicit. 
+  /// Set DataSet. Write DataSet in implicit.
   /// \warning size of dataset should be below maxpdusize
   void SetDataSet(const DataSet & ds);
   void SetBlob(const std::string & partialblob);
@@ -62,7 +62,7 @@ public:
   void SetMessageHeader(uint8_t messageheader) {
     MessageHeader = messageheader;
   }
-  //flip the least significant bit of the message header to 1 
+  //flip the least significant bit of the message header to 1
   //if this is a command, else set it to 0.
   void SetCommand(const bool& inCommand);
   void SetLastFragment(const bool& inLast);//set to true if this is the last PDV of a set

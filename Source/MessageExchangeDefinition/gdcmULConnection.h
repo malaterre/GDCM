@@ -32,7 +32,7 @@ namespace gdcm{
 
 /**
  * \brief ULConnection
-This is the class that contains the socket to another machine, and passes data through itself, 
+This is the class that contains the socket to another machine, and passes data through itself,
 as well as maintaining a sense of state.
 
 The ULConnectionManager tells the ULConnection what data can actually be sent.
@@ -41,7 +41,7 @@ This class is done this way so that it can be eventually be replaced with a ULSe
 if such a protocol is warranted, so that all data that passes through can be managed through a
 secure connection.  For now, this class provides a simple pass-through mechanism to the socket itself.
 
-So, for instance, a gdcm object will be passes to this object, and it will then get passed 
+So, for instance, a gdcm object will be passes to this object, and it will then get passed
 along the connection, if that connection is in the proper state to do so.
 
 For right now, this class is not directly intended to be inherited from, but the potential
@@ -60,12 +60,12 @@ class ULConnection
       ULConnection(gdcm::network::ULConnection& inConnection){}; //no copy construction allowed
 
       EStateID mCurrentState;
-  
+
       std::vector<PresentationContext> mPresentationContexts;
       uint32_t mMaxPDUSize;
 
     public:
-  
+
       ULConnection(const ULConnectionInfo& inUserInformation);
       //destructors are virtual to prevent memory leaks by inherited classes
       virtual ~ULConnection();
@@ -89,7 +89,7 @@ class ULConnection
 
       std::vector<PresentationContext> GetPresentationContexts() const;
       void SetPresentationContexts(const std::vector<PresentationContext>& inContexts);
-      //given a particular data element, presumably the SOP class, 
+      //given a particular data element, presumably the SOP class,
       //find the presentation context for that SOP
       //NOT YET IMPLEMENTED
       PresentationContext FindContext(const DataElement& de) const;

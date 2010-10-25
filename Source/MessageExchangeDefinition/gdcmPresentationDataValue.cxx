@@ -44,7 +44,7 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   SwapperDoOp::SwapArray(&itemlength,1);
   ItemLength = itemlength;
   is.read( (char*)&PresentationContextID, sizeof(PresentationContextID) );
-  
+
   uint8_t mh;
   is.read( (char*)&mh, 1 );
   MessageHeader = mh;
@@ -63,7 +63,7 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   VL debug = Blob.size();
   assert( debug == vl );
 
-  assert (ItemLength + 4 == Size() );  
+  assert (ItemLength + 4 == Size() );
   return is;
 
 }
@@ -75,7 +75,7 @@ std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os
   SwapperDoOp::SwapArray(&itemlength,1);
   ItemLength = itemlength;
   is.read( (char*)&PresentationContextID, sizeof(PresentationContextID) );
-  
+
   uint8_t mh;
   is.read( (char*)&mh, 1 );
   //assert( mh == 0 ); // bitwise stuff...
@@ -86,7 +86,7 @@ std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os
   is.read( &Blob[0], ItemLength - 2 );
   os.write( &Blob[0], ItemLength - 2 );
 
-  assert (ItemLength + 4 == Size() );  
+  assert (ItemLength + 4 == Size() );
   return is;
 }
 
@@ -106,7 +106,7 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   assert( debug == ItemLength - 2 );
 
   assert (ItemLength + 4 == Size() );
-  
+
   return os;
 }
 
@@ -170,7 +170,7 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
 void PresentationDataValue::MyInit(File const &file)
 {
   const FileMetaInformation &fmi = file.GetHeader();
-  
+
 //D: # Dicom-Data-Set
 //D: # Used TransferSyntax: Little Endian Implicit
 //D: (0000,0002) UI =SecondaryCaptureImageStorage            #  26, 1 AffectedSOPClassUID
@@ -179,7 +179,7 @@ void PresentationDataValue::MyInit(File const &file)
 //D: (0000,0700) US 2                                        #   2, 1 Priority
 //D: (0000,0800) US 1                                        #   2, 1 DataSetType
 //D: (0000,1000) UI [1.2.826.0.1.3680043.2.1125.4986931123241056575784008796031983649] #  64, 1 AffectedSOPInstanceUID
-//D: 
+//D:
 
   DS.Clear();
   DataSet &ds = DS;

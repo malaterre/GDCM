@@ -43,7 +43,7 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
   CommandDataSet ds;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( 
+  const char *uid = gdcm::UIDs::GetUIDString(
     gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
 
   std::string suid = uid;

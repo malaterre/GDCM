@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/* 
+/*
 file name: gdcmBaseRootQuery.h
 contains: a baseclass which will produce a dataset for c-find and c-move with patient/study root
 name and date: 18 oct 2010 mmr
@@ -55,7 +55,7 @@ namespace gdcm{
       QuerySeries mSeries;
       QueryImage mImage;
 
-      DataSet mDataSet; 
+      DataSet mDataSet;
     protected:
       ERootType mRootType; //set in construction, and it's something else in the study root type
       std::string mHelpDescription; //used when generating the help output
@@ -75,7 +75,7 @@ namespace gdcm{
       DataSet GetQueryDataSet() const;
 
       //the following functionality would be nice, but is not necessary at the moment.
-      //virtual void ValidateDataSet(const DataSet& inDS) const; 
+      //virtual void ValidateDataSet(const DataSet& inDS) const;
     };
   }
 }

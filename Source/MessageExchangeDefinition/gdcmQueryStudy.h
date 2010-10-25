@@ -33,7 +33,7 @@ namespace gdcm{
       std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const;
       std::vector<gdcm::Tag> GetUniqueTags(const ERootType& inRootType) const;
       std::vector<gdcm::Tag> GetOptionalTags(const ERootType& inRootType) const;
-      
+
       std::string GetName() const { return "Study"; }
     };
   }

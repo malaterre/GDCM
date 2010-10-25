@@ -27,8 +27,8 @@ The result of a ULAction is a ULEvent (ie, what happened as a result of the acti
 
 This ULEvent is passed to the ULState, so that the transition to the next state can occur.
 
-Actions are associated with Payloads-- be thos filestreams, AETitles to establish connections, 
-whatever.  The actual parameters that the user will pass via an action will come through 
+Actions are associated with Payloads-- be thos filestreams, AETitles to establish connections,
+whatever.  The actual parameters that the user will pass via an action will come through
 a Payload object, which should, in itself, be some gdcm-based object (but not all objects can
 be payloads; sending a single dataelement as a payload isn't meaningful).  As such, each action
 has its own particular payload.
@@ -43,7 +43,7 @@ name and date: 16 sept 2010 mmr
 Some actions perform changes that should raise events on the local system, and some
 actions perform changes that will require waiting for events from the remote system.
 
-Therefore, this base action has been modified so that those events are set by each action.  
+Therefore, this base action has been modified so that those events are set by each action.
 When the event loop runs an action, it will then test to see if a local event was raised by the
 action, and if so, perform the appropriate subsequent action.  If the action requires waiting
 for a response from the remote system, then the event loop will sit there (presumably with the

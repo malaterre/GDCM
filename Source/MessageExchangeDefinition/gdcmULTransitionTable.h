@@ -77,7 +77,7 @@ namespace gdcm {
     };
 
     class ULTransitionTable {
-    private: 
+    private:
       TableRow mTable[cMaxEventID];
     public:
       ULTransitionTable();
