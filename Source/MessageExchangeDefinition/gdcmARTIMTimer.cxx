@@ -20,12 +20,12 @@
 This file contains the code for the ARTIM timer.
 
 Basically, the ARTIM timer will just get the wall time when it's started,
-and then can be queried for the current time, and then can be stopped (ie, 
-the start time reset). 
+and then can be queried for the current time, and then can be stopped (ie,
+the start time reset).
 
 Because we're trying to do this without threading, we should be able to 'start' the
 ARTIM timer by this mechanism, and then when waiting for a particular response, tight
-loop that with sleep calls and determinations of when the ARTIM timer has reached its 
+loop that with sleep calls and determinations of when the ARTIM timer has reached its
 peak.  As such, this isn't a strict 'timer' in the traditional sense of the word,
 but more of a time keeper.
 
@@ -37,7 +37,7 @@ but more of a time keeper.
 using namespace gdcm::network;
 
 //initiates the start and timeout at -1;
-ARTIMTimer::ARTIMTimer(){ 
+ARTIMTimer::ARTIMTimer(){
   mStartTime = 0;
   mTimeOut = 0;
 }

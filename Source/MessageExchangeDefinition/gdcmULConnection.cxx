@@ -80,7 +80,7 @@ std::vector<PresentationContext> ULConnection::GetPresentationContexts() const{
 void ULConnection::SetPresentationContexts(const std::vector<PresentationContext>& inContexts){
   mPresentationContexts = inContexts;
 }
-//given a particular data element, presumably the SOP class, 
+//given a particular data element, presumably the SOP class,
 //find the presentation context for that SOP
 //NOT YET IMPLEMENTED
 PresentationContext ULConnection::FindContext(const gdcm::DataElement& de) const{

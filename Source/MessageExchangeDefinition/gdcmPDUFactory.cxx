@@ -123,7 +123,7 @@ BasePDU* PDUFactory::ConstructAbortPDU(){
   return theAAbortPDU;
 }
 std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(const ULConnection& inConnection){
-  
+
   std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCEchoRQ(inConnection);
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;

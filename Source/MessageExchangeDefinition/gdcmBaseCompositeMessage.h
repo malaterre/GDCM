@@ -18,7 +18,7 @@
 /*
 The Composite events described in section 3.7-2009 of the DICOM standard all use their own messages.
 These messages are constructed using Presentation Data Values, from section 3.8-2009 of the standard,
-and then fill in appropriate values in their datasets.  
+and then fill in appropriate values in their datasets.
 
 So, for the five composites:
 cecho

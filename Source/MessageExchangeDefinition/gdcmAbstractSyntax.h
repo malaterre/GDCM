@@ -42,7 +42,7 @@ public:
   void SetName( const char *name ) { UpdateName( name ); }
   const char *GetName() const { return Name.c_str(); }
 
-  // accept a gdcm::UIDs::TSType also... 
+  // accept a gdcm::UIDs::TSType also...
   void SetNameFromUID( gdcm::UIDs::TSName tsname );
   //now that the PresentationContext messes around with UIDs and returns a string
   //use that string as well.

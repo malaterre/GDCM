@@ -32,7 +32,7 @@ each class have its own file for the sake of brevity of the number of files.
 using namespace gdcm::network;
 
 //Send A-RELEASE-RQ-PDU
-EStateID ULActionAR1::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR1::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   AReleaseRQPDU thePDU;//for now, use Matheiu's default values
@@ -46,7 +46,7 @@ EStateID ULActionAR1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue A-RELEASE indication primitive
-EStateID ULActionAR2::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR2::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
@@ -55,7 +55,7 @@ EStateID ULActionAR2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue A-RELEASE confirmation primitive, and close transport connection
-EStateID ULActionAR3::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR3::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
@@ -66,7 +66,7 @@ EStateID ULActionAR3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue A-RELEASE-RP PDU and start ARTIM timer
-EStateID ULActionAR4::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR4::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   AReleaseRPPDU thePDU;//for now, use Matheiu's default values
@@ -80,7 +80,7 @@ EStateID ULActionAR4::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Stop ARTIM timer
-EStateID ULActionAR5::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR5::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   inConnection.GetTimer().Stop();
@@ -88,7 +88,7 @@ EStateID ULActionAR5::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue P-DATA indication
-EStateID ULActionAR6::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR6::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = true;
@@ -97,7 +97,7 @@ EStateID ULActionAR6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue P-DATA-TF PDU
-EStateID ULActionAR7::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR7::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   PDataTFPDU thePDU;//for now, use Matheiu's default values
@@ -109,14 +109,14 @@ EStateID ULActionAR7::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Issue A-RELEASE indication (release collision):
 //- If association-requestor, next state is eSta9ReleaseCollisionRqLocal
 //- if not, next state is eSta10ReleaseCollisionAc
-EStateID ULActionAR8::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR8::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   return eSta10ReleaseCollisionAc;
 }
 
 //Send A-RELEASE-RP PDU
-EStateID ULActionAR9::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR9::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   AReleaseRPPDU thePDU;//for now, use Matheiu's default values
@@ -128,7 +128,7 @@ EStateID ULActionAR9::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue A-RELEASE confirmation primitive
-EStateID ULActionAR10::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionAR10::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
@@ -136,4 +136,4 @@ EStateID ULActionAR10::PerformAction(ULEvent& inEvent, ULConnection& inConnectio
 
   return eSta12ReleaseCollisionAcLocal;
 }
-    
+

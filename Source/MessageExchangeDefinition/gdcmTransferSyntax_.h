@@ -46,7 +46,7 @@ public:
   void SetName( const char *name );
   const char *GetName() const { return Name.c_str(); }
 
-  // accept a gdcm::UIDs::TSType also... 
+  // accept a gdcm::UIDs::TSType also...
   void SetNameFromUID( gdcm::UIDs::TSName tsname );
 
   std::istream &Read(std::istream &is);

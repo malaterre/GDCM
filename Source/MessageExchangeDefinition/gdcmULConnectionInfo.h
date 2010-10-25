@@ -35,7 +35,7 @@ namespace gdcm{
   namespace network {
     class ULConnectionInfo {
       UserInformation mUserInformation;
-      
+
       char mCalledAETitle[16];
       char mCallingAETitle[16];
 
@@ -44,7 +44,7 @@ namespace gdcm{
       std::string mCalledComputerName; //either the IP or the name has to be filled in
     public:
       ULConnectionInfo();
-      
+
       //it is possible to misinitialize this object, so
       //have it return false if something breaks (ie, given AEs are bigger than 16 characters,
       //no name or IP address).
@@ -60,7 +60,7 @@ namespace gdcm{
       unsigned long GetCalledIPAddress() const;
       int GetCalledIPPort() const;
       std::string GetCalledComputerName() const;
-      
+
     };
   }
 }

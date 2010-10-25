@@ -64,7 +64,7 @@ public:
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;
-  uint32_t PDULength; // len of 
+  uint32_t PDULength; // len of
   static const uint16_t ProtocolVersion;
   static const uint16_t Reserved9_10;
   static const uint8_t Reserved11_26[16];

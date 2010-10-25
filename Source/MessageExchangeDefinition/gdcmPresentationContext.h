@@ -141,9 +141,9 @@ public:
   //if the operation is something other than an echo, that should be interpreted
   //as a failure; echos themselves take a null dataset.
   //it is assumed that Find will do the Right Thing, or that the find class is unimportant.
-  //however, this function could be extended in the future to validate that a given 
+  //however, this function could be extended in the future to validate that a given
   //dataset conforms to the expectations of a particular FIND SOP abstract syntax, if necessary.
-  //current tests (7 oct 2010) show that for our test queries, find SOP didn't 
+  //current tests (7 oct 2010) show that for our test queries, find SOP didn't
   //change the outcome of the search.
   //if it's not a verification context ID, then you can also get the UID associated with the data set.
   static EPresentationContextID AssignPresentationContextID(const DataSet& inDS, std::string& outUIDString);

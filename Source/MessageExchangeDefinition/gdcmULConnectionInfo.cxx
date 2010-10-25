@@ -25,7 +25,7 @@
 // IP Port
 //A connection must be established with this information, that's subsequently
 //placed into various primitives for actual communication.
-#include "gdcmULConnectionInfo.h" 
+#include "gdcmULConnectionInfo.h"
 #include <socket++/sockinet.h>//for setting up the local socket
 
 using namespace gdcm::network;
@@ -34,7 +34,7 @@ ULConnectionInfo::ULConnectionInfo(){
   memset(mCallingAETitle, 0, 16);
   memset(mCalledAETitle, 0, 16);
 }
-      
+
       //it is possible to misinitialize this object, so
       //have it return false if something breaks (ie, given AEs are bigger than 16 characters,
       //no name or IP address).

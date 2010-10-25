@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/* 
+/*
 file name: gdcmBaseRootQuery.cpp
 contains: a baseclass which will produce a dataset for c-find and c-move with patient root
 name and date: 18 oct 2010 mmr
@@ -119,7 +119,7 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os){
   std::vector<gdcm::Tag> theTags;
   std::vector<gdcm::Tag>::iterator ttor;
 
-  
+
   static const gdcm::Global &g = gdcm::Global::GetInstance();
   static const gdcm::Dicts &dicts = g.GetDicts();
   static const gdcm::Dict &pubdict = dicts.GetPublicDict();
@@ -135,7 +135,7 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os){
     os << std::endl;
   }
 
-  
+
   os << std::endl;
   os << "The following tags are unique at each level of a " << mHelpDescription << ": " << std::endl;
   for (qtor = theQueries.begin(); qtor < theQueries.end(); qtor++){
@@ -148,7 +148,7 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os){
     os << std::endl;
   }
 
-  
+
   os << std::endl;
   os << "The following tags are optional at each level of a " << mHelpDescription << ": "  << std::endl;
   for (qtor = theQueries.begin(); qtor < theQueries.end(); qtor++){

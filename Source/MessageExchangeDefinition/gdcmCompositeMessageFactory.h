@@ -34,7 +34,7 @@ namespace gdcm {
     class CompositeMessageFactory {
     public:
       //the echo request only needs a properly constructed PDV.
-      //find, move, etc, may need something more robust, but since those are 
+      //find, move, etc, may need something more robust, but since those are
       //easily placed into the appropriate pdatapdu in the pdufactory,
       //this approach without a base class (but done internally) is useful.
       static std::vector<PresentationDataValue> ConstructCEchoRQ(const ULConnection& inConnection);

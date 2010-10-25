@@ -159,7 +159,7 @@ static void process_input(iosockinet& sio)
 }
 
 //Send P-DATA-TF PDU
-EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent)
 {
   std::vector<BasePDU*> theDataPDUs = inEvent.GetPDUs();
@@ -208,7 +208,7 @@ EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
 //Send P-DATA indication primitive
 //for now, does nothing, stops the event loop
-EStateID ULActionDT2::PerformAction(ULEvent& inEvent, ULConnection& inConnection, 
+EStateID ULActionDT2::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;

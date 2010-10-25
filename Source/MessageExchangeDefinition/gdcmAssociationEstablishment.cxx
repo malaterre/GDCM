@@ -84,7 +84,7 @@ std::iostream &AssociationEstablishment::Run(std::iostream &ios)
       gdcm::network::AAssociateRJPDU rjpdu;
       rjpdu.Read( ios );
       rjpdu.Print( std::cout );
-      return ios; // idle 
+      return ios; // idle
       }
     break;
   default:
