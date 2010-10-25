@@ -165,6 +165,10 @@
 #include "gdcmFileDerivation.h"
 
 using namespace gdcm;
+
+#include "gdcmULConnectionManager.h"
+
+using namespace gdcm::network;
 %}
 
 //%insert("runtime") %{
@@ -691,3 +695,6 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
 %include "gdcmFileDerivation.h"
+
+// MEXD:
+%include "gdcmULConnectionManager.h"
