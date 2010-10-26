@@ -36,14 +36,15 @@ namespace gdcm {
 
 /**
  * \brief ULConnectionManager
- * The ULConnectionManager performs actions on the ULConnection given inputs from
- * the user and from the state of what's going on around the connection (ie,
- * timeouts of the ARTIM timer, responses from the peer across the connection,
- * etc).
+ * The ULConnectionManager performs actions on the ULConnection given inputs
+ * from the user and from the state of what's going on around the connection
+ * (ie, timeouts of the ARTIM timer, responses from the peer across the
+ * connection, etc).
  *
  * Its inputs are ULEvents, and it performs ULActions.
  */
-    class GDCM_EXPORT ULConnectionManager {
+class GDCM_EXPORT ULConnectionManager
+{
     private:
       ULConnection* mConnection;
       ULTransitionTable mTransitions;
@@ -60,11 +61,11 @@ namespace gdcm {
       ULConnectionManager();
       ~ULConnectionManager();
 
-      //returns true if a connection of the given AETitle (ie, 'this' program)
-      //is able to connect to the given AETitle and Port in a certain amount of time
-      //providing the connection type will establish the proper
-      //exchange syntax with a server; if a different functionality is required,
-      //a different connection should be established.
+      /// returns true if a connection of the given AETitle (ie, 'this' program)
+      /// is able to connect to the given AETitle and Port in a certain amount of
+      /// time providing the connection type will establish the proper exchange
+      /// syntax with a server; if a different functionality is required, a
+      /// different connection should be established.
       bool EstablishConnection(const std::string& inAETitle, const std::string& inConnectAETitle,
         const std::string& inComputerName, const long& inIPAddress,
         const unsigned short& inConnectPort, const double& inTimeout,
@@ -105,4 +106,5 @@ namespace gdcm {
     };
   }
 }
+
 #endif //ULCONNECTIONMANAGER_H
