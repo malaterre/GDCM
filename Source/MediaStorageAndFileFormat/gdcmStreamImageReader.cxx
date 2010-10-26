@@ -102,7 +102,7 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   //need to get the pixel size information
   //should that come from the header?
   //most likely  that's a tag in the header
-  std::vector<double> extent = ImageHelper::GetPixelExtent(mReader.GetFile());
+  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
