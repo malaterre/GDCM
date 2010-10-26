@@ -18,6 +18,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmUnpacker12Bits.h"
+#include <limits>
 
 #include <sstream>
 
@@ -77,7 +78,8 @@ bool RAWCodec::DecodeBytes(const char* inBytes, const int& inBufferLength,
     {
     assert( this->GetPixelFormat() != PixelFormat::UINT12 );
     assert( this->GetPixelFormat() != PixelFormat::INT12 );
-    memcpy_s(outBytes, inOutBufferLength, inBytes, inBufferLength);
+    assert(inBufferLength == inOutBufferLength);
+    memcpy(outBytes, inBytes, inBufferLength);
     return true;
     }
   // else
@@ -96,13 +98,15 @@ bool RAWCodec::DecodeBytes(const char* inBytes, const int& inBufferLength,
   
   if( this->GetPixelFormat() == PixelFormat::UINT12 ||
     this->GetPixelFormat() == PixelFormat::INT12 ){
-    unsigned long len = str.size() * 16 / 12;
+      assert(str.size() < std::numeric_limits<unsigned long>::max());
+    unsigned long len = (unsigned long)str.size() * 16 / 12;
     char * copy = new char[len];
     Unpacker12Bits u12;
     bool b = u12.Unpack(copy, &str[0], str.size() );
     assert( b );
     assert (len == inOutBufferLength);
-    memcpy_s(outBytes, inOutBufferLength, copy, len);
+    assert(inOutBufferLength == len);
+    memcpy(outBytes, copy, len);
 
     delete[] copy;
 
@@ -110,7 +114,7 @@ bool RAWCodec::DecodeBytes(const char* inBytes, const int& inBufferLength,
   }
   else{
     assert (check == inOutBufferLength);
-    memcpy_s(outBytes, inOutBufferLength, str.c_str(), check);
+    memcpy(outBytes, str.c_str(), check);
   }
 
 

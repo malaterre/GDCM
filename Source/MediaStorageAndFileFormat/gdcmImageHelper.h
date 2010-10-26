@@ -19,6 +19,9 @@
 #include "gdcmTag.h"
 #include <vector>
 #include "gdcmPixelFormat.h"
+#include "gdcmPhotometricInterpretation.h"
+#include "gdcmSmartPointer.h"
+#include "gdcmLookupTable.h"
 
 namespace gdcm
 {
@@ -27,6 +30,7 @@ class MediaStorage;
 class DataSet;
 class File;
 class Image;
+class ByteValue;
 /**
  * \brief ImageHelper (internal class, not intended for user level)
  *
@@ -69,7 +73,7 @@ public:
 
   /// This function returns pixel information about an image from its dataset
   /// That includes samples per pixel and bit depth (in that order)
-  static PixelFormat GetPixelFormatValue(const File& inF);
+  static PixelFormat GetPixelFormat(const File& inF);
 
   /// Set/Get shift/scale from/to a file
   /// \warning this function reads/sets the Slope/Intercept in appropriate
@@ -99,6 +103,19 @@ public:
   static bool ComputeSpacingFromImagePositionPatient(const std::vector<double> &imageposition, std::vector<double> & spacing);
 
   static bool GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector<double> & dircos);
+
+  //functions to get more information from a file
+  //useful for the stream image reader, which fills in necessary image information
+  //distinctly from the reader-style data input
+  static PhotometricInterpretation GetPhotometricInterpretation(File const& f);
+  //returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
+  static unsigned int GetPlanarConfiguration(File const& f);
+
+  //returns the lookup table of an image file
+  static SmartPointer<LookupTable> GetLUT(File const& f);
+
+  ///Moved from PixampReader to here.  Generally used for photometric interpretation.
+  static const ByteValue* GetPointerFromElement(Tag const &tag, File const& f);
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);

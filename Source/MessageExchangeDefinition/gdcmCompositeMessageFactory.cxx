@@ -30,6 +30,7 @@ name and date: 4 oct 2010 mmr
 #include "gdcmCStoreMessages.h"
 #include "gdcmCFindMessages.h"
 #include "gdcmCMoveMessages.h"
+#include "gdcmBaseRootQuery.h"
 
 namespace gdcm {
 namespace network {
@@ -42,13 +43,13 @@ namespace network {
     CStoreRQ theStoreRQ;
     return theStoreRQ.ConstructPDV(inDataSet);
   }
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCFindRQ(const ULConnection& inConnection, DataSet *inDataSet) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery) {
     CFindRQ theFindRQ;
-    return theFindRQ.ConstructPDV(inDataSet);
+    return theFindRQ.ConstructPDV(inRootQuery);
   }
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCMoveRQ(const ULConnection& inConnection, DataSet *inDataSet) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCMoveRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery) {
     CMoveRQ theMoveRQ;
-    return theMoveRQ.ConstructPDV(inDataSet);
+    return theMoveRQ.ConstructPDV(inRootQuery);
   }
 }
 }

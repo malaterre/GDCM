@@ -46,5 +46,12 @@ std::vector<gdcm::Tag> QuerySeries::GetOptionalTags(const ERootType& inRootType)
   return theReturn;
 }
 
+DataElement QuerySeries::GetQueryLevel() const{
+  std::string theValue = "SERIES";
+  DataElement de;
+  de.SetTag(Tag(0x0008,0x0052));
+  de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
+  return de;
+}
 }
 }

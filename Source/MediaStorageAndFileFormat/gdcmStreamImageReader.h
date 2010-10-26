@@ -40,12 +40,19 @@ class MediaStorage;
  *
  * \see Image
  */
-class GDCM_EXPORT StreamImageReader : public Reader
+class GDCM_EXPORT StreamImageReader
 {
 
 public:
   StreamImageReader();
   ~StreamImageReader();
+
+
+  /// One of either SetFileName or SetStream must be called prior
+  /// to any other functions.  These initialize an internal Reader class
+  /// to be able to get non-pixel image information.
+  void SetFileName(const char* inFileName);
+  void SetStream(std::istream& inStream);
   
   /// Defines an image extent for the Read function.
   /// DICOM states that an image can have no more than 2^16 pixels per edge (as of 2009)
@@ -75,7 +82,13 @@ public:
   /// with the pixel 0x7fe0, 0x0010 tag.
   virtual bool ReadImageInformation();
 
+
 protected:
+
+  //contains a reader for being able to ReadUpToTag
+  //however, we don't want the user to be able to call Read
+  //either directly or via a parent class call, so we hide the reader in here.
+  Reader mReader;
 
   std::streamoff mFileOffset; //the fileoffset for getting header information
   DataSet mHeaderInformation; //all the non-pixel information

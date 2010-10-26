@@ -111,5 +111,12 @@ std::vector<Tag> QueryStudy::GetOptionalTags(const ERootType& inRootType) const{
   return theReturn;
 }
 
+DataElement QueryStudy::GetQueryLevel() const{
+  std::string theValue = "STUDY";
+  DataElement de;
+  de.SetTag(Tag(0x0008,0x0052));
+  de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
+  return de;
+}
 }
 }

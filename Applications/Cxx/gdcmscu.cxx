@@ -46,6 +46,9 @@
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
 #include "gdcmQueryFactory.h"
+#include "gdcmStudyRootQuery.h"
+#include "gdcmPatientRootQuery.h"
+#include "gdcmDefs.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -130,7 +133,7 @@ bool CTestAllFunctions(const char* remote, int portno, const std::string& aetitl
 
     std::vector<gdcm::DataSet> theReturn = theManager.SendStore(&ds);
     theManager.BreakConnection(-1);
-
+/*//FIXME-- must make the test useful
     //then search for it based on 0x20,xd and 0x20,xe, and maybe 0x8,0x18
     //but have to construct a proper cfind query first!
     gdcm::DataSet query;
@@ -183,7 +186,7 @@ bool CTestAllFunctions(const char* remote, int portno, const std::string& aetitl
       std::cerr << "No found dataset matches stored dataset." <<std::endl;
       return false;
     }
-    std::cout << fitor->c_str() << " passed scu testing." <<std::endl;
+    std::cout << fitor->c_str() << " passed scu testing." <<std::endl;*/
   }
   return true;
 }
@@ -230,8 +233,9 @@ std::string const &call )
 
 }
 
+//note that pointer to the base root query-- the caller must instantiated and delete
 void CMove( const char *remote, int portno, std::string const &aetitle,
-std::string const &call, gdcm::DataSet const &ds, int portscp)
+           std::string const &call, gdcm::network::BaseRootQuery* query, int portscp)
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -254,11 +258,12 @@ std::string const &call, gdcm::DataSet const &ds, int portscp)
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eMove, ds)){
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eMove, query->GetQueryDataSet())){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }
-  std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( (gdcm::DataSet*)&ds );
+
+  std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
   std::vector<gdcm::DataSet>::iterator itor;
   int c = 0;
   for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
@@ -269,8 +274,9 @@ std::string const &call, gdcm::DataSet const &ds, int portscp)
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 
+//note that pointer to the base root query-- the caller must instantiated and delete
 void CFind( const char *remote, int portno , std::string const &aetitle,
-std::string const &call , gdcm::DataSet const &ds )
+std::string const &call , gdcm::network::BaseRootQuery* query )
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -293,11 +299,11 @@ std::string const &call , gdcm::DataSet const &ds )
   // Add a query:
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eFind, ds)){
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eFind,  query->GetQueryDataSet())){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }
-  std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( (gdcm::DataSet*)&ds );
+  std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( query );
   std::vector<gdcm::DataSet>::iterator itor;
   int c = 0;
   for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
@@ -670,10 +676,10 @@ void PrintHelp()
   std::cout << "C-STORE Options:" << std::endl;
   std::cout << "  -i --input          DICOM filename" << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
-  std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
+  //std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
   std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
   std::cout << "     --study          C-FIND Study Root Model." << std::endl;
-  std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
+  //std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
   std::cout << "C-MOVE Options:" << std::endl;
   std::cout << "  -o --output         DICOM filename / directory." << std::endl;
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
@@ -1060,6 +1066,13 @@ int main(int argc, char *argv[])
     gdcm::StringFilter sf;
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it = 
       keys.begin();
+    gdcm::network::BaseRootQuery* theQuery;
+    if (findstudy > 0){
+      theQuery = new gdcm::network::StudyRootQuery();
+    }
+    else{
+      theQuery = new gdcm::network::PatientRootQuery();
+    }
     gdcm::DataSet ds;
     for(; it != keys.end(); ++it)
       {
@@ -1067,12 +1080,14 @@ int main(int argc, char *argv[])
       gdcm::DataElement de( it->first );
       de.SetByteValue ( s.c_str(), s.size() );
       ds.Insert( de );
+      theQuery->SetSearchParameter(it->first, s);
       }
 
     ds.Print( std::cout );
 
 
-    CMove( hostname, port, callingaetitle, callaetitle, ds, portscp );
+    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscp );
+    delete theQuery;
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
@@ -1086,6 +1101,15 @@ int main(int argc, char *argv[])
     gdcm::StringFilter sf;
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it = 
       keys.begin();
+
+    gdcm::network::BaseRootQuery* theQuery;
+    if (findstudy > 0){
+      theQuery = new gdcm::network::StudyRootQuery();
+    }
+    else{
+      theQuery = new gdcm::network::PatientRootQuery();
+    }
+
     gdcm::DataSet ds;
     for(; it != keys.end(); ++it)
       {
@@ -1093,11 +1117,13 @@ int main(int argc, char *argv[])
       gdcm::DataElement de( it->first );
       de.SetByteValue ( s.c_str(), s.size() );
       ds.Insert( de );
+      theQuery->SetSearchParameter(it->first, s);
       }
 
     ds.Print( std::cout );
 
-    CFind( hostname, port, callingaetitle, callaetitle, ds );
+    CFind( hostname, port, callingaetitle, callaetitle, theQuery );
+    delete theQuery;
     }
   else if ( mode == "test" ) // Test all images
     {

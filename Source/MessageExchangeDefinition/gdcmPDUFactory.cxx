@@ -33,6 +33,7 @@ class to construct specific instances of PDUs, and return the BasePDU class.
 #include "gdcmAReleaseRQPDU.h"
 #include "gdcmPDataTFPDU.h"
 #include "gdcmCompositeMessageFactory.h"
+#include "gdcmBaseRootQuery.h"
 
 using namespace gdcm::network;
 
@@ -135,10 +136,10 @@ std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(const ULConnection& inConnectio
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnection, gdcm::DataSet *inDataSet)
+std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery)
 {
   std::vector<PresentationDataValue> pdv =
-    CompositeMessageFactory::ConstructCMoveRQ(inConnection, inDataSet );
+    CompositeMessageFactory::ConstructCMoveRQ(inConnection, inRootQuery );
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
@@ -148,7 +149,7 @@ std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnectio
   }
   return outVector;
 }
-std::vector<BasePDU*> PDUFactory::CreateCStorePDU(const ULConnection& inConnection, gdcm::DataSet *inDataSet)
+std::vector<BasePDU*> PDUFactory::CreateCStorePDU(const ULConnection& inConnection, gdcm::DataSet* inDataSet)
 {
 
   std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCStoreRQ(inConnection, inDataSet );
@@ -162,9 +163,9 @@ std::vector<BasePDU*> PDUFactory::CreateCStorePDU(const ULConnection& inConnecti
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, gdcm::DataSet* inDataSet){
+std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery){
 //still have to build this!
-  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCFindRQ(inConnection, inDataSet );
+  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCFindRQ(inConnection, inRootQuery );
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
@@ -190,8 +191,8 @@ std::vector<PresentationDataValue> PDUFactory::GetPDVs(const std::vector<BasePDU
       assert(0); //shouldn't really get here.
       return outPDVs; //just stop now, no longer with data pdus.
     }
-    int theNumPDVsinPDU = thePDataTFPDU->GetNumPDVs();
-    for (int i = 0; i < theNumPDVsinPDU; i++){
+    size_t theNumPDVsinPDU = thePDataTFPDU->GetNumPDVs();
+    for (size_t i = 0; i < theNumPDVsinPDU; i++){
       outPDVs.push_back(thePDataTFPDU->GetPresentationDataValue(i));
     }
   }

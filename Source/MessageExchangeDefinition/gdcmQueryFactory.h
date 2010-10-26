@@ -31,9 +31,41 @@ to a particular query style
 
 namespace gdcm{
   namespace network{
+    ///The character sets enumerated in 9.3 Annex C, section C.12.1.1.2
+    ///The resulting character set is stored in 0008,0005
+    ///The conversion to the data element is performed by the QueryFactory itself
+    enum GDCM_EXPORT ECharSet {
+      eLatin1 = 0,
+      eLatin2,
+      eLatin3,
+      eLatin4,
+      eCyrillic,
+      eArabic,
+      eGreek,
+      eHebrew,
+      eLatin5,
+      eJapanese,
+      eThai,
+      eJapaneseKanjiMultibyte,
+      eJapaneseSupplementaryKanjiMultibyte,
+      eKoreanHangulHanjaMultibyte,
+      eUTF8,
+      eGB18030
+    };
+
     class GDCM_EXPORT QueryFactory {
     public:
       static BaseRootQuery* ProduceQuery(const ERootType &inRootType);
+
+      ///This function will produce the appropriate dataelement given a list of charsets.
+      ///The first charset will be used directly, while the second and subsequent
+      ///will be prepended with "ISO2022 ".  Redundant character sets are not permitted,
+      ///so if they are encountered, they will just be skipped.
+      ///if UTF8 or GB18030 is used, no subsequent character sets will be used
+      ///if the vector passed in is empty, then the dataelement that's passed out will be empty
+      ///and Latin1 is the presumed encoding
+      static DataElement ProduceCharacterSetDataElement(const std::vector<ECharSet>& inCharSetType);
+      static void ListCharSets(std::ostream& os);
     };
   }
 }

@@ -55,7 +55,6 @@ public:
   //void SetPixamp(Pixmap const &pix);
 
 protected:
-  const ByteValue* GetPointerFromElement(Tag const &tag) const;
   virtual bool ReadImage(MediaStorage const &ms);
   virtual bool ReadACRNEMAImage();
 

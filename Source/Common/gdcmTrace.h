@@ -94,6 +94,24 @@ private:
 #ifdef NDEBUG
 #define gdcmDebugMacro(msg) {}
 #else
+#if defined (WIN32) || defined (_WIN32)
+#define gdcmDebugMacro(msg)                                       \
+{                                                                 \
+   if( gdcm::Trace::GetDebugFlag() )                              \
+   {                                                              \
+   std::ostringstream osmacro;                                    \
+   char buffer[80];                                               \
+   osmacro << "Debug: In " __FILE__ ", line " << __LINE__         \
+           << ", function " << GDCM_FUNCTION << '\n'              \
+           << "Last system error was: " << strerror_s(buffer, 80) \
+           << '\n' << msg << "\n\n";                              \
+   if( gdcm::Trace::GetDebugToFile() )                            \
+      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
+   else                                                           \
+      std::cerr << osmacro.str() << std::endl;                    \
+   }                                                              \
+}
+#else
 #define gdcmDebugMacro(msg)                                       \
 {                                                                 \
    if( gdcm::Trace::GetDebugFlag() )                              \
@@ -109,6 +127,7 @@ private:
       std::cerr << osmacro.str() << std::endl;                    \
    }                                                              \
 }
+#endif //WIN32, _WIN32
 #endif //NDEBUG
 
 /**
