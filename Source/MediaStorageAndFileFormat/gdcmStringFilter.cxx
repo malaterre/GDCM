@@ -148,7 +148,12 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
   int state = 0;
   for (j = 1, str1 = query; state >= 0 ; j++, str1 = NULL)
     {
+#if defined (WIN32) || defined (_WIN32)
+    token = strtok_s(str1, delim, &saveptr1);
+#else
     token = strtok_r(str1, delim, &saveptr1);
+#endif
+
     if (token == NULL)
       break;
     //printf("%d: %s\n", j, token);
@@ -163,7 +168,11 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
     std::vector< std::string > subtokens;
     for (str2 = token; ; str2 = NULL)
       {
-      subtoken = strtok_r(str2, subdelim, &saveptr2);
+#if defined (WIN32) || defined (_WIN32)
+        subtoken = strtok_s(str2, subdelim, &saveptr2);
+#else
+        subtoken = strtok_r(str2, subdelim, &saveptr2);
+#endif
       if (subtoken == NULL)
         break;
       //printf(" --> %s\n", subtoken);
