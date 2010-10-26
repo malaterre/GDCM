@@ -40,6 +40,7 @@ The dataset held by this object (or, really, one of its derivates) should be pas
 #include "gdcmDictEntry.h"
 #include "gdcmDicts.h"
 #include "gdcmGlobal.h"
+#include <limits>
 
 namespace gdcm{
 namespace network {
@@ -77,6 +78,14 @@ void BaseRootQuery::SetSearchParameter(const gdcm::Tag& inTag, const gdcm::DictE
     {
     de.SetVR( vr );
     }
+
+  std::string thePaddedValue = inValue;
+  if (thePaddedValue.length() %2 != 0){
+    thePaddedValue.insert(thePaddedValue.end(), '\0');
+  }
+
+  assert(thePaddedValue.length() < std::numeric_limits<uint32_t>::max());
+  de.SetByteValue(thePaddedValue.c_str(), (uint32_t)thePaddedValue.length());
 
   mDataSet.Insert(de);
 }

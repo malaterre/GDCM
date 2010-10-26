@@ -25,6 +25,7 @@ placeholder file to get the compiler/linker to play nice with this file
 
 
 #include "gdcmPatientRootQuery.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm{
 namespace network {
@@ -39,5 +40,60 @@ void PatientRootQuery::SetParameters(){
   mRootType = ePatientRootType;
   mHelpDescription = "Patient-level root query";
 }
+
+
+///have to be able to ensure that
+///0x8,0x52 is set
+///that the level is appropriate (ie, not setting PATIENT for a study query
+///that the tags in the query match the right level (either required, unique, optional)
+bool PatientRootQuery::ValidateQuery() const{
+  //if it's empty, it's not useful
+  DataSet ds = GetQueryDataSet();
+  if (ds.Size() == 0) return false;
+
+  //search for 0x8,0x52
+  gdcm::Attribute<0x0008, 0x0052> level;
+  level.SetFromDataElement( ds.GetDataElement( level.GetTag() ) );
+  std::string theVal = level.GetValue();
+
+  QueryBase* qb = NULL;
+  if (strcmp(theVal.c_str(), "PATIENT") == 0){
+    //make sure remaining tags are somewhere in the list of required, unique, or optional tags
+    qb = new QueryPatient();
+  }
+  if (strcmp(theVal.c_str(), "STUDY") == 0){
+    //make sure remaining tags are somewhere in the list of required, unique, or optional tags
+    qb = new QueryStudy();
+  }
+  if (strcmp(theVal.c_str(), "SERIES") == 0){
+    //make sure remaining tags are somewhere in the list of required, unique, or optional tags
+    qb = new QuerySeries();
+  }
+  if (strcmp(theVal.c_str(), "IMAGE") == 0 || strcmp(theVal.c_str(), "FRAME") == 0){
+    //make sure remaining tags are somewhere in the list of required, unique, or optional tags
+    qb = new QueryImage();
+  }
+  if (qb == NULL){
+    return false;
+  }
+  bool theReturn = true;
+
+  std::vector<gdcm::Tag> tags = qb->GetAllTags(ePatientRootType);
+  //all the tags in the dataset should be in that tag list
+  //otherwise, it's not valid
+  gdcm::DataSet::ConstIterator itor;
+  for (itor = ds.Begin(); itor != ds.End(); itor++){
+    gdcm::Tag t = itor->GetTag();
+    if (t == level.GetTag()) continue;
+    if (std::find(tags.begin(), tags.end(), t) == tags.end()){
+      theReturn = false;
+      break;
+    }
+  }
+
+  delete qb;
+  return theReturn;
+}
+
 }
 }
