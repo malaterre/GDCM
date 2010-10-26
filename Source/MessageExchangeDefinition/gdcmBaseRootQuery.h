@@ -74,8 +74,11 @@ namespace gdcm{
 
       DataSet GetQueryDataSet() const;
 
-      //the following functionality would be nice, but is not necessary at the moment.
-      //virtual void ValidateDataSet(const DataSet& inDS) const;
+      ///have to be able to ensure that
+      ///0x8,0x52 is set
+      ///that the level is appropriate (ie, not setting PATIENT for a study query
+      ///that the tags in the query match the right level (either required, unique, optional)
+      virtual bool ValidateQuery() const = 0;
     };
   }
 }

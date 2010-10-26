@@ -1122,6 +1122,12 @@ int main(int argc, char *argv[])
 
     ds.Print( std::cout );
 
+    if (!theQuery->ValidateQuery()){
+      std::cout << "You have not constructed a valid find query.  Please try again." << std::endl;
+      delete theQuery;
+      return 1;
+    }//must ensure that 0x8,0x52 is set and that
+    //the value in that tag corresponds to the query type
     CFind( hostname, port, callingaetitle, callaetitle, theQuery );
     delete theQuery;
     }

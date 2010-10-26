@@ -35,6 +35,8 @@ namespace gdcm{
     public:
       PatientRootQuery();
       ~PatientRootQuery();
+
+      bool ValidateQuery() const;
     };
   }
 }

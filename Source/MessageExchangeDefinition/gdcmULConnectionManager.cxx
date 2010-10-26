@@ -315,6 +315,25 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
             //with the dataset, even if the status is 'success'
             //success == 0000H
           }
+          if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
+            //check for other error fields
+            ByteValue *err1 = NULL, *err2 = NULL;
+            std::cout << "Transfer failed with code " << theVal << std::endl;
+            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
+              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
+              err1 = de.GetByteValue();
+              std::cout << " Tag 0x0,0x901 reported as " << *err1 << std::endl;
+            }
+            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0902))){
+              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0902));
+              err2 = de.GetByteValue();
+              std::cout << " Tag 0x0,0x902 reported as " << *err2 << std::endl;
+            }
+          }
+
+
+
+
           receivingData = false;
           justWaiting = false;
           if (theVal == pendingDE1 || theVal == pendingDE2) {
