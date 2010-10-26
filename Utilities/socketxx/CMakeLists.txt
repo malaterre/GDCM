@@ -43,7 +43,6 @@ INCLUDE_DIRECTORIES(
 #OPTION(BUILD_SHARED_LIBS "Build with shared libraries." ON)
 
 add_subdirectory(socket++)
-add_subdirectory(doc)
 add_subdirectory(test) 
 
 
