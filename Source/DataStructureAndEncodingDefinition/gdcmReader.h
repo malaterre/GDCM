@@ -102,7 +102,7 @@ protected:
 
   SmartPointer<File> F;
 
-  friend StreamImageReader; //need to be friended to be able to grab the GetStreamPtr
+  friend class StreamImageReader; //need to be friended to be able to grab the GetStreamPtr
 
   //this function is added for the StreamImageReader, which needs to read
   //up to the pixel data and then stops right before reading the pixel data.
