@@ -33,7 +33,7 @@ namespace gdcm {
       eEcho,
       eFind,
       //eGet,      //our spec does not require C-GET support
-      eMove,
+      eMove,       //established by EstablishConnectionMove--DO NOT USE THIS DIRECTLY
       eStore
     };
 
@@ -50,6 +50,7 @@ class GDCM_EXPORT ULConnectionManager
 {
     private:
       ULConnection* mConnection;
+      ULConnection* mSecondaryConnection;
       ULTransitionTable mTransitions;
 
       //no copying
@@ -58,7 +59,12 @@ class GDCM_EXPORT ULConnectionManager
       //event handler loop.
       //will just keep running until the current event is nonexistent.
       //at which point, it will return the current state of the connection
-      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet);
+      //if inWaitFirst == true, the loop awaits incoming data first, before sending data
+      //back.  Can be used to implement scp functionality, in theory-- in this instance,
+      //it's being used to instantiate a loop to get the results from a cmove.
+      //requires that a secondary connection be started.
+      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet,
+        const bool& inWaitFirst, ULConnection* inWhichConnection);
 
     public:
       ULConnectionManager();
@@ -69,10 +75,18 @@ class GDCM_EXPORT ULConnectionManager
       /// time providing the connection type will establish the proper exchange
       /// syntax with a server; if a different functionality is required, a
       /// different connection should be established.
+      /// returns false if the connection type is 'move'-- have to give a return
+      /// port for move to work as specified.
       bool EstablishConnection(const std::string& inAETitle, const std::string& inConnectAETitle,
         const std::string& inComputerName, const long& inIPAddress,
         const unsigned short& inConnectPort, const double& inTimeout,
         const EConnectionType& inConnectionType, const gdcm::DataSet& inDS);
+
+      /// returns true for above reasons, but contains the special 'move' port
+      bool EstablishConnectionMove(const std::string& inAETitle, const std::string& inConnectAETitle,
+        const std::string& inComputerName, const long& inIPAddress,
+        const unsigned short& inConnectPort, const double& inTimeout,
+        const unsigned short& inReturnPort, const gdcm::DataSet& inDS);
 
 
       //bool ReestablishConnection(const EConnectionType& inConnectionType,

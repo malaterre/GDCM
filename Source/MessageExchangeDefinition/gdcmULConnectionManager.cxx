@@ -46,6 +46,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
                                               const unsigned short& inConnectPort, const double& inTimeout,
                                               const EConnectionType& inConnectionType, const gdcm::DataSet& inDS)
 {
+
   //generate a ULConnectionInfo object
   UserInformation userInfo;
   ULConnectionInfo connectInfo;
@@ -158,11 +159,40 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //otherwise, keep rolling the event loop
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, false, mConnection);
 
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
+
+
+/// returns true for above reasons, but contains the special 'move' port
+bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, const std::string& inConnectAETitle,
+  const std::string& inComputerName, const long& inIPAddress,
+  const unsigned short& inConnectPort, const double& inTimeout,
+  const unsigned short& inReturnPort, const gdcm::DataSet& inDS){
+
+
+  //generate a ULConnectionInfo object
+  UserInformation userInfo;
+  ULConnectionInfo connectInfo;
+  if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
+  if (inAETitle.size() > 16) return false; //as above
+  if (!connectInfo.Initialize(userInfo,inAETitle.c_str(), inConnectAETitle.c_str(),
+    inIPAddress, inReturnPort, inComputerName)){
+    return false;
+  }
+
+  if (mSecondaryConnection != NULL){
+    delete mSecondaryConnection;
+  }
+  mSecondaryConnection = new ULConnection(connectInfo);
+
+  mSecondaryConnection->GetTimer().SetTimeout(inTimeout);
+
+  return EstablishConnection(inAETitle, inConnectAETitle,
+    inComputerName, inIPAddress, inConnectPort, inTimeout, eMove, inDS);
+}
 
 //send the Data PDU associated with Echo (ie, a default DataPDU)
 //this lets the user confirm that the connection is alive.
@@ -173,7 +203,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, false, mConnection);
   //theEvent should contain the PDU for the echo!
 
   if (theState == eSta6TransferReady){//ie, finished the transitions
@@ -190,7 +220,7 @@ std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(BaseRootQuery* inRootQ
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
-  EStateID theState = RunEventLoop(theEvent, theResult);
+  EStateID theState = RunEventLoop(theEvent, theResult, false, mConnection);
   return theResult;
 }
 std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQuery)
@@ -199,7 +229,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQu
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
-  EStateID theState = RunEventLoop(theEvent, theResult);
+  EStateID theState = RunEventLoop(theEvent, theResult, false, mConnection);
   return theResult;
 }
 
@@ -209,7 +239,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataS
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
-  EStateID theState = RunEventLoop(theEvent, theResult);
+  EStateID theState = RunEventLoop(theEvent, theResult, false, mConnection);
   return theResult;
 }
 
@@ -219,7 +249,7 @@ bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   mConnection->GetTimer().SetTimeout(inTimeOut);
 
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, false, mConnection);
   return (theState == eSta1Idle);//ie, finished the transitions
 }
 
@@ -228,7 +258,7 @@ void ULConnectionManager::BreakConnectionNow(){
   ULEvent theEvent(eAABORTRequest, thePDU);
 
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, false, mConnection);
 }
 
 
@@ -240,7 +270,8 @@ void ULConnectionManager::BreakConnectionNow(){
 //if no response, assume that the connection is broken.
 //if there's a response, then yay.
 //note that this is the ARTIM timeout event
-EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gdcm::DataSet>& outDataSet){
+EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gdcm::DataSet>& outDataSet,
+                                           const bool& inWaitFirst, ULConnection* inWhichConnection){
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent;
   EEventID raisedEvent;
@@ -250,12 +281,16 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
-    if (!justWaiting){
-      mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
+    if (!inWaitFirst){
+      if (!justWaiting){
+        mTransitions.HandleEvent(currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
+      }
+      theState = inWhichConnection->GetState();
+    } else {
+      //just wait, the connection needs to be set up
     }
-    theState = mConnection->GetState();
-    std::istream &is = *mConnection->GetProtocol();
-    std::ostream &os = *mConnection->GetProtocol();
+    std::istream &is = *inWhichConnection->GetProtocol();
+    std::ostream &os = *inWhichConnection->GetProtocol();
 
 
 
