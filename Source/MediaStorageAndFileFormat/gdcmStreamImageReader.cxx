@@ -63,9 +63,9 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
 }
 /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
 /// The return amount is in bytes.
-uint32_t StreamImageReader::DefineProperBufferLength() const{
-  
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile());
+uint32_t StreamImageReader::DefineProperBufferLength() const
+{
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   return (mYMax - mYMin)*(mXMax - mXMin)*bytesPerPixel;
@@ -103,7 +103,7 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   //should that come from the header?
   //most likely  that's a tag in the header
   std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile());
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
