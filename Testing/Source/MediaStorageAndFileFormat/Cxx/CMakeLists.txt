@@ -41,6 +41,7 @@ SET(MSFF_TEST_SRCS
   TestPrint
   TestSorter
   TestImageReader
+  TestStreamImageReader
   TestImageReaderRandomEmpty
   TestDirectionCosines
   TestImageWriter

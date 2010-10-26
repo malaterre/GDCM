@@ -639,10 +639,10 @@ PixelFormat ImageHelper::GetPixelFormat(const File& inF){
 }
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
   /// rows and columns of the image in pixels (as opposed to actual distances).
-std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
+std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& inF){
 
   const DataSet& ds = inF.GetDataSet();
-  std::vector<double> theReturn(2);
+  std::vector<unsigned int> theReturn(2);
   {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at = { 0 };
@@ -715,6 +715,21 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     {
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
     gdcmAssertMacro( b ); (void)b;
+    }
+  else if (
+    ms == MediaStorage::RTDoseStorage
+  )
+    {
+    Attribute<0x3004,0x000e> gridscaling = { 0 };
+    gridscaling.SetFromDataSet( ds );
+    interceptslope[0] = 0;
+    interceptslope[1] = gridscaling.GetValue();
+    if( interceptslope[1] == 0 )
+      {
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+      interceptslope[1] = 1;
+      }
     }
 
   // \post condition slope can never be 0:
@@ -1548,6 +1563,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::MRImageStorage // FIXME !
    && ms != MediaStorage::PETImageStorage
+   && ms != MediaStorage::RTDoseStorage
    && ms != MediaStorage::SecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
@@ -1624,6 +1640,15 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     Attribute<0x0028,0x1053> at2;
     at2.SetValue( img.GetSlope() );
     subds2.Insert( at2.GetAsDataElement() );
+
+    return;
+    }
+
+  if( ms == MediaStorage::RTDoseStorage )
+    {
+    Attribute<0x3004,0x00e> at2;
+    at2.SetValue( img.GetSlope() );
+    ds.Replace( at2.GetAsDataElement() );
 
     return;
     }
@@ -1718,6 +1743,16 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretation(File const& 
       }
     }
 
+  bool isacrnema = false;
+  DataSet ds = f.GetDataSet();
+  const Tag trecognitioncode(0x0008,0x0010);
+  if( ds.FindDataElement( trecognitioncode ) && !ds.GetDataElement( trecognitioncode ).IsEmpty() )
+    {
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+    // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+    gdcmDebugMacro( "Mixture of ACR NEMA and DICOM file" );
+    isacrnema = true;
+  }
   if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
     {
     if( pi != PhotometricInterpretation::UNKNOW )

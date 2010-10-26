@@ -28,6 +28,8 @@
 #include "gdcmULConnectionInfo.h"
 #include <socket++/sockinet.h>//for setting up the local socket
 
+#include <arpa/inet.h> // inet_addr
+
 using namespace gdcm::network;
 
 ULConnectionInfo::ULConnectionInfo(){
