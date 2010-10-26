@@ -31,6 +31,7 @@ name and date: 4 oct 2010 mmr
 
 namespace gdcm {
   namespace network {
+    class BaseRootQuery;
     class CompositeMessageFactory {
     public:
       //the echo request only needs a properly constructed PDV.
@@ -41,9 +42,9 @@ namespace gdcm {
 
       static std::vector<PresentationDataValue> ConstructCStoreRQ(const ULConnection& inConnection, DataSet *inDataSet);
 
-  static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, DataSet *inDataSet);
+  static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
 
-  static  std::vector<PresentationDataValue> ConstructCMoveRQ(const ULConnection& inConnection, DataSet *inDataSet);
+  static  std::vector<PresentationDataValue> ConstructCMoveRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
 
 
     };

@@ -46,6 +46,7 @@
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
 #include "gdcmQueryFactory.h"
+#include "gdcmDefs.h"
 
 #include <fstream>
 #include <socket++/echo.h>

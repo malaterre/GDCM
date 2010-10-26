@@ -28,7 +28,9 @@
 #include "gdcmULConnectionInfo.h"
 #include <socket++/sockinet.h>//for setting up the local socket
 
+#if defined (__APPLE__)
 #include <arpa/inet.h> // inet_addr
+#endif
 
 using namespace gdcm::network;
 
