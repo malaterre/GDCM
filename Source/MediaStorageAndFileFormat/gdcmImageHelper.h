@@ -65,11 +65,11 @@ public:
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
   /// rows and columns of the image in pixels (as opposed to actual distances).
   /// The output is {col , row}
-  static std::vector<double> GetPixelExtent(const File& inF);
+  static std::vector<unsigned int> GetDimensionsValue(const File& inF);
 
   /// This function returns pixel information about an image from its dataset
   /// That includes samples per pixel and bit depth (in that order)
-  static PixelFormat GetImagePixelInformation(const File& inF);
+  static PixelFormat GetPixelFormatValue(const File& inF);
 
   /// Set/Get shift/scale from/to a file
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);

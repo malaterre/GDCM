@@ -588,7 +588,8 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
 /// This function returns pixel information about an image from its dataset
 /// That includes samples per pixel and bit depth (in that order)
 /// Returns a PixelFormat
-PixelFormat ImageHelper::GetImagePixelInformation(const File& inF){
+PixelFormat ImageHelper::GetPixelFormatValue(const File& inF)
+{
   // D 0028|0011 [US] [Columns] [512]
   //[10/20/10 9:05:07 AM] Mathieu Malaterre:     
   PixelFormat pf;
@@ -637,10 +638,10 @@ PixelFormat ImageHelper::GetImagePixelInformation(const File& inF){
 }
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
   /// rows and columns of the image in pixels (as opposed to actual distances).
-std::vector<double> ImageHelper::GetPixelExtent(const File& inF){
+std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& inF){
 
   const DataSet& ds = inF.GetDataSet();
-  std::vector<double> theReturn(2);
+  std::vector<unsigned int> theReturn(2);
   {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at = { 0 };
