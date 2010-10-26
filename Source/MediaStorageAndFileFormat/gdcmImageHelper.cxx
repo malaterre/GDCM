@@ -590,9 +590,9 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
 /// This function returns pixel information about an image from its dataset
 /// That includes samples per pixel and bit depth (in that order)
 /// Returns a PixelFormat
-PixelFormat ImageHelper::GetPixelFormat(const File& inF){
+PixelFormat ImageHelper::GetPixelFormatValue(const File& inF){
   // D 0028|0011 [US] [Columns] [512]
-  //[10/20/10 9:05:07 AM] Mathieu Malaterre:     
+  //[10/20/10 9:05:07 AM] Mathieu Malaterre:
   PixelFormat pf;
   const DataSet& ds = inF.GetDataSet();
   // D 0028|0100 [US] [Bits Allocated] [16]
@@ -1712,7 +1712,7 @@ bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<doubl
 PhotometricInterpretation ImageHelper::GetPhotometricInterpretation(File const& f){
   // 5. Photometric Interpretation
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
-  PixelFormat pf = GetPixelFormat(f);
+  PixelFormat pf = GetPixelFormatValue(f);
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation =
     ImageHelper::GetPointerFromElement(tphotometricinterpretation, f);
@@ -1779,7 +1779,7 @@ unsigned int ImageHelper::GetPlanarConfiguration(File const& f){
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
-  PixelFormat pf = GetPixelFormat(f);
+  PixelFormat pf = GetPixelFormatValue(f);
   unsigned int pc = 0;
   // FIXME: Whatif planaconfiguration is send in a grayscale image... it would be empty...
   // well hopefully :(
@@ -1805,7 +1805,7 @@ unsigned int ImageHelper::GetPlanarConfiguration(File const& f){
 SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f){
 
   DataSet ds = f.GetDataSet();
-  PixelFormat pf = GetPixelFormat(f);
+  PixelFormat pf = GetPixelFormatValue(f);
   PhotometricInterpretation pi = GetPhotometricInterpretation(f);
   // Do the Palette Color:
   // 1. Modality LUT Sequence
