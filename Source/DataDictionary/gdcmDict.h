@@ -100,6 +100,19 @@ public:
     return it->second;
     }
 
+  /// Function to return the Keyword from a Tag
+  const char *GetKeywordFromTag(Tag const & tag) const
+    {
+    MapDictEntry::const_iterator it =
+      DictInternal.find(tag);
+    if (it == DictInternal.end())
+      {
+      return NULL;
+      }
+    assert( DictInternal.count(tag) == 1 );
+    return it->second.GetKeyword();
+    }
+
   /// Lookup DictEntry by keyword. Even if DICOM standard defines keyword
   /// as being unique. The lookup table is built on Tag. Therefore
   /// looking up a DictEntry by Keyword is more inefficient than looking up
