@@ -31,6 +31,7 @@ name and date: 25 Sept 2010 mmr
 
 namespace gdcm{
   namespace network{
+    class BaseRootQuery;
     class PDUFactory {
       public:
       static BasePDU* ConstructPDU(uint8_t itemtype);//eventually needs to be smartpointer'd
@@ -45,8 +46,8 @@ namespace gdcm{
       //be then placed into the vector of PDUs
       static std::vector<BasePDU*> CreateCEchoPDU(const ULConnection& inConnection);
       static std::vector<BasePDU*> CreateCStorePDU(const ULConnection& inConnection, DataSet *inDataSet);
-      static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, DataSet* inDataSet);
-      static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, DataSet* inDataSet);
+      static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
+      static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
 
       //given data pdus, produce the presentation data values stored within.
       //all operations have these as the payload of the data sending operation

@@ -22,7 +22,7 @@
 #include "gdcmTypes.h"
 #include "gdcmPresentationDataValue.h"
 #include "gdcmBasePDU.h"
-
+#include <algorithm>
 namespace gdcm
 {
 
@@ -49,7 +49,8 @@ public:
 
   void AddPresentationDataValue( PresentationDataValue const &pdv ) {
     V.push_back( pdv );
-    ItemLength = Size() - 6;
+    assert(Size() < std::numeric_limits<uint32_t>::max());
+    ItemLength = (uint32_t)Size() - 6;
   }
   PresentationDataValue const &GetPresentationDataValue(unsigned int i) const {
     assert( !V.empty() && i < V.size() );
