@@ -22,7 +22,7 @@
 #include "gdcmTypes.h"
 #include "gdcmPresentationDataValue.h"
 #include "gdcmBasePDU.h"
-#include <algorithm>
+#include <limits>
 namespace gdcm
 {
 
