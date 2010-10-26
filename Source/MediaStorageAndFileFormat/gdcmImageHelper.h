@@ -72,6 +72,8 @@ public:
   static PixelFormat GetPixelFormatValue(const File& inF);
 
   /// Set/Get shift/scale from/to a file
+  /// \warning this function reads/sets the Slope/Intercept in appropriate
+  /// class storage, but also Grid Scaling in RT Dose Storage
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
