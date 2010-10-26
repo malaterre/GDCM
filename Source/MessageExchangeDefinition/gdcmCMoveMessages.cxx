@@ -25,16 +25,26 @@ this file defines the messages for the cfind action
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmCommandDataSet.h"
+#include "gdcmStudyRootQuery.h"
+#include "gdcmPresentationContext.h"
 
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQuery){
   std::vector<PresentationDataValue> thePDVs;
-{
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(13);
-
+  int contextID = ePatientRootQueryRetrieveInformationModelMOVE;
+  const char *uid = gdcm::UIDs::GetUIDString(
+    gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
+  std::string suid = uid;
+  if (dynamic_cast<StudyRootQuery*>(inRootQuery)!=NULL){
+    contextID = eStudyRootQueryRetrieveInformationModelMOVE;
+    const char *uid2 = gdcm::UIDs::GetUIDString(
+      gdcm::UIDs::StudyRootQueryRetrieveInformationModelMOVE );
+    suid = uid2;
+  }
+  thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
@@ -42,13 +52,9 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
   CommandDataSet ds;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString(
-    gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
-
-  std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
+  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   {
   gdcm::Attribute<0x0,0x100> at = { 33 };
@@ -80,17 +86,23 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
   }
 
   thePDV.SetDataSet(ds);
+  {
+    PresentationDataValue thePDV;
+    thePDV.SetPresentationContextID(contextID); // FIXME
+    //thePDV.SetBlob( sub );
+    thePDV.SetDataSet(inRootQuery->GetQueryDataSet());
+    thePDV.SetMessageHeader( 2 );
+    thePDVs.push_back(thePDV);
+  }
   thePDVs.push_back(thePDV);
+  return thePDVs;
+
 }
 
-{
-    PresentationDataValue thePDV;
-    thePDV.SetPresentationContextID(13); // FIXME
-    //thePDV.SetBlob( sub );
-    thePDV.SetDataSet(*inDataSet);
-      thePDV.SetMessageHeader( 2 );
-    thePDVs.push_back(thePDV);
-}
+//this is a private function, should not be callable
+//but if you manage to do call it, return a blank dataset.
+std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
+  std::vector<PresentationDataValue> thePDVs;
   return thePDVs;
 
 }

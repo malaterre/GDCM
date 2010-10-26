@@ -35,6 +35,7 @@ namespace gdcm{
       std::vector<gdcm::Tag> GetOptionalTags(const ERootType& inRootType) const;
 
       std::string GetName() const { return "Study"; }
+      DataElement GetQueryLevel() const;
     };
   }
 }

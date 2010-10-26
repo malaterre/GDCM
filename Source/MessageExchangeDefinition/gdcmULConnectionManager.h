@@ -25,7 +25,10 @@
 
 namespace gdcm {
   class DataSet;
+
+
   namespace network {
+  class BaseRootQuery;
     enum GDCM_EXPORT EConnectionType {
       eEcho,
       eFind,
@@ -100,8 +103,8 @@ class GDCM_EXPORT ULConnectionManager
 
       // API will change...
       std::vector<DataSet> SendStore(DataSet *inDataSet);
-      std::vector<DataSet> SendFind(DataSet *inDataSet);
-      std::vector<DataSet> SendMove(DataSet *inDataSet);
+      std::vector<DataSet> SendFind(BaseRootQuery* inRootQuery);
+      std::vector<DataSet> SendMove(BaseRootQuery* inRootQuery);
 
     };
   }

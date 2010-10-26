@@ -27,7 +27,8 @@ const uint8_t PDataTFPDU::Reserved2 = 0x00;
 
 PDataTFPDU::PDataTFPDU()
 {
-  ItemLength = Size() - 6;
+  assert(Size() < std::numeric_limits<uint32_t>::max());
+  ItemLength = (uint32_t)Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
