@@ -715,6 +715,21 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
     gdcmAssertMacro( b ); (void)b;
     }
+  else if (
+    ms == MediaStorage::RTDoseStorage
+  )
+    {
+    Attribute<0x3004,0x000e> gridscaling = { 0 };
+    gridscaling.SetFromDataSet( ds );
+    interceptslope[0] = 0;
+    interceptslope[1] = gridscaling.GetValue();
+    if( interceptslope[1] == 0 )
+      {
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+      interceptslope[1] = 1;
+      }
+    }
 
   // \post condition slope can never be 0:
   assert( interceptslope[1] != 0. );
@@ -1547,6 +1562,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::MRImageStorage // FIXME !
    && ms != MediaStorage::PETImageStorage
+   && ms != MediaStorage::RTDoseStorage
    && ms != MediaStorage::SecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
@@ -1623,6 +1639,15 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     Attribute<0x0028,0x1053> at2;
     at2.SetValue( img.GetSlope() );
     subds2.Insert( at2.GetAsDataElement() );
+
+    return;
+    }
+
+  if( ms == MediaStorage::RTDoseStorage )
+    {
+    Attribute<0x3004,0x00e> at2;
+    at2.SetValue( img.GetSlope() );
+    ds.Replace( at2.GetAsDataElement() );
 
     return;
     }
