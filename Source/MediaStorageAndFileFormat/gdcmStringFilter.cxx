@@ -111,23 +111,6 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
   static const gdcm::Dicts &dicts = g.GetDicts();
   static const gdcm::Dict &pubdict = dicts.GetPublicDict();
 
-/*
-  if( ds.IsEmpty() || !ds.FindDataElement(t) )
-    {
-    gdcmDebugMacro( "DataSet is empty or does not contains tag:" );
-    return ret;
-    }
-  const DataElement &de = ds.GetDataElement( t );
-  //assert( de.GetTag().IsPublic() );
-  std::string strowner;
-  const char *owner = 0;
-  if( t.IsPrivate() && !t.IsPrivateCreator() )
-    {
-    strowner = ds.GetPrivateCreator(t);
-    owner = strowner.c_str();
-    }
-*/
-
   char *query = strdup( query_const.c_str() );
   const char delim[] = "/";
   const char subdelim[] = "[]@='";
@@ -136,11 +119,6 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
   char *saveptr1, *saveptr2;
   int j;
 
-//  if (argc != 4) {
-//    fprintf(stderr, "Usage: %s string delim subdelim\n",
-//      argv[0]);
-//    exit(EXIT_FAILURE);
-//  }
   bool dicomnativemodel = false;
   const gdcm::DataSet *curds = NULL;
   const gdcm::DataElement *curde = NULL;
@@ -157,13 +135,6 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
     if (token == NULL)
       break;
     //printf("%d: %s\n", j, token);
-    //ProcessToken ( token, ds );
-    //std::string stoken = token;
-    //if( token == "DicomNativeModel" )
-    //  {
-    //  assert( !dicomnativemodel );
-    //  dicomnativemodel = true;
-    //  }
 
     std::vector< std::string > subtokens;
     for (str2 = token; ; str2 = NULL)
@@ -226,6 +197,12 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
       assert( bv );
       //bv->Print( std::cout << std::endl );
       }
+    else
+      {
+      assert( subtokens.size() );
+      gdcmDebugMacro( "Unhandled token: " << subtokens[0] );
+      state = -1;
+      }
     }
   if( state != 2 )
     {
@@ -272,7 +249,6 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
     }
 
   assert( vr != VR::UN && vr != VR::INVALID );
-  //std::cerr << "Found " << vr << " for " << de.GetTag() << std::endl;
   //ret.first = entry.GetName();
   if( VR::IsASCII( vr ) )
     {
