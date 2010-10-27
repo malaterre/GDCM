@@ -420,7 +420,7 @@ void vtkGDCMImageWriter::WriteSlice(vtkImageData *data)
 
 //----------------------------------------------------------------------------
 //void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
-void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::Anonymizer & ano)
+static void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::Anonymizer & ano)
 {
   if( s && *s )
     {

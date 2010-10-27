@@ -29,6 +29,7 @@
 #include "vtkPolyDataWriter.h"
 
 class vtkMedicalImageProperties;
+class vtkRTStructSetProperties;
 //BTX
 namespace gdcm { class File; }
 //ETX
@@ -47,10 +48,16 @@ public:
   // Description:
   // Get the medical image properties object
 //  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
+  virtual void SetMedicalImageProperties(vtkMedicalImageProperties *pd);
+
+  virtual void SetRTStructSetProperties(vtkRTStructSetProperties *pd);
 
 protected:
   vtkGDCMPolyDataWriter();
   ~vtkGDCMPolyDataWriter();
+
+  vtkMedicalImageProperties *MedicalImageProperties;
+  vtkRTStructSetProperties *RTStructSetProperties;
 
   void WriteData();
 //BTX

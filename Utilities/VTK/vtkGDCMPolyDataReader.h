@@ -32,6 +32,7 @@
 #include "vtkPolyDataAlgorithm.h"
 
 class vtkMedicalImageProperties;
+class vtkRTStructSetProperties;
 //BTX
 namespace gdcm { class Reader; }
 //ETX
@@ -51,12 +52,15 @@ public:
   // Get the medical image properties object
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
 
+  vtkGetObjectMacro(RTStructSetProperties, vtkRTStructSetProperties);
+
 protected:
   vtkGDCMPolyDataReader();
   ~vtkGDCMPolyDataReader();
 
   char *FileName;
   vtkMedicalImageProperties *MedicalImageProperties;
+  vtkRTStructSetProperties *RTStructSetProperties;
 //BTX
   void FillMedicalImageInformation(const gdcm::Reader &reader);
 //ETX
