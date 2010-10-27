@@ -253,12 +253,12 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
 */
   //ds.Insert( at3.GetAsDataElement() );
 
-  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
+  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
-  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000, 11112, query->GetQueryDataSet())){
+  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000, portscp, query->GetQueryDataSet())){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }
@@ -704,6 +704,7 @@ int main(int argc, char *argv[])
   std::string callaetitle = "ANY-SCP";
   int port = 104; // default
   int portscp = 0;
+  int portscpnum = 0;
   std::string filename;
   int verbose = 0;
   int warning = 0;
@@ -771,7 +772,7 @@ int main(int argc, char *argv[])
         {"patient", 0, &findpatient, 1}, // --patient
         {"study", 0, &findstudy, 1}, // --study
         {"psonly", 0, &findpsonly, 1}, // --psonly
-        {"port-scp", 0, &portscp, 1}, // --port-scp
+        {"port-scp", 1, &portscp, 1}, // --port-scp
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:";
@@ -838,6 +839,15 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "testdir") == 0 );
             //assert( callaetitle.empty() );
             testDir = optarg;
+            }
+          else if( option_index == 22 ) /* port-scp */
+            {
+            assert( strcmp(s, "port-scp") == 0 );
+            portscpnum = atoi(optarg);
+            }
+          else
+            {
+            assert( 0 );
             }
           //printf (" with arg %s", optarg);
           }
@@ -1085,8 +1095,13 @@ int main(int argc, char *argv[])
 
     ds.Print( std::cout );
 
+    if( !portscp )
+      {
+      std::cerr << "Need to set explicitely port number for SCP association --port-scp" << std::endl;
+      return 1;
+      }
 
-    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscp );
+    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum );
     delete theQuery;
     }
   else if ( mode == "find" ) // C-FIND SCU
