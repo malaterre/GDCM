@@ -21,6 +21,7 @@
 #include "gdcmFile.h"
 #include "gdcmAttribute.h"
 #include "gdcmCommandDataSet.h"
+#include <limits>
 
 namespace gdcm
 {
@@ -33,7 +34,8 @@ PresentationDataValue::PresentationDataValue()
   PresentationContextID = 0; //MUST BE SET BY THE CALLER!
 
   // postcondition
-  ItemLength = Size() - 4;
+  assert(Size() < std::numeric_limits<uint32_t>::max());
+  ItemLength = (uint32_t)Size() - 4;
   assert (ItemLength + 4 == Size() );
 }
 
@@ -60,7 +62,8 @@ std::istream &PresentationDataValue::Read(std::istream &is)
   //std::cerr << "Reading Blob: " << vl << std::endl;
   is.read( &Blob[0], vl );
 
-  VL debug = Blob.size();
+  assert(Blob.size() < std::numeric_limits<uint32_t>::max());
+  VL debug = (uint32_t)Blob.size();
   assert( debug == vl );
 
   assert (ItemLength + 4 == Size() );
@@ -101,7 +104,8 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   os.write( (char*)&t, 1 );
 
   os.write( Blob.c_str(), Blob.size() );
-  VL debug = Blob.size();
+  assert(Blob.size() < std::numeric_limits<uint32_t>::max());
+  VL debug = (uint32_t)Blob.size();
 
   assert( debug == ItemLength - 2 );
 
@@ -124,7 +128,8 @@ size_t PresentationDataValue::Size() const
 void PresentationDataValue::SetBlob(const std::string & partialblob)
 {
   Blob = partialblob;
-  ItemLength = Size() - 4;
+  assert(Size() < std::numeric_limits<uint32_t>::max());
+  ItemLength = (uint32_t)Size() - 4;
 }
 
 void PresentationDataValue::SetDataSet(const DataSet & ds)
@@ -133,7 +138,8 @@ void PresentationDataValue::SetDataSet(const DataSet & ds)
   //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
   ds.Write<ImplicitDataElement,SwapperNoOp>( ss );
   Blob = ss.str();
-  ItemLength = Size() - 4;
+  assert(Size() < std::numeric_limits<uint32_t>::max());
+  ItemLength = (uint32_t)Size() - 4;
   assert (ItemLength + 4 == Size() );
 }
 
@@ -250,7 +256,8 @@ void PresentationDataValue::MyInit2(const char *uid1, const char *uid2)
   std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
+  assert(suid.size() < std::numeric_limits<uint32_t>::max());
+  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   }
 
@@ -260,7 +267,8 @@ void PresentationDataValue::MyInit2(const char *uid1, const char *uid2)
   std::string suid = uid2;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
+  assert(suid.size() < std::numeric_limits<uint32_t>::max());
+  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   }
 
@@ -288,7 +296,8 @@ void PresentationDataValue::MyInit2(const char *uid1, const char *uid2)
     ds.Insert( at.GetAsDataElement() );
     }
 
-  ItemLength = Size() - 4;
+  assert(Size() < std::numeric_limits<uint32_t>::max());
+  ItemLength = (uint32_t)Size() - 4;
   assert (ItemLength + 4 == Size() );
 
   //ds.Print( std::cout );
