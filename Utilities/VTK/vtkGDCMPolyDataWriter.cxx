@@ -16,6 +16,8 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkInformation.h"
+#include "vtkDoubleArray.h"
+#include "vtkPointData.h"
 #include "vtkInformationVector.h"
 #include "vtkPolyData.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
@@ -94,19 +96,7 @@ void vtkGDCMPolyDataWriter::WriteData()
   int numInputs = this->GetNumberOfInputPorts();
   for(int input = 0; input < numInputs; ++input )
     {
-    vtkPoints *pts;
-    vtkCellArray *polys;
-    vtkPolyData *theInput = this->GetInput(input);
-
-    polys = theInput->GetPolys();
-    pts = theInput->GetPoints();
-    if (pts == NULL || polys == NULL )
-      {
-      vtkErrorMacro(<<"No data to write!");
-      return;
-      }
-
-    this->WriteRTSTRUCTData(file, pts, polys);
+    this->WriteRTSTRUCTData(file, input);
     }
 
   if( !writer.Write() )
@@ -265,10 +255,12 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
 {
   SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
+  SmartPointer<SequenceOfItems> sqiobs;
+  sqiobs = new SequenceOfItems;
   vtkIdType n = this->RTStructSetProperties->GetNumberOfStructureSetROIs();
   for( vtkIdType id = 0; id < n; ++id )
     {
-    int roinumber                = this->RTStructSetProperties->GetStructureSetROINumber(id);
+    int roinumber              = this->RTStructSetProperties->GetStructureSetROINumber(id);
     const char *refframerefuid = this->RTStructSetProperties->GetStructureSetROIRefFrameRefUID(id);
     const char *roiname        = this->RTStructSetProperties->GetStructureSetROIName(id);
     const char *roigenalgo     = this->RTStructSetProperties->GetStructureSetROIGenerationAlgorithm(id);
@@ -292,6 +284,30 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     atroigenalg.SetValue( roigenalgo );
     subds.Insert( atroigenalg.GetAsDataElement() );
 
+    // do the obs stuff
+    Item itemobs;
+    itemobs.SetVLToUndefined();
+    DataSet &subdsobs = itemobs.GetNestedDataSet();
+
+    int observationnumber = this->RTStructSetProperties->GetStructureSetObservationNumber(id);
+    gdcm::Attribute<0x3006,0x0082> atobservationnumber;
+    atobservationnumber.SetValue( observationnumber );
+    subdsobs.Insert( atobservationnumber.GetAsDataElement() );
+
+    gdcm::Attribute<0x3006,0x0084> atreferencedroinumber;
+    atreferencedroinumber.SetValue( roinumber );
+    subdsobs.Insert( atreferencedroinumber.GetAsDataElement() );
+
+    const char *rtroiinterpretedtype = this->RTStructSetProperties->GetStructureSetRTROIInterpretedType(id);
+    gdcm::Attribute<0x3006,0x00a4> atrtroiinterpretedtype;
+    atrtroiinterpretedtype.SetValue( rtroiinterpretedtype );
+    subdsobs.Insert( atrtroiinterpretedtype.GetAsDataElement() );
+
+    gdcm::Attribute<0x3006,0x00a6> atroiinterpreter;
+    //atroiinterpreter.SetValue( rtroiinterpretedtype );
+    subdsobs.Insert( atroiinterpreter.GetAsDataElement() );
+
+    sqiobs->AddItem( itemobs );
     sqi->AddItem( item );
     }
   DataElement de1( Tag(0x3006,0x0020) );
@@ -299,6 +315,12 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   de1.SetValue( *sqi );
   de1.SetVLToUndefined();
   ds.Insert( de1 );
+
+  DataElement de2( Tag(0x3006,0x0080) );
+  de2.SetVR( VR::SQ );
+  de2.SetValue( *sqiobs );
+  de2.SetVLToUndefined();
+  ds.Insert( de2 );
 }
 
     // For ex: DICOM (0010,0010) = DOE,JOHN
@@ -375,8 +397,24 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
 
 }
 
-void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, vtkPoints *pts, vtkCellArray *polys)
+void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
 {
+    vtkPolyData *input = this->GetInput(pdidx);
+    vtkPoints *pts;
+    vtkCellArray *polys;
+
+    polys = input->GetPolys();
+    pts = input->GetPoints();
+    vtkDataArray *scalars = input->GetCellData()->GetScalars();
+    vtkDoubleArray *darray = vtkDoubleArray::SafeDownCast( scalars );
+    assert( darray );
+    int nt = darray->GetNumberOfTuples();
+    if (pts == NULL || polys == NULL )
+      {
+      vtkErrorMacro(<<"No data to write!");
+      return;
+      }
+
 /*
 (3006,0039) ?? (SQ)                                               # u/l,1 ROI Contour Sequence
   (fffe,e000) na (Item with undefined length)
@@ -402,7 +440,8 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, vtkPoints *pts, 
   vtkIdType *indx = 0;
   double v[3];
   std::vector<double> cellpoints;
-  for (polys->InitTraversal(); polys->GetNextCell(npts,indx); )
+  unsigned int cellnum = 0;
+  for (polys->InitTraversal(); polys->GetNextCell(npts,indx); cellnum++ )
     {
     cellpoints.resize(0);
     for(vtkIdType index = 0; index < npts; ++index)
@@ -426,6 +465,30 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, vtkPoints *pts, 
     contgeotype.SetValue( "CLOSED_PLANAR " );
     subds.Insert( contgeotype.GetAsDataElement() );
 
+    SmartPointer<SequenceOfItems> thesqi = new SequenceOfItems;
+      {
+      Item item;
+      item.SetVLToUndefined();
+      DataSet &subds = item.GetNestedDataSet();
+
+      gdcm::Attribute<0x0008,0x1150> classat;
+      classat.SetValue ( this->RTStructSetProperties->
+        GetContourReferencedFrameOfReferenceClassUID( pdidx, cellnum ));
+      subds.Insert( classat.GetAsDataElement() );
+      gdcm::Attribute<0x0008,0x1155> instat;
+      instat.SetValue ( this->RTStructSetProperties->
+        GetContourReferencedFrameOfReferenceInstanceUID( pdidx, cellnum ));
+      subds.Insert( instat.GetAsDataElement() );
+      thesqi->AddItem( item );
+      }
+
+    DataElement contimsq = DataElement( Tag(0x3006,0x0016) );
+    contimsq.SetVR( VR::SQ );
+    contimsq.SetValue( *thesqi );
+    contimsq.SetVLToUndefined();
+    subds.Insert( contimsq );
+
+
     sqi->AddItem( item );
     }
   DataSet& ds = file.GetDataSet();
@@ -438,6 +501,17 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, vtkPoints *pts, 
   Item item;
   item.SetVLToUndefined();
   DataSet &subds = item.GetNestedDataSet();
+
+  //(3006,002a) IS [220\160\120]  #  12, 3 ROIDisplayColor
+  gdcm::Attribute<0x3006,0x002a> roidispcolor;
+  double tuple[3];
+  darray->GetTupleValue( 0, tuple );
+  int32_t intcolor[3];
+  intcolor[0] = tuple[0] * 255.;
+  intcolor[1] = tuple[1] * 255.;
+  intcolor[2] = tuple[2] * 255.;
+  roidispcolor.SetValues( intcolor, 3 );
+  subds.Insert( roidispcolor.GetAsDataElement() );
 
   const Tag sisq2(0x3006,0x0040);
   DataElement de2( sisq2 );
