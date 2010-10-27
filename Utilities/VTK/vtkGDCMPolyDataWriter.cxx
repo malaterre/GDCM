@@ -261,8 +261,44 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   sqi2->AddItem( item2 );
 
   sqi1->AddItem( item1 );
+}
+{
+  SmartPointer<SequenceOfItems> sqi;
+  sqi = new SequenceOfItems;
+  vtkIdType n = this->RTStructSetProperties->GetNumberOfStructureSetROIs();
+  for( vtkIdType id = 0; id < n; ++id )
+    {
+    int roinumber                = this->RTStructSetProperties->GetStructureSetROINumber(id);
+    const char *refframerefuid = this->RTStructSetProperties->GetStructureSetROIRefFrameRefUID(id);
+    const char *roiname        = this->RTStructSetProperties->GetStructureSetROIName(id);
+    const char *roigenalgo     = this->RTStructSetProperties->GetStructureSetROIGenerationAlgorithm(id);
+    Item item;
+    item.SetVLToUndefined();
+    DataSet &subds = item.GetNestedDataSet();
 
+    gdcm::Attribute<0x3006,0x0022> atroinumber;
+    atroinumber.SetValue( roinumber );
+    subds.Insert( atroinumber.GetAsDataElement() );
 
+    gdcm::Attribute<0x3006,0x0024> atrefframeuid;
+    atrefframeuid.SetValue( refframerefuid );
+    subds.Insert( atrefframeuid.GetAsDataElement() );
+
+    gdcm::Attribute<0x3006,0x0026> atroiname;
+    atroiname.SetValue( roiname );
+    subds.Insert( atroiname.GetAsDataElement() );
+
+    gdcm::Attribute<0x3006,0x0036> atroigenalg;
+    atroigenalg.SetValue( roigenalgo );
+    subds.Insert( atroigenalg.GetAsDataElement() );
+
+    sqi->AddItem( item );
+    }
+  DataElement de1( Tag(0x3006,0x0020) );
+  de1.SetVR( VR::SQ );
+  de1.SetValue( *sqi );
+  de1.SetVLToUndefined();
+  ds.Insert( de1 );
 }
 
     // For ex: DICOM (0010,0010) = DOE,JOHN
