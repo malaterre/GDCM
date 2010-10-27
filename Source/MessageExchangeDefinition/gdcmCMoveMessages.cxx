@@ -86,6 +86,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQu
   }
 
   thePDV.SetDataSet(ds);
+  thePDVs.push_back(thePDV);
   {
     PresentationDataValue thePDV;
     thePDV.SetPresentationContextID(contextID); // FIXME
@@ -94,7 +95,6 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQu
     thePDV.SetMessageHeader( 2 );
     thePDVs.push_back(thePDV);
   }
-  thePDVs.push_back(thePDV);
   return thePDVs;
 
 }
