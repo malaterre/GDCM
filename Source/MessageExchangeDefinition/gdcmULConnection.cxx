@@ -87,3 +87,28 @@ PresentationContext ULConnection::FindContext(const gdcm::DataElement& de) const
   PresentationContext empty;
   return empty;
 }
+
+
+bool ULConnection::InitializeConnection(){
+  try{
+    echo* p = new echo(protocol::tcp);
+    if (GetConnectionInfo().GetCalledIPPort() == 0){
+      if (!GetConnectionInfo().GetCalledComputerName().empty())
+        (*p)->connect(GetConnectionInfo().GetCalledComputerName().c_str());
+      else
+        (*p)->connect(GetConnectionInfo().GetCalledIPAddress());
+    }
+    else {
+      if (!GetConnectionInfo().GetCalledComputerName().empty())
+        (*p)->connect(GetConnectionInfo().GetCalledComputerName().c_str(),
+          GetConnectionInfo().GetCalledIPPort());
+    }
+    //make sure to convert timeouts to platform appropriate values.
+    (*p)->recvtimeout((int)GetTimer().GetTimeout());
+    (*p)->sendtimeout((int)GetTimer().GetTimeout());
+    SetProtocol(p);
+  } catch (...){//unable to establish connection, so break off.
+     return false;
+  }
+  return true;
+}

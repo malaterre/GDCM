@@ -94,6 +94,7 @@ class ULConnection
       //NOT YET IMPLEMENTED
       PresentationContext FindContext(const DataElement& de) const;
 
+      bool InitializeConnection();
 
 
     };

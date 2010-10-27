@@ -258,7 +258,7 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eMove, query->GetQueryDataSet())){
+  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000, 11112, query->GetQueryDataSet())){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }

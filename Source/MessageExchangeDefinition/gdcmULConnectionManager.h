@@ -33,7 +33,7 @@ namespace gdcm {
       eEcho,
       eFind,
       //eGet,      //our spec does not require C-GET support
-      eMove,       //established by EstablishConnectionMove--DO NOT USE THIS DIRECTLY
+      //eMove,       //established by EstablishConnectionMove--DO NOT USE THIS DIRECTLY
       eStore
     };
 
@@ -59,12 +59,13 @@ class GDCM_EXPORT ULConnectionManager
       //event handler loop.
       //will just keep running until the current event is nonexistent.
       //at which point, it will return the current state of the connection
-      //if inWaitFirst == true, the loop awaits incoming data first, before sending data
-      //back.  Can be used to implement scp functionality, in theory-- in this instance,
-      //it's being used to instantiate a loop to get the results from a cmove.
-      //requires that a secondary connection be started.
-      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet,
-        const bool& inWaitFirst, ULConnection* inWhichConnection);
+      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet);
+
+      //like the above, but will manage the event loop for a move event (which
+      //is basically two simultaneous connections interwoven, one inbound and
+      //the other outbound.  Note, for instance, that cmoversp's can be sent back
+      //during the other connection's operation.
+      EStateID RunMoveEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet);
 
     public:
       ULConnectionManager();
