@@ -54,6 +54,12 @@ public:
   // Copy the contents of p to this instance.
   virtual void DeepCopy(vtkRTStructSetProperties *p);
 
+  void AddContourReferencedFrameOfReference( vtkIdType pdnum, const char *classuid , const char * instanceuid );
+  const char *GetContourReferencedFrameOfReferenceClassUID( vtkIdType pdnum, vtkIdType id );
+  const char *GetContourReferencedFrameOfReferenceInstanceUID( vtkIdType pdnum, vtkIdType id );
+  vtkIdType GetNumberOfContourReferencedFrameOfReferences();
+  vtkIdType GetNumberOfContourReferencedFrameOfReferences(vtkIdType pdnum);
+
   void AddReferencedFrameOfReference( const char *classuid , const char * instanceuid );
   const char *GetReferencedFrameOfReferenceClassUID( vtkIdType id );
   const char *GetReferencedFrameOfReferenceInstanceUID( vtkIdType id );
@@ -63,11 +69,18 @@ public:
     const char* refframerefuid,
     const char* roiname,
     const char* ROIGenerationAlgorithm);
+  void AddStructureSetROIObservation( int refnumber,
+    int observationnumber,
+    const char *rtroiinterpretedtype,
+    const char *roiinterpreter);
+
   vtkIdType GetNumberOfStructureSetROIs();
+  int GetStructureSetObservationNumber(vtkIdType id);
   int GetStructureSetROINumber(vtkIdType id);
   const char *GetStructureSetROIRefFrameRefUID(vtkIdType);
   const char *GetStructureSetROIName(vtkIdType);
   const char *GetStructureSetROIGenerationAlgorithm(vtkIdType);
+  const char *GetStructureSetRTROIInterpretedType(vtkIdType id);
 
 protected:
   vtkRTStructSetProperties();

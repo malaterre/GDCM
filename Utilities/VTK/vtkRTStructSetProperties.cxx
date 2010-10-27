@@ -33,6 +33,16 @@ struct StructureSetROI
   std::string RefFrameRefUID;
   std::string ROIName;
   std::string ROIGenerationAlgorithm;
+
+  // (3006,0080) SQ (Sequence with undefine)# u/l, 1 RTROIObservationsSequence
+  // (3006,0082) IS [0]                     #   2, 1 ObservationNumber
+  // (3006,0084) IS [0]                     #   2, 1 ReferencedROINumber
+  // (3006,00a4) CS [ORGAN]                 #   6, 1 RTROIInterpretedType
+  // (3006,00a6) PN (no value available)    #   0, 0 ROIInterpreter
+  int ObservationNumber;
+  // RefROI is AFAIK simply ROINumber
+  std::string RTROIInterpretedType;
+  std::string ROIInterpreter;
 };
 
 //----------------------------------------------------------------------------
@@ -46,6 +56,22 @@ public:
     {
     ReferencedFrameOfReferences = p->ReferencedFrameOfReferences;
     }
+  vtkIdType GetNumberOfContourReferencedFrameOfReferences()
+    {
+    return ContourReferencedFrameOfReferences.size();
+    }
+  vtkIdType GetNumberOfContourReferencedFrameOfReferences(vtkIdType pdnum)
+    {
+    return ContourReferencedFrameOfReferences[pdnum].size();
+    }
+  const char *GetContourReferencedFrameOfReferenceClassUID( vtkIdType pdnum, vtkIdType id )
+    {
+    return ContourReferencedFrameOfReferences[pdnum][ id ].first.c_str();
+    }
+  const char *GetContourReferencedFrameOfReferenceInstanceUID( vtkIdType pdnum, vtkIdType id )
+    {
+    return ContourReferencedFrameOfReferences[pdnum][ id ].second.c_str();
+    }
   vtkIdType GetNumberOfReferencedFrameOfReferences()
     {
     return ReferencedFrameOfReferences.size();
@@ -54,16 +80,45 @@ public:
     {
     return ReferencedFrameOfReferences[ id ].first.c_str();
     }
-  const char *GetReferencedFrameOfReferenceInstanceUID( vtkIdType id )
+  const char *GetReferencedFrameOfReferenceInstanceUID(vtkIdType id )
     {
     return ReferencedFrameOfReferences[ id ].second.c_str();
     }
+  void AddContourReferencedFrameOfReference( vtkIdType pdnum, const char *classuid , const char * instanceuid )
+    {
+    ContourReferencedFrameOfReferences.resize(pdnum+1);
+    ContourReferencedFrameOfReferences[pdnum].push_back(
+      std::make_pair( classuid, instanceuid ) );
+    }
+  std::vector< std::vector < std::pair< std::string, std::string > > > ContourReferencedFrameOfReferences;
   void AddReferencedFrameOfReference( const char *classuid , const char * instanceuid )
     {
     ReferencedFrameOfReferences.push_back(
       std::make_pair( classuid, instanceuid ) );
     }
   std::vector < std::pair< std::string, std::string > > ReferencedFrameOfReferences;
+  void AddStructureSetROIObservation( int refnumber,
+    int observationnumber,
+    const char *rtroiinterpretedtype,
+    const char *roiinterpreter
+  )
+    {
+    std::vector<StructureSetROI>::iterator it = StructureSetROIs.begin();
+    bool found = false;
+    for( ; it != StructureSetROIs.end(); ++it )
+      {
+      if( it->ROINumber == refnumber )
+        {
+        found = true;
+        it->ObservationNumber = observationnumber;
+        it->RTROIInterpretedType = rtroiinterpretedtype;
+        it->ROIInterpreter = roiinterpreter;
+        }
+      }
+    // postcond
+    assert( found );
+    }
+
   void AddStructureSetROI( int roinumber,
     const char* refframerefuid,
     const char* roiname,
@@ -81,9 +136,17 @@ public:
     {
     return StructureSetROIs.size();
     }
+  int GetStructureSetObservationNumber(vtkIdType id)
+    {
+    return StructureSetROIs[id].ObservationNumber;
+    }
   int GetStructureSetROINumber(vtkIdType id)
     {
     return StructureSetROIs[id].ROINumber;
+    }
+  const char *GetStructureSetRTROIInterpretedType(vtkIdType id)
+    {
+    return StructureSetROIs[id].RTROIInterpretedType.c_str();
     }
   const char *GetStructureSetROIRefFrameRefUID(vtkIdType id)
     {
@@ -120,6 +183,30 @@ vtkRTStructSetProperties::~vtkRTStructSetProperties()
 }
 
 //----------------------------------------------------------------------------
+void vtkRTStructSetProperties::AddContourReferencedFrameOfReference(vtkIdType pdnum, const char *classuid , const char * instanceuid )
+{
+  this->Internals->AddContourReferencedFrameOfReference(pdnum, classuid, instanceuid );
+}
+const char *vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceClassUID( vtkIdType pdnum, vtkIdType id )
+{
+  return this->Internals->GetContourReferencedFrameOfReferenceClassUID(pdnum, id );
+}
+
+const char *vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceInstanceUID( vtkIdType pdnum, vtkIdType id )
+{
+  return this->Internals->GetContourReferencedFrameOfReferenceInstanceUID(pdnum ,id );
+}
+
+vtkIdType vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences()
+{
+  return this->Internals->GetNumberOfContourReferencedFrameOfReferences();
+}
+
+vtkIdType vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences(vtkIdType pdnum)
+{
+  return this->Internals->GetNumberOfContourReferencedFrameOfReferences(pdnum);
+}
+
 void vtkRTStructSetProperties::AddReferencedFrameOfReference( const char *classuid , const char * instanceuid )
 {
   this->Internals->AddReferencedFrameOfReference( classuid, instanceuid );
@@ -139,6 +226,13 @@ vtkIdType vtkRTStructSetProperties::GetNumberOfReferencedFrameOfReferences()
 {
   return this->Internals->GetNumberOfReferencedFrameOfReferences();
 }
+void vtkRTStructSetProperties::AddStructureSetROIObservation( int refnumber,
+    int observationnumber,
+    const char *rtroiinterpretedtype,
+    const char *roiinterpreter)
+{
+  this->Internals->AddStructureSetROIObservation( refnumber, observationnumber, rtroiinterpretedtype, roiinterpreter );
+}
 
 void vtkRTStructSetProperties::AddStructureSetROI( int roinumber,
     const char* refframerefuid,
@@ -153,10 +247,19 @@ vtkIdType vtkRTStructSetProperties::GetNumberOfStructureSetROIs()
 {
   return this->Internals->GetNumberOfStructureSetROIs();
 }
+int vtkRTStructSetProperties::GetStructureSetObservationNumber(vtkIdType id)
+{
+  return this->Internals->GetStructureSetObservationNumber(id);
+}
 int vtkRTStructSetProperties::GetStructureSetROINumber(vtkIdType id)
 {
   return this->Internals->GetStructureSetROINumber(id);
 }
+const char *vtkRTStructSetProperties::GetStructureSetRTROIInterpretedType(vtkIdType id)
+{
+  return this->Internals->GetStructureSetRTROIInterpretedType(id);
+}
+
 const char *vtkRTStructSetProperties::GetStructureSetROIRefFrameRefUID(vtkIdType id)
 {
   return this->Internals->GetStructureSetROIRefFrameRefUID(id);

@@ -62,7 +62,7 @@ protected:
   void WriteData();
 //BTX
   void WriteRTSTRUCTInfo(gdcm::File &file);
-  void WriteRTSTRUCTData(gdcm::File &file, vtkPoints *pts, vtkCellArray *polys);
+  void WriteRTSTRUCTData(gdcm::File &file, int num);
 //ETX
 
 private:
