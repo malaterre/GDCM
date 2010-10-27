@@ -59,6 +59,16 @@ public:
   const char *GetReferencedFrameOfReferenceInstanceUID( vtkIdType id );
   vtkIdType GetNumberOfReferencedFrameOfReferences();
 
+  void AddStructureSetROI( int roinumber,
+    const char* refframerefuid,
+    const char* roiname,
+    const char* ROIGenerationAlgorithm);
+  vtkIdType GetNumberOfStructureSetROIs();
+  int GetStructureSetROINumber(vtkIdType id);
+  const char *GetStructureSetROIRefFrameRefUID(vtkIdType);
+  const char *GetStructureSetROIName(vtkIdType);
+  const char *GetStructureSetROIGenerationAlgorithm(vtkIdType);
+
 protected:
   vtkRTStructSetProperties();
   ~vtkRTStructSetProperties();

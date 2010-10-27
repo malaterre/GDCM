@@ -239,14 +239,6 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
 //(3006,0026) ?? (LO) [Bladder ]                                # 8,1 ROI Name
 //(3006,0036) ?? (CS) [MANUAL]                                  # 6,1 ROI Generation Algorithm
 
-struct StructureSetROI
-{
-  int ROINumber;
-  std::string RefFrameRefUID;
-  std::string ROIName;
-  std::string ROIGenerationAlgorithm;
-};
-
 int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const &reader,
   vtkInformationVector *outputVector)
 {
@@ -372,10 +364,9 @@ refinstanceuid.GetValue().c_str() );
     }
 
   // For each Item in the DataSet create a vtkPolyData
-  std::vector<StructureSetROI> structuresetrois;
   for(unsigned int pd = 0; pd < sqi->GetNumberOfItems(); ++pd)
     {
-    StructureSetROI structuresetroi;
+    //StructureSetROI structuresetroi;
     // get the info object
     vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
 
@@ -396,20 +387,27 @@ refinstanceuid.GetValue().c_str() );
       }
     const gdcm::DataElement &sde = snestedds.GetDataElement( stcsq );
     std::string s(sde.GetByteValue()->GetPointer(), sde.GetByteValue()->GetLength());
-    structuresetroi.ROIName = s;
+    //structuresetroi.ROIName = s;
     gdcm::Attribute<0x3006,0x0022> roinumber;
     roinumber.SetFromDataSet( snestedds );
-    structuresetroi.ROINumber = roinumber.GetValue();
+    //structuresetroi.ROINumber = roinumber.GetValue();
     gdcm::Attribute<0x3006,0x0024> refframeuid;
     refframeuid.SetFromDataSet( snestedds );
-    structuresetroi.RefFrameRefUID = refframeuid.GetValue();
+    //structuresetroi.RefFrameRefUID = refframeuid.GetValue();
     gdcm::Attribute<0x3006,0x0026> roiname;
     roiname.SetFromDataSet( snestedds );
     assert( s == roiname.GetValue() );
     gdcm::Attribute<0x3006,0x0036> roigenalg;
     roigenalg.SetFromDataSet( snestedds );
-    structuresetroi.ROIGenerationAlgorithm = roigenalg.GetValue();
-    structuresetrois.push_back( structuresetroi );
+    //structuresetroi.ROIGenerationAlgorithm = roigenalg.GetValue();
+    //structuresetrois.push_back( structuresetroi );
+
+    this->RTStructSetProperties->AddStructureSetROI(
+      roinumber.GetValue(),
+      refframeuid.GetValue(),
+      roiname.GetValue(),
+      roigenalg.GetValue()
+    );
 
     const gdcm::DataSet& nestedds = item.GetNestedDataSet();
     //std::cout << nestedds << std::endl;
@@ -449,7 +447,8 @@ refinstanceuid.GetValue().c_str() );
     //newPts->GetData()->SetName( s.c_str() );
     // In VTK there is no API to specify the name of a vtkPolyData, you can only specify Name
     // for the scalars (pointdata or celldata), so let's do that...
-    scalars->SetName( structuresetroi.ROIName.c_str() );
+    //scalars->SetName( structuresetroi.ROIName.c_str() );
+    scalars->SetName( roiname.GetValue().c_str() );
     vtkCellArray *polys = vtkCellArray::New();
     for(unsigned int i = 0; i < nitems; ++i)
       {

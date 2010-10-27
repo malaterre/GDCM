@@ -27,6 +27,13 @@
 vtkCxxRevisionMacro(vtkRTStructSetProperties, "1.21")
 vtkStandardNewMacro(vtkRTStructSetProperties)
 
+struct StructureSetROI
+{
+  int ROINumber;
+  std::string RefFrameRefUID;
+  std::string ROIName;
+  std::string ROIGenerationAlgorithm;
+};
 
 //----------------------------------------------------------------------------
 class vtkRTStructSetPropertiesInternals
@@ -57,6 +64,41 @@ public:
       std::make_pair( classuid, instanceuid ) );
     }
   std::vector < std::pair< std::string, std::string > > ReferencedFrameOfReferences;
+  void AddStructureSetROI( int roinumber,
+    const char* refframerefuid,
+    const char* roiname,
+    const char* roigenerationalgorithm
+  )
+    {
+    StructureSetROI structuresetroi;
+    structuresetroi.ROIName = roiname;
+    structuresetroi.ROINumber = roinumber;
+    structuresetroi.RefFrameRefUID = refframerefuid;
+    structuresetroi.ROIGenerationAlgorithm = roigenerationalgorithm;
+    StructureSetROIs.push_back( structuresetroi );
+    }
+  vtkIdType GetNumberOfStructureSetROIs()
+    {
+    return StructureSetROIs.size();
+    }
+  int GetStructureSetROINumber(vtkIdType id)
+    {
+    return StructureSetROIs[id].ROINumber;
+    }
+  const char *GetStructureSetROIRefFrameRefUID(vtkIdType id)
+    {
+    return StructureSetROIs[id].RefFrameRefUID.c_str();
+    }
+  const char *GetStructureSetROIName(vtkIdType id)
+    {
+    return StructureSetROIs[id].ROIName.c_str();
+    }
+  const char *GetStructureSetROIGenerationAlgorithm(vtkIdType id)
+    {
+    return StructureSetROIs[id].ROIGenerationAlgorithm.c_str();
+    }
+
+  std::vector<StructureSetROI> StructureSetROIs;
 };
 
 //----------------------------------------------------------------------------
@@ -96,6 +138,36 @@ const char *vtkRTStructSetProperties::GetReferencedFrameOfReferenceInstanceUID( 
 vtkIdType vtkRTStructSetProperties::GetNumberOfReferencedFrameOfReferences()
 {
   return this->Internals->GetNumberOfReferencedFrameOfReferences();
+}
+
+void vtkRTStructSetProperties::AddStructureSetROI( int roinumber,
+    const char* refframerefuid,
+    const char* roiname,
+    const char* roigenerationalgorithm
+  )
+{
+  this->Internals->AddStructureSetROI( roinumber, refframerefuid, roiname, roigenerationalgorithm );
+}
+
+vtkIdType vtkRTStructSetProperties::GetNumberOfStructureSetROIs()
+{
+  return this->Internals->GetNumberOfStructureSetROIs();
+}
+int vtkRTStructSetProperties::GetStructureSetROINumber(vtkIdType id)
+{
+  return this->Internals->GetStructureSetROINumber(id);
+}
+const char *vtkRTStructSetProperties::GetStructureSetROIRefFrameRefUID(vtkIdType id)
+{
+  return this->Internals->GetStructureSetROIRefFrameRefUID(id);
+}
+const char *vtkRTStructSetProperties::GetStructureSetROIName(vtkIdType id)
+{
+  return this->Internals->GetStructureSetROIName(id);
+}
+const char *vtkRTStructSetProperties::GetStructureSetROIGenerationAlgorithm(vtkIdType id)
+{
+  return this->Internals->GetStructureSetROIGenerationAlgorithm(id);
 }
 
 //----------------------------------------------------------------------------
