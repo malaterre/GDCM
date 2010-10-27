@@ -36,7 +36,9 @@
 #include "gdcmProgressEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
+#ifdef GDCM_BUILD_TESTING
 #include "gdcmTesting.h"
+#endif
 #include "gdcmObject.h"
 #include "gdcmPixelFormat.h"
 #include "gdcmMediaStorage.h"

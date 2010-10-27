@@ -25,7 +25,7 @@
 
 class vtkRTStructSetPropertiesInternals;
 
-class VTK_IO_EXPORT vtkRTStructSetProperties : public vtkObject
+class VTK_EXPORT vtkRTStructSetProperties : public vtkObject
 {
 public:
   static vtkRTStructSetProperties *New();

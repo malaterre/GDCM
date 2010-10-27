@@ -96,10 +96,10 @@ void vtkGDCMPolyDataWriter::WriteData()
     {
     vtkPoints *pts;
     vtkCellArray *polys;
-    vtkPolyData *input = this->GetInput();
+    vtkPolyData *theInput = this->GetInput(input);
 
-    polys = input->GetPolys();
-    pts = input->GetPoints();
+    polys = theInput->GetPolys();
+    pts = theInput->GetPoints();
     if (pts == NULL || polys == NULL )
       {
       vtkErrorMacro(<<"No data to write!");

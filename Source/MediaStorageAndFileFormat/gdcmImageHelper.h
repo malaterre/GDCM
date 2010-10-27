@@ -73,7 +73,7 @@ public:
 
   /// This function returns pixel information about an image from its dataset
   /// That includes samples per pixel and bit depth (in that order)
-  static PixelFormat GetPixelFormatValue(const File& inF);
+  static PixelFormat GetPixelFormat(const File& inF);
 
   /// Set/Get shift/scale from/to a file
   /// \warning this function reads/sets the Slope/Intercept in appropriate
