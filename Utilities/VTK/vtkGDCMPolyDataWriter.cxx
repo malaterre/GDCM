@@ -255,10 +255,12 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
 {
   SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
+  SmartPointer<SequenceOfItems> sqiobs;
+  sqiobs = new SequenceOfItems;
   vtkIdType n = this->RTStructSetProperties->GetNumberOfStructureSetROIs();
   for( vtkIdType id = 0; id < n; ++id )
     {
-    int roinumber                = this->RTStructSetProperties->GetStructureSetROINumber(id);
+    int roinumber              = this->RTStructSetProperties->GetStructureSetROINumber(id);
     const char *refframerefuid = this->RTStructSetProperties->GetStructureSetROIRefFrameRefUID(id);
     const char *roiname        = this->RTStructSetProperties->GetStructureSetROIName(id);
     const char *roigenalgo     = this->RTStructSetProperties->GetStructureSetROIGenerationAlgorithm(id);
@@ -282,6 +284,30 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     atroigenalg.SetValue( roigenalgo );
     subds.Insert( atroigenalg.GetAsDataElement() );
 
+    // do the obs stuff
+    Item itemobs;
+    itemobs.SetVLToUndefined();
+    DataSet &subdsobs = itemobs.GetNestedDataSet();
+
+    int observationnumber = this->RTStructSetProperties->GetStructureSetObservationNumber(id);
+    gdcm::Attribute<0x3006,0x0082> atobservationnumber;
+    atobservationnumber.SetValue( observationnumber );
+    subdsobs.Insert( atobservationnumber.GetAsDataElement() );
+
+    gdcm::Attribute<0x3006,0x0084> atreferencedroinumber;
+    atreferencedroinumber.SetValue( roinumber );
+    subdsobs.Insert( atreferencedroinumber.GetAsDataElement() );
+
+    const char *rtroiinterpretedtype = this->RTStructSetProperties->GetStructureSetRTROIInterpretedType(id);
+    gdcm::Attribute<0x3006,0x00a4> atrtroiinterpretedtype;
+    atrtroiinterpretedtype.SetValue( rtroiinterpretedtype );
+    subdsobs.Insert( atrtroiinterpretedtype.GetAsDataElement() );
+
+    gdcm::Attribute<0x3006,0x00a6> atroiinterpreter;
+    //atroiinterpreter.SetValue( rtroiinterpretedtype );
+    subdsobs.Insert( atroiinterpreter.GetAsDataElement() );
+
+    sqiobs->AddItem( itemobs );
     sqi->AddItem( item );
     }
   DataElement de1( Tag(0x3006,0x0020) );
@@ -289,6 +315,12 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   de1.SetValue( *sqi );
   de1.SetVLToUndefined();
   ds.Insert( de1 );
+
+  DataElement de2( Tag(0x3006,0x0080) );
+  de2.SetVR( VR::SQ );
+  de2.SetValue( *sqiobs );
+  de2.SetVLToUndefined();
+  ds.Insert( de2 );
 }
 
     // For ex: DICOM (0010,0010) = DOE,JOHN

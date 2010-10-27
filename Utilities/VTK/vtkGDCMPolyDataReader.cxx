@@ -529,6 +529,39 @@ refinstanceuid.GetValue().c_str() );
     scalars->Delete();
     }
 
+  // Add the Observations:
+  // we can only be doing it here once all RT are loaded, since we will
+  // attach observation to *existing* rtstruct
+  gdcm::Tag trtroiobssq(0x3006,0x0080);
+  if( !ds.FindDataElement( trtroiobssq ) )
+    {
+    return 0;
+    }
+  const gdcm::DataElement &rtroiobssq = ds.GetDataElement( trtroiobssq );
+  gdcm::SmartPointer<gdcm::SequenceOfItems> rtroiobssqsqi = rtroiobssq.GetValueAsSQ();
+  if( !rtroiobssqsqi || !rtroiobssqsqi->GetNumberOfItems() )
+    {
+    return 0;
+    }
+  for(unsigned int obs = 0; obs < rtroiobssqsqi->GetNumberOfItems(); ++obs)
+    {
+    const gdcm::Item & item = rtroiobssqsqi->GetItem(obs+1); // Item start at #1
+    const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+    gdcm::Attribute<0x3006,0x0082> observationnumber;
+    observationnumber.SetFromDataSet( nestedds );
+    gdcm::Attribute<0x3006,0x0084> referencedroinumber;
+    referencedroinumber.SetFromDataSet( nestedds );
+    gdcm::Attribute<0x3006,0x00a4> rtroiinterpretedtype;
+    rtroiinterpretedtype.SetFromDataSet( nestedds );
+    gdcm::Attribute<0x3006,0x00a6> roiinterpreter;
+    roiinterpreter.SetFromDataSet( nestedds );
+    this->RTStructSetProperties->
+      AddStructureSetROIObservation( referencedroinumber.GetValue(),
+        observationnumber.GetValue(),
+        rtroiinterpretedtype.GetValue(),
+        roiinterpreter.GetValue() );
+    }
+
   return 1;
 }
 

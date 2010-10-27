@@ -69,11 +69,18 @@ public:
     const char* refframerefuid,
     const char* roiname,
     const char* ROIGenerationAlgorithm);
+  void AddStructureSetROIObservation( int refnumber,
+    int observationnumber,
+    const char *rtroiinterpretedtype,
+    const char *roiinterpreter);
+
   vtkIdType GetNumberOfStructureSetROIs();
+  int GetStructureSetObservationNumber(vtkIdType id);
   int GetStructureSetROINumber(vtkIdType id);
   const char *GetStructureSetROIRefFrameRefUID(vtkIdType);
   const char *GetStructureSetROIName(vtkIdType);
   const char *GetStructureSetROIGenerationAlgorithm(vtkIdType);
+  const char *GetStructureSetRTROIInterpretedType(vtkIdType id);
 
 protected:
   vtkRTStructSetProperties();
