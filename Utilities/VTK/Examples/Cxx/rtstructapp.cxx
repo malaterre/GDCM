@@ -13,7 +13,7 @@
 
 =========================================================================*/
 #include "vtkGDCMPolyDataReader.h"
-//#include "vtkGDCMPolyDataWriter.h"
+#include "vtkGDCMPolyDataWriter.h"
 
 #include "vtkAppendPolyData.h"
 #include "vtkPolyDataWriter.h"
@@ -21,6 +21,7 @@
 #include "vtkPolyDataMapper2D.h"
 #include "vtkActor2D.h"
 #include "vtkRenderWindowInteractor.h"
+#include "vtkMedicalImageProperties.h"
 #include "vtkRenderWindow.h"
 #include "vtkRenderer.h"
 #include "vtkCamera.h"
@@ -45,11 +46,16 @@ int main(int argc, char *argv[])
   reader->SetFileName( filename );
   reader->Update();
 
-//  vtkGDCMPolyDataWriter * writer2 = vtkGDCMPolyDataWriter::New();
-//  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
-//    writer2->SetInput( num, reader->GetOutput(num) );
-//  writer2->SetFileName( "rtstruct.dcm" );
-//  writer2->Write();
+  //std::cout << reader->GetMedicalImageProperties()->GetStudyDate() << std::endl;
+
+  vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
+  //writer->SetNumberOfInputPorts( reader->GetNumberOfOutputPorts() );
+  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
+    writer->SetInput( num, reader->GetOutput(num) );
+  writer->SetFileName( "rtstruct.dcm" );
+  writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+  writer->SetRTStructSetProperties( reader->GetRTStructSetProperties() );
+  writer->Write();
 
   // print reader output:
   reader->Print( std::cout );
@@ -63,56 +69,35 @@ int main(int argc, char *argv[])
     append->AddInput( reader->GetOutput(i) );
     }
 
-  vtkPolyDataWriter * writer = vtkPolyDataWriter::New();
-  writer->SetInput( reader->GetOutput() );
-  writer->SetFileName( "rtstruct.vtk" );
-  //writer->Write();
-
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
-  //vtkPolyDataMapper2D* cubeMapper = vtkPolyDataMapper2D::New();
-      //cubeMapper->SetInput( reader->GetOutput() );
-      cubeMapper->SetInput( append->GetOutput() );
-      cubeMapper->SetScalarRange(0,7);
+  cubeMapper->SetInput( append->GetOutput() );
+  cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
-  //vtkActor2D* cubeActor = vtkActor2D::New();
-      cubeActor->SetMapper(cubeMapper);
+  cubeActor->SetMapper(cubeMapper);
   vtkProperty * property = cubeActor->GetProperty();
   property->SetRepresentationToWireframe();
-  //cubeActor->GetProperty()->SetColor(1, 0, 0);
-
-
-  // The usual rendering stuff.
-//  vtkCamera *camera = vtkCamera::New();
-//      camera->SetPosition(1,1,1);
-//      camera->SetFocalPoint(0,0,0);
 
   vtkRenderer *renderer = vtkRenderer::New();
   vtkRenderWindow *renWin = vtkRenderWindow::New();
-    renWin->AddRenderer(renderer);
+  renWin->AddRenderer(renderer);
 
   vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
-    iren->SetRenderWindow(renWin);
+  iren->SetRenderWindow(renWin);
 
   renderer->AddActor(cubeActor);
-  //renderer->AddActor2D(cubeActor);
-      //renderer->SetActiveCamera(camera);
-      renderer->ResetCamera();
-      renderer->SetBackground(1,1,1);
+  renderer->ResetCamera();
+  renderer->SetBackground(1,1,1);
 
   renWin->SetSize(300,300);
 
-  // interact with data
   renWin->Render();
   iren->Start();
-
-
 
   reader->Delete();
   append->Delete();
   cubeMapper->Delete();
   cubeActor->Delete();
-//  camera->Delete();
   renderer->Delete();
   renWin->Delete();
   iren->Delete();
