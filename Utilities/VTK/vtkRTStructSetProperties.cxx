@@ -46,6 +46,22 @@ public:
     {
     ReferencedFrameOfReferences = p->ReferencedFrameOfReferences;
     }
+  vtkIdType GetNumberOfContourReferencedFrameOfReferences()
+    {
+    return ContourReferencedFrameOfReferences.size();
+    }
+  vtkIdType GetNumberOfContourReferencedFrameOfReferences(vtkIdType pdnum)
+    {
+    return ContourReferencedFrameOfReferences[pdnum].size();
+    }
+  const char *GetContourReferencedFrameOfReferenceClassUID( vtkIdType pdnum, vtkIdType id )
+    {
+    return ContourReferencedFrameOfReferences[pdnum][ id ].first.c_str();
+    }
+  const char *GetContourReferencedFrameOfReferenceInstanceUID( vtkIdType pdnum, vtkIdType id )
+    {
+    return ContourReferencedFrameOfReferences[pdnum][ id ].second.c_str();
+    }
   vtkIdType GetNumberOfReferencedFrameOfReferences()
     {
     return ReferencedFrameOfReferences.size();
@@ -54,10 +70,17 @@ public:
     {
     return ReferencedFrameOfReferences[ id ].first.c_str();
     }
-  const char *GetReferencedFrameOfReferenceInstanceUID( vtkIdType id )
+  const char *GetReferencedFrameOfReferenceInstanceUID(vtkIdType id )
     {
     return ReferencedFrameOfReferences[ id ].second.c_str();
     }
+  void AddContourReferencedFrameOfReference( vtkIdType pdnum, const char *classuid , const char * instanceuid )
+    {
+    ContourReferencedFrameOfReferences.resize(pdnum+1);
+    ContourReferencedFrameOfReferences[pdnum].push_back(
+      std::make_pair( classuid, instanceuid ) );
+    }
+  std::vector< std::vector < std::pair< std::string, std::string > > > ContourReferencedFrameOfReferences;
   void AddReferencedFrameOfReference( const char *classuid , const char * instanceuid )
     {
     ReferencedFrameOfReferences.push_back(
@@ -120,6 +143,30 @@ vtkRTStructSetProperties::~vtkRTStructSetProperties()
 }
 
 //----------------------------------------------------------------------------
+void vtkRTStructSetProperties::AddContourReferencedFrameOfReference(vtkIdType pdnum, const char *classuid , const char * instanceuid )
+{
+  this->Internals->AddContourReferencedFrameOfReference(pdnum, classuid, instanceuid );
+}
+const char *vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceClassUID( vtkIdType pdnum, vtkIdType id )
+{
+  return this->Internals->GetContourReferencedFrameOfReferenceClassUID(pdnum, id );
+}
+
+const char *vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceInstanceUID( vtkIdType pdnum, vtkIdType id )
+{
+  return this->Internals->GetContourReferencedFrameOfReferenceInstanceUID(pdnum ,id );
+}
+
+vtkIdType vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences()
+{
+  return this->Internals->GetNumberOfContourReferencedFrameOfReferences();
+}
+
+vtkIdType vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences(vtkIdType pdnum)
+{
+  return this->Internals->GetNumberOfContourReferencedFrameOfReferences(pdnum);
+}
+
 void vtkRTStructSetProperties::AddReferencedFrameOfReference( const char *classuid , const char * instanceuid )
 {
   this->Internals->AddReferencedFrameOfReference( classuid, instanceuid );

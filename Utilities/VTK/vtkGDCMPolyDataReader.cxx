@@ -19,7 +19,7 @@
 #include "vtkInformationVector.h"
 #include "vtkPolyData.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
-#include "vtkFloatArray.h"
+#include "vtkDoubleArray.h"
 #include "vtkCellArray.h"
 #include "vtkCellData.h"
 #include "vtkMedicalImageProperties.h"
@@ -438,7 +438,7 @@ refinstanceuid.GetValue().c_str() );
     unsigned int nitems = sqi2->GetNumberOfItems();
     //std::cout << nitems << std::endl;
     //this->SetNumberOfOutputPorts(nitems);
-    vtkFloatArray *scalars = vtkFloatArray::New();
+    vtkDoubleArray *scalars = vtkDoubleArray::New();
     scalars->SetNumberOfComponents(3);
 
     vtkPoints *newPts = vtkPoints::New();
@@ -462,8 +462,32 @@ refinstanceuid.GetValue().c_str() );
       //std::cout << contourdata << std::endl;
 
       //const gdcm::ByteValue *bv = contourdata.GetByteValue();
+      gdcm::Attribute<0x3006,0x0042> contgeotype;
+      contgeotype.SetFromDataSet( nestedds2 );
+      assert( contgeotype.GetValue() == "CLOSED_PLANAR " );
+
+      gdcm::Attribute<0x3006,0x0046> numcontpoints;
+      numcontpoints.SetFromDataSet( nestedds2 );
+
       gdcm::Attribute<0x3006,0x0050> at;
       at.SetFromDataElement( contourdata );
+
+        {
+        assert( nestedds2.FindDataElement( gdcm::Tag(0x3006,0x0016) ) );
+        const gdcm::DataElement &contourimagesequence = nestedds2.GetDataElement( gdcm::Tag(0x3006,0x0016) );
+        gdcm::SmartPointer<gdcm::SequenceOfItems> contourimagesequence_sqi = contourimagesequence.GetValueAsSQ();
+        assert( contourimagesequence_sqi && contourimagesequence_sqi->GetNumberOfItems() == 1 );
+      const gdcm::Item & theitem = contourimagesequence_sqi->GetItem(1);
+      const gdcm::DataSet& nestedds = theitem.GetNestedDataSet();
+
+      gdcm::Attribute<0x0008,0x1150> classat;
+      classat.SetFromDataSet( nestedds );
+      gdcm::Attribute<0x0008,0x1155> instat;
+      instat.SetFromDataSet( nestedds );
+
+      this->RTStructSetProperties->AddContourReferencedFrameOfReference( pd,
+        classat.GetValue(), instat.GetValue() );
+        }
 
       //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
       //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
@@ -471,6 +495,7 @@ refinstanceuid.GetValue().c_str() );
       vtkIdType buffer[256];
       vtkIdType *ptIds;
       unsigned int npts = at.GetNumberOfValues() / 3;
+      assert( npts == numcontpoints.GetValue() );
       if(npts>256)
         {
         ptIds = new vtkIdType[npts];
