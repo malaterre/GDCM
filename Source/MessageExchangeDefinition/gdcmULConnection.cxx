@@ -51,11 +51,13 @@ void ULConnection::SetState(const EStateID& inState){
 
 //echo* ULConnection::GetProtocol(){
 std::iostream* ULConnection::GetProtocol(){
-  if (mSocket){
-    return mSocket;
-  }
   if (mEcho){
     return mEcho;
+  }
+  //be careful-- the socket doesn't get removed when the protocol is stopped,
+  //because then subsequent cstores will break.
+  if (mSocket){
+    return mSocket;
   }
   return NULL;
 }
@@ -164,9 +166,10 @@ void ULConnection::StopProtocol(){
   if (mEcho != NULL){
     delete mEcho;
     mEcho = NULL;
-  }
-  if (mSocket != NULL){
-    delete mSocket;
-    mSocket = NULL;
+    SetState(eSta1Idle);
+  } else {
+    //don't actually kill the connection, just kill the association.
+    //this is just for a cstorescp initialized by a cmove
+    SetState(eSta2Open);
   }
 }
