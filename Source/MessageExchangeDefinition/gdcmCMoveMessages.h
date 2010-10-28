@@ -27,13 +27,16 @@ this file defines the messages for the cfind action
 
 namespace gdcm{
   namespace network{
+    class ULConnection;
     class CMoveRQ : public BaseCompositeMessage {
       //this class will fulfill the inheritance,
       //but additional information is needed by cmovd
-      //namely, the root type
+      //namely, the root type or the calling AE-TITLE
       std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     public:
-      std::vector<PresentationDataValue> ConstructPDV(BaseRootQuery* inRootQuery);
+      std::vector<PresentationDataValue> ConstructPDV(
+        const ULConnection &inConnection,
+        BaseRootQuery* inRootQuery);
     };
 
     class CMoveRSP : public BaseCompositeMessage {
