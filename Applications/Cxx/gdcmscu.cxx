@@ -235,7 +235,8 @@ std::string const &call )
 
 //note that pointer to the base root query-- the caller must instantiated and delete
 void CMove( const char *remote, int portno, std::string const &aetitle,
-           std::string const &call, gdcm::network::BaseRootQuery* query, int portscp)
+  std::string const &call, gdcm::network::BaseRootQuery* query,
+  int portscp, std::string const & outputdir )
 {
 /*
 (0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
@@ -255,6 +256,7 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
 
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
+
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
@@ -704,8 +706,10 @@ int main(int argc, char *argv[])
   std::string callaetitle = "ANY-SCP";
   int port = 104; // default
   int portscp = 0;
+  int outputopt = 0;
   int portscpnum = 0;
   std::string filename;
+  std::string outputdir;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -773,9 +777,10 @@ int main(int argc, char *argv[])
         {"study", 0, &findstudy, 1}, // --study
         {"psonly", 0, &findpsonly, 1}, // --psonly
         {"port-scp", 1, &portscp, 1}, // --port-scp
+        {"output", 1, &outputopt, 1}, // --output
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:H:p:VWDEhvk:";
+    static const char short_options[] = "i:H:p:VWDEhvk:o:";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -845,6 +850,11 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "port-scp") == 0 );
             portscpnum = atoi(optarg);
             }
+          else if( option_index == 23 ) /* output */
+            {
+            assert( strcmp(s, "output") == 0 );
+            outputdir = optarg;
+            }
           else
             {
             assert( 0 );
@@ -884,6 +894,11 @@ int main(int argc, char *argv[])
       //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
+      break;
+
+    case 'o':
+      assert( outputdir.empty() );
+      outputdir = optarg;
       break;
 
     case 'H':
@@ -1101,7 +1116,7 @@ int main(int argc, char *argv[])
       return 1;
       }
 
-    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum );
+    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir );
     delete theQuery;
     }
   else if ( mode == "find" ) // C-FIND SCU
