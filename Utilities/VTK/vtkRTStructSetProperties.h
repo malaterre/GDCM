@@ -50,6 +50,21 @@ public:
   vtkSetStringMacro(StructureSetTime);
   vtkGetStringMacro(StructureSetTime);
 
+  vtkSetStringMacro(SOPInstanceUID);
+  vtkGetStringMacro(SOPInstanceUID);
+
+  vtkSetStringMacro(StudyInstanceUID);
+  vtkGetStringMacro(StudyInstanceUID);
+
+  vtkSetStringMacro(SeriesInstanceUID);
+  vtkGetStringMacro(SeriesInstanceUID);
+
+  vtkSetStringMacro(ReferenceSeriesInstanceUID);
+  vtkGetStringMacro(ReferenceSeriesInstanceUID);
+
+  vtkSetStringMacro(ReferenceFrameOfReferenceUID);
+  vtkGetStringMacro(ReferenceFrameOfReferenceUID);
+
   // Description:
   // Copy the contents of p to this instance.
   virtual void DeepCopy(vtkRTStructSetProperties *p);
@@ -90,6 +105,13 @@ protected:
   char *StructureSetName;
   char *StructureSetDate;
   char *StructureSetTime;
+
+  char *SOPInstanceUID;
+  char *StudyInstanceUID;
+  char *SeriesInstanceUID;
+
+  char *ReferenceSeriesInstanceUID;
+  char *ReferenceFrameOfReferenceUID;
 
   // Description:
   // PIMPL Encapsulation for STL containers

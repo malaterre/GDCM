@@ -29,6 +29,7 @@
 #include "vtkRTStructSetProperties.h"
 
 #include "gdcmWriter.h"
+#include "gdcmUIDs.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmAttribute.h"
@@ -174,6 +175,9 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     SetStringValueFromTag(this->RTStructSetProperties->GetStructureSetName(), gdcm::Tag(0x3006,0x0004), ano);
     SetStringValueFromTag(this->RTStructSetProperties->GetStructureSetDate(), gdcm::Tag(0x3006,0x0008), ano);
     SetStringValueFromTag(this->RTStructSetProperties->GetStructureSetTime(), gdcm::Tag(0x3006,0x0009), ano);
+    SetStringValueFromTag(this->RTStructSetProperties->GetSOPInstanceUID(), gdcm::Tag(0x0008,0x0018), ano);
+    SetStringValueFromTag(this->RTStructSetProperties->GetStudyInstanceUID(), gdcm::Tag(0x0020,0x000d), ano);
+    SetStringValueFromTag(this->RTStructSetProperties->GetSeriesInstanceUID(), gdcm::Tag(0x0020,0x000e), ano);
 
 {
   SmartPointer<SequenceOfItems> sqi;
@@ -211,6 +215,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   item1.SetVLToUndefined();
   DataSet &ds2 = item1.GetNestedDataSet();
 
+  gdcm::Attribute<0x0020,0x052> frameofreferenceuid;
+  frameofreferenceuid.SetValue(
+    this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() );
+  ds2.Insert( frameofreferenceuid.GetAsDataElement() );
+
   DataElement de2( Tag(0x3006,0x0012) );
   de2.SetVR( VR::SQ );
   SmartPointer<SequenceOfItems> sqi2 = new SequenceOfItems;
@@ -222,6 +231,15 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   item2.SetVLToUndefined();
   DataSet &ds3 = item2.GetNestedDataSet();
 
+  Attribute<0x0008,0x1150> refsopclassuid;
+  const char *rtuid = gdcm::UIDs::GetUIDString(
+    gdcm::UIDs::RTStructureSetStorage);
+  refsopclassuid.SetValue ( rtuid );
+  ds3.Insert( refsopclassuid.GetAsDataElement() );
+  Attribute<0x0008,0x1155> refsopinstuid;
+  refsopinstuid.SetValue ( this->RTStructSetProperties->GetStudyInstanceUID() );
+  ds3.Insert( refsopinstuid.GetAsDataElement() );
+
   DataElement de3( Tag(0x3006,0x0014) );
   de3.SetVR( VR::SQ );
   SmartPointer<SequenceOfItems> sqi3 = new SequenceOfItems;
@@ -232,6 +250,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   Item item3;
   item3.SetVLToUndefined();
   DataSet &ds4 = item3.GetNestedDataSet();
+
+  gdcm::Attribute<0x0020,0x000e> seriesinstanceuid;
+  seriesinstanceuid.SetValue(
+    this->RTStructSetProperties->GetReferenceSeriesInstanceUID() );
+  ds4.Insert( seriesinstanceuid.GetAsDataElement() );
 
   DataElement de4( Tag(0x3006,0x0016) );
   de4.SetVR( VR::SQ );
@@ -501,6 +524,10 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
   Item item;
   item.SetVLToUndefined();
   DataSet &subds = item.GetNestedDataSet();
+
+  gdcm::Attribute<0x3006,0x0084> referencedroinumber;
+  referencedroinumber.SetValue ( pdidx );
+  subds.Insert( referencedroinumber.GetAsDataElement() );
 
   //(3006,002a) IS [220\160\120]  #  12, 3 ROIDisplayColor
   gdcm::Attribute<0x3006,0x002a> roidispcolor;

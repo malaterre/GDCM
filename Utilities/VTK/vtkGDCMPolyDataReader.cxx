@@ -83,6 +83,9 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
   this->RTStructSetProperties->SetStructureSetName( GetStringValueFromTag( gdcm::Tag(0x3006,0x0004), ds) );
   this->RTStructSetProperties->SetStructureSetDate( GetStringValueFromTag( gdcm::Tag(0x3006,0x0008), ds) );
   this->RTStructSetProperties->SetStructureSetTime( GetStringValueFromTag( gdcm::Tag(0x3006,0x0009), ds) );
+  this->RTStructSetProperties->SetSOPInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0008,0x0018), ds) );
+  this->RTStructSetProperties->SetStudyInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0020,0x000d), ds) );
+  this->RTStructSetProperties->SetSeriesInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0020,0x000e), ds) );
 
   // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h
   // For ex: DICOM (0010,0010) = DOE,JOHN
@@ -282,6 +285,10 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     const gdcm::Item & item = sqi0->GetItem(pd+1); // Item start at #1
     const gdcm::DataSet& nestedds = item.GetNestedDataSet();
     // (3006,0012) SQ (Sequence with undefined length #=1)     # u/l, 1 RTReferencedStudySequence
+    gdcm::Attribute<0x0020,0x052> frameofreferenceuid;
+    frameofreferenceuid.SetFromDataSet( nestedds );
+    this->RTStructSetProperties->SetReferenceFrameOfReferenceUID(
+      frameofreferenceuid.GetValue() );
     gdcm::Tag trtrefstudysq(0x3006,0x0012);
     if( !nestedds.FindDataElement( trtrefstudysq) )
       {
@@ -306,6 +313,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
       return 0;
       }
     const gdcm::DataElement &rtrefseriessq = nestedds.GetDataElement( trtrefseriessq);
+
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi000 = rtrefseriessq.GetValueAsSQ();
     if( !sqi000 || !sqi000->GetNumberOfItems() )
       {
@@ -316,6 +324,13 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
       {
       const gdcm::Item & item = sqi000->GetItem(pd00+1); // Item start at #1
       const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+
+    gdcm::Attribute<0x0020,0x000e> seriesinstanceuid;
+    seriesinstanceuid.SetFromDataSet( nestedds );
+    this->RTStructSetProperties->SetReferenceSeriesInstanceUID(
+      seriesinstanceuid.GetValue() );
+
+
             // (3006,0016) SQ (Sequence with undefined length #=162)   # u/l, 1 ContourImageSequence
     gdcm::Tag tcontourimageseq(0x3006,0x0016);
     if( !nestedds.FindDataElement( tcontourimageseq) )
