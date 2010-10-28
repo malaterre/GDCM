@@ -33,6 +33,7 @@ namespace gdcm
 // primitives:
 namespace network
 {
+class AAssociateRQPDU;
 
 /**
 Table 9-17
@@ -60,6 +61,8 @@ public:
 
   void Print(std::ostream &os) const;
   bool IsLastFragment() const { return true; }
+
+  void InitSimple( AAssociateRQPDU const & rqpdu );
 
 private:
   static const uint8_t ItemType; // PDUType ?
