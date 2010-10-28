@@ -46,7 +46,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     // a md5sum computed on LittleEndian would fail. Thus we need to
     // byteswap (again!) here:
 #ifdef GDCM_WORDS_BIGENDIAN
-    if( img.GetPixelFormat().GetBitsAllocated() == 16 )
+    if( false )
       {
       assert( !(len % 2) );
       // gdcm-US-ALOKA is a 16 bits image with PALETTE
