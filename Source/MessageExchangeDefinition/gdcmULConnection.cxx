@@ -140,6 +140,8 @@ bool ULConnection::InitializeIncomingConnection(){
     sin.listen();
     mSocket = new iosockinet(sin.accept());
 
+    SetState(eSta2Open);
+
     /*
     if (mSocket != NULL){
       delete mSocket;
