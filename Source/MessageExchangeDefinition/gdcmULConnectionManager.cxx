@@ -276,7 +276,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, 
 //the user should look to cout to see the response of the echo command
 std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
-  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU();//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> empty;
@@ -312,7 +312,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQu
 
 std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
 {
-  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStorePDU( *mConnection, inDataSet );
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
@@ -359,21 +359,19 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
     std::istream &is = *mConnection->GetProtocol();
     std::ostream &os = *mConnection->GetProtocol();
 
-  // When doing a C-MOVE we recevie the Requested DataSet over
-  // another chanel (technically this is send to an SCP)
+  // When doing a C-MOVE we receive the Requested DataSet over
+  // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
 
-#if 1
-  if (mSecondaryConnection->GetProtocol() == NULL){
-    mSecondaryConnection->InitializeIncomingConnection();
-  }
-  EStateID theCStoreStateID;
-  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-  std::vector<DataSet> outputDataSet;
-  theCStoreStateID = RunEventLoop(theCStoreEvent, outputDataSet, mSecondaryConnection, true);
-  waitingForEvent = true;
+    if (mSecondaryConnection->GetProtocol() == NULL){
+      mSecondaryConnection->InitializeIncomingConnection();
+    }
+    EStateID theCStoreStateID;
+    ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+    std::vector<DataSet> outputDataSet;
+    theCStoreStateID = RunEventLoop(theCStoreEvent, outputDataSet, mSecondaryConnection, true);
+    waitingForEvent = true;
 
-#endif
 
 
 
@@ -606,6 +604,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           pendingDE2 = 0xff00;
           success = 0x0000;
           theVal = pendingDE1;
+          uint32_t theCommandCode = 0;//for now, a nothing value
           DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
           if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
             gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
@@ -617,6 +616,13 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
             //so, the loop below is a do/while loop; there should be at least a second packet
             //with the dataset, even if the status is 'success'
             //success == 0000H
+          }
+          //check to see if this is a cstorerq
+          if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0100))){
+            gdcm::DataElement de2 = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
+            gdcm::Attribute<0x0,0x0100> at2;
+            at2.SetFromDataElement( de2 );
+            theCommandCode = at2.GetValues()[0];
           }
           if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
             //check for other error fields
@@ -682,6 +688,18 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                 delete theData[i];
               }
               outDataSet.push_back(theCompleteFindResponse);
+
+              if (theCommandCode == 1){//if we're doing cstore scp stuff, send information back along the connection.
+                std::vector<BasePDU*> theCStoreRSPPDU = PDUFactory::CreateCStoreRSPPDU(&theRSP);//pass NULL for C-Echo
+                //send them directly back over the connection
+                //ideall, should go through the transition table, but we know this should work
+                //and it won't change the state (unless something breaks?, but then an exception should throw)
+                std::vector<BasePDU*>::iterator itor;
+                for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
+                  (*itor)->Write(*inWhichConnection->GetProtocol());
+                }
+                inWhichConnection->GetProtocol()->flush();
+              }
             }
           }
         }
