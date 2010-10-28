@@ -64,7 +64,7 @@ ARTIMTimer& ULConnection::GetTimer(){
   return mTimer;
 }
 
-ULConnectionInfo ULConnection::GetConnectionInfo() const{
+const ULConnectionInfo &ULConnection::GetConnectionInfo() const{
   return mInfo;
 }
 

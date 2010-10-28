@@ -27,11 +27,15 @@ this file defines the messages for the cfind action
 #include "gdcmCommandDataSet.h"
 #include "gdcmStudyRootQuery.h"
 #include "gdcmPresentationContext.h"
+#include "gdcmULConnection.h"
 
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQuery){
+std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
+  const ULConnection &inConnection,
+  BaseRootQuery* inRootQuery)
+{
   std::vector<PresentationDataValue> thePDVs;
   PresentationDataValue thePDV;
   int contextID = ePatientRootQueryRetrieveInformationModelMOVE;
@@ -67,6 +71,9 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQu
   {
   // FIXME !!!!
   gdcm::Attribute<0x0,0x600> at = { "SILVERSTREAK" };
+  const char *calling = inConnection.GetConnectionInfo().GetCallingAETitle();
+  //gdcm::Attribute<0x0,0x600> at = { "ACME1" };
+  at.SetValue( calling );
   ds.Insert( at.GetAsDataElement() );
   }
   {

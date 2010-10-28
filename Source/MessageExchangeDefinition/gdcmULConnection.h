@@ -85,7 +85,7 @@ class ULConnection
 
       ARTIMTimer& GetTimer();
 
-      ULConnectionInfo GetConnectionInfo() const;
+      const ULConnectionInfo &GetConnectionInfo() const;
 
       //when the connection is first associated, the connection is told
       //the max packet/PDU size and the way in which to present data

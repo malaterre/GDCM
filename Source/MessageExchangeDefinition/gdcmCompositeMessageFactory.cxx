@@ -49,7 +49,7 @@ namespace network {
   }
   std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCMoveRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery) {
     CMoveRQ theMoveRQ;
-    return theMoveRQ.ConstructPDV(inRootQuery);
+    return theMoveRQ.ConstructPDV(inConnection, inRootQuery);
   }
 }
 }
