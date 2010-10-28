@@ -46,7 +46,7 @@ AAssociateRQPDU::AAssociateRQPDU()
   //const char calling[] = "ECHOSCU";
   //strncpy(CallingAETitle, calling, strlen(calling) );
 
-//  PresContext.push_back( PresentationContext() );
+  //SetCallingAETitle( "MOVESCU" );
 
   ItemLength = Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
@@ -54,9 +54,9 @@ AAssociateRQPDU::AAssociateRQPDU()
 
 std::istream &AAssociateRQPDU::Read(std::istream &is)
 {
-  uint8_t itemtype = 0;
-  is.read( (char*)&itemtype, sizeof(ItemType) );
-  assert( itemtype == ItemType );
+  //uint8_t itemtype = 0;
+  //is.read( (char*)&itemtype, sizeof(ItemType) );
+  //assert( itemtype == ItemType );
   uint8_t reserved2;
   is >> reserved2;
   uint32_t itemlength;
