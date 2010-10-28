@@ -34,14 +34,18 @@ name and date: 4 oct 2010 mmr
 
 namespace gdcm {
 namespace network {
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCEchoRQ(const ULConnection& inConnection){
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCEchoRQ(){
     CEchoRQ theEchoRQ;
     return theEchoRQ.ConstructPDV(NULL);
   }
 
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRQ(const ULConnection& inConnection, DataSet *inDataSet) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRQ(DataSet *inDataSet) {
     CStoreRQ theStoreRQ;
     return theStoreRQ.ConstructPDV(inDataSet);
+  }
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRSP(DataSet *inDataSet) {
+    CStoreRSP theStoreRSP;
+    return theStoreRSP.ConstructPDV(inDataSet);
   }
   std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery) {
     CFindRQ theFindRQ;

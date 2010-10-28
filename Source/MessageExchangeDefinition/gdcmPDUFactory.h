@@ -44,8 +44,9 @@ namespace gdcm{
       //for the appropriate composite service (c-echo, c-find, c-store, c-get, c-move)
       //the connection is necessary to construct the stream of PDVs that will
       //be then placed into the vector of PDUs
-      static std::vector<BasePDU*> CreateCEchoPDU(const ULConnection& inConnection);
-      static std::vector<BasePDU*> CreateCStorePDU(const ULConnection& inConnection, DataSet *inDataSet);
+      static std::vector<BasePDU*> CreateCEchoPDU();
+      static std::vector<BasePDU*> CreateCStoreRQPDU(DataSet *inDataSet);
+      static std::vector<BasePDU*> CreateCStoreRSPPDU(DataSet *inDataSet);
       static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
       static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
 

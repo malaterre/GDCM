@@ -26,6 +26,7 @@ this file defines the messages for the cstore action
 #include "gdcmImplicitDataElement.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmCommandDataSet.h"
+#include <limits>
 
 namespace gdcm{
 namespace network{
@@ -53,7 +54,8 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
+  assert(suid.size() < std::numeric_limits<uint32_t>::max());
+  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   }
 
@@ -66,7 +68,8 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
+  assert(suid.size() < std::numeric_limits<uint32_t>::max());
+  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   }
 
@@ -147,10 +150,81 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   return thePDVs;
 
 }
-
+///should be passed the received dataset, ie, the cstorerq, so that
+///the cstorersp contains the appropriate SOP instance UIDs.
 std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(DataSet* inDataSet){
-  std::vector<PresentationDataValue> thePDV;
-  return thePDV;
+  std::vector<PresentationDataValue> thePDVs;
+  CommandDataSet ds;
+
+  const gdcm::DataElement &de1 = inDataSet->GetDataElement( gdcm::Tag( 0x0000,0x0002 ) );
+  //const gdcm::ByteValue *bv1 = de1.GetByteValue();
+  //std::string s1( bv1->GetPointer(), bv1->GetLength() );
+  const gdcm::DataElement &de2 = inDataSet->GetDataElement( gdcm::Tag( 0x0000,0x1000 ) );
+  //const gdcm::ByteValue *bv2 = de2.GetByteValue();
+  //std::string s2( bv2->GetPointer(), bv2->GetLength() );
+  //pass back the instance UIDs in the response
+  ds.Insert(de1);
+  ds.Insert(de2);
+  //code is from the presentationdatavalue::myinit2
+  /*
+  {
+    DataElement de( Tag(0x0,0x2) );
+    de.SetVR( VR::UI );
+    const char *uid = uid1;
+    std::string suid = uid;
+    if( suid.size() % 2 )
+      suid.push_back( ' ' ); // no \0 !
+    assert(suid.size() < std::numeric_limits<uint32_t>::max());
+    de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
+    ds.Insert( de );
+  }
+
+  {
+  DataElement de( Tag(0x0,0x1000) );
+  de.SetVR( VR::UI );
+  std::string suid = uid2;
+  if( suid.size() % 2 )
+    suid.push_back( ' ' ); // no \0 !
+  assert(suid.size() < std::numeric_limits<uint32_t>::max());
+  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
+  ds.Insert( de );
+  }
+  */
+
+    {
+    gdcm::Attribute<0x0,0x100> at = { 32769 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x120> at = { 1 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x800> at = { 257 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x900> at = { 0 };
+    ds.Insert( at.GetAsDataElement() );
+    }
+    {
+    gdcm::Attribute<0x0,0x0> at = { 0 };
+    unsigned int glen = ds.GetLength<ImplicitDataElement>();
+    assert( (glen % 2) == 0 );
+    at.SetValue( glen );
+    ds.Insert( at.GetAsDataElement() );
+    }
+
+  PresentationDataValue pdv;
+
+
+  //ds.Print( std::cout );
+  pdv.SetDataSet(ds);
+
+  pdv.SetMessageHeader(3);
+  thePDVs.push_back(pdv);
+
+  return thePDVs;
 }
 
 }//namespace network

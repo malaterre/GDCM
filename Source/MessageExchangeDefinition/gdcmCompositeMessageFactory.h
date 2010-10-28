@@ -38,13 +38,14 @@ namespace gdcm {
       //find, move, etc, may need something more robust, but since those are
       //easily placed into the appropriate pdatapdu in the pdufactory,
       //this approach without a base class (but done internally) is useful.
-      static std::vector<PresentationDataValue> ConstructCEchoRQ(const ULConnection& inConnection);
+      static std::vector<PresentationDataValue> ConstructCEchoRQ();
 
-      static std::vector<PresentationDataValue> ConstructCStoreRQ(const ULConnection& inConnection, DataSet *inDataSet);
+      static std::vector<PresentationDataValue> ConstructCStoreRQ(DataSet *inDataSet);
+      static std::vector<PresentationDataValue> ConstructCStoreRSP(DataSet *inDataSet);
 
-  static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
+      static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
 
-  static  std::vector<PresentationDataValue> ConstructCMoveRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
+      static  std::vector<PresentationDataValue> ConstructCMoveRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
 
 
     };
