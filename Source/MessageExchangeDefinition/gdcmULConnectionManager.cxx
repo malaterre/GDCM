@@ -363,7 +363,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // another chanel (technically this is send to an SCP)
   // in our case we use another port to receive it.
 
-#if 0
+#if 1
   if (mSecondaryConnection->GetProtocol() == NULL){
     mSecondaryConnection->InitializeIncomingConnection();
   }
@@ -543,14 +543,17 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
   EEventID raisedEvent;
 
   bool receivingData = false;
-  bool justWaiting = startWaiting;
+  //bool justWaiting = startWaiting;
+  //not sure justwaiting is useful; for now, go back to waiting for event
+
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
-    if (!justWaiting){
+    if (!waitingForEvent){//justWaiting){
       mTransitions.HandleEvent(currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
+      //this gathering of the state is for scus that have just sent out a request
+      theState = inWhichConnection->GetState();
     }
-    theState = inWhichConnection->GetState();
     std::istream &is = *inWhichConnection->GetProtocol();
     std::ostream &os = *inWhichConnection->GetProtocol();
 
@@ -586,9 +589,12 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
         }
       }
       //now, we have to figure out the event that just happened based on the PDU that was received.
+      //this state gathering is for scps, especially the cstore for cmove.
+      theState = inWhichConnection->GetState();
       if (!incomingPDUs.empty()){
         currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(incomingPDUs[0]));
         currentEvent.SetPDU(incomingPDUs);
+        //here's the scp handling code
         if (mConnection->GetTimer().GetHasExpired()){
           currentEvent.SetEvent(eARTIMTimerExpired);
         }
@@ -632,10 +638,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
 
 
           receivingData = false;
-          justWaiting = false;
+          //justWaiting = false;
           if (theVal == pendingDE1 || theVal == pendingDE2) {
             receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
-            justWaiting = true;
+            //justWaiting = true;
             waitingForEvent = true;
           }
           if (theVal == pendingDE1 || theVal == pendingDE2 /*|| theVal == success*/){//keep looping if we haven't succeeded or failed; these are the values for 'pending'

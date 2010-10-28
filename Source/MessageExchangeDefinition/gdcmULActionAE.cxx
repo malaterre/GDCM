@@ -125,13 +125,50 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   //have to determine 'acceptability'
   //this is more server side than client, so it's a bit empty now
-  bool acceptable = true;
+  //we have one server type, a store scp started on a cmove
+  //so, it's defined as acceptable.
+  bool acceptable = true;//for now, always accept
+  if (inEvent.GetPDUs().empty()){
+    acceptable = false; //can't accept an empty set of pdus.
+    //also, requrie little endian, not sure how to set that, but it should be here.
+  }
+  gdcm::network::AAssociateRQPDU* rqpdu =
+    dynamic_cast<gdcm::network::AAssociateRQPDU*>(inEvent.GetPDUs()[0]);
+  if (rqpdu == NULL){
+    acceptable = false;
+  }
+  else {
+    //check for little endian here
+    for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ ){
+    }
+  }
   if (acceptable){
 
-    outWaitingForEvent = false;
+    outWaitingForEvent = false;//not waiting, now want to get the
+    //sending of data underway.  Have to get info now
     outRaisedEvent = eAASSOCIATEresponseAccept;
 
-    return eSta3WaitLocalAssoc;
+    gdcm::network::TransferSyntax_ ts1;
+    ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+
+    gdcm::network::AAssociateACPDU acpdu;
+
+    for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ ){
+      // FIXME / HARDCODED We only ever accept Little Endian
+      // FIXME we should check :
+      // rqpdu.GetAbstractSyntax() contains LittleENdian
+      gdcm::network::PresentationContextAC pcac1;
+      PresentationContext const &pc = rqpdu->GetPresentationContext(index);
+      uint8_t id = pc.GetPresentationContextID();
+
+      pcac1.SetPresentationContextID( id ); // DCMTK MR
+      pcac1.SetTransferSyntax( ts1 );
+      acpdu.AddPresentationContextAC( pcac1 );
+    }
+    acpdu.Write( *inConnection.GetProtocol() );
+    inConnection.GetProtocol()->flush();
+
+    return eSta6TransferReady;
   } else {
 
     outWaitingForEvent = false;
