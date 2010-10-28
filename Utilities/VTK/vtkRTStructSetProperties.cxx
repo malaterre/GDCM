@@ -173,6 +173,12 @@ vtkRTStructSetProperties::vtkRTStructSetProperties()
   this->StructureSetName              = NULL;
   this->StructureSetDate              = NULL;
   this->StructureSetTime              = NULL;
+
+  this->SOPInstanceUID= NULL;
+  this->StudyInstanceUID = NULL;
+  this->SeriesInstanceUID = NULL;
+  this->ReferenceSeriesInstanceUID = NULL;
+  this->ReferenceFrameOfReferenceUID = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -280,6 +286,13 @@ void vtkRTStructSetProperties::Clear()
   this->SetStructureSetName(NULL);
   this->SetStructureSetDate(NULL);
   this->SetStructureSetTime(NULL);
+
+  this->SetSOPInstanceUID( NULL );
+  this->SetStudyInstanceUID ( NULL );
+  this->SetSeriesInstanceUID ( NULL );
+  this->SetReferenceSeriesInstanceUID ( NULL );
+  this->SetReferenceFrameOfReferenceUID ( NULL );
+
 }
 
 //----------------------------------------------------------------------------
