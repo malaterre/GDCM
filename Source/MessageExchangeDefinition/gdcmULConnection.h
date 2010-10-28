@@ -26,6 +26,7 @@
 #include "gdcmPresentationContext.h"
 
 
+class iosockinet;
 class echo;
 namespace gdcm{
   namespace network{
@@ -53,7 +54,12 @@ class ULConnection
 {
 
       ULConnectionInfo mInfo;
-      echo* mSocket;//of the three protocols offered by socket++-- echo, smtp, and ftp--
+      //this is a dirty dirty hack
+      //but to establish an outgoing connection (scu), we need the echo service
+      //to establish incoming, we just need a port and localhost, so an iosockinet works while an
+      //echo would fail (probably because one already exists)
+      echo* mEcho;
+      iosockinet* mSocket;//of the three protocols offered by socket++-- echo, smtp, and ftp--
       //echo most closely matches what the DICOM standard describes as a network connection
       ARTIMTimer mTimer;
 
@@ -75,7 +81,7 @@ class ULConnection
 
       //echo* GetProtocol();
       std::iostream* GetProtocol();
-      void SetProtocol(echo* inProtocol);
+      void StopProtocol();
 
       ARTIMTimer& GetTimer();
 
@@ -94,7 +100,10 @@ class ULConnection
       //NOT YET IMPLEMENTED
       PresentationContext FindContext(const DataElement& de) const;
 
+      //used to establish scu connections
       bool InitializeConnection();
+      //used to establish scp connections
+      bool InitializeIncomingConnection();
 
 
     };

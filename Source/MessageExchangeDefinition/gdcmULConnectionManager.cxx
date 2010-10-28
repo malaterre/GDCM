@@ -165,7 +165,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //otherwise, keep rolling the event loop
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
 
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
@@ -267,7 +267,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, 
   //otherwise, keep rolling the event loop
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
@@ -280,7 +280,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
   //theEvent should contain the PDU for the echo!
 
   if (theState == eSta6TransferReady){//ie, finished the transitions
@@ -306,7 +306,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQu
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
-  EStateID theState = RunEventLoop(theEvent, theResult);
+  EStateID theState = RunEventLoop(theEvent, theResult, mConnection, false);
   return theResult;
 }
 
@@ -316,7 +316,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataS
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   std::vector<gdcm::DataSet> theResult;
-  EStateID theState = RunEventLoop(theEvent, theResult);
+  EStateID theState = RunEventLoop(theEvent, theResult, mConnection, false);
   return theResult;
 }
 
@@ -326,7 +326,7 @@ bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   mConnection->GetTimer().SetTimeout(inTimeOut);
 
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
   return (theState == eSta1Idle);//ie, finished the transitions
 }
 
@@ -335,7 +335,7 @@ void ULConnectionManager::BreakConnectionNow(){
   ULEvent theEvent(eAABORTRequest, thePDU);
 
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty);
+  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
 }
 
 
@@ -355,22 +355,10 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
     if (!justWaiting){
       mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
     }
-    //incoming socket initialization
-    //from mm's code in dt1
-    sockinetbuf sin (sockbuf::sock_stream);
-    sin.bind( mSecondaryConnection->GetConnectionInfo().GetCalledIPPort() );
-    sin.listen();
-    iosockinet s (sin.accept());
-
 
     theState = mConnection->GetState();
     std::istream &is = *mConnection->GetProtocol();
     std::ostream &os = *mConnection->GetProtocol();
-
-    std::istream &isSCP = s;
-    std::ostream &osSCP = s;
-
-    std::istream* currStream = &is;
 
 
     //just as for the regular event loop, but we have to alternate between the connections.
@@ -382,24 +370,12 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
     if (waitingForEvent){
       while (waitingForEvent){//loop for reading in the events that come down the wire
         uint8_t itemtype = 0x0;
-        currStream = &is;
-        try {
-          currStream->read( (char*)&itemtype, 1 );
-        } catch (...){
-        }
-        if (itemtype == 0){//nothing got read
-           try {
-             currStream = &isSCP;
-             currStream->read((char*)&itemtype, 1 );
-           } catch(...){
-             //now we care; neither connection received, kill it, most likely.
-           }
-        }
+        is.read( (char*)&itemtype, 1 );
 
         BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
         if (thePDU != NULL){
           incomingPDUs.push_back(thePDU);
-          thePDU->Read(*currStream);
+          thePDU->Read(is);
           thePDU->Print(std::cout);
           if (thePDU->IsLastFragment()) waitingForEvent = false;
         } else {
@@ -454,6 +430,26 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
             receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
             justWaiting = true;
             waitingForEvent = true;
+            //ok, if we're pending, then let's open the cstorescp connection here
+            //(if it's not already open), and then from here start a storescp event loop.
+            //just don't listen to the cmove event loop until this is done.
+            //could cause a pileup on the main connection, I suppose.
+            //could also report the progress here, if we liked.
+            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0100))){
+              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
+              gdcm::Attribute<0x0,0x0100> at;
+              at.SetFromDataElement( de );
+              uint32_t theCommandCode = at.GetValues()[0];
+              if (theCommandCode == 0x8021){//cmove response, so prep the retrieval loop on the back connection
+                if (mSecondaryConnection->GetProtocol() == NULL){
+                  mSecondaryConnection->InitializeIncomingConnection();
+                }
+                EStateID theCStoreStateID;
+                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                std::vector<DataSet> outputDataSet;
+                theCStoreStateID = RunEventLoop(theCStoreEvent, outputDataSet, mSecondaryConnection, true);
+              }
+            }
           }
           if (theVal == pendingDE1 || theVal == pendingDE2 /*|| theVal == success*/){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
             //first, dynamically cast that pdu in the event
@@ -467,19 +463,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
             bool interrupted = false;
             do {
               uint8_t itemtype = 0x0;
-              currStream = &is;
-              try {
-                currStream->read( (char*)&itemtype, 1 );
-              } catch (...){
-              }
-              if (itemtype == 0){//nothing got read
-                 try {
-                   currStream = &isSCP;
-                   currStream->read((char*)&itemtype, 1 );
-                 } catch(...){
-                   //now we care; neither connection received, kill it, most likely.
-                 }
-              }
+              is.read( (char*)&itemtype, 1 );
               //what happens if nothing's read?
               thePDU = PDUFactory::ConstructPDU(itemtype);
               if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
@@ -490,7 +474,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                 break;
               }
               if (thePDU != NULL){
-                thePDU->Read(*currStream);
+                thePDU->Read(is);
                 theData.push_back(thePDU);
               } else{
                 break;
@@ -536,22 +520,23 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
 //if no response, assume that the connection is broken.
 //if there's a response, then yay.
 //note that this is the ARTIM timeout event
-EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gdcm::DataSet>& outDataSet){
+EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gdcm::DataSet>& outDataSet,
+        ULConnection* inWhichConnection, const bool& startWaiting = false){
   EStateID theState = eStaDoesNotExist;
-  bool waitingForEvent;
+  bool waitingForEvent = startWaiting;//overwritten if not starting waiting, but if waiting, then wait
   EEventID raisedEvent;
 
   bool receivingData = false;
-  bool justWaiting = false;
+  bool justWaiting = startWaiting;
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
     if (!justWaiting){
-      mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
+      mTransitions.HandleEvent(currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
     }
-    theState = mConnection->GetState();
-    std::istream &is = *mConnection->GetProtocol();
-    std::ostream &os = *mConnection->GetProtocol();
+    theState = inWhichConnection->GetState();
+    std::istream &is = *inWhichConnection->GetProtocol();
+    std::ostream &os = *inWhichConnection->GetProtocol();
 
 
 

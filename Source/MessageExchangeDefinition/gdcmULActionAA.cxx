@@ -48,7 +48,7 @@ EStateID ULActionAA2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
 
   inConnection.GetTimer().Stop();
-  inConnection.SetProtocol(NULL);
+  inConnection.StopProtocol();
 
   return eSta1Idle;
 }

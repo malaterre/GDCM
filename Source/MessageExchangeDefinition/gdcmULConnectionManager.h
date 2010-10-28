@@ -59,7 +59,10 @@ class GDCM_EXPORT ULConnectionManager
       //event handler loop.
       //will just keep running until the current event is nonexistent.
       //at which point, it will return the current state of the connection
-      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet);
+      //this starts by initiating an action, but can be put into a passive mode
+      //for a cmove/cstore combination by setting startWaiting to true
+      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet,
+        ULConnection* inWhichConnection, const bool& startWaiting);
 
       //like the above, but will manage the event loop for a move event (which
       //is basically two simultaneous connections interwoven, one inbound and
