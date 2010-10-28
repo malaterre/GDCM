@@ -137,7 +137,7 @@ bool ULConnection::InitializeIncomingConnection(){
     sin.bind( mInfo.GetCalledIPPort() );
     sin.recvtimeout((int)GetTimer().GetTimeout());
     sin.sendtimeout((int)GetTimer().GetTimeout());
-    //sin.listen();
+    sin.listen();
     mSocket = new iosockinet(sin.accept());
 
     /*
