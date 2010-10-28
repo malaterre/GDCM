@@ -57,7 +57,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQu
   de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   {
-  gdcm::Attribute<0x0,0x100> at = { 33 };
+  gdcm::Attribute<0x0,0x100> at = { 33 };//0021H, as per the spec
   ds.Insert( at.GetAsDataElement() );
   }
   {
@@ -66,7 +66,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQu
   }
   {
   // FIXME !!!!
-  gdcm::Attribute<0x0,0x600> at = { "ACME1" };
+  gdcm::Attribute<0x0,0x600> at = { "SILVERSTREAK" };
   ds.Insert( at.GetAsDataElement() );
   }
   {
@@ -89,7 +89,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(BaseRootQuery* inRootQu
   thePDVs.push_back(thePDV);
   {
     PresentationDataValue thePDV;
-    thePDV.SetPresentationContextID(contextID); // FIXME
+    thePDV.SetPresentationContextID(contextID);
     //thePDV.SetBlob( sub );
     thePDV.SetDataSet(inRootQuery->GetQueryDataSet());
     thePDV.SetMessageHeader( 2 );

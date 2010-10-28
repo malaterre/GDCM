@@ -24,15 +24,20 @@ using namespace gdcm::network;
 ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo){
   mCurrentState = eSta1Idle;
   mSocket = NULL;
+  mEcho = NULL;
   mInfo = inConnectInfo;
 }
 
 
 ULConnection::~ULConnection(){
-  if (mSocket != NULL){
-    delete mSocket;
-    mSocket = NULL;
-  }
+    if (mEcho != NULL){
+      delete mEcho;
+      mEcho = NULL;
+    }
+    if (mSocket != NULL){
+      delete mSocket;
+      mSocket = NULL;
+    }
 }
 
 
@@ -46,21 +51,18 @@ void ULConnection::SetState(const EStateID& inState){
 
 //echo* ULConnection::GetProtocol(){
 std::iostream* ULConnection::GetProtocol(){
-  return mSocket;
-}
-
-void ULConnection::SetProtocol(echo* inProtocol){
-  if (mSocket != NULL){
-    delete mSocket;
-    mSocket = NULL;
+  if (mSocket){
+    return mSocket;
   }
-  mSocket = inProtocol;
+  if (mEcho){
+    return mEcho;
+  }
+  return NULL;
 }
 
 ARTIMTimer& ULConnection::GetTimer(){
   return mTimer;
 }
-
 
 ULConnectionInfo ULConnection::GetConnectionInfo() const{
   return mInfo;
@@ -106,9 +108,63 @@ bool ULConnection::InitializeConnection(){
     //make sure to convert timeouts to platform appropriate values.
     (*p)->recvtimeout((int)GetTimer().GetTimeout());
     (*p)->sendtimeout((int)GetTimer().GetTimeout());
-    SetProtocol(p);
-  } catch (...){//unable to establish connection, so break off.
+    if (mEcho != NULL){
+      delete mEcho;
+      mEcho = NULL;
+    }
+    if (mSocket != NULL){
+      delete mSocket;
+      mSocket = NULL;
+    }
+    mEcho = p;
+  } catch (std::exception& ex){//unable to establish connection, so break off.
+     gdcmWarningMacro("Unable to open connection with exception " << ex.what() << std::endl);
      return false;
   }
   return true;
+}
+bool ULConnection::InitializeIncomingConnection(){
+  try{
+    if (mEcho != NULL){
+      delete mEcho;
+      mEcho = NULL;
+    }
+    if (mSocket != NULL){
+      delete mSocket;
+      mSocket = NULL;
+    }
+    sockinetbuf sin (sockbuf::sock_stream);
+    sin.bind( mInfo.GetCalledIPPort() );
+    sin.recvtimeout((int)GetTimer().GetTimeout());
+    sin.sendtimeout((int)GetTimer().GetTimeout());
+    //sin.listen();
+    mSocket = new iosockinet(sin.accept());
+
+    /*
+    if (mSocket != NULL){
+      delete mSocket;
+    }
+    mSocket = new protocol();
+    sockinetaddr theAddy(GetConnectionInfo().GetCalledComputerName().c_str(),
+      GetConnectionInfo().GetCalledIPPort());
+    mSocket->rdbuf()->connect(theAddy);
+    mSocket->rdbuf()->recvtimeout((int)GetTimer().GetTimeout());
+    mSocket->rdbuf()->sendtimeout((int)GetTimer().GetTimeout());
+*/
+  } catch (std::exception& ex){//unable to establish connection, so break off.
+     gdcmWarningMacro("Unable to open connection with exception " << ex.what() << std::endl);
+     return false;
+  }
+  return true;
+}
+
+void ULConnection::StopProtocol(){
+  if (mEcho != NULL){
+    delete mEcho;
+    mEcho = NULL;
+  }
+  if (mSocket != NULL){
+    delete mSocket;
+    mSocket = NULL;
+  }
 }
