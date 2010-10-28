@@ -26,6 +26,7 @@ gdcmCommandDataSet.cxx
 gdcmImplementationClassUIDSub.cxx
 gdcmImplementationUIDSub.cxx
 gdcmImplementationVersionNameSub.cxx
+gdcmAsynchronousOperationsWindowSub.cxx
 gdcmAssociationEstablishment.cxx
 gdcmAssociationRelease.cxx
 gdcmDataTransfer.cxx

@@ -16,27 +16,28 @@
  *
  *=========================================================================*/
 
-#include "gdcmUserInformation.h"
+#include "gdcmAsynchronousOperationsWindowSub.h"
+#include "gdcmFileMetaInformation.h"
 #include "gdcmSwapper.h"
 
 namespace gdcm
 {
 namespace network
 {
+const uint8_t AsynchronousOperationsWindowSub::ItemType = 0x53;
+const uint8_t AsynchronousOperationsWindowSub::Reserved2 = 0x00;
 
-const uint8_t UserInformation::ItemType = 0x50;
-const uint8_t UserInformation::Reserved2 = 0x00;
-
-UserInformation::UserInformation()
+AsynchronousOperationsWindowSub::AsynchronousOperationsWindowSub()
 {
-  size_t t0 = MLS.Size();
-  size_t t1 = ICUID.Size();
-  size_t t2 = IVNS.Size();
-  ItemLength = t0 + t1 + t2;
+  ItemLength = 0;
+  MaximumNumberOperationsInvoked = 0;
+  MaximumNumberOperationsPerformed = 0;
+
+  ItemLength = Size() - 4;
   assert( ItemLength + 4 == Size() );
 }
 
-std::istream &UserInformation::Read(std::istream &is)
+std::istream &AsynchronousOperationsWindowSub::Read(std::istream &is)
 {
   //uint8_t itemtype = 0x0;
   //is.read( (char*)&itemtype, sizeof(ItemType) );
@@ -48,46 +49,20 @@ std::istream &UserInformation::Read(std::istream &is)
   SwapperDoOp::SwapArray(&itemlength,1);
   ItemLength = itemlength;
 
-//  MLS.Read(is);
-//  ICUID.Read(is);
-//  IVNS.Read(is);
-  uint8_t itemtype2 = 0x0;
-  size_t curlen = 0;
-  while( curlen < ItemLength )
-    {
-    is.read( (char*)&itemtype2, sizeof(ItemType) );
-    switch ( itemtype2 )
-      {
-    case 0x51: // MaximumLengthSub
-      MLS.Read( is );
-      curlen += MLS.Size();
-      break;
-    case 0x52: // ImplementationClassUIDSub
-      ICUID.Read(is);
-      curlen += ICUID.Size();
-      break;
-    case 0x53: // AsynchronousOperationsWindowSub
-      AOWS.Read( is );
-      curlen += AOWS.Size();
-      break;
-    case 0x55: // ImplementationVersionNameSub
-      IVNS.Read( is );
-      curlen += IVNS.Size();
-      break;
-    default:
-      gdcmErrorMacro( "Unknown ItemType: " << std::hex << (int) itemtype2 );
-      curlen = ItemLength; // make sure to exit
-      assert(0);
-      break;
-      }
-    }
-  assert( curlen == ItemLength );
+  uint16_t maximumnumberoperationsinvoked;
+  is.read( (char*)&maximumnumberoperationsinvoked, sizeof(MaximumNumberOperationsInvoked) );
+  SwapperDoOp::SwapArray(&maximumnumberoperationsinvoked,1);
+  MaximumNumberOperationsInvoked = maximumnumberoperationsinvoked;
 
-  assert( ItemLength + 4 == Size() );
+  uint16_t maximumnumberoperationsperformed;
+  is.read( (char*)&maximumnumberoperationsperformed, sizeof(MaximumNumberOperationsPerformed) );
+  SwapperDoOp::SwapArray(&MaximumNumberOperationsPerformed,1);
+  MaximumNumberOperationsPerformed = maximumnumberoperationsperformed;
+
   return is;
 }
 
-const std::ostream &UserInformation::Write(std::ostream &os) const
+const std::ostream &AsynchronousOperationsWindowSub::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
@@ -96,31 +71,21 @@ const std::ostream &UserInformation::Write(std::ostream &os) const
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
 
-  MLS.Write(os);
-  //os.write( Data.c_str(), Data.size() );
-  ICUID.Write(os);
-  IVNS.Write(os);
-
-  assert( ItemLength + 4 == Size() );
+  assert(0); // TODO
 
   return os;
 }
 
-size_t UserInformation::Size() const
+size_t AsynchronousOperationsWindowSub::Size() const
 {
   size_t ret = 0;
   ret += sizeof(ItemType);
   ret += sizeof(Reserved2);
-  ret += sizeof(ItemLength); // len of
-  ret += MLS.Size();
-  ret += ICUID.Size();
-  ret += IVNS.Size();
+  ret += sizeof(ItemLength);
+  ret += sizeof(MaximumNumberOperationsInvoked);
+  ret += sizeof(MaximumNumberOperationsPerformed);
 
   return ret;
-}
-
-void UserInformation::Print(std::ostream &os) const
-{
 }
 
 } // end namespace network

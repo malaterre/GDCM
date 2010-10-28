@@ -16,14 +16,10 @@
  *
  *=========================================================================*/
 
-#ifndef GDCMUSERINFORMATION_H
-#define GDCMUSERINFORMATION_H
+#ifndef GDCMASYNCHRONOUSOPERATIONSWINDOWSUB_H
+#define GDCMASYNCHRONOUSOPERATIONSWINDOWSUB_H
 
 #include "gdcmTypes.h"
-#include "gdcmMaximumLengthSub.h"
-#include "gdcmImplementationVersionNameSub.h"
-#include "gdcmImplementationClassUIDSub.h"
-#include "gdcmAsynchronousOperationsWindowSub.h"
 
 namespace gdcm
 {
@@ -32,37 +28,30 @@ namespace network
 {
 
 /**
-Table 9-16
-USER INFORMATION ITEM FIELDS
-
-TODO what is the goal of :
-
-Table 9-20
-USER INFORMATION ITEM FIELDS
+PS 3.7
+Table D.3-7
+ASYNCHRONOUS OPERATIONS WINDOW SUB-ITEM FIELDS
+(A-ASSOCIATE-RQ)
  */
-class GDCM_EXPORT UserInformation
+class GDCM_EXPORT AsynchronousOperationsWindowSub
 {
 public:
-  UserInformation();
+  AsynchronousOperationsWindowSub();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
-  size_t Size() const;
 
-  void Print(std::ostream &os) const;
+  size_t Size() const;
 
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
-  uint16_t ItemLength; // len of
-  MaximumLengthSub MLS;
-  //std::string /*UserInformation*/ Data; // ??
-  ImplementationClassUIDSub ICUID;
-  AsynchronousOperationsWindowSub AOWS;
-  ImplementationVersionNameSub IVNS;
+  uint16_t ItemLength;
+  uint16_t MaximumNumberOperationsInvoked;
+  uint16_t MaximumNumberOperationsPerformed;
 };
 
 } // end namespace network
 
 } // end namespace gdcm
 
-#endif //GDCMUSERINFORMATION_H
+#endif // GDCMASYNCHRONOUSOPERATIONSWINDOWSUB_H
