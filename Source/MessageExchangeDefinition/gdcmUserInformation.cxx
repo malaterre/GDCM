@@ -114,6 +114,7 @@ size_t UserInformation::Size() const
   ret += sizeof(ItemLength); // len of
   ret += MLS.Size();
   ret += ICUID.Size();
+  ret += AOWS.Size();
   ret += IVNS.Size();
 
   return ret;
