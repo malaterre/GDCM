@@ -362,16 +362,15 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // When doing a C-MOVE we receive the Requested DataSet over
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
-
+/*
     if (mSecondaryConnection->GetProtocol() == NULL){
       mSecondaryConnection->InitializeIncomingConnection();
+      EStateID theCStoreStateID;
+      ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+      theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
     }
-    EStateID theCStoreStateID;
-    ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-    std::vector<DataSet> outputDataSet;
-    theCStoreStateID = RunEventLoop(theCStoreEvent, outputDataSet, mSecondaryConnection, true);
     waitingForEvent = true;
-
+*/
 
 
 
@@ -427,6 +426,44 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
             //check for other error fields
             ByteValue *err1 = NULL, *err2 = NULL;
             std::cout << "Transfer failed with code " << theVal << std::endl;
+            switch (theVal){
+              case 0xA701:
+                std::cout << "Refused: Out of Resources – Unable to calculate number of matches" << std::endl;
+                break;
+              case 0xA702:
+                std::cout << "Refused: Out of Resources – Unable to perform sub-operations" << std::endl;
+                break;
+              case 0xA801:
+                std::cout << "Refused: Move Destination unknown" << std::endl;
+                break;
+              case 0xA900:
+                std::cout << "Identifier does not match SOP Class" << std::endl;
+                break;
+              case 0xAA00:
+                std::cout << "None of the frames requested were found in the SOP Instance" << std::endl;
+                break;
+              case 0xAA01:
+                std::cout << "Unable to create new object for this SOP class" << std::endl;
+                break;
+              case 0xAA02:
+                std::cout << "Unable to extract frames" << std::endl;
+                break;
+              case 0xAA03:
+                std::cout << "Time-based request received for a non-time-based original SOP Instance. " << std::endl;
+                break;
+              case 0xAA04:
+                std::cout << "Invalid Request" << std::endl;
+                break;
+              case 0xFE00:
+                std::cout << "Sub-operations terminated due to Cancel Indication" << std::endl;
+                break;
+              case 0xB000:
+                std::cout << "Sub-operations Complete – One or more Failures or Warnings" << std::endl;
+                break;
+              default:
+                std::cout << "Unable to process" << std::endl;
+                break;
+            }
             if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
               gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
               err1 = de.GetByteValue();
@@ -444,6 +481,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
             receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
             justWaiting = true;
             waitingForEvent = true;
+
             //ok, if we're pending, then let's open the cstorescp connection here
             //(if it's not already open), and then from here start a storescp event loop.
             //just don't listen to the cmove event loop until this is done.
@@ -456,53 +494,60 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
               uint32_t theCommandCode = at.GetValues()[0];
               if (theCommandCode == 0x8021){//cmove response, so prep the retrieval loop on the back connection
                 if (mSecondaryConnection->GetProtocol() == NULL){
+                  //establish the connection
                   mSecondaryConnection->InitializeIncomingConnection();
+                }
+                if (mSecondaryConnection->GetState()== eSta1Idle ||
+                  mSecondaryConnection->GetState() == eSta2Open){
+                  EStateID theCStoreStateID;
+                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
                 }
                 EStateID theCStoreStateID;
                 ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                std::vector<DataSet> outputDataSet;
-                theCStoreStateID = RunEventLoop(theCStoreEvent, outputDataSet, mSecondaryConnection, true);
+                //now, get data from across the network
+                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
               }
-            }
-          }
-          if (theVal == pendingDE1 || theVal == pendingDE2 /*|| theVal == success*/){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
-            //first, dynamically cast that pdu in the event
-            //should be a data pdu
-            //then, look for tag 0x0,0x900
+            } else {//not dealing with cmove progress updates, apparently
+              //keep looping if we haven't succeeded or failed; these are the values for 'pending'
+              //first, dynamically cast that pdu in the event
+              //should be a data pdu
+              //then, look for tag 0x0,0x900
 
-            //only add datasets that are _not_ part of the network response
-            std::vector<gdcm::DataSet> final;
-            std::vector<BasePDU*> theData;
-            BasePDU* thePDU;//outside the loop for the do/while stopping condition
-            bool interrupted = false;
-            do {
-              uint8_t itemtype = 0x0;
-              is.read( (char*)&itemtype, 1 );
-              //what happens if nothing's read?
-              thePDU = PDUFactory::ConstructPDU(itemtype);
-              if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
-                std::vector<BasePDU*> interruptingPDUs;
-                currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
-                currentEvent.SetPDU(interruptingPDUs);
-                interrupted= true;
-                break;
+              //only add datasets that are _not_ part of the network response
+              std::vector<gdcm::DataSet> final;
+              std::vector<BasePDU*> theData;
+              BasePDU* thePDU;//outside the loop for the do/while stopping condition
+              bool interrupted = false;
+              do {
+                uint8_t itemtype = 0x0;
+                is.read( (char*)&itemtype, 1 );
+                //what happens if nothing's read?
+                thePDU = PDUFactory::ConstructPDU(itemtype);
+                if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
+                  std::vector<BasePDU*> interruptingPDUs;
+                  currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
+                  currentEvent.SetPDU(interruptingPDUs);
+                  interrupted= true;
+                  break;
+                }
+                if (thePDU != NULL){
+                  thePDU->Read(is);
+                  theData.push_back(thePDU);
+                } else{
+                  break;
+                }
+                //!!!need to handle incoming PDUs that are not data, ie, an abort
+              } while(/*!is.eof() &&*/ !thePDU->IsLastFragment());
+              if (!interrupted){//ie, if the remote server didn't hang up
+                DataSet theCompleteFindResponse =
+                  PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+                //note that it's the responsibility of the event to delete the PDU in theFindRSP
+                for (int i = 0; i < theData.size(); i++){
+                  delete theData[i];
+                }
+                outDataSet.push_back(theCompleteFindResponse);
               }
-              if (thePDU != NULL){
-                thePDU->Read(is);
-                theData.push_back(thePDU);
-              } else{
-                break;
-              }
-              //!!!need to handle incoming PDUs that are not data, ie, an abort
-            } while(/*!is.eof() &&*/ !thePDU->IsLastFragment());
-            if (!interrupted){//ie, if the remote server didn't hang up
-              DataSet theCompleteFindResponse =
-                PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
-              //note that it's the responsibility of the event to delete the PDU in theFindRSP
-              for (int i = 0; i < theData.size(); i++){
-                delete theData[i];
-              }
-              outDataSet.push_back(theCompleteFindResponse);
             }
           }
         }
@@ -580,6 +625,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
             if (thePDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
+          }
+          if (itemtype == 7){//abort; received at the end of a cmove/cstorescp from dcm4chee
+            waitingForEvent = false;
+            inWhichConnection->StopProtocol();
           }
         }
         catch (...){
