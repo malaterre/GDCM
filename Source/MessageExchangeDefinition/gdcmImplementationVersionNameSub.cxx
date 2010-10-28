@@ -36,9 +36,9 @@ ImplementationVersionNameSub::ImplementationVersionNameSub()
 
 std::istream &ImplementationVersionNameSub::Read(std::istream &is)
 {
-  uint8_t itemtype = 0x0;
-  is.read( (char*)&itemtype, sizeof(ItemType) );
-  assert( itemtype == ItemType );
+  //uint8_t itemtype = 0x0;
+  //is.read( (char*)&itemtype, sizeof(ItemType) );
+  //assert( itemtype == ItemType );
   uint8_t reserved2;
   is.read( (char*)&reserved2, sizeof(Reserved2) );
   uint16_t itemlength;
