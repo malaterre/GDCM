@@ -31,8 +31,9 @@ UserInformation::UserInformation()
 {
   size_t t0 = MLS.Size();
   size_t t1 = ICUID.Size();
-  size_t t2 = IVNS.Size();
-  ItemLength = t0 + t1 + t2;
+  size_t t2 = AOWS.Size();
+  size_t t3 = IVNS.Size();
+  ItemLength = t0 + t1 + t2 + t3;
   assert( ItemLength + 4 == Size() );
 }
 
