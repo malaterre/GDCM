@@ -338,7 +338,6 @@ void ULConnectionManager::BreakConnectionNow(){
   EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
 }
 
-
 //event handler loop for move-- will interweave the two event loops,
 //one for storescp and the other for movescu.  Perhaps complicated, but
 //avoids starting a second process.
@@ -359,6 +358,23 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
     theState = mConnection->GetState();
     std::istream &is = *mConnection->GetProtocol();
     std::ostream &os = *mConnection->GetProtocol();
+
+  // When doing a C-MOVE we recevie the Requested DataSet over
+  // another chanel (technically this is send to an SCP)
+  // in our case we use another port to receive it.
+
+#if 0
+  if (mSecondaryConnection->GetProtocol() == NULL){
+    mSecondaryConnection->InitializeIncomingConnection();
+  }
+  EStateID theCStoreStateID;
+  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+  std::vector<DataSet> outputDataSet;
+  theCStoreStateID = RunEventLoop(theCStoreEvent, outputDataSet, mSecondaryConnection, true);
+    waitingForEvent = false;
+
+#endif
+
 
 
     //just as for the regular event loop, but we have to alternate between the connections.
