@@ -371,7 +371,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
   std::vector<DataSet> outputDataSet;
   theCStoreStateID = RunEventLoop(theCStoreEvent, outputDataSet, mSecondaryConnection, true);
-    waitingForEvent = false;
+  waitingForEvent = true;
 
 #endif
 
