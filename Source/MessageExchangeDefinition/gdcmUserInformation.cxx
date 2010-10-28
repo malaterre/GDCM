@@ -48,9 +48,36 @@ std::istream &UserInformation::Read(std::istream &is)
   SwapperDoOp::SwapArray(&itemlength,1);
   ItemLength = itemlength;
 
-  MLS.Read(is);
-  ICUID.Read(is);
-  IVNS.Read(is);
+//  MLS.Read(is);
+//  ICUID.Read(is);
+//  IVNS.Read(is);
+  uint8_t itemtype2 = 0x0;
+  size_t curlen = 0;
+  while( curlen < ItemLength )
+    {
+    is.read( (char*)&itemtype2, sizeof(ItemType) );
+    switch ( itemtype2 )
+      {
+    case 0x51: // MaximumLengthSub
+      MLS.Read( is );
+      curlen += MLS.Size();
+      break;
+    case 0x52: // ImplementationClassUIDSub
+      ICUID.Read(is);
+      curlen += ICUID.Size();
+      break;
+    case 0x55: // ImplementationVersionNameSub
+      IVNS.Read( is );
+      curlen += IVNS.Size();
+      break;
+    default:
+      gdcmErrorMacro( "Unknown ItemType: " << std::hex << (int) itemtype2 );
+      curlen = ItemLength; // make sure to exit
+      assert(0);
+      break;
+      }
+    }
+  assert( curlen == ItemLength );
 
   assert( ItemLength + 4 == Size() );
   return is;
