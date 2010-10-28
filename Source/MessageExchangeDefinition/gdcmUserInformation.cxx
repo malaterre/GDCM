@@ -18,6 +18,7 @@
 
 #include "gdcmUserInformation.h"
 #include "gdcmSwapper.h"
+#include "gdcmAsynchronousOperationsWindowSub.h"
 
 namespace gdcm
 {
@@ -29,9 +30,10 @@ const uint8_t UserInformation::Reserved2 = 0x00;
 
 UserInformation::UserInformation()
 {
+  AOWS = NULL;
   size_t t0 = MLS.Size();
   size_t t1 = ICUID.Size();
-  size_t t2 = AOWS.Size();
+  size_t t2 = 0; //AOWS.Size();
   size_t t3 = IVNS.Size();
   ItemLength = t0 + t1 + t2 + t3;
   assert( ItemLength + 4 == Size() );
@@ -68,8 +70,9 @@ std::istream &UserInformation::Read(std::istream &is)
       curlen += ICUID.Size();
       break;
     case 0x53: // AsynchronousOperationsWindowSub
-      AOWS.Read( is );
-      curlen += AOWS.Size();
+      AOWS = new AsynchronousOperationsWindowSub;
+      AOWS->Read( is );
+      curlen += AOWS->Size();
       break;
     case 0x55: // ImplementationVersionNameSub
       IVNS.Read( is );
@@ -98,8 +101,11 @@ const std::ostream &UserInformation::Write(std::ostream &os) const
   os.write( (char*)&copy, sizeof(ItemLength) );
 
   MLS.Write(os);
-  //os.write( Data.c_str(), Data.size() );
   ICUID.Write(os);
+  if( AOWS )
+    {
+    AOWS->Write(os);
+    }
   IVNS.Write(os);
 
   assert( ItemLength + 4 == Size() );
@@ -115,7 +121,8 @@ size_t UserInformation::Size() const
   ret += sizeof(ItemLength); // len of
   ret += MLS.Size();
   ret += ICUID.Size();
-  ret += AOWS.Size();
+  if( AOWS )
+    ret += AOWS->Size();
   ret += IVNS.Size();
 
   return ret;

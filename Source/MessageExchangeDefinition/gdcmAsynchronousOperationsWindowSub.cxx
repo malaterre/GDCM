@@ -56,7 +56,7 @@ std::istream &AsynchronousOperationsWindowSub::Read(std::istream &is)
 
   uint16_t maximumnumberoperationsperformed;
   is.read( (char*)&maximumnumberoperationsperformed, sizeof(MaximumNumberOperationsPerformed) );
-  SwapperDoOp::SwapArray(&MaximumNumberOperationsPerformed,1);
+  SwapperDoOp::SwapArray(&maximumnumberoperationsperformed,1);
   MaximumNumberOperationsPerformed = maximumnumberoperationsperformed;
 
   return is;
@@ -71,7 +71,13 @@ const std::ostream &AsynchronousOperationsWindowSub::Write(std::ostream &os) con
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
 
-  assert(0); // TODO
+  uint16_t maximumnumberoperationsinvoked = MaximumNumberOperationsInvoked;
+  SwapperDoOp::SwapArray(&maximumnumberoperationsinvoked,1);
+  os.write( (char*)&maximumnumberoperationsinvoked, sizeof(MaximumNumberOperationsInvoked) );
+
+  uint16_t maximumnumberoperationsperformed = MaximumNumberOperationsPerformed;
+  SwapperDoOp::SwapArray(&maximumnumberoperationsperformed,1);
+  os.write( (char*)&maximumnumberoperationsperformed, sizeof(MaximumNumberOperationsPerformed) );
 
   return os;
 }

@@ -23,7 +23,6 @@
 #include "gdcmMaximumLengthSub.h"
 #include "gdcmImplementationVersionNameSub.h"
 #include "gdcmImplementationClassUIDSub.h"
-#include "gdcmAsynchronousOperationsWindowSub.h"
 
 namespace gdcm
 {
@@ -31,6 +30,7 @@ namespace gdcm
 namespace network
 {
 
+class AsynchronousOperationsWindowSub;
 /**
 Table 9-16
 USER INFORMATION ITEM FIELDS
@@ -57,7 +57,7 @@ private:
   MaximumLengthSub MLS;
   //std::string /*UserInformation*/ Data; // ??
   ImplementationClassUIDSub ICUID;
-  AsynchronousOperationsWindowSub AOWS;
+  AsynchronousOperationsWindowSub *AOWS;
   ImplementationVersionNameSub IVNS;
 };
 
