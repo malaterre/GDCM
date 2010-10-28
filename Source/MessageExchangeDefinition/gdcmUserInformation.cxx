@@ -70,6 +70,7 @@ std::istream &UserInformation::Read(std::istream &is)
       curlen += ICUID.Size();
       break;
     case 0x53: // AsynchronousOperationsWindowSub
+      assert( !AOWS );
       AOWS = new AsynchronousOperationsWindowSub;
       AOWS->Read( is );
       curlen += AOWS->Size();

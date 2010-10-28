@@ -18,6 +18,7 @@
 
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmSwapper.h"
+#include "gdcmAAssociateRQPDU.h"
 
 namespace gdcm
 {
@@ -173,6 +174,28 @@ void AAssociateACPDU::Print(std::ostream &os) const
     {
     it->Print(os);
     }
+}
+
+void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
+{
+  gdcm::network::TransferSyntax_ ts1;
+  ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+
+
+  for( unsigned int index = 0; index < rqpdu.GetNumberOfPresentationContext(); index++ )
+    {
+    // FIXME / HARDCODED We only ever accept Little Endian
+    // FIXME we should check :
+    // rqpdu.GetAbstractSyntax() contains LittleENdian
+    gdcm::network::PresentationContextAC pcac1;
+    PresentationContext const &pc = rqpdu.GetPresentationContext(index);
+    uint8_t id = pc.GetPresentationContextID();
+
+    pcac1.SetPresentationContextID( id ); // DCMTK MR
+    pcac1.SetTransferSyntax( ts1 );
+    AddPresentationContextAC( pcac1 );
+    }
+
 }
 
 } // end namespace network
