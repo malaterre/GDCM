@@ -137,11 +137,6 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   if (rqpdu == NULL){
     acceptable = false;
   }
-  else {
-    //check for little endian here
-    for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ ){
-    }
-  }
   if (acceptable){
 
     outWaitingForEvent = false;//not waiting, now want to get the
