@@ -40,6 +40,7 @@
 #include "gdcmVersion.h"
 #include "gdcmGlobal.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmWriter.h"
 
 //for testing!  Should be put in a testing executable,
 //but it's just here now because I know this path works
@@ -271,6 +272,29 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
   for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
     std::cout << "Message " << c++ << std::endl;
     itor->Print(std::cout);
+  }
+  //write to the output directory
+  if (!outputdir.empty()){
+    //loop over each dataset, write out the given objects by the SOP Instance UID
+    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
+      if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018))){
+        gdcm::DataElement de = itor->GetDataElement(gdcm::Tag(0x0008,0x0018));
+        std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
+        gdcm::Writer w;
+        std::string theLoc = outputdir + "/" + sopclassuid_str + ".dcm";
+        w.SetFileName(theLoc.c_str());
+        gdcm::File &f = w.GetFile();
+        f.SetDataSet(*itor);
+        gdcm::FileMetaInformation &fmi = f.GetHeader();
+        fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+        w.SetCheckFileMetaInformation( true );
+        if (!w.Write()){
+          std::cerr << "Failed to write " << sopclassuid_str << std::endl;
+        }
+      }
+    }
+  } else {
+    std::cerr << "Output directory not specified." << std::endl;
   }
 
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
@@ -683,7 +707,7 @@ void PrintHelp()
   std::cout << "     --study          C-FIND Study Root Model." << std::endl;
   //std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
   std::cout << "C-MOVE Options:" << std::endl;
-  std::cout << "  -o --output         DICOM filename / directory." << std::endl;
+  std::cout << "  -o --output         DICOM output directory." << std::endl;
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
