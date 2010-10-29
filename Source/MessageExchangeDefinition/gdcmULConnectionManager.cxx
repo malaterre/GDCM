@@ -375,6 +375,13 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                   ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                   theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
                 }
+
+#if 1
+  gdcm::network::AReleaseRPPDU rel;
+  rel.Write( *mSecondaryConnection->GetProtocol() );
+  mSecondaryConnection->GetProtocol()->flush();
+#endif
+
 #if 0
                 EStateID theCStoreStateID;
                 ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
