@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMIMPLEMENTATIONUIDSUB_H
 #define GDCMIMPLEMENTATIONUIDSUB_H
 
@@ -28,8 +27,9 @@ namespace network
 {
 
 /**
-Table D.3-2
-IMPLEMENTATION UID SUB-ITEM FIELDS (A-ASSOCIATE-AC)
+ * \brief ImplementationUIDSub
+ * Table D.3-2
+ * IMPLEMENTATION UID SUB-ITEM FIELDS (A-ASSOCIATE-AC)
  */
 class GDCM_EXPORT ImplementationUIDSub
 {

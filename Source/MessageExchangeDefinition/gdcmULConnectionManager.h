@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef ULCONNECTIONMANAGER_H
-#define ULCONNECTIONMANAGER_H
+#ifndef GDCMULCONNECTIONMANAGER_H
+#define GDCMULCONNECTIONMANAGER_H
 
 #include "gdcmULTransitionTable.h"
 #include "gdcmULConnection.h"
@@ -128,4 +128,4 @@ class GDCM_EXPORT ULConnectionManager
   }
 }
 
-#endif //ULCONNECTIONMANAGER_H
+#endif // GDCMULCONNECTIONMANAGER_H

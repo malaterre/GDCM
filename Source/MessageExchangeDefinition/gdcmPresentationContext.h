@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMPRESENTATIONCONTEXT_H
 #define GDCMPRESENTATIONCONTEXT_H
 
@@ -113,9 +112,10 @@ enum EPresentationContextID {
 };
 
 /**
- Table 9-13
- PRESENTATION CONTEXT ITEM FIELDS
-\see PresentationContextAC
+ * \brief PresentationContext
+ * Table 9-13
+ * PRESENTATION CONTEXT ITEM FIELDS
+ * \see PresentationContextAC
  */
 class GDCM_EXPORT PresentationContext
 {

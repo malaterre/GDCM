@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMPRESENTATIONCONTEXTAC_H
 #define GDCMPRESENTATIONCONTEXTAC_H
 
@@ -29,9 +28,10 @@ namespace network
 {
 
 /**
- Table 9-18
-PRESENTATION CONTEXT ITEM FIELDS
-\see PresentationContext
+ * \brief PresentationContextAC
+ * Table 9-18
+ * PRESENTATION CONTEXT ITEM FIELDS
+ * \see PresentationContext
  */
 class GDCM_EXPORT PresentationContextAC
 {

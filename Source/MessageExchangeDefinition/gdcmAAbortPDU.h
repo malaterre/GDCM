@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMAABORTPDU_H
 #define GDCMAABORTPDU_H
 
@@ -25,17 +24,14 @@
 namespace gdcm
 {
 
-// TODO: MM : does swig handle nested namespace
-// I would like to avoid polluting gdcm namespace with such low level details the networ
-// primitives:
 namespace network
 {
 
 /**
-Table 9-26
-A-ABORT PDU FIELDS
+ * \brief AAbortPDU
+ * Table 9-26 A-ABORT PDU FIELDS
  */
-  class GDCM_EXPORT AAbortPDU : public BasePDU
+class GDCM_EXPORT AAbortPDU : public BasePDU
 {
 public:
   AAbortPDU();

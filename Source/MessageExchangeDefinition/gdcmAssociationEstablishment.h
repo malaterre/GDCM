@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMASSOCIATIONESTABLISHMENT_H
 #define GDCMASSOCIATIONESTABLISHMENT_H
 
@@ -28,8 +27,9 @@ namespace network
 {
 
 /**
- Table 9-2
-ASSOCIATION ESTABLISHMENT
+ * \brief AssociationEstablishment
+ * Table 9-2
+ * ASSOCIATION ESTABLISHMENT
  */
 class GDCM_EXPORT AssociationEstablishment
 {

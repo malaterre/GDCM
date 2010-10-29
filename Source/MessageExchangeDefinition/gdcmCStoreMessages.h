@@ -15,17 +15,19 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-this file defines the messages for the cecho action
-5 oct 2010 mmr
-*/
+#ifndef GDCMCSTOREMESSAGES_H
+#define GDCMCSTOREMESSAGES_H
 
 #include "gdcmBaseCompositeMessage.h"
 
 namespace gdcm{
   namespace network{
     class BasePDU;
-    class CStoreRQ : public BaseCompositeMessage {
+/**
+ * \brief CStoreRQ
+ * this file defines the messages for the cecho action
+ */
+class CStoreRQ : public BaseCompositeMessage {
     public:
       std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };
@@ -37,3 +39,4 @@ namespace gdcm{
     };
   }
 }
+#endif // GDCMCSTOREMESSAGES_H

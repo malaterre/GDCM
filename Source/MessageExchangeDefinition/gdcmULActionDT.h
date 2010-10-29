@@ -15,15 +15,18 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
+#ifndef GDCMULACTIONDT_H
+#define GDCMULACTIONDT_H
+
+#include "gdcmULAction.h"
+
+/**
 This header defines the classes for the DT Actions,
 Data Transfer Related Actions (Table 9-8 of ps 3.8-2009).
 
 Since each class is essentially a placeholder for a function pointer, I'm breaking with having
 each class have its own file for the sake of brevity of the number of files.
 */
-
-#include "gdcmULAction.h"
 
 namespace gdcm {
   namespace network {
@@ -45,3 +48,4 @@ namespace gdcm {
     };
   }
 }
+#endif // GDCMULACTIONDT_H
