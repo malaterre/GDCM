@@ -15,25 +15,27 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
-//this class contains all the information about a particular connection
-//as established by the user.  That is, it's:
-// User Information
-// Calling AE Title
-// Called AE Title
-// IP address/computer name
-// IP Port
-//A connection must be established with this information, that's subsequently
-//placed into various primitives for actual communication.
-#ifndef ULCONNECTIONINFO_H
-#define ULCONNECTIONINFO_H
+#ifndef GDCMULCONNECTIONINFO_H
+#define GDCMULCONNECTIONINFO_H
 
 #include "gdcmUserInformation.h"
 #include <string>
 
 namespace gdcm{
   namespace network {
-    class ULConnectionInfo {
+/**
+ * \brief ULConnectionInfo
+ * this class contains all the information about a particular connection
+ * as established by the user.  That is, it's:
+ *  User Information
+ *  Calling AE Title
+ *  Called AE Title
+ *  IP address/computer name
+ *  IP Port
+ * A connection must be established with this information, that's subsequently
+ * placed into various primitives for actual communication.
+ */
+class ULConnectionInfo {
       UserInformation mUserInformation;
 
       char mCalledAETitle[16];
@@ -65,4 +67,4 @@ namespace gdcm{
   }
 }
 
-#endif //ULCONNECTIONINFO_H
+#endif //GDCMULCONNECTIONINFO_H

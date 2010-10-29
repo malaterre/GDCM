@@ -15,19 +15,21 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef CFINDMESSAGES_H
-#define CFINDMESSAGES_H
-/*
-this file defines the messages for the cfind action
-5 oct 2010 mmr
-*/
+#ifndef GDCMCFINDMESSAGES_H
+#define GDCMCFINDMESSAGES_H
 
 #include "gdcmBaseCompositeMessage.h"
 #include "gdcmBaseRootQuery.h"
 
 namespace gdcm{
   namespace network{
-    class CFindRQ : public BaseCompositeMessage {
+
+/*
+ * \brief CFindRQ
+ * this file defines the messages for the cfind action
+ */
+class CFindRQ : public BaseCompositeMessage
+{
       //this class will fulfill the inheritance,
       //but additional information is needed by cfind
       //namely, the root type

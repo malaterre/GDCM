@@ -15,20 +15,19 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-filename: gdcmQueryImage.h
-contains: class to construct an image-based query for c-find and c-move
-name and date: 15 oct 2010 mmr
+#ifndef GDCMQUERYIMAGE_H
+#define GDCMQUERYIMAGE_H
 
-*/
-#ifndef QUERYIMAGE_H
-#define QUERYIMAGE_H
 #include "gdcmQueryBase.h"
 #include "gdcmDataSet.h"
 
 namespace gdcm{
   namespace network{
-    class QueryImage : public QueryBase {
+/**
+ * \brief QueryImage
+ * contains: class to construct an image-based query for c-find and c-move
+ */
+class QueryImage : public QueryBase {
       gdcm::DataSet mCurrentQuery;
     public:
       std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const;
@@ -41,4 +40,4 @@ namespace gdcm{
   }
 }
 
-#endif //QUERYIMAGE_H
+#endif // GDCMQUERYIMAGE_H

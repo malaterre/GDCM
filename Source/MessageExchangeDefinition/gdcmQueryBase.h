@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef QUERYBASE_H
-#define QUERYBASE_H
+#ifndef GDCMQUERYBASE_H
+#define GDCMQUERYBASE_H
 
 #include "gdcmTag.h"
 #include "gdcmDataSet.h"
@@ -57,7 +57,8 @@ namespace gdcm{
  * design is somewhat overly complicated, but is kept so that if we ever wanted to
  * try to guess the query type from the given tags, we could do so.
  */
-    class QueryBase {
+class QueryBase
+{
     public:
 
       virtual std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const = 0;
@@ -80,4 +81,4 @@ namespace gdcm{
   }
 }
 
-#endif //QUERYBASE_H
+#endif //GDCMQUERYBASE_H

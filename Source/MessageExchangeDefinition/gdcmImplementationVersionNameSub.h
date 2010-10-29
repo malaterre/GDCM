@@ -28,8 +28,9 @@ namespace network
 {
 
 /**
-Table D.3-3
-IMPLEMENTATION VERSION NAME SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
+ * \brief ImplementationVersionNameSub
+ * Table D.3-3
+ * IMPLEMENTATION VERSION NAME SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
  */
 class GDCM_EXPORT ImplementationVersionNameSub
 {

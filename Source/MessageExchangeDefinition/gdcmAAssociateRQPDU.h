@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMAASSOCIATERQPDU_H
 #define GDCMAASSOCIATERQPDU_H
 
@@ -29,14 +28,12 @@
 namespace gdcm
 {
 
-// TODO: MM : does swig handle nested namespace
-// I would like to avoid polluting gdcm namespace with such low level details the networ
-// primitives:
 namespace network
 {
 
 /**
-Table 9-11 ASSOCIATE-RQ PDU fields
+ * \brief AAssociateRQPDU
+ * Table 9-11 ASSOCIATE-RQ PDU fields
  */
 class GDCM_EXPORT AAssociateRQPDU : public BasePDU
 {
