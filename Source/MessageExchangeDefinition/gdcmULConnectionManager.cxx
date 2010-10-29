@@ -362,16 +362,22 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // When doing a C-MOVE we receive the Requested DataSet over
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
-/*
-    if (mSecondaryConnection->GetProtocol() == NULL){
-      mSecondaryConnection->InitializeIncomingConnection();
-      EStateID theCStoreStateID;
-      ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-      theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-    }
-    waitingForEvent = true;
-*/
-
+#if 0
+                if (mSecondaryConnection->GetProtocol() == NULL){
+                  //establish the connection
+                  mSecondaryConnection->InitializeIncomingConnection();
+                }
+                if (mSecondaryConnection->GetState()== eSta1Idle ||
+                  mSecondaryConnection->GetState() == eSta2Open){
+                  EStateID theCStoreStateID;
+                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+                }
+                EStateID theCStoreStateID;
+                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                //now, get data from across the network
+                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+#endif
 
 
     //just as for the regular event loop, but we have to alternate between the connections.
@@ -381,27 +387,33 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
     //from is will contain progress info.
     std::vector<BasePDU*> incomingPDUs;
     if (waitingForEvent){
-      while (waitingForEvent){//loop for reading in the events that come down the wire
+      while (waitingForEvent)
+        {//loop for reading in the events that come down the wire
         uint8_t itemtype = 0x0;
         is.read( (char*)&itemtype, 1 );
 
         BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
-        if (thePDU != NULL){
+        if (thePDU != NULL)
+          {
           incomingPDUs.push_back(thePDU);
           thePDU->Read(is);
           thePDU->Print(std::cout);
           if (thePDU->IsLastFragment()) waitingForEvent = false;
-        } else {
+          }
+        else
+          {
           waitingForEvent = false; //because no PDU means not waiting anymore
+          }
         }
-      }
       //now, we have to figure out the event that just happened based on the PDU that was received.
-      if (!incomingPDUs.empty()){
+      if (!incomingPDUs.empty())
+        {
         currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(incomingPDUs[0]));
         currentEvent.SetPDU(incomingPDUs);
-        if (mConnection->GetTimer().GetHasExpired()){
+        if (mConnection->GetTimer().GetHasExpired())
+          {
           currentEvent.SetEvent(eARTIMTimerExpired);
-        }
+          }
         if (theState == eSta6TransferReady){//ie, finished the transitions
           //with find, the results now come down the wire.
           //the pdu we already have from the event will tell us how many to expect.
@@ -626,7 +638,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
           }
-          if (itemtype == 7){//abort; received at the end of a cmove/cstorescp from dcm4chee
+          if (itemtype == 7 || itemtype == 5 ){//abort || release; received at the end of a cmove/cstorescp from dcm4chee||dcmtk
             waitingForEvent = false;
             inWhichConnection->StopProtocol();
           }
