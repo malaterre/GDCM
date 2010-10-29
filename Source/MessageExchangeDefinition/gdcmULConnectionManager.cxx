@@ -734,6 +734,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                   thePDU = PDUFactory::ConstructPDU(itemtype);
                   if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
                     std::vector<BasePDU*> interruptingPDUs;
+                    interruptingPDUs.push_back(thePDU);
                     currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
                     currentEvent.SetPDU(interruptingPDUs);
                     interrupted= true;

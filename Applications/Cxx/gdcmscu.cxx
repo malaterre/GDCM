@@ -269,10 +269,10 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
   std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
   std::vector<gdcm::DataSet>::iterator itor;
   int c = 0;
-  for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
-    std::cout << "Message " << c++ << std::endl;
-    itor->Print(std::cout);
-  }
+//  for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
+//    std::cout << "Message " << c++ << std::endl;
+//    itor->Print(std::cout);
+//  }
   //write to the output directory
   if (!outputdir.empty()){
     //loop over each dataset, write out the given objects by the SOP Instance UID
