@@ -100,7 +100,7 @@ ULTransitionTable::ULTransitionTable(){
   mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
   mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta5WaitRemoteAssoc)] =
-    *Transition::MakeNew(eSta1Idle, new ULActionAE4());
+    *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
   mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta6TransferReady)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
   mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta7WaitRelease)] =
