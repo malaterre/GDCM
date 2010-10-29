@@ -364,7 +364,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // When doing a C-MOVE we receive the Requested DataSet over
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
-#if 1
+//#if 0
                 if (mSecondaryConnection->GetProtocol() == NULL){
                   //establish the connection
                   mSecondaryConnection->InitializeIncomingConnection();
@@ -375,6 +375,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                   ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                   theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
                 }
+#if 0
                 EStateID theCStoreStateID;
                 ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                 //now, get data from across the network
@@ -521,6 +522,9 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                 ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                 //now, get data from across the network
                 theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+                if (theCStoreStateID == eSta1Idle){//debugging break point
+                  std::cout << "It's IDLE!" << std::endl;
+                }
               }
             } else {//not dealing with cmove progress updates, apparently
               //keep looping if we haven't succeeded or failed; these are the values for 'pending'
@@ -641,13 +645,6 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
           }
-          if (itemtype == 7 /*|| itemtype == 5*/ ){//abort || release; received at the end of a cmove/cstorescp from dcm4chee||dcmtk
-            waitingForEvent = false;
-            inWhichConnection->StopProtocol();
-            //gdcm::network::AReleaseRPPDU rel;
-            //rel.Write( os );
-            //os.flush();
-          }
         }
         catch (...){
           //handle the exception, which is basically that nothing came in over the pipe.
@@ -663,117 +660,134 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
         if (mConnection->GetTimer().GetHasExpired()){
           currentEvent.SetEvent(eARTIMTimerExpired);
         }
-        if (theState == eSta6TransferReady){//ie, finished the transitions
-          //with find, the results now come down the wire.
-          //the pdu we already have from the event will tell us how many to expect.
-          uint32_t pendingDE1, pendingDE2, success, theVal;
-          pendingDE1 = 0xff01;
-          pendingDE2 = 0xff00;
-          success = 0x0000;
-          theVal = pendingDE1;
-          uint32_t theCommandCode = 0;//for now, a nothing value
-          DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
-          if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
-            gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
-            gdcm::Attribute<0x0,0x0900> at;
-            at.SetFromDataElement( de );
-            theVal = at.GetValues()[0];
-            //if theVal is Pending or Success, then we need to enter the loop below,
-            //because we need the data PDUs.
-            //so, the loop below is a do/while loop; there should be at least a second packet
-            //with the dataset, even if the status is 'success'
-            //success == 0000H
-          }
-          //check to see if this is a cstorerq
-          if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0100))){
-            gdcm::DataElement de2 = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
-            gdcm::Attribute<0x0,0x0100> at2;
-            at2.SetFromDataElement( de2 );
-            theCommandCode = at2.GetValues()[0];
-          }
-          if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
-            //check for other error fields
-            ByteValue *err1 = NULL, *err2 = NULL;
-            std::cout << "Transfer failed with code " << theVal << std::endl;
-            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
-              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
-              err1 = de.GetByteValue();
-              std::cout << " Tag 0x0,0x901 reported as " << *err1 << std::endl;
-            }
-            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0902))){
-              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0902));
-              err2 = de.GetByteValue();
-              std::cout << " Tag 0x0,0x902 reported as " << *err2 << std::endl;
-            }
-          }
-
-
-
-
-          receivingData = false;
-          //justWaiting = false;
-          if (theVal == pendingDE1 || theVal == pendingDE2) {
-            receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
-            //justWaiting = true;
-            waitingForEvent = true;
-          }
-          if (theVal == pendingDE1 || theVal == pendingDE2 /*|| theVal == success*/){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
-            //first, dynamically cast that pdu in the event
-            //should be a data pdu
-            //then, look for tag 0x0,0x900
-
-            //only add datasets that are _not_ part of the network response
-            std::vector<gdcm::DataSet> final;
-            std::vector<BasePDU*> theData;
-            BasePDU* thePDU;//outside the loop for the do/while stopping condition
-            bool interrupted = false;
-            do {
-              uint8_t itemtype = 0x0;
-              is.read( (char*)&itemtype, 1 );
-              //what happens if nothing's read?
-              thePDU = PDUFactory::ConstructPDU(itemtype);
-              if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
-                std::vector<BasePDU*> interruptingPDUs;
-                currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
-                currentEvent.SetPDU(interruptingPDUs);
-                interrupted= true;
-                break;
+        switch(currentEvent.GetEvent()){
+          case ePDATATFPDU:
+            {
+            //if (theState == eSta6TransferReady){//ie, finished the transitions
+              //with find, the results now come down the wire.
+              //the pdu we already have from the event will tell us how many to expect.
+              uint32_t pendingDE1, pendingDE2, success, theVal;
+              pendingDE1 = 0xff01;
+              pendingDE2 = 0xff00;
+              success = 0x0000;
+              theVal = pendingDE1;
+              uint32_t theCommandCode = 0;//for now, a nothing value
+              DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+              if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
+                gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
+                gdcm::Attribute<0x0,0x0900> at;
+                at.SetFromDataElement( de );
+                theVal = at.GetValues()[0];
+                //if theVal is Pending or Success, then we need to enter the loop below,
+                //because we need the data PDUs.
+                //so, the loop below is a do/while loop; there should be at least a second packet
+                //with the dataset, even if the status is 'success'
+                //success == 0000H
               }
-              if (thePDU != NULL){
-                thePDU->Read(is);
-                theData.push_back(thePDU);
-              } else{
-                break;
+              //check to see if this is a cstorerq
+              if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0100))){
+                gdcm::DataElement de2 = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
+                gdcm::Attribute<0x0,0x0100> at2;
+                at2.SetFromDataElement( de2 );
+                theCommandCode = at2.GetValues()[0];
               }
-              //!!!need to handle incoming PDUs that are not data, ie, an abort
-            } while(/*!is.eof() &&*/ !thePDU->IsLastFragment());
-            if (!interrupted){//ie, if the remote server didn't hang up
-              DataSet theCompleteFindResponse =
-                PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
-              //note that it's the responsibility of the event to delete the PDU in theFindRSP
-              for (int i = 0; i < theData.size(); i++){
-                delete theData[i];
-              }
-              outDataSet.push_back(theCompleteFindResponse);
-
-              if (theCommandCode == 1){//if we're doing cstore scp stuff, send information back along the connection.
-                std::vector<BasePDU*> theCStoreRSPPDU = PDUFactory::CreateCStoreRSPPDU(&theRSP, theFirstPDU);//pass NULL for C-Echo
-                //send them directly back over the connection
-                //ideall, should go through the transition table, but we know this should work
-                //and it won't change the state (unless something breaks?, but then an exception should throw)
-                std::vector<BasePDU*>::iterator itor;
-                for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
-                  (*itor)->Write(*inWhichConnection->GetProtocol());
+              if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
+                //check for other error fields
+                ByteValue *err1 = NULL, *err2 = NULL;
+                std::cout << "Transfer failed with code " << theVal << std::endl;
+                if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
+                  gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
+                  err1 = de.GetByteValue();
+                  std::cout << " Tag 0x0,0x901 reported as " << *err1 << std::endl;
                 }
-                inWhichConnection->GetProtocol()->flush();
+                if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0902))){
+                  gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0902));
+                  err2 = de.GetByteValue();
+                  std::cout << " Tag 0x0,0x902 reported as " << *err2 << std::endl;
+                }
+              }
+
+
+
+
+              receivingData = false;
+              //justWaiting = false;
+              if (theVal == pendingDE1 || theVal == pendingDE2) {
+                receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
+                //justWaiting = true;
+                waitingForEvent = true;
+              }
+              if (theVal == pendingDE1 || theVal == pendingDE2 /*|| theVal == success*/){//keep looping if we haven't succeeded or failed; these are the values for 'pending'
+                //first, dynamically cast that pdu in the event
+                //should be a data pdu
+                //then, look for tag 0x0,0x900
+
+                //only add datasets that are _not_ part of the network response
+                std::vector<gdcm::DataSet> final;
+                std::vector<BasePDU*> theData;
+                BasePDU* thePDU;//outside the loop for the do/while stopping condition
+                bool interrupted = false;
+                do {
+                  uint8_t itemtype = 0x0;
+                  is.read( (char*)&itemtype, 1 );
+                  //what happens if nothing's read?
+                  thePDU = PDUFactory::ConstructPDU(itemtype);
+                  if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
+                    std::vector<BasePDU*> interruptingPDUs;
+                    currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
+                    currentEvent.SetPDU(interruptingPDUs);
+                    interrupted= true;
+                    break;
+                  }
+                  if (thePDU != NULL){
+                    thePDU->Read(is);
+                    theData.push_back(thePDU);
+                  } else{
+                    break;
+                  }
+                  //!!!need to handle incoming PDUs that are not data, ie, an abort
+                } while(/*!is.eof() &&*/ !thePDU->IsLastFragment());
+                if (!interrupted){//ie, if the remote server didn't hang up
+                  DataSet theCompleteFindResponse =
+                    PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+                  //note that it's the responsibility of the event to delete the PDU in theFindRSP
+                  for (int i = 0; i < theData.size(); i++){
+                    delete theData[i];
+                  }
+                  outDataSet.push_back(theCompleteFindResponse);
+
+                  if (theCommandCode == 1){//if we're doing cstore scp stuff, send information back along the connection.
+                    std::vector<BasePDU*> theCStoreRSPPDU = PDUFactory::CreateCStoreRSPPDU(&theRSP, theFirstPDU);//pass NULL for C-Echo
+                    //send them directly back over the connection
+                    //ideall, should go through the transition table, but we know this should work
+                    //and it won't change the state (unless something breaks?, but then an exception should throw)
+                    std::vector<BasePDU*>::iterator itor;
+                    for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
+                      (*itor)->Write(*inWhichConnection->GetProtocol());
+                    }
+                    inWhichConnection->GetProtocol()->flush();
+                    receivingData = false; //gotta get data on the other connection for a cmove
+                  }
+                }
               }
             }
+            break;
+            case eARELEASERequest://process this via the transition table
+              waitingForEvent = false;
+              break;
+            case eAABORTRequest:
+              waitingForEvent = false;
+              inWhichConnection->StopProtocol();
+              break;
+            case eASSOCIATE_ACPDUreceived:
+              waitingForEvent = false;
+              break;
           }
         }
-      } else {
-        raisedEvent = eEventDoesNotExist;
-        waitingForEvent = false;
-      }
+      //} else {
+      //  raisedEvent = eEventDoesNotExist;
+      //  waitingForEvent = false;
+      //}
     }
     else {
       currentEvent.SetEvent(raisedEvent);//actions that cause transitions in the state table
