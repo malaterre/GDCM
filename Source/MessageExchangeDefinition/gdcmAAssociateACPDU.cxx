@@ -103,6 +103,29 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
 
   return is;
 }
+void AAssociateACPDU::SetCalledAETitle(const char calledaetitle[16])
+{
+  size_t len = strlen( calledaetitle );
+  if( len <= 16 )
+    {
+    memset(CalledAETitle, ' ', sizeof(CalledAETitle));
+    strncpy(CalledAETitle, calledaetitle, len );
+    }
+  // FIXME Need to check upper case
+  // FIXME cannot set to only whitespaces
+}
+
+void AAssociateACPDU::SetCallingAETitle(const char callingaetitle[16])
+{
+  size_t len = strlen( callingaetitle );
+  if( len <= 16 )
+    {
+    memset(CallingAETitle, ' ', sizeof(CallingAETitle));
+    strncpy(CallingAETitle, callingaetitle, len );
+    }
+  // FIXME Need to check upper case
+  // FIXME cannot set to only whitespaces
+}
 
 const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
 {
@@ -116,14 +139,9 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   SwapperDoOp::SwapArray(&protocolversion,1);
   os.write( (char*)&protocolversion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
-  //os.write( (char*)&Reserved11_26, sizeof(Reserved11_26) );
-  const char calling[] = "ANY-SCP         ";
-  os.write( calling, 16 );
+  os.write( CallingAETitle, 16 );
 
-  //os.write( (char*)&Reserved27_42, sizeof(Reserved27_42) );
-  //const char called[] = "STORESCU        ";
-  const char called[] = "ECHOSCU        ";
-  os.write( called, 16 );
+  os.write( CalledAETitle, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
