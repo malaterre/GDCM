@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMIMPLEMENTATIONCLASSUIDSUB_H
 #define GDCMIMPLEMENTATIONCLASSUIDSUB_H
 
@@ -28,9 +27,10 @@ namespace network
 {
 
 /**
-PS 3.7
-Table D.3-1
-IMPLEMENTATION CLASS UID SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
+ * \brief ImplementationClassUIDSub
+ * PS 3.7
+ * Table D.3-1
+ * IMPLEMENTATION CLASS UID SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
  */
 class GDCM_EXPORT ImplementationClassUIDSub
 {

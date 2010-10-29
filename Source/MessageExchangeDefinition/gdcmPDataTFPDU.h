@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMPDATATFPDU_H
 #define GDCMPDATATFPDU_H
 
@@ -23,18 +22,17 @@
 #include "gdcmPresentationDataValue.h"
 #include "gdcmBasePDU.h"
 #include <limits>
+
 namespace gdcm
 {
 
-// TODO: MM : does swig handle nested namespace
-// I would like to avoid polluting gdcm namespace with such low level details the networ
-// primitives:
 namespace network
 {
 
 /**
-Table 9-22
-P-DATA-TF PDU FIELDS
+ * \brief PDataTFPDU
+ * Table 9-22
+ * P-DATA-TF PDU FIELDS
  */
 class GDCM_EXPORT PDataTFPDU : public BasePDU
 {

@@ -32,14 +32,16 @@ using namespace gdcm::network;
 
 //construct the table
 ULTransitionTable::ULTransitionTable(){
-  //row 1
-
+//row 1
+// A-ASSOCIATE Request (local user)
   mTable[eAASSOCIATERequestLocalUser].transitions[GetStateIndex(eSta1Idle)] =
     *Transition::MakeNew(eSta4LocalAssocDone, new ULActionAE1());
-  //row 2
+//row 2
+// Transport Conn. Confirmn (local transport service)
   mTable[eTransportConnConfirmLocal].transitions[GetStateIndex(eSta4LocalAssocDone)] =
     *Transition::MakeNew(eSta5WaitRemoteAssoc, new ULActionAE2());
 //row 3
+// A-ASSOCIATE-AC PDU (received on transport connection)
   mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[eASSOCIATE_ACPDUreceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -64,6 +66,7 @@ ULTransitionTable::ULTransitionTable(){
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
 
 //row 4
+// A-ASSOCIATE-RJ PDU (received on transport connection)
   mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -87,9 +90,11 @@ ULTransitionTable::ULTransitionTable(){
   mTable[eASSOCIATE_RJPDUreceived].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
 //row 5
+// Transport Connection Indication (local transport service)
   mTable[eTransportConnIndicLocal].transitions[GetStateIndex(eSta1Idle)] =
     *Transition::MakeNew(eSta2Open, new ULActionAE5());
 //row 6
+// A-ASSOCIATE-RQ PDU (received on transport connection)
   mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta3WaitLocalAssoc | eSta13AwaitingClose, new ULActionAE6());
   mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -113,17 +118,21 @@ ULTransitionTable::ULTransitionTable(){
   mTable[eAASSOCIATE_RQPDUreceived].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA7());
 //row 7
+// A-ASSOCIATE response primitive (accept)
   mTable[eAASSOCIATEresponseAccept].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
     *Transition::MakeNew(eSta7WaitRelease, new ULActionAE7());
 //row 8
+// A-ASSOCIATE response primitive (reject)
   mTable[eAASSOCIATEresponseReject].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
     *Transition::MakeNew(eSta7WaitRelease, new ULActionAE7());
-  //Row 9
+//Row 9
+// P-DATA request primitive
   mTable[ePDATArequest].transitions[GetStateIndex(eSta6TransferReady)] =
     *Transition::MakeNew(eSta6TransferReady, new ULActionDT1());
   mTable[ePDATArequest].transitions[GetStateIndex(eSta8WaitLocalRelease)] =
     *Transition::MakeNew(eSta8WaitLocalRelease, new ULActionAR7());
 //row 10
+// P-DATA-TF PDU
   mTable[ePDATATFPDU].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[ePDATATFPDU].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -147,9 +156,11 @@ ULTransitionTable::ULTransitionTable(){
   mTable[ePDATATFPDU].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
 //row 11
+// A-RELEASE Request primitive
   mTable[eARELEASERequest].transitions[GetStateIndex(eSta6TransferReady)] =
     *Transition::MakeNew(eSta7WaitRelease, new ULActionAR1());
 //row 12
+// A-RELEASE-RQ PDU (received on open transport connection)
   mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -173,6 +184,7 @@ ULTransitionTable::ULTransitionTable(){
   mTable[eARELEASE_RQPDUReceivedOpen].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
 //row 13
+// A-RELEASE-RP PDU (received on transport connection)
   mTable[eARELEASE_RPPDUReceived].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[eARELEASE_RPPDUReceived].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -195,14 +207,16 @@ ULTransitionTable::ULTransitionTable(){
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA8());
   mTable[eARELEASE_RPPDUReceived].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA6());
-  //Row 14
+// Row 14
+// A-RELEASE Response primitive
   mTable[eARELEASEResponse].transitions[GetStateIndex(eSta8WaitLocalRelease)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAR4());
   mTable[eARELEASEResponse].transitions[GetStateIndex(eSta9ReleaseCollisionRqLocal)] =
     *Transition::MakeNew(eSta11ReleaseCollisionRq, new ULActionAR9);
   mTable[eARELEASEResponse].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAR4());
-  //row 15
+// row 15
+// A-ABORT Request primitive
   mTable[eAABORTRequest].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[eAABORTRequest].transitions[GetStateIndex(eSta4LocalAssocDone)] =
@@ -223,7 +237,8 @@ ULTransitionTable::ULTransitionTable(){
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[eAABORTRequest].transitions[GetStateIndex(eSta12ReleaseCollisionAcLocal)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
-  //row 16
+// row 16
+// A-ABORT PDU (received on open transport connection)
   mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta1Idle, new ULActionAA2());
   mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -246,7 +261,8 @@ ULTransitionTable::ULTransitionTable(){
     *Transition::MakeNew(eSta1Idle, new ULActionAA3());
   mTable[eAABORTPDUReceivedOpen].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta1Idle, new ULActionAA2());
-  //row 17
+//row 17
+// Transport connection closed indication (local transport service),
   mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta1Idle, new ULActionAA5());
   mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
@@ -271,12 +287,14 @@ ULTransitionTable::ULTransitionTable(){
     *Transition::MakeNew(eSta1Idle, new ULActionAA4());
   mTable[eTransportConnectionClosed].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta1Idle, new ULActionAA5());
-  //row 18
+//row 18
+// ARTIM timer expired (Association reject/release timer),
   mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta2Open)] =
     *Transition::MakeNew(eSta1Idle, new ULActionAA2());
   mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta13AwaitingClose)] =
     *Transition::MakeNew(eSta1Idle, new ULActionAA2());
-  //row 19
+//row 19
+// Unrecognized or invalid PDU received
   mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta3WaitLocalAssoc)] =
     *Transition::MakeNew(eSta13AwaitingClose, new ULActionAA1());
   mTable[eARTIMTimerExpired].transitions[GetStateIndex(eSta13AwaitingClose)] =

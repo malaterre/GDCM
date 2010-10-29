@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMDIMSE_H
 #define GDCMDIMSE_H
 
@@ -27,13 +26,14 @@ namespace gdcm
 namespace network
 {
 
-/*
-PS 3.7 - 2009
-Annex E Command Dictionary (Normative)
-E.1 REGISTRY OF DICOM COMMAND ELEMENTS
-Table E.1-1
-COMMAND FIELDS (PART 1)
-*/
+/**
+ * \brief DIMSE
+ * PS 3.7 - 2009
+ * Annex E Command Dictionary (Normative)
+ * E.1 REGISTRY OF DICOM COMMAND ELEMENTS
+ * Table E.1-1
+ * COMMAND FIELDS (PART 1)
+ */
 class DIMSE {
 public:
   typedef enum {

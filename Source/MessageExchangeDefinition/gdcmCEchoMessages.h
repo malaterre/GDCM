@@ -15,16 +15,16 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-this file defines the messages for the cecho action
-5 oct 2010 mmr
-*/
-
 #include "gdcmBaseCompositeMessage.h"
 
 namespace gdcm{
   namespace network{
-    class CEchoRQ : public BaseCompositeMessage {
+
+/**
+ * \brief CEchoRQ
+ * this file defines the messages for the cecho action
+ */
+class CEchoRQ : public BaseCompositeMessage {
     public:
       std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };

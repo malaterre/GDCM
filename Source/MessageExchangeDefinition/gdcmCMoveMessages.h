@@ -15,20 +15,20 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef CMOVEMESSAGES_H
-#define CMOVEMESSAGES_H
-/*
-this file defines the messages for the cfind action
-5 oct 2010 mmr
-*/
+#ifndef GDCMCMOVEMESSAGES_H
+#define GDCMCMOVEMESSAGES_H
 
 #include "gdcmBaseCompositeMessage.h"
 #include "gdcmBaseRootQuery.h"
 
 namespace gdcm{
   namespace network{
-    class ULConnection;
-    class CMoveRQ : public BaseCompositeMessage {
+  class ULConnection;
+/**
+ * \brief CMoveRQ
+ * this file defines the messages for the cmove action
+ */
+class CMoveRQ : public BaseCompositeMessage {
       //this class will fulfill the inheritance,
       //but additional information is needed by cmovd
       //namely, the root type or the calling AE-TITLE
@@ -39,7 +39,11 @@ namespace gdcm{
         BaseRootQuery* inRootQuery);
     };
 
-    class CMoveRSP : public BaseCompositeMessage {
+/**
+ * \brief CMoveRSP
+ * this file defines the messages for the cmove action
+ */
+class CMoveRSP : public BaseCompositeMessage {
     public:
       std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };

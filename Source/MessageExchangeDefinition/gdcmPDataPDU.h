@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMPDATAPDU_H
 #define GDCMPDATAPDU_H
 #error ??

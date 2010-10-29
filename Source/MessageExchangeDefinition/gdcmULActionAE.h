@@ -15,8 +15,12 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
+#ifndef GDCMULACTIONAE_H
+#define GDCMULACTIONAE_H
 
+#include "gdcmULAction.h"
+
+/**
 This header defines the classes for the AE Actions,
 Association Establishment Related Actions (Table 9-6 of ps 3.8-2009).
 
@@ -24,8 +28,6 @@ Since each class is essentially a placeholder for a function pointer, I'm breaki
 each class have its own file for the sake of brevity of the number of files.
 
 */
-
-#include "gdcmULAction.h"
 
 namespace gdcm {
   namespace network {
@@ -98,3 +100,4 @@ namespace gdcm {
     };
   }
 }
+#endif // GDCMULACTIONAE_H

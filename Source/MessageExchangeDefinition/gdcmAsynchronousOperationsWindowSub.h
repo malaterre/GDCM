@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMASYNCHRONOUSOPERATIONSWINDOWSUB_H
 #define GDCMASYNCHRONOUSOPERATIONSWINDOWSUB_H
 
@@ -28,10 +27,11 @@ namespace network
 {
 
 /**
-PS 3.7
-Table D.3-7
-ASYNCHRONOUS OPERATIONS WINDOW SUB-ITEM FIELDS
-(A-ASSOCIATE-RQ)
+ * \brief AsynchronousOperationsWindowSub
+ * PS 3.7
+ * Table D.3-7
+ * ASYNCHRONOUS OPERATIONS WINDOW SUB-ITEM FIELDS
+ * (A-ASSOCIATE-RQ)
  */
 class GDCM_EXPORT AsynchronousOperationsWindowSub
 {
