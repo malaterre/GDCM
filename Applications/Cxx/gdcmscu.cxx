@@ -1073,6 +1073,21 @@ int main(int argc, char *argv[])
     std::cerr << "Problem with port number" << std::endl;
     return 1;
     }
+  // checkout outputdir opt:
+  if( outputopt )
+    {
+    if( !gdcm::System::FileIsDirectory( outputdir.c_str()) )
+      {
+      if( !gdcm::System::MakeDirectory( outputdir.c_str() ) )
+        {
+        std::cerr << "Sorry: " << outputdir << " is not a valid directory.";
+        std::cerr << std::endl;
+        std::cerr << "and I could not create it.";
+        std::cerr << std::endl;
+        return 1;
+        }
+      }
+    }
 
   const char *hostname = shostname.c_str();
   std::string mode = "echo";
