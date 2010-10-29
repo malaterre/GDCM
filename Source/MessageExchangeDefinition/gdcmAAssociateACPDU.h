@@ -61,19 +61,14 @@ public:
 
   void InitSimple( AAssociateRQPDU const & rqpdu );
 
-  void SetCalledAETitle(const char calledaetitle[16]);
-  const char *GetCalledAETitle() const { return CalledAETitle; }
-  void SetCallingAETitle(const char callingaetitle[16]);
-  const char *GetCallingAETitle() const { return CallingAETitle; }
-
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;
   uint32_t PDULength; // len of
   static const uint16_t ProtocolVersion;
   static const uint16_t Reserved9_10;
-  static const uint8_t CalledAETitle[16];
-  static const uint8_t CallingAETitle[16];
+  static const uint8_t Reserved11_26[16];
+  static const uint8_t Reserved27_42[16];
   static const uint8_t Reserved43_74[32];
   /*
   75-xxx Variable items This variable field shall contain the following items: one Application
