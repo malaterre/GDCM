@@ -25,6 +25,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmBaseRootQuery.h"
 
+#include "gdcmAReleaseRPPDU.h"
+
 #include <vector>
 #include <socket++/echo.h>//for setting up the local socket
 
@@ -362,7 +364,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // When doing a C-MOVE we receive the Requested DataSet over
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
-#if 0
+#if 1
                 if (mSecondaryConnection->GetProtocol() == NULL){
                   //establish the connection
                   mSecondaryConnection->InitializeIncomingConnection();
@@ -641,6 +643,9 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           if (itemtype == 7 || itemtype == 5 ){//abort || release; received at the end of a cmove/cstorescp from dcm4chee||dcmtk
             waitingForEvent = false;
             inWhichConnection->StopProtocol();
+            //gdcm::network::AReleaseRPPDU rel;
+            //rel.Write( os );
+            //os.flush();
           }
         }
         catch (...){
