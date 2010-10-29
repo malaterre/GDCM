@@ -428,10 +428,10 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
             std::cout << "Transfer failed with code " << theVal << std::endl;
             switch (theVal){
               case 0xA701:
-                std::cout << "Refused: Out of Resources – Unable to calculate number of matches" << std::endl;
+                std::cout << "Refused: Out of Resources Unable to calculate number of matches" << std::endl;
                 break;
               case 0xA702:
-                std::cout << "Refused: Out of Resources – Unable to perform sub-operations" << std::endl;
+                std::cout << "Refused: Out of Resources Unable to perform sub-operations" << std::endl;
                 break;
               case 0xA801:
                 std::cout << "Refused: Move Destination unknown" << std::endl;
@@ -458,7 +458,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                 std::cout << "Sub-operations terminated due to Cancel Indication" << std::endl;
                 break;
               case 0xB000:
-                std::cout << "Sub-operations Complete – One or more Failures or Warnings" << std::endl;
+                std::cout << "Sub-operations Complete One or more Failures or Warnings" << std::endl;
                 break;
               default:
                 std::cout << "Unable to process" << std::endl;
