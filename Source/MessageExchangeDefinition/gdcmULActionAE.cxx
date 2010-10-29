@@ -160,6 +160,8 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       pcac1.SetTransferSyntax( ts1 );
       acpdu.AddPresentationContextAC( pcac1 );
     }
+    acpdu.SetCalledAETitle(inConnection.GetConnectionInfo().GetCalledAETitle());
+    acpdu.SetCallingAETitle(inConnection.GetConnectionInfo().GetCallingAETitle());
     acpdu.Write( *inConnection.GetProtocol() );
     inConnection.GetProtocol()->flush();
 
