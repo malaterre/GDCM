@@ -24,14 +24,16 @@ this file defines the messages for the cecho action
 
 namespace gdcm{
   namespace network{
+    class BasePDU;
     class CStoreRQ : public BaseCompositeMessage {
     public:
       std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
     };
 
     class CStoreRSP : public BaseCompositeMessage {
+      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);//to fulfill the virtual contract
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet, BasePDU* inPC);
     };
   }
 }

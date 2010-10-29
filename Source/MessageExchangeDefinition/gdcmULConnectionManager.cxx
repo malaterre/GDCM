@@ -614,7 +614,8 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
     std::istream &is = *inWhichConnection->GetProtocol();
     std::ostream &os = *inWhichConnection->GetProtocol();
 
-
+    BasePDU* theFirstPDU = NULL;// the first pdu read in during this event loop,
+    //used to make sure the presentation context ID is correct
 
     //read the connection, as that's an event as well.
     //waiting for an object to come back across the connection, so that it can get handled.
@@ -631,12 +632,12 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
         try {
           is.read( (char*)&itemtype, 1 );
           //what happens if nothing's read?
-          BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
-          if (thePDU != NULL){
-            incomingPDUs.push_back(thePDU);
-            thePDU->Read(is);
-            thePDU->Print(std::cout);
-            if (thePDU->IsLastFragment()) waitingForEvent = false;
+          theFirstPDU = PDUFactory::ConstructPDU(itemtype);
+          if (theFirstPDU != NULL){
+            incomingPDUs.push_back(theFirstPDU);
+            theFirstPDU->Read(is);
+            theFirstPDU->Print(std::cout);
+            if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
           }
@@ -756,7 +757,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
               outDataSet.push_back(theCompleteFindResponse);
 
               if (theCommandCode == 1){//if we're doing cstore scp stuff, send information back along the connection.
-                std::vector<BasePDU*> theCStoreRSPPDU = PDUFactory::CreateCStoreRSPPDU(&theRSP);//pass NULL for C-Echo
+                std::vector<BasePDU*> theCStoreRSPPDU = PDUFactory::CreateCStoreRSPPDU(&theRSP, theFirstPDU);//pass NULL for C-Echo
                 //send them directly back over the connection
                 //ideall, should go through the transition table, but we know this should work
                 //and it won't change the state (unless something breaks?, but then an exception should throw)

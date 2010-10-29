@@ -37,6 +37,7 @@ This is an abstract class.  It cannot be instantiated on its own.
 #define BASECOMPOSITEMESSSAGE_H
 #include "gdcmDataSet.h"
 #include "gdcmPresentationDataValue.h"
+#include "gdcmPresentationContext.h"
 #include <vector>
 
 namespace gdcm{

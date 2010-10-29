@@ -23,7 +23,6 @@ name and date: 25 Sept 2010 mmr
 #ifndef PDUFACTORY_H
 #define PDUFACTORY_H
 #include "gdcmTypes.h"
-#include "gdcmBasePDU.h"
 #include "gdcmNetworkEvents.h"
 #include "gdcmDataSet.h"
 #include "gdcmULConnection.h"
@@ -31,6 +30,7 @@ name and date: 25 Sept 2010 mmr
 
 namespace gdcm{
   namespace network{
+    class BasePDU;
     class BaseRootQuery;
     class PDUFactory {
       public:
@@ -46,7 +46,7 @@ namespace gdcm{
       //be then placed into the vector of PDUs
       static std::vector<BasePDU*> CreateCEchoPDU();
       static std::vector<BasePDU*> CreateCStoreRQPDU(DataSet *inDataSet);
-      static std::vector<BasePDU*> CreateCStoreRSPPDU(DataSet *inDataSet);
+      static std::vector<BasePDU*> CreateCStoreRSPPDU(DataSet *inDataSet, BasePDU* inPC);
       static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
       static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
 

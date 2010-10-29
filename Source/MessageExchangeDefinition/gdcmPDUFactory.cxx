@@ -34,6 +34,7 @@ class to construct specific instances of PDUs, and return the BasePDU class.
 #include "gdcmPDataTFPDU.h"
 #include "gdcmCompositeMessageFactory.h"
 #include "gdcmBaseRootQuery.h"
+#include "gdcmBasePDU.h"
 
 using namespace gdcm::network;
 
@@ -162,10 +163,10 @@ std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(gdcm::DataSet* inDataSet)
   }
   return outVector;
 }
-std::vector<BasePDU*> PDUFactory::CreateCStoreRSPPDU(gdcm::DataSet* inDataSet)
+std::vector<BasePDU*> PDUFactory::CreateCStoreRSPPDU(gdcm::DataSet* inDataSet, BasePDU* inPDU)
 {
 
-  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCStoreRSP(inDataSet );
+  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCStoreRSP(inDataSet, inPDU );
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
