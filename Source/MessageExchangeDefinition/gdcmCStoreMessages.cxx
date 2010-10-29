@@ -207,6 +207,7 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
   if (!theDataPDU){
     //guessing at the pdv!
     thePDVValue = 67;
+assert(0);
   } else {
     gdcm::network::PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
     thePDVValue = input_pdv.GetPresentationContextID();

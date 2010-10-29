@@ -15,21 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-The transition table of all the ULEvents, new ULActions, and ULStates.
-
-Based roughly on the solutions in player2.cpp in the boost examples and this so question:
-http://stackoverflow.com/questions/1647631/c-state-machine-design
-
-The transition table is constructed of TableRows.  Each row is based on an event, and an event handler in the
-TransitionTable object takes a given event, and then finds the given row.
-
-Then, given the current state of the connection, determines the appropriate action to take and then the
-state to transition to next.
-
-*/
-#ifndef ULTRANSITIONTABLE_H
-#define ULTRANSITIONTABLE_H
+#ifndef GDCMULTRANSITIONTABLE_H
+#define GDCMULTRANSITIONTABLE_H
 
 #include "gdcmNetworkStateID.h"
 #include "gdcmNetworkEvents.h"
@@ -76,7 +63,22 @@ namespace gdcm {
       //copy constructor for stl additions into the transition table below.
     };
 
-    class ULTransitionTable {
+/**
+ * \brief ULTransitionTable
+ * The transition table of all the ULEvents, new ULActions, and ULStates.
+ *
+ * Based roughly on the solutions in player2.cpp in the boost examples and this so question:
+ * http://stackoverflow.com/questions/1647631/c-state-machine-design
+ *
+ * The transition table is constructed of TableRows.  Each row is based on an event, and an event handler in the
+ * TransitionTable object takes a given event, and then finds the given row.
+ *
+ * Then, given the current state of the connection, determines the appropriate action to take and then the
+ * state to transition to next.
+ *
+ */
+class ULTransitionTable
+{
     private:
       TableRow mTable[cMaxEventID];
     public:
@@ -89,4 +91,4 @@ namespace gdcm {
     };
   }
 }
-#endif
+#endif // GDCMULTRANSITIONTABLE_H

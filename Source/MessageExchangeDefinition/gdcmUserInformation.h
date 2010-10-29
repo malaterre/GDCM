@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMUSERINFORMATION_H
 #define GDCMUSERINFORMATION_H
 
@@ -32,13 +31,14 @@ namespace network
 
 class AsynchronousOperationsWindowSub;
 /**
-Table 9-16
-USER INFORMATION ITEM FIELDS
-
-TODO what is the goal of :
-
-Table 9-20
-USER INFORMATION ITEM FIELDS
+ * \brief UserInformation
+ * Table 9-16
+ * USER INFORMATION ITEM FIELDS
+ *
+ * TODO what is the goal of :
+ *
+ * Table 9-20
+ * USER INFORMATION ITEM FIELDS
  */
 class GDCM_EXPORT UserInformation
 {

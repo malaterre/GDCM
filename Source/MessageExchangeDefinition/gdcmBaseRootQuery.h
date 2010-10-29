@@ -15,26 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-file name: gdcmBaseRootQuery.h
-contains: a baseclass which will produce a dataset for c-find and c-move with patient/study root
-name and date: 18 oct 2010 mmr
-
-This class contains the functionality used in patient c-find and c-move queries.
-PatientRootQuery and StudyRootQuery derive from this class.
-
-Namely:
-1) list all tags associated with a particular query type
-2) produce a query dataset via tag association
-
-Eventually, it can be used to validate a particular dataset type.
-
-The dataset held by this object (or, really, one of its derivates) should be passed to a c-find or c-move query.
-
-*/
-
-#ifndef BASEROOTQUERY_H
-#define BASEROOTQUERY_H
+#ifndef GDCMBASEROOTQUERY_H
+#define GDCMBASEROOTQUERY_H
 
 #include "gdcmQueryPatient.h"
 #include "gdcmQueryStudy.h"
@@ -47,7 +29,24 @@ The dataset held by this object (or, really, one of its derivates) should be pas
 
 namespace gdcm{
   namespace network {
-    class GDCM_EXPORT BaseRootQuery{
+/**
+ * \brief BaseRootQuery
+ * contains: a baseclass which will produce a dataset for c-find and c-move with patient/study root
+ * name and date: 18 oct 2010 mmr
+ *
+ * This class contains the functionality used in patient c-find and c-move queries.
+ * PatientRootQuery and StudyRootQuery derive from this class.
+ *
+ * Namely:
+ * 1) list all tags associated with a particular query type
+ * 2) produce a query dataset via tag association
+ *
+ * Eventually, it can be used to validate a particular dataset type.
+ *
+ * The dataset held by this object (or, really, one of its derivates) should be passed to a c-find or c-move query.
+ */
+class GDCM_EXPORT BaseRootQuery
+{
       //these four classes contain the required, unique, and optional tags from the standard.
       //used both to list the tags as well as to validate a dataset, if ever we were to do so.
       QueryPatient mPatient;
@@ -84,4 +83,4 @@ namespace gdcm{
 }
 
 
-#endif //BASEROOTQUERY_H
+#endif //GDCMBASEROOTQUERY_H

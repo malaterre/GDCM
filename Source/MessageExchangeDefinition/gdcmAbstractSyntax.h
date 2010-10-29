@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMABSTRACTSYNTAX_H
 #define GDCMABSTRACTSYNTAX_H
 
@@ -29,8 +28,9 @@ namespace network
 {
 
 /**
- Table 9-14
-ABSTRACT SYNTAX SUB-ITEM FIELDS
+ * \brief AbstractSyntax
+ * Table 9-14
+ * ABSTRACT SYNTAX SUB-ITEM FIELDS
  */
 class GDCM_EXPORT AbstractSyntax
 {

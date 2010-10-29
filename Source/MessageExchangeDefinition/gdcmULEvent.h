@@ -15,27 +15,26 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-base class for network events.
+#ifndef GDCMULEVENT_H
+#define GDCMULEVENT_H
 
-An event consists of the event ID and the data associated with that event.
-
-Note that once a PDU is created, it is now the responsibility of the associated event to destroy it!
-name and date: 25 sept 2010 mmr
-
-*/
 #include "gdcmNetworkStateID.h"
 #include "gdcmNetworkEvents.h"
 #include "gdcmBasePDU.h"
 #include <vector>
 
-#ifndef ULEVENT_H
-#define ULEVENT_H
-
 namespace gdcm {
   namespace network {
 
-    class ULEvent {
+/**
+ * \brief ULEvent
+ * base class for network events.
+ *
+ * An event consists of the event ID and the data associated with that event.
+ *
+ * Note that once a PDU is created, it is now the responsibility of the associated event to destroy it!
+ */
+class ULEvent {
       EEventID mEvent;
       std::vector<BasePDU*> mBasePDU;
 
@@ -74,4 +73,4 @@ namespace gdcm {
   }
 }
 
-#endif //ULEVENT_H
+#endif //GDCMULEVENT_H

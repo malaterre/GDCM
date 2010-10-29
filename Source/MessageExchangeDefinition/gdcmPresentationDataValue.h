@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMPRESENTATIONDATAVALUE_H
 #define GDCMPRESENTATIONDATAVALUE_H
 
@@ -28,8 +27,9 @@ namespace network
 {
 
 /**
- Table 9-23
-PRESENTATION-DATA-VALUE ITEM FIELDS
+ * \brief PresentationDataValue
+ * Table 9-23
+ * PRESENTATION-DATA-VALUE ITEM FIELDS
  */
 class GDCM_EXPORT PresentationDataValue
 {

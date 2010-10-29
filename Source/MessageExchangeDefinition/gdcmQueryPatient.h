@@ -15,20 +15,19 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-filename: gdcmQueryPatient.h
-contains: class to construct a patient-based query for c-find and c-move
-name and date: 15 oct 2010 mmr
+#ifndef GDCMQUERYPATIENT_H
+#define GDCMQUERYPATIENT_H
 
-*/
-
-#ifndef QUERYPATIENT_H
-#define QUERYPATIENT_H
 #include "gdcmQueryBase.h"
 
 namespace gdcm{
   namespace network{
-    class QueryPatient : public QueryBase {
+/**
+ * \brief QueryPatient
+ * contains: class to construct a patient-based query for c-find and c-move
+ * name and date: 15 oct 2010 mmr
+ */
+class QueryPatient : public QueryBase {
     public:
       std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const;
       std::vector<gdcm::Tag> GetUniqueTags(const ERootType& inRootType) const;
@@ -40,4 +39,4 @@ namespace gdcm{
   }
 }
 
-#endif //QUERYPATIENT_H
+#endif //GDCMQUERYPATIENT_H

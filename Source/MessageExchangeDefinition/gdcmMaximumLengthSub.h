@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMMAXIMUMLENGTHSUB_H
 #define GDCMMAXIMUMLENGTHSUB_H
 
@@ -28,14 +27,15 @@ namespace network
 {
 
 /**
-Annex D
-Table D.1-1
-MAXIMUM LENGTH SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
-
-or
-
-Table D.1-2
-Maximum length sub-item fields (A-ASSOCIATE-AC)
+ * \brief MaximumLengthSub
+ * Annex D
+ * Table D.1-1
+ * MAXIMUM LENGTH SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
+ *
+ * or
+ *
+ * Table D.1-2
+ * Maximum length sub-item fields (A-ASSOCIATE-AC)
  */
 class GDCM_EXPORT MaximumLengthSub
 {

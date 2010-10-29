@@ -15,18 +15,20 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-Each network connection will be in a particular state at any given time.
-Those states have IDs as described in the standard ps3.8-2009, roughly 1-13.
-This enumeration lists those states. The actual ULState class will contain more information
-about transitions to other states.
+#ifndef GDCMNETWORKSTATEID_H
+#define GDCMNETWORKSTATEID_H
 
-name and date: 16 sept 2010 mmr
-*/
-#ifndef NETWORKSTATEID_H
-#define NETWORKSTATEID_H
 namespace gdcm {
   namespace network {
+
+/**
+ * Each network connection will be in a particular state at any given time.
+ * Those states have IDs as described in the standard ps3.8-2009, roughly 1-13.
+ * This enumeration lists those states. The actual ULState class will contain more information
+ * about transitions to other states.
+ *
+ * name and date: 16 sept 2010 mmr
+ */
     enum EStateID {
       eStaDoesNotExist = 0,
       eSta1Idle = 1,
@@ -84,4 +86,4 @@ namespace gdcm {
   }
 }
 
-#endif //NETWORKSTATEID_H
+#endif //GDCMNETWORKSTATEID_H

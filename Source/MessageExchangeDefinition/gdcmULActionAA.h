@@ -15,18 +15,18 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
+#ifndef GDCMULACTIONAA_H
+#define GDCMULACTIONAA_H
+
+#include "gdcmULAction.h"
+
+/**
 This header defines the classes for the AA Actions,
 Association Abort Related Actions (Table 9-9 of ps 3.8-2009).
 
 Since each class is essentially a placeholder for a function pointer, I'm breaking with having
 each class have its own file for the sake of brevity of the number of files.
-
 */
-#ifndef ULACTIONAA_H
-#define ULACTIONAA_H
-
-#include "gdcmULAction.h"
 
 namespace gdcm {
   namespace network {
@@ -100,4 +100,4 @@ namespace gdcm {
   }
 }
 
-#endif
+#endif // GDCMULACTIONAA_H

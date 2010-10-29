@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMTRANSFERSYNTAX__H
 #define GDCMTRANSFERSYNTAX__H
 
@@ -30,14 +29,14 @@ namespace network
 {
 
 /**
-Table 9-15
-TRANSFER SYNTAX SUB-ITEM FIELDS
-
-
-TODO what is the goal of :
-
-Table 9-19
-TRANSFER SYNTAX SUB-ITEM FIELDS
+ * \brief TransferSyntax_
+ * Table 9-15
+ * TRANSFER SYNTAX SUB-ITEM FIELDS
+ *
+ * TODO what is the goal of :
+ *
+ * Table 9-19
+ * TRANSFER SYNTAX SUB-ITEM FIELDS
  */
 class GDCM_EXPORT TransferSyntax_
 {

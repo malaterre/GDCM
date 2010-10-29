@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMAPPLICATIONCONTEXT_H
 #define GDCMAPPLICATIONCONTEXT_H
 
@@ -28,11 +27,11 @@ namespace network
 {
 
 /**
- Table 9-12
-APPLICATION CONTEXT ITEM FIELDS
-
- FIXME:
- Looks like Application Context can only be 64 bytes at max (see Figure 9-1 / PS 3.8 - 2009 )
+ * \brief ApplicationContext
+ * Table 9-12
+ * APPLICATION CONTEXT ITEM FIELDS
+ * \fixme
+ * Looks like Application Context can only be 64 bytes at max (see Figure 9-1 / PS 3.8 - 2009 )
  */
 class GDCM_EXPORT ApplicationContext
 {

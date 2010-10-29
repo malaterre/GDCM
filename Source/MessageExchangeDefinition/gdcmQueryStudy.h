@@ -15,20 +15,19 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-filename: gdcmQueryStudy.h
-contains: class to construct a study-based query for c-find and c-move
-name and date: 15 oct 2010 mmr
+#ifndef GDCMQUERYSTUDY_H
+#define GDCMQUERYSTUDY_H
 
-*/
-
-#ifndef QUERYSTUDY_H
-#define QUERYSTUDY_H
 #include "gdcmQueryBase.h"
 
 namespace gdcm{
   namespace network{
-    class QueryStudy : public QueryBase {
+
+/**
+ * \brief QueryStudy.h
+ * contains: class to construct a study-based query for c-find and c-move
+ */
+class QueryStudy : public QueryBase {
     public:
       std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const;
       std::vector<gdcm::Tag> GetUniqueTags(const ERootType& inRootType) const;
@@ -40,4 +39,4 @@ namespace gdcm{
   }
 }
 
-#endif //QUERYSTUDY_H
+#endif //GDCMQUERYSTUDY_H
