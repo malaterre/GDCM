@@ -640,7 +640,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
           }
-          if (itemtype == 7 || itemtype == 5 ){//abort || release; received at the end of a cmove/cstorescp from dcm4chee||dcmtk
+          if (itemtype == 7 /*|| itemtype == 5*/ ){//abort || release; received at the end of a cmove/cstorescp from dcm4chee||dcmtk
             waitingForEvent = false;
             inWhichConnection->StopProtocol();
             //gdcm::network::AReleaseRPPDU rel;
