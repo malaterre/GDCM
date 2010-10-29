@@ -245,7 +245,7 @@ class MY_API sockbuf: public streambuf
 //      sockbuf&        operator = (const sockbuf&);
         virtual ~sockbuf ();
 
-        int sd () const { return rep->sock; }
+        SOCKET sd () const { return rep->sock; }
         int pubsync () { return sync (); }
         virtual bool is_open () const;
 

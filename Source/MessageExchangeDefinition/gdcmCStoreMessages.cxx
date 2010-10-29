@@ -26,6 +26,8 @@ this file defines the messages for the cstore action
 #include "gdcmImplicitDataElement.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmCommandDataSet.h"
+#include "gdcmBasePDU.h"
+#include "gdcmPDataTFPDU.h"
 #include <limits>
 
 namespace gdcm{
@@ -150,10 +152,18 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   return thePDVs;
 
 }
-///should be passed the received dataset, ie, the cstorerq, so that
-///the cstorersp contains the appropriate SOP instance UIDs.
+
+//private hack
 std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
+  return thePDVs;
+}
+
+std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, BasePDU* inPDU){
+  std::vector<PresentationDataValue> thePDVs;
+
+///should be passed the received dataset, ie, the cstorerq, so that
+///the cstorersp contains the appropriate SOP instance UIDs.
   CommandDataSet ds;
 
   const gdcm::DataElement &de1 = inDataSet->GetDataElement( gdcm::Tag( 0x0000,0x0002 ) );
@@ -191,7 +201,18 @@ std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(DataSet* inDataSet){
 
   // FIXME
   // how do we retrieve the actual PresID from the AAssociate?
-  pdv.SetPresentationContextID( 67 );
+  PDataTFPDU* theDataPDU = dynamic_cast<PDataTFPDU*>(inPDU);
+  assert (theDataPDU);
+  uint8_t thePDVValue;
+  if (!theDataPDU){
+    //guessing at the pdv!
+    thePDVValue = 67;
+  } else {
+    gdcm::network::PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
+    thePDVValue = input_pdv.GetPresentationContextID();
+  }
+
+  pdv.SetPresentationContextID( thePDVValue );//inPC.GetPresentationContextID() );
   // FIXME
 
   pdv.SetDataSet(ds);

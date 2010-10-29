@@ -43,9 +43,9 @@ namespace network {
     CStoreRQ theStoreRQ;
     return theStoreRQ.ConstructPDV(inDataSet);
   }
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRSP(DataSet *inDataSet) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRSP(DataSet *inDataSet, BasePDU* inPDU) {
     CStoreRSP theStoreRSP;
-    return theStoreRSP.ConstructPDV(inDataSet);
+    return theStoreRSP.ConstructPDV(inDataSet, inPDU);
   }
   std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery) {
     CFindRQ theFindRQ;
