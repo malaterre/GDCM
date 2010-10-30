@@ -28,13 +28,31 @@ const uint8_t AAssociateACPDU::ItemType = 0x02; // PDUType ?
 const uint8_t AAssociateACPDU::Reserved2 = 0x00;
 const uint16_t AAssociateACPDU::ProtocolVersion = 0x01; // big endian
 const uint16_t AAssociateACPDU::Reserved9_10 = 0x0000;
-const uint8_t AAssociateACPDU::Reserved11_26[16] = {  };
-const uint8_t AAssociateACPDU::Reserved27_42[16] = {  };
+//const uint8_t AAssociateACPDU::Reserved11_26[16] = {  };
+//const uint8_t AAssociateACPDU::Reserved27_42[16] = {  };
 const uint8_t AAssociateACPDU::Reserved43_74[32] = {  };
 
 AAssociateACPDU::AAssociateACPDU()
 {
   PDULength = 0; // len of
+  memset(Reserved11_26, ' ', sizeof(Reserved11_26));
+  memset(Reserved27_42, ' ', sizeof(Reserved27_42));
+
+  PDULength = Size() - 6;
+}
+
+void AAssociateACPDU::SetCalledAETitle(const char calledaetitle[16])
+{
+  //size_t len = strlen( calledaetitle );
+  //assert( len <= 16 ); // since forwared from AA-RQ no reason to be invalid
+  strncpy(Reserved11_26, calledaetitle, 16 );
+}
+
+void AAssociateACPDU::SetCallingAETitle(const char callingaetitle[16])
+{
+  //size_t len = strlen( callingaetitle );
+  //assert( len <= 16 ); // since forwared from AA-RQ no reason to be invalid
+  strncpy(Reserved27_42, callingaetitle, 16 );
 }
 
 std::istream &AAssociateACPDU::Read(std::istream &is)
@@ -58,10 +76,12 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   uint16_t reserved9_10;
   is.read( (char*)&reserved9_10, sizeof(Reserved9_10) );
   SwapperDoOp::SwapArray(&reserved9_10,1);
-  uint8_t reserved11_26[16] = {  };
+  char reserved11_26[16] = {  };
   is.read( (char*)&reserved11_26, sizeof(Reserved11_26) ); // called
-  uint8_t reserved27_42[16] = {  };
+  strncpy( Reserved11_26, reserved11_26, sizeof(Reserved11_26) );
+  char reserved27_42[16] = {  };
   is.read( (char*)&reserved27_42, sizeof(Reserved27_42) ); // calling
+  strncpy( Reserved27_42, Reserved27_42, sizeof(Reserved27_42) );
   uint8_t reserved43_74[32] = {  };
   is.read( (char*)&reserved43_74, sizeof(Reserved43_74) ); // 0 (32 times)
 
@@ -116,14 +136,14 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   SwapperDoOp::SwapArray(&protocolversion,1);
   os.write( (char*)&protocolversion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
-  //os.write( (char*)&Reserved11_26, sizeof(Reserved11_26) );
+  os.write( (char*)&Reserved11_26, sizeof(Reserved11_26) );
   const char calling[] = "ANY-SCP         ";
-  os.write( calling, 16 );
+  //os.write( calling, 16 );
 
-  //os.write( (char*)&Reserved27_42, sizeof(Reserved27_42) );
+  os.write( (char*)&Reserved27_42, sizeof(Reserved27_42) );
   //const char called[] = "STORESCU        ";
   const char called[] = "ECHOSCU        ";
-  os.write( called, 16 );
+  //os.write( called, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();

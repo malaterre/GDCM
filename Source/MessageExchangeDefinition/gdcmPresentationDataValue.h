@@ -77,7 +77,8 @@ public:
   //many datasets.
   static DataSet ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs);
 
-void MyInit2(const char *uid1, const char *uid2); // FIXME
+private:
+  void MyInit2(const char *uid1, const char *uid2); // FIXME
 
 private:
   uint32_t ItemLength;

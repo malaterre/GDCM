@@ -19,6 +19,8 @@
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmSwapper.h"
 
+#include "gdcmAAssociateACPDU.h"
+
 namespace gdcm
 {
 /*
@@ -40,9 +42,9 @@ const uint8_t AAssociateRQPDU::Reserved43_74[32] = {};
 AAssociateRQPDU::AAssociateRQPDU()
 {
   memset(CalledAETitle, ' ', sizeof(CalledAETitle));
-  const char called[] = "ANY-SCP";
-  strncpy(CalledAETitle, called, strlen(called) );
-  //memset(CallingAETitle, ' ', sizeof(CallingAETitle));
+  //const char called[] = "ANY-SCP";
+  //strncpy(CalledAETitle, called, strlen(called) );
+  memset(CallingAETitle, ' ', sizeof(CallingAETitle));
   //const char calling[] = "ECHOSCU";
   //strncpy(CallingAETitle, calling, strlen(calling) );
 
@@ -50,6 +52,15 @@ AAssociateRQPDU::AAssociateRQPDU()
 
   ItemLength = Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
+}
+
+void AAssociateRQPDU::InitFromRQ( AAssociateACPDU & acpdu )
+{
+  // Table 9-17 ASSOCIATE-AC PDU fields
+  // This reserved field shall be sent with a value identical to the value
+  // received in the same field of the A-ASSOCIATE-RQ PDU
+  acpdu.SetCalledAETitle( this->GetCalledAETitle() );
+  acpdu.SetCallingAETitle( this->GetCallingAETitle() );
 }
 
 std::istream &AAssociateRQPDU::Read(std::istream &is)
@@ -69,10 +80,10 @@ std::istream &AAssociateRQPDU::Read(std::istream &is)
   uint16_t reserved9_10;
   is.read( (char*)&reserved9_10, sizeof(Reserved9_10) );
   SwapperDoOp::SwapArray(&reserved9_10,1);
-  char calledaetitle[16];
-  is.read( (char*)&calledaetitle, sizeof(CalledAETitle) ); // called
-  char callingaetitle[16];
-  is.read( (char*)&callingaetitle, sizeof(CallingAETitle) ); // calling
+  //char calledaetitle[16];
+  is.read( (char*)&CalledAETitle, sizeof(CalledAETitle) ); // called
+  //char callingaetitle[16];
+  is.read( (char*)&CallingAETitle, sizeof(CallingAETitle) ); // calling
   uint8_t reserved43_74[32] = {  };
   is.read( (char*)&reserved43_74, sizeof(Reserved43_74) ); // 0 (32 times)
 

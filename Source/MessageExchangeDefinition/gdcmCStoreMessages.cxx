@@ -166,6 +166,11 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
 ///the cstorersp contains the appropriate SOP instance UIDs.
   CommandDataSet ds;
 
+  uint32_t theMessageID = 0;
+  gdcm::Attribute<0x0,0x0110> at3 = { 0 };
+  at3.SetFromDataSet( *inDataSet );
+  theMessageID = at3.GetValue();
+
   const gdcm::DataElement &de1 = inDataSet->GetDataElement( gdcm::Tag( 0x0000,0x0002 ) );
   const gdcm::DataElement &de2 = inDataSet->GetDataElement( gdcm::Tag( 0x0000,0x1000 ) );
   //pass back the instance UIDs in the response
@@ -174,11 +179,14 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
 
   //code is from the presentationdatavalue::myinit2
     {
+    // Command Field
     gdcm::Attribute<0x0,0x100> at = { 32769 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
+    // Message ID Being Responded To
     gdcm::Attribute<0x0,0x120> at = { 1 };
+    at.SetValue( theMessageID );
     ds.Insert( at.GetAsDataElement() );
     }
     {
@@ -204,17 +212,10 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
   PDataTFPDU* theDataPDU = dynamic_cast<PDataTFPDU*>(inPDU);
   assert (theDataPDU);
   uint8_t thePDVValue;
-  if (!theDataPDU){
-    //guessing at the pdv!
-    thePDVValue = 67;
-assert(0);
-  } else {
-    gdcm::network::PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
-    thePDVValue = input_pdv.GetPresentationContextID();
-  }
+  gdcm::network::PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
+  thePDVValue = input_pdv.GetPresentationContextID();
 
-  pdv.SetPresentationContextID( thePDVValue );//inPC.GetPresentationContextID() );
-  // FIXME
+  pdv.SetPresentationContextID( thePDVValue );
 
   pdv.SetDataSet(ds);
 
