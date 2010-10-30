@@ -60,8 +60,7 @@ EStateID ULActionAR3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   outWaitingForEvent = false;
   outRaisedEvent = eARELEASERequest;
-  //inConnection.GetProtocol()->dis
-  //I can't see a way to close this connection directly; I guess it just gets reopened elsewhere?
+  inConnection.StopProtocol();
   return eSta1Idle;
 }
 

@@ -563,8 +563,8 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                     dataSetCountIncremented = true;
                 }
                 //force the abort from our side
-                ULEvent theCStoreEvent(eAABORTRequest, NULL);//have to fill this in, we're in passive mode now
-                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+              //  ULEvent theCStoreEvent(eAABORTRequest, NULL);//have to fill this in, we're in passive mode now
+              //  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
               }
             } else {//not dealing with cmove progress updates, apparently
               //keep looping if we haven't succeeded or failed; these are the values for 'pending'
