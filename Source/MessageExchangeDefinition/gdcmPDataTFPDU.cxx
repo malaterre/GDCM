@@ -86,6 +86,7 @@ std::istream &PDataTFPDU::ReadInto(std::istream &is, std::ostream &os)
 
 const std::ostream &PDataTFPDU::Write(std::ostream &os) const
 {
+  assert( (ItemLength + 4 + 1 + 1) == Size() );
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
   //os.write( (char*)&ItemLength, sizeof(ItemLength) );

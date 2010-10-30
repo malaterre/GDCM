@@ -365,6 +365,8 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
 //#if 0
+//    <<<<<<< HEAD
+
     /*
     if (mSecondaryConnection->GetProtocol() == NULL){
       //establish the connection
@@ -383,6 +385,26 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
     ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
     //now, get data from across the network
     theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+//=======
+#if 1
+                if (mSecondaryConnection->GetProtocol() == NULL){
+                  //establish the connection
+                  mSecondaryConnection->InitializeIncomingConnection();
+                }
+                if (mSecondaryConnection->GetState()== eSta1Idle ||
+                  mSecondaryConnection->GetState() == eSta2Open){
+                  EStateID theCStoreStateID;
+                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+                }
+#endif
+
+
+#if 0
+  gdcm::network::AReleaseRPPDU rel;
+  rel.Write( *mSecondaryConnection->GetProtocol() );
+  mSecondaryConnection->GetProtocol()->flush();
+//>>>>>>> 0bad65172d78ba1c13fb98c8163e6177befc4dda
 #endif
 #if 1
     ULEvent theCStoreEvent2(eARELEASEResponse, NULL);//have to fill this in, we're in passive mode now
@@ -710,6 +732,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                 at2.SetFromDataElement( de2 );
                 theCommandCode = at2.GetValues()[0];
               }
+
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
                 //check for other error fields
                 ByteValue *err1 = NULL, *err2 = NULL;
@@ -785,7 +808,14 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                     for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
                       (*itor)->Write(*inWhichConnection->GetProtocol());
                     }
+
                     inWhichConnection->GetProtocol()->flush();
+
+                    // FIXME added MM / Oct 30 2010
+                    gdcm::network::AReleaseRPPDU rel;
+                    //rel.Write( *inWhichConnection->GetProtocol() );
+                    //inWhichConnection->GetProtocol()->flush();
+
                     receivingData = false; //gotta get data on the other connection for a cmove
                   }
                 }

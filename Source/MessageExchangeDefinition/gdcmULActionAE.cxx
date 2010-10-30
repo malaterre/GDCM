@@ -171,16 +171,21 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       pcac1.SetTransferSyntax( ts1 );
       acpdu.AddPresentationContextAC( pcac1 );
     }
+
+    // Init AE-Titles:
+    rqpdu->InitFromRQ( acpdu );
+
     acpdu.Write( *inConnection.GetProtocol() );
     inConnection.GetProtocol()->flush();
 
-    return eSta6TransferReady;
+    return eSta3WaitLocalAssoc;
   } else {
 
     outWaitingForEvent = false;
     outRaisedEvent = eAASSOCIATEresponseReject;
     AAssociateRJPDU thePDU;//for now, use Matheiu's default values
     thePDU.Write(*inConnection.GetProtocol());
+    inConnection.GetProtocol()->flush();
     inConnection.GetTimer().Stop();
     return eSta13AwaitingClose;
   }
@@ -191,8 +196,11 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAE7::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
-  AAssociateACPDU thePDU;//for now, use Matheiu's default values
-  thePDU.Write(*inConnection.GetProtocol());
+
+// FIXME  MM
+  //AAssociateACPDU thePDU;//for now, use Matheiu's default values
+  //thePDU.Write(*inConnection.GetProtocol());
+// FIXME
 
   outWaitingForEvent = true;
   outRaisedEvent = eEventDoesNotExist;
@@ -203,7 +211,7 @@ EStateID ULActionAE7::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAE8::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
-  AAssociateACPDU thePDU;//for now, use Matheiu's default values
+  AAssociateRJPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetTimer().Start();
   outWaitingForEvent = false;
