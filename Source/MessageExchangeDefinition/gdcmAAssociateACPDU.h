@@ -59,6 +59,7 @@ public:
   void Print(std::ostream &os) const;
   bool IsLastFragment() const { return true; }
 
+private:
   void InitSimple( AAssociateRQPDU const & rqpdu );
 
 private:
