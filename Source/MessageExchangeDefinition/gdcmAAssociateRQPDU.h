@@ -31,6 +31,7 @@ namespace gdcm
 namespace network
 {
 
+class AAssociateACPDU;
 /**
  * \brief AAssociateRQPDU
  * Table 9-11 ASSOCIATE-RQ PDU fields
@@ -49,7 +50,20 @@ public:
   void SetCallingAETitle(const char callingaetitle[16]);
   const char *GetCallingAETitle() const { return CallingAETitle; }
 
+  /// This function will initialize an AAssociateACPDU from
+  /// the fields in the AAssociateRQPDU structure
+  void InitFromRQ( AAssociateACPDU & acpdu );
+
   void Print(std::ostream &os) const;
+
+  AAssociateRQPDU(const AAssociateRQPDU &_val)
+    {
+    assert( 0 );
+    }
+  AAssociateRQPDU &operator=(const AAssociateRQPDU &_val)
+    {
+    assert( 0 );
+    }
 
   typedef std::vector<PresentationContext>::size_type SizeType;
   SizeType GetNumberOfPresentationContext() const {

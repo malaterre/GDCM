@@ -59,6 +59,11 @@ public:
   void Print(std::ostream &os) const;
   bool IsLastFragment() const { return true; }
 
+protected:
+  friend class AAssociateRQPDU;
+  void SetCalledAETitle(const char calledaetitle[16]);
+  void SetCallingAETitle(const char callingaetitle[16]);
+
 private:
   void InitSimple( AAssociateRQPDU const & rqpdu );
 
@@ -68,8 +73,18 @@ private:
   uint32_t PDULength; // len of
   static const uint16_t ProtocolVersion;
   static const uint16_t Reserved9_10;
-  static const uint8_t Reserved11_26[16];
-  static const uint8_t Reserved27_42[16];
+
+  // This reserved field shall be sent with a value identical to the value
+  // received in the same field of the A-ASSOCIATE-RQ PDU, but its value
+  // shall not be tested when received.
+  char Reserved11_26[16];
+  // This reserved field shall be sent with a value identical to the value
+  // received in the same field of the A-ASSOCIATE-RQ PDU, but its value
+  // shall not be tested when received.
+  char Reserved27_42[16];
+  // This reserved field shall be sent with a value identical to the value
+  // received in the same field of the A-ASSOCIATE-RQ PDU, but its value
+  // shall not be tested when received.
   static const uint8_t Reserved43_74[32];
   /*
   75-xxx Variable items This variable field shall contain the following items: one Application
