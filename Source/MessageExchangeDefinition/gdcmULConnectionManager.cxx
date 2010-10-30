@@ -700,6 +700,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                 at2.SetFromDataElement( de2 );
                 theCommandCode = at2.GetValues()[0];
               }
+
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
                 //check for other error fields
                 ByteValue *err1 = NULL, *err2 = NULL;
@@ -780,8 +781,8 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
 
                     // FIXME added MM / Oct 30 2010
                     gdcm::network::AReleaseRPPDU rel;
-                    rel.Write( *inWhichConnection->GetProtocol() );
-                    inWhichConnection->GetProtocol()->flush();
+                    //rel.Write( *inWhichConnection->GetProtocol() );
+                    //inWhichConnection->GetProtocol()->flush();
 
                     receivingData = false; //gotta get data on the other connection for a cmove
                   }
