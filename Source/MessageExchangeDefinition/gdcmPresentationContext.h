@@ -129,6 +129,7 @@ public:
   AbstractSyntax const &GetAbstractSyntax() const { return SubItems; }
 
   void AddTransferSyntax( TransferSyntax_ const &ts );
+  std::vector<TransferSyntax_> GetTransferSyntaxes()const {return TransferSyntaxes; }
 
   void SetPresentationContextID( uint8_t id );
   uint8_t GetPresentationContextID() const;
