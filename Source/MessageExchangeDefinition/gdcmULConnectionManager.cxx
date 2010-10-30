@@ -364,7 +364,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // When doing a C-MOVE we receive the Requested DataSet over
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
-//#if 0
+#if 1
                 if (mSecondaryConnection->GetProtocol() == NULL){
                   //establish the connection
                   mSecondaryConnection->InitializeIncomingConnection();
@@ -375,8 +375,10 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                   ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                   theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
                 }
+#endif
 
-#if 1
+
+#if 0
   gdcm::network::AReleaseRPPDU rel;
   rel.Write( *mSecondaryConnection->GetProtocol() );
   mSecondaryConnection->GetProtocol()->flush();
@@ -647,7 +649,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           if (theFirstPDU != NULL){
             incomingPDUs.push_back(theFirstPDU);
             theFirstPDU->Read(is);
-            theFirstPDU->Print(std::cout);
+            //theFirstPDU->Print(std::cout);
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
@@ -773,7 +775,14 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                     for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
                       (*itor)->Write(*inWhichConnection->GetProtocol());
                     }
+
                     inWhichConnection->GetProtocol()->flush();
+
+                    // FIXME added MM / Oct 30 2010
+                    gdcm::network::AReleaseRPPDU rel;
+                    rel.Write( *inWhichConnection->GetProtocol() );
+                    inWhichConnection->GetProtocol()->flush();
+
                     receivingData = false; //gotta get data on the other connection for a cmove
                   }
                 }

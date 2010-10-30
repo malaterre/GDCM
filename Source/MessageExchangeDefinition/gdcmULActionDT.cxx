@@ -34,6 +34,7 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmAReleaseRPPDU.h"
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAAssociateACPDU.h"
+#include "gdcmAReleaseRQPDU.h"
 
 #include <socket++/echo.h>//for setting up the local socket
 
@@ -41,8 +42,12 @@ using namespace gdcm::network;
 
 static void process_input(iosockinet& sio)
 {
+  uint8_t itemtype = 0x0;
+  sio.read( (char*)&itemtype, 1 );
+  assert( itemtype == 0x1 );
+
   gdcm::network::AAssociateRQPDU rqpdu;
-  rqpdu.SetCallingAETitle( "MOVESCU" );
+  //rqpdu.SetCallingAETitle( "MOTESCU" );
   rqpdu.Read( sio );
   rqpdu.Print( std::cout );
 
@@ -72,7 +77,6 @@ static void process_input(iosockinet& sio)
 
   //std::cout << "done AAssociateACPDU !" << std::endl;
 
-  uint8_t itemtype = 0x0;
   sio.read( (char*)&itemtype, 1 );
   assert( itemtype == 0x4 );
 
@@ -145,6 +149,11 @@ static void process_input(iosockinet& sio)
     pdata4.Write( sio );
     //sio.flush();
     }
+
+  //sio.read( (char*)&itemtype, 1 );
+  //assert( itemtype == 0x4 );
+  //gdcm::network::AReleaseRQPDU rel0;
+  //rel0.Read( sio );
 
   // send release:
   gdcm::network::AReleaseRPPDU rel;

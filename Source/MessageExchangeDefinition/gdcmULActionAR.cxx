@@ -100,6 +100,7 @@ EStateID ULActionAR6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAR7::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
+assert(0);
   PDataTFPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetProtocol()->flush();
@@ -112,6 +113,7 @@ EStateID ULActionAR7::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAR8::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
+assert(0);
   return eSta10ReleaseCollisionAc;
 }
 

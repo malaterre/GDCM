@@ -35,6 +35,7 @@ const uint8_t AAssociateACPDU::Reserved43_74[32] = {  };
 AAssociateACPDU::AAssociateACPDU()
 {
   PDULength = 0; // len of
+  PDULength = Size() - 6;
 }
 
 std::istream &AAssociateACPDU::Read(std::istream &is)
