@@ -21,23 +21,15 @@
  * movescu (DCMTK)
  * storescu (DCMTK)
  */
-#include "gdcmAAssociateRQPDU.h"
-#include "gdcmAReleaseRPPDU.h"
-#include "gdcmAAssociateACPDU.h"
-#include "gdcmPDataTFPDU.h"
-#include "gdcmAReleaseRQPDU.h"
-#include "gdcmAReleaseRPPDU.h"
-#include "gdcmAAbortPDU.h"
 #include "gdcmReader.h"
-#include "gdcmAAssociateRJPDU.h"
-#include "gdcmAssociationEstablishment.h"
 #include "gdcmAttribute.h"
 #include "gdcmULConnectionManager.h"
 #include "gdcmDataSet.h"
-#include "gdcmStringFilter.h"
 #include "gdcmVersion.h"
 #include "gdcmGlobal.h"
+#include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmStringFilter.h"
 #include "gdcmWriter.h"
 
 //for testing!  Should be put in a testing executable,
@@ -195,24 +187,6 @@ bool CTestAllFunctions(const char* remote, int portno, const std::string& aetitl
 void CEcho( const char *remote, int portno, std::string const &aetitle,
 std::string const &call )
 {
-  /*
-  echo e(protocol::tcp);
-
-  if (portno == 0)
-    e->connect ( remote );
-  else
-    e->connect ( remote, portno);
-
-  gdcm::network::AssociationEstablishment ae;
-  ae.Run(e);
-
-  gdcm::network::DataTransfer dt;
-  dt.Run(e);
-  e.flush();
-
-  gdcm::network::AssociationRelease ar;
-  ar.Run(e);
-*/
   gdcm::network::ULConnectionManager theManager;
   gdcm::DataSet blank;
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eEcho, blank)){
@@ -237,25 +211,8 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
   std::string const &call, gdcm::network::BaseRootQuery* query,
   int portscp, std::string const & outputdir )
 {
-/*
-(0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
-(0010,0010) PN (no value available)                     #   0, 0 PatientsName
-(0010,0020) LO (no value available)                     #   0, 0 PatientID
-
-*/
-/*
-  gdcm::DataSet ds;
-  gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
-  ds.Insert( at1.GetAsDataElement() );
-  gdcm::Attribute<0x10,0x10> at2 = { "FROG^KERMIT TCH " };
-  ds.Insert( at2.GetAsDataElement() );
-  gdcm::Attribute<0x10,0x20> at3 = { "" };
-*/
-  //ds.Insert( at3.GetAsDataElement() );
-
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
-
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
@@ -267,15 +224,14 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
   std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
   std::vector<gdcm::DataSet>::iterator itor;
   int c = 0;
-//  for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
-//    std::cout << "Message " << c++ << std::endl;
-//    itor->Print(std::cout);
-//  }
   //write to the output directory
-  if (!outputdir.empty()){
+  if (!outputdir.empty())
+    {
     //loop over each dataset, write out the given objects by the SOP Instance UID
-    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
-      if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018))){
+    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
+      {
+      if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018)))
+        {
         gdcm::DataElement de = itor->GetDataElement(gdcm::Tag(0x0008,0x0018));
         std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
         gdcm::Writer w;
@@ -286,14 +242,17 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
         gdcm::FileMetaInformation &fmi = f.GetHeader();
         fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
         w.SetCheckFileMetaInformation( true );
-        if (!w.Write()){
+        if (!w.Write())
+          {
           std::cerr << "Failed to write " << sopclassuid_str << std::endl;
+          }
         }
       }
     }
-  } else {
+  else
+    {
     std::cerr << "Output directory not specified." << std::endl;
-  }
+    }
 
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
@@ -302,24 +261,7 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
 void CFind( const char *remote, int portno , std::string const &aetitle,
 std::string const &call , gdcm::network::BaseRootQuery* query )
 {
-/*
-(0008,0052) CS [PATIENT]                                #   8, 1 QueryRetrieveLevel
-(0010,0010) PN (no value available)                     #   0, 0 PatientsName
-(0010,0020) LO (no value available)                     #   0, 0 PatientID
-
-*/
-/*
-  gdcm::DataSet ds;
-  gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
-  ds.Insert( at1.GetAsDataElement() );
-  gdcm::Attribute<0x10,0x10> at2 = { "F*" };
-  //Attribute<0x10,0x10> at2 = { "X*" };
-  ds.Insert( at2.GetAsDataElement() );
-  gdcm::Attribute<0x10,0x20> at3 = { "" };
-  ds.Insert( at3.GetAsDataElement() );
-*/
-
-  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm      
+  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
@@ -338,339 +280,23 @@ std::string const &call , gdcm::network::BaseRootQuery* query )
 }
 
 void CStore( const char *remote, int portno,
-std::string const &aetitle,
-std::string const &call,
- std::string const & filename )
+  std::string const &aetitle,
+  std::string const &call,
+  std::string const & filename )
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   reader.Read();
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
-  gdcm::network::ULConnectionManager theManager;  
+  gdcm::network::ULConnectionManager theManager;
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eStore, ds)){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }
   theManager.SendStore( (gdcm::DataSet*)&ds );
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  
-/*
-  echo e(protocol::tcp);
 
-  if (portno == 0)
-    e->connect ( remote );
-  else
-    e->connect ( remote, portno);
-*/
-/*
-I:     Abstract Syntax: =AmbulatoryECGWaveformStorage
-I:     Abstract Syntax: =BasicTextSR
-I:     Abstract Syntax: =BasicVoiceAudioWaveformStorage
-I:     Abstract Syntax: =BlendingSoftcopyPresentationStateStorage
-I:     Abstract Syntax: =CardiacElectrophysiologyWaveformStorage
-I:     Abstract Syntax: =ChestCADSR
-I:     Abstract Syntax: =ColorSoftcopyPresentationStateStorage
-I:     Abstract Syntax: =ComprehensiveSR
-I:     Abstract Syntax: =ComputedRadiographyImageStorage
-I:     Abstract Syntax: =CTImageStorage
-I:     Abstract Syntax: =DigitalIntraOralXRayImageStorageForPresentation
-I:     Abstract Syntax: =DigitalIntraOralXRayImageStorageForProcessing
-I:     Abstract Syntax: =DigitalMammographyXRayImageStorageForPresentation
-I:     Abstract Syntax: =DigitalMammographyXRayImageStorageForProcessing
-I:     Abstract Syntax: =DigitalXRayImageStorageForPresentation
-I:     Abstract Syntax: =DigitalXRayImageStorageForProcessing
-I:     Abstract Syntax: =EncapsulatedPDFStorage
-I:     Abstract Syntax: =EnhancedCTImageStorage
-I:     Abstract Syntax: =EnhancedMRImageStorage
-I:     Abstract Syntax: =EnhancedSR
-I:     Abstract Syntax: =EnhancedXAImageStorage
-I:     Abstract Syntax: =EnhancedXRFImageStorage
-I:     Abstract Syntax: =GeneralECGWaveformStorage
-I:     Abstract Syntax: =GrayscaleSoftcopyPresentationStateStorage
-I:     Abstract Syntax: =HemodynamicWaveformStorage
-I:     Abstract Syntax: =KeyObjectSelectionDocument
-I:     Abstract Syntax: =MammographyCADSR
-I:     Abstract Syntax: =MRImageStorage
-I:     Abstract Syntax: =MRSpectroscopyStorage
-I:     Abstract Syntax: =MultiframeGrayscaleByteSecondaryCaptureImageStorage
-I:     Abstract Syntax: =MultiframeGrayscaleWordSecondaryCaptureImageStorage
-I:     Abstract Syntax: =MultiframeSingleBitSecondaryCaptureImageStorage
-I:     Abstract Syntax: =MultiframeTrueColorSecondaryCaptureImageStorage
-I:     Abstract Syntax: =NuclearMedicineImageStorage
-I:     Abstract Syntax: =OphthalmicPhotography16BitImageStorage
-I:     Abstract Syntax: =OphthalmicPhotography8BitImageStorage
-I:     Abstract Syntax: =PETCurveStorage
-I:     Abstract Syntax: =PETImageStorage
-I:     Abstract Syntax: =ProcedureLogStorage
-I:     Abstract Syntax: =PseudoColorSoftcopyPresentationStateStorage
-I:     Abstract Syntax: =RawDataStorage
-I:     Abstract Syntax: =RealWorldValueMappingStorage
-I:     Abstract Syntax: =RTBeamsTreatmentRecordStorage
-I:     Abstract Syntax: =RTBrachyTreatmentRecordStorage
-I:     Abstract Syntax: =RTDoseStorage
-I:     Abstract Syntax: =RTImageStorage
-I:     Abstract Syntax: =RTPlanStorage
-I:     Abstract Syntax: =RTStructureSetStorage
-I:     Abstract Syntax: =RTTreatmentSummaryRecordStorage
-I:     Abstract Syntax: =SecondaryCaptureImageStorage
-I:     Abstract Syntax: =SpatialFiducialsStorage
-I:     Abstract Syntax: =SpatialRegistrationStorage
-I:     Abstract Syntax: =StereometricRelationshipStorage
-I:     Abstract Syntax: =TwelveLeadECGWaveformStorage
-I:     Abstract Syntax: =UltrasoundImageStorage
-I:     Abstract Syntax: =UltrasoundMultiframeImageStorage
-I:     Abstract Syntax: =VLEndoscopicImageStorage
-I:     Abstract Syntax: =VLMicroscopicImageStorage
-I:     Abstract Syntax: =VLPhotographicImageStorage
-I:     Abstract Syntax: =VLSlideCoordinatesMicroscopicImageStorage
-I:     Abstract Syntax: =XRayAngiographicImageStorage
-I:     Abstract Syntax: =XRayFluoroscopyImageStorage
-I:     Abstract Syntax: =XRayRadiationDoseSR
-*/
-  /*
-  gdcm::network::TransferSyntax_ ts;
-  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-  //ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
-
-  gdcm::network::AAssociateRQPDU cstore;
-  cstore.SetCallingAETitle( "STORESCU" );
-
-  //gdcm::UIDs::TSName begin = gdcm::UIDs::AmbulatoryECGWaveformStorage; // 136
-  gdcm::UIDs::TSName begin = gdcm::UIDs::ComputedRadiographyImageStorage; // 109
-  //gdcm::UIDs::TSName end   = gdcm::UIDs::HemodynamicWaveformStorage;
-  //gdcm::UIDs::TSName end   = gdcm::UIDs::BasicTextSRStorage; // 177
-  gdcm::UIDs::TSName end   = gdcm::UIDs::RTIonBeamsTreatmentRecordStorage; // 197
-//  unsigned int id = 1;
-//  for( unsigned int tsname = begin; tsname <= end; ++tsname, id +=2  )
-//    {
-//    gdcm::network::AbstractSyntax as;
-//    as.SetNameFromUID( (gdcm::UIDs::TSName)tsname );
-//
-//    gdcm::network::PresentationContext pc;
-//    pc.SetPresentationContextID( id );
-//    pc.SetAbstractSyntax( as );
-//    pc.AddTransferSyntax( ts );
-//    cstore.AddPresentationContext( pc );
-//    }
-
-    gdcm::network::AbstractSyntax as;
-    as.SetNameFromUID( gdcm::UIDs::SecondaryCaptureImageStorage );
-
-    gdcm::network::PresentationContext pc;
-    pc.SetPresentationContextID( 197 );
-    pc.SetAbstractSyntax( as );
-    pc.AddTransferSyntax( ts );
-    cstore.AddPresentationContext( pc );
-
-  cstore.Write(e);
-  e.flush();
-
-  uint8_t itemtype = 0;
-  e.read( (char*)&itemtype, 1 );
-  gdcm::network::AAssociateACPDU acpdu;
-  switch ( itemtype )
-    {
-  case 0x2:
-    acpdu.Read( e );
-    break;
-  default:
-    assert( 0 );
-    throw "Unimplemented";
-    }
-
-  gdcm::network::AAssociateACPDU::SizeType s = acpdu.GetNumberOfPresentationContextAC();
-  std::cout << "BEGIN AAssociateACPDU: " << std::endl;
-  acpdu.Print( std::cout );
-  std::cout << "END AAssociateACPDU: " << std::endl;
-
-  gdcm::Reader r;
-  r.SetFileName( "/tmp/send3.dcm" ); // FIXME: use 'filename'
-  r.Read();
-
-  {
-  gdcm::network::PresentationDataValue pdv;
-  pdv.SetPresentationContextID( 197 );
-  pdv.MyInit( r.GetFile() );
-
-  gdcm::network::PDataTFPDU pdata;
-  pdata.AddPresentationDataValue( pdv );
-  pdata.Write( e );
-  e.flush();
-  }
-  std::cout << "done PDataTFPDU 1!" << std::endl;
-
-  {
-  gdcm::network::PresentationDataValue pdv2;
-  pdv2.SetPresentationContextID( 197 );
-  pdv2.SetDataSet( r.GetFile().GetDataSet() );
-  pdv2.SetMessageHeader( 2 );
-
-  gdcm::network::PDataTFPDU pdata2;
-  pdata2.AddPresentationDataValue( pdv2 );
-  pdata2.Write( e );
-  e.flush();
-  }
-  std::cout << "done PDataTFPDU 2!" << std::endl;
-
-  gdcm::network::PDataTFPDU pdata3;
-  pdata3.Read( e );
-  pdata3.Print( std::cout );
-
-  gdcm::network::AssociationRelease ar;
-  ar.Run(e);
-*/
-}
-
-static void process_input(iosockinet& sio)
-{
-  /*
-  gdcm::network::AAssociateRQPDU rqpdu;
-  rqpdu.SetCallingAETitle( "STORESCU" );
-  rqpdu.Read( sio );
-  //rqpdu.Print( std::cout );
-
-  std::cout << "done AAssociateRQPDU !" << std::endl;
-
-  gdcm::network::TransferSyntax_ ts1;
-  ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-
-  gdcm::network::TransferSyntax_ ts2;
-  ts2.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
-
-  gdcm::network::TransferSyntax_ ts3;
-  ts3.SetNameFromUID( gdcm::UIDs::ExplicitVRBigEndian );
-
-  gdcm::network::AAssociateACPDU acpdu;
-  for( unsigned int id = 1; id < 252; id += 4  )
-    {
-    gdcm::network::PresentationContextAC pcac1;
-    pcac1.SetPresentationContextID( id );
-    pcac1.SetTransferSyntax( ts2 );
-    acpdu.AddPresentationContextAC( pcac1 );
-
-    gdcm::network::PresentationContextAC pcac2;
-    pcac2.SetPresentationContextID( id + 2 );
-    pcac2.SetTransferSyntax( ts3 );
-    acpdu.AddPresentationContextAC( pcac2 );
-    }
-
-  acpdu.Write( sio );
-  sio.flush();
-
-  std::cout << "done AAssociateACPDU !" << std::endl;
-
-  gdcm::network::PDataTFPDU pdata;
-  pdata.Read( sio );
-  //pdata.Print( std::cout );
-  // pick the first one:
-  gdcm::network::PresentationDataValue const &input_pdv = pdata.GetPresentationDataValue(0);
-
-  std::cout << "done PDataTFPDU 1!" << std::endl;
-
-  uint8_t messageheader;
-  messageheader = input_pdv.GetMessageHeader();
-
-  std::cout << "Start with MessageHeader : " << (int)messageheader << std::endl;
-  //input_pdv.GetDataSet().Print (std::cout);
-
-  gdcm::Attribute<0x0,0x800> at = { 0 };
-  at.SetFromDataSet( input_pdv.GetDataSet() );
-  unsigned short commanddatasettype = at.GetValue();
-  std::cout << "CommandDataSetType: " << at.GetValue() << std::endl;
-  assert( messageheader == 3 );
-
-  // C-STORE
-  if( commanddatasettype == 1 )
-    {
-    std::ofstream out( "/tmp/storescu.dcm" );
-    int i = 0;
-    do
-      {
-      gdcm::network::PDataTFPDU pdata2;
-      pdata2.ReadInto( sio, out );
-      //pdata2.Print( std::cout );
-      gdcm::network::PresentationDataValue const &pdv = pdata2.GetPresentationDataValue(0);
-      messageheader = pdv.GetMessageHeader();
-      std::cout << "---------------- done PDataTFPDU: " << i << std::endl;
-      std::cout << "---------------- done MessageHeader: " << (int)messageheader << std::endl;
-      ++i;
-      }
-    while( messageheader == 0 );
-    assert( messageheader == 2 ); // end of data
-
-    //gdcm::network::PDataTFPDU pdata3;
-    //pdata3.ReadInto( sio, out );
-    //pdata3.Print( std::cout );
-    //gdcm::network::PresentationDataValue const &pdv3 = pdata3.GetPresentationDataValue(0);
-    //messageheader = pdv3.GetMessageHeader();
-    //std::cout << "---------------- done PDataTFPDU: " << i << std::endl;
-    //std::cout << "---------------- done MessageHeader: " << (int)messageheader << std::endl;
-
-    out.close();
-
-    gdcm::network::PresentationDataValue pdv;
-    pdv.SetPresentationContextID( input_pdv.GetPresentationContextID() );
-    gdcm::File f;
-    pdv.MyInit2( f );
-
-    //std::cout << "Compare:" << std::endl;
-    //input_pdv.Print( std::cout );
-    //std::cout << "To:" << std::endl;
-    //pdv.Print( std::cout );
-
-    gdcm::network::PDataTFPDU pdata4;
-    pdata4.AddPresentationDataValue( pdv );
-    pdata4.Write( sio );
-
-    }
-  // C-ECHO
-  else if( commanddatasettype == 257 )
-    {
-    gdcm::network::PDataTFPDU pdata2;
-    gdcm::network::PresentationDataValue pdv;
-    pdv.MyInit3();
-    pdata2.AddPresentationDataValue( pdv );
-    pdata2.Write( sio );
-    sio.flush();
-
-    }
-  else 
-    {
-    assert( 0 );
-    }
-
-
-  // send release:
-  gdcm::network::AReleaseRPPDU rel;
-  rel.Write( sio );
-  sio.flush();
-
-  std::cout << "done AReleaseRPPDU!" << std::endl;
-
-  gdcm::network::AReleaseRPPDU rel2;
-  rel2.Write( sio );
-  sio.flush();
-  */
-}
-
-void CStoreServer( int portno )
-{
-  sockinetbuf sin (sockbuf::sock_stream);
-
-  //sin.bind( );
-  sin.bind( portno );
-
-  std::cout << "localhost = " << sin.localhost() << std::endl
-    << "localport = " << sin.localport() << std::endl;
-
-  sin.listen();
-
-  for(;;)
-    {
-    iosockinet s (sin.accept());
-    process_input(s);
-    }
 }
 
 void PrintVersion()
@@ -754,11 +380,10 @@ int main(int argc, char *argv[])
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
 
   //if you want study or patient level query help, uncomment these lines
-  //gdcm::network::BaseRootQuery* theBase = 
+  //gdcm::network::BaseRootQuery* theBase =
   //  gdcm::network::QueryFactory::ProduceQuery(gdcm::network::ePatientRootType);
   //theBase->WriteHelpFile(std::cout);
   //delete theBase;
-
 
   // FIXME: remove testing stuff:
   int testmode = 0;
@@ -783,8 +408,8 @@ int main(int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
         {"hostname", 1, 0, 0},     // -h
-        {"aetitle", 1, 0, 0},     // 
-        {"call", 1, 0, 0},     // 
+        {"aetitle", 1, 0, 0},     //
+        {"call", 1, 0, 0},     //
         {"port", 0, &port, 1}, // -p
         {"input", 1, 0, 0}, // dcmfile-in
         {"testdir", 0, 0, 1},
@@ -1113,7 +738,8 @@ int main(int argc, char *argv[])
   if ( mode == "server" ) // C-STORE SCP
     {
     // MM: Do not expose that to user for now (2010/10/11).
-    CStoreServer( port );
+    //CStoreServer( port );
+    return 1;
     }
   else if ( mode == "echo" ) // C-ECHO SCU
     {
@@ -1126,15 +752,17 @@ int main(int argc, char *argv[])
     // ./bin/gdcmscu --move dhcp-67-183 5678 move
     // ./bin/gdcmscu --move mi2b2.slicer.org 11112 move
     gdcm::StringFilter sf;
-    std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it = 
+    std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
     gdcm::network::BaseRootQuery* theQuery;
-    if (findstudy > 0){
+    if (findstudy > 0)
+      {
       theQuery = new gdcm::network::StudyRootQuery();
-    }
-    else{
+      }
+    else
+      {
       theQuery = new gdcm::network::PatientRootQuery();
-    }
+      }
     gdcm::DataSet ds;
     for(; it != keys.end(); ++it)
       {
@@ -1166,16 +794,18 @@ int main(int argc, char *argv[])
     // PATIENT query:
     // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 8,52,PATIENT --key 10,10,"F*"
     gdcm::StringFilter sf;
-    std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it = 
+    std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
 
     gdcm::network::BaseRootQuery* theQuery;
-    if (findstudy > 0){
+    if (findstudy > 0)
+      {
       theQuery = new gdcm::network::StudyRootQuery();
-    }
-    else{
+      }
+    else
+      {
       theQuery = new gdcm::network::PatientRootQuery();
-    }
+      }
 
     gdcm::DataSet ds;
     for(; it != keys.end(); ++it)
@@ -1189,11 +819,12 @@ int main(int argc, char *argv[])
 
     ds.Print( std::cout );
 
-    if (!theQuery->ValidateQuery()){
+    if (!theQuery->ValidateQuery())
+      {
       std::cout << "You have not constructed a valid find query.  Please try again." << std::endl;
       delete theQuery;
       return 1;
-    }//must ensure that 0x8,0x52 is set and that
+      }//must ensure that 0x8,0x52 is set and that
     //the value in that tag corresponds to the query type
     CFind( hostname, port, callingaetitle, callaetitle, theQuery );
     delete theQuery;
