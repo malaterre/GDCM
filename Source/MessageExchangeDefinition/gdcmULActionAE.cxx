@@ -198,8 +198,8 @@ EStateID ULActionAE7::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
 
 // FIXME  MM
-  //AAssociateACPDU thePDU;//for now, use Matheiu's default values
-  //thePDU.Write(*inConnection.GetProtocol());
+//  AAssociateACPDU thePDU;//for now, use Matheiu's default values
+//  thePDU.Write(*inConnection.GetProtocol());
 // FIXME
 
   outWaitingForEvent = true;
