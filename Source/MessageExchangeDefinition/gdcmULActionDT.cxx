@@ -137,7 +137,7 @@ static void process_input(iosockinet& sio)
     const gdcm::ByteValue *bv2 = de2.GetByteValue();
     std::string s2( bv2->GetPointer(), bv2->GetLength() );
 
-    pdv.MyInit2( s1.c_str(), s2.c_str() );
+    //pdv.MyInit2( s1.c_str(), s2.c_str() );
 
     //std::cout << "Compare:" << std::endl;
     //input_pdv.Print( std::cout );
