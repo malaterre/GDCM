@@ -156,6 +156,17 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       PresentationContext const &pc = rqpdu->GetPresentationContext(index);
       uint8_t id = pc.GetPresentationContextID();
 
+      std::vector<TransferSyntax_> tsSet = pc.GetTransferSyntaxes();
+      std::vector<TransferSyntax_>::iterator tsitor;
+      bool hasLittleEndian = false;
+      for (tsitor = tsSet.begin(); tsitor < tsSet.end(); tsitor++){
+        if (strcmp(tsitor->GetName(), ts1.GetName())==0){
+          hasLittleEndian = true;
+        }
+      }
+      if (!hasLittleEndian) continue; //don't add this presentation context, because
+      //the client doesn't know how to handle it.
+
       pcac1.SetPresentationContextID( id ); // DCMTK MR
       pcac1.SetTransferSyntax( ts1 );
       acpdu.AddPresentationContextAC( pcac1 );

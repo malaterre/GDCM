@@ -352,6 +352,10 @@ void PresentationDataValue::Print(std::ostream &os) const
   os << "ItemLength: " << ItemLength << std::endl;
   os << "PresentationContextID: " << (int)PresentationContextID << std::endl;
   os << "MessageHeader: " << (int)MessageHeader << std::endl;
+  std::vector<PresentationDataValue> thePDVs;
+  thePDVs.push_back(*this);
+  DataSet ds = ConcatenatePDVBlobs(thePDVs);
+  os << "Data: " << ds <<std::endl;
 }
 
 void PresentationDataValue::SetCommand(const bool& inCommand){

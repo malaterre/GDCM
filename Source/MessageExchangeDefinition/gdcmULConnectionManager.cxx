@@ -365,31 +365,35 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
 //#if 0
-                if (mSecondaryConnection->GetProtocol() == NULL){
-                  //establish the connection
-                  mSecondaryConnection->InitializeIncomingConnection();
-                }
-                if (mSecondaryConnection->GetState()== eSta1Idle ||
-                  mSecondaryConnection->GetState() == eSta2Open){
-                  EStateID theCStoreStateID;
-                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-                }
+    /*
+    if (mSecondaryConnection->GetProtocol() == NULL){
+      //establish the connection
+      mSecondaryConnection->InitializeIncomingConnection();
+    }
+    if (mSecondaryConnection->GetState()== eSta1Idle ||
+      mSecondaryConnection->GetState() == eSta2Open){
+      EStateID theCStoreStateID;
+      ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+      theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+    }
+
 
 #if 1
-  gdcm::network::AReleaseRPPDU rel;
-  rel.Write( *mSecondaryConnection->GetProtocol() );
-  mSecondaryConnection->GetProtocol()->flush();
+    EStateID theCStoreStateID;
+    ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+    //now, get data from across the network
+    theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+#endif
+#if 1
+    ULEvent theCStoreEvent2(eARELEASEResponse, NULL);//have to fill this in, we're in passive mode now
+    //now, get data from across the network
+    theCStoreStateID = RunEventLoop(theCStoreEvent2, outDataSet, mSecondaryConnection, true);
+//    gdcm::network::AReleaseRPPDU rel;
+//    rel.Write( *mSecondaryConnection->GetProtocol() );
+//    mSecondaryConnection->GetProtocol()->flush();
 #endif
 
-#if 0
-                EStateID theCStoreStateID;
-                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                //now, get data from across the network
-                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-#endif
-
-
+*/
     //just as for the regular event loop, but we have to alternate between the connections.
     //it may be that nothing comes back over the is connection, but lots over the
     //isSCP connection.  So, if is fails, meh.  But if isSCP fails, that's not so meh.
@@ -407,6 +411,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
           {
           incomingPDUs.push_back(thePDU);
           thePDU->Read(is);
+          std::cout << "PDU code: " << static_cast<int>(itemtype) << std::endl;
           thePDU->Print(std::cout);
           if (thePDU->IsLastFragment()) waitingForEvent = false;
           }
@@ -519,19 +524,25 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                   //establish the connection
                   mSecondaryConnection->InitializeIncomingConnection();
                 }
+                EStateID theCStoreStateID = eSta6TransferReady;
                 if (mSecondaryConnection->GetState()== eSta1Idle ||
                   mSecondaryConnection->GetState() == eSta2Open){
-                  EStateID theCStoreStateID;
                   ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                   theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
                 }
-                EStateID theCStoreStateID;
-                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                //now, get data from across the network
-                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-                if (theCStoreStateID == eSta1Idle){//debugging break point
-                  std::cout << "It's IDLE!" << std::endl;
+                bool dataSetCountIncremented = true;//false once the number of incoming datasets doesn't change.
+                while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
+                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  //now, get data from across the network
+                  int theNumDataSets = outDataSet.size();
+                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+                  dataSetCountIncremented = false;
+                  if (outDataSet.size() > theNumDataSets)
+                    dataSetCountIncremented = true;
                 }
+                //force the abort from our side
+                ULEvent theCStoreEvent(eAABORTRequest, NULL);//have to fill this in, we're in passive mode now
+                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
               }
             } else {//not dealing with cmove progress updates, apparently
               //keep looping if we haven't succeeded or failed; these are the values for 'pending'
@@ -647,6 +658,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
           if (theFirstPDU != NULL){
             incomingPDUs.push_back(theFirstPDU);
             theFirstPDU->Read(is);
+            std::cout << "PDU code: " << static_cast<int>(itemtype) << std::endl;
             theFirstPDU->Print(std::cout);
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
@@ -754,7 +766,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                     break;
                   }
                   //!!!need to handle incoming PDUs that are not data, ie, an abort
-                } while(/*!is.eof() &&*/ !thePDU->IsLastFragment());
+                } while(!thePDU->IsLastFragment());
                 if (!interrupted){//ie, if the remote server didn't hang up
                   DataSet theCompleteFindResponse =
                     PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
