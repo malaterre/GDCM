@@ -204,17 +204,10 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
   PDataTFPDU* theDataPDU = dynamic_cast<PDataTFPDU*>(inPDU);
   assert (theDataPDU);
   uint8_t thePDVValue;
-  if (!theDataPDU){
-    //guessing at the pdv!
-    thePDVValue = 67;
-assert(0);
-  } else {
-    gdcm::network::PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
-    thePDVValue = input_pdv.GetPresentationContextID();
-  }
+  gdcm::network::PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
+  thePDVValue = input_pdv.GetPresentationContextID();
 
-  pdv.SetPresentationContextID( thePDVValue );//inPC.GetPresentationContextID() );
-  // FIXME
+  pdv.SetPresentationContextID( thePDVValue );
 
   pdv.SetDataSet(ds);
 
