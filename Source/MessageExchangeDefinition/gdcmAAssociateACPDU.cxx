@@ -198,7 +198,7 @@ void AAssociateACPDU::Print(std::ostream &os) const
 
 void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
 {
-  gdcm::network::TransferSyntax_ ts1;
+  gdcm::network::TransferSyntaxSub ts1;
   ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
 

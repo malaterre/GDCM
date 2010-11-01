@@ -73,7 +73,7 @@ std::istream &PresentationContext::Read(std::istream &is)
   size_t offset = SubItems.Size() + 4;
   while( curlen + offset < ItemLength )
     {
-    TransferSyntax_ ts;
+    TransferSyntaxSub ts;
     ts.Read( is );
     TransferSyntaxes.push_back( ts );
     curlen += ts.Size();
@@ -99,7 +99,7 @@ const std::ostream &PresentationContext::Write(std::ostream &os) const
   os.write( (char*)&Reserved7, sizeof(Reserved7) );
   os.write( (char*)&Reserved8, sizeof(Reserved8) );
   SubItems.Write(os);
-  std::vector<TransferSyntax_>::const_iterator it = TransferSyntaxes.begin();
+  std::vector<TransferSyntaxSub>::const_iterator it = TransferSyntaxes.begin();
   for( ; it != TransferSyntaxes.end(); ++it )
     {
     it->Write( os );
@@ -119,7 +119,7 @@ size_t PresentationContext::Size() const
   ret += sizeof(Reserved7);
   ret += sizeof(Reserved8);
   ret += SubItems.Size();
-  std::vector<TransferSyntax_>::const_iterator it = TransferSyntaxes.begin();
+  std::vector<TransferSyntaxSub>::const_iterator it = TransferSyntaxes.begin();
   for( ; it != TransferSyntaxes.end(); ++it )
     {
     ret += it->Size();
@@ -137,7 +137,7 @@ void PresentationContext::SetAbstractSyntax( AbstractSyntax const & as )
   assert( ItemLength + 4 == Size() );
 }
 
-void PresentationContext::AddTransferSyntax( TransferSyntax_ const &ts )
+void PresentationContext::AddTransferSyntax( TransferSyntaxSub const &ts )
 {
   TransferSyntaxes.push_back( ts );
   size_t lenTemp = Size() - 4;

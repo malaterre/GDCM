@@ -53,7 +53,7 @@ static void process_input(iosockinet& sio)
 
   //std::cout << "done AAssociateRQPDU !" << std::endl;
 
-  gdcm::network::TransferSyntax_ ts1;
+  gdcm::network::TransferSyntaxSub ts1;
   ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
   gdcm::network::AAssociateACPDU acpdu;

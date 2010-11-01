@@ -15,29 +15,29 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "gdcmTransferSyntax_.h"
+#include "gdcmTransferSyntaxSub.h"
 #include "gdcmSwapper.h"
 
 namespace gdcm
 {
 namespace network
 {
-const uint8_t TransferSyntax_::ItemType = 0x40;
-const uint8_t TransferSyntax_::Reserved2 = 0x00;
+const uint8_t TransferSyntaxSub::ItemType = 0x40;
+const uint8_t TransferSyntaxSub::Reserved2 = 0x00;
 
-TransferSyntax_::TransferSyntax_()
+TransferSyntaxSub::TransferSyntaxSub()
 {
   //UpdateName( "1.2.840.10008.1.1" );
   ItemLength = 0;
 }
 
-void TransferSyntax_::SetName( const char *name )
+void TransferSyntaxSub::SetName( const char *name )
 {
   Name = name;
   ItemLength = Name.size();
 }
 
-std::istream &TransferSyntax_::Read(std::istream &is)
+std::istream &TransferSyntaxSub::Read(std::istream &is)
 {
   uint8_t itemtype = 0xf;
   is.read( (char*)&itemtype, sizeof(ItemType) );
@@ -57,7 +57,7 @@ std::istream &TransferSyntax_::Read(std::istream &is)
   return is;
 }
 
-const std::ostream &TransferSyntax_::Write(std::ostream &os) const
+const std::ostream &TransferSyntaxSub::Write(std::ostream &os) const
 {
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
@@ -70,7 +70,7 @@ const std::ostream &TransferSyntax_::Write(std::ostream &os) const
   return os;
 }
 
-size_t TransferSyntax_::Size() const
+size_t TransferSyntaxSub::Size() const
 {
   size_t ret = 0;
   assert( Name.size() == ItemLength );
@@ -81,7 +81,7 @@ size_t TransferSyntax_::Size() const
   return ret;
 }
 
-void TransferSyntax_::UpdateName( const char *name )
+void TransferSyntaxSub::UpdateName( const char *name )
 {
   if( name )
     {
@@ -100,13 +100,13 @@ void TransferSyntax_::UpdateName( const char *name )
   throw "Invalid Name";
 }
 
-void TransferSyntax_::SetNameFromUID( gdcm::UIDs::TSName tsname )
+void TransferSyntaxSub::SetNameFromUID( gdcm::UIDs::TSName tsname )
 {
   const char *name = gdcm::UIDs::GetUIDString( tsname );
   UpdateName( name );
 }
 
-void TransferSyntax_::Print(std::ostream &os) const
+void TransferSyntaxSub::Print(std::ostream &os) const
 {
   os << "Name: " << Name;
   UIDs uids;

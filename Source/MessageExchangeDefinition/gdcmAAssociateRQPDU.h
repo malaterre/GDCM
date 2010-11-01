@@ -50,6 +50,8 @@ public:
   void SetCallingAETitle(const char callingaetitle[16]);
   const char *GetCallingAETitle() const { return CallingAETitle; }
 
+  static bool IsAETitleValid(const char title[16]);
+
   /// This function will initialize an AAssociateACPDU from
   /// the fields in the AAssociateRQPDU structure
   void InitFromRQ( AAssociateACPDU & acpdu );
