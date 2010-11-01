@@ -459,12 +459,35 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
           pendingDE2 = 0xff00;
           success = 0x0000;
           theVal = pendingDE1;
+          uint32_t theNumLeft = 0; // the number of pending sub operations left.
+          //so here's the thing: dcmtk responds with 'success' as it first cmove rsp
+          //which is retarded and, I think, wrong.  However, dcm4chee responds with 'pending'
+          //so, we look either for pending, or for the number of operations left
+          // (tag 0000, 1020) if the value is success, and that number should be 0.
           DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
           if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
             gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
             gdcm::Attribute<0x0,0x0900> at;
             at.SetFromDataElement( de );
             theVal = at.GetValues()[0];
+            //if theVal is Pending or Success, then we need to enter the loop below,
+            //because we need the data PDUs.
+            //so, the loop below is a do/while loop; there should be at least a second packet
+            //with the dataset, even if the status is 'success'
+            //success == 0000H
+          }
+          uint32_t theCommandCode = 0;
+          if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0100))){
+            gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
+            gdcm::Attribute<0x0,0x0100> at;
+            at.SetFromDataElement( de );
+            theCommandCode = at.GetValues()[0];
+          }
+          if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x1020))){
+            gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x1020));
+            gdcm::Attribute<0x0,0x1020> at;
+            at.SetFromDataElement( de );
+            theNumLeft = at.GetValues()[0];
             //if theVal is Pending or Success, then we need to enter the loop below,
             //because we need the data PDUs.
             //so, the loop below is a do/while loop; there should be at least a second packet
@@ -526,7 +549,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
           }
           receivingData = false;
           justWaiting = false;
-          if (theVal == pendingDE1 || theVal == pendingDE2) {
+          if (theVal == pendingDE1 || theVal == pendingDE2 || (theVal == success && theNumLeft != 0)) {
             receivingData = true; //wait for more data as more PDUs (findrsps, for instance)
             justWaiting = true;
             waitingForEvent = true;
@@ -536,36 +559,30 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
             //just don't listen to the cmove event loop until this is done.
             //could cause a pileup on the main connection, I suppose.
             //could also report the progress here, if we liked.
-            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0100))){
-              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
-              gdcm::Attribute<0x0,0x0100> at;
-              at.SetFromDataElement( de );
-              uint32_t theCommandCode = at.GetValues()[0];
-              if (theCommandCode == 0x8021){//cmove response, so prep the retrieval loop on the back connection
-                if (mSecondaryConnection->GetProtocol() == NULL){
-                  //establish the connection
-                  mSecondaryConnection->InitializeIncomingConnection();
-                }
-                EStateID theCStoreStateID = eSta6TransferReady;
-                if (mSecondaryConnection->GetState()== eSta1Idle ||
-                  mSecondaryConnection->GetState() == eSta2Open){
-                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-                }
-                bool dataSetCountIncremented = true;//false once the number of incoming datasets doesn't change.
-                while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
-                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                  //now, get data from across the network
-                  int theNumDataSets = outDataSet.size();
-                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-                  dataSetCountIncremented = false;
-                  if (outDataSet.size() > theNumDataSets)
-                    dataSetCountIncremented = true;
-                }
-                //force the abort from our side
-              //  ULEvent theCStoreEvent(eAABORTRequest, NULL);//have to fill this in, we're in passive mode now
-              //  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+            if (theCommandCode == 0x8021){//cmove response, so prep the retrieval loop on the back connection
+              if (mSecondaryConnection->GetProtocol() == NULL){
+                //establish the connection
+                mSecondaryConnection->InitializeIncomingConnection();
               }
+              EStateID theCStoreStateID = eSta6TransferReady;
+              if (mSecondaryConnection->GetState()== eSta1Idle ||
+                mSecondaryConnection->GetState() == eSta2Open){
+                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+              }
+              bool dataSetCountIncremented = true;//false once the number of incoming datasets doesn't change.
+              while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
+                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                //now, get data from across the network
+                int theNumDataSets = outDataSet.size();
+                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+                dataSetCountIncremented = false;
+                if (outDataSet.size() > theNumDataSets)
+                  dataSetCountIncremented = true;
+              }
+              //force the abort from our side
+            //  ULEvent theCStoreEvent(eAABORTRequest, NULL);//have to fill this in, we're in passive mode now
+            //  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
             } else {//not dealing with cmove progress updates, apparently
               //keep looping if we haven't succeeded or failed; these are the values for 'pending'
               //first, dynamically cast that pdu in the event
