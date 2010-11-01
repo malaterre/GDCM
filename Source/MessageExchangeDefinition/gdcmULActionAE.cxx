@@ -143,7 +143,7 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     //sending of data underway.  Have to get info now
     outRaisedEvent = eAASSOCIATEresponseAccept;
 
-    gdcm::network::TransferSyntax_ ts1;
+    gdcm::network::TransferSyntaxSub ts1;
     ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
     gdcm::network::AAssociateACPDU acpdu;
@@ -156,8 +156,8 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       PresentationContext const &pc = rqpdu->GetPresentationContext(index);
       uint8_t id = pc.GetPresentationContextID();
 
-      std::vector<TransferSyntax_> tsSet = pc.GetTransferSyntaxes();
-      std::vector<TransferSyntax_>::iterator tsitor;
+      std::vector<TransferSyntaxSub> tsSet = pc.GetTransferSyntaxes();
+      std::vector<TransferSyntaxSub>::iterator tsitor;
       bool hasLittleEndian = false;
       for (tsitor = tsSet.begin(); tsitor < tsSet.end(); tsitor++){
         if (strcmp(tsitor->GetName(), ts1.GetName())==0){

@@ -139,7 +139,9 @@ const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
   SwapperDoOp::SwapArray(&protocolversion,1);
   os.write( (char*)&protocolversion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
+  assert( AAssociateRQPDU::IsAETitleValid(CalledAETitle) );
   os.write( CalledAETitle, 16 );
+  assert( AAssociateRQPDU::IsAETitleValid(CallingAETitle) );
   os.write( CallingAETitle, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write(os);
@@ -173,6 +175,22 @@ size_t AAssociateRQPDU::Size() const
   ret += UserInfo.Size();
 
   return ret;
+}
+
+bool AAssociateRQPDU::IsAETitleValid(const char title[16])
+{
+  std::string s ( title, 16 );
+  // check no \0 :
+  size_t len = strlen( s.c_str() );
+  if( len != 16 ) return false;
+  std::locale loc;
+  std::string str = s;
+  for (size_t i=0; i < str.size(); ++i)
+    {
+    str[i] = toupper(str[i],loc);
+    }
+  if( str != s ) return false;
+  return true;
 }
 
 void AAssociateRQPDU::AddPresentationContext( PresentationContext const &pc )

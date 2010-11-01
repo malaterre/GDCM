@@ -60,7 +60,7 @@ std::iostream &AssociationEstablishment::Run(std::iostream &ios)
   as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
   pc.SetAbstractSyntax( as );
 
-  gdcm::network::TransferSyntax_ ts;
+  gdcm::network::TransferSyntaxSub ts;
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
 

@@ -19,7 +19,7 @@
 #define GDCMPRESENTATIONCONTEXTAC_H
 
 #include "gdcmTypes.h"
-#include "gdcmTransferSyntax_.h"
+#include "gdcmTransferSyntaxSub.h"
 
 namespace gdcm
 {
@@ -42,7 +42,7 @@ public:
 
   size_t Size() const;
 
-  void SetTransferSyntax( TransferSyntax_ const &ts );
+  void SetTransferSyntax( TransferSyntaxSub const &ts );
   void SetPresentationContextID( uint8_t id );
 
   void Print(std::ostream &os) const;
@@ -55,7 +55,7 @@ private:
   static const uint8_t Reserved6;
   uint8_t /*Reason*/Result;
   static const uint8_t Reserved8;
-  TransferSyntax_ SubItems;
+  TransferSyntaxSub SubItems;
 };
 
 } // end namespace network

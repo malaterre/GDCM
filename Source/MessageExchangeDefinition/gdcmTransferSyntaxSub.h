@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef GDCMTRANSFERSYNTAX__H
-#define GDCMTRANSFERSYNTAX__H
+#ifndef GDCMTRANSFERSYNTAXSUB_H
+#define GDCMTRANSFERSYNTAXSUB_H
 
 #include "gdcmTypes.h"
 #include "gdcmTransferSyntax.h"
@@ -29,7 +29,7 @@ namespace network
 {
 
 /**
- * \brief TransferSyntax_
+ * \brief TransferSyntaxSub
  * Table 9-15
  * TRANSFER SYNTAX SUB-ITEM FIELDS
  *
@@ -38,10 +38,10 @@ namespace network
  * Table 9-19
  * TRANSFER SYNTAX SUB-ITEM FIELDS
  */
-class GDCM_EXPORT TransferSyntax_
+class GDCM_EXPORT TransferSyntaxSub
 {
 public:
-  TransferSyntax_();
+  TransferSyntaxSub();
   void SetName( const char *name );
   const char *GetName() const { return Name.c_str(); }
 
@@ -58,11 +58,11 @@ private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
   uint16_t ItemLength; // len of
-  std::string /*TransferSyntax_*/ Name; // UID
+  std::string /*TransferSyntaxSub*/ Name; // UID
 };
 
 } // end namespace network
 
 } // end namespace gdcm
 
-#endif //GDCMTRANSFERSYNTAX__H
+#endif //GDCMTRANSFERSYNTAXSUB_H

@@ -92,7 +92,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 
   std::vector<PresentationContext> pcVector;
   PresentationContext pc;
-  gdcm::network::TransferSyntax_ ts;
+  gdcm::network::TransferSyntaxSub ts;
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
   ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
@@ -236,7 +236,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, 
 
   std::vector<PresentationContext> pcVector;
   PresentationContext pc;
-  gdcm::network::TransferSyntax_ ts;
+  gdcm::network::TransferSyntaxSub ts;
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
   ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );

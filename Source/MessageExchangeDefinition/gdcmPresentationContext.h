@@ -20,7 +20,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmAbstractSyntax.h"
-#include "gdcmTransferSyntax_.h"
+#include "gdcmTransferSyntaxSub.h"
 #include "gdcmDataSet.h"
 
 namespace gdcm
@@ -128,8 +128,8 @@ public:
   void SetAbstractSyntax( AbstractSyntax const & as );
   AbstractSyntax const &GetAbstractSyntax() const { return SubItems; }
 
-  void AddTransferSyntax( TransferSyntax_ const &ts );
-  std::vector<TransferSyntax_> GetTransferSyntaxes()const {return TransferSyntaxes; }
+  void AddTransferSyntax( TransferSyntaxSub const &ts );
+  std::vector<TransferSyntaxSub> GetTransferSyntaxes()const {return TransferSyntaxes; }
 
   void SetPresentationContextID( uint8_t id );
   uint8_t GetPresentationContextID() const;
@@ -165,7 +165,7 @@ description of the use and encoding of these sub-items see Sections
 */
 
   AbstractSyntax SubItems;
-  std::vector<TransferSyntax_> TransferSyntaxes;
+  std::vector<TransferSyntaxSub> TransferSyntaxes;
 };
 
 } // end namespace network

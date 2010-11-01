@@ -95,7 +95,7 @@ size_t PresentationContextAC::Size() const
   return ret;
 }
 
-void PresentationContextAC::SetTransferSyntax( TransferSyntax_ const &ts )
+void PresentationContextAC::SetTransferSyntax( TransferSyntaxSub const &ts )
 {
   SubItems = ts;
   ItemLength = Size() - 4;
