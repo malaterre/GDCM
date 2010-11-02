@@ -15,11 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-this file defines the messages for the cfind action
-5 oct 2010 mmr
-*/
-
 #include "gdcmCMoveMessages.h"
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
