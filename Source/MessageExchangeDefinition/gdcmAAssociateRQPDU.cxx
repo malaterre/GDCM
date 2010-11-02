@@ -61,8 +61,8 @@ void AAssociateRQPDU::InitFromRQ( AAssociateACPDU & acpdu )
   // Table 9-17 ASSOCIATE-AC PDU fields
   // This reserved field shall be sent with a value identical to the value
   // received in the same field of the A-ASSOCIATE-RQ PDU
-  acpdu.SetCalledAETitle( this->GetCalledAETitle() );
-  acpdu.SetCallingAETitle( this->GetCallingAETitle() );
+  acpdu.SetCalledAETitle( this->GetCalledAETitle().c_str() );
+  acpdu.SetCallingAETitle( this->GetCallingAETitle().c_str() );
 }
 
 std::istream &AAssociateRQPDU::Read(std::istream &is)
