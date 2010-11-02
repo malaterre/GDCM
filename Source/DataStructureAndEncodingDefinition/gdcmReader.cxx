@@ -270,23 +270,25 @@ namespace details
 bool Reader::Read()
 {
   details::DefaultCaller caller(F->GetDataSet());
-  return InternalReadCommon(caller);
+  std::streamoff streamOff;
+  return InternalReadCommon(caller, streamOff);
 }
 
-bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
+bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags, std::streamoff& outStreamOffset)
 {
   details::ReadUpToTagCaller caller(F->GetDataSet(),tag,skiptags);
-  return InternalReadCommon(caller);
+  return InternalReadCommon(caller, outStreamOffset);
 }
 
 bool Reader::ReadSelectedTags( std::set<Tag> const & selectedTags )
 {
   details::ReadSelectedTagsCaller caller(F->GetDataSet(), selectedTags);
-  return InternalReadCommon(caller);
+  std::streamoff streamOff;
+  return InternalReadCommon(caller, streamOff);
 }
 
 template <typename T_Caller>
-bool Reader::InternalReadCommon(const T_Caller &caller)
+bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStreamOffset)
 {
   if( !Stream )
     {
@@ -673,8 +675,10 @@ std::istream &is = *Stream;
 //    }
 
   // FIXME : call this function twice...
+  outStreamOffset = 0;
   if (Ifstream && Ifstream->is_open())
     {
+    outStreamOffset = Ifstream->tellg();
     Ifstream->close();
     delete Ifstream;
     Ifstream = NULL;

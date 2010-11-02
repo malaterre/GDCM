@@ -19,6 +19,7 @@
 #include "gdcmByteSwap.h"
 #include "gdcmTrace.h"
 #include "gdcmTesting.h"
+#include "gdcmImageHelper.h"
 
 int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydump = false)
 {
@@ -30,16 +31,61 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
   if ( reader.ReadImageInformation() )
     {
     int res = 0;
-    //std::cerr << "Success to read image from file: " << filename << std::endl;
+
+    //let's be tricky; each image will be read in portions, first the top half, then the bottom
+    //that way, we can test how the stream handles fragmentation of the data
+    //we could also loop this to get various different size combinations, but I'm not sure
+    //that's useful, yet.
+    std::vector<unsigned int> extent = gdcm::ImageHelper::GetDimensionsValue(reader.GetImageData());
+
+    unsigned short xmin = 0;
+    unsigned short xmax = extent[0];
+    unsigned short ymin = 0;
+    unsigned short ymax = extent[1]/2;
+
+    reader.DefinePixelExtent(0, extent[0], 0, extent[1]);
     unsigned long len = reader.DefineProperBufferLength();
+    char* finalBuffer = new char[len];
+    bool result = reader.Read(finalBuffer, len);
+    if( !result ){
+      std::cerr << "res2 failure:" << filename << std::endl;
+      return 1;
+    }
+/*
+    //now, read in smaller buffer extents
+    reader.DefinePixelExtent(xmin, xmax, ymin, ymax);
+    len = reader.DefineProperBufferLength();
 
     char* buffer = new char[len];
     bool res2 = reader.Read(buffer, len);
-    if( !res2 )
-      {
+    if( !res2 ){
       std::cerr << "res2 failure:" << filename << std::endl;
       return 1;
-      }
+    }
+    //copy the result into finalBuffer
+    memcpy(finalBuffer, buffer, len);
+
+    //now read the next half of the image
+    ymin = ymax;
+    ymax = extent[1];
+
+    reader.DefinePixelExtent(xmin, xmax, ymin, ymax);
+
+    //std::cerr << "Success to read image from file: " << filename << std::endl;
+    unsigned long len2 = reader.DefineProperBufferLength();
+
+    char* buffer2 = new char[len2];
+    bool res3 = reader.Read(buffer2, len2);
+    if( !res3 ){
+      std::cerr << "res3 failure:" << filename << std::endl;
+      return 1;
+    }
+    //copy the result into finalBuffer
+    memcpy(&(finalBuffer[len]), buffer2, len2);
+
+    delete [] buffer;
+    delete [] buffer2;
+*/
     // On big Endian system we have byteswapped the buffer (duh!)
     // Since the md5sum is byte based there is now way it would detect
     // that the file is written in big endian word, so comparing against
@@ -59,7 +105,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     const char *ref = gdcm::Testing::GetMD5FromFile(filename);
 
     char digest[33];
-    gdcm::Testing::ComputeMD5(buffer, len, digest);
+    gdcm::Testing::ComputeMD5(finalBuffer, len, digest);
     if( verbose )
       {
       std::cout << "ref=" << ref << std::endl;
@@ -84,7 +130,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
       //assert(0);
 #endif
       }
-    delete[] buffer;
+    delete[] finalBuffer;
     return res;
     }
 
