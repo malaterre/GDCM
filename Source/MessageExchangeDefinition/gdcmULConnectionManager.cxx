@@ -364,58 +364,16 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
   // When doing a C-MOVE we receive the Requested DataSet over
   // another channel (technically this is send to an SCP)
   // in our case we use another port to receive it.
-//#if 0
-//    <<<<<<< HEAD
-
-    /*
-    if (mSecondaryConnection->GetProtocol() == NULL){
-      //establish the connection
-      mSecondaryConnection->InitializeIncomingConnection();
-    }
-    if (mSecondaryConnection->GetState()== eSta1Idle ||
-      mSecondaryConnection->GetState() == eSta2Open){
-      EStateID theCStoreStateID;
-      ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-      theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-    }
-
-
-#if 1
-    EStateID theCStoreStateID;
-    ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-    //now, get data from across the network
-    theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-//=======
-#if 1
-                if (mSecondaryConnection->GetProtocol() == NULL){
-                  //establish the connection
-                  mSecondaryConnection->InitializeIncomingConnection();
-                }
-                if (mSecondaryConnection->GetState()== eSta1Idle ||
-                  mSecondaryConnection->GetState() == eSta2Open){
-                  EStateID theCStoreStateID;
-                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                  theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-                }
-#endif
-
-
-#if 0
-  gdcm::network::AReleaseRPPDU rel;
-  rel.Write( *mSecondaryConnection->GetProtocol() );
-  mSecondaryConnection->GetProtocol()->flush();
-//>>>>>>> 0bad65172d78ba1c13fb98c8163e6177befc4dda
-#endif
-#if 1
-    ULEvent theCStoreEvent2(eARELEASEResponse, NULL);//have to fill this in, we're in passive mode now
-    //now, get data from across the network
-    theCStoreStateID = RunEventLoop(theCStoreEvent2, outDataSet, mSecondaryConnection, true);
-//    gdcm::network::AReleaseRPPDU rel;
-//    rel.Write( *mSecondaryConnection->GetProtocol() );
-//    mSecondaryConnection->GetProtocol()->flush();
-#endif
-
-*/
+     if (mSecondaryConnection->GetProtocol() == NULL){
+        //establish the connection
+        mSecondaryConnection->InitializeIncomingConnection();
+      }
+      EStateID theCStoreStateID = eSta6TransferReady;
+      if (mSecondaryConnection->GetState()== eSta1Idle ||
+        mSecondaryConnection->GetState() == eSta2Open){
+        ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+        theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+      }
     //just as for the regular event loop, but we have to alternate between the connections.
     //it may be that nothing comes back over the is connection, but lots over the
     //isSCP connection.  So, if is fails, meh.  But if isSCP fails, that's not so meh.
@@ -560,16 +518,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
             //could cause a pileup on the main connection, I suppose.
             //could also report the progress here, if we liked.
             if (theCommandCode == 0x8021){//cmove response, so prep the retrieval loop on the back connection
-              if (mSecondaryConnection->GetProtocol() == NULL){
-                //establish the connection
-                mSecondaryConnection->InitializeIncomingConnection();
-              }
-              EStateID theCStoreStateID = eSta6TransferReady;
-              if (mSecondaryConnection->GetState()== eSta1Idle ||
-                mSecondaryConnection->GetState() == eSta2Open){
-                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-              }
+
               bool dataSetCountIncremented = true;//false once the number of incoming datasets doesn't change.
               while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
                 ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
