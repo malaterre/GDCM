@@ -46,9 +46,9 @@ public:
   void AddPresentationContext( PresentationContext const &pc );
 
   void SetCalledAETitle(const char calledaetitle[16]);
-  const char *GetCalledAETitle() const { return CalledAETitle; }
+  std::string GetCalledAETitle() const { return std::string(CalledAETitle,16); }
   void SetCallingAETitle(const char callingaetitle[16]);
-  const char *GetCallingAETitle() const { return CallingAETitle; }
+  std::string GetCallingAETitle() const { return std::string(CallingAETitle,16); }
 
   static bool IsAETitleValid(const char title[16]);
 
