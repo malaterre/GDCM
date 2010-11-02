@@ -187,7 +187,7 @@ bool AAssociateRQPDU::IsAETitleValid(const char title[16])
   std::string str = s;
   for (size_t i=0; i < str.size(); ++i)
     {
-    str[i] = toupper(str[i],loc);
+    str[i] = std::toupper(str[i],loc);
     }
   if( str != s ) return false;
   return true;
