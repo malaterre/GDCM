@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef QUERYSERIES_H
-#define QUERYSERIES_H
+#ifndef GDCMQUERYSERIES_H
+#define GDCMQUERYSERIES_H
 
 #include "gdcmQueryBase.h"
 
@@ -39,4 +39,4 @@ class QuerySeries : public QueryBase {
   }
 }
 
-#endif //QUERYSERIES_H
+#endif //GDCMQUERYSERIES_H

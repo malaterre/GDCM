@@ -25,8 +25,8 @@ Note that this enumeration is not 'power of two', like the states, because you c
 multiple simultaneous events.  Multiple state outputs in transition tables, however, is possible.
 
 */
-#ifndef NETWORKEVENTS_H
-#define NETWORKEVENTS_H
+#ifndef GDCMNETWORKEVENTS_H
+#define GDCMNETWORKEVENTS_H
 
 namespace gdcm {
   namespace network{
