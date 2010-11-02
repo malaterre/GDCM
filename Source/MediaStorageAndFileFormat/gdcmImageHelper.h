@@ -69,15 +69,16 @@ public:
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
   /// rows and columns of the image in pixels (as opposed to actual distances).
   /// The output is {col , row}
-  static std::vector<unsigned int> GetDimensionsValue(const File& inF);
+  static std::vector<unsigned int> GetDimensionsValue(const DataSet& ds);
 
   /// This function returns pixel information about an image from its dataset
   /// That includes samples per pixel and bit depth (in that order)
-  static PixelFormat GetPixelFormat(const File& inF);
+  static PixelFormat GetPixelFormat(const DataSet& ds);
 
   /// Set/Get shift/scale from/to a file
   /// \warning this function reads/sets the Slope/Intercept in appropriate
   /// class storage, but also Grid Scaling in RT Dose Storage
+  /// Can't take a dataset because the mediastorage of the file must be known
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
@@ -86,6 +87,7 @@ public:
   static void SetOriginValue(DataSet & ds, const Image & img);
 
   /// Get Direction Cosines (IOP) from/to a file
+  /// Requires a file because mediastorage must be known
   static std::vector<double> GetDirectionCosinesValue(File const & f);
   /// Set Direction Cosines (IOP) from/to a file
   /// When IOD does not defines what is IOP (eg. typically Secondary Capture Image Storage)
@@ -109,7 +111,7 @@ public:
   //distinctly from the reader-style data input
   static PhotometricInterpretation GetPhotometricInterpretation(File const& f);
   //returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
-  static unsigned int GetPlanarConfiguration(File const& f);
+  static unsigned int GetPlanarConfiguration(const DataSet& ds);
 
   //returns the lookup table of an image file
   static SmartPointer<LookupTable> GetLUT(File const& f);

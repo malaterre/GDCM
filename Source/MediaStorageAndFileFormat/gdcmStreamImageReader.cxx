@@ -63,9 +63,11 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
 }
 /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
 /// The return amount is in bytes.
+/// If the return is 0, then that means that the pixel extent was not defined prior
 uint32_t StreamImageReader::DefineProperBufferLength() const
 {
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile());
+  if (mXMax < mXMin || mYMax < mYMin) return 0;
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile().GetDataSet());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   return (mYMax - mYMin)*(mXMax - mXMin)*bytesPerPixel;
@@ -82,19 +84,22 @@ bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLeng
     return false; //for now
 
 
-  OneShotReadBuf osrb(inReadBuffer, inBufferLength);
-  std::ostream ostr(&osrb);
+//  OneShotReadBuf osrb(inReadBuffer, inBufferLength);
+//  std::ostream ostr(&osrb);
 
   //put the codec interpretation here
 
-  return ReadImageSubregionRAW(ostr);
+//  return ReadImageSubregionRAW(ostr);
+  //just do memcpys instead of doing this stream shenanigans
+  return ReadImageSubregionRAW((char*)inReadBuffer, inBufferLength);
 
 }
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
     Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
     */
-bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
+//bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) {
+bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength) {
   //assumes that the file is organized in row-major format, with each row rastering across
   int y;
   std::streamoff theOffset;
@@ -102,11 +107,23 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   //need to get the pixel size information
   //should that come from the header?
   //most likely  that's a tag in the header
-  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile());
+  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile().GetDataSet());
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile().GetDataSet());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
+
+  //set up the codec prior to resetting the file, just in case that affects the way that
+  //files are handled by the ImageHelper
+  RAWCodec theCodec;
+  theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile().GetDataSet()));
+  theCodec.SetPlanarConfiguration(ImageHelper::GetPlanarConfiguration(mReader.GetFile().GetDataSet()));
+  theCodec.SetPhotometricInterpretation(ImageHelper::GetPhotometricInterpretation(mReader.GetFile()));
+  //how do I handle byte swapping here?  where is it set?
+
+  //have to reset the stream to the proper position
+  //first, reopen the stream,then the loop should set the right position
+  mReader.SetFileName(mReader.GetFileName().c_str());
   std::istream* theStream = mReader.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
@@ -115,11 +132,11 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
   char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
   try {
     for (y = mYMin; y < mYMax; ++y){
+      theStream->seekg(std::ios::beg);
       theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*bytesPerPixel; 
       theStream->seekg(theOffset);
       theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
   //now, convert that buffer.
-      RAWCodec theCodec;
       if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel, 
         tmpBuffer2, SubRowSize*bytesPerPixel)){
         delete [] tmpBuffer;
@@ -127,7 +144,8 @@ bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) const {
         return false;
       }
       //this next line may require a bit of finagling...
-      std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]) + 1, std::ostream_iterator<char>(os));
+      //std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]), std::ostream_iterator<char>(os));
+      memcpy(&(inReadBuffer[(y-mYMin)*SubRowSize + mXMin]), tmpBuffer2, SubRowSize*bytesPerPixel);
     }
   }
   catch (std::exception & ex){
@@ -156,13 +174,8 @@ bool StreamImageReader::ReadImageInformation(){
   //read up to the point in the stream where the pixel information tag is
   //store that location and keep the rest of the data as the header information dataset
   std::set<Tag> theSkipTags;
-  Tag thePixelDataTag(0x7fe0, 0x0010);
-  bool read = false;
-  std::istream* theStream = mReader.GetStreamPtr();
-  if (theStream == NULL){
-    gdcmErrorMacro("Filename was not initialized for gdcm stream image reader.");
-    return false;
-  }
+  Tag thePixelDataTag(0x7ee0, 0x000f);//must be LESS than the pixel information tag, 0x7fe0,0x0010
+  //otherwise, it'll read that tag as well.
   //make a reader object in readimageinformation
   //call read up to tag
   //then create data structures from that dataset that's been read-up-to
@@ -170,14 +183,10 @@ bool StreamImageReader::ReadImageInformation(){
   try
   {
     //ok, need to read up until I know what kind of endianness i'm dealing with?
-    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags)){
+    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags, mFileOffset)){
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
       return false;
     }
-    //get the file stream position
-    mFileOffset = theStream->tellg();//part of the reader functionality, the really
-    //super class of this reader
-    //when reading past here, can use file pointers and the like
   }
   catch(std::exception & ex)
   {
@@ -192,6 +201,17 @@ bool StreamImageReader::ReadImageInformation(){
   return true;
 }
 
+  /// Returns the dataset read by ReadImageInformation
+  /// Couple this with the ImageHelper to get statistics about the image,
+  /// like pixel extent, to be able to initialize buffers for reading
+DataSet StreamImageReader::GetImageData() const{
+  if (mFileOffset > 0){
+    return mReader.GetFile().GetDataSet();
+  } else {
+    DataSet empty;
+    return empty;
+  }
+}
 
 } // end namespace gdcm
 

@@ -66,6 +66,7 @@ public:
   /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
   /// The return amount is in bytes.  Call this function to determine the size of the char* buffer
   /// that will need to be passed in to ReadImageSubregion().  
+  /// If the return is 0, then that means that the pixel extent was not defined prior
   uint32_t DefineProperBufferLength() const;
 
   /// Read the DICOM image. There are three reasons for failure:
@@ -82,6 +83,10 @@ public:
   /// with the pixel 0x7fe0, 0x0010 tag.
   virtual bool ReadImageInformation();
 
+  /// Returns the dataset read by ReadImageInformation
+  /// Couple this with the ImageHelper to get statistics about the image,
+  /// like pixel extent, to be able to initialize buffers for reading
+  DataSet GetImageData() const;
 
 protected:
 
@@ -101,7 +106,8 @@ protected:
   ///  Make sure to call DefinePixelExtent and to initialize the buffer with the
   /// amount given by DefineProperBufferLength prior to calling this.
   /// reads by the RAW codec; other codecs are added once implemented
-  virtual bool ReadImageSubregionRAW(std::ostream& os) const;
+  //virtual bool ReadImageSubregionRAW(std::ostream& os);
+  virtual bool ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength);
 
 };
 //see http://stackoverflow.com/questions/1448467/initializing-a-c-stdistringstream-from-an-in-memory-buffer/1449527#1449527

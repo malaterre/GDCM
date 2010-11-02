@@ -590,11 +590,11 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
 /// This function returns pixel information about an image from its dataset
 /// That includes samples per pixel and bit depth (in that order)
 /// Returns a PixelFormat
-PixelFormat ImageHelper::GetPixelFormat(const File& inF){
+PixelFormat ImageHelper::GetPixelFormat(const DataSet& ds){
   // D 0028|0011 [US] [Columns] [512]
   //[10/20/10 9:05:07 AM] Mathieu Malaterre:
   PixelFormat pf;
-  const DataSet& ds = inF.GetDataSet();
+  //const DataSet& ds = inF.GetDataSet();
   // D 0028|0100 [US] [Bits Allocated] [16]
   {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
@@ -639,9 +639,9 @@ PixelFormat ImageHelper::GetPixelFormat(const File& inF){
 }
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
   /// rows and columns of the image in pixels (as opposed to actual distances).
-std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& inF){
+std::vector<unsigned int> ImageHelper::GetDimensionsValue(const DataSet& ds){
 
-  const DataSet& ds = inF.GetDataSet();
+  //const DataSet& ds = inF.GetDataSet();
   std::vector<unsigned int> theReturn(2);
   {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
@@ -1712,7 +1712,7 @@ bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<doubl
 PhotometricInterpretation ImageHelper::GetPhotometricInterpretation(File const& f){
   // 5. Photometric Interpretation
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
-  PixelFormat pf = GetPixelFormat(f);
+  PixelFormat pf = GetPixelFormat(f.GetDataSet());
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation =
     ImageHelper::GetPointerFromElement(tphotometricinterpretation, f);
@@ -1775,15 +1775,15 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretation(File const& 
 }
 //returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
 //code is borrowed from gdcmPixmapReader::ReadImage(MediaStorage const &ms)
-unsigned int ImageHelper::GetPlanarConfiguration(File const& f){
+unsigned int ImageHelper::GetPlanarConfiguration(const DataSet& ds){
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
-  PixelFormat pf = GetPixelFormat(f);
+  PixelFormat pf = GetPixelFormat(ds);
   unsigned int pc = 0;
   // FIXME: Whatif planaconfiguration is send in a grayscale image... it would be empty...
   // well hopefully :(
-  DataSet ds = f.GetDataSet();
+//  DataSet ds = f.GetDataSet();
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
     const DataElement& de = ds.GetDataElement( planarconfiguration );
@@ -1805,7 +1805,7 @@ unsigned int ImageHelper::GetPlanarConfiguration(File const& f){
 SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f){
 
   DataSet ds = f.GetDataSet();
-  PixelFormat pf = GetPixelFormat(f);
+  PixelFormat pf = GetPixelFormat(ds);
   PhotometricInterpretation pi = GetPhotometricInterpretation(f);
   // Do the Palette Color:
   // 1. Modality LUT Sequence
