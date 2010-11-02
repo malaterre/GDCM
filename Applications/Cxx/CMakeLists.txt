@@ -121,7 +121,9 @@ ENDFOREACH(exename)
 
 IF(BUILD_TESTING)
   # http://www.na-mic.org/Wiki/index.php/CTSC:ARRA:Mockup
+  # http://www.dicomserver.co.uk/
   ADD_TEST(gdcmscu-echo-MI2B2 ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo --call MI2B2 mi2b2.slicer.org 11112)
   ADD_TEST(gdcmscu-echo-dicomserver ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo www.dicomserver.co.uk 11112)
   ADD_TEST(gdcmscu-find-MI2B2 ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --call MI2B2 mi2b2.slicer.org 11112 -k 8,52=PATIENT -k 10,10=X*)
+  ADD_TEST(gdcmscu-find-dicomserver ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find www.dicomserver.co.uk 11112 -k 8,52=PATIENT -k 10,20=*)
 ENDIF(BUILD_TESTING)
