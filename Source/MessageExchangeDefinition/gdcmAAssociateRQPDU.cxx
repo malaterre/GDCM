@@ -20,6 +20,8 @@
 #include "gdcmSwapper.h"
 
 #include "gdcmAAssociateACPDU.h"
+#include <string>
+#include <locale>
 
 namespace gdcm
 {
