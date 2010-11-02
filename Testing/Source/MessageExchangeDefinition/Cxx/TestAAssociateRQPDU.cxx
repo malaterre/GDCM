@@ -17,8 +17,20 @@
  *=========================================================================*/
 #include "gdcmAAssociateRQPDU.h"
 
+#include "gdcmVR.h"
+
 int TestAAssociateRQPDU(int argc, char *argv[])
 {
+  int ret = 0;
   gdcm::network::AAssociateRQPDU o;
-  return 0;
+  gdcm::AEComp aetitle = "MOVESCU";
+  std::cerr << "[" << aetitle.size() << "]" << std::endl;
+  o.SetCallingAETitle( aetitle.c_str() );
+  std::cerr << "[" << o.GetCallingAETitle() << "]" << std::endl;
+  gdcm::AEComp aetitle_ret = o.GetCallingAETitle();
+  std::cerr << "[" << aetitle_ret.Trim() << "]" << std::endl;
+  std::cerr << "[" << aetitle.Trim() << "]" << std::endl;
+  if( aetitle_ret.Trim() != aetitle.Trim() ) ++ret;
+
+  return ret;
 }
