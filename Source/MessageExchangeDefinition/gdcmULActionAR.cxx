@@ -51,7 +51,22 @@ EStateID ULActionAR2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   outWaitingForEvent = false;
   outRaisedEvent = eARELEASERequest;//here's the primitive being sent
-  return eSta8WaitLocalRelease;
+
+  //this is very stupid.
+  //the A-release indication primitive is given to determine whether or not the
+  //server wants to send an a-release, an a-abort, or a pdata pdu.
+  //we just want to send an a-release.
+  //therfore, this function will directly send the release.
+  //ar8 does the same thing, but so far, we have not had that collision yet.
+
+  AReleaseRPPDU thePDU;//for now, use Matheiu's default values
+  thePDU.Write(*inConnection.GetProtocol());
+  inConnection.GetProtocol()->flush();
+
+  //if we hadn't actually just performed the primitive right here, we sould be in sta8
+  //as it is, we should be in sta13
+//  return eSta8WaitLocalRelease;
+  return eSta13AwaitingClose;
 }
 
 //Issue A-RELEASE confirmation primitive, and close transport connection

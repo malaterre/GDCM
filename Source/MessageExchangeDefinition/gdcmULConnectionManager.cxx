@@ -791,6 +791,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
             case eARELEASERequest://process this via the transition table
               waitingForEvent = false;
               break;
+            case eARELEASE_RQPDUReceivedOpen://process this via the transition table
+              waitingForEvent = false;
+              receivingData = true; //to continue the loop to process the release
+              break;
             case eAABORTRequest:
               waitingForEvent = false;
               inWhichConnection->StopProtocol();
