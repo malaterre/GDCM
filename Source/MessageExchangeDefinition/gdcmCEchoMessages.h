@@ -15,6 +15,9 @@
  *  limitations under the License.
  *
  *=========================================================================*/
+#ifndef GDCMCECHOMESSAGES_H
+#define GDCMCECHOMESSAGES_H
+
 #include "gdcmBaseCompositeMessage.h"
 
 namespace gdcm{
@@ -35,3 +38,4 @@ class CEchoRQ : public BaseCompositeMessage {
     };
   }
 }
+#endif // GDCMCECHOMESSAGES_H
