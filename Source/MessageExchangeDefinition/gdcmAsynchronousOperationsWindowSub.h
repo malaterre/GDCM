@@ -33,7 +33,7 @@ namespace network
  * ASYNCHRONOUS OPERATIONS WINDOW SUB-ITEM FIELDS
  * (A-ASSOCIATE-RQ)
  */
-class GDCM_EXPORT AsynchronousOperationsWindowSub
+class AsynchronousOperationsWindowSub
 {
 public:
   AsynchronousOperationsWindowSub();

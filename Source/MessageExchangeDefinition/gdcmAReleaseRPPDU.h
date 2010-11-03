@@ -32,7 +32,7 @@ namespace network
  * Table 9-25
  * A-RELEASE-RP PDU fields
  */
-class GDCM_EXPORT AReleaseRPPDU : public BasePDU
+class AReleaseRPPDU : public BasePDU
 {
 public:
   AReleaseRPPDU();

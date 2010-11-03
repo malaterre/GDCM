@@ -33,7 +33,7 @@ namespace network
  * \fixme
  * Looks like Application Context can only be 64 bytes at max (see Figure 9-1 / PS 3.8 - 2009 )
  */
-class GDCM_EXPORT ApplicationContext
+class ApplicationContext
 {
 public:
   ApplicationContext();

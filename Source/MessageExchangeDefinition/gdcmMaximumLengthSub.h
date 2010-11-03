@@ -37,7 +37,7 @@ namespace network
  * Table D.1-2
  * Maximum length sub-item fields (A-ASSOCIATE-AC)
  */
-class GDCM_EXPORT MaximumLengthSub
+class MaximumLengthSub
 {
 public:
   MaximumLengthSub();

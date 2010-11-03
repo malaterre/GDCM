@@ -40,7 +40,7 @@ class AsynchronousOperationsWindowSub;
  * Table 9-20
  * USER INFORMATION ITEM FIELDS
  */
-class GDCM_EXPORT UserInformation
+class UserInformation
 {
 public:
   UserInformation();
