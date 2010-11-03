@@ -32,7 +32,7 @@ namespace network
  * Table 9-21
  * ASSOCIATE-RJ PDU FIELDS
  */
-class GDCM_EXPORT AAssociateRJPDU : public BasePDU
+class AAssociateRJPDU : public BasePDU
 {
 public:
   AAssociateRJPDU();
