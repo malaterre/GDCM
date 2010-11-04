@@ -12,6 +12,7 @@ SET(DSED_TEST_SRCS
   #TestByteValue
   TestPreamble
   TestReader
+  TestReaderUpToTag
   TestWriter
   TestWriter2
   TestCSAHeader

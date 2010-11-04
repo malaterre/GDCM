@@ -31,13 +31,14 @@ namespace gdcm
 template <typename TSwap>
 std::istream &ExplicitDataElement::Read(std::istream &is)
 {
-  TagField.Read<TSwap>(is);
+  ReadPreValue<TSwap>(is);
   return ReadValue<TSwap>(is);
 }
 
 template <typename TSwap>
-std::istream &ExplicitDataElement::ReadValue(std::istream &is)
+std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
 {
+  TagField.Read<TSwap>(is);
   // See PS 3.5, Data Element Structure With Explicit VR
   // Read Tag
   if( !is )
@@ -172,7 +173,11 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
     ValueLengthField = ValueLengthField - 7;
     }
 #endif
+}
 
+template <typename TSwap>
+std::istream &ExplicitDataElement::ReadValue(std::istream &is)
+{
   if( ValueLengthField == 0 )
     {
     // Simple fast path

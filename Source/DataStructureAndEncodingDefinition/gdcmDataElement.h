@@ -233,6 +233,17 @@ public:
   }
 
   template <typename TDE, typename TSwap>
+  std::istream &ReadPreValue(std::istream &is, std::set<Tag> const &skiptags) {
+    (void)skiptags;
+    return static_cast<TDE*>(this)->template ReadPreValue<TSwap>(is);
+  }
+  template <typename TDE, typename TSwap>
+  std::istream &ReadValue(std::istream &is, std::set<Tag> const &skiptags) {
+    (void)skiptags;
+    return static_cast<TDE*>(this)->template ReadValue<TSwap>(is);
+  }
+
+  template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length) {
     return static_cast<TDE*>(this)->template ReadWithLength<TSwap>(is,length);
   }
