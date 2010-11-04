@@ -69,6 +69,8 @@ std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
       gdcmDebugMacro(
         "Item Delimitation Item has a length different from 0 and is: " << ValueLengthField );
       }
+    // Reset ValueLengthField to avoid user error
+    ValueLengthField = 0;
     // Set pointer to NULL to avoid user error
     ValueField = 0;
     VRField = VR::INVALID;
@@ -173,6 +175,7 @@ std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
     ValueLengthField = ValueLengthField - 7;
     }
 #endif
+  return is;
 }
 
 template <typename TSwap>
