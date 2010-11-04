@@ -91,17 +91,6 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     // that the file is written in big endian word, so comparing against
     // a md5sum computed on LittleEndian would fail. Thus we need to
     // byteswap (again!) here:
-#ifdef GDCM_WORDS_BIGENDIAN
-    if( false )
-      {
-      assert( !(len % 2) );
-      // gdcm-US-ALOKA is a 16 bits image with PALETTE
-      //assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
-      //  || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
-      gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
-        (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
-      }
-#endif
     const char *ref = gdcm::Testing::GetMD5FromFile(filename);
 
     char digest[33];
