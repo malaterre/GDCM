@@ -174,11 +174,12 @@ bool StreamImageReader::ReadImageInformation(){
   //read up to the point in the stream where the pixel information tag is
   //store that location and keep the rest of the data as the header information dataset
   std::set<Tag> theSkipTags;
-  Tag thePixelDataTag(0x7ee0, 0x000f);//must be LESS than the pixel information tag, 0x7fe0,0x0010
+  Tag thePixelDataTag(0x7fe0, 0x0010);//must be LESS than the pixel information tag, 0x7fe0,0x0010
   //otherwise, it'll read that tag as well.
   //make a reader object in readimageinformation
   //call read up to tag
   //then create data structures from that dataset that's been read-up-to
+  theSkipTags.insert(thePixelDataTag);
 
   try
   {
