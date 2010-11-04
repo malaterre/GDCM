@@ -56,6 +56,7 @@ std::istream &ImplicitDataElement::ReadPreValue(std::istream& is)
     throw Exception("Impossible");
     return is;
     }
+  return is;
 }
 
 template <typename TSwap>

@@ -297,81 +297,81 @@ bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStrea
     }
   bool success = true;
 
-try
-    {
-std::istream &is = *Stream;
-
-  bool haspreamble = true;
   try
     {
-    F->GetHeader().GetPreamble().Read( is );
-    }
-  catch( std::exception &ex )
-    {
-    // return to beginning of file, hopefully this file is simply missing preamble
-    is.seekg(0, std::ios::beg);
-    haspreamble = false;
-    }
-  catch( ... )
-    {
-    assert(0);
-    }
+    std::istream &is = *Stream;
 
-  bool hasmetaheader = false;
-  try
-    {
-    if( haspreamble )
+    bool haspreamble = true;
+    try
       {
-      try
+      F->GetHeader().GetPreamble().Read( is );
+      }
+    catch( std::exception &ex )
+      {
+      // return to beginning of file, hopefully this file is simply missing preamble
+      is.seekg(0, std::ios::beg);
+      haspreamble = false;
+      }
+    catch( ... )
+      {
+      assert(0);
+      }
+
+    bool hasmetaheader = false;
+    try
+      {
+      if( haspreamble )
         {
-        F->GetHeader().Read( is );
-        hasmetaheader = true;
-        assert( !F->GetHeader().IsEmpty() );
-        }
-      catch( std::exception &ex )
-        {
-        (void)ex;
-        // Weird implicit meta header:
-        is.seekg(128+4, std::ios::beg );
         try
           {
-          F->GetHeader().ReadCompat(is);
+          F->GetHeader().Read( is );
+          hasmetaheader = true;
+          assert( !F->GetHeader().IsEmpty() );
           }
-        catch( std::exception &ex2 )
+        catch( std::exception &ex )
           {
-          // Ok I get it now... there is absolutely no meta header, giving up
-          //hasmetaheader = false;
-          (void)ex2;
+          (void)ex;
+          // Weird implicit meta header:
+          is.seekg(128+4, std::ios::beg );
+          try
+            {
+            F->GetHeader().ReadCompat(is);
+            }
+          catch( std::exception &ex2 )
+            {
+            // Ok I get it now... there is absolutely no meta header, giving up
+            //hasmetaheader = false;
+            (void)ex2;
+            }
           }
         }
+      else
+        {
+        F->GetHeader().ReadCompat(is);
+        }
       }
-    else
+    catch( std::exception &ex )
       {
-      F->GetHeader().ReadCompat(is);
+      // Same player play again:
+      is.seekg(0, std::ios::beg );
+      hasmetaheader = false;
       }
-    }
-  catch( std::exception &ex )
-    {
-    // Same player play again:
-    is.seekg(0, std::ios::beg );
-    hasmetaheader = false;
-    }
-  catch( ... )
-    {
-    // Ooops..
-    assert(0);
-    }
-  if( F->GetHeader().IsEmpty() )
-    {
-    hasmetaheader = false;
-    gdcmWarningMacro( "no file meta info found" );
-    }
+    catch( ... )
+      {
+      // Ooops..
+      assert(0);
+      }
+    if( F->GetHeader().IsEmpty() )
+      {
+      hasmetaheader = false;
+      gdcmWarningMacro( "no file meta info found" );
+      }
 
-  const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();
-  if( !ts.IsValid() )
-    {
-    throw Exception( "Meta Header issue" );
-    }
+    const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();
+    if( !ts.IsValid() )
+      {
+      throw Exception( "Meta Header issue" );
+      }
 
   //std::cerr << ts.GetNegociatedType() << std::endl;
   //std::cerr << TransferSyntax::GetTSString(ts) << std::endl;
@@ -610,7 +610,7 @@ std::istream &is = *Stream;
       }
     else
       {
-        gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
+      gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
       // Let's try again with an ExplicitImplicitDataElement:
       if( ts.GetSwapCode() == SwapCode::LittleEndian &&
         ts.GetNegociatedType() == TransferSyntax::Explicit )
@@ -655,8 +655,8 @@ std::istream &is = *Stream;
     success = false;
     }
 
-    //if( success ) assert( Stream->eof() );
-    caller.Check(success, *Stream );
+  //if( success ) assert( Stream->eof() );
+  caller.Check(success, *Stream );
     }
   catch( Exception &ex )
     {
@@ -668,11 +668,11 @@ std::istream &is = *Stream;
     gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
-//  if( !success )
-//    {
-//    F->GetHeader().Clear();
-//    F->GetDataSet().Clear();
-//    }
+  //  if( !success )
+  //    {
+  //    F->GetHeader().Clear();
+  //    F->GetDataSet().Clear();
+  //    }
 
   // FIXME : call this function twice...
   outStreamOffset = 0;
