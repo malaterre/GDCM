@@ -79,3 +79,13 @@ SET(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 FOREACH(name ${MEXD_TEST_SRCS})
   ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
 ENDFOREACH(name)
+
+set(DCMQRSCP_HOSTNAME gotlib)
+set(DCMQRSCP_PORT 5677)
+set(DCMQRSCP_DIRECTORY ${GDCM_TEMP_DIRECTORY})
+configure_file(
+  ${GDCM_SOURCE_DIR}/CMake/dcmqrscp.cfg.in
+  ${CMAKE_CURRENT_BINARY_DIR}/dcmqrscp.cfg
+  )
+# execute_process(COMMAND ${DCMTK_DCMQRSCP_EXECUTABLE}
+#   --verbose --debug -c ${CMAKE_CURRENT_BINARY_DIR}/dcmqrscp.cfg)
