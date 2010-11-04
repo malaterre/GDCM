@@ -2,10 +2,19 @@
 
 cd $HOME/Dashboards/GDCMScripts && git pull
 
+echo "Starting dcmqrscp"
+
+dcmqrscp -v -d -c ./dcmqrscp.cfg 5678 &
+
 #ctest -S zorglub-gcc4-64-makefiles.cmake -V -O zorglub-gcc4-64-makefiles.log
 ctest -S zorglub-gcc43-64-makefiles.cmake -V -O zorglub-gcc43-64-makefiles.log
+ctest -S zorglub-gcc-64-makefiles-dcmqrscp.cmake -V -O zorglub-gcc-64-makefiles-dcmqrscp.log
 ctest -S zorglub-gcc-64-makefiles.cmake -V -O zorglub-gcc-64-makefiles.log
 ctest -S zorglub-gcc-snap-64-makefiles.cmake -V -O zorglub-gcc-snap-64-makefiles.log
+
+echo "Stopping dcmqrscp"
+
+termscu --aetitle ACME1 --call ACME_STORE  gotlib 5678
 
 # Nightly doxygen:
 cd $HOME/Dashboards/MyTests/gdcm-nightly && touch Utilities/doxygen/Doxyfile
