@@ -653,6 +653,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "a870a7a7cab8c17646d118ae146be588" , "MR16BitsAllocated_8BitsStored.dcm" },
 
+{ "da153c2f438d6dd4277e0c6ad2aeae74" , "OsirixFake16BitsStoredFakeSpacing.dcm" },
+{ "1c485e1ac2b2bdbeeba14391b8c1e0c8" , "JPEGDefinedLengthSequenceOfFragments.dcm" },
+
 
 /* Stopping condition */
 { 0 ,0 }
