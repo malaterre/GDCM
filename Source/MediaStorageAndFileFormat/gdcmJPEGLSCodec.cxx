@@ -268,12 +268,12 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   //sq->GetTable().SetTag( itemStart );
 
   const unsigned int *dims = this->GetDimensions();
-    int image_width = dims[0];
-    int image_height = dims[1];
-    const PixelFormat &pf = this->GetPixelFormat();
-    int sample_pixel = pf.GetSamplesPerPixel();
-    int bitsallocated = pf.GetBitsAllocated();
-    int bitsstored = pf.GetBitsStored();
+  int image_width = dims[0];
+  int image_height = dims[1];
+  const PixelFormat &pf = this->GetPixelFormat();
+  int sample_pixel = pf.GetSamplesPerPixel();
+  int bitsallocated = pf.GetBitsAllocated();
+  int bitsstored = pf.GetBitsStored();
 
   const ByteValue *bv = in.GetByteValue();
   const char *input = bv->GetPointer();
@@ -286,6 +286,7 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     const char *inputdata = input + dim * image_len; //bv->GetPointer();
 
     JlsParamaters params;
+    memset( &params, 0, sizeof(params) );
 /*
 The fields in JlsCustomParameters do not control lossy/lossless. They
 provide the possiblity to tune the JPEG-LS internals for better compression
@@ -336,9 +337,9 @@ Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e
     params.width = image_width;
 
     if (sample_pixel == 4)
-{
+      {
       params.ilv = ILV_LINE;
-}
+      }
     else if (sample_pixel == 3)
       {
       params.ilv = ILV_LINE;
@@ -350,7 +351,8 @@ Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e
     //rgbyteCompressed.resize(size.cx *size.cy * ccomp * cbit / 4);
 
     size_t cbyteCompressed;
-    JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, inputdata, inputlength, &params);
+    JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(),
+      &cbyteCompressed, inputdata, inputlength, &params);
     if( error != OK )
       {
       gdcmErrorMacro( "Error compressing: " << error );
