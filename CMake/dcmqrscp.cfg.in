@@ -1,0 +1,17 @@
+NetworkType     = "tcp"
+NetworkTCPPort  = 5678
+MaxPDUSize      = 16384
+MaxAssociations = 16
+Display         = "no"
+
+HostTable BEGIN
+gdcmdash        = (GDCMDASH, @DCMQRSCP_HOSTNAME@, @DCMQRSCP_PORT@)
+HostTable END
+
+VendorTable BEGIN
+"GDCM Company"   = gdcmcompany
+VendorTable END
+
+AETable BEGIN
+GDCM_STORE   @DCMQRSCP_DIRECTORY@/GDCM_STORE   RW (9, 1024mb)   gdcmcompany
+AETable END
