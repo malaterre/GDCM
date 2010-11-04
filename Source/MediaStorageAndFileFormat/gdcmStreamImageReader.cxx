@@ -145,7 +145,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
       }
       //this next line may require a bit of finagling...
       //std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]), std::ostream_iterator<char>(os));
-      memcpy(&(inReadBuffer[(y-mYMin)*SubRowSize + mXMin]), tmpBuffer2, SubRowSize*bytesPerPixel);
+      memcpy(&(inReadBuffer[((y-mYMin)*SubRowSize + mXMin)*bytesPerPixel]), tmpBuffer2, SubRowSize*bytesPerPixel);
     }
   }
   catch (std::exception & ex){
