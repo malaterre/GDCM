@@ -95,6 +95,13 @@ namespace gdcm
       {
       //assert( de.GetTag() != Tag(0,0) );
       InsertDataElement( de );
+      // FIXME FIXME
+      // the following is a HACK
+      if( de.GetTag() == t )
+        {
+        std::streamoff off = de.GetVL();
+        is.seekg( -off , std::ios_base::cur);
+        }
       // tag was found, we can exit the loop:
       if ( t <= de.GetTag() ) break;
       }
