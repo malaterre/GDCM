@@ -38,7 +38,7 @@ namespace network
  * Table 9-19
  * TRANSFER SYNTAX SUB-ITEM FIELDS
  */
-class GDCM_EXPORT TransferSyntaxSub
+class TransferSyntaxSub
 {
 public:
   TransferSyntaxSub();

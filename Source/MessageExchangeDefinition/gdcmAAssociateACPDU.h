@@ -36,7 +36,7 @@ class AAssociateRQPDU;
  * Table 9-17
  * ASSOCIATE-AC PDU fields
  */
-class GDCM_EXPORT AAssociateACPDU : public BasePDU
+class AAssociateACPDU : public BasePDU
 {
 public:
   AAssociateACPDU();
