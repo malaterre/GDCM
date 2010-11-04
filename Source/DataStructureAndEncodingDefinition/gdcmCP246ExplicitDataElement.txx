@@ -115,6 +115,7 @@ std::istream &CP246ExplicitDataElement::ReadPreValue(std::istream &is)
 template <typename TSwap>
 std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
 {
+  if( is.eof() ) return is;
   if( ValueLengthField == 0 )
     {
     // Simple fast path

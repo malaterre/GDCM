@@ -62,6 +62,10 @@ std::istream &ImplicitDataElement::ReadPreValue(std::istream& is)
 template <typename TSwap>
 std::istream &ImplicitDataElement::ReadValue(std::istream &is)
 {
+  if( is.eof() ) return is;
+  const Tag itemStartItem(0xfffe,0xe000);
+  assert( TagField != itemStartItem );
+
   /*
    * technically this should not be needed, but what if an implementor, forgot
    * to set VL = 0, then we should make sure to exit early

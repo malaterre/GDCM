@@ -136,6 +136,7 @@ std::istream &UNExplicitDataElement::ReadPreValue(std::istream &is)
 template <typename TSwap>
 std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
 {
+  if( is.eof() ) return is;
   if( ValueLengthField == 0 )
     {
     // Simple fast path
