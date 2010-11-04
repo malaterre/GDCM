@@ -47,6 +47,7 @@ std::istream &UNExplicitImplicitDataElement::ReadPreValue(std::istream &is)
 template <typename TSwap>
 std::istream &UNExplicitImplicitDataElement::ReadValue(std::istream &is)
 {
+  if( is.eof() ) return is;
   DataElement &de = *this;
   try
     {

@@ -175,6 +175,7 @@ std::istream &VR16ExplicitDataElement::ReadPreValue(std::istream &is)
 template <typename TSwap>
 std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is)
 {
+  if( is.eof() ) return is;
 
   if( ValueLengthField == 0 )
     {
