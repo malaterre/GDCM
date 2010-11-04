@@ -67,11 +67,21 @@ namespace gdcm
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadUpToTag(std::istream &is, const Tag &t, const std::set<Tag> & skiptags) {
     DataElement de;
-    while( !is.eof() && de.template ReadOrSkip<TDE,TSwap>(is, skiptags) )
+    while( !is.eof() && de.template ReadPreValue<TDE,TSwap>(is, skiptags) )
       {
       // If tag read was in skiptags then we should NOT add it:
       if( skiptags.count( de.GetTag() ) == 0 )
+        {
+        de.template ReadValue<TDE,TSwap>(is, skiptags);
         InsertDataElement( de );
+        }
+      else
+        {
+        /// FIXME we could just seek
+        if( de.GetTag() != t )
+          de.template ReadValue<TDE,TSwap>(is, skiptags);
+        //is.seekg( de.GetVL() );
+        }
       // tag was found, we can exit the loop:
       if ( t <= de.GetTag() ) break;
       }
@@ -94,52 +104,52 @@ namespace gdcm
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadSelectedTags(std::istream &inputStream, const std::set<Tag> & selectedTags) {
     if ( ! (selectedTags.empty() || inputStream.fail()) )
-    {
+      {
       const Tag maxTag = *(selectedTags.rbegin());
       std::set<Tag> tags = selectedTags;
       DataElement dataElem;
 
       while( !inputStream.eof() )
-      {
+        {
         Tag& tag = dataElem.GetTag();
         tag.Read<TSwap>(inputStream);
         if ( inputStream.fail() || maxTag < tag )
-        {
+          {
           // Failed to read the tag, or the read tag exceeds the maximum.
           // As we assume ascending tag ordering, we can exit the loop.
           break;
-        }
+          }
         static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream);
 
         if ( inputStream.fail() )
-        {
+          {
           // Failed to read the value.
           break;
-        }
+          }
 
         const std::set<Tag>::iterator found = tags.find(tag);
 
         if ( found != tags.end() )
-        {
+          {
           InsertDataElement( dataElem );
           tags.erase(found);
 
           if ( tags.empty() )
-          {
+            {
             // All selected tags were found, we can exit the loop:
             break;
+            }
           }
-        }
         if ( ! (tag < maxTag ) )
-        {
+          {
           // The maximum tag was encountered, and as we assume
           // ascending tag ordering, we can exit the loop:
           break;
+          }
         }
       }
-    }
     return inputStream;
-  }
+    }
 
 
   template <typename TDE, typename TSwap>

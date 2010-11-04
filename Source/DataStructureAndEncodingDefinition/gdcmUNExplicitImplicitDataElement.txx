@@ -31,8 +31,16 @@ namespace gdcm
 template <typename TSwap>
 std::istream &UNExplicitImplicitDataElement::Read(std::istream &is)
 {
-  TagField.Read<TSwap>(is);
+  ReadPreValue<TSwap>(is);
   return ReadValue<TSwap>(is);
+}
+
+template <typename TSwap>
+std::istream &UNExplicitImplicitDataElement::ReadPreValue(std::istream &is)
+{
+  DataElement &de = *this;
+  //de.template ReadPreValue<UNExplicitDataElement,TSwap>( is );
+  return is;
 }
 
 template <typename TSwap>
@@ -41,7 +49,7 @@ std::istream &UNExplicitImplicitDataElement::ReadValue(std::istream &is)
   DataElement &de = *this;
   try
     {
-    de.Read<UNExplicitDataElement,TSwap>( is );
+    //de.template ReadValue<UNExplicitDataElement,TSwap>( is );
     }
   catch(ParseException &ex)
     {
@@ -55,7 +63,7 @@ std::istream &UNExplicitImplicitDataElement::ReadValue(std::istream &is)
       {
       is.seekg( -6, std::ios::cur );
       }
-    de.Read<ImplicitDataElement,TSwap>( is );
+    //de.template ReadValue<ImplicitDataElement,TSwap>( is );
     }
   return is;
 }

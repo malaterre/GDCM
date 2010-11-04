@@ -31,6 +31,7 @@ namespace gdcm
 #include "gdcmDataFileNames.cxx"
 #include "gdcmMD5DataImages.cxx"
 #include "gdcmMediaStorageDataFiles.cxx"
+#include "gdcmStreamOffsetDataFiles.cxx"
 
 bool Testing::ComputeMD5(const char *buffer, unsigned long buf_len,
   char digest_str[33])
@@ -140,6 +141,27 @@ const char * Testing::GetMD5FromFile(const char *filepath)
   assert( i <= GetNumberOfMD5DataImages() );
   return md5s[i][0];
 }
+
+std::streamoff Testing::GetStreamOffsetFromFile(const char *filepath)
+{
+  if(!filepath) return NULL;
+  unsigned int i = 0;
+  const StreamOffset* so = gdcmStreamOffsetDataFiles;
+  const char *p = so[i].filename;
+  Filename comp(filepath);
+  const char *filename = comp.GetName();
+  while( p != 0 )
+    {
+    if( strcmp( filename, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = so[i].filename;
+    }
+  return so[i].offset;
+}
+
 
 const char *Testing::GetDataRoot()
 {

@@ -67,6 +67,10 @@ public :
   static const char * const * GetMD5DataImage(unsigned int file);
   static const char * GetMD5FromFile(const char *filepath);
 
+  /// Return the offset of the very first pixel cell in the PixelData
+  /// -1 if not found
+  static std::streamoff GetStreamOffsetFromFile(const char *filepath);
+
   /// Return the GDCM DATA ROOT
   static const char * GetDataRoot();
 
