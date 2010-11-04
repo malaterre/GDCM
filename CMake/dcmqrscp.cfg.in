@@ -1,11 +1,12 @@
 NetworkType     = "tcp"
-NetworkTCPPort  = 5678
+NetworkTCPPort  = 5679
 MaxPDUSize      = 16384
 MaxAssociations = 16
 Display         = "no"
 
 HostTable BEGIN
 gdcmdash        = (GDCMDASH, @DCMQRSCP_HOSTNAME@, @DCMQRSCP_PORT@)
+gdcmcompany     = gdcmdash
 HostTable END
 
 VendorTable BEGIN
