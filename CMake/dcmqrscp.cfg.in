@@ -1,3 +1,5 @@
+# http://support.dcmtk.org/docs/dcmqrscp.html
+# http://support.dcmtk.org/docs/file_dcmqrset.html
 NetworkType     = "tcp"
 NetworkTCPPort  = 5679
 MaxPDUSize      = 16384
