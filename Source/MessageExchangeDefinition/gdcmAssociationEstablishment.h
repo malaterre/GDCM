@@ -31,7 +31,7 @@ namespace network
  * Table 9-2
  * ASSOCIATION ESTABLISHMENT
  */
-class GDCM_EXPORT AssociationEstablishment
+class AssociationEstablishment
 {
 public:
   AssociationEstablishment();

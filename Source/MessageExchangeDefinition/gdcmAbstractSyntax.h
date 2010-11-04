@@ -32,7 +32,7 @@ namespace network
  * Table 9-14
  * ABSTRACT SYNTAX SUB-ITEM FIELDS
  */
-class GDCM_EXPORT AbstractSyntax
+class AbstractSyntax
 {
 public:
   AbstractSyntax();

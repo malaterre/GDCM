@@ -32,7 +32,7 @@ namespace network
  * Table D.3-1
  * IMPLEMENTATION CLASS UID SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
  */
-class GDCM_EXPORT ImplementationClassUIDSub
+class ImplementationClassUIDSub
 {
 public:
   ImplementationClassUIDSub();
