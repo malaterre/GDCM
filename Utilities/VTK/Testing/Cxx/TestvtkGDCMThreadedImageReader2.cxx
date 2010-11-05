@@ -27,7 +27,6 @@
 #include "vtkImageData.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include <vtksys/SystemTools.hxx>
-#include "vtkVolumeTextureMapper3D.h"
 #endif
 
 class ProgressObserver : public vtkCommand
