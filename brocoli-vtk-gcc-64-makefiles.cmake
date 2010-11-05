@@ -7,13 +7,13 @@
 cmake_minimum_required(VERSION 2.8.2)
 
 # Client maintainer: mathieu malaterre
-set(CTEST_SITE "tomate")
+set(CTEST_SITE "brocoli")
 set(CTEST_BUILD_NAME "Linux-gcc")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
 set(dashboard_root_name "MyTests")
 set(dashboard_source_name VTK)
-set(dashboard_binary_name VTK-gcc-tomate)
+set(dashboard_binary_name VTK-gcc-brocoli)
 set(dashboard_model Nightly)
 
 #set(VTK_DATA_ROOT ${CTEST_DASHBOARD_ROOT}/VTKData)
