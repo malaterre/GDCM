@@ -26,7 +26,7 @@ macro(dashboard_hook_init)
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
 GDCM_BUILD_APPLICATIONS:BOOL=ON
 GDCM_BUILD_EXAMPLES:BOOL=ON
-GDCM_USE_VTK:BOOL=ON
+GDCM_USE_VTK:BOOL=OFF
     "
     )
 endmacro(dashboard_hook_init)
