@@ -34,7 +34,7 @@ PatientRootQuery::PatientRootQuery() {
   SetParameters();
 }
 
-PatientRootQuery::~PatientRootQuery(){};
+PatientRootQuery::~PatientRootQuery(){}
 
 void PatientRootQuery::SetParameters(){
   mRootType = ePatientRootType;
