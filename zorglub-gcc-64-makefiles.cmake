@@ -9,7 +9,7 @@ SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly")
 set(dashboard_do_memcheck FALSE)
-set(dashboard_do_coverage TRUE)
+set(dashboard_do_coverage FALSE)
 
 SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
 SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspacingtestimages")
@@ -20,9 +20,9 @@ SET (ENV{JAVA_HOME} "/usr/lib/jvm/default-java")
 
 # http://www.cmake.org/Wiki/CTest:Coverage
 SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")
-SET(ENV{CXXFLAGS} "-g -O0 -fprofile-arcs -ftest-coverage -Wno-deprecated -W -Wall")
-SET(ENV{CFLAGS} "-g -O0 -fprofile-arcs -ftest-coverage -W -Wall")
-SET(ENV{LDFLAGS} "-fprofile-arcs -ftest-coverage")
+#SET(ENV{CXXFLAGS} "-g -O0 -fprofile-arcs -ftest-coverage -Wno-deprecated -W -Wall")
+#SET(ENV{CFLAGS} "-g -O0 -fprofile-arcs -ftest-coverage -W -Wall")
+#SET(ENV{LDFLAGS} "-fprofile-arcs -ftest-coverage")
 
 macro(dashboard_hook_init)
   set( dashboard_cache "

@@ -8,17 +8,28 @@ set(dashboard_root_name "MyTests")
 SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly-tomate")
-set(dashboard_do_memcheck FALSE)
+set(dashboard_do_memcheck TRUE)
 set(dashboard_do_coverage FALSE)
+set(CTEST_TEST_TIMEOUT 3000)
 
-SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings ")
-SET(ENV{CFLAGS}   "-g -O0 -Wall -W -pedantic -Wno-long-long")
+SET(CTEST_MEMORYCHECK_COMMAND           "/usr/bin/valgrind")
+SET(CTEST_MEMORYCHECK_COMMAND_OPTIONS   "-q --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=10")
+SET(ENV{GLIBCPP_FORCE_NEW} 1)
+SET(ENV{GLIBCXX_FORCE_NEW} 1)
+
+SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -pedantic -Wno-long-long -Wsign-promo -Weffc++ -Wabi -D_GLIBCXX_DEBUG")
+SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long")
+
 SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
+MEMORYCHECK_COMMAND_OPTIONS:STRING=${CTEST_MEMORYCHECK_COMMAND_OPTIONS}
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
 GDCM_BUILD_APPLICATIONS:BOOL=ON
+GDCM_BUILD_EXAMPLES:BOOL=ON
+GDCM_USE_VTK:BOOL=ON
+CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
     "
     )
 endmacro(dashboard_hook_init)

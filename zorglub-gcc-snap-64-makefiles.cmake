@@ -8,7 +8,7 @@ set(dashboard_root_name "MyTests")
 SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly-snap")
-set(dashboard_do_memcheck TRUE)
+set(dashboard_do_memcheck FALSE)
 set(dashboard_do_coverage FALSE)
 set(CTEST_TEST_TIMEOUT 3000)
 
