@@ -1,13 +1,13 @@
 # Client maintainer: mathieu . malaterre  gmail . com
 
-set(CTEST_SITE "tomate")
+set(CTEST_SITE "brocoli")
 set(CTEST_BUILD_NAME "Linux-gcc-GIT")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
 set(dashboard_root_name "MyTests")
 SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm")
-set(dashboard_binary_name "gdcm-nightly-tomate")
+set(dashboard_binary_name "gdcm-nightly-brocoli")
 set(dashboard_do_memcheck FALSE)
 set(dashboard_do_coverage FALSE)
 
