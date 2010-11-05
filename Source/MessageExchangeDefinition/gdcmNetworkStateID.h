@@ -43,7 +43,7 @@ namespace gdcm {
       eSta10ReleaseCollisionAc = 512,
       eSta11ReleaseCollisionRq = 1024,
       eSta12ReleaseCollisionAcLocal = 2048,
-      eSta13AwaitingClose = 4096,
+      eSta13AwaitingClose = 4096
     };
 
     const int cMaxStateID = 13;
