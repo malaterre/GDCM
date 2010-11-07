@@ -121,6 +121,10 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     delete[] finalBuffer;
     return res;
     }
+  else
+    {
+    return 1;
+    }
 
 #if 0
   const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
