@@ -301,40 +301,57 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
 std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(BaseRootQuery* inRootQuery)
 {
+  std::vector<gdcm::DataSet> theResult;
+  if (mConnection == NULL){
+    return theResult;
+  }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  std::vector<gdcm::DataSet> theResult;
   EStateID theState = RunMoveEventLoop(theEvent, theResult);
   return theResult;
 }
 std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQuery)
 {
+  std::vector<gdcm::DataSet> theResult;
+  if (mConnection == NULL){
+    return theResult;
+  }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  std::vector<gdcm::DataSet> theResult;
   EStateID theState = RunEventLoop(theEvent, theResult, mConnection, false);
   return theResult;
 }
 
 std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
 {
+  std::vector<gdcm::DataSet> theResult;
+  if (mConnection == NULL){
+    return theResult;
+  }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  std::vector<gdcm::DataSet> theResult;
   EStateID theState = RunEventLoop(theEvent, theResult, mConnection, false);
   return theResult;
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
+  std::vector<gdcm::DataSet> theResult;
+  if (mConnection == NULL){
+    return false;
+  }
   BasePDU* thePDU = PDUFactory::ConstructReleasePDU();
   ULEvent theEvent(eARELEASERequest, thePDU);
   mConnection->GetTimer().SetTimeout(inTimeOut);
 
   std::vector<gdcm::DataSet> empty;
   EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
+  if (mConnection!= NULL){
+    delete mConnection;
+    mConnection = NULL;
+  }
   return (theState == eSta1Idle);//ie, finished the transitions
 }
 
@@ -344,6 +361,10 @@ void ULConnectionManager::BreakConnectionNow(){
 
   std::vector<gdcm::DataSet> empty;
   EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
+  if (mConnection!= NULL){
+    delete mConnection;
+    mConnection = NULL;
+  }
 }
 
 //event handler loop for move-- will interweave the two event loops,
@@ -622,6 +643,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
+    raisedEvent = eEventDoesNotExist;
     if (!waitingForEvent){//justWaiting){
       mTransitions.HandleEvent(currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
       //this gathering of the state is for scus that have just sent out a request
