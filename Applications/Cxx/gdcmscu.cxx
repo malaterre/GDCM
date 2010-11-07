@@ -284,23 +284,35 @@ int CStore( const char *remote, int portno,
   std::string const &call,
   std::vector<std::string> const & filenames )
 {
-  const std::string & filename = filenames[0];
-
+  std::string filename = filenames[0];
+  gdcm::network::ULConnectionManager theManager;
+  std::vector<std::string> files;
+  if( gdcm::System::FileIsDirectory(filename.c_str()) )
+    {
+    unsigned int nfiles = 1;
+    gdcm::Directory dir;
+    nfiles = dir.Load(filename, false);
+    files = dir.GetFilenames();
+    }
+  else
+    {
+    files = filenames;
+    }
+  filename = files[0];
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   if( !reader.Read() ) return 1;
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
-  gdcm::network::ULConnectionManager theManager;
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eStore, ds)){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }
   theManager.SendStore( (gdcm::DataSet*)&ds );
 
-  for( int i = 1; i < filenames.size(); ++i )
+  for( int i = 1; i < files.size(); ++i )
     {
-    const std::string & filename = filenames[i];
+    const std::string & filename = files[i];
     gdcm::Reader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() ) return 1;
