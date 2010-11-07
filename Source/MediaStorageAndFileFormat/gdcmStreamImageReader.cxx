@@ -115,7 +115,17 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
 
   //set up the codec prior to resetting the file, just in case that affects the way that
   //files are handled by the ImageHelper
+
+  const FileMetaInformation &header = mReader.GetFile().GetHeader();
+  const TransferSyntax &ts = header.GetDataSetTransferSyntax();
+
   RAWCodec theCodec;
+  if( !theCodec.CanDecode(ts) )
+    {
+    gdcmDebugMacro( "Only RAW for now" );
+    return false;
+    }
+
   theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile().GetDataSet()));
   theCodec.SetPlanarConfiguration(ImageHelper::GetPlanarConfiguration(mReader.GetFile().GetDataSet()));
   theCodec.SetPhotometricInterpretation(ImageHelper::GetPhotometricInterpretation(mReader.GetFile()));
