@@ -101,6 +101,7 @@ bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLeng
 //bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) {
 bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength) {
   //assumes that the file is organized in row-major format, with each row rastering across
+  assert( mFileOffset != -1 );
   int y;
   std::streamoff theOffset;
 
@@ -115,7 +116,19 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
 
   //set up the codec prior to resetting the file, just in case that affects the way that
   //files are handled by the ImageHelper
+
+  const FileMetaInformation &header = mReader.GetFile().GetHeader();
+  const TransferSyntax &ts = header.GetDataSetTransferSyntax();
+  bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
+
   RAWCodec theCodec;
+  if( !theCodec.CanDecode(ts) )
+    {
+    gdcmDebugMacro( "Only RAW for now" );
+    return false;
+    }
+
+  theCodec.SetNeedByteSwap( needbyteswap );
   theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile().GetDataSet()));
   theCodec.SetPlanarConfiguration(ImageHelper::GetPlanarConfiguration(mReader.GetFile().GetDataSet()));
   theCodec.SetPhotometricInterpretation(ImageHelper::GetPhotometricInterpretation(mReader.GetFile()));
@@ -199,6 +212,11 @@ bool StreamImageReader::ReadImageInformation(){
     gdcmWarningMacro( "Failed to read:" << mReader.GetFileName()  << " with unknown error" );
   }
 
+  // eg. ELSCINT1_PMSCT_RLE1.dcm
+  if( mFileOffset == -1 ) return false;
+
+  // postcondition
+  assert( mFileOffset != -1 );
   return true;
 }
 

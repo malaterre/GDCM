@@ -36,7 +36,7 @@ StudyRootQuery::StudyRootQuery() {
   SetParameters();
 }
 
-StudyRootQuery::~StudyRootQuery(){};
+StudyRootQuery::~StudyRootQuery(){}
 
 
 void StudyRootQuery::SetParameters(){

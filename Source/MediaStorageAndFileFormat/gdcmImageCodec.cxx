@@ -508,7 +508,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     }
     break;
   case PhotometricInterpretation::PALETTE_COLOR:
-    assert( LUT );
+    //assert( LUT );
     // Nothing needs to be done
     break;
   case PhotometricInterpretation::YBR_FULL_422:

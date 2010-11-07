@@ -15,12 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-this file defines the messages for the cstore action
-6 oct 2010 mm
-*/
-
 #include "gdcmCStoreMessages.h"
+
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
@@ -50,6 +46,7 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   {
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
+  assert( inDataSet->FindDataElement( Tag(0x0008, 0x0016) ) );
   const DataElement& msclass = inDataSet->GetDataElement( Tag(0x0008, 0x0016) );
   const char *uid = msclass.GetByteValue()->GetPointer();
   assert( uid );
@@ -62,6 +59,7 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   }
 
   {
+  assert( inDataSet->FindDataElement( Tag(0x0008, 0x0018) ) );
   const DataElement& msinst = inDataSet->GetDataElement( Tag(0x0008, 0x0018) );
   const char *uid = msinst.GetByteValue()->GetPointer();
   assert( uid );
@@ -75,38 +73,32 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   ds.Insert( de );
   }
 
-    {
-    gdcm::Attribute<0x0,0x100> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    gdcm::Attribute<0x0,0x110> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    gdcm::Attribute<0x0,0x700> at = { 2 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    gdcm::Attribute<0x0,0x800> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    gdcm::Attribute<0x0,0x0> at = { 0 };
-    unsigned int glen = ds.GetLength<ImplicitDataElement>();
-    assert( (glen % 2) == 0 );
-    at.SetValue( glen );
-    ds.Insert( at.GetAsDataElement() );
-    }
-
-  //ItemLength = Size() - 4;
-  //assert (ItemLength + 4 == Size() );
-
-  //ds.Print( std::cout );
-
-//  std::ofstream b( "/tmp/debug1" );
-//  ds.Write<ImplicitDataElement,SwapperNoOp>( b );
-//  b.close();
+  {
+  gdcm::Attribute<0x0,0x100> at = { 1 };
+  ds.Insert( at.GetAsDataElement() );
+  }
+static int messageid = 1;
+  {
+  gdcm::Attribute<0x0,0x110> at = { 0 };
+  at.SetValue( messageid++ );
+  assert( messageid < std::numeric_limits<uint32_t>::max());
+  ds.Insert( at.GetAsDataElement() );
+  }
+  {
+  gdcm::Attribute<0x0,0x700> at = { 2 };
+  ds.Insert( at.GetAsDataElement() );
+  }
+  {
+  gdcm::Attribute<0x0,0x800> at = { 1 };
+  ds.Insert( at.GetAsDataElement() );
+  }
+  {
+  gdcm::Attribute<0x0,0x0> at = { 0 };
+  unsigned int glen = ds.GetLength<ImplicitDataElement>();
+  assert( (glen % 2) == 0 );
+  at.SetValue( glen );
+  ds.Insert( at.GetAsDataElement() );
+  }
 
   thePDV.SetDataSet(ds);
 
@@ -116,7 +108,6 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
 
   // now let's chunk'ate the dataset:
 {
-  //thePDV.SetCommand(true);
   std::stringstream ss;
   inDataSet->Write<ImplicitDataElement,SwapperNoOp>( ss );
   std::string ds_copy = ss.str();
@@ -138,7 +129,6 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
       PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
 
     thePDV.SetBlob( sub );
-    //thePDV.SetDataSet(*inDataSet);
     if( remaining == maxpdu )
       thePDV.SetMessageHeader( 0 );
     else

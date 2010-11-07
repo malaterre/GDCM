@@ -146,23 +146,49 @@ std::string const &call , gdcm::network::BaseRootQuery* query )
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 
-void CStore( const char *remote, int portno,
+int CStore( const char *remote, int portno,
   std::string const &aetitle,
   std::string const &call,
-  std::string const & filename )
+  std::vector<std::string> const & filenames, int recursive )
 {
+  std::string filename = filenames[0];
+  gdcm::network::ULConnectionManager theManager;
+  std::vector<std::string> files;
+  if( gdcm::System::FileIsDirectory(filename.c_str()) )
+    {
+    unsigned int nfiles = 1;
+    gdcm::Directory dir;
+    nfiles = dir.Load(filename, recursive);
+    files = dir.GetFilenames();
+    }
+  else
+    {
+    files = filenames;
+    }
+  filename = files[0];
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  reader.Read();
+  if( !reader.Read() ) return 1;
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
-  gdcm::network::ULConnectionManager theManager;
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eStore, ds)){
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
   }
   theManager.SendStore( (gdcm::DataSet*)&ds );
+
+  for( int i = 1; i < files.size(); ++i )
+    {
+    const std::string & filename = files[i];
+    gdcm::Reader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() ) return 1;
+    const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+    theManager.SendStore( (gdcm::DataSet*)&ds );
+    }
+
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+  return 0;
 
 }
 
@@ -192,6 +218,7 @@ void PrintHelp()
 //  std::cout << "     --test           Test all functions agains a known working server." << std::endl;
   std::cout << "C-STORE Options:" << std::endl;
   std::cout << "  -i --input          DICOM filename" << std::endl;
+  std::cout << "  -r --recursive      recursively process (sub-)directories." << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
   //std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
   std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
@@ -224,6 +251,7 @@ int main(int argc, char *argv[])
   int outputopt = 0;
   int portscpnum = 0;
   std::string filename;
+  gdcm::Directory::FilenamesType filenames;
   std::string outputdir;
   int verbose = 0;
   int warning = 0;
@@ -243,6 +271,7 @@ int main(int argc, char *argv[])
   int resourcespath = 0;
   std::string root;
   int rootuid = 0;
+  int recursive = 0;
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
 
@@ -290,9 +319,10 @@ int main(int argc, char *argv[])
         {"psonly", 0, &findpsonly, 1}, // --psonly
         {"port-scp", 1, &portscp, 1}, // --port-scp
         {"output", 1, &outputopt, 1}, // --output
+        {"recursive", 0, &recursive, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:H:p:VWDEhvk:o:";
+    static const char short_options[] = "i:H:p:VWDEhvk:o:r";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -408,6 +438,10 @@ int main(int argc, char *argv[])
       filename = optarg;
       break;
 
+    case 'r':
+      recursive = 1;
+      break;
+
     case 'o':
       assert( outputdir.empty() );
       outputdir = optarg;
@@ -466,11 +500,17 @@ int main(int argc, char *argv[])
       shostname = argv[optind++];
       port = atoi( argv[optind++] );
       }
-    else if( v == 3 )
+    else if( v >= 3 )
       {
       shostname = argv[optind++];
       port = atoi( argv[optind++] );
-      filename = argv[optind++];
+      //filename = argv[optind++];
+      std::vector<std::string> files;
+      while (optind < argc)
+        {
+        files.push_back( argv[optind++] );
+        }
+      filenames = files;
       }
     else
       {
@@ -693,7 +733,7 @@ int main(int argc, char *argv[])
   else // C-STORE SCU
     {
     // mode == filename
-    CStore( hostname, port, callingaetitle, callaetitle ,filename );
+    return CStore( hostname, port, callingaetitle, callaetitle ,filenames, recursive );
     }
   return 0;
 }

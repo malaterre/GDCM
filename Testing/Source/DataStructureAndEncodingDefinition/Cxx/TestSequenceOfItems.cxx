@@ -29,5 +29,15 @@ int TestSequenceOfItems(int, char *[])
     return 1;
     }
 
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
+  gdcm::DataElement des( gdcm::Tag(0xdead,0xbeef) );
+  des.SetVR(gdcm::VR::SQ);
+  des.SetValue(*sq);
+
+  if( !des.GetValueAsSQ()->IsUndefinedLength() )
+    {
+    return 1;
+    }
+
   return 0;
 }
