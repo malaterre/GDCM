@@ -282,7 +282,7 @@ std::string const &call , gdcm::network::BaseRootQuery* query )
 int CStore( const char *remote, int portno,
   std::string const &aetitle,
   std::string const &call,
-  std::vector<std::string> const & filenames )
+  std::vector<std::string> const & filenames, int recursive )
 {
   std::string filename = filenames[0];
   gdcm::network::ULConnectionManager theManager;
@@ -291,7 +291,7 @@ int CStore( const char *remote, int portno,
     {
     unsigned int nfiles = 1;
     gdcm::Directory dir;
-    nfiles = dir.Load(filename, false);
+    nfiles = dir.Load(filename, recursive);
     files = dir.GetFilenames();
     }
   else
@@ -877,7 +877,7 @@ int main(int argc, char *argv[])
   else // C-STORE SCU
     {
     // mode == filename
-    return CStore( hostname, port, callingaetitle, callaetitle ,filenames );
+    return CStore( hostname, port, callingaetitle, callaetitle ,filenames, recursive );
     }
   return 0;
 }
