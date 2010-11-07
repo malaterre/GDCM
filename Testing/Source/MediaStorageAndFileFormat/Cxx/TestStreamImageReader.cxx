@@ -114,9 +114,8 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
       res = 1;
 #if 0
       std::ofstream debug("/tmp/dump.gray");
-      debug.write(buffer, len);
+      debug.write(finalBuffer, len);
       debug.close();
-      //assert(0);
 #endif
       }
     delete[] finalBuffer;
