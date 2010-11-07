@@ -119,6 +119,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
 
   const FileMetaInformation &header = mReader.GetFile().GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
+  bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
 
   RAWCodec theCodec;
   if( !theCodec.CanDecode(ts) )
@@ -127,6 +128,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
     return false;
     }
 
+  theCodec.SetNeedByteSwap( needbyteswap );
   theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile().GetDataSet()));
   theCodec.SetPlanarConfiguration(ImageHelper::GetPlanarConfiguration(mReader.GetFile().GetDataSet()));
   theCodec.SetPhotometricInterpretation(ImageHelper::GetPhotometricInterpretation(mReader.GetFile()));
