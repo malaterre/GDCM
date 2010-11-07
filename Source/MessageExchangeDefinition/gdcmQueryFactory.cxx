@@ -34,13 +34,22 @@ to a particular query style
 
 namespace gdcm{
   namespace network {
-BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType){
+BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQueryLevel& inQueryLevel){
+  BaseRootQuery* theReturn = NULL;
   switch (inRootType){
     case ePatientRootType:
     default:
-      return new PatientRootQuery();
+      theReturn = new PatientRootQuery();
+      theReturn->InitializeDataSet(inQueryLevel);
+      return theReturn;
     case eStudyRootType:
-      return new StudyRootQuery();
+      if (inQueryLevel != ePatient){
+        theReturn = new StudyRootQuery();
+        theReturn->InitializeDataSet(inQueryLevel);
+        return theReturn;
+      } else {
+        return NULL;
+      }
   }
 }
 

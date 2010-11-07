@@ -33,7 +33,8 @@ class GDCM_EXPORT PatientRootQuery : public BaseRootQuery {
       PatientRootQuery();
       ~PatientRootQuery();
 
-      bool ValidateQuery() const;
+      std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
+      bool ValidateQuery(bool forFind) const;
     };
   }
 }

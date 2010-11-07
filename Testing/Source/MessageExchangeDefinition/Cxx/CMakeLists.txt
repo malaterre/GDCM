@@ -5,6 +5,7 @@ TestPresentationContext
 TestQueryFactory
 TestStudyRootQuery
 TestULConnectionManager
+TestAllFunctions
 )
 
 # Add the include paths
@@ -23,7 +24,7 @@ CREATE_TEST_SOURCELIST(MEXDTests gdcmMEXDTests.cxx ${MEXD_TEST_SRCS}
   EXTRA_INCLUDE gdcmTestDriver.h
   )
 ADD_EXECUTABLE(gdcmMEXDTests ${MEXDTests})
-TARGET_LINK_LIBRARIES(gdcmMEXDTests gdcmMEXD)
+TARGET_LINK_LIBRARIES(gdcmMEXDTests gdcmMEXD gdcmDSED gdcmCommon)
 
 #Don't understand why I need that ??
 SET(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")

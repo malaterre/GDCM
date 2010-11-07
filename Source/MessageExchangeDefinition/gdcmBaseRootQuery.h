@@ -45,17 +45,25 @@ namespace gdcm{
  *
  * The dataset held by this object (or, really, one of its derivates) should be passed to a c-find or c-move query.
  */
+    enum GDCM_EXPORT EQueryLevel {
+      ePatient,
+      eStudy,
+      eSeries,
+      eImageOrFrame
+    };
+
 class GDCM_EXPORT BaseRootQuery
 {
       //these four classes contain the required, unique, and optional tags from the standard.
       //used both to list the tags as well as to validate a dataset, if ever we were to do so.
+
+      DataSet mDataSet;
+    protected:
       QueryPatient mPatient;
       QueryStudy mStudy;
       QuerySeries mSeries;
       QueryImage mImage;
 
-      DataSet mDataSet;
-    protected:
       ERootType mRootType; //set in construction, and it's something else in the study root type
       std::string mHelpDescription; //used when generating the help output
       virtual void SetParameters() = 0; //to ensure that this base class is not used directly,
@@ -73,11 +81,21 @@ class GDCM_EXPORT BaseRootQuery
 
       DataSet GetQueryDataSet() const;
 
+      ///this function will return all tags at a given query level, so that
+      ///they maybe selected for searching.  The boolean forFind is true
+      ///if the query is a find query, or false for a move query.
+      virtual std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) = 0;
+
+      //this function sets tag 8,52 to the appropriate value based on query level
+      void InitializeDataSet(const EQueryLevel& inQueryLevel);
+
       ///have to be able to ensure that
-      ///0x8,0x52 is set
+      ///0x8,0x52 is set (which will be true if InitializeDataSet is called...)
       ///that the level is appropriate (ie, not setting PATIENT for a study query
       ///that the tags in the query match the right level (either required, unique, optional)
-      virtual bool ValidateQuery() const = 0;
+      ///by default, this function checks to see if the query is for finding, which is more
+      ///permissive than for moving.  For moving, only the unique tags are allowed.
+      virtual bool ValidateQuery(bool forFind) const = 0;
     };
   }
 }

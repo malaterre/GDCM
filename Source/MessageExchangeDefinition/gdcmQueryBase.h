@@ -27,7 +27,7 @@
 
 namespace gdcm{
   namespace network{
-    enum ERootType{
+    enum GDCM_EXPORT ERootType{
       ePatientRootType,
       eStudyRootType
     };

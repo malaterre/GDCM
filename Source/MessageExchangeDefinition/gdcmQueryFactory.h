@@ -58,7 +58,11 @@ namespace gdcm{
 class GDCM_EXPORT QueryFactory
 {
     public:
-      static BaseRootQuery* ProduceQuery(const ERootType &inRootType);
+      //this function will produce a query (basically, a wrapper to a dataset that can validate
+      //whether or not the query is a valid cfind/cmove query) and the level of the
+      //query (patient, study, series, image).  If the user provides an invalid instantiation
+      //(ie, study root type, query level of patient), then the result is NULL.
+      static BaseRootQuery* ProduceQuery(const ERootType &inRootType, const EQueryLevel& inQueryLevel);
 
       ///This function will produce the appropriate dataelement given a list of charsets.
       ///The first charset will be used directly, while the second and subsequent

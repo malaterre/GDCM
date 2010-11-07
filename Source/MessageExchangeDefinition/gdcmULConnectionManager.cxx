@@ -153,10 +153,16 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
     case eStore:
       std::string uidName;
         pc.SetPresentationContextID( PresentationContext::AssignPresentationContextID(inDS, uidName) );
-        as.SetNameFromUIDString( uidName );
-        pc.SetAbstractSyntax( as );
-        pcVector.push_back(pc);
+        if (pc.GetPresentationContextID() != eVerificationSOPClass){
+          as.SetNameFromUIDString( uidName );
+          pc.SetAbstractSyntax( as );
+          pcVector.push_back(pc);
+        }
       break;
+  }
+  if (pcVector.empty()){
+    std::cout << "Unable to establish presentation context; ensure that dataset has tags 0x8,0x16 and 0x8,0x18 defined." <<std::endl;
+    return false;
   }
   mConnection->SetPresentationContexts(pcVector);
 
