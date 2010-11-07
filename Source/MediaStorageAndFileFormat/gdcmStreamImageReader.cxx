@@ -101,6 +101,7 @@ bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLeng
 //bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) {
 bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength) {
   //assumes that the file is organized in row-major format, with each row rastering across
+  assert( mFileOffset != -1 );
   int y;
   std::streamoff theOffset;
 
@@ -209,6 +210,11 @@ bool StreamImageReader::ReadImageInformation(){
     gdcmWarningMacro( "Failed to read:" << mReader.GetFileName()  << " with unknown error" );
   }
 
+  // eg. ELSCINT1_PMSCT_RLE1.dcm
+  if( mFileOffset == -1 ) return false;
+
+  // postcondition
+  assert( mFileOffset != -1 );
   return true;
 }
 
