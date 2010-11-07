@@ -45,11 +45,39 @@ void StudyRootQuery::SetParameters(){
 }
 
 
+std::vector<gdcm::Tag> StudyRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind){
+  if (forFind){
+    switch (inQueryLevel){
+      case ePatient:
+        return mPatient.GetAllTags(eStudyRootType);
+      case eStudy:
+        return mStudy.GetAllTags(eStudyRootType);
+      case eSeries:
+      default:
+        return mSeries.GetAllTags(eStudyRootType);
+      case eImageOrFrame:
+        return mImage.GetAllTags(eStudyRootType);
+    }
+  }
+  else {//for move
+    switch (inQueryLevel){
+      case ePatient:
+        return mPatient.GetUniqueTags(eStudyRootType);
+      case eStudy:
+        return mStudy.GetUniqueTags(eStudyRootType);
+      case eSeries:
+      default:
+        return mSeries.GetUniqueTags(eStudyRootType);
+      case eImageOrFrame:
+        return mImage.GetUniqueTags(eStudyRootType);
+    }
+  }
+}
 ///have to be able to ensure that
 ///0x8,0x52 is set
 ///that the level is appropriate (ie, not setting PATIENT for a study query
 ///that the tags in the query match the right level (either required, unique, optional)
-bool StudyRootQuery::ValidateQuery() const{
+bool StudyRootQuery::ValidateQuery(bool forFind) const{
   //if it's empty, it's not useful
   DataSet ds = GetQueryDataSet();
   if (ds.Size() == 0) return false;
@@ -80,7 +108,12 @@ bool StudyRootQuery::ValidateQuery() const{
   }
   bool theReturn = true;
 
-  std::vector<gdcm::Tag> tags = qb->GetAllTags(eStudyRootType);
+  std::vector<gdcm::Tag> tags;
+  if (forFind){
+    tags = qb->GetAllTags(eStudyRootType);
+  } else{
+    tags = qb->GetUniqueTags(eStudyRootType);
+  }
   //all the tags in the dataset should be in that tag list
   //otherwise, it's not valid
   gdcm::DataSet::ConstIterator itor;

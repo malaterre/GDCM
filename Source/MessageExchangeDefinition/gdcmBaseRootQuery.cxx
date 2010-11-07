@@ -41,6 +41,7 @@ The dataset held by this object (or, really, one of its derivates) should be pas
 #include "gdcmDicts.h"
 #include "gdcmGlobal.h"
 #include <limits>
+#include "gdcmAttribute.h"
 
 namespace gdcm{
 namespace network {
@@ -177,6 +178,37 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os){
 
 DataSet BaseRootQuery::GetQueryDataSet() const{
   return mDataSet;
+}
+
+
+void BaseRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
+  switch (inQueryLevel){
+    case ePatient:
+      {
+        gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
+        mDataSet.Insert( at1.GetAsDataElement() );
+      }
+      break;
+    case eStudy:
+      {
+        gdcm::Attribute<0x8,0x52> at1 = { "STUDY" };
+        mDataSet.Insert( at1.GetAsDataElement() );
+      }
+      break;
+    case eSeries:
+      {
+        gdcm::Attribute<0x8,0x52> at1 = { "SERIES" };
+        mDataSet.Insert( at1.GetAsDataElement() );
+      }
+    default:
+      break;
+    case eImageOrFrame:
+      {
+        gdcm::Attribute<0x8,0x52> at1 = { "IMAGE" };
+        mDataSet.Insert( at1.GetAsDataElement() );
+      }
+      break;
+  }
 }
 
 }
