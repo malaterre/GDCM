@@ -67,7 +67,6 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   // FIXME !!!!
   gdcm::Attribute<0x0,0x600> at = { "SILVERSTREAK" };
   const char *calling = inConnection.GetConnectionInfo().GetCallingAETitle();
-  //gdcm::Attribute<0x0,0x600> at = { "ACME1" };
   at.SetValue( calling );
   ds.Insert( at.GetAsDataElement() );
   }
