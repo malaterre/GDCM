@@ -348,10 +348,10 @@ bool ULConnectionManager::BreakConnection(const double& inTimeOut){
 
   std::vector<gdcm::DataSet> empty;
   EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
-  if (mConnection!= NULL){
-    delete mConnection;
-    mConnection = NULL;
-  }
+//  if (mConnection!= NULL){
+//    delete mConnection;
+//    mConnection = NULL;
+//  }
   return (theState == eSta1Idle);//ie, finished the transitions
 }
 
@@ -361,10 +361,10 @@ void ULConnectionManager::BreakConnectionNow(){
 
   std::vector<gdcm::DataSet> empty;
   EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
-  if (mConnection!= NULL){
-    delete mConnection;
-    mConnection = NULL;
-  }
+//  if (mConnection!= NULL){
+//    delete mConnection;
+//    mConnection = NULL;
+//  }
 }
 
 //event handler loop for move-- will interweave the two event loops,
