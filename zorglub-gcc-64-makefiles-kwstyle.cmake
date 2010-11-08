@@ -1,7 +1,7 @@
 # Client maintainer: mathieu . malaterre  gmail . com
 
 set(CTEST_SITE "zorglub")
-set(CTEST_BUILD_NAME "Linux-gcc-GIT")
+set(CTEST_BUILD_NAME "GDCM2-Linux-kwstyle-SVN")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
 set(dashboard_root_name "MyTests")
