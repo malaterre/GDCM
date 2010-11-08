@@ -95,7 +95,7 @@ bool LoadGlobalDicts(){
 
 int TestAllFunctions(int argc, char *argv[])
 {
-
+#if 0
   std::string aetitle("UNITED1");//the ae title of this computer
   std::string call("COMMON");//the ae title of the server
   int portno = 11112;//the port of the server
@@ -103,6 +103,17 @@ int TestAllFunctions(int argc, char *argv[])
   std::string remote("192.168.1.4");//the ip address of the remote server
   std::string outputDir("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
   std::string inputDir("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
+#else
+  std::string aetitle = argv[1]; // ("UNITED1");//the ae title of this computer
+  std::string call = argv[2]; //("COMMON");//the ae title of the server
+  int portno = atoi(argv[3]); // 11112;//the port of the server
+  int moveReturnPort = atoi(argv[4]); // 11111;//the port over which return cstore scps are done for cmove
+  std::string remote = argv[5]; //("192.168.1.4");//the ip address of the remote server
+  std::string tmpdir = Testing::GetTempDirectory( "TestAllFunctions" );
+  std::string outputDir = tmpdir; // ("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
+  std::string inputDir = tmpdir; //("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
+
+#endif
   gdcm::network::ERootType queryRootType = gdcm::network::ePatientRootType;//how queries are done
 
   if (!LoadGlobalDicts()){//for IODs
