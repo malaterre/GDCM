@@ -1,4 +1,4 @@
-# GDCM Common Dashboard Script
+# ITK Common Dashboard Script
 #
 # This script contains basic dashboard driver code common to all
 # clients.
@@ -27,8 +27,8 @@
 #   dashboard_model           = Nightly | Experimental | Continuous
 #   dashboard_loop            = Repeat until N seconds have elapsed
 #   dashboard_root_name       = Change name of "My Tests" directory
-#   dashboard_source_name     = Name of source directory (GDCM)
-#   dashboard_binary_name     = Name of binary directory (GDCM-build)
+#   dashboard_source_name     = Name of source directory (ITK)
+#   dashboard_binary_name     = Name of binary directory (ITK-build)
 #   dashboard_cache           = Initial CMakeCache.txt file content
 #   dashboard_do_coverage     = True to enable coverage (ex: gcov)
 #   dashboard_do_memcheck     = True to enable memcheck (ex: valgrind)
@@ -67,7 +67,7 @@
 #   set(ENV{FC}  /path/to/fc)   # Fortran compiler (optional)
 #   set(ENV{LD_LIBRARY_PATH} /path/to/vendor/lib) # (if necessary)
 
-cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 set(dashboard_user_home "$ENV{HOME}")
 
@@ -118,7 +118,7 @@ endif()
 
 # Select Git source to use.
 if(NOT DEFINED dashboard_git_url)
-set(dashboard_git_url "git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm")
+set(dashboard_git_url "git://itk.org/ITK.git")
 endif()
 if(NOT DEFINED dashboard_git_branch)
   if("${dashboard_model}" STREQUAL "Nightly")
@@ -149,7 +149,7 @@ if(NOT DEFINED CTEST_SOURCE_DIRECTORY)
   if(DEFINED dashboard_source_name)
     set(CTEST_SOURCE_DIRECTORY ${CTEST_DASHBOARD_ROOT}/${dashboard_source_name})
   else()
-    set(CTEST_SOURCE_DIRECTORY ${CTEST_DASHBOARD_ROOT}/GDCM)
+    set(CTEST_SOURCE_DIRECTORY ${CTEST_DASHBOARD_ROOT}/ITK)
   endif()
 endif()
 
@@ -167,7 +167,7 @@ if(EXISTS ${CTEST_SOURCE_DIRECTORY})
   if(NOT EXISTS "${CTEST_SOURCE_DIRECTORY}/.git")
     set(vcs_refresh "because it is not managed by git.")
   endif()
-  if(vcs_refresh AND "${CTEST_SOURCE_DIRECTORY}" MATCHES "/(GDCM|gdcm)[^/]*")
+  if(vcs_refresh AND "${CTEST_SOURCE_DIRECTORY}" MATCHES "/(ITK|Insight)[^/]*")
     message("Deleting source tree\n  ${CTEST_SOURCE_DIRECTORY}\n${vcs_refresh}")
     file(REMOVE_RECURSE "${CTEST_SOURCE_DIRECTORY}")
   endif()
@@ -368,13 +368,11 @@ while(NOT dashboard_done)
     endif()
     ctest_build()
 
-    if(NOT dashboard_no_test)
-      if(COMMAND dashboard_hook_test)
-        dashboard_hook_test()
-      endif()
-      ctest_test(${CTEST_TEST_ARGS})
-    endif(NOT dashboard_no_test)
-    set(safe_message_skip 1) # Block further messages
+    if(COMMAND dashboard_hook_test)
+      dashboard_hook_test()
+    endif()
+    ctest_test(${CTEST_TEST_ARGS})
+    set(safe_message_skip 1) # Block furhter messages
 
     if(dashboard_do_coverage)
       if(COMMAND dashboard_hook_coverage)
