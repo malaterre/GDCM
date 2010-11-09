@@ -378,7 +378,8 @@ int main(int argc, char *argv[])
             ss >> cdummy;
             assert( cdummy == ',' || cdummy == '=' );
             std::string str;
-            ss >> str;
+            //ss >> str;
+            std::getline(ss, str); // do not skip whitespace
             keys.push_back( std::make_pair(tag, str) );
             }
           else if( option_index == 11 ) /* test */
@@ -427,7 +428,8 @@ int main(int argc, char *argv[])
         ss >> cdummy;
         assert( cdummy == ',' || cdummy == '=' );
         std::string str;
-        ss >> str;
+        //ss >> str;
+        std::getline(ss, str); // do not skip whitespace
         keys.push_back( std::make_pair(tag, str) );
         }
       break;
