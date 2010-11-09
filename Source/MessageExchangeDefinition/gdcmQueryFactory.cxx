@@ -32,6 +32,8 @@ to a particular query style
 #include "gdcmPatientRootQuery.h"
 #include "gdcmStudyRootQuery.h"
 
+#include <locale>
+
 namespace gdcm{
   namespace network {
 BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQueryLevel& inQueryLevel){
@@ -51,6 +53,17 @@ BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQu
         return NULL;
       }
   }
+}
+
+ECharSet QueryFactory::GetCharacterFromCurrentLocale()
+{
+  std::locale l("");
+  std::string loc = l.name();
+  if( loc.find( "UTF-8" ) != std::string::npos )
+    {
+    return eUTF8;
+    }
+  return eLatin1;
 }
 
 ///This function will produce the appropriate dataelement given a list of charsets.
@@ -139,6 +152,8 @@ DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<EChar
     visited[*itor] = true;
   }
 
+  if( theOutputString.size() % 2 )
+    theOutputString.push_back( ' ' ); // no \0 !
   theReturn.SetByteValue(theOutputString.c_str(),
     (uint32_t)theOutputString.length());
   theReturn.SetTag(Tag(0x0008, 0x0005));
