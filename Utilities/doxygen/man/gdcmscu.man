@@ -39,20 +39,18 @@ C-MOVE operation are executed using two different ports (one for the SCU and one
      --move           C-MOVE.
 \endverbatim
 
-\subsection cfing_options C-STORE options
+\subsection cstore_options C-STORE options
 \verbatim
   -i --input      DICOM filename
 \endverbatim
 
-\subsection cfing_options C-FIND options
+\subsection cfind_options C-FIND options
 \verbatim
-     --worklist       C-FIND Worklist Model.
      --patient        C-FIND Patient Root Model.
      --study          C-FIND Study Root Model.
-     --psonly         C-FIND Patient/Study Only Model.
 \endverbatim
 
-\subsection cfing_options C-STORE options
+\subsection cmove_options C-MOVE options
 \verbatim
   -o --output     DICOM filename / directory
      --port-scp   Port for incoming associations
@@ -126,6 +124,12 @@ or if you prefer being explicit:
 
 \verbatim
 gdcmscu --store dicom.example.com 104 -i myfile.dcm
+\endverbatim
+
+You can even send multiple files using the same association:
+
+\verbatim
+gdcmscu --store dicom.example.com 104 myfile1.dcm myfile2.dcm myfile3.dcm ...
 \endverbatim
 
 \section cfind_usage C-FIND usage
