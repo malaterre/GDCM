@@ -117,9 +117,16 @@ bool StudyRootQuery::ValidateQuery(bool forFind) const{
   //all the tags in the dataset should be in that tag list
   //otherwise, it's not valid
   gdcm::DataSet::ConstIterator itor;
+  gdcm::Attribute<0x0008, 0x0005> language;
   for (itor = ds.Begin(); itor != ds.End(); itor++){
     gdcm::Tag t = itor->GetTag();
+    if (t == level.GetTag()) continue;
+    if (t.GetGroup() == language.GetTag().GetGroup() &&
+      t.GetElement() == language.GetTag().GetElement()) continue;
     if (std::find(tags.begin(), tags.end(), t) == tags.end()){
+      //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
+      //of the possible language tag values
+      //well, for now, just allow it if it's present.
       theReturn = false;
       break;
     }
