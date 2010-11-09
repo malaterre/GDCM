@@ -1,9 +1,6 @@
 SET(MEXD_TEST_SRCS
-TestBaseRootQuery
-TestPatientRootQuery
 TestPresentationContext
 TestQueryFactory
-TestStudyRootQuery
 TestULConnectionManager
 TestAllFunctions
 )
@@ -31,19 +28,7 @@ SET(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 
 # Loop over files and create executables
 FOREACH(name ${MEXD_TEST_SRCS})
-  IF(${name} STREQUAL "TestAllFunctions")
-  IF(GDCM_DICOM_SERVER_AETITLE)
-    ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name}
-      ${GDCM_DICOM_CLIENT_AETITLE}
-      ${GDCM_DICOM_SERVER_AETITLE}
-      ${GDCM_DICOM_SERVER_PORT}
-      ${GDCM_DICOM_CLIENT_PORT}
-      ${GDCM_DICOM_SERVER_PEER}
-      )
-  ENDIF(GDCM_DICOM_SERVER_AETITLE)
-  ELSE(${name} STREQUAL "TestAllFunctions")
-    ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
-  ENDIF(${name} STREQUAL "TestAllFunctions")
+  ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
 ENDFOREACH(name)
 
 set(DCMQRSCP_HOSTNAME gotlib)
