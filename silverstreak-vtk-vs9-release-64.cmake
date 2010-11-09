@@ -1,24 +1,26 @@
 # Client maintainer: mmroden gmail . com
+cmake_minimum_required(VERSION 2.8.2)
 
 set(CTEST_SITE "silverstreak")
 set(CTEST_BUILD_NAME "Win32-windows7-vs9-2.1-Release")
 set(CTEST_BUILD_CONFIGURATION Release)
 set(CTEST_CMAKE_GENERATOR "Visual Studio 9 2008 Win64")
 set(CTEST_DASHBOARD_ROOT "H:/src/dashboard/gdcm-dashboard/")
-set(dashboard_binary_name "gdcm-build-release-64-nightly")
+set(dashboard_binary_name "vtk-build-release-64-nightly")
+set(dashboard_source_name VTK)
+set(dashboard_model Nightly)
 
 SET(CTEST_GIT_COMMAND "C:/Program Files (x86)/Git/bin/git.exe")
 SET(ENV{CFLAGS} "/W4")
 SET(ENV{CXXFLAGS} "/W4")
 
-macro(dashboard_hook_init)
-  set( dashboard_cache "
-  GDCM_BUILD_SHARED_LIBS:BOOL=ON
-  GDCM_BUILD_APPLICATIONS:BOOL=ON
-  GDCM_BUILD_EXAMPLES:BOOL=ON
-  VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/vtk-build-release-64-nightly
-    "
-    )
-endmacro(dashboard_hook_init)
+set(dashboard_cache "
+BUILD_SHARED_LIBS:BOOL=ON
+BUILD_EXAMPLES:BOOL=OFF
+VTK_DEBUG_LEAKS:BOOL=ON
+VTK_USE_PARALLEL:BOOL=OFF
+VTK_USE_RENDERING:BOOL=ON
+VTK_WRAP_JAVA:BOOL=ON
+")
 
-include(${CTEST_SCRIPT_DIRECTORY}/gdcm_common.cmake)
+include(${CTEST_SCRIPT_DIRECTORY}/vtk_common.cmake)
