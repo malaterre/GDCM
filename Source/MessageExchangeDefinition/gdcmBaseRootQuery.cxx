@@ -185,13 +185,13 @@ void BaseRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
   switch (inQueryLevel){
     case ePatient:
       {
-        gdcm::Attribute<0x8,0x52> at1 = { "PATIENT" };
+        gdcm::Attribute<0x8,0x52> at1 = { "PATIENT " };
         mDataSet.Insert( at1.GetAsDataElement() );
       }
       break;
     case eStudy:
       {
-        gdcm::Attribute<0x8,0x52> at1 = { "STUDY" };
+        gdcm::Attribute<0x8,0x52> at1 = { "STUDY " };
         mDataSet.Insert( at1.GetAsDataElement() );
       }
       break;
@@ -204,7 +204,7 @@ void BaseRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
       break;
     case eImageOrFrame:
       {
-        gdcm::Attribute<0x8,0x52> at1 = { "IMAGE" };
+        gdcm::Attribute<0x8,0x52> at1 = { "IMAGE " };
         mDataSet.Insert( at1.GetAsDataElement() );
       }
       break;
