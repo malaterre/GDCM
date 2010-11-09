@@ -20,17 +20,20 @@
 
 #include "gdcmBaseRootQuery.h"
 
+
 namespace gdcm{
   namespace network {
 /**
  * \brief StudyRootQuery
  * contains: the class which will produce a dataset for c-find and c-move with study root
  */
+    class QueryFactory;
 class GDCM_EXPORT StudyRootQuery : public BaseRootQuery {
     private:
       void SetParameters();
-    public:
+      friend QueryFactory;
       StudyRootQuery();
+    public:
       ~StudyRootQuery();
 
       std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
