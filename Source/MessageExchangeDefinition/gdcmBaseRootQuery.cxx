@@ -88,7 +88,8 @@ void BaseRootQuery::SetSearchParameter(const gdcm::Tag& inTag, const gdcm::DictE
   assert(thePaddedValue.length() < std::numeric_limits<uint32_t>::max());
   de.SetByteValue(thePaddedValue.c_str(), (uint32_t)thePaddedValue.length());
 
-  mDataSet.Insert(de);
+  //Replace any existing values
+  mDataSet.Replace(de);
 }
 
 void BaseRootQuery::SetSearchParameter(const gdcm::Tag& inTag, const std::string& inValue){
