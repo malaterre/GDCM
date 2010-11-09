@@ -84,15 +84,15 @@ bool PatientRootQuery::ValidateQuery(bool forFind) const{
 
   //search for 0x8,0x52
   gdcm::Attribute<0x0008, 0x0052> level;
-  level.SetFromDataElement( ds.GetDataElement( level.GetTag() ) );
+  level.SetFromDataSet( ds );
   std::string theVal = level.GetValue();
 
   QueryBase* qb = NULL;
-  if (strcmp(theVal.c_str(), "PATIENT") == 0){
+  if (strcmp(theVal.c_str(), "PATIENT ") == 0){
     //make sure remaining tags are somewhere in the list of required, unique, or optional tags
     qb = new QueryPatient();
   }
-  if (strcmp(theVal.c_str(), "STUDY") == 0){
+  if (strcmp(theVal.c_str(), "STUDY ") == 0){
     //make sure remaining tags are somewhere in the list of required, unique, or optional tags
     qb = new QueryStudy();
   }
@@ -100,7 +100,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind) const{
     //make sure remaining tags are somewhere in the list of required, unique, or optional tags
     qb = new QuerySeries();
   }
-  if (strcmp(theVal.c_str(), "IMAGE") == 0 || strcmp(theVal.c_str(), "FRAME") == 0){
+  if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME") == 0){
     //make sure remaining tags are somewhere in the list of required, unique, or optional tags
     qb = new QueryImage();
   }

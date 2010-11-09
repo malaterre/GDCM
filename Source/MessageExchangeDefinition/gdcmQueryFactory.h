@@ -72,6 +72,9 @@ class GDCM_EXPORT QueryFactory
       ///if the vector passed in is empty, then the dataelement that's passed out will be empty
       ///and Latin1 is the presumed encoding
       static DataElement ProduceCharacterSetDataElement(const std::vector<ECharSet>& inCharSetType);
+
+      static ECharSet GetCharacterFromCurrentLocale();
+
       static void ListCharSets(std::ostream& os);
     };
   }
