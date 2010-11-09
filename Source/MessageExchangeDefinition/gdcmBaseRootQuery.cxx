@@ -81,8 +81,8 @@ void BaseRootQuery::SetSearchParameter(const gdcm::Tag& inTag, const gdcm::DictE
     }
 
   std::string thePaddedValue = inValue;
-  if (thePaddedValue.length() %2 != 0){
-    thePaddedValue.insert(thePaddedValue.end(), '\0');
+  if (thePaddedValue.length() % 2 ){
+    thePaddedValue.push_back(' ');
   }
 
   assert(thePaddedValue.length() < std::numeric_limits<uint32_t>::max());
