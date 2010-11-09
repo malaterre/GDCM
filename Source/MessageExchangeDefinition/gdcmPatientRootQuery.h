@@ -30,7 +30,7 @@ namespace gdcm{
 class GDCM_EXPORT PatientRootQuery : public BaseRootQuery {
     private:
       void SetParameters();
-      friend QueryFactory;
+      friend class QueryFactory;
       PatientRootQuery();
     public:
       ~PatientRootQuery();

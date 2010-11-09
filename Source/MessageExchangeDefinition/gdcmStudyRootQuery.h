@@ -31,7 +31,7 @@ namespace gdcm{
 class GDCM_EXPORT StudyRootQuery : public BaseRootQuery {
     private:
       void SetParameters();
-      friend QueryFactory;
+      friend class QueryFactory;
       StudyRootQuery();
     public:
       ~StudyRootQuery();

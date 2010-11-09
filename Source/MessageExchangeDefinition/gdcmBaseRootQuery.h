@@ -61,7 +61,7 @@ class GDCM_EXPORT BaseRootQuery
       DataSet mDataSet;
     protected:
 
-      friend QueryFactory;
+      friend class QueryFactory;
       BaseRootQuery();
 
       QueryPatient mPatient;
