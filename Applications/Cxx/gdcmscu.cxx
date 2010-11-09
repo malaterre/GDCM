@@ -388,12 +388,12 @@ int main(int argc, char *argv[])
             //assert( callaetitle.empty() );
             testDir = optarg;
             }
-          else if( option_index == 22 ) /* port-scp */
+          else if( option_index == 20 ) /* port-scp */
             {
             assert( strcmp(s, "port-scp") == 0 );
             portscpnum = atoi(optarg);
             }
-          else if( option_index == 23 ) /* output */
+          else if( option_index == 21 ) /* output */
             {
             assert( strcmp(s, "output") == 0 );
             outputdir = optarg;
