@@ -109,7 +109,7 @@ int TestAllFunctions(int argc, char *argv[])
   int portno = atoi(argv[3]); // 11112;//the port of the server
   int moveReturnPort = atoi(argv[4]); // 11111;//the port over which return cstore scps are done for cmove
   std::string remote = argv[5]; //("192.168.1.4");//the ip address of the remote server
-  std::string tmpdir = Testing::GetTempDirectory( "TestAllFunctions" );
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( "TestAllFunctions" );
   std::string outputDir = tmpdir; // ("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
   std::string inputDir = tmpdir; //("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
 
