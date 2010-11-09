@@ -53,7 +53,6 @@ BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQu
   }
 }
 
-
 ///This function will produce the appropriate dataelement given a list of charsets.
 ///The first charset will be used directly, while the second and subsequent
 ///will be prepended with "ISO2022 ".  Redundant character sets are not permitted,

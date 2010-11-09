@@ -35,6 +35,7 @@
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 #include "vtkMatrix4x4.h"
 #include "vtkUnsignedCharArray.h"
+//#include "vtkUnsignedShortArray.h"
 #include "vtkBitArray.h"
 
 #include "gdcmImageReader.h"
