@@ -15,6 +15,7 @@ set(dashboard_root_name "MyTests")
 set(dashboard_source_name VTK)
 set(dashboard_binary_name VTK-gcc-tomate)
 set(dashboard_model Nightly)
+set(dashboard_do_test FALSE)
 
 #set(VTK_DATA_ROOT ${CTEST_DASHBOARD_ROOT}/VTKData)
 #set(VTK_LARGE_DATA_ROOT ${CTEST_DASHBOARD_ROOT}/VTKLargeData)
