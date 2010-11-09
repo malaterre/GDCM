@@ -52,6 +52,7 @@ namespace gdcm{
       eImageOrFrame
     };
 
+    class QueryFactory;
 class GDCM_EXPORT BaseRootQuery
 {
       //these four classes contain the required, unique, and optional tags from the standard.
@@ -59,6 +60,10 @@ class GDCM_EXPORT BaseRootQuery
 
       DataSet mDataSet;
     protected:
+
+      friend QueryFactory;
+      BaseRootQuery();
+
       QueryPatient mPatient;
       QueryStudy mStudy;
       QuerySeries mSeries;
@@ -71,7 +76,6 @@ class GDCM_EXPORT BaseRootQuery
 
       void SetSearchParameter(const gdcm::Tag& inTag, const gdcm::DictEntry& inDictEntry, const std::string& inValue);
     public:
-      BaseRootQuery();
       virtual ~BaseRootQuery();
 
       void SetSearchParameter(const gdcm::Tag& inTag, const std::string& inValue);

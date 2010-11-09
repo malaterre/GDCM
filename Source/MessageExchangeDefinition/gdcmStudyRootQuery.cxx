@@ -87,11 +87,11 @@ bool StudyRootQuery::ValidateQuery(bool forFind) const{
   level.SetFromDataElement( ds.GetDataElement( level.GetTag() ) );
   std::string theVal = level.GetValue();
 
-  if (strcmp(theVal.c_str(), "PATIENT") == 0) return false;
+  if (strcmp(theVal.c_str(), "PATIENT ") == 0) return false;
 
   QueryBase* qb = NULL;
 
-  if (strcmp(theVal.c_str(), "STUDY") == 0){
+  if (strcmp(theVal.c_str(), "STUDY ") == 0){
     //make sure remaining tags are somewhere in the list of required, unique, or optional tags
     qb = new QueryStudy();
   }
@@ -99,7 +99,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind) const{
     //make sure remaining tags are somewhere in the list of required, unique, or optional tags
     qb = new QuerySeries();
   }
-  if (strcmp(theVal.c_str(), "IMAGE") == 0 || strcmp(theVal.c_str(), "FRAME") == 0){
+  if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME") == 0){
     //make sure remaining tags are somewhere in the list of required, unique, or optional tags
     qb = new QueryImage();
   }
