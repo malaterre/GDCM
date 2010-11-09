@@ -26,11 +26,13 @@ namespace gdcm{
  * \brief PatientRootQuery
  * contains: the class which will produce a dataset for c-find and c-move with patient root
  */
+    class QueryFactory;
 class GDCM_EXPORT PatientRootQuery : public BaseRootQuery {
     private:
       void SetParameters();
-    public:
+      friend QueryFactory;
       PatientRootQuery();
+    public:
       ~PatientRootQuery();
 
       std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
