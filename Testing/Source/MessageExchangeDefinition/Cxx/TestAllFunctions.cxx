@@ -21,6 +21,7 @@
 #include "gdcmQueryFactory.h"
 
 #include "gdcmDirectory.h"
+#include "gdcmTesting.h"
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
 #include "gdcmAttribute.h"
