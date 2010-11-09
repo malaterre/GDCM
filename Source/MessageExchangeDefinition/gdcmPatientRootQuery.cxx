@@ -84,7 +84,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind) const{
 
   //search for 0x8,0x52
   gdcm::Attribute<0x0008, 0x0052> level;
-  level.SetFromDataElement( ds.GetDataElement( level.GetTag() ) );
+  level.SetFromDataSet( ds );
   std::string theVal = level.GetValue();
 
   QueryBase* qb = NULL;
