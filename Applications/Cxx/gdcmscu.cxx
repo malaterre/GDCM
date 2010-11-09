@@ -658,13 +658,18 @@ int main(int argc, char *argv[])
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
     gdcm::network::BaseRootQuery* theQuery;
-    if (findstudy > 0)
+    if (findstudy)
       {
       theQuery = new gdcm::network::StudyRootQuery();
       }
-    else
+    else if (findpatient)
       {
       theQuery = new gdcm::network::PatientRootQuery();
+      }
+    else
+      {
+      std::cerr << "Specify the query" << std::endl;
+      return 1;
       }
     gdcm::DataSet ds;
     for(; it != keys.end(); ++it)
@@ -701,26 +706,35 @@ int main(int argc, char *argv[])
       keys.begin();
 
     gdcm::network::BaseRootQuery* theQuery;
-    if (findstudy > 0)
+    if (findstudy)
       {
       theQuery = new gdcm::network::StudyRootQuery();
       }
-    else
+    else if (findpatient)
       {
       theQuery = new gdcm::network::PatientRootQuery();
       }
 
-    gdcm::DataSet ds;
+    //gdcm::DataSet ds;
     for(; it != keys.end(); ++it)
       {
       std::string s = sf.FromString( it->first, it->second.c_str(), it->second.size() );
-      gdcm::DataElement de( it->first );
-      de.SetByteValue ( s.c_str(), s.size() );
-      ds.Insert( de );
+      //gdcm::DataElement de( it->first );
+      //de.SetByteValue ( s.c_str(), s.size() );
+      //ds.Insert( de );
       theQuery->SetSearchParameter(it->first, s);
       }
 
-    ds.Print( std::cout );
+    // setup the special character set
+    std::vector<gdcm::network::ECharSet> inCharSetType;
+    inCharSetType.push_back( gdcm::network::QueryFactory::GetCharacterFromCurrentLocale() );
+    gdcm::DataElement de = gdcm::network::QueryFactory::ProduceCharacterSetDataElement(inCharSetType);
+    std::string param ( de.GetByteValue()->GetPointer(),
+      de.GetByteValue()->GetLength() );
+    theQuery->SetSearchParameter(de.GetTag(), param );
+    //ds.Insert( de );
+
+    //ds.Print( std::cout );
 
     if (!theQuery->ValidateQuery(true))
       {
