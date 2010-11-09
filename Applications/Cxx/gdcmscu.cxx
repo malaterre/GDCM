@@ -708,11 +708,17 @@ int main(int argc, char *argv[])
     gdcm::network::BaseRootQuery* theQuery;
     if (findstudy)
       {
-      theQuery = new gdcm::network::StudyRootQuery();
+      //theQuery = new gdcm::network::StudyRootQuery();
+      theQuery =
+        gdcm::network::QueryFactory::ProduceQuery(
+          gdcm::network::eStudyRootType, gdcm::network::eStudy);
       }
     else if (findpatient)
       {
-      theQuery = new gdcm::network::PatientRootQuery();
+      //theQuery = new gdcm::network::PatientRootQuery();
+      theQuery =
+        gdcm::network::QueryFactory::ProduceQuery(
+          gdcm::network::ePatientRootType, gdcm::network::ePatient);
       }
 
     //gdcm::DataSet ds;
