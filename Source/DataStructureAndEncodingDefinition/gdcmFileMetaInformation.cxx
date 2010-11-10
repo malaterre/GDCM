@@ -604,15 +604,21 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
       }
     else
       {
-    throw Exception( "Cannot find DICOM type. Giving up." );
-    //  std::streampos start = is.tellg();
-    //  ImplicitDataElement ide;
-    //  ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
-    //  std::streampos cur = is.tellg();
-    //  std::cout << "s-c" << start - cur << std::endl;
-    //  is.seekg( start - cur, std::ios::cur );
-    //  // ok we could read at least one implicit element
-    //  DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+      DataElement null( Tag(0x0,0x0), 0);
+      ImplicitDataElement ide;
+      ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
+      if( ide == null )
+        {
+        // Ok big deal we found a null dataelement, should we really add it
+        // in the dataset ? Well let's assume this is not that important
+        ReadCompat(is);
+        assert( DataSetTS == TransferSyntax::ImplicitVRLittleEndian );
+        return is;
+        }
+      else
+        {
+        throw Exception( "Cannot find DICOM type. Giving up." );
+        }
       }
     }
   return is;
