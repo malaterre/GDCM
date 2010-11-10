@@ -82,6 +82,7 @@ public:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     WeirdPapryus,
 #endif
+    CT_private_ELE,
     TS_END
   } TSType;
 

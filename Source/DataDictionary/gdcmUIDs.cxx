@@ -357,6 +357,8 @@ DICOM_Conformance_Statement_MR_R2.6.pdf
 {"1.2.752.24.3.7.6","Sectra Compression (Private Syntax)"},
 {"1.2.752.24.3.7.7","Sectra Compression LS (Private Syntax)"},
 {"1.2.840.113619.5.2", "Implicit VR Big Endian DLX (G.E Private)"},
+/*DICOM_Conformance_Statement_GEMINI_R3.5_R3.6.pdf */
+{"1.3.46.670589.33.1.4.1","CT-private-ELE"},
 { 0, 0 }
 };
 

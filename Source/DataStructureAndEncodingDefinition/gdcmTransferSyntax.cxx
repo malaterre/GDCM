@@ -70,6 +70,7 @@ static const char *TSStrings[] = {
   // Weird Papyrus
   "1.2.840.10008.1.20",
 #endif
+  "1.3.46.670589.33.1.4.1",
   // Unknown
   "Unknown Transfer Syntax", // Pretty sure we never use this case...
   0 // Compilers have no obligation to finish by NULL, do it ourself
