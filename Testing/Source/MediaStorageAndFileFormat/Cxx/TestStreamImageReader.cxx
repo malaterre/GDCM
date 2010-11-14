@@ -36,7 +36,8 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     //that way, we can test how the stream handles fragmentation of the data
     //we could also loop this to get various different size combinations, but I'm not sure
     //that's useful, yet.
-    std::vector<unsigned int> extent = gdcm::ImageHelper::GetDimensionsValue(reader.GetImageData());
+    std::vector<unsigned int> extent =
+      gdcm::ImageHelper::GetDimensionsValue(reader.GetFile());
 
     unsigned short xmin = 0;
     unsigned short xmax = extent[0];
