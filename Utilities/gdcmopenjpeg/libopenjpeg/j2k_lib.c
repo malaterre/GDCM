@@ -27,50 +27,38 @@
 #ifdef WIN32
 #include <windows.h>
 #else
-#include <sys/time.h>
+/*#include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/times.h>
+*/
 #endif /* WIN32 */
-#include "opj_includes.h"
+#include "j2k_lib.h"
 
-double opj_clock() {
+
+OPJ_FLOAT64 opj_clock(void) {
+#if 0
 #ifdef WIN32
-	/* WIN32: use QueryPerformance (very accurate) */
+  /* WIN32: use QueryPerformance (very accurate) */
     LARGE_INTEGER freq , t ;
     /* freq is the clock speed of the CPU */
     QueryPerformanceFrequency(&freq) ;
-	/* cout << "freq = " << ((double) freq.QuadPart) << endl; */
+  /* cout << "freq = " << ((double) freq.QuadPart) << endl; */
     /* t is the high resolution performance counter (see MSDN) */
     QueryPerformanceCounter ( & t ) ;
     return ( t.QuadPart /(double) freq.QuadPart ) ;
 #else
-	/* Unix or Linux: use resource usage */
+  /* Unix or Linux: use resource usage */
     struct rusage t;
     double procTime;
     /* (1) Get the rusage data structure at this moment (man getrusage) */
     getrusage(0,&t);
     /* (2) What is the elapsed time ? - CPU time = User time + System time */
-	/* (2a) Get the seconds */
+  /* (2a) Get the seconds */
     procTime = t.ru_utime.tv_sec + t.ru_stime.tv_sec;
     /* (2b) More precisely! Get the microseconds part ! */
     return ( procTime + (t.ru_utime.tv_usec + t.ru_stime.tv_usec) * 1e-6 ) ;
 #endif
+
+#endif
+  return 0;
 }
-
-void* opj_malloc( size_t size ) {
-	void *memblock = malloc(size);
-	if(memblock) {
-		memset(memblock, 0, size);
-	}
-	return memblock;
-}
-
-void* opj_realloc( void *memblock, size_t size ) {
-	return realloc(memblock, size);
-}
-
-void opj_free( void *memblock ) {
-	free(memblock);
-}
-
-

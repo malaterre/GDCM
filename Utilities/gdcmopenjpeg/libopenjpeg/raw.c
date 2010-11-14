@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2003-2005, Francois Devaux and Antonin Descampe
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
- * Copyright (c) 2002-2005, Communications and remote sensing Laboratory, Universite catholique de Louvain, Belgium
+ * Copyright (c) 2002-2007, Communications and Remote Sensing Laboratory, Universite catholique de Louvain (UCL), Belgium
+ * Copyright (c) 2002-2007, Professor Benoit Macq
+ * Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
+ * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,61 +28,61 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "opj_includes.h"
+#include "raw.h"
+#include "opj_malloc.h"
 
-/* 
+/*
 ==========================================================
    local functions
 ==========================================================
 */
 
 
-/* 
+/*
 ==========================================================
    RAW encoding interface
 ==========================================================
 */
 
-opj_raw_t* raw_create() {
-	opj_raw_t *raw = (opj_raw_t*)opj_malloc(sizeof(opj_raw_t));
-	return raw;
+opj_raw_t* raw_create(void) {
+  opj_raw_t *raw = (opj_raw_t*)opj_malloc(sizeof(opj_raw_t));
+  return raw;
 }
 
 void raw_destroy(opj_raw_t *raw) {
-	if(raw) {
-		opj_free(raw);
-	}
+  if(raw) {
+    opj_free(raw);
+  }
 }
 
-int raw_numbytes(opj_raw_t *raw) {
-	return raw->bp - raw->start;
+OPJ_UINT32 raw_numbytes(opj_raw_t *raw) {
+  return raw->bp - raw->start;
 }
 
-void raw_init_dec(opj_raw_t *raw, unsigned char *bp, int len) {
-	raw->start = bp;
-	raw->lenmax = len;
-	raw->len = 0;
-	raw->c = 0;
-	raw->ct = 0;
+void raw_init_dec(opj_raw_t *raw, OPJ_BYTE *bp, OPJ_UINT32 len) {
+  raw->start = bp;
+  raw->lenmax = len;
+  raw->len = 0;
+  raw->c = 0;
+  raw->ct = 0;
 }
 
-int raw_decode(opj_raw_t *raw) {
-	int d;
-	if (raw->ct == 0) {
-		raw->ct = 8;
-		if (raw->len == raw->lenmax) {
-			raw->c = 0xff;
-		} else {
-			if (raw->c == 0xff) {
-				raw->ct = 7;
-			}
-			raw->c = *(raw->start + raw->len);
-			raw->len++;
-		}
-	}
-	raw->ct--;
-	d = (raw->c >> raw->ct) & 0x01;
-	
-	return d;
-}
+OPJ_UINT32 raw_decode(opj_raw_t *raw) {
+  OPJ_UINT32 d;
+  if (raw->ct == 0) {
+    raw->ct = 8;
+    if (raw->len == raw->lenmax) {
+      raw->c = 0xff;
+    } else {
+      if (raw->c == 0xff) {
+        raw->ct = 7;
+      }
+      raw->c = *(raw->start + raw->len);
+      raw->len++;
+    }
+  }
+  raw->ct--;
+  d = (raw->c >> raw->ct) & 0x01;
 
+  return d;
+}

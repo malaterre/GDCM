@@ -25,39 +25,57 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <openjpeg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
-#include <setjmp.h>
-#ifndef DONT_HAVE_GETOPT
-#include <getopt.h>
-#else
-#include "compat/getopt.h"
-#endif
 
+#include "openjpeg.h"
+#include "j2k_lib.h"
+#include "j2k.h"
+#include "jp2.h"
+#include "cio.h"
+#include "mj2.h"
 #include "mj2_convert.h"
+#include "compat/getopt.h"
 
-#define MJ2_MDAT  0x6d646174
-#define JP2_JP2C 0x6a703263
+/**
+Size of memory first allocated for MOOV box
+*/
+#define TEMP_BUF 10000
 
-//MEMORY LEAK
-#ifdef _DEBUG
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>  // Must be included first
-#include <crtdbg.h>
-#endif
-//MEM
+/* -------------------------------------------------------------------------- */
 
-jmp_buf j2k_error;
+/**
+sample error callback expecting a FILE* client object
+*/
+void error_callback(const char *msg, void *client_data) {
+  FILE *stream = (FILE*)client_data;
+  fprintf(stream, "[ERROR] %s", msg);
+}
+/**
+sample warning callback expecting a FILE* client object
+*/
+void warning_callback(const char *msg, void *client_data) {
+  FILE *stream = (FILE*)client_data;
+  fprintf(stream, "[WARNING] %s", msg);
+}
+/**
+sample debug callback expecting a FILE* client object
+*/
+void info_callback(const char *msg, void *client_data) {
+  FILE *stream = (FILE*)client_data;
+  fprintf(stream, "[INFO] %s", msg);
+}
+
+/* -------------------------------------------------------------------------- */
+
 
 void help_display()
 {
   fprintf(stdout,"HELP\n----\n\n");
   fprintf(stdout,"- the -h option displays this help information on screen\n\n");
-  
-  
+
+
   fprintf(stdout,"List of parameters for the MJ2 encoder:\n");
   fprintf(stdout,"\n");
   fprintf(stdout,"REMARKS:\n");
@@ -67,13 +85,6 @@ void help_display()
     (stdout,"The markers written to the main_header are : SOC SIZ COD QCD COM.\n");
   fprintf
     (stdout,"COD and QCD never appear in the tile_header.\n");
-  fprintf(stdout,"\n");
-  fprintf
-    (stdout,"- This coder can encode a mega image, a test was made on a 24000x24000 pixels \n");
-  fprintf
-    (stdout,"color image.  You need enough disk space memory (twice the original) to encode \n");
-  fprintf
-    (stdout,"the image,i.e. for a 1.5 GB image you need a minimum of 3GB of disk memory)\n");
   fprintf(stdout,"\n");
   fprintf(stdout,"By default:\n");
   fprintf(stdout,"------------\n");
@@ -107,16 +118,16 @@ void help_display()
     (stdout,"Optional Parameters:\n");
   fprintf(stdout,"-h           : display the help information \n");
   fprintf(stdout,"-r           : different compression ratios for successive layers (-r 20,10,5)\n ");
-  fprintf(stdout,"	         - The rate specified for each quality level is the desired \n");
-  fprintf(stdout,"	           compression factor.\n");
-  fprintf(stdout,"		   Example: -r 20,10,1 means quality 1: compress 20x, \n");
-  fprintf(stdout,"		     quality 2: compress 10x and quality 3: compress lossless\n");
+  fprintf(stdout,"           - The rate specified for each quality level is the desired \n");
+  fprintf(stdout,"             compression factor.\n");
+  fprintf(stdout,"       Example: -r 20,10,1 means quality 1: compress 20x, \n");
+  fprintf(stdout,"         quality 2: compress 10x and quality 3: compress lossless\n");
   fprintf(stdout,"               (options -r and -q cannot be used together)\n ");
-  
+
   fprintf(stdout,"-q           : different psnr for successive layers (-q 30,40,50) \n ");
-  
+
   fprintf(stdout,"               (options -r and -q cannot be used together)\n ");
-  
+
   fprintf(stdout,"-n           : number of resolutions (-n 3) \n");
   fprintf(stdout,"-b           : size of code block (-b 32,32) \n");
   fprintf(stdout,"-c           : size of precinct (-c 128,128) \n");
@@ -125,7 +136,7 @@ void help_display()
     (stdout,"-p           : progression order (-p LRCP) [LRCP, RLCP, RPCL, PCRL, CPRL] \n");
   fprintf
     (stdout,"-s           : subsampling factor (-s 2,2) [-s X,Y] \n");
-  fprintf(stdout,"	     Remark: subsampling bigger than 2 can produce error\n");
+  fprintf(stdout,"       Remark: subsampling bigger than 2 can produce error\n");
   fprintf
     (stdout,"-SOP         : write SOP marker before each packet \n");
   fprintf
@@ -138,8 +149,6 @@ void help_display()
     (stdout,"                 Indicate multiple modes by adding their values. \n");
   fprintf
     (stdout,"                 ex: RESTART(4) + RESET(2) + SEGMARK(32) = -M 38\n");
-  fprintf
-    (stdout,"-x           : create an index file *.Idx (-x index_name.Idx) \n");
   fprintf
     (stdout,"-ROI         : c=%%d,U=%%d : quantization indices upshifted \n");
   fprintf
@@ -155,7 +164,7 @@ void help_display()
   fprintf(stdout,"               of the Cb and Cr components for YUV files \n");
   fprintf(stdout,"               (default is '352,288,2,2' for CIF format's 352x288 and 4:2:0)\n");
   fprintf(stdout,"-F           : video frame rate (set to 25 by default)\n");
-  
+
   fprintf(stdout,"\n");
   fprintf(stdout,"IMPORTANT:\n");
   fprintf(stdout,"-----------\n");
@@ -180,9 +189,9 @@ void help_display()
   fprintf(stdout,"Tpacket_0 Tile layer res. comp. prec. start_pos end_pos disto\n");
   fprintf(stdout,"...\n");
   fprintf(stdout,"Tpacket_Np ''   ''    ''   ''    ''       ''       ''     ''\n");
-  
+
   fprintf(stdout,"MaxDisto\n");
-  
+
   fprintf(stdout,"TotalDisto\n\n");
 }
 
@@ -197,436 +206,399 @@ int give_progression(char progression[4])
       return 1;
     } else {
       if (progression[0] == 'R' && progression[1] == 'P'
-	&& progression[2] == 'C' && progression[3] == 'L') {
-	return 2;
+        && progression[2] == 'C' && progression[3] == 'L') {
+        return 2;
       } else {
-	if (progression[0] == 'P' && progression[1] == 'C'
-	  && progression[2] == 'R' && progression[3] == 'L') {
-	  return 3;
-	} else {
-	  if (progression[0] == 'C' && progression[1] == 'P'
-	    && progression[2] == 'R' && progression[3] == 'L') {
-	    return 4;
-	  } else {
-	    return -1;
-	  }
-	}
+        if (progression[0] == 'P' && progression[1] == 'C'
+          && progression[2] == 'R' && progression[3] == 'L') {
+          return 3;
+        } else {
+          if (progression[0] == 'C' && progression[1] == 'P'
+            && progression[2] == 'R' && progression[3] == 'L') {
+            return 4;
+          } else {
+            return -1;
+          }
+        }
       }
     }
   }
 }
 
-double dwt_norms_97[4][10] = {
-  {1.000, 1.965, 4.177, 8.403, 16.90, 33.84, 67.69, 135.3, 270.6, 540.9},
-  {2.022, 3.989, 8.355, 17.04, 34.27, 68.63, 137.3, 274.6, 549.0},
-  {2.022, 3.989, 8.355, 17.04, 34.27, 68.63, 137.3, 274.6, 549.0},
-  {2.080, 3.865, 8.307, 17.18, 34.71, 69.59, 139.3, 278.6, 557.2}
-};
 
-int floorlog2(int a)
-{
-  int l;
-  for (l = 0; a > 1; l++) {
-    a >>= 1;
-  }
-  return l;
-}
 
-void encode_stepsize(int stepsize, int numbps, int *expn, int *mant)
-{
-  int p, n;
-  p = floorlog2(stepsize) - 13;
-  n = 11 - floorlog2(stepsize);
-  *mant = (n < 0 ? stepsize >> -n : stepsize << n) & 0x7ff;
-  *expn = numbps - p;
-}
-
-void calc_explicit_stepsizes(j2k_tccp_t * tccp, int prec)
-{
-  int numbands, bandno;
-  numbands = 3 * tccp->numresolutions - 2;
-  for (bandno = 0; bandno < numbands; bandno++) {
-    double stepsize;
-    
-    int resno, level, orient, gain;
-    resno = bandno == 0 ? 0 : (bandno - 1) / 3 + 1;
-    orient = bandno == 0 ? 0 : (bandno - 1) % 3 + 1;
-    level = tccp->numresolutions - 1 - resno;
-    gain =
-      tccp->qmfbid == 0 ? 0 : (orient ==
-      0 ? 0 : (orient == 1
-      || orient == 2 ? 1 : 2));
-    if (tccp->qntsty == J2K_CCP_QNTSTY_NOQNT) {
-      stepsize = 1.0;
-    } else {
-      double norm = dwt_norms_97[orient][level];
-      stepsize = (1 << (gain + 1)) / norm;
-    }
-    encode_stepsize((int) floor(stepsize * 8192.0), prec + gain,
-		    &tccp->stepsizes[bandno].expn,
-		    &tccp->stepsizes[bandno].mant);
-  }
-}
 
 int main(int argc, char **argv)
 {
-  int NumResolution, numD_min;	/*   NumResolution : number of resolution                     */
-  int Tile_arg;			/*   Tile_arg = 0 (not in argument) ou = 1 (in argument)      */
-  int CSty;			/*   CSty : coding style                                      */
-  int Prog_order;		/*   progression order (default LRCP)                         */
-  char progression[4];
-  int numpocs, numpocs_tile;	/*   Number of progression order change (POC) default 0       */
-  int prcw_init[J2K_MAXRLVLS];	/*   Initialisation Precinct width                            */
-  int prch_init[J2K_MAXRLVLS];	/*   Initialisation Precinct height                           */
-  //int prcw_init, prch_init;                     /*   Initialisation precincts' size                           */
-  int cblockw_init, cblockh_init;	/*   Initialisation codeblocks' size                          */
-  int mode, value;		/*   Mode switch (cblk_style)                                 */
-  int subsampling_dx, subsampling_dy;	/* subsampling value for dx and dy                    */
-  int ROI_compno, ROI_shift;	/*   region of interrest                                      */
-  int Dim[2];			/*   portion of the image coded                               */
-  int TX0, TY0;			/*   tile off-set                                             */
-  mj2_movie_t movie;
-  j2k_cp_t cp, cp_init;		/*   cp_init is used to initialise in multiple tiles          */
-  j2k_tcp_t *tcp, *tcp_init;	/*   tcp_init is used to initialise in multiple tile          */
-  j2k_poc_t POC[32];		/*   POC : used in case of Progression order change           */
-  j2k_poc_t *tcp_poc;
-  j2k_tccp_t *tccp;
-  int i, tileno, l, j;
-  char *infile = 0;
-  char *outfile = 0;
-  char *index = 0;
+  mj2_cparameters_t mj2_parameters;  /* MJ2 compression parameters */
+  opj_cparameters_t *j2k_parameters;  /* J2K compression parameters */
+  opj_event_mgr_t event_mgr;    /* event manager */
+  opj_cio_t *cio;
+  char value;
+  opj_mj2_t *movie;
+  opj_image_t *img;
+  int i, j;
   char *s, S1, S2, S3;
   char *buf;
-  int ir = 0;
-  int res_spec = 0;		/*   For various precinct sizes specification                 */
-  char sep;
-  int w;			/*   Width of YUV file                                        */
-  int h;			/*   Height of YUV file                                       */
-  int CbCr_subsampling_dx;	/*   Sample rate of YUV 4:4:4 4:2:2 or 4:2:0                  */
-  int CbCr_subsampling_dy;	/*   Sample rate of YUV 4:4:4 4:2:2 or 4:2:0                  */
-  int frame_rate;		/*   Video Frame Rate                                         */
-  int numcomps;			/*   In YUV files, numcomps always considered as 3            */
-  int prec;			/*   In YUV files, precision always considered as 8           */
-  int x1, y1,  len, jp2c_initpos, m, k, pos;
+  int x1, y1,  len;
   long mdat_initpos, offset;
-  FILE *mj2file, *yuvfile;
-  unsigned int sampleno;
-  j2k_image_t img;
-  
+  FILE *mj2file;
+  int sampleno;
+  opj_cinfo_t* cinfo;
+  bool bSuccess;
+  int numframes;
+  double total_time = 0;
+
   /* default value */
   /* ------------- */
-  NumResolution = 6;
-  CSty = 0;
-  cblockw_init = 64;
-  cblockh_init = 64;
-  cp.tw = 1;
-  cp.th = 1;
-  cp.index_on = 0;
-  Prog_order = 0;
-  numpocs = 0;
-  mode = 0;
-  subsampling_dx = 1;
-  subsampling_dy = 1;
-  ROI_compno = -1;		/* no ROI */
-  ROI_shift = 0;
-  Dim[0] = 0;
-  Dim[1] = 0;
-  TX0 = 0;
-  TY0 = 0;
-  cp.comment = NULL;
-  cp.disto_alloc = 0;
-  cp.fixed_alloc = 0;
-  cp.fixed_quality = 0;		//add fixed_quality
-  w = 352;			// CIF default value
-  h = 288;			// CIF default value
-  CbCr_subsampling_dx = 2;	// CIF default value
-  CbCr_subsampling_dy = 2;	// CIF default value
-  frame_rate = 25;
-  
-  
-  Tile_arg = 0;
-  cp_init.tcps = (j2k_tcp_t *) malloc(sizeof(j2k_tcp_t));	/* initialisation if only one tile */
-  tcp_init = &cp_init.tcps[0];
-  tcp_init->numlayers = 0;
-  
-  cp.intermed_file = 0;		// Don't store each tile in a file during processing 
-  
+  mj2_parameters.Dim[0] = 0;
+  mj2_parameters.Dim[1] = 0;
+  mj2_parameters.w = 352;      // CIF default value
+  mj2_parameters.h = 288;      // CIF default value
+  mj2_parameters.CbCr_subsampling_dx = 2;  // CIF default value
+  mj2_parameters.CbCr_subsampling_dy = 2;  // CIF default value
+  mj2_parameters.frame_rate = 25;
+  /*
+  configure the event callbacks (not required)
+  setting of each callback is optionnal
+  */
+  memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+  event_mgr.error_handler = error_callback;
+  event_mgr.warning_handler = warning_callback;
+  event_mgr.info_handler = NULL;
+
+  /* set J2K encoding parameters to default values */
+  opj_set_default_encoder_parameters(&mj2_parameters.j2k_parameters);
+  j2k_parameters = &mj2_parameters.j2k_parameters;
+
+  /* Create comment for codestream */
+  if(j2k_parameters->cp_comment == NULL) {
+    const char comment[] = "Created by OpenJPEG version ";
+    const size_t clen = strlen(comment);
+    const char *version = opj_version();
+    j2k_parameters->cp_comment = (char*)malloc(clen+strlen(version)+1);
+    sprintf(j2k_parameters->cp_comment,"%s%s", comment, version);
+  }
+
+  mj2_parameters.decod_format = 0;
+  mj2_parameters.cod_format = 0;
+
   while (1) {
     int c = getopt(argc, argv,
-      "i:o:r:q:f:t:n:c:b:x:p:s:d:h:P:S:E:M:R:T:C:I:W:F:");
+      "i:o:r:q:f:t:n:c:b:p:s:d:h P:S:E:M:R:T:C:I:W:F:");
     if (c == -1)
       break;
     switch (c) {
-    case 'i':			/* IN fill */
-      infile = optarg;
-      s = optarg;
-      while (*s) {
-	s++;
+    case 'i':      /* IN fill */
+      {
+        char *infile = optarg;
+        s = optarg;
+        while (*s) {
+          s++;
+        }
+        s--;
+        S3 = *s;
+        s--;
+        S2 = *s;
+        s--;
+        S1 = *s;
+
+        if ((S1 == 'y' && S2 == 'u' && S3 == 'v')
+          || (S1 == 'Y' && S2 == 'U' && S3 == 'V')) {
+          mj2_parameters.decod_format = YUV_DFMT;
+        }
+        else {
+          fprintf(stderr,
+            "!! Unrecognized format for infile : %c%c%c [accept only *.yuv] !!\n\n",
+            S1, S2, S3);
+          return 1;
+        }
+        strncpy(mj2_parameters.infile, infile, sizeof(mj2_parameters.infile)-1);
       }
-      s--;
-      S3 = *s;
-      s--;
-      S2 = *s;
-      s--;
-      S1 = *s;
-      
-      if ((S1 == 'y' && S2 == 'u' && S3 == 'v')
-	|| (S1 == 'Y' && S2 == 'U' && S3 == 'V')) {
-	cp.decod_format = YUV_DFMT;
-	break;
-      }
-      fprintf(stderr,
-	"!! Unrecognized format for infile : %c%c%c [accept only *.yuv] !!\n\n",
-	S1, S2, S3);
-      return 1;
       break;
       /* ----------------------------------------------------- */
-    case 'o':			/* OUT fill */
-      outfile = optarg;
-      while (*outfile) {
-	outfile++;
+    case 'o':      /* OUT fill */
+      {
+        char *outfile = optarg;
+        while (*outfile) {
+          outfile++;
+        }
+        outfile--;
+        S3 = *outfile;
+        outfile--;
+        S2 = *outfile;
+        outfile--;
+        S1 = *outfile;
+
+        outfile = optarg;
+
+        if ((S1 == 'm' && S2 == 'j' && S3 == '2')
+          || (S1 == 'M' && S2 == 'J' && S3 == '2'))
+          mj2_parameters.cod_format = MJ2_CFMT;
+        else {
+          fprintf(stderr,
+            "Unknown output format image *.%c%c%c [only *.mj2]!! \n",
+            S1, S2, S3);
+          return 1;
+        }
+        strncpy(mj2_parameters.outfile, outfile, sizeof(mj2_parameters.outfile)-1);
       }
-      outfile--;
-      S3 = *outfile;
-      outfile--;
-      S2 = *outfile;
-      outfile--;
-      S1 = *outfile;
-      
-      outfile = optarg;
-      
-      if ((S1 == 'm' && S2 == 'j' && S3 == '2')
-	|| (S1 == 'M' && S2 == 'J' && S3 == '2'))
-	cp.cod_format = MJ2_CFMT;
-      else {
-	fprintf(stderr,
-	  "Unknown output format image *.%c%c%c [only *.mj2]!! \n",
-	  S1, S2, S3);
-	return 1;
-      }
-      
-      
-      
       break;
       /* ----------------------------------------------------- */
-    case 'r':			/* rates rates/distorsion */
-      s = optarg;
-      while (sscanf(s, "%d", &tcp_init->rates[tcp_init->numlayers])
-	== 1) {
-	tcp_init->numlayers++;
-	while (*s && *s != ',') {
-	  s++;
-	}
-	if (!*s)
-	  break;
-	s++;
+    case 'r':      /* rates rates/distorsion */
+      {
+        float rate;
+        s = optarg;
+        while (sscanf(s, "%f", &rate) == 1) {
+          j2k_parameters->tcp_rates[j2k_parameters->tcp_numlayers] = rate * 2;
+          j2k_parameters->tcp_numlayers++;
+          while (*s && *s != ',') {
+            s++;
+          }
+          if (!*s)
+            break;
+          s++;
+        }
+        j2k_parameters->cp_disto_alloc = 1;
       }
-      cp.disto_alloc = 1;
-      cp.matrice = NULL;
       break;
       /* ----------------------------------------------------- */
-    case 'q':			/* add fixed_quality */
+    case 'q':      /* add fixed_quality */
       s = optarg;
-      while (sscanf
-	(s, "%f", &tcp_init->distoratio[tcp_init->numlayers]) == 1) {
-	tcp_init->numlayers++;
-	while (*s && *s != ',') {
-	  s++;
-	}
-	if (!*s)
-	  break;
-	s++;
+      while (sscanf(s, "%f", &j2k_parameters->tcp_distoratio[j2k_parameters->tcp_numlayers]) == 1) {
+        j2k_parameters->tcp_numlayers++;
+        while (*s && *s != ',') {
+          s++;
+        }
+        if (!*s)
+          break;
+        s++;
       }
-      cp.fixed_quality = 1;
-      cp.matrice = NULL;
+      j2k_parameters->cp_fixed_quality = 1;
       break;
       /* dda */
       /* ----------------------------------------------------- */
-    case 'f':			/* mod fixed_quality (before : -q) */
-      s = optarg;
-      sscanf(s, "%d", &tcp_init->numlayers);
-      s++;
-      if (tcp_init->numlayers > 9)
-	s++;
-      cp.matrice =
-	(int *) malloc(tcp_init->numlayers * NumResolution * 3 *
-	sizeof(int));
-      s = s + 2;
-      for (i = 0; i < tcp_init->numlayers; i++) {
-	tcp_init->rates[i] = 1;
-	sscanf(s, "%d,", &cp.matrice[i * NumResolution * 3]);
-	s += 2;
-	if (cp.matrice[i * NumResolution * 3] > 9)
-	  s++;
-	cp.matrice[i * NumResolution * 3 + 1] = 0;
-	cp.matrice[i * NumResolution * 3 + 2] = 0;
-	for (j = 1; j < NumResolution; j++) {
-	  sscanf(s, "%d,%d,%d",
-	    &cp.matrice[i * NumResolution * 3 + j * 3 + 0],
-	    &cp.matrice[i * NumResolution * 3 + j * 3 + 1],
-	    &cp.matrice[i * NumResolution * 3 + j * 3 + 2]);
-	  s += 6;
-	  if (cp.matrice[i * NumResolution * 3 + j * 3] > 9)
-	    s++;
-	  if (cp.matrice[i * NumResolution * 3 + j * 3 + 1] > 9)
-	    s++;
-	  if (cp.matrice[i * NumResolution * 3 + j * 3 + 2] > 9)
-	    s++;
-	}
-	if (i < tcp_init->numlayers - 1)
-	  s++;
-      }
-      cp.fixed_alloc = 1;
-      break;
-      /* ----------------------------------------------------- */
-    case 't':			/* tiles */
-      sscanf(optarg, "%d,%d", &cp.tdx, &cp.tdy);
-      Tile_arg = 1;
-      break;
-      /* ----------------------------------------------------- */
-    case 'n':			/* resolution */
-      sscanf(optarg, "%d", &NumResolution);
-      break;
-      /* ----------------------------------------------------- */
-    case 'c':			/* precinct dimension */
-      s = optarg;
-      do {
-	sep = 0;
-	sscanf(s, "[%d,%d]%c", &prcw_init[res_spec],
-	  &prch_init[res_spec], &sep);
-	CSty |= 0x01;
-	res_spec++;
-	s = strpbrk(s, "]") + 2;
-      } while (sep == ',');
-      break;
-      /* ----------------------------------------------------- */
-    case 'b':			/* code-block dimension */
-      sscanf(optarg, "%d,%d", &cblockw_init, &cblockh_init);
-      if (cblockw_init * cblockh_init > 4096 || cblockw_init > 1024
-	|| cblockw_init < 4 || cblockh_init > 1024 || cblockh_init < 4) {
-	fprintf(stderr,
-	  "!! Size of code_block error (option -b) !!\n\nRestriction :\n    * width*height<=4096\n    * 4<=width,height<= 1024\n\n");
-	return 1;
+    case 'f':      /* mod fixed_quality (before : -q) */
+      {
+        int *row = NULL, *col = NULL;
+        int numlayers = 0, numresolution = 0, matrix_width = 0;
+
+        s = optarg;
+        sscanf(s, "%d", &numlayers);
+        s++;
+        if (numlayers > 9)
+          s++;
+
+        j2k_parameters->tcp_numlayers = numlayers;
+        numresolution = j2k_parameters->numresolution;
+        matrix_width = numresolution * 3;
+        j2k_parameters->cp_matrice = (int *) malloc(numlayers * matrix_width * sizeof(int));
+        s = s + 2;
+
+        for (i = 0; i < numlayers; i++) {
+          row = &j2k_parameters->cp_matrice[i * matrix_width];
+          col = row;
+          j2k_parameters->tcp_rates[i] = 1;
+          sscanf(s, "%d,", &col[0]);
+          s += 2;
+          if (col[0] > 9)
+            s++;
+          col[1] = 0;
+          col[2] = 0;
+          for (j = 1; j < numresolution; j++) {
+            col += 3;
+            sscanf(s, "%d,%d,%d", &col[0], &col[1], &col[2]);
+            s += 6;
+            if (col[0] > 9)
+              s++;
+            if (col[1] > 9)
+              s++;
+            if (col[2] > 9)
+              s++;
+          }
+          if (i < numlayers - 1)
+            s++;
+        }
+        j2k_parameters->cp_fixed_alloc = 1;
       }
       break;
       /* ----------------------------------------------------- */
-    case 'x':			/* creation of index file */
-      index = optarg;
-      cp.index_on = 1;
+    case 't':      /* tiles */
+      sscanf(optarg, "%d,%d", &j2k_parameters->cp_tdx, &j2k_parameters->cp_tdy);
+      j2k_parameters->tile_size_on = true;
       break;
       /* ----------------------------------------------------- */
-    case 'p':			/* progression order */
-      s = optarg;
-      for (i = 0; i < 4; i++) {
-	progression[i] = *s;
-	s++;
+    case 'n':      /* resolution */
+      sscanf(optarg, "%d", &j2k_parameters->numresolution);
+      break;
+      /* ----------------------------------------------------- */
+    case 'c':      /* precinct dimension */
+      {
+        char sep;
+        int res_spec = 0;
+
+        char *s = optarg;
+        do {
+          sep = 0;
+          sscanf(s, "[%d,%d]%c", &j2k_parameters->prcw_init[res_spec],
+                                 &j2k_parameters->prch_init[res_spec], &sep);
+          j2k_parameters->csty |= 0x01;
+          res_spec++;
+          s = strpbrk(s, "]") + 2;
+        }
+        while (sep == ',');
+        j2k_parameters->res_spec = res_spec;
       }
-      Prog_order = give_progression(progression);
-      
-      if (Prog_order == -1) {
-	fprintf(stderr,
-	  "Unrecognized progression order [LRCP, RLCP, RPCL, PCRL, CPRL] !!\n");
-	return 1;
+      break;
+
+      /* ----------------------------------------------------- */
+    case 'b':      /* code-block dimension */
+      {
+        int cblockw_init = 0, cblockh_init = 0;
+        sscanf(optarg, "%d,%d", &cblockw_init, &cblockh_init);
+        if (cblockw_init * cblockh_init > 4096 || cblockw_init > 1024
+          || cblockw_init < 4 || cblockh_init > 1024 || cblockh_init < 4) {
+          fprintf(stderr,
+            "!! Size of code_block error (option -b) !!\n\nRestriction :\n"
+            "    * width*height<=4096\n    * 4<=width,height<= 1024\n\n");
+          return 1;
+        }
+        j2k_parameters->cblockw_init = cblockw_init;
+        j2k_parameters->cblockh_init = cblockh_init;
       }
       break;
       /* ----------------------------------------------------- */
-    case 's':			/* subsampling factor */
-      if (sscanf(optarg, "%d,%d", &subsampling_dx, &subsampling_dy)
-	!= 2) {
-	fprintf(stderr,
-	  "'-s' sub-sampling argument error !  [-s dx,dy]\n");
-	return 1;
+    case 'p':      /* progression order */
+      {
+        char progression[4];
+
+        strncpy(progression, optarg, 4);
+        j2k_parameters->prog_order = give_progression(progression);
+        if (j2k_parameters->prog_order == -1) {
+          fprintf(stderr, "Unrecognized progression order "
+            "[LRCP, RLCP, RPCL, PCRL, CPRL] !!\n");
+          return 1;
+        }
       }
       break;
       /* ----------------------------------------------------- */
-    case 'd':			/* coordonnate of the reference grid */
-      if (sscanf(optarg, "%d,%d", &Dim[0], &Dim[1]) != 2) {
-	fprintf(stderr,
-	  "-d 'coordonnate of the reference grid' argument error !! [-d x0,y0]\n");
-	return 1;
+    case 's':      /* subsampling factor */
+      {
+        if (sscanf(optarg, "%d,%d", &j2k_parameters->subsampling_dx,
+                                    &j2k_parameters->subsampling_dy) != 2) {
+          fprintf(stderr,  "'-s' sub-sampling argument error !  [-s dx,dy]\n");
+          return 1;
+        }
       }
       break;
       /* ----------------------------------------------------- */
-    case 'h':			/* Display an help description */
+    case 'd':      /* coordonnate of the reference grid */
+      {
+        if (sscanf(optarg, "%d,%d", &j2k_parameters->image_offset_x0,
+                                    &j2k_parameters->image_offset_y0) != 2) {
+          fprintf(stderr,  "-d 'coordonnate of the reference grid' argument "
+            "error !! [-d x0,y0]\n");
+          return 1;
+        }
+      }
+      break;
+      /* ----------------------------------------------------- */
+    case 'h':      /* Display an help description */
       help_display();
       return 0;
       break;
       /* ----------------------------------------------------- */
-    case 'P':			/* POC */
-      fprintf(stderr, "/----------------------------------\\\n");
-      fprintf(stderr, "|  POC option not fully tested !!  |\n");
-      fprintf(stderr, "\\----------------------------------/\n");
-      
-      s = optarg;
-      while (sscanf(s, "T%d=%d,%d,%d,%d,%d,%s", &POC[numpocs].tile,
-	&POC[numpocs].resno0, &POC[numpocs].compno0,
-	&POC[numpocs].layno1, &POC[numpocs].resno1,
-	&POC[numpocs].compno1, POC[numpocs].progorder) == 7) {
-	POC[numpocs].prg = give_progression(POC[numpocs].progorder);
-	/* POC[numpocs].tile; */
-	numpocs++;
-	while (*s && *s != '/') {
-	  s++;
-	}
-	if (!*s)
-	  break;
-	s++;
+    case 'P':      /* POC */
+      {
+        int numpocs = 0;    /* number of progression order change (POC) default 0 */
+        opj_poc_t *POC = NULL;  /* POC : used in case of Progression order change */
+
+        char *s = optarg;
+        POC = j2k_parameters->POC;
+
+        while (sscanf(s, "T%d=%d,%d,%d,%d,%d,%4s", &POC[numpocs].tile,
+          &POC[numpocs].resno0, &POC[numpocs].compno0,
+          &POC[numpocs].layno1, &POC[numpocs].resno1,
+          &POC[numpocs].compno1, &POC[numpocs].progorder) == 7) {
+          POC[numpocs].prg1 = give_progression(POC[numpocs].progorder);
+          numpocs++;
+          while (*s && *s != '/') {
+            s++;
+          }
+          if (!*s) {
+            break;
+          }
+          s++;
+        }
+        j2k_parameters->numpocs = numpocs;
       }
       break;
       /* ------------------------------------------------------ */
-    case 'S':			/* SOP marker */
-      CSty |= 0x02;
+    case 'S':      /* SOP marker */
+      j2k_parameters->csty |= 0x02;
       break;
       /* ------------------------------------------------------ */
-    case 'E':			/* EPH marker */
-      CSty |= 0x04;
+    case 'E':      /* EPH marker */
+      j2k_parameters->csty |= 0x04;
       break;
       /* ------------------------------------------------------ */
-    case 'M':			/* Mode switch pas tous au point !! */
+    case 'M':      /* Mode switch pas tous au point !! */
       if (sscanf(optarg, "%d", &value) == 1) {
-	for (i = 0; i <= 5; i++) {
-	  int cache = value & (1 << i);
-	  if (cache)
-	    mode |= (1 << i);
-	}
+        for (i = 0; i <= 5; i++) {
+          int cache = value & (1 << i);
+          if (cache)
+            j2k_parameters->mode |= (1 << i);
+        }
       }
       break;
       /* ------------------------------------------------------ */
-    case 'R':			/* ROI */
-      if (sscanf(optarg, "OI:c=%d,U=%d", &ROI_compno, &ROI_shift) != 2) {
-	fprintf(stderr, "ROI error !! [-ROI:c='compno',U='shift']\n");
-	return 1;
+    case 'R':      /* ROI */
+      {
+        if (sscanf(optarg, "OI:c=%d,U=%d", &j2k_parameters->roi_compno,
+                                           &j2k_parameters->roi_shift) != 2) {
+          fprintf(stderr, "ROI error !! [-ROI:c='compno',U='shift']\n");
+          return 1;
+        }
       }
       break;
       /* ------------------------------------------------------ */
-    case 'T':			/* Tile offset */
-      if (sscanf(optarg, "%d,%d", &TX0, &TY0) != 2) {
-	fprintf(stderr, "-T 'tile offset' argument error !! [-T X0,Y0]");
-	return 1;
+    case 'T':      /* Tile offset */
+      {
+        if (sscanf(optarg, "%d,%d", &j2k_parameters->cp_tx0, &j2k_parameters->cp_ty0) != 2) {
+          fprintf(stderr, "-T 'tile offset' argument error !! [-T X0,Y0]");
+          return 1;
+        }
       }
       break;
       /* ------------------------------------------------------ */
-    case 'C':			/* Add a comment */
-      cp.comment = optarg;
+    case 'C':      /* Add a comment */
+      {
+        j2k_parameters->cp_comment = (char*)malloc(strlen(optarg) + 1);
+        if(j2k_parameters->cp_comment) {
+          strcpy(j2k_parameters->cp_comment, optarg);
+        }
+      }
       break;
       /* ------------------------------------------------------ */
-    case 'I':			/* reversible or not */
-      ir = 1;
+    case 'I':      /* reversible or not */
+      {
+        j2k_parameters->irreversible = 1;
+      }
       break;
       /* ------------------------------------------------------ */
-    case 'W':			/* Width and Height and Cb and Cr subsampling in case of YUV format files */
+    case 'W':      /* Width and Height and Cb and Cr subsampling in case of YUV format files */
       if (sscanf
-	(optarg, "%d,%d,%d,%d", &w, &h, &CbCr_subsampling_dx,
-	&CbCr_subsampling_dy) != 4) {
-	fprintf(stderr, "-W argument error");
-	return 1;
+        (optarg, "%d,%d,%d,%d", &mj2_parameters.w, &mj2_parameters.h, &mj2_parameters.CbCr_subsampling_dx,
+        &mj2_parameters.CbCr_subsampling_dy) != 4) {
+        fprintf(stderr, "-W argument error");
+        return 1;
       }
       break;
       /* ------------------------------------------------------ */
-    case 'F':			/* Video frame rate */
-      if (sscanf(optarg, "%d", &frame_rate) != 1) {
-	fprintf(stderr, "-F argument error");
-	return 1;
+    case 'F':      /* Video frame rate */
+      if (sscanf(optarg, "%d", &mj2_parameters.frame_rate) != 1) {
+        fprintf(stderr, "-F argument error");
+        return 1;
       }
       break;
       /* ------------------------------------------------------ */
@@ -634,363 +606,200 @@ int main(int argc, char **argv)
       return 1;
     }
   }
-  
-  cp.tx0 = TX0;
-  cp.ty0 = TY0;
-  
+
   /* Error messages */
   /* -------------- */
-  if (!infile || !outfile) {
+  if (!mj2_parameters.cod_format || !mj2_parameters.decod_format) {
     fprintf(stderr,
       "Correct usage: mj2_encoder -i yuv-file -o mj2-file (+ options)\n");
     return 1;
   }
-  
-  if ((cp.disto_alloc || cp.fixed_alloc || cp.fixed_quality)
-    && (!(cp.disto_alloc ^ cp.fixed_alloc ^ cp.fixed_quality))) {
-    fprintf(stderr,
-      "Error: options -r -q and -f can not be used together !!\n");
+
+  if ((j2k_parameters->cp_disto_alloc || j2k_parameters->cp_fixed_alloc || j2k_parameters->cp_fixed_quality)
+    && (!(j2k_parameters->cp_disto_alloc ^ j2k_parameters->cp_fixed_alloc ^ j2k_parameters->cp_fixed_quality))) {
+    fprintf(stderr, "Error: options -r -q and -f cannot be used together !!\n");
     return 1;
-  }				// mod fixed_quality
-  
+  }        /* mod fixed_quality */
+
   /* if no rate entered, lossless by default */
-  if (tcp_init->numlayers == 0) {
-    tcp_init->rates[tcp_init->numlayers] = 0;   //MOD antonin : losslessbug
-    tcp_init->numlayers++;
-    cp.disto_alloc = 1;
+  if (j2k_parameters->tcp_numlayers == 0) {
+    j2k_parameters->tcp_rates[0] = 0;  /* MOD antonin : losslessbug */
+    j2k_parameters->tcp_numlayers++;
+    j2k_parameters->cp_disto_alloc = 1;
   }
-  
-  if (TX0 > Dim[0] || TY0 > Dim[1]) {
+
+  if((j2k_parameters->cp_tx0 > j2k_parameters->image_offset_x0) || (j2k_parameters->cp_ty0 > j2k_parameters->image_offset_y0)) {
     fprintf(stderr,
       "Error: Tile offset dimension is unnappropriate --> TX0(%d)<=IMG_X0(%d) TYO(%d)<=IMG_Y0(%d) \n",
-      TX0, Dim[0], TY0, Dim[1]);
+      j2k_parameters->cp_tx0, j2k_parameters->image_offset_x0, j2k_parameters->cp_ty0, j2k_parameters->image_offset_y0);
     return 1;
   }
-  
-  for (i = 0; i < numpocs; i++) {
-    if (POC[i].prg == -1) {
+
+  for (i = 0; i < j2k_parameters->numpocs; i++) {
+    if (j2k_parameters->POC[i].prg == -1) {
       fprintf(stderr,
-	"Unrecognized progression order in option -P (POC n %d) [LRCP, RLCP, RPCL, PCRL, CPRL] !!\n",
-	i + 1);
+        "Unrecognized progression order in option -P (POC n %d) [LRCP, RLCP, RPCL, PCRL, CPRL] !!\n",
+        i + 1);
     }
   }
-  
+
+  if (j2k_parameters->cp_tdx > mj2_parameters.Dim[0] || j2k_parameters->cp_tdy > mj2_parameters.Dim[1]) {
+    fprintf(stderr,
+      "Error: Tile offset dimension is unnappropriate --> TX0(%d)<=IMG_X0(%d) TYO(%d)<=IMG_Y0(%d) \n",
+      j2k_parameters->cp_tdx, mj2_parameters.Dim[0], j2k_parameters->cp_tdy, mj2_parameters.Dim[1]);
+    return 1;
+  }
+
   /* to respect profile - 0 */
   /* ---------------------- */
-  numD_min = 0;
-  
-  x1 = !Dim[0] ? (w - 1) * subsampling_dx + 1 : Dim[0] + (w -
-    1) *
-    subsampling_dx + 1;
-  y1 = !Dim[1] ? (h - 1) * subsampling_dy + 1 : Dim[1] + (h -
-    1) *
-    subsampling_dy + 1;
-  
-  if (Tile_arg == 1) {
-    cp.tw = int_ceildiv(x1 - cp.tx0, cp.tdx);
-    cp.th = int_ceildiv(y1 - cp.ty0, cp.tdy);
-  } else {
-    cp.tdx = x1 - cp.tx0;
-    cp.tdy = y1 - cp.ty0;
-  }
-  
-  
-  /* Initialization for PPM marker */
-  cp.ppm = 0;
-  cp.ppm_data = NULL;
-  cp.ppm_previous = 0;
-  cp.ppm_store = 0;
-  
-  numcomps = 3;			/* Because YUV files only have 3 components */
-  
-  tcp_init->mct = 0;		/* No component transform needed */
-  
-  prec = 8;			/* Because in YUV files, components have 8-bit depth */
-  
-  /* Init the mutiple tiles */
-  /* ---------------------- */
-  cp.tcps = (j2k_tcp_t *) malloc(cp.tw * cp.th * sizeof(j2k_tcp_t));
-  
-  for (tileno = 0; tileno < cp.tw * cp.th; tileno++) {
-    tcp = &cp.tcps[tileno];
-    tcp->numlayers = tcp_init->numlayers;
-    for (j = 0; j < tcp->numlayers; j++) {
-      if (cp.fixed_quality)	// add fixed_quality
-	tcp->distoratio[j] = tcp_init->distoratio[j];
-      else
-	tcp->rates[j] = tcp_init->rates[j];
-    }
-    tcp->csty = CSty;
-    tcp->prg = Prog_order;
-    tcp->mct = tcp_init->mct;
-    tcp->ppt = 0;
-    tcp->ppt_data = NULL;
-    tcp->ppt_store = 0;
-    
-    numpocs_tile = 0;
-    tcp->POC = 0;
-    if (numpocs) {
-      /* intialisation of POC */
-      tcp->POC = 1;
-      for (i = 0; i < numpocs; i++) {
-	if (tileno == POC[i].tile - 1 || POC[i].tile == -1) {
-	  tcp_poc = &tcp->pocs[numpocs_tile];
-	  tcp_poc->resno0 = POC[numpocs_tile].resno0;
-	  tcp_poc->compno0 = POC[numpocs_tile].compno0;
-	  tcp_poc->layno1 = POC[numpocs_tile].layno1;
-	  tcp_poc->resno1 = POC[numpocs_tile].resno1;
-	  tcp_poc->compno1 = POC[numpocs_tile].compno1;
-	  tcp_poc->prg = POC[numpocs_tile].prg;
-	  tcp_poc->tile = POC[numpocs_tile].tile;
-	  numpocs_tile++;
-	}
-      }
-    }
-    tcp->numpocs = numpocs_tile;
-    tcp->tccps = (j2k_tccp_t *) malloc(numcomps * sizeof(j2k_tccp_t));
-    
-    for (i = 0; i < numcomps; i++) {
-      tccp = &tcp->tccps[i];
-      tccp->csty = CSty & 0x01;	/* 0 => one precinct || 1 => custom precinct  */
-      tccp->numresolutions = NumResolution;
-      tccp->cblkw = int_floorlog2(cblockw_init);
-      tccp->cblkh = int_floorlog2(cblockh_init);
-      tccp->cblksty = mode;
-      tccp->qmfbid = ir ? 0 : 1;
-      tccp->qntsty = ir ? J2K_CCP_QNTSTY_SEQNT : J2K_CCP_QNTSTY_NOQNT;
-      tccp->numgbits = 2;
-      if (i == ROI_compno)
-	tccp->roishift = ROI_shift;
-      else
-	tccp->roishift = 0;
-      if (CSty & J2K_CCP_CSTY_PRT) {
-	int p = 0;
-	for (j = tccp->numresolutions - 1; j >= 0; j--) {
-	  if (p < res_spec) {
-	    if (prcw_init[p] < 1)
-	      tccp->prcw[j] = 1;
-	    else
-	      tccp->prcw[j] = int_floorlog2(prcw_init[p]);
-	    
-	    if (prch_init[p] < 1)
-	      tccp->prch[j] = 1;
-	    else
-	      tccp->prch[j] = int_floorlog2(prch_init[p]);
-	  } else {
-	    int size_prcw, size_prch;
-	    size_prcw = prcw_init[res_spec - 1] >> (p - (res_spec - 1));
-	    size_prch = prch_init[res_spec - 1] >> (p - (res_spec - 1));
-	    if (size_prcw < 1)
-	      tccp->prcw[j] = 1;
-	    else
-	      tccp->prcw[j] = int_floorlog2(size_prcw);
-	    if (size_prch < 1)
-	      tccp->prch[j] = 1;
-	    else
-	      tccp->prch[j] = int_floorlog2(size_prch);
-	  }
-	  p++;
-	  /*printf("\nsize precinct pour level %d : %d,%d\n", j,
-	  tccp->prcw[j], tccp->prch[j]); */
-	}
-      } else {
-	for (j = 0; j < tccp->numresolutions; j++) {
-	  tccp->prcw[j] = 15;
-	  tccp->prch[j] = 15;
-	}
-      }
-      calc_explicit_stepsizes(tccp, prec);
-    }
-  }
-  
-  mj2file = fopen(outfile, "wb");
-  
+
+  x1 = !mj2_parameters.Dim[0] ? (mj2_parameters.w - 1) * j2k_parameters->subsampling_dx
+    + 1 : mj2_parameters.Dim[0] + (mj2_parameters.w - 1) * j2k_parameters->subsampling_dx + 1;
+  y1 = !mj2_parameters.Dim[1] ? (mj2_parameters.h - 1) * j2k_parameters->subsampling_dy
+    + 1 : mj2_parameters.Dim[1] + (mj2_parameters.h - 1) * j2k_parameters->subsampling_dy + 1;
+  mj2_parameters.numcomps = 3;      /* Because YUV files only have 3 components */
+  mj2_parameters.prec = 8;      /* Because in YUV files, components have 8-bit depth */
+
+  j2k_parameters->tcp_mct = 0;
+
+  mj2file = fopen(mj2_parameters.outfile, "wb");
+
   if (!mj2file) {
     fprintf(stderr, "failed to open %s for writing\n", argv[2]);
     return 1;
   }
-  
-  movie.tk = (mj2_tk_t *) malloc(sizeof(mj2_tk_t));
-  movie.num_vtk = 1;
-  movie.num_stk = 0;
-  movie.num_htk = 0;
-  
-  movie.tk[0].track_type = 0;	// Video Track
-  movie.tk[0].track_ID = 1;
-  movie.tk[0].Dim[0] = Dim[0];
-  movie.tk[0].Dim[1] = Dim[1];
-  movie.tk[0].w = w;
-  movie.tk[0].h = h;
-  movie.tk[0].CbCr_subsampling_dx = CbCr_subsampling_dx;
-  movie.tk[0].CbCr_subsampling_dy = CbCr_subsampling_dy;
-  movie.tk[0].sample_rate = frame_rate;
-  movie.tk[0].jp2_struct.numcomps = 3;	// NC  
-  jp2_init_stdjp2(&movie.tk[0].jp2_struct);
-  
-  movie.tk[0].jp2_struct.w = w;
-  movie.tk[0].jp2_struct.h = h;
-  movie.tk[0].jp2_struct.bpc = 7;  
-  movie.tk[0].jp2_struct.meth = 1;
-  movie.tk[0].jp2_struct.enumcs = 18;  // YUV
-  
-  
-  yuvfile = fopen(infile,"rb");
-  if (!yuvfile) {  
-    fprintf(stderr, "failed to open %s for reading\n",infile);
+
+  /* get a MJ2 decompressor handle */
+  cinfo = mj2_create_compress();
+  movie = cinfo->mj2_handle;
+
+  /* catch events using our callbacks and give a local context */
+  opj_set_event_mgr((opj_common_ptr)cinfo, &event_mgr, stderr);
+
+  /* setup encoder parameters */
+  mj2_setup_encoder(movie, &mj2_parameters);
+
+  movie->tk[0].num_samples = yuv_num_frames(&movie->tk[0],mj2_parameters.infile);
+  if (movie->tk[0].num_samples == -1) {
     return 1;
   }
-  
-  movie.tk[0].num_samples = yuv_num_frames(&movie.tk[0],yuvfile); 
-  if (!movie.tk[0].num_samples) {
-    fprintf(stderr,"Unable to count the number of frames in YUV input file\n");
-  }
-  
+
   // One sample per chunk
-  movie.tk[0].chunk = (mj2_chunk_t*) malloc(movie.tk[0].num_samples * sizeof(mj2_chunk_t));     
-  movie.tk[0].sample = (mj2_sample_t*) malloc(movie.tk[0].num_samples * sizeof(mj2_sample_t));
-  
-  if (mj2_init_stdmovie(&movie)) {
+  movie->tk[0].chunk = (mj2_chunk_t*) malloc(movie->tk[0].num_samples * sizeof(mj2_chunk_t));
+  movie->tk[0].sample = (mj2_sample_t*) malloc(movie->tk[0].num_samples * sizeof(mj2_sample_t));
+
+  if (mj2_init_stdmovie(movie)) {
     fprintf(stderr, "Error with movie initialization");
     return 1;
-  };    
-  
-  // Writing JP, FTYP and MDAT boxes 
+  };
+
+  // Writing JP, FTYP and MDAT boxes
   buf = (char*) malloc (300 * sizeof(char)); // Assuming that the JP and FTYP
   // boxes won't be longer than 300 bytes
-  cio_init(buf , 300);
-  mj2_write_jp();
-  mj2_write_ftyp(&movie);
-  mdat_initpos = cio_tell();
-  cio_skip(4);
-  cio_write(MJ2_MDAT, 4);	
-  fwrite(buf,cio_tell(),1,mj2file);
-  offset = cio_tell();
+  cio = opj_cio_open((opj_common_ptr)movie->cinfo, buf, 300);
+  mj2_write_jp(cio);
+  mj2_write_ftyp(movie, cio);
+  mdat_initpos = cio_tell(cio);
+  cio_skip(cio, 4);
+  cio_write(cio, MJ2_MDAT, 4);
+  fwrite(buf,cio_tell(cio),1,mj2file);
+  offset = cio_tell(cio);
+  opj_cio_close(cio);
   free(buf);
-  
-  for (i = 0; i < movie.num_stk + movie.num_htk + movie.num_vtk; i++) {
-    if (movie.tk[i].track_type != 0) {
+
+  for (i = 0; i < movie->num_stk + movie->num_htk + movie->num_vtk; i++) {
+    if (movie->tk[i].track_type != 0) {
       fprintf(stderr, "Unable to write sound or hint tracks\n");
     } else {
-      //j2k_cp_t cp_init;
       mj2_tk_t *tk;
-      
-      tk = &movie.tk[i];
-      
-      //tk->sample =
-	//(mj2_sample_t *) malloc(tk->num_samples * sizeof(mj2_sample_t));
+      int buflen = 0;
+
+      tk = &movie->tk[i];
       tk->num_chunks = tk->num_samples;
-      //tk->chunk =
-	//(mj2_chunk_t *) malloc(tk->num_chunks * sizeof(mj2_chunk_t));
-            
+      numframes = tk->num_samples;
+
       fprintf(stderr, "Video Track number %d\n", i + 1);
-      
-      // Copy the first tile coding parameters (tcp) to cp_init 
-      
-      //cp_init.tcps =
-	//(j2k_tcp_t *) malloc(cp.tw * cp.th * sizeof(j2k_tcp_t));
-      for (tileno = 0; tileno < cp.tw * cp.th; tileno++) {
-	for (l = 0; l < cp.tcps[tileno].numlayers; l++) {
-	  cp_init.tcps[tileno].rates[l] = cp.tcps[tileno].rates[l];
-	  //tileno = cp.tcps[tileno].rates[l];
-	}
+
+      img = mj2_image_create(tk, j2k_parameters);
+      buflen = 2 * (tk->w * tk->h * 8);
+      buf = (char *) malloc(buflen*sizeof(char));
+
+      for (sampleno = 0; sampleno < numframes; sampleno++) {
+        double init_time = opj_clock();
+        double elapsed_time;
+        if (yuvtoimage(tk, img, sampleno, j2k_parameters, mj2_parameters.infile)) {
+          fprintf(stderr, "Error with frame number %d in YUV file\n", sampleno);
+          return 1;
+        }
+
+        /* setup the encoder parameters using the current image and user parameters */
+        opj_setup_encoder(cinfo, j2k_parameters, img);
+
+        cio = opj_cio_open((opj_common_ptr)movie->cinfo, buf, buflen);
+
+        cio_skip(cio, 4);
+        cio_write(cio, JP2_JP2C, 4);  // JP2C
+
+        /* encode the image */
+        bSuccess = opj_encode(cinfo, cio, img, NULL);
+        if (!bSuccess) {
+          opj_cio_close(cio);
+          fprintf(stderr, "failed to encode image\n");
+          return 1;
+        }
+
+        len = cio_tell(cio) - 8;
+        cio_seek(cio, 0);
+        cio_write(cio, len+8,4);
+        opj_cio_close(cio);
+        tk->sample[sampleno].sample_size = len+8;
+        tk->sample[sampleno].offset = offset;
+        tk->chunk[sampleno].offset = offset;  // There is one sample per chunk
+        fwrite(buf, 1, len+8, mj2file);
+        offset += len+8;
+        elapsed_time = opj_clock()-init_time;
+        fprintf(stderr, "Frame number %d/%d encoded in %.2f mseconds\n", sampleno + 1, numframes, elapsed_time*1000);
+        total_time += elapsed_time;
+
       }
-      
-      for (sampleno = 0; sampleno < tk->num_samples; sampleno++) {
-	buf = (char *) malloc(cp.tdx * cp.tdy * cp.th * cp.tw * 2);
-	cio_init(buf, cp.tdx * cp.tdy * cp.th * cp.tw * 2);
-	
-	fprintf(stderr, "Frame number %d/%d: ", sampleno + 1, tk->num_samples);
-	
-	
-	if (!yuvtoimage(yuvfile, tk, &img, sampleno, subsampling_dx, subsampling_dy)) {
-	  fprintf(stderr, "Error with frame number %d in YUV file\n", sampleno);
-	  return 1;
-	}
-	
-	jp2c_initpos = cio_tell();
-	cio_skip(4);
-	cio_write(JP2_JP2C, 4);	// JP2C
-	
-	len = j2k_encode(&img, &cp, buf, cp.tdx * cp.tdy * 2, index); 
-	if (len ==0) {
-	  fprintf(stderr,"Unable to encode image");
-	  return 1;
-	}
-	
-	cio_seek(jp2c_initpos);
-	cio_write(len+8,4);
-	
-	for (m = 0; m < img.numcomps; m++) {
-	  free(img.comps[m].data);	  
-	}
-	free(img.comps);
-	
-	tk->sample[sampleno].sample_size = len+8;
-	
-	tk->sample[sampleno].offset = offset;
-	tk->chunk[sampleno].offset = offset;	// There is one sample per chunk 
-	
-	fwrite(buf, 1, len+8, mj2file);
-	
-	offset += len+8;
-	
-	free(buf);
-	
-	// Copy the cp_init parameters to cp.tcps 
-	
-	for (tileno = 0; tileno < cp.tw * cp.th; tileno++) {
-	  for (k = 0; k < cp.tcps[tileno].numlayers; k++) {
-	    cp.tcps[tileno].rates[k] = cp_init.tcps[tileno].rates[k];
-	  }
-	}
-      }
+      /* free buffer data */
+      free(buf);
+      /* free image data */
+      opj_image_destroy(img);
     }
   }
-  
+
   fseek(mj2file, mdat_initpos, SEEK_SET);
 
   buf = (char*) malloc(4*sizeof(char));
-  
-  cio_init(buf, 4);	// Init a cio to write box length variable in a little endian way 
-  cio_write(offset - mdat_initpos, 4);
+
+  // Init a cio to write box length variable in a little endian way
+  cio = opj_cio_open(NULL, buf, 4);
+  cio_write(cio, offset - mdat_initpos, 4);
   fwrite(buf, 4, 1, mj2file);
   fseek(mj2file,0,SEEK_END);
   free(buf);
-  
-  // Writing MOOV box 
-  i=1;
-  buf = (char*) malloc (10000 * sizeof(char));
-  cio_init(buf , i*10000);
-  if (setjmp(j2k_error)) {
-    i++;
-    realloc(buf,i*10000* sizeof(char));
-    pos = cio_tell();
-    cio_init(buf , i*10000);
-    cio_seek(pos);
-  }
-  mj2_write_moov(&movie);
-  fwrite(buf,cio_tell(),1,mj2file);
-  
-  // Ending program 
-  mj2_memory_free(&movie);
-  free(cp_init.tcps);
-  if (tcp_init->numlayers > 9)
-    free(cp.matrice);
-  for (tileno = 0; tileno < cp.tw * cp.th; tileno++)
-    free(cp.tcps[tileno].tccps);
-  free(cp.tcps);  
-  fclose(mj2file);
-  free(buf);
-  remove("Compo0");
-  remove("Compo1");
-  remove("Compo2");
 
-  //MEMORY LEAK
-  #ifdef _DEBUG
-    _CrtDumpMemoryLeaks();
-  #endif
-  //MEM
-    
+  // Writing MOOV box
+  buf = (char*) malloc ((TEMP_BUF+numframes*20) * sizeof(char));
+  cio = opj_cio_open(movie->cinfo, buf, (TEMP_BUF+numframes*20));
+  mj2_write_moov(movie, cio);
+  fwrite(buf,cio_tell(cio),1,mj2file);
+  free(buf);
+
+  fprintf(stdout,"Total encoding time: %.2f s for %d frames (%.1f fps)\n", total_time, numframes, (float)numframes/total_time);
+
+  // Ending program
+
+  fclose(mj2file);
+  /* free remaining compression structures */
+  mj2_destroy_compress(movie);
+  free(cinfo);
+  /* free user parameters structure */
+  if(j2k_parameters->cp_comment) free(j2k_parameters->cp_comment);
+  if(j2k_parameters->cp_matrice) free(j2k_parameters->cp_matrice);
+  opj_cio_close(cio);
+
   return 0;
 }
 

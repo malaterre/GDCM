@@ -3,35 +3,48 @@
 /* Contributed to Open JPEG by Glenn Pearson, contract software developer, U.S. National Library of Medicine.
 
 The base code in this file was developed by the author as part of a video archiving
-project for the U.S. National Library of Medicine, Bethesda, MD. 
+project for the U.S. National Library of Medicine, Bethesda, MD.
 It is the policy of NLM (and U.S. government) to not assert copyright.
 
 A non-exclusive copy of this code has been contributed to the Open JPEG project.
 Except for copyright, inclusion of the code within Open JPEG for distribution and use
 can be bound by the Open JPEG open-source license and disclaimer, expressed elsewhere.
 */
-#include <stdio.h>
-#include <malloc.h>
-#include <setjmp.h>
 
+#include "opj_includes.h"
 #include "mj2.h"
-#include <openjpeg.h>
-
-//MEMORY LEAK
-#ifdef _DEBUG
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>  // Must be included first
-#include <crtdbg.h>
-#endif
-//MEM
 
 #include "mj2_to_metadata.h"
 #include <string.h>
-#ifndef DONT_HAVE_GETOPT
-#include <getopt.h>
-#else
 #include "compat/getopt.h"
-#endif
+
+/* -------------------------------------------------------------------------- */
+
+/**
+sample error callback expecting a FILE* client object
+*/
+void error_callback(const char *msg, void *client_data) {
+  FILE *stream = (FILE*)client_data;
+  fprintf(stream, "[ERROR] %s", msg);
+}
+/**
+sample warning callback expecting a FILE* client object
+*/
+void warning_callback(const char *msg, void *client_data) {
+  FILE *stream = (FILE*)client_data;
+  fprintf(stream, "[WARNING] %s", msg);
+}
+/**
+sample debug callback expecting a FILE* client object
+*/
+void info_callback(const char *msg, void *client_data) {
+  FILE *stream = (FILE*)client_data;
+  fprintf(stream, "[INFO] %s", msg);
+}
+
+/* -------------------------------------------------------------------------- */
+
+
 
 /* ------------- */
 
@@ -41,7 +54,7 @@ void help_display()
   fprintf(stdout,"                Help for the 'mj2_to_metadata' Program\n");
   fprintf(stdout,"                ======================================\n");
   fprintf(stdout,"The -h option displays this information on screen.\n\n");
-  
+
   fprintf(stdout,"mj2_to_metadata generates an XML file from a Motion JPEG 2000 file.\n");
   fprintf(stdout,"The generated XML shows the structural, but not (yet) curatorial,\n");
   fprintf(stdout,"metadata from the movie header and from the JPEG 2000 image and tile\n");
@@ -96,9 +109,12 @@ void help_display()
 
 int main(int argc, char *argv[]) {
 
+  opj_dinfo_t* dinfo;
+  opj_event_mgr_t event_mgr;    /* event manager */
+
   FILE *file, *xmlout;
 /*  char xmloutname[50]; */
-  mj2_movie_t movie;
+  opj_mj2_t *movie;
 
   char* infile = 0;
   char* outfile = 0;
@@ -110,19 +126,16 @@ int main(int argc, char *argv[]) {
   BOOL sampletables = FALSE;
   BOOL raw = TRUE;
   BOOL derived = TRUE;
-
-#ifndef NO_PACKETS_DECODING
-  fprintf(stdout,"WARNING:  For best performance, define NO_PACKETS_DECODING in preprocessing.\n");
-#endif
+  mj2_dparameters_t parameters;
 
   while (TRUE) {
-	/* ':' after letter means it takes an argument */
+  /* ':' after letter means it takes an argument */
     int c = getopt(argc, argv, "i:o:f:v:hntrd");
-	/* FUTURE:  Reserve 'p' for pruning file (which will probably make -t redundant) */
+  /* FUTURE:  Reserve 'p' for pruning file (which will probably make -t redundant) */
     if (c == -1)
       break;
     switch (c) {
-    case 'i':			/* IN file */
+    case 'i':      /* IN file */
       infile = optarg;
       s = optarg;
       while (*s) { s++; } /* Run to filename end */
@@ -132,7 +145,7 @@ int main(int argc, char *argv[]) {
       S2 = *s;
       s--;
       S1 = *s;
-      
+
       if ((S1 == 'm' && S2 == 'j' && S3 == '2')
       || (S1 == 'M' && S2 == 'J' && S3 == '2')) {
        break;
@@ -141,7 +154,7 @@ int main(int argc, char *argv[]) {
       return 1;
 
       /* ----------------------------------------------------- */
-    case 'o':			/* OUT file */
+    case 'o':      /* OUT file */
       outfile = optarg;
       while (*outfile) { outfile++; } /* Run to filename end */
       outfile--;
@@ -150,60 +163,60 @@ int main(int argc, char *argv[]) {
       S2 = *outfile;
       outfile--;
       S1 = *outfile;
-      
+
       outfile = optarg;
-      
+
       if ((S1 == 'x' && S2 == 'm' && S3 == 'l')
-	  || (S1 == 'X' && S2 == 'M' && S3 == 'L'))
+    || (S1 == 'X' && S2 == 'M' && S3 == 'L'))
         break;
-    
+
       fprintf(stderr,
-	  "Output file name must have .xml extension, not .%c%c%c\n", S1, S2, S3);
-	  return 1;
+    "Output file name must have .xml extension, not .%c%c%c\n", S1, S2, S3);
+    return 1;
 
       /* ----------------------------------------------------- */
-    case 'f':			/* Choose sample frame.  0 = none */
+    case 'f':      /* Choose sample frame.  0 = none */
       sscanf(optarg, "%u", &sampleframe);
       break;
 
       /* ----------------------------------------------------- */
-    case 'v':			/* Verification by DTD. */
+    case 'v':      /* Verification by DTD. */
       stringDTD = optarg;
-	  /* We will not insist upon last 3 chars being "dtd", since non-file
-	  access protocol may be used. */
-	  if(strchr(stringDTD,'"') != NULL) {
+    /* We will not insist upon last 3 chars being "dtd", since non-file
+    access protocol may be used. */
+    if(strchr(stringDTD,'"') != NULL) {
         fprintf(stderr, "-D's string must not contain any embedded double-quote characters.\n");
-	    return 1;
-	  }
+      return 1;
+    }
 
       if (strncmp(stringDTD,"PUBLIC ",7) == 0 || strncmp(stringDTD,"SYSTEM ",7) == 0)
         break;
-    
+
       fprintf(stderr, "-D's string must start with \"PUBLIC \" or \"SYSTEM \"\n");
-	  return 1;
+    return 1;
 
     /* ----------------------------------------------------- */
-    case 'n':			/* Suppress comments */
+    case 'n':      /* Suppress comments */
       notes = FALSE;
       break;
 
     /* ----------------------------------------------------- */
-    case 't':			/* Show sample size and chunk offset tables */
+    case 't':      /* Show sample size and chunk offset tables */
       sampletables = TRUE;
       break;
 
     /* ----------------------------------------------------- */
-    case 'h':			/* Display an help description */
+    case 'h':      /* Display an help description */
       help_display();
       return 0;
 
     /* ----------------------------------------------------- */
-    case 'r':			/* Suppress raw data */
+    case 'r':      /* Suppress raw data */
       raw = FALSE;
       break;
 
     /* ----------------------------------------------------- */
-    case 'd':			/* Suppress derived data */
+    case 'd':      /* Suppress derived data */
       derived = FALSE;
       break;
 
@@ -214,7 +227,7 @@ int main(int argc, char *argv[]) {
   } /* while */
 
   if(!raw && !derived)
-	  raw = TRUE; /* At least one of 'raw' and 'derived' must be true */
+    raw = TRUE; /* At least one of 'raw' and 'derived' must be true */
 
     /* Error messages */
   /* -------------- */
@@ -225,7 +238,7 @@ int main(int argc, char *argv[]) {
 
 /* was:
   if (argc != 3) {
-    printf("Bad syntax: Usage: MJ2_to_metadata inputfile.mj2 outputfile.xml\n"); 
+    printf("Bad syntax: Usage: MJ2_to_metadata inputfile.mj2 outputfile.xml\n");
     printf("Example: MJ2_to_metadata foreman.mj2 foreman.xml\n");
     return 1;
   }
@@ -235,9 +248,9 @@ int main(int argc, char *argv[]) {
   {
     infile++; /* There may be a leading blank if user put space after -i */
   }
-  
+
   file = fopen(infile, "rb"); /* was: argv[1] */
-  
+
   if (!file) {
     fprintf(stderr, "Failed to open %s for reading.\n", infile); /* was: argv[1] */
     return 1;
@@ -257,23 +270,41 @@ int main(int argc, char *argv[]) {
   }
   // Leave it open
 
-  if (mj2_read_struct(file, &movie)) // Creating the movie structure
+  /*
+  configure the event callbacks (not required)
+  setting of each callback is optionnal
+  */
+  memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+  event_mgr.error_handler = error_callback;
+  event_mgr.warning_handler = warning_callback;
+  event_mgr.info_handler = info_callback;
+
+  /* get a MJ2 decompressor handle */
+  dinfo = mj2_create_decompress();
+
+  /* catch events using our callbacks and give a local context */
+  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, stderr);
+
+  /* setup the decoder decoding parameters using user parameters */
+  movie = (opj_mj2_t*) dinfo->mj2_handle;
+  mj2_setup_decoder(dinfo->mj2_handle, &parameters);
+
+  if (mj2_read_struct(file, movie)) // Creating the movie structure
   {
     fclose(xmlout);
     return 1;
   }
 
   xml_write_init(notes, sampletables, raw, derived);
-  xml_write_struct(file, xmlout, &movie, sampleframe, stringDTD);
+  xml_write_struct(file, xmlout, movie, sampleframe, stringDTD, &event_mgr);
   fclose(xmlout);
 
-  mj2_memory_free(&movie);
+  fprintf(stderr,"Metadata correctly extracted to XML file \n");;
 
-  //MEMORY LEAK
-  #ifdef _DEBUG
-    _CrtDumpMemoryLeaks();
-  #endif
-  //MEM
+  /* free remaining structures */
+  if(dinfo) {
+    mj2_destroy_decompress((opj_mj2_t*)dinfo->mj2_handle);
+  }
 
   return 0;
 }
