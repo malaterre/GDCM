@@ -43,6 +43,10 @@ public:
   /// Split the SIEMENS MOSAIC image
   bool Split();
 
+  /// Compute the new dimensions according to private information
+  /// stored in the MOSAIC header.
+  bool ComputeMOSAICDimensions(unsigned int dims[3]);
+
   void SetImage(const Image& image);
   const Image &GetImage() const { return *I; }
   Image &GetImage() { return *I; }
