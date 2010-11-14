@@ -12,7 +12,7 @@
 #   set(CTEST_BUILD_NAME "Platform-Compiler")
 #   set(CTEST_BUILD_CONFIGURATION Debug)
 #   set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
-#   include(${CTEST_SCRIPT_DIRECTORY}/itk_common.cmake)
+#   include(${CTEST_SCRIPT_DIRECTORY}/gdcm_common.cmake)
 #
 # Then run a scheduled task (cron job) with a command line such as
 #
@@ -221,7 +221,7 @@ endif()
   set(CTEST_NIGHTLY_START_TIME "01:00:00 UTC")
   set(CTEST_DROP_METHOD "http")
   set(CTEST_DROP_SITE "www.cdash.org")
-  set(CTEST_DROP_LOCATION "/CDash/submit.php?project=Insight")
+  set(CTEST_DROP_LOCATION "/CDash/submit.php?project=GDCM")
   set(CTEST_DROP_SITE_CDASH TRUE)
 endif()
 
