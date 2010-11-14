@@ -69,11 +69,11 @@ public:
   /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
   /// rows and columns of the image in pixels (as opposed to actual distances).
   /// The output is {col , row}
-  static std::vector<unsigned int> GetDimensionsValue(const DataSet& ds);
+  static std::vector<unsigned int> GetDimensionsValue(const File& f);
 
   /// This function returns pixel information about an image from its dataset
   /// That includes samples per pixel and bit depth (in that order)
-  static PixelFormat GetPixelFormat(const DataSet& ds);
+  static PixelFormat GetPixelFormatValue(const File& f);
 
   /// Set/Get shift/scale from/to a file
   /// \warning this function reads/sets the Slope/Intercept in appropriate
@@ -109,9 +109,9 @@ public:
   //functions to get more information from a file
   //useful for the stream image reader, which fills in necessary image information
   //distinctly from the reader-style data input
-  static PhotometricInterpretation GetPhotometricInterpretation(File const& f);
+  static PhotometricInterpretation GetPhotometricInterpretationValue(File const& f);
   //returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
-  static unsigned int GetPlanarConfiguration(const DataSet& ds);
+  static unsigned int GetPlanarConfigurationValue(const File& f);
 
   //returns the lookup table of an image file
   static SmartPointer<LookupTable> GetLUT(File const& f);
