@@ -67,7 +67,7 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint
 uint32_t StreamImageReader::DefineProperBufferLength() const
 {
   if (mXMax < mXMin || mYMax < mYMin) return 0;
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile().GetDataSet());
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   return (mYMax - mYMin)*(mXMax - mXMin)*bytesPerPixel;
@@ -108,8 +108,8 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   //need to get the pixel size information
   //should that come from the header?
   //most likely  that's a tag in the header
-  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile().GetDataSet());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormat(mReader.GetFile().GetDataSet());
+  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile());
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
@@ -129,9 +129,11 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
     }
 
   theCodec.SetNeedByteSwap( needbyteswap );
-  theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile().GetDataSet()));
-  theCodec.SetPlanarConfiguration(ImageHelper::GetPlanarConfiguration(mReader.GetFile().GetDataSet()));
-  theCodec.SetPhotometricInterpretation(ImageHelper::GetPhotometricInterpretation(mReader.GetFile()));
+  theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile()));
+  theCodec.SetPlanarConfiguration(
+    ImageHelper::GetPlanarConfigurationValue(mReader.GetFile()));
+  theCodec.SetPhotometricInterpretation(
+    ImageHelper::GetPhotometricInterpretationValue(mReader.GetFile()));
   //how do I handle byte swapping here?  where is it set?
 
   //have to reset the stream to the proper position
@@ -146,11 +148,11 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   try {
     for (y = mYMin; y < mYMax; ++y){
       theStream->seekg(std::ios::beg);
-      theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*bytesPerPixel; 
+      theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*bytesPerPixel;
       theStream->seekg(theOffset);
       theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
   //now, convert that buffer.
-      if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel, 
+      if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel,
         tmpBuffer2, SubRowSize*bytesPerPixel)){
         delete [] tmpBuffer;
         delete [] tmpBuffer2;
@@ -181,7 +183,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
 }
 
 /// Set the spacing and dimension information for the set filename.
-/// returns false if the file is not initialized or not an image, 
+/// returns false if the file is not initialized or not an image,
 /// with the pixel 0x7fe0, 0x0010 tag.
 bool StreamImageReader::ReadImageInformation(){
   //read up to the point in the stream where the pixel information tag is
@@ -223,13 +225,17 @@ bool StreamImageReader::ReadImageInformation(){
   /// Returns the dataset read by ReadImageInformation
   /// Couple this with the ImageHelper to get statistics about the image,
   /// like pixel extent, to be able to initialize buffers for reading
-DataSet StreamImageReader::GetImageData() const{
-  if (mFileOffset > 0){
-    return mReader.GetFile().GetDataSet();
-  } else {
-    DataSet empty;
-    return empty;
-  }
+File const &StreamImageReader::GetFile() const
+{
+  if (mFileOffset > 0)
+    {
+    return mReader.GetFile();
+    }
+  else
+    {
+    assert(0);
+    return mReader.GetFile();
+    }
 }
 
 } // end namespace gdcm
