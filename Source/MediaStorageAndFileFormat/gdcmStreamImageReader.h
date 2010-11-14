@@ -35,7 +35,7 @@ class MediaStorage;
  * representation via an ITK streaming (ie, multithreaded) interface
  * Image is different from Pixmap has it has a position and a direction in
  * Space.
- * Currently, this class is threadsafe in that it can read a single extent 
+ * Currently, this class is threadsafe in that it can read a single extent
  * in a single thread.  Multiple versions can be used for multiple extents/threads.
  *
  * \see Image
@@ -53,10 +53,10 @@ public:
   /// to be able to get non-pixel image information.
   void SetFileName(const char* inFileName);
   void SetStream(std::istream& inStream);
-  
+
   /// Defines an image extent for the Read function.
   /// DICOM states that an image can have no more than 2^16 pixels per edge (as of 2009)
-  /// In this case, the pixel extents ignore the direction cosines entirely, and 
+  /// In this case, the pixel extents ignore the direction cosines entirely, and
   /// assumes that the origin of the image is at location 0,0 (regardless of the definition
   /// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
   /// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
@@ -65,7 +65,7 @@ public:
 
   /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
   /// The return amount is in bytes.  Call this function to determine the size of the char* buffer
-  /// that will need to be passed in to ReadImageSubregion().  
+  /// that will need to be passed in to ReadImageSubregion().
   /// If the return is 0, then that means that the pixel extent was not defined prior
   uint32_t DefineProperBufferLength() const;
 
@@ -79,14 +79,14 @@ public:
   bool Read(void* inReadBuffer, const std::size_t& inBufferLength);
 
   /// Set the spacing and dimension information for the set filename.
-  /// returns false if the file is not initialized or not an image, 
+  /// returns false if the file is not initialized or not an image,
   /// with the pixel 0x7fe0, 0x0010 tag.
   virtual bool ReadImageInformation();
 
   /// Returns the dataset read by ReadImageInformation
   /// Couple this with the ImageHelper to get statistics about the image,
   /// like pixel extent, to be able to initialize buffers for reading
-  DataSet GetImageData() const;
+  File const & GetFile() const;
 
 protected:
 
@@ -98,7 +98,7 @@ protected:
   std::streamoff mFileOffset; //the fileoffset for getting header information
   DataSet mHeaderInformation; //all the non-pixel information
 
-  //for thread safety, these should not be stored here, but should be used  
+  //for thread safety, these should not be stored here, but should be used
   //for every read subregion operation.
   uint16_t mXMin, mYMin, mXMax, mYMax;
 
