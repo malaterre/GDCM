@@ -1,6 +1,7 @@
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 # Defines the source code for the library
 SET(OPENJPEG_SRCS
+  tcd.c
   bio.c
   cio.c
   dwt.c
@@ -16,9 +17,33 @@ SET(OPENJPEG_SRCS
   pi.c
   raw.c
   t1.c
-  t2.c
-  tcd.c
   tgt.c
+  profile.c
+  invert.c
+  function_list.c
+  t2.c
+  bio.h
+  cio.h
+  dwt.h
+  event.h
+  image.h
+  j2k.h
+  j2k_lib.h
+  jp2.h
+  jpt.h
+  mct.h
+  mqc.h
+  openjpeg.h
+  pi.h
+  int.h
+  raw.h
+  t1.h
+  t2.h
+  tcd.h
+  tgt.h
+  profile.h
+  invert.h
+  function_list.h
 )
 
 # Pass proper definition to preprocessor to generate shared lib
@@ -30,27 +55,26 @@ IF(WIN32)
   ENDIF(BUILD_SHARED_LIBS)
 ENDIF(WIN32)
 
+IF(ENABLE_PROFILING)
+    ADD_DEFINITIONS(-D_PROFILE)
+ENDIF(ENABLE_PROFILING)
+
 # Create the library
 ADD_LIBRARY(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
-SET_TARGET_PROPERTIES(${OPENJPEG_LIBRARY_NAME} PROPERTIES ${OPENJPEG_LIBRARY_PROPERTIES})
+SET_TARGET_PROPERTIES(${OPENJPEG_LIBRARY_NAME} PROPERTIES
+	${OPENJPEG_LIBRARY_PROPERTIES})
 IF(UNIX)
-  TARGET_LINK_LIBRARIES(${OPENJPEG_LIBRARY_NAME} -lm)
+  TARGET_LINK_LIBRARIES(${OPENJPEG_LIBRARY_NAME} m)
 ENDIF(UNIX)
 
-# Install library
-IF(NOT OPENJPEG_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${OPENJPEG_LIBRARY_NAME}
-    EXPORT ${GDCM_TARGETS_NAME}
-    RUNTIME DESTINATION ${OPENJPEG_INSTALL_BIN_DIR} COMPONENT Applications
-    LIBRARY DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Libraries
-    ARCHIVE DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Development
-  ${CPACK_NAMELINK_TYPE}
-  )
-ENDIF(NOT OPENJPEG_INSTALL_NO_LIBRARIES)
 
-IF(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB header_files "*.h")
-  INSTALL(FILES ${header_files}
-    DESTINATION ${OPENJPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
-  )
-ENDIF(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+# Install library
+INSTALL(TARGETS ${OPENJPEG_LIBRARY_NAME}
+  EXPORT OpenJPEGTargets
+	DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Libraries
+)
+
+# Install includes files
+INSTALL(FILES openjpeg.h
+	DESTINATION ${OPENJPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
+)
