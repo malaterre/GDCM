@@ -132,7 +132,7 @@ int main (int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -158,9 +158,9 @@ int main (int argc, char *argv[])
             assert( xmlpath.empty() );
             xmlpath = optarg;
             }
-          printf (" with arg %s, index = %d", optarg, option_index);
+          //printf (" with arg %s, index = %d", optarg, option_index);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
@@ -177,7 +177,7 @@ int main (int argc, char *argv[])
     case 'U':
       //assert( outfilename.empty() );
       //outfilename = optarg;
-      printf ("option unenhance \n");
+      //printf ("option unenhance \n");
       unenhance = 1;
       break;
 
@@ -309,8 +309,8 @@ int main (int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-if( unenhance && false )
-{
+  if( unenhance && false )
+    {
     gdcm::Global& g = gdcm::Global::GetInstance();
     // First thing we need to locate the XML dict
     // did the user requested to look XML file in a particular directory ?
@@ -341,7 +341,7 @@ if( unenhance && false )
       }
 
     const gdcm::Defs &defs = g.GetDefs();
-}
+    }
 
 
   if( mosaic )
@@ -360,7 +360,7 @@ if( unenhance && false )
     bool b = filter.Split();
     if( !b )
       {
-      std::cerr << "Could not split << " << filename << std::endl;
+      std::cerr << "Could not split : " << filename << std::endl;
       return 1;
       }
 
@@ -377,7 +377,7 @@ if( unenhance && false )
     fg.SetPattern( pattern.c_str() );
     if( !fg.Generate() )
       {
-      std::cerr << "could not generate" << std::endl;
+      std::cerr << "could not generate filenames" << std::endl;
       return 1;
       }
     const double *cosines = image.GetDirectionCosines();
@@ -426,8 +426,8 @@ if( unenhance && false )
     return 0;
     }
   else if ( unenhance )
-{
-std::cerr << "Not implemented" << std::endl;
+    {
+    std::cerr << "Not implemented" << std::endl;
     return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -437,24 +437,24 @@ std::cerr << "Not implemented" << std::endl;
       return 1;
       }
 
-  const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = file.GetDataSet();
-  gdcm::MediaStorage ms;
-  ms.SetFromFile(file);
-  if( ms.IsUndefined() )
-    {
-    std::cerr << "Unknown MediaStorage" << std::endl;
-    return 1;
-    }
+    const gdcm::File &file = reader.GetFile();
+    const gdcm::DataSet &ds = file.GetDataSet();
+    gdcm::MediaStorage ms;
+    ms.SetFromFile(file);
+    if( ms.IsUndefined() )
+      {
+      std::cerr << "Unknown MediaStorage" << std::endl;
+      return 1;
+      }
 
-  gdcm::UIDs uid;
-  uid.SetFromUID( ms.GetString() );
+    gdcm::UIDs uid;
+    uid.SetFromUID( ms.GetString() );
 
-  if( uid != gdcm::UIDs::EnhancedMRImageStorage )
-  {
-  std::cerr << "MediaStorage is not handled " << ms << " [" << uid.GetName() << "]" << std::endl;
-    return 1;
-  }
+    if( uid != gdcm::UIDs::EnhancedMRImageStorage )
+      {
+      std::cerr << "MediaStorage is not handled " << ms << " [" << uid.GetName() << "]" << std::endl;
+      return 1;
+      }
 
     const gdcm::Image &image = reader.GetImage();
     const unsigned int *dims = image.GetDimensions();
@@ -515,16 +515,16 @@ std::cerr << "Not implemented" << std::endl;
         return 1;
         }
       else
-      {
+        {
         std::cout << "Success to write: " << outfilenamei << std::endl;
+        }
       }
-       }
 
     return 0;
- }
+    }
   else
     {
- std::cerr << "Not implemented" << std::endl;
+    std::cerr << "Not implemented" << std::endl;
     return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -593,13 +593,13 @@ std::cerr << "Not implemented" << std::endl;
         return 1;
         }
       else
-      {
+        {
         std::cout << "Success to write: " << outfilenamei << std::endl;
-      }
+        }
       }
 
     return 0;
-     }
+    }
 
   return 0;
 }
