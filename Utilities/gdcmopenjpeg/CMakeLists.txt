@@ -90,18 +90,18 @@ CONFIGURE_FILE(
 
 #-----------------------------------------------------------------------------
 # OpenJPEG build configuration options.
-OPTION(BUILD_SHARED_LIBS "Build OpenJPEG with shared libraries." OFF)
-OPTION(ENABLE_PROFILING "Enable profiling for the library" OFF)
+#OPTION(BUILD_SHARED_LIBS "Build OpenJPEG with shared libraries." OFF)
+#OPTION(ENABLE_PROFILING "Enable profiling for the library" OFF)
 
 #-----------------------------------------------------------------------------
-SET (EXECUTABLE_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-SET (LIBRARY_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
-MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+#SET (EXECUTABLE_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+#SET (LIBRARY_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+#MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 
 #-----------------------------------------------------------------------------
 # For the codec...
-OPTION(BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
+#OPTION(BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
 
 
 # configure name mangling to allow multiple libraries to coexist
@@ -110,7 +110,7 @@ IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 SET(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
-               @ONLY IMMEDIATE)
+               @ONLY)
 ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 
 #-----------------------------------------------------------------------------
@@ -118,28 +118,25 @@ ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/opj_configure.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/opj_configure.h)
 
+IF(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+  INSTALL(FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
+      ${CMAKE_CURRENT_BINARY_DIR}/opj_configure.h
+    DESTINATION ${OPENJPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
+  )
+ENDIF(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+
 
 #-----------------------------------------------------------------------------
 # Always build the library
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 SUBDIRS(
   libopenjpeg
-  # mj2
-  #j2kviewer/src
   )
-
-#IF(NOT UNIX)
-#SUBDIRS(
-#  jpwl
-#  jp3d
-#  indexer_JPIP
-#  )
-#ENDIF(NOT UNIX)
-
 #-----------------------------------------------------------------------------
 # Build example only if requested
 IF(BUILD_EXAMPLES)
-  SUBDIRS(codec)
+  # SUBDIRS(codec)
 ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
@@ -157,16 +154,16 @@ IF(BUILD_TESTING)
   INCLUDE(CTest)
 ENDIF(BUILD_TESTING)
 
-IF(BUILD_TESTING)
-SET(CMAKE_MODULE_PATH "${OPENJPEG_SOURCE_DIR}/CMake")
-FIND_PACKAGE(FreeImage REQUIRED)
-INCLUDE_DIRECTORIES( ${FREEIMAGE_INCLUDE_PATH} )
-
-  SUBDIRS(
-    test_V2_tile_handling
-    test_Free_image_V2_tile_handling
-  )
-ENDIF(BUILD_TESTING)
+#IF(BUILD_TESTING)
+#SET(CMAKE_MODULE_PATH "${OPENJPEG_SOURCE_DIR}/CMake")
+#FIND_PACKAGE(FreeImage REQUIRED)
+#INCLUDE_DIRECTORIES( ${FREEIMAGE_INCLUDE_PATH} )
+#
+#  SUBDIRS(
+#    test_V2_tile_handling
+#    test_Free_image_V2_tile_handling
+#  )
+#ENDIF(BUILD_TESTING)
 
 # Adding test with dataset from:
 # http://www.crc.ricoh.com/~gormish/jpeg2000conformance/
@@ -181,20 +178,20 @@ FIND_PATH(JPEG2000_CONFORMANCE_DATA_ROOT testimages.html
 
 #-----------------------------------------------------------------------------
 # Compiler specific flags:
-IF(CMAKE_COMPILER_IS_GNUCC)
-  # For all builds, make sure openjpeg is std99 compliant:
-  # SET(CMAKE_C_FLAGS "-Wall -std=c99 ${CMAKE_C_FLAGS}") # FIXME: this setting prevented us from setting a coverage build.
-  # Do not use ffast-math for all build, it would produce incorrect results, only set for release:
-  SET(CMAKE_C_FLAGS_RELEASE "-ffast-math ${CMAKE_C_FLAGS_RELEASE}")
-ENDIF(CMAKE_COMPILER_IS_GNUCC)
+#IF(CMAKE_COMPILER_IS_GNUCC)
+#  # For all builds, make sure openjpeg is std99 compliant:
+#  # SET(CMAKE_C_FLAGS "-Wall -std=c99 ${CMAKE_C_FLAGS}") # FIXME: this setting prevented us from setting a coverage build.
+#  # Do not use ffast-math for all build, it would produce incorrect results, only set for release:
+#  SET(CMAKE_C_FLAGS_RELEASE "-ffast-math ${CMAKE_C_FLAGS_RELEASE}")
+#ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 # install all targets referenced as OPENJPEGTargets
-install(EXPORT OpenJPEGTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
-CONFIGURE_FILE( ${OPENJPEG_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
-  ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+install(EXPORT GDCMTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
+CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/OpenJPEGConfig.cmake
   @ONLY
 )
-INSTALL( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/OpenJPEGConfig.cmake
   DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
 )
 
