@@ -175,6 +175,7 @@ FIND_PATH(JPEG2000_CONFORMANCE_DATA_ROOT testimages.html
   ${OPENJPEG_SOURCE_DIR}/../jpeg2000testimages
   $ENV{JPEG2000_CONFORMANCE_DATA_ROOT}
 )
+MARK_AS_ADVANCED(JPEG2000_CONFORMANCE_DATA_ROOT)
 
 #-----------------------------------------------------------------------------
 # Compiler specific flags:
