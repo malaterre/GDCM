@@ -219,6 +219,7 @@ void PrintHelp()
   std::cout << "C-STORE Options:" << std::endl;
   std::cout << "  -i --input          DICOM filename" << std::endl;
   std::cout << "  -r --recursive      recursively process (sub-)directories." << std::endl;
+  std::cout << "     --store-query    Store constructed query in file." << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
   //std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
   std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
@@ -253,6 +254,7 @@ int main(int argc, char *argv[])
   std::string filename;
   gdcm::Directory::FilenamesType filenames;
   std::string outputdir;
+  int storequery = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -268,6 +270,7 @@ int main(int argc, char *argv[])
   int findstudy = 0;
   int findpsonly = 0;
   std::string xmlpath;
+  std::string queryfile;
   int resourcespath = 0;
   std::string root;
   int rootuid = 0;
@@ -320,6 +323,7 @@ int main(int argc, char *argv[])
         {"port-scp", 1, &portscp, 1}, // --port-scp
         {"output", 1, &outputopt, 1}, // --output
         {"recursive", 0, &recursive, 1},
+        {"store-query", 0, &storequery, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:o:r";
@@ -397,6 +401,11 @@ int main(int argc, char *argv[])
             {
             assert( strcmp(s, "output") == 0 );
             outputdir = optarg;
+            }
+          else if( option_index == 22 ) /* store-query */
+            {
+            assert( strcmp(s, "store-query") == 0 );
+            queryfile = optarg;
             }
           else
             {
@@ -748,6 +757,18 @@ int main(int argc, char *argv[])
     //ds.Insert( de );
 
     //ds.Print( std::cout );
+
+    if( false && storequery )
+      {
+      gdcm::Writer writer;
+      writer.GetFile().SetDataSet( theQuery->GetQueryDataSet() );
+      writer.SetFileName( queryfile.c_str() );
+      if( !writer.Write() )
+        {
+        std::cerr << "Could not write out query to: " << queryfile << std::endl;
+        return 1;
+        }
+      }
 
     if (!theQuery->ValidateQuery(true))
       {
