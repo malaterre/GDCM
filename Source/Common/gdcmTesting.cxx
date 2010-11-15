@@ -30,6 +30,7 @@ namespace gdcm
 
 #include "gdcmDataFileNames.cxx"
 #include "gdcmMD5DataImages.cxx"
+#include "gdcmMD5DataBrokenImages.cxx"
 #include "gdcmMediaStorageDataFiles.cxx"
 #include "gdcmStreamOffsetDataFiles.cxx"
 
@@ -139,6 +140,25 @@ const char * Testing::GetMD5FromFile(const char *filepath)
     }
   // \postcondition always valid (before sentinel)
   assert( i <= GetNumberOfMD5DataImages() );
+  return md5s[i][0];
+}
+
+const char * Testing::GetMD5FromBrokenFile(const char *filepath)
+{
+  int i = 0;
+  Testing::MD5DataImagesType md5s = gdcmMD5DataBrokenImages; //GetMD5DataImages();
+  const char *p = md5s[i][1];
+  Filename comp(filepath);
+  const char *filename = comp.GetName();
+  while( p != 0 )
+    {
+    if( strcmp( filename, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = md5s[i][1];
+    }
   return md5s[i][0];
 }
 
