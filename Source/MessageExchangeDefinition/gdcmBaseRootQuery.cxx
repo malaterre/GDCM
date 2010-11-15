@@ -177,7 +177,7 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os){
   return os;
 }
 
-DataSet BaseRootQuery::GetQueryDataSet() const{
+DataSet const & BaseRootQuery::GetQueryDataSet() const{
   return mDataSet;
 }
 

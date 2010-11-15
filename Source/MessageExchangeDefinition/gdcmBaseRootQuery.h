@@ -83,7 +83,7 @@ class GDCM_EXPORT BaseRootQuery
 
       virtual const std::ostream &WriteHelpFile(std::ostream &os);
 
-      DataSet GetQueryDataSet() const;
+      DataSet const & GetQueryDataSet() const;
 
       ///this function will return all tags at a given query level, so that
       ///they maybe selected for searching.  The boolean forFind is true
