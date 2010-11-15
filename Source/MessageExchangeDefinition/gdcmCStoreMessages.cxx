@@ -50,7 +50,7 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   const DataElement& msclass = inDataSet->GetDataElement( Tag(0x0008, 0x0016) );
   const char *uid = msclass.GetByteValue()->GetPointer();
   assert( uid );
-  std::string suid = uid;
+  std::string suid = std::string(uid, msclass.GetByteValue()->GetLength());
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
   assert(suid.size() < std::numeric_limits<uint32_t>::max());
@@ -65,7 +65,7 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   assert( uid );
   DataElement de( Tag(0x0,0x1000) );
   de.SetVR( VR::UI );
-  std::string suid = uid;
+  std::string suid = std::string(uid, msinst.GetByteValue()->GetLength() );
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
   assert(suid.size() < std::numeric_limits<uint32_t>::max());
