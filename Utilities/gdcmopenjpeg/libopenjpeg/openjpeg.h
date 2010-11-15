@@ -805,6 +805,7 @@ Set decoding parameters to default values
 */
 OPJ_API void OPJ_CALLCONV opj_set_default_decoder_parameters(opj_dparameters_t *parameters);
 
+#define USE_OPJ_DEPRECATED
 #ifdef USE_OPJ_DEPRECATED
 /**
 Setup the decoder decoding parameters using user parameters.
