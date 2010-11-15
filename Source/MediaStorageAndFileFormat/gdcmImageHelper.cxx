@@ -691,7 +691,8 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
     //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
     //  theReturn[1] = 1;
     //  }
-  } theReturn;
+  }
+  return theReturn;
 }
 
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
