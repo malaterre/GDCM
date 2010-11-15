@@ -402,12 +402,12 @@ while(NOT dashboard_done)
     safe_message("Starting fresh build...")
     write_cache()
   endif()
-  
+
   # VTKData is not a submodule at this time, so use ctest_update
   if(DEFINED VTK_DATA_ROOT)
     ctest_update(SOURCE "${VTK_DATA_ROOT}")
   endif()
-  
+
   if(DEFINED VTK_LARGE_DATA_ROOT)
     ctest_update(SOURCE "${VTK_LARGE_DATA_ROOT}")
   endif()

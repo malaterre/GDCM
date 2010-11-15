@@ -10,7 +10,7 @@ set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly-kwstyle")
 set(dashboard_do_memcheck FALSE)
 set(dashboard_do_coverage FALSE)
-set(dashboard_no_test     TRUE)
+set(dashboard_do_test     FALSE)
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
