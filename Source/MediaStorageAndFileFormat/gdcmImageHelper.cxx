@@ -638,14 +638,16 @@ PixelFormat ImageHelper::GetPixelFormatValue(const File& f)
   return pf;
 
 }
-  /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
-  /// rows and columns of the image in pixels (as opposed to actual distances).
+/// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
+/// rows and columns of the image in pixels (as opposed to actual distances).
+/// Also checks 0054, 0081 for the number of z slices for a 3D image
+/// If that tag is not present, default the z dimension to 1
 std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
 {
   DataSet const & ds = f.GetDataSet();
 
   //const DataSet& ds = inF.GetDataSet();
-  std::vector<unsigned int> theReturn(2);
+  std::vector<unsigned int> theReturn(3);
   {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at = { 0 };
@@ -672,7 +674,24 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
     //  theReturn[1] = 1;
     //  }
   }
-  return theReturn;
+  // D 0054|0081 [US] [Planes] [512]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    Tag thePlanes(0x0054,0x0081);
+    if (ds.FindDataElement(thePlanes)){
+      Attribute<0x0054,0x0081> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[2] = at.GetValue();
+    } else {
+      theReturn[2] = 1;
+    }
+    //if( theReturn[1] == 0 )
+    //  {
+    //  // come' on ! WTF
+    //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
+    //  theReturn[1] = 1;
+    //  }
+  } theReturn;
 }
 
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)

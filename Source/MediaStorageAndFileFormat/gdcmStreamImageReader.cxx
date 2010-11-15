@@ -31,8 +31,8 @@ namespace gdcm
 StreamImageReader::StreamImageReader(){
   //set these values to be the opposite ends of possible,
   //so that if the extent is not defined, read can fail properly.
-  mXMin = mYMin = std::numeric_limits<uint16_t>::max();
-  mXMax = mYMax = std::numeric_limits<uint16_t>::min();
+  mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
+  mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
 }
 StreamImageReader::~StreamImageReader(){
 }
@@ -55,22 +55,26 @@ void StreamImageReader::SetStream(std::istream& inStream){
 /// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
 /// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
 /// of pixel size or orientation.
-void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint16_t inYMin, uint16_t inYMax){
+void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax,
+                                          uint16_t inYMin, uint16_t inYMax,
+                                          uint16_t inZMin, uint16_t inZMax){
   mXMin = inXMin;
   mYMin = inYMin;
   mXMax = inXMax;
   mYMax = inYMax;
+  mZMin = inZMin;
+  mZMax = inZMax;
 }
 /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
 /// The return amount is in bytes.
 /// If the return is 0, then that means that the pixel extent was not defined prior
 uint32_t StreamImageReader::DefineProperBufferLength() const
 {
-  if (mXMax < mXMin || mYMax < mYMin) return 0;
+  if (mXMax < mXMin || mYMax < mYMin || mZMax < mZMin) return 0;
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mReader.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
-  return (mYMax - mYMin)*(mXMax - mXMin)*bytesPerPixel;
+  return (mYMax - mYMin)*(mXMax - mXMin)*(mZMax - mZMin)*bytesPerPixel;
 }
 
 /// Read the DICOM image. There are two reason for failure:
@@ -80,7 +84,7 @@ uint32_t StreamImageReader::DefineProperBufferLength() const
 bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLength){
 
   //need to have some kind of extent defined.
-  if (mXMin > mXMax || mYMin > mYMax)
+  if (mXMin > mXMax || mYMin > mYMax || mZMin > mZMax)
     return false; //for now
 
 
@@ -102,7 +106,7 @@ bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLeng
 bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength) {
   //assumes that the file is organized in row-major format, with each row rastering across
   assert( mFileOffset != -1 );
-  int y;
+  int y, z;
   std::streamoff theOffset;
 
   //need to get the pixel size information
@@ -113,6 +117,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
+  int SubColSize = mYMax - mYMin;
 
   //set up the codec prior to resetting the file, just in case that affects the way that
   //files are handled by the ImageHelper
@@ -146,21 +151,26 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   char* tmpBuffer = new char[SubRowSize*bytesPerPixel];
   char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
   try {
-    for (y = mYMin; y < mYMax; ++y){
-      theStream->seekg(std::ios::beg);
-      theOffset = mFileOffset + (y*(int)extent[0] + mXMin)*bytesPerPixel;
-      theStream->seekg(theOffset);
-      theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
-  //now, convert that buffer.
-      if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel,
-        tmpBuffer2, SubRowSize*bytesPerPixel)){
-        delete [] tmpBuffer;
-        delete [] tmpBuffer2;
-        return false;
+    for (z = mZMin; z < mZMax; ++z){
+      for (y = mYMin; y < mYMax; ++y){
+        theStream->seekg(std::ios::beg);
+        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel;
+        theStream->seekg(theOffset);
+        theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
+    //now, convert that buffer.
+        if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel,
+          tmpBuffer2, SubRowSize*bytesPerPixel)){
+          delete [] tmpBuffer;
+          delete [] tmpBuffer2;
+          return false;
+        }
+        //this next line may require a bit of finagling...
+        //std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]), std::ostream_iterator<char>(os));
+        //make sure to have a test that will test different x, y, and z mins and maxes
+        memcpy(&(inReadBuffer[((z-mZMin)*SubRowSize*SubColSize +
+          (y-mYMin)*SubRowSize)// + mXMin)//shouldn't need mXMin
+          *bytesPerPixel]), tmpBuffer2, SubRowSize*bytesPerPixel);
       }
-      //this next line may require a bit of finagling...
-      //std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]), std::ostream_iterator<char>(os));
-      memcpy(&(inReadBuffer[((y-mYMin)*SubRowSize + mXMin)*bytesPerPixel]), tmpBuffer2, SubRowSize*bytesPerPixel);
     }
   }
   catch (std::exception & ex){

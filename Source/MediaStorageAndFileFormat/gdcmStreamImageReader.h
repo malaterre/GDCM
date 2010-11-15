@@ -61,7 +61,9 @@ public:
   /// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
   /// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
   /// of pixel size or orientation.
-  void DefinePixelExtent(uint16_t inXMin, uint16_t inXMax, uint16_t inYMin, uint16_t inYMax);
+  /// 15 nov 2010: added z dimension, defaults to being 1 plane large
+  void DefinePixelExtent(uint16_t inXMin, uint16_t inXMax,
+    uint16_t inYMin, uint16_t inYMax, uint16_t inZMin = 0, uint16_t inZMax = 1);
 
   /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
   /// The return amount is in bytes.  Call this function to determine the size of the char* buffer
@@ -100,7 +102,7 @@ protected:
 
   //for thread safety, these should not be stored here, but should be used
   //for every read subregion operation.
-  uint16_t mXMin, mYMin, mXMax, mYMax;
+  uint16_t mXMin, mYMin, mXMax, mYMax, mZMin, mZMax;
 
   /// Using the min, max, etc set by DefinePixelExtent, this will fill the given buffer
   ///  Make sure to call DefinePixelExtent and to initialize the buffer with the
