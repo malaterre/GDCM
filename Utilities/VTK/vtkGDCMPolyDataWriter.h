@@ -52,6 +52,9 @@ public:
 
   virtual void SetRTStructSetProperties(vtkRTStructSetProperties *pd);
 
+  // make parent class public...
+  void SetNumberOfInputPorts(int n);
+
 protected:
   vtkGDCMPolyDataWriter();
   ~vtkGDCMPolyDataWriter();

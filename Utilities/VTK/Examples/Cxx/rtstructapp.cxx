@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
   //std::cout << reader->GetMedicalImageProperties()->GetStudyDate() << std::endl;
 
   vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
-  //writer->SetNumberOfInputPorts( reader->GetNumberOfOutputPorts() );
+  writer->SetNumberOfInputPorts( reader->GetNumberOfOutputPorts() );
   for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
     writer->SetInput( num, reader->GetOutput(num) );
   writer->SetFileName( "rtstruct.dcm" );

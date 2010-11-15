@@ -45,7 +45,7 @@ vtkCxxSetObjectMacro(vtkGDCMPolyDataWriter,RTStructSetProperties,vtkRTStructSetP
 //----------------------------------------------------------------------------
 vtkGDCMPolyDataWriter::vtkGDCMPolyDataWriter()
 {
-  this->SetNumberOfInputPorts(9);
+  this->SetNumberOfInputPorts(1);
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->RTStructSetProperties = vtkRTStructSetProperties::New();
 }
@@ -420,9 +420,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
 
 }
 
+//----------------------------------------------------------------------------
 void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
 {
     vtkPolyData *input = this->GetInput(pdidx);
+    assert( input );
     vtkPoints *pts;
     vtkCellArray *polys;
 
@@ -552,6 +554,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
 
 }
 
+//----------------------------------------------------------------------------
+void vtkGDCMPolyDataWriter::SetNumberOfInputPorts(int n)
+{
+  Superclass::SetNumberOfInputPorts(n);
+}
 
 //----------------------------------------------------------------------------
 void vtkGDCMPolyDataWriter::PrintSelf(ostream& os, vtkIndent indent)
