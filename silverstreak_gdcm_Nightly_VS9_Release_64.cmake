@@ -17,6 +17,16 @@ macro(dashboard_hook_init)
   GDCM_BUILD_APPLICATIONS:BOOL=ON
   GDCM_BUILD_EXAMPLES:BOOL=ON
   VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/vtk-build-release-64-nightly
+  #set up DICOM Q/R
+  #client side (server restriction)
+  GDCM_DICOM_CLIENT_AETITLE:STRING=UNITED1
+  #only needed for cmove
+  GDCM_DICOM_CLIENT_PORT:STRING=11111
+
+  #server side conf:
+  GDCM_DICOM_SERVER_AETITLE:STRING=COMMON
+  GDCM_DICOM_SERVER_PEER:STRING=192.168.1.4
+  GDCM_DICOM_SERVER_PORT:STRING=11112
     "
     )
 endmacro(dashboard_hook_init)
