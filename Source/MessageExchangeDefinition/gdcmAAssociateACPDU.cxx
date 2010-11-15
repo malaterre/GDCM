@@ -81,7 +81,7 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   strncpy( Reserved11_26, reserved11_26, sizeof(Reserved11_26) );
   char reserved27_42[16] = {  };
   is.read( (char*)&reserved27_42, sizeof(Reserved27_42) ); // calling
-  strncpy( Reserved27_42, Reserved27_42, sizeof(Reserved27_42) );
+  strncpy( Reserved27_42, reserved27_42, sizeof(Reserved27_42) );
   uint8_t reserved43_74[32] = {  };
   is.read( (char*)&reserved43_74, sizeof(Reserved43_74) ); // 0 (32 times)
 
