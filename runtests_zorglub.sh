@@ -29,3 +29,7 @@ rsync --quiet -av -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdoc
 # Nightly PDF Doxygen
 cd $HOME/Dashboards/MyTests/gdcm-nightly/Utilities/doxygen/latex
 rsync --quiet -av gdcm-2.1.0.pdf malat,gdcm@web.sourceforge.net:htdocs
+
+# mirror on github:
+cd $HOME/Dashboards/gdcm
+git push --mirror git@github.com:malaterre/GDCM.git
