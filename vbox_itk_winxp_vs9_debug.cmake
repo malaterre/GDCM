@@ -3,7 +3,7 @@
 set(CTEST_SITE "vbox.malat")
 set(CTEST_BUILD_NAME "Win32-VS9-Express")
 set(CTEST_BUILD_CONFIGURATION Release)
-set(CTEST_CMAKE_GENERATOR "Visual Studio 9 2008")
+set(CTEST_CMAKE_GENERATOR "Visual Studio 10 2010")
 set(CTEST_TEST_TIMEOUT 240)
 #set(CTEST_GIT_COMMAND "C:/Program Files/Git/bin/git.exe")
 set(CTEST_GIT_COMMAND "C:/cygwin/bin/git.exe")

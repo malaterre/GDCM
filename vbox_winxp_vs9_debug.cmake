@@ -4,7 +4,7 @@ set(CTEST_SITE "vbox_winxp")
 set(CTEST_BUILD_NAME "Win32-winXP-vs9-Debug")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Visual Studio 9 2008")
-set(CTEST_DASHBOARD_ROOT "c:/cygwin/home/mathieu/Dashboard/gdcm-vs9/")
+#set(CTEST_DASHBOARD_ROOT "c:/cygwin/home/mathieu/Dashboard/gdcm-vs9/")
 set(dashboard_binary_name "gdcm-build-debug-32-nightly")
 
 SET(CTEST_GIT_COMMAND "C:/cygwin/bin/git.exe")
