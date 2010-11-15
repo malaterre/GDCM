@@ -102,6 +102,9 @@ void vtkGDCMPolyDataWriter::WriteData()
 
   if( !writer.Write() )
     {
+    vtkErrorMacro(<< "Could not write");
+    this->SetErrorCode(vtkErrorCode::FileFormatError);
+    return;
     }
 
 }
