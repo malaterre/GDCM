@@ -149,6 +149,7 @@ DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<EChar
     }
     if (itor < (inCharSetType.end()-1))
       theOutputString += "\\";
+    assert( itor < inCharSetType.end() );
     visited[*itor] = true;
   }
 
