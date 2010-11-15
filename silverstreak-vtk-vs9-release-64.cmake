@@ -9,6 +9,7 @@ set(CTEST_DASHBOARD_ROOT "H:/src/dashboard/gdcm-dashboard/")
 set(dashboard_binary_name "vtk-build-release-64-nightly")
 set(dashboard_source_name VTK)
 set(dashboard_model Nightly)
+set(dashboard_do_test FALSE)
 
 SET(CTEST_GIT_COMMAND "C:/Program Files (x86)/Git/bin/git.exe")
 SET(ENV{CFLAGS} "/W4")
