@@ -438,12 +438,13 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     pts = input->GetPoints();
     vtkDataArray *scalars = input->GetCellData()->GetScalars();
     vtkDoubleArray *darray = vtkDoubleArray::SafeDownCast( scalars );
-    if( !darray )
-      {
-      vtkErrorMacro(<<"No data to write!");
-      return;
-      }
-    int nt = darray->GetNumberOfTuples();
+    vtkFloatArray *farray = vtkFloatArray::SafeDownCast( scalars );
+    //if( !darray && !farray )
+    //  {
+    //  vtkErrorMacro(<<"No data to write!");
+    //  return;
+    //  }
+    //int nt = scalars->GetNumberOfTuples();
     if (pts == NULL || polys == NULL )
       {
       vtkErrorMacro(<<"No data to write!");
@@ -543,12 +544,23 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
 
   //(3006,002a) IS [220\160\120]  #  12, 3 ROIDisplayColor
   gdcm::Attribute<0x3006,0x002a> roidispcolor;
-  double tuple[3];
-  darray->GetTupleValue( 0, tuple );
   int32_t intcolor[3];
-  intcolor[0] = tuple[0] * 255.;
-  intcolor[1] = tuple[1] * 255.;
-  intcolor[2] = tuple[2] * 255.;
+  if( darray )
+    {
+    double tuple[3];
+    darray->GetTupleValue( 0, tuple );
+    intcolor[0] = tuple[0] * 255.;
+    intcolor[1] = tuple[1] * 255.;
+    intcolor[2] = tuple[2] * 255.;
+    }
+  if( farray )
+    {
+    float ftuple[3];
+    farray->GetTupleValue( 0, ftuple );
+    intcolor[0] = ftuple[0] * 255.;
+    intcolor[1] = ftuple[1] * 255.;
+    intcolor[2] = ftuple[2] * 255.;
+    }
   roidispcolor.SetValues( intcolor, 3 );
   subds.Insert( roidispcolor.GetAsDataElement() );
 
