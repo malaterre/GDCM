@@ -16,6 +16,7 @@ macro(dashboard_hook_init)
   GDCM_BUILD_SHARED_LIBS:BOOL=ON
   GDCM_BUILD_APPLICATIONS:BOOL=ON
   GDCM_BUILD_EXAMPLES:BOOL=ON
+  GDCM_USE_VTK:BOOL=ON
   VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/vtk-build-release-64-nightly
   #set up DICOM Q/R
   #client side (server restriction)
