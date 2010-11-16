@@ -219,8 +219,9 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   DataSet &ds2 = item1.GetNestedDataSet();
 
   gdcm::Attribute<0x0020,0x052> frameofreferenceuid;
-  frameofreferenceuid.SetValue(
-    this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() );
+  if( this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() )
+    frameofreferenceuid.SetValue(
+      this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() );
   ds2.Insert( frameofreferenceuid.GetAsDataElement() );
 
   DataElement de2( Tag(0x3006,0x0012) );
@@ -240,7 +241,8 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   refsopclassuid.SetValue ( rtuid );
   ds3.Insert( refsopclassuid.GetAsDataElement() );
   Attribute<0x0008,0x1155> refsopinstuid;
-  refsopinstuid.SetValue ( this->RTStructSetProperties->GetStudyInstanceUID() );
+  if( this->RTStructSetProperties->GetStudyInstanceUID() )
+    refsopinstuid.SetValue ( this->RTStructSetProperties->GetStudyInstanceUID() );
   ds3.Insert( refsopinstuid.GetAsDataElement() );
 
   DataElement de3( Tag(0x3006,0x0014) );
@@ -255,8 +257,9 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   DataSet &ds4 = item3.GetNestedDataSet();
 
   gdcm::Attribute<0x0020,0x000e> seriesinstanceuid;
-  seriesinstanceuid.SetValue(
-    this->RTStructSetProperties->GetReferenceSeriesInstanceUID() );
+  if ( this->RTStructSetProperties->GetReferenceSeriesInstanceUID() )
+    seriesinstanceuid.SetValue(
+      this->RTStructSetProperties->GetReferenceSeriesInstanceUID() );
   ds4.Insert( seriesinstanceuid.GetAsDataElement() );
 
   DataElement de4( Tag(0x3006,0x0016) );
@@ -435,7 +438,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     pts = input->GetPoints();
     vtkDataArray *scalars = input->GetCellData()->GetScalars();
     vtkDoubleArray *darray = vtkDoubleArray::SafeDownCast( scalars );
-    assert( darray );
+    if( !darray )
+      {
+      vtkErrorMacro(<<"No data to write!");
+      return;
+      }
     int nt = darray->GetNumberOfTuples();
     if (pts == NULL || polys == NULL )
       {
