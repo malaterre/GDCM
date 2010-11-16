@@ -20,8 +20,6 @@
 #include "vtkBitArray.h"
 #include "vtkUnsignedCharArray.h"
 
-#include "gdcmTesting.h"
-
 int main(int argc, char *argv[])
 {
   if( argc < 3 )
