@@ -19,7 +19,7 @@
 
 
 #include "gdcmStreamImageWriter.h"
-#include "gdcmImage.h"
+#include "gdcmTag.h"
 #include "gdcmMediaStorage.h"
 #include <algorithm>
 #include "gdcmImageHelper.h"
@@ -93,15 +93,15 @@ bool StreamImageWriter::Write(void* inReadBuffer, const std::size_t& inBufferLen
     */
 bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::size_t& inBufferLength) {
   //assumes that the file is organized in row-major format, with each row rastering across
-/*  assert( mFileOffset != -1 );
+  assert( mFileOffset != -1 );
   int y, z;
   std::streamoff theOffset;
 
   //need to get the pixel size information
   //should that come from the header?
   //most likely  that's a tag in the header
-  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mReader.GetFile());
+  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mWriter.GetFile());
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mWriter.GetFile());
   //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
   int bytesPerPixel = pixelInfo.GetPixelSize();
   int SubRowSize = mXMax - mXMin;
@@ -110,7 +110,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //set up the codec prior to resetting the file, just in case that affects the way that
   //files are handled by the ImageHelper
 
-  const FileMetaInformation &header = mReader.GetFile().GetHeader();
+  const FileMetaInformation &header = mWriter.GetFile().GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
   bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
 
@@ -122,17 +122,17 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
     }
 
   theCodec.SetNeedByteSwap( needbyteswap );
-  theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile()));
+  theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mWriter.GetFile()));
   theCodec.SetPlanarConfiguration(
-    ImageHelper::GetPlanarConfigurationValue(mReader.GetFile()));
+    ImageHelper::GetPlanarConfigurationValue(mWriter.GetFile()));
   theCodec.SetPhotometricInterpretation(
-    ImageHelper::GetPhotometricInterpretationValue(mReader.GetFile()));
+    ImageHelper::GetPhotometricInterpretationValue(mWriter.GetFile()));
   //how do I handle byte swapping here?  where is it set?
 
   //have to reset the stream to the proper position
   //first, reopen the stream,then the loop should set the right position
-  mReader.SetFileName(mReader.GetFileName().c_str());
-  std::istream* theStream = mReader.GetStreamPtr();//probably going to need a copy of this
+  mWriter.SetFileName(mWriter.GetFileName().c_str());
+  std::ostream* theStream = mWriter.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
   //tmpBuffer is for a single raster
@@ -141,23 +141,24 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   try {
     for (z = mZMin; z < mZMax; ++z){
       for (y = mYMin; y < mYMax; ++y){
-        theStream->seekg(std::ios::beg);
-        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel;
-        theStream->seekg(theOffset);
-        theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
-    //now, convert that buffer.
+        //this next line may require a bit of finagling...
+        //std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]), std::ostream_iterator<char>(os));
+        //make sure to have a test that will test different x, y, and z mins and maxes
+        memcpy(tmpBuffer, &(inWriteBuffer[((z-mZMin)*SubRowSize*SubColSize +
+          (y-mYMin)*SubRowSize)// + mXMin)//shouldn't need mXMin
+          *bytesPerPixel]), SubRowSize*bytesPerPixel);
+
+
         if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel,
           tmpBuffer2, SubRowSize*bytesPerPixel)){
           delete [] tmpBuffer;
           delete [] tmpBuffer2;
           return false;
         }
-        //this next line may require a bit of finagling...
-        //std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]), std::ostream_iterator<char>(os));
-        //make sure to have a test that will test different x, y, and z mins and maxes
-        memcpy(&(inReadBuffer[((z-mZMin)*SubRowSize*SubColSize +
-          (y-mYMin)*SubRowSize)// + mXMin)//shouldn't need mXMin
-          *bytesPerPixel]), tmpBuffer2, SubRowSize*bytesPerPixel);
+        theStream->seekp(std::ios::beg);
+        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel;
+        theStream->seekp(theOffset);
+        theStream->write(tmpBuffer2, SubRowSize*bytesPerPixel);
       }
     }
   }
@@ -174,9 +175,8 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
     delete [] tmpBuffer2;
     return false;
   }
-
   delete [] tmpBuffer;
-  delete [] tmpBuffer2;*/
+  delete [] tmpBuffer2;
   return true;
 }
 
@@ -184,23 +184,21 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
 /// returns false if the file is not initialized or not an image,
 /// with the pixel 0x7fe0, 0x0010 tag.
 bool StreamImageWriter::WriteImageInformation(){
-  //read up to the point in the stream where the pixel information tag is
-  //store that location and keep the rest of the data as the header information dataset
-/*  std::set<Tag> theSkipTags;
-  Tag thePixelDataTag(0x7fe0, 0x0010);//must be LESS than the pixel information tag, 0x7fe0,0x0010
-  //otherwise, it'll read that tag as well.
-  //make a reader object in readimageinformation
-  //call read up to tag
-  //then create data structures from that dataset that's been read-up-to
-  theSkipTags.insert(thePixelDataTag);
 
+  //ok, the writer has a file in it, and so we place the dataset that we're given into
+  //the file
+  mWriter.GetFile().SetDataSet(mNonPixelInformation);
   try
   {
-    //ok, need to read up until I know what kind of endianness i'm dealing with?
-    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags, mFileOffset)){
-      gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
-      return false;
-    }
+    mWriter.Write();//should write everything BUT the image tag.  right?
+    //this is where to start writing zeros for the image.
+    //BUT! do we know here if it's compressed for writing out?  If so, shouldn't that require forcing
+    //the datasets to be presented sequentially?
+    //at this point, we should be at the end of the dataset, and the pointer should be set to eof
+    //which is good, because otherwise, we have a problem (write is inherited, and I can't easily
+    //do the trick where I return the stream location
+    mWriter.SetFileName(mWriter.GetFileName().c_str());
+    mFileOffset = mWriter.GetStreamPtr()->tellp();
   }
   catch(std::exception & ex)
   {
@@ -216,14 +214,22 @@ bool StreamImageWriter::WriteImageInformation(){
   if( mFileOffset == -1 ) return false;
 
   // postcondition
-  assert( mFileOffset != -1 );*/
+  assert( mFileOffset != -1 );
   return true;
 }
 
-  /// Set the image information to be written to disk
-  /// This function will make a local copy of the header information.
-void StreamImageWriter::SetImageInformation(const DataSet& inHeaderInformation){
-  mHeaderInformation = inHeaderInformation;
+  /// Set the image information to be written to disk that is everything but
+  /// the pixel information.  Copies the data into a new dataset, except for the pixel element
+///This way, writing the image information will just write everything else.
+void StreamImageWriter::SetImageNonPixelInformation(const DataSet& inNonPixelInformation){
+  mNonPixelInformation.Clear();
+  gdcm::DataSet::ConstIterator itor;
+  gdcm::Tag thePixelDataTag(0x7fe0, 0x0010);
+  for (itor = inNonPixelInformation.Begin(); itor != inNonPixelInformation.End(); ++itor){
+    if (itor->GetTag() != thePixelDataTag){
+      mNonPixelInformation.Insert(*itor);
+    }
+  }
 }
 
 } // end namespace gdcm
