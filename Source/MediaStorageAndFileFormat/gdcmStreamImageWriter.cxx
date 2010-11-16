@@ -18,7 +18,7 @@
 
 
 
-#include "gdcmStreamImageReader.h"
+#include "gdcmStreamImageWriter.h"
 #include "gdcmImage.h"
 #include "gdcmMediaStorage.h"
 #include <algorithm>
@@ -28,23 +28,23 @@
 namespace gdcm
 {
 
-StreamImageReader::StreamImageReader(){
+StreamImageWriter::StreamImageWriter(){
   //set these values to be the opposite ends of possible,
   //so that if the extent is not defined, read can fail properly.
   mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
 }
-StreamImageReader::~StreamImageReader(){
+StreamImageWriter::~StreamImageWriter(){
 }
 
 
 /// One of either SetFileName or SetStream must be called prior
 /// to any other functions.
-void StreamImageReader::SetFileName(const char* inFileName){
-  mReader.SetFileName(inFileName);
+void StreamImageWriter::SetFileName(const char* inFileName){
+  mWriter.SetFileName(inFileName);
 }
-void StreamImageReader::SetStream(std::istream& inStream){
-  mReader.SetStream(inStream);
+void StreamImageWriter::SetStream(std::ostream& inStream){
+  mWriter.SetStream(inStream);
 }
 
 
@@ -55,7 +55,7 @@ void StreamImageReader::SetStream(std::istream& inStream){
 /// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
 /// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
 /// of pixel size or orientation.
-void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax,
+void StreamImageWriter::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax,
                                           uint16_t inYMin, uint16_t inYMax,
                                           uint16_t inZMin, uint16_t inZMax){
   mXMin = inXMin;
@@ -65,23 +65,12 @@ void StreamImageReader::DefinePixelExtent(uint16_t inXMin, uint16_t inXMax,
   mZMin = inZMin;
   mZMax = inZMax;
 }
-/// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
-/// The return amount is in bytes.
-/// If the return is 0, then that means that the pixel extent was not defined prior
-uint32_t StreamImageReader::DefineProperBufferLength() const
-{
-  if (mXMax < mXMin || mYMax < mYMin || mZMax < mZMin) return 0;
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mReader.GetFile());
-  //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
-  int bytesPerPixel = pixelInfo.GetPixelSize();
-  return (mYMax - mYMin)*(mXMax - mXMin)*(mZMax - mZMin)*bytesPerPixel;
-}
 
 /// Read the DICOM image. There are two reason for failure:
 /// 1. The extent is not set
 /// 2. The output buffer is not set
 /// This method has been implemented to look similar to the metaimageio in itk
-bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLength){
+bool StreamImageWriter::Write(void* inReadBuffer, const std::size_t& inBufferLength){
 
   //need to have some kind of extent defined.
   if (mXMin > mXMax || mYMin > mYMax || mZMin > mZMax)
@@ -95,17 +84,16 @@ bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLeng
 
 //  return ReadImageSubregionRAW(ostr);
   //just do memcpys instead of doing this stream shenanigans
-  return ReadImageSubregionRAW((char*)inReadBuffer, inBufferLength);
+  return WriteImageSubregionRAW((char*)inReadBuffer, inBufferLength);
 
 }
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
     Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
     */
-//bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) {
-bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength) {
+bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::size_t& inBufferLength) {
   //assumes that the file is organized in row-major format, with each row rastering across
-  assert( mFileOffset != -1 );
+/*  assert( mFileOffset != -1 );
   int y, z;
   std::streamoff theOffset;
 
@@ -175,30 +163,30 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName() << " with ex:" << ex.what() );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
-  } 
+  }
   catch (...){
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName() << " with unknown error." );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
   }
 
   delete [] tmpBuffer;
-  delete [] tmpBuffer2;
+  delete [] tmpBuffer2;*/
   return true;
 }
 
 /// Set the spacing and dimension information for the set filename.
 /// returns false if the file is not initialized or not an image,
 /// with the pixel 0x7fe0, 0x0010 tag.
-bool StreamImageReader::ReadImageInformation(){
+bool StreamImageWriter::WriteImageInformation(){
   //read up to the point in the stream where the pixel information tag is
   //store that location and keep the rest of the data as the header information dataset
-  std::set<Tag> theSkipTags;
+/*  std::set<Tag> theSkipTags;
   Tag thePixelDataTag(0x7fe0, 0x0010);//must be LESS than the pixel information tag, 0x7fe0,0x0010
   //otherwise, it'll read that tag as well.
   //make a reader object in readimageinformation
@@ -217,35 +205,25 @@ bool StreamImageReader::ReadImageInformation(){
   catch(std::exception & ex)
   {
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName() << " with ex:" << ex.what() );
   }
   catch(...)
   {
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName()  << " with unknown error" );
+    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName()  << " with unknown error" );
   }
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm
   if( mFileOffset == -1 ) return false;
 
   // postcondition
-  assert( mFileOffset != -1 );
+  assert( mFileOffset != -1 );*/
   return true;
 }
 
-  /// Returns the dataset read by ReadImageInformation
-  /// Couple this with the ImageHelper to get statistics about the image,
-  /// like pixel extent, to be able to initialize buffers for reading
-File const &StreamImageReader::GetFile() const
-{
-  if (mFileOffset > 0)
-    {
-    return mReader.GetFile();
-    }
-  else
-    {
-    assert(0);
-    return mReader.GetFile();
-    }
+  /// Set the image information to be written to disk
+  /// This function will make a local copy of the header information.
+void StreamImageWriter::SetImageInformation(const DataSet& inHeaderInformation){
+  mHeaderInformation = inHeaderInformation;
 }
 
 } // end namespace gdcm
