@@ -15,15 +15,26 @@
 #include "vtkGDCMPolyDataWriter.h"
 
 #include "vtkPolyData.h"
+#include "vtkPolyDataReader.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkRTStructSetProperties.h"
 
 int main(int argc, char *argv[])
 {
+#if 0
+  const char *input = "/home/mathieu/Kitware/VTKData/Data/hello.vtk";
+
+  vtkPolyDataReader *reader = vtkPolyDataReader::New();
+  reader->SetFileName( input );
+  reader->Update();
+  vtkPolyData *pd = reader->GetOutput(); // vtkPolyData::New();
+#else
+  vtkPolyData *pd = vtkPolyData::New();
+#endif
+
   const char * filename = argv[1];
 
   int numinput = 1;
-  vtkPolyData *pd = vtkPolyData::New();
   vtkMedicalImageProperties *iprop = vtkMedicalImageProperties::New();
   vtkRTStructSetProperties *rtprop = vtkRTStructSetProperties::New();
 
