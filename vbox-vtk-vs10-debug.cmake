@@ -8,6 +8,7 @@ set(CTEST_CMAKE_GENERATOR "Visual Studio 10")
 set(dashboard_binary_name "vtk-vs10-debug")
 set(dashboard_source_name VTK)
 set(dashboard_model Nightly)
+set(dashboard_do_test FALSE)
 
 SET(CTEST_GIT_COMMAND "C:/cygwin/bin/git.exe")
 #SET(ENV{CFLAGS} "/W4")
