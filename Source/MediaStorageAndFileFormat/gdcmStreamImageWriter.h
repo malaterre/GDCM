@@ -19,9 +19,7 @@
 #ifndef GDCMSTREAMIMAGEWRITER_H
 #define GDCMSTREAMIMAGEWRITER_H
 
-#include "gdcmPixmapWriter.h"
-#include "gdcmImage.h"
-#include "gdcmWriter.h"
+#include "gdcmImageWriter.h"
 #include <iostream>
 #include "gdcmDataSet.h"
 
@@ -79,20 +77,21 @@ public:
   /// but if it's compressed, we have to force the ordering of chunks that are written.
   virtual bool WriteImageInformation();
 
-  /// Set the image information to be written to disk
-  /// This function will make a local copy of the header information.
-  void SetImageInformation(const DataSet& inHeaderInformation);
+  /// Set the image information to be written to disk that is everything but
+  /// the pixel information.
+  void SetImageNonPixelInformation(const DataSet& inNonPixelInformation);
 
 
 protected:
 
-  //contains a reader for being able to ReadUpToTag
-  //however, we don't want the user to be able to call Read
-  //either directly or via a parent class call, so we hide the reader in here.
-  Writer mWriter;
+  //contains the PrepareWrite function, which will get the given dataset ready
+  //for writing to disk by manufacturing the header information.
+  //note that if there is a pixel element in the given dataset, that will be removed
+  //during the copy, so that the imagewriter can write everything else out
+  ImageWriter mWriter;
 
   std::streamoff mFileOffset; //the fileoffset for getting header information
-  DataSet mHeaderInformation; //all the non-pixel information
+  DataSet mNonPixelInformation; //all the non-pixel information
 
   //for thread safety, these should not be stored here, but should be used
   //for every read subregion operation.

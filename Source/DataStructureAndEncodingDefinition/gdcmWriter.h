@@ -72,11 +72,13 @@ public:
     assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
     Stream = Ofstream;
+    mFileName = filename;
   }
   /// Set user ostream buffer
   void SetStream(std::ostream &output_stream) {
     Stream = &output_stream;
   }
+
 
   /// Set/Get the DICOM file (DataSet + Header)
   void SetFile(const File& f) { F = f; }
@@ -87,6 +89,14 @@ public:
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
+  std::string GetFileName() const { return mFileName;}
+
+
+  //this function is added for the StreamImageWriter, which needs to write
+  //up to the pixel data and then stops right before writing the pixel data.
+  //after that, for the raw codec at least, zeros are written for the length of the data
+  std::ostream* GetStreamPtr() const { return Stream; }
+
 protected:
   std::ostream *Stream;
   std::ofstream *Ofstream;
@@ -94,6 +104,7 @@ protected:
 private:
   SmartPointer<File> F;
   bool CheckFileMetaInformation;
+  std::string mFileName;
 };
 
 } // end namespace gdcm
