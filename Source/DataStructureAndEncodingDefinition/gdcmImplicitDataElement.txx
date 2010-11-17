@@ -53,7 +53,7 @@ std::istream &ImplicitDataElement::ReadPreValue(std::istream& is)
   if( !ValueLengthField.Read<TSwap>(is) )
     {
     //assert(0 && "Should not happen");
-    throw Exception("Impossible");
+    throw Exception("Impossible ValueLengthField");
     return is;
     }
   return is;
@@ -308,7 +308,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
   if( !ValueLengthField.Read<TSwap>(is) )
     {
     //assert(0 && "Should not happen");
-    throw Exception("Impossible");
+    throw Exception("Impossible ValueLengthField");
     return is;
     }
 
@@ -330,7 +330,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
   if( ValueLengthField > length && !ValueLengthField.IsUndefined() )
     {
     gdcmWarningMacro( "Cannot read more length than what is remaining in the file" );
-    throw Exception( "Impossible" );
+    throw Exception( "Impossible (more)" );
     }
   if( ValueLengthField == 0 )
     {
