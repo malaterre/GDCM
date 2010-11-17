@@ -1,7 +1,7 @@
 # Client maintainer: mmroden gmail . com
 
 set(CTEST_SITE "silverstreak")
-set(CTEST_BUILD_NAME "Win32-windows7-vs9-2.1-Debug")
+set(CTEST_BUILD_NAME "Win32-windows7-vs9-2.1-Debug-x64")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Visual Studio 9 2008 Win64")
 set(CTEST_DASHBOARD_ROOT "H:/src/dashboard/gdcm-dashboard/")
