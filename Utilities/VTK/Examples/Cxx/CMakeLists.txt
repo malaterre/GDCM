@@ -43,6 +43,7 @@ FOREACH(app ${GDCM_VTK_APPS})
   ADD_EXECUTABLE(${app} ${app}.cxx)
   #SET_TARGET_PROPERTIES(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   TARGET_LINK_LIBRARIES(${app} ${VTKGDCM_NAME} ${vtkgdcm_LIBS})
+  TARGET_LINK_LIBRARIES(${app} gdcmDSED gdcmMSFF gdcmCommon)
   IF(GDCM_BUILD_TESTING)
     # gdcmTesting is in Common:
     TARGET_LINK_LIBRARIES(${app} gdcmCommon)
