@@ -7955,7 +7955,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x7eff,0x002e,"TMDTK",VR::LT,VM::VM1,"?",false },
   {0x0029,0x0008,"TOSHIBA COMAPL HEADER",VR::CS,VM::VM1,"COMAPL Header Type",false },
   {0x0029,0x0009,"TOSHIBA COMAPL HEADER",VR::LO,VM::VM1,"COMAPL Header Version",false },
-  {0x0029,0x0010,"TOSHIBA COMAPL HEADER",VR::LO,VM::VM1,"",false },
+  {0x0029,0x0010,"TOSHIBA COMAPL HEADER",VR::SQ,VM::VM1,"COMAPL Header Info",false },
   {0x0029,0x0020,"TOSHIBA COMAPL HEADER",VR::OB,VM::VM1,"COMAPL History Information",false },
   {0x0029,0x0031,"TOSHIBA COMAPL HEADER",VR::LO,VM::VM1_n,"",false },
   {0x0029,0x0032,"TOSHIBA COMAPL HEADER",VR::UL,VM::VM1_n,"",false },
