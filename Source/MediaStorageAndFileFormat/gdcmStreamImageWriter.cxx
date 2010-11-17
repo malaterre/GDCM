@@ -164,13 +164,13 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName() << " with ex:" << ex.what() );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
   }
   catch (...){
-    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName() << " with unknown error." );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
@@ -203,11 +203,11 @@ bool StreamImageWriter::WriteImageInformation(){
   catch(std::exception & ex)
   {
     (void)ex;
-    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName() << " with ex:" << ex.what() );
   }
   catch(...)
   {
-    gdcmWarningMacro( "Failed to write:" << mReader.GetFileName()  << " with unknown error" );
+    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName()  << " with unknown error" );
   }
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm
