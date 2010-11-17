@@ -17,7 +17,7 @@ macro(dashboard_hook_init)
     BUILD_SHARED_LIBS:BOOL=ON
     BUILD_TESTING:BOOL=ON
     ITK_USE_SYSTEM_GDCM:BOOL=ON
-    GDCM_DIR:PATH=$ENV{HOME}/Dashboards/${dashboard_root_name}/gdcm-gcc-tomate
+    GDCM_DIR:PATH=${CTEST_DASHBOARD_ROOT}/gdcm-gcc-tomate
     "
     )
 endmacro(dashboard_hook_init)
