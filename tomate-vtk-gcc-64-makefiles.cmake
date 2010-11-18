@@ -18,6 +18,9 @@ set(dashboard_binary_name VTK-gcc-tomate)
 set(dashboard_model Nightly)
 set(dashboard_do_test FALSE)
 
+SET(ENV{PATH} "/opt/bin:/opt/jdk/bin:/opt/jre/bin:/usr/local/sbin:/usr/local/bin:$ENV{PATH}")
+
+
 set(dashboard_cache "
 BUILD_SHARED_LIBS:BOOL=ON
 BUILD_EXAMPLES:BOOL=OFF
