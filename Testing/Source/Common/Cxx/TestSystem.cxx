@@ -81,6 +81,7 @@ int TestSystem(int, char *[])
   unsigned long size1 = sizeof(off_t);
   unsigned long size2 = sizeof(size_t);
   unsigned long size3 = sizeof(uintmax_t);
+  (void)size3;
   unsigned long size4 = sizeof(std::streamsize);
   if( size1 > size2 )
     {

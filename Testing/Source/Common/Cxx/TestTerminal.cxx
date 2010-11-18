@@ -47,7 +47,7 @@ void TestAll()
   //std::cerr << term::setbgcolor( term::blue ) << "cerr:bg:blue" << std::endl;
 }
 
-int TestTerminal(int argc, char *argv[])
+int TestTerminal(int , char *[])
 {
   // Typically for WIN32
   term::setmode( term::CONSOLE );

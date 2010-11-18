@@ -24,6 +24,10 @@ struct MyASN1 : public gdcm::ASN1
 
 int TestASN1(int argc, char *argv[])
 {
+  if( argc < 1 )
+    {
+    return 1;
+    }
   const char *filename = argv[1];
   MyASN1 asn1;
   asn1.ParseDumpFile( filename );
