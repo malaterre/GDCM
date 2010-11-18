@@ -196,7 +196,7 @@ std::string FindRTStructFileNameBySeriesUID(std::string inDirectory, std::string
 //so, armed with that list of points and the list of images, the first point in 
 //each polydata object can be appropriately compiled into the rtstruct
 vtkRTStructSetProperties* ProduceStructureSetProperties(std::string inDirectory,
-                                                        vtkPolyData* inPolyData)
+                                                        vtkAppendPolyData* inPolyData)
 {
   Directory::FilenamesType theCTSeries = GetCTImageSeriesUIDs(inDirectory);
   if (theCTSeries.size() > 1){
@@ -219,7 +219,8 @@ vtkRTStructSetProperties* ProduceStructureSetProperties(std::string inDirectory,
   theRTStruct->SetStudyInstanceUID(theCTDataSets[0].FindNextDataElement(Tag(0x0020,0x000d)).GetByteValue()->GetPointer());
   //the series UID should be set automatically, and happen during creation
   theRTStruct->SetReferenceSeriesInstanceUID(theCTDataSets[0].FindNextDataElement(Tag(0x0020,0x000e)).GetByteValue()->GetPointer());
-  theRTStruct->SetReferenceFrameOfReferenceUID(theCTDataSets[0].FindNextDataElement(Tag(0x0020,0x0052)).GetByteValue()->GetPointer());
+  theRTStruct->SetReferenceFrameOfReferenceUID(theCTDataSets[0].FindNextDataElement(Tag(0x0020,0x0052)).GetByteValue()->
+  GetPointer());
   //set the date and time to be now
   
   char date[22];
@@ -236,8 +237,14 @@ vtkRTStructSetProperties* ProduceStructureSetProperties(std::string inDirectory,
   std::copy(&(date[datelen]), &(date[datelen+timelen]), timeString.begin());
   theRTStruct->SetStructureSetTime(timeString.c_str());
   
+  //now, we have go to through each vtkPolyData, assign the ROI names per polydata, and then also assign the
+  //reference SOP instance UIDs on a per-plane basis.
+  for (int i = 0; i < inPolyData->GetNumberOfOutputPorts(); i++){
+    
+  }
   
 
+  return theRTStruct;
 }
 
 
