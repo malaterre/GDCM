@@ -37,7 +37,6 @@ gdcmImplementationClassUIDSub.cxx
 gdcmImplementationUIDSub.cxx
 gdcmImplementationVersionNameSub.cxx
 gdcmAsynchronousOperationsWindowSub.cxx
-gdcmAssociationEstablishment.cxx
 gdcmULTransitionTable.cxx
 gdcmULActionAA.cxx
 gdcmULActionAE.cxx
