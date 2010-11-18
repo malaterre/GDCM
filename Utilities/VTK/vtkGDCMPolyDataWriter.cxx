@@ -133,6 +133,8 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     ds.ReplaceEmpty( de );
     }
     {
+    //this is incorrect.
+    //the study MUST be the same as the image from which this object is derived.
     const char *study = uid.Generate();
     DataElement de( Tag(0x0020,0x000d) );
     VL::Type strlenStudy= (VL::Type)strlen(study);
