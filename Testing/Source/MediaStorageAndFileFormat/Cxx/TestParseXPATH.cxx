@@ -19,6 +19,29 @@
 #include "gdcmGlobal.h"
 #include "gdcmStringFilter.h"
 #include "gdcmTesting.h"
+#include "gdcmFilename.h"
+
+static bool CheckResult( std::string const & filename, std::string const & value )
+{
+  if(
+       filename == "D_CLUNIE_MR3_JPLY.dcm"
+    || filename == "D_CLUNIE_RG3_JPLY.dcm"
+    || filename == "D_CLUNIE_NM1_JPLY.dcm"
+    || filename == "D_CLUNIE_MR4_JPLY.dcm"
+    || filename == "D_CLUNIE_CT1_J2KI.dcm"
+    || filename == "D_CLUNIE_MR1_JPLY.dcm"
+    || filename == "D_CLUNIE_SC1_JPLY.dcm"
+    || filename == "D_CLUNIE_MR2_JPLY.dcm"
+    || filename == "D_CLUNIE_RG2_JPLY.dcm"
+    || filename == "D_CLUNIE_XA1_JPLY.dcm" )
+    {
+    return value == "Lossy Compression ";
+    }
+  else if ( filename == "JPEG_LossyYBR.dcm" )
+    return value ==  "Full fidelity image, uncompressed or lossless compressed";
+  else
+    return value == "";
+}
 
 int TestParseXPATHFile(const char* filename, bool verbose = false )
 {
@@ -46,10 +69,16 @@ int TestParseXPATHFile(const char* filename, bool verbose = false )
     {
     return 1;
     }
-  if( verbose )
-    std::cout << "Res: " << value << std::endl;
 
-  return 0;
+  gdcm::Filename fn( filename );
+
+  bool b = CheckResult( fn.GetName(), value );
+  if( !b )
+    {
+    std::cerr << "Problem with: " << filename << " -> " << value << std::endl;
+    }
+
+  return !b;
 }
 
 int TestParseXPATH(int argc, char *argv[])
@@ -69,7 +98,7 @@ int TestParseXPATH(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestParseXPATHFile( filename);
+    r += TestParseXPATHFile(filename);
     ++i;
     }
   return EXIT_SUCCESS;

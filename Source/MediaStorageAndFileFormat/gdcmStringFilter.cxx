@@ -104,7 +104,8 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, std::string &va
     }
 }
 
-bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &ds, std::string &retvalue ) const
+bool StringFilter::ExecuteQuery(std::string const & query_const,
+  DataSet const &ds, std::string &retvalue ) const
 {
   //std::pair<std::string, std::string> ret;
   static gdcm::Global &g = gdcm::Global::GetInstance();
@@ -126,11 +127,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
   int state = 0;
   for (j = 1, str1 = query; state >= 0 ; j++, str1 = NULL)
     {
-#if defined (WIN32) || defined (_WIN32)
-    token = strtok_s(str1, delim, &saveptr1);
-#else
-    token = strtok_r(str1, delim, &saveptr1);
-#endif
+    token = System::StrTokR(str1, delim, &saveptr1);
 
     if (token == NULL)
       break;
@@ -139,11 +136,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const, DataSet const &
     std::vector< std::string > subtokens;
     for (str2 = token; ; str2 = NULL)
       {
-#if defined (WIN32) || defined (_WIN32)
-        subtoken = strtok_s(str2, subdelim, &saveptr2);
-#else
-        subtoken = strtok_r(str2, subdelim, &saveptr2);
-#endif
+      subtoken = System::StrTokR(str2, subdelim, &saveptr2);
       if (subtoken == NULL)
         break;
       //printf(" --> %s\n", subtoken);

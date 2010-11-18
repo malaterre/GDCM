@@ -111,6 +111,9 @@ public:
   /// NOT THREAD SAFE
   static const char * GetCWD();
 
+  /// strtok_r
+  static char *StrTokR(char *ptr, const char *sep, char **end);
+
   /// NOT THREAD SAFE
 /*
   static void SetArgv0(const char *);
