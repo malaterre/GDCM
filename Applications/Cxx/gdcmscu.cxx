@@ -666,7 +666,7 @@ int main(int argc, char *argv[])
     gdcm::StringFilter sf;
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
-    gdcm::network::BaseRootQuery* theQuery;
+    gdcm::network::BaseRootQuery* theQuery = 0;
     if (findstudy)
       {
       //theQuery = new gdcm::network::StudyRootQuery();
@@ -721,7 +721,7 @@ int main(int argc, char *argv[])
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
 
-    gdcm::network::BaseRootQuery* theQuery;
+    gdcm::network::BaseRootQuery* theQuery = 0;
     if (findstudy)
       {
       //theQuery = new gdcm::network::StudyRootQuery();
@@ -735,6 +735,11 @@ int main(int argc, char *argv[])
       theQuery =
         gdcm::network::QueryFactory::ProduceQuery(
           gdcm::network::ePatientRootType, gdcm::network::ePatient);
+      }
+    else
+      {
+      std::cerr << "Specify the query" << std::endl;
+      return 1;
       }
 
     //gdcm::DataSet ds;
