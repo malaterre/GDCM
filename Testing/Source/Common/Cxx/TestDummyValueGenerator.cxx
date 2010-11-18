@@ -15,9 +15,9 @@
 #include "gdcmDummyValueGenerator.h"
 #include "gdcmTesting.h"
 
-int TestDummyValueGenerator(int argc, char *argv[])
+int TestDummyValueGenerator(int , char *[])
 {
-  gdcm::DummyValueGenerator dvg;
+  gdcm::DummyValueGenerator dvg; (void)dvg;
   const char patientid1[] = "hello";
   const char patientid2[] = "hello ";
   // Because patientid1 & patientid2 are equivalent in DICOM we need to be able to generate
