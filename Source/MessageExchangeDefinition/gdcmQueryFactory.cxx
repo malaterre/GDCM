@@ -15,19 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-file name: gdcmQueryFactory.cxx
-contains: a class to produce a query based off of user-entered information
-name and date: 18 oct 2010 mmr
-
-Essentially, this class is used to construct a query based off of user input (typically
-from the command line; if in code directly, the query itself could just be instantiated)
-
-In theory, could also be used as the interface to validate incoming datasets as belonging
-to a particular query style
-*/
-
-
 #include "gdcmQueryFactory.h"
 #include "gdcmPatientRootQuery.h"
 #include "gdcmStudyRootQuery.h"
@@ -71,7 +58,8 @@ ECharSet QueryFactory::GetCharacterFromCurrentLocale()
 ///will be prepended with "ISO2022 ".  Redundant character sets are not permitted,
 ///so if they are encountered, they will just be skipped.
 ///if UTF8 or GB18030 is used, no subsequent character sets will be used
-DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<ECharSet>& inCharSetType){
+DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<ECharSet>& inCharSetType)
+{
   DataElement theReturn;
   //use the 'visited' array to make sure that if a redundant character set is entered,
   //it's skipped rather than produce a malformed tag.
@@ -83,74 +71,81 @@ DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<EChar
 
   std::vector<ECharSet>::const_iterator itor;
   std::string theOutputString;
-  for (itor = inCharSetType.begin(); itor < inCharSetType.end(); itor++){
-    if (itor > inCharSetType.begin()){
+  for (itor = inCharSetType.begin(); itor < inCharSetType.end(); itor++)
+    {
+    if (itor > inCharSetType.begin())
+      {
       theOutputString += "ISO 2022 ";
-    }
-    else {
+      }
+    else
+      {
       theOutputString += "ISO_IR ";
-    }
+      }
 
     if (visited[*itor]) continue;
-    switch (*itor){
-      default:
-      case eLatin1:
-        theOutputString += "100";
-        break;
-      case eLatin2:
-        theOutputString += "101";
-        break;
-      case eLatin3:
-        theOutputString += "109";
-        break;
-      case eLatin4:
-        theOutputString += "110";
-        break;
-      case eCyrillic:
-        theOutputString += "144";
-        break;
-      case eArabic:
-        theOutputString += "127";
-        break;
-      case eGreek:
-        theOutputString += "126";
-        break;
-      case eHebrew:
-        theOutputString += "138";
-        break;
-      case eLatin5:
-        theOutputString += "148";
-        break;
-      case eJapanese:
-        theOutputString += "13";
-        break;
-      case eThai:
-        theOutputString += "166";
-        break;
-      case eJapaneseKanjiMultibyte:
-        theOutputString += "87";
-        break;
-      case eJapaneseSupplementaryKanjiMultibyte:
-        theOutputString += "159";
-        break;
-      case eKoreanHangulHanjaMultibyte:
-        theOutputString += "149";
-        break;
-        //for the next two, they are only valid if they are
-        //the only ones that appear
-      case eUTF8:
-        theOutputString = "ISO_IR 192";
-        itor = inCharSetType.end(); //stop the loop
-        break;
-      case eGB18030:
-        theOutputString = "GB13080";
-        itor = inCharSetType.end(); //stop the loop
-        break;
-    }
+    switch (*itor)
+      {
+    default:
+    case eLatin1:
+      theOutputString += "100";
+      break;
+    case eLatin2:
+      theOutputString += "101";
+      break;
+    case eLatin3:
+      theOutputString += "109";
+      break;
+    case eLatin4:
+      theOutputString += "110";
+      break;
+    case eCyrillic:
+      theOutputString += "144";
+      break;
+    case eArabic:
+      theOutputString += "127";
+      break;
+    case eGreek:
+      theOutputString += "126";
+      break;
+    case eHebrew:
+      theOutputString += "138";
+      break;
+    case eLatin5:
+      theOutputString += "148";
+      break;
+    case eJapanese:
+      theOutputString += "13";
+      break;
+    case eThai:
+      theOutputString += "166";
+      break;
+    case eJapaneseKanjiMultibyte:
+      theOutputString += "87";
+      break;
+    case eJapaneseSupplementaryKanjiMultibyte:
+      theOutputString += "159";
+      break;
+    case eKoreanHangulHanjaMultibyte:
+      theOutputString += "149";
+      break;
+      //for the next two, they are only valid if they are
+      //the only ones that appear
+    case eUTF8:
+      theOutputString = "ISO_IR 192";
+      itor = inCharSetType.end(); //stop the loop
+      break;
+    case eGB18030:
+      theOutputString = "GB13080";
+      itor = inCharSetType.end(); //stop the loop
+      break;
+      }
     if (itor < (inCharSetType.end()-1))
       theOutputString += "\\";
+#if 0
+    // the following code will not work for UTF-8 and eGB18030
     assert( itor < inCharSetType.end() );
     visited[*itor] = true;
+#endif
   }
 
   if( theOutputString.size() % 2 )

@@ -46,37 +46,46 @@ namespace gdcm{
 
 /**
  * \brief QueryFactory.h
+ * \note
  * contains: a class to produce a query based off of user-entered information
- * name and date: 18 oct 2010 mmr
  *
- * Essentially, this class is used to construct a query based off of user input (typically
- * from the command line; if in code directly, the query itself could just be instantiated)
+ * Essentially, this class is used to construct a query based off of user input
+ * (typically from the command line; if in code directly, the query itself
+ * could just be instantiated)
  *
- * In theory, could also be used as the interface to validate incoming datasets as belonging
- * to a particular query style
-*/
+ * In theory, could also be used as the interface to validate incoming datasets
+ * as belonging to a particular query style
+ */
 class GDCM_EXPORT QueryFactory
 {
-    public:
-      //this function will produce a query (basically, a wrapper to a dataset that can validate
-      //whether or not the query is a valid cfind/cmove query) and the level of the
-      //query (patient, study, series, image).  If the user provides an invalid instantiation
-      //(ie, study root type, query level of patient), then the result is NULL.
-      static BaseRootQuery* ProduceQuery(const ERootType &inRootType, const EQueryLevel& inQueryLevel);
+public:
+  /// this function will produce a query (basically, a wrapper to a dataset that
+  /// can validate whether or not the query is a valid cfind/cmove query) and the
+  /// level of the query (patient, study, series, image). If the user provides
+  /// an invalid instantiation (ie, study root type, query level of patient),
+  /// then the result is NULL.
+  static BaseRootQuery* ProduceQuery(const ERootType &inRootType,
+    const EQueryLevel& inQueryLevel);
 
-      ///This function will produce the appropriate dataelement given a list of charsets.
-      ///The first charset will be used directly, while the second and subsequent
-      ///will be prepended with "ISO2022 ".  Redundant character sets are not permitted,
-      ///so if they are encountered, they will just be skipped.
-      ///if UTF8 or GB18030 is used, no subsequent character sets will be used
-      ///if the vector passed in is empty, then the dataelement that's passed out will be empty
-      ///and Latin1 is the presumed encoding
-      static DataElement ProduceCharacterSetDataElement(const std::vector<ECharSet>& inCharSetType);
+  /// This function will produce the appropriate dataelement given a list of
+  /// charsets. The first charset will be used directly, while the second and
+  /// subsequent will be prepended with "ISO2022 ". Redundant character sets are
+  /// not permitted, so if they are encountered, they will just be skipped. if
+  /// UTF8 or GB18030 is used, no subsequent character sets will be used if the
+  /// vector passed in is empty, then the dataelement that's passed out will be
+  /// empty and Latin1 is the presumed encoding
+  static DataElement ProduceCharacterSetDataElement(
+    const std::vector<ECharSet>& inCharSetType);
 
-      static ECharSet GetCharacterFromCurrentLocale();
+  /// This function will return the corresponding ECharSet associated with the
+  /// current locale of the running system (based on the value of locale() ).
+  static ECharSet GetCharacterFromCurrentLocale();
 
-      static void ListCharSets(std::ostream& os);
-    };
-  }
-}
+  /// List all possible CharSet
+  static void ListCharSets(std::ostream& os);
+};
+
+} // end namespace network
+} // end namespace gdcm
+
 #endif // GDCMQUERYFACTORY_H
