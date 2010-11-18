@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
         {"port-scp", 1, &portscp, 1}, // --port-scp
         {"output", 1, &outputopt, 1}, // --output
         {"recursive", 0, &recursive, 1},
-        {"store-query", 0, &storequery, 1},
+        {"store-query", 1, &storequery, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:o:r";
@@ -402,7 +402,7 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "output") == 0 );
             outputdir = optarg;
             }
-          else if( option_index == 22 ) /* store-query */
+          else if( option_index == 23 ) /* store-query */
             {
             assert( strcmp(s, "store-query") == 0 );
             queryfile = optarg;
@@ -763,9 +763,12 @@ int main(int argc, char *argv[])
 
     //ds.Print( std::cout );
 
-    if( false && storequery )
+    if( storequery )
       {
       gdcm::Writer writer;
+      writer.SetCheckFileMetaInformation( false );
+      writer.GetFile().GetHeader().SetDataSetTransferSyntax(
+        gdcm::TransferSyntax::ImplicitVRLittleEndian );
       writer.GetFile().SetDataSet( theQuery->GetQueryDataSet() );
       writer.SetFileName( queryfile.c_str() );
       if( !writer.Write() )
