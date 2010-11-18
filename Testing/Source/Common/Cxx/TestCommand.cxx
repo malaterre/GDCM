@@ -25,7 +25,7 @@ void foo(gdcm::Command *c)
   c->Execute((gdcm::Subject*)0, gdcm::AnyEvent() );
 }
 
-int TestCommand(int argc, char *argv[])
+int TestCommand(int , char *[])
 {
   SmartPointer<gdcm::MemberCommand<Watcher> > mc = gdcm::MemberCommand<Watcher>::New();
   foo(mc);
