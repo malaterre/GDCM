@@ -18,6 +18,7 @@
 #ifndef GDCMASSOCIATIONESTABLISHMENT_H
 #define GDCMASSOCIATIONESTABLISHMENT_H
 
+#error do not use
 #include "gdcmTypes.h"
 
 namespace gdcm
