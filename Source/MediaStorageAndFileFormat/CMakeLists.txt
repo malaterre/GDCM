@@ -69,6 +69,7 @@ SET(MSFF_SRCS
   gdcmSegmentedPaletteColorLookupTable.cxx
   gdcmStreamImageReader.cxx
   gdcmStreamImageWriter.cxx
+  gdcmDirectoryHelper.cxx
   )
 if(OPENJPEG_VERSION VERSION_LESS 2.0)
   list(APPEND MSFF_SRCS
