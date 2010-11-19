@@ -1139,7 +1139,12 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     char * copy = new char[len];
     //memcpy(copy, pointer, len);
     image.GetBuffer(copy);
-    r.Rescale(pointer,copy,len);
+    if( !r.Rescale(pointer,copy,len) )
+      {
+      vtkErrorMacro( "Could not Rescale" );
+      // problem with gdcmData/3E768EB7.dcm
+      return 0;
+      }
     delete[] copy;
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];

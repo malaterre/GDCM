@@ -368,6 +368,8 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
     break;
   case PixelFormat::UINT12:
     //RescaleFunctionIntoBestFit<uint12_t>(out,in,n);
+    // problem with gdcmData/3E768EB7.dcm
+    return false;
     assert(0);
     break;
   case PixelFormat::INT12:
