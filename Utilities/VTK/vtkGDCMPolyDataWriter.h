@@ -27,7 +27,6 @@
 #define VTKGDCMPOLYDATAWRITER_H
 
 #include "vtkPolyDataWriter.h"
-#include "vtkStdString.h"
 
 class vtkMedicalImageProperties;
 class vtkRTStructSetProperties;
@@ -47,25 +46,6 @@ public:
 //  vtkGetStringMacro(FileName);
 
   // Description:
-  // Set/Get the directory containing the CT/MR series from which
-  // this RT Struct was derived.
-  // If this structure is set, then the vtkRTStructSetProperties
-  // object is ignored in favor of the data derived from this CT/MR
-  // series.  If you are writing an RT Struct from a 3D volume,
-  // then you will need to initialize the rtstruct and use that directly.
-  // Only one CT/MR series can be in this directory, and only the first
-  // CT, followed by the first MR, series will be used, all others ignored.
-  vtkSetStringMacro(DirectoryName);
-  vtkGetStringMacro(DirectoryName);
-
-  //if loading from a directory, the struct label and name must be set explicitly
-  vtkSetStringMacro(StructLabel);
-  vtkGetStringMacro(StructLabel);
-  
-  vtkSetStringMacro(StructName);
-  vtkGetStringMacro(StructName);
-
-  // Description:
   // Get the medical image properties object
 //  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties *pd);
@@ -81,11 +61,6 @@ protected:
 
   vtkMedicalImageProperties *MedicalImageProperties;
   vtkRTStructSetProperties *RTStructSetProperties;
-  
-  //unbelievable.  Still using char* after all these years.
-  char* DirectoryName;
-  char* StructLabel;
-  char* StructName;
 
   void WriteData();
 //BTX
