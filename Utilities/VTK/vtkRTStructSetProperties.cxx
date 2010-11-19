@@ -189,18 +189,21 @@ std::string vtkGDCMPolyHelper::RetrieveSOPInstanceUIDFromZPosition(double inZPos
   gdcm::Tag thePosition(0x0020, 0x0032);
   gdcm::Tag theSOPInstanceUID(0x0008, 0x0018);
   std::string blank;//return only if there's a problem
-  for (itor < inDS.begin(); itor != inDS.end(); itor++){
-    if (itor->FindDataElement(thePosition)){
+  for (itor < inDS.begin(); itor != inDS.end(); itor++)
+    {
+    if (itor->FindDataElement(thePosition))
+      {
       DataElement de = itor->GetDataElement(thePosition);
       gdcm::Attribute<0x0020,0x0032> at;
       at.SetFromDataElement( de );
-      if (fabs(at.GetValue(2) < inZPos)<0.01){
+      if (fabs(at.GetValue(2) - inZPos)<0.01)
+        {
         DataElement de2 = itor->GetDataElement(theSOPInstanceUID);
         std::string theReturn(de2.GetByteValue()->GetPointer());
         return theReturn;
+        }
       }
     }
-  }
   return blank;
 }
 
