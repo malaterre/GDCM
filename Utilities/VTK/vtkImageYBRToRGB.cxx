@@ -1,5 +1,21 @@
 /*=========================================================================
 
+  Program: GDCM (Grassroots DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2010 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+/*=========================================================================
+
+  Portions of this file are subject to the VTK Toolkit Version 3 copyright.
+
   Program:   Visualization Toolkit
   Module:    $RCSfile: vtkImageYBRToRGB.cxx,v $
 
