@@ -139,13 +139,12 @@ DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<EChar
       itor = inCharSetType.end(); //stop the loop
       break;
       }
-    if (itor < (inCharSetType.end()-1))
+    if (itor < (inCharSetType.end()-1)){
       theOutputString += "\\";
-#if 0
     // the following code will not work for UTF-8 and eGB18030
-    assert( itor < inCharSetType.end() );
-    visited[*itor] = true;
-#endif
+      assert( itor < inCharSetType.end() );
+      visited[*itor] = true;
+    }
   }
 
   if( theOutputString.size() % 2 )

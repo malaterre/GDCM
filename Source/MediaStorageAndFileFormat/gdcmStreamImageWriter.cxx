@@ -187,7 +187,7 @@ bool StreamImageWriter::WriteImageInformation(){
 
   //ok, the writer has a file in it, and so we place the dataset that we're given into
   //the file
-  mWriter.GetFile().SetDataSet(mNonPixelInformation);
+  mWriter.SetFile(mFile);
   try
   {
     mWriter.Write();//should write everything BUT the image tag.  right?
@@ -221,15 +221,8 @@ bool StreamImageWriter::WriteImageInformation(){
   /// Set the image information to be written to disk that is everything but
   /// the pixel information.  Copies the data into a new dataset, except for the pixel element
 ///This way, writing the image information will just write everything else.
-void StreamImageWriter::SetImageNonPixelInformation(const DataSet& inNonPixelInformation){
-  mNonPixelInformation.Clear();
-  gdcm::DataSet::ConstIterator itor;
-  gdcm::Tag thePixelDataTag(0x7fe0, 0x0010);
-  for (itor = inNonPixelInformation.Begin(); itor != inNonPixelInformation.End(); ++itor){
-    if (itor->GetTag() != thePixelDataTag){
-      mNonPixelInformation.Insert(*itor);
-    }
-  }
+void StreamImageWriter::SetImageNonPixelInformation(const File& inFile){
+  mFile = inFile;
 }
 
 } // end namespace gdcm
