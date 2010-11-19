@@ -296,9 +296,9 @@ vtkRTStructSetProperties* vtkGDCMPolyHelper::ProduceStructureSetProperties(const
       double* thePoint = thePoints->GetPoint(0);
       double theZ = thePoint[2];
       std::string theSOPInstance = RetrieveSOPInstanceUIDFromZPosition(theZ, theCTDataSets);
-      //I think that this k is correct, that's on a polydata contour level, not an overall index
-      //actually, I'm wrong-- this needs a second index to add it in properly
-      theRTStruct->AddContourReferencedFrameOfReference(k, theSOPInstance.c_str(), theSOPClassID.c_str());
+      //j is correct here, because it's adding, as in there's an internal vector
+      //that's growing.
+      theRTStruct->AddContourReferencedFrameOfReference(j, theSOPInstance.c_str(), theSOPClassID.c_str());
     }
   }
   
