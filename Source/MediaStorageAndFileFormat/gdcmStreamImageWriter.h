@@ -79,7 +79,7 @@ public:
 
   /// Set the image information to be written to disk that is everything but
   /// the pixel information.
-  void SetImageNonPixelInformation(const DataSet& inNonPixelInformation);
+  void SetImageNonPixelInformation(const File& inFile);
 
 
 protected:
@@ -91,7 +91,7 @@ protected:
   ImageWriter mWriter;
 
   std::streamoff mFileOffset; //the fileoffset for getting header information
-  DataSet mNonPixelInformation; //all the non-pixel information
+  File mFile; //all the non-pixel information
 
   //for thread safety, these should not be stored here, but should be used
   //for every read subregion operation.
