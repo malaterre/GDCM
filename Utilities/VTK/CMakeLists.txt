@@ -79,7 +79,6 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyDataReader.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyDataWriter.cxx
-    ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyHelper.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkRTStructSetProperties.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkLookupTable16.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx

@@ -144,6 +144,7 @@ std::string FindRTStructFileNameBySeriesUID(std::string inDirectory, std::string
 //so, armed with that list of points and the list of images, the first point in 
 //each polydata object can be appropriately compiled into the rtstruct
 //we use appendpolydata here-- each polydata is an organ
+#if 0
 vtkRTStructSetProperties* ProduceStructureSetProperties(std::string inDirectory,
                                                         vtkAppendPolyData* inPolyData)
 {
@@ -195,6 +196,7 @@ vtkRTStructSetProperties* ProduceStructureSetProperties(std::string inDirectory,
 
   return theRTStruct;
 }
+#endif
 
 
 
