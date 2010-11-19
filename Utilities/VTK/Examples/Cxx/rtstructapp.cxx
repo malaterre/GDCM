@@ -91,58 +91,6 @@ Directory::FilenamesType GetCTImageSeriesUIDs(std::string inDirectory)
   return GetSeriesUIDsBySOPClassUID(inDirectory, "1.2.840.10008.5.1.4.1.1.2");
 }
 
-//the code in GetSeriesUIDsBySOPClassUID will enumerate the CT images in a directory
-//This code will retrieve an image by its Series UID.
-//this code doesn't return pointers or smart pointers because it's intended to 
-//be easily wrapped by calling languages that don't know pointers (ie, Java)
-//this function is a proof of concept
-//for it to really work, it needs to also 
-std::vector<DataSet> LoadCTImageFromFiles(std::string inDirectory, std::string inSeriesUID)
-{
-  gdcm::Scanner theScanner;
-  gdcm::Directory theDir;
-  theScanner.AddTag(Tag(0x0020, 0x000e));//Series UID
-  std::vector<DataSet> theReturn;
-  std::vector<DataSet> blank;//returned in case of an error
-  
-  try {
-    theDir.Load(inDirectory);
-    theScanner.Scan(theDir.GetFilenames());
-    
-    //now find all series UIDs
-    Directory::FilenamesType theSeriesValues = theScanner.GetOrderedValues(Tag(0x0020,0x000e));
-    
-    //now count the number of series that are of that given SOPClassUID
-    int theNumSeries = theSeriesValues.size();
-    for (int i = 0; i < theNumSeries; i++){
-      if (inSeriesUID == theSeriesValues[0]){
-        //find all files that have that series UID, and then load them via 
-        //the vtkImageReader
-        Directory::FilenamesType theFiles =
-          theScanner.GetAllFilenamesFromTagToValue(Tag(0x0020, 0x000e), theSeriesValues[0].c_str());
-        IPPSorter sorter;
-        sorter.SetComputeZSpacing(true);
-        sorter.SetZSpacingTolerance(0.000001);
-        if (!sorter.Sort(theFiles)){
-          gdcmWarningMacro("Unable to sort CT Image Files.");
-          return blank;
-        }
-        Directory::FilenamesType theSortedFiles = sorter.GetFilenames();
-        for (unsigned long j = 0; j < theSortedFiles.size(); ++j){
-          Reader theReader;
-          theReader.SetFileName(theSortedFiles[j].c_str());
-          theReader.Read();
-          theReturn.push_back(theReader.GetFile().GetDataSet());
-        }
-        return theReturn;
-      }
-    }
-    return blank;
-  } catch (...){
-    gdcmWarningMacro("Something went wrong reading CT images.");
-    return blank;
-  }
-}
 
 //the gdcm rtstruct reader works fine with a single filename
 //obtain the filename from a series UID
@@ -195,6 +143,7 @@ std::string FindRTStructFileNameBySeriesUID(std::string inDirectory, std::string
 //(that need both the z position and the appropriate SOP Instance UID for a plane)
 //so, armed with that list of points and the list of images, the first point in 
 //each polydata object can be appropriately compiled into the rtstruct
+//we use appendpolydata here-- each polydata is an organ
 vtkRTStructSetProperties* ProduceStructureSetProperties(std::string inDirectory,
                                                         vtkAppendPolyData* inPolyData)
 {

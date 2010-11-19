@@ -27,6 +27,7 @@
 #include "vtkErrorCode.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkRTStructSetProperties.h"
+#include "vtkGDCMPolyHelper.h"
 
 #include "gdcmWriter.h"
 #include "gdcmUIDs.h"
@@ -36,6 +37,7 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmSystem.h"
 
 vtkCxxRevisionMacro(vtkGDCMPolyDataWriter, "$Revision: 1.74 $")
 vtkStandardNewMacro(vtkGDCMPolyDataWriter)
@@ -48,6 +50,9 @@ vtkGDCMPolyDataWriter::vtkGDCMPolyDataWriter()
   this->SetNumberOfInputPorts(1);
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->RTStructSetProperties = vtkRTStructSetProperties::New();
+  this->DirectoryName = NULL;
+  this->StructLabel = NULL;
+  this->StructName = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -78,6 +83,7 @@ static void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::Anony
 #endif
     }
 }
+
 
 //----------------------------------------------------------------------------
 void vtkGDCMPolyDataWriter::WriteData()
@@ -132,7 +138,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
     ds.ReplaceEmpty( de );
     }
-    {
+/*    {
     //this is incorrect.
     //the study MUST be the same as the image from which this object is derived.
     const char *study = uid.Generate();
@@ -141,7 +147,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     de.SetByteValue( study, strlenStudy );
     de.SetVR( Attribute<0x0020, 0x000d>::GetVR() );
     ds.ReplaceEmpty( de );
-    }
+    }*/
     {
     const char *series = uid.Generate();
     DataElement de( Tag(0x0020,0x000e) );
@@ -175,7 +181,10 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   int year, month, day;
   gdcm::Anonymizer ano;
     ano.SetFile( file );
-
+  std::vector<DataSet> theCTDataSets;//only used if the directory name is empty
+  //but given the large number of contexts here, this vector will be in the root context
+    
+  if(this->DirectoryName == NULL){
     SetStringValueFromTag(this->RTStructSetProperties->GetStructureSetLabel(), gdcm::Tag(0x3006,0x0002), ano);
     SetStringValueFromTag(this->RTStructSetProperties->GetStructureSetName(), gdcm::Tag(0x3006,0x0004), ano);
     SetStringValueFromTag(this->RTStructSetProperties->GetStructureSetDate(), gdcm::Tag(0x3006,0x0008), ano);
@@ -183,31 +192,85 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     SetStringValueFromTag(this->RTStructSetProperties->GetSOPInstanceUID(), gdcm::Tag(0x0008,0x0018), ano);
     SetStringValueFromTag(this->RTStructSetProperties->GetStudyInstanceUID(), gdcm::Tag(0x0020,0x000d), ano);
     SetStringValueFromTag(this->RTStructSetProperties->GetSeriesInstanceUID(), gdcm::Tag(0x0020,0x000e), ano);
+  } else {
+    std::string theDirectory(this->DirectoryName);
+    Directory::FilenamesType theCTSeries = vtkGDCMPolyHelper::GetCTImageSeriesUIDs(theDirectory);
+    if (theCTSeries.size() > 1){
+      gdcmWarningMacro("More than one CT series detected, only reading series UID: " << theCTSeries[0]);
+    }
+    if (theCTSeries.empty()){
+      gdcmWarningMacro("No CT Series found, trying MR.");
+      theCTSeries = vtkGDCMPolyHelper::GetMRImageSeriesUIDs(theDirectory);
+      if (theCTSeries.size() > 1){
+        gdcmWarningMacro("More than one MR series detected, only reading series UID: " << theCTSeries[0]);
+      }
+      if (theCTSeries.empty()){
+        gdcmWarningMacro("No CT or MR series found, throwing.");
+        throw -1;
+      }
+    }
+    //load the images in the CT series
+    theCTDataSets = vtkGDCMPolyHelper::LoadImageFromFiles(theDirectory, theCTSeries[0]);
+    if (theCTDataSets.empty()){
+      gdcmWarningMacro("No CT or MR Images loaded, throwing.");
+      throw -1;
+    }
+    SetStringValueFromTag(this->StructLabel, gdcm::Tag(0x3006,0x0002), ano);
+    SetStringValueFromTag(this->StructName, gdcm::Tag(0x3006,0x0004), ano);
+
+    SetStringValueFromTag(theCTDataSets[0].FindNextDataElement(Tag(0x0020,0x000d)).GetByteValue()->GetPointer(),
+                          gdcm::Tag(0x0020,0x000d), ano);
+    //series and SOP instance UIDs should be set by the rtstruct, which generates them randomly
+    SetStringValueFromTag(this->RTStructSetProperties->GetSOPInstanceUID(), gdcm::Tag(0x0008,0x0018), ano);
+    SetStringValueFromTag(this->RTStructSetProperties->GetSeriesInstanceUID(), gdcm::Tag(0x0020,0x000e), ano);
+
+
+    //set the date and time to be now
+    char date[22];
+    const size_t datelen = 8;
+    int res = System::GetCurrentDateTime(date);
+    assert( res );
+    (void)res;//warning removal
+    //the date is the first 8 chars 
+    std::string dateString;
+    std::copy(&(date[0]), &(date[datelen]), dateString.begin());
+    SetStringValueFromTag(dateString.c_str(), gdcm::Tag(0x3006,0x0008), ano);
+    std::string timeString;
+    const size_t timelen = 6; //for now, only need hhmmss
+    std::copy(&(date[datelen]), &(date[datelen+timelen]), timeString.begin());
+    SetStringValueFromTag(timeString.c_str(), gdcm::Tag(0x3006,0x0009), ano);
+  }
 
 {
   SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
   vtkIdType n = this->RTStructSetProperties->GetNumberOfReferencedFrameOfReferences();
-  for( vtkIdType id = 0; id < n; ++id )
-    {
-    const char *sopclass = this->RTStructSetProperties->GetReferencedFrameOfReferenceClassUID(id);
-    const char *instanceuid = this->RTStructSetProperties->GetReferencedFrameOfReferenceInstanceUID(id);
+  for( vtkIdType id = 0; id < n; ++id ){
+    std::string sopclass;
+    std::string instanceuid;
+    if (this->DirectoryName == NULL){
+      sopclass = this->RTStructSetProperties->GetReferencedFrameOfReferenceClassUID(id);
+      instanceuid = this->RTStructSetProperties->GetReferencedFrameOfReferenceInstanceUID(id);
+    } else {
+      sopclass = vtkGDCMPolyHelper::GetSOPClassUID(theCTDataSets);
+      instanceuid = vtkGDCMPolyHelper::RetrieveSOPInstanceUIDFromIndex(id, theCTDataSets);
+    }
     Item item;
     item.SetVLToUndefined();
     DataSet &subds = item.GetNestedDataSet();
-{
-    Attribute<0x0008,0x1150> at;
-    at.SetValue( sopclass );
-    subds.Insert( at.GetAsDataElement() );
-}
-{
-    Attribute<0x0008,0x1155> at;
-    at.SetValue( instanceuid );
-    subds.Insert( at.GetAsDataElement() );
-}
+    {
+      Attribute<0x0008,0x1150> at;
+      at.SetValue( sopclass.c_str() );
+      subds.Insert( at.GetAsDataElement() );
+    }
+    {
+      Attribute<0x0008,0x1155> at;
+      at.SetValue( instanceuid.c_str() );
+      subds.Insert( at.GetAsDataElement() );
+    }
 
     sqi->AddItem( item );
-    }
+  }
 
   DataElement de1( Tag(0x3006,0x0010) );
   de1.SetVR( VR::SQ );
@@ -221,9 +284,13 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   DataSet &ds2 = item1.GetNestedDataSet();
 
   gdcm::Attribute<0x0020,0x052> frameofreferenceuid;
-  if( this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() )
-    frameofreferenceuid.SetValue(
-      this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() );
+  if (this->DirectoryName == NULL){
+    if( this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() )
+      frameofreferenceuid.SetValue(
+        this->RTStructSetProperties->GetReferenceFrameOfReferenceUID() );
+  } else {
+    frameofreferenceuid.SetValue(vtkGDCMPolyHelper::GetFrameOfReference(theCTDataSets).c_str());
+  }
   ds2.Insert( frameofreferenceuid.GetAsDataElement() );
 
   DataElement de2( Tag(0x3006,0x0012) );
@@ -509,7 +576,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
       item.SetVLToUndefined();
       DataSet &subds = item.GetNestedDataSet();
 
-      gdcm::Attribute<0x0008,0x1150> classat;
+      gdcm::Attribute<0x0008,0x1150> classat; 
       classat.SetValue ( this->RTStructSetProperties->
         GetContourReferencedFrameOfReferenceClassUID( pdidx, cellnum ));
       subds.Insert( classat.GetAsDataElement() );
