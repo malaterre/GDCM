@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
 //  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
 //    writer->SetInput( num, reader->GetOutput(num) );
   writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[0] + ".dcm").c_str());
+  //doesn't look like the medical properties are actually written out
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   //this line is cheating, we won't have the same stuff, and may not have a struct
   //to start with.
@@ -79,8 +80,10 @@ int main(int argc, char *argv[])
 
   //loop through the outputs in order to write them out as if they had been created and appended
   Directory::FilenamesType roiNames, roiAlgorithms, roiTypes;
+  vtkAppendPolyData* append = vtkAppendPolyData::New();
   for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i){
     writer->SetInput(i, reader->GetOutput(i));
+    append->AddInput(reader->GetOutput(i));
     roiNames.push_back(reader->GetRTStructSetProperties()->GetStructureSetROIName(i));
     roiAlgorithms.push_back(reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i));
     roiTypes.push_back(reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i));
@@ -102,7 +105,7 @@ int main(int argc, char *argv[])
 
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
-  cubeMapper->SetInput( (vtkPolyData*)writer->GetInput() );
+  cubeMapper->SetInput( append->GetOutput());
   cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
   cubeActor->SetMapper(cubeMapper);
