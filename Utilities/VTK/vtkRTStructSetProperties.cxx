@@ -14,7 +14,8 @@
 =========================================================================*/
 #include "vtkRTStructSetProperties.h"
 #include "vtkObjectFactory.h"
-#include "vtkAppendPolyData.h"
+#include "vtkGDCMPolyDataWriter.h"
+#include "vtkPolyData.h"
 
 #include "gdcmDirectory.h"
 #include "gdcmScanner.h"
@@ -23,6 +24,8 @@
 #include "gdcmIPPSorter.h"
 #include "gdcmAttribute.h"
 #include "gdcmDirectoryHelper.h"
+#include "vtkCellArray.h"
+#include "vtkCellData.h"
 
 #include <string>
 #include <map>
@@ -48,7 +51,7 @@ vtkStandardNewMacro(vtkRTStructSetProperties)
 vtkRTStructSetProperties* vtkRTStructSetProperties::ProduceStructureSetProperties(const std::string& inDirectory,
                                                                            const std::string& inStructLabel,
                                                                            const std::string& inStructName,
-                                                                           vtkAppendPolyData* inPolyData,//should also have colors
+                                                                           vtkGDCMPolyDataWriter* inPolyData,//for polydata inputs
                                                                            gdcm::Directory::FilenamesType inROINames,
                                                                            gdcm::Directory::FilenamesType inROIAlgorithmName,
                                                                            gdcm::Directory::FilenamesType inROIType)
@@ -96,11 +99,11 @@ vtkRTStructSetProperties* vtkRTStructSetProperties::ProduceStructureSetPropertie
   (void)res;//warning removal
   //the date is the first 8 chars
   std::string dateString;
-  std::copy(&(date[0]), &(date[datelen]), dateString.begin());
+  dateString.insert(dateString.begin(), &(date[0]), &(date[datelen]));
   theRTStruct->SetStructureSetDate(dateString.c_str());
   std::string timeString;
   const size_t timelen = 6; //for now, only need hhmmss
-  std::copy(&(date[datelen]), &(date[datelen+timelen]), timeString.begin());
+  timeString.insert(timeString.begin(), &(date[datelen]), &(date[datelen+timelen]));
   theRTStruct->SetStructureSetTime(timeString.c_str());
 
   //for each image, we need to fill in the sop class and instance UIDs for the frame of reference
@@ -112,7 +115,7 @@ vtkRTStructSetProperties* vtkRTStructSetProperties::ProduceStructureSetPropertie
 
   //now, we have go to through each vtkPolyData, assign the ROI names per polydata, and then also assign the
   //reference SOP instance UIDs on a per-plane basis.
-  for (int j = 0; j < inPolyData->GetNumberOfOutputPorts(); j++){
+  for (int j = 0; j < inPolyData->GetNumberOfInputPorts(); j++){
     theRTStruct->AddStructureSetROI(j,
       theRTStruct->GetReferenceFrameOfReferenceUID(),
       inROINames[j].c_str(),
@@ -123,16 +126,19 @@ vtkRTStructSetProperties* vtkRTStructSetProperties::ProduceStructureSetPropertie
      //order that the tuples appear, as well as the colors
      //right now, each cell in the vtkpolydata is a contour in an xy plane
      //that's what MUST be passed in
-    vtkPolyData* theData = inPolyData->GetOutput(j);
-    if (theData->GetPoints() == NULL || theData->GetNumberOfPoints() == 0)
-      continue; //not sure this can happen, but hey
-    //use the first point in each plane.
-    //theRTStruct->SetContourReferencedFrameOfReferenceSize(theData->GetNumberOfPoints());
-    for (int k = 0; k < theData->GetNumberOfPoints(); k++){
-      vtkPoints* thePoints = theData->GetPoints();
-      if (thePoints->GetNumberOfPoints() < 1) continue;
-      double* thePoint = thePoints->GetPoint(0);
-      double theZ = thePoint[2];
+    vtkPolyData* theData = inPolyData->GetInput(j);
+    unsigned int cellnum = 0;
+    vtkPoints *pts;
+    vtkCellArray *polys;
+    vtkIdType npts = 0;
+    vtkIdType *indx = 0;
+    pts = theData->GetPoints();
+    polys = theData->GetPolys();
+    double v[3];
+    for (polys->InitTraversal(); polys->GetNextCell(npts,indx); cellnum++ ){
+      if (npts < 1) continue;
+      pts->GetPoint(indx[0],v);
+      double theZ = v[2];
       std::string theSOPInstance = DirectoryHelper::RetrieveSOPInstanceUIDFromZPosition(theZ, theCTDataSets);
       //j is correct here, because it's adding, as in there's an internal vector
       //that's growing.
