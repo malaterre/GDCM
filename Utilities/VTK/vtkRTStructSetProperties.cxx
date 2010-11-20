@@ -120,7 +120,7 @@ vtkRTStructSetProperties* vtkRTStructSetProperties::ProduceStructureSetPropertie
   //for each image, we need to fill in the sop class and instance UIDs for the frame of reference
   std::string theSOPClassID = DirectoryHelper::GetSOPClassUID(theCTDataSets).c_str();
   for (unsigned long i = 0; i < theCTDataSets.size(); i++){
-    theRTStruct->AddContourReferencedFrameOfReference(i, theSOPClassID.c_str(),
+    theRTStruct->AddReferencedFrameOfReference(theSOPClassID.c_str(),
       DirectoryHelper::RetrieveSOPInstanceUIDFromIndex(i,theCTDataSets).c_str());
   }
 
