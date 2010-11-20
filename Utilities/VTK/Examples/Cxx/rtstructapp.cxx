@@ -67,8 +67,8 @@ int main(int argc, char *argv[])
 
   vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
   writer->SetNumberOfInputPorts( reader->GetNumberOfOutputPorts() );
-  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
-    writer->SetInput( num, reader->GetOutput(num) );
+//  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
+//    writer->SetInput( num, reader->GetOutput(num) );
   writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[0] + ".dcm").c_str());
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   //this line is cheating, we won't have the same stuff, and may not have a struct
@@ -79,9 +79,8 @@ int main(int argc, char *argv[])
 
   //loop through the outputs in order to write them out as if they had been created and appended
   Directory::FilenamesType roiNames, roiAlgorithms, roiTypes;
-  vtkAppendPolyData* append = vtkAppendPolyData::New();
-  for (int i = 0; i < reader->GetNumberOfOutputPorts(); i++){
-    append->AddInput(reader->GetOutput(i));
+  for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i){
+    writer->SetInput(i, reader->GetOutput(i));
     roiNames.push_back(reader->GetRTStructSetProperties()->GetStructureSetROIName(i));
     roiAlgorithms.push_back(reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i));
     roiTypes.push_back(reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i));
@@ -91,7 +90,7 @@ int main(int argc, char *argv[])
     vtkRTStructSetProperties::ProduceStructureSetProperties(theDirName,
     reader->GetRTStructSetProperties()->GetStructureSetLabel(),
     reader->GetRTStructSetProperties()->GetStructureSetName(),
-    append, roiNames, roiAlgorithms, roiTypes);
+    writer, roiNames, roiAlgorithms, roiTypes);
 
   writer->SetRTStructSetProperties(theProperties);
   writer->Write();
@@ -103,7 +102,7 @@ int main(int argc, char *argv[])
 
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
-  cubeMapper->SetInput( append->GetOutput() );
+  cubeMapper->SetInput( (vtkPolyData*)writer->GetInput() );
   cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
   cubeActor->SetMapper(cubeMapper);
@@ -127,7 +126,7 @@ int main(int argc, char *argv[])
   iren->Start();
 
   reader->Delete();
-  append->Delete();
+//  append->Delete();
   cubeMapper->Delete();
   cubeActor->Delete();
   renderer->Delete();
