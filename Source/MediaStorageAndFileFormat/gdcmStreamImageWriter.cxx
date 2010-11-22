@@ -33,6 +33,7 @@ StreamImageWriter::StreamImageWriter(){
   //so that if the extent is not defined, read can fail properly.
   mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
+  mElementOffsets = 0;
 }
 StreamImageWriter::~StreamImageWriter(){
 }
@@ -42,6 +43,7 @@ StreamImageWriter::~StreamImageWriter(){
 /// to any other functions.
 void StreamImageWriter::SetFileName(const char* inFileName){
   mWriter.SetFileName(inFileName);
+  mElementOffsets = 0;//changing to a new file, should make sure that we're starting again
 }
 void StreamImageWriter::SetStream(std::ostream& inStream){
   mWriter.SetStream(inStream);
@@ -260,6 +262,8 @@ bool StreamImageWriter::WriteImageInformation(){
   //ok, the writer has a file in it, and so we place the dataset that we're given into
   //the file
   mWriter.SetFile(mFile);
+  mElementOffsets = 0;//changing to a new file, should make sure that we're starting again
+  //filename needs to be set prior to this function
   try
   {
     mWriter.Write();//should write everything BUT the image tag.  right?

@@ -42,9 +42,11 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     unsigned short xmin = 0;
     unsigned short xmax = extent[0];
     unsigned short ymin = 0;
-    unsigned short ymax = extent[1]/2;
+    unsigned short ymax = extent[1];
+    unsigned short zmin = 0;
+    unsigned short zmax = extent[2];
 
-    reader.DefinePixelExtent(0, extent[0], 0, extent[1]);
+    reader.DefinePixelExtent(0, extent[0], 0, extent[1], 0, extent[2]);
     unsigned long len = reader.DefineProperBufferLength();
     char* finalBuffer = new char[len];
     bool result = reader.Read(finalBuffer, len);
