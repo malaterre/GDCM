@@ -82,7 +82,6 @@ public:
   /// the pixel information.
   void SetImageNonPixelInformation(const File& inFile);
 
-
 protected:
 
   //contains the PrepareWrite function, which will get the given dataset ready
