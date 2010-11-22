@@ -723,8 +723,11 @@ int vtkGDCMImageReader::RequestInformationCompat()
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-    vtkErrorMacro( "ImageReader failed" );
-    return 0;
+      //added more detail for those instances where you can't debug, like in java
+      std::string theFilename(this->FileNames->GetValue(0), this->FileNames->GetValue(0).size());
+      std::string theError = "ImageReader failed on file: " + theFilename;
+      vtkErrorMacro( << theError );
+      return 0;
     }
   const gdcm::Image &image = reader.GetImage();
   this->LossyFlag = image.IsLossy();
