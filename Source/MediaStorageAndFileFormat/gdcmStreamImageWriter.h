@@ -19,7 +19,7 @@
 #ifndef GDCMSTREAMIMAGEWRITER_H
 #define GDCMSTREAMIMAGEWRITER_H
 
-#include "gdcmImageWriter.h"
+#include "gdcmWriter.h"
 #include <iostream>
 #include "gdcmDataSet.h"
 
@@ -88,7 +88,7 @@ protected:
   //for writing to disk by manufacturing the header information.
   //note that if there is a pixel element in the given dataset, that will be removed
   //during the copy, so that the imagewriter can write everything else out
-  ImageWriter mWriter;
+  Writer mWriter;
 
   std::streamoff mFileOffset; //the fileoffset for getting header information
   File mFile; //all the non-pixel information
