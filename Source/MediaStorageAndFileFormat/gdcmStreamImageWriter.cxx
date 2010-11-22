@@ -87,6 +87,70 @@ bool StreamImageWriter::Write(void* inReadBuffer, const std::size_t& inBufferLen
   return WriteImageSubregionRAW((char*)inReadBuffer, inBufferLength);
 
 }
+
+/// when writing a raw file, we know the full extent, and can just write the first
+/// 12 bytes out (the tag, the VR, and the size)
+/// when we do compressed files, we'll do it in chunks, as described in
+/// 2009-3, part 5, Annex A, section 4.
+/// Pass the raw codec so that in the rare case of a bigendian explicit raw,
+/// the first 12 bytes written out should still be kosher.
+/// returns -1 if there's any failure, or the complete offset (12 bytes)
+/// if it works.  Those 12 bytes are then added to the position in order to determine
+/// where to write.
+int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream){
+
+  //if this is the first time writing the file out, then
+  //the first few header bytes need to be written out; the tags, the length, etc
+  //that information is found at 2009, section 5, annex A, table 4-1 and 4-2
+  //for now, just writing out straight raw, which means that the first 12 bytes are
+  //07fe, 0010, OB, 00, 32 bit length
+  //and must be written in little endian (for now-- could do big endian raw, but not atm)
+  //so, we set those 12 bytes up, send them through the codec, and then write them directly to disk
+  //because this is raw, we know exactly the size that will be written.  So, let's do that.
+  uint16_t firstTag = 0x7fe0;
+  uint16_t secondTag = 0x0010;
+  uint16_t thirdTag = 0x4f42;
+  uint16_t fourthTag = 0x0000;
+  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mWriter.GetFile());
+  uint32_t sizeTag = extent[0]*extent[1]*extent[2];
+
+  const int theBufferSize = 4*sizeof(uint16_t)+sizeof(uint32_t);
+
+  char* tmpBuffer1 = new char[theBufferSize];
+  char* tmpBuffer2 = new char[theBufferSize];
+  std::streamoff theOffset;
+
+  try {
+    memcpy(&(tmpBuffer1[0]), &firstTag, sizeof(uint16_t));
+    memcpy(&(tmpBuffer1[sizeof(uint16_t)]), &secondTag, sizeof(uint16_t));
+    memcpy(&(tmpBuffer1[2*sizeof(uint16_t)]), &thirdTag, sizeof(uint16_t));
+    memcpy(&(tmpBuffer1[3*sizeof(uint16_t)]), &fourthTag, sizeof(uint16_t));
+    memcpy(&(tmpBuffer1[4*sizeof(uint16_t)]), &sizeTag, sizeof(uint32_t));
+    //run that through the codec
+
+    if (!inCodec->DecodeBytes(tmpBuffer1, theBufferSize,
+      tmpBuffer2, theBufferSize)){
+      delete [] tmpBuffer1;
+      delete [] tmpBuffer2;
+      return -1;
+    }
+
+    //write that chunk to the beginning of the file
+    inStream->seekp(std::ios::beg);
+    theOffset = mFileOffset;
+    inStream->seekp(theOffset);
+    inStream->write(tmpBuffer2, theBufferSize);
+
+  } catch(...){
+    delete [] tmpBuffer1;
+    delete [] tmpBuffer2;
+    return -1;
+  }
+  delete [] tmpBuffer1;
+  delete [] tmpBuffer2;
+  return theBufferSize;
+}
+
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
     Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
@@ -139,6 +203,14 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   char* tmpBuffer = new char[SubRowSize*bytesPerPixel];
   char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
   try {
+    if (mElementOffsets == 0){
+      mElementOffsets = WriteRawHeader(&theCodec, theStream);
+    }
+    if (mElementOffsets < 0){//something broke during writing
+      delete [] tmpBuffer;
+      delete [] tmpBuffer2;
+      return false;
+    }
     for (z = mZMin; z < mZMax; ++z){
       for (y = mYMin; y < mYMax; ++y){
         //this next line may require a bit of finagling...
@@ -156,7 +228,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
           return false;
         }
         theStream->seekp(std::ios::beg);
-        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel;
+        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel + mElementOffsets;
         theStream->seekp(theOffset);
         theStream->write(tmpBuffer2, SubRowSize*bytesPerPixel);
       }

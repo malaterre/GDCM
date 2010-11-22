@@ -27,6 +27,7 @@ namespace gdcm
 {
 
 class MediaStorage;
+class RAWCodec;
 /**
  * \brief StreamImageReader
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
@@ -103,6 +104,23 @@ protected:
   /// reads by the RAW codec; other codecs are added once implemented
   //virtual bool ReadImageSubregionRAW(std::ostream& os);
   virtual bool WriteImageSubregionRAW(char* inWriteBuffer, const std::size_t& inBufferLength);
+
+  /// when writing a raw file, we know the full extent, and can just write the first
+  /// 12 bytes out (the tag, the VR, and the size)
+  /// when we do compressed files, we'll do it in chunks, as described in
+  /// 2009-3, part 5, Annex A, section 4.
+  /// Pass the raw codec so that in the rare case of a bigendian explicit raw,
+  /// the first 12 bytes written out should still be kosher.
+  /// returns -1 if there's any failure, or the complete offset (12 bytes)
+  /// if it works.  Those 12 bytes are then added to the position in order to determine
+  /// where to write.
+  int WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream);
+
+  /// The result of WriteRawHeader (or another header, when that's implemented)
+  /// This result is saved so that the first N bytes aren't constantly being
+  /// rewritten for each chunk that's passed in.
+  /// For compressed data, the offset table will require rewrites of data.
+  int mElementOffsets;
 
 };
 
