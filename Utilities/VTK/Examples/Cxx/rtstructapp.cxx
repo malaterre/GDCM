@@ -29,6 +29,8 @@
 #include "vtkProperty2D.h"
 #include "vtkImageData.h"
 #include "gdcmDirectoryHelper.h"
+#include "vtkStringArray.h"
+
 
 #include "vtkRTStructSetProperties.h"
 
@@ -79,21 +81,24 @@ int main(int argc, char *argv[])
   //writer->Write();
 
   //loop through the outputs in order to write them out as if they had been created and appended
-  Directory::FilenamesType roiNames, roiAlgorithms, roiTypes;
+  vtkStringArray* roiNames = vtkStringArray::New();
+  vtkStringArray* roiAlgorithms = vtkStringArray::New();
+  vtkStringArray* roiTypes = vtkStringArray::New();
   vtkAppendPolyData* append = vtkAppendPolyData::New();
   for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i){
     writer->SetInput(i, reader->GetOutput(i));
     append->AddInput(reader->GetOutput(i));
-    roiNames.push_back(reader->GetRTStructSetProperties()->GetStructureSetROIName(i));
-    roiAlgorithms.push_back(reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i));
-    roiTypes.push_back(reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i));
+    roiNames->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetROIName(i));
+    roiAlgorithms->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i));
+    roiTypes->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i));
   }
 
-  vtkRTStructSetProperties* theProperties =
-    vtkRTStructSetProperties::ProduceStructureSetProperties(theDirName,
+  vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
+  writer->SetRTStructSetProperties(theProperties);
+  writer->InitializeRTStructSet(theDirName,
     reader->GetRTStructSetProperties()->GetStructureSetLabel(),
     reader->GetRTStructSetProperties()->GetStructureSetName(),
-    writer, roiNames, roiAlgorithms, roiTypes);
+    *roiNames, *roiAlgorithms, *roiTypes);
 
   writer->SetRTStructSetProperties(theProperties);
   writer->Write();
@@ -135,6 +140,11 @@ int main(int argc, char *argv[])
   renderer->Delete();
   renWin->Delete();
   iren->Delete();
+  roiNames->Delete();
+  roiAlgorithms->Delete();
+  roiTypes->Delete();
+  theProperties->Delete();
+
 
   writer->Delete();
 

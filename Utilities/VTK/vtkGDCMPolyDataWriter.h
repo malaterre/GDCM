@@ -27,6 +27,9 @@
 #define VTKGDCMPOLYDATAWRITER_H
 
 #include "vtkPolyDataWriter.h"
+#include "vtkStringArray.h"
+#include "vtkStdString.h"
+
 
 class vtkMedicalImageProperties;
 class vtkRTStructSetProperties;
@@ -51,6 +54,18 @@ public:
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties *pd);
 
   virtual void SetRTStructSetProperties(vtkRTStructSetProperties *pd);
+
+
+  //this function will initialize the contained rtstructset with
+  //the inputs of the writer and the various extra information
+  //necessary for writing a complete rtstructset.
+  //NOTE: inputs must be set BEFORE calling this function!
+  //NOTE: the number of outputs for the appendpolydata MUST MATCH the ROI vectors!
+  void InitializeRTStructSet(vtkStdString inDirectory,
+     vtkStdString inStructLabel, vtkStdString inStructName,
+     vtkStringArray& inROINames,
+     vtkStringArray& inROIAlgorithmName,
+     vtkStringArray& inROIType);
 
   // make parent class public...
   void SetNumberOfInputPorts(int n);
