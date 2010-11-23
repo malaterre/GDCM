@@ -25,7 +25,6 @@
 #include "gdcmDirectory.h"
 
 class vtkRTStructSetPropertiesInternals;
-class vtkGDCMPolyDataWriter; // FIXME
 
 class VTK_EXPORT vtkRTStructSetProperties : public vtkObject
 {
@@ -98,23 +97,6 @@ public:
   const char *GetStructureSetROIName(vtkIdType);
   const char *GetStructureSetROIGenerationAlgorithm(vtkIdType);
   const char *GetStructureSetRTROIInterpretedType(vtkIdType id);
-
-  //the function LoadCTImageFromFiles gives us a list of images in IPP-sorted order for
-  //constructing rt structures
-  //(that need both the z position and the appropriate SOP Instance UID for a plane)
-  //so, armed with that list of points and the list of images, the first point in
-  //each polydata object can be appropriately compiled into the rtstruct
-  //we use appendpolydata here-- each polydata is an organ
-  //NOTE: the writer is supplied in order to get the appropriate polydata organization
-  //as it will be used in the writer.
-//BTX
-  static vtkRTStructSetProperties* ProduceStructureSetProperties(const std::string& inDirectory,
-     const std::string& inStructLabel, const std::string& inStructName,
-     vtkGDCMPolyDataWriter* inPolyData,//for polydata inputs
-     gdcm::Directory::FilenamesType inROINames,
-     gdcm::Directory::FilenamesType inROIAlgorithmName,
-     gdcm::Directory::FilenamesType inROIType);
-//ETX
 
 protected:
   vtkRTStructSetProperties();
