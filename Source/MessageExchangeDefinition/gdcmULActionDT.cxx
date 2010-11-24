@@ -67,7 +67,7 @@ static void process_input(iosockinet& sio)
     PresentationContext const &pc = rqpdu.GetPresentationContext(index);
     uint8_t id = pc.GetPresentationContextID();
 
-    pcac1.SetPresentationContextID( id ); // DCMTK MR
+    pcac1.SetPresentationContextID( id );
     pcac1.SetTransferSyntax( ts1 );
     acpdu.AddPresentationContextAC( pcac1 );
     }
