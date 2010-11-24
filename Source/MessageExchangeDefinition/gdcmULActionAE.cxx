@@ -43,33 +43,40 @@ EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   //opening a local socket
   outWaitingForEvent = false;
-  if (!inConnection.InitializeConnection()){
-     outRaisedEvent = eEventDoesNotExist;
+  if (!inConnection.InitializeConnection())
+    {
+    outRaisedEvent = eEventDoesNotExist;
     return eSta1Idle;
-  } else {
+    }
+  else
+    {
     outRaisedEvent = eTransportConnConfirmLocal;
-  }
+    }
   return eSta4LocalAssocDone;
 }
 
 //Send A-ASSOCIATE-RQ-PDU
 EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
-  AAssociateRQPDU thePDU;//for now, use Matheiu's default values
+  bool& outWaitingForEvent, EEventID& outRaisedEvent)
+{
+  AAssociateRQPDU thePDU;
 
   thePDU.SetCallingAETitle( inConnection.GetConnectionInfo().GetCallingAETitle() );
   thePDU.SetCalledAETitle( inConnection.GetConnectionInfo().GetCalledAETitle() );
 
   //the presentation context is now defined when the connection is first
-  //desired to be established.  The connection proposes these different presentation contexts.
-  //ideally, we could refine it further to a particular presentation context, but
-  //if the server supports many and we support many, then an arbitrary decision can be made.
-  std::vector<PresentationContext> thePCS = inConnection.GetPresentationContexts();
+  //desired to be established. The connection proposes these different
+  //presentation contexts. ideally, we could refine it further to a particular
+  //presentation context, but if the server supports many and we support many,
+  //then an arbitrary decision can be made.
+  std::vector<PresentationContext> const & thePCS =
+    inConnection.GetPresentationContexts();
 
   std::vector<PresentationContext>::const_iterator itor;
-  for (itor = thePCS.begin(); itor < thePCS.end(); itor++){
+  for (itor = thePCS.begin(); itor < thePCS.end(); itor++)
+    {
     thePDU.AddPresentationContext(*itor);
-  }
+    }
 
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetProtocol()->flush();
@@ -167,7 +174,7 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       if (!hasLittleEndian) continue; //don't add this presentation context, because
       //the client doesn't know how to handle it.
 
-      pcac1.SetPresentationContextID( id ); // DCMTK MR
+      pcac1.SetPresentationContextID( id );
       pcac1.SetTransferSyntax( ts1 );
       acpdu.AddPresentationContextAC( pcac1 );
     }
