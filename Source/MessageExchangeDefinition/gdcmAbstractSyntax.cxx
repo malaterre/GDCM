@@ -109,6 +109,11 @@ void AbstractSyntax::SetNameFromUIDString( const std::string& inUIDName )
   UpdateName( name );
 }
 
+void AbstractSyntax::Print(std::ostream &os) const
+{
+  os << Name << std::endl;
+}
+
 
 } // end namespace network
 } // end namespace gdcm
