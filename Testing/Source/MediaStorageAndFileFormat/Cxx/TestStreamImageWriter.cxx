@@ -35,13 +35,13 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
   theStreamReader.SetFileName( filename );
 
   // Create directory first:
-  std::string tmpdir = gdcm::Testing::GetTempDirectory( NULL );//subdir );
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
   if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
     {
       gdcm::System::MakeDirectory( tmpdir.c_str() );
     //return 1;
     }
-  std::string outfilename = gdcm::Testing::GetTempFilename( filename, NULL );
+  std::string outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
 
   if ( theStreamReader.ReadImageInformation() )
     {
@@ -59,6 +59,8 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     //for now, we'll do 1-4
 
     //first, check that the image information can be written
+    //theStreamReader.GetFile().GetDataSet().Print( std::cout );
+
     theStreamWriter.SetFile(theStreamReader.GetFile());
     theStreamWriter.SetFileName(outfilename.c_str());
     if (!theStreamWriter.WriteImageInformation()){
