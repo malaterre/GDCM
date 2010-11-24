@@ -79,6 +79,10 @@ std::istream &AAssociateRQPDU::Read(std::istream &is)
   uint16_t protocolversion;
   is.read( (char*)&protocolversion, sizeof(ProtocolVersion) );
   SwapperDoOp::SwapArray(&protocolversion,1);
+  if( protocolversion != ProtocolVersion )
+    {
+    gdcmWarningMacro( "ProtocolVersion is: " << protocolversion );
+    }
   uint16_t reserved9_10;
   is.read( (char*)&reserved9_10, sizeof(Reserved9_10) );
   SwapperDoOp::SwapArray(&reserved9_10,1);
@@ -233,8 +237,10 @@ void AAssociateRQPDU::Print(std::ostream &os) const
   //uint32_t ItemLength; // PDU Length
   //static const uint16_t ProtocolVersion;
   //static const uint16_t Reserved9_10;
-  //char CalledAETitle[16];
-  //char CallingAETitle[16];
+  os << "CalledAETitle: ";
+  os << GetCalledAETitle() << std::endl;
+  os << "CallingAETitle: ";
+  os << GetCallingAETitle() << std::endl;
   //static const uint8_t Reserved43_74[32]; // { 0 }
   os << "ApplicationContext: ";
   AppContext.Print( os );
