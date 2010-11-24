@@ -78,7 +78,7 @@ uint32_t ULConnection::GetMaxPDUSize() const{
   return mMaxPDUSize;
 }
 
-std::vector<PresentationContext> ULConnection::GetPresentationContexts() const{
+std::vector<PresentationContext> const &ULConnection::GetPresentationContexts() const{
   return mPresentationContexts;
 }
 void ULConnection::SetPresentationContexts(const std::vector<PresentationContext>& inContexts){
