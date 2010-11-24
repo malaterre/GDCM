@@ -17,8 +17,23 @@
 int TestOrientation(int, char *[])
 {
   gdcm::Orientation o;
+{
   double dircos[] = { 0, 1, 0, 0, 1, 0 };
   gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
+
+  if( type != gdcm::Orientation::AXIAL )
+    {
+    return 1;
+    }
+}
+  double dircos[] = { 0, 1, 0, 0, 0, -1 };
+  gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
+
+  if( type != gdcm::Orientation::SAGITTAL )
+    {
+    return 1;
+    }
+
 
   if( o.GetObliquityThresholdCosineValue() != 0.8 )
     {
