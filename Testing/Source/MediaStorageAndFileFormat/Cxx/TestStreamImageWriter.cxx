@@ -59,7 +59,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     //for now, we'll do 1-4
 
     //first, check that the image information can be written
-    theStreamWriter.SetImageNonPixelInformation(theStreamReader.GetFile());
+    theStreamWriter.SetFile(theStreamReader.GetFile());
     theStreamWriter.SetFileName(outfilename.c_str());
     if (!theStreamWriter.WriteImageInformation()){
       std::cerr << "unable to write image information" << std::endl;
