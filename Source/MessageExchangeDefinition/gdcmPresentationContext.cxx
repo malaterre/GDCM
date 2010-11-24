@@ -165,7 +165,12 @@ void PresentationContext::Print(std::ostream &os) const
   //static const uint8_t Reserved6;
   //static const uint8_t Reserved7;
   //static const uint8_t Reserved8;
-
+  SubItems.Print( os );
+  std::vector<TransferSyntaxSub>::const_iterator it = TransferSyntaxes.begin();
+  for( ; it != TransferSyntaxes.end(); ++it )
+    {
+    it->Print( os );
+    }
 }
 
 //this function will return the appropriate ID from the above
