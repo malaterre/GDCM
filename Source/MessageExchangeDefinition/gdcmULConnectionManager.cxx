@@ -61,17 +61,18 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
   if (inAETitle.size() > 16) return false; //as above
   if (!connectInfo.Initialize(userInfo, inConnectAETitle.c_str(),
-    inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName)){
+      inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName))
+    {
     return false;
-  }
+    }
 
-  if (mConnection!= NULL){
+  if (mConnection != NULL)
+    {
     delete mConnection;
-  }
+    }
   mConnection = new ULConnection(connectInfo);
 
   mConnection->GetTimer().SetTimeout(inTimeout);
-
 
   // Warning PresentationContextID is important
   // this is a sort of uniq key used by the recevier. Eg.
@@ -96,6 +97,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
   ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
+  //ts.SetNameFromUID( gdcm::UIDs::JPEGLosslessNonHierarchicalFirstOrderPredictionProcess14SelectionValue1DefaultTransferSyntaxforLosslessJPEGImageCompression);
   //pc.AddTransferSyntax( ts ); // we do not support explicit (mm)
   switch (inConnectionType){
     case eEcho:
