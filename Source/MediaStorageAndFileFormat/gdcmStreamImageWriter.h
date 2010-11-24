@@ -79,8 +79,8 @@ public:
   virtual bool WriteImageInformation();
 
   /// Set the image information to be written to disk that is everything but
-  /// the pixel information.
-  void SetImageNonPixelInformation(const File& inFile);
+  /// the pixel information: (7fe0,0010) PixelData
+  void SetFile(const File& inFile);
 
 protected:
 
@@ -91,7 +91,7 @@ protected:
   Writer mWriter;
 
   std::streamoff mFileOffset; //the fileoffset for getting header information
-  File mFile; //all the non-pixel information
+  SmartPointer<File> mspFile; //all the non-pixel information
 
   //for thread safety, these should not be stored here, but should be used
   //for every read subregion operation.

@@ -261,6 +261,7 @@ bool StreamImageWriter::WriteImageInformation(){
 
   //ok, the writer has a file in it, and so we place the dataset that we're given into
   //the file
+  File &mFile = *mspFile;
   mWriter.SetFile(mFile);
   mElementOffsets = 0;//changing to a new file, should make sure that we're starting again
   //filename needs to be set prior to this function
@@ -297,8 +298,9 @@ bool StreamImageWriter::WriteImageInformation(){
   /// Set the image information to be written to disk that is everything but
   /// the pixel information.  Copies the data into a new dataset, except for the pixel element
 ///This way, writing the image information will just write everything else.
-void StreamImageWriter::SetImageNonPixelInformation(const File& inFile){
-  mFile = inFile;
+void StreamImageWriter::SetFile(const File& inFile)
+{
+  mspFile = inFile;
 }
 
 } // end namespace gdcm
