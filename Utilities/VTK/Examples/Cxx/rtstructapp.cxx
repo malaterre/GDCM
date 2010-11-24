@@ -15,7 +15,6 @@
 #include "vtkGDCMPolyDataReader.h"
 #include "vtkGDCMPolyDataWriter.h"
 
-#include "vtkAppendPolyData.h"
 #include "vtkPolyDataWriter.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkPolyDataMapper2D.h"
@@ -27,86 +26,54 @@
 #include "vtkCamera.h"
 #include "vtkProperty.h"
 #include "vtkProperty2D.h"
+#include "vtkAppendPolyData.h"
 #include "vtkImageData.h"
-#include "gdcmDirectoryHelper.h"
-#include "vtkStringArray.h"
 
-
-#include "vtkRTStructSetProperties.h"
-
+/*
+ * Small example to read in a RTSTUCT and write it out (displays it too).
+ */
 
 // gdcmDataExtra/gdcmNonImageData/exRT_Structure_Set_Storage.dcm
 // gdcmDataExtra/gdcmNonImageData/RTSTRUCT_1.3.6.1.4.1.22213.1.1396.2.dcm
 // gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm
 
-using namespace gdcm;
-
-
 int main(int argc, char *argv[])
 {
-  if( argc < 2 )
+  if( argc < 3 )
     {
-    std::cerr << argv[0] << " directory-with-rtstruct-and-ct-images\n";
+    std::cerr << argv[0] << " input.dcm output.dcm\n";
     return 1;
     }
-  //const char * filename = argv[1];
-  std::string theDirName(argv[1]);
-  Directory::FilenamesType theRTSeries =
-    DirectoryHelper::GetRTStructSeriesUIDs(theDirName);
-  if (theRTSeries.empty()){
-    std::cerr << "No RTStructs found for the test, ending." << std::endl;
-    return 1;
-  }
-
-  Directory::FilenamesType theRTNames =
-    DirectoryHelper::GetFilenamesFromSeriesUIDs(theDirName, theRTSeries[0]);
-
+  const char * filename = argv[1];
+  const char * outfilename = argv[2];
   vtkGDCMPolyDataReader * reader = vtkGDCMPolyDataReader::New();
-  reader->SetFileName( theRTNames[0].c_str() );
+  reader->SetFileName( filename );
   reader->Update();
 
   //std::cout << reader->GetMedicalImageProperties()->GetStudyDate() << std::endl;
 
   vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
   writer->SetNumberOfInputPorts( reader->GetNumberOfOutputPorts() );
-//  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
-//    writer->SetInput( num, reader->GetOutput(num) );
-  writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[0] + ".dcm").c_str());
+  writer->SetFileName( outfilename );
+  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
+    writer->SetInput( num, reader->GetOutput(num) );
   //doesn't look like the medical properties are actually written out
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-  //this line is cheating, we won't have the same stuff, and may not have a struct
-  //to start with.
-  //have to go back to the original data to reconstruct the RTStructureSetProperties
-  //writer->SetRTStructSetProperties( reader->GetRTStructSetProperties() );
-  //writer->Write();
-
-  //loop through the outputs in order to write them out as if they had been created and appended
-  vtkStringArray* roiNames = vtkStringArray::New();
-  vtkStringArray* roiAlgorithms = vtkStringArray::New();
-  vtkStringArray* roiTypes = vtkStringArray::New();
-  vtkAppendPolyData* append = vtkAppendPolyData::New();
-  for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i){
-    writer->SetInput(i, reader->GetOutput(i));
-    append->AddInput(reader->GetOutput(i));
-    roiNames->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetROIName(i));
-    roiAlgorithms->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i));
-    roiTypes->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i));
-  }
-
-  vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
-  writer->SetRTStructSetProperties(theProperties);
-  writer->InitializeRTStructSet(theDirName,
-    reader->GetRTStructSetProperties()->GetStructureSetLabel(),
-    reader->GetRTStructSetProperties()->GetStructureSetName(),
-    *roiNames, *roiAlgorithms, *roiTypes);
-
-  writer->SetRTStructSetProperties(theProperties);
+  writer->SetRTStructSetProperties( reader->GetRTStructSetProperties() );
   writer->Write();
 
   // print reader output:
   reader->Print( std::cout );
   // print first output:
   reader->GetOutput()->Print( std::cout );
+
+ vtkAppendPolyData *append = vtkAppendPolyData::New();
+
+ int n = reader->GetNumberOfOutputPorts();
+ for(int i = 0; i < n; ++i)
+   {
+   append->AddInput( reader->GetOutput(i) );
+   }
 
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
@@ -134,18 +101,12 @@ int main(int argc, char *argv[])
   iren->Start();
 
   reader->Delete();
-//  append->Delete();
+  append->Delete();
   cubeMapper->Delete();
   cubeActor->Delete();
   renderer->Delete();
   renWin->Delete();
   iren->Delete();
-  roiNames->Delete();
-  roiAlgorithms->Delete();
-  roiTypes->Delete();
-  theProperties->Delete();
-
-
   writer->Delete();
 
   return 0;
