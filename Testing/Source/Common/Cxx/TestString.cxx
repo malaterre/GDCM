@@ -22,7 +22,7 @@ void Print(CSComp v)
   std::cout << v << std::endl;
 }
 
-int TestString(int argc, char *argv[])
+int TestString(int , char *[])
 {
 {
   gdcm::String<'\\'> s = "coucou";
