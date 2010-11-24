@@ -24,6 +24,7 @@
 #include "gdcmReader.h"
 #include "gdcmAttribute.h"
 #include "gdcmULConnectionManager.h"
+#include "gdcmULConnection.h"
 #include "gdcmDataSet.h"
 #include "gdcmVersion.h"
 #include "gdcmGlobal.h"
@@ -169,12 +170,32 @@ int CStore( const char *remote, int portno,
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   if( !reader.Read() ) return 1;
+  //const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eStore, ds)){
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0,
+      portno, 1000, gdcm::network::eStore, ds))
+    {
     std::cerr << "Failed to establish connection." << std::endl;
     exit (-1);
-  }
+    }
+#if 0
+  // Right now we are never reading back the AC-Acpt to
+  // if we can prefer a compressed TS
+  gdcm::network::ULConnection* uc = theManager.GetConnection();
+  std::vector<gdcm::network::PresentationContext> const &pcs =
+    uc->GetPresentationContexts();
+  std::vector<gdcm::network::PresentationContext>::const_iterator it =
+    pcs.begin();
+  std::cout << "B" << std::endl;
+  for( ; it != pcs.end(); ++it )
+    {
+    it->Print ( std::cout );
+    }
+  std::cout << "BB" << std::endl;
+  theManager.SendStore( (gdcm::DataSet*)&ds );
+#endif
+
   theManager.SendStore( (gdcm::DataSet*)&ds );
 
   for( int i = 1; i < files.size(); ++i )
