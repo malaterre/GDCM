@@ -4,6 +4,8 @@ cd $HOME/Dashboards/GDCMScripts && git pull
 
 echo "Starting dcmqrscp"
 
+rm -rf /tmp/GDCM_STORE
+mkdir /tmp/GDCM_STORE
 dcmqrscp -v -d -c ./dcmqrscp.cfg 5678 &
 
 #ctest -S zorglub-gcc4-64-makefiles.cmake -V -O zorglub-gcc4-64-makefiles.log
