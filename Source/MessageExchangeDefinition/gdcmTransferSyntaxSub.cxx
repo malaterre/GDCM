@@ -91,7 +91,7 @@ void TransferSyntaxSub::UpdateName( const char *name )
       {
       Name = name;
       ItemLength = Name.size();
-      assert( ItemLength + 4 == Size() );
+      assert( (size_t)ItemLength + 4 == Size() );
       return;
       }
     }
