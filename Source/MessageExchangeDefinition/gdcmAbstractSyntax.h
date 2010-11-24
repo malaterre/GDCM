@@ -49,6 +49,8 @@ public:
   void SetNameFromUIDString( const std::string& inUIDName );
 
   size_t Size() const;
+
+  void Print(std::ostream &os) const;
 private:
   void UpdateName( const char *name );
   static const uint8_t ItemType;
