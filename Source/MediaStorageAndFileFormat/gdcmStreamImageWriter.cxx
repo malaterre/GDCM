@@ -28,14 +28,16 @@
 namespace gdcm
 {
 
-StreamImageWriter::StreamImageWriter(){
+StreamImageWriter::StreamImageWriter():mspFile(new File)
+{
   //set these values to be the opposite ends of possible,
   //so that if the extent is not defined, read can fail properly.
   mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
   mElementOffsets = 0;
 }
-StreamImageWriter::~StreamImageWriter(){
+StreamImageWriter::~StreamImageWriter()
+{
 }
 
 
