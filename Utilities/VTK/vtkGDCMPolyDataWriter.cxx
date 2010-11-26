@@ -442,6 +442,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     vtkCellArray *polys;
 
     polys = input->GetPolys();
+    vtkCellArray* lines = input->GetLines();
     pts = input->GetPoints();
     vtkDataArray *scalars = input->GetCellData()->GetScalars();
     vtkDoubleArray *darray = vtkDoubleArray::SafeDownCast( scalars );
@@ -452,7 +453,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     //  return;
     //  }
     //int nt = scalars->GetNumberOfTuples();
-    if (pts == NULL || polys == NULL )
+    if (pts == NULL || polys == NULL || lines == NULL)
       {
       vtkErrorMacro(<<"No data to write!");
       return;
@@ -482,18 +483,26 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
   vtkIdType npts = 0;
   vtkIdType *indx = 0;
   double v[3];
-  std::vector<double> cellpoints;
   unsigned int cellnum = 0;
-  for (polys->InitTraversal(); polys->GetNextCell(npts,indx); cellnum++ )
-    {
+
+  //choose to use either polys or lines
+  //the result of vtk marching cubes->stripper->appendpolydata is a set of lines,
+  //not polys, so favor that one for now.
+  //choose by the number of polys/lines available.
+  vtkCellArray* theCells = lines;
+  if (!lines || lines->GetNumberOfCells() == 0){
+    theCells = polys;
+  }
+
+  std::vector<double> cellpoints;
+  for (theCells->InitTraversal(); theCells->GetNextCell(npts,indx); cellnum++ ){
     cellpoints.resize(0);
-    for(vtkIdType index = 0; index < npts; ++index)
-      {
+    for(vtkIdType index = 0; index < npts; ++index){
       pts->GetPoint(indx[index],v);
       cellpoints.push_back( v[0] );
       cellpoints.push_back( v[1] );
       cellpoints.push_back( v[2] );
-      }
+    }
     Item item;
     item.SetVLToUndefined();
     DataSet &subds = item.GetNestedDataSet();
@@ -509,7 +518,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     subds.Insert( contgeotype.GetAsDataElement() );
 
     SmartPointer<SequenceOfItems> thesqi = new SequenceOfItems;
-      {
+    {
       Item item;
       item.SetVLToUndefined();
       DataSet &subds = item.GetNestedDataSet();
@@ -523,7 +532,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
         GetContourReferencedFrameOfReferenceInstanceUID( pdidx, cellnum ));
       subds.Insert( instat.GetAsDataElement() );
       thesqi->AddItem( item );
-      }
+    }
 
     DataElement contimsq = DataElement( Tag(0x3006,0x0016) );
     contimsq.SetVR( VR::SQ );
@@ -533,7 +542,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
 
 
     sqi->AddItem( item );
-    }
+  }
   DataSet& ds = file.GetDataSet();
 {
   const Tag sisq(0x3006,0x0039);
@@ -699,8 +708,18 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
     vtkIdType *indx = 0;
     pts = theData->GetPoints();
     polys = theData->GetPolys();
+    vtkCellArray* lines = theData->GetLines();
+
+    //choose to use either polys or lines
+    //the result of vtk marching cubes->stripper->appendpolydata is a set of lines,
+    //not polys, so favor that one for now.
+    //choose by the number of polys/lines available.
+    vtkCellArray* theCells = lines;
+    if (!lines || lines->GetNumberOfCells() == 0){
+      theCells = polys;
+    }
     double v[3];
-    for (polys->InitTraversal(); polys->GetNextCell(npts,indx); cellnum++ ){
+    for (theCells->InitTraversal(); theCells->GetNextCell(npts,indx); cellnum++ ){
       if (npts < 1) continue;
       pts->GetPoint(indx[0],v);
       double theZ = v[2];
