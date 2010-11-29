@@ -32,8 +32,7 @@ namespace gdcm
  * \brief SplitMosaicFilter class
  * Class to reshuffle bytes for a SIEMENS Mosaic image
  * Siemens CSA Image Header
- *  Chemical Shift Anisotropy
- *
+ * CSA:= Common Siemens Architecture, sometimes also known as Common syngo Architecture
  *
  */
 class GDCM_EXPORT SplitMosaicFilter
