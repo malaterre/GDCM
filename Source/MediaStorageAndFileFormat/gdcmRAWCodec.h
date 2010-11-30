@@ -38,8 +38,8 @@ public:
 
   /// Used by the ImageStreamReader-- converts a read in 
   /// buffer into one with the proper encodings.
-  bool DecodeBytes(const char* inBytes, const int& inBufferLength, 
-    char* outBytes, const int& inOutBufferLength);
+  bool DecodeBytes(const char* inBytes, size_t inBufferLength,
+    char* outBytes, size_t inOutBufferLength);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);
