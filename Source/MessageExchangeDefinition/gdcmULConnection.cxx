@@ -20,112 +20,146 @@
 
 using namespace gdcm::network;
 
-
-ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo){
+ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo)
+{
   mCurrentState = eSta1Idle;
   mSocket = NULL;
   mEcho = NULL;
   mInfo = inConnectInfo;
 }
 
-
-ULConnection::~ULConnection(){
-    if (mEcho != NULL){
-      delete mEcho;
-      mEcho = NULL;
+ULConnection::~ULConnection()
+{
+  if (mEcho != NULL)
+    {
+    delete mEcho;
+    mEcho = NULL;
     }
-    if (mSocket != NULL){
-      delete mSocket;
-      mSocket = NULL;
+  if (mSocket != NULL)
+    {
+    delete mSocket;
+    mSocket = NULL;
     }
 }
 
-
-
-EStateID ULConnection::GetState() const{
+EStateID ULConnection::GetState() const
+{
   return mCurrentState;
 }
-void ULConnection::SetState(const EStateID& inState){
+
+void ULConnection::SetState(const EStateID& inState)
+{
   mCurrentState = inState;
 }
 
 //echo* ULConnection::GetProtocol(){
-std::iostream* ULConnection::GetProtocol(){
-  if (mEcho){
+std::iostream* ULConnection::GetProtocol()
+{
+  if (mEcho)
+    {
     return mEcho;
-  }
+    }
   //be careful-- the socket doesn't get removed when the protocol is stopped,
   //because then subsequent cstores will break.
-  if (mSocket){
+  if (mSocket)
+    {
     return mSocket;
-  }
+    }
   return NULL;
 }
 
-ARTIMTimer& ULConnection::GetTimer(){
+ARTIMTimer& ULConnection::GetTimer()
+{
   return mTimer;
 }
 
-const ULConnectionInfo &ULConnection::GetConnectionInfo() const{
+const ULConnectionInfo &ULConnection::GetConnectionInfo() const
+{
   return mInfo;
 }
 
-
-void ULConnection::SetMaxPDUSize(const uint32_t& inSize){
+void ULConnection::SetMaxPDUSize(uint32_t inSize)
+{
   mMaxPDUSize = inSize;
 }
-uint32_t ULConnection::GetMaxPDUSize() const{
+
+uint32_t ULConnection::GetMaxPDUSize() const
+{
   return mMaxPDUSize;
 }
 
-std::vector<PresentationContext> const &ULConnection::GetPresentationContexts() const{
+std::vector<PresentationContext> const &
+ULConnection::GetPresentationContexts() const
+{
   return mPresentationContexts;
 }
-void ULConnection::SetPresentationContexts(const std::vector<PresentationContext>& inContexts){
+
+void ULConnection::SetPresentationContexts(
+  const std::vector<PresentationContext>& inContexts)
+{
   mPresentationContexts = inContexts;
 }
 //given a particular data element, presumably the SOP class,
 //find the presentation context for that SOP
 //NOT YET IMPLEMENTED
-PresentationContext ULConnection::FindContext(const gdcm::DataElement& de) const{
+PresentationContext ULConnection::FindContext(const gdcm::DataElement& de) const
+{
   PresentationContext empty;
+  assert( 0 && "TODO" );
   return empty;
 }
 
-
-bool ULConnection::InitializeConnection(){
-  try{
+bool ULConnection::InitializeConnection()
+{
+  try
+    {
     echo* p = new echo(protocol::tcp);
-    if (GetConnectionInfo().GetCalledIPPort() == 0){
+    if (GetConnectionInfo().GetCalledIPPort() == 0)
+      {
       if (!GetConnectionInfo().GetCalledComputerName().empty())
         (*p)->connect(GetConnectionInfo().GetCalledComputerName().c_str());
       else
         (*p)->connect(GetConnectionInfo().GetCalledIPAddress());
-    }
-    else {
+      }
+    else
+      {
       if (!GetConnectionInfo().GetCalledComputerName().empty())
         (*p)->connect(GetConnectionInfo().GetCalledComputerName().c_str(),
           GetConnectionInfo().GetCalledIPPort());
-    }
+      }
     //make sure to convert timeouts to platform appropriate values.
     (*p)->recvtimeout((int)GetTimer().GetTimeout());
     (*p)->sendtimeout((int)GetTimer().GetTimeout());
-    if (mEcho != NULL){
+    if (mEcho != NULL)
+      {
       delete mEcho;
       mEcho = NULL;
-    }
-    if (mSocket != NULL){
+      }
+    if (mSocket != NULL)
+      {
       delete mSocket;
       mSocket = NULL;
-    }
+      }
     mEcho = p;
-  } catch (std::exception& ex){//unable to establish connection, so break off.
-     gdcmWarningMacro("Unable to open connection with exception " << ex.what() << std::endl);
-     return false;
-  }
+    }
+  catch ( sockerr &err )
+    {
+    gdcmWarningMacro( "Unable to open connection with exception " << err.what()
+      << std::endl );
+    return false;
+    }
+  catch (std::exception& ex)
+    {
+    //unable to establish connection, so break off.
+    gdcmWarningMacro( "Unable to open connection with exception " << ex.what()
+      << std::endl );
+    return false;
+    }
   return true;
 }
-bool ULConnection::InitializeIncomingConnection(){
+
+bool ULConnection::InitializeIncomingConnection()
+{
   try{
     if (mEcho != NULL){
       delete mEcho;

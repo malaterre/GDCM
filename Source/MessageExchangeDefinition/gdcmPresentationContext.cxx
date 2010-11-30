@@ -15,7 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #include "gdcmPresentationContext.h"
 #include "gdcmUIDs.h"
 #include "gdcmSwapper.h"
@@ -24,6 +23,7 @@
 #include "gdcmGlobal.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmSOPClassUIDToIOD.h"
+
 #include <limits>
 
 namespace gdcm
@@ -40,11 +40,8 @@ const uint8_t PresentationContext::Reserved8 = 0x00;
 PresentationContext::PresentationContext()
 {
   ID = 0x01;
-
-  size_t lenTemp = Size() - 4;
-  assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
-  ItemLength = (uint16_t)lenTemp;
-  assert( ItemLength + 4 == Size() );
+  ItemLength = 8;
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 std::istream &PresentationContext::Read(std::istream &is)
@@ -80,13 +77,13 @@ std::istream &PresentationContext::Read(std::istream &is)
     }
   assert( curlen + offset == ItemLength );
 
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
   return is;
 }
 
 const std::ostream &PresentationContext::Write(std::ostream &os) const
 {
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
   //os.write( (char*)&ItemLength, sizeof(ItemLength) );
@@ -125,25 +122,23 @@ size_t PresentationContext::Size() const
     ret += it->Size();
     }
 
+  assert(ret <= (size_t)std::numeric_limits<uint16_t>::max);
+  assert(ret >= 4);
   return ret;
 }
 
 void PresentationContext::SetAbstractSyntax( AbstractSyntax const & as )
 {
   SubItems = as;
-  size_t lenTemp = Size() - 4;
-  assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
-  ItemLength = (uint16_t)lenTemp;
-  assert( ItemLength + 4 == Size() );
+  ItemLength = (uint16_t)Size() - 4;
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 void PresentationContext::AddTransferSyntax( TransferSyntaxSub const &ts )
 {
   TransferSyntaxes.push_back( ts );
-  size_t lenTemp = Size() - 4;
-  assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
-  ItemLength = (uint16_t)lenTemp;
-  assert( ItemLength + 4 == Size() );
+  ItemLength = (uint16_t)Size() - 4;
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 void PresentationContext::SetPresentationContextID( uint8_t id )

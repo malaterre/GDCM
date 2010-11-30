@@ -552,7 +552,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
               while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
                 ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                 //now, get data from across the network
-                int theNumDataSets = outDataSet.size();
+                size_t theNumDataSets = outDataSet.size();
                 theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
                 dataSetCountIncremented = false;
                 if (outDataSet.size() > theNumDataSets)
@@ -596,7 +596,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                 DataSet theCompleteFindResponse =
                   PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
                 //note that it's the responsibility of the event to delete the PDU in theFindRSP
-                for (int i = 0; i < theData.size(); i++){
+                for (size_t i = 0; i < theData.size(); i++){
                   delete theData[i];
                 }
                 outDataSet.push_back(theCompleteFindResponse);
@@ -790,7 +790,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                   DataSet theCompleteFindResponse =
                     PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
                   //note that it's the responsibility of the event to delete the PDU in theFindRSP
-                  for (int i = 0; i < theData.size(); i++){
+                  for (size_t i = 0; i < theData.size(); i++){
                     delete theData[i];
                   }
                   outDataSet.push_back(theCompleteFindResponse);

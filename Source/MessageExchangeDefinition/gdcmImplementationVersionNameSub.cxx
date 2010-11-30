@@ -31,7 +31,7 @@ ImplementationVersionNameSub::ImplementationVersionNameSub()
 {
   ImplementationVersionName = FileMetaInformation::GetImplementationVersionName();
   ItemLength = ImplementationVersionName.size();
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 std::istream &ImplementationVersionNameSub::Read(std::istream &is)
