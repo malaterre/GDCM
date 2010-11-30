@@ -95,7 +95,7 @@ OPJ_UINT32 opj_read_from_memory(void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* 
     }
   else
     {
-    l_nb_read = p_file->mem + p_file->len - p_file->cur;
+    l_nb_read = (OPJ_UINT32)(p_file->mem + p_file->len - p_file->cur);
     assert( l_nb_read < p_nb_bytes );
     }
   memcpy(p_buffer,p_file->cur,l_nb_read);
@@ -205,7 +205,7 @@ public:
 
 void JPEG2000Codec::SetRate(unsigned int idx, double rate)
 {
-  Internals->coder_param.tcp_rates[idx] = rate;
+  Internals->coder_param.tcp_rates[idx] = (float)rate;
   if( Internals->coder_param.tcp_numlayers <= (int)idx )
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
@@ -220,7 +220,7 @@ double JPEG2000Codec::GetRate(unsigned int idx ) const
 
 void JPEG2000Codec::SetQuality(unsigned int idx, double q)
 {
-  Internals->coder_param.tcp_distoratio[idx] = q;
+  Internals->coder_param.tcp_distoratio[idx] = (float)q;
   if( Internals->coder_param.tcp_numlayers <= (int)idx )
     {
     Internals->coder_param.tcp_numlayers = idx + 1;
@@ -299,7 +299,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     if(!r) return false;
     out = in;
     std::string str = os.str();
-    out.SetByteValue( &str[0], str.size() );
+    out.SetByteValue( &str[0], (uint32_t)str.size() );
     //memcpy(buffer, os.str().c_str(), len);
     return r;
     }
@@ -337,7 +337,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       }
     std::string str = os.str();
     assert( str.size() );
-    out.SetByteValue( &str[0], str.size() );
+    out.SetByteValue( &str[0], (uint32_t)str.size() );
 
     return true;
     }
@@ -364,7 +364,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
-  uint32_t file_length = buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
+  uint32_t file_length = (uint32_t)buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
 
   // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
   // so we need to make sure to remove it:
@@ -587,8 +587,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     //assert( comp->prec >= PF.GetBitsStored());
     if( comp->prec != PF.GetBitsStored() )
       {
-      PF.SetBitsStored( comp->prec );
-      PF.SetHighBit( comp->prec - 1 ); // ??
+      PF.SetBitsStored( (unsigned short)comp->prec );
+      PF.SetHighBit( (unsigned short)(comp->prec - 1) ); // ??
       }
     assert( PF.IsValid() );
     assert( comp->prec <= 32 );
@@ -913,7 +913,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     /* encode the destination image */
     /* ---------------------------- */
     parameters.cod_format = J2K_CFMT; /* J2K format output */
-    int codestream_length;
+    size_t codestream_length;
 #if OPENJPEG_MAJOR_VERSION == 1
     opj_cio_t *cio = NULL;
 
@@ -1028,7 +1028,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     std::string str = os.str();
     assert( str.size() );
     Fragment frag;
-    frag.SetByteValue( &str[0], str.size() );
+    frag.SetByteValue( &str[0], (uint32_t)str.size() );
     sq->AddFragment( frag );
     }
 
@@ -1065,7 +1065,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 #endif // OPENJPEG_MAJOR_VERSION == 1
   opj_image_t *image = NULL;
   unsigned char *src = (unsigned char*)dummy_buffer;
-  int file_length = buf_size;
+  size_t file_length = buf_size;
 
 #if OPENJPEG_MAJOR_VERSION == 1
   /* configure the event callbacks (not required) */
@@ -1258,8 +1258,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     gdcmErrorMacro( "do not handle precision: " << comp->prec );
     return false;
     }
-  this->PF.SetBitsStored( comp->prec );
-  this->PF.SetHighBit( comp->prec - 1 );
+  this->PF.SetBitsStored( (unsigned short)comp->prec );
+  this->PF.SetHighBit( (unsigned short)(comp->prec - 1) );
   this->PF.SetPixelRepresentation( comp->sgnd );
 
   if( image->numcomps == 1 )
