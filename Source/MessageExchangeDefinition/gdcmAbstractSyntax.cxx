@@ -74,6 +74,8 @@ size_t AbstractSyntax::Size() const
   ret += sizeof(Reserved2);
   ret += sizeof(ItemLength);
   ret += ItemLength;
+  assert(ret <= (size_t)std::numeric_limits<uint16_t>::max);
+  assert(ret >= 4);
   return ret;
 }
 
@@ -89,7 +91,7 @@ void AbstractSyntax::UpdateName( const char *name )
       size_t lenTemp = Name.size();
       assert(lenTemp < (size_t)std::numeric_limits<uint16_t>::max);
       ItemLength = (uint16_t)lenTemp;
-      assert( ItemLength + 4 == Size() );
+      assert( (size_t)ItemLength + 4 == Size() );
       return;
       }
     }

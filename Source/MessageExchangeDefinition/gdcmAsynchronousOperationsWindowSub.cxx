@@ -34,7 +34,7 @@ AsynchronousOperationsWindowSub::AsynchronousOperationsWindowSub()
   MaximumNumberOperationsPerformed = 0;
 
   ItemLength = Size() - 4;
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 std::istream &AsynchronousOperationsWindowSub::Read(std::istream &is)

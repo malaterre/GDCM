@@ -78,7 +78,7 @@ void ApplicationContext::UpdateName( const char *name )
 {
   Name = name;
   ItemLength = Name.size();
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 void ApplicationContext::Print(std::ostream &os) const

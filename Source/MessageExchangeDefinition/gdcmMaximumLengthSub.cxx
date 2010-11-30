@@ -30,7 +30,7 @@ MaximumLengthSub::MaximumLengthSub()
 {
   ItemLength = 0x4;
   MaximumLength = 0x4000;
-  assert( (ItemLength + 4) == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 std::istream &MaximumLengthSub::Read(std::istream &is)

@@ -32,7 +32,7 @@ ImplementationClassUIDSub::ImplementationClassUIDSub()
   ImplementationClassUID = FileMetaInformation::GetImplementationClassUID();
 
   ItemLength = ImplementationClassUID.size();
-  assert( (ItemLength + 4) == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 std::istream &ImplementationClassUIDSub::Read(std::istream &is)
@@ -52,7 +52,7 @@ std::istream &ImplementationClassUIDSub::Read(std::istream &is)
   is.read( name, itemlength );
   ImplementationClassUID = std::string(name, itemlength);
 
-  assert( (ItemLength + 4) == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
   return is;
 }
 

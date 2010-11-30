@@ -36,7 +36,7 @@ UserInformation::UserInformation()
   size_t t2 = 0; //AOWS.Size();
   size_t t3 = IVNS.Size();
   ItemLength = t0 + t1 + t2 + t3;
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 std::istream &UserInformation::Read(std::istream &is)
@@ -88,7 +88,7 @@ std::istream &UserInformation::Read(std::istream &is)
     }
   assert( curlen == ItemLength );
 
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
   return is;
 }
 
@@ -109,7 +109,7 @@ const std::ostream &UserInformation::Write(std::ostream &os) const
     }
   IVNS.Write(os);
 
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
 
   return os;
 }

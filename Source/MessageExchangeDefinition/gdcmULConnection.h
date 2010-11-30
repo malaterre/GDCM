@@ -93,8 +93,8 @@ class ULConnection
 
       //when the connection is first associated, the connection is told
       //the max packet/PDU size and the way in which to present data
-      //(presentation contexts, etc).  Store that here.
-      void SetMaxPDUSize(const uint32_t& inSize);
+      //(presentation contexts, etc). Store that here.
+      void SetMaxPDUSize(uint32_t inSize);
       uint32_t GetMaxPDUSize() const;
 
       std::vector<PresentationContext> const & GetPresentationContexts() const;
@@ -104,12 +104,11 @@ class ULConnection
       //NOT YET IMPLEMENTED
       PresentationContext FindContext(const DataElement& de) const;
 
-      //used to establish scu connections
+      /// used to establish scu connections
       bool InitializeConnection();
-      //used to establish scp connections
+
+      /// used to establish scp connections
       bool InitializeIncomingConnection();
-
-
     };
   }
 }

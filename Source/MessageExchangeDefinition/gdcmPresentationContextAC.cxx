@@ -15,9 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #include "gdcmPresentationContextAC.h"
 #include "gdcmSwapper.h"
+
+#include <limits>
 
 namespace gdcm
 {
@@ -30,10 +31,10 @@ const uint8_t PresentationContextAC::Reserved8 = 0x00;
 
 PresentationContextAC::PresentationContextAC()
 {
-  ItemLength = 0; // len of last transfer syntax
   ID = 1; // odd [1-255]
   Result = 0;
-  //assert( ItemLength + 4 == Size() );
+  ItemLength = 8;
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 std::istream &PresentationContextAC::Read(std::istream &is)
@@ -59,7 +60,7 @@ std::istream &PresentationContextAC::Read(std::istream &is)
   is.read( (char*)&reserved8, sizeof(Reserved6) );
   SubItems.Read( is );
 
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
   return is;
 }
 
@@ -77,7 +78,7 @@ const std::ostream &PresentationContextAC::Write(std::ostream &os) const
   os.write( (char*)&Reserved8, sizeof(Reserved8) );
   SubItems.Write(os);
 
-  assert( ItemLength + 4 == Size() );
+  assert( (size_t)ItemLength + 4 == Size() );
   return os;
 }
 
@@ -92,14 +93,17 @@ size_t PresentationContextAC::Size() const
   ret += sizeof(Result);
   ret += sizeof(Reserved8);
   ret += SubItems.Size();
+
+  assert(ret <= (size_t)std::numeric_limits<uint16_t>::max);
+  assert(ret >= 4);
   return ret;
 }
 
 void PresentationContextAC::SetTransferSyntax( TransferSyntaxSub const &ts )
 {
   SubItems = ts;
-  ItemLength = Size() - 4;
-  assert( ItemLength + 4 == Size() );
+  ItemLength = (uint16_t)Size() - 4;
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 void PresentationContextAC::Print(std::ostream &os) const

@@ -198,7 +198,7 @@ int CStore( const char *remote, int portno,
 
   theManager.SendStore( (gdcm::DataSet*)&ds );
 
-  for( int i = 1; i < files.size(); ++i )
+  for( size_t i = 1; i < files.size(); ++i )
     {
     const std::string & filename = files[i];
     gdcm::Reader reader;

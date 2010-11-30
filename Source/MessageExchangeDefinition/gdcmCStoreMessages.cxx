@@ -77,7 +77,7 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   gdcm::Attribute<0x0,0x100> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
-static int messageid = 1;
+static uint32_t messageid = 1;
   {
   gdcm::Attribute<0x0,0x110> at = { 0 };
   at.SetValue( messageid++ );
