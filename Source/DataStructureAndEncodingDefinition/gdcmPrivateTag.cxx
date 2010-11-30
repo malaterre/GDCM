@@ -29,8 +29,8 @@ namespace gdcm
       gdcmDebugMacro( "Problem reading Private Tag: " << str );
       return false;
       }
-    SetGroup( group );
-    SetElement( element );
+    SetGroup( (uint16_t)group );
+    SetElement( (uint16_t)element );
     SetOwner( owner.c_str() );
     return true;
     }
