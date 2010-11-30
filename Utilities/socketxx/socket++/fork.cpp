@@ -42,7 +42,7 @@ Fork::KillForks::~KillForks ()
     if (cur->kill_child)
       delete cur;
 
-  while (Fork::ForkProcess::list && wait (0) > 0);
+  while (Fork::ForkProcess::list && wait (0) > 0) {}
 }
 
 Fork::ForkProcess::ForkProcess (bool kill, bool give_reason)
