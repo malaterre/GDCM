@@ -65,9 +65,9 @@ bool RAWCodec::Code(DataElement const &in, DataElement &out)
   return true;
 }
 
-bool RAWCodec::DecodeBytes(const char* inBytes, const int& inBufferLength, 
-                           char* outBytes, const int& inOutBufferLength){
-
+bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
+                           char* outBytes, size_t inOutBufferLength)
+{
   // First let's see if we can do a fast-path:
   if( !NeedByteSwap &&
     !RequestPaddedCompositePixelCode &&
@@ -97,9 +97,9 @@ bool RAWCodec::DecodeBytes(const char* inBytes, const int& inBufferLength,
 
   
   if( this->GetPixelFormat() == PixelFormat::UINT12 ||
-    this->GetPixelFormat() == PixelFormat::INT12 ){
-      assert(str.size() < std::numeric_limits<unsigned long>::max());
-    unsigned long len = (unsigned long)str.size() * 16 / 12;
+      this->GetPixelFormat() == PixelFormat::INT12 )
+    {
+    size_t len = str.size() * 16 / 12;
     char * copy = new char[len];
     Unpacker12Bits u12;
     bool b = u12.Unpack(copy, &str[0], str.size() );
@@ -111,7 +111,7 @@ bool RAWCodec::DecodeBytes(const char* inBytes, const int& inBufferLength,
     delete[] copy;
 
     this->GetPixelFormat().SetBitsAllocated( 16 );
-  }
+    }
   else{
     assert (check == inOutBufferLength);
     memcpy(outBytes, str.c_str(), check);
