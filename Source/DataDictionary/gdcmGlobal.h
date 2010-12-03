@@ -57,6 +57,7 @@ public:
   /// retrieve the default/internal dicts (Part 6)
   /// This dict is filled up at load time
   Dicts const &GetDicts() const;
+  Dicts &GetDicts();
 
   /// retrieve the default/internal (Part 3)
   /// You need to explicitely call LoadResourcesFiles before

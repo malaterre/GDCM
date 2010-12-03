@@ -253,6 +253,15 @@ public:
 #endif
     assert( s < DictInternal.size() /*&& std::cout << tag << "," << de << std::endl*/ );
     }
+  /// Remove entry 'tag'. Return true on success (element was found
+  /// and remove). return false if element was not found.
+  bool RemoveDictEntry(const PrivateTag &tag)
+    {
+    MapDictEntry::size_type s =
+      DictInternal.erase(tag);
+    assert( s == 1 || s == 0 );
+    return s == 1;
+    }
   const DictEntry &GetDictEntry(const PrivateTag &tag) const
     {
     // if 0x10 -> return Private Creator
