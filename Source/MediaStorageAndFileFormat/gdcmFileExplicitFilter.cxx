@@ -73,7 +73,13 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     std::string strowner;
     const char *owner = 0;
     const Tag& t = de.GetTag();
-    if( t.IsPrivate() && !ChangePrivateTags )
+    if( t.IsPrivate() && !ChangePrivateTags
+    // As a special exception we convert to proper VR :
+    // - Private Group Length
+    // - Private Creator
+    // This makes the output more readable (and this should be relative safe)
+      && !t.IsGroupLength() && !t.IsPrivateCreator()
+    )
       {
       // nothing to do ! just skip
       ++it;
