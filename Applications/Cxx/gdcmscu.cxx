@@ -40,7 +40,6 @@
 #include "gdcmQueryFactory.h"
 #include "gdcmStudyRootQuery.h"
 #include "gdcmPatientRootQuery.h"
-#include "gdcmDefs.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -251,7 +250,6 @@ void PrintHelp()
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
-  std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
   std::cout << "  -D --debug     print debug info." << std::endl;
@@ -292,7 +290,6 @@ int main(int argc, char *argv[])
   int findpsonly = 0;
   std::string xmlpath;
   std::string queryfile;
-  int resourcespath = 0;
   std::string root;
   int rootuid = 0;
   int recursive = 0;
@@ -574,33 +571,6 @@ int main(int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( callaetitle.c_str() );
-  gdcm::Global& g = gdcm::Global::GetInstance();
-  if( !resourcespath )
-    {
-    const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
-    if( xmlpathenv )
-      {
-      // Make sure to look for XML dict in user explicitly specified dir first:
-      xmlpath = xmlpathenv;
-      resourcespath = 1;
-      }
-    }
-  if( resourcespath )
-    {
-    // xmlpath is set either by the cmd line option or the env var
-    if( !g.Prepend( xmlpath.c_str() ) )
-      {
-      std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
-      return 1;
-      }
-    }
-  // All set, then load the XML files:
-  if( !g.LoadResourcesFiles() )
-    {
-    std::cerr << "Could not load XML file from specified path" << std::endl;
-    return 1;
-    }
-  const gdcm::Defs &defs = g.GetDefs(); (void)defs;
   if( !rootuid )
     {
     // only read the env var if no explicit cmd line option
