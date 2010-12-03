@@ -19,10 +19,8 @@
 #include "gdcmUIDs.h"
 #include "gdcmSwapper.h"
 #include "gdcmAttribute.h"
-#include "gdcmDefs.h"
 #include "gdcmGlobal.h"
 #include "gdcmMediaStorage.h"
-#include "gdcmSOPClassUIDToIOD.h"
 
 #include <limits>
 
@@ -194,12 +192,10 @@ EPresentationContextID PresentationContext::AssignPresentationContextID(const Da
       return eVerificationSOPClass;
       }
 #endif
-    const gdcm::Defs &defs = g.GetDefs();
     gdcm::MediaStorage mst;
     if (!mst.SetFromDataSet(inDS)){
       return eVerificationSOPClass;
     }
-    const char *iod = defs.GetIODNameFromMediaStorage(mst);
     gdcm::UIDs uid;//want to get this as well, to set the abstract syntax properly
     uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
     outUIDString = std::string(gdcm::MediaStorage::GetMSString(mst));
