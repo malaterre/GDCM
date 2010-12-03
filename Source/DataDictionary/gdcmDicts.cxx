@@ -132,6 +132,10 @@ const PrivateDict &Dicts::GetPrivateDict() const
 {
   return ShadowDict;
 }
+PrivateDict &Dicts::GetPrivateDict()
+{
+  return ShadowDict;
+}
 
 const CSAHeaderDict &Dicts::GetCSAHeaderDict() const
 {

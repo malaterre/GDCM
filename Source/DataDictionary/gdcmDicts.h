@@ -49,6 +49,7 @@ public:
   const Dict &GetPublicDict() const;
 
   const PrivateDict &GetPrivateDict() const;
+  PrivateDict &GetPrivateDict();
 
   const CSAHeaderDict &GetCSAHeaderDict() const;
 
