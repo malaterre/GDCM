@@ -132,7 +132,8 @@ void PDataTFPDU::Print(std::ostream &os) const
 }
 
 
-bool PDataTFPDU::IsLastFragment() const{
+bool PDataTFPDU::IsLastFragment() const
+{
   if (V.empty()) return true;
   return V[V.size()-1].GetIsLastFragment();
 }
