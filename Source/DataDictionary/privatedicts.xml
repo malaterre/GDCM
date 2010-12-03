@@ -8194,6 +8194,31 @@
   <entry owner="V1" group="0011" element="xx02" vr="DS" vm="1" name="Normalization Coefficient"/>
   <entry owner="V1" group="0011" element="xx03" vr="DS" vm="1-n" name="Receiving Gain"/>
   <entry owner="V1" group="0011" element="xx04" vr="DS" vm="1" name="Mean Image Noise"/>
+  <entry owner="VEPRO VIM 5.0 DATA" group="0055" element="xx10" vr="OB" vm="1" name="VIFHEADER2"/>
+  <entry owner="VEPRO VIM 5.0 DATA" group="0055" element="xx20" vr="OB" vm="1" name="VIMDATA2"/>
+  <entry owner="VEPRO VIM 5.0 DATA" group="0055" element="xx30" vr="OB" vm="1" name="ICONDATA2"/>
+  <entry owner="VEPRO VIM 5.0 DATA" group="0055" element="xx51" vr="UI" vm="1" name="VEPRO UID ??"/>
+  <entry owner="VEPRO VIM 5.0 DATA" group="0055" element="xx65" vr="OB" vm="1" name="??"/>
+  <entry owner="VEPRO BROKER 1.0" group="0057" element="xx10" vr="SQ" vm="1" name="VEPRO Data replace sequence"/>
+  <entry owner="VEPRO BROKER 1.0 DATA REPLACE" group="0057" element="xx20" vr="SQ" vm="1" name="Original data sequence"/>
+  <entry owner="VEPRO BROKER 1.0 DATA REPLACE" group="0057" element="xx30" vr="SQ" vm="1" name="Replaced data sequence"/>
+  <entry owner="VEPRO BROKER 1.0 DATA REPLACE" group="0057" element="xx40" vr="DA" vm="1" name="Date of data replacement"/>
+  <entry owner="VEPRO BROKER 1.0 DATA REPLACE" group="0057" element="xx41" vr="TM" vm="1" name="Time of data replacement"/>
+  <entry owner="VEPRO BROKER 1.0 DATA REPLACE" group="0057" element="xx42" vr="LO" vm="1" name="Dicom receive node"/>
+  <entry owner="VEPRO BROKER 1.0 DATA REPLACE" group="0057" element="xx43" vr="LO" vm="1" name="Application name"/>
+  <entry owner="VEPRO BROKER 1.0 DATA REPLACE" group="0057" element="xx44" vr="LO" vm="1" name="Computer name"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx40" vr="DA" vm="1" name="Receive date"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx41" vr="TM" vm="1" name="Receive time"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx42" vr="ST" vm="1" name="Receive node"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx43" vr="ST" vm="1" name="Receive application"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx50" vr="ST" vm="1" name="Receive local computer"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx51" vr="ST" vm="1" name="Receive local ae title"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx60" vr="ST" vm="1" name="Receive remote computer"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx61" vr="ST" vm="1" name="Receive remote ae title"/>
+  <entry owner="VEPRO DICOM RECEIVE DATA 1.0" group="0059" element="xx70" vr="UI" vm="1" name="Receive original transfer syntax"/>
+  <entry owner="VEPRO DICOM TRANSFER 1.0" group="0059" element="xx10" vr="SQ" vm="1" name="Dicom Transfer Info"/>
+  <entry owner="VEPRO VIF 3.0 DATA" group="0055" element="xx30" vr="OB" vm="1" name="Icon data"/>
+  <entry owner="VEPRO VIF 3.0 DATA" group="0055" element="xx65" vr="OB" vm="1" name="Image hash value"/>
   <entry owner="Varian Medical Systems VISION 3253" group="3253" element="xx00" vr="UN" vm="1" name="XML stream."/>
   <entry owner="Varian Medical Systems VISION 3253" group="3253" element="xx01" vr="UN" vm="1" name="Data length of the XML stream"/>
   <entry owner="Varian Medical Systems VISION 3253" group="3253" element="xx02" vr="UN" vm="1" name="Extended Interface Format tag"/>
