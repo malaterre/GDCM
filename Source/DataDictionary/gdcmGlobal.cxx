@@ -169,6 +169,12 @@ Dicts const &Global::GetDicts() const
   return Internals->GlobalDicts;
 }
 
+Dicts &Global::GetDicts()
+{
+  assert( !Internals->GlobalDicts.IsEmpty() );
+  return Internals->GlobalDicts;
+}
+
 Defs const &Global::GetDefs() const
 {
   assert( !Internals->GlobalDefs.IsEmpty() );
