@@ -226,6 +226,15 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
   // \postcondition:
   assert( vr.IsVRFile() );
   assert( vr != VR::INVALID );
+
+  if( tag.IsGroupLength() )
+    {
+    assert( vr == VR::UL );
+    }
+  if( tag.IsPrivateCreator() )
+    {
+    assert( vr == VR::LO );
+    }
   return vr;
 }
 
