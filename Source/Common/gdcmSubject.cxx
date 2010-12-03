@@ -215,43 +215,43 @@ Subject::~Subject()
   delete Internals;
 }
 
-  unsigned long Subject::AddObserver(const Event & event, Command *cmd)
-    {
+unsigned long Subject::AddObserver(const Event & event, Command *cmd)
+{
   return this->Internals->AddObserver(event,cmd);
-    }
-  unsigned long Subject::AddObserver(const Event & event, Command *cmd) const
-    {
+}
+unsigned long Subject::AddObserver(const Event & event, Command *cmd) const
+{
   return this->Internals->AddObserver(event,cmd);
-    }
+}
 
-  Command* Subject::GetCommand(unsigned long tag)
-    {
-    return this->Internals->GetCommand(tag);
-    }
+Command* Subject::GetCommand(unsigned long tag)
+{
+  return this->Internals->GetCommand(tag);
+}
 
-  void Subject::InvokeEvent( const Event & event)
-    {
-    this->Internals->InvokeEvent(event,this);
-    }
+void Subject::InvokeEvent( const Event & event)
+{
+  this->Internals->InvokeEvent(event,this);
+}
 
-  void Subject::InvokeEvent( const Event & event) const
-    {
-    this->Internals->InvokeEvent(event,this);
-    }
+void Subject::InvokeEvent( const Event & event) const
+{
+  this->Internals->InvokeEvent(event,this);
+}
 
-  void Subject::RemoveObserver(unsigned long tag)
-    {
-    this->Internals->RemoveObserver(tag);
-    }
+void Subject::RemoveObserver(unsigned long tag)
+{
+  this->Internals->RemoveObserver(tag);
+}
 
-  void Subject::RemoveAllObservers()
-    {
-    this->Internals->RemoveAllObservers();
-    }
+void Subject::RemoveAllObservers()
+{
+  this->Internals->RemoveAllObservers();
+}
 
-  bool Subject::HasObserver( const Event & event ) const
-    {
-    return this->Internals->HasObserver(event);
-    }
+bool Subject::HasObserver( const Event & event ) const
+{
+  return this->Internals->HasObserver(event);
+}
 
 }
