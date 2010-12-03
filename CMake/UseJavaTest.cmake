@@ -27,6 +27,7 @@
 MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
   GET_SOURCE_FILE_PROPERTY(loc ${FILENAME}.class LOCATION)
   GET_SOURCE_FILE_PROPERTY(pyenv ${FILENAME}.class RUNTIMEPATH)
+  GET_SOURCE_FILE_PROPERTY(theclasspath ${FILENAME}.class CLASSPATH)
   get_filename_component(loc2 ${loc} NAME_WE)
 
 
@@ -48,16 +49,32 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
     ENDIF(pyenv)
    ENDIF(CMAKE_CONFIGURATION_TYPES)
   STRING(REGEX REPLACE ";" " " wo_semicolumn "${ARGN}")
+
+  set(classpath)
+  if(theclasspath)
+    set(classpath "${theclasspath}:.")
+  else(theclasspath)
+    set(classpath ".")
+  endif(theclasspath)
+  set(theld_library_path $ENV{LD_LIBRARY_PATH})
+  set(ld_library_path)
+  if(theld_library_path)
+    set(ld_library_path ${theld_library_path})
+  endif(theld_library_path)
+  if(pyenv)
+    set(ld_library_path ${ld_library_path}:${pyenv})
+  endif(pyenv)
+
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
 "
-  SET(ENV{LD_LIBRARY_PATH} ${pyenv})
-  SET(ENV{CLASSPATH} ${pyenv}/gdcm.jar:.)
+  SET(ENV{LD_LIBRARY_PATH} ${ld_library_path})
+  #SET(ENV{CLASSPATH} ${pyenv}/gdcm.jar:.)
   MESSAGE(\"pyenv: ${pyenv}\")
   MESSAGE(\"loc: ${loc}\")
   MESSAGE(\"loc2: ${loc2}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   EXECUTE_PROCESS(
-    COMMAND ${JAVA_RUNTIME} ${loc2} ${wo_semicolumn}
+    COMMAND ${JAVA_RUNTIME} -classpath ${classpath} ${loc2} ${wo_semicolumn}
     WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
     RESULT_VARIABLE import_res
     OUTPUT_VARIABLE import_output
