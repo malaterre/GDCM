@@ -164,7 +164,7 @@ const char * Testing::GetMD5FromBrokenFile(const char *filepath)
 
 std::streamoff Testing::GetStreamOffsetFromFile(const char *filepath)
 {
-  if(!filepath) return NULL;
+  if(!filepath) return 0;
   unsigned int i = 0;
   const StreamOffset* so = gdcmStreamOffsetDataFiles;
   const char *p = so[i].filename;
