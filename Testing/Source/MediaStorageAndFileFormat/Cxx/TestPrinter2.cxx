@@ -47,7 +47,10 @@ int TestPrinter2(int argc, char *argv[])
   gdcm::PrivateDict &priv_dict = dicts.GetPrivateDict();
 
   gdcm::PrivateTag pt(0x2001,0x005f,"Philips Imaging DD 001");
-  priv_dict.RemoveDictEntry( pt );
+  if( !priv_dict.RemoveDictEntry( pt ) )
+    {
+    return 1;
+    }
 
   gdcm::Reader r2;
   r2.SetFileName( filename.c_str() );
