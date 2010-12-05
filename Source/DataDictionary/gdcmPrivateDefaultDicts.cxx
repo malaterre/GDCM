@@ -4996,6 +4996,8 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0009,0x0000,"SIEMENS CM VA0  CMS",VR::IS,VM::VM1,"Number of Measurements",false },
   {0x0009,0x0010,"SIEMENS CM VA0  CMS",VR::CS,VM::VM1,"Storage Mode",false },
   {0x0009,0x0012,"SIEMENS CM VA0  CMS",VR::UL,VM::VM1,"Evaluation Mask Image",false },
+  {0x0009,0x0013,"SIEMENS CM VA0  CMS",VR::IS,VM::VM1,"Int ??",false },
+  {0x0009,0x0014,"SIEMENS CM VA0  CMS",VR::IS,VM::VM1,"Int ??",false },
   {0x0009,0x0026,"SIEMENS CM VA0  CMS",VR::DA,VM::VM1,"Table Zero Date",false },
   {0x0009,0x0027,"SIEMENS CM VA0  CMS",VR::TM,VM::VM1,"Table Zero Time",false },
   {0x0011,0x000a,"SIEMENS CM VA0  CMS",VR::LO,VM::VM1,"?",false },
