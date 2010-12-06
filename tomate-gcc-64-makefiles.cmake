@@ -22,6 +22,8 @@ SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long")
 
 SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
+# Need to pass the path to the VTK libraries
+SET(ENV{LD_LIBRARY_PATH} "${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate/bin")
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
