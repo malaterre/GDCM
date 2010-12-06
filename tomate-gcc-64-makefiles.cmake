@@ -33,6 +33,9 @@ GDCM_USE_VTK:BOOL=ON
 # Cannot use CTEST_DASHBOARD_ROOT directly...
 VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate
 CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
+# wrapping stuff
+GDCM_WRAP_PYTHON:BOOL=ON
+GDCM_WRAP_JAVA:BOOL=ON
     "
     )
 endmacro(dashboard_hook_init)
