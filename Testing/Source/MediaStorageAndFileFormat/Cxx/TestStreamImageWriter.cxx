@@ -72,12 +72,16 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
 
     unsigned short xmax = extent[0];
     unsigned short ymax = extent[1];
+    unsigned short theChunkSize = 4;
+    unsigned short ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
     unsigned short zmax = extent[2];
 
-    int z, y;
+    int z, y, nexty;
     for (z = 0; z < zmax; ++z){
-      for (y = 0; y < ymax; ++y){
-        theStreamReader.DefinePixelExtent(0, xmax, y, y+1, z, z+1);
+      for (y = 0; y < ymax; y += ychunk){
+        nexty = y + ychunk;
+        if (nexty > ymax) nexty = ymax;
+        theStreamReader.DefinePixelExtent(0, xmax, y, y+nexty, z, z+1);
         unsigned long len = theStreamReader.DefineProperBufferLength();
         char* finalBuffer = new char[len];
         bool result = theStreamReader.Read(finalBuffer, len);
@@ -86,7 +90,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
           delete [] finalBuffer;
           return 1;
         }
-        theStreamWriter.DefinePixelExtent(0, xmax, y, y+1, z, z+1);
+        theStreamWriter.DefinePixelExtent(0, xmax, y, y+nexty, z, z+1);
         if (!theStreamWriter.Write(finalBuffer, len)){
           std::cerr << "writing failure:" << outfilename << " at y = " << y << " and z= " << z << std::endl;
           delete [] finalBuffer;
