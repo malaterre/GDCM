@@ -199,7 +199,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
 
   //have to reset the stream to the proper position
   //first, reopen the stream,then the loop should set the right position
-  mWriter.SetFileName(mWriter.GetFileName().c_str());
+  //mWriter.SetFileName(mWriter.GetFileName().c_str());
   std::ostream* theStream = mWriter.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
@@ -269,14 +269,19 @@ bool StreamImageWriter::WriteImageInformation(){
   //filename needs to be set prior to this function
   try
   {
-    mWriter.Write();//should write everything BUT the image tag.  right?
+    mFile.GetDataSet().Remove( Tag(0x7fe0,0x0010) ); // FIXME
+    assert( !mFile.GetDataSet().FindDataElement( Tag(0x7fe0,0x0010) ) );
+    if( !mWriter.Write() )//should write everything BUT the image tag.  right?
+      {
+      assert( 0 );
+      }
     //this is where to start writing zeros for the image.
     //BUT! do we know here if it's compressed for writing out?  If so, shouldn't that require forcing
     //the datasets to be presented sequentially?
     //at this point, we should be at the end of the dataset, and the pointer should be set to eof
     //which is good, because otherwise, we have a problem (write is inherited, and I can't easily
     //do the trick where I return the stream location
-    mWriter.SetFileName(mWriter.GetFileName().c_str());
+    //mWriter.SetFileName(mWriter.GetFileName().c_str());
     mFileOffset = mWriter.GetStreamPtr()->tellp();
   }
   catch(std::exception & ex)
