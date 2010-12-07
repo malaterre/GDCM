@@ -35,10 +35,13 @@ namespace gdcm
 
 Writer::~Writer()
 {
-  if (Ofstream) {
+  if (Ofstream)
+    {
     Ofstream->close();
     delete Ofstream;
-  }
+    Ofstream = NULL;
+    Stream = NULL;
+    }
 }
 
 bool Writer::Write()
@@ -164,17 +167,6 @@ catch(...)
   gdcmErrorMacro( "what the hell" );
   return false;
 }
-
-
-
-  // FIXME : call this function twice...
-  if (Ofstream)
-  {
-  Ofstream->close();
-  delete Ofstream;
-  Ofstream = NULL;
-  Stream = NULL;
-  }
 
   return true;
 }
