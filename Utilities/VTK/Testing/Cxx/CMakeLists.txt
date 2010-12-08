@@ -2,7 +2,6 @@
 # vtkGDCM
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
-  TestvtkGDCMImageReader2
   TestvtkGDCMImageReader4
   TestvtkGDCMImageReaderIsLossy
   #TestvtkGDCMImageActor
@@ -17,6 +16,13 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
 
+# Need gdcmData
+IF(GDCM_DATA_ROOT)
+  SET(VTK_GDCM_TEST_SRCS
+    ${VTK_GDCM_TEST_SRCS}
+    TestvtkGDCMImageReader2
+    )
+ENDIF(GDCM_DATA_ROOT)
 # Need gdcmDataExtra
 IF(GDCM_DATA_EXTRA_ROOT)
   SET(VTK_GDCM_TEST_SRCS
