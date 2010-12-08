@@ -91,6 +91,18 @@ bool StreamImageWriter::Write(void* inReadBuffer, const std::size_t& inBufferLen
   return WriteImageSubregionRAW((char*)inReadBuffer, inBufferLength);
 
 }
+/// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
+/// The return amount is in bytes.
+/// If the return is 0, then that means that the pixel extent was not defined prior
+/// this return is for RAW inputs which are then encoded by the writer, but are used
+/// to ensure that the writer gets the proper buffer size
+uint32_t StreamImageWriter::DefineProperBufferLength() {
+  if (mXMax < mXMin || mYMax < mYMin || mZMax < mZMin) return 0;
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mWriter.GetFile());
+  //unsigned short samplesPerPixel = pixelInfo.GetSamplesPerPixel();
+  int bytesPerPixel = pixelInfo.GetPixelSize();
+  return (mYMax - mYMin)*(mXMax - mXMin)*(mZMax - mZMin)*bytesPerPixel;
+}
 
 /// when writing a raw file, we know the full extent, and can just write the first
 /// 12 bytes out (the tag, the VR, and the size)
@@ -163,7 +175,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //assumes that the file is organized in row-major format, with each row rastering across
   assert( mFileOffset != -1 );
   int y, z;
-  std::streamoff theOffset;
+//  std::streamoff theOffset;
 
   //need to get the pixel size information
   //should that come from the header?
@@ -200,7 +212,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //have to reset the stream to the proper position
   //first, reopen the stream,then the loop should set the right position
   //MM: you have to reopen the stream, by default, the writer closes it each time it writes.
-  mWriter.SetFileName(mWriter.GetFileName().c_str());
+  mWriter.SetFileName(mWriter.GetFileName().c_str(), true);//open in file append mode
   std::ostream* theStream = mWriter.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
@@ -216,6 +228,12 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
       delete [] tmpBuffer2;
       return false;
     }
+    //only need to seek to the location once, and then write sequentially
+    //may be trickier with compressed images, but should work for RAW
+    theStream->seekp(std::ios::end);
+    //seeking to the end should be sufficient, if we're guaranteed to get chunks in order
+//    theOffset = mFileOffset + (mZMin * (int)(extent[1]*extent[0]) + mYMin*(int)extent[0] + mXMin)*bytesPerPixel + mElementOffsets;
+//    theStream->seekp(theOffset);
     for (z = mZMin; z < mZMax; ++z){
       for (y = mYMin; y < mYMax; ++y){
         //this next line may require a bit of finagling...
@@ -232,10 +250,9 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
           delete [] tmpBuffer2;
           return false;
         }
-        theStream->seekp(std::ios::beg);
-        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel + mElementOffsets;
-        theStream->seekp(theOffset);
+        //should be appending
         theStream->write(tmpBuffer2, SubRowSize*bytesPerPixel);
+        theStream->flush();
       }
     }
   }

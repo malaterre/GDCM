@@ -28,11 +28,11 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
 {
   if( verbose )
     std::cerr << "Reading and writing: " << filename << std::endl;
-  gdcm::StreamImageReader theStreamReader;
+  gdcm::ImageReader theImageReaderOriginal;
   gdcm::ImageReader theImageReader;
   gdcm::StreamImageWriter theStreamWriter;
 
-  theStreamReader.SetFileName( filename );
+  theImageReaderOriginal.SetFileName( filename );
 
   // Create directory first:
   std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
@@ -43,7 +43,8 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     }
   std::string outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
 
-  if ( theStreamReader.ReadImageInformation() )
+
+  if ( theImageReaderOriginal.Read() )
     {
     int res = 0;
 
@@ -58,17 +59,25 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     //5) go to step2, replace step 3 with a regular image reader.
     //for now, we'll do 1-4
 
+    //pull image information prior to messing with the file
+    gdcm::Image theOriginalImage = theImageReaderOriginal.GetImage();
+    char* theOriginalBuffer = new char[theOriginalImage.GetBufferLength()];
+    if (!theOriginalImage.GetBuffer(theOriginalBuffer)){
+      std::cerr << "Unable to get original image buffer, stopping." << std::endl;
+      return 1;
+    }
+
     //first, check that the image information can be written
     //theStreamReader.GetFile().GetDataSet().Print( std::cout );
 
-    theStreamWriter.SetFile(theStreamReader.GetFile());
+    theStreamWriter.SetFile(theImageReaderOriginal.GetFile());
     theStreamWriter.SetFileName(outfilename.c_str());
     if (!theStreamWriter.WriteImageInformation()){
       std::cerr << "unable to write image information" << std::endl;
       return 1;
     }
     std::vector<unsigned int> extent =
-      gdcm::ImageHelper::GetDimensionsValue(theStreamReader.GetFile());
+      gdcm::ImageHelper::GetDimensionsValue(theImageReaderOriginal.GetFile());
 
     unsigned short xmax = extent[0];
     unsigned short ymax = extent[1];
@@ -76,29 +85,30 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     unsigned short ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
     unsigned short zmax = extent[2];
 
+
     int z, y, nexty;
+    unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
+    //the bytes sequentially.  So, store how far you got in the buffer with each iteration.
     for (z = 0; z < zmax; ++z){
       for (y = 0; y < ymax; y += ychunk){
         nexty = y + ychunk;
         if (nexty > ymax) nexty = ymax;
-        theStreamReader.DefinePixelExtent(0, xmax, y, y+nexty, z, z+1);
-        unsigned long len = theStreamReader.DefineProperBufferLength();
+        theStreamWriter.DefinePixelExtent(0, xmax, y, nexty, z, z+1);
+        unsigned long len = theStreamWriter.DefineProperBufferLength();
         char* finalBuffer = new char[len];
-        bool result = theStreamReader.Read(finalBuffer, len);
-        if( !result ){
-          std::cerr << "reading failure:" << filename << " at y = " << y << " and z= " << z << std::endl;
-          delete [] finalBuffer;
-          return 1;
-        }
-        theStreamWriter.DefinePixelExtent(0, xmax, y, y+nexty, z, z+1);
+        memcpy(finalBuffer, &(theOriginalBuffer[prevLen]), len);
+
         if (!theStreamWriter.Write(finalBuffer, len)){
           std::cerr << "writing failure:" << outfilename << " at y = " << y << " and z= " << z << std::endl;
+          delete [] theOriginalBuffer;
           delete [] finalBuffer;
           return 1;
         }
         delete [] finalBuffer;
+        prevLen += len;
       }
     }
+    delete [] theOriginalBuffer;
     theImageReader.SetFileName(outfilename.c_str());
     if (!theImageReader.Read()){
       std::cerr << "unable to read in the written test file." << std::endl;
@@ -146,6 +156,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
   }
   else
     {
+    std::cerr << "Unable to read test file: " << filename << std::endl;
     return 1;
     }
 

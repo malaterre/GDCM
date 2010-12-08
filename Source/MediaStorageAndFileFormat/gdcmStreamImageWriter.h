@@ -64,6 +64,14 @@ public:
   void DefinePixelExtent(uint16_t inXMin, uint16_t inXMax,
     uint16_t inYMin, uint16_t inYMax, uint16_t inZMin = 0, uint16_t inZMax = 1);
 
+
+  /// Paying attention to the pixel format and so forth, define the proper buffer length for the user.
+  /// The return amount is in bytes.
+  /// If the return is 0, then that means that the pixel extent was not defined prior
+  /// this return is for RAW inputs which are then encoded by the writer, but are used
+  /// to ensure that the writer gets the proper buffer size
+  uint32_t DefineProperBufferLength();
+
   /// Read the DICOM image. There are three reasons for failure:
   /// 1. The extent is not set
   /// 2. the conversion from void* to std::ostream (internally) fails

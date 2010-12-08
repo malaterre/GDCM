@@ -58,7 +58,7 @@ public:
   virtual bool Write(); // Execute()
 
   /// Set the filename of DICOM file to write:
-  void SetFileName(const char *filename) {
+  void SetFileName(const char *filename, bool inAppendMode = false) {
     //std::cerr << "Stream: " << filename << std::endl;
     //std::cerr << "Ofstream: " << Ofstream << std::endl;
     if (Ofstream && Ofstream->is_open())
@@ -67,7 +67,11 @@ public:
       delete Ofstream;
       }
     Ofstream = new std::ofstream();
-    Ofstream->open(filename, std::ios::out | std::ios::binary );
+    if (!inAppendMode){
+      Ofstream->open(filename, std::ios::out | std::ios::binary );
+    } else {
+      Ofstream->open(filename, std::ios::out | std::ios::app | std::ios::binary );
+    }
     assert( Ofstream->is_open() );
     assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;

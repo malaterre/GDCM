@@ -269,6 +269,15 @@ namespace details
 
 bool Reader::Read()
 {
+  //first, just check to see if the file is zero length.
+  //a zero length file will just return false, because there's nothing there.
+  std::ifstream theFileStreamPtr(GetFileName().c_str());
+  std::streampos theBeg = theFileStreamPtr.tellg();
+  theFileStreamPtr.seekg(0, std::ios::end);
+  std::streampos theEnd = theFileStreamPtr.tellg();
+  theFileStreamPtr.seekg(0, std::ios::beg);//reset the file pointer, just in case
+  if ((theEnd - theBeg) < 43) return false; //smaller than 43 bytes = too small to be dicom
+  theFileStreamPtr.close();
   details::DefaultCaller caller(F->GetDataSet());
   std::streamoff streamOff;
   return InternalReadCommon(caller, streamOff);
