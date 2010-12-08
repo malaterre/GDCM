@@ -20,6 +20,7 @@ set(dashboard_do_test FALSE)
 
 SET(ENV{PATH} "/opt/bin:/opt/jdk/bin:/opt/jre/bin:/usr/local/sbin:/usr/local/bin:$ENV{PATH}")
 SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
+SET(ENV{JAVA_HOME} "/opt/jdk")
 
 
 set(dashboard_cache "
