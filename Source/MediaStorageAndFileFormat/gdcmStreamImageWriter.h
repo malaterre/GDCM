@@ -98,7 +98,8 @@ protected:
   //during the copy, so that the imagewriter can write everything else out
   Writer mWriter;
 
-  std::streamoff mFileOffset; //the fileoffset for getting header information
+  //is the offset necessary if we always append?
+  //std::streamoff mFileOffset; //the fileoffset for getting header information
   SmartPointer<File> mspFile; //all the non-pixel information
 
   //for thread safety, these should not be stored here, but should be used

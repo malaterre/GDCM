@@ -134,7 +134,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
 
   char* tmpBuffer1 = new char[theBufferSize];
   char* tmpBuffer2 = new char[theBufferSize];
-  std::streamoff theOffset;
+//  std::streamoff theOffset;
 
   try {
     memcpy(&(tmpBuffer1[0]), &firstTag, sizeof(uint16_t));
@@ -151,11 +151,13 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
       return -1;
     }
 
-    //write that chunk to the beginning of the file
-    inStream->seekp(std::ios::beg);
-    theOffset = mFileOffset;
-    inStream->seekp(theOffset);
+    //write that chunk to the end of the file, ie, this function
+    //requires that it be called with a stream in append mode
+//    inStream->seekp(std::ios::beg);
+//    theOffset = mFileOffset;
+//    inStream->seekp(theOffset);
     inStream->write(tmpBuffer2, theBufferSize);
+    inStream->flush();
 
   } catch(...){
     delete [] tmpBuffer1;
@@ -173,7 +175,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
     */
 bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::size_t& inBufferLength) {
   //assumes that the file is organized in row-major format, with each row rastering across
-  assert( mFileOffset != -1 );
+//  assert( mFileOffset != -1 );
   int y, z;
 //  std::streamoff theOffset;
 
@@ -303,7 +305,8 @@ bool StreamImageWriter::WriteImageInformation(){
     //at this point, we should be at the end of the dataset, and the pointer should be set to eof
     //which is good, because otherwise, we have a problem (write is inherited, and I can't easily
     //do the trick where I return the stream location
-    mWriter.SetFileName(mWriter.GetFileName().c_str());//MM: we must call setfilename in order to open
+    //no longer really using the mFileLocation anyway, because always appending.
+ /*   mWriter.SetFileName(mWriter.GetFileName().c_str());//MM: we must call setfilename in order to open
     //the stream.  Otherwise, the position information will be wrong.
     std::ostream* theStreamPtr = mWriter.GetStreamPtr();
     theStreamPtr->seekp(std::ios::end);
@@ -312,6 +315,7 @@ bool StreamImageWriter::WriteImageInformation(){
     if (theFileStreamPtr!= NULL){
       theFileStreamPtr->close();
     }
+    */
   }
   catch(std::exception & ex)
   {
@@ -324,10 +328,10 @@ bool StreamImageWriter::WriteImageInformation(){
   }
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm
-  if( mFileOffset == -1 ) return false;
+//  if( mFileOffset == -1 ) return false;
 
   // postcondition
-  assert( mFileOffset != -1 );
+//  assert( mFileOffset != -1 );
   return true;
 }
 
