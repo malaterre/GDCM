@@ -21,8 +21,7 @@ SET(ENV{GLIBCXX_FORCE_NEW} 1)
 SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -pedantic -Wno-long-long -Wsign-promo -Weffc++ -Wabi -D_GLIBCXX_DEBUG")
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long")
 
-SET(ENV{PATH} "/opt/bin:/opt/jdk/bin:/opt/jre/bin:/usr/local/sbin:/usr/local/bin:$ENV{PATH}")
-SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
+SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:/opt/bin:/opt/jdk/bin:/opt/jre/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11")
 SET(ENV{JAVA_HOME} "/opt/jdk")
 # Need to pass the path to the VTK libraries
 SET(ENV{LD_LIBRARY_PATH} "${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate/bin")
@@ -40,6 +39,7 @@ CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
 # wrapping stuff
 GDCM_WRAP_PYTHON:BOOL=ON
 GDCM_WRAP_JAVA:BOOL=ON
+GDCM_WRAP_CSHARP:BOOL=ON
     "
     )
 endmacro(dashboard_hook_init)
