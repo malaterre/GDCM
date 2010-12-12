@@ -7,9 +7,11 @@ INCLUDE_DIRECTORIES(
   ${JAVA_AWT_INCLUDE_PATH}
   )
 
-set(classpath
-  ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${GDCM_VTK_JAVA_JAR}
-)
+if(UNIX)
+  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${GDCM_VTK_JAVA_JAR})
+else(UNIX)
+  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${GDCM_VTK_JAVA_JAR})
+endif(UNIX)
 ADD_CUSTOM_COMMAND(
   OUTPUT ${EXECUTABLE_OUTPUT_PATH}/HelloVTKWorld.class
   COMMAND ${JAVA_COMPILE} ARGS -classpath "${classpath}"
