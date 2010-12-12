@@ -37,10 +37,13 @@ namespace gdcm
 
 Reader::~Reader()
 {
-  if (Ifstream) {
+  if (Ifstream)
+    {
     Ifstream->close();
     delete Ifstream;
-  }
+    Ifstream = NULL;
+    Stream = NULL;
+    }
 }
 
 /// \brief tells us if "DICM" is found as position 128
@@ -688,10 +691,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStrea
   if (Ifstream && Ifstream->is_open())
     {
     outStreamOffset = Ifstream->tellg();
-    Ifstream->close();
-    delete Ifstream;
-    Ifstream = NULL;
-    Stream = NULL;
+    //Ifstream->close();
+    //delete Ifstream;
+    //Ifstream = NULL;
+    //Stream = NULL;
     }
 
   return success;

@@ -72,7 +72,6 @@ public:
     Ifstream = new std::ifstream();
     Ifstream->open(filename, std::ios::binary);
     Stream = Ifstream;
-    mFileName = filename;
   }
 
   /// Set the open-ed stream directly
@@ -116,18 +115,12 @@ protected:
   //will still have to be subject to endianness swaps, if necessary.
   std::istream* GetStreamPtr() const { return Stream; }
 
-  //this function returns the filename that the reader was initialized with
-  //used primarilly for debugging/exception arguments, to identify a failed 
-  //file, which can be useful when reading a stack.
-  std::string GetFileName() const { return mFileName; }
-
 private:
   template <typename T_Caller>
   bool InternalReadCommon(const T_Caller &caller, std::streamoff& outStreamOffset);
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;
-  std::string mFileName;
 };
 
 /**

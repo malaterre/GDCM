@@ -155,7 +155,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
 
   //have to reset the stream to the proper position
   //first, reopen the stream,then the loop should set the right position
-  mReader.SetFileName(mReader.GetFileName().c_str());
+  //mReader.SetFileName(mReader.GetFileName().c_str());
   std::istream* theStream = mReader.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
@@ -187,13 +187,13 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
   } 
   catch (...){
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to read with unknown error." );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
@@ -278,11 +278,11 @@ bool StreamImageReader::ReadImageInformation(){
   catch(std::exception & ex)
   {
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
   }
   catch(...)
   {
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName()  << " with unknown error" );
+    gdcmWarningMacro( "Failed to read with unknown error" );
   }
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm
