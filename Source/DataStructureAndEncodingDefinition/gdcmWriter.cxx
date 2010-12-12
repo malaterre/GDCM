@@ -33,6 +33,10 @@
 namespace gdcm
 {
 
+Writer::Writer():Stream(NULL),Ofstream(NULL),F(new File),CheckFileMetaInformation(true)
+{
+}
+
 Writer::~Writer()
 {
   if (Ofstream)

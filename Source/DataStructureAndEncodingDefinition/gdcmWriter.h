@@ -41,17 +41,15 @@ class FileMetaInformation;
  * - 32bits VR will be rewritten with 00
  *
  * \warning
- * gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
+ * gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found,
+ * unless a DICOMDIR is being written out
  *
  * \see Reader DataSet File
  */
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():F(new File),CheckFileMetaInformation(true) {
-    Stream = NULL;
-    Ofstream = NULL;
-  }
+  Writer();
   virtual ~Writer();
 
   /// Main function to tell the writer to write
@@ -76,7 +74,6 @@ public:
     assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
     Stream = Ofstream;
-    mFileName = filename;
   }
   /// Set user ostream buffer
   void SetStream(std::ostream &output_stream) {
@@ -93,9 +90,6 @@ public:
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
-  std::string GetFileName() const { return mFileName;}
-
-
   //this function is added for the StreamImageWriter, which needs to write
   //up to the pixel data and then stops right before writing the pixel data.
   //after that, for the raw codec at least, zeros are written for the length of the data
@@ -108,7 +102,6 @@ protected:
 private:
   SmartPointer<File> F;
   bool CheckFileMetaInformation;
-  std::string mFileName;
 };
 
 } // end namespace gdcm
