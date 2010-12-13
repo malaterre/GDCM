@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(
   )
 
 SET(MessageExchangeDefinition_SRCS
+  gdcmServiceClassUser.cxx
   gdcmAAbortPDU.cxx
   gdcmAAssociateRJPDU.cxx
   gdcmAbstractSyntax.cxx
