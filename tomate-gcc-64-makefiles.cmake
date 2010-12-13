@@ -39,7 +39,7 @@ CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
 # wrapping stuff
 GDCM_WRAP_PYTHON:BOOL=ON
 GDCM_WRAP_JAVA:BOOL=ON
-GDCM_WRAP_CSHARP:BOOL=ON
+GDCM_WRAP_CSHARP:BOOL=OFF
     "
     )
 endmacro(dashboard_hook_init)
