@@ -640,22 +640,23 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "c57035e2dac52e339b27e8c965251b3d" , "DCMTK_JPEGExt_12Bits.dcm" }, // checked with dcmdjpeg v3.5.4+ 2009-05-07
 
-{ "d7673c8575cb2765f8ae25aa3899c77e","PHILIPS_GDCM12xBug.dcm"},
-{ "a597540a79306be4710f4f04497fc23a","PHILIPS_GDCM12xBug2.dcm"},
+{ "d7673c8575cb2765f8ae25aa3899c77e" , "PHILIPS_GDCM12xBug.dcm"},
+{ "a597540a79306be4710f4f04497fc23a" , "PHILIPS_GDCM12xBug2.dcm"},
 
-{ "1e8843c2d247f9e9e7a44c9c6de43f6d", "multiframegrayscalewordscis.dcm" },
-{ "928b41468193f0eecaea216866bbe735", "signedtruecoloroldsc.dcm" },
-{ "209bc9b02004a712f0436a1ca5e676b4", "multiframesinglebitscis.dcm" },
-{ "c8698fa1ec0b227113f244954b8e88f4", "multiframegrayscalebytescis.dcm" },
-{ "dce1513162a762bf43dcc3c9d5c5c3f7", "multiframetruecolorscis.dcm" },
+{ "1e8843c2d247f9e9e7a44c9c6de43f6d" , "multiframegrayscalewordscis.dcm" },
+{ "928b41468193f0eecaea216866bbe735" , "signedtruecoloroldsc.dcm" },
+{ "209bc9b02004a712f0436a1ca5e676b4" , "multiframesinglebitscis.dcm" },
+{ "c8698fa1ec0b227113f244954b8e88f4" , "multiframegrayscalebytescis.dcm" },
+{ "dce1513162a762bf43dcc3c9d5c5c3f7" , "multiframetruecolorscis.dcm" },
 
-{ "6bf95a48f366bdf8af3a198c7b723c77", "SinglePrecisionSC.dcm" },
+{ "6bf95a48f366bdf8af3a198c7b723c77" , "SinglePrecisionSC.dcm" },
 
 { "a870a7a7cab8c17646d118ae146be588" , "MR16BitsAllocated_8BitsStored.dcm" },
 
 { "da153c2f438d6dd4277e0c6ad2aeae74" , "OsirixFake16BitsStoredFakeSpacing.dcm" },
 { "1c485e1ac2b2bdbeeba14391b8c1e0c8" , "JPEGDefinedLengthSequenceOfFragments.dcm" },
 
+{ "ae1290d59c63b0c334a4834c5995fe45" , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" },
 
 /* Stopping condition */
 { 0 ,0 }
