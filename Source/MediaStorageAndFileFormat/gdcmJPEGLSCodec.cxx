@@ -18,7 +18,6 @@
 #include "gdcmDataElement.h"
 
 // CharLS includes
-#include "gdcmcharls/stdafx.h" // sigh...
 #include "gdcmcharls/interface.h"
 #include "gdcmcharls/util.h"
 #include "gdcmcharls/defaulttraits.h"
@@ -26,6 +25,7 @@
 #include "gdcmcharls/colortransform.h"
 #include "gdcmcharls/streams.h"
 #include "gdcmcharls/processline.h"
+#include "gdcmcharls/publictypes.h"
 
 
 namespace gdcm

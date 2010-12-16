@@ -9,6 +9,8 @@
 #ifdef NDEBUG
 #  ifndef ASSERT
 #    define ASSERT(t) { }
+#  endif
+#  ifndef assert
 #    define assert(t) { }
 #  endif
 #else
