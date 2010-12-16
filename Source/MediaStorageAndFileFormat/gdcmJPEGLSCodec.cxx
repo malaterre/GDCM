@@ -60,7 +60,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
 
-  JlsParamaters metadata;
+  JlsParameters metadata;
   if (JpegLsReadHeader(dummy_buffer, buf_size, &metadata) != OK)
     {
     return false;
@@ -148,7 +148,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     sf->GetBuffer(buffer, totalLen);
     //is.write(buffer, totalLen);
 
-    JlsParamaters metadata;
+    JlsParameters metadata;
     if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
       {
       return false;
@@ -160,7 +160,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     const BYTE* pbyteCompressed = (const BYTE*)buffer;
     int cbyteCompressed = totalLen;
 
-    JlsParamaters params;
+    JlsParameters params;
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
     std::vector<BYTE> rgbyteCompressed;
@@ -169,7 +169,9 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     std::vector<BYTE> rgbyteOut;
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
-    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    JlsParameters theInfo;
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(),
+      pbyteCompressed, cbyteCompressed, &theInfo);
     ASSERT(result == OK);
     (void)result;//warning removal
 
@@ -206,7 +208,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   // what if 0xd9 is never found ?
   assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
 
-    JlsParamaters metadata;
+    JlsParameters metadata;
     if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
       {
       return false;
@@ -218,7 +220,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
     int cbyteCompressed = totalLen;
 
-    JlsParamaters params;
+    JlsParameters params;
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
     std::vector<BYTE> rgbyteCompressed;
@@ -227,7 +229,9 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     std::vector<BYTE> rgbyteOut;
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
-    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    JlsParameters theInfo;
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(),
+      pbyteCompressed, cbyteCompressed, &theInfo);
     ASSERT(result == OK);
     (void)result;//warning removal
 bool r = true;
@@ -285,7 +289,7 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     {
     const char *inputdata = input + dim * image_len; //bv->GetPointer();
 
-    JlsParamaters params;
+    JlsParameters params;
     memset( &params, 0, sizeof(params) );
 /*
 The fields in JlsCustomParameters do not control lossy/lossless. They
