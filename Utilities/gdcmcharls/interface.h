@@ -6,6 +6,7 @@
 #ifndef JLS_INTERFACE
 #define JLS_INTERFACE
 
+#include "publictypes.h"
 
 #if defined(_WIN32)
 #ifndef CHARLS_IMEXPORT
@@ -17,7 +18,6 @@
 #endif
 #endif /* _WIN32 */
 
-#include "publictypes.h"
 
 #ifdef __cplusplus
 extern "C" 
