@@ -1,23 +1,80 @@
-project(charls)
-cmake_minimum_required(VERSION 2.6)
+IF(NOT CHARLS_NAMESPACE)
+  SET(CHARLS_NAMESPACE "CHARLS")
+  SET(CHARLS_STANDALONE 1)
+ENDIF(NOT CHARLS_NAMESPACE)
+# In all cases:
+STRING(TOLOWER ${CHARLS_NAMESPACE} CHARLS_LIBRARY_NAME)
+
+PROJECT(${CHARLS_NAMESPACE} CXX)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
+#-----------------------------------------------------------------------------
+# CHARLS version number
+SET(CHARLS_MAJOR_VERSION 1)
+SET(CHARLS_MINOR_VERSION 0)
+SET(CHARLS_BUILD_VERSION 0)
+SET(CHARLS_VERSION
+      "${CHARLS_MAJOR_VERSION}.${CHARLS_MINOR_VERSION}.${CHARLS_BUILD_VERSION}")
+
+#-----------------------------------------------------------------------------
+SET (EXECUTABLE_OUTPUT_PATH ${CHARLS_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+SET (LIBRARY_OUTPUT_PATH ${CHARLS_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+
+IF(NOT CHARLS_INSTALL_BIN_DIR)
+  SET(CHARLS_INSTALL_BIN_DIR "bin")
+ENDIF(NOT CHARLS_INSTALL_BIN_DIR)
+IF(NOT CHARLS_INSTALL_LIB_DIR)
+  SET(CHARLS_INSTALL_LIB_DIR "lib")
+ENDIF(NOT CHARLS_INSTALL_LIB_DIR)
+
+#SET(MANGLE_PREFIX ${JPEGLS_LIBRARY_NAME})
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jpegls_mangle.h.in
+#               ${CMAKE_CURRENT_BINARY_DIR}/jpegls_mangle.h
+#               @ONLY )
+
 
 
 # When user specify build type do not override settings:
 IF(NOT CMAKE_BUILD_TYPE)
-# The following compiler option are only meant for GCC:
-IF(CMAKE_COMPILER_IS_GNUCC)
-# the following is optimization micrmanagement that made better code for x86
-# SET(CMAKE_CXX_FLAGS "-D NDEBUG -O3 -Wall -Wextra -pedantic -fvisibility=hidden -fomit-frame-pointer -momit-leaf-frame-pointer -fweb  -ftracer" )
-SET(CMAKE_CXX_FLAGS "-D NDEBUG -O3" )
-ENDIF(CMAKE_COMPILER_IS_GNUCC)
+  # The following compiler option are only meant for GCC:
+  IF(CMAKE_COMPILER_IS_GNUCC)
+    #SET(CMAKE_CXX_FLAGS "-Wall -O3 -g" )
+  ENDIF(CMAKE_COMPILER_IS_GNUCC)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-OPTION(charls_BUILD_SHARED_LIBS "Build CharLS with shared libraries." OFF)
-SET(BUILD_SHARED_LIBS ${charls_BUILD_SHARED_LIBS})
+#OPTION(charls_BUILD_SHARED_LIBS "Build CharLS with shared libraries." OFF)
+#SET(BUILD_SHARED_LIBS ${charls_BUILD_SHARED_LIBS})
 
-add_library(CharLS header.cpp  interface.cpp  jpegls.cpp  )
+add_library(${CHARLS_LIBRARY_NAME} header.cpp  interface.cpp  jpegls.cpp)
+SET_TARGET_PROPERTIES(${CHARLS_LIBRARY_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 
+# Install library
+IF(NOT CHARLS_INSTALL_NO_LIBRARIES)
+  # Runtime
+  INSTALL(TARGETS ${CHARLS_LIBRARY_NAME}
+    EXPORT ${GDCM_TARGETS_NAME}
+    RUNTIME DESTINATION ${CHARLS_INSTALL_BIN_DIR} COMPONENT Applications
+    LIBRARY DESTINATION ${CHARLS_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
+    ARCHIVE DESTINATION ${CHARLS_INSTALL_LIB_DIR} COMPONENT Development
+  )
+  #Development
+  if(NAMELINK_ONLY)
+    INSTALL(TARGETS ${CHARLS_LIBRARY_NAME}
+    EXPORT ${GDCM_TARGETS_NAME}
+      LIBRARY DESTINATION ${CHARLS_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
+    )
+  endif(NAMELINK_ONLY)
+ENDIF(NOT CHARLS_INSTALL_NO_LIBRARIES)
 
-add_executable(charlstest test/main.cpp test/time.cpp test/util.cpp test/bitstreamdamage.cpp test/compliance.cpp test/performance.cpp test/dicomsamples.cpp)
-target_link_libraries (charlstest CharLS)
+IF(NOT CHARLS_INSTALL_NO_DEVELOPMENT)
+  FILE(GLOB header_files "*.h")
+  INSTALL(FILES ${header_files}
+    DESTINATION ${CHARLS_INSTALL_INCLUDE_DIR}/gdcmcharls COMPONENT Headers
+  )
+ENDIF(NOT CHARLS_INSTALL_NO_DEVELOPMENT)
+#add_executable(charlstest test/test.cpp test/time.cpp)
+#target_link_libraries (charlstest CharLS)
 
+#include(CTest)
+#add_test(charlstest charlstest)
