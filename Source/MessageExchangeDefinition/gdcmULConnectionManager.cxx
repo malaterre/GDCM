@@ -310,7 +310,7 @@ std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(BaseRootQuery* inRootQ
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunMoveEventLoop(theEvent, theResult);
+  RunMoveEventLoop(theEvent, theResult);
   return theResult;
 }
 std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQuery)
@@ -322,7 +322,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQu
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunEventLoop(theEvent, theResult, mConnection, false);
+  RunEventLoop(theEvent, theResult, mConnection, false);
   return theResult;
 }
 
@@ -335,7 +335,7 @@ std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataS
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunEventLoop(theEvent, theResult, mConnection, false);
+  RunEventLoop(theEvent, theResult, mConnection, false);
   return theResult;
 }
 
@@ -362,7 +362,7 @@ void ULConnectionManager::BreakConnectionNow(){
   ULEvent theEvent(eAABORTRequest, thePDU);
 
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
+  RunEventLoop(theEvent, empty, mConnection, false);
 //  if (mConnection!= NULL){
 //    delete mConnection;
 //    mConnection = NULL;
@@ -388,7 +388,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
 
     theState = mConnection->GetState();
     std::istream &is = *mConnection->GetProtocol();
-    std::ostream &os = *mConnection->GetProtocol();
+    //std::ostream &os = *mConnection->GetProtocol();
 
   // When doing a C-MOVE we receive the Requested DataSet over
   // another channel (technically this is send to an SCP)
@@ -652,7 +652,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
       theState = inWhichConnection->GetState();
     }
     std::istream &is = *inWhichConnection->GetProtocol();
-    std::ostream &os = *inWhichConnection->GetProtocol();
+    //std::ostream &os = *inWhichConnection->GetProtocol();
 
     BasePDU* theFirstPDU = NULL;// the first pdu read in during this event loop,
     //used to make sure the presentation context ID is correct
@@ -830,6 +830,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
               inWhichConnection->StopProtocol();
               break;
             case eASSOCIATE_ACPDUreceived:
+            default:
               waitingForEvent = false;
               break;
           }

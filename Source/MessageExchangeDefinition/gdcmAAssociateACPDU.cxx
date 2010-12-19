@@ -137,12 +137,12 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   os.write( (char*)&protocolversion, sizeof(ProtocolVersion) );
   os.write( (char*)&Reserved9_10, sizeof(Reserved9_10) );
   os.write( (char*)&Reserved11_26, sizeof(Reserved11_26) );
-  const char calling[] = "ANY-SCP         ";
+  //const char calling[] = "ANY-SCP         ";
   //os.write( calling, 16 );
 
   os.write( (char*)&Reserved27_42, sizeof(Reserved27_42) );
   //const char called[] = "STORESCU        ";
-  const char called[] = "ECHOSCU        ";
+  //const char called[] = "ECHOSCU        ";
   //os.write( called, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
