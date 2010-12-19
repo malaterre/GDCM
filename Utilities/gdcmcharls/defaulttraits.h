@@ -47,7 +47,7 @@ public:
 		bpp = log_2(max);	
 		LIMIT = 2 * (bpp + MAX(8,bpp));
 		qbpp = log_2(RANGE);
-		RESET = BASIC_RESET;
+		//RESET = BASIC_RESET;//causes a build failure on macos
 	}
 
 	
