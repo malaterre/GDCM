@@ -110,6 +110,10 @@ protected:
   /// reads by the RAW codec; other codecs are added once implemented
   //virtual bool ReadImageSubregionRAW(std::ostream& os);
   virtual bool ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength);
+  
+  /// Reads the file via JpegLS.  The JpegLS codec, as of this writing, requires that the
+  /// entire file be read in in order to decode a subregion, so that's what's done here.
+  bool ReadImageSubregionJpegLS(char* inReadBuffer, const std::size_t& inBufferLength);
 
 };
 //see http://stackoverflow.com/questions/1448467/initializing-a-c-stdistringstream-from-an-in-memory-buffer/1449527#1449527

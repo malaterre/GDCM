@@ -39,12 +39,13 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     std::vector<unsigned int> extent =
       gdcm::ImageHelper::GetDimensionsValue(reader.GetFile());
 
-    unsigned short xmin = 0;
-    unsigned short xmax = extent[0];
-    unsigned short ymin = 0;
-    unsigned short ymax = extent[1];
-    unsigned short zmin = 0;
-    unsigned short zmax = extent[2];
+    //at this point, these values aren't used, but may be in the future
+    //unsigned short xmin = 0;
+    //unsigned short xmax = extent[0];
+    //unsigned short ymin = 0;
+    //unsigned short ymax = extent[1];
+    //unsigned short zmin = 0;
+    //unsigned short zmax = extent[2];
 
     reader.DefinePixelExtent(0, extent[0], 0, extent[1], 0, extent[2]);
     unsigned long len = reader.DefineProperBufferLength();

@@ -39,7 +39,7 @@ template <typename TSwap>
 std::istream &UNExplicitImplicitDataElement::ReadPreValue(std::istream &is)
 {
   assert(0);
-  DataElement &de = *this;
+  //DataElement &de = *this;//unused de, fires a warning on macos
   //de.template ReadPreValue<UNExplicitDataElement,TSwap>( is );
   return is;
 }
