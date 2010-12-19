@@ -24,6 +24,7 @@
 #include <algorithm>
 #include "gdcmImageHelper.h"
 #include "gdcmRAWCodec.h"
+#include "gdcmJPEGLSCodec.h"
 
 namespace gdcm
 {
@@ -129,8 +130,19 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   RAWCodec theCodec;
   if( !theCodec.CanDecode(ts) )
     {
-    gdcmDebugMacro( "Only RAW for now" );
-    return false;
+    JPEGLSCodec theJpegLSCodec;
+    if (!theJpegLSCodec.CanDecode(ts))
+      {
+      gdcmDebugMacro( "Raw Codec cannot decode this file by streaming." );
+      return false;
+      } 
+    else 
+      {
+      //read in the entire file for jpegls
+      //right now, it needs to be read entirely off of disk first
+      //kind of a shame, but it's the way it is now
+      mReader.Read();
+      }
     }
 
   theCodec.SetNeedByteSwap( needbyteswap );
@@ -189,6 +201,55 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
 
   delete [] tmpBuffer;
   delete [] tmpBuffer2;
+  return true;
+}
+
+/** This class reads via the jpegls codec.
+Due to limitations in that codec, the entire file must be read into memory before a subregion
+can be decoded.
+ */
+bool StreamImageReader::ReadImageSubregionJpegLS(char* inReadBuffer, const std::size_t& inBufferLength) {
+  //assumes that the file is organized in row-major format, with each row rastering across
+  //don't need to get all the other stuff (ie, the file offset) since we have to read it all in anyway
+  
+  //set up the codec prior to resetting the file, just in case that affects the way that
+  //files are handled by the ImageHelper
+  
+  const FileMetaInformation &header = mReader.GetFile().GetHeader();
+  const TransferSyntax &ts = header.GetDataSetTransferSyntax();
+  bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
+  
+  JPEGLSCodec theCodec;
+  if (!theCodec.CanDecode(ts))
+  {
+    gdcmDebugMacro( "JpegLS cannot read this." );
+    return false;
+  }
+  //read in the entire file for jpegls
+  //right now, it needs to be read entirely off of disk first
+  //kind of a shame, but it's the way it is now
+  mReader.Read();
+  
+  theCodec.SetNeedByteSwap( needbyteswap );
+  theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile()));
+  theCodec.SetPlanarConfiguration(ImageHelper::GetPlanarConfigurationValue(mReader.GetFile()));
+  theCodec.SetPhotometricInterpretation(ImageHelper::GetPhotometricInterpretationValue(mReader.GetFile()));
+  
+  try {
+    DataSet ds = mReader.GetFile().GetDataSet();
+    Tag thePixelDataTag(0x7fe0, 0x0010);
+    DataElement de = ds.GetDataElement(thePixelDataTag);
+    theCodec.Decode(de, inReadBuffer, inBufferLength, mXMin, mXMax, mYMin, mYMax, mZMin, mZMax);
+  }
+  catch (std::exception & ex){
+    (void)ex;
+    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    return false;
+  } 
+  catch (...){
+    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with unknown error." );
+    return false;
+  }
   return true;
 }
 
