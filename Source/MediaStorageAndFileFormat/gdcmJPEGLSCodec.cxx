@@ -258,6 +258,149 @@ bool r = true;
 #endif
 }
 
+//used by the streaming decoder
+//therefore, takes in streaming parameters
+//assumes that the entire data element for the pixels have been read in,
+//and that they can be sequences or whatever.
+bool JPEGLSCodec::Decode(DataElement const &in, char* outBuffer, uint32_t inBufferLength,
+                         uint32_t inXMin, uint32_t inXMax, uint32_t inYMin,
+                         uint32_t inYMax, uint32_t inZMin, uint32_t inZMax)
+{
+#ifndef GDCM_USE_JPEGLS
+  return false;
+#else
+  if( NumberOfDimensions == 2 )
+  {
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    std::stringstream is;
+    unsigned long totalLen = sf->ComputeByteLength();
+    char *buffer = new char[totalLen];
+    sf->GetBuffer(buffer, totalLen);
+    //is.write(buffer, totalLen);
+    
+    JlsParameters metadata;
+    if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
+    {
+      return false;
+    }
+    
+    // allowedlossyerror == 0 => Lossless
+    LossyFlag = metadata.allowedlossyerror;
+    
+    const BYTE* pbyteCompressed = (const BYTE*)buffer;
+    int cbyteCompressed = totalLen;
+    
+    JlsParameters params;
+    JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+    
+    std::vector<BYTE> rgbyteCompressed;
+    rgbyteCompressed.resize(params.height *params.width* 4);
+    
+    //std::vector<BYTE> rgbyteOut;
+    //rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
+    
+    JlsParameters theInfo;
+    JlsRect theROI;
+    theROI.X = inXMin;
+    theROI.Y = inYMin;
+    theROI.Width = inXMax - inXMin;
+    theROI.Height = inYMax - inYMin;
+    JLS_ERROR result = JpegLsDecodeRect(outBuffer, inBufferLength, 
+                                        pbyteCompressed, cbyteCompressed, 
+                                        theROI, &theInfo);
+    
+    //JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(),
+    //                                pbyteCompressed, cbyteCompressed, &theInfo);
+    //ASSERT(result == OK);
+    //(void)result;//warning removal
+    
+    delete[] buffer;
+    
+    //out = in;
+    
+    //VL::Type rgByteOutSize = (VL::Type)rgbyteOut.size();
+    //out.SetByteValue( (char*)&rgbyteOut[0], rgByteOutSize );
+    return result == OK;
+  }
+  else if( NumberOfDimensions == 3 )
+  {
+    return false; //no 3D support yet
+    /*
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    assert( sf->GetNumberOfFragments() == Dimensions[2] );
+    std::stringstream os;
+    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+    {
+      const Fragment &frag = sf->GetFragment(i);
+      if( frag.IsEmpty() ) return false;
+      const ByteValue *bv = frag.GetByteValue();
+      assert( bv );
+      char *mybuffer = new char[bv->GetLength()];
+      unsigned long totalLen = bv->GetLength();
+      
+      bv->GetBuffer(mybuffer, bv->GetLength());
+      
+      const BYTE* pbyteCompressed = (const BYTE*)mybuffer;
+      while( totalLen > 0 && pbyteCompressed[totalLen-1] != 0xd9 )
+      {
+        totalLen--;
+      }
+      // what if 0xd9 is never found ?
+      assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
+      
+      JlsParameters metadata;
+      if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
+      {
+        return false;
+      }
+      
+      // allowedlossyerror == 0 => Lossless
+      LossyFlag = metadata.allowedlossyerror;
+      
+      
+      int cbyteCompressed = totalLen;
+      
+      JlsParameters params;
+      JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+      
+      std::vector<BYTE> rgbyteCompressed;
+      rgbyteCompressed.resize(params.height *params.width* 4);
+      
+      std::vector<BYTE> rgbyteOut;
+      rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
+      
+      JlsParameters theInfo;
+      JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(),
+                                      pbyteCompressed, cbyteCompressed, &theInfo);
+      ASSERT(result == OK);
+      (void)result;//warning removal
+      bool r = true;
+      
+      
+      delete[] mybuffer;
+      os.write( (char*)&rgbyteOut[0], rgbyteOut.size() );
+      
+      if(!r) return false;
+      assert( r == true );
+      
+      
+    }
+    std::string str = os.str();
+    assert( str.size() );
+    VL::Type strSize = (VL::Type)str.size();
+    out.SetByteValue( &str[0], strSize );
+    
+    
+    return true;
+    */
+  }
+  return false;
+  
+#endif
+}
+
 // Compress into JPEG
 bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
 {
