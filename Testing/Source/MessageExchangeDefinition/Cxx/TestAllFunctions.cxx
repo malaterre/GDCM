@@ -96,7 +96,7 @@ bool LoadGlobalDicts(){
 
 int TestAllFunctions(int argc, char *argv[])
 {
-#if 1
+#if 0
   std::string aetitle("UNITED1");//the ae title of this computer
   std::string call("COMMON");//the ae title of the server
   int portno = 11112;//the port of the server

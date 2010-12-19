@@ -153,7 +153,7 @@ const std::string &PresentationDataValue::GetBlob() const{
 //but the are all part of the same data set)
 DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
 
-  size_t s = inPDVs.size();
+  //size_t s = inPDVs.size();
 
   std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
   std::vector<PresentationDataValue>::const_iterator itor;
