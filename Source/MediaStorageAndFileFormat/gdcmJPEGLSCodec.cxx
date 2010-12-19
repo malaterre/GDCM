@@ -385,3 +385,4 @@ void JPEGLSCodec::SetLossyError(int error)
 }
 
 } // end namespace gdcm
+	
