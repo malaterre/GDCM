@@ -455,7 +455,8 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     //int nt = scalars->GetNumberOfTuples();
     if (pts == NULL || polys == NULL || lines == NULL)
       {
-      vtkErrorMacro(<<"No data to write!");
+      vtkWarningMacro(<<"No data to write!");//should be a warning, not an error, because
+      //it's entirely possible to have a blank ROI
       return;
       }
 

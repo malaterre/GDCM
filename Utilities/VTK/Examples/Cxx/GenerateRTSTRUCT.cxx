@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
   //std::cout << reader->GetMedicalImageProperties()->GetStudyDate() << std::endl;
 
   vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
-  writer->SetNumberOfInputPorts( reader->GetNumberOfOutputPorts() );
+  int numMasks = reader->GetNumberOfOutputPorts() + 1;//add a blank one in
+  writer->SetNumberOfInputPorts( numMasks );
 //  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
 //    writer->SetInput( num, reader->GetOutput(num) );
   writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[0] + ".dcm").c_str());
@@ -82,14 +83,27 @@ int main(int argc, char *argv[])
   vtkStringArray* roiNames = vtkStringArray::New();
   vtkStringArray* roiAlgorithms = vtkStringArray::New();
   vtkStringArray* roiTypes = vtkStringArray::New();
+  roiNames->SetNumberOfValues(numMasks);
+  roiAlgorithms->SetNumberOfValues(numMasks);
+  roiTypes->SetNumberOfValues(numMasks);
   vtkAppendPolyData* append = vtkAppendPolyData::New();
   for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i){
     writer->SetInput(i, reader->GetOutput(i));
     append->AddInput(reader->GetOutput(i));
-    roiNames->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetROIName(i));
-    roiAlgorithms->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i));
-    roiTypes->InsertNextValue(reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i));
+    std::string theString = reader->GetRTStructSetProperties()->GetStructureSetROIName(i);
+    roiNames->InsertValue(i, theString);
+    theString = reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i);
+    roiAlgorithms->InsertValue(i, theString);
+    theString = reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i);
+    roiTypes->InsertValue(i, theString);
   }
+  //ok, now we'll add a blank organ
+  //the blank organ is to test to ensure that blank organs work; there have been crash reports
+  vtkPolyData* blank = vtkPolyData::New();
+  writer->SetInput(numMasks-1, blank);
+  roiNames->InsertNextValue("blank");
+  roiAlgorithms->InsertNextValue("blank");
+  roiTypes->InsertNextValue("ORGAN");
 
   vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
   writer->SetRTStructSetProperties(theProperties);
@@ -142,6 +156,10 @@ int main(int argc, char *argv[])
   roiAlgorithms->Delete();
   roiTypes->Delete();
   theProperties->Delete();
+  roiNames->Delete();
+  roiAlgorithms->Delete();
+  roiTypes->Delete();
+  blank->Delete();
 
 
   writer->Delete();
