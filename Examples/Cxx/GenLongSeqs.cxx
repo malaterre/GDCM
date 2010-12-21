@@ -23,14 +23,12 @@
 /*
  * This example is used to generate the file:
  *
- * gdcmConformanceTests/SequenceWithUndefinedLengthNotConvertibleToDefinedLength.dcm
  *
  * There is a flaw in the DICOM design were it is assumed that Sequence can be
  * either represented as undefined length or defined length. This should work
  * in most case, but the undefined length is a little more general and can
  * store sequence of items that a defined length cannot.
- * Deflated syntax was used in this case since this synthetic example can be
- * nicely compressed using this transfer syntax.
+ * We need to make sure that we can store numerous Item in a SQ
  *
  * Warning: do not try to compute the group length elements !
  * Warning: You may need a 64bits machine for this example to work.
@@ -54,12 +52,6 @@ int main(int argc, char *argv[])
   gdcm::File &file = reader.GetFile();
   gdcm::DataSet &ds = file.GetDataSet();
 
-  const unsigned int nitems = 1000;
-  const unsigned int ptr_len = 42; /*94967296 / nitems; */
-  //assert( ptr_len == 42949672 );
-  char *ptr = new char[ptr_len];
-  memset(ptr,0,ptr_len);
-
   // Create a Sequence
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
@@ -69,19 +61,21 @@ int main(int argc, char *argv[])
   owner.SetByteValue(owner_str, strlen(owner_str));
   owner.SetVR( gdcm::VR::LO );
 
-  for(unsigned int idx = 0; idx < 10/* nitems*/; ++idx)
+  size_t nitems = 1000;
+  nitems += std::numeric_limits<uint32_t>::max();
+  for(unsigned int idx = 0; idx < nitems; ++idx)
     {
     // Create a dataelement
-    gdcm::DataElement de( gdcm::Tag(0x4d4d, 0x1002) );
-    de.SetByteValue(ptr, ptr_len);
-    de.SetVR( gdcm::VR::OB );
+    //gdcm::DataElement de( gdcm::Tag(0x4d4d, 0x1002) );
+    //de.SetByteValue(ptr, ptr_len);
+    //de.SetVR( gdcm::VR::OB );
 
     // Create an item
     gdcm::Item it;
     it.SetVLToUndefined();
-    gdcm::DataSet &nds = it.GetNestedDataSet();
-    nds.Insert(owner);
-    nds.Insert(de);
+    //gdcm::DataSet &nds = it.GetNestedDataSet();
+    //nds.Insert(owner);
+    //nds.Insert(de);
 
     sq->AddItem(it);
     }
