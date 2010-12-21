@@ -125,10 +125,14 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
   //because this is raw, we know exactly the size that will be written.  So, let's do that.
   uint16_t firstTag = 0x7fe0;
   uint16_t secondTag = 0x0010;
-  uint16_t thirdTag = 0x4f42;
+  //uint16_t thirdTag = 0x4f42;
+  uint16_t thirdTag = 0x424f; // OB
+  //uint16_t thirdTag = 0x574f; // OW
   uint16_t fourthTag = 0x0000;
   std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mWriter.GetFile());
-  uint32_t sizeTag = extent[0]*extent[1]*extent[2];
+  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mWriter.GetFile());
+  int bytesPerPixel = pixelInfo.GetPixelSize();
+  uint32_t sizeTag = extent[0]*extent[1]*extent[2]*bytesPerPixel;
 
   const int theBufferSize = 4*sizeof(uint16_t)+sizeof(uint32_t);
 
