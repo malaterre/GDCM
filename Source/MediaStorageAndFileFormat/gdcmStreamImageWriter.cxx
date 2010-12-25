@@ -128,6 +128,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
   //uint16_t thirdTag = 0x4f42;
   uint16_t thirdTag = 0x424f; // OB
   //uint16_t thirdTag = 0x574f; // OW
+  //static VR ComputeVR(File const & file, DataSet const &ds, const Tag& tag);
   uint16_t fourthTag = 0x0000;
   std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mWriter.GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mWriter.GetFile());
