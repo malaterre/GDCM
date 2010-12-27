@@ -255,7 +255,7 @@ bool PixmapWriter::PrepareWrite()
   if( PixelData->GetNumberOfDimensions() == 3  )
     {
     Attribute<0x0028, 0x0008> numberofframes;
-    assert( PixelData->GetDimension(2) > 1 );
+    assert( PixelData->GetDimension(2) >= 1 );
     numberofframes.SetValue( PixelData->GetDimension(2) );
     ds.Replace( numberofframes.GetAsDataElement() );
     }
