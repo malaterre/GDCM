@@ -109,8 +109,8 @@ bool Anonymizer::Replace( Tag const &t, const char *value )
   VL::Type len = 0; //to avoid the size_t warning on 64 bit windows
   if( value )
     {
-      len = (VL::Type)strlen( value );//strlen returns size_t, but it should be VL::Type
-      //strlen shouldn't be more than 4gb anyway
+    len = (VL::Type)strlen( value );//strlen returns size_t, but it should be VL::Type
+    //strlen shouldn't be more than 4gb anyway
     }
   return Replace( t, value, len );
 }
@@ -285,7 +285,7 @@ static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-            gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
           for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
@@ -331,7 +331,7 @@ static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-            gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
           for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
@@ -698,6 +698,7 @@ catch(...)
 
   this->InvokeEvent( IterationEvent() );
 
+#if 0
   // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
   // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
   UIDGenerator uid;
@@ -705,6 +706,7 @@ catch(...)
     Replace( Tag(0x008,0x0018), uid.Generate() );
 
   this->InvokeEvent( IterationEvent() );
+#endif
 
   return true;
 }
@@ -798,51 +800,74 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
   this->InvokeEvent( ae );
 
   typedef std::pair< Tag, std::string > TagValueKey;
-  typedef std::map< TagValueKey, std::string > DummyMap;
-  static DummyMap dummymap;
-  gdcm::UIDGenerator uid;
-
-  //DataSet &ds = F->GetDataSet();
+  typedef std::map< TagValueKey, std::string > DummyMapNonUIDTags;
+  typedef std::map< std::string, std::string > DummyMapUIDTags;
+  static DummyMapNonUIDTags dummyMapNonUIDTags;
+  static DummyMapUIDTags dummyMapUIDTags;
 
   bool canempty = CanEmptyTag( tag, iod );
   if( !canempty )
     {
-    TagValueKey tvk;
-    tvk.first = tag;
     DataElement copy;
     copy = ds.GetDataElement( tag );
-    // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
-    // has an empty 0008,0018 attribute, let's try to handle that:
-    if( !copy.IsEmpty() )
+
+    if ( IsVRUI( tag ) )
       {
-      if( ByteValue *bv = copy.GetByteValue() )
+      std::string UIDToAnonymize = "";
+      gdcm::UIDGenerator uid;
+
+      if( !copy.IsEmpty() )
         {
-        tvk.second = std::string( bv->GetPointer(), bv->GetLength() );
+        if( ByteValue *bv = copy.GetByteValue() )
+          {
+          UIDToAnonymize = std::string( bv->GetPointer(), bv->GetLength() );
+          }
         }
-      }
-    assert( dummymap.count( tvk ) == 0 || dummymap.count( tvk ) == 1 );
-    if( dummymap.count( tvk ) == 0 )
-      {
-      // Generate a new (single) dummy value:
-      if( IsVRUI( tag ) )
+
+      std::string anonymizedUID = "";
+      if( !UIDToAnonymize.empty() )
         {
-        dummymap[ tvk ] = uid.Generate();
+        if ( dummyMapUIDTags.count( UIDToAnonymize ) == 0 )
+          {
+          anonymizedUID = uid.Generate();
+          dummyMapUIDTags[ UIDToAnonymize ] = anonymizedUID;
+          }
+        else
+          {
+          anonymizedUID = dummyMapUIDTags[ UIDToAnonymize ];
+          }
         }
       else
+        {
+        // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
+        // has an empty 0008,0018 attribute, let's try to handle creating new UID
+        anonymizedUID = uid.Generate();
+        }
+
+        copy.SetByteValue( anonymizedUID.c_str(), anonymizedUID.size() );
+        ds.Replace( copy );
+      }
+    else
+      {
+      TagValueKey tvk;
+      tvk.first = tag;
+
+      assert( dummyMapNonUIDTags.count( tvk ) == 0 || dummyMapNonUIDTags.count( tvk ) == 1 );
+      if( dummyMapNonUIDTags.count( tvk ) == 0 )
         {
         const char *ret = DummyValueGenerator::Generate( tvk.second.c_str() );
         if( ret )
           {
-          dummymap[ tvk ] = ret;
+          dummyMapNonUIDTags[ tvk ] = ret;
           }
         else
-          dummymap[ tvk ] = "";
+          dummyMapNonUIDTags[ tvk ] = "";
         }
+
+      std::string &v = dummyMapNonUIDTags[ tvk ];
+      copy.SetByteValue( v.c_str(), v.size() );
       }
-    std::string &v = dummymap[ tvk ];
-    VL::Type vSize = (VL::Type)v.size();
-    copy.SetByteValue( v.c_str(), vSize );
-    ds.Replace( copy );
+      ds.Replace( copy );
     }
   else
     {
