@@ -24,13 +24,14 @@ namespace gdcm
     unsigned int group = 0, element = 0;
     std::string owner;
     owner.resize( strlen(str) );
-    if( !str || sscanf(str, "%04x,%04x,%s", &group , &element, &owner[0] ) != 3 )
+    if( !str || sscanf(str, "%04x,%04x,%[^\"]", &group , &element, &owner[0] ) != 3 )
       {
       gdcmDebugMacro( "Problem reading Private Tag: " << str );
       return false;
       }
     SetGroup( (uint16_t)group );
-    SetElement( (uint16_t)element );
+    // just keep the lower bits of element:
+    SetElement( (uint8_t)element );
     SetOwner( owner.c_str() );
     return true;
     }
