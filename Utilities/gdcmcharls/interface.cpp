@@ -4,8 +4,10 @@
 
 
 //implement correct linkage for win32 dlls
-#if defined(_WIN32)
+#if defined(_WIN32) && defined(_WINDLL)
 #define CHARLS_IMEXPORT(returntype) __declspec(dllexport) returntype __stdcall
+#else
+#define CHARLS_IMEXPORT(returntype) returntype
 #endif
 
 #include "config.h"
