@@ -219,7 +219,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //have to reset the stream to the proper position
   //first, reopen the stream,then the loop should set the right position
   //MM: you have to reopen the stream, by default, the writer closes it each time it writes.
-  mWriter.SetFileName(mWriter.GetFileName().c_str(), true);//open in file append mode
+//  mWriter.SetFileName(mWriter.GetFileName().c_str(), true);//open in file append mode
   std::ostream* theStream = mWriter.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
