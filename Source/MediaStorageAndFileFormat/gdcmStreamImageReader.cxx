@@ -243,11 +243,11 @@ bool StreamImageReader::ReadImageSubregionJpegLS(char* inReadBuffer, const std::
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
     return false;
   } 
   catch (...){
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to read with unknown error." );
     return false;
   }
   return true;
