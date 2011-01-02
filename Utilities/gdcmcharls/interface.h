@@ -8,7 +8,7 @@
 
 #include "publictypes.h"
 
-#if defined(_WIN32)
+#if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
 #ifndef CHARLS_IMEXPORT
 #define CHARLS_IMEXPORT(returntype) __declspec(dllimport) returntype __stdcall
 #endif
