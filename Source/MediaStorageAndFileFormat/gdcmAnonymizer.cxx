@@ -497,6 +497,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     gdcmDebugMacro( "EncryptedContentTransferSyntax Attribute is present !" );
     return false;
     }
+#if 0
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
+    {
+    return false;
+    }
+#endif
 
   // PS 3.15
   // E.1 BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE
@@ -701,11 +708,15 @@ catch(...)
   this->InvokeEvent( IterationEvent() );
 
 #if 0
-  // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
-  // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
+  // Since the de-identified SOP Instance is a significantly altered version of
+  // the original Data Set, it is a new SOP Instance, with a SOP Instance UID
+  // that differs from the original Data Set.
   UIDGenerator uid;
-  if( ds.FindDataElement( Tag(0x008,0x0018) ) )
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
+    {
     Replace( Tag(0x008,0x0018), uid.Generate() );
+    }
 
   this->InvokeEvent( IterationEvent() );
 #endif
@@ -948,11 +959,13 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
 
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 {
-  // 1. The application shall decrypt, using its recipient key, one instance of the Encrypted Content
-  // (0400,0520) Attribute within the Encrypted Attributes Sequence (0400,0500) and decode the resulting
-  // block of bytes into a DICOM dataset using the Transfer Syntax specified in the Encrypted Content
-  // Transfer Syntax UID (0400,0510). Re-identifiers claiming conformance to this profile shall be capable
-  // of decrypting the Encrypted Content using either AES or Triple-DES in all possible key lengths
+  // 1. The application shall decrypt, using its recipient key, one instance of
+  // the Encrypted Content (0400,0520) Attribute within the Encrypted
+  // Attributes Sequence (0400,0500) and decode the resulting block of bytes
+  // into a DICOM dataset using the Transfer Syntax specified in the Encrypted
+  // Content Transfer Syntax UID (0400,0510). Re-identifiers claiming
+  // conformance to this profile shall be capable of decrypting the Encrypted
+  // Content using either AES or Triple-DES in all possible key lengths
   // specified in this profile
   CryptographicMessageSyntax &p7 = *CMS;
   //p7.SetCertificate( this->x509 );
@@ -1040,9 +1053,10 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   delete[] buf;
   delete[] orig;
 
-  // 2. The application shall move all Attributes contained in the single item of the Modified Attributes
-  // Sequence (0400,0550) of the decoded dataset into the main dataset, replacing dummy value
-  // Attributes that may be present in the main dataset.
+  // 2. The application shall move all Attributes contained in the single item
+  // of the Modified Attributes Sequence (0400,0550) of the decoded dataset
+  // into the main dataset, replacing dummy value Attributes that may be
+  // present in the main dataset.
   //assert( dummy.GetVR() == VR::SQ );
 {
   //const SequenceOfItems *sqi = dummy.GetSequenceOfItems();
@@ -1055,11 +1069,22 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
     {
     ds.Replace( *it );
     }
+
+  // FIXME the above Replace assume that the encrypted content will replace
+  // any dummy values. What if the anonymizer was dumb and forgot
+  // to encrypt say UID 8,18 ? We would be left with the Instance UID
+  // of the encrypted one ?
+  if( !nds2.FindDataElement( Tag(0x8,0x18) ) )
+    {
+    gdcmErrorMacro( "Could not find Instance UID" );
+    return false;
+    }
 }
 
-  // 3. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
-  // value of NO and De-identification Method (0012,0063) and De-identification Method Code Sequence
-  // (0012,0064) shall be removed.
+  // 3. The attribute Patient Identity Removed (0012,0062) shall be replaced or
+  // added to the dataset with a value of NO and De-identification Method
+  // (0012,0063) and De-identification Method Code Sequence (0012,0064) shall
+  // be removed.
   //Replace( Tag(0x0012,0x0062), "NO");
   Remove( Tag(0x0012,0x0062) );
   Remove( Tag(0x0012,0x0063) );
