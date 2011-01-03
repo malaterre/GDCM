@@ -712,8 +712,7 @@ catch(...)
   // the original Data Set, it is a new SOP Instance, with a SOP Instance UID
   // that differs from the original Data Set.
   UIDGenerator uid;
-  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
-    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
+  if( ds.FindDataElement( Tag(0x0008,0x0018) ) )
     {
     Replace( Tag(0x008,0x0018), uid.Generate() );
     }
