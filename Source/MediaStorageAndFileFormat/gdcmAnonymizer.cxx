@@ -594,6 +594,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
   if( !b )
   {
+    delete[] orig;
+    delete[] buf;
     gdcmErrorMacro( "Problem with Encrypt" );
     return false;
   }
