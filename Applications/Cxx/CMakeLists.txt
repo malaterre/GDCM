@@ -119,6 +119,18 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   ENDIF(NOT GDCM_INSTALL_NO_RUNTIME)
 ENDFOREACH(exename)
 
+#IF(BUILD_TESTING)
+#  IF(GDCM_DATA_ROOT)
+#    FILE(MAKE_DIRECTORY ${GDCM_TEMP_DIRECTORY}/gdcmanon-gdcmdata)
+#    ADD_TEST(gdcmanon-gdcmdata ${EXECUTABLE_OUTPUT_PATH}/gdcmanon
+#      --continue  # skip LIBIDO-16-ACR_NEMA-Volume.dcm
+#      --certificate ${GDCM_SOURCE_DIR}/Testing/Source/Data/certificate.pem
+#      ${GDCM_DATA_ROOT}
+#      ${GDCM_TEMP_DIRECTORY}/gdcmanon-gdcmdata
+#      )
+#  ENDIF(GDCM_DATA_ROOT)
+#ENDIF(BUILD_TESTING)
+
 IF(BUILD_TESTING)
   # http://www.na-mic.org/Wiki/index.php/CTSC:ARRA:Mockup
   # http://www.dicomserver.co.uk/

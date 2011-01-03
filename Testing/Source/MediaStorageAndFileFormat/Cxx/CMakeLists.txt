@@ -73,6 +73,7 @@ IF(GDCM_DATA_ROOT)
   SET(MSFF_TEST_SRCS
       ${MSFF_TEST_SRCS}
   TestScanner
+  TestAnonymizer3
   TestPrinter2
   TestIPPSorter
   TestIPPSorter2

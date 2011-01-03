@@ -32,10 +32,30 @@ int TestFileDerive(const char *subdir, const char* filename)
     {
     return 1;
     }
-
   FileDerivation fd;
   fd.SetFile( reader.GetFile() );
   // Setup some actions:
+
+#if 0
+  // TODO we should reference the original image
+  File &file = reader.GetFile();
+  DataSet &ds = file.GetDataSet();
+
+  if( !ds.FindDataElement( Tag(0x0008,0x0016) ) )
+    {
+    return 1;
+    }
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) ) )
+    {
+    return 1;
+    }
+  const DataElement &sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+  const DataElement &sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
+  // Make sure that const char* pointer will be properly padded with \0 char:
+  std::string sopclassuid_str( sopclassuid.GetByteValue()->GetPointer(), sopclassuid.GetByteValue()->GetLength() );
+  std::string sopinstanceuid_str( sopinstanceuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetLength() );
+#endif
+
   if( !fd.Derive() )
     {
     return 1;
