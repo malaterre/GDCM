@@ -5,7 +5,6 @@ SET(MSFF_TEST_SRCS
   TestParseXPATH
   TestValidate
   TestAnonymizeEvent
-  TestAnonymizer2
   TestFileDerivation
   TestSegmentedPaletteColorLookupTable
   TestPNMCodec
@@ -71,45 +70,55 @@ SET(MSFF_TEST_SRCS
 
 IF(GDCM_DATA_ROOT)
   SET(MSFF_TEST_SRCS
-      ${MSFF_TEST_SRCS}
-  TestScanner
-  TestAnonymizer3
-  TestPrinter2
-  TestIPPSorter
-  TestIPPSorter2
-  TestCopyDataSet
-  TestDataElementValueAsSQ
-  TestImageWriter2
-  TestDICOMDIRGenerator1 # Must be after TestImageChangeTransferSyntax4
-  TestDICOMDIRGenerator2 # Must be after TestImageChangeTransferSyntax4
-      )
+    ${MSFF_TEST_SRCS}
+    TestScanner
+    TestPrinter2
+    TestIPPSorter
+    TestIPPSorter2
+    TestCopyDataSet
+    TestDataElementValueAsSQ
+    TestImageWriter2
+    TestDICOMDIRGenerator1 # Must be after TestImageChangeTransferSyntax4
+    TestDICOMDIRGenerator2 # Must be after TestImageChangeTransferSyntax4
+    )
+    # Those tests requires that openssl be linked in:
+    IF(GDCM_USE_SYSTEM_OPENSSL)
+      SET(MSFF_TEST_SRCS
+        ${MSFF_TEST_SRCS}
+        TestAnonymizer2
+        TestAnonymizer3
+        )
+    ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 ENDIF(GDCM_DATA_ROOT)
+
 # gdcmDataExtra
 IF(GDCM_DATA_EXTRA_ROOT)
   SET(MSFF_TEST_SRCS
-      ${MSFF_TEST_SRCS}
-  TestSplitMosaicFilter
-)
+    ${MSFF_TEST_SRCS}
+    TestSplitMosaicFilter
+    )
 ENDIF(GDCM_DATA_EXTRA_ROOT)
 
 IF(GDCM_USE_JPEGLS)
-  SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
+  SET(MSFF_TEST_SRCS
+    ${MSFF_TEST_SRCS}
     TestImageChangeTransferSyntax5
-  )
+    )
 ENDIF(GDCM_USE_JPEGLS)
 
 IF(GDCM_HAVE_PTHREAD_H)
-SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
-  TestUIDGenerator2
-  )
+  SET(MSFF_TEST_SRCS
+    ${MSFF_TEST_SRCS}
+    TestUIDGenerator2
+    )
 ENDIF(GDCM_HAVE_PTHREAD_H)
+
 IF(GDCM_PIXEL_SPACING_DATA_ROOT)
   SET(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestImageReaderPixelSpacing
-  )
+    )
 ENDIF(GDCM_PIXEL_SPACING_DATA_ROOT)
-
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
