@@ -142,6 +142,7 @@ ENDIF(BUILD_EXAMPLES)
 #-----------------------------------------------------------------------------
 # For the documentation
 OPTION(BUILD_DOCUMENTATION "Build the doxygen documentation" OFF)
+MARK_AS_ADVANCED(BUILD_DOCUMENTATION)
 IF(BUILD_DOCUMENTATION)
   SUBDIRS(doc)
 ENDIF(BUILD_DOCUMENTATION)
