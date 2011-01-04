@@ -2451,7 +2451,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x006a,"GEMS_PARM_01",VR::US,VM::VM1,"AV Correction Indicator",false },
   {0x0043,0x006b,"GEMS_PARM_01",VR::US,VM::VM1,"L-MDK Correction Indicator",false },
   {0x0043,0x006c,"GEMS_PARM_01",VR::IS,VM::VM1,"Detector Row",false },
-  {0x0043,0x006d,"GEMS_PARM_01",VR::IS,VM::VM1,"Area Size",false },
+  {0x0043,0x006d,"GEMS_PARM_01",VR::DS,VM::VM1,"Area Size",false }, // Corrected IS -> DS
   {0x0043,0x006e,"GEMS_PARM_01",VR::SH,VM::VM1,"Auto mA Mode",false },
   {0x0043,0x006f,"GEMS_PARM_01",VR::DS,VM::VM3_4,"Scanner Table Entry (single gradient coil systems only)/Scanner Table Entry + Gradient Coil Selected",false },
   {0x0043,0x0070,"GEMS_PARM_01",VR::LO,VM::VM1,"Paradigm Name",false },
