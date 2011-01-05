@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
   int rle = 0;
   int usevtkdicom = 0;
   int compress = 0;
+  int lowerleft = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -151,6 +152,7 @@ int main(int argc, char *argv[])
         {"rle", 0, &rle, 1}, // lossless !
         {"compress", 0, &compress, 1}, // compress with using MetaIO
         {"use-vtkdicom", 0, &usevtkdicom, 1}, // use vtkDICOMImageReader
+        {"lower-left", 0, &lowerleft, 1}, // use FileLowerLeftOn
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -317,7 +319,7 @@ int main(int argc, char *argv[])
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  //reader->FileLowerLeftOn();
+  reader->SetFileLowerLeft( lowerleft );
 
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   vtkDICOMImageReader *dicomreader = vtkDICOMImageReader::New();
