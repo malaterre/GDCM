@@ -125,13 +125,14 @@ IF(GDCM_USE_ACTIVIZ AND UNIX)
   get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
     PATH)
 
-  LINK_DIRECTORIES(${bla})
-  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF
-    ${bla}/libvtkCommon.so
-    #${bla}/libvtkIO.so
-    ${bla}/libvtkImaging.so
-    ${bla}/libvtkRendering.so
-    )
+  #LINK_DIRECTORIES(${bla})
+  #TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF
+  #  ${bla}/libvtkCommon.so
+  #  #${bla}/libvtkIO.so
+  #  ${bla}/libvtkImaging.so
+  #  ${bla}/libvtkRendering.so
+  #  )
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
 ELSE(GDCM_USE_ACTIVIZ AND UNIX)
   TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
 ENDIF(GDCM_USE_ACTIVIZ AND UNIX)
