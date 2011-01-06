@@ -21,6 +21,7 @@
 #include "gdcmNetworkStateID.h"
 #include "gdcmULEvent.h"
 #include "gdcmULConnection.h"
+#include "gdcmObject.h"
 
 namespace gdcm {
   namespace network {
@@ -58,7 +59,7 @@ namespace gdcm {
  * obtained, then the the rest of the state transitions can happen.
  *
  */
-class ULAction {
+    class ULAction : public Object{
     private:
       //cannot copy a ULAction
       ULAction(const gdcm::network::ULAction& inAction) {};
