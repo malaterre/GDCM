@@ -267,6 +267,11 @@ bool PixmapWriter::PrepareWrite()
     }
 
   PixelFormat pf = PixelData->GetPixelFormat();
+  if ( !pf.IsValid() )
+    {
+    gdcmWarningMacro( "Pixel format is not valid: " << pf );
+    return false;
+    }
   PhotometricInterpretation pi = PixelData->GetPhotometricInterpretation();
   if( pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel() )
     {

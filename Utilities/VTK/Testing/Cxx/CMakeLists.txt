@@ -13,6 +13,7 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
     TestvtkGDCMImageWriter1
     TestvtkGDCMImageWriter2
     TestvtkGDCMThreadedImageReader2
+    TestvtkGDCMMetaImageWriter
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
 

@@ -123,6 +123,10 @@ int main(int argc, char *argv[])
   int usevtkdicom = 0;
   int compress = 0;
   int lowerleft = 0;
+  int oshift = 0;
+  int oscale = 0;
+  double shift = 0.;
+  double scale = 1.;
 
   int verbose = 0;
   int warning = 0;
@@ -153,6 +157,8 @@ int main(int argc, char *argv[])
         {"compress", 0, &compress, 1}, // compress with using MetaIO
         {"use-vtkdicom", 0, &usevtkdicom, 1}, // use vtkDICOMImageReader
         {"lower-left", 0, &lowerleft, 1}, // use FileLowerLeftOn
+        {"shift", 1, &oshift, 1}, //
+        {"scale", 1, &oscale, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -206,6 +212,16 @@ int main(int argc, char *argv[])
             {
             assert( strcmp(s, "root-uid") == 0 );
             root_uid = optarg;
+            }
+          else if( option_index == 15 ) /* shift */
+            {
+            assert( strcmp(s, "shift") == 0 );
+            shift = atof(optarg);
+            }
+          else if( option_index == 16 ) /* scale */
+            {
+            assert( strcmp(s, "scale") == 0 );
+            scale = atof(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -486,6 +502,7 @@ int main(int argc, char *argv[])
   // else
 
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
+  //writer->SetFileLowerLeft( 1 );
   if( studyuid )
     {
     writer->SetStudyUID( study_uid.c_str() );
@@ -707,6 +724,16 @@ int main(int argc, char *argv[])
     {
     if( !modality_str.empty() )
       writer->GetMedicalImageProperties()->SetModality( modality_str.c_str() );;
+    }
+
+  // Let's do that at the end to be sure it always overwrite any other default
+  if( oshift )
+    {
+    writer->SetShift( shift );
+    }
+  if( oscale )
+    {
+    writer->SetScale( scale );
     }
 
   // Pass on the filetime of input file

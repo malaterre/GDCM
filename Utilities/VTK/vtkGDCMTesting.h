@@ -34,6 +34,15 @@ public:
   static const char *GetVTKDataRoot();
   static const char *GetGDCMDataRoot();
 
+//BTX
+  typedef const char* const (*MD5MetaImagesType)[3];
+//  static MD5MetaImagesType GetMD5MetaImages();
+//  static unsigned int GetNumberOfMD5MetaImages();
+//  static const char * const * GetMD5MetaImage(unsigned int file);
+//ETX
+  static const char * GetMHDMD5FromFile(const char *filepath);
+  static const char * GetRAWMD5FromFile(const char *filepath);
+
 protected:
   vtkGDCMTesting();
   ~vtkGDCMTesting();
