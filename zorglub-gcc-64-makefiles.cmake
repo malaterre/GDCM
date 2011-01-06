@@ -45,6 +45,9 @@ GDCM_VTK_DOCUMENTATION:BOOL=ON
 # 0x00007fffe9c8a2b0 in cio_tell () from /usr/lib/libopenjpeg.so.2
 GDCM_USE_SYSTEM_OPENJPEG:BOOL=OFF
 
+# To do some more testing for the anonymizer
+GDCM_USE_SYSTEM_OPENSSL:BOOL=ON
+
 CMAKE_INSTALL_PREFIX:PATH=/tmp/local-gcc
     "
     )
