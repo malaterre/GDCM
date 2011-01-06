@@ -8,14 +8,15 @@ HelloActiviz3
 HelloActiviz4
 HelloActiviz5
 RefCounting
+MetaImageMD5Activiz
 )
 FOREACH(example ${examples})
   file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
   #file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMImageReader.cs result2)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/r:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
+    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/r:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
     #WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
             ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
