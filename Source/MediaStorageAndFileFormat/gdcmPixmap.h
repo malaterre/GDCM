@@ -35,7 +35,7 @@ class GDCM_EXPORT Pixmap : public Bitmap
 public:
   Pixmap();
   ~Pixmap();
-  void Print(std::ostream &) const {}
+  void Print(std::ostream &) const;
 
   /// returns if Overlays are stored in the unused bit of the pixel data:
   bool AreOverlaysInPixelData() const;

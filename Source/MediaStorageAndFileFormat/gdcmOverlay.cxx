@@ -156,6 +156,8 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
         assert( !ds.FindDataElement( toverlaydata ) );
         const DataElement& overlayrows = ds.GetDataElement( toverlayrows );
         const DataElement& overlaycols = ds.GetDataElement( toverlaycols );
+        Tag toverlaybitpos(overlay.GetGroup(),0x0102 );
+        assert( ds.FindDataElement( toverlaybitpos ) );
         if( !overlayrows.IsEmpty() && !overlaycols.IsEmpty() )
           {
           ++numoverlays;
@@ -267,6 +269,7 @@ void Overlay::Update(const DataElement & de)
       gdcmWarningMacro( "Unsuported OverlayBitsAllocated: " << at.GetValue() );
       }
     SetBitsAllocated( at.GetValue() );
+    SetBitsAllocated( 16 );
     }
   else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
     {
@@ -274,7 +277,7 @@ void Overlay::Update(const DataElement & de)
     at.SetFromDataElement( de );
     if( at.GetValue() != 0 ) // For old ACR when using unused bits...
       {
-      gdcmWarningMacro( "Unsuported OverlayBitPosition: " << at.GetValue() );
+      gdcmDebugMacro( "Unsuported OverlayBitPosition: " << at.GetValue() );
       }
     SetBitPosition( at.GetValue() );
     }
@@ -325,6 +328,7 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
     assert( ds.FindDataElement( Tag(0x7fe0,0x0010) ) );
     const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );
     const ByteValue *bv = pixeldata.GetByteValue();
+    if( !bv ) return false;
     assert( bv );
     const char *array = bv->GetPointer();
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is pain to support,

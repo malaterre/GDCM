@@ -96,6 +96,7 @@ IF(GDCM_DATA_EXTRA_ROOT)
   SET(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestSplitMosaicFilter
+    TestOverlay2
     )
 ENDIF(GDCM_DATA_EXTRA_ROOT)
 
