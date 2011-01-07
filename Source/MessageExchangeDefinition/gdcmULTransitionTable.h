@@ -23,35 +23,31 @@
 #include "gdcmULAction.h"
 #include "gdcmULConnection.h"
 #include <vector>
-#include "gdcmSmartPointer.h"
-#include "gdcmObject.h"
 
 
 namespace gdcm {
   namespace network{
 
     //The transition dictates the action that should be taken from the start state to the end state
-    class Transition : public Object{
-    public:
+    struct Transition {
       int mEnd;
-      SmartPointer<ULAction> mAction;
+      ULAction* mAction;
       Transition(){
         mEnd = eStaDoesNotExist;
-        //mAction = NULL;
+        mAction = NULL;
       }
       ~Transition(){
-        //if it's a smart pointer, should not need deletes
-        //if (mAction != NULL){
-        //  delete mAction;
-        //  mAction = NULL;
-        //}
+        if (mAction != NULL){
+          delete mAction;
+          mAction = NULL;
+        }
       }
-      Transition(int inEndState, SmartPointer<ULAction> inAction){
+      Transition(int inEndState, ULAction* inAction){
         mEnd = inEndState;
         mAction = inAction;
       }
-      static SmartPointer<Transition> MakeNew(int inEndState, SmartPointer<ULAction> inAction){
-        return SmartPointer<Transition>(Transition(inEndState, inAction));
+      static Transition* MakeNew(int inEndState, ULAction* inAction){
+        return new Transition(inEndState, inAction);
       }
     };
 
@@ -62,7 +58,7 @@ namespace gdcm {
     //don't need to store the event; that's implicitly defined in the Table itself by location
     class TableRow{
     public:
-      SmartPointer<Transition> transitions[cMaxStateID];
+      Transition transitions[cMaxStateID];
 
       //copy constructor for stl additions into the transition table below.
     };
