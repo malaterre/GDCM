@@ -810,5 +810,27 @@ bool Bitmap::IsTransferSyntaxCompatible( TransferSyntax const & ts ) const
   return false;
 }
 
+void Bitmap::Print(std::ostream &os) const
+{
+  Object::Print(os);
+  //assert( NumberOfDimensions );
+  os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
+  if( NumberOfDimensions )
+    {
+    assert( Dimensions.size() );
+    os << "Dimensions: (";
+    std::vector<unsigned int>::const_iterator it = Dimensions.begin();
+    os << *it;
+    for(++it; it != Dimensions.end(); ++it)
+      {
+      os << "," << *it;
+      }
+    os << ")\n";
+    PF.Print(os);
+    }
+  os << "PhotometricInterpretation: " << PI << "\n";
+  os << "PlanarConfiguration: " << PlanarConfiguration << "\n";
+  os << "TransferSyntax: " << TS << "\n";
+}
 
 }
