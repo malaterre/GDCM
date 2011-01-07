@@ -87,13 +87,10 @@ BogusItemStartItemEnd.dcm
   TheralysNoModalityNoObject.dcm
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
-# Recent issue with compression/decompression (overlay in pixel data not handled)
   image.acr
-  PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm # ???
   MergeCOM3_330_IM50.dcm
   ImplicitVRInExplicitDataSet2.dcm
   BogugsItemAndSequenceLengthCorrected.dcm
-  MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
 
