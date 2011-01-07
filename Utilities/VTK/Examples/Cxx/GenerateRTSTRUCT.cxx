@@ -101,9 +101,9 @@ int main(int argc, char *argv[])
   //the blank organ is to test to ensure that blank organs work; there have been crash reports
   vtkPolyData* blank = vtkPolyData::New();
   writer->SetInput(numMasks-1, blank);
-  roiNames->InsertValue(numMasks-1, "blank");
-  roiAlgorithms->InsertValue(numMasks-1, "blank");
-  roiTypes->InsertValue(numMasks-1, "ORGAN");
+  roiNames->InsertNextValue("blank");
+  roiAlgorithms->InsertNextValue("blank");
+  roiTypes->InsertNextValue("ORGAN");
 
   vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
   writer->SetRTStructSetProperties(theProperties);
