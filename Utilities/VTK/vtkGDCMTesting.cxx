@@ -201,9 +201,23 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { 0 , 0 , 0 }
 };
 
-//  static MD5MetaImagesType GetMD5MetaImages();
-//  static unsigned int GetNumberOfMD5MetaImages();
-//  static const char * const * GetMD5MetaImage(unsigned int file);
+//static MD5MetaImagesType vtkGDCMTesting::GetMD5MetaImages()
+//{
+//}
+
+unsigned int vtkGDCMTesting::GetNumberOfMD5MetaImages()
+{
+  // Do not count NULL value:
+  static const unsigned int size = sizeof(vtkgdcmMD5MetaImages)/sizeof(*vtkgdcmMD5MetaImages) - 1;
+  return size;
+}
+
+const char * const * vtkGDCMTesting::GetMD5MetaImage(unsigned int file)
+{
+  if( file < vtkGDCMTesting::GetNumberOfMD5MetaImages() ) return vtkgdcmMD5MetaImages[file];
+  return NULL;
+}
+
 const char * vtkGDCMTesting::GetMHDMD5FromFile(const char *filepath)
 {
   if(!filepath) return NULL;
