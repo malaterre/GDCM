@@ -378,7 +378,7 @@ bool PixmapWriter::PrepareWrite()
     ds.Insert( de );
 
     // FIXME: for now rewrite 'Overlay in pixel data' still in the pixel data element...
-    if( !ov.IsInPixelData() )
+    //if( !ov.IsInPixelData() )
       {
       const ByteValue & overlaydatabv = ov.GetOverlayData();
       DataElement overlaydata( Tag(0x6000,0x3000) );
