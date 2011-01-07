@@ -121,6 +121,17 @@ int TestvtkGDCMMetaImageWriter(int argc, char *argv[])
     return TestvtkGDCMMetaImageWrite(filename, true);
     }
 
+#if 0
+  unsigned int n = vtkGDCMTesting::GetNumberOfMD5MetaImages();
+  for( unsigned int i = 0; i < n; ++i )
+    {
+    const char * const * p = vtkGDCMTesting::GetMD5MetaImage(i);
+    std::cout << p[1] << "  " << p[0] << ".mhd" <<  std::endl;
+    std::cout << p[2] << "  " << p[0] << ".raw" << std::endl;
+    }
+  return 0;
+#endif
+
   // else
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
