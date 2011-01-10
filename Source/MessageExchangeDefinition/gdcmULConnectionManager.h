@@ -22,6 +22,7 @@
 #include "gdcmULConnection.h"
 #include "gdcmULConnectionInfo.h"
 #include "gdcmPresentationDataValue.h"
+#include "gdcmULConnectionCallback.h"
 
 namespace gdcm {
   class DataSet;
@@ -61,14 +62,14 @@ class GDCM_EXPORT ULConnectionManager
       //at which point, it will return the current state of the connection
       //this starts by initiating an action, but can be put into a passive mode
       //for a cmove/cstore combination by setting startWaiting to true
-      EStateID RunEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet,
-        ULConnection* inWhichConnection, const bool& startWaiting);
+      EStateID RunEventLoop(ULEvent& inEvent, ULConnection* inWhichConnection, 
+        ULConnectionCallback* inCallback, const bool& startWaiting);
 
       //like the above, but will manage the event loop for a move event (which
       //is basically two simultaneous connections interwoven, one inbound and
       //the other outbound.  Note, for instance, that cmoversp's can be sent back
       //during the other connection's operation.
-      EStateID RunMoveEventLoop(ULEvent& inEvent, std::vector<DataSet>& outDataSet);
+      EStateID RunMoveEventLoop(ULEvent& inEvent, ULConnectionCallback* inCallback);
 
     public:
       ULConnectionManager();
@@ -117,12 +118,18 @@ class GDCM_EXPORT ULConnectionManager
       //the user should look to cout to see the response of the echo command
       //returns the PresentationDataValue that was returned by the remote
       //host.  Note that the PDV can be uninitialized, which would indicate failure.
+      //Echo does not use a callback for results.
       std::vector<PresentationDataValue> SendEcho();
 
       // API will change...
       std::vector<DataSet> SendStore(DataSet *inDataSet);
       std::vector<DataSet> SendFind(BaseRootQuery* inRootQuery);
       std::vector<DataSet> SendMove(BaseRootQuery* inRootQuery);
+
+      ///callback based API
+      void SendStore(DataSet * inDataSet, ULConnectionCallback* inCallback);
+      void SendFind(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
+      void SendMove(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
 
     };
   }

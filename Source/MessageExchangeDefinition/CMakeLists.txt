@@ -61,6 +61,7 @@ gdcmPatientRootQuery.cxx
 gdcmStudyRootQuery.cxx
 gdcmBaseRootQuery.cxx
 gdcmQueryFactory.cxx
+gdcmULConnectionBasicCallback.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})

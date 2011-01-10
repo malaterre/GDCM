@@ -27,6 +27,8 @@
 
 #include "gdcmAReleaseRPPDU.h"
 
+#include "gdcmULConnectionBasicCallback.h"
+
 #include <vector>
 #include <socket++/echo.h>//for setting up the local socket
 
@@ -174,8 +176,8 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //if there's nothing on the event loop, assume that it's done & the function can exit.
   //otherwise, keep rolling the event loop
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
-  std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
+  //no callback, assume that no data is transferred back, because there shouldn't be any
+  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
 
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
@@ -277,7 +279,8 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, 
   //otherwise, keep rolling the event loop
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
   std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
+  //No data should be returned when connections are established
+  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
@@ -289,8 +292,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU();//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
   //theEvent should contain the PDU for the echo!
 
   if (theState == eSta6TransferReady){//ie, finished the transitions
@@ -303,40 +305,51 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
 std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(BaseRootQuery* inRootQuery)
 {
-  std::vector<gdcm::DataSet> theResult;
+  ULConnectionBasicCallback theCallback;
+  SendMove(inRootQuery, &theCallback);
+  return theCallback.GetDataSets();
+}
+
+void ULConnectionManager::SendMove(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
   if (mConnection == NULL){
-    return theResult;
+    return;
   }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
-
-  RunMoveEventLoop(theEvent, theResult);
-  return theResult;
+  RunMoveEventLoop(theEvent, inCallback);
 }
+
 std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQuery)
 {
-  std::vector<gdcm::DataSet> theResult;
+  ULConnectionBasicCallback theCallback;
+  SendFind(inRootQuery, &theCallback);
+  return theCallback.GetDataSets();
+}
+
+void ULConnectionManager::SendFind(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
   if (mConnection == NULL){
-    return theResult;
+    return;
   }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
-
-  RunEventLoop(theEvent, theResult, mConnection, false);
-  return theResult;
+  RunEventLoop(theEvent, mConnection, inCallback, false);
 }
 
 std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
 {
-  std::vector<gdcm::DataSet> theResult;
+  ULConnectionBasicCallback theCallback;
+  SendStore(inDataSet, &theCallback);
+  return theCallback.GetDataSets();
+}
+
+void ULConnectionManager::SendStore(gdcm::DataSet * inDataSet, ULConnectionCallback* inCallback){
   if (mConnection == NULL){
-    return theResult;
+    return;
   }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
+  RunEventLoop(theEvent, mConnection, inCallback, false);
 
-  RunEventLoop(theEvent, theResult, mConnection, false);
-  return theResult;
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
@@ -348,12 +361,9 @@ bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   ULEvent theEvent(eARELEASERequest, thePDU);
   mConnection->GetTimer().SetTimeout(inTimeOut);
 
-  std::vector<gdcm::DataSet> empty;
-  EStateID theState = RunEventLoop(theEvent, empty, mConnection, false);
-//  if (mConnection!= NULL){
-//    delete mConnection;
-//    mConnection = NULL;
-//  }
+  //assume no data coming back when dying, no need for callback
+  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+
   return (theState == eSta1Idle);//ie, finished the transitions
 }
 
@@ -361,18 +371,14 @@ void ULConnectionManager::BreakConnectionNow(){
   BasePDU* thePDU = PDUFactory::ConstructAbortPDU();
   ULEvent theEvent(eAABORTRequest, thePDU);
 
-  std::vector<gdcm::DataSet> empty;
-  RunEventLoop(theEvent, empty, mConnection, false);
-//  if (mConnection!= NULL){
-//    delete mConnection;
-//    mConnection = NULL;
-//  }
+  //assume no data coming back when dying, no need for callback
+  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
 }
 
 //event handler loop for move-- will interweave the two event loops,
 //one for storescp and the other for movescu.  Perhaps complicated, but
 //avoids starting a second process.
-EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vector<gdcm::DataSet>& outDataSet){
+EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionCallback* inCallback){
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent;
   EEventID raisedEvent;
@@ -401,7 +407,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
       if (mSecondaryConnection->GetState()== eSta1Idle ||
         mSecondaryConnection->GetState() == eSta2Open){
         ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-        theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
+        theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
       }
     //just as for the regular event loop, but we have to alternate between the connections.
     //it may be that nothing comes back over the is connection, but lots over the
@@ -552,11 +558,13 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
               while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
                 ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
                 //now, get data from across the network
-                size_t theNumDataSets = outDataSet.size();
-                theCStoreStateID = RunEventLoop(theCStoreEvent, outDataSet, mSecondaryConnection, true);
-                dataSetCountIncremented = false;
-                if (outDataSet.size() > theNumDataSets)
+                theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
+                if (inCallback){
                   dataSetCountIncremented = true;
+                  inCallback->ResetHandledDataSet();
+                } else {
+                  dataSetCountIncremented = false;
+                }
               }
               //force the abort from our side
             //  ULEvent theCStoreEvent(eAABORTRequest, NULL);//have to fill this in, we're in passive mode now
@@ -599,7 +607,10 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
                 for (size_t i = 0; i < theData.size(); i++){
                   delete theData[i];
                 }
-                outDataSet.push_back(theCompleteFindResponse);
+                //outDataSet.push_back(theCompleteFindResponse);
+                if (inCallback){
+                  inCallback->HandleDataSet(theCompleteFindResponse);
+                }
               }
             }
           }
@@ -632,8 +643,8 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, std::vecto
 //if no response, assume that the connection is broken.
 //if there's a response, then yay.
 //note that this is the ARTIM timeout event
-EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gdcm::DataSet>& outDataSet,
-        ULConnection* inWhichConnection, const bool& startWaiting = false){
+EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* inWhichConnection,
+                                           ULConnectionCallback* inCallback, const bool& startWaiting = false){
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent = startWaiting;//overwritten if not starting waiting, but if waiting, then wait
   EEventID raisedEvent;
@@ -793,7 +804,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, std::vector<gd
                   for (size_t i = 0; i < theData.size(); i++){
                     delete theData[i];
                   }
-                  outDataSet.push_back(theCompleteFindResponse);
+                  //outDataSet.push_back(theCompleteFindResponse);
+                  if (inCallback){
+                    inCallback->HandleDataSet(theCompleteFindResponse);
+                  }
 
                   if (theCommandCode == 1){//if we're doing cstore scp stuff, send information back along the connection.
                     std::vector<BasePDU*> theCStoreRSPPDU = PDUFactory::CreateCStoreRSPPDU(&theRSP, theFirstPDU);//pass NULL for C-Echo
