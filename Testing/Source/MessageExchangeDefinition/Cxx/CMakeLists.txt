@@ -4,6 +4,7 @@ TestQueryFactory
 TestULConnectionManager
 TestAllFunctions
 TestServiceClassUser
+TestSCUValidation
 )
 
 # Add the include paths
