@@ -4,6 +4,7 @@ set(CTEST_SITE "zorglub")
 set(CTEST_BUILD_NAME "Linux-gcc-snap-GIT")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
+set(CTEST_DASHBOARD_ROOT "/local/mmalater")
 set(dashboard_root_name "MyTests")
 SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm")
@@ -13,8 +14,8 @@ set(dashboard_do_coverage FALSE)
 
 SET(ENV{CC} "gcc-4.3")
 SET(ENV{CXX} "g++-4.3")
-SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
-SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspacingtestimages")
+#SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
+#SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspacingtestimages")
 SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -Wsign-promo -Weffc++ -Wabi -D_GLIBCXX_DEBUG")
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long")
 
@@ -30,7 +31,7 @@ GDCM_TEST_BOOTSTRAP:BOOL=OFF
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
 GDCM_BUILD_APPLICATIONS:BOOL=ON
 
-GDCM_USE_VTK:BOOL=ON
+GDCM_USE_VTK:BOOL=OFF
 VTK_DIR:PATH=/home/mathieu/Kitware/VTK56-gcc
 GDCM_DOCUMENTATION:BOOL=ON
 GDCM_VTK_DOCUMENTATION:BOOL=ON
