@@ -161,7 +161,8 @@ int TestAllFunctions(int argc, char *argv[])
         delete [] buf;
       }
     }
-    if (!theQuery->ValidateQuery(true)){
+    //using the non-strict version of query validation
+    if (!theQuery->ValidateQuery(true, false)){
       std::cerr << "Unable to validate query." << std::endl;
       delete theQuery;
       continue;

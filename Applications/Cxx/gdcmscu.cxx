@@ -149,7 +149,7 @@ std::string const &call , gdcm::network::BaseRootQuery* query )
 int CStore( const char *remote, int portno,
   std::string const &aetitle,
   std::string const &call,
-  std::vector<std::string> const & filenames, int recursive )
+  std::vector<std::string> const & filenames, bool inRecursive )
 {
   std::string filename = filenames[0];
   gdcm::network::ULConnectionManager theManager;
@@ -158,7 +158,7 @@ int CStore( const char *remote, int portno,
     {
     unsigned int nfiles = 1;
     gdcm::Directory dir;
-    nfiles = dir.Load(filename, recursive);
+    nfiles = dir.Load(filename, inRecursive);
     files = dir.GetFilenames();
     }
   else
@@ -560,15 +560,20 @@ int main(int argc, char *argv[])
     return 0;
     }
 
+  bool theDebug = debug != 0;
+  bool theWarning = warning != 0;
+  bool theError = error != 0;
+  bool theVerbose = verbose != 0;
+  bool theRecursive = recursive != 0;
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( theDebug );
+  gdcm::Trace::SetWarning( theWarning );
+  gdcm::Trace::SetError( theError );
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( theVerbose );
+    gdcm::Trace::SetError( theVerbose);
     }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( callaetitle.c_str() );
   if( !rootuid )
@@ -769,7 +774,9 @@ int main(int argc, char *argv[])
         }
       }
 
-    if (!theQuery->ValidateQuery(true))
+    //doing a non-strict query, the second parameter there.
+    //look at the base query comments
+    if (!theQuery->ValidateQuery(true, false))
       {
       std::cout << "You have not constructed a valid find query.  Please try again." << std::endl;
       delete theQuery;
@@ -782,7 +789,7 @@ int main(int argc, char *argv[])
   else // C-STORE SCU
     {
     // mode == filename
-    return CStore( hostname, port, callingaetitle, callaetitle ,filenames, recursive );
+    return CStore( hostname, port, callingaetitle, callaetitle ,filenames, theRecursive );
     }
   return 0;
 }
