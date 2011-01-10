@@ -24,6 +24,7 @@ vtkStandardNewMacro(vtkGDCMTesting)
 
 // DICOM Filename, MHD MD5, RAW MD5
 static const char * const vtkgdcmMD5MetaImages[][3] = {
+{ "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm","3d77fa60702897dd0ad601ee728f93d3", "8b636107a6d8e6a6b3d1d7eed966d7a0" },
 { "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm","3b22e8e2aea4354ed947786152504d4d", "cd301effb5e2020f539a2f5d24a429d7" },
 { "SIEMENS_GBS_III-16-ACR_NEMA_1.acr","3864799d39588714e16c3a4482137c74", "ea24c09f475a4e9643e27f6d470edc67" },
 { "SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm","f285ebea4a7675457b916c16ff770934", "ea24c09f475a4e9643e27f6d470edc67" },
