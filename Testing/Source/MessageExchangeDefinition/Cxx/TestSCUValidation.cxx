@@ -37,6 +37,7 @@ gdcm::network::ULConnectionManager *GetConnectionManager()
   gdcm::network::ULConnectionManager *theManager =
     new gdcm::network::ULConnectionManager();
   gdcm::network::BaseRootQuery* theQuery;
+  //!!! Mathieu, this code will crash because theQuery is not initialized
   if (!theManager->EstablishConnection(AETitle, PeerAETitle, ComputerName, 0,
     port, 1000, gdcm::network::eFind,  theQuery->GetQueryDataSet()))
   {
@@ -45,7 +46,7 @@ gdcm::network::ULConnectionManager *GetConnectionManager()
   return theManager;
 }
 
-std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery)
+std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
@@ -55,7 +56,7 @@ std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery)
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "PATIENT"); //Query/Retrieval Level
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), ""); //Patient ID
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x10), "*"); //Patient Name
-  if(validateQuery && !theQuery->ValidateQuery(true))
+  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
   {
     return theDataSets;
   }
@@ -63,7 +64,7 @@ std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery)
   return theDataSets;
 }
 
-std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuery)
+std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
@@ -75,7 +76,7 @@ std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuer
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0x10), ""); //Study ID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xD), ""); //Study Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xE), ""); //Series Instance UID
-  if(validateQuery && !theQuery->ValidateQuery(true))
+  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
   {
     return theDataSets;
   }
@@ -83,7 +84,7 @@ std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuer
   return theDataSets;
 }
 
-std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *studyInstanceUID, bool validateQuery)
+std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *studyInstanceUID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
@@ -94,7 +95,7 @@ std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *stud
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xD), studyInstanceUID); //Study Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xE), ""); //Series Instance UID
-  if(validateQuery && !theQuery->ValidateQuery(true))
+  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
   {
     return theDataSets;
   }
@@ -103,7 +104,7 @@ std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *stud
 }
 
 std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
-               const char *studyInstanceUID, const char *seriesInstanceUID, bool validateQuery)
+               const char *studyInstanceUID, const char *seriesInstanceUID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
@@ -115,7 +116,7 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xD), studyInstanceUID); //Study Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xE), seriesInstanceUID); //Series Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x18), ""); //SOP Instance UID
-  if(validateQuery && !theQuery->ValidateQuery(true))
+  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
   {
     return theDataSets;
   }
@@ -134,11 +135,14 @@ void PrintDataSets(std::vector<gdcm::DataSet> theDataSets)
 
 int TestSCUValidation(int argc, char *argv[])
 {
+  //set this to true to use a strict interpretation of the DICOM standard for query validation
+  bool theUseStrictQueries = false;
+
   //Case 1:
   //Here I want to retrieve Study Information for the known Patient.
   //Here i pass the PatientID as a input and i need to reterive the StudyId,
   //StudyDate and Series Instance UID.
-  std::vector<gdcm::DataSet> theDataSets = GetStudyInfo("Z354998", true);
+  std::vector<gdcm::DataSet> theDataSets = GetStudyInfo("Z354998", true, theUseStrictQueries);
   PrintDataSets(theDataSets);
   //In the above i validated the constructed Query. This will not allow to add the
   //Series Instance UID as a search parameter for the query. On the result of
@@ -149,7 +153,7 @@ int TestSCUValidation(int argc, char *argv[])
   //This will send the Query which is having the SeriesInstanceUID tag
   //in search parameter to the CFind. This will executed successfully and
   //returns the SeriesInsanceUID related to the given StudyUID.
-  theDataSets = GetStudyInfo("Z354998", false);
+  theDataSets = GetStudyInfo("Z354998", false, theUseStrictQueries);
   PrintDataSets(theDataSets);
 
   //case 3:
@@ -159,14 +163,14 @@ int TestSCUValidation(int argc, char *argv[])
   //as a search parameter. It allows only SeriesInstanceUID, Modality and SeriesNumber
   //as a search parameter.
   theDataSets = GetSeriesInfo("Z354998",
-    "1.2.826.0.1.3680043.4.1.19990124221049.2", true);
+    "1.2.826.0.1.3680043.4.1.19990124221049.2", true, theUseStrictQueries);
   PrintDataSets(theDataSets);
 
   //case 4:
   //If i execute the above same CFind Query for Get Series with out validating
   //the query, it will return the requested SeriesInstanceUID for Known Study level.
   theDataSets = GetSeriesInfo("Z354998",
-    "1.2.826.0.1.3680043.4.1.19990124221049.2", false);
+    "1.2.826.0.1.3680043.4.1.19990124221049.2", false, theUseStrictQueries);
   PrintDataSets(theDataSets);
   //In StudyLevel I cant get the Series information(Ref:Case 2). In Series Level
   //also i cant get the Series information for the known Study Level(Ref:Case 3).
@@ -180,7 +184,7 @@ int TestSCUValidation(int argc, char *argv[])
   //search Query.
   theDataSets = GetImageInfo("Z354998",
     "1.2.826.0.1.3680043.4.1.19990124221049.2",
-    "1.2.826.0.1.3680043.4.1.19990124221049.3", true);
+    "1.2.826.0.1.3680043.4.1.19990124221049.3", true, theUseStrictQueries);
   PrintDataSets(theDataSets);
 
   //case 6:
@@ -188,7 +192,7 @@ int TestSCUValidation(int argc, char *argv[])
   //validate the generated Query.
   theDataSets = GetImageInfo("Z354998",
     "1.2.826.0.1.3680043.4.1.19990124221049.2",
-    "1.2.826.0.1.3680043.4.1.19990124221049.3", false);
+    "1.2.826.0.1.3680043.4.1.19990124221049.3", false, theUseStrictQueries);
   PrintDataSets(theDataSets);
 
   //I want the Following things to do in CFind Query.
