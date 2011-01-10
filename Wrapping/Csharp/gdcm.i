@@ -398,6 +398,11 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
 
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
+/*
+ The following line is very important it properly convert :
+SWIGTYPE_p_std__vectorT_int_t__size_type -> uint
+*/
+%template() std::vector< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (CSharpDataSet) SWIGDataSet;
