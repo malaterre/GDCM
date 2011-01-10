@@ -2,6 +2,8 @@
 
 cd $HOME/Dashboards/GDCMScripts && git pull
 
+export PATH=$PATH:$HOME/local/bin
+
 echo "Starting dcmqrscp"
 
 rm -rf /tmp/GDCM_STORE
