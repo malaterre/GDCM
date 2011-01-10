@@ -2,7 +2,7 @@
 
 cd $HOME/Dashboards/GDCMScripts && git pull
 
-export PATH=$PATH:$HOME/local/bin
+export PATH=$PATH:$HOME/local/bin:$HOME/Software/cmake-2.8.2-Linux-i386/bin
 
 echo "Starting dcmqrscp"
 
