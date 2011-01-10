@@ -99,7 +99,14 @@ class GDCM_EXPORT BaseRootQuery
       ///that the tags in the query match the right level (either required, unique, optional)
       ///by default, this function checks to see if the query is for finding, which is more
       ///permissive than for moving.  For moving, only the unique tags are allowed.
-      virtual bool ValidateQuery(bool forFind) const = 0;
+      ///10 Jan 2011: adding in the 'strict' mode.
+      ///according to the standard (at least, how I've read it), only tags for a particular
+      ///level should be allowed in a particular query (ie, just series level tags in a series
+      ///level query).  However, it seems that dcm4chee doesn't share that interpretation.
+      ///So, if 'inStrict' is false, then tags from the current level and all higher levels
+      ///are now considered valid.  So, if you're doing a non-strict series-level query,
+      ///tags from the patient and study level can be passed along as well.
+      virtual bool ValidateQuery(bool forFind, bool inStrict) const = 0;
     };
   }
 }
