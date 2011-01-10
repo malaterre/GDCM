@@ -396,10 +396,16 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
     if( md5sum )
       {
       char *buffer = new char[ image.GetBufferLength() ];
-      image.GetBuffer( buffer );
-      char digest[33] = {};
-      gdcm::MD5::Compute( buffer, image.GetBufferLength(), digest );
-      std::cout << "md5sum: " << digest << std::endl;
+      if( image.GetBuffer( buffer ) )
+        {
+        char digest[33] = {};
+        gdcm::MD5::Compute( buffer, image.GetBufferLength(), digest );
+        std::cout << "md5sum: " << digest << std::endl;
+        }
+      else
+        {
+        std::cout << "Problem decompressing file: " << filename << std::endl;
+        }
       delete[] buffer;
       }
     }
