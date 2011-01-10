@@ -71,6 +71,11 @@ int TestAllFunctions(int argc, char *argv[])
   std::string outputDir("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
   std::string inputDir("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
 #else
+  if( argc < 6 )
+    {
+    std::cerr << argv[0] << " aetitle call portno moveReturnPort remote" << std::endl;
+    return 1;
+    }
   std::string aetitle = argv[1]; // ("UNITED1");//the ae title of this computer
   std::string call = argv[2]; //("COMMON");//the ae title of the server
   int portno = atoi(argv[3]); // 11112;//the port of the server
