@@ -60,40 +60,6 @@ bool AreDataSetsEqual(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2){
   return true;
 }
 
-bool LoadGlobalDicts(){
-
-  int resourcespath = 0;
-  std::string xmlpath;
-
-  gdcm::Global& g = gdcm::Global::GetInstance();
-  if( !resourcespath )
-    {
-    const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
-    if( xmlpathenv )
-      {
-      // Make sure to look for XML dict in user explicitly specified dir first:
-      xmlpath = xmlpathenv;
-      resourcespath = 1;
-      }
-    }
-  if( resourcespath )
-    {
-    // xmlpath is set either by the cmd line option or the env var
-    if( !g.Prepend( xmlpath.c_str() ) )
-      {
-      std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
-      return false;
-      }
-    }
-  // All set, then load the XML files:
-  if( !g.LoadResourcesFiles() )
-    {
-    std::cerr << "Could not load XML file from specified path" << std::endl;
-      return false;
-    }
-  return true;
-}
-
 int TestAllFunctions(int argc, char *argv[])
 {
 #if 0
@@ -116,11 +82,6 @@ int TestAllFunctions(int argc, char *argv[])
 
 #endif
   gdcm::network::ERootType queryRootType = gdcm::network::ePatientRootType;//how queries are done
-
-  if (!LoadGlobalDicts()){//for IODs
-    return 1;
-  }
-
 
   //first, run an echo, make sure that that works.
   gdcm::network::ULConnectionManager theManager;
