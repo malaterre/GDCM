@@ -16,8 +16,8 @@ ctest -S zorglub-gcc43-64-makefiles.cmake -V -O zorglub-gcc43-64-makefiles.log
 ctest -S zorglub-gcc-64-makefiles-dcmqrscp.cmake -V -O zorglub-gcc-64-makefiles-dcmqrscp.log
 ctest -S zorglub-gcc-64-makefiles.cmake -V -O zorglub-gcc-64-makefiles.log
 ctest -S zorglub-gcc-64-makefiles-release.cmake -V -O zorglub-gcc-64-makefiles-release.log
-ctest -S zorglub-gcc-snap-64-makefiles.cmake -V -O zorglub-gcc-snap-64-makefiles.log
-ctest -S zorglub-gcc-64-makefiles-kwstyle.cmake -V -O zorglub-gcc-64-makefiles-kwstyle.log
+#ctest -S zorglub-gcc-snap-64-makefiles.cmake -V -O zorglub-gcc-snap-64-makefiles.log
+#ctest -S zorglub-gcc-64-makefiles-kwstyle.cmake -V -O zorglub-gcc-64-makefiles-kwstyle.log
 
 echo "Stopping dcmqrscp"
 
