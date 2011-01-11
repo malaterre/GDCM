@@ -40,6 +40,7 @@
 #include "gdcmQueryFactory.h"
 #include "gdcmStudyRootQuery.h"
 #include "gdcmPatientRootQuery.h"
+#include "gdcmULWritingCallback.h"
 
 #include <fstream>
 #include <socket++/echo.h>
@@ -76,10 +77,16 @@ std::string const &call )
 //note that pointer to the base root query-- the caller must instantiated and delete
 void CMove( const char *remote, int portno, std::string const &aetitle,
   std::string const &call, gdcm::network::BaseRootQuery* query,
-  int portscp, std::string const & outputdir )
+  int portscp, std::string const & outputdir, const bool& inInterleaveWriting )
 {
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
+
+  if (outputdir.empty())
+    {
+    std::cerr << "Output directory not specified." << std::endl;
+    return;
+    }
 
   gdcm::network::ULConnectionManager theManager;
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
@@ -88,39 +95,40 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
     exit (-1);
   }
 
-  std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
-  std::vector<gdcm::DataSet>::iterator itor;
-  int c = 0;
-  //write to the output directory
-  if (!outputdir.empty())
+  if (!inInterleaveWriting)
     {
-    //loop over each dataset, write out the given objects by the SOP Instance UID
-    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
-      {
-      if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018)))
+      std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
+      std::vector<gdcm::DataSet>::iterator itor;
+      int c = 0;
+    //write to the output directory
+      //loop over each dataset, write out the given objects by the SOP Instance UID
+      for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
         {
-        gdcm::DataElement de = itor->GetDataElement(gdcm::Tag(0x0008,0x0018));
-        std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
-        gdcm::Writer w;
-        std::string theLoc = outputdir + "/" + sopclassuid_str + ".dcm";
-        w.SetFileName(theLoc.c_str());
-        gdcm::File &f = w.GetFile();
-        f.SetDataSet(*itor);
-        gdcm::FileMetaInformation &fmi = f.GetHeader();
-        fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
-        w.SetCheckFileMetaInformation( true );
-        if (!w.Write())
+        if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018)))
           {
-          std::cerr << "Failed to write " << sopclassuid_str << std::endl;
+          gdcm::DataElement de = itor->GetDataElement(gdcm::Tag(0x0008,0x0018));
+          std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
+          gdcm::Writer w;
+          std::string theLoc = outputdir + "/" + sopclassuid_str + ".dcm";
+          w.SetFileName(theLoc.c_str());
+          gdcm::File &f = w.GetFile();
+          f.SetDataSet(*itor);
+          gdcm::FileMetaInformation &fmi = f.GetHeader();
+          fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+          w.SetCheckFileMetaInformation( true );
+          if (!w.Write())
+            {
+            std::cerr << "Failed to write " << sopclassuid_str << std::endl;
+            }
           }
         }
-      }
     }
-  else
+  else 
     {
-    std::cerr << "Output directory not specified." << std::endl;
+      gdcm::network::ULWritingCallback theCallback;
+      theCallback.SetDirectory(outputdir);
+      theManager.SendMove( query, &theCallback );
     }
-
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 }
 
@@ -701,7 +709,10 @@ int main(int argc, char *argv[])
       return 1;
       }
 
-    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir );
+    //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
+    //across, rather than all at once at the end.  Turn off the boolean to have
+    //it written all at once at the end.
+    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir, true );
     delete theQuery;
     }
   else if ( mode == "find" ) // C-FIND SCU

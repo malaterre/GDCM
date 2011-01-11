@@ -32,11 +32,11 @@ namespace gdcm
     ///Alternatives to this method include progress updates, saving to disk, etc.
     ///This class is NOT THREAD SAFE.  Access the dataset vector after the
     ///entire set of datasets has been returned by the ULConnectionManager.
-    class GDCM_EXPORT ULConnectionBasicCallback : public ULConnectionCallback{
+    class GDCM_EXPORT ULBasicCallback : public ULConnectionCallback{
       std::vector<DataSet> mDataSets;
     public:
-      ULConnectionBasicCallback() {};
-      virtual ~ULConnectionBasicCallback() {} //empty, for later inheritance
+      ULBasicCallback() {};
+      virtual ~ULBasicCallback() {} //empty, for later inheritance
 
       virtual void HandleDataSet(const DataSet& inDataSet);
 

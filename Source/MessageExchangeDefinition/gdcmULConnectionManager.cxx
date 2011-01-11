@@ -27,7 +27,7 @@
 
 #include "gdcmAReleaseRPPDU.h"
 
-#include "gdcmULConnectionBasicCallback.h"
+#include "gdcmULBasicCallback.h"
 
 #include <vector>
 #include <socket++/echo.h>//for setting up the local socket
@@ -305,7 +305,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
 std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(BaseRootQuery* inRootQuery)
 {
-  ULConnectionBasicCallback theCallback;
+  ULBasicCallback theCallback;
   SendMove(inRootQuery, &theCallback);
   return theCallback.GetDataSets();
 }
@@ -321,7 +321,7 @@ void ULConnectionManager::SendMove(BaseRootQuery* inRootQuery, ULConnectionCallb
 
 std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQuery)
 {
-  ULConnectionBasicCallback theCallback;
+  ULBasicCallback theCallback;
   SendFind(inRootQuery, &theCallback);
   return theCallback.GetDataSets();
 }
@@ -337,7 +337,7 @@ void ULConnectionManager::SendFind(BaseRootQuery* inRootQuery, ULConnectionCallb
 
 std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
 {
-  ULConnectionBasicCallback theCallback;
+  ULBasicCallback theCallback;
   SendStore(inDataSet, &theCallback);
   return theCallback.GetDataSets();
 }
