@@ -1,22 +1,24 @@
 # Client maintainer: mathieu . malaterre  gmail . com
 
-set(CTEST_SITE "zorglub")
+set(CTEST_SITE "macminig4")
 set(CTEST_BUILD_NAME "GDCM2-Linux-kwstyle-SVN")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
-set(CTEST_DASHBOARD_ROOT "/local/mmalater")
 set(dashboard_root_name "MyTests")
-SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly-kwstyle")
 set(dashboard_do_memcheck FALSE)
 set(dashboard_do_coverage FALSE)
 set(dashboard_do_test     FALSE)
+set(dashboard_no_clean    TRUE)
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
 GDCM_USE_KWSTYLE:BOOL=ON
+
+GDCM_DOCUMENTATION:BOOL=ON
+GDCM_VTK_DOCUMENTATION:BOOL=ON
     "
     )
 endmacro(dashboard_hook_init)
@@ -25,7 +27,7 @@ macro(dashboard_hook_submit)
   execute_process(COMMAND KWStyle
     -lesshtml
     -html /tmp/${CTEST_PROJECT_NAME}
-    -kwsurl http://gdcm.svn.sf.net/viewvc/gdcm/trunk/
+    -kwsurl http://gdcm.git.sf.net/
     -xml ${CTEST_BINARY_DIRECTORY}/Utilities/KWStyle/GDCM.kws.xml
     -dart ${CTEST_BINARY_DIRECTORY} -1 1
     -o ${CTEST_SOURCE_DIRECTORY}/Utilities/KWStyle/GDCMOverwrite.txt
