@@ -17,17 +17,17 @@
  *=========================================================================*/
 
 
-#include "gdcmULConnectionBasicCallback.h"
+#include "gdcmULBasicCallback.h"
 
 namespace gdcm {
   namespace network {
-void ULConnectionBasicCallback::HandleDataSet(const DataSet& inDataSet)
+void ULBasicCallback::HandleDataSet(const DataSet& inDataSet)
 {
   mDataSets.push_back(inDataSet);
   DataSetHandled();
 }
 
-std::vector<DataSet> ULConnectionBasicCallback::GetDataSets() const {
+std::vector<DataSet> ULBasicCallback::GetDataSets() const {
   return mDataSets;
 }
   }
