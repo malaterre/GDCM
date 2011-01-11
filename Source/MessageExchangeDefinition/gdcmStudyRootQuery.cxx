@@ -186,8 +186,15 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       return false;
     }
   }
+
   //all the tags in the dataset should be in that tag list
   //otherwise, it's not valid
+  //also, while the level tag must be present, and the language tag can be
+  //present (but does not have to be), some other tag must show up as well
+  //so, have two counts: 1 for tags that are found, 1 for tags that are not
+  //if there are no found tags, then the query is invalid
+  //if there is one improper tag found, then the query is invalid
+  int thePresentTagCount = 0;
   gdcm::DataSet::ConstIterator itor;
   gdcm::Attribute<0x0008, 0x0005> language;
   for (itor = ds.Begin(); itor != ds.End(); itor++){
@@ -201,10 +208,11 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //well, for now, just allow it if it's present.
       theReturn = false;
       break;
+    } else {
+      thePresentTagCount++;
     }
   }
-
-  return theReturn;
+  return theReturn && (thePresentTagCount > 0);
 }
 
 }

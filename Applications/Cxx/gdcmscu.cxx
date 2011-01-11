@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
             }
           else
             {
-            assert( 0 );
+       //     assert( 0 );
             }
           //printf (" with arg %s", optarg);
           }
