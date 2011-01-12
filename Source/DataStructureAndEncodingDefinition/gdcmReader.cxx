@@ -367,7 +367,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStrea
     if( F->GetHeader().IsEmpty() )
       {
       hasmetaheader = false;
-      gdcmWarningMacro( "no file meta info found" );
+      gdcmDebugMacro( "no file meta info found" );
       }
 
     const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();

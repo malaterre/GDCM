@@ -6529,7 +6529,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0051,0x000a,"SIEMENS MR HEADER",VR::SH,VM::VM1,"?",false },
   {0x0051,0x000b,"SIEMENS MR HEADER",VR::SH,VM::VM1,"AcquisitionMatrixText",false },
   {0x0051,0x000c,"SIEMENS MR HEADER",VR::SH,VM::VM1,"?",false },
-  {0x0051,0x000d,"SIEMENS MR HEADER",VR::SH,VM::VM1,"?",false },
+  {0x0051,0x000d,"SIEMENS MR HEADER",VR::SH,VM::VM1,"Slice Location (?)",false },
   {0x0051,0x000e,"SIEMENS MR HEADER",VR::SH,VM::VM1,"?",false },
   {0x0051,0x000f,"SIEMENS MR HEADER",VR::LO,VM::VM1,"CoilString",false },
   {0x0051,0x0011,"SIEMENS MR HEADER",VR::LO,VM::VM1,"PATModeText",false },

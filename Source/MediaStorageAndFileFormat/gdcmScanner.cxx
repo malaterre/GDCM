@@ -282,25 +282,27 @@ const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valuere
 }
 
 
-  /// Will loop over all files and return a vector of std::strings of filenames
-  /// where value match the reference value 'valueref'
-Directory::FilenamesType Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref)const {
+/// Will loop over all files and return a vector of std::strings of filenames
+/// where value match the reference value 'valueref'
+Directory::FilenamesType
+Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref) const
+{
   Directory::FilenamesType theReturn;
   if( valueref )
     {
-    Directory::FilenamesType::const_iterator file = Filenames.begin();
     size_t len = strlen( valueref );
     if( len && valueref[ len - 1 ] == ' ' )
       {
       --len;
       }
+    Directory::FilenamesType::const_iterator file = Filenames.begin();
     for(; file != Filenames.end(); ++file)
       {
       const char *filename = file->c_str();
       const char * value = GetValue(filename, t);
       if( value && strncmp(value, valueref, len ) == 0 )
         {
-        theReturn.push_back(std::string(filename));
+        theReturn.push_back( filename );
         }
       }
     }
@@ -330,8 +332,8 @@ Scanner::ValuesType Scanner::GetValues(Tag const &t) const
 }
 
 
-Directory::FilenamesType Scanner::GetOrderedValues(Tag const &t) const{
-
+Directory::FilenamesType Scanner::GetOrderedValues(Tag const &t) const
+{
   Directory::FilenamesType theReturn;
   Directory::FilenamesType::const_iterator file = Filenames.begin();
   for(; file != Filenames.end(); ++file)
