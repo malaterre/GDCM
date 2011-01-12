@@ -108,7 +108,9 @@ public:
   /// Get all the values found (in lexicographic order) associated with Tag 't'
   ValuesType GetValues(Tag const &t) const;
 
-  /// Get all the values found (in a vactor) associated with Tag 't'
+  /// Get all the values found (in a vector) associated with Tag 't'
+  /// This function is identical to GetValues, but is accessible from the wrapped
+  /// layer (python, C#, java)
   Directory::FilenamesType GetOrderedValues(Tag const &t) const;
 
   /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
