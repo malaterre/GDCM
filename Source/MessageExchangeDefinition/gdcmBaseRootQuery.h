@@ -83,6 +83,11 @@ class GDCM_EXPORT BaseRootQuery
 
       virtual const std::ostream &WriteHelpFile(std::ostream &os);
 
+      //this function allows writing of the query to disk for storing for future use
+      //virtual in case it needs to be overiden
+      //returns false if the operation failed
+      virtual bool WriteQuery(const std::string& inFileName);
+
       DataSet const & GetQueryDataSet() const;
 
       ///this function will return all tags at a given query level, so that
