@@ -85,22 +85,30 @@ int TestSplitMosaicFilter(int, char *[])
   buf.resize(l);
   image.GetBuffer( &buf[0] );
 
-  std::vector<char> outbuf;
-  outbuf.resize(l);
 
   unsigned int inputdims[3] = { 384, 384, 1 };
+  std::vector<char> outbuf;
+  unsigned long ll = inputdims[0] * inputdims[1] * sizeof( unsigned short );
+  outbuf.resize(ll);
+
   reorganize_mosaic_invert((unsigned short *)&outbuf[0],  inputdims,
     6, image.GetDimensions(), (const unsigned short*)&buf[0] );
 
+#if 0
   std::ofstream o( "/tmp/debug" );
-  o.write( &outbuf[0], l );
+  o.write( &outbuf[0], ll );
   o.close();
+#endif
 
   char digest[33];
-  gdcm::Testing::ComputeMD5(&outbuf[0], l, digest);
+  gdcm::Testing::ComputeMD5(&outbuf[0], ll, digest);
 
-  // be96c01db8a0ec0753bd43f6a985345c
-  std::cout << digest << std::endl;
+  // $ gdcminfo --md5sum gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
+  if( strcmp(digest, "be96c01db8a0ec0753bd43f6a985345c" ) != 0 )
+    {
+    std::cerr << digest << std::endl;
+    return 1;
+    }
 
   return 0;
 }
