@@ -42,6 +42,7 @@ The dataset held by this object (or, really, one of its derivates) should be pas
 #include "gdcmGlobal.h"
 #include <limits>
 #include "gdcmAttribute.h"
+#include "gdcmWriter.h"
 
 namespace gdcm{
 namespace network {
@@ -116,7 +117,7 @@ void BaseRootQuery::SetSearchParameter(const std::string& inKeyword, const std::
   SetSearchParameter(theTag, dictentry, inValue);
 }
 
-const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os){
+const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os) {
 
   //mash all the query types into a vector for ease-of-use
   std::vector<QueryBase*> theQueries;
@@ -175,6 +176,22 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os){
   os << std::endl;
 
   return os;
+}
+
+
+bool BaseRootQuery::WriteQuery(const std::string& inFileName)
+{
+  gdcm::Writer writer;
+  writer.SetCheckFileMetaInformation( false );
+  writer.GetFile().GetHeader().SetDataSetTransferSyntax(
+    gdcm::TransferSyntax::ImplicitVRLittleEndian );
+  writer.GetFile().SetDataSet( GetQueryDataSet() );
+  writer.SetFileName( inFileName.c_str() );
+  if( !writer.Write() )
+    {
+      return false;
+    }
+  return true;
 }
 
 DataSet const & BaseRootQuery::GetQueryDataSet() const{
