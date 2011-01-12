@@ -261,13 +261,11 @@ void PrintHelp()
   std::cout << "  -p --port           Port number." << std::endl;
   std::cout << "     --aetitle        Set Calling AE Title." << std::endl;
   std::cout << "     --call           Set Called AE Title." << std::endl;
-//  std::cout << "  -t --testdir        Set the directory for testing images (if --test is chosen)." << std::endl;
   std::cout << "Mode Options:" << std::endl;
   std::cout << "     --echo           C-ECHO (default when none)." << std::endl;
   std::cout << "     --store          C-STORE." << std::endl;
   std::cout << "     --find           C-FIND." << std::endl;
   std::cout << "     --move           C-MOVE." << std::endl;
-//  std::cout << "     --test           Test all functions agains a known working server." << std::endl;
   std::cout << "C-STORE Options:" << std::endl;
   std::cout << "  -i --input          DICOM filename" << std::endl;
   std::cout << "  -r --recursive      recursively process (sub-)directories." << std::endl;
@@ -277,9 +275,11 @@ void PrintHelp()
   std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
   std::cout << "     --study          C-FIND Study Root Model." << std::endl;
   //std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
+  std::cout << "     --key        0123,4567=VALUE for specifying search criteria (wildcard allowed)." << std::endl;
   std::cout << "C-MOVE Options:" << std::endl;
   std::cout << "  -o --output         DICOM output directory." << std::endl;
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
+  std::cout << "     --key            0123,4567=VALUE for specifying search criteria (wildcard not allowed)." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -744,7 +744,7 @@ int main(int argc, char *argv[])
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
 
     // PATIENT query:
-    // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 8,52,PATIENT --key 10,10,"F*"
+    // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 8,52,PATIENT --key 10,10="F*"
     gdcm::StringFilter sf;
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
