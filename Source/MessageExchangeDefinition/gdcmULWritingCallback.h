@@ -37,7 +37,7 @@ namespace gdcm
       virtual ~ULWritingCallback() {} //empty, for later inheritance
 
       ///provide the directory into which all files are written.
-      void SetDirectory(const std::string& inDirectoryName);
+      void SetDirectory(const std::string& inDirectoryName) { mDirectoryName = inDirectoryName; }
 
       virtual void HandleDataSet(const DataSet& inDataSet);
     };
