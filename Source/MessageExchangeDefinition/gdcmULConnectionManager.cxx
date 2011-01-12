@@ -426,8 +426,10 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           {
           incomingPDUs.push_back(thePDU);
           thePDU->Read(is);
+#if 0
           std::cout << "PDU code: " << static_cast<int>(itemtype) << std::endl;
           thePDU->Print(std::cout);
+#endif
           if (thePDU->IsLastFragment()) waitingForEvent = false;
           }
         else
