@@ -687,8 +687,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
           if (theFirstPDU != NULL){
             incomingPDUs.push_back(theFirstPDU);
             theFirstPDU->Read(is);
+#if 0
             std::cout << "PDU code: " << static_cast<int>(itemtype) << std::endl;
             theFirstPDU->Print(std::cout);
+#endif
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
