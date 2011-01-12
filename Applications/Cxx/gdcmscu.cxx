@@ -94,7 +94,7 @@ std::string const &call )
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete
-void CMove( const char *remote, int portno, std::string const &aetitle,
+int CMove( const char *remote, int portno, std::string const &aetitle,
   std::string const &call, gdcm::network::BaseRootQuery* query,
   int portscp, std::string const & outputdir, const bool& inInterleaveWriting )
 {
@@ -104,56 +104,60 @@ void CMove( const char *remote, int portno, std::string const &aetitle,
   if (outputdir.empty())
     {
     std::cerr << "Output directory not specified." << std::endl;
-    return;
+    return 1;
     }
 
   gdcm::network::ULConnectionManager theManager;
-  //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eMove, ds);
-  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000, portscp, query->GetQueryDataSet())){
+  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
+      portscp, query->GetQueryDataSet()))
+    {
     std::cerr << "Failed to establish connection." << std::endl;
-    exit (-1);
-  }
+    return 1;
+    }
 
+  int ret = 0;
   if (!inInterleaveWriting)
     {
-      std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
-      std::vector<gdcm::DataSet>::iterator itor;
-      int c = 0;
+    std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
+    std::vector<gdcm::DataSet>::iterator itor;
+    int c = 0;
     //write to the output directory
-      //loop over each dataset, write out the given objects by the SOP Instance UID
-      for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
+    //loop over each dataset, write out the given objects by the SOP Instance UID
+    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
+      {
+      if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018)))
         {
-        if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018)))
+        gdcm::DataElement de = itor->GetDataElement(gdcm::Tag(0x0008,0x0018));
+        std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
+        gdcm::Writer w;
+        std::string theLoc = outputdir + "/" + sopclassuid_str + ".dcm";
+        w.SetFileName(theLoc.c_str());
+        gdcm::File &f = w.GetFile();
+        f.SetDataSet(*itor);
+        gdcm::FileMetaInformation &fmi = f.GetHeader();
+        fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+        w.SetCheckFileMetaInformation( true );
+        if (!w.Write())
           {
-          gdcm::DataElement de = itor->GetDataElement(gdcm::Tag(0x0008,0x0018));
-          std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
-          gdcm::Writer w;
-          std::string theLoc = outputdir + "/" + sopclassuid_str + ".dcm";
-          w.SetFileName(theLoc.c_str());
-          gdcm::File &f = w.GetFile();
-          f.SetDataSet(*itor);
-          gdcm::FileMetaInformation &fmi = f.GetHeader();
-          fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
-          w.SetCheckFileMetaInformation( true );
-          if (!w.Write())
-            {
-            std::cerr << "Failed to write " << sopclassuid_str << std::endl;
-            }
+          std::cerr << "Failed to write " << sopclassuid_str << std::endl;
+          ++ret;
           }
         }
+      }
     }
   else 
     {
-      gdcm::network::ULWritingCallback theCallback;
-      theCallback.SetDirectory(outputdir);
-      theManager.SendMove( query, &theCallback );
+    gdcm::network::ULWritingCallback theCallback;
+    theCallback.SetDirectory(outputdir);
+    theManager.SendMove( query, &theCallback );
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+  return ret;
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete
-void CFind( const char *remote, int portno , std::string const &aetitle,
-std::string const &call , gdcm::network::BaseRootQuery* query )
+int CFind( const char *remote, int portno , std::string const &aetitle,
+  std::string const &call , gdcm::network::BaseRootQuery* query )
 {
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
@@ -161,7 +165,7 @@ std::string const &call , gdcm::network::BaseRootQuery* query )
   //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eFind,  query->GetQueryDataSet())){
     std::cerr << "Failed to establish connection." << std::endl;
-    exit (-1);
+    return 1;
   }
   std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( query );
   std::vector<gdcm::DataSet>::iterator itor;
@@ -171,6 +175,7 @@ std::string const &call , gdcm::network::BaseRootQuery* query )
     itor->Print(std::cout);
   }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+  return 0;
 }
 
 int CStore( const char *remote, int portno,
@@ -731,8 +736,9 @@ int main(int argc, char *argv[])
     //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
     //across, rather than all at once at the end.  Turn off the boolean to have
     //it written all at once at the end.
-    CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir, true );
+    int ret = CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir, true );
     delete theQuery;
+    return ret;
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
@@ -813,8 +819,9 @@ int main(int argc, char *argv[])
       return 1;
       }//must ensure that 0x8,0x52 is set and that
     //the value in that tag corresponds to the query type
-    CFind( hostname, port, callingaetitle, callaetitle, theQuery );
+    int ret = CFind( hostname, port, callingaetitle, callaetitle, theQuery );
     delete theQuery;
+    return ret;
     }
   else // C-STORE SCU
     {
