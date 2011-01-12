@@ -27,7 +27,7 @@ void ULBasicCallback::HandleDataSet(const DataSet& inDataSet)
   DataSetHandled();
 }
 
-std::vector<DataSet> ULBasicCallback::GetDataSets() const {
+std::vector<DataSet> const & ULBasicCallback::GetDataSets() const {
   return mDataSets;
 }
   }

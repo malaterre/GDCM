@@ -40,7 +40,7 @@ namespace gdcm
 
       virtual void HandleDataSet(const DataSet& inDataSet);
 
-      std::vector<DataSet> GetDataSets() const;
+      std::vector<DataSet> const & GetDataSets() const;
     };
   }
 }
