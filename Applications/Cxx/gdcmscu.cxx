@@ -96,7 +96,7 @@ std::string const &call )
 //note that pointer to the base root query-- the caller must instantiated and delete
 int CMove( const char *remote, int portno, std::string const &aetitle,
   std::string const &call, gdcm::network::BaseRootQuery* query,
-  int portscp, std::string const & outputdir, const bool& inInterleaveWriting )
+  int portscp, std::string const & outputdir, bool inInterleaveWriting )
 {
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
@@ -689,8 +689,8 @@ int main(int argc, char *argv[])
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
-    // ./bin/gdcmscu --move dhcp-67-183 5678 move
-    // ./bin/gdcmscu --move mi2b2.slicer.org 11112 move
+    // ./bin/gdcmscu --move --patient dhcp-67-183 5678 move
+    // ./bin/gdcmscu --move --patient mi2b2.slicer.org 11112 move
     gdcm::StringFilter sf;
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
@@ -743,12 +743,12 @@ int main(int argc, char *argv[])
   else if ( mode == "find" ) // C-FIND SCU
     {
     // Construct C-FIND DataSet:
-    // ./bin/gdcmscu --find dhcp-67-183 5678
-    // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
+    // ./bin/gdcmscu --find --patient dhcp-67-183 5678
+    // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
 
     // PATIENT query:
-    // ./bin/gdcmscu --find mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 8,52,PATIENT --key 10,10,"F*"
+    // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 8,52,PATIENT --key 10,10,"F*"
     gdcm::StringFilter sf;
     std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
       keys.begin();
