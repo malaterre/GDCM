@@ -64,20 +64,15 @@ std::string const &call )
     return 1;
   }
   std::vector<gdcm::network::PresentationDataValue> theValues1 = theManager.SendEcho();
-#if 0
-  std::vector<gdcm::network::PresentationDataValue>::iterator itor;
-  for (itor = theValues1.begin(); itor < theValues1.end(); itor++)
+
+  if (gdcm::Trace::GetWarningFlag())
     {
-    itor->Print(std::cout);
+    std::vector<gdcm::network::PresentationDataValue>::iterator itor;
+    for (itor = theValues1.begin(); itor < theValues1.end(); itor++)
+      {
+      itor->Print(std::cout);
+      }
     }
-#endif
-#if 0
-  // why sent twice a c-echo ?
-  std::vector<gdcm::network::PresentationDataValue> theValues2 = theManager.SendEcho();
-  for (itor = theValues2.begin(); itor < theValues2.end(); itor++){
-    itor->Print(std::cout);
-  }
-#endif
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
   // Check the Success Status
