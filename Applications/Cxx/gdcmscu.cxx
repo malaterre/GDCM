@@ -52,21 +52,27 @@
 
 // Execute like this:
 // ./bin/gdcmscu www.dicomserver.co.uk 11112 echo
-void CEcho( const char *remote, int portno, std::string const &aetitle,
+int CEcho( const char *remote, int portno, std::string const &aetitle,
 std::string const &call )
 {
   gdcm::network::ULConnectionManager theManager;
   gdcm::DataSet blank;
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eEcho, blank)){
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10,
+      gdcm::network::eEcho, blank))
+    {
     std::cerr << "Failed to establish connection." << std::endl;
-    exit (-1);
+    return 1;
   }
   std::vector<gdcm::network::PresentationDataValue> theValues1 = theManager.SendEcho();
-  std::vector<gdcm::network::PresentationDataValue>::iterator itor;
-  for (itor = theValues1.begin(); itor < theValues1.end(); itor++){
-//    itor->Print(std::cout);
-  }
 #if 0
+  std::vector<gdcm::network::PresentationDataValue>::iterator itor;
+  for (itor = theValues1.begin(); itor < theValues1.end(); itor++)
+    {
+    itor->Print(std::cout);
+    }
+#endif
+#if 0
+  // why sent twice a c-echo ?
   std::vector<gdcm::network::PresentationDataValue> theValues2 = theManager.SendEcho();
   for (itor = theValues2.begin(); itor < theValues2.end(); itor++){
     itor->Print(std::cout);
@@ -74,6 +80,17 @@ std::string const &call )
 #endif
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
+  // Check the Success Status
+  gdcm::DataSet ds = gdcm::network::PresentationDataValue::ConcatenatePDVBlobs( theValues1 );
+  gdcm::Attribute<0x0,0x0900> at;
+  at.SetFromDataSet( ds );
+
+  if( at.GetValue() != 0 )
+    {
+    return 1;
+    }
+
+  return 0;
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete
@@ -663,7 +680,7 @@ int main(int argc, char *argv[])
     {
     // ./bin/gdcmscu mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
-    CEcho( hostname, port, callingaetitle, callaetitle );
+    return CEcho( hostname, port, callingaetitle, callaetitle );
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
