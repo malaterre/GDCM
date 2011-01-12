@@ -328,7 +328,9 @@ void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection
     int stateIndex = GetStateIndex(inConnection.GetState());
     if (stateIndex >= 0 && stateIndex < cMaxStateID){
       if (mTable[eventID].transitions[stateIndex].mAction != NULL){
+#if 0
         std::cout << "Process: Event:" << eventID << ", State:" << stateIndex << std::endl;
+#endif
         inConnection.SetState(mTable[eventID].transitions[stateIndex].mAction->
           PerformAction(inEvent, inConnection, outWaitingForEvent, outRaisedEvent));
 
