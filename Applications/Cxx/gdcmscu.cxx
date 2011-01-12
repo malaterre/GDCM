@@ -243,11 +243,12 @@ int CFind( const char *remote, int portno , std::string const &aetitle,
   std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( query );
   std::vector<gdcm::DataSet>::iterator itor;
   int c = 0;
-  for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++){
-    if (gdcm::Trace::GetWarningFlag())
+  if (gdcm::Trace::GetWarningFlag())
+    {
+    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
       {
-      std::cout << "Message " << c++ << std::endl;
-      itor->Print(std::cout);
+        std::cout << "Message " << c++ << std::endl;
+        itor->Print(std::cout);
       }
   }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite

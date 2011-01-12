@@ -31,6 +31,7 @@
 
 #include <vector>
 #include <socket++/echo.h>//for setting up the local socket
+#include "gdcmTrace.h"
 
 using namespace gdcm::network;
 
@@ -165,7 +166,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
       break;
   }
   if (pcVector.empty()){
-    std::cout << "Unable to establish presentation context; ensure that dataset has tags 0x8,0x16 and 0x8,0x18 defined." <<std::endl;
+    gdcmWarningMacro("Unable to establish presentation context; ensure that dataset has tags 0x8,0x16 and 0x8,0x18 defined." <<std::endl);
     return false;
   }
   mConnection->SetPresentationContexts(pcVector);
@@ -396,19 +397,21 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
     std::istream &is = *mConnection->GetProtocol();
     //std::ostream &os = *mConnection->GetProtocol();
 
-  // When doing a C-MOVE we receive the Requested DataSet over
-  // another channel (technically this is send to an SCP)
-  // in our case we use another port to receive it.
-     if (mSecondaryConnection->GetProtocol() == NULL){
-        //establish the connection
-        mSecondaryConnection->InitializeIncomingConnection();
-      }
-      EStateID theCStoreStateID = eSta6TransferReady;
-      if (mSecondaryConnection->GetState()== eSta1Idle ||
-        mSecondaryConnection->GetState() == eSta2Open){
-        ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-        theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
-      }
+
+    //When doing a C-MOVE we receive the Requested DataSet over
+    //another channel (technically this is send to an SCP)
+    //in our case we use another port to receive it.
+    if (mSecondaryConnection->GetProtocol() == NULL){
+      //establish the connection
+      mSecondaryConnection->InitializeIncomingConnection();
+    }
+    EStateID theCStoreStateID = eSta6TransferReady;
+    if (mSecondaryConnection->GetState()== eSta1Idle ||
+      mSecondaryConnection->GetState() == eSta2Open){
+      ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+      theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
+    }
+
     //just as for the regular event loop, but we have to alternate between the connections.
     //it may be that nothing comes back over the is connection, but lots over the
     //isSCP connection.  So, if is fails, meh.  But if isSCP fails, that's not so meh.
@@ -426,10 +429,8 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           {
           incomingPDUs.push_back(thePDU);
           thePDU->Read(is);
-#if 0
-          std::cout << "PDU code: " << static_cast<int>(itemtype) << std::endl;
-          thePDU->Print(std::cout);
-#endif
+          gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
+          //thePDU->Print(std::cout);
           if (thePDU->IsLastFragment()) waitingForEvent = false;
           }
         else
@@ -492,54 +493,54 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
             //check for other error fields
             ByteValue *err1 = NULL, *err2 = NULL;
-            std::cout << "Transfer failed with code " << theVal << std::endl;
+            gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
             switch (theVal){
               case 0xA701:
-                std::cout << "Refused: Out of Resources Unable to calculate number of matches" << std::endl;
+                gdcmErrorMacro( "Refused: Out of Resources Unable to calculate number of matches" << std::endl);
                 break;
               case 0xA702:
-                std::cout << "Refused: Out of Resources Unable to perform sub-operations" << std::endl;
+                gdcmErrorMacro( "Refused: Out of Resources Unable to perform sub-operations" << std::endl);
                 break;
               case 0xA801:
-                std::cout << "Refused: Move Destination unknown" << std::endl;
+                gdcmErrorMacro( "Refused: Move Destination unknown" << std::endl);
                 break;
               case 0xA900:
-                std::cout << "Identifier does not match SOP Class" << std::endl;
+                gdcmErrorMacro( "Identifier does not match SOP Class" << std::endl);
                 break;
               case 0xAA00:
-                std::cout << "None of the frames requested were found in the SOP Instance" << std::endl;
+                gdcmErrorMacro( "None of the frames requested were found in the SOP Instance" << std::endl);
                 break;
               case 0xAA01:
-                std::cout << "Unable to create new object for this SOP class" << std::endl;
+                gdcmErrorMacro( "Unable to create new object for this SOP class" << std::endl);
                 break;
               case 0xAA02:
-                std::cout << "Unable to extract frames" << std::endl;
+                gdcmErrorMacro( "Unable to extract frames" << std::endl);
                 break;
               case 0xAA03:
-                std::cout << "Time-based request received for a non-time-based original SOP Instance. " << std::endl;
+                gdcmErrorMacro( "Time-based request received for a non-time-based original SOP Instance. " << std::endl);
                 break;
               case 0xAA04:
-                std::cout << "Invalid Request" << std::endl;
+                gdcmErrorMacro( "Invalid Request" << std::endl);
                 break;
               case 0xFE00:
-                std::cout << "Sub-operations terminated due to Cancel Indication" << std::endl;
+                gdcmErrorMacro( "Sub-operations terminated due to Cancel Indication" << std::endl);
                 break;
               case 0xB000:
-                std::cout << "Sub-operations Complete One or more Failures or Warnings" << std::endl;
+                gdcmErrorMacro( "Sub-operations Complete One or more Failures or Warnings" << std::endl);
                 break;
               default:
-                std::cout << "Unable to process" << std::endl;
+                gdcmErrorMacro( "Unable to process" << std::endl);
                 break;
             }
             if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
               gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
               err1 = de.GetByteValue();
-              std::cout << " Tag 0x0,0x901 reported as " << *err1 << std::endl;
+              gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
             }
             if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0902))){
               gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0902));
               err2 = de.GetByteValue();
-              std::cout << " Tag 0x0,0x902 reported as " << *err2 << std::endl;
+              gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
             }
           }
           receivingData = false;
@@ -689,10 +690,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
           if (theFirstPDU != NULL){
             incomingPDUs.push_back(theFirstPDU);
             theFirstPDU->Read(is);
-#if 0
-            std::cout << "PDU code: " << static_cast<int>(itemtype) << std::endl;
-            theFirstPDU->Print(std::cout);
-#endif
+            gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
@@ -747,16 +745,16 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
                 //check for other error fields
                 ByteValue *err1 = NULL, *err2 = NULL;
-                std::cout << "Transfer failed with code " << theVal << std::endl;
+                gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
                 if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
                   gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
                   err1 = de.GetByteValue();
-                  std::cout << " Tag 0x0,0x901 reported as " << *err1 << std::endl;
+                  gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
                 }
                 if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0902))){
                   gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0902));
                   err2 = de.GetByteValue();
-                  std::cout << " Tag 0x0,0x902 reported as " << *err2 << std::endl;
+                  gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
                 }
               }
 

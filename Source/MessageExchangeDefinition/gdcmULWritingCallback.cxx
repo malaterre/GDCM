@@ -20,6 +20,7 @@
 #include "gdcmULWritingCallback.h"
 #include "gdcmFile.h"
 #include "gdcmWriter.h"
+#include "gdcmTrace.h"
 
 namespace gdcm {
   namespace network {
@@ -43,12 +44,16 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
     w.SetCheckFileMetaInformation( true );
     if (!w.Write())
       {
-      std::cerr << "Failed to write " << sopclassuid_str << std::endl;
+      gdcmErrorMacro("Failed to write " << sopclassuid_str << std::endl);
+      }
+    else 
+      {
+      gdcmWarningMacro("Wrote " << sopclassuid_str << " to disk. " << std::endl);
       }
     }
   else 
     {
-      std::cerr << "Failed to write data set, could not find tag 0x0008, 0x0018" << std::endl;
+      gdcmErrorMacro( "Failed to write data set, could not find tag 0x0008, 0x0018" << std::endl);
     }
   DataSetHandled();
 }
