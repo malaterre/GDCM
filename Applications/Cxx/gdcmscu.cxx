@@ -365,12 +365,12 @@ int main(int argc, char *argv[])
         {"store", 0, &storemode, 1}, // --store
         {"find", 0, &findmode, 1}, // --find
         {"move", 0, &movemode, 1}, // --move
-        {"key", 1, 0, 0}, // --key
+        {"key", 1, 0, 0}, // (15) --key
         {"worklist", 0, &findworklist, 1}, // --worklist
         {"patient", 0, &findpatient, 1}, // --patient
         {"study", 0, &findstudy, 1}, // --study
         {"psonly", 0, &findpsonly, 1}, // --psonly
-        {"port-scp", 1, &portscp, 1}, // --port-scp
+        {"port-scp", 1, &portscp, 1}, // (20) --port-scp
         {"output", 1, &outputopt, 1}, // --output
         {"recursive", 0, &recursive, 1},
         {"store-query", 1, &storequery, 1},
@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
             //assert( callaetitle.empty() );
             callaetitle = optarg;
             }
-          else if( option_index == 16 ) /* key */
+          else if( option_index == 15 ) /* key */
             {
             assert( strcmp(s, "key") == 0 );
             if( !tag.ReadFromCommaSeparatedString(optarg) )
@@ -436,12 +436,6 @@ int main(int argc, char *argv[])
             std::getline(ss, str); // do not skip whitespace
             keys.push_back( std::make_pair(tag, str) );
             }
-          else if( option_index == 11 ) /* test */
-            {
-            assert( strcmp(s, "testdir") == 0 );
-            //assert( callaetitle.empty() );
-            testDir = optarg;
-            }
           else if( option_index == 20 ) /* port-scp */
             {
             assert( strcmp(s, "port-scp") == 0 );
@@ -459,6 +453,8 @@ int main(int argc, char *argv[])
             }
           else
             {
+            // If you reach here someone mess-up the index and the argument in
+            // the getopt table
             assert( 0 );
             }
           //printf (" with arg %s", optarg);
