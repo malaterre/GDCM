@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
 
   "${GDCM_BINARY_DIR}/Testing/Source/Data"
   "${GDCM_SOURCE_DIR}/Testing/Source/Data"
@@ -72,9 +73,9 @@ ADD_LIBRARY(gdcmMEXD ${MessageExchangeDefinition_SRCS})
 SET_TARGET_PROPERTIES(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
 #target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
-target_link_libraries(gdcmMEXD gdcmDICT gdcmDSED gdcmIOD socketxx ws2_32.lib)
+target_link_libraries(gdcmMEXD gdcmDICT gdcmDSED gdcmMSFF gdcmIOD socketxx ws2_32.lib)
 else (WIN32)
-TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmDSED gdcmIOD socketxx)
+TARGET_LINK_LIBRARIES(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
 endif(WIN32)
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmMEXD
