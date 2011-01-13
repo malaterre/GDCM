@@ -105,6 +105,10 @@ opj_codec_private_t;
  */
 void opj_default_callback (const char *msg, void *client_data)
 {
+#if 0
+  fprintf( stderr, msg );
+  assert( 0 );
+#endif
 }
 
 void set_default_event_handler(opj_event_mgr_t * p_manager)
