@@ -104,6 +104,10 @@ BogusItemStartItemEnd.dcm
 
 # buggy dcm4che
   kos.dcm
+
+# problem with overlay in unsed bits:
+  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
