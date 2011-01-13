@@ -5944,8 +5944,21 @@ bool j2k_read_sot (
   if
     (!l_tot_len)
   {
+    void* l_data = p_manager->m_error_data;
+      assert( l_data );
+    if( l_data )
+      {
+      OPJ_UINT32 **s = (OPJ_UINT32**)l_data;
+      assert( s[1] == 0 );
+      if( s[1] == 0 )
+        {
+        s[1] = &l_tot_len;
+        }
+      }
     opj_event_msg(p_manager, EVT_ERROR, "Cannot read data with no size known, giving up\n");
-    return false;
+    assert( l_tot_len != 0 );
+    if( !l_tot_len )
+      return false;
   }
 
   opj_read_bytes(p_header_data,&l_current_part ,1);    /* Psot */
