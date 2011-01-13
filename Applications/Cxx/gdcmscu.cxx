@@ -32,6 +32,7 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmStringFilter.h"
 #include "gdcmWriter.h"
+#include "gdcmPrinter.h"
 
 //for testing!  Should be put in a testing executable,
 //but it's just here now because I know this path works
@@ -72,11 +73,14 @@ std::string const &call )
   //other than a return code.
   if (gdcm::Trace::GetWarningFlag())
     {
-    std::vector<gdcm::network::PresentationDataValue>::iterator itor;
-    for (itor = theValues1.begin(); itor < theValues1.end(); itor++)
-      {
-      itor->Print(std::cout);
-      }
+      gdcm::DataSet ds = gdcm::network::PresentationDataValue::ConcatenatePDVBlobs(theValues1);
+      gdcm::Printer thePrinter;
+      thePrinter.PrintDataSet(ds, std::cout);
+  //  std::vector<gdcm::network::PresentationDataValue>::iterator itor;
+  //  for (itor = theValues1.begin(); itor < theValues1.end(); itor++)
+  //    {
+   //   itor->Print(std::cout);
+   //   }
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
