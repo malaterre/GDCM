@@ -438,6 +438,7 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
       gdcm::Writer writer;
       writer.SetFileName( fg.GetFilename( count ) );
       writer.SetFile( reader.GetFile() );
+      writer.GetFile().GetHeader().Clear();
       if( !writer.Write() )
         {
         assert( 0 );
@@ -459,6 +460,7 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
       gdcm::Writer writer;
       writer.SetFileName( fg.GetFilename( count ) );
       writer.SetFile( reader.GetFile() );
+      writer.GetFile().GetHeader().Clear();
       if( !writer.Write() )
         {
         assert( 0 );
