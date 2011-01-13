@@ -83,8 +83,11 @@ int TestSplitMosaicFilter(int, char *[])
   unsigned long l = image.GetBufferLength();
   std::vector<char> buf;
   buf.resize(l);
-  image.GetBuffer( &buf[0] );
-
+  if( !image.GetBuffer( &buf[0] ) )
+    {
+    std::cerr << "Could not GetBuffer << " << filename << std::endl;
+    return 1;
+    }
 
   unsigned int inputdims[3] = { 384, 384, 1 };
   std::vector<char> outbuf;
