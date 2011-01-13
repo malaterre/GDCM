@@ -172,6 +172,11 @@ catch(...)
   return false;
 }
 
+if (Ofstream)
+{
+  Ofstream->flush();
+}
+
   return true;
 }
 
