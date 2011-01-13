@@ -63,6 +63,7 @@ public:
   }
   size_t GetNumberOfOverlays() const { return Overlays.size(); }
   void SetNumberOfOverlays(size_t n) { Overlays.resize(n); }
+  void RemoveOverlay(size_t i) { Overlays.erase( Overlays.begin() + i ); }
 
   /// Set/Get Icon Image
   const IconImage &GetIconImage() const { return Icon; }
