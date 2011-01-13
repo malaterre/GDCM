@@ -80,7 +80,7 @@ size_t AReleaseRPPDU::Size() const
 
 void AReleaseRPPDU::Print(std::ostream &os) const
 {
-  os << "Not implemented yet" << std::endl;
+  os << "AReleaseRP PDU printing not implemented yet" << std::endl;
 }
 
 } // end namespace network
