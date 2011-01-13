@@ -78,7 +78,7 @@ size_t AReleaseRQPDU::Size() const
 
 void AReleaseRQPDU::Print(std::ostream &os) const
 {
-  os << "Not implemented yet" << std::endl;
+  os << "AReleaseRQ PDU printing not implemented yet" << std::endl;
 }
 } // end namespace network
 } // end namespace gdcm

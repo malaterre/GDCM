@@ -32,6 +32,7 @@
 #include <vector>
 #include <socket++/echo.h>//for setting up the local socket
 #include "gdcmTrace.h"
+#include "gdcmPrinter.h"
 
 using namespace gdcm::network;
 
@@ -180,6 +181,24 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //no callback, assume that no data is transferred back, because there shouldn't be any
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
 
+  if (gdcm::Trace::GetDebugFlag())
+    {
+      vector<BasePDU*> thePDUs = theEvent.GetPDUs();
+      vector<BasePDU*>::iterator itor;
+      for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
+        {
+        if (*itor == NULL) continue; //can have a nulled pdu, apparently
+        if (gdcm::Trace::GetDebugToFile())
+          {
+            (*itor)->Print(gdcm::Trace::GetDebugFile());
+          }
+        else 
+          {
+            (*itor)->Print(std::cout);
+          }
+        }
+    }
+
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
@@ -282,6 +301,25 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, 
   std::vector<gdcm::DataSet> empty;
   //No data should be returned when connections are established
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+
+  if (gdcm::Trace::GetDebugFlag())
+    {
+      vector<BasePDU*> thePDUs = theEvent.GetPDUs();
+      vector<BasePDU*>::iterator itor;
+      for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
+        {
+        if (*itor == NULL) continue; //can have a nulled pdu, apparently
+        if (gdcm::Trace::GetDebugToFile())
+          {
+            (*itor)->Print(gdcm::Trace::GetDebugFile());
+          }
+        else 
+          {
+            (*itor)->Print(std::cout);
+          }
+        }
+    }
+
   return (theState == eSta6TransferReady);//ie, finished the transitions
 }
 
@@ -430,7 +468,17 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           incomingPDUs.push_back(thePDU);
           thePDU->Read(is);
           gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
-          //thePDU->Print(std::cout);
+          if (gdcm::Trace::GetDebugFlag())
+            {
+            if (gdcm::Trace::GetDebugToFile())
+              {
+                thePDU->Print(gdcm::Trace::GetDebugFile());
+              }
+            else 
+              {
+                thePDU->Print(std::cout);
+              }
+            }
           if (thePDU->IsLastFragment()) waitingForEvent = false;
           }
         else
@@ -461,6 +509,17 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           //so, we look either for pending, or for the number of operations left
           // (tag 0000, 1020) if the value is success, and that number should be 0.
           DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+          if (gdcm::Trace::GetDebugFlag()){
+            gdcm::Printer thePrinter;
+            if (gdcm::Trace::GetDebugToFile())
+              {
+              thePrinter.PrintDataSet(theRSP, gdcm::Trace::GetDebugFile());
+              }
+            else
+              {
+              thePrinter.PrintDataSet(theRSP, std::cout);
+              }
+          }
           if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
             gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
             gdcm::Attribute<0x0,0x0900> at;
@@ -691,6 +750,18 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
             incomingPDUs.push_back(theFirstPDU);
             theFirstPDU->Read(is);
             gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
+            if (gdcm::Trace::GetDebugFlag())
+              {
+              if (gdcm::Trace::GetDebugToFile())
+                {
+                  theFirstPDU->Print(gdcm::Trace::GetDebugFile());
+                }
+              else 
+                {
+                  theFirstPDU->Print(std::cout);
+                }
+              }
+
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
             waitingForEvent = false; //because no PDU means not waiting anymore
@@ -734,6 +805,18 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 //with the dataset, even if the status is 'success'
                 //success == 0000H
               }
+              if (gdcm::Trace::GetDebugFlag()){
+                gdcm::Printer thePrinter;
+                if (gdcm::Trace::GetDebugToFile())
+                  {
+                  thePrinter.PrintDataSet(theRSP, gdcm::Trace::GetDebugFile());
+                  }
+                else
+                  {
+                  thePrinter.PrintDataSet(theRSP, std::cout);
+                  }
+              }
+
               //check to see if this is a cstorerq
               if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0100))){
                 gdcm::DataElement de2 = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
