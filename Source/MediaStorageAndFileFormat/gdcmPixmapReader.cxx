@@ -684,6 +684,22 @@ void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
     //std::cout << "Num of Overlays: " << numoverlays << std::endl;
     assert( idxoverlays == numoverlays );
     }
+
+  // Now is good time to do some cleanup (eg. DX_GE_FALCON_SNOWY-VOI.dcm).
+  const PixelFormat &pf = pixeldata.GetPixelFormat();
+  // Yes I am using a call in the for() loop, because I internally modify the
+  // number of overlays:
+  for( size_t ov = 0; ov < pixeldata.GetNumberOfOverlays(); ++ov )
+    {
+    const Overlay& o = pixeldata.GetOverlay(ov);
+    unsigned short obp = o.GetBitPosition();
+    if( obp < pf.GetBitsStored() )
+      {
+      pixeldata.RemoveOverlay( ov );
+      gdcmWarningMacro( "Invalid BitPosition: " << obp << " for overlay #" << ov << " removing it." );
+      }
+    }
+
 }
 
 bool PixmapReader::ReadImage(MediaStorage const &ms)
