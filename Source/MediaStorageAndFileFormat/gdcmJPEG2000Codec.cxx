@@ -816,6 +816,12 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
 bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
+  if( NeedOverlayCleanup )
+    {
+    gdcmErrorMacro( "TODO" );
+    return false;
+    }
+
   //
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
