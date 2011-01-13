@@ -76,11 +76,6 @@ std::string const &call )
       gdcm::DataSet ds = gdcm::network::PresentationDataValue::ConcatenatePDVBlobs(theValues1);
       gdcm::Printer thePrinter;
       thePrinter.PrintDataSet(ds, std::cout);
-  //  std::vector<gdcm::network::PresentationDataValue>::iterator itor;
-  //  for (itor = theValues1.begin(); itor < theValues1.end(); itor++)
-  //    {
-   //   itor->Print(std::cout);
-   //   }
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
