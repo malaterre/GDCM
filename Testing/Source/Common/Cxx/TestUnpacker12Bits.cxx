@@ -96,7 +96,10 @@ int TestUnpacker12Bits(int, char *[])
   unsigned char values[6] = {};
   const unsigned char ref[] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab };
   bool b = u12.Pack((char*)values, (char*)input, 8); // 4 * sizeof(us) == 8
-  if(!b) return 1;
+  if(!b)
+    {
+    return 1;
+    }
   for(size_t i = 0; i < 6; ++i)
     {
     if( values[i] != ref[i] )
