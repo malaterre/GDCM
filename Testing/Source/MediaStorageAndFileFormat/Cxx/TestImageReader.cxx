@@ -38,6 +38,16 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       int lossy = img.IsLossy();
       std::cout << lossy << "," << filename << std::endl;
       }
+    int reflossy = gdcm::Testing::GetLossyFlagFromFile( filename );
+    if( reflossy == -1 )
+      {
+      std::cerr << "Missing lossy flag for: " << filename << std::endl;
+      }
+    if( img.IsLossy() != reflossy )
+      {
+      std::cerr << "Inconsistency for lossy flag for: " << filename << std::endl;
+      return 1;
+      }
     char* buffer = new char[len];
     bool res2 = img.GetBuffer(buffer);
     if( !res2 )
@@ -128,6 +138,7 @@ int TestImageReader(int argc, char *argv[])
   // First of get rid of warning/debug message
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

@@ -658,6 +658,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "ae1290d59c63b0c334a4834c5995fe45" , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" },
 
+{ "f3a3d0e739e5f4fbeddd1452b81f4d89" , "D_CLUNIE_CT1_JLSL.dcm" },
+{ "5e9085c66976d2f5f9989d88bf7a90c4" , "D_CLUNIE_CT1_JLSN.dcm" },
+
 /* Stopping condition */
 { 0 ,0 }
 };
