@@ -484,6 +484,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
+  int reversible;
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
@@ -497,6 +498,14 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     &l_nb_tiles_y,
     cio);
   assert( bResult );
+
+#if OPENJPEG_MAJOR_VERSION == 1
+#else
+  // needs to be before call to opj_decode...
+  reversible = opj_get_reversible(dinfo, &parameters );
+  assert( reversible == 0 || reversible == 1 );
+#endif
+
   image = opj_decode(dinfo, cio);
   //assert( image );
   bResult = bResult && (image != 00);
@@ -530,7 +539,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     }
 #endif
 
-  int reversible;
 #if OPENJPEG_MAJOR_VERSION == 1
   opj_j2k_t* j2k = NULL;
   opj_jp2_t* jp2 = NULL;
@@ -551,8 +559,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
-#else
-    reversible = 1;
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
 
@@ -1228,7 +1234,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
 #else
-    reversible = 1;
+  reversible = opj_get_reversible(dinfo, &parameters );
+  assert( reversible == 0 || reversible == 1 );
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
 

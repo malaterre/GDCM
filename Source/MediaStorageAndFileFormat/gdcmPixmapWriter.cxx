@@ -397,11 +397,19 @@ bool PixmapWriter::PrepareWrite()
   const TransferSyntax &ts = PixelData->GetTransferSyntax();
   assert( ts.IsExplicit() || ts.IsImplicit() );
 
-//  if( !ts.IsLossy() && PixelData->IsLossy() )
-//    {
-//    gdcmWarningMacro( "Sorry Pixel Data in encapsulated stream was found to be lossy while Transfer Syntax does not authorized that" );
-//    return false;
-//    }
+  // if ts_orig is undefined we need to check ts of Pixel Data comply with itself
+  if( ts_orig == TransferSyntax::TS_END )
+    {
+    if( !ts.CanStoreLossy() && PixelData->IsLossy() )
+      {
+      gdcmWarningMacro( "Sorry Pixel Data in encapsulated stream was found to be "
+        "lossy while Transfer Syntax does not authorized that" );
+      return false;
+      }
+    // Obviously we could also be checking the contrary: trying to store a
+    // lossless compressed JPEG file using a lossy JPEG (compatible) one. But I
+    // do not believe this is an error in this case.
+    }
 
   if( /*ts.IsLossy() &&*/ PixelData->IsLossy() )
     {
