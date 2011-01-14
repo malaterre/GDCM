@@ -75,6 +75,11 @@ public :
   /// -1 if not found
   static std::streamoff GetStreamOffsetFromFile(const char *filepath);
 
+  /// Return the lossy flag of the given filename
+  /// -1 -> Error
+  ///  0 -> Lossless
+  ///  1 -> Lossy
+  static int GetLossyFlagFromFile(const char *filepath);
 
   /// Return the GDCM DATA ROOT
   static const char * GetDataRoot();
