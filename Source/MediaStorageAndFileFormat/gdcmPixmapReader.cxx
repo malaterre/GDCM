@@ -1161,6 +1161,12 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       const DataElement &de = PixelData->GetDataElement();
       //const ByteValue *bv = de.GetByteValue();
       const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+      if( !sqf )
+        {
+        // TODO: It would be nice to recognize file such as JPEGDefinedLengthSequenceOfFragments.dcm
+        gdcmDebugMacro( "File is declared as JPEG compressed but does not contains Fragmens explicitely." );
+        return false;
+        }
       sqf->WriteBuffer( ss );
       //std::string s( bv->GetPointer(), bv->GetLength() );
       //is.str( s );
