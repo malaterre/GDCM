@@ -209,6 +209,11 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "d23db052b02b2a2c510104486cdf40b2"  , "XA-MONO2-8-12x-catheter.dcm" },
 { "231bb6c25d482422745bb839d6f8610a"  , "PHILIPS_GDCM12xBug2.dcm" },
 { "e2558e4e01d937bfac33b7e0fb07b7b5"  , "PHILIPS_GDCM12xBug.dcm" },
+{ "434c7aa1172ce3af0c306d9a2cb28c17"  , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" },
+{ "346ba438ade47d75c41e637858a419f8"  , "OsirixFake16BitsStoredFakeSpacing.dcm" },
+{ "efe1ff2da3fc0bfcc5df834fa390d5cf"  , "MR16BitsAllocated_8BitsStored.dcm" },
+{ "7900d059078278ad0387f7c4aaf2027d"  , "JPEGDefinedLengthSequenceOfFragments.dcm" },
+
 { NULL, NULL}
 };
 
