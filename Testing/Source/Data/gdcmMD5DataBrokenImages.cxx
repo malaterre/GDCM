@@ -45,6 +45,7 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 
 // item length are supposed to be 0, not FFFF...
 { "3cc629fa470efb114a14ca3909117eb8" , "SIEMENS-MR-RGB-16Bits.dcm" }, // size match
+{ "0fb0cb12f2b038bbfe1014bbf2935026" , "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm" }, // size match
 
 
 // this is a private syntax from ge with a little endian dataset and big endian pixel data
