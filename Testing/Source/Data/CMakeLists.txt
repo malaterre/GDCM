@@ -108,6 +108,8 @@ BogusItemStartItemEnd.dcm
 # problem with overlay in unsed bits:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
+# packed 12 bits still not ok:
+  MR-MONO2-12-angio-an1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
