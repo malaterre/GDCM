@@ -75,6 +75,11 @@ public :
   /// -1 if not found
   static std::streamoff GetStreamOffsetFromFile(const char *filepath);
 
+  /// Return the offset just after Pixel Data Length (7fe0,0000) if found.
+  /// Otherwise the offset of the very first pixel cell in Pixel Data
+  /// -1 if not found
+  static std::streamoff GetSelectedTagsOffsetFromFile(const char *filepath);
+
   /// Return the lossy flag of the given filename
   /// -1 -> Error
   ///  0 -> Lossless

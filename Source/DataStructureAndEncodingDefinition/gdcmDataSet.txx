@@ -118,8 +118,8 @@ namespace gdcm
 
       while( !inputStream.eof() )
         {
-        Tag& tag = dataElem.GetTag();
-        tag.Read<TSwap>(inputStream);
+        static_cast<TDE&>(dataElem).template ReadPreValue<TSwap>(inputStream);
+        const Tag& tag = dataElem.GetTag();
         if ( inputStream.fail() || maxTag < tag )
           {
           // Failed to read the tag, or the read tag exceeds the maximum.
