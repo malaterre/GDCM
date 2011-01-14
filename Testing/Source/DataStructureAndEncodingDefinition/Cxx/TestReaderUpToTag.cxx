@@ -45,7 +45,11 @@ int TestReadUpToTag(const char* filename, bool verbose = false)
   if(verbose)
     std::cout << "{ \"" << filename << "\"," << outStreamOffset << " }," << std::endl;
   std::streamoff refoffset = gdcm::Testing::GetStreamOffsetFromFile(filename);
-  if( refoffset != outStreamOffset ) return 1;
+  if( refoffset != outStreamOffset )
+    {
+    std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
+    return 1;
+    }
 
   return 0;
 }
