@@ -4996,6 +4996,8 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0009,0x0000,"SIEMENS CM VA0  CMS",VR::IS,VM::VM1,"Number of Measurements",false },
   {0x0009,0x0010,"SIEMENS CM VA0  CMS",VR::CS,VM::VM1,"Storage Mode",false },
   {0x0009,0x0012,"SIEMENS CM VA0  CMS",VR::UL,VM::VM1,"Evaluation Mask Image",false },
+  // SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm seems to think the following 2 are UL and not IS...
+  // but clearly SIEMENS_ImageLocationUN.dcm indicates those two are VR:IS...
   {0x0009,0x0013,"SIEMENS CM VA0  CMS",VR::IS,VM::VM1,"Int ??",false },
   {0x0009,0x0014,"SIEMENS CM VA0  CMS",VR::IS,VM::VM1,"Int ??",false },
   {0x0009,0x0026,"SIEMENS CM VA0  CMS",VR::DA,VM::VM1,"Table Zero Date",false },
