@@ -89,9 +89,7 @@ public:
   void SetFile(File& file) { F = &file; }
 
   /// Will read only up to Tag 'tag'
-  ///also provides the offset into the stream, so that the stream position can
-  ///be reset to that next location if/when the reader picks up reading past the given tag.
-  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags, std::streamoff& outStreamOffset);
+  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags);
 
   /// Will only read the specified selected tags.
   bool ReadSelectedTags(std::set<Tag> const & tags);
@@ -117,7 +115,7 @@ protected:
 
 private:
   template <typename T_Caller>
-  bool InternalReadCommon(const T_Caller &caller, std::streamoff& outStreamOffset);
+  bool InternalReadCommon(const T_Caller &caller);
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;

@@ -41,10 +41,12 @@ StreamImageReader::~StreamImageReader(){
 
 /// One of either SetFileName or SetStream must be called prior
 /// to any other functions.
-void StreamImageReader::SetFileName(const char* inFileName){
+void StreamImageReader::SetFileName(const char* inFileName)
+{
   mReader.SetFileName(inFileName);
 }
-void StreamImageReader::SetStream(std::istream& inStream){
+void StreamImageReader::SetStream(std::istream& inStream)
+{
   mReader.SetStream(inStream);
 }
 
@@ -256,7 +258,8 @@ bool StreamImageReader::ReadImageSubregionJpegLS(char* inReadBuffer, const std::
 /// Set the spacing and dimension information for the set filename.
 /// returns false if the file is not initialized or not an image,
 /// with the pixel 0x7fe0, 0x0010 tag.
-bool StreamImageReader::ReadImageInformation(){
+bool StreamImageReader::ReadImageInformation()
+{
   //read up to the point in the stream where the pixel information tag is
   //store that location and keep the rest of the data as the header information dataset
   std::set<Tag> theSkipTags;
@@ -268,22 +271,24 @@ bool StreamImageReader::ReadImageInformation(){
   theSkipTags.insert(thePixelDataTag);
 
   try
-  {
+    {
     //ok, need to read up until I know what kind of endianness i'm dealing with?
-    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags, mFileOffset)){
+    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags))
+      {
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
       return false;
+      }
+    mFileOffset = mReader.GetStreamPtr()->tellg();
     }
-  }
   catch(std::exception & ex)
-  {
+    {
     (void)ex;
     gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
-  }
+    }
   catch(...)
-  {
+    {
     gdcmWarningMacro( "Failed to read with unknown error" );
-  }
+    }
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm
   if( mFileOffset == -1 ) return false;
