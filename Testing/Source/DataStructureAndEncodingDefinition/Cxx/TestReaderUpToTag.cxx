@@ -24,19 +24,20 @@ int TestReadUpToTag(const char* filename, bool verbose = false)
   if( verbose )
   std::cout << "TestRead: " << filename << std::endl;
 
+  std::ifstream is( filename );
   gdcm::Reader reader;
-  reader.SetFileName( filename );
+  reader.SetStream( is );
   // Let's read up to Pixel Data el...
   gdcm::Tag pixeldata (0x7fe0,0x0010);
   std::set<gdcm::Tag> skiptags;
   // ... but do not read it (to skip mem allocation)
   skiptags.insert( pixeldata );
-  std::streamoff outStreamOffset;
-  if ( !reader.ReadUpToTag( pixeldata, skiptags, outStreamOffset) )
+  if ( !reader.ReadUpToTag( pixeldata, skiptags) )
     {
     std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
     return 1;
     }
+  std::streamoff outStreamOffset = is.tellg();
 
   const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
 
@@ -50,6 +51,7 @@ int TestReadUpToTag(const char* filename, bool verbose = false)
     std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
     return 1;
     }
+  is.close();
 
   return 0;
 }

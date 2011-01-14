@@ -138,8 +138,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       try
         {
         // Start reading all tags, including the 'last' one:
-        std::streamoff theStreamOffset;
-        read = reader.ReadUpToTag(last, SkipTags, theStreamOffset);
+        read = reader.ReadUpToTag(last, SkipTags);
         }
       catch(std::exception & ex)
         {
