@@ -18,7 +18,7 @@ SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspac
 SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings ")
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -pedantic -Wno-long-long")
 # set any extra envionment variables here
-SET (ENV{JAVA_HOME} "/usr/lib/jvm/default-java")
+#SET (ENV{JAVA_HOME} "/usr/lib/jvm/default-java")
 
 # http://www.cmake.org/Wiki/CTest:Coverage
 SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")
@@ -29,7 +29,7 @@ SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")
 macro(dashboard_hook_init)
   set( dashboard_cache "
 GDCM_WRAP_PYTHON:BOOL=ON
-GDCM_WRAP_CSHARP:BOOL=ON
+GDCM_WRAP_CSHARP:BOOL=OFF
 GDCM_WRAP_JAVA:BOOL=ON
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
 GDCM_TEST_DCMTK:BOOL=ON
