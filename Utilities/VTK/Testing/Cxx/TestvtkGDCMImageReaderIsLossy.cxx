@@ -43,7 +43,7 @@ int TestvtkGDCMImageReaderIsLossyFunc(const char *filename, bool verbose = false
       reader->GetOutput()->Print( cout );
       reader->GetMedicalImageProperties()->Print( cout );
       }
-    int reflossy = gdcm::Testing::GetLossyFlagFromFilename( filename );
+    int reflossy = gdcm::Testing::GetLossyFlagFromFile( filename );
     if( reader->GetLossyFlag() != reflossy )
       {
       std::cerr << "Mismatch for " << filename << std::endl;
