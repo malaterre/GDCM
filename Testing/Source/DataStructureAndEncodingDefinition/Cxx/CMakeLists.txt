@@ -13,6 +13,7 @@ SET(DSED_TEST_SRCS
   TestPreamble
   TestReader
   TestReaderUpToTag
+  TestReaderSelectedTags
   TestWriter
   TestWriter2
   TestCSAHeader
