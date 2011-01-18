@@ -125,6 +125,7 @@ protected:
   static const char * GetGDCMSourceApplicationEntityTitle();
 
 private:
+  std::istream &ReadCompat(std::istream &is, unsigned int counter);
   Preamble P;
 
 //static stuff:
