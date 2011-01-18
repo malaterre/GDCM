@@ -56,7 +56,7 @@ public:
   virtual bool Write(); // Execute()
 
   /// Set the filename of DICOM file to write:
-  void SetFileName(const char *filename, bool inAppendMode = false) {
+  void SetFileName(const char *filename) {
     //std::cerr << "Stream: " << filename << std::endl;
     //std::cerr << "Ofstream: " << Ofstream << std::endl;
     if (Ofstream && Ofstream->is_open())
@@ -65,11 +65,7 @@ public:
       delete Ofstream;
       }
     Ofstream = new std::ofstream();
-    if (!inAppendMode){
-      Ofstream->open(filename, std::ios::out | std::ios::binary );
-    } else {
-      Ofstream->open(filename, std::ios::out | std::ios::app | std::ios::binary );
-    }
+    Ofstream->open(filename, std::ios::out | std::ios::binary );
     assert( Ofstream->is_open() );
     assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
@@ -80,7 +76,6 @@ public:
     Stream = &output_stream;
   }
 
-
   /// Set/Get the DICOM file (DataSet + Header)
   void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
@@ -90,6 +85,8 @@ public:
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
+protected:
+  friend class StreamImageWriter;
   //this function is added for the StreamImageWriter, which needs to write
   //up to the pixel data and then stops right before writing the pixel data.
   //after that, for the raw codec at least, zeros are written for the length of the data
