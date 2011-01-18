@@ -18,6 +18,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmUnpacker12Bits.h"
+#include <limits>
 
 #include <sstream>
 
@@ -62,6 +63,62 @@ bool RAWCodec::Code(DataElement const &in, DataElement &out)
   out = in;
   //assert(0);
   return true;
+}
+
+bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
+                           char* outBytes, size_t inOutBufferLength)
+{
+  // First let's see if we can do a fast-path:
+  if( !NeedByteSwap &&
+    !RequestPaddedCompositePixelCode &&
+    PI == PhotometricInterpretation::MONOCHROME2 &&
+    !PlanarConfiguration && !RequestPlanarConfiguration &&
+    GetPixelFormat().GetBitsAllocated() != 12 &&
+    !NeedOverlayCleanup )
+    {
+    assert( this->GetPixelFormat() != PixelFormat::UINT12 );
+    assert( this->GetPixelFormat() != PixelFormat::INT12 );
+    assert(inBufferLength == inOutBufferLength);
+    memcpy(outBytes, inBytes, inBufferLength);
+    return true;
+    }
+  // else
+  assert( inBytes );
+  assert( outBytes );
+  std::stringstream is;
+  is.write(inBytes, inBufferLength);
+  std::stringstream os;
+  bool r = Decode(is, os);
+  assert( r );
+  if(!r) return false;
+
+  std::string str = os.str();
+  std::string::size_type check = str.size();
+
+  
+  if( this->GetPixelFormat() == PixelFormat::UINT12 ||
+      this->GetPixelFormat() == PixelFormat::INT12 )
+    {
+    size_t len = str.size() * 16 / 12;
+    char * copy = new char[len];
+    Unpacker12Bits u12;
+    bool b = u12.Unpack(copy, &str[0], str.size() );
+    assert( b );
+    assert (len == inOutBufferLength);
+    assert(inOutBufferLength == len);
+    memcpy(outBytes, copy, len);
+
+    delete[] copy;
+
+    this->GetPixelFormat().SetBitsAllocated( 16 );
+    }
+  else{
+    assert (check == inOutBufferLength);
+    memcpy(outBytes, str.c_str(), check);
+  }
+
+
+  return r;
 }
 
 bool RAWCodec::Decode(DataElement const &in, DataElement &out)
