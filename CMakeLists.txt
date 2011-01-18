@@ -122,11 +122,7 @@ MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 #-----------------------------------------------------------------------------
 # Adding GDCM_DATA_ROOT
-FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
-  ${GDCM_SOURCE_DIR}/../gdcmData
-  $ENV{GDCM_DATA_ROOT}
-  $ENV{PUB_DICT_PATH}/../../gdcmData
-  )
+FIND_PATH(GDCM_DATA_ROOT test.acr ${GDCM_SOURCE_DIR}/Testing/Data $ENV{GDCM_DATA_ROOT})
 MARK_AS_ADVANCED(GDCM_DATA_ROOT)
 # You can define a path where you extra the famous D. Clunie spacing dataset
 # http://www.dclunie.com/images/pixelspacingtestimages.zip
