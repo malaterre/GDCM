@@ -203,18 +203,18 @@ static bool derives( File & file, const Pixmap& compressed_image )
 #if 1
   DataSet &ds = file.GetDataSet();
 
-  DataElement sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
-  if( !ds.FindDataElement( Tag(0x0008,0x0016) ) )
+  if( !ds.FindDataElement( Tag(0x0008,0x0016) )
+    || ds.GetDataElement( Tag(0x0008,0x0016) ).IsEmpty() )
     {
-    assert(0);
     return false;
     }
-  DataElement sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
-  if( !ds.FindDataElement( Tag(0x0008,0x0018) ) )
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
     {
-    assert(0);
     return false;
     }
+  const DataElement &sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+  const DataElement &sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
   // Make sure that const char* pointer will be properly padded with \0 char:
   std::string sopclassuid_str( sopclassuid.GetByteValue()->GetPointer(), sopclassuid.GetByteValue()->GetLength() );
   std::string sopinstanceuid_str( sopinstanceuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetLength() );

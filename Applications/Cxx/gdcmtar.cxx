@@ -32,6 +32,10 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmUIDs.h"
 #include "gdcmGlobal.h"
+#include "gdcmDirectory.h"
+#include "gdcmScanner.h"
+#include "gdcmIPPSorter.h"
+#include "gdcmAttribute.h"
 
 #include <string>
 #include <iostream>
@@ -57,6 +61,7 @@ void PrintHelp()
   std::cout << "  -i --input     DICOM filename" << std::endl;
   std::cout << "  -o --output    DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
+  std::cout << "     --enhance    enhance (default)" << std::endl;
   std::cout << "  -U --unenhance  unenhance" << std::endl;
   std::cout << "  -M --mosaic     Split SIEMENS Mosaic image into multiple frames." << std::endl;
   std::cout << "  -p --pattern    Specify trailing file pattern." << std::endl;
@@ -74,6 +79,441 @@ void PrintHelp()
   //std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
+/*
+ * The following example is a basic sorted which should work in generic cases.
+ * It sort files based on:
+ * Study Instance UID
+ *   Series Instance UID
+ *     Frame of Reference UID
+ *       Image Orientation (Patient)
+ *         Image Position (Patient) (Sorting based on IPP + IOP)
+ */
+
+namespace gdcm {
+  const Tag t0(0x0008,0x0016); // SOP Class UID
+  const Tag t1(0x0020,0x000d); // Study Instance UID
+  const Tag t2(0x0020,0x000e); // Series Instance UID
+  const Tag t3(0x0020,0x0052); // Frame of Reference UID
+  const Tag t4(0x0020,0x0037); // Image Orientation (Patient)
+
+class DiscriminateVolume
+{
+private:
+  static const bool debuggdcmtar = false;
+  std::vector< Directory::FilenamesType > SortedFiles;
+  std::vector< Directory::FilenamesType > UnsortedFiles;
+
+  Directory::FilenamesType GetAllFilenamesFromTagToValue(
+    Scanner const & s, Directory::FilenamesType const &filesubset, Tag const &t, const char *valueref)
+{
+  Directory::FilenamesType theReturn;
+  if( valueref )
+    {
+    size_t len = strlen( valueref );
+    Directory::FilenamesType::const_iterator file = filesubset.begin();
+    for(; file != filesubset.end(); ++file)
+      {
+      const char *filename = file->c_str();
+      const char * value = s.GetValue(filename, t);
+      if( value && strncmp(value, valueref, len ) == 0 )
+        {
+        theReturn.push_back( filename );
+        }
+      }
+    }
+  return theReturn;
+}
+
+void ProcessAIOP(Scanner const & s, Directory::FilenamesType const & subset, const char *iopval)
+{
+  if( debuggdcmtar )
+  std::cout << "IOP: " << iopval << std::endl;
+  IPPSorter ipp;
+  ipp.SetComputeZSpacing( true );
+  ipp.SetZSpacingTolerance( 1e-3 ); // ??
+  bool b = ipp.Sort( subset );
+  if( !b )
+    {
+    // If you reach here this means you need one more parameter to discriminiat this
+    // series. Eg. T1 / T2 intertwinted. Multiple Echo (0018,0081)
+    if( debuggdcmtar )
+      {
+      std::cerr << "Failed to sort: " << subset.begin()->c_str() << std::endl;
+      for(
+        Directory::FilenamesType::const_iterator file = subset.begin();
+        file != subset.end(); ++file)
+        {
+        std::cerr << *file << std::endl;
+        }
+      }
+    UnsortedFiles.push_back( subset );
+    return ;
+    }
+  if( debuggdcmtar )
+  ipp.Print( std::cout );
+  SortedFiles.push_back( ipp.GetFilenames() );
+}
+
+void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subset, const char * frameuid)
+{
+  // In this subset of files (belonging to same series), let's find those
+  // belonging to the same Frame ref UID:
+  Directory::FilenamesType files = GetAllFilenamesFromTagToValue(
+    s, subset, t3, frameuid);
+
+  std::set< std::string > iopset;
+
+  for(
+    Directory::FilenamesType::const_iterator file = files.begin();
+    file != files.end(); ++file)
+    {
+    //std::cout << *file << std::endl;
+    const char * value = s.GetValue(file->c_str(), gdcm::t4 );
+    assert( value );
+    iopset.insert( value );
+    }
+  size_t n = iopset.size();
+  if ( n == 0 )
+    {
+    assert( files.empty() );
+    return;
+    }
+
+  if( debuggdcmtar )
+  std::cout << "Frame of Ref: " << frameuid << std::endl;
+  if ( n == 1 )
+    {
+    ProcessAIOP(s, files, iopset.begin()->c_str() );
+    }
+  else
+    {
+    const char *f = files.begin()->c_str();
+    if( debuggdcmtar )
+    std::cerr << "More than one IOP: " << f << std::endl;
+    // Make sure that there is actually 'n' different IOP
+    gdcm::DirectionCosines ref;
+    gdcm::DirectionCosines dc;
+    for(
+      std::set< std::string >::const_iterator it = iopset.begin();
+      it != iopset.end(); ++it )
+      {
+      ref.SetFromString( it->c_str() );
+      for(
+        Directory::FilenamesType::const_iterator file = files.begin();
+        file != files.end(); ++file)
+        {
+        std::string value = s.GetValue(file->c_str(), gdcm::t4 );
+        if( value != it->c_str() )
+          {
+          dc.SetFromString( value.c_str() );
+          const double crossdot = ref.CrossDot(dc);
+          const double eps = std::fabs( 1. - crossdot );
+          if( eps < 1e-6 )
+            {
+            std::cerr << "Problem with IOP discrimination: " << file->c_str()
+              << " " << it->c_str() << std::endl;
+            return;
+            }
+          }
+        }
+      }
+      // If we reach here this means there is actually 'n' different IOP
+    for(
+      std::set< std::string >::const_iterator it = iopset.begin();
+      it != iopset.end(); ++it )
+      {
+      const char *iopvalue = it->c_str();
+      Directory::FilenamesType iopfiles = GetAllFilenamesFromTagToValue(
+        s, files, t4, iopvalue );
+      ProcessAIOP(s, iopfiles, iopvalue );
+      }
+    }
+}
+
+void ProcessASeries(Scanner const & s, const char * seriesuid)
+{
+  if( debuggdcmtar )
+  std::cout << "Series: " << seriesuid << std::endl;
+  // let's find all files belonging to this series:
+  Directory::FilenamesType seriesfiles = GetAllFilenamesFromTagToValue(
+    s, s.GetFilenames(), t2, seriesuid);
+
+  gdcm::Scanner::ValuesType vt3 = s.GetValues(t3);
+  for(
+    gdcm::Scanner::ValuesType::const_iterator it = vt3.begin()
+    ; it != vt3.end(); ++it )
+    {
+    ProcessAFrameOfRef(s, seriesfiles, it->c_str());
+    }
+}
+
+void ProcessAStudy(Scanner const & s, const char * studyuid)
+{
+  if( debuggdcmtar )
+  std::cout << "Study: " << studyuid << std::endl;
+  gdcm::Scanner::ValuesType vt2 = s.GetValues(t2);
+  for(
+    gdcm::Scanner::ValuesType::const_iterator it = vt2.begin()
+    ; it != vt2.end(); ++it )
+    {
+    ProcessASeries(s, it->c_str());
+    }
+}
+public:
+
+void Print( std::ostream & os )
+{
+  os << "Sorted Files: " << std::endl;
+  for(
+    std::vector< Directory::FilenamesType >::const_iterator it = SortedFiles.begin();
+    it != SortedFiles.end(); ++it )
+    {
+    os << "Group: " << std::endl;
+    for(
+      Directory::FilenamesType::const_iterator file = it->begin();
+      file != it->end(); ++file)
+      {
+      os << *file << std::endl;
+      }
+    }
+  os << "Unsorted Files: " << std::endl;
+  for(
+    std::vector< Directory::FilenamesType >::const_iterator it = UnsortedFiles.begin();
+    it != UnsortedFiles.end(); ++it )
+    {
+    os << "Group: " << std::endl;
+    for(
+      Directory::FilenamesType::const_iterator file = it->begin();
+      file != it->end(); ++file)
+      {
+      os << *file << std::endl;
+      }
+    }
+
+}
+
+  std::vector< Directory::FilenamesType > const & GetSortedFiles() const { return SortedFiles; }
+  std::vector< Directory::FilenamesType > const & GetUnsortedFiles() const { return UnsortedFiles; }
+
+void ProcessIntoVolume( Scanner const & s )
+{
+  gdcm::Scanner::ValuesType vt1 = s.GetValues( gdcm::t1 );
+  for(
+    gdcm::Scanner::ValuesType::const_iterator it = vt1.begin()
+    ; it != vt1.end(); ++it )
+    {
+    ProcessAStudy( s, it->c_str() );
+    }
+
+}
+
+};
+
+bool ConcatenateImages(Image &im1, Image const &im2)
+{
+  DataElement& de1 = im1.GetDataElement();
+  if( de1.GetByteValue() )
+    {
+    ByteValue *bv1 = de1.GetByteValue();
+    std::vector<char> v1 = *bv1;
+    const DataElement& de2 = im2.GetDataElement();
+    const ByteValue *bv2 = de2.GetByteValue();
+    const std::vector<char> & v2 = *bv2;
+    v1.insert( v1.end(), v2.begin(), v2.end() );
+
+    de1.SetByteValue(&v1[0], v1.size());
+    }
+  else if( de1.GetSequenceOfFragments() )
+    {
+    assert( 0 );
+    }
+  else
+    {
+    return false;
+    }
+
+  // update meta info
+  unsigned int z = im1.GetDimension(2);
+  im1.SetDimension(2, z + 1 );
+  return true;
+}
+
+} // namespace gdcm
+
+
+int MakeImageEnhanced( std::string const & filename, std::string const &outfilename )
+{
+  gdcm::Directory d;
+  d.Load( filename.c_str(), true ); // recursive !
+
+  gdcm::Scanner s;
+  s.AddTag( gdcm::t0 );
+  s.AddTag( gdcm::t1 );
+  s.AddTag( gdcm::t2 );
+  s.AddTag( gdcm::t3 );
+  s.AddTag( gdcm::t4 );
+  bool b = s.Scan( d.GetFilenames() );
+  if( !b )
+    {
+    std::cerr << "Scanner failed" << std::endl;
+    return 1;
+    }
+
+  // For now only accept MR Image Storage
+  gdcm::Scanner::ValuesType vt = s.GetValues(gdcm::t0);
+  if( vt.size() != 1 ) return 1;
+
+  const char *sop = vt.begin()->c_str();
+  gdcm::MediaStorage ms = gdcm::MediaStorage::GetMSType( sop );
+  if( ms != gdcm::MediaStorage::MRImageStorage )
+    {
+    return 1;
+    }
+
+  gdcm::DiscriminateVolume dv;
+  dv.ProcessIntoVolume( s );
+//  dv.Print( std::cout );
+
+  // gdcm::DataElement &de = im.GetImage().GetDataElement();
+  std::vector< gdcm::Directory::FilenamesType > const &sorted = dv.GetSortedFiles();
+  if( !gdcm::System::MakeDirectory( outfilename.c_str() ) )
+    {
+    std::cerr << "Could not create dir: " << outfilename << std::endl;
+    return 1;
+    }
+  std::vector< gdcm::Directory::FilenamesType >::const_iterator it = sorted.begin();
+  for( ; it != sorted.end(); ++it )
+    {
+  gdcm::ImageWriter im;
+
+    gdcm::Directory::FilenamesType const & files = *it;
+    gdcm::Directory::FilenamesType::const_iterator file = files.begin();
+
+    const char *reffile = file->c_str();
+    // construct the target dir:
+    const char* studyuid = s.GetValue(reffile, gdcm::t1);
+    const char* seriesuid = s.GetValue(reffile, gdcm::t2);
+    const char* frameuid = s.GetValue(reffile, gdcm::t3);
+    std::string targetdir = outfilename;
+    targetdir += '/';
+    targetdir += studyuid;
+    targetdir += '/';
+    targetdir += seriesuid;
+    targetdir += '/';
+    targetdir += frameuid;
+    // construct the target name:
+    std::string targetname = targetdir;
+
+    targetdir += "/old/";
+
+    // make sure the dir exist first:
+  if( !gdcm::System::MakeDirectory( targetdir.c_str() ) )
+    {
+    std::cerr << "Could not create dir: " << targetdir << std::endl;
+    return 1;
+    }
+
+  gdcm::FilenameGenerator fg;
+  fg.SetNumberOfFilenames( files.size() );
+  fg.SetPrefix( targetdir.c_str() );
+  fg.SetPattern( "%04d.dcm" );
+  if( !fg.Generate() )
+    {
+    assert( 0 );
+    }
+
+
+      gdcm::ImageReader reader;
+      reader.SetFileName( reffile );
+      if( !reader.Read() )
+        {
+        assert( 0 );
+        }
+      gdcm::Image &currentim = reader.GetImage();
+      assert( currentim.GetNumberOfDimensions( ) == 2 );
+      currentim.SetNumberOfDimensions( 3 );
+      size_t count = 0;
+
+      //gdcm::ImageWriter writer;
+      gdcm::Writer writer;
+      writer.SetFileName( fg.GetFilename( count ) );
+      writer.SetFile( reader.GetFile() );
+      writer.GetFile().GetHeader().Clear();
+      if( !writer.Write() )
+        {
+        assert( 0 );
+        }
+      ++file;
+      ++count;
+
+    for( ; file != files.end(); ++file, ++count )
+      {
+      gdcm::ImageReader reader;
+      reader.SetFileName( file->c_str() );
+      if( !reader.Read() )
+        {
+        assert( 0 );
+        }
+      const gdcm::Image &im = reader.GetImage();
+
+      //gdcm::ImageWriter writer;
+      gdcm::Writer writer;
+      writer.SetFileName( fg.GetFilename( count ) );
+      writer.SetFile( reader.GetFile() );
+      writer.GetFile().GetHeader().Clear();
+      if( !writer.Write() )
+        {
+        assert( 0 );
+        }
+
+      if( !ConcatenateImages(currentim, im) )
+        {
+        assert( 0 );
+        }
+      }
+
+  im.SetFileName( (targetname + "/new.dcm").c_str() );
+//  im.SetFile( reader.GetFile() );
+
+  gdcm::DataSet &ds = im.GetFile().GetDataSet();
+
+  gdcm::MediaStorage ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+
+    gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
+    const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+    ds.Insert( de );
+
+  im.SetImage( currentim );
+  if( !im.Write() )
+    {
+    std::cerr << "Could not write: " << std::endl;
+    return 1;
+    }
+
+    }
+
+  std::vector< gdcm::Directory::FilenamesType > const &unsorted = dv.GetUnsortedFiles();
+  std::cerr << "Could not process the following files (please report): " << std::endl;
+{
+  std::vector< gdcm::Directory::FilenamesType >::const_iterator it = unsorted.begin();
+  for( ; it != unsorted.end(); ++it )
+    {
+    gdcm::Directory::FilenamesType const & files = *it;
+    gdcm::Directory::FilenamesType::const_iterator file = files.begin();
+    for( ; file != files.end(); ++file )
+      {
+      std::cerr << *file << std::endl;
+      }
+
+    }
+}
+
+
+
+  return 0;
+}
 
 int main (int argc, char *argv[])
 {
@@ -86,6 +526,7 @@ int main (int argc, char *argv[])
   std::string root;
   int resourcespath = 0;
   int mosaic = 0;
+  int enhance = 1;
   int unenhance = 0;
   std::string xmlpath;
 
@@ -105,6 +546,7 @@ int main (int argc, char *argv[])
         {"output", 1, 0, 0},
         {"mosaic", 0, &mosaic, 1}, // split siemens mosaic into multiple frames
         {"pattern", 1, 0, 0},               // p
+        {"enhance", 0, &enhance, 1},               // unenhance
         {"unenhance", 0, &unenhance, 1},               // unenhance
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         //{"resources-path", 0, &resourcespath, 1},
@@ -132,7 +574,7 @@ int main (int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -147,20 +589,25 @@ int main (int argc, char *argv[])
             assert( pattern.empty() );
             pattern = optarg;
             }
-           else if( option_index == 5 ) /* root uid */
+           else if( option_index == 6 ) /* root uid */
             {
             assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
-            else if( option_index == 6 ) /* resourcespath */
+            else if( option_index == 7 ) /* resourcespath */
             {
             assert( strcmp(s, "resources-path") == 0 );
             assert( xmlpath.empty() );
             xmlpath = optarg;
             }
-          printf (" with arg %s, index = %d", optarg, option_index);
+          else
+            {
+            printf (" with arg %s, index = %d", optarg, option_index);
+            assert(0);
+            }
+          //printf (" with arg %s, index = %d", optarg, option_index);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
@@ -177,7 +624,7 @@ int main (int argc, char *argv[])
     case 'U':
       //assert( outfilename.empty() );
       //outfilename = optarg;
-      printf ("option unenhance \n");
+      //printf ("option unenhance \n");
       unenhance = 1;
       break;
 
@@ -309,8 +756,8 @@ int main (int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-if( unenhance && false )
-{
+  if( unenhance && false )
+    {
     gdcm::Global& g = gdcm::Global::GetInstance();
     // First thing we need to locate the XML dict
     // did the user requested to look XML file in a particular directory ?
@@ -341,7 +788,7 @@ if( unenhance && false )
       }
 
     const gdcm::Defs &defs = g.GetDefs();
-}
+    }
 
 
   if( mosaic )
@@ -360,7 +807,7 @@ if( unenhance && false )
     bool b = filter.Split();
     if( !b )
       {
-      std::cerr << "Could not split << " << filename << std::endl;
+      std::cerr << "Could not split : " << filename << std::endl;
       return 1;
       }
 
@@ -377,7 +824,7 @@ if( unenhance && false )
     fg.SetPattern( pattern.c_str() );
     if( !fg.Generate() )
       {
-      std::cerr << "could not generate" << std::endl;
+      std::cerr << "could not generate filenames" << std::endl;
       return 1;
       }
     const double *cosines = image.GetDirectionCosines();
@@ -426,8 +873,8 @@ if( unenhance && false )
     return 0;
     }
   else if ( unenhance )
-{
-std::cerr << "Not implemented" << std::endl;
+    {
+    std::cerr << "Not implemented" << std::endl;
     return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -437,24 +884,24 @@ std::cerr << "Not implemented" << std::endl;
       return 1;
       }
 
-  const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = file.GetDataSet();
-  gdcm::MediaStorage ms;
-  ms.SetFromFile(file);
-  if( ms.IsUndefined() )
-    {
-    std::cerr << "Unknown MediaStorage" << std::endl;
-    return 1;
-    }
+    const gdcm::File &file = reader.GetFile();
+    const gdcm::DataSet &ds = file.GetDataSet();
+    gdcm::MediaStorage ms;
+    ms.SetFromFile(file);
+    if( ms.IsUndefined() )
+      {
+      std::cerr << "Unknown MediaStorage" << std::endl;
+      return 1;
+      }
 
-  gdcm::UIDs uid;
-  uid.SetFromUID( ms.GetString() );
+    gdcm::UIDs uid;
+    uid.SetFromUID( ms.GetString() );
 
-  if( uid != gdcm::UIDs::EnhancedMRImageStorage )
-  {
-  std::cerr << "MediaStorage is not handled " << ms << " [" << uid.GetName() << "]" << std::endl;
-    return 1;
-  }
+    if( uid != gdcm::UIDs::EnhancedMRImageStorage )
+      {
+      std::cerr << "MediaStorage is not handled " << ms << " [" << uid.GetName() << "]" << std::endl;
+      return 1;
+      }
 
     const gdcm::Image &image = reader.GetImage();
     const unsigned int *dims = image.GetDimensions();
@@ -515,16 +962,19 @@ std::cerr << "Not implemented" << std::endl;
         return 1;
         }
       else
-      {
+        {
         std::cout << "Success to write: " << outfilenamei << std::endl;
+        }
       }
-       }
 
     return 0;
- }
+    }
   else
     {
- std::cerr << "Not implemented" << std::endl;
+    assert( enhance );
+    return MakeImageEnhanced( filename, outfilename );
+#if 0
+    std::cerr << "Not implemented" << std::endl;
     return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -593,13 +1043,14 @@ std::cerr << "Not implemented" << std::endl;
         return 1;
         }
       else
-      {
+        {
         std::cout << "Success to write: " << outfilenamei << std::endl;
-      }
+        }
       }
 
     return 0;
-     }
+#endif
+    }
 
   return 0;
 }
