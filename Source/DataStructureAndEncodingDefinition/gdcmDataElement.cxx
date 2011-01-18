@@ -133,7 +133,14 @@ namespace gdcm
           sqi->SetLength( bv->GetLength() );
           std::stringstream ss;
           ss.str( std::string( bv->GetPointer(), bv->GetLength() ) );
+          try {
           sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+          }
+          catch ( std::exception & )
+          {
+          // Some people like to skew things up and write invalid SQ in VR:UN field
+          // if conversion fails, simply keep the binary VR:UN stuff as-is
+          }
           return sqi;
           }
         else

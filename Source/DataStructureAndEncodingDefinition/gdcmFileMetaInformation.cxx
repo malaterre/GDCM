@@ -537,6 +537,11 @@ std::istream &FileMetaInformation::Read(std::istream &is)
 
 std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 {
+  return ReadCompat(is, 0);
+}
+
+std::istream &FileMetaInformation::ReadCompat(std::istream &is, unsigned int counter)
+{
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
   if( !IsEmpty() )
@@ -604,15 +609,23 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
       }
     else
       {
-    throw Exception( "Cannot find DICOM type. Giving up." );
-    //  std::streampos start = is.tellg();
-    //  ImplicitDataElement ide;
-    //  ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
-    //  std::streampos cur = is.tellg();
-    //  std::cout << "s-c" << start - cur << std::endl;
-    //  is.seekg( start - cur, std::ios::cur );
-    //  // ok we could read at least one implicit element
-    //  DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+      DataElement null( Tag(0x0,0x0), 0);
+      ImplicitDataElement ide;
+      ide.Read<SwapperNoOp>(is); // might throw an exception which will NOT be caught
+      // let's assume that we can read at most 10 null elements, after that we decide
+      // arbitrarily that the cannot possibly be a DICOM file.
+      if( ide == null && counter < 10 )
+        {
+        // Ok big deal we found a null dataelement, should we really add it
+        // in the dataset ? Well let's assume this is not that important
+        ReadCompat(is, counter + 1);
+        assert( DataSetTS == TransferSyntax::ImplicitVRLittleEndian );
+        return is;
+        }
+      else
+        {
+        throw Exception( "Cannot find DICOM type. Giving up." );
+        }
       }
     }
   return is;

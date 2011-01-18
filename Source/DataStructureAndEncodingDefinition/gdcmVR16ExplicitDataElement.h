@@ -35,6 +35,9 @@ public:
   std::istream &Read(std::istream &is);
 
   template <typename TSwap>
+  std::istream &ReadPreValue(std::istream &is);
+
+  template <typename TSwap>
   std::istream &ReadValue(std::istream &is);
 
   template <typename TSwap>

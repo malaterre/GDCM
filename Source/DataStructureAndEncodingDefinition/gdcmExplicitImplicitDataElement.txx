@@ -31,8 +31,15 @@ namespace gdcm
 template <typename TSwap>
 std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
 {
-  TagField.Read<TSwap>(is);
+  ReadPreValue<TSwap>(is);
   return ReadValue<TSwap>(is);
+}
+
+template <typename TSwap>
+std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
+{
+  TagField.Read<TSwap>(is);
+  return is;
 }
 
 template <typename TSwap>

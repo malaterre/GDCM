@@ -31,13 +31,14 @@ namespace gdcm
 template <typename TSwap>
 std::istream &ExplicitDataElement::Read(std::istream &is)
 {
-  TagField.Read<TSwap>(is);
+  ReadPreValue<TSwap>(is);
   return ReadValue<TSwap>(is);
 }
 
 template <typename TSwap>
-std::istream &ExplicitDataElement::ReadValue(std::istream &is)
+std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
 {
+  TagField.Read<TSwap>(is);
   // See PS 3.5, Data Element Structure With Explicit VR
   // Read Tag
   if( !is )
@@ -68,6 +69,8 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
       gdcmDebugMacro(
         "Item Delimitation Item has a length different from 0 and is: " << ValueLengthField );
       }
+    // Reset ValueLengthField to avoid user error
+    ValueLengthField = 0;
     // Set pointer to NULL to avoid user error
     ValueField = 0;
     VRField = VR::INVALID;
@@ -172,7 +175,13 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
     ValueLengthField = ValueLengthField - 7;
     }
 #endif
+  return is;
+}
 
+template <typename TSwap>
+std::istream &ExplicitDataElement::ReadValue(std::istream &is)
+{
+  if( is.eof() ) return is;
   if( ValueLengthField == 0 )
     {
     // Simple fast path

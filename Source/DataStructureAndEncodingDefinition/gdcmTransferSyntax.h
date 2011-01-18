@@ -82,6 +82,7 @@ public:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     WeirdPapryus,
 #endif
+    CT_private_ELE,
     TS_END
   } TSType;
 
@@ -113,11 +114,12 @@ public:
 
   bool IsEncapsulated() const;
 
-  /// Return whether the Transfer Syntax contains a lossy or lossless Encapsulated stream
-  /// \warning IsLossy is NOT !IsLossless since JPEG 2000 Transfer Syntax is dual
-  /// the stream can be either lossy or lossless compressed.
+  /** Return if the transfer syntax algorithm is a lossy algorithm */
   bool IsLossy() const;
+  /** Return if the transfer syntax algorithm is a lossless algorithm */
   bool IsLossless() const;
+  /** return if TransFer Syntax Allow storing of Lossy Pixel Data */
+  bool CanStoreLossy() const;
 
   const char *GetString() const { return TransferSyntax::GetTSString(TSField); }
 

@@ -33,12 +33,19 @@
 namespace gdcm
 {
 
+Writer::Writer():Stream(NULL),Ofstream(NULL),F(new File),CheckFileMetaInformation(true)
+{
+}
+
 Writer::~Writer()
 {
-  if (Ofstream) {
+  if (Ofstream)
+    {
     Ofstream->close();
     delete Ofstream;
-  }
+    Ofstream = NULL;
+    Stream = NULL;
+    }
 }
 
 bool Writer::Write()
@@ -165,16 +172,10 @@ catch(...)
   return false;
 }
 
-
-
-  // FIXME : call this function twice...
-  if (Ofstream)
-  {
-  Ofstream->close();
-  delete Ofstream;
-  Ofstream = NULL;
-  Stream = NULL;
-  }
+if (Ofstream)
+{
+  Ofstream->flush();
+}
 
   return true;
 }

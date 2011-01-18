@@ -70,6 +70,7 @@ static const char *TSStrings[] = {
   // Weird Papyrus
   "1.2.840.10008.1.20",
 #endif
+  "1.3.46.670589.33.1.4.1",
   // Unknown
   "Unknown Transfer Syntax", // Pretty sure we never use this case...
   0 // Compilers have no obligation to finish by NULL, do it ourself
@@ -153,6 +154,30 @@ bool TransferSyntax::IsLossy() const
     }
   return false;
 
+}
+
+// This function really test the kind of compression algorithm and the matching
+// transfer syntax.  If you use the JPEG compression algorithm (ITU-T T.81,
+// ISO/IEC IS 10918-1), You will not be able to declare a lossy compress pixel
+// data using JPEGLosslessProcess14_1 For the same reason using J2K (ITU-T
+// T.800, ISO/IEC IS 15444-1), you shoult not be allowed to stored an
+// irreversible wavelet compressed pixel data in a file declared with transfer
+// syntax JPEG2000Lossless.
+// Same goes for JPEG-LS (ITU-T T.87, ISO/IEC IS 14495-1), and to some extent
+// RLE which does not even allow lossy compression...
+bool TransferSyntax::CanStoreLossy() const
+{
+  if (
+    TSField == JPEGLosslessProcess14 ||
+    TSField == JPEGLosslessProcess14_1 ||
+    TSField == JPEGLSLossless ||
+    TSField == JPEG2000Lossless ||
+    TSField == RLELossless
+  )
+    {
+    return false;
+    }
+  return true;
 }
 
 bool TransferSyntax::IsLossless() const
