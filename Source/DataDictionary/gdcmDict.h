@@ -100,6 +100,53 @@ public:
     return it->second;
     }
 
+  /// Function to return the Keyword from a Tag
+  const char *GetKeywordFromTag(Tag const & tag) const
+    {
+    MapDictEntry::const_iterator it =
+      DictInternal.find(tag);
+    if (it == DictInternal.end())
+      {
+      return NULL;
+      }
+    assert( DictInternal.count(tag) == 1 );
+    return it->second.GetKeyword();
+    }
+
+  /// Lookup DictEntry by keyword. Even if DICOM standard defines keyword
+  /// as being unique. The lookup table is built on Tag. Therefore
+  /// looking up a DictEntry by Keyword is more inefficient than looking up
+  /// by Tag.
+  const DictEntry &GetDictEntryByKeyword(const char *keyword, Tag & tag) const
+    {
+    MapDictEntry::const_iterator it =
+      DictInternal.begin();
+    if( keyword )
+      {
+      for(; it != DictInternal.end(); ++it)
+        {
+        if( strcmp( keyword, it->second.GetKeyword() ) == 0 )
+          {
+          // Found a match !
+          tag = it->first;
+          break;
+          }
+        }
+      }
+    else
+      {
+      it = DictInternal.end();
+      }
+    if (it == DictInternal.end())
+      {
+      tag = Tag(0xffff,0xffff);
+      it = DictInternal.find( tag );
+      return it->second;
+      }
+    assert( DictInternal.count(tag) == 1 );
+    return it->second;
+    }
+
   /// Inefficient way of looking up tag by name. Technically DICOM
   /// does not garantee uniqueness (and Curve / Overlay are there to prove it). But
   /// most of the time name is in fact uniq and can be uniquely link to a tag
@@ -205,6 +252,15 @@ public:
       }
 #endif
     assert( s < DictInternal.size() /*&& std::cout << tag << "," << de << std::endl*/ );
+    }
+  /// Remove entry 'tag'. Return true on success (element was found
+  /// and remove). return false if element was not found.
+  bool RemoveDictEntry(const PrivateTag &tag)
+    {
+    MapDictEntry::size_type s =
+      DictInternal.erase(tag);
+    assert( s == 1 || s == 0 );
+    return s == 1;
     }
   const DictEntry &GetDictEntry(const PrivateTag &tag) const
     {

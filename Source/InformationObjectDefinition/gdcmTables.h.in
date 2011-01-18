@@ -17,4 +17,4 @@
 const char * const gdcmTables[] = {
   @GDCM_XML_TABLES@
   0 };
-#endif __gdcmTables_h
+#endif // __gdcmTables_h
