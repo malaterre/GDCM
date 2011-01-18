@@ -521,9 +521,9 @@ int main(int argc, char *argv[])
       files.push_back( argv[optind++] );
       }
     //printf ("\n");
-    if( files.size() == 2 
+    if( files.size() == 2
       && filename.empty()
-      && outfilename.empty() 
+      && outfilename.empty()
     )
       {
       filename = files[0];
@@ -580,7 +580,7 @@ int main(int argc, char *argv[])
 #ifndef GDCM_USE_SYSTEM_OPENSSL
     std::cerr << "OpenSSL was not configured." << std::endl;
     return 1;
-#endif 
+#endif
     }
 
   // by default AES 256
@@ -786,4 +786,3 @@ int main(int argc, char *argv[])
     }
   return 0;
 }
-

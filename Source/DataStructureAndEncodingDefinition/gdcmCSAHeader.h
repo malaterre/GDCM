@@ -22,11 +22,11 @@
 namespace gdcm
 {
 /*
- * Everything done in this code is for the sole purpose of writing interoperable 
+ * Everything done in this code is for the sole purpose of writing interoperable
  * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
- * If you believe anything in this code violates any law or any of your rights, 
- * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
- * find a solution. 
+ * If you believe anything in this code violates any law or any of your rights,
+ * please contact us (gdcm-developers@lists.sourceforge.net) so that we can
+ * find a solution.
  */
 //-----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ class PrivateTag;
  * External references:
  * 5.1.3.2.4.1 MEDCOM History Information
  * and 5.1.4.3 CSA Non-Image Module
- * in 
+ * in
  * http://tamsinfo.toshiba.com/docrequest/pdf/E.Soft_v2.0.pdf
  */
 class GDCM_EXPORT CSAHeader

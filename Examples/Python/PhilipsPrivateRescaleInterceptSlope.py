@@ -16,7 +16,7 @@
 """
 Usage:
 
- python 
+ python
 """
 
 import gdcm

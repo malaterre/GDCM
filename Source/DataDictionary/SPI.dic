@@ -9,14 +9,14 @@
 0009 0040 US 1 Data Object Type
 0009 0041 SH 1 Data Object Subtype
 0009 1010 LO 1 Comments
-0009 1015 LO 1 SPI Image UID 
+0009 1015 LO 1 SPI Image UID
 0009 1040 US 1 Data Object Type
 0009 1041 LO 1 Data Object Subtype
-0009 1110 LO 1 Recognition Code 
+0009 1110 LO 1 Recognition Code
 0009 1130 US 1 Byte Offset Of Original Header
-0009 1131 US 1 Length Of Original Header 
-0009 1140 US 1 Byte Offset Of Pixelmatrix 
-0009 1141 UL 1 Length Of Pixelmatrix In Bytes 
+0009 1131 US 1 Length Of Original Header
+0009 1140 US 1 Byte Offset Of Pixelmatrix
+0009 1141 UL 1 Length Of Pixelmatrix In Bytes
 0009 1210 CS 1 Storage Mode
 0009 1212 UL 1 Evaluation Mask Image
 0009 1213 UN 1 TODO

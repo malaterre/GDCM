@@ -52,14 +52,14 @@ IF(GDCM_DOCUMENTATION)
     SET(GDCM_DOC_PDF_LINK
       "http://gdcm.sourceforge.net/${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}/gdcm-${GDCM_VERSION}.pdf"
     )
-    SET(GDCM_DOC_TARBALL_LINK 
+    SET(GDCM_DOC_TARBALL_LINK
       "http://gdcm.sourceforge.net/${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}/gdcm-${GDCM_VERSION}-doc.tar.gz"
     )
   ELSE(GDCM_MINOR_VERSION MATCHES "[02468]$")
     SET(GDCM_DOC_PDF_LINK
       "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}.pdf"
     )
-    SET(GDCM_DOC_TARBALL_LINK 
+    SET(GDCM_DOC_TARBALL_LINK
       "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}-doc.tar.gz"
     )
   ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
@@ -102,11 +102,11 @@ IF(GDCM_DOCUMENTATION)
     MARK_AS_ADVANCED(PDFOPT_EXECUTABLE SED_EXECUTABLE)
     # Let's customize the pdf tags a little usind sed:
     # Apparently egrep is also needed...
-    # BAD: there is a circular dependency where refman.tex depend on refman.tex in the sed steps... 
+    # BAD: there is a circular dependency where refman.tex depend on refman.tex in the sed steps...
     # hack our way in anyway by simply removing the dep...
     #ADD_CUSTOM_COMMAND(
-    #  ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/patchtex.cmake 
-    #) 
+    #  ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/patchtex.cmake
+    #)
     # TODO, FOREACH(*.tex)
     # sed -i -e "/home/mmalaterre/Projects/" ...
     STRING(REPLACE "/" "\\/" sed_gdcm_source_dir ${GDCM_SOURCE_DIR})
@@ -122,7 +122,7 @@ IF(GDCM_DOCUMENTATION)
       ARGS     -i.tmp -e "'s/${sed_gdcm_source_dir}/gdcm/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/*.tex
       # Command #3
       COMMAND  ${CMAKE_MAKE_PROGRAM}
-      DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex 
+      DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
 ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     #${GDCM_DOC_TARBALL}
       COMMENT  "GDCM: Creating (patched) pdf of documentation"
@@ -131,7 +131,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ADD_CUSTOM_COMMAND(
       OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       COMMAND  ${PDFOPT_EXECUTABLE}
-      ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf 
+      ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
                ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
       COMMENT  "GDCM: Creating optimized pdf version of documentation"
@@ -153,7 +153,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   ENDIF(UNIX AND GDCM_PDF_DOCUMENTATION)
 
   # Install html pages:
-  #INSTALL(FILES 
+  #INSTALL(FILES
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcm2vtk.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmconv.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmanon.html
@@ -168,7 +168,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmviewer.html
   #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT Development
   #)
-  INSTALL(FILES 
+  INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
@@ -197,4 +197,3 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   ENDIF(GDCM_USE_VTK)
 
 ENDIF(GDCM_DOCUMENTATION)
-

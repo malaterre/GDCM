@@ -43,22 +43,22 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
 
 // no such thing as partial specialization of function in c++
 // so instead use this trick:
-template<typename TOut, typename TIn> 
+template<typename TOut, typename TIn>
 struct FImpl;
 
-template<typename TOut, typename TIn> 
+template<typename TOut, typename TIn>
 void InverseRescaleFunction(TOut *out, const TIn *in, double intercept, double slope, size_t size)
 { FImpl<TOut,TIn>::InverseRescaleFunction(out,in,intercept,slope,size); } // users, don't touch this!
 
-template<typename TOut, typename TIn> 
-struct FImpl 
-{ 
+template<typename TOut, typename TIn>
+struct FImpl
+{
   // parameter 'size' is in bytes
   // TODO: add template parameter for intercept/slope so that we can have specialized instantiation
   // when 1. both are int, 2. slope is 1, 3. intercept is 0
   // Detail: casting from float to int is soooo slow
-  static void InverseRescaleFunction( TOut *out, const TIn *in, 
-    double intercept, double slope, size_t size) // users, go ahead and specialize this 
+  static void InverseRescaleFunction( TOut *out, const TIn *in,
+    double intercept, double slope, size_t size) // users, go ahead and specialize this
     {
     // If you read the code down below you'll see a specialized function for float, thus
     // if we reach here it pretty much means slope/intercept were integer type
@@ -67,13 +67,13 @@ struct FImpl
     size /= sizeof(TIn);
     for(size_t i = 0; i != size; ++i)
       {
-      // '+ 0.5' trick is NOT needed for image such as: gdcmData/D_CLUNIE_CT1_J2KI.dcm 
+      // '+ 0.5' trick is NOT needed for image such as: gdcmData/D_CLUNIE_CT1_J2KI.dcm
       out[i] = (TOut)(((double)in[i] - intercept) / slope );
       }
     }
 };
 
-template<typename TOut> 
+template<typename TOut>
 struct FImpl<TOut, float>
 {
   static void InverseRescaleFunction(TOut *out, const float *in,
@@ -91,7 +91,7 @@ struct FImpl<TOut, float>
       }
     }
 };
-template<typename TOut> 
+template<typename TOut>
 struct FImpl<TOut, double>
 {
   static void InverseRescaleFunction(TOut *out, const double *in,
@@ -114,7 +114,7 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
 {
   PixelFormat::ScalarType st = PixelFormat::UNKNOWN;
   assert( slope == (int)slope && intercept == (int)intercept);
-  
+
   double min = slope * pf.GetMin() + intercept;
   double max = slope * pf.GetMax() + intercept;
   assert( min <= max );
@@ -158,7 +158,7 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
       {
       st = PixelFormat::INT16;
       }
-    else if( max <= std::numeric_limits<int32_t>::max() 
+    else if( max <= std::numeric_limits<int32_t>::max()
       && min >= std::numeric_limits<int32_t>::min() )
       {
       st = PixelFormat::INT32;
@@ -289,7 +289,7 @@ void Rescaler::InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_
 bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
 {
   // fast path:
-  if( Slope == 1 && Intercept == 0 ) 
+  if( Slope == 1 && Intercept == 0 )
     {
     memcpy(out,in,n);
     return true;
@@ -334,7 +334,7 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
     assert(0);
     break;
     }
- 
+
   return true;}
 
 bool Rescaler::Rescale(char *out, const char *in, size_t n)
@@ -391,7 +391,7 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
     assert(0);
     break;
     }
- 
+
   return true;
 }
 
@@ -399,7 +399,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
 {
   PixelFormat st = PixelFormat::UNKNOWN;
   //assert( slope == (int)slope && intercept == (int)intercept);
-  
+
   double dmin = (_min - intercept ) / slope;
   double dmax = (_max - intercept ) / slope;
   assert( dmin <= dmax );
@@ -441,7 +441,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
     }
   else
     {
-    if( max <= std::numeric_limits<int8_t>::max() 
+    if( max <= std::numeric_limits<int8_t>::max()
       && min >= std::numeric_limits<int8_t>::min() )
       {
       st = PixelFormat::INT8;
@@ -451,7 +451,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       {
       st = PixelFormat::INT16;
       }
-    else if( max <= std::numeric_limits<int32_t>::max() 
+    else if( max <= std::numeric_limits<int32_t>::max()
       && min >= std::numeric_limits<int32_t>::min() )
       {
       st = PixelFormat::INT32;
@@ -511,4 +511,3 @@ void Rescaler::SetUseTargetPixelType(bool b)
 }
 
 } // end namespace gdcm
-

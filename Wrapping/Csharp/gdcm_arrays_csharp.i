@@ -11,10 +11,10 @@
  * ----------------------------
  * Array typemaps using default p/invoke marshaling. The data is copied to a separately
  * allocated buffer when passing over the managed-native boundary.
- * 
- * There are separate typemaps for in, out and inout arrays to enable avoiding 
+ *
+ * There are separate typemaps for in, out and inout arrays to enable avoiding
  * unnecessary copying.
- * 
+ *
  * Example usage:
  *
  *   %include "arrays_csharp.i"
@@ -36,12 +36,12 @@
  * but it makes garbage collection more difficult. When considering using
  * these typemaps, think carefully whether you have callbacks that may cause
  * the control to re-enter the managed side from within the call (and produce
- * garbage for the gc) or whether other threads may produce enough garbage to 
+ * garbage for the gc) or whether other threads may produce enough garbage to
  * trigger gc while the call is being executed. In those cases it may be
  * wiser to use the default marshaling typemaps.
- * 
- * Please note that when using fixed arrays, you have to mark your corresponding 
- * module class method unsafe using 
+ *
+ * Please note that when using fixed arrays, you have to mark your corresponding
+ * module class method unsafe using
  * %csmethodmodifiers "public unsafe"
  * (the visibility of the method is up to you).
  *
@@ -115,7 +115,7 @@ CSHARP_ARRAYS(double, double)
 %typemap(cstype)  CTYPE FIXED[] "CSTYPE[]"
 %typemap(csin,
            pre=       "    fixed ( CSTYPE* swig_ptrTo_$csinput = $csinput ) {",
-           terminator="    }") 
+           terminator="    }")
                   CTYPE FIXED[] "(IntPtr)swig_ptrTo_$csinput"
 
 %typemap(in)      CTYPE FIXED[] "$1 = $input;"
@@ -137,4 +137,3 @@ CSHARP_ARRAYS_FIXED(long long, long)
 CSHARP_ARRAYS_FIXED(unsigned long long, ulong)
 CSHARP_ARRAYS_FIXED(float, float)
 CSHARP_ARRAYS_FIXED(double, double)
-

@@ -26,10 +26,12 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   GenAllVR
+  ReadGEMSSDO
   DiffFile
   SimpleScanner
   TraverseModules
   GetSequenceUltrasound
+  ReadAndPrintAttributes
   ChangeSequenceUltrasound
   LargeVRDSExplicit
   ExtractEncryptedContent

@@ -28,7 +28,7 @@ namespace gdcm
  *    this would only happen in some very rare cases.
  * gdcm 2.X design could handle bug #1 or #2 exclusively, this class can now handle
  * file which have both issues.
- * See: gdcmData/TheralysGDCM120Bug.dcm 
+ * See: gdcmData/TheralysGDCM120Bug.dcm
  */
 class GDCM_EXPORT UNExplicitImplicitDataElement : public DataElement
 {
@@ -37,6 +37,9 @@ public:
 
   template <typename TSwap>
   std::istream &Read(std::istream &is);
+
+  template <typename TSwap>
+  std::istream &ReadValue(std::istream &is);
 
   // PURPOSELY do not provide an implementation for writing !
   //template <typename TSwap>
@@ -48,4 +51,3 @@ public:
 #include "gdcmUNExplicitImplicitDataElement.txx"
 
 #endif //GDCMUNEXPLICITIMPLICITDATAELEMENT_H
-

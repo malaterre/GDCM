@@ -19,7 +19,7 @@ int TestTransferSyntax(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::TransferSyntax ts;
-  
+
   ts = gdcm::TransferSyntax::JPEG2000;
   if( !ts.IsLossless() )
     {

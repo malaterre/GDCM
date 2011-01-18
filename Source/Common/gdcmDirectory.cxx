@@ -53,7 +53,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
     if ( fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
       {
       // Need to check for . and .. to avoid infinite loop
-      if ( fileName != "." && fileName != ".." 
+      if ( fileName != "." && fileName != ".."
         && fileName[0] != '.' // discard any hidden dir
         && recursive )
         {
@@ -81,7 +81,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
   DIR* dir = opendir(dirName.c_str());
   if (!dir)
     {
-    const char *str = strerror(errno);
+    const char *str = strerror(errno); (void)str;
     gdcmErrorMacro( "Error was: " << str << " when opening directory: " << dirName );
     return 0;
     }
@@ -100,7 +100,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
     fileName = dirName + d->d_name;
     if( stat(fileName.c_str(), &buf) != 0 )
       {
-      const char *str = strerror(errno);
+      const char *str = strerror(errno); (void)str;
       gdcmErrorMacro( "Last Error was: " << str << " for file: " << fileName );
       break;
       }
@@ -133,7 +133,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
     }
   if( closedir(dir) != 0 )
     {
-    const char *str = strerror(errno);
+    const char *str = strerror(errno); (void)str;
     gdcmErrorMacro( "Last error was: " << str << " when closing directory: " << fileName );
     }
 #endif
@@ -149,7 +149,7 @@ void Directory::Print(std::ostream &_os) const
     _os << "(None)" << std::endl;
   else
     {
-    std::copy(Directories.begin(), Directories.end(), 
+    std::copy(Directories.begin(), Directories.end(),
       std::ostream_iterator<std::string>(_os << std::endl, "\n"));
     }
   _os << "Filenames: ";
@@ -157,7 +157,7 @@ void Directory::Print(std::ostream &_os) const
     _os << "(None)" << std::endl;
   else
     {
-    std::copy(Filenames.begin(), Filenames.end(), 
+    std::copy(Filenames.begin(), Filenames.end(),
       std::ostream_iterator<std::string>(_os << std::endl, "\n"));
     }
 }

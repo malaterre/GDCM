@@ -74,20 +74,20 @@ The basic system parameters are kept here.
 /* Scan component threshold is the maximum number of components put
 in per scan */
 
-#define SCAN_COMPONENT_THRESHOLD 4  
+#define SCAN_COMPONENT_THRESHOLD 4
 
 /* Mask to be used for creating files. */
 #define UMASK 0666  /* Octal */
 
 /* Buffersize is used as the default I/O buffer. A smaller size ensures
-   less storage space. A larger size requires more storage space. 
+   less storage space. A larger size requires more storage space.
    256 seems like a good number for smaller machines, but for machines
    with greater than 0.5 MB of memory, 1024 would be better because
    it reduces on the number of seeks necessary.  Helpful for macro-sized
    words such as 16 bit or 24 bit to have a proper multiple of such
    word.
    */
-#define BUFFERSIZE 256 
+#define BUFFERSIZE 256
 
 /* Lossless Buffersize is a variable that is kept for the lossless
    streams.  It can be any positive number, though a larger number
@@ -110,4 +110,3 @@ in per scan */
 #define LEE_DCT
 
 #endif
-

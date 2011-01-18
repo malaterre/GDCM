@@ -41,7 +41,7 @@ if __name__ == "__main__":
   r.SetFileName( file1 )
   if not r.Read():
     sys.exit(1)
-  
+
   f = r.GetFile()
   ds = f.GetDataSet()
   tsis = gdcm.Tag(0x0008,0x2112) # SourceImageSequence
@@ -72,4 +72,3 @@ if __name__ == "__main__":
   w.SetFileName( file2 )
   if not w.Write():
     sys.exit(1)
- 

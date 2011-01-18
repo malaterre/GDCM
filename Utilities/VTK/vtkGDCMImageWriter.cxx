@@ -108,7 +108,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->PlanarConfiguration = 0;
   this->LossyFlag = 0;
   this->CompressionType = NO_COMPRESSION;
-  
+
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
   gdcm::UIDGenerator uidgen;
   const char *uid = uidgen.Generate();
@@ -315,7 +315,7 @@ void vtkGDCMImageWriter::Write()
       {
       if( lastSlice - firstSlice + 1 != this->FileNames->GetNumberOfValues() )
         {
-        vtkErrorMacro("Wrong number of filenames: " << this->FileNames->GetNumberOfValues() 
+        vtkErrorMacro("Wrong number of filenames: " << this->FileNames->GetNumberOfValues()
           << " should be " << lastSlice - firstSlice + 1);
         return;
         }
@@ -367,7 +367,7 @@ void vtkGDCMImageWriter::Write()
 //    new char[(this->FileName ? strlen(this->FileName) : 1) +
 //            (this->FilePrefix ? strlen(this->FilePrefix) : 1) +
 //            (this->FilePattern ? strlen(this->FilePattern) : 1) + 10];
-  
+
   // Fill in image information.
   this->GetInput()->UpdateInformation();
   int *wExtent;
@@ -375,12 +375,12 @@ void vtkGDCMImageWriter::Write()
   this->FileNumber = this->GetInput()->GetWholeExtent()[4];
   this->UpdateProgress(0.0);
   // loop over the z axis and write the slices
-  for (this->FileNumber = wExtent[4]; this->FileNumber <= wExtent[5]; 
+  for (this->FileNumber = wExtent[4]; this->FileNumber <= wExtent[5];
        ++this->FileNumber)
     {
     this->GetInput()->SetUpdateExtent(wExtent[0], wExtent[1],
                                       wExtent[2], wExtent[3],
-                                      this->FileNumber, 
+                                      this->FileNumber,
                                       this->FileNumber);
     // determine the name
 /*
@@ -388,11 +388,11 @@ void vtkGDCMImageWriter::Write()
       {
       sprintf(this->InternalFileName,"%s",this->FileName);
       }
-    else 
+    else
       {
       if (this->FilePrefix)
         {
-        sprintf(this->InternalFileName, this->FilePattern, 
+        sprintf(this->InternalFileName, this->FilePattern,
                 this->FilePrefix, this->FileNumber);
         }
       else
@@ -640,7 +640,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     vtkFloatingPointType srange[2];
     data->GetScalarRange(srange);
     // HACK !!!
-    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
+    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it
     // anyway, so let's make GDCM just as bad as any other library, by providing a fix:
     if( ms == gdcm::MediaStorage::MRImageStorage /*&& pixeltype.GetBitsAllocated() == 8*/ )
       {
@@ -717,7 +717,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
   bv->SetLength( len ); // allocate !
-  
+
 //  std::ofstream of( "/tmp/bla.raw" );
 //  of.write( (char*)data->GetScalarPointer(), len);
 //  of.close();
@@ -754,7 +754,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     vtkFloatingPointType srange[2];
     data->GetScalarRange(srange);
     // HACK !!!
-    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
+    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it
     // anyway, so let's make GDCM just as bad as any other library, by providing a fix:
     if( ms == gdcm::MediaStorage::MRImageStorage /*&& pixeltype.GetBitsAllocated() == 8*/ )
       {
@@ -833,7 +833,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   int year, month, day;
   gdcm::File& file = writer.GetFile();
   gdcm::DataSet& ds = file.GetDataSet();
-  vtkGDCMMedicalImageProperties *gdcmmip = 
+  vtkGDCMMedicalImageProperties *gdcmmip =
     dynamic_cast<vtkGDCMMedicalImageProperties*>( this->MedicalImageProperties );
   gdcm::Anonymizer ano;
   if( gdcmmip )
@@ -996,7 +996,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       pixeltype.GetBitsAllocated() == 8 &&
       pixeltype.GetBitsStored() == 8 &&
       pixeltype.GetHighBit() == 7 &&
-      pixeltype.GetPixelRepresentation() == 0 
+      pixeltype.GetPixelRepresentation() == 0
       // image.GetPlanarConfiguration()
     )
       {
@@ -1015,7 +1015,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       pixeltype.GetBitsAllocated() == 1 &&
       pixeltype.GetBitsStored() == 1 &&
       pixeltype.GetHighBit() == 0 &&
-      pixeltype.GetPixelRepresentation() == 0 
+      pixeltype.GetPixelRepresentation() == 0
       // image.GetPlanarConfiguration()
     )
       {
@@ -1032,7 +1032,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       pixeltype.GetBitsAllocated() == 16 &&
       pixeltype.GetBitsStored() <= 16 && pixeltype.GetBitsStored() >= 9 &&
       pixeltype.GetHighBit() == pixeltype.GetBitsStored() - 1 &&
-      pixeltype.GetPixelRepresentation() == 0 
+      pixeltype.GetPixelRepresentation() == 0
       // image.GetPlanarConfiguration()
     )
       {
@@ -1049,7 +1049,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       pixeltype.GetBitsAllocated() == 8 &&
       pixeltype.GetBitsStored() == 8 &&
       pixeltype.GetHighBit() == 7 &&
-      pixeltype.GetPixelRepresentation() == 0 
+      pixeltype.GetPixelRepresentation() == 0
       // image.GetPlanarConfiguration()
     )
       {
@@ -1092,7 +1092,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     {
     iop[i] = dircos->GetElement(i,0);
     }
-  
+
   for(int i = 0; i < 3; ++i)
     {
     iop[i+3] = dircos->GetElement(i,1);

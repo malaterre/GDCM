@@ -58,4 +58,3 @@ public:
 } // end namespace gdcm
 
 #endif //GDCMLO_H
-

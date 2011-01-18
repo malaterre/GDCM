@@ -28,4 +28,3 @@ int TestCoder(int, char *[])
   gdcm::DummyCoder c;
   return 0;
 }
-

@@ -51,4 +51,3 @@ set(GDCM_USE_FILE ${SELF_DIR}/UseGDCM.cmake)
 
 # Backward compatible part:
 SET(GDCM_FOUND       TRUE)
-

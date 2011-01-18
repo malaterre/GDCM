@@ -208,13 +208,14 @@ namespace details
         {
         m_dataSet.template ReadWithLength<T1,T2>(is,length);
         }
-    static void Check(bool b, std::istream &stream) 
+    static void Check(bool b, std::istream &stream)
       {
+      (void)stream;
       if( b ) assert( stream.eof() );
       }
   };
 
-  class ReadUpToTagCaller 
+  class ReadUpToTagCaller
   {
   private:
     gdcm::DataSet & m_dataSet;
@@ -238,9 +239,9 @@ namespace details
         m_dataSet.template ReadUpToTagWithLength<T1,T2>(is,m_tag,length);
         }
     static void Check(bool , std::istream &)  {}
-  }; 
+  };
 
-  class ReadSelectedTagsCaller 
+  class ReadSelectedTagsCaller
   {
   private:
     DataSet & m_dataSet;
@@ -263,7 +264,7 @@ namespace details
       m_dataSet.template ReadSelectedTagsWithLength<T1,T2>(is,m_tags,length);
     }
     static void Check(bool , std::istream &)  {}
-  }; 
+  };
 }
 
 bool Reader::Read()
@@ -403,6 +404,7 @@ std::istream &is = *Stream;
         // There is no such thing as Implicit Big Endian... oh well
         // LIBIDO-16-ACR_NEMA-Volume.dcm
         //F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag, skiptags);
+        //caller.template ReadCommon<ImplicitDataElement,SwapperDoOp>(is);
         throw "Virtual Big Endian Implicit is not defined by DICOM";
         }
       else

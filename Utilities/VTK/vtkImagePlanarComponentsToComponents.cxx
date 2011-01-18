@@ -48,11 +48,11 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
   int maxX, maxY, maxZ;
   // find the region to loop over
   maxX = outExt[1] - outExt[0];
-  maxY = outExt[3] - outExt[2]; 
+  maxY = outExt[3] - outExt[2];
   maxZ = outExt[5] - outExt[4];
   (void)self;
   (void)id;
-  
+
 
   //target = static_cast<unsigned long>((maxZ+1)*(maxY+1)/50.0);
   //target++;
@@ -97,8 +97,8 @@ int vtkImagePlanarComponentsToComponents::RequestData(
   vtkInformation* in1Info = inputVector[0]->GetInformationObject(0);
   vtkImageData *inData = vtkImageData::SafeDownCast(
     in1Info->Get(vtkDataObject::DATA_OBJECT()));
- 
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);  
+
+  vtkInformation *outInfo = outputVector->GetInformationObject(0);
   vtkImageData *output = vtkImageData::SafeDownCast(
     outInfo->Get(vtkDataObject::DATA_OBJECT()));
   vtkImageData *data = this->AllocateOutputData(output);
@@ -108,16 +108,16 @@ int vtkImagePlanarComponentsToComponents::RequestData(
     {
     vtkErrorMacro("Execute: This source only deal with uchar/ushort");
     }
-  
+
   outExt = data->GetExtent();
-  
-  // Get increments to march through data 
+
+  // Get increments to march through data
   data->GetContinuousIncrements(outExt, outIncX, outIncY, outIncZ);
 
   switch (inData->GetScalarType())
     {
     vtkTemplateMacro(
-      vtkImagePlanarComponentsToComponentsExecute(this, inData, 
+      vtkImagePlanarComponentsToComponentsExecute(this, inData,
                               data, outExt, 0, static_cast<VTK_TT *>(0)));
     default:
       vtkErrorMacro(<< "Execute: Unknown ScalarType");
@@ -132,4 +132,3 @@ void vtkImagePlanarComponentsToComponents::PrintSelf(ostream& os, vtkIndent inde
 {
   this->Superclass::PrintSelf(os,indent);
 }
-

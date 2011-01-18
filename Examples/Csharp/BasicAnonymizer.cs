@@ -21,9 +21,9 @@
  * See ClinicalTrialIdentificationWorkflow.cs for a more complex example
  */
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/BasicAnonymizer.exe gdcmData/012345.002.050.dcm out.dcm 
+ * $ mono bin/BasicAnonymizer.exe gdcmData/012345.002.050.dcm out.dcm
  */
 using System;
 using gdcm;
@@ -121,8 +121,7 @@ public class BasicAnonymizer
       {
       return 1;
       }
-    
+
     return 0;
     }
 }
-

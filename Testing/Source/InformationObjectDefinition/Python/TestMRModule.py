@@ -29,7 +29,6 @@ mentry = module.GetModuleEntry( gdcm.Tag(0x0018,0x0087) )
 print mentry
 mentry = module.GetModuleEntry( gdcm.Tag(0x0018,0x1080) )
 print mentry
-  
+
 # Test succeed ?
 sys.exit(0)
-

@@ -24,7 +24,7 @@ namespace gdcm
 
 /**
  * \brief StringFilter
- * StringFilter is the class that make gdcm2.x looks more like gdcm1 and transform the binary blob 
+ * StringFilter is the class that make gdcm2.x looks more like gdcm1 and transform the binary blob
  * contained in a DataElement into a string, typically this is a nice feature to have for wrapped language
  */
 class GDCM_EXPORT StringFilter

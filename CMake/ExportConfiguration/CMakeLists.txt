@@ -21,18 +21,20 @@ INSTALL( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
   DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
 )
 
-# install all targets referenced as GDCMTargets
-install(EXPORT GDCMTargets DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
+# install all targets referenced as ${GDCM_TARGETS_NAME}
+if(GDCM_STANDALONE)
+  install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
+endif(GDCM_STANDALONE)
 
 # [Prevent viral CMake dep]
 # See the following ref, which explain this mess.
 # http://cmake.org/Bug/view.php?id=9822
-# 0009822: Please expose: cmGlobalGenerator::GetExportSet at cmake level 
+# 0009822: Please expose: cmGlobalGenerator::GetExportSet at cmake level
 
 # I cannot retrieve the lists of exported targets, so read them from the file instead
 
 #set(gdcmtarget_cmake
-#  "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/GDCMTargets.cmake")
+#  "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/${GDCM_TARGETS_NAME}.cmake")
 
 #CONFIGURE_FILE(
 # ${GDCM_BINARY_DIR}/CMakeCache.txt
@@ -108,4 +110,3 @@ foreach(target ${targets})
     export(TARGETS ${target} FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake APPEND)
   endif(TARGET ${target})
 endforeach(target)
-

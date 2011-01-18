@@ -10,9 +10,9 @@ IF(NOT CMAKE_CSharp_COMPILER_WORKS)
     "class Dummy {\n"
     "static void Main() {\n"
     "}\n}\n")
-  TRY_COMPILE(CMAKE_CSharp_COMPILER_WORKS ${CMAKE_BINARY_DIR} 
+  TRY_COMPILE(CMAKE_CSharp_COMPILER_WORKS ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/testCSharpCompiler.cs
-    OUTPUT_VARIABLE OUTPUT) 
+    OUTPUT_VARIABLE OUTPUT)
   SET(C_TEST_WAS_RUN 1)
 ENDIF(NOT CMAKE_CSharp_COMPILER_WORKS)
 
@@ -30,7 +30,7 @@ ELSE(NOT CMAKE_CSharp_COMPILER_WORKS)
     MESSAGE(STATUS "Check for working CSharp compiler: ${CMAKE_CSharp_COMPILER} -- works")
     FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
       "Determining if the CSharp compiler works passed with "
-      "the following output:\n${OUTPUT}\n\n") 
+      "the following output:\n${OUTPUT}\n\n")
   ENDIF(C_TEST_WAS_RUN)
   SET(CMAKE_CSharp_COMPILER_WORKS 1 CACHE INTERNAL "")
 
@@ -49,4 +49,3 @@ ELSE(NOT CMAKE_CSharp_COMPILER_WORKS)
       )
   ENDIF(CMAKE_CSharp_COMPILER_FORCED)
 ENDIF(NOT CMAKE_CSharp_COMPILER_WORKS)
-

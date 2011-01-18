@@ -75,7 +75,7 @@ double frap(double frac[2], double startx, double maxden = 10 )
     if(x==(double)ai) break;     // AF: division by zero
     x = 1/(x - (double) ai);
     if(x>(double)0x7FFFFFFF) break;  // AF: representation failure
-    } 
+    }
 
   /* now remaining x is between 0 and 1/ai */
   /* approx as either 0 or 1/m where m is max that will fit in maxden */
@@ -93,7 +93,7 @@ double frap(double frac[2], double startx, double maxden = 10 )
   //printf("%ld/%ld, error = %e\n", m[0][0], m[1][0],
   //  startx - ((double) m[0][0] / (double) m[1][0]));
   const double error2 = startx - ((double) m[0][0] / (double) m[1][0]);
-  assert( fabs(error) < fabs(error2) );
+  assert( fabs(error) < fabs(error2) ); (void)error2;
 
   return error;
 }
@@ -116,4 +116,3 @@ Attribute<0x28,0x34> Spacing::ComputePixelAspectRatioFromPixelSpacing(const Attr
 
 
 } // end namespace gdcm
-

@@ -31,9 +31,16 @@ namespace gdcm
 template <typename TSwap>
 std::istream &UNExplicitDataElement::Read(std::istream &is)
 {
+  TagField.Read<TSwap>(is);
+  return ReadValue<TSwap>(is);
+}
+
+template <typename TSwap>
+std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
+{
   // See PS 3.5, Data Element Structure With UNExplicit VR
   // Read Tag
-  if( !TagField.Read<TSwap>(is) )
+  if( !is )
     {
     if( !is.eof() ) // FIXME This should not be needed
       {
@@ -83,7 +90,7 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
     // assert( TagField == Tag(0xfffe, 0xe000) );
     // -> For some reason VR is written as {44,0} well I guess this is a VR...
-    // Technically there is a second bug, dcmtk assume other things when reading this tag, 
+    // Technically there is a second bug, dcmtk assume other things when reading this tag,
     // so I need to change this tag too, if I ever want dcmtk to read this file. oh well
     // 0019004_Baseline_IMG1.dcm
     // -> VR is garbage also...

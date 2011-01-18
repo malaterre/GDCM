@@ -35,7 +35,7 @@ Looking at the HTML page, I think the 'unit' tr was done by hand thus should be 
 	  <xsl:variable name="creator" select="normalize-space(td[7])"/>
 	  <xsl:variable name="unit" select="normalize-space(td[8])"/>
 		  <!-- tag="{ $tag }" -->
-	  <entry name="{ $name }" 
+	  <entry name="{ $name }"
 		  type="{ $type }" vr="{ $vr }" vm="{ $vm }" description="{$desc}">
           <!--xsl:for-each select=".">
 	  <xsl:variable name="vm" select="normalize-space(td[1])"/>

@@ -6,24 +6,24 @@
   Date:      $Date: 2008/08/10 22:58:28 $
   Version:   $Revision: 1.21 $
 
-  Copyright (c) 1993-2002 Ken Martin, Will Schroeder, Bill Lorensen 
+  Copyright (c) 1993-2002 Ken Martin, Will Schroeder, Bill Lorensen
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
 
-// .NAME  wxVTKRenderWindowInteractor - class to enable VTK to render to 
+// .NAME  wxVTKRenderWindowInteractor - class to enable VTK to render to
 // and interact with wxWindow.
 // .SECTION Description
 //  wxVTKRenderWindowInteractor provide a VTK widget for wxWindow. This class
 // was completely rewrote to have the 'Look & Feel' of the python version:
 // wxVTKRenderWindowInteractor.py
-// .SECTION Caveats 
-//  - There is a know bug that prevent this class to works for more info see 
+// .SECTION Caveats
+//  - There is a know bug that prevent this class to works for more info see
 // WX_USE_X_CAPTURE. This bug only affect wxGTK from 2.3.2 to wxGTK 2.4.0.
 //  - Furthermore this class is tempated over either wxWindows or wxGLCanvas,
 // in wxWindows 2.3.1 and earlier, the wxGLCanvas had scroll bars, you can avoid
@@ -73,7 +73,7 @@
 #endif //__WXGTK__
 
 // Motif version (renamed into wxX11 for wxWindow 2.4 and newer)
-#if defined(__WXMOTIF__) 
+#if defined(__WXMOTIF__)
 # error This GUI is not supported by wxVTKRenderWindowInteractor for now
 #endif
 
@@ -91,7 +91,7 @@ class wxVTKRenderWindowInteractor : public wxWindow, public vtkRenderWindowInter
 #endif //__WXGTK__
 {
   DECLARE_DYNAMIC_CLASS(wxVTKRenderWindowInteractor)
-  
+
   public:
     //constructors
     wxVTKRenderWindowInteractor();
@@ -106,7 +106,7 @@ class wxVTKRenderWindowInteractor : public wxWindow, public vtkRenderWindowInter
     static wxVTKRenderWindowInteractor * New();
     void PrintSelf(ostream& os, vtkIndent indent);
 
-	  //destructor
+    //destructor
     ~wxVTKRenderWindowInteractor();
 
     // vtkRenderWindowInteractor overrides
@@ -164,7 +164,7 @@ class wxVTKRenderWindowInteractor : public wxWindow, public vtkRenderWindowInter
     int RenderAllowed;
     long GetHandleHack();
     int Stereo;
-    
+
   private:
     long Handle;
     bool Created;

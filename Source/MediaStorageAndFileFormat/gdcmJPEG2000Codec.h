@@ -19,7 +19,7 @@
 
 namespace gdcm
 {
-  
+
 class JPEG2000Internals;
 /**
  * \brief Class to do JPEG 2000

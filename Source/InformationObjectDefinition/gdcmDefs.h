@@ -50,7 +50,7 @@ public:
   bool IsEmpty() const { return GetModules().IsEmpty(); }
 
   bool Verify(const File& file) const;
-  
+
   // \deprecated DO NOT USE
   bool Verify(const DataSet& ds) const;
 
@@ -79,4 +79,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMDEFS_H
-

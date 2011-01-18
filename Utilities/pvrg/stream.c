@@ -107,11 +107,11 @@ int umask[] = {        /* This is -1 XOR 2^{i+1}-1 */
 /* Internally kept variables for global flag communication */
 
 int CleartoResync=0;       /* Return black blocks until last Resync reached*/
-int ResyncEnable=0;    	   /* This enables the resync feature */
-int ResyncCount=0;	   /* This is the resync marker count */
-int LastKnownResync=0;	   /* This is the index of the next Resync */
-int EndofFile=0;	   /* End of file means read stream exhausted */
-int EndofImage=0;	   /* End of image means EOI image marker found */
+int ResyncEnable=0;         /* This enables the resync feature */
+int ResyncCount=0;     /* This is the resync marker count */
+int LastKnownResync=0;     /* This is the index of the next Resync */
+int EndofFile=0;     /* End of file means read stream exhausted */
+int EndofImage=0;     /* End of image means EOI image marker found */
 
 /* Static variables that keep internal state. */
 
@@ -167,7 +167,7 @@ void initstream()
       Stack_Stream_srin[i]=NULL;
     }
 }
- 
+
 /*BFUNC
 
 pushstream() pushes the currently active stream into its predefined
@@ -255,7 +255,7 @@ int brseek(offset,ptr)
 
 /*BFUNC
 
-bpushc() is used to unget a character value from the current stream. 
+bpushc() is used to unget a character value from the current stream.
 
 EFUNC*/
 
@@ -275,7 +275,7 @@ int bgetc()
 
 /*BFUNC
 
-bgetw() gets a msb word from the stream. 
+bgetw() gets a msb word from the stream.
 
 EFUNC*/
 
@@ -314,15 +314,15 @@ static int pgetc()
   if ((temp = bgetc())==MARKER_MARKER)   /* If MARKER then */
     {
       if ((temp = bgetc()))              /* if next is not 0xff, then marker */
-	{
-	  WHEREAMI();
-	  printf("Unanticipated marker detected.\n");
-	  if (!ResyncEnable) DoAllMarker(); /* If no resync enabled */
-	}                                   /* could be marker */
+  {
+    WHEREAMI();
+    printf("Unanticipated marker detected.\n");
+    if (!ResyncEnable) DoAllMarker(); /* If no resync enabled */
+  }                                   /* could be marker */
       else
-	{
-	  return(MARKER_MARKER);        /* else truly 0xff */
-	}
+  {
+    return(MARKER_MARKER);        /* else truly 0xff */
+  }
     }
   return(temp);
 }
@@ -355,7 +355,7 @@ void mropen(filename,index)
     {
       WHEREAMI();
       printf("%s cannot be opened because %d stream slot filled.\n",
-	     filename,index);
+       filename,index);
       exit(ERROR_BOUNDS);
     }
   if (Stack_Stream_Current!=index) pushstream();
@@ -365,7 +365,7 @@ void mropen(filename,index)
     {
       WHEREAMI();
       printf("Cannot read input file %s.\n",
-	     filename);
+       filename);
       exit(ERROR_INIT_FILE);
     }
   CleartoResync=0;
@@ -414,7 +414,7 @@ void mwopen(filename,index)
     {
       WHEREAMI();
       printf("%s cannot be opened because %d stream slot filled.\n",
-	     filename,index);
+       filename,index);
       exit(ERROR_BOUNDS);
     }
   if ((Stack_Stream_Current!=index)) pushstream();
@@ -622,7 +622,7 @@ void meputv(n,b)
 
 /*BFUNC
 
-megetv() gets n bits from the read stream and returns it. 
+megetv() gets n bits from the read stream and returns it.
 
 EFUNC*/
 
@@ -637,13 +637,13 @@ int megetv(n)
   while(p > 0)
     {
       if (read_position>23)  /* If byte buffer contains almost entire word */
-	{
-	  rv = (current_read_byte << p);  /* Manipulate buffer */
-	  current_read_byte = pgetc();    /* Change read bytes */
-	  rv |= (current_read_byte >> (8-p));
-	  read_position = 7-p;
-	  return(rv & lmask[n]);          /* Can return pending residual val */
-	}
+  {
+    rv = (current_read_byte << p);  /* Manipulate buffer */
+    current_read_byte = pgetc();    /* Change read bytes */
+    rv |= (current_read_byte >> (8-p));
+    read_position = 7-p;
+    return(rv & lmask[n]);          /* Can return pending residual val */
+  }
       current_read_byte = (current_read_byte << 8) | pgetc();
       read_position += 8;                 /* else shift in new information */
       p -= 8;
@@ -678,12 +678,12 @@ int DoMarker()
     {
 #ifdef VERSION_1_0
       if ((marker_read_byte = bgetc())!=MARKER_MARKER)
-	{
-	  WHEREAMI();
-	  printf("Unknown FIL marker. Bypassing.\n");
-	  ErrorValue = ERROR_MARKER;
-	  return(0);
-	}
+  {
+    WHEREAMI();
+    printf("Unknown FIL marker. Bypassing.\n");
+    ErrorValue = ERROR_MARKER;
+    return(0);
+  }
 #endif
       marker_read_byte = bgetc();
     }
@@ -694,98 +694,98 @@ int DoMarker()
   if (InResync)
     {
       if ((marker <0xd0)||(marker>0xd7))
-	{
-	  WHEREAMI();
-	  printf("Illegal resync marker found.\n");
-	  return(0);
-	}
+  {
+    WHEREAMI();
+    printf("Illegal resync marker found.\n");
+    return(0);
+  }
     }
   switch(hin)                            /* Pretty much self explanatory */
     {
     case 0x0c:                           /* Frame Style Marker */
       switch(lon)
-	{
-	case 0x04:
-	  ReadDht();
-	  break;
-	case 0x00:
-	case 0x01:
-	case 0x03:
-	  ReadSof(lon);
-	  break;
-	case 0x08:
-	case 0x09:
-	case 0x0a:
-	case 0x0b:
-	case 0x0c:
-	case 0x0d:
-	case 0x0e:
-	case 0x0f:
-	  WHEREAMI();
-	  printf("Arithmetic coding not supported.\n");
-	  length = bgetw();
-	  for(i=2;i<length;i++)          /* Length adds 2 bytes itself */
-	    bgetc();
-	  break;
-	case 0x02:
-	case 0x05:
-	case 0x06:
-	case 0x07:
-	default:
-	  WHEREAMI();
-	  printf("Frame type %x not supported.\n",lon);
-	  length = bgetw();
-	  for(i=2;i<length;i++)          /* Length adds 2 bytes itself */
-	    bgetc();
-	  break;
-	}
+  {
+  case 0x04:
+    ReadDht();
+    break;
+  case 0x00:
+  case 0x01:
+  case 0x03:
+    ReadSof(lon);
+    break;
+  case 0x08:
+  case 0x09:
+  case 0x0a:
+  case 0x0b:
+  case 0x0c:
+  case 0x0d:
+  case 0x0e:
+  case 0x0f:
+    WHEREAMI();
+    printf("Arithmetic coding not supported.\n");
+    length = bgetw();
+    for(i=2;i<length;i++)          /* Length adds 2 bytes itself */
+      bgetc();
+    break;
+  case 0x02:
+  case 0x05:
+  case 0x06:
+  case 0x07:
+  default:
+    WHEREAMI();
+    printf("Frame type %x not supported.\n",lon);
+    length = bgetw();
+    for(i=2;i<length;i++)          /* Length adds 2 bytes itself */
+      bgetc();
+    break;
+  }
       break;
     case 0x0d:  /* Resync Marker */
       if (lon > 7)
-	{
-	  switch(lon)
-	    {
-	    case 0x08:                    /* Start of Image */
-	      EndofImage=0;               /* If End of Image occurs */
-	      CImage->ImageSequence++;    /* reset, and increment sequence */
-	      break;
-	    case 0x09:                    /* End of Image */
-	      EndofImage=1;
-	      break;
-	    case 0x0a:
-	      ResyncCount=0;              /* SOS clears the resync count */
-	      ReadSos();
-	      break;
-	    case 0x0b:
-	      ReadDqt();
-	      break;
-	    case 0x0c:
-	      ReadDnl();
-	      break;
-	    case 0x0d:
-	      ReadDri();
-	      break;
-	    default:
-	      WHEREAMI();
-	      printf("Hierarchical markers found.\n");
-	      length = bgetw();
-	      for(i=2;i<length;i++)      /* Length adds 2 bytes itself */
-		{
-		  bgetc();
-		}
-	      break;
-	    }
-	}
+  {
+    switch(lon)
+      {
+      case 0x08:                    /* Start of Image */
+        EndofImage=0;               /* If End of Image occurs */
+        CImage->ImageSequence++;    /* reset, and increment sequence */
+        break;
+      case 0x09:                    /* End of Image */
+        EndofImage=1;
+        break;
+      case 0x0a:
+        ResyncCount=0;              /* SOS clears the resync count */
+        ReadSos();
+        break;
+      case 0x0b:
+        ReadDqt();
+        break;
+      case 0x0c:
+        ReadDnl();
+        break;
+      case 0x0d:
+        ReadDri();
+        break;
+      default:
+        WHEREAMI();
+        printf("Hierarchical markers found.\n");
+        length = bgetw();
+        for(i=2;i<length;i++)      /* Length adds 2 bytes itself */
+    {
+      bgetc();
+    }
+        break;
+      }
+  }
       break;
     case 0x0e: /* Application Specific */
       length = bgetw();
       for(i=2;i<length;i++) /* Length adds 2 bytes itself */
-	bgetc();
+  bgetc();
       break;
     case 0x0f: /* JPEG Specific */
       length = bgetw();
       for(i=2;i<length;i++) /* Length adds 2 bytes itself */
-	bgetc();
+  bgetc();
       break;
     default:
       WHEREAMI();
@@ -814,10 +814,10 @@ int ScreenMarker()
       current_read_byte = 0;
       read_position= -1;                 /* Consume byte to be flush */
       if ((marker_read_byte=bgetc())==(unsigned int)EOF)
-	{
-	  EndofFile=2;
-	  return(EOF);
-	}
+  {
+    EndofFile=2;
+    return(EOF);
+  }
     }
   else                /* If flush, then marker byte is current read byte */
     {
@@ -832,17 +832,17 @@ int ScreenMarker()
   while((marker_read_byte = bgetc())==MARKER_FIL)
     {                                      /* Get rid of FIL markers */
       if ((marker_read_byte = bgetc())!=MARKER_MARKER)
-	{
-	  WHEREAMI();
-	  printf("Unattached FIL marker.\n");
-	  ErrorValue = ERROR_MARKER;
-	  return(-1);
-	}
+  {
+    WHEREAMI();
+    printf("Unattached FIL marker.\n");
+    ErrorValue = ERROR_MARKER;
+    return(-1);
+  }
       if (marker_read_byte == (unsigned int)EOF)        /* Found end of file */
-	{
-	  EndofFile=2;
-	  return(EOF);
-	}
+  {
+    EndofFile=2;
+    return(EOF);
+  }
       marker_read_byte = bgetc();         /* Otherwise read another byte */
     }                                     /* Call processor for markers */
   if (marker_read_byte)  return(DoMarker());
@@ -878,16 +878,16 @@ void Resync()
   do
     {
       while((marker_read_byte = bgetc())!=MARKER_MARKER)
-	{
-	  if (marker_read_byte==(unsigned int)EOF)
-	    {
-	      WHEREAMI();
-	      printf("Attempt to resync at end of file.\n");
-	      printf("Sorry.\n");
-	      TerminateFile();
-	      exit(ERROR_PREMATURE_EOF);
-	    }
-	}
+  {
+    if (marker_read_byte==(unsigned int)EOF)
+      {
+        WHEREAMI();
+        printf("Attempt to resync at end of file.\n");
+        printf("Sorry.\n");
+        TerminateFile();
+        exit(ERROR_PREMATURE_EOF);
+      }
+  }
     }
   while(((marker_read_byte = bgetc()) & MARKER_RSC_MASK)!=MARKER_RSC);
   LastKnownResync = marker_read_byte & 0x07;  /* Set up currently read */
@@ -896,9 +896,9 @@ void Resync()
   /*
     In general, we assume that we must add black space
     until resynchronization. This is consistent under both
-    byte loss, byte gain, and byte corruption. 
+    byte loss, byte gain, and byte corruption.
     We assume corruption does not create new markers with
-    an RSC value--if so, we are probably dead, anyways.    
+    an RSC value--if so, we are probably dead, anyways.
     */
   CleartoResync=1;
   ResyncCount = (LastKnownResync+1)&0x07;
@@ -907,7 +907,7 @@ void Resync()
   ResetCodec();  /* Reset the codec incase in a non-local jump. */
 
   printf("ResyncCount: %d  LastKnownResync: %d\n",
-	 ResyncCount,LastKnownResync);
+   ResyncCount,LastKnownResync);
 }
 
 /*BFUNC
@@ -942,28 +942,28 @@ int ReadResync()
   while((ValueRead = ScreenMarker()) >= 0)
     {
       if ((ValueRead & MARKER_RSC_MASK)!=MARKER_RSC) /* Strange marker found */
-	{
-	  if (ValueRead != MARKER_DNL)  /* DNL only other possibility */
-	    {                           /* actually excluded, never reached */
-	      WHEREAMI();               /* 11/19/91 ACH */
-	      printf("Non-Resync marker found for resync.\n");
-	      printf("Trying again.\n");
-	    }
-	}
+  {
+    if (ValueRead != MARKER_DNL)  /* DNL only other possibility */
+      {                           /* actually excluded, never reached */
+        WHEREAMI();               /* 11/19/91 ACH */
+        printf("Non-Resync marker found for resync.\n");
+        printf("Trying again.\n");
+      }
+  }
       else
-	{
-	  ValueRead = ValueRead & 0x07;  /* If so, then check resync count */
-	  if (ValueRead != ResyncCount)
-	    {
-	      WHEREAMI();
-	      printf("Bad resync counter. No search done.\n");
-	    }
-	  ResyncCount = (ResyncCount+1)&0x07;
+  {
+    ValueRead = ValueRead & 0x07;  /* If so, then check resync count */
+    if (ValueRead != ResyncCount)
+      {
+        WHEREAMI();
+        printf("Bad resync counter. No search done.\n");
+      }
+    ResyncCount = (ResyncCount+1)&0x07;
                                          /* Flush spurious markers. */
-	  while((ValueRead = ScreenMarker()) >= 0);
-	  InResync=0;
-	  return(0);
-	}
+    while((ValueRead = ScreenMarker()) >= 0);
+    InResync=0;
+    return(0);
+  }
     }
   WHEREAMI();
   printf("Anticipated resync not found.\n");

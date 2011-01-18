@@ -1,7 +1,7 @@
 # http://www.cmake.org/Wiki/CmakeMingw
 # Usage:
 #
-#  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake 
+#  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake
 #
 # For gdcm you need at least the following three package (2008/08/19):
 #
@@ -32,9 +32,8 @@ SET(CMAKE_CXX_FLAGS -m32)
 SET(CMAKE_FIND_ROOT_PATH   /usr/i486-linux-gnu )
 
 # adjust the default behaviour of the FIND_XXX() commands:
-# search headers and libraries in the target environment, search 
+# search headers and libraries in the target environment, search
 # programs in the host environment
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-

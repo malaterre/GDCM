@@ -196,5 +196,3 @@ extern void PrintMatrix();
 extern void ClearMatrix();
 
 #endif
-
-

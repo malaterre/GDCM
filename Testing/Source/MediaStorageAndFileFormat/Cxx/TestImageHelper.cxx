@@ -24,7 +24,7 @@ int TestImageHelper(int, char *[])
   const double pos[] = { 0,0,0,
                          1,1,1};
   const double answer[3] = {1,1,1};
-  
+
   std::vector<double> impos(pos,pos+6);
   std::vector<double> spacing;
   spacing.resize(3);
@@ -101,8 +101,7 @@ int TestImageHelper(int, char *[])
   if ( (at.GetValue(0) != 1) || (at.GetValue(1) != 0) || (at.GetValue(2) != 0) ||
        (at.GetValue(3) != 0) || (at.GetValue(4) != 1) || (at.GetValue(5) != 0) ) return 1;
 
-} 
-  
-  return 0;
 }
 
+  return 0;
+}

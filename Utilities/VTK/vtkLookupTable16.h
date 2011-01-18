@@ -12,13 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkLookupTable16 - 
+// .NAME vtkLookupTable16 -
 // .SECTION Description
 //
 // .SECTION Caveats
 //
 // .SECTION See Also
-// vtkLookupTable 
+// vtkLookupTable
 
 #ifndef VTKLOOKUPTABLE16_H
 #define VTKLOOKUPTABLE16_H
@@ -30,7 +30,7 @@ class VTK_EXPORT vtkLookupTable16 : public vtkLookupTable
 {
 public:
   static vtkLookupTable16 *New();
-  
+
   vtkTypeRevisionMacro(vtkLookupTable16,vtkLookupTable);
   void PrintSelf(ostream& os, vtkIndent indent);
 
@@ -49,20 +49,20 @@ protected:
 
   vtkUnsignedShortArray *Table16;
 
-void MapScalarsThroughTable2(void *input, 
+void MapScalarsThroughTable2(void *input,
                                              unsigned char *output,
-                                             int inputDataType, 
+                                             int inputDataType,
                                              int numberOfValues,
                                              int inputIncrement,
                                              int outputFormat);
- 
+
 private:
   vtkLookupTable16(const vtkLookupTable16&);  // Not implemented.
   void operator=(const vtkLookupTable16&);  // Not implemented.
 };
 
 //----------------------------------------------------------------------------
-inline unsigned char *vtkLookupTable16::WritePointer(const vtkIdType id, 
+inline unsigned char *vtkLookupTable16::WritePointer(const vtkIdType id,
                                                    const int number)
 {
   //this->InsertTime.Modified();
@@ -70,6 +70,3 @@ inline unsigned char *vtkLookupTable16::WritePointer(const vtkIdType id,
 }
 
 #endif
-
-
-

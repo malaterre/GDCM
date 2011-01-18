@@ -21,7 +21,7 @@
 #include <string>
 
 /*
-PS 3.16 - 2008 
+PS 3.16 - 2008
 CID 7202 Source Image Purposes of Reference
 Context ID 7202
 Source Image Purposes of Reference
@@ -452,7 +452,7 @@ bool FileDerivation::Derive()
     {
     // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
     gdcm::Attribute<0x0008,0x0008> at3;
-    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"}; 
+    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"};
     at3.SetValues( values, 2, true ); // true => copy data !
     if( ds.FindDataElement( at3.GetTag() ) )
       {
@@ -483,4 +483,3 @@ bool FileDerivation::Derive()
 
 
 } // end namespace gdcm
-

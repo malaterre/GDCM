@@ -30,7 +30,7 @@ VL ImplicitDataElement::GetLength() const
     SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
     if( sq )
       {
-      return TagField.GetLength() + ValueLengthField.GetLength() 
+      return TagField.GetLength() + ValueLengthField.GetLength()
         + sq->ComputeLength<ImplicitDataElement>();
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -38,7 +38,7 @@ VL ImplicitDataElement::GetLength() const
     if( sf )
       {
       //assert( VRField & VR::OB_OW ); // VR::INVALID is not possible AFAIK...
-      return TagField.GetLength() /*+ VRField.GetLength()*/ 
+      return TagField.GetLength() /*+ VRField.GetLength()*/
         + ValueLengthField.GetLength() + sf->ComputeLength();
       }
 #endif
@@ -49,16 +49,15 @@ VL ImplicitDataElement::GetLength() const
   else if( const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&v) )
     {
     // TestWrite2
-    return TagField.GetLength() + ValueLengthField.GetLength() 
+    return TagField.GetLength() + ValueLengthField.GetLength()
       + sqi->ComputeLength<ImplicitDataElement>();
     }
   else
     {
     assert( !ValueField || ValueField->GetLength() == ValueLengthField );
-    return TagField.GetLength() + ValueLengthField.GetLength() 
+    return TagField.GetLength() + ValueLengthField.GetLength()
       + ValueLengthField;
     }
 }
 
 } // end namespace gdcm
-

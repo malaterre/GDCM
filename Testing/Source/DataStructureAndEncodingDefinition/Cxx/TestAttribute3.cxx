@@ -65,8 +65,6 @@ int main(int argc, char *argv[])
   m1.Print( std::cout << std::endl );
 
   std::cout << std::endl;
- 
+
   return 0;
 }
-
-

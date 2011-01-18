@@ -11,14 +11,14 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jlossls.h"		/* Private declarations for lossless codec */
+#include "jlossls.h"    /* Private declarations for lossless codec */
 
 
 #ifdef C_LOSSLESS_SUPPORTED
 
 METHODDEF(void)
 simple_downscale(j_compress_ptr cinfo,
-		 JSAMPROW input_buf, JSAMPROW output_buf, JDIMENSION width)
+     JSAMPROW input_buf, JSAMPROW output_buf, JDIMENSION width)
 {
   /* j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec; */
   unsigned int xindex;
@@ -26,13 +26,13 @@ simple_downscale(j_compress_ptr cinfo,
 
   for (xindex = 0; xindex < width; xindex++)
     output_buf[xindex] = (JSAMPLE) RIGHT_SHIFT(GETJSAMPLE(input_buf[xindex]),
-					       cinfo->Al);
+                 cinfo->Al);
 }
 
 
 METHODDEF(void)
 noscale(j_compress_ptr cinfo,
-	JSAMPROW input_buf, JSAMPROW output_buf, JDIMENSION width)
+  JSAMPROW input_buf, JSAMPROW output_buf, JDIMENSION width)
 {
   (void)cinfo;
   MEMCOPY(output_buf, input_buf, width * SIZEOF(JSAMPLE));

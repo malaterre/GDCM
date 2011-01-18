@@ -56,11 +56,11 @@ if __name__ == "__main__":
   r.SetFileName( file1 )
   if not r.Read():
     sys.exit(1)
-  
+
   fg = gdcm.FilenameGenerator()
   f = r.GetFile()
   ds = f.GetDataSet()
-  tsis = gdcm.Tag(0x2005,0x1132) # 
+  tsis = gdcm.Tag(0x2005,0x1132) #
   if ds.FindDataElement( tsis ):
     sis = ds.GetDataElement( tsis )
     #sqsis = sis.GetSequenceOfItems()
@@ -76,11 +76,10 @@ if __name__ == "__main__":
       for i in range(0,nitems):
         item1 = sqsis.GetItem(i+1) # Item start at 1
         nestedds = item1.GetNestedDataSet()
-        tprcs = gdcm.Tag(0x2005,0x1144) # 
+        tprcs = gdcm.Tag(0x2005,0x1144) #
         if nestedds.FindDataElement( tprcs ):
           prcs = nestedds.GetDataElement( tprcs )
           bv = prcs.GetByteValue()
           print bv
           f = open( fg.GetFilename(i) , "w" )
           f.write( bv.WriteBuffer() )
- 

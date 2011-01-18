@@ -108,7 +108,7 @@ MACRO(CSHARP_ADD_EXECUTABLE name)
 
   SET(CSHARP_EXECUTABLE_${name}_ARGS
     #"/out:${name}.dll" ${csharp_cs_sources}
-    #"/r:gdcm_csharp.dll" 
+    #"/r:gdcm_csharp.dll"
     "/out:${name}.exe ${csharp_cs_sources}"
   )
 
@@ -153,4 +153,3 @@ MACRO(CSHARP_LINK_LIBRARIES name)
   )
 
 ENDMACRO(CSHARP_LINK_LIBRARIES)
-

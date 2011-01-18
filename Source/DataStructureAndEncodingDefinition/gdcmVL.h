@@ -67,8 +67,8 @@ public:
   operator uint32_t () const { return ValueLength; }
 
   VL GetLength() const {
-	  // VL cannot know it's length...well in implicit yes...
-	  // TODO: need to check we cannot call this function from an Explicit element
+    // VL cannot know it's length...well in implicit yes...
+    // TODO: need to check we cannot call this function from an Explicit element
     return 4;
   }
 

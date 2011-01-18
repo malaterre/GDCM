@@ -19,7 +19,7 @@ import vtk.*;
 
 /*
  * Compilation:
- * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/vtkgdcm.jar:/home/mmalaterre/Projects/VTK54-gcc/bin/vtk.jar javac HelloVTKWorld.java 
+ * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/vtkgdcm.jar:/home/mmalaterre/Projects/VTK54-gcc/bin/vtk.jar javac HelloVTKWorld.java
  *
  * Usage:
  * LD_LIBRARY_PATH=/usr/lib/jvm/java-6-sun-1.6.0.07/jre/lib/amd64/xawt/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/:/home/mmalaterre/Projects/VTK54-gcc/bin/ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/vtkgdcm.jar:/home/mmalaterre/Projects/VTK54-gcc/bin/vtk.jar:. java HelloVTKWorld ~/Creatis/gdcmData/012345.002.050.dcm out.dcm
@@ -27,14 +27,14 @@ import vtk.*;
  */
 public class HelloVTKWorld
 {
-  static { 
-    System.loadLibrary("vtkCommonJava"); 
-    System.loadLibrary("vtkFilteringJava"); 
-    System.loadLibrary("vtkIOJava"); 
-    System.loadLibrary("vtkImagingJava"); 
-    System.loadLibrary("vtkGraphicsJava"); 
-    System.loadLibrary("vtkRenderingJava"); 
-    System.loadLibrary("vtkgdcmJava"); 
+  static {
+    System.loadLibrary("vtkCommonJava");
+    System.loadLibrary("vtkFilteringJava");
+    System.loadLibrary("vtkIOJava");
+    System.loadLibrary("vtkImagingJava");
+    System.loadLibrary("vtkGraphicsJava");
+    System.loadLibrary("vtkRenderingJava");
+    System.loadLibrary("vtkgdcmJava");
     try {
       System.loadLibrary("vtkHybridJava");
     } catch (Throwable e) {
@@ -55,11 +55,11 @@ public class HelloVTKWorld
     reader.Update();
 
     vtkMedicalImageProperties prop = reader.GetMedicalImageProperties();
-    System.out.println( prop.GetPatientName() ); // 
+    System.out.println( prop.GetPatientName() ); //
 
 //    if( reader.GetImageFormat() == vtkgdcm.vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
 //      {
-//      System.out.println( "Image is MONOCHROME2" ); // 
+//      System.out.println( "Image is MONOCHROME2" ); //
 //      }
 
     // Just for fun, invert the direction cosines, output should reflect that:
@@ -81,4 +81,3 @@ public class HelloVTKWorld
     System.out.println("Success reading: " + filename );
     }
 }
-

@@ -130,7 +130,7 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
 /*
  * FIXME:
  * In order to support : gdcmData/SIEMENS_GBS_III-16-ACR_NEMA_1.acr
- *                       gdcmDataExtra/gdcmSampleData/images_of_interest/XA_GE_JPEG_02_with_Overlays.dcm  
+ *                       gdcmDataExtra/gdcmSampleData/images_of_interest/XA_GE_JPEG_02_with_Overlays.dcm
  * I cannot simply check for overlay_group,3000 this would not work
  * I would need a strong euristick
  */
@@ -458,7 +458,7 @@ void Overlay::Decode(std::istream &is, std::ostream &os)
 
 bool Overlay::GetBuffer(char *buffer) const
 {
-  unsigned long length = Internal->Data.size();
+  size_t length = Internal->Data.size();
   std::copy(buffer, buffer+length, Internal->Data.begin());
   return true;
 }

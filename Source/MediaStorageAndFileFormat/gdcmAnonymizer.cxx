@@ -106,10 +106,11 @@ bool Anonymizer::Remove( Tag const &t )
 
 bool Anonymizer::Replace( Tag const &t, const char *value )
 {
-  size_t len = 0;
+  VL::Type len = 0; //to avoid the size_t warning on 64 bit windows
   if( value )
     {
-    len = strlen( value );
+      len = (VL::Type)strlen( value );//strlen returns size_t, but it should be VL::Type
+      //strlen shouldn't be more than 4gb anyway
     }
   return Replace( t, value, len );
 }
@@ -155,8 +156,8 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
     // Ok this is a public element
     assert( t.IsPublic() );
     const DictEntry &dictentry = dicts.GetDictEntry(t);
-    if ( dictentry.GetVR() == VR::INVALID 
-      || dictentry.GetVR() == VR::UN 
+    if ( dictentry.GetVR() == VR::INVALID
+      || dictentry.GetVR() == VR::UN
       || dictentry.GetVR() == VR::SQ
     )
       {
@@ -245,7 +246,8 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
           {
           de.SetVR( dictentry.GetVR() );
           }
-        de.SetByteValue( padded.c_str(), padded.size() );
+        const VL::Type paddedSize = (VL::Type) padded.size();//casting to avoid size_t warning on 64
+        de.SetByteValue( padded.c_str(), paddedSize );
         ds.Replace( de );
         ret = true;
         }
@@ -283,8 +285,8 @@ static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-          unsigned int n = sq->GetNumberOfItems();
-          for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+            gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
             DataSet &nested = item.GetNestedDataSet();
@@ -329,8 +331,8 @@ static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-          unsigned int n = sq->GetNumberOfItems();
-          for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+            gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
             DataSet &nested = item.GetNestedDataSet();
@@ -375,8 +377,8 @@ static bool Anonymizer_RemovePrivateTags(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-          unsigned int n = sq->GetNumberOfItems();
-          for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+          gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
             DataSet &nested = item.GetNestedDataSet();
@@ -446,8 +448,8 @@ bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, S
   if( found ) return true;
 
   // now look into sub-sequence:
-  unsigned int n = sqi->GetNumberOfItems();
-  for( unsigned int i = 1; i <= n; i++) // item starts at 1, not 0
+  gdcm::SequenceOfItems::SizeType n = sqi->GetNumberOfItems();
+  for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
     {
     Item &item = sqi->GetItem( i );
     DataSet &nested = item.GetNestedDataSet();
@@ -488,8 +490,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
-  if(  ds.FindDataElement( Tag(0x0400,0x0500) ) 
-    || ds.FindDataElement( Tag(0x0012,0x0062) ) 
+  if(  ds.FindDataElement( Tag(0x0400,0x0500) )
+    || ds.FindDataElement( Tag(0x0012,0x0062) )
     || ds.FindDataElement( Tag(0x0012,0x0063) ) )
     {
     gdcmDebugMacro( "EncryptedContentTransferSyntax Attribute is present !" );
@@ -590,12 +592,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
   size_t encrypted_len2 = encrypted_len;
   bool b = p7.Encrypt( buf, encrypted_len, orig, encrypted_str.size() );
-  if( !b ) 
+  if( !b )
   {
     gdcmErrorMacro( "Problem with Encrypt" );
     return false;
   }
   assert( encrypted_len <= encrypted_len2 );
+  (void)encrypted_len2;//warning removal
 
     {
     // Create a Sequence
@@ -608,11 +611,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     // <entry group="0400" element="0510" vr="UI" vm="1" name="Encrypted Content Transfer Syntax UID"/>
     DataElement encrypted_ts_de( Tag(0x400,0x510) );
     encrypted_ts_de.SetVR( Attribute<0x0400, 0x0510>::GetVR() );
-    encrypted_ts_de.SetByteValue( encrypted_ts.GetString(), strlen(encrypted_ts.GetString()) );
+    const VL::Type encryptedStrLen = (VL::Type)strlen(encrypted_ts.GetString());
+    encrypted_ts_de.SetByteValue( encrypted_ts.GetString(), encryptedStrLen );
     // <entry group="0400" element="0520" vr="OB" vm="1" name="Encrypted Content"/>
     DataElement encrypted_de( Tag(0x400,0x520) );
     encrypted_de.SetVR( Attribute<0x0400, 0x0520>::GetVR() );
-    encrypted_de.SetByteValue( (char*)buf, encrypted_len );
+    const VL::Type encryptedLenSize = (VL::Type)encrypted_len;
+    encrypted_de.SetByteValue( (char*)buf, encryptedLenSize );
     delete[] buf;
     delete[] orig;
 
@@ -667,7 +672,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   }
   catch(std::exception &ex)
   {
-  gdcmDebugMacro( "Problem during RecurseDataSet" );
+  gdcmDebugMacro( "Problem during RecurseDataSet");
+  (void)ex; //to get rid of the warning.  TODO: spit out the exception
   return false;
   }
 catch(...)
@@ -711,7 +717,7 @@ bool IsVRUI(Tag const &tag)
   const DictEntry &dictentry = dicts.GetDictEntry(tag);
   if( dictentry.GetVR() == VR::UI ) return true;
   //if( tag == Tag(0x0020,0x000d)   // Study Instance UID : UI
-  // || tag == Tag(0x0020,0x0052)   // 
+  // || tag == Tag(0x0020,0x0052)   //
   // || tag == Tag(0x0020,0x000e) ) // Series Instance UID : UI
   //  {
   //  return true;
@@ -767,7 +773,7 @@ I think it would also make sense to quote the following attributes:
 * Study ID,
 * Series Number.
 It is required they have consistent values when one is about to
-generate a DICOMDIR 
+generate a DICOMDIR
 
 => Sup 142
 */
@@ -775,7 +781,7 @@ generate a DICOMDIR
   static const unsigned int numDeIds = sizeof(SpecialTypeTags) / deidSize;
 
   bool b = std::binary_search(SpecialTypeTags, SpecialTypeTags + numDeIds, tag);
-  
+
   // This is a Type 3 attribute but with VR=UI
   // <entry group="0008" element="0014" vr="UI" vm="1" name="Instance Creator UID"/>
   //assert( dicts.GetDictEntry(tag).GetVR() != VR::UI );
@@ -834,7 +840,8 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
         }
       }
     std::string &v = dummymap[ tvk ];
-    copy.SetByteValue( v.c_str(), v.size() );
+    VL::Type vSize = (VL::Type)v.size();
+    copy.SetByteValue( v.c_str(), vSize );
     ds.Replace( copy );
     }
   else
@@ -889,8 +896,8 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
       assert( sqi->IsUndefinedLength() );
       //de.GetVL().SetToUndefined();
       //sqi->SetLengthToUndefined();
-      unsigned int n = sqi->GetNumberOfItems();
-      for( unsigned int i = 1; i <= n; ++i )
+      gdcm::SequenceOfItems::SizeType n = sqi->GetNumberOfItems();
+      for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; ++i )
         {
         Item &item = sqi->GetItem( i );
         DataSet &nested = item.GetNestedDataSet();
@@ -934,7 +941,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   SmartPointer<SequenceOfItems> sq = EncryptedAttributesSequence.GetValueAsSQ();
   const Item &item1 = sq->GetItem(1);
   const DataSet &nds1 = item1.GetNestedDataSet();
-  if( !nds1.FindDataElement( Tag(0x0400,0x0510) ) 
+  if( !nds1.FindDataElement( Tag(0x0400,0x0510) )
     || nds1.GetDataElement( Tag(0x0400,0x0510) ).IsEmpty() )
     {
     gdcmDebugMacro( "Missing EncryptedContentTransferSyntax Attribute" );
@@ -952,7 +959,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
     return false;
     }
 
-  if( !nds1.FindDataElement( Tag(0x0400,0x0520) ) 
+  if( !nds1.FindDataElement( Tag(0x0400,0x0520) )
     || nds1.GetDataElement( Tag(0x0400,0x0520) ).IsEmpty() )
     {
     gdcmDebugMacro( "Missing EncryptedContent Attribute" );
@@ -961,7 +968,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 
   const DataElement &EncryptedContent = nds1.GetDataElement( Tag(0x0400,0x0520) );
   const ByteValue *bv = EncryptedContent.GetByteValue();
-  
+
   size_t encrypted_len = bv->GetLength();
   char *orig = new char[ bv->GetLength() ];
   char *buf = new char[ bv->GetLength() ];
@@ -976,6 +983,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
     return false;
     }
   assert( encrypted_len <= encrypted_len2 );
+  (void)encrypted_len2;//warning removal
 
   std::stringstream ss;
   ss.str( std::string((char*)buf, encrypted_len) );
@@ -997,16 +1005,16 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   //des.Read<ExplicitDataElement,SwapperNoOp>(ss);
   //des.ReadNested<ExplicitDataElement,SwapperNoOp>(ss);
 
-  //std::cout << des << std::endl; 
-  //std::cout << dummy << std::endl; 
-  //std::cout << ss.tellg() << std::endl; 
+  //std::cout << des << std::endl;
+  //std::cout << dummy << std::endl;
+  //std::cout << ss.tellg() << std::endl;
   assert( (size_t)ss.tellg() <= encrypted_len );
   // TODO: check that for i = ss.tellg() to encrypted_len, ss[i] == 0
   delete[] buf;
   delete[] orig;
 
   // 2. The application shall move all Attributes contained in the single item of the Modified Attributes
-  // Sequence (0400,0550) of the decoded dataset into the main dataset, replacing¿dummy value¿
+  // Sequence (0400,0550) of the decoded dataset into the main dataset, replacing dummy value
   // Attributes that may be present in the main dataset.
   //assert( dummy.GetVR() == VR::SQ );
 {
@@ -1045,4 +1053,3 @@ const CryptographicMessageSyntax *Anonymizer::GetCryptographicMessageSyntax() co
 }
 
 } // end namespace gdcm
-

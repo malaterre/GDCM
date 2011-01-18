@@ -34,7 +34,7 @@ if __name__ == "__main__":
   r.SetFileName( file1 )
   if not r.Read():
     sys.exit(1)
-  
+
   f = r.GetFile()
   ds = f.GetDataSet()
   #tsis = gdcm.Tag(0x0008,0x2112) # SourceImageSequence
@@ -43,14 +43,14 @@ if __name__ == "__main__":
   de = gdcm.DataElement(gdcm.Tag(0x0010, 0x2180))
   de.SetByteValue("Occupation", gdcm.VL(len("Occupation")))
   de.SetVR(gdcm.VR(gdcm.VR.SH))
-  
+
   # Create an item
   it=gdcm.Item()
   it.SetVLToUndefined()      # Needed to not popup error message
   #it.InsertDataElement(de)
   nds=it.GetNestedDataSet()
   nds.Insert(de)
-  
+
   # Create a Sequence
   sq=gdcm.SequenceOfItems().New()
   sq.SetLengthToUndefined()
@@ -61,7 +61,7 @@ if __name__ == "__main__":
   des.SetVR(gdcm.VR(gdcm.VR.SQ))
   des.SetValue(sq.__ref__())
   des.SetVLToUndefined()
-  
+
   ds.Insert(des)
 
   w = gdcm.Writer()
@@ -69,4 +69,3 @@ if __name__ == "__main__":
   w.SetFileName( file2 )
   if not w.Write():
     sys.exit(1)
- 

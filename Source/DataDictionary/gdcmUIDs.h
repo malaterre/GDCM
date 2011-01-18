@@ -631,7 +631,7 @@ dicomTransferCapability = 268 // dicomTransferCapability
   // TODO: Because I would like a dual signature for TSType and TSName, C++ won't let me do it...
   static const char* GetUIDString(/*TSType*/ unsigned int ts);
   static const char* GetUIDName(/*TSType*/ unsigned int ts);
-  
+
   /// Initialize object from a string (a uid number)
   /// return false on error, and internal state is set to 0
   bool SetFromUID(const char *str);
@@ -640,7 +640,7 @@ dicomTransferCapability = 268 // dicomTransferCapability
   /// return NULL when not initialized
   const char *GetName() const;
 
-  /// When object is Initialize function return the uid 
+  /// When object is Initialize function return the uid
   /// return NULL when not initialized
   const char *GetString() const;
 
@@ -660,5 +660,3 @@ inline std::ostream &operator<<(std::ostream &_os, const UIDs &uid)
 } // end namespace gdcm
 
 #endif //GDCMUIDS_H
-
-

@@ -33,7 +33,7 @@ namespace gdcm
  * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
  * \note
  * SEQUENCE OF ITEMS (VALUE REPRESENTATION SQ)
- * A Value Representation for Data Elements that contain a sequence of 
+ * A Value Representation for Data Elements that contain a sequence of
  * Data Sets. Sequence of Items allows for Nested Data Sets.
  */
 class GDCM_EXPORT SequenceOfItems : public Value
@@ -41,6 +41,7 @@ class GDCM_EXPORT SequenceOfItems : public Value
 public:
   // Typdefs:
   typedef std::vector< Item > ItemVector;
+  typedef ItemVector::size_type SizeType;
   typedef ItemVector::iterator Iterator;
   typedef ItemVector::const_iterator ConstIterator;
   Iterator Begin() { return Items.begin(); }
@@ -73,16 +74,16 @@ public:
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);
 
-  unsigned int GetNumberOfItems() const {  return Items.size(); }
-  void SetNumberOfItems(unsigned int n) {  Items.resize(n); }
+  SizeType GetNumberOfItems() const {  return Items.size(); }
+  void SetNumberOfItems(SizeType n) {  Items.resize(n); }
 
   /* WARNING: first item is #1 (see DICOM standard)
    *  Each Item shall be implicitly assigned an ordinal position starting with the value 1 for the
    * first Item in the Sequence, and incremented by 1 with each subsequent Item. The last Item in the
    * Sequence shall have an ordinal position equal to the number of Items in the Sequence.
    */
-  const Item &GetItem(unsigned int position) const;
-  Item &GetItem(unsigned int position);
+  const Item &GetItem(SizeType position) const;
+  Item &GetItem(SizeType position);
 
   SequenceOfItems &operator=(const SequenceOfItems &val) {
     SequenceLengthField = val.SequenceLengthField;
@@ -233,4 +234,3 @@ public:
 #include "gdcmSequenceOfItems.txx"
 
 #endif //GDCMSEQUENCEOFITEMS_H
-

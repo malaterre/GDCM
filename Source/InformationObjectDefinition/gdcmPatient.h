@@ -28,7 +28,7 @@ namespace gdcm
 class GDCM_EXPORT Patient
 {
 public:
-  Patient() { 
+  Patient() {
   }
 
 private:

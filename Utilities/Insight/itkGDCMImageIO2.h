@@ -36,14 +36,14 @@ namespace itk
  * instead duplicate code here */
 #if defined(WIN32) && defined(ITK_BUILD_SHARED_LIBS)
  #if defined(itkgdcm2_EXPORTS)
-  #define ITK_GDCM_EXPORT __declspec( dllexport ) 
+  #define ITK_GDCM_EXPORT __declspec( dllexport )
  #else
-  #define ITK_GDCM_EXPORT __declspec( dllimport ) 
+  #define ITK_GDCM_EXPORT __declspec( dllimport )
  #endif
 #else
   #define ITK_GDCM_EXPORT
 #endif
-#else 
+#else
   #define ITK_GDCM_EXPORT ITK_EXPORT
 #endif
 
@@ -54,7 +54,7 @@ public:
   typedef GDCMImageIO2         Self;
   typedef ImageIOBase         Superclass;
   typedef SmartPointer<Self>  Pointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -66,10 +66,10 @@ public:
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
   virtual bool CanReadFile(const char*);
-  
+
   /** Set the spacing and dimesion information for the current filename. */
   virtual void ReadImageInformation();
-  
+
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
 
@@ -82,13 +82,13 @@ public:
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
   virtual void WriteImageInformation();
-  
+
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
   /** Macro to access Rescale Slope and Rescale Intercept. Which are
-   * needed to rescale properly image when needed. User then need to 
+   * needed to rescale properly image when needed. User then need to
    * Always check those value when access value from the DICOM header */
   itkGetMacro(RescaleSlope, double);
   itkGetMacro(RescaleIntercept, double);
@@ -144,13 +144,13 @@ public:
    * false and the value "Unknown " in the labelId. If the tagkey is found then
    * this static method returns true and the actual string descriptor of the
    * tagkey is returned in the variable labelId. */
-  static bool GetLabelFromTag( const std::string & tag, 
+  static bool GetLabelFromTag( const std::string & tag,
                                std::string & labelId );
 
   /** A DICOM file can contains multiple binary stream that can be very long
    * For example an Overlay on the image. Most of the time user do not want to load
    * this binary structure in memory since it can consume lot of memory. Therefore
-   * any field that is bigger than the default value 0xfff is discarded and just seek'd 
+   * any field that is bigger than the default value 0xfff is discarded and just seek'd
    * This method allow advanced user to force the reading of such field
    */
   itkSetMacro(MaxSizeLoadEntry, long);
@@ -169,7 +169,7 @@ public:
    */
   itkSetMacro(LoadPrivateTags, bool);
   itkGetMacro(LoadPrivateTags, bool);
-  itkBooleanMacro(LoadPrivateTags);  
+  itkBooleanMacro(LoadPrivateTags);
 
   /** Global method to define the default value for
    * LoadSequences. When instances of GDCMImageIO are created, the

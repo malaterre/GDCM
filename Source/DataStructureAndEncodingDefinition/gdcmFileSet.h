@@ -42,7 +42,7 @@ public:
 
   void SetFiles(FilesType const &files);
   FilesType const &GetFiles() const {
-    return Files; 
+    return Files;
   }
 
 private:

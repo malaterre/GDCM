@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 # vim: set fileencoding=iso-8859-1
 
 """
@@ -68,7 +68,7 @@ class Part3Parser:
 
   def SetOutputFileName(self,s):
     self._OutputFilename = s
-  
+
   def IsComment(self,s):
     if len(s) == 0:
       return True
@@ -215,7 +215,7 @@ class Part3Parser:
     patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z/\s-]+)\s*$")
     m = patt.match(s)
     # The previous regex would think : Table C.7-17A
-    # is correct...I don't know how to fix the regex, so discard result if 
+    # is correct...I don't know how to fix the regex, so discard result if
     # len(m.group(1)) <= 1
     if(m and len(m.group(1)) > 1):
       print "Table Name:", m.group(1)
@@ -452,7 +452,7 @@ class Part3Parser:
       return self._Shift
     print "OUCH:", s
     return 0
-  
+
   def Open(self):
     #self._Infile = file(self._InputFilename, 'r')
     #for line in self._Infile.readlines():
@@ -467,7 +467,7 @@ class Part3Parser:
     for line_ori in cmd_input:
       #while  line.startswith('%') : # skip comment lines
       #print "!!!",line
-      #line= cmd_input.next() 
+      #line= cmd_input.next()
       line = line_ori[:-1]
       if( self.IsStartTable(line) ):
         table_name_found = self.IsTableName2(line)
@@ -482,7 +482,7 @@ class Part3Parser:
           line3 = cmd_input.next()[:-1]
           if( self.IsTableDescription(line3) ):
             # Ok we found a table
-            outfile.write( 
+            outfile.write(
               "<table ref=\""+line.strip()+"\" name=\""+line2.strip()+"\">"
             )
             buffer = ''
@@ -491,7 +491,7 @@ class Part3Parser:
             for subline_ori in cmd_input:
               subline = subline_ori[:-1]
               if( self.IsIncludeTable(subline)):
-                # BUG DO NOT SUPPORT MULTI_LINE INCLUDE 
+                # BUG DO NOT SUPPORT MULTI_LINE INCLUDE
                 #print "Include Table:", subline
                 if( subline != '' ):
                   outfile.write( "<include ref=\""+\
@@ -527,13 +527,13 @@ class Part3Parser:
           print "Problem with:", line, line2
       #line = cmd_input.next()
       if not line_ori: break
-    cmd_input.close() 
+    cmd_input.close()
     outfile.write( '</tables>' )
     self.Write()
 
   def Write(self):
    print "Write"
- 
+
   # Main function to call for parsing
   def Parse(self):
     self.Open()
@@ -553,5 +553,3 @@ if __name__ == "__main__":
   dp.SetInputFileName( inputfilename )
   dp.SetOutputFileName( tempfile )
   dp.Parse()
-
-

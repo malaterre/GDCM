@@ -158,7 +158,7 @@ const char *SOPClassUIDToIOD::GetIOD(UIDs const & uid)
   //typedef const char* const (*SOPClassUIDToIODType)[2];
   SOPClassUIDToIOD::SOPClassUIDToIODType *p = SOPClassUIDToIODStrings;
   const char *sopclassuid = uid.GetString();
-  
+
   // FIXME I think we can do binary search
   while( (*p)[0] && strcmp( (*p)[0] , sopclassuid ) != 0 )
     {
@@ -174,7 +174,7 @@ SOPClassUIDToIOD::SOPClassUIDToIODType *SOPClassUIDToIOD::GetSOPClassUIDToIODs()
 
 SOPClassUIDToIOD::SOPClassUIDToIODType& SOPClassUIDToIOD::GetSOPClassUIDToIOD(unsigned int i)
 {
-  if( i < SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ) 
+  if( i < SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() )
     return SOPClassUIDToIODStrings[i];
   // else return the {0x0, 0x0} sentinel:
   assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == 0 );
@@ -223,4 +223,3 @@ const char *SOPClassUIDToIOD::GetIODFromSOPClassUID(const char *sopclassuid)
 }
 
 }
-

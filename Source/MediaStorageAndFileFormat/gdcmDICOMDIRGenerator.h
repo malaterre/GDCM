@@ -36,12 +36,12 @@ class DICOMDIRGeneratorInternal;
  * PS 3.11 - 2008 / D.3.2 Physical Medium And Medium Format
  * The STD-GEN-CD and STD-GEN-SEC-CD application profiles require the 120 mm CD-R physical
  * medium with the ISO/IEC 9660 Media Format, as defined in PS3.12.
- * See also PS 3.12 - 2008 / Annex F 120mm CD-R Medium (Normative) and 
+ * See also PS 3.12 - 2008 / Annex F 120mm CD-R Medium (Normative) and
  * PS 3.10 - 2008 / 8 DICOM File Service / 8.1 FILE-SET
  *
  * \warning:
  * PS 3.11 - 2008 / D.3.1 SOP Classes and Transfer Syntaxes
- * Composite Image & Stand-alone Storage are required to be stored as Explicit VR Little 
+ * Composite Image & Stand-alone Storage are required to be stored as Explicit VR Little
  * Endian Uncompressed (1.2.840.10008.1.2.1). When a DICOM file is found using another
  * Transfer Syntax the generator will simply stops.
  *
@@ -50,7 +50,7 @@ class DICOMDIRGeneratorInternal;
  * - filenames should be valid VR::CS value (16 bytes, upper case ...)
  *
  * \bug:
- * There is a current limitation of not handling Referenced SOP Class UID / 
+ * There is a current limitation of not handling Referenced SOP Class UID /
  * Referenced SOP Instance UID simply because the gdcm::Scanner does not allow us
  * See PS 3.11 / Table D.3-2 STD-GEN Additional DICOMDIR Keys
  */
@@ -68,7 +68,7 @@ public:
   /// Set the root directory from which the filenames should be considered.
   void SetRootDirectory( FilenameType const & root );
 
-  /// Set the File Set ID. 
+  /// Set the File Set ID.
   /// \warning this need to be a valid VR::CS value
   void SetDescriptor( const char *d );
 

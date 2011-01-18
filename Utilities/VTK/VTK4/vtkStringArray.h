@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkStringArray - 
+// .NAME vtkStringArray -
 // .SECTION Description
 //
 // .SECTION

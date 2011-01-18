@@ -8,9 +8,9 @@
  * It is included in all files while building the uuid library.  Due to
  * namespace pollution, no uuid headers should be included in .h files in
  * GDCM.
- * 
+ *
  * The following command was used to obtain the symbol list:
- * 
+ *
  * nm lib@MANGLE_PREFIX@.a | grep " [TR] "
  */
 
@@ -35,4 +35,3 @@
 #cmakedefine HAVE_SYS_TIME_H
 
 #endif
-

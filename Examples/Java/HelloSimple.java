@@ -14,9 +14,9 @@
 =========================================================================*/
 /*
  * Compilation:
- * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar javac HelloSimple.java 
+ * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar javac HelloSimple.java
  *
- * Usage: 
+ * Usage:
  * $ LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar:. java HelloSimple ~/Creatis/gdcmData/012345.002.050.dcm
  */
 import gdcm.*;
@@ -41,4 +41,3 @@ public class HelloSimple
     System.out.println("Success reading: " + filename );
     }
 }
-

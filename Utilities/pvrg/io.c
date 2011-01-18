@@ -129,7 +129,7 @@ static BUFFER *MakeXBuffer(nelem,wsize)
   temp->currentoffs = 0;
   temp->streamoffs = 0;
   if (!(temp->space =(unsigned char *)     /* Allocate buffer space */
-	calloc(temp->size+1,sizeof(unsigned char))))
+  calloc(temp->size+1,sizeof(unsigned char))))
     {
       WHEREAMI();
       printf("Cannot allocate buffer memory.\n");
@@ -181,11 +181,11 @@ void MakeIob(type,flags,wsize)
   for(index=0;index<CScan->NumberComponents;index++) /* Make IOBUF */
     {                                                /* For each component */
       if (!(temp = MakeStructure(IOBUF)))
-	{
-	  WHEREAMI();
-	  printf("Cannot allocate IOBUF structure.\n");
-	  exit(ERROR_MEMORY);
-	}
+  {
+    WHEREAMI();
+    printf("Cannot allocate IOBUF structure.\n");
+    exit(ERROR_MEMORY);
+  }
       temp->linelastdefault=(1<<(CFrame->DataPrecision-PointTransform-1));
       temp->type = type;
       temp->wsize = wsize;
@@ -194,64 +194,64 @@ void MakeIob(type,flags,wsize)
       temp->width = CFrame->Width[CScan->ci[index]];  /* Set up widthxheight */
       temp->height = CFrame->Height[CScan->ci[index]];
       if (CScan->NumberComponents==1)
-	{
-	  temp->hor = 1;               /* For non-interleaved mode the freq */
-	  temp->ver = 1;               /* is always 1x1 */
-	}
+  {
+    temp->hor = 1;               /* For non-interleaved mode the freq */
+    temp->ver = 1;               /* is always 1x1 */
+  }
       else
-	{
-	  temp->hor = CFrame->hf[CScan->ci[index]];       /* and hf x vf */
-	  temp->ver = CFrame->vf[CScan->ci[index]];
-	}
+  {
+    temp->hor = CFrame->hf[CScan->ci[index]];       /* and hf x vf */
+    temp->ver = CFrame->vf[CScan->ci[index]];
+  }
       switch(temp->type)
-	{
-	case IOB_BLOCK:             /* BLOCK TYPE */
-	  temp->num = temp->ver*BlockHeight;
-	  break;
-	case IOB_LINE:             /* LINE TYPE */
-	  temp->num = temp->ver + 1;
-	  break;
-	default:
-	  WHEREAMI();
-	  printf("Illegal type specified: %d.\n",type);
-	  exit(ERROR_BOUNDS);
-	}
+  {
+  case IOB_BLOCK:             /* BLOCK TYPE */
+    temp->num = temp->ver*BlockHeight;
+    break;
+  case IOB_LINE:             /* LINE TYPE */
+    temp->num = temp->ver + 1;
+    break;
+  default:
+    WHEREAMI();
+    printf("Illegal type specified: %d.\n",type);
+    exit(ERROR_BOUNDS);
+  }
       temp->flags = flags;                            /* and also flags */
       if (!(temp->blist =                             /*Set up buffer list */
-	    (BUFFER **) calloc(temp->num,sizeof(BUFFER *))))
-	{
-	  WHEREAMI();
-	  printf("Cannot allocate Iob bufferlist.\n");
-	  exit(ERROR_MEMORY);
-	}
-	   if( CFrame->tmpfile )
+      (BUFFER **) calloc(temp->num,sizeof(BUFFER *))))
+  {
+    WHEREAMI();
+    printf("Cannot allocate Iob bufferlist.\n");
+    exit(ERROR_MEMORY);
+  }
+     if( CFrame->tmpfile )
   {
       temp->file = CFrame->tmpfile;
   }
     else
   {
       if ((temp->file =                               /* Open file */
-	   open(CFrame->ComponentFileName[CScan->ci[index]],
-		flags,UMASK)) < 0)
-	{
-	  WHEREAMI();
-	  printf("Cannot open file %s.\n",
-		 CFrame->ComponentFileName[CScan->ci[index]]);
-	  exit(ERROR_INIT_FILE);
-	}               /* Make buffer for every line of component in MDU */
+     open(CFrame->ComponentFileName[CScan->ci[index]],
+    flags,UMASK)) < 0)
+  {
+    WHEREAMI();
+    printf("Cannot open file %s.\n",
+     CFrame->ComponentFileName[CScan->ci[index]]);
+    exit(ERROR_INIT_FILE);
+  }               /* Make buffer for every line of component in MDU */
   }
 
       for(sofs=0,current=temp->blist;current<temp->blist+temp->num;current++)
-	{
-	  *current = MakeXBuffer(CFrame->BufferSize, wsize);
-	  (*current)->streamoffs = sofs;
-	  (*current)->iob = temp;
-	  (*current)->data_linelast = temp->linelastdefault;
-	  if (!temp->height || (current - temp->blist) < temp->height-1)
-	    {
-	      sofs += CFrame->Width[CScan->ci[index]]*wsize;
-	    }
-	}
+  {
+    *current = MakeXBuffer(CFrame->BufferSize, wsize);
+    (*current)->streamoffs = sofs;
+    (*current)->iob = temp;
+    (*current)->data_linelast = temp->linelastdefault;
+    if (!temp->height || (current - temp->blist) < temp->height-1)
+      {
+        sofs += CFrame->Width[CScan->ci[index]]*wsize;
+      }
+  }
       CScan->Iob[index] = temp;
     }
 }
@@ -271,11 +271,11 @@ void PrintIob()
     {
       printf("*** Iob ID: %p ***\n",(void*)Iob);
       printf("Number of Buffers: %d  Width: %d  Height: %d\n",
-	     Iob->num,Iob->width,Iob->height);
+       Iob->num,Iob->width,Iob->height);
       printf("hpos: %d  vpos: %d  hor-freq: %d  ver-freq: %d\n",
-	     Iob->hpos,Iob->vpos,Iob->hor,Iob->ver);
+       Iob->hpos,Iob->vpos,Iob->hor,Iob->ver);
       printf("filed: %d  flags: %d  BufferListId: %p\n",
-	     Iob->file,Iob->flags,(void*)Iob->blist);
+       Iob->file,Iob->flags,(void*)Iob->blist);
     }
   else
     {
@@ -318,37 +318,37 @@ static void WriteXBuffer(len,storage,buffer)
     {                     /* UNIX implementations, we are forced to do this */
     case 1:               /* explicit ordering of bytes... */
       while(len--)        /* Write the rest of the buffer out to the disk */
-	{
-	  wout = *(storage++)<<PointTransform;
-	*(buffer->bptr++) = (unsigned char) wout;
-	}
+  {
+    wout = *(storage++)<<PointTransform;
+  *(buffer->bptr++) = (unsigned char) wout;
+  }
       break;
     case 2:
       while(len--)        /* Write the rest of the buffer out to the disk */
-	{
-	  wout = *(storage++)<<PointTransform;
-	  *(buffer->bptr++) = (unsigned char) (wout>>8)&0xff;
-	  *(buffer->bptr++) = (unsigned char) wout&0xff;
-	}
+  {
+    wout = *(storage++)<<PointTransform;
+    *(buffer->bptr++) = (unsigned char) (wout>>8)&0xff;
+    *(buffer->bptr++) = (unsigned char) wout&0xff;
+  }
       break;
     case 3:
       while(len--)        /* Write the rest of the buffer out to the disk */
-	{
-	  wout = *(storage++)<<PointTransform;
-	  *(buffer->bptr++) = (unsigned char) (wout>>16)&0xff;
-	  *(buffer->bptr++) = (unsigned char) (wout>>8)&0xff;
-	  *(buffer->bptr++) = (unsigned char) wout&0xff;
-	}
+  {
+    wout = *(storage++)<<PointTransform;
+    *(buffer->bptr++) = (unsigned char) (wout>>16)&0xff;
+    *(buffer->bptr++) = (unsigned char) (wout>>8)&0xff;
+    *(buffer->bptr++) = (unsigned char) wout&0xff;
+  }
       break;
     case 4:
       while(len--)        /* Write the rest of the buffer out to the disk */
-	{
-	  wout = *(storage++)<<PointTransform;
-	  *(buffer->bptr++) = (unsigned char) (wout>>24)&0xff;
-	  *(buffer->bptr++) = (unsigned char) (wout>>16)&0xff;
-	  *(buffer->bptr++) = (unsigned char) (wout>>8)&0xff;
-	  *(buffer->bptr++) = (unsigned char) wout&0xff;
-	}
+  {
+    wout = *(storage++)<<PointTransform;
+    *(buffer->bptr++) = (unsigned char) (wout>>24)&0xff;
+    *(buffer->bptr++) = (unsigned char) (wout>>16)&0xff;
+    *(buffer->bptr++) = (unsigned char) (wout>>8)&0xff;
+    *(buffer->bptr++) = (unsigned char) wout&0xff;
+  }
       break;
     default:
       WHEREAMI();
@@ -399,37 +399,37 @@ static void ReadXBuffer(len,storage,buffer)
     {
     case 1:
       while(len--)                      /* Now copy over to storage */
-	{
-	  rin = (int) *(buffer->bptr++);
-	  *(storage++) = rin >> PointTransform;
-	}
+  {
+    rin = (int) *(buffer->bptr++);
+    *(storage++) = rin >> PointTransform;
+  }
       break;
     case 2:
       while(len--)                      /* Now copy over to storage */
-	{
-	  rin = (((int)*(buffer->bptr++))<<8);
-	  rin |= *(buffer->bptr++);
-	  *(storage++) = rin >> PointTransform; 
-	}
+  {
+    rin = (((int)*(buffer->bptr++))<<8);
+    rin |= *(buffer->bptr++);
+    *(storage++) = rin >> PointTransform;
+  }
       break;
     case 3:
       while(len--)                      /* Now copy over to storage */
-	{
-	  rin = (((int)*(buffer->bptr++))<<16);
-	  rin |= (((int)*(buffer->bptr++))<<8);
-	  rin |= (*(buffer->bptr++));
-	  *(storage++) = rin >> PointTransform;
-	}
+  {
+    rin = (((int)*(buffer->bptr++))<<16);
+    rin |= (((int)*(buffer->bptr++))<<8);
+    rin |= (*(buffer->bptr++));
+    *(storage++) = rin >> PointTransform;
+  }
       break;
     case 4:
       while(len--)                      /* Now copy over to storage */
-	{
-	  rin = (((int)*(buffer->bptr++))<<24);
-	  rin |= (((int)*(buffer->bptr++))<<16);
-	  rin |= (((int)*(buffer->bptr++))<<8);
-	  rin |= (*(buffer->bptr++));
-	  *(storage++) = rin >> PointTransform;
-	}
+  {
+    rin = (((int)*(buffer->bptr++))<<24);
+    rin |= (((int)*(buffer->bptr++))<<16);
+    rin |= (((int)*(buffer->bptr++))<<8);
+    rin |= (*(buffer->bptr++));
+    *(storage++) = rin >> PointTransform;
+  }
       break;
     default:
       WHEREAMI();
@@ -447,7 +447,7 @@ static void ReadXBuffer(len,storage,buffer)
 /*BFUNC
 
 ReadResizeBuffer() reads len bytes from the stream and puts it
-into the buffer. 
+into the buffer.
 
 EFUNC*/
 
@@ -479,11 +479,11 @@ static void ReadResizeBuffer(len,buffer)
   lseek(buffer->iob->file,location,SEEK_SET);
 #ifdef IO_DEBUG
   printf("Read: Filed %d  Buf: %x  NBytes: %d\n",
-	 buffer->iob->file,buffer->tptr,amount);
+   buffer->iob->file,buffer->tptr,amount);
 #endif
   if ((retval = read(buffer->iob->file,      /* Do the read */
-		     buffer->tptr,
-		     amount)) < 0)
+         buffer->tptr,
+         amount)) < 0)
     {
       WHEREAMI();
       printf("Cannot Resize.\n");
@@ -514,8 +514,8 @@ static void FlushBuffer(buffer)
 #endif
   lseek(buffer->iob->file,buffer->streamoffs+buffer->currentoffs,SEEK_SET);
   if ((retval = write(buffer->iob->file,
-		      buffer->space,
-		      (buffer->bptr - buffer->space))) < 0)
+          buffer->space,
+          (buffer->bptr - buffer->space))) < 0)
     {
       WHEREAMI();
       printf("Cannot flush buffer.\n");
@@ -541,7 +541,7 @@ void ReadBlock(store)
   int i,voffs;
 
   voffs = (Iob->vpos % Iob->ver)*BlockHeight;  /* Find current v offset*/
-#ifdef IO_DEBUG                                
+#ifdef IO_DEBUG
   for(i=0;i<BlockHeight;i++)
     {
       printf("%d Iob %x\n",i,Iob->blist[i]->Iob);
@@ -558,21 +558,21 @@ void ReadBlock(store)
   if ((++Iob->hpos % Iob->hor)==0)          /* Increment MDU block pos */
     {
       if ((++Iob->vpos % Iob->ver) == 0)
-	{
-	  if (Iob->hpos < CScan->MDUWide*Iob->hor)
-	    {
-	      Iob->vpos -= Iob->ver;
-	    }
-	  else
-	    {
-	      Iob->hpos = 0;                /* If at end of raster width*/
-	      BlockMoveTo();                /* Reload buffers from start */
-	    }                               /* of next line. */
-	}
+  {
+    if (Iob->hpos < CScan->MDUWide*Iob->hor)
+      {
+        Iob->vpos -= Iob->ver;
+      }
+    else
+      {
+        Iob->hpos = 0;                /* If at end of raster width*/
+        BlockMoveTo();                /* Reload buffers from start */
+      }                               /* of next line. */
+  }
       else
-	{
-	  Iob->hpos -= Iob->hor;
-	}
+  {
+    Iob->hpos -= Iob->hor;
+  }
     }
 }
 
@@ -595,31 +595,31 @@ void WriteBlock(store)
   for(i=voffs;i<voffs+BlockHeight;i++)
     {
       if (!Iob->height || (((Iob->vpos/Iob->ver)*BlockHeight + i) <
-			   Iob->height))
-	{
-	  WriteXBound(BlockWidth,store,Iob->blist[i]); /* write Block elms */
-	  store+=BlockWidth;                   /* Iob indexed by offset */
-	}
+         Iob->height))
+  {
+    WriteXBound(BlockWidth,store,Iob->blist[i]); /* write Block elms */
+    store+=BlockWidth;                   /* Iob indexed by offset */
+  }
     }
   if ((++Iob->hpos % Iob->hor)==0)             /* Increment block position */
     {                                          /* in MDU. */
       if ((++Iob->vpos % Iob->ver) == 0)
-	{
-	  if (Iob->hpos < CScan->MDUWide*Iob->hor)
-	    {
-	      Iob->vpos -= Iob->ver;
-	    }
-	  else
-	    {
-	      Iob->hpos = 0;                  /* If at end of image (width) */
-	      FlushIob();                     /* Flush current IOB and */
-	      BlockMoveTo();                  /* Move to next lower MDU line */
-	    }
-	}
+  {
+    if (Iob->hpos < CScan->MDUWide*Iob->hor)
+      {
+        Iob->vpos -= Iob->ver;
+      }
+    else
+      {
+        Iob->hpos = 0;                  /* If at end of image (width) */
+        FlushIob();                     /* Flush current IOB and */
+        BlockMoveTo();                  /* Move to next lower MDU line */
+      }
+  }
       else
-	{
-	  Iob->hpos -= Iob->hor;
-	}
+  {
+    Iob->hpos -= Iob->hor;
+  }
     }
 }
 
@@ -641,24 +641,24 @@ static void BlockMoveTo()
     {
       WHEREAMI();
       printf("%p  Moving To [Horizontal:Vertical] [%d:%d] \n",
-	     (void*)Iob,Iob->hpos,Iob->vpos);
+       (void*)Iob,Iob->hpos,Iob->vpos);
     }
   horizontal =  Iob->hpos * BlockWidth;    /* Calculate actual */
   vertical = Iob->vpos * BlockHeight;      /* Pixel position */
   for(i=0;i<Iob->ver*BlockHeight;i++)
     {
       if (Iob->height)
-	{
-	  vertical = 
-	    ((vertical < Iob->height) ?
-	     vertical : Iob->height-1);
-	}
+  {
+    vertical =
+      ((vertical < Iob->height) ?
+       vertical : Iob->height-1);
+  }
       Iob->blist[i]->tptr =                /* Reset pointer space */
-	Iob->blist[i]->bptr =              /* To show no contents */
-	  Iob->blist[i]->space;
+  Iob->blist[i]->bptr =              /* To show no contents */
+    Iob->blist[i]->space;
       Iob->blist[i]->currentoffs = horizontal* Iob->wsize;/* reset h offset */
       Iob->blist[i]->streamoffs = vertical * Iob->width *
-	Iob->wsize;                                       /* Reset v offset */
+  Iob->wsize;                                       /* Reset v offset */
       vertical++;
     }
 }
@@ -681,35 +681,35 @@ void RewindIob()
       BlockWidth = BLOCKWIDTH;   /* Block width. */
       BlockHeight = BLOCKHEIGHT; /* Block height. */
       for(i=0;i<Iob->ver*BlockHeight;i++)
-	{
-	  Iob->blist[i]->tptr =
-	    Iob->blist[i]->bptr =
-	      Iob->blist[i]->space;
-	  Iob->blist[i]->currentoffs = 0;
-	  Iob->blist[i]->streamoffs = i * Iob->width * Iob->wsize;
-	}
+  {
+    Iob->blist[i]->tptr =
+      Iob->blist[i]->bptr =
+        Iob->blist[i]->space;
+    Iob->blist[i]->currentoffs = 0;
+    Iob->blist[i]->streamoffs = i * Iob->width * Iob->wsize;
+  }
       Iob->hpos = Iob->vpos = 0;
       break;
     case IOB_LINE:
       Iob->linelastdefault=(1<<(CFrame->DataPrecision-PointTransform-1));
       for(i= 0;i<Iob->ver+1;i++)
-	{
-	  Iob->blist[i]->tptr =
-	    Iob->blist[i]->bptr =
-	      Iob->blist[i]->space;
-	  Iob->blist[i]->currentoffs = 0;
-	  if (!i)
-	    {
-	      Iob->blist[i]->streamoffs = 0;
-	      Iob->blist[i]->disable=1;
-	    }
-	  else
-	    {
-	      Iob->blist[i]->streamoffs = (i-1) * Iob->width * Iob->wsize;
-	      Iob->blist[i]->disable=0;
-	    }
-	  Iob->blist[i]->data_linelast = Iob->linelastdefault;
-	}
+  {
+    Iob->blist[i]->tptr =
+      Iob->blist[i]->bptr =
+        Iob->blist[i]->space;
+    Iob->blist[i]->currentoffs = 0;
+    if (!i)
+      {
+        Iob->blist[i]->streamoffs = 0;
+        Iob->blist[i]->disable=1;
+      }
+    else
+      {
+        Iob->blist[i]->streamoffs = (i-1) * Iob->width * Iob->wsize;
+        Iob->blist[i]->disable=0;
+      }
+    Iob->blist[i]->data_linelast = Iob->linelastdefault;
+  }
       Iob->hpos = 0;
       Iob->vpos = -1;
       break;
@@ -738,15 +738,15 @@ void FlushIob()
     {
     case IOB_BLOCK:
       for(i=0;i<Iob->ver*BlockHeight;i++)
-	FlushBuffer(Iob->blist[i]);
+  FlushBuffer(Iob->blist[i]);
       break;
     case IOB_LINE:
       Iob->blist[0]->data_linelast=Iob->linelastdefault;
       for(i=1;i<Iob->ver+1;i++)
-	{
-	  Iob->blist[i]->data_linelast=Iob->linelastdefault;
-	  FlushBuffer(Iob->blist[i]);
-	}
+  {
+    Iob->blist[i]->data_linelast=Iob->linelastdefault;
+    FlushBuffer(Iob->blist[i]);
+  }
       break;
     default:
       WHEREAMI();
@@ -774,27 +774,27 @@ void SeekEndIob()
     {
       WHEREAMI();
       printf("End not flush, making flush (actual: %d != target:%d)\n",
-	     size,tsize);
+       size,tsize);
 
       if (size<tsize)
-	{
-	  lseek(Iob->file,tsize-1,SEEK_SET);         /* Seek and terminate */
-	  write(Iob->file,Terminator,1);
-	}
+  {
+    lseek(Iob->file,tsize-1,SEEK_SET);         /* Seek and terminate */
+    write(Iob->file,Terminator,1);
+  }
       else if (size > tsize)
-	{
+  {
 #ifdef NOTRUNCATE
-	  WHEREAMI();
-	  printf("file is too large, only first %d bytes valid\n",
-		 tsize);
+    WHEREAMI();
+    printf("file is too large, only first %d bytes valid\n",
+     tsize);
 #else
 #ifdef WIN32
-	  chsize(Iob->file,tsize); /* no ftruncate on WIN32... */
+    chsize(Iob->file,tsize); /* no ftruncate on WIN32... */
 #else
-	  ftruncate(Iob->file,tsize);                   /* simply truncate*/
+    ftruncate(Iob->file,tsize);                   /* simply truncate*/
 #endif
 #endif
-	}
+  }
     }
 }
 
@@ -837,17 +837,17 @@ static void ReadXBound(nelem,cstore,buffer)
       printf("ReadBound: Trailing Edge Detected. Diff: %d\n",diff);
 #endif
       if (diff <= 0)
-	{
-	  for(i=0;i<nelem;i++)       /* Pure outside bounds */
-	    *(cstore++) = buffer->overflow;
-	}
+  {
+    for(i=0;i<nelem;i++)       /* Pure outside bounds */
+      *(cstore++) = buffer->overflow;
+  }
       else
-	{
-	  ReadXBuffer(diff,cstore,buffer);
-	  buffer->overflow = (unsigned int) cstore[diff-1];
-	  for(i=diff;i<nelem;i++)     /* Replicate to bounds */
-	    cstore[i] = cstore[i-1];
-	}
+  {
+    ReadXBuffer(diff,cstore,buffer);
+    buffer->overflow = (unsigned int) cstore[diff-1];
+    for(i=diff;i<nelem;i++)     /* Replicate to bounds */
+      cstore[i] = cstore[i-1];
+  }
     }
   else
     ReadXBuffer(nelem,cstore,buffer);
@@ -872,7 +872,7 @@ static void WriteXBound(nelem,cstore,buffer)
   if ((diff = buffer->iob->width - TrueBufferPos(buffer)) <= nelem)
     {                           /* Diff is balance to write to disk */
       if (diff > 0)             /* Write balance out to disk */
-	WriteXBuffer(diff,cstore,buffer);
+  WriteXBuffer(diff,cstore,buffer);
     }
   else                          /* If more than numberelem, then can put all */
     WriteXBuffer(nelem,cstore,buffer);       /* to the buffer. */
@@ -916,36 +916,36 @@ void TerminateFile()
   if (CFrame->GlobalHeight)
     {
       printf("> GH:%d  GW:%d  R:%d\n",
-	     CFrame->GlobalHeight,
-	     CFrame->GlobalWidth,
-	     CFrame->ResyncInterval);
+       CFrame->GlobalHeight,
+       CFrame->GlobalWidth,
+       CFrame->ResyncInterval);
       for(i=0;i<CScan->NumberComponents;i++)
-	{
-	  if (CScan->Iob[i])
-	    {
-	      printf(">> C:%d  N:%s  H:%d  W:%d  hf:%d  vf:%d\n",
-		     CScan->ci[i],
-		     CFrame->ComponentFileName[CScan->ci[i]],
-		     CFrame->Height[CScan->ci[i]],
-		     CFrame->Width[CScan->ci[i]],
-		     CFrame->hf[CScan->ci[i]],
-		     CFrame->vf[CScan->ci[i]]);
-	      InstallIob(i);
-	      FlushIob();
-	      size = lseek(CScan->Iob[i]->file,0,SEEK_END);
-	      if (size !=
-		  CFrame->Width[CScan->ci[i]]*CFrame->Height[CScan->ci[i]]*
-		  CScan->Iob[i]->wsize)
-		{                                      /* Terminate file */
-		  lseek(CScan->Iob[i]->file,           /* by seeking to end */
-			(CFrame->Width[CScan->ci[i]]*  /* And writing byte */
-			 CFrame->Height[CScan->ci[i]]*
-			 CScan->Iob[i]->wsize)-1,      /* Making flush with */
-			SEEK_SET);                           /* Original size  */
-		  write(CScan->Iob[i]->file,Terminator,1);
-		}
-	    }
-	}
+  {
+    if (CScan->Iob[i])
+      {
+        printf(">> C:%d  N:%s  H:%d  W:%d  hf:%d  vf:%d\n",
+         CScan->ci[i],
+         CFrame->ComponentFileName[CScan->ci[i]],
+         CFrame->Height[CScan->ci[i]],
+         CFrame->Width[CScan->ci[i]],
+         CFrame->hf[CScan->ci[i]],
+         CFrame->vf[CScan->ci[i]]);
+        InstallIob(i);
+        FlushIob();
+        size = lseek(CScan->Iob[i]->file,0,SEEK_END);
+        if (size !=
+      CFrame->Width[CScan->ci[i]]*CFrame->Height[CScan->ci[i]]*
+      CScan->Iob[i]->wsize)
+    {                                      /* Terminate file */
+      lseek(CScan->Iob[i]->file,           /* by seeking to end */
+      (CFrame->Width[CScan->ci[i]]*  /* And writing byte */
+       CFrame->Height[CScan->ci[i]]*
+       CScan->Iob[i]->wsize)-1,      /* Making flush with */
+      SEEK_SET);                           /* Original size  */
+      write(CScan->Iob[i]->file,Terminator,1);
+    }
+      }
+  }
     }
   else
     {
@@ -1028,17 +1028,17 @@ void ReadPreambleLine(nelem,store)
       printf("%d Iob %x\n",i,Iob->blist[i]->Iob);
 #endif
       if (i<preamblelength)
-	{
-	  *(store++)=Iob->blist[i]->data_linelast;
-	  ReadXBound(Iob->hor*nelem,store,Iob->blist[i]);
-	  store+=Iob->hor*nelem;
-	  Iob->blist[i]->data_linelast = *(store-1);
-	}
+  {
+    *(store++)=Iob->blist[i]->data_linelast;
+    ReadXBound(Iob->hor*nelem,store,Iob->blist[i]);
+    store+=Iob->hor*nelem;
+    Iob->blist[i]->data_linelast = *(store-1);
+  }
       else
-	{
-	  *(store) = Iob->blist[i]->data_linelast;
-	  store += Iob->hor*nelem+1;
-	}
+  {
+    *(store) = Iob->blist[i]->data_linelast;
+    store += Iob->hor*nelem+1;
+  }
     }
 }
 
@@ -1047,7 +1047,7 @@ void ReadPreambleLine(nelem,store)
 
 WriteLine() is used to write a particular line out to the IOB.  The
 line must be of the proper form in the array for this function to
-work. 
+work.
 
 In total, there should be (HORIZONTALFREQUENCY+1) * nelem
 (VERTICALFREQUENCY+1) elements in the *store array.  This forms a
@@ -1077,7 +1077,7 @@ void WriteLine(nelem,store)
     {                               /* Buffer list of IOB */
 #ifdef IO_DEBUG
       printf("WriteLine: %d  Store: %d Iobblist: %x\n",
-	     i,*(store+1),Iob->blist[i]);
+       i,*(store+1),Iob->blist[i]);
 #endif
 
       WriteXBound(Iob->hor*nelem,store+1,Iob->blist[i]);
@@ -1135,31 +1135,31 @@ static void LineMoveTo()
     {
       WHEREAMI();
       printf("%p  Moving To [Horizontal:Vertical] [%d:%d] \n",
-	     (void*)Iob,Iob->hpos,Iob->vpos);
+       (void*)Iob,Iob->hpos,Iob->vpos);
     }
   horizontal =  Iob->hpos;
   vertical = Iob->vpos;
   for(i=0;i<Iob->ver+1;i++)
     {                                     /* Reset last element read */
       if (vertical<0)
-	{
-	  Iob->blist[i]->disable=1;
-	  continue;
-	}
+  {
+    Iob->blist[i]->disable=1;
+    continue;
+  }
       Iob->blist[i]->disable=0;
-      Iob->blist[i]->data_linelast=Iob->linelastdefault; 
+      Iob->blist[i]->data_linelast=Iob->linelastdefault;
       if (Iob->height)
-	{
-	  vertical = 
-	    ((vertical < Iob->height) ?
-	     vertical : Iob->height-1);
-	}
+  {
+    vertical =
+      ((vertical < Iob->height) ?
+       vertical : Iob->height-1);
+  }
       Iob->blist[i]->tptr =                /* Reset pointer space */
-	Iob->blist[i]->bptr =              /* To show no contents */
-	  Iob->blist[i]->space;
+  Iob->blist[i]->bptr =              /* To show no contents */
+    Iob->blist[i]->space;
       Iob->blist[i]->currentoffs = horizontal* Iob->wsize; /* Reset h offset */
       Iob->blist[i]->streamoffs = vertical * Iob->width *
-	Iob->wsize;                                        /* Reset v offset */
+  Iob->wsize;                                        /* Reset v offset */
       vertical++;
     }
 }

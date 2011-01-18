@@ -36,4 +36,3 @@ SET(CTEST_CUSTOM_MEMCHECK_IGNORE
 # ==3201==    at 0x4C20809: operator new(unsigned long) (vg_replace_malloc.c:230)
 # ==3201==    by 0x405E28F: DJDecoderRegistration::registerCodecs(E_DecompressionColorSpaceConversion, E_UIDCreation, E_PlanarConfiguration, bool) (in /usr/lib/libdcmjpeg.so.1.0.0)
 # ==3201==    by 0x402AB1: (within /usr/bin/dcmdjpeg)
-

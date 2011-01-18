@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  */
 
 #include "gdcmDefs.h"
@@ -68,4 +68,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

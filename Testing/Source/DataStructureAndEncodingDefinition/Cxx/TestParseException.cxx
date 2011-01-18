@@ -19,4 +19,3 @@ int TestParseException(int, char *[])
   gdcm::ParseException pe;
   return 0;
 }
-

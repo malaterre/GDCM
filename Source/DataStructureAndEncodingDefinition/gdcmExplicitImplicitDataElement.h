@@ -35,6 +35,9 @@ public:
   template <typename TSwap>
   std::istream &Read(std::istream &is);
 
+  template <typename TSwap>
+  std::istream &ReadValue(std::istream &is);
+
 template <typename TSwap>
 std::istream &ReadWithLength(std::istream &is, VL & length)
 {
@@ -51,4 +54,3 @@ std::istream &ReadWithLength(std::istream &is, VL & length)
 #include "gdcmExplicitImplicitDataElement.txx"
 
 #endif //GDCMEXPLICITIMPLICITDATAELEMENT_H
-

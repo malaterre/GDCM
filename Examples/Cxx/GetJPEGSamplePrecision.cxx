@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * This example is a little helper to detect the famous SIEMENS JPEG lossless compressed image
  * where DICOM is declared as:
  *
@@ -34,7 +34,7 @@
  *                         VerticalSamplingFactor = 1
  *                         QuantizationTableDestinationSelector = 0
  *
- * 
+ *
  * This case is valid. One simply has to use the 16bits jpeg decoder to decode the 12bits stored image.
  * This used to be an issue in GDCM 1.2.x (fixed in GDCM 1.2.5)
  *
@@ -120,4 +120,3 @@ int main(int argc, char *argv[])
 
   return 1;
 }
-

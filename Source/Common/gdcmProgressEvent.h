@@ -23,7 +23,7 @@ namespace gdcm
 
 /**
  * \brief ProgressEvent
- * Special type of event triggered during 
+ * Special type of event triggered during
  *
  * \see AnyEvent
  */

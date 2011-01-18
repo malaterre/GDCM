@@ -28,7 +28,7 @@ class FileMetaInformation;
  * formedness check only.
  *
  * \details Detailled description here
- * To avoid GDCM being yet another broken DICOM lib we try to 
+ * To avoid GDCM being yet another broken DICOM lib we try to
  * be user level and avoid writing illegal stuff (odd length,
  * non-zero value for Item start/end length ...)
  * Therefore you cannot (well unless you are really smart) write
@@ -49,8 +49,8 @@ class GDCM_EXPORT Writer
 {
 public:
   Writer():F(new File),CheckFileMetaInformation(true) {
-	  Stream = NULL;
-	  Ofstream = NULL;
+    Stream = NULL;
+    Ofstream = NULL;
   }
   virtual ~Writer();
 

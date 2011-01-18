@@ -23,9 +23,9 @@
 
 
 /*
-from	Scott Johnson /Scott Johnson neuwave com/
-to	VTK /vtkusers vtk.org/
-date	Tue, May 11, 2010 at 7:01 PM
+from  Scott Johnson /Scott Johnson neuwave com/
+to  VTK /vtkusers vtk.org/
+date  Tue, May 11, 2010 at 7:01 PM
 */
 #include <strstream>
 #include <string>
@@ -280,9 +280,9 @@ public:
         _ROIMapper = vtkPolyDataMapper2D::New();
         _ROIMapper->SetInputConnection(_polyTransform->GetOutputPort());
 
-		vtkCoordinate* coordinate = vtkCoordinate::New();
-		coordinate->SetCoordinateSystemToWorld();
-		_ROIMapper->SetTransformCoordinate(coordinate);
+    vtkCoordinate* coordinate = vtkCoordinate::New();
+    coordinate->SetCoordinateSystemToWorld();
+    _ROIMapper->SetTransformCoordinate(coordinate);
 
         _ROIActor = vtkActor2D::New();
         _ROIActor->SetMapper(_ROIMapper);
@@ -347,8 +347,8 @@ public:
         _reslice->SetResliceAxes(matrix);
         _reslice->Update();
 
-		vtkMatrix4x4* inverse = vtkMatrix4x4::New();
-		vtkMatrix4x4::Invert(matrix, inverse);
+    vtkMatrix4x4* inverse = vtkMatrix4x4::New();
+    vtkMatrix4x4::Invert(matrix, inverse);
 
         _transform->SetMatrix(inverse);
         _transform->Update();
@@ -405,7 +405,7 @@ public:
         _plane->SetOrigin(newPoint[0], newPoint[1], newPoint[2]);
 
         // Annotate the image.
-        posString << "Position: (" << newPoint[0] << ", " << newPoint[1] 
+        posString << "Position: (" << newPoint[0] << ", " << newPoint[1]
                   << ", " << newPoint[2] << ")  Slice: " << newSlice;
         _annotation->SetInput(posString.str());
 
@@ -476,7 +476,7 @@ public:
             break;
         }
 
-        // Move the origin from the original image coordinate system to the 
+        // Move the origin from the original image coordinate system to the
         // resliced image coordinate system.
         matrix->MultiplyPoint(point, newPoint);
         matrix->SetElement(0, 3, newPoint[0]);
@@ -490,12 +490,12 @@ public:
         // PROBLEM:  If the transformation is connected rather than
         // using SetResliceAxes, the Direction Cosines do not reflect
         // the orientation of the vtkImageReslice.
-        _reslice->GetResliceAxesDirectionCosines(xDirCosine, yDirCosine, 
+        _reslice->GetResliceAxesDirectionCosines(xDirCosine, yDirCosine,
                                                  zDirCosine);
         vtkMath::Cross(xDirCosine, yDirCosine, normal);
         _plane->SetNormal(normal);
 
-        // Set the extents and spacing of the reslice to account for 
+        // Set the extents and spacing of the reslice to account for
         // all of the data.
         _reslice->SetOutputExtentToDefault();
         _reslice->SetOutputSpacing(spacing[0], spacing[0], spacing[0]);
@@ -565,15 +565,15 @@ void KeyCallback::Execute(vtkObject* caller, unsigned long eventId, void *callda
     else if (!sym.compare("Down"))
     {
         _reslice->SetSlice(_reslice->GetSlice() - 1);
-    } 
+    }
     else if ((!sym.compare("A")) || (!sym.compare("a")))
     {
         _reslice->SetOrientation(ResliceRender::AXIAL);
-    } 
+    }
     else if ((!sym.compare("C")) || (!sym.compare("c")))
     {
         _reslice->SetOrientation(ResliceRender::CORONAL);
-    } 
+    }
     else if ((!sym.compare("S")) || (!sym.compare("s")))
     {
         _reslice->SetOrientation(ResliceRender::SAGITTAL);
@@ -611,5 +611,3 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
-
-

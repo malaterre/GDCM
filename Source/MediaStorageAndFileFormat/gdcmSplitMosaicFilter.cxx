@@ -24,7 +24,7 @@ SplitMosaicFilter::SplitMosaicFilter():F(new File),I(new Image) {}
 SplitMosaicFilter::~SplitMosaicFilter() {}
 
 /*
- *  gdcmDataExtra/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm  
+ *  gdcmDataExtra/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
  */
 bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims, unsigned int square,
   const unsigned int *outputdims, unsigned short *output )
@@ -35,7 +35,7 @@ bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdim
       {
       for(unsigned z = 0; z < outputdims[2]; ++z)
         {
-        output[ x + y*outputdims[0] + z*outputdims[0]*outputdims[1] ] = 
+        output[ x + y*outputdims[0] + z*outputdims[0]*outputdims[1] ] =
           input[ (x + z * outputdims[0]) + (y + (z/square)*outputdims[0])*inputdims[0] ];
         }
       }
@@ -89,11 +89,17 @@ bool SplitMosaicFilter::Split()
 
 
   // SliceThickness ??
- 	const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
-  //std::cout << csael4 << std::endl;
-  gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4;
-  el4.Set( csael4.GetValue() );
-  int numberOfImagesInMosaic = el4.GetValue();
+  int numberOfImagesInMosaic = 0;
+  if( csa.FindCSAElementByName( "NumberOfImagesInMosaic" ) )
+    {
+    const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
+    //std::cout << csael4 << std::endl;
+    gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4;
+    el4.Set( csael4.GetValue() );
+    numberOfImagesInMosaic = el4.GetValue();
+    }
+
+  if( !numberOfImagesInMosaic ) return false;
 
   unsigned int div = (unsigned int )ceil(sqrt( (double)numberOfImagesInMosaic ) );
   dims[0] /= div;
@@ -117,7 +123,8 @@ bool SplitMosaicFilter::Split()
   bool b = reorganize_mosaic((unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims, (unsigned short*)&outbuf[0] );
   (void)b;
 
-  pixeldata.SetByteValue( &outbuf[0], outbuf.size() );
+  VL::Type outbufSize = (VL::Type)outbuf.size();
+  pixeldata.SetByteValue( &outbuf[0], outbufSize );
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe1,0x1010) );
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
   //const gdcm::VL &l = pixeldata.GetVL();
@@ -171,7 +178,8 @@ bool SplitMosaicFilter::Split()
     }
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
   const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-  de.SetByteValue( msstr, strlen(msstr) );
+  VL::Type strlenMsstr = (VL::Type)strlen(msstr);
+  de.SetByteValue( msstr, strlenMsstr );
   de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
   ds.Replace( de );
 
@@ -180,4 +188,3 @@ bool SplitMosaicFilter::Split()
 
 
 } // end namespace gdcm
-

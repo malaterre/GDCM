@@ -137,10 +137,10 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
     break;
   case 32:
     type = PixelFormat::UINT32;
-    break;    
+    break;
   case 64:
     type = PixelFormat::UINT32; // why not ?
-    break;    
+    break;
   case 24:
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
     type = PixelFormat::UINT8;
@@ -208,6 +208,7 @@ uint8_t PixelFormat::GetPixelSize() const
 
 int64_t PixelFormat::GetMin() const
 {
+  assert( BitsAllocated ); // cannot be unknown
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
     {
@@ -234,6 +235,7 @@ int64_t PixelFormat::GetMin() const
 
 int64_t PixelFormat::GetMax() const
 {
+  assert( BitsAllocated ); // cannot be unknown
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
     {
@@ -290,7 +292,7 @@ bool PixelFormat::Validate()
 
 void PixelFormat::Print(std::ostream &os) const
 {
-  os << "SamplesPerPixel    :" << SamplesPerPixel     << "\n"; 
+  os << "SamplesPerPixel    :" << SamplesPerPixel     << "\n";
   os << "BitsAllocated      :" << BitsAllocated       << "\n";
   os << "BitsStored         :" << BitsStored          << "\n";
   os << "HighBit            :" << HighBit             << "\n";

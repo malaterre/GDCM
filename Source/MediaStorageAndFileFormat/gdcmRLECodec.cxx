@@ -135,7 +135,7 @@ inline int count_identical_bytes(const char *start, unsigned int len)
   return p - start;
 #else
   const char ref = start[0];
-  int count = 1; // start at one
+  unsigned int count = 1; // start at one; make unsigned for comparison
   const unsigned int cmin = std::min(128u,len);
   while( count < cmin && start[count] == ref )
     {
@@ -169,7 +169,7 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
     }
   return p - start;
 #else
-  int count = 1;
+  unsigned int count = 1;
   const unsigned int cmin = std::min(128u,len);
 #if 0
   // TODO: this version that handles the note still does not work...
@@ -197,7 +197,7 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
         {
         continue;
         }
-      --count;
+      --count;//Note that count can go negative, or wrapped if unsigned!
       break;
       }
     }
@@ -215,7 +215,7 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
 }
 
 /* return output length */
-int rle_encode(char *output, unsigned int outputlength, const char *input, unsigned int inputlength)
+ptrdiff_t rle_encode(char *output, unsigned int outputlength, const char *input, unsigned int inputlength)
 {
   char *pout = output;
   const char *pin = input;
@@ -315,7 +315,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   const Tag itemStart(0xfffe, 0xe000);
   //sq->GetTable().SetTag( itemStart );
   // FIXME  ? Is this compulsary ?
-  const char dummy[4] = {};
+  //const char dummy[4] = {};
   //sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
 
   const ByteValue *bv = in.GetByteValue();
@@ -360,7 +360,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     return false;
     }
 
-  if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
+  if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
@@ -368,7 +368,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     MaxNumSegments *= 3;
     }
 
-  assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16 
+  assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16
     || GetPixelFormat().GetBitsAllocated() == 32 );
   if( GetPixelFormat().GetSamplesPerPixel() == 3 )
     {
@@ -493,11 +493,11 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
       std::stringstream data;
       assert( partition % dims[1] == 0 );
-      int length = 0;
+      size_t length = 0;
       // Do not cross row boundary:
       for(unsigned int y = 0; y < dims[1]; ++y)
         {
-        int llength = rle_encode(outbuf, n, ptr + y*dims[0], partition / dims[1] /*image_len*/);
+        ptrdiff_t llength = rle_encode(outbuf, n, ptr + y*dims[0], partition / dims[1] /*image_len*/);
         if( llength < 0 )
           {
           std::cerr << "RLE compressor error" << std::endl;
@@ -521,7 +521,8 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     assert( str.size() );
     Fragment frag;
     //frag.SetTag( itemStart );
-    frag.SetByteValue( &str[0], str.size() );
+    VL::Type strSize = (VL::Type)str.size();
+    frag.SetByteValue( &str[0], strSize );
     sq->AddFragment( frag );
     }
 
@@ -568,10 +569,12 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
       std::stringstream os;
       bool r = Decode(is, os);
       assert( r == true );
+      (void)r; //warning removal
     std::string str = os.str();
     std::string::size_type check = str.size();
     assert( check == len );
-    out.SetByteValue( &str[0], check );
+    VL::Type checkCast = (VL::Type)check;
+    out.SetByteValue( &str[0], checkCast );
     return true;
     }
   else if ( NumberOfDimensions == 3 )
@@ -599,13 +602,14 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
       SetLength( llen );
       bool r = Decode(is, os);
       assert( r == true );
+      (void)r; //warning removal
       std::streampos p = is.tellg();
       // http://groups.google.com/group/microsoft.public.vc.stl/browse_thread/thread/96740930d0e4e6b8
       if( !!is )
         {
         // Indeed the length of the RLE stream has been padded with a \0
         // which is discarded
-        uint32_t check = bv.GetLength() - p;
+          std::streamoff check = bv.GetLength() - p;
         // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
         assert( check == 0 || check == 1 || check == 2 );
         if( check ) gdcmWarningMacro( "tiny offset detected in between RLE segments" );
@@ -650,7 +654,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
   unsigned long length = Length;
   // Special case:
   assert( GetPixelFormat().GetBitsAllocated() == 32 ||
-          GetPixelFormat().GetBitsAllocated() == 16 || 
+          GetPixelFormat().GetBitsAllocated() == 16 ||
           GetPixelFormat().GetBitsAllocated() == 8 );
   if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
@@ -681,9 +685,10 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       // This should be at most the \0 padding
       //gdcmWarningMacro( "RLE Header says: " << frame.Header.Offset[i] <<
       //   " when it should says: " << pos << std::endl );
-      uint32_t check = frame.Header.Offset[i] - pos;
+      uint32_t check = frame.Header.Offset[i] - pos;//should it be a streampos or a uint32? mmr
       // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
       assert( check == 1 || check == 2);
+      (void)check; //warning removal
       is.seekg( frame.Header.Offset[i], std::ios::beg );
       }
 
@@ -692,7 +697,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     //std::cerr << "Length: " << Length << "\n";
     //assert( (uint32_t)is.Tellg() == frame.Header.Offset[i] );
 
-    // FIXME: ALOKA_SSD-8-MONO2-RLE-SQ.dcm 
+    // FIXME: ALOKA_SSD-8-MONO2-RLE-SQ.dcm
     // I think the RLE decoder is off by one, we are reading in 128001 byte, while only 128000
     // are present
     while( numOutBytes < length )

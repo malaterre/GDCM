@@ -31,4 +31,3 @@ int TestDICOMDIR(int argc, char *argv[])
 
   return 0;
 }
-

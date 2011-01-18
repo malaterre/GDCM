@@ -12,11 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * This example shows how to setup the pipeline from a gdcm::ImageReader into a
  * Qt QImage data structure.
  * It only handles 2D image.
- * 
+ *
  * Ref:
  * http://doc.trolltech.com/4.5/qimage.html
  *

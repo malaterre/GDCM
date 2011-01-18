@@ -64,4 +64,3 @@ int TestTagPath(int argc, char *argv[])
 
   return 0;
 }
-

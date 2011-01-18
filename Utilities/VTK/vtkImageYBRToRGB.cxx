@@ -40,10 +40,10 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
   vtkImageIterator<T> inIt(inData, outExt);
   vtkImageProgressIterator<T> outIt(outData, outExt, self, id);
   int idxC;
-  
+
   // find the region to loop over
   int maxC = inData->GetNumberOfScalarComponents()-1;
-  
+
   int R, G, B;
   // Loop through ouput pixels
   while (!outIt.IsAtEnd())
@@ -79,9 +79,9 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
  //     R = y + (1.4075 * (v - 128));
  //     G = y - (0.3455 * (u - 128) - (0.7169 * (v - 128)));
  //     B = y + (1.7790 * (u - 128));
- 	R = y                + 1.40200 * Cr + 0.5;
- 	G = y - 0.34414 * Cb - 0.71414 * Cr + 0.5;
- 	B = y + 1.77200 * Cb + 0.5;
+      R = y                + 1.40200 * Cr + 0.5;
+      G = y - 0.34414 * Cb - 0.71414 * Cr + 0.5;
+      B = y + 1.77200 * Cb + 0.5;
 
 
       //int a = (int)y - 16;
@@ -119,7 +119,7 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
       *outSI = (T)(R); ++outSI;
       *outSI = (T)(G); ++outSI;
       *outSI = (T)(B); ++outSI;
-      
+
       for (idxC = 3; idxC <= maxC; idxC++)
         {
         *outSI++ = *inSI++;
@@ -131,13 +131,13 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
 }
 
 //----------------------------------------------------------------------------
-void vtkImageYBRToRGB::ThreadedExecute (vtkImageData *inData, 
+void vtkImageYBRToRGB::ThreadedExecute (vtkImageData *inData,
                                        vtkImageData *outData,
                                        int outExt[6], int id)
 {
-  vtkDebugMacro(<< "Execute: inData = " << inData 
+  vtkDebugMacro(<< "Execute: inData = " << inData
     << ", outData = " << outData);
-  
+
   // this filter expects that input is the same type as output.
   if (inData->GetScalarType() != outData->GetScalarType())
     {
@@ -149,7 +149,7 @@ void vtkImageYBRToRGB::ThreadedExecute (vtkImageData *inData,
     {
     return;
     }
-  
+
   // need three components for input and output
   if (inData->GetNumberOfScalarComponents() < 3)
     {
@@ -165,7 +165,7 @@ void vtkImageYBRToRGB::ThreadedExecute (vtkImageData *inData,
   switch (inData->GetScalarType())
     {
     vtkTemplateMacro(
-      vtkImageYBRToRGBExecute(this, inData, 
+      vtkImageYBRToRGBExecute(this, inData,
                               outData, outExt, id, static_cast<VTK_TT *>(0)));
     default:
       vtkErrorMacro(<< "Execute: Unknown ScalarType");
@@ -178,4 +178,3 @@ void vtkImageYBRToRGB::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }
-

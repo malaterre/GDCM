@@ -27,7 +27,7 @@
 // everything is now handled within the vtkGDCMImageReader as Planar Configuration can not
 // be externalized (conflict with file lower left)
 
-#error do not use this class 
+#error do not use this class
 
 //class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
 class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
@@ -54,4 +54,3 @@ private:
 };
 
 #endif
-

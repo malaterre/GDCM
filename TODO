@@ -17,15 +17,15 @@ Offer mapping from UID to Manufacturer:  eg. 1.3.12.2.1107 -> SIEMENS
 
 we have implemented a tool called "dcm2avi" that can be used for this
 purpose. Please send an email to dicom/at/offis/dot/de in case you are
-interested in an evaluation version of this program. 
+interested in an evaluation version of this program.
 -----------------------------------------------------------------------
 
 from sup58_ft2.doc
 >CTDIvol  	(0018,9445)  	2C  	Computed Tomography Dose Index (CTDIvol), im mGy according to IEC 60601-2-44, Ed.2.1 (Clause 29.1.103.4), The Volume CTDIvol. It describes the average dose for this frame for the selected CT conditions of operation.
 -----------------------------------------------------------------------
-Calling dcmodify [1][2] with option --erase-tag should do what you want. 
+Calling dcmodify [1][2] with option --erase-tag should do what you want.
 -----------------------------------------------------------------------
-You should be able to say: this file is a ACR NEMA read it ! So the wizard 
+You should be able to say: this file is a ACR NEMA read it ! So the wizard
 should be bypass and the discovery step can be skipped.
 -----------------------------------------------------------------------
 Need to handle image rotation/flip
@@ -47,7 +47,7 @@ CT0013
 CT0014
 
 GFUNCST2
-MRVPWCB2 
+MRVPWCB2
 -----------------------------------------------------------------------
 Wrong Private element in dcmtk:
 (0009,1227) TM [210959.000000]                          #  14, 1 LastMoveTime
@@ -100,7 +100,7 @@ TODO:
 /home/mmalaterre/Creatis/gdcmDataExtra/gdcmSampleData/images_of_interest/ITK-GDCM-1.2.2.saysExplicitVR-butIsImplicitVR.dcm
 -----------------------------------------------------------------------
 ZSpacing for RTDoseStorage is not handled properly:
-bin/gdcmvtkGDCMTests TestvtkGDCMImageWriter BogugsItemAndSequenceLengthCorrected.dcm    
+bin/gdcmvtkGDCMTests TestvtkGDCMImageWriter BogugsItemAndSequenceLengthCorrected.dcm
 -----------------------------------------------------------------------
 There are still some subtle issues with Enhanced modality:
 * what if frames are not order according to IPP ?
@@ -155,7 +155,7 @@ What this means is that 10,22 is Type 1 only within sequence 10,1002
 -----------------------------------------------------------------------
 Yet another brain dead philips DICOM image:
 
-gdcmDataExtra/gdcmBreakers/Unexpected-Sequence-Terminator/images/Philips-Intera_Unexpected_Sequence_Terminator_1.dcm 
+gdcmDataExtra/gdcmBreakers/Unexpected-Sequence-Terminator/images/Philips-Intera_Unexpected_Sequence_Terminator_1.dcm
 
 (2005,e005) DS (CS) [75.0]                               # 4,1 Synergy Reconstruction Type
 ...
@@ -254,7 +254,7 @@ gdcmraw out.dcm out.jpg
 -> out.jpg still contains the JFIF marker (color space...)
 -----------------------------------------------------------------------
 BUG: SERIOUS gdcm does not allow creation of such file
-dcmcjpeg +fs 100 GE_DLX-8-MONO2-Multiframe.dcm /tmp/jpeg3.dcm 
+dcmcjpeg +fs 100 GE_DLX-8-MONO2-Multiframe.dcm /tmp/jpeg3.dcm
 
 tricky for jpeg 2000
 -----------------------------------------------------------------------
@@ -355,7 +355,7 @@ Make sure Overlay can reference original instance
 question:
 image is a reslice of original image, how do I map to original UID ?
 -----------------------------------------------------------------------
- * There is a current limitation of not handling Referenced SOP Class UID / 
+ * There is a current limitation of not handling Referenced SOP Class UID /
  * Referenced SOP Instance UID simply because the gdcm::Scanner does not allow us
  * See PS 3.11 / Table D.3-2 STD-GEN Additional DICOMDIR Keys
 -----------------------------------------------------------------------
@@ -367,7 +367,7 @@ Re: How to load sequence items
 # CPP check
 find_program(CPPCHECK_EXECUTABLE NAMES cppcheck
 DOC "cppcheck - static check tool")
-add_custom_target (cppcheck ${CPPCHECK_EXECUTABLE} -a -f -q 
+add_custom_target (cppcheck ${CPPCHECK_EXECUTABLE} -a -f -q
 ${GDCM_SOURCE_DIR}"
 COMMENT "Checking C++ code")
 
@@ -386,7 +386,7 @@ http://www.varian.com/media/oncology/services_and_support/pdf/dicom/System_Serve
 http://www.varian.com/media/oncology/services_and_support/pdf/dicom/System_Server_DCS.pdf
 -----------------------------------------------------------------------
 http://www.w3.org/People/Bos/JPEG-XMP/
-rdjpgxmp : extract XMP metadata from a JPEG file 
+rdjpgxmp : extract XMP metadata from a JPEG file
 -----------------------------------------------------------------------
 PDFParser:
 http://www.codeproject.com/kb/cpp/ExtractPDFText.aspx

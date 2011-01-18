@@ -22,10 +22,10 @@ namespace gdcm
 
 /*
  * This class is a pure hack. Its only goal is to work around a bad bug in :
- *  $ swig -version 
+ *  $ swig -version
  *  SWIG Version 1.3.31
  *
- *  See 
+ *  See
  * - http://sourceforge.net/mailarchive/forum.php?thread_name=bf0c3b3f0802290552y5163989t76572b80a044ce28%40mail.gmail.com&forum_name=swig-user
  *
  *  As a side note there is also a problem with const reference to enum type:
@@ -52,4 +52,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMCONSTCHARWRAPPER_H
-

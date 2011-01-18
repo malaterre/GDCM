@@ -14,7 +14,7 @@
 =========================================================================*/
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/GetArray.exe gdcmData/012345.002.050.dcm
  */
@@ -78,4 +78,3 @@ public class GetArray
     return 0;
     }
 }
-

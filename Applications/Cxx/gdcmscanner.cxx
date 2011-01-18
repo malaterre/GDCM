@@ -249,9 +249,9 @@ int main(int argc, char *argv[])
     {
     std::cout << "Will parse: " << dirname << std::endl;
     std::cout << "Looking for tags: \n";
-    std::copy(tags.begin(), tags.end(), 
+    std::copy(tags.begin(), tags.end(),
       std::ostream_iterator<gdcm::Tag>( std::cout, "\n"));
-    std::copy(privatetags.begin(), privatetags.end(), 
+    std::copy(privatetags.begin(), privatetags.end(),
       std::ostream_iterator<gdcm::PrivateTag>( std::cout, "\n"));
     //std::cout << std::endl;
     }
@@ -282,4 +282,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

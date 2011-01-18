@@ -133,48 +133,48 @@ void LeeIDct(x,y)
   for(jptr=y,iptr=x,i=0;i<8;i++)
     {
       x0 = MSCALE(isqrt2*LS(*(iptr++),2));
-      x1 = LS(*(iptr++),2); 
-      x2 = LS(*(iptr++),2); 
-      x3 = LS(*(iptr++),2); 
-      x4 = LS(*(iptr++),2); 
-      x5 = LS(*(iptr++),2); 
-      x6 = LS(*(iptr++),2); 
-      x7 = LS(*(iptr++),2); 
-      
+      x1 = LS(*(iptr++),2);
+      x2 = LS(*(iptr++),2);
+      x3 = LS(*(iptr++),2);
+      x4 = LS(*(iptr++),2);
+      x5 = LS(*(iptr++),2);
+      x6 = LS(*(iptr++),2);
+      x7 = LS(*(iptr++),2);
+
       a1 = MSCALE(itwoc1d4*x4);
       r0 = x0+a1;
       r1 = x0-a1;
-      
+
       a3 = MSCALE(itwoc1d4*(x2+x6));
       r2 = MSCALE(itwoc1d8*(x2+a3));
       r3 = MSCALE(itwoc3d8*(x2-a3));
-      
+
       f0 = r0+r2;
       f1 = r1+r3;
       f2 = r0-r2;
       f3 = r1-r3;
-      
+
       b1 = x3+x5;
       c1 = MSCALE(itwoc1d4*b1);
       s0 = x1+c1;
       s1 = x1-c1;
-      
+
       b2 = x1+x3;
       b3 = x5+x7;
       c3 = MSCALE(itwoc1d4*(b2+b3));
       s2 = MSCALE(itwoc1d8*(b2+c3));
       s3 = MSCALE(itwoc3d8*(b2-c3));
-      
+
       g0 = MSCALE(itwoc1d16*(s0+s2));
       g1 = MSCALE(itwoc3d16*(s1+s3));
       g2 = MSCALE(itwoc7d16*(s0-s2));
       g3 = MSCALE(itwoc5d16*(s1-s3));
-      
+
       *(jptr++) = f0+g0;
       *(jptr++) = f1+g1;
       *(jptr++) = f3+g3;
       *(jptr++) = f2+g2;
-      
+
       *(jptr++) = f2-g2;
       *(jptr++) = f3-g3;
       *(jptr++) = f1-g1;
@@ -193,19 +193,19 @@ void LeeIDct(x,y)
 
       x0 = MSCALE(isqrt2*(*(iptr)));
       iptr += 8;
-      x1 = *(iptr); 
+      x1 = *(iptr);
       iptr += 8;
-      x2 = *(iptr); 
+      x2 = *(iptr);
       iptr += 8;
-      x3 = *(iptr); 
+      x3 = *(iptr);
       iptr += 8;
-      x4 = *(iptr); 
+      x4 = *(iptr);
       iptr += 8;
-      x5 = *(iptr); 
+      x5 = *(iptr);
       iptr += 8;
-      x6 = *(iptr); 
+      x6 = *(iptr);
       iptr += 8;
-      x7 = *(iptr); 
+      x7 = *(iptr);
 
 #else
 
@@ -228,36 +228,36 @@ void LeeIDct(x,y)
       x0 = MSCALE(isqrt2*(*iptr));
 
 #endif
-      
+
       a1 = MSCALE(itwoc1d4*x4);
       r0 = x0+a1;
       r1 = x0-a1;
-      
+
       a3 = MSCALE(itwoc1d4*(x2+x6));
       r2 = MSCALE(itwoc1d8*(x2+a3));
       r3 = MSCALE(itwoc3d8*(x2-a3));
-      
+
       f0 = r0+r2;
       f1 = r1+r3;
       f2 = r0-r2;
       f3 = r1-r3;
-      
+
       b1 = x3+x5;
       c1 = MSCALE(itwoc1d4*b1);
       s0 = x1+c1;
       s1 = x1-c1;
-      
+
       b2 = x1+x3;
       b3 = x5+x7;
       c3 = MSCALE(itwoc1d4*(b2+b3));
       s2 = MSCALE(itwoc1d8*(b2+c3));
       s3 = MSCALE(itwoc3d8*(b2-c3));
-      
+
       g0 = MSCALE(itwoc1d16*(s0+s2));
       g1 = MSCALE(itwoc3d16*(s1+s3));
       g2 = MSCALE(itwoc7d16*(s0-s2));
       g3 = MSCALE(itwoc5d16*(s1-s3));
- 
+
       ihold = f0+g0;
       (*jptr) = IDCTSCALE(ihold);
       jptr += 8;
@@ -324,7 +324,7 @@ void LeeIDct(x,y)
 #define s1 rx5
 #define s2 rx6
 #define s3 rx7
-  
+
 
 /*BFUNC
 
@@ -386,7 +386,7 @@ void LeeDct(x,y)
       s1 = g1+g3;
       s2 = MSCALE(twoc1d8*(g0-g2));
       s3 = MSCALE(twoc3d8*(g1-g3));
-      
+
       jptr[1] = hold = s0+s1;
       c2 = s2+s3;
       jptr[3] = hold = c2-hold;
@@ -436,7 +436,7 @@ void LeeDct(x,y)
       r1 = f1+f3;
       r2 = MSCALE(twoc1d8*(f0-f2));
       r3 = MSCALE(twoc3d8*(f1-f3));
-      
+
       y0 = MSCALE(sqrt2*(r0+r1));
       y4 = MSCALE(twoc1d4*(r0-r1));
       y2 = r2+r3;
@@ -446,12 +446,12 @@ void LeeDct(x,y)
       jptr[16] = DCTSCALE(y2);
       jptr[32] = DCTSCALE(y4);
       jptr[48] = DCTSCALE(y6);
-      
+
       s0 = g0+g2;
       s1 = g1+g3;
       s2 = MSCALE(twoc1d8*(g0-g2));
       s3 = MSCALE(twoc3d8*(g1-g3));
-      
+
       y1 = s0+s1;
       c2 = s2+s3;
       y3 = c2-y1;

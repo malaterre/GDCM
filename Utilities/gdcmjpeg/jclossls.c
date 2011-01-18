@@ -36,7 +36,7 @@ start_pass (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
  * This is called only once, during master selection.
  */
 
-GLOBAL(void) 
+GLOBAL(void)
 jinit_lossless_c_codec(j_compress_ptr cinfo)
 {
   j_lossless_c_ptr losslsc;
@@ -44,7 +44,7 @@ jinit_lossless_c_codec(j_compress_ptr cinfo)
   /* Create subobject in permanent pool */
   losslsc = (j_lossless_c_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				SIZEOF(jpeg_lossless_c_codec));
+        SIZEOF(jpeg_lossless_c_codec));
   cinfo->codec = (struct jpeg_c_codec *) losslsc;
 
   /* Initialize sub-modules */
@@ -68,8 +68,8 @@ jinit_lossless_c_codec(j_compress_ptr cinfo)
 
   /* Need a full-image difference buffer in any multi-pass mode. */
   jinit_c_diff_controller(cinfo,
-			  (boolean) (cinfo->num_scans > 1 ||
-				     cinfo->optimize_coding));
+        (boolean) (cinfo->num_scans > 1 ||
+             cinfo->optimize_coding));
 
   /* Initialize method pointers.
    *

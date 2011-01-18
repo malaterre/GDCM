@@ -108,7 +108,7 @@ APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/wxWidgets/Copyright.txt)
 
 #IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 ##  FILE(GLOB header_files "*.h" "*.txx")
-#  INSTALL(FILES 
+#  INSTALL(FILES
 ##${header_files}
 #gdcm_expat.h
 ##gdcm_md5.h # In an install tree there should not be the need for the md5 lib...

@@ -310,10 +310,10 @@ bool DictConverter::ConvertToXML(const char *raw, std::string &cxx)
   ReadVM(raw+len, vm);
   len += strlen(VM::GetVMString(vm))+1;
   std::ostringstream os;
-  os << "  <DataElement Tag=\"" << std::hex << std::setw(4) 
-    << std::setfill('0') << group << "," 
+  os << "  <DataElement Tag=\"" << std::hex << std::setw(4)
+    << std::setfill('0') << group << ","
     << std::setw(4) << std::setfill('0')
-    << element << "\" VR=\"" << vr << "\" VM=\"" << vm << "\"\tName=\"" 
+    << element << "\" VR=\"" << vr << "\" VM=\"" << vm << "\"\tName=\""
     << (raw+len) << "\">";
   cxx = os.str();
   return true;
@@ -340,17 +340,17 @@ bool DictConverter::ConvertToCXX(const char *raw, std::string &cxx)
   ReadVM(raw+len, vm);
   len += strlen(VM::GetVMString(vm))+1;
   std::ostringstream os;
-  os << "   {0x" << std::hex << std::setw(4) << std::setfill('0') 
-    << group << ", 0x" 
+  os << "   {0x" << std::hex << std::setw(4) << std::setfill('0')
+    << group << ", 0x"
     << std::setw(4) << std::setfill('0');
   if( OutputType == DICT_DEBUG )
     {
-    os << element << ", \"" << vr << "\" , \"" << vm << "\" , \"" 
+    os << element << ", \"" << vr << "\" , \"" << vm << "\" , \""
       << (raw+len) << "\"}, ";
     }
   else
     {
-    os << element << std::dec << ",(VR::VRType)" << (int)vr 
+    os << element << std::dec << ",(VR::VRType)" << (int)vr
       << ",(VM::VMType)" << (int)vm << ",\"" << (raw+len) << "\"},";
     }
   cxx = os.str();
@@ -358,7 +358,7 @@ bool DictConverter::ConvertToCXX(const char *raw, std::string &cxx)
 }
 
 
-void DictConverter::AddGroupLength() 
+void DictConverter::AddGroupLength()
 {
   std::ifstream &from = Internal->InputStream;
   std::ofstream &into = Internal->OutputStream;

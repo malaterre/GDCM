@@ -42,7 +42,7 @@ public:
    * different objects  */
   unsigned long AddObserver(const Event & event, Command *);
   unsigned long AddObserver(const Event & event, Command *) const;
- 
+
   /** Get the command associated with the given tag.  NOTE: This returns
    * a pointer to a Command, but it is safe to asign this to a
    * Command::Pointer.  Since Command inherits from LightObject, at this
@@ -76,4 +76,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMSUBJECT_H
-

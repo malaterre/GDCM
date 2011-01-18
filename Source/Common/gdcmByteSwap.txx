@@ -47,7 +47,7 @@ template <class T>
 bool ByteSwap<T>::SystemIsBigEndian() { return false; }
 template <class T>
 bool ByteSwap<T>::SystemIsLittleEndian() { return true; }
-#endif  
+#endif
 
 template <class T>
 void ByteSwap<T>::Swap(T &p)
@@ -91,9 +91,9 @@ void ByteSwap<T>::SwapRange(T *p, unsigned int num)
 
 template <class T>
 void ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(T *p, SwapCode const &sc,
-  unsigned int num)
+  std::streamoff num)
 {
-  for(unsigned int i=0; i<num; i++)
+  for( std::streamoff i=0; i<num; i++)
     {
     ByteSwap<T>::SwapFromSwapCodeIntoSystem(p[i], sc);
     }
@@ -137,10 +137,10 @@ void Swap8(T &a, SwapCode const &swapcode)
 #ifndef GDCM_WORDS_BIGENDIAN
     a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
 #endif
-    break;   
+    break;
   case 3412 :
     a= ((a<<16) | (a>>16)  );
-    break;  
+    break;
   case 2143 :
     a= (((a<< 8) & 0xff00ff00) | ((a>>8) & 0x00ff00ff) );
     break;
@@ -148,7 +148,7 @@ void Swap8(T &a, SwapCode const &swapcode)
     std::cerr << "Unexpected swap code:" << swapcode;
     }
 }
-  
+
 
 } // end namespace gdcm
 

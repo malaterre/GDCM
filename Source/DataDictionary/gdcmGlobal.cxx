@@ -185,4 +185,3 @@ GlobalInternal * Global::Internals;
 
 
 } // end namespace gdcm
-

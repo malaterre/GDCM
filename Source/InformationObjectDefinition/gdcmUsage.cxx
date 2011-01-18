@@ -43,4 +43,3 @@ Usage::UsageType Usage::GetUsageType(const char *type)
 }
 
 } // end namespace gdcm
-

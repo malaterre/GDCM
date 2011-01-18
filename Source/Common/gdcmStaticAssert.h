@@ -17,7 +17,7 @@
 
 
 // the following was shamelessly borowed from BOOST static assert:
-namespace gdcm 
+namespace gdcm
 {
   template <bool x>
   struct STATIC_ASSERTION_FAILURE;
@@ -44,11 +44,10 @@ namespace gdcm
  *
  * template <class T>
  * struct must_not_be_instantiated
- * {   
+ * {
  * // this will be triggered if this type is instantiated
- * GDCM_STATIC_ASSERT(sizeof(T) == 0); 
+ * GDCM_STATIC_ASSERT(sizeof(T) == 0);
  * };
- * 
+ *
  */
 #endif // GDCMSTATICASSERT_H
-

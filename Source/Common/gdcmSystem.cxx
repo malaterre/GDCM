@@ -59,7 +59,7 @@
 #include <fcntl.h>
 #include <unistd.h> /* gethostname */
 #include <strings.h> // strncasecmp
-#endif 
+#endif
 
 // TODO: WIN32 replacement for C99 stuff:
 // #if defined(_WIN32) || defined(_WIN64)
@@ -72,7 +72,7 @@
 namespace gdcm
 {
 
-#if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
+#if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__))
 inline int Mkdir(const char* dir)
 {
   return _mkdir(dir);
@@ -328,7 +328,7 @@ size_t System::FileSize(const char* filename)
           };
 #endif
   struct stat fs;
-  if (stat(filename, &fs) != 0) 
+  if (stat(filename, &fs) != 0)
     {
     return 0;
     }
@@ -370,7 +370,7 @@ const char *System::GetCurrentDataDirectory()
     return path;
     }
 #endif
-    
+
   gdcm::Filename fn( GetCurrentProcessFileName() );
   if ( !fn.IsEmpty() )
     {
@@ -384,14 +384,14 @@ const char *System::GetCurrentDataDirectory()
 }
 #endif
 
-/* 
+/*
  * TODO:
  * check cygwin
  * check beos : get_next_image_info
  * check solaris
  * check hpux
  * check os2: DosGetInfoBlocks / DosQueryModuleName
- * check macosx : 
+ * check macosx :
  *  ProcessSerialNumber psn = {kNoProcess, kCurrentProcess};
  *  GetProcessInformation -> FSMakeFSSpec
  * ...
@@ -443,7 +443,7 @@ const char *System::GetCurrentModuleFileName()
     if( len >= PATH_MAX ) return 0; // throw error ?
     // else
     strcpy(path,info.dli_fname);
-    return path; 
+    return path;
     }
 #elif defined(_WIN32)
   // GetModuleFileName works the same on Win32 for library AFAIK
@@ -568,12 +568,12 @@ static int gettimeofday2(struct timeval *tv, struct timezone *tz)
   #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif
 
-//struct timezone 
+//struct timezone
 //{
 //  int  tz_minuteswest; /* minutes W of Greenwich */
 //  int  tz_dsttime;     /* type of dst correction */
 //};
- 
+
 int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
 /*
@@ -588,22 +588,22 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
   FILETIME ft;
   unsigned __int64 tmpres = 0;
   //static int tzflag;
- 
+
   if (NULL != tv)
   {
     GetSystemTimeAsFileTime(&ft);
- 
+
     tmpres |= ft.dwHighDateTime;
     tmpres <<= 32;
     tmpres |= ft.dwLowDateTime;
- 
+
     /*converting file time to unix epoch*/
     tmpres /= 10;  /*convert into microseconds*/
-    tmpres -= DELTA_EPOCH_IN_MICROSECS; 
+    tmpres -= DELTA_EPOCH_IN_MICROSECS;
     tv->tv_sec = (long)(tmpres / 1000000UL);
     tv->tv_usec = (long)(tmpres % 1000000UL);
   }
- 
+
 //  if (NULL != tz)
 //  {
 //    if (!tzflag)
@@ -614,7 +614,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 //    tz->tz_minuteswest = _timezone / 60;
 //    tz->tz_dsttime = _daylight;
 //  }
- 
+
   return 0;
 }
 #endif
@@ -625,7 +625,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
  "17890714172557";
  "19891714172557";
  "19890014172557";
- While the DICOM PS 3.5-2008 would prohibit them. 
+ While the DICOM PS 3.5-2008 would prohibit them.
  I leave it this way so that we correctly read in /almost/ valid date. What we write out is
  always valid anyway which is what is important.
 */

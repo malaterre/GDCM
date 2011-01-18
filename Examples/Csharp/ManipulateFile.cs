@@ -14,9 +14,9 @@
 =========================================================================*/
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/ManipulateFile.exe gdcmData/012345.002.050.dcm out.dcm 
+ * $ mono bin/ManipulateFile.exe gdcmData/012345.002.050.dcm out.dcm
  */
 using System;
 using gdcm;
@@ -56,8 +56,7 @@ public class ManipulateFile
       {
       return 1;
       }
-    
+
     return 0;
     }
 }
-

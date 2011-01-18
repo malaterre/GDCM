@@ -26,46 +26,46 @@ namespace gdcm
 
 static const char *MSStrings[] = {
   "1.2.840.10008.1.3.10",
-  "1.2.840.10008.5.1.4.1.1.1",    
-  "1.2.840.10008.5.1.4.1.1.1.1",  
+  "1.2.840.10008.5.1.4.1.1.1",
+  "1.2.840.10008.5.1.4.1.1.1.1",
   "1.2.840.10008.5.1.4.1.1.1.1.1",
-  "1.2.840.10008.5.1.4.1.1.1.2",  
+  "1.2.840.10008.5.1.4.1.1.1.2",
   "1.2.840.10008.5.1.4.1.1.1.2.1",
-  "1.2.840.10008.5.1.4.1.1.1.3",  
+  "1.2.840.10008.5.1.4.1.1.1.3",
   "1.2.840.10008.5.1.4.1.1.1.3.1",
-  "1.2.840.10008.5.1.4.1.1.2",    
-  "1.2.840.10008.5.1.4.1.1.2.1",  
-  "1.2.840.10008.5.1.4.1.1.6",    
+  "1.2.840.10008.5.1.4.1.1.2",
+  "1.2.840.10008.5.1.4.1.1.2.1",
+  "1.2.840.10008.5.1.4.1.1.6",
   "1.2.840.10008.5.1.4.1.1.6.1",  // Ultrasound Image Storage
-  "1.2.840.10008.5.1.4.1.1.3",    
-  "1.2.840.10008.5.1.4.1.1.3.1",  
-  "1.2.840.10008.5.1.4.1.1.4",    
-  "1.2.840.10008.5.1.4.1.1.4.1",  
-  "1.2.840.10008.5.1.4.1.1.4.2",  
+  "1.2.840.10008.5.1.4.1.1.3",
+  "1.2.840.10008.5.1.4.1.1.3.1",
+  "1.2.840.10008.5.1.4.1.1.4",
+  "1.2.840.10008.5.1.4.1.1.4.1",
+  "1.2.840.10008.5.1.4.1.1.4.2",
   "1.2.840.10008.5.1.4.1.1.5",     // NuclearMedicineImageStorageRetired
-  "1.2.840.10008.5.1.4.1.1.7",    
-  "1.2.840.10008.5.1.4.1.1.7.1",  
-  "1.2.840.10008.5.1.4.1.1.7.2",  
-  "1.2.840.10008.5.1.4.1.1.7.3",  
-  "1.2.840.10008.5.1.4.1.1.7.4",  
-  "1.2.840.10008.5.1.4.1.1.8",    
-  "1.2.840.10008.5.1.4.1.1.9",    
+  "1.2.840.10008.5.1.4.1.1.7",
+  "1.2.840.10008.5.1.4.1.1.7.1",
+  "1.2.840.10008.5.1.4.1.1.7.2",
+  "1.2.840.10008.5.1.4.1.1.7.3",
+  "1.2.840.10008.5.1.4.1.1.7.4",
+  "1.2.840.10008.5.1.4.1.1.8",
+  "1.2.840.10008.5.1.4.1.1.9",
   "1.2.840.10008.5.1.4.1.1.9.1.1",
   "1.2.840.10008.5.1.4.1.1.9.1.2",
   "1.2.840.10008.5.1.4.1.1.9.1.3",
   "1.2.840.10008.5.1.4.1.1.9.2.1",
   "1.2.840.10008.5.1.4.1.1.9.3.1",
   "1.2.840.10008.5.1.4.1.1.9.4.1",
-  "1.2.840.10008.5.1.4.1.1.10",   
-  "1.2.840.10008.5.1.4.1.1.11",   
-  "1.2.840.10008.5.1.4.1.1.11.1", 
-  "1.2.840.10008.5.1.4.1.1.12.1", 
-  "1.2.840.10008.5.1.4.1.1.12.2", 
-  "1.2.840.10008.5.1.4.1.1.12.3", 
-  "1.2.840.10008.5.1.4.1.1.20",   
-  "1.2.840.10008.5.1.4.1.1.66",   
-  "1.2.840.10008.5.1.4.1.1.66.1", 
-  "1.2.840.10008.5.1.4.1.1.66.2", 
+  "1.2.840.10008.5.1.4.1.1.10",
+  "1.2.840.10008.5.1.4.1.1.11",
+  "1.2.840.10008.5.1.4.1.1.11.1",
+  "1.2.840.10008.5.1.4.1.1.12.1",
+  "1.2.840.10008.5.1.4.1.1.12.2",
+  "1.2.840.10008.5.1.4.1.1.12.3",
+  "1.2.840.10008.5.1.4.1.1.20",
+  "1.2.840.10008.5.1.4.1.1.66",
+  "1.2.840.10008.5.1.4.1.1.66.1",
+  "1.2.840.10008.5.1.4.1.1.66.2",
 
   // See PETAt001_PT001.dcm
   "1.2.840.10008.5.1.4.1.1.128",
@@ -118,7 +118,7 @@ static const char *MSStrings[] = {
   // Philips Private MR Synthetic Image Storage
   "1.3.46.670589.5.0.10",
   "1.2.840.10008.5.1.4.1.1.77.1.4", // "VL Photographic Image Storage",
-  "1.2.840.10008.5.1.4.1.1.66.4", // Segmentation Storage 
+  "1.2.840.10008.5.1.4.1.1.66.4", // Segmentation Storage
   "1.2.840.10008.5.1.4.1.1.481.8", // RT Ion Plan Storage
   "1.2.840.10008.5.1.4.1.1.13.1.1", // XRay3DAngiographicImageStorage,
   "1.2.840.10008.5.1.4.1.1.12.1.1", // Enhanced XA Image Storage
@@ -136,7 +136,7 @@ MediaStorage::MSType MediaStorage::GetMSType(const char *str)
       return (MSType)i;
       }
     }
-  // Ouch ! We did not find anything, that's pretty bad, let's hope that 
+  // Ouch ! We did not find anything, that's pretty bad, let's hope that
   // the toolkit which wrote the image is buggy and tolerate space padded binary
   // string
   CodeString codestring = str;
@@ -166,7 +166,7 @@ const char* MediaStorage::GetString() const
 
 // FIXME
 // Currently the implementation is bogus it only define the TS which
-// are associated with an image so indeed the implementation of IsImage 
+// are associated with an image so indeed the implementation of IsImage
 // is only the verification of TSType is != TS_END
 bool MediaStorage::IsImage(MSType ms)
 {
@@ -276,7 +276,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//ModalityPerformedProcedureStepSOPClass
   {"  ", 2},//PhilipsPrivateMRSyntheticImageStorage
   {"XC", 2},//VLPhotographicImageStorage
-  {"SEG ", 3},// Segmentation Storage 
+  {"SEG ", 3},// Segmentation Storage
   {"  ", 2},// RT Ion Plan Storage
   {"XA", 3},// XRay3DAngiographicImageStorage,
   {"XA", 3},// Enhanced XA Image Storage
@@ -286,7 +286,7 @@ static MSModalityType MSModalityTypes[] = {
 
 unsigned int MediaStorage::GetNumberOfMSType()
 {
-  const unsigned int n = MS_END; 
+  const unsigned int n = MS_END;
   assert( n > 0 );
   return n;
 }
@@ -319,7 +319,7 @@ void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
   if( !modality || !dim ) return;
   //if( strlen(modality) != 2 ) return;
   int i = 0;
-  while( MSModalityTypes[i].Modality && 
+  while( MSModalityTypes[i].Modality &&
     (strcmp(modality, MSModalityTypes[i].Modality) != 0 || MSModalityTypes[i].Dimension < dim ))
     {
     ++i;
@@ -542,7 +542,7 @@ bool MediaStorage::SetFromFile(File const &file)
      * BEGIN HACK:
      * Technically it should be enough to know that the image is a SecondaryCaptureImageStorage ... BUT GDCM 1.x
      * used to rewrite everything by default as SecondaryCaptureImageStorage so when you would look carefully
-     * this DataSet would in fact contains *everything* from the MR Image Storage, therefore, we prefer to use 
+     * this DataSet would in fact contains *everything* from the MR Image Storage, therefore, we prefer to use
      * the Source Image Sequence to detect the *real* IOD...I am pretty sure this will bite us one day...
      */
     MediaStorage ms2;

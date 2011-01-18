@@ -174,4 +174,3 @@ int TestImageWriter(int argc, char *argv[])
 
   return r;
 }
-

@@ -41,7 +41,7 @@ Code is from:
 http://www.codeproject.com/KB/stl/zipstream.aspx
 
  TODO:
-   
+
 zran.c
     index a zlib or gzip stream and randomly access it
     - illustrates the use of Z_BLOCK, inflatePrime(), and
@@ -86,7 +86,7 @@ namespace detail
     const int gz_extra_field = 0x04; /* bit 2 set: extra field present */
     const int gz_orig_name  =  0x08; /* bit 3 set: original file name present */
     const int gz_comment    =  0x10; /* bit 4 set: file comment present */
-    const int gz_reserved   =  0xE0; /* bits 5..7: reserved */    
+    const int gz_reserved   =  0xE0; /* bits 5..7: reserved */
 }
 
 /// default gzip buffer size,
@@ -134,9 +134,9 @@ public:
     int               sync        (void);
     int_type          overflow    (int_type c);
     std::streamsize   flush       (void);
-    inline 
+    inline
     ostream_reference get_ostream (void) const;
-    inline 
+    inline
     int               get_zerr    (void) const;
     inline
     unsigned long     get_crc     (void) const;
@@ -146,10 +146,10 @@ public:
     long              get_out_size(void) const;
 
 private:
-    
+
     bool              zip_to_stream(char_type *buffer,
                                     std::streamsize buffer_size);
-    
+
     ostream_reference   _ostream;
     z_stream            _zip_stream;
     int                 _err;
@@ -206,12 +206,12 @@ public:
     long              get_out_size             (void) const;
     inline
     long              get_in_size              (void) const;
-   
+
 
 private:
-    
+
     void              put_back_from_zip_stream (void);
-    
+
     std::streamsize   unzip_from_stream        (char_type* buffer,
                                                 std::streamsize buffer_size);
 
@@ -236,7 +236,7 @@ class basic_zip_ostream :
     public std::basic_ostream<charT, traits>
 {
 public:
-    
+
     typedef char char_type;
     typedef std::basic_ostream<charT, traits>& ostream_reference;
     typedef std::basic_ostream<charT, traits> ostream_type;
@@ -258,14 +258,14 @@ public:
     basic_zip_ostream<charT, traits>& zflush    (void);
     void                              finished  (void);
 
-//    void                              make_gzip() 
+//    void                              make_gzip()
 //       { add_header(); _is_gzip = true; }
 
 private:
 
     basic_zip_ostream<charT,traits>&  add_header(void);
     basic_zip_ostream<charT,traits>&  add_footer(void);
-    
+
     bool _is_gzip;
     bool _added_footer;
 };
@@ -290,7 +290,7 @@ public:
                                size_t input_buffer_size = zstream_default_buffer_size);
 
     inline
-    bool     is_gzip           (void) const;    
+    bool     is_gzip           (void) const;
     inline
     bool     check_crc         (void);
     inline
@@ -299,12 +299,12 @@ public:
     long     get_gzip_crc      (void) const;
     inline
     long     get_gzip_data_size(void) const;
-    
+
 protected:
-    
+
     int      check_header      (void);
-    void     read_footer       (void);   
-    
+    void     read_footer       (void);
+
     bool _is_gzip;
     long _gzip_crc;
     long _gzip_data_size;
@@ -324,14 +324,14 @@ typedef basic_zip_istream<char> zip_istream;
 inline bool isGZip(std::istream &is)
 {
     const int gz_magic[2] = {0x1f, 0x8b};
-    
+
     int c1 = (int) is.get();
     if(c1 != gz_magic[0])
     {
         is.putback(c1);
         return false;
     }
-    
+
     int c2 = (int) is.get();
     if(c2 != gz_magic[1])
     {
@@ -339,7 +339,7 @@ inline bool isGZip(std::istream &is)
         is.putback(c1);
         return false;
     }
-    
+
     is.putback(c2);
     is.putback(c1);
     return true;
@@ -350,4 +350,3 @@ inline bool isGZip(std::istream &is)
 }
 
 #endif // _ZIPSTREAM_H_
-

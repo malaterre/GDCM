@@ -135,7 +135,7 @@ int TestByteSwap(int , char *[])
     }
 
   uint16_t array[] = { 0x1234 };
-  gdcm::ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(array, 
+  gdcm::ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(array,
     gdcm::SwapCode::BigEndian,2);
    if ( array[0] != 0x3412 )
      {
@@ -144,4 +144,3 @@ int TestByteSwap(int , char *[])
 
   return 0;
 }
-

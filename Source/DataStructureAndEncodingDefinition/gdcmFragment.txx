@@ -21,4 +21,4 @@ namespace gdcm
 {
 } // end namespace gdcm
 
-#endif GDCMFRAGMENT_TXX
+#endif // GDCMFRAGMENT_TXX

@@ -20,7 +20,7 @@
 
 namespace gdcm
 {
-  
+
 /**
  * \brief SegmentedPaletteColorLookupTable class
  */

@@ -57,8 +57,8 @@ GET_FILENAME_COMPONENT(COMPILER_LOCATION "${CMAKE_CSharp_COMPILER}"
 
 # configure variables set in this file for fast reload later on
 CONFIGURE_FILE(
-  #${CMAKE_ROOT}/Modules/CMakeCSharpCompiler.cmake.in 
-  ${CMAKE_MODULE_PATH}/CMakeCSharpCompiler.cmake.in 
+  #${CMAKE_ROOT}/Modules/CMakeCSharpCompiler.cmake.in
+  ${CMAKE_MODULE_PATH}/CMakeCSharpCompiler.cmake.in
   #  "${CMAKE_PLATFORM_ROOT_BIN}/CMakeCSharpCompiler.cmake"
   ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeCSharpCompiler.cmake
   @ONLY

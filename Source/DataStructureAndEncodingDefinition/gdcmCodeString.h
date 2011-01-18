@@ -111,4 +111,3 @@ inline bool operator!=(const CodeString &ref, const CodeString& cs)
 } // end namespace gdcm
 
 #endif //GDCMCODESTRING_H
-

@@ -17,4 +17,3 @@
 namespace gdcm
 {
 } // end namespace gdcm
-

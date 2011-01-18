@@ -331,6 +331,13 @@ int main(int argc, char *argv[])
     }
 
   vtkImageReader2Factory* imgfactory = vtkImageReader2Factory::New();
+#if VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION <= 4
+  // warning vtk 5.4 is broken metaimage are not added to factory
+  // by default
+  vtkMetaImageReader *d = vtkMetaImageReader::New();
+  imgfactory->RegisterReader( d );
+  d->Delete();
+#endif
   if( usevtkdicom )
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     imgfactory->RegisterReader( dicomreader );
@@ -416,8 +423,8 @@ int main(int argc, char *argv[])
 #endif
       return 0;
       }
-    else if(  gdcm::System::StrCaseCmp(outputextension,".tif") == 0  
-      ||  gdcm::System::StrCaseCmp(outputextension,".tiff") == 0  ) // 
+    else if(  gdcm::System::StrCaseCmp(outputextension,".tif") == 0
+      ||  gdcm::System::StrCaseCmp(outputextension,".tiff") == 0  ) //
       {
       vtkTIFFWriter * writer = vtkTIFFWriter::New();
       writer->SetFileName( outfilename );
@@ -600,7 +607,7 @@ int main(int argc, char *argv[])
       writer->GetMedicalImageProperties()->SetStudyID( reader->GetStudyID() );
       //writer->GetMedicalImageProperties()->SetGantryTilt( reader->GetGantryAngle() ); // TODO
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 2
-      writer->GetMedicalImageProperties()->SetDirectionCosine( dircos[0], 
+      writer->GetMedicalImageProperties()->SetDirectionCosine( dircos[0],
         dircos[1],
         dircos[2],
         dircos[3],
@@ -679,7 +686,7 @@ int main(int argc, char *argv[])
 // The following looks nice from the API, but the VTK implementation only sets them to '?' ... weird
 //  vtkGetMacro(BitsAllocated, int);
 //  vtkGetStringMacro(AnatomicalOrientation);
-//  vtkGetMacro(GantryAngle, double); 
+//  vtkGetMacro(GantryAngle, double);
 //  vtkGetStringMacro(PatientName);
 //  vtkGetStringMacro(PatientID);
 //  vtkGetStringMacro(Date);
@@ -691,7 +698,7 @@ int main(int argc, char *argv[])
       }
 #endif
     }
-  // nothing special need to be done for vtkStructuredPointsReader 
+  // nothing special need to be done for vtkStructuredPointsReader
 
   // Handle here the specific modality:
   if ( modality )
@@ -741,4 +748,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

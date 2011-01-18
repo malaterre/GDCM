@@ -31,7 +31,7 @@ ELSE(WIN32)
     # FindGTK.cmake update
     # http://www.cmake.org/Bug/bug.php?op=show&bugid=3582
     #FIND_PACKAGE(GTK REQUIRED)
-    #INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} 
+    #INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR}
     #  #/usr/lib/wx/include/gtk-2.4/
     #)
     FIND_PACKAGE(PkgConfig)
@@ -64,8 +64,8 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(wxGDCM main.cpp wxGDCMFrame.cpp wxGDCMFrameBase.cpp wxVTKRenderWindowInteractor.cxx)
 TARGET_LINK_LIBRARIES(wxGDCM vtkRendering ${wxWidgets_LIBRARIES} vtkgdcm)
 INSTALL(TARGETS wxGDCM
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib/static
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib/static
   ${CPACK_NAMELINK_TYPE}
-	)
+  )

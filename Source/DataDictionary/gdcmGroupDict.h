@@ -28,7 +28,7 @@ namespace gdcm
 {
 /**
  * \brief Class to represent the mapping from group number to its abbreviation and name
- * \note Should I rewrite this class to use a std::map instead of std::vector for problem of 
+ * \note Should I rewrite this class to use a std::map instead of std::vector for problem of
  * memory consumption ?
  */
 class GDCM_EXPORT GroupDict
@@ -40,7 +40,7 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const GroupDict &_val);
 
-  unsigned long Size() const
+  size_t Size() const
     {
     assert( Names.size() == Abbreviations.size() );
     return Names.size(); }
@@ -66,8 +66,8 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const GroupDict &_val)
 {
-  unsigned int size = _val.Size();
-  for(unsigned int i=0; i<size; ++i)
+  size_t size = _val.Size();
+  for(size_t i=0; i<size; ++i)
     {
     _os << std::hex << std::setw(4) << std::setfill( '0' ) << i << ","
       << _val.GetAbbreviation(i) << "," << _val.GetName(i) << "\n";

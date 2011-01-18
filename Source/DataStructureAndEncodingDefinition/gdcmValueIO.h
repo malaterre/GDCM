@@ -35,5 +35,4 @@ public:
 
 #include "gdcmValueIO.txx"
 
-#endif //__gdcmValue_h
-
+#endif //GDCMVALUEIO_H

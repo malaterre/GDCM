@@ -30,12 +30,12 @@ PNMCodec::~PNMCodec()
 {
 }
 
-bool PNMCodec::CanDecode(TransferSyntax const &ts) const
+bool PNMCodec::CanDecode(TransferSyntax const &) const
 {
   return false;
 }
 
-bool PNMCodec::CanCode(TransferSyntax const &ts) const
+bool PNMCodec::CanCode(TransferSyntax const &) const
 {
   return false;
 }
@@ -47,7 +47,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
   std::ofstream os(filename);
   const unsigned int *dims = this->GetDimensions();
   const PhotometricInterpretation &pi = this->GetPhotometricInterpretation();
-  if( pi == PhotometricInterpretation::MONOCHROME2 
+  if( pi == PhotometricInterpretation::MONOCHROME2
     || pi == PhotometricInterpretation::MONOCHROME1 ) // warning viz will be surprising
     {
     os << "P5\n";
@@ -62,7 +62,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     return false;
     }
   os << dims[0] << " " << dims[1] << "\n";
-  
+
   const PixelFormat& pf = GetPixelFormat();
   switch(pf)
     {
@@ -82,7 +82,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
 
   const gdcm::ByteValue *bv = out.GetByteValue();
   // FIXME: PNM Codec cannot handle encapsulated syntax... sigh
-  if(!bv) 
+  if(!bv)
     {
     gdcmErrorMacro( "PNM Codec does not handle compress syntax. You need to decompress first." );
     return false;
@@ -116,7 +116,7 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
     pi = gdcm::PhotometricInterpretation::MONOCHROME2;
   else if( type == "P6" )
     pi = gdcm::PhotometricInterpretation::RGB;
-  else 
+  else
     {
     std::cerr << "Unhandled PGM type: " << type << std::endl;
     return false;
@@ -180,7 +180,8 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
   if( !is.eof() ) return false;
 
   out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
-  out.SetByteValue( buf, pdlen );
+  VL::Type pdLenSize = (VL::Type)pdlen;
+  out.SetByteValue( buf, pdLenSize );
   delete[] buf;
 
   is.close();
@@ -201,7 +202,7 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     pi = gdcm::PhotometricInterpretation::MONOCHROME2;
   else if( type == "P6" ) // P3 => ASCII
     pi = gdcm::PhotometricInterpretation::RGB;
-  else 
+  else
     {
     std::cerr << "Unhandled PGM type: " << type << std::endl;
     return false;

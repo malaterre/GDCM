@@ -25,7 +25,7 @@ int TestDataSet(int , char *[])
   gdcm::DataElement d;
   ds.Insert(d);
   const gdcm::DataElement& r =
-	  ds.GetDataElement( gdcm::Tag(0,0) );
+    ds.GetDataElement( gdcm::Tag(0,0) );
   std::cout << r << std::endl;
 
   const gdcm::Tag t2 = gdcm::Tag(0x1234, 0x5678);
@@ -33,7 +33,7 @@ int TestDataSet(int , char *[])
   std::cout << d2 << std::endl;
   ds.Insert(d2);
   const gdcm::DataElement& r2 =
-	  ds.GetDataElement( t2 );
+    ds.GetDataElement( t2 );
   std::cout << r2 << std::endl;
 
   const gdcm::Tag t3 = gdcm::Tag(0x1234, 0x5679);
@@ -42,7 +42,7 @@ int TestDataSet(int , char *[])
   std::cout << d3 << std::endl;
   ds.Insert(d3);
   const gdcm::DataElement& r3 =
-	  ds.GetDataElement( t3 );
+    ds.GetDataElement( t3 );
   std::cout << r3 << std::endl;
 
   std::cout << "Size:" << ds.Size() << std::endl;
@@ -71,4 +71,3 @@ int TestDataSet(int , char *[])
 
   return 0;
 }
-

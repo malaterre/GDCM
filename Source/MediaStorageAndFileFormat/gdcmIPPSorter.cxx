@@ -38,7 +38,7 @@ IPPSorter::~IPPSorter()
 inline double spacing_round(double n, int d) /* pow is defined as pow( double, double) or pow(double int) on M$ comp */
 {
   return floor(n * pow(10., d) + .5) / pow(10., d);
-} 
+}
 
 bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
@@ -115,7 +115,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   if( !dc.IsValid() ) return false;
   double normal2[3];
   dc.Cross( normal2 );
-  assert( normal2[0] == normal[0] && 
+  assert( normal2[0] == normal[0] &&
           normal2[1] == normal[1] &&
           normal2[2] == normal[2] );
   // You only have to do this once for all slices in the volume. Next, for
@@ -189,7 +189,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     // is spacing good ?
     if( spacingisgood && ComputeZSpacing )
       {
-      // If user ask for a ZTolerance of 1e-4, there is no need for us to 
+      // If user ask for a ZTolerance of 1e-4, there is no need for us to
       // store the extra digits... this will make sure to return 2.2 from a 2.1999938551239993 value
       const int l = (int)( -log10(ZTolerance) );
       ZSpacing = spacing_round(zspacing, l);

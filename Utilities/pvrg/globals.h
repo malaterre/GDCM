@@ -109,7 +109,7 @@ typedef void vFunc();
 /* WHEREAMI prints out current location in code. */
 #ifdef CODEC_DEBUG
 #define WHEREAMI() printf("F>%s:R>%s:L>%d: ",\
-			  __FILE__,RoutineName,__LINE__)
+        __FILE__,RoutineName,__LINE__)
 #else
 #define WHEREAMI()
 #endif /* CODEC_DEBUG */

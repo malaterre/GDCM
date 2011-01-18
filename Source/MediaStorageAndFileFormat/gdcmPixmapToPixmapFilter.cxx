@@ -33,4 +33,3 @@ void PixmapToPixmapFilter::SetInput(const Pixmap& image)
 
 
 } // end namespace gdcm
-

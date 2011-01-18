@@ -112,7 +112,6 @@ int TestGlobal(int, char *[])
   const gdcm::IODs &iods = defs.GetIODs();
   std::cout << iods << std::endl;
 
-  
+
   return 0;
 }
-

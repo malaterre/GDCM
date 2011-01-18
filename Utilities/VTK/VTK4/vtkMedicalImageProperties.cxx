@@ -169,7 +169,7 @@ public:
       {
       if (cit->second == uid) return (int)(cit->first);
       ++cit;
-      } 
+      }
     return -1; // uid not found.
     }
   void Print(ostream &os, vtkIndent indent)
@@ -1003,4 +1003,3 @@ void vtkMedicalImageProperties::PrintSelf(ostream& os, vtkIndent indent)
 
   this->Internals->Print(os << "\n", indent.GetNextIndent() );
 }
-

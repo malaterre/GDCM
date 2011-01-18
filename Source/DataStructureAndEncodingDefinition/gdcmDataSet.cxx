@@ -45,7 +45,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     // TODO: tmp.erase(tmp.find_last_not_of(' ') + 1);
     while( owner.size() && owner[owner.size()-1] == ' ' )
       {
-      // osirix/AbdominalCT/36382443 
+      // osirix/AbdominalCT/36382443
       owner.erase(owner.size()-1,1);
       }
     assert( owner.size() == 0 || owner[owner.size()-1] != ' ' );
@@ -105,4 +105,3 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
 }
 
 } // end namespace gdcm
-

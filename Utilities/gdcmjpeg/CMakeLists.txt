@@ -79,15 +79,15 @@ jdshuff.c
 )
 
 SET(JPEG_HEADER_FILES
-  jchuff.h  
-  jdct.h  
-  jdhuff.h  
-  jerror.h  
-  jinclude.h  
-  jmemsys.h  
+  jchuff.h
+  jdct.h
+  jdhuff.h
+  jerror.h
+  jinclude.h
+  jmemsys.h
   jmorecfg.h
-  jpegint.h  
-  jpeglib.h  
+  jpegint.h
+  jpeglib.h
   jversion.h
   jlossy.h
   jlossls.h

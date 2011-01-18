@@ -38,7 +38,7 @@ int main(int argc, char* argv[] )
     {
     return 1;
     }
-  
+
   gdcm::File &file = reader.GetFile();
   gdcm::DataSet &ds = file.GetDataSet();
   gdcm::Tag tsis(0x0008,0x2112); // SourceImageSequence

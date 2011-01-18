@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ############################################################################
 #
 #  Program: GDCM (Grassroots DICOM). A DICOM library
@@ -71,7 +72,7 @@ blacklist = (
 # Do not expose low level jpeg implementation detail
 "JPEG8Codec"
 "JPEG12Codec"
-"JPEG16Codec" 
+"JPEG16Codec"
 "JPEG2000Codec"
 # For now remove the codec part:
 "ImageCodec"
@@ -124,4 +125,3 @@ if __name__ == "__main__":
 
   print "number of class not wrap:%d"%total
   sys.exit(total)
-

@@ -66,7 +66,7 @@ bool PixmapReader::Read()
 {
   if( !Reader::Read() )
     {
-    // cemra_bug/IM-0001-0066.dcm 
+    // cemra_bug/IM-0001-0066.dcm
     // will return from the parser with an error
     // but a partial Pixel Data can be seen
     return false;
@@ -82,7 +82,7 @@ bool PixmapReader::Read()
   bool res = false;
   /* Does it really make sense to check for Media Storage SOP Class UID?
    * I need then to check consistency with 0008 0016 Instance SOP Class UID
-   * ... I don't think there is an end. 
+   * ... I don't think there is an end.
    * I'd rather go the old way check a bunch of tags (From Image Plane
    * Module).
    */
@@ -133,7 +133,7 @@ bool PixmapReader::Read()
           {
           gdcmDebugMacro( "After all it might be a DICOM file "
             "(Mallinckrodt-like)" );
-          
+
     //PixelData->SetCompressionFromTransferSyntax( ts );
           //PixelData->SetCompressionType( Compression::RAW );
           res = ReadImage(ms2);
@@ -256,14 +256,14 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
       }
     // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
       {
-	  //if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
-	  {
-	  //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+    //if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
+    {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
       Attribute<0x0028,0x0002> at = { 1 };
       at.SetFromDataSet( ds );
       pf.SetSamplesPerPixel( at.GetValue() );
-	  }
-	  // else pf will default to 1...
+    }
+    // else pf will default to 1...
       }
     pixeldata.SetPixelFormat( pf );
     // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
@@ -279,7 +279,7 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
     assert( pi != PhotometricInterpretation::UNKNOW);
     pixeldata.SetPhotometricInterpretation( pi );
 
-    // 
+    //
     if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       SmartPointer<LookupTable> lut = new LookupTable;
@@ -306,16 +306,16 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
         lut->InitializeLUT( LookupTable::LookupTableType(i),
           el_us3[0], el_us3[1], el_us3[2] );
 
-        // (0028,1201) OW 
+        // (0028,1201) OW
         // (0028,1202) OW
-        // (0028,1203) OW 
+        // (0028,1203) OW
         const Tag tlut(0x0028, (0x1201 + i));
         //const Tag tlut(0x0028, 0x3006);
 
         // Segmented LUT
-        // (0028,1221) OW 
+        // (0028,1221) OW
         // (0028,1222) OW
-        // (0028,1223) OW 
+        // (0028,1223) OW
         const Tag seglut(0x0028, (0x1221 + i));
         if( ds.FindDataElement( tlut ) )
           {
@@ -327,7 +327,7 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
           //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
 
           unsigned long check =
-            (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+            (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
             * el_us3.GetValue(2) / 8;
           assert( check == lut_raw->GetLength() ); (void)check;
           }
@@ -339,9 +339,9 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
             (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
           //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
 
-          unsigned long check =
-            (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
-            * el_us3.GetValue(2) / 8;
+          //unsigned long check =
+          //  (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
+          //  * el_us3.GetValue(2) / 8;
           //assert( check == lut_raw->GetLength() ); (void)check;
           }
         else
@@ -668,7 +668,7 @@ void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
         std::ostringstream unpack;
         ov.Decompress( unpack );
         std::string s = unpack.str();
-        size_t l = s.size();
+        //size_t l = s.size();
         // The following line will fail with images like XA_GE_JPEG_02_with_Overlays.dcm
         // since the overlays are stored in the unused bit of the PixelData
         if( !ov.IsEmpty() )
@@ -712,6 +712,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     const char *str = ds.GetDataElement( trecognitioncode ).GetByteValue()->GetPointer();
     assert( strncmp( str, "ACR-NEMA", strlen( "ACR-NEMA" ) ) == 0 ||
       strncmp( str, "ACRNEMA", strlen( "ACRNEMA" ) ) == 0 );
+    (void)str;//warning removal
     }
 
   // Ok we have the dataset let's feed the Image (PixelData)
@@ -743,7 +744,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   //  PixelData->SetNumberOfDimensions(2);
   //  }
 
- 
+
   // 2. What are the col & rows:
   // D 0028|0011 [US] [Columns] [512]
   //const Tag tcolumns(0x0028, 0x0011);
@@ -762,7 +763,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   //  gdcmWarningMacro( "This should not happen: No Columns found." );
   //  if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
   //    {
-  //    // Pretty bad we really need this information. Should not 
+  //    // Pretty bad we really need this information. Should not
   //    // happen in theory. Maybe papyrus files ??
   //    return false;
   //    }
@@ -786,7 +787,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     //  gdcmWarningMacro( "This should not happen: No Rows found." );
     //  if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
     //    {
-    //    // Pretty bad we really need this information. Should not 
+    //    // Pretty bad we really need this information. Should not
     //    // happen in theory. Maybe papyrus files ??
     //    return false;
     //    }
@@ -910,7 +911,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       {
       pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
       }
-    else if ( isacrnema ) 
+    else if ( isacrnema )
       {
       assert ( pf.GetSamplesPerPixel() == 0 );
       assert ( pi == PhotometricInterpretation::UNKNOW );
@@ -964,7 +965,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     gdcmWarningMacro( "Modality LUT (0028,3000) are not handled. Image will not be displayed properly" );
     }
   // 2. LUTData (0028,3006)
-  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUT need to 
+  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUT need to
   // be sent to require a LUT Data...
   bool lutdata = ds.FindDataElement(Tag(0x0028,0x3006) );
   if( lutdata )
@@ -1032,22 +1033,22 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       // (0028,1103) US 0\0\16
       const Tag tdescriptor(0x0028, (0x1101 + i));
       //const Tag tdescriptor(0x0028, 0x3002);
-      Element<VR::US,VM::VM3> el_us3 = {};
+      Element<VR::US,VM::VM3> el_us3 = {{ 0, 0, 0}};
       // Now pass the byte array to a DICOMizer:
       el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
         el_us3[0], el_us3[1], el_us3[2] );
 
-      // (0028,1201) OW 
+      // (0028,1201) OW
       // (0028,1202) OW
-      // (0028,1203) OW 
+      // (0028,1203) OW
       const Tag tlut(0x0028, (0x1201 + i));
       //const Tag tlut(0x0028, 0x3006);
-      
+
       // Segmented LUT
-      // (0028,1221) OW 
+      // (0028,1221) OW
       // (0028,1222) OW
-      // (0028,1223) OW 
+      // (0028,1223) OW
       const Tag seglut(0x0028, (0x1221 + i));
       if( ds.FindDataElement( tlut ) )
         {
@@ -1065,7 +1066,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
           }
 
         unsigned long check =
-          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
           * el_us3.GetValue(2) / 8;
         assert( !lut->Initialized() || check == lut_raw->GetLength() ); (void)check;
         }
@@ -1083,9 +1084,9 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
           lut->Clear();
           }
 
-        unsigned long check =
-          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
-          * el_us3.GetValue(2) / 8;
+        //unsigned long check =
+        //  (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
+         // * el_us3.GetValue(2) / 8;
         //assert( check == lut_raw->GetLength() ); (void)check;
         }
       else
@@ -1241,18 +1242,18 @@ bool PixmapReader::ReadACRNEMAImage()
   // 2. What are the col & rows:
   // D 0028|0011 [US] [Columns] [512]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     PixelData->SetDimension(0, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
     }
 
   // D 0028|0010 [US] [Rows] [512]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
     Attribute<0x0028,0x0010> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     PixelData->SetDimension(1, at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     }
@@ -1295,36 +1296,36 @@ bool PixmapReader::ReadACRNEMAImage()
   PixelFormat pf;
   // D 0028|0100 [US] [Bits Allocated] [16]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
     Attribute<0x0028,0x0100> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetBitsAllocated( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     }
 
   // D 0028|0101 [US] [Bits Stored] [12]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
     Attribute<0x0028,0x0101> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetBitsStored( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     }
 
   // D 0028|0102 [US] [High Bit] [11]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
     Attribute<0x0028,0x0102> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetHighBit( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     }
 
   // D 0028|0103 [US] [Pixel Representation] [0]
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
     Attribute<0x0028,0x0103> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
     pf.SetPixelRepresentation( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
     }
@@ -1350,7 +1351,7 @@ bool PixmapReader::ReadACRNEMAImage()
     }
   PixelData->SetDataElement( de );
 
-  // There is no such thing as Photometric Interpretation and 
+  // There is no such thing as Photometric Interpretation and
   // Planar Configuration in ACR NEMA so let's default to something ...
   PixelData->SetPhotometricInterpretation(
     PhotometricInterpretation::MONOCHROME2 );
@@ -1358,9 +1359,9 @@ bool PixmapReader::ReadACRNEMAImage()
   const Tag planarconfiguration(0x0028, 0x0006);
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
-    const DataElement& de = ds.GetDataElement( planarconfiguration );
+    //const DataElement& de = ds.GetDataElement( planarconfiguration );
     Attribute<0x0028,0x0006> at = { 0 };
-    at.SetFromDataElement( de );
+    at.SetFromDataSet( ds );
 
     //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
     unsigned int pc = at.GetValue();

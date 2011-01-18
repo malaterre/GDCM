@@ -41,7 +41,7 @@ class SequenceOfFragments;
  * either Implicit or Explicit
  *
  * \details
- * DATA ELEMENT: 
+ * DATA ELEMENT:
  * A unit of information as defined by a single entry in the data dictionary.
  * An encoded Information Object Definition (IOD) Attribute that is composed
  * of, at a minimum, three fields: a Data Element Tag, a Value Length, and a
@@ -268,4 +268,3 @@ inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 } // end namespace gdcm
 
 #endif //GDCMDATAELEMENT_H
-

@@ -33,4 +33,3 @@ int TestCommand(int argc, char *argv[])
   foo(smc);
   return 0;
 }
-

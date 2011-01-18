@@ -32,4 +32,3 @@ int TestTypes(int argc, char *argv[])
 
   return 0;
 }
-

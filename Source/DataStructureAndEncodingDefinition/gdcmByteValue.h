@@ -43,10 +43,12 @@ public:
         Length++;
         }
   }
-  ByteValue(std::vector<char> &v):Internal(v),Length(v.size()) {}
+
+  /// \warning casting to uint32_t
+  ByteValue(std::vector<char> &v):Internal(v),Length((uint32_t)v.size()) {}
   //ByteValue(std::ostringstream const &os) {
   //  (void)os;
-	//   assert(0); // TODO
+  //   assert(0); // TODO
   //}
   ~ByteValue() {
     Internal.clear();
@@ -65,8 +67,8 @@ public:
   }
 
   bool IsEmpty() const {
-    if( Internal.empty() ) assert( Length == 0 ); 
-    return Internal.empty(); 
+    if( Internal.empty() ) assert( Length == 0 );
+    return Internal.empty();
   }
   VL GetLength() const { return Length; }
   // Does a reallocation
@@ -162,7 +164,7 @@ public:
   template <typename TSwap, typename TType>
   std::istream &Read(std::istream &is) {
     // If Length is odd we have detected that in SetLength
-    // and calling std::vector::resize make sure to allocate *AND* 
+    // and calling std::vector::resize make sure to allocate *AND*
     // initialize values to 0 so we are sure to have a \0 at the end
     // even in this case
     if(Length)
@@ -254,4 +256,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMBYTEVALUE_H
-

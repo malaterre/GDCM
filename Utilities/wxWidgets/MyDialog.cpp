@@ -28,4 +28,3 @@ void MyDialog::do_layout()
     Layout();
     // end wxGlade
 }
-

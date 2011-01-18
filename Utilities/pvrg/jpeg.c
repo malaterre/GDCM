@@ -73,12 +73,12 @@ extern void JpegLosslessEncodeScan();
 
 /* These variables occur in the stream definition. */
 
-extern int CleartoResync;  
+extern int CleartoResync;
 extern int LastKnownResync;
-extern int ResyncEnable;   
-extern int ResyncCount;    
-extern int EndofFile;      
-extern int EndofImage;     
+extern int ResyncEnable;
+extern int ResyncCount;
+extern int EndofFile;
+extern int EndofImage;
 
 /* Define the parameter passing structures. */
 IMAGE *CImage=NULL;           /* Current Image variables structure */
@@ -111,7 +111,7 @@ vFunc *UseDct = ChenDct;       /* This is the DCT algorithm to use */
 vFunc *UseIDct = ChenIDct;     /* This is the inverse DCT algorithm to use */
 
 /* Add some macros to ease readability. */
-#define DefaultDct (*UseDct)    
+#define DefaultDct (*UseDct)
 #define DefaultIDct (*UseIDct)
 
 /*START*/
@@ -144,136 +144,136 @@ int main(argc,argv)
   ComponentIndex=1;  /* Start with index 1 (Could be zero, but JFIF compat) */
   for(i=1;i<argc;i++)  /* Else loop through all arguments. */
     {
-      if (!strcmp(argv[i],"-JFIF"))
-	CImage->Jfif=1;
-      else if (!strcmp(argv[i],"-ci"))
-	ComponentIndex=atoi(argv[++i]);
-      else if (*(argv[i]) == '-')       /* Strip off first "dash" */
- 	{
- 	  switch(*(++argv[i]))
- 	    {
-	    case 'a':                      /* -a Reference DCT */
-	      UseDct = ReferenceDct;
-	      UseIDct = ReferenceIDct;
-	      break;
-	    case 'b':                      /* -b Lee DCT */
-	      UseDct = LeeDct;
-	      UseIDct = LeeIDct;
-	      break;
- 	    case 'd':                      /* -d Decode */
-	      CImage->JpegMode = J_DECODER;
- 	      break; 
- 	    case 'k':                      /* -k Lossless mode */
-	      CImage->JpegMode = J_LOSSLESS;
-	      CFrame->Type=3;
-	      LosslessPredictorType = atoi(argv[++i]);
- 	      break; 
-	    case 'f':
- 	      switch(*(++argv[i]))
- 		{
- 		case 'w':                 /* -fw Frame width */
- 		  CFrame->Width[ComponentIndex] =
-		    atoi(argv[++i]);
-		  break;
-		case 'h':                 /* -fh Frame height */
-		  CFrame->Height[ComponentIndex] =
-		    atoi(argv[++i]);
-		  break;
-		default:
-		  WHEREAMI();
-		  printf("Illegal option: f%c.\n",
-			 *argv[i]);
-		  exit(ERROR_BOUNDS);
-		  break;
-		}
-	      break;
-	    case 'i':    
-	      switch(*(++argv[i]))
-		{
-		case 'w':                /* -iw Image width */
-		  CFrame->GlobalWidth = atoi(argv[++i]);
-		  break;
-		case 'h':                /* -ih Image height */
-		  CFrame->GlobalHeight = atoi(argv[++i]);
-		  break;
-		default:
-		  WHEREAMI();
-		  printf("Illegal option: i%c.\n",
-			 *argv[i]);
-		  exit(ERROR_BOUNDS);
-		  break;
-		}
-	      break;
-	    case 'h':                    /* -h horizontal frequency */
-	      CFrame->hf[ComponentIndex] =
-		atoi(argv[++i]);
-	      break;
+    if (!strcmp(argv[i],"-JFIF"))
+      CImage->Jfif=1;
+    else if (!strcmp(argv[i],"-ci"))
+      ComponentIndex=atoi(argv[++i]);
+    else if (*(argv[i]) == '-')       /* Strip off first "dash" */
+      {
+      switch(*(++argv[i]))
+        {
+      case 'a':                      /* -a Reference DCT */
+        UseDct = ReferenceDct;
+        UseIDct = ReferenceIDct;
+        break;
+      case 'b':                      /* -b Lee DCT */
+        UseDct = LeeDct;
+        UseIDct = LeeIDct;
+        break;
+      case 'd':                      /* -d Decode */
+        CImage->JpegMode = J_DECODER;
+        break;
+      case 'k':                      /* -k Lossless mode */
+        CImage->JpegMode = J_LOSSLESS;
+        CFrame->Type=3;
+        LosslessPredictorType = atoi(argv[++i]);
+        break;
+      case 'f':
+        switch(*(++argv[i]))
+          {
+        case 'w':                 /* -fw Frame width */
+          CFrame->Width[ComponentIndex] =
+            atoi(argv[++i]);
+          break;
+        case 'h':                 /* -fh Frame height */
+          CFrame->Height[ComponentIndex] =
+            atoi(argv[++i]);
+          break;
+        default:
+          WHEREAMI();
+          printf("Illegal option: f%c.\n",
+            *argv[i]);
+          exit(ERROR_BOUNDS);
+          break;
+          }
+        break;
+      case 'i':
+        switch(*(++argv[i]))
+          {
+        case 'w':                /* -iw Image width */
+          CFrame->GlobalWidth = atoi(argv[++i]);
+          break;
+        case 'h':                /* -ih Image height */
+          CFrame->GlobalHeight = atoi(argv[++i]);
+          break;
+        default:
+          WHEREAMI();
+          printf("Illegal option: i%c.\n",
+            *argv[i]);
+          exit(ERROR_BOUNDS);
+          break;
+          }
+        break;
+      case 'h':                    /* -h horizontal frequency */
+        CFrame->hf[ComponentIndex] =
+          atoi(argv[++i]);
+        break;
 #ifndef PRODUCTION_VERSION
-	    case 'l':                    /* -l loudness for debugging */
-	      Loud = atoi(argv[++i]);
-	      break;
+      case 'l':                    /* -l loudness for debugging */
+        Loud = atoi(argv[++i]);
+        break;
 #endif
-	    case 'n':                    /* Set non-interleaved mode */
-	      ScanComponentThreshold=1;
-	      break;
-	    case 'o':                    /* -o Oracle mode (input parsing)*/
-	      Oracle=1;
-	      break;
-	    case 'p':
-	      CFrame->DataPrecision = atoi(argv[++i]);
-	      if (!CFrame->Type) CFrame->Type = 1;
-	      break;
-	    case 'r':                    /* -r resynchronization */
-	      CFrame->ResyncInterval = atoi(argv[++i]);
-	      break;
-	    case 'q':                    /* -q Q factor */
-	      if (*(++argv[i])=='l') LargeQ=1;
-	      CFrame->Q = atoi(argv[++i]);
-	      break;
-	    case 'v':                    /* -v vertical frequency */
-	      CFrame->vf[ComponentIndex] = atoi(argv[++i]);
-	      break;
-	    case 's':                    /* -s stream file name */
-	      CImage->StreamFileName = argv[++i];
-	      break;
-	    case 't':
-	      PointTransform=atoi(argv[++i]);
-	      break;
+      case 'n':                    /* Set non-interleaved mode */
+        ScanComponentThreshold=1;
+        break;
+      case 'o':                    /* -o Oracle mode (input parsing)*/
+        Oracle=1;
+        break;
+      case 'p':
+        CFrame->DataPrecision = atoi(argv[++i]);
+        if (!CFrame->Type) CFrame->Type = 1;
+        break;
+      case 'r':                    /* -r resynchronization */
+        CFrame->ResyncInterval = atoi(argv[++i]);
+        break;
+      case 'q':                    /* -q Q factor */
+        if (*(++argv[i])=='l') LargeQ=1;
+        CFrame->Q = atoi(argv[++i]);
+        break;
+      case 'v':                    /* -v vertical frequency */
+        CFrame->vf[ComponentIndex] = atoi(argv[++i]);
+        break;
+      case 's':                    /* -s stream file name */
+        CImage->StreamFileName = argv[++i];
+        break;
+      case 't':
+        PointTransform=atoi(argv[++i]);
+        break;
 #ifndef PRODUCTION_VERSION
-	    case 'x':                    /* -x trace */
-	      HuffmanTrace = 1;
-	      break;
+      case 'x':                    /* -x trace */
+        HuffmanTrace = 1;
+        break;
 #endif
-	    case 'u':                    /* -u disable width/size output */
-	      Notify=0;
-	      break;
-	    case 'y':
-	      Robust=1;
-	      break;
-	    case 'z':                    /* -z use default Huffman */
-	      CImage->JpegMode |= J_DEFAULTHUFFMAN;
-	      break;
-	    case 'g':                    /* -g GDCM secret option */
-	      CFrame->tmpfile = atoi(argv[++i]); /* very bad programming but should work :) */
-	      break;
-	    default:
-	      WHEREAMI();
-	      printf("Illegal option in command line: %c.\n",
-		     *argv[i]);
-	      exit(ERROR_BOUNDS);
-	      break;
-	    }
-	}
-      else                               /* If not a "-" then a filename */
-	{
-	  CFrame->cn[CFrame->GlobalNumberComponents++]= ComponentIndex;
-	  if (!CFrame->vf[ComponentIndex])
-	    CFrame->vf[ComponentIndex]=1;
-	  if (!CFrame->hf[ComponentIndex])
-	    CFrame->hf[ComponentIndex]=1;
-	  CFrame->ComponentFileName[ComponentIndex] = argv[i];
-	  ComponentIndex++;
-	}
+      case 'u':                    /* -u disable width/size output */
+        Notify=0;
+        break;
+      case 'y':
+        Robust=1;
+        break;
+      case 'z':                    /* -z use default Huffman */
+        CImage->JpegMode |= J_DEFAULTHUFFMAN;
+        break;
+      case 'g':                    /* -g GDCM secret option */
+        CFrame->tmpfile = atoi(argv[++i]); /* very bad programming but should work :) */
+        break;
+      default:
+        WHEREAMI();
+        printf("Illegal option in command line: %c.\n",
+          *argv[i]);
+        exit(ERROR_BOUNDS);
+        break;
+        }
+      }
+    else                               /* If not a "-" then a filename */
+      {
+      CFrame->cn[CFrame->GlobalNumberComponents++]= ComponentIndex;
+      if (!CFrame->vf[ComponentIndex])
+        CFrame->vf[ComponentIndex]=1;
+      if (!CFrame->hf[ComponentIndex])
+        CFrame->hf[ComponentIndex]=1;
+      CFrame->ComponentFileName[ComponentIndex] = argv[i];
+      ComponentIndex++;
+      }
     }
 
   if (Oracle)            /* If Oracle set */
@@ -294,20 +294,20 @@ int main(argc,argv)
     }
   if (CImage->StreamFileName == NULL)            /* Check for stream name */
     {
-      if (CFrame->ComponentFileName[CFrame->cn[0]])  /* If doesn't exist */
-	{                                            /* Create one. */
-	  CImage->StreamFileName =
-	    (char *) calloc(strlen(CFrame->ComponentFileName[CFrame->cn[0]])+6,
-			    sizeof(char));
-	  sprintf(CImage->StreamFileName,"%s.jpg",
-		  CFrame->ComponentFileName[CFrame->cn[0]]);
-	}
-      else
-	{
-	  WHEREAMI();
-	  printf("No stream filename.\n");
-	  exit(ERROR_BOUNDS);
-	}
+    if (CFrame->ComponentFileName[CFrame->cn[0]])  /* If doesn't exist */
+      {                                            /* Create one. */
+      CImage->StreamFileName =
+        (char *) calloc(strlen(CFrame->ComponentFileName[CFrame->cn[0]])+6,
+          sizeof(char));
+      sprintf(CImage->StreamFileName,"%s.jpg",
+        CFrame->ComponentFileName[CFrame->cn[0]]);
+      }
+    else
+      {
+      WHEREAMI();
+      printf("No stream filename.\n");
+      exit(ERROR_BOUNDS);
+      }
     }
   if (GetFlag(CImage->JpegMode,J_DECODER))       /* If decoder flag set then */
     {                                            /* decode frame. */
@@ -315,15 +315,15 @@ int main(argc,argv)
     }
   else
     {
-      if (!(CFrame->GlobalWidth) || !(CFrame->GlobalHeight)) /* Dimensions ? */
-	{
-	  WHEREAMI();
-	  printf("Unspecified frame size.\n");
-	  exit(ERROR_BOUNDS);
-	}
-      swopen(CImage->StreamFileName,0);          /* Open output file, index 0*/
-      JpegEncodeFrame();                         /* Encode the frame */
-      swclose();                                 /* Flush remaining bits */
+    if (!(CFrame->GlobalWidth) || !(CFrame->GlobalHeight)) /* Dimensions ? */
+      {
+      WHEREAMI();
+      printf("Unspecified frame size.\n");
+      exit(ERROR_BOUNDS);
+      }
+    swopen(CImage->StreamFileName,0);          /* Open output file, index 0*/
+    JpegEncodeFrame();                         /* Encode the frame */
+    swclose();                                 /* Flush remaining bits */
     }
   /*exit(ErrorValue);*/
   return(ErrorValue);
@@ -354,73 +354,73 @@ static void JpegEncodeFrame()
     }
   while(1)                      /* This loop breaks up a large number of */
     {                           /* components into small scans */
-      if (CFrame->GlobalNumberComponents<=CurrentComponent)
-	{
-	  break;                /* All encoded */
-	}
-      else if (CFrame->GlobalNumberComponents-CurrentComponent <=
-	       ScanComponentThreshold)
-	{                       /* If less/equal to (SCT) components do it */
-	  CScan->NumberComponents =  
-	    CFrame->GlobalNumberComponents-CurrentComponent;
-	  for(i=0;CurrentComponent<CFrame->GlobalNumberComponents;
-	      CurrentComponent++,i++)
-	    {
-	      CScan->ci[i]=CFrame->cn[CurrentComponent];
-	    }
-	}
-      else
-	{                       /* Break into (SCT) componets */
-	  CScan->NumberComponents = ScanComponentThreshold; 
-	  for(i=0;i<ScanComponentThreshold;CurrentComponent++,i++)
-	    {
-	      CScan->ci[i]=CFrame->cn[CurrentComponent];
-	    }
-	}
-      CheckValidity();                  /* Check validity */
-      CheckBaseline();                  /* See if type is correct */
+    if (CFrame->GlobalNumberComponents<=CurrentComponent)
+      {
+      break;                /* All encoded */
+      }
+    else if (CFrame->GlobalNumberComponents-CurrentComponent <=
+      ScanComponentThreshold)
+      {                       /* If less/equal to (SCT) components do it */
+      CScan->NumberComponents =
+        CFrame->GlobalNumberComponents-CurrentComponent;
+      for(i=0;CurrentComponent<CFrame->GlobalNumberComponents;
+        CurrentComponent++,i++)
+        {
+        CScan->ci[i]=CFrame->cn[CurrentComponent];
+        }
+      }
+    else
+      {                       /* Break into (SCT) componets */
+      CScan->NumberComponents = ScanComponentThreshold;
+      for(i=0;i<ScanComponentThreshold;CurrentComponent++,i++)
+        {
+        CScan->ci[i]=CFrame->cn[CurrentComponent];
+        }
+      }
+    CheckValidity();                  /* Check validity */
+    CheckBaseline();                  /* See if type is correct */
 
-      if (Loud > MUTE)
-	{
-	  PrintImage();
-	  PrintFrame();
-	  PrintScan();
-	}
-      ConfirmFileSize();                /* Does files on disk agree? */
-      if (GetFlag(CImage->JpegMode,J_LOSSLESS))
-	{
-	  MakeIob(IOB_LINE,O_RDONLY,
-		  ((CFrame->DataPrecision>8)?2:1));  /* Make IO read struct*/
-	  JpegLosslessFrequencyScan();        /* Else make custom stables */
-	  JpegCustomScan(CUSTOM_DO_DC);
-	  WriteDht();                         /* write Huffman tables */
-	  JpegLosslessEncodeScan();
-	}
-      else if (GetFlag(CImage->JpegMode,J_DEFAULTHUFFMAN))
-	{
-	  MakeIob(IOB_BLOCK,O_RDONLY,
-		  ((CFrame->DataPrecision>8)?2:1));  /* Make IO read struct */
+    if (Loud > MUTE)
+      {
+      PrintImage();
+      PrintFrame();
+      PrintScan();
+      }
+    ConfirmFileSize();                /* Does files on disk agree? */
+    if (GetFlag(CImage->JpegMode,J_LOSSLESS))
+      {
+      MakeIob(IOB_LINE,O_RDONLY,
+        ((CFrame->DataPrecision>8)?2:1));  /* Make IO read struct*/
+      JpegLosslessFrequencyScan();        /* Else make custom stables */
+      JpegCustomScan(CUSTOM_DO_DC);
+      WriteDht();                         /* write Huffman tables */
+      JpegLosslessEncodeScan();
+      }
+    else if (GetFlag(CImage->JpegMode,J_DEFAULTHUFFMAN))
+      {
+      MakeIob(IOB_BLOCK,O_RDONLY,
+        ((CFrame->DataPrecision>8)?2:1));  /* Make IO read struct */
 
-	  JpegDefaultHuffmanScan();     /* If default tables, then set up */
-	  WriteDqt();                       /* Write out quantization */
-	  WriteDht();                       /* and Huffman tables */
-	  JpegEncodeScan();                 /* Encode the scan */
-	}
-      else
-	{
-	  MakeIob(IOB_BLOCK,O_RDONLY,
-		  ((CFrame->DataPrecision>8)?2:1));  /* Make IO read struct*/
-	  JpegFrequencyScan();              /* Else make custom tables */
-	  JpegCustomScan(CUSTOM_DO_AC|CUSTOM_DO_DC);
-	  WriteDqt();                       /* Write out quantization */
-	  WriteDht();                       /* and Huffman tables */
-	  JpegEncodeScan();                 /* Encode the scan */
-	}
-      for(i=0;i<CScan->NumberComponents;i++)  /* Close all components */
-	{
-	  InstallIob(i);
-	  CloseIob();
-	}
+      JpegDefaultHuffmanScan();     /* If default tables, then set up */
+      WriteDqt();                       /* Write out quantization */
+      WriteDht();                       /* and Huffman tables */
+      JpegEncodeScan();                 /* Encode the scan */
+      }
+    else
+      {
+      MakeIob(IOB_BLOCK,O_RDONLY,
+        ((CFrame->DataPrecision>8)?2:1));  /* Make IO read struct*/
+      JpegFrequencyScan();              /* Else make custom tables */
+      JpegCustomScan(CUSTOM_DO_AC|CUSTOM_DO_DC);
+      WriteDqt();                       /* Write out quantization */
+      WriteDht();                       /* and Huffman tables */
+      JpegEncodeScan();                 /* Encode the scan */
+      }
+    for(i=0;i<CScan->NumberComponents;i++)  /* Close all components */
+      {
+      InstallIob(i);
+      CloseIob();
+      }
     }
   WriteEoi();                              /* All finished, Write eoi */
 }
@@ -446,19 +446,19 @@ void JpegQuantizationFrame()
   CScan->sq[CScan->NumberQTablesSend++] = 0; /* Queue luminance to send */
   if (CFrame->GlobalNumberComponents>1)
     {
-      if (CFrame->Q)                 /* rescale quantization matrices */
-	CImage->QuantizationMatrices[1] =
-	  ScaleMatrix(CFrame->Q,Q_PRECISION,LargeQ,ChrominanceQuantization);
-      else
-	CImage->QuantizationMatrices[1] = ChrominanceQuantization;
-      CScan->sq[CScan->NumberQTablesSend++] = 1; /* Queue table to send */
+    if (CFrame->Q)                 /* rescale quantization matrices */
+      CImage->QuantizationMatrices[1] =
+        ScaleMatrix(CFrame->Q,Q_PRECISION,LargeQ,ChrominanceQuantization);
+    else
+      CImage->QuantizationMatrices[1] = ChrominanceQuantization;
+    CScan->sq[CScan->NumberQTablesSend++] = 1; /* Queue table to send */
     }
   for(i=0;i<CFrame->GlobalNumberComponents;i++)
     {
-      if (i%ScanComponentThreshold)
-	CFrame->tq[CFrame->cn[i]]=1; /* chrominance q for non-primaries */
-      else
-	CFrame->tq[CFrame->cn[i]]=0; /* luminance q starts each scan */
+    if (i%ScanComponentThreshold)
+      CFrame->tq[CFrame->cn[i]]=1; /* chrominance q for non-primaries */
+    else
+      CFrame->tq[CFrame->cn[i]]=0; /* luminance q starts each scan */
     }
 }
 
@@ -502,10 +502,10 @@ void JpegDefaultHuffmanScan()
       SpecifiedHuffman(ChrominanceACBits,ChrominanceACValues);
       SetACHuffman(1);
       for(i=1;i<CScan->NumberComponents;i++)
-	{
-	  CScan->td[i] = 1;
-	  CScan->ta[i] = 1;
-	}
+        {
+        CScan->td[i] = 1;
+        CScan->ta[i] = 1;
+        }
       CScan->sa[CScan->NumberACTablesSend++] = 1;
       CScan->sd[CScan->NumberDCTablesSend++] = 1;
       CImage->NumberACTables = MAX(CImage->NumberACTables,2);
@@ -518,7 +518,7 @@ void JpegDefaultHuffmanScan()
     }
 }
 
-/*BFUNC 
+/*BFUNC
 
 JpegFrequencyScan() assembles the frequency statistics for the given
 scan, making one AC Freq, DC Freq statistic per component specified.
@@ -535,7 +535,7 @@ void JpegFrequencyScan()
 
   InstallIob(0);                 /* Zero out for fast single-component */
   InstallPrediction(0);          /* operation. */
-  InstallFrequency(0); 
+  InstallFrequency(0);
   CheckScan();
   NumberMDU = CScan->MDUWide*CScan->MDUHigh;
   ClearFrameFrequency();
@@ -544,41 +544,41 @@ void JpegFrequencyScan()
   DCTShift = ((CFrame->DataPrecision>8)?2048:128);
   for(i=0;i<NumberMDU;i++)         /* Do for all MDU in image */
     {
-      if ( i && (CFrame->ResyncInterval))
-	{
-	  if (!(i % CFrame->ResyncInterval)) /* Resync the codec */
-	    ResetCodec();
-	}
-      for(j=0;j<CScan->NumberComponents;j++)
-	{
-	  InstallIob(j);
-	  InstallPrediction(j);    /* Install statistics tables */
-	  InstallFrequency(j);
-	  if (CScan->NumberComponents==1)
-	    dohf=dovf=1;
-	  else
-	    {
-	      dohf = CFrame->hf[CScan->ci[j]];
-	      dovf = CFrame->vf[CScan->ci[j]];
-	    }
-	  for(v=0;v<dovf;v++)  /* Do encoding */
-	    {                                      /* and accum. stats */
-	      for(h=0;h<dohf;h++)
-		{
-		  ReadBlock(input);
-		  PreshiftDctMatrix(input,DCTShift);
-		  DefaultDct(input,output);
-		  BoundDctMatrix(output,DCTBound);
-		  Quantize(output,
-			   CImage->
-			   QuantizationMatrices[CFrame->
-						tq[CScan->ci[j]]]);
-		  ZigzagMatrix(output,input);
-		  FrequencyDC(*input);           /* Freq accumulates */
-		  FrequencyAC(input);            /* stats w/o encoding */
-		}
-	    }
-	}
+    if ( i && (CFrame->ResyncInterval))
+      {
+      if (!(i % CFrame->ResyncInterval)) /* Resync the codec */
+        ResetCodec();
+      }
+    for(j=0;j<CScan->NumberComponents;j++)
+      {
+      InstallIob(j);
+      InstallPrediction(j);    /* Install statistics tables */
+      InstallFrequency(j);
+      if (CScan->NumberComponents==1)
+        dohf=dovf=1;
+      else
+        {
+        dohf = CFrame->hf[CScan->ci[j]];
+        dovf = CFrame->vf[CScan->ci[j]];
+        }
+      for(v=0;v<dovf;v++)  /* Do encoding */
+        {                                      /* and accum. stats */
+        for(h=0;h<dohf;h++)
+          {
+          ReadBlock(input);
+          PreshiftDctMatrix(input,DCTShift);
+          DefaultDct(input,output);
+          BoundDctMatrix(output,DCTBound);
+          Quantize(output,
+            CImage->
+            QuantizationMatrices[CFrame->
+            tq[CScan->ci[j]]]);
+          ZigzagMatrix(output,input);
+          FrequencyDC(*input);           /* Freq accumulates */
+          FrequencyAC(input);            /* stats w/o encoding */
+          }
+        }
+      }
     }
   for(i=0;i<CScan->NumberComponents;i++)  /* Rewind to start */
     {
@@ -599,117 +599,117 @@ void JpegCustomScan(flags)
 {
   BEGIN("JpegCustomScan")
   int i,Sumbits;
-  
+
   if ((GetFlag(CImage->JpegMode,J_FULLHUFFMAN)) ||
-      (CScan->NumberComponents < 3))
+    (CScan->NumberComponents < 3))
     {
-      for(i=0;i<CScan->NumberComponents;i++)
-	{
-	  if (GetFlag(flags,CUSTOM_DO_DC))
-	    {
-	      MakeXhuff();
-	      MakeEhuff();
-	      MakeHuffman(CScan->DCFrequency[i]);
-	      SetDCHuffman(i);
-	      CScan->td[i] = i;
-	      CScan->sd[CScan->NumberDCTablesSend++] = i;
-	    }
-	  if (GetFlag(flags,CUSTOM_DO_AC))
-	    {
-	      MakeXhuff();
-	      MakeEhuff();
-	      MakeHuffman(CScan->ACFrequency[i]);
-	      SetACHuffman(i);
-	      CScan->ta[i] = i;
-	      CScan->sa[CScan->NumberACTablesSend++] = i;
-	    }
-	  InstallIob(i);
-	  RewindIob();
-	}
-      CImage->NumberACTables = MAX(CImage->NumberACTables,
-				   CScan->NumberComponents);
-      CImage->NumberDCTables = MAX(CImage->NumberDCTables,
-				   CScan->NumberComponents);
+    for(i=0;i<CScan->NumberComponents;i++)
+      {
+      if (GetFlag(flags,CUSTOM_DO_DC))
+        {
+        MakeXhuff();
+        MakeEhuff();
+        MakeHuffman(CScan->DCFrequency[i]);
+        SetDCHuffman(i);
+        CScan->td[i] = i;
+        CScan->sd[CScan->NumberDCTablesSend++] = i;
+        }
+      if (GetFlag(flags,CUSTOM_DO_AC))
+        {
+        MakeXhuff();
+        MakeEhuff();
+        MakeHuffman(CScan->ACFrequency[i]);
+        SetACHuffman(i);
+        CScan->ta[i] = i;
+        CScan->sa[CScan->NumberACTablesSend++] = i;
+        }
+      InstallIob(i);
+      RewindIob();
+      }
+    CImage->NumberACTables = MAX(CImage->NumberACTables,
+      CScan->NumberComponents);
+    CImage->NumberDCTables = MAX(CImage->NumberDCTables,
+      CScan->NumberComponents);
     }
   else
     {
+    if (GetFlag(flags,CUSTOM_DO_DC))
+      {
+      MakeXhuff();                   /* 0 Component has custom Huffman */
+      MakeEhuff();
+      MakeHuffman(CScan->DCFrequency[0]);
+      SetDCHuffman(0);
+      CScan->td[0] = 0;              /* 0 component uses tables 0 */
+      CScan->sd[CScan->NumberDCTablesSend++] = 0; /* Queue to send */
+      }
+    if (GetFlag(flags,CUSTOM_DO_AC))
+      {
+      MakeXhuff();
+      MakeEhuff();
+      MakeHuffman(CScan->ACFrequency[0]);
+      SetACHuffman(0);
+      CScan->ta[0] = 0;
+      CScan->sa[CScan->NumberACTablesSend++] = 0; /* Queue table send */
+      }
+    if (CScan->NumberComponents > 1)
+      {
       if (GetFlag(flags,CUSTOM_DO_DC))
-	{
-	  MakeXhuff();                   /* 0 Component has custom Huffman */
-	  MakeEhuff();
-	  MakeHuffman(CScan->DCFrequency[0]);
-	  SetDCHuffman(0);
-	  CScan->td[0] = 0;              /* 0 component uses tables 0 */
-	  CScan->sd[CScan->NumberDCTablesSend++] = 0; /* Queue to send */
-	}
+        {
+        for(i=2;i<CScan->NumberComponents;i++) /* Rest share Huffman*/
+          {                                    /* Accum. frequencies */
+          AddFrequency(CScan->DCFrequency[1],CScan->DCFrequency[i]);
+          }
+        MakeXhuff();
+        MakeEhuff();
+        MakeHuffman(CScan->DCFrequency[1]);
+        SetDCHuffman(1);
+        for(i=1;i<CScan->NumberComponents;i++) /* Rest use table 1 */
+          CScan->td[i] = 1;
+        CScan->sd[CScan->NumberDCTablesSend++] = 1;/* Queue to send */
+        }
       if (GetFlag(flags,CUSTOM_DO_AC))
-	{
-	  MakeXhuff();
-	  MakeEhuff();
-	  MakeHuffman(CScan->ACFrequency[0]);
-	  SetACHuffman(0);
-	  CScan->ta[0] = 0;
-	  CScan->sa[CScan->NumberACTablesSend++] = 0; /* Queue table send */
-	}
-      if (CScan->NumberComponents > 1)
-	{
-	  if (GetFlag(flags,CUSTOM_DO_DC))
-	    {
-	      for(i=2;i<CScan->NumberComponents;i++) /* Rest share Huffman*/
-		{                                    /* Accum. frequencies */
-		  AddFrequency(CScan->DCFrequency[1],CScan->DCFrequency[i]);
-		}
-	      MakeXhuff();
-	      MakeEhuff();
-	      MakeHuffman(CScan->DCFrequency[1]);
-	      SetDCHuffman(1);
-	      for(i=1;i<CScan->NumberComponents;i++) /* Rest use table 1 */
-		CScan->td[i] = 1;
-	      CScan->sd[CScan->NumberDCTablesSend++] = 1;/* Queue to send */
-	    }
-	  if (GetFlag(flags,CUSTOM_DO_AC))
-	    {
-	      for(i=2;i<CScan->NumberComponents;i++) /*Accum. frequencies */
-		{
-		  AddFrequency(CScan->ACFrequency[1],CScan->ACFrequency[i]);
-		}
-	      MakeXhuff();
-	      MakeEhuff();
-	      MakeHuffman(CScan->ACFrequency[1]);
-	      SetACHuffman(1);
-	      for(i=1;i<CScan->NumberComponents;i++) /* Rest use table 1 */
-		CScan->ta[i] = 1;
-	      CScan->sa[CScan->NumberACTablesSend++] = 1;  /* Queue to send */
-	    }
-	  CImage->NumberACTables = MAX(CImage->NumberACTables,2);/*reset */
-	  CImage->NumberDCTables = MAX(CImage->NumberDCTables,2);/* limits */
-	}
-      else
-	{
-	  CImage->NumberACTables = MAX(CImage->NumberACTables,1); /* Reset */
-	  CImage->NumberDCTables = MAX(CImage->NumberDCTables,1); /*  limits */
-	}
+        {
+        for(i=2;i<CScan->NumberComponents;i++) /*Accum. frequencies */
+          {
+          AddFrequency(CScan->ACFrequency[1],CScan->ACFrequency[i]);
+          }
+        MakeXhuff();
+        MakeEhuff();
+        MakeHuffman(CScan->ACFrequency[1]);
+        SetACHuffman(1);
+        for(i=1;i<CScan->NumberComponents;i++) /* Rest use table 1 */
+          CScan->ta[i] = 1;
+        CScan->sa[CScan->NumberACTablesSend++] = 1;  /* Queue to send */
+        }
+      CImage->NumberACTables = MAX(CImage->NumberACTables,2);/*reset */
+      CImage->NumberDCTables = MAX(CImage->NumberDCTables,2);/* limits */
+      }
+    else
+      {
+      CImage->NumberACTables = MAX(CImage->NumberACTables,1); /* Reset */
+      CImage->NumberDCTables = MAX(CImage->NumberDCTables,1); /*  limits */
+      }
     }
   if (HuffmanTrace)     /* If trace flag, then dump out frequency tables */
     {
-      Sumbits = 0;
-      for(i=0;i<CImage->NumberACTables;i++)
-	{
-	  WHEREAMI();
-	  printf("AC Code Frequency: Table %d\n",i);
-	  PrintACEhuff(i);
-	  Sumbits += SizeACEhuff(i);
-	}
-      for(i=0;i<CImage->NumberDCTables;i++)
-	{
-	  WHEREAMI();
-	  printf("DC Code Frequency: Table %d\n",i);
-	  PrintDCEhuff(i);
-	  Sumbits +=  SizeDCEhuff(i);
-	}
+    Sumbits = 0;
+    for(i=0;i<CImage->NumberACTables;i++)
+      {
       WHEREAMI();
-      printf("Total bits: %d  bytes: %d\n",
-	     Sumbits,(Sumbits+7)/8);
+      printf("AC Code Frequency: Table %d\n",i);
+      PrintACEhuff(i);
+      Sumbits += SizeACEhuff(i);
+      }
+    for(i=0;i<CImage->NumberDCTables;i++)
+      {
+      WHEREAMI();
+      printf("DC Code Frequency: Table %d\n",i);
+      PrintDCEhuff(i);
+      Sumbits +=  SizeDCEhuff(i);
+      }
+    WHEREAMI();
+    printf("Total bits: %d  bytes: %d\n",
+      Sumbits,(Sumbits+7)/8);
     }
 }
 
@@ -726,7 +726,7 @@ void JpegEncodeScan()
   int i,j,h,v,dohf,dovf;
   int input[64],output[64];
   int DCTBound,DCTShift;
-  
+
   InstallIob(0);
   CheckScan();
   NumberMDU = CScan->MDUWide*CScan->MDUHigh;
@@ -737,76 +737,76 @@ void JpegEncodeScan()
   ResyncCount=0;                /* Reset the resync counter for every scan */
   if (CFrame->InsertDnl>0) /* If DNL is greater than 0, insert */
     {                           /* into according Resync interval */
-      if  (!(CFrame->ResyncInterval))
-	WriteDnl();  /* Automatically write a dnl if no resync is enabled.*/
-      else                      /* If DNL > MDU, then put in last resync */
-	CFrame->InsertDnl = MAX(CFrame->InsertDnl,      /* interval */
-				NumberMDU/CFrame->ResyncInterval);
+    if  (!(CFrame->ResyncInterval))
+      WriteDnl();  /* Automatically write a dnl if no resync is enabled.*/
+    else                      /* If DNL > MDU, then put in last resync */
+      CFrame->InsertDnl = MAX(CFrame->InsertDnl,      /* interval */
+        NumberMDU/CFrame->ResyncInterval);
     }
   WriteSos();                  /* Start of Scan */
   for(i=0;i<NumberMDU;i++)
     {
-      if ( i && (CFrame->ResyncInterval))
-	{
-	  if (!(i % CFrame->ResyncInterval)) /* Check for resync */
-	    {
-	      if ((i/CFrame->ResyncInterval)==CFrame->InsertDnl)
-		{
-		  WriteDnl();                /* If resync matches use DNL */
-		  CFrame->InsertDnl=0;       /* Mission accomplished. */
-		}
-	      WriteResync();                 /* Write resync */
-	      ResetCodec();
-	    }
-	}
-      for(j=0;j<CScan->NumberComponents;j++)
-	{
-	  if (Loud > MUTE)
-	    {
-	      WHEREAMI();
-	      printf("[Pass 2 [Component:MDU] [%d:%d]]\n",j,i);
-	    }
-	  InstallIob(j);                    /* Install component j */
-	  InstallPrediction(j);
-	  if (CScan->NumberComponents==1)
-	    dohf=dovf=1;
-	  else
-	    {
-	      dohf = CFrame->hf[CScan->ci[j]];
-	      dovf = CFrame->vf[CScan->ci[j]];
-	    }
-	  for(v=0;v<dovf;v++)  /* loop thru MDU */
-	    {
-	      for(h=0;h<dohf;h++)
-		{
-		  ReadBlock(input);                /* Read in */
-		  if (Loud > WHISPER)
-		    {
-		      WHEREAMI();
-		      printf("Raw input:\n");
-		      PrintMatrix(input);
-		    }
-		  PreshiftDctMatrix(input,DCTShift);        /* Shift */
-		  DefaultDct(input,output);        /* DCT */
-		  BoundDctMatrix(output,DCTBound); /* Bound, limit */
-		  Quantize(output,                 /* Quantize */
-			   CImage->
-			   QuantizationMatrices[CFrame->
-						tq[CScan->ci[j]]]);
-		  ZigzagMatrix(output,input);      /* Zigzag trace */
-		  if (Loud > TALK)
-		    {
-		      WHEREAMI();
-		      printf("Cooked Output:\n");
-		      PrintMatrix(input);
-		    }
-		  UseDCHuffman(CScan->td[j]);
-		  EncodeDC(*input);               /* Encode DC component */
-		  UseACHuffman(CScan->ta[j]);
-		  EncodeAC(input);                /* Encode AC component */
-		}
-	    }
-	}
+    if ( i && (CFrame->ResyncInterval))
+      {
+      if (!(i % CFrame->ResyncInterval)) /* Check for resync */
+        {
+        if ((i/CFrame->ResyncInterval)==CFrame->InsertDnl)
+          {
+          WriteDnl();                /* If resync matches use DNL */
+          CFrame->InsertDnl=0;       /* Mission accomplished. */
+          }
+        WriteResync();                 /* Write resync */
+        ResetCodec();
+        }
+      }
+    for(j=0;j<CScan->NumberComponents;j++)
+      {
+      if (Loud > MUTE)
+        {
+        WHEREAMI();
+        printf("[Pass 2 [Component:MDU] [%d:%d]]\n",j,i);
+        }
+      InstallIob(j);                    /* Install component j */
+      InstallPrediction(j);
+      if (CScan->NumberComponents==1)
+        dohf=dovf=1;
+      else
+        {
+        dohf = CFrame->hf[CScan->ci[j]];
+        dovf = CFrame->vf[CScan->ci[j]];
+        }
+      for(v=0;v<dovf;v++)  /* loop thru MDU */
+        {
+        for(h=0;h<dohf;h++)
+          {
+          ReadBlock(input);                /* Read in */
+          if (Loud > WHISPER)
+            {
+            WHEREAMI();
+            printf("Raw input:\n");
+            PrintMatrix(input);
+            }
+          PreshiftDctMatrix(input,DCTShift);        /* Shift */
+          DefaultDct(input,output);        /* DCT */
+          BoundDctMatrix(output,DCTBound); /* Bound, limit */
+          Quantize(output,                 /* Quantize */
+            CImage->
+            QuantizationMatrices[CFrame->
+            tq[CScan->ci[j]]]);
+          ZigzagMatrix(output,input);      /* Zigzag trace */
+          if (Loud > TALK)
+            {
+            WHEREAMI();
+            printf("Cooked Output:\n");
+            PrintMatrix(input);
+            }
+          UseDCHuffman(CScan->td[j]);
+          EncodeDC(*input);               /* Encode DC component */
+          UseACHuffman(CScan->ta[j]);
+          EncodeAC(input);                /* Encode AC component */
+          }
+        }
+      }
     }
   if (CFrame->InsertDnl==-2)    /* -2 is automatic DNL insertion */
     {
@@ -846,14 +846,14 @@ void JpegLosslessFrequencyScan()
     MaxElem= LOSSLESSBUFFERSIZE/4;      /* elements can be loaded in */
   else
     {
-      MaxElem= LOSSLESSBUFFERSIZE/
-	((CFrame->vf[CScan->ci[0]]+1)*(CFrame->hf[CScan->ci[0]]+1));
-      for(j=1;j<CScan->NumberComponents;j++)          /* Rewind to start */
-	{
-	  x=LOSSLESSBUFFERSIZE/
-	    ((CFrame->vf[CScan->ci[j]]+1)*(CFrame->hf[CScan->ci[j]]+1));
-	  if (x < MaxElem) MaxElem=x;
-	}
+    MaxElem= LOSSLESSBUFFERSIZE/
+      ((CFrame->vf[CScan->ci[0]]+1)*(CFrame->hf[CScan->ci[0]]+1));
+    for(j=1;j<CScan->NumberComponents;j++)          /* Rewind to start */
+      {
+      x=LOSSLESSBUFFERSIZE/
+        ((CFrame->vf[CScan->ci[j]]+1)*(CFrame->hf[CScan->ci[j]]+1));
+      if (x < MaxElem) MaxElem=x;
+      }
     }
   CScan->SSS=LosslessPredictorType;
   CScan->SAL=PointTransform;
@@ -875,159 +875,159 @@ void JpegLosslessFrequencyScan()
       printf("Resync Interval not an integer multiple of MDU's wide.\n");
       printf("Proceeding anyways.\n");
       if (MaxElem>=CFrame->ResyncInterval)
-	MaxElem=CFrame->ResyncInterval;       /* Reduce to resync interval */
+        MaxElem=CFrame->ResyncInterval;       /* Reduce to resync interval */
       else
-	MaxElem=1;                            /* Can't proceed quickly */
+        MaxElem=1;                            /* Can't proceed quickly */
     }
   CurrentElem=NumberElem=0;
   for(y=0;y<CScan->MDUHigh;y++)
     {
-      for(x=0;x<CScan->MDUWide;x++)
-	{
-	  if (CurrentMDU && (CFrame->ResyncInterval))
-	    {
-	      if (!(CurrentMDU % CFrame->ResyncInterval)) /* Check resync */
-		{
-		  UseType=1;                     /* Reset codec */
-		  for(j=0;j<CScan->NumberComponents;j++)
-		    {
-		      InstallIob(j); 
-		      LineResetBuffers();
-		    }
-		}
-	    }
-	  if (!(CurrentMDU%CScan->MDUWide)&&(CurrentMDU)) /* Reset CScan type */
-	    {
-	      UseType=2;                           /* Start of line */
-	      StartofLine=1;                       /* uses top pel predictor */
-	    }
-	  CurrentElem++;
-	  if (CurrentElem>=NumberElem)
-	    {
-	      NumberElem = MIN((CScan->MDUWide-x),MaxElem);
-	      CurrentElem=0;
-	      for(j=0;j<CScan->NumberComponents;j++)
-		{
-		  InstallIob(j);                    /* Install component j */
-		  ReadLine(NumberElem,              /* Read in some elements*/
-			   CScan->LosslessBuffer[j]); 
-		}
-	    }
-	  if (CScan->NumberComponents==1)
-	    {
-	      width=horfreq*NumberElem+1;
-	      input = &CScan->LosslessBuffer[0][CurrentElem];
-	      if (Loud > NOISY)
-		{
-		  WHEREAMI();
-		  printf("[Pass 1 [Component:MDU:Total] [%d:%d:%d]]\n",
-			 0,CurrentMDU,NumberMDU);
-		}
-	      switch(UseType) /* Same as lossless coding predictor*/
-		{
-		case 1:
-		  px = input[width];
-		  break;
-		case 2:
-		  px = input[1];
-		  break;
-		case 3:
-		  px = input[0];
-		  break;
-		case 4:
-		  px = input[width] + input[1] - input[0];
-		  break;
-		case 5:
-		  px = input[width] + ((input[1] - input[0])>>1);
-		  break;
-		case 6:
-		  px = input[1] + ((input[width] - input[0])>>1);
-		  break;
-		case 7:
-		  px = (input[1]+input[width])>>1;  /* No rounding */
-		  break;
-		default:
-		  WHEREAMI();
-		  printf("Lossless mode %d not supported.\n",UseType);
-		  break;
-		}
-	      value=input[width+1]-px;
-	      if (Loud > NOISY)
-		printf("IN=%d  PX=%d  FRE: %d\n",
-		       input[width+1],px,value);
-	      LosslessFrequencyDC(value); 
-	    }
-	  else
-	    {
-	      for(j=0;j<CScan->NumberComponents;j++)
-		{
-		  if (Loud > NOISY)
-		    {
-		      WHEREAMI();
-		      printf("[Pass 1 [Component:MDU:Total] [%d:%d:%d]]\n",
-			     j,CurrentMDU,NumberMDU);
-		    }
-		  InstallFrequency(j);
-		  height=CFrame->vf[CScan->ci[j]];
-		  horfreq=CFrame->hf[CScan->ci[j]];
-		  width=horfreq*NumberElem+1;
-		  input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
-		  for(v=1;v<=height;v++) 
-		    {
-		      for(h=1;h<=horfreq;h++)
-			{
-			  switch(UseType) /* lossless coding predictor*/
-			    {
-			    case 1:
-			      px = input[(v*(width))+h-1];
-			      break;
-			    case 2:
-			      px = input[((v-1)*(width))+h];
-			      break;
-			    case 3:
-			      px = input[((v-1)*(width))+h-1];
-			      break;
-			    case 4:
-			      px = input[(v*(width))+h-1] +
-				input[((v-1)*(width))+h] -
-				  input[((v-1)*(width))+h-1];
-			      break;
-			    case 5:
-			      px = input[(v*(width))+h-1] +
-				((input[((v-1)*(width))+h] -
-				 input[((v-1)*(width))+h-1])>>1);
-			      break;
-			    case 6:
-			      px = input[((v-1)*(width))+h] +
-				((input[(v*(width))+h-1] -
-				 input[((v-1)*(width))+h-1])>>1);
-			      break;
-			    case 7:
-			      px = (input[((v-1)*(width))+h] +
-				    input[(v*(width))+h-1])>>1;
-			      break;
-			    default:
-			      WHEREAMI();
-			      printf("Lossless mode: %d not supported.\n",
-				     UseType);
-			      break;
-			    }
-			  value=input[(v*(width))+h]-px;
-			  if (Loud > NOISY)
-			    printf("IN=%d  PX=%d  FRE: %d\n",
-				   input[(v*(width))+h],px,value);
-			  LosslessFrequencyDC(value); 
-			}
-		    }
-		}
-	    }
-	  CurrentMDU++;
-	  if (StartofLine)
-	    {
-	      UseType=CScan->SSS;
-	      StartofLine=0;
-	    }
-	}
+    for(x=0;x<CScan->MDUWide;x++)
+      {
+      if (CurrentMDU && (CFrame->ResyncInterval))
+        {
+        if (!(CurrentMDU % CFrame->ResyncInterval)) /* Check resync */
+          {
+          UseType=1;                     /* Reset codec */
+          for(j=0;j<CScan->NumberComponents;j++)
+            {
+            InstallIob(j);
+            LineResetBuffers();
+            }
+          }
+        }
+      if (!(CurrentMDU%CScan->MDUWide)&&(CurrentMDU)) /* Reset CScan type */
+        {
+        UseType=2;                           /* Start of line */
+        StartofLine=1;                       /* uses top pel predictor */
+        }
+      CurrentElem++;
+      if (CurrentElem>=NumberElem)
+        {
+        NumberElem = MIN((CScan->MDUWide-x),MaxElem);
+        CurrentElem=0;
+        for(j=0;j<CScan->NumberComponents;j++)
+          {
+          InstallIob(j);                    /* Install component j */
+          ReadLine(NumberElem,              /* Read in some elements*/
+            CScan->LosslessBuffer[j]);
+          }
+        }
+      if (CScan->NumberComponents==1)
+        {
+        width=horfreq*NumberElem+1;
+        input = &CScan->LosslessBuffer[0][CurrentElem];
+        if (Loud > NOISY)
+          {
+          WHEREAMI();
+          printf("[Pass 1 [Component:MDU:Total] [%d:%d:%d]]\n",
+            0,CurrentMDU,NumberMDU);
+          }
+        switch(UseType) /* Same as lossless coding predictor*/
+          {
+        case 1:
+          px = input[width];
+          break;
+        case 2:
+          px = input[1];
+          break;
+        case 3:
+          px = input[0];
+          break;
+        case 4:
+          px = input[width] + input[1] - input[0];
+          break;
+        case 5:
+          px = input[width] + ((input[1] - input[0])>>1);
+          break;
+        case 6:
+          px = input[1] + ((input[width] - input[0])>>1);
+          break;
+        case 7:
+          px = (input[1]+input[width])>>1;  /* No rounding */
+          break;
+        default:
+          WHEREAMI();
+          printf("Lossless mode %d not supported.\n",UseType);
+          break;
+          }
+        value=input[width+1]-px;
+        if (Loud > NOISY)
+          printf("IN=%d  PX=%d  FRE: %d\n",
+            input[width+1],px,value);
+        LosslessFrequencyDC(value);
+        }
+      else
+        {
+        for(j=0;j<CScan->NumberComponents;j++)
+          {
+          if (Loud > NOISY)
+            {
+            WHEREAMI();
+            printf("[Pass 1 [Component:MDU:Total] [%d:%d:%d]]\n",
+              j,CurrentMDU,NumberMDU);
+            }
+          InstallFrequency(j);
+          height=CFrame->vf[CScan->ci[j]];
+          horfreq=CFrame->hf[CScan->ci[j]];
+          width=horfreq*NumberElem+1;
+          input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
+          for(v=1;v<=height;v++)
+            {
+            for(h=1;h<=horfreq;h++)
+              {
+              switch(UseType) /* lossless coding predictor*/
+                {
+              case 1:
+                px = input[(v*(width))+h-1];
+                break;
+              case 2:
+                px = input[((v-1)*(width))+h];
+                break;
+              case 3:
+                px = input[((v-1)*(width))+h-1];
+                break;
+              case 4:
+                px = input[(v*(width))+h-1] +
+                  input[((v-1)*(width))+h] -
+                  input[((v-1)*(width))+h-1];
+                break;
+              case 5:
+                px = input[(v*(width))+h-1] +
+                  ((input[((v-1)*(width))+h] -
+                    input[((v-1)*(width))+h-1])>>1);
+                break;
+              case 6:
+                px = input[((v-1)*(width))+h] +
+                  ((input[(v*(width))+h-1] -
+                    input[((v-1)*(width))+h-1])>>1);
+                break;
+              case 7:
+                px = (input[((v-1)*(width))+h] +
+                  input[(v*(width))+h-1])>>1;
+                break;
+              default:
+                WHEREAMI();
+                printf("Lossless mode: %d not supported.\n",
+                  UseType);
+                break;
+                }
+              value=input[(v*(width))+h]-px;
+              if (Loud > NOISY)
+                printf("IN=%d  PX=%d  FRE: %d\n",
+                  input[(v*(width))+h],px,value);
+              LosslessFrequencyDC(value);
+              }
+            }
+          }
+        }
+      CurrentMDU++;
+      if (StartofLine)
+        {
+        UseType=CScan->SSS;
+        StartofLine=0;
+        }
+      }
     }
   for(j=0;j<CScan->NumberComponents;j++)          /* Rewind to start */
     {
@@ -1051,7 +1051,7 @@ void JpegLosslessEncodeScan()
   int MaxElem,CurrentElem,NumberElem;
   int StartofLine=1,UseType=1;              /* Start with type 1 coding */
   int *input;
-  
+
   CheckScan();
   for(j=0;j<CScan->NumberComponents;j++)    /* Important to rewind to start */
     {                                       /* for lossless coding... */
@@ -1062,14 +1062,14 @@ void JpegLosslessEncodeScan()
     MaxElem= LOSSLESSBUFFERSIZE/4;      /* elements can be loaded in */
   else
     {
-      MaxElem= LOSSLESSBUFFERSIZE/
-	((CFrame->vf[CScan->ci[0]]+1)*(CFrame->hf[CScan->ci[0]]+1));
-      for(j=1;j<CScan->NumberComponents;j++)          /* Rewind to start */
-	{
-	  x=LOSSLESSBUFFERSIZE/
-	    ((CFrame->vf[CScan->ci[j]]+1)*(CFrame->hf[CScan->ci[j]]+1));
-	  if (x < MaxElem) MaxElem=x;
-	}
+    MaxElem= LOSSLESSBUFFERSIZE/
+      ((CFrame->vf[CScan->ci[0]]+1)*(CFrame->hf[CScan->ci[0]]+1));
+    for(j=1;j<CScan->NumberComponents;j++)          /* Rewind to start */
+      {
+      x=LOSSLESSBUFFERSIZE/
+        ((CFrame->vf[CScan->ci[j]]+1)*(CFrame->hf[CScan->ci[j]]+1));
+      if (x < MaxElem) MaxElem=x;
+      }
     }
   CScan->SSS=LosslessPredictorType;
   CScan->SAL=PointTransform;
@@ -1086,192 +1086,192 @@ void JpegLosslessEncodeScan()
   ResyncCount=0;                /* Reset the resync counter for every scan */
   if (CFrame->InsertDnl>0) /* If DNL is greater than 0, insert */
     {                           /* into according Resync interval */
-      if  (!(CFrame->ResyncInterval))
-	WriteDnl();  /* Automatically write a dnl if no resync is enabled.*/
-      else                      /* If DNL > MDU, then put in last resync */
-	CFrame->InsertDnl = MAX(CFrame->InsertDnl,         /* interval */
-				NumberMDU/CFrame->ResyncInterval);
+    if  (!(CFrame->ResyncInterval))
+      WriteDnl();  /* Automatically write a dnl if no resync is enabled.*/
+    else                      /* If DNL > MDU, then put in last resync */
+      CFrame->InsertDnl = MAX(CFrame->InsertDnl,         /* interval */
+        NumberMDU/CFrame->ResyncInterval);
     }
   WriteSos();                  /* Start of Scan */
   CurrentMDU=0;
   if ((CFrame->ResyncInterval)&&(CFrame->ResyncInterval % CScan->MDUWide))
     {
-      WHEREAMI();
-      printf("Resync Interval not an integer multiple of MDU's wide.\n");
-      printf("Proceeding anyways.\n");
-      if (MaxElem>=CFrame->ResyncInterval)
-	MaxElem=CFrame->ResyncInterval;       /* Reduce to resync interval */
-      else
-	MaxElem=1;                            /* Can't proceed quickly */
+    WHEREAMI();
+    printf("Resync Interval not an integer multiple of MDU's wide.\n");
+    printf("Proceeding anyways.\n");
+    if (MaxElem>=CFrame->ResyncInterval)
+      MaxElem=CFrame->ResyncInterval;       /* Reduce to resync interval */
+    else
+      MaxElem=1;                            /* Can't proceed quickly */
     }
   CurrentElem=NumberElem=0;
   for(y=0;y<CScan->MDUHigh;y++)
     {
-      for(x=0;x<CScan->MDUWide;x++)
-	{
-	  if (CurrentMDU && (CFrame->ResyncInterval))
-	    {
-	      if (!(CurrentMDU % CFrame->ResyncInterval)) /* Check resync */
-		{
-		  if ((CurrentMDU/CFrame->ResyncInterval)==CFrame->InsertDnl)
-		    {
-		      WriteDnl();              /* If resync matches use DNL */
-		      CFrame->InsertDnl=0;     /* Mission accomplished. */
-		    }
-		  WriteResync();                 /* Write resync */
-		  UseType=1;                     /* Reset codec */
-		  for(j=0;j<CScan->NumberComponents;j++)
-		    {
-		      InstallIob(j); 
-		      LineResetBuffers();
-		    }
-		}
-	    }
-	  if (!(CurrentMDU%CScan->MDUWide)&&(CurrentMDU)) /* Reset CScan type */
-	    {
-	      UseType=2;                           /* Start of line */
-	      StartofLine=1;                       /* uses top pel predictor */
-	    }
-	  CurrentElem++;
-	  if (CurrentElem>=NumberElem)
-	    {
-	      NumberElem = MIN((CScan->MDUWide-x),MaxElem);
-	      CurrentElem=0;
-	      for(j=0;j<CScan->NumberComponents;j++)
-		{
-		  InstallIob(j);                    /* Install component j */
-		  ReadLine(NumberElem,              /* Read in some elements*/
-			   CScan->LosslessBuffer[j]); 
-		}
-	    }
-	  if (CScan->NumberComponents==1)
-	    {
-	      if (Loud > MUTE)
-		{
-		  WHEREAMI();
-		  printf("[Pass 2 [Component:MDU:Total] [%d:%d:%d]]\n",
-			 0,CurrentMDU,NumberMDU);
-		}
-	      input = &CScan->LosslessBuffer[0][CurrentElem];
-	      width=horfreq*NumberElem+1;
-	      switch(UseType) /* Same as lossless coding predictor*/
-		{
-		case 1:
-		  px = input[width];
-		  break;
-		case 2:
-		  px = input[1];
-		  break;
-		case 3:
-		  px = input[0];
-		  break;
-		case 4:
-		  px = input[width] + input[1] - input[0];
-		  break;
-		case 5:
-		  px = input[width] + ((input[1] - input[0])>>1);
-		  break;
-		case 6:
-		  px = input[1] + ((input[width] - input[0])>>1);
-		  break;
-		case 7:
-		  px = (input[1] + input[width])>>1;  /* No rounding */
-		  break;
-		default:
-		  WHEREAMI();
-		  printf("Lossless mode %d not supported.\n",UseType);
-		  break;
-		}
-	      value=input[width+1]-px;
-	      if (Loud > MUTE)
-		printf("IN=%d  PX=%d  FRE: %d\n",
-		       input[width+1],px,value);
-	      LosslessEncodeDC(value); 
-	    }
-	  else
-	    {
-	      for(j=0;j<CScan->NumberComponents;j++)
-		{
-		  if (Loud > MUTE)
-		    {
-		      WHEREAMI();
-		      printf("[Pass 2 [Component:MDU] [%d:%d]]\n",
-			     j,CurrentMDU);
-		    }
-		  height=CFrame->vf[CScan->ci[j]];
-		  horfreq=CFrame->hf[CScan->ci[j]];
-		  width=horfreq*NumberElem+1;
-		  input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
-		  UseDCHuffman(CScan->td[j]);
-		  for(v=1;v<=height;v++) 
-		    {
-		      for(h=1;h<=horfreq;h++)
-			{
-			  switch(UseType)   /* Same as lossless predictor*/
-			    {
-			    case 1:
-			      px = input[(v*(width))+h-1];
-			      break;
-			    case 2:
-			      px = input[((v-1)*(width))+h];
-			      break;
-			    case 3:
-			      px = input[((v-1)*(width))+h-1];
-			      break;
-			    case 4:
-			      px = input[(v*(width))+h-1] +
-				input[((v-1)*(width))+h] -
-				  input[((v-1)*(width))+h-1];
-			      break;
-			    case 5:
-			      px = input[(v*(width))+h-1] +
-				((input[((v-1)*(width))+h] -
-				  input[((v-1)*(width))+h-1])>>1);
-			      break;
-			    case 6:
-			      px = input[((v-1)*(width))+h] +
-				((input[(v*(width))+h-1] -
-				  input[((v-1)*(width))+h-1])>>1);
-			      break;
-			    case 7:
-			      px = (input[((v-1)*(width))+h] +
-				    input[(v*(width))+h-1])>>1;
-			      break;
-			    default:
-			      WHEREAMI();
-			      printf("Lossless mode %d not supported.\n",
-				     UseType);
-			      break;
-			    }
-			  value=input[(v*(width))+h]-px;
-			  if (Loud > MUTE)
-			    {
-			      printf("IN=%d  PX=%d  ENC: %d\n",
-				     input[(v*(width))+h],px,value);
-			    }
-			  LosslessEncodeDC(value); /* Encode as DC component */
-			}
-		    }
-		}
-	    }
-	  CurrentMDU++;
-	  if (StartofLine)
-	    {
-	      UseType=CScan->SSS;
-	      StartofLine=0;
-	    }
-	}
+    for(x=0;x<CScan->MDUWide;x++)
+      {
+      if (CurrentMDU && (CFrame->ResyncInterval))
+        {
+        if (!(CurrentMDU % CFrame->ResyncInterval)) /* Check resync */
+          {
+          if ((CurrentMDU/CFrame->ResyncInterval)==CFrame->InsertDnl)
+            {
+            WriteDnl();              /* If resync matches use DNL */
+            CFrame->InsertDnl=0;     /* Mission accomplished. */
+            }
+          WriteResync();                 /* Write resync */
+          UseType=1;                     /* Reset codec */
+          for(j=0;j<CScan->NumberComponents;j++)
+            {
+            InstallIob(j);
+            LineResetBuffers();
+            }
+          }
+        }
+      if (!(CurrentMDU%CScan->MDUWide)&&(CurrentMDU)) /* Reset CScan type */
+        {
+        UseType=2;                           /* Start of line */
+        StartofLine=1;                       /* uses top pel predictor */
+        }
+      CurrentElem++;
+      if (CurrentElem>=NumberElem)
+        {
+        NumberElem = MIN((CScan->MDUWide-x),MaxElem);
+        CurrentElem=0;
+        for(j=0;j<CScan->NumberComponents;j++)
+          {
+          InstallIob(j);                    /* Install component j */
+          ReadLine(NumberElem,              /* Read in some elements*/
+            CScan->LosslessBuffer[j]);
+          }
+        }
+      if (CScan->NumberComponents==1)
+        {
+        if (Loud > MUTE)
+          {
+          WHEREAMI();
+          printf("[Pass 2 [Component:MDU:Total] [%d:%d:%d]]\n",
+            0,CurrentMDU,NumberMDU);
+          }
+        input = &CScan->LosslessBuffer[0][CurrentElem];
+        width=horfreq*NumberElem+1;
+        switch(UseType) /* Same as lossless coding predictor*/
+          {
+        case 1:
+          px = input[width];
+          break;
+        case 2:
+          px = input[1];
+          break;
+        case 3:
+          px = input[0];
+          break;
+        case 4:
+          px = input[width] + input[1] - input[0];
+          break;
+        case 5:
+          px = input[width] + ((input[1] - input[0])>>1);
+          break;
+        case 6:
+          px = input[1] + ((input[width] - input[0])>>1);
+          break;
+        case 7:
+          px = (input[1] + input[width])>>1;  /* No rounding */
+          break;
+        default:
+          WHEREAMI();
+          printf("Lossless mode %d not supported.\n",UseType);
+          break;
+          }
+        value=input[width+1]-px;
+        if (Loud > MUTE)
+          printf("IN=%d  PX=%d  FRE: %d\n",
+            input[width+1],px,value);
+        LosslessEncodeDC(value);
+        }
+      else
+        {
+        for(j=0;j<CScan->NumberComponents;j++)
+          {
+          if (Loud > MUTE)
+            {
+            WHEREAMI();
+            printf("[Pass 2 [Component:MDU] [%d:%d]]\n",
+              j,CurrentMDU);
+            }
+          height=CFrame->vf[CScan->ci[j]];
+          horfreq=CFrame->hf[CScan->ci[j]];
+          width=horfreq*NumberElem+1;
+          input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
+          UseDCHuffman(CScan->td[j]);
+          for(v=1;v<=height;v++)
+            {
+            for(h=1;h<=horfreq;h++)
+              {
+              switch(UseType)   /* Same as lossless predictor*/
+                {
+              case 1:
+                px = input[(v*(width))+h-1];
+                break;
+              case 2:
+                px = input[((v-1)*(width))+h];
+                break;
+              case 3:
+                px = input[((v-1)*(width))+h-1];
+                break;
+              case 4:
+                px = input[(v*(width))+h-1] +
+                  input[((v-1)*(width))+h] -
+                  input[((v-1)*(width))+h-1];
+                break;
+              case 5:
+                px = input[(v*(width))+h-1] +
+                  ((input[((v-1)*(width))+h] -
+                    input[((v-1)*(width))+h-1])>>1);
+                break;
+              case 6:
+                px = input[((v-1)*(width))+h] +
+                  ((input[(v*(width))+h-1] -
+                    input[((v-1)*(width))+h-1])>>1);
+                break;
+              case 7:
+                px = (input[((v-1)*(width))+h] +
+                  input[(v*(width))+h-1])>>1;
+                break;
+              default:
+                WHEREAMI();
+                printf("Lossless mode %d not supported.\n",
+                  UseType);
+                break;
+                }
+              value=input[(v*(width))+h]-px;
+              if (Loud > MUTE)
+                {
+                printf("IN=%d  PX=%d  ENC: %d\n",
+                  input[(v*(width))+h],px,value);
+                }
+              LosslessEncodeDC(value); /* Encode as DC component */
+              }
+            }
+          }
+        }
+      CurrentMDU++;
+      if (StartofLine)
+        {
+        UseType=CScan->SSS;
+        StartofLine=0;
+        }
+      }
     }
   if (CFrame->InsertDnl==-2)    /* -2 is automatic DNL insertion */
     {
-      WriteDnl();
-      CFrame->InsertDnl=0;
+    WriteDnl();
+    CFrame->InsertDnl=0;
     }
 
   for(j=0;j<CScan->NumberComponents;j++)          /* Rewind to start */
     {
-      InstallIob(j);
-      RewindIob();
+    InstallIob(j);
+    RewindIob();
     }
 }
 
@@ -1288,7 +1288,7 @@ static void JpegDecodeFrame()
 {
   BEGIN("JpegDecodeFrame")
   int i;
-  
+
   sropen(CImage->StreamFileName,0);   /* Zero index */
   if (ScreenAllMarker() < 0)          /* Do all markers pending */
     {
@@ -1298,52 +1298,52 @@ static void JpegDecodeFrame()
     }
   while(1)
     {
-      if (NumberMDU>=0)               /* If NumberMDU is positive proceed */
-	{
-	  if (CurrentMDU >= NumberMDU) /* If all decoded */
-	    {
-	      if (Notify)             /* Print statistics */
-		{
-		  printf("> GW:%d  GH:%d  R:%d\n",
-			 CFrame->GlobalWidth,
-			 CFrame->GlobalHeight,
-			 CFrame->ResyncInterval);
-		}
-	      for(i=0;i<CScan->NumberComponents;i++)  /* Print Scan info */
-		{
-		  if (Notify)
-		    {
-		      printf(">> C:%d  N:%s  W:%d  H:%d  hf:%d  vf:%d\n",
-			     CScan->ci[i],
-			     CFrame->ComponentFileName[CScan->ci[i]],
-			     CFrame->Width[CScan->ci[i]],
-			     CFrame->Height[CScan->ci[i]],
-			     CFrame->hf[CScan->ci[i]],
-			     CFrame->vf[CScan->ci[i]]);
-		    }
-		  InstallIob(i);
-		  FlushIob();                        /* Close image files */
-		  SeekEndIob();
-		  CloseIob();
-		}
-	      CurrentMDU=0;
-	      if (ScreenAllMarker()<0)            /* See if any more images*/
-		{
-		  WHEREAMI();
-		  printf("No trailing marker found!\n");
-		  exit(-1);
-		}
-	      if ((EndofFile)||(EndofImage))      /* Nothing, then return */
-		{
-		  srclose();
-		  break;
-		}
-	    }
-	}
-      if (CFrame->Type==3)
-	JpegLosslessDecodeScan();
-      else
-	JpegDecodeScan();
+    if (NumberMDU>=0)               /* If NumberMDU is positive proceed */
+      {
+      if (CurrentMDU >= NumberMDU) /* If all decoded */
+        {
+        if (Notify)             /* Print statistics */
+          {
+          printf("> GW:%d  GH:%d  R:%d\n",
+            CFrame->GlobalWidth,
+            CFrame->GlobalHeight,
+            CFrame->ResyncInterval);
+          }
+        for(i=0;i<CScan->NumberComponents;i++)  /* Print Scan info */
+          {
+          if (Notify)
+            {
+            printf(">> C:%d  N:%s  W:%d  H:%d  hf:%d  vf:%d\n",
+              CScan->ci[i],
+              CFrame->ComponentFileName[CScan->ci[i]],
+              CFrame->Width[CScan->ci[i]],
+              CFrame->Height[CScan->ci[i]],
+              CFrame->hf[CScan->ci[i]],
+              CFrame->vf[CScan->ci[i]]);
+            }
+          InstallIob(i);
+          FlushIob();                        /* Close image files */
+          SeekEndIob();
+          CloseIob();
+          }
+        CurrentMDU=0;
+        if (ScreenAllMarker()<0)            /* See if any more images*/
+          {
+          WHEREAMI();
+          printf("No trailing marker found!\n");
+          exit(-1);
+          }
+        if ((EndofFile)||(EndofImage))      /* Nothing, then return */
+          {
+          srclose();
+          break;
+          }
+        }
+      }
+    if (CFrame->Type==3)
+      JpegLosslessDecodeScan();
+    else
+      JpegDecodeScan();
     }
 }
 
@@ -1375,14 +1375,14 @@ static void JpegLosslessDecodeScan()
     MaxElem= LOSSLESSBUFFERSIZE/4;      /* elements can be loaded in */
   else
     {
-      MaxElem= LOSSLESSBUFFERSIZE/
-	((CFrame->vf[CScan->ci[0]]+1)*(CFrame->hf[CScan->ci[0]]+1));
-      for(j=1;j<CScan->NumberComponents;j++)          /* Rewind to start */
-	{
-	  v=LOSSLESSBUFFERSIZE/
-	    ((CFrame->vf[CScan->ci[j]]+1)*(CFrame->hf[CScan->ci[j]]+1));
-	  if (v < MaxElem) MaxElem=v;
-	}
+    MaxElem= LOSSLESSBUFFERSIZE/
+      ((CFrame->vf[CScan->ci[0]]+1)*(CFrame->hf[CScan->ci[0]]+1));
+    for(j=1;j<CScan->NumberComponents;j++)          /* Rewind to start */
+      {
+      v=LOSSLESSBUFFERSIZE/
+        ((CFrame->vf[CScan->ci[j]]+1)*(CFrame->hf[CScan->ci[j]]+1));
+      if (v < MaxElem) MaxElem=v;
+      }
     }
   InstallIob(0);
   UseDCHuffman(CScan->td[0]);          /* Install DC table */
@@ -1399,202 +1399,202 @@ static void JpegLosslessDecodeScan()
       printf("Resync Interval not an integer multiple of MDU's wide.\n");
       printf("Proceeding anyways.\n");
       if (MaxElem>=CFrame->ResyncInterval)
-	MaxElem=CFrame->ResyncInterval;       /* Reduce to resync interval */
+        MaxElem=CFrame->ResyncInterval;       /* Reduce to resync interval */
       else
-	MaxElem=1;                            /* Can't proceed quickly */
+        MaxElem=1;                            /* Can't proceed quickly */
     }
   CurrentElem=NumberElem=0;
   while(1)
     {
-      if ((NumberMDU<0)&&(!(CurrentMDU%CScan->MDUWide)))
-	{
-	  if (CheckMarker()==0xdc)
-	    ScreenMarker();
-	}
-      if (NumberMDU>=0)               /* If NumberMDU is positive proceed */
-	{
-	  if (CurrentMDU >= NumberMDU) /* If all decoded */
-	    return;
-	}
+    if ((NumberMDU<0)&&(!(CurrentMDU%CScan->MDUWide)))
+      {
+      if (CheckMarker()==0xdc)
+        ScreenMarker();
+      }
+    if (NumberMDU>=0)               /* If NumberMDU is positive proceed */
+      {
+      if (CurrentMDU >= NumberMDU) /* If all decoded */
+        return;
+      }
 
-      if (CFrame->ResyncInterval)                /* Flag to decoder stream */
-	ResyncEnable = 1;
-      if (CurrentMDU && (CFrame->ResyncInterval))
-	{                                    /* If resync interval */
-	  if ((CurrentMDU % CFrame->ResyncInterval)==0) 
-	    {
-	      if (!CleartoResync)               /* If not in error recovery*/
-		ReadResync();                          /* read resync. */
-	      if (CleartoResync)
-		{
-		  /* 
-		    Clear until we have LastKnownResync:
-		    the offset is by 1 because we add the resync i%8
-		    _after_ we code the ith resync interval...
-		    */
-		  if (((CurrentMDU/CFrame->ResyncInterval)&0x07)==
-		      ((LastKnownResync+1)&0x07))
-		    CleartoResync = 0;   /* Finished with resync clearing */
-		}
-	      UseType=1;                             /* Reset codec */
-	      for(j=0;j<CScan->NumberComponents;j++) /* reset line buffers */
-		{                                    /* Type is previous pel */
-		  InstallIob(j);
-		  LineResetBuffers();
-		}
-	    }
-	}
-      if (!(CurrentMDU%CScan->MDUWide)&&(CurrentMDU))  /* Reset CScan type */
-	{
-	  UseType=2;                            /* Start of line */
-	  StartofLine=1;                        /* uses top pel predictor */
-	}
+    if (CFrame->ResyncInterval)                /* Flag to decoder stream */
+      ResyncEnable = 1;
+    if (CurrentMDU && (CFrame->ResyncInterval))
+      {                                    /* If resync interval */
+      if ((CurrentMDU % CFrame->ResyncInterval)==0)
+        {
+        if (!CleartoResync)               /* If not in error recovery*/
+          ReadResync();                          /* read resync. */
+        if (CleartoResync)
+          {
+          /*
+          Clear until we have LastKnownResync:
+          the offset is by 1 because we add the resync i%8
+          _after_ we code the ith resync interval...
+           */
+          if (((CurrentMDU/CFrame->ResyncInterval)&0x07)==
+            ((LastKnownResync+1)&0x07))
+            CleartoResync = 0;   /* Finished with resync clearing */
+          }
+        UseType=1;                             /* Reset codec */
+        for(j=0;j<CScan->NumberComponents;j++) /* reset line buffers */
+          {                                    /* Type is previous pel */
+          InstallIob(j);
+          LineResetBuffers();
+          }
+        }
+      }
+    if (!(CurrentMDU%CScan->MDUWide)&&(CurrentMDU))  /* Reset CScan type */
+      {
+      UseType=2;                            /* Start of line */
+      StartofLine=1;                        /* uses top pel predictor */
+      }
 
-      if (CurrentElem>=NumberElem)
-	{
-	  NumberElem = MIN((CScan->MDUWide-(CurrentMDU%CScan->MDUWide)),
-			   MaxElem);
-	  CurrentElem=0;
-	  for(j=0;j<CScan->NumberComponents;j++)
-	    {
-	      InstallIob(j);                    /* Install component j */
-	      ReadPreambleLine(NumberElem,     /* Read in some elements*/
-			       CScan->LosslessBuffer[j]); 
-	    }
-	}
-      if (CScan->NumberComponents==1)
-	{
-	  width=horfreq*NumberElem+1;
-	  input = &CScan->LosslessBuffer[0][CurrentElem];
-	  switch(UseType) /* Same as lossless coding predictor*/
-	    {
-	    case 1:
-	      px = input[width];
-	      break;
-	    case 2:
-	      px = input[1];
-	      break;
-	    case 3:
-	      px = input[0];
-	      break;
-	    case 4:
-	      px = input[width] + input[1] - input[0];
-	      break;
-	    case 5:
-	      px = input[width] + ((input[1] - input[0])>>1);
-	      break;
-	    case 6:
-	      px = input[1] + ((input[width] - input[0])>>1);
-	      break;
-	    case 7:
-	      px = (input[1] + input[width])>>1;  /* No rounding */
-	      break;
-	    default:
-	      WHEREAMI();
-	      printf("Lossless mode %d not supported.\n",UseType);
-	      break;
-	    }
-	  if (CleartoResync)         /* If CleartoResync, flush */
-	    input[width+1] = 0;
-	  else
-	    {
-	      value = LosslessDecodeDC();
-	      input[width+1] = (value+px)&0xffff;
-	      if (Loud > MUTE)
-		{
-		  printf("OUT=%d  PX=%d  VAL: %d\n",
-			 input[width+1],px,value);
-		}
-	    }
-	}
+    if (CurrentElem>=NumberElem)
+      {
+      NumberElem = MIN((CScan->MDUWide-(CurrentMDU%CScan->MDUWide)),
+        MaxElem);
+      CurrentElem=0;
+      for(j=0;j<CScan->NumberComponents;j++)
+        {
+        InstallIob(j);                    /* Install component j */
+        ReadPreambleLine(NumberElem,     /* Read in some elements*/
+          CScan->LosslessBuffer[j]);
+        }
+      }
+    if (CScan->NumberComponents==1)
+      {
+      width=horfreq*NumberElem+1;
+      input = &CScan->LosslessBuffer[0][CurrentElem];
+      switch(UseType) /* Same as lossless coding predictor*/
+        {
+      case 1:
+        px = input[width];
+        break;
+      case 2:
+        px = input[1];
+        break;
+      case 3:
+        px = input[0];
+        break;
+      case 4:
+        px = input[width] + input[1] - input[0];
+        break;
+      case 5:
+        px = input[width] + ((input[1] - input[0])>>1);
+        break;
+      case 6:
+        px = input[1] + ((input[width] - input[0])>>1);
+        break;
+      case 7:
+        px = (input[1] + input[width])>>1;  /* No rounding */
+        break;
+      default:
+        WHEREAMI();
+        printf("Lossless mode %d not supported.\n",UseType);
+        break;
+        }
+      if (CleartoResync)         /* If CleartoResync, flush */
+        input[width+1] = 0;
       else
-	{
-	  for(j=0;j<CScan->NumberComponents;j++)   /* Decode MDU */
-	    {
-	      if (Loud > MUTE)
-		{
-		  WHEREAMI();
-		  printf("[Decoder Pass [Component:MDU:#MDU] [%d:%d:%d]]\n",
-			 j,CurrentMDU,NumberMDU);
-		}
-	      InstallIob(j);                     /* Install component */
-	      height=CFrame->vf[CScan->ci[j]];
-	      horfreq=CFrame->hf[CScan->ci[j]];
-	      width=horfreq*NumberElem+1;
-	      input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
-	      UseDCHuffman(CScan->td[j]);          /* Install DC table */
-	      for(v=1;v<=height;v++)
-		{
-		  for(h=1;h<=horfreq;h++)
-		    {
-		      switch(UseType) /* Same as lossless coding predictor*/
-			{
-			case 1:
-			  px = input[(v*(width))+h-1];
-			  break;
-			case 2:
-			  px = input[((v-1)*(width))+h];
-			  break;
-			case 3:
-			  px = input[((v-1)*(width))+h-1];
-			  break;
-			case 4:
-			  px = input[(v*(width))+h-1] +
-			    input[((v-1)*(width))+h] -
-			      input[((v-1)*(width))+h-1];
-			  break;
-			case 5:
-			  px = input[(v*(width))+h-1] +
-			    ((input[((v-1)*(width))+h] -
-			      input[((v-1)*(width))+h-1])>>1);
-			  break;
-			case 6:
-			  px = input[((v-1)*(width))+h] +
-			    ((input[(v*(width))+h-1] -
-			      input[((v-1)*(width))+h-1])>>1);
-			  break;
-			case 7:
-			  px = (input[((v-1)*(width))+h] +
-				input[(v*(width))+h-1])>>1;
-			  break;
-			default:
-			  WHEREAMI();
-			  printf("Lossless mode %d not supported.\n",
-				 UseType);
-			  break;
-			}
-		      if (CleartoResync)         /* If CleartoResync, flush */
-			input[(v*(width))+h] = 0;
-		      else
-			{
-			  value = LosslessDecodeDC();
-			  input[(v*(width))+h] = (value+px)&0xffff;
-			  if (Loud > MUTE)
-			    {
-			      printf("OUT=%d  PX=%d  VAL: %d\n",
-				     input[(v*(width))+h],px,value);
-			    }
-			}
-		    }
-		}
-	    }
-	}
-      CurrentElem++;
-      if (CurrentElem>=NumberElem)
-	{
-	  for(j=0;j<CScan->NumberComponents;j++)
-	    {
-	      InstallIob(j);                    /* Install component j */
-	      WriteLine(NumberElem,             /* Write out elements*/
-			CScan->LosslessBuffer[j]); 
-	    }
-	}
-      CurrentMDU++;
-      if (StartofLine)
-	{
-	  UseType=CScan->SSS;
-	  StartofLine=0;
-	}
+        {
+        value = LosslessDecodeDC();
+        input[width+1] = (value+px)&0xffff;
+        if (Loud > MUTE)
+          {
+          printf("OUT=%d  PX=%d  VAL: %d\n",
+            input[width+1],px,value);
+          }
+        }
+      }
+    else
+      {
+      for(j=0;j<CScan->NumberComponents;j++)   /* Decode MDU */
+        {
+        if (Loud > MUTE)
+          {
+          WHEREAMI();
+          printf("[Decoder Pass [Component:MDU:#MDU] [%d:%d:%d]]\n",
+            j,CurrentMDU,NumberMDU);
+          }
+        InstallIob(j);                     /* Install component */
+        height=CFrame->vf[CScan->ci[j]];
+        horfreq=CFrame->hf[CScan->ci[j]];
+        width=horfreq*NumberElem+1;
+        input = &CScan->LosslessBuffer[j][CurrentElem*horfreq];
+        UseDCHuffman(CScan->td[j]);          /* Install DC table */
+        for(v=1;v<=height;v++)
+          {
+          for(h=1;h<=horfreq;h++)
+            {
+            switch(UseType) /* Same as lossless coding predictor*/
+              {
+            case 1:
+              px = input[(v*(width))+h-1];
+              break;
+            case 2:
+              px = input[((v-1)*(width))+h];
+              break;
+            case 3:
+              px = input[((v-1)*(width))+h-1];
+              break;
+            case 4:
+              px = input[(v*(width))+h-1] +
+                input[((v-1)*(width))+h] -
+                input[((v-1)*(width))+h-1];
+              break;
+            case 5:
+              px = input[(v*(width))+h-1] +
+                ((input[((v-1)*(width))+h] -
+                  input[((v-1)*(width))+h-1])>>1);
+              break;
+            case 6:
+              px = input[((v-1)*(width))+h] +
+                ((input[(v*(width))+h-1] -
+                  input[((v-1)*(width))+h-1])>>1);
+              break;
+            case 7:
+              px = (input[((v-1)*(width))+h] +
+                input[(v*(width))+h-1])>>1;
+              break;
+            default:
+              WHEREAMI();
+              printf("Lossless mode %d not supported.\n",
+                UseType);
+              break;
+              }
+            if (CleartoResync)         /* If CleartoResync, flush */
+              input[(v*(width))+h] = 0;
+            else
+              {
+              value = LosslessDecodeDC();
+              input[(v*(width))+h] = (value+px)&0xffff;
+              if (Loud > MUTE)
+                {
+                printf("OUT=%d  PX=%d  VAL: %d\n",
+                  input[(v*(width))+h],px,value);
+                }
+              }
+            }
+          }
+        }
+      }
+    CurrentElem++;
+    if (CurrentElem>=NumberElem)
+      {
+      for(j=0;j<CScan->NumberComponents;j++)
+        {
+        InstallIob(j);                    /* Install component j */
+        WriteLine(NumberElem,             /* Write out elements*/
+          CScan->LosslessBuffer[j]);
+        }
+      }
+    CurrentMDU++;
+    if (StartofLine)
+      {
+      UseType=CScan->SSS;
+      StartofLine=0;
+      }
     }
 }
 
@@ -1614,100 +1614,100 @@ static void JpegDecodeScan()
 
   while(1)
     {
-      if ((NumberMDU<0)&&(!(CurrentMDU%CScan->MDUWide)))
-	{
-	  if (CheckMarker()==0xdc)
-	    ScreenMarker();
-	}
-      if (NumberMDU>=0)               /* If NumberMDU is positive proceed */
-	{
-	  if (CurrentMDU >= NumberMDU) /* If all decoded */
-	    return;
-	}
-      if (CFrame->ResyncInterval)                /* Flag to decoder stream */
-	{
-	  ResyncEnable = 1;
-	}
-      if (CurrentMDU && (CFrame->ResyncInterval))
-	{                                    /* If resync interval */
-	  if ((CurrentMDU % CFrame->ResyncInterval)==0) 
-	    {
-	      if (!CleartoResync)               /* If not in error recovery*/
-		{                               /* read resync. */
-		  ReadResync();
-		}
-	      if (CleartoResync)
-		{
-		  /* 
-		    Clear until we have LastKnownResync:
-		    the offset is by 1 because we add the resync i%8
-		    _after_ we code the ith resync interval...
-		    */
-		  if (((CurrentMDU/CFrame->ResyncInterval)&0x07)==
-		      ((LastKnownResync+1)&0x07))
-		    {
-		      CleartoResync = 0;   /* Finished with resync clearing */
-		    }
-		}
-  	      ResetCodec();                /* Reset codec */
-	    }
-	}
-      IDCTBound=((CFrame->DataPrecision>8)?4095:255);
-      IDCTShift=((CFrame->DataPrecision>8)?2048:128);
-      for(j=0;j<CScan->NumberComponents;j++)   /* Decode MDU */
-	{
-	  if (Loud > MUTE)
-	    {
-	      WHEREAMI();
-	      printf("[Decoder Pass [Component:MDU:#MDU] [%d:%d:%d]]\n",
-		     j,CurrentMDU,NumberMDU);
-	    }
-	  InstallPrediction(j);             /* Install component */
-	  InstallIob(j);
-	  if (CScan->NumberComponents==1) /* Check for non-interleaved mode */
-	    dohf=dovf=1;
-	  else
-	    {
-	      dohf = CFrame->hf[CScan->ci[j]];
-	      dovf = CFrame->vf[CScan->ci[j]];
-	    }
-	  for(v=0;v<dovf;v++) /* Do for blocks in MDU*/
-	    {
-	      for(h=0;h<dohf;h++)
-		{
-		  if (CleartoResync)             /* CleartoResync, flush */
-		    ClearMatrix(input);
-		  else
-		    {
-		      UseDCHuffman(CScan->td[j]);  /* Install DC table */
-		      *input = DecodeDC();         /* Decode DC */
-		      UseACHuffman(CScan->ta[j]);  /* Install AC table */
-		      DecodeAC(input);             /* Decode AC */
-		      if (Loud > TALK)
-			{
-			  printf("Cooked Input\n");
-			  PrintMatrix(input);
-			}
-		      IZigzagMatrix(input,output);   /* Inverse zigzag */
-		      IQuantize(output,              /* Inverse quantize */
-				CImage->
-				QuantizationMatrices[CFrame->
-						     tq[CScan->ci[j]]]);
-		      DefaultIDct(output,input);     /* Inverse DCT */
-		      PostshiftIDctMatrix(input,IDCTShift);
-		      /* Shift (all positive)*/
-		      BoundIDctMatrix(input,IDCTBound); /* Bound */
-		      if (Loud > WHISPER)
-			{
-			  printf("Raw Output\n");
-			  PrintMatrix(input);
-			}
-		    }
-		  WriteBlock(input);                 /* Write out */
-		}
-	    }
-	}
-      CurrentMDU++;
+    if ((NumberMDU<0)&&(!(CurrentMDU%CScan->MDUWide)))
+      {
+      if (CheckMarker()==0xdc)
+        ScreenMarker();
+      }
+    if (NumberMDU>=0)               /* If NumberMDU is positive proceed */
+      {
+      if (CurrentMDU >= NumberMDU) /* If all decoded */
+        return;
+      }
+    if (CFrame->ResyncInterval)                /* Flag to decoder stream */
+      {
+      ResyncEnable = 1;
+      }
+    if (CurrentMDU && (CFrame->ResyncInterval))
+      {                                    /* If resync interval */
+      if ((CurrentMDU % CFrame->ResyncInterval)==0)
+        {
+        if (!CleartoResync)               /* If not in error recovery*/
+          {                               /* read resync. */
+          ReadResync();
+          }
+        if (CleartoResync)
+          {
+          /*
+          Clear until we have LastKnownResync:
+          the offset is by 1 because we add the resync i%8
+          _after_ we code the ith resync interval...
+           */
+          if (((CurrentMDU/CFrame->ResyncInterval)&0x07)==
+            ((LastKnownResync+1)&0x07))
+            {
+            CleartoResync = 0;   /* Finished with resync clearing */
+            }
+          }
+        ResetCodec();                /* Reset codec */
+        }
+      }
+    IDCTBound=((CFrame->DataPrecision>8)?4095:255);
+    IDCTShift=((CFrame->DataPrecision>8)?2048:128);
+    for(j=0;j<CScan->NumberComponents;j++)   /* Decode MDU */
+      {
+      if (Loud > MUTE)
+        {
+        WHEREAMI();
+        printf("[Decoder Pass [Component:MDU:#MDU] [%d:%d:%d]]\n",
+          j,CurrentMDU,NumberMDU);
+        }
+      InstallPrediction(j);             /* Install component */
+      InstallIob(j);
+      if (CScan->NumberComponents==1) /* Check for non-interleaved mode */
+        dohf=dovf=1;
+      else
+        {
+        dohf = CFrame->hf[CScan->ci[j]];
+        dovf = CFrame->vf[CScan->ci[j]];
+        }
+      for(v=0;v<dovf;v++) /* Do for blocks in MDU*/
+        {
+        for(h=0;h<dohf;h++)
+          {
+          if (CleartoResync)             /* CleartoResync, flush */
+            ClearMatrix(input);
+          else
+            {
+            UseDCHuffman(CScan->td[j]);  /* Install DC table */
+            *input = DecodeDC();         /* Decode DC */
+            UseACHuffman(CScan->ta[j]);  /* Install AC table */
+            DecodeAC(input);             /* Decode AC */
+            if (Loud > TALK)
+              {
+              printf("Cooked Input\n");
+              PrintMatrix(input);
+              }
+            IZigzagMatrix(input,output);   /* Inverse zigzag */
+            IQuantize(output,              /* Inverse quantize */
+              CImage->
+              QuantizationMatrices[CFrame->
+              tq[CScan->ci[j]]]);
+            DefaultIDct(output,input);     /* Inverse DCT */
+            PostshiftIDctMatrix(input,IDCTShift);
+            /* Shift (all positive)*/
+            BoundIDctMatrix(input,IDCTBound); /* Bound */
+            if (Loud > WHISPER)
+              {
+              printf("Raw Output\n");
+              PrintMatrix(input);
+              }
+            }
+          WriteBlock(input);                 /* Write out */
+          }
+        }
+      }
+    CurrentMDU++;
     }
 }
 
@@ -1729,37 +1729,37 @@ void PrintImage()
   printf("*** Image ID: %p ***\n",(void*)CImage); /* %p should work ... */
   if (CImage)
     {
-      if (CImage->StreamFileName)
-	{
-	  printf("StreamFileName %s\n",(CImage->StreamFileName ?
-					CImage->StreamFileName :
-					"Null"));
-	}
-      printf("InternalMode: %d   ImageSequence: %d\n",
-	     CImage->JpegMode,CImage->ImageSequence);
-      printf("NumberQuantizationMatrices %d\n",
-	     CImage->NumberQuantizationMatrices);
-      for(i=0;i<CImage->NumberQuantizationMatrices;i++)
-	{
-	  printf("Quantization Matrix [%d]\n",i);
-	  PrintMatrix(CImage->QuantizationMatrices[i]);
-	}
-      printf("NumberDCTables %d\n",
-	     CImage->NumberDCTables);
-      for(i=0;i<CImage->NumberDCTables;i++)
-	{
-	  printf("DC Huffman Table[%d]\n",i);
-	  UseDCHuffman(i);
-	  PrintHuffman();
-	}
-      printf("NumberACTables %d\n",
-	     CImage->NumberACTables);
-      for(i=0;i<CImage->NumberACTables;i++)
-	{
-	  printf("AC Huffman Table[%d]\n",i);
-	  UseACHuffman(i);
-	  PrintHuffman();
-	}
+    if (CImage->StreamFileName)
+      {
+      printf("StreamFileName %s\n",(CImage->StreamFileName ?
+          CImage->StreamFileName :
+          "Null"));
+      }
+    printf("InternalMode: %d   ImageSequence: %d\n",
+      CImage->JpegMode,CImage->ImageSequence);
+    printf("NumberQuantizationMatrices %d\n",
+      CImage->NumberQuantizationMatrices);
+    for(i=0;i<CImage->NumberQuantizationMatrices;i++)
+      {
+      printf("Quantization Matrix [%d]\n",i);
+      PrintMatrix(CImage->QuantizationMatrices[i]);
+      }
+    printf("NumberDCTables %d\n",
+      CImage->NumberDCTables);
+    for(i=0;i<CImage->NumberDCTables;i++)
+      {
+      printf("DC Huffman Table[%d]\n",i);
+      UseDCHuffman(i);
+      PrintHuffman();
+      }
+    printf("NumberACTables %d\n",
+      CImage->NumberACTables);
+    for(i=0;i<CImage->NumberACTables;i++)
+      {
+      printf("AC Huffman Table[%d]\n",i);
+      UseACHuffman(i);
+      PrintHuffman();
+      }
     }
 }
 
@@ -1779,25 +1779,25 @@ void PrintFrame()
   printf("*** Frame ID: %p *** (TYPE: %d)\n",(void*)CFrame,CFrame->Type);
   if (CFrame)
     {
-      printf("DataPrecision: %d  ResyncInterval: %d\n",
-	     CFrame->DataPrecision,CFrame->ResyncInterval);
-      printf("Height: %d   Width: %d\n",
-	     CFrame->GlobalHeight,CFrame->GlobalWidth);
-      printf("BufferSize: %d  Image: %p\n",CFrame->BufferSize,(void*)CFrame->Image);
-      printf("NumberComponents %d\n",
-	     CFrame->GlobalNumberComponents);
-      for(i=0;i<CFrame->GlobalNumberComponents;i++)
-	{
-	  printf("ComponentFileName %s\n",
-		 ((CFrame->ComponentFileName[CFrame->cn[i]]) ?
-		  CFrame->ComponentFileName[CFrame->cn[i]] : "Null"));
-	  printf("HorizontalFrequency: %d  VerticalFrequency: %d\n",
-		 CFrame->hf[CFrame->cn[i]],CFrame->vf[CFrame->cn[i]]);
-	  printf("Height: %d  Width: %d\n",
-		 CFrame->Height[CFrame->cn[i]],CFrame->Width[CFrame->cn[i]]);
-	  InstallIob(i);
-	  PrintIob();
-	}
+    printf("DataPrecision: %d  ResyncInterval: %d\n",
+      CFrame->DataPrecision,CFrame->ResyncInterval);
+    printf("Height: %d   Width: %d\n",
+      CFrame->GlobalHeight,CFrame->GlobalWidth);
+    printf("BufferSize: %d  Image: %p\n",CFrame->BufferSize,(void*)CFrame->Image);
+    printf("NumberComponents %d\n",
+      CFrame->GlobalNumberComponents);
+    for(i=0;i<CFrame->GlobalNumberComponents;i++)
+      {
+      printf("ComponentFileName %s\n",
+        ((CFrame->ComponentFileName[CFrame->cn[i]]) ?
+         CFrame->ComponentFileName[CFrame->cn[i]] : "Null"));
+      printf("HorizontalFrequency: %d  VerticalFrequency: %d\n",
+        CFrame->hf[CFrame->cn[i]],CFrame->vf[CFrame->cn[i]]);
+      printf("Height: %d  Width: %d\n",
+        CFrame->Height[CFrame->cn[i]],CFrame->Width[CFrame->cn[i]]);
+      InstallIob(i);
+      PrintIob();
+      }
     }
 }
 
@@ -1817,21 +1817,21 @@ void PrintScan()
   printf("*** Scan ID: %p ***\n",(void*)CScan);
   if (CScan)
     {
-      printf("NumberComponents %d\n",
-	     CScan->NumberComponents);
-      for(i=0;i<CScan->NumberComponents;i++)
-	{
-	  printf("Component: %d  Index: %d\n",
-		 i,CScan->ci[i]);
-	  printf("DC Huffman Table: %d  AC Huffman Table: %d\n",
-		 CScan->td[i],CScan->ta[i]);
-	  printf("LastDC: %d  Iob: %p\n",
-		 *(CScan->LastDC[i]),(void*)CScan->Iob[i]);
-	}
-      printf("NumberACSend: %d  NumberDCSend: %d  NumberQSend: %d\n",
-	     CScan->NumberACTablesSend,
-	     CScan->NumberDCTablesSend,
-	     CScan->NumberQTablesSend);
+    printf("NumberComponents %d\n",
+      CScan->NumberComponents);
+    for(i=0;i<CScan->NumberComponents;i++)
+      {
+      printf("Component: %d  Index: %d\n",
+        i,CScan->ci[i]);
+      printf("DC Huffman Table: %d  AC Huffman Table: %d\n",
+        CScan->td[i],CScan->ta[i]);
+      printf("LastDC: %d  Iob: %p\n",
+        *(CScan->LastDC[i]),(void*)CScan->Iob[i]);
+      }
+    printf("NumberACSend: %d  NumberDCSend: %d  NumberQSend: %d\n",
+      CScan->NumberACTablesSend,
+      CScan->NumberDCTablesSend,
+      CScan->NumberQTablesSend);
     }
 }
 
@@ -1894,7 +1894,7 @@ void MakeFrame()
   for(i=0;i<MAXIMUM_COMPONENTS;i++)
     {
       CFrame->cn[i] = 0;           /* Clean out all slots */
-      CFrame->hf[i] = 0; 
+      CFrame->hf[i] = 0;
       CFrame->vf[i] = 0;
       CFrame->tq[i] = 0;
       CFrame->Height[i] = 0;
@@ -1920,24 +1920,24 @@ void MakeScanFrequency()
 
   for(i=0;i<MAXIMUM_SOURCES;i++)
     {
-      if (!(CScan->LastDC[i] = MakeStructure(int)))
-	{
-	  WHEREAMI();
-	  printf("Cannot allocate LastDC integer store.\n");
-	  exit(ERROR_MEMORY);
-	}
-      if (!(CScan->ACFrequency[i] = (int *) calloc(257,sizeof(int))))
-	{
-	  WHEREAMI();
-	  printf("Cannot allocate AC Frequency array.\n");
-	  exit(ERROR_MEMORY);
-	}
-      if (!(CScan->DCFrequency[i] = (int *) calloc(257,sizeof(int))))
-	{
-	  WHEREAMI();
-	  printf("Cannot allocate DC Frequency array.\n");
-	  exit(ERROR_MEMORY);
-	}
+    if (!(CScan->LastDC[i] = MakeStructure(int)))
+      {
+      WHEREAMI();
+      printf("Cannot allocate LastDC integer store.\n");
+      exit(ERROR_MEMORY);
+      }
+    if (!(CScan->ACFrequency[i] = (int *) calloc(257,sizeof(int))))
+      {
+      WHEREAMI();
+      printf("Cannot allocate AC Frequency array.\n");
+      exit(ERROR_MEMORY);
+      }
+    if (!(CScan->DCFrequency[i] = (int *) calloc(257,sizeof(int))))
+      {
+      WHEREAMI();
+      printf("Cannot allocate DC Frequency array.\n");
+      exit(ERROR_MEMORY);
+      }
     }
 }
 
@@ -1993,20 +1993,20 @@ void MakeConsistentFileNames()
 
   for(i=0;i<CScan->NumberComponents;i++)
     {
-      if (CImage->ImageSequence)  /* If in sequence, must add sequence */
-	{                         /* identifier */
-	  CFrame->ComponentFileName[CScan->ci[i]] = 
-	    (char *) calloc(strlen(CImage->StreamFileName)+16,sizeof(char));
-	  sprintf(CFrame->ComponentFileName[CScan->ci[i]],"%s.%d.%d",
-		  CImage->StreamFileName,CImage->ImageSequence,CScan->ci[i]);
-	}
-      else if (CFrame->ComponentFileName[CScan->ci[i]] == NULL)
-	{                        /* Otherwise if none specified, create. */
-	  CFrame->ComponentFileName[CScan->ci[i]] = 
-	    (char *) calloc(strlen(CImage->StreamFileName)+8,sizeof(char));
-	  sprintf(CFrame->ComponentFileName[CScan->ci[i]],"%s.%d",
-		  CImage->StreamFileName,CScan->ci[i]);
-	}
+    if (CImage->ImageSequence)  /* If in sequence, must add sequence */
+      {                         /* identifier */
+      CFrame->ComponentFileName[CScan->ci[i]] =
+        (char *) calloc(strlen(CImage->StreamFileName)+16,sizeof(char));
+      sprintf(CFrame->ComponentFileName[CScan->ci[i]],"%s.%d.%d",
+        CImage->StreamFileName,CImage->ImageSequence,CScan->ci[i]);
+      }
+    else if (CFrame->ComponentFileName[CScan->ci[i]] == NULL)
+      {                        /* Otherwise if none specified, create. */
+      CFrame->ComponentFileName[CScan->ci[i]] =
+        (char *) calloc(strlen(CImage->StreamFileName)+8,sizeof(char));
+      sprintf(CFrame->ComponentFileName[CScan->ci[i]],"%s.%d",
+        CImage->StreamFileName,CScan->ci[i]);
+      }
     }
 }
 
@@ -2033,47 +2033,47 @@ void CheckValidity()
     }
   if ((CFrame->DataPrecision!=8)&&(CFrame->DataPrecision!=12))
     {
-      if (CImage->JpegMode == J_LOSSLESS)
-	{
-	  if (CFrame->DataPrecision<=16)
-	    printf("Precision type: %d\n",CFrame->DataPrecision);
-	  else
-	    printf("Caution: precision type: %d greater than 16.\n",
-		   CFrame->DataPrecision);
-	}
+    if (CImage->JpegMode == J_LOSSLESS)
+      {
+      if (CFrame->DataPrecision<=16)
+        printf("Precision type: %d\n",CFrame->DataPrecision);
       else
-	printf("Caution: precision type: %d not 8 or 12.\n",
-	       CFrame->DataPrecision);
+        printf("Caution: precision type: %d greater than 16.\n",
+          CFrame->DataPrecision);
+      }
+    else
+      printf("Caution: precision type: %d not 8 or 12.\n",
+        CFrame->DataPrecision);
     }
   InBounds(CScan->NumberComponents,1,15,"Bad Number of Components");
   for(i=0;i<CScan->NumberComponents;i++)
     {
-      InBounds(CFrame->Width[CScan->ci[i]],0,MAXIMUM_IMAGE_WIDTH,
-	       "Bad Frame Width");
-      InBounds(CFrame->Height[CScan->ci[i]],0,MAXIMUM_IMAGE_HEIGHT,
-	       "Bad Frame Height");
-      InBounds(CFrame->hf[CScan->ci[i]],1,MAXIMUM_HORIZONTAL_FREQUENCY,
-	       "Bad Horizontal Frequency");
-      InBounds(CFrame->vf[CScan->ci[i]],1,MAXIMUM_VERTICAL_FREQUENCY,
-	       "Bad Vertical Frequency");
+    InBounds(CFrame->Width[CScan->ci[i]],0,MAXIMUM_IMAGE_WIDTH,
+      "Bad Frame Width");
+    InBounds(CFrame->Height[CScan->ci[i]],0,MAXIMUM_IMAGE_HEIGHT,
+      "Bad Frame Height");
+    InBounds(CFrame->hf[CScan->ci[i]],1,MAXIMUM_HORIZONTAL_FREQUENCY,
+      "Bad Horizontal Frequency");
+    InBounds(CFrame->vf[CScan->ci[i]],1,MAXIMUM_VERTICAL_FREQUENCY,
+      "Bad Vertical Frequency");
     }
   InBounds(LosslessPredictorType,0,7,"Bad Lossless Predictor Type");
   if (PointTransform)
     {
-      if (!(LosslessPredictorType))
-	{
-	  WHEREAMI();
-	  printf("Point Transform specified without lossless prediction.\n");
-	  printf("Shifting of input/output should be anticipated.\n");
-	}
-      else
-	InBounds(PointTransform,0,14,"Bad Point Transform");
+    if (!(LosslessPredictorType))
+      {
+      WHEREAMI();
+      printf("Point Transform specified without lossless prediction.\n");
+      printf("Shifting of input/output should be anticipated.\n");
+      }
+    else
+      InBounds(PointTransform,0,14,"Bad Point Transform");
     }
   if (ErrorValue)
     {
-      WHEREAMI();
-      printf("Invalid input detected.\n");
-      exit(ErrorValue);
+    WHEREAMI();
+    printf("Invalid input detected.\n");
+    exit(ErrorValue);
     }
 }
 
@@ -2100,14 +2100,14 @@ int CheckBaseline()
   InBounds(CScan->NumberComponents,1,4,"Bad Number of Components");
   for(i=0;i<CScan->NumberComponents;i++)
     {
-      InBounds(CFrame->Width[CScan->ci[i]],0,MAXIMUM_IMAGE_WIDTH,
-	       "Bad Frame Width");
-      InBounds(CFrame->Height[CScan->ci[i]],0,MAXIMUM_IMAGE_HEIGHT,
-	       "Bad Frame Height");
-      InBounds(CFrame->hf[CScan->ci[i]],1,MAXIMUM_JPEG_HORIZONTAL_FREQUENCY,
-	       "Bad Horizontal Frequency");
-      InBounds(CFrame->vf[CScan->ci[i]],1,MAXIMUM_JPEG_VERTICAL_FREQUENCY,
-	       "Bad Vertical Frequency");
+    InBounds(CFrame->Width[CScan->ci[i]],0,MAXIMUM_IMAGE_WIDTH,
+      "Bad Frame Width");
+    InBounds(CFrame->Height[CScan->ci[i]],0,MAXIMUM_IMAGE_HEIGHT,
+      "Bad Frame Height");
+    InBounds(CFrame->hf[CScan->ci[i]],1,MAXIMUM_JPEG_HORIZONTAL_FREQUENCY,
+      "Bad Horizontal Frequency");
+    InBounds(CFrame->vf[CScan->ci[i]],1,MAXIMUM_JPEG_VERTICAL_FREQUENCY,
+      "Bad Vertical Frequency");
     }
   if (ErrorValue)
     {
@@ -2132,51 +2132,51 @@ void ConfirmFileSize()
 
   for(i=0;i<CScan->NumberComponents;i++)  /* Do for all components in scan*/
     {
-      if (CFrame->ComponentFileName[CScan->ci[i]])
-	{
-	  if ((test = fopen(CFrame->ComponentFileName[CScan->ci[i]],
-			    "rb")) == NULL)
-	    {
-	      WHEREAMI();
-	      printf("Cannot open filename %s\n",
-		     CFrame->ComponentFileName[CScan->ci[i]]);
-	      exit(ERROR_BOUNDS);
-	    }
-	  fseek(test,0,2);                /* Go to end */
-	  FileSize = ftell(test);         /* Find number of bytes */
-	  rewind(test);
-	  if (CFrame->Height[CScan->ci[i]] == 0)  /* Must have good dimens*/
-	    {
-	      if (CFrame->Width[CScan->ci[i]] == 0)
-		{
-		  WHEREAMI();
-		  printf("Bad file specification in %s.\n",
-			 CFrame->ComponentFileName[CScan->ci[i]]);
-		}
-	      else
-		{
-		  CFrame->Height[CScan->ci[i]] = FileSize /
-		    (CFrame->Width[CScan->ci[i]]*
-		      ((CFrame->DataPrecision>8)?2:1));
-		  WHEREAMI();
-		  printf("Autosizing height to %d\n",
-			 CFrame->Height[CScan->ci[i]]);
-		}
-	    }                                 /* Dimensions must conform */
-	  if (FileSize !=
-	      CFrame->Width[CScan->ci[i]] * CFrame->Height[CScan->ci[i]]*
-	      ((CFrame->DataPrecision>8)?2:1)) 
-	    {
-	      WHEREAMI();
-	      printf("File size conflict in %s, est: %d  act: %d \n",
-		     CFrame->ComponentFileName[CScan->ci[i]],
-		     CFrame->Width[CScan->ci[i]]*CFrame->Height[CScan->ci[i]]*
-		     ((CFrame->DataPrecision>8)?2:1),
-		     FileSize);
-	      exit(ERROR_BOUNDS);
-	    }
-	  fclose(test);
-	}
+    if (CFrame->ComponentFileName[CScan->ci[i]])
+      {
+      if ((test = fopen(CFrame->ComponentFileName[CScan->ci[i]],
+            "rb")) == NULL)
+        {
+        WHEREAMI();
+        printf("Cannot open filename %s\n",
+          CFrame->ComponentFileName[CScan->ci[i]]);
+        exit(ERROR_BOUNDS);
+        }
+      fseek(test,0,2);                /* Go to end */
+      FileSize = ftell(test);         /* Find number of bytes */
+      rewind(test);
+      if (CFrame->Height[CScan->ci[i]] == 0)  /* Must have good dimens*/
+        {
+        if (CFrame->Width[CScan->ci[i]] == 0)
+          {
+          WHEREAMI();
+          printf("Bad file specification in %s.\n",
+            CFrame->ComponentFileName[CScan->ci[i]]);
+          }
+        else
+          {
+          CFrame->Height[CScan->ci[i]] = FileSize /
+            (CFrame->Width[CScan->ci[i]]*
+             ((CFrame->DataPrecision>8)?2:1));
+          WHEREAMI();
+          printf("Autosizing height to %d\n",
+            CFrame->Height[CScan->ci[i]]);
+          }
+        }                                 /* Dimensions must conform */
+      if (FileSize !=
+        CFrame->Width[CScan->ci[i]] * CFrame->Height[CScan->ci[i]]*
+        ((CFrame->DataPrecision>8)?2:1))
+        {
+        WHEREAMI();
+        printf("File size conflict in %s, est: %d  act: %d \n",
+          CFrame->ComponentFileName[CScan->ci[i]],
+          CFrame->Width[CScan->ci[i]]*CFrame->Height[CScan->ci[i]]*
+          ((CFrame->DataPrecision>8)?2:1),
+          FileSize);
+        exit(ERROR_BOUNDS);
+        }
+      fclose(test);
+      }
     }
 }
 

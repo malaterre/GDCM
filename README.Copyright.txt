@@ -7,4 +7,3 @@ under the new simplified BSD license, approved by the Open Source Initiative (OS
 * http://www.opensource.org/licenses/bsd-license.php
 
 See Copyright.txt
-

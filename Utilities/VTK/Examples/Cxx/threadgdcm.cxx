@@ -198,7 +198,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   delete[] pthread;
 
   //pthread_mutex_destroy(&lock);
- 
+
   // For some reason writing down the file is painfully slow...
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
   writer->SetInput( output );
@@ -245,4 +245,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

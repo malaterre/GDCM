@@ -41,7 +41,7 @@ void PythonFilter::SetDicts(const Dicts &dicts)
 
 static const char *PythonTypesFromVR[] = {
 0, //  "??",        // 0
-"s", //  "AE",        // 1 
+"s", //  "AE",        // 1
 "s", //  "AS",        // 2
 "(ii)", //  "AT",        // 3
 "s", //  "CS",        // 4

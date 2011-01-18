@@ -80,7 +80,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       continue;
       }
     if( t.IsPrivate() && !t.IsPrivateCreator() )
-      { 
+      {
       strowner = ds.GetPrivateCreator(t);
       owner = strowner.c_str();
       }
@@ -203,4 +203,3 @@ bool FileExplicitFilter::Change()
 
 
 } // end namespace gdcm
-

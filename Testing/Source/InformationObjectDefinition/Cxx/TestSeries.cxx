@@ -19,4 +19,3 @@ int TestSeries(int, char *[])
   gdcm::Series series;
   return 0;
 }
-

@@ -36,7 +36,7 @@ void XMLDictReader::HandleEntry(const char **atts)
 
   Tag &tag = CurrentTag;
   DictEntry &de = CurrentDE;
-  
+
   int i = 0;
   const char **current = atts;
   // Supported attributes:
@@ -231,4 +231,3 @@ void XMLDictReader::CharacterDataHandler(const char *data, int length)
 }
 
 }
-

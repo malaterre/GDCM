@@ -3,7 +3,7 @@
  * compare.c --- compare whether or not two UUID's are the same
  *
  * Returns 0 if the two UUID's are different, and 1 if they are the same.
- * 
+ *
  * Copyright (C) 1996, 1997 Theodore Ts'o.
  *
  * %Begin-Header%
@@ -19,7 +19,7 @@
  * 3. The name of the author may not be used to endorse or promote
  *    products derived from this software without specific prior
  *    written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
@@ -42,15 +42,14 @@
 
 int uuid_compare(const uuid_t uu1, const uuid_t uu2)
 {
-	struct uuid	uuid1, uuid2;
+  struct uuid  uuid1, uuid2;
 
-	uuid_unpack(uu1, &uuid1);
-	uuid_unpack(uu2, &uuid2);
+  uuid_unpack(uu1, &uuid1);
+  uuid_unpack(uu2, &uuid2);
 
-	UUCMP(uuid1.time_low, uuid2.time_low);
-	UUCMP(uuid1.time_mid, uuid2.time_mid);
-	UUCMP(uuid1.time_hi_and_version, uuid2.time_hi_and_version);
-	UUCMP(uuid1.clock_seq, uuid2.clock_seq);
-	return memcmp(uuid1.node, uuid2.node, 6);
+  UUCMP(uuid1.time_low, uuid2.time_low);
+  UUCMP(uuid1.time_mid, uuid2.time_mid);
+  UUCMP(uuid1.time_hi_and_version, uuid2.time_hi_and_version);
+  UUCMP(uuid1.clock_seq, uuid2.clock_seq);
+  return memcmp(uuid1.node, uuid2.node, 6);
 }
-

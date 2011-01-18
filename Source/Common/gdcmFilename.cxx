@@ -78,7 +78,7 @@ const char *Filename::ToWindowsSlashes()
   return Conversion.c_str();
 }
 
-// convert windows slashes to unix slashes 
+// convert windows slashes to unix slashes
 const char *Filename::ToUnixSlashes()
 {
   Conversion = FileName;
@@ -97,7 +97,7 @@ const char *Filename::ToUnixSlashes()
   return Conversion.c_str();
 }
 
-#if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
+#if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__))
 #include <windows.h>
 
 inline void Realpath(const char *path, std::string & resolved_path)
@@ -173,4 +173,3 @@ const char *Filename::Join(const char *path, const char *filename)
 }
 
 } // end namespace gdcm
-

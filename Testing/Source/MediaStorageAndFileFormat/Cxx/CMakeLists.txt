@@ -206,7 +206,7 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           #MESSAGE("IS DICOMDIR ${filename_name}")
           SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
         ENDIF(is_dicomdir)
-        # 
+        #
       ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
@@ -225,4 +225,3 @@ IF(GDCM_DATA_ROOT)
 ENDIF(GDCM_DATA_ROOT)
   ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
 ENDIF(GDCM_TEST_DCMTK)
-

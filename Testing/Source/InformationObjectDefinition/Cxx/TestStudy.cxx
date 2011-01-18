@@ -19,4 +19,3 @@ int TestStudy(int, char *[])
   gdcm::Study study;
   return 0;
 }
-

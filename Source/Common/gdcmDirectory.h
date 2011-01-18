@@ -31,11 +31,11 @@ namespace gdcm
  * for manipulating directores: basically traversing directories
  * and harvesting files
  *
- * \note 
+ * \note
  * will not take into account unix type hidden file
  * recursive option will not look into UNIX type hidden directory (those starting with a '.')
  *
- * \note 
+ * \note
  * Since python or C# provide there own equivalent implementation,
  * in which case gdcm::Directory does not make much sense.
  */
@@ -72,8 +72,8 @@ public :
     return Explore( Toplevel, recursive );
   }
   // \todo later: GLOB
-  // The glob() function searches for all the pathnames matching pattern according to 
-  // the rules used by the shell (see glob(7)).  No tilde expansion or parameter 
+  // The glob() function searches for all the pathnames matching pattern according to
+  // the rules used by the shell (see glob(7)).  No tilde expansion or parameter
   // substitution is done; if you want these, use wordexp(3).
   // int Glob(...);
 

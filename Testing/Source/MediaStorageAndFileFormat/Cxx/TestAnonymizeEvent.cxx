@@ -19,4 +19,3 @@ int TestAnonymizeEvent(int, char *[])
   gdcm::AnonymizeEvent ae;
   return 0;
 }
-

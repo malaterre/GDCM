@@ -23,11 +23,11 @@ namespace gdcm
 {
 
 /*
- * Everything done in this code is for the sole purpose of writing interoperable 
+ * Everything done in this code is for the sole purpose of writing interoperable
  * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
- * If you believe anything in this code violates any law or any of your rights, 
- * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
- * find a solution. 
+ * If you believe anything in this code violates any law or any of your rights,
+ * please contact us (gdcm-developers@lists.sourceforge.net) so that we can
+ * find a solution.
  */
 //-----------------------------------------------------------------------------
 

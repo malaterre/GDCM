@@ -28,4 +28,3 @@ print t.GetDataRoot()
 
 # Test succeed ?
 #sys.exit(sucess != 1)
-

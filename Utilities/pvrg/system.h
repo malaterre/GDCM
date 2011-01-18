@@ -67,7 +67,7 @@ int vpos;
 int hor;                      /* Sampling frequency */
 int ver;
 int width;                    /* Width and height of image */
-int height; 
+int height;
 int file;                     /* File descriptor */
 int flags;                    /* File mode flags */
 int linelastdefault;          /* Last line element default */

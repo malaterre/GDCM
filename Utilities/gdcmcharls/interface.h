@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 
 #ifndef JLS_INTERFACE
@@ -9,65 +9,65 @@
 
 enum JLS_ERROR
 {
-	OK = 0,
-	InvalidJlsParameters,
-	ParameterValueNotSupported,
-	UncompressedBufferTooSmall,
-	CompressedBufferTooSmall,
-	InvalidCompressedData,
-	ImageTypeNotSupported,
-	UnsupportedBitDepthForTransform,
-	UnsupportedColorTransform
+  OK = 0,
+  InvalidJlsParameters,
+  ParameterValueNotSupported,
+  UncompressedBufferTooSmall,
+  CompressedBufferTooSmall,
+  InvalidCompressedData,
+  ImageTypeNotSupported,
+  UnsupportedBitDepthForTransform,
+  UnsupportedColorTransform
 };
 
 enum interleavemode
 {
-	ILV_NONE = 0,
-	ILV_LINE = 1,
-	ILV_SAMPLE = 2
+  ILV_NONE = 0,
+  ILV_LINE = 1,
+  ILV_SAMPLE = 2
 };
 
 
 
 struct JlsCustomParameters
 {
-	int MAXVAL;
-	int T1;
-	int T2;
-	int T3;
-	int RESET;
+  int MAXVAL;
+  int T1;
+  int T2;
+  int T3;
+  int RESET;
 };
 
 struct JfifParamaters
 {
-	int   Ver;
-	char  units;
-	int   XDensity;
-	int   YDensity;
-	short Xthumb;
-	short Ythumb;
-	void* pdataThumbnail; // user must set buffer which size is Xthumb*Ythumb*3(RGB) before JpegLsDecode()
+  int   Ver;
+  char  units;
+  int   XDensity;
+  int   YDensity;
+  short Xthumb;
+  short Ythumb;
+  void* pdataThumbnail; // user must set buffer which size is Xthumb*Ythumb*3(RGB) before JpegLsDecode()
 };
 
 struct JlsParamaters
 {
-	int width;
-	int height;
-	int bitspersample;
-	int bytesperline;	// for [source (at encoding)][decoded (at decoding)] pixel image in user buffer
-	int components;
-	int allowedlossyerror;
-	interleavemode ilv;
-	int colorTransform;
-	bool outputBgr;
-	JlsCustomParameters custom;
-	JfifParamaters jfif;
+  int width;
+  int height;
+  int bitspersample;
+  int bytesperline;  // for [source (at encoding)][decoded (at decoding)] pixel image in user buffer
+  int components;
+  int allowedlossyerror;
+  interleavemode ilv;
+  int colorTransform;
+  bool outputBgr;
+  JlsCustomParameters custom;
+  JfifParamaters jfif;
 };
 
 
 #if defined(_WIN32)
 #ifndef CHARLS_IMEXPORT
-#define CHARLS_IMEXPORT __declspec(dllimport) 
+#define CHARLS_IMEXPORT __declspec(dllimport)
 #pragma comment (lib,"charls.lib")
 #endif
 #else

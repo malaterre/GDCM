@@ -45,7 +45,7 @@ double Image::GetSpacing(unsigned int idx) const
 void Image::SetSpacing(const double *spacing)
 {
   assert( NumberOfDimensions );
-  Spacing = std::vector<double>(spacing, 
+  Spacing = std::vector<double>(spacing,
     spacing+NumberOfDimensions);
 }
 
@@ -87,7 +87,7 @@ void Image::SetOrigin(const float *ori)
 void Image::SetOrigin(const double *ori)
 {
   assert( NumberOfDimensions );
-  Origin = std::vector<double>(ori, 
+  Origin = std::vector<double>(ori,
     ori+NumberOfDimensions);
 }
 
@@ -127,7 +127,7 @@ void Image::SetDirectionCosines(const float *dircos)
 void Image::SetDirectionCosines(const double *dircos)
 {
   assert( NumberOfDimensions );
-  DirectionCosines = std::vector<double>(dircos, 
+  DirectionCosines = std::vector<double>(dircos,
     dircos+6);
 }
 
@@ -204,4 +204,3 @@ void Image::Print(std::ostream &os) const
 
 
 } // end namespace gdcm
-

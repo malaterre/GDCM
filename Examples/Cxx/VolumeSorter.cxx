@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  */
 #include "gdcmSorter.h"
 #include "gdcmIPPSorter.h"
@@ -78,7 +78,7 @@ bool mysort4(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
 
   std::cout << dist1 << "," << dist2 << std::endl;
   return dist1 < dist2;
- 
+
 }
 
 
@@ -193,8 +193,7 @@ int main(int argc, char *argv[])
 
   std::cout << "IPPSorter:" << std::endl;
   ippsorter.Print( std::cout );
-  
+
 
   return 0;
 }
-

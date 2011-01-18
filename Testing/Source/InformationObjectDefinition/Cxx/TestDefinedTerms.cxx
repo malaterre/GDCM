@@ -19,4 +19,3 @@ int TestDefinedTerms(int, char *[])
   gdcm::DefinedTerms dt;
   return 0;
 }
-

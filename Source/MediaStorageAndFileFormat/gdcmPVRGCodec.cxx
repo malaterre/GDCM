@@ -39,6 +39,7 @@ PVRGCodec::~PVRGCodec()
 bool PVRGCodec::CanDecode(TransferSyntax const &ts) const
 {
 #ifndef GDCM_USE_PVRG
+  (void)ts;
   return false;
 #else
   return ts == TransferSyntax::JPEGBaselineProcess1
@@ -51,23 +52,25 @@ bool PVRGCodec::CanDecode(TransferSyntax const &ts) const
 #endif
 }
 
-bool PVRGCodec::CanCode(TransferSyntax const &ts) const
+bool PVRGCodec::CanCode(TransferSyntax const &) const
 {
   return false;
 }
 
 /* PVRG command line is a bit tricky to use:
  *
- * ./bin/pvrg-jpeg -d -s jpeg.jpg -ci 0 out.raw  
+ * ./bin/pvrg-jpeg -d -s jpeg.jpg -ci 0 out.raw
  *
  * means decompress input file: jpeg.jpg into out.raw
- * warning the -ci is important otherwise JFIF is assumed 
+ * warning the -ci is important otherwise JFIF is assumed
  * and comp # is assumed to be 1...
  * -u reduce verbosity
  */
 bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 {
 #ifndef GDCM_USE_PVRG
+  (void)in;
+  (void)out;
   return false;
 #else
   // First thing create a jpegls file from the fragment:
@@ -96,7 +99,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   // -> check if tempnam needs the 'free'
   char *input  = tempnam(0, "gdcminpvrg");
   char *output = tempnam(0, "gdcmoutpvrg");
-  if( !input || !output ) 
+  if( !input || !output )
     {
     //free(input);
     //free(output);
@@ -110,7 +113,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   // -u -> set Notify to 0 (less verbose)
   //pvrg_command += " -ci 0 -d -u ";
   pvrg_command += " -d -u ";
-  // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw  
+  // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw
   pvrg_command += "-s ";
   pvrg_command += input;
   pvrg_command += " ";
@@ -137,9 +140,9 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
       buf,
 #ifdef GDCM_WORDS_BIGENDIAN
-      SwapCode::LittleEndian, 
+      SwapCode::LittleEndian,
 #else
-      SwapCode::BigEndian, 
+      SwapCode::BigEndian,
 #endif
       len/2);
     }
@@ -171,6 +174,8 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 bool PVRGCodec::Code(DataElement const &in, DataElement &out)
 {
 #ifndef GDCM_USE_PVRG
+  (void)in;
+  (void)out;
   return false;
 #else
   /* Do I really want to produce JPEG by PRVRG ? Shouldn't IJG handle all cases nicely ? */

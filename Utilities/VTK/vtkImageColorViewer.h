@@ -66,7 +66,7 @@ class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkPolyData;
 
-class VTK_EXPORT vtkImageColorViewer : public vtkObject 
+class VTK_EXPORT vtkImageColorViewer : public vtkObject
 {
 public:
   static vtkImageColorViewer *New();
@@ -80,7 +80,7 @@ public:
   // Description:
   // Render the resulting image.
   virtual void Render(void);
-  
+
   // Description:
   // Set/Get the input image to the viewer.
   virtual void SetInput(vtkImageData *in);
@@ -92,7 +92,7 @@ public:
 
   double GetOverlayVisibility();
   void SetOverlayVisibility(double vis);
-  
+
   // Description:
   // Set/get the slice orientation
   //BTX
@@ -130,7 +130,7 @@ public:
   // the new whole extent. Calling this method will ensure that the display
   // extent is reset properly.
   virtual void UpdateDisplayExtent();
-  
+
   // Description:
   // Return the minimum and maximum slice values (depending on the orientation
   // this can be in X, Y or Z).
@@ -140,7 +140,7 @@ public:
     { this->GetSliceRange(range[0], range[1]); }
   virtual void GetSliceRange(int &min, int &max);
   virtual int* GetSliceRange();
-  
+
   // Description:
   // Set window and level for mapping pixels to colors.
   virtual double GetColorWindow();
@@ -153,19 +153,19 @@ public:
   virtual void SetDisplayId(void *a);
   virtual void SetWindowId(void *a);
   virtual void SetParentId(void *a);
-  
+
   // Description:
   // Set/Get the position in screen coordinates of the rendering window.
   virtual int* GetPosition();
   virtual void SetPosition(int a,int b);
   virtual void SetPosition(int a[2]) { this->SetPosition(a[0],a[1]); }
-  
+
   // Description:
   // Set/Get the size of the window in screen coordinates in pixels.
   virtual int* GetSize();
   virtual void SetSize(int a, int b);
   virtual void SetSize(int a[2]) { this->SetSize(a[0],a[1]); }
-  
+
   // Description:
   // Get the internal render window, renderer, image actor, and
   // image map instances.
@@ -174,7 +174,7 @@ public:
   vtkGetObjectMacro(ImageActor,vtkImageActor);
   vtkGetObjectMacro(WindowLevel,vtkImageMapToWindowLevelColors2);
   vtkGetObjectMacro(InteractorStyle,vtkInteractorStyleImage);
-  
+
   // Description:
   // Set your own renderwindow and renderer
   virtual void SetRenderWindow(vtkRenderWindow *arg);
@@ -183,8 +183,8 @@ public:
   // Description:
   // Attach an interactor for the internal render window.
   virtual void SetupInteractor(vtkRenderWindowInteractor*);
-  
-  // Description:  
+
+  // Description:
   // Create a window in memory instead of on the screen. This may not
   // be supported for every type of window and on some windows you may
   // need to invoke this prior to the first render.
@@ -235,5 +235,3 @@ private:
 };
 
 #endif
-
-

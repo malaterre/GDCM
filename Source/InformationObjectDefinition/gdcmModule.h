@@ -102,4 +102,3 @@ inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
 } // end namespace gdcm
 
 #endif //GDCMMODULE_H
-

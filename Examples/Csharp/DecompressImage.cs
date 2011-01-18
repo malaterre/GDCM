@@ -14,9 +14,9 @@
 =========================================================================*/
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/DecompressImage.exe gdcmData/012345.002.050.dcm decompress.dcm 
+ * $ mono bin/DecompressImage.exe gdcmData/012345.002.050.dcm decompress.dcm
  */
 using System;
 using gdcm;
@@ -46,7 +46,7 @@ public class DecompressImage
     //int l = gdcm.Orientation.GetLabel(t);
     //System.Console.WriteLine( "Orientation label:" + l );
 
-    // Set the dimensions, 
+    // Set the dimensions,
     // 1. either one at a time
     //image.SetDimension(0, ir.GetDimension(0) );
     //image.SetDimension(1, ir.GetDimension(1) );
@@ -82,8 +82,7 @@ public class DecompressImage
       {
       return 1;
       }
-    
+
     return 0;
     }
 }
-

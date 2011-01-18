@@ -14,7 +14,7 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <!-- how to run:
-$ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008/08_04pu.xml 
+$ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008/08_04pu.xml
 -->
 <xsl:template match="text()" />
   <xsl:template match="informaltable">
@@ -61,7 +61,7 @@ $ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008
 	    <xsl:apply-templates select="informaltable"/>
     </sop-classes>
   </xsl:template>
- 
+
   <xsl:template match="row">
     <!--xsl:apply-templates/-->
     <xsl:variable name="classname" select="entry[1]/para"/>
@@ -81,7 +81,7 @@ $ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008
     <xsl:value-of select="."/>
   </xsl:template>
   -->
- 
+
   <xsl:template match="/">
     <xsl:comment>
   Program: GDCM (Grassroots DICOM). A DICOM library
@@ -98,4 +98,3 @@ $ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008
      <xsl:apply-templates select="article"/>
  </xsl:template>
 </xsl:stylesheet>
-

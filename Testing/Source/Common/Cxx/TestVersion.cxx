@@ -16,7 +16,7 @@
 
 int TestVersion(int, char *[])
 {
-  // The following statements just test whether those functions are callable: 
+  // The following statements just test whether those functions are callable:
   const char *version = gdcm::Version::GetVersion();
   const int majorVersion = gdcm::Version::GetMajorVersion();
   (void)majorVersion;

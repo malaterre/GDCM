@@ -19,4 +19,3 @@ int TestApplicationEntity(int, char *[])
   gdcm::ApplicationEntity ae;
   return 0;
 }
-

@@ -34,7 +34,7 @@ if __name__ == "__main__":
   r.SetFileName( file )
   if not r.Read():
     sys.exit(1)
-  
+
   ds = r.GetFile().GetDataSet()
   csa_t1 = gdcm.CSAHeader()
   csa_t2 = gdcm.CSAHeader()
@@ -47,7 +47,7 @@ if __name__ == "__main__":
   if ds.FindDataElement( t1 ):
     csa_t1.LoadFromDataElement( ds.GetDataElement( t1 ) )
     print csa_t1
- 
+
   # Now let's pretend we are only interested in B_value and DiffusionGradientDirection entries:
   bvalues = csa_t1.GetCSAElementByName( "B_value" ) # WARNING: it is case sensitive !
   print bvalues
@@ -67,5 +67,3 @@ if __name__ == "__main__":
   #print bv
   str = bv.GetPointer()
   print str.split("\\")
-
-

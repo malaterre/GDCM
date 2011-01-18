@@ -28,7 +28,7 @@ class DataSet;
 class Usage;
 /**
  * \brief Class for representing a Macro
- * \note Attribute Macro: 
+ * \note Attribute Macro:
  * a set of Attributes that are described in a single table that is referenced
  * by multiple Module or other tables.
  * \sa Module
@@ -95,4 +95,3 @@ inline std::ostream& operator<<(std::ostream& _os, const Macro &_val)
 } // end namespace gdcm
 
 #endif //GDCMMACRO_H
-

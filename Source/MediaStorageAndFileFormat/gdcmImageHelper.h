@@ -30,7 +30,7 @@ class Image;
  * \brief ImageHelper (internal class, not intended for user level)
  *
  * \details
- * Helper for writing World images in DICOM. DICOM has a 'template' approach to image where 
+ * Helper for writing World images in DICOM. DICOM has a 'template' approach to image where
  * MR Image Storage are distinct object from Enhanced MR Image Storage. For example the
  * Pixel Spacing in one object is not at the same position (ie Tag) as in the other
  * this class is the central (read: fragile) place where all the dispatching is done from
@@ -54,7 +54,7 @@ public:
 
   /// GDCM 1.x compatibility issue:
   /// When using ReWrite an MR Image Storage would be rewritten as Secondary Capture Object while
-  /// still having a Pixel Spacing tag (0028,0030). If you have deal with those files, use this 
+  /// still having a Pixel Spacing tag (0028,0030). If you have deal with those files, use this
   /// very special flag to handle them
   /// Unless explicitely set elsewhere by the standard, it will use value from 0028,0030 / 0018,0088
   /// for the Pixel Spacing of the Image
@@ -100,4 +100,3 @@ private:
 } // end namespace gdcm
 
 #endif //__gdcmSpacing_h
-

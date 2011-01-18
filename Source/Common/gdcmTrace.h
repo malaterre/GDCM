@@ -27,7 +27,7 @@
 #include <string.h> // strerror
 
 
-namespace gdcm 
+namespace gdcm
 {
 
 /**
@@ -44,7 +44,7 @@ public :
   static void DebugOn(); //  { DebugFlag = true; };
   static void DebugOff(); // { DebugFlag = false; };
   static bool GetDebugFlag(); // { DebugFlag = false; };
-  
+
   static void SetWarning(bool debug); //  { DebugFlag = true; };
   static void WarningOn(); //  { WarningFlag = true; };
   static void WarningOff(); // { WarningFlag = false; };
@@ -67,7 +67,7 @@ private:
 
 // Here we define function this is the only way to be able to pass
 // stuff with indirection like:
-// gdcmDebug( "my message:" << i << '\t' ); 
+// gdcmDebug( "my message:" << i << '\t' );
 // You cannot use function unless you use vnsprintf ...
 
 // __FUNCTION is not always defined by preprocessor
@@ -81,7 +81,7 @@ private:
 #ifdef __GNUC__
 #  define GDCM_FUNCTION __PRETTY_FUNCTION__
 #else
-#  define GDCM_FUNCTION __FUNCTION__ 
+#  define GDCM_FUNCTION __FUNCTION__
 #endif //__GNUC__
 #else
 #  define GDCM_FUNCTION "<unknow>"
@@ -137,7 +137,7 @@ private:
 /**
  * \brief   Error this is pretty bad, more than just warning
  * It could mean lost of data, something not handle...
- * @param msg second message part 
+ * @param msg second message part
  */
 #ifdef NDEBUG
 #define gdcmErrorMacro(msg) {}
@@ -159,7 +159,7 @@ private:
 #endif //NDEBUG
 
 /**
- * \brief   Assert 
+ * \brief   Assert
  * @param arg argument to test
  *        An easy solution to pass also a message is to do:
  *        gdcmAssertMacro( "my message" && 2 < 3 )
@@ -185,7 +185,7 @@ private:
 #endif //NDEBUG
 
 /**
- * \brief   AssertAlways 
+ * \brief   AssertAlways
  * @param arg argument to test
  *        An easy solution to pass also a message is to do:
  *        gdcmAssertMacro( "my message" && 2 < 3 )

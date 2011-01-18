@@ -19,4 +19,3 @@ int TestIODs(int, char *[])
   gdcm::IODs iods;
   return 0;
 }
-

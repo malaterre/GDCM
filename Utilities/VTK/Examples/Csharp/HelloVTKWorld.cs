@@ -27,11 +27,11 @@ public class HelloVTKWorld
     reader.Update();
 
     vtkMedicalImageProperties prop = reader.GetMedicalImageProperties();
-    System.Console.WriteLine( prop.GetPatientName() ); // 
+    System.Console.WriteLine( prop.GetPatientName() ); //
 
     if( reader.GetImageFormat() == vtkgdcm.vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
       {
-      System.Console.WriteLine( "Image is MONOCHROME2" ); // 
+      System.Console.WriteLine( "Image is MONOCHROME2" ); //
       }
 
     // Just for fun, invert the direction cosines, output should reflect that:
@@ -53,4 +53,3 @@ public class HelloVTKWorld
     return 0;
     }
 }
-

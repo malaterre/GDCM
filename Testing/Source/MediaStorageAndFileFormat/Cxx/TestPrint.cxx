@@ -27,7 +27,7 @@ int TestSimplePrint(const char *filename, bool verbose = false)
     return 1;
     }
   gdcm::DataSet const& ds = r.GetFile().GetDataSet();
-  
+
   int ret = 0;
   gdcm::DataSet::ConstIterator it = ds.Begin();
   std::ostringstream os;
@@ -64,4 +64,3 @@ int TestPrint(int argc, char *argv[])
 
   return r;
 }
-

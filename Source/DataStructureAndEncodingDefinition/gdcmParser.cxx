@@ -22,7 +22,7 @@ static const char *ErrorStrings[] =
   "FATAL",
   NULL
 };
-  
+
 bool Parser::Parse(const char *buffer, int len, bool isFinal)
 {
   if (len == 0)
@@ -92,7 +92,7 @@ void * Parser::GetUserData() const
 
 void Parser::SetElementHandler(StartElementHandler start, EndElementHandler end)
 {
-  StartElement = start; 
+  StartElement = start;
   EndElement = end;
 }
 
@@ -112,4 +112,3 @@ const char *Parser::GetErrorString(ErrorType const &err)
 }
 
 } // end namespace gdcm
-

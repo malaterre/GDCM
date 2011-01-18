@@ -71,11 +71,11 @@ bool ASN1::ParseDump(const char *array, size_t length)
 
   int indent = 1; // 0 is not visually nice
   int dump = 0; // -1 => will print hex stuff
-	BIO *out=NULL;
+  BIO *out=NULL;
 
-	out=BIO_new(BIO_s_file());
+  out=BIO_new(BIO_s_file());
   assert( out );
-	BIO_set_fp(out,stdout,BIO_NOCLOSE|BIO_FP_TEXT);
+  BIO_set_fp(out,stdout,BIO_NOCLOSE|BIO_FP_TEXT);
   if (!ASN1_parse_dump(out,(unsigned char*)array,length,indent,dump) )
     {
     return false;
@@ -93,20 +93,20 @@ bool ASN1::ParseDump(const char *array, size_t length)
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 static int print_hex(unsigned char *buf, int len)
 {
-	int i;
-	int n;
+  int i;
+  int n;
 
-	for(i=0,n=0;i<len;i++){
-		if(n > 7){
-			printf("\n");
-			n = 0;
-		}
-		printf("0x%02x, ",buf[i]);
-		n++;
-	}
-	printf("\n");
+  for(i=0,n=0;i<len;i++){
+    if(n > 7){
+      printf("\n");
+      n = 0;
+    }
+    printf("0x%02x, ",buf[i]);
+    n++;
+  }
+  printf("\n");
 
-	return(0);
+  return(0);
 }
 #endif
 
@@ -114,23 +114,23 @@ static int print_hex(unsigned char *buf, int len)
 int ASN1::TestPBKDF2()
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-	const char pass[] = "password";
-	const char salt[] = "12340000";
-	int ic = 1;
-	unsigned char buf[1024];
+  const char pass[] = "password";
+  const char salt[] = "12340000";
+  int ic = 1;
+  unsigned char buf[1024];
 
-	ic = 1;
-	PKCS5_PBKDF2_HMAC_SHA1(pass, strlen(pass), (unsigned char*)salt, strlen(salt), ic, 32+16, buf);
-	printf("PKCS5_PBKDF2_HMAC_SHA1(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
-	print_hex(buf, 32+16);
+  ic = 1;
+  PKCS5_PBKDF2_HMAC_SHA1(pass, strlen(pass), (unsigned char*)salt, strlen(salt), ic, 32+16, buf);
+  printf("PKCS5_PBKDF2_HMAC_SHA1(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
+  print_hex(buf, 32+16);
 
-	ic = 1;
-	EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char*)salt, (unsigned char*)pass, strlen(pass), ic, buf, buf+32);
-	printf("EVP_BytesToKey(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
-	print_hex(buf, 32+16);
+  ic = 1;
+  EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char*)salt, (unsigned char*)pass, strlen(pass), ic, buf, buf+32);
+  printf("EVP_BytesToKey(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
+  print_hex(buf, 32+16);
 
 #endif
-	return 0;
+  return 0;
 }
 
 } // end namespace gdcm

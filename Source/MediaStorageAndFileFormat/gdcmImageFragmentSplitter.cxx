@@ -112,4 +112,3 @@ void ImageFragmentSplitter::SetFragmentSizeMax(unsigned int fragsize)
 }
 
 } // end namespace gdcm
-

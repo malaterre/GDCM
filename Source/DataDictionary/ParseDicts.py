@@ -1,12 +1,12 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 """
 WARNING: This script has no meaning today (post 2008).
 Since the standard is now available as .doc. If we assume
 that the .doc is valid (according to standard only pdf should)
 then there is not point in using this parser anymore today.
 
-Let's write our own python parser to clean up the pdf (after 
-pdftotext of course). 
+Let's write our own python parser to clean up the pdf (after
+pdftotext of course).
 Instructions: run pdftotext like this:
 
 $ pdftotext -f 9 -l 81 -raw -nopgbrk 04_06PU.PDF 04_06PU-3.txt
@@ -41,7 +41,7 @@ class PdfTextParser:
 
   def SetOutputFileName(self,s):
     self._OutputFilename = s
-  
+
   # Function returning if s is a comment for sure
   def IsAComment(self,s):
     #print s,  len(s)
@@ -55,10 +55,10 @@ class PdfTextParser:
       return True
     elif s == "PS 3.6-2007":
       return True
-    patt = re.compile('^Page [0-9]+$') 
+    patt = re.compile('^Page [0-9]+$')
     if( patt.match(s) ):
       return True
-    patt = re.compile('^(.*)PS 3.6-2007(.*)$') 
+    patt = re.compile('^(.*)PS 3.6-2007(.*)$')
     if( patt.match(s) ):
       return True
     patt = re.compile('^\s*(- Standard -)\s*')
@@ -70,7 +70,7 @@ class PdfTextParser:
     return False
 
   def IsAStartingLine(self,s):
-    patt = re.compile('^\\([0-9a-fA-Fx]+,[0-9a-fA-F]+\\) (.*)$') 
+    patt = re.compile('^\\([0-9a-fA-Fx]+,[0-9a-fA-F]+\\) (.*)$')
     if( patt.match(s) ):
       return True
     return False
@@ -163,7 +163,7 @@ class PdfTextParser:
     outfile.writelines( self._OutLines )
     outfile.close()
     self._Infile.close()
-    
+
   # Main function to call for parsing
   def Parse(self):
     self.Open()
@@ -188,7 +188,7 @@ class DicomV3Expander:
 
   def SetOutputFileName(self,s):
     self._OutputFilename = s
- 
+
   # Function to turn into lower case a tag:
   # ex: (ABCD, EF01) -> (abcd, ef01)
   def LowerCaseTag(self,s):
@@ -359,7 +359,7 @@ class Converter:
       self.AddOutputLine( output )
       return True
     return False
- 
+
   def AddOutputLine(self,s):
     self._OutLines.append(s + '\n')
 
@@ -372,7 +372,7 @@ class Converter:
   def Convert(self):
      self.Open()
      self.Write()
- 
+
 if __name__ == "__main__":
   argc = len(os.sys.argv )
   if ( argc < 3 ):

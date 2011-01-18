@@ -20,7 +20,6 @@
 namespace gdcm
 {
 
-class ExplicitImplicitDataElement;
 /**
  * \brief Class to represent an *Implicit VR* Data Element
  * \note bla
@@ -32,6 +31,9 @@ public:
 
   template <typename TSwap>
   std::istream &Read(std::istream& is);
+
+  template <typename TSwap>
+  std::istream &ReadValue(std::istream& is);
 
   template <typename TSwap>
   std::istream &ReadWithLength(std::istream& is, VL & length);

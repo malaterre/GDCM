@@ -14,7 +14,7 @@
 =========================================================================*/
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/DecompressJPEGFile.exe somejpegfile.jpg
  */
@@ -26,7 +26,7 @@ public class DecompressJPEGFile
   public static int Main(string[] args)
     {
     string file1 = args[0];
-    System.IO.FileStream infile = 
+    System.IO.FileStream infile =
       new System.IO.FileStream(file1, System.IO.FileMode.Open, System.IO.FileAccess.Read);
     uint fsize = gdcm.PosixEmulation.FileSize(file1);
 
@@ -82,8 +82,7 @@ public class DecompressJPEGFile
       writer.Write(decompressedData);
       }
 
-    
+
     return 0;
     }
 }
-

@@ -58,4 +58,3 @@ if __name__ == "__main__":
 
   # Let's print it as string pair:
   print sf.ToStringPair(gdcm.Tag(0x0028,0x0010))
-

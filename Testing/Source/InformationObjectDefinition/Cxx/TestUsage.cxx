@@ -19,4 +19,3 @@ int TestUsage(int, char *[])
   gdcm::Usage u;
   return 0;
 }
-

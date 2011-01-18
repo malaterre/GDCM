@@ -62,10 +62,10 @@ calc_output_dimensions (j_decompress_ptr cinfo)
        ci++, compptr++) {
     int ssize = cinfo->min_codec_data_unit;
     while (ssize < DCTSIZE &&
-	   (compptr->h_samp_factor * ssize * 2 <=
-	    cinfo->max_h_samp_factor * cinfo->min_codec_data_unit) &&
-	   (compptr->v_samp_factor * ssize * 2 <=
-	    cinfo->max_v_samp_factor * cinfo->min_codec_data_unit)) {
+     (compptr->h_samp_factor * ssize * 2 <=
+      cinfo->max_h_samp_factor * cinfo->min_codec_data_unit) &&
+     (compptr->v_samp_factor * ssize * 2 <=
+      cinfo->max_v_samp_factor * cinfo->min_codec_data_unit)) {
       ssize = ssize * 2;
     }
     compptr->codec_data_unit = ssize;
@@ -79,12 +79,12 @@ calc_output_dimensions (j_decompress_ptr cinfo)
     /* Size in samples, after IDCT scaling */
     compptr->downsampled_width = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width *
-		    (long) (compptr->h_samp_factor * compptr->codec_data_unit),
-		    (long) (cinfo->max_h_samp_factor * DCTSIZE));
+        (long) (compptr->h_samp_factor * compptr->codec_data_unit),
+        (long) (cinfo->max_h_samp_factor * DCTSIZE));
     compptr->downsampled_height = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_height *
-		    (long) (compptr->v_samp_factor * compptr->codec_data_unit),
-		    (long) (cinfo->max_v_samp_factor * DCTSIZE));
+        (long) (compptr->v_samp_factor * compptr->codec_data_unit),
+        (long) (cinfo->max_v_samp_factor * DCTSIZE));
   }
 
 #else /* !IDCT_SCALING_SUPPORTED */
@@ -136,12 +136,12 @@ latch_quant_tables (j_decompress_ptr cinfo)
     /* Make sure specified quantization table is present */
     qtblno = compptr->quant_tbl_no;
     if (qtblno < 0 || qtblno >= NUM_QUANT_TBLS ||
-	cinfo->quant_tbl_ptrs[qtblno] == NULL)
+  cinfo->quant_tbl_ptrs[qtblno] == NULL)
       ERREXIT1(cinfo, JERR_NO_QUANT_TABLE, qtblno);
     /* OK, save away the quantization table */
     qtbl = (JQUANT_TBL *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				  SIZEOF(JQUANT_TBL));
+          SIZEOF(JQUANT_TBL));
     MEMCOPY(qtbl, cinfo->quant_tbl_ptrs[qtblno], SIZEOF(JQUANT_TBL));
     compptr->quant_table = qtbl;
   }
@@ -190,7 +190,7 @@ jinit_lossy_d_codec (j_decompress_ptr cinfo)
   /* Create subobject in permanent pool */
   lossyd = (j_lossy_d_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				SIZEOF(jpeg_lossy_d_codec));
+        SIZEOF(jpeg_lossy_d_codec));
   cinfo->codec = (struct jpeg_d_codec *) lossyd;
 
   /* Initialize sub-modules */
@@ -226,7 +226,3 @@ jinit_lossy_d_codec (j_decompress_ptr cinfo)
   lossyd->pub.start_input_pass = start_input_pass;
   lossyd->pub.start_output_pass = start_output_pass;
 }
-
-
-
-

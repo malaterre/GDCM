@@ -24,7 +24,7 @@
  * This example is used to generate the file:
  *
  * gdcmConformanceTests/SequenceWithUndefinedLengthNotConvertibleToDefinedLength.dcm
- * 
+ *
  * There is a flaw in the DICOM design were it is assumed that Sequence can be
  * either represented as undefined length or defined length. This should work
  * in most case, but the undefined length is a little more general and can
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
   des.SetVR(gdcm::VR::SQ);
   des.SetValue(*sq);
   des.SetVLToUndefined();
-  
+
   ds.Insert(owner);
   ds.Insert(des);
 
@@ -106,4 +106,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

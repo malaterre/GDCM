@@ -194,7 +194,7 @@ int TestSystem(int, char *[])
   //long l = 0;
   //int n = sscanf( long_str8, "%8ld", &l );
   //std::cout << "Long:" << l << std::endl;
-  
+
   char hostname[255+1];
   hostname[255] = 0;
   if( gdcm::System::GetHostName( hostname ) )
@@ -307,11 +307,11 @@ std::cerr << "found:" << ss1 << std::endl;
   os.close();
 
   size_t ss2 = gdcm::System::FileSize( testfilesize );
-  if( ss2 != strlen( coucou ) ) 
+  if( ss2 != strlen( coucou ) )
 {
 std::cerr << "found:" << ss2 << std::endl;
   res++;
 }
-   
+
   return res;
 }

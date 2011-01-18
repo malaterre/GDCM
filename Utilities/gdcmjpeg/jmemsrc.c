@@ -171,6 +171,3 @@ jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET * buffer, size_t bufsize)
   src->pub.next_input_byte = buffer;
   src->pub.bytes_in_buffer = bufsize;
 }
-
-
-

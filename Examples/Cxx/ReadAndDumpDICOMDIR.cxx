@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * This example shows how to read and dump a DICOMDIR File
  *
  * Thanks:

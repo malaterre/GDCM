@@ -52,17 +52,24 @@ public:
   VL GetLength() const {
     assert( !ValueLengthField.IsUndefined() );
     assert( !ValueField || ValueField->GetLength() == ValueLengthField );
-    return TagField.GetLength() + ValueLengthField.GetLength() 
+    return TagField.GetLength() + ValueLengthField.GetLength()
       + ValueLengthField;
   }
 
   template <typename TSwap>
   std::istream &Read(std::istream &is)
     {
+    TagField.Read<TSwap>(is);
+    return ReadValue<TSwap>(is);
+    }
+
+  template <typename TSwap>
+  std::istream &ReadValue(std::istream &is)
+    {
     // Superclass
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
-    if( !TagField.Read<TSwap>(is) )
+    if( !is )
       {
       //  BogusItemStartItemEnd.dcm
       throw Exception( "Problem" );
@@ -70,7 +77,7 @@ public:
       }
     if( !ValueLengthField.Read<TSwap>(is) )
       {
-      // GENESIS_SIGNA-JPEG-CorruptFrag.dcm 
+      // GENESIS_SIGNA-JPEG-CorruptFrag.dcm
       // JPEG fragment is declared to have 61902, but infact really is only 61901
       // so we end up reading 0xddff,0x00e0, and VL = 0x0 (1 byte)
       throw Exception( "Problem" );
@@ -135,7 +142,7 @@ public:
         return os;
         }
       }
-    // Value 
+    // Value
     if( ValueLengthField && bv )
       {
       // Self

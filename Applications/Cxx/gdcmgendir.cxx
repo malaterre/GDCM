@@ -13,7 +13,7 @@
 
 =========================================================================*/
 /*
- * Implementation of General Purpose CD-R Interchange / STD-GEN-CD DICOMDIR in GDCM 
+ * Implementation of General Purpose CD-R Interchange / STD-GEN-CD DICOMDIR in GDCM
  */
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
@@ -206,9 +206,9 @@ int main(int argc, char *argv[])
       files.push_back( argv[optind++] );
       }
     //printf ("\n");
-    if( files.size() >= 2 
+    if( files.size() >= 2
       && filename.empty()
-      && outfilename.empty() 
+      && outfilename.empty()
     )
       {
       filename = files[0].c_str();
@@ -237,14 +237,14 @@ int main(int argc, char *argv[])
     return 0;
     }
 
-  if( filename.empty() 
+  if( filename.empty()
     || outfilename.empty() )
     {
     //std::cerr << "Need input file (-i)\n";
     PrintHelp();
     return 1;
     }
-  
+
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( debug );
   gdcm::Trace::SetWarning( warning );
@@ -349,4 +349,3 @@ int main(int argc, char *argv[])
 
   return res;
 }
-

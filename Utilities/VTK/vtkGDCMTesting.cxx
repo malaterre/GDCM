@@ -34,9 +34,9 @@ vtkGDCMTesting::~vtkGDCMTesting()
 const char *vtkGDCMTesting::GetVTKDataRoot()
 {
 #ifdef VTK_DATA_ROOT
-  return VTK_DATA_ROOT; 
+  return VTK_DATA_ROOT;
 #else
-  return NULL; 
+  return NULL;
 #endif
 }
 
@@ -46,7 +46,7 @@ const char *vtkGDCMTesting::GetGDCMDataRoot()
 #ifdef GDCM_BUILD_TESTING
   return gdcm::Testing::GetDataRoot();
 #else
-  return NULL; 
+  return NULL;
 #endif
 }
 
@@ -55,4 +55,3 @@ void vtkGDCMTesting::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }
-

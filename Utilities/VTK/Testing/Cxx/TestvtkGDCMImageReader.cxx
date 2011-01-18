@@ -57,7 +57,7 @@ int TestvtkGDCMImageRead(const char *filename, bool verbose)
   reader->Update();
 
   if( verbose )
-    { 
+    {
     reader->GetOutput()->Print( cout );
     reader->GetMedicalImageProperties()->Print( cout );
     }
@@ -88,7 +88,7 @@ int TestvtkGDCMImageRead(const char *filename, bool verbose)
     }
 
   reader->Delete();
-  return 0; 
+  return 0;
 }
 
 int TestvtkGDCMImageReader(int argc, char *argv[])

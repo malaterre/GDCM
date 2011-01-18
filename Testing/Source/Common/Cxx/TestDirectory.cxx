@@ -70,4 +70,3 @@ int TestDirectory(int argc, char *argv[])
 
   return res;
 }
-

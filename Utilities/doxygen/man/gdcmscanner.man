@@ -59,10 +59,10 @@ $ gdcmscanner -t 10,10 -d gdcmData -p
 Because gdcmscanner does not support progress, you have to wait until all files are traversed to see any results. This is quite cumbersome, on linux this can be worked around with the following trick:
 
 \verbatim
-$ find gdcmData -type d -exec gdcmscanner -t 10,10 -d {} -p \; 
+$ find gdcmData -type d -exec gdcmscanner -t 10,10 -d {} -p \;
 \endverbatim
 
-So all directory are locally traversed (no child directory are recursively traversed), which means results comes out much faster. 
+So all directory are locally traversed (no child directory are recursively traversed), which means results comes out much faster.
 
 \section see_also SEE ALSO
 

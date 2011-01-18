@@ -22,7 +22,7 @@ int TestImageReaderPixelSpacing(int argc, char *argv[])
   const char *filenames[] = { "CRIMAGE", "DXIMAGE", "MGIMAGE" };
   const unsigned int nfiles = sizeof(filenames)/sizeof(*filenames);
   const char *root = gdcm::Testing::GetPixelSpacingDataRoot();
-  if( !root || !*root ) 
+  if( !root || !*root )
     {
     std::cerr << "root is not defiend" << std::endl;
     return 1;
@@ -46,7 +46,7 @@ int TestImageReaderPixelSpacing(int argc, char *argv[])
     std::cout << spacing[0] << ","
       << spacing[1] << ","
       << spacing[2] << std::endl;
-    if( spacing[0] != spacing_ref[0] 
+    if( spacing[0] != spacing_ref[0]
       || spacing[1] != spacing_ref[1] )
       {
       std::cerr << "Wrong spacing for: " << filename << std::endl;
@@ -56,4 +56,3 @@ int TestImageReaderPixelSpacing(int argc, char *argv[])
 
   return ret;
 }
-

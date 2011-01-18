@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * Dummy implementation of C.7.1.3 Clinical Trial Subject Module
  *
  * Usage:
@@ -80,4 +80,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

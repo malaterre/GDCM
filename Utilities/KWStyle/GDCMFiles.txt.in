@@ -9,4 +9,3 @@
 "@GDCM_SOURCE_DIR@/Source/InformationObjectDefinition/*.cxx"
 "@GDCM_SOURCE_DIR@/Source/MediaStorageAndFileFormat/*.h"
 "@GDCM_SOURCE_DIR@/Source/MediaStorageAndFileFormat/*.cxx"
-

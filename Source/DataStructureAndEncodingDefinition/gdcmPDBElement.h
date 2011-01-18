@@ -59,11 +59,10 @@ inline std::ostream& operator<<(std::ostream &os, const PDBElement &val)
   os << " \"";
   os << val.ValueField;
   os << "\"";
-  
+
   return os;
 }
 
 } // end namespace gdcm
 
 #endif //GDCMPDBELEMENT_H
-

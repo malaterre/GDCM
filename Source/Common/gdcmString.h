@@ -56,7 +56,7 @@ public:
     push_back( TPadChar );
     }
   }
-  String(const value_type* s, size_type n): std::string(s, n) 
+  String(const value_type* s, size_type n): std::string(s, n)
   {
   // We are being passed a const char* pointer, so s[n] == 0 (garanteed!)
   if( n % 2 )
@@ -65,7 +65,7 @@ public:
     }
   }
   String(const std::string& s, size_type pos=0, size_type n=npos):
-    std::string(s, pos, n) 
+    std::string(s, pos, n)
   {
   // FIXME: some users might already have padded the string 's' with a trailing \0...
   if( size() % 2 )
@@ -98,7 +98,7 @@ public:
     std::string str = *this; // copy
     std::string::size_type pos1 = str.find_first_not_of(' ');
     std::string::size_type pos2 = str.find_last_not_of(' ');
-    str = str.substr( (pos1 == std::string::npos) ? 0 : pos1, 
+    str = str.substr( (pos1 == std::string::npos) ? 0 : pos1,
       (pos2 == std::string::npos) ? (str.size() - 1) : (pos2 - pos1 + 1));
     return str;
   }
@@ -126,4 +126,3 @@ inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,T
 } // end namespace gdcm
 
 #endif //GDCMSTRING_H
-

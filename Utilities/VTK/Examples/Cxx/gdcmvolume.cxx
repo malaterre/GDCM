@@ -28,7 +28,7 @@
 
 // gdcmvolume gdcmData/GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm
 int main(int argc, char *argv[])
-{ 
+{
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   reader->SetFileName( argv[1] );
   reader->Update();
@@ -39,12 +39,12 @@ int main(int argc, char *argv[])
   iren->SetRenderWindow(renWin);
   vtkRenderer *ren = vtkRenderer::New();
   renWin->AddRenderer(ren);
-  
+
   // Create a transfer function mapping scalar value to opacity
   vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
   //oTFun->AddSegment(0, 1.0, 256, 0.1);
   oTFun->AddSegment(0, 1.0, 240, 0.1);
-    
+
   vtkColorTransferFunction *cTFun = vtkColorTransferFunction::New();
   cTFun->AddRGBPoint(   0, 1.0, 1.0, 1.0 );
   //cTFun->AddRGBPoint( 255, 1.0, 1.0, 1.0 );
@@ -55,28 +55,28 @@ int main(int argc, char *argv[])
   clip->SetInputConnection( reader->GetOutputPort() );
   clip->SetOutputWholeExtent(0,66,0,66,30,37);
   clip->ClipDataOn();
-  
+
   vtkVolumeProperty *property = vtkVolumeProperty::New();
   property->SetScalarOpacity(oTFun);
   property->SetColor(cTFun);
   property->SetInterpolationTypeToLinear();
-  
+
   vtkFixedPointVolumeRayCastMapper *mapper = vtkFixedPointVolumeRayCastMapper::New();
   mapper->SetBlendModeToMinimumIntensity();
   mapper->SetInputConnection( reader->GetOutputPort() );
-  
+
   vtkVolume *volume = vtkVolume::New();
   volume->SetMapper(mapper);
   volume->SetProperty(property);
-  
-  
+
+
   ren->AddViewProp(volume);
-  
+
   renWin->Render();
     {
     iren->Start();
     }
-  
+
   volume->Delete();
   mapper->Delete();
   property->Delete();
@@ -87,8 +87,7 @@ int main(int argc, char *argv[])
   renWin->Delete();
   iren->Delete();
   ren->Delete();
- 
+
 
  return 0;
 }
-

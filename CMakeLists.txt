@@ -58,6 +58,15 @@ ELSE(GDCM_NO_EXECUTABLE_PROPERTIES)
   SET(python_site_package "")
 ENDIF(GDCM_NO_EXECUTABLE_PROPERTIES)
 
+SET(GDCM_STANDALONE 0)
+# Top level project (eg. ITK) should set GDCM_TARGETS_NAME
+# to define a particular behavior where GDCM does not call
+# install(EXPORT...)
+# This sets the default value for GDCM_STANDALONE
+IF(NOT GDCM_TARGETS_NAME)
+  SET(GDCM_TARGETS_NAME GDCMTargets)
+  SET(GDCM_STANDALONE 1)
+ENDIF(NOT GDCM_TARGETS_NAME)
 #-----------------------------------------------------------------------------
 INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
 CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
@@ -121,7 +130,7 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
 MARK_AS_ADVANCED(GDCM_DATA_ROOT)
 # You can define a path where you extra the famous D. Clunie spacing dataset
 # http://www.dclunie.com/images/pixelspacingtestimages.zip
-# for example: 
+# for example:
 # find $HOME/pixelspacingtestimages
 # $HOME/pixelspacingtestimages
 # $HOME/pixelspacingtestimages/DISCIMG
@@ -294,7 +303,7 @@ IF(GDCM_USE_SYSTEM_OPENJPEG)
   # For some reason I cannot specify the version I want.
   # FIND_PACKAGE(OpenJPEG 2.0 REQUIRED)
   # oh well we should handle both 1.0 and 2.0 anyway...
-  FIND_PACKAGE(OpenJPEG REQUIRED)
+  #FIND_PACKAGE(OpenJPEG REQUIRED)
   SET(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
 ELSE(GDCM_USE_SYSTEM_OPENJPEG)
   SET(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
@@ -844,4 +853,3 @@ IF(GDCM_USE_VTK)
 ENDIF(GDCM_USE_VTK)
 SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 SUBDIRS(CMake/ExportConfiguration)
-

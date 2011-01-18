@@ -26,8 +26,10 @@
 #include "gdcmImage.h"
 #include "gdcmDirectionCosines.h"
 
+#include <math.h> // fabs
+
   /* TODO:
-   * 
+   *
    * (0028,9145) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelValueTransformationSequence
    * (fffe,e000) na (Item with undefined length #=3)         # u/l, 1 Item
    * (0028,1052) DS [0.00000]                                #   8, 1 RescaleIntercept
@@ -35,7 +37,7 @@
    * (0028,1054) LO [US]                                     #   2, 1 RescaleType
    * (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
    * (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
-   * 
+   *
    * Same goes for window level...
    */
 
@@ -62,7 +64,7 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
-  // 
+  //
   const Tag tps(0x0020,0x0032);
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
@@ -95,7 +97,7 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   // Take it from the first item
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
-  // 
+  //
   const Tag tps(0x0020,0x0037);
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
@@ -164,7 +166,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   std::vector<double> cosines;
   // For some reason TOSHIBA-EnhancedCT.dcm is storing the direction cosines in the per-frame section
   // and not the shared one... oh well
-  bool b1 = GetDirectionCosinesValueFromSequence(ds, t1, cosines) 
+  bool b1 = GetDirectionCosinesValueFromSequence(ds, t1, cosines)
     || GetDirectionCosinesValueFromSequence(ds,t2,cosines);
   if(!b1)
     {
@@ -199,9 +201,9 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   // For each item
   std::vector<double> distances;
-  unsigned int nitems = sqi->GetNumberOfItems();
+  gdcm::SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
   std::vector<double> dircos_subds2; dircos_subds2.resize(6);
-  for(unsigned int i = 1; i <= nitems; ++i)
+  for(gdcm::SequenceOfItems::SizeType i = 1; i <= nitems; ++i)
     {
     const Item &item = sqi->GetItem(i);
     const DataSet & subds = item.GetNestedDataSet();
@@ -238,7 +240,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     prev = distances[i];
     }
   meanspacing /= (nitems - 1);
-  
+
   //zspacing = distances[1] - distances[0];
   zspacing = meanspacing;
 
@@ -363,7 +365,7 @@ bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double
   assert( at2.GetNumberOfValues() == 1 );
   sp.push_back( at1.GetValue() );
   sp.push_back( at2.GetValue() );
- 
+
   return true;
 }
 
@@ -401,7 +403,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
-    if( GetOriginValueFromSequence(ds,t1, ori) 
+    if( GetOriginValueFromSequence(ds,t1, ori)
      || GetOriginValueFromSequence(ds, t2, ori) )
       {
       assert( ori.size() == 3 );
@@ -488,7 +490,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
-    if( GetDirectionCosinesValueFromSequence(ds,t1, dircos) 
+    if( GetDirectionCosinesValueFromSequence(ds,t1, dircos)
      || GetDirectionCosinesValueFromSequence(ds, t2, dircos) )
       {
       assert( dircos.size() == 6 );
@@ -594,7 +596,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
-    if( GetInterceptSlopeValueFromSequence(ds,t1, interceptslope) 
+    if( GetInterceptSlopeValueFromSequence(ds,t1, interceptslope)
      || GetInterceptSlopeValueFromSequence(ds,t2, interceptslope) )
       {
       assert( interceptslope.size() == 2 );
@@ -606,6 +608,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       interceptslope[0] = 0;
       interceptslope[1] = 1;
       bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
+      gdcmAssertMacro( b ); (void)b;
       return interceptslope;
       }
     }
@@ -621,10 +624,11 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
  || ms == MediaStorage::SecondaryCaptureImageStorage
  || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
  || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
- || ForceRescaleInterceptSlope 
+ || ForceRescaleInterceptSlope
   )
     {
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
+    gdcmAssertMacro( b ); (void)b;
     }
 
   // \post condition slope can never be 0:
@@ -800,7 +804,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
-    if( GetSpacingValueFromSequence(ds,t1, sp) 
+    if( GetSpacingValueFromSequence(ds,t1, sp)
       || GetSpacingValueFromSequence(ds, t2, sp) )
       {
       assert( sp.size() == 3 );
@@ -858,8 +862,8 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         // I would need to throw an expection that VM is not compatible
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
-        assert( el.GetLength() == 2 ); 
-        for(unsigned long i = 0; i < el.GetLength(); ++i) 
+        assert( el.GetLength() == 2 );
+        for(unsigned long i = 0; i < el.GetLength(); ++i)
           sp.push_back( el.GetValue(i) );
         std::swap( sp[0], sp[1]);
         assert( sp.size() == (unsigned int)entry.GetVM() );
@@ -875,7 +879,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         ss.str( s );
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
-        for(unsigned long i = 0; i < el.GetLength(); ++i) 
+        for(unsigned long i = 0; i < el.GetLength(); ++i)
           sp.push_back( el.GetValue(i) );
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
@@ -921,7 +925,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
             ss.str( s );
             el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
             el.Read( ss );
-            for(unsigned long i = 0; i < el.GetLength(); ++i) 
+            for(unsigned long i = 0; i < el.GetLength(); ++i)
               sp.push_back( el.GetValue(i) );
             //assert( sp.size() == entry.GetVM() );
             }
@@ -1105,7 +1109,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           el.Write( os );
           de.SetVR( VR::DS );
           if( os.str().size() % 2 ) os << " ";
-          de.SetByteValue( os.str().c_str(), os.str().size() );
+          VL::Type osStrSize = (VL::Type)os.str().size();
+          de.SetByteValue( os.str().c_str(),osStrSize );
           ds.Replace( de );
           }
         break;
@@ -1123,7 +1128,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           el.Write( os );
           de.SetVR( VR::IS );
           if( os.str().size() % 2 ) os << " ";
-          de.SetByteValue( os.str().c_str(), os.str().size() );
+          VL::Type osStrSize = (VL::Type)os.str().size();
+          de.SetByteValue( os.str().c_str(), osStrSize );
           ds.Replace( de );
           }
         break;
@@ -1165,7 +1171,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             std::stringstream os;
             el.Write( os );
             de.SetVR( VR::DS );
-            de.SetByteValue( os.str().c_str(), os.str().size() );
+            VL::Type osStrSize = (VL::Type)os.str().size();
+            de.SetByteValue( os.str().c_str(), osStrSize );
             ds.Replace( de );
 
         }
@@ -1187,7 +1194,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             el.Write( os );
             de.SetVR( VR::DS );
             if( os.str().size() % 2 ) os << " ";
-            de.SetByteValue( os.str().c_str(), os.str().size() );
+            VL::Type osStrSize = (VL::Type)os.str().size();
+            de.SetByteValue( os.str().c_str(), osStrSize );
             ds.Replace( de );
             }
           break;
@@ -1577,7 +1585,7 @@ bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<doubl
     spacing[1] += y;
     spacing[2] += z;
     }
-  int n = imageposition.size() / 3;
+  size_t n = imageposition.size() / 3;
   spacing[0] /= n;
   spacing[1] /= n;
   spacing[2] /= n;

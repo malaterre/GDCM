@@ -32,18 +32,18 @@ VL CP246ExplicitDataElement::GetLength() const
     // TODO can factor the code:
     if( sq )
       {
-      return TagField.GetLength() + VRField.GetLength() + 
+      return TagField.GetLength() + VRField.GetLength() +
         ValueLengthField.GetLength() + sq->ComputeLength<CP246ExplicitDataElement>();
       }
     SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
     if( sf )
       {
       assert( VRField & VR::OB_OW );
-      return TagField.GetLength() + VRField.GetLength() 
+      return TagField.GetLength() + VRField.GetLength()
         + ValueLengthField.GetLength() + sf->ComputeLength();
       }
     assert(0);
-	return 0;
+  return 0;
     }
   else
     {

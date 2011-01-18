@@ -242,7 +242,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename, bool verbose = false)
 
   reader->Delete();
 
-  return 0; 
+  return 0;
 }
 
 int TestvtkGDCMThreadedImageReader(int argc, char *argv[])

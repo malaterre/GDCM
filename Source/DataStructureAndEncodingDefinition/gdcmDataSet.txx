@@ -93,18 +93,30 @@ namespace gdcm
 
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadSelectedTags(std::istream &inputStream, const std::set<Tag> & selectedTags) {
-    if ( ! selectedTags.empty() )
+    if ( ! (selectedTags.empty() || inputStream.fail()) )
     {
       const Tag maxTag = *(selectedTags.rbegin());
       std::set<Tag> tags = selectedTags;
       DataElement dataElem;
 
-      // TODO There's an optimization opportunity here:
-      // dataElem.Read only needs to read the value if the tag is selected!
-      // Niels Dekker, LKEB, Jan 2010.
-      while( !inputStream.eof() && dataElem.template Read<TDE,TSwap>(inputStream) )
+      while( !inputStream.eof() )
       {
-        const Tag tag = dataElem.GetTag();
+        Tag& tag = dataElem.GetTag();
+        tag.Read<TSwap>(inputStream);
+        if ( inputStream.fail() || maxTag < tag )
+        {
+          // Failed to read the tag, or the read tag exceeds the maximum.
+          // As we assume ascending tag ordering, we can exit the loop.
+          break;
+        }
+        static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream);
+
+        if ( inputStream.fail() )
+        {
+          // Failed to read the value.
+          break;
+        }
+
         const std::set<Tag>::iterator found = tags.find(tag);
 
         if ( found != tags.end() )
@@ -186,7 +198,7 @@ namespace gdcm
         l += de.GetLength<TDE>();
         //std::cout << "l:" << l << std::endl;
         //assert( !de.GetVL().IsUndefined() );
-        //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
+        //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() <<
         //  "," << de.GetVL() << "," << l << std::endl;
         // Bug_Philips_ItemTag_3F3F
         //  (0x2005, 0x1080): for some reason computation of length fails...
@@ -283,4 +295,3 @@ namespace gdcm
 } // end namespace gdcm
 
 #endif // GDCMDATASET_TXX
-

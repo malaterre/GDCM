@@ -22,7 +22,7 @@
 namespace gdcm
 {
 
-bool Macro::FindMacroEntry(const Tag &tag) const 
+bool Macro::FindMacroEntry(const Tag &tag) const
 {
   MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
   if( it != ModuleInternal.end() )
@@ -33,7 +33,7 @@ bool Macro::FindMacroEntry(const Tag &tag) const
   return false;
 }
 
-const MacroEntry& Macro::GetMacroEntry(const Tag &tag) const 
+const MacroEntry& Macro::GetMacroEntry(const Tag &tag) const
 {
   MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
   if( it != ModuleInternal.end() )

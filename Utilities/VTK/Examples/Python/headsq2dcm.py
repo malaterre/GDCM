@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 ############################################################################
 #
 #  Program: GDCM (Grassroots DICOM). A DICOM library
@@ -17,7 +15,7 @@
 
 """
 Usage:
- python headsq2dcm.py -D /path/to/VTKData   
+ python headsq2dcm.py -D /path/to/VTKData
 """
 
 import vtk
@@ -44,4 +42,3 @@ writer.SetInput( reader.GetOutput() )
 #writer.SetInput( cast.GetOutput() )
 writer.SetFileDimensionality( 3 )
 writer.Write()
-

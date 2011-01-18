@@ -36,4 +36,3 @@ for file in dir.GetFilenames():
 
 # Test succeed ?
 #sys.exit(sucess != 1)
-

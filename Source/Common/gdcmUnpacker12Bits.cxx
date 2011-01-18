@@ -58,4 +58,3 @@ bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
 }
 
 } // end namespace gdcm
-

@@ -45,7 +45,7 @@ int TestvtkGDCMPolyDataRead(const char *filename, int nb, bool verbose)
   reader->Update();
 
   if( verbose )
-    { 
+    {
     reader->GetOutput()->Print( cout );
     reader->GetMedicalImageProperties()->Print( cout );
     }
@@ -57,7 +57,7 @@ int TestvtkGDCMPolyDataRead(const char *filename, int nb, bool verbose)
     }
 
   reader->Delete();
-  return ret; 
+  return ret;
 }
 
 int TestvtkGDCMPolyDataReader(int argc, char *argv[])

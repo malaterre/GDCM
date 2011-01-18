@@ -1,0 +1,233 @@
+
+                                 mpeg2decode
+                                 ===========
+
+                   MPEG-2 Video Decoder, Version 1.1, June 1994
+
+                        MPEG Software Simulation Group
+                             (MPEG-L@netcom.com)
+
+
+
+The program mpeg2decode is our implementation of an ISO/IEC DIS 13818-2
+decoder. It converts MPEG-1 and MPEG-2 video bitstreams into uncompressed
+video.
+
+
+Features
+========
+
++ decodes non-scalable, spatial scalable, SNR scalable and data partitioning
+  MPEG-2 video bitstreams
+
++ supports Simple, Main, SNR Scalable and Spatially Scalable Profile streams
+  at all defined levels
+
++ decodes MPEG-1 (ISO/IEC IS 11172-2) video bitstreams (except D-picture
+  sequences)
+
++ several output formats: separate and interleaved Y,U,V component,
+  Truevision TGA, PBMPLUS PPM, X11 display
+
++ 8 bit ordered dither and interlaced to progressive scan conversion
+  for X11 display
+
++ optional output of detailed decoding information
+
++ robustness against stream syntax errors
+
++ fast IEEE 1180-1990 compliant integer arithmetic inverse DCT
+
++ optional double precision floating point inverse DCT
+
+
+Missing Features
+================
+
+- spatial scalability other than interlaced -> interlaced
+
+- D-picture MPEG-1 sequences
+
+- temporal scalability
+
+- error concealment
+
+- repeat_field_first and other mostly display process oriented features
+
+
+Introduction
+============
+
+mpeg2decode takes one or more ISO/IEC DIS 13818-2 [1] MPEG-2 video bitstreams
+and converts them to uncompressed video. Since MPEG-2 is (by definition)
+forward compatible with MPEG-1, mpeg2decode also decodes MPEG-1 sequences
+(ISO/IEC IS 11172-2 [2]).
+
+The decoder is not optimized for speed, although some parts (e.g. variable
+length decoding, inverse DCT) are based on relatively fast algorithms. The
+emphasis was on correct implementation of the standard and simple structure
+of the program. Its main purpose is to demonstrate a sample implementation of
+an MPEG-2 decoder and to serve as an educational tool. Our hope is that this
+implementation makes it easier to understand the relatively complex details
+of the standard.
+
+As you can deduce from the list of missing features, mpeg2decode is still under
+development. However, we considered the current version to be complete
+enough to justify a public release.
+
+The decoder has been extensively tested on bitstreams produced by a variety
+of encoders from the MPEG research community to ascertain validity of the
+implementation. Of course we can't guarantee complete compliance with the
+standard.
+
+
+Usage
+=====
+
+mpeg2decode {options} input.m2v {upper.m2v} {outfile}
+
+Options:
+
+-vn  verbose output (n: level)
+
+Instructs mpeg2decode to generate informative ouput about the sequence
+to stdout. Increasing level (-v1, -v2, etc.) results in more detailed
+output.
+
+-on  output format (0: YUV, 1: SIF, 2: TGA, 3:PPM, 4:X11, 5:X11 HiQ)
+
+To choose a file format for the decoded pictures. Default is 0 (YUV).
+The following formats are currently supported:
+
+YUV: three headerless files, one for each component. The luminance component
+     is stored with an extension of .Y, the chrominance components are
+     stored as .U and .V respectively. Size of the chrominance files depends
+     on the chroma_format used by the sequence. In case of 4:2:0 they have
+     half resolution in both dimensions, in case of 4:2:2 they are subsampled
+     in horizontal direction only, while 4:4:4 uses full chrominance
+     resolution. All components are stored in row storage from top left to
+     bottom right.
+
+SIF: one headerless file, with interleaved components. Component order
+     is Cb, Y, Cr, Y. This format is also known as Abekas or CCIR Rec. 656
+     format. The chrominance components have half resolution in horizontal
+     direction (4:2:2) and are aligned with the even luminance samples.
+     File extension is .SIF.
+
+TGA: Truevision TGA [4] 24 bit R,G,B format in uncompressed (no run length
+     coding) format with .tga extension.
+
+PPM: Portable PixMap format as defined in PBMPLUS [5], a graphics package by
+     Jef Poskanzer. Extension is .ppm.
+
+X11: display decoded video on an X Window System server. The current version
+     supports only 8 bit color display. You can use the DISPLAY environment
+     variable to select a (non-default) display. The output routines perform
+     8 bit dithering and interlaced to progressive scan conversion. You can
+     choose among two different scan conversion algorithms (only for 4:2:0
+     interlaced streams):
+
+     - a high quality slow algorithm (-o5, X11 HiQ)
+     - a faster but less accurate algorithm (-o4, X11)
+
+-f   store interlaced frames in frame format
+
+By default, interlaced video is stored field by field. The -f option
+permits to store both fields of a frame into one file.
+
+-r   use double precision reference IDCT
+
+The -r option selects a double precision inverse DCT which is primarily
+useful for comparing results from different decoders. The default is to
+use a faster integer arithmetic only IDCT implementation which meets the
+criteria of IEEE 1180-1990 [3].
+
+-s infile  spatial scalable sequence
+
+Spatial scalable video is decoded in two passes. The -s option specifies
+the names of the output files from the first (lower layer) pass to the
+second (enhancement layer) pass. 'infile' describes the name format of the
+lower layer pictures for spatial scalable sequences in a format similar to
+outfile as described below.
+
+-q
+
+Set this switch to suppress output of warnings to stderr. Usually a bad idea.
+
+-t
+
+Setting this option activates low level tracing to stdout. This is mainly for
+debugging purposes. Output is extremely voluminous. It currently doesn't
+cover all syntactic elements.
+
+outfile
+
+This parameter has to be specified for output types -o0 to -o3 only. It
+describes the names of the output files as a printf format string. It has to
+contain exactly one integer format descriptor (e.g. %d, %02d) and, except
+for frame storage (-f option or progressive video), a %c descriptor
+
+example: out%02d_%c generates files
+
+	out00_a.*, out00_b.*, out01_a.*, ...
+
+	('a' denotes the top field, 'b' the bottom field,
+	 .* is the suffix appropriate for the output format)
+
+
+upper.m2v
+
+is the name of the upper layer bitstream of an SNR scalable stream or a
+data partioning scalable bitstream (input.m2v is the lower layer).
+
+
+Examples
+========
+
+non-scalable stream (one layer, one pass):
+
+	mpeg2decode base.m2v f%d%c
+
+SNR-scalable stream (two layers, one pass):
+
+	mpeg2decode base.m2v snr.m2v f%d%c
+
+spatial-scalable stream (two layers, two passes):
+
+	mpeg2decode base.m2v l%d%c
+	mpeg2decode -s l%d%c spatial.m2v f%d%c
+
+hybrid spatial/SNR-scalable stream (three layers, two passes):
+
+	mpeg2decode base.m2v l%d%c
+	mpeg2decode -s l%d%c spatial.m2v snr.m2v f%d%c
+
+hybrid SNR/spatial-scalable stream (three layers, two passes):
+
+	mpeg2decode base.m2v snr.m2v l%d%c
+	mpeg2decode -s l%d%c spatial.m2v f%d%c
+
+hybrid SNR/spatial/SNR-scalable stream (four layers, two passes):
+
+	mpeg2decode base.m2v snr1.m2v l%d%c
+	mpeg2decode -s l%d%c spatial.m2v snr2.m2v f%d%c
+
+etc.
+
+
+References
+==========
+
+[1] Draft International Standard ISO/IEC DIS 13818: Generic Coding of
+    Moving Pictures and Associated Audio, Part 2: Video.
+
+[2] International Standard ISO/IEC IS 11172: Coding of moving pictures
+    and associated audio for digital storage media up to about 1,5 Mbit/s,
+    Part 2: Video.
+
+[3] IEEE Standard Specifications for the Implementations of 8 by 8
+    Inverse Discrete Cosine Transform, IEEE Std 1180-1990, December 6, 1990.
+
+[4] Truevision TGA (TM) File Format Specification Version 2.0, January 1991.
+
+[5] Jef Poskanzer: PBMPLUS, Extended Portable Bitmap Toolkit, December 10, 1991.

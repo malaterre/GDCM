@@ -10,7 +10,7 @@
 # Set Source files properties such as CPLUSPLUS and MONO_FLAGS to specify
 # special behavior of MONO. Also global CMAKE_MONO_FLAGS can be used to add
 # special flags to all swig calls.
-# Another special variable is CMAKE_MONO_OUTDIR, it allows one to specify 
+# Another special variable is CMAKE_MONO_OUTDIR, it allows one to specify
 # where to write all the swig generated module (swig -outdir option)
 # The name-specific variable MONO_MODULE_<name>_EXTRA_DEPS may be used
 # to specify extra dependencies for the generated modules.
@@ -43,4 +43,3 @@ MACRO(MONO_LINK_LIBRARIES name)
     MESSAGE(SEND_ERROR "Cannot find Swig library \"${name}\".")
   ENDIF(MONO_MODULE_${name}_REAL_NAME)
 ENDMACRO(MONO_LINK_LIBRARIES name)
-

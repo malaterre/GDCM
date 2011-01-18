@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
   sqlite3* db;
   sqlite3_open("./dicom.db", &db);
 
-  if(db == 0) 
+  if(db == 0)
     {
     std::cerr << "Could not open database." << std::endl;
     return 1;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
   char *errmsg;
   ret = sqlite3_exec(db, sql_stmt, 0, 0, &errmsg);
 
-  if(ret != SQLITE_OK) 
+  if(ret != SQLITE_OK)
     {
     printf("Error in statement: %s [%s].\n", sql_stmt, errmsg);
     return 1;
@@ -86,13 +86,13 @@ int main(int argc, char *argv[])
 
   sqlite3_stmt *stmt;
   if ( sqlite3_prepare(
-      db, 
+      db,
       "insert into browser values (?,?)",  // stmt
       -1, // If than zero, then stmt is read up to the first nul terminator
       &stmt,
       0  // Pointer to unused portion of stmt
   )
-    != SQLITE_OK) 
+    != SQLITE_OK)
     {
     printf("\nCould not prepare statement.");
     return 1;
@@ -121,13 +121,13 @@ int main(int argc, char *argv[])
             strlen(value),  // length of text
             SQLITE_STATIC // SQLite assumes that the information is in static
         )
-          != SQLITE_OK) 
+          != SQLITE_OK)
           {
           printf("\nCould not bind int.\n");
           return 1;
           }
         }
-      if (sqlite3_step(stmt) != SQLITE_DONE) 
+      if (sqlite3_step(stmt) != SQLITE_DONE)
         {
         printf("\nCould not step (execute) stmt.\n");
         return 1;
@@ -144,4 +144,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

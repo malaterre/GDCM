@@ -112,4 +112,3 @@ bool ImageChangePlanarConfiguration::Change()
 
 
 } // end namespace gdcm
-

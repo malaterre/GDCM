@@ -65,7 +65,7 @@ int transpose_index[] =          /* Is a transpose map for matrix transp. */
  1,  9, 17, 25, 33, 41, 49, 57,
  2, 10, 18, 26, 34, 42, 50, 58,
  3, 11, 19, 27, 35, 43, 51, 59,
- 4, 12, 20, 28, 36, 44, 52, 60, 
+ 4, 12, 20, 28, 36, 44, 52, 60,
  5, 13, 21, 29, 37, 45, 53, 61,
  6, 14, 22, 30, 38, 46, 54, 62,
  7, 15, 23, 31, 39, 47, 55, 63};
@@ -156,9 +156,9 @@ static void DoubleReferenceDct1D(ivect,ovect)
   for(mptr=DctMatrix,optr=ovect;optr<ovect+BLOCKWIDTH;optr++)
     {                           /* 1d dct is just matrix multiply */
       for(*optr=0,iptr=ivect;iptr<ivect+BLOCKWIDTH;iptr++)
-	{
-	  *optr += *iptr*(*(mptr++));
-	}
+  {
+    *optr += *iptr*(*(mptr++));
+  }
     }
 }
 
@@ -220,9 +220,9 @@ static void DoubleReferenceIDct1D(ivect,ovect)
   for(mptr = IDctMatrix,optr=ovect;optr<ovect+BLOCKWIDTH;optr++)
     {
       for(*optr=0,iptr=ivect;iptr<ivect+BLOCKWIDTH;iptr++)
-	{
-	  *optr += *iptr*(*(mptr++));
-	}
+  {
+    *optr += *iptr*(*(mptr++));
+  }
     }
 }
 
@@ -264,7 +264,7 @@ static void DoubleTransposeMatrix(matrix,newmatrix)
     {
       *(newmatrix++) = matrix[*tptr];
     }
-}  
+}
 
 /*BFUNC
 
@@ -288,15 +288,15 @@ void Quantize(matrix,qmatrix)
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++)
     {
       if (*mptr > 0)          /* Rounding is different for +/- coeffs */
-	{
-	  *mptr = (*mptr + *qmatrix/2)/ (*qmatrix);
-	  qmatrix++;
-	}
+  {
+    *mptr = (*mptr + *qmatrix/2)/ (*qmatrix);
+    qmatrix++;
+  }
       else
-	{
-	  *mptr = (*mptr - *qmatrix/2)/ (*qmatrix);
-	  qmatrix++;
-	}
+  {
+    *mptr = (*mptr - *qmatrix/2)/ (*qmatrix);
+    qmatrix++;
+  }
     }
 }
 
@@ -379,9 +379,9 @@ void BoundDctMatrix(matrix,Bound)
   for(mptr=matrix;mptr<matrix+BLOCKSIZE;mptr++)
     {
       if (*mptr+Bound < 0)
-	*mptr = -Bound;
+  *mptr = -Bound;
       else if (*mptr-Bound > 0)
-	*mptr = Bound;
+  *mptr = Bound;
     }
 }
 
@@ -476,16 +476,16 @@ int *ScaleMatrix(Numerator,Denominator,LongFlag,Matrix)
     {
       *tptr = (*(Matrix++) * Numerator)/Denominator;
       if (*tptr > Limit)
-	*tptr = Limit;
+  *tptr = Limit;
       else if (*tptr < 1)
-	*tptr = 1;
+  *tptr = 1;
     }
   return(Temp);
 }
 
 /*BFUNC
 
-PrintMatrix() prints an 8x8 matrix in row/column form. 
+PrintMatrix() prints an 8x8 matrix in row/column form.
 
 EFUNC*/
 
@@ -498,10 +498,10 @@ void PrintMatrix(matrix)
   if (matrix)
     {
       for(i=0;i<BLOCKHEIGHT;i++)
-	{
-	  for(j=0;j<BLOCKWIDTH;j++) {printf("%6d ",*(matrix++));}
-	  printf("\n");
-	}
+  {
+    for(j=0;j<BLOCKWIDTH;j++) {printf("%6d ",*(matrix++));}
+    printf("\n");
+  }
     }
   else {printf("Null\n");}
 }

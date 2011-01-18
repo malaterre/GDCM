@@ -61,7 +61,7 @@ void SharedPtr(const char *array, const size_t len)
 
 int TestCopyValue(int , char *[])
 {
-  
+
   const char array[] = "GDCM is yet another DICOM library.";
   const size_t len = strlen( array );
   RawPtr(array, len);

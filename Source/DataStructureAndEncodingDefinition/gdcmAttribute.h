@@ -67,7 +67,7 @@ public:
 /**
  * \brief Attribute class
  * This class use template metaprograming tricks to let the user know when the template
- * instanciation does not match the public dictionary. 
+ * instanciation does not match the public dictionary.
  *
  * Typical example that compile is:
  * Attribute<0x0008,0x9007> a = {"ORIGINAL","PRIMARY","T1","NONE"};
@@ -79,10 +79,10 @@ public:
  * Attribute<0x0018,0x1182, VR::IS, VM::VM3> fd3 = {0,1,2}; // VM3 is not valid
  * Attribute<0x0018,0x1182, VR::UL, VM::VM2> fd3 = {0,1}; // UL is not valid VR
  */
-template<uint16_t Group, uint16_t Element, 
-	 int TVR = TagToType<Group, Element>::VRType, // can the user override this value ? 
-	 int TVM = TagToType<Group, Element>::VMType // can the user override this value ?
-	 /*typename SQAttribute = void_*/ > // if only I had variadic template...
+template<uint16_t Group, uint16_t Element,
+   int TVR = TagToType<Group, Element>::VRType, // can the user override this value ?
+   int TVM = TagToType<Group, Element>::VMType // can the user override this value ?
+   /*typename SQAttribute = void_*/ > // if only I had variadic template...
 class Attribute
 {
 public:
@@ -139,17 +139,17 @@ public:
   bool operator==(const Attribute &att) const
     {
     return std::equal(Internal, Internal+GetNumberOfValues(),
-      att.GetValues()); 
+      att.GetValues());
     }
   bool operator!=(const Attribute &att) const
     {
     return !std::equal(Internal, Internal+GetNumberOfValues(),
-      att.GetValues()); 
+      att.GetValues());
     }
   bool operator<(const Attribute &att) const
     {
     return std::lexicographical_compare(Internal, Internal+GetNumberOfValues(),
-      att.GetValues(), att.GetValues() + att.GetNumberOfValues() ); 
+      att.GetValues(), att.GetValues() + att.GetNumberOfValues() );
     }
 
   ArrayType &GetValue(unsigned int idx = 0) {
@@ -185,7 +185,7 @@ public:
     DataElement ret( GetTag() );
     std::ostringstream os;
     // os.imbue(std::locale::classic()); // This is not required AFAIK
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetNumberOfValues(),os);
     ret.SetVR( GetVR() );
     assert( ret.GetVR() != VR::SQ );
@@ -199,7 +199,243 @@ public:
           }
         }
       }
-    ret.SetByteValue( os.str().c_str(), os.str().size() );
+    VL::Type osStrSize = (VL::Type)os.str().size();
+    ret.SetByteValue( os.str().c_str(), osStrSize );
+    return ret;
+  }
+
+  void SetFromDataElement(DataElement const &de) {
+    // This is kind of hackish but since I do not generate other element than the first one: 0x6000 I should be ok:
+    assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 || GetTag().GetGroup() == 0x5000 );
+    assert( GetVR() != VR::INVALID );
+    assert( GetVR().Compatible( de.GetVR() ) || de.GetVR() == VR::INVALID ); // In case of VR::INVALID cannot use the & operator
+    if( de.IsEmpty() ) return;
+    const ByteValue *bv = de.GetByteValue();
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( de.GetVR() == VR::UN /*|| de.GetVR() == VR::INVALID*/ )
+#else
+    if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+#endif
+      {
+      SetByteValue(bv);
+      }
+    else
+      {
+      SetByteValueNoSwap(bv);
+      }
+  }
+  void Set(DataSet const &ds) {
+    SetFromDataElement( ds.GetDataElement( GetTag() ) );
+  }
+  void SetFromDataSet(DataSet const &ds) {
+    if( ds.FindDataElement( GetTag() ) &&
+      !ds.GetDataElement( GetTag() ).IsEmpty() )
+      {
+      SetFromDataElement( ds.GetDataElement( GetTag() ) );
+      }
+  }
+protected:
+  void SetByteValueNoSwap(const ByteValue *bv) {
+    if( !bv ) return; // That would be bad...
+    assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
+    //if( VRToEncoding<TVR>::Mode == VR::VRBINARY )
+    //  {
+    //  // always do a copy !
+    //  SetValues(bv->GetPointer(), bv->GetLength());
+    //  }
+    //else
+      {
+      std::stringstream ss;
+      std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+      ss.str( s );
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal,
+        GetNumberOfValues(),ss);
+      }
+  }
+  void SetByteValue(const ByteValue *bv) {
+    if( !bv ) return; // That would be bad...
+    assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
+    //if( VRToEncoding<TVR>::Mode == VR::VRBINARY )
+    //  {
+    //  // always do a copy !
+    //  SetValues(bv->GetPointer(), bv->GetLength());
+    //  }
+    //else
+      {
+      std::stringstream ss;
+      std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+      ss.str( s );
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
+        GetNumberOfValues(),ss);
+      }
+  }
+#if 0 // TODO  FIXME the implicit way:
+  // explicit:
+  void Read(std::istream &_is) {
+    const uint16_t cref[] = { Group, Element };
+    uint16_t c[2];
+    _is.read((char*)&c, sizeof(c));
+    assert( c[0] == cref[0] && c[1] == cref[1] );
+    char vr[2];
+    _is.read(vr, 2); // Check consistency ?
+    const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    uint32_t l = VRVLSize< (TVR & VR::VL32) >::Read(_is);
+    l /= sizeof( typename VRToType<TVR>::Type );
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
+      l,_is);
+  }
+  void Write(std::ostream &_os) const {
+    uint16_t c[] = { Group, Element };
+    _os.write((char*)&c, 4);
+    uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    _os.write((char*)&l, 4);
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
+      GetLength(),_os);
+    }
+  void Read(std::istream &_is) {
+    uint16_t cref[] = { Group, Element };
+    uint16_t c[2];
+    _is.read((char*)&c, 4);
+    const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    uint32_t l;
+    _is.read((char*)&l, 4);
+    l /= sizeof( typename VRToType<TVR>::Type );
+     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
+      l,_is);
+    }
+  void Write(std::ostream &_os) const {
+    uint16_t c[] = { Group, Element };
+    _os.write((char*)&c, 4);
+    uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    _os.write((char*)&l, 4);
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
+      GetLength(),_os);
+    }
+#endif
+
+};
+
+template<uint16_t Group, uint16_t Element, int TVR >
+class Attribute<Group,Element,TVR,VM::VM1>
+{
+public:
+  typedef typename VRToType<TVR>::Type ArrayType;
+  enum { VMType = VMToLength<VM::VM1>::Length };
+  //ArrayType Internal[VMToLength<TVM>::Length];
+  ArrayType Internal;
+  GDCM_STATIC_ASSERT( VMToLength<VM::VM1>::Length == 1 );
+
+  // Make sure that user specified VR/VM are compatible with the public dictionary:
+  GDCM_STATIC_ASSERT( ((VR::VRType)TVR & (VR::VRType)(TagToType<Group, Element>::VRType)) );
+  GDCM_STATIC_ASSERT( ((VM::VMType)VM::VM1 & (VM::VMType)(TagToType<Group, Element>::VMType)) );
+  GDCM_STATIC_ASSERT( ((((VR::VRType)TVR & VR::VR_VM1) && ((VM::VMType)VM::VM1 == VM::VM1) )
+                    || !((VR::VRType)TVR & VR::VR_VM1) ) );
+
+  static Tag GetTag() { return Tag(Group,Element); }
+  static VR  GetVR()  { return (VR::VRType)TVR; }
+  static VM  GetVM()  { return (VM::VMType)VM::VM1; }
+
+  // The following two methods do make sense only in case of public element,
+  // when the template is intanciated with private element the VR/VM are simply
+  // defaulted to allow everything (see gdcmTagToType.h default template for TagToType)
+  static VR  GetDictVR() { return (VR::VRType)(TagToType<Group, Element>::VRType); }
+  static VM  GetDictVM() { return (VM::VMType)(TagToType<Group, Element>::VMType); }
+
+  // Some extra dummy checks:
+  // Data Elements with a VR of SQ, OF, OW, OB or UN shall always have a Value Multiplicity of one.
+
+  unsigned int GetNumberOfValues() const {
+    return VMToLength<VM::VM1>::Length;
+  }
+  // Implementation of Print is common to all Mode (ASCII/Binary)
+  // TODO: Can we print a \ when in ASCII...well I don't think so
+  // it would mean we used a bad VM then, right ?
+  void Print(std::ostream &os) const {
+    os << GetTag() << " ";
+    os << TagToType<Group,Element>::GetVRString()  << " ";
+    os << TagToType<Group,Element>::GetVMString()  << " ";
+    os << Internal; // VM is at least garantee to be one
+  }
+  // copy:
+  //ArrayType GetValue(unsigned int idx = 0) {
+  //  assert( idx < GetNumberOfValues() );
+  //  return Internal[idx];
+  //}
+  //ArrayType operator[] (unsigned int idx) {
+  //  return GetValue(idx);
+  //}
+  // FIXME: is this always a good idea ?
+  // I do not think so, I prefer operator
+  //operator ArrayType () const { return Internal[0]; }
+
+  bool operator==(const Attribute &att) const
+    {
+    return std::equal(&Internal, &Internal+GetNumberOfValues(),
+      att.GetValues());
+    }
+  bool operator!=(const Attribute &att) const
+    {
+    return !std::equal(&Internal, &Internal+GetNumberOfValues(),
+      att.GetValues());
+    }
+  bool operator<(const Attribute &att) const
+    {
+    return std::lexicographical_compare(&Internal, &Internal+GetNumberOfValues(),
+      att.GetValues(), att.GetValues() + att.GetNumberOfValues() );
+    }
+
+  ArrayType &GetValue() {
+//    assert( idx < GetNumberOfValues() );
+    return Internal;
+  }
+//  ArrayType & operator[] (unsigned int idx) {
+//    return GetValue(idx);
+//  }
+  // const reference
+  ArrayType const &GetValue() const {
+    //assert( idx < GetNumberOfValues() );
+    return Internal;
+  }
+  //ArrayType const & operator[] () const {
+  //  return GetValue();
+  //}
+  void SetValue(ArrayType v) {
+//    assert( idx < GetNumberOfValues() );
+    Internal = v;
+  }
+/*  void SetValues(const ArrayType* array, unsigned int numel = VMType ) {
+    assert( array && numel && numel == GetNumberOfValues() );
+    // std::copy is smarted than a memcpy, and will call memcpy when POD type
+    std::copy(array, array+numel, Internal);
+  }
+*/
+
+  // FIXME Should we remove this function ?
+  const ArrayType* GetValues() const {
+    return &Internal;
+  }
+
+  // API to talk to the run-time layer: gdcm::DataElement
+  DataElement GetAsDataElement() const {
+    DataElement ret( GetTag() );
+    std::ostringstream os;
+    // os.imbue(std::locale::classic()); // This is not required AFAIK
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(&Internal,
+      GetNumberOfValues(),os);
+    ret.SetVR( GetVR() );
+    assert( ret.GetVR() != VR::SQ );
+    if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
+      {
+      if( GetVR() != VR::UI )
+        {
+        if( os.str().size() % 2 )
+          {
+          os << " ";
+          }
+        }
+      }
+    VL::Type osStrSize = (VL::Type)os.str().size();
+    ret.SetByteValue( os.str().c_str(), osStrSize );
     return ret;
   }
 
@@ -243,7 +479,7 @@ protected:
       std::stringstream ss;
       std::string s = std::string( bv->GetPointer(), bv->GetLength() );
       ss.str( s );
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal, 
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(&Internal,
         GetNumberOfValues(),ss);
       }
   }
@@ -260,7 +496,7 @@ protected:
       std::stringstream ss;
       std::string s = std::string( bv->GetPointer(), bv->GetLength() );
       ss.str( s );
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(&Internal,
         GetNumberOfValues(),ss);
       }
   }
@@ -276,7 +512,7 @@ protected:
     const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
     uint32_t l = VRVLSize< (TVR & VR::VL32) >::Read(_is);
     l /= sizeof( typename VRToType<TVR>::Type );
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       l,_is);
   }
   void Write(std::ostream &_os) const {
@@ -284,7 +520,7 @@ protected:
     _os.write((char*)&c, 4);
     uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
     _os.write((char*)&l, 4);
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
   void Read(std::istream &_is) {
@@ -295,7 +531,7 @@ protected:
     uint32_t l;
     _is.read((char*)&l, 4);
     l /= sizeof( typename VRToType<TVR>::Type );
-     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       l,_is);
     }
   void Write(std::ostream &_os) const {
@@ -303,17 +539,16 @@ protected:
     _os.write((char*)&c, 4);
     uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
     _os.write((char*)&l, 4);
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
 #endif
 
 };
 
-
 // No need to repeat default template arg, since primary template
 // will be used to generate the default arguments
-template<uint16_t Group, uint16_t Element, int TVR > 
+template<uint16_t Group, uint16_t Element, int TVR >
 class Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
@@ -411,7 +646,7 @@ public:
     std::ostringstream os;
     if( Internal )
       {
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
         GetNumberOfValues(),os);
       if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
         {
@@ -426,7 +661,8 @@ public:
       }
     ret.SetVR( GetVR() );
     assert( ret.GetVR() != VR::SQ );
-    ret.SetByteValue( os.str().c_str(), os.str().size() );
+    VL::Type osStrSize = (VL::Type) os.str().size();
+    ret.SetByteValue( os.str().c_str(), osStrSize);
     return ret;
   }
   void SetFromDataElement(DataElement const &de) {
@@ -460,7 +696,7 @@ protected:
       {
       delete[] internal;
       }
-    //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
     //  GetNumberOfValues(),ss);
   }
 
@@ -470,35 +706,35 @@ private:
   bool Own : 1;
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM1_8> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
   VM  GetVM() const { return VM::VM1_8; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM2_n> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
   VM  GetVM() const { return VM::VM2_n; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM2_2n> : public Attribute<Group,Element,TVR,VM::VM2_n>
 {
 public:
   static VM  GetVM() { return VM::VM2_2n; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM3_n> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
   static VM  GetVM() { return VM::VM3_n; }
 };
 
-template<uint16_t Group, uint16_t Element, int TVR> 
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM3_3n> : public Attribute<Group,Element,TVR,VM::VM3_n>
 {
 public:
@@ -507,7 +743,7 @@ public:
 
 
 // For particular case for ASCII string
-// WARNING: This template explicitely instanciates a particular 
+// WARNING: This template explicitely instanciates a particular
 // EncodingImplementation THEREFORE it is required to be declared after the
 // EncodingImplementation is needs (doh!)
 #if 0
@@ -527,7 +763,7 @@ public:
       Internal[i++] = sarray.substr(pos1, pos2-pos1);
       pos1 = pos2+1;
       pos2 = sarray.find(sep, pos1+1);
-      } 
+      }
     Internal[i] = sarray.substr(pos1, pos2-pos1);
     // Shouldn't we do the contrary, since we know how many separators
     // (and default behavior is to discard anything after the VM declared
@@ -562,7 +798,7 @@ class Attribute<VR::PN, TVM> : public StringAttribute<TVM>
 
 #if 0
 
-// Implementation for the undefined length (dynamically allocated array) 
+// Implementation for the undefined length (dynamically allocated array)
 template<int TVR>
 class Attribute<TVR, VM::VM1_n>
 {
@@ -595,7 +831,7 @@ public:
   }
 
   // If save is set to zero user should not delete the pointer
-  //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false) 
+  //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false)
   void SetArray(const ArrayType *array, unsigned long len,
     bool save = false) {
     if( save ) {
@@ -619,11 +855,11 @@ public:
       _os << "," << Internal[i];
     }
   void Read(std::istream &_is) {
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
       GetLength(),_os);
     }
 

@@ -100,14 +100,13 @@ int TestString(int argc, char *argv[])
   privatecreator.erase(privatecreator.find_last_not_of(' ') + 1);
   std::cout << "[" << privatecreator << "]" << std::endl;
 
-  static const CSComp values[] = {"DERIVED","SECONDARY"}; 
+  static const CSComp values[] = {"DERIVED","SECONDARY"};
   std::cout << values[0] << std::endl;
   Print( values[0] );
-  
+
   const char trim[] = "8 ";
   gdcm::String<> strim( trim );
   std::cout << "|" << strim.Trim() << "|" << std::endl;
 
   return 0;
 }
-

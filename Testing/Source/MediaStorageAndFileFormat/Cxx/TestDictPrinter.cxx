@@ -19,4 +19,3 @@ int TestDictPrinter(int, char *[])
   gdcm::DictPrinter dp;
   return 0;
 }
-

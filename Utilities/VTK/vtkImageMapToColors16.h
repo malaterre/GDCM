@@ -44,7 +44,7 @@ public:
   vtkGetObjectMacro(LookupTable,vtkScalarsToColors);
 
   // Description:
-  // Set the output format, the default is RGBA.  
+  // Set the output format, the default is RGBA.
   vtkSetMacro(OutputFormat,int);
   vtkGetMacro(OutputFormat,int);
   void SetOutputFormatToRGBA() { this->OutputFormat = VTK_RGBA; };
@@ -73,7 +73,7 @@ protected:
   ~vtkImageMapToColors16();
 
   virtual int RequestInformation (vtkInformation *, vtkInformationVector **, vtkInformationVector *);
-  
+
   void ThreadedRequestData(vtkInformation *request,
                            vtkInformationVector **inputVector,
                            vtkInformationVector *outputVector,
@@ -86,7 +86,7 @@ protected:
 
   vtkScalarsToColors *LookupTable;
   int OutputFormat;
-  
+
   int ActiveComponent;
   int PassAlphaToOutput;
 
@@ -97,10 +97,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-

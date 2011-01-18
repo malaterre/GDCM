@@ -121,43 +121,43 @@ void FrequencyAC(matrix)
     {
       cofac = abs(matrix[k]);           /* Find absolute size */
       if (cofac < 256)
-	{
-	  ssss = csize[cofac];
-	}
+  {
+    ssss = csize[cofac];
+  }
       else
-	{
-	  cofac = cofac >> 8;
-	  ssss = csize[cofac] + 8;
-	}
+  {
+    cofac = cofac >> 8;
+    ssss = csize[cofac] + 8;
+  }
       if (matrix[k] == 0)               /* Check for zeroes */
-	{
-	  if (k == BLOCKSIZE-1)         /* If end of block, then process */
-	    {
+  {
+    if (k == BLOCKSIZE-1)         /* If end of block, then process */
+      {
 #ifdef CODEC_DEBUG
-	      printf("AC FEncoding EOB %d\n",0);
+        printf("AC FEncoding EOB %d\n",0);
 #endif
-	      ACFrequency[0]++;         /* Increment EOB frequency */
-	      break;
-	    }
-	  r++;
-	}
+        ACFrequency[0]++;         /* Increment EOB frequency */
+        break;
+      }
+    r++;
+  }
       else
-	{
-	  while(r > 15)                 /* Convert, r, ssss, into RLE */
-	    {
+  {
+    while(r > 15)                 /* Convert, r, ssss, into RLE */
+      {
 #ifdef CODEC_DEBUG
-	      printf("AC FEncoding OVFL %d\n",240);
+        printf("AC FEncoding OVFL %d\n",240);
 #endif
-	      ACFrequency[240]++;       /* Increment ZRL extender freq */
-	      r -= 16;
-	    }
-	  i = 16*r + ssss;              /* Make code */
-	  r = 0;
+        ACFrequency[240]++;       /* Increment ZRL extender freq */
+        r -= 16;
+      }
+    i = 16*r + ssss;              /* Make code */
+    r = 0;
 #ifdef CODEC_DEBUG
-	  printf("AC FEncoding nnnnssss %d\n",i);
+    printf("AC FEncoding nnnnssss %d\n",i);
 #endif
-	  ACFrequency[i]++;             /* Increment frequency of such code. */
-	}
+    ACFrequency[i]++;             /* Increment frequency of such code. */
+  }
     }
 }
 
@@ -178,52 +178,52 @@ void EncodeAC(matrix)
     {
       cofac = abs(matrix[k]);             /* Find absolute size */
       if (cofac < 256)
-	{
-	  ssss = csize[cofac];
-	}
+  {
+    ssss = csize[cofac];
+  }
       else
-	{
-	  cofac = cofac >> 8;
-	  ssss = csize[cofac] + 8;
-	}
+  {
+    cofac = cofac >> 8;
+    ssss = csize[cofac] + 8;
+  }
       if (matrix[k] == 0)                /* Check for zeroes */
-	{
-	  if (k == BLOCKSIZE-1)
-	    {
+  {
+    if (k == BLOCKSIZE-1)
+      {
 #ifdef CODEC_DEBUG
-	      printf("AC Encoding EOB %d\n",0);
+        printf("AC Encoding EOB %d\n",0);
 #endif
-	      EncodeHuffman(0);
-	      break;
-	    }
-	  r++;                           /* Increment run-length of zeroes */
-	}
+        EncodeHuffman(0);
+        break;
+      }
+    r++;                           /* Increment run-length of zeroes */
+  }
       else
-	{
-	  while(r > 15)                 /* If run-length > 15, time for  */
-	    {                           /* Run-length extension */
+  {
+    while(r > 15)                 /* If run-length > 15, time for  */
+      {                           /* Run-length extension */
 #ifdef CODEC_DEBUG
-	      printf("AC Encoding OVFL %d\n",240);
+        printf("AC Encoding OVFL %d\n",240);
 #endif
-	      EncodeHuffman(240);
-	      r -= 16;
-	    }
-	  i = 16*r + ssss;              /* Now we can find code byte */
+        EncodeHuffman(240);
+        r -= 16;
+      }
+    i = 16*r + ssss;              /* Now we can find code byte */
 #ifdef CODEC_DEBUG
-	  printf("AC Encoding nnnnssss %d\n",i);
+    printf("AC Encoding nnnnssss %d\n",i);
 #endif
-	  r = 0;
-	  EncodeHuffman(i);             /* Encode RLE code */
-	  if (matrix[k]< 0)             /* Follow by significant bits */
-	    {
-	      fputv(ssss,matrix[k]-1);
-	    }
-	  else
-	    {
-	      fputv(ssss,matrix[k]);
-	    }
+    r = 0;
+    EncodeHuffman(i);             /* Encode RLE code */
+    if (matrix[k]< 0)             /* Follow by significant bits */
+      {
+        fputv(ssss,matrix[k]-1);
+      }
+    else
+      {
+        fputv(ssss,matrix[k]);
+      }
 
-	}
+  }
     }
 }
 
@@ -256,24 +256,24 @@ void DecodeAC(matrix)
       s = r & 0xf;                                 /* Find significant bits */
       n = (r >> 4) & 0xf;                          /* n = run-length */
       if (s)
-	{
-	  if ((k += n)>=BLOCKSIZE) break;          /* JPEG Mistake */
-	  matrix[k] = fgetv(s);                    /* Get s bits */
+  {
+    if ((k += n)>=BLOCKSIZE) break;          /* JPEG Mistake */
+    matrix[k] = fgetv(s);                    /* Get s bits */
 
-	  s--; /* Align s */
-	  if ((matrix[k] & bit_set_mask[s]) == 0)  /* Also (1 << s) */
-	    {
-	      matrix[k] |= extend_mask[s];         /* Also  (-1 << s) + 1 */
-	      matrix[k]++;                         /* Increment 2's c */
-	    }
-	  k++;                                     /* Goto next element */
-	}
+    s--; /* Align s */
+    if ((matrix[k] & bit_set_mask[s]) == 0)  /* Also (1 << s) */
+      {
+        matrix[k] |= extend_mask[s];         /* Also  (-1 << s) + 1 */
+        matrix[k]++;                         /* Increment 2's c */
+      }
+    k++;                                     /* Goto next element */
+  }
       else if (n == 15)                      /* Zero run length code extnd */
-	k += 16;
+  k += 16;
       else
-	{
-	  break;
-	}
+  {
+    break;
+  }
     }
 }
 
@@ -302,10 +302,10 @@ int DecodeDC()
       printf("Raw DC Decode %d\n",diff);
 #endif
       if ((diff & bit_set_mask[s]) == 0)
-	{
-	  diff |= extend_mask[s];
-	  diff++;
-	}
+  {
+    diff |= extend_mask[s];
+    diff++;
+  }
       diff += *LastDC;                      /* Change the last DC */
       *LastDC = diff;
     }
@@ -334,7 +334,7 @@ void FrequencyDC(coef)
     }
   else
     {
-      cofac = cofac >> 8; 
+      cofac = cofac >> 8;
       s = csize[cofac] + 8;
     }
 #ifdef CODEC_DEBUG
@@ -390,7 +390,7 @@ void ResetCodec()
 {
   BEGIN("ResetCodec")
   int i;
-  
+
   for(i=0;i<CScan->NumberComponents;i++)
     {
       *CScan->LastDC[i] = 0;                /* Sets all DC predictions to 0 */
@@ -407,20 +407,20 @@ void ClearFrameFrequency()
 {
   int i;
   int *iptr;
-  
+
   for(i=0;i<CScan->NumberComponents;i++)
     {
       *CScan->LastDC[i] = 0;
       for(iptr=CScan->ACFrequency[i];
-	  iptr<CScan->ACFrequency[i]+257;iptr++)
-	{
-	  *iptr = 0;
-	}
+    iptr<CScan->ACFrequency[i]+257;iptr++)
+  {
+    *iptr = 0;
+  }
       for(iptr=CScan->DCFrequency[i];
-	  iptr<CScan->DCFrequency[i]+257;iptr++)
-	{
-	  *iptr = 0;
-	}
+    iptr<CScan->DCFrequency[i]+257;iptr++)
+  {
+    *iptr = 0;
+  }
     }
 }
 
@@ -438,7 +438,7 @@ void AddFrequency(ptr1,ptr2)
 {
   BEGIN("AddFrequency")
   int i;
-  
+
   for(i=0;i<256;i++)
     {
       *(ptr1) = *(ptr1) + *(ptr2);
@@ -503,12 +503,12 @@ void PrintACEhuff(index)
   for(place=0,i=0;i<8;i++)
     {
       for(j=0;j<8;j++)
-	{
-	  printf("%2x:[%d:%d]:%d ",
-		 place,freq[place],eh->ehufsi[place],
-		 freq[place]*eh->ehufsi[place]);
-	  place++;
-	}
+  {
+    printf("%2x:[%d:%d]:%d ",
+     place,freq[place],eh->ehufsi[place],
+     freq[place]*eh->ehufsi[place]);
+    place++;
+  }
       printf("\n");
     }
 }
@@ -559,12 +559,12 @@ void PrintDCEhuff(index)
   for(place=0,i=0;i<8;i++)
     {
       for(j=0;j<8;j++)
-	{
-	  printf("%2x:[%d:%d]:%d ",
-		 place,freq[place],eh->ehufsi[place],
-		 freq[place]*eh->ehufsi[place]);
-	  place++;
-	}
+  {
+    printf("%2x:[%d:%d]:%d ",
+     place,freq[place],eh->ehufsi[place],
+     freq[place]*eh->ehufsi[place]);
+    place++;
+  }
       printf("\n");
     }
 }
@@ -679,10 +679,10 @@ int LosslessDecodeDC()
       printf("Raw DC Decode %d\n",coef);
 #endif
       if ((coef & bit_set_mask[s]) == 0)
-	{
-	  coef |= extend_mask[s];
-	  coef++;
-	}
+  {
+    coef |= extend_mask[s];
+    coef++;
+  }
       return(coef);
     }
   else return(0);

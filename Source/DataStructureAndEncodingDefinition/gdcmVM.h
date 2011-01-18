@@ -63,7 +63,7 @@ namespace gdcm
  * 30_30n
  * 28
  *
- * 6-6n 
+ * 6-6n
  */
 class GDCM_EXPORT VM
 {
@@ -110,7 +110,7 @@ public:
     VM_END = VM1_n + 1  // Custom tag to count number of entry
   } VMType;
 
-  /// Return the string as written in the official DICOM dict from 
+  /// Return the string as written in the official DICOM dict from
   /// a custom enum type
   static const char* GetVMString(VMType vm);
   static VMType GetVMType(const char *vm);
@@ -125,7 +125,7 @@ public:
   /// the dictionary, while the passed in value is the value guess from the file.
   bool Compatible(VM const &vm) const;
 
-  /// 
+  ///
   static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
   static unsigned int GetNumberOfElementsFromArray(const char *array, unsigned int length);
 

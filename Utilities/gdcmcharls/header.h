@@ -1,6 +1,6 @@
-// 
-// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use. 
-// 
+//
+// (C) Jan de Vaan 2007-2009, all rights reserved. See the accompanying "License.txt" for licensed use.
+//
 
 
 #ifndef CHARLS_HEADER
@@ -27,12 +27,12 @@ class JLSOutputStream;
 
 
 template<class STRATEGY>
-class JlsCodecFactory 
+class JlsCodecFactory
 {
-public:	
-	STRATEGY* GetCodec(const JlsParamaters& info, const JlsCustomParameters&);
+public:
+  STRATEGY* GetCodec(const JlsParamaters& info, const JlsCustomParameters&);
 private:
-	STRATEGY* GetCodecImpl(const JlsParamaters& info);
+  STRATEGY* GetCodecImpl(const JlsParamaters& info);
 };
 
 
@@ -42,10 +42,10 @@ private:
 class JpegSegment
 {
 protected:
-	JpegSegment() {}
+  JpegSegment() {}
 public:
-	virtual ~JpegSegment() {}
-	virtual void Write(JLSOutputStream* pstream) = 0;
+  virtual ~JpegSegment() {}
+  virtual void Write(JLSOutputStream* pstream) = 0;
 };
 
 #endif

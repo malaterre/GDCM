@@ -52,4 +52,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMIMAGEFRAGMENTSPLITTER_H
-

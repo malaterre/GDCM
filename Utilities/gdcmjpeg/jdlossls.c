@@ -53,7 +53,7 @@ start_input_pass (j_decompress_ptr cinfo)
  * This is called only once, during master selection.
  */
 
-GLOBAL(void) 
+GLOBAL(void)
 jinit_lossless_d_codec(j_decompress_ptr cinfo)
 {
   j_lossless_d_ptr losslsd;
@@ -62,7 +62,7 @@ jinit_lossless_d_codec(j_decompress_ptr cinfo)
   /* Create subobject in permanent pool */
   losslsd = (j_lossless_d_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				SIZEOF(jpeg_lossless_d_codec));
+        SIZEOF(jpeg_lossless_d_codec));
   cinfo->codec = (struct jpeg_d_codec *) losslsd;
 
   /* Initialize sub-modules */

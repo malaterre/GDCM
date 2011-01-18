@@ -22,4 +22,3 @@ ENDIF(WIN32)
 # http://public.kitware.com/Bug/view.php?id=7757
 GET_FILENAME_COMPONENT(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
 SET(CSharp_USE_FILE ${current_list_path}/UseCSharp.cmake)
-

@@ -51,7 +51,7 @@ public:
   } PIType; // PhotometricInterpretationType
 
   PhotometricInterpretation(PIType pi = UNKNOW):PIField(pi) {}
-  
+
   static const char *GetPIString(PIType pi);
 
   const char *GetString() const;
@@ -68,7 +68,7 @@ public:
   unsigned short GetSamplesPerPixel() const;
 
   // TODO
-  // not all PhotometricInterpretation are allowed for compressed Transfer 
+  // not all PhotometricInterpretation are allowed for compressed Transfer
   // syntax
   // static bool IsAllowedForCompressedTS(PIType pi);
 

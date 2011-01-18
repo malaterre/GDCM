@@ -22,7 +22,7 @@
  */
 
 #ifdef __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
 
@@ -38,5 +38,3 @@ int puff(unsigned char *dest,           /* pointer to destination pointer */
 #ifdef __cplusplus
 }  /* end extern "C" */
 #endif
-
-

@@ -38,7 +38,6 @@ if __name__ == "__main__":
       #print t.GetFileName(i)
       filename = t.GetFileName(i)
       sucess += TestImageRead( filename )
-  
+
   # Test succeed ?
   sys.exit(sucess == 0)
-

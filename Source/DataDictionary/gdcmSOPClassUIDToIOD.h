@@ -48,5 +48,3 @@ public:
 } // end namespace gdcm
 
 #endif //GDCMSOPCLASSUIDTOIOD_H
-
-

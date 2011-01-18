@@ -49,7 +49,7 @@ int TestVM(int, char *[])
 
   const char str8[] = "   ";
   unsigned int count8 = gdcm::VM::GetNumberOfElementsFromArray(str8, strlen(str8) );
-  if( count8 != 0 ) 
+  if( count8 != 0 )
     {
     std::cerr << "count8 failed" << std::endl;
     return 1;

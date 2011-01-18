@@ -34,11 +34,11 @@ namespace gdcm
  * ...
  * But also to retrieve the image as a raw buffer (char *)
  * Since we have to deal with both RAW data and JPEG stream (which
- * internally encode all the above information) this API might seems 
+ * internally encode all the above information) this API might seems
  * redundant. One way to solve that would be to subclass gdcm::Image
  * with gdcm::JPEGImage which would from the stream extract the header info
  * and fill it to please gdcm::Image...well except origin for instance
- * 
+ *
  * Basically you can see it as a storage for the Pixel Data element (7fe0,0010).
  *
  * \warning This class does some heuristics to guess the Spacing but is not
@@ -127,4 +127,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMIMAGE_H
-

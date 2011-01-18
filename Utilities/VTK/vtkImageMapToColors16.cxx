@@ -136,7 +136,7 @@ int vtkImageMapToColors16::RequestInformation (
 
   if (this->LookupTable == NULL)
     {
-    vtkInformation *scalarInfo = vtkDataObject::GetActiveFieldInformation(inInfo, 
+    vtkInformation *scalarInfo = vtkDataObject::GetActiveFieldInformation(inInfo,
       vtkDataObject::FIELD_ASSOCIATION_POINTS, vtkDataSetAttributes::SCALARS);
     if ( scalarInfo->Get(vtkDataObject::FIELD_ARRAY_TYPE()) != VTK_UNSIGNED_CHAR )
       {
@@ -291,8 +291,3 @@ void vtkImageMapToColors16::PrintSelf(ostream& os, vtkIndent indent)
     os << "(none)\n";
     }
 }
-
-
-
-
-

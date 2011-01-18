@@ -12,10 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * This example will show how one can read in two DICOM files, use the dataset
  * from file1 and use image from file2  to save it in a 3rd file.
- * 
+ *
  * Eg:
  * MergeTwoFiles gdcmData/012345.002.050.dcm gdcmData/test.acr merge.dcm
  */
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
   gdcm::ImageWriter writer;
   writer.SetFileName( file3 );
   writer.SetFile( reader1.GetFile() );
-  // ImageWriter will always use all of gdcm::Image information an override anything wrong from 
+  // ImageWriter will always use all of gdcm::Image information an override anything wrong from
   // reader1.GetFile(), including the Transfer Syntax
   writer.SetImage( reader2.GetImage() );
 
@@ -85,4 +85,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

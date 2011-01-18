@@ -47,8 +47,9 @@ ImageCodec::~ImageCodec()
 {
 }
 
-bool ImageCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+bool ImageCodec::GetHeaderInfo(std::istream &, TransferSyntax &)
 {
+  // This function should really be virtual pure.
   assert( 0 );
   return false;
 }
@@ -140,7 +141,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   // Code is coming from:
   // http://lestourtereaux.free.fr/papers/data/yuvrgb.pdf
   assert( !(buf_size % 3) );
-  unsigned long size = buf_size/3;
+  unsigned long size = (unsigned long)buf_size/3;
   unsigned char *copy = new unsigned char[ buf_size ];
   memmove( copy, dummy_buffer, buf_size);
 assert(0); // Do not use this code !
@@ -200,7 +201,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   // US-RGB-8-epicard.dcm
   //assert( image.GetNumberOfDimensions() == 3 );
   assert( buf_size % 3 == 0 );
-  unsigned long size = buf_size/3;
+  unsigned long size = (unsigned long)buf_size/3;
   char *copy = new char[ buf_size ];
   //memmove( copy, dummy_buffer, buf_size);
 
@@ -350,13 +351,13 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
           // gdcmData/D_CLUNIE_RG3_JPLY.dcm
           // stores a 12bits JPEG stream with scalar value [0,1024], however
           // the DICOM header says the data are stored on 10bits [0,1023], thus this HACK:
-          gdcmWarningMacro( "Bogus max value: "<< c << " max should be at most: " << mask 
+          gdcmWarningMacro( "Bogus max value: "<< c << " max should be at most: " << mask
             << " results will be truncated. Use at own risk");
           c = mask;
           }
-        assert( c <= mask ); 
+        assert( c <= mask );
         c = mask - c;
-        assert( c <= mask ); 
+        assert( c <= mask );
         os.write((char*)&c, 2);
         }
       }
@@ -392,7 +393,7 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
       smask =
         smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) );
       // nmask : to propagate sign bit on negative values
-      int16_t nmask = (int16_t)0x8000;  
+      int16_t nmask = (int16_t)0x8000;
       nmask = nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 );
 
       uint16_t c;
@@ -448,7 +449,7 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
   return true;
 }
 
-bool ImageCodec::Decode(DataElement const &is, DataElement &os)
+bool ImageCodec::Decode(DataElement const &, DataElement &)
 {
   return true;
 }
@@ -548,7 +549,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     // - XA_GE_JPEG_02_with_Overlays.dcm
     // - SIEMENS_GBS_III-16-ACR_NEMA_1.acr
     // Sigh, I finally found someone not declaring that unused bits where not zero:
-    // gdcmConformanceTests/dcm4chee_unusedbits_not_zero.dcm   
+    // gdcmConformanceTests/dcm4chee_unusedbits_not_zero.dcm
     if( NeedOverlayCleanup )
       DoOverlayCleanup(*cur_is,os);
     else

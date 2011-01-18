@@ -58,7 +58,7 @@
 
 #include "vtkGDCMTesting.h"
 
-// same for vtkGDCMImageReader / vtkGDCMImageWriter so that we get all 
+// same for vtkGDCMImageReader / vtkGDCMImageWriter so that we get all
 // parent's member class functions properly wrapped. (Update, SetFileName ...)
 #include "vtkAlgorithm.h"
 #include "vtkImageAlgorithm.h"
@@ -264,7 +264,7 @@ using Kitware.VTK;
 #endif //USEACTIVIZ
 
 #ifdef USEACTIVIZ
-// By hiding all New operator I make sure that no-one will ever be 
+// By hiding all New operator I make sure that no-one will ever be
 // able to create a swig wrap object I did not decide to allow.
 // For instance the only two objects allowed for now are:
 // - vtkGDCMImageReader
@@ -499,4 +499,3 @@ while we would want:
 %include "vtkVolumeReader.h"
 %include "vtkVolume16Reader.h"
 #endif
-

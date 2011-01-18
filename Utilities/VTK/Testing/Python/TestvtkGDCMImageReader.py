@@ -59,4 +59,3 @@ w2 = vtkgdcm.vtkGDCMImageWriter()
 w2.SetInput( jpegreader.GetOutput() )
 w2.SetFileName( "beach.dcm" )
 w2.Write()
-

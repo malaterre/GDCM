@@ -18,14 +18,14 @@
 
 namespace gdcm
 {
-  
+
 int TestFL()
 {
   Element<VR::FL, VM::VM1> a = { TPI };
   a.Print( std::cout );
   std::cout << std::endl;
 
-  Element<VR::FL, VM::VM8> b = 
+  Element<VR::FL, VM::VM8> b =
     { 0,1,2,3,4,5,6,7 };
   b.Print( std::cout );
   std::cout << std::endl;
@@ -50,7 +50,7 @@ int TestFD()
   //double t = *reinterpret_cast<const double*>(*s);
   //std::cout << t << std::endl;
 
-  Element<VR::FD, VM::VM8> b; 
+  Element<VR::FD, VM::VM8> b;
   double array[] = { 1,2,3,4,5,6,7,9 };
   b = reinterpret_cast<Element<VR::FD, VM::VM8>& >( array );
   b.Print( std::cout );
@@ -87,8 +87,8 @@ int TestUL()
 
 int TestAT()
 {
-  // = (0020,5000) : (0010,0010)\(0010,0020)\(0020,0013) 
-  Element<VR::AT, VM::VM3> a; 
+  // = (0020,5000) : (0010,0010)\(0010,0020)\(0020,0013)
+  Element<VR::AT, VM::VM3> a;
   Tag list[3];
   list[0] = Tag(0x0010,0x0010);
   list[1] = Tag(0x0010,0x0020);
@@ -97,7 +97,7 @@ int TestAT()
   a.Print( std::cout );
   std::cout << std::endl;
 
-  Element<VR::AT, VM::VM1_n> b; 
+  Element<VR::AT, VM::VM1_n> b;
   b.SetArray( list, sizeof(list), false);
   b.Print( std::cout );
   std::cout << std::endl;
@@ -187,4 +187,3 @@ int TestElement(int , char *[])
 
   return r;
 }
-

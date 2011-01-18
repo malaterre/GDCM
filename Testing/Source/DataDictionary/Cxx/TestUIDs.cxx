@@ -494,4 +494,3 @@ int TestUIDs(int, char *[])
 
   return 0;
 }
-

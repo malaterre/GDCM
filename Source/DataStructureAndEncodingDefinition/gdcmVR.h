@@ -23,6 +23,18 @@
 #include <fstream>
 #include <assert.h>
 
+//these defines are here to ensure compilation on sunos gcc
+#if defined (CS)
+# undef CS
+#endif
+#if defined (DS)
+# undef DS
+#endif
+#if defined (SS)
+# undef SS
+#endif
+
+
 namespace gdcm
 {
 
@@ -40,7 +52,7 @@ namespace gdcm
  * The field where the Value Representation of a Data Element is
  * stored in the encoding of a Data Element structure with explicit VR.
  */
-class GDCM_EXPORT VR 
+class GDCM_EXPORT VR
 {
 public:
   typedef enum {
@@ -105,14 +117,14 @@ public:
   //static bool IsValid(const VRType &vr1, const VRType &vr2);
   // Find out if the string read is byte swapped
   static bool IsSwap(const char *vr);
-  
+
   // Size read on disk
   // FIXME: int ?
   int GetLength() const {
     return VR::GetLength(VRField);
   }
   unsigned int GetSizeof() const;
-  static uint32_t GetLength(VRType vr) { 
+  static uint32_t GetLength(VRType vr) {
     //if( vr == VR::INVALID ) return 4;
     if( vr & VL32 )
       {
@@ -121,7 +133,7 @@ public:
     else
       return 2;
   }
-  
+
   // Some use of template metaprograming with ugly macro
   static bool IsBinary(VRType vr);
   static bool IsASCII(VRType vr);
@@ -131,7 +143,7 @@ public:
   static bool IsBinary2(VRType vr);
   // TODO: REMOVE ME
   static bool IsASCII2(VRType vr);
-  
+
   VR(VRType vr = INVALID):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
   std::istream &Read(std::istream &is)
@@ -220,7 +232,7 @@ template<int T> struct VRToType;
 
 
 // Do not use me
-struct UI { char Internal[64+1]; 
+struct UI { char Internal[64+1];
   friend std::ostream& operator<<(std::ostream &_os, const UI &_val);
 };
 inline std::ostream& operator<<(std::ostream &_os, const UI &_val)
@@ -279,9 +291,9 @@ TYPETOENCODING(UT,VRASCII ,UTComp)
 
 inline unsigned int VR::GetSize() const
 {
-	switch(VRField)
-	{
-		VRTypeTemplateCase(AE)
+  switch(VRField)
+  {
+    VRTypeTemplateCase(AE)
     VRTypeTemplateCase(AS)
     VRTypeTemplateCase(AT)
     VRTypeTemplateCase(CS)
@@ -310,10 +322,10 @@ inline unsigned int VR::GetSize() const
     VRTypeTemplateCase(UT)
     case VR::US_SS:
       return 2;
-		default:
-			 assert( 0 && "should not" );
-	}
-	return 0;
+    default:
+       assert( 0 && "should not" );
+  }
+  return 0;
 }
 #endif // SWIG
 
@@ -321,4 +333,3 @@ inline unsigned int VR::GetSize() const
 } // end namespace gdcm
 
 #endif //GDCMVR_H
-

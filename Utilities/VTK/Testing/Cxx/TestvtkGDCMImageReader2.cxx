@@ -30,7 +30,7 @@
 #define vtkFloatingPointType float
 #endif
 /*
- * Test to show the pipeline for 
+ * Test to show the pipeline for
  * IPPSorter -> vtkGDCMImageReader -> vtkImageChangeInformation
  */
 int TestvtkGDCMImageReader2(int , char *[])
@@ -137,7 +137,7 @@ int TestvtkGDCMImageReader2(int , char *[])
     std::cerr << "FilenameGenerator::Generate failed" << std::endl;
     return 1;
     }
-  if( !fg.GetNumberOfFilenames() ) 
+  if( !fg.GetNumberOfFilenames() )
     {
     std::cerr << "No filenames generated" << std::endl;
     return 1;

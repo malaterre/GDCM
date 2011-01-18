@@ -29,9 +29,9 @@
  * 2. YCC is set to 1, while image is grayscale need to set it back to 0
  *
  * Ref:
- * It's a software from http://rentgenprom.ru/ , shipped with universal digital radiographic units 
- * "ProScan-2000". The Ukrainian manufacturer developed own digital radiographic unit and it is 
- * compatible with software from "ProScan-2000". 
+ * It's a software from http://rentgenprom.ru/ , shipped with universal digital radiographic units
+ * "ProScan-2000". The Ukrainian manufacturer developed own digital radiographic unit and it is
+ * compatible with software from "ProScan-2000".
  */
 int main(int argc, char *argv[])
 {
@@ -124,4 +124,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

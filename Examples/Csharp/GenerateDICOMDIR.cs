@@ -16,7 +16,7 @@
 /*
  * Simple C# example to show how to use DICOMDIRGenerator
  *
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/GenerateDICOMDIR.exe path output_filename
  */

@@ -17,7 +17,7 @@ import gdcm
 import os,sys
 
 if __name__ == "__main__":
-  
+
   #gi = gdcm.GlobalInstance
   #print gi
   singleton = gdcm.Global.GetInstance()
@@ -33,4 +33,3 @@ if __name__ == "__main__":
 
   # Test succeed ?
   sys.exit(0)
-

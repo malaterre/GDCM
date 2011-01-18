@@ -18,6 +18,9 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
+#ifdef GDCM_WORDS_BIGENDIAN
+#include "gdcmTagToVR.h"
+#endif
 
 namespace gdcm
 {
@@ -26,9 +29,16 @@ namespace gdcm
 template <typename TSwap>
 std::istream &ImplicitDataElement::Read(std::istream &is)
 {
+  TagField.Read<TSwap>(is);
+  return ReadValue<TSwap>(is);
+}
+
+template <typename TSwap>
+std::istream &ImplicitDataElement::ReadValue(std::istream &is)
+{
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
-  if( !TagField.Read<TSwap>(is) )
+  if( !is )
     {
     if( !is.eof() ) // FIXME This should not be needed
       assert(0 && "Should not happen");
@@ -136,18 +146,17 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
           gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
             "TransferSyntax=Implicit for tag: " << TagField );
           }
-        catch( Exception &ex )
+        catch( Exception & )
           {
           // MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm
           std::streampos current = is.tellg();
-          int diff = start - current;
+          std::streamoff diff = start - current;
           is.seekg( diff, std::ios::cur );
           assert( diff == -14 );
           ValueIO<ImplicitDataElement,SwapperDoOp>::Read(is,*ValueField);
           }
-        catch( std::exception &ex )
+        catch( std::exception & )
           {
-          (void)ex;
           ValueLengthField = ValueField->GetLength();
           }
         return is;
@@ -199,7 +208,43 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+  bool failed;
+#ifdef GDCM_WORDS_BIGENDIAN
+  VR vrfield = GetVRFromTag( TagField );
+  if( vrfield & VR::VRASCII || vrfield == VR::INVALID )
+    {
+    //assert( VRField.GetSize() == 1 );
+    failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
+    }
+  else
+    {
+    assert( vrfield & VR::VRBINARY );
+    unsigned int vrsize = vrfield.GetSize();
+    assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+    if(vrfield==VR::AT) vrsize = 2;
+    switch(vrsize)
+      {
+    case 1:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      break;
+    case 2:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      break;
+    case 4:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      break;
+    case 8:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      break;
+    default:
+    failed = true;
+      assert(0);
+      }
+    }
+#else
+  failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
+#endif
+  if( failed )
     {
     // Special handling for PixelData tag:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -217,8 +262,8 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     }
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it 
-  // as long as each of the Item lengths are correct
+  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly
+  // recompute it as long as each of the Item lengths are correct
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
     {
@@ -347,18 +392,17 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
           gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
             "TransferSyntax=Implicit for tag: " << TagField );
           }
-        catch( Exception &ex )
+        catch( Exception &)
           {
           // MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm
           std::streampos current = is.tellg();
-          int diff = start - current;
+          std::streamoff diff = start - current;//could be bad, if the specific implementation does not support negative streamoff values.
           is.seekg( diff, std::ios::cur );
           assert( diff == -14 );
           ValueIO<ImplicitDataElement,SwapperDoOp>::Read(is,*ValueField);
           }
-        catch( std::exception &ex )
+        catch( std::exception & )
           {
-          (void)ex;
           ValueLengthField = ValueField->GetLength();
           }
         return is;
@@ -411,7 +455,44 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+  bool failed;
+#ifdef GDCM_WORDS_BIGENDIAN
+  VR vrfield = GetVRFromTag( TagField );
+  if( vrfield & VR::VRASCII || vrfield == VR::INVALID )
+    {
+    //assert( VRField.GetSize() == 1 );
+    failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
+    }
+  else
+    {
+    assert( vrfield & VR::VRBINARY );
+    unsigned int vrsize = vrfield.GetSize();
+    assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+    if(vrfield==VR::AT) vrsize = 2;
+    switch(vrsize)
+      {
+    case 1:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      break;
+    case 2:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      break;
+    case 4:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      break;
+    case 8:
+      failed = !ValueIO<ImplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      break;
+    default:
+    failed = true;
+      assert(0);
+      }
+    }
+#else
+  failed = !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField);
+#endif
+  if( failed )
+  //if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     // Special handling for PixelData tag:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -429,7 +510,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
     }
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it 
+  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it
   // as long as each of the Item lengths are correct
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
@@ -442,7 +523,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
   assert( VRField == VR::INVALID );
 #endif
 
-  return is;  
+  return is;
 }
 
 //-----------------------------------------------------------------------------

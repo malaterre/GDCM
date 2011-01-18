@@ -31,7 +31,7 @@ class GDCM_EXPORT LookupTable : public Object
 {
 public:
   typedef enum {
-    RED = 0,  // Keep RED == 0 
+    RED = 0,  // Keep RED == 0
     GREEN,
     BLUE,
     GRAY,
@@ -45,6 +45,7 @@ public:
   /// Allocate the LUT
   void Allocate( unsigned short bitsample = 8 );
   /// Generic interface:
+  //TODO: check to see if length should be unsigned short, unsigned int, or whatever
   void InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize);
   unsigned int GetLUTLength(LookupTableType type) const;

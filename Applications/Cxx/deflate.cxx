@@ -33,7 +33,7 @@ int inf(FILE *source, FILE *dest)
     ret = inflateInit2(&strm, -MAX_WBITS);
     if (ret != Z_OK)
     {
-	std::cout << "could not inflateInit" << std::endl;
+  std::cout << "could not inflateInit" << std::endl;
         return ret;
     }
 
@@ -103,14 +103,14 @@ void zerr(int ret)
 
 int main()
 {
-	FILE *input;
-	FILE *output;
-	input = fopen("deflat.gz","r");
-	output = fopen("deflat.dcm","w");
-	if(!input) std::cout << "no input" << std::endl;
-	if(!output) std::cout << "no output" << std::endl;
+  FILE *input;
+  FILE *output;
+  input = fopen("deflat.gz","r");
+  output = fopen("deflat.dcm","w");
+  if(!input) std::cout << "no input" << std::endl;
+  if(!output) std::cout << "no output" << std::endl;
 int r = inf(input, output);
 //std::cout << strerror( errno) << std::endl;
 // zerr(r) ;
-	 return r;
+   return r;
 }

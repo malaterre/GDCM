@@ -58,7 +58,7 @@ int TestFileDerive(const char *subdir, const char* filename)
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
     }
- 
+
   // now let's try to read it back in:
   Reader reader2;
   reader2.SetFileName( outfilename.c_str() );
@@ -92,4 +92,3 @@ int TestFileDerivation( int argc, char *argv[])
   return r;
   return 0;
 }
-

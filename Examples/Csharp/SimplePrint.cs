@@ -15,11 +15,11 @@
 /*
   Convertor convertor = new Convertor();
   int a = convertor.Convert<int>( some_int_blob );
-  double b = convertor.Convert<double>( some_double_blob ); 
+  double b = convertor.Convert<double>( some_double_blob );
 */
 
 /*
- * Usage: 
+ * Usage:
  * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
  * $ mono bin/SimplePrint.exe gdcmData/012345.002.050.dcm
  */
@@ -78,4 +78,3 @@ public class SimplePrint
     return 0;
     }
 }
-

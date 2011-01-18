@@ -47,7 +47,7 @@ public:
 
   const TableEntry &GetTableEntry(const Tag &tag) const
     {
-    MapTableEntry::const_iterator it = 
+    MapTableEntry::const_iterator it =
       TableInternal.find(tag);
     if (it == TableInternal.end())
       {

@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  */
 #include "gdcmSorter.h"
 #include "gdcmScanner.h"
@@ -22,7 +22,7 @@
 
 bool mysort(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
 {
-  //gdcm::Attribute<0x0020,0x0013> at1; // Instance Number 
+  //gdcm::Attribute<0x0020,0x0013> at1; // Instance Number
   gdcm::Attribute<0x0018,0x1060> at1; // Trigger Time
   gdcm::Attribute<0x0020,0x0032> at11; // Image Position (Patient)
   at1.Set( ds1 );
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
   unsigned int nfiles = dir.Load( dirname );
 
   dir.Print( std::cout );
-  
+
   gdcm::Sorter sorter;
   sorter.SetSortFunction( mysort );
   sorter.Sort( dir.GetFilenames() );
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   const gdcm::Scanner::ValuesType &values = s.GetValues();
   unsigned int nvalues = values.size();
   std::cout << "There are " << nvalues << " different type of values" << std::endl;
-  
+
   //std::cout << "nfiles=" << nfiles << std::endl;
   if( nfiles % nvalues != 0 )
     {
@@ -116,4 +116,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-

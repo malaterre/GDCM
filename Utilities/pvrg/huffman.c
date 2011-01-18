@@ -124,41 +124,41 @@ static void CodeSize()
       least_value_index = next_least_value_index = -1;
       cfip = frequency;
       for(i=0;i<257;i++)                      /* Find two smallest values */
-	{
-	  if (*cfip)
-	    {
-	      if (*cfip <= least_value)
-		{
-		  next_least_value = least_value;
-		  least_value = *cfip;
-		  next_least_value_index = least_value_index;
-		  least_value_index = i;
-		}
-	      else if (*cfip <= next_least_value)
-		{
-		  next_least_value = *cfip;
-		  next_least_value_index = i;
-		}
-	    }
-	  cfip++;
-	}
+  {
+    if (*cfip)
+      {
+        if (*cfip <= least_value)
+    {
+      next_least_value = least_value;
+      least_value = *cfip;
+      next_least_value_index = least_value_index;
+      least_value_index = i;
+    }
+        else if (*cfip <= next_least_value)
+    {
+      next_least_value = *cfip;
+      next_least_value_index = i;
+    }
+      }
+    cfip++;
+  }
       if (next_least_value_index == -1)      /* If only one value, finished */
-	{
-	  break;
-	}
+  {
+    break;
+  }
       frequency[least_value_index] += frequency[next_least_value_index];
       frequency[next_least_value_index] = 0;
       codesize[least_value_index]++;
       while(others[least_value_index] != -1)
-	{
-	  least_value_index = others[least_value_index];
-	  codesize[least_value_index]++;
-	}
+  {
+    least_value_index = others[least_value_index];
+    codesize[least_value_index]++;
+  }
       others[least_value_index] = next_least_value_index;
       do
-	{
-	  codesize[next_least_value_index]++;
-	}
+  {
+    codesize[next_least_value_index]++;
+  }
       while((next_least_value_index = others[next_least_value_index]) != -1);
     }
 }
@@ -179,9 +179,9 @@ static void CountBits()
   for(csptr=codesize+256;csptr>=codesize;csptr--)
     {
       if (*csptr)
-	{
-	  Xhuff->bits[*csptr]++;
-	}
+  {
+    Xhuff->bits[*csptr]++;
+  }
     }
 }
 
@@ -201,19 +201,19 @@ static void AdjustBits()
   while(1)
     {
       if (Xhuff->bits[i]>0)
-	{
-	  j = i-1;
-	  while(!Xhuff->bits[--j]);  /* Change from JPEG Manual */
-	  Xhuff->bits[i] -= 2;       /* Remove 2 of the longest hufco */
-	  Xhuff->bits[i-1]++;        /* Add one hufco to its prefix */
-	  Xhuff->bits[j]--;          /* Remove hufco from next length */
-	  Xhuff->bits[j+1] += 2;     /* to be prefix to one hufco */
-	}                            /* from j term and the one */
+  {
+    j = i-1;
+    while(!Xhuff->bits[--j]);  /* Change from JPEG Manual */
+    Xhuff->bits[i] -= 2;       /* Remove 2 of the longest hufco */
+    Xhuff->bits[i-1]++;        /* Add one hufco to its prefix */
+    Xhuff->bits[j]--;          /* Remove hufco from next length */
+    Xhuff->bits[j+1] += 2;     /* to be prefix to one hufco */
+  }                            /* from j term and the one */
                                      /* hufco from the i (longest) term.*/
       else if (--i==16)
-	{
-	  break;
-	}
+  {
+    break;
+  }
     }
   while(!Xhuff->bits[i])             /* If fortunate enough not to use */
     {                                /* any 16 bit codes, then find out */
@@ -239,12 +239,12 @@ static void SortInput()
   for(p=0,i=1;i<33;i++)  /* Designate a length in i. */
     {
       for(j=0;j<256;j++) /* Find all codes with a given length. */
-	{
-	  if (codesize[j]==i)
-	    {
-	      Xhuff->huffval[p++] = j;  /* Add that value to be associated */
-	    }                           /* with the next largest code. */
-	}
+  {
+    if (codesize[j]==i)
+      {
+        Xhuff->huffval[p++] = j;  /* Add that value to be associated */
+      }                           /* with the next largest code. */
+  }
     }
 }
 
@@ -264,9 +264,9 @@ static void SizeTable()
   for(p=0,i=1;i<17;i++)
     {
       for(j=1;j<=Xhuff->bits[i];j++)
-	{
-	  huffsize[p++] = i;
-	}
+  {
+    huffsize[p++] = i;
+  }
     }
   huffsize[p] = 0;
   lastp = p;
@@ -290,19 +290,19 @@ static void CodeTable()
   while(1)
     {
       do
-	{
-	  huffcode[p++] = code++;
-	}
+  {
+    huffcode[p++] = code++;
+  }
       while((huffsize[p]==size)&&(p<257)); /* Overflow Detection */
       if (!huffsize[p]) /* All finished. */
-	{
-	  break;
-	}
+  {
+    break;
+  }
       do                /* Shift next code to expand prefix. */
-	{
-	  code <<= 1;
-	  size++;
-	}
+  {
+    code <<= 1;
+    size++;
+  }
       while(huffsize[p] != size);
     }
 }
@@ -345,18 +345,18 @@ static void DecoderTables()
   for(Dhuff->ml=1,p=0,l=1;l<=16;l++)
     {
       if (Xhuff->bits[l]==0)
-	{
-	  Dhuff->maxcode[l] = -1; /* Watch out JPEG is wrong here */
-	}                         /* We use -1 to indicate skipping. */
+  {
+    Dhuff->maxcode[l] = -1; /* Watch out JPEG is wrong here */
+  }                         /* We use -1 to indicate skipping. */
       else
-	{
-	  Dhuff->valptr[l]=p;
-	  Dhuff->mincode[l]=huffcode[p];
-	  p+=Xhuff->bits[l]-1;
-	  Dhuff->maxcode[l]=huffcode[p];
-	  Dhuff->ml = l;
-	  p++;
-	}
+  {
+    Dhuff->valptr[l]=p;
+    Dhuff->mincode[l]=huffcode[p];
+    p+=Xhuff->bits[l]-1;
+    Dhuff->maxcode[l]=huffcode[p];
+    Dhuff->ml = l;
+    p++;
+  }
     }
   Dhuff->maxcode[Dhuff->ml]++;
 }
@@ -463,10 +463,10 @@ void ReadHuffman()
     {
       printf("Huffman Read In:\n");
       for(i=1;i<=16;i++)
-	{
-	  printf("DHUFF->MAXCODE DHUFF->MINCODE DHUFF->VALPTR %d %d %d\n",
-		 Dhuff->maxcode[i],Dhuff->mincode[i],Dhuff->valptr[i]);
-	}
+  {
+    printf("DHUFF->MAXCODE DHUFF->MINCODE DHUFF->VALPTR %d %d %d\n",
+     Dhuff->maxcode[i],Dhuff->mincode[i],Dhuff->valptr[i]);
+  }
     }
 }
 
@@ -485,14 +485,14 @@ void WriteHuffman()
   if (Xhuff)
     {
       for(accum=0,i=1;i<=16;i++)
-	{
-	  bputc(Xhuff->bits[i]);
-	  accum += Xhuff->bits[i];
-	}
+  {
+    bputc(Xhuff->bits[i]);
+    accum += Xhuff->bits[i];
+  }
       for(i=0;i<accum;i++)
-	{
-	  bputc(Xhuff->huffval[i]);
-	}
+  {
+    bputc(Xhuff->huffval[i]);
+  }
     }
   else
     {
@@ -523,21 +523,21 @@ int DecodeHuffman()
   for(l=1;code>Dhuff->maxcode[l];l++)
     {
       if (Loud > WHISPER)
-	{
-	  WHEREAMI();
-	  printf("CurrentCode=%d Length=%d Dhuff->Maxcode=%d\n",
-		 code,l,Dhuff->maxcode[l]);
-	}
+  {
+    WHEREAMI();
+    printf("CurrentCode=%d Length=%d Dhuff->Maxcode=%d\n",
+     code,l,Dhuff->maxcode[l]);
+  }
       code= (code<<1)+fgetb();
     }
   if(code<Dhuff->maxcode[Dhuff->ml])
     {
       p = Dhuff->valptr[l] + code - Dhuff->mincode[l];
       if (Loud > WHISPER)
-	{
-	  WHEREAMI();
-	  printf("HuffmanDecoded code: %d  value: %d\n",p,Xhuff->huffval[p]);
-	}
+  {
+    WHEREAMI();
+    printf("HuffmanDecoded code: %d  value: %d\n",p,Xhuff->huffval[p]);
+  }
       return(Xhuff->huffval[p]);
     }
   else
@@ -565,7 +565,7 @@ void EncodeHuffman(value)
     {
       WHEREAMI();
       printf("HUFFMAN_OUTPUT value=%d Ehuff->ehufsi=%d Ehuff->ehufco=%d\n",
-	     value,Ehuff->ehufsi[value],Ehuff->ehufco[value]);
+       value,Ehuff->ehufsi[value],Ehuff->ehufco[value]);
     }
   if (!Ehuff)
     {
@@ -740,14 +740,14 @@ void PrintHuffman()
       printf("Xhuff ID: %p\n",(void*)Xhuff);
       printf("Bits: [length:number]\n");
       for(i=1;i<9;i++)
-	{
-	  printf("[%d:%d]",i,Xhuff->bits[i]);
-	}
+  {
+    printf("[%d:%d]",i,Xhuff->bits[i]);
+  }
       printf("\n");
       for(i=9;i<17;i++)
-	{
-	  printf("[%d:%d]",i,Xhuff->bits[i]);
-	}
+  {
+    printf("[%d:%d]",i,Xhuff->bits[i]);
+  }
       printf("\n");
 
       printf("Huffval:\n");
@@ -767,40 +767,40 @@ void PrintHuffman()
       printf("MaxLength: %d\n",Dhuff->ml);
       printf("[index:MaxCode:MinCode:ValPtr]\n");
       for(i=1;i<5;i++)
-	{
-	  printf("[%d:%2x:%2x:%2x]",
-		 i,
-		 Dhuff->maxcode[i],
-		 Dhuff->mincode[i],
-		 Dhuff->valptr[i]);
-	}
+  {
+    printf("[%d:%2x:%2x:%2x]",
+     i,
+     Dhuff->maxcode[i],
+     Dhuff->mincode[i],
+     Dhuff->valptr[i]);
+  }
       printf("\n");
       for(i=5;i<9;i++)
-	{
-	  printf("[%d:%2x:%2x:%2x]",
-		 i,
-		 Dhuff->maxcode[i],
-		 Dhuff->mincode[i],
-		 Dhuff->valptr[i]);
-	}
+  {
+    printf("[%d:%2x:%2x:%2x]",
+     i,
+     Dhuff->maxcode[i],
+     Dhuff->mincode[i],
+     Dhuff->valptr[i]);
+  }
       printf("\n");
       for(i=9;i<13;i++)
-	{
-	  printf("[%d:%2x:%2x:%2x]",
-		 i,
-		 Dhuff->maxcode[i],
-		 Dhuff->mincode[i],
-		 Dhuff->valptr[i]);
-	}
+  {
+    printf("[%d:%2x:%2x:%2x]",
+     i,
+     Dhuff->maxcode[i],
+     Dhuff->mincode[i],
+     Dhuff->valptr[i]);
+  }
       printf("\n");
       for(i=13;i<17;i++)
-	{
-	  printf("[%d:%2x:%2x:%2x]",
-		 i,
-		 Dhuff->maxcode[i],
-		 Dhuff->mincode[i],
-		 Dhuff->valptr[i]);
-	}
+  {
+    printf("[%d:%2x:%2x:%2x]",
+     i,
+     Dhuff->maxcode[i],
+     Dhuff->mincode[i],
+     Dhuff->valptr[i]);
+  }
       printf("\n");
     }
 }
@@ -821,9 +821,9 @@ void PrintTable(table)
   for(i=0;i<16;i++)
     {
       for(j=0;j<16;j++)
-	{
-	  printf("%2x ",*(table++));
-	}
+  {
+    printf("%2x ",*(table++));
+  }
       printf("\n");
     }
 }

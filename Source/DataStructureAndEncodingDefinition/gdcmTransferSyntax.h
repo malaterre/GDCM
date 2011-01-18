@@ -142,4 +142,3 @@ inline std::ostream &operator<<(std::ostream &_os, const TransferSyntax &ts)
 } // end namespace gdcm
 
 #endif //GDCMTRANSFERSYNTAX_H
-

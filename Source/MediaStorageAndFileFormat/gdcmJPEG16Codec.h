@@ -19,7 +19,7 @@
 
 namespace gdcm
 {
-  
+
 class JPEGInternals;
 class ByteValue;
 /**

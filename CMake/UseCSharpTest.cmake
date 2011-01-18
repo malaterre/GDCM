@@ -6,7 +6,7 @@
 # Since cmake is only transmitting the ADD_TEST line to ctest thus you are loosing
 # the env var. The only way to store the env var is to physically write in the cmake script
 # whatever PYTHONPATH you want and then add the test as 'cmake -P python_test.cmake'
-# 
+#
 # Usage:
 # SET_SOURCE_FILES_PROPERTIES(test.py PROPERTIES PYTHONPATH
 #   "${LIBRARY_OUTPUT_PATH}:${VTK_DIR}")
@@ -33,9 +33,9 @@ MACRO(ADD_CSHARP_TEST TESTNAME FILENAME)
       SET(pyenv "${pyenv};${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}")
     ELSE(pyenv)
       SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE})
-	    #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
-	    #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CONFIG_TYPE})
-	    #SET(pyenv ${LIBRARY_OUTPUT_PATH}/\${CMAKE_CONFIG_TYPE})
+      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
+      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CONFIG_TYPE})
+      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/\${CMAKE_CONFIG_TYPE})
     ENDIF(pyenv)
   ELSE(CMAKE_CONFIGURATION_TYPES)
     IF(pyenv)
@@ -52,13 +52,13 @@ MACRO(ADD_CSHARP_TEST TESTNAME FILENAME)
   #MESSAGE(\"pyenv: ${pyenv}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   EXECUTE_PROCESS(
-  	COMMAND ${CMAKE_CSHARP_INTERPRETER} ${loc} ${wo_semicolumn}
-  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
-  	RESULT_VARIABLE import_res
-  	OUTPUT_VARIABLE import_output
-  	ERROR_VARIABLE  import_output
-  )
-  
+    COMMAND ${CMAKE_CSHARP_INTERPRETER} ${loc} ${wo_semicolumn}
+    #WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
+    RESULT_VARIABLE import_res
+    OUTPUT_VARIABLE import_output
+    ERROR_VARIABLE  import_output
+    )
+
   # Pass the output back to ctest
   IF(import_output)
     MESSAGE("\${import_output}")

@@ -46,7 +46,7 @@ def TestKakadu(filename, kdu_expand):
   # now need to skip the ppm header:
   dd_cmd = 'dd bs=15 skip=1 if=%s of = %s'%(output_ppm,output_raw)
   #print "ret:",ret
-  md5 = gdcm.Testing.ComputeFileMD5( output_raw ) 
+  md5 = gdcm.Testing.ComputeFileMD5( output_raw )
   # ok this is the md5 as computed after decompression using kdu_expand
   # let see if it match out previously (stored) md5:
   ref = gdcm.Testing.GetMD5FromFile(filename)
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     j2ksubdir = 'TestImageChangeTransferSyntax2' # FIXME hardcoded !
     nfiles = d.Load( tempdir + '/' + j2ksubdir )
     # make sure the output dir for temporary j2k files exists:
-    md = gdcm.System.MakeDirectory( tempdir + '/' + j2ksubdir + '/kakadu' ); 
+    md = gdcm.System.MakeDirectory( tempdir + '/' + j2ksubdir + '/kakadu' );
     if not md:
       sys.exit(1)
     files = d.GetFilenames()
@@ -94,4 +94,3 @@ if __name__ == "__main__":
 
     # Test succeed ?
     sys.exit(sucess)
-

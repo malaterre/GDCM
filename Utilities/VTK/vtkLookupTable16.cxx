@@ -54,7 +54,7 @@ void vtkLookupTable16::SetNumberOfTableValues(vtkIdType number)
 
 //----------------------------------------------------------------------------
 // Apply shift/scale to the scalar value v and do table lookup.
-inline unsigned short *vtkLinearLookup16(double v,   
+inline unsigned short *vtkLinearLookup16(double v,
                                       unsigned short *table,
                                       double maxIndex,
                                       double shift, double scale)
@@ -79,7 +79,7 @@ void vtkLookupTableLogRange16(double range[2], double logRange[2])
 assert(0);
 }
 
-inline double vtkApplyLogScale16(double v, double range[2], 
+inline double vtkApplyLogScale16(double v, double range[2],
                                double logRange[2])
 {
 assert(0);
@@ -87,8 +87,8 @@ assert(0);
 }
 
 template<class T>
-void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input, 
-                           unsigned short *output, int length, 
+void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
+                           unsigned short *output, int length,
                            int inIncr, int outFormat)
 {
   int i = length;
@@ -99,7 +99,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
   unsigned short *cptr;
   double alpha;
 
-  if ( (alpha=self->GetAlpha()) >= 1.0 ) //no blending required 
+  if ( (alpha=self->GetAlpha()) >= 1.0 ) //no blending required
     {
     if (self->GetScale() == VTK_SCALE_LOG10)
       {
@@ -119,23 +119,23 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       if (outFormat == VTK_RGBA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
-          *output++ = *cptr++;     
+          *output++ = *cptr++;
           input += inIncr;
           }
         }
       else if (outFormat == VTK_RGB)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
@@ -144,11 +144,11 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else if (outFormat == VTK_LUMINANCE_ALPHA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           *output++ = cptr[3];
           input += inIncr;
@@ -156,11 +156,11 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else // outFormat == VTK_LUMINANCE
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
@@ -183,21 +183,21 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
 
       if (outFormat == VTK_RGBA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
-          *output++ = *cptr++;     
+          *output++ = *cptr++;
           input += inIncr;
           }
         }
       else if (outFormat == VTK_RGB)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
@@ -206,10 +206,10 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else if (outFormat == VTK_LUMINANCE_ALPHA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           *output++ = cptr[3];
           input += inIncr;
@@ -217,10 +217,10 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else // outFormat == VTK_LUMINANCE
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
@@ -248,10 +248,10 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       if (outFormat == VTK_RGBA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
@@ -261,10 +261,10 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else if (outFormat == VTK_RGB)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
@@ -273,11 +273,11 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else if (outFormat == VTK_LUMINANCE_ALPHA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           *output++ = static_cast<unsigned short>(alpha*cptr[3]);
           input += inIncr;
@@ -285,11 +285,11 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else // outFormat == VTK_LUMINANCE
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
           val = vtkApplyLogScale16(*input, range, logRange);
-          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
@@ -312,9 +312,9 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
 
       if (outFormat == VTK_RGBA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
@@ -324,9 +324,9 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else if (outFormat == VTK_RGB)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
@@ -335,10 +335,10 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else if (outFormat == VTK_LUMINANCE_ALPHA)
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           *output++ = static_cast<unsigned short>(cptr[3]*alpha);
           input += inIncr;
@@ -346,10 +346,10 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         }
       else // outFormat == VTK_LUMINANCE
         {
-        while (--i >= 0) 
+        while (--i >= 0)
           {
-          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale);
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 +
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
@@ -359,9 +359,9 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
 }
 
 //----------------------------------------------------------------------------
-void vtkLookupTable16::MapScalarsThroughTable2(void *input, 
+void vtkLookupTable16::MapScalarsThroughTable2(void *input,
                                              unsigned char *output,
-                                             int inputDataType, 
+                                             int inputDataType,
                                              int numberOfValues,
                                              int inputIncrement,
                                              int outputFormat)
@@ -416,7 +416,7 @@ assert(0);
       return;
     }
 }
- 
+
 void vtkLookupTable16::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);

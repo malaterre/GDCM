@@ -18,22 +18,22 @@
  * not specify this particular encoding).
  * This is required for the sake of interoperability with any standard
  * conforming DICOM system.
- * 
- * Everything done in this code is for the sole purpose of writing interoperable 
+ *
+ * Everything done in this code is for the sole purpose of writing interoperable
  * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
- * If you believe anything in this code violates any law or any of your rights, 
- * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
- * find a solution. 
+ * If you believe anything in this code violates any law or any of your rights,
+ * please contact us (gdcm-developers@lists.sourceforge.net) so that we can
+ * find a solution.
  *
  * Everything you do with this code is at your own risk, since decompression
  * algorithm was not written from specification documents.
  *
  * Special thanks to:
- * Mauro Maiorca for bringing to our attention on this new ELSCINT1 
+ * Mauro Maiorca for bringing to our attention on this new ELSCINT1
  * compression algorithm : PMSCT_RLE1 (different from the 'LOSSLESS RICE')
  * See post at:
  * http://groups.google.com/group/comp.protocols.dicom/msg/f2b99bf706a7f8ca
- * 
+ *
  * Thanks to Jesus Spinola, for more datasets,
  * http://www.itk.org/pipermail/insight-users/2008-April/025571.html
  *
@@ -122,7 +122,7 @@ int main(int argc, char *argv [])
   const gdcm::ByteValue * bv = compressiontype.GetByteValue();
   std::string comp = "PMSCT_RLE1";
   if( strncmp( bv->GetPointer(), comp.c_str(), comp.size() ) != 0 ) return 1;
-  
+
   const gdcm::PrivateTag tcompressedpixeldata(0x07a1,0x000a,"ELSCINT1");
   if( !ds.FindDataElement( tcompressedpixeldata) ) return 1;
   const gdcm::DataElement& compressionpixeldata = ds.GetDataElement( tcompressedpixeldata);
@@ -165,4 +165,3 @@ int main(int argc, char *argv [])
 
   return 0;
 }
-

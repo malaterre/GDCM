@@ -32,7 +32,7 @@ class MediaStorage;
  *
  * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of
  * attribute that belong to what gdcm calls a 'Pixmap'
- * 
+ *
  * \see Pixmap
  */
 class GDCM_EXPORT PixmapReader : public Reader
@@ -44,7 +44,7 @@ public:
   /// Read the DICOM image. There are two reason for failure:
   /// 1. The input filename is not DICOM
   /// 2. The input DICOM file does not contains an Pixmap.
-  
+
   bool Read();
 
   // Following methods are valid only after a call to 'Read'
@@ -58,7 +58,7 @@ protected:
   const ByteValue* GetPointerFromElement(Tag const &tag) const;
   virtual bool ReadImage(MediaStorage const &ms);
   virtual bool ReadACRNEMAImage();
-  
+
   SmartPointer<Pixmap> PixelData;
 };
 
@@ -70,4 +70,3 @@ protected:
 } // end namespace gdcm
 
 #endif //GDCMPIXMAPREADER_H
-

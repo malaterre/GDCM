@@ -43,8 +43,8 @@ class GDCM_EXPORT Type
 {
 public:
   typedef enum {
-	  T1 = 0,
-	  T1C,
+    T1 = 0,
+    T1C,
     T2,
     T2C,
     T3,

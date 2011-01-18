@@ -49,7 +49,7 @@ def gdcm_to_numpy(image):
     """Converts a GDCM image to a numpy array.
     """
     pf = image.GetPixelFormat()
-    
+
     assert pf.GetScalarType() in get_gdcm_to_numpy_typemap().keys(), \
            "Unsupported array type %s"%pf
 
@@ -73,4 +73,3 @@ if __name__ == "__main__":
 
   numpy_array = gdcm_to_numpy( r.GetImage() )
   print numpy_array
-

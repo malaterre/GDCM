@@ -73,7 +73,7 @@ int TestWrite2(const char *subdir, const char* filename, bool recursing)
   xde.SetVR( VR::UI );
   xde.SetTag( Tag(0x0008,0x0018) );
   reader.GetFile().GetDataSet().Insert( xde );
- 
+
 
   Writer writer;
   writer.SetFileName( outfilename.c_str() );

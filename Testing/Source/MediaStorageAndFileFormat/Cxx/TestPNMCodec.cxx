@@ -21,4 +21,3 @@ int TestPNMCodec(int, char *[])
   pnm.CanDecode( gdcm::TransferSyntax::ImplicitVRLittleEndian );
   return 0;
 }
-

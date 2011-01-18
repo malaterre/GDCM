@@ -59,4 +59,3 @@ int TestPDBHeader(int , char *[])
 
   return ret;
 }
-

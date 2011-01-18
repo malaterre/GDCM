@@ -118,14 +118,14 @@ public:
   } MSType; // Media Storage Type
 
 typedef enum {
-	  NoObject = 0, // DICOMDIR
-	  Video, // Most common, include image, video and volume
-	  Waveform, // Isn't it simply a 1D video ?
-	  Audio, // ???
-	  PDF,
-	  URI, // URL...
-	  Segmentation, // TODO
-	  ObjectEnd
+    NoObject = 0, // DICOMDIR
+    Video, // Most common, include image, video and volume
+    Waveform, // Isn't it simply a 1D video ?
+    Audio, // ???
+    PDF,
+    URI, // URL...
+    Segmentation, // TODO
+    ObjectEnd
   } ObjectType;
 
   /// Return the Media String associated. Will return NULL for MS_END
@@ -138,7 +138,7 @@ typedef enum {
   MediaStorage(MSType type = MS_END):MSField(type) {}
 
   /// Returns whether DICOM has a Pixel Data element (7fe0,0010)
-  /// \warning MRSpectroscopyStorage could be image but are not 
+  /// \warning MRSpectroscopyStorage could be image but are not
   static bool IsImage(MSType ts);
 
   operator MSType () const { return MSField; }
@@ -152,7 +152,7 @@ typedef enum {
 
   /// Attempt to set the MediaStorage from a file:
   /// WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
-  /// then MediaStorage is set to the default SecondaryCaptureImageStorage (return value is 
+  /// then MediaStorage is set to the default SecondaryCaptureImageStorage (return value is
   /// false in this case)
   bool SetFromFile(File const &file);
 

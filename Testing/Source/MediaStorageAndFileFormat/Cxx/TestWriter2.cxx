@@ -25,7 +25,7 @@ int TestWriter2(int argc, char *argv[])
     return 1;
     }
 
-  
+
   Writer writer;
   writer.SetFileName( outfilename );
   writer.SetFile( reader.GetFile() );

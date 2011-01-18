@@ -119,7 +119,7 @@ std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
       isUnicode = gTrue;
       i = 2;
       }
-    else 
+    else
       {
       isUnicode = gFalse;
       i = 0;
@@ -286,7 +286,7 @@ int main (int argc, char *argv[])
       filename = argv[optind];
       outfilename = argv[optind+1];
       }
-    else 
+    else
       {
       PrintHelp();
       return 1;
@@ -652,4 +652,3 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
 
   return 0;
 }
-

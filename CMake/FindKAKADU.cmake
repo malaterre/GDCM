@@ -1,4 +1,4 @@
-# 
+#
 # this module looks for KAKADu
 # http://www.kakadusoftware.com/
 #
@@ -17,4 +17,3 @@ FIND_PROGRAM(KDU_EXPAND_EXECUTABLE
 MARK_AS_ADVANCED(
   KDU_EXPAND_EXECUTABLE
   )
-

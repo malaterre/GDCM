@@ -33,7 +33,7 @@ if __name__ == "__main__":
   # setup reader
   r = vtkgdcm.vtkGDCMThreadedImageReader2()
   dir = gdcm.Directory()
-  
+
   # Did user pass in a directory:
   system = gdcm.System()
   if system.FileIsDirectory( dirname ):
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     Note (MM), I verified that even if there are multiple Series in this Study they are all compatible and thus
     can be loaded as a fake 3D (VTK) volume, only origin is changing & shift/scale .
     See:
-    $ for i in `ls ForSeriesTesting/Perfusion/images/1.*`; do gdcminfo $i; done | sort | uniq 
+    $ for i in `ls ForSeriesTesting/Perfusion/images/1.*`; do gdcminfo $i; done | sort | uniq
     """
     """
     gdcminfo ForSeriesTesting/Perfusion/images/1.3.46.670589.5.2.14.2198403904.1100092395.157798.dcm
@@ -91,7 +91,6 @@ if __name__ == "__main__":
     r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     print r.GetOutput()
-  
+
   # Test succeed ?
   #sys.exit(sucess != 1)
-

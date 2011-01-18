@@ -45,4 +45,3 @@ med.SetModality( "MR" )
 
 w.SetFileName( "mr.dcm" )
 w.Write()
-

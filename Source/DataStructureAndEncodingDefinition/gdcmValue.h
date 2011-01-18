@@ -48,4 +48,3 @@ public:
 #include "gdcmValue.txx"
 
 #endif //GDCMVALUE_H
-

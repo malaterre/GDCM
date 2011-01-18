@@ -49,7 +49,7 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   const double smin = 6.0999998822808266e-05;
   const double smax = 247336.561051;
   ir.SetMinMaxForPixelType( smin, smax );
-  
+
   double outref[] = { 0 };
     {
     char *copy = (char*)outref;
@@ -117,7 +117,7 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   outputpt = r.ComputeInterceptSlopePixelType();
   // min,max = [-33792, 31743]
   // we need at least int32 to store that
-  if( outputpt != gdcm::PixelFormat::INT32 ) 
+  if( outputpt != gdcm::PixelFormat::INT32 )
     {
     return  1;
     }
@@ -134,4 +134,3 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
 
   return 0;
 }
-

@@ -87,7 +87,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
   const char *owner = 0;
   const Tag& t = tag;
   if( t.IsPrivate() && !t.IsPrivateCreator() )
-    { 
+    {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
     }

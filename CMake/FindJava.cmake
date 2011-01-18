@@ -71,7 +71,7 @@ IF(Java_JAVA_EXECUTABLE)
       MESSAGE( FATAL_ERROR "Error executing java -version" )
     ELSE()
       # extract major/minor version and patch level from "java -version" output
-      # Tested on linux using 
+      # Tested on linux using
       # 1. Sun / Sun OEM
       # 2. OpenJDK 1.6
       # 3. GCJ 1.5
@@ -151,4 +151,3 @@ MARK_AS_ADVANCED(
 SET(JAVA_RUNTIME ${Java_JAVA_EXECUTABLE})
 SET(JAVA_ARCHIVE ${Java_JAR_EXECUTABLE})
 SET(JAVA_COMPILE ${Java_JAVAC_EXECUTABLE})
-

@@ -166,7 +166,7 @@ mode.
 The following example shows how to use dumb mode and achieve 5 operations at the same time:
 \li Empty the tag (0010,0010) Patient's Name,
 \li Empty the tag (0010,0020) Patient ID,
-\li Remove the tag (0010,0040) Patient's Sex 
+\li Remove the tag (0010,0040) Patient's Sex
 \li Remove the tag (0010,1010) Patient's Age
 \li Replace the tag (0010,1030) Patient's Weight with the value '10'
 
@@ -226,13 +226,13 @@ $ openssl genrsa -out CA_key.pem
 Command line to generate a rsa key (2048bit)
 
 \verbatim
-$ openssl genrsa -out CA_key.pem 2048 
+$ openssl genrsa -out CA_key.pem 2048
 \endverbatim
 
 Command line to generate a rsa key (2048bit) + passphrase
 
 \verbatim
-$ openssl genrsa -des3 -out CA_key.pem 2048 
+$ openssl genrsa -des3 -out CA_key.pem 2048
 \endverbatim
 
 \subsection certificate Generating a Certificate

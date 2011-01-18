@@ -326,33 +326,33 @@ namespace gdcm
 {"1.2.392.200036.9116.7.8.1.1.1", "Toshiba Private Data Storage" },
 // business.fujifilm.co.uk/medical/downloads/DICOM_xg1.pdf
 {"1.2.392.200036.9125.1.1.2" , "Fuji Private CR Image Storage"},
-/* CREF4.09-80_iSite4.1DICOMConformance.pdf 
+/* CREF4.09-80_iSite4.1DICOMConformance.pdf
 Correction: 1.2.840113619.4.27 -> 1.2.840.113619.4.27 ... sigh
 DICOM_Conformance_Statement_MR_R2.6.pdf
 */
-{"1.2.840.113619.4.27"       ,"GE Nuclear Medicine private SOP Class"}, 
-{"1.3.46.670589.11.0.0.12.1"       ,"Philips Private MR Spectrum Storage"}, 
-{"1.3.46.670589.11.0.0.12.2"       ,"Philips Private MR Series Data Storage"}, 
-{"1.3.46.670589.11.0.0.12.4"       ,"Philips Private MR Examcard Storage"}, 
-{"1.3.46.670589.2.3.1.1"       ,"Philips Private Specialized XA Image"}, 
-{"1.3.46.670589.2.4.1.1"       ,"Philips Private CX Image Storage"}, 
-{"1.3.46.670589.2.5.1.1"       ,"Philips iE33 private 3D Object Storage"}, 
-{"1.3.46.670589.5.0.1"       ,"Philips Private Volume Storage"}, 
-{"1.3.46.670589.5.0.1.1"       ,"Philips Private Volume Image Reference"}, 
-{"1.3.46.670589.5.0.10"       ,"Philips Private MR Synthetic Image Storage"}, 
-{"1.3.46.670589.5.0.11"       ,"Philips Private MR Cardio Analysis Storage"}, 
-{"1.3.46.670589.5.0.11.1"       ,"Philips Private MR Cardio Analysis Data"}, 
-{"1.3.46.670589.5.0.12"       ,"Philips Private CX Synthetic Image Storage"}, 
-{"1.3.46.670589.5.0.13"       ,"Philips Private Perfusion Image Reference"}, 
-{"1.3.46.670589.5.0.14"       ,"Philips Private Perfusion Analysis Data"}, 
-{"1.3.46.670589.5.0.2"       ,"Philips Private 3D Object Storage"}, 
-{"1.3.46.670589.5.0.2.1"       ,"Philips Private 3D Object 2 Storage"}, 
-{"1.3.46.670589.5.0.3"       ,"Philips Private Surface Storage"}, 
-{"1.3.46.670589.5.0.3.1"       ,"Philips Private Surface 2 Storage"}, 
-{"1.3.46.670589.5.0.4"       ,"Philips Private Composite Object Storage"}, 
-{"1.3.46.670589.5.0.7"       ,"Philips Private MR Cardio Profile"}, 
-{"1.3.46.670589.5.0.8"       ,"Philips Private MR Cardio"}, 
-{"1.3.46.670589.5.0.9"       ,"Philips Private CT Synthetic Image Storage"}, 
+{"1.2.840.113619.4.27"       ,"GE Nuclear Medicine private SOP Class"},
+{"1.3.46.670589.11.0.0.12.1"       ,"Philips Private MR Spectrum Storage"},
+{"1.3.46.670589.11.0.0.12.2"       ,"Philips Private MR Series Data Storage"},
+{"1.3.46.670589.11.0.0.12.4"       ,"Philips Private MR Examcard Storage"},
+{"1.3.46.670589.2.3.1.1"       ,"Philips Private Specialized XA Image"},
+{"1.3.46.670589.2.4.1.1"       ,"Philips Private CX Image Storage"},
+{"1.3.46.670589.2.5.1.1"       ,"Philips iE33 private 3D Object Storage"},
+{"1.3.46.670589.5.0.1"       ,"Philips Private Volume Storage"},
+{"1.3.46.670589.5.0.1.1"       ,"Philips Private Volume Image Reference"},
+{"1.3.46.670589.5.0.10"       ,"Philips Private MR Synthetic Image Storage"},
+{"1.3.46.670589.5.0.11"       ,"Philips Private MR Cardio Analysis Storage"},
+{"1.3.46.670589.5.0.11.1"       ,"Philips Private MR Cardio Analysis Data"},
+{"1.3.46.670589.5.0.12"       ,"Philips Private CX Synthetic Image Storage"},
+{"1.3.46.670589.5.0.13"       ,"Philips Private Perfusion Image Reference"},
+{"1.3.46.670589.5.0.14"       ,"Philips Private Perfusion Analysis Data"},
+{"1.3.46.670589.5.0.2"       ,"Philips Private 3D Object Storage"},
+{"1.3.46.670589.5.0.2.1"       ,"Philips Private 3D Object 2 Storage"},
+{"1.3.46.670589.5.0.3"       ,"Philips Private Surface Storage"},
+{"1.3.46.670589.5.0.3.1"       ,"Philips Private Surface 2 Storage"},
+{"1.3.46.670589.5.0.4"       ,"Philips Private Composite Object Storage"},
+{"1.3.46.670589.5.0.7"       ,"Philips Private MR Cardio Profile"},
+{"1.3.46.670589.5.0.8"       ,"Philips Private MR Cardio"},
+{"1.3.46.670589.5.0.9"       ,"Philips Private CT Synthetic Image Storage"},
 /* PACS_conformance_statement_10.2P2.pdf */
 {"1.2.752.24.3.7.6","Sectra Compression (Private Syntax)"},
 {"1.2.752.24.3.7.7","Sectra Compression LS (Private Syntax)"},
@@ -434,4 +434,3 @@ const char *UIDs::GetName() const
 } // end namespace gdcm
 
 //#endif //__gdcmUIDs_cxx
-

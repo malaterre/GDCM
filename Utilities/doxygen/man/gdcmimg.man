@@ -114,7 +114,7 @@ To fill the region [0,100]x[0,100] of a DICOM image simply do:
 $ gdcmimg --fill 0 --region 0,100,0,100 -i input.dcm -o output_black.dcm
 \endverbatim
 
-Warning: if the Pixel Data is compressed, the image is first decompressed so that pixel can be set to 0, 
+Warning: if the Pixel Data is compressed, the image is first decompressed so that pixel can be set to 0,
 but it is not recompressed.
 
 \subsection convert_raw Convert RAW to DICOM

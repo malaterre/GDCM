@@ -77,4 +77,3 @@ inline std::ostream& operator<<(std::ostream& _os, const Macros &_val)
 } // end namespace gdcm
 
 #endif //GDCMMODULES_H
-

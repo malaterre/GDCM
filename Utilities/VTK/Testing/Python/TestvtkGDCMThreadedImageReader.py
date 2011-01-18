@@ -76,13 +76,13 @@ if __name__ == "__main__":
     # failure
     print "Need a filename"
     sys.exit(1)
-  
+
   # setup reader
   r = vtkgdcm.vtkGDCMThreadedImageReader()
   r.FileLowerLeftOn()
   #dir = vtkDirectory()
   dir = gdcm.Directory()
-  
+
   # Did user pass in a directory:
   system = gdcm.System()
   if system.FileIsDirectory( filename ):
@@ -116,8 +116,7 @@ if __name__ == "__main__":
     r.Update()
     print r.GetOutput()
     #sys.exit(1)
-  
-  
+
+
   # Test succeed ?
   #sys.exit(sucess != 1)
-

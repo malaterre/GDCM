@@ -1,4 +1,4 @@
-# 
+#
 # this module looks for KWStyle
 # http://public.kitware.com/KWStyle
 #
@@ -33,4 +33,3 @@ find_program(KWSTYLE_EXECUTABLE
 mark_as_advanced(
   KWSTYLE_EXECUTABLE
   )
-

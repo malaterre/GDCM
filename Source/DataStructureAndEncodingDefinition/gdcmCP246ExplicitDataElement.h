@@ -34,6 +34,9 @@ public:
   std::istream &Read(std::istream &is);
 
   template <typename TSwap>
+  std::istream &ReadValue(std::istream &is);
+
+  template <typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL & length);
 
   // PURPOSELY do not provide an implementation for writing !
@@ -46,4 +49,3 @@ public:
 #include "gdcmCP246ExplicitDataElement.txx"
 
 #endif //GDCMCP246EXPLICITDATAELEMENT_H
-

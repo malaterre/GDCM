@@ -43,4 +43,3 @@ private:
 } // end namespace gdcm
 
 #endif //GDCMIMAGEAPPLYLOOKUPTABLE_H
-

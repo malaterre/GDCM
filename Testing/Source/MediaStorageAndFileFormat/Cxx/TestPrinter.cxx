@@ -57,4 +57,3 @@ int TestPrinter(int argc, char *argv[])
 
   return r;
 }
-

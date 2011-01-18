@@ -25,7 +25,7 @@ class TransferSyntax;
 /**
  * \brief JPEG codec
  * Class to do JPEG (8bits, 12bits, 16bits lossy & lossless).
- * It redispatch in between the different codec implementation: gdcm::JPEG8Codec, 
+ * It redispatch in between the different codec implementation: gdcm::JPEG8Codec,
  * gdcm::JPEG12Codec & gdcm::JPEG16Codec
  * It also support inconsistency in between DICOM header and JPEG compressed stream
  * ImageCodec implementation for the JPEG case

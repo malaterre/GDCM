@@ -127,7 +127,7 @@ int TestvtkGDCMImageRead4(const char *filename, bool verbose)
 
   reader->Delete();
   writer->Delete();
-  return 0; 
+  return 0;
 }
 
 int TestvtkGDCMImageReader4(int argc, char *argv[])

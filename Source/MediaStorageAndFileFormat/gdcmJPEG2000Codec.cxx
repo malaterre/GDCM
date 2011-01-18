@@ -38,18 +38,21 @@ namespace gdcm
 sample error callback expecting a FILE* client object
 */
 void error_callback(const char *msg, void *) {
+  (void)msg;
   gdcmErrorMacro( "Error in gdcmopenjpeg" << msg );
 }
 /**
 sample warning callback expecting a FILE* client object
 */
 void warning_callback(const char *msg, void *) {
+  (void)msg;
   gdcmWarningMacro( "Warning in gdcmopenjpeg" << msg );
 }
 /**
 sample debug callback expecting no client object
 */
 void info_callback(const char *msg, void *) {
+  (void)msg;
   gdcmDebugMacro( "Info in gdcmopenjpeg" << msg );
 }
 
@@ -84,8 +87,8 @@ struct myfile
 
 OPJ_UINT32 opj_read_from_memory(void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* p_file)
 {
-	//OPJ_UINT32 l_nb_read = fread(p_buffer,1,p_nb_bytes,p_file);
-	OPJ_UINT32 l_nb_read;
+  //OPJ_UINT32 l_nb_read = fread(p_buffer,1,p_nb_bytes,p_file);
+  OPJ_UINT32 l_nb_read;
   if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
     {
     l_nb_read = 1*p_nb_bytes;
@@ -99,16 +102,16 @@ OPJ_UINT32 opj_read_from_memory(void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* 
   p_file->cur += l_nb_read;
   assert( p_file->cur <= p_file->mem + p_file->len );
   //std::cout << "l_nb_read: " << l_nb_read << std::endl;
-	return l_nb_read ? l_nb_read : -1;
+  return l_nb_read ? l_nb_read : ((OPJ_UINT32)-1);
 }
 
 OPJ_UINT32 opj_write_from_memory (void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* p_file)
 {
-	//return fwrite(p_buffer,1,p_nb_bytes,p_file);
-	OPJ_UINT32 l_nb_write;
+  //return fwrite(p_buffer,1,p_nb_bytes,p_file);
+  OPJ_UINT32 l_nb_write;
   //if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
   //  {
-  //  l_nb_write = 1*p_nb_bytes;
+  l_nb_write = 1*p_nb_bytes;
   //  }
   //else
   //  {
@@ -119,8 +122,8 @@ OPJ_UINT32 opj_write_from_memory (void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile
   p_file->cur += l_nb_write;
   p_file->len += l_nb_write;
   //assert( p_file->cur < p_file->mem + p_file->len );
-	//return l_nb_write;
-	return p_nb_bytes;
+  return l_nb_write;
+  //return p_nb_bytes;
 }
 
 OPJ_SIZE_T opj_skip_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
@@ -136,7 +139,7 @@ OPJ_SIZE_T opj_skip_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
     }
 
   p_file->cur = p_file->mem + p_file->len;
-  return -1;
+  return (OPJ_SIZE_T)-1;
 }
 
 bool opj_seek_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
@@ -157,24 +160,24 @@ bool opj_seek_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
 
 opj_stream_t* OPJ_CALLCONV opj_stream_create_memory_stream (myfile* p_mem,OPJ_UINT32 p_size,bool p_is_read_stream)
 {
-	opj_stream_t* l_stream = 00;
-	if
-		(! p_mem)
-	{
-		return 00;
-	}
-	l_stream = opj_stream_create(p_size,p_is_read_stream);
-	if
-		(! l_stream)
-	{
-		return 00;
-	}
-	opj_stream_set_user_data(l_stream,p_mem);
-	opj_stream_set_read_function(l_stream,(opj_stream_read_fn) opj_read_from_memory);
-	opj_stream_set_write_function(l_stream, (opj_stream_write_fn) opj_write_from_memory);
-	opj_stream_set_skip_function(l_stream, (opj_stream_skip_fn) opj_skip_from_memory);
-	opj_stream_set_seek_function(l_stream, (opj_stream_seek_fn) opj_seek_from_memory);
-	return l_stream;
+  opj_stream_t* l_stream = 00;
+  if
+    (! p_mem)
+  {
+    return 00;
+  }
+  l_stream = opj_stream_create(p_size,p_is_read_stream);
+  if
+    (! l_stream)
+  {
+    return 00;
+  }
+  opj_stream_set_user_data(l_stream,p_mem);
+  opj_stream_set_read_function(l_stream,(opj_stream_read_fn) opj_read_from_memory);
+  opj_stream_set_write_function(l_stream, (opj_stream_write_fn) opj_write_from_memory);
+  opj_stream_set_skip_function(l_stream, (opj_stream_skip_fn) opj_skip_from_memory);
+  opj_stream_set_seek_function(l_stream, (opj_stream_seek_fn) opj_seek_from_memory);
+  return l_stream;
 }
 
 #endif // OPENJPEG_MAJOR_VERSION == 2
@@ -259,13 +262,13 @@ JPEG2000Codec::~JPEG2000Codec()
 
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
 {
-  return ts == TransferSyntax::JPEG2000Lossless 
+  return ts == TransferSyntax::JPEG2000Lossless
       || ts == TransferSyntax::JPEG2000;
 }
 
 bool JPEG2000Codec::CanCode(TransferSyntax const &ts) const
 {
-  return ts == TransferSyntax::JPEG2000Lossless 
+  return ts == TransferSyntax::JPEG2000Lossless
       || ts == TransferSyntax::JPEG2000;
 }
 
@@ -350,8 +353,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
   opj_cio_t *cio;
 #elif OPENJPEG_MAJOR_VERSION == 2
-	opj_codec_t* dinfo = NULL;	/* handle to a decompressor */
-	opj_stream_t *cio = NULL;
+  opj_codec_t* dinfo = NULL;  /* handle to a decompressor */
+  opj_stream_t *cio = NULL;
 #endif // OPENJPEG_MAJOR_VERSION == 1
   opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
@@ -456,9 +459,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
-	bool bResult;
-	OPJ_INT32 l_tile_x0,l_tile_y0;
-	OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+  bool bResult;
+  OPJ_INT32 l_tile_x0,l_tile_y0;
+  OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
     dinfo,
     &image,
@@ -472,7 +475,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   image = opj_decode(dinfo, cio);
   bResult = bResult && (image != 00);
   bResult = bResult && opj_end_decompress(dinfo,cio);
-  if (!image) 
+  if (!image)
     {
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
@@ -486,7 +489,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     {
     if( image->color_space == CLRSPC_GRAY )
       {
-      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 
+      assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
         || this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
         || this->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR );
       }
@@ -500,9 +503,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     }
 #endif
-  
-#if OPENJPEG_MAJOR_VERSION == 1
+
   int reversible;
+#if OPENJPEG_MAJOR_VERSION == 1
   opj_j2k_t* j2k = NULL;
   opj_jp2_t* jp2 = NULL;
 
@@ -522,8 +525,10 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
-  LossyFlag = !reversible;
+#else
+    reversible = 1;
 #endif // OPENJPEG_MAJOR_VERSION == 1
+  LossyFlag = !reversible;
 
 #if 0
 #ifndef GDCM_USE_SYSTEM_OPENJPEG
@@ -548,7 +553,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   // Copy buffer
   unsigned long len = Dimensions[0]*Dimensions[1] * (PF.GetBitsAllocated() / 8) * image->numcomps;
   char *raw = new char[len];
-  for (int compno = 0; compno < image->numcomps; compno++)
+  //assert( len == fsrc->len );
+  for (unsigned int compno = 0; compno < image->numcomps; compno++)
     {
     opj_image_comp_t *comp = &image->comps[compno];
 
@@ -590,7 +596,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     if (comp->prec <= 8)
       {
       uint8_t *data8 = (uint8_t*)raw + compno;
-      for (int i = 0; i < wr * hr; i++) 
+      for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
         *data8 = (uint8_t)v;
@@ -601,7 +607,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       {
       // ELSCINT1_JP2vsJ2K.dcm is a 12bits image
       uint16_t *data16 = (uint16_t*)raw + compno;
-      for (int i = 0; i < wr * hr; i++) 
+      for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
         *data16 = (uint16_t)v;
@@ -611,7 +617,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     else
       {
       uint32_t *data32 = (uint32_t*)raw + compno;
-      for (int i = 0; i < wr * hr; i++) 
+      for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
         *data32 = (uint32_t)v;
@@ -629,9 +635,9 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   if(dinfo) {
     opj_destroy_decompress(dinfo);
   }
-#elif OPENJPEG_MAJOR_VERSION == 1
+#elif OPENJPEG_MAJOR_VERSION == 2
   /* free remaining structures */
-  if (dinfo) 
+  if (dinfo)
     {
     opj_destroy_codec(dinfo);
     }
@@ -678,6 +684,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   int bitsallocated, int bitsstored, int sign, int quality, int pc)
 {
   (void)quality;
+  (void)fragment_size;
   int w, h;
   int numcomps;
   OPJ_COLOR_SPACE color_space;
@@ -850,10 +857,10 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       {
       gdcmErrorMacro( "Error: options -r -q and -f cannot be used together." );
       return false;
-      }				/* mod fixed_quality */
+      }        /* mod fixed_quality */
 
     /* if no rate entered, lossless by default */
-    if (parameters.tcp_numlayers == 0) 
+    if (parameters.tcp_numlayers == 0)
       {
       parameters.tcp_rates[0] = 0;
       parameters.tcp_numlayers = 1;
@@ -861,19 +868,42 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       }
 
     if(parameters.cp_comment == NULL) {
-      const char comment[] = "Created by GDCM/OpenJPEG version 1.0";
+      const char comment[] = "Created by GDCM/OpenJPEG version 2.0";
       parameters.cp_comment = (char*)malloc(strlen(comment) + 1);
       strcpy(parameters.cp_comment, comment);
       /* no need to delete parameters.cp_comment on exit */
       //delete_comment = false;
     }
 
+  // Compute the proper number of resolutions to use.
+  // This is mostly done for images smaller than 64 pixels
+  // along any dimension.
+  unsigned int numberOfResolutions = 0;
+
+  unsigned int tw = image_width >> 1;
+  unsigned int th = image_height >> 1;
+
+  while( tw && th )
+    {
+    numberOfResolutions++;
+    tw >>= 1;
+    th >>= 1;
+    }
+
+  // Clamp the number of resolutions to 6.
+  if( numberOfResolutions > 6 )
+    {
+    numberOfResolutions = 6;
+    }
+
+  parameters.numresolution = numberOfResolutions;
+
 
     /* decode the source image */
     /* ----------------------- */
 
-    image = rawtoimage((char*)inputdata, &parameters, 
-      static_cast<int>( inputlength ), 
+    image = rawtoimage((char*)inputdata, &parameters,
+      static_cast<int>( inputlength ),
       image_width, image_height,
       sample_pixel, bitsallocated, bitsstored, sign, quality, this->GetPlanarConfiguration() );
     if (!image) {
@@ -932,14 +962,14 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       return false;
       }
     /* encode the image */
-    /*if (*indexfilename)					// If need to extract codestream information
+    /*if (*indexfilename)          // If need to extract codestream information
       bSuccess = opj_encode_with_info(cinfo, cio, image, &cstr_info);
       else*/
-    bSuccess = opj_start_compress(cinfo,image,cio);				
+    bSuccess = opj_start_compress(cinfo,image,cio);
     bSuccess = bSuccess && opj_encode(cinfo, cio);
     bSuccess = bSuccess && opj_end_compress(cinfo, cio);
 
-    if (!bSuccess) 
+    if (!bSuccess)
       {
       opj_stream_destroy(cio);
       return false;
@@ -1030,8 +1060,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
   opj_cio_t *cio;
 #elif OPENJPEG_MAJOR_VERSION == 2
-	opj_codec_t* dinfo = NULL;	/* handle to a decompressor */
-	opj_stream_t *cio = NULL;
+  opj_codec_t* dinfo = NULL;  /* handle to a decompressor */
+  opj_stream_t *cio = NULL;
 #endif // OPENJPEG_MAJOR_VERSION == 1
   opj_image_t *image = NULL;
   unsigned char *src = (unsigned char*)dummy_buffer;
@@ -1090,7 +1120,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 
 #if OPENJPEG_MAJOR_VERSION == 1
   /* catch events using our callbacks and give a local context */
-  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
+  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
@@ -1116,9 +1146,9 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
-	bool bResult;
-	OPJ_INT32 l_tile_x0,l_tile_y0;
-	OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+  bool bResult;
+  OPJ_INT32 l_tile_x0,l_tile_y0;
+  OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
     dinfo,
     &image,
@@ -1132,7 +1162,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   //image = opj_decode(dinfo, cio);
   //bResult = bResult && (image != 00);
   //bResult = bResult && opj_end_decompress(dinfo,cio);
-  //if (!image) 
+  //if (!image)
   //  {
   //  opj_destroy_codec(dinfo);
   //  opj_stream_destroy(cio);
@@ -1162,8 +1192,10 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
-  LossyFlag = !reversible;
+#else
+    reversible = 1;
 #endif // OPENJPEG_MAJOR_VERSION == 1
+  LossyFlag = !reversible;
 
 #if 0
 #ifndef GDCM_USE_SYSTEM_OPENJPEG
@@ -1245,7 +1277,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     //assert( image->color_space == 0 );
     //PI = PhotometricInterpretation::RGB;
     /*
-    8.2.4 JPEG 2000 IMAGE COMPRESSION 
+    8.2.4 JPEG 2000 IMAGE COMPRESSION
     The JPEG 2000 bit stream specifies whether or not a reversible or irreversible
     multi-component (color) transformation, if any, has been applied. If no
     multi-component transformation has been applied, then the components shall
@@ -1328,7 +1360,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   /* close the byte stream */
   opj_stream_destroy(cio);
   /* free remaining structures */
-  if (dinfo) 
+  if (dinfo)
     {
     opj_destroy_codec(dinfo);
     }

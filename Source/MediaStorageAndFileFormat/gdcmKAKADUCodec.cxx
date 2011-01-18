@@ -38,14 +38,15 @@ KAKADUCodec::~KAKADUCodec()
 bool KAKADUCodec::CanDecode(TransferSyntax const &ts) const
 {
 #ifndef GDCM_USE_KAKADU
+  (void)ts;
   return false;
 #else
-  return ts == TransferSyntax::JPEG2000Lossless 
+  return ts == TransferSyntax::JPEG2000Lossless
       || ts == TransferSyntax::JPEG2000;
 #endif
 }
 
-bool KAKADUCodec::CanCode(TransferSyntax const &ts) const
+bool KAKADUCodec::CanCode(TransferSyntax const &) const
 {
   return false;
 }
@@ -57,6 +58,8 @@ bool KAKADUCodec::CanCode(TransferSyntax const &ts) const
 bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
 {
 #ifndef GDCM_USE_KAKADU
+  (void)in;
+  (void)out;
   return false;
 #else
   // First thing creates a j2k file from the fragment:
@@ -69,7 +72,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
     // -> check if tempnam needs the 'free'
     char *tempinput  = tempnam(0, "gdcminkduexp");
     char *tempoutput = tempnam(0, "gdcmoutkduexp");
-    if( !tempinput || !tempoutput ) 
+    if( !tempinput || !tempoutput )
       {
       //free(input);
       //free(output);
@@ -92,7 +95,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
 #else
 #error not implemented
 #endif
-    // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw  
+    // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw
     kakadu_command += " -i ";
     kakadu_command += input;
     kakadu_command += " -o ";
@@ -141,7 +144,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
       // -> check if tempnam needs the 'free'
       char *tempinput  = tempnam(0, "gdcminkduexp");
       char *tempoutput = tempnam(0, "gdcmoutkduexp");
-      if( !tempinput || !tempoutput ) 
+      if( !tempinput || !tempoutput )
         {
         //free(input);
         //free(output);
@@ -169,7 +172,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
 #else
 #error not implemented
 #endif
-      // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw  
+      // ./bin/kakadujpeg -d -s jpeg.jpg -ci 0 out.raw
       kakadu_command += " -i ";
       kakadu_command += input;
       kakadu_command += " -o ";
@@ -224,6 +227,8 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
 bool KAKADUCodec::Code(DataElement const &in, DataElement &out)
 {
 #ifndef GDCM_USE_KAKADU
+  (void)in;
+  (void)out;
   return false;
 #else
   // That would be neat, please contribute :)

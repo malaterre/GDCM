@@ -1,7 +1,7 @@
 # http://www.cmake.org/Wiki/CmakeMingw
 # Usage:
 #
-#  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake 
+#  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake
 #
 #
 #  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
@@ -22,7 +22,7 @@ SET(CMAKE_CXX_COMPILER i586-mingw32msvc-g++)
 SET(CMAKE_FIND_ROOT_PATH  /usr/i586-mingw32msvc )
 
 # adjust the default behaviour of the FIND_XXX() commands:
-# search headers and libraries in the target environment, search 
+# search headers and libraries in the target environment, search
 # programs in the host environment
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)

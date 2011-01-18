@@ -1,10 +1,10 @@
 # Define the tests for Data Structure and Encoding Definitions
 # DSED
 SET(DSED_TEST_SRCS
-	TestAttribute
+  TestAttribute
   TestCodeString
-	TestAttribute1
-	TestAttribute7
+  TestAttribute1
+  TestAttribute7
   #TestReadPatientName
   TestLO
   TestCSAElement
@@ -60,7 +60,7 @@ IF(GDCM_DATA_ROOT)
 SET(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
   TestReader2
-	TestAttribute8
+  TestAttribute8
   TestPDBHeader
   )
 ENDIF(GDCM_DATA_ROOT)
@@ -99,7 +99,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
-CREATE_TEST_SOURCELIST(DSEDTests gdcmDSEDTests.cxx ${DSED_TEST_SRCS} 
+CREATE_TEST_SOURCELIST(DSEDTests gdcmDSEDTests.cxx ${DSED_TEST_SRCS}
   EXTRA_INCLUDE gdcmTestDriver.h
   )
 ADD_EXECUTABLE(gdcmDSEDTests ${DSEDTests})
@@ -121,4 +121,3 @@ ENDFOREACH(name)
 #ADD_EXECUTABLE(TestAttribute3 TestAttribute3.cxx)
 #ADD_EXECUTABLE(TestAttribute4 TestAttribute4.cxx)
 #ADD_EXECUTABLE(TestAttribute5 TestAttribute5.cxx)
-

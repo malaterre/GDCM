@@ -23,8 +23,8 @@
 namespace gdcm
 {
 
-	// FIXME gdcmSequenceOfItems qnd gdcmSequenceOfFragments 
-	// should be rethink (duplicate code)
+  // FIXME gdcmSequenceOfItems qnd gdcmSequenceOfFragments
+  // should be rethink (duplicate code)
 /**
  * \brief Class to represent a Sequence Of Fragments
  * \todo I do not enforce that Sequence of Fragments ends with a SQ end del
@@ -39,8 +39,8 @@ public:
   SequenceOfFragments():Table(),SequenceLengthField(0xFFFFFFFF) { }
 
   /// \brief Returns the SQ length, as read from disk
-  VL GetLength() const { 
-	  return SequenceLengthField; }
+  VL GetLength() const {
+    return SequenceLengthField; }
   /// \brief Sets the actual SQ length
   void SetLength(VL length) {
     SequenceLengthField = length;
@@ -87,7 +87,7 @@ std::istream& Read(std::istream &is)
       }
     catch(...)
       {
-      // Bug_Siemens_PrivateIconNoItem.dcm 
+      // Bug_Siemens_PrivateIconNoItem.dcm
       // First thing first let's rewind
       is.seekg(-4, std::ios::cur);
       if ( Table.GetTag() == Tag(0xd8ff,0xe0ff) )
@@ -128,13 +128,13 @@ std::istream& Read(std::istream &is)
         Fragments.push_back( frag );
         is.clear(); // clear the error bit
         }
-      // 2. GENESIS_SIGNA-JPEG-CorruptFrag.dcm 
+      // 2. GENESIS_SIGNA-JPEG-CorruptFrag.dcm
       else if ( frag.GetTag() == Tag(0xddff,0x00e0) )
         {
         assert( Fragments.size() == 1 );
         const ByteValue *bv = Fragments[0].GetByteValue();
         assert( (unsigned char)bv->GetPointer()[ bv->GetLength() - 1 ] == 0xfe );
-        // Yes this is an extra copy, this is a bug anyway, go fix YOUR code 
+        // Yes this is an extra copy, this is a bug anyway, go fix YOUR code
         Fragments[0].SetByteValue( bv->GetPointer(), bv->GetLength() - 1 );
         gdcmWarningMacro( "JPEG Fragment length was declared with an extra byte at the end: stripped !" );
         is.clear(); // clear the error bit

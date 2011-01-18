@@ -176,7 +176,7 @@ void GDCMImageIO2::Read(void* buffer)
   const gdcm::Image &image = reader.GetImage();
   unsigned long len = image.GetBufferLength();
 
-  const unsigned long numberOfBytesToBeRead = 
+  const unsigned long numberOfBytesToBeRead =
     static_cast< unsigned long>( this->GetImageSizeInBytes() );
   assert( numberOfBytesToBeRead == len );
 
@@ -255,11 +255,11 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
       m_ComponentType = ImageIOBase::DOUBLE;
       break;
     default:
-      itkExceptionMacro( "Unhandled PixelFormat: \n" << gdcm::PixelFormat(outputpt) ); 
+      itkExceptionMacro( "Unhandled PixelFormat: \n" << gdcm::PixelFormat(outputpt) );
     }
 
   m_NumberOfComponents = pixeltype.GetSamplesPerPixel();
-  if( image.GetPhotometricInterpretation() == 
+  if( image.GetPhotometricInterpretation() ==
     gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
     assert( m_NumberOfComponents == 1 );
@@ -528,7 +528,7 @@ void GDCMImageIO2::PrintSelf(std::ostream& os, Indent indent) const
   Superclass::PrintSelf(os, indent);
 }
 
-bool GDCMImageIO2::GetLabelFromTag( const std::string & tag, 
+bool GDCMImageIO2::GetLabelFromTag( const std::string & tag,
                                std::string & labelId )
 {
   gdcm::Tag t;

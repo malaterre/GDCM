@@ -59,12 +59,12 @@ int TestImageChangePhotometricInterpretation2(int argc, char *argv[])
         gdcm::ImageChangePhotometricInterpretation::RGB2YBR(rgb2,ybr);
         if( memcmp(rgb,rgb2,3*sizeof(Type)) != 0 )
           {
-	  //std::cerr << "Problem with R,G,B=" << r << "," << g << "," << b << 
+    //std::cerr << "Problem with R,G,B=" << r << "," << g << "," << b <<
           //" instead of " << (int)rgb2[0] << "," << (int)rgb2[1] << "," << (int)rgb2[2] << std::endl;
           //std::cerr << "diff:" << diff(rgb,rgb2) << std::endl;
           double d = diff(rgb,rgb2);
           sdiff += d;
-          if( d > max ) 
+          if( d > max )
             {
             error2[0] = rgb2[0];
             error2[1] = rgb2[1];

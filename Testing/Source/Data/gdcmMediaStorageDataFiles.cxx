@@ -15,10 +15,10 @@
 
 
 /*
- * gdcmscanner -d /path/to/gdcmData/ -t 8,16 -p 
+ * gdcmscanner -d /path/to/gdcmData/ -t 8,16 -p
  */
 
-static const char * const gdcmMediaStorageDataFiles[][2] = { 
+static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm","1.2.840.10008.5.1.4.1.1.7" },
 { "SIEMENS_GBS_III-16-ACR_NEMA_1.acr", ""},
 { "00191113.dcm","1.2.840.10008.5.1.4.1.1.12.1"},
@@ -228,4 +228,3 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 /* Stopping condition */
 { 0 ,0 }
 };
-

@@ -25,4 +25,4 @@ ISO 2022 IR 166 : 874 : TIS 620-2533 (Thai) Extended
 ISO 2022 IR 87 : 50222 : JIS X 0208 (Kanji) Extended
 ISO 2022 IR 159 : 50222 : JIS X 0212 (Kanji) Extended
 ISO 2022 IR 149 : 20949 : KS X 1001 (Hangul and Hanja) Extended
-GB18030 : 54936 : Chinese (Simplified) Extended 
+GB18030 : 54936 : Chinese (Simplified) Extended

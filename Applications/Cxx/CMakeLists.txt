@@ -44,7 +44,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcminfo
   )
 # poppler people have the worse API backward compatibility I know of.
-# there is absolutely no way to check the version of poppler 
+# there is absolutely no way to check the version of poppler
 # they change the API during a minor change of the version
 IF(GDCM_USE_SYSTEM_POPPLER)
   INCLUDE(CheckCXXSourceCompiles)
@@ -103,7 +103,7 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   ENDIF(WIN32 AND NOT CYGWIN)
   IF(NOT GDCM_INSTALL_NO_RUNTIME)
     INSTALL(TARGETS ${exename}
-      EXPORT GDCMTargets
+      EXPORT ${GDCM_TARGETS_NAME}
       RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
       ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
@@ -118,4 +118,3 @@ ENDFOREACH(exename)
 
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
-

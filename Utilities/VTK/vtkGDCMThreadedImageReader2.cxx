@@ -99,7 +99,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
   //printf("outExt:%d,%d,%d,%d,%d,%d\n",
   //  outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
   // FIXME:
-  // The code could be a little tidier, all I am trying to do here is differenciate the 
+  // The code could be a little tidier, all I am trying to do here is differenciate the
   // case where we have a series of 2D files and the case where we have a single multi-frames
   // files...
   int maxfiles = self->GetFileNames()->GetNumberOfValues();
@@ -114,7 +114,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
     if( id == 0 )
       {
       // we only consider outExt here for computing the progress, while in fact we should really
-      // consider numFiles to compute exact update progress...oh well let's assume this is almost 
+      // consider numFiles to compute exact update progress...oh well let's assume this is almost
       // correct.
       self->UpdateProgress(float(i)/float(outExt[5]-outExt[4]+1));
       }
@@ -275,8 +275,8 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
       // Overlays:
       //case OverlayPortNumber:
     default:
-      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), 
-        this->DataExtent[0], this->DataExtent[1], 
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
+        this->DataExtent[0], this->DataExtent[1],
         this->DataExtent[2], this->DataExtent[3],
         0,0 );
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
@@ -295,16 +295,16 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
 // This method needs to be called num times.  Results must not overlap for
 // consistent starting extent.  Subclass can override this method.
 // This method returns the number of peices resulting from a successful split.
-// This can be from 1 to "total".  
+// This can be from 1 to "total".
 // If 1 is returned, the extent cannot be split.
-int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6], 
+int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6],
                              int num, int total)
 {
   memcpy(splitExt, startExt, 6 * sizeof(*splitExt));
 
   vtkDebugMacro("SplitExtent: ( " << startExt[0] << ", " << startExt[1] << ", "
                 << startExt[2] << ", " << startExt[3] << ", "
-                << startExt[4] << ", " << startExt[5] << "), " 
+                << startExt[4] << ", " << startExt[5] << "), "
                 << num << " of " << total);
 
   // We should only split along the Z direction (only in the case of multiple files...)
@@ -339,16 +339,16 @@ int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6],
     {
     splitExt[splitAxis*2] = splitExt[splitAxis*2] + num*valuesPerThread;
     }
-  
+
 
   return maxThreadIdUsed + 1;
 }
 
 void vtkGDCMThreadedImageReader2::ThreadedRequestData (
-  vtkInformation * vtkNotUsed( request ), 
+  vtkInformation * vtkNotUsed( request ),
   vtkInformationVector** vtkNotUsed( inputVector ),
   vtkInformationVector * vtkNotUsed( outputVector ),
-  vtkImageData ***inData, 
+  vtkImageData ***inData,
   vtkImageData **outData,
   int outExt[6], int id)
 {
@@ -375,4 +375,3 @@ void vtkGDCMThreadedImageReader2::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }
-

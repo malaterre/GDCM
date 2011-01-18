@@ -35,7 +35,7 @@ int main(int argc, char* argv[] )
 
   if( Region ( argv[1], &x_min, &y_min, &x_max, &y_max ) )
     {
-    std::cout << "x_min = " << x_min << std::endl; 
+    std::cout << "x_min = " << x_min << std::endl;
     std::cout << "y_min = " << y_min << std::endl;
     std::cout << "x_max = " << x_max << std::endl;
     std::cout << "y_max = " << y_max << std::endl;
@@ -79,7 +79,7 @@ bool Region ( char* nomefile, unsigned int* X_min, unsigned int* Y_min, unsigned
   const gdcm::Item & item = sqi->GetItem(1);
   //std::cout << item << std::endl;
   const gdcm::DataSet& nestedds = item.GetNestedDataSet();
-  //std::cout << nestedds << std::endl;  
+  //std::cout << nestedds << std::endl;
 
   gdcm::Tag tX0(0x0018,0x6018);
   gdcm::Tag tY0(0x0018,0x601a);
@@ -101,7 +101,7 @@ bool Region ( char* nomefile, unsigned int* X_min, unsigned int* Y_min, unsigned
   //const gdcm::ByteValue *bvY0 = deY0.GetByteValue();
   //const gdcm::ByteValue *bvX1 = deX1.GetByteValue();
   //const gdcm::ByteValue *bvY1 = deY1.GetByteValue();
-  //std::cout << bvX0 << std::endl << bvY0 << std::endl << bvX1 << std::endl << bvY1 << std::endl;   
+  //std::cout << bvX0 << std::endl << bvY0 << std::endl << bvX1 << std::endl << bvY1 << std::endl;
 
   gdcm::Attribute<0x0018,0x6018> atX0;
   gdcm::Attribute<0x0018,0x601a> atY0;
@@ -111,22 +111,21 @@ bool Region ( char* nomefile, unsigned int* X_min, unsigned int* Y_min, unsigned
   atY0.SetFromDataElement( deY0 );
   atX1.SetFromDataElement( deX1 );
   atY1.SetFromDataElement( deY1 );
-  const uint32_t* X0 = atX0.GetValues();
-  const uint32_t* Y0 = atY0.GetValues();
-  const uint32_t* X1 = atX1.GetValues();
-  const uint32_t* Y1 = atY1.GetValues();
+  uint32_t X0 = atX0.GetValue();
+  uint32_t Y0 = atY0.GetValue();
+  uint32_t X1 = atX1.GetValue();
+  uint32_t Y1 = atY1.GetValue();
   std::cout << X0 << std::endl << Y0 << std::endl << X1 << std::endl << Y1 << std::endl;
 
-  *X_min = static_cast<unsigned int>(X0[0]);
-  *Y_min = static_cast<unsigned int>(Y0[0]);
-  *X_max = static_cast<unsigned int>(X1[0]);
-  *Y_max = static_cast<unsigned int>(Y1[0]);
+  *X_min = static_cast<unsigned int>(X0);
+  *Y_min = static_cast<unsigned int>(Y0);
+  *X_max = static_cast<unsigned int>(X1);
+  *Y_max = static_cast<unsigned int>(Y1);
 
-  //std::cout << "X_min = " << *X_min << std::endl;      
+  //std::cout << "X_min = " << *X_min << std::endl;
   //std::cout << "Y_min = " << *Y_min << std::endl;
   //std::cout << "X_max = " << *X_max << std::endl;
   //std::cout << "Y_max = " << *Y_max << std::endl;
 
   return true;
 }
-

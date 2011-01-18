@@ -37,7 +37,7 @@ public:
   // WARNING: This need to be a valid root, otherwise call will fail
   // Implementation note. According to DICOM standard PS 3.5, Section 9 :
   // Unique Identifiers (UIDs), we have:
-  /* 
+  /*
   ...
   The <org root> portion of the UID uniquely identifies an organization, (i.e., manufacturer, research
   organization, NEMA, etc.), and is composed of a number of numeric components as defined by ISO 8824.
@@ -50,9 +50,9 @@ public:
   ...
    */
   /// The current implementation in GDCM make use of the UUID implementation (RFC 4122) and has been
-  /// successfully been tested for a root of size 26 bytes. Any longer root should work (the ::Generate() 
-  /// function will return a string), but will truncate the high bits of the 128bits UUID until the 
-  /// generated string fits on 64 bits. The authors disclaims any 
+  /// successfully been tested for a root of size 26 bytes. Any longer root should work (the ::Generate()
+  /// function will return a string), but will truncate the high bits of the 128bits UUID until the
+  /// generated string fits on 64 bits. The authors disclaims any
   /// responsabitlity for garanteeing uniqueness of UIDs when the root is longer than 26 bytes.
   static void SetRoot(const char * root);
   static const char *GetRoot();
@@ -62,7 +62,7 @@ public:
   /// In summary do not write code like that:
   /// const char *uid1 = uid.Generate();
   /// const char *uid2 = uid.Generate();
-  /// since uid1 == uid2 
+  /// since uid1 == uid2
   const char* Generate();
 
   /// Find out if the string is a valid UID or not

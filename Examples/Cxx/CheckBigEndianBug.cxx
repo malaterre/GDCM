@@ -12,9 +12,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* 
+/*
  * WARNING: This is a dev tool, do not use !
- * 
+ *
  * Usage: after a gdcmconv, you would like to know if the conversion process is acceptable
  * sometime a vbindiff is acceptable, sometime it is not. In the case of the famous Philips
  * Little/Big Endian Explicit Transfer Syntax it is not easy to compare two files. However
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
   // buffer2[0] = 1; // let's make the test fail
   std::multiset<char> set1( buffer1, buffer1 + s1 );
   std::multiset<char> set2( buffer2, buffer2 + s2 );
-  
+
 
   if( set1 == set2 )
     {
@@ -109,8 +109,7 @@ int main(int argc, char *argv[])
     }
   delete[] buffer1;
   delete[] buffer2;
-  
+
 
   return 0;
 }
-

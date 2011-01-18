@@ -51,7 +51,7 @@ int TestVRDS(int, char *[])
     std::cerr << "Float works:" << copy << " vs " << str << std::endl;
     return 1;
     }
-  
+
   // Repeat with double, it works this time
   if( (copy = TestVRDSFunc<double,dsmaxbytes>(str)) != str )
     {

@@ -20,7 +20,7 @@
 int TestDataElementValueAsSQ(int argc, char *argv[])
 {
   int ret = 0;
-  const char *filenames[] = { 
+  const char *filenames[] = {
     "D_CLUNIE_CT1_J2KI.dcm",
     "PET-cardio-Multiframe-Papyrus.dcm"
   };
@@ -30,7 +30,7 @@ int TestDataElementValueAsSQ(int argc, char *argv[])
   };
   const unsigned int nfiles = sizeof(filenames)/sizeof(*filenames);
   const char *root = gdcm::Testing::GetDataRoot();
-  if( !root || !*root ) 
+  if( !root || !*root )
     {
     std::cerr << "root is not defiend" << std::endl;
     return 1;
@@ -62,4 +62,3 @@ int TestDataElementValueAsSQ(int argc, char *argv[])
 
   return ret;
 }
-

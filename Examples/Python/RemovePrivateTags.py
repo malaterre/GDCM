@@ -33,13 +33,13 @@ if __name__ == "__main__":
   r.SetFileName( file1 )
   if not r.Read():
     sys.exit(1)
-  
+
   # Remove private tags
   ano = gdcm.Anonymizer()
   ano.SetFile( r.GetFile() )
   if not ano.RemovePrivateTags():
     sys.exit(1)
-  
+
   # Write DICOM file
   w = gdcm.Writer()
   w.SetFile( ano.GetFile() )
@@ -47,7 +47,6 @@ if __name__ == "__main__":
   w.SetFileName( file2 )
   if not w.Write():
     sys.exit(1)
-  
+
   # It is usually a good idea to exit the script with an error, as gdcm does not remove partial (incorrect) DICOM file
   # (application level)
-  

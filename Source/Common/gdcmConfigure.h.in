@@ -97,8 +97,6 @@
 /* GDCM uses __FUNCTION__ which is not ANSI C, but C99 */
 #cmakedefine GDCM_CXX_HAS_FUNCTION
 
-#define GDCM_SIZEOF_LONG @GDCM_SIZEOF_LONG@
-
 /* Special time structure support */
 #cmakedefine GDCM_HAVE_SYS_TIME_H
 #cmakedefine GDCM_HAVE_WINSOCK_H
@@ -115,7 +113,7 @@
 #cmakedefine GDCM_HAVE__SNPRINTF
 #cmakedefine GDCM_HAVE_GETTIMEOFDAY
 
-// MM: I have a feeling that if GDCM_HAVE_WCHAR_IFSTREAM, then UNICODE filename 
+// MM: I have a feeling that if GDCM_HAVE_WCHAR_IFSTREAM, then UNICODE filename
 // are expected to be specified as UTF-16, but if no API exist for UTF-16
 // at std::ifstream level, then const char* of std::ifstream might accept
 // UTF-8
@@ -124,7 +122,7 @@
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
 /* To Remove code that support broken DICOM implementation and therefore
- * add some over head. Turn Off at your own risk 
+ * add some over head. Turn Off at your own risk
  */
 #cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 
