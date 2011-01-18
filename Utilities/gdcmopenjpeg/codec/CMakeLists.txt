@@ -55,7 +55,7 @@ FOREACH(exe j2k_to_image image_to_j2k j2k_dump)
   ENDIF(UNIX)
   # Install exe
   INSTALL(TARGETS ${exe}
-    EXPORT OpenJPEGTargets
+    EXPORT ${GDCM_TARGETS_NAME}
     DESTINATION ${OPENJPEG_INSTALL_BIN_DIR} COMPONENT Applications
   )
 ENDFOREACH(exe)
