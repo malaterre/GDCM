@@ -140,6 +140,8 @@ int main(int argc, char *argv [])
   // Add the pixel data element
   reader.GetFile().GetDataSet().Replace( pixeldata );
 
+  reader.GetFile().GetHeader().SetDataSetTransferSyntax(
+    gdcm::TransferSyntax::ExplicitVRLittleEndian);
   gdcm::Writer writer;
   writer.SetFile( reader.GetFile() );
 
