@@ -1,12 +1,13 @@
 #
-# this module looks for Dicom3Tools, well right now only dciodvfy
+# this module looks for Dicom3Tools, well right now only dciodvfy, dcuncat,
+# dcmulti
 #
 # DCIODVFY_EXECUTABLE - the full path to the dciodvfy
 # DCIODVFY_FOUND      - If false, don't attempt to use dciodvfy
 
 # dicom3tools are funny to build you'll need imake
-# Anyway in order not to pollute your system, you can do an in-source build
-# and install which should be clean enough:
+# Anyway in order not to pollute your system, you can do an in-source build and
+# install which should be clean enough:
 #
 # ./Configure
 # imake -I./config -DInstallInTopDir
@@ -36,10 +37,21 @@ FIND_PROGRAM(DCDUMP_EXECUTABLE
   "$ENV{DICOM3TOOLS}/bin/1.2.6.8."
   )
 
+FIND_PROGRAM(DCUNCAT_EXECUTABLE
+  dcuncat
+  "$ENV{DICOM3TOOLS}/bin"
+  )
+
+FIND_PROGRAM(DCMULTI_EXECUTABLE
+  dcmulti
+  "$ENV{DICOM3TOOLS}/bin"
+  )
 
 MARK_AS_ADVANCED(
   DCIODVFY_EXECUTABLE
   DCDUMP_EXECUTABLE
+  DCUNCAT_EXECUTABLE
+  DCMULTI_EXECUTABLE
   )
 
 #IF (NOT DCIODVFY_EXECUTABLE)
