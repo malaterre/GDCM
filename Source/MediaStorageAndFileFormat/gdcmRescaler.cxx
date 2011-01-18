@@ -367,16 +367,10 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
     RescaleFunctionIntoBestFit<int8_t>(out,(int8_t*)in,n);
     break;
   case PixelFormat::UINT12:
-    //RescaleFunctionIntoBestFit<uint12_t>(out,in,n);
-    assert(0);
-    break;
-  case PixelFormat::INT12:
-    //RescaleFunctionIntoBestFit<int12_t>(out,in,n);
-    assert(0);
-    break;
   case PixelFormat::UINT16:
     RescaleFunctionIntoBestFit<uint16_t>(out,(uint16_t*)in,n);
     break;
+  case PixelFormat::INT12:
   case PixelFormat::INT16:
     RescaleFunctionIntoBestFit<int16_t>(out,(int16_t*)in,n);
     break;

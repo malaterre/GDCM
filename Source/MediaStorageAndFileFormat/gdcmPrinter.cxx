@@ -600,6 +600,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
 {
   const ByteValue *bv = de.GetByteValue();
   const SequenceOfItems *sqi = 0; //de.GetSequenceOfItems();
+  const Value &value = de.GetValue();
   const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
   std::string strowner;
@@ -646,6 +647,22 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
   assert( refvr != VR::US_SS );
   assert( refvr != VR::OB_OW );
 
+  if( dynamic_cast<const SequenceOfItems*>( &value ) )
+    {
+    sqi = de.GetValueAsSQ();
+    refvr = VR::SQ;
+    assert( refvr == VR::SQ );
+    }
+
+  if( (vr_read == VR::INVALID || vr_read == VR::UN ) && vl_read.IsUndefined() )
+    {
+    assert( refvr == VR::SQ );
+    }
+
+//  if( vr_read == VR::SQ || vr_read == VR::UN )
+//    {
+//    sqi = de.GetValueAsSQ();
+//    }
   if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID || vr_read == VR::UN ) )
     {
     assert( vr != VR::INVALID );

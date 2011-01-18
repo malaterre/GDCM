@@ -145,7 +145,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
         // FIXME: This test is weak, since implicitely we are doing a != on floating point value
         if( sorted.find(dist) != sorted.end() )
           {
-          gdcmDebugMacro( "dist: " << dist << " already found" );
+          gdcmDebugMacro( "dist: " << dist << " already found: " << filename );
           return false;
           }
         sorted.insert(
@@ -194,7 +194,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       const int l = (int)( -log10(ZTolerance) );
       ZSpacing = spacing_round(zspacing, l);
       }
-    assert( spacingisgood == false ||  (ZSpacing > ZTolerance && ZTolerance > 0) );
+    assert( spacingisgood == false ||  (ComputeZSpacing ? (ZSpacing > ZTolerance && ZTolerance > 0) : ZTolerance > 0) );
     }
 }
 

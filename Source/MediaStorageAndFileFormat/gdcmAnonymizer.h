@@ -45,19 +45,23 @@ class CryptographicMessageSyntax;
  * - Remove all private attributes
  * - Remove all retired attributes
  *
- * All function calls actually execute the user specified request. Previous implementation were calling
- * a general Anonymize function but traversing a std::set is O(n) operation, while a simple user specified
- * request is O(log(n)) operation. So 'm' user interaction is O(m*log(n)) which is < O(n) complexity.
+ * All function calls actually execute the user specified request. Previous
+ * implementation were calling a general Anonymize function but traversing a
+ * std::set is O(n) operation, while a simple user specified request is
+ * O(log(n)) operation. So 'm' user interaction is O(m*log(n)) which is < O(n)
+ * complexity.
  *
  * 2. smart mode
- * this mode implements the Basic Application Level Confidentiality Profile (DICOM PS 3.15-2008)
- * In this case it is extremely important to use the same gdcm::Anonymizer class when anonymizing
- * a FileSet. Once the gdcm::Anonymizer is destroyed its memory of known (already processed) UIDs
- * will be lost. which will make the anonymizer behaves incorrectly for attributes such as Series UID
- * Study UID where user want some consistancy.
- * When attribute is Type 1 / Type 1C, a dummy generator will take in the existing value and produce
- * a dummy value (a sha1 representation). sha1 algorithm is considered to be cryptograpgically strong
- * (compared to md5sum) so that we meet the following two conditions:
+ * this mode implements the Basic Application Level Confidentiality Profile
+ * (DICOM PS 3.15-2008) In this case, it is extremely important to use the same
+ * gdcm::Anonymizer class when anonymizing a FileSet. Once the gdcm::Anonymizer
+ * is destroyed its memory of known (already processed) UIDs will be lost.
+ * which will make the anonymizer behaves incorrectly for attributes such as
+ * Series UID Study UID where user want some consistency.  When attribute is
+ * Type 1 / Type 1C, a dummy generator will take in the existing value and
+ * produce a dummy value (a sha1 representation). sha1 algorithm is considered
+ * to be cryptographically strong (compared to md5sum) so that we meet the
+ * following two conditions:
  *  - Produce the same dummy value for the same input value
  *  - do not provide an easy way to retrieve the original value from the sha1 generated value
  *
@@ -123,7 +127,7 @@ public:
   void SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms );
   const CryptographicMessageSyntax *GetCryptographicMessageSyntax() const;
 
-  /// for wrapped language: instanciate a reference counted object
+  /// for wrapped language: instantiate a reference counted object
   static SmartPointer<Anonymizer> New() { return new Anonymizer; }
 
   /// Return the list of Tag that will be considered when anonymizing a DICOM file.

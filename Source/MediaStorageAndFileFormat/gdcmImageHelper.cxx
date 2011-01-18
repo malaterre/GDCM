@@ -25,6 +25,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmImage.h"
 #include "gdcmDirectionCosines.h"
+#include "gdcmSegmentedPaletteColorLookupTable.h"
+#include "gdcmByteValue.h"
 
 #include <math.h> // fabs
 
@@ -584,6 +586,115 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
   return true;
 }
 
+
+/// This function returns pixel information about an image from its dataset
+/// That includes samples per pixel and bit depth (in that order)
+/// Returns a PixelFormat
+PixelFormat ImageHelper::GetPixelFormatValue(const File& f)
+{
+  // D 0028|0011 [US] [Columns] [512]
+  //[10/20/10 9:05:07 AM] Mathieu Malaterre:
+  PixelFormat pf;
+  const DataSet& ds = f.GetDataSet();
+  // D 0028|0100 [US] [Bits Allocated] [16]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+    Attribute<0x0028,0x0100> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetBitsAllocated( at.GetValue() );
+  }
+  // D 0028|0101 [US] [Bits Stored] [12]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+    Attribute<0x0028,0x0101> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetBitsStored( at.GetValue() );
+  }
+  // D 0028|0102 [US] [High Bit] [11]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+    Attribute<0x0028,0x0102> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetHighBit( at.GetValue() );
+  }
+  // D 0028|0103 [US] [Pixel Representation] [0]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+    Attribute<0x0028,0x0103> at = { 0 };
+    at.SetFromDataSet( ds );
+    pf.SetPixelRepresentation( at.GetValue() );
+  }
+  // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
+  {
+  //if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+    Attribute<0x0028,0x0002> at = { 1 };
+    at.SetFromDataSet( ds );
+    pf.SetSamplesPerPixel( at.GetValue() );
+  }
+  // else pf will default to 1...
+  }
+  return pf;
+
+}
+/// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
+/// rows and columns of the image in pixels (as opposed to actual distances).
+/// Also checks 0054, 0081 for the number of z slices for a 3D image
+/// If that tag is not present, default the z dimension to 1
+std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
+{
+  DataSet const & ds = f.GetDataSet();
+
+  //const DataSet& ds = inF.GetDataSet();
+  std::vector<unsigned int> theReturn(3);
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+    Attribute<0x0028,0x0011> at = { 0 };
+    at.SetFromDataSet( ds );
+    theReturn[0] = at.GetValue();
+    //if( theReturn[0] == 0 )
+    //  {
+    //  // come' on ! WTF
+    //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
+    //  theReturn[0] = 1;
+    //  }
+  }
+
+  // D 0028|0010 [US] [Rows] [512]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    Attribute<0x0028,0x0010> at = { 0 };
+    at.SetFromDataSet( ds );
+    theReturn[1] = at.GetValue();
+    //if( theReturn[1] == 0 )
+    //  {
+    //  // come' on ! WTF
+    //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
+    //  theReturn[1] = 1;
+    //  }
+  }
+  // D 0054|0081 [US] [Planes] [512]
+  {
+    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    Tag thePlanes(0x0054,0x0081);
+    if (ds.FindDataElement(thePlanes)){
+      Attribute<0x0054,0x0081> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[2] = at.GetValue();
+    } else {
+      theReturn[2] = 1;
+    }
+    //if( theReturn[1] == 0 )
+    //  {
+    //  // come' on ! WTF
+    //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
+    //  theReturn[1] = 1;
+    //  }
+  }
+  return theReturn;
+}
+
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 {
   std::vector<double> interceptslope;
@@ -629,6 +740,21 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     {
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
     gdcmAssertMacro( b ); (void)b;
+    }
+  else if (
+    ms == MediaStorage::RTDoseStorage
+  )
+    {
+    Attribute<0x3004,0x000e> gridscaling = { 0 };
+    gridscaling.SetFromDataSet( ds );
+    interceptslope[0] = 0;
+    interceptslope[1] = gridscaling.GetValue();
+    if( interceptslope[1] == 0 )
+      {
+      // come' on ! WTF
+      gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+      interceptslope[1] = 1;
+      }
     }
 
   // \post condition slope can never be 0:
@@ -1462,6 +1588,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::MRImageStorage // FIXME !
    && ms != MediaStorage::PETImageStorage
+   && ms != MediaStorage::RTDoseStorage
    && ms != MediaStorage::SecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
@@ -1542,6 +1669,15 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     return;
     }
 
+  if( ms == MediaStorage::RTDoseStorage )
+    {
+    Attribute<0x3004,0x00e> at2;
+    at2.SetValue( img.GetSlope() );
+    ds.Replace( at2.GetAsDataElement() );
+
+    return;
+    }
+
   // Question: should I always insert them ?
   // Answer: not always, let's discard MR if (1,0):
   if( ms == MediaStorage::MRImageStorage && img.GetIntercept() == 0. && img.GetSlope() == 1. )
@@ -1593,5 +1729,254 @@ bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<doubl
   return true;
 }
 
+
+//functions to get more information from a file
+//useful for the stream image reader, which fills in necessary image information
+//distinctly from the reader-style data input
+//code is borrowed from gdcmPixmapReader::ReadImage(MediaStorage const &ms)
+PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File const& f){
+  // 5. Photometric Interpretation
+  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+  PixelFormat pf = GetPixelFormatValue(f);
+  const Tag tphotometricinterpretation(0x0028, 0x0004);
+  const ByteValue *photometricinterpretation =
+    ImageHelper::GetPointerFromElement(tphotometricinterpretation, f);
+  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
+  if( photometricinterpretation )
+    {
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
+    }
+  else
+    {
+    if( pf.GetSamplesPerPixel() == 1 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
+      pi = PhotometricInterpretation::MONOCHROME2;
+      }
+    else if( pf.GetSamplesPerPixel() == 3 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      pi = PhotometricInterpretation::RGB;
+      }
+    else if( pf.GetSamplesPerPixel() == 4 )
+      {
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      pi = PhotometricInterpretation::ARGB;
+      }
+    }
+
+  bool isacrnema = false;
+  DataSet ds = f.GetDataSet();
+  const Tag trecognitioncode(0x0008,0x0010);
+  if( ds.FindDataElement( trecognitioncode ) && !ds.GetDataElement( trecognitioncode ).IsEmpty() )
+    {
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+    // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+    gdcmDebugMacro( "Mixture of ACR NEMA and DICOM file" );
+    isacrnema = true;
+  }
+  if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
+    {
+    if( pi != PhotometricInterpretation::UNKNOW )
+      {
+      pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
+      }
+    else if ( isacrnema )
+      {
+      assert ( pf.GetSamplesPerPixel() == 0 );
+      assert ( pi == PhotometricInterpretation::UNKNOW );
+      pf.SetSamplesPerPixel( 1 );
+      pi = PhotometricInterpretation::MONOCHROME2;
+      }
+    else
+      {
+      gdcmWarningMacro( "Cannot recognize image type. Does not looks like ACR-NEMA and is missing both Sample Per Pixel AND PhotometricInterpretation. Please report" );
+      }
+    }
+  return pi;
+}
+//returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
+//code is borrowed from gdcmPixmapReader::ReadImage(MediaStorage const &ms)
+unsigned int ImageHelper::GetPlanarConfigurationValue(const File& f){
+  // 4. Planar Configuration
+  // D 0028|0006 [US] [Planar Configuration] [1]
+  const Tag planarconfiguration = Tag(0x0028, 0x0006);
+  PixelFormat pf = GetPixelFormatValue(f);
+  unsigned int pc = 0;
+  // FIXME: Whatif planaconfiguration is send in a grayscale image... it would be empty...
+  // well hopefully :(
+  DataSet const & ds = f.GetDataSet();
+  if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
+    {
+    const DataElement& de = ds.GetDataElement( planarconfiguration );
+    Attribute<0x0028,0x0006> at = { 0 };
+    at.SetFromDataElement( de );
+
+    //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
+    pc = at.GetValue();
+    if( pc && pf.GetSamplesPerPixel() != 3 )
+      {
+      gdcmDebugMacro( "Cannot have PlanarConfiguration=1, when Sample Per Pixel != 3" );
+      pc = 0;
+      }
+    }
+  return pc;
+}
+
+  //returns the lookup table of an image file
+SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f){
+
+  DataSet const & ds = f.GetDataSet();
+  PixelFormat pf = GetPixelFormatValue(f);
+  PhotometricInterpretation pi = GetPhotometricInterpretationValue(f);
+  // Do the Palette Color:
+  // 1. Modality LUT Sequence
+  bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );
+  if( modlut )
+    {
+    gdcmWarningMacro( "Modality LUT (0028,3000) are not handled. Image will not be displayed properly" );
+    }
+  // 2. LUTData (0028,3006)
+  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUT need to
+  // be sent to require a LUT Data...
+  bool lutdata = ds.FindDataElement(Tag(0x0028,0x3006) );
+  if( lutdata )
+    {
+    gdcmWarningMacro( "LUT Data (0028,3006) are not handled. Image will not be displayed properly" );
+    }
+  // 3. VOILUTSequence (0028,3010)
+  bool voilut = ds.FindDataElement(Tag(0x0028,0x3010) );
+  if( voilut )
+    {
+    gdcmWarningMacro( "VOI LUT (0028,3010) are not handled. Image will not be displayed properly" );
+    }
+  // (0028,0120) US 32767                                    #   2, 1 PixelPaddingValue
+  bool pixelpaddingvalue = ds.FindDataElement(Tag(0x0028,0x0120));
+
+  // PS 3.3 - 2008 / C.7.5.1.1.2 Pixel Padding Value and Pixel Padding Range Limit
+  if(pixelpaddingvalue)
+    {
+    // Technically if Pixel Padding Value is 0 on MONOCHROME2 image, then appearance should be fine...
+    bool vizissue = true;
+    if( pf.GetPixelRepresentation() == 0 )
+      {
+      Element<VR::US,VM::VM1> ppv;
+      if( !ds.GetDataElement(Tag(0x0028,0x0120) ).IsEmpty() )
+        {
+        ppv.SetFromDataElement( ds.GetDataElement(Tag(0x0028,0x0120)) ); //.GetValue() );
+        if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
+          {
+          vizissue = false;
+          }
+        }
+      }
+    else if( pf.GetPixelRepresentation() == 1 )
+      {
+      gdcmDebugMacro( "TODO" );
+      }
+    // test if there is any viz issue:
+    if( vizissue )
+      {
+      gdcmDebugMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+      }
+    }
+  SmartPointer<LookupTable> lut = new LookupTable;
+  const Tag testseglut(0x0028, (0x1221 + 0));
+  if( ds.FindDataElement( testseglut ) )
+    {
+    lut = new SegmentedPaletteColorLookupTable;
+    }
+  //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
+  lut->Allocate( pf.GetBitsAllocated() );
+
+  // for each red, green, blue:
+  for(int i=0; i<3; ++i)
+    {
+    // (0028,1101) US 0\0\16
+    // (0028,1102) US 0\0\16
+    // (0028,1103) US 0\0\16
+    const Tag tdescriptor(0x0028, (0x1101 + i));
+    //const Tag tdescriptor(0x0028, 0x3002);
+    Element<VR::US,VM::VM3> el_us3 = {{ 0, 0, 0}};
+    // Now pass the byte array to a DICOMizer:
+    el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
+    lut->InitializeLUT( LookupTable::LookupTableType(i),
+      el_us3[0], el_us3[1], el_us3[2] );
+
+    // (0028,1201) OW
+    // (0028,1202) OW
+    // (0028,1203) OW
+    const Tag tlut(0x0028, (0x1201 + i));
+    //const Tag tlut(0x0028, 0x3006);
+
+    // Segmented LUT
+    // (0028,1221) OW
+    // (0028,1222) OW
+    // (0028,1223) OW
+    const Tag seglut(0x0028, (0x1221 + i));
+    if( ds.FindDataElement( tlut ) )
+      {
+      const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
+      if( lut_raw )
+        {
+        // LookupTableType::RED == 0
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        }
+      else
+        {
+        lut->Clear();
+        }
+
+      unsigned long check =
+        (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
+        * el_us3.GetValue(2) / 8;
+      assert( !lut->Initialized() || check == lut_raw->GetLength() ); (void)check;
+      }
+    else if( ds.FindDataElement( seglut ) )
+      {
+      const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
+      if( lut_raw )
+        {
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        }
+      else
+        {
+        lut->Clear();
+        }
+
+      //unsigned long check =
+      //  (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
+       // * el_us3.GetValue(2) / 8;
+      //assert( check == lut_raw->GetLength() ); (void)check;
+      }
+    else
+      {
+      assert(0);
+      }
+    }
+  if( ! lut->Initialized() ) {
+    gdcmDebugMacro("LUT was uninitialized!");
+  }
+  return lut;
+}
+
+
+const ByteValue* ImageHelper::GetPointerFromElement(Tag const &tag, const File& inF) {
+
+  const DataSet &ds = inF.GetDataSet();
+  if( ds.FindDataElement( tag ) )
+    {
+    const DataElement &de = ds.GetDataElement( tag );
+    return de.GetByteValue();
+    }
+  return 0;
+}
 
 }

@@ -19,7 +19,7 @@
 #include <string.h> // strlen
 #include <stdio.h> // EOF
 
-int TestString2(int argc, char *argv[])
+int TestString2(int , char *[])
 {
   gdcm::String<> s1 = "coucou";
   std::cout << s1 << " -> " << s1.size() << std::endl;

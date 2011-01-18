@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-int TestFilenameGenerator(int argc, char *argv[])
+int TestFilenameGenerator(int , char *[])
 {
   gdcm::FilenameGenerator fg;
   const char pattern[] = "/tmp/bla%01d";

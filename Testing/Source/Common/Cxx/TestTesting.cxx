@@ -15,7 +15,7 @@
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
-int TestTesting(int argc, char *argv[])
+int TestTesting(int , char *[])
 {
   gdcm::Testing testing;
   testing.Print( std::cout );

@@ -21,6 +21,7 @@
 namespace gdcm
 {
 
+class StreamImageWriter;
 class Pixmap;
 /**
  * \brief PixmapWriter

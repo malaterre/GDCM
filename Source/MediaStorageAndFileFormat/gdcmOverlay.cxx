@@ -134,19 +134,35 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
  * I cannot simply check for overlay_group,3000 this would not work
  * I would need a strong euristick
  */
-      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
-      //if( ds.FindDataElement( Tag(overlay.GetGroup(),0x0010 ) ) )
+      // Store found tag in overlay:
+      overlay = de.GetTag();
+      // heuristic based on either the Overlay Data or the Col/Row info
+      Tag toverlaydata(overlay.GetGroup(),0x3000 );
+      Tag toverlayrows(overlay.GetGroup(),0x0010 );
+      Tag toverlaycols(overlay.GetGroup(),0x0011 );
+      if( ds.FindDataElement( toverlaydata ) )
         {
         // ok so far so good...
-        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        const DataElement& overlaydata = ds.GetDataElement( toverlaydata );
         //const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x0010));
         if( !overlaydata.IsEmpty() )
           {
           ++numoverlays;
           }
         }
-        // Store found tag in overlay:
-        overlay = de.GetTag();
+      else if( ds.FindDataElement( toverlayrows ) && ds.FindDataElement( toverlaycols ) )
+        {
+        // Overlay Pixel are in Unused Pixel
+        assert( !ds.FindDataElement( toverlaydata ) );
+        const DataElement& overlayrows = ds.GetDataElement( toverlayrows );
+        const DataElement& overlaycols = ds.GetDataElement( toverlaycols );
+        Tag toverlaybitpos(overlay.GetGroup(),0x0102 );
+        assert( ds.FindDataElement( toverlaybitpos ) );
+        if( !overlayrows.IsEmpty() && !overlaycols.IsEmpty() )
+          {
+          ++numoverlays;
+          }
+        }
         // Move on to the next possible one:
         overlay.SetGroup( overlay.GetGroup() + 2 );
         // reset to element 0x0 just in case...
@@ -156,6 +172,11 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
 
   // at most one out of two :
   assert( numoverlays < 0x00ff / 2 );
+  // PS 3.3 - 2004:
+  // C.9.2 Overlay plane module
+  // Each Overlay Plane is one bit deep. Sixteen separate Overlay Planes may be associated with an
+  // Image or exist as Standalone Overlays in a Series
+  assert( numoverlays <= 16 );
   return numoverlays;
 }
 
@@ -248,6 +269,7 @@ void Overlay::Update(const DataElement & de)
       gdcmWarningMacro( "Unsuported OverlayBitsAllocated: " << at.GetValue() );
       }
     SetBitsAllocated( at.GetValue() );
+    SetBitsAllocated( 16 );
     }
   else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
     {
@@ -255,7 +277,7 @@ void Overlay::Update(const DataElement & de)
     at.SetFromDataElement( de );
     if( at.GetValue() != 0 ) // For old ACR when using unused bits...
       {
-      gdcmWarningMacro( "Unsuported OverlayBitPosition: " << at.GetValue() );
+      gdcmDebugMacro( "Unsuported OverlayBitPosition: " << at.GetValue() );
       }
     SetBitPosition( at.GetValue() );
     }
@@ -306,6 +328,7 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
     assert( ds.FindDataElement( Tag(0x7fe0,0x0010) ) );
     const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );
     const ByteValue *bv = pixeldata.GetByteValue();
+    if( !bv ) return false;
     assert( bv );
     const char *array = bv->GetPointer();
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is pain to support,

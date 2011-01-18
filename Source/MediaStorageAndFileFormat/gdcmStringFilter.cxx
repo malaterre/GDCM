@@ -19,6 +19,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmDataSetHelper.h"
 
+#include <string.h> // strtok
+
 namespace gdcm
 {
 
@@ -71,7 +73,7 @@ std::string StringFilter::ToMIME64(const Tag& t) const
       if( el.GetLength() ) { \
       os << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
-      ret.second = os.str(); } } \
+      retvalue = os.str(); } } \
     } break
 
 std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) const
@@ -86,6 +88,225 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
     const DataSet &ds = GetFile().GetDataSet();
     return ToStringPair(t, ds);
     }
+}
+
+bool StringFilter::ExecuteQuery(std::string const & query_const, std::string &value ) const
+{
+//  if( t.GetGroup() == 0x2 )
+//    {
+//    const FileMetaInformation &header = GetFile().GetHeader();
+//    return ToStringPair(query_const, header);
+//    }
+//  else
+    {
+    const DataSet &ds = GetFile().GetDataSet();
+    return ExecuteQuery(query_const, ds, value);
+    }
+}
+
+bool StringFilter::ExecuteQuery(std::string const & query_const,
+  DataSet const &ds, std::string &retvalue ) const
+{
+  //std::pair<std::string, std::string> ret;
+  static gdcm::Global &g = gdcm::Global::GetInstance();
+  static const gdcm::Dicts &dicts = g.GetDicts();
+  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+
+  char *query = strdup( query_const.c_str() );
+  const char delim[] = "/";
+  const char subdelim[] = "[]@='";
+
+  char *str1, *str2, *token, *subtoken;
+  char *saveptr1, *saveptr2;
+  int j;
+
+  bool dicomnativemodel = false;
+  const gdcm::DataSet *curds = NULL;
+  const gdcm::DataElement *curde = NULL;
+  gdcm::Tag t;
+  int state = 0;
+  for (j = 1, str1 = query; state >= 0 ; j++, str1 = NULL)
+    {
+    token = System::StrTokR(str1, delim, &saveptr1);
+
+    if (token == NULL)
+      break;
+    //printf("%d: %s\n", j, token);
+
+    std::vector< std::string > subtokens;
+    for (str2 = token; ; str2 = NULL)
+      {
+      subtoken = System::StrTokR(str2, subdelim, &saveptr2);
+      if (subtoken == NULL)
+        break;
+      //printf(" --> %s\n", subtoken);
+      subtokens.push_back( subtoken );
+      }
+    if( subtokens[0] == "DicomNativeModel" )
+      {
+      // move to next state
+      assert( state == 0 );
+      state = 1;
+      curds = &ds;
+      }
+    else if( subtokens[0] == "DicomAttribute" )
+      {
+      if( state != 1 )
+        {
+        state = -1;
+        break;
+        }
+      assert( subtokens[1] == "keyword" );
+      const char *k = subtokens[2].c_str();
+      const gdcm::DictEntry &dictentry = pubdict.GetDictEntryByKeyword(k, t);
+      if( !curds->FindDataElement( t ) )
+        {
+        state = -1;
+        break;
+        }
+      curde = &curds->GetDataElement( t );
+      }
+    else if( subtokens[0] == "Item" )
+      {
+      assert( state == 1 );
+      assert( curde );
+      assert( subtokens[1] == "number" );
+      gdcm::SequenceOfItems *sqi = curde->GetValueAsSQ();
+      if( !sqi )
+        {
+        state = -1;
+        break;
+        }
+      gdcm::Item const &item = sqi->GetItem( atoi( subtokens[2].c_str() ) );
+      curds = &item.GetNestedDataSet();
+      }
+    else if( subtokens[0] == "Value" )
+      {
+      assert( state == 1 );
+      // move to next state
+      state = 2;
+      assert( subtokens[1] == "number" );
+      const gdcm::ByteValue *bv = curde->GetByteValue();
+      assert( bv );
+      //bv->Print( std::cout << std::endl );
+      }
+    else
+      {
+      assert( subtokens.size() );
+      gdcmDebugMacro( "Unhandled token: " << subtokens[0] );
+      state = -1;
+      }
+    }
+  if( state != 2 )
+    {
+    return false;
+    }
+  free( query );
+
+  const DataElement &de = *curde;
+
+  const DictEntry &entry = pubdict.GetDictEntry(de.GetTag());
+
+  const VR &vr_read = de.GetVR();
+  const VR &vr_dict = entry.GetVR();
+
+  if( vr_dict == VR::INVALID )
+    {
+    // FIXME This is a public element we do not support...
+    return false;
+    }
+
+  VR vr;
+  // always prefer the vr from the file:
+  if( vr_read == VR::INVALID )
+    {
+    vr = vr_dict;
+    }
+  else if ( vr_read == VR::UN && vr_dict != VR::INVALID ) // File is explicit, but still prefer vr from dict when UN
+    {
+    vr = vr_dict;
+    }
+  else // cool the file is Explicit !
+    {
+    vr = vr_read;
+    }
+  if( vr.IsDual() ) // This mean vr was read from a dict entry:
+    {
+    vr = DataSetHelper::ComputeVR(*F,ds, t);
+    }
+
+  if( vr == VR::UN )
+    {
+    // this element is not known...
+    return false;
+    }
+
+  assert( vr != VR::UN && vr != VR::INVALID );
+  //ret.first = entry.GetName();
+  if( VR::IsASCII( vr ) )
+    {
+    assert( vr & VR::VRASCII );
+    const ByteValue *bv = de.GetByteValue();
+    if( de.GetVL() )
+      {
+      assert( bv /*|| bv->IsEmpty()*/ );
+      retvalue = std::string( bv->GetPointer(), bv->GetLength() );
+      // Let's remove any trailing \0 :
+      retvalue.resize( std::min( retvalue.size(), strlen( retvalue.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
+      }
+    else
+      {
+      //assert( bv == NULL );
+      retvalue = ""; // ??
+      }
+    }
+  else
+    {
+    assert( vr & VR::VRBINARY );
+    const ByteValue *bv = de.GetByteValue();
+    std::ostringstream os;
+    if( bv )
+      {
+      //VM::VMType vm = entry.GetVM();//!!mmr-- can I remove this, or will it mess with the stream?
+      //assert( vm == VM::VM1 );
+      if( vr.IsDual() ) // This mean vr was read from a dict entry:
+        {
+        vr = DataSetHelper::ComputeVR(GetFile(),ds, t);
+        }
+      std::ostringstream os;
+      switch(vr)
+        {
+        StringFilterCase(AT);
+        StringFilterCase(FL);
+        StringFilterCase(FD);
+        //StringFilterCase(OB);
+        StringFilterCase(OF);
+        //StringFilterCase(OW);
+        StringFilterCase(SL);
+        //StringFilterCase(SQ);
+        StringFilterCase(SS);
+        StringFilterCase(UL);
+        //StringFilterCase(UN);
+        StringFilterCase(US);
+        StringFilterCase(UT);
+      case VR::UN:
+      case VR::US_SS:
+        assert(0);
+        break;
+      case VR::OB:
+      case VR::OW:
+      case VR::OB_OW:
+      case VR::SQ:
+        gdcmWarningMacro( "Unhandled: " << vr << " for tag " << de.GetTag() );
+        retvalue = "";
+        break;
+      default:
+        assert(0);
+        break;
+        }
+      }
+    }
+  return true;
 }
 
 std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, DataSet const &ds) const
@@ -178,6 +399,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
         vr = DataSetHelper::ComputeVR(GetFile(),ds, t);
         }
       std::ostringstream os;
+      std::string retvalue;
       switch(vr)
         {
         StringFilterCase(AT);
@@ -208,6 +430,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
         assert(0);
         break;
         }
+        ret.second = retvalue;
       }
     }
   return ret;

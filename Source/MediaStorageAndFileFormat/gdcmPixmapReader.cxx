@@ -26,6 +26,7 @@
 #include "gdcmIconImage.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmImageHelper.h"
 
 namespace gdcm
 {
@@ -51,16 +52,6 @@ Pixmap& PixmapReader::GetPixmap()
 //  PixelData = img;
 //}
 
-const ByteValue* PixmapReader::GetPointerFromElement(Tag const &tag) const
-{
-  const DataSet &ds = F->GetDataSet();
-  if( ds.FindDataElement( tag ) )
-    {
-    const DataElement &de = ds.GetDataElement( tag );
-    return de.GetByteValue();
-    }
-  return 0;
-}
 
 bool PixmapReader::Read()
 {
@@ -123,7 +114,7 @@ bool PixmapReader::Read()
       if( ds.FindDataElement( tsopclassuid) && !ds.GetDataElement( tsopclassuid).IsEmpty() )
         {
         const ByteValue *sopclassuid
-          = GetPointerFromElement( tsopclassuid );
+          = ImageHelper::GetPointerFromElement( tsopclassuid, *F );
         std::string sopclassuid_str(
           sopclassuid->GetPointer(),
           sopclassuid->GetLength() );
@@ -693,6 +684,22 @@ void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
     //std::cout << "Num of Overlays: " << numoverlays << std::endl;
     assert( idxoverlays == numoverlays );
     }
+
+  // Now is good time to do some cleanup (eg. DX_GE_FALCON_SNOWY-VOI.dcm).
+  const PixelFormat &pf = pixeldata.GetPixelFormat();
+  // Yes I am using a call in the for() loop, because I internally modify the
+  // number of overlays:
+  for( size_t ov = 0; ov < pixeldata.GetNumberOfOverlays(); ++ov )
+    {
+    const Overlay& o = pixeldata.GetOverlay(ov);
+    unsigned short obp = o.GetBitPosition();
+    if( obp < pf.GetBitsStored() )
+      {
+      pixeldata.RemoveOverlay( ov );
+      gdcmWarningMacro( "Invalid BitPosition: " << obp << " for overlay #" << ov << " removing it." );
+      }
+    }
+
 }
 
 bool PixmapReader::ReadImage(MediaStorage const &ms)
@@ -877,7 +884,7 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation
-    = GetPointerFromElement( tphotometricinterpretation );
+    = ImageHelper::GetPointerFromElement( tphotometricinterpretation, *F );
   PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
   if( photometricinterpretation )
     {
@@ -1154,6 +1161,12 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       const DataElement &de = PixelData->GetDataElement();
       //const ByteValue *bv = de.GetByteValue();
       const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+      if( !sqf )
+        {
+        // TODO: It would be nice to recognize file such as JPEGDefinedLengthSequenceOfFragments.dcm
+        gdcmDebugMacro( "File is declared as JPEG compressed but does not contains Fragmens explicitely." );
+        return false;
+        }
       sqf->WriteBuffer( ss );
       //std::string s( bv->GetPointer(), bv->GetLength() );
       //is.str( s );

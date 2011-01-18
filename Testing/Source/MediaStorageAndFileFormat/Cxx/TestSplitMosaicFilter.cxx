@@ -17,6 +17,25 @@
 #include "gdcmSystem.h"
 #include "gdcmImageReader.h"
 
+static bool reorganize_mosaic_invert(unsigned short *input, const unsigned int *inputdims, unsigned int square,
+  const unsigned int *outputdims, const unsigned short *output )
+{
+  for(unsigned x = 0; x < outputdims[0]; ++x)
+    {
+    for(unsigned y = 0; y < outputdims[1]; ++y)
+      {
+      for(unsigned z = 0; z < outputdims[2]; ++z)
+        {
+        size_t outputidx = x + y*outputdims[0] + z*outputdims[0]*outputdims[1];
+        size_t inputidx = (x + (z%square)*outputdims[0]) +
+          (y + (z/square)*outputdims[0])*inputdims[0];
+        input[ inputidx ] = output[ outputidx ];
+        }
+      }
+    }
+  return true;
+}
+
 int TestSplitMosaicFilter(int, char *[])
 {
   gdcm::SplitMosaicFilter s;
@@ -60,6 +79,39 @@ int TestSplitMosaicFilter(int, char *[])
     }
 
   const gdcm::Image &image = filter.GetImage();
+
+  unsigned long l = image.GetBufferLength();
+  std::vector<char> buf;
+  buf.resize(l);
+  if( !image.GetBuffer( &buf[0] ) )
+    {
+    std::cerr << "Could not GetBuffer << " << filename << std::endl;
+    return 1;
+    }
+
+  unsigned int inputdims[3] = { 384, 384, 1 };
+  std::vector<char> outbuf;
+  unsigned long ll = inputdims[0] * inputdims[1] * sizeof( unsigned short );
+  outbuf.resize(ll);
+
+  reorganize_mosaic_invert((unsigned short *)&outbuf[0],  inputdims,
+    6, image.GetDimensions(), (const unsigned short*)&buf[0] );
+
+#if 0
+  std::ofstream o( "/tmp/debug" );
+  o.write( &outbuf[0], ll );
+  o.close();
+#endif
+
+  char digest[33];
+  gdcm::Testing::ComputeMD5(&outbuf[0], ll, digest);
+
+  // $ gdcminfo --md5sum gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
+  if( strcmp(digest, "be96c01db8a0ec0753bd43f6a985345c" ) != 0 )
+    {
+    std::cerr << digest << std::endl;
+    return 1;
+    }
 
   return 0;
 }

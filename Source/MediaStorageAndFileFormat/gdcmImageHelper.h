@@ -18,6 +18,10 @@
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
 #include <vector>
+#include "gdcmPixelFormat.h"
+#include "gdcmPhotometricInterpretation.h"
+#include "gdcmSmartPointer.h"
+#include "gdcmLookupTable.h"
 
 namespace gdcm
 {
@@ -26,6 +30,7 @@ class MediaStorage;
 class DataSet;
 class File;
 class Image;
+class ByteValue;
 /**
  * \brief ImageHelper (internal class, not intended for user level)
  *
@@ -61,7 +66,19 @@ public:
   static void SetForcePixelSpacing(bool);
   static bool GetForcePixelSpacing();
 
+  /// This function checks tags (0x0028, 0x0010) and (0x0028, 0x0011) for the
+  /// rows and columns of the image in pixels (as opposed to actual distances).
+  /// The output is {col , row}
+  static std::vector<unsigned int> GetDimensionsValue(const File& f);
+
+  /// This function returns pixel information about an image from its dataset
+  /// That includes samples per pixel and bit depth (in that order)
+  static PixelFormat GetPixelFormatValue(const File& f);
+
   /// Set/Get shift/scale from/to a file
+  /// \warning this function reads/sets the Slope/Intercept in appropriate
+  /// class storage, but also Grid Scaling in RT Dose Storage
+  /// Can't take a dataset because the mediastorage of the file must be known
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
@@ -70,6 +87,7 @@ public:
   static void SetOriginValue(DataSet & ds, const Image & img);
 
   /// Get Direction Cosines (IOP) from/to a file
+  /// Requires a file because mediastorage must be known
   static std::vector<double> GetDirectionCosinesValue(File const & f);
   /// Set Direction Cosines (IOP) from/to a file
   /// When IOD does not defines what is IOP (eg. typically Secondary Capture Image Storage)
@@ -87,6 +105,19 @@ public:
   static bool ComputeSpacingFromImagePositionPatient(const std::vector<double> &imageposition, std::vector<double> & spacing);
 
   static bool GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector<double> & dircos);
+
+  //functions to get more information from a file
+  //useful for the stream image reader, which fills in necessary image information
+  //distinctly from the reader-style data input
+  static PhotometricInterpretation GetPhotometricInterpretationValue(File const& f);
+  //returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
+  static unsigned int GetPlanarConfigurationValue(const File& f);
+
+  //returns the lookup table of an image file
+  static SmartPointer<LookupTable> GetLUT(File const& f);
+
+  ///Moved from PixampReader to here.  Generally used for photometric interpretation.
+  static const ByteValue* GetPointerFromElement(Tag const &tag, File const& f);
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);

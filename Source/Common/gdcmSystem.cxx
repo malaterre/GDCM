@@ -855,4 +855,41 @@ bool System::GetHostName(char name[255])
   return false;
 }
 
+char *System::StrTokR(char *ptr, const char *sep, char **end)
+{
+#if 1
+  if (ptr == NULL)
+    {
+    ptr = *end;
+    }
+
+  /* search string for set of char: strspn */
+  while (*ptr && strchr(sep, *ptr))
+    {
+    ++ptr;
+    }
+
+  if (*ptr == '\0') return NULL;
+
+  char *token = ptr;
+  *end = token + 1;
+
+  char *pend = *end;
+  while (*pend && !strchr(sep, *pend))
+    {
+    ++pend;
+    }
+
+  if (*pend)
+    {
+    *pend = '\0';
+    ++pend;
+    }
+
+  return token;
+#else
+  return strtok_r(ptr,sep,end);
+#endif
+}
+
 } // end namespace gdcm
