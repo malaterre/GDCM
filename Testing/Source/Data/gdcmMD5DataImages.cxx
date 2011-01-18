@@ -71,7 +71,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 16 1 */
 { "3372195a35448b76daee682d23502090" , "CT-SIEMENS-Icone-With-PaletteColor.dcm" },
 /* gdcm 512 512 1 16 1 */
-{ "7f029288f98f4c04e62f1aac0122e429" , "D_CLUNIE_CT1_J2KI.dcm" },
+{ "05bbdbcc81081791f6f9f8a1ffa648c8" , "D_CLUNIE_CT1_J2KI.dcm" },
 /* gdcm 512 512 1 16 1 */
 { "f3a3d0e739e5f4fbeddd1452b81f4d89" , "D_CLUNIE_CT1_J2KR.dcm" },
 /* gdcm 512 512 1 16 1 */
@@ -612,7 +612,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "4d790e17ee35572d64e37c55dbc36725" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" },
 { "93ddc0c3d642af60f55630232d2801ae" , "CT_Image_Storage_multiframe.dcm" },
-{ "ff261592e1c4b205eca7eea99d0101c0" , "ELSCINT1_JP2vsJ2K.dcm" },
+{ "6127740892542f23e37e6ab516b17caf" , "ELSCINT1_JP2vsJ2K.dcm" },
 { "b620a57170941e26dfd07ff334c73cb4" , "GE_MR_0025xx1bProtocolDataBlock.dcm" },
 { "4b5423b34ab4e104c222359a91448a5d" , "CT-SIEMENS-MissingPixelDataInIconSQ.dcm" },
 { "79b8705f2e6c7464bd3e2fc7e1d3483b" , "KODAK_CompressedIcon.dcm" },
@@ -634,25 +634,32 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 
 { "62687f0a17e9c4153f18b55c8abfcef3" , "SIEMENS_CSA2.dcm" },
-{ "37647008dc1c94096f4e996b409b9d30" , "MAROTECH_CT_JP2Lossy.dcm" },
+{ "a02fa05065b3a93a391f820ac38bd9ee" , "MAROTECH_CT_JP2Lossy.dcm" },
 { "8b5e38699887158c3defd47900a68fc5" , "ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm" },
 
 
 { "c57035e2dac52e339b27e8c965251b3d" , "DCMTK_JPEGExt_12Bits.dcm" }, // checked with dcmdjpeg v3.5.4+ 2009-05-07
 
-{ "d7673c8575cb2765f8ae25aa3899c77e","PHILIPS_GDCM12xBug.dcm"},
-{ "a597540a79306be4710f4f04497fc23a","PHILIPS_GDCM12xBug2.dcm"},
+{ "d7673c8575cb2765f8ae25aa3899c77e" , "PHILIPS_GDCM12xBug.dcm"},
+{ "a597540a79306be4710f4f04497fc23a" , "PHILIPS_GDCM12xBug2.dcm"},
 
-{ "1e8843c2d247f9e9e7a44c9c6de43f6d", "multiframegrayscalewordscis.dcm" },
-{ "928b41468193f0eecaea216866bbe735", "signedtruecoloroldsc.dcm" },
-{ "209bc9b02004a712f0436a1ca5e676b4", "multiframesinglebitscis.dcm" },
-{ "c8698fa1ec0b227113f244954b8e88f4", "multiframegrayscalebytescis.dcm" },
-{ "dce1513162a762bf43dcc3c9d5c5c3f7", "multiframetruecolorscis.dcm" },
+{ "1e8843c2d247f9e9e7a44c9c6de43f6d" , "multiframegrayscalewordscis.dcm" },
+{ "928b41468193f0eecaea216866bbe735" , "signedtruecoloroldsc.dcm" },
+{ "209bc9b02004a712f0436a1ca5e676b4" , "multiframesinglebitscis.dcm" },
+{ "c8698fa1ec0b227113f244954b8e88f4" , "multiframegrayscalebytescis.dcm" },
+{ "dce1513162a762bf43dcc3c9d5c5c3f7" , "multiframetruecolorscis.dcm" },
 
-{ "6bf95a48f366bdf8af3a198c7b723c77", "SinglePrecisionSC.dcm" },
+{ "6bf95a48f366bdf8af3a198c7b723c77" , "SinglePrecisionSC.dcm" },
 
 { "a870a7a7cab8c17646d118ae146be588" , "MR16BitsAllocated_8BitsStored.dcm" },
 
+{ "da153c2f438d6dd4277e0c6ad2aeae74" , "OsirixFake16BitsStoredFakeSpacing.dcm" },
+{ "1c485e1ac2b2bdbeeba14391b8c1e0c8" , "JPEGDefinedLengthSequenceOfFragments.dcm" },
+
+{ "ae1290d59c63b0c334a4834c5995fe45" , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" },
+
+{ "f3a3d0e739e5f4fbeddd1452b81f4d89" , "D_CLUNIE_CT1_JLSL.dcm" },
+{ "5e9085c66976d2f5f9989d88bf7a90c4" , "D_CLUNIE_CT1_JLSN.dcm" },
 
 /* Stopping condition */
 { 0 ,0 }

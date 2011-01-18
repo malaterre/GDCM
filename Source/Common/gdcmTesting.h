@@ -67,6 +67,25 @@ public :
   static const char * const * GetMD5DataImage(unsigned int file);
   static const char * GetMD5FromFile(const char *filepath);
 
+  /// Return what should have been the md5 of file 'filepath'
+  /// This is based on current GDCM implementation to decipher a broken DICOM file.
+  static const char * GetMD5FromBrokenFile(const char *filepath);
+
+  /// Return the offset of the very first pixel cell in the PixelData
+  /// -1 if not found
+  static std::streamoff GetStreamOffsetFromFile(const char *filepath);
+
+  /// Return the offset just after Pixel Data Length (7fe0,0000) if found.
+  /// Otherwise the offset of the very first pixel cell in Pixel Data
+  /// -1 if not found
+  static std::streamoff GetSelectedTagsOffsetFromFile(const char *filepath);
+
+  /// Return the lossy flag of the given filename
+  /// -1 -> Error
+  ///  0 -> Lossless
+  ///  1 -> Lossy
+  static int GetLossyFlagFromFile(const char *filepath);
+
   /// Return the GDCM DATA ROOT
   static const char * GetDataRoot();
 
