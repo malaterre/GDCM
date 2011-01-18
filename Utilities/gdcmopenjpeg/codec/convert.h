@@ -1,9 +1,10 @@
 /*
+ * Copyright (c) 2002-2007, Communications and Remote Sensing Laboratory, Universite catholique de Louvain (UCL), Belgium
+ * Copyright (c) 2002-2007, Professor Benoit Macq
  * Copyright (c) 2001-2003, David Janssens
  * Copyright (c) 2002-2003, Yannick Verschueren
- * Copyright (c) 2003-2005, Francois Devaux and Antonin Descampe
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
- * Copyright (c) 2002-2005, Communications and remote sensing Laboratory, Universite catholique de Louvain, Belgium
+ * Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,23 +31,48 @@
 #ifndef __J2K_CONVERT_H
 #define __J2K_CONVERT_H
 
-opj_image_t* bmptoimage(char *filename, opj_cparameters_t *parameters);
+/**@name RAW image encoding parameters */
+/*@{*/
+typedef struct raw_cparameters {
+  /** width of the raw image */
+  int rawWidth;
+  /** height of the raw image */
+  int rawHeight;
+  /** components of the raw image */
+  int rawComp;
+  /** bit depth of the raw image */
+  int rawBitDepth;
+  /** signed/unsigned raw image */
+  bool rawSigned;
+  /*@}*/
+} raw_cparameters_t;
 
-int imagetobmp(opj_image_t *image, char *outfile);
+/* TGA conversion */
+opj_image_t* tgatoimage(const char *filename, opj_cparameters_t *parameters);
+int imagetotga(opj_image_t * image, const char *outfile);
 
+/* BMP conversion */
+opj_image_t* bmptoimage(const char *filename, opj_cparameters_t *parameters);
+int imagetobmp(opj_image_t *image, const char *outfile);
+
+/* TIFF to image conversion*/
+opj_image_t* tiftoimage(const char *filename, opj_cparameters_t *parameters);
+int imagetotif(opj_image_t *image, const char *outfile);
 /**
 Load a single image component encoded in PGX file format
 @param filename Name of the PGX file to load
 @param parameters *List ?*
 @return Returns a greyscale image if successful, returns NULL otherwise
 */
-opj_image_t* pgxtoimage(char *filename, opj_cparameters_t *parameters);
+opj_image_t* pgxtoimage(const char *filename, opj_cparameters_t *parameters);
+int imagetopgx(opj_image_t *image, const char *outfile);
 
-int imagetopgx(opj_image_t *image, char *outfile);
+opj_image_t* pnmtoimage(const char *filename, opj_cparameters_t *parameters);
+int imagetopnm(opj_image_t *image, const char *outfile);
 
-opj_image_t* pnmtoimage(char *filename, opj_cparameters_t *parameters);
-
-int imagetopnm(opj_image_t *image, char *outfile);
+/* RAW conversion */
+int imagetoraw(opj_image_t * image, const char *outfile);
+opj_image_t* rawtoimage(const char *filename, opj_cparameters_t *parameters, raw_cparameters_t *raw_cp);
 
 #endif /* __J2K_CONVERT_H */
 
