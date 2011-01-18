@@ -423,7 +423,14 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
     overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
     }
 
+#ifdef _WIN32
+  // mingw
+  SYSTEM_INFO info;
+  GetSystemInfo (&info);
+  const unsigned int nprocs = info.dwNumberOfProcessors;
+#else
   const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
+#endif
   const unsigned int nthreads = std::min( nprocs, nfiles );
   threadparams *params = new threadparams[nthreads];
 

@@ -1,11 +1,11 @@
 /*=========================================================================
 
-  Program:   Visualization Toolkit
-  Module:    $RCSfile: vtkGDCMTesting.h,v $
+  Program: GDCM (Grassroots DICOM). A DICOM library
+  Module:  $URL$
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) 2006-2010 Mathieu Malaterre
   All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -33,6 +33,15 @@ public:
 
   static const char *GetVTKDataRoot();
   static const char *GetGDCMDataRoot();
+
+//BTX
+  typedef const char* const (*MD5MetaImagesType)[3];
+  static const char * const * GetMD5MetaImage(unsigned int file);
+//ETX
+  static unsigned int GetNumberOfMD5MetaImages();
+
+  static const char * GetMHDMD5FromFile(const char *filepath);
+  static const char * GetRAWMD5FromFile(const char *filepath);
 
 protected:
   vtkGDCMTesting();

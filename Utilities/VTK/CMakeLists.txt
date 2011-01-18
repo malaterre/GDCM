@@ -12,11 +12,11 @@ SET(vtkgdcm_SRCS
   vtkGDCMMedicalImageProperties.cxx
   )
 
-IF(GDCM_HAVE_PTHREAD_H)
+IF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
   vtkGDCMThreadedImageReader.cxx
   )
-ENDIF(GDCM_HAVE_PTHREAD_H)
+ENDIF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
 
 INCLUDE(${VTK_USE_FILE})
 INCLUDE_DIRECTORIES(
@@ -124,13 +124,14 @@ IF(GDCM_USE_ACTIVIZ AND UNIX)
   get_filename_component(bla ${ACTIVIZ_KITWARE_VTK_LIBRARY}
     PATH)
 
-  LINK_DIRECTORIES(${bla})
-  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF
-    ${bla}/libvtkCommon.so
-    #${bla}/libvtkIO.so
-    ${bla}/libvtkImaging.so
-    ${bla}/libvtkRendering.so
-    )
+  #LINK_DIRECTORIES(${bla})
+  #TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF
+  #  ${bla}/libvtkCommon.so
+  #  #${bla}/libvtkIO.so
+  #  ${bla}/libvtkImaging.so
+  #  ${bla}/libvtkRendering.so
+  #  )
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
 ELSE(GDCM_USE_ACTIVIZ AND UNIX)
   TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
 ENDIF(GDCM_USE_ACTIVIZ AND UNIX)

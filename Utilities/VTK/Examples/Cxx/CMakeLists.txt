@@ -24,6 +24,7 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
       ${GDCM_VTK_APPS}
       ConvertRGBToLuminance
       Convert16BitsTo8Bits
+      ConvertMultiFrameToSingleFrame
       MagnifyFile
       )
     IF(GDCM_DATA_EXTRA_ROOT)
@@ -41,6 +42,11 @@ FOREACH(app ${GDCM_VTK_APPS})
   ADD_EXECUTABLE(${app} ${app}.cxx)
   #SET_TARGET_PROPERTIES(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   TARGET_LINK_LIBRARIES(${app} ${VTKGDCM_NAME} ${vtkgdcm_LIBS})
+  TARGET_LINK_LIBRARIES(${app} gdcmDSED gdcmMSFF gdcmCommon)
+  IF(GDCM_BUILD_TESTING)
+    # gdcmTesting is in Common:
+    TARGET_LINK_LIBRARIES(${app} gdcmCommon)
+  ENDIF(GDCM_BUILD_TESTING)
   IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     IF(VTK_USE_RENDERING)
       TARGET_LINK_LIBRARIES(${app} vtkWidgets vtkVolumeRendering)

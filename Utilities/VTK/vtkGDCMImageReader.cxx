@@ -35,6 +35,7 @@
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 #include "vtkMatrix4x4.h"
 #include "vtkUnsignedCharArray.h"
+//#include "vtkUnsignedShortArray.h"
 #include "vtkBitArray.h"
 
 #include "gdcmImageReader.h"
@@ -722,7 +723,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-    vtkErrorMacro( "ImageReader failed" );
+    vtkErrorMacro( "ImageReader failed on " << filename );
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
@@ -1138,7 +1139,12 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     char * copy = new char[len];
     //memcpy(copy, pointer, len);
     image.GetBuffer(copy);
-    r.Rescale(pointer,copy,len);
+    if( !r.Rescale(pointer,copy,len) )
+      {
+      vtkErrorMacro( "Could not Rescale" );
+      // problem with gdcmData/3E768EB7.dcm
+      return 0;
+      }
     delete[] copy;
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
