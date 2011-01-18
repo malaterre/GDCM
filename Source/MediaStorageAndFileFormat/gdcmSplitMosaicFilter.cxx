@@ -28,17 +28,17 @@ namespace details {
 /*
  *  gdcmDataExtra/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
  */
-static bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims, unsigned int square,
-  const unsigned int *outputdims, unsigned short *output )
+static bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims,
+  unsigned int square, const unsigned int *outputdims, unsigned short *output )
 {
-  for(unsigned x = 0; x < outputdims[0]; ++x)
+  for(unsigned int x = 0; x < outputdims[0]; ++x)
     {
-    for(unsigned y = 0; y < outputdims[1]; ++y)
+    for(unsigned int y = 0; y < outputdims[1]; ++y)
       {
-      for(unsigned z = 0; z < outputdims[2]; ++z)
+      for(unsigned int z = 0; z < outputdims[2]; ++z)
         {
-        size_t outputidx = x + y*outputdims[0] + z*outputdims[0]*outputdims[1];
-        size_t inputidx = (x + (z%square)*outputdims[0]) +
+        const size_t outputidx = x + y*outputdims[0] + z*outputdims[0]*outputdims[1];
+        const size_t inputidx = (x + (z%square)*outputdims[0]) +
           (y + (z/square)*outputdims[0])*inputdims[0];
         output[ outputidx ] = input[ inputidx ];
         }
@@ -74,10 +74,12 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   if( csa.FindCSAElementByName( "NumberOfImagesInMosaic" ) )
     {
     const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
-    //std::cout << csael4 << std::endl;
-    gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4 = { 0 };
-    el4.Set( csael4.GetValue() );
-    numberOfImagesInMosaic = el4.GetValue();
+    if( !csael4.IsEmpty() )
+      {
+      gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4 = { 0 };
+      el4.Set( csael4.GetValue() );
+      numberOfImagesInMosaic = el4.GetValue();
+      }
     }
 
   if( !numberOfImagesInMosaic ) return false;
@@ -104,6 +106,7 @@ bool SplitMosaicFilter::Split()
   const gdcm::Image &inputimage = GetImage();
   if( inputimage.GetPixelFormat() != PixelFormat::UINT16 )
     {
+    gdcmDebugMacro( "Expecting UINT16 PixelFormat" );
     return false;
     }
   unsigned long l = inputimage.GetBufferLength();
@@ -153,6 +156,7 @@ bool SplitMosaicFilter::Split()
     }
   else
     {
+    gdcmDebugMacro( "Expecting MRImageStorage" );
     return false;
     }
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
