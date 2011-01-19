@@ -21,43 +21,60 @@
 
 int TestFileDerive(const char *subdir, const char* filename)
 {
-  using gdcm::Reader;
-  using gdcm::Writer;
-  using gdcm::Testing;
-  using gdcm::System;
-  using gdcm::FileDerivation;
+  using namespace gdcm;
+
   Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
+    std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
     }
   FileDerivation fd;
   fd.SetFile( reader.GetFile() );
   // Setup some actions:
 
-#if 0
   // TODO we should reference the original image
   File &file = reader.GetFile();
   DataSet &ds = file.GetDataSet();
 
-  if( !ds.FindDataElement( Tag(0x0008,0x0016) ) )
+  if( !ds.FindDataElement( Tag(0x0008,0x0016) )
+    || ds.GetDataElement( Tag(0x0008,0x0016) ).IsEmpty() )
     {
-    return 1;
+    std::cerr << "Missing sop class giving up: " << filename << std::endl;
+    return 0;
     }
-  if( !ds.FindDataElement( Tag(0x0008,0x0018) ) )
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
     {
-    return 1;
+    std::cerr << "Missing sop instance giving up: " << filename << std::endl;
+    return 0;
     }
+
   const DataElement &sopclassuid = ds.GetDataElement( Tag(0x0008,0x0016) );
   const DataElement &sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0018) );
   // Make sure that const char* pointer will be properly padded with \0 char:
   std::string sopclassuid_str( sopclassuid.GetByteValue()->GetPointer(), sopclassuid.GetByteValue()->GetLength() );
   std::string sopinstanceuid_str( sopinstanceuid.GetByteValue()->GetPointer(), sopinstanceuid.GetByteValue()->GetLength() );
-#endif
+
+  fd.AddReference( sopclassuid_str.c_str(), sopinstanceuid_str.c_str() );
+
+  // CID 7202 Source Image Purposes of Reference
+  // {"DCM",121320,"Uncompressed predecessor"},
+  fd.SetPurposeOfReferenceCodeSequenceCodeValue( 121320 );
+
+  // CID 7203 Image Derivation
+  // { "DCM",113040,"Lossy Compression" },
+  fd.SetDerivationCodeSequenceCodeValue( 113040 );
+  fd.SetDerivationDescription( "lossy conversion" );
 
   if( !fd.Derive() )
     {
+    std::cerr << "Failed to derive: " << filename << std::endl;
+    if( ds.FindDataElement( Tag(0x8,0x2112) ) )
+      {
+      return 0;
+      }
     return 1;
     }
 
@@ -100,6 +117,8 @@ int TestFileDerivation( int argc, char *argv[])
     }
 
   // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
