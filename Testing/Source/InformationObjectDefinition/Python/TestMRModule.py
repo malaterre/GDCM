@@ -20,14 +20,15 @@ g = gdcm.Global.GetInstance()
 g.LoadResourcesFiles()
 defs = g.GetDefs()
 modules = defs.GetModules()
+macros = defs.GetMacros()
 #module = modules.GetModule( "MR Image Module Attributes" )
 module = modules.GetModule( "C.8.3.1" )
 #print dir(module)
 
-mentry = module.GetModuleEntry( gdcm.Tag(0x0018,0x0087) )
+mentry = module.GetModuleEntryInMacros( macros, gdcm.Tag(0x0018,0x0087) )
 #print dir(mentry)
 print mentry
-mentry = module.GetModuleEntry( gdcm.Tag(0x0018,0x1080) )
+mentry = module.GetModuleEntryInMacros( macros, gdcm.Tag(0x0018,0x1080) )
 print mentry
 
 # Test succeed ?
