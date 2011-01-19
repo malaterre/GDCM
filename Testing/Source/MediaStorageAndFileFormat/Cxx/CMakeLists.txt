@@ -18,7 +18,7 @@ SET(MSFF_TEST_SRCS
   TestImageHelper
   TestImageToImageFilter
   TestImageChangeTransferSyntax1
-  TestImageChangePhotometricInterpretation
+  #TestImageChangePhotometricInterpretation
   #TestImageChangePhotometricInterpretation2 # does not compile on mingw...
   TestImageChangeTransferSyntax2
   TestImageChangeTransferSyntax3
