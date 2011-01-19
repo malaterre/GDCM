@@ -17,7 +17,8 @@
 #include "gdcmSystem.h"
 #include "gdcmImageReader.h"
 
-static bool reorganize_mosaic_invert(unsigned short *input, const unsigned int *inputdims, unsigned int square,
+static bool reorganize_mosaic_invert(unsigned short *input,
+  const unsigned int *inputdims, unsigned int square,
   const unsigned int *outputdims, const unsigned short *output )
 {
   for(unsigned x = 0; x < outputdims[0]; ++x)
@@ -36,23 +37,30 @@ static bool reorganize_mosaic_invert(unsigned short *input, const unsigned int *
   return true;
 }
 
-int TestSplitMosaicFilter(int, char *[])
+int TestSplitMosaicFilter(int argc, char *argv[])
 {
+  std::string filename;
+  if( argc == 2 )
+    {
+    filename = argv[1];
+    }
+  else
+    {
+    const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
+    if( !extradataroot )
+      {
+      return 1;
+      }
+    if( !gdcm::System::FileIsDirectory(extradataroot) )
+      {
+      std::cerr << "No such directory: " << extradataroot <<  std::endl;
+      return 1;
+      }
+
+    filename = extradataroot;
+    filename += "/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm";
+    }
   gdcm::SplitMosaicFilter s;
-
-  const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
-  if( !extradataroot )
-    {
-    return 1;
-    }
-  if( !gdcm::System::FileIsDirectory(extradataroot) )
-    {
-    std::cerr << "No such directory: " << extradataroot <<  std::endl;
-    return 1;
-    }
-
-  std::string filename = extradataroot;
-  filename += "/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm";
 
   // std::cout << filename << std::endl;
   if( !gdcm::System::FileExists(filename.c_str()) )
@@ -67,6 +75,11 @@ int TestSplitMosaicFilter(int, char *[])
     std::cerr << "could not read: " << filename << std::endl;
     return 1;
     }
+  const gdcm::Image &image = reader.GetImage();
+  unsigned int inputdims[3] = { 0, 0, 1 };
+  const unsigned int *dims = image.GetDimensions();
+  inputdims[0] = dims[0];
+  inputdims[1] = dims[1];
 
   gdcm::SplitMosaicFilter filter;
   filter.SetImage( reader.GetImage() );
@@ -78,7 +91,7 @@ int TestSplitMosaicFilter(int, char *[])
     return 1;
     }
 
-  const gdcm::Image &image = filter.GetImage();
+//  const gdcm::Image &image = filter.GetImage();
 
   unsigned long l = image.GetBufferLength();
   std::vector<char> buf;
@@ -89,13 +102,15 @@ int TestSplitMosaicFilter(int, char *[])
     return 1;
     }
 
-  unsigned int inputdims[3] = { 384, 384, 1 };
   std::vector<char> outbuf;
   unsigned long ll = inputdims[0] * inputdims[1] * sizeof( unsigned short );
   outbuf.resize(ll);
 
+  const unsigned int *mos_dims = image.GetDimensions();
+  unsigned int div = (unsigned int )ceil(sqrt( (double)mos_dims[2]) );
+
   reorganize_mosaic_invert((unsigned short *)&outbuf[0],  inputdims,
-    6, image.GetDimensions(), (const unsigned short*)&buf[0] );
+    div, mos_dims, (const unsigned short*)&buf[0] );
 
 #if 0
   std::ofstream o( "/tmp/debug" );
@@ -109,7 +124,7 @@ int TestSplitMosaicFilter(int, char *[])
   // $ gdcminfo --md5sum gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
   if( strcmp(digest, "be96c01db8a0ec0753bd43f6a985345c" ) != 0 )
     {
-    std::cerr << digest << std::endl;
+    std::cerr << "Problem found: " << digest << std::endl;
     return 1;
     }
 
