@@ -27,12 +27,11 @@ file-out  DICOM output filename
 
 \subsection options Options
 \verbatim
-  -i --input     DICOM filename or directory
-  -o --output    DICOM filename or directory
+  -i --input              DICOM filename or directory
+  -o --output             DICOM filename or directory
   -r --recursive          recursive.
-     --descriptor          descriptor.
-     --root-uid               Root UID.
-     --resources-path         Resources path.
+     --descriptor         descriptor.
+     --root-uid           Root UID.
 \endverbatim
 
 \subsection general_options General Options
@@ -59,20 +58,22 @@ file-out  DICOM output filename
 \subsection environment_variable environment variable
 \verbatim
   GDCM_ROOT_UID Root UID
-  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)
 \endverbatim
 
 \section usage Typical usage
 
 \section note NOTE
-One may have to run some preliminary steps in order to get gdcmgendir to generate the DICOMDIR file. Namely two steps:
+One may have to run some preliminary steps in order to get gdcmgendir to
+generate the DICOMDIR file. Namely two steps:
 \li Batch renaming of the DICOM filename into something compatible with ISO 9660 filename convention
 \li Convert all DICOM file into the Explicit VR Little Endian Uncompressed (1.2.840.10008.1.2.1)
 
-Step 1. can be solved in a numerous way. Eg. on UNIX environment this could either be solved using the mkisofs
-command line tool. filename should not contains any extension since the VR CS does not allow for the '.' character.
-Only upper case, digit 0-9, the space ' ' and the underscore '_' character are valid in VR CS, with a maximum
-of 8 bytes. Another simple tool that can be handy is 'rename' in conjunction with 'basename'.
+Step 1. can be solved in a numerous way. Eg. on UNIX environment this could
+either be solved using the mkisofs command line tool. filename should not
+contains any extension since the VR CS does not allow for the '.' character.
+Only upper case, digit 0-9, the space ' ' and the underscore '_' character are
+valid in VR CS, with a maximum of 8 bytes. Another simple tool that can be
+handy is 'rename' in conjunction with 'basename'.
 
 Step 2. can simply be achieved using the gdcmconv command line tool:
 
