@@ -237,6 +237,7 @@ EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
+
 %include "gdcmProgressEvent.h"
 //%feature("director") AnonymizeEvent;
 %include "gdcmAnonymizeEvent.h"
@@ -607,7 +608,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
 %include "gdcmSHA1.h"
-%include "gdcmBase64.h"
+//%include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
 
