@@ -40,6 +40,7 @@ int TestvtkGDCMMetaImageWrite(const char *filename, bool verbose)
   int canread = reader->CanReadFile( filename );
   if( !canread )
     {
+    reader->Delete();
     const char *refms = gdcm::Testing::GetMediaStorageFromFile(filename);
     if( gdcm::MediaStorage::IsImage( gdcm::MediaStorage::GetMSType(refms) ) )
       {
