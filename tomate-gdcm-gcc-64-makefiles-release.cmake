@@ -1,7 +1,7 @@
 # Client maintainer: mathieu . malaterre  gmail . com
 
 set(CTEST_SITE "tomate")
-set(CTEST_BUILD_NAME "Linux-gcc-GIT-release")
+set(CTEST_BUILD_NAME "Linux-gcc-GIT-release-cov")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
 set(CTEST_DASHBOARD_ROOT "/local/mmalater")
