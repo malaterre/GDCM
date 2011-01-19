@@ -148,6 +148,9 @@ SET(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
 FOREACH(name ${MSFF_TEST_SRCS})
   ADD_TEST(${name} ${GDCM_MSFF_TESTS} ${name})
 ENDFOREACH(name)
+IF(GDCM_DATA_ROOT)
+  SET_TESTS_PROPERTIES(TestDICOMDIRGenerator2 PROPERTIES WILL_FAIL ON)
+ENDIF(GDCM_DATA_ROOT)
 
 # We can only run the dcmtk cross-checking test *only* after all the tests have run
 # in particular once the TestWriter is done.
