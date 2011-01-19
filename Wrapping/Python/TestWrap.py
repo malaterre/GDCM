@@ -43,6 +43,7 @@ blacklist = (
 "String"
 "CodeString"
 "Parser"
+"TagToVR"
 
 # DataDict:
 "TagToType"
