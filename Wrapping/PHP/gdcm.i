@@ -19,11 +19,11 @@
 %module(docstring="A DICOM library",directors=1) gdcm
 #pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516,842
 
-//#if defined(SWIGPHP)
-//%{
-//#define SWIGPHP
-//%}
-//#endif
+#if defined(SWIGPHP)
+%{
+#define SWIGPHP
+%}
+#endif
 
 
 %{
@@ -201,7 +201,7 @@ using namespace gdcm;
 
 #if defined(SWIGPHP)
 %define EXTEND_CLASS_PRINT(classname)
-EXTEND_CLASS_PRINT_GENERAL(toString,classname)
+EXTEND_CLASS_PRINT_GENERAL(__toString,classname)
 %enddef
 #endif
 
