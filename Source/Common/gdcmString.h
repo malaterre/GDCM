@@ -75,7 +75,7 @@ public:
   }
 
   /// WARNING: Trailing \0 might be lost in this operation:
-  operator const char *() { return this->c_str(); }
+  operator const char *() const { return this->c_str(); }
 
   /// return if string is valid
   bool IsValid() const {

@@ -264,12 +264,13 @@ void Overlay::Update(const DataElement & de)
     {
     Attribute<0x6000,0x0100> at;
     at.SetFromDataElement( de );
+    // if OverlayBitsAllocated is 1 it imply OverlayData element
+    // if OverlayBitsAllocated is 16 it imply Overlay in unused pixel bits
     if( at.GetValue() != 1 )
       {
       gdcmWarningMacro( "Unsuported OverlayBitsAllocated: " << at.GetValue() );
       }
     SetBitsAllocated( at.GetValue() );
-    SetBitsAllocated( 16 );
     }
   else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
     {
