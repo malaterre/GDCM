@@ -21,7 +21,7 @@
 require_once( 'gdcm.php' );
 
 $reader = new PixmapReader();
-$reader->SetFilename( "/test.dcm" );
+$reader->SetFilename( "test.dcm" );
 if( !$reader->Read() )
 {
 return;
