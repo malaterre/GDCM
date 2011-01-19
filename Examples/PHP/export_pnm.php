@@ -21,18 +21,26 @@
 require_once( 'gdcm.php' );
 
 $reader = new PixmapReader();
-$reader->SetFilename( "test.dcm" );
-$reader->Read();
+$reader->SetFilename( "/test.dcm" );
+if( !$reader->Read() )
+{
+return;
+}
 
 $file = $reader->GetFile();
 $pixmap = $reader->GetPixmap();
 
+print $pixmap;
+
 $pnm = new PNMCodec();
-$pnm.SetDimensions( $imageori->GetDimensions() );
-$pnm.SetPixelFormat( $imageori->GetPixelFormat() );
-$pnm.SetPhotometricInterpretation( $imageori->GetPhotometricInterpretation() );
+$pnm->SetDimensions( $pixmap->GetDimensions() );
+$pnm->SetPixelFormat( $pixmap->GetPixelFormat() );
+$pnm->SetPhotometricInterpretation( $pixmap->GetPhotometricInterpretation() );
 $in = $pixmap->GetDataElement();
 $outfilename = 'test.pnm';
-$pnm.Write( outfilename, in );
+if( $pnm->Write( $outfilename, $in ) )
+{
+print "Success";
+}
 
 ?>
