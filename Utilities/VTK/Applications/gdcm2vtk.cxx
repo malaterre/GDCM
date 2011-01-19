@@ -80,6 +80,10 @@ void PrintHelp()
   std::cout << "     --compress         when supported generate a compressed file." << std::endl;
   std::cout << "     --use-vtkdicom     Use vtkDICOMImageReader (instead of GDCM)." << std::endl;
   std::cout << "     --modality         set Modality." << std::endl;
+  std::cout << "     --lower-left       set lower left." << std::endl;
+  std::cout << "     --shift            set shift." << std::endl;
+  std::cout << "     --scale            set scale." << std::endl;
+  std::cout << "     --compress         set compressoin (MetaIO)." << std::endl;
   std::cout << "  -T --study-uid        Study UID." << std::endl;
   std::cout << "  -S --series-uid       Series UID." << std::endl;
   std::cout << "     --root-uid         Root UID." << std::endl;
@@ -101,6 +105,7 @@ void PrintHelp()
 
 int main(int argc, char *argv[])
 {
+  int retcode = 0;
   int c;
   //int digit_optind = 0;
 
@@ -421,10 +426,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".png") == 0 )
       {
@@ -436,10 +442,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".tif") == 0
       ||  gdcm::System::StrCaseCmp(outputextension,".tiff") == 0  ) //
@@ -452,10 +459,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  ) // vtkXMLImageDataWriter::GetDefaultFileExtension()
       {
@@ -468,10 +476,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     else if(  gdcm::System::StrCaseCmp(outputextension,".mha") == 0 ||
@@ -493,13 +502,15 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
 #endif
     }
-  // else
+//  else
+    {
 
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
   //writer->SetFileLowerLeft( 1 );
@@ -766,8 +777,10 @@ int main(int argc, char *argv[])
 
   if( verbose )
     writer->GetInput()->Print( std::cout );
-
   writer->Delete();
+}
+
+cleanup:
   if( imgreader ) imgreader->Delete();
   datareader->Delete();
   reader->Delete();
@@ -775,5 +788,5 @@ int main(int argc, char *argv[])
   dicomreader->Delete();
 #endif
 
-  return 0;
+  return retcode;
 }
