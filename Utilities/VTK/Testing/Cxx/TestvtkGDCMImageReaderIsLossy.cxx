@@ -55,6 +55,7 @@ int TestvtkGDCMImageReaderIsLossyFunc(const char *filename, bool verbose = false
     std::cerr << "Could not read: " << filename << std::endl;
     //++res;
     }
+  reader->Delete();
 
   return res;
 }
