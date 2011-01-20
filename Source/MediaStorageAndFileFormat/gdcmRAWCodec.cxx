@@ -82,8 +82,9 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
     assert( PI != PhotometricInterpretation::YBR_ICT );
     assert( this->GetPixelFormat() != PixelFormat::UINT12 );
     assert( this->GetPixelFormat() != PixelFormat::INT12 );
-    assert(inBufferLength == inOutBufferLength);
-    memcpy(outBytes, inBytes, inBufferLength);
+    // DermaColorLossLess.dcm
+    assert(inBufferLength == inOutBufferLength || inBufferLength == inOutBufferLength + 1);
+    memcpy(outBytes, inBytes, inOutBufferLength);
     return true;
     }
   // else
