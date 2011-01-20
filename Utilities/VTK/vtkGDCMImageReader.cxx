@@ -838,7 +838,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
     ComputePixelTypeFromFiles(this->FileName, this->FileNames, image);
   if( this->FileName )
     {
-    assert( outputpt == pixeltype );
+    // We should test that outputpt is 8 when BitsAllocated = 16 / Bits Stored = 8
+    // BUT we should test that output is 16 when BitsAllocated = 16 / BitsStored = 12
+    // assert( outputpt == pixeltype );
     }
 
   // Compute output pixel format when Rescaling:
