@@ -83,7 +83,12 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
     assert( this->GetPixelFormat() != PixelFormat::UINT12 );
     assert( this->GetPixelFormat() != PixelFormat::INT12 );
     // DermaColorLossLess.dcm
-    assert(inBufferLength == inOutBufferLength || inBufferLength == inOutBufferLength + 1);
+    //assert(inBufferLength == inOutBufferLength || inBufferLength == inOutBufferLength + 1);
+    // What if the user request a subportion of the image:
+    // this happen in the case of MOSAIC image, where we are only interested in the non-zero
+    // pixel of the tiled image.
+    // removal of this assert also solve an issue with: SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+    // where we need to discard trailing pixel data bytes.
     memcpy(outBytes, inBytes, inOutBufferLength);
     return true;
     }
