@@ -230,6 +230,31 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 
+FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/dcmdjpls/")
+
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDJPLS_EXECUTABLE)
+        #if(EXISTS "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/${filename_name}")
+        ADD_TEST("DCMDJPLS-${filename_name}" ${DCMTK_DCMDJPLS_EXECUTABLE}
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/${filename_name}"
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/dcmdjpls/${filename_name}")
+        # Special handling of the DICOMDIR files:
+        STRING(REGEX MATCH ${filename_name} is_dicomdir ${gdcm_data_dicomdir_filenames_glob})
+        IF(is_dicomdir)
+          #MESSAGE("IS DICOMDIR ${filename_name}")
+          SET_TESTS_PROPERTIES("DCMDJPLS-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        ENDIF(is_dicomdir)
+        #endif(EXISTS "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/${filename_name}")
+        #
+      ENDIF(DCMTK_DCMDJPLS_EXECUTABLE)
+    ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
 # Need to SET_TESTS_PROPERTIES only *after* the loop is done (test need to have been declared first)
 IF(GDCM_TEST_DCMTK)
   IF(DCMTK_DCMDJPEG_EXECUTABLE)
