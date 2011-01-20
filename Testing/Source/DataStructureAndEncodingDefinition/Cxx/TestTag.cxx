@@ -81,6 +81,26 @@ int TestPrivate()
   return 0;
 }
 
+int TestPipePrintRead()
+{
+  gdcm::Tag t(0x1234,0x5678);
+  const char pipesep[] = "1234|5678";
+
+  gdcm::Tag tprime(0x0,0x0);
+  if( !tprime.ReadFromPipeSeparatedString(pipesep) )
+    {
+    return 1;
+    }
+
+  if( tprime != t ) return 1;
+
+  std::string str = t.PrintAsPipeSeparatedString();
+
+  if( str != pipesep ) return 1;
+
+  return 0;
+}
+
 int TestOperator()
 {
   gdcm::Tag t1(0x1234,0x5678);
@@ -308,6 +328,8 @@ int TestTag(int , char * [])
   int res = TestOperator();
   if( res ) return res;
   res = TestPrivate();
+  if( res ) return res;
+  res = TestPipePrintRead();
   if( res ) return res;
 
   const gdcm::Tag myTag(0x0008,0x103e);
