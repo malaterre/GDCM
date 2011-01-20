@@ -18,6 +18,7 @@
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
+#include "gdcmAttribute.h"
 
 /*
 Let's test the relation in between lossless transfer syntax and lossless compressed stream.
@@ -109,9 +110,15 @@ int TestImageWriter2(int argc, char *argv[])
       // We should never authorized writing of image that was lossy compress and declare as lossless
       if( writer.Write() )
         {
-        std::cerr << "We should never authorize writing of image that was lossy compress and declare as lossless" << std::endl;
-        std::cerr << filename_lossy << " " << filename_lossless << std::endl;
-        return 1;
+        gdcm::Attribute<0x0028,0x2110> at;
+        at.Set( writer.GetFile().GetDataSet() );
+        if( at.GetValue() != "01" )
+          {
+          std::cerr << "We should never authorize writing of image that was lossy "
+            "compress and declare as lossless" << std::endl;
+          std::cerr << filename_lossy << " " << filename_lossless << std::endl;
+          return 1;
+          }
         }
       }
 
