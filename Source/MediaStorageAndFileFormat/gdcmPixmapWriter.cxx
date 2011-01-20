@@ -397,6 +397,9 @@ bool PixmapWriter::PrepareWrite()
   const TransferSyntax &ts = PixelData->GetTransferSyntax();
   assert( ts.IsExplicit() || ts.IsImplicit() );
 
+  // It is perfectly ok to store a lossy image using a J2K (this is odd, but valid).
+  // as long as your mark LossyImageCompression with value 1
+#if 0
   // if ts_orig is undefined we need to check ts of Pixel Data comply with itself
   if( ts_orig == TransferSyntax::TS_END )
     {
@@ -410,6 +413,7 @@ bool PixmapWriter::PrepareWrite()
     // lossless compressed JPEG file using a lossy JPEG (compatible) one. But I
     // do not believe this is an error in this case.
     }
+#endif
 
   if( /*ts.IsLossy() &&*/ PixelData->IsLossy() )
     {
