@@ -14,7 +14,7 @@ set(dashboard_do_coverage FALSE)
 set(dashboard_model Continuous)
 set(CTEST_TEST_TIMEOUT 3000)
 
-SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
+SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}:/local/mmalater/install/bin/")
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
@@ -26,6 +26,7 @@ GDCM_USE_VTK:BOOL=ON
 VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate
 CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
 GDCM_USE_SYSTEM_OPENSSL:BOOL=ON
+GDCM_TEST_DCMTK:BOOL=ON
 GDCM_DATA_EXTRA_ROOT:PATH=${CTEST_DASHBOARD_ROOT}/gdcmDataExtra
     "
     )
