@@ -30,6 +30,23 @@ SWIG_ADD_MODULE(php_gdcm php gdcm.i)
 SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF)
 
 SET_TARGET_PROPERTIES(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+# Remove 'lib' prefix :no-op on windows and valid for UNIX based syste
+SET_TARGET_PROPERTIES(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES PREFIX "")
+
+# For some reason the php glue module name is odd using swig 1.3.40, it is php_gdcm on windows
+# while simply gdcm on other unix system:
+# ...
+#    if (!dl('php_gdcm.dll')) return;
+#  } else {
+#    // PHP_SHLIB_SUFFIX gives 'dylib' on MacOS X but modules are 'so'.
+#    if (PHP_SHLIB_SUFFIX === 'dylib') {
+#      if (!dl('gdcm.so')) return;
+#    } else {
+#      if (!dl('gdcm.'.PHP_SHLIB_SUFFIX)) return;
+# ...
+IF(UNIX)
+  SET_TARGET_PROPERTIES(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "gdcm")
+ENDIF(UNIX)
 
 # Module are always place in the library destination
 # but for poor win32 user I decided to place them
