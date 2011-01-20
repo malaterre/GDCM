@@ -16,7 +16,7 @@ set(dashboard_do_coverage TRUE)
 SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings ")
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -pedantic -Wno-long-long")
 # set any extra envionment variables here
-#SET (ENV{JAVA_HOME} "/usr/lib/jvm/default-java")
+SET(ENV{JAVA_HOME} "/opt/jdk")
 
 # http://www.cmake.org/Wiki/CTest:Coverage
 SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")
