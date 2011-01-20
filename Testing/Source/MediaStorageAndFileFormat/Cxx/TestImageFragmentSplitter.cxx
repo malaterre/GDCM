@@ -74,6 +74,7 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
     gdcm::Filename fn( filename );
     if( fn.GetName() == std::string("JPEGDefinedLengthSequenceOfFragments.dcm" ) )
       {
+      // JPEG Fragments are packed in a VR:OB Attribute
       return 0;
       }
     std::cerr << "Could not apply splitter: " << filename << std::endl;

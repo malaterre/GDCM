@@ -41,6 +41,12 @@ int TestvtkGDCMMetaImageWrite(const char *filename, bool verbose)
   if( !canread )
     {
     reader->Delete();
+    gdcm::Filename fn( filename );
+    if( fn.GetName() == std::string("ELSCINT1_PMSCT_RLE1.dcm" ) )
+      {
+      // No Pixel Data...
+      return 0;
+      }
     const char *refms = gdcm::Testing::GetMediaStorageFromFile(filename);
     if( gdcm::MediaStorage::IsImage( gdcm::MediaStorage::GetMSType(refms) ) )
       {
