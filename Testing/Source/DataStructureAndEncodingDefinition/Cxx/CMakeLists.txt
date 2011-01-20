@@ -64,6 +64,7 @@ SET(DSED_TEST_SRCS
   TestReader2
   TestAttribute8
   TestPDBHeader
+  TestSequenceOfItems2
   )
 ENDIF(GDCM_DATA_ROOT)
 IF(GDCM_DATA_EXTRA_ROOT)
