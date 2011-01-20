@@ -297,19 +297,21 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     codec.SetNeedByteSwap( GetNeedByteSwap() );
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
     DataElement out;
-    bool r = codec.Decode(PixelData, out);
+    //bool r = codec.Decode(PixelData, out);
+    bool r = codec.DecodeBytes(bv->GetPointer(), bv->GetLength(),
+      buffer, len);
     if( !r ) return false;
-    const ByteValue *outbv = out.GetByteValue();
-    assert( outbv );
+    //const ByteValue *outbv = out.GetByteValue();
+    //assert( outbv );
     if( len != bv->GetLength() )
       {
       // SIEMENS_GBS_III-16-ACR_NEMA_1.acr
       // This is also handling the famous DermaColorLossLess.dcm issue
       // where RGB image is odd length (GetBufferLength()) but
       // ByteValue::GetLength is rounded up to the next even byte length
-      gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
-        " is different from computed value " << len );
-      ((ByteValue*)outbv)->SetLength( len );
+    //  gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
+    //    " is different from computed value " << len );
+    //  ((ByteValue*)outbv)->SetLength( len );
       }
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
@@ -317,11 +319,12 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
 
-    unsigned long check = outbv->GetLength();  // FIXME
+    unsigned long check; // = outbv->GetLength();  // FIXME
+    check = len;
     // DermaColorLossLess.dcm
     assert( check == len || check == len + 1 );
     (void)check;// removing warning
-    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    //if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     return r;
     }
   return false;
