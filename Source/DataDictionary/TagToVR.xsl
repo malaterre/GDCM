@@ -37,22 +37,20 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef GDCMTAGTOVR_H
-#define GDCMTAGTOVR_H
-
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 #include "gdcmStaticAssert.h"
 
 namespace gdcm {
-VR::VRType GetVRFromTag( uint32_t tag ) {
+VR::VRType GetVRFromTag( Tag const &amp; t ) {
+if( t.IsGroupLength() ) return VR::UL;
+uint32_t tag = t.GetElementTag();
 switch( tag ) {
 </xsl:text>
     <xsl:for-each select="dict/entry">
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
-      <xsl:if test="contains(@element,'x') = true and contains(@element,'xx') = false and @vr != '' and @vr != 'US_SS' and @vr != 'US_SS_OW' and @vr != 'OB_OW'">
+      <xsl:if test="contains(@element,'x') = true and contains(@element,'xx') = false and @vr != '' and @vr != 'US_SS_OW' and @vr != 'OB_OW'">
 <xsl:variable name="classname">
         <xsl:text>case 0x</xsl:text>
         <xsl:value-of select="$group"/>
@@ -73,7 +71,6 @@ return VR::INVALID;
 }
     <xsl:text>
 } // end namespace gdcm
-#endif // GDCMTAGTOVR_H
 </xsl:text>
   </xsl:template>
 </xsl:stylesheet>
