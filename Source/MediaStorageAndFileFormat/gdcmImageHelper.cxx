@@ -401,7 +401,8 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
   const DataSet& ds = f.GetDataSet();
 
   if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
+   || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
@@ -411,7 +412,9 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
       assert( ori.size() == 3 );
       return ori;
       }
-    assert(0);
+    ori.resize( 3 );
+    gdcmWarningMacro( "Could not find Origin" );
+    return ori;
     }
   ori.resize( 3 );
 
@@ -488,7 +491,8 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
   const DataSet& ds = f.GetDataSet();
 
   if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
+   || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
@@ -703,7 +707,8 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   const DataSet& ds = f.GetDataSet();
 
   if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
+   || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
@@ -925,7 +930,8 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
   const DataSet& ds = f.GetDataSet();
 
   if( ms == MediaStorage::EnhancedCTImageStorage
-    ||  ms == MediaStorage::EnhancedMRImageStorage )
+    || ms == MediaStorage::EnhancedMRImageStorage
+    || ms == MediaStorage::SegmentationStorage )
     {
     // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>
     const Tag t1(0x5200,0x9229);
@@ -938,7 +944,9 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       }
     // Else.
     // How do I send an error ?
-    sp.push_back( 0.0 ); // FIXME !!
+    sp.resize( 3 ); // FIXME !!
+    sp[2] = 1.;
+    gdcmWarningMacro( "Could not find Spacing" );
     return sp;
     }
   else if( ms == MediaStorage::UltrasoundMultiFrameImageStorage )
@@ -1131,7 +1139,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
   assert( spacing.size() == 3 );
 
   if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
+   || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::SegmentationStorage )
     {
 /*
     (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
@@ -1410,6 +1419,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    && ms != MediaStorage::MRImageStorage
    && ms != MediaStorage::RTDoseStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
+   && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
@@ -1418,7 +1428,8 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
     }
 
   if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
+   || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::SegmentationStorage )
     {
 /*
     (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
@@ -1485,6 +1496,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::MRImageStorage
    && ms != MediaStorage::RTDoseStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
+   && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
@@ -1512,7 +1524,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     }
 
   if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
+   || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::SegmentationStorage )
     {
 /*
     (0020,9116) SQ (Sequence with undefined length #=1)     # u/l, 1 PlaneOrientationSequence
@@ -1593,7 +1606,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
-   && ms != MediaStorage::EnhancedCTImageStorage )
+   && ms != MediaStorage::EnhancedCTImageStorage
+   && ms != MediaStorage::SegmentationStorage )
     {
     if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
       {
@@ -1602,8 +1616,10 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     return;
     }
 
+  if( ms == MediaStorage::SegmentationStorage ) return; // seg storage cannot have rescale slope
   if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
+   || ms == MediaStorage::EnhancedMRImageStorage
+  )
     {
 /*
     (0020,9116) SQ (Sequence with undefined length #=1)     # u/l, 1 PlaneOrientationSequence
