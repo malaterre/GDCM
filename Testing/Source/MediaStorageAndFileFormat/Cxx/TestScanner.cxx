@@ -114,9 +114,15 @@ int TestScanner(int argc, char *argv[])
 
   // Let's get the value for tag t1 in first file:
   gdcm::Scanner::MappingType const &mt = s.GetMappings();
-  const char *filename = d.GetFilenames()[0].c_str();
+  std::string sfilename;
+  sfilename = gdcm::Testing::GetDataRoot();
+  sfilename+= "/test.acr";
+  //const char *filename = d.GetFilenames()[0].c_str();
+  const char *filename = sfilename.c_str();
+  // The following breaks with Papyrus file: PET-cardio-Multiframe-Papyrus.dcm
   unsigned int i = 0;
   gdcm::Scanner::MappingType::const_iterator it = mt.find(filename);
+  assert( it != mt.end() );
   while( it == mt.end() )
     {
     ++i;
