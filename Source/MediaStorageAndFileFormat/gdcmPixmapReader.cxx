@@ -685,7 +685,7 @@ void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
           if( !ov.GrabOverlayFromPixelData(ds) )
             {
             gdcmErrorMacro( "Could not extract Overlay from Pixel Data" );
-            throw Exception("TODO: Could not extract Overlay Data");
+            //throw Exception("TODO: Could not extract Overlay Data");
             }
           updateoverlayinfo = true;
           }
