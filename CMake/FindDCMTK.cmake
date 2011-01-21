@@ -145,7 +145,7 @@ find_package_handle_standard_args(DCMTK DEFAULT_MSG
 # Compatibility: This variable is deprecated
 set(DCMTK_INCLUDE_DIR ${DCMTK_INCLUDE_DIRS})
 
-foreach(executable dcmdump dcmdjpeg dcmdrle storescu echoscu movescu findscu dcmqrscp)
+foreach(executable dcmdump dcmdjpeg dcmdrle dcmdjpls storescu echoscu movescu findscu dcmqrscp)
   string(TOUPPER ${executable} EXECUTABLE)
   find_program(DCMTK_${EXECUTABLE}_EXECUTABLE ${executable} ${DCMTK_DIR}/bin)
   mark_as_advanced(DCMTK_${EXECUTABLE}_EXECUTABLE)

@@ -590,7 +590,9 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 }
 #endif
 
-gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames, gdcm::PixelFormat const & pixeltype_ref)
+static gdcm::PixelFormat::ScalarType
+ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
+  gdcm::Image const & imageref)
 {
   gdcm::PixelFormat::ScalarType outputpt ;
   outputpt = gdcm::PixelFormat::UNKNOWN;
@@ -600,14 +602,7 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
   // 2. Make sure to decide which Pixel Type to use using *all* slices:
   if( inputfilename )
     {
-    gdcm::ImageReader reader;
-    reader.SetFileName( inputfilename );
-    if( !reader.Read() )
-      {
-      //vtkErrorMacro( "ImageReader failed" );
-      return gdcm::PixelFormat::UNKNOWN;
-      }
-    const gdcm::Image &image = reader.GetImage();
+    const gdcm::Image &image = imageref;
     const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
     double shift = image.GetIntercept();
     double scale = image.GetSlope();
@@ -621,6 +616,7 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
   else if ( filenames && filenames->GetNumberOfValues() > 0 )
     {
     std::set< gdcm::PixelFormat::ScalarType > pixeltypes;
+    // FIXME a gdcm::Scanner would be much faster here:
     for(int i = 0; i < filenames->GetNumberOfValues(); ++i )
       {
       const char *filename = filenames->GetValue( i );
@@ -675,7 +671,7 @@ gdcm::PixelFormat::ScalarType ComputePixelTypeFromFiles(const char *inputfilenam
     assert( 0 ); // I do not think this is possible
     }
   //gdcmAssertMacro( outputpt >= pixeltype_ref );
-  (void)pixeltype_ref;
+  //(void)pixeltype_ref;
 
   return outputpt;
 }
@@ -838,7 +834,14 @@ int vtkGDCMImageReader::RequestInformationCompat()
   this->Scale = image.GetSlope();
 
   //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
-  gdcm::PixelFormat::ScalarType outputpt = ComputePixelTypeFromFiles(this->FileName, this->FileNames, pixeltype);
+  gdcm::PixelFormat::ScalarType outputpt =
+    ComputePixelTypeFromFiles(this->FileName, this->FileNames, image);
+  if( this->FileName )
+    {
+    // We should test that outputpt is 8 when BitsAllocated = 16 / Bits Stored = 8
+    // BUT we should test that output is 16 when BitsAllocated = 16 / BitsStored = 12
+    // assert( outputpt == pixeltype );
+    }
 
   // Compute output pixel format when Rescaling:
 //  if( this->Shift != 0 || this->Scale != 1. )

@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
     }
   assert( filenames->GetNumberOfValues() == (int)fg.GetNumberOfFilenames() );
   writer->SetFileNames( filenames );
+  filenames->Delete();
   writer->SetFileDimensionality( 2 );
   writer->SetInput( reader->GetOutput() );
   writer->SetImageFormat( reader->GetImageFormat() );

@@ -62,7 +62,7 @@ int TestvtkGDCMImageRead(const char *filename, bool verbose)
     reader->GetMedicalImageProperties()->Print( cout );
     }
 
-  if( verbose )
+  if( verbose && false )
     {
     // Create directory first:
     const char subdir[] = "TestvtkGDCMImageReader";

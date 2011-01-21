@@ -537,11 +537,6 @@ std::istream &FileMetaInformation::Read(std::istream &is)
 
 std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 {
-  return ReadCompat(is, 0);
-}
-
-std::istream &FileMetaInformation::ReadCompat(std::istream &is, unsigned int counter)
-{
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
   if( !IsEmpty() )
@@ -609,6 +604,7 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is, unsigned int cou
       }
     else
       {
+#if 0
       DataElement null( Tag(0x0,0x0), 0);
       ImplicitDataElement ide;
       ide.Read<SwapperNoOp>(is); // might throw an exception which will NOT be caught
@@ -623,6 +619,7 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is, unsigned int cou
         return is;
         }
       else
+#endif
         {
         throw Exception( "Cannot find DICOM type. Giving up." );
         }

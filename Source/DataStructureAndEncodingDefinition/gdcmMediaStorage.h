@@ -144,6 +144,7 @@ typedef enum {
   operator MSType () const { return MSField; }
 
   const char *GetModality() const;
+  unsigned int GetModalityDimension() const;
 
   static unsigned int GetNumberOfMSType();
   static unsigned int GetNumberOfMSString();
