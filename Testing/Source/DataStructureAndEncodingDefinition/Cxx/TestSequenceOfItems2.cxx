@@ -52,5 +52,30 @@ int TestSequenceOfItems2(int, char *[])
   gdcm::SequenceOfItems::SizeType n = sqi->GetNumberOfItems();
   if( n != 1 ) return 1;
 
+  const gdcm::Item & item = sqi->GetItem( 1 );
+  const gdcm::DataSet &subds = item.GetNestedDataSet();
+
+  // std::cout << subds << std::endl;
+  gdcm::Tag ticonpixeldata(0x7fe0,0x0010);
+  const gdcm::DataElement &iconpixeldata = subds.GetDataElement( ticonpixeldata );
+  const gdcm::ByteValue *bv = iconpixeldata.GetByteValue();
+
+  // I could test that gdcm::JPEGCodec::GetHeaderInfo return JPEG file:
+  // JPEG image data, JFIF standard 1.01
+
+  gdcm::PrivateTag tgeiiscompressiontype(0x7fd1,0x10,"GEIIS");
+  const gdcm::DataElement &geiiscompressiontype = subds.GetDataElement( tgeiiscompressiontype );
+  gdcm::Element<gdcm::VR::UL,gdcm::VM::VM1> el;
+  el.SetFromDataElement( geiiscompressiontype );
+
+  unsigned int v = el.GetValue();
+  if( v != 26 ) return 1;
+
+#if 0
+  std::ofstream of( "/tmp/o.jpg" );
+  of.write( bv->GetPointer(), bv->GetLength() );
+  of.close();
+#endif
+
   return 0;
 }

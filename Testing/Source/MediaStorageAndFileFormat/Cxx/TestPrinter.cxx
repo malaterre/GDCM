@@ -32,7 +32,8 @@ static const char * const printmd5[][2] = {
 { "fde1da68a1707dcc687ddffd57e6b3c3" , "ACUSON-24-YBR_FULL-RLE-b.dcm" } ,
 { "a27c6628d6379783a3be223481d5cba4" , "ACUSON-24-YBR_FULL-RLE.dcm" } ,
 { "9f3aa114b955a812942f815b6b456eaf" , "ALOKA_SSD-8-MONO2-RLE-SQ.dcm" } ,
-{ "94d5040ef0a25481b2f6d33a6f5cda9c" , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" } ,
+// MM: Check on Fri Jan 21 08:54:17 CET 2011, for AMIInvalidPrivateDefinedLengthSQasUN.dcm
+{ "7e7c192969966d13823aff31482fd66e" , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" } ,
 { "9bd2c821bdc3a53b5a6a09b581ef3b9c" , "BugGDCM2_UndefItemWrongVL.dcm" } ,
 { "6d2af85d2af299c223b684538d42d9e5" , "CR-MONO1-10-chest.dcm" } ,
 { "820d45cefd528e011921ea129bec9084" , "CT_16b_signed-UsedBits13.dcm" } ,

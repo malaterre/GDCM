@@ -653,6 +653,14 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     refvr = VR::SQ;
     assert( refvr == VR::SQ );
     }
+#if 0
+  else if( vr == VR::SQ && vr_read != VR::SQ )
+    {
+    sqi = de.GetValueAsSQ();
+    refvr = VR::SQ;
+    assert( refvr == VR::SQ );
+    }
+#endif
 
   if( (vr_read == VR::INVALID || vr_read == VR::UN ) && vl_read.IsUndefined() )
     {
