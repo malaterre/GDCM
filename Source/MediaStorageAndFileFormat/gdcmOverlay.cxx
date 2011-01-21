@@ -329,7 +329,11 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
     assert( ds.FindDataElement( Tag(0x7fe0,0x0010) ) );
     const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );
     const ByteValue *bv = pixeldata.GetByteValue();
-    if( !bv ) return false;
+    if( !bv )
+      {
+      // XA_GE_JPEG_02_with_Overlays.dcm
+      return false;
+      }
     assert( bv );
     const char *array = bv->GetPointer();
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is pain to support,
