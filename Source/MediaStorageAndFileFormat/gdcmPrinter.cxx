@@ -584,7 +584,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
     { \
       Element<VR::type,VM::VM1_n> el; \
       if( !de.IsEmpty() ) { \
-      el.SetFromDataElement( de ); \
+      el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << "" << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
