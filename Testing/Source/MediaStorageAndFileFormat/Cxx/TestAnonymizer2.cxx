@@ -77,6 +77,14 @@ int TestAnonymize2(const char *subdir, const char *filename)
     return 1;
     }
 
+  const DataSet &ds = reader.GetFile().GetDataSet();
+  bool hasinstanceuid = true;
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
+    {
+    hasinstanceuid = false;
+    }
+
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile() )
     {
@@ -90,8 +98,12 @@ int TestAnonymize2(const char *subdir, const char *filename)
   writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
-    std::cerr << "Failed to write: " << outfilename << std::endl;
-    return 1;
+    if( hasinstanceuid )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+    return 0;
     }
 }
 // Decrypt
@@ -116,6 +128,14 @@ int TestAnonymize2(const char *subdir, const char *filename)
     return 1;
     }
 
+  const DataSet &ds = reader.GetFile().GetDataSet();
+  bool hasinstanceuid = true;
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
+    {
+    hasinstanceuid = false;
+    }
+
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile(false) )
     {
@@ -129,8 +149,13 @@ int TestAnonymize2(const char *subdir, const char *filename)
   writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
-    std::cerr << "Failed to write: " << outfilename2 << std::endl;
-    return 1;
+    if( hasinstanceuid )
+      {
+      std::cerr << "Failed to write (2): " << outfilename2 << std::endl;
+      std::cerr << "Orig file was : " << outfilename << std::endl;
+      return 1;
+      }
+    return 0;
     }
 }
 
