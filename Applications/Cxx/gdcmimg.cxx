@@ -316,16 +316,18 @@ bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Direc
   image.SetNumberOfDimensions( 2 );
   if( filenames.size() > 1 )
     {
-  image.SetNumberOfDimensions( 3 );
+    image.SetNumberOfDimensions( 3 );
     }
 
-    gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+  gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
   for(; it != filenames.end(); ++it)
     {
     b = b && PopulateSingeFile( writer, sq, jpeg, it->c_str() );
     }
   if( filenames.size() > 1 )
-  image.SetDimension(2,  filenames.size() );
+    {
+    image.SetDimension(2,  filenames.size() );
+    }
 
   return b;
 }

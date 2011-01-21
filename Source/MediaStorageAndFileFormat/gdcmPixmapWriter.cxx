@@ -505,6 +505,16 @@ bool PixmapWriter::PrepareWrite()
   ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
 
+  // Most SOP Class support 2D, but let's make sure that 3D is ok:
+  if( PixelData->GetNumberOfDimensions() > 2 )
+    {
+    if( ms.GetModalityDimension() < PixelData->GetNumberOfDimensions() )
+      {
+      gdcmErrorMacro( "Problem with NumberOfDimensions and MediaStorage" );
+      return false;
+      }
+    }
+
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
     {
