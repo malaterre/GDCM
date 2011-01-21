@@ -60,6 +60,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
   gdcm::CryptographicMessageSyntax cms;
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
+    std::cerr << "Could not parse cert: " << certpath << std::endl;
     return 1;
     }
 
@@ -79,6 +80,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile() )
     {
+    std::cerr << "BasicApplicationLevelConfidentialityProfile fails for: " << filename << std::endl;
     return 1;
     }
 
@@ -97,6 +99,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
   gdcm::CryptographicMessageSyntax cms;
   if( !cms.ParseKeyFile( keypath.c_str() ) )
     {
+    std::cerr << "Could not parse key: " << keypath << std::endl;
     return 1;
     }
 
@@ -116,6 +119,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile(false) )
     {
+    std::cerr << "BasicApplicationLevelConfidentialityProfile (false) fails for: " << outfilename << std::endl;
     return 1;
     }
 
@@ -145,6 +149,7 @@ int TestAnonymizer2(int argc, char *argv[])
   // else
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
