@@ -342,40 +342,40 @@ bool PixmapWriter::PrepareWrite()
     overlayrows.SetValue( ov.GetRows() );
     de = overlayrows.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0011> overlaycolumns;
     overlaycolumns.SetValue( ov.GetColumns() );
     de = overlaycolumns.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     if( ov.GetDescription() ) // Type 3
       {
       Attribute<0x6000,0x0022> overlaydescription;
       overlaydescription.SetValue( ov.GetDescription() );
       de = overlaydescription.GetAsDataElement();
       de.GetTag().SetGroup( ov.GetGroup() );
-      ds.Insert( de );
+      ds.Replace( de );
       }
     Attribute<0x6000,0x0040> overlaytype; // 'G' or 'R'
     overlaytype.SetValue( ov.GetType() );
     de = overlaytype.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0050> overlayorigin;
     overlayorigin.SetValues( ov.GetOrigin() );
     de = overlayorigin.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0100> overlaybitsallocated;
     overlaybitsallocated.SetValue( ov.GetBitsAllocated() );
     de = overlaybitsallocated.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0102> overlaybitposition;
     overlaybitposition.SetValue( ov.GetBitPosition() );
     de = overlaybitposition.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
 
     // FIXME: for now rewrite 'Overlay in pixel data' still in the pixel data element...
     //if( !ov.IsInPixelData() )
@@ -385,7 +385,7 @@ bool PixmapWriter::PrepareWrite()
       overlaydata.SetByteValue( overlaydatabv.GetPointer(), overlaydatabv.GetLength() );
       overlaydata.SetVR( VR::OW ); // FIXME
       overlaydata.GetTag().SetGroup( ov.GetGroup() );
-      ds.Insert( overlaydata );
+      ds.Replace( overlaydata );
       }
     }
 
