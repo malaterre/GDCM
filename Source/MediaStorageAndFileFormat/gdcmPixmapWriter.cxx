@@ -511,7 +511,9 @@ bool PixmapWriter::PrepareWrite()
     if( ms.GetModalityDimension() < PixelData->GetNumberOfDimensions() )
       {
       gdcmErrorMacro( "Problem with NumberOfDimensions and MediaStorage" );
+#if 0
       return false;
+#endif
       }
     }
 

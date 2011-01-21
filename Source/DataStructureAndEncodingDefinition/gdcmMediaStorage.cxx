@@ -317,7 +317,7 @@ unsigned int MediaStorage::GetModalityDimension() const
 {
   if (!MSModalityTypes[MSField].Modality)
     return 0;
-  assert( MSModalityTypes[MSField].Modality[0] != ' ' ); // FIXME
+  assert( MSModalityTypes[MSField].Dimension );
   return MSModalityTypes[MSField].Dimension;
 }
 
