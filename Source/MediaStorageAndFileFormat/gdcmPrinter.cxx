@@ -584,7 +584,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
     { \
       Element<VR::type,VM::VM1_n> el; \
       if( !de.IsEmpty() ) { \
-      el.Set( de.GetValue() ); \
+      el.SetFromDataElement( de ); \
       if( el.GetLength() ) { \
       os << "" << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
@@ -593,7 +593,6 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
                  else os << GDCM_TERMINAL_VT100_INVERSE << GDCM_TERMINAL_VT100_FOREGROUND_RED << "(VR=" << refvr << " is incompatible with length)" << GDCM_TERMINAL_VT100_NORMAL; } } \
       else { assert( de.IsEmpty()); os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
-
 
 VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds,
   const DataElement &de, std::ostream &out, std::string const & indent )

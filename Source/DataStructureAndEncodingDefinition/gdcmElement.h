@@ -482,6 +482,23 @@ public:
         GetLength(),ss);
       }
   }
+  void SetFromDataElement(DataElement const &de) {
+    const ByteValue *bv = de.GetByteValue();
+    if( !bv ) return;
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( de.GetVR() == VR::UN /*|| de.GetVR() == VR::INVALID*/ )
+#else
+    if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+#endif
+      {
+      Set(de.GetValue());
+      }
+    else
+      {
+      SetNoSwap(de.GetValue());
+      }
+  }
+
 
   // Need to be placed after definition of EncodingImplementation<VR::VRASCII>
   void WriteASCII(std::ostream &os) const {
@@ -537,6 +554,27 @@ public:
     SetArray(_val.Internal, _val.Length, true);
     return *this;
     }
+protected:
+  void SetNoSwap(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    if( (VR::VRType)(VRToEncoding<TVR>::Mode) == VR::VRBINARY )
+      {
+      const Type* array = (Type*)bv->GetPointer();
+      if( array ) {
+        assert( array ); // That would be bad...
+        assert( Internal == 0 );
+        SetArray(array, bv->GetLength() ); }
+      }
+    else
+      {
+      std::stringstream ss;
+      std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+      ss.str( s );
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal,
+        GetLength(),ss);
+      }
+  }
 
 private:
   typename VRToType<TVR>::Type *Internal;
