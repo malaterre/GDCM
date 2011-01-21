@@ -1061,8 +1061,10 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
 
   uint32_t n;
   ss.read((char*)&n, sizeof(n));
+  SwapperNoOp::SwapArray(&n,1);
   uint32_t unused;
   ss.read((char*)&unused, sizeof(unused));
+  SwapperNoOp::SwapArray(&unused,1);
   assert( unused == 77 ); // 'M' character...
 
   for(uint32_t i = 0; i < n; ++i)
@@ -1078,6 +1080,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
     //std::cout << "'" << name << "' ";
     uint32_t vm;
     ss.read((char*)&vm, sizeof(vm));
+    SwapperNoOp::SwapArray(&vm,1);
     csael.SetVM( VM::GetVMTypeFromLength(vm,1) );
     //assert( csael.GetVM() != VM::VM0 );
     //std::cout << "VM " << vm <<  ", ";
@@ -1089,6 +1092,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
     //std::cout << "VR " << vr << ", ";
     uint32_t syngodt;
     ss.read((char*)&syngodt, sizeof(syngodt));
+    SwapperNoOp::SwapArray(&syngodt,1);
     bool cm = check_mapping(syngodt, vr);
     if( !cm )
       {
@@ -1099,10 +1103,12 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
     //std::cout << "SyngoDT " << syngodt << ", ";
     uint32_t nitems;
     ss.read((char*)&nitems, sizeof(nitems));
+    SwapperNoOp::SwapArray(&nitems,1);
     csael.SetNoOfItems( nitems );
     //std::cout << "NoOfItems " << nitems << ", ";
     uint32_t xx;
     ss.read((char*)&xx, sizeof(xx));
+    SwapperNoOp::SwapArray(&xx,1);
     //std::cout << "xx=" << xx<< std::endl;
     assert( xx == 77 || xx == 205 );
 
@@ -1112,6 +1118,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
       {
       uint32_t item_xx[4];
       ss.read((char*)&item_xx, 4*sizeof(uint32_t));
+      SwapperNoOp::SwapArray(item_xx,4);
       assert( item_xx[2] == 77 || item_xx[2] == 205 );
       uint32_t len = item_xx[1]; // 2nd element
       assert( item_xx[0] == item_xx[1] && item_xx[1] == item_xx[3] );
