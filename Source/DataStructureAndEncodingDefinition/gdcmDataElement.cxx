@@ -128,16 +128,25 @@ namespace gdcm
           assert( bv );
           SequenceOfItems *sqi = new SequenceOfItems;
           sqi->SetLength( bv->GetLength() );
-          std::stringstream ss;
-          ss.str( std::string( bv->GetPointer(), bv->GetLength() ) );
-          try {
-          sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
-          }
-          catch ( std::exception & )
-          {
-          // Some people like to skew things up and write invalid SQ in VR:UN field
-          // if conversion fails, simply keep the binary VR:UN stuff as-is
-          }
+          std::string s( bv->GetPointer(), bv->GetLength() );
+          try
+            {
+            std::stringstream ss;
+            ss.str( s );
+            sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+            }
+          catch ( Exception &ex )
+            {
+            // Some people like to skew things up and write invalid SQ in VR:UN field
+            // if conversion fails, simply keep the binary VR:UN stuff as-is
+            // eg. AMIInvalidPrivateDefinedLengthSQasUN.dcm";
+            //const char *s = e.what();
+            // s -> gdcm::ImplicitDataElement -> Impossible (more)
+            std::stringstream ss;
+            ss.str(s);
+            sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
+            (void)ex;//cast to avoid the warning message
+            }
           return sqi;
           }
         else
