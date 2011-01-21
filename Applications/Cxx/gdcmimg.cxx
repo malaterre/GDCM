@@ -205,12 +205,13 @@ bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
 }
 
 
-bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & study_uid, std::string const & series_uid, gdcm::DataSet& ds)
+bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & study_uid, std::string const & series_uid, gdcm::PixmapWriter& writer)
 {
+  gdcm::DataSet & ds = writer.GetFile().GetDataSet();
+  gdcm::MediaStorage ms = gdcm::MediaStorage::MS_END;
   if( sopclassuid )
     {
     // Is it by value or by name ?
-    gdcm::MediaStorage ms = gdcm::MediaStorage::MS_END;
     if( gdcm::UIDGenerator::IsValid( sopclass.c_str() ) )
       {
       ms = gdcm::MediaStorage::GetMSType( sopclass.c_str() );
@@ -236,6 +237,20 @@ bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & 
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
     }
+  else
+    {
+    // FIXME we are copying the default behavior of gdcm.PixmapWriter here:
+    ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+    }
+
+  gdcm::Pixmap &image = writer.GetPixmap();
+  if( ms.GetModalityDimension() < image.GetNumberOfDimensions() )
+    {
+    std::cerr << "Could not find Modality" << std::endl;
+    return false;
+    }
+
+
         {
         gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
         de.SetByteValue( study_uid.c_str(), study_uid.size() );
@@ -746,7 +761,7 @@ int main (int argc, char *argv[])
         }
 
       if( !Populate( writer, raw, filenames ) ) return 1;
-      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
       if( !writer.Write() )
@@ -779,7 +794,7 @@ int main (int argc, char *argv[])
       rle.SetPhotometricInterpretation( pi );
 
       if( !Populate( writer, rle, filenames ) ) return 1;
-      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
       if( !writer.Write() )
@@ -797,7 +812,7 @@ int main (int argc, char *argv[])
       gdcm::PNMCodec pnm;
       gdcm::PixmapWriter writer;
       if( !Populate( writer, pnm, filenames ) ) return 1;
-      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
       if( !writer.Write() )
@@ -813,7 +828,7 @@ int main (int argc, char *argv[])
       gdcm::JPEGLSCodec jpeg;
       gdcm::PixmapWriter writer;
       if( !Populate( writer, jpeg, filenames ) ) return 1;
-      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
       if( !writer.Write() )
@@ -836,7 +851,7 @@ int main (int argc, char *argv[])
       gdcm::JPEG2000Codec jpeg;
       gdcm::PixmapWriter writer;
       if( !Populate( writer, jpeg, filenames ) ) return 1;
-      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
       if( !writer.Write() )
@@ -860,7 +875,7 @@ int main (int argc, char *argv[])
       jpeg.SetPixelFormat( pf );
       gdcm::PixmapWriter writer;
       if( !Populate( writer, jpeg, filenames ) ) return 1;
-      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer.GetFile().GetDataSet() ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
       if( !writer.Write() )
