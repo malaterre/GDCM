@@ -174,8 +174,12 @@ bool ULConnection::InitializeIncomingConnection()
     int theRecvTimeout = sin.recvtimeout(1);//(int)GetTimer().GetTimeout());
     int theSendTimeout = sin.sendtimeout(1);//(int)GetTimer().GetTimeout());
     sin.listen();
-    mSocket = new iosockinet(sin.accept());
-
+    if (sin.is_readready(1, 0)){
+      mSocket = new iosockinet(sin.accept());
+    } else {
+      SetState(eStaDoesNotExist);
+      return false; //no connection here, so have to initialize later.
+    }
     SetState(eSta2Open);
 
     /*
