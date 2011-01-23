@@ -439,13 +439,19 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
     //When doing a C-MOVE we receive the Requested DataSet over
     //another channel (technically this is send to an SCP)
     //in our case we use another port to receive it.
+    EStateID theCStoreStateID = eSta6TransferReady;
+    bool secondConnectionEstablished = false;
     if (mSecondaryConnection->GetProtocol() == NULL){
       //establish the connection
-      mSecondaryConnection->InitializeIncomingConnection();
+      //can fail if is_readready doesn't return true, ie, the connection
+      //wasn't opened on the other side because the other side isn't sending data yet
+      //for whatever reason (maybe there's nothing to get?)
+      secondConnectionEstablished =
+        mSecondaryConnection->InitializeIncomingConnection();
     }
-    EStateID theCStoreStateID = eSta6TransferReady;
-    if (mSecondaryConnection->GetState()== eSta1Idle ||
-      mSecondaryConnection->GetState() == eSta2Open){
+    if (secondConnectionEstablished &&
+      (mSecondaryConnection->GetState()== eSta1Idle ||
+      mSecondaryConnection->GetState() == eSta2Open)){
       ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
       theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
     }
@@ -617,15 +623,34 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             if (theCommandCode == 0x8021){//cmove response, so prep the retrieval loop on the back connection
 
               bool dataSetCountIncremented = true;//false once the number of incoming datasets doesn't change.
-              while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
-                ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
-                //now, get data from across the network
-                theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
-                if (inCallback){
-                  dataSetCountIncremented = true;
-                  inCallback->ResetHandledDataSet();
-                } else {
-                  dataSetCountIncremented = false;
+              if (mSecondaryConnection->GetProtocol() == NULL){
+                //establish the connection
+                //can fail if is_readready doesn't return true, ie, the connection
+                //wasn't opened on the other side because the other side isn't sending data yet
+                //for whatever reason (maybe there's nothing to get?)
+                secondConnectionEstablished =
+                  mSecondaryConnection->InitializeIncomingConnection();
+                if (secondConnectionEstablished &&
+                  (mSecondaryConnection->GetState()== eSta1Idle ||
+                  mSecondaryConnection->GetState() == eSta2Open)){
+                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
+                } else {//something broke, can't establish secondary move connection here
+                  gdcmErrorMacro( "Unable to establish secondary connection with server, aborting." << std::endl);
+                  return eStaDoesNotExist;
+                }
+              }
+              if (secondConnectionEstablished){
+                while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
+                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  //now, get data from across the network
+                  theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
+                  if (inCallback){
+                    dataSetCountIncremented = true;
+                    inCallback->ResetHandledDataSet();
+                  } else {
+                    dataSetCountIncremented = false;
+                  }
                 }
               }
               //force the abort from our side

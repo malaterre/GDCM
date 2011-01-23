@@ -777,13 +777,23 @@ int main(int argc, char *argv[])
     // ./bin/gdcmscu --move --patient mi2b2.slicer.org 11112 move
     gdcm::network::BaseRootQuery* theQuery = ConstructQuery(true, findstudy != 0, findpatient != 0, keys);
 
+    if (findstudy == 0 && findpatient == 0)
+      {
+      if (gdcm::Trace::GetErrorFlag())
+        {
+        std::cerr << "Need to explicitly choose query retrieve level, --patient or --study" << std::endl;      
+        }
+      std::cerr << "Move failed." << std::endl;
+      return 1;
+      }
+
     if( !portscp )
       {
       if (gdcm::Trace::GetErrorFlag())
         {
         std::cerr << "Need to set explicitely port number for SCP association --port-scp" << std::endl;      
         }
-      std::cout << "Move failed." << std::endl;
+      std::cerr << "Move failed." << std::endl;
       return 1;
       }
 
@@ -794,6 +804,7 @@ int main(int argc, char *argv[])
         {
         std::cerr << "Could not write out query to: " << queryfile << std::endl;
         delete [] theQuery;
+        std::cerr << "Move failed." << std::endl;
         return 1;
         }
       }
@@ -812,7 +823,7 @@ int main(int argc, char *argv[])
     delete theQuery;
     if (ret != 0)
       {
-      std::cout << "Move failed." << std::endl;
+      std::cerr << "Move failed." << std::endl;
       }
     else
       {
@@ -828,9 +839,17 @@ int main(int argc, char *argv[])
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
 
     // PATIENT query:
-    // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 8,52,PATIENT --key 10,10="F*"
+    // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 10,10="F*" -V
     gdcm::network::BaseRootQuery* theQuery = ConstructQuery(false, findstudy != 0, findpatient != 0, keys);
-
+    if (findstudy == 0 && findpatient == 0)
+      {
+      if (gdcm::Trace::GetErrorFlag())
+        {
+        std::cerr << "Need to explicitly choose query retrieve level, --patient or --study" << std::endl;      
+        }
+      std::cerr << "Move failed." << std::endl;
+      return 1;
+      }
     if (!theQuery)
       {
         std::cerr << "Query construction failed." <<std::endl;
