@@ -17,7 +17,8 @@
 #include "gdcmFile.h"
 #include "gdcmTesting.h"
 #include "gdcmMediaStorage.h"
-
+#include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 int TestReadUpToTag(const char* filename, bool verbose = false)
 {
@@ -56,6 +57,35 @@ int TestReadUpToTag(const char* filename, bool verbose = false)
   return 0;
 }
 
+int TestReadUpToTagExtra()
+{
+  const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
+  if( !extradataroot )
+    {
+    return 1;
+    }
+  if( !gdcm::System::FileIsDirectory(extradataroot) )
+    {
+    std::cerr << "No such directory: " << extradataroot <<  std::endl;
+    return 1;
+    }
+
+  gdcm::Directory d;
+  unsigned int nfiles = d.Load( extradataroot, true ); // no recursion
+  std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
+
+  gdcm::Directory::FilenamesType const & fns = d.GetFilenames();
+  int r = 0;
+  for( gdcm::Directory::FilenamesType::const_iterator it = fns.begin();
+    it != fns.end(); ++it )
+    {
+    const char *filename = it->c_str();
+    r += TestReadUpToTag( filename );
+    }
+
+  return r;
+}
+
 int TestReaderUpToTag(int argc, char *argv[])
 {
   if( argc == 2 )
@@ -75,6 +105,9 @@ int TestReaderUpToTag(int argc, char *argv[])
     r += TestReadUpToTag( filename );
     ++i;
     }
+
+  // puposely discard gdcmDataExtra test, this is just an 'extra' test...
+  int b2 = TestReadUpToTagExtra(); (void)b2;
 
   return r;
 }
