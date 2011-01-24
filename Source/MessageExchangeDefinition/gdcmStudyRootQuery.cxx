@@ -104,7 +104,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       qb = new QuerySeries();
     }
-    if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME") == 0){
+    if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       qb = new QueryImage();
     }
@@ -154,7 +154,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
-    if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME") == 0){
+    if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<gdcm::Tag> tagGroup;
       qb = new QueryStudy();
