@@ -583,6 +583,13 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           catch ( Exception &ex2 )
             {
             (void)ex2;
+            // Mon Jan 24 10:59:25 CET 2011
+            // MM: UNExplicitImplicitDataElement does not seems to be used anymore to read
+            // gdcmData/TheralysGDCM120Bug.dcm, instead the code path goes into
+            // ExplicitImplicitDataElement class instead.
+            // Simply rethrow the exception for now.
+            throw;
+#if 0
             is.clear();
             if( haspreamble )
               {
@@ -605,6 +612,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
             F->GetDataSet().Clear(); // remove garbage from 1st attempt...
             //F->GetDataSet().template Read<UNExplicitImplicitDataElement,SwapperNoOp>(is);
             caller.template ReadCommon<UNExplicitImplicitDataElement,SwapperNoOp>(is);
+#endif
             }
           }
         }
