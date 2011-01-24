@@ -224,6 +224,13 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is)
       }
     else
       {
+      if( TagField != Tag(0x7fe0,0x0010) )
+        {
+        // gdcmSampleData/ForSeriesTesting/Perfusion/DICOMDIR
+        ParseException pe;
+        pe.SetLastElement(*this);
+        throw pe;
+        }
       // Ok this is Pixel Data fragmented...
       assert( TagField == Tag(0x7fe0,0x0010) );
       assert( VRField & VR::OB_OW );
