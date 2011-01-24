@@ -64,6 +64,7 @@ gdcmBaseRootQuery.cxx
 gdcmQueryFactory.cxx
 gdcmULBasicCallback.cxx
 gdcmULWritingCallback.cxx
+gdcmCompositeNetworkFunctions.cxx
   )
 
 #ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})

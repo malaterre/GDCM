@@ -866,9 +866,6 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 }
               }
 
-
-
-
               receivingData = false;
               //justWaiting = false;
               if (theVal == pendingDE1 || theVal == pendingDE2) {

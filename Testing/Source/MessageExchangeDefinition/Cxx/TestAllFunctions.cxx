@@ -62,12 +62,12 @@ bool AreDataSetsEqual(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2){
 
 int TestAllFunctions(int argc, char *argv[])
 {
-#if 0
+#if 1
   std::string aetitle("UNITED1");//the ae title of this computer
   std::string call("COMMON");//the ae title of the server
   int portno = 11112;//the port of the server
   int moveReturnPort = 11111;//the port over which return cstore scps are done for cmove
-  std::string remote("192.168.1.4");//the ip address of the remote server
+  std::string remote("192.168.1.9");//the ip address of the remote server
   std::string outputDir("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
   std::string inputDir("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
 #else
@@ -149,16 +149,18 @@ int TestAllFunctions(int argc, char *argv[])
       if (ds.FindDataElement(*tagItor)){
         gdcm::DataElement de = ds.GetDataElement(*tagItor);
         gdcm::ByteValue* theVal = de.GetByteValue();
-        unsigned long len = 2;
+        unsigned long len = 1;
         char* buf = new char[len];
         if (theVal->GetBuffer(buf, len)){
           std::string searchTerm(buf, &(buf[len]));//because buf is probably not null terminated
           searchTerm += "*";
-          theQuery->SetSearchParameter(*tagItor, searchTerm);
-          delete [] buf;
-          break;
+          theQuery->SetSearchParameter(*tagItor, searchTerm);//searchTerm);
         }
         delete [] buf;
+      } else {
+        theQuery->SetSearchParameter(*tagItor, "");//null string
+        //check out
+        //http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/a15957b33b23c1ee/1373e5e0241bd94b?lnk=gst&q=UID+root&pli=1
       }
     }
     //using the non-strict version of query validation

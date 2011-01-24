@@ -21,307 +21,23 @@
  * movescu (DCMTK)
  * storescu (DCMTK)
  */
-#include "gdcmReader.h"
-#include "gdcmAttribute.h"
-#include "gdcmULConnectionManager.h"
-#include "gdcmULConnection.h"
-#include "gdcmDataSet.h"
+
+#include "gdcmCompositeNetworkFunctions.h"
+
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include <getopt.h>
 #include "gdcmVersion.h"
 #include "gdcmGlobal.h"
 #include "gdcmSystem.h"
-#include "gdcmUIDGenerator.h"
-#include "gdcmStringFilter.h"
-#include "gdcmWriter.h"
-#include "gdcmPrinter.h"
-
-//for testing!  Should be put in a testing executable,
-//but it's just here now because I know this path works
 #include "gdcmDirectory.h"
-#include "gdcmImageReader.h"
-#include "gdcmQueryFactory.h"
-#include "gdcmStudyRootQuery.h"
-#include "gdcmPatientRootQuery.h"
-#include "gdcmULWritingCallback.h"
+#include "gdcmDataSet.h"
+#include "gdcmFileMetaInformation.h"
+#include "gdcmUIDGenerator.h"
 
-#include <fstream>
-#include <socket++/echo.h>
-#include <stdlib.h>
-#include <getopt.h>
+#include "gdcmBaseRootQuery.h"
 
-
-
-
-// Execute like this:
-// ./bin/gdcmscu www.dicomserver.co.uk 11112 echo
-int CEcho( const char *remote, int portno, std::string const &aetitle,
-std::string const &call )
-{
-  gdcm::network::ULConnectionManager theManager;
-  gdcm::DataSet blank;
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10,
-      gdcm::network::eEcho, blank))
-    {
-      if (gdcm::Trace::GetErrorFlag())
-        {
-        std::cerr << "Failed to establish connection." << std::endl;
-        }
-    return 1;
-    }
-  std::vector<gdcm::network::PresentationDataValue> theValues1 = theManager.SendEcho();
-
-  //should print _something_ to let the user know of success, if they ask for something
-  //other than a return code.
-  if (gdcm::Trace::GetWarningFlag())
-    {
-      gdcm::DataSet ds = gdcm::network::PresentationDataValue::ConcatenatePDVBlobs(theValues1);
-      gdcm::Printer thePrinter;
-      thePrinter.PrintDataSet(ds, std::cout);
-    }
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-
-  // Check the Success Status
-  gdcm::DataSet ds = gdcm::network::PresentationDataValue::ConcatenatePDVBlobs( theValues1 );
-  gdcm::Attribute<0x0,0x0900> at;
-  at.SetFromDataSet( ds );
-
-  if( at.GetValue() != 0 )
-    {
-    return 1;
-    }
-
-  return 0;
-}
-
-//this function will take command line options and construct a cmove query from them
-//returns NULL if the query could not be constructed.
-//note that the caller is responsible for deleting the constructed query.
-//used to build both a move and a find query (true for inMove if it's move, false if it's find)
-gdcm::network::BaseRootQuery* ConstructQuery(bool inMove, bool findstudy, bool findpatient,
-                                             const std::vector< std::pair<gdcm::Tag, std::string> >& keys)
-{
-  gdcm::StringFilter sf;
-  std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
-    keys.begin();
-  gdcm::network::BaseRootQuery* outQuery = 0;
-  if (findstudy)
-    {
-    //theQuery = new gdcm::network::StudyRootQuery();
-    outQuery =
-      gdcm::network::QueryFactory::ProduceQuery(
-        gdcm::network::eStudyRootType, gdcm::network::eStudy);
-    }
-  else if (findpatient)
-    {
-    //theQuery = new gdcm::network::PatientRootQuery();
-    outQuery =
-      gdcm::network::QueryFactory::ProduceQuery(
-        gdcm::network::ePatientRootType, gdcm::network::ePatient);
-
-    }
-  else
-    {
-    if (gdcm::Trace::GetErrorFlag())
-      std::cerr << "Specify the query" << std::endl;
-    return NULL;
-    }
-  gdcm::DataSet ds;
-  for(; it != keys.end(); ++it)
-    {
-    std::string s = sf.FromString( it->first, it->second.c_str(), it->second.size() );
-    if (inMove)
-      {
-      gdcm::DataElement de( it->first );
-      de.SetByteValue ( s.c_str(), s.size() );
-      ds.Insert( de );
-      }
-    outQuery->SetSearchParameter(it->first, s);
-    }
-
-  if (gdcm::Trace::GetWarningFlag())
-    ds.Print( std::cout );
-
-
-  // setup the special character set
-  std::vector<gdcm::network::ECharSet> inCharSetType;
-  inCharSetType.push_back( gdcm::network::QueryFactory::GetCharacterFromCurrentLocale() );
-  gdcm::DataElement de = gdcm::network::QueryFactory::ProduceCharacterSetDataElement(inCharSetType);
-  std::string param ( de.GetByteValue()->GetPointer(),
-    de.GetByteValue()->GetLength() );
-  outQuery->SetSearchParameter(de.GetTag(), param );
-
-  return outQuery;
-}
-
-//note that pointer to the base root query-- the caller must instantiated and delete
-int CMove( const char *remote, int portno, std::string const &aetitle,
-  std::string const &call, gdcm::network::BaseRootQuery* query,
-  int portscp, std::string const & outputdir, bool inInterleaveWriting )
-{
-  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
-  // Add a query:
-
-  if (outputdir.empty())
-    {
-      if (gdcm::Trace::GetErrorFlag())
-        {
-        std::cerr << "Output directory not specified." << std::endl;
-        }
-    return 1;
-    }
-
-  gdcm::network::ULConnectionManager theManager;
-  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
-      portscp, query->GetQueryDataSet()))
-    {
-      if (gdcm::Trace::GetErrorFlag())
-        {
-        std::cerr << "Failed to establish connection." << std::endl;
-        }
-    return 1;
-    }
-
-  int ret = 0;
-  if (!inInterleaveWriting)
-    {
-    std::vector<gdcm::DataSet> theDataSets  = theManager.SendMove( query );
-    std::vector<gdcm::DataSet>::iterator itor;
-    int c = 0;
-    //write to the output directory
-    //loop over each dataset, write out the given objects by the SOP Instance UID
-    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
-      {
-      if (itor->FindDataElement(gdcm::Tag(0x0008,0x0018)))
-        {
-        gdcm::DataElement de = itor->GetDataElement(gdcm::Tag(0x0008,0x0018));
-        std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
-        gdcm::Writer w;
-        std::string theLoc = outputdir + "/" + sopclassuid_str + ".dcm";
-        w.SetFileName(theLoc.c_str());
-        gdcm::File &f = w.GetFile();
-        f.SetDataSet(*itor);
-        gdcm::FileMetaInformation &fmi = f.GetHeader();
-        fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
-        w.SetCheckFileMetaInformation( true );
-        if (!w.Write())
-          {
-          if (gdcm::Trace::GetErrorFlag())
-            {
-            std::cerr << "Failed to write " << sopclassuid_str << std::endl;
-            }
-          ++ret;
-          }
-        }
-      }
-    }
-  else 
-    {
-    gdcm::network::ULWritingCallback theCallback;
-    theCallback.SetDirectory(outputdir);
-    theManager.SendMove( query, &theCallback );
-    }
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return ret;
-}
-
-//note that pointer to the base root query-- the caller must instantiated and delete
-int CFind( const char *remote, int portno , std::string const &aetitle,
-  std::string const &call , gdcm::network::BaseRootQuery* query )
-{
-  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
-  // Add a query:
-  gdcm::network::ULConnectionManager theManager;
-  //theManager.EstablishConnection("ACME1", "ACME_STORE", remote, 0, portno, 1000, gdcm::network::eFind, ds);
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000, gdcm::network::eFind,  query->GetQueryDataSet())){
-
-    if (gdcm::Trace::GetErrorFlag())
-      {
-      std::cerr << "Failed to establish connection." << std::endl;
-      }
-    return 1;
-  }
-  std::vector<gdcm::DataSet> theDataSets  = theManager.SendFind( query );
-  std::vector<gdcm::DataSet>::iterator itor;
-  int c = 0;
-  if (gdcm::Trace::GetWarningFlag())
-    {
-    for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
-      {
-        std::cout << "Message " << c++ << std::endl;
-        itor->Print(std::cout);
-      }
-  }
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return 0;
-}
-
-int CStore( const char *remote, int portno,
-  std::string const &aetitle,
-  std::string const &call,
-  std::vector<std::string> const & filenames, bool inRecursive )
-{
-  std::string filename = filenames[0];
-  gdcm::network::ULConnectionManager theManager;
-  std::vector<std::string> files;
-  if( gdcm::System::FileIsDirectory(filename.c_str()) )
-    {
-    unsigned int nfiles = 1;
-    gdcm::Directory dir;
-    nfiles = dir.Load(filename, inRecursive);
-    files = dir.GetFilenames();
-    }
-  else
-    {
-    files = filenames;
-    }
-  filename = files[0];
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() ) return 1;
-  //const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
-
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0,
-      portno, 1000, gdcm::network::eStore, ds))
-    {
-      if (gdcm::Trace::GetErrorFlag())
-        {
-        std::cerr << "Failed to establish connection." << std::endl;
-        }
-      return 1;
-    }
-#if 0
-  // Right now we are never reading back the AC-Acpt to
-  // if we can prefer a compressed TS
-  gdcm::network::ULConnection* uc = theManager.GetConnection();
-  std::vector<gdcm::network::PresentationContext> const &pcs =
-    uc->GetPresentationContexts();
-  std::vector<gdcm::network::PresentationContext>::const_iterator it =
-    pcs.begin();
-  std::cout << "B" << std::endl;
-  for( ; it != pcs.end(); ++it )
-    {
-    it->Print ( std::cout );
-    }
-  std::cout << "BB" << std::endl;
-  theManager.SendStore( (gdcm::DataSet*)&ds );
-#endif
-
-  theManager.SendStore( (gdcm::DataSet*)&ds );
-
-  for( size_t i = 1; i < files.size(); ++i )
-    {
-    const std::string & filename = files[i];
-    gdcm::Reader reader;
-    reader.SetFileName( filename.c_str() );
-    if( !reader.Read() ) return 1;
-    const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
-    theManager.SendStore( (gdcm::DataSet*)&ds );
-    }
-
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return 0;
-
-}
 
 void PrintVersion()
 {
@@ -750,6 +466,9 @@ int main(int argc, char *argv[])
     mode = "move";
     }
 
+  //this class contains the networking calls
+  gdcm::CompositeNetworkFunctions theNetworkFunctions;
+
   if ( mode == "server" ) // C-STORE SCP
     {
     // MM: Do not expose that to user for now (2010/10/11).
@@ -760,8 +479,8 @@ int main(int argc, char *argv[])
     {
     // ./bin/gdcmscu mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
-    int theReturnCode = CEcho( hostname, port, callingaetitle, callaetitle );
-    if (theReturnCode != 0)
+    bool didItWork = theNetworkFunctions.CEcho( hostname, port, callingaetitle, callaetitle );
+    if (!didItWork)
       {
       std::cout << "Echo failed." << std::endl;
       }
@@ -769,13 +488,13 @@ int main(int argc, char *argv[])
       {
       std::cout << "Echo succeeded." << std::endl;
       }
-    return theReturnCode;
+    return (didItWork ? 0 : 1);
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
     // ./bin/gdcmscu --move --patient dhcp-67-183 5678 move
     // ./bin/gdcmscu --move --patient mi2b2.slicer.org 11112 move
-    gdcm::network::BaseRootQuery* theQuery = ConstructQuery(true, findstudy != 0, findpatient != 0, keys);
+    gdcm::network::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(true, findstudy != 0, findpatient != 0, keys);
 
     if (findstudy == 0 && findpatient == 0)
       {
@@ -796,7 +515,6 @@ int main(int argc, char *argv[])
       std::cerr << "Move failed." << std::endl;
       return 1;
       }
-
 
     if( storequery )
       {
@@ -819,9 +537,9 @@ int main(int argc, char *argv[])
     //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
     //across, rather than all at once at the end.  Turn off the boolean to have
     //it written all at once at the end.
-    int ret = CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir, true );
+    bool didItWork = theNetworkFunctions.CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir );
     delete theQuery;
-    if (ret != 0)
+    if (!didItWork)
       {
       std::cerr << "Move failed." << std::endl;
       }
@@ -829,7 +547,7 @@ int main(int argc, char *argv[])
       {
       std::cout << "Move succeeded." << std::endl;
       }
-    return ret;
+    return (didItWork ? 0 : 1);
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
@@ -840,7 +558,7 @@ int main(int argc, char *argv[])
 
     // PATIENT query:
     // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 10,10="F*" -V
-    gdcm::network::BaseRootQuery* theQuery = ConstructQuery(false, findstudy != 0, findpatient != 0, keys);
+    gdcm::network::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, findstudy != 0, findpatient != 0, keys);
     if (findstudy == 0 && findpatient == 0)
       {
       if (gdcm::Trace::GetErrorFlag())
@@ -875,7 +593,13 @@ int main(int argc, char *argv[])
       return 1;
       }//must ensure that 0x8,0x52 is set and that
     //the value in that tag corresponds to the query type
-    int ret = CFind( hostname, port, callingaetitle, callaetitle, theQuery );
+    int ret = 0;
+    std::vector<gdcm::DataSet> theDataSet = theNetworkFunctions.CFind( hostname, port, callingaetitle, callaetitle, theQuery );
+    std::vector<gdcm::DataSet>::iterator itor;
+    for (itor = theDataSet.begin(); itor != theDataSet.end(); itor++){
+      itor->Print(std::cout);
+    }
+
     delete theQuery;
     if (ret == 0)
       std::cout << "Find was successful." << std::endl;
@@ -886,13 +610,13 @@ int main(int argc, char *argv[])
   else // C-STORE SCU
     {
     // mode == filename
-    int ret = CStore( hostname, port, callingaetitle, callaetitle ,filenames, theRecursive );
+    bool didItWork = theNetworkFunctions.CStore( hostname, port, callingaetitle, callaetitle ,filenames, theRecursive );
 
-    if (ret == 0)
+    if (!didItWork)
       std::cout << "Store was successful." << std::endl;
     else
       std::cout << "Store failed." << std::endl;
-    return ret;
+    return (didItWork ? 0 : 1);
     }
   return 0;
 }
