@@ -71,21 +71,36 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 
   this->Dimensions[0] = metadata.width;
   this->Dimensions[1] = metadata.height;
-  switch( metadata.bitspersample )
+  if( metadata.bitspersample <= 8 )
     {
-  case 8:
     this->PF = PixelFormat( PixelFormat::UINT8 );
-    break;
-  case 12:
+    }
+  else if( metadata.bitspersample <= 16 )
+    {
+    assert( metadata.bitspersample > 8 );
     this->PF = PixelFormat( PixelFormat::UINT16 );
-    this->PF.SetBitsStored( 12 );
-    break;
-  case 16:
-    this->PF = PixelFormat( PixelFormat::UINT16 );
-    break;
-  default:
+    }
+  else
+    {
     assert(0);
     }
+  this->PF.SetBitsStored( metadata.bitspersample );
+  assert( this->PF.IsValid() );
+//  switch( metadata.bitspersample )
+//    {
+//  case 8:
+//    this->PF = PixelFormat( PixelFormat::UINT8 );
+//    break;
+//  case 12:
+//    this->PF = PixelFormat( PixelFormat::UINT16 );
+//    this->PF.SetBitsStored( 12 );
+//    break;
+//  case 16:
+//    this->PF = PixelFormat( PixelFormat::UINT16 );
+//    break;
+//  default:
+//    assert(0);
+//    }
   if( metadata.components == 1 )
     {
     PI = PhotometricInterpretation::MONOCHROME2;
@@ -316,11 +331,7 @@ sample dit not suffer from that.
     // Using bitsstored for the encoder gives a slightly better compression ratio, and is indeed the
     // right way of doing it.
 
-/*
-FIXME: 12bits RGB is not working, so for now use the bitsallocated all the time
-Problem reading image from: /home/mathieu/Creatis/gdcmData/SIEMENS-MR-RGB-16Bits.dcm
-Found 8fd82891d8c7f146656aa88160c69b0b instead of faff9970b905458c0844400b5b869e25
-*/
+    // gdcmData/PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
     if( true || pf.GetPixelRepresentation() )
       {
       // gdcmData/CT_16b_signed-UsedBits13.dcm
