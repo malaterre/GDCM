@@ -192,7 +192,7 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "LEADTOOLS_FLOWERS-8-PAL-RLE.dcm","ec48c6dda2fdff2dd59366764d1fb0bd", "16e999d6afc5574bcb075f296c3bcbbc" },
 { "D_CLUNIE_VL4_RLE.dcm","c1bdaec5bf045ae322068790c2f304a8", "e2fdf24d2c03dd0991b4f4e9d6e84ed6" },
 { "GE_GENESIS-16-MONO2-WrongLengthItem.dcm","97e495e5e6b9fd9e080c7b9e40589b84", "1497fb9d7467b1eb36d5618e254aac76" },
-{ "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm","27fc7180bba7cae92c5a42e944364191", "9c4316acb45b3a5634b34026bd7b083d" },
+{ "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm","a7da0400b907b86ef97af8e61658b569", "6bbe3a067ff90eae950bc901f0f92f9e" },
 { "LEADTOOLS_FLOWERS-24-RGB-JpegLossless.dcm","09dc2ab46d45d47a3ad41e9d53bf3c8d", "279e2b0363394a553ff8571cf3540c6c" },
 { "SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm","c1bcf58ffa46cfe50a989847cdd3e3c9", "73f5986082729c2661cdc8de81fd26d0" },
 { "SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm","3c10ecf511e1316d367399eeb4ee70dd", "d2fab61e0fff8869e448d69951f1084d" },
