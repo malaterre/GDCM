@@ -201,8 +201,8 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "GE_DLX-8-MONO2-Multiframe.dcm","67c44b08178efe2857221f3015b0510f", "71e4ea61df4f7ada2955799c91f93e74" },
 { "LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm","4a967f8f35bfb93262dc90e0b8acf6b8", "3cd8bd92db17bff54e376885dfefdd8d" },
 { "00191113.dcm","7c17afc7815f18ebaecd99b9b07950f1", "bfff320d1b058e91b4819aa4560c16f7" },
-{ "D_CLUNIE_CT1_JLSL.dcm","4efffce4cded3f8785d5ac4d3b11da41", "0dad61b4113ba6a5c6c29d48e47be800" },
-{ "D_CLUNIE_CT1_JLSN.dcm","bcf17a67d96046ce7a2b4de4495dbd4c", "a855156efd56d4a1c786260ffd945907" },
+{ "D_CLUNIE_CT1_JLSL.dcm","4efffce4cded3f8785d5ac4d3b11da41", "a109da372df2b85ff0a705fba62e9589" },
+{ "D_CLUNIE_CT1_JLSN.dcm","bcf17a67d96046ce7a2b4de4495dbd4c", "7ca273fff6311586bd02ac983ccfbb6b" },
 
 /* Stopping condition */
 { 0 , 0 , 0 }
