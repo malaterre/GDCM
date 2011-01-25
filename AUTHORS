@@ -2,15 +2,17 @@ GDCM 2.x:
 --------
 
            Fabrice Bellet            : Contributor (RPM)
-          Charl P. Botha             : Contributor (python, VTK)
+          Charl P. Botha             : Contributor (Python, VTK)
              Shane Blackett          : Contributor (Win32)
              Niels Dekker            : Contributor (C++ guru)
         Daniele E. Domenichelli      : Contributor (C++)
-              Dean Inglis            : Contributor (Win32)
+              Dean Inglis            : Contributor (Win32, VTK)
+    Paulo Henrique Junqueira Amorim  : Contributor (Python)
            Mathieu Malaterre         : Project leader, main developer
               Lars Matthaus          : Contributor (Java)
+              Sean McBride           : Contributor (C++)
           Steve M. Robbins           : Contributor (debian)
-              Mark Roden             : Contributor (C#)
+              Mark Roden             : Developer (C++, C#)
        Jean-Pierre Roux              : Developer, maintain gdcmDataExtra
          Christina Rossmanith        : Contributor (Siemens CSA)
      Christopher W Treml             : Contributor (C#)
@@ -34,7 +36,6 @@ GDCM 1.x (Developpers and contributors, alphabetical order)
    Leonardo Flores Valencia
             Dennis Hu
               Luis Ibanez
-    Paulo Henrique Junqueira Amorim
             Michal Kurgan
             Gianni Lazzarato
             George Li
