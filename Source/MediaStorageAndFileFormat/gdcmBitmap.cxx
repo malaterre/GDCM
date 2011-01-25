@@ -558,11 +558,17 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
       if( !b ) return false;
       lossyflag = codec.IsLossy();
       // we need to know the actual pixeltype after ::Read
+#if 0
+// This is actually very dangerous to change the pixel format right here. What if
+// user stored a 16/10/9 signed image using JPEG-LS, JPEG-LS would be required to use
+// the full spectrum of the unsigned short 16 bits range to store that image and would
+// therefore -rightfully- declared as 16 bits...
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
         gdcm::Bitmap *i = (gdcm::Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
+#endif
 
       return true;
       }
