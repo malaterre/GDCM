@@ -676,7 +676,7 @@ void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
             << std::endl );
           ov.IsInPixelData( true );
           // make sure Overlay is valid
-          if( ov.GetBitsAllocated() != pixeldata.GetPixelFormat().GetBitsAllocated() );
+          if( ov.GetBitsAllocated() != pixeldata.GetPixelFormat().GetBitsAllocated() )
             {
             gdcmWarningMacro( "Bits Allocated are wrong. Correcting." );
             ov.SetBitsAllocated( pixeldata.GetPixelFormat().GetBitsAllocated() );
