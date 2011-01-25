@@ -46,6 +46,9 @@
 //-----------------------------------------------------------------------------
 //This is needed when compiling in debug mode
 #ifdef _MSC_VER
+// to allow construct such as: std::numeric_limits<int>::max() we need the following:
+// warning C4003: not enough actual parameters for macro 'max'
+#define NOMINMAX
 # pragma warning ( default : 4263 ) /* no override, call convention differs */
 // 'identifier' : class 'type' needs to have dll-interface to be used by
 // clients of class 'type2'
