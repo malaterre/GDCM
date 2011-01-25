@@ -27,6 +27,9 @@ GDCM_WRAP_PYTHON:BOOL=ON
 GDCM_WRAP_CSHARP:BOOL=ON
 GDCM_WRAP_JAVA:BOOL=ON
 
+There is an ongoing effort to make PHP another supported language (very experimental ATM)
+GDCM_WRAP_PHP:BOOL=ON
+
 For VTK user:
 GDCM_USE_VTK:BOOL=ON
 
