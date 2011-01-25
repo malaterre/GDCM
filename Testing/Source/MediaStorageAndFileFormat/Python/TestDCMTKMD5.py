@@ -60,6 +60,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   jpegre2 = re.compile('^.*JPEGExtended.*$')
   jpegre3 = re.compile('^.*JPEGBaseline.*$')
   j2kre = re.compile('^.*JPEG2000.*$')
+  jplsre = re.compile('^.*JPEGLS.*$')
   rlere = re.compile('^.*RLELossless.*$')
   lexre = re.compile('^.*LittleEndianExplicit.*$')
   leire = re.compile('^.*LittleEndianImplicit.*$')
@@ -88,6 +89,27 @@ def TestDCMTKMD5( filename, verbose = False ):
     if ret:
       print "dcmdjpeg failed to decompress file. giving up"
       return 0
+
+    gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
+    gdcmraw += gdcmraw_args
+    #print gdcmraw
+    ret = os.system( gdcmraw )
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
+    ref = gdcm.Testing.GetMD5FromFile(filename)
+    #print md5
+    retval  = 0
+    if ref != md5:
+      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      retval = 1
+    #print outputfilename
+    return retval
+  elif( jplsre.match( ret ) ):
+    #print "jpegls: ",filename
+    dcmdjpls_exec = "dcmdjpls " + filename + " " + outputfilename
+    ret = os.system( dcmdjpls_exec )
+    if ret:
+      print "failed with: ", dcmdjpls_exec
+      return 1
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
     gdcmraw += gdcmraw_args
