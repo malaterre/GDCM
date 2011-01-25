@@ -16,18 +16,26 @@
 """ This module loads all the classes from the GDCM library into
 its namespace.  This is a required module."""
 
+# warning: when loading 'import gdcm', if a gdcm.so is to be found in the same
+# directory as a gdcm.py file, then there will be conflict. This will happen
+# in the case of a user wrapping to PHP and Python at the same time.
+
 import os
 import sys
 
-# This file is a thin wrapper to the swig generated python module. It allows us to do a couple of things:
-# 1. do the RTLD_GLOBAL thingy on GNU system (with GNU compiler) before loading the compiled python module
+# This file is a thin wrapper to the swig generated python module. It allows us
+# to do a couple of things:
+# 1. do the RTLD_GLOBAL thingy on GNU system (with GNU compiler) before loading
+#    the compiled python module
 # 2. Load some secret path using directly the locate of this gdcm.py file.
-#    a. If the gdcm.py is installed in a normal installation then we can deduce where the Part3.xml can be found
-#    This is the 'non frozen' case
-#    b. Is the python executable is frozen then assume that everything is at the same level and look for Part3.xml
+#    a. If the gdcm.py is installed in a normal installation then we can deduce
+#    where the Part3.xml can be found. This is the 'non frozen' case
+#    b. Is the python executable is frozen then assume that everything is at
+#    the same level and look for Part3.xml
 #    at the same level as the frozen application is (see py2exe for more info)
-# 3. Finally this is also a good time to look up the env var and if GDCM_RESOURCES_PATH is set, then fill
-#    the 'resource manager' via the Global.Prepend interface.
+# 3. Finally this is also a good time to look up the env var and if
+# GDCM_RESOURCES_PATH is set, then fill the 'resource manager' via the
+# Global.Prepend interface.
 
 def main_is_frozen():
   return hasattr(sys, "frozen")
