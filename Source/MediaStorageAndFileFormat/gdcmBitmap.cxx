@@ -313,11 +313,13 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     //    " is different from computed value " << len );
     //  ((ByteValue*)outbv)->SetLength( len );
       }
+#if 0
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
+#endif
 
     unsigned long check; // = outbv->GetLength();  // FIXME
     check = len;
@@ -354,11 +356,13 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       assert( b );
       lossyflag = codec.IsLossy();
       // we need to know the actual pixeltype after ::Read
+#if 0
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
         gdcm::Bitmap *i = (gdcm::Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
+#endif
 
       return true;
       }
@@ -395,11 +399,13 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
     //  i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
     //  }
+#if 0
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
+#endif
     //if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
     //|| GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
     //  {
@@ -652,11 +658,35 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       if( !b ) return false;
       lossyflag = codec.IsLossy();
       // we need to know the actual pixeltype after ::Read
+#if 0
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
+        // Because J2K support the full spectrum I do not see any issue
+        // with the following:
         gdcm::Bitmap *i = (gdcm::Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
+#else
+      // lets only check the only issue we have:
+      // OsirixFake16BitsStoredFakeSpacing.dcm
+      const PixelFormat & cpf = codec.GetPixelFormat();
+      const PixelFormat & pf = GetPixelFormat();
+      if( cpf.GetBitsAllocated() == pf.GetBitsAllocated() )
+        {
+        if( cpf.GetPixelRepresentation() == pf.GetPixelRepresentation() )
+          {
+          if( cpf.GetSamplesPerPixel() == pf.GetSamplesPerPixel() )
+            {
+            if( cpf.GetBitsStored() < pf.GetBitsStored() )
+              {
+              gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+              gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
+              i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
+              }
+            }
+          }
+        }
+#endif
 
       return true;
       }
@@ -690,11 +720,34 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       assert( !ts.IsLossy() );
       gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
       }
+#if 0
     if( codec.GetPixelFormat() != GetPixelFormat() )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
+#else
+      // lets only check the only issue we have:
+      // OsirixFake16BitsStoredFakeSpacing.dcm
+      const PixelFormat & cpf = codec.GetPixelFormat();
+      const PixelFormat & pf = GetPixelFormat();
+      if( cpf.GetBitsAllocated() == pf.GetBitsAllocated() )
+        {
+        if( cpf.GetPixelRepresentation() == pf.GetPixelRepresentation() )
+          {
+          if( cpf.GetSamplesPerPixel() == pf.GetSamplesPerPixel() )
+            {
+            if( cpf.GetBitsStored() < pf.GetBitsStored() )
+              {
+              gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+              gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
+              i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
+              }
+            }
+          }
+        }
+
+#endif
     return r;
     }
   return false;
