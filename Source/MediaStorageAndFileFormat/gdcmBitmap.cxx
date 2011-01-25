@@ -399,9 +399,15 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
     //  i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
     //  }
-#if 0
+#if 1
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
+      // gdcmData/DCMTK_JPEGExt_12Bits.dcm
+      assert( GetPixelFormat().GetPixelRepresentation() ==
+        codec.GetPixelFormat().GetPixelRepresentation() );
+      assert( GetPixelFormat().GetBitsStored() ==
+        codec.GetPixelFormat().GetBitsStored() );
+      assert( GetPixelFormat().GetBitsAllocated() == 12 );
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
