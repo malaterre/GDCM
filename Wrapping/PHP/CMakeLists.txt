@@ -48,6 +48,18 @@ IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "gdcm")
 ENDIF(UNIX)
 
+# Let's copy gdcm.php into the bin dir:
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.php
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.php ${LIBRARY_OUTPUT_PATH}/gdcm.php
+  DEPENDS "${swig_generated_file_fullname}"
+  COMMENT "copying gdcm.php"
+)
+ADD_CUSTOM_TARGET(GDCMPHP ALL
+  DEPENDS ${LIBRARY_OUTPUT_PATH}/gdcm.php
+  COMMENT "building gdcm.php"
+)
+
 # Module are always place in the library destination
 # but for poor win32 user I decided to place them
 # right next to the other dlls
