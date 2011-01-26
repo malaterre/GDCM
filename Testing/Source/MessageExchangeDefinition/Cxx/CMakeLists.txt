@@ -5,6 +5,8 @@ TestULConnectionManager
 TestAllFunctions
 TestServiceClassUser
 TestSCUValidation
+TestEcho
+TestFind
 )
 
 # Add the include paths
