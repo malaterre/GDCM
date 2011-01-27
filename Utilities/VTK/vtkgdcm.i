@@ -25,6 +25,12 @@
 %}
 #endif
 
+#if defined(SWIGPHP)
+%{
+#define SWIGPHP
+%}
+#endif
+
 %{
 //#define VTK_MAJOR_VERSION 5
 //#define VTK_MINOR_VERSION 4
@@ -75,6 +81,8 @@
 #include "vtkVolumeReader.h"
 #include "vtkVolume16Reader.h"
 
+#include "vtkWindowToImageFilter.h"
+
 #include "vtkToolkits.h" // VTK_DATA_ROOT
 %}
 
@@ -111,6 +119,7 @@ using Kitware.VTK;
 #define VTK_FILTERING_EXPORT
 #define VTK_IO_EXPORT
 #define VTK_IMAGING_EXPORT
+#define VTK_RENDERING_EXPORT
 
 
 // FIXME. Including #include vtkSetGet would not work on siwg 1.3.33 ...
@@ -346,7 +355,9 @@ using Kitware.VTK;
 }
 
 %include "vtkObjectBase.h"
+#ifdef SWIGCSHARP
 %csmethodmodifiers vtkObjectBase::ToString() "public override"
+#endif
 %extend vtkObjectBase
 {
   const char *ToString()
@@ -477,6 +488,22 @@ while we would want:
 %}
 };
 
+#ifdef SWIGPHP
+%extend vtkGDCMImageReader
+{
+//public function __construct2($res=null) {
+//  $this->_cPtr=vtkGDCMImageReader_Create();
+//}
+
+//%typemap(out) vtkGDCMImageReader* (vtkGDCMImageReader::New)
+//%{
+//public function __construct($res=null) {
+//  $this->_cPtr=vtkGDCMImageReader_Create();
+//}
+//%}
+};
+#endif
+
 %extend vtkGDCMImageWriter
 {
 %typemap(cscode) vtkGDCMImageWriter
@@ -491,6 +518,10 @@ while we would want:
 %clear double*;
 %clear double* GetDataSpacing();
 %clear double* GetDataOrigin();
+
+#ifdef SWIGPHP
+%include "vtkWindowToImageFilter.h"
+#endif
 
 #ifndef USEACTIVIZ
 %include "vtkImageExport.h"
