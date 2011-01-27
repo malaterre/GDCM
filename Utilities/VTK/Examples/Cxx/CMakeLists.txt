@@ -7,6 +7,7 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
   SET(GDCM_VTK_APPS
     ConvertSingleBitTo8Bits
     GenerateRTSTRUCT
+    offscreenimage
   )
   IF(VTK_USE_RENDERING)
     SET(GDCM_VTK_APPS
