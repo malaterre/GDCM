@@ -874,8 +874,6 @@ int main (int argc, char *argv[])
     }
   else if ( unenhance )
     {
-    std::cerr << "Not implemented" << std::endl;
-    return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
@@ -884,8 +882,8 @@ int main (int argc, char *argv[])
       return 1;
       }
 
-    const gdcm::File &file = reader.GetFile();
-    const gdcm::DataSet &ds = file.GetDataSet();
+    gdcm::File &file = reader.GetFile();
+    gdcm::DataSet &ds = file.GetDataSet();
     gdcm::MediaStorage ms;
     ms.SetFromFile(file);
     if( ms.IsUndefined() )
@@ -903,9 +901,21 @@ int main (int argc, char *argv[])
       return 1;
       }
 
+  // Ok then change it old Old MR Image Storage
+    gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
+    ms = gdcm::MediaStorage::MRImageStorage;
+    const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+    ds.Replace( de );
+  // Remove SharedFunctionalGroupsSequence
+    ds.Remove( gdcm::Tag( 0x5200,0x9229 ) );
+  // Remove PerFrameFunctionalGroupsSequence
+    ds.Remove( gdcm::Tag( 0x5200,0x9230 ) );
+
     const gdcm::Image &image = reader.GetImage();
     const unsigned int *dims = image.GetDimensions();
-    std::cout << image << std::endl;
+    //std::cout << image << std::endl;
     const gdcm::DataElement &pixeldata = image.GetDataElement();
     const gdcm::ByteValue *bv = pixeldata.GetByteValue();
     unsigned long slice_len = image.GetBufferLength() / dims[2];
