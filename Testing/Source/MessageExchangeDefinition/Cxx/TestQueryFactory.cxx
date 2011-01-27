@@ -19,6 +19,6 @@
 
 int TestQueryFactory(int argc, char *argv[])
 {
-  gdcm::network::QueryFactory o;
+  gdcm::QueryFactory o;
   return 0;
 }

@@ -45,7 +45,6 @@ The dataset held by this object (or, really, one of its derivates) should be pas
 #include "gdcmWriter.h"
 
 namespace gdcm{
-namespace network {
 
 BaseRootQuery::BaseRootQuery(){
   //nothing to do, really
@@ -229,5 +228,4 @@ void BaseRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
   }
 }
 
-}
 }

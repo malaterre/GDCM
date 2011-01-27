@@ -88,26 +88,26 @@ bool CompositeNetworkFunctions::CEcho( const char *remote, int portno, std::stri
 //returns NULL if the query could not be constructed.
 //note that the caller is responsible for deleting the constructed query.
 //used to build both a move and a find query (true for inMove if it's move, false if it's find)
-gdcm::network::BaseRootQuery* CompositeNetworkFunctions::ConstructQuery(bool inMove, bool findstudy, bool findpatient,
+gdcm::BaseRootQuery* CompositeNetworkFunctions::ConstructQuery(bool inMove, bool findstudy, bool findpatient,
                                              const std::vector< std::pair<gdcm::Tag, std::string> >& keys)
 {
   gdcm::StringFilter sf;
   std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it =
     keys.begin();
-  gdcm::network::BaseRootQuery* outQuery = 0;
+  gdcm::BaseRootQuery* outQuery = 0;
   if (findstudy)
     {
     //theQuery = new gdcm::network::StudyRootQuery();
     outQuery =
-      gdcm::network::QueryFactory::ProduceQuery(
-        gdcm::network::eStudyRootType, gdcm::network::eStudy);
+      gdcm::QueryFactory::ProduceQuery(
+        gdcm::eStudyRootType, gdcm::eStudy);
     }
   else if (findpatient)
     {
     //theQuery = new gdcm::network::PatientRootQuery();
     outQuery =
-      gdcm::network::QueryFactory::ProduceQuery(
-        gdcm::network::ePatientRootType, gdcm::network::ePatient);
+      gdcm::QueryFactory::ProduceQuery(
+        gdcm::ePatientRootType, gdcm::ePatient);
 
     }
   else
@@ -134,9 +134,9 @@ gdcm::network::BaseRootQuery* CompositeNetworkFunctions::ConstructQuery(bool inM
 
 
   // setup the special character set
-  std::vector<gdcm::network::ECharSet> inCharSetType;
-  inCharSetType.push_back( gdcm::network::QueryFactory::GetCharacterFromCurrentLocale() );
-  gdcm::DataElement de = gdcm::network::QueryFactory::ProduceCharacterSetDataElement(inCharSetType);
+  std::vector<gdcm::ECharSet> inCharSetType;
+  inCharSetType.push_back( gdcm::QueryFactory::GetCharacterFromCurrentLocale() );
+  gdcm::DataElement de = gdcm::QueryFactory::ProduceCharacterSetDataElement(inCharSetType);
   std::string param ( de.GetByteValue()->GetPointer(),
     de.GetByteValue()->GetLength() );
   outQuery->SetSearchParameter(de.GetTag(), param );
@@ -147,7 +147,7 @@ gdcm::network::BaseRootQuery* CompositeNetworkFunctions::ConstructQuery(bool inM
 
 //note that pointer to the base root query-- the caller must instantiated and delete
 bool CompositeNetworkFunctions::CMove( const char *remote, int portno, std::string const &aetitle,
-            std::string const &call, gdcm::network::BaseRootQuery* query,
+            std::string const &call, gdcm::BaseRootQuery* query,
             int portscp, std::string const & outputdir)
 {
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
@@ -184,7 +184,7 @@ bool CompositeNetworkFunctions::CMove( const char *remote, int portno, std::stri
 
 //note that pointer to the base root query-- the caller must instantiated and delete
 std::vector<gdcm::DataSet> CompositeNetworkFunctions::CFind( const char *remote, int portno , std::string const &aetitle,
-                                  std::string const &call , gdcm::network::BaseRootQuery* query )
+                                  std::string const &call , gdcm::BaseRootQuery* query )
 {
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:

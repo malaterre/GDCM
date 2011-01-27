@@ -139,7 +139,7 @@ std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(){
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery)
+std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnection, gdcm::BaseRootQuery* inRootQuery)
 {
   std::vector<PresentationDataValue> pdv =
     CompositeMessageFactory::ConstructCMoveRQ(inConnection, inRootQuery );
@@ -179,7 +179,7 @@ std::vector<BasePDU*> PDUFactory::CreateCStoreRSPPDU(gdcm::DataSet* inDataSet, B
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery){
+std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, gdcm::BaseRootQuery* inRootQuery){
 //still have to build this!
   std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCFindRQ(inConnection, inRootQuery );
   std::vector<PresentationDataValue>::iterator pdvItor;

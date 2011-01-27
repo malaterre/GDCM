@@ -17,6 +17,7 @@
  *=========================================================================*/
 
 #include "gdcmCompositeNetworkFunctions.h"
+#include "gdcmBaseRootQuery.h"
 
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -157,7 +158,7 @@ int TestAllFunctions(int argc, char *argv[])
     keys.push_back(std::make_pair(theIDTag, theEmptyString));
 
     
-    gdcm::network::BaseRootQuery *theQuery =
+    gdcm::BaseRootQuery *theQuery =
       theNetworkFunctions.ConstructQuery(false, false, true, keys);
 
 

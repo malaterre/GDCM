@@ -28,7 +28,6 @@ placeholder file to get the compiler/linker to play nice with this file
 #include "gdcmAttribute.h"
 
 namespace gdcm{
-namespace network {
 
 PatientRootQuery::PatientRootQuery() {
   SetParameters();
@@ -248,5 +247,5 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   return theReturn && (thePresentTagCount > 0);
 }
 
-}
+
 }

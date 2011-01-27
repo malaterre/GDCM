@@ -36,7 +36,7 @@ gdcm::network::ULConnectionManager *GetConnectionManager()
 {
   gdcm::network::ULConnectionManager *theManager =
     new gdcm::network::ULConnectionManager();
-  gdcm::network::BaseRootQuery* theQuery;
+  gdcm::BaseRootQuery* theQuery;
   //!!! Mathieu, this code will crash because theQuery is not initialized
   if (!theManager->EstablishConnection(AETitle, PeerAETitle, ComputerName, 0,
     port, 1000, gdcm::network::eFind,  theQuery->GetQueryDataSet()))
@@ -50,9 +50,9 @@ std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
-  gdcm::network::BaseRootQuery* theQuery =
-    gdcm::network::QueryFactory::ProduceQuery(gdcm::network::ePatientRootType,
-      gdcm::network::ePatient);
+  gdcm::BaseRootQuery* theQuery =
+    gdcm::QueryFactory::ProduceQuery(gdcm::ePatientRootType,
+      gdcm::ePatient);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "PATIENT"); //Query/Retrieval Level
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), ""); //Patient ID
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x10), "*"); //Patient Name
@@ -68,8 +68,8 @@ std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuer
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
-  gdcm::network::BaseRootQuery* theQuery =
-    gdcm::network::QueryFactory::ProduceQuery(gdcm::network::eStudyRootType, gdcm::network::eStudy);
+  gdcm::BaseRootQuery* theQuery =
+    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eStudy);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "STUDY"); //Query/Retrieval Level
 
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID
@@ -88,8 +88,8 @@ std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *stud
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
-  gdcm::network::BaseRootQuery* theQuery =
-    gdcm::network::QueryFactory::ProduceQuery(gdcm::network::eStudyRootType, gdcm::network::eSeries);
+  gdcm::BaseRootQuery* theQuery =
+    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eSeries);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "SERIES"); //Query/Retrieval Level
 
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID
@@ -108,8 +108,8 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
-  gdcm::network::BaseRootQuery* theQuery =
-    gdcm::network::QueryFactory::ProduceQuery(gdcm::network::eStudyRootType, gdcm::network::eImageOrFrame);
+  gdcm::BaseRootQuery* theQuery =
+    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eImageOrFrame);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "SERIES"); //Query/Retrieval Level
 
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID
