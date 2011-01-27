@@ -15,10 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "gdcmStudyRootQuery.h"
-#include "gdcmULConnectionManager.h"
-#include "gdcmPatientRootQuery.h"
-#include "gdcmQueryFactory.h"
+
+#include "gdcmCompositeNetworkFunctions.h"
 
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -26,6 +24,9 @@
 #include "gdcmWriter.h"
 #include "gdcmAttribute.h"
 #include "gdcmGlobal.h"
+
+#include <iostream>
+#include <fstream>
 
 //this should maybe override == ?
 bool AreDataSetsEqual(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2){
@@ -68,7 +69,7 @@ int TestAllFunctions(int argc, char *argv[])
   int portno = 11112;//the port of the server
   int moveReturnPort = 11111;//the port over which return cstore scps are done for cmove
   std::string remote("192.168.1.9");//the ip address of the remote server
-  std::string outputDir("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
+  std::string outputDir("h:/gdcmtestdataretrievedcmtkoutput");//place to where data is returned by cmove
   std::string inputDir("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
 #else
   if( argc < 6 )
@@ -85,22 +86,16 @@ int TestAllFunctions(int argc, char *argv[])
   std::string outputDir = tmpdir; // ("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
   std::string inputDir = tmpdir; //("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
 
-#endif
-  gdcm::network::ERootType queryRootType = gdcm::network::ePatientRootType;//how queries are done
+#endif  
+  
+  gdcm::CompositeNetworkFunctions theNetworkFunctions;
+  bool didItWork = theNetworkFunctions.CEcho( remote.c_str(), portno, aetitle, call );
 
-  //first, run an echo, make sure that that works.
-  gdcm::network::ULConnectionManager theManager;
-  gdcm::DataSet blank;
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eEcho, blank)){
-    std::cerr << "Failed to establish connection." << std::endl;
+  if (!didItWork)
+    {
+    std::cerr << "Echo failed." << std::endl;
     return 1;
-  }
-  std::vector<gdcm::network::PresentationDataValue> theValues1 = theManager.SendEcho();
-  std::vector<gdcm::network::PresentationDataValue>::iterator itor;
-  for (itor = theValues1.begin(); itor < theValues1.end(); itor++){
-    itor->Print(std::cout);
-  }
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+    }
 
   //now, run the individual tests.
   //get the filenames from the test directory
@@ -108,112 +103,122 @@ int TestAllFunctions(int argc, char *argv[])
   theDir.Load(inputDir, false);
 
   std::vector<std::string> theFilenames = theDir.GetFilenames();
+  //store the datasets remotely
+  didItWork = theNetworkFunctions.CStore(remote.c_str(), portno, aetitle, call, theFilenames, false);
 
-  //contrary to the warning, the factory is actually used.
-  gdcm::network::QueryFactory theFactory;
+  if (!didItWork) 
+    {
+    std::cerr << "Store failed." << std::endl;
+    return 1;
+    }
 
   std::vector<std::string>::iterator fitor;
-  for (fitor = theFilenames.begin(); fitor < theFilenames.end(); ++fitor){
+  for (fitor = theFilenames.begin(); fitor < theFilenames.end(); ++fitor)
+    {
 
     //read in the file
     gdcm::Reader theReader;
     theReader.SetFileName(fitor->c_str());
     if (!theReader.Read()) {
-      std::cerr << "Test failed, dicom file failed to load." <<std::endl;
-      continue;
+      std::cerr << "Test failed, dicom file " << *fitor << " failed to load." <<std::endl;
+      return 1;
     }
     gdcm::File theFile = theReader.GetFile();
     gdcm::DataSet ds = theFile.GetDataSet();
 
-    //store the file remotely
-    if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10, gdcm::network::eStore, ds)){
-      std::cerr << "Failed to establish c-store connection." << std::endl;
-      continue;
-    }
-
-    std::vector<gdcm::DataSet> theReturn = theManager.SendStore(&ds);
-    theManager.BreakConnection(-1);
-
-    //construct the cfind query
-    gdcm::network::BaseRootQuery* theQuery =
-      theFactory.ProduceQuery(queryRootType, gdcm::network::eSeries);
-
-    //take one of the required tags from the dataset
-    //search the tags in the returned list for one that's in the dataset
-    //whichever one's hit first, we'll search on, using the first char value followed by *
-    std::vector<gdcm::Tag> theTags = theQuery->GetTagListByLevel(gdcm::network::eSeries, true);
-
-    gdcm::Tag selectedTag;
-    std::vector<gdcm::Tag>::iterator tagItor;
-    for (tagItor = theTags.begin(); tagItor < theTags.end(); tagItor++){
-      if (ds.FindDataElement(*tagItor)){
-        gdcm::DataElement de = ds.GetDataElement(*tagItor);
-        gdcm::ByteValue* theVal = de.GetByteValue();
-        unsigned long len = 1;
-        char* buf = new char[len];
-        if (theVal->GetBuffer(buf, len)){
-          std::string searchTerm(buf, &(buf[len]));//because buf is probably not null terminated
-          searchTerm += "*";
-          theQuery->SetSearchParameter(*tagItor, searchTerm);//searchTerm);
+    //have to construct a query from the dataset.
+    //grab tag 10,10, use that to get 10,20
+    //set the query just to be the first character and * after that.
+    std::vector<std::pair<gdcm::Tag, std::string> > keys;
+    gdcm::Tag theTag(0x0010, 0x0010);
+    gdcm::Tag theIDTag(0x0010, 0x0020);
+    if (ds.FindDataElement(theTag))
+      {
+      gdcm::DataElement de = ds.GetDataElement(theTag);
+      const gdcm::ByteValue* bv = de.GetByteValue();
+      int theBufferLen = bv->GetLength();
+      if (theBufferLen < 2) continue;
+      char* theBuf = new char[theBufferLen];
+      bv->GetBuffer(theBuf, theBufferLen);
+      std::string theSearchString(theBuf, theBuf + theBufferLen/2);
+      delete [] theBuf;
+      theSearchString += "*";
+      if (theSearchString.size() %2 == 1)
+        {
+        theSearchString += " "; //to make sure everything is double spaced
         }
-        delete [] buf;
-      } else {
-        theQuery->SetSearchParameter(*tagItor, "");//null string
-        //check out
-        //http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/a15957b33b23c1ee/1373e5e0241bd94b?lnk=gst&q=UID+root&pli=1
+      keys.push_back(std::make_pair(theTag, theSearchString));
       }
-    }
-    //using the non-strict version of query validation
-    if (!theQuery->ValidateQuery(true, false)){
-      std::cerr << "Unable to validate query." << std::endl;
-      delete theQuery;
+    else 
+      { 
       continue;
-    }
-    if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10,
-      gdcm::network::eFind, theQuery->GetQueryDataSet())){
-      std::cerr << "Failed to establish c-find connection." << std::endl;
-      delete theQuery;
-      continue;
-    }
-
-    std::vector<gdcm::DataSet> theQueryReturn = theManager.SendFind(theQuery);
-    theManager.BreakConnection(-1);
-
-    //now, find the dataset in theQueryReturn that corresponds to ds and then move it locally with a cmove
-    //we will actually just do an in-memory comparison of the returned result.
-    //for now, assume only one response.
-    if (theQueryReturn.empty()){
-      std::cerr << "Failed to find sent dataset." <<std::endl;
-      delete theQuery;
-      continue;
-    }
-
-    std::vector<gdcm::DataSet>::iterator theQueryResultItor;
-    bool foundMatch = false;
-/*    for (theQueryResultItor = theQueryReturn.begin(); theQueryResultItor < theQueryReturn.end(); theQueryResultItor++){
-      //check to see if any data sets match upon return.
-      theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 10, moveReturnPort, *theQueryResultItor);
-      std::vector<gdcm::DataSet> theMoveResult = theManager.SendMove(&(*theQueryResultItor));
-      theManager.BreakConnection(-1);
-      std::vector<gdcm::DataSet>::iterator theMoveResultItor;
-      for (theMoveResultItor = theMoveResult.begin(); theMoveResultItor < theMoveResult.end(); ++theMoveResultItor){
-        //now iterate over each data element
-
-        if (AreDataSetsEqual(*theMoveResultItor, ds)){
-          foundMatch = true;//can break now
-          theQueryResultItor = theQueryReturn.end();
-          theMoveResultItor = theMoveResult.end();
-          break;
-        }
       }
-    }*/
-    if (!foundMatch){
-      std::cerr << "No found dataset matches stored dataset." <<std::endl;
-      delete theQuery;
-      continue;
-    }
+    std::string theEmptyString;
+    keys.push_back(std::make_pair(theIDTag, theEmptyString));
+
+    
+    gdcm::network::BaseRootQuery *theQuery =
+      theNetworkFunctions.ConstructQuery(false, false, true, keys);
+
+
+    std::vector<gdcm::DataSet> theDataSets =
+      theNetworkFunctions.CFind(remote.c_str(), portno, aetitle, call, theQuery);
+
     delete theQuery;
-    std::cout << fitor->c_str() << " passed scu testing." <<std::endl;
+
+    if (theDataSets.empty())
+      {
+      std::cerr << "Unable to find the dataset that was just sent to the server, " << *fitor << std::endl;
+      return 1;
+      }
+
+    keys.clear();
+    //if it's not empty, then pull it.
+    for (std::vector<gdcm::DataSet>::iterator itor = theDataSets.begin();
+      itor != theDataSets.end(); itor++)
+      {
+      if (itor->FindDataElement(theIDTag))
+        {
+        gdcm::DataElement de = itor->GetDataElement(theIDTag);
+        const gdcm::ByteValue *bv = de.GetByteValue();
+        int theBufferLen = bv->GetLength();
+        char* theBuf = new char[theBufferLen];
+        bv->GetBuffer(theBuf, theBufferLen);
+        std::string theSearchString(theBuf, theBuf + theBufferLen);
+        delete [] theBuf;
+        keys.push_back(std::make_pair(theIDTag, theSearchString));
+        
+        gdcm::DataElement de2 = ds.GetDataElement(theIDTag);
+        if (!(de == de2))
+          {
+          std::cerr << "Sent dataset does not match returned dataset ID. " << std::endl;
+          return 1;
+          }
+        break;
+        }
+      else 
+        {
+        continue;
+        }
+    }
+
+    if (keys.empty())
+      {
+      std::cerr << "Sent dataset " << *fitor << " was not found by resulting CFind query. " << std::endl;
+      return 1;
+      }
+
+    theQuery = theNetworkFunctions.ConstructQuery(true, false, true, keys);
+    didItWork = theNetworkFunctions.CMove(remote.c_str(), portno, aetitle, call, theQuery, moveReturnPort, outputDir);
+    if (!didItWork)
+      {
+      std::cerr << "CMove failed for file " << *fitor << std::endl;
+      return 1;
+      }
+    delete theQuery;
+
+    std::cout << "File " << *fitor << " moved back to server." << std::endl;
+
   }
   return 0;
 

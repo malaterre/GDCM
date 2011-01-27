@@ -17,7 +17,8 @@
  *=========================================================================*/
 
 #include "gdcmCompositeNetworkFunctions.h"
-
+#include "gdcmTag.h"
+#include "gdcmQueryFactory.h"
 
 int TestEcho(int argc, char *argv[])
 {
