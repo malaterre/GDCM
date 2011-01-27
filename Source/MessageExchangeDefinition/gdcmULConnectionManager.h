@@ -26,10 +26,9 @@
 
 namespace gdcm {
   class DataSet;
-
+  class BaseRootQuery;
 
   namespace network {
-  class BaseRootQuery;
     enum GDCM_EXPORT EConnectionType {
       eEcho,
       eFind,
@@ -47,8 +46,8 @@ namespace gdcm {
  *
  * Its inputs are ULEvents, and it performs ULActions.
  */
-class GDCM_EXPORT ULConnectionManager
-{
+  class GDCM_EXPORT ULConnectionManager
+  {
     private:
       ULConnection* mConnection;
       ULConnection* mSecondaryConnection;

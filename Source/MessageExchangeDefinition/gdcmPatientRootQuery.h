@@ -21,24 +21,22 @@
 #include "gdcmBaseRootQuery.h"
 
 namespace gdcm{
-  namespace network {
 /**
  * \brief PatientRootQuery
  * contains: the class which will produce a dataset for c-find and c-move with patient root
  */
-    class QueryFactory;
-class GDCM_EXPORT PatientRootQuery : public BaseRootQuery {
-    private:
-      void SetParameters();
-      friend class QueryFactory;
-      PatientRootQuery();
-    public:
-      ~PatientRootQuery();
+  class QueryFactory;
+  class GDCM_EXPORT PatientRootQuery : public BaseRootQuery {
+  private:
+    void SetParameters();
+    friend class QueryFactory;
+    PatientRootQuery();
+  public:
+    ~PatientRootQuery();
 
-      std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
-      bool ValidateQuery(bool forFind, bool inStrict) const;
-    };
-  }
+    std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
+    bool ValidateQuery(bool forFind, bool inStrict) const;
+  };
 }
 
 #endif //PATIENTROOTQUERY_H

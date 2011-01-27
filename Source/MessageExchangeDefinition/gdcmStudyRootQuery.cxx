@@ -30,7 +30,6 @@ placeholder file to get the compiler/linker to play nice with this file
 #include "gdcmDataSet.h"
 
 namespace gdcm{
-namespace network {
 
 StudyRootQuery::StudyRootQuery() {
   SetParameters();
@@ -215,5 +214,4 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   return theReturn && (thePresentTagCount > 0);
 }
 
-}
 }

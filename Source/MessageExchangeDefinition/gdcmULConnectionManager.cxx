@@ -342,14 +342,14 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   }
 }
 
-std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(BaseRootQuery* inRootQuery)
+std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(gdcm::BaseRootQuery* inRootQuery)
 {
   ULBasicCallback theCallback;
   SendMove(inRootQuery, &theCallback);
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendMove(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
+void ULConnectionManager::SendMove(gdcm::BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
   if (mConnection == NULL){
     return;
   }
@@ -358,14 +358,14 @@ void ULConnectionManager::SendMove(BaseRootQuery* inRootQuery, ULConnectionCallb
   RunMoveEventLoop(theEvent, inCallback);
 }
 
-std::vector<gdcm::DataSet> ULConnectionManager::SendFind(BaseRootQuery* inRootQuery)
+std::vector<gdcm::DataSet> ULConnectionManager::SendFind(gdcm::BaseRootQuery* inRootQuery)
 {
   ULBasicCallback theCallback;
   SendFind(inRootQuery, &theCallback);
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendFind(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
+void ULConnectionManager::SendFind(gdcm::BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
   if (mConnection == NULL){
     return;
   }

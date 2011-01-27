@@ -22,7 +22,6 @@
 #include <locale>
 
 namespace gdcm{
-  namespace network {
 BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQueryLevel& inQueryLevel){
   BaseRootQuery* theReturn = NULL;
   switch (inRootType){
@@ -181,5 +180,4 @@ void QueryFactory::ListCharSets(std::ostream& os){
 
 }
 
-  }
 }

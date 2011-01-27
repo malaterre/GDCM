@@ -26,9 +26,7 @@
 namespace gdcm{
   class DataSet;
   class Tag;
-  namespace network{
-    class BaseRootQuery;
-  }
+  class BaseRootQuery;
   /// These functions provide a generic API to the DICOM functions implemented in GDCM.
   /// Advanced users can use this code as a template for building their own versions of
   /// these functions (for instance, to provide progress bars or some other way of handling
@@ -53,8 +51,8 @@ namespace gdcm{
     ///Note that the caller is responsible for deleting the constructed query.
     ///This function is used to build both a move and a find query 
     ///(true for inMove if it's move, false if it's find)
-    gdcm::network::BaseRootQuery* ConstructQuery(bool inMove, bool findstudy, bool findpatient,
-                                                 const std::vector< std::pair<gdcm::Tag, std::string> >& keys);
+    gdcm::BaseRootQuery* ConstructQuery(bool inMove, bool findstudy, bool findpatient,
+                                        const std::vector< std::pair<gdcm::Tag, std::string> >& keys);
 
 
     ///This function will use the provided query to get files from a remote server.
@@ -67,7 +65,7 @@ namespace gdcm{
     ///should remain in memory, for instance, that behavior can be changed by creating a user-level version
     ///of this function.
     bool CMove( const char *remote, int portno, std::string const &aetitle,
-                const std::string& call, gdcm::network::BaseRootQuery* query,
+                const std::string& call, gdcm::BaseRootQuery* query,
                 int portscp, const std::string& outputdir);
 
 
@@ -76,7 +74,7 @@ namespace gdcm{
     ///by the server.  If the dataset is empty, then it is possible that an error condition was encountered;
     ///in which case, the user should monitor the error and warning streams.
     std::vector<gdcm::DataSet> CFind( const char *remote, int portno , std::string const &aetitle,
-                                      std::string const &call , gdcm::network::BaseRootQuery* query );
+                                      std::string const &call , gdcm::BaseRootQuery* query );
 
     ///This function will place the provided files into the remote server.
     ///The function returns true if it worked.

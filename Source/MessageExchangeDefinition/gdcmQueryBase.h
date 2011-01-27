@@ -26,11 +26,10 @@
 #include <algorithm>
 
 namespace gdcm{
-  namespace network{
-    enum GDCM_EXPORT ERootType{
-      ePatientRootType,
-      eStudyRootType
-    };
+  enum GDCM_EXPORT ERootType{
+    ePatientRootType,
+    eStudyRootType
+  };
 
 /**
  * \brief QueryBase
@@ -59,26 +58,25 @@ namespace gdcm{
  */
 class QueryBase
 {
-    public:
+  public:
 
-      virtual std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const = 0;
-      virtual std::vector<gdcm::Tag> GetUniqueTags(const ERootType& inRootType) const = 0;
-      virtual std::vector<gdcm::Tag> GetOptionalTags(const ERootType& inRootType) const = 0;
-      ///In order to validate a query dataset, just check for the presence of a tag,
-      ///not it's requirement level in the spec
-      virtual std::vector<gdcm::Tag> GetAllTags(const ERootType& inRootType) const{
-        std::vector<gdcm::Tag> theReturn = GetRequiredTags(inRootType);
-        std::vector<gdcm::Tag> theNext = GetUniqueTags(inRootType);
-        theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
-        theNext = GetOptionalTags(inRootType);
-        theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
-        return theReturn;
-      }
+    virtual std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const = 0;
+    virtual std::vector<gdcm::Tag> GetUniqueTags(const ERootType& inRootType) const = 0;
+    virtual std::vector<gdcm::Tag> GetOptionalTags(const ERootType& inRootType) const = 0;
+    ///In order to validate a query dataset, just check for the presence of a tag,
+    ///not it's requirement level in the spec
+    virtual std::vector<gdcm::Tag> GetAllTags(const ERootType& inRootType) const{
+      std::vector<gdcm::Tag> theReturn = GetRequiredTags(inRootType);
+      std::vector<gdcm::Tag> theNext = GetUniqueTags(inRootType);
+      theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
+      theNext = GetOptionalTags(inRootType);
+      theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
+      return theReturn;
+    }
 
-      virtual std::string GetName() const = 0;
-      virtual DataElement GetQueryLevel() const = 0;
-    };
-  }
+    virtual std::string GetName() const = 0;
+    virtual DataElement GetQueryLevel() const = 0;
+  };
 }
 
 #endif //GDCMQUERYBASE_H
