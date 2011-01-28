@@ -494,7 +494,7 @@ int main(int argc, char *argv[])
     {
     // ./bin/gdcmscu --move --patient dhcp-67-183 5678 move
     // ./bin/gdcmscu --move --patient mi2b2.slicer.org 11112 move
-    gdcm::network::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(true, findstudy != 0, findpatient != 0, keys);
+    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(true, findstudy != 0, findpatient != 0, keys);
 
     if (findstudy == 0 && findpatient == 0)
       {
@@ -558,7 +558,7 @@ int main(int argc, char *argv[])
 
     // PATIENT query:
     // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 10,10="F*" -V
-    gdcm::network::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, findstudy != 0, findpatient != 0, keys);
+    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, findstudy != 0, findpatient != 0, keys);
     if (findstudy == 0 && findpatient == 0)
       {
       if (gdcm::Trace::GetErrorFlag())
