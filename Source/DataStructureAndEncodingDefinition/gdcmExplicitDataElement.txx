@@ -506,6 +506,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
           failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Write(os,*ValueField);
           break;
         default:
+          failed = true;
           assert(0);
           }
         }
