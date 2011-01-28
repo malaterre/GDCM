@@ -97,6 +97,10 @@ public:
   /// \see FormatDateTime
   static bool ParseDateTime(time_t &timep, long &milliseconds, const char date[22]);
 
+  /// Return the value for Timezone Offset From UTC as string.
+  /// \warning not thread safe
+  static const char *GetTimezoneOffsetFromUTC();
+
   /// Encode bytes
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 

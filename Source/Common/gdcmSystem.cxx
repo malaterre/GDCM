@@ -692,6 +692,18 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
   return true;
 }
 
+const char *System::GetTimezoneOffsetFromUTC()
+{
+  static std::string buffer;
+  char outstr[10];
+  time_t t = time(NULL);
+  struct tm *tmp = localtime(&t);
+  size_t l = strftime(outstr, sizeof(outstr), "%z", tmp);
+  assert( l == 5 );
+  buffer = outstr;
+  return buffer.c_str();
+}
+
 bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 {
   // \precondition
@@ -765,18 +777,13 @@ bool System::GetCurrentDateTime(char date[22])
   struct timeval tv;
   gettimeofday (&tv, NULL);
   timep = tv.tv_sec;
-  // A concatenated date-time character string in
-  // the format:
+  // A concatenated date-time character string in the format:
   // YYYYMMDDHHMMSS.FFFFFF&ZZXX
-  // The components of this string, from left to
-  // right, are YYYY = Year, MM = Month, DD =
-  // Day, HH = Hour (range "00" - "23"), MM =
-  // Minute (range "00" - "59"), SS = Second
-  // (range "00" - "60").
-  // FFFFFF = Fractional Second contains a
-  // fractional part of a second as small as 1
-  // millionth of a second (range ¿000000¿ -
-  // ¿999999¿).
+  // The components of this string, from left to right, are YYYY = Year, MM =
+  // Month, DD = Day, HH = Hour (range "00" - "23"), MM = Minute (range "00" -
+  // "59"), SS = Second (range "00" - "60").
+  // FFFFFF = Fractional Second contains a fractional part of a second as small
+  // as 1 millionth of a second (range 000000 - 999999).
   assert( tv.tv_usec >= 0 && tv.tv_usec < 1000000 );
   milliseconds = tv.tv_usec;
 
