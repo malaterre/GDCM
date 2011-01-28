@@ -32,12 +32,10 @@ const char *PeerAETitle = "ANY";
 const char *ComputerName = "87.106.65.167"; // www.dicomserver.co.uk
 int port = 11112;
 
-gdcm::network::ULConnectionManager *GetConnectionManager()
+gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* theQuery)
 {
   gdcm::network::ULConnectionManager *theManager =
     new gdcm::network::ULConnectionManager();
-  gdcm::BaseRootQuery* theQuery = NULL;
-  //!!! Mathieu, this code will crash because theQuery is not initialized
   if (!theManager->EstablishConnection(AETitle, PeerAETitle, ComputerName, 0,
     port, 1000, gdcm::network::eFind,  theQuery->GetQueryDataSet()))
   {
@@ -49,7 +47,6 @@ gdcm::network::ULConnectionManager *GetConnectionManager()
 std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
-  gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
   gdcm::BaseRootQuery* theQuery =
     gdcm::QueryFactory::ProduceQuery(gdcm::ePatientRootType,
       gdcm::ePatient);
@@ -60,6 +57,8 @@ std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery
   {
     return theDataSets;
   }
+
+  gdcm::network::ULConnectionManager *theManager = GetConnectionManager( theQuery );
   theDataSets  = theManager->SendFind( theQuery );
   return theDataSets;
 }
@@ -67,7 +66,6 @@ std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery
 std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
-  gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
   gdcm::BaseRootQuery* theQuery =
     gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eStudy);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "STUDY"); //Query/Retrieval Level
@@ -80,6 +78,8 @@ std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuer
   {
     return theDataSets;
   }
+
+  gdcm::network::ULConnectionManager *theManager = GetConnectionManager( theQuery );
   theDataSets  = theManager->SendFind( theQuery );
   return theDataSets;
 }
@@ -87,7 +87,6 @@ std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuer
 std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *studyInstanceUID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
-  gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
   gdcm::BaseRootQuery* theQuery =
     gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eSeries);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "SERIES"); //Query/Retrieval Level
@@ -99,6 +98,7 @@ std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *stud
   {
     return theDataSets;
   }
+  gdcm::network::ULConnectionManager *theManager = GetConnectionManager( theQuery );
   theDataSets  = theManager->SendFind( theQuery );
   return theDataSets;
 }
@@ -107,7 +107,6 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
                const char *studyInstanceUID, const char *seriesInstanceUID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
-  gdcm::network::ULConnectionManager *theManager = GetConnectionManager();
   gdcm::BaseRootQuery* theQuery =
     gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eImageOrFrame);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "SERIES"); //Query/Retrieval Level
@@ -120,6 +119,7 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
   {
     return theDataSets;
   }
+  gdcm::network::ULConnectionManager *theManager = GetConnectionManager( theQuery );
   theDataSets = theManager->SendFind( theQuery );
   return theDataSets;
 }
