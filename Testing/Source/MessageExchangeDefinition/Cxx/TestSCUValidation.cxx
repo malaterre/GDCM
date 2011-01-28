@@ -36,7 +36,7 @@ gdcm::network::ULConnectionManager *GetConnectionManager()
 {
   gdcm::network::ULConnectionManager *theManager =
     new gdcm::network::ULConnectionManager();
-  gdcm::BaseRootQuery* theQuery;
+  gdcm::BaseRootQuery* theQuery = NULL;
   //!!! Mathieu, this code will crash because theQuery is not initialized
   if (!theManager->EstablishConnection(AETitle, PeerAETitle, ComputerName, 0,
     port, 1000, gdcm::network::eFind,  theQuery->GetQueryDataSet()))
