@@ -1041,6 +1041,10 @@ int main (int argc, char *argv[])
       return 1;
       }
 
+  // Preserve info:
+  gdcm::DataElement oldsopclassuid = ds.GetDataElement( gdcm::Tag(0x8,0x16) );
+  gdcm::DataElement oldinstanceuid = ds.GetDataElement( gdcm::Tag(0x8,0x18) );
+
   // Ok then change it old Old MR Image Storage
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     ms = gdcm::MediaStorage::MRImageStorage;
@@ -1091,6 +1095,18 @@ int main (int argc, char *argv[])
     //ds.Remove( gdcm::Tag( 0x0008,0x0012) );
     //ds.Remove( gdcm::Tag( 0x0008,0x0013) );
 
+  // reference the old instance:
+  // PS 3.3-2009 C.7.6.16.1.3
+#if 0
+  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1150) ) == false );
+  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1155) ) == false );
+  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1160) ) == false );
+  oldsopclassuid.SetTag( gdcm::Tag(0x8,0x1150) );
+  oldinstanceuid.SetTag( gdcm::Tag(0x8,0x1155) );
+  ds.Insert( oldsopclassuid );
+  ds.Insert( oldinstanceuid );
+#endif
+
   char date[22];
   const size_t datelen = 8;
   int res = gdcm::System::GetCurrentDateTime(date);
@@ -1100,6 +1116,10 @@ int main (int argc, char *argv[])
   gdcm::Attribute<0x8,0x13> instcreationtime;
   instcreationtime.SetValue( gdcm::DTComp( date + datelen, 13 ) );
   ds.Replace( instcreationtime.GetAsDataElement() );
+  const char *offset = gdcm::System::GetTimezoneOffsetFromUTC();
+  gdcm::Attribute<0x8,0x201> timezoneoffsetfromutc;
+  timezoneoffsetfromutc.SetValue( offset );
+  ds.Replace( timezoneoffsetfromutc.GetAsDataElement() );
 
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
