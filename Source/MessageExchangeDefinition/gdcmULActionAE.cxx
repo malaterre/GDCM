@@ -139,13 +139,14 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     acceptable = false; //can't accept an empty set of pdus.
     //also, requrie little endian, not sure how to set that, but it should be here.
   }
-  gdcm::network::AAssociateRQPDU* rqpdu =
-    dynamic_cast<gdcm::network::AAssociateRQPDU*>(inEvent.GetPDUs()[0]);
-  if (rqpdu == NULL){
-    acceptable = false;
+  gdcm::network::AAssociateRQPDU* rqpdu;
+  if (acceptable){
+    rqpdu = dynamic_cast<gdcm::network::AAssociateRQPDU*>(inEvent.GetPDUs()[0]);
+    if (rqpdu == NULL){
+      acceptable = false;
+    }
   }
   if (acceptable){
-
     outWaitingForEvent = false;//not waiting, now want to get the
     //sending of data underway.  Have to get info now
     outRaisedEvent = eAASSOCIATEresponseAccept;
