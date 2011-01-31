@@ -166,9 +166,11 @@
 
 using namespace gdcm;
 
+#include "gdcmPresentationDataValue.h"
+#include "gdcmULConnectionCallback.h"
+using gdcm::network::PresentationDataValue;
+using gdcm::network::ULConnectionCallback;
 #include "gdcmULConnectionManager.h"
-
-using namespace gdcm::network;
 %}
 
 //%insert("runtime") %{
@@ -697,4 +699,5 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
+//%include "gdcmPresentationDataValue.h"
 %include "gdcmULConnectionManager.h"
