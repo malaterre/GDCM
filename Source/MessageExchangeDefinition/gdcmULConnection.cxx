@@ -99,6 +99,17 @@ void ULConnection::SetPresentationContexts(
 {
   mPresentationContexts = inContexts;
 }
+
+
+std::vector<PresentationContext> ULConnection::GetAcceptedPresentationContexts() const
+{
+  return mAcceptedPresentationContexts;
+}
+void ULConnection::AddAcceptedPresentationContext(const PresentationContext& inPC)
+{
+  mAcceptedPresentationContexts.push_back(inPC);
+}
+
 //given a particular data element, presumably the SOP class,
 //find the presentation context for that SOP
 //NOT YET IMPLEMENTED
