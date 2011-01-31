@@ -161,6 +161,10 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       // rqpdu.GetAbstractSyntax() contains LittleENdian
       gdcm::network::PresentationContextAC pcac1;
       PresentationContext const &pc = rqpdu->GetPresentationContext(index);
+      //add the presentation context back into the connection,
+      //so later functions will know what's allowed on this connection
+      inConnection.AddAcceptedPresentationContext(pc);
+
       uint8_t id = pc.GetPresentationContextID();
 
       std::vector<TransferSyntaxSub> tsSet = pc.GetTransferSyntaxes();

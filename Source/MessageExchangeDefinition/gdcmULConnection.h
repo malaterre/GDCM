@@ -72,7 +72,11 @@ class ULConnection
       EStateID mCurrentState;
 
       std::vector<PresentationContext> mPresentationContexts;
+      //this is our list of presentation contexts of what we can send
       uint32_t mMaxPDUSize;
+
+      std::vector<PresentationContext> mAcceptedPresentationContexts;//these come back from the server
+      //and tell us what can be sent over this connection
 
     public:
 
@@ -103,6 +107,9 @@ class ULConnection
       //find the presentation context for that SOP
       //NOT YET IMPLEMENTED
       PresentationContext FindContext(const DataElement& de) const;
+
+      std::vector<PresentationContext> GetAcceptedPresentationContexts() const;
+      void AddAcceptedPresentationContext(const PresentationContext& inPC);
 
       /// used to establish scu connections
       bool InitializeConnection();
