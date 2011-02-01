@@ -956,7 +956,6 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   InternalType = UNKNOWN; // reset
   gdcm::Tag t1(0x0029,0x0010);
   gdcm::Tag t2(0x0029,0x0020);
-  Tag toto = de.GetTag().GetPrivateCreator();
   uint16_t v = (de.GetTag().GetElement() << 8);
   uint16_t v2 = v >> 8;
   //if( de.GetTag().GetPrivateCreator() == t1 )

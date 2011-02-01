@@ -67,7 +67,7 @@ public:
   // copy a file
 
   /// \deprecated DO NOT USE: This function might disapear real time soon...
-  static bool GetHardwareAddress(unsigned char addr[6]);
+  GDCM_LEGACY(static bool GetHardwareAddress(unsigned char addr[6]))
 
   /// Retrieve the hostname, only the first 255 byte are copyied.
   /// This may come handy to specify the Station Name

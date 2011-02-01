@@ -74,7 +74,7 @@ public:
 
 protected:
   static bool GenerateUUID(unsigned char *uuid_data);
-  const char* Generate2();
+  GDCM_LEGACY(const char* Generate2())
 
 private:
   static const char GDCM_UID[];
