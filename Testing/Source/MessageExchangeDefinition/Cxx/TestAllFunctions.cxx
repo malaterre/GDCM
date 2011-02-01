@@ -159,7 +159,7 @@ int TestAllFunctions(int argc, char *argv[])
 
     
     gdcm::BaseRootQuery *theQuery =
-      theNetworkFunctions.ConstructQuery(false, false, true, keys);
+      theNetworkFunctions.ConstructQuery(false, gdcm::ePatientRootType, gdcm::ePatient, keys);
 
 
     std::vector<gdcm::DataSet> theDataSets =
@@ -209,7 +209,7 @@ int TestAllFunctions(int argc, char *argv[])
       return 1;
       }
 
-    theQuery = theNetworkFunctions.ConstructQuery(true, false, true, keys);
+    theQuery = theNetworkFunctions.ConstructQuery(true, gdcm::ePatientRootType, gdcm::ePatient, keys);
     didItWork = theNetworkFunctions.CMove(remote.c_str(), portno, aetitle, call, theQuery, moveReturnPort, outputDir);
     if (!didItWork)
       {
