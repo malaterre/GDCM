@@ -167,7 +167,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     Tag channelminval(0x5400,0x0110);
     Tag channelmaxval(0x5400,0x0112);
     //assert( ds.FindDataElement( pixeldata ) );
-    //int v = -1;
+    int v = -1;
     if( waveformdata == t || waveformpaddingvalue == t )
       {
       Tag waveformbitsallocated(0x5400,0x1004);
@@ -185,6 +185,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       Attribute<0x0028,0x0100> at;
       at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
       }
+    (void)v;
 
     if( pixeldata == t || t.IsGroupXX(overlaydata) )
       {
