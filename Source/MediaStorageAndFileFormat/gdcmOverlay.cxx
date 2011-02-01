@@ -140,6 +140,7 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       Tag toverlaydata(overlay.GetGroup(),0x3000 );
       Tag toverlayrows(overlay.GetGroup(),0x0010 );
       Tag toverlaycols(overlay.GetGroup(),0x0011 );
+      Tag toverlaybitpos(overlay.GetGroup(),0x0102 );
       if( ds.FindDataElement( toverlaydata ) )
         {
         // ok so far so good...
@@ -150,15 +151,16 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
           ++numoverlays;
           }
         }
-      else if( ds.FindDataElement( toverlayrows ) && ds.FindDataElement( toverlaycols ) )
+      else if( ds.FindDataElement( toverlayrows ) && ds.FindDataElement( toverlaycols )
+        && ds.FindDataElement( toverlaybitpos ) )
         {
         // Overlay Pixel are in Unused Pixel
         assert( !ds.FindDataElement( toverlaydata ) );
         const DataElement& overlayrows = ds.GetDataElement( toverlayrows );
         const DataElement& overlaycols = ds.GetDataElement( toverlaycols );
-        Tag toverlaybitpos(overlay.GetGroup(),0x0102 );
         assert( ds.FindDataElement( toverlaybitpos ) );
-        if( !overlayrows.IsEmpty() && !overlaycols.IsEmpty() )
+        const DataElement& overlaybitpos = ds.GetDataElement( toverlaybitpos );
+        if( !overlayrows.IsEmpty() && !overlaycols.IsEmpty() && !overlaybitpos.IsEmpty() )
           {
           ++numoverlays;
           }
