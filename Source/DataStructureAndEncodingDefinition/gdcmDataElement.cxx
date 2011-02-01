@@ -144,7 +144,12 @@ namespace gdcm
             // s -> gdcm::ImplicitDataElement -> Impossible (more)
             std::stringstream ss;
             ss.str(s);
+            try {
             sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
+            } catch ( Exception &ex ) {
+              gdcmErrorMacro( "Could not read SQ. Giving up" );
+              return NULL;
+            }
             (void)ex;//cast to avoid the warning message
             }
           return sqi;
