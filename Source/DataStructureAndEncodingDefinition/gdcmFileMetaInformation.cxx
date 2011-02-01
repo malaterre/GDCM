@@ -669,7 +669,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       // Looks like an Explicit File Meta Information Header.
       is.seekg(-6, std::ios::cur); // Seek back
       //is.seekg(start, std::ios::beg); // Seek back
-      std::streampos dpos = is.tellg();
+      //std::streampos dpos = is.tellg();
       ExplicitDataElement xde;
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {

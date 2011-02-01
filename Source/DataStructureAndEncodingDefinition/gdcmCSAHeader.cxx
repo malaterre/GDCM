@@ -620,7 +620,7 @@ VR GetVRFromDataSetFormatDict( const Tag& t )
 {
   static const unsigned int nentries = sizeof(DataSetFormatDict) / sizeof(*DataSetFormatDict);
   VR ret = VR::VR_END;
-  static const Tag tend = Tag(0xffff,0xffff);
+  //static const Tag tend = Tag(0xffff,0xffff);
   for( unsigned int i = 0; i < nentries; ++i)
     {
     const DataSetFormatEntry &entry = DataSetFormatDict[i];
