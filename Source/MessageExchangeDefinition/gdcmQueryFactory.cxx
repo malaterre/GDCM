@@ -43,11 +43,18 @@ BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQu
 
 ECharSet QueryFactory::GetCharacterFromCurrentLocale()
 {
-  std::locale l("");
-  std::string loc = l.name();
-  if( loc.find( "UTF-8" ) != std::string::npos )
+  try 
     {
-    return eUTF8;
+    std::locale l("");
+    std::string loc = l.name();
+    if( loc.find( "UTF-8" ) != std::string::npos )
+      {
+      return eUTF8;
+      }
+    }
+  catch (...)
+    {
+      return eLatin1;
     }
   return eLatin1;
 }
