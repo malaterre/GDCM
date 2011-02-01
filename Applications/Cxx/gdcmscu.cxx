@@ -175,7 +175,6 @@ int main(int argc, char *argv[])
       {"debug", 0, &debug, 1},
       {"error", 0, &error, 1},
       {"help", 0, &help, 1},
-      {"queryhelp", 0, &queryhelp, 1},
       {"version", 0, &version, 1},
       {"hostname", 1, 0, 0},     // -h
       {"aetitle", 1, 0, 0},     //
@@ -190,15 +189,16 @@ int main(int argc, char *argv[])
       {"worklist", 0, &findworklist, 1}, // --worklist
       {"patientroot", 0, &findpatientroot, 1}, // --patientroot
       {"studyroot", 0, &findstudyroot, 1}, // --studyroot
-      {"patient", 0, &patientquery, 1}, // --patient
-      {"study", 0, &studyquery, 1}, // --study
-      {"series", 0, &patientquery, 1}, // --series
-      {"image", 0, &studyquery, 1}, // --image
       {"psonly", 0, &findpsonly, 1}, // --psonly
       {"port-scp", 1, &portscp, 1}, // (20) --port-scp
       {"output", 1, &outputopt, 1}, // --output
       {"recursive", 0, &recursive, 1},
       {"store-query", 1, &storequery, 1},
+      {"queryhelp", 0, &queryhelp, 1},
+      {"patient", 0, &patientquery, 1}, // --patient
+      {"study", 0, &studyquery, 1}, // --study
+      {"series", 0, &patientquery, 1}, // --series
+      {"image", 0, &studyquery, 1}, // --image
       {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:o:r";
