@@ -88,7 +88,7 @@ void PrintHelp()
   std::cout << "  -D --debug     print debug info." << std::endl;
   std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
-  std::cout << "  -q --queryhelp print query help." << std::endl;
+  std::cout << "     --queryhelp print query help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
   
 }
