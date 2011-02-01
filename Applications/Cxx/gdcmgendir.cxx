@@ -47,7 +47,6 @@ void PrintHelp()
   std::cout << "  -r --recursive          recursive." << std::endl;
   std::cout << "     --descriptor          descriptor." << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
-  std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -57,7 +56,6 @@ void PrintHelp()
   std::cout << "  -v --version   print version." << std::endl;
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
-  std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
 int main(int argc, char *argv[])

@@ -80,6 +80,10 @@ void PrintHelp()
   std::cout << "     --compress         when supported generate a compressed file." << std::endl;
   std::cout << "     --use-vtkdicom     Use vtkDICOMImageReader (instead of GDCM)." << std::endl;
   std::cout << "     --modality         set Modality." << std::endl;
+  std::cout << "     --lower-left       set lower left." << std::endl;
+  std::cout << "     --shift            set shift." << std::endl;
+  std::cout << "     --scale            set scale." << std::endl;
+  std::cout << "     --compress         set compressoin (MetaIO)." << std::endl;
   std::cout << "  -T --study-uid        Study UID." << std::endl;
   std::cout << "  -S --series-uid       Series UID." << std::endl;
   std::cout << "     --root-uid         Root UID." << std::endl;
@@ -101,6 +105,7 @@ void PrintHelp()
 
 int main(int argc, char *argv[])
 {
+  int retcode = 0;
   int c;
   //int digit_optind = 0;
 
@@ -122,6 +127,11 @@ int main(int argc, char *argv[])
   int rle = 0;
   int usevtkdicom = 0;
   int compress = 0;
+  int lowerleft = 0;
+  int oshift = 0;
+  int oscale = 0;
+  double shift = 0.;
+  double scale = 1.;
 
   int verbose = 0;
   int warning = 0;
@@ -151,6 +161,9 @@ int main(int argc, char *argv[])
         {"rle", 0, &rle, 1}, // lossless !
         {"compress", 0, &compress, 1}, // compress with using MetaIO
         {"use-vtkdicom", 0, &usevtkdicom, 1}, // use vtkDICOMImageReader
+        {"lower-left", 0, &lowerleft, 1}, // use FileLowerLeftOn
+        {"shift", 1, &oshift, 1}, //
+        {"scale", 1, &oscale, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -204,6 +217,16 @@ int main(int argc, char *argv[])
             {
             assert( strcmp(s, "root-uid") == 0 );
             root_uid = optarg;
+            }
+          else if( option_index == 15 ) /* shift */
+            {
+            assert( strcmp(s, "shift") == 0 );
+            shift = atof(optarg);
+            }
+          else if( option_index == 16 ) /* scale */
+            {
+            assert( strcmp(s, "scale") == 0 );
+            scale = atof(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -317,7 +340,7 @@ int main(int argc, char *argv[])
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  //reader->FileLowerLeftOn();
+  reader->SetFileLowerLeft( lowerleft );
 
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   vtkDICOMImageReader *dicomreader = vtkDICOMImageReader::New();
@@ -403,10 +426,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".png") == 0 )
       {
@@ -418,10 +442,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".tif") == 0
       ||  gdcm::System::StrCaseCmp(outputextension,".tiff") == 0  ) //
@@ -434,10 +459,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
     else if(  gdcm::System::StrCaseCmp(outputextension,".vti") == 0  ) // vtkXMLImageDataWriter::GetDefaultFileExtension()
       {
@@ -450,10 +476,11 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
 #endif
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     else if(  gdcm::System::StrCaseCmp(outputextension,".mha") == 0 ||
@@ -475,15 +502,18 @@ int main(int argc, char *argv[])
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
-        return 1;
+        retcode = 1;
         }
-      return 0;
+      writer->Delete();
+      goto cleanup;
       }
 #endif
     }
-  // else
+//  else
+    {
 
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
+  //writer->SetFileLowerLeft( 1 );
   if( studyuid )
     {
     writer->SetStudyUID( study_uid.c_str() );
@@ -707,6 +737,16 @@ int main(int argc, char *argv[])
       writer->GetMedicalImageProperties()->SetModality( modality_str.c_str() );;
     }
 
+  // Let's do that at the end to be sure it always overwrite any other default
+  if( oshift )
+    {
+    writer->SetShift( shift );
+    }
+  if( oscale )
+    {
+    writer->SetScale( scale );
+    }
+
   // Pass on the filetime of input file
   time_t studydatetime = gdcm::System::FileTime( filename );
   char date[22];
@@ -737,8 +777,10 @@ int main(int argc, char *argv[])
 
   if( verbose )
     writer->GetInput()->Print( std::cout );
-
   writer->Delete();
+}
+
+cleanup:
   if( imgreader ) imgreader->Delete();
   datareader->Delete();
   reader->Delete();
@@ -746,5 +788,5 @@ int main(int argc, char *argv[])
   dicomreader->Delete();
 #endif
 
-  return 0;
+  return retcode;
 }

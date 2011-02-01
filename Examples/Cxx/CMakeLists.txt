@@ -26,6 +26,9 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   GenAllVR
+  DiscriminateVolume
+  GetSubSequenceData
+  GenLongSeqs
   ReadGEMSSDO
   DiffFile
   SimpleScanner
@@ -54,6 +57,7 @@ SET(EXAMPLES_SRCS
   ReadExplicitLengthSQIVR
   SortImage
   csa2img
+  iU22tomultisc
   rle2img
   uid_unique
   PublicDict

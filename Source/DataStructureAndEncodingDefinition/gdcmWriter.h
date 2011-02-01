@@ -41,24 +41,22 @@ class FileMetaInformation;
  * - 32bits VR will be rewritten with 00
  *
  * \warning
- * gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
+ * gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found,
+ * unless a DICOMDIR is being written out
  *
  * \see Reader DataSet File
  */
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():F(new File),CheckFileMetaInformation(true) {
-    Stream = NULL;
-    Ofstream = NULL;
-  }
+  Writer();
   virtual ~Writer();
 
   /// Main function to tell the writer to write
   virtual bool Write(); // Execute()
 
   /// Set the filename of DICOM file to write:
-  void SetFileName(const char *filename, bool inAppendMode = false) {
+  void SetFileName(const char *filename) {
     //std::cerr << "Stream: " << filename << std::endl;
     //std::cerr << "Ofstream: " << Ofstream << std::endl;
     if (Ofstream && Ofstream->is_open())
@@ -67,22 +65,16 @@ public:
       delete Ofstream;
       }
     Ofstream = new std::ofstream();
-    if (!inAppendMode){
-      Ofstream->open(filename, std::ios::out | std::ios::binary );
-    } else {
-      Ofstream->open(filename, std::ios::out | std::ios::app | std::ios::binary );
-    }
+    Ofstream->open(filename, std::ios::out | std::ios::binary );
     assert( Ofstream->is_open() );
     assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
     Stream = Ofstream;
-    mFileName = filename;
   }
   /// Set user ostream buffer
   void SetStream(std::ostream &output_stream) {
     Stream = &output_stream;
   }
-
 
   /// Set/Get the DICOM file (DataSet + Header)
   void SetFile(const File& f) { F = f; }
@@ -93,9 +85,8 @@ public:
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
-  std::string GetFileName() const { return mFileName;}
-
-
+protected:
+  friend class StreamImageWriter;
   //this function is added for the StreamImageWriter, which needs to write
   //up to the pixel data and then stops right before writing the pixel data.
   //after that, for the raw codec at least, zeros are written for the length of the data
@@ -108,7 +99,6 @@ protected:
 private:
   SmartPointer<File> F;
   bool CheckFileMetaInformation;
-  std::string mFileName;
 };
 
 } // end namespace gdcm

@@ -105,6 +105,10 @@ opj_codec_private_t;
  */
 void opj_default_callback (const char *msg, void *client_data)
 {
+#if 0
+  fprintf( stderr, msg );
+  assert( 0 );
+#endif
 }
 
 void set_default_event_handler(opj_event_mgr_t * p_manager)
@@ -905,4 +909,39 @@ OPJ_API bool OPJ_CALLCONV opj_restrict_decoding (opj_dparameters_t *parameters,O
   parameters->m_decode_end_x = p_end_x;
   parameters->m_decode_end_y = p_end_y;
   return true;
+}
+
+int j2k_get_reversible(
+  opj_j2k_t * p_j2k)
+{
+  opj_cp_t *cp = 00;
+  cp = &(p_j2k->m_cp);
+  return cp->tcps->tccps->qmfbid;
+}
+int jp2_get_reversible(
+  opj_jp2_t * p_jp2)
+{
+  return j2k_get_reversible(p_jp2->j2k);
+}
+
+int OPJ_CALLCONV opj_get_reversible(opj_codec_t *p_info, opj_dparameters_t *parameters)
+{
+  int ret = -1;
+  if (p_info)
+    {
+    opj_codec_private_t * l_info = (opj_codec_private_t *) p_info;
+    if (l_info->is_decompressor)
+      {
+      switch(parameters->decod_format)
+        {
+      case 0: // J2K_CFMT:
+        ret = j2k_get_reversible(l_info->m_codec);
+        break;
+      case 1: // JP2_CFMT:
+        ret = jp2_get_reversible(l_info->m_codec);
+        break;
+        }
+      }
+    }
+  return ret;
 }

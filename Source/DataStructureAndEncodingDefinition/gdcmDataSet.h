@@ -116,7 +116,6 @@ public:
     for( ; it != DES.end(); ++it)
       {
       assert( !(it->GetLength<TDE>().IsUndefined()) );
-      VL len = it->GetLength<TDE>();
       if ( it->GetTag() != Tag(0xfffe,0xe00d) )
         {
         ll += it->GetLength<TDE>();

@@ -27,6 +27,7 @@
 // "There is no option to suppress all SWIG warning messages."
 #pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516
 %{
+#include <cstddef> // ptrdiff_t
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
 #include "gdcmSmartPointer.h"
@@ -166,9 +167,11 @@
 
 using namespace gdcm;
 
+#include "gdcmPresentationDataValue.h"
+#include "gdcmULConnectionCallback.h"
+using gdcm::network::PresentationDataValue;
+using gdcm::network::ULConnectionCallback;
 #include "gdcmULConnectionManager.h"
-
-using namespace gdcm::network;
 %}
 
 //%insert("runtime") %{
@@ -697,4 +700,5 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
+//%include "gdcmPresentationDataValue.h"
 %include "gdcmULConnectionManager.h"

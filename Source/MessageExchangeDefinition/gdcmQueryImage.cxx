@@ -26,7 +26,6 @@ name and date: 15 oct 2010 mmr
 #include "gdcmQueryImage.h"
 
 namespace gdcm{
-namespace network{
 std::vector<Tag> QueryImage::GetRequiredTags(const ERootType& inRootType) const{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.5
   theReturn.push_back(Tag(0x0020, 0x0013));
@@ -60,5 +59,4 @@ DataElement QueryImage::GetQueryLevel() const{
   return de;
 }
 
-}
 }

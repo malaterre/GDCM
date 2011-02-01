@@ -19,6 +19,7 @@
 #include "gdcmImageWriter.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmImage.h"
+#include "gdcmFilename.h"
 
 int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
 {
@@ -45,7 +46,8 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
     {
     return 0; // nothing to do
     }
-  const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
+  const gdcm::File &file = reader.GetFile();
+  const gdcm::FileMetaInformation &header = file.GetHeader();
   gdcm::MediaStorage ms = header.GetMediaStorage();
   if(  header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ImplicitVRLittleEndian
     || header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE
@@ -63,6 +65,18 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
   bool b = splitter.Split();
   if( !b )
     {
+    const gdcm::DataElement &pixeldata = file.GetDataSet().GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
+    const gdcm::SequenceOfFragments* sqf = pixeldata.GetSequenceOfFragments();
+    if( sqf && dims[2] == 1 )
+      {
+      return 0;
+      }
+    gdcm::Filename fn( filename );
+    if( fn.GetName() == std::string("JPEGDefinedLengthSequenceOfFragments.dcm" ) )
+      {
+      // JPEG Fragments are packed in a VR:OB Attribute
+      return 0;
+      }
     std::cerr << "Could not apply splitter: " << filename << std::endl;
     return 1;
     }

@@ -17,26 +17,28 @@
 #include "gdcmFile.h"
 #include "gdcmTesting.h"
 #include "gdcmMediaStorage.h"
-
+#include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 int TestReadUpToTag(const char* filename, bool verbose = false)
 {
   if( verbose )
   std::cout << "TestRead: " << filename << std::endl;
 
+  std::ifstream is( filename );
   gdcm::Reader reader;
-  reader.SetFileName( filename );
+  reader.SetStream( is );
   // Let's read up to Pixel Data el...
   gdcm::Tag pixeldata (0x7fe0,0x0010);
   std::set<gdcm::Tag> skiptags;
   // ... but do not read it (to skip mem allocation)
   skiptags.insert( pixeldata );
-  std::streamoff outStreamOffset;
-  if ( !reader.ReadUpToTag( pixeldata, skiptags, outStreamOffset) )
+  if ( !reader.ReadUpToTag( pixeldata, skiptags) )
     {
     std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
     return 1;
     }
+  std::streamoff outStreamOffset = is.tellg();
 
   const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
 
@@ -45,9 +47,43 @@ int TestReadUpToTag(const char* filename, bool verbose = false)
   if(verbose)
     std::cout << "{ \"" << filename << "\"," << outStreamOffset << " }," << std::endl;
   std::streamoff refoffset = gdcm::Testing::GetStreamOffsetFromFile(filename);
-  if( refoffset != outStreamOffset ) return 1;
+  if( refoffset != outStreamOffset )
+    {
+    std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
+    return 1;
+    }
+  is.close();
 
   return 0;
+}
+
+int TestReadUpToTagExtra()
+{
+  const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
+  if( !extradataroot )
+    {
+    return 1;
+    }
+  if( !gdcm::System::FileIsDirectory(extradataroot) )
+    {
+    std::cerr << "No such directory: " << extradataroot <<  std::endl;
+    return 1;
+    }
+
+  gdcm::Directory d;
+  unsigned int nfiles = d.Load( extradataroot, true ); // no recursion
+  std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
+
+  gdcm::Directory::FilenamesType const & fns = d.GetFilenames();
+  int r = 0;
+  for( gdcm::Directory::FilenamesType::const_iterator it = fns.begin();
+    it != fns.end(); ++it )
+    {
+    const char *filename = it->c_str();
+    r += TestReadUpToTag( filename );
+    }
+
+  return r;
 }
 
 int TestReaderUpToTag(int argc, char *argv[])
@@ -69,6 +105,9 @@ int TestReaderUpToTag(int argc, char *argv[])
     r += TestReadUpToTag( filename );
     ++i;
     }
+
+  // puposely discard gdcmDataExtra test, this is just an 'extra' test...
+  int b2 = TestReadUpToTagExtra(); (void)b2;
 
   return r;
 }

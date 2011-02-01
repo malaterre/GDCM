@@ -313,6 +313,14 @@ const char *MediaStorage::GetModality() const
   return MSModalityTypes[MSField].Modality;
 }
 
+unsigned int MediaStorage::GetModalityDimension() const
+{
+  if (!MSModalityTypes[MSField].Modality)
+    return 0;
+  assert( MSModalityTypes[MSField].Dimension );
+  return MSModalityTypes[MSField].Dimension;
+}
+
 void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
 {
   // no default value is set, it is up to the user to decide initial value

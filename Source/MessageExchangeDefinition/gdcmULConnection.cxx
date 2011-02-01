@@ -99,6 +99,17 @@ void ULConnection::SetPresentationContexts(
 {
   mPresentationContexts = inContexts;
 }
+
+
+std::vector<PresentationContext> ULConnection::GetAcceptedPresentationContexts() const
+{
+  return mAcceptedPresentationContexts;
+}
+void ULConnection::AddAcceptedPresentationContext(const PresentationContext& inPC)
+{
+  mAcceptedPresentationContexts.push_back(inPC);
+}
+
 //given a particular data element, presumably the SOP class,
 //find the presentation context for that SOP
 //NOT YET IMPLEMENTED
@@ -171,11 +182,15 @@ bool ULConnection::InitializeIncomingConnection()
     }
     sockinetbuf sin (sockbuf::sock_stream);
     sin.bind( mInfo.GetCalledIPPort() );
-    sin.recvtimeout(1);//(int)GetTimer().GetTimeout());
-    sin.sendtimeout(1);//(int)GetTimer().GetTimeout());
+    int theRecvTimeout = sin.recvtimeout(1);//(int)GetTimer().GetTimeout());
+    int theSendTimeout = sin.sendtimeout(1);//(int)GetTimer().GetTimeout());
     sin.listen();
-    mSocket = new iosockinet(sin.accept());
-
+    if (sin.is_readready(1, 0)){
+      mSocket = new iosockinet(sin.accept());
+    } else {
+      SetState(eStaDoesNotExist);
+      return false; //no connection here, so have to initialize later.
+    }
     SetState(eSta2Open);
 
     /*

@@ -104,7 +104,10 @@ public:
   void SetBitsStored(unsigned short bs)
     {
     if( bs <= BitsAllocated )
+      {
       BitsStored = bs;
+      SetHighBit( BitsStored - 1 );
+      }
     }
 
   /// HighBit see Tag (0028,0102) US High Bit

@@ -41,10 +41,12 @@ StreamImageReader::~StreamImageReader(){
 
 /// One of either SetFileName or SetStream must be called prior
 /// to any other functions.
-void StreamImageReader::SetFileName(const char* inFileName){
+void StreamImageReader::SetFileName(const char* inFileName)
+{
   mReader.SetFileName(inFileName);
 }
-void StreamImageReader::SetStream(std::istream& inStream){
+void StreamImageReader::SetStream(std::istream& inStream)
+{
   mReader.SetStream(inStream);
 }
 
@@ -155,7 +157,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
 
   //have to reset the stream to the proper position
   //first, reopen the stream,then the loop should set the right position
-  mReader.SetFileName(mReader.GetFileName().c_str());
+  //mReader.SetFileName(mReader.GetFileName().c_str());
   std::istream* theStream = mReader.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
@@ -187,13 +189,13 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
   } 
   catch (...){
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to read with unknown error." );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
@@ -243,11 +245,11 @@ bool StreamImageReader::ReadImageSubregionJpegLS(char* inReadBuffer, const std::
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
     return false;
   } 
   catch (...){
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to read with unknown error." );
     return false;
   }
   return true;
@@ -256,7 +258,8 @@ bool StreamImageReader::ReadImageSubregionJpegLS(char* inReadBuffer, const std::
 /// Set the spacing and dimension information for the set filename.
 /// returns false if the file is not initialized or not an image,
 /// with the pixel 0x7fe0, 0x0010 tag.
-bool StreamImageReader::ReadImageInformation(){
+bool StreamImageReader::ReadImageInformation()
+{
   //read up to the point in the stream where the pixel information tag is
   //store that location and keep the rest of the data as the header information dataset
   std::set<Tag> theSkipTags;
@@ -268,22 +271,24 @@ bool StreamImageReader::ReadImageInformation(){
   theSkipTags.insert(thePixelDataTag);
 
   try
-  {
+    {
     //ok, need to read up until I know what kind of endianness i'm dealing with?
-    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags, mFileOffset)){
+    if (!mReader.ReadUpToTag(thePixelDataTag, theSkipTags))
+      {
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
       return false;
+      }
+    mFileOffset = mReader.GetStreamPtr()->tellg();
     }
-  }
   catch(std::exception & ex)
-  {
+    {
     (void)ex;
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName() << " with ex:" << ex.what() );
-  }
+    gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
+    }
   catch(...)
-  {
-    gdcmWarningMacro( "Failed to read:" << mReader.GetFileName()  << " with unknown error" );
-  }
+    {
+    gdcmWarningMacro( "Failed to read with unknown error" );
+    }
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm
   if( mFileOffset == -1 ) return false;

@@ -20,6 +20,8 @@ ADD_CUSTOM_TARGET(GDCMJavaExample ALL
   DEPENDS ${EXECUTABLE_OUTPUT_PATH}/HelloSimple.class
   COMMENT "building gdcm java example"
 )
+# make sure gdcm.jar is built
+ADD_DEPENDENCIES(GDCMJavaExample GDCMJavaJar)
 
 IF(BUILD_TESTING)
 IF(GDCM_DATA_ROOT)

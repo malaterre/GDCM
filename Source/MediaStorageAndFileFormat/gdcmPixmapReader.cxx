@@ -611,6 +611,7 @@ void DoCurves(const DataSet& ds, Pixmap& pixeldata)
 
 void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
 {
+  bool updateoverlayinfo = false;
   unsigned int numoverlays;
   if( (numoverlays = Overlay::GetNumberOfOverlays( ds )) )
     {
@@ -674,16 +675,57 @@ void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
             << "This is not supported right now"
             << std::endl );
           ov.IsInPixelData( true );
+          // make sure Overlay is valid
+          if( ov.GetBitsAllocated() != pixeldata.GetPixelFormat().GetBitsAllocated() )
+            {
+            gdcmWarningMacro( "Bits Allocated are wrong. Correcting." );
+            ov.SetBitsAllocated( pixeldata.GetPixelFormat().GetBitsAllocated() );
+            }
+
           if( !ov.GrabOverlayFromPixelData(ds) )
             {
             gdcmErrorMacro( "Could not extract Overlay from Pixel Data" );
+            //throw Exception("TODO: Could not extract Overlay Data");
             }
+          updateoverlayinfo = true;
           }
         }
       }
     //std::cout << "Num of Overlays: " << numoverlays << std::endl;
     assert( idxoverlays == numoverlays );
     }
+
+  // Now is good time to do some cleanup (eg. DX_GE_FALCON_SNOWY-VOI.dcm).
+  const PixelFormat &pf = pixeldata.GetPixelFormat();
+  // Yes I am using a call in the for() loop, because I internally modify the
+  // number of overlays:
+  for( size_t ov_idx = pixeldata.GetNumberOfOverlays(); ov_idx != 0; --ov_idx )
+    {
+    size_t ov = ov_idx - 1;
+    const Overlay& o = pixeldata.GetOverlay(ov);
+    if( o.IsInPixelData() )
+      {
+      unsigned short obp = o.GetBitPosition();
+      if( obp < pf.GetBitsStored() )
+        {
+        pixeldata.RemoveOverlay( ov );
+        gdcmWarningMacro( "Invalid BitPosition: " << obp << " for overlay #" << ov << " removing it." );
+        }
+      }
+    }
+
+  if( updateoverlayinfo )
+    {
+    for( size_t ov = 0; ov < pixeldata.GetNumberOfOverlays(); ++ov )
+      {
+      Overlay& o = pixeldata.GetOverlay(ov);
+      // We need to update information
+      assert( o.GetBitsAllocated() == 16 );
+      o.SetBitsAllocated( 1 );
+      o.SetBitPosition( 0 );
+      }
+    }
+
 }
 
 bool PixmapReader::ReadImage(MediaStorage const &ms)
@@ -1145,6 +1187,12 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       const DataElement &de = PixelData->GetDataElement();
       //const ByteValue *bv = de.GetByteValue();
       const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+      if( !sqf )
+        {
+        // TODO: It would be nice to recognize file such as JPEGDefinedLengthSequenceOfFragments.dcm
+        gdcmDebugMacro( "File is declared as JPEG compressed but does not contains Fragmens explicitely." );
+        return false;
+        }
       sqf->WriteBuffer( ss );
       //std::string s( bv->GetPointer(), bv->GetLength() );
       //is.str( s );

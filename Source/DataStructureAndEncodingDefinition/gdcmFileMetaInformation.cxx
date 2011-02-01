@@ -604,18 +604,22 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
       }
     else
       {
+#if 0
       DataElement null( Tag(0x0,0x0), 0);
       ImplicitDataElement ide;
-      ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
-      if( ide == null )
+      ide.Read<SwapperNoOp>(is); // might throw an exception which will NOT be caught
+      // let's assume that we can read at most 10 null elements, after that we decide
+      // arbitrarily that the cannot possibly be a DICOM file.
+      if( ide == null && counter < 10 )
         {
         // Ok big deal we found a null dataelement, should we really add it
         // in the dataset ? Well let's assume this is not that important
-        ReadCompat(is);
+        ReadCompat(is, counter + 1);
         assert( DataSetTS == TransferSyntax::ImplicitVRLittleEndian );
         return is;
         }
       else
+#endif
         {
         throw Exception( "Cannot find DICOM type. Giving up." );
         }
@@ -665,7 +669,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       // Looks like an Explicit File Meta Information Header.
       is.seekg(-6, std::ios::cur); // Seek back
       //is.seekg(start, std::ios::beg); // Seek back
-      std::streampos dpos = is.tellg();
+      //std::streampos dpos = is.tellg();
       ExplicitDataElement xde;
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {

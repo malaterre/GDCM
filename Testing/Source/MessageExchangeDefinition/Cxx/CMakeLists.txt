@@ -3,6 +3,10 @@ TestPresentationContext
 TestQueryFactory
 TestULConnectionManager
 TestAllFunctions
+TestServiceClassUser
+TestSCUValidation
+TestEcho
+TestFind
 )
 
 # Add the include paths
@@ -21,14 +25,20 @@ CREATE_TEST_SOURCELIST(MEXDTests gdcmMEXDTests.cxx ${MEXD_TEST_SRCS}
   EXTRA_INCLUDE gdcmTestDriver.h
   )
 ADD_EXECUTABLE(gdcmMEXDTests ${MEXDTests})
-TARGET_LINK_LIBRARIES(gdcmMEXDTests gdcmMEXD gdcmDSED gdcmDICT gdcmCommon)
+TARGET_LINK_LIBRARIES(gdcmMEXDTests gdcmMEXD gdcmMSFF gdcmDSED gdcmDICT gdcmCommon)
 
 #Don't understand why I need that ??
 SET(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 
 # Loop over files and create executables
 FOREACH(name ${MEXD_TEST_SRCS})
-  ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
+  IF(${name} STREQUAL "TestAllFunctions")
+  IF(GDCM_DICOM_SERVER_AETITLE)
+    ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE} ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT} ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
+  ENDIF(GDCM_DICOM_SERVER_AETITLE)
+  ELSE(${name} STREQUAL "TestAllFunctions")
+    ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
+  ENDIF(${name} STREQUAL "TestAllFunctions")
 ENDFOREACH(name)
 
 set(DCMQRSCP_HOSTNAME gotlib)

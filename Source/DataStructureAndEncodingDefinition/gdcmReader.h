@@ -72,7 +72,6 @@ public:
     Ifstream = new std::ifstream();
     Ifstream->open(filename, std::ios::binary);
     Stream = Ifstream;
-    mFileName = filename;
   }
 
   /// Set the open-ed stream directly
@@ -90,9 +89,7 @@ public:
   void SetFile(File& file) { F = &file; }
 
   /// Will read only up to Tag 'tag'
-  ///also provides the offset into the stream, so that the stream position can
-  ///be reset to that next location if/when the reader picks up reading past the given tag.
-  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags, std::streamoff& outStreamOffset);
+  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags);
 
   /// Will only read the specified selected tags.
   bool ReadSelectedTags(std::set<Tag> const & tags);
@@ -116,18 +113,12 @@ protected:
   //will still have to be subject to endianness swaps, if necessary.
   std::istream* GetStreamPtr() const { return Stream; }
 
-  //this function returns the filename that the reader was initialized with
-  //used primarilly for debugging/exception arguments, to identify a failed 
-  //file, which can be useful when reading a stack.
-  std::string GetFileName() const { return mFileName; }
-
 private:
   template <typename T_Caller>
-  bool InternalReadCommon(const T_Caller &caller, std::streamoff& outStreamOffset);
+  bool InternalReadCommon(const T_Caller &caller);
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;
-  std::string mFileName;
 };
 
 /**

@@ -5,7 +5,6 @@ SET(MSFF_TEST_SRCS
   TestParseXPATH
   TestValidate
   TestAnonymizeEvent
-  TestAnonymizer2
   TestFileDerivation
   TestSegmentedPaletteColorLookupTable
   TestPNMCodec
@@ -19,7 +18,7 @@ SET(MSFF_TEST_SRCS
   TestImageHelper
   TestImageToImageFilter
   TestImageChangeTransferSyntax1
-  TestImageChangePhotometricInterpretation
+  #TestImageChangePhotometricInterpretation
   #TestImageChangePhotometricInterpretation2 # does not compile on mingw...
   TestImageChangeTransferSyntax2
   TestImageChangeTransferSyntax3
@@ -71,44 +70,56 @@ SET(MSFF_TEST_SRCS
 
 IF(GDCM_DATA_ROOT)
   SET(MSFF_TEST_SRCS
-      ${MSFF_TEST_SRCS}
-  TestScanner
-  TestPrinter2
-  TestIPPSorter
-  TestIPPSorter2
-  TestCopyDataSet
-  TestDataElementValueAsSQ
-  TestImageWriter2
-  TestDICOMDIRGenerator1 # Must be after TestImageChangeTransferSyntax4
-  TestDICOMDIRGenerator2 # Must be after TestImageChangeTransferSyntax4
-      )
+    ${MSFF_TEST_SRCS}
+    TestScanner
+    TestPrinter2
+    TestIPPSorter
+    TestIPPSorter2
+    TestCopyDataSet
+    TestDataElementValueAsSQ
+    TestImageWriter2
+    TestDICOMDIRGenerator1 # Must be after TestImageChangeTransferSyntax4
+    TestDICOMDIRGenerator2 # Must be after TestImageChangeTransferSyntax4
+    )
+    # Those tests requires that openssl be linked in:
+    IF(GDCM_USE_SYSTEM_OPENSSL)
+      SET(MSFF_TEST_SRCS
+        ${MSFF_TEST_SRCS}
+        TestAnonymizer2
+        TestAnonymizer3
+        )
+    ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 ENDIF(GDCM_DATA_ROOT)
+
 # gdcmDataExtra
 IF(GDCM_DATA_EXTRA_ROOT)
   SET(MSFF_TEST_SRCS
-      ${MSFF_TEST_SRCS}
-  TestSplitMosaicFilter
-)
+    ${MSFF_TEST_SRCS}
+    TestSplitMosaicFilter
+    TestOverlay2
+    )
 ENDIF(GDCM_DATA_EXTRA_ROOT)
 
 IF(GDCM_USE_JPEGLS)
-  SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
+  SET(MSFF_TEST_SRCS
+    ${MSFF_TEST_SRCS}
     TestImageChangeTransferSyntax5
-  )
+    )
 ENDIF(GDCM_USE_JPEGLS)
 
 IF(GDCM_HAVE_PTHREAD_H)
-SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
-  TestUIDGenerator2
-  )
+  SET(MSFF_TEST_SRCS
+    ${MSFF_TEST_SRCS}
+    TestUIDGenerator2
+    )
 ENDIF(GDCM_HAVE_PTHREAD_H)
+
 IF(GDCM_PIXEL_SPACING_DATA_ROOT)
   SET(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestImageReaderPixelSpacing
-  )
+    )
 ENDIF(GDCM_PIXEL_SPACING_DATA_ROOT)
-
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
@@ -137,6 +148,9 @@ SET(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
 FOREACH(name ${MSFF_TEST_SRCS})
   ADD_TEST(${name} ${GDCM_MSFF_TESTS} ${name})
 ENDFOREACH(name)
+IF(GDCM_DATA_ROOT)
+  SET_TESTS_PROPERTIES(TestDICOMDIRGenerator2 PROPERTIES WILL_FAIL ON)
+ENDIF(GDCM_DATA_ROOT)
 
 # We can only run the dcmtk cross-checking test *only* after all the tests have run
 # in particular once the TestWriter is done.
@@ -216,16 +230,47 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 
+FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/dcmdjpls/")
+
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDJPLS_EXECUTABLE)
+        #if(EXISTS "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/${filename_name}")
+        ADD_TEST("DCMDJPLS-${filename_name}" ${DCMTK_DCMDJPLS_EXECUTABLE}
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/${filename_name}"
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/dcmdjpls/${filename_name}")
+        # Special handling of the DICOMDIR files:
+        STRING(REGEX MATCH ${filename_name} is_dicomdir ${gdcm_data_dicomdir_filenames_glob})
+        IF(is_dicomdir)
+          #MESSAGE("IS DICOMDIR ${filename_name}")
+          SET_TESTS_PROPERTIES("DCMDJPLS-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        ENDIF(is_dicomdir)
+        #endif(EXISTS "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/${filename_name}")
+        #
+      ENDIF(DCMTK_DCMDJPLS_EXECUTABLE)
+    ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
 # Need to SET_TESTS_PROPERTIES only *after* the loop is done (test need to have been declared first)
 IF(GDCM_TEST_DCMTK)
-  IF(DCMTK_DCMDJPEG_EXECUTABLE)
-IF(GDCM_DATA_ROOT)
-# No pixel data
-  SET_TESTS_PROPERTIES("DCMDJPEG-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
-# It is missing the very last pixel, so technically is illegal
-  SET_TESTS_PROPERTIES("DCMDRLE-ALOKA_SSD-8-MONO2-RLE-SQ.dcm" PROPERTIES WILL_FAIL TRUE)
-# No pixel data
-  SET_TESTS_PROPERTIES("DCMDRLE-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
-ENDIF(GDCM_DATA_ROOT)
-  ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
+  IF(GDCM_DATA_ROOT)
+    IF(DCMTK_DCMDJPLS_EXECUTABLE)
+      # No pixel data
+      SET_TESTS_PROPERTIES("DCMDJPLS-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
+    ENDIF(DCMTK_DCMDJPLS_EXECUTABLE)
+    IF(DCMTK_DCMDJPEG_EXECUTABLE)
+      # No pixel data
+      SET_TESTS_PROPERTIES("DCMDJPEG-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
+    ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
+    IF(DCMTK_DCMDRLE_EXECUTABLE)
+      # No pixel data
+      SET_TESTS_PROPERTIES("DCMDRLE-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
+      # It is missing the very last pixel, so technically is illegal
+      SET_TESTS_PROPERTIES("DCMDRLE-ALOKA_SSD-8-MONO2-RLE-SQ.dcm" PROPERTIES WILL_FAIL TRUE)
+    ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
+  ENDIF(GDCM_DATA_ROOT)
 ENDIF(GDCM_TEST_DCMTK)

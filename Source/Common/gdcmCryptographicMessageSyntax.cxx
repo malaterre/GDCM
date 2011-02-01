@@ -15,6 +15,8 @@
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmTrace.h"
 
+#include <limits> // numeric_limits
+
 #include <stdio.h> // stderr
 #include <string.h> // strcmp
 #include <assert.h>
@@ -73,7 +75,7 @@ class CryptographicMessageSyntaxInternals
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 public:
-  CryptographicMessageSyntaxInternals():recips(NULL),pkey(NULL),CipherType( CryptographicMessageSyntax::AES256_CIPHER ),cipher(NULL),p7(PKCS7_new()),p7bio(NULL) {
+  CryptographicMessageSyntaxInternals():recips(NULL),pkey(NULL),CipherType( CryptographicMessageSyntax::AES256_CIPHER ),cipher(NULL),p7(PKCS7_new()){
     recips = sk_X509_new_null();
     PKCS7_set_type(p7,NID_pkcs7_enveloped);
     bio_buffer = BIO_new(BIO_s_mem());
@@ -84,9 +86,6 @@ public:
     PKCS7_free(p7);
     p7 = NULL;
     BIO_free_all(bio_buffer);
-
-    if(p7bio)
-      BIO_free_all(p7bio);
   }
   unsigned int GetNumberOfRecipients() const {
     //::STACK_OF(X509) *recips = recips;
@@ -136,8 +135,6 @@ public:
        if (!nodetach) PKCS7_set_detached(p7,1);
      */
 
-    if ((p7bio=PKCS7_dataInit(p7,NULL)) == NULL) return false;
-
     return true;
     }
 
@@ -154,14 +151,21 @@ public:
       Initialized = true;
       }
 
-    BIO *data = BIO_new_mem_buf((void*)array, len);
+    if( len > (size_t)std::numeric_limits<int>::max() )
+      {
+      gdcmErrorMacro( "len is too big: " << len );
+      return false;
+      }
+    BIO *data = BIO_new_mem_buf((void*)array, (int)len);
     if(!data)
       {
       gdcmErrorMacro( "BIO_new_mem_buf" );
       return false;
       }
 
-    char buf[1024*4];
+    char buf[256];
+    BIO *p7bio;
+    if ((p7bio=PKCS7_dataInit(p7,NULL)) == NULL) return false;
     for (;;)
       {
       int i = BIO_read(data,buf,sizeof(buf));
@@ -169,9 +173,10 @@ public:
       BIO_write(p7bio,buf,i);
       }
     // BIO_flush() returns 1 for success and 0 or -1 for failure.
-    if( BIO_flush(p7bio) != 1 )
+    int bflush = BIO_flush(p7bio);
+    if( bflush != 1 )
       {
-      gdcmErrorMacro( "BIO_flush" );
+      gdcmErrorMacro( "BIO_flush: " << bflush );
       return false;
       }
 
@@ -205,6 +210,7 @@ public:
     memcpy( output, binary, outlen );
 
     BIO_free(data);
+    BIO_free_all(p7bio);
     return true;
     }
   CryptographicMessageSyntax::CipherTypes GetCipherType() const {
@@ -217,7 +223,6 @@ private:
   CryptographicMessageSyntax::CipherTypes CipherType;
   const EVP_CIPHER *cipher;
   ::PKCS7 *p7;
-  BIO *p7bio;
   BIO *bio_buffer;
   bool Initialized;
 #endif
@@ -301,7 +306,12 @@ bool CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const cha
 
   EVP_PKEY *pkey = x509->GetPrivateKey();
 
-  data = BIO_new_mem_buf((void*)array, len);
+  if( len > (size_t)std::numeric_limits<int>::max() )
+    {
+    gdcmErrorMacro( "len is too big: " << len );
+    return false;
+    }
+  data = BIO_new_mem_buf((void*)array, (int)len);
   if(!data) goto err;
 
 

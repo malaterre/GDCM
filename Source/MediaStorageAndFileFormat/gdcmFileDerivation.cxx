@@ -345,7 +345,8 @@ bool FileDerivation::AddSourceImageSequence()
     {
     return false;
     }
-  std::vector< std::pair< std::string, std::string > >::const_iterator it = Internals->References.begin();
+  std::vector< std::pair< std::string, std::string > >::const_iterator it =
+    Internals->References.begin();
   for( ; it != Internals->References.end(); ++it )
     {
     Item item1;
@@ -471,12 +472,18 @@ bool FileDerivation::Derive()
 //    }
 
   bool b = AddSourceImageSequence();
-  if( !b ) return false;
+  if( !b )
+    {
+    gdcmDebugMacro( "Could not AddSourceImageSequence" );
+    return false;
+    }
 
   b = AddDerivationDescription();
-  if( !b ) return false;
-
-
+  if( !b )
+    {
+    gdcmDebugMacro( "Could not AddDerivationDescription" );
+    return false;
+    }
 
   return true;
 }

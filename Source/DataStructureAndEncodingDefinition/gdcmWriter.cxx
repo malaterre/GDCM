@@ -33,6 +33,10 @@
 namespace gdcm
 {
 
+Writer::Writer():Stream(NULL),Ofstream(NULL),F(new File),CheckFileMetaInformation(true)
+{
+}
+
 Writer::~Writer()
 {
   if (Ofstream)
@@ -166,6 +170,11 @@ catch(...)
 {
   gdcmErrorMacro( "what the hell" );
   return false;
+}
+
+if (Ofstream)
+{
+  Ofstream->flush();
 }
 
   return true;

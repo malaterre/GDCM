@@ -54,7 +54,7 @@ bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
     *q++ = (b0 >> 8) + ((b1 & 0xf) << 4);
     *q++ = b1 >> 4;
     }
-  return false;
+  return true;
 }
 
 } // end namespace gdcm
