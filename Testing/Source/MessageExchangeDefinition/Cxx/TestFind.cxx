@@ -39,7 +39,7 @@ int TestFind(int argc, char *argv[])
   std::vector<std::pair<gdcm::Tag, std::string> > theTags;
   theTags.push_back(theTagPair);
 
-  gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, false, true, theTags);
+  gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, gdcm::ePatientRootType, gdcm::ePatient, theTags);
 
   if (!theQuery) {
     std::cerr << "Query construction failed!" << std::endl; 
