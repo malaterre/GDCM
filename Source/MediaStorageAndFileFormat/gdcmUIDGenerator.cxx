@@ -91,6 +91,7 @@ struct fnv_hash
     }
 };
 
+#if !defined(GDCM_LEGACY_REMOVE)
 const char* UIDGenerator::Generate2()
 {
 #ifndef _WIN32
@@ -195,6 +196,7 @@ const char* UIDGenerator::Generate2()
   return 0;
 #endif
 }
+#endif
 
 /*
 Implementation note: You cannot set a root of more than 26 bytes (which should already

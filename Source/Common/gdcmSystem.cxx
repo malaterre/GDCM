@@ -514,6 +514,7 @@ size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
   return sres.size();
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 bool System::GetHardwareAddress(unsigned char addr[6])
 {
   int stat = 0; //uuid_get_node_id(addr);
@@ -535,6 +536,7 @@ bool System::GetHardwareAddress(unsigned char addr[6])
   //gdcmWarningMacro("Problem in finding the MAC Address");
   return false;
 }
+#endif
 
 #if defined(_WIN32) && !defined(GDCM_HAVE_GETTIMEOFDAY)
 #include <stdio.h>
