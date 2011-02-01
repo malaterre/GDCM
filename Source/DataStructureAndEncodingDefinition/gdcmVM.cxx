@@ -340,6 +340,7 @@ VM::VMType VM::GetVMTypeFromLength(unsigned int length, unsigned int size)
   case 5: return VM::VM5;
   case 6: return VM::VM6;
   case 8: return VM::VM8;
+  case 9: return VM::VM9;
   case 16: return VM::VM16;
   case 24: return VM::VM24;
   case 32: return VM::VM32;

@@ -21,28 +21,27 @@
 #include "gdcmBaseRootQuery.h"
 
 namespace gdcm{
-  namespace network{
     ///The character sets enumerated in 9.3 Annex C, section C.12.1.1.2
     ///The resulting character set is stored in 0008,0005
     ///The conversion to the data element is performed by the QueryFactory itself
-    enum GDCM_EXPORT ECharSet {
-      eLatin1 = 0,
-      eLatin2,
-      eLatin3,
-      eLatin4,
-      eCyrillic,
-      eArabic,
-      eGreek,
-      eHebrew,
-      eLatin5,
-      eJapanese,
-      eThai,
-      eJapaneseKanjiMultibyte,
-      eJapaneseSupplementaryKanjiMultibyte,
-      eKoreanHangulHanjaMultibyte,
-      eUTF8,
-      eGB18030
-    };
+  enum GDCM_EXPORT ECharSet {
+    eLatin1 = 0,
+    eLatin2,
+    eLatin3,
+    eLatin4,
+    eCyrillic,
+    eArabic,
+    eGreek,
+    eHebrew,
+    eLatin5,
+    eJapanese,
+    eThai,
+    eJapaneseKanjiMultibyte,
+    eJapaneseSupplementaryKanjiMultibyte,
+    eKoreanHangulHanjaMultibyte,
+    eUTF8,
+    eGB18030
+  };
 
 /**
  * \brief QueryFactory.h
@@ -85,7 +84,6 @@ public:
   static void ListCharSets(std::ostream& os);
 };
 
-} // end namespace network
 } // end namespace gdcm
 
 #endif // GDCMQUERYFACTORY_H

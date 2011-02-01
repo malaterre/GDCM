@@ -26,7 +26,7 @@ name and date: 15 oct 2010 mmr
 #include "gdcmQueryStudy.h"
 
 namespace gdcm{
-namespace network{
+
 std::vector<Tag> QueryStudy::GetRequiredTags(const ERootType& inRootType) const{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.3
   switch (inRootType){
@@ -118,5 +118,5 @@ DataElement QueryStudy::GetQueryLevel() const{
   de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
   return de;
 }
-}
+
 }

@@ -37,10 +37,13 @@ namespace gdcm
 
 Reader::~Reader()
 {
-  if (Ifstream) {
+  if (Ifstream)
+    {
     Ifstream->close();
     delete Ifstream;
-  }
+    Ifstream = NULL;
+    Stream = NULL;
+    }
 }
 
 /// \brief tells us if "DICM" is found as position 128
@@ -269,35 +272,24 @@ namespace details
 
 bool Reader::Read()
 {
-  //first, just check to see if the file is zero length.
-  //a zero length file will just return false, because there's nothing there.
-  std::ifstream theFileStreamPtr(GetFileName().c_str());
-  std::streampos theBeg = theFileStreamPtr.tellg();
-  theFileStreamPtr.seekg(0, std::ios::end);
-  std::streampos theEnd = theFileStreamPtr.tellg();
-  theFileStreamPtr.seekg(0, std::ios::beg);//reset the file pointer, just in case
-  if ((theEnd - theBeg) < 43) return false; //smaller than 43 bytes = too small to be dicom
-  theFileStreamPtr.close();
   details::DefaultCaller caller(F->GetDataSet());
-  std::streamoff streamOff;
-  return InternalReadCommon(caller, streamOff);
+  return InternalReadCommon(caller);
 }
 
-bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags, std::streamoff& outStreamOffset)
+bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
 {
   details::ReadUpToTagCaller caller(F->GetDataSet(),tag,skiptags);
-  return InternalReadCommon(caller, outStreamOffset);
+  return InternalReadCommon(caller);
 }
 
 bool Reader::ReadSelectedTags( std::set<Tag> const & selectedTags )
 {
   details::ReadSelectedTagsCaller caller(F->GetDataSet(), selectedTags);
-  std::streamoff streamOff;
-  return InternalReadCommon(caller, streamOff);
+  return InternalReadCommon(caller);
 }
 
 template <typename T_Caller>
-bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStreamOffset)
+bool Reader::InternalReadCommon(const T_Caller &caller)
 {
   if( !Stream )
     {
@@ -373,7 +365,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStrea
     if( F->GetHeader().IsEmpty() )
       {
       hasmetaheader = false;
-      gdcmWarningMacro( "no file meta info found" );
+      gdcmDebugMacro( "no file meta info found" );
       }
 
     const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();
@@ -591,6 +583,13 @@ bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStrea
           catch ( Exception &ex2 )
             {
             (void)ex2;
+            // Mon Jan 24 10:59:25 CET 2011
+            // MM: UNExplicitImplicitDataElement does not seems to be used anymore to read
+            // gdcmData/TheralysGDCM120Bug.dcm, instead the code path goes into
+            // ExplicitImplicitDataElement class instead.
+            // Simply rethrow the exception for now.
+            throw;
+#if 0
             is.clear();
             if( haspreamble )
               {
@@ -613,6 +612,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStrea
             F->GetDataSet().Clear(); // remove garbage from 1st attempt...
             //F->GetDataSet().template Read<UNExplicitImplicitDataElement,SwapperNoOp>(is);
             caller.template ReadCommon<UNExplicitImplicitDataElement,SwapperNoOp>(is);
+#endif
             }
           }
         }
@@ -684,14 +684,12 @@ bool Reader::InternalReadCommon(const T_Caller &caller, std::streamoff& outStrea
   //    }
 
   // FIXME : call this function twice...
-  outStreamOffset = 0;
   if (Ifstream && Ifstream->is_open())
     {
-    outStreamOffset = Ifstream->tellg();
-    Ifstream->close();
-    delete Ifstream;
-    Ifstream = NULL;
-    Stream = NULL;
+    //Ifstream->close();
+    //delete Ifstream;
+    //Ifstream = NULL;
+    //Stream = NULL;
     }
 
   return success;

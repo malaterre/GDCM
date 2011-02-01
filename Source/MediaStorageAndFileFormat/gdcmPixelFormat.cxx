@@ -262,6 +262,10 @@ int64_t PixelFormat::GetMax() const
 
 bool PixelFormat::IsValid()
 {
+  if( PixelRepresentation != 0 && PixelRepresentation != 1 )
+    {
+    return false;
+    }
   if( BitsAllocated < BitsStored ) return false;
   if( BitsAllocated < HighBit ) return false;
   return true;

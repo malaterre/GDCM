@@ -26,7 +26,7 @@ name and date: 15 oct 2010 mmr
 #include "gdcmQuerySeries.h"
 
 namespace gdcm{
-namespace network{
+
 std::vector<gdcm::Tag> QuerySeries::GetRequiredTags(const ERootType& inRootType) const{
   std::vector<gdcm::Tag> theReturn;//see 3.4 C.6.1.1.4
   theReturn.push_back(Tag(0x0008, 0x0060));
@@ -53,5 +53,5 @@ DataElement QuerySeries::GetQueryLevel() const{
   de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
   return de;
 }
-}
+
 }

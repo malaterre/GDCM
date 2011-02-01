@@ -139,13 +139,14 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     acceptable = false; //can't accept an empty set of pdus.
     //also, requrie little endian, not sure how to set that, but it should be here.
   }
-  gdcm::network::AAssociateRQPDU* rqpdu =
-    dynamic_cast<gdcm::network::AAssociateRQPDU*>(inEvent.GetPDUs()[0]);
-  if (rqpdu == NULL){
-    acceptable = false;
+  gdcm::network::AAssociateRQPDU* rqpdu;
+  if (acceptable){
+    rqpdu = dynamic_cast<gdcm::network::AAssociateRQPDU*>(inEvent.GetPDUs()[0]);
+    if (rqpdu == NULL){
+      acceptable = false;
+    }
   }
   if (acceptable){
-
     outWaitingForEvent = false;//not waiting, now want to get the
     //sending of data underway.  Have to get info now
     outRaisedEvent = eAASSOCIATEresponseAccept;
@@ -161,6 +162,10 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       // rqpdu.GetAbstractSyntax() contains LittleENdian
       gdcm::network::PresentationContextAC pcac1;
       PresentationContext const &pc = rqpdu->GetPresentationContext(index);
+      //add the presentation context back into the connection,
+      //so later functions will know what's allowed on this connection
+      inConnection.AddAcceptedPresentationContext(pc);
+
       uint8_t id = pc.GetPresentationContextID();
 
       std::vector<TransferSyntaxSub> tsSet = pc.GetTransferSyntaxes();

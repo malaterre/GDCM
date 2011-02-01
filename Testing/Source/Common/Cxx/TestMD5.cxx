@@ -80,6 +80,8 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "9178b1d061641464ecaf271fc4328948"  , "D_CLUNIE_XA1_JPLL.dcm" },
 { "1f050eec29d9eeed3d406570ea1b9168"  , "D_CLUNIE_XA1_JPLY.dcm" },
 { "99040c48b80d40d6f7d6eed6a3cbc824"  , "D_CLUNIE_XA1_RLE.dcm" },
+{ "9cf394a4dde294fc740e7577529ba5ca"  , "D_CLUNIE_CT1_JLSL.dcm" },
+{ "b4d14dc9e820e6f1cf17730833a0373a"  , "D_CLUNIE_CT1_JLSN.dcm" },
 { "de20088d529a3bb211933c2d3b7604aa"  , "DCMTK_JPEGExt_12Bits.dcm" },
 { "e959b1f056d40bb4b21d0cbff1f67310"  , "DermaColorLossLess.dcm" },
 { "dee54ccedfed2d4d5562b52a1a7a5cfc"  , "DICOMDIR" },
@@ -209,6 +211,11 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "d23db052b02b2a2c510104486cdf40b2"  , "XA-MONO2-8-12x-catheter.dcm" },
 { "231bb6c25d482422745bb839d6f8610a"  , "PHILIPS_GDCM12xBug2.dcm" },
 { "e2558e4e01d937bfac33b7e0fb07b7b5"  , "PHILIPS_GDCM12xBug.dcm" },
+{ "434c7aa1172ce3af0c306d9a2cb28c17"  , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" },
+{ "346ba438ade47d75c41e637858a419f8"  , "OsirixFake16BitsStoredFakeSpacing.dcm" },
+{ "efe1ff2da3fc0bfcc5df834fa390d5cf"  , "MR16BitsAllocated_8BitsStored.dcm" },
+{ "7900d059078278ad0387f7c4aaf2027d"  , "JPEGDefinedLengthSequenceOfFragments.dcm" },
+
 { NULL, NULL}
 };
 

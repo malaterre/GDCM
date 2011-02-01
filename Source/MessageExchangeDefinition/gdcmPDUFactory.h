@@ -25,16 +25,16 @@
 #include "gdcmPresentationDataValue.h"
 
 namespace gdcm{
+  class BaseRootQuery;
   namespace network{
     class BasePDU;
-    class BaseRootQuery;
 
 /**
  * \brief PDUFactory basically, given an initial byte, construct the
  * appropriate PDU. This way, the event loop doesn't have to know about all
  * the different PDU types.
  */
-class PDUFactory {
+  class PDUFactory {
       public:
       static BasePDU* ConstructPDU(uint8_t itemtype);//eventually needs to be smartpointer'd
       static EEventID DetermineEventByPDU(BasePDU* inPDU);

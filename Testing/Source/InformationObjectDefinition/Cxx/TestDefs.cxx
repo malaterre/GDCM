@@ -33,7 +33,8 @@ int TestDefs(int, char *[])
 
   int ret = 0;
   gdcm::MediaStorage::MSType mst;
-  for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
+  for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage;
+    mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
     {
     const char *iod = defs.GetIODNameFromMediaStorage(mst);
     gdcm::UIDs uid;
@@ -69,7 +70,8 @@ int TestDefs(int, char *[])
         if( iod_ref_str != iod )
           {
           std::cerr << "UID: " << uid << "   ";
-          std::cerr << "Incompatible IODs: [" << iod << "] versus ref= [" << iod_ref_str << "]" << std::endl;
+          std::cerr << "Incompatible IODs: [" << iod << "] versus ref= [" <<
+            iod_ref_str << "]" << std::endl;
           ++ret;
           }
         }

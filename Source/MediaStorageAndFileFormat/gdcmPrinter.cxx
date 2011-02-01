@@ -594,7 +594,6 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       else { assert( de.IsEmpty()); os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
 
-
 VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds,
   const DataElement &de, std::ostream &out, std::string const & indent )
 {
@@ -653,6 +652,14 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     refvr = VR::SQ;
     assert( refvr == VR::SQ );
     }
+#if 0
+  else if( vr == VR::SQ && vr_read != VR::SQ )
+    {
+    sqi = de.GetValueAsSQ();
+    refvr = VR::SQ;
+    assert( refvr == VR::SQ );
+    }
+#endif
 
   if( (vr_read == VR::INVALID || vr_read == VR::UN ) && vl_read.IsUndefined() )
     {

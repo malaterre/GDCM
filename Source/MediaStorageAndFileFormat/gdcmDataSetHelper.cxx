@@ -185,6 +185,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       Attribute<0x0028,0x0100> at;
       at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
       }
+    (void)v;
 
     if( pixeldata == t || t.IsGroupXX(overlaydata) )
       {

@@ -128,6 +128,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
   //uint16_t thirdTag = 0x4f42;
   uint16_t thirdTag = 0x424f; // OB
   //uint16_t thirdTag = 0x574f; // OW
+  //static VR ComputeVR(File const & file, DataSet const &ds, const Tag& tag);
   uint16_t fourthTag = 0x0000;
   std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mWriter.GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mWriter.GetFile());
@@ -218,7 +219,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //have to reset the stream to the proper position
   //first, reopen the stream,then the loop should set the right position
   //MM: you have to reopen the stream, by default, the writer closes it each time it writes.
-  mWriter.SetFileName(mWriter.GetFileName().c_str(), true);//open in file append mode
+//  mWriter.SetFileName(mWriter.GetFileName().c_str(), true);//open in file append mode
   std::ostream* theStream = mWriter.GetStreamPtr();//probably going to need a copy of this
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
@@ -264,13 +265,13 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   }
   catch (std::exception & ex){
     (void)ex;
-    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to write with ex:" << ex.what() );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
   }
   catch (...){
-    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName() << " with unknown error." );
+    gdcmWarningMacro( "Failed to write with unknown error." );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
@@ -324,11 +325,11 @@ bool StreamImageWriter::WriteImageInformation(){
   catch(std::exception & ex)
   {
     (void)ex;
-    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName() << " with ex:" << ex.what() );
+    gdcmWarningMacro( "Failed to write with ex:" << ex.what() );
   }
   catch(...)
   {
-    gdcmWarningMacro( "Failed to write:" << mWriter.GetFileName()  << " with unknown error" );
+    gdcmWarningMacro( "Failed to write with unknown error" );
   }
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm

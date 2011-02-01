@@ -824,6 +824,8 @@ Decode an image from a JPEG-2000 codestream
 */
 OPJ_API opj_image_t* OPJ_CALLCONV opj_decode(opj_codec_t *p_decompressor, opj_stream_t * cio);
 
+OPJ_API int OPJ_CALLCONV opj_get_reversible(opj_codec_t *p_decompressor, opj_dparameters_t *parameters);
+
 /**
  * Writes a tile with the given data.
  *

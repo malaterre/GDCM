@@ -75,6 +75,7 @@ int TestImageReaderRandomEmptyFunc(const char *subdir, const char* filename, boo
     writer.SetFileName( outfn.c_str() );
     if( !writer.Write() )
       {
+      std::cerr << "Could not write: " << outfn << std::endl;
       ret++;
       }
 
@@ -98,6 +99,7 @@ int TestImageReaderRandomEmpty(int argc, char *argv[])
   // First of get rid of warning/debug message
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

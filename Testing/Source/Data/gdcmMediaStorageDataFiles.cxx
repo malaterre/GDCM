@@ -20,7 +20,7 @@
 
 static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm","1.2.840.10008.5.1.4.1.1.7" },
-{ "SIEMENS_GBS_III-16-ACR_NEMA_1.acr", ""},
+{ "SIEMENS_GBS_III-16-ACR_NEMA_1.acr", "1.2.840.10008.5.1.4.1.1.4"},
 { "00191113.dcm","1.2.840.10008.5.1.4.1.1.12.1"},
 { "SignedShortLosslessBug.dcm","1.2.840.10008.5.1.4.1.1.2"},
 { "gdcm-MR-PHILIPS-16-NonSquarePixels.dcm","1.2.840.10008.5.1.4.1.1.4"},

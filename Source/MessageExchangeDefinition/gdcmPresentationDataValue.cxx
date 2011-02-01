@@ -21,6 +21,7 @@
 #include "gdcmFile.h"
 #include "gdcmAttribute.h"
 #include "gdcmCommandDataSet.h"
+#include "gdcmPrinter.h"
 #include <limits>
 
 namespace gdcm
@@ -364,7 +365,10 @@ void PresentationDataValue::Print(std::ostream &os) const
   std::vector<PresentationDataValue> thePDVs;
   thePDVs.push_back(*this);
   DataSet ds = ConcatenatePDVBlobs(thePDVs);
-  os << "Data: " << ds <<std::endl;
+  gdcm::Printer thePrinter;
+  thePrinter.PrintDataSet(ds, os);
+  //os << "Data: " << ds <<std::endl;
+
 }
 
 void PresentationDataValue::SetCommand(const bool& inCommand){

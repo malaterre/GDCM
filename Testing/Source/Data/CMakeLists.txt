@@ -87,19 +87,10 @@ BogusItemStartItemEnd.dcm
   TheralysNoModalityNoObject.dcm
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
-  #MR_Spectroscopy_SIEMENS_OF.dcm
-  #SIEMENS-MR-RGB-16Bits.dcm
-# Recent issue with compression/decompression (overlay in pixel data not handled)
-  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
-  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
   image.acr
-  PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm # ???
   MergeCOM3_330_IM50.dcm
   ImplicitVRInExplicitDataSet2.dcm
   BogugsItemAndSequenceLengthCorrected.dcm
-#SC that are well hidden MR Image Storage
-#  fffc0000UN.dcm
-  MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
 
@@ -114,6 +105,11 @@ BogusItemStartItemEnd.dcm
 # buggy dcm4che
   kos.dcm
 
+# problem with overlay in unsed bits:
+  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
+# packed 12 bits still not ok:
+  MR-MONO2-12-angio-an1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

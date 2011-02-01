@@ -85,6 +85,21 @@ struct myfile
   size_t len;
 };
 
+void gdcm_error_callback(const char* msg, void* f)
+{
+  if( strcmp( msg, "Cannot read data with no size known, giving up\n" ) == 0 )
+    {
+    OPJ_UINT32 **s = (OPJ_UINT32**)f;
+    *s[1] = *s[0];
+    gdcmWarningMacro( "Recovering from odd J2K file" );
+    }
+//  else
+//    {
+//    fprintf( stderr, msg );
+//    }
+}
+
+
 OPJ_UINT32 opj_read_from_memory(void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* p_file)
 {
   //OPJ_UINT32 l_nb_read = fread(p_buffer,1,p_nb_bytes,p_file);
@@ -455,11 +470,21 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   fsrc->mem = fsrc->cur = (char*)src;
   fsrc->len = file_length;
 
+  OPJ_UINT32 *s[2];
+  // the following hack is used for the file: DX_J2K_0Padding.dcm
+  // see the function j2k_read_sot in openjpeg (line: 5946)
+  // to deal with zero length Psot
+  OPJ_UINT32 fl = file_length - 100;
+  s[0] = &fl;
+  s[1] = 0;
+  opj_set_error_handler(dinfo, gdcm_error_callback, s);
+
   cio = opj_stream_create_memory_stream(fsrc,J2K_STREAM_CHUNK_SIZE, true);
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
+  int reversible;
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
@@ -472,7 +497,17 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     &l_nb_tiles_x,
     &l_nb_tiles_y,
     cio);
+  assert( bResult );
+
+#if OPENJPEG_MAJOR_VERSION == 1
+#else
+  // needs to be before call to opj_decode...
+  reversible = opj_get_reversible(dinfo, &parameters );
+  assert( reversible == 0 || reversible == 1 );
+#endif
+
   image = opj_decode(dinfo, cio);
+  //assert( image );
   bResult = bResult && (image != 00);
   bResult = bResult && opj_end_decompress(dinfo,cio);
   if (!image)
@@ -504,7 +539,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     }
 #endif
 
-  int reversible;
 #if OPENJPEG_MAJOR_VERSION == 1
   opj_j2k_t* j2k = NULL;
   opj_jp2_t* jp2 = NULL;
@@ -525,8 +559,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
-#else
-    reversible = 1;
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
 
@@ -790,6 +822,12 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
 bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
+  if( NeedOverlayCleanup )
+    {
+    gdcmErrorMacro( "TODO" );
+    return false;
+    }
+
   //
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
@@ -1142,6 +1180,9 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   fsrc->mem = fsrc->cur = (char*)src;
   fsrc->len = file_length;
 
+  // the hack is not used when reading meta-info of a j2k stream:
+  opj_set_error_handler(dinfo, gdcm_error_callback, NULL);
+
   cio = opj_stream_create_memory_stream(fsrc,J2K_STREAM_CHUNK_SIZE, true);
 
   /* setup the decoder decoding parameters using user parameters */
@@ -1193,7 +1234,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
 #else
-    reversible = 1;
+  reversible = opj_get_reversible(dinfo, &parameters );
+  assert( reversible == 0 || reversible == 1 );
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
 

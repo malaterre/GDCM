@@ -297,31 +297,36 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     codec.SetNeedByteSwap( GetNeedByteSwap() );
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
     DataElement out;
-    bool r = codec.Decode(PixelData, out);
+    //bool r = codec.Decode(PixelData, out);
+    bool r = codec.DecodeBytes(bv->GetPointer(), bv->GetLength(),
+      buffer, len);
     if( !r ) return false;
-    const ByteValue *outbv = out.GetByteValue();
-    assert( outbv );
+    //const ByteValue *outbv = out.GetByteValue();
+    //assert( outbv );
     if( len != bv->GetLength() )
       {
       // SIEMENS_GBS_III-16-ACR_NEMA_1.acr
       // This is also handling the famous DermaColorLossLess.dcm issue
       // where RGB image is odd length (GetBufferLength()) but
       // ByteValue::GetLength is rounded up to the next even byte length
-      gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
-        " is different from computed value " << len );
-      ((ByteValue*)outbv)->SetLength( len );
+    //  gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
+    //    " is different from computed value " << len );
+    //  ((ByteValue*)outbv)->SetLength( len );
       }
+#if 0
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
+#endif
 
-    unsigned long check = outbv->GetLength();  // FIXME
+    unsigned long check; // = outbv->GetLength();  // FIXME
+    check = len;
     // DermaColorLossLess.dcm
     assert( check == len || check == len + 1 );
     (void)check;// removing warning
-    if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    //if(buffer) memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     return r;
     }
   return false;
@@ -351,11 +356,13 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       assert( b );
       lossyflag = codec.IsLossy();
       // we need to know the actual pixeltype after ::Read
+#if 0
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
         gdcm::Bitmap *i = (gdcm::Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
+#endif
 
       return true;
       }
@@ -392,11 +399,19 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
     //  i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
     //  }
+#if 1
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
+      // gdcmData/DCMTK_JPEGExt_12Bits.dcm
+      assert( GetPixelFormat().GetPixelRepresentation() ==
+        codec.GetPixelFormat().GetPixelRepresentation() );
+      assert( GetPixelFormat().GetBitsStored() ==
+        codec.GetPixelFormat().GetBitsStored() );
+      assert( GetPixelFormat().GetBitsAllocated() == 12 );
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
+#endif
     //if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
     //|| GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
     //  {
@@ -555,11 +570,17 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
       if( !b ) return false;
       lossyflag = codec.IsLossy();
       // we need to know the actual pixeltype after ::Read
+#if 0
+// This is actually very dangerous to change the pixel format right here. What if
+// user stored a 16/10/9 signed image using JPEG-LS, JPEG-LS would be required to use
+// the full spectrum of the unsigned short 16 bits range to store that image and would
+// therefore -rightfully- declared as 16 bits...
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
         gdcm::Bitmap *i = (gdcm::Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
+#endif
 
       return true;
       }
@@ -643,11 +664,35 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       if( !b ) return false;
       lossyflag = codec.IsLossy();
       // we need to know the actual pixeltype after ::Read
+#if 0
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
+        // Because J2K support the full spectrum I do not see any issue
+        // with the following:
         gdcm::Bitmap *i = (gdcm::Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
+#else
+      // lets only check the only issue we have:
+      // OsirixFake16BitsStoredFakeSpacing.dcm
+      const PixelFormat & cpf = codec.GetPixelFormat();
+      const PixelFormat & pf = GetPixelFormat();
+      if( cpf.GetBitsAllocated() == pf.GetBitsAllocated() )
+        {
+        if( cpf.GetPixelRepresentation() == pf.GetPixelRepresentation() )
+          {
+          if( cpf.GetSamplesPerPixel() == pf.GetSamplesPerPixel() )
+            {
+            if( cpf.GetBitsStored() < pf.GetBitsStored() )
+              {
+              gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+              gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
+              i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
+              }
+            }
+          }
+        }
+#endif
 
       return true;
       }
@@ -681,11 +726,34 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       assert( !ts.IsLossy() );
       gdcmErrorMacro( "EVIL file, it is declared as lossless but is in fact lossy." );
       }
+#if 0
     if( codec.GetPixelFormat() != GetPixelFormat() )
       {
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
+#else
+      // lets only check the only issue we have:
+      // OsirixFake16BitsStoredFakeSpacing.dcm
+      const PixelFormat & cpf = codec.GetPixelFormat();
+      const PixelFormat & pf = GetPixelFormat();
+      if( cpf.GetBitsAllocated() == pf.GetBitsAllocated() )
+        {
+        if( cpf.GetPixelRepresentation() == pf.GetPixelRepresentation() )
+          {
+          if( cpf.GetSamplesPerPixel() == pf.GetSamplesPerPixel() )
+            {
+            if( cpf.GetBitsStored() < pf.GetBitsStored() )
+              {
+              gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+              gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
+              i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
+              }
+            }
+          }
+        }
+
+#endif
     return r;
     }
   return false;
@@ -810,5 +878,27 @@ bool Bitmap::IsTransferSyntaxCompatible( TransferSyntax const & ts ) const
   return false;
 }
 
+void Bitmap::Print(std::ostream &os) const
+{
+  Object::Print(os);
+  //assert( NumberOfDimensions );
+  os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
+  if( NumberOfDimensions )
+    {
+    assert( Dimensions.size() );
+    os << "Dimensions: (";
+    std::vector<unsigned int>::const_iterator it = Dimensions.begin();
+    os << *it;
+    for(++it; it != Dimensions.end(); ++it)
+      {
+      os << "," << *it;
+      }
+    os << ")\n";
+    PF.Print(os);
+    }
+  os << "PhotometricInterpretation: " << PI << "\n";
+  os << "PlanarConfiguration: " << PlanarConfiguration << "\n";
+  os << "TransferSyntax: " << TS << "\n";
+}
 
 }

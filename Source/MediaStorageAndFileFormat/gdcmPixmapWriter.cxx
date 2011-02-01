@@ -255,7 +255,7 @@ bool PixmapWriter::PrepareWrite()
   if( PixelData->GetNumberOfDimensions() == 3  )
     {
     Attribute<0x0028, 0x0008> numberofframes;
-    assert( PixelData->GetDimension(2) > 1 );
+    assert( PixelData->GetDimension(2) >= 1 );
     numberofframes.SetValue( PixelData->GetDimension(2) );
     ds.Replace( numberofframes.GetAsDataElement() );
     }
@@ -267,6 +267,11 @@ bool PixmapWriter::PrepareWrite()
     }
 
   PixelFormat pf = PixelData->GetPixelFormat();
+  if ( !pf.IsValid() )
+    {
+    gdcmWarningMacro( "Pixel format is not valid: " << pf );
+    return false;
+    }
   PhotometricInterpretation pi = PixelData->GetPhotometricInterpretation();
   if( pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel() )
     {
@@ -337,50 +342,50 @@ bool PixmapWriter::PrepareWrite()
     overlayrows.SetValue( ov.GetRows() );
     de = overlayrows.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0011> overlaycolumns;
     overlaycolumns.SetValue( ov.GetColumns() );
     de = overlaycolumns.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     if( ov.GetDescription() ) // Type 3
       {
       Attribute<0x6000,0x0022> overlaydescription;
       overlaydescription.SetValue( ov.GetDescription() );
       de = overlaydescription.GetAsDataElement();
       de.GetTag().SetGroup( ov.GetGroup() );
-      ds.Insert( de );
+      ds.Replace( de );
       }
     Attribute<0x6000,0x0040> overlaytype; // 'G' or 'R'
     overlaytype.SetValue( ov.GetType() );
     de = overlaytype.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0050> overlayorigin;
     overlayorigin.SetValues( ov.GetOrigin() );
     de = overlayorigin.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0100> overlaybitsallocated;
     overlaybitsallocated.SetValue( ov.GetBitsAllocated() );
     de = overlaybitsallocated.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
     Attribute<0x6000,0x0102> overlaybitposition;
     overlaybitposition.SetValue( ov.GetBitPosition() );
     de = overlaybitposition.GetAsDataElement();
     de.GetTag().SetGroup( ov.GetGroup() );
-    ds.Insert( de );
+    ds.Replace( de );
 
     // FIXME: for now rewrite 'Overlay in pixel data' still in the pixel data element...
-    if( !ov.IsInPixelData() )
+    //if( !ov.IsInPixelData() )
       {
       const ByteValue & overlaydatabv = ov.GetOverlayData();
       DataElement overlaydata( Tag(0x6000,0x3000) );
       overlaydata.SetByteValue( overlaydatabv.GetPointer(), overlaydatabv.GetLength() );
       overlaydata.SetVR( VR::OW ); // FIXME
       overlaydata.GetTag().SetGroup( ov.GetGroup() );
-      ds.Insert( overlaydata );
+      ds.Replace( overlaydata );
       }
     }
 
@@ -392,11 +397,23 @@ bool PixmapWriter::PrepareWrite()
   const TransferSyntax &ts = PixelData->GetTransferSyntax();
   assert( ts.IsExplicit() || ts.IsImplicit() );
 
-//  if( !ts.IsLossy() && PixelData->IsLossy() )
-//    {
-//    gdcmWarningMacro( "Sorry Pixel Data in encapsulated stream was found to be lossy while Transfer Syntax does not authorized that" );
-//    return false;
-//    }
+  // It is perfectly ok to store a lossy image using a J2K (this is odd, but valid).
+  // as long as your mark LossyImageCompression with value 1
+#if 0
+  // if ts_orig is undefined we need to check ts of Pixel Data comply with itself
+  if( ts_orig == TransferSyntax::TS_END )
+    {
+    if( !ts.CanStoreLossy() && PixelData->IsLossy() )
+      {
+      gdcmWarningMacro( "Sorry Pixel Data in encapsulated stream was found to be "
+        "lossy while Transfer Syntax does not authorized that" );
+      return false;
+      }
+    // Obviously we could also be checking the contrary: trying to store a
+    // lossless compressed JPEG file using a lossy JPEG (compatible) one. But I
+    // do not believe this is an error in this case.
+    }
+#endif
 
   if( /*ts.IsLossy() &&*/ PixelData->IsLossy() )
     {
@@ -487,6 +504,18 @@ bool PixmapWriter::PrepareWrite()
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
+
+  // Most SOP Class support 2D, but let's make sure that 3D is ok:
+  if( PixelData->GetNumberOfDimensions() > 2 )
+    {
+    if( ms.GetModalityDimension() < PixelData->GetNumberOfDimensions() )
+      {
+      gdcmErrorMacro( "Problem with NumberOfDimensions and MediaStorage" );
+#if 0
+      return false;
+#endif
+      }
+    }
 
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )

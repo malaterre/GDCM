@@ -60,6 +60,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
   gdcm::CryptographicMessageSyntax cms;
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
+    std::cerr << "Could not parse cert: " << certpath << std::endl;
     return 1;
     }
 
@@ -76,9 +77,18 @@ int TestAnonymize2(const char *subdir, const char *filename)
     return 1;
     }
 
+  const DataSet &ds = reader.GetFile().GetDataSet();
+  bool hasinstanceuid = true;
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
+    {
+    hasinstanceuid = false;
+    }
+
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile() )
     {
+    std::cerr << "BasicApplicationLevelConfidentialityProfile fails for: " << filename << std::endl;
     return 1;
     }
 
@@ -88,8 +98,12 @@ int TestAnonymize2(const char *subdir, const char *filename)
   writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
-    std::cerr << "Failed to write: " << outfilename << std::endl;
-    return 1;
+    if( hasinstanceuid )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+    return 0;
     }
 }
 // Decrypt
@@ -97,6 +111,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
   gdcm::CryptographicMessageSyntax cms;
   if( !cms.ParseKeyFile( keypath.c_str() ) )
     {
+    std::cerr << "Could not parse key: " << keypath << std::endl;
     return 1;
     }
 
@@ -113,9 +128,18 @@ int TestAnonymize2(const char *subdir, const char *filename)
     return 1;
     }
 
+  const DataSet &ds = reader.GetFile().GetDataSet();
+  bool hasinstanceuid = true;
+  if( !ds.FindDataElement( Tag(0x0008,0x0018) )
+    || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
+    {
+    hasinstanceuid = false;
+    }
+
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile(false) )
     {
+    std::cerr << "BasicApplicationLevelConfidentialityProfile (false) fails for: " << outfilename << std::endl;
     return 1;
     }
 
@@ -125,8 +149,13 @@ int TestAnonymize2(const char *subdir, const char *filename)
   writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
-    std::cerr << "Failed to write: " << outfilename2 << std::endl;
-    return 1;
+    if( hasinstanceuid )
+      {
+      std::cerr << "Failed to write (2): " << outfilename2 << std::endl;
+      std::cerr << "Orig file was : " << outfilename << std::endl;
+      return 1;
+      }
+    return 0;
     }
 }
 
@@ -145,6 +174,7 @@ int TestAnonymizer2(int argc, char *argv[])
   // else
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

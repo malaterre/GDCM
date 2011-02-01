@@ -655,14 +655,14 @@ int sockbuf::sendtimeout (int wp)
 {
   int oldstmo = rep->stmo;
   rep->stmo = (wp < 0) ? -1: wp;
-  return oldstmo;
+  return rep->stmo;
 }
 
 int sockbuf::recvtimeout (int wp)
 {
   int oldrtmo = rep->rtmo;
   rep->rtmo = (wp < 0) ? -1: wp;
-  return oldrtmo;
+  return rep->rtmo;
 }
 
 int sockbuf::is_readready (int wp_sec, int wp_usec) const

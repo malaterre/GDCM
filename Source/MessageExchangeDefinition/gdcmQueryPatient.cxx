@@ -26,7 +26,6 @@ name and date: 15 oct 2010 mmr
 #include "gdcmQueryPatient.h"
 
 namespace gdcm{
-namespace network{
 
 std::vector<gdcm::Tag> QueryPatient::GetRequiredTags(const ERootType& inRootType) const{
   std::vector<gdcm::Tag> theReturn;//see 3.4 C.6.1.1.2
@@ -86,6 +85,5 @@ DataElement QueryPatient::GetQueryLevel() const{
   de.SetTag(Tag(0x0008,0x0052));
   de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
   return de;
-}
 }
 }

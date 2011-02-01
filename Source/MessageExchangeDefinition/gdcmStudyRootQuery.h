@@ -22,29 +22,27 @@
 
 
 namespace gdcm{
-  namespace network {
 /**
  * \brief StudyRootQuery
  * contains: the class which will produce a dataset for c-find and c-move with study root
  */
-    class QueryFactory;
-class GDCM_EXPORT StudyRootQuery : public BaseRootQuery {
-    private:
-      void SetParameters();
-      friend class QueryFactory;
-      StudyRootQuery();
-    public:
-      ~StudyRootQuery();
+  class QueryFactory;
+  class GDCM_EXPORT StudyRootQuery : public BaseRootQuery {
+  private:
+    void SetParameters();
+    friend class QueryFactory;
+    StudyRootQuery();
+  public:
+    ~StudyRootQuery();
 
-      std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
+    std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
 
-      ///have to be able to ensure that
-      ///0x8,0x52 is set
-      ///that the level is appropriate (ie, not setting PATIENT for a study query
-      ///that the tags in the query match the right level (either required, unique, optional)
-      bool ValidateQuery(bool forFind) const;
-    };
-  }
+    ///have to be able to ensure that
+    ///0x8,0x52 is set
+    ///that the level is appropriate (ie, not setting PATIENT for a study query
+    ///that the tags in the query match the right level (either required, unique, optional)
+    bool ValidateQuery(bool forFind, bool inStrict) const;
+  };
 }
 
 

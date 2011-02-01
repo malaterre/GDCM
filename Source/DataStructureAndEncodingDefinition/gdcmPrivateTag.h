@@ -40,7 +40,12 @@ class GDCM_EXPORT PrivateTag : public Tag
 public:
   PrivateTag(uint16_t group = 0, uint16_t element = 0, const char *owner = ""):Tag(group,element),Owner(owner) {
     std::transform(Owner.begin(), Owner.end(), Owner.begin(), ::tolower);
-    //assert( element > 0x0010 && element < 0x100 );
+    // truncate the high bits
+    SetElement( (uint8_t)element );
+
+    // TODO:
+    // by default the cstor create with 0x0,0x0 which is invalid...
+    //assert( GetElement() >= 0x0010 && GetElement() < 0x100 );
   }
 
   const char *GetOwner() const { return Owner.c_str(); }

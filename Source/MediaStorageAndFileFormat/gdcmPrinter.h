@@ -83,10 +83,14 @@ public:
 
   void Print(std::ostream& os);
 
+  //now no longer protected so that individual datasets can be printed directly
+  //as per bug #131 in trac.
+  //12 jan 2011 mmr
+  void PrintDataSet(const DataSet &ds, std::ostream& os, const std::string &s = "");
+
 protected:
   void PrintDataSetOld(std::ostream &os, const DataSet &ds);
   void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
-  void PrintDataSet(const DataSet &ds, std::ostream& os, const std::string &s = "");
   VR PrintDataElement(std::ostringstream & os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent );
 void PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & indent);
 

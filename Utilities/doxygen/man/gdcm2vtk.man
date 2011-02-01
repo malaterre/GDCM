@@ -32,6 +32,10 @@ file-out  DICOM output filename
      --compress         when supported generate a compressed file.
      --use-vtkdicom     Use vtkDICOMImageReader (instead of GDCM).
      --modality         set Modality.
+     --lower-left       set lower left.
+     --shift            set shift.
+     --scale            set scale.
+     --compress         set compression (MetaIO).
   -T --study-uid        Study UID.
   -S --series-uid       Series UID.
      --root-uid         Root UID.

@@ -23,8 +23,8 @@
 #include "gdcmULConnection.h"
 
 namespace gdcm {
+  class BaseRootQuery;
   namespace network {
-    class BaseRootQuery;
     class BasePDU;
 /**
  * \brief CompositeMessageFactory
