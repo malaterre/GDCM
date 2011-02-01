@@ -1,17 +1,17 @@
 /*=========================================================================
-
-  Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
-
-  Copyright (c) 2006-2010 Mathieu Malaterre
-  All rights reserved.
-  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
-
-=========================================================================*/
+ 
+ Program: GDCM (Grassroots DICOM). A DICOM library
+ Module:  $URL$
+ 
+ Copyright (c) 2006-2010 Mathieu Malaterre
+ All rights reserved.
+ See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+ 
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notice for more information.
+ 
+ =========================================================================*/
 /*
  * Simple command line tool to echo/store/find/move DICOM using
  * DICOM Query/Retrieve
@@ -37,6 +37,7 @@
 #include "gdcmUIDGenerator.h"
 
 #include "gdcmBaseRootQuery.h"
+#include "gdcmQueryFactory.h"
 
 
 void PrintVersion()
@@ -67,14 +68,19 @@ void PrintHelp()
   std::cout << "     --store-query    Store constructed query in file." << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
   //std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
-  std::cout << "     --patient        C-FIND Patient Root Model." << std::endl;
-  std::cout << "     --study          C-FIND Study Root Model." << std::endl;
+  std::cout << "     --patientroot    C-FIND Patient Root Model." << std::endl;
+  std::cout << "     --studyroot      C-FIND Study Root Model." << std::endl;
+  std::cout << "     --patient        C-FIND Query on Patient Info (cannot be used with --studyroot)" << std::endl;
+  std::cout << "     --study          C-FIND Query on Study Info." << std::endl;
+  std::cout << "     --series         C-FIND Query on Series Info." << std::endl;
+  std::cout << "     --image          C-FIND Query on Image Info." << std::endl;
   //std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
-  std::cout << "     --key        0123,4567=VALUE for specifying search criteria (wildcard allowed)." << std::endl;
+  std::cout << "     --key            0123,4567=VALUE for specifying search criteria (wildcard allowed)." << std::endl;
   std::cout << "C-MOVE Options:" << std::endl;
   std::cout << "  -o --output         DICOM output directory." << std::endl;
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
   std::cout << "     --key            0123,4567=VALUE for specifying search criteria (wildcard not allowed)." << std::endl;
+  std::cout << "  Note that C-MOVE supports the same queries as C-FIND, but no wildcards are allowed." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -82,14 +88,38 @@ void PrintHelp()
   std::cout << "  -D --debug     print debug info." << std::endl;
   std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
+  std::cout << "  -q --queryhelp print query help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  
+}
+
+void PrintQueryHelp(int inFindPatientRoot){
+  
+  gdcm::BaseRootQuery* theBase;
+  if (inFindPatientRoot)
+  {
+    std::cout << "To find the help for a study-level query, type" <<std::endl;
+    std::cout << " --queryhelp --studyroot" << std::endl;
+    theBase = gdcm::QueryFactory::ProduceQuery(gdcm::ePatientRootType, gdcm::ePatient);
+    theBase->WriteHelpFile(std::cout);
+    delete theBase;
+  }
+  else
+  {
+    std::cout << "To find the help for a patient-level query, type" <<std::endl;
+    std::cout << " --queryhelp --patientroot" << std::endl;
+    std::cout << "These are the study level, study root queries: " << std::endl;
+    theBase = gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eStudy);
+    theBase->WriteHelpFile(std::cout);
+    delete theBase;
+  }
 }
 
 int main(int argc, char *argv[])
 {
   int c;
   //int digit_optind = 0;
-
+  
   std::string shostname;
   std::string callingaetitle = "GDCMSCU";
   std::string callaetitle = "ANY-SCP";
@@ -106,14 +136,19 @@ int main(int argc, char *argv[])
   int debug = 0;
   int error = 0;
   int help = 0;
+  int queryhelp = 0;
   int version = 0;
   int echomode = 0;
   int storemode = 0;
   int findmode = 0;
   int movemode = 0;
   int findworklist = 0;
-  int findpatient = 0;
-  int findstudy = 0;
+  int findpatientroot = 0;
+  int findstudyroot = 0;
+  int patientquery = 0;
+  int studyquery = 0;
+  int seriesquery = 0;
+  int imagequery = 0;
   int findpsonly = 0;
   std::string xmlpath;
   std::string queryfile;
@@ -122,98 +157,93 @@ int main(int argc, char *argv[])
   int recursive = 0;
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
-
-  //if you want study or patient level query help, uncomment these lines
-  //gdcm::network::BaseRootQuery* theBase =
-  //  gdcm::network::QueryFactory::ProduceQuery(gdcm::network::ePatientRootType);
-  //theBase->WriteHelpFile(std::cout);
-  //delete theBase;
-
-  // FIXME: remove testing stuff:
-  int testmode = 0;
-  std::string testDir = "D:/gdcmData/scusubset";//changing the testdir doesn't work;
-  //I think I'm not so good with these options
+  
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
-/*
-   struct option {
-              const char *name;
-              int has_arg;
-              int *flag;
-              int val;
-          };
-*/
+    /*
+     struct option {
+     const char *name;
+     int has_arg;
+     int *flag;
+     int val;
+     };
+     */
     static struct option long_options[] = {
-        {"verbose", 0, &verbose, 1},
-        {"warning", 0, &warning, 1},
-        {"debug", 0, &debug, 1},
-        {"error", 0, &error, 1},
-        {"help", 0, &help, 1},
-        {"version", 0, &version, 1},
-        {"hostname", 1, 0, 0},     // -h
-        {"aetitle", 1, 0, 0},     //
-        {"call", 1, 0, 0},     //
-        {"port", 0, &port, 1}, // -p
-        {"input", 1, 0, 0}, // dcmfile-in
-        {"echo", 0, &echomode, 1}, // --echo
-        {"store", 0, &storemode, 1}, // --store
-        {"find", 0, &findmode, 1}, // --find
-        {"move", 0, &movemode, 1}, // --move
-        {"key", 1, 0, 0}, // (15) --key
-        {"worklist", 0, &findworklist, 1}, // --worklist
-        {"patient", 0, &findpatient, 1}, // --patient
-        {"study", 0, &findstudy, 1}, // --study
-        {"psonly", 0, &findpsonly, 1}, // --psonly
-        {"port-scp", 1, &portscp, 1}, // (20) --port-scp
-        {"output", 1, &outputopt, 1}, // --output
-        {"recursive", 0, &recursive, 1},
-        {"store-query", 1, &storequery, 1},
-        {0, 0, 0, 0} // required
+      {"verbose", 0, &verbose, 1},
+      {"warning", 0, &warning, 1},
+      {"debug", 0, &debug, 1},
+      {"error", 0, &error, 1},
+      {"help", 0, &help, 1},
+      {"queryhelp", 0, &queryhelp, 1},
+      {"version", 0, &version, 1},
+      {"hostname", 1, 0, 0},     // -h
+      {"aetitle", 1, 0, 0},     //
+      {"call", 1, 0, 0},     //
+      {"port", 0, &port, 1}, // -p
+      {"input", 1, 0, 0}, // dcmfile-in
+      {"echo", 0, &echomode, 1}, // --echo
+      {"store", 0, &storemode, 1}, // --store
+      {"find", 0, &findmode, 1}, // --find
+      {"move", 0, &movemode, 1}, // --move
+      {"key", 1, 0, 0}, // (15) --key
+      {"worklist", 0, &findworklist, 1}, // --worklist
+      {"patientroot", 0, &findpatientroot, 1}, // --patientroot
+      {"studyroot", 0, &findstudyroot, 1}, // --studyroot
+      {"patient", 0, &patientquery, 1}, // --patient
+      {"study", 0, &studyquery, 1}, // --study
+      {"series", 0, &patientquery, 1}, // --series
+      {"image", 0, &studyquery, 1}, // --image
+      {"psonly", 0, &findpsonly, 1}, // --psonly
+      {"port-scp", 1, &portscp, 1}, // (20) --port-scp
+      {"output", 1, &outputopt, 1}, // --output
+      {"recursive", 0, &recursive, 1},
+      {"store-query", 1, &storequery, 1},
+      {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:o:r";
     c = getopt_long (argc, argv, short_options,
-      long_options, &option_index);
+                     long_options, &option_index);
     if (c == -1)
-      {
+    {
       break;
-      }
-
+    }
+    
     switch (c)
+    {
+      case 0:
+      case '-':
       {
-    case 0:
-    case '-':
-        {
         const char *s = long_options[option_index].name;
         //printf ("option %s", s);
         if (optarg)
-          {
+        {
           if( option_index == 0 ) /* input */
-            {
+          {
             assert( strcmp(s, "input") == 0 );
             assert( filename.empty() );
             filename = optarg;
-            }
+          }
           else if( option_index == 7 ) /* calling aetitle */
-            {
+          {
             assert( strcmp(s, "aetitle") == 0 );
             //assert( callingaetitle.empty() );
             callingaetitle = optarg;
-            }
+          }
           else if( option_index == 8 ) /* called aetitle */
-            {
+          {
             assert( strcmp(s, "call") == 0 );
             //assert( callaetitle.empty() );
             callaetitle = optarg;
-            }
+          }
           else if( option_index == 15 ) /* key */
-            {
+          {
             assert( strcmp(s, "key") == 0 );
             if( !tag.ReadFromCommaSeparatedString(optarg) )
-              {
+            {
               std::cerr << "Could not read Tag: " << optarg << std::endl;
               return 1;
-              }
+            }
             std::stringstream ss;
             ss.str( optarg );
             uint16_t dummy;
@@ -230,41 +260,41 @@ int main(int argc, char *argv[])
             //ss >> str;
             std::getline(ss, str); // do not skip whitespace
             keys.push_back( std::make_pair(tag, str) );
-            }
+          }
           else if( option_index == 20 ) /* port-scp */
-            {
+          {
             assert( strcmp(s, "port-scp") == 0 );
             portscpnum = atoi(optarg);
-            }
+          }
           else if( option_index == 21 ) /* output */
-            {
+          {
             assert( strcmp(s, "output") == 0 );
             outputdir = optarg;
-            }
+          }
           else if( option_index == 23 ) /* store-query */
-            {
+          {
             assert( strcmp(s, "store-query") == 0 );
             queryfile = optarg;
-            }
+          }
           else
-            {
+          {
             // If you reach here someone mess-up the index and the argument in
             // the getopt table
             assert( 0 );
-            }
-          //printf (" with arg %s", optarg);
           }
-        //printf ("\n");
+          //printf (" with arg %s", optarg);
         }
-      break;
-
-    case 'k':
-        {
+        //printf ("\n");
+      }
+        break;
+        
+      case 'k':
+      {
         if( !tag.ReadFromCommaSeparatedString(optarg) )
-          {
+        {
           std::cerr << "Could not read Tag: " << optarg << std::endl;
           return 1;
-          }
+        }
         std::stringstream ss;
         ss.str( optarg );
         uint16_t dummy;
@@ -281,108 +311,116 @@ int main(int argc, char *argv[])
         //ss >> str;
         std::getline(ss, str); // do not skip whitespace
         keys.push_back( std::make_pair(tag, str) );
-        }
-      break;
-
-    case 'i':
-      //printf ("option i with value '%s'\n", optarg);
-      assert( filename.empty() );
-      filename = optarg;
-      break;
-
-    case 'r':
-      recursive = 1;
-      break;
-
-    case 'o':
-      assert( outputdir.empty() );
-      outputdir = optarg;
-      break;
-
-    case 'H':
-      shostname = optarg;
-      break;
-
-    case 'p':
-      port = atoi( optarg );
-      break;
-
-    case 'V':
-      verbose = 1;
-      break;
-
-    case 'W':
-      warning = 1;
-      break;
-
-    case 'D':
-      debug = 1;
-      break;
-
-    case 'E':
-      error = 1;
-      break;
-
-    case 'h':
-      help = 1;
-      break;
-
-    case 'v':
-      version = 1;
-      break;
-
-    case '?':
-      break;
-
-    default:
-      printf ("?? getopt returned character code 0%o ??\n", c);
       }
+        break;
+        
+      case 'i':
+        //printf ("option i with value '%s'\n", optarg);
+        assert( filename.empty() );
+        filename = optarg;
+        break;
+        
+      case 'r':
+        recursive = 1;
+        break;
+        
+      case 'o':
+        assert( outputdir.empty() );
+        outputdir = optarg;
+        break;
+        
+      case 'H':
+        shostname = optarg;
+        break;
+        
+      case 'p':
+        port = atoi( optarg );
+        break;
+        
+      case 'V':
+        verbose = 1;
+        break;
+        
+      case 'W':
+        warning = 1;
+        break;
+        
+      case 'D':
+        debug = 1;
+        break;
+        
+      case 'E':
+        error = 1;
+        break;
+        
+      case 'h':
+        help = 1;
+        break;
+        
+      case 'q':
+        queryhelp = 1;
+        break;
+        
+      case 'v':
+        version = 1;
+        break;
+        
+      case '?':
+        break;
+        
+      default:
+        printf ("?? getopt returned character code 0%o ??\n", c);
+    }
   }
-
+  
   if (optind < argc)
-    {
+  {
     int v = argc - optind;
     // hostname port filename
     if( v == 1 )
-      {
+    {
       shostname = argv[optind++];
-      }
+    }
     else if( v == 2 )
-      {
+    {
       shostname = argv[optind++];
       port = atoi( argv[optind++] );
-      }
+    }
     else if( v >= 3 )
-      {
+    {
       shostname = argv[optind++];
       port = atoi( argv[optind++] );
       //filename = argv[optind++];
       std::vector<std::string> files;
       while (optind < argc)
-        {
-        files.push_back( argv[optind++] );
-        }
-      filenames = files;
-      }
-    else
       {
-      return 1;
+        files.push_back( argv[optind++] );
       }
-    assert( optind == argc );
+      filenames = files;
     }
-
-  if( version )
+    else
     {
+      return 1;
+    }
+    assert( optind == argc );
+  }
+  
+  if( version )
+  {
     PrintVersion();
     return 0;
-    }
-
+  }
+  
   if( help )
-    {
+  {
     PrintHelp();
     return 0;
-    }
-
+  }
+  if(queryhelp)
+  {
+    PrintQueryHelp(findpatientroot);
+    return 0;
+  }
   bool theDebug = debug != 0;
   bool theWarning = warning != 0;
   bool theError = error != 0;
@@ -394,204 +432,226 @@ int main(int argc, char *argv[])
   gdcm::Trace::SetError( theError );
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
-    {
+  {
     gdcm::Trace::SetWarning( theVerbose );
     gdcm::Trace::SetError( theVerbose);
-    }
+  }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( callaetitle.c_str() );
   if( !rootuid )
-    {
+  {
     // only read the env var if no explicit cmd line option
     // maybe there is an env var defined... let's check
     const char *rootuid_env = getenv("GDCM_ROOT_UID");
     if( rootuid_env )
-      {
+    {
       rootuid = 1;
       root = rootuid_env;
-      }
     }
+  }
   if( rootuid )
-    {
+  {
     // root is set either by the cmd line option or the env var
     if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
-      {
+    {
       std::cerr << "specified Root UID is not valid: " << root << std::endl;
       return 1;
-      }
-    gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
-
+    gdcm::UIDGenerator::SetRoot( root.c_str() );
+  }
+  
   if( shostname.empty() )
-    {
+  {
     std::cerr << "Hostname missing" << std::endl;
     return 1;
-    }
+  }
   if( port == 0 )
-    {
+  {
     std::cerr << "Problem with port number" << std::endl;
     return 1;
-    }
+  }
   // checkout outputdir opt:
   if( outputopt )
-    {
+  {
     if( !gdcm::System::FileIsDirectory( outputdir.c_str()) )
-      {
+    {
       if( !gdcm::System::MakeDirectory( outputdir.c_str() ) )
-        {
+      {
         std::cerr << "Sorry: " << outputdir << " is not a valid directory.";
         std::cerr << std::endl;
         std::cerr << "and I could not create it.";
         std::cerr << std::endl;
         return 1;
-        }
       }
     }
-
+  }
+  
   const char *hostname = shostname.c_str();
   std::string mode = "echo";
   if ( echomode )
-    {
+  {
     mode = "echo";
-    }
+  }
   else if ( storemode )
-    {
+  {
     mode = "store";
-    }
+  }
   else if ( findmode )
-    {
+  {
     mode = "find";
-    }
+  }
   else if ( movemode )
-    {
+  {
     mode = "move";
-    }
-
+  }
+  
   //this class contains the networking calls
   gdcm::CompositeNetworkFunctions theNetworkFunctions;
-
+  
   if ( mode == "server" ) // C-STORE SCP
-    {
+  {
     // MM: Do not expose that to user for now (2010/10/11).
     //CStoreServer( port );
     return 1;
-    }
+  }
   else if ( mode == "echo" ) // C-ECHO SCU
-    {
+  {
     // ./bin/gdcmscu mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     bool didItWork = theNetworkFunctions.CEcho( hostname, port, callingaetitle, callaetitle );
     if (!didItWork)
-      {
-      std::cout << "Echo failed." << std::endl;
-      }
-    else
-      {
-      std::cout << "Echo succeeded." << std::endl;
-      }
-    return (didItWork ? 0 : 1);
-    }
-  else if ( mode == "move" ) // C-FIND SCU
     {
+      std::cout << "Echo failed." << std::endl;
+    }
+    else
+    {
+      std::cout << "Echo succeeded." << std::endl;
+    }
+    return (didItWork ? 0 : 1);
+  }
+  else if ( mode == "move" ) // C-FIND SCU
+  {
     // ./bin/gdcmscu --move --patient dhcp-67-183 5678 move
     // ./bin/gdcmscu --move --patient mi2b2.slicer.org 11112 move
-    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(true, findstudy != 0, findpatient != 0, keys);
-
-    if (findstudy == 0 && findpatient == 0)
-      {
+    gdcm::ERootType theRoot = gdcm::eStudyRootType;
+    if (findpatientroot)
+      theRoot = gdcm::ePatientRootType;
+    gdcm::EQueryLevel theLevel = gdcm::eStudy;
+    if (patientquery)
+      theLevel = gdcm::ePatient;
+    if (seriesquery)
+      theLevel = gdcm::eSeries;
+    if (imagequery)
+      theLevel = gdcm::eImageOrFrame;
+    
+    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(true, theRoot, theLevel ,keys);
+    
+    if (findstudyroot == 0 && findpatientroot == 0)
+    {
       if (gdcm::Trace::GetErrorFlag())
-        {
-        std::cerr << "Need to explicitly choose query retrieve level, --patient or --study" << std::endl;      
-        }
+      {
+        std::cerr << "Need to explicitly choose query retrieve level, --patientroot or --studyroot" << std::endl;      
+      }
       std::cerr << "Move failed." << std::endl;
       return 1;
-      }
-
+    }
+    
     if( !portscp )
-      {
+    {
       if (gdcm::Trace::GetErrorFlag())
-        {
+      {
         std::cerr << "Need to set explicitely port number for SCP association --port-scp" << std::endl;      
-        }
+      }
       std::cerr << "Move failed." << std::endl;
       return 1;
-      }
-
+    }
+    
     if( storequery )
-      {
+    {
       if (!theQuery->WriteQuery(queryfile))
-        {
+      {
         std::cerr << "Could not write out query to: " << queryfile << std::endl;
         delete [] theQuery;
         std::cerr << "Move failed." << std::endl;
         return 1;
-        }
       }
-
+    }
+    
     if (!theQuery->ValidateQuery(true, false))
-      {
+    {
       std::cerr << "You have not constructed a valid find query.  Please try again." << std::endl;
       delete theQuery;
       return 1;
-      }//must ensure that 0x8,0x52 is set and that
-
+    }//must ensure that 0x8,0x52 is set and that
+    
     //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
     //across, rather than all at once at the end.  Turn off the boolean to have
     //it written all at once at the end.
     bool didItWork = theNetworkFunctions.CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir );
     delete theQuery;
     if (!didItWork)
-      {
-      std::cerr << "Move failed." << std::endl;
-      }
-    else
-      {
-      std::cout << "Move succeeded." << std::endl;
-      }
-    return (didItWork ? 0 : 1);
-    }
-  else if ( mode == "find" ) // C-FIND SCU
     {
+      std::cerr << "Move failed." << std::endl;
+    }
+    else
+    {
+      std::cout << "Move succeeded." << std::endl;
+    }
+    return (didItWork ? 0 : 1);
+  }
+  else if ( mode == "find" ) // C-FIND SCU
+  {
     // Construct C-FIND DataSet:
     // ./bin/gdcmscu --find --patient dhcp-67-183 5678
     // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
-
+    
     // PATIENT query:
     // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 10,10="F*" -V
-    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, findstudy != 0, findpatient != 0, keys);
-    if (findstudy == 0 && findpatient == 0)
-      {
+    gdcm::ERootType theRoot = gdcm::eStudyRootType;
+    if (findpatientroot)
+      theRoot = gdcm::ePatientRootType;
+    gdcm::EQueryLevel theLevel = gdcm::eStudy;
+    if (patientquery)
+      theLevel = gdcm::ePatient;
+    if (seriesquery)
+      theLevel = gdcm::eSeries;
+    if (imagequery)
+      theLevel = gdcm::eImageOrFrame;
+    
+    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, theRoot, theLevel ,keys);
+    if (findstudyroot == 0 && findpatientroot == 0)
+    {
       if (gdcm::Trace::GetErrorFlag())
-        {
-        std::cerr << "Need to explicitly choose query retrieve level, --patient or --study" << std::endl;      
-        }
+      {
+        std::cerr << "Need to explicitly choose query retrieve level, --patientroot or --studyroot" << std::endl;      
+      }
       std::cerr << "Move failed." << std::endl;
       return 1;
-      }
+    }
     if (!theQuery)
-      {
-        std::cerr << "Query construction failed." <<std::endl;
-        return 1;
-      }
-
+    {
+      std::cerr << "Query construction failed." <<std::endl;
+      return 1;
+    }
+    
     if( storequery )
-      {
+    {
       if (!theQuery->WriteQuery(queryfile))
-        {
+      {
         std::cerr << "Could not write out query to: " << queryfile << std::endl;
         delete [] theQuery;
         return 1;
-        }
       }
-
+    }
+    
     //doing a non-strict query, the second parameter there.
     //look at the base query comments
     if (!theQuery->ValidateQuery(true, false))
-      {
+    {
       std::cerr << "You have not constructed a valid find query.  Please try again." << std::endl;
       delete theQuery;
       return 1;
-      }//must ensure that 0x8,0x52 is set and that
+    }//must ensure that 0x8,0x52 is set and that
     //the value in that tag corresponds to the query type
     int ret = 0;
     std::vector<gdcm::DataSet> theDataSet = theNetworkFunctions.CFind( hostname, port, callingaetitle, callaetitle, theQuery );
@@ -599,24 +659,24 @@ int main(int argc, char *argv[])
     for (itor = theDataSet.begin(); itor != theDataSet.end(); itor++){
       itor->Print(std::cout);
     }
-
+    
     delete theQuery;
     if (ret == 0)
       std::cout << "Find was successful." << std::endl;
     else
       std::cout << "Find failed." << std::endl;
     return ret;
-    }
+  }
   else // C-STORE SCU
-    {
+  {
     // mode == filename
     bool didItWork = theNetworkFunctions.CStore( hostname, port, callingaetitle, callaetitle ,filenames, theRecursive );
-
+    
     if (!didItWork)
       std::cout << "Store was successful." << std::endl;
     else
       std::cout << "Store failed." << std::endl;
     return (didItWork ? 0 : 1);
-    }
+  }
   return 0;
 }
