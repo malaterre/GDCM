@@ -76,6 +76,7 @@ void PrintHelp()
   std::cout << "     --image          C-FIND Query on Image Info." << std::endl;
   //std::cout << "     --psonly         C-FIND Patient/Study Only Model." << std::endl;
   std::cout << "     --key            0123,4567=VALUE for specifying search criteria (wildcard allowed)." << std::endl;
+  std::cout << "                      With --key, leave blank (ie, --key 10,10="") to retrieve values" << std::endl;
   std::cout << "C-MOVE Options:" << std::endl;
   std::cout << "  -o --output         DICOM output directory." << std::endl;
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
@@ -197,7 +198,7 @@ int main(int argc, char *argv[])
       {"queryhelp", 0, &queryhelp, 1},
       {"patient", 0, &patientquery, 1}, // --patient
       {"study", 0, &studyquery, 1}, // --study
-      {"series", 0, &patientquery, 1}, // --series
+      {"series", 0, &seriesquery, 1}, // --series
       {"image", 0, &studyquery, 1}, // --image
       {0, 0, 0, 0} // required
     };
