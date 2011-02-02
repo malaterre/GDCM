@@ -671,6 +671,7 @@ int main(int argc, char *argv[])
   else // C-STORE SCU
   {
     // mode == filename
+    filenames.push_back(filename);//otherwise, segfault because filenames is empty
     bool didItWork = theNetworkFunctions.CStore( hostname, port, callingaetitle, callaetitle ,filenames, theRecursive );
     
     if (!didItWork)
