@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
   writer->InitializeRTStructSet(theDirName,
     reader->GetRTStructSetProperties()->GetStructureSetLabel(),
     reader->GetRTStructSetProperties()->GetStructureSetName(),
-    *roiNames, *roiAlgorithms, *roiTypes);
+    roiNames, roiAlgorithms, roiTypes);
 
   writer->SetRTStructSetProperties(theProperties);
   writer->Write();
