@@ -241,7 +241,11 @@ bool CompositeNetworkFunctions::CStore( const char *remote, int portno,
   theManager.SendStore( (gdcm::DataSet*)&ds );
 #endif
 
+  try {
   theManager.SendStore( (gdcm::DataSet*)&ds );
+  if (gdcm::Trace::GetWarningFlag()){
+    std::cout << "C-Store of file " << filename << " was successful." <<std::endl;
+  }
 
   for( size_t i = 1; i < files.size(); ++i )
     {
@@ -251,8 +255,18 @@ bool CompositeNetworkFunctions::CStore( const char *remote, int portno,
     if( !reader.Read() ) return false;
     const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
     theManager.SendStore( (gdcm::DataSet*)&ds );
+      if (gdcm::Trace::GetWarningFlag()){
+        std::cout << "C-Store of file " << filename << " was successful." <<std::endl;
+      }
     }
-
+  } catch (...)
+  {
+    theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+    if (gdcm::Trace::GetErrorFlag()){
+      std::cerr << "C-Store of file " << filename << " was unsuccessful, aborting. " << std::endl;
+    }
+    return false;
+  }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   return true;
 

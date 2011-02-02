@@ -48,7 +48,8 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
       }
     else 
       {
-      gdcmWarningMacro("Wrote " << sopclassuid_str << " to disk. " << std::endl);
+        if (gdcm::Trace::GetWarningFlag())
+          std::cout << "Wrote " << sopclassuid_str << " to disk. " << std::endl;
       }
     }
   else 
