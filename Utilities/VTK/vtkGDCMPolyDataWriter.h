@@ -63,9 +63,9 @@ public:
   //NOTE: the number of outputs for the appendpolydata MUST MATCH the ROI vectors!
   void InitializeRTStructSet(vtkStdString inDirectory,
      vtkStdString inStructLabel, vtkStdString inStructName,
-     vtkStringArray& inROINames,
-     vtkStringArray& inROIAlgorithmName,
-     vtkStringArray& inROIType);
+     vtkStringArray* inROINames,
+     vtkStringArray* inROIAlgorithmName,
+     vtkStringArray* inROIType);
 
   // make parent class public...
   void SetNumberOfInputPorts(int n);

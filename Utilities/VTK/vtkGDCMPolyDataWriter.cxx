@@ -614,9 +614,9 @@ void vtkGDCMPolyDataWriter::PrintSelf(ostream& os, vtkIndent indent)
 void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
                                                   vtkStdString inStructLabel,
                                                   vtkStdString inStructName,
-                                                  vtkStringArray& inROINames,
-                                                  vtkStringArray& inROIAlgorithmName,
-                                                  vtkStringArray& inROIType)
+                                                  vtkStringArray* inROINames,
+                                                  vtkStringArray* inROIAlgorithmName,
+                                                  vtkStringArray* inROIType)
 {
   using namespace gdcm;
   gdcm::Directory::FilenamesType theCTSeries =
@@ -692,10 +692,10 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
   for (int j = 0; j < GetNumberOfInputPorts(); j++){
     theRTStruct->AddStructureSetROI(j,
       theRTStruct->GetReferenceFrameOfReferenceUID(),
-      inROINames.GetValue(j).c_str(),
-      inROIAlgorithmName.GetValue(j).c_str());
+      inROINames->GetValue(j).c_str(),
+      inROIAlgorithmName->GetValue(j).c_str());
     theRTStruct->AddStructureSetROIObservation(j,
-     j, inROIType.GetValue(j).c_str(), "");
+     j, inROIType->GetValue(j).c_str(), "");
      //for each organ, gotta go through and add in the right planes in the
      //order that the tuples appear, as well as the colors
      //right now, each cell in the vtkpolydata is a contour in an xy plane
