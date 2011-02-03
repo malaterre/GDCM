@@ -6319,9 +6319,9 @@
   <entry owner="SIEMENS MED OCS TABLE OFFSET" group="0039" element="xx78" vr="DS" vm="3" name="Offset"/>
   <entry owner="SIEMENS MED OCS TABLE VERTICAL POSITION" group="0039" element="xx75" vr="DS" vm="1" name="vertical Table Position"/>
   <entry owner="SIEMENS MED OCS TRANS MATRIX" group="0039" element="xx80" vr="DS" vm="5" name="Transformation Matrix"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx00" vr="UN" vm="1" name="Private Creator Version"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx00" vr="SH" vm="1" name="Private Creator Version"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx03" vr="UN" vm="1" name="Frame Rate"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx0c" vr="UN" vm="1" name="Burned in Graphics"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx0c" vr="US" vm="1" name="Burned in Graphics"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx0d" vr="UN" vm="1" name="SieClear Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx20" vr="UN" vm="1" name="B-Mode Submode"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx21" vr="UN" vm="1" name="B-Mode Dynamic Range"/>
@@ -6330,10 +6330,10 @@
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx24" vr="UN" vm="1" name="B-Mode Edge Enhance Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx25" vr="UN" vm="1" name="B-Mode Persistence Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx26" vr="UN" vm="1" name="B-Mode Map Index"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx27" vr="US" vm="1" name="?"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx28" vr="US" vm="1" name="?"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx29" vr="US" vm="1" name="?"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2a" vr="UN" vm="1" name="B-Mode Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx27" vr="US" vm="1" name="???"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx28" vr="US" vm="1" name="???"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx29" vr="US" vm="1" name="???"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2a" vr="US" vm="1" name="B-Mode Tint Type"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2d" vr="UN" vm="1" name="B-Mode Tint Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2e" vr="UN" vm="1" name="ClarifyVE Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx31" vr="US" vm="1" name="?"/>
@@ -6357,8 +6357,8 @@
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx66" vr="UN" vm="1" name="Doppler Submode"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx67" vr="US" vm="1" name="?"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx69" vr="UN" vm="1" name="Doppler Time/Freq Res Index"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6a" vr="UN" vm="1" name="Doppler Trace Inverted"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6c" vr="UN" vm="1" name="Doppler Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6a" vr="US" vm="1" name="Doppler Trace Inverted"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6c" vr="US" vm="1" name="Doppler Tint Type"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx72" vr="UN" vm="1" name="Doppler Tint Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx80" vr="UN" vm="1" name="M-Mode Dynamic Range"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx81" vr="UN" vm="1" name="M-Mode Overall Gain"/>
@@ -6506,10 +6506,14 @@
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx24" vr="UN" vm="1" name="B-Mode Edge Enhance Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx25" vr="UN" vm="1" name="B-Mode Persistence Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx26" vr="UN" vm="1" name="B-Mode Map Index"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2a" vr="UN" vm="1" name="B-Mode Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx27" vr="US" vm="1" name="??"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx28" vr="US" vm="1" name="??"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx29" vr="US" vm="1" name="??"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2a" vr="US" vm="1" name="B-Mode Tint Type"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2d" vr="UN" vm="1" name="B-Mode Tint Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2e" vr="UN" vm="1" name="ClarifyVE Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3a" vr="UN" vm="1" name="Image Flag"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3b" vr="LT" vm="1" name="IPDA/MDA Data"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx40" vr="UN" vm="1" name="Color Flow state"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx41" vr="UN" vm="1" name="Color Flow Wall Filter Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx42" vr="UN" vm="1" name="Color Flow Submode"/>
