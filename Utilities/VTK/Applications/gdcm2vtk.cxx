@@ -87,6 +87,7 @@ void PrintHelp()
   std::cout << "  -T --study-uid        Study UID." << std::endl;
   std::cout << "  -S --series-uid       Series UID." << std::endl;
   std::cout << "     --root-uid         Root UID." << std::endl;
+  std::cout << "     --imageformat      Image Format [1-8] (aka PhotometricInterpretation)." << std::endl;
   std::cout << "Compression Types (lossless):" << std::endl;
   std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
@@ -130,8 +131,10 @@ int main(int argc, char *argv[])
   int lowerleft = 0;
   int oshift = 0;
   int oscale = 0;
+  int oimageformat = 0;
   double shift = 0.;
   double scale = 1.;
+  int imageformat = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -164,6 +167,7 @@ int main(int argc, char *argv[])
         {"lower-left", 0, &lowerleft, 1}, // use FileLowerLeftOn
         {"shift", 1, &oshift, 1}, //
         {"scale", 1, &oscale, 1}, //
+        {"imageformat", 1, &oimageformat, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -227,6 +231,11 @@ int main(int argc, char *argv[])
             {
             assert( strcmp(s, "scale") == 0 );
             scale = atof(optarg);
+            }
+          else if( option_index == 17 ) /* imageformat */
+            {
+            assert( strcmp(s, "imageformat") == 0 );
+            imageformat = atoi(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -745,6 +754,10 @@ int main(int argc, char *argv[])
   if( oscale )
     {
     writer->SetScale( scale );
+    }
+  if( oimageformat )
+    {
+    writer->SetImageFormat( imageformat );
     }
 
   // Pass on the filetime of input file
