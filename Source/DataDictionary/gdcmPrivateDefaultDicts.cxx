@@ -8032,7 +8032,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0xf001,0x0006,"Sound Technologies",VR::CS,VM::VM1,"Image enhancements",false },
   {0xf001,0x0007,"Sound Technologies",VR::CS,VM::VM1,"Detector Settings",false },
   {0xf001,0x0008,"Sound Technologies",VR::CS,VM::VM1,"Application Version",false },
-  {0xf001,0x0009,"Sound Technologies",VR::LO,VM::VM1,"Image Laterality 3Extended",false },
+  {0xf001,0x0009,"Sound Technologies",VR::LO,VM::VM1,"Image Laterality Extended",false },
   {0xf001,0x000a,"Sound Technologies",VR::PN,VM::VM1,"Client Name",false },
   {0xf001,0x000b,"Sound Technologies",VR::UI,VM::VM1,"Reference Study Instance Uid",false },
   {0xf001,0x000c,"Sound Technologies",VR::UI,VM::VM1,"Reference Series Instance Uid",false },

@@ -7990,7 +7990,7 @@
   <entry owner="Sound Technologies" group="f001" element="xx06" vr="CS" vm="1" name="Image enhancements"/>
   <entry owner="Sound Technologies" group="f001" element="xx07" vr="CS" vm="1" name="Detector Settings"/>
   <entry owner="Sound Technologies" group="f001" element="xx08" vr="CS" vm="1" name="Application Version"/>
-  <entry owner="Sound Technologies" group="f001" element="xx09" vr="LO" vm="1" name="Image Laterality 3Extended"/>
+  <entry owner="Sound Technologies" group="f001" element="xx09" vr="LO" vm="1" name="Image Laterality Extended"/>
   <entry owner="Sound Technologies" group="f001" element="xx0a" vr="PN" vm="1" name="Client Name"/>
   <entry owner="Sound Technologies" group="f001" element="xx0b" vr="UI" vm="1" name="Reference Study Instance Uid"/>
   <entry owner="Sound Technologies" group="f001" element="xx0c" vr="UI" vm="1" name="Reference Series Instance Uid"/>
