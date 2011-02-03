@@ -340,7 +340,6 @@ int main(int argc, char *argv[])
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  reader->SetFileLowerLeft( lowerleft );
 
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   vtkDICOMImageReader *dicomreader = vtkDICOMImageReader::New();
@@ -371,6 +370,8 @@ int main(int argc, char *argv[])
     imgfactory->RegisterReader( reader );
   vtkImageReader2* imgreader =
     imgfactory->CreateImageReader2(filename);
+  // Set lowerleft *after* CreateImageReader2
+  imgreader->SetFileLowerLeft( lowerleft );
   vtkStructuredPointsReader *datareader = vtkStructuredPointsReader::New();
   datareader->SetFileName( filename );
   int res = 0;
