@@ -26,14 +26,28 @@ namespace gdcm
  * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/1190189387c1702c
  * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/a9e118fbbf6dcc9f
  * http://forum.dcmtk.org/viewtopic.php?p=5441&sid=61ad1304edb31203c4136890ab651405
-YBR_FULL as Photometric Interpretation is really the right thing to do. The problem is that the JPEG bitstream as such does not contain any indication of the color model - it just specifies that there are three samples per pixel. In theory it is well possible to apply baseline JPEG compression to RGB pixel data, although this is an unusual approach since YCbCr provides for better compression ratio at given image quality. A JFIF header would contain that information, but the JFIF header is neither required nor recommended in the DICOM JPEG bitstream. In the absence of that information, and with a JPEG compressed DICOM file where Photometric Interpretation is "RGB", the parser needs to decide whether the encoder did something unsual but legal and decompress the JPEG bitstream as RGB, or whether the encoder just failed to correctly encode the color model of the JPEG bitstream (which in my experience is in most cases the correct assumption) and ignore Photometric Interpretation (and thus incorrectly decode unusual but legal images).
+
+YBR_FULL as Photometric Interpretation is really the right thing to do. The
+problem is that the JPEG bitstream as such does not contain any indication of
+the color model - it just specifies that there are three samples per pixel. In
+theory it is well possible to apply baseline JPEG compression to RGB pixel
+data, although this is an unusual approach since YCbCr provides for better
+compression ratio at given image quality. A JFIF header would contain that
+information, but the JFIF header is neither required nor recommended in the
+DICOM JPEG bitstream. In the absence of that information, and with a JPEG
+compressed DICOM file where Photometric Interpretation is "RGB", the parser
+needs to decide whether the encoder did something unsual but legal and
+decompress the JPEG bitstream as RGB, or whether the encoder just failed to
+correctly encode the color model of the JPEG bitstream (which in my experience
+is in most cases the correct assumption) and ignore Photometric Interpretation
+(and thus incorrectly decode unusual but legal images).
 */
 bool ImageChangePhotometricInterpretation::ChangeMonochrome()
 {
   // Ok let's give up on this one for now.
-  // We would need to take care of Pixel Padding Value to actually be able to invert the image
-  // without this information we potentially will be making mistake. just like Largest Image Pixel Value and other
-  // would be wrong
+  // We would need to take care of Pixel Padding Value to actually be able to
+  // invert the image without this information we potentially will be making
+  // mistake. just like Largest Image Pixel Value and other would be wrong
   return false;
   const Pixmap &image = *Input;
   PhotometricInterpretation pi = image.GetPhotometricInterpretation();
