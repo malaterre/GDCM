@@ -562,6 +562,7 @@ IF(WIN32)
   if(GDCM_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX "${GDCM_DEBUG_POSTFIX}")
   endif(GDCM_DEBUG_POSTFIX)
+  MARK_AS_ADVANCED(GDCM_DEBUG_POSTFIX)
 ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
