@@ -1875,6 +1875,7 @@
   <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx09" vr="SL" vm="1" name="Store Width of Functional Image"/>
   <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx0a" vr="SL" vm="1" name="Store level of Functional Image"/>
   <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx0b" vr="FL" vm="1" name="Store B-Value with Functional Image"/>
+  <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx0c" vr="LO" vm="1" name="Analysis Package"/>
   <entry owner="GEMS_GDXE_ATHENAV2_INTERNAL_USE" group="7fdf" element="xx10" vr="LT" vm="1" name="PPS Stream"/>
   <entry owner="GEMS_GDXE_ATHENAV2_INTERNAL_USE" group="7fdf" element="xx11" vr="LT" vm="1" name="Pixel Data References (temporary)"/>
   <entry owner="GEMS_GDXE_ATHENAV2_INTERNAL_USE" group="7fdf" element="xx20" vr="SS" vm="1" name="Auto Push Tag"/>
@@ -2479,6 +2480,17 @@
   <entry owner="GEMS_PARM_01" group="0043" element="xx98" vr="UI" vm="1" name="ASSET Acquisition Calibration Series UID"/>
   <entry owner="GEMS_PARM_01" group="0043" element="xx99" vr="LO" vm="1-n" name="Extended Options"/>
   <entry owner="GEMS_PARM_01" group="0043" element="xx9a" vr="IS" vm="1" name="Rx Stack Identification"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9b" vr="DS" vm="1" name="NPW factor"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9c" vr="OB" vm="1" name="Research Tag 1"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9d" vr="OB" vm="1" name="Research Tag 2"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9e" vr="OB" vm="1" name="Research Tag 3"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9f" vr="OB" vm="1" name="Research Tag 4"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa0" vr="SQ" vm="1" name="Spectroscopy Pixel Sequence"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa1" vr="SQ" vm="1" name="Spectroscopy Default Display Sequence"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa2" vr="DS" vm="1-n" name="MEG Data"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa3" vr="CS" vm="1" name="ASL Contrast technique"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa4" vr="LO" vm="1" name="Detailed text for ASL labeling technique"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa5" vr="IS" vm="1" name="Duration of the label or control pulse"/>
   <entry owner="GEMS_PARM_01" group="0051" element="xx0a" vr="SL" vm="1" name="Store level of Functional Image"/>
   <entry owner="GEMS_PARM_01" group="0051" element="xx0b" vr="FL" vm="1" name="Store B-Value with Functional Image"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xx10" vr="UI" vm="1" name="DICOM Implementation UID"/>
@@ -2501,6 +2513,12 @@
   <entry owner="GEMS_PARM_01" group="2001" element="xx86" vr="US" vm="1" name="Number of Degrees of Freedom"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xx8a" vr="FL" vm="1" name="Z Threshold"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xx8b" vr="FL" vm="1" name="p Threshold"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx90" vr="OB" vm="1" name="Processing parameters"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx91" vr="OB" vm="1" name="Motion Plot"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx92" vr="OB" vm="1" name="ROIs"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx93" vr="OB" vm="1" name="Tracts"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx94" vr="OB" vm="1" name="Report"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx95" vr="OB" vm="1" name="Response Data"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xxa0" vr="FL" vm="1-n" name="Motion Parameters"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xxa1" vr="FL" vm="1-n" name="Registration Parameters"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xxa2" vr="FL" vm="1-n" name="Subject Data"/>
