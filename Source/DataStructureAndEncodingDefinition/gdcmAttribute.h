@@ -446,7 +446,11 @@ public:
     assert( GetVR().Compatible( de.GetVR() ) || de.GetVR() == VR::INVALID ); // In case of VR::INVALID cannot use the & operator
     if( de.IsEmpty() ) return;
     const ByteValue *bv = de.GetByteValue();
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( de.GetVR() == VR::UN /*|| de.GetVR() == VR::INVALID*/ )
+#else
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+#endif
       {
       SetByteValue(bv);
       }
