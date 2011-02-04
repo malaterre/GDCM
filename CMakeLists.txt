@@ -68,6 +68,9 @@ IF(NOT GDCM_TARGETS_NAME)
   SET(GDCM_STANDALONE 1)
 ENDIF(NOT GDCM_TARGETS_NAME)
 #-----------------------------------------------------------------------------
+# PDB handling
+INCLUDE(${GDCM_SOURCE_DIR}/CMake/InstallMacros.cmake)
+#-----------------------------------------------------------------------------
 INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
 CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt)
