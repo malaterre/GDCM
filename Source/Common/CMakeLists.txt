@@ -162,7 +162,9 @@ install_pdb(gdcmCommon)
 install_includes("*.h" "*.txx")
 
 # Install generated files
-INSTALL(FILES ${header_files}
-  "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
-  DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
-  )
+IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+  INSTALL(FILES ${header_files}
+    "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
+    DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
+    )
+ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
