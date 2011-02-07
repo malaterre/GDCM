@@ -224,17 +224,9 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
   std::string filename = filenames[0];
   network::ULConnectionManager theManager;
   Directory::FilenamesType files;
-//  if( System::FileIsDirectory(filename.c_str()) )
-//    {
-//    unsigned int nfiles = 1;
-//    Directory dir;
-//    nfiles = dir.Load(filename, inRecursive);
-//    files = dir.GetFilenames();
-//    }
-//  else
-    {
-    files = filenames;
-    }
+  files = filenames;
+
+  // use the first file for the init
   filename = files[0];
 
   Reader reader;
