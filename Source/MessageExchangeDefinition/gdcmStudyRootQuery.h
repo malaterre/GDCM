@@ -35,7 +35,7 @@ namespace gdcm{
   public:
     ~StudyRootQuery();
 
-    std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
+    std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
 
     ///have to be able to ensure that
     ///0x8,0x52 is set

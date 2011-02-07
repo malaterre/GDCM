@@ -42,7 +42,7 @@ void PatientRootQuery::SetParameters(){
 
 
 
-std::vector<gdcm::Tag> PatientRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) {
+std::vector<Tag> PatientRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) {
   if (forFind){
     switch (inQueryLevel){
       case ePatient:
@@ -82,12 +82,12 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   if (ds.Size() == 0) return false;
 
   //search for 0x8,0x52
-  gdcm::Attribute<0x0008, 0x0052> level;
+  Attribute<0x0008, 0x0052> level;
   level.SetFromDataSet( ds );
   std::string theVal = level.GetValue();
   bool theReturn = true;
 
-  std::vector<gdcm::Tag> tags;
+  std::vector<Tag> tags;
   if (inStrict)
   {
     QueryBase* qb = NULL;
@@ -121,7 +121,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     QueryBase* qb = NULL;
     if (strcmp(theVal.c_str(), "PATIENT ") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      std::vector<gdcm::Tag> tagGroup;
+      std::vector<Tag> tagGroup;
       qb = new QueryPatient();
       if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
@@ -133,7 +133,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     }
     if (strcmp(theVal.c_str(), "STUDY ") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      std::vector<gdcm::Tag> tagGroup;
+      std::vector<Tag> tagGroup;
       qb = new QueryPatient();
       if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
@@ -153,7 +153,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     }
     if (strcmp(theVal.c_str(), "SERIES") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      std::vector<gdcm::Tag> tagGroup;
+      std::vector<Tag> tagGroup;
       qb = new QueryPatient();
       if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
@@ -181,7 +181,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     }
     if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      std::vector<gdcm::Tag> tagGroup;
+      std::vector<Tag> tagGroup;
       qb = new QueryPatient();
       if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
@@ -227,10 +227,10 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   //if there are no found tags, then the query is invalid
   //if there is one improper tag found, then the query is invalid
   int thePresentTagCount = 0;
-  gdcm::DataSet::ConstIterator itor;
-  gdcm::Attribute<0x0008, 0x0005> language;
+  DataSet::ConstIterator itor;
+  Attribute<0x0008, 0x0005> language;
   for (itor = ds.Begin(); itor != ds.End(); itor++){
-    gdcm::Tag t = itor->GetTag();
+    Tag t = itor->GetTag();
     if (t == level.GetTag()) continue;
     if (t.GetGroup() == language.GetTag().GetGroup() &&
       t.GetElement() == language.GetTag().GetElement()) continue;

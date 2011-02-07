@@ -31,19 +31,20 @@ this file defines the messages for the cfind action
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CFindRQ::ConstructPDV(BaseRootQuery* inRootQuery){
+std::vector<PresentationDataValue> CFindRQ::ConstructPDV(const BaseRootQuery* inRootQuery){
   std::vector<PresentationDataValue> thePDVs;
   PresentationDataValue thePDV;
   int contextID = ePatientRootQueryRetrieveInformationModelFIND;
-  const char *uid = gdcm::UIDs::GetUIDString(
-    gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+  const char *uid = UIDs::GetUIDString(
+    UIDs::PatientRootQueryRetrieveInformationModelFIND );
   std::string suid = uid;
-  if (dynamic_cast<StudyRootQuery*>(inRootQuery)!=NULL){
+  if (dynamic_cast<const StudyRootQuery*>(inRootQuery)!=NULL)
+    {
     contextID = eStudyRootQueryRetrieveInformationModelFIND;
-    const char *uid2 = gdcm::UIDs::GetUIDString(
-      gdcm::UIDs::StudyRootQueryRetrieveInformationModelFIND );
+    const char *uid2 = UIDs::GetUIDString(
+      UIDs::StudyRootQueryRetrieveInformationModelFIND );
     suid = uid2;
-  }
+    }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 
   thePDV.SetCommand(true);
@@ -59,23 +60,23 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(BaseRootQuery* inRootQu
   de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   {
-  gdcm::Attribute<0x0,0x100> at = { 32 };
+  Attribute<0x0,0x100> at = { 32 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x110> at = { 1 };
+  Attribute<0x0,0x110> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x700> at = { 2 };
+  Attribute<0x0,0x700> at = { 2 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x800> at = { 1 };
+  Attribute<0x0,0x800> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x0> at = { 0 };
+  Attribute<0x0,0x0> at = { 0 };
   unsigned int glen = ds.GetLength<ImplicitDataElement>();
   assert( (glen % 2) == 0 );
   at.SetValue( glen );
@@ -92,18 +93,21 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(BaseRootQuery* inRootQu
 
 //this is a private function, should not be callable
 //but if you manage to do call it, return a blank dataset.
-std::vector<PresentationDataValue> CFindRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CFindRQ::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
+  assert( 0 && "TODO" );
   return thePDVs;
 
 }
 
-std::vector<PresentationDataValue>  CFindRSP::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue>  CFindRSP::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  assert( 0 && "TODO" );
   return thePDV;
 }
-std::vector<PresentationDataValue>  CFindCancelRq::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue>  CFindCancelRQ::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  assert( 0 && "TODO" );
   return thePDV;
 }
 

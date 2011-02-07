@@ -202,7 +202,7 @@ void PresentationDataValue::MyInit(File const &file)
   {
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::SecondaryCaptureImageStorage );
+  const char *uid = UIDs::GetUIDString( UIDs::SecondaryCaptureImageStorage );
   std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
@@ -222,23 +222,23 @@ void PresentationDataValue::MyInit(File const &file)
   }
 
     {
-    gdcm::Attribute<0x0,0x100> at = { 1 };
+    Attribute<0x0,0x100> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x110> at = { 1 };
+    Attribute<0x0,0x110> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x700> at = { 2 };
+    Attribute<0x0,0x700> at = { 2 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x800> at = { 1 };
+    Attribute<0x0,0x800> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x0> at = { 0 };
+    Attribute<0x0,0x0> at = { 0 };
     unsigned int glen = ds.GetLength<ImplicitDataElement>();
     assert( (glen % 2) == 0 );
     at.SetValue( glen );
@@ -283,23 +283,23 @@ void PresentationDataValue::MyInit2(const char *uid1, const char *uid2)
   }
 
     {
-    gdcm::Attribute<0x0,0x100> at = { 32769 };
+    Attribute<0x0,0x100> at = { 32769 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x120> at = { 1 };
+    Attribute<0x0,0x120> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x800> at = { 257 };
+    Attribute<0x0,0x800> at = { 257 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x900> at = { 0 };
+    Attribute<0x0,0x900> at = { 0 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x0> at = { 0 };
+    Attribute<0x0,0x0> at = { 0 };
     unsigned int glen = ds.GetLength<ImplicitDataElement>();
     assert( (glen % 2) == 0 );
     at.SetValue( glen );
@@ -323,29 +323,29 @@ void PresentationDataValue::MyInit3()
   DataSet &ds = DS;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
+  const char *uid = UIDs::GetUIDString( UIDs::VerificationSOPClass );
   std::string suid = uid;
   suid.push_back( ' ' ); // no \0 !
   de.SetByteValue( suid.c_str(), suid.size()  );
   ds.Insert( de );
     {
-    gdcm::Attribute<0x0,0x100> at = { 32816 };
+    Attribute<0x0,0x100> at = { 32816 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x120> at = { 1 };
+    Attribute<0x0,0x120> at = { 1 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x800> at = { 257 };
+    Attribute<0x0,0x800> at = { 257 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x900> at = { 0 };
+    Attribute<0x0,0x900> at = { 0 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x0> at = { 0 };
+    Attribute<0x0,0x0> at = { 0 };
     unsigned int glen = ds.GetLength<ImplicitDataElement>();
     assert( (glen % 2) == 0 );
     at.SetValue( glen );
@@ -365,7 +365,7 @@ void PresentationDataValue::Print(std::ostream &os) const
   std::vector<PresentationDataValue> thePDVs;
   thePDVs.push_back(*this);
   DataSet ds = ConcatenatePDVBlobs(thePDVs);
-  gdcm::Printer thePrinter;
+  Printer thePrinter;
   thePrinter.PrintDataSet(ds, os);
   //os << "Data: " << ds <<std::endl;
 

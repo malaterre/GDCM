@@ -36,98 +36,115 @@ class to construct specific instances of PDUs, and return the BasePDU class.
 #include "gdcmBaseRootQuery.h"
 #include "gdcmBasePDU.h"
 
-using namespace gdcm::network;
+namespace gdcm
+{
+namespace network
+{
 
 //eventually needs to be smartpointer'd
-BasePDU* PDUFactory::ConstructPDU(uint8_t itemtype){
+BasePDU* PDUFactory::ConstructPDU(uint8_t itemtype)
+{
   BasePDU* thePDU = NULL;
-  switch (itemtype){
-    case 0x01:
-      thePDU = new AAssociateRQPDU();
-      break;
-    case 0x02:
-      thePDU = new AAssociateACPDU();
-      break;
-    case 0x03:
-      thePDU = new AAssociateRJPDU();
-      break;
-    case 0x04:
-      thePDU = new PDataTFPDU();
-      break;
-    case 0x05:
-      thePDU = new AReleaseRQPDU();
-      break;
-    case 0x06:
-      thePDU = new AReleaseRPPDU();
-      break;
-    case 0x07:
-      thePDU = new AAbortPDU();
-      break;
-      //default is that the PDU remains null
-  }
+  switch (itemtype)
+    {
+  case 0x01:
+    thePDU = new AAssociateRQPDU();
+    break;
+  case 0x02:
+    thePDU = new AAssociateACPDU();
+    break;
+  case 0x03:
+    thePDU = new AAssociateRJPDU();
+    break;
+  case 0x04:
+    thePDU = new PDataTFPDU();
+    break;
+  case 0x05:
+    thePDU = new AReleaseRQPDU();
+    break;
+  case 0x06:
+    thePDU = new AReleaseRPPDU();
+    break;
+  case 0x07:
+    thePDU = new AAbortPDU();
+    break;
+    //default is that the PDU remains null
+    }
   return thePDU;
 
 }
 
 //determine which event was received by the PDU type
-EEventID PDUFactory::DetermineEventByPDU(BasePDU* inPDU){
-  if(inPDU) {
-  AAssociateRQPDU* theAAssociateRQPDU = dynamic_cast<AAssociateRQPDU*>(inPDU);
-  if (theAAssociateRQPDU != NULL){
-    return eAASSOCIATE_RQPDUreceived;
-  }
-  AAssociateACPDU* theAAssociateACPDU = dynamic_cast<AAssociateACPDU*>(inPDU);
-  if (theAAssociateACPDU != NULL){
-    return eASSOCIATE_ACPDUreceived;
-  }
-  AAssociateRJPDU* theAAssociateRJPDU = dynamic_cast<AAssociateRJPDU*>(inPDU);
-  if (theAAssociateRJPDU != NULL){
-    return eASSOCIATE_RJPDUreceived;
-  }
-  PDataTFPDU* thePDataTFPDU = dynamic_cast<PDataTFPDU*>(inPDU);
-  if (thePDataTFPDU != NULL){
-  ///
-    const PresentationDataValue &pdv = thePDataTFPDU->GetPresentationDataValue(0);
-#if 0
-    int mh = pdv.GetMessageHeader();
-    if( mh == 3 )
+EEventID PDUFactory::DetermineEventByPDU(const BasePDU* inPDU)
+{
+  if(inPDU)
+    {
+    const AAssociateRQPDU* theAAssociateRQPDU = dynamic_cast<const AAssociateRQPDU*>(inPDU);
+    if (theAAssociateRQPDU != NULL)
       {
-      // E.2 MESSAGE CONTROL HEADER ENCODING
-      // If bit 1 is set to 1, the following fragment shall contain the last
-      // fragment of a Message Data Set or of a Message Command.
-      std::cout << "This was the last fragment of the message data set" << std::endl;
+      return eAASSOCIATE_RQPDUreceived;
       }
+    const AAssociateACPDU* theAAssociateACPDU = dynamic_cast<const AAssociateACPDU*>(inPDU);
+    if (theAAssociateACPDU != NULL)
+      {
+      return eASSOCIATE_ACPDUreceived;
+      }
+    const AAssociateRJPDU* theAAssociateRJPDU = dynamic_cast<const AAssociateRJPDU*>(inPDU);
+    if (theAAssociateRJPDU != NULL)
+      {
+      return eASSOCIATE_RJPDUreceived;
+      }
+    const PDataTFPDU* thePDataTFPDU = dynamic_cast<const PDataTFPDU*>(inPDU);
+    if (thePDataTFPDU != NULL)
+      {
+      ///
+      const PresentationDataValue &pdv = thePDataTFPDU->GetPresentationDataValue(0);
+      (void)pdv;
+#if 0
+      int mh = pdv.GetMessageHeader();
+      if( mh == 3 )
+        {
+        // E.2 MESSAGE CONTROL HEADER ENCODING
+        // If bit 1 is set to 1, the following fragment shall contain the last
+        // fragment of a Message Data Set or of a Message Command.
+        std::cout << "This was the last fragment of the message data set" << std::endl;
+        }
 #endif
-    return ePDATATFPDU;
-  }
-  AReleaseRQPDU* theAReleaseRQPDU = dynamic_cast<AReleaseRQPDU*>(inPDU);
-  if (theAReleaseRQPDU != NULL){
-    return eARELEASE_RQPDUReceivedOpen;
-  }
-  AReleaseRPPDU* theAReleaseRPPDU = dynamic_cast<AReleaseRPPDU*>(inPDU);
-  if (theAReleaseRPPDU != NULL){
-    return eARELEASE_RPPDUReceived;
-  }
-  AAbortPDU* theAAbortPDU = dynamic_cast<AAbortPDU*>(inPDU);
-  if (theAAbortPDU != NULL){
-    return eAABORTPDUReceivedOpen;
-  }
-}
+      return ePDATATFPDU;
+      }
+    const AReleaseRQPDU* theAReleaseRQPDU = dynamic_cast<const AReleaseRQPDU*>(inPDU);
+    if (theAReleaseRQPDU != NULL)
+      {
+      return eARELEASE_RQPDUReceivedOpen;
+      }
+    const AReleaseRPPDU* theAReleaseRPPDU = dynamic_cast<const AReleaseRPPDU*>(inPDU);
+    if (theAReleaseRPPDU != NULL)
+      {
+      return eARELEASE_RPPDUReceived;
+      }
+    const AAbortPDU* theAAbortPDU = dynamic_cast<const AAbortPDU*>(inPDU);
+    if (theAAbortPDU != NULL)
+      {
+      return eAABORTPDUReceivedOpen;
+      }
+    }
   return eEventDoesNotExist;
 }
 
-BasePDU* PDUFactory::ConstructReleasePDU(){
+BasePDU* PDUFactory::ConstructReleasePDU()
+{
   AReleaseRQPDU* theAReleaseRQPDU = new AReleaseRQPDU();
 
   return theAReleaseRQPDU;
 }
-BasePDU* PDUFactory::ConstructAbortPDU(){
+BasePDU* PDUFactory::ConstructAbortPDU()
+{
   AAbortPDU* theAAbortPDU = new AAbortPDU();
 
   return theAAbortPDU;
 }
-std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(){
-
+std::vector<BasePDU*> PDUFactory::CreateCEchoPDU()
+{
   std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCEchoRQ();
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
@@ -139,7 +156,8 @@ std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(){
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnection, gdcm::BaseRootQuery* inRootQuery)
+std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection&
+  inConnection, const BaseRootQuery* inRootQuery)
 {
   std::vector<PresentationDataValue> pdv =
     CompositeMessageFactory::ConstructCMoveRQ(inConnection, inRootQuery );
@@ -152,7 +170,8 @@ std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection& inConnectio
   }
   return outVector;
 }
-std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(gdcm::DataSet* inDataSet)
+
+std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(const DataSet* inDataSet)
 {
 
   std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCStoreRQ(inDataSet );
@@ -165,7 +184,8 @@ std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(gdcm::DataSet* inDataSet)
   }
   return outVector;
 }
-std::vector<BasePDU*> PDUFactory::CreateCStoreRSPPDU(gdcm::DataSet* inDataSet, BasePDU* inPDU)
+
+std::vector<BasePDU*> PDUFactory::CreateCStoreRSPPDU(const DataSet* inDataSet, const BasePDU* inPDU)
 {
 
   std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCStoreRSP(inDataSet, inPDU );
@@ -179,7 +199,7 @@ std::vector<BasePDU*> PDUFactory::CreateCStoreRSPPDU(gdcm::DataSet* inDataSet, B
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, gdcm::BaseRootQuery* inRootQuery){
+std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnection, const BaseRootQuery* inRootQuery){
 //still have to build this!
   std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCFindRQ(inConnection, inRootQuery );
   std::vector<PresentationDataValue>::iterator pdvItor;
@@ -214,3 +234,5 @@ std::vector<PresentationDataValue> PDUFactory::GetPDVs(const std::vector<BasePDU
   }
   return outPDVs;
 }
+} // end namespace network
+} // end namespace gdcm

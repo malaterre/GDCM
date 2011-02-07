@@ -67,7 +67,7 @@ class ULConnection
       //echo most closely matches what the DICOM standard describes as a network connection
       ARTIMTimer mTimer;
 
-      ULConnection(gdcm::network::ULConnection& inConnection){}; //no copy construction allowed
+      ULConnection(ULConnection& inConnection){}; //no copy construction allowed
 
       EStateID mCurrentState;
 

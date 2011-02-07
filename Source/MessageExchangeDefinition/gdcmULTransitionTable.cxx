@@ -28,8 +28,10 @@ This file is the implementation of the ULTransitionTable class, including the ac
 #include "gdcmULActionAR.h"
 #include "gdcmULActionDT.h"
 
-using namespace gdcm::network;
-
+namespace gdcm
+{
+namespace network
+{
 //construct the table
 ULTransitionTable::ULTransitionTable(){
 //row 1
@@ -338,3 +340,6 @@ void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection
     }
   }
 }
+
+} // end namespace network
+} // end namespace gdcm

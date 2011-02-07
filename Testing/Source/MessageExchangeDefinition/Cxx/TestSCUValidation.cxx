@@ -127,7 +127,6 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
 void PrintDataSets(std::vector<gdcm::DataSet> theDataSets)
 {
   std::vector<gdcm::DataSet>::iterator itor;
-  int count = 0;
   for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
     itor->Print(std::cout);
 }

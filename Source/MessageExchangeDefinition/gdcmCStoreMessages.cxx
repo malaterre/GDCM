@@ -29,7 +29,8 @@
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(const DataSet* inDataSet)
+{
   std::vector<PresentationDataValue> thePDVs;
 {
   assert( inDataSet );
@@ -74,26 +75,26 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(DataSet* inDataSet){
   }
 
   {
-  gdcm::Attribute<0x0,0x100> at = { 1 };
+  Attribute<0x0,0x100> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
 static uint32_t messageid = 1;
   {
-  gdcm::Attribute<0x0,0x110> at = { 0 };
+  Attribute<0x0,0x110> at = { 0 };
   at.SetValue( messageid++ );
   assert( messageid < std::numeric_limits<uint32_t>::max());
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x700> at = { 2 };
+  Attribute<0x0,0x700> at = { 2 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x800> at = { 1 };
+  Attribute<0x0,0x800> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x0> at = { 0 };
+  Attribute<0x0,0x0> at = { 0 };
   unsigned int glen = ds.GetLength<ImplicitDataElement>();
   assert( (glen % 2) == 0 );
   at.SetValue( glen );
@@ -144,12 +145,13 @@ static uint32_t messageid = 1;
 }
 
 //private hack
-std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
+  assert( 0 && "TODO" );
   return thePDVs;
 }
 
-std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, BasePDU* inPDU){
+std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(const DataSet* inDataSet, const BasePDU* inPDU){
   std::vector<PresentationDataValue> thePDVs;
 
 ///should be passed the received dataset, ie, the cstorerq, so that
@@ -157,12 +159,12 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
   CommandDataSet ds;
 
   uint32_t theMessageID = 0;
-  gdcm::Attribute<0x0,0x0110> at3 = { 0 };
+  Attribute<0x0,0x0110> at3 = { 0 };
   at3.SetFromDataSet( *inDataSet );
   theMessageID = at3.GetValue();
 
-  const gdcm::DataElement &de1 = inDataSet->GetDataElement( gdcm::Tag( 0x0000,0x0002 ) );
-  const gdcm::DataElement &de2 = inDataSet->GetDataElement( gdcm::Tag( 0x0000,0x1000 ) );
+  const DataElement &de1 = inDataSet->GetDataElement( Tag( 0x0000,0x0002 ) );
+  const DataElement &de2 = inDataSet->GetDataElement( Tag( 0x0000,0x1000 ) );
   //pass back the instance UIDs in the response
   ds.Insert(de1);
   ds.Insert(de2);
@@ -170,25 +172,25 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
   //code is from the presentationdatavalue::myinit2
     {
     // Command Field
-    gdcm::Attribute<0x0,0x100> at = { 32769 };
+    Attribute<0x0,0x100> at = { 32769 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
     // Message ID Being Responded To
-    gdcm::Attribute<0x0,0x120> at = { 1 };
+    Attribute<0x0,0x120> at = { 1 };
     at.SetValue( theMessageID );
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x800> at = { 257 };
+    Attribute<0x0,0x800> at = { 257 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x900> at = { 0 };
+    Attribute<0x0,0x900> at = { 0 };
     ds.Insert( at.GetAsDataElement() );
     }
     {
-    gdcm::Attribute<0x0,0x0> at = { 0 };
+    Attribute<0x0,0x0> at = { 0 };
     unsigned int glen = ds.GetLength<ImplicitDataElement>();
     assert( (glen % 2) == 0 );
     at.SetValue( glen );
@@ -199,10 +201,10 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(DataSet* inDataSet, B
 
   // FIXME
   // how do we retrieve the actual PresID from the AAssociate?
-  PDataTFPDU* theDataPDU = dynamic_cast<PDataTFPDU*>(inPDU);
+  const PDataTFPDU* theDataPDU = dynamic_cast<const PDataTFPDU*>(inPDU);
   assert (theDataPDU);
   uint8_t thePDVValue;
-  gdcm::network::PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
+  PresentationDataValue const &input_pdv = theDataPDU->GetPresentationDataValue(0);
   thePDVValue = input_pdv.GetPresentationContextID();
 
   pdv.SetPresentationContextID( thePDVValue );

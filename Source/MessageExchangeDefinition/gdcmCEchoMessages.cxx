@@ -30,7 +30,7 @@ this file defines the messages for the cecho action
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(const DataSet* inDataSet){
   PresentationDataValue thePDV;
   thePDV.SetPresentationContextID(eVerificationSOPClass);
 
@@ -41,26 +41,26 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(DataSet* inDataSet){
   CommandDataSet ds;
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  const char *uid = gdcm::UIDs::GetUIDString( gdcm::UIDs::VerificationSOPClass );
+  const char *uid = UIDs::GetUIDString( UIDs::VerificationSOPClass );
   std::string suid = uid;
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
   de.SetByteValue( suid.c_str(), suid.size()  );
   ds.Insert( de );
   {
-  gdcm::Attribute<0x0,0x100> at = { 48 };
+  Attribute<0x0,0x100> at = { 48 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x110> at = { 1 };
+  Attribute<0x0,0x110> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x800> at = { 257 };
+  Attribute<0x0,0x800> at = { 257 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x0> at = { 0 };
+  Attribute<0x0,0x0> at = { 0 };
   unsigned int glen = ds.GetLength<ImplicitDataElement>();
   assert( (glen % 2) == 0 );
   at.SetValue( glen );
@@ -75,8 +75,9 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(DataSet* inDataSet){
 
 }
 
-std::vector<PresentationDataValue>  CEchoRSP::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue>  CEchoRSP::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  assert( 0 && "TODO" );
   return thePDV;
 }
 

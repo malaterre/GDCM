@@ -32,11 +32,11 @@ class CMoveRQ : public BaseCompositeMessage {
       //this class will fulfill the inheritance,
       //but additional information is needed by cmovd
       //namely, the root type or the calling AE-TITLE
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     public:
       std::vector<PresentationDataValue> ConstructPDV(
         const ULConnection &inConnection,
-        BaseRootQuery* inRootQuery);
+        const BaseRootQuery* inRootQuery);
     };
 
 /**
@@ -45,12 +45,12 @@ class CMoveRQ : public BaseCompositeMessage {
  */
 class CMoveRSP : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     };
 
     class CMoveCancelRq : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     };
   }
 }

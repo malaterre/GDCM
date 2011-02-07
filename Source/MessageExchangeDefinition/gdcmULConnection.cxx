@@ -18,8 +18,10 @@
 #include "gdcmULConnection.h"
 #include <socket++/echo.h>
 
-using namespace gdcm::network;
-
+namespace gdcm
+{
+namespace network
+{
 ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo)
 {
   mCurrentState = eSta1Idle;
@@ -113,7 +115,7 @@ void ULConnection::AddAcceptedPresentationContext(const PresentationContext& inP
 //given a particular data element, presumably the SOP class,
 //find the presentation context for that SOP
 //NOT YET IMPLEMENTED
-PresentationContext ULConnection::FindContext(const gdcm::DataElement& de) const
+PresentationContext ULConnection::FindContext(const DataElement& de) const
 {
   PresentationContext empty;
   assert( 0 && "TODO" );
@@ -222,3 +224,5 @@ void ULConnection::StopProtocol(){
     SetState(eSta2Open);
   }
 }
+} // end namespace network
+} // end namespace gdcm

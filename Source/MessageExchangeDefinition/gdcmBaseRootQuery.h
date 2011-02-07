@@ -74,11 +74,11 @@ namespace gdcm{
     virtual void SetParameters() = 0; //to ensure that this base class is not used directly,
     //a particular instance must be chosen
 
-    void SetSearchParameter(const gdcm::Tag& inTag, const gdcm::DictEntry& inDictEntry, const std::string& inValue);
+    void SetSearchParameter(const Tag& inTag, const DictEntry& inDictEntry, const std::string& inValue);
     public:
     virtual ~BaseRootQuery();
 
-    void SetSearchParameter(const gdcm::Tag& inTag, const std::string& inValue);
+    void SetSearchParameter(const Tag& inTag, const std::string& inValue);
     void SetSearchParameter(const std::string& inKeyword, const std::string& inValue);
 
     virtual const std::ostream &WriteHelpFile(std::ostream &os);
@@ -93,7 +93,7 @@ namespace gdcm{
     ///this function will return all tags at a given query level, so that
     ///they maybe selected for searching.  The boolean forFind is true
     ///if the query is a find query, or false for a move query.
-    virtual std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) = 0;
+    virtual std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) = 0;
 
     //this function sets tag 8,52 to the appropriate value based on query level
     void InitializeDataSet(const EQueryLevel& inQueryLevel);

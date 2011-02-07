@@ -34,7 +34,10 @@ but more of a time keeper.
 #include "gdcmARTIMTimer.h"
 #include "gdcmSystem.h"
 
-using namespace gdcm::network;
+namespace gdcm
+{
+namespace network
+{
 
 //initiates the start and timeout at -1;
 ARTIMTimer::ARTIMTimer(){
@@ -75,3 +78,6 @@ bool ARTIMTimer::GetHasExpired() const{
 void ARTIMTimer::Stop() {
   mStartTime = -1;//stop the timer by resetting it.
 }
+
+} // end namespace network
+} // end namespace gdcm

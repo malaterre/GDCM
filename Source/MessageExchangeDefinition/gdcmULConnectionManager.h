@@ -54,7 +54,7 @@ namespace gdcm {
       ULTransitionTable mTransitions;
 
       //no copying
-      ULConnectionManager(const gdcm::network::ULConnectionManager& inCM){};
+      ULConnectionManager(const ULConnectionManager& inCM){};
 
       //event handler loop.
       //will just keep running until the current event is nonexistent.
@@ -74,6 +74,10 @@ namespace gdcm {
       ULConnectionManager();
       ~ULConnectionManager();
 
+      // NOTE: (MM) The following two functions are difficults to use, therefore marking
+      // them as internal for now.
+
+      // \internal
       /// returns true if a connection of the given AETitle (ie, 'this' program)
       /// is able to connect to the given AETitle and Port in a certain amount of
       /// time providing the connection type will establish the proper exchange
@@ -81,20 +85,24 @@ namespace gdcm {
       /// different connection should be established.
       /// returns false if the connection type is 'move'-- have to give a return
       /// port for move to work as specified.
-      bool EstablishConnection(const std::string& inAETitle, const std::string& inConnectAETitle,
-        const std::string& inComputerName, const long& inIPAddress,
-        const unsigned short& inConnectPort, const double& inTimeout,
-        const EConnectionType& inConnectionType, const gdcm::DataSet& inDS);
+      bool EstablishConnection(const std::string& inAETitle,
+        const std::string& inConnectAETitle,
+        const std::string& inComputerName, long inIPAddress,
+        uint16_t inConnectPort, double inTimeout,
+        const EConnectionType& inConnectionType, const DataSet& inDS);
 
       /// returns true for above reasons, but contains the special 'move' port
-      bool EstablishConnectionMove(const std::string& inAETitle, const std::string& inConnectAETitle,
-        const std::string& inComputerName, const long& inIPAddress,
-        const unsigned short& inConnectPort, const double& inTimeout,
-        const unsigned short& inReturnPort, const gdcm::DataSet& inDS);
+      /// \internal
+      bool EstablishConnectionMove(const std::string& inAETitle,
+        const std::string& inConnectAETitle,
+        const std::string& inComputerName, long inIPAddress,
+        uint16_t inConnectPort, double inTimeout,
+        uint16_t inReturnPort, const DataSet& inDS);
+      // \endinternal
 
 
       //bool ReestablishConnection(const EConnectionType& inConnectionType,
-      //  const gdcm::DataSet& inDS);
+      //  const DataSet& inDS);
 
       //allows for a connection to be broken, but waits for an acknowledgement
       //of the breaking for a certain amount of time.  Returns true of the
@@ -120,15 +128,17 @@ namespace gdcm {
       //Echo does not use a callback for results.
       std::vector<PresentationDataValue> SendEcho();
 
+      // \internal
       // API will change...
-      std::vector<DataSet> SendStore(DataSet *inDataSet);
-      std::vector<DataSet> SendFind(BaseRootQuery* inRootQuery);
-      std::vector<DataSet> SendMove(BaseRootQuery* inRootQuery);
+      std::vector<DataSet> SendStore(const DataSet *inDataSet);
+      std::vector<DataSet> SendFind(const BaseRootQuery* inRootQuery);
+      std::vector<DataSet> SendMove(const BaseRootQuery* inRootQuery);
+      // \endinternal
 
       ///callback based API
-      void SendStore(DataSet * inDataSet, ULConnectionCallback* inCallback);
-      void SendFind(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
-      void SendMove(BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
+      void SendStore(const DataSet * inDataSet, ULConnectionCallback* inCallback);
+      void SendFind(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
+      void SendMove(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
 
     };
   }

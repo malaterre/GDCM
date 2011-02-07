@@ -198,8 +198,8 @@ void AAssociateACPDU::Print(std::ostream &os) const
 
 void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
 {
-  gdcm::network::TransferSyntaxSub ts1;
-  ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  TransferSyntaxSub ts1;
+  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
 
   for( unsigned int index = 0; index < rqpdu.GetNumberOfPresentationContext(); index++ )
@@ -207,7 +207,7 @@ void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
     // FIXME / HARDCODED We only ever accept Little Endian
     // FIXME we should check :
     // rqpdu.GetAbstractSyntax() contains LittleENdian
-    gdcm::network::PresentationContextAC pcac1;
+    PresentationContextAC pcac1;
     PresentationContext const &pc = rqpdu.GetPresentationContext(index);
     uint8_t id = pc.GetPresentationContextID();
 

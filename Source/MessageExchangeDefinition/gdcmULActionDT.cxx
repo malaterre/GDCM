@@ -38,7 +38,10 @@ each class have its own file for the sake of brevity of the number of files.
 
 #include <socket++/echo.h>//for setting up the local socket
 
-using namespace gdcm::network;
+namespace gdcm
+{
+namespace network
+{
 
 static void process_input(iosockinet& sio)
 {
@@ -46,24 +49,24 @@ static void process_input(iosockinet& sio)
   sio.read( (char*)&itemtype, 1 );
   assert( itemtype == 0x1 );
 
-  gdcm::network::AAssociateRQPDU rqpdu;
+  AAssociateRQPDU rqpdu;
   //rqpdu.SetCallingAETitle( "MOTESCU" );
   rqpdu.Read( sio );
   rqpdu.Print( std::cout );
 
   //std::cout << "done AAssociateRQPDU !" << std::endl;
 
-  gdcm::network::TransferSyntaxSub ts1;
-  ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  TransferSyntaxSub ts1;
+  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
-  gdcm::network::AAssociateACPDU acpdu;
+  AAssociateACPDU acpdu;
 
   for( unsigned int index = 0; index < rqpdu.GetNumberOfPresentationContext(); index++ )
     {
     // FIXME / HARDCODED We only ever accept Little Endian
     // FIXME we should check :
     // rqpdu.GetAbstractSyntax() contains LittleENdian
-    gdcm::network::PresentationContextAC pcac1;
+    PresentationContextAC pcac1;
     PresentationContext const &pc = rqpdu.GetPresentationContext(index);
     uint8_t id = pc.GetPresentationContextID();
 
@@ -80,14 +83,14 @@ static void process_input(iosockinet& sio)
   sio.read( (char*)&itemtype, 1 );
   assert( itemtype == 0x4 );
 
-  gdcm::network::PDataTFPDU pdata;
+  PDataTFPDU pdata;
   pdata.Read( sio );
   pdata.Print( std::cout );
   // pick the first one:
   size_t n = pdata.GetNumPDVs();
 
   assert( n == 1 );
-  gdcm::network::PresentationDataValue const &input_pdv = pdata.GetPresentationDataValue(0);
+  PresentationDataValue const &input_pdv = pdata.GetPresentationDataValue(0);
 
   //std::cout << "done PDataTFPDU 1!" << std::endl;
 
@@ -96,7 +99,7 @@ static void process_input(iosockinet& sio)
 
   //std::cout << "Start with MessageHeader : " << (int)messageheader << std::endl;
 
-  gdcm::Attribute<0x0,0x800> at = { 0 };
+  Attribute<0x0,0x800> at = { 0 };
   //at.SetFromDataSet( input_pdv.GetDataSet() );
   unsigned short commanddatasettype = at.GetValue();
   //std::cout << "CommandDataSetType: " << at.GetValue() << std::endl;
@@ -109,12 +112,12 @@ static void process_input(iosockinet& sio)
     int i = 0;
     do
       {
-      gdcm::network::PDataTFPDU pdata2;
+      PDataTFPDU pdata2;
       pdata2.ReadInto( sio, out );
       //pdata2.Print( std::cout );
       size_t n2 = pdata.GetNumPDVs();
       assert( n2 == 1 );
-      gdcm::network::PresentationDataValue const &pdv = pdata2.GetPresentationDataValue(0);
+      PresentationDataValue const &pdv = pdata2.GetPresentationDataValue(0);
       messageheader = pdv.GetMessageHeader();
       //std::cout << "---------------- done PDataTFPDU: " << i << std::endl;
       //std::cout << "---------------- done MessageHeader: " << (int)messageheader << std::endl;
@@ -124,17 +127,17 @@ static void process_input(iosockinet& sio)
     assert( messageheader == 2 ); // end of data
     out.close();
 
-    gdcm::network::PresentationDataValue pdv;
+    PresentationDataValue pdv;
     pdv.SetPresentationContextID( input_pdv.GetPresentationContextID() );
     std::vector<PresentationDataValue> inpdvs;
     inpdvs.push_back( input_pdv );
-    gdcm::DataSet ds1 = PresentationDataValue::ConcatenatePDVBlobs( inpdvs );
+    DataSet ds1 = PresentationDataValue::ConcatenatePDVBlobs( inpdvs );
 
-    const gdcm::DataElement &de1 = ds1.GetDataElement( gdcm::Tag( 0x0000,0x0002 ) );
-    const gdcm::ByteValue *bv1 = de1.GetByteValue();
+    const DataElement &de1 = ds1.GetDataElement( Tag( 0x0000,0x0002 ) );
+    const ByteValue *bv1 = de1.GetByteValue();
     std::string s1( bv1->GetPointer(), bv1->GetLength() );
-    const gdcm::DataElement &de2 = ds1.GetDataElement( gdcm::Tag( 0x0000,0x1000 ) );
-    const gdcm::ByteValue *bv2 = de2.GetByteValue();
+    const DataElement &de2 = ds1.GetDataElement( Tag( 0x0000,0x1000 ) );
+    const ByteValue *bv2 = de2.GetByteValue();
     std::string s2( bv2->GetPointer(), bv2->GetLength() );
 
     //pdv.MyInit2( s1.c_str(), s2.c_str() );
@@ -144,7 +147,7 @@ static void process_input(iosockinet& sio)
     //std::cout << "To:" << std::endl;
     //pdv.Print( std::cout );
 
-    gdcm::network::PDataTFPDU pdata4;
+    PDataTFPDU pdata4;
     pdata4.AddPresentationDataValue( pdv );
     pdata4.Write( sio );
     //sio.flush();
@@ -152,17 +155,17 @@ static void process_input(iosockinet& sio)
 
   //sio.read( (char*)&itemtype, 1 );
   //assert( itemtype == 0x4 );
-  //gdcm::network::AReleaseRQPDU rel0;
+  //AReleaseRQPDU rel0;
   //rel0.Read( sio );
 
   // send release:
-  gdcm::network::AReleaseRPPDU rel;
+  AReleaseRPPDU rel;
   rel.Write( sio );
   sio.flush();
 
   //std::cout << "done AReleaseRPPDU!" << std::endl;
 
-  gdcm::network::AReleaseRPPDU rel2;
+  AReleaseRPPDU rel2;
   //rel2.Write( sio );
   //sio.flush();
 }
@@ -178,7 +181,7 @@ EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
     PDataTFPDU* dataPDU = dynamic_cast<PDataTFPDU*>(*itor);
     if (dataPDU == NULL){
-      throw new gdcm::Exception("Data sending event PDU malformed.");
+      throw new Exception("Data sending event PDU malformed.");
       return eStaDoesNotExist;
     }
     dataPDU->Write(*inConnection.GetProtocol());
@@ -224,3 +227,6 @@ EStateID ULActionDT2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   outRaisedEvent = ePDATArequest;
   return eSta6TransferReady;
 }
+
+} // end namespace network
+} // end namespace gdcm

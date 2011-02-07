@@ -165,13 +165,9 @@
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
-using namespace gdcm;
+#include "gdcmCompositeNetworkFunctions.h"
 
-#include "gdcmPresentationDataValue.h"
-#include "gdcmULConnectionCallback.h"
-using gdcm::network::PresentationDataValue;
-using gdcm::network::ULConnectionCallback;
-#include "gdcmULConnectionManager.h"
+using namespace gdcm;
 %}
 
 //%insert("runtime") %{
@@ -700,5 +696,4 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
-//%include "gdcmPresentationDataValue.h"
-%include "gdcmULConnectionManager.h"
+%include "gdcmCompositeNetworkFunctions.h"

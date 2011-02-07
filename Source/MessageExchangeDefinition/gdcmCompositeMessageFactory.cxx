@@ -34,24 +34,26 @@ name and date: 4 oct 2010 mmr
 
 namespace gdcm {
 namespace network {
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCEchoRQ(){
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCEchoRQ()
+    {
     CEchoRQ theEchoRQ;
     return theEchoRQ.ConstructPDV(NULL);
-  }
+    }
 
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRQ(DataSet *inDataSet) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRQ(const DataSet *inDataSet)
+    {
     CStoreRQ theStoreRQ;
     return theStoreRQ.ConstructPDV(inDataSet);
-  }
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRSP(DataSet *inDataSet, BasePDU* inPDU) {
+    }
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCStoreRSP(const DataSet *inDataSet, const BasePDU* inPDU) {
     CStoreRSP theStoreRSP;
     return theStoreRSP.ConstructPDV(inDataSet, inPDU);
   }
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCFindRQ(const ULConnection& inConnection, const BaseRootQuery* inRootQuery) {
     CFindRQ theFindRQ;
     return theFindRQ.ConstructPDV(inRootQuery);
   }
-  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCMoveRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery) {
+  std::vector<PresentationDataValue> CompositeMessageFactory::ConstructCMoveRQ(const ULConnection& inConnection, const BaseRootQuery* inRootQuery) {
     CMoveRQ theMoveRQ;
     return theMoveRQ.ConstructPDV(inConnection, inRootQuery);
   }

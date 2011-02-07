@@ -85,7 +85,7 @@ void TransferSyntaxSub::UpdateName( const char *name )
 {
   if( name )
     {
-    gdcm::UIDs uids;
+    UIDs uids;
     bool b = uids.SetFromUID( name );
     if( b )
       {
@@ -100,9 +100,9 @@ void TransferSyntaxSub::UpdateName( const char *name )
   throw "Invalid Name";
 }
 
-void TransferSyntaxSub::SetNameFromUID( gdcm::UIDs::TSName tsname )
+void TransferSyntaxSub::SetNameFromUID( UIDs::TSName tsname )
 {
-  const char *name = gdcm::UIDs::GetUIDString( tsname );
+  const char *name = UIDs::GetUIDString( tsname );
   UpdateName( name );
 }
 

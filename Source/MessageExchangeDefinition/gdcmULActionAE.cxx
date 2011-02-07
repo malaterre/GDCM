@@ -35,7 +35,8 @@ each class have its own file for the sake of brevity of the number of files.
 
 namespace gdcm
 {
-namespace network{  //gonna have to collapse these namespaces at some point
+namespace network
+{
 
 //Issue TRANSPORT CONNECT request primitive to local transport service.
 EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
@@ -139,9 +140,9 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     acceptable = false; //can't accept an empty set of pdus.
     //also, requrie little endian, not sure how to set that, but it should be here.
   }
-  gdcm::network::AAssociateRQPDU* rqpdu;
+  AAssociateRQPDU* rqpdu;
   if (acceptable){
-    rqpdu = dynamic_cast<gdcm::network::AAssociateRQPDU*>(inEvent.GetPDUs()[0]);
+    rqpdu = dynamic_cast<AAssociateRQPDU*>(inEvent.GetPDUs()[0]);
     if (rqpdu == NULL){
       acceptable = false;
     }
@@ -151,16 +152,16 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     //sending of data underway.  Have to get info now
     outRaisedEvent = eAASSOCIATEresponseAccept;
 
-    gdcm::network::TransferSyntaxSub ts1;
-    ts1.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+    TransferSyntaxSub ts1;
+    ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
-    gdcm::network::AAssociateACPDU acpdu;
+    AAssociateACPDU acpdu;
 
     for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ ){
       // FIXME / HARDCODED We only ever accept Little Endian
       // FIXME we should check :
       // rqpdu.GetAbstractSyntax() contains LittleENdian
-      gdcm::network::PresentationContextAC pcac1;
+      PresentationContextAC pcac1;
       PresentationContext const &pc = rqpdu->GetPresentationContext(index);
       //add the presentation context back into the connection,
       //so later functions will know what's allowed on this connection
@@ -232,5 +233,5 @@ EStateID ULActionAE8::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   return eSta13AwaitingClose;
 }
 
-   }
-}
+} // end namespace network
+} // end namespace gdcm
