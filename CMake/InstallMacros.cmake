@@ -33,24 +33,20 @@ ENDMACRO (install_library)
 MACRO (install_pdb library)
   if (MSVC)
     get_target_property(library_dll ${library} LOCATION)
+    string(REPLACE .dll .pdb library_pdb ${library_dll})
     IF(CMAKE_CONFIGURATION_TYPES)
       # Visual Studio
-      #FOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
-      #  string(REPLACE "$(OutDir)" "\${CMAKE_INSTALL_CONFIG_NAME}" library_pdb "${library_dll}")
-      #ENDFOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
-      string(REPLACE "$(OutDir)" "\${BUILD_TYPE}" library_pdb "${library_dll}")
-      install (FILES ${library_pdb}
-        DESTINATION ${GDCM_INSTALL_BIN_DIR}
-        COMPONENT Development
-        )
+      #string(REPLACE "$(OutDir)" "\${BUILD_TYPE}" library_pdb "${library_dll}")
+      #string(REPLACE "$(Configuration)" "\${BUILD_TYPE}" library_pdb "${library_dll}")
+      string(REPLACE "${CMAKE_CFG_INTDIR}" "\${BUILD_TYPE}" library_pdb "${library_pdb}")
     ELSE(CMAKE_CONFIGURATION_TYPES)
       # nmake
-      string(REPLACE .dll .pdb library_pdb ${library_dll})
-      install (FILES ${library_pdb}
-        DESTINATION ${GDCM_INSTALL_BIN_DIR}
-        COMPONENT Development
-        )
+      # nothing to do ...
     ENDIF(CMAKE_CONFIGURATION_TYPES)
+    install (FILES ${library_pdb}
+      DESTINATION ${GDCM_INSTALL_BIN_DIR}
+      COMPONENT Development
+      )
   endif (MSVC)
 ENDMACRO (install_pdb)
 
