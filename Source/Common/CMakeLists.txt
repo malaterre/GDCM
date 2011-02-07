@@ -154,30 +154,15 @@ IF(GDCM_USE_SYSTEM_OPENSSL)
   TARGET_LINK_LIBRARIES(gdcmCommon ${OPENSSL_LIBRARIES})
 ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
+# libs
+install_library(gdcmCommon)
+#PDB
+install_pdb(gdcmCommon)
+# include files
+install_includes("*.h" "*.txx")
 
-IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  # Runtime
-  INSTALL(TARGETS gdcmCommon
-    EXPORT ${GDCM_TARGETS_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+# Install generated files
+INSTALL(FILES ${header_files}
+  "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
+  DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
-  #Development
-  if(NAMELINK_ONLY)
-    INSTALL(TARGETS gdcmCommon
-      EXPORT ${GDCM_TARGETS_NAME}
-      LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
-    )
-  #PDB
-  install_pdb(gdcmCommon Development)
-  endif(NAMELINK_ONLY)
-ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
-
-IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB header_files "*.h" "*.txx")
-  INSTALL(FILES ${header_files}
-    "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
-    DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
-  )
-ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
