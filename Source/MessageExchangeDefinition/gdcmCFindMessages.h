@@ -33,19 +33,19 @@ class CFindRQ : public BaseCompositeMessage
       //this class will fulfill the inheritance,
       //but additional information is needed by cfind
       //namely, the root type
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     public:
-      std::vector<PresentationDataValue> ConstructPDV(BaseRootQuery* inRootQuery);
+      std::vector<PresentationDataValue> ConstructPDV(const BaseRootQuery* inRootQuery);
     };
 
     class CFindRSP : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     };
 
-    class CFindCancelRq : public BaseCompositeMessage {
+    class CFindCancelRQ : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     };
   }
 }

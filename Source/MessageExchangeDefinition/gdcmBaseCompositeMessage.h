@@ -52,7 +52,7 @@ class BaseCompositeMessage
       //the pdv, as described in Annex E of 3.8-2009, is the first byte
       //of the message (the MessageHeader), and then the subsequent dataset
       //that describes the operation.
-      virtual std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet) = 0;
+      virtual std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet) = 0;
 
     };
   }

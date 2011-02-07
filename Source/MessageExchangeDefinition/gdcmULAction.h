@@ -61,7 +61,7 @@ namespace gdcm {
 class ULAction {
     private:
       //cannot copy a ULAction
-      ULAction(const gdcm::network::ULAction& inAction) {};
+      ULAction(const ULAction& inAction) {};
 
     protected:
 

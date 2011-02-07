@@ -34,7 +34,7 @@ namespace gdcm{
   public:
     ~PatientRootQuery();
 
-    std::vector<gdcm::Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
+    std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
     bool ValidateQuery(bool forFind, bool inStrict) const;
   };
 }

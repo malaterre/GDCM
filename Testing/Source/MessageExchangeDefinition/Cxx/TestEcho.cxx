@@ -29,7 +29,8 @@ int TestEcho(int argc, char *argv[])
 
   gdcm::CompositeNetworkFunctions theNetworkFunctions;
 
-  bool didItWork = theNetworkFunctions.CEcho( hostname.c_str(), port, callingaetitle, callaetitle );
+  bool didItWork = theNetworkFunctions.CEcho( hostname.c_str(), port,
+    callingaetitle.c_str(), callaetitle.c_str() );
 
   return (didItWork ? 0:1);
 }

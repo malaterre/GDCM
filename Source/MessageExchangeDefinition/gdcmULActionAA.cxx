@@ -29,7 +29,10 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmAAbortPDU.h"
 #include <socket++/echo.h>
 
-using namespace gdcm::network;
+namespace gdcm
+{
+namespace network
+{
 
 //Send A-ABORT PDU (service-user source) and start (or restart if already started) ARTIM timer
 EStateID ULActionAA1::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
@@ -107,3 +110,5 @@ EStateID ULActionAA8::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
   return eSta13AwaitingClose;
 }
+} // end namespace network
+} // end namespace gdcm

@@ -44,7 +44,7 @@ void StudyRootQuery::SetParameters(){
 }
 
 
-std::vector<gdcm::Tag> StudyRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind){
+std::vector<Tag> StudyRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind){
   if (forFind){
     switch (inQueryLevel){
       case ePatient:
@@ -82,7 +82,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   if (ds.Size() == 0) return false;
 
   //search for 0x8,0x52
-  gdcm::Attribute<0x0008, 0x0052> level;
+  Attribute<0x0008, 0x0052> level;
   level.SetFromDataElement( ds.GetDataElement( level.GetTag() ) );
   std::string theVal = level.GetValue();
 
@@ -90,7 +90,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
 
   bool theReturn = true;
 
-  std::vector<gdcm::Tag> tags;
+  std::vector<Tag> tags;
   if (inStrict)
   {
     QueryBase* qb = NULL;
@@ -123,7 +123,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
 
     if (strcmp(theVal.c_str(), "STUDY ") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      std::vector<gdcm::Tag> tagGroup;
+      std::vector<Tag> tagGroup;
       qb = new QueryStudy();
       if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
@@ -135,7 +135,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     }
     if (strcmp(theVal.c_str(), "SERIES") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      std::vector<gdcm::Tag> tagGroup;
+      std::vector<Tag> tagGroup;
       qb = new QueryStudy();
       if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
@@ -155,7 +155,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     }
     if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0){
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      std::vector<gdcm::Tag> tagGroup;
+      std::vector<Tag> tagGroup;
       qb = new QueryStudy();
       if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
@@ -194,10 +194,10 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   //if there are no found tags, then the query is invalid
   //if there is one improper tag found, then the query is invalid
   int thePresentTagCount = 0;
-  gdcm::DataSet::ConstIterator itor;
-  gdcm::Attribute<0x0008, 0x0005> language;
+  DataSet::ConstIterator itor;
+  Attribute<0x0008, 0x0005> language;
   for (itor = ds.Begin(); itor != ds.End(); itor++){
-    gdcm::Tag t = itor->GetTag();
+    Tag t = itor->GetTag();
     if (t == level.GetTag()) continue;
     if (t.GetGroup() == language.GetTag().GetGroup() &&
       t.GetElement() == language.GetTag().GetElement()) continue;

@@ -183,148 +183,147 @@ EPresentationContextID PresentationContext::AssignPresentationContextID(const Da
       return eVerificationSOPClass;
   }
   else {
-    using gdcm::MediaStorage;
 #if 0
-    gdcm::Global& g = gdcm::Global::GetInstance();
+    Global& g = Global::GetInstance();
     if( !g.LoadResourcesFiles() ) // NOT THREAD SAFE
       {
       std::cerr << "Could not LoadResourcesFiles" << std::endl;
       return eVerificationSOPClass;
       }
 #endif
-    gdcm::MediaStorage mst;
+    MediaStorage mst;
     if (!mst.SetFromDataSet(inDS)){
       return eVerificationSOPClass;
     }
-    gdcm::UIDs uid;//want to get this as well, to set the abstract syntax properly
-    uid.SetFromUID( gdcm::MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
-    outUIDString = std::string(gdcm::MediaStorage::GetMSString(mst));
+    UIDs uid;//want to get this as well, to set the abstract syntax properly
+    uid.SetFromUID( MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
+    outUIDString = std::string(MediaStorage::GetMSString(mst));
     switch (uid){
-      case gdcm::UIDs::AmbulatoryECGWaveformStorage:
+      case UIDs::AmbulatoryECGWaveformStorage:
         return eAmbulatoryECGWaveformStorage;
-      case gdcm::UIDs::BasicTextSRStorage:
+      case UIDs::BasicTextSRStorage:
         return eBasicTextSR;
-      case gdcm::UIDs::BasicVoiceAudioWaveformStorage:
+      case UIDs::BasicVoiceAudioWaveformStorage:
         return eBasicVoiceAudioWaveformStorage;
-      case gdcm::UIDs::BlendingSoftcopyPresentationStateStorageSOPClass:
+      case UIDs::BlendingSoftcopyPresentationStateStorageSOPClass:
         return eBlendingSoftcopyPresentationStateStorage;
-      case gdcm::UIDs::CardiacElectrophysiologyWaveformStorage:
+      case UIDs::CardiacElectrophysiologyWaveformStorage:
         return eCardiacElectrophysiologyWaveformStorage;
-      case gdcm::UIDs::ChestCADSRStorage:
+      case UIDs::ChestCADSRStorage:
         return eChestCADSR;
-      case gdcm::UIDs::ColorSoftcopyPresentationStateStorageSOPClass:
+      case UIDs::ColorSoftcopyPresentationStateStorageSOPClass:
         return eColorSoftcopyPresentationStateStorage;
-      case gdcm::UIDs::ComprehensiveSRStorage:
+      case UIDs::ComprehensiveSRStorage:
         return eComprehensiveSR;
-      case gdcm::UIDs::ComputedRadiographyImageStorage:
+      case UIDs::ComputedRadiographyImageStorage:
         return eComputedRadiographyImageStorage;
-      case gdcm::UIDs::CTImageStorage:
+      case UIDs::CTImageStorage:
         return eCTImageStorage;
-      case gdcm::UIDs::DigitalIntraoralXRayImageStorageForPresentation:
+      case UIDs::DigitalIntraoralXRayImageStorageForPresentation:
         return eDigitalIntraOralXRayImageStorageForPresentation;
-      case gdcm::UIDs::DigitalIntraoralXRayImageStorageForProcessing:
+      case UIDs::DigitalIntraoralXRayImageStorageForProcessing:
         return eDigitalIntraOralXRayImageStorageForProcessing;
-      case gdcm::UIDs::DigitalMammographyXRayImageStorageForPresentation:
+      case UIDs::DigitalMammographyXRayImageStorageForPresentation:
         return eDigitalMammographyXRayImageStorageForPresentation;
-      case gdcm::UIDs::DigitalMammographyXRayImageStorageForProcessing:
+      case UIDs::DigitalMammographyXRayImageStorageForProcessing:
         return eDigitalMammographyXRayImageStorageForProcessing;
-      case gdcm::UIDs::DigitalXRayImageStorageForPresentation:
+      case UIDs::DigitalXRayImageStorageForPresentation:
         return eDigitalXRayImageStorageForPresentation;
-      case gdcm::UIDs::DigitalXRayImageStorageForProcessing:
+      case UIDs::DigitalXRayImageStorageForProcessing:
         return eDigitalXRayImageStorageForProcessing;
-      case gdcm::UIDs::EncapsulatedPDFStorage:
+      case UIDs::EncapsulatedPDFStorage:
         return eEncapsulatedPDFStorage;
-      case gdcm::UIDs::EnhancedCTImageStorage:
+      case UIDs::EnhancedCTImageStorage:
         return eEnhancedCTImageStorage;
-      case gdcm::UIDs::EnhancedMRImageStorage:
+      case UIDs::EnhancedMRImageStorage:
         return eEnhancedMRImageStorage;
-      case gdcm::UIDs::EnhancedSRStorage:
+      case UIDs::EnhancedSRStorage:
         return eEnhancedSR;
-      case gdcm::UIDs::EnhancedXAImageStorage:
+      case UIDs::EnhancedXAImageStorage:
         return eEnhancedXAImageStorage;
-      case gdcm::UIDs::EnhancedXRFImageStorage:
+      case UIDs::EnhancedXRFImageStorage:
         return eEnhancedXRFImageStorage;
-      case gdcm::UIDs::GeneralECGWaveformStorage:
+      case UIDs::GeneralECGWaveformStorage:
         return eGeneralECGWaveformStorage;
-      case gdcm::UIDs::GrayscaleSoftcopyPresentationStateStorageSOPClass:
+      case UIDs::GrayscaleSoftcopyPresentationStateStorageSOPClass:
         return eGrayscaleSoftcopyPresentationStateStorage;
-      case gdcm::UIDs::HemodynamicWaveformStorage:
+      case UIDs::HemodynamicWaveformStorage:
         return eHemodynamicWaveformStorage;
-      case gdcm::UIDs::KeyObjectSelectionDocumentStorage:
+      case UIDs::KeyObjectSelectionDocumentStorage:
         return eKeyObjectSelectionDocument;
-      case gdcm::UIDs::MammographyCADSRStorage:
+      case UIDs::MammographyCADSRStorage:
         return eMammographyCADSR;
-      case gdcm::UIDs::MRImageStorage:
+      case UIDs::MRImageStorage:
         return eMRImageStorage;
-      case gdcm::UIDs::MRSpectroscopyStorage:
+      case UIDs::MRSpectroscopyStorage:
         return eMRSpectroscopyStorage;
-      case gdcm::UIDs::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
+      case UIDs::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
         return eMultiframeGrayscaleByteSecondaryCaptureImageStorage;
-      case gdcm::UIDs::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
+      case UIDs::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
         return eMultiframeGrayscaleWordSecondaryCaptureImageStorage;
-      case gdcm::UIDs::MultiframeSingleBitSecondaryCaptureImageStorage:
+      case UIDs::MultiframeSingleBitSecondaryCaptureImageStorage:
         return eMultiframeSingleBitSecondaryCaptureImageStorage;
-      case gdcm::UIDs::MultiframeTrueColorSecondaryCaptureImageStorage:
+      case UIDs::MultiframeTrueColorSecondaryCaptureImageStorage:
         return eMultiframeTrueColorSecondaryCaptureImageStorage;
-      case gdcm::UIDs::NuclearMedicineImageStorage:
+      case UIDs::NuclearMedicineImageStorage:
         return eNuclearMedicineImageStorage;
-      case gdcm::UIDs::OphthalmicPhotography16BitImageStorage:
+      case UIDs::OphthalmicPhotography16BitImageStorage:
         return eOphthalmicPhotography16BitImageStorage;
-      case gdcm::UIDs::OphthalmicPhotography8BitImageStorage:
+      case UIDs::OphthalmicPhotography8BitImageStorage:
         return eOphthalmicPhotography8BitImageStorage;
-      //case gdcm::UIDs::PositronEmissionTomographyImageStorage:
+      //case UIDs::PositronEmissionTomographyImageStorage:
       //  return ePETCurveStorage;//!!!NOTE!  This isn't right! can we handle curve storage?
-      case gdcm::UIDs::PositronEmissionTomographyImageStorage:
+      case UIDs::PositronEmissionTomographyImageStorage:
         return ePETImageStorage;
-      case gdcm::UIDs::ProcedureLogStorage:
+      case UIDs::ProcedureLogStorage:
         return eProcedureLogStorage;
-      case gdcm::UIDs::PseudoColorSoftcopyPresentationStateStorageSOPClass:
+      case UIDs::PseudoColorSoftcopyPresentationStateStorageSOPClass:
         return ePseudoColorSoftcopyPresentationStateStorage;
-      case gdcm::UIDs::RawDataStorage:
+      case UIDs::RawDataStorage:
         return eRawDataStorage;
-      case gdcm::UIDs::RealWorldValueMappingStorage:
+      case UIDs::RealWorldValueMappingStorage:
         return eRealWorldValueMappingStorage;
-      case gdcm::UIDs::RTBeamsTreatmentRecordStorage:
+      case UIDs::RTBeamsTreatmentRecordStorage:
         return eRTBeamsTreatmentRecordStorage;
-      case gdcm::UIDs::RTBrachyTreatmentRecordStorage:
+      case UIDs::RTBrachyTreatmentRecordStorage:
         return eRTBrachyTreatmentRecordStorage;
-      case gdcm::UIDs::RTDoseStorage:
+      case UIDs::RTDoseStorage:
         return eRTDoseStorage;
-      case gdcm::UIDs::RTImageStorage:
+      case UIDs::RTImageStorage:
         return eRTImageStorage;
-      case gdcm::UIDs::RTPlanStorage:
+      case UIDs::RTPlanStorage:
         return eRTPlanStorage;
-      case gdcm::UIDs::RTStructureSetStorage:
+      case UIDs::RTStructureSetStorage:
         return eRTStructureSetStorage;
-      case gdcm::UIDs::RTTreatmentSummaryRecordStorage:
+      case UIDs::RTTreatmentSummaryRecordStorage:
         return eRTTreatmentSummaryRecordStorage;
-      case gdcm::UIDs::SecondaryCaptureImageStorage:
+      case UIDs::SecondaryCaptureImageStorage:
         return eSecondaryCaptureImageStorage;
-      case gdcm::UIDs::SpatialFiducialsStorage:
+      case UIDs::SpatialFiducialsStorage:
         return eSpatialFiducialsStorage;
-      case gdcm::UIDs::SpatialRegistrationStorage:
+      case UIDs::SpatialRegistrationStorage:
         return eSpatialRegistrationStorage;
-      case gdcm::UIDs::StereometricRelationshipStorage:
+      case UIDs::StereometricRelationshipStorage:
         return eStereometricRelationshipStorage;
-      case gdcm::UIDs::WaveformStorageTrialRetired://!!NOTE: I'm not sure these are equivalent
+      case UIDs::WaveformStorageTrialRetired://!!NOTE: I'm not sure these are equivalent
         return eTwelveLeadECGWaveformStorage;
-      case gdcm::UIDs::UltrasoundImageStorage:
+      case UIDs::UltrasoundImageStorage:
         return eUltrasoundImageStorage;
-      case gdcm::UIDs::UltrasoundMultiframeImageStorage:
+      case UIDs::UltrasoundMultiframeImageStorage:
         return eUltrasoundMultiframeImageStorage;
-      case gdcm::UIDs::VLEndoscopicImageStorage:
+      case UIDs::VLEndoscopicImageStorage:
         return eVLEndoscopicImageStorage;
-      case gdcm::UIDs::VLMicroscopicImageStorage:
+      case UIDs::VLMicroscopicImageStorage:
         return eVLMicroscopicImageStorage;
-      case gdcm::UIDs::VLPhotographicImageStorage:
+      case UIDs::VLPhotographicImageStorage:
         return eVLPhotographicImageStorage;
-      case gdcm::UIDs::VLSlideCoordinatesMicroscopicImageStorage:
+      case UIDs::VLSlideCoordinatesMicroscopicImageStorage:
         return eVLSlideCoordinatesMicroscopicImageStorage;
-      case gdcm::UIDs::XRayAngiographicImageStorage:
+      case UIDs::XRayAngiographicImageStorage:
         return eXRayAngiographicImageStorage;
-      case gdcm::UIDs::XRayRadiofluoroscopicImageStorage:
+      case UIDs::XRayRadiofluoroscopicImageStorage:
         return eXRayFluoroscopyImageStorage;
-      case gdcm::UIDs::XRayRadiationDoseSRStorage:
+      case UIDs::XRayRadiationDoseSRStorage:
         return eXRayRadiationDoseSR;
       default:
         return eVerificationSOPClass;

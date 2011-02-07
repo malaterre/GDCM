@@ -53,12 +53,11 @@ BaseRootQuery::~BaseRootQuery(){
   //nothing to do, really
 }
 
-void BaseRootQuery::SetSearchParameter(const gdcm::Tag& inTag, const gdcm::DictEntry& inDictEntry, const std::string& inValue){
+void BaseRootQuery::SetSearchParameter(const Tag& inTag, const DictEntry& inDictEntry, const std::string& inValue){
 
   //borrowed this code from anonymization; not sure if it's correct, though.
-  gdcm::DataElement de;
+  DataElement de;
   de.SetTag( inTag );
-  using gdcm::VR;
   const VR &vr = inDictEntry.GetVR();
   if( vr.IsDual() )
     {
@@ -92,27 +91,27 @@ void BaseRootQuery::SetSearchParameter(const gdcm::Tag& inTag, const gdcm::DictE
   mDataSet.Replace(de);
 }
 
-void BaseRootQuery::SetSearchParameter(const gdcm::Tag& inTag, const std::string& inValue){
+void BaseRootQuery::SetSearchParameter(const Tag& inTag, const std::string& inValue){
   //IF WE WANTED, we could validate the incoming tag as belonging to our set of tags.
   //but we will not.
 
-  static const gdcm::Global &g = gdcm::Global::GetInstance();
-  static const gdcm::Dicts &dicts = g.GetDicts();
-  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+  static const Global &g = Global::GetInstance();
+  static const Dicts &dicts = g.GetDicts();
+  static const Dict &pubdict = dicts.GetPublicDict();
 
-  const gdcm::DictEntry &dictentry = pubdict.GetDictEntry(inTag);
+  const DictEntry &dictentry = pubdict.GetDictEntry(inTag);
 
   SetSearchParameter(inTag, dictentry, inValue);
 
 }
 void BaseRootQuery::SetSearchParameter(const std::string& inKeyword, const std::string& inValue){
 
-  static const gdcm::Global &g = gdcm::Global::GetInstance();
-  static const gdcm::Dicts &dicts = g.GetDicts();
-  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+  static const Global &g = Global::GetInstance();
+  static const Dicts &dicts = g.GetDicts();
+  static const Dict &pubdict = dicts.GetPublicDict();
 
-  gdcm::Tag theTag;
-  const gdcm::DictEntry &dictentry = pubdict.GetDictEntryByName(inKeyword.c_str(), theTag);
+  Tag theTag;
+  const DictEntry &dictentry = pubdict.GetDictEntryByName(inKeyword.c_str(), theTag);
   SetSearchParameter(theTag, dictentry, inValue);
 }
 
@@ -127,20 +126,20 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os) {
   theQueries.push_back(&mImage);
 
 
-  std::vector<gdcm::Tag> theTags;
-  std::vector<gdcm::Tag>::iterator ttor;
+  std::vector<Tag> theTags;
+  std::vector<Tag>::iterator ttor;
 
 
-  static const gdcm::Global &g = gdcm::Global::GetInstance();
-  static const gdcm::Dicts &dicts = g.GetDicts();
-  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+  static const Global &g = Global::GetInstance();
+  static const Dicts &dicts = g.GetDicts();
+  static const Dict &pubdict = dicts.GetPublicDict();
 
   os << "The following tags must be supported by a C-FIND/C-MOVE " << mHelpDescription << ": " << std::endl;
   for (qtor = theQueries.begin(); qtor < theQueries.end(); qtor++){
     os << "Level: " << (*qtor)->GetName() << std::endl;
     theTags = (*qtor)->GetRequiredTags(mRootType);
     for (ttor = theTags.begin(); ttor < theTags.end(); ttor++){
-      const gdcm::DictEntry &dictentry = pubdict.GetDictEntry(*ttor);
+      const DictEntry &dictentry = pubdict.GetDictEntry(*ttor);
       os << "Keyword: " << dictentry.GetKeyword() << " Tag: " << *ttor << std::endl;
     }
     os << std::endl;
@@ -153,7 +152,7 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os) {
     os << "Level: " << (*qtor)->GetName() << std::endl;
     theTags = (*qtor)->GetUniqueTags(mRootType);
     for (ttor = theTags.begin(); ttor < theTags.end(); ttor++){
-      const gdcm::DictEntry &dictentry = pubdict.GetDictEntry(*ttor);
+      const DictEntry &dictentry = pubdict.GetDictEntry(*ttor);
       os << "Keyword: " << dictentry.GetKeyword() << " Tag: " << *ttor << std::endl;
     }
     os << std::endl;
@@ -166,7 +165,7 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os) {
     os << "Level: " << (*qtor)->GetName() << std::endl;
     theTags = (*qtor)->GetOptionalTags(mRootType);
     for (ttor = theTags.begin(); ttor < theTags.end(); ttor++){
-      const gdcm::DictEntry &dictentry = pubdict.GetDictEntry(*ttor);
+      const DictEntry &dictentry = pubdict.GetDictEntry(*ttor);
       os << "Keyword: " << dictentry.GetKeyword() << " Tag: " << *ttor << std::endl;
     }
     os << std::endl;
@@ -180,10 +179,10 @@ const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os) {
 
 bool BaseRootQuery::WriteQuery(const std::string& inFileName)
 {
-  gdcm::Writer writer;
+  Writer writer;
   writer.SetCheckFileMetaInformation( false );
   writer.GetFile().GetHeader().SetDataSetTransferSyntax(
-    gdcm::TransferSyntax::ImplicitVRLittleEndian );
+    TransferSyntax::ImplicitVRLittleEndian );
   writer.GetFile().SetDataSet( GetQueryDataSet() );
   writer.SetFileName( inFileName.c_str() );
   if( !writer.Write() )
@@ -202,26 +201,26 @@ void BaseRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
   switch (inQueryLevel){
     case ePatient:
       {
-        gdcm::Attribute<0x8,0x52> at1 = { "PATIENT " };
+        Attribute<0x8,0x52> at1 = { "PATIENT " };
         mDataSet.Insert( at1.GetAsDataElement() );
       }
       break;
     case eStudy:
       {
-        gdcm::Attribute<0x8,0x52> at1 = { "STUDY " };
+        Attribute<0x8,0x52> at1 = { "STUDY " };
         mDataSet.Insert( at1.GetAsDataElement() );
       }
       break;
     case eSeries:
       {
-        gdcm::Attribute<0x8,0x52> at1 = { "SERIES" };
+        Attribute<0x8,0x52> at1 = { "SERIES" };
         mDataSet.Insert( at1.GetAsDataElement() );
       }
     default:
       break;
     case eImageOrFrame:
       {
-        gdcm::Attribute<0x8,0x52> at1 = { "IMAGE " };
+        Attribute<0x8,0x52> at1 = { "IMAGE " };
         mDataSet.Insert( at1.GetAsDataElement() );
       }
       break;

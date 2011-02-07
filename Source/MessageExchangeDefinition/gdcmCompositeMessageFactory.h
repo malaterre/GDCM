@@ -43,12 +43,12 @@ class CompositeMessageFactory
       //this approach without a base class (but done internally) is useful.
       static std::vector<PresentationDataValue> ConstructCEchoRQ();
 
-      static std::vector<PresentationDataValue> ConstructCStoreRQ(DataSet *inDataSet);
-      static std::vector<PresentationDataValue> ConstructCStoreRSP(DataSet *inDataSet, BasePDU* inPC);
+      static std::vector<PresentationDataValue> ConstructCStoreRQ(const DataSet *inDataSet);
+      static std::vector<PresentationDataValue> ConstructCStoreRSP(const DataSet *inDataSet, const BasePDU* inPC);
 
-      static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
+      static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);
 
-      static  std::vector<PresentationDataValue> ConstructCMoveRQ(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
+      static  std::vector<PresentationDataValue> ConstructCMoveRQ(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);
 
 
     };

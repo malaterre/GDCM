@@ -90,7 +90,8 @@ int TestAllFunctions(int argc, char *argv[])
 #endif  
   
   gdcm::CompositeNetworkFunctions theNetworkFunctions;
-  bool didItWork = theNetworkFunctions.CEcho( remote.c_str(), portno, aetitle, call );
+  bool didItWork = theNetworkFunctions.CEcho( remote.c_str(), portno,
+    aetitle.c_str(), call.c_str() );
 
   if (!didItWork)
     {
@@ -105,7 +106,8 @@ int TestAllFunctions(int argc, char *argv[])
 
   std::vector<std::string> theFilenames = theDir.GetFilenames();
   //store the datasets remotely
-  didItWork = theNetworkFunctions.CStore(remote.c_str(), portno, aetitle, call, theFilenames, false);
+  didItWork = theNetworkFunctions.CStore(remote.c_str(), portno, theFilenames, 
+    aetitle.c_str(), call.c_str());
 
   if (!didItWork) 
     {
@@ -159,13 +161,19 @@ int TestAllFunctions(int argc, char *argv[])
 
     
     gdcm::BaseRootQuery *theQuery =
-      theNetworkFunctions.ConstructQuery(false, gdcm::ePatientRootType, gdcm::ePatient, keys);
+      theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys);
 
 
-    std::vector<gdcm::DataSet> theDataSets =
-      theNetworkFunctions.CFind(remote.c_str(), portno, aetitle, call, theQuery);
+    std::vector<gdcm::DataSet> theDataSets ;
+    bool b = 
+      theNetworkFunctions.CFind(remote.c_str(), portno, theQuery, theDataSets, aetitle.c_str(), call.c_str());
 
     delete theQuery;
+    if( !b ) 
+      {
+      std::cerr << "Problem in CFind" << std::endl;
+      return 1;
+      }
 
     if (theDataSets.empty())
       {
@@ -209,8 +217,9 @@ int TestAllFunctions(int argc, char *argv[])
       return 1;
       }
 
-    theQuery = theNetworkFunctions.ConstructQuery(true, gdcm::ePatientRootType, gdcm::ePatient, keys);
-    didItWork = theNetworkFunctions.CMove(remote.c_str(), portno, aetitle, call, theQuery, moveReturnPort, outputDir);
+    theQuery = theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, true);
+    didItWork = theNetworkFunctions.CMove(remote.c_str(), portno, theQuery,
+      moveReturnPort, aetitle.c_str(), call.c_str(), outputDir.c_str());
     if (!didItWork)
       {
       std::cerr << "CMove failed for file " << *fitor << std::endl;

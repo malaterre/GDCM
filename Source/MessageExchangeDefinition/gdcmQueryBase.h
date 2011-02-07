@@ -60,14 +60,14 @@ class QueryBase
 {
   public:
 
-    virtual std::vector<gdcm::Tag> GetRequiredTags(const ERootType& inRootType) const = 0;
-    virtual std::vector<gdcm::Tag> GetUniqueTags(const ERootType& inRootType) const = 0;
-    virtual std::vector<gdcm::Tag> GetOptionalTags(const ERootType& inRootType) const = 0;
+    virtual std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const = 0;
+    virtual std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const = 0;
+    virtual std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const = 0;
     ///In order to validate a query dataset, just check for the presence of a tag,
     ///not it's requirement level in the spec
-    virtual std::vector<gdcm::Tag> GetAllTags(const ERootType& inRootType) const{
-      std::vector<gdcm::Tag> theReturn = GetRequiredTags(inRootType);
-      std::vector<gdcm::Tag> theNext = GetUniqueTags(inRootType);
+    virtual std::vector<Tag> GetAllTags(const ERootType& inRootType) const{
+      std::vector<Tag> theReturn = GetRequiredTags(inRootType);
+      std::vector<Tag> theNext = GetUniqueTags(inRootType);
       theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
       theNext = GetOptionalTags(inRootType);
       theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());

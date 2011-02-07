@@ -29,20 +29,21 @@ namespace network{
 
 std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   const ULConnection &inConnection,
-  BaseRootQuery* inRootQuery)
+  const BaseRootQuery* inRootQuery)
 {
   std::vector<PresentationDataValue> thePDVs;
   PresentationDataValue thePDV;
   int contextID = ePatientRootQueryRetrieveInformationModelMOVE;
-  const char *uid = gdcm::UIDs::GetUIDString(
-    gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
+  const char *uid = UIDs::GetUIDString(
+    UIDs::PatientRootQueryRetrieveInformationModelMOVE );
   std::string suid = uid;
-  if (dynamic_cast<StudyRootQuery*>(inRootQuery)!=NULL){
+  if (dynamic_cast<const StudyRootQuery*>(inRootQuery)!=NULL)
+    {
     contextID = eStudyRootQueryRetrieveInformationModelMOVE;
-    const char *uid2 = gdcm::UIDs::GetUIDString(
-      gdcm::UIDs::StudyRootQueryRetrieveInformationModelMOVE );
+    const char *uid2 = UIDs::GetUIDString(
+      UIDs::StudyRootQueryRetrieveInformationModelMOVE );
     suid = uid2;
-  }
+    }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -56,30 +57,30 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   {
-  gdcm::Attribute<0x0,0x100> at = { 33 };//0021H, as per the spec
+  Attribute<0x0,0x100> at = { 33 };//0021H, as per the spec
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x110> at = { 1 };
+  Attribute<0x0,0x110> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
   // FIXME !!!!
-  gdcm::Attribute<0x0,0x600> at = { "SILVERSTREAK" };
+  Attribute<0x0,0x600> at = { "SILVERSTREAK" };
   const char *calling = inConnection.GetConnectionInfo().GetCallingAETitle();
   at.SetValue( calling );
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x700> at = { 0 };
+  Attribute<0x0,0x700> at = { 0 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x800> at = { 1 };
+  Attribute<0x0,0x800> at = { 1 };
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  gdcm::Attribute<0x0,0x0> at = { 0 };
+  Attribute<0x0,0x0> at = { 0 };
   unsigned int glen = ds.GetLength<ImplicitDataElement>();
   assert( (glen % 2) == 0 );
   at.SetValue( glen );
@@ -102,18 +103,21 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
 
 //this is a private function, should not be callable
 //but if you manage to do call it, return a blank dataset.
-std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
+  assert( 0 && "TODO" );
   return thePDVs;
 
 }
 
-std::vector<PresentationDataValue>  CMoveRSP::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue>  CMoveRSP::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  assert( 0 && "TODO" );
   return thePDV;
 }
-std::vector<PresentationDataValue>  CMoveCancelRq::ConstructPDV(DataSet* inDataSet){
+std::vector<PresentationDataValue>  CMoveCancelRq::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  assert( 0 && "TODO" );
   return thePDV;
 }
 

@@ -29,12 +29,12 @@ namespace gdcm{
  */
 class CEchoRQ : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     };
 
     class CEchoRSP : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     };
   }
 }

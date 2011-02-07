@@ -32,7 +32,10 @@
 #include <arpa/inet.h> // inet_addr
 #endif
 
-using namespace gdcm::network;
+namespace gdcm
+{
+namespace network
+{
 
 ULConnectionInfo::ULConnectionInfo(){
   memset(mCallingAETitle, 0, 16);
@@ -88,3 +91,6 @@ int ULConnectionInfo::GetCalledIPPort() const{
 std::string ULConnectionInfo::GetCalledComputerName() const{
   return mCalledComputerName;
 }
+
+} // end namespace network
+} // end namespace gdcm

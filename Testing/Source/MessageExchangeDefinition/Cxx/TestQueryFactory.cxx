@@ -20,5 +20,6 @@
 int TestQueryFactory(int argc, char *argv[])
 {
   gdcm::QueryFactory o;
+  (void)o;
   return 0;
 }

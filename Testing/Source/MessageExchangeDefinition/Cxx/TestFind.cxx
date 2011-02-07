@@ -39,7 +39,8 @@ int TestFind(int argc, char *argv[])
   std::vector<std::pair<gdcm::Tag, std::string> > theTags;
   theTags.push_back(theTagPair);
 
-  gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, gdcm::ePatientRootType, gdcm::ePatient, theTags);
+  gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(
+    gdcm::ePatientRootType, gdcm::ePatient, theTags);
 
   if (!theQuery) {
     std::cerr << "Query construction failed!" << std::endl; 
@@ -53,7 +54,11 @@ int TestFind(int argc, char *argv[])
     return 1;
     }
 
-  std::vector<gdcm::DataSet> theDataSet = theNetworkFunctions.CFind(hostname.c_str(), port, callingaetitle, callaetitle, theQuery);
+  std::vector<gdcm::DataSet> theDataSet ;
+  bool b =
+    theNetworkFunctions.CFind(hostname.c_str(), port,
+      theQuery, theDataSet , callingaetitle.c_str(), callaetitle.c_str());
+  if( !b ) return 1;
 
   //need to put some kind of validation of theDataSet here
 

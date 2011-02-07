@@ -34,35 +34,44 @@
 #include "gdcmTrace.h"
 #include "gdcmPrinter.h"
 
-using namespace gdcm::network;
+namespace gdcm
+{
+namespace network
+{
 
 
-ULConnectionManager::ULConnectionManager(){
+ULConnectionManager::ULConnectionManager()
+{
   mConnection = NULL;
   mSecondaryConnection = NULL;
 }
 
-ULConnectionManager::~ULConnectionManager(){
-  if (mConnection != NULL){
+ULConnectionManager::~ULConnectionManager()
+{
+  if (mConnection != NULL)
+    {
     delete mConnection;
     mConnection = NULL;
-  }
-  if (mSecondaryConnection != NULL){
+    }
+  if (mSecondaryConnection != NULL)
+    {
     delete mSecondaryConnection;
     mSecondaryConnection = NULL;
-  }
+    }
 }
 
-bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  const std::string& inConnectAETitle,
-                                              const std::string& inComputerName, const long& inIPAddress,
-                                              const unsigned short& inConnectPort, const double& inTimeout,
-                                              const EConnectionType& inConnectionType, const gdcm::DataSet& inDS)
+bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
+  const std::string& inConnectAETitle,
+  const std::string& inComputerName, long inIPAddress,
+  unsigned short inConnectPort, double inTimeout,
+  const EConnectionType& inConnectionType, const DataSet& inDS)
 {
 
   //generate a ULConnectionInfo object
   UserInformation userInfo;
   ULConnectionInfo connectInfo;
-  if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
+  if (inConnectAETitle.size() > 16)
+    return false;//too long an AETitle, probably need better failure message
   if (inAETitle.size() > 16) return false; //as above
   if (!connectInfo.Initialize(userInfo, inConnectAETitle.c_str(),
       inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName))
@@ -93,42 +102,42 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //the presentation context will now be part of the connection, so that this
   //initialization for the association-rq will use parameters from the connection
 
-  gdcm::network::AbstractSyntax as;
+  AbstractSyntax as;
 
   std::vector<PresentationContext> pcVector;
   PresentationContext pc;
-  gdcm::network::TransferSyntaxSub ts;
-  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  TransferSyntaxSub ts;
+  ts.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
-  ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
-  //ts.SetNameFromUID( gdcm::UIDs::JPEGLosslessNonHierarchicalFirstOrderPredictionProcess14SelectionValue1DefaultTransferSyntaxforLosslessJPEGImageCompression);
+  ts.SetNameFromUID( UIDs::ExplicitVRLittleEndian );
+  //ts.SetNameFromUID( UIDs::JPEGLosslessNonHierarchicalFirstOrderPredictionProcess14SelectionValue1DefaultTransferSyntaxforLosslessJPEGImageCompression);
   //pc.AddTransferSyntax( ts ); // we do not support explicit (mm)
   switch (inConnectionType){
     case eEcho:
         pc.SetPresentationContextID( eVerificationSOPClass );
-        as.SetNameFromUID( gdcm::UIDs::VerificationSOPClass );
+        as.SetNameFromUID( UIDs::VerificationSOPClass );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
       break;
     case eFind:
         pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelFIND );
-        as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( UIDs::PatientRootQueryRetrieveInformationModelFIND );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
         pc.SetPresentationContextID(eStudyRootQueryRetrieveInformationModelFIND );
-        as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( UIDs::StudyRootQueryRetrieveInformationModelFIND );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
         pc.SetPresentationContextID( ePatientStudyOnlyQueryRetrieveInformationModelFINDRetired );
-        as.SetNameFromUID( gdcm::UIDs::PatientStudyOnlyQueryRetrieveInformationModelFINDRetired );
+        as.SetNameFromUID( UIDs::PatientStudyOnlyQueryRetrieveInformationModelFINDRetired );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
         pc.SetPresentationContextID( eModalityWorklistInformationModelFIND );
-        as.SetNameFromUID( gdcm::UIDs::ModalityWorklistInformationModelFIND );
+        as.SetNameFromUID( UIDs::ModalityWorklistInformationModelFIND );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
         pc.SetPresentationContextID( eGeneralPurposeWorklistInformationModelFIND );
-        as.SetNameFromUID( gdcm::UIDs::GeneralPurposeWorklistInformationModelFIND );
+        as.SetNameFromUID( UIDs::GeneralPurposeWorklistInformationModelFIND );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
       break;
@@ -139,20 +148,20 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
         // should we also send stuff from FIND ?
         // E: Move PresCtx but no Find (accepting for now)
         pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelFIND );
-        as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( UIDs::PatientRootQueryRetrieveInformationModelFIND );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
         // move
         pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelMOVE );
-        as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
+        as.SetNameFromUID( UIDs::PatientRootQueryRetrieveInformationModelMOVE );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
         pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelFIND );
-        as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelFIND );
+        as.SetNameFromUID( UIDs::StudyRootQueryRetrieveInformationModelFIND );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
         pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelMOVE );
-        as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelMOVE );
+        as.SetNameFromUID( UIDs::StudyRootQueryRetrieveInformationModelMOVE );
         pc.SetAbstractSyntax( as );
         pcVector.push_back(pc);
       break;*/
@@ -181,16 +190,16 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
   //no callback, assume that no data is transferred back, because there shouldn't be any
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
 
-  if (gdcm::Trace::GetDebugFlag())
+  if (Trace::GetDebugFlag())
     {
       vector<BasePDU*> thePDUs = theEvent.GetPDUs();
       vector<BasePDU*>::iterator itor;
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
         if (*itor == NULL) continue; //can have a nulled pdu, apparently
-        if (gdcm::Trace::GetDebugToFile())
+        if (Trace::GetDebugToFile())
           {
-            (*itor)->Print(gdcm::Trace::GetDebugFile());
+            (*itor)->Print(Trace::GetDebugFile());
           }
         else 
           {
@@ -205,10 +214,11 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,  con
 
 
 /// returns true for above reasons, but contains the special 'move' port
-bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, const std::string& inConnectAETitle,
-  const std::string& inComputerName, const long& inIPAddress,
-  const unsigned short& inConnectPort, const double& inTimeout,
-  const unsigned short& inReturnPort, const gdcm::DataSet& inDS){
+bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
+  const std::string& inConnectAETitle,
+  const std::string& inComputerName, long inIPAddress,
+  uint16_t inConnectPort, double inTimeout,
+  uint16_t inReturnPort, const DataSet& inDS){
 
 
   //generate a ULConnectionInfo object
@@ -262,32 +272,32 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, 
   //the presentation context will now be part of the connection, so that this
   //initialization for the association-rq will use parameters from the connection
 
-  gdcm::network::AbstractSyntax as;
+  AbstractSyntax as;
 
   std::vector<PresentationContext> pcVector;
   PresentationContext pc;
-  gdcm::network::TransferSyntaxSub ts;
-  ts.SetNameFromUID( gdcm::UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  TransferSyntaxSub ts;
+  ts.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
-  ts.SetNameFromUID( gdcm::UIDs::ExplicitVRLittleEndian );
+  ts.SetNameFromUID( UIDs::ExplicitVRLittleEndian );
   //pc.AddTransferSyntax( ts ); // we do not support explicit (mm)
   // should we also send stuff from FIND ?
   // E: Move PresCtx but no Find (accepting for now)
   pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelFIND );
-  as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelFIND );
+  as.SetNameFromUID( UIDs::PatientRootQueryRetrieveInformationModelFIND );
   pc.SetAbstractSyntax( as );
   pcVector.push_back(pc);
   // move
   pc.SetPresentationContextID( ePatientRootQueryRetrieveInformationModelMOVE );
-  as.SetNameFromUID( gdcm::UIDs::PatientRootQueryRetrieveInformationModelMOVE );
+  as.SetNameFromUID( UIDs::PatientRootQueryRetrieveInformationModelMOVE );
   pc.SetAbstractSyntax( as );
   pcVector.push_back(pc);
   pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelFIND );
-  as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelFIND );
+  as.SetNameFromUID( UIDs::StudyRootQueryRetrieveInformationModelFIND );
   pc.SetAbstractSyntax( as );
   pcVector.push_back(pc);
   pc.SetPresentationContextID( eStudyRootQueryRetrieveInformationModelMOVE );
-  as.SetNameFromUID( gdcm::UIDs::StudyRootQueryRetrieveInformationModelMOVE );
+  as.SetNameFromUID( UIDs::StudyRootQueryRetrieveInformationModelMOVE );
   pc.SetAbstractSyntax( as );
   pcVector.push_back(pc);
   mConnection->SetPresentationContexts(pcVector);
@@ -298,20 +308,20 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle, 
   //if there's nothing on the event loop, assume that it's done & the function can exit.
   //otherwise, keep rolling the event loop
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
-  std::vector<gdcm::DataSet> empty;
+  std::vector<DataSet> empty;
   //No data should be returned when connections are established
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
 
-  if (gdcm::Trace::GetDebugFlag())
+  if (Trace::GetDebugFlag())
     {
       vector<BasePDU*> thePDUs = theEvent.GetPDUs();
       vector<BasePDU*>::iterator itor;
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
         if (*itor == NULL) continue; //can have a nulled pdu, apparently
-        if (gdcm::Trace::GetDebugToFile())
+        if (Trace::GetDebugToFile())
           {
-            (*itor)->Print(gdcm::Trace::GetDebugFile());
+            (*itor)->Print(Trace::GetDebugFile());
           }
         else 
           {
@@ -342,49 +352,55 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   }
 }
 
-std::vector<gdcm::DataSet>  ULConnectionManager::SendMove(gdcm::BaseRootQuery* inRootQuery)
+std::vector<DataSet>  ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery)
 {
   ULBasicCallback theCallback;
   SendMove(inRootQuery, &theCallback);
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendMove(gdcm::BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
-  if (mConnection == NULL){
+void ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
+  ULConnectionCallback* inCallback)
+{
+  if (mConnection == NULL)
+    {
     return;
-  }
+    }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
   RunMoveEventLoop(theEvent, inCallback);
 }
 
-std::vector<gdcm::DataSet> ULConnectionManager::SendFind(gdcm::BaseRootQuery* inRootQuery)
+std::vector<DataSet> ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery)
 {
   ULBasicCallback theCallback;
   SendFind(inRootQuery, &theCallback);
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendFind(gdcm::BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback){
-  if (mConnection == NULL){
+void ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback)
+{
+  if (mConnection == NULL)
+    {
     return;
-  }
+    }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCFindPDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
   RunEventLoop(theEvent, mConnection, inCallback, false);
 }
 
-std::vector<gdcm::DataSet> ULConnectionManager::SendStore(gdcm::DataSet *inDataSet)
+std::vector<DataSet> ULConnectionManager::SendStore(const DataSet *inDataSet)
 {
   ULBasicCallback theCallback;
   SendStore(inDataSet, &theCallback);
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendStore(gdcm::DataSet * inDataSet, ULConnectionCallback* inCallback){
-  if (mConnection == NULL){
+void ULConnectionManager::SendStore(const DataSet * inDataSet, ULConnectionCallback* inCallback){
+  if (mConnection == NULL)
+    {
     return;
-  }
+    }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(inDataSet );
   ULEvent theEvent(ePDATArequest, theDataPDU);
   RunEventLoop(theEvent, mConnection, inCallback, false);
@@ -392,7 +408,7 @@ void ULConnectionManager::SendStore(gdcm::DataSet * inDataSet, ULConnectionCallb
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
-  std::vector<gdcm::DataSet> theResult;
+  std::vector<DataSet> theResult;
   if (mConnection == NULL){
     return false;
   }
@@ -412,6 +428,7 @@ void ULConnectionManager::BreakConnectionNow(){
 
   //assume no data coming back when dying, no need for callback
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+  (void)theState;
 }
 
 //event handler loop for move-- will interweave the two event loops,
@@ -474,11 +491,11 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           incomingPDUs.push_back(thePDU);
           thePDU->Read(is);
           gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
-          if (gdcm::Trace::GetDebugFlag())
+          if (Trace::GetDebugFlag())
             {
-            if (gdcm::Trace::GetDebugToFile())
+            if (Trace::GetDebugToFile())
               {
-                thePDU->Print(gdcm::Trace::GetDebugFile());
+                thePDU->Print(Trace::GetDebugFile());
               }
             else 
               {
@@ -515,20 +532,20 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           //so, we look either for pending, or for the number of operations left
           // (tag 0000, 1020) if the value is success, and that number should be 0.
           DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
-          if (gdcm::Trace::GetDebugFlag()){
-            gdcm::Printer thePrinter;
-            if (gdcm::Trace::GetDebugToFile())
+          if (Trace::GetDebugFlag()){
+            Printer thePrinter;
+            if (Trace::GetDebugToFile())
               {
-              thePrinter.PrintDataSet(theRSP, gdcm::Trace::GetDebugFile());
+              thePrinter.PrintDataSet(theRSP, Trace::GetDebugFile());
               }
             else
               {
               thePrinter.PrintDataSet(theRSP, std::cout);
               }
           }
-          if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
-            gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
-            gdcm::Attribute<0x0,0x0900> at;
+          if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
+            DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
+            Attribute<0x0,0x0900> at;
             at.SetFromDataElement( de );
             theVal = at.GetValues()[0];
             //if theVal is Pending or Success, then we need to enter the loop below,
@@ -538,15 +555,15 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             //success == 0000H
           }
           uint32_t theCommandCode = 0;
-          if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0100))){
-            gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
-            gdcm::Attribute<0x0,0x0100> at;
+          if (theRSP.FindDataElement(Tag(0x0,0x0100))){
+            DataElement de = theRSP.GetDataElement(Tag(0x0,0x0100));
+            Attribute<0x0,0x0100> at;
             at.SetFromDataElement( de );
             theCommandCode = at.GetValues()[0];
           }
-          if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x1020))){
-            gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x1020));
-            gdcm::Attribute<0x0,0x1020> at;
+          if (theRSP.FindDataElement(Tag(0x0, 0x1020))){
+            DataElement de = theRSP.GetDataElement(Tag(0x0,0x1020));
+            Attribute<0x0,0x1020> at;
             at.SetFromDataElement( de );
             theNumLeft = at.GetValues()[0];
             //if theVal is Pending or Success, then we need to enter the loop below,
@@ -597,13 +614,13 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
                 gdcmErrorMacro( "Unable to process" << std::endl);
                 break;
             }
-            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
-              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
+            if (theRSP.FindDataElement(Tag(0x0,0x0901))){
+              DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
               err1 = de.GetByteValue();
               gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
             }
-            if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0902))){
-              gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0902));
+            if (theRSP.FindDataElement(Tag(0x0,0x0902))){
+              DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
               err2 = de.GetByteValue();
               gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
             }
@@ -663,7 +680,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
               //then, look for tag 0x0,0x900
 
               //only add datasets that are _not_ part of the network response
-              std::vector<gdcm::DataSet> final;
+              std::vector<DataSet> final;
               std::vector<BasePDU*> theData;
               BasePDU* thePDU;//outside the loop for the do/while stopping condition
               bool interrupted = false;
@@ -775,11 +792,11 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
             incomingPDUs.push_back(theFirstPDU);
             theFirstPDU->Read(is);
             gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
-            if (gdcm::Trace::GetDebugFlag())
+            if (Trace::GetDebugFlag())
               {
-              if (gdcm::Trace::GetDebugToFile())
+              if (Trace::GetDebugToFile())
                 {
-                  theFirstPDU->Print(gdcm::Trace::GetDebugFile());
+                  theFirstPDU->Print(Trace::GetDebugFile());
                 }
               else 
                 {
@@ -819,9 +836,9 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               theVal = pendingDE1;
               uint32_t theCommandCode = 0;//for now, a nothing value
               DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
-              if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0900))){
-                gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0900));
-                gdcm::Attribute<0x0,0x0900> at;
+              if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
+                DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
+                Attribute<0x0,0x0900> at;
                 at.SetFromDataElement( de );
                 theVal = at.GetValues()[0];
                 //if theVal is Pending or Success, then we need to enter the loop below,
@@ -830,11 +847,11 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 //with the dataset, even if the status is 'success'
                 //success == 0000H
               }
-              if (gdcm::Trace::GetDebugFlag()){
-                gdcm::Printer thePrinter;
-                if (gdcm::Trace::GetDebugToFile())
+              if (Trace::GetDebugFlag()){
+                Printer thePrinter;
+                if (Trace::GetDebugToFile())
                   {
-                  thePrinter.PrintDataSet(theRSP, gdcm::Trace::GetDebugFile());
+                  thePrinter.PrintDataSet(theRSP, Trace::GetDebugFile());
                   }
                 else
                   {
@@ -843,9 +860,9 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               }
 
               //check to see if this is a cstorerq
-              if (theRSP.FindDataElement(gdcm::Tag(0x0, 0x0100))){
-                gdcm::DataElement de2 = theRSP.GetDataElement(gdcm::Tag(0x0,0x0100));
-                gdcm::Attribute<0x0,0x0100> at2;
+              if (theRSP.FindDataElement(Tag(0x0, 0x0100))){
+                DataElement de2 = theRSP.GetDataElement(Tag(0x0,0x0100));
+                Attribute<0x0,0x0100> at2;
                 at2.SetFromDataElement( de2 );
                 theCommandCode = at2.GetValues()[0];
               }
@@ -854,13 +871,13 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 //check for other error fields
                 ByteValue *err1 = NULL, *err2 = NULL;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
-                if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0901))){
-                  gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0901));
+                if (theRSP.FindDataElement(Tag(0x0,0x0901))){
+                  DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
                   err1 = de.GetByteValue();
                   gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
                 }
-                if (theRSP.FindDataElement(gdcm::Tag(0x0,0x0902))){
-                  gdcm::DataElement de = theRSP.GetDataElement(gdcm::Tag(0x0,0x0902));
+                if (theRSP.FindDataElement(Tag(0x0,0x0902))){
+                  DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
                   err2 = de.GetByteValue();
                   gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
                 }
@@ -879,7 +896,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 //then, look for tag 0x0,0x900
 
                 //only add datasets that are _not_ part of the network response
-                std::vector<gdcm::DataSet> final;
+                std::vector<DataSet> final;
                 std::vector<BasePDU*> theData;
                 BasePDU* thePDU;//outside the loop for the do/while stopping condition
                 bool interrupted = false;
@@ -929,7 +946,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                     inWhichConnection->GetProtocol()->flush();
 
                     // FIXME added MM / Oct 30 2010
-                    gdcm::network::AReleaseRPPDU rel;
+                    AReleaseRPPDU rel;
                     //rel.Write( *inWhichConnection->GetProtocol() );
                     //inWhichConnection->GetProtocol()->flush();
 
@@ -974,3 +991,6 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
 
   return theState;
 }
+
+} // end namespace network
+} // end namespace gdcm

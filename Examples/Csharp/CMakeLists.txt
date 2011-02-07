@@ -18,6 +18,7 @@ SET(CSHARP_EXAMPLES
   StandardizeFiles
   ReformatFile
   CompressLossyJPEG
+  SendFileSCU
   )
 
 IF(BUILD_TESTING)

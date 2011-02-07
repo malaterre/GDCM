@@ -29,13 +29,13 @@ namespace gdcm{
  */
 class CStoreRQ : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
     };
 
     class CStoreRSP : public BaseCompositeMessage {
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet);//to fulfill the virtual contract
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);//to fulfill the virtual contract
     public:
-      std::vector<PresentationDataValue> ConstructPDV(DataSet* inDataSet, BasePDU* inPC);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet, const BasePDU* inPC);
     };
   }
 }

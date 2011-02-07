@@ -37,7 +37,7 @@ namespace gdcm{
   class PDUFactory {
       public:
       static BasePDU* ConstructPDU(uint8_t itemtype);//eventually needs to be smartpointer'd
-      static EEventID DetermineEventByPDU(BasePDU* inPDU);
+      static EEventID DetermineEventByPDU(const BasePDU* inPDU);
       static BasePDU* ConstructReleasePDU();
       static BasePDU* ConstructAbortPDU();
 
@@ -47,10 +47,10 @@ namespace gdcm{
       //the connection is necessary to construct the stream of PDVs that will
       //be then placed into the vector of PDUs
       static std::vector<BasePDU*> CreateCEchoPDU();
-      static std::vector<BasePDU*> CreateCStoreRQPDU(DataSet *inDataSet);
-      static std::vector<BasePDU*> CreateCStoreRSPPDU(DataSet *inDataSet, BasePDU* inPC);
-      static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
-      static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, BaseRootQuery* inRootQuery);
+      static std::vector<BasePDU*> CreateCStoreRQPDU(const DataSet *inDataSet);
+      static std::vector<BasePDU*> CreateCStoreRSPPDU(const DataSet *inDataSet, const BasePDU* inPC);
+      static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);
+      static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);
 
       //given data pdus, produce the presentation data values stored within.
       //all operations have these as the payload of the data sending operation

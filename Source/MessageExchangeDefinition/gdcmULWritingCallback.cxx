@@ -30,17 +30,17 @@ namespace gdcm {
     //they can be written, which could be the case on very fast connections with slow disks
 void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
 {
-  if (inDataSet.FindDataElement(gdcm::Tag(0x0008,0x0018)))
+  if (inDataSet.FindDataElement(Tag(0x0008,0x0018)))
     {
-    gdcm::DataElement de = inDataSet.GetDataElement(gdcm::Tag(0x0008,0x0018));
+    DataElement de = inDataSet.GetDataElement(Tag(0x0008,0x0018));
     std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
-    gdcm::Writer w;
+    Writer w;
     std::string theLoc = mDirectoryName + "/" + sopclassuid_str + ".dcm";
     w.SetFileName(theLoc.c_str());
-    gdcm::File &f = w.GetFile();
+    File &f = w.GetFile();
     f.SetDataSet(inDataSet);
-    gdcm::FileMetaInformation &fmi = f.GetHeader();
-    fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+    FileMetaInformation &fmi = f.GetHeader();
+    fmi.SetDataSetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
     w.SetCheckFileMetaInformation( true );
     if (!w.Write())
       {
@@ -48,15 +48,16 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
       }
     else 
       {
-        if (gdcm::Trace::GetWarningFlag())
-          std::cout << "Wrote " << sopclassuid_str << " to disk. " << std::endl;
+      if (Trace::GetWarningFlag())
+        std::cout << "Wrote " << sopclassuid_str << " to disk. " << std::endl;
       }
     }
   else 
     {
-      gdcmErrorMacro( "Failed to write data set, could not find tag 0x0008, 0x0018" << std::endl);
+    gdcmErrorMacro( "Failed to write data set, could not find tag 0x0008, 0x0018" << std::endl);
     }
   DataSetHandled();
 }
-  }
-}
+
+} // end namespace network
+} // end namespace gdcm

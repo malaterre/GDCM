@@ -29,7 +29,10 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmAReleaseRPPDU.h"
 #include "gdcmPDataTFPDU.h"
 
-using namespace gdcm::network;
+namespace gdcm
+{
+namespace network
+{
 
 //Send A-RELEASE-RQ-PDU
 EStateID ULActionAR1::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
@@ -153,3 +156,5 @@ EStateID ULActionAR10::PerformAction(ULEvent& inEvent, ULConnection& inConnectio
   return eSta12ReleaseCollisionAcLocal;
 }
 
+} // end namespace network
+} // end namespace gdcm

@@ -27,8 +27,8 @@ name and date: 15 oct 2010 mmr
 
 namespace gdcm{
 
-std::vector<gdcm::Tag> QueryPatient::GetRequiredTags(const ERootType& inRootType) const{
-  std::vector<gdcm::Tag> theReturn;//see 3.4 C.6.1.1.2
+std::vector<Tag> QueryPatient::GetRequiredTags(const ERootType& inRootType) const{
+  std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
   switch (inRootType){
     case ePatientRootType:
     default:
@@ -40,8 +40,8 @@ std::vector<gdcm::Tag> QueryPatient::GetRequiredTags(const ERootType& inRootType
   }
   return theReturn;
 }
-std::vector<gdcm::Tag> QueryPatient::GetUniqueTags(const ERootType& inRootType) const{
-  std::vector<gdcm::Tag> theReturn;//see 3.4 C.6.1.1.2
+std::vector<Tag> QueryPatient::GetUniqueTags(const ERootType& inRootType) const{
+  std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
   switch (inRootType){
     case ePatientRootType:
     default:
@@ -54,8 +54,8 @@ std::vector<gdcm::Tag> QueryPatient::GetUniqueTags(const ERootType& inRootType) 
   return theReturn;
 
 }
-std::vector<gdcm::Tag> QueryPatient::GetOptionalTags(const ERootType& inRootType) const{
-  std::vector<gdcm::Tag> theReturn;//see 3.4 C.6.1.1.2
+std::vector<Tag> QueryPatient::GetOptionalTags(const ERootType& inRootType) const{
+  std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
   switch (inRootType){
     case ePatientRootType:
     default:

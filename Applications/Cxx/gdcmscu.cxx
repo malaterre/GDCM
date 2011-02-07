@@ -1,17 +1,17 @@
 /*=========================================================================
- 
- Program: GDCM (Grassroots DICOM). A DICOM library
- Module:  $URL$
- 
- Copyright (c) 2006-2010 Mathieu Malaterre
- All rights reserved.
- See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
- 
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notice for more information.
- 
- =========================================================================*/
+
+  Program: GDCM (Grassroots DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2010 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
 /*
  * Simple command line tool to echo/store/find/move DICOM using
  * DICOM Query/Retrieve
@@ -489,46 +489,47 @@ int main(int argc, char *argv[])
   const char *hostname = shostname.c_str();
   std::string mode = "echo";
   if ( echomode )
-  {
+    {
     mode = "echo";
-  }
+    }
   else if ( storemode )
-  {
+    {
     mode = "store";
-  }
+    }
   else if ( findmode )
-  {
+    {
     mode = "find";
-  }
+    }
   else if ( movemode )
-  {
+    {
     mode = "move";
-  }
+    }
   
   //this class contains the networking calls
   gdcm::CompositeNetworkFunctions theNetworkFunctions;
   
   if ( mode == "server" ) // C-STORE SCP
-  {
+    {
     // MM: Do not expose that to user for now (2010/10/11).
     //CStoreServer( port );
     return 1;
-  }
+    }
   else if ( mode == "echo" ) // C-ECHO SCU
-  {
+    {
     // ./bin/gdcmscu mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
-    bool didItWork = theNetworkFunctions.CEcho( hostname, port, callingaetitle, callaetitle );
+    bool didItWork = theNetworkFunctions.CEcho( hostname, port,
+      callingaetitle.c_str(), callaetitle.c_str() );
     if (!didItWork)
-    {
+      {
       std::cout << "Echo failed." << std::endl;
-    }
+      }
     else
-    {
+      {
       std::cout << "Echo succeeded." << std::endl;
-    }
+      }
     return (didItWork ? 0 : 1);
-  }
+    }
   else if ( mode == "move" ) // C-FIND SCU
   {
     // ./bin/gdcmscu --move --patient dhcp-67-183 5678 move
@@ -544,7 +545,7 @@ int main(int argc, char *argv[])
     if (imagequery)
       theLevel = gdcm::eImageOrFrame;
     
-    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(true, theRoot, theLevel ,keys);
+    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(theRoot, theLevel, keys, true);
     
     if (findstudyroot == 0 && findpatientroot == 0)
     {
@@ -587,7 +588,9 @@ int main(int argc, char *argv[])
     //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
     //across, rather than all at once at the end.  Turn off the boolean to have
     //it written all at once at the end.
-    bool didItWork = theNetworkFunctions.CMove( hostname, port, callingaetitle, callaetitle, theQuery, portscpnum, outputdir );
+    bool didItWork = theNetworkFunctions.CMove( hostname, port, 
+      theQuery, portscpnum,
+      callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
     delete theQuery;
     if (!didItWork)
     {
@@ -619,7 +622,8 @@ int main(int argc, char *argv[])
     if (imagequery)
       theLevel = gdcm::eImageOrFrame;
     
-    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(false, theRoot, theLevel ,keys);
+    gdcm::BaseRootQuery* theQuery = 
+      theNetworkFunctions.ConstructQuery(theRoot, theLevel ,keys);
     if (findstudyroot == 0 && findpatientroot == 0)
     {
       if (gdcm::Trace::GetErrorFlag())
@@ -655,11 +659,19 @@ int main(int argc, char *argv[])
     }//must ensure that 0x8,0x52 is set and that
     //the value in that tag corresponds to the query type
     int ret = 0;
-    std::vector<gdcm::DataSet> theDataSet = theNetworkFunctions.CFind( hostname, port, callingaetitle, callaetitle, theQuery );
+    std::vector<gdcm::DataSet> theDataSet;
+    if( !theNetworkFunctions.CFind(hostname, port, theQuery, theDataSet,
+        callingaetitle.c_str(), callaetitle.c_str()) )
+      {
+      std::cerr << "Problem in CFind." << std::endl;
+      delete theQuery;
+      return 1;
+      }
     std::vector<gdcm::DataSet>::iterator itor;
-    for (itor = theDataSet.begin(); itor != theDataSet.end(); itor++){
+    for (itor = theDataSet.begin(); itor != theDataSet.end(); itor++)
+      {
       itor->Print(std::cout);
-    }
+      }
     
     delete theQuery;
     if (ret == 0)
@@ -672,7 +684,13 @@ int main(int argc, char *argv[])
   {
     // mode == filename
     filenames.push_back(filename);//otherwise, segfault because filenames is empty
-    bool didItWork = theNetworkFunctions.CStore( hostname, port, callingaetitle, callaetitle ,filenames, theRecursive );
+    if( theRecursive )
+      {
+      assert( 0 );
+      }
+    bool didItWork = 
+      theNetworkFunctions.CStore(hostname, port, filenames,
+        callingaetitle.c_str(), callaetitle.c_str());
     
     if (!didItWork)
       std::cout << "Store was successful." << std::endl;
