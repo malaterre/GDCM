@@ -282,6 +282,15 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
       gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
       }
     }
+  catch ( Exception &e )
+    {
+    // If you reach here this is basically because GDCM does not support encoding other
+    // than raw transfer syntx (Little Endian Explicit/Implicit...)
+    theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+    gdcmErrorMacro( "C-Store of file " << filename << " was unsuccessful, aborting. " )
+    gdcmErrorMacro( "Error was " << e.what() );
+    return false;
+    }
   catch (...)
     {
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
