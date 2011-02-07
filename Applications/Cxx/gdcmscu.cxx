@@ -128,7 +128,6 @@ int main(int argc, char *argv[])
   int portscp = 0;
   int outputopt = 0;
   int portscpnum = 0;
-  std::string filename;
   gdcm::Directory::FilenamesType filenames;
   std::string outputdir;
   int storequery = 0;
@@ -222,8 +221,7 @@ int main(int argc, char *argv[])
           if( option_index == 0 ) /* input */
           {
             assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
-            filename = optarg;
+            filenames.push_back( optarg );
           }
           else if( option_index == 7 ) /* calling aetitle */
           {
@@ -317,8 +315,7 @@ int main(int argc, char *argv[])
         
       case 'i':
         //printf ("option i with value '%s'\n", optarg);
-        assert( filename.empty() );
-        filename = optarg;
+        filenames.push_back( optarg );
         break;
         
       case 'r':
@@ -373,38 +370,37 @@ int main(int argc, char *argv[])
         printf ("?? getopt returned character code 0%o ??\n", c);
     }
   }
-  
+
   if (optind < argc)
-  {
+    {
     int v = argc - optind;
     // hostname port filename
     if( v == 1 )
-    {
+      {
       shostname = argv[optind++];
-    }
+      }
     else if( v == 2 )
-    {
+      {
       shostname = argv[optind++];
       port = atoi( argv[optind++] );
-    }
+      }
     else if( v >= 3 )
-    {
+      {
       shostname = argv[optind++];
       port = atoi( argv[optind++] );
-      //filename = argv[optind++];
       std::vector<std::string> files;
       while (optind < argc)
-      {
+        {
         files.push_back( argv[optind++] );
-      }
+        }
       filenames = files;
-    }
+      }
     else
-    {
+      {
       return 1;
-    }
+      }
     assert( optind == argc );
-  }
+    }
   
   if( version )
   {
@@ -681,22 +677,35 @@ int main(int argc, char *argv[])
     return ret;
   }
   else // C-STORE SCU
-  {
-    // mode == filename
-    filenames.push_back(filename);//otherwise, segfault because filenames is empty
-    if( theRecursive )
+    {
+    // mode == directory
+    gdcm::Directory::FilenamesType thefiles;
+    for( gdcm::Directory::FilenamesType::const_iterator file = filenames.begin();
+      file != filenames.end(); ++file )
       {
-      assert( 0 );
+      if( gdcm::System::FileIsDirectory(file->c_str()) )
+        {
+        gdcm::Directory::FilenamesType files;
+        gdcm::Directory dir;
+        dir.Load(*file, theRecursive);
+        files = dir.GetFilenames();
+        thefiles.insert(thefiles.end(), files.begin(), files.end());
+        }
+      else
+        {
+        // This is a file simply add it
+        thefiles.push_back(*file);
+        }
       }
     bool didItWork = 
-      theNetworkFunctions.CStore(hostname, port, filenames,
+      theNetworkFunctions.CStore(hostname, port, thefiles,
         callingaetitle.c_str(), callaetitle.c_str());
-    
+
     if (!didItWork)
       std::cout << "Store was successful." << std::endl;
     else
       std::cout << "Store failed." << std::endl;
     return (didItWork ? 0 : 1);
-  }
+    }
   return 0;
 }
