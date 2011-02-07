@@ -17,66 +17,60 @@ INCLUDE_DIRECTORIES(
   )
 
 SET(MessageExchangeDefinition_SRCS
-  gdcmServiceClassUser.cxx
   gdcmAAbortPDU.cxx
+  gdcmAAssociateACPDU.cxx
   gdcmAAssociateRJPDU.cxx
-  gdcmAbstractSyntax.cxx
+  gdcmAAssociateRQPDU.cxx
+  gdcmARTIMTimer.cxx
   gdcmAReleaseRPPDU.cxx
-  #gdcmPDataPDU.cxx
+  gdcmAReleaseRQPDU.cxx
+  gdcmAbstractSyntax.cxx
+  gdcmApplicationContext.cxx
+  gdcmAsynchronousOperationsWindowSub.cxx
+  gdcmBaseRootQuery.cxx
+  gdcmCEchoMessages.cxx
+  gdcmCFindMessages.cxx
+  gdcmCMoveMessages.cxx
+  gdcmCStoreMessages.cxx
+  gdcmCommandDataSet.cxx
+  gdcmCompositeMessageFactory.cxx
+  gdcmCompositeNetworkFunctions.cxx
+  gdcmImplementationClassUIDSub.cxx
+  gdcmImplementationUIDSub.cxx
+  gdcmImplementationVersionNameSub.cxx
+  gdcmMaximumLengthSub.cxx
+  gdcmPDUFactory.cxx
+  gdcmPDataTFPDU.cxx
+  gdcmPatientRootQuery.cxx
+  gdcmPresentationContext.cxx
   gdcmPresentationContextAC.cxx
   gdcmPresentationDataValue.cxx
+  gdcmQueryFactory.cxx
+  gdcmQueryImage.cxx
+  gdcmQueryPatient.cxx
+  gdcmQuerySeries.cxx
+  gdcmQueryStudy.cxx
+  gdcmServiceClassUser.cxx
+  gdcmStudyRootQuery.cxx
+  gdcmTransferSyntaxSub.cxx
+  gdcmULActionAA.cxx
+  gdcmULActionAE.cxx
+  gdcmULActionAR.cxx
+  gdcmULActionDT.cxx
+  gdcmULBasicCallback.cxx
+  gdcmULConnection.cxx
+  gdcmULConnectionInfo.cxx
+  gdcmULConnectionManager.cxx
+  gdcmULTransitionTable.cxx
+  gdcmULWritingCallback.cxx
   gdcmUserInformation.cxx
-gdcmAAssociateACPDU.cxx
-gdcmAAssociateRQPDU.cxx
-gdcmApplicationContext.cxx
-gdcmAReleaseRQPDU.cxx
-gdcmPDataTFPDU.cxx
-gdcmPresentationContext.cxx
-gdcmTransferSyntaxSub.cxx
-gdcmMaximumLengthSub.cxx
-gdcmCommandDataSet.cxx
-gdcmImplementationClassUIDSub.cxx
-gdcmImplementationUIDSub.cxx
-gdcmImplementationVersionNameSub.cxx
-gdcmAsynchronousOperationsWindowSub.cxx
-gdcmULTransitionTable.cxx
-gdcmULActionAA.cxx
-gdcmULActionAE.cxx
-gdcmULActionAR.cxx
-gdcmULActionDT.cxx
-gdcmARTIMTimer.cxx
-gdcmULConnection.cxx
-gdcmULConnectionManager.cxx
-gdcmULConnectionInfo.cxx
-gdcmPDUFactory.cxx
-gdcmCompositeMessageFactory.cxx
-gdcmCEchoMessages.cxx
-gdcmCFindMessages.cxx
-gdcmCStoreMessages.cxx
-gdcmCMoveMessages.cxx
-gdcmQueryImage.cxx
-gdcmQuerySeries.cxx
-gdcmQueryStudy.cxx
-gdcmQueryPatient.cxx
-gdcmPatientRootQuery.cxx
-gdcmStudyRootQuery.cxx
-gdcmBaseRootQuery.cxx
-gdcmQueryFactory.cxx
-gdcmULBasicCallback.cxx
-gdcmULWritingCallback.cxx
-gdcmCompositeNetworkFunctions.cxx
   )
 
-#ADD_LIBRARY(gdcmMED ${MessageExchangeDefinition_SRCS})
-# Let's prefer the 4 letter name: MEXD:
 ADD_LIBRARY(gdcmMEXD ${MessageExchangeDefinition_SRCS})
-#TARGET_LINK_LIBRARIES(gdcmMEXD gdcmDICT gdcmCommon)
+TARGET_LINK_LIBRARIES(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
 SET_TARGET_PROPERTIES(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
-#target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
-target_link_libraries(gdcmMEXD gdcmDICT gdcmDSED gdcmMSFF gdcmIOD socketxx ws2_32.lib)
-else (WIN32)
-TARGET_LINK_LIBRARIES(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
+  target_link_libraries(ws2_32)
 endif(WIN32)
 
 # libs
