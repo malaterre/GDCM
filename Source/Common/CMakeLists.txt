@@ -156,7 +156,7 @@ ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
 # libs
 install_library(gdcmCommon)
-#PDB
+# PDB
 install_pdb(gdcmCommon)
 # include files
 install_includes("*.h" "*.txx")
