@@ -70,7 +70,7 @@ ADD_LIBRARY(gdcmMEXD ${MessageExchangeDefinition_SRCS})
 TARGET_LINK_LIBRARIES(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
 SET_TARGET_PROPERTIES(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
-  target_link_libraries(ws2_32)
+  target_link_libraries(ws2_32.lib)
 endif(WIN32)
 
 # libs
