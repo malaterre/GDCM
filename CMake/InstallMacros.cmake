@@ -35,9 +35,14 @@ MACRO (install_pdb library)
     get_target_property(library_dll ${library} LOCATION)
     IF(CMAKE_CONFIGURATION_TYPES)
       # Visual Studio
-      FOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
-        string(REPLACE "$(OutDir)" "\${CMAKE_INSTALL_CONFIG_NAME}" library_pdb "${library_dll}")
-      ENDFOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
+      #FOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
+      #  string(REPLACE "$(OutDir)" "\${CMAKE_INSTALL_CONFIG_NAME}" library_pdb "${library_dll}")
+      #ENDFOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
+      string(REPLACE "$(OutDir)" "\${BUILD_TYPE}" library_pdb "${library_dll}")
+      install (FILES ${library_pdb}
+        DESTINATION ${GDCM_INSTALL_BIN_DIR}
+        COMPONENT Development
+        )
     ELSE(CMAKE_CONFIGURATION_TYPES)
       # nmake
       string(REPLACE .dll .pdb library_pdb ${library_dll})
