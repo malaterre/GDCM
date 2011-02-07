@@ -32,6 +32,11 @@ public class SendFileSCU
     bool b = CompositeNetworkFunctions.CEcho( server, port );
     if( !b ) return 1;
 
+    FilenamesType files = new FilenamesType();
+    files.Add( filename );
+    b = CompositeNetworkFunctions.CStore( server, port, files );
+    if( !b ) return 1;
+
     return 0;
     }
 }
