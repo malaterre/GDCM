@@ -26,7 +26,7 @@ namespace gdcm{
  * \brief QueryImage
  * contains: class to construct an image-based query for c-find and c-move
  */
-  class QueryImage : public QueryBase {
+  class GDCM_EXPORT QueryImage : public QueryBase {
     DataSet mCurrentQuery;
   public:
     std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;

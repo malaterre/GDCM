@@ -26,7 +26,7 @@ namespace gdcm{
  * contains: class to construct a series-based query for c-find and c-move
  * name and date: 15 oct 2010 mmr
  */
-  class QuerySeries : public QueryBase {
+  class GDCM_EXPORT QuerySeries : public QueryBase {
   public:
     std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
     std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
