@@ -12,18 +12,26 @@ if(UNIX)
 else(UNIX)
   set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${GDCM_VTK_JAVA_JAR})
 endif(UNIX)
-ADD_CUSTOM_COMMAND(
-  OUTPUT ${EXECUTABLE_OUTPUT_PATH}/HelloVTKWorld.class
-  COMMAND ${JAVA_COMPILE} ARGS -classpath "${classpath}"
-    ${CMAKE_CURRENT_SOURCE_DIR}/HelloVTKWorld.java -d ${EXECUTABLE_OUTPUT_PATH}
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/HelloVTKWorld.java
-  COMMENT "javac HelloVTKWorld.java"
-)
+
+set(classfilesdep)
+set(examples
+  HelloVTKWorld
+  )
+FOREACH(example ${examples})
+  ADD_CUSTOM_COMMAND(
+    OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
+    COMMAND ${JAVA_COMPILE} ARGS -classpath "${classpath}"
+    ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java
+    COMMENT "javac ${example}.java"
+    )
+  list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
+ENDFOREACH(example)
 
 # 3. ok now add the target
 ADD_CUSTOM_TARGET(GDCMJavaVTKExample ALL
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/HelloVTKWorld.class
+  DEPENDS ${classfilesdep}
   COMMENT "building gdcm java example"
 )
 ADD_DEPENDENCIES(GDCMJavaVTKExample VTKGDCMJavaJar)
