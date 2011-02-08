@@ -55,11 +55,15 @@
 
 
 #if !defined(XML_STATIC) && !defined(XMLIMPORT)
-#ifndef XML_BUILDING_EXPAT
 /* using Expat from an application */
 
 #ifdef XML_USE_MSC_EXTENSIONS
+#ifdef gdcmexpat_EXPORTS
 #define XMLIMPORT __declspec(dllimport)
+#else
+#ifndef XML_BUILDING_EXPAT
+#define XMLIMPORT __declspec(dllimport)
+#endif
 #endif
 
 #endif
