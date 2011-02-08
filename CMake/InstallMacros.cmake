@@ -36,7 +36,6 @@ MACRO (install_pdb library)
       # Visual Studio
       # The following does not work with LOCATION keyword. See:
       # http://www.cmake.org/pipermail/cmake/2011-February/042579.html
-      #string(REPLACE "${CMAKE_CFG_INTDIR}" "\${BUILD_TYPE}" library_pdb "${library_pdb}")
       FOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
         get_target_property(library_dll ${library} LOCATION_${cfg})
         string(REPLACE .dll .pdb library_pdb ${library_dll})
@@ -48,7 +47,9 @@ MACRO (install_pdb library)
       ENDFOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
     ELSE(CMAKE_CONFIGURATION_TYPES)
       # nmake
-      get_target_property(library_dll ${library} LOCATION)
+      # Same as above we need the explicit location_<config> variable to account for
+      # the value of CMAKE_DEBUG_POSTFIX
+      get_target_property(library_dll ${library} LOCATION_${CMAKE_BUILD_TYPE})
       string(REPLACE .dll .pdb library_pdb ${library_dll})
       install (FILES ${library_pdb}
         DESTINATION ${GDCM_INSTALL_BIN_DIR}

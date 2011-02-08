@@ -160,6 +160,9 @@ using Kitware.VTK;
 %ignore vtkMatrix4x4::Adjoint(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 %ignore vtkMatrix4x4::Invert(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 %ignore vtkMatrix4x4::Transpose(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
+// In VTK 5.8 we have to ignore the const variant:
+%ignore vtkMatrix4x4::Invert(const vtkMatrix4x4 *in, vtkMatrix4x4 *out);
+%ignore vtkMatrix4x4::Transpose(const vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 
 %ignore vtkImageWriter::GetInput; // I am getting a warning on swig 1.3.33 because of vtkImageAlgorithm.GetInput
 

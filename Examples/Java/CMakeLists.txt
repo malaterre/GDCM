@@ -7,17 +7,25 @@ INCLUDE_DIRECTORIES(
   ${JAVA_AWT_INCLUDE_PATH}
   )
 
+set(classfilesdep)
+set(examples
+  HelloSimple
+  DecompressPixmap
+  )
+FOREACH(example ${examples})
 ADD_CUSTOM_COMMAND(
-  OUTPUT ${EXECUTABLE_OUTPUT_PATH}/HelloSimple.class
-  COMMAND ${JAVA_COMPILE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/HelloSimple.java -d ${EXECUTABLE_OUTPUT_PATH} -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+  OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
+  COMMAND ${JAVA_COMPILE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH} -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/HelloSimple.java
-  COMMENT "javac HelloSimple.java"
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java
+  COMMENT "javac ${example}.java"
 )
+  list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
+ENDFOREACH(example)
 
 # 3. ok now add the target
 ADD_CUSTOM_TARGET(GDCMJavaExample ALL
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/HelloSimple.class
+  DEPENDS ${classfilesdep}
   COMMENT "building gdcm java example"
 )
 # make sure gdcm.jar is built
