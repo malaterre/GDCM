@@ -757,6 +757,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PARAVIEWMODULE_GROUP "Runtime")
   # Expand the "Development" group by default, since we have so few components.
   # Also, provide this group with a description.
+  # The following is needed for CMake 2.8.3 and above to preserve backward compat
+  set(CPACK_MONOLITHIC_INSTALL 1)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
     "All of the tools you'll ever need to develop software using GDCM")
