@@ -225,7 +225,7 @@ using namespace gdcm;
 // gdcm does not use std::string in its interface, but we do need it for the
 // %extend (see below)
 %include "std_string.i"
-%include "std_set.i"
+//%include "std_set.i"
 %include "std_vector.i"
 %include "std_pair.i"
 %include "std_map.i"
@@ -539,7 +539,7 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmStringFilter.h"
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
-%template (ValuesType)      std::set<std::string>;
+//%template (ValuesType)      std::set<std::string>;
 %rename (CSharpTagToValue) SWIGTagToValue;
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
