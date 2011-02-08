@@ -32,21 +32,29 @@ ENDMACRO (install_library)
 
 MACRO (install_pdb library)
   if (MSVC)
-    get_target_property(library_dll ${library} LOCATION)
-    string(REPLACE .dll .pdb library_pdb ${library_dll})
     IF(CMAKE_CONFIGURATION_TYPES)
       # Visual Studio
-      #string(REPLACE "$(OutDir)" "\${BUILD_TYPE}" library_pdb "${library_dll}")
-      #string(REPLACE "$(Configuration)" "\${BUILD_TYPE}" library_pdb "${library_dll}")
-      string(REPLACE "${CMAKE_CFG_INTDIR}" "\${BUILD_TYPE}" library_pdb "${library_pdb}")
+      # The following does not work with LOCATION keyword. See:
+      # http://www.cmake.org/pipermail/cmake/2011-February/042579.html
+      #string(REPLACE "${CMAKE_CFG_INTDIR}" "\${BUILD_TYPE}" library_pdb "${library_pdb}")
+      FOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
+        get_target_property(library_dll ${library} LOCATION_${cfg})
+        string(REPLACE .dll .pdb library_pdb ${library_dll})
+        install (FILES ${library_pdb}
+          DESTINATION ${GDCM_INSTALL_BIN_DIR}
+          COMPONENT Development
+          CONFIGURATIONS ${cfg}
+          )
+      ENDFOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
     ELSE(CMAKE_CONFIGURATION_TYPES)
       # nmake
-      # nothing to do ...
+      get_target_property(library_dll ${library} LOCATION)
+      string(REPLACE .dll .pdb library_pdb ${library_dll})
+      install (FILES ${library_pdb}
+        DESTINATION ${GDCM_INSTALL_BIN_DIR}
+        COMPONENT Development
+        )
     ENDIF(CMAKE_CONFIGURATION_TYPES)
-    install (FILES ${library_pdb}
-      DESTINATION ${GDCM_INSTALL_BIN_DIR}
-      COMPONENT Development
-      )
   endif (MSVC)
 ENDMACRO (install_pdb)
 
