@@ -626,7 +626,7 @@ int main(int argc, char *argv[])
       {
         std::cerr << "Need to explicitly choose query retrieve level, --patientroot or --studyroot" << std::endl;      
       }
-      std::cerr << "Move failed." << std::endl;
+      std::cerr << "Find failed." << std::endl;
       return 1;
     }
     if (!theQuery)
