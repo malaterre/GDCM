@@ -48,6 +48,13 @@ IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "gdcm")
 ENDIF(UNIX)
 
+# See gdcm bug #3175803
+add_custom_command(TARGET ${SWIG_MODULE_php_gdcm_REAL_NAME}
+  PRE_BUILD
+  COMMAND sed -i -e 's/zend_error_noreturn/zend_error/g' "${swig_generated_file_fullname}"
+  COMMENT "Patching zend_error_noreturn into zend_error"
+  )
+
 # Let's copy gdcm.php into the bin dir:
 ADD_CUSTOM_COMMAND(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.php
