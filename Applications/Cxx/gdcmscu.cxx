@@ -677,31 +677,12 @@ int main(int argc, char *argv[])
     return ret;
   }
   else // C-STORE SCU
-    {
-    // mode == directory
-    gdcm::Directory::FilenamesType thefiles;
-    for( gdcm::Directory::FilenamesType::const_iterator file = filenames.begin();
-      file != filenames.end(); ++file )
-      {
-      if( gdcm::System::FileIsDirectory(file->c_str()) )
-        {
-        gdcm::Directory::FilenamesType files;
-        gdcm::Directory dir;
-        dir.Load(*file, theRecursive);
-        files = dir.GetFilenames();
-        thefiles.insert(thefiles.end(), files.begin(), files.end());
-        }
-      else
-        {
-        // This is a file simply add it
-        thefiles.push_back(*file);
-        }
-      }
-    bool didItWork = 
-      theNetworkFunctions.CStore(hostname, port, thefiles,
-        callingaetitle.c_str(), callaetitle.c_str());
-
-    if (!didItWork)
+  {
+    // mode == filename
+    filenames.push_back(filename);//otherwise, segfault because filenames is empty
+    bool didItWork = theNetworkFunctions.CStore( hostname, port, callingaetitle, callaetitle ,filenames, theRecursive );
+    
+    if (didItWork)
       std::cout << "Store was successful." << std::endl;
     else
       std::cout << "Store failed." << std::endl;
