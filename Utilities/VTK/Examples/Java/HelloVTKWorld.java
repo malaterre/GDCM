@@ -33,8 +33,12 @@ public class HelloVTKWorld
     System.loadLibrary("vtkIOJava");
     System.loadLibrary("vtkImagingJava");
     System.loadLibrary("vtkGraphicsJava");
-    System.loadLibrary("vtkRenderingJava");
     System.loadLibrary("vtkgdcmJava");
+    try {
+      System.loadLibrary("vtkRenderingJava");
+    } catch (Throwable e) {
+      System.out.println("cannot load vtkHybrid, skipping...");
+    }
     try {
       System.loadLibrary("vtkHybridJava");
     } catch (Throwable e) {
