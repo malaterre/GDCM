@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# grab me at:
+# wget "http://gdcm.git.sourceforge.net/git/gitweb.cgi?p=gdcm/gdcm;a=blob_plain;f=setupgdcm.sh;hb=8b66f6fa797a5979d43fcfdd0d3da634a861cd3a" -O setupgdcm.sh
+
 # sudo apt-get install git
 # sudo apt-get install cmake
 
