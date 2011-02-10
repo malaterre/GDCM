@@ -8,9 +8,9 @@ INCLUDE_DIRECTORIES(
   )
 
 if(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${LIBRARY_OUTPUT_PATH}/gdcm.jar:${GDCM_VTK_JAVA_JAR})
+  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${LIBRARY_OUTPUT_PATH}/gdcm.jar:${VTK_JAVA_JAR}:${GDCM_VTK_JAVA_JAR})
 else(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\${LIBRARY_OUTPUT_PATH}/gdcm.jar\;${GDCM_VTK_JAVA_JAR})
+  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${LIBRARY_OUTPUT_PATH}/gdcm.jar\;${VTK_JAVA_JAR}\;${GDCM_VTK_JAVA_JAR})
 endif(UNIX)
 
 set(classfilesdep)
