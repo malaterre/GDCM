@@ -102,7 +102,8 @@ int TestAllFunctions(int argc, char *argv[])
   //now, run the individual tests.
   //get the filenames from the test directory
   gdcm::Directory theDir;
-  theDir.Load(inputDir, false);
+  unsigned int nfiles = theDir.Load(inputDir, false);
+  if( !n ) return 1;
 
   std::vector<std::string> theFilenames = theDir.GetFilenames();
   //store the datasets remotely
