@@ -50,6 +50,9 @@ public class ReadSeriesIntoVTK
 
   public static void main(String[] args)
     {
+    // See: http://review.source.kitware.com/#change,888
+    // vtkWrapJava does not handle static keyword
+    // String directory = vtkGDCMTesting.GetGDCMDataRoot();
     vtkGDCMTesting t = new vtkGDCMTesting();
     String directory = t.GetGDCMDataRoot();
     String file0 = directory + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq0.dcm";
