@@ -2,12 +2,17 @@ SET(MEXD_TEST_SRCS
 TestPresentationContext
 TestQueryFactory
 TestULConnectionManager
-TestAllFunctions
 TestServiceClassUser
 TestSCUValidation
 TestEcho
 TestFind
 )
+IF(GDCM_DATA_ROOT)
+  SET(MEXD_TEST_SRCS
+    ${MEXD_TEST_SRCS}
+    TestAllFunctions
+    )
+ENDIF(GDCM_DATA_ROOT)
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
