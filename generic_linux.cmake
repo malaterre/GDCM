@@ -2,7 +2,7 @@
 
 #set(CTEST_SITE "todo")
 #set(CTEST_BUILD_NAME "todo")
-#set(CTEST_CMAKE_GENERATOR "todo")
+set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
