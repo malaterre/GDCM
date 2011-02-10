@@ -209,6 +209,13 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #  )
 #  endif(NAMELINK_ONLY)
 
+# See gdcm bug #3175803
+add_custom_command(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
+  PRE_BUILD
+  COMMAND sed -i -e 's/zend_error_noreturn/zend_error/g' "${swig_generated_file_fullname}"
+  COMMENT "Patching zend_error_noreturn into zend_error"
+  )
+
 # Let's copy vtkgdcm.php into the bin dir:
 ADD_CUSTOM_COMMAND(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
