@@ -541,6 +541,7 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmUIDGenerator.h"
 //%template (ValuesType)      std::set<std::string>;
 %rename (CSharpTagToValue) SWIGTagToValue;
+%template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
