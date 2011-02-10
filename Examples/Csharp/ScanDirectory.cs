@@ -33,7 +33,10 @@ public class ScanDirectory
     if(nfiles == 0) return 1;
     //System.Console.WriteLine( "Files:\n" + d.toString() );
 
-    Scanner s = new Scanner();
+    //Scanner s = new Scanner();
+    SmartPtrScan sscan = Scanner.New();
+    Scanner s = sscan.__ref__();
+    SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(s, "MySimple");
     s.AddTag( t );
     bool b = s.Scan( d.GetFilenames() );
     if(!b) return 1;
