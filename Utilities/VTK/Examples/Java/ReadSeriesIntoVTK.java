@@ -58,6 +58,7 @@ public class ReadSeriesIntoVTK
     String file3 = directory + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq3.dcm";
 
     vtkStringArray s = new vtkStringArray();
+    System.out.println("adding : " + file0 );
     s.InsertNextValue( file0 );
     s.InsertNextValue( file1 );
     s.InsertNextValue( file2 );
@@ -69,5 +70,12 @@ public class ReadSeriesIntoVTK
 
     System.out.println("Success reading: " + file0 );
 
+    vtkMetaImageWriter writer = new vtkMetaImageWriter();
+    writer.SetCompression( false );
+    writer.SetInput( reader.GetOutput() );
+    writer.SetFileName( "ReadSeriesIntoVTK.mhd" );
+    writer.Write();
+
+    System.out.println("Success writing: " + writer.GetFileName() );
     }
 }
