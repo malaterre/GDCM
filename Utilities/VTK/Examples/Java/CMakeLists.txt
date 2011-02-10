@@ -8,15 +8,16 @@ INCLUDE_DIRECTORIES(
   )
 
 if(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${GDCM_VTK_JAVA_JAR})
+  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${LIBRARY_OUTPUT_PATH}/gdcm.jar:${GDCM_VTK_JAVA_JAR})
 else(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${GDCM_VTK_JAVA_JAR})
+  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\${LIBRARY_OUTPUT_PATH}/gdcm.jar\;${GDCM_VTK_JAVA_JAR})
 endif(UNIX)
 
 set(classfilesdep)
 set(examples
   HelloVTKWorld
   ReadSeriesIntoVTK
+  AWTMedical3
   )
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
