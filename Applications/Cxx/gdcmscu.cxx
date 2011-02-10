@@ -654,7 +654,6 @@ int main(int argc, char *argv[])
       return 1;
     }//must ensure that 0x8,0x52 is set and that
     //the value in that tag corresponds to the query type
-    int ret = 0;
     std::vector<gdcm::DataSet> theDataSet;
     if( !theNetworkFunctions.CFind(hostname, port, theQuery, theDataSet,
         callingaetitle.c_str(), callaetitle.c_str()) )
@@ -670,11 +669,8 @@ int main(int argc, char *argv[])
       }
     
     delete theQuery;
-    if (ret == 0)
-      std::cout << "Find was successful." << std::endl;
-    else
-      std::cout << "Find failed." << std::endl;
-    return ret;
+    std::cout << "Find was successful." << std::endl;
+    return 0;
   }
   else // C-STORE SCU
     {
@@ -701,7 +697,7 @@ int main(int argc, char *argv[])
       theNetworkFunctions.CStore(hostname, port, thefiles,
         callingaetitle.c_str(), callaetitle.c_str());
 
-    if (!didItWork)
+    if (didItWork)
       std::cout << "Store was successful." << std::endl;
     else
       std::cout << "Store failed." << std::endl;
