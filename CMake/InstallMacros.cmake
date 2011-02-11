@@ -59,9 +59,10 @@ MACRO (install_pdb library)
   endif (MSVC)
 ENDMACRO (install_pdb)
 
+# At least one argument is required
 MACRO (install_includes glob_expression)
   IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
-    FILE(GLOB header_files ${glob_expression})
+    FILE(GLOB header_files ${glob_expression} ${ARGN})
     INSTALL(FILES ${header_files}
       DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
       )
