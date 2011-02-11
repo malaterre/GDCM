@@ -251,7 +251,7 @@ typedef String<'\\',64> LTComp;
 typedef String<'\\',64> PNComp;
 typedef String<'\\',64> SHComp;
 typedef String<'\\',64> STComp;
-typedef String<'\\',64> TMComp;
+typedef String<'\\',16> TMComp;
 typedef String<'\\',64,0> UIComp;
 typedef String<'\\',64> UTComp;
 

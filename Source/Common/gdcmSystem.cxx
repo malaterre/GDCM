@@ -640,13 +640,20 @@ bool System::ParseDateTime(time_t &timep, const char date[22])
 bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22])
 {
   if(!date) return false;
-  assert( strlen(date) <= 22 );
   size_t len = strlen(date);
   if( len < 4 ) return false; // need at least the full year
+  if( len > 21 ) return false;
 
   struct tm ptm;
   // No such thing as strptime on some st*$^% platform
-  //char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
+#if defined(GDCM_HAVE_STRPTIME) && 0
+  char *ptr1 = strptime(date, "%Y%m%d%H%M%S", &ptm);
+  if( ptr1 != date + 14 )
+    {
+    // We stopped parsing the string at some point, assume this is an error
+    return false;
+    }
+#else
   // instead write our own:
   int year, mon, day, hour, min, sec, n;
   if ((n = sscanf(date, "%4d%2d%2d%2d%2d%2d",
@@ -661,10 +668,15 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     case 5: sec = 0;
       }
     ptm.tm_year = year - 1900;
+    if( mon < 1 || mon > 12 ) return false;
     ptm.tm_mon = mon - 1;
+    if( day < 1 || day > 31 ) return false;
     ptm.tm_mday = day;
+    if( hour > 24 ) return false;
     ptm.tm_hour = hour;
+    if( min > 60 ) return false;
     ptm.tm_min = min;
+    if( sec > 60 ) return false;
     ptm.tm_sec = sec;
     ptm.tm_wday = -1;
     ptm.tm_yday = -1;
@@ -674,6 +686,7 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     {
     return false;
     }
+#endif
   timep = mktime(&ptm);
   if( timep == (time_t)-1) return false;
 
