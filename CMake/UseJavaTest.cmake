@@ -5,7 +5,7 @@
 #   "${LIBRARY_OUTPUT_PATH}:${VTK_DIR}")
 # ADD_PYTHON_TEST(PYTHON-TEST test.py)
 #
-#  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
