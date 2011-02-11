@@ -19,6 +19,7 @@ GDCM_USE_KWSTYLE:BOOL=ON
 
 GDCM_DOCUMENTATION:BOOL=ON
 GDCM_VTK_DOCUMENTATION:BOOL=ON
+VTK_DIR:PATH=/home/mathieu/Kitware/VTK-gcc
     "
     )
 endmacro(dashboard_hook_init)
