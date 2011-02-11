@@ -4,7 +4,6 @@
 <!-- fop -xml Part6.xml -xsl Part6PDF.xsl Part6.pdf -->
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.

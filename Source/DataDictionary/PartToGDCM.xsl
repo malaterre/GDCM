@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
@@ -35,7 +34,6 @@ This file was generated using the following commands:
     </xsl:comment>
     <xsl:comment>
   Program: GDCM (Grass Root DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.

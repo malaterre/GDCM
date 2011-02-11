@@ -5,7 +5,6 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/DefaultDicts.xsl $
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.

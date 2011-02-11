@@ -4,7 +4,6 @@
 <!-- XSL to convert XML Part6.xml UIDs into C++ code -->
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
@@ -22,7 +21,6 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
