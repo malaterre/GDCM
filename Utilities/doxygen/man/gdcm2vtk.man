@@ -182,6 +182,6 @@ reader itself. This allow setting the Image Orientation (Patient) properly.
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2010 Mathieu Malaterre
+Copyright (c) 2006-2011 Mathieu Malaterre
 
 */
