@@ -722,7 +722,7 @@ const char *System::GetTimezoneOffsetFromUTC()
 bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 {
   // \precondition
-  assert( milliseconds >= 0 && milliseconds < 1000000 );
+  if( !(milliseconds >= 0 && milliseconds < 1000000) ) return false;
 
   // YYYYMMDDHHMMSS.FFFFFF&ZZXX
   if(!date) return false;
