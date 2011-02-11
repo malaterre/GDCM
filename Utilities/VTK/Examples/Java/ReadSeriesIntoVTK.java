@@ -50,6 +50,10 @@ public class ReadSeriesIntoVTK
 
   public static void main(String[] args)
     {
+    vtkFileOutputWindow outWin = new vtkFileOutputWindow();
+    outWin.SetInstance(outWin);
+    outWin.SetFileName("MVSVTKViewer.log");
+
     // See: http://review.source.kitware.com/#change,888
     // vtkWrapJava does not handle static keyword
     // String directory = vtkGDCMTesting.GetGDCMDataRoot();
@@ -74,6 +78,7 @@ public class ReadSeriesIntoVTK
     System.out.println("Success reading: " + file0 );
 
     vtkMetaImageWriter writer = new vtkMetaImageWriter();
+    writer.DebugOn();
     writer.SetCompression( false );
     writer.SetInput( reader.GetOutput() );
     writer.SetFileName( "ReadSeriesIntoVTK.mhd" );
