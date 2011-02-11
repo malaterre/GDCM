@@ -2,7 +2,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:my="urn:my" version="2.0" exclude-result-prefixes="#all">
   <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
@@ -886,7 +885,6 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     </xsl:comment>
     <xsl:comment>
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.

@@ -4,7 +4,6 @@
 <!-- fop -xml GDCM2.xml -xsl gdcm2pdf.xsl GDCM2.pdf -->
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.

@@ -3,7 +3,6 @@
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
@@ -85,7 +84,6 @@ $ xsltproc ../trunk/Source/InformationObjectDefinition/Part4.xsl ./standard/2008
   <xsl:template match="/">
     <xsl:comment>
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
   Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
