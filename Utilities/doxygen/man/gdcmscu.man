@@ -182,6 +182,30 @@ This would become using GDCM syntax:
 gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10="F*"
 \endverbatim
 
+\section debugging Debugging
+
+This is sometime difficult to investigate why a connection to a remote DICOM server
+cannot be done. Some recommendations follows:
+
+Always try to do a simple C-ECHO at first. If you cannot get the C-ECHO to work
+none of the other operations will work
+
+Before trying to a C-MOVE operation, make sure you can execute the C-FIND equivalent
+query first.
+
+When doing a C-MOVE operation you really need to communicate with the PACS admin as
+the C-MOVE operation is different from the other lower level operation such as HTTP/GET.
+When doing a C-MOVE, the server will communicate back using another chanel (could be different
+port) using it's internal database to map an AE-TITLE back to the destination IP.
+Indeed the C-MOVE operation by design does not always use your incoming IP adress to send back
+the resulting dataset. Instead it uses a mapping of AE-TITLE to IP adress to send back
+any results. So pay particular attention to the spelling of your AE-TITLE and your incoming
+port (which may be different from the port to connect to the server).
+
+watch out that port ranging [1-1024] are reserved for admin and not easily accessible unless
+granted special priviliges. therefore the default 104 DICOM port might be accessible to all
+your users.
+
 \section see_also SEE ALSO
 
 <b>gdcmconv</b>(1)
