@@ -102,7 +102,8 @@ public:
   /// \warning not thread safe
   static const char *GetTimezoneOffsetFromUTC();
 
-  /// Encode bytes
+  /// Used internally by the UIDGenerator class to convert a uuid tape to a
+  /// DICOM VR:UI type
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 
   /// consistant func for C99 spec of strcasecmp/strncasecmp
