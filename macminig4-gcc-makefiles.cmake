@@ -19,7 +19,7 @@ macro(dashboard_hook_init)
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
 GDCM_BUILD_APPLICATIONS:BOOL=ON
 
-#GDCM_DATA_EXTRA_ROOT:PATH=$ENV{HOME}/Creatis/gdcmDataExtra
+GDCM_DATA_EXTRA_ROOT:PATH=$ENV{HOME}/Creatis/gdcmDataExtra
     "
     )
 endmacro(dashboard_hook_init)

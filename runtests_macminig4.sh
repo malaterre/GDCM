@@ -3,6 +3,7 @@
 cd $HOME/Dashboards/GDCMScripts && git pull
 
 #ctest -S zorglub-gcc-snap-64-makefiles.cmake -V -O zorglub-gcc-snap-64-makefiles.log
+ctest -S macminig4-gcc-makefiles.cmake            -V -O macminig4-gcc-makefiles.log
 ctest -S macminig4-gcc-64-makefiles-kwstyle.cmake -V -O macminig4-gcc-64-makefiles-kwstyle.log
 
 # Nightly doxygen:
