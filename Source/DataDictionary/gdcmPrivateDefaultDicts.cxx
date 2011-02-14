@@ -861,7 +861,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x01f1,0x0044,"ELSCINT1",VR::OW,VM::VM1,"?",false },
   {0x01f1,0x0045,"ELSCINT1",VR::IS,VM::VM1,"Private (01F1,1045)",false },
   {0x01f1,0x0046,"ELSCINT1",VR::FL,VM::VM1,"?",false },
-  {0x01f1,0x0047,"ELSCINT1",VR::SH,VM::VM1,"?",false },
+  {0x01f1,0x0047,"ELSCINT1",VR::SH,VM::VM1,"Acquisition Dimension (2D/3D)",false },
   {0x01f1,0x0049,"ELSCINT1",VR::DS,VM::VM1,"Private (01F1,1049)",false },
   {0x01f1,0x004a,"ELSCINT1",VR::SH,VM::VM1,"?",false },
   {0x01f1,0x004b,"ELSCINT1",VR::SH,VM::VM1,"Private (01F1,104B)",false },
