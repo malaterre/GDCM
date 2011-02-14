@@ -852,7 +852,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x01f1,0x0033,"ELSCINT1",VR::DS,VM::VM1,"Cycle Time",false },
   {0x01f1,0x0036,"ELSCINT1",VR::CS,VM::VM1,"?",false },
   {0x01f1,0x0037,"ELSCINT1",VR::DS,VM::VM1,"?",false },
-  {0x01f1,0x0038,"ELSCINT1",VR::LO,VM::VM1,"?",false },
+  {0x01f1,0x0038,"ELSCINT1",VR::LO,VM::VM1,"CT Technique (eg. Bolus Tracking)",false },
   {0x01f1,0x0039,"ELSCINT1",VR::LO,VM::VM1,"?",false },
   {0x01f1,0x0040,"ELSCINT1",VR::CS,VM::VM1,"?",false },
   {0x01f1,0x0041,"ELSCINT1",VR::CS,VM::VM1,"?Percent?",false },

@@ -123,11 +123,11 @@ int main(int argc, char *argv [])
   std::string comprgb = "PMSCT_RGB1";
   bool isrle = false;
   bool isrgb = false;
-  if( strncmp( bv->GetPointer(), comprle.c_str(), comprle.size() ) != 0 )
+  if( strncmp( bv->GetPointer(), comprle.c_str(), comprle.size() ) == 0 )
     {
     isrle = true;
     }
-  if( strncmp( bv->GetPointer(), comprgb.c_str(), comprgb.size() ) != 0 )
+  if( strncmp( bv->GetPointer(), comprgb.c_str(), comprgb.size() ) == 0 )
     {
     isrgb = true;
     return 1;
