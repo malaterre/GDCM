@@ -145,7 +145,7 @@ namespace gdcm
             ss.str(s);
             try {
             sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
-            } catch ( Exception &ex ) {
+            } catch ( Exception & ) {
               gdcmErrorMacro( "Could not read SQ. Giving up" );
               return NULL;
             }

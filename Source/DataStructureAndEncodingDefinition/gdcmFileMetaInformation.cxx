@@ -536,6 +536,8 @@ std::istream &FileMetaInformation::Read(std::istream &is)
 
 std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 {
+  // \precondition
+  assert( is.good() );
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
   if( !IsEmpty() )
@@ -573,8 +575,21 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     }
   else if( t.GetGroup() == 0x0800 ) // Good ol' ACR NEMA
     {
-    is.seekg(-4, std::ios::cur); // Seek back
-    DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
+    char vr_str[3];
+    is.read(vr_str, 2);
+    vr_str[2] = '\0';
+    VR::VRType vr = VR::GetVRType(vr_str);
+    if( vr != VR::VR_END )
+      {
+      // File start with a 0x0008 element but no FileMetaInfo and is Explicit
+      DataSetTS = TransferSyntax::ExplicitVRBigEndian;
+      }
+    else
+      {
+      // File start with a 0x0008 element but no FileMetaInfo and is Implicit
+      DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
+      }
+    is.seekg(-6, std::ios::cur); // Seek back
     }
   else if( t.GetElement() == 0x0010 ) // Hum, is it a private creator ?
     {
