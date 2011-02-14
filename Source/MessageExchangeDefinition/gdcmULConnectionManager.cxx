@@ -430,7 +430,7 @@ void ULConnectionManager::BreakConnectionNow(){
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
   (void)theState;
 }
-
+  
 //event handler loop for move-- will interweave the two event loops,
 //one for storescp and the other for movescu.  Perhaps complicated, but
 //avoids starting a second process.
@@ -871,6 +871,44 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 //check for other error fields
                 ByteValue *err1 = NULL, *err2 = NULL;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
+                switch (theVal){
+                  case 0xA701:
+                    gdcmErrorMacro( "Refused: Out of Resources Unable to calculate number of matches" << std::endl);
+                    break;
+                  case 0xA702:
+                    gdcmErrorMacro( "Refused: Out of Resources Unable to perform sub-operations" << std::endl);
+                    break;
+                  case 0xA801:
+                    gdcmErrorMacro( "Refused: Move Destination unknown" << std::endl);
+                    break;
+                  case 0xA900:
+                    gdcmErrorMacro( "Identifier does not match SOP Class" << std::endl);
+                    break;
+                  case 0xAA00:
+                    gdcmErrorMacro( "None of the frames requested were found in the SOP Instance" << std::endl);
+                    break;
+                  case 0xAA01:
+                    gdcmErrorMacro( "Unable to create new object for this SOP class" << std::endl);
+                    break;
+                  case 0xAA02:
+                    gdcmErrorMacro( "Unable to extract frames" << std::endl);
+                    break;
+                  case 0xAA03:
+                    gdcmErrorMacro( "Time-based request received for a non-time-based original SOP Instance. " << std::endl);
+                    break;
+                  case 0xAA04:
+                    gdcmErrorMacro( "Invalid Request" << std::endl);
+                    break;
+                  case 0xFE00:
+                    gdcmErrorMacro( "Sub-operations terminated due to Cancel Indication" << std::endl);
+                    break;
+                  case 0xB000:
+                    gdcmErrorMacro( "Sub-operations Complete One or more Failures or Warnings" << std::endl);
+                    break;
+                  default:
+                    gdcmErrorMacro( "Unable to process" << std::endl);
+                    break;
+                }
                 if (theRSP.FindDataElement(Tag(0x0,0x0901))){
                   DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
                   err1 = de.GetByteValue();
