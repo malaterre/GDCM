@@ -159,8 +159,8 @@ public:
   template <typename TSwap>
   std::istream &Read(std::istream &is)
     {
-    is.read(ElementTag.bytes, 4);
-    TSwap::SwapArray(ElementTag.tags, 2);
+    if( is.read(ElementTag.bytes, 4) )
+      TSwap::SwapArray(ElementTag.tags, 2);
     return is;
     }
 
