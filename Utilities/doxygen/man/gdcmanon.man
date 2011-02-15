@@ -258,6 +258,14 @@ Direct link to PS 3.15-2008:
 
 ftp://medical.nema.org/medical/dicom/2008/08_15pu.pdf
 
+\section gdcmanon_warnings Warnings
+
+Certains attributes may still contains Protected Health Information (PHI) after
+an anonymization step. This is typically the case for Patient's Address (0010,1040).
+The reason is that this particular attribute is not supposed to be in the composite
+IODs in the first place. DICOM Supp 142 includes it (however gdcmanon does not
+implement it).
+
 \section see_also SEE ALSO
 
 <b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1)
