@@ -61,7 +61,7 @@ file-out  DICOM output filename
 \subsection mosaic SIEMENS Mosaic
 
 \verbatim
- $ gdcminfo MR-sonata-3D-as-Tile.dcm
+$ gdcminfo MR-sonata-3D-as-Tile.dcm
 \endverbatim
 
 \verbatim
@@ -113,7 +113,7 @@ Will output:
 \endverbatim
 
 \verbatim
- $ gdcminfo mosaic000.dcm
+$ gdcminfo mosaic000.dcm
 \endverbatim
 
 \verbatim

@@ -11,9 +11,9 @@ gdcmanon [options] dir-in  dir-out
 
 \section description DESCRIPTION
 
-The \b gdcmanon tool is an implementation of PS 3.15 / E.1 / Basic
- Application Level Confidentiality Profile
- (Implementation of E.1.1 De-identify & E.1.2 Re-identify)
+The \b gdcmanon tool is an implementation of PS 3.15 / E.1 / Basic Application
+Level Confidentiality Profile (Implementation of E.1.1 De-identify & E.1.2
+Re-identify)
 
 This tool is split into two very different operating mode:
 \li An implementation of PS 3.15, see -e and -d flags
@@ -149,7 +149,7 @@ than one single file.  When anonymizing multiple DICOM files, you are required
 to use the directory input. You cannot call multiple time the gdcmanon command
 line tool. Indeed the tool stores in memory during the process only a hash
 table of conversion so that each time a particular value is found it get always
-replaced by the same de-identified value (think: consistant Series Instance
+replaced by the same de-identified value (think: consistent Series Instance
 UID).
 
 \subsection dumb Dumb mode
@@ -171,7 +171,7 @@ The following example shows how to use dumb mode and achieve 5 operations at the
 \li Replace the tag (0010,1030) Patient's Weight with the value '10'
 
 You are required to check which DICOM attribute is Type 1 and Type 1C, before
-trying to 'Empty' or 'Remove' a particular DICOM attribute.  For the same
+trying to \b 'Empty' or \b 'Remove' a particular DICOM attribute.  For the same
 reason, you are required to check what are valid value in a replace operation.
 
 \verbatim
@@ -200,14 +200,14 @@ want to remove completely this DICOM attribute. This will make the DICOM:
 In this case one could simply do, as a first step execute the reversible anonymizer:
 
 \verbatim
- gdcmanon -c certificate.pem input.dcm anonymized_reversible.dcm
+$ gdcmanon -c certificate.pem input.dcm anonymized_reversible.dcm
 \endverbatim
 
 and now completely remove the DICOM attribute containing the secretly encrypted Patient related
 information:
 
 \verbatim
- gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reversible.dcm anonymized_irreversible.dcm
+$ gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reversible.dcm anonymized_irreversible.dcm
 \endverbatim
 
 \section openssl OpenSSL
