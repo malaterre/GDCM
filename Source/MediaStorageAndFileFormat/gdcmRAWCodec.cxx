@@ -88,7 +88,15 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
     // pixel of the tiled image.
     // removal of this assert also solve an issue with: SIEMENS_GBS_III-16-ACR_NEMA_1.acr
     // where we need to discard trailing pixel data bytes.
-    memcpy(outBytes, inBytes, inOutBufferLength);
+    if( inOutBufferLength <= inBufferLength )
+      {
+      memcpy(outBytes, inBytes, inOutBufferLength);
+      }
+    else
+      {
+      gdcmWarningMacro( "Requesting too much data. Truncating result" );
+      memcpy(outBytes, inBytes, inBufferLength);
+      }
     return true;
     }
   // else
