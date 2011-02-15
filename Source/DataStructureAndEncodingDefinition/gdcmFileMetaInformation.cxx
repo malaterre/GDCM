@@ -614,7 +614,10 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     if( vr != VR::VR_END )
       {
       // Ok we found a VR, this is 99% likely to be our safe bet
-      DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
+      if( t.GetGroup() > 0xff || t.GetElement() > 0xff )
+        DataSetTS = TransferSyntax::ExplicitVRBigEndian;
+      else
+        DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
       }
     else
       {
