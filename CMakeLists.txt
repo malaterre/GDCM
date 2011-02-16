@@ -305,7 +305,7 @@ IF(GDCM_USE_SYSTEM_OPENJPEG)
   # For some reason I cannot specify the version I want.
   # FIND_PACKAGE(OpenJPEG 2.0 REQUIRED)
   # oh well we should handle both 1.0 and 2.0 anyway...
-  #FIND_PACKAGE(OpenJPEG REQUIRED)
+  FIND_PACKAGE(OpenJPEG REQUIRED)
   SET(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
 ELSE(GDCM_USE_SYSTEM_OPENJPEG)
   SET(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
@@ -758,6 +758,11 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
     "All of the tools you'll ever need to develop software using GDCM")
 
+  if(CMAKE_VERSION VERSION_EQUAL 2.8.3)
+    # The following is needed for CMake 2.8.3 and above to preserve backward compat
+    set(CPACK_MONOLITHIC_INSTALL 1)
+  endif(CMAKE_VERSION VERSION_EQUAL 2.8.3)
+  
   # It doesn't make sense to install the headers without the libraries
   # (because you could never use the headers!), so make the headers component
   # depend on the libraries component.

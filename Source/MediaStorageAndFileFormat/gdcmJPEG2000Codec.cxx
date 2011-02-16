@@ -446,6 +446,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     return false;
     }
 
+  int reversible;
 #if OPENJPEG_MAJOR_VERSION == 1
   /* catch events using our callbacks and give a local context */
   opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
@@ -484,7 +485,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
-  int reversible;
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
@@ -586,7 +586,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   unsigned long len = Dimensions[0]*Dimensions[1] * (PF.GetBitsAllocated() / 8) * image->numcomps;
   char *raw = new char[len];
   //assert( len == fsrc->len );
-  for (unsigned int compno = 0; compno < image->numcomps; compno++)
+  for (unsigned int compno = 0; compno < (unsigned int)image->numcomps; compno++)
     {
     opj_image_comp_t *comp = &image->comps[compno];
 

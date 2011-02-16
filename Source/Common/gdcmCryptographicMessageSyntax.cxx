@@ -102,8 +102,8 @@ public:
     ::X509 *ret = sk_X509_value(recips, i);
     return ret;
   }
-  void SetPrivateKey(::EVP_PKEY* pkey) {
-    this->pkey = pkey;
+  void SetPrivateKey(::EVP_PKEY* thepkey) {
+    this->pkey = thepkey;
   }
   ::EVP_PKEY* GetPrivateKey() const {
     return pkey;
