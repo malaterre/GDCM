@@ -35,79 +35,194 @@
 #include "gdcmAttribute.h"
 #include "gdcmImageWriter.h"
 
+int CLIP(int min, int val, int max)
+{
+  if( val < min ) val = min;
+  if( val > max ) val = max;
+  return val;
+}
+
 void delta_decode(const unsigned char *data_in, size_t data_size,
-  std::vector<unsigned char> &new_stream, int w, int h)
+  std::vector<unsigned char> &new_stream, size_t w, size_t h)
 {
   size_t outputlen = 3 * w * h;
 #if 0
-  new_stream.resize( 3 * w * h );
-  (void)outputlen;
   signed short val = 0 ;
+  signed short col[3] = { 0, 0, 0 } ;
 
-  for ( size_t ii=0, jj=0; (ii < data_size) && (jj < 3*w*h) ;  )
-    {
-    unsigned char byte = data_in[ii++];
+  // --- prepare memory for the decoded stream ---
+  new_stream.resize( 3 * w * h );
 
-    switch( byte )
-      {
-    case 0x81 : // reset value
-      val = (signed char) data_in[ii++];
-      new_stream[jj++] = val;
-      break ;
+#define  VAL CLIP(0,val,255)
+#define  COL CLIP(0,col[jj%3],255)
 
-    case 0x83 : // repetition code
-        {
-        unsigned char rep  = data_in[ii++];
-        for ( int k=0; k < rep; k++ )
-          {
-          new_stream[jj++] = val;
-          new_stream[jj++] = val;
-          new_stream[jj++] = val;
+  // --- We have 2 modes: color or B&W.  In Color mode each color component
+  // is treated individually, in B&W all 3 component are the same.
+  // code "81" change the color mode. ---
+  int mode_color = 0 ;
+
+  // --- for all the element in the input stream ---
+  for ( size_t ii=0, jj=0; (ii < data_size) && (jj < 3*w*h) ;  ) {
+
+    // --- fetch the next byte ---
+    unsigned char byte = data_in[ii++] ;
+
+    switch( byte ) {
+
+      // ================================================================
+      // ===  Code 81:  Color mode and color reset        ===
+      // used change the color mode and set the colors         ===
+      // ================================================================
+      // Note: we only use the code 81 if it fall on a first color    ===
+      //       component.  Otherwhise we use the roll through to get  ===
+      //       the byte value to the "default" treatment.
+      // ================================================================
+    case 0x81 :  // reset value & switch color mode
+
+      // --- only valid if first color component ---
+      if ( ! (jj % 3) ) {
+        mode_color = ! mode_color ;
+
+        // --- special case if next code is 0x82 (just skip it!) ---
+        if ( data_in[ii] == 0x082 )
+          ii++ ;
+
+        if ( mode_color ) {
+          col[0] = data_in[ii++] ;
+          col[1] = data_in[ii++] ;
+          col[2] = data_in[ii++] ;
+          new_stream[jj] = COL ; jj++;
+          new_stream[jj] = COL ; jj++;
+          new_stream[jj] = COL ; jj++;
+
+        } else {
+          col[0] = col[1] = col[2] = val = data_in[ii++] ;
+          new_stream[jj++] = VAL ;
+          new_stream[jj++] = VAL ;
+          new_stream[jj++] = VAL ;
+        }
+
+        break ;
+      }
+
+
+      // ================================================================
+      // ===  Code 83:  Repetition code            ===
+      // used to repeat the current color multiple times        ===
+      // ================================================================
+      // Note: we only use the code 83 if it fall on a first color    ===
+      //       component.  Otherwhise we use the roll through to get  ===
+      //       the byte value to the "default" treatment.
+      // ================================================================
+    case 0x83 :  // repetition code
+
+      // --- only valid if first color component ---
+      if ( ! (jj % 3) ) {
+
+        if ( mode_color ) {
+          unsigned char rep  = data_in[ii++] ;
+          for ( int k=0; k < rep; k++ ) {
+            new_stream[jj] = COL ;
+            jj++ ;
+            new_stream[jj] = COL ;
+            jj++ ;
+            new_stream[jj] = COL ;
+            jj++ ;
+          }
+        } else {
+          unsigned char rep  = data_in[ii++] ;
+          for ( int k=0; k < rep; k++ ) {
+            new_stream[jj++] = VAL ;
+            new_stream[jj++] = VAL ;
+            new_stream[jj++] = VAL ;
           }
         }
-      break ;
+        break ;
+      }
 
-    case 0x82 : // esc 1 byte (use roll through)
-      byte = data_in[ii++] ;
+      // ================================================================
+      // ===  Code 82:  Esc sequence.            ===
+      // Used to treat a byte 81, 82 or 83 as a normal data byte      ===
+      // ================================================================
+      // Note: we only use the code 83 if it fall on a first color    ===
+      //       component.  Otherwhise we use the roll through to get  ===
+      //       the byte value to the "default" treatment.
+      // ================================================================
+    case 0x82 :  // esc 1 byte (use roll through)
 
+      // --- only valid if first color component ---
+      if ( ! (jj % 3) ) {
+        if ( (data_in[ii] == 0x081) || (data_in[ii] == 0x082) || (data_in[ii] == 0x083) ) {
+          byte = data_in[ii++] ;
+        }
+      }
+
+      // ================================================================
+      // ===  Default                ===
+      // ================================================================
+      // Note: The byte value is added either to the current B&W or   ===
+      //       color values.  The value added can be a signed char    ===
+      //       (-128 to 127) or a positive value (0 to 255) or a      ===
+      //       negative value (-1 to -255).
+      // ================================================================
     default :
+
       // --- negative or positive values ? ---
       int val_pos = byte ;
       int val_neg = 256 - byte ;
 
-      short new_val = 0 ;
+      short old_val = 0 ;
 
+      if ( ! mode_color )
+        old_val = val ;
+      else
+        old_val = col[jj%3] ;
+
+
+      short new_val = 0 ;
       // --- The "middle range" values are found with "byte" as a signed char ---
-      // Apparently I need to let the values go slightly negative...
-      if ( (val + (signed char) byte >= -64) && (val + (signed char) byte <= 255) )
-        {
-        // if ( (byte < 0x040) || (byte > 0x0A0) )
+      if ( (old_val + (signed char) byte >= 0) && (old_val + (signed char) byte <= 255) ) {
+
         new_val = (signed char) byte ;
 
         // --- for more "extreme" we use "byte" and "256-byte" ---
-        }
-      else if ( val - val_neg >= 0 )
-        {
-        new_val = -val_neg;
-        }
-      else if ( val + val_pos <= 255 )
-        {
-        new_val = val_pos;
-        }
+      } else if ( old_val - val_neg >= 0 ) {
 
-      val += new_val ;
-      new_stream[jj++] = val;
+        new_val = -val_neg ;
+
+      } else if ( old_val + val_pos <= 255 ) {
+
+        new_val = val_pos ;
       }
+
+      if ( ! mode_color ) {
+        val += new_val ;
+        col[0] = col[1] = col[2] = val ;
+        new_stream[jj++] = VAL ;
+        new_stream[jj++] = VAL ;
+        new_stream[jj++] = VAL ;
+      } else {
+        col[jj%3] += new_val ;
+        new_stream[jj] = COL ;
+        jj++ ;
+      }
+
     }
+  }
+
 #else
 
   // RLE pass
   std::vector<unsigned char> temp;
+  int count = 0;
   for(size_t i = 0; i < data_size; ++i)
     {
     if( data_in[i] == 0x83 )
       {
-      int repeat = data_in[i+1] + 1;
+      int repeat = data_in[i+1];
+      assert( repeat );
+      ++count;
+#if 0
       const unsigned char *value = data_in+i+2;
       while(repeat)
         {
@@ -117,6 +232,16 @@ void delta_decode(const unsigned char *data_in, size_t data_size,
         --repeat;
         }
       i+=4;
+#else
+      unsigned char value = data_in[i+2];
+      std::cout << count << " " << repeat << " " << (int)value << std::endl;
+      while(repeat)
+        {
+        temp.push_back( value );
+        --repeat;
+        }
+      i+=2;
+#endif
       }
     else
       {
@@ -124,7 +249,7 @@ void delta_decode(const unsigned char *data_in, size_t data_size,
       }
     }
 
-#if 1
+#if 0
   std::cout <<  " RLE pass: " << temp.size() << std::endl;
   std::cout <<  " RLE pass / 3: " << ((double)temp.size()/3) << std::endl;
 //  assert( temp.size() % 3 == 0 );
