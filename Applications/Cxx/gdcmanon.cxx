@@ -619,7 +619,7 @@ int main(int argc, char *argv[])
 
   if( !gdcm::System::FileExists(filename.c_str()) )
     {
-    // doh !
+    std::cerr << "Could not find file: " << filename << std::endl;
     return 1;
     }
 
