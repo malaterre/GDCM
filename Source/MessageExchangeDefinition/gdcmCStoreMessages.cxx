@@ -50,9 +50,6 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(const DataSet* inDataS
   if( !inDataSet->FindDataElement( Tag(0x0008, 0x0016) ) ||
     inDataSet->GetDataElement( Tag(0x0008, 0x0016) ).IsEmpty() )
     {
-//  inDataSet->Print( std::cout );
-  bool b = inDataSet->FindDataElement( Tag(0x0008, 0x0016) );
-assert( 0 );
     throw Exception("Missing SOP Class UID");
     }
   const DataElement& msclass = inDataSet->GetDataElement( Tag(0x0008, 0x0016) );
