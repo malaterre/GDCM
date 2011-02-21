@@ -19,7 +19,8 @@
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmBaseRootQuery.h"
 
-#include "gdcmDirectory.h"
+//#include "gdcmDirectory.h"
+#include "gdcmScanner.h"
 #include "gdcmTesting.h"
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
@@ -62,33 +63,22 @@ bool AreDataSetsEqual(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2){
   return true;
 }
 
-int TestAllFunctions(int argc, char *argv[])
+int TestSCUFunctions(int argc, char *argv[])
 {
-#if 0
-  std::string aetitle("UNITED1");//the ae title of this computer
-  std::string call("COMMON");//the ae title of the server
-  int portno = 11112;//the port of the server
-  int moveReturnPort = 11111;//the port over which return cstore scps are done for cmove
-  std::string remote("192.168.1.9");//the ip address of the remote server
-  std::string outputDir("h:/gdcmtestdataretrievedcmtkoutput");//place to where data is returned by cmove
-  std::string inputDir("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
-#else
   if( argc < 6 )
     {
     std::cerr << argv[0] << " aetitle call portno moveReturnPort remote" << std::endl;
     return 1;
     }
-  std::string aetitle = argv[1]; // ("UNITED1");//the ae title of this computer
-  std::string call = argv[2]; //("COMMON");//the ae title of the server
-  int portno = atoi(argv[3]); // 11112;//the port of the server
-  int moveReturnPort = atoi(argv[4]); // 11111;//the port over which return cstore scps are done for cmove
-  std::string remote = argv[5]; //("192.168.1.4");//the ip address of the remote server
-  std::string tmpdir = gdcm::Testing::GetTempDirectory( "TestAllFunctions" );
-  std::string outputDir = tmpdir; // ("h:/gdcmtestdataretrievedcmtk");//place to where data is returned by cmove
-  std::string inputDir = gdcm::Testing::GetDataRoot(); //("h:/gdcmtestdataretrievedcmtk");//input collection of data to transfer
+  std::string aetitle = argv[1]; // the ae title of this computer
+  std::string call = argv[2]; // the ae title of the server
+  int portno = atoi(argv[3]); // the port of the server
+  int moveReturnPort = atoi(argv[4]); // the port over which return cstore scps are done for cmove
+  std::string remote = argv[5]; //the ip address of the remote server
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( "TestSCUFunctions" );
+  std::string outputDir = tmpdir; //place to where data is returned by cmove
+  //std::string inputDir = gdcm::Testing::GetDataRoot(); //input collection of data to transfer
 
-#endif  
-  
   gdcm::CompositeNetworkFunctions theNetworkFunctions;
   bool didItWork = theNetworkFunctions.CEcho( remote.c_str(), portno,
     aetitle.c_str(), call.c_str() );
@@ -101,16 +91,45 @@ int TestAllFunctions(int argc, char *argv[])
 
   //now, run the individual tests.
   //get the filenames from the test directory
-  gdcm::Directory theDir;
-  unsigned int nfiles = theDir.Load(inputDir, false);
-  if( !nfiles ) return 1;
+  //gdcm::Directory theDir;
+  //unsigned int nfiles = theDir.Load(inputDir, false);
+  //if( !nfiles ) return 1;
 
-  std::vector<std::string> theFilenames = theDir.GetFilenames();
+  std::vector<std::string> theFilenames; // = theDir.GetFilenames();
+  const char *filename;
+  int i = 0;
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
+    {
+    theFilenames.push_back( filename );
+    ++i;
+    }
+
+  gdcm::Scanner sc;
+  gdcm::Tag sopinstance(0x8,0x18);
+  sc.AddTag( sopinstance );
+  if( !sc.Scan( theFilenames ) )
+    {
+    return 1;
+    }
+
+  // remove any file without SOP Instance UID
+  for(
+    gdcm::Directory::FilenamesType::iterator it = theFilenames.begin();
+    it != theFilenames.end(); )
+    {
+    const char *file = it->c_str();
+    const char* v = sc.GetValue(file, sopinstance );
+    if( !v ) it = theFilenames.erase( it );
+    else ++it;
+    }
+
+
   //store the datasets remotely
-  didItWork = theNetworkFunctions.CStore(remote.c_str(), portno, theFilenames, 
+  didItWork = theNetworkFunctions.CStore(remote.c_str(), portno, theFilenames,
     aetitle.c_str(), call.c_str());
 
-  if (!didItWork) 
+  if (!didItWork)
     {
     std::cerr << "Store failed." << std::endl;
     return 1;
@@ -119,14 +138,14 @@ int TestAllFunctions(int argc, char *argv[])
   std::vector<std::string>::iterator fitor;
   for (fitor = theFilenames.begin(); fitor < theFilenames.end(); ++fitor)
     {
-
     //read in the file
     gdcm::Reader theReader;
     theReader.SetFileName(fitor->c_str());
-    if (!theReader.Read()) {
+    if (!theReader.Read())
+      {
       std::cerr << "Test failed, dicom file " << *fitor << " failed to load." <<std::endl;
       return 1;
-    }
+      }
     gdcm::File theFile = theReader.GetFile();
     gdcm::DataSet ds = theFile.GetDataSet();
 
@@ -153,24 +172,22 @@ int TestAllFunctions(int argc, char *argv[])
         }
       keys.push_back(std::make_pair(theTag, theSearchString));
       }
-    else 
-      { 
+    else
+      {
       continue;
       }
     std::string theEmptyString;
     keys.push_back(std::make_pair(theIDTag, theEmptyString));
 
-    
     gdcm::BaseRootQuery *theQuery =
       theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys);
 
-
-    std::vector<gdcm::DataSet> theDataSets ;
-    bool b = 
+    std::vector<gdcm::DataSet> theDataSets;
+    bool b =
       theNetworkFunctions.CFind(remote.c_str(), portno, theQuery, theDataSets, aetitle.c_str(), call.c_str());
 
     delete theQuery;
-    if( !b ) 
+    if( !b )
       {
       std::cerr << "Problem in CFind" << std::endl;
       return 1;
@@ -197,7 +214,7 @@ int TestAllFunctions(int argc, char *argv[])
         std::string theSearchString(theBuf, theBuf + theBufferLen);
         delete [] theBuf;
         keys.push_back(std::make_pair(theIDTag, theSearchString));
-        
+
         gdcm::DataElement de2 = ds.GetDataElement(theIDTag);
         if (!(de == de2))
           {
@@ -206,11 +223,11 @@ int TestAllFunctions(int argc, char *argv[])
           }
         break;
         }
-      else 
+      else
         {
         continue;
         }
-    }
+      }
 
     if (keys.empty())
       {
@@ -229,8 +246,7 @@ int TestAllFunctions(int argc, char *argv[])
     delete theQuery;
 
     std::cout << "File " << *fitor << " moved back to server." << std::endl;
+    }
 
-  }
   return 0;
-
 }
