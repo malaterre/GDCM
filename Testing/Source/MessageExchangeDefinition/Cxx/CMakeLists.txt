@@ -10,7 +10,7 @@ TestFind
 IF(GDCM_DATA_ROOT)
   SET(MEXD_TEST_SRCS
     ${MEXD_TEST_SRCS}
-    TestAllFunctions
+    TestSCUFunctions
     )
 ENDIF(GDCM_DATA_ROOT)
 
@@ -37,13 +37,13 @@ SET(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 
 # Loop over files and create executables
 FOREACH(name ${MEXD_TEST_SRCS})
-  IF(${name} STREQUAL "TestAllFunctions")
+  IF(${name} STREQUAL "TestSCUFunctions")
   IF(GDCM_DICOM_SERVER_AETITLE)
     ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE} ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT} ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
   ENDIF(GDCM_DICOM_SERVER_AETITLE)
-  ELSE(${name} STREQUAL "TestAllFunctions")
+  ELSE(${name} STREQUAL "TestSCUFunctions")
     ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
-  ENDIF(${name} STREQUAL "TestAllFunctions")
+  ENDIF(${name} STREQUAL "TestSCUFunctions")
 ENDFOREACH(name)
 
 set(DCMQRSCP_HOSTNAME gotlib)
