@@ -583,7 +583,7 @@ int main(int argc, char *argv[])
     //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
     //across, rather than all at once at the end.  Turn off the boolean to have
     //it written all at once at the end.
-    bool didItWork = theNetworkFunctions.CMove( hostname, port, 
+    bool didItWork = theNetworkFunctions.CMoveToDisk( hostname, port, 
       theQuery, portscpnum,
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
     delete theQuery;
