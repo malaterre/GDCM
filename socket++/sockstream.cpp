@@ -639,14 +639,14 @@ int sockbuf::sendmsg (msghdr* msg, int msgf)
 
 int sockbuf::sendtimeout (int wp)
 {
-  int oldstmo = rep->stmo;
+  //int oldstmo = rep->stmo;
   rep->stmo = (wp < 0) ? -1: wp;
   return rep->stmo;
 }
 
 int sockbuf::recvtimeout (int wp)
 {
-  int oldrtmo = rep->rtmo;
+  //int oldrtmo = rep->rtmo;
   rep->rtmo = (wp < 0) ? -1: wp;
   return rep->rtmo;
 }
