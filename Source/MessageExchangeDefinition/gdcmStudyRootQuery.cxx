@@ -213,5 +213,36 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   }
   return theReturn && (thePresentTagCount > 0);
 }
-
+  void StudyRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
+    switch (inQueryLevel){
+      case eStudy:
+      {
+        Attribute<0x8,0x52> at1 = { "STUDY " };
+        mDataSet.Insert( at1.GetAsDataElement() );
+      }
+        break;
+      case eSeries:
+      {
+        Attribute<0x8,0x52> at1 = { "SERIES" };
+        mDataSet.Insert( at1.GetAsDataElement() );
+        Attribute<0x20, 0xd> Studylevel;// make it blank
+        mDataSet.Insert( Studylevel.GetAsDataElement() );
+      }
+      default:
+        break;
+      case eImageOrFrame:
+      {
+        Attribute<0x8,0x52> at1 = { "IMAGE " };
+        mDataSet.Insert( at1.GetAsDataElement() );
+        
+        Attribute<0x20, 0xd> Studylevel;// make it blank
+        mDataSet.Insert( Studylevel.GetAsDataElement() );
+        
+        Attribute<0x20, 0xe> SeriesLevel;// make it blank
+        mDataSet.Insert( SeriesLevel.GetAsDataElement() );
+      }
+        break;
+    }
+  }
+  
 }

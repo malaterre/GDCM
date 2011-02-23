@@ -31,8 +31,11 @@ namespace gdcm{
     void SetParameters();
     friend class QueryFactory;
     PatientRootQuery();
+
   public:
     ~PatientRootQuery();
+
+    void InitializeDataSet(const EQueryLevel& inQueryLevel);
 
     std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
     bool ValidateQuery(bool forFind, bool inStrict) const;

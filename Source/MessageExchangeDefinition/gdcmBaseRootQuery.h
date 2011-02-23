@@ -58,9 +58,9 @@ namespace gdcm{
     //these four classes contain the required, unique, and optional tags from the standard.
     //used both to list the tags as well as to validate a dataset, if ever we were to do so.
 
-    DataSet mDataSet;
     protected:
-
+    
+    DataSet mDataSet;
     friend class QueryFactory;
     BaseRootQuery();
 
@@ -95,8 +95,10 @@ namespace gdcm{
     ///if the query is a find query, or false for a move query.
     virtual std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) = 0;
 
-    //this function sets tag 8,52 to the appropriate value based on query level
-    void InitializeDataSet(const EQueryLevel& inQueryLevel);
+    /// this function sets tag 8,52 to the appropriate value based on query level
+    /// also fills in the right unique tags, as per the standard's requirements
+    /// should allow for connection with dcmtk 
+    virtual void InitializeDataSet(const EQueryLevel& inQueryLevel) = 0;
 
     ///have to be able to ensure that
     ///0x8,0x52 is set (which will be true if InitializeDataSet is called...)
