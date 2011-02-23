@@ -135,7 +135,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
 
 
 //note that pointer to the base root query-- the caller must instantiated and delete
-bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
+bool CompositeNetworkFunctions::CMoveToDisk( const char *remote, uint16_t portno,
   const BaseRootQuery* query, uint16_t portscp,
   const char *aetitle, const char *call, const char* outputdir)
 {
@@ -171,6 +171,44 @@ bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
 
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   return true;
+}
+  
+std::vector<DataSet> CompositeNetworkFunctions::CMoveToMemory( const char *remote, uint16_t portno,
+                                                              const BaseRootQuery* query, uint16_t portscp,
+                                                              const char *aetitle, const char *call,
+                                                              const char *outputdir){
+  std::vector<DataSet> theMovedImages;
+  if( !remote ) return theMovedImages;
+  if( !aetitle )
+  {
+    aetitle = "GDCMSCU";
+  }
+  if( !call )
+  {
+    call = "ANY-SCP";
+  }
+  
+  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
+  // Add a query:
+  
+  if (!outputdir)
+  {
+    outputdir = ".";
+  }
+  
+  network::ULConnectionManager theManager;
+  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
+                                          portscp, query->GetQueryDataSet()))
+  {
+    gdcmErrorMacro( "Failed to establish connection." );
+    return theMovedImages;
+  }
+
+  theMovedImages = theManager.SendMove( query );
+
+  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+  return theMovedImages;
+
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete
