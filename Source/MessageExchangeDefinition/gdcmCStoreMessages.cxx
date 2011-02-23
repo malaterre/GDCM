@@ -47,7 +47,11 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(const DataSet* inDataS
   {
   DataElement de( Tag(0x0,0x2) );
   de.SetVR( VR::UI );
-  assert( inDataSet->FindDataElement( Tag(0x0008, 0x0016) ) );
+  if( !inDataSet->FindDataElement( Tag(0x0008, 0x0016) ) ||
+    inDataSet->GetDataElement( Tag(0x0008, 0x0016) ).IsEmpty() )
+    {
+    throw Exception("Missing SOP Class UID");
+    }
   const DataElement& msclass = inDataSet->GetDataElement( Tag(0x0008, 0x0016) );
   const char *uid = msclass.GetByteValue()->GetPointer();
   assert( uid );
@@ -145,8 +149,10 @@ static uint32_t messageid = 1;
 }
 
 //private hack
-std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(const DataSet* inDataSet)
+{
   std::vector<PresentationDataValue> thePDVs;
+  (void)inDataSet;
   assert( 0 && "TODO" );
   return thePDVs;
 }

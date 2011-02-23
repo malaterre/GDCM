@@ -44,7 +44,7 @@ namespace gdcm
 {
 
 // Execute like this:
-// ./bin/gdcmscu www.dicomserver.co.uk 11112 echo
+// gdcmscu www.dicomserver.co.uk 11112 echo
 bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
   const char *aetitle, const char *call)
 {
@@ -165,18 +165,18 @@ bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
     return false;
     }
 
-  int ret = 0;
   network::ULWritingCallback theCallback;
   theCallback.SetDirectory(outputdir);
   theManager.SendMove( query, &theCallback );
 
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return (ret == 0);//if ret == 0, then nothing was broken
+  return true;
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete
 bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
-  const BaseRootQuery* query, std::vector<DataSet> &retDataSets, const char *aetitle, const char *call )
+  const BaseRootQuery* query, std::vector<DataSet> &retDataSets,
+  const char *aetitle, const char *call )
 {
   if( !remote ) return false;
   if( !aetitle )
@@ -193,7 +193,7 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
   // Add a query:
   network::ULConnectionManager theManager;
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000,
-      network::eFind,  query->GetQueryDataSet()))
+      network::eFind, query->GetQueryDataSet()))
     {
     gdcmErrorMacro( "Failed to establish connection." );
     return false;
@@ -231,7 +231,11 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
 
   Reader reader;
   reader.SetFileName( filename.c_str() );
-  if( !reader.Read() ) return 1;
+  if( !reader.Read() )
+    {
+    gdcmErrorMacro( "Could not read: " << filename );
+    return false;
+    }
   //const File &file = reader.GetFile();
   const DataSet &ds = reader.GetFile().GetDataSet();
 
@@ -268,7 +272,11 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
       const std::string & filename = files[i];
       Reader reader;
       reader.SetFileName( filename.c_str() );
-      if( !reader.Read() ) return false;
+      if( !reader.Read() )
+        {
+        gdcmErrorMacro( "Could not read: " << filename );
+        return false;
+        }
       const DataSet &ds = reader.GetFile().GetDataSet();
       theManager.SendStore( (DataSet*)&ds );
       gdcmDebugMacro( "C-Store of file " << filename << " was successful." );

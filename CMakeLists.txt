@@ -302,7 +302,7 @@ IF(GDCM_USE_SYSTEM_OPENJPEG)
   # For some reason I cannot specify the version I want.
   # FIND_PACKAGE(OpenJPEG 2.0 REQUIRED)
   # oh well we should handle both 1.0 and 2.0 anyway...
-  #FIND_PACKAGE(OpenJPEG REQUIRED)
+  FIND_PACKAGE(OpenJPEG REQUIRED)
   SET(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
 ELSE(GDCM_USE_SYSTEM_OPENJPEG)
   SET(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
@@ -635,7 +635,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_PACKAGE_CONTACT ${GDCM_PACKAGE_CONTACT})
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
-  SET(CPACK_SOURCE_IGNORE_FILES "/debian/" "/CVS/" "/\\\\.git/" "TODO" "/Testing/Data/")
+  SET(CPACK_SOURCE_IGNORE_FILES "/\\\\.gitmodules" "/\\\\.git/" "TODO" "/Testing/Data/")
   SET(CPACK_IGNORE_FILES ${CPACK_SOURCE_IGNORE_FILES})
 
   # List executables
@@ -757,8 +757,10 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PARAVIEWMODULE_GROUP "Runtime")
   # Expand the "Development" group by default, since we have so few components.
   # Also, provide this group with a description.
-  # The following is needed for CMake 2.8.3 and above to preserve backward compat
-  set(CPACK_MONOLITHIC_INSTALL 1)
+  if(CMAKE_VERSION VERSION_EQUAL 2.8.3)
+    # The following is needed for CMake 2.8.3 and above to preserve backward compat
+    set(CPACK_MONOLITHIC_INSTALL 1)
+  endif(CMAKE_VERSION VERSION_EQUAL 2.8.3)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
     "All of the tools you'll ever need to develop software using GDCM")

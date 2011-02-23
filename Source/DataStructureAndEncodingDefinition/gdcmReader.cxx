@@ -18,6 +18,7 @@
 #include "gdcmSwapper.h"
 
 #include "gdcmDeflateStream.h"
+#include "gdcmSystem.h"
 
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
@@ -309,6 +310,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
     catch( std::exception &ex )
       {
       // return to beginning of file, hopefully this file is simply missing preamble
+      is.clear();
       is.seekg(0, std::ios::beg);
       haspreamble = false;
       }
@@ -333,6 +335,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           (void)ex;
           // Weird implicit meta header:
           is.seekg(128+4, std::ios::beg );
+          assert( is.good() );
           try
             {
             F->GetHeader().ReadCompat(is);
@@ -692,6 +695,248 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
     }
 
   return success;
+}
+
+// This function re-implements code from:
+// http://www.dclunie.com/medical-image-faq/html/part2.html#DICOMTransferSyntaxDetermination
+// The above code does not work well for random file. It implicitly assumes we are trying
+// to read a DICOM file in the first place, while our goal is indeed to detect whether or
+// not the file can be assimilated as DICOM. So we extended it.
+// Of course this function only returns a 'maybe DICOM', since we are not guaranteed that
+// the stream is not truncated, but this is outside the scope of this function.
+bool Reader::CanRead() const
+{
+  // fastpath
+  std::istream &is = *Stream;
+    {
+    is.seekg( 128, std::ios::beg ); // we ignore return value as we test is.good()
+    char b[4];
+    if (is.good() && is.read(b,4) && strncmp(b,"DICM",4) == 0)
+      {
+      is.seekg(0, std::ios::beg);
+      return true;
+      }
+    }
+
+  // Start overhead for backward compatibility
+  bool bigendian = false;
+  bool explicitvr	= false;
+  is.clear();
+  //is.seekg(0, std::ios::end);
+  //std::streampos filelen = is.tellg();
+  is.seekg(0, std::ios::beg);
+
+  char b[8];
+  if (is.good() && is.read(b,8))
+    {
+    // examine probable group number ... assume <= 0x00ff
+    if (b[0] < b[1]) bigendian=true;
+    else if (b[0] == 0 && b[1] == 0)
+      {
+      // blech ... group number is zero
+      // no point in looking at element number
+      // as it will probably be zero too (group length)
+      // try the 32 bit value length of implicit vr
+      if (b[4] < b[7]) bigendian=true;
+      }
+    // else littleendian
+    if (isupper(b[4]) && isupper(b[5])) explicitvr=true;
+    }
+  SwapCode sc = SwapCode::Unknown;
+  TransferSyntax::NegociatedType nts = TransferSyntax::Unknown;
+
+  std::stringstream ss( std::string(b, 8) );
+
+  Tag t;
+  if (bigendian)
+    {
+    t.Read<SwapperDoOp>(ss);
+    //assert( t.GetGroup() != 0x2 );
+    if( t.GetGroup() <= 0xff )
+      sc = SwapCode::BigEndian;
+    }
+  else
+    {
+    t.Read<SwapperNoOp>(ss);
+    //assert( t.GetGroup() != 0x2 );
+    if( t.GetGroup() <= 0xff )
+      sc = SwapCode::LittleEndian;
+    }
+
+  VL vl;
+  VR::VRType vr = VR::VR_END;
+  if (explicitvr)
+    {
+    char vr_str[3];
+    vr_str[0] = b[4];
+    vr_str[1] = b[5];
+    vr_str[2] = '\0';
+    vr = VR::GetVRType(vr_str);
+    if( vr != VR::VR_END )
+      nts = TransferSyntax::Explicit;
+    }
+  else
+    {
+    if( bigendian )
+      vl.Read<SwapperDoOp>( ss );
+    else
+      vl.Read<SwapperNoOp>( ss );
+    if( vl < 0xff )
+      nts = TransferSyntax::Implicit;
+    }
+
+#if 0
+  is.clear();
+  is.seekg(0, std::ios::end);
+  std::streampos filelen = is.tellg();
+  is.seekg(0, std::ios::beg);
+  Tag t;
+  VL gl; // group length
+  if( bigendian )
+    {
+    if( !t.Read<SwapperDoOp>(is) )
+      {
+      is.clear();
+      is.seekg(0, std::ios::beg);
+      return false;
+      }
+    }
+  else
+    {
+    if( !t.Read<SwapperNoOp>(is) )
+      {
+      is.clear();
+      is.seekg(0, std::ios::beg);
+      return false;
+      }
+    }
+  if( t.GetGroup() % 2 == 0 )
+    {
+    switch( t.GetGroup() )
+      {
+    case 0x0002:
+    //case 0x0004: // DICOMDIR is for media, thus FMI is compulsory
+    case 0x0008:
+      sc = SwapCode::LittleEndian;
+      break;
+    //case 0x0200: // FMI is Explicit VR Little Endian...
+    case 0x0800:
+      sc = SwapCode::BigEndian;
+      break;
+    default:
+      ;
+      }
+    if( sc != SwapCode::Unknown )
+      {
+      // Purposely not Re-use ReadVR since we can read VR_END
+      char vr_str[3];
+      is.read(vr_str, 2);
+      vr_str[2] = '\0';
+      // Cannot use GetVRTypeFromFile since is assert ...
+      VR::VRType vr = VR::GetVRType(vr_str);
+      if( vr != VR::VR_END )
+        {
+        nts = TransferSyntax::Explicit;
+        }
+      else
+        {
+        assert( !(VR::IsSwap(vr_str)));
+        is.seekg(-2, std::ios::cur); // Seek back
+        gl.Read<SwapperNoOp>(is);
+
+        if( t.GetElement() == 0x0000 )
+          {
+          switch(gl)
+            {
+          case 0x00000004 :
+            assert( sc == SwapCode::LittleEndian);    // 1234
+            sc = SwapCode::LittleEndian;    // 1234
+            break;
+          case 0x04000000 :
+            assert( sc == SwapCode::BigEndian);    // 1234
+            sc = SwapCode::BigEndian;       // 4321
+            break;
+          case 0x00040000 :
+            sc = SwapCode::BadLittleEndian; // 3412
+            gdcmWarningMacro( "Bad Little Endian" );
+            break;
+          case 0x00000400 :
+            sc = SwapCode::BadBigEndian;    // 2143
+            gdcmWarningMacro( "Bad Big Endian" );
+            break;
+          default:
+            ;
+            }
+          }
+        if( gl && gl < filelen )
+          nts = TransferSyntax::Implicit;
+        }
+      }
+    }
+  else
+    {
+    // US-IRAD-NoPreambleStartWith0003.dcm
+    gdcmDebugMacro( "Start with a private tag creator" );
+    if( t.GetGroup() > 0x0002 && t.GetGroup() < 0x8 )
+      {
+      switch( t.GetElement() )
+        {
+      case 0x0010:
+        sc = SwapCode::LittleEndian;
+        break;
+      default:
+        ;
+        }
+      }
+    if( sc != SwapCode::Unknown )
+      {
+      // Purposely not Re-use ReadVR since we can read VR_END
+      char vr_str[3];
+      is.read(vr_str, 2);
+      vr_str[2] = '\0';
+      // Cannot use GetVRTypeFromFile since is assert ...
+      VR::VRType vr = VR::GetVRType(vr_str);
+      if( vr != VR::VR_END )
+        {
+        nts = TransferSyntax::Explicit;
+        }
+      else
+        {
+        assert( !(VR::IsSwap(vr_str)));
+        is.seekg(-2, std::ios::cur); // Seek back
+        gl.Read<SwapperNoOp>(is);
+        if( t.GetElement() == 0x0000 )
+          {
+          assert( gl == 0x4 || gl == 0x04000000 );
+          }
+        if( gl && gl < filelen )
+          nts = TransferSyntax::Implicit;
+        }
+      }
+    }
+
+#endif
+  // reset in all other cases:
+  is.clear();
+  is.seekg(0, std::ios::beg);
+
+  // Implicit Little Endian
+  if( nts == TransferSyntax::Implicit && sc == SwapCode::LittleEndian ) return true;
+  if( nts == TransferSyntax::Implicit && sc == SwapCode::BigEndian ) return false;
+  if( nts == TransferSyntax::Explicit && sc == SwapCode::LittleEndian ) return true;
+  if( nts == TransferSyntax::Explicit && sc == SwapCode::BigEndian ) return true;
+
+//  assert( nts == TransferSyntax::Unknown );
+//  if( sc != SwapCode::Unknown )
+//    {
+//    gdcm::Reader r;
+//    r.SetStream( is );
+//    is.clear();
+//    is.seekg(0, std::ios::beg);
+//    return r.Read();
+//    }
+
+  return false;
 }
 
 } // end namespace gdcm
