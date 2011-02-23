@@ -41,8 +41,8 @@ each class have its own file for the sake of brevity of the number of files.
 namespace gdcm
 {
 namespace network
-{
-
+  {
+#if USE_PROCESS_INPUT
 static void process_input(iosockinet& sio)
 {
   uint8_t itemtype = 0x0;
@@ -169,7 +169,7 @@ static void process_input(iosockinet& sio)
   //rel2.Write( sio );
   //sio.flush();
 }
-
+#endif //USE_PROCESS_INPUT
 //Send P-DATA-TF PDU
 EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent)
@@ -193,7 +193,7 @@ EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   // another chanel (technically this is send to an SCP)
   // in our case we use another port to receive it.
 
-#if 0
+#if USE_PROCESS_INPUT
   //wait for the user to try to send some data.
   sockinetbuf sin (sockbuf::sock_stream);
 

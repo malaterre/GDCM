@@ -30,7 +30,7 @@ gdcm::Directory::FilenamesType DirectoryHelper::GetSeriesUIDsBySOPClassUID(const
 
     //now count the number of series that are of that given SOPClassUID
     size_t theNumSeries = theSeriesValues.size();
-    for (int i = 0; i < theNumSeries; i++){
+    for (size_t i = 0; i < theNumSeries; i++){
       std::string theFirstFilename =
       theScanner.GetFilenameFromTagToValue(Tag(0x0020,0x000e), theSeriesValues[i].c_str());
       std::string theSOPClassUID = theScanner.GetValue(theFirstFilename.c_str(), Tag(0x0008,0x0016));
@@ -84,7 +84,7 @@ Directory::FilenamesType DirectoryHelper::GetFilenamesFromSeriesUIDs(const std::
     Directory::FilenamesType theSeriesValues = theScanner.GetOrderedValues(Tag(0x0020,0x000e));
     //now count the number of series that are of that given SOPClassUID
     size_t theNumSeries = theSeriesValues.size();
-    for (int i = 0; i < theNumSeries; i++){
+    for (size_t i = 0; i < theNumSeries; i++){
       std::string theSeriesUID = theSeriesValues[i];
       //dicom strings sometimes have trailing spaces; make sure to avoid those
       size_t endpos = theSeriesUID.find_last_not_of(" "); // Find the first character position from reverse af
@@ -126,7 +126,7 @@ std::vector<DataSet> DirectoryHelper::LoadImageFromFiles(const std::string& inDi
 
     //now count the number of series that are of that given SOPClassUID
     size_t theNumSeries = theSeriesValues.size();
-    for (int i = 0; i < theNumSeries; i++){
+    for (size_t i = 0; i < theNumSeries; i++){
       if (inSeriesUID == theSeriesValues[0]){
         //find all files that have that series UID, and then load them via
         //the vtkImageReader

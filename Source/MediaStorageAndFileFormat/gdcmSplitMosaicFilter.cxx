@@ -75,7 +75,7 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
     const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
     if( !csael4.IsEmpty() )
       {
-      gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4 = { 0 };
+        gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4 = {{ 0 }};
       el4.Set( csael4.GetValue() );
       numberOfImagesInMosaic = el4.GetValue();
       }
