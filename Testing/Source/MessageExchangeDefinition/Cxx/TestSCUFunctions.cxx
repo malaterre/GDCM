@@ -183,8 +183,7 @@ int TestSCUFunctions(int argc, char *argv[])
       theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys);
 
     std::vector<gdcm::DataSet> theDataSets;
-    bool b =
-      theNetworkFunctions.CFind(remote.c_str(), portno, theQuery, theDataSets, aetitle.c_str(), call.c_str());
+    bool b = theNetworkFunctions.CFind(remote.c_str(), portno, theQuery, theDataSets, aetitle.c_str(), call.c_str());
 
     delete theQuery;
     if( !b )
@@ -201,8 +200,8 @@ int TestSCUFunctions(int argc, char *argv[])
 
     keys.clear();
     //if it's not empty, then pull it.
-    for (std::vector<gdcm::DataSet>::iterator itor = theDataSets.begin();
-      itor != theDataSets.end(); itor++)
+    std::vector<gdcm::DataSet>::iterator itor;
+    for (itor = theDataSets.begin(); itor != theDataSets.end(); itor++)
       {
       if (itor->FindDataElement(theIDTag))
         {
@@ -236,14 +235,29 @@ int TestSCUFunctions(int argc, char *argv[])
       }
 
     theQuery = theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, true);
-    didItWork = theNetworkFunctions.CMove(remote.c_str(), portno, theQuery,
+    std::vector<gdcm::DataSet> theMoveDataSets = theNetworkFunctions.CMoveToMemory(remote.c_str(), portno, theQuery,
       moveReturnPort, aetitle.c_str(), call.c_str(), outputDir.c_str());
-    if (!didItWork)
+    if (theMoveDataSets.empty())
       {
       std::cerr << "CMove failed for file " << *fitor << std::endl;
       return 1;
       }
+    else  {
+      bool foundMatch = false;
+      for (itor = theMoveDataSets.begin(); itor != theMoveDataSets.end(); itor++)
+      {
+        if (AreDataSetsEqual(*itor, ds)){
+          foundMatch = true;
+          break;
+        }
+      }
+      if (!foundMatch){
+        std::cerr << "Retrieved datasets did not match sent dataset." << std::endl;
+        return 1;
+      }
+    }
     delete theQuery;
+    
 
     std::cout << "File " << *fitor << " moved back to server." << std::endl;
     }
