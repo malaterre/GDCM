@@ -110,7 +110,7 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
   if(!r) return false;
 
   std::string str = os.str();
-  std::string::size_type check = str.size();
+  //std::string::size_type check = str.size();//unused
 
   
   if( this->GetPixelFormat() == PixelFormat::UINT12 ||

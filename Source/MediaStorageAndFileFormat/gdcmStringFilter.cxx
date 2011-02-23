@@ -119,7 +119,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
   char *saveptr1, *saveptr2;
   int j;
 
-  bool dicomnativemodel = false;
+  //bool dicomnativemodel = false;//unused
   const gdcm::DataSet *curds = NULL;
   const gdcm::DataElement *curde = NULL;
   gdcm::Tag t;
@@ -156,8 +156,8 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
         break;
         }
       assert( subtokens[1] == "keyword" );
-      const char *k = subtokens[2].c_str();
-      const gdcm::DictEntry &dictentry = pubdict.GetDictEntryByKeyword(k, t);
+      //const char *k = subtokens[2].c_str();//unused
+      //const gdcm::DictEntry &dictentry = pubdict.GetDictEntryByKeyword(k, t);//unused
       if( !curds->FindDataElement( t ) )
         {
         state = -1;
