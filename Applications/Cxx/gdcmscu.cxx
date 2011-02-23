@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
       {"patient", 0, &patientquery, 1}, // --patient
       {"study", 0, &studyquery, 1}, // --study
       {"series", 0, &seriesquery, 1}, // --series
-      {"image", 0, &studyquery, 1}, // --image
+      {"image", 0, &imagequery, 1}, // --image
       {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:VWDEhvk:o:r";

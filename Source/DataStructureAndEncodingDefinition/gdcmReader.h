@@ -93,6 +93,10 @@ public:
   /// Will only read the specified selected tags.
   bool ReadSelectedTags(std::set<Tag> const & tags);
 
+  /// Test whether this is a DICOM file
+  /// \warning need to call either SetFileName or SetStream first
+  bool CanRead() const;
+
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();
