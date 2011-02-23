@@ -197,34 +197,4 @@ DataSet const & BaseRootQuery::GetQueryDataSet() const{
 }
 
 
-void BaseRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
-  switch (inQueryLevel){
-    case ePatient:
-      {
-        Attribute<0x8,0x52> at1 = { "PATIENT " };
-        mDataSet.Insert( at1.GetAsDataElement() );
-      }
-      break;
-    case eStudy:
-      {
-        Attribute<0x8,0x52> at1 = { "STUDY " };
-        mDataSet.Insert( at1.GetAsDataElement() );
-      }
-      break;
-    case eSeries:
-      {
-        Attribute<0x8,0x52> at1 = { "SERIES" };
-        mDataSet.Insert( at1.GetAsDataElement() );
-      }
-    default:
-      break;
-    case eImageOrFrame:
-      {
-        Attribute<0x8,0x52> at1 = { "IMAGE " };
-        mDataSet.Insert( at1.GetAsDataElement() );
-      }
-      break;
-  }
-}
-
 }

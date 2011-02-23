@@ -32,8 +32,11 @@ namespace gdcm{
     void SetParameters();
     friend class QueryFactory;
     StudyRootQuery();
+
   public:
     ~StudyRootQuery();
+
+    void InitializeDataSet(const EQueryLevel& inQueryLevel);
 
     std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
 
