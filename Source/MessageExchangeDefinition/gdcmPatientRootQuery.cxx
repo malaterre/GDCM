@@ -260,7 +260,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       {
         Attribute<0x8,0x52> at1 = { "STUDY " };
         mDataSet.Insert( at1.GetAsDataElement() );
-        Attribute<0x10,0x20> PatientLevel;
+        Attribute<0x10,0x20> PatientLevel = { "" };
         mDataSet.Insert( PatientLevel.GetAsDataElement() );
       }
         break;
@@ -268,9 +268,9 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       {
         Attribute<0x8,0x52> at1 = { "SERIES" };
         mDataSet.Insert( at1.GetAsDataElement() );
-        Attribute<0x10,0x20> PatientLevel;
+        Attribute<0x10,0x20> PatientLevel = { "" };
         mDataSet.Insert( PatientLevel.GetAsDataElement() );
-        Attribute<0x20, 0xd> Studylevel;// make it blank
+        Attribute<0x20, 0xd> Studylevel = { "" };// make it blank
         mDataSet.Insert( Studylevel.GetAsDataElement() );
       }
       default:
@@ -280,13 +280,13 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
         Attribute<0x8,0x52> at1 = { "IMAGE " };
         mDataSet.Insert( at1.GetAsDataElement() );
         
-        Attribute<0x10,0x20> PatientLevel;
+        Attribute<0x10,0x20> PatientLevel = { "" };
         mDataSet.Insert( PatientLevel.GetAsDataElement() );
         
-        Attribute<0x20, 0xd> Studylevel;//blanked
+        Attribute<0x20, 0xd> Studylevel = { "" };//blanked
         mDataSet.Insert( Studylevel.GetAsDataElement() );
         
-        Attribute<0x20, 0xe> SeriesLevel;//blanked
+        Attribute<0x20, 0xe> SeriesLevel = { "" };//blanked
         mDataSet.Insert( SeriesLevel.GetAsDataElement() );
       }
         break;
