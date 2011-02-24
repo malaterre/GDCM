@@ -90,7 +90,11 @@ void PrintHelp()
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "     --queryhelp print query help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
-  
+
+  std::locale l("");
+  std::string loc = l.name();
+  std::cout << std::endl;
+  std::cout << "Local character set: " << loc << std::endl;
 }
 
 void PrintQueryHelp(int inFindPatientRoot){

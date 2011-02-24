@@ -101,6 +101,7 @@ static int scanFolderQt(QDir const &dir, QStringList& files)
 
 int main(int argc, char *argv[])
 {
+
   // very important:
   QCoreApplication qCoreApp( argc , argv );
   if( argc < 2 )
