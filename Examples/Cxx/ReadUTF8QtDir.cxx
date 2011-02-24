@@ -20,6 +20,7 @@
 
 #include <QDir>
 #include <QString>
+#include <QCoreApplication>
 
 #include <string>
 #include <fstream>
@@ -75,13 +76,15 @@ static int scanFolderQt(QDir const &dir, QStringList& files)
   for ( int i=0; i<children.count(); i++ ) {
     QFileInfo file = children.at(i);
     if ( file.isDir() == true ) {
-      scanFolderQt(QDir(file.absoluteFilePath()), files);
+      res += scanFolderQt(QDir(file.absoluteFilePath()), files);
       continue;
     }
     // QString
-    std::string str = file.absoluteFilePath().toStdString();
-    const char *ba_str1 = str.c_str();
-    res += TestBothFuncs("QString", ba_str1);
+    // This API does not work once QCoreApplication is used:
+    // std::string str = file.absoluteFilePath().toStdString();
+    // const char *ba_str1 = str.c_str();
+    // res += TestBothFuncs("QString", ba_str1);
+
     // Now try explicit UTF-8
     QByteArray bautf8 = file.absoluteFilePath().toUtf8();
     const char *ba_str2 = bautf8.constData();
@@ -92,6 +95,8 @@ static int scanFolderQt(QDir const &dir, QStringList& files)
 
 int main(int argc, char *argv[])
 {
+  // very important:
+  QCoreApplication qCoreApp( argc , argv );
   if( argc < 2 )
     {
     std::cerr << argv[0] << " dir " << std::endl;
@@ -102,7 +107,7 @@ int main(int argc, char *argv[])
   const char *dirname = argv[1];
   res += scanFolder( dirname );
 
-  QDir dir( QString::fromLocal8Bit(dirname) );
+  QDir dir( QString::fromUtf8(dirname) );
   QStringList files;
   res += scanFolderQt( dir, files);
 
@@ -111,5 +116,5 @@ int main(int argc, char *argv[])
   else
     std::cerr << "Success with UTF-8" << std::endl;
 
-  return 0;
+  return res;
 }
