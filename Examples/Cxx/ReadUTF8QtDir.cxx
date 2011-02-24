@@ -22,24 +22,40 @@
 #include <QString>
 
 #include <string>
+#include <fstream>
 
-static void TestBothFuncs(const char *info , const char *ba_str)
+#include <stdio.h> // fopen
+
+static int TestBothFuncs(const char *info , const char *ba_str)
 {
+  int res = 0;
+  FILE *f = fopen( ba_str, "r" );
+  if( f )
+    {
+    std::cout << info << " fopen: " << ba_str << std::endl;
+    fclose(f);
+    ++res;
+    }
   std::ifstream is( ba_str );
   if( is.is_open() )
     {
     std::cout << info << " is_open: " << ba_str << std::endl;
+    ++res;
     }
+  is.close();
   gdcm::Reader reader;
   reader.SetFileName( ba_str );
   if( reader.CanRead() == true )
     {
     std::cout << info << " CanRead:" << ba_str << std::endl;
+    ++res;
     }
+  return 3 - res;
 }
 
-static void scanFolder(const char dirname[])
+static int scanFolder(const char dirname[])
 {
+  int res = 0;
   gdcm::Directory dir;
   unsigned int nfiles = dir.Load( dirname, true );
   const gdcm::Directory::FilenamesType &filenames = dir.GetFilenames();
@@ -47,31 +63,31 @@ static void scanFolder(const char dirname[])
   for( unsigned int i = 0; i < nfiles; ++i )
     {
     const char *ba_str = filenames[i].c_str();
-    TestBothFuncs("GDCM",ba_str);
+    res += TestBothFuncs("GDCM",ba_str);
     }
+  return res;
 }
 
-static void scanFolderQt(QDir const &dir, QStringList& files)
+static int scanFolderQt(QDir const &dir, QStringList& files)
 {
+  int res = 0;
   QFileInfoList children = dir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot);
-  //std::cerr << "D: Found #: " << children.count() << std::endl;
   for ( int i=0; i<children.count(); i++ ) {
     QFileInfo file = children.at(i);
     if ( file.isDir() == true ) {
       scanFolderQt(QDir(file.absoluteFilePath()), files);
       continue;
     }
-    //std::cerr << "D: QString: " << file.absoluteFilePath().toStdString() << std::endl;
     // QString
     std::string str = file.absoluteFilePath().toStdString();
     const char *ba_str1 = str.c_str();
-    TestBothFuncs("QString", ba_str1);
+    res += TestBothFuncs("QString", ba_str1);
     // Now try explicit UTF-8
     QByteArray bautf8 = file.absoluteFilePath().toUtf8();
     const char *ba_str2 = bautf8.constData();
-    //std::cout << "D: UTF-8 istream: " << ba_str << std::endl;
-    TestBothFuncs("UTF8", ba_str2);
+    res += TestBothFuncs("UTF8", ba_str2);
     }
+  return res;
 }
 
 int main(int argc, char *argv[])
@@ -82,12 +98,18 @@ int main(int argc, char *argv[])
     return 1;
     }
 
+  int res = 0;
   const char *dirname = argv[1];
-  scanFolder( dirname );
+  res += scanFolder( dirname );
 
-  QDir dir( QString::fromUtf8(dirname) );
+  QDir dir( QString::fromLocal8Bit(dirname) );
   QStringList files;
-  scanFolderQt( dir, files);
+  res += scanFolderQt( dir, files);
+
+  if( res )
+    std::cerr << "Problem with UTF-8" << std::endl;
+  else
+    std::cerr << "Success with UTF-8" << std::endl;
 
   return 0;
 }
