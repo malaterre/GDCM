@@ -37,21 +37,27 @@ static int TestBothFuncs(const char *info , const char *ba_str)
     fclose(f);
     ++res;
     }
+  gdcm::Reader reader;
   std::ifstream is( ba_str );
   if( is.is_open() )
     {
     std::cout << info << " is_open: " << ba_str << std::endl;
     ++res;
     }
+  reader.SetStream( is );
+  if( reader.CanRead() == true )
+    {
+    std::cout << info << " SetStream/CanRead:" << ba_str << std::endl;
+    ++res;
+    }
   is.close();
-  gdcm::Reader reader;
   reader.SetFileName( ba_str );
   if( reader.CanRead() == true )
     {
-    std::cout << info << " CanRead:" << ba_str << std::endl;
+    std::cout << info << " SetFileName/CanRead:" << ba_str << std::endl;
     ++res;
     }
-  return 3 - res;
+  return 4 - res;
 }
 
 static int scanFolder(const char dirname[])
@@ -108,6 +114,7 @@ int main(int argc, char *argv[])
   res += scanFolder( dirname );
 
   QDir dir( QString::fromUtf8(dirname) );
+  // QDir dir( QString::fromLocal8Bit(dirname) );
   QStringList files;
   res += scanFolderQt( dir, files);
 
