@@ -72,6 +72,9 @@ IF(QT4_FOUND)
   # qtGUI will resolved QImage symbol
   # qtcore will resolve qstring symbols
   TARGET_LINK_LIBRARIES(ConvertToQImage gdcmMSFF ${QT_LIBRARIES})
+
+  ADD_EXECUTABLE(ReadUTF8QtDir ReadUTF8QtDir.cxx)
+  TARGET_LINK_LIBRARIES(ReadUTF8QtDir gdcmMSFF ${QT_LIBRARIES})
 ENDIF(QT4_FOUND)
 
 IF(MAGIC_FOUND)
