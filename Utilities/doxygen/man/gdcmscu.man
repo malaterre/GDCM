@@ -223,17 +223,24 @@ C-MOVE operation.
 
 \section gdcmscu_cfind_image C-FIND IMAGE level (Composite Object Instance)
 
-One should pay attention that the following query is valid for a conquest server
-or a dcm4chee server:
+One should pay attention that gdcmscu --find and findscu are not completely
+equivalent. Using gdcmscu --find, all Unique Keys will be added automatically. One can
+therefore execute something like this:
 
 \verbatim
 $ gdcmscu --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112
 \endverbatim
 
-However for a dcmtk server (tested with 3.5.4), one has to execute the following query:
+instead of the more explicit form
 
 \verbatim
 $ gdcmscu --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112 --key 10,20 --key 20,d --key 20,e
+\endverbatim
+
+This would also be equivalent to:
+
+\verbatim
+$ findscu --patient --key 8,52=IMAGE --key 8,18=1.2.3.4.5.6 dicom.example.com 11112 --key 10,20 --key 20,d --key 20,e
 \endverbatim
 
 \section see_also SEE ALSO
