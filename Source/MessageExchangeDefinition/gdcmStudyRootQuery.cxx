@@ -225,7 +225,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       {
         Attribute<0x8,0x52> at1 = { "SERIES" };
         mDataSet.Insert( at1.GetAsDataElement() );
-        Attribute<0x20, 0xd> Studylevel;// make it blank
+        Attribute<0x20, 0xd> Studylevel = { "" };// make it blank
         mDataSet.Insert( Studylevel.GetAsDataElement() );
       }
       default:
@@ -235,10 +235,10 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
         Attribute<0x8,0x52> at1 = { "IMAGE " };
         mDataSet.Insert( at1.GetAsDataElement() );
         
-        Attribute<0x20, 0xd> Studylevel;// make it blank
+        Attribute<0x20, 0xd> Studylevel = { "" };// make it blank
         mDataSet.Insert( Studylevel.GetAsDataElement() );
         
-        Attribute<0x20, 0xe> SeriesLevel;// make it blank
+        Attribute<0x20, 0xe> SeriesLevel = { "" };// make it blank
         mDataSet.Insert( SeriesLevel.GetAsDataElement() );
       }
         break;
