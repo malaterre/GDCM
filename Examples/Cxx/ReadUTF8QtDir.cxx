@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
   const char *dirname = argv[1];
   res += scanFolder( dirname );
 
-  QDir dir( QString::fromUtf8(dirname) );
-  // QDir dir( QString::fromLocal8Bit(dirname) );
+  //QDir dir( QString::fromUtf8(dirname) );
+  QDir dir( QString::fromLocal8Bit(dirname) );
   QStringList files;
   res += scanFolderQt( dir, files);
 
