@@ -364,9 +364,7 @@ int sockbuf::sync ()
                 sb << " wlen=(" << wlen << ")";
                 err += sb.rdbuf()->str();
             }
-            //throw sockerr (errno, err.c_str ());
-            //throw "STOP ME";
-            return eof;
+            throw sockerr (errno, err.c_str ());
         }
 
         setp (pbase (), (char_type*) rep->pend);
@@ -643,16 +641,16 @@ int sockbuf::sendmsg (msghdr* msg, int msgf)
 
 int sockbuf::sendtimeout (int wp)
 {
-  //int oldstmo = rep->stmo;
+  int oldstmo = rep->stmo;
   rep->stmo = (wp < 0) ? -1: wp;
-  return rep->stmo;
+  return oldstmo;
 }
 
 int sockbuf::recvtimeout (int wp)
 {
-  //int oldrtmo = rep->rtmo;
+  int oldrtmo = rep->rtmo;
   rep->rtmo = (wp < 0) ? -1: wp;
-  return rep->rtmo;
+  return oldrtmo;
 }
 
 int sockbuf::is_readready (int wp_sec, int wp_usec) const
