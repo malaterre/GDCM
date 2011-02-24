@@ -49,6 +49,7 @@
 #include "sockstream.h"
 #include <sstream>
 #include <string>
+#include <cassert>
 
 #if defined(__CYGWIN__) || !defined(WIN32)
 extern "C" {
@@ -363,7 +364,9 @@ int sockbuf::sync ()
                 sb << " wlen=(" << wlen << ")";
                 err += sb.rdbuf()->str();
             }
-            throw sockerr (errno, err.c_str ());
+            //throw sockerr (errno, err.c_str ());
+            //throw "STOP ME";
+            return eof;
         }
 
         setp (pbase (), (char_type*) rep->pend);
@@ -566,6 +569,7 @@ int sockbuf::write(const void* buf, int len)
   while(len>0) {
     //int wval = ::write (rep->sock, (char*) buf, len);
     int wval = ::send (rep->sock, (char*) buf, len, 0);
+    //assert( wval > 0 );
     if (wval == -1) throw wlen;
     len -= wval;
     wlen += wval;
