@@ -89,13 +89,7 @@ int TestSCUFunctions(int argc, char *argv[])
     return 1;
     }
 
-  //now, run the individual tests.
-  //get the filenames from the test directory
-  //gdcm::Directory theDir;
-  //unsigned int nfiles = theDir.Load(inputDir, false);
-  //if( !nfiles ) return 1;
-
-  std::vector<std::string> theFilenames; // = theDir.GetFilenames();
+  std::vector<std::string> theFilenames;
   const char *filename;
   int i = 0;
   const char * const *filenames = gdcm::Testing::GetFileNames();
@@ -105,8 +99,13 @@ int TestSCUFunctions(int argc, char *argv[])
     ++i;
     }
 
+  // Fow now lets eliminate invalid candidates:
+  // - no SOP Class UID
+  // - no SOP Instance UID
   gdcm::Scanner sc;
+  gdcm::Tag sopclass(0x8,0x16);
   gdcm::Tag sopinstance(0x8,0x18);
+  sc.AddTag( sopclass );
   sc.AddTag( sopinstance );
   if( !sc.Scan( theFilenames ) )
     {
@@ -119,8 +118,9 @@ int TestSCUFunctions(int argc, char *argv[])
     it != theFilenames.end(); )
     {
     const char *file = it->c_str();
-    const char* v = sc.GetValue(file, sopinstance );
-    if( !v ) it = theFilenames.erase( it );
+    const char* v1 = sc.GetValue(file, sopclass );
+    const char* v2 = sc.GetValue(file, sopinstance );
+    if( !v1 || !v2 ) it = theFilenames.erase( it );
     else ++it;
     }
 
