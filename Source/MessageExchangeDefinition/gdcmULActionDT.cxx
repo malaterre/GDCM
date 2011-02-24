@@ -185,8 +185,12 @@ EStateID ULActionDT1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
       return eStaDoesNotExist;
     }
     dataPDU->Write(*inConnection.GetProtocol());
+    //if( !inConnection.GetProtocol()->good() );
+    //  {
+    //  throw new Exception("Protocol is not good.");
+    //  return eStaDoesNotExist;
+    //  }
     inConnection.GetProtocol()->flush();
-
   }
 
   // When doing a C-MOVE we recevie the Requested DataSet over

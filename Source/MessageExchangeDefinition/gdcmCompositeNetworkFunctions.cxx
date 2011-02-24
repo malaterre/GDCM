@@ -302,6 +302,7 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
       const std::string & filename = files[i];
       Reader reader;
       reader.SetFileName( filename.c_str() );
+      gdcmDebugMacro( "Processing: " << filename );
       if( !reader.Read() )
         {
         gdcmErrorMacro( "Could not read: " << filename );
@@ -317,6 +318,7 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     // If you reach here this is basically because GDCM does not support encoding other
     // than raw transfer syntx (Little Endian Explicit/Implicit...)
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+    // TODO: filename is bogus it does not point to the right filename
     gdcmErrorMacro( "C-Store of file " << filename << " was unsuccessful, aborting. " )
     gdcmErrorMacro( "Error was " << e.what() );
     return false;

@@ -396,7 +396,8 @@ std::vector<DataSet> ULConnectionManager::SendStore(const DataSet *inDataSet)
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendStore(const DataSet * inDataSet, ULConnectionCallback* inCallback){
+void ULConnectionManager::SendStore(const DataSet * inDataSet, ULConnectionCallback* inCallback)
+{
   if (mConnection == NULL)
     {
     return;

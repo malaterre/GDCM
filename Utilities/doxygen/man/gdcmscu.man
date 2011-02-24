@@ -221,6 +221,21 @@ At the moment \b gdcmscu only supports non-compressed transfer syntax. It will
 always request DataSet using Implicit VR Little Endian Transfer Syntax during a
 C-MOVE operation.
 
+\section gdcmscu_cfind_image C-FIND IMAGE level (Composite Object Instance)
+
+One should pay attention that the following query is valid for a conquest server
+or a dcm4chee server:
+
+\verbatim
+$ gdcmscu --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112
+\endverbatim
+
+However for a dcmtk server (tested with 3.5.4), one has to execute the following query:
+
+\verbatim
+$ gdcmscu --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112 --key 10,20 --key 20,d --key 20,e
+\endverbatim
+
 \section see_also SEE ALSO
 
 <b>gdcmconv</b>(1)

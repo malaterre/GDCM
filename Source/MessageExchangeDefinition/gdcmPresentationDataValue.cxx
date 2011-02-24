@@ -94,14 +94,18 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   uint32_t copy = ItemLength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
+  assert( os.good() );
   os.write( (char*)&PresentationContextID, sizeof(PresentationContextID) );
+  assert( os.good() );
 
   uint8_t t = MessageHeader;
   os.write( (char*)&t, 1 );
+  assert( os.good() );
 
   os.write( Blob.c_str(), Blob.size() );
   assert(Blob.size() < std::numeric_limits<uint32_t>::max());
   VL debug = (uint32_t)Blob.size();
+  //assert( os.good() );
 
   assert( debug == ItemLength - 2 );
 
