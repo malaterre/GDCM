@@ -236,7 +236,7 @@ int TestSCUFunctions(int argc, char *argv[])
 
     theQuery = theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, true);
     std::vector<gdcm::DataSet> theMoveDataSets = theNetworkFunctions.CMoveToMemory(remote.c_str(), portno, theQuery,
-      moveReturnPort, aetitle.c_str(), call.c_str(), outputDir.c_str());
+      moveReturnPort, aetitle.c_str(), call.c_str() );
     if (theMoveDataSets.empty())
       {
       std::cerr << "CMove failed for file " << *fitor << std::endl;
