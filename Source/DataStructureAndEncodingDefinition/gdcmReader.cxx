@@ -291,7 +291,7 @@ bool Reader::ReadSelectedTags( std::set<Tag> const & selectedTags )
 template <typename T_Caller>
 bool Reader::InternalReadCommon(const T_Caller &caller)
 {
-  if( !Stream )
+  if( !Stream || !*Stream )
     {
     gdcmErrorMacro( "No File" );
     return false;
