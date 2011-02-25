@@ -342,6 +342,7 @@ bool FileDerivation::AddSourceImageSequence()
 
   if( sqi->GetNumberOfItems() )
     {
+    gdcmWarningMacro( "Do not support appending Referenced Image" );
     return false;
     }
   std::vector< std::pair< std::string, std::string > >::const_iterator it =
