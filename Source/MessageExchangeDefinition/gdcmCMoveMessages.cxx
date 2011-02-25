@@ -23,6 +23,7 @@
 #include "gdcmStudyRootQuery.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmULConnection.h"
+#include "gdcmAAssociateRQPDU.h"
 
 namespace gdcm{
 namespace network{
@@ -65,9 +66,9 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   ds.Insert( at.GetAsDataElement() );
   }
   {
-  // FIXME !!!!
-  Attribute<0x0,0x600> at = { "SILVERSTREAK" };
+  Attribute<0x0,0x600> at = { "" };
   const char *calling = inConnection.GetConnectionInfo().GetCallingAETitle();
+  assert( AAssociateRQPDU::IsAETitleValid( calling ) );
   at.SetValue( calling );
   ds.Insert( at.GetAsDataElement() );
   }
