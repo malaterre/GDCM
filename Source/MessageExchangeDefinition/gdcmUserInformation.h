@@ -46,6 +46,9 @@ public:
 
   void Print(std::ostream &os) const;
 
+  const MaximumLengthSub &GetMaximumLengthSub() const { return MLS; }
+  MaximumLengthSub &GetMaximumLengthSub() { return MLS; }
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
