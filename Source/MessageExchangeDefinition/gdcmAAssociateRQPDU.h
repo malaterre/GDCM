@@ -102,7 +102,7 @@ private:
   11-26 Called-AE-title Destination DICOM Application Name. It shall be encoded as 16
   characters as defined by the ISO 646:1990-Basic G0 Set with leading
   and trailing spaces (20H) being non-significant. The value made of 16
-  spaces (20H) meaning “no Application Name specified” shall not be
+  spaces (20H) meaning "no Application Name specified" shall not be
   used. For a complete description of the use of this field, see Section
   7.1.1.4.
    */
@@ -111,7 +111,7 @@ private:
   27-42 Calling-AE-title Source DICOM Application Name. It shall be encoded as 16
   characters as defined by the ISO 646:1990-Basic G0 Set with leading
   and trailing spaces (20H) being non-significant. The value made of 16
-  spaces (20H) meaning “no Application Name specified” shall not be
+  spaces (20H) meaning "no Application Name specified" shall not be
   used. For a complete description of the use of this field, see Section
   7.1.1.3.
    */
