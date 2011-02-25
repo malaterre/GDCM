@@ -41,6 +41,10 @@ public:
   const std::ostream &Write(std::ostream &os) const;
 
   size_t Size() const;
+
+  uint32_t GetMaximumLength() const { return MaximumLength; }
+  void SetMaximumLength(uint32_t maximumlength) { MaximumLength = maximumlength; }
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
