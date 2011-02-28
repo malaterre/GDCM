@@ -33,10 +33,15 @@ int port = 11112;
 
 gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* theQuery)
 {
+  network::AAssociateRQPDU generator;
+  network::AbstractSyntax as;
+  as.SetNameFromUID( query->GetAbstractSyntaxUID() );
+  generator.AddPresentationContextByAbstractSyntax( as );
+
   gdcm::network::ULConnectionManager *theManager =
     new gdcm::network::ULConnectionManager();
   if (!theManager->EstablishConnection(AETitle, PeerAETitle, ComputerName, 0,
-    port, 1000, gdcm::network::eFind,  theQuery->GetQueryDataSet()))
+    port, 1000, generator.GetPresentationContexts() ))
   {
     throw gdcm::Exception("Failed to establish connection.");
   }
