@@ -160,7 +160,7 @@ bool CompositeNetworkFunctions::CMoveToDisk( const char *remote, uint16_t portno
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
   // Add a query:
 
-  if (!outputdir)
+  if (!outputdir || !*outputdir)
     {
     outputdir = ".";
     }
@@ -170,9 +170,8 @@ bool CompositeNetworkFunctions::CMoveToDisk( const char *remote, uint16_t portno
   // the following is really dumb:
   network::AAssociateRQPDU generator;
   network::AbstractSyntax as;
-  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  as.SetNameFromUID( query->GetAbstractSyntaxUID(true) );
   generator.AddPresentationContextByAbstractSyntax( as );
-  assert( 0 );
 
   if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
       portscp, generator.GetPresentationContexts()))
@@ -205,12 +204,13 @@ std::vector<DataSet> CompositeNetworkFunctions::CMoveToMemory( const char *remot
   
   
   network::ULConnectionManager theManager;
+
   // the following is really dumb:
   network::AAssociateRQPDU generator;
   network::AbstractSyntax as;
-  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  as.SetNameFromUID( query->GetAbstractSyntaxUID(true) );
   generator.AddPresentationContextByAbstractSyntax( as );
-assert( 0);
+
   if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
                                           portscp, generator.GetPresentationContexts()))
   {

@@ -293,8 +293,10 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     }
   }
 
-UIDs::TSName PatientRootQuery::GetAbstractSyntaxUID() const
+UIDs::TSName PatientRootQuery::GetAbstractSyntaxUID(bool inMove) const
 {
+  if( inMove )
+    return UIDs::PatientRootQueryRetrieveInformationModelMOVE;
   return UIDs::PatientRootQueryRetrieveInformationModelFIND;
 }
 

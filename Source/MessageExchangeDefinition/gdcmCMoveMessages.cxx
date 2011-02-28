@@ -49,7 +49,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 #else
   AbstractSyntax as;
-  as.SetNameFromUID( inRootQuery->GetAbstractSyntaxUID() );
+  as.SetNameFromUID( inRootQuery->GetAbstractSyntaxUID(true) );
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
 #endif
