@@ -26,27 +26,27 @@ this file defines the messages for the cecho action
 #include "gdcmImplicitDataElement.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmCommandDataSet.h"
+#include "gdcmULConnection.h"
 
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
+ const ULConnection &inConnection, const BaseRootQuery* inRootQuery)
+{
   PresentationDataValue thePDV;
-  thePDV.SetPresentationContextID(eVerificationSOPClass);
+  AbstractSyntax as;
+  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  thePDV.SetPresentationContextID(
+    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+  assert( thePDV.GetPresentationContextID() == 1 );
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
   CommandDataSet ds;
-  DataElement de( Tag(0x0,0x2) );
-  de.SetVR( VR::UI );
-  const char *uid = UIDs::GetUIDString( UIDs::VerificationSOPClass );
-  std::string suid = uid;
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
-  ds.Insert( de );
+  ds.Insert( as.GetAsDataElement() );
   {
   Attribute<0x0,0x100> at = { 48 };
   ds.Insert( at.GetAsDataElement() );

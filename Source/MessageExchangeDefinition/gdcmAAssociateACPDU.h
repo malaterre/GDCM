@@ -55,6 +55,7 @@ public:
   void Print(std::ostream &os) const;
   bool IsLastFragment() const { return true; }
 
+  void InitFromRQ( AAssociateRQPDU const & rqpdu );
 protected:
   friend class AAssociateRQPDU;
   void SetCalledAETitle(const char calledaetitle[16]);

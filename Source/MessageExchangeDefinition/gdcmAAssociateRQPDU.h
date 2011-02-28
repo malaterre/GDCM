@@ -41,16 +41,20 @@ public:
   size_t Size() const;
   void AddPresentationContext( PresentationContext const &pc );
 
+  /// Set the Called AE Title
   void SetCalledAETitle(const char calledaetitle[16]);
   std::string GetCalledAETitle() const { return std::string(CalledAETitle,16); }
+
+  /// Set the Calling AE Title
   void SetCallingAETitle(const char callingaetitle[16]);
   std::string GetCallingAETitle() const { return std::string(CallingAETitle,16); }
 
+  /// Check whether or not the \input title is a valid AE title
   static bool IsAETitleValid(const char title[16]);
 
   /// This function will initialize an AAssociateACPDU from
   /// the fields in the AAssociateRQPDU structure
-  void InitFromRQ( AAssociateACPDU & acpdu );
+  //void InitFromRQ( AAssociateACPDU & acpdu );
 
   void Print(std::ostream &os) const;
 
@@ -68,12 +72,18 @@ public:
   SizeType GetNumberOfPresentationContext() const {
     return PresContext.size();
   }
-  PresentationContext const &GetPresentationContext(unsigned int i) const {
+  PresentationContext const &GetPresentationContext(SizeType i) const {
     assert( !PresContext.empty() && i < PresContext.size() );
     return PresContext[i];
   }
-  const PresentationContext *GetPresentationContextByID(unsigned int i) const;
+  typedef std::vector<PresentationContext> PresentationContextArrayType;
+  PresentationContextArrayType const &GetPresentationContexts() { return PresContext; }
+
+  const PresentationContext *GetPresentationContextByID(uint8_t i) const;
+  const PresentationContext *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
   bool IsLastFragment() const { return true; }
+
+  bool AddPresentationContextByAbstractSyntax( AbstractSyntax const & as );
 
 private:
   // 1 PDU-type 01H

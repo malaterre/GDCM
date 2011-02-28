@@ -191,6 +191,19 @@ void AAssociateACPDU::Print(std::ostream &os) const
     }
 }
 
+void AAssociateACPDU::InitFromRQ( AAssociateRQPDU const & rqpdu )
+{
+  // Table 9-17 ASSOCIATE-AC PDU fields
+  // This reserved field shall be sent with a value identical to the value
+  // received in the same field of the A-ASSOCIATE-RQ PDU
+  SetCalledAETitle( rqpdu.GetCalledAETitle().c_str() );
+  SetCallingAETitle( rqpdu.GetCallingAETitle().c_str() );
+
+  std::cerr << "Max: " << this->UserInfo.GetMaximumLengthSub().GetMaximumLength() << std::endl;
+assert(0);
+}
+
+
 void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
 {
   TransferSyntaxSub ts1;

@@ -21,8 +21,10 @@
 #include "gdcmBaseCompositeMessage.h"
 #include "gdcmBaseRootQuery.h"
 
-namespace gdcm{
-  namespace network{
+namespace gdcm
+{
+namespace network
+{
 
 /*
  * \brief CFindRQ
@@ -30,23 +32,20 @@ namespace gdcm{
  */
 class CFindRQ : public BaseCompositeMessage
 {
-      //this class will fulfill the inheritance,
-      //but additional information is needed by cfind
-      //namely, the root type
-      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
-    public:
-      std::vector<PresentationDataValue> ConstructPDV(const BaseRootQuery* inRootQuery);
-    };
+public:
+  std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection,
+    const BaseRootQuery* inRootQuery);
+};
 
-    class CFindRSP : public BaseCompositeMessage {
-    public:
-      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
-    };
+class CFindRSP : public BaseCompositeMessage {
+public:
+  std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+};
 
-    class CFindCancelRQ : public BaseCompositeMessage {
-    public:
-      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
-    };
-  }
+  class CFindCancelRQ : public BaseCompositeMessage {
+  public:
+    std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+  };
+}
 }
 #endif

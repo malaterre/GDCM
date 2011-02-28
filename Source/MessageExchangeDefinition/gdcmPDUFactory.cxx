@@ -143,9 +143,10 @@ BasePDU* PDUFactory::ConstructAbortPDU()
 
   return theAAbortPDU;
 }
-std::vector<BasePDU*> PDUFactory::CreateCEchoPDU()
+std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(const ULConnection& inConnection)
 {
-  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCEchoRQ();
+  std::vector<PresentationDataValue> pdv =
+    CompositeMessageFactory::ConstructCEchoRQ(inConnection);
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
@@ -171,10 +172,10 @@ std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection&
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(const DataSet* inDataSet)
+std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(const ULConnection& inConnection, const DataSet* inDataSet)
 {
-
-  std::vector<PresentationDataValue> pdv = CompositeMessageFactory::ConstructCStoreRQ(inDataSet );
+  std::vector<PresentationDataValue> pdv =
+    CompositeMessageFactory::ConstructCStoreRQ(inConnection, inDataSet );
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){
