@@ -117,7 +117,7 @@ namespace gdcm{
     ///tags from the patient and study level can be passed along as well.
     virtual bool ValidateQuery(bool forFind, bool inStrict) const = 0;
 
-    virtual UIDs::TSName GetAbstractSyntaxUID() const = 0;
+    virtual UIDs::TSName GetAbstractSyntaxUID(bool inMove = false) const = 0;
   };
 }
 

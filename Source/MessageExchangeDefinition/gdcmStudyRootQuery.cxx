@@ -250,8 +250,10 @@ void StudyRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
   }
 }
 
-UIDs::TSName StudyRootQuery::GetAbstractSyntaxUID() const
+UIDs::TSName StudyRootQuery::GetAbstractSyntaxUID(bool inMove) const
 {
+  if( inMove )
+    return UIDs::StudyRootQueryRetrieveInformationModelMOVE;
   return UIDs::StudyRootQueryRetrieveInformationModelFIND;
 }
 

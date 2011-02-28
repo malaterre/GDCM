@@ -46,7 +46,7 @@ namespace gdcm{
     ///that the tags in the query match the right level (either required, unique, optional)
     bool ValidateQuery(bool forFind, bool inStrict) const;
 
-    UIDs::TSName GetAbstractSyntaxUID() const;
+    UIDs::TSName GetAbstractSyntaxUID(bool inMove = false) const;
   };
 }
 
