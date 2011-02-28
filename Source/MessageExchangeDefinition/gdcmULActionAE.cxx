@@ -93,6 +93,17 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 // PS 3.7 / Annex D for A-ASSOCIATE definition
 EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
+
+
+  // Mark please check this junk:
+  assert(!inEvent.GetPDUs().empty());
+  AAssociateACPDU* acpdu;
+    acpdu = dynamic_cast<AAssociateACPDU*>(inEvent.GetPDUs()[0]);
+  assert( acpdu );
+  uint32_t maxpdu = acpdu->GetUserInformation().GetMaximumLengthSub().GetMaximumLength();
+  assert( maxpdu == 4096 );
+  inConnection.SetMaxPDUSize(maxpdu);
+
   outWaitingForEvent = false;
   outRaisedEvent = eEventDoesNotExist;//no event is raised,
   //wait for the user to try to send some data.

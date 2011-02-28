@@ -302,10 +302,13 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
 
   // the following is really dumb:
   network::AAssociateRQPDU generator;
-  network::AbstractSyntax as;
-  as.SetNameFromUID( UIDs::VerificationSOPClass );
-  generator.AddPresentationContextByAbstractSyntax( as );
-assert( 0) ;
+  gdcm::Scanner::ValuesType::const_iterator it = sopclasses.begin();
+  for( ; it != sopclasses.end(); ++it )
+    {
+    network::AbstractSyntax as;
+    as.SetName( it->c_str() );
+    generator.AddPresentationContextByAbstractSyntax( as );
+    }
 
   if (!theManager.EstablishConnection(aetitle, call, remote, 0,
       portno, 1000, generator.GetPresentationContexts() ))

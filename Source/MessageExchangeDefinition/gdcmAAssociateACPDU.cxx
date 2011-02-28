@@ -198,9 +198,6 @@ void AAssociateACPDU::InitFromRQ( AAssociateRQPDU const & rqpdu )
   // received in the same field of the A-ASSOCIATE-RQ PDU
   SetCalledAETitle( rqpdu.GetCalledAETitle().c_str() );
   SetCallingAETitle( rqpdu.GetCallingAETitle().c_str() );
-
-  std::cerr << "Max: " << this->UserInfo.GetMaximumLengthSub().GetMaximumLength() << std::endl;
-assert(0);
 }
 
 
