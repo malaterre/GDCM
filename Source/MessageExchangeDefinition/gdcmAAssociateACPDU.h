@@ -49,6 +49,7 @@ public:
   SizeType GetNumberOfPresentationContextAC() const {
     return PresContextAC.size();
   }
+  const UserInformation &GetUserInformation() const { return UserInfo; }
 
   size_t Size() const;
 

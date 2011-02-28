@@ -46,14 +46,14 @@ const ULConnection &inConnection, const DataSet* inDataSet)
     PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
 #else
   MediaStorage mst;
-  if (mst.SetFromDataSet(*inDataSet))
+  if (!mst.SetFromDataSet(*inDataSet))
     {
     assert( 0 );
     }
   UIDs uid;
   uid.SetFromUID( MediaStorage::GetMSString(mst) );
   //as.SetNameFromUID( uid );
-  as.SetName( uid.GetName() );
+  as.SetName( uid.GetString() );
 
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
@@ -138,7 +138,8 @@ static uint32_t messageid = 1;
   std::string ds_copy = ss.str();
   // E: 0006:0308 DUL Illegal PDU Length 16390.  Max expected 16384
   //const size_t maxpdu = 16384;
-  const size_t maxpdu = 16378;
+  size_t maxpdu = 16378;
+  maxpdu = inConnection.GetMaxPDUSize() - 6;
   size_t len = ds_copy.size();
   const char *begin = ds_copy.c_str();
   const char *end = begin + len;
