@@ -3,7 +3,7 @@ TestPresentationContext
 TestQueryFactory
 TestULConnectionManager
 TestServiceClassUser
-TestSCUValidation
+#TestSCUValidation # change of API
 TestEcho
 TestFind
 )
