@@ -89,7 +89,7 @@ namespace gdcm {
         const std::string& inConnectAETitle,
         const std::string& inComputerName, long inIPAddress,
         uint16_t inConnectPort, double inTimeout,
-        std::vector<PresentationContext> pcVector );
+        std::vector<PresentationContext> const & pcVector );
 
       /// returns true for above reasons, but contains the special 'move' port
       /// \internal
@@ -98,7 +98,7 @@ namespace gdcm {
         const std::string& inComputerName, long inIPAddress,
         uint16_t inConnectPort, double inTimeout,
         uint16_t inReturnPort,
-        std::vector<PresentationContext> pcVector);
+        std::vector<PresentationContext> const & pcVector);
       // \endinternal
 
 

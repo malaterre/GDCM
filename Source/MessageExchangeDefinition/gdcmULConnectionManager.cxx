@@ -64,7 +64,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   const std::string& inConnectAETitle,
   const std::string& inComputerName, long inIPAddress,
   unsigned short inConnectPort, double inTimeout,
-  std::vector<PresentationContext> pcVector)
+  std::vector<PresentationContext> const & pcVector)
 {
 
   //generate a ULConnectionInfo object
@@ -102,9 +102,9 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   //the presentation context will now be part of the connection, so that this
   //initialization for the association-rq will use parameters from the connection
 
-  AbstractSyntax as;
 
 #if 0
+  AbstractSyntax as;
   std::vector<PresentationContext> pcVector;
   PresentationContext pc;
   TransferSyntaxSub ts;
@@ -221,7 +221,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   const std::string& inComputerName, long inIPAddress,
   uint16_t inConnectPort, double inTimeout,
   uint16_t inReturnPort,
-  std::vector<PresentationContext> pcVector)
+  std::vector<PresentationContext> const & pcVector)
 {
 
 

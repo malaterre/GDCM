@@ -105,10 +105,8 @@ class ULConnection
       static std::vector<PresentationContext> GeneratePresentationContexts(
         Scanner::ValuesType const & sopclasses );
 
-      uint8_t GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const {
-        assert( 0 );
-        return 0;
-      }
+      /// return 0 upon error
+      uint8_t GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const;
 
       std::vector<PresentationContext> const & GetPresentationContexts() const;
       void SetPresentationContexts(const std::vector<PresentationContext>& inContexts);

@@ -231,5 +231,23 @@ void ULConnection::StopProtocol(){
     SetState(eSta2Open);
   }
 }
+
+uint8_t ULConnection::GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const
+{
+  // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
+  // for now duplicate code from AAssociateRQPDU::GetPresentationContextIDFromAbstractSyntax
+  uint8_t ret = 0;
+  std::vector<PresentationContext>::const_iterator it = mPresentationContexts.begin();
+  for( ; it != mPresentationContexts.end(); ++it)
+    {
+    if( it->GetAbstractSyntax() == as )
+      {
+      ret = it->GetPresentationContextID();
+      }
+    }
+
+  return ret;
+}
+
 } // end namespace network
 } // end namespace gdcm

@@ -175,7 +175,9 @@ bool AAssociateRQPDU::IsAETitleValid(const char title[16])
   std::string s ( title, 16 );
   // check no \0 :
   size_t len = strlen( s.c_str() );
-  if( len != 16 ) return false;
+
+  // FIXME:
+//  if( len != 16 ) return false;
   std::locale loc;
   std::string str = s;
   for (size_t i=0; i < str.size(); ++i)
@@ -278,7 +280,13 @@ bool AAssociateRQPDU::AddPresentationContextByAbstractSyntax( AbstractSyntax con
   PresentationContext pc;
   pc.SetAbstractSyntax( as );
   pc.SetPresentationContextID( 2*n + 1 );
+
+  TransferSyntaxSub ts;
+  ts.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  pc.AddTransferSyntax( ts );
+
   PresContext.push_back( pc );
+
   return true;
 }
 
