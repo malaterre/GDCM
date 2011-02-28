@@ -293,4 +293,9 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     }
   }
 
+UIDs::TSName PatientRootQuery::GetAbstractSyntaxUID() const
+{
+  return UIDs::PatientRootQueryRetrieveInformationModelFIND;
+}
+
 }

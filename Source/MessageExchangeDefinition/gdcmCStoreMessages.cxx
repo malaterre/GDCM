@@ -24,20 +24,40 @@
 #include "gdcmCommandDataSet.h"
 #include "gdcmBasePDU.h"
 #include "gdcmPDataTFPDU.h"
+#include "gdcmMediaStorage.h"
+#include "gdcmULConnection.h"
+
 #include <limits>
 
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(const DataSet* inDataSet)
+std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(
+const ULConnection &inConnection, const DataSet* inDataSet)
 {
   std::vector<PresentationDataValue> thePDVs;
+  AbstractSyntax as;
 {
   assert( inDataSet );
   PresentationDataValue thePDV;
+#if 0
   std::string UIDString;
   thePDV.SetPresentationContextID(
     PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
+#else
+  MediaStorage mst;
+  if (mst.SetFromDataSet(*inDataSet))
+    {
+    assert( 0 );
+    }
+  UIDs uid;
+  uid.SetFromUID( MediaStorage::GetMSString(mst) );
+  //as.SetNameFromUID( uid );
+  as.SetName( uid.GetName() );
+
+  thePDV.SetPresentationContextID(
+    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+#endif
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -131,7 +151,12 @@ static uint32_t messageid = 1;
     PresentationDataValue thePDV;
     std::string UIDString;
     thePDV.SetPresentationContextID(
-      PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
+#if 0
+      PresentationContext::AssignPresentationContextID(*inDataSet, UIDString)
+#else
+      inConnection.GetPresentationContextIDFromAbstractSyntax(as)
+#endif
+    );
 
     thePDV.SetBlob( sub );
     if( remaining == maxpdu )
@@ -149,10 +174,20 @@ static uint32_t messageid = 1;
 }
 
 //private hack
-std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(const DataSet* inDataSet)
+std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(
+const ULConnection &inConnection, const BaseRootQuery* inRootQuery)
 {
   std::vector<PresentationDataValue> thePDVs;
-  (void)inDataSet;
+  (void)inRootQuery;
+  assert( 0 && "TODO" );
+  return thePDVs;
+}
+
+//private hack
+std::vector<PresentationDataValue>  CStoreRSP::ConstructPDV(const ULConnection &, const BaseRootQuery* inRootQuery)
+{
+  std::vector<PresentationDataValue> thePDVs;
+  (void)inRootQuery;
   assert( 0 && "TODO" );
   return thePDVs;
 }

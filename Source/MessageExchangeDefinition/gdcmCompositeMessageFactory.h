@@ -41,9 +41,9 @@ class CompositeMessageFactory
       //find, move, etc, may need something more robust, but since those are
       //easily placed into the appropriate pdatapdu in the pdufactory,
       //this approach without a base class (but done internally) is useful.
-      static std::vector<PresentationDataValue> ConstructCEchoRQ();
+      static std::vector<PresentationDataValue> ConstructCEchoRQ(const ULConnection& inConnection);
 
-      static std::vector<PresentationDataValue> ConstructCStoreRQ(const DataSet *inDataSet);
+      static std::vector<PresentationDataValue> ConstructCStoreRQ(const ULConnection& inConnection,const DataSet *inDataSet);
       static std::vector<PresentationDataValue> ConstructCStoreRSP(const DataSet *inDataSet, const BasePDU* inPC);
 
       static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);

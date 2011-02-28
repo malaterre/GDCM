@@ -34,6 +34,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
 {
   std::vector<PresentationDataValue> thePDVs;
   PresentationDataValue thePDV;
+#if 0
   int contextID = ePatientRootQueryRetrieveInformationModelMOVE;
   const char *uid = UIDs::GetUIDString(
     UIDs::PatientRootQueryRetrieveInformationModelMOVE );
@@ -46,17 +47,18 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
     suid = uid2;
     }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
+#else
+  AbstractSyntax as;
+  as.SetNameFromUID( inRootQuery->GetAbstractSyntaxUID() );
+  thePDV.SetPresentationContextID(
+    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+#endif
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
   CommandDataSet ds;
-  DataElement de( Tag(0x0,0x2) );
-  de.SetVR( VR::UI );
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
-  ds.Insert( de );
+  ds.Insert( as.GetAsDataElement() );
   {
   Attribute<0x0,0x100> at = { 33 };//0021H, as per the spec
   ds.Insert( at.GetAsDataElement() );
@@ -92,7 +94,8 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   thePDVs.push_back(thePDV);
   {
     PresentationDataValue thePDV;
-    thePDV.SetPresentationContextID(contextID);
+    thePDV.SetPresentationContextID(
+    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
     //thePDV.SetBlob( sub );
     thePDV.SetDataSet(inRootQuery->GetQueryDataSet());
     thePDV.SetMessageHeader( 2 );

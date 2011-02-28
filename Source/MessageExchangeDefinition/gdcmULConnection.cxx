@@ -122,6 +122,11 @@ PresentationContext ULConnection::FindContext(const DataElement& de) const
   return empty;
 }
 
+std::vector<PresentationContext> GeneratePresentationContexts(Scanner::ValuesType const & sopclasses )
+{
+  std::vector<PresentationContext> ret;
+}
+
 bool ULConnection::InitializeConnection()
 {
   try

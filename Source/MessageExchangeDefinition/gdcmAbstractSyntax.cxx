@@ -111,6 +111,18 @@ void AbstractSyntax::Print(std::ostream &os) const
   os << Name << std::endl;
 }
 
+DataElement AbstractSyntax::GetAsDataElement() const
+{
+  DataElement de( Tag(0x0,0x2) );
+  de.SetVR( VR::UI );
+  std::string suid;
+  suid = Name;
+  if( suid.size() % 2 )
+    suid.push_back( ' ' ); // no \0 !
+  de.SetByteValue( suid.c_str(), suid.size()  );
+
+  return de;
+}
 
 } // end namespace network
 } // end namespace gdcm

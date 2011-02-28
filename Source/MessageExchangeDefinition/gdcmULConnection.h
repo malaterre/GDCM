@@ -25,6 +25,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmPresentationContext.h"
 
+#include "gdcmScanner.h" // FIXME
 
 class iosockinet;
 class echo;
@@ -100,6 +101,14 @@ class ULConnection
       //(presentation contexts, etc). Store that here.
       void SetMaxPDUSize(uint32_t inSize);
       uint32_t GetMaxPDUSize() const;
+
+      static std::vector<PresentationContext> GeneratePresentationContexts(
+        Scanner::ValuesType const & sopclasses );
+
+      uint8_t GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const {
+        assert( 0 );
+        return 0;
+      }
 
       std::vector<PresentationContext> const & GetPresentationContexts() const;
       void SetPresentationContexts(const std::vector<PresentationContext>& inContexts);

@@ -23,13 +23,16 @@
 namespace gdcm{
   namespace network{
 
+class ULConnection;
+
 /**
  * \brief CEchoRQ
  * this file defines the messages for the cecho action
  */
 class CEchoRQ : public BaseCompositeMessage {
     public:
-      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection,
+        const BaseRootQuery* inRootQuery);
     };
 
     class CEchoRSP : public BaseCompositeMessage {

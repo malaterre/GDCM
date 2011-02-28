@@ -28,12 +28,14 @@ namespace gdcm{
  * this file defines the messages for the cecho action
  */
 class CStoreRQ : public BaseCompositeMessage {
+      std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection, const BaseRootQuery* inRootQuery);//to fulfill the virtual contract
     public:
-      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+      std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection,
+        const DataSet* inDataSet);
     };
 
     class CStoreRSP : public BaseCompositeMessage {
-      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);//to fulfill the virtual contract
+      std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection, const BaseRootQuery* inRootQuery);//to fulfill the virtual contract
     public:
       std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet, const BasePDU* inPC);
     };

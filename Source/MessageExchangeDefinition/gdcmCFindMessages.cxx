@@ -27,13 +27,17 @@ this file defines the messages for the cfind action
 #include "gdcmPresentationContext.h"
 #include "gdcmCommandDataSet.h"
 #include "gdcmStudyRootQuery.h"
+#include "gdcmULConnection.h"
 
 namespace gdcm{
 namespace network{
 
-std::vector<PresentationDataValue> CFindRQ::ConstructPDV(const BaseRootQuery* inRootQuery){
+std::vector<PresentationDataValue> CFindRQ::ConstructPDV(
+ const ULConnection &inConnection, const BaseRootQuery* inRootQuery)
+{
   std::vector<PresentationDataValue> thePDVs;
   PresentationDataValue thePDV;
+#if 0
   int contextID = ePatientRootQueryRetrieveInformationModelFIND;
   const char *uid = UIDs::GetUIDString(
     UIDs::PatientRootQueryRetrieveInformationModelFIND );
@@ -46,19 +50,19 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(const BaseRootQuery* in
     suid = uid2;
     }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
+#else
+  AbstractSyntax as;
+  as.SetNameFromUID( inRootQuery->GetAbstractSyntaxUID() );
+  thePDV.SetPresentationContextID(
+    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+#endif
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
   CommandDataSet ds;
-  DataElement de( Tag(0x0,0x2) );
-  de.SetVR( VR::UI );
-
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
-  ds.Insert( de );
+  ds.Insert( as.GetAsDataElement() );
   {
   Attribute<0x0,0x100> at = { 32 };
   ds.Insert( at.GetAsDataElement() );
@@ -89,15 +93,6 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(const BaseRootQuery* in
   thePDV.SetMessageHeader( 2 );
   thePDVs.push_back(thePDV);
   return thePDVs;
-}
-
-//this is a private function, should not be callable
-//but if you manage to do call it, return a blank dataset.
-std::vector<PresentationDataValue> CFindRQ::ConstructPDV(const DataSet* inDataSet){
-  std::vector<PresentationDataValue> thePDVs;
-  assert( 0 && "TODO" );
-  return thePDVs;
-
 }
 
 std::vector<PresentationDataValue>  CFindRSP::ConstructPDV(const DataSet* inDataSet){

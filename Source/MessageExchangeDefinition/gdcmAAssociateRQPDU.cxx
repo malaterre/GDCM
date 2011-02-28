@@ -51,18 +51,6 @@ AAssociateRQPDU::AAssociateRQPDU()
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
-void AAssociateRQPDU::InitFromRQ( AAssociateACPDU & acpdu )
-{
-  // Table 9-17 ASSOCIATE-AC PDU fields
-  // This reserved field shall be sent with a value identical to the value
-  // received in the same field of the A-ASSOCIATE-RQ PDU
-  acpdu.SetCalledAETitle( this->GetCalledAETitle().c_str() );
-  acpdu.SetCallingAETitle( this->GetCallingAETitle().c_str() );
-
-  std::cerr << "Max: " << this->UserInfo.GetMaximumLengthSub().GetMaximumLength() << std::endl;
-assert(0);
-}
-
 std::istream &AAssociateRQPDU::Read(std::istream &is)
 {
   //uint8_t itemtype = 0;
@@ -183,6 +171,7 @@ size_t AAssociateRQPDU::Size() const
 
 bool AAssociateRQPDU::IsAETitleValid(const char title[16])
 {
+  if(!title) return false;
   std::string s ( title, 16 );
   // check no \0 :
   size_t len = strlen( s.c_str() );
@@ -206,6 +195,7 @@ void AAssociateRQPDU::AddPresentationContext( PresentationContext const &pc )
 
 void AAssociateRQPDU::SetCalledAETitle(const char calledaetitle[16])
 {
+  assert( AAssociateRQPDU::IsAETitleValid(calledaetitle) );
   size_t len = strlen( calledaetitle );
   if( len <= 16 )
     {
@@ -218,6 +208,7 @@ void AAssociateRQPDU::SetCalledAETitle(const char calledaetitle[16])
 
 void AAssociateRQPDU::SetCallingAETitle(const char callingaetitle[16])
 {
+  assert( AAssociateRQPDU::IsAETitleValid(callingaetitle) );
   size_t len = strlen( callingaetitle );
   if( len <= 16 )
     {
@@ -255,17 +246,41 @@ void AAssociateRQPDU::Print(std::ostream &os) const
   os << std::endl;
 }
 
-const PresentationContext *AAssociateRQPDU::GetPresentationContextByID(unsigned int id) const {
-    std::vector<PresentationContext>::const_iterator it = PresContext.begin();
-    for( ; it != PresContext.end(); ++it)
+const PresentationContext *AAssociateRQPDU::GetPresentationContextByID(uint8_t id) const
+{
+  std::vector<PresentationContext>::const_iterator it = PresContext.begin();
+  for( ; it != PresContext.end(); ++it)
+    {
+    if( it->GetPresentationContextID() == id )
       {
-      if( it->GetPresentationContextID() == id )
-        {
-        return &*it;
-        }
+      return &*it;
       }
-    return NULL;
-  }
+    }
+  return NULL;
+}
+
+const PresentationContext *AAssociateRQPDU::GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const
+{
+  std::vector<PresentationContext>::const_iterator it = PresContext.begin();
+  for( ; it != PresContext.end(); ++it)
+    {
+    if( it->GetAbstractSyntax() == as )
+      {
+      return &*it;
+      }
+    }
+  return NULL;
+}
+
+bool AAssociateRQPDU::AddPresentationContextByAbstractSyntax( AbstractSyntax const & as )
+{
+  SizeType n = PresContext.size();
+  PresentationContext pc;
+  pc.SetAbstractSyntax( as );
+  pc.SetPresentationContextID( 2*n + 1 );
+  PresContext.push_back( pc );
+  return true;
+}
 
 } // end namespace network
 } // end namespace gdcm

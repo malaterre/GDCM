@@ -25,6 +25,8 @@
 #include "gdcmDataSet.h"
 #include "gdcmDictEntry.h"
 #include "gdcmTag.h"
+#include "gdcmUIDs.h"
+
 #include <iostream>
 
 namespace gdcm{
@@ -114,6 +116,8 @@ namespace gdcm{
     ///are now considered valid.  So, if you're doing a non-strict series-level query,
     ///tags from the patient and study level can be passed along as well.
     virtual bool ValidateQuery(bool forFind, bool inStrict) const = 0;
+
+    virtual UIDs::TSName GetAbstractSyntaxUID() const = 0;
   };
 }
 

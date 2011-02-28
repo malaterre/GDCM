@@ -39,6 +39,8 @@ namespace gdcm{
 
     std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
     bool ValidateQuery(bool forFind, bool inStrict) const;
+
+    UIDs::TSName GetAbstractSyntaxUID() const;
   };
 }
 

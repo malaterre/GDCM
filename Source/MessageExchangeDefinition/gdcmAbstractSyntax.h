@@ -16,6 +16,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmUIDs.h"
+#include "gdcmDataElement.h"
 
 namespace gdcm
 {
@@ -47,6 +48,14 @@ public:
   size_t Size() const;
 
   void Print(std::ostream &os) const;
+
+  bool operator==(const AbstractSyntax & as) const
+    {
+    return Name == as.Name;
+    }
+
+  DataElement GetAsDataElement() const;
+
 private:
   void UpdateName( const char *name );
   static const uint8_t ItemType;

@@ -186,7 +186,7 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     }
 
     // Init AE-Titles:
-    rqpdu->InitFromRQ( acpdu );
+    acpdu.InitFromRQ( *rqpdu );
 
     acpdu.Write( *inConnection.GetProtocol() );
     inConnection.GetProtocol()->flush();

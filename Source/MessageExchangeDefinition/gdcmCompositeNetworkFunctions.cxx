@@ -38,6 +38,8 @@
 #include "gdcmStudyRootQuery.h"
 #include "gdcmPatientRootQuery.h"
 #include "gdcmULWritingCallback.h"
+#include "gdcmAAssociateRQPDU.h"
+#include "gdcmAbstractSyntax.h"
 #include "gdcmImageReader.h"
 
 namespace gdcm
@@ -58,9 +60,15 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     call = "ANY-SCP";
     }
   network::ULConnectionManager theManager;
-  DataSet blank;
+
+  // the following is really dumb:
+  network::AAssociateRQPDU generator;
+  network::AbstractSyntax as;
+  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  generator.AddPresentationContextByAbstractSyntax( as );
+
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10,
-      network::eEcho, blank))
+      generator.GetPresentationContexts() ))
     {
     gdcmErrorMacro( "Failed to establish connection." );
     return false;
@@ -158,8 +166,16 @@ bool CompositeNetworkFunctions::CMoveToDisk( const char *remote, uint16_t portno
     }
 
   network::ULConnectionManager theManager;
+
+  // the following is really dumb:
+  network::AAssociateRQPDU generator;
+  network::AbstractSyntax as;
+  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  generator.AddPresentationContextByAbstractSyntax( as );
+  assert( 0 );
+
   if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
-      portscp, query->GetQueryDataSet()))
+      portscp, generator.GetPresentationContexts()))
     {
     gdcmErrorMacro( "Failed to establish connection." );
     return false;
@@ -189,8 +205,14 @@ std::vector<DataSet> CompositeNetworkFunctions::CMoveToMemory( const char *remot
   
   
   network::ULConnectionManager theManager;
+  // the following is really dumb:
+  network::AAssociateRQPDU generator;
+  network::AbstractSyntax as;
+  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  generator.AddPresentationContextByAbstractSyntax( as );
+assert( 0);
   if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
-                                          portscp, query->GetQueryDataSet()))
+                                          portscp, generator.GetPresentationContexts()))
   {
     gdcmErrorMacro( "Failed to establish connection." );
     return theMovedImages;
@@ -222,8 +244,15 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
   //   dhcp-67-183 5678  patqry.dcm
   // Add a query:
   network::ULConnectionManager theManager;
+
+  // the following is really dumb:
+  network::AAssociateRQPDU generator;
+  network::AbstractSyntax as;
+  as.SetNameFromUID( query->GetAbstractSyntaxUID() );
+  generator.AddPresentationContextByAbstractSyntax( as );
+
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000,
-      network::eFind, query->GetQueryDataSet()))
+      generator.GetPresentationContexts()))
     {
     gdcmErrorMacro( "Failed to establish connection." );
     return false;
@@ -251,26 +280,35 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     call = "ANY-SCP";
     }
 
-  std::string filename = filenames[0];
+  // By design GDCM C-STORE implementation only setup the association for any dataset we are
+  // about to send. This is therefore very important to gather all possible SOP Class
+  // we are about to send otherwise the other end will simply disconnect us
+  // this imply that C-STORE will refuse any DataSet without SOP Clas or SOP Instances
+  gdcm::Scanner sc;
+  gdcm::Tag sopclass(0x8,0x16);
+  gdcm::Tag sopinstance(0x8,0x18);
+  sc.AddTag( sopclass );
+  //sc.AddTag( sopinstance );
+  if( !sc.Scan( filenames ) )
+    {
+    gdcmErrorMacro( "Could not scan filenames" );
+    return 1;
+    }
+  gdcm::Scanner::ValuesType sopclasses = sc.GetValues( sopclass );
+
   network::ULConnectionManager theManager;
   Directory::FilenamesType files;
   files = filenames;
 
-  // use the first file for the init
-  filename = files[0];
-
-  Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
-    {
-    gdcmErrorMacro( "Could not read: " << filename );
-    return false;
-    }
-  //const File &file = reader.GetFile();
-  const DataSet &ds = reader.GetFile().GetDataSet();
+  // the following is really dumb:
+  network::AAssociateRQPDU generator;
+  network::AbstractSyntax as;
+  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  generator.AddPresentationContextByAbstractSyntax( as );
+assert( 0) ;
 
   if (!theManager.EstablishConnection(aetitle, call, remote, 0,
-      portno, 1000, network::eStore, ds))
+      portno, 1000, generator.GetPresentationContexts() ))
     {
     gdcmErrorMacro( "Failed to establish connection." );
     return false;
@@ -292,14 +330,13 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
   theManager.SendStore( (DataSet*)&ds );
 #endif
 
+  const char *fn = "";
   try
     {
-    theManager.SendStore( (DataSet*)&ds );
-    gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
-
-    for( size_t i = 1; i < files.size(); ++i )
+    for( size_t i = 0; i < files.size(); ++i )
       {
       const std::string & filename = files[i];
+      fn = filename.c_str();
       Reader reader;
       reader.SetFileName( filename.c_str() );
       gdcmDebugMacro( "Processing: " << filename );
@@ -319,14 +356,14 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     // than raw transfer syntx (Little Endian Explicit/Implicit...)
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
     // TODO: filename is bogus it does not point to the right filename
-    gdcmErrorMacro( "C-Store of file " << filename << " was unsuccessful, aborting. " )
+    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " )
     gdcmErrorMacro( "Error was " << e.what() );
     return false;
     }
   catch (...)
     {
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-    gdcmErrorMacro( "C-Store of file " << filename << " was unsuccessful, aborting. " )
+    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " )
     return false;
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite

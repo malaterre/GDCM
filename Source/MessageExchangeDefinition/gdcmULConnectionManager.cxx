@@ -64,7 +64,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   const std::string& inConnectAETitle,
   const std::string& inComputerName, long inIPAddress,
   unsigned short inConnectPort, double inTimeout,
-  const EConnectionType& inConnectionType, const DataSet& inDS)
+  std::vector<PresentationContext> pcVector)
 {
 
   //generate a ULConnectionInfo object
@@ -104,6 +104,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
 
   AbstractSyntax as;
 
+#if 0
   std::vector<PresentationContext> pcVector;
   PresentationContext pc;
   TransferSyntaxSub ts;
@@ -179,6 +180,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
     gdcmWarningMacro("Unable to establish presentation context; ensure that dataset has tags 0x8,0x16 and 0x8,0x18 defined." <<std::endl);
     return false;
   }
+#endif
   mConnection->SetPresentationContexts(pcVector);
 
 
@@ -218,7 +220,9 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   const std::string& inConnectAETitle,
   const std::string& inComputerName, long inIPAddress,
   uint16_t inConnectPort, double inTimeout,
-  uint16_t inReturnPort, const DataSet& inDS){
+  uint16_t inReturnPort,
+  std::vector<PresentationContext> pcVector)
+{
 
 
   //generate a ULConnectionInfo object
@@ -274,6 +278,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
 
   AbstractSyntax as;
 
+#if 0
   std::vector<PresentationContext> pcVector;
   PresentationContext pc;
   TransferSyntaxSub ts;
@@ -300,6 +305,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   as.SetNameFromUID( UIDs::StudyRootQueryRetrieveInformationModelMOVE );
   pc.SetAbstractSyntax( as );
   pcVector.push_back(pc);
+#endif
   mConnection->SetPresentationContexts(pcVector);
 
 
@@ -338,7 +344,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
 //the user should look to cout to see the response of the echo command
 std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
 
-  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU();//pass NULL for C-Echo
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
@@ -402,7 +408,7 @@ void ULConnectionManager::SendStore(const DataSet * inDataSet, ULConnectionCallb
     {
     return;
     }
-  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(inDataSet );
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(*mConnection, inDataSet);
   ULEvent theEvent(ePDATArequest, theDataPDU);
   RunEventLoop(theEvent, mConnection, inCallback, false);
 
