@@ -49,7 +49,7 @@ const ULConnection &inConnection, File const & file )
 {
 const DataSet* inDataSet = &file.GetDataSet();
   std::vector<PresentationDataValue> thePDVs;
-  AbstractSyntax as;
+  PresentationContext pc( UIDs::VerificationSOPClass );
   uint8_t prescontid;
 {
   assert( inDataSet );
@@ -68,11 +68,11 @@ const DataSet* inDataSet = &file.GetDataSet();
   UIDs uid;
   uid.SetFromUID( MediaStorage::GetMSString(mst) );
   //as.SetNameFromUID( uid );
-  as.SetName( uid.GetString() );
+  pc.GetAbstractSyntax().SetName( uid.GetString() );
 }
 
-  prescontid = inConnection.GetPresentationContextIDFromAbstractSyntax(as);
-  thePDV.SetPresentationContextID( prescontid );
+//  prescontid = inConnection.GetPresentationContextIDFromAbstractSyntax(as);
+//  thePDV.SetPresentationContextID( prescontid );
 #endif
 
   thePDV.SetCommand(true);
@@ -96,21 +96,49 @@ const DataSet* inDataSet = &file.GetDataSet();
     suid.push_back( ' ' ); // no \0 !
 
   // self check
-  const PresentationContextAC * pc = inConnection.GetPresentationContextACByID(prescontid);
-  assert( pc );
-  TransferSyntaxSub const &tssub = pc->GetTransferSyntax();
+//  const PresentationContextAC * pc = inConnection.GetPresentationContextACByID(prescontid);
+//  assert( pc );
+//  TransferSyntaxSub const &tssub = pc->GetTransferSyntax();
   const TransferSyntax & fmits = file.GetHeader().GetDataSetTransferSyntax();
+  const char *tsuidvalue = fmits.GetString();
+//  TransferSyntaxSub tssub;
+//  tssub.SetName( tsuidvalue );
+  pc.GetTransferSyntax(0).SetName( tsuidvalue );
+
   std::string tsuid = fmits.GetString();
+
+  prescontid = inConnection.GetPresentationContextIDFromPresentationContext(pc);
+  // prescontid cannot possibly be unknown since we are only looking in our own
+  // AAssociateRQPDU
+  assert( prescontid != 0 );
+
+  // Now let's see if this best matching PresentationContext can be found in the AC
+  // section of the AAssociateACPDU
+  const PresentationContextAC * acpc = inConnection.GetPresentationContextACByID(prescontid);
 
   // the following make sure that the accepted Presentation Context match the actual encoding
   // of the current File
   // ADV: technically we could use an explicit Vr encoded dataset and send it over
   // an implicit TS accecpted Transfer syntax. However thing do not interchange well
   // so we really need a filter to check whether conversion is ok or not.
-  if( tsuid != tssub.GetName() )
+  if( acpc == 0 )
     {
-    throw Exception("TODO: Need to implement multi TS");
+    // Technically we should fallback to something else. Anyway lets' give up
+    // and hope the use will convert the encapsulated stream to something else...
+    throw Exception("Server side refuse our proposed PC.");
     }
+
+  // For some reason using a dcmtk 3.5.4 server. The PresCont even if refused returned
+  // filled with the default Implicit Little Endian. So make sure TS matches
+  TransferSyntaxSub const & actssub = acpc->GetTransferSyntax();
+  if( !(actssub == pc.GetTransferSyntax(0)) )
+    {
+    gdcmDebugMacro( "Faulty Presentation Context : "
+      << (int)acpc->GetPresentationContextID() );
+    throw Exception("Server side refuse our proposed PC for context id" );
+    }
+
+  thePDV.SetPresentationContextID( prescontid );
 
   assert(suid.size() < std::numeric_limits<uint32_t>::max());
   de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );

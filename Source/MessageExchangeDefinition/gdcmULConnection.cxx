@@ -243,20 +243,20 @@ const PresentationContextAC *ULConnection::GetPresentationContextACByID(uint8_t 
   return NULL;
 }
 
-uint8_t ULConnection::GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const
+uint8_t ULConnection::GetPresentationContextIDFromPresentationContext(PresentationContext const & pc) const
 {
   // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
   // for now duplicate code from AAssociateRQPDU::GetPresentationContextIDFromAbstractSyntax
   uint8_t ret = 0;
-  std::vector<PresentationContext>::const_iterator it = mPresentationContexts.begin();
-  for( ; it != mPresentationContexts.end(); ++it)
+
+  std::vector<PresentationContext>::const_iterator it =
+    std::find( mPresentationContexts.begin(), mPresentationContexts.end(), pc );
+  if( it != mPresentationContexts.end() )
     {
-    if( it->GetAbstractSyntax() == as )
-      {
-      ret = it->GetPresentationContextID();
-      }
+    ret = it->GetPresentationContextID();
     }
 
+  assert( ret );
   return ret;
 }
 

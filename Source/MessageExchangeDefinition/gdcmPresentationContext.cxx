@@ -38,6 +38,17 @@ PresentationContext::PresentationContext()
   assert( (size_t)ItemLength + 4 == Size() );
 }
 
+PresentationContext::PresentationContext( UIDs::TSName asname, UIDs::TSName tsname )
+{
+  AbstractSyntax as;
+  as.SetNameFromUID( asname );
+  SetAbstractSyntax( as );
+
+  TransferSyntaxSub ts;
+  ts.SetNameFromUID( tsname );
+  AddTransferSyntax( ts );
+}
+
 std::istream &PresentationContext::Read(std::istream &is)
 {
   //uint8_t itemtype = 0x0;
@@ -137,6 +148,8 @@ void PresentationContext::AddTransferSyntax( TransferSyntaxSub const &ts )
 
 void PresentationContext::SetPresentationContextID( uint8_t id )
 {
+  assert( id % 2 == 1 );
+  assert( id );
   ID = id;
 }
 

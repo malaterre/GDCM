@@ -104,7 +104,7 @@ class ULConnection
 
       const PresentationContextAC *GetPresentationContextACByID(uint8_t id) const;
       /// return 0 upon error
-      uint8_t GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const;
+      uint8_t GetPresentationContextIDFromPresentationContext(PresentationContext const & pc) const;
 
       std::vector<PresentationContext> const & GetPresentationContexts() const;
       void SetPresentationContexts(const std::vector<PresentationContext>& inContexts);
