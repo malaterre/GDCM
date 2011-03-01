@@ -158,7 +158,7 @@ const DataSet* inDataSet = &file.GetDataSet();
       {
       const char *uid = bv->GetPointer();
       assert( uid );
-      std::string suid = std::string(uid, bv->GetLength() );
+      suid = std::string(uid, bv->GetLength() );
       if( suid.size() % 2 )
         suid.push_back( ' ' ); // no \0 !
       assert(suid.size() < std::numeric_limits<uint32_t>::max());

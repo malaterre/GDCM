@@ -27,8 +27,8 @@ namespace network
  * \brief PresentationContextGenerator
  * This class is responsible for generating the proper PresentationContext that
  * will be used in subsequent operation during a DICOM Query/Retrieve
- * association.  the step of the association is very sensible as special care
- * need to be taken to explicitely define what instance are going to be send
+ * association. The step of the association is very sensible as special care
+ * need to be taken to explicitly define what instance are going to be send
  * and how they are encoded.
  *
  * For example a PresentationContext will express that negotiation requires
@@ -41,6 +41,13 @@ namespace network
  * Another API: GenerateFromFilenames() is used for C-STORE (SCU) as it will
  * loop over all filenames argument to detect the actual encoding. and
  * therefore find the proper encoding to be used.
+ *
+ * Two modes are available. The default mode (SetMergeModeToAbstractSyntax)
+ * append PresentationContext (one AbstractSyntax and one TransferSyntax), as
+ * long a they are different. Eg MR Image Storage/JPEG2000 and MR Image
+ * Storage/JPEGLossless would be considered different.  the other mode
+ * SetMergeModeToTransferSyntax merge any new TransferSyntax to the already
+ * existing PresentationContext in order to re-use the same AbstractSyntax.
  *
  * \see PresentationContext
  */
