@@ -44,6 +44,8 @@ class ULConnectionInfo {
       unsigned long mCalledIPAddress;
       int mCalledIPPort;
       std::string mCalledComputerName; //either the IP or the name has to be filled in
+  
+      unsigned long mMaxPDULength;
     public:
       ULConnectionInfo();
 
@@ -63,6 +65,10 @@ class ULConnectionInfo {
       int GetCalledIPPort() const;
       std::string GetCalledComputerName() const;
 
+      //CStore needs to know the max pdu length, so the value gets initialized
+      //when a cstore connection is established (but not for the others).
+      void SetMaxPDULength(unsigned long inMaxPDULength);
+      unsigned long GetMaxPDULength() const;
     };
   }
 }

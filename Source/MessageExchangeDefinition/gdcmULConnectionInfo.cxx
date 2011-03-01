@@ -92,5 +92,12 @@ std::string ULConnectionInfo::GetCalledComputerName() const{
   return mCalledComputerName;
 }
 
+void ULConnectionInfo::SetMaxPDULength(unsigned long inMaxPDULength){
+  mMaxPDULength = inMaxPDULength;
+}
+unsigned long ULConnectionInfo::GetMaxPDULength() const{
+  return mMaxPDULength;
+}
+
 } // end namespace network
 } // end namespace gdcm
