@@ -51,10 +51,9 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(
     }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 #else
-  AbstractSyntax as;
-  as.SetNameFromUID( inRootQuery->GetAbstractSyntaxUID() );
+  PresentationContext pc( inRootQuery->GetAbstractSyntaxUID() );
   thePDV.SetPresentationContextID(
-    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+    inConnection.GetPresentationContextIDFromPresentationContext(pc) );
 #endif
 
   thePDV.SetCommand(true);
@@ -62,7 +61,7 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(
   //ignore incoming data set, make your own
 
   CommandDataSet ds;
-  ds.Insert( as.GetAsDataElement() );
+  ds.Insert( pc.GetAbstractSyntax().GetAsDataElement() );
   {
   Attribute<0x0,0x100> at = { 32 };
   ds.Insert( at.GetAsDataElement() );

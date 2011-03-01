@@ -29,13 +29,6 @@ namespace gdcm {
   class BaseRootQuery;
 
   namespace network {
-    enum GDCM_EXPORT EConnectionType {
-      eEcho,
-      eFind,
-      //eGet,      //our spec does not require C-GET support
-      //eMove,       //established by EstablishConnectionMove--DO NOT USE THIS DIRECTLY
-      eStore
-    };
 
 /**
  * \brief ULConnectionManager

@@ -35,10 +35,9 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
  const ULConnection &inConnection, const BaseRootQuery* inRootQuery)
 {
   PresentationDataValue thePDV;
-  AbstractSyntax as;
-  as.SetNameFromUID( UIDs::VerificationSOPClass );
+  PresentationContext pc( UIDs::VerificationSOPClass );
   thePDV.SetPresentationContextID(
-    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+    inConnection.GetPresentationContextIDFromPresentationContext(pc) );
   assert( thePDV.GetPresentationContextID() == 1 );
 
   thePDV.SetCommand(true);
@@ -46,7 +45,7 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
   //ignore incoming data set, make your own
 
   CommandDataSet ds;
-  ds.Insert( as.GetAsDataElement() );
+  ds.Insert( pc.GetAbstractSyntax().GetAsDataElement() );
   {
   Attribute<0x0,0x100> at = { 48 };
   ds.Insert( at.GetAsDataElement() );

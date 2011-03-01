@@ -48,17 +48,16 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
     }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 #else
-  AbstractSyntax as;
-  as.SetNameFromUID( inRootQuery->GetAbstractSyntaxUID(true) );
+  PresentationContext pc( inRootQuery->GetAbstractSyntaxUID(true) );
   thePDV.SetPresentationContextID(
-    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+    inConnection.GetPresentationContextIDFromPresentationContext(pc) );
 #endif
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
   //ignore incoming data set, make your own
 
   CommandDataSet ds;
-  ds.Insert( as.GetAsDataElement() );
+  ds.Insert( pc.GetAbstractSyntax().GetAsDataElement() );
   {
   Attribute<0x0,0x100> at = { 33 };//0021H, as per the spec
   ds.Insert( at.GetAsDataElement() );
@@ -95,7 +94,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   {
     PresentationDataValue thePDV;
     thePDV.SetPresentationContextID(
-    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+    inConnection.GetPresentationContextIDFromPresentationContext(pc) );
     //thePDV.SetBlob( sub );
     thePDV.SetDataSet(inRootQuery->GetQueryDataSet());
     thePDV.SetMessageHeader( 2 );

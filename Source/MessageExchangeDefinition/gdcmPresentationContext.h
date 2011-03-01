@@ -35,15 +35,26 @@ class GDCM_EXPORT PresentationContext
 {
 public:
   PresentationContext();
+
+  /// Initialize Presentation Context with AbstractSyntax set to asname
+  /// and with a single TransferSyntax set to tsname (dfault to Implicit VR
+  /// LittleEndian when not specified ).
+  PresentationContext( UIDs::TSName asname, UIDs::TSName tsname =
+    UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM  );
+
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
   size_t Size() const;
 
   void SetAbstractSyntax( AbstractSyntax const & as );
   AbstractSyntax const &GetAbstractSyntax() const { return SubItems; }
+  AbstractSyntax &GetAbstractSyntax() { return SubItems; }
 
   void AddTransferSyntax( TransferSyntaxSub const &ts );
-  std::vector<TransferSyntaxSub> GetTransferSyntaxes()const {return TransferSyntaxes; }
+  typedef std::vector<TransferSyntaxSub>::size_type SizeType;
+  TransferSyntaxSub const & GetTransferSyntax(SizeType i) const { return TransferSyntaxes[i]; }
+  TransferSyntaxSub & GetTransferSyntax(SizeType i) { return TransferSyntaxes[i]; }
+  std::vector<TransferSyntaxSub> const & GetTransferSyntaxes() const {return TransferSyntaxes; }
 
   void SetPresentationContextID( uint8_t id );
   uint8_t GetPresentationContextID() const;
@@ -62,6 +73,13 @@ public:
   //change the outcome of the search.
   //if it's not a verification context ID, then you can also get the UID associated with the data set.
   //static uint8_t AssignPresentationContextID(const DataSet& inDS, std::string& outUIDString);
+
+  bool operator==(const PresentationContext & pc) const
+    {
+    assert( TransferSyntaxes.size() == 1 ); // TODO
+    assert( pc.TransferSyntaxes.size() == 1 );
+    return SubItems == pc.SubItems && TransferSyntaxes == pc.TransferSyntaxes;
+    }
 
 private:
   static const uint8_t ItemType;
