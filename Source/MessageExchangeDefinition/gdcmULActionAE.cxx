@@ -101,8 +101,13 @@ EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     acpdu = dynamic_cast<AAssociateACPDU*>(inEvent.GetPDUs()[0]);
   assert( acpdu );
   uint32_t maxpdu = acpdu->GetUserInformation().GetMaximumLengthSub().GetMaximumLength();
-  assert( maxpdu == 4096 );
   inConnection.SetMaxPDUSize(maxpdu);
+
+  // once again duplicate AAssociateACPDU vs ULConnection
+  for( unsigned int index = 0; index < acpdu->GetNumberOfPresentationContextAC(); index++ ){
+    PresentationContextAC const &pc = acpdu->GetPresentationContextAC(index);
+    inConnection.AddAcceptedPresentationContext(pc);
+  }
 
   outWaitingForEvent = false;
   outRaisedEvent = eEventDoesNotExist;//no event is raised,
@@ -140,6 +145,8 @@ EStateID ULActionAE5::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
+ // we are in a C-MOVE
+
   inConnection.GetTimer().Stop();
 
   //have to determine 'acceptability'
@@ -171,12 +178,13 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
     for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ ){
       // FIXME / HARDCODED We only ever accept Little Endian
       // FIXME we should check :
-      // rqpdu.GetAbstractSyntax() contains LittleENdian
+      // rqpdu.GetAbstractSyntax() contains LittleEndian
       PresentationContextAC pcac1;
       PresentationContext const &pc = rqpdu->GetPresentationContext(index);
       //add the presentation context back into the connection,
       //so later functions will know what's allowed on this connection
-      inConnection.AddAcceptedPresentationContext(pc);
+      // BOGUS (MM):
+      //inConnection.AddAcceptedPresentationContext(pc);
 
       uint8_t id = pc.GetPresentationContextID();
 

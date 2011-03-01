@@ -82,18 +82,10 @@ public:
   /// This is an error to set remote to NULL or portno to 0
   /// when \param outputdir is not set default to current dir ('.')
   /// Returns true if it worked.
-  static bool CMoveToDisk( const char *remote, uint16_t portno, const BaseRootQuery* query,
+  static bool CMove( const char *remote, uint16_t portno, const BaseRootQuery* query,
     uint16_t portscp, const char *aetitle = NULL,
     const char *call = NULL, const char *outputdir = NULL);
 
-  /// This function returns the result of a CMove into memory, rather than placing the
-  /// results into files on disk.  Be careful with this, because large datasets would be
-  /// in memory, which means that 32bit programs might run out of memory quickly.
-  /// If it doesn't work, the vector will be empty upon return
-  static std::vector<DataSet> CMoveToMemory( const char *remote, uint16_t portno,
-    const BaseRootQuery* query, uint16_t portscp, const char *aetitle = NULL,
-    const char *call = NULL);
-  
   /// This function will use the provided query to determine what files a remote
   /// server contains that match the query strings.  The return is a vector of
   /// datasets that contain tags as reported by the server.  If the dataset is

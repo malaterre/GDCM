@@ -274,21 +274,5 @@ const PresentationContext *AAssociateRQPDU::GetPresentationContextByAbstractSynt
   return NULL;
 }
 
-bool AAssociateRQPDU::AddPresentationContextByAbstractSyntax( AbstractSyntax const & as )
-{
-  SizeType n = PresContext.size();
-  PresentationContext pc;
-  pc.SetAbstractSyntax( as );
-  pc.SetPresentationContextID( 2*n + 1 );
-
-  TransferSyntaxSub ts;
-  ts.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
-  pc.AddTransferSyntax( ts );
-
-  PresContext.push_back( pc );
-
-  return true;
-}
-
 } // end namespace network
 } // end namespace gdcm

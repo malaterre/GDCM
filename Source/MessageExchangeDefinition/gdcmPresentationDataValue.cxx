@@ -17,6 +17,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmCommandDataSet.h"
 #include "gdcmPrinter.h"
+
 #include <limits>
 
 namespace gdcm
@@ -52,19 +53,12 @@ std::istream &PresentationDataValue::Read(std::istream &is)
     }
 
   assert( ItemLength > 2 );
-  VL vl = ItemLength - 2;
-  Blob.resize( vl ); // reserve ??
-  assert( vl );
-  //std::cerr << "Reading Blob: " << vl << std::endl;
+  uint32_t vl = ItemLength - 2;
+  Blob.resize( vl );
   is.read( &Blob[0], vl );
-
-  assert(Blob.size() < std::numeric_limits<uint32_t>::max());
-  VL debug = (uint32_t)Blob.size();
-  assert( debug == vl );
 
   assert (ItemLength + 4 == Size() );
   return is;
-
 }
 
 std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os)
@@ -77,13 +71,17 @@ std::istream &PresentationDataValue::ReadInto(std::istream &is, std::ostream &os
 
   uint8_t mh;
   is.read( (char*)&mh, 1 );
-  //assert( mh == 0 ); // bitwise stuff...
   MessageHeader = mh;
+  if ( MessageHeader > 3 )
+    {
+    gdcmDebugMacro( "Bizarre MessageHeader: " << MessageHeader );
+    }
 
-  VL vl = ItemLength - 2;
-  Blob.resize( vl ); // reserve ??
-  is.read( &Blob[0], ItemLength - 2 );
-  os.write( &Blob[0], ItemLength - 2 );
+  assert( ItemLength > 2 );
+  uint32_t vl = ItemLength - 2;
+  Blob.resize( vl );
+  is.read( &Blob[0], vl );
+  os.write( &Blob[0], vl );
 
   assert (ItemLength + 4 == Size() );
   return is;
@@ -98,17 +96,14 @@ const std::ostream &PresentationDataValue::Write(std::ostream &os) const
   os.write( (char*)&PresentationContextID, sizeof(PresentationContextID) );
   assert( os.good() );
 
+  assert( MessageHeader <= 3 );
   uint8_t t = MessageHeader;
   os.write( (char*)&t, 1 );
   assert( os.good() );
 
   os.write( Blob.c_str(), Blob.size() );
-  assert(Blob.size() < std::numeric_limits<uint32_t>::max());
-  VL debug = (uint32_t)Blob.size();
-  //assert( os.good() );
 
-  assert( debug == ItemLength - 2 );
-
+  assert( Blob.size() == ItemLength - 2 );
   assert (ItemLength + 4 == Size() );
 
   return os;
@@ -127,9 +122,11 @@ size_t PresentationDataValue::Size() const
 
 void PresentationDataValue::SetBlob(const std::string & partialblob)
 {
+  assert( !partialblob.empty() );
   Blob = partialblob;
   assert(Size() < std::numeric_limits<uint32_t>::max());
   ItemLength = (uint32_t)Size() - 4;
+  assert (ItemLength + 4 == Size() );
 }
 
 void PresentationDataValue::SetDataSet(const DataSet & ds)
@@ -137,13 +134,11 @@ void PresentationDataValue::SetDataSet(const DataSet & ds)
   std::stringstream ss;
   //!!FIXME-- have to make sure that the transfer syntax is known and accounted for!
   ds.Write<ImplicitDataElement,SwapperNoOp>( ss );
-  Blob = ss.str();
-  assert(Size() < std::numeric_limits<uint32_t>::max());
-  ItemLength = (uint32_t)Size() - 4;
-  assert (ItemLength + 4 == Size() );
+  SetBlob( ss.str() );
 }
 
-const std::string &PresentationDataValue::GetBlob() const{
+const std::string &PresentationDataValue::GetBlob() const
+{
   return Blob;
 }
 
@@ -151,8 +146,8 @@ const std::string &PresentationDataValue::GetBlob() const{
 //loop that gets the results from the scp will be clever and only enter this function
 //when the pdu has its 'last bit' set to true (ie, when all the pdvs can be sent in at once,
 //but the are all part of the same data set)
-DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs){
-
+DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs)
+{
   //size_t s = inPDVs.size();
 
   std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
@@ -181,181 +176,6 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
   return outDataSet;
 }
 
-/*
-void PresentationDataValue::MyInit(File const &file)
-{
-  const FileMetaInformation &fmi = file.GetHeader();
-
-//D: # Dicom-Data-Set
-//D: # Used TransferSyntax: Little Endian Implicit
-//D: (0000,0002) UI =SecondaryCaptureImageStorage            #  26, 1 AffectedSOPClassUID
-//D: (0000,0100) US 1                                        #   2, 1 CommandField
-//D: (0000,0110) US 1                                        #   2, 1 MessageID
-//D: (0000,0700) US 2                                        #   2, 1 Priority
-//D: (0000,0800) US 1                                        #   2, 1 DataSetType
-//D: (0000,1000) UI [1.2.826.0.1.3680043.2.1125.4986931123241056575784008796031983649] #  64, 1 AffectedSOPInstanceUID
-//D:
-
-  DS.Clear();
-  DataSet &ds = DS;
-  {
-  DataElement de( Tag(0x0,0x2) );
-  de.SetVR( VR::UI );
-  const char *uid = UIDs::GetUIDString( UIDs::SecondaryCaptureImageStorage );
-  std::string suid = uid;
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
-  ds.Insert( de );
-  }
-
-  {
-  const char a[] = "1.2.826.0.1.3680043.2.1125.7445042278205614490601873384971697089";
-  DataElement de( Tag(0x0,0x1000) );
-  de.SetVR( VR::UI );
-  std::string suid = a;
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
-  ds.Insert( de );
-  }
-
-    {
-    Attribute<0x0,0x100> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x110> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x700> at = { 2 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x800> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x0> at = { 0 };
-    unsigned int glen = ds.GetLength<ImplicitDataElement>();
-    assert( (glen % 2) == 0 );
-    at.SetValue( glen );
-    ds.Insert( at.GetAsDataElement() );
-    }
-
-  ItemLength = Size() - 4;
-  assert (ItemLength + 4 == Size() );
-
-  ds.Print( std::cout );
-
-  std::ofstream b( "/tmp/debug1" );
-  ds.Write<ImplicitDataElement,SwapperNoOp>( b );
-  b.close();
-}
-*/
-
-void PresentationDataValue::MyInit2(const char *uid1, const char *uid2)
-{
-  CommandDataSet ds;
-  {
-  DataElement de( Tag(0x0,0x2) );
-  de.SetVR( VR::UI );
-  const char *uid = uid1;
-  std::string suid = uid;
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  assert(suid.size() < std::numeric_limits<uint32_t>::max());
-  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
-  ds.Insert( de );
-  }
-
-  {
-  DataElement de( Tag(0x0,0x1000) );
-  de.SetVR( VR::UI );
-  std::string suid = uid2;
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  assert(suid.size() < std::numeric_limits<uint32_t>::max());
-  de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
-  ds.Insert( de );
-  }
-
-    {
-    Attribute<0x0,0x100> at = { 32769 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x120> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x800> at = { 257 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x900> at = { 0 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x0> at = { 0 };
-    unsigned int glen = ds.GetLength<ImplicitDataElement>();
-    assert( (glen % 2) == 0 );
-    at.SetValue( glen );
-    ds.Insert( at.GetAsDataElement() );
-    }
-
-  assert(Size() < std::numeric_limits<uint32_t>::max());
-  ItemLength = (uint32_t)Size() - 4;
-  assert (ItemLength + 4 == Size() );
-
-  //ds.Print( std::cout );
-  SetDataSet(ds);
-
-  MessageHeader = 3;
-}
-
-/*
-void PresentationDataValue::MyInit3()
-{
-  DS.Clear();
-  DataSet &ds = DS;
-  DataElement de( Tag(0x0,0x2) );
-  de.SetVR( VR::UI );
-  const char *uid = UIDs::GetUIDString( UIDs::VerificationSOPClass );
-  std::string suid = uid;
-  suid.push_back( ' ' ); // no \0 !
-  de.SetByteValue( suid.c_str(), suid.size()  );
-  ds.Insert( de );
-    {
-    Attribute<0x0,0x100> at = { 32816 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x120> at = { 1 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x800> at = { 257 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x900> at = { 0 };
-    ds.Insert( at.GetAsDataElement() );
-    }
-    {
-    Attribute<0x0,0x0> at = { 0 };
-    unsigned int glen = ds.GetLength<ImplicitDataElement>();
-    assert( (glen % 2) == 0 );
-    at.SetValue( glen );
-    ds.Insert( at.GetAsDataElement() );
-    }
-
-  MessageHeader = 3;
-  ItemLength = Size() - 4;
-  assert (ItemLength + 4 == Size() );
-}
-*/
 void PresentationDataValue::Print(std::ostream &os) const
 {
   os << "ItemLength: " << ItemLength << std::endl;
@@ -366,31 +186,40 @@ void PresentationDataValue::Print(std::ostream &os) const
   DataSet ds = ConcatenatePDVBlobs(thePDVs);
   Printer thePrinter;
   thePrinter.PrintDataSet(ds, os);
-  //os << "Data: " << ds <<std::endl;
-
 }
 
-void PresentationDataValue::SetCommand(const bool& inCommand){
-  if (inCommand){
+void PresentationDataValue::SetCommand(bool inCommand)
+{
+  if (inCommand)
+    {
     MessageHeader |= 1;
-  } else {
+    }
+  else
+    {
     MessageHeader &= ~1;
-  }
+    }
 }
-void PresentationDataValue::SetLastFragment(const bool& inLast){
 
-  if (inLast){
+void PresentationDataValue::SetLastFragment(bool inLast)
+{
+  if (inLast)
+    {
     MessageHeader |= 2;
-  } else {
+    }
+  else
+    {
     MessageHeader &= ~2;//set the second field to zero
-  }
+    }
 }
 
-bool PresentationDataValue::GetIsCommand() const{
-  return ((MessageHeader & 1) == 1);
+bool PresentationDataValue::GetIsCommand() const
+{
+  return (MessageHeader & 1) == 1;
 }
-bool PresentationDataValue::GetIsLastFragment() const{
-  return ((MessageHeader & 2) == 2);
+
+bool PresentationDataValue::GetIsLastFragment() const
+{
+  return (MessageHeader & 2) == 2;
 }
 
 } // end namespace network

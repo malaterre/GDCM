@@ -59,11 +59,12 @@ public:
   // Only the first two bits are considered
   void SetMessageHeader(uint8_t messageheader) {
     MessageHeader = messageheader;
+    assert( MessageHeader <= 0x3 );
   }
   //flip the least significant bit of the message header to 1
   //if this is a command, else set it to 0.
-  void SetCommand(const bool& inCommand);
-  void SetLastFragment(const bool& inLast);//set to true if this is the last PDV of a set
+  void SetCommand(bool inCommand);
+  void SetLastFragment(bool inLast);//set to true if this is the last PDV of a set
 
   bool GetIsCommand() const;
   bool GetIsLastFragment() const;
@@ -71,22 +72,15 @@ public:
   void Print(std::ostream &os) const;
 
   //NOTE that the PDVs have to be given in the order in which they were received!
-  //also note that a dataset may be across multiple PDVs, or that a single PDV could have
-  //many datasets.
+  //also note that a dataset may be across multiple PDVs
+  /// \warning DataSet will be read as Implicit Little Endian TS
   static DataSet ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs);
-
-private:
-  void MyInit2(const char *uid1, const char *uid2); // FIXME
 
 private:
   uint32_t ItemLength;
   uint8_t PresentationContextID;
-
-  // FIXME this should change if the DataSet cannot fit in memory.
-  //DataSet DS;
-  std::string Blob; // std::vector<char> ??
-
   uint8_t MessageHeader;
+  std::string Blob;
 };
 } // end namespace network
 

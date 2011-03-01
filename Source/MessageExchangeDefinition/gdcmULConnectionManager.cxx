@@ -395,20 +395,20 @@ void ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery, ULConnectio
   RunEventLoop(theEvent, mConnection, inCallback, false);
 }
 
-std::vector<DataSet> ULConnectionManager::SendStore(const DataSet *inDataSet)
+std::vector<DataSet> ULConnectionManager::SendStore(const File &file)
 {
   ULBasicCallback theCallback;
-  SendStore(inDataSet, &theCallback);
+  SendStore(file, &theCallback);
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendStore(const DataSet * inDataSet, ULConnectionCallback* inCallback)
+void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inCallback)
 {
   if (mConnection == NULL)
     {
     return;
     }
-  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(*mConnection, inDataSet);
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(*mConnection, file);
   ULEvent theEvent(ePDATArequest, theDataPDU);
   RunEventLoop(theEvent, mConnection, inCallback, false);
 

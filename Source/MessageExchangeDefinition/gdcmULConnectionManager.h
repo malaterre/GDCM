@@ -25,7 +25,7 @@
 #include "gdcmULConnectionCallback.h"
 
 namespace gdcm {
-  class DataSet;
+  class File;
   class BaseRootQuery;
 
   namespace network {
@@ -131,13 +131,13 @@ namespace gdcm {
 
       // \internal
       // API will change...
-      std::vector<DataSet> SendStore(const DataSet *inDataSet);
+      std::vector<DataSet> SendStore(const File &file);
       std::vector<DataSet> SendFind(const BaseRootQuery* inRootQuery);
       std::vector<DataSet> SendMove(const BaseRootQuery* inRootQuery);
       // \endinternal
 
       ///callback based API
-      void SendStore(const DataSet * inDataSet, ULConnectionCallback* inCallback);
+      void SendStore(const File & file, ULConnectionCallback* inCallback);
       void SendFind(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
       void SendMove(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
 
