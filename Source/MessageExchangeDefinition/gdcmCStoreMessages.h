@@ -21,6 +21,7 @@
 #include "gdcmBaseCompositeMessage.h"
 
 namespace gdcm{
+class File;
   namespace network{
     class BasePDU;
 /**
@@ -31,7 +32,7 @@ class CStoreRQ : public BaseCompositeMessage {
       std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection, const BaseRootQuery* inRootQuery);//to fulfill the virtual contract
     public:
       std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection,
-        const DataSet* inDataSet);
+        const File& file);
     };
 
     class CStoreRSP : public BaseCompositeMessage {

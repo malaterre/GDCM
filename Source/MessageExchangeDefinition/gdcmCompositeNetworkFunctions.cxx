@@ -38,9 +38,9 @@
 #include "gdcmStudyRootQuery.h"
 #include "gdcmPatientRootQuery.h"
 #include "gdcmULWritingCallback.h"
-#include "gdcmAAssociateRQPDU.h"
 #include "gdcmAbstractSyntax.h"
 #include "gdcmImageReader.h"
+#include "gdcmPresentationContextGenerator.h"
 
 namespace gdcm
 {
@@ -59,14 +59,16 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     {
     call = "ANY-SCP";
     }
+
+  // Generate the PresentationContext array from the echo UID:
+  network::PresentationContextGenerator generator;
+  if( !generator.GenerateFromUID( UIDs::VerificationSOPClass ) )
+    {
+    gdcmErrorMacro( "Failed to generate pres context." );
+    return false;
+    }
+
   network::ULConnectionManager theManager;
-
-  // the following is really dumb:
-  network::AAssociateRQPDU generator;
-  network::AbstractSyntax as;
-  as.SetNameFromUID( UIDs::VerificationSOPClass );
-  generator.AddPresentationContextByAbstractSyntax( as );
-
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10,
       generator.GetPresentationContexts() ))
     {
@@ -143,7 +145,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
 
 
 //note that pointer to the base root query-- the caller must instantiated and delete
-bool CompositeNetworkFunctions::CMoveToDisk( const char *remote, uint16_t portno,
+bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
   const BaseRootQuery* query, uint16_t portscp,
   const char *aetitle, const char *call, const char* outputdir)
 {
@@ -157,22 +159,27 @@ bool CompositeNetworkFunctions::CMoveToDisk( const char *remote, uint16_t portno
     call = "ANY-SCP";
     }
 
-  // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*" dhcp-67-183 5678  patqry.dcm
-  // Add a query:
+  /* movescu -v -d --aetitle GDCMDASH3 --call GDCM_STORE --patient --key
+   * 8,52=IMAGE --key 8,18=1.3.12.2.1107.5.8.1.123456789.199507271758050707765
+   * dicom.example.com 11112 --key 10,20 +P 5677
+   * --key 20,d=1.3.12.2.1107.5.8.1.123456789.199507271758050705910
+   * --key 20,e=1.3.12.2.1107.5.8.1.123456789.199507271758050706635
+   */
 
   if (!outputdir || !*outputdir)
     {
     outputdir = ".";
     }
 
+  // Generate the PresentationContext array from the query UID:
+  network::PresentationContextGenerator generator;
+  if( !generator.GenerateFromUID( query->GetAbstractSyntaxUID(true) ) )
+    {
+    gdcmErrorMacro( "Failed to generate pres context." );
+    return false;
+    }
+
   network::ULConnectionManager theManager;
-
-  // the following is really dumb:
-  network::AAssociateRQPDU generator;
-  network::AbstractSyntax as;
-  as.SetNameFromUID( query->GetAbstractSyntaxUID(true) );
-  generator.AddPresentationContextByAbstractSyntax( as );
-
   if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
       portscp, generator.GetPresentationContexts()))
     {
@@ -186,43 +193,6 @@ bool CompositeNetworkFunctions::CMoveToDisk( const char *remote, uint16_t portno
 
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   return true;
-}
-  
-std::vector<DataSet> CompositeNetworkFunctions::CMoveToMemory( const char *remote, uint16_t portno,
-                                                              const BaseRootQuery* query, uint16_t portscp,
-                                                              const char *aetitle, const char *call){
-  std::vector<DataSet> theMovedImages;
-  if( !remote ) return theMovedImages;
-  if( !aetitle )
-  {
-    aetitle = "GDCMSCU";
-  }
-  if( !call )
-  {
-    call = "ANY-SCP";
-  }
-  
-  
-  network::ULConnectionManager theManager;
-
-  // the following is really dumb:
-  network::AAssociateRQPDU generator;
-  network::AbstractSyntax as;
-  as.SetNameFromUID( query->GetAbstractSyntaxUID(true) );
-  generator.AddPresentationContextByAbstractSyntax( as );
-
-  if (!theManager.EstablishConnectionMove(aetitle, call, remote, 0, portno, 1000,
-                                          portscp, generator.GetPresentationContexts()))
-  {
-    gdcmErrorMacro( "Failed to establish connection." );
-    return theMovedImages;
-  }
-
-  theMovedImages = theManager.SendMove( query );
-
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return theMovedImages;
-
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete
@@ -243,14 +213,16 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
   // $ findscu -v  -d --aetitle ACME1 --call ACME_STORE  -P -k 0010,0010="X*"
   //   dhcp-67-183 5678  patqry.dcm
   // Add a query:
+
+  // Generate the PresentationContext array from the query UID:
+  network::PresentationContextGenerator generator;
+  if( !generator.GenerateFromUID( query->GetAbstractSyntaxUID() ) )
+    {
+    gdcmErrorMacro( "Failed to generate pres context." );
+    return false;
+    }
+
   network::ULConnectionManager theManager;
-
-  // the following is really dumb:
-  network::AAssociateRQPDU generator;
-  network::AbstractSyntax as;
-  as.SetNameFromUID( query->GetAbstractSyntaxUID() );
-  generator.AddPresentationContextByAbstractSyntax( as );
-
   if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000,
       generator.GetPresentationContexts()))
     {
@@ -280,34 +252,16 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     call = "ANY-SCP";
     }
 
-  // By design GDCM C-STORE implementation only setup the association for any dataset we are
-  // about to send. This is therefore very important to gather all possible SOP Class
-  // we are about to send otherwise the other end will simply disconnect us
-  // this imply that C-STORE will refuse any DataSet without SOP Clas or SOP Instances
-  gdcm::Scanner sc;
-  gdcm::Tag sopclass(0x8,0x16);
-  gdcm::Tag sopinstance(0x8,0x18);
-  sc.AddTag( sopclass );
-  //sc.AddTag( sopinstance );
-  if( !sc.Scan( filenames ) )
-    {
-    gdcmErrorMacro( "Could not scan filenames" );
-    return 1;
-    }
-  gdcm::Scanner::ValuesType sopclasses = sc.GetValues( sopclass );
-
   network::ULConnectionManager theManager;
   Directory::FilenamesType files;
   files = filenames;
 
-  // the following is really dumb:
-  network::AAssociateRQPDU generator;
-  gdcm::Scanner::ValuesType::const_iterator it = sopclasses.begin();
-  for( ; it != sopclasses.end(); ++it )
+  // Generate the PresentationContext array from the File-Set:
+  network::PresentationContextGenerator generator;
+  if( !generator.GenerateFromFilenames(filenames) )
     {
-    network::AbstractSyntax as;
-    as.SetName( it->c_str() );
-    generator.AddPresentationContextByAbstractSyntax( as );
+    gdcmErrorMacro( "Failed to generate pres context." );
+    return false;
     }
 
   if (!theManager.EstablishConnection(aetitle, call, remote, 0,
@@ -348,8 +302,8 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
         gdcmErrorMacro( "Could not read: " << filename );
         return false;
         }
-      const DataSet &ds = reader.GetFile().GetDataSet();
-      theManager.SendStore( (DataSet*)&ds );
+      const File &file = reader.GetFile();
+      theManager.SendStore( file );
       gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
       }
     }

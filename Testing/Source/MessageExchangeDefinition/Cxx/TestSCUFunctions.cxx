@@ -235,27 +235,13 @@ int TestSCUFunctions(int argc, char *argv[])
       }
 
     theQuery = theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, true);
-    std::vector<gdcm::DataSet> theMoveDataSets = theNetworkFunctions.CMoveToMemory(remote.c_str(), portno, theQuery,
-      moveReturnPort, aetitle.c_str(), call.c_str() );
-    if (theMoveDataSets.empty())
+    didItWork = theNetworkFunctions.CMove(remote.c_str(), portno, theQuery,
+      moveReturnPort, aetitle.c_str(), call.c_str(), outputDir.c_str() );
+    if ( !didItWork )
       {
       std::cerr << "CMove failed for file " << *fitor << std::endl;
       return 1;
       }
-    else  {
-      bool foundMatch = false;
-      for (itor = theMoveDataSets.begin(); itor != theMoveDataSets.end(); itor++)
-      {
-        if (AreDataSetsEqual(*itor, ds)){
-          foundMatch = true;
-          break;
-        }
-      }
-      if (!foundMatch){
-        std::cerr << "Retrieved datasets did not match sent dataset." << std::endl;
-        return 1;
-      }
-    }
     delete theQuery;
     
 

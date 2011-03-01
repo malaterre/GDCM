@@ -19,6 +19,7 @@
 
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
+#include "gdcmFile.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmCommandDataSet.h"
@@ -26,17 +27,30 @@
 #include "gdcmPDataTFPDU.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmULConnection.h"
+#include "gdcmWriter.h"
 
 #include <limits>
 
 namespace gdcm{
+
+class DataSetWriter : public Writer
+{
+public:
+  DataSetWriter()
+    {
+    SetWriteDataSetOnly( true );
+    }
+};
+
 namespace network{
 
 std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(
-const ULConnection &inConnection, const DataSet* inDataSet)
+const ULConnection &inConnection, File const & file )
 {
+const DataSet* inDataSet = &file.GetDataSet();
   std::vector<PresentationDataValue> thePDVs;
   AbstractSyntax as;
+  uint8_t prescontid;
 {
   assert( inDataSet );
   PresentationDataValue thePDV;
@@ -45,6 +59,7 @@ const ULConnection &inConnection, const DataSet* inDataSet)
   thePDV.SetPresentationContextID(
     PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
 #else
+{
   MediaStorage mst;
   if (!mst.SetFromDataSet(*inDataSet))
     {
@@ -54,9 +69,10 @@ const ULConnection &inConnection, const DataSet* inDataSet)
   uid.SetFromUID( MediaStorage::GetMSString(mst) );
   //as.SetNameFromUID( uid );
   as.SetName( uid.GetString() );
+}
 
-  thePDV.SetPresentationContextID(
-    inConnection.GetPresentationContextIDFromAbstractSyntax(as) );
+  prescontid = inConnection.GetPresentationContextIDFromAbstractSyntax(as);
+  thePDV.SetPresentationContextID( prescontid );
 #endif
 
   thePDV.SetCommand(true);
@@ -78,6 +94,24 @@ const ULConnection &inConnection, const DataSet* inDataSet)
   std::string suid = std::string(uid, msclass.GetByteValue()->GetLength());
   if( suid.size() % 2 )
     suid.push_back( ' ' ); // no \0 !
+
+  // self check
+  const PresentationContextAC * pc = inConnection.GetPresentationContextACByID(prescontid);
+  assert( pc );
+  TransferSyntaxSub const &tssub = pc->GetTransferSyntax();
+  const TransferSyntax & fmits = file.GetHeader().GetDataSetTransferSyntax();
+  std::string tsuid = fmits.GetString();
+
+  // the following make sure that the accepted Presentation Context match the actual encoding
+  // of the current File
+  // ADV: technically we could use an explicit Vr encoded dataset and send it over
+  // an implicit TS accecpted Transfer syntax. However thing do not interchange well
+  // so we really need a filter to check whether conversion is ok or not.
+  if( tsuid != tssub.GetName() )
+    {
+    throw Exception("TODO: Need to implement multi TS");
+    }
+
   assert(suid.size() < std::numeric_limits<uint32_t>::max());
   de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
@@ -134,10 +168,18 @@ static uint32_t messageid = 1;
   // now let's chunk'ate the dataset:
 {
   std::stringstream ss;
+#if 0
   inDataSet->Write<ImplicitDataElement,SwapperNoOp>( ss );
+#else
+  DataSetWriter writer;
+  writer.SetStream( ss );
+  writer.SetFile( file );
+  writer.Write();
+#endif
+
   std::string ds_copy = ss.str();
   // E: 0006:0308 DUL Illegal PDU Length 16390.  Max expected 16384
-  //const size_t maxpdu = 16384;
+  //const size_t maxpdu = 16384 - 6;
   size_t maxpdu = 16378;
   maxpdu = inConnection.GetMaxPDUSize() - 6;
   size_t len = ds_copy.size();
@@ -151,13 +193,7 @@ static uint32_t messageid = 1;
 
     PresentationDataValue thePDV;
     std::string UIDString;
-    thePDV.SetPresentationContextID(
-#if 0
-      PresentationContext::AssignPresentationContextID(*inDataSet, UIDString)
-#else
-      inConnection.GetPresentationContextIDFromAbstractSyntax(as)
-#endif
-    );
+    thePDV.SetPresentationContextID( prescontid );
 
     thePDV.SetBlob( sub );
     if( remaining == maxpdu )

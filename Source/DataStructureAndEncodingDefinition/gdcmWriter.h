@@ -85,6 +85,9 @@ public:
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
 protected:
+  void SetWriteDataSetOnly(bool b) { WriteDataSetOnly = b; }
+
+protected:
   friend class StreamImageWriter;
   //this function is added for the StreamImageWriter, which needs to write
   //up to the pixel data and then stops right before writing the pixel data.
@@ -98,6 +101,7 @@ protected:
 private:
   SmartPointer<File> F;
   bool CheckFileMetaInformation;
+  bool WriteDataSetOnly;
 };
 
 } // end namespace gdcm

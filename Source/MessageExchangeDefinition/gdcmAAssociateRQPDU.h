@@ -83,8 +83,6 @@ public:
   const PresentationContext *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
   bool IsLastFragment() const { return true; }
 
-  bool AddPresentationContextByAbstractSyntax( AbstractSyntax const & as );
-
 private:
   // 1 PDU-type 01H
   static const uint8_t ItemType; // PDUType ?

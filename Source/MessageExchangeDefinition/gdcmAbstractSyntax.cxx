@@ -100,11 +100,11 @@ void AbstractSyntax::SetNameFromUID( UIDs::TSName tsname )
   const char *name = UIDs::GetUIDString( tsname );
   UpdateName( name );
 }
-void AbstractSyntax::SetNameFromUIDString( const std::string& inUIDName )
-{
-  const char *name = inUIDName.c_str();
-  UpdateName( name );
-}
+//void AbstractSyntax::SetNameFromUIDString( const std::string& inUIDName )
+//{
+//  const char *name = inUIDName.c_str();
+//  UpdateName( name );
+//}
 
 void AbstractSyntax::Print(std::ostream &os) const
 {

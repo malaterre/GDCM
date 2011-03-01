@@ -23,7 +23,7 @@
 #include "gdcmULConnectionInfo.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmDataElement.h"
-#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextAC.h"
 
 #include "gdcmScanner.h" // FIXME
 
@@ -76,7 +76,7 @@ class ULConnection
       //this is our list of presentation contexts of what we can send
       uint32_t mMaxPDUSize;
 
-      std::vector<PresentationContext> mAcceptedPresentationContexts;//these come back from the server
+      std::vector<PresentationContextAC> mAcceptedPresentationContexts;//these come back from the server
       //and tell us what can be sent over this connection
 
     public:
@@ -102,9 +102,7 @@ class ULConnection
       void SetMaxPDUSize(uint32_t inSize);
       uint32_t GetMaxPDUSize() const;
 
-      static std::vector<PresentationContext> GeneratePresentationContexts(
-        Scanner::ValuesType const & sopclasses );
-
+      const PresentationContextAC *GetPresentationContextACByID(uint8_t id) const;
       /// return 0 upon error
       uint8_t GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const;
 
@@ -115,8 +113,8 @@ class ULConnection
       //NOT YET IMPLEMENTED
       PresentationContext FindContext(const DataElement& de) const;
 
-      std::vector<PresentationContext> GetAcceptedPresentationContexts() const;
-      void AddAcceptedPresentationContext(const PresentationContext& inPC);
+      std::vector<PresentationContextAC> GetAcceptedPresentationContexts() const;
+      void AddAcceptedPresentationContext(const PresentationContextAC& inPC);
 
       /// used to establish scu connections
       bool InitializeConnection();

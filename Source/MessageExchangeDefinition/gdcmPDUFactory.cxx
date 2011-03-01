@@ -172,10 +172,10 @@ std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection&
   return outVector;
 }
 
-std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(const ULConnection& inConnection, const DataSet* inDataSet)
+std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(const ULConnection& inConnection, const File& file)
 {
   std::vector<PresentationDataValue> pdv =
-    CompositeMessageFactory::ConstructCStoreRQ(inConnection, inDataSet );
+    CompositeMessageFactory::ConstructCStoreRQ(inConnection, file);
   std::vector<PresentationDataValue>::iterator pdvItor;
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++){

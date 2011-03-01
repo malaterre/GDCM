@@ -12,6 +12,7 @@
 
 =========================================================================*/
 #include "gdcmULConnectionManager.h"
+#include "gdcmPresentationContextGenerator.h"
 #include "gdcmReader.h"
 #include "gdcmAttribute.h"
 #include "gdcmDataSet.h"
@@ -33,10 +34,12 @@ int port = 11112;
 
 gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* theQuery)
 {
-  network::AAssociateRQPDU generator;
-  network::AbstractSyntax as;
-  as.SetNameFromUID( query->GetAbstractSyntaxUID() );
-  generator.AddPresentationContextByAbstractSyntax( as );
+  gdcm::network::PresentationContextGenerator generator;
+  if( !generator.GenerateFromUID( theQuery->GetAbstractSyntaxUID() ) )
+    {
+    gdcmErrorMacro( "Failed to generate pres context." );
+    return NULL;
+    }
 
   gdcm::network::ULConnectionManager *theManager =
     new gdcm::network::ULConnectionManager();

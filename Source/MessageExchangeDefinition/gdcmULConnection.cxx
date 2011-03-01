@@ -103,11 +103,11 @@ void ULConnection::SetPresentationContexts(
 }
 
 
-std::vector<PresentationContext> ULConnection::GetAcceptedPresentationContexts() const
+std::vector<PresentationContextAC> ULConnection::GetAcceptedPresentationContexts() const
 {
   return mAcceptedPresentationContexts;
 }
-void ULConnection::AddAcceptedPresentationContext(const PresentationContext& inPC)
+void ULConnection::AddAcceptedPresentationContext(const PresentationContextAC& inPC)
 {
   mAcceptedPresentationContexts.push_back(inPC);
 }
@@ -120,11 +120,6 @@ PresentationContext ULConnection::FindContext(const DataElement& de) const
   PresentationContext empty;
   assert( 0 && "TODO" );
   return empty;
-}
-
-std::vector<PresentationContext> GeneratePresentationContexts(Scanner::ValuesType const & sopclasses )
-{
-  std::vector<PresentationContext> ret;
 }
 
 bool ULConnection::InitializeConnection()
@@ -230,6 +225,22 @@ void ULConnection::StopProtocol(){
     //this is just for a cstorescp initialized by a cmove
     SetState(eSta2Open);
   }
+}
+
+const PresentationContextAC *ULConnection::GetPresentationContextACByID(uint8_t id) const
+{
+  // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
+  // for now duplicate code from AAssociateRQPDU::GetPresentationContextFromAbstractSyntax
+  std::vector<PresentationContextAC>::const_iterator it = mAcceptedPresentationContexts.begin();
+  for( ; it != mAcceptedPresentationContexts.end(); ++it)
+    {
+    if( it->GetPresentationContextID() == id )
+      {
+      return &*it;
+      }
+    }
+
+  return NULL;
 }
 
 uint8_t ULConnection::GetPresentationContextIDFromAbstractSyntax(AbstractSyntax const & as) const

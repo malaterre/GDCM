@@ -43,6 +43,12 @@ public:
 
   void Print(std::ostream &os) const;
 
+  uint8_t GetPresentationContextID() const
+    {
+    return ID;
+    }
+  TransferSyntaxSub const & GetTransferSyntax() const { return SubItems; }
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
