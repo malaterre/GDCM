@@ -148,14 +148,22 @@ const DataSet* inDataSet = &file.GetDataSet();
   {
   assert( inDataSet->FindDataElement( Tag(0x0008, 0x0018) ) );
   const DataElement& msinst = inDataSet->GetDataElement( Tag(0x0008, 0x0018) );
-  const char *uid = msinst.GetByteValue()->GetPointer();
-  assert( uid );
+  std::string suid;
   DataElement de( Tag(0x0,0x1000) );
   de.SetVR( VR::UI );
-  std::string suid = std::string(uid, msinst.GetByteValue()->GetLength() );
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
-  assert(suid.size() < std::numeric_limits<uint32_t>::max());
+  if( !msinst.IsEmpty() );
+    {
+    const ByteValue* bv = msinst.GetByteValue();
+    if( bv )
+      {
+      const char *uid = bv->GetPointer();
+      assert( uid );
+      std::string suid = std::string(uid, bv->GetLength() );
+      if( suid.size() % 2 )
+        suid.push_back( ' ' ); // no \0 !
+      assert(suid.size() < std::numeric_limits<uint32_t>::max());
+      }
+    }
   de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
   ds.Insert( de );
   }

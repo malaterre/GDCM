@@ -110,6 +110,8 @@ BogusItemStartItemEnd.dcm
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
 # packed 12 bits still not ok:
   MR-MONO2-12-angio-an1.acr
+
+  PHILIPS_GDCM12xBug.dcm # See bug : 3196213
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

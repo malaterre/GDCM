@@ -28,7 +28,6 @@ const uint8_t PresentationContext::ItemType = 0x20;
 const uint8_t PresentationContext::Reserved2 = 0x00;
 const uint8_t PresentationContext::Reserved6 = 0x00;
 const uint8_t PresentationContext::Reserved7 = 0x00;
-//const uint8_t PresentationContext::Reserved7 = 0xff; // DCMTK ??
 const uint8_t PresentationContext::Reserved8 = 0x00;
 
 PresentationContext::PresentationContext()
@@ -46,6 +45,7 @@ PresentationContext::PresentationContext( UIDs::TSName asname, UIDs::TSName tsna
 
   TransferSyntaxSub ts;
   ts.SetNameFromUID( tsname );
+  assert( TransferSyntaxes.empty() );
   AddTransferSyntax( ts );
 }
 
@@ -67,6 +67,7 @@ std::istream &PresentationContext::Read(std::istream &is)
   is.read( (char*)&reserved6, sizeof(Reserved6) );
   uint8_t reserved7;
   is.read( (char*)&reserved7, sizeof(Reserved7) );
+  assert( reserved7 == 0 );
   uint8_t reserved8;
   is.read( (char*)&reserved8, sizeof(Reserved6) );
   SubItems.Read( is );
@@ -91,7 +92,6 @@ const std::ostream &PresentationContext::Write(std::ostream &os) const
   assert( (size_t)ItemLength + 4 == Size() );
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
   uint16_t copy = ItemLength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
@@ -174,256 +174,6 @@ void PresentationContext::Print(std::ostream &os) const
     it->Print( os );
     }
 }
-
-//the presentation context id is arbitrary per connection
-//so, just to make life easier for now, the ID will be the same as the UID of the type
-//that way, when the return comes, the selected presentation context can be used
-//by the service by referring to the ID.
-//we cannot use the UID const directly, since that's not guaranteed to be lower
-//than 255, and the number has to be within a byte
-enum EPresentationContextID {
-  eVerificationSOPClass = 1,
-  ePatientRootQueryRetrieveInformationModelFIND = 3,
-  eStudyRootQueryRetrieveInformationModelFIND = 5,
-  ePatientStudyOnlyQueryRetrieveInformationModelFINDRetired = 7,
-  eModalityWorklistInformationModelFIND = 9,
-  eGeneralPurposeWorklistInformationModelFIND = 11,
-  ePatientRootQueryRetrieveInformationModelMOVE = 13,
-  eStudyRootQueryRetrieveInformationModelMOVE = 15,
-  ePatientStudyOnlyQueryRetrieveInformationModelMOVERetired = 17,
-  eAmbulatoryECGWaveformStorage = 19,
-  eBasicTextSR = 21,
-  eBasicVoiceAudioWaveformStorage = 23,
-  eBlendingSoftcopyPresentationStateStorage = 25,
-  eCardiacElectrophysiologyWaveformStorage = 27,
-  eChestCADSR = 29,
-  eColorSoftcopyPresentationStateStorage = 31,
-  eComprehensiveSR = 33,
-  eComputedRadiographyImageStorage = 35,
-  eCTImageStorage = 37,
-  eDigitalIntraOralXRayImageStorageForPresentation = 39,
-  eDigitalIntraOralXRayImageStorageForProcessing = 41,
-  eDigitalMammographyXRayImageStorageForPresentation = 43,
-  eDigitalMammographyXRayImageStorageForProcessing = 45,
-  eDigitalXRayImageStorageForPresentation = 47,
-  eDigitalXRayImageStorageForProcessing = 49,
-  eEncapsulatedPDFStorage = 51,
-  eEnhancedCTImageStorage = 53,
-  eEnhancedMRImageStorage = 55,
-  eEnhancedSR = 57,
-  eEnhancedXAImageStorage = 59,
-  eEnhancedXRFImageStorage= 61,
-  eGeneralECGWaveformStorage = 63,
-  eGrayscaleSoftcopyPresentationStateStorage = 65,
-  eHemodynamicWaveformStorage = 67,
-  eKeyObjectSelectionDocument = 69,
-  eMammographyCADSR = 71,
-  eMRImageStorage = 73,
-  eMRSpectroscopyStorage = 75,
-  eMultiframeGrayscaleByteSecondaryCaptureImageStorage = 77,
-  eMultiframeGrayscaleWordSecondaryCaptureImageStorage = 79,
-  eMultiframeSingleBitSecondaryCaptureImageStorage = 81,
-  eMultiframeTrueColorSecondaryCaptureImageStorage = 83,
-  eNuclearMedicineImageStorage = 85,
-  eOphthalmicPhotography16BitImageStorage = 87,
-  eOphthalmicPhotography8BitImageStorage = 89,
-  ePETCurveStorage = 91,
-  ePETImageStorage = 93,
-  eProcedureLogStorage = 95,
-  ePseudoColorSoftcopyPresentationStateStorage = 97,
-  eRawDataStorage = 99,
-  eRealWorldValueMappingStorage = 101,
-  eRTBeamsTreatmentRecordStorage = 103,
-  eRTBrachyTreatmentRecordStorage = 105,
-  eRTDoseStorage = 107,
-  eRTImageStorage = 109,
-  eRTPlanStorage = 111,
-  eRTStructureSetStorage = 113,
-  eRTTreatmentSummaryRecordStorage = 115,
-  eSecondaryCaptureImageStorage = 117,
-  eSpatialFiducialsStorage = 119,
-  eSpatialRegistrationStorage = 121,
-  eStereometricRelationshipStorage = 123,
-  eTwelveLeadECGWaveformStorage = 125,
-  eUltrasoundImageStorage = 127,
-  eUltrasoundMultiframeImageStorage = 129,
-  eVLEndoscopicImageStorage = 131,
-  eVLMicroscopicImageStorage = 133,
-  eVLPhotographicImageStorage = 135,
-  eVLSlideCoordinatesMicroscopicImageStorage = 137,
-  eXRayAngiographicImageStorage = 139,
-  eXRayFluoroscopyImageStorage = 141,
-  eXRayRadiationDoseSR = 143
-};
-
-
-#if 0
-//this function will return the appropriate ID from the above
-//list, after querying the appropriate tag in the dataset.  If the tag above
-//does not exist, then the result is a pure verification ID.
-//if the operation is something other than an echo, that should be interpreted
-//as a failure; echos themselves take a null dataset.
-uint8_t PresentationContext::AssignPresentationContextID(const DataSet& inDS, std::string& outUIDString)
-{
-  //check to see if you have the 0x0008, 0x0016 tag in the dataset
-  //if not, return verification
-//  assert( inDS.FindDataElement(Tag(0x0008, 0x0016)) );
-//  assert( inDS.FindDataElement(Tag(0x0008, 0x0018)) );
-  const DataElement &de1 = inDS.GetDataElement(Tag(0x0008, 0x0016));
-  const DataElement &de2 = inDS.GetDataElement(Tag(0x0008, 0x0018));
-
-  if (de1.IsEmpty() || de2.IsEmpty()) {
-      return eVerificationSOPClass;
-  }
-  else {
-#if 0
-    Global& g = Global::GetInstance();
-    if( !g.LoadResourcesFiles() ) // NOT THREAD SAFE
-      {
-      std::cerr << "Could not LoadResourcesFiles" << std::endl;
-      return eVerificationSOPClass;
-      }
-#endif
-    MediaStorage mst;
-    if (!mst.SetFromDataSet(inDS)){
-      return eVerificationSOPClass;
-    }
-    UIDs uid;//want to get this as well, to set the abstract syntax properly
-    uid.SetFromUID( MediaStorage::GetMSString(mst) /*mst.GetString()*/ );
-    outUIDString = std::string(MediaStorage::GetMSString(mst));
-    switch (uid){
-      case UIDs::AmbulatoryECGWaveformStorage:
-        return eAmbulatoryECGWaveformStorage;
-      case UIDs::BasicTextSRStorage:
-        return eBasicTextSR;
-      case UIDs::BasicVoiceAudioWaveformStorage:
-        return eBasicVoiceAudioWaveformStorage;
-      case UIDs::BlendingSoftcopyPresentationStateStorageSOPClass:
-        return eBlendingSoftcopyPresentationStateStorage;
-      case UIDs::CardiacElectrophysiologyWaveformStorage:
-        return eCardiacElectrophysiologyWaveformStorage;
-      case UIDs::ChestCADSRStorage:
-        return eChestCADSR;
-      case UIDs::ColorSoftcopyPresentationStateStorageSOPClass:
-        return eColorSoftcopyPresentationStateStorage;
-      case UIDs::ComprehensiveSRStorage:
-        return eComprehensiveSR;
-      case UIDs::ComputedRadiographyImageStorage:
-        return eComputedRadiographyImageStorage;
-      case UIDs::CTImageStorage:
-        return eCTImageStorage;
-      case UIDs::DigitalIntraoralXRayImageStorageForPresentation:
-        return eDigitalIntraOralXRayImageStorageForPresentation;
-      case UIDs::DigitalIntraoralXRayImageStorageForProcessing:
-        return eDigitalIntraOralXRayImageStorageForProcessing;
-      case UIDs::DigitalMammographyXRayImageStorageForPresentation:
-        return eDigitalMammographyXRayImageStorageForPresentation;
-      case UIDs::DigitalMammographyXRayImageStorageForProcessing:
-        return eDigitalMammographyXRayImageStorageForProcessing;
-      case UIDs::DigitalXRayImageStorageForPresentation:
-        return eDigitalXRayImageStorageForPresentation;
-      case UIDs::DigitalXRayImageStorageForProcessing:
-        return eDigitalXRayImageStorageForProcessing;
-      case UIDs::EncapsulatedPDFStorage:
-        return eEncapsulatedPDFStorage;
-      case UIDs::EnhancedCTImageStorage:
-        return eEnhancedCTImageStorage;
-      case UIDs::EnhancedMRImageStorage:
-        return eEnhancedMRImageStorage;
-      case UIDs::EnhancedSRStorage:
-        return eEnhancedSR;
-      case UIDs::EnhancedXAImageStorage:
-        return eEnhancedXAImageStorage;
-      case UIDs::EnhancedXRFImageStorage:
-        return eEnhancedXRFImageStorage;
-      case UIDs::GeneralECGWaveformStorage:
-        return eGeneralECGWaveformStorage;
-      case UIDs::GrayscaleSoftcopyPresentationStateStorageSOPClass:
-        return eGrayscaleSoftcopyPresentationStateStorage;
-      case UIDs::HemodynamicWaveformStorage:
-        return eHemodynamicWaveformStorage;
-      case UIDs::KeyObjectSelectionDocumentStorage:
-        return eKeyObjectSelectionDocument;
-      case UIDs::MammographyCADSRStorage:
-        return eMammographyCADSR;
-      case UIDs::MRImageStorage:
-        return eMRImageStorage;
-      case UIDs::MRSpectroscopyStorage:
-        return eMRSpectroscopyStorage;
-      case UIDs::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
-        return eMultiframeGrayscaleByteSecondaryCaptureImageStorage;
-      case UIDs::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
-        return eMultiframeGrayscaleWordSecondaryCaptureImageStorage;
-      case UIDs::MultiframeSingleBitSecondaryCaptureImageStorage:
-        return eMultiframeSingleBitSecondaryCaptureImageStorage;
-      case UIDs::MultiframeTrueColorSecondaryCaptureImageStorage:
-        return eMultiframeTrueColorSecondaryCaptureImageStorage;
-      case UIDs::NuclearMedicineImageStorage:
-        return eNuclearMedicineImageStorage;
-      case UIDs::OphthalmicPhotography16BitImageStorage:
-        return eOphthalmicPhotography16BitImageStorage;
-      case UIDs::OphthalmicPhotography8BitImageStorage:
-        return eOphthalmicPhotography8BitImageStorage;
-      //case UIDs::PositronEmissionTomographyImageStorage:
-      //  return ePETCurveStorage;//!!!NOTE!  This isn't right! can we handle curve storage?
-      case UIDs::PositronEmissionTomographyImageStorage:
-        return ePETImageStorage;
-      case UIDs::ProcedureLogStorage:
-        return eProcedureLogStorage;
-      case UIDs::PseudoColorSoftcopyPresentationStateStorageSOPClass:
-        return ePseudoColorSoftcopyPresentationStateStorage;
-      case UIDs::RawDataStorage:
-        return eRawDataStorage;
-      case UIDs::RealWorldValueMappingStorage:
-        return eRealWorldValueMappingStorage;
-      case UIDs::RTBeamsTreatmentRecordStorage:
-        return eRTBeamsTreatmentRecordStorage;
-      case UIDs::RTBrachyTreatmentRecordStorage:
-        return eRTBrachyTreatmentRecordStorage;
-      case UIDs::RTDoseStorage:
-        return eRTDoseStorage;
-      case UIDs::RTImageStorage:
-        return eRTImageStorage;
-      case UIDs::RTPlanStorage:
-        return eRTPlanStorage;
-      case UIDs::RTStructureSetStorage:
-        return eRTStructureSetStorage;
-      case UIDs::RTTreatmentSummaryRecordStorage:
-        return eRTTreatmentSummaryRecordStorage;
-      case UIDs::SecondaryCaptureImageStorage:
-        return eSecondaryCaptureImageStorage;
-      case UIDs::SpatialFiducialsStorage:
-        return eSpatialFiducialsStorage;
-      case UIDs::SpatialRegistrationStorage:
-        return eSpatialRegistrationStorage;
-      case UIDs::StereometricRelationshipStorage:
-        return eStereometricRelationshipStorage;
-      case UIDs::WaveformStorageTrialRetired://!!NOTE: I'm not sure these are equivalent
-        return eTwelveLeadECGWaveformStorage;
-      case UIDs::UltrasoundImageStorage:
-        return eUltrasoundImageStorage;
-      case UIDs::UltrasoundMultiframeImageStorage:
-        return eUltrasoundMultiframeImageStorage;
-      case UIDs::VLEndoscopicImageStorage:
-        return eVLEndoscopicImageStorage;
-      case UIDs::VLMicroscopicImageStorage:
-        return eVLMicroscopicImageStorage;
-      case UIDs::VLPhotographicImageStorage:
-        return eVLPhotographicImageStorage;
-      case UIDs::VLSlideCoordinatesMicroscopicImageStorage:
-        return eVLSlideCoordinatesMicroscopicImageStorage;
-      case UIDs::XRayAngiographicImageStorage:
-        return eXRayAngiographicImageStorage;
-      case UIDs::XRayRadiofluoroscopicImageStorage:
-        return eXRayFluoroscopyImageStorage;
-      case UIDs::XRayRadiationDoseSRStorage:
-        return eXRayRadiationDoseSR;
-      default:
-        return eVerificationSOPClass;
-    }
-  }
-}
-#endif
 
 } // end namespace network
 } // end namespace gdcm

@@ -123,7 +123,8 @@ bool PresentationContextGenerator::AddPresentationContext( AbstractSyntax const 
     std::find( PresContext.begin(), PresContext.end(), pc );
 
   // default mode it to only append when pc is not present already:
-  // warning dcmtk will segfault if no PresentationContext is found:
+  // warning dcmtk 3.5.4 will segfault if no PresentationContext is found
+  // (fixed in 3.6.0)
   if( it == PresContext.end() )
     {
     PresContext.push_back( pc );

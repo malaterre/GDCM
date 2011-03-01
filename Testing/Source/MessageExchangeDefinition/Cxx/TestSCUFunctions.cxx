@@ -120,7 +120,7 @@ int TestSCUFunctions(int argc, char *argv[])
     const char *file = it->c_str();
     const char* v1 = sc.GetValue(file, sopclass );
     const char* v2 = sc.GetValue(file, sopinstance );
-    if( !v1 || !v2 ) it = theFilenames.erase( it );
+    if( !v1 || !v2 || !*v1 || !*v2 ) it = theFilenames.erase( it );
     else ++it;
     }
 
