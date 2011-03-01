@@ -67,7 +67,8 @@ std::istream &PresentationContext::Read(std::istream &is)
   is.read( (char*)&reserved6, sizeof(Reserved6) );
   uint8_t reserved7;
   is.read( (char*)&reserved7, sizeof(Reserved7) );
-  assert( reserved7 == 0 );
+//  assert( reserved7 == 0 );
+  //no need for this assert--'This reserved field shall be sent with a value 00H but not tested to this value when received.'
   uint8_t reserved8;
   is.read( (char*)&reserved8, sizeof(Reserved6) );
   SubItems.Read( is );
