@@ -12,10 +12,12 @@
 
 =========================================================================*/
 #include "gdcmUnpacker12Bits.h"
-#include <stdlib.h>
 
+#include <iostream>
 #include <set>
 #include <vector>
+
+#include <stdlib.h>
 
 int TestUnpacker12Bits(int, char *[])
 {

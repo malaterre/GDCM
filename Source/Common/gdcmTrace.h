@@ -15,16 +15,10 @@
 #define GDCMTRACE_H
 
 #include "gdcmTypes.h"
+#include "gdcmSystem.h"
 
-#include <string>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <assert.h>
-#include <errno.h>
-#include <string.h> // strerror
-
+#include <iosfwd>
+#include <cassert>
 
 namespace gdcm
 {
@@ -32,6 +26,8 @@ namespace gdcm
 /**
  * \brief Trace
  * \details Debug / Warning and Error are encapsulated in this class
+ * by default the Trace class will redirect any debug/warning/error
+ * to std::cerr. Unless SetStream was specified with another (open) stream.
  */
 class GDCM_EXPORT Trace
 {
@@ -39,29 +35,31 @@ public :
   Trace();
   ~Trace();
 
-  static void SetDebug(bool debug); //  { DebugFlag = true; };
-  static void DebugOn(); //  { DebugFlag = true; };
-  static void DebugOff(); // { DebugFlag = false; };
-  static bool GetDebugFlag(); // { DebugFlag = false; };
+  /// Explicitely set the ostream for gdcm::Trace to report to
+  static void SetStream(std::ostream &os);
+  static std::ostream &GetStream();
 
-  static void SetWarning(bool debug); //  { DebugFlag = true; };
-  static void WarningOn(); //  { WarningFlag = true; };
-  static void WarningOff(); // { WarningFlag = false; };
+  static void SetDebug(bool debug);
+  static void DebugOn();
+  static void DebugOff();
+  static bool GetDebugFlag();
+
+  static void SetWarning(bool debug);
+  static void WarningOn();
+  static void WarningOff();
   static bool GetWarningFlag();
 
-  static void SetError(bool debug); //  { DebugFlag = true; };
-  static void ErrorOn(); //  { ErrorFlag = true; };
-  static void ErrorOff(); // { ErrorFlag = false; };
+  static void SetError(bool debug);
+  static void ErrorOn();
+  static void ErrorOff();
   static bool GetErrorFlag();
 
-  static bool GetDebugToFile ();
-  static std::ofstream &GetDebugFile ();
+  /// \deprecated DO NOT USE
+  GDCM_LEGACY(static bool GetDebugToFile ())
+  GDCM_LEGACY(static std::ofstream &GetDebugFile ())
 
 protected:
 private:
-//  static bool DebugFlag;
-//  static bool WarningFlag;
-//  static bool ErrorFlag;
 };
 
 // Here we define function this is the only way to be able to pass
@@ -93,24 +91,6 @@ private:
 #ifdef NDEBUG
 #define gdcmDebugMacro(msg) {}
 #else
-#if defined (WIN32) || defined (_WIN32)
-#define gdcmDebugMacro(msg)                                       \
-{                                                                 \
-   if( gdcm::Trace::GetDebugFlag() )                              \
-   {                                                              \
-   std::ostringstream osmacro;                                    \
-   char buffer[80];                                               \
-   osmacro << "Debug: In " __FILE__ ", line " << __LINE__         \
-           << ", function " << GDCM_FUNCTION << '\n'              \
-           << "Last system error was: " << strerror_s(buffer, 80) \
-           << '\n' << msg << "\n\n";                              \
-   if( gdcm::Trace::GetDebugToFile() )                            \
-      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                           \
-      std::cerr << osmacro.str() << std::endl;                    \
-   }                                                              \
-}
-#else
 #define gdcmDebugMacro(msg)                                       \
 {                                                                 \
    if( gdcm::Trace::GetDebugFlag() )                              \
@@ -118,15 +98,12 @@ private:
    std::ostringstream osmacro;                                    \
    osmacro << "Debug: In " __FILE__ ", line " << __LINE__         \
            << ", function " << GDCM_FUNCTION << '\n'              \
-           << "Last system error was: " << strerror(errno)        \
-           << '\n' << msg << "\n\n";                              \
-   if( gdcm::Trace::GetDebugToFile() )                            \
-      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                           \
-      std::cerr << osmacro.str() << std::endl;                    \
+           << "Last system error was: "                           \
+           << gdcm::System::GetLastSystemError() << '\n' << msg;  \
+   std::ostream &os = gdcm::Trace::GetStream();                   \
+   os << osmacro.str() << "\n\n" << std::endl;                    \
    }                                                              \
 }
-#endif //WIN32, _WIN32
 #endif //NDEBUG
 
 /**
@@ -144,10 +121,8 @@ private:
    osmacro << "Warning: In " __FILE__ ", line " << __LINE__       \
            << ", function " << GDCM_FUNCTION << "\n"              \
            << msg << "\n\n";                                      \
-   if( gdcm::Trace::GetDebugToFile() )                            \
-      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                           \
-      std::cerr << osmacro.str() << std::endl;                    \
+   std::ostream &os = gdcm::Trace::GetStream();                   \
+   os << osmacro.str() << std::endl;                              \
    }                                                              \
 }
 #endif //NDEBUG
@@ -168,10 +143,8 @@ private:
    osmacro << "Error: In " __FILE__ ", line " << __LINE__         \
            << ", function " << GDCM_FUNCTION << '\n'              \
            << msg << "\n\n";                                      \
-   if( gdcm::Trace::GetDebugToFile() )                            \
-      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                           \
-      std::cerr << osmacro.str() << std::endl;                    \
+   std::ostream &os = gdcm::Trace::GetStream();                   \
+   os << osmacro.str() << std::endl;                              \
    }                                                              \
 }
 #endif //NDEBUG
@@ -193,10 +166,8 @@ private:
    osmacro << "Assert: In " __FILE__ ", line " << __LINE__        \
            << ", function " << GDCM_FUNCTION                      \
            << "\n\n";                                             \
-   if( gdcm::Trace::GetDebugToFile() )                            \
-      gdcm::Trace::GetDebugFile() << osmacro.str() << std::endl;  \
-   else                                                           \
-      std::cerr << osmacro.str() << std::endl;                    \
+   std::ostream &os = gdcm::Trace::GetStream();                   \
+   os << osmacro.str() << std::endl;                              \
    assert ( arg );                                                \
    }                                                              \
 }

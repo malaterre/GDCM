@@ -17,6 +17,8 @@
 #include "gdcmSHA1.h"
 #include "gdcmMD5.h"
 
+#include <cstring> // strlen
+
 namespace gdcm
 {
 

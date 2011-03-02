@@ -21,6 +21,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include <cstring>
+
 namespace gdcm
 {
 /**

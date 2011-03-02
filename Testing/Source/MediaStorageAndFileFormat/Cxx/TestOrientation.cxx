@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "gdcmOrientation.h"
 
+#include <iostream>
+
 int TestOrientation(int, char *[])
 {
   gdcm::Orientation o;

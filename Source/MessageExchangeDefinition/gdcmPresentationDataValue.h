@@ -16,6 +16,8 @@
 
 #include "gdcmTypes.h"
 
+#include <vector>
+
 namespace gdcm
 {
 class DataSet;

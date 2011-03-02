@@ -17,6 +17,8 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 
+#include <cstring>
+
 #ifdef OPENJPEG_MAJOR_VERSION
 #if OPENJPEG_MAJOR_VERSION == 1
 #include "gdcm_openjpeg.h"

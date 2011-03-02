@@ -20,6 +20,8 @@
 #include <iomanip>
 #include <iterator>
 
+#include <cstring>
+
 namespace gdcm
 {
 

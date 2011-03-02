@@ -13,8 +13,55 @@
 =========================================================================*/
 #include "gdcmTrace.h"
 
+#include <iostream>
+
 int TestTrace(int, char *[])
 {
   gdcm::Trace t;
+
+  gdcmDebugMacro( "DebugKO" );
+  gdcmWarningMacro( "WarningKO" );
+  gdcmErrorMacro( "ErrorKO" );
+
+  // test the SetStream interface
+  std::ostringstream useros;
+  gdcm::Trace::SetStream( useros );
+
+  gdcmDebugMacro( "DebugOK_OFF" );
+  gdcmWarningMacro( "WarningOK_OFF" );
+  gdcmErrorMacro( "ErrorOK_OFF" );
+
+  gdcm::Trace::DebugOn();
+  gdcm::Trace::WarningOn();
+  gdcm::Trace::ErrorOn();
+
+  gdcmDebugMacro( "DebugOK_ON" );
+  gdcmWarningMacro( "WarningOK_ON" );
+  gdcmErrorMacro( "ErrorOK_ON" );
+
+  std::string result = useros.str();
+  if( result.find( "KO" ) != std::string::npos )
+    {
+    std::cerr << result << std::endl;
+    return 1;
+    }
+  if( result.find( "OFF" ) != std::string::npos )
+    {
+    std::cerr << result << std::endl;
+    return 1;
+    }
+
+  // opposite:
+  if( result.find( "OK" ) == std::string::npos )
+    {
+    std::cerr << result << std::endl;
+    return 1;
+    }
+  if( result.find( "ON" ) == std::string::npos )
+    {
+    std::cerr << result << std::endl;
+    return 1;
+    }
+
   return 0;
 }

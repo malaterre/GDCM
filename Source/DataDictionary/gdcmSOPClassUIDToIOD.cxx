@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "gdcmSOPClassUIDToIOD.h"
 
+#include <cstring>
+
 namespace gdcm
 {
   static const char * const SOPClassUIDToIODStrings[][2] = {

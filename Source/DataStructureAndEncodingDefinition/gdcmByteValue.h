@@ -140,17 +140,7 @@ public:
     std::vector<char>::iterator it = Internal.begin();
     for(; it != Internal.end(); ++it) *it = c;
   }
-  bool GetBuffer(char *buffer, unsigned long length) const {
-    // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
-    // so we need an inequality
-    if( length <= Internal.size() )
-      {
-      memcpy(buffer, &Internal[0], length);
-      return true;
-      }
-    gdcmDebugMacro( "Could not handle length= " << length );
-    return false;
-    }
+  bool GetBuffer(char *buffer, unsigned long length) const;
   bool WriteBuffer(std::ostream &os) const {
     if( Length ) {
       //assert( Internal.size() <= Length );

@@ -17,6 +17,8 @@
 #include "gdcmByteValue.h"
 #include "gdcmParseException.h"
 
+#include <cstring>
+
 namespace gdcm
 {
   template <typename TDE, typename TSwap>

@@ -19,6 +19,7 @@
 #include "gdcmItem.h"
 
 #include <vector>
+#include <cstring> // strcmp
 
 namespace gdcm
 {

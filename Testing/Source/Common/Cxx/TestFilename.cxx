@@ -16,6 +16,7 @@
 #include "gdcmTesting.h"
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib> // EXIT_FAILURE
 
 /*!

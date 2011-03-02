@@ -13,6 +13,9 @@
 =========================================================================*/
 #include "gdcmTrace.h"
 
+#include <iostream>
+#include <fstream>
+
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
@@ -20,8 +23,20 @@ namespace gdcm
 static bool DebugFlag   = false;
 static bool WarningFlag = true;
 static bool ErrorFlag   = true;
+#if !defined(GDCM_LEGACY_REMOVE)
 static bool DebugToFile = false;
 static std::ofstream DebugFile;
+#endif
+static std::ostream * src = &std::cerr;
+
+void Trace::SetStream(std::ostream &os)
+{
+  src = &os;
+}
+std::ostream &Trace::GetStream()
+{
+  return *src;
+}
 
 //-----------------------------------------------------------------------------
 // Constructor / Destructor
@@ -32,10 +47,12 @@ Trace::Trace()
 
 Trace::~Trace()
 {
+#if !defined(GDCM_LEGACY_REMOVE)
   if ( DebugFile.is_open() )
     {
     DebugFile.close();
     }
+#endif
 }
 
 void Trace::SetDebug(bool debug)  { DebugFlag = debug; }
@@ -62,6 +79,7 @@ bool Trace::GetErrorFlag()
   return ErrorFlag;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 bool Trace::GetDebugToFile()
 {
   return DebugToFile;
@@ -76,5 +94,6 @@ std::ofstream &Trace::GetDebugFile ()
 {
   return DebugFile;
 }
+#endif
 
 }
