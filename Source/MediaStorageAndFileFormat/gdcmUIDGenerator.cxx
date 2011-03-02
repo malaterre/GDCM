@@ -16,6 +16,7 @@
 #include "gdcmSystem.h"
 
 #include <bitset>
+#include <cstring>
 
 // FIXME...
 #if defined(_WIN32) || defined(__CYGWIN__)

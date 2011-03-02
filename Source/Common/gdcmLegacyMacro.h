@@ -19,7 +19,6 @@
 #endif
 
 #include "gdcmException.h"
-#include "gdcmTrace.h"
 
 //----------------------------------------------------------------------------
 // Setup legacy code policy.
@@ -73,5 +72,6 @@
   gdcmWarningMacro(#method " was deprecated for " version " and will be removed in a future version.  Use " #replace " instead.")
 #endif
 
+#include "gdcmTrace.h"
 
 #endif // GDCMLEGACYMACRO_H

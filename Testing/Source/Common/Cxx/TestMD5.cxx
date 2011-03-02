@@ -18,6 +18,7 @@
 #include "gdcmTesting.h"
 
 #include <iostream>
+#include <cstring> // strcmp
 
 static const char * const gdcmMD5SumFiles[][2] = {
 { "f5ae1418f6ec07ae13522c18ff1e067a"  , "00191113.dcm" },

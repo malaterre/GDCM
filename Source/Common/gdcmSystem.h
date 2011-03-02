@@ -21,7 +21,7 @@ namespace gdcm
 
 /**
  * \brief Class to do system operation
- * \details OS independant functionalities
+ * \details OS independent functionalities
  */
 class GDCM_EXPORT System
 {
@@ -40,7 +40,7 @@ public:
   static const char *GetLastSystemError();
 
   /// Return the filesize. 0 if file does not exist.
-  /// \warning you need to use FileExists to differenciate between empty file and missing file.
+  /// \warning you need to use FileExists to differentiate between empty file and missing file.
   /// \warning for very large size file and on system where size_t is not appropriate to store
   /// off_t value the function will return 0.
   static size_t FileSize(const char* filename);
@@ -65,14 +65,14 @@ public:
   // Chdir
   // copy a file
 
-  /// \deprecated DO NOT USE: This function might disapear real time soon...
+  /// \deprecated DO NOT USE: This function might disappear real time soon...
   GDCM_LEGACY(static bool GetHardwareAddress(unsigned char addr[6]))
 
   /// Retrieve the hostname, only the first 255 byte are copyied.
   /// This may come handy to specify the Station Name
   static bool GetHostName(char hostname[255]);
 
-  // In the following the size '22' is explicitely listed. You need to pass in
+  // In the following the size '22' is explicitly listed. You need to pass in
   // at least 22bytes of array. If the string is an output it will be
   // automatically padded ( array[21] == 0 ) for you.
   // Those functions: GetCurrentDateTime / FormatDateTime / ParseDateTime do
@@ -106,7 +106,7 @@ public:
   /// DICOM VR:UI type
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 
-  /// consistant func for C99 spec of strcasecmp/strncasecmp
+  /// consistent func for C99 spec of strcasecmp/strncasecmp
   static int StrCaseCmp(const char *s1, const char *s2);
   /// \pre n != 0
   static int StrNCaseCmp(const char *s1, const char *s2, size_t n);

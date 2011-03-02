@@ -20,6 +20,8 @@
 #include "gdcmUserInformation.h"
 #include "gdcmBasePDU.h"
 
+#include <vector>
+
 namespace gdcm
 {
 

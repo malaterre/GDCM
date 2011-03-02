@@ -17,9 +17,11 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmUnpacker12Bits.h"
-#include <limits>
 
+#include <limits>
 #include <sstream>
+
+#include <cstring>
 
 namespace gdcm
 {

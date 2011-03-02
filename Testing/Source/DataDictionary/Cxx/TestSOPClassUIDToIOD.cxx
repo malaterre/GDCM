@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "gdcmSOPClassUIDToIOD.h"
 
+#include <iostream>
+
 int TestSOPClassUIDToIOD(int, char *[])
 {
   gdcm::SOPClassUIDToIOD sop2iod;

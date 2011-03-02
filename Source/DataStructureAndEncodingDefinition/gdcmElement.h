@@ -27,6 +27,7 @@
 #include <sstream>
 #include <limits>
 #include <cmath>
+#include <cstring>
 
 namespace gdcm
 {

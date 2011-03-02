@@ -21,6 +21,8 @@
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
 
+#include <cstring>
+
 namespace gdcm
 {
 /*

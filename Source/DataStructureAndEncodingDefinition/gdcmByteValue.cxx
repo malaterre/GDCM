@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "gdcmByteValue.h"
 
+#include <cstring> // memcpy
+
 namespace gdcm
 {
 
@@ -53,5 +55,17 @@ namespace gdcm
       }
     os << std::dec;
   }
+
+  bool ByteValue::GetBuffer(char *buffer, unsigned long length) const {
+    // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
+    // so we need an inequality
+    if( length <= Internal.size() )
+      {
+      memcpy(buffer, &Internal[0], length);
+      return true;
+      }
+    gdcmDebugMacro( "Could not handle length= " << length );
+    return false;
+    }
 
 }

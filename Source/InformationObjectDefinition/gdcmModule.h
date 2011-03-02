@@ -19,6 +19,7 @@
 #include "gdcmModuleEntry.h"
 
 #include <map>
+#include <vector>
 
 namespace gdcm
 {

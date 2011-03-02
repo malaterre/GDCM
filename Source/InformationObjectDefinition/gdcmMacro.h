@@ -19,6 +19,7 @@
 #include "gdcmMacroEntry.h"
 
 #include <map>
+#include <vector>
 
 namespace gdcm
 {

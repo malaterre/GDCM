@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <cstddef> // ptrdiff_t
+#include <cstring>
 
 namespace gdcm
 {

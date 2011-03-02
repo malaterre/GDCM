@@ -14,6 +14,7 @@
 #include "gdcmFilenameGenerator.h"
 #include "gdcmTrace.h"
 
+#include <cstring> // strchr
 #include <stdio.h> // snprintf
 #ifdef _WIN32
 #define snprintf _snprintf
