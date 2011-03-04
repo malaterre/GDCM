@@ -86,10 +86,10 @@ static int scanFolderQt(QDir const &dir, QStringList& files)
       continue;
     }
     // QString
-    // This API does not work once QCoreApplication is used:
-    // std::string str = file.absoluteFilePath().toStdString();
-    // const char *ba_str1 = str.c_str();
-    // res += TestBothFuncs("QString", ba_str1);
+    // Convert from the internal representation to 8bits
+    QByteArray str = file.absoluteFilePath().toLocal8Bit();
+    const char *ba_str1 = str.constData();
+    res += TestBothFuncs("QString", ba_str1);
 
     // Now try explicit UTF-8
     QByteArray bautf8 = file.absoluteFilePath().toUtf8();
