@@ -49,8 +49,8 @@ file-out  DICOM output filename
 \section usage_example Usage Example
 
 \verbatim
- $ wget http://gdcm.sourceforge.net/gdcm.pdf
- $ gdcmpdf gdcm.pdf gdcm.dcm
+$ wget http://gdcm.sourceforge.net/gdcm.pdf
+$ gdcmpdf gdcm.pdf gdcm.dcm
 \endverbatim
 
 To re-extract the encapsulated pdf file:

@@ -91,10 +91,24 @@ void PrintHelp()
   std::cout << "     --queryhelp print query help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
 
-  std::locale l("");
-  std::string loc = l.name();
-  std::cout << std::endl;
-  std::cout << "Local character set: " << loc << std::endl;
+  try
+    {
+    std::locale l("");
+    std::string loc = l.name();
+    std::cout << std::endl;
+    std::cout << "Local Name: " << loc << std::endl;
+    }
+  catch( const std::exception& e)
+    {
+    std::cerr << e.what() << std::endl;
+    }
+  std::cout << "Local Character Set: " << gdcm::System::GetLocaleCharset() << std::endl;
+  std::vector<gdcm::ECharSet> charsettype;
+  charsettype.push_back( gdcm::QueryFactory::GetCharacterFromCurrentLocale() );
+  gdcm::DataElement de = gdcm::QueryFactory::ProduceCharacterSetDataElement(charsettype);
+  gdcm::ByteValue *bv = de.GetByteValue();
+  std::string s( bv->GetPointer(), bv->GetLength() );
+  std::cout << "DICOM Character Set: [" << s << "]" << std::endl;
 }
 
 void PrintQueryHelp(int inFindPatientRoot){

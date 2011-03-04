@@ -10,7 +10,8 @@ gdcmtar [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmtar is a command line tool used to tar/untar multi-frames images (including SIEMENS MOSAIC file)
+The \b gdcmtar is a command line tool used to tar/untar multi-frames images
+(including SIEMENS MOSAIC file)
 
 \section parameters PARAMETERS
 

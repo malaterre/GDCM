@@ -60,6 +60,10 @@
 #include <strings.h> // strncasecmp
 #endif
 
+#if defined(GDCM_HAVE_LANGINFO_H)
+#include <langinfo.h> // nl_langinfo
+#endif
+
 // TODO: WIN32 replacement for C99 stuff:
 // #if defined(_WIN32) || defined(_WIN64)
 // #define snprintf _snprintf
@@ -911,6 +915,72 @@ char *System::StrTokR(char *ptr, const char *sep, char **end)
 #else
   return strtok_r(ptr,sep,end);
 #endif
+}
+
+struct CharsetAliasType
+{
+  const char *alias;
+  const char *name;
+};
+
+static const char *CharsetAliasToName(const char *alias)
+{
+  static CharsetAliasType aliases[] = {
+    { "CP1252", "UTF-8" }, // mingw + debian/6.0
+    { NULL, NULL },
+  };
+  for( CharsetAliasType *a = aliases; a->alias; a++)
+    {
+    if (strcmp (a->alias, alias) == 0)
+      {
+      return a->name;
+      }
+    }
+  // We need to tell the user...
+  return NULL;
+}
+
+const char *System::GetLocaleCharset()
+{
+  const char *codeset = NULL;
+#if defined(GDCM_HAVE_NL_LANGINFO)
+  //setlocale (LC_CTYPE, NULL);
+  /* According to documentation nl_langinfo needs :
+     setlocale(3) needs to be executed with proper arguments before.
+     However even if CODESET only required LC_TYPE only setting LC_TYPE is not
+     enough to get it working on a debian/6.0 system within c++
+     so instead call setlocale on LC_ALL to fix it.
+   */
+  char *oldlocale = strdup(setlocale(LC_ALL, ""));
+  // TODO: what if setlocale return NULL ?
+  codeset = nl_langinfo (CODESET);
+  setlocale(LC_ALL, oldlocale);
+  free(oldlocale);
+#endif // GDCM_HAVE_NL_LANGINFO
+
+#if defined(_WIN32)
+#if 0
+  char buf1[128];
+  char buf2[128];
+  const char *codeset1;
+  const char *codeset2;
+  codeset1 = buf1;
+  codeset2 = buf2;
+  sprintf(buf1, "CP%d", GetConsoleCP());
+  sprintf(buf2, "CP%d", GetConsoleOutputCP());
+
+  // BUG: both returns 'CP437' on debian + mingw32...
+  // instead prefer GetACP() call:
+#endif
+  static char buf[2+10+1]; // 2 char, 10 bytes + 0
+  // GetACP: Retrieves the current Windows ANSI code page identifier for the
+  // operating system.
+  sprintf (buf, "CP%u", GetACP ());
+  codeset = CharsetAliasToName(buf);
+#endif
+
+  // warning ANSI_X3.4-1968 means ASCII
+  return codeset;
 }
 
 } // end namespace gdcm
