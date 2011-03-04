@@ -44,7 +44,13 @@ BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQu
 ECharSet QueryFactory::GetCharacterFromCurrentLocale()
 {
   const char *charset = System::GetLocaleCharset();
-  if( strcmp( charset, "UTF-8" ) == 0 ) return eUTF8;
+  if( charset )
+    {
+    if( strcmp( charset, "UTF-8" ) == 0 ) return eUTF8;
+    else if( strcmp( charset, "US-ASCII" ) == 0 ) return eLatin1;
+    else if( strcmp( charset, "ANSI_X3.4-1968" ) == 0 ) return eLatin1;
+    }
+  gdcmWarningMacro( "Problem finding Locale Charset. Default to Latin-1" );
   return eLatin1;
 }
 
