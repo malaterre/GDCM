@@ -41,16 +41,53 @@ BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQu
   }
 }
 
+/*
+LATIN1        ISO 8859-1
+LATIN2        ISO 8859-2
+LATIN3        ISO 8859-3
+LATIN4        ISO 8859-4
+ISO_8859_5    ISO 8859-5 Latin/Cyrillic
+ISO_8859_6    ISO 8859-6 Latin/Arabic
+ISO_8859_7    ISO 8859-7 Latin/Greek
+ISO_8859_8    ISO 8859-8 Latin/Hebrew
+LATIN5        ISO 8859-9
+LATIN6        ISO 8859-10
+LATIN7        ISO 8859-13
+LATIN8        ISO 8859-14
+LATIN9        ISO 8859-15
+LATIN10       ISO 8859-16
+*/
 ECharSet QueryFactory::GetCharacterFromCurrentLocale()
 {
   const char *charset = System::GetLocaleCharset();
   if( charset )
     {
+    // UTF-8 (this is the default for UNIX):
     if( strcmp( charset, "UTF-8" ) == 0 ) return eUTF8;
+    // US-ASCII, simply return latin1
     else if( strcmp( charset, "US-ASCII" ) == 0 ) return eLatin1;
     else if( strcmp( charset, "ANSI_X3.4-1968" ) == 0 ) return eLatin1;
+    // Latin-1
+    else if( strcmp( charset, "ISO-8859-1" ) == 0 ) return eLatin1;
+    else if( strcmp( charset, "ISO-8859-2" ) == 0 ) return eLatin2;
+    else if( strcmp( charset, "ISO-8859-3" ) == 0 ) return eLatin3;
+    else if( strcmp( charset, "ISO-8859-4" ) == 0 ) return eLatin4;
+    else if( strcmp( charset, "ISO-8859-5" ) == 0 ) return eCyrillic;
+    else if( strcmp( charset, "ISO-8859-6" ) == 0 ) return eArabic;
+    else if( strcmp( charset, "ISO-8859-7" ) == 0 ) return eGreek;
+    else if( strcmp( charset, "ISO-8859-8" ) == 0 ) return eHebrew;
+    else if( strcmp( charset, "ISO-8859-9" ) == 0 ) return eLatin5;
+    //
+    else if( strcmp( charset, "EUC-JP" ) == 0 )     return eJapanese;
+    else if( strcmp( charset, "TIS-620" ) == 0 )    return eThai;
+    else if( strcmp( charset, "EUC-JP" ) == 0 )     return eJapaneseKanjiMultibyte;
+    else if( strcmp( charset, "EUC-JP" ) == 0 )     return eJapaneseSupplementaryKanjiMultibyte;
+    else if( strcmp( charset, "EUC-KR" ) == 0 )     return eKoreanHangulHanjaMultibyte;
+    //else if( strcmp( charset, "UTF-8" ) == 0 )      return eUTF8;
+    else if( strcmp( charset, "GB18030" ) == 0 )    return eGB18030;
+    gdcmWarningMacro( "Problem mapping Locale Charset: " << charset );
     }
-  gdcmWarningMacro( "Problem finding Locale Charset. Default to Latin-1" );
+  gdcmWarningMacro( "Default to Latin-1" );
   return eLatin1;
 }
 
