@@ -170,19 +170,20 @@ DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<EChar
       //the only ones that appear
     case eUTF8:
       theOutputString = "ISO_IR 192";
-      itor = inCharSetType.end(); //stop the loop
+      itor = inCharSetType.end() - 1; //stop the loop
       break;
     case eGB18030:
       theOutputString = "GB13080";
-      itor = inCharSetType.end(); //stop the loop
+      itor = inCharSetType.end() - 1; //stop the loop
       break;
       }
-    if (itor < (inCharSetType.end()-1)){
+    if (itor < (inCharSetType.end()-1))
+      {
       theOutputString += "\\";
-    // the following code will not work for UTF-8 and eGB18030
+      // the following code will not work for UTF-8 and eGB18030
       assert( itor < inCharSetType.end() );
       visited[*itor] = true;
-    }
+      }
   }
 
   if( theOutputString.size() % 2 )
