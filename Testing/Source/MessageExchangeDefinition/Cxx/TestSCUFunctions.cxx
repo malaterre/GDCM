@@ -63,6 +63,34 @@ bool AreDataSetsEqual(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2){
   return true;
 }
 
+bool checkbl( const char *filename )
+{
+  static const char *blacklist[] = {
+    "PHILIPS_GDCM12xBug2.dcm", // #3196213
+    // W: DIMSE Warning: (GDCMSCU,ANY-SCP): DIMSE receiveDataSetInMemory:
+    // dset->read() Failed (Corrupted data)
+    "MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm",
+    "MR_Philips_Intera_PrivateSequenceImplicitVR.dcm",
+    "GE_DLX-8-MONO2-PrivateSyntax.dcm", // Implicit VR Big Endian DLX (G.E Private)
+    "PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm", // Implicit VR Big Endian DLX (G.E Private)
+    // W: DIMSE Warning: (STORESCU,ANY-SCP): sendMessage: unable to convert
+    // dataset from 'JPEG Lossless, Non-hierarchical, Process 14' transfer
+    // syntax to 'Big Endian Explicit'
+    "SignedShortLosslessBug.dcm",
+    "MR-MONO2-12-shoulder.dcm",
+    NULL
+  };
+  for( const char **bl = blacklist; *bl; ++bl )
+    {
+    const char *res = strstr( filename, *bl );
+    if( res )
+      {
+      return true;
+      }
+    }
+  return false;
+}
+
 int TestSCUFunctions(int argc, char *argv[])
 {
   if( argc < 6 )
@@ -121,6 +149,7 @@ int TestSCUFunctions(int argc, char *argv[])
     const char* v1 = sc.GetValue(file, sopclass );
     const char* v2 = sc.GetValue(file, sopinstance );
     if( !v1 || !v2 || !*v1 || !*v2 ) it = theFilenames.erase( it );
+    else if( checkbl( file ) ) it = theFilenames.erase( it );
     else ++it;
     }
 
