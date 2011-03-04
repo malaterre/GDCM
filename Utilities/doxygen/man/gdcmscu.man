@@ -87,32 +87,32 @@ C-MOVE operation are executed using two different ports (one for the SCU and one
 a C-ECHO to server dicom.example.com using port 104, use:
 
 \verbatim
-gdcmscu dicom.example.com
+$ gdcmscu dicom.example.com
 \endverbatim
 
 or if you prefer being explicit:
 
 \verbatim
-gdcmscu --echo dicom.example.com 104
+$ gdcmscu --echo dicom.example.com 104
 \endverbatim
 
 Using basic security your DICOM server might require that you set the
 appropriate called AE-TITLE
 
 \verbatim
-gdcmscu --echo dicom.example.com 11112 --call SERVSCP
+$ gdcmscu --echo dicom.example.com 11112 --call SERVSCP
 \endverbatim
 
 If you want to specifiy your own AE-TITLE (default is GDCMSCU), simply use:
 
 \verbatim
-gdcmscu --echo dicom.example.com 11112 --call SERVSCP --aetitle MYSCU
+$ gdcmscu --echo dicom.example.com 11112 --call SERVSCP --aetitle MYSCU
 \endverbatim
 
 For example you could test on the DICOM server provided by DICOMObject team:
 
 \verbatim
-gdcmscu www.dicomserver.co.uk 11112
+$ gdcmscu www.dicomserver.co.uk 11112
 \endverbatim
 
 \section cstore_usage C-STORE usage
@@ -120,19 +120,19 @@ C-STORE is the operation that allow sending a DICOM file to a remote DICOM
 server. For instance to send a file called myfile.dcm
 
 \verbatim
-gdcmscu --store dicom.example.com 104 myfile.dcm
+$ gdcmscu --store dicom.example.com 104 myfile.dcm
 \endverbatim
 
 or if you prefer being explicit:
 
 \verbatim
-gdcmscu --store dicom.example.com 104 -i myfile.dcm
+$ gdcmscu --store dicom.example.com 104 -i myfile.dcm
 \endverbatim
 
 You can even send multiple files using the same association:
 
 \verbatim
-gdcmscu --store dicom.example.com 104 myfile1.dcm myfile2.dcm myfile3.dcm ...
+$ gdcmscu --store dicom.example.com 104 myfile1.dcm myfile2.dcm myfile3.dcm ...
 \endverbatim
 
 \section cfind_usage C-FIND usage
@@ -141,19 +141,19 @@ for example to find all DICOM Instance where PatientsName match a particular
 pattern, usage is simply:
 
 \verbatim
-gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10,"A*"
+$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10,"A*"
 \endverbatim
 
 We also support a DCMTK compatible convention:
 
 \verbatim
-gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10="A*"
+$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10="A*"
 \endverbatim
 
 When an attribute is set without a value it will be part of the output result:
 
 \verbatim
-gdcmscu --find --patient dicom.example.com 11112 --call MI2B2 --patientroot -k 10,10="A*" -k 10,20
+$ gdcmscu --find --patient dicom.example.com 11112 --call MI2B2 --patientroot -k 10,10="A*" -k 10,20
 \endverbatim
 
 \section cmove_usage C-MOVE usage
@@ -162,7 +162,7 @@ server. Most of the time, it is a subsequent operation after a C-FIND query.
 To retrieve a DICOM instance where PatientID is ABCD1234, simply execute:
 
 \verbatim
-gdcmscu --move --patient --aetitle ACME1 --call ACME_STORE dicom.example.com 5678 --patientroot -k 10,20="ABCD1234" --port-scp 1234
+$ gdcmscu --move --patient --aetitle ACME1 --call ACME_STORE dicom.example.com 5678 --patientroot -k 10,20="ABCD1234" --port-scp 1234
 \endverbatim
 
 WARNING For this operation to work you need information from the DICOM server
@@ -188,7 +188,7 @@ findscu --patient dicom.example.com 11112 --key 8,52=PATIENT --key 10,10="F*"
 This would become using GDCM syntax:
 
 \verbatim
-gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10="F*"
+$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10="F*"
 \endverbatim
 
 \section debugging Debugging

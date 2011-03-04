@@ -57,7 +57,6 @@ namespace gdcm{
  */
 class ULConnection
 {
-
       ULConnectionInfo mInfo;
       //this is a dirty dirty hack
       //but to establish an outgoing connection (scu), we need the echo service

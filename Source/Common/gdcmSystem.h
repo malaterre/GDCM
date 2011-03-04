@@ -120,6 +120,9 @@ public:
   /// strtok_r
   static char *StrTokR(char *ptr, const char *sep, char **end);
 
+  /// return `locale charmap`
+  static const char *GetLocaleCharset();
+
   /// NOT THREAD SAFE
 /*
   static void SetArgv0(const char *);

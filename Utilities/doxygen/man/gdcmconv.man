@@ -116,13 +116,13 @@ file-out  DICOM output filename
 properly parsable DICOM file. Usage is simply:
 
 \verbatim
-gdcmconv input.dcm output.dcm
+$ gdcmconv input.dcm output.dcm
 \endverbatim
 
 or if you prefer being explicit:
 
 \verbatim
-gdcmconv -i input.dcm -o output.dcm
+$ gdcmconv -i input.dcm -o output.dcm
 \endverbatim
 
 Even though gdcmconv can overwrite directly on the same file (input.dcm =
@@ -151,7 +151,9 @@ of quality control, see gdcmconv Quality Control section (down below).
 
 Running
 
-gdcmconv input.dcm output.dcm
+\verbatim
+$ gdcmconv input.dcm output.dcm
+\endverbatim
 
 Is not enough to recompute file meta header, when input file is buggy. You may
 want to use: --check-meta

@@ -21,10 +21,12 @@ CHECK_INCLUDE_FILE_CONCAT("sys/time.h"     GDCM_HAVE_SYS_TIME_H)
 CHECK_INCLUDE_FILE_CONCAT("winsock.h"       GDCM_HAVE_WINSOCK_H)
 CHECK_INCLUDE_FILE_CONCAT("byteswap.h"       GDCM_HAVE_BYTESWAP_H)
 CHECK_INCLUDE_FILE("rpc.h"       GDCM_HAVE_RPC_H)
+CHECK_INCLUDE_FILE("langinfo.h"       GDCM_HAVE_LANGINFO_H)
 
 INCLUDE(CheckFunctionExists)
 # See http://public.kitware.com/Bug/view.php?id=8246
 INCLUDE(CheckSymbolExists)
+CHECK_SYMBOL_EXISTS(nl_langinfo "langinfo.h" GDCM_HAVE_NL_LANGINFO)
 #C99
 #CHECK_FUNCTION_EXISTS(strcasecmp  GDCM_HAVE_STRCASECMP)
 CHECK_SYMBOL_EXISTS(strcasecmp "strings.h" GDCM_HAVE_STRCASECMP)
