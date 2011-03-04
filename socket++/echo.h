@@ -16,7 +16,7 @@
 class MY_API echo: public protocol
 {
 public:
-  class echobuf: public protocol::protocolbuf {
+  class MY_API echobuf: public protocol::protocolbuf {
   public:
     echobuf (sockinetbuf& si): protocol::protocolbuf (si) {}
     echobuf (protocol::p_name pname) : protocol::protocolbuf (pname) {}
