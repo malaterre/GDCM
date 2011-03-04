@@ -211,11 +211,24 @@ the resulting dataset. Instead it uses a mapping of AE-TITLE to IP adress to sen
 any results. So pay particular attention to the spelling of your AE-TITLE and your incoming
 port (which may be different from the port to connect to the server).
 
-watch out that port ranging [1-1024] are reserved for admin and not easily accessible unless
-granted special priviliges. therefore the default 104 DICOM port might be accessible to all
+\section gdcmscu_portwarnings Port Warning
+
+Watch out that port ranging [1-1024] are reserved for admin and not easily accessible unless
+granted special priviliges. Therefore the default 104 DICOM port might be accessible to all
 your users.
 
-\section gdcmscu_warnings Warnings
+\section gdcmscu_ctorewarnings C-STORE Warnings
+
+When constructing a C-STORE operation, gdcmscu will always use the Media Storage as found
+in the file to be sent. For encapsulated DICOM file (eg. RLE Lossless) the receiving
+SCP server might not support this compression and will legitemely refuse the C-STORE
+operation. In this case users have to manually convert to a non-compressed form this particular file:
+
+\verbatim
+$ gdcmconv --raw compressed.dcm non_compressed.dcm
+\endverbatim
+
+\section gdcmscu_cmovewarnings C-MOVE Warnings
 
 At the moment \b gdcmscu only supports non-compressed transfer syntax. It will
 always request DataSet using Implicit VR Little Endian Transfer Syntax during a
@@ -242,6 +255,44 @@ This would also be equivalent to:
 \verbatim
 $ findscu --patient --key 8,52=IMAGE --key 8,18=1.2.3.4.5.6 dicom.example.com 11112 --key 10,20 --key 20,d --key 20,e
 \endverbatim
+
+\section gdcmscu_storing Storing the Query
+
+It is also possible to store the query:
+
+\verbatim
+gdcmscu --find --patient --patientroot dicom.example.com 11112 --key 10,20="*" --key 10,10 --store-query query.dcm
+\endverbatim
+
+One can then check the DataSet values send for the query:
+
+\verbatim
+$ gdcmdump query.dcm
+# Dicom-File-Format
+
+# Dicom-Meta-Information-Header
+# Used TransferSyntax:
+
+# Dicom-Data-Set
+# Used TransferSyntax: 1.2.840.10008.1.2
+(0008,0005) ?? (CS) [ISO_IR 192]                                  # 10,1-n Specific Character Set
+(0008,0052) ?? (CS) [PATIENT ]                                    # 8,1 Query/Retrieve Level
+(0010,0010) ?? (PN) (no value)                                    # 0,1 Patient's Name
+(0010,0020) ?? (LO) [* ]                                          # 2,1 Patient ID
+\endverbatim
+
+The Specific Character Set was set to "ISO_IR 192" as the locale encoding of
+the system was found automatically by gdcmscu to be UTF-8.
+
+This means that the following command line will properly setup the Query with
+the appropriate Charset to be executed correctly:
+
+\verbatim
+$ gdcmscu --find --patient --patientroot dicom.example.com 11112 --key 10,10="*Jérôme*"
+\endverbatim
+
+the query is always executed on the server side (SCP), some implementations does not support
+string matching with different Character Set.
 
 \section see_also SEE ALSO
 

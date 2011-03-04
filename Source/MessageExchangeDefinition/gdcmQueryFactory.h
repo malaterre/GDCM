@@ -24,7 +24,7 @@ namespace gdcm{
     ///The character sets enumerated in PS 3.3 2009 Annex C, section C.12.1.1.2
     ///The resulting character set is stored in 0008,0005
     ///The conversion to the data element is performed by the QueryFactory itself
-  enum GDCM_EXPORT ECharSet {
+  enum ECharSet {
     eLatin1 = 0,
     eLatin2,
     eLatin3,
