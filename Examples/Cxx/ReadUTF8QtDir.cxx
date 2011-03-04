@@ -12,6 +12,10 @@
 
 =========================================================================*/
 /*
+ * GDCM API expect a const char * as input for SetFileName
+ * In order to use this API from Qt, here is a simple test that
+ * shows how to do it in a portable manner:
+ *
  * http://doc.qt.nokia.com/latest/qdir.html#navigation-and-directory-operations
  */
 
@@ -85,23 +89,17 @@ static int scanFolderQt(QDir const &dir, QStringList& files)
       res += scanFolderQt(QDir(file.absoluteFilePath()), files);
       continue;
     }
-    // QString
-    // Convert from the internal representation to 8bits
+    // Convert back from the internal representation to 8bits
+    // toLocal8Bit() returns by copy. Need to store explicitely the QByteArray
     QByteArray str = file.absoluteFilePath().toLocal8Bit();
     const char *ba_str1 = str.constData();
     res += TestBothFuncs("QString", ba_str1);
-
-    // Now try explicit UTF-8
-    QByteArray bautf8 = file.absoluteFilePath().toUtf8();
-    const char *ba_str2 = bautf8.constData();
-    res += TestBothFuncs("UTF8", ba_str2);
     }
   return res;
 }
 
 int main(int argc, char *argv[])
 {
-
   // very important:
   QCoreApplication qCoreApp( argc , argv );
   if( argc < 2 )
@@ -114,7 +112,6 @@ int main(int argc, char *argv[])
   const char *dirname = argv[1];
   res += scanFolder( dirname );
 
-  //QDir dir( QString::fromUtf8(dirname) );
   QDir dir( QString::fromLocal8Bit(dirname) );
   QStringList files;
   res += scanFolderQt( dir, files);
