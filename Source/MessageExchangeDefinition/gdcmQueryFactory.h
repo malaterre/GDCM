@@ -21,7 +21,7 @@
 #include "gdcmBaseRootQuery.h"
 
 namespace gdcm{
-    ///The character sets enumerated in 9.3 Annex C, section C.12.1.1.2
+    ///The character sets enumerated in PS 3.3 2009 Annex C, section C.12.1.1.2
     ///The resulting character set is stored in 0008,0005
     ///The conversion to the data element is performed by the QueryFactory itself
   enum GDCM_EXPORT ECharSet {
@@ -33,14 +33,14 @@ namespace gdcm{
     eArabic,
     eGreek,
     eHebrew,
-    eLatin5,
-    eJapanese,
-    eThai,
-    eJapaneseKanjiMultibyte,
-    eJapaneseSupplementaryKanjiMultibyte,
-    eKoreanHangulHanjaMultibyte,
+    eLatin5, // Latin Alphabet No. 5 (Turkish) Extended
+    eJapanese, // JIS X 0201 (Shift JIS) Extended
+    eThai, // TIS 620-2533 (Thai) Extended
+    eJapaneseKanjiMultibyte, // JIS X 0208 (Kanji) Extended
+    eJapaneseSupplementaryKanjiMultibyte, // JIS X 0212 (Kanji) Extended
+    eKoreanHangulHanjaMultibyte, // KS X 1001 (Hangul and Hanja) Extended
     eUTF8,
-    eGB18030
+    eGB18030 // Chinese (Simplified) Extended
   };
 
 /**
