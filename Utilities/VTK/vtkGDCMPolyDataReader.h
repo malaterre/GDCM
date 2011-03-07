@@ -22,7 +22,7 @@
 // would be inconsistant in between the two data structures.
 //
 // .SECTION See Also
-// vtkGDCMImageReader vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkGDCMImageReader vtkGDCMPolyDataWriter vtkRTStructSetProperties
 
 
 #ifndef VTKGDCMPOLYDATAREADER_H

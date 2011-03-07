@@ -15,13 +15,12 @@
 // .SECTION Description
 //
 // .SECTION See Also
-// vtkMedicalImageReader2
+// vtkGDCMPolyDataReader vtkGDCMPolyDataWriter
 
 #ifndef VTKRTSTRUCTSETPROPERTIES_H
 #define VTKRTSTRUCTSETPROPERTIES_H
 
 #include "vtkObject.h"
-#include "gdcmDirectory.h"
 
 class vtkRTStructSetPropertiesInternals;
 
