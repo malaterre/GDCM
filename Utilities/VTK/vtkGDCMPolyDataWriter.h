@@ -19,7 +19,7 @@
 // .SECTION Warning
 //
 // .SECTION See Also
-// vtkGDCMImageReader vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkGDCMImageReader vtkGDCMPolyDataReader vtkRTStructSetProperties
 
 
 #ifndef VTKGDCMPOLYDATAWRITER_H
