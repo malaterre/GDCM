@@ -28,15 +28,17 @@ namespace gdcm
 {
 /**
  * \brief Composite Network Functions
- * These functions provide a generic API to the DICOM functions implemented in GDCM.
- * Advanced users can use this code as a template for building their own versions of
- * these functions (for instance, to provide progress bars or some other way of handling
- * returned query information), but for most users, these functions should be
- * sufficient to interface with a PACS to a local machine.
- * Note that these functions are not contained within a static class or some other
- * class-style interface, because multiple connections can be instantiated in the same program.
- * The DICOM standard is much more function oriented rather than class oriented in this
- * instance, so the design of this API reflects that functional approach.
+ * These functions provide a generic API to the DICOM functions implemented in
+ * GDCM.
+ * Advanced users can use this code as a template for building their own
+ * versions of these functions (for instance, to provide progress bars or some
+ * other way of handling returned query information), but for most users, these
+ * functions should be sufficient to interface with a PACS to a local machine.
+ * Note that these functions are not contained within a static class or some
+ * other class-style interface, because multiple connections can be
+ * instantiated in the same program.  The DICOM standard is much more function
+ * oriented rather than class oriented in this instance, so the design of this
+ * API reflects that functional approach.
  * These functions implements the following SCU operations:
  * \li C-ECHO SCU
  * \li C-FIND SCU

@@ -370,5 +370,12 @@ std::cerr << "found:" << ss2 << std::endl;
   res++;
 }
 
+  const char *codeset = gdcm::System::GetLocaleCharset();
+if( !codeset )
+{
+std::cerr << "Could nto find Charset on your system. Please report." << std::endl;
+res++;
+}
+
   return res;
 }
