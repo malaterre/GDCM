@@ -64,33 +64,41 @@ using namespace std;
 #  define MSG_MAXIOVLEN     16
 #endif // __linux__
 
+//this class gets rid of the C4251 warning by internalizing the string.
+//that way, if something else links to this library (and it should!), no linker conflicts should happen
+//see http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
+class StringWrapper { 
+public:
+	string text;
+};
+
 // socket exception classes
 class MY_API sockerr
 {
     int  err;
-    string text;
+    StringWrapper text;
     public:
         sockerr (int e, const char *operation = NULL): err (e)
         {
             if (operation != NULL)
             {
-                text = operation;
+                text.text = operation;
             }
         }
         sockerr (int e, const char *operation, const char *specification) : err (e)
         {
             if (operation != NULL)
-                text = operation;
+                text.text = operation;
             if (specification != NULL)
             {
-                text += "(";
-                text += specification;
-                text += ")";
+                text.text += "(";
+                text.text += specification;
+                text.text += ")";
             }
         }
         sockerr (int e, const string &operation): err (e)
         {
-            text = operation;
+            text.text = operation;
         }
         sockerr (const sockerr &O)
         {
@@ -99,7 +107,7 @@ class MY_API sockerr
         }
 
         const char* what () const { return "sockerr"; }
-        const char* operation () const { return text.c_str(); }
+        const char* operation () const { return text.text.c_str(); }
 
 //      int errno () const { return err; }
         int serrno () const { return err; } // LN
@@ -215,7 +223,7 @@ class MY_API sockbuf: public streambuf
         };
 
         sockcnt* rep;  // counts the # refs to sock
-        string        sockname; // name of sockbuf - Herbert Straub
+        StringWrapper        sockname; // name of sockbuf - Herbert Straub
 
 #if 0
         virtual sockbuf*      setbuf (char_type* s, int_type* n);
@@ -369,17 +377,17 @@ extern osockstream& lfcr (osockstream&);
 
 void sockbuf::setname (const char *name)
 {
-    sockname = name;
+    sockname.text = name;
 }
 
 void sockbuf::setname (const string &name)
 {
-    sockname = name;
+    sockname.text = name;
 }
 
 const string& sockbuf::getname ()
 {
-    return sockname;
+    return sockname.text;
 }
 
 #endif    // _SOCKSTREAM_H
