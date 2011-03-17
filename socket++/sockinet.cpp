@@ -36,9 +36,15 @@
 #   include <arpa/inet.h>
 	EXTERN_C_END
 #else
+#ifndef EADDRNOTAVAIL
 # define EADDRNOTAVAIL                WSAEADDRNOTAVAIL
+#endif
+#ifndef EADDRINUSE
 # define EADDRINUSE                        WSAEADDRINUSE
+#endif
+#ifndef ENOPROTOOPT
 #    define ENOPROTOOPT                    WSAENOPROTOOPT
+#endif
 #endif // !WIN32
 
 #ifndef INADDR_NONE

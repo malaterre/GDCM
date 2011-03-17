@@ -12,7 +12,9 @@
 #include <protocol.h>
 
 #ifdef WIN32
+#ifndef EPROTONOSUPPORT
 #	define EPROTONOSUPPORT				WSAEPROTONOSUPPORT
+#endif
 #endif
 
 const char* protocol::protocolbuf::protocol_name () const
