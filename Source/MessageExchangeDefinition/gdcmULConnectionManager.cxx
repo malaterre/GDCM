@@ -199,14 +199,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
         if (*itor == NULL) continue; //can have a nulled pdu, apparently
-        if (Trace::GetDebugToFile())
-          {
-            (*itor)->Print(Trace::GetDebugFile());
-          }
-        else 
-          {
-            (*itor)->Print(std::cout);
-          }
+          (*itor)->Print(Trace::GetStream());
         }
     }
 
@@ -325,14 +318,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
         if (*itor == NULL) continue; //can have a nulled pdu, apparently
-        if (Trace::GetDebugToFile())
-          {
-            (*itor)->Print(Trace::GetDebugFile());
-          }
-        else 
-          {
-            (*itor)->Print(std::cout);
-          }
+        (*itor)->Print(Trace::GetStream());
         }
     }
 
@@ -500,14 +486,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
           if (Trace::GetDebugFlag())
             {
-            if (Trace::GetDebugToFile())
-              {
-                thePDU->Print(Trace::GetDebugFile());
-              }
-            else 
-              {
-                thePDU->Print(std::cout);
-              }
+            thePDU->Print(Trace::GetStream());
             }
           if (thePDU->IsLastFragment()) waitingForEvent = false;
           }
@@ -541,14 +520,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
           if (Trace::GetDebugFlag()){
             Printer thePrinter;
-            if (Trace::GetDebugToFile())
-              {
-              thePrinter.PrintDataSet(theRSP, Trace::GetDebugFile());
-              }
-            else
-              {
-              thePrinter.PrintDataSet(theRSP, std::cout);
-              }
+            thePrinter.PrintDataSet(theRSP, Trace::GetStream());
           }
           if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
             DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
@@ -801,14 +773,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
             gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
             if (Trace::GetDebugFlag())
               {
-              if (Trace::GetDebugToFile())
-                {
-                  theFirstPDU->Print(Trace::GetDebugFile());
-                }
-              else 
-                {
-                  theFirstPDU->Print(std::cout);
-                }
+               theFirstPDU->Print(Trace::GetStream());
               }
 
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
@@ -856,14 +821,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               }
               if (Trace::GetDebugFlag()){
                 Printer thePrinter;
-                if (Trace::GetDebugToFile())
-                  {
-                  thePrinter.PrintDataSet(theRSP, Trace::GetDebugFile());
-                  }
-                else
-                  {
-                  thePrinter.PrintDataSet(theRSP, std::cout);
-                  }
+                thePrinter.PrintDataSet(theRSP, Trace::GetStream());
               }
 
               //check to see if this is a cstorerq
