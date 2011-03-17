@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
 
-  gdcm::DummyValueGenerator dvg;
+//  gdcm::DummyValueGenerator dvg;
 
   const std::size_t len = 10;
   char ss[len];
