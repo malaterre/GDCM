@@ -587,7 +587,7 @@ sockbuf::sockdesc sockbuf::accept (sockAddr& sa)
 {
   socklen_t len = sa.size ();
   int soc = -1;
-  if ((soc = ::accept (rep->sock, sa.addr (),
+  if ((int)(soc = ::accept (rep->sock, sa.addr (),
                        &len)) == -1)
     throw sockerr (errno, "sockbuf::sockdesc", sockname.c_str());
   return sockdesc (soc);
@@ -596,7 +596,7 @@ sockbuf::sockdesc sockbuf::accept (sockAddr& sa)
 sockbuf::sockdesc sockbuf::accept ()
 {
   int soc = -1;
-  if ((soc = ::accept (rep->sock, 0, 0)) == -1)
+  if ((int)(soc = ::accept (rep->sock, 0, 0)) == -1)
     throw sockerr (errno, "sockbuf::sockdesc", sockname.c_str());
   return sockdesc (soc);
 }
@@ -755,7 +755,7 @@ int sockbuf::is_readready (int wp_sec, int wp_usec) const
   tv.tv_sec  = wp_sec;
   tv.tv_usec = wp_usec;
 
-  int ret = select (rep->sock+1, &fds, 0, 0, (wp_sec == -1) ? 0: &tv);
+  int ret = select ((int)(rep->sock)+1, &fds, 0, 0, (wp_sec == -1) ? 0: &tv);
   if (ret == -1) throw sockerr (errno, "sockbuf::is_readready", sockname.c_str());
   return ret;
 }
@@ -770,7 +770,7 @@ int sockbuf::is_writeready (int wp_sec, int wp_usec) const
   tv.tv_sec  = wp_sec;
   tv.tv_usec = wp_usec;
 
-  int ret = select (rep->sock+1, 0, &fds, 0, (wp_sec == -1) ? 0: &tv);
+  int ret = select ((int)(rep->sock)+1, 0, &fds, 0, (wp_sec == -1) ? 0: &tv);
   if (ret == -1) throw sockerr (errno, "sockbuf::is_writeready", sockname.c_str());
   return ret;
 }
@@ -785,7 +785,7 @@ int sockbuf::is_exceptionpending (int wp_sec, int wp_usec) const
   tv.tv_sec = wp_sec;
   tv.tv_usec = wp_usec;
 
-  int ret = select (rep->sock+1, 0, 0, &fds, (wp_sec == -1) ? 0: &tv);
+  int ret = select ((int)(rep->sock)+1, 0, 0, &fds, (wp_sec == -1) ? 0: &tv);
   if (ret == -1) throw sockerr (errno, "sockbuf::is_exceptionpending", sockname.c_str());
   return ret;
 }
