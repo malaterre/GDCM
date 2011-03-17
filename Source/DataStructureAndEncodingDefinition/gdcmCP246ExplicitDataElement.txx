@@ -76,7 +76,7 @@ std::istream &CP246ExplicitDataElement::ReadPreValue(std::istream &is)
       return is;
       }
     }
-  catch( std::exception &ex )
+  catch( std::exception & )
     {
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
     // assert( TagField == Tag(0xfffe, 0xe000) );
@@ -149,7 +149,7 @@ std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
           assert(0);
           }
         }
-      catch( std::exception &ex)
+      catch( std::exception &)
         {
         // Must be one of those non-cp246 file...
         // but for some reason seekg back to previous offset + Read
@@ -195,7 +195,7 @@ std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
         assert(0 && "Should not happen");
         }
       }
-    catch( std::exception &ex )
+    catch( std::exception & )
       {
       ValueLengthField = ValueField->GetLength();
       }

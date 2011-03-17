@@ -42,7 +42,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       {
       std::cerr << "Missing lossy flag for: " << filename << std::endl;
       }
-    if( img.IsLossy() != reflossy )
+    if( img.IsLossy() != (reflossy > 0 ? true : false)  )//vs10 has a stupid bool/int cast warning
       {
       std::cerr << "Inconsistency for lossy flag for: " << filename << std::endl;
       return 1;

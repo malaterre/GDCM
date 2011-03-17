@@ -55,7 +55,7 @@ int TestDirectory(int argc, char *argv[])
     bool recursive = false;
     if ( argc > 2 )
       {
-      recursive = atoi(argv[2]);
+      recursive = (atoi(argv[2]) > 0 ? true : false);
       }
     res += TestOneDirectory( argv[1], recursive);
     }
