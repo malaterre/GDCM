@@ -686,7 +686,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       // This should be at most the \0 padding
       //gdcmWarningMacro( "RLE Header says: " << frame.Header.Offset[i] <<
       //   " when it should says: " << pos << std::endl );
-      uint32_t check = frame.Header.Offset[i] - pos;//should it be a streampos or a uint32? mmr
+      std::streamoff check = frame.Header.Offset[i] - pos;//should it be a streampos or a uint32? mmr
       // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
       assert( check == 1 || check == 2);
       (void)check; //warning removal

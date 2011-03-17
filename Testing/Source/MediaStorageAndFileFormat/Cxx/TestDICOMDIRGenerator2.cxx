@@ -46,7 +46,7 @@ int TestDICOMDIRGenerator2(int argc, char *argv[])
     gdcm::System::MakeDirectory( outtmpdir.c_str() );
     }
 
-  nfiles = dir.Load(directory, recursive);
+  nfiles = dir.Load(directory, (recursive > 0 ? true : false));
 
   gdcm::FilenameGenerator fg;
   const char pattern[] = "FILE%03d";

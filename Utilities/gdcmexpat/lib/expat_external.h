@@ -59,7 +59,7 @@
 
 #ifdef XML_USE_MSC_EXTENSIONS
 #ifdef gdcmexpat_EXPORTS
-#define XMLIMPORT __declspec(dllimport)
+#define XMLIMPORT __declspec(dllexport)
 #else
 #ifndef XML_BUILDING_EXPAT
 #define XMLIMPORT __declspec(dllimport)

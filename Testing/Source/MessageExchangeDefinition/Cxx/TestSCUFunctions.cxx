@@ -107,8 +107,7 @@ int TestSCUFunctions(int argc, char *argv[])
   std::string outputDir = tmpdir; //place to where data is returned by cmove
   //std::string inputDir = gdcm::Testing::GetDataRoot(); //input collection of data to transfer
 
-  gdcm::CompositeNetworkFunctions theNetworkFunctions;
-  bool didItWork = theNetworkFunctions.CEcho( remote.c_str(), portno,
+  bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( remote.c_str(), portno,
     aetitle.c_str(), call.c_str() );
 
   if (!didItWork)
@@ -155,7 +154,7 @@ int TestSCUFunctions(int argc, char *argv[])
 
 
   //store the datasets remotely
-  didItWork = theNetworkFunctions.CStore(remote.c_str(), portno, theFilenames,
+  didItWork = gdcm::CompositeNetworkFunctions::CStore(remote.c_str(), portno, theFilenames,
     aetitle.c_str(), call.c_str());
 
   if (!didItWork)
@@ -209,10 +208,10 @@ int TestSCUFunctions(int argc, char *argv[])
     keys.push_back(std::make_pair(theIDTag, theEmptyString));
 
     gdcm::BaseRootQuery *theQuery =
-      theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys);
+      gdcm::CompositeNetworkFunctions::ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys);
 
     std::vector<gdcm::DataSet> theDataSets;
-    bool b = theNetworkFunctions.CFind(remote.c_str(), portno, theQuery, theDataSets, aetitle.c_str(), call.c_str());
+    bool b = gdcm::CompositeNetworkFunctions::CFind(remote.c_str(), portno, theQuery, theDataSets, aetitle.c_str(), call.c_str());
 
     delete theQuery;
     if( !b )
@@ -263,8 +262,8 @@ int TestSCUFunctions(int argc, char *argv[])
       return 1;
       }
 
-    theQuery = theNetworkFunctions.ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, true);
-    didItWork = theNetworkFunctions.CMove(remote.c_str(), portno, theQuery,
+    theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, true);
+    didItWork = gdcm::CompositeNetworkFunctions::CMove(remote.c_str(), portno, theQuery,
       moveReturnPort, aetitle.c_str(), call.c_str(), outputDir.c_str() );
     if ( !didItWork )
       {
