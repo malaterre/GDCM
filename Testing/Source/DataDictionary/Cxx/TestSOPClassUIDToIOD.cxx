@@ -17,7 +17,6 @@
 
 int TestSOPClassUIDToIOD(int, char *[])
 {
-  gdcm::SOPClassUIDToIOD sop2iod;
 
   gdcm::SOPClassUIDToIOD::SOPClassUIDToIODType& s = gdcm::SOPClassUIDToIOD::GetSOPClassUIDToIOD(0);
   std::cout << s[0] << std::endl;
