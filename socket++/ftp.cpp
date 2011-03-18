@@ -18,7 +18,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #else
+#ifndef EADDRNOTAVAIL
 # define EADDRNOTAVAIL                WSAEADDRNOTAVAIL
+#endif
 #endif
 #include <string.h>
 #include <stdio.h> // for sprintf
@@ -85,7 +87,7 @@ ftp::replycodea ftp::ftpbuf::ftpdata (int portno, istream* i, ostream* o,
 
     // read data from c and put it in o
     char buf [1024];
-    int  rdsz;
+    std::streamsize  rdsz;
 
     while ((rdsz = c.sgetn (buf, 1024)) != EOF)
       o->write (buf, rdsz);
@@ -94,7 +96,7 @@ ftp::replycodea ftp::ftpbuf::ftpdata (int portno, istream* i, ostream* o,
 
     // read data from i and send it to c
     char buf [1024];
-    int  rdsz;
+    std::streamsize  rdsz;
     streambuf* rb = i->rdbuf ();
 
     while ((rdsz = rb->sgetn (buf, 1024)) > 0) {
