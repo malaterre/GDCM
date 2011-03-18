@@ -48,8 +48,7 @@ void PixmapWriter::DoIconImage(DataSet & rootds, Pixmap const & image)
     //DataElement iconimagesq = rootds.GetDataElement( ticonimage );
     //iconimagesq.SetTag( ticonimage );
     DataElement iconimagesq;
-    Attribute<0x0088,0x0200> iiat;
-    iconimagesq.SetTag( iiat.GetTag() );
+    iconimagesq.SetTag( Attribute<0x0088,0x0200>::GetTag() );
     iconimagesq.SetVR( VR::SQ );
     SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
     sq->SetLengthToUndefined();

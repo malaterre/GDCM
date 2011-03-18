@@ -307,7 +307,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
       {
       F->GetHeader().GetPreamble().Read( is );
       }
-    catch( std::exception &ex )
+    catch( std::exception & )
       {
       // return to beginning of file, hopefully this file is simply missing preamble
       is.clear();
@@ -353,7 +353,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
         F->GetHeader().ReadCompat(is);
         }
       }
-    catch( std::exception &ex )
+    catch( std::exception & )
       {
       // Same player play again:
       is.seekg(0, std::ios::beg );
@@ -432,7 +432,9 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           std::streampos start = is.tellg();
           is.seekg( 0, std::ios::end);
           std::streampos end = is.tellg();
-          VL l = (VL)(end - start);
+		  std::streamoff theOffset = end-start;
+		  assert (theOffset > 0 || theOffset < std::numeric_limits<uint32_t>::max());
+          VL l = (uint32_t)(theOffset);
           is.seekg( start, std::ios::beg );
           //F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
           caller.template ReadCommonWithLength<ImplicitDataElement,SwapperNoOp>(is,l);
@@ -549,7 +551,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           caller.template ReadCommon<VR16ExplicitDataElement,SwapperNoOp>(is);
           // This file can only be rewritten as implicit...
           }
-        catch ( Exception &ex1 )
+        catch ( Exception & )
           {
           try
             {
