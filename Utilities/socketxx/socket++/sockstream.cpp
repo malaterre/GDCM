@@ -415,7 +415,7 @@ sockbuf::~sockbuf ()
     delete rep;
     if (c == SOCKET_ERROR)
 #if defined(__CYGWIN__) || !defined(WIN32)
-    throw sockerr (errno, "sockbuf::~sockbuf", sockname.c_str());
+    throw sockerr (errno, "sockbuf::~sockbuf", sockname.text.c_str());
 #else
     throw sockerr(WSAGetLastError(), "sockbuf::~sockbuf", sockname.text.c_str());
 #endif
@@ -708,13 +708,13 @@ int sockbuf::sendto (sockAddr& sa, const void* buf, int len, int msgf)
 int sockbuf::recvmsg (msghdr* msg, int msgf)
 {
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0)
-    throw sockerr (ETIMEDOUT, "sockbuf::recvmsg", sockname.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::recvmsg", sockname.text.c_str());
 
   if (rep->oob && atmark ())
     throw sockoob ();
 
   int rval = ::recvmsg(rep->sock, msg, msgf);
-  if (rval == -1) throw sockerr (errno, "sockbuf::recvmsg", sockname.c_str());
+  if (rval == -1) throw sockerr (errno, "sockbuf::recvmsg", sockname.text.c_str());
   return rval;
 }
 
@@ -723,7 +723,7 @@ int sockbuf::sendmsg (msghdr* msg, int msgf)
 // of sockerr.
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
-    throw sockerr (ETIMEDOUT, "sockbuf::sendmsg", sockname.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::sendmsg", sockname.text.c_str());
 
   int wlen = ::sendmsg (rep->sock, msg, msgf);
   if (wlen == -1) throw 0;
@@ -992,7 +992,7 @@ bool sockbuf::atmark () const
 #if !defined(WIN32) || defined(__CYGWIN__)
   int arg;
   if (::ioctl (rep->sock, SIOCATMARK, &arg) == -1)
-    throw sockerr (errno, "sockbuf::atmark", sockname.c_str());
+    throw sockerr (errno, "sockbuf::atmark", sockname.text.c_str());
 #else
   unsigned long arg = 0;
   if (::ioctlsocket(rep->sock, SIOCATMARK, &arg) == SOCKET_ERROR)
@@ -1009,7 +1009,7 @@ int sockbuf::pgrp () const
 {
   int arg;
   if (::ioctl (rep->sock, SIOCGPGRP, &arg) == -1)
-    throw sockerr (errno, "sockbuf::pgrp", sockname.c_str());
+    throw sockerr (errno, "sockbuf::pgrp", sockname.text.c_str());
   return arg;
 }
 
@@ -1019,7 +1019,7 @@ int sockbuf::pgrp (int new_pgrp) const
 {
   int old = pgrp ();
   if (::ioctl (rep->sock, SIOCSPGRP, &new_pgrp) == -1)
-    throw sockerr (errno, "sockbuf::pgrp", sockname.c_str());
+    throw sockerr (errno, "sockbuf::pgrp", sockname.text.c_str());
   return old;
 }
 
@@ -1030,10 +1030,10 @@ void sockbuf::closeonexec (bool set) const
 #if !defined( __sgi) && !defined(__hpux)
   if (set) {
     if (::ioctl (rep->sock, FIOCLEX, 0) == -1)
-      throw sockerr (errno, "sockbuf::closeonexec", sockname.c_str());
+      throw sockerr (errno, "sockbuf::closeonexec", sockname.text.c_str());
   } else {
     if (::ioctl (rep->sock, FIONCLEX, 0) == -1)
-      throw sockerr (errno, "sockbuf::closeonexec", sockname.c_str());
+      throw sockerr (errno, "sockbuf::closeonexec", sockname.text.c_str());
   }
 #endif
 }
@@ -1046,7 +1046,7 @@ long sockbuf::nread () const
   long arg;
 #if defined(__CYGWIN__) || !defined(WIN32)
   if (::ioctl (rep->sock, FIONREAD, &arg) == -1)
-    throw sockerr (errno, "sockbuf::nread", sockname.c_str());
+    throw sockerr (errno, "sockbuf::nread", sockname.text.c_str());
 #else
   if (::ioctlsocket (rep->sock, FIONREAD, (unsigned long *) &arg) == SOCKET_ERROR)
     throw sockerr (WSAGetLastError(), "sockbuf::nread", sockname.text.c_str());
@@ -1070,7 +1070,7 @@ void sockbuf::nbio (bool set) const
 #if defined(__CYGWIN__) || !defined(WIN32)
   int arg = set;
   if (::ioctl (rep->sock, FIONBIO, &arg) == -1)
-    throw sockerr (errno, "sockbuf::nbio", sockname.c_str());
+    throw sockerr (errno, "sockbuf::nbio", sockname.text.c_str());
 #else
   unsigned long arg = (set)?1:0;
   if (::ioctlsocket (rep->sock, FIONBIO, &arg) == -1)
@@ -1085,7 +1085,7 @@ void sockbuf::async (bool set) const
 {
   int arg = set;
   if (::ioctl (rep->sock, FIOASYNC, &arg) == -1)
-    throw sockerr (errno, "sockbuf::async", sockname.c_str());
+    throw sockerr (errno, "sockbuf::async", sockname.text.c_str());
 }
 #endif // !WIN32
 
