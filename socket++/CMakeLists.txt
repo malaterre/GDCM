@@ -47,12 +47,12 @@ INCLUDE_DIRECTORIES(
 SET(libsocket___la_SOURCES
   sockstream.cpp sockstream.h
   sockinet.cpp sockinet.h
-  #pipestream.cpp pipestream.h
-  #fork.cpp fork.h
+  pipestream.cpp pipestream.h
+  fork.cpp fork.h
   protocol.cpp protocol.h
   echo.cpp echo.h
-  #smtp.cpp smtp.h
-  #ftp.cpp ftp.h
+  smtp.cpp smtp.h
+  ftp.cpp ftp.h
   #sig.cpp sig.h
   )
 

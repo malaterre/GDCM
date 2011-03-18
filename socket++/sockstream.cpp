@@ -63,126 +63,48 @@ extern "C" {
 #   if (_MSC_VER >= 1400)
 #      include <errno.h>
 #   endif
-#ifndef EWOULDBLOCK
 #   define EWOULDBLOCK          WSAEWOULDBLOCK
-#endif
-#ifndef EINPROGRESS
 #   define EINPROGRESS          WSAEINPROGRESS
-#endif
-#ifndef EALREADY
 #   define EALREADY             WSAEALREADY
-#endif
-#ifndef ENOTSOCK
 #   define ENOTSOCK             WSAENOTSOCK
-#endif
-#ifndef EDESTADDRREQ
 #   define EDESTADDRREQ         WSAEDESTADDRREQ
-#endif
-#ifndef EMSGSIZE
 #   define EMSGSIZE             WSAEMSGSIZE
-#endif
-#ifndef EPROTOTYPE
 #   define EPROTOTYPE           WSAEPROTOTYPE
-#endif
-#ifndef ENOPROTOOPT
 #   define ENOPROTOOPT          WSAENOPROTOOPT
-#endif
-#ifndef EPROTONOSUPPORT
 #   define EPROTONOSUPPORT      WSAEPROTONOSUPPORT
-#endif
-#ifndef ESOCKTNOSUPPORT
 #   define ESOCKTNOSUPPORT      WSAESOCKTNOSUPPORT
-#endif
-#ifndef EOPNOTSUPP
 #   define EOPNOTSUPP           WSAEOPNOTSUPP
-#endif
-#ifndef EPFNOSUPPORT
 #   define EPFNOSUPPORT         WSAEPFNOSUPPORT
-#endif
-#ifndef EAFNOSUPPORT
 #   define EAFNOSUPPORT         WSAEAFNOSUPPORT
-#endif
-#ifndef EADDRINUSE
 #   define EADDRINUSE           WSAEADDRINUSE
-#endif
-#ifndef EADDRNOTAVAIL
 #   define EADDRNOTAVAIL        WSAEADDRNOTAVAIL
-#endif
-#ifndef ENETDOWN
 #   define ENETDOWN             WSAENETDOWN
-#endif
-#ifndef ENETUNREACH
 #   define ENETUNREACH          WSAENETUNREACH
-#endif
-#ifndef ENETRESET
 #   define ENETRESET            WSAENETRESET
-#endif
-#ifndef ECONNABORTED
 #   define ECONNABORTED         WSAECONNABORTED
-#endif
-#ifndef ECONNRESET
 #   define ECONNRESET           WSAECONNRESET
-#endif
-#ifndef ENOBUFS
 #   define ENOBUFS              WSAENOBUFS
-#endif
-#ifndef EISCONN
 #   define EISCONN              WSAEISCONN
-#endif
-#ifndef ENOTCONN
 #   define ENOTCONN             WSAENOTCONN
-#endif
-#ifndef ESHUTDOWN
 #   define ESHUTDOWN            WSAESHUTDOWN
-#endif
-#ifndef ETOOMANYREFS
 #   define ETOOMANYREFS         WSAETOOMANYREFS
-#endif
-#ifndef ETIMEDOUT
 #   define ETIMEDOUT            WSAETIMEDOUT
-#endif
-#ifndef ECONNREFUSED
 #   define ECONNREFUSED         WSAECONNREFUSED
-#endif
-#ifndef ELOOP
 #   define ELOOP                WSAELOOP
-#endif
-#ifndef EHOSTDOWN
 #   define EHOSTDOWN            WSAEHOSTDOWN
-#endif
-#ifndef EHOSTUNREACH
 #   define EHOSTUNREACH         WSAEHOSTUNREACH
-#endif
-#ifndef EPROCLIM
 #   define EPROCLIM             WSAEPROCLIM
-#endif
-#ifndef EUSERS
 #   define EUSERS               WSAEUSERS
-#endif
-#ifndef EDQUOT
 #   define EDQUOT               WSAEDQUOT
-#endif
-#ifndef EISCONN
 #   define EISCONN              WSAEISCONN
-#endif
-#ifndef ENOTCONN
 #   define ENOTCONN             WSAENOTCONN
-#endif
-#ifndef ECONNRESET
 #   define ECONNRESET           WSAECONNRESET
-#endif
-#ifndef ECONNREFUSED
 #   define ECONNREFUSED         WSAECONNREFUSED
-#endif
-#ifndef ETIMEDOUT
 #   define ETIMEDOUT            WSAETIMEDOUT
-#endif
-#ifndef EADDRINUSE
 #   define EADDRINUSE           WSAEADDRINUSE
-#endif
-#ifndef EADDRNOTAVAIL
 #   define EADDRNOTAVAIL        WSAEADDRNOTAVAIL
-#endif
+#   define EWOULDBLOCK          WSAEWOULDBLOCK
+
 
 #endif // !WIN32
 
@@ -492,15 +414,15 @@ sockbuf::int_type sockbuf::uflow ()
 
 streamsize sockbuf::xsgetn (char_type* s, streamsize n)
 {
-  std::streamsize rval = showmanyc ();
+  int rval = showmanyc ();
   if (rval >= n) {
-    memcpy (s, gptr (), (size_t)(n * sizeof (char_type)));
-    gbump ((int)n);
+    memcpy (s, gptr (), n * sizeof (char_type));
+    gbump (n);
     return n;
   }
 
-  memcpy (s, gptr (), (size_t)(rval * sizeof (char_type)));
-  gbump ((int)rval);
+  memcpy (s, gptr (), rval * sizeof (char_type));
+  gbump (rval);
 
   if (underflow () != eof)
     return rval + xsgetn (s + rval, n - rval);
@@ -535,15 +457,15 @@ sockbuf::int_type sockbuf::overflow (sockbuf::int_type c)
 
 streamsize sockbuf::xsputn (const char_type* s, streamsize n)
 {
-  std::streamsize wval = epptr () - pptr ();
+  int wval = epptr () - pptr ();
   if (n <= wval) {
-    memcpy (pptr (), s, (size_t)(n * sizeof (char_type)));
-    pbump ((int)n);
+    memcpy (pptr (), s, n * sizeof (char_type));
+    pbump (n);
     return n;
   }
 
-  memcpy (pptr (), s, (size_t)(wval * sizeof (char_type)));
-  pbump ((int)wval);
+  memcpy (pptr (), s, wval * sizeof (char_type));
+  pbump (wval);
 
   if (overflow () != eof)
     return wval + xsputn (s + wval, n - wval);
