@@ -417,7 +417,7 @@ sockbuf::~sockbuf ()
 #if defined(__CYGWIN__) || !defined(WIN32)
     throw sockerr (errno, "sockbuf::~sockbuf", sockname.c_str());
 #else
-    throw sockerr(WSAGetLastError(), "sockbuf::~sockbuf", sockname.text.c_str());
+    throw sockerr(WSAGetLastError(), "sockbuf::~sockbuf", sockname.c_str());
 #endif
   }
 }
@@ -444,7 +444,7 @@ int sockbuf::sync ()
             // write was not completely successful
             stringstream sb;
             string err ("sockbuf::sync");
-            err += "(" + sockname.text + ")";
+            err += "(" + sockname + ")";
             if (wlen) {
                 // reposition unwritten chars
                 char* pto = pbase ();
@@ -568,19 +568,19 @@ streamsize sockbuf::xsputn (const char_type* s, streamsize n)
 void sockbuf::bind (sockAddr& sa)
 {
   if (::bind (rep->sock, sa.addr (), sa.size ()) == -1)
-    throw sockerr (errno, "sockbuf::bind", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::bind", sockname.c_str());
 }
 
 void sockbuf::connect (sockAddr& sa)
 {
   if (::connect(rep->sock, sa.addr (), sa.size()) == -1)
-    throw sockerr (errno, "sockbuf::connect", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::connect", sockname.c_str());
 }
 
 void sockbuf::listen (int num)
 {
   if (::listen (rep->sock, num) == -1)
-    throw sockerr (errno, "sockbuf::listen", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::listen", sockname.c_str());
 }
 
 sockbuf::sockdesc sockbuf::accept (sockAddr& sa)
@@ -589,7 +589,7 @@ sockbuf::sockdesc sockbuf::accept (sockAddr& sa)
   int soc = -1;
   if ((int)(soc = ::accept (rep->sock, sa.addr (),
                        &len)) == -1)
-    throw sockerr (errno, "sockbuf::sockdesc", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::sockdesc", sockname.c_str());
   return sockdesc (soc);
 }
 
@@ -597,14 +597,14 @@ sockbuf::sockdesc sockbuf::accept ()
 {
   int soc = -1;
   if ((int)(soc = ::accept (rep->sock, 0, 0)) == -1)
-    throw sockerr (errno, "sockbuf::sockdesc", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::sockdesc", sockname.c_str());
   return sockdesc (soc);
 }
 
 int sockbuf::read (void* buf, int len)
 {
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0) {
-    throw sockerr (ETIMEDOUT, "sockbuf::read", sockname.text.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::read", sockname.c_str());
   }
 
   if (rep->oob && atmark ())
@@ -613,28 +613,28 @@ int sockbuf::read (void* buf, int len)
   int rval = 0;
   //if ((rval = ::read (rep->sock, (char*) buf, len)) == -1)
   if ((rval = ::recv (rep->sock, (char*) buf, len, 0)) == -1)
-    throw sockerr (errno, "sockbuf::read", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::read", sockname.c_str());
   return rval;
 }
 
 int sockbuf::recv (void* buf, int len, int msgf)
 {
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0)
-    throw sockerr (ETIMEDOUT, "sockbuf::recv", sockname.text.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::recv", sockname.c_str());
 
   if (rep->oob && atmark ())
     throw sockoob ();
 
   int rval = 0;
   if ((rval = ::recv (rep->sock, (char*) buf, len, msgf)) == -1)
-    throw sockerr (errno, "sockbuf::recv", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::recv", sockname.c_str());
   return rval;
 }
 
 int sockbuf::recvfrom (sockAddr& sa, void* buf, int len, int msgf)
 {
   if (rep->rtmo != -1 && is_readready (rep->rtmo)==0)
-    throw sockerr (ETIMEDOUT, "sockbuf::recvfrom", sockname.text.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::recvfrom", sockname.c_str());
 
   if (rep->oob && atmark ())
     throw sockoob ();
@@ -644,7 +644,7 @@ int sockbuf::recvfrom (sockAddr& sa, void* buf, int len, int msgf)
 
   if ((rval = ::recvfrom (rep->sock, (char*) buf, len,
                           msgf, sa.addr (), &__sa_len)) == -1)
-    throw sockerr (errno, "sockbuf::recvfrom", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::recvfrom", sockname.c_str());
   return rval;
 }
 
@@ -653,7 +653,7 @@ int sockbuf::write(const void* buf, int len)
 // of sockerr.
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
-    throw sockerr (ETIMEDOUT, "sockbuf::write", sockname.text.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::write", sockname.c_str());
 
   int wlen=0;
   while(len>0) {
@@ -672,7 +672,7 @@ int sockbuf::send (const void* buf, int len, int msgf)
 // of sockerr.
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
-    throw sockerr (ETIMEDOUT, "sockbuf::send", sockname.text.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::send", sockname.c_str());
 
   int wlen=0;
   while(len>0) {
@@ -689,7 +689,7 @@ int sockbuf::sendto (sockAddr& sa, const void* buf, int len, int msgf)
 // of sockerr.
 {
   if (rep->stmo != -1 && is_writeready (rep->stmo)==0)
-    throw sockerr (ETIMEDOUT, "sockbuf::sendto", sockname.text.c_str());
+    throw sockerr (ETIMEDOUT, "sockbuf::sendto", sockname.c_str());
 
   int wlen=0;
   while(len>0) {
@@ -756,7 +756,7 @@ int sockbuf::is_readready (int wp_sec, int wp_usec) const
   tv.tv_usec = wp_usec;
 
   int ret = select ((int)(rep->sock)+1, &fds, 0, 0, (wp_sec == -1) ? 0: &tv);
-  if (ret == -1) throw sockerr (errno, "sockbuf::is_readready", sockname.text.c_str());
+  if (ret == -1) throw sockerr (errno, "sockbuf::is_readready", sockname.c_str());
   return ret;
 }
 
@@ -771,7 +771,7 @@ int sockbuf::is_writeready (int wp_sec, int wp_usec) const
   tv.tv_usec = wp_usec;
 
   int ret = select ((int)(rep->sock)+1, 0, &fds, 0, (wp_sec == -1) ? 0: &tv);
-  if (ret == -1) throw sockerr (errno, "sockbuf::is_writeready", sockname.text.c_str());
+  if (ret == -1) throw sockerr (errno, "sockbuf::is_writeready", sockname.c_str());
   return ret;
 }
 
@@ -786,7 +786,7 @@ int sockbuf::is_exceptionpending (int wp_sec, int wp_usec) const
   tv.tv_usec = wp_usec;
 
   int ret = select ((int)(rep->sock)+1, 0, 0, &fds, (wp_sec == -1) ? 0: &tv);
-  if (ret == -1) throw sockerr (errno, "sockbuf::is_exceptionpending", sockname.text.c_str());
+  if (ret == -1) throw sockerr (errno, "sockbuf::is_exceptionpending", sockname.c_str());
   return ret;
 }
 
@@ -806,21 +806,21 @@ void sockbuf::shutdown (shuthow sh)
     shutdown (shut_write);
     break;
   }
-  if (::shutdown(rep->sock, sh) == -1) throw sockerr (errno, "sockbuf::shutdown", sockname.text.c_str());
+  if (::shutdown(rep->sock, sh) == -1) throw sockerr (errno, "sockbuf::shutdown", sockname.c_str());
 }
 
 int sockbuf::getopt (int op, void* buf, int len, int level) const
 {
   socklen_t salen = len;
   if (::getsockopt (rep->sock, level, op, (char*) buf, &salen) == -1)
-    throw sockerr (errno, "sockbuf::getopt", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::getopt", sockname.c_str());
   return len;
 }
 
 void sockbuf::setopt (int op, void* buf, int len, int level) const
 {
   if (::setsockopt (rep->sock, level, op, (char*) buf, len) == -1)
-    throw sockerr (errno, "sockbuf::setopt", sockname.text.c_str());
+    throw sockerr (errno, "sockbuf::setopt", sockname.c_str());
 }
 
 sockbuf::type sockbuf::gettype () const
@@ -996,7 +996,7 @@ bool sockbuf::atmark () const
 #else
   unsigned long arg = 0;
   if (::ioctlsocket(rep->sock, SIOCATMARK, &arg) == SOCKET_ERROR)
-    throw sockerr (WSAGetLastError(), "sockbuf::atmark", sockname.text.c_str());
+    throw sockerr (WSAGetLastError(), "sockbuf::atmark", sockname.c_str());
 #endif // !WIN32
   return arg!=0;
 }
@@ -1049,7 +1049,7 @@ long sockbuf::nread () const
     throw sockerr (errno, "sockbuf::nread", sockname.c_str());
 #else
   if (::ioctlsocket (rep->sock, FIONREAD, (unsigned long *) &arg) == SOCKET_ERROR)
-    throw sockerr (WSAGetLastError(), "sockbuf::nread", sockname.text.c_str());
+    throw sockerr (WSAGetLastError(), "sockbuf::nread", sockname.c_str());
 #endif // !WIN32
   return arg;
 }
@@ -1074,7 +1074,7 @@ void sockbuf::nbio (bool set) const
 #else
   unsigned long arg = (set)?1:0;
   if (::ioctlsocket (rep->sock, FIONBIO, &arg) == -1)
-    throw sockerr (WSAGetLastError(), "sockbuf::nbio", sockname.text.c_str());
+    throw sockerr (WSAGetLastError(), "sockbuf::nbio", sockname.c_str());
 #endif // !WIN32
 }
 
