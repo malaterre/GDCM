@@ -117,8 +117,10 @@ void Swap4(T &a, SwapCode const &swapcode)
 #endif
 }
 
+//note: according to http://www.parashift.com/c++-faq-lite/templates.html#faq-35.8
+//the inlining of the template class means that the specialization doesn't cause linker errors
 template<class T>
-void Swap8(T &a, SwapCode const &swapcode)
+void inline Swap8(T &a, SwapCode const &swapcode)
 {
   switch (swapcode)
     {
@@ -133,7 +135,7 @@ void Swap8(T &a, SwapCode const &swapcode)
 #endif
     break;
   case 4321 :
-#ifndef GDCM_WORDS_BIGENDIAN
+#ifdef GDCM_WORDS_BIGENDIAN
     a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
 #endif
     break;
@@ -142,6 +144,37 @@ void Swap8(T &a, SwapCode const &swapcode)
     break;
   case 2143 :
     a= (((a<< 8) & 0xff00ff00) | ((a>>8) & 0x00ff00ff) );
+    break;
+  default :
+    std::cerr << "Unexpected swap code:" << swapcode;
+    }
+}
+
+template <>
+void inline Swap8<uint16_t>(uint16_t &a, SwapCode const &swapcode)
+{
+  switch (swapcode)
+    {
+  case SwapCode::Unknown:
+#ifdef GDCM_WORDS_BIGENDIAN
+    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+#endif
+    break;
+  case 1234 :
+#ifdef GDCM_WORDS_BIGENDIAN
+    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+#endif
+    break;
+  case 4321 :
+#ifdef GDCM_WORDS_BIGENDIAN
+    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+#endif
+    break;
+  case 3412 :
+    //a= ((a<<16) | (a>>16)  );//do nothing, a = a
+    break;
+  case 2143 :
+    a= (((a<< 8) & 0xff00) | ((a>>8) & 0x00ff) );
     break;
   default :
     std::cerr << "Unexpected swap code:" << swapcode;

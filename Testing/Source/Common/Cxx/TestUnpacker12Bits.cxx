@@ -33,8 +33,7 @@ int TestUnpacker12Bits(int, char *[])
   //const size_t len = sizeof(values) / sizeof(*values);
   const size_t outlen = 16 * len / 12;
   char * output = new char[outlen];
-  gdcm::Unpacker12Bits u12;
-  bool b = u12.Unpack(output, values, len);
+  bool b = gdcm::Unpacker12Bits::Unpack(output, values, len);
   if( b )
     {
     std::set<short> out;
@@ -71,8 +70,7 @@ int TestUnpacker12Bits(int, char *[])
   const size_t len = sizeof(values) / sizeof(*values);
   const size_t outlen = 16 * len / 12;
   char * output = new char[outlen];
-  gdcm::Unpacker12Bits u12;
-  bool b = u12.Unpack(output, (char*)values, len);
+  bool b = gdcm::Unpacker12Bits::Unpack(output, (char*)values, len);
   if (!b) res = 1;
   if( b )
     {
@@ -93,10 +91,9 @@ int TestUnpacker12Bits(int, char *[])
 
 {
   const unsigned short input[] = { 0x301, 0x452, 0x967, 0xab8 };
-  gdcm::Unpacker12Bits u12;
   unsigned char values[6] = {};
   const unsigned char ref[] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab };
-  bool b = u12.Pack((char*)values, (char*)input, 8); // 4 * sizeof(us) == 8
+  bool b = gdcm::Unpacker12Bits::Pack((char*)values, (char*)input, 8); // 4 * sizeof(us) == 8
   if(!b)
     {
     return 1;
@@ -119,12 +116,11 @@ int TestUnpacker12Bits(int, char *[])
     }
   assert( v.size() == 4096 );
   assert( v[0] == 0 );
-  gdcm::Unpacker12Bits u12;
   const size_t outsize = 4096 / 2 * 3;
   unsigned char outvalues[outsize] = {};
-  u12.Pack( (char*)outvalues, (char*)&v[0], 4096 * sizeof(unsigned short) );
+  gdcm::Unpacker12Bits::Pack( (char*)outvalues, (char*)&v[0], 4096 * sizeof(unsigned short) );
   unsigned short outvalues2[4096] = {};
-  u12.Unpack( (char*)outvalues2, (char*)outvalues, outsize);
+  gdcm::Unpacker12Bits::Unpack( (char*)outvalues2, (char*)outvalues, outsize);
 
   for(uint16_t val = 0; val < 4096; ++val)
     {

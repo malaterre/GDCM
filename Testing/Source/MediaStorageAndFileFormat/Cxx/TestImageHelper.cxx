@@ -19,7 +19,7 @@
 
 int TestImageHelper(int, char *[])
 {
-  gdcm::ImageHelper sh;
+//  gdcm::ImageHelper sh;
   const double pos[] = { 0,0,0,
                          1,1,1};
   const double answer[3] = {1,1,1};

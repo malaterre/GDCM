@@ -519,7 +519,6 @@ int main(int argc, char *argv[])
     }
   
   //this class contains the networking calls
-  gdcm::CompositeNetworkFunctions theNetworkFunctions;
   
   if ( mode == "server" ) // C-STORE SCP
     {
@@ -531,7 +530,7 @@ int main(int argc, char *argv[])
     {
     // ./bin/gdcmscu mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
-    bool didItWork = theNetworkFunctions.CEcho( hostname, port,
+    bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( hostname, port,
       callingaetitle.c_str(), callaetitle.c_str() );
     if (!didItWork)
       {
@@ -558,7 +557,7 @@ int main(int argc, char *argv[])
     if (imagequery)
       theLevel = gdcm::eImageOrFrame;
     
-    gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(theRoot, theLevel, keys, true);
+    gdcm::BaseRootQuery* theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel, keys, true);
     
     if (findstudyroot == 0 && findpatientroot == 0)
     {
@@ -601,7 +600,7 @@ int main(int argc, char *argv[])
     //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
     //across, rather than all at once at the end.  Turn off the boolean to have
     //it written all at once at the end.
-    bool didItWork = theNetworkFunctions.CMove( hostname, port,
+    bool didItWork = gdcm::CompositeNetworkFunctions::CMove( hostname, port,
       theQuery, portscpnum,
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
     delete theQuery;
@@ -636,7 +635,7 @@ int main(int argc, char *argv[])
       theLevel = gdcm::eImageOrFrame;
     
     gdcm::BaseRootQuery* theQuery = 
-      theNetworkFunctions.ConstructQuery(theRoot, theLevel ,keys);
+      gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if (findstudyroot == 0 && findpatientroot == 0)
     {
       if (gdcm::Trace::GetErrorFlag())
@@ -672,7 +671,7 @@ int main(int argc, char *argv[])
     }//must ensure that 0x8,0x52 is set and that
     //the value in that tag corresponds to the query type
     std::vector<gdcm::DataSet> theDataSet;
-    if( !theNetworkFunctions.CFind(hostname, port, theQuery, theDataSet,
+    if( !gdcm::CompositeNetworkFunctions::CFind(hostname, port, theQuery, theDataSet,
         callingaetitle.c_str(), callaetitle.c_str()) )
       {
       std::cerr << "Problem in CFind." << std::endl;
@@ -711,7 +710,7 @@ int main(int argc, char *argv[])
         }
       }
     bool didItWork = 
-      theNetworkFunctions.CStore(hostname, port, thefiles,
+      gdcm::CompositeNetworkFunctions::CStore(hostname, port, thefiles,
         callingaetitle.c_str(), callaetitle.c_str());
 
     if (didItWork)
