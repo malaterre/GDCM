@@ -387,7 +387,7 @@ bool VR::IsValid(const char *vr1, VRType vr2)
 {
   assert( strlen(vr1) == 2 );
   VR::VRType vr = GetVRType(vr1);
-  return ((vr & vr2) > 0 ? true : false);
+  return (bool)(vr & vr2);
 }
 
 bool VR::IsSwap(const char *vr)
@@ -529,7 +529,7 @@ bool VR::Compatible(VR const &vr) const
   //if( VRField == VR::INVALID && vr.VRField == VR::INVALID ) return true;
   if( vr.VRField == VR::INVALID ) return true;
   else if( vr.VRField == VR::UN ) return true;
-  else return ((VRField & vr.VRField) > 0 ? true : false);
+  else return VRField & vr.VRField;
 }
 
 bool VR::IsDual() const

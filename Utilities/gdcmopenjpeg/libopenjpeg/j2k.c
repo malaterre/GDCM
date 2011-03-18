@@ -9335,7 +9335,7 @@ bool j2k_set_decode_area(
 }
 
 void j2k_dump_image(FILE *fd, opj_image_t * img) {
-  OPJ_UINT32 compno; // to avoid signed/unsigned mismatch
+  int compno;
   fprintf(fd, "image {\n");
   fprintf(fd, "  x0=%d, y0=%d, x1=%d, y1=%d\n", img->x0, img->y0, img->x1, img->y1);
   fprintf(fd, "  numcomps=%d\n", img->numcomps);

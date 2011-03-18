@@ -805,14 +805,14 @@ int main (int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
-  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
-  gdcm::Trace::SetError(  (error  > 0 ? true : false));
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
-    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
@@ -947,7 +947,7 @@ int main (int argc, char *argv[])
     if( explicitts || deflated )
       {
       gdcm::FileExplicitFilter fef;
-      fef.SetChangePrivateTags( (changeprivatetags > 0 ? true: false));
+      fef.SetChangePrivateTags( changeprivatetags );
       fef.SetFile( reader.GetFile() );
       if( !fef.Change() )
         {
@@ -980,7 +980,7 @@ int main (int argc, char *argv[])
     gdcm::ImageFragmentSplitter splitter;
     splitter.SetInput( image );
     splitter.SetFragmentSizeMax( fragmentsize );
-    splitter.SetForce( (force > 0 ? true: false));
+    splitter.SetForce( force );
     bool b = splitter.Split();
     if( !b )
       {
@@ -1086,8 +1086,8 @@ int main (int argc, char *argv[])
     gdcm::JPEGCodec jpegcodec;
     gdcm::JPEGLSCodec jpeglscodec;
     gdcm::ImageChangeTransferSyntax change;
-    change.SetForce( (force > 0 ? true: false));
-    change.SetCompressIconImage( (compressicon > 0 ? true: false));
+    change.SetForce( force );
+    change.SetCompressIconImage( compressicon );
     if( jpeg )
       {
       if( lossy )
@@ -1246,7 +1246,7 @@ int main (int argc, char *argv[])
     if( usedict /*ts.IsImplicit()*/ )
       {
       gdcm::FileExplicitFilter fef;
-      fef.SetChangePrivateTags( (changeprivatetags > 0 ? true : false));
+      fef.SetChangePrivateTags( changeprivatetags );
       fef.SetFile( reader.GetFile() );
       if(!fef.Change())
         {
@@ -1397,7 +1397,7 @@ int main (int argc, char *argv[])
 
     gdcm::Writer writer;
     writer.SetFileName( outfilename.c_str() );
-    writer.SetCheckFileMetaInformation( (checkmeta > 0 ? true : false));
+    writer.SetCheckFileMetaInformation( checkmeta );
     //writer.SetFile( f );
     writer.SetFile( reader.GetFile() );
     if( !writer.Write() )

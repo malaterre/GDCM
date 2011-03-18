@@ -91,7 +91,7 @@ std::istream &VR16ExplicitDataElement::ReadPreValue(std::istream &is)
       return is;
       }
     }
-  catch( Exception & )
+  catch( Exception &ex )
     {
     VRField = VR::INVALID;
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
@@ -210,7 +210,7 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is)
           assert(0);
           }
         }
-      catch( std::exception &)
+      catch( std::exception &ex)
         {
         // Must be one of those non-cp246 file...
         // but for some reason seekg back to previous offset + Read

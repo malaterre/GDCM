@@ -84,7 +84,7 @@ std::istream &UNExplicitDataElement::ReadPreValue(std::istream &is)
       return is;
       }
     }
-  catch( Exception & )
+  catch( Exception &ex )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
@@ -172,7 +172,7 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
           assert(0);
           }
         }
-      catch( std::exception &)
+      catch( std::exception &ex)
         {
         // Must be one of those non-cp246 file...
         // but for some reason seekg back to previous offset + Read

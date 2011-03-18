@@ -29,6 +29,7 @@ int TestFind(int argc, char *argv[])
   std::string callaetitle = "MI2B2";
   std::string callingaetitle = "ACME1";
 
+  gdcm::CompositeNetworkFunctions theNetworkFunctions;
   
   gdcm::Tag theTag(0x0010, 0x0010);
   std::string theName = "F*";
@@ -38,7 +39,7 @@ int TestFind(int argc, char *argv[])
   std::vector<std::pair<gdcm::Tag, std::string> > theTags;
   theTags.push_back(theTagPair);
 
-  gdcm::BaseRootQuery* theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery(
+  gdcm::BaseRootQuery* theQuery = theNetworkFunctions.ConstructQuery(
     gdcm::ePatientRootType, gdcm::ePatient, theTags);
 
   if (!theQuery) {
@@ -55,7 +56,7 @@ int TestFind(int argc, char *argv[])
 
   std::vector<gdcm::DataSet> theDataSet ;
   bool b =
-    gdcm::CompositeNetworkFunctions::CFind(hostname.c_str(), port,
+    theNetworkFunctions.CFind(hostname.c_str(), port,
       theQuery, theDataSet , callingaetitle.c_str(), callaetitle.c_str());
   if( !b ) return 1;
 
