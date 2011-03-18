@@ -135,7 +135,7 @@ void inline Swap8(T &a, SwapCode const &swapcode)
 #endif
     break;
   case 4321 :
-#ifdef GDCM_WORDS_BIGENDIAN
+#ifndef GDCM_WORDS_BIGENDIAN
     a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
 #endif
     break;
@@ -166,8 +166,9 @@ void inline Swap8<uint16_t>(uint16_t &a, SwapCode const &swapcode)
 #endif
     break;
   case 4321 :
-#ifdef GDCM_WORDS_BIGENDIAN
-    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+#ifndef GDCM_WORDS_BIGENDIAN
+//    probably not really useful since the lowest 0x0000 are what's used in unsigned shorts
+//    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
 #endif
     break;
   case 3412 :
