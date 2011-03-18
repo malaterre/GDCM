@@ -234,14 +234,14 @@ int main(int argc, char *argv[])
     return 1;
     }
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
-  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
-  gdcm::Trace::SetError(  (error  > 0 ? true : false));
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
-    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
     }
 
   if( verbose )

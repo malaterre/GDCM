@@ -1031,7 +1031,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
         //std::cout << ds << std::endl;
         assert( ss.eof() );
         }
-      catch(std::exception &)
+      catch(std::exception &ex)
         {
         gdcmErrorMacro( "Something went wrong while decoding... please report" );
         return false;

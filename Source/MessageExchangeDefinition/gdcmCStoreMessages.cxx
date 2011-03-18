@@ -151,7 +151,7 @@ const DataSet* inDataSet = &file.GetDataSet();
   std::string suid;
   DataElement de( Tag(0x0,0x1000) );
   de.SetVR( VR::UI );
-  if( !msinst.IsEmpty() )
+  if( !msinst.IsEmpty() );
     {
     const ByteValue* bv = msinst.GetByteValue();
     if( bv )

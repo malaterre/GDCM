@@ -35,7 +35,7 @@ public:
         std::string s = "Please send me over";
         }
     }
-    catch(std::exception & ) {
+    catch(std::exception &e ) {
       assert(0);
       }
     }

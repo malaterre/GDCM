@@ -99,16 +99,14 @@ bool Writer::Write()
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
     //gzostream gzos(os.rdbuf());
-      try {
+      {
       zlib_stream::zip_ostream gzos( os );
       assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
       DS.Write<ExplicitDataElement,SwapperNoOp>(gzos);
       //gzos.flush();
-      } catch (...){
-		  return false;
-	  }
+      }
 
-    return true;//os;
+    return os;
     }
 
   try

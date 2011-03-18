@@ -27,7 +27,9 @@ int TestEcho(int argc, char *argv[])
   std::string callaetitle = "MI2B2";
   std::string callingaetitle = "ACME1";
 
-  bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( hostname.c_str(), port,
+  gdcm::CompositeNetworkFunctions theNetworkFunctions;
+
+  bool didItWork = theNetworkFunctions.CEcho( hostname.c_str(), port,
     callingaetitle.c_str(), callaetitle.c_str() );
 
   return (didItWork ? 0:1);

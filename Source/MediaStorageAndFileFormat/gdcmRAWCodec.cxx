@@ -120,7 +120,8 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
     {
     size_t len = str.size() * 16 / 12;
     char * copy = new char[len];
-    bool b = Unpacker12Bits::Unpack(copy, &str[0], str.size() );
+    Unpacker12Bits u12;
+    bool b = u12.Unpack(copy, &str[0], str.size() );
     assert( b );
     assert (len == inOutBufferLength);
     assert(inOutBufferLength == len);

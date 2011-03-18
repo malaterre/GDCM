@@ -643,7 +643,7 @@ int main(int argc, char *argv[])
       std::cerr << "Input directory should be different from output directory" << std::endl;
       return 1;
       }
-    nfiles = dir.Load(filename, (recursive > 0 ? true : false));
+    nfiles = dir.Load(filename, recursive);
     filenames = dir.GetFilenames();
     gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
     // Prepare outfilenames
@@ -681,14 +681,14 @@ int main(int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
-  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
-  gdcm::Trace::SetError(  (error  > 0 ? true : false));
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
-    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmanon" );
@@ -763,7 +763,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, (continuemode > 0 ? true: false)) )
+      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, continuemode) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;
@@ -776,7 +776,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFile(anon, in, out, (continuemode > 0 ? true: false)) )
+      if( !AnonymizeOneFile(anon, in, out, continuemode) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;
