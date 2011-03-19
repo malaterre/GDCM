@@ -476,7 +476,7 @@ basic_unzip_streambuf<charT, traits>::unzip_from_stream(char_type* buffer,
     while(_err==Z_OK && _zip_stream.avail_out != 0 && count != 0);
 
 	std::streamsize theSize = buffer_size - ((std::streamsize)_zip_stream.avail_out) / sizeof(char_type);
-	assert (theSize > 0 && theSize < std::numeric_limits<uInt>::max());
+	assert (theSize >= 0 && theSize < std::numeric_limits<uInt>::max());
 
     // updating crc
     _crc = crc32(_crc, (byte_buffer_type) buffer,(uInt)theSize);
