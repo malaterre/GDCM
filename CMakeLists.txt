@@ -30,10 +30,7 @@ SET(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
 GET_FILENAME_COMPONENT(PARENTDIR ${GDCM_BINARY_DIR} PATH)
 STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${PARENTDIR}" INSOURCESUBDIR)
-IF(INSOURCE OR INSOURCESUBDIR)
-  MESSAGE(FATAL_ERROR "GDCM requires an out of source Build. "
-    "Please create a separate binary directory and run CMake there.")
-ENDIF(INSOURCE OR INSOURCESUBDIR)
+
 
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
