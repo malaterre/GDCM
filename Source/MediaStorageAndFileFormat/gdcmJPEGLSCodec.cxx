@@ -196,7 +196,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     std::vector<BYTE> rgbyteOut;
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
-    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
     ASSERT(result == OK);
 
     delete[] buffer;
@@ -252,7 +252,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     std::vector<BYTE> rgbyteOut;
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
-    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
     ASSERT(result == OK);
 bool r = true;
 
