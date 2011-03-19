@@ -19,7 +19,7 @@
 
 // CharLS includes
 #ifdef GDCM_USE_SYSTEM_EXPAT
-#include "CharLS/stdafx.h" // sigh...
+//#include "CharLS/stdafx.h" // sigh...
 #include "CharLS/interface.h"
 #include "CharLS/util.h"
 #include "CharLS/defaulttraits.h"
