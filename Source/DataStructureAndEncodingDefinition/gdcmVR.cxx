@@ -387,7 +387,7 @@ bool VR::IsValid(const char *vr1, VRType vr2)
 {
   assert( strlen(vr1) == 2 );
   VR::VRType vr = GetVRType(vr1);
-  return ((vr & vr2) > 0 ? true : false);
+  return ((vr & vr2) != 0 ? true : false);
 }
 
 bool VR::IsSwap(const char *vr)
