@@ -199,7 +199,7 @@ ENDIF(MSVC)
 # Install directories
 
 STRING(TOLOWER ${PROJECT_NAME} projectname)
-SET(subdir "${projectname}-${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
+SET(subdir "${projectname}")
 
 IF(NOT GDCM_INSTALL_BIN_DIR)
   SET(GDCM_INSTALL_BIN_DIR "bin")
