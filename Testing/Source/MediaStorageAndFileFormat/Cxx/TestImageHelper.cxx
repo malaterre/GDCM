@@ -22,7 +22,7 @@ int TestImageHelper(int, char *[])
 //  gdcm::ImageHelper sh;
   const double pos[] = { 0,0,0,
                          1,1,1};
-  const double answer[3] = {1,1,1};
+  //const double answer[3] = {1,1,1};
 
   std::vector<double> impos(pos,pos+6);
   std::vector<double> spacing;

@@ -1480,6 +1480,7 @@ XML_Parse(XML_Parser parser, const char *s, int len, int isFinal)
         break;
       case XML_INITIALIZED:
       case XML_PARSING:
+      case XML_FINISHED://to avoid warning that this case isn't handled
         result = XML_STATUS_OK;
         if (isFinal) {
           ps_parsing = XML_FINISHED;

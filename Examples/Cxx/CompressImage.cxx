@@ -44,10 +44,10 @@ int main(int argc, char *argv[])
     }
 
   // The output of gdcm::Reader is a gdcm::File
-  gdcm::File &file = reader.GetFile();
+  //gdcm::File &file = reader.GetFile();
 
   // the dataset is the the set of element we are interested in:
-  gdcm::DataSet &ds = file.GetDataSet();
+  //gdcm::DataSet &ds = file.GetDataSet();
 
   const gdcm::Image &image = reader.GetImage();
   image.Print( std::cout );

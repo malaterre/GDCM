@@ -100,7 +100,7 @@ int TestImageChangeTransferSyntaxJ2K(const char *filename, bool verbose = false)
   gdcm::Image img = reader2.GetImage();
   // When recompressing: US-RGB-8-epicard.dcm, make sure to compute the md5 using the
   // same original Planar Configuration...
-  if( img.GetPlanarConfiguration() !=  pc )
+  if( (int)img.GetPlanarConfiguration() !=  pc )
     {
     gdcm::ImageChangePlanarConfiguration icpc;
     icpc.SetInput( reader2.GetImage() );

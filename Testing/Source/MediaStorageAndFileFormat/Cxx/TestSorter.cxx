@@ -36,8 +36,8 @@ int TestSorter(int argc, char *argv[])
   d.Print( std::cout );
   std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
-  bool b = s.Sort( d.GetFilenames() );
-/*
+/* bool b = s.Sort( d.GetFilenames() );
+
   if( !b )
     {
     std::cerr << "Failed to sort:" << directory << std::endl;

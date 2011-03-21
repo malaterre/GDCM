@@ -485,7 +485,7 @@ int TestUIDs(int, char *[])
   std::cout << "All:" << std::endl;
   for(unsigned int i = 0; i < gdcm::UIDs::GetNumberOfTransferSyntaxStrings(); ++i)
     {
-    const char * const * str_pair = gdcm::UIDs::GetTransferSyntaxString(i);
+    //const char * const * str_pair = gdcm::UIDs::GetTransferSyntaxString(i);
     uid.SetFromUID( gdcm::UIDs::GetUIDString( i+1 ) );
     //std::cout << uid << std::endl;
     if( !uid.GetName() || !uid.GetString() ) return 1;

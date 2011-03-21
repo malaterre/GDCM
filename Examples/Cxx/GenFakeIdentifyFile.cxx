@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     {
     const gdcm::Tag &dicttag = dictit->first;
     if( dicttag == Tag(0x6e65,0x6146) ) break;
-    const gdcm::DictEntry &dictentry = dictit->second;
+    //const gdcm::DictEntry &dictentry = dictit->second;
     ds.Insert( CreateFakeElement( dicttag, false ) );
     }
   ds.Remove( gdcm::Tag(0x400,0x500) );

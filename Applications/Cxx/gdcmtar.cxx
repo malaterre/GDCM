@@ -926,7 +926,7 @@ int main (int argc, char *argv[])
       return 1;
       }
 
-    const gdcm::Defs &defs = g.GetDefs();
+    //const gdcm::Defs &defs = g.GetDefs();
     }
 
 
@@ -1108,7 +1108,7 @@ int main (int argc, char *argv[])
 
   char date[22];
   const size_t datelen = 8;
-  int res = gdcm::System::GetCurrentDateTime(date);
+  //int res = gdcm::System::GetCurrentDateTime(date);
   gdcm::Attribute<0x8,0x12> instcreationdate;
   instcreationdate.SetValue( gdcm::DTComp( date, datelen ) );
   ds.Replace( instcreationdate.GetAsDataElement() );
@@ -1144,8 +1144,8 @@ int main (int argc, char *argv[])
 
       //
       //writer.SetImage( filter.GetImage() );
-      gdcm::Image & //slice = writer.GetImage();
-      slice = reader.GetImage();
+      //gdcm::Image & //slice = writer.GetImage();
+      //slice = reader.GetImage();
 //      slice.SetOrigin( new_origin );
 //      slice.SetNumberOfDimensions( 2 );
 //      assert( slice.GetPixelFormat() == reader.GetImage().GetPixelFormat() );

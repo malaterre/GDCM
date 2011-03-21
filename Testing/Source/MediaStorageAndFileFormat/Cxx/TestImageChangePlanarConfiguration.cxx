@@ -36,7 +36,7 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
     }
   const gdcm::Image &image = reader.GetImage();
 
-  unsigned int pc = image.GetPlanarConfiguration();
+  //unsigned int pc = image.GetPlanarConfiguration();
 
   gdcm::ImageChangePlanarConfiguration pcfilt;
   pcfilt.SetInput( image );

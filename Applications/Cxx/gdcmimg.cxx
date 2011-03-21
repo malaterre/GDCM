@@ -76,7 +76,8 @@ bool readsize(const char *str, unsigned int * size)
 
 bool readgeometry(const char *geometry, unsigned int * region)
 {
-  int n = sscanf( geometry, "%i,%i,%i,%i,%i,%i", region, region+1, region+2, region+3, region+4, region+5);
+  //int n = 
+  sscanf( geometry, "%i,%i,%i,%i,%i,%i", region, region+1, region+2, region+3, region+4, region+5);
   return true;
 }
 
