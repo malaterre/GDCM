@@ -301,7 +301,7 @@ bool StreamImageReader::ReadImageInformation()
   
 bool StreamImageReader::CanReadImage() const{
   //this is the check to ensure that ReadImageInformation was read in properly
-  if (mFileOffset != -1){
+  if (mFileOffset == -1){
     return false;
   }
   
