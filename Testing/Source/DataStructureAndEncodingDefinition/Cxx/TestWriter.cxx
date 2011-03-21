@@ -92,8 +92,8 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
        {
        // ok this situation was already analyzed and the writen file is
        // readable by dcmtk and such
-       size_t size1 = System::FileSize( filename );
-       size_t size2 = System::FileSize( outfilename.c_str() );
+       //size_t size1 = System::FileSize( filename );
+       //size_t size2 = System::FileSize( outfilename.c_str() );
        //assert( size1 == size2 ); // cannot deal with implicit VR meta data header
        return 0;
        }

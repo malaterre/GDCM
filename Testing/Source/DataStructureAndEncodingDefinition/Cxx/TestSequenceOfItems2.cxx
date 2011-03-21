@@ -56,8 +56,8 @@ int TestSequenceOfItems2(int, char *[])
 
   // std::cout << subds << std::endl;
   gdcm::Tag ticonpixeldata(0x7fe0,0x0010);
-  const gdcm::DataElement &iconpixeldata = subds.GetDataElement( ticonpixeldata );
-  const gdcm::ByteValue *bv = iconpixeldata.GetByteValue();
+  //const gdcm::DataElement &iconpixeldata = subds.GetDataElement( ticonpixeldata );
+//  const gdcm::ByteValue *bv = iconpixeldata.GetByteValue();//unused unless that lower #def is set to true
 
   // I could test that gdcm::JPEGCodec::GetHeaderInfo return JPEG file:
   // JPEG image data, JFIF standard 1.01

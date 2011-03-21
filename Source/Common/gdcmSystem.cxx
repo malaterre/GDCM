@@ -923,23 +923,6 @@ struct CharsetAliasType
   const char *name;
 };
 
-static const char *CharsetAliasToName(const char *alias)
-{
-  static CharsetAliasType aliases[] = {
-    { "CP1252", "UTF-8" }, // mingw + debian/6.0
-    { NULL, NULL },
-  };
-  for( CharsetAliasType *a = aliases; a->alias; a++)
-    {
-    if (strcmp (a->alias, alias) == 0)
-      {
-      return a->name;
-      }
-    }
-  // We need to tell the user...
-  return NULL;
-}
-
 const char *System::GetLocaleCharset()
 {
   const char *codeset = NULL;

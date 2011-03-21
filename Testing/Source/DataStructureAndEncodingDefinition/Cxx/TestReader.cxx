@@ -30,10 +30,11 @@ int TestRead(const char* filename, bool verbose = false)
     return 1;
     }
 
-  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
+//commenting out the fmi and ds to avoid warnings
+  //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   //std::cout << h << std::endl;
 
-  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   //std::cout << ds << std::endl;
 
   const char *ref = gdcm::Testing::GetMediaStorageFromFile(filename);
