@@ -20,7 +20,7 @@
 int TestDicts(int, char *[])
 {
   gdcm::Dicts dicts;
-  const gdcm::Dict &d = dicts.GetPublicDict();
+  //const gdcm::Dict &d = dicts.GetPublicDict();
   //std::cout << d << std::endl;
 
   const gdcm::Global& g = gdcm::GlobalInstance;

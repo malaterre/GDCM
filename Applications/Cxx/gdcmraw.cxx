@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
+  //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   //std::cout << h << std::endl;
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();

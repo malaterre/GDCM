@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
       for( int index = 1; it != mapping.end(); ++it, ++index)
         {
-        const Tag & tag = it->first;
+        //const Tag & tag = it->first;
         const char *value = it->second;
 
         if (sqlite3_bind_text (

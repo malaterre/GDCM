@@ -108,7 +108,7 @@ bool TestCrossDot()
 int TestDirectionCosines(int, char *[])
 {
   gdcm::DirectionCosines dc;
-  const double *dircos = dc;
+  //const double *dircos = dc;
   if( !dc.IsValid() )
     {
     return 1;

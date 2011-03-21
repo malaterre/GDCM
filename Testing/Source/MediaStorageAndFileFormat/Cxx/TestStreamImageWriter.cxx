@@ -45,7 +45,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
 
   if ( theImageReaderOriginal.Read() )
     {
-    int res = 0;
+    //int res = 0;
 
     //to test the writer out, we have to read an image and then
     //write it out one line at a time.

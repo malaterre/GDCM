@@ -348,7 +348,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
     return 1;
     }
   const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = file.GetDataSet();
+  //const gdcm::DataSet &ds = file.GetDataSet();
   gdcm::MediaStorage ms;
   ms.SetFromFile(file);
   /*
@@ -378,8 +378,8 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
       std::cerr << "Could not read image from: " << filename << std::endl;
       return 1;
       }
-    const gdcm::File &file = reader.GetFile();
-    const gdcm::DataSet &ds = file.GetDataSet();
+    //const gdcm::File &file = reader.GetFile();
+    //const gdcm::DataSet &ds = file.GetDataSet();
     const gdcm::Image &image = reader.GetImage();
     const double *dircos = image.GetDirectionCosines();
     gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
@@ -520,7 +520,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
 #endif // GDCM_USE_SYSTEM_POPPLER
     }
   // Do the IOD verification !
-  bool v = defs.Verify( file );
+  //bool v = defs.Verify( file );
   //std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
 
   return 0;

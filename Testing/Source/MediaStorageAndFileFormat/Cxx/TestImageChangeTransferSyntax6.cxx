@@ -47,7 +47,7 @@ int TestImageChangeTransferSyntaxRAWBE(const char *filename, bool verbose = fals
     }
 
   const gdcm::Image &image = reader.GetImage();
-  const TransferSyntax &ts = reader.GetFile().GetHeader().GetDataSetTransferSyntax();
+  //const TransferSyntax &ts = reader.GetFile().GetHeader().GetDataSetTransferSyntax();
 
   gdcm::ImageChangeTransferSyntax change;
   change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );

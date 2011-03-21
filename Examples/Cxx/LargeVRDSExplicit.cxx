@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     {
     return 0;
     }
-  unsigned int nitems = sqi2->GetNumberOfItems();
+  //unsigned int nitems = sqi2->GetNumberOfItems();
   gdcm::Item & item2 = sqi2->GetItem(1); // Item start at #1
 
   gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
@@ -139,7 +139,8 @@ int main(int argc, char *argv[])
   const unsigned int niter = 8;
   for( unsigned int i = 0; i < niter; ++i)
     {
-    bool b = interpolate(&out[0], out.size() / 3, out2);
+    //bool b = 
+    interpolate(&out[0], out.size() / 3, out2);
     //const double *pout = &out[0];
     out = out2;
     out2.clear();

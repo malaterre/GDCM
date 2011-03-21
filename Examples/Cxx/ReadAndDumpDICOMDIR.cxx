@@ -76,7 +76,7 @@ int main(int argc, char *argv [])
       const gdcm::DataElement &de = (*it);
       // ne pas utiliser GetSequenceOfItems pour extraire les items
       gdcm::SmartPointer<gdcm::SequenceOfItems> sqi =de.GetValueAsSQ();
-      int itemused = 1;
+      unsigned int itemused = 1;
       while (itemused<=sqi->GetNumberOfItems())
 
         {
@@ -191,7 +191,7 @@ int main(int argc, char *argv [])
 
 
 
-                if(itemused <sqi->GetNumberOfItems())
+                if(itemused < sqi->GetNumberOfItems())
                   {itemused++;
                   }else{break;}
 

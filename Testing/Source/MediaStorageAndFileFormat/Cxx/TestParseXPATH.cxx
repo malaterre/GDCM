@@ -44,9 +44,9 @@ static bool CheckResult( std::string const & filename, std::string const & value
 
 int TestParseXPATHFile(const char* filename, bool verbose = false )
 {
-  static gdcm::Global &g = gdcm::Global::GetInstance();
-  static const gdcm::Dicts &dicts = g.GetDicts();
-  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+  //static gdcm::Global &g = gdcm::Global::GetInstance();
+  //static const gdcm::Dicts &dicts = g.GetDicts();
+  //static const gdcm::Dict &pubdict = dicts.GetPublicDict();
 
   gdcm::Reader reader;
 //  reader.SetFileName( "/home/mathieu/Creatis/gdcmData/D_CLUNIE_CT1_J2KI.dcm" );

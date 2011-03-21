@@ -189,7 +189,10 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     ASSERT(result == OK);
 
     delete[] buffer;
-
+      
+    if (result != OK) {
+      return false;
+    }
     out = in;
 
     out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
@@ -243,10 +246,13 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
     JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
     ASSERT(result == OK);
-bool r = true;
+    bool r = true;
 
 
       delete[] mybuffer;
+      if (result != OK){
+        return false;
+      }
     os.write( (char*)&rgbyteOut[0], rgbyteOut.size() );
 
       if(!r) return false;

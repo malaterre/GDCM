@@ -20,6 +20,7 @@ int TestImage(int, char *[])
 
   gdcm::ImageReader reader;
   const gdcm::Image &img2 = reader.GetImage();
+  img2.Print(std::cout);//just to avoid the warning of img2 being unused
 
 #if 0
 {

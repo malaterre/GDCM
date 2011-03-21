@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
   // 2. And it contains an Image !
 
   // The output of superclass gdcm::Reader is a gdcm::File
-  gdcm::File &file = reader.GetFile();
+  //gdcm::File &file = reader.GetFile();
 
   // The other output of gdcm::ImageReader is a gdcm::Image
   const gdcm::Image &image = reader.GetImage();
