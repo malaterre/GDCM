@@ -103,7 +103,7 @@ int TestAttributeDS()
   const double newvalues[] = {12.34,56.78,90.0};
   const unsigned int numvalues = sizeof(values) / sizeof(values[0]);
 
-  gdcm::Attribute<0x0020,0x0032> ipp = {-158.135803,-179.035797,-75.699997};
+  gdcm::Attribute<0x0020,0x0032> ipp = {{-158.135803,-179.035797,-75.699997}};
   // FIXME HARDCODED:
   if( ipp.GetVM() != gdcm::VM::VM3 ) return 1;
   if( ipp.GetVR() != gdcm::VR::DS ) return 1;
@@ -167,7 +167,7 @@ int TestAttributeIS()
   gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM1> fd1 = {0};
   if( fd1.GetVM() != gdcm::VM::VM1 ) return 1;
 
-  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM2> fd2 = {0,1};
+  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM2> fd2 = {{0,1}};
   if( fd2.GetVM() != gdcm::VM::VM2 ) return 1;
 
   // this one should not be allowed, I need a special CTest macro...

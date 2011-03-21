@@ -510,7 +510,7 @@ basic_unzip_streambuf<charT, traits>::fill_input_buffer(void)
         // Ok so we reached the end of file, since we did not read no header
         // we have to explicitely tell zlib the compress stream ends, therefore
         // we add an extra \0 character...it may not always be needed...
-        assert( nbytesread < _input_buffer.size() / sizeof(char_type) );
+        assert( nbytesread < (std::streamsize)(_input_buffer.size() / sizeof(char_type)) );
         _input_buffer[ (unsigned int)nbytesread ] = 0;
         ++nbytesread;
         }

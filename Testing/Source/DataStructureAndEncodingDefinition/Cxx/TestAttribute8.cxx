@@ -34,7 +34,8 @@ int TestAttribute8Func(const char *filename, bool verbose = false)
     return 1;
     }
 
-  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
+  //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
+  //h is unused
   //std::cout << h << std::endl;
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();

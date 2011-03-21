@@ -168,7 +168,8 @@ bool singleTestDS(double d, int sz, bool se = false)
     if ( checkerror(d, s, se) )
         fail = true;
 
-    if( s.size() != sz )
+    assert(sz >= 0);
+    if( s.size() != (unsigned int)sz )
     {
         std::cout << "ERROR: Size = " << s.size() << " (should be " << sz << ")" << std::endl;
         fail = true;
@@ -421,7 +422,7 @@ int TestDS(int, char *[])
     int max_exp = std::numeric_limits<double>::max_exponent10;
 
     std::cout << "Running " << random_count << " random tests." << std::endl << std::endl;
-    for (int i = 0; i<random_count; i++)
+    for (unsigned int i = 0; i<random_count; i++)
     {
         // Create something that looks like a random double
         int rand_exp =  ( ( std::rand() / (double)(RAND_MAX) ) * (max_exp - min_exp) ) + min_exp;
