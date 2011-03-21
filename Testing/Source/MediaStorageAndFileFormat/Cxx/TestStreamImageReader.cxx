@@ -20,6 +20,12 @@
 #include "gdcmTesting.h"
 #include "gdcmImageHelper.h"
 
+#include "gdcmImage.h"
+#include "gdcmMediaStorage.h"
+
+#include "gdcmRAWCodec.h"
+#include "gdcmJPEGLSCodec.h"
+
 int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydump = false)
 {
   if( verbose )
@@ -45,14 +51,20 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     //unsigned short ymax = extent[1];
     //unsigned short zmin = 0;
     //unsigned short zmax = extent[2];
-
+      
     reader.DefinePixelExtent(0, extent[0], 0, extent[1], 0, extent[2]);
     unsigned long len = reader.DefineProperBufferLength();
     char* finalBuffer = new char[len];
-    bool result = reader.Read(finalBuffer, len);
-    if( !result ){
-      std::cerr << "res2 failure:" << filename << std::endl;
-      return 1;
+    if (reader.CanReadImage()){
+      bool result = reader.Read(finalBuffer, len);
+      if( !result ){
+        std::cerr << "res2 failure:" << filename << std::endl;
+        delete [] finalBuffer;
+        return 1;
+      }
+    } else {
+      delete [] finalBuffer;
+      return 0; //essentially, we're going to skip this file since it can't be read by the streamer
     }
 /*
     //now, read in smaller buffer extents
@@ -113,11 +125,13 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
       }
     else if( strcmp(digest, ref) )
       {
-      std::cerr << "Problem reading image from: " << filename << std::endl;
-      std::cerr << "Found " << digest << " instead of " << ref << std::endl;
-      // let's be nice for now and only truly fails when file is proper DICOM
-      if( correct_ref )
-      res = 1;
+        
+        // let's be nice for now and only truly fails when file is proper DICOM
+      if( correct_ref ){
+        std::cerr << "Problem reading image from: " << filename << std::endl;
+        std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+        res = 1;
+      }
 #if 0
       std::ofstream debug("/tmp/dump.gray");
       debug.write(finalBuffer, len);
@@ -129,6 +143,8 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     }
   else
     {
+      
+      std::cerr << "Problem reading image information from: " << filename << std::endl;
     return 1;
     }
 
@@ -156,6 +172,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
 #endif
   return 0;
 }
+
 
 int TestStreamImageReader(int argc, char *argv[])
 {

@@ -79,6 +79,14 @@ public:
   /// MUST have an extent defined, or else Read will return false.
   /// If no particular extent is required, use ImageReader instead.
   bool Read(void* inReadBuffer, const std::size_t& inBufferLength);
+  
+  /// Only RAW images are currently readable by the stream reader.  As more
+  /// streaming codecs are added, then this function will be updated to reflect
+  /// those changes.  Calling this function prior to reading will ensure that 
+  /// only streamable files are streamed.  Make sure to call ReadImageInformation
+  /// prior to calling this function.
+  bool CanReadImage() const;
+  
 
   /// Set the spacing and dimension information for the set filename.
   /// returns false if the file is not initialized or not an image,
