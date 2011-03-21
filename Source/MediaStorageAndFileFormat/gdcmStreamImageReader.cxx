@@ -298,6 +298,21 @@ bool StreamImageReader::ReadImageInformation()
   return true;
 }
 
+  
+bool StreamImageReader::CanReadImage() const{
+  //this is the check to ensure that ReadImageInformation was read in properly
+  if (mFileOffset != -1){
+    return false;
+  }
+  
+  const FileMetaInformation &header = mReader.GetFile().GetHeader();
+  const TransferSyntax &ts = header.GetDataSetTransferSyntax();
+  //bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
+  
+  RAWCodec theCodec;
+  return theCodec.CanDecode(ts);
+}
+
   /// Returns the dataset read by ReadImageInformation
   /// Couple this with the ImageHelper to get statistics about the image,
   /// like pixel extent, to be able to initialize buffers for reading
