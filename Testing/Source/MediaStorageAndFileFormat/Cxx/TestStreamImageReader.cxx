@@ -134,7 +134,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
       {
         
         // let's be nice for now and only truly fails when file is proper DICOM
-      if( correct_ref )
+      if( correct_ref && !strcmp(correct_ref, ref) )
         {
         std::cerr << "Problem reading image from: " << filename << std::endl;
         std::cerr << "Found " << digest << " instead of " << ref << std::endl;
@@ -164,7 +164,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
           }
         */
         res = 1;
-        }
+        } 
 #if 0
       std::ofstream debug("/tmp/dump.gray");
       debug.write(finalBuffer, len);
@@ -172,6 +172,11 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
 #endif
       }
     delete[] finalBuffer;
+    if (res == 0) 
+    {
+      //uncomment this line to determine if a file was correctly read
+      //std::cerr << "Correctly read " << filename << std::endl;
+    }
     return res;
     }
 
