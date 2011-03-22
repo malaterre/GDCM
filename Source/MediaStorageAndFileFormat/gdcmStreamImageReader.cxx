@@ -290,11 +290,13 @@ bool StreamImageReader::ReadImageInformation()
     gdcmWarningMacro( "Failed to read with unknown error" );
     }
 
+
   // eg. ELSCINT1_PMSCT_RLE1.dcm
   if( mFileOffset == -1 ) return false;
 
   // postcondition
   assert( mFileOffset != -1 );
+  
   return true;
 }
 
@@ -310,7 +312,17 @@ bool StreamImageReader::CanReadImage() const{
   //bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
   
   RAWCodec theCodec;
-  return theCodec.CanDecode(ts);
+  bool canDecodeRaw = theCodec.CanDecode(ts);
+  if (!canDecodeRaw) return false;
+  
+  std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mReader.GetFile());
+  if (extent.empty()) return false; //should not happen with current GetDimensionsValue implementation
+  //but just in case...
+  
+  if (extent[0] == 0 || extent[1] == 0)
+    return false;
+    
+  return true;
 }
 
   /// Returns the dataset read by ReadImageInformation
