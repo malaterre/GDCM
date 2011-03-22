@@ -32,7 +32,11 @@ int TestImageReaderRandomEmptyFunc(const char *subdir, const char* filename, boo
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-    return 1;
+    return 0;//this is NOT a test of the ImageReader read function
+    //this is a test of the anonymizer.  As such, if the reader can't read this file,
+    //that should be handled in the TestImageReader test, NOT here.
+    //There is a lot of logic involved in testing non-standard images that should not be
+    //duplicated here.
     }
 
   const gdcm::File &file = reader.GetFile();
