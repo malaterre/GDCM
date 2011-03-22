@@ -19,6 +19,7 @@
 #include "gdcmTrace.h"
 #include "gdcmTesting.h"
 #include "gdcmImageHelper.h"
+#include "gdcmImageReader.h"
 
 #include "gdcmImage.h"
 #include "gdcmMediaStorage.h"
@@ -33,7 +34,12 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
   gdcm::StreamImageReader reader;
 
   reader.SetFileName( filename );
-  if ( reader.ReadImageInformation() )
+  bool canReadImageInformation = reader.ReadImageInformation();
+  if (!canReadImageInformation)
+    {
+    return 0; //unable to read tags as expected.
+    }
+  else
     {
     int res = 0;
 
@@ -55,6 +61,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     reader.DefinePixelExtent(0, extent[0], 0, extent[1], 0, extent[2]);
     unsigned long len = reader.DefineProperBufferLength();
     char* finalBuffer = new char[len];
+    memset(finalBuffer, 0, sizeof(char)*len);
     if (reader.CanReadImage()){
       bool result = reader.Read(finalBuffer, len);
       if( !result ){
@@ -127,11 +134,37 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
       {
         
         // let's be nice for now and only truly fails when file is proper DICOM
-      if( correct_ref ){
+      if( correct_ref )
+        {
         std::cerr << "Problem reading image from: " << filename << std::endl;
         std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+        /*
+        //uncomment this code to explicitly read and check the md5 hash
+        gdcm::ImageReader reader;
+        
+        reader.SetFileName( filename );
+        if (reader.Read())
+          {
+          const gdcm::Image &img = reader.GetImage();
+          //std::cerr << "Success to read image from file: " << filename << std::endl;
+          unsigned long len2 = img.GetBufferLength();
+          
+          char* buffer2 = new char[len];
+          bool res3 = img.GetBuffer(buffer2);
+          if (res3)
+            {
+            char digest2[33];
+            gdcm::Testing::ComputeMD5(buffer2, len2, digest2);
+            if (strcmp(digest2, digest))
+              {
+              std::cerr << "Second check read " << digest2 << " not " << digest << std::endl;
+              }
+            }
+          delete [] buffer2;
+          }
+        */
         res = 1;
-      }
+        }
 #if 0
       std::ofstream debug("/tmp/dump.gray");
       debug.write(finalBuffer, len);
@@ -140,12 +173,6 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
       }
     delete[] finalBuffer;
     return res;
-    }
-  else
-    {
-      
-      std::cerr << "Problem reading image information from: " << filename << std::endl;
-    return 1;
     }
 
 #if 0
