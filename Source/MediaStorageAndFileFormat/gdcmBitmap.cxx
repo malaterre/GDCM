@@ -884,6 +884,7 @@ void Bitmap::Print(std::ostream &os) const
   Object::Print(os);
   //assert( NumberOfDimensions );
   os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
+#if 0 //apparently, the dimensions can be empty here
   if( NumberOfDimensions )
     {
     assert( Dimensions.size() );
@@ -897,6 +898,7 @@ void Bitmap::Print(std::ostream &os) const
     os << ")\n";
     PF.Print(os);
     }
+#endif
   os << "PhotometricInterpretation: " << PI << "\n";
   os << "PlanarConfiguration: " << PlanarConfiguration << "\n";
   os << "TransferSyntax: " << TS << "\n";
