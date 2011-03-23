@@ -22,9 +22,9 @@
 
 int TestEcho(int argc, char *argv[])
 {
-  std::string hostname = "mi2b2.slicer.org";
+  std::string hostname = "common.bwh.harvard.edu";
   int port = 11112;
-  std::string callaetitle = "MI2B2";
+  std::string callaetitle = "CTK_AE";
   std::string callingaetitle = "ACME1";
 
   bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( hostname.c_str(), port,
