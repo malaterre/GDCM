@@ -468,7 +468,7 @@ int sockbuf::sync ()
     return 0;
 }
 
-int sockbuf::showmanyc () const
+streamsize sockbuf::showmanyc () const
 // return the number of chars in the input sequence
 {
     if (gptr () && gptr () < egptr ())

@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 //  gdcm::DummyValueGenerator dvg;
 
   const std::size_t len = 10;
-  char ss[len];
+  char ss[len+1];
   ss[len] = '\0';
 
   const char owner_str[] = "GDCM CONFORMANCE TESTS";
