@@ -222,7 +222,7 @@ class MY_API sockbuf: public streambuf
 
         virtual int           sync ();
 
-        virtual int           showmanyc () const;
+        virtual streamsize    showmanyc () const;
         virtual streamsize    xsgetn (char_type* s, streamsize n);
         virtual int_type      underflow ();
         virtual int_type      uflow ();
