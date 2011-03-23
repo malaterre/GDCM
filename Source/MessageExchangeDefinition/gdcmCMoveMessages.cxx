@@ -20,7 +20,6 @@
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmCommandDataSet.h"
-//#include "gdcmStudyRootQuery.h"
 #include "gdcmPresentationContextRQ.h"
 #include "gdcmULConnection.h"
 #include "gdcmAAssociateRQPDU.h"

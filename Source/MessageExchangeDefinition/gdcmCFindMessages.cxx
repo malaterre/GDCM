@@ -26,7 +26,6 @@ this file defines the messages for the cfind action
 #include "gdcmImplicitDataElement.h"
 #include "gdcmPresentationContextRQ.h"
 #include "gdcmCommandDataSet.h"
-//#include "gdcmStudyRootQuery.h"
 #include "gdcmULConnection.h"
 
 namespace gdcm{

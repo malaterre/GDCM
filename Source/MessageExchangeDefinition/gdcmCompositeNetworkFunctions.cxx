@@ -29,20 +29,12 @@
 #include "gdcmGlobal.h"
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
-#include "gdcmStringFilter.h"
 #include "gdcmWriter.h"
 #include "gdcmPrinter.h"
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmProgressEvent.h"
-
 #include "gdcmQueryFactory.h"
-#include "gdcmDirectory.h"
-//#include "gdcmStudyRootQuery.h"
-//#include "gdcmFindPatientRootQuery.h"
-//#include "gdcmMovePatientRootQuery.h"
 #include "gdcmULWritingCallback.h"
-#include "gdcmAbstractSyntax.h"
-#include "gdcmImageReader.h"
 #include "gdcmPresentationContextGenerator.h"
 
 namespace gdcm
@@ -111,18 +103,14 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
 BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   EQueryLevel inQueryLevel, const KeyValuePairArrayType& keys, bool inMove)
 {
-  StringFilter sf;
   KeyValuePairArrayType::const_iterator it = keys.begin();
   DataSet ds;
   for(; it != keys.end(); ++it)
     {
-    std::string s = sf.FromString( it->first, it->second.c_str(), it->second.size() );
-    if (inMove)
-      {
-      DataElement de( it->first );
-      de.SetByteValue ( s.c_str(), s.size() );
-      ds.Insert( de );
-      }
+    DataElement de( it->first );
+    const std::string &s = it->second;
+    de.SetByteValue ( s.c_str(), s.size() );
+    ds.Insert( de );
     }
   return CompositeNetworkFunctions::ConstructQuery( inRootType,
     inQueryLevel, ds, inMove);
