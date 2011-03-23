@@ -174,7 +174,7 @@ public:
   const std::ostream &Write(std::ostream &os) const
     {
     VRType vrfield = VRField;
-    gdcmAssertAlwaysMacro( !IsDual() );
+    //gdcmAssertAlwaysMacro( !IsDual() );
     if( vrfield == VR::INVALID )
       {
       //vrfield = VR::UN;

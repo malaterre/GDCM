@@ -18,8 +18,8 @@
 #ifndef GDCMCOMPOSITENETWORKFUNCTIONS_H
 #define GDCMCOMPOSITENETWORKFUNCTIONS_H
 
-#include "gdcmBaseRootQuery.h"
 #include "gdcmDirectory.h"
+#include "gdcmBaseRootQuery.h" // EQueryLevel / EQueryType
 
 #include <vector>
 #include <string>

@@ -100,8 +100,8 @@ private:
            << ", function " << GDCM_FUNCTION << '\n'              \
            << "Last system error was: "                           \
            << gdcm::System::GetLastSystemError() << '\n' << msg;  \
-   std::ostream &os = gdcm::Trace::GetStream();                   \
-   os << osmacro.str() << "\n\n" << std::endl;                    \
+   std::ostream &_os = gdcm::Trace::GetStream();                   \
+   _os << osmacro.str() << "\n\n" << std::endl;                    \
    }                                                              \
 }
 #endif //NDEBUG
@@ -121,8 +121,8 @@ private:
    osmacro << "Warning: In " __FILE__ ", line " << __LINE__       \
            << ", function " << GDCM_FUNCTION << "\n"              \
            << msg << "\n\n";                                      \
-   std::ostream &os = gdcm::Trace::GetStream();                   \
-   os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetStream();                   \
+   _os << osmacro.str() << std::endl;                              \
    }                                                              \
 }
 #endif //NDEBUG
@@ -143,8 +143,8 @@ private:
    osmacro << "Error: In " __FILE__ ", line " << __LINE__         \
            << ", function " << GDCM_FUNCTION << '\n'              \
            << msg << "\n\n";                                      \
-   std::ostream &os = gdcm::Trace::GetStream();                   \
-   os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetStream();                   \
+   _os << osmacro.str() << std::endl;                              \
    }                                                              \
 }
 #endif //NDEBUG
@@ -166,8 +166,8 @@ private:
    osmacro << "Assert: In " __FILE__ ", line " << __LINE__        \
            << ", function " << GDCM_FUNCTION                      \
            << "\n\n";                                             \
-   std::ostream &os = gdcm::Trace::GetStream();                   \
-   os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetStream();                   \
+   _os << osmacro.str() << std::endl;                              \
    assert ( arg );                                                \
    }                                                              \
 }
