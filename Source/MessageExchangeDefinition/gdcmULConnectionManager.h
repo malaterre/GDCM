@@ -23,6 +23,8 @@
 #include "gdcmULConnectionInfo.h"
 #include "gdcmPresentationDataValue.h"
 #include "gdcmULConnectionCallback.h"
+#include "gdcmSubject.h"
+#include "gdcmPresentationContext.h"
 
 namespace gdcm {
   class File;
@@ -39,7 +41,7 @@ namespace gdcm {
  *
  * Its inputs are ULEvents, and it performs ULActions.
  */
-  class GDCM_EXPORT ULConnectionManager
+  class GDCM_EXPORT ULConnectionManager : public Subject
   {
     private:
       ULConnection* mConnection;

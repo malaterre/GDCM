@@ -21,7 +21,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmFile.h"
 #include "gdcmImplicitDataElement.h"
-#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextRQ.h"
 #include "gdcmCommandDataSet.h"
 #include "gdcmBasePDU.h"
 #include "gdcmPDataTFPDU.h"
@@ -48,8 +48,9 @@ std::vector<PresentationDataValue> CStoreRQ::ConstructPDV(
 const ULConnection &inConnection, File const & file )
 {
 const DataSet* inDataSet = &file.GetDataSet();
+
   std::vector<PresentationDataValue> thePDVs;
-  PresentationContext pc( UIDs::VerificationSOPClass );
+  PresentationContextRQ pc( UIDs::VerificationSOPClass );
   uint8_t prescontid;
 {
   assert( inDataSet );
@@ -57,7 +58,7 @@ const DataSet* inDataSet = &file.GetDataSet();
 #if 0
   std::string UIDString;
   thePDV.SetPresentationContextID(
-    PresentationContext::AssignPresentationContextID(*inDataSet, UIDString));
+    PresentationContextRQ::AssignPresentationContextID(*inDataSet, UIDString));
 #else
 {
   MediaStorage mst;
@@ -111,14 +112,16 @@ const DataSet* inDataSet = &file.GetDataSet();
   // prescontid cannot possibly be unknown since we are only looking in our own
   // AAssociateRQPDU
   assert( prescontid != 0 );
+  const PresentationContextRQ * rqpc = inConnection.GetPresentationContextRQByID(prescontid);
+  assert( rqpc );
 
-  // Now let's see if this best matching PresentationContext can be found in the AC
+  // Now let's see if this best matching PresentationContextRQ can be found in the AC
   // section of the AAssociateACPDU
   const PresentationContextAC * acpc = inConnection.GetPresentationContextACByID(prescontid);
 
   // the following make sure that the accepted Presentation Context match the actual encoding
   // of the current File
-  // ADV: technically we could use an explicit Vr encoded dataset and send it over
+  // ADV: technically we could use an explicit VR encoded dataset and send it over
   // an implicit TS accecpted Transfer syntax. However thing do not interchange well
   // so we really need a filter to check whether conversion is ok or not.
   if( acpc == 0 )
@@ -128,15 +131,28 @@ const DataSet* inDataSet = &file.GetDataSet();
     throw Exception("Server side refuse our proposed PC.");
     }
 
+  TransferSyntaxSub const & actssub = acpc->GetTransferSyntax();
+  assert( rqpc->GetNumberOfTransferSyntaxes() == 1 ); // TODO FIXME
+  TransferSyntaxSub const & rqtssub = rqpc->GetTransferSyntax(0);
+  if( !(actssub == rqtssub) )
+    {
+    gdcmDebugMacro( "Faulty Presentation Context : "
+      << (int)acpc->GetPresentationContextID() );
+    throw Exception("Server side refuse our proposed PC for context id" );
+    }
+
+#if 0
   // For some reason using a dcmtk 3.5.4 server. The PresCont even if refused returned
   // filled with the default Implicit Little Endian. So make sure TS matches
   TransferSyntaxSub const & actssub = acpc->GetTransferSyntax();
+  TransferSyntaxSub const & dummy0 = pc.GetTransferSyntax(0);
   if( !(actssub == pc.GetTransferSyntax(0)) )
     {
     gdcmDebugMacro( "Faulty Presentation Context : "
       << (int)acpc->GetPresentationContextID() );
     throw Exception("Server side refuse our proposed PC for context id" );
     }
+#endif
 
   thePDV.SetPresentationContextID( prescontid );
 

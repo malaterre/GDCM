@@ -23,6 +23,7 @@
 #include "gdcmULConnection.h"
 
 namespace gdcm {
+class Subject;
   namespace network {
 
 /**
@@ -71,7 +72,7 @@ class ULAction {
       //make sure destructors are virtual to avoid memory leaks
       virtual ~ULAction() {};
 
-      virtual EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      virtual EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent) = 0;
     };
   }

@@ -23,8 +23,6 @@
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
 #include "gdcmQueryFactory.h"
-#include "gdcmStudyRootQuery.h"
-#include "gdcmPatientRootQuery.h"
 #include "gdcmGlobal.h"
 
 const char *AETitle = "ANY";
@@ -34,7 +32,7 @@ int port = 11112;
 
 gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* theQuery)
 {
-  gdcm::network::PresentationContextGenerator generator;
+  gdcm::PresentationContextGenerator generator;
   if( !generator.GenerateFromUID( theQuery->GetAbstractSyntaxUID() ) )
     {
     gdcmErrorMacro( "Failed to generate pres context." );
@@ -55,12 +53,12 @@ std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
-    gdcm::QueryFactory::ProduceQuery(gdcm::ePatientRootType,
+    gdcm::QueryFactory::ProduceQuery(gdcm::ePatientRootType, gdcm::eFind,
       gdcm::ePatient);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "PATIENT"); //Query/Retrieval Level
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), ""); //Patient ID
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x10), "*"); //Patient Name
-  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
+  if(validateQuery && !theQuery->ValidateQuery(inStrictQuery))
   {
     return theDataSets;
   }
@@ -74,14 +72,14 @@ std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuer
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
-    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eStudy);
+    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eFind, gdcm::eStudy);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "STUDY"); //Query/Retrieval Level
 
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0x10), ""); //Study ID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xD), ""); //Study Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xE), ""); //Series Instance UID
-  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
+  if(validateQuery && !theQuery->ValidateQuery(inStrictQuery))
   {
     return theDataSets;
   }
@@ -95,13 +93,13 @@ std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *stud
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
-    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eSeries);
+    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eFind, gdcm::eSeries);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "SERIES"); //Query/Retrieval Level
 
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xD), studyInstanceUID); //Study Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xE), ""); //Series Instance UID
-  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
+  if(validateQuery && !theQuery->ValidateQuery(inStrictQuery))
   {
     return theDataSets;
   }
@@ -115,14 +113,14 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
-    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eImageOrFrame);
+    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eFind, gdcm::eImageOrFrame);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "SERIES"); //Query/Retrieval Level
 
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xD), studyInstanceUID); //Study Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x20, 0xE), seriesInstanceUID); //Series Instance UID
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x18), ""); //SOP Instance UID
-  if(validateQuery && !theQuery->ValidateQuery(true, inStrictQuery))
+  if(validateQuery && !theQuery->ValidateQuery(inStrictQuery))
   {
     return theDataSets;
   }

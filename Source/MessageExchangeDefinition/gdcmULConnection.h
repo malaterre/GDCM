@@ -21,9 +21,10 @@
 #include "gdcmNetworkStateID.h"
 #include "gdcmARTIMTimer.h"
 #include "gdcmULConnectionInfo.h"
-#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextRQ.h"
 #include "gdcmDataElement.h"
 #include "gdcmPresentationContextAC.h"
+#include "gdcmPresentationContext.h"
 
 #include "gdcmScanner.h" // FIXME
 
@@ -71,7 +72,7 @@ class ULConnection
 
       EStateID mCurrentState;
 
-      std::vector<PresentationContext> mPresentationContexts;
+      std::vector<PresentationContextRQ> mPresentationContexts;
       //this is our list of presentation contexts of what we can send
       uint32_t mMaxPDUSize;
 
@@ -102,17 +103,23 @@ class ULConnection
       uint32_t GetMaxPDUSize() const;
 
       const PresentationContextAC *GetPresentationContextACByID(uint8_t id) const;
-      /// return 0 upon error
-      uint8_t GetPresentationContextIDFromPresentationContext(PresentationContext const & pc) const;
+      const PresentationContextRQ *GetPresentationContextRQByID(uint8_t id) const;
 
-      std::vector<PresentationContext> const & GetPresentationContexts() const;
+      /// return 0 upon error
+      uint8_t GetPresentationContextIDFromPresentationContext(PresentationContextRQ const & pc) const;
+
+      std::vector<PresentationContextRQ> const & GetPresentationContexts() const;
+      void SetPresentationContexts(const std::vector<PresentationContextRQ>& inContexts);
+
       void SetPresentationContexts(const std::vector<PresentationContext>& inContexts);
+
       //given a particular data element, presumably the SOP class,
       //find the presentation context for that SOP
       //NOT YET IMPLEMENTED
-      PresentationContext FindContext(const DataElement& de) const;
+      PresentationContextRQ FindContext(const DataElement& de) const;
 
-      std::vector<PresentationContextAC> GetAcceptedPresentationContexts() const;
+      std::vector<PresentationContextAC> const & GetAcceptedPresentationContexts() const;
+      std::vector<PresentationContextAC> & GetAcceptedPresentationContexts();
       void AddAcceptedPresentationContext(const PresentationContextAC& inPC);
 
       /// used to establish scu connections

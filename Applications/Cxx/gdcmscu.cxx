@@ -111,14 +111,14 @@ void PrintHelp()
   std::cout << "DICOM Character Set: [" << s << "]" << std::endl;
 }
 
-void PrintQueryHelp(int inFindPatientRoot){
-  
+void PrintQueryHelp(int inFindPatientRoot)
+{
   gdcm::BaseRootQuery* theBase;
   if (inFindPatientRoot)
   {
     std::cout << "To find the help for a study-level query, type" <<std::endl;
     std::cout << " --queryhelp --studyroot" << std::endl;
-    theBase = gdcm::QueryFactory::ProduceQuery(gdcm::ePatientRootType, gdcm::ePatient);
+    theBase = gdcm::QueryFactory::ProduceQuery(gdcm::ePatientRootType, gdcm::eFind, gdcm::ePatient);
     theBase->WriteHelpFile(std::cout);
     delete theBase;
   }
@@ -127,7 +127,7 @@ void PrintQueryHelp(int inFindPatientRoot){
     std::cout << "To find the help for a patient-level query, type" <<std::endl;
     std::cout << " --queryhelp --patientroot" << std::endl;
     std::cout << "These are the study level, study root queries: " << std::endl;
-    theBase = gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eStudy);
+    theBase = gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eFind, gdcm::eStudy);
     theBase->WriteHelpFile(std::cout);
     delete theBase;
   }
@@ -426,15 +426,15 @@ int main(int argc, char *argv[])
   }
   
   if( help )
-  {
+    {
     PrintHelp();
     return 0;
-  }
+    }
   if(queryhelp)
-  {
+    {
     PrintQueryHelp(findpatientroot);
     return 0;
-  }
+    }
   bool theDebug = debug != 0;
   bool theWarning = warning != 0;
   bool theError = error != 0;
@@ -446,58 +446,58 @@ int main(int argc, char *argv[])
   gdcm::Trace::SetError( theError );
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
-  {
+    {
     gdcm::Trace::SetWarning( theVerbose );
     gdcm::Trace::SetError( theVerbose);
-  }
+    }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( callaetitle.c_str() );
   if( !rootuid )
-  {
+    {
     // only read the env var if no explicit cmd line option
     // maybe there is an env var defined... let's check
     const char *rootuid_env = getenv("GDCM_ROOT_UID");
     if( rootuid_env )
-    {
+      {
       rootuid = 1;
       root = rootuid_env;
+      }
     }
-  }
   if( rootuid )
-  {
+    {
     // root is set either by the cmd line option or the env var
     if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
-    {
+      {
       std::cerr << "specified Root UID is not valid: " << root << std::endl;
       return 1;
-    }
+      }
     gdcm::UIDGenerator::SetRoot( root.c_str() );
-  }
+    }
   
   if( shostname.empty() )
-  {
+    {
     std::cerr << "Hostname missing" << std::endl;
     return 1;
-  }
+    }
   if( port == 0 )
-  {
+    {
     std::cerr << "Problem with port number" << std::endl;
     return 1;
-  }
+    }
   // checkout outputdir opt:
   if( outputopt )
-  {
-    if( !gdcm::System::FileIsDirectory( outputdir.c_str()) )
     {
-      if( !gdcm::System::MakeDirectory( outputdir.c_str() ) )
+    if( !gdcm::System::FileIsDirectory( outputdir.c_str()) )
       {
+      if( !gdcm::System::MakeDirectory( outputdir.c_str() ) )
+        {
         std::cerr << "Sorry: " << outputdir << " is not a valid directory.";
         std::cerr << std::endl;
         std::cerr << "and I could not create it.";
         std::cerr << std::endl;
         return 1;
+        }
       }
     }
-  }
   
   const char *hostname = shostname.c_str();
   std::string mode = "echo";
@@ -543,7 +543,7 @@ int main(int argc, char *argv[])
     return (didItWork ? 0 : 1);
     }
   else if ( mode == "move" ) // C-FIND SCU
-  {
+    {
     // ./bin/gdcmscu --move --patient dhcp-67-183 5678 move
     // ./bin/gdcmscu --move --patient mi2b2.slicer.org 11112 move
     gdcm::ERootType theRoot = gdcm::eStudyRootType;
@@ -556,71 +556,69 @@ int main(int argc, char *argv[])
       theLevel = gdcm::eSeries;
     if (imagequery)
       theLevel = gdcm::eImageOrFrame;
-    
-    gdcm::BaseRootQuery* theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel, keys, true);
-    
+
+    gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
+      gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys, true);
+
     if (findstudyroot == 0 && findpatientroot == 0)
-    {
-      if (gdcm::Trace::GetErrorFlag())
       {
+      if (gdcm::Trace::GetErrorFlag())
+        {
         std::cerr << "Need to explicitly choose query retrieve level, --patientroot or --studyroot" << std::endl;      
-      }
+        }
       std::cerr << "Move failed." << std::endl;
       return 1;
-    }
-    
+      }
+
     if( !portscp )
-    {
-      if (gdcm::Trace::GetErrorFlag())
       {
+      if (gdcm::Trace::GetErrorFlag())
+        {
         std::cerr << "Need to set explicitely port number for SCP association --port-scp" << std::endl;      
-      }
+        }
       std::cerr << "Move failed." << std::endl;
       return 1;
-    }
-    
+      }
+
     if( storequery )
-    {
-      if (!theQuery->WriteQuery(queryfile))
       {
+      if (!theQuery->WriteQuery(queryfile))
+        {
         std::cerr << "Could not write out query to: " << queryfile << std::endl;
-        delete [] theQuery;
         std::cerr << "Move failed." << std::endl;
         return 1;
+        }
       }
-    }
-    
-    if (!theQuery->ValidateQuery(true, false))
-    {
+
+    if (!theQuery->ValidateQuery())
+      {
       std::cerr << "You have not constructed a valid find query.  Please try again." << std::endl;
-      delete theQuery;
       return 1;
-    }//must ensure that 0x8,0x52 is set and that
-    
+      }
+
     //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
     //across, rather than all at once at the end.  Turn off the boolean to have
     //it written all at once at the end.
     bool didItWork = gdcm::CompositeNetworkFunctions::CMove( hostname, port,
       theQuery, portscpnum,
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
-    delete theQuery;
     if (!didItWork)
-    {
+      {
       std::cerr << "Move failed." << std::endl;
-    }
+      }
     else
-    {
+      {
       std::cout << "Move succeeded." << std::endl;
-    }
+      }
     return (didItWork ? 0 : 1);
-  }
+    }
   else if ( mode == "find" ) // C-FIND SCU
-  {
+    {
     // Construct C-FIND DataSet:
     // ./bin/gdcmscu --find --patient dhcp-67-183 5678
     // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // findscu -aec MI2B2 -P -k 0010,0010=F* mi2b2.slicer.org 11112 patqry.dcm
-    
+
     // PATIENT query:
     // ./bin/gdcmscu --find --patient mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2 --key 10,10="F*" -V
     gdcm::ERootType theRoot = gdcm::eStudyRootType;
@@ -633,49 +631,47 @@ int main(int argc, char *argv[])
       theLevel = gdcm::eSeries;
     if (imagequery)
       theLevel = gdcm::eImageOrFrame;
-    
-    gdcm::BaseRootQuery* theQuery = 
+
+    gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
+
     if (findstudyroot == 0 && findpatientroot == 0)
-    {
-      if (gdcm::Trace::GetErrorFlag())
       {
+      if (gdcm::Trace::GetErrorFlag())
+        {
         std::cerr << "Need to explicitly choose query retrieve level, --patientroot or --studyroot" << std::endl;      
-      }
+        }
       std::cerr << "Find failed." << std::endl;
       return 1;
-    }
+      }
     if (!theQuery)
-    {
+      {
       std::cerr << "Query construction failed." <<std::endl;
       return 1;
-    }
-    
-    if( storequery )
-    {
-      if (!theQuery->WriteQuery(queryfile))
-      {
-        std::cerr << "Could not write out query to: " << queryfile << std::endl;
-        delete [] theQuery;
-        return 1;
       }
-    }
-    
+
+    if( storequery )
+      {
+      if (!theQuery->WriteQuery(queryfile))
+        {
+        std::cerr << "Could not write out query to: " << queryfile << std::endl;
+        return 1;
+        }
+      }
+
     //doing a non-strict query, the second parameter there.
     //look at the base query comments
-    if (!theQuery->ValidateQuery(true, false))
-    {
+    if (!theQuery->ValidateQuery())
+      {
       std::cerr << "You have not constructed a valid find query.  Please try again." << std::endl;
-      delete theQuery;
       return 1;
-    }//must ensure that 0x8,0x52 is set and that
+      }
     //the value in that tag corresponds to the query type
     std::vector<gdcm::DataSet> theDataSet;
     if( !gdcm::CompositeNetworkFunctions::CFind(hostname, port, theQuery, theDataSet,
         callingaetitle.c_str(), callaetitle.c_str()) )
       {
       std::cerr << "Problem in CFind." << std::endl;
-      delete theQuery;
       return 1;
       }
     std::vector<gdcm::DataSet>::iterator itor;
@@ -683,11 +679,10 @@ int main(int argc, char *argv[])
       {
       itor->Print(std::cout);
       }
-    
-    delete theQuery;
-    std::cout << "Find was successful." << std::endl;
+
+    //std::cout << "Find was successful." << std::endl;
     return 0;
-  }
+    }
   else // C-STORE SCU
     {
     // mode == directory
@@ -719,5 +714,6 @@ int main(int argc, char *argv[])
       std::cout << "Store failed." << std::endl;
     return (didItWork ? 0 : 1);
     }
+
   return 0;
 }

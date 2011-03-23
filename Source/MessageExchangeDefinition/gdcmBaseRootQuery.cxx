@@ -192,8 +192,19 @@ bool BaseRootQuery::WriteQuery(const std::string& inFileName)
   return true;
 }
 
-DataSet const & BaseRootQuery::GetQueryDataSet() const{
+DataSet const & BaseRootQuery::GetQueryDataSet() const
+{
   return mDataSet;
+}
+
+DataSet & BaseRootQuery::GetQueryDataSet()
+{
+  return mDataSet;
+}
+
+void BaseRootQuery::AddQueryDataSet(const DataSet & ds)
+{
+  mDataSet.GetDES().insert( ds.GetDES().begin(), ds.GetDES().end() );
 }
 
 

@@ -28,6 +28,7 @@ SET(MessageExchangeDefinition_SRCS
   gdcmAbstractSyntax.cxx
   gdcmApplicationContext.cxx
   gdcmAsynchronousOperationsWindowSub.cxx
+  gdcmQueryBase.cxx
   gdcmBaseRootQuery.cxx
   gdcmCEchoMessages.cxx
   gdcmCFindMessages.cxx
@@ -42,8 +43,10 @@ SET(MessageExchangeDefinition_SRCS
   gdcmMaximumLengthSub.cxx
   gdcmPDUFactory.cxx
   gdcmPDataTFPDU.cxx
-  gdcmPatientRootQuery.cxx
+  gdcmFindPatientRootQuery.cxx
+  gdcmMovePatientRootQuery.cxx
   gdcmPresentationContext.cxx
+  gdcmPresentationContextRQ.cxx
   gdcmPresentationContextAC.cxx
   gdcmPresentationDataValue.cxx
   gdcmQueryFactory.cxx
@@ -52,7 +55,8 @@ SET(MessageExchangeDefinition_SRCS
   gdcmQuerySeries.cxx
   gdcmQueryStudy.cxx
   gdcmServiceClassUser.cxx
-  gdcmStudyRootQuery.cxx
+  gdcmFindStudyRootQuery.cxx
+  gdcmMoveStudyRootQuery.cxx
   gdcmTransferSyntaxSub.cxx
   gdcmULActionAA.cxx
   gdcmULActionAE.cxx

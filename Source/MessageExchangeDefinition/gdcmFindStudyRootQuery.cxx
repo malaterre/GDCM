@@ -1,30 +1,17 @@
 /*=========================================================================
- *
- *  Copyright Insight Software Consortium
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0.txt
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *=========================================================================*/
-/*
-file name: gdcmStudyRootQuery.cxx
-contains: the class which will produce a dataset for c-find and c-move with study root
-name and date: 18 oct 2010 mmr
 
-placeholder file to get the compiler/linker to play nice with this file
-*/
+  Program: GDCM (Grassroots DICOM). A DICOM library
 
+  Copyright (c) 2006-2011 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
-#include "gdcmStudyRootQuery.h"
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#include "gdcmFindStudyRootQuery.h"
 
 #include "gdcmAttribute.h"
 #include "gdcmDataSet.h"
@@ -32,53 +19,62 @@ placeholder file to get the compiler/linker to play nice with this file
 namespace gdcm
 {
 
-StudyRootQuery::StudyRootQuery()
+FindStudyRootQuery::FindStudyRootQuery()
 {
-  SetParameters();
-}
-
-StudyRootQuery::~StudyRootQuery(){}
-
-
-void StudyRootQuery::SetParameters(){
   mRootType = eStudyRootType;
   mHelpDescription = "Study-level root query";
 }
 
+void FindStudyRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
+{
+  switch (inQueryLevel)
+    {
+  case eStudy:
+      {
+      Attribute<0x8,0x52> at1 = { "STUDY " };
+      mDataSet.Insert( at1.GetAsDataElement() );
+      }
+    break;
+  case eSeries:
+      {
+      Attribute<0x8,0x52> at1 = { "SERIES" };
+      mDataSet.Insert( at1.GetAsDataElement() );
+      Attribute<0x20, 0xd> Studylevel = { "" };
+      mDataSet.Insert( Studylevel.GetAsDataElement() );
+      }
+  case eImageOrFrame:
+      {
+      Attribute<0x8,0x52> at1 = { "IMAGE " };
+      mDataSet.Insert( at1.GetAsDataElement() );
 
-std::vector<Tag> StudyRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind){
-  if (forFind){
-    switch (inQueryLevel){
-      case ePatient:
-        return mPatient.GetAllTags(eStudyRootType);
-      case eStudy:
-        return mStudy.GetAllTags(eStudyRootType);
-      case eSeries:
-      default:
-        return mSeries.GetAllTags(eStudyRootType);
-      case eImageOrFrame:
-        return mImage.GetAllTags(eStudyRootType);
-    }
-  }
-  else {//for move
-    switch (inQueryLevel){
-      case ePatient:
-        return mPatient.GetUniqueTags(eStudyRootType);
-      case eStudy:
-        return mStudy.GetUniqueTags(eStudyRootType);
-      case eSeries:
-      default:
-        return mSeries.GetUniqueTags(eStudyRootType);
-      case eImageOrFrame:
-        return mImage.GetUniqueTags(eStudyRootType);
-    }
+      Attribute<0x20, 0xd> Studylevel = { "" };
+      mDataSet.Insert( Studylevel.GetAsDataElement() );
+
+      Attribute<0x20, 0xe> SeriesLevel = { "" };
+      mDataSet.Insert( SeriesLevel.GetAsDataElement() );
+      }
+    break;
   }
 }
-///have to be able to ensure that
-///0x8,0x52 is set
-///that the level is appropriate (ie, not setting PATIENT for a study query
-///that the tags in the query match the right level (either required, unique, optional)
-bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
+
+std::vector<Tag> FindStudyRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel)
+{
+  switch (inQueryLevel)
+    {
+  case ePatient:
+    return mPatient.GetAllTags(eStudyRootType);
+  case eStudy:
+    return mStudy.GetAllTags(eStudyRootType);
+  case eSeries:
+//  default:
+    return mSeries.GetAllTags(eStudyRootType);
+  case eImageOrFrame:
+    return mImage.GetAllTags(eStudyRootType);
+    }
+}
+
+bool FindStudyRootQuery::ValidateQuery(bool inStrict) const
+{
   //if it's empty, it's not useful
   DataSet ds = GetQueryDataSet();
   if (ds.Size() == 0) return false;
@@ -112,11 +108,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     if (qb == NULL){
       return false;
     }
-    if (forFind){
       tags = qb->GetAllTags(eStudyRootType);
-    } else{
-      tags = qb->GetUniqueTags(eStudyRootType);
-    }
     delete qb;
   }
   else //include all previous levels (ie, series gets study, image gets series and study)
@@ -127,11 +119,7 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryStudy();
-      if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
@@ -139,19 +127,11 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryStudy();
-      if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QuerySeries();
-      if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
@@ -159,27 +139,15 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryStudy();
-      if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QuerySeries();
-      if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QueryImage();
-      if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
@@ -216,44 +184,8 @@ bool StudyRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   return theReturn && (thePresentTagCount > 0);
 }
 
-void StudyRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
+UIDs::TSName FindStudyRootQuery::GetAbstractSyntaxUID() const
 {
-  switch (inQueryLevel)
-    {
-  case eStudy:
-      {
-      Attribute<0x8,0x52> at1 = { "STUDY " };
-      mDataSet.Insert( at1.GetAsDataElement() );
-      }
-    break;
-  case eSeries:
-      {
-      Attribute<0x8,0x52> at1 = { "SERIES" };
-      mDataSet.Insert( at1.GetAsDataElement() );
-      Attribute<0x20, 0xd> Studylevel = { "" };// make it blank
-      mDataSet.Insert( Studylevel.GetAsDataElement() );
-      }
-  default:
-    break;
-  case eImageOrFrame:
-      {
-      Attribute<0x8,0x52> at1 = { "IMAGE " };
-      mDataSet.Insert( at1.GetAsDataElement() );
-
-      Attribute<0x20, 0xd> Studylevel = { "" };// make it blank
-      mDataSet.Insert( Studylevel.GetAsDataElement() );
-
-      Attribute<0x20, 0xe> SeriesLevel = { "" };// make it blank
-      mDataSet.Insert( SeriesLevel.GetAsDataElement() );
-      }
-    break;
-  }
-}
-
-UIDs::TSName StudyRootQuery::GetAbstractSyntaxUID(bool inMove) const
-{
-  if( inMove )
-    return UIDs::StudyRootQueryRetrieveInformationModelMOVE;
   return UIDs::StudyRootQueryRetrieveInformationModelFIND;
 }
 

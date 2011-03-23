@@ -14,26 +14,52 @@
 #include "gdcmPresentationContextGenerator.h"
 
 #include "gdcmReader.h"
+#include "gdcmTransferSyntax.h"
+
 #include <algorithm> // std::find
 
 namespace gdcm
 {
+std::string PresentationContextGenerator::DefaultTransferSyntax = "1.2.840.10008.1.2";
 
-namespace network
+const char *PresentationContextGenerator::GetDefaultTransferSyntax() const
 {
+  return DefaultTransferSyntax.c_str();
+}
+
+void PresentationContextGenerator::SetDefaultTransferSyntax( const TransferSyntax &ts )
+{
+  DefaultTransferSyntax = ts.GetString();
+}
+
 PresentationContextGenerator::PresentationContextGenerator() {}
 
-bool PresentationContextGenerator::GenerateFromUID(UIDs::TSName tsname)
+//bool PresentationContextGenerator::GenerateFromQuery(BaseRootQuery *query)
+//{
+//}
+
+bool PresentationContextGenerator::GenerateFromUID(UIDs::TSName asname)
 {
   PresContext.clear();
 
-  AbstractSyntax as;
-  as.SetNameFromUID( tsname );
+  const char *asnamestr = UIDs::GetUIDString( asname );
+  const char *tsnamestr = GetDefaultTransferSyntax();
 
-  TransferSyntaxSub ts;
-  ts.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  AddPresentationContext( asnamestr, tsnamestr );
 
-  AddPresentationContext( as, ts );
+  // There is a special case for MOVE operations. Need to have alternate FIND operations
+  if( asname == UIDs::PatientRootQueryRetrieveInformationModelMOVE )
+    {
+    const char *asnamestr = UIDs::GetUIDString(
+      UIDs::PatientRootQueryRetrieveInformationModelFIND );
+    AddPresentationContext( asnamestr, tsnamestr );
+    }
+  if( asname == UIDs::StudyRootQueryRetrieveInformationModelMOVE )
+    {
+    const char *asnamestr = UIDs::GetUIDString(
+      UIDs::StudyRootQueryRetrieveInformationModelFIND );
+    AddPresentationContext( asnamestr, tsnamestr );
+    }
 
   return true;
 }
@@ -93,11 +119,7 @@ bool PresentationContextGenerator::GenerateFromFilenames(const Directory::Filena
         std::string buffer( bv->GetPointer(), bv->GetLength() );
         const char *sopclassvalue = buffer.c_str();
 
-        AbstractSyntax as;
-        as.SetName( sopclassvalue );
-        TransferSyntaxSub ts;
-        ts.SetName( tsuidvalue );
-        AddPresentationContext( as, ts );
+        AddPresentationContext( sopclassvalue, tsuidvalue );
         }
       }
     else
@@ -109,8 +131,12 @@ bool PresentationContextGenerator::GenerateFromFilenames(const Directory::Filena
   return true;
 }
 
-bool PresentationContextGenerator::AddPresentationContext( AbstractSyntax const & as, TransferSyntaxSub const & ts )
+bool PresentationContextGenerator::AddPresentationContext( const char *as, const char * ts )
 {
+  // \precondition
+  assert( as );
+  assert( ts );
+
   SizeType n = PresContext.size();
   PresentationContext pc;
   pc.SetAbstractSyntax( as );
@@ -141,7 +167,5 @@ void PresentationContextGenerator::SetMergeModeToTransferSyntax()
 {
   assert( 0 && "TODO" );
 }
-
-} // end namespace network
 
 } // end namespace gdcm

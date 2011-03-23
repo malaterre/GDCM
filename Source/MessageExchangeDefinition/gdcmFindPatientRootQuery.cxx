@@ -1,82 +1,91 @@
 /*=========================================================================
- *
- *  Copyright Insight Software Consortium
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0.txt
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *=========================================================================*/
-/*
-file name: gdcmPatientRootQuery.cxx
-contains: the class which will produce a dataset for c-find and c-move with study root
-name and date: 18 oct 2010 mmr
 
-placeholder file to get the compiler/linker to play nice with this file
-*/
+  Program: GDCM (Grassroots DICOM). A DICOM library
 
+  Copyright (c) 2006-2011 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
-#include "gdcmPatientRootQuery.h"
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#include "gdcmFindPatientRootQuery.h"
 #include "gdcmAttribute.h"
 
-namespace gdcm{
+namespace gdcm
+{
 
-PatientRootQuery::PatientRootQuery() {
-  SetParameters();
-}
-
-PatientRootQuery::~PatientRootQuery(){}
-
-void PatientRootQuery::SetParameters(){
+FindPatientRootQuery::FindPatientRootQuery()
+{
   mRootType = ePatientRootType;
   mHelpDescription = "Patient-level root query";
 }
 
+void FindPatientRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
+{
+  switch (inQueryLevel)
+    {
+  case ePatient:
+      {
+      Attribute<0x8,0x52> at1 = { "PATIENT " };
+      mDataSet.Insert( at1.GetAsDataElement() );
+      }
+    break;
+  case eStudy:
+      {
+      Attribute<0x8,0x52> at1 = { "STUDY " };
+      mDataSet.Insert( at1.GetAsDataElement() );
+      Attribute<0x10,0x20> PatientLevel = { "" };
+      mDataSet.Insert( PatientLevel.GetAsDataElement() );
+      }
+    break;
+  case eSeries:
+      {
+      Attribute<0x8,0x52> at1 = { "SERIES" };
+      mDataSet.Insert( at1.GetAsDataElement() );
+      Attribute<0x10,0x20> PatientLevel = { "" };
+      mDataSet.Insert( PatientLevel.GetAsDataElement() );
+      Attribute<0x20, 0xd> Studylevel = { "" };
+      mDataSet.Insert( Studylevel.GetAsDataElement() );
+      }
+  case eImageOrFrame:
+      {
+      Attribute<0x8,0x52> at1 = { "IMAGE " };
+      mDataSet.Insert( at1.GetAsDataElement() );
 
+      Attribute<0x10,0x20> PatientLevel = { "" };
+      mDataSet.Insert( PatientLevel.GetAsDataElement() );
 
-std::vector<Tag> PatientRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) {
-  if (forFind){
-    switch (inQueryLevel){
-      case ePatient:
-        return mPatient.GetAllTags(ePatientRootType);
-      case eStudy:
-        return mStudy.GetAllTags(ePatientRootType);
-      case eSeries:
-      default:
-        return mSeries.GetAllTags(ePatientRootType);
-      case eImageOrFrame:
-        return mImage.GetAllTags(ePatientRootType);
+      Attribute<0x20, 0xd> Studylevel = { "" };
+      mDataSet.Insert( Studylevel.GetAsDataElement() );
+
+      Attribute<0x20, 0xe> SeriesLevel = { "" };
+      mDataSet.Insert( SeriesLevel.GetAsDataElement() );
+      }
+    break;
     }
-  }
-  else {//for move
-    switch (inQueryLevel){
-      case ePatient:
-        return mPatient.GetUniqueTags(ePatientRootType);
-      case eStudy:
-        return mStudy.GetUniqueTags(ePatientRootType);
-      case eSeries:
-      default:
-        return mSeries.GetUniqueTags(ePatientRootType);
-      case eImageOrFrame:
-        return mImage.GetUniqueTags(ePatientRootType);
-    }
-  }
 }
 
+std::vector<Tag> FindPatientRootQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel)
+{
+  switch (inQueryLevel)
+    {
+  case ePatient:
+    return mPatient.GetAllTags(ePatientRootType);
+  case eStudy:
+    return mStudy.GetAllTags(ePatientRootType);
+  case eSeries:
+//  default:
+    return mSeries.GetAllTags(ePatientRootType);
+  case eImageOrFrame:
+    return mImage.GetAllTags(ePatientRootType);
+    }
+}
 
-///have to be able to ensure that
-///0x8,0x52 is set
-///that the level is appropriate (ie, not setting PATIENT for a study query
-///that the tags in the query match the right level (either required, unique, optional)
-bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
+bool FindPatientRootQuery::ValidateQuery(bool inStrict) const
+{
   //if it's empty, it's not useful
   DataSet ds = GetQueryDataSet();
   if (ds.Size() == 0) return false;
@@ -110,11 +119,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
     if (qb == NULL){
       return false;
     }
-    if (forFind){
       tags = qb->GetAllTags(ePatientRootType);
-    } else{
-      tags = qb->GetUniqueTags(ePatientRootType);
-    }
   }
   else //include all previous levels (ie, series gets study and patient, image gets series, study, and patient)
   {
@@ -123,11 +128,7 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryPatient();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
@@ -135,19 +136,11 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryPatient();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QueryStudy();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
@@ -155,27 +148,15 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryPatient();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QueryStudy();
-      if (forFind){
         tagGroup = qb->GetAllTags(eStudyRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QuerySeries();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
@@ -183,35 +164,19 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryPatient();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QueryStudy();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QuerySeries();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QueryImage();
-      if (forFind){
         tagGroup = qb->GetAllTags(ePatientRootType);
-      } else{
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
-      }
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
     }
@@ -247,56 +212,8 @@ bool PatientRootQuery::ValidateQuery(bool forFind, bool inStrict) const{
   return theReturn && (thePresentTagCount > 0);
 }
 
-  
-  void PatientRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel){
-    switch (inQueryLevel){
-      case ePatient:
-      {
-        Attribute<0x8,0x52> at1 = { "PATIENT " };
-        mDataSet.Insert( at1.GetAsDataElement() );
-      }
-        break;
-      case eStudy:
-      {
-        Attribute<0x8,0x52> at1 = { "STUDY " };
-        mDataSet.Insert( at1.GetAsDataElement() );
-        Attribute<0x10,0x20> PatientLevel = { "" };
-        mDataSet.Insert( PatientLevel.GetAsDataElement() );
-      }
-        break;
-      case eSeries:
-      {
-        Attribute<0x8,0x52> at1 = { "SERIES" };
-        mDataSet.Insert( at1.GetAsDataElement() );
-        Attribute<0x10,0x20> PatientLevel = { "" };
-        mDataSet.Insert( PatientLevel.GetAsDataElement() );
-        Attribute<0x20, 0xd> Studylevel = { "" };// make it blank
-        mDataSet.Insert( Studylevel.GetAsDataElement() );
-      }
-      default:
-        break;
-      case eImageOrFrame:
-      {
-        Attribute<0x8,0x52> at1 = { "IMAGE " };
-        mDataSet.Insert( at1.GetAsDataElement() );
-        
-        Attribute<0x10,0x20> PatientLevel = { "" };
-        mDataSet.Insert( PatientLevel.GetAsDataElement() );
-        
-        Attribute<0x20, 0xd> Studylevel = { "" };//blanked
-        mDataSet.Insert( Studylevel.GetAsDataElement() );
-        
-        Attribute<0x20, 0xe> SeriesLevel = { "" };//blanked
-        mDataSet.Insert( SeriesLevel.GetAsDataElement() );
-      }
-        break;
-    }
-  }
-
-UIDs::TSName PatientRootQuery::GetAbstractSyntaxUID(bool inMove) const
+UIDs::TSName FindPatientRootQuery::GetAbstractSyntaxUID() const
 {
-  if( inMove )
-    return UIDs::PatientRootQueryRetrieveInformationModelMOVE;
   return UIDs::PatientRootQueryRetrieveInformationModelFIND;
 }
 

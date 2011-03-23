@@ -24,9 +24,9 @@ this file defines the messages for the cfind action
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
-#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextRQ.h"
 #include "gdcmCommandDataSet.h"
-#include "gdcmStudyRootQuery.h"
+//#include "gdcmStudyRootQuery.h"
 #include "gdcmULConnection.h"
 
 namespace gdcm{
@@ -51,7 +51,7 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(
     }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 #else
-  PresentationContext pc( inRootQuery->GetAbstractSyntaxUID() );
+  PresentationContextRQ pc( inRootQuery->GetAbstractSyntaxUID() );
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromPresentationContext(pc) );
 #endif

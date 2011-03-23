@@ -15,25 +15,28 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
-
 #include "gdcmULWritingCallback.h"
+
 #include "gdcmFile.h"
 #include "gdcmWriter.h"
-#include "gdcmTrace.h"
 
-namespace gdcm {
-  namespace network {
+namespace gdcm
+{
 
-    //writes the data set to disk immediately, rather than keeping it memory.
-    //could have potential timing issues if datasets come over the network faster than
-    //they can be written, which could be the case on very fast connections with slow disks
+namespace network
+{
+
+// writes the data set to disk immediately, rather than keeping it memory.
+// could have potential timing issues if datasets come over the network faster than
+// they can be written, which could be the case on very fast connections with slow disks
 void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
 {
-  if (inDataSet.FindDataElement(Tag(0x0008,0x0018)))
+  if (inDataSet.FindDataElement(Tag(0x0008,0x0018)) &&
+    !inDataSet.GetDataElement(Tag(0x0008,0x0018)).IsEmpty() )
     {
-    DataElement de = inDataSet.GetDataElement(Tag(0x0008,0x0018));
-    std::string sopclassuid_str( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
+    const DataElement &de = inDataSet.GetDataElement(Tag(0x0008,0x0018));
+    std::string sopclassuid_str( de.GetByteValue()->GetPointer(),
+      de.GetByteValue()->GetLength() );
     Writer w;
     std::string theLoc = mDirectoryName + "/" + sopclassuid_str + ".dcm";
     w.SetFileName(theLoc.c_str());
@@ -48,8 +51,7 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
       }
     else 
       {
-      if (Trace::GetWarningFlag())
-        std::cout << "Wrote " << sopclassuid_str << " to disk. " << std::endl;
+      gdcmDebugMacro( "Wrote " << sopclassuid_str << " to disk. " << std::endl);
       }
     }
   else 

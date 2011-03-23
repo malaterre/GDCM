@@ -21,21 +21,25 @@
 #include "gdcmQueryBase.h"
 #include "gdcmDataSet.h"
 
-namespace gdcm{
+namespace gdcm
+{
 /**
  * \brief QueryImage
- * contains: class to construct an image-based query for c-find and c-move
+ * contains: class to construct an image-based query for C-FIND and C-MOVE
  */
-  class GDCM_EXPORT QueryImage : public QueryBase {
-    DataSet mCurrentQuery;
-  public:
-    std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
+class QueryImage : public QueryBase
+{
+  DataSet mCurrentQuery;
+public:
+  std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
 
-    std::string GetName() const { return "Composite Object Instance (Image)"; }
-    DataElement GetQueryLevel() const;
-  };
-}
+  std::string GetName() const { return "Composite Object Instance (Image)"; }
+
+  DataElement GetQueryLevel() const;
+};
+
+} // end namespace gdcm
 
 #endif // GDCMQUERYIMAGE_H

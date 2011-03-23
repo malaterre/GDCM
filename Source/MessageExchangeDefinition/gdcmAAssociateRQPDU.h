@@ -17,7 +17,7 @@
 #include "gdcmTypes.h"
 #include "gdcmVR.h" // AEComp
 #include "gdcmApplicationContext.h"
-#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextRQ.h"
 #include "gdcmUserInformation.h"
 #include "gdcmBasePDU.h"
 
@@ -39,7 +39,7 @@ public:
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
   size_t Size() const;
-  void AddPresentationContext( PresentationContext const &pc );
+  void AddPresentationContext( PresentationContextRQ const &pc );
 
   /// Set the Called AE Title
   void SetCalledAETitle(const char calledaetitle[16]);
@@ -68,19 +68,19 @@ public:
 //    assert( 0 );
 //    }
 
-  typedef std::vector<PresentationContext>::size_type SizeType;
+  typedef std::vector<PresentationContextRQ>::size_type SizeType;
   SizeType GetNumberOfPresentationContext() const {
     return PresContext.size();
   }
-  PresentationContext const &GetPresentationContext(SizeType i) const {
+  PresentationContextRQ const &GetPresentationContext(SizeType i) const {
     assert( !PresContext.empty() && i < PresContext.size() );
     return PresContext[i];
   }
-  typedef std::vector<PresentationContext> PresentationContextArrayType;
+  typedef std::vector<PresentationContextRQ> PresentationContextArrayType;
   PresentationContextArrayType const &GetPresentationContexts() { return PresContext; }
 
-  const PresentationContext *GetPresentationContextByID(uint8_t i) const;
-  const PresentationContext *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
+  const PresentationContextRQ *GetPresentationContextByID(uint8_t i) const;
+  const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
   bool IsLastFragment() const { return true; }
 
 private:
@@ -136,7 +136,7 @@ private:
   see Sections 7.1.1.2, 7.1.1.13, and 7.1.1.6.
    */
   ApplicationContext AppContext;
-  std::vector<PresentationContext> PresContext;
+  std::vector<PresentationContextRQ> PresContext;
   UserInformation UserInfo;
 };
 

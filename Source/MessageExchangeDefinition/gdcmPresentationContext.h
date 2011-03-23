@@ -15,21 +15,16 @@
 #define GDCMPRESENTATIONCONTEXT_H
 
 #include "gdcmTypes.h"
-#include "gdcmAbstractSyntax.h"
-#include "gdcmTransferSyntaxSub.h"
-#include "gdcmDataSet.h"
+#include "gdcmUIDs.h"
+
+#include <vector>
 
 namespace gdcm
 {
 
-namespace network
-{
-
 /**
  * \brief PresentationContext
- * Table 9-13
- * PRESENTATION CONTEXT ITEM FIELDS
- * \see PresentationContextAC
+ * \see PresentationContextAC PresentationContextRQ
  */
 class GDCM_EXPORT PresentationContext
 {
@@ -39,22 +34,17 @@ public:
   /// Initialize Presentation Context with AbstractSyntax set to asname
   /// and with a single TransferSyntax set to tsname (dfault to Implicit VR
   /// LittleEndian when not specified ).
-  PresentationContext( UIDs::TSName asname, UIDs::TSName tsname =
-    UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM  );
+  PresentationContext( UIDs::TSName asname,
+    UIDs::TSName tsname = UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
-  std::istream &Read(std::istream &is);
-  const std::ostream &Write(std::ostream &os) const;
-  size_t Size() const;
+  void SetAbstractSyntax( const char *as ) { AbstractSyntax = as; }
+  const char *GetAbstractSyntax() const { return AbstractSyntax.c_str(); }
 
-  void SetAbstractSyntax( AbstractSyntax const & as );
-  AbstractSyntax const &GetAbstractSyntax() const { return SubItems; }
-  AbstractSyntax &GetAbstractSyntax() { return SubItems; }
-
-  void AddTransferSyntax( TransferSyntaxSub const &ts );
-  typedef std::vector<TransferSyntaxSub>::size_type SizeType;
-  TransferSyntaxSub const & GetTransferSyntax(SizeType i) const { return TransferSyntaxes[i]; }
-  TransferSyntaxSub & GetTransferSyntax(SizeType i) { return TransferSyntaxes[i]; }
-  std::vector<TransferSyntaxSub> const & GetTransferSyntaxes() const {return TransferSyntaxes; }
+  void AddTransferSyntax( const char *tsstr );
+  typedef std::vector<std::string> TransferSyntaxArrayType;
+  typedef TransferSyntaxArrayType::size_type SizeType;
+  const char *GetTransferSyntax(SizeType i) const { return TransferSyntaxes[i].c_str(); }
+  SizeType GetNumberOfTransferSyntaxes() const { return TransferSyntaxes.size(); }
 
   void SetPresentationContextID( uint8_t id );
   uint8_t GetPresentationContextID() const;
@@ -65,28 +55,14 @@ public:
     {
     assert( TransferSyntaxes.size() == 1 ); // TODO
     assert( pc.TransferSyntaxes.size() == 1 );
-    return SubItems == pc.SubItems && TransferSyntaxes == pc.TransferSyntaxes;
+    return AbstractSyntax == pc.AbstractSyntax && TransferSyntaxes == pc.TransferSyntaxes;
     }
 
 private:
-  static const uint8_t ItemType;
-  static const uint8_t Reserved2;
-  uint16_t ItemLength; // len of last transfer syntax
+  std::string AbstractSyntax;
+  std::vector<std::string> TransferSyntaxes;
   uint8_t /*PresentationContext*/ID;
-  static const uint8_t Reserved6;
-  static const uint8_t Reserved7;
-  static const uint8_t Reserved8;
-  /*
-  This variable field shall contain the following sub-items: one Abstract
-  Syntax and one or more Transfer Syntax(es). For a complete
-  description of the use and encoding of these sub-items see Sections
-  9.3.2.2.1 and 9.3.2.2.2.
-   */
-  AbstractSyntax SubItems;
-  std::vector<TransferSyntaxSub> TransferSyntaxes;
 };
-
-} // end namespace network
 
 } // end namespace gdcm
 

@@ -24,7 +24,7 @@ this file defines the messages for the cecho action
 #include "gdcmUIDs.h"
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
-#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextRQ.h"
 #include "gdcmCommandDataSet.h"
 #include "gdcmULConnection.h"
 
@@ -35,7 +35,7 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
  const ULConnection &inConnection, const BaseRootQuery* inRootQuery)
 {
   PresentationDataValue thePDV;
-  PresentationContext pc( UIDs::VerificationSOPClass );
+  PresentationContextRQ pc( UIDs::VerificationSOPClass );
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromPresentationContext(pc) );
   assert( thePDV.GetPresentationContextID() == 1 );

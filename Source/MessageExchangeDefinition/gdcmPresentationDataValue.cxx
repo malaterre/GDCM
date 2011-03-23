@@ -166,11 +166,10 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
   std::ofstream d( "/tmp/debug" );
   d.write( theEntireBuffer.c_str(), theEntireBuffer.size() );
   d.close();
-  std::ifstream i( "/tmp/debug" );
-  outDataSet.Read<ImplicitDataElement,SwapperNoOp>( i );
 #endif
 
   outDataSet.Read<ImplicitDataElement,SwapperNoOp>( ss );
+  //outDataSet.Read<ExplicitDataElement,SwapperNoOp>( ss );
 
 
   return outDataSet;

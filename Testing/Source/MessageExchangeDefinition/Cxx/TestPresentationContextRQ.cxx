@@ -15,33 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef GDCMPATIENTROOTQUERY_H
-#define GDCMPATIENTROOTQUERY_H
+#include "gdcmPresentationContextRQ.h"
 
-#include "gdcmBaseRootQuery.h"
-
-namespace gdcm{
-/**
- * \brief PatientRootQuery
- * contains: the class which will produce a dataset for c-find and c-move with patient root
- */
-  class QueryFactory;
-  class GDCM_EXPORT PatientRootQuery : public BaseRootQuery {
-  private:
-    void SetParameters();
-    friend class QueryFactory;
-    PatientRootQuery();
-
-  public:
-    ~PatientRootQuery();
-
-    void InitializeDataSet(const EQueryLevel& inQueryLevel);
-
-    std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind);
-    bool ValidateQuery(bool forFind, bool inStrict) const;
-
-    UIDs::TSName GetAbstractSyntaxUID(bool inMove = false) const;
-  };
+int TestPresentationContextRQ(int argc, char *argv[])
+{
+  gdcm::network::PresentationContextRQ o;
+  return 0;
 }
-
-#endif //PATIENTROOTQUERY_H

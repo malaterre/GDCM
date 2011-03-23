@@ -26,6 +26,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmTag.h"
 #include "gdcmUIDs.h"
+#include "gdcmObject.h"
 
 #include <iostream>
 
@@ -48,14 +49,20 @@ namespace gdcm{
  *
  * The dataset held by this object (or, really, one of its derivates) should be passed to a c-find or c-move query.
  */
-  enum GDCM_EXPORT EQueryLevel {
+  enum EQueryLevel
+    {
     ePatient,
     eStudy,
     eSeries,
     eImageOrFrame
-  };
+    };
+  enum EQueryType
+    {
+    eFind,
+    eMove
+    };
 
-  class GDCM_EXPORT BaseRootQuery
+  class GDCM_EXPORT BaseRootQuery : public Object
   {
     //these four classes contain the required, unique, and optional tags from the standard.
     //used both to list the tags as well as to validate a dataset, if ever we were to do so.
@@ -73,8 +80,6 @@ namespace gdcm{
 
     ERootType mRootType; //set in construction, and it's something else in the study root type
     std::string mHelpDescription; //used when generating the help output
-    virtual void SetParameters() = 0; //to ensure that this base class is not used directly,
-    //a particular instance must be chosen
 
     void SetSearchParameter(const Tag& inTag, const DictEntry& inDictEntry, const std::string& inValue);
     public:
@@ -90,12 +95,15 @@ namespace gdcm{
     //returns false if the operation failed
     virtual bool WriteQuery(const std::string& inFileName);
 
+    /// Set/Get the internal representation of the query as a DataSet
     DataSet const & GetQueryDataSet() const;
+    DataSet & GetQueryDataSet();
+    void AddQueryDataSet(const DataSet & ds);
 
     ///this function will return all tags at a given query level, so that
     ///they maybe selected for searching.  The boolean forFind is true
     ///if the query is a find query, or false for a move query.
-    virtual std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel, bool forFind) = 0;
+    virtual std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel) = 0;
 
     /// this function sets tag 8,52 to the appropriate value based on query level
     /// also fills in the right unique tags, as per the standard's requirements
@@ -115,9 +123,9 @@ namespace gdcm{
     ///So, if 'inStrict' is false, then tags from the current level and all higher levels
     ///are now considered valid.  So, if you're doing a non-strict series-level query,
     ///tags from the patient and study level can be passed along as well.
-    virtual bool ValidateQuery(bool forFind, bool inStrict) const = 0;
+    virtual bool ValidateQuery(bool inStrict = true) const = 0;
 
-    virtual UIDs::TSName GetAbstractSyntaxUID(bool inMove = false) const = 0;
+    virtual UIDs::TSName GetAbstractSyntaxUID() const = 0;
   };
 }
 

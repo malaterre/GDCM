@@ -20,21 +20,23 @@
 
 #include "gdcmQueryBase.h"
 
-namespace gdcm{
-
+namespace gdcm
+{
 /**
  * \brief QueryStudy.h
- * contains: class to construct a study-based query for c-find and c-move
+ * contains: class to construct a study-based query for C-FIND and C-MOVE
  */
-  class GDCM_EXPORT QueryStudy : public QueryBase {
-  public:
-    std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
+class QueryStudy : public QueryBase
+{
+public:
+  std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
 
-    std::string GetName() const { return "Study"; }
-    DataElement GetQueryLevel() const;
-  };
-}
+  std::string GetName() const { return "Study"; }
+  DataElement GetQueryLevel() const;
+};
+
+} // end namespace gdcm
 
 #endif //GDCMQUERYSTUDY_H

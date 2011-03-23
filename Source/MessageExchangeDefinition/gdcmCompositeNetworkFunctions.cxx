@@ -32,11 +32,14 @@
 #include "gdcmStringFilter.h"
 #include "gdcmWriter.h"
 #include "gdcmPrinter.h"
+#include "gdcmSimpleSubjectWatcher.h"
+#include "gdcmProgressEvent.h"
 
 #include "gdcmQueryFactory.h"
 #include "gdcmDirectory.h"
-#include "gdcmStudyRootQuery.h"
-#include "gdcmPatientRootQuery.h"
+//#include "gdcmStudyRootQuery.h"
+//#include "gdcmFindPatientRootQuery.h"
+//#include "gdcmMovePatientRootQuery.h"
 #include "gdcmULWritingCallback.h"
 #include "gdcmAbstractSyntax.h"
 #include "gdcmImageReader.h"
@@ -61,7 +64,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     }
 
   // Generate the PresentationContext array from the echo UID:
-  network::PresentationContextGenerator generator;
+  PresentationContextGenerator generator;
   if( !generator.GenerateFromUID( UIDs::VerificationSOPClass ) )
     {
     gdcmErrorMacro( "Failed to generate pres context." );
@@ -79,7 +82,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
 
   //should print _something_ to let the user know of success, if they ask for something
   //other than a return code.
-  if (Trace::GetWarningFlag())
+  if (Trace::GetDebugFlag())
     {
     DataSet ds = network::PresentationDataValue::ConcatenatePDVBlobs(theValues1);
     Printer thePrinter;
@@ -110,12 +113,6 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
 {
   StringFilter sf;
   KeyValuePairArrayType::const_iterator it = keys.begin();
-  BaseRootQuery* outQuery = QueryFactory::ProduceQuery(inRootType, inQueryLevel);
-  if (!outQuery)
-    {
-    gdcmErrorMacro( "Specify the query" );
-    return NULL;
-    }
   DataSet ds;
   for(; it != keys.end(); ++it)
     {
@@ -126,8 +123,25 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
       de.SetByteValue ( s.c_str(), s.size() );
       ds.Insert( de );
       }
-    outQuery->SetSearchParameter(it->first, s);
     }
+  return CompositeNetworkFunctions::ConstructQuery( inRootType,
+    inQueryLevel, ds, inMove);
+}
+
+BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
+  EQueryLevel inQueryLevel, const DataSet& ds, bool inMove)
+{
+  BaseRootQuery* outQuery;
+  if( inMove )
+    outQuery = QueryFactory::ProduceQuery(inRootType, eMove, inQueryLevel);
+  else
+    outQuery = QueryFactory::ProduceQuery(inRootType, eFind, inQueryLevel);
+  if (!outQuery)
+    {
+    gdcmErrorMacro( "Specify the query" );
+    return NULL;
+    }
+  outQuery->AddQueryDataSet(ds);
 
   if (Trace::GetDebugFlag())
     ds.Print( std::cout );
@@ -172,8 +186,8 @@ bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
     }
 
   // Generate the PresentationContext array from the query UID:
-  network::PresentationContextGenerator generator;
-  if( !generator.GenerateFromUID( query->GetAbstractSyntaxUID(true) ) )
+  PresentationContextGenerator generator;
+  if( !generator.GenerateFromUID( query->GetAbstractSyntaxUID() ) )
     {
     gdcmErrorMacro( "Failed to generate pres context." );
     return false;
@@ -215,7 +229,7 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
   // Add a query:
 
   // Generate the PresentationContext array from the query UID:
-  network::PresentationContextGenerator generator;
+  PresentationContextGenerator generator;
   if( !generator.GenerateFromUID( query->GetAbstractSyntaxUID() ) )
     {
     gdcmErrorMacro( "Failed to generate pres context." );
@@ -238,11 +252,36 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
   return true;
 }
 
+class MyWatcher : public SimpleSubjectWatcher
+{
+  size_t nfiles;
+  double progress;
+  size_t index;
+  double refprogress;
+public:
+  MyWatcher(Subject * s, const char *comment = "", size_t n = 1):SimpleSubjectWatcher(s,comment),nfiles(n),progress(0),index(0),refprogress(0){}
+  void ShowIteration()
+    {
+    index++;
+    assert( index <= nfiles );
+    refprogress = progress;
+    }
+  void ShowProgress(Subject *caller, const Event &evt)
+    {
+    const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
+    (void)caller;
+    progress = refprogress + (1. / nfiles ) * pe.GetProgress();
+//    std::cout << "Progress: " << progress << " " << pe.GetProgress() << std::endl;
+    }
+  virtual void ShowDataSet(Subject *caller, const Event &evt) {}
+};
+
 bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
   const Directory::FilenamesType& filenames,
   const char *aetitle, const char *call)
 {
   if( !remote ) return false;
+  // TODO AE-TITLE are more restrictive than that !
   if( !aetitle )
     {
     aetitle = "GDCMSCU";
@@ -252,12 +291,15 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     call = "ANY-SCP";
     }
 
-  network::ULConnectionManager theManager;
-  Directory::FilenamesType files;
-  files = filenames;
+  SmartPointer<network::ULConnectionManager> ps = new network::ULConnectionManager;
+  network::ULConnectionManager &theManager = *ps;
+  Directory::FilenamesType const &files = filenames;
+
+  //SimpleSubjectWatcher watcher(ps, "cstore");
+  MyWatcher watcher(ps, "cstore", files.size() );
 
   // Generate the PresentationContext array from the File-Set:
-  network::PresentationContextGenerator generator;
+  PresentationContextGenerator generator;
   if( !generator.GenerateFromFilenames(filenames) )
     {
     gdcmErrorMacro( "Failed to generate pres context." );
@@ -270,30 +312,15 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     gdcmErrorMacro( "Failed to establish connection." );
     return false;
     }
-#if 0
-  // Right now we are never reading back the AC-Acpt to
-  // if we can prefer a compressed TS
-  network::ULConnection* uc = theManager.GetConnection();
-  std::vector<network::PresentationContext> const &pcs =
-    uc->GetPresentationContexts();
-  std::vector<network::PresentationContext>::const_iterator it =
-    pcs.begin();
-  std::cout << "B" << std::endl;
-  for( ; it != pcs.end(); ++it )
-    {
-    it->Print ( std::cout );
-    }
-  std::cout << "BB" << std::endl;
-  theManager.SendStore( (DataSet*)&ds );
-#endif
 
-  const char *fn = "";
+  const char *fn = ""; // FIXME
   try
     {
     for( size_t i = 0; i < files.size(); ++i )
       {
       const std::string & filename = files[i];
       fn = filename.c_str();
+      assert( fn && *fn );
       Reader reader;
       reader.SetFileName( filename.c_str() );
       gdcmDebugMacro( "Processing: " << filename );
@@ -304,6 +331,7 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
         }
       const File &file = reader.GetFile();
       theManager.SendStore( file );
+      theManager.InvokeEvent( IterationEvent() );
       gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
       }
     }
@@ -312,7 +340,6 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     // If you reach here this is basically because GDCM does not support encoding other
     // than raw transfer syntx (Little Endian Explicit/Implicit...)
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-    // TODO: filename is bogus it does not point to the right filename
     gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " )
     gdcmErrorMacro( "Error was " << e.what() );
     return false;
