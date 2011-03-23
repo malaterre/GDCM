@@ -35,7 +35,7 @@ namespace gdcm {
     //Next State: eSta7WaitRelease
     class ULActionAR1 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -43,7 +43,7 @@ namespace gdcm {
     //Next State: eSta8WaitLocalRelease
     class ULActionAR2 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -51,7 +51,7 @@ namespace gdcm {
     //Next State: eSta1Idle
     class ULActionAR3 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -59,7 +59,7 @@ namespace gdcm {
     //Next State: eSta13AwaitingClose
     class ULActionAR4 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -67,7 +67,7 @@ namespace gdcm {
     //Next State: eSta1Idle
     class ULActionAR5 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -75,7 +75,7 @@ namespace gdcm {
     //Next State: eSta7WaitRelease
     class ULActionAR6 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -83,7 +83,7 @@ namespace gdcm {
     //Next State: eSta8WaitLocalRelease
     class ULActionAR7 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -92,7 +92,7 @@ namespace gdcm {
     //- if not, next state is eSta10ReleaseCollisionAc
     class ULActionAR8 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -100,7 +100,7 @@ namespace gdcm {
     //Next State: eSta11ReleaseCollisionRq
     class ULActionAR9 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -108,7 +108,7 @@ namespace gdcm {
     //Next State: eSta12ReleaseCollisionAcLocal
     class ULActionAR10 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
   }

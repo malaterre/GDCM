@@ -39,7 +39,7 @@ namespace network
 {
 
 //Issue TRANSPORT CONNECT request primitive to local transport service.
-EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   //opening a local socket
@@ -57,7 +57,7 @@ EStateID ULActionAE1::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Send A-ASSOCIATE-RQ-PDU
-EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE2::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
   bool& outWaitingForEvent, EEventID& outRaisedEvent)
 {
   AAssociateRQPDU thePDU;
@@ -70,10 +70,10 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
   //presentation contexts. ideally, we could refine it further to a particular
   //presentation context, but if the server supports many and we support many,
   //then an arbitrary decision can be made.
-  std::vector<PresentationContext> const & thePCS =
+  std::vector<PresentationContextRQ> const & thePCS =
     inConnection.GetPresentationContexts();
 
-  std::vector<PresentationContext>::const_iterator itor;
+  std::vector<PresentationContextRQ>::const_iterator itor;
   for (itor = thePCS.begin(); itor < thePCS.end(); itor++)
     {
     thePDU.AddPresentationContext(*itor);
@@ -91,7 +91,7 @@ EStateID ULActionAE2::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //Issue A-ASSOCIATE confirmation (accept) primitive
 // NOTE: A-ASSOCIATE is NOT A-ASSOCIATE-AC
 // PS 3.7 / Annex D for A-ASSOCIATE definition
-EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE3::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
 
@@ -116,7 +116,7 @@ EStateID ULActionAE3::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue A-ASSOCIATE confirmation (reject) primitive and close transport connection
-EStateID ULActionAE4::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE4::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
@@ -125,7 +125,7 @@ EStateID ULActionAE4::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Issue Transport connection response primitive, start ARTIM timer
-EStateID ULActionAE5::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE5::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   //issue response primitive; have to set that up
@@ -142,7 +142,7 @@ EStateID ULActionAE5::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 //otherwise:
 //- issue A-ASSOCIATE-RJ-PDU and start ARTIM timer
 //Next state: eSta13AwaitingClose
-EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE6::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
  // we are in a C-MOVE
@@ -175,12 +175,13 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
     AAssociateACPDU acpdu;
 
-    for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ ){
+    for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ )
+      {
       // FIXME / HARDCODED We only ever accept Little Endian
       // FIXME we should check :
       // rqpdu.GetAbstractSyntax() contains LittleEndian
       PresentationContextAC pcac1;
-      PresentationContext const &pc = rqpdu->GetPresentationContext(index);
+      PresentationContextRQ const &pc = rqpdu->GetPresentationContext(index);
       //add the presentation context back into the connection,
       //so later functions will know what's allowed on this connection
       // BOGUS (MM):
@@ -188,19 +189,22 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 
       uint8_t id = pc.GetPresentationContextID();
 
-      std::vector<TransferSyntaxSub> tsSet = pc.GetTransferSyntaxes();
-      std::vector<TransferSyntaxSub>::iterator tsitor;
+      std::vector<TransferSyntaxSub> const & tsSet = pc.GetTransferSyntaxes();
+      std::vector<TransferSyntaxSub>::const_iterator tsitor;
       bool hasLittleEndian = false;
-      for (tsitor = tsSet.begin(); tsitor < tsSet.end(); tsitor++){
-        if (strcmp(tsitor->GetName(), ts1.GetName())==0){
+      for (tsitor = tsSet.begin(); tsitor < tsSet.end(); tsitor++)
+        {
+        if (strcmp(tsitor->GetName(), ts1.GetName())==0)
+          {
           hasLittleEndian = true;
+          }
         }
-      }
       if (!hasLittleEndian) continue; //don't add this presentation context, because
       //the client doesn't know how to handle it.
 
       pcac1.SetPresentationContextID( id );
       pcac1.SetTransferSyntax( ts1 );
+      //pcac1.SetTransferSyntax( tsSet[0] );
       acpdu.AddPresentationContextAC( pcac1 );
     }
 
@@ -225,7 +229,7 @@ EStateID ULActionAE6::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Send A-ASSOCIATE-AC PDU
-EStateID ULActionAE7::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE7::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
 
@@ -240,7 +244,7 @@ EStateID ULActionAE7::PerformAction(ULEvent& inEvent, ULConnection& inConnection
 }
 
 //Send A-ASSOCIATE-RJ PDU and start ARTIM timer
-EStateID ULActionAE8::PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE8::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   AAssociateRJPDU thePDU;//for now, use Matheiu's default values

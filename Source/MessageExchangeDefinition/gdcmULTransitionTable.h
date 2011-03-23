@@ -21,12 +21,15 @@
 #include "gdcmNetworkStateID.h"
 #include "gdcmNetworkEvents.h"
 #include "gdcmULAction.h"
-#include "gdcmULConnection.h"
-#include <vector>
 
+#include <cstdlib>  // NULL
 
 namespace gdcm {
+class Subject;
   namespace network{
+class ULConnection;
+class ULAction;
+class ULEvent;
 
     //The transition dictates the action that should be taken from the start state to the end state
     struct Transition {
@@ -67,14 +70,16 @@ namespace gdcm {
  * \brief ULTransitionTable
  * The transition table of all the ULEvents, new ULActions, and ULStates.
  *
- * Based roughly on the solutions in player2.cpp in the boost examples and this so question:
+ * Based roughly on the solutions in player2.cpp in the boost examples and this
+ * so question:
  * http://stackoverflow.com/questions/1647631/c-state-machine-design
  *
- * The transition table is constructed of TableRows.  Each row is based on an event, and an event handler in the
- * TransitionTable object takes a given event, and then finds the given row.
+ * The transition table is constructed of TableRows.  Each row is based on an
+ * event, and an event handler in the TransitionTable object takes a given
+ * event, and then finds the given row.
  *
- * Then, given the current state of the connection, determines the appropriate action to take and then the
- * state to transition to next.
+ * Then, given the current state of the connection, determines the appropriate
+ * action to take and then the state to transition to next.
  *
  */
 class ULTransitionTable
@@ -84,7 +89,7 @@ class ULTransitionTable
     public:
       ULTransitionTable();
 
-      void HandleEvent(ULEvent& inEvent, ULConnection& inConnection,
+      void HandleEvent(Subject*s,ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent) const;
 
       void PrintTable() const; //so that the table can be printed and verified against the DICOM standard

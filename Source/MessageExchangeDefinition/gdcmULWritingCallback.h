@@ -19,18 +19,20 @@
 #define GDCMULCONNECTIONWRITINGCALLBACK_H
 
 #include "gdcmULConnectionCallback.h"
-#include "gdcmDataSet.h"
-#include <vector>
 
 namespace gdcm 
 {
-  namespace network
-  {
-    ///This is the most basic of callbacks for how the ULConnectionManager handles
-    ///incoming datasets.  DataSets are immediately written to disk as soon as they are
-    ///received.  NOTE that if the incoming connection is faster than the disk writing
-    ///speed, this callback could cause some pileups!
-    class GDCM_EXPORT ULWritingCallback : public ULConnectionCallback{
+class DataSet;
+namespace network
+{
+/* \brief ULWritingCallback
+ * This is the most basic of callbacks for how the ULConnectionManager handles
+ * incoming datasets.  DataSets are immediately written to disk as soon as they
+ * are received.  NOTE that if the incoming connection is faster than the disk
+ * writing speed, this callback could cause some pileups!
+ */
+class GDCM_EXPORT ULWritingCallback : public ULConnectionCallback
+{
       std::string mDirectoryName;
     public:
       ULWritingCallback() {};

@@ -20,21 +20,23 @@
 
 #include "gdcmQueryBase.h"
 
-namespace gdcm{
+namespace gdcm
+{
 /**
  * \brief QuerySeries
  * contains: class to construct a series-based query for c-find and c-move
- * name and date: 15 oct 2010 mmr
  */
-  class GDCM_EXPORT QuerySeries : public QueryBase {
-  public:
-    std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
+class QuerySeries : public QueryBase
+{
+public:
+  std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
 
-    std::string GetName() const { return "Series"; }
-    DataElement GetQueryLevel() const;
-  };
-}
+  std::string GetName() const { return "Series"; }
+  DataElement GetQueryLevel() const;
+};
+
+} // end namespace gdcm
 
 #endif //GDCMQUERYSERIES_H

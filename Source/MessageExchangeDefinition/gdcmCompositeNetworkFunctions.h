@@ -52,8 +52,8 @@ public:
   /// remote server is responding on the given IP and port number as expected.
   /// \param aetitle when not set will default to 'GDCMSCU'
   /// \param call when not set will default to 'ANY-SCP'
-  /// This is an error to set remote to NULL or portno to 0
-  /// Returns true if it worked.
+  /// \error This is an error to set remote to NULL or portno to 0
+  /// \return true if it worked.
   static bool CEcho( const char *remote, uint16_t portno, const char *aetitle = NULL,
     const char *call = NULL );
 
@@ -66,6 +66,10 @@ public:
   /// Note that the caller is responsible for deleting the constructed query.
   /// This function is used to build both a move and a find query 
   /// (true for inMove if it's move, false if it's find)
+  static BaseRootQuery* ConstructQuery(ERootType inRootType, EQueryLevel inQueryLevel,
+    const DataSet& queryds, bool inMove = false );
+
+  /// \deprecated
   static BaseRootQuery* ConstructQuery(ERootType inRootType, EQueryLevel inQueryLevel,
     const KeyValuePairArrayType& keys, bool inMove = false );
 
@@ -83,7 +87,7 @@ public:
   /// \param call when not set will default to 'ANY-SCP'
   /// This is an error to set remote to NULL or portno to 0
   /// when \param outputdir is not set default to current dir ('.')
-  /// Returns true if it worked.
+  /// \return true if it worked.
   static bool CMove( const char *remote, uint16_t portno, const BaseRootQuery* query,
     uint16_t portscp, const char *aetitle = NULL,
     const char *call = NULL, const char *outputdir = NULL);
@@ -95,8 +99,8 @@ public:
   /// which case, the user should monitor the error and warning streams.
   /// \param aetitle when not set will default to 'GDCMSCU'
   /// \param call when not set will default to 'ANY-SCP'
-  /// This is an error to set remote to NULL or portno to 0
-  /// Returns true if it worked.
+  /// \error This is an error to set remote to NULL or portno to 0
+  /// \return true if it worked.
   static bool CFind( const char *remote, uint16_t portno, 
     const BaseRootQuery* query,
     std::vector<DataSet> &retDataSets,
@@ -104,11 +108,12 @@ public:
     const char *call = NULL );
 
   /// This function will place the provided files into the remote server.
-  /// The function returns true if it worked.
+  /// The function returns true if it worked for all files.
+  /// \warning the server side can refuse an association on a given file
   /// \param aetitle when not set will default to 'GDCMSCU'
   /// \param call when not set will default to 'ANY-SCP'
-  /// This is an error to set remote to NULL or portno to 0
-  /// Returns true if it worked.
+  /// \error This is an error to set remote to NULL or portno to 0
+  /// \return true if it worked for all files
   static bool CStore( const char *remote, uint16_t portno,
     const Directory::FilenamesType & filenames,
     const char *aetitle = NULL, const char *call = NULL);

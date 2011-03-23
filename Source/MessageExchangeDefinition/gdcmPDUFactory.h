@@ -55,7 +55,7 @@ namespace gdcm{
       //given data pdus, produce the presentation data values stored within.
       //all operations have these as the payload of the data sending operation
       //however, echo does not have a dataset in the pdv.
-      static std::vector<PresentationDataValue> GetPDVs(const std::vector<BasePDU*> inDataPDUs);
+      static std::vector<PresentationDataValue> GetPDVs(const std::vector<BasePDU*> & inDataPDUs);
     };
   }
 }

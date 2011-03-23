@@ -213,7 +213,7 @@ void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
     // FIXME we should check :
     // rqpdu.GetAbstractSyntax() contains LittleENdian
     PresentationContextAC pcac1;
-    PresentationContext const &pc = rqpdu.GetPresentationContext(index);
+    PresentationContextRQ const &pc = rqpdu.GetPresentationContext(index);
     uint8_t id = pc.GetPresentationContextID();
 
     pcac1.SetPresentationContextID( id ); // DCMTK MR

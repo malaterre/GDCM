@@ -40,6 +40,7 @@ protected:
   virtual void ShowProgress(Subject *caller, const Event &evt);
   virtual void ShowIteration();
   virtual void ShowAnonymization(Subject *caller, const Event &evt);
+  virtual void ShowDataSet(Subject *caller, const Event &evt);
   virtual void ShowData(Subject *caller, const Event &evt);
   virtual void ShowAbort();
 
@@ -62,6 +63,7 @@ private:
   SmartPointer<SimpleCommandType> m_AbortFilterCommand;
   SmartPointer<CommandType> m_AnonymizeFilterCommand;
   SmartPointer<CommandType> m_DataFilterCommand;
+  SmartPointer<CommandType> m_DataSetFilterCommand;
 
   unsigned long m_StartTag;
   unsigned long m_EndTag;
@@ -70,6 +72,7 @@ private:
   unsigned long m_AbortTag;
   unsigned long m_AnonymizeTag;
   unsigned long m_DataTag;
+  unsigned long m_DataSetTag;
 
   bool m_TestAbort;
 

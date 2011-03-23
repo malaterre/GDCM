@@ -20,8 +20,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmCommandDataSet.h"
-#include "gdcmStudyRootQuery.h"
-#include "gdcmPresentationContext.h"
+//#include "gdcmStudyRootQuery.h"
+#include "gdcmPresentationContextRQ.h"
 #include "gdcmULConnection.h"
 #include "gdcmAAssociateRQPDU.h"
 
@@ -48,7 +48,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
     }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 #else
-  PresentationContext pc( inRootQuery->GetAbstractSyntaxUID(true) );
+  PresentationContextRQ pc( inRootQuery->GetAbstractSyntaxUID() );
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromPresentationContext(pc) );
 #endif

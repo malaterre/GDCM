@@ -20,21 +20,23 @@
 
 #include "gdcmQueryBase.h"
 
-namespace gdcm{
+namespace gdcm
+{
 /**
  * \brief QueryPatient
  * contains: class to construct a patient-based query for c-find and c-move
- * name and date: 15 oct 2010 mmr
  */
-class GDCM_EXPORT QueryPatient : public QueryBase {
-  public:
-    std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
-    std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
+class QueryPatient : public QueryBase
+{
+public:
+  std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
 
-    std::string GetName() const { return "Patient"; }
-    DataElement GetQueryLevel() const;
-  };
-}
+  std::string GetName() const { return "Patient"; }
+  DataElement GetQueryLevel() const;
+};
+
+} // end namespace gdcm
 
 #endif //GDCMQUERYPATIENT_H

@@ -35,7 +35,7 @@ namespace gdcm {
     //Next State: eSta13AwaitingClose
     class ULActionAA1 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -43,7 +43,7 @@ namespace gdcm {
     //Next State: eSta1Idle
     class ULActionAA2 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -54,7 +54,7 @@ namespace gdcm {
     //Next State: eSta1Idle
     class ULActionAA3 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -62,7 +62,7 @@ namespace gdcm {
     //Next State: eSta1Idle
     class ULActionAA4 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -70,7 +70,7 @@ namespace gdcm {
     //Next State: eSta1Idle
     class ULActionAA5 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -78,7 +78,7 @@ namespace gdcm {
     //Next State: eSta13AwaitingClose
     class ULActionAA6 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -86,7 +86,7 @@ namespace gdcm {
     //Next State: eSta13AwaitingClose
     class ULActionAA7 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -94,7 +94,7 @@ namespace gdcm {
     //Next State: eSta13AwaitingClose
     class ULActionAA8 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
   }

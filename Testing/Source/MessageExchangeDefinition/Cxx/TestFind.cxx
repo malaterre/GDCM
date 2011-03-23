@@ -19,11 +19,11 @@
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmTag.h"
 #include "gdcmQueryFactory.h"
+#include "gdcmMovePatientRootQuery.h"
 
 
 int TestFind(int argc, char *argv[])
 {
-
   std::string hostname = "mi2b2.slicer.org";
   int port = 11112;
   std::string callaetitle = "MI2B2";
@@ -46,7 +46,7 @@ int TestFind(int argc, char *argv[])
     return 1;
   }    
   
-  if (!theQuery->ValidateQuery(true, false))
+  if (!theQuery->ValidateQuery(false))
     {
     std::cerr << "Find query is not valid.  Please try again." << std::endl;
     delete theQuery;

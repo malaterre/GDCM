@@ -1,5 +1,5 @@
 SET(MEXD_TEST_SRCS
-TestPresentationContext
+TestPresentationContextRQ
 TestQueryFactory
 TestULConnectionManager
 TestServiceClassUser
@@ -37,13 +37,15 @@ SET(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 
 # Loop over files and create executables
 FOREACH(name ${MEXD_TEST_SRCS})
-  IF(${name} STREQUAL "TestSCUFunctions")
-  IF(GDCM_DICOM_SERVER_AETITLE)
-    ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE} ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT} ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
-  ENDIF(GDCM_DICOM_SERVER_AETITLE)
-  ELSE(${name} STREQUAL "TestSCUFunctions")
+  IF(${name} STREQUAL "TestSCUFunctions" OR ${name} STREQUAL "TestServiceClassUser")
+    IF(GDCM_DICOM_SERVER_AETITLE)
+      ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
+        ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT}
+        ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
+    ENDIF(GDCM_DICOM_SERVER_AETITLE)
+  ELSE()
     ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
-  ENDIF(${name} STREQUAL "TestSCUFunctions")
+  ENDIF()
 ENDFOREACH(name)
 
 set(DCMQRSCP_HOSTNAME gotlib)

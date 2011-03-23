@@ -24,6 +24,7 @@
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAttribute.h"
 #include "gdcmBaseRootQuery.h"
+#include "gdcmDataSetEvent.h"
 
 #include "gdcmAReleaseRPPDU.h"
 
@@ -105,8 +106,8 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
 
 #if 0
   AbstractSyntax as;
-  std::vector<PresentationContext> pcVector;
-  PresentationContext pc;
+  std::vector<PresentationContextRQ> pcVector;
+  PresentationContextRQ pc;
   TransferSyntaxSub ts;
   ts.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
@@ -168,7 +169,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
       break;*/
     case eStore:
       std::string uidName;
-        pc.SetPresentationContextID( PresentationContext::AssignPresentationContextID(inDS, uidName) );
+        pc.SetPresentationContextID( PresentationContextRQ::AssignPresentationContextID(inDS, uidName) );
         if (pc.GetPresentationContextID() != eVerificationSOPClass){
           as.SetNameFromUIDString( uidName );
           pc.SetAbstractSyntax( as );
@@ -199,7 +200,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
         if (*itor == NULL) continue; //can have a nulled pdu, apparently
-          (*itor)->Print(Trace::GetStream());
+        (*itor)->Print(Trace::GetStream());
         }
     }
 
@@ -272,8 +273,8 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   AbstractSyntax as;
 
 #if 0
-  std::vector<PresentationContext> pcVector;
-  PresentationContext pc;
+  std::vector<PresentationContextRQ> pcVector;
+  PresentationContextRQ pc;
   TransferSyntaxSub ts;
   ts.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
   pc.AddTransferSyntax( ts );
@@ -395,9 +396,12 @@ void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inC
     return;
     }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(*mConnection, file);
+  const DataSet* inDataSet = &file.GetDataSet();
+  DataSetEvent dse( inDataSet );
+  this->InvokeEvent( dse );
+
   ULEvent theEvent(ePDATArequest, theDataPDU);
   RunEventLoop(theEvent, mConnection, inCallback, false);
-
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
@@ -438,7 +442,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
     if (!justWaiting){
-      mTransitions.HandleEvent(currentEvent, *mConnection, waitingForEvent, raisedEvent);
+      mTransitions.HandleEvent(this,currentEvent, *mConnection, waitingForEvent, raisedEvent);
     }
 
     theState = mConnection->GetState();
@@ -741,7 +745,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
   do {
     raisedEvent = eEventDoesNotExist;
     if (!waitingForEvent){//justWaiting){
-      mTransitions.HandleEvent(currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
+      mTransitions.HandleEvent(this, currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
       //this gathering of the state is for scus that have just sent out a request
       theState = inWhichConnection->GetState();
     }
@@ -781,9 +785,11 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
             waitingForEvent = false; //because no PDU means not waiting anymore
           }
         }
-        catch (...){
+        catch (...)
+          {
           //handle the exception, which is basically that nothing came in over the pipe.
-        }
+          assert( 0 );
+          }
       }
       //now, we have to figure out the event that just happened based on the PDU that was received.
       //this state gathering is for scps, especially the cstore for cmove.
@@ -807,7 +813,9 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               success = 0x0000;
               theVal = pendingDE1;
               uint32_t theCommandCode = 0;//for now, a nothing value
-              DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+              DataSet theRSP =
+                PresentationDataValue::ConcatenatePDVBlobs(
+                  PDUFactory::GetPDVs(currentEvent.GetPDUs()));
               if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
                 DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
                 Attribute<0x0,0x0900> at;
@@ -819,20 +827,23 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 //with the dataset, even if the status is 'success'
                 //success == 0000H
               }
-              if (Trace::GetDebugFlag()){
+              if (Trace::GetDebugFlag())
+                {
                 Printer thePrinter;
                 thePrinter.PrintDataSet(theRSP, Trace::GetStream());
               }
 
               //check to see if this is a cstorerq
-              if (theRSP.FindDataElement(Tag(0x0, 0x0100))){
+              if (theRSP.FindDataElement(Tag(0x0, 0x0100)))
+                {
                 DataElement de2 = theRSP.GetDataElement(Tag(0x0,0x0100));
                 Attribute<0x0,0x0100> at2;
                 at2.SetFromDataElement( de2 );
                 theCommandCode = at2.GetValues()[0];
-              }
+                }
 
-              if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
+              if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success)
+                {
                 //check for other error fields
                 ByteValue *err1 = NULL, *err2 = NULL;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
@@ -928,13 +939,18 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                   DataSet theCompleteFindResponse =
                     PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
                   //note that it's the responsibility of the event to delete the PDU in theFindRSP
-                  for (size_t i = 0; i < theData.size(); i++){
+                  for (size_t i = 0; i < theData.size(); i++)
+                    {
                     delete theData[i];
-                  }
+                    }
                   //outDataSet.push_back(theCompleteFindResponse);
-                  if (inCallback){
+                  if (inCallback)
+                    {
                     inCallback->HandleDataSet(theCompleteFindResponse);
-                  }
+                    }
+                  //  DataSetEvent dse( &theCompleteFindResponse );
+                  //  this->InvokeEvent( dse );
+
 
                   if (theCommandCode == 1){//if we're doing cstore scp stuff, send information back along the connection.
                     std::vector<BasePDU*> theCStoreRSPPDU = PDUFactory::CreateCStoreRSPPDU(&theRSP, theFirstPDU);//pass NULL for C-Echo
@@ -949,7 +965,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                     inWhichConnection->GetProtocol()->flush();
 
                     // FIXME added MM / Oct 30 2010
-                    AReleaseRPPDU rel;
+                    //AReleaseRPPDU rel;
                     //rel.Write( *inWhichConnection->GetProtocol() );
                     //inWhichConnection->GetProtocol()->flush();
 

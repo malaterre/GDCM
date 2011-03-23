@@ -19,9 +19,7 @@
 
 namespace gdcm
 {
-
-namespace network
-{
+class TransferSyntax;
 
 /**
  * \brief PresentationContextGenerator
@@ -68,24 +66,27 @@ public:
   void SetMergeModeToTransferSyntax();
 
   /// Generate the PresentationContext array from a UID (eg. VerificationSOPClass)
-  bool GenerateFromUID(UIDs::TSName tsname);
+  bool GenerateFromUID(UIDs::TSName asname);
 
   /// Generate the PresentationContext array from a File-Set. File specified needs to
   /// be valid DICOM files.
+  /// Used for C-STORE operations
   bool GenerateFromFilenames(const Directory::FilenamesType &files);
 
   typedef std::vector<PresentationContext> PresentationContextArrayType;
   typedef PresentationContextArrayType::size_type SizeType;
   PresentationContextArrayType const &GetPresentationContexts() { return PresContext; }
 
+  /// Not implemented for now. GDCM internally uses Implicit Little Endian
+  void SetDefaultTransferSyntax( const TransferSyntax &ts );
 protected:
-  bool AddPresentationContext( AbstractSyntax const & as, TransferSyntaxSub const & ts );
+  bool AddPresentationContext( const char *as, const char *ts );
+  const char *GetDefaultTransferSyntax() const;
 
 private:
   std::vector<PresentationContext> PresContext;
+  static std::string DefaultTransferSyntax;
 };
-
-} // end namespace network
 
 } // end namespace gdcm
 

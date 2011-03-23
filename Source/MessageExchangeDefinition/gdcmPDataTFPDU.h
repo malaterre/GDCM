@@ -35,7 +35,6 @@ class GDCM_EXPORT PDataTFPDU : public BasePDU
 public:
   PDataTFPDU();
   std::istream &Read(std::istream &is);
-  std::istream &ReadInto(std::istream &is, std::ostream &os);
   const std::ostream &Write(std::ostream &os) const;
 
   /// \internal Compute Size
@@ -45,19 +44,22 @@ public:
     V.push_back( pdv );
     assert(Size() < std::numeric_limits<uint32_t>::max());
     ItemLength = (uint32_t)Size() - 6;
-  }
-  PresentationDataValue const &GetPresentationDataValue(unsigned int i) const {
+    }
+
+  typedef std::vector<PresentationDataValue>::size_type SizeType;
+  PresentationDataValue const &GetPresentationDataValue(SizeType i) const {
     assert( !V.empty() && i < V.size() );
     return V[i];
   }
-
-  size_t GetNumPDVs() const {
+  SizeType GetNumberOfPresentationDataValues() const {
     return V.size();
-  }
+    }
 
   void Print(std::ostream &os) const;
   bool IsLastFragment() const;
 
+protected:
+  std::istream &ReadInto(std::istream &is, std::ostream &os);
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;

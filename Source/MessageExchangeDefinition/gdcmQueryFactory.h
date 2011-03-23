@@ -63,8 +63,8 @@ public:
   /// level of the query (patient, study, series, image). If the user provides
   /// an invalid instantiation (ie, study root type, query level of patient),
   /// then the result is NULL.
-  static BaseRootQuery* ProduceQuery(const ERootType &inRootType,
-    const EQueryLevel& inQueryLevel);
+  static BaseRootQuery* ProduceQuery(ERootType inRootType, EQueryType inQueryType,
+    EQueryLevel inQueryLevel);
 
   /// This function will produce the appropriate dataelement given a list of
   /// charsets. The first charset will be used directly, while the second and

@@ -90,7 +90,7 @@ uint32_t ULConnection::GetMaxPDUSize() const
   return mMaxPDUSize;
 }
 
-std::vector<PresentationContext> const &
+std::vector<PresentationContextRQ> const &
 ULConnection::GetPresentationContexts() const
 {
   return mPresentationContexts;
@@ -99,11 +99,26 @@ ULConnection::GetPresentationContexts() const
 void ULConnection::SetPresentationContexts(
   const std::vector<PresentationContext>& inContexts)
 {
+  mPresentationContexts.clear();
+  for( size_t i = 0; i < inContexts.size(); ++i )
+    {
+    PresentationContext const &in = inContexts[i];
+    mPresentationContexts.push_back( in );
+    }
+}
+
+void ULConnection::SetPresentationContexts(
+  const std::vector<PresentationContextRQ>& inContexts)
+{
   mPresentationContexts = inContexts;
 }
 
+std::vector<PresentationContextAC> & ULConnection::GetAcceptedPresentationContexts()
+{
+  return mAcceptedPresentationContexts;
+}
 
-std::vector<PresentationContextAC> ULConnection::GetAcceptedPresentationContexts() const
+std::vector<PresentationContextAC> const & ULConnection::GetAcceptedPresentationContexts() const
 {
   return mAcceptedPresentationContexts;
 }
@@ -115,9 +130,9 @@ void ULConnection::AddAcceptedPresentationContext(const PresentationContextAC& i
 //given a particular data element, presumably the SOP class,
 //find the presentation context for that SOP
 //NOT YET IMPLEMENTED
-PresentationContext ULConnection::FindContext(const DataElement& de) const
+PresentationContextRQ ULConnection::FindContext(const DataElement& de) const
 {
-  PresentationContext empty;
+  PresentationContextRQ empty;
   assert( 0 && "TODO" );
   return empty;
 }
@@ -227,6 +242,22 @@ void ULConnection::StopProtocol(){
   }
 }
 
+const PresentationContextRQ *ULConnection::GetPresentationContextRQByID(uint8_t id) const
+{
+  // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
+  // for now duplicate code from AAssociateRQPDU::GetPresentationContextFromAbstractSyntax
+  std::vector<PresentationContextRQ>::const_iterator it = mPresentationContexts.begin();
+  for( ; it != mPresentationContexts.end(); ++it)
+    {
+    if( it->GetPresentationContextID() == id )
+      {
+      return &*it;
+      }
+    }
+
+  return NULL;
+}
+
 const PresentationContextAC *ULConnection::GetPresentationContextACByID(uint8_t id) const
 {
   // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
@@ -243,13 +274,13 @@ const PresentationContextAC *ULConnection::GetPresentationContextACByID(uint8_t 
   return NULL;
 }
 
-uint8_t ULConnection::GetPresentationContextIDFromPresentationContext(PresentationContext const & pc) const
+uint8_t ULConnection::GetPresentationContextIDFromPresentationContext(PresentationContextRQ const & pc) const
 {
   // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
   // for now duplicate code from AAssociateRQPDU::GetPresentationContextIDFromAbstractSyntax
   uint8_t ret = 0;
 
-  std::vector<PresentationContext>::const_iterator it =
+  std::vector<PresentationContextRQ>::const_iterator it =
     std::find( mPresentationContexts.begin(), mPresentationContexts.end(), pc );
   if( it != mPresentationContexts.end() )
     {

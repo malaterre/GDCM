@@ -19,7 +19,7 @@
 #define GDCMBASECOMPOSITEMESSSAGE_H
 
 #include "gdcmPresentationDataValue.h"
-#include "gdcmPresentationContext.h"
+//#include "gdcmPresentationContext.h"
 #include "gdcmBaseRootQuery.h"
 
 #include <vector>

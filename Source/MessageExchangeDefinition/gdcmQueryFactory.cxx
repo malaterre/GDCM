@@ -16,29 +16,49 @@
  *
  *=========================================================================*/
 #include "gdcmQueryFactory.h"
-#include "gdcmPatientRootQuery.h"
-#include "gdcmStudyRootQuery.h"
+#include "gdcmFindPatientRootQuery.h"
+#include "gdcmMovePatientRootQuery.h"
+#include "gdcmFindStudyRootQuery.h"
+#include "gdcmMoveStudyRootQuery.h"
 
 #include <locale>
 
-namespace gdcm{
-BaseRootQuery* QueryFactory::ProduceQuery(const ERootType &inRootType, const EQueryLevel& inQueryLevel){
+namespace gdcm
+{
+BaseRootQuery* QueryFactory::ProduceQuery(ERootType inRootType, EQueryType inQueryType,
+ EQueryLevel inQueryLevel)
+{
   BaseRootQuery* theReturn = NULL;
-  switch (inRootType){
+  switch (inQueryType)
+    {
+  case eFind:
+    switch (inRootType)
+      {
     case ePatientRootType:
-    default:
-      theReturn = new PatientRootQuery();
-      theReturn->InitializeDataSet(inQueryLevel);
-      return theReturn;
+      theReturn = new FindPatientRootQuery();
+      break;
     case eStudyRootType:
-      if (inQueryLevel != ePatient){
-        theReturn = new StudyRootQuery();
-        theReturn->InitializeDataSet(inQueryLevel);
-        return theReturn;
-      } else {
-        return NULL;
+      if (inQueryLevel != ePatient)
+        theReturn = new FindStudyRootQuery();
+      break;
       }
-  }
+    break;
+  case eMove:
+    switch (inRootType)
+      {
+    case ePatientRootType:
+      theReturn = new MovePatientRootQuery();
+      break;
+    case eStudyRootType:
+      if (inQueryLevel != ePatient)
+        theReturn = new MoveStudyRootQuery();
+      break;
+      }
+    break;
+    }
+  if( theReturn )
+    theReturn->InitializeDataSet(inQueryLevel);
+  return theReturn;
 }
 
 /*
@@ -195,7 +215,8 @@ DataElement QueryFactory::ProduceCharacterSetDataElement(const std::vector<EChar
 }
 
 
-void QueryFactory::ListCharSets(std::ostream& os){
+void QueryFactory::ListCharSets(std::ostream& os)
+{
   os << "The following character sets are supported by GDCM Network Queries." << std::endl;
   os << "The number in the parenthesis is the index to select." << std::endl;
   os << "Note that multiple selections are possible." << std::endl;
@@ -217,7 +238,6 @@ void QueryFactory::ListCharSets(std::ostream& os){
   os << "GB1308 (15)++" << std::endl;
   os << "+ These character sets must be chosen second or later in a set." << std::endl;
   os << "++ These character sets must be chosen alone, in no set." << std::endl;
-
 }
 
-}
+} // end namespace gdcm

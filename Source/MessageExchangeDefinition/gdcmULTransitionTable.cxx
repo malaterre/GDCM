@@ -18,9 +18,9 @@
 
 
 /*
-This file is the implementation of the ULTransitionTable class, including the actual event handling as well as the construction of the table itself.
-
-*/
+ * This file is the implementation of the ULTransitionTable class, including
+ * the actual event handling as well as the construction of the table itself.
+ */
 
 #include "gdcmULTransitionTable.h"
 #include "gdcmULActionAA.h"
@@ -33,7 +33,8 @@ namespace gdcm
 namespace network
 {
 //construct the table
-ULTransitionTable::ULTransitionTable(){
+ULTransitionTable::ULTransitionTable()
+{
 //row 1
 // A-ASSOCIATE Request (local user)
   mTable[eAASSOCIATERequestLocalUser].transitions[GetStateIndex(eSta1Idle)] =
@@ -321,7 +322,7 @@ ULTransitionTable::ULTransitionTable(){
 }
 
 //given the event and the state of the connection, call the appropriate action
-void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection,
+void ULTransitionTable::HandleEvent(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
                                     bool& outWaitingForEvent, EEventID& outRaisedEvent) const{
   //first, find the Event
   EEventID eventID = inEvent.GetEvent();
@@ -334,7 +335,7 @@ void ULTransitionTable::HandleEvent(ULEvent& inEvent, ULConnection& inConnection
         std::cout << "Process: Event:" << eventID << ", State:" << stateIndex << std::endl;
 #endif
         inConnection.SetState(mTable[eventID].transitions[stateIndex].mAction->
-          PerformAction(inEvent, inConnection, outWaitingForEvent, outRaisedEvent));
+          PerformAction(s,inEvent, inConnection, outWaitingForEvent, outRaisedEvent));
 
       }
     }

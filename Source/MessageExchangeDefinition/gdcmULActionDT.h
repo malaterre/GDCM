@@ -35,7 +35,7 @@ namespace gdcm {
     //Next state: eSta6TransferReady
     class ULActionDT1 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
 
@@ -43,7 +43,7 @@ namespace gdcm {
     //Next state: eSta6TransferReady
     class ULActionDT2 : public ULAction {
     public:
-      EStateID PerformAction(ULEvent& inEvent, ULConnection& inConnection,
+      EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent);
     };
   }

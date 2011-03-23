@@ -25,11 +25,13 @@
 #include <vector>
 #include <algorithm>
 
-namespace gdcm{
-  enum GDCM_EXPORT ERootType{
+namespace gdcm
+{
+  enum ERootType
+    {
     ePatientRootType,
     eStudyRootType
-  };
+    };
 
 /**
  * \brief QueryBase
@@ -63,16 +65,10 @@ class QueryBase
     virtual std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const = 0;
     virtual std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const = 0;
     virtual std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const = 0;
-    ///In order to validate a query dataset, just check for the presence of a tag,
-    ///not it's requirement level in the spec
-    virtual std::vector<Tag> GetAllTags(const ERootType& inRootType) const{
-      std::vector<Tag> theReturn = GetRequiredTags(inRootType);
-      std::vector<Tag> theNext = GetUniqueTags(inRootType);
-      theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
-      theNext = GetOptionalTags(inRootType);
-      theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
-      return theReturn;
-    }
+
+    /// In order to validate a query dataset, just check for the presence of a tag,
+    /// not it's requirement level in the spec
+    virtual std::vector<Tag> GetAllTags(const ERootType& inRootType) const;
 
     virtual std::string GetName() const = 0;
     virtual DataElement GetQueryLevel() const = 0;
