@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
@@ -75,6 +76,8 @@ IF(QT4_FOUND)
 
   ADD_EXECUTABLE(ReadUTF8QtDir ReadUTF8QtDir.cxx)
   TARGET_LINK_LIBRARIES(ReadUTF8QtDir gdcmMSFF ${QT_LIBRARIES})
+  ADD_EXECUTABLE(CStoreQtProgress CStoreQtProgress.cxx)
+  TARGET_LINK_LIBRARIES(CStoreQtProgress gdcmMEXD gdcmMSFF ${QT_LIBRARIES})
 ENDIF(QT4_FOUND)
 
 IF(MAGIC_FOUND)
