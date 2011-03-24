@@ -34,6 +34,11 @@
 
 int TestServiceClassUser(int argc, char *argv[])
 {
+  if( argc < 5 )
+    {
+    std::cerr << argv[0] << " aetitle call portno moveReturnPort remote" << std::endl;
+    return 1;
+    }
   std::string aetitle = argv[1]; // the ae title of this computer
   std::string call = argv[2]; // the ae title of the server
   int portno = atoi(argv[3]); // the port of the server
@@ -264,6 +269,12 @@ int TestServiceClassUser(int argc, char *argv[])
   writer.SetFileName( outfilename );
   if( !writer.Write() )
     {
+    return 1;
+    }
+
+  if( !gdcm::System::FileExists(outfilename) )
+    {
+    std::cerr << "FileExists: " << outfilename << std::endl;
     return 1;
     }
 
