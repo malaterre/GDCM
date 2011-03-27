@@ -40,7 +40,6 @@ Writer::~Writer()
 {
   if (Ofstream)
     {
-    Ofstream->close();
     delete Ofstream;
     Ofstream = NULL;
     Stream = NULL;
@@ -155,6 +154,7 @@ bool Writer::Write()
   if (Ofstream)
     {
     Ofstream->flush();
+    Ofstream->close();
     }
 
   return true;

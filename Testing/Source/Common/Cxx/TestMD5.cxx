@@ -242,8 +242,8 @@ int TestMD5Func(const char* filename, const char *md5ref, bool verbose = false)
     std::cout << "Problem with: " << path << std::endl;
     std::cout << "Ref: " << md5ref << " vs " << md5 << std::endl;
     // Let's remove this buggy file:
-    std::cout << "Removing: " << path << std::endl;
-    gdcm::System::RemoveFile(path.c_str());
+    //std::cout << "Removing: " << path << std::endl;
+    //gdcm::System::RemoveFile(path.c_str());
     return 1;
     }
   return 0;
@@ -270,11 +270,11 @@ static const char *GetMD5Sum(const char *filename)
 
 int TestMD5(int argc, char *argv[])
 {
-//  if( argc == 2 )
-//    {
-//    const char *filename = argv[1];
-//    return TestMD5Func(filename, true);
-//    }
+  if( argc == 2 )
+    {
+    const char *filename = argv[1];
+    return TestMD5Func(filename, "", true);
+    }
 
   // else
   gdcm::Trace::DebugOff();
