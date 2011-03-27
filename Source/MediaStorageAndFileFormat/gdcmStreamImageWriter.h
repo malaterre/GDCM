@@ -85,6 +85,12 @@ public:
   /// Of course, if we're doing a non-compressed format, that works
   /// but if it's compressed, we have to force the ordering of chunks that are written.
   virtual bool WriteImageInformation();
+  
+  /// This function determines if a file can even be written using the streaming writer
+  /// unlike the reader, can be called before WriteImageInformation, but must be called
+  /// after SetFile.
+  bool CanWriteFile() const;
+  
 
   /// Set the image information to be written to disk that is everything but
   /// the pixel information: (7fe0,0010) PixelData
