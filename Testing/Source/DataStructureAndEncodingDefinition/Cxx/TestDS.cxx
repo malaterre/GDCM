@@ -99,8 +99,8 @@ std::string to_string ( Float data ) {
 
 bool checkerror(double d, std::string s)
 {
-
-    double error = fabs(d - atof( s.c_str() ));
+	double theConverted = atof(s.c_str());
+    double error = fabs(d - theConverted);
 
     int Log = (int)log10(fabs(d));
     int eo = ( Log - 14 );
@@ -121,7 +121,8 @@ bool checkerror(double d, std::string s)
         eo += 1;
 
 
-    if (error > pow(10., eo) )
+    //if (error > pow(10., eo) )
+	if (log10(error) > eo)
     {
         std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;
         return true;

@@ -69,7 +69,13 @@ std::vector<Tag> FindStudyRootQuery::GetTagListByLevel(const EQueryLevel& inQuer
 //  default:
     return mSeries.GetAllTags(eStudyRootType);
   case eImageOrFrame:
-    return mImage.GetAllTags(eStudyRootType);
+    return mImage.GetAllTags(eStudyRootType); 
+  default: //have to return _something_ if a query level isn't given
+	  assert(0);
+	  {
+		  std::vector<Tag> empty;
+		  return empty;
+	  }
     }
 }
 
