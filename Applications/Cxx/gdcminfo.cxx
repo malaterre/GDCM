@@ -677,14 +677,14 @@ int main(int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( debug != 0);
+  gdcm::Trace::SetWarning( warning != 0);
+  gdcm::Trace::SetError( error != 0);
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( verbose != 0);
+    gdcm::Trace::SetError( verbose != 0);
     }
 
   if( !gdcm::System::FileExists(filename.c_str()) )
@@ -727,7 +727,7 @@ int main(int argc, char *argv[])
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     gdcm::Directory d;
-    d.Load(filename, recursive);
+    d.Load(filename, recursive!= 0);
     gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
     for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
       {
