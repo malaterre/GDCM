@@ -617,6 +617,11 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
                                                   vtkStringArray* inROIAlgorithmName,
                                                   vtkStringArray* inROIType)
 {
+
+  gdcm::Trace::WarningOn();    
+  std::ostringstream stm;
+  gdcm::Trace::SetStream(stm);
+
   using namespace gdcm;
   gdcm::Directory::FilenamesType theCTSeries =
     gdcm::DirectoryHelper::GetCTImageSeriesUIDs(inDirectory);
@@ -700,7 +705,10 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
      //right now, each cell in the vtkpolydata is a contour in an xy plane
      //that's what MUST be passed in
     vtkPolyData* theData = dynamic_cast<vtkPolyData*>(GetInput(j));
-    if (theData == NULL) continue;
+    if (theData == NULL){
+      gdcmWarningMacro("theData for input " << j << " is NULL, continuing");
+      continue;
+    }
     unsigned int cellnum = 0;
     vtkPoints *pts;
     vtkCellArray *polys;
@@ -719,15 +727,24 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
       theCells = polys;
     }
     double v[3];
+    gdcmWarningMacro("The number of cells:" << theCells->GetNumberOfCells());
     for (theCells->InitTraversal(); theCells->GetNextCell(npts,indx); cellnum++ ){
-      if (npts < 1) continue;
+      if (npts < 1){
+        gdcmWarningMacro("theCells for input " << j << " is less than 1, continuing");
+        continue;
+      } 
       pts->GetPoint(indx[0],v);
       double theZ = v[2];
       std::string theSOPInstance = DirectoryHelper::RetrieveSOPInstanceUIDFromZPosition(theZ, theCTDataSets);
       //j is correct here, because it's adding, as in there's an internal vector
       //that's growing.
+      gdcmWarningMacro("SOP Instance for plane " << theZ << " is " << theSOPInstance);
+      
       theRTStruct->AddContourReferencedFrameOfReference(j,theSOPClassID.c_str(), theSOPInstance.c_str());
     }
   }
-  return;// true;
+
+  FILE* outputFile = fopen("D:\\MVSDownloadDirectory\\1.2.840.113704.1.111.1848.1260456318.5\\debugoutput.txt", "a+");
+  fwrite(stm.str().c_str(), 1, stm.str().size(), outputFile);
+  fclose(outputFile);
 }

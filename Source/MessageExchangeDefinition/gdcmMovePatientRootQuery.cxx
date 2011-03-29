@@ -81,6 +81,12 @@ std::vector<Tag> MovePatientRootQuery::GetTagListByLevel(const EQueryLevel& inQu
     return mSeries.GetUniqueTags(ePatientRootType);
   case eImageOrFrame:
     return mImage.GetUniqueTags(ePatientRootType);
+  default: //have to return _something_ if a query level isn't given
+	  assert(0);
+	  {
+		  std::vector<Tag> empty;
+		  return empty;
+	  }
     }
 }
 

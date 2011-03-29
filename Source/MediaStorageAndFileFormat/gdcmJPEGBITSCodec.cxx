@@ -127,7 +127,9 @@ fill_input_buffer (j_decompress_ptr cinfo)
     src->infile->read( (char*)src->buffer, INPUT_BUF_SIZE);
     }
 
-  nbytes = src->infile->gcount();
+  std::streamsize gcount = src->infile->gcount();
+  assert(gcount < INT_MAX);
+  nbytes = (size_t)gcount;
 
   if (nbytes <= 0) {
     if (src->start_of_file)  /* Treat empty input file as fatal error */
