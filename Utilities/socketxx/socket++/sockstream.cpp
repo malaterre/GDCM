@@ -1059,7 +1059,7 @@ long sockbuf::howmanyc () const
 // and the recvbuf of the socket.
 {
   std::streamsize theShowMany = showmanyc();
-  assert (theShowMany < MAXINT);
+  assert (theShowMany < INT_MAX);
   return (long)theShowMany + nread ();
 }
 
