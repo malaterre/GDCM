@@ -1044,7 +1044,9 @@ long sockbuf::howmanyc () const
 // return how many chars are available for reading in the input buffer
 // and the recvbuf of the socket.
 {
-  return showmanyc () + nread ();
+  std::streamsize theShowMany = showmanyc();
+  assert (theShowMany < MAXINT);
+  return (long)theShowMany + nread ();
 }
 
 void sockbuf::nbio (bool set) const
