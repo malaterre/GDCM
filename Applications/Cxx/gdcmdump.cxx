@@ -73,7 +73,7 @@ int DoOperation(const std::string & filename)
 
   TPrinter printer;
   printer.SetFile ( reader.GetFile() );
-  printer.SetColor( color );
+  printer.SetColor( color != 0);
   printer.Print( std::cout );
 
   // Only return success when file read succeeded not depending whether or not we printed it
@@ -485,14 +485,14 @@ int main (int argc, char *argv[])
     return 1;
     }
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( debug != 0);
+  gdcm::Trace::SetWarning( warning != 0);
+  gdcm::Trace::SetError( error != 0);
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( verbose != 0);
+    gdcm::Trace::SetError( verbose!= 0);
     }
 
   if( mapuidnames )
@@ -510,7 +510,7 @@ int main (int argc, char *argv[])
   else if( gdcm::System::FileIsDirectory( filename.c_str() ) )
     {
     gdcm::Directory d;
-    d.Load(filename, recursive);
+    d.Load(filename, recursive!= 0);
     gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
     for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
       {
@@ -520,11 +520,11 @@ int main (int argc, char *argv[])
         }
       else if( printasn1 )
         {
-        res += PrintASN1(*it, verbose);
+        res += PrintASN1(*it, verbose!= 0);
         }
       else if( printpdb )
         {
-        res += PrintPDB(*it, verbose);
+        res += PrintPDB(*it, verbose!= 0);
         }
       else if( printcsa )
         {
@@ -551,11 +551,11 @@ int main (int argc, char *argv[])
       }
     else if( printasn1 )
       {
-      res += PrintASN1(filename, verbose);
+      res += PrintASN1(filename, verbose!= 0);
       }
     else if( printpdb )
       {
-      res += PrintPDB(filename, verbose);
+      res += PrintPDB(filename, verbose!= 0);
       }
     else if( printcsa )
       {
