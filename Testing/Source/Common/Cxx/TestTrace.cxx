@@ -17,14 +17,14 @@
 
 int TestTrace(int, char *[])
 {
-  gdcm::Trace t;
+	
+  std::ostringstream useros;
 
   gdcmDebugMacro( "DebugKO" );
   gdcmWarningMacro( "WarningKO" );
   gdcmErrorMacro( "ErrorKO" );
 
   // test the SetStream interface
-  std::ostringstream useros;
   gdcm::Trace::SetStream( useros );
 
   gdcmDebugMacro( "DebugOK_OFF" );
@@ -38,7 +38,9 @@ int TestTrace(int, char *[])
   gdcmDebugMacro( "DebugOK_ON" );
   gdcmWarningMacro( "WarningOK_ON" );
   gdcmErrorMacro( "ErrorOK_ON" );
-
+  
+  //in release mode, tracing just doesn't work any more, so this test isn't valid.
+#ifndef NDEBUG
   std::string result = useros.str();
   if( result.find( "KO" ) != std::string::npos )
     {
@@ -62,6 +64,6 @@ int TestTrace(int, char *[])
     std::cerr << result << std::endl;
     return 1;
     }
-
+#endif
   return 0;
 }
