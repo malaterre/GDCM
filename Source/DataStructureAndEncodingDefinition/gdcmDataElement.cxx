@@ -18,6 +18,7 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmTrace.h"
 
 namespace gdcm
 {
@@ -116,7 +117,8 @@ namespace gdcm
             assert( item == itemPMSStart );
             ss.seekg(-4,std::ios::cur);
             sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
-            (void)ex;//cast to avoid the warning message
+			(void)ex;  //to avoid unreferenced variable warning on release
+			gdcmErrorMacro(ex.what());
             }
           return sqi;
           }
@@ -143,13 +145,14 @@ namespace gdcm
             // s -> gdcm::ImplicitDataElement -> Impossible (more)
             std::stringstream ss;
             ss.str(s);
+			(void)ex;  //to avoid unreferenced variable warning on release
             try {
             sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
             } catch ( Exception & ) {
               gdcmErrorMacro( "Could not read SQ. Giving up" );
               return NULL;
             }
-            (void)ex;//cast to avoid the warning message
+			gdcmErrorMacro(ex.what());
             }
           return sqi;
           }

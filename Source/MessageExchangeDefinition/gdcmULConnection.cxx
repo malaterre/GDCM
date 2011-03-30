@@ -172,12 +172,14 @@ bool ULConnection::InitializeConnection()
     }
   catch ( sockerr &err )
     {
+	(void)err;  //to avoid unreferenced variable warning on release
     gdcmWarningMacro( "Unable to open connection with exception " << err.what()
       << std::endl );
     return false;
     }
   catch (std::exception& ex)
     {
+	(void)ex;  //to avoid unreferenced variable warning on release
     //unable to establish connection, so break off.
     gdcmWarningMacro( "Unable to open connection with exception " << ex.what()
       << std::endl );
@@ -224,6 +226,7 @@ bool ULConnection::InitializeIncomingConnection()
     mSocket->rdbuf()->sendtimeout((int)GetTimer().GetTimeout());
 */
   } catch (std::exception& ex){//unable to establish connection, so break off.
+     (void)ex;  //to avoid unreferenced variable warning on release
      gdcmWarningMacro("Unable to open connection with exception " << ex.what() << std::endl);
      return false;
   }

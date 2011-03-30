@@ -216,6 +216,7 @@ bool ServiceClassUser::SendStore(File const &file)
     }
   catch ( std::exception &ex )
     {
+    (void)ex;  //to avoid unreferenced variable warning on release
     gdcmErrorMacro( "Could not C-STORE: " << ex.what() );
     return false;
     }

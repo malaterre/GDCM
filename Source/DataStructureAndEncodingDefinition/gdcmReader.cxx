@@ -332,7 +332,8 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           }
         catch( std::exception &ex )
           {
-          (void)ex;
+			(void)ex;  //to avoid unreferenced variable warning on release
+			gdcmErrorMacro(ex.what());
           // Weird implicit meta header:
           is.seekg(128+4, std::ios::beg );
           assert( is.good() );
@@ -342,9 +343,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
             }
           catch( std::exception &ex2 )
             {
+			(void)ex2;  //to avoid unreferenced variable warning on release
             // Ok I get it now... there is absolutely no meta header, giving up
             //hasmetaheader = false;
-            (void)ex2;
+			gdcmErrorMacro(ex2.what());
             }
           }
         }
@@ -659,6 +661,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
     }
   catch( Exception &ex )
     {
+	(void)ex;  //to avoid unreferenced variable warning on release
     gdcmDebugMacro( ex.what() );
     success = false;
     }
@@ -673,6 +676,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
     }
   catch( Exception &ex )
     {
+	(void)ex;  //to avoid unreferenced variable warning on release
     gdcmDebugMacro( ex.what() );
     success = false;
     }
