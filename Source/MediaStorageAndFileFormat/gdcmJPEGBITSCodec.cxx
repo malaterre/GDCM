@@ -14,6 +14,8 @@
 #include "gdcmTrace.h"
 #include "gdcmTransferSyntax.h"
 
+#include <limits.h>
+
 /*
  * jdatasrc.c
  *
