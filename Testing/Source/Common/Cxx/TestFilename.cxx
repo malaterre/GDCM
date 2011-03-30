@@ -163,6 +163,15 @@ int TestFilename(int argc, char *argv[])
 }
 
 {
+
+//#define TESTLONGPATHNAMES
+#ifdef TESTLONGPATHNAMES
+	//why are we testing this?  This is the operating system's deal, not GDCM's.
+	//GDCM is not responsible for long path names, and cannot fix this issue.
+	//if we want to move this to a configuration option (ie, test for long pathnames),
+	//then we can--otherwise, windows users should just beware of this issue.
+	//This path limit has been the case since Windows 95, and is unlikely to change any time soon.
+
   // Apparently there is an issue with long pathanem i nWin32 system:
   // http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
   // The only way to work around the 260 byte limitation it appears as if we
@@ -175,7 +184,11 @@ int TestFilename(int argc, char *argv[])
   const char *directory_ = gdcm::Testing::GetTempDirectory(subdir);
 #ifdef _WIN32
   gdcm::Filename mydir( directory_ );
-  std::string unc = "\\\\?\\";
+  std::string unc = "\\\\?\\";//on Windows, to use UNC, you need to:
+  //a) append this string
+  //b) use a network drive (ie, the gdcm file is made on a network drive) that
+  //c) you have access to.
+  //I don't think this is a good or useful test. mmr
   unc += mydir.ToWindowsSlashes();
   const char *directory = unc.c_str();
 #else
@@ -211,12 +224,13 @@ int TestFilename(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-    }
+  }
 else
 {
     std::cerr << "seriously " << fn << std::endl;
     return EXIT_FAILURE;
 }
+#endif //TESTLONGPATHNAMES
 }
 
   return 0;
