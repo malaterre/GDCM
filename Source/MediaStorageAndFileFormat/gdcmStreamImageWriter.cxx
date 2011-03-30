@@ -340,6 +340,37 @@ bool StreamImageWriter::WriteImageInformation(){
   return true;
 }
 
+//this function determines if a file can even be written using the streaming writer
+//unlike the reader, can be called before WriteImageInformation, but must be called
+//after SetFile.
+bool StreamImageWriter::CanWriteFile() const
+{
+  File &mFile = *mspFile;
+  if (mspFile == NULL)
+    {
+    return false;
+    }
+
+  bool hasTag23 = mFile.GetDataSet().FindDataElement(Tag(0x02,0x03));
+  bool hasTag818 = mFile.GetDataSet().FindDataElement(Tag(0x08,0x18));
+  if (!hasTag23 && !hasTag818){
+    return false; //need both tags to be able to write out to disk
+  }
+  
+  
+  const FileMetaInformation &header = mFile.GetHeader();
+  const TransferSyntax &ts = header.GetDataSetTransferSyntax();
+  
+  RAWCodec theCodec;
+  bool canDecodeWithRaw = !theCodec.CanDecode(ts);
+  if (!canDecodeWithRaw)
+    {
+    return false; 
+    }
+
+  return true;
+}
+
   /// Set the image information to be written to disk that is everything but
   /// the pixel information.  Copies the data into a new dataset, except for the pixel element
 ///This way, writing the image information will just write everything else.
