@@ -236,7 +236,7 @@ class MY_API sockbuf: public streambuf
 
         virtual int           sync ();
 
-        virtual streamsize    showmanyc () const;
+        virtual streamsize    showmanyc_old () const;//has a name conflict in gcc 4.2.1, so append _old to it
         virtual streamsize    xsgetn (char_type* s, streamsize n);
         virtual int_type      underflow ();
         virtual int_type      uflow ();
