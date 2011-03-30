@@ -469,7 +469,7 @@ int sockbuf::sync ()
     return 0;
 }
 
-streamsize sockbuf::showmanyc_old () const
+streamsize sockbuf::showmanyc () const
 // return the number of chars in the input sequence
 {
     if (gptr () && gptr () < egptr ())
@@ -507,7 +507,7 @@ sockbuf::int_type sockbuf::uflow ()
 
 streamsize sockbuf::xsgetn (char_type* s, streamsize n)
 {
-  std::streamsize rval = showmanyc_old ();
+  std::streamsize rval = showmanyc ();
   if (rval >= n) {
     memcpy (s, gptr (), (size_t)(n * sizeof (char_type)));
     gbump ((int)n);
@@ -1059,7 +1059,7 @@ long sockbuf::howmanyc () const
 // return how many chars are available for reading in the input buffer
 // and the recvbuf of the socket.
 {
-  std::streamsize theShowMany = showmanyc_old();
+  std::streamsize theShowMany = showmanyc();
   assert (theShowMany < INT_MAX);
   return (long)theShowMany + nread ();
 }
