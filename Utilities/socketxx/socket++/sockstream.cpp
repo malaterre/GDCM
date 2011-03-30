@@ -64,6 +64,7 @@
 #include <sstream>
 #include <string>
 #include <cassert>
+#include <climits>
 
 #if defined(__CYGWIN__) || !defined(WIN32)
 extern "C" {
