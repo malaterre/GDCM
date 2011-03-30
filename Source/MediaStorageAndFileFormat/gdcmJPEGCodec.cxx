@@ -37,7 +37,8 @@ JPEGCodec::~JPEGCodec()
 
 void JPEGCodec::SetQuality(double q)
 {
-  Quality = q;
+  Quality = (int)q;//not sure why a double is passed and stored in an int.
+  //the casting will happen here anyway, so making it explicit removes a warning.
 }
 
 double JPEGCodec::GetQuality() const
