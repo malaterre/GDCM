@@ -76,8 +76,12 @@ std::string to_string ( Float data ) {
                     digits -=1;
 #endif
             }
-            else if( ldata < 0)
-                digits += ldata; // (zeros before first significant digit)
+            else if( ldata < 0){
+				//since ldata is negative, to have the test pass, 
+				//the right casting has to be done to avoid a casting warning here
+				unsigned long uldata = (unsigned long)(fabs(ldata)+1.0);
+                digits -= uldata; // (zeros before first significant digit) 
+			}
         }
     }
     /*
@@ -165,7 +169,7 @@ bool singleTestDS(double d, int sz, bool se = false)
 {
     bool fail = false;
     std::cout << "           -|----------------|-" << std::endl;
-    std::string s = to_string( d );
+    std::string s = to_string<double>( d );
     std::cout << "  Result:    " << s << std::flush;
 
     if ( checkerror(d, s, se) )
@@ -428,13 +432,13 @@ int TestDS(int, char *[])
     for (unsigned int i = 0; i<random_count; i++)
     {
         // Create something that looks like a random double
-        int rand_exp =  ( ( std::rand() / (double)(RAND_MAX) ) * (max_exp - min_exp) ) + min_exp;
+        int rand_exp =  ( ((int)( std::rand() / (double)(RAND_MAX) ) ) * (max_exp - min_exp) ) + min_exp;
         double rand = static_cast<double>(std::rand()) * pow(10., rand_exp);
         if (rand != rand) {i--; continue;} // nan
         if (rand == std::numeric_limits<double>::infinity()) {i--; continue;} // inf
 
         std::string s = to_string( rand );
-//        std::cout << s;
+        //std::cout << s;
         if (s.size() > 16 || !s.compare("inf") || !s.compare("nan") )
         {
 //            std::cout << "\t--- FAIL" << std::endl;
