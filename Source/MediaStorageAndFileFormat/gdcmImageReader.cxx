@@ -94,8 +94,8 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
 
   // Do the Rescale Intercept & Slope
   std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
-  pixeldata.SetIntercept( is[0] );
-  pixeldata.SetSlope( is[1] );
+  pixeldata.SetIntercept(0, is[0] );
+  pixeldata.SetSlope(0, is[1] );
 
   return true;
 }
@@ -143,8 +143,8 @@ bool ImageReader::ReadACRNEMAImage()
 
   // Do the Rescale Intercept & Slope
   std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
-  pixeldata.SetIntercept( is[0] );
-  pixeldata.SetSlope( is[1] );
+  pixeldata.SetIntercept(0, is[0] );
+  pixeldata.SetSlope(0, is[1] );
 
   return true;
 }
