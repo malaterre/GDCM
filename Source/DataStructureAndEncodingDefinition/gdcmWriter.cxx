@@ -77,6 +77,7 @@ bool Writer::Write()
         }
       catch(gdcm::Exception &ex)
         {
+		(void)ex;  //to avoid unreferenced variable warning on release
         gdcmErrorMacro( "Could not recreate the File Meta Header, please report:" << ex.what() );
         return false;
         }
@@ -142,6 +143,7 @@ bool Writer::Write()
     }
   catch(std::exception &ex)
     {
+	(void)ex;  //to avoid unreferenced variable warning on release
     gdcmErrorMacro( ex.what() );
     return false;
     }

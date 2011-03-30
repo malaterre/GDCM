@@ -325,6 +325,7 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     }
   catch ( Exception &e )
     {
+    (void)e;  //to avoid unreferenced variable warning on release
     // If you reach here this is basically because GDCM does not support encoding other
     // than raw transfer syntx (Little Endian Explicit/Implicit...)
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
