@@ -55,13 +55,13 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 #else
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
 
   JlsParamaters metadata;
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   if (JpegLsReadHeader(dummy_buffer, (unsigned int)buf_size, &metadata) != OK)
     {
     return false;

@@ -122,6 +122,8 @@ bool checkerror(double d, std::string s)
 
 
     //if (error > pow(10., eo) )
+	//pow will underflow at 10^-308, so errors lower than -308 will appear to be 
+	//larger than pow(10., eo), because the 'pow' result will be 0 in vs2010
 	if (log10(error) > eo)
     {
         std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;

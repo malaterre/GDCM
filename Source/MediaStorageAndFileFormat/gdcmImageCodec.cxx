@@ -100,7 +100,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
@@ -135,7 +135,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
@@ -146,7 +146,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   // http://lestourtereaux.free.fr/papers/data/yuvrgb.pdf
   assert( !(buf_size % 3) );
   unsigned long size = (unsigned long)buf_size/3;
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   unsigned char *copy = new unsigned char[ (unsigned int)buf_size ];
   memmove( copy, dummy_buffer, (size_t)buf_size);
 assert(0); // Do not use this code !
@@ -197,7 +197,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
@@ -236,7 +236,7 @@ bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
@@ -259,7 +259,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  assert(buf_size < INT_MAX);
+  //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
