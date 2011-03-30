@@ -17,14 +17,14 @@
 
 int TestTrace(int, char *[])
 {
-	
-  std::ostringstream useros;
+  gdcm::Trace t; //initializes all macros to 'off'
 
   gdcmDebugMacro( "DebugKO" );
   gdcmWarningMacro( "WarningKO" );
   gdcmErrorMacro( "ErrorKO" );
 
   // test the SetStream interface
+  std::ostringstream useros;
   gdcm::Trace::SetStream( useros );
 
   gdcmDebugMacro( "DebugOK_OFF" );
@@ -32,7 +32,7 @@ int TestTrace(int, char *[])
   gdcmErrorMacro( "ErrorOK_OFF" );
 
   gdcm::Trace::DebugOn();
-  gdcm::Trace::WarningOn();
+  gdcm::Trace::WarningOn(); 
   gdcm::Trace::ErrorOn();
 
   gdcmDebugMacro( "DebugOK_ON" );
