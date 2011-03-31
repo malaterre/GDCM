@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
   //std::cout << reader->GetMedicalImageProperties()->GetStudyDate() << std::endl;
 
   vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
-  int numMasks = reader->GetNumberOfOutputPorts();// + 1;//add a blank one in
+  int numMasks = reader->GetNumberOfOutputPorts() + 1;//add a blank one in
   writer->SetNumberOfInputPorts( numMasks );
 //  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
 //    writer->SetInput( num, reader->GetOutput(num) );
@@ -98,11 +98,11 @@ int main(int argc, char *argv[])
   }
   //ok, now we'll add a blank organ
   //the blank organ is to test to ensure that blank organs work; there have been crash reports
-//  vtkPolyData* blank = vtkPolyData::New();
-//  writer->SetInput(numMasks-1, blank);
-//  roiNames->InsertValue(numMasks-1, "blank");
-//  roiAlgorithms->InsertValue(numMasks-1, "blank");
-//  roiTypes->InsertValue(numMasks-1, "ORGAN");
+  vtkPolyData* blank = vtkPolyData::New();
+  writer->SetInput(numMasks-1, blank);
+  roiNames->InsertValue(numMasks-1, "blank");
+  roiAlgorithms->InsertValue(numMasks-1, "blank");
+  roiTypes->InsertValue(numMasks-1, "ORGAN");
 
   vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
   writer->SetRTStructSetProperties(theProperties);
@@ -111,6 +111,7 @@ int main(int argc, char *argv[])
     reader->GetRTStructSetProperties()->GetStructureSetName(),
     roiNames, roiAlgorithms, roiTypes);
 
+  writer->SetRTStructSetProperties(theProperties);
   writer->Write();
 
   // print reader output:
@@ -144,6 +145,7 @@ int main(int argc, char *argv[])
   iren->Start();
 
   reader->Delete();
+//  append->Delete();
   cubeMapper->Delete();
   cubeActor->Delete();
   renderer->Delete();
@@ -153,7 +155,10 @@ int main(int argc, char *argv[])
   roiAlgorithms->Delete();
   roiTypes->Delete();
   theProperties->Delete();
-//  blank->Delete();
+  roiNames->Delete();
+  roiAlgorithms->Delete();
+  roiTypes->Delete();
+  blank->Delete();
 
 
   writer->Delete();

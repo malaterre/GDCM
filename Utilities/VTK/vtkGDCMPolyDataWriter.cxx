@@ -617,11 +617,6 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
                                                   vtkStringArray* inROIAlgorithmName,
                                                   vtkStringArray* inROIType)
 {
-
-  gdcm::Trace::WarningOn();    
-  std::ostringstream stm;
-  gdcm::Trace::SetStream(stm);
-
   using namespace gdcm;
   gdcm::Directory::FilenamesType theCTSeries =
     gdcm::DirectoryHelper::GetCTImageSeriesUIDs(inDirectory);
@@ -743,8 +738,4 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
       theRTStruct->AddContourReferencedFrameOfReference(j,theSOPClassID.c_str(), theSOPInstance.c_str());
     }
   }
-
-  FILE* outputFile = fopen("D:\\MVSDownloadDirectory\\1.2.840.113704.1.111.1848.1260456318.5\\debugoutput.txt", "a+");
-  fwrite(stm.str().c_str(), 1, stm.str().size(), outputFile);
-  fclose(outputFile);
 }
