@@ -27,6 +27,7 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   GenAllVR
+  ELSCINT1WaveToText
   DiscriminateVolume
   GetSubSequenceData
   GenLongSeqs
