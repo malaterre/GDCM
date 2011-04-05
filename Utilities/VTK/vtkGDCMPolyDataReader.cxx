@@ -478,29 +478,35 @@ refinstanceuid.GetValue().c_str() );
       //const gdcm::ByteValue *bv = contourdata.GetByteValue();
       gdcm::Attribute<0x3006,0x0042> contgeotype;
       contgeotype.SetFromDataSet( nestedds2 );
-      assert( contgeotype.GetValue() == "CLOSED_PLANAR " );
+      assert( contgeotype.GetValue() == "CLOSED_PLANAR " || contgeotype.GetValue() == "POINT " );
 
       gdcm::Attribute<0x3006,0x0046> numcontpoints;
       numcontpoints.SetFromDataSet( nestedds2 );
 
+      if( contgeotype.GetValue() == "POINT " )
+        {
+        assert( numcontpoints.GetValue() == 1 );
+        }
+
       gdcm::Attribute<0x3006,0x0050> at;
       at.SetFromDataElement( contourdata );
 
+      if( contgeotype.GetValue() == "CLOSED_PLANAR " )
         {
         assert( nestedds2.FindDataElement( gdcm::Tag(0x3006,0x0016) ) );
         const gdcm::DataElement &contourimagesequence = nestedds2.GetDataElement( gdcm::Tag(0x3006,0x0016) );
         gdcm::SmartPointer<gdcm::SequenceOfItems> contourimagesequence_sqi = contourimagesequence.GetValueAsSQ();
         assert( contourimagesequence_sqi && contourimagesequence_sqi->GetNumberOfItems() == 1 );
-      const gdcm::Item & theitem = contourimagesequence_sqi->GetItem(1);
-      const gdcm::DataSet& nestedds = theitem.GetNestedDataSet();
+        const gdcm::Item & theitem = contourimagesequence_sqi->GetItem(1);
+        const gdcm::DataSet& nestedds = theitem.GetNestedDataSet();
 
-      gdcm::Attribute<0x0008,0x1150> classat;
-      classat.SetFromDataSet( nestedds );
-      gdcm::Attribute<0x0008,0x1155> instat;
-      instat.SetFromDataSet( nestedds );
+        gdcm::Attribute<0x0008,0x1150> classat;
+        classat.SetFromDataSet( nestedds );
+        gdcm::Attribute<0x0008,0x1155> instat;
+        instat.SetFromDataSet( nestedds );
 
-      this->RTStructSetProperties->AddContourReferencedFrameOfReference( pd,
-        classat.GetValue(), instat.GetValue() );
+        this->RTStructSetProperties->AddContourReferencedFrameOfReference( pd,
+          classat.GetValue(), instat.GetValue() );
         }
 
       //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
