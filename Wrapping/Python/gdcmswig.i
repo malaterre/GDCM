@@ -164,7 +164,9 @@
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
+#include "gdcmBaseRootQuery.h"
 #include "gdcmCompositeNetworkFunctions.h"
+#include "gdcmServiceClassUser.h"
 
 using namespace gdcm;
 %}
@@ -695,4 +697,6 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
+%include "gdcmBaseRootQuery.h"
 %include "gdcmCompositeNetworkFunctions.h"
+%include "gdcmServiceClassUser.h"
