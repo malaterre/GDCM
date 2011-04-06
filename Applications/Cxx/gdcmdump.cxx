@@ -24,6 +24,7 @@
  * gdcmdump has some feature not described in the DICOM standard:
  *   --csa : to print CSA information (dcmInfo.exe compatible)
  *   --pdb : to print PDB information (GEMS private info)
+ *   --elscint : to print ELSCINT information (ELSCINT private info)
  *
  *
  * TODO: it would be nice to have custom printing, namely printing as HTML/XML
@@ -58,6 +59,167 @@
 int color = 0;
 
 int ignoreerrors = 0;
+
+namespace cleanup
+{
+bool readastring(std::string &out, const char *input )
+{
+  out.clear();
+  while( *input )
+    {
+    out.push_back( *input++ );
+    }
+  return true;
+}
+
+struct el
+{
+  std::string name;
+  uint32_t pad;
+  std::vector<std::string> values;
+  size_t Size() const
+    {
+    size_t s = 0;
+    s += name.size() + 1;
+    s += sizeof(pad);
+    for( std::vector<std::string>::const_iterator it = values.begin(); it != values.end(); ++it )
+      s += it->size() + 1;
+    return s;
+    }
+  void ReadFromString( const char * input )
+    {
+    readastring( name, input );
+    const char *p = input + 1+  name.size();
+    memcpy( &pad, p, sizeof( pad ) );
+    //assert( pad == 1 || pad == 2 || pad == 3 || pad == 6 );
+    values.resize( pad );
+    const char *pp = p + sizeof(uint32_t);
+    for( uint32_t pidx = 0; pidx < pad; ++pidx )
+      {
+      readastring( values[pidx], pp );
+      pp = pp + values[pidx].size() + 1;
+      }
+    }
+  void Print() const
+    {
+    //std::cout << "  " << name << " : " << pad << " : (";
+    std::cout << "  " << name << " [";
+      {
+      std::vector<std::string>::const_iterator it = values.begin();
+      std::cout << *it++;
+      for(; it != values.end(); ++it )
+        {
+        std::cout << "\\";
+        std::cout << *it;
+        }
+      }
+    std::cout << "]" << std::endl;
+    }
+};
+
+
+struct info
+{
+  size_t Read(const char *in )
+    {
+    const char *m = in;
+    uint32_t h;
+    memcpy( &h, in, sizeof(h) );
+    in += sizeof(h);
+    std::string dummy;
+    readastring( dummy, in );
+    in += dummy.size();
+    in += 1;
+    if( h == 432154 ) // 0x6981a
+      {
+      // Single item
+      uint32_t nels;
+      memcpy( &nels, in, sizeof(nels) );
+      in += sizeof(nels);
+      //std::cout << "  ELSCINT1/Item name: " << dummy << " : " << nels << std::endl;
+      std::cout << "ELSCINT1/Item name: [" << dummy << "]" << std::endl;
+      for( uint32_t i = 0; i < nels; ++i )
+        {
+        el e;
+        e.ReadFromString( in );
+        e.Print();
+        in += e.Size();
+        }
+      }
+    else if( h == 2341 ) // 0x925
+      {
+      // Multiple Item(s)
+      uint32_t d;
+      memcpy( &d, in, sizeof(d) );
+      in += sizeof(d);
+      //std::cout << "  Info Name: " << dummy << " : " << d << std::endl;
+      std::cout << "ELSCINT1/Item name: " << dummy << std::endl;
+      for( uint32_t dix = 0; dix < d; ++dix )
+        {
+        uint32_t fixme;
+        memcpy( &fixme, in, sizeof(fixme) );
+        in += 4; //
+        //std::cout << "  number of  Subitems " << fixme << std::endl;
+        uint32_t nels = fixme;
+        if( nels )
+          std::cout << " SubItems #" << dix << std::endl;
+        else
+          std::cout << " No SubItems (Empty)" << std::endl;
+        for( uint32_t i = 0; i < nels; ++i )
+          {
+          el e;
+          e.ReadFromString( in );
+          e.Print();
+          in += e.Size();
+          }
+        }
+      // postcondition
+      uint32_t fixme;
+      memcpy( &fixme, in, sizeof(fixme) );
+      assert( fixme == 0x0006981A );
+      }
+    else
+      {
+      assert( 0 );
+      }
+    return in - m;
+    }
+};
+
+int DumpEl2_new(const gdcm::DataSet & ds)
+{
+  // 01f7,1026
+  const gdcm::PrivateTag t01f7_26(0x01f7,0x1026,"ELSCINT1");
+  if( !ds.FindDataElement( t01f7_26 ) ) return 1;
+  const gdcm::DataElement& de01f7_26 = ds.GetDataElement( t01f7_26 );
+  if ( de01f7_26.IsEmpty() ) return 1;
+  const gdcm::ByteValue * bv = de01f7_26.GetByteValue();
+
+  const char *begin = bv->GetPointer();
+  uint32_t val0[3];
+  memcpy( &val0, begin, sizeof( val0 ) );
+  assert( val0[0] == 0xF22D );
+  begin += sizeof( val0 );
+
+  // 1A 98 06 00 -> start element
+  // Next is a string (can be NULL)
+  // then number of (nested) elements
+
+  std::cout << "ELSCINT1 Dumping info from tag " << t01f7_26 << std::endl;
+  info i;
+  size_t o;
+  assert( val0[1] == 0x1 );
+  for( uint32_t idx = 0; idx < val0[2]; ++idx )
+    {
+    o = i.Read( begin );
+    std::cout << std::endl;
+    begin += o;
+    }
+
+  return 0;
+}
+
+} // end namespace cleanup
 
 template <typename TPrinter>
 int DoOperation(const std::string & filename)
@@ -117,6 +279,23 @@ int PrintASN1(const std::string & filename, bool verbose)
   bool b = gdcm::ASN1::ParseDump( bv->GetPointer(), bv->GetLength() );
   if( !b ) return 1;
   return 0;
+}
+
+int PrintELSCINT(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  int ret = cleanup::DumpEl2_new( ds );
+
+  return ret;
 }
 
 int PrintPDB(const std::string & filename, bool verbose)
@@ -266,6 +445,7 @@ void PrintHelp()
   std::cout << "  -c --color          print in color." << std::endl;
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
+  std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -291,6 +471,7 @@ int main (int argc, char *argv[])
   int print = 0;
   int printcsa = 0;
   int printpdb = 0;
+  int printelscint = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -329,6 +510,7 @@ int main (int argc, char *argv[])
         {"ignore-errors", 0, &ignoreerrors, 1},
         {"asn1", 0, &printasn1, 1},
         {"map-uid-names", 0, &mapuidnames, 1},
+        {"elscint", 0, &printelscint, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -522,6 +704,10 @@ int main (int argc, char *argv[])
         {
         res += PrintASN1(*it, verbose!= 0);
         }
+      else if( printelscint )
+        {
+        res += PrintELSCINT(*it, verbose!= 0);
+        }
       else if( printpdb )
         {
         res += PrintPDB(*it, verbose!= 0);
@@ -552,6 +738,10 @@ int main (int argc, char *argv[])
     else if( printasn1 )
       {
       res += PrintASN1(filename, verbose!= 0);
+      }
+    else if( printelscint )
+      {
+      res += PrintELSCINT(filename, verbose!= 0);
       }
     else if( printpdb )
       {
