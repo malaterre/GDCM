@@ -155,7 +155,7 @@ SwapCode Image::GetSwapCode() const
   return SwapCode();
 }
 
-void Image::SetSwapCode(SwapCode sc)
+void Image::SetSwapCode(SwapCode)
 {
 }
 
@@ -170,7 +170,7 @@ void Image::SetIntercept(unsigned int idx, double intercept)
 {
   assert( NumberOfDimensions );
   assert( idx < InterceptSlopeArray.size() );
-  assert( NumberOfDimensions == InterceptSlopeArray.size() );
+  //assert( NumberOfDimensions == InterceptSlopeArray.size() );
   InterceptSlopeArray[idx][0] = intercept;
 }
 
