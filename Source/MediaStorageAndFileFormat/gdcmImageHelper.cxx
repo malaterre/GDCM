@@ -415,6 +415,31 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
     gdcmWarningMacro( "Could not find Origin" );
     return ori;
     }
+  if( ms == MediaStorage::NuclearMedicineImageStorage )
+    {
+    const Tag t1(0x0054,0x0022);
+    if( ds.FindDataElement( t1 ) )
+      {
+      SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( t1 ).GetValueAsSQ();
+      assert( sqi );
+      // Get first item:
+      const Item &item = sqi->GetItem(1);
+      const DataSet & subds = item.GetNestedDataSet();
+      const Tag timagepositionpatient(0x0020, 0x0032);
+      assert( subds.FindDataElement( timagepositionpatient ) );
+      Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
+      at.SetFromDataSet( subds );
+      ori.resize( at.GetNumberOfValues() );
+      for( unsigned int i = 0; i < at.GetNumberOfValues(); ++i )
+        {
+        ori[i] = at.GetValue(i);
+        }
+      return ori;
+      }
+    ori.resize( 3 );
+    gdcmWarningMacro( "Could not find Origin" );
+    return ori;
+    }
   ori.resize( 3 );
 
   // else
@@ -522,6 +547,36 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
       return dircos;
       }
     }
+  if( ms == MediaStorage::NuclearMedicineImageStorage )
+    {
+    const Tag t1(0x0054,0x0022);
+    if( ds.FindDataElement( t1 ) )
+      {
+      SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( t1 ).GetValueAsSQ();
+      assert( sqi );
+      // Get first item:
+      const Item &item = sqi->GetItem(1);
+      const DataSet & subds = item.GetNestedDataSet();
+
+      dircos.resize( 6 );
+      bool b2 = ImageHelper::GetDirectionCosinesFromDataSet(subds, dircos);
+      if( b2 )
+        {
+        }
+      else
+        {
+        gdcmErrorMacro( "Image Orientation (Patient) was not found" );
+        dircos[0] = 1;
+        dircos[1] = 0;
+        dircos[2] = 0;
+        dircos[3] = 0;
+        dircos[4] = 1;
+        dircos[5] = 0;
+        }
+      return dircos;
+      }
+    }
+
 
   dircos.resize( 6 );
   if( ms == MediaStorage::SecondaryCaptureImageStorage || !GetDirectionCosinesFromDataSet(ds, dircos) )
@@ -860,6 +915,7 @@ Tag ImageHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
   switch(ms)
     {
   case MediaStorage::MRImageStorage:
+  case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
   case MediaStorage::GeneralElectricMagneticResonanceImageStorage:
     // (0018,0088) DS [3]                                      #   2, 1 SpacingBetweenSlices
     t = Tag(0x0018,0x0088);
@@ -900,7 +956,6 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
   case MediaStorage::RTDoseStorage: // gdcmData/BogugsItemAndSequenceLengthCorrected.dcm
     t = Tag(0x3004,0x000c);
     break;
-  case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
   case MediaStorage::GEPrivate3DModelStorage:
   case MediaStorage::Philips3D:
   case MediaStorage::VideoEndoscopicImageStorage:
