@@ -240,6 +240,57 @@ void Image::Print(std::ostream &os) const
     //std::vector<double> Origin;
 
     }
+#else
+  if( NumberOfDimensions )
+    {
+      {
+      os << "Origin: (";
+#if 0
+      if( !OriginArray[0].empty() )
+        {
+        std::vector<double>::const_iterator it = OriginArray[0].begin();
+        os << *it;
+        for(++it; it != OriginArray[0].end(); ++it)
+          {
+          os << "," << *it;
+          }
+        }
+#else
+        const double *orig = GetOrigin();
+        os << orig[0];
+        os << "," << orig[1];
+        os << "," << orig[2];
+#endif
+      os << ")\n";
+      }
+      {
+      os << "Spacing: (";
+        const double *sp = GetSpacing();
+      os << sp[0];
+      os << "," << sp[1];
+      os << "," << sp[2];
+      os << ")\n";
+      }
+      {
+      os << "DirectionCosines: (";
+      //if( !DirectionCosines.empty() )
+        {
+        //std::vector<double>::const_iterator it = DirectionCosines.begin();
+        const double *dc = GetDirectionCosines();
+        os << dc[0];
+          os << "," << dc[1];
+          os << "," << dc[2];
+          os << "," << dc[3];
+          os << "," << dc[4];
+          os << "," << dc[5];
+        }
+      os << ")\n";
+      }
+      {
+      os << "Rescale Intercept/Slope: (" << GetIntercept() << "," << GetSlope() << ")\n";
+      }
+
+    }
 #endif
 }
 
