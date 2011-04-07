@@ -37,6 +37,7 @@ dcm_directory   DICOM input directory
   -c --color     print in color.
   -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
   -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
+     --elscint   print ELSCINT Protocol Information (01f7,26,ELSCINT1).
   -A --asn1      print encapsulated ASN1 structure >(0400,0520).
 \endverbatim
 
@@ -191,6 +192,43 @@ BWRT "-1"
 TRICKSIMG "1"
 TAG_SPACE "7"
 TAG_TYPE "None"
+\&...
+\endverbatim
+
+\subsection elscint_pi ELSCINT Protocol Information
+
+Using this option it is possible to dump as a readable text what is contained
+in the private attribute as found in typical ELSCINT CT DICOM file.
+
+ELSCINT Protocol Information: (01f7,26,ELSCINT1)
+
+\verbatim
+$ gdcmdump --elscint ELSCINT1_ProtocolInformation.dcm
+\endverbatim
+
+\verbatim
+ELSCINT1 Dumping info from tag (01f7,26,elscint1)
+ELSCINT1/Item name: []
+  ApprovedStep [yes]
+  RefSurview [1\0]
+  STD-first-img-pos [11.5]
+  current-step [yes]
+  ntimed-steps [0]
+  orig-n-slices [390]
+  protocol-file [Head_Multi_1032_usr.proc]
+  protocol-name [FACE-TRAUMA/Head/Hx]
+  protocol-path [/usr/diamond.root/spr/]
+  protocol-step [1]
+  protocol-version [2.51]
+
+ELSCINT1/Item name: [doseright]
+  ACS [n/a]
+  ACS-bed-position [0]
+  ACS-calc-mas [0]
+  ACS-iq-parameter [0]
+  ACS-learn-allowed [no]
+  ACS-water-radius [-1.000000]
+  ACS-water-radius-scan [-1]
 \&...
 \endverbatim
 
