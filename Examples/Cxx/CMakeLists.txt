@@ -61,7 +61,6 @@ SET(EXAMPLES_SRCS
   csa2img
   iU22tomultisc
   rle2img
-  pmsct_rg1toimg
   uid_unique
   PublicDict
   GenSeqs
