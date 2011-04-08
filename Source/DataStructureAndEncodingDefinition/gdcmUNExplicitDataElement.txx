@@ -84,7 +84,7 @@ std::istream &UNExplicitDataElement::ReadPreValue(std::istream &is)
       return is;
       }
     }
-  catch( Exception & )
+  catch( Exception &ex )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
@@ -98,6 +98,7 @@ std::istream &UNExplicitDataElement::ReadPreValue(std::istream &is)
     //gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
     //  TagField << " in order to read a buggy DICOM file." );
     //VRField = VR::INVALID;
+    (void)ex;
     ParseException pe;
     pe.SetLastElement( *this );
     throw pe;
