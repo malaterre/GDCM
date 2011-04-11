@@ -46,14 +46,14 @@ int main(int argc, char *argv[])
     std::cerr << argv[0] << " directory-with-rtstruct-and-ct-images\n";
     return 1;
     }
-  //const char * filename = argv[1];
   std::string theDirName(argv[1]);
   Directory::FilenamesType theRTSeries =
     DirectoryHelper::GetRTStructSeriesUIDs(theDirName);
-  if (theRTSeries.empty()){
+  if (theRTSeries.empty())
+    {
     std::cerr << "No RTStructs found for the test, ending." << std::endl;
     return 1;
-  }
+    }
 
   Directory::FilenamesType theRTNames =
     DirectoryHelper::GetFilenamesFromSeriesUIDs(theDirName, theRTSeries[0]);
@@ -67,10 +67,7 @@ int main(int argc, char *argv[])
   vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
   int numMasks = reader->GetNumberOfOutputPorts() + 1;//add a blank one in
   writer->SetNumberOfInputPorts( numMasks );
-//  for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
-//    writer->SetInput( num, reader->GetOutput(num) );
   writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[0] + ".dcm").c_str());
-  //doesn't look like the medical properties are actually written out
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   //this line is cheating, we won't have the same stuff, and may not have a struct
   //to start with.
@@ -86,7 +83,8 @@ int main(int argc, char *argv[])
   roiAlgorithms->SetNumberOfValues(numMasks);
   roiTypes->SetNumberOfValues(numMasks);
   vtkAppendPolyData* append = vtkAppendPolyData::New();
-  for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i){
+  for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i)
+    {
     writer->SetInput(i, reader->GetOutput(i));
     append->AddInput(reader->GetOutput(i));
     std::string theString = reader->GetRTStructSetProperties()->GetStructureSetROIName(i);
@@ -95,7 +93,7 @@ int main(int argc, char *argv[])
     roiAlgorithms->InsertValue(i, theString);
     theString = reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i);
     roiTypes->InsertValue(i, theString);
-  }
+    }
   //ok, now we'll add a blank organ
   //the blank organ is to test to ensure that blank organs work; there have been crash reports
   vtkPolyData* blank = vtkPolyData::New();
@@ -145,21 +143,17 @@ int main(int argc, char *argv[])
   iren->Start();
 
   reader->Delete();
-//  append->Delete();
+  append->Delete();
   cubeMapper->Delete();
   cubeActor->Delete();
   renderer->Delete();
   renWin->Delete();
   iren->Delete();
   roiNames->Delete();
-  roiAlgorithms->Delete();
   roiTypes->Delete();
   theProperties->Delete();
-  roiNames->Delete();
   roiAlgorithms->Delete();
-  roiTypes->Delete();
   blank->Delete();
-
 
   writer->Delete();
 
