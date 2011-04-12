@@ -216,6 +216,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::EnhancedXAImageStorage:
       iodname = "Enhanced X Ray Angiographic Image IOD Modules";
       break;
+    case MediaStorage::RTIonBeamsTreatmentRecordStorage:
+      iodname = "RT Ion Beams Treatment Record IOD Modules";
+      break;
     default:
       iodname = 0;
     }
