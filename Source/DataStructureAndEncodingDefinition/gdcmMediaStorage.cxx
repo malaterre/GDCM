@@ -121,6 +121,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.481.8", // RT Ion Plan Storage
   "1.2.840.10008.5.1.4.1.1.13.1.1", // XRay3DAngiographicImageStorage,
   "1.2.840.10008.5.1.4.1.1.12.1.1", // Enhanced XA Image Storage
+  "1.2.840.10008.5.1.4.1.1.481.9", //  RTIonBeamsTreatmentRecordStorage
   0
 };
 
@@ -194,6 +195,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == RTIonPlanStorage
     || ms == LeadECGWaveformStorage
     || ms == GeneralECGWaveformStorage
+    || ms == RTIonBeamsTreatmentRecordStorage
     || ms == RTStructureSetStorage )
     {
     return false;
