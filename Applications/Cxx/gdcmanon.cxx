@@ -438,7 +438,8 @@ int main(int argc, char *argv[])
             ss >> cdummy;
             assert( cdummy == ',' || cdummy == '=' );
             std::string str;
-            ss >> str;
+            //ss >> str;
+            std::getline(ss, str); // do not skip whitespace
             replace_tags_value.push_back( std::make_pair(tag, str) );
             }
           //printf (" with arg %s", optarg);
