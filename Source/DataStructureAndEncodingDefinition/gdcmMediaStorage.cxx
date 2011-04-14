@@ -281,6 +281,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},// RT Ion Plan Storage
   {"XA", 3},// XRay3DAngiographicImageStorage,
   {"XA", 3},// Enhanced XA Image Storage
+  {"  ", 2},// RTIonBeamsTreatmentRecordStorage
 
   {NULL, 0} //MS_END
 };
