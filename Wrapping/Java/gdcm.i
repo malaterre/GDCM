@@ -271,29 +271,7 @@ EXTEND_CLASS_PRINT(gdcm::Directory)
 %include "gdcmValue.h"
 EXTEND_CLASS_PRINT(gdcm::Value)
 // Array marshaling for arrays of primitives
-%define %cs_marshal_array(TYPE, CSTYPE)
-       %typemap(ctype)  TYPE[] "void*"
-       %typemap(imtype, inattributes="[MarshalAs(UnmanagedType.LPArray)]") TYPE[] "CSTYPE[]"
-       %typemap(cstype) TYPE[] "CSTYPE[]"
-       %typemap(in)     TYPE[] %{ $1 = (TYPE*)$input; %}
-       %typemap(csin)   TYPE[] "$csinput"
-%enddef
-
-// The following macro invocations allow you to pass arrays of primitive
-// types. Arrays of other things such as System.Drawing.Point are also
-// possible.
-%cs_marshal_array(bool, bool)
-%cs_marshal_array(char, byte)
-%cs_marshal_array(short, short)
-%cs_marshal_array(unsigned short, ushort)
-%cs_marshal_array(int, int)
-%cs_marshal_array(unsigned int, uint)
-%cs_marshal_array(long, int)
-%cs_marshal_array(unsigned long, uint)
-%cs_marshal_array(long long, long)
-%cs_marshal_array(unsigned long long, ulong)
-%cs_marshal_array(float, float)
-%cs_marshal_array(double, double)
+%include "arrays_java.i"
 
 
 // %clear commands should be unnecessary, but do it just-in-case
