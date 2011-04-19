@@ -39,11 +39,14 @@ MACRO (install_pdb library)
       FOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
         get_target_property(library_dll ${library} LOCATION_${cfg})
         string(REPLACE .dll .pdb library_pdb ${library_dll})
-        install (FILES ${library_pdb}
-          DESTINATION ${GDCM_INSTALL_BIN_DIR}
-          COMPONENT Development
-          CONFIGURATIONS ${cfg}
-          )
+        string(TOLOWER ${cfg} lcfg)
+        if(lcfg STREQUAL "debug" or lcfg STREQUAL "relwithdebinfo")
+          install (FILES ${library_pdb}
+            DESTINATION ${GDCM_INSTALL_BIN_DIR}
+            COMPONENT Development
+            CONFIGURATIONS ${cfg}
+            )
+        endif()
       ENDFOREACH(cfg ${CMAKE_CONFIGURATION_TYPES})
     ELSE(CMAKE_CONFIGURATION_TYPES)
       # nmake
@@ -51,10 +54,13 @@ MACRO (install_pdb library)
       # the value of CMAKE_DEBUG_POSTFIX
       get_target_property(library_dll ${library} LOCATION_${CMAKE_BUILD_TYPE})
       string(REPLACE .dll .pdb library_pdb ${library_dll})
-      install (FILES ${library_pdb}
-        DESTINATION ${GDCM_INSTALL_BIN_DIR}
-        COMPONENT Development
-        )
+      string(TOLOWER ${CMAKE_BUILD_TYPE} lcfg)
+      if(lcfg STREQUAL "debug" or lcfg STREQUAL "relwithdebinfo")
+        install (FILES ${library_pdb}
+          DESTINATION ${GDCM_INSTALL_BIN_DIR}
+          COMPONENT Development
+          )
+      endif()
     ENDIF(CMAKE_CONFIGURATION_TYPES)
   endif (MSVC)
 ENDMACRO (install_pdb)
