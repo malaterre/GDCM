@@ -219,6 +219,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::RTIonBeamsTreatmentRecordStorage:
       iodname = "RT Ion Beams Treatment Record IOD Modules";
       break;
+    case MediaStorage::CSANonImageStorage:
+      iodname = "Siemens Non-image IOD Modules";
+      break;
     default:
       iodname = 0;
     }
