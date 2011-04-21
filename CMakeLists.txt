@@ -622,7 +622,8 @@ endif()
 
 #-----------------------------------------------------------------------------
 # CPack stuff
-IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+IF(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
+  IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   IF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
     SET(CMAKE_INSTALL_MFC_LIBRARIES 0)
     SET(CMAKE_INSTALL_DEBUG_LIBRARIES 0)
@@ -879,8 +880,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PARAVIEWMODULE_INSTALL_TYPES Developer Full)
 
   INCLUDE(CPack)
+  ENDIF()
 
-ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+ENDIF()
 
 
 MACRO(PROCESSONEDIR DIRNAME myoutput)
