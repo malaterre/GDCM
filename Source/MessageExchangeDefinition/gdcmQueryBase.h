@@ -58,7 +58,7 @@ namespace gdcm
  * design is somewhat overly complicated, but is kept so that if we ever wanted to
  * try to guess the query type from the given tags, we could do so.
  */
-class QueryBase
+class GDCM_EXPORT QueryBase
 {
   public:
 

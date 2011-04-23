@@ -26,7 +26,7 @@ namespace gdcm
  * \brief QuerySeries
  * contains: class to construct a series-based query for c-find and c-move
  */
-class QuerySeries : public QueryBase
+class GDCM_EXPORT QuerySeries : public QueryBase
 {
 public:
   std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
