@@ -26,7 +26,7 @@ namespace gdcm
  * \brief QueryPatient
  * contains: class to construct a patient-based query for c-find and c-move
  */
-class QueryPatient : public QueryBase
+class GDCM_EXPORT QueryPatient : public QueryBase
 {
 public:
   std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;

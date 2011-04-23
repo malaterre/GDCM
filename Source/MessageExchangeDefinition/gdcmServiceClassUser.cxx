@@ -162,6 +162,11 @@ const char *ServiceClassUser::GetCalledAETitle() const
   return Internals->calledaetitle.c_str();
 }
 
+const char *ServiceClassUser::GetAETitle() const
+{
+  return Internals->aetitle.c_str();
+}
+
 void ServiceClassUser::SetHostname( const char *hostname )
 {
   if( hostname )

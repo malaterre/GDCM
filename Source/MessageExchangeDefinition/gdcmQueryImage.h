@@ -27,7 +27,7 @@ namespace gdcm
  * \brief QueryImage
  * contains: class to construct an image-based query for C-FIND and C-MOVE
  */
-class QueryImage : public QueryBase
+class GDCM_EXPORT QueryImage : public QueryBase
 {
   DataSet mCurrentQuery;
 public:

@@ -26,7 +26,7 @@ namespace gdcm
  * \brief QueryStudy.h
  * contains: class to construct a study-based query for C-FIND and C-MOVE
  */
-class QueryStudy : public QueryBase
+class GDCM_EXPORT QueryStudy : public QueryBase
 {
 public:
   std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
