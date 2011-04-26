@@ -21,7 +21,7 @@
 #include "gdcmSwapper.h"
 
 #include <vector>
-#include <cstddef> // ptrdiff_t
+#include <stddef.h> // ptrdiff_t fix
 #include <cstring>
 
 namespace gdcm
