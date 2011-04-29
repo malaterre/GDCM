@@ -26,6 +26,7 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
+  FixJAIBugJPEGLS
   pmsct_rgb1
   GenAllVR
   ELSCINT1WaveToText
