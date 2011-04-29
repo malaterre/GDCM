@@ -271,6 +271,7 @@ EXTEND_CLASS_PRINT(gdcm::Directory)
 %include "gdcmValue.h"
 EXTEND_CLASS_PRINT(gdcm::Value)
 // Array marshaling for arrays of primitives
+// http://www.swig.org/Doc2.0/Java.html#Java_unbounded_c_arrays
 %include "arrays_java.i"
 
 
