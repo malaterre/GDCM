@@ -180,6 +180,9 @@ bool PixmapReader::Read()
 void DoIconImage(const DataSet& rootds, Pixmap& image)
 {
   const Tag ticonimage(0x0088,0x0200);
+  // AMIInvalidPrivateDefinedLengthSQasUN.dcm
+  // GE_CT_With_Private_compressed-icon.dcm
+  // MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
   const PrivateTag tgeiconimage(0x0009,0x0010,"GEIIS");
   // AFAIK this icon SQ is undocumented , but I found it in:
   // gdcmDataExtra/gdcmBreakers/2929J888_8b_YBR_RLE_PlanConf0_breaker.dcm
