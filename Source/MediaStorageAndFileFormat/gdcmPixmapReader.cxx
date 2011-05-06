@@ -358,7 +358,13 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
     pixeldata.SetDataElement( de );
 
     // Pass TransferSyntax:
-    pixeldata.SetTransferSyntax( image.GetTransferSyntax() );
+    // Warning This is legal for the Icon to be uncompress in a compressed image
+    // We need to set the appropriate TS here:
+    const ByteValue *bv = de.GetByteValue();
+    if( bv )
+      pixeldata.SetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
+    else
+      pixeldata.SetTransferSyntax( image.GetTransferSyntax() );
     }
   else if( false && rootds.FindDataElement( tgeiconimage ) )
     {
