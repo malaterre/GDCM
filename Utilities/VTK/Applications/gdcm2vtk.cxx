@@ -27,6 +27,7 @@
 #include "vtkPNGWriter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMetaImageReader.h"
+#include "vtkXMLImageDataReader.h"
 #include "vtkMetaImageWriter.h"
 #include "vtkDICOMImageReader.h"
 #include "vtkMINCImageReader.h"
@@ -378,18 +379,21 @@ int main(int argc, char *argv[])
     imgfactory->RegisterReader( reader );
   vtkImageReader2* imgreader =
     imgfactory->CreateImageReader2(filename);
-  // Set lowerleft *after* CreateImageReader2
-  imgreader->SetFileLowerLeft( lowerleft );
   vtkStructuredPointsReader *datareader = vtkStructuredPointsReader::New();
   datareader->SetFileName( filename );
+  vtkXMLReader *xmlreader = vtkXMLImageDataReader::New();
   int res = 0;
   if( !imgreader )
     {
-    res = datareader->IsFileStructuredPoints();
-    if( !res )
+    int xmlres = xmlreader->CanReadFile( filename );
+    if( !xmlres )
       {
-      std::cerr << "could not find no reader to handle file: " << filename << std::endl;
-      return 1;
+      res = datareader->IsFileStructuredPoints();
+      if( !res )
+        {
+        std::cerr << "could not find no reader to handle file: " << filename << std::endl;
+        return 1;
+        }
       }
     }
   imgfactory->Delete();
@@ -397,6 +401,7 @@ int main(int argc, char *argv[])
   vtkImageData *imgdata;
   if( imgreader )
     {
+    imgreader->SetFileLowerLeft( lowerleft );
     imgreader->SetFileName(filename);
     imgreader->Update();
     if( imgreader->GetErrorCode() )
@@ -417,6 +422,12 @@ int main(int argc, char *argv[])
       return 1;
       }
     imgdata = datareader->GetOutput();
+    }
+  else if( xmlreader->CanReadFile( filename ) )
+    {
+    xmlreader->SetFileName(filename);
+    xmlreader->Update();
+    imgdata = vtkXMLImageDataReader::SafeDownCast(xmlreader)->GetOutput();
     }
 
   gdcm::Filename fn = outfilename;
