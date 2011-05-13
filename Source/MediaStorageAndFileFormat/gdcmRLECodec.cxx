@@ -358,6 +358,8 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     }
   else
     {
+    delete[] buffer;
+    delete[] bufferrgb;
     return false;
     }
 
