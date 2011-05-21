@@ -127,11 +127,11 @@ std::vector<DataSet> DirectoryHelper::LoadImageFromFiles(const std::string& inDi
     //now count the number of series that are of that given SOPClassUID
     size_t theNumSeries = theSeriesValues.size();
     for (size_t i = 0; i < theNumSeries; i++){
-      if (inSeriesUID == theSeriesValues[0]){
+      if (inSeriesUID == theSeriesValues[i]){
         //find all files that have that series UID, and then load them via
         //the vtkImageReader
         Directory::FilenamesType theFiles =
-        theScanner.GetAllFilenamesFromTagToValue(Tag(0x0020, 0x000e), theSeriesValues[0].c_str());
+        theScanner.GetAllFilenamesFromTagToValue(Tag(0x0020, 0x000e), theSeriesValues[i].c_str());
         IPPSorter sorter;
         sorter.SetComputeZSpacing(true);
         sorter.SetZSpacingTolerance(0.000001);
