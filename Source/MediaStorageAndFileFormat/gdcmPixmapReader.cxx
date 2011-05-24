@@ -1433,6 +1433,7 @@ bool PixmapReader::ReadACRNEMAImage()
     PhotometricInterpretation pi(
       PhotometricInterpretation::GetPIType(
         photometricinterpretation_str.c_str()));
+    PixelData->SetPhotometricInterpretation( pi );
     }
   else
     {
