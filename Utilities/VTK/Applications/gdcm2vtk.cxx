@@ -25,6 +25,7 @@
 #include "vtkImageData.h"
 #include "vtkTIFFWriter.h"
 #include "vtkPNGWriter.h"
+#include "vtkBMPWriter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMetaImageReader.h"
 #include "vtkXMLImageDataReader.h"
@@ -452,6 +453,22 @@ int main(int argc, char *argv[])
       writer->Delete();
       goto cleanup;
       }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".bmp") == 0 )
+      {
+      vtkBMPWriter * writer = vtkBMPWriter::New();
+      writer->SetFileName( outfilename );
+      writer->SetInput( imgdata );
+      writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        retcode = 1;
+        }
+#endif
+      writer->Delete();
+      goto cleanup;
+      }
     else if(  gdcm::System::StrCaseCmp(outputextension,".png") == 0 )
       {
       vtkPNGWriter * writer = vtkPNGWriter::New();
@@ -686,8 +703,11 @@ int main(int argc, char *argv[])
       //reader->GetLookupTable()->Print( std::cout );
       if( palettecolor )
         {
-        reader->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader->GetLookupTable() );
-        writer->SetImageFormat( VTK_LOOKUP_TABLE );
+        if( reader->GetNumberOfScalarComponents() == 1 )
+          {
+          reader->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader->GetLookupTable() );
+          writer->SetImageFormat( VTK_LOOKUP_TABLE );
+          }
         }
       }
     else if( vtkGESignaReader * reader = vtkGESignaReader::SafeDownCast(imgreader) )
