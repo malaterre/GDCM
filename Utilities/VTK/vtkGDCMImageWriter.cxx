@@ -660,6 +660,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Setup LUT if any:
   if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
+    assert( pixeltype.GetSamplesPerPixel() == 1 );
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
     //vtkLookupTable * vtklut = this->LookupTable;
     assert( vtklut );
