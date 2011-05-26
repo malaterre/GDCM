@@ -190,6 +190,13 @@ int TestAttributeOF()
 
   if( at.GetNumberOfValues() != 5 ) return 1;
 
+  // Sup 132
+  // Tag : (0x0066,0x0016), VR : OF, VM : 1, Type : 1
+  gdcm::Attribute<0x0066,0x0016> at1;
+  float value = 1.f;
+  at1.SetValue( value );
+  ds.Insert( at1.GetAsDataElement() );
+
   return 0;
 }
 int TestAttributeOW() { return 0; }
