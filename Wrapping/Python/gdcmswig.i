@@ -683,7 +683,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
-%template (DoubleType) std::vector<double>;
+%template (DoubleArrayType) std::vector<double>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
@@ -698,6 +698,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
+%template (DataSetArrayType) std::vector<gdcm::DataSet>;
 %include "gdcmQueryBase.h"
 %include "gdcmBaseRootQuery.h"
 %include "gdcmCompositeNetworkFunctions.h"
