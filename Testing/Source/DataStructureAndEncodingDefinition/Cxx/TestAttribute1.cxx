@@ -180,7 +180,18 @@ int TestAttributeIS()
 int TestAttributeLO() { return 0; }
 int TestAttributeLT() { return 0; }
 int TestAttributeOB() { return 0; }
-int TestAttributeOF() { return 0; }
+int TestAttributeOF()
+{
+  gdcm::DataSet ds;
+  const float array[] = { 0, 1, 2, 3, 4 };
+  gdcm::Attribute<0x5600,0x0020, gdcm::VR::OF, gdcm::VM::VM1_n> at;
+  at.SetValues( array, sizeof( array ) / sizeof( *array ) );
+  ds.Insert( at.GetAsDataElement() );
+
+  if( at.GetNumberOfValues() != 5 ) return 1;
+
+  return 0;
+}
 int TestAttributeOW() { return 0; }
 int TestAttributePN() { return 0; }
 int TestAttributeSH() { return 0; }
