@@ -21,6 +21,7 @@ IF(VTK_USE_RENDERING)
   SET(GDCM_VTK_APPS
     ${GDCM_VTK_APPS}
     gdcmviewer # vtkImageViewer2
+    gdcm2pnm
     )
 ENDIF(VTK_USE_RENDERING)
 
