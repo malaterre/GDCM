@@ -322,6 +322,9 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
 
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
+/*
+*/
+%template() std::set< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (JavaDataSet) SWIGDataSet;
@@ -470,13 +473,15 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmUIDGenerator.h"
 %template (ValuesType)      std::set<std::string>;
 %rename (JavaTagToValue) SWIGTagToValue;
-%template() std::set< gdcm::Item >;
-%include "gdcmScanner.h"
-EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmSubject.h"
 %include "gdcmCommand.h"
+
+%template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
+%include "gdcmScanner.h"
+EXTEND_CLASS_PRINT(gdcm::Scanner)
+
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
 
