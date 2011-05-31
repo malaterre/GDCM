@@ -11,6 +11,7 @@ set(classfilesdep)
 set(examples
   HelloSimple
   DecompressPixmap
+  ScanDirectory
   )
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
