@@ -172,6 +172,7 @@ size_t AAssociateRQPDU::Size() const
 bool AAssociateRQPDU::IsAETitleValid(const char title[16])
 {
   if(!title) return false;
+#if 0
   std::string s ( title, 16 );
   // check no \0 :
   //size_t len = strlen( s.c_str() );
@@ -185,6 +186,7 @@ bool AAssociateRQPDU::IsAETitleValid(const char title[16])
     str[i] = std::toupper(str[i],loc);
     }
   if( str != s ) return false;
+#endif
   return true;
 }
 
