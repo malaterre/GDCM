@@ -68,14 +68,15 @@ public:
   }
 
   /// Set/Get Icon Image
-  const IconImage &GetIconImage() const { return Icon; }
-  IconImage &GetIconImage() { return Icon; }
+  const IconImage &GetIconImage() const { return *Icon; }
+  IconImage &GetIconImage() { return *Icon; }
+  void SetIconImage(IconImage const &ii) { Icon = ii; }
 
 //private:
 protected:
   std::vector<Overlay>  Overlays;
   std::vector<Curve>  Curves;
-  IconImage Icon;
+  SmartPointer<IconImage> Icon;
 };
 
 } // end namespace gdcm

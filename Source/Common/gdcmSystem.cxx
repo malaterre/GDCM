@@ -717,7 +717,7 @@ const char *System::GetTimezoneOffsetFromUTC()
   time_t t = time(NULL);
   struct tm *tmp = localtime(&t);
   size_t l = strftime(outstr, sizeof(outstr), "%z", tmp);
-  assert( l == 5 );
+  assert( l == 5 ); (void)l;
   buffer = outstr;
   return buffer.c_str();
 }

@@ -262,6 +262,46 @@ Real life example of why you would use --force:
 $ gdcmconv --raw compressed.dcm uncompressed.dcm
 \endverbatim
 
+\subsection compress_icon Compressing an uncompressed Icon
+
+By default when compressing a DICOM Image file, gdcmconv will not compress the
+icon.  A user option needs to be turned on to explicitely force the compression
+of the Icon Image Sequence Pixel Data
+
+For example, by default we will not compress the Icon Image Sequence Pixel Data
+attribute:
+
+\verbatim
+$ gdcmconv --jpeg gdcmData/simpleImageWithIcon.dcm uncompressed_icon.dcm
+\endverbatim
+
+In the following example we will explicitely compress the Icon Image Sequence
+Pixel Data attibute. In that case the same Transfer Syntax is being used for
+both the main Pixel Data and the Pixel Data from the Icon Image Sequence:
+
+\verbatim
+$ gdcmconv --jpeg --compress-icon gdcmData/simpleImageWithIcon.dcm compressed_icon.dcm
+\endverbatim
+
+\subsection generate_icon Generating an Icon
+
+For some application it might be necessary to produce a small preview of the main image
+to be able to quickly load that short preview instead of the main image. In that case:
+
+\verbatim
+gdcmconv --raw --generate-icon gdcmData/test.acr test_icon.dcm
+\endverbatim
+
+In some cases the main Pixel Data element is expressed as pixel defined on
+16bits. Since Icon can only store at most pixel of size 8bits, a rescale
+operation needs to take place.  In order to properly select a better interval
+for doing the rescale operation user can specify the min max used for the
+rescale operation:
+
+\verbatim
+gdcmconv --raw --generate-icon --icon-minmax 0,192 gdcmData/012345.002.050.dcm icon_minmax.dcm
+\endverbatim
+
 \subsection planar_configuration Changing the planar Configuration
 
 Often RLE files are compressed using a different Planar Comnfiguration (RRR ...

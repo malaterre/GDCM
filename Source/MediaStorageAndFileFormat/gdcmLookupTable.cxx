@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "gdcmLookupTable.h"
 #include <vector>
+#include <set>
+
 #include <string.h>
 
 namespace gdcm
@@ -133,7 +135,8 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
   if( BitSample == 8 )
     {
     const unsigned int mult = Internal->BitSize[type]/8;
-    assert( Internal->Length[type]*mult == length );
+    assert( Internal->Length[type]*mult == length
+      || Internal->Length[type]*mult + 1 == length );
     unsigned int offset = 0;
     if( mult == 2 )
       {
@@ -246,8 +249,191 @@ void LookupTable::SetBlueLUT(const unsigned char *blue, unsigned int length)
   SetLUT(BLUE, blue, length);
 }
 
+namespace {
+  typedef union {
+    uint8_t rgb[4]; // 3rd value = 0
+    uint32_t I;
+  } U8;
+
+  typedef union {
+    uint16_t rgb[4]; // 3rd value = 0
+    uint64_t I;
+  } U16;
+
+  struct ltstr8
+    {
+    bool operator()(U8 u1, U8 u2) const
+      {
+      return u1.I < u2.I;
+      }
+    };
+  struct ltstr16
+    {
+    bool operator()(U16 u1, U16 u2) const
+      {
+      return u1.I < u2.I;
+      }
+    };
+} // end namespace
+
+inline void printrgb( const unsigned char *rgb )
+{
+  std::cout << int(rgb[0]) << "," << int(rgb[1]) << "," << int(rgb[2]);
+}
+
+void LookupTable::Encode(std::istream &is, std::ostream &os)
+{
+  if ( BitSample == 8 )
+    {
+#if 0
+    // FIXME:
+    // There is a very subbtle issue here. We are trying to compress a 8bits RGB image
+    // into an 8bits allocated indexed Pixel Data with 8bits LUT... this is just not
+    // possible in the general case
+    typedef std::set< U8, ltstr8 > RGBColorIndexer;
+    RGBColorIndexer s;
+
+    int count = 0;
+    while( !is.eof() )
+      {
+      U8 u;
+      u.rgb[3] = 0;
+      is.read( (char*)u.rgb, 3);
+      assert( u.rgb[3] == 0 );
+      //assert( u.rgb[0] == u.rgb[1] && u.rgb[1] == u.rgb[2] );
+      std::pair<RGBColorIndexer::iterator,bool> it = s.insert( u );
+      if( it.second ) ++count;
+      int d = std::distance(s.begin(), it.first);
+      //std::cout << count << " Index: " << d << " -> "; printrgb( u.rgb ); std::cout << "\n";
+      //assert( s.size() < 256 );
+      assert( d < s.size() );
+      //assert( d < 256 && d >= 0 );
+      }
+
+    // now generate output image
+    // this has two been done in two passes as std::set always re-balance
+    is.clear();
+    is.seekg( 0 );
+    while( !is.eof() )
+      {
+      U8 u;
+      u.rgb[3] = 0;
+      is.read( (char*)u.rgb, 3);
+      assert( u.rgb[3] == 0 );
+      //assert( u.rgb[0] == u.rgb[1] && u.rgb[1] == u.rgb[2] );
+      std::pair<RGBColorIndexer::iterator,bool> it = s.insert( u );
+      int d = std::distance(s.begin(), it.first);
+      //std::cout << "Index: " << d << " -> "; printrgb( u.rgb ); std::cout << "\n";
+      assert( d < s.size() );
+      //assert( d < 256 && d >= 0 );
+      os.put( d );
+      }
+
+    // now setup the LUT itself:
+    unsigned short ncolor = s.size();
+    // FIXME: shop'off any RGB that is not at the beginning.
+    if( ncolor > 256 ) ncolor = 256;
+    InitializeRedLUT(ncolor, 0, 8);
+    InitializeGreenLUT(ncolor, 0, 8);
+    InitializeBlueLUT(ncolor, 0, 8);
+    //int i = Internal->RGB.size();
+    //assert( Internal->RGB.size() == 5 );
+    int idx = 0;
+    for( RGBColorIndexer::const_iterator it = s.begin(); it != s.end() && idx < 256; ++it, ++idx )
+      {
+      assert( idx == std::distance( s.begin(), it ) );
+      //std::cout << "Index: " << idx << " -> "; printrgb( it->rgb ); std::cout << "\n";
+      Internal->RGB[3*idx+RED]   = it->rgb[RED];
+      Internal->RGB[3*idx+GREEN] = it->rgb[GREEN];
+      Internal->RGB[3*idx+BLUE]  = it->rgb[BLUE];
+      }
+#else
+    while( !is.eof() )
+      {
+      U8 u;
+      u.rgb[3] = 0;
+      is.read( (char*)u.rgb, 3);
+      assert( u.rgb[3] == 0 );
+      int d = 0;
+      assert( d < 256 && d >= 0 );
+      os.put( d );
+      }
+#endif
+    }
+  else if ( BitSample == 16 )
+    {
+#if 0
+    typedef std::set< U16, ltstr16 > RGBColorIndexer;
+    RGBColorIndexer s;
+
+    while( !is.eof() )
+      {
+      U16 u;
+      u.rgb[3] = 0;
+      is.read( (char*)u.rgb, 3*2);
+      assert( u.rgb[3] == 0 );
+      //assert( u.rgb[0] == u.rgb[1] && u.rgb[1] == u.rgb[2] );
+      std::pair<RGBColorIndexer::iterator,bool> it = s.insert( u );
+      int d = std::distance(s.begin(), it.first);
+      //std::cout << "Index: " << d << " -> "; printrgb( u.rgb ); std::cout << "\n";
+      assert( d < s.size() );
+      assert( d < 65536 && d >= 0 );
+      }
+
+    // now generate output image
+    // this has two been done in two passes as std::set always re-balance
+    is.clear();
+    is.seekg( 0 );
+    while( !is.eof() )
+      {
+      U16 u;
+      u.rgb[3] = 0;
+      is.read( (char*)u.rgb, 3*2);
+      assert( u.rgb[3] == 0 );
+      //assert( u.rgb[0] == u.rgb[1] && u.rgb[1] == u.rgb[2] );
+      std::pair<RGBColorIndexer::iterator,bool> it = s.insert( u );
+      unsigned short d = std::distance(s.begin(), it.first);
+      //std::cout << "Index: " << d << " -> "; printrgb( u.rgb ); std::cout << "\n";
+      assert( d < s.size() );
+      assert( d < 65536 && d >= 0 );
+      os.write( (char*)&d , 2 );
+      }
+
+    // now setup the LUT itself:
+    unsigned short ncolor = s.size();
+    InitializeRedLUT(ncolor, 0, 16);
+    InitializeGreenLUT(ncolor, 0, 16);
+    InitializeBlueLUT(ncolor, 0, 16);
+    //int i = Internal->RGB.size();
+    //assert( Internal->RGB.size() == 5 );
+    int idx = 0;
+    uint16_t *rgb16 = (uint16_t*)&Internal->RGB[0];
+    for( RGBColorIndexer::const_iterator it = s.begin(); it != s.end(); ++it, ++idx )
+      {
+      assert( idx == std::distance( s.begin(), it ) );
+      //std::cout << "Index: " << idx << " -> "; printrgb( it->rgb ); std::cout << "\n";
+      rgb16[3*idx+RED]   = it->rgb[RED];
+      rgb16[3*idx+GREEN] = it->rgb[GREEN];
+      rgb16[3*idx+BLUE]  = it->rgb[BLUE];
+      }
+#else
+    while( !is.eof() )
+      {
+      U16 u;
+      u.rgb[3] = 0;
+      is.read( (char*)u.rgb, 3*2);
+      assert( u.rgb[3] == 0 );
+      unsigned short d = 0;
+      assert( d < 65536 && d >= 0 );
+      os.write( (char*)&d , 2 );
+      }
+#endif
+  }
+}
+
 void LookupTable::Decode(std::istream &is, std::ostream &os) const
 {
+  assert( Initialized() );
   if ( BitSample == 8 )
     {
     unsigned char idx;

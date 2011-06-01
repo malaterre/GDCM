@@ -3419,6 +3419,7 @@
   <entry owner="INTELERAD MEDICAL SYSTEMS" group="3f01" element="xx03" vr="LO" vm="1" name="Source AE"/>
   <entry owner="INTELERAD MEDICAL SYSTEMS" group="3f01" element="xx04" vr="LO" vm="1" name="Deferred Validation"/>
   <entry owner="INTELERAD MEDICAL SYSTEMS" group="3f01" element="xx05" vr="LO" vm="1" name="Series Owner"/>
+  <entry owner="ISG Image" group="0065" element="xx11" vr="UL" vm="1" name="?"/>
   <entry owner="ISG shadow" group="0029" element="xx70" vr="IS" vm="1" name="?"/>
   <entry owner="ISG shadow" group="0029" element="xx80" vr="IS" vm="1" name="?"/>
   <entry owner="ISG shadow" group="0029" element="xx90" vr="IS" vm="1" name="?"/>
@@ -5061,6 +5062,8 @@
   <entry owner="SECTRA_ImageInfo_01" group="0029" element="xx04" vr="OB" vm="1" name="Image Info new"/>
   <entry owner="SECTRA_OverlayInfo_01" group="6001" element="xx01" vr="LO" vm="1" name="Sectra Overlay"/>
   <entry owner="SEGAMI MIML" group="0031" element="xx98" vr="OW" vm="1" name="?"/>
+  <entry owner="SEGAMI__MEMO" group="0035" element="xx97" vr="SH" vm="1" name="?"/>
+  <entry owner="SEGAMI__MEMO" group="0035" element="xx98" vr="LT" vm="1" name="?"/>
   <entry owner="SET WINDOW" group="0019" element="xx00" vr="UN" vm="1" name="Set Window Image Filter"/>
   <entry owner="SET WINDOW" group="0019" element="xx01" vr="UN" vm="1" name="Set Window Magnification Power"/>
   <entry owner="SHS MagicView 300" group="0029" element="xx01" vr="FD" vm="1-n" name="Zoom Factor"/>
@@ -7981,21 +7984,21 @@
   <entry owner="Silhouette V1.0" group="0029" element="xx55" vr="LT" vm="1" name="?"/>
   <entry owner="Silhouette V1.0" group="0029" element="xx56" vr="LT" vm="1" name="?"/>
   <entry owner="Silhouette V1.0" group="0029" element="xx57" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx13" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx14" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx17" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx18" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx19" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1a" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1b" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1c" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1d" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1e" vr="UN" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx13" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx14" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx17" vr="FD" vm="2" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx18" vr="FD" vm="2" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx19" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1a" vr="FD" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1b" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1c" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1d" vr="UL" vm="3" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1e" vr="UL" vm="3" name="?"/>
   <entry owner="Silhouette VRS 3.0" group="0029" element="xx27" vr="US" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx28" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx30" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx32" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx34" vr="UN" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx28" vr="OB" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx30" vr="US" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx32" vr="US" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx34" vr="LO" vm="1" name="?"/>
   <entry owner="Silhouette VRS 3.0" group="0029" element="xx35" vr="CS" vm="1" name="?"/>
   <entry owner="Silhouette VRS 3.0" group="0029" element="xx36" vr="US" vm="1" name="?"/>
   <entry owner="Sound Technologies" group="f001" element="xx00" vr="CS" vm="1" name="Patient Species"/>
