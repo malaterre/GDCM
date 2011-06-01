@@ -38,6 +38,7 @@ dcm_directory   DICOM input directory
   -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
   -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
      --elscint   print ELSCINT Protocol Information (01f7,26,ELSCINT1).
+     --vepro     print VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA).
   -A --asn1      print encapsulated ASN1 structure >(0400,0520).
 \endverbatim
 
@@ -230,6 +231,56 @@ ELSCINT1/Item name: [doseright]
   ACS-water-radius [-1.000000]
   ACS-water-radius-scan [-1]
 \&...
+\endverbatim
+
+\subsection vepro_pi VEPRO Protocol Information
+
+Using this option it is possible to dump as a readable text what is contained
+in the private attribute as found in typical VEPRO CT DICOM file.
+
+ELSCINT Protocol Information: (0055,20,VEPRO VIM 5.0 DATA)
+
+\verbatim
+$ gdcmdump --vepro VEPRO_ProtocolInformation.dcm
+\endverbatim
+
+\verbatim
+VIMDATA2: (0055,20,VEPRO VIM 5.0 DATA)
+  ID: VIM
+  Version: 5.0
+  UserName:
+  UserAdress1: Name of Institution
+  UserAdress2: Street of Institution
+  UserAdress3: City of Institution
+  UserAdress4:
+  UserAdress5:
+  RecDate: 20101001
+  RecTime: 211321
+  RecPlace:
+  RecSource: DICOM Distributor
+  DF1: P-09/10-41808
+  DF2: Sultana Razia
+  DF3: 19411001
+  DF4: F
+  DF5:
+  DF6:
+  DF7:
+  DF8: CT Scan Brain without Contrast
+  DF9: 10/10-0034873
+  DF10: 10/10-00348
+  DF11:
+  DF12:
+  DF13:
+  DF14:  Head 0.5
+  DF15: 4
+  DF16:
+  DF17:
+  DF18:
+  DF19:
+  DF20:
+  StudyUID: 1.2.392.200036.9116.2.6.1.48.1214228007.1285934880.206831
+  SeriesUID: 1.2.392.200036.9116.2.6.1.48.1214228007.1285935201.938653
+  Modality: CT
 \endverbatim
 
 \subsection asn1 Encapsulated ASN1 Structure

@@ -23,14 +23,16 @@ class FileDerivationInternals;
 class DataSet;
 /**
  * \brief FileDerivation class
- * See PS 3.16 - 2008 For the list of Code Value that can be used for in Derivation Code Sequence
+ * See PS 3.16 - 2008 For the list of Code Value that can be used for in
+ * Derivation Code Sequence
  *
  * URL: http://medical.nema.org/medical/dicom/2008/08_16pu.pdf
  *
- * DICOM Part 16 has two Context Groups CID 7202 and CID 7203 which contain a set of codes defining
- * reason for a source image reference (ie. reason code for referenced image sequence) and a coded
- * description of the deriation applied to the new image data from the original. Both these context
- * groups are extensible.
+ * DICOM Part 16 has two Context Groups CID 7202 and CID 7203 which contain a
+ * set of codes defining reason for a source image reference (ie. reason code
+ * for referenced image sequence) and a coded description of the deriation
+ * applied to the new image data from the original. Both these context groups
+ * are extensible.
  *
  * File Derivation is compulsary when creating a lossy derived image.
  */

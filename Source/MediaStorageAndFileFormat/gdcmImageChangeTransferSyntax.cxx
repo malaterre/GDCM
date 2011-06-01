@@ -376,32 +376,32 @@ bool ImageChangeTransferSyntax::Change()
     // same goes for icon
     gdcm::DataElement iconpixeldata( gdcm::Tag(0x7fe0,0x0010) );
     if( !Input->GetIconImage().IsEmpty() )
-{
-    // same goes for icon
-    gdcm::ByteValue *bv = new gdcm::ByteValue();
-    unsigned long len = Input->GetIconImage().GetBufferLength();
-    bv->SetLength( len );
-    bool bb = Input->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
-    if( !bb )
       {
-      return false;
-      }
-    iconpixeldata.SetValue( *bv );
+      // same goes for icon
+      gdcm::ByteValue *bv = new gdcm::ByteValue();
+      unsigned long len = Input->GetIconImage().GetBufferLength();
+      bv->SetLength( len );
+      bool bb = Input->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
+      if( !bb )
+        {
+        return false;
+        }
+      iconpixeldata.SetValue( *bv );
 
-    success = false;
-    if( !success ) success = TryRAWCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryJPEGCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryJPEGLSCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryJPEG2000Codec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryRLECodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-    Output->GetIconImage().SetTransferSyntax( TS );
-    if( !success )
-      {
-      //assert(0);
-      return false;
+      success = false;
+      if( !success ) success = TryRAWCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
+      if( !success ) success = TryJPEGCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
+      if( !success ) success = TryJPEGLSCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
+      if( !success ) success = TryJPEG2000Codec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
+      if( !success ) success = TryRLECodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
+      Output->GetIconImage().SetTransferSyntax( TS );
+      if( !success )
+        {
+        //assert(0);
+        return false;
+        }
+      assert( Output->GetIconImage().GetTransferSyntax() == TS );
       }
-    assert( Output->GetIconImage().GetTransferSyntax() == TS );
-}
 
     //Output->ComputeLossyFlag();
     assert( Output->GetTransferSyntax() == TS );

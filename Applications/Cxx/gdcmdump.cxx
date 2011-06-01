@@ -62,6 +62,156 @@ int ignoreerrors = 0;
 
 namespace cleanup
 {
+// VEPRO
+/*
+[VIMDATA2]
+PrivateCreator = VEPRO VIM 5.0 DATA
+Group = 0x0055
+Element = 0x0020
+Data.ID     = C|0|3
+Data.Version     = C|3|3
+Data.UserName    = C|6|32
+Data.UserAdress1  = C|38|32
+Data.UserAdress2  = C|70|32
+Data.UserAdress3  = C|102|32
+Data.UserAdress4  = C|134|32
+Data.UserAdress5  = C|166|32
+Data.RecDate        = C|198|8
+Data.RecTime        = C|206|6
+Data.RecPlace        = C|212|64
+Data.RecSource        = C|276|64
+Data.DF1          = C|340|64
+Data.DF2          = C|404|64
+Data.DF3          = C|468|64
+Data.DF4          = C|532|64
+Data.DF5          = C|596|64
+Data.DF6          = C|660|64
+Data.DF7          = C|724|64
+Data.DF8          = C|788|64
+Data.DF9          = C|852|64
+Data.DF10          = C|916|64
+Data.DF11          = C|980|64
+Data.DF12          = C|1044|64
+Data.DF13          = C|1108|64
+Data.DF14          = C|1172|64
+Data.DF15          = C|1236|64
+Data.DF16          = C|1300|64
+Data.DF17          = C|1364|64
+Data.DF18          = C|1428|64
+Data.DF19          = C|1492|64
+Data.DF20          = C|1556|64
+Data.StudyUID          = C|1642|64
+Data.SeriesUID          = C|1706|64
+Data.Modality          = C|1770|16
+*/
+// TYPE[C/I] / OFFSET / LENGTH (in bytes)
+struct Data2
+{
+ char ID[3]; // Data.ID     = C|0|3
+ char Version[3]; // Data.Version     = C|3|3
+ char UserName[32]; // Data.UserName    = C|6|32
+ char UserAdress1[32]; // Data.UserAdress1  = C|38|32
+ char UserAdress2[32]; // Data.UserAdress2  = C|70|32
+ char UserAdress3[32]; // Data.UserAdress3  = C|102|32
+ char UserAdress4[32]; // Data.UserAdress4  = C|134|32
+ char UserAdress5[32]; // Data.UserAdress5  = C|166|32
+ char RecDate[8];  // Data.RecDate        = C|198|8
+ char RecTime[6];  // Data.RecTime        = C|206|6
+ char RecPlace[64]; // Data.RecPlace        = C|212|64
+ char RecSource[64];// Data.RecSource        = C|276|64
+ char DF1[64];       // Data.DF1          = C|340|64
+ char DF2[64];       // Data.DF2          = C|404|64
+ char DF3[64];       // Data.DF3          = C|468|64
+ char DF4[64];       // Data.DF4          = C|532|64
+ char DF5[64];       // Data.DF5          = C|596|64
+ char DF6[64];       // Data.DF6          = C|660|64
+ char DF7[64];       // Data.DF7          = C|724|64
+ char DF8[64];       // Data.DF8          = C|788|64
+ char DF9[64];       // Data.DF9          = C|852|64
+ char DF10[64];     // Data.DF10          = C|916|64
+ char DF11[64];     // Data.DF11          = C|980|64
+ char DF12[64];     // Data.DF12          = C|1044|64
+ char DF13[64];     // Data.DF13          = C|1108|64
+ char DF14[64];     // Data.DF14          = C|1172|64
+ char DF15[64];     // Data.DF15          = C|1236|64
+ char DF16[64];     // Data.DF16          = C|1300|64
+ char DF17[64];     // Data.DF17          = C|1364|64
+ char DF18[64];     // Data.DF18          = C|1428|64
+ char DF19[64];     // Data.DF19          = C|1492|64
+ char DF20[64];     // Data.DF20          = C|1556|64
+ char Padding[22]; // ?????
+ char StudyUID[64];  // Data.StudyUID          = C|1642|64
+ char SeriesUID[64];  // Data.SeriesUID          = C|1706|64
+ char Modality[16];  // Data.Modality          = C|1770|16
+
+ void Print( std::ostream &os )
+   {
+   os << "VIMDATA2: (0055,20,VEPRO VIM 5.0 DATA)\n";
+   os << "  ID: "          << std::string(ID,3) << "\n";
+   os << "  Version: "     << std::string(Version,3) << "\n";
+   os << "  UserName: "    << std::string(UserName,32) << "\n";
+   os << "  UserAdress1: " << std::string(UserAdress1,32) << "\n";
+   os << "  UserAdress2: " << std::string(UserAdress2,32) << "\n";
+   os << "  UserAdress3: " << std::string(UserAdress3,32) << "\n";
+   os << "  UserAdress4: " << std::string(UserAdress4,32) << "\n";
+   os << "  UserAdress5: " << std::string(UserAdress5,32) << "\n";
+   os << "  RecDate: "     << std::string(RecDate,8) << "\n";
+   os << "  RecTime: "     << std::string(RecTime,64) << "\n";
+   os << "  RecPlace: "    << std::string(RecPlace,64) << "\n";
+   os << "  RecSource: "   << std::string(RecSource,64) << "\n";
+   os << "  DF1: "         << std::string(DF1,64) << "\n";
+   os << "  DF2: "         << std::string(DF2,64) << "\n";
+   os << "  DF3: "         << std::string(DF3,64) << "\n";
+   os << "  DF4: "         << std::string(DF4,64) << "\n";
+   os << "  DF5: "         << std::string(DF5,64) << "\n";
+   os << "  DF6: "         << std::string(DF6,64) << "\n";
+   os << "  DF7: "         << std::string(DF7,64) << "\n";
+   os << "  DF8: "         << std::string(DF8,64) << "\n";
+   os << "  DF9: "         << std::string(DF9,64) << "\n";
+   os << "  DF10: "        << std::string(DF10,64) << "\n";
+   os << "  DF11: "        << std::string(DF11,64) << "\n";
+   os << "  DF12: "        << std::string(DF12,64) << "\n";
+   os << "  DF13: "        << std::string(DF13,64) << "\n";
+   os << "  DF14: "        << std::string(DF14,64) << "\n";
+   os << "  DF15: "        << std::string(DF15,64) << "\n";
+   os << "  DF16: "        << std::string(DF16,64) << "\n";
+   os << "  DF17: "        << std::string(DF17,64) << "\n";
+   os << "  DF18: "        << std::string(DF18,64) << "\n";
+   os << "  DF19: "        << std::string(DF19,64) << "\n";
+   os << "  DF20: "        << std::string(DF20,64) << "\n";
+   //os << "  Padding: " <<   std::string(Padding,22) << "\n";
+   os << "  StudyUID: "    << std::string(StudyUID,64) << "\n";
+   os << "  SeriesUID: "   << std::string(SeriesUID,64) << "\n";
+   os << "  Modality: "    << std::string(Modality,16) << "\n";
+   }
+};
+
+bool ProcessData( const char *buf, size_t len )
+{
+  Data2 data2;
+  size_t s = sizeof(data2);
+  assert( len >= s);
+  // VIMDATA2 is generally 2048 bytes, while s = 1786
+  // the end is filled with \0 bytes
+  memcpy(&data2, buf, s);
+
+  data2.Print( std::cout );
+  return true;
+}
+
+int DumpVEPRO(const gdcm::DataSet & ds)
+{
+  // 01f7,1026
+  const gdcm::PrivateTag tdata(0x55,0x0020,"VEPRO VIM 5.0 DATA");
+  if( !ds.FindDataElement( tdata ) ) return 1;
+  const gdcm::DataElement &data = ds.GetDataElement( tdata );
+  const gdcm::ByteValue *bv2 = data.GetByteValue();
+  ProcessData( bv2->GetPointer(), bv2->GetLength() );
+
+  return 0;
+}
+
+// ELSCINT1
 bool readastring(std::string &out, const char *input )
 {
   out.clear();
@@ -298,6 +448,23 @@ int PrintELSCINT(const std::string & filename, bool verbose)
   return ret;
 }
 
+int PrintVEPRO(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  int ret = cleanup::DumpVEPRO( ds );
+
+  return ret;
+}
+
 int PrintPDB(const std::string & filename, bool verbose)
 {
   (void)verbose;
@@ -446,6 +613,7 @@ void PrintHelp()
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
+  std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -472,6 +640,7 @@ int main (int argc, char *argv[])
   int printcsa = 0;
   int printpdb = 0;
   int printelscint = 0;
+  int printvepro = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -511,6 +680,7 @@ int main (int argc, char *argv[])
         {"asn1", 0, &printasn1, 1},
         {"map-uid-names", 0, &mapuidnames, 1},
         {"elscint", 0, &printelscint, 1},
+        {"vepro", 0, &printvepro, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -704,6 +874,10 @@ int main (int argc, char *argv[])
         {
         res += PrintASN1(*it, verbose!= 0);
         }
+      else if( printvepro )
+        {
+        res += PrintVEPRO(*it, verbose!= 0);
+        }
       else if( printelscint )
         {
         res += PrintELSCINT(*it, verbose!= 0);
@@ -738,6 +912,10 @@ int main (int argc, char *argv[])
     else if( printasn1 )
       {
       res += PrintASN1(filename, verbose!= 0);
+      }
+    else if( printvepro )
+      {
+      res += PrintVEPRO(filename, verbose!= 0);
       }
     else if( printelscint )
       {

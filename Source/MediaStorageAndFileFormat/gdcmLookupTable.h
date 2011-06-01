@@ -92,6 +92,9 @@ public:
   bool Initialized() const;
 
 private:
+  /// Unfinished work
+  void Encode(std::istream &is, std::ostream &os);
+
 protected:
   LookupTableInternal *Internal;
   unsigned short BitSample; // refer to the pixel type (not the bit size of LUT)

@@ -2,6 +2,8 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmIconImageFilter.cxx
+  gdcmIconImageGenerator.cxx
   gdcmDICOMDIRGenerator.cxx
   gdcmSpacing.cxx
   gdcmFileExplicitFilter.cxx

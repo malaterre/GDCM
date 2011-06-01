@@ -26,7 +26,7 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
-  FixJAIBugJPEGLS
+  ExtractIconFromFile
   pmsct_rgb1
   GenAllVR
   ELSCINT1WaveToText
@@ -68,6 +68,12 @@ SET(EXAMPLES_SRCS
   GenSeqs
   GetJPEGSamplePrecision
 )
+IF(GDCM_USE_JPEGLS)
+SET(EXAMPLES_SRCS
+  ${EXAMPLES_SRCS}
+  FixJAIBugJPEGLS
+  )
+ENDIF(GDCM_USE_JPEGLS)
 
 IF(QT4_FOUND)
   INCLUDE(${QT_USE_FILE})
@@ -103,7 +109,11 @@ ENDIF(GDCM_BUILD_TESTING)
 
 FOREACH(example ${EXAMPLES_SRCS})
   ADD_EXECUTABLE(${example} ${example}.cxx)
-  TARGET_LINK_LIBRARIES(${example} gdcmMSFF gdcmcharls)
+  IF(${example} STREQUAL "FixJAIBugJPEGLS")
+    TARGET_LINK_LIBRARIES(${example} gdcmMSFF gdcmcharls)
+  ELSE()
+    TARGET_LINK_LIBRARIES(${example} gdcmMSFF)
+  ENDIF()
 ENDFOREACH(example)
 
 IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)

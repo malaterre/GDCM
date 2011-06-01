@@ -33,7 +33,7 @@ namespace gdcm
 (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
 
-Pixmap::Pixmap():Overlays(),Curves(),Icon() {}
+Pixmap::Pixmap():Overlays(),Curves(),Icon(new IconImage) {}
 
 Pixmap::~Pixmap() {}
 
