@@ -7745,7 +7745,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x0032,"SPI-P-XSB-VISUB Release 1",VR::CS,VM::VM1,"?",false },
   {0x0029,0x003f,"SPI-P-XSB-VISUB Release 1",VR::CS,VM::VM1,"?",false },
   {0x0073,0x0001,"STENTOR",VR::ST,VM::VM1,"?",false },
-  {0x0073,0x0002,"STENTOR",VR::ST,VM::VM1,"Private Creator",false },
+  {0x0073,0x0002,"STENTOR",VR::ST,VM::VM1,"Stentor Remote IP-Address Element",false },
   {0x0073,0x0003,"STENTOR",VR::ST,VM::VM1,"Stentor Remote AETitle Element",false },
   {0x0073,0x0004,"STENTOR",VR::ST,VM::VM1,"Stentor Local AETitle Element",false },
   {0x0073,0x0006,"STENTOR",VR::LO,VM::VM1,"Stentor Transfer Syntax Value",false },
