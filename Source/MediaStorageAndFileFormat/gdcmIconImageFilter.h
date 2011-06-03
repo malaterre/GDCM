@@ -24,11 +24,12 @@ class IconImageFilterInternals;
 /**
  * \brief IconImageFilter
  * This filter will extract icons from a gdcm::File
- * This filter will loop over all known sequence (public and private) that may contains
- * an IconImage and retrieve them. The filter will fails with a value of false if no
- * icon can be found
- * Since it handle both public and private icon type, one should not assume
- * the icon is in uncompress form, some private vendor store private icon in JPEG8/JPEG12
+ * This filter will loop over all known sequence (public and private) that may
+ * contains an IconImage and retrieve them. The filter will fails with a value
+ * of false if no icon can be found
+ * Since it handle both public and private icon type, one should not assume the
+ * icon is in uncompress form, some private vendor store private icon in
+ * JPEG8/JPEG12
  *
  * Implementation details:
  * This filter supports the following Icons:
@@ -37,8 +38,10 @@ class IconImageFilterInternals;
  * - (6003,10,GEMS_Ultrasound_ImageGroup_001) GEMS Image Thumbnail Sequence
  * - (0055,30,VEPRO VIM 5.0 DATA) ICONDATA2
  *
- * \warning the icon stored in those private attribute do not conform to definition
- * of Icon Image Sequence (do not simply copy/paste).
+ * \warning the icon stored in those private attribute do not conform to
+ * definition of Icon Image Sequence (do not simply copy/paste). For example
+ * some private icon can be expressed as 12bits pixel, while the DICOM standard
+ * only allow 8bits icons.
  *
  * \see ImageReader
  */
