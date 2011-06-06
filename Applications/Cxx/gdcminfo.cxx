@@ -348,7 +348,6 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
     return 1;
     }
   const gdcm::File &file = reader.GetFile();
-  //const gdcm::DataSet &ds = file.GetDataSet();
   gdcm::MediaStorage ms;
   ms.SetFromFile(file);
   /*
@@ -411,6 +410,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
   else if ( ms == gdcm::MediaStorage::EncapsulatedPDFStorage )
     {
 #ifdef GDCM_USE_SYSTEM_POPPLER
+    const gdcm::DataSet &ds = file.GetDataSet();
     const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x42,0x11) );
     const gdcm::ByteValue* bv = de.GetByteValue();
     const char *p = bv->GetPointer();
