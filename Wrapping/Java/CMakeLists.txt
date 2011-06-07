@@ -65,6 +65,13 @@ SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE
 #FILE(GLOB javafiles "${CMAKE_CURRENT_BINARY_DIR}/*.java")
 #MESSAGE("javafile:${javafiles}")
 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  # http://www.swig.org/Doc2.0/Java.html#Java_typemaps_c_to_java_types
+  SET_SOURCE_FILES_PROPERTIES(
+    ${swig_generated_file_fullname}
+    PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 ADD_CUSTOM_COMMAND(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
 # 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated (which means all *.java should be there)

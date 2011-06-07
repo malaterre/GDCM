@@ -172,6 +172,7 @@ public class ScanDirectory
       new Tag(0x0008, 0x0080),    // InstitutionName
     };
     for( Tag t : tagarray ) {
+      //System.out.println( "Tag: " + t.toString() );
       s.AddTag( t );
     }
     boolean b = s.Scan( fns );

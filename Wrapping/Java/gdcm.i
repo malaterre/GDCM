@@ -16,7 +16,7 @@
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 
 %module(docstring="A DICOM library",directors=1) gdcm
-#pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516,822
+#pragma SWIG nowarn=302,303,312,325,362,383,389,401,503,504,509,510,514,516,822
 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
 // I need to redefine it myself... seems to be solved in later revision
@@ -391,7 +391,7 @@ EXTEND_CLASS_PRINT(gdcm::FileMetaInformation)
 EXTEND_CLASS_PRINT(gdcm::File)
 //%include "gdcm_arrays_csharp.i"
 
-%apply char[] { char* buffer }
+%apply signed char[] { signed char* buffer }
 %apply unsigned int[] { unsigned int dims[3] }
 
 //%apply byte OUTPUT[] { char* buffer } ;
@@ -438,7 +438,7 @@ EXTEND_CLASS_PRINT(gdcm::File)
     return $self->GetBuffer((char*)buffer);
   }
 };
-%clear char* buffer;
+%clear signed char* buffer;
 %clear unsigned int* dims;
 EXTEND_CLASS_PRINT(gdcm::Bitmap)
 

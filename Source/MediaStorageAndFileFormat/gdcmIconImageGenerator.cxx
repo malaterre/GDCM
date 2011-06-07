@@ -194,7 +194,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     Point* Points = new Point[numPoints];
     const ByteValue *bv = PixelData.GetByteValue();
     const char *inbuffer = bv->GetPointer();
-    size_t bvlen = bv->GetLength();
+    size_t bvlen = bv->GetLength(); (void)bvlen;
     assert( bvlen == (size_t) numPoints * 3 ); // only 8bits RGB please
     for(int i = 0; i < numPoints; i++)
       {
