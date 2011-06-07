@@ -29,9 +29,10 @@ class IconImageGeneratorInternals;
  * - MONOCHROME1
  * - MONOCHROME2
  * - PALETTE_COLOR
+ *
  * The Pixel Bits Allocated is restricted to 8bits, therefore 16 bits image
- * needs to be rescaled.  by default the filter will use the full scalar range
- * of 16bits image to rescale to unsigned 8bits
+ * needs to be rescaled. By default the filter will use the full scalar range
+ * of 16bits image to rescale to unsigned 8bits.
  * This may not be ideal for some situation, in which case the API
  * SetPixelMinMax can be used to overwrite the default min,max interval used.
  *
