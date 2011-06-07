@@ -99,7 +99,8 @@ public class ScanDirectory
       {
       if( pf.GetScalarType() == PixelFormat.ScalarType.UINT8 )
         {
-        imageType = BufferedImage.TYPE_INT_RGB;
+        // FIXME should be TYPE_3BYTE_RGB
+        imageType = BufferedImage.TYPE_3BYTE_BGR;
         }
       }
     long width  = input.GetDimension(0);
