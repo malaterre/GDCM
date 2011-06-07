@@ -163,6 +163,9 @@
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmIconImageGenerator.h"
+#include "gdcmIconImageFilter.h"
+
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
@@ -214,6 +217,8 @@ using namespace gdcm;
 
 #if defined(SWIGJAVA)
 %define EXTEND_CLASS_PRINT(classname)
+// Remove Print( ostream & os )
+//%ignore classname::Print
 EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 %enddef
 #endif
@@ -267,25 +272,33 @@ EXTEND_CLASS_PRINT(gdcm::VM)
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
 EXTEND_CLASS_PRINT(gdcm::Directory)
+//%clear FilenameType;
+%clear FilenamesType;
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 EXTEND_CLASS_PRINT(gdcm::Value)
 // Array marshaling for arrays of primitives
 // http://www.swig.org/Doc2.0/Java.html#Java_unbounded_c_arrays
-%include "arrays_java.i"
-
 
 // %clear commands should be unnecessary, but do it just-in-case
 %clear char* buffer;
 %clear unsigned char* buffer;
 
-%apply char[] { char* buffer }
+%include "arrays_java.i"
+
 %ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
-//%ignore gdcm::ByteValue::GetPointer() const;
-//%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
+%ignore gdcm::ByteValue::GetPointer() const;
+%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
+%apply signed char[] { signed char* buffer }
 %include "gdcmByteValue.h"
+%extend gdcm::ByteValue
+{
+  bool GetBuffer(signed char *buffer, unsigned long length) const {
+    return self->GetBuffer((char*)buffer, length);
+  }
+};
 EXTEND_CLASS_PRINT(gdcm::ByteValue)
-%clear char* buffer;
+%clear signed char* buffer;
 
 
 %apply char[] { const char* array }
@@ -348,7 +361,17 @@ EXTEND_CLASS_PRINT(gdcm::DataSet)
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
+%apply signed char[] { signed char* array }
+%ignore gdcm::LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
 %include "gdcmLookupTable.h"
+%extend gdcm::LookupTable
+{
+  unsigned int GetLUT(LookupTableType type, signed char *array) const {
+    unsigned int length = 0;
+    self->GetLUT( type, (unsigned char*)array, length);
+    return length;
+  }
+};
 EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
 EXTEND_CLASS_PRINT(gdcm::Overlay)
@@ -383,10 +406,13 @@ EXTEND_CLASS_PRINT(gdcm::File)
 //       %typemap(csin)   TYPE[] "$csinput"
 //%enddef
 //%cs_marshal_array(char, byte)
+%ignore gdcm::Bitmap::GetBuffer(char* buffer) const;
 %include "gdcmBitmap.h"
-EXTEND_CLASS_PRINT(gdcm::Bitmap)
 %extend gdcm::Bitmap
 {
+  bool GetBuffer(signed char *buffer) const {
+    return self->GetBuffer((char*)buffer);
+  }
   bool GetArray(unsigned char buffer[]) const {
     assert( $self->GetPixelFormat() == PixelFormat::UINT8 );
     return $self->GetBuffer((char*)buffer);
@@ -414,6 +440,7 @@ EXTEND_CLASS_PRINT(gdcm::Bitmap)
 };
 %clear char* buffer;
 %clear unsigned int* dims;
+EXTEND_CLASS_PRINT(gdcm::Bitmap)
 
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
@@ -454,6 +481,8 @@ EXTEND_CLASS_PRINT(gdcm::Dict)
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
+%template (TagSetType) std::set<gdcm::Tag>;
+%ignore gdcm::Reader::SetStream;
 %include "gdcmReader.h"
 //EXTEND_CLASS_PRINT(gdcm::Reader)
 %include "gdcmPixmapReader.h"
@@ -604,6 +633,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+%include "gdcmIconImageGenerator.h"
+%include "gdcmIconImageFilter.h"
 
 %feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"
