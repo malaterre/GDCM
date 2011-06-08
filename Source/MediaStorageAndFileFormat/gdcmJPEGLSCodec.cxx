@@ -393,4 +393,11 @@ void JPEGLSCodec::SetLossyError(int error)
   LossyError = error;
 }
 
+bool JPEGLSCodec::Decode(DataElement const &, char* , uint32_t ,
+              uint32_t , uint32_t , uint32_t ,
+              uint32_t , uint32_t , uint32_t )
+{
+ return false;
+}
+
 } // end namespace gdcm

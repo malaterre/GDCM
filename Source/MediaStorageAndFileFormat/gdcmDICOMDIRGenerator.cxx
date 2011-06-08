@@ -914,9 +914,9 @@ bool DICOMDIRGenerator::Generate()
 
   gdcm::DataElement de_drs( Tag(0x4,0x1220) ); // DirectoryRecordSequence
 
-  SequenceOfItems * sqi = new SequenceOfItems;
+  SequenceOfItems * sqi0 = new SequenceOfItems;
   de_drs.SetVR( VR::SQ );
-  de_drs.SetValue( *sqi );
+  de_drs.SetValue( *sqi0 );
   de_drs.SetVLToUndefined();
 
   ds.Insert( de_drs );

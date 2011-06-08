@@ -3,6 +3,7 @@
 # gccxml for the C++ parser and allow a full ANSI C++ support
 FIND_PACKAGE(SWIG REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
+OPTION(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)
 
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
