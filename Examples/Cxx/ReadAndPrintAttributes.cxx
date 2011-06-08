@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
   // In this example we will show why using name to lookup attribute can be
   // dangerous.
   Tag tPatientName(0x0,0x0);
-  //const DictEntry &de1 = 
+  //const DictEntry &de1 =
   pubdict.GetDictEntryByName("Patient Name", tPatientName);
 
   std::cout << "Found: " << tPatientName << std::endl;
@@ -67,14 +67,14 @@ int main(int argc, char *argv[])
   // has become Patient's Name.
 
   Tag tPatientsName;
-  //const DictEntry &de2 = 
+  //const DictEntry &de2 =
   pubdict.GetDictEntryByName("Patient's Name", tPatientsName);
 
   std::cout << "Found: " << tPatientsName << std::endl;
 
   // Let's try to read an arbitrary DICOM Attribute:
   Tag tDoseGridScaling;
-  //const DictEntry &de3 = 
+  //const DictEntry &de3 =
   pubdict.GetDictEntryByName("Dose Grid Scaling", tDoseGridScaling);
 
   std::cout << "Found: " << tDoseGridScaling << std::endl;

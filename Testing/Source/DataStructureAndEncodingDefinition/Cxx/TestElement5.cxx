@@ -57,7 +57,7 @@ int TestElement5(int , char *[])
   std::cout << spacing.GetValue() << std::endl;
   std::cout << spacing.GetValue(1) << std::endl;
 
-  //int res = 
+  //int res =
   TestLO();
 
   return 0;

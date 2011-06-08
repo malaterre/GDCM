@@ -38,7 +38,7 @@ int main(int argc, char *argv [])
  // * The data is simply 8-bit unsigned in the obvious x/y/z order
  // * 200D,300B contains the data
  // * 200D,3001 contains the no. of voxels (416,412,256 in this case)
- // * 200D,3003 contains the voxel sizes (0.156184527398215 / 
+ // * 200D,3003 contains the voxel sizes (0.156184527398215 /
  // 0.1223749613981957 / 0.328479990704639 in this case)
 
   const gdcm::File &file = reader.GetFile();
