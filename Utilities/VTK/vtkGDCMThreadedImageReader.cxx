@@ -34,6 +34,12 @@
 #include <pthread.h>
 #include <unistd.h> // sysconf
 
+#ifdef __APPLE__
+// For some reason sysconf + _SC_NPROCESSORS_ONLN is documented on macosx tiger, but it does not compile
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#endif
+
 vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMThreadedImageReader)
 
@@ -428,7 +434,19 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   GetSystemInfo (&info);
   const unsigned int nprocs = info.dwNumberOfProcessors;
 #else
+#ifdef _SC_NPROCESSORS_ONLN
   const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
+#endif
+#ifdef __APPLE__
+  int count = 1;
+  size_t size = sizeof(count);
+  int res = sysctlbyname("hw.ncpu",&count,&size,NULL,0);
+  if( res == -1 )
+    {
+    count = 1;
+    }
+  const unsigned int nprocs = (unsigned int)count;
+#endif
 #endif
   const unsigned int nthreads = std::min( nprocs, nfiles );
   threadparams *params = new threadparams[nthreads];
