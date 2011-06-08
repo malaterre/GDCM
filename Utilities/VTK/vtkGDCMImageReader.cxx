@@ -1237,7 +1237,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
         {
         vtkWarningMacro( "vtkImageData Overlay have an extent that do not match the one of the image" );
         }
-      if( origin[0] != 0 || origin[1] != 0 )
+      if( origin[0] != 1 || origin[1] != 1 )
         {
         vtkWarningMacro( "Overlay with origin are not supported right now" );
         }
