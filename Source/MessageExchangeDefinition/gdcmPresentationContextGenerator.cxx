@@ -50,15 +50,15 @@ bool PresentationContextGenerator::GenerateFromUID(UIDs::TSName asname)
   // There is a special case for MOVE operations. Need to have alternate FIND operations
   if( asname == UIDs::PatientRootQueryRetrieveInformationModelMOVE )
     {
-    const char *asnamestr = UIDs::GetUIDString(
+    const char *asnamestr0 = UIDs::GetUIDString(
       UIDs::PatientRootQueryRetrieveInformationModelFIND );
-    AddPresentationContext( asnamestr, tsnamestr );
+    AddPresentationContext( asnamestr0, tsnamestr );
     }
   if( asname == UIDs::StudyRootQueryRetrieveInformationModelMOVE )
     {
-    const char *asnamestr = UIDs::GetUIDString(
+    const char *asnamestr0 = UIDs::GetUIDString(
       UIDs::StudyRootQueryRetrieveInformationModelFIND );
-    AddPresentationContext( asnamestr, tsnamestr );
+    AddPresentationContext( asnamestr0, tsnamestr );
     }
 
   return true;

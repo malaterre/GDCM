@@ -73,6 +73,8 @@
 #cmakedefine GDCM_USE_KAKADU
 #cmakedefine GDCM_USE_JPEGLS
 
+#cmakedefine GDCM_AUTOLOAD_GDCMJNI
+
 /* For older gcc / broken plateform */
 #cmakedefine GDCM_NO_ANSI_STRING_STREAM
 

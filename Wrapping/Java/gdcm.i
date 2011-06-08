@@ -173,19 +173,6 @@
 using namespace gdcm;
 %}
 
-// http://www.swig.org/Doc1.3/Java.html#imclass_pragmas
-
-%pragma(java) jniclasscode=%{
- static {
-   try {
-       System.loadLibrary("gdcmjni");
-   } catch (UnsatisfiedLinkError e) {
-     System.err.println("Native code library failed to load. \n" + e);
-     System.exit(1);
-   }
- }
-%}
-
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
 
@@ -225,6 +212,23 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 
 //%feature("autodoc", "1")
 %include "gdcmConfigure.h"
+
+// http://www.swig.org/Doc1.3/Java.html#imclass_pragmas
+// Need to be located *after* gdcmConfigure.h
+#ifdef GDCM_AUTOLOAD_GDCMJNI
+%pragma(java) jniclasscode=%{
+ static {
+   try {
+       System.loadLibrary("gdcmjni");
+   } catch (UnsatisfiedLinkError e) {
+     System.err.println("Native code library failed to load. \n" + e);
+     System.exit(1);
+   }
+ }
+%}
+#endif
+
+
 //%include "gdcmTypes.h"
 //%include "gdcmWin32.h"
 // I cannot include gdcmWin32.h without gdcmTypes.h, first. But gdcmTypes.h needs to know _MSC_VER at swig time...

@@ -78,6 +78,7 @@ void ApplicationContext::UpdateName( const char *name )
 
 void ApplicationContext::Print(std::ostream &os) const
 {
+  os << Name << std::endl;
 }
 
 } // end namespace network

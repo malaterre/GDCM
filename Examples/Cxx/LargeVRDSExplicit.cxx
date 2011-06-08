@@ -43,7 +43,7 @@ bool interpolate(const double * pts, unsigned int npts, std::vector<double> &out
       {
       if( j != npts - 1 )
         {
-        assert( j >= 0 && 3*j+5 < 3*npts );
+        assert( 3*j+5 < 3*npts );
         const double midpointx = (pts[3*j+0] + pts[3*j+3]) / 2;
         const double midpointy = (pts[3*j+1] + pts[3*j+4]) / 2;
         const double midpointz = (pts[3*j+2] + pts[3*j+5]) / 2;
@@ -54,7 +54,7 @@ bool interpolate(const double * pts, unsigned int npts, std::vector<double> &out
       }
     else
       {
-      assert( j >= 0 && j < npts );
+      assert( j < npts );
       out.push_back( pts[3*j+0] );
       out.push_back( pts[3*j+1] );
       out.push_back( pts[3*j+2] );
