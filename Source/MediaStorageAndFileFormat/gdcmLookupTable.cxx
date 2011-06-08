@@ -423,7 +423,7 @@ void LookupTable::Encode(std::istream &is, std::ostream &os)
       u.rgb[3] = 0;
       is.read( (char*)u.rgb, 3*2);
       assert( u.rgb[3] == 0 );
-      unsigned short d = 0;
+      int d = 0;
       assert( d < 65536 && d >= 0 );
       os.write( (char*)&d , 2 );
       }
