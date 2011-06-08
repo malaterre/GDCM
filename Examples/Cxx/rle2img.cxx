@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -120,8 +119,20 @@ int main(int argc, char *argv [])
   const gdcm::DataElement& compressiontype = ds.GetDataElement( tcompressiontype );
   if ( compressiontype.IsEmpty() ) return 1;
   const gdcm::ByteValue * bv = compressiontype.GetByteValue();
-  std::string comp = "PMSCT_RLE1";
-  if( strncmp( bv->GetPointer(), comp.c_str(), comp.size() ) != 0 ) return 1;
+  std::string comprle = "PMSCT_RLE1";
+  std::string comprgb = "PMSCT_RGB1";
+  bool isrle = false;
+  bool isrgb = false;
+  if( strncmp( bv->GetPointer(), comprle.c_str(), comprle.size() ) == 0 )
+    {
+    isrle = true;
+    }
+  if( strncmp( bv->GetPointer(), comprgb.c_str(), comprgb.size() ) == 0 )
+    {
+    isrgb = true;
+    return 1;
+    }
+  if( !isrgb && !isrle ) return 1;
 
   const gdcm::PrivateTag tcompressedpixeldata(0x07a1,0x000a,"ELSCINT1");
   if( !ds.FindDataElement( tcompressedpixeldata) ) return 1;

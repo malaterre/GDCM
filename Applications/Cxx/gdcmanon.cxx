@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -439,7 +438,8 @@ int main(int argc, char *argv[])
             ss >> cdummy;
             assert( cdummy == ',' || cdummy == '=' );
             std::string str;
-            ss >> str;
+            //ss >> str;
+            std::getline(ss, str); // do not skip whitespace
             replace_tags_value.push_back( std::make_pair(tag, str) );
             }
           //printf (" with arg %s", optarg);
@@ -620,7 +620,7 @@ int main(int argc, char *argv[])
 
   if( !gdcm::System::FileExists(filename.c_str()) )
     {
-    // doh !
+    std::cerr << "Could not find file: " << filename << std::endl;
     return 1;
     }
 
@@ -644,7 +644,7 @@ int main(int argc, char *argv[])
       std::cerr << "Input directory should be different from output directory" << std::endl;
       return 1;
       }
-    nfiles = dir.Load(filename, recursive);
+    nfiles = dir.Load(filename, (recursive > 0 ? true : false));
     filenames = dir.GetFilenames();
     gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
     // Prepare outfilenames
@@ -682,14 +682,14 @@ int main(int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
+  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
+  gdcm::Trace::SetError(  (error  > 0 ? true : false));
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmanon" );
@@ -764,7 +764,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, continuemode) )
+      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, (continuemode > 0 ? true: false)) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;
@@ -777,7 +777,7 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFile(anon, in, out, continuemode) )
+      if( !AnonymizeOneFile(anon, in, out, (continuemode > 0 ? true: false)) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         return 1;

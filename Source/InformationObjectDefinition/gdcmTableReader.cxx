@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -556,9 +555,9 @@ int TableReader::Read()
   int ret = 0;
   do {
     is.read(buf, sizeof(buf));
-    size_t len = is.gcount();
-    done = len < sizeof(buf);
-    if (XML_Parse(parser, buf, len, done) == XML_STATUS_ERROR) {
+	  std::streamsize len = is.gcount();
+    done = (unsigned int)len < sizeof(buf);
+    if (XML_Parse(parser, buf, (int)len, done) == XML_STATUS_ERROR) {
       fprintf(stderr,
         "%s at line %" XML_FMT_INT_MOD "u\n",
         XML_ErrorString(XML_GetErrorCode(parser)),

@@ -401,3 +401,11 @@ FIX Iterator in gdcm::Dict
 Structured REport for Presentation
 -----------------------------------------------------------------------
 WADO instead of DICOM protocol
+-----------------------------------------------------------------------
+http://assimp.sourceforge.net/main_license.html
+-----------------------------------------------------------------------
+Missing dict for: SIEMENS MED SP DXMG WH AWS 1
+http://www.medical.siemens.com/siemens/en_GLOBAL/rg_marcom_FBAs/files/brochures/DICOM/sp_mammo/WH_AWS_VB30_dcs_ekl.pdf
+-----------------------------------------------------------------------
+Other quantization algorithm:
+http://alpng.sourceforge.net/octree.html

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -74,6 +73,7 @@
 #include "gdcmSystem.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
+#include "gdcmIconImageGenerator.h"
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmUIDGenerator.h"
@@ -148,6 +148,8 @@ void PrintHelp()
   std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
   std::cout << "  -R --rle                            Compress image in rle (lossless only)." << std::endl;
   std::cout << "  -F --force                          Force decompression/merging before recompression/splitting." << std::endl;
+  std::cout << "     --generate-icon                  Generate icon." << std::endl;
+  std::cout << "     --icon-minmax                    Min/Max value for icon." << std::endl;
   std::cout << "     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
   std::cout << "     --planar-configuration [01]      Change planar configuration." << std::endl;
   std::cout << "  -Y --lossy                          Use the lossy (if possible) compressor." << std::endl;
@@ -447,8 +449,12 @@ int main (int argc, char *argv[])
   int force = 0;
   int planarconf = 0;
   int planarconfval = 0;
+  double iconmin = 0;
+  double iconmax = 0;
   int usedict = 0;
   int compressicon = 0;
+  int generateicon = 0;
+  int iconminmax = 0;
   int removegrouplength = 0;
   int removeprivate = 0;
   int removeretired = 0;
@@ -513,6 +519,8 @@ int main (int argc, char *argv[])
         {"explicit", 0, &explicitts, 1}, //
         {"implicit", 0, &implicit, 1}, //
         {"use-dict", 0, &usedict, 1}, //
+        {"generate-icon", 0, &generateicon, 1}, //
+        {"icon-minmax", 1, &iconminmax, 1}, //
         {"compress-icon", 0, &compressicon, 1}, //
         {"remove-gl", 0, &removegrouplength, 1}, //
         {"remove-private-tags", 0, &removeprivate, 1}, //
@@ -577,33 +585,43 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "planar-configuration") == 0 );
             planarconfval = atoi(optarg);
             }
-          else if( option_index == 37 ) /* photometricinterpretation */
+          else if( option_index == 34 ) /* icon minmax*/
+            {
+            assert( strcmp(s, "icon-minmax") == 0 );
+            std::stringstream ss;
+            ss.str( optarg );
+            ss >> iconmin;
+            char comma;
+            ss >> comma;
+            ss >> iconmax;
+            }
+          else if( option_index == 39 ) /* photometricinterpretation */
             {
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
-          else if( option_index == 39 ) /* rate */
+          else if( option_index == 41 ) /* rate */
             {
             assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
-          else if( option_index == 40 ) /* quality */
+          else if( option_index == 42 ) /* quality */
             {
             assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
-          else if( option_index == 41 ) /* tile */
+          else if( option_index == 43 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
             unsigned int n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
-          else if( option_index == 42 ) /* number of resolution */
+          else if( option_index == 44 ) /* number of resolution */
             {
             assert( strcmp(s, "number-resolution") == 0 );
             nresvalue = atoi(optarg);
             }
-          else if( option_index == 44 ) /* JPEG-LS error */
+          else if( option_index == 46 ) /* JPEG-LS error */
             {
             assert( strcmp(s, "allowed-error") == 0 );
             jpeglserror_value = atoi(optarg);
@@ -806,14 +824,14 @@ int main (int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
+  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
+  gdcm::Trace::SetError(  (error  > 0 ? true : false));
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
@@ -948,7 +966,7 @@ int main (int argc, char *argv[])
     if( explicitts || deflated )
       {
       gdcm::FileExplicitFilter fef;
-      fef.SetChangePrivateTags( changeprivatetags );
+      fef.SetChangePrivateTags( (changeprivatetags > 0 ? true: false));
       fef.SetFile( reader.GetFile() );
       if( !fef.Change() )
         {
@@ -981,7 +999,7 @@ int main (int argc, char *argv[])
     gdcm::ImageFragmentSplitter splitter;
     splitter.SetInput( image );
     splitter.SetFragmentSizeMax( fragmentsize );
-    splitter.SetForce( force );
+    splitter.SetForce( (force > 0 ? true: false));
     bool b = splitter.Split();
     if( !b )
       {
@@ -1075,20 +1093,35 @@ int main (int argc, char *argv[])
       std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
-    const gdcm::Pixmap &image = reader.GetPixmap();
+    gdcm::Pixmap &image = reader.GetPixmap();
     //const gdcm::IconImage &icon = image.GetIconImage();
     //if( !icon.IsEmpty() )
     //  {
     //  std::cerr << "Icons are not supported" << std::endl;
     //  return 1;
     //  }
+    if( generateicon )
+      {
+      gdcm::IconImageGenerator iig;
+      iig.SetPixmap( image );
+      const unsigned int idims[2] = { 64, 64 };
+      iig.SetOutputDimensions( idims );
+      if( iconminmax )
+        {
+        iig.SetPixelMinMax( iconmin, iconmax );
+        }
+      bool b = iig.Generate();
+      if( !b ) return 1;
+      const gdcm::IconImage &icon = iig.GetIconImage();
+      image.SetIconImage( icon );
+      }
 
     gdcm::JPEG2000Codec j2kcodec;
     gdcm::JPEGCodec jpegcodec;
     gdcm::JPEGLSCodec jpeglscodec;
     gdcm::ImageChangeTransferSyntax change;
-    change.SetForce( force );
-    change.SetCompressIconImage( compressicon );
+    change.SetForce( (force > 0 ? true: false));
+    change.SetCompressIconImage( (compressicon > 0 ? true: false));
     if( jpeg )
       {
       if( lossy )
@@ -1247,7 +1280,7 @@ int main (int argc, char *argv[])
     if( usedict /*ts.IsImplicit()*/ )
       {
       gdcm::FileExplicitFilter fef;
-      fef.SetChangePrivateTags( changeprivatetags );
+      fef.SetChangePrivateTags( (changeprivatetags > 0 ? true : false));
       fef.SetFile( reader.GetFile() );
       if(!fef.Change())
         {
@@ -1398,7 +1431,7 @@ int main (int argc, char *argv[])
 
     gdcm::Writer writer;
     writer.SetFileName( outfilename.c_str() );
-    writer.SetCheckFileMetaInformation( checkmeta );
+    writer.SetCheckFileMetaInformation( (checkmeta > 0 ? true : false));
     //writer.SetFile( f );
     writer.SetFile( reader.GetFile() );
     if( !writer.Write() )

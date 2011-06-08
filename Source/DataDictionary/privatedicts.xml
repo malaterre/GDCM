@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -1875,6 +1874,7 @@
   <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx09" vr="SL" vm="1" name="Store Width of Functional Image"/>
   <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx0a" vr="SL" vm="1" name="Store level of Functional Image"/>
   <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx0b" vr="FL" vm="1" name="Store B-Value with Functional Image"/>
+  <entry owner="GEMS_FUNCTOOL_01" group="0051" element="xx0c" vr="LO" vm="1" name="Analysis Package"/>
   <entry owner="GEMS_GDXE_ATHENAV2_INTERNAL_USE" group="7fdf" element="xx10" vr="LT" vm="1" name="PPS Stream"/>
   <entry owner="GEMS_GDXE_ATHENAV2_INTERNAL_USE" group="7fdf" element="xx11" vr="LT" vm="1" name="Pixel Data References (temporary)"/>
   <entry owner="GEMS_GDXE_ATHENAV2_INTERNAL_USE" group="7fdf" element="xx20" vr="SS" vm="1" name="Auto Push Tag"/>
@@ -2479,6 +2479,17 @@
   <entry owner="GEMS_PARM_01" group="0043" element="xx98" vr="UI" vm="1" name="ASSET Acquisition Calibration Series UID"/>
   <entry owner="GEMS_PARM_01" group="0043" element="xx99" vr="LO" vm="1-n" name="Extended Options"/>
   <entry owner="GEMS_PARM_01" group="0043" element="xx9a" vr="IS" vm="1" name="Rx Stack Identification"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9b" vr="DS" vm="1" name="NPW factor"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9c" vr="OB" vm="1" name="Research Tag 1"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9d" vr="OB" vm="1" name="Research Tag 2"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9e" vr="OB" vm="1" name="Research Tag 3"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xx9f" vr="OB" vm="1" name="Research Tag 4"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa0" vr="SQ" vm="1" name="Spectroscopy Pixel Sequence"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa1" vr="SQ" vm="1" name="Spectroscopy Default Display Sequence"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa2" vr="DS" vm="1-n" name="MEG Data"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa3" vr="CS" vm="1" name="ASL Contrast technique"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa4" vr="LO" vm="1" name="Detailed text for ASL labeling technique"/>
+  <entry owner="GEMS_PARM_01" group="0043" element="xxa5" vr="IS" vm="1" name="Duration of the label or control pulse"/>
   <entry owner="GEMS_PARM_01" group="0051" element="xx0a" vr="SL" vm="1" name="Store level of Functional Image"/>
   <entry owner="GEMS_PARM_01" group="0051" element="xx0b" vr="FL" vm="1" name="Store B-Value with Functional Image"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xx10" vr="UI" vm="1" name="DICOM Implementation UID"/>
@@ -2501,6 +2512,12 @@
   <entry owner="GEMS_PARM_01" group="2001" element="xx86" vr="US" vm="1" name="Number of Degrees of Freedom"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xx8a" vr="FL" vm="1" name="Z Threshold"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xx8b" vr="FL" vm="1" name="p Threshold"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx90" vr="OB" vm="1" name="Processing parameters"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx91" vr="OB" vm="1" name="Motion Plot"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx92" vr="OB" vm="1" name="ROIs"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx93" vr="OB" vm="1" name="Tracts"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx94" vr="OB" vm="1" name="Report"/>
+  <entry owner="GEMS_PARM_01" group="2001" element="xx95" vr="OB" vm="1" name="Response Data"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xxa0" vr="FL" vm="1-n" name="Motion Parameters"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xxa1" vr="FL" vm="1-n" name="Registration Parameters"/>
   <entry owner="GEMS_PARM_01" group="2001" element="xxa2" vr="FL" vm="1-n" name="Subject Data"/>
@@ -3402,6 +3419,7 @@
   <entry owner="INTELERAD MEDICAL SYSTEMS" group="3f01" element="xx03" vr="LO" vm="1" name="Source AE"/>
   <entry owner="INTELERAD MEDICAL SYSTEMS" group="3f01" element="xx04" vr="LO" vm="1" name="Deferred Validation"/>
   <entry owner="INTELERAD MEDICAL SYSTEMS" group="3f01" element="xx05" vr="LO" vm="1" name="Series Owner"/>
+  <entry owner="ISG Image" group="0065" element="xx11" vr="UL" vm="1" name="?"/>
   <entry owner="ISG shadow" group="0029" element="xx70" vr="IS" vm="1" name="?"/>
   <entry owner="ISG shadow" group="0029" element="xx80" vr="IS" vm="1" name="?"/>
   <entry owner="ISG shadow" group="0029" element="xx90" vr="IS" vm="1" name="?"/>
@@ -4643,6 +4661,104 @@
   <entry owner="Philips RAD Imaging DD 097" group="200b" element="xxa0" vr="LT" vm="1" name="?"/>
   <entry owner="Philips US Imaging 60" group="0031" element="xx30" vr="UL" vm="1" name="Private data"/>
   <entry owner="Philips US Imaging 60" group="0031" element="xx31" vr="UL" vm="1" name="Private data"/>
+  <entry owner="Philips US Imaging DD 017" group="200d" element="xx05" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 023" group="200d" element="xx37" vr="DA" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 023" group="200d" element="xx38" vr="TM" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx01" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx02" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx03" vr="LO" vm="6" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx04" vr="LO" vm="6" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx05" vr="LO" vm="1-n" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx06" vr="LO" vm="6" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx07" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx08" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx09" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx0a" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx0b" vr="OB" vm="1" name="Raw Data US"/>
+  <entry owner="Philips US Imaging DD 033" group="200d" element="xx14" vr="IS" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx01" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx02" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx03" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx04" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx05" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx06" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx07" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx08" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx09" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx0a" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx0b" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx0c" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx0d" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx0e" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx0f" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx10" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx21" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx22" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx23" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 034" group="200d" element="xx24" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx01" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx02" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx03" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx04" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx05" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx07" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx08" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx09" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx0a" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx0b" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx0c" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 035" group="200d" element="xx0d" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 036" group="200d" element="xx01" vr="LO" vm="3" name="Cols/Rows/Frames"/>
+  <entry owner="Philips US Imaging DD 036" group="200d" element="xx02" vr="LO" vm="3" name="Cols/Rows/Frames"/>
+  <entry owner="Philips US Imaging DD 036" group="200d" element="xx03" vr="LO" vm="3" name="Voxel Spacing"/>
+  <entry owner="Philips US Imaging DD 036" group="200d" element="xx04" vr="LO" vm="3" name="?"/>
+  <entry owner="Philips US Imaging DD 038" group="200d" element="xx01" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx01" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx04" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx05" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx06" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx07" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx08" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx09" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx0a" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx0b" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx0c" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 039" group="200d" element="xx0d" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx01" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx02" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx03" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx04" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx05" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx06" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx07" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 040" group="200d" element="xx20" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 041" group="200d" element="xx1e" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx50" vr="LO" vm="3" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx51" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx52" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx53" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx54" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx55" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx56" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx57" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx58" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx59" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx5a" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx5b" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx5c" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx5d" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx5e" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx5f" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx60" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx70" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx71" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx72" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx73" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx74" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx75" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx76" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 042" group="200d" element="xx77" vr="LO" vm="1" name="?"/>
+  <entry owner="Philips US Imaging DD 043" group="200d" element="xx05" vr="SH" vm="1" name="?"/>
   <entry owner="Philips US Imaging DD 109" group="200d" element="xx00" vr="US" vm="1" name="?"/>
   <entry owner="Philips US Imaging DD 109" group="200d" element="xx01" vr="SQ" vm="1" name="?"/>
   <entry owner="Philips US Imaging DD 109" group="200d" element="xx02" vr="ST" vm="1" name="?"/>
@@ -4946,6 +5062,8 @@
   <entry owner="SECTRA_ImageInfo_01" group="0029" element="xx04" vr="OB" vm="1" name="Image Info new"/>
   <entry owner="SECTRA_OverlayInfo_01" group="6001" element="xx01" vr="LO" vm="1" name="Sectra Overlay"/>
   <entry owner="SEGAMI MIML" group="0031" element="xx98" vr="OW" vm="1" name="?"/>
+  <entry owner="SEGAMI__MEMO" group="0035" element="xx97" vr="SH" vm="1" name="?"/>
+  <entry owner="SEGAMI__MEMO" group="0035" element="xx98" vr="LT" vm="1" name="?"/>
   <entry owner="SET WINDOW" group="0019" element="xx00" vr="UN" vm="1" name="Set Window Image Filter"/>
   <entry owner="SET WINDOW" group="0019" element="xx01" vr="UN" vm="1" name="Set Window Magnification Power"/>
   <entry owner="SHS MagicView 300" group="0029" element="xx01" vr="FD" vm="1-n" name="Zoom Factor"/>
@@ -6221,9 +6339,9 @@
   <entry owner="SIEMENS MED OCS TABLE OFFSET" group="0039" element="xx78" vr="DS" vm="3" name="Offset"/>
   <entry owner="SIEMENS MED OCS TABLE VERTICAL POSITION" group="0039" element="xx75" vr="DS" vm="1" name="vertical Table Position"/>
   <entry owner="SIEMENS MED OCS TRANS MATRIX" group="0039" element="xx80" vr="DS" vm="5" name="Transformation Matrix"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx00" vr="UN" vm="1" name="Private Creator Version"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx00" vr="SH" vm="1" name="Private Creator Version"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx03" vr="UN" vm="1" name="Frame Rate"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx0c" vr="UN" vm="1" name="Burned in Graphics"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx0c" vr="US" vm="1" name="Burned in Graphics"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx0d" vr="UN" vm="1" name="SieClear Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx20" vr="UN" vm="1" name="B-Mode Submode"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx21" vr="UN" vm="1" name="B-Mode Dynamic Range"/>
@@ -6232,10 +6350,10 @@
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx24" vr="UN" vm="1" name="B-Mode Edge Enhance Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx25" vr="UN" vm="1" name="B-Mode Persistence Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx26" vr="UN" vm="1" name="B-Mode Map Index"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx27" vr="US" vm="1" name="?"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx28" vr="US" vm="1" name="?"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx29" vr="US" vm="1" name="?"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2a" vr="UN" vm="1" name="B-Mode Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx27" vr="US" vm="1" name="???"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx28" vr="US" vm="1" name="???"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx29" vr="US" vm="1" name="???"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2a" vr="US" vm="1" name="B-Mode Tint Type"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2d" vr="UN" vm="1" name="B-Mode Tint Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx2e" vr="UN" vm="1" name="ClarifyVE Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx31" vr="US" vm="1" name="?"/>
@@ -6259,8 +6377,8 @@
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx66" vr="UN" vm="1" name="Doppler Submode"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx67" vr="US" vm="1" name="?"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx69" vr="UN" vm="1" name="Doppler Time/Freq Res Index"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6a" vr="UN" vm="1" name="Doppler Trace Inverted"/>
-  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6c" vr="UN" vm="1" name="Doppler Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6a" vr="US" vm="1" name="Doppler Trace Inverted"/>
+  <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx6c" vr="US" vm="1" name="Doppler Tint Type"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx72" vr="UN" vm="1" name="Doppler Tint Index"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx80" vr="UN" vm="1" name="M-Mode Dynamic Range"/>
   <entry owner="SIEMENS MED SMS USG ANTARES" group="0019" element="xx81" vr="UN" vm="1" name="M-Mode Overall Gain"/>
@@ -6408,10 +6526,14 @@
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx24" vr="UN" vm="1" name="B-Mode Edge Enhance Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx25" vr="UN" vm="1" name="B-Mode Persistence Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx26" vr="UN" vm="1" name="B-Mode Map Index"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2a" vr="UN" vm="1" name="B-Mode Tint Type"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx27" vr="US" vm="1" name="??"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx28" vr="US" vm="1" name="??"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx29" vr="US" vm="1" name="??"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2a" vr="US" vm="1" name="B-Mode Tint Type"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2d" vr="UN" vm="1" name="B-Mode Tint Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2e" vr="UN" vm="1" name="ClarifyVE Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3a" vr="UN" vm="1" name="Image Flag"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3b" vr="LT" vm="1" name="IPDA/MDA Data"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx40" vr="UN" vm="1" name="Color Flow state"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx41" vr="UN" vm="1" name="Color Flow Wall Filter Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx42" vr="UN" vm="1" name="Color Flow Submode"/>
@@ -7862,21 +7984,21 @@
   <entry owner="Silhouette V1.0" group="0029" element="xx55" vr="LT" vm="1" name="?"/>
   <entry owner="Silhouette V1.0" group="0029" element="xx56" vr="LT" vm="1" name="?"/>
   <entry owner="Silhouette V1.0" group="0029" element="xx57" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx13" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx14" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx17" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx18" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx19" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1a" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1b" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1c" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1d" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1e" vr="UN" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx13" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx14" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx17" vr="FD" vm="2" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx18" vr="FD" vm="2" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx19" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1a" vr="FD" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1b" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1c" vr="UL" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1d" vr="UL" vm="3" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx1e" vr="UL" vm="3" name="?"/>
   <entry owner="Silhouette VRS 3.0" group="0029" element="xx27" vr="US" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx28" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx30" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx32" vr="UN" vm="1" name="?"/>
-  <entry owner="Silhouette VRS 3.0" group="0029" element="xx34" vr="UN" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx28" vr="OB" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx30" vr="US" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx32" vr="US" vm="1" name="?"/>
+  <entry owner="Silhouette VRS 3.0" group="0029" element="xx34" vr="LO" vm="1" name="?"/>
   <entry owner="Silhouette VRS 3.0" group="0029" element="xx35" vr="CS" vm="1" name="?"/>
   <entry owner="Silhouette VRS 3.0" group="0029" element="xx36" vr="US" vm="1" name="?"/>
   <entry owner="Sound Technologies" group="f001" element="xx00" vr="CS" vm="1" name="Patient Species"/>
@@ -7888,7 +8010,7 @@
   <entry owner="Sound Technologies" group="f001" element="xx06" vr="CS" vm="1" name="Image enhancements"/>
   <entry owner="Sound Technologies" group="f001" element="xx07" vr="CS" vm="1" name="Detector Settings"/>
   <entry owner="Sound Technologies" group="f001" element="xx08" vr="CS" vm="1" name="Application Version"/>
-  <entry owner="Sound Technologies" group="f001" element="xx09" vr="LO" vm="1" name="Image Laterality 3Extended"/>
+  <entry owner="Sound Technologies" group="f001" element="xx09" vr="LO" vm="1" name="Image Laterality Extended"/>
   <entry owner="Sound Technologies" group="f001" element="xx0a" vr="PN" vm="1" name="Client Name"/>
   <entry owner="Sound Technologies" group="f001" element="xx0b" vr="UI" vm="1" name="Reference Study Instance Uid"/>
   <entry owner="Sound Technologies" group="f001" element="xx0c" vr="UI" vm="1" name="Reference Series Instance Uid"/>

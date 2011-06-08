@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -679,7 +678,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
-%template (DoubleType) std::vector<double>;
+%template (DoubleArrayType) std::vector<double>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"

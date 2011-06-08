@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -20,6 +19,9 @@
 #include <iostream>
 #include <iomanip>
 #include <iterator>
+
+#include <cstring>
+#include <limits.h>
 
 namespace gdcm
 {
@@ -98,7 +100,8 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  //assert(buf_size < INT_MAX);
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   is.seekg(start, std::ios::beg); // reset
@@ -132,7 +135,8 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  //assert(buf_size < INT_MAX);
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   is.seekg(start, std::ios::beg); // reset
@@ -142,8 +146,9 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   // http://lestourtereaux.free.fr/papers/data/yuvrgb.pdf
   assert( !(buf_size % 3) );
   unsigned long size = (unsigned long)buf_size/3;
-  unsigned char *copy = new unsigned char[ buf_size ];
-  memmove( copy, dummy_buffer, buf_size);
+  //assert(buf_size < INT_MAX);
+  unsigned char *copy = new unsigned char[ (unsigned int)buf_size ];
+  memmove( copy, dummy_buffer, (size_t)buf_size);
 assert(0); // Do not use this code !
   // FIXME FIXME FIXME
   // The following is bogus: we are doing two operation at once:
@@ -192,7 +197,8 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  //assert(buf_size < INT_MAX);
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   is.seekg(start, std::ios::beg); // reset
@@ -202,7 +208,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   //assert( image.GetNumberOfDimensions() == 3 );
   assert( buf_size % 3 == 0 );
   unsigned long size = (unsigned long)buf_size/3;
-  char *copy = new char[ buf_size ];
+  char *copy = new char[ (unsigned int)buf_size ];
   //memmove( copy, dummy_buffer, buf_size);
 
   const char *r = dummy_buffer /*copy*/;
@@ -230,7 +236,8 @@ bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  //assert(buf_size < INT_MAX);
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   is.seekg(start, std::ios::beg); // reset
@@ -252,7 +259,8 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  //assert(buf_size < INT_MAX);
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   is.seekg(start, std::ios::beg); // reset

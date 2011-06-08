@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -343,6 +342,7 @@ bool FileDerivation::AddSourceImageSequence()
 
   if( sqi->GetNumberOfItems() )
     {
+    gdcmWarningMacro( "Do not support appending Referenced Image" );
     return false;
     }
   std::vector< std::pair< std::string, std::string > >::const_iterator it =

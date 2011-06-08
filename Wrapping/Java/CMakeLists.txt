@@ -3,6 +3,7 @@
 # gccxml for the C++ parser and allow a full ANSI C++ support
 FIND_PACKAGE(SWIG REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
+OPTION(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)
 
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
@@ -64,6 +65,13 @@ SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE
 #MESSAGE("res:${res}")
 #FILE(GLOB javafiles "${CMAKE_CURRENT_BINARY_DIR}/*.java")
 #MESSAGE("javafile:${javafiles}")
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  # http://www.swig.org/Doc2.0/Java.html#Java_typemaps_c_to_java_types
+  SET_SOURCE_FILES_PROPERTIES(
+    ${swig_generated_file_fullname}
+    PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_CUSTOM_COMMAND(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar

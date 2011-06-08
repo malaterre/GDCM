@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -42,7 +41,7 @@ public:
   bool Decode(DataElement const &is, DataElement &os);
   bool Decode(DataElement const &in, char* outBuffer, uint32_t inBufferLength,
               uint32_t inXMin, uint32_t inXMax, uint32_t inYMin,
-              uint32_t inYMax, uint32_t inZMin, uint32_t inZMax) { return false; }
+              uint32_t inYMax, uint32_t inZMin, uint32_t inZMax);
   bool Code(DataElement const &in, DataElement &out);
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -45,10 +44,10 @@ int main(int argc, char *argv[])
     }
 
   // The output of gdcm::Reader is a gdcm::File
-  gdcm::File &file = reader.GetFile();
+  //gdcm::File &file = reader.GetFile();
 
   // the dataset is the the set of element we are interested in:
-  gdcm::DataSet &ds = file.GetDataSet();
+  //gdcm::DataSet &ds = file.GetDataSet();
 
   const gdcm::Image &image = reader.GetImage();
   image.Print( std::cout );

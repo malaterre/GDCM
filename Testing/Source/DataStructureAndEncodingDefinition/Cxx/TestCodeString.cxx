@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -36,6 +35,7 @@ int TestCodeString(int , char *[])
 
   const char fn3[] = "SUBDIR1\\SUBDIR2\\IMG01 ";
 
+{
   gdcm::DataElement de( at.GetTag() );
   de.SetByteValue( fn3, strlen(fn3) );
 
@@ -53,6 +53,7 @@ int TestCodeString(int , char *[])
       return 1;
       }
     }
+}
 
   const char fn4[] = "SUBDIR1\\SUBDIR2\\IMG01";
 {

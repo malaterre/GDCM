@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -13,6 +12,8 @@
 
 =========================================================================*/
 #include "gdcmByteValue.h"
+
+#include <cstring> // memcpy
 
 namespace gdcm
 {
@@ -54,5 +55,17 @@ namespace gdcm
       }
     os << std::dec;
   }
+
+  bool ByteValue::GetBuffer(char *buffer, unsigned long length) const {
+    // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
+    // so we need an inequality
+    if( length <= Internal.size() )
+      {
+      memcpy(buffer, &Internal[0], length);
+      return true;
+      }
+    gdcmDebugMacro( "Could not handle length= " << length );
+    return false;
+    }
 
 }

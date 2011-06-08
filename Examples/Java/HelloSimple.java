@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -14,10 +13,10 @@
 =========================================================================*/
 /*
  * Compilation:
- * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar javac HelloSimple.java
+ * $ CLASSPATH=gdcm.jar javac ../../gdcm/Examples/Java/HelloSimple.java -d .
  *
  * Usage:
- * $ LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/gdcm.jar:. java HelloSimple ~/Creatis/gdcmData/012345.002.050.dcm
+ * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java HelloSimple gdcmData/012345.002.050.dcm
  */
 import gdcm.*;
 

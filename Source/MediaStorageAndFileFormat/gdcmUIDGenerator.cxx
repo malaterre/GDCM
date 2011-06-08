@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,6 +16,7 @@
 #include "gdcmSystem.h"
 
 #include <bitset>
+#include <cstring>
 
 // FIXME...
 #if defined(_WIN32) || defined(__CYGWIN__)
@@ -91,6 +91,7 @@ struct fnv_hash
     }
 };
 
+#if !defined(GDCM_LEGACY_REMOVE)
 const char* UIDGenerator::Generate2()
 {
 #ifndef _WIN32
@@ -195,6 +196,7 @@ const char* UIDGenerator::Generate2()
   return 0;
 #endif
 }
+#endif
 
 /*
 Implementation note: You cannot set a root of more than 26 bytes (which should already

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,7 +16,7 @@
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 
 %module(docstring="A DICOM library",directors=1) gdcm
-#pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516,822
+#pragma SWIG nowarn=302,303,312,325,362,383,389,401,503,504,509,510,514,516,822
 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
 // I need to redefine it myself... seems to be solved in later revision
@@ -164,24 +163,14 @@
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmIconImageGenerator.h"
+#include "gdcmIconImageFilter.h"
+
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
 using namespace gdcm;
-%}
-
-// http://www.swig.org/Doc1.3/Java.html#imclass_pragmas
-
-%pragma(java) jniclasscode=%{
- static {
-   try {
-       System.loadLibrary("gdcmjni");
-   } catch (UnsatisfiedLinkError e) {
-     System.err.println("Native code library failed to load. \n" + e);
-     System.exit(1);
-   }
- }
 %}
 
 // swig need to know what are uint16_t, uint8_t...
@@ -190,7 +179,7 @@ using namespace gdcm;
 // gdcm does not use std::string in its interface, but we do need it for the
 // %extend (see below)
 %include "std_string.i"
-//%include "std_set.i"
+%include "std_set.i"
 %include "std_vector.i"
 %include "std_pair.i"
 %include "std_map.i"
@@ -215,12 +204,31 @@ using namespace gdcm;
 
 #if defined(SWIGJAVA)
 %define EXTEND_CLASS_PRINT(classname)
+// Remove Print( ostream & os )
+//%ignore classname::Print
 EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 %enddef
 #endif
 
 //%feature("autodoc", "1")
 %include "gdcmConfigure.h"
+
+// http://www.swig.org/Doc1.3/Java.html#imclass_pragmas
+// Need to be located *after* gdcmConfigure.h
+#ifdef GDCM_AUTOLOAD_GDCMJNI
+%pragma(java) jniclasscode=%{
+ static {
+   try {
+       System.loadLibrary("gdcmjni");
+   } catch (UnsatisfiedLinkError e) {
+     System.err.println("Native code library failed to load. \n" + e);
+     System.exit(1);
+   }
+ }
+%}
+#endif
+
+
 //%include "gdcmTypes.h"
 //%include "gdcmWin32.h"
 // I cannot include gdcmWin32.h without gdcmTypes.h, first. But gdcmTypes.h needs to know _MSC_VER at swig time...
@@ -268,46 +276,33 @@ EXTEND_CLASS_PRINT(gdcm::VM)
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
 EXTEND_CLASS_PRINT(gdcm::Directory)
+//%clear FilenameType;
+%clear FilenamesType;
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 EXTEND_CLASS_PRINT(gdcm::Value)
 // Array marshaling for arrays of primitives
-%define %cs_marshal_array(TYPE, CSTYPE)
-       %typemap(ctype)  TYPE[] "void*"
-       %typemap(imtype, inattributes="[MarshalAs(UnmanagedType.LPArray)]") TYPE[] "CSTYPE[]"
-       %typemap(cstype) TYPE[] "CSTYPE[]"
-       %typemap(in)     TYPE[] %{ $1 = (TYPE*)$input; %}
-       %typemap(csin)   TYPE[] "$csinput"
-%enddef
-
-// The following macro invocations allow you to pass arrays of primitive
-// types. Arrays of other things such as System.Drawing.Point are also
-// possible.
-%cs_marshal_array(bool, bool)
-%cs_marshal_array(char, byte)
-%cs_marshal_array(short, short)
-%cs_marshal_array(unsigned short, ushort)
-%cs_marshal_array(int, int)
-%cs_marshal_array(unsigned int, uint)
-%cs_marshal_array(long, int)
-%cs_marshal_array(unsigned long, uint)
-%cs_marshal_array(long long, long)
-%cs_marshal_array(unsigned long long, ulong)
-%cs_marshal_array(float, float)
-%cs_marshal_array(double, double)
-
+// http://www.swig.org/Doc2.0/Java.html#Java_unbounded_c_arrays
 
 // %clear commands should be unnecessary, but do it just-in-case
 %clear char* buffer;
 %clear unsigned char* buffer;
 
-%apply char[] { char* buffer }
+%include "arrays_java.i"
+
 %ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
-//%ignore gdcm::ByteValue::GetPointer() const;
-//%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
+%ignore gdcm::ByteValue::GetPointer() const;
+%ignore gdcm::ByteValue::GetBuffer(char *buffer, unsigned long length) const;
+%apply signed char[] { signed char* buffer }
 %include "gdcmByteValue.h"
+%extend gdcm::ByteValue
+{
+  bool GetBuffer(signed char *buffer, unsigned long length) const {
+    return self->GetBuffer((char*)buffer, length);
+  }
+};
 EXTEND_CLASS_PRINT(gdcm::ByteValue)
-%clear char* buffer;
+%clear signed char* buffer;
 
 
 %apply char[] { const char* array }
@@ -344,6 +339,9 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
 
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
+/*
+*/
+%template() std::set< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (JavaDataSet) SWIGDataSet;
@@ -367,7 +365,17 @@ EXTEND_CLASS_PRINT(gdcm::DataSet)
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
+%apply signed char[] { signed char* array }
+%ignore gdcm::LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
 %include "gdcmLookupTable.h"
+%extend gdcm::LookupTable
+{
+  unsigned int GetLUT(LookupTableType type, signed char *array) const {
+    unsigned int length = 0;
+    self->GetLUT( type, (unsigned char*)array, length);
+    return length;
+  }
+};
 EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
 EXTEND_CLASS_PRINT(gdcm::Overlay)
@@ -387,7 +395,7 @@ EXTEND_CLASS_PRINT(gdcm::FileMetaInformation)
 EXTEND_CLASS_PRINT(gdcm::File)
 //%include "gdcm_arrays_csharp.i"
 
-%apply char[] { char* buffer }
+%apply signed char[] { signed char* buffer }
 %apply unsigned int[] { unsigned int dims[3] }
 
 //%apply byte OUTPUT[] { char* buffer } ;
@@ -402,10 +410,13 @@ EXTEND_CLASS_PRINT(gdcm::File)
 //       %typemap(csin)   TYPE[] "$csinput"
 //%enddef
 //%cs_marshal_array(char, byte)
+%ignore gdcm::Bitmap::GetBuffer(char* buffer) const;
 %include "gdcmBitmap.h"
-EXTEND_CLASS_PRINT(gdcm::Bitmap)
 %extend gdcm::Bitmap
 {
+  bool GetBuffer(signed char *buffer) const {
+    return self->GetBuffer((char*)buffer);
+  }
   bool GetArray(unsigned char buffer[]) const {
     assert( $self->GetPixelFormat() == PixelFormat::UINT8 );
     return $self->GetBuffer((char*)buffer);
@@ -431,8 +442,9 @@ EXTEND_CLASS_PRINT(gdcm::Bitmap)
     return $self->GetBuffer((char*)buffer);
   }
 };
-%clear char* buffer;
+%clear signed char* buffer;
 %clear unsigned int* dims;
+EXTEND_CLASS_PRINT(gdcm::Bitmap)
 
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
@@ -473,6 +485,8 @@ EXTEND_CLASS_PRINT(gdcm::Dict)
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
+%template (TagSetType) std::set<gdcm::Tag>;
+%ignore gdcm::Reader::SetStream;
 %include "gdcmReader.h"
 //EXTEND_CLASS_PRINT(gdcm::Reader)
 %include "gdcmPixmapReader.h"
@@ -490,14 +504,17 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmStringFilter.h"
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
-//%template (ValuesType)      std::set<std::string>;
+%template (ValuesType)      std::set<std::string>;
 %rename (JavaTagToValue) SWIGTagToValue;
-%include "gdcmScanner.h"
-EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmSubject.h"
 %include "gdcmCommand.h"
+
+%template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
+%include "gdcmScanner.h"
+EXTEND_CLASS_PRINT(gdcm::Scanner)
+
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
 
@@ -612,7 +629,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
-%template (DoubleType) std::vector<double>;
+%template (DoubleArrayType) std::vector<double>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
@@ -620,6 +637,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+%include "gdcmIconImageGenerator.h"
+%include "gdcmIconImageFilter.h"
 
 %feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"

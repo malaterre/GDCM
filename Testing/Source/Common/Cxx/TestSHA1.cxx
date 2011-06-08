@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,6 +16,7 @@
 #include "gdcmTesting.h"
 
 #include <iostream>
+#include <cstring> // strcmp
 
 static const char * const gdcmSHA1SumFiles[][2] = {
 { "265465a2e3b204ab9a094f2de56bbec96d55ab74" , "00191113.dcm" },

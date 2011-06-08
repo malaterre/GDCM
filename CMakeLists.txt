@@ -38,7 +38,7 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 17)
+SET(GDCM_BUILD_VERSION 18)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_API_VERSION
@@ -67,6 +67,9 @@ IF(NOT GDCM_TARGETS_NAME)
   SET(GDCM_TARGETS_NAME GDCMTargets)
   SET(GDCM_STANDALONE 1)
 ENDIF(NOT GDCM_TARGETS_NAME)
+#-----------------------------------------------------------------------------
+# PDB handling
+INCLUDE(${GDCM_SOURCE_DIR}/CMake/InstallMacros.cmake)
 #-----------------------------------------------------------------------------
 INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
 CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
@@ -299,7 +302,7 @@ IF(GDCM_USE_SYSTEM_OPENJPEG)
   # For some reason I cannot specify the version I want.
   # FIND_PACKAGE(OpenJPEG 2.0 REQUIRED)
   # oh well we should handle both 1.0 and 2.0 anyway...
-  #FIND_PACKAGE(OpenJPEG REQUIRED)
+  FIND_PACKAGE(OpenJPEG REQUIRED)
   SET(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
 ELSE(GDCM_USE_SYSTEM_OPENJPEG)
   SET(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
@@ -552,6 +555,15 @@ SET(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
 IF(BUILD_APPLICATIONS)
   SUBDIRS(Applications)
 ENDIF(BUILD_APPLICATIONS)
+#-----------------------------------------------------------------------------
+# Allow user to set a postfix symbol to a target library name (eg. 'd')
+IF(WIN32)
+  SET(GDCM_DEBUG_POSTFIX "" CACHE STRING "Globally append a debug postfix symbols on all libraries")
+  if(GDCM_DEBUG_POSTFIX)
+    set(CMAKE_DEBUG_POSTFIX "${GDCM_DEBUG_POSTFIX}")
+  endif(GDCM_DEBUG_POSTFIX)
+  MARK_AS_ADVANCED(GDCM_DEBUG_POSTFIX)
+ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
 # CPack stuff
@@ -572,32 +584,24 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_PACKAGE_INSTALL_DIRECTORY "GDCM ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
   SET(CPACK_SOURCE_PACKAGE_FILE_NAME "gdcm-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
-  #SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
   IF(WIN32 AND NOT UNIX)
-    #STRING(REGEX REPLACE "/" "\\\\\\\\" CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/Utilities/Release/GDCMInstall.bmp")
-
-    # There is a bug in NSI that does not handle full unix paths properly. Make
-    # sure there is at least one set of four (4) backlasshes.
-    #SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
+    # There is a bug in NSI that does not handle full UNIX paths properly. Make
+    # sure there is at least one set of four (4) backlashes.
     SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\gdcmviewer.exe")
     SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
     SET(CPACK_NSIS_HELP_LINK "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_MODIFY_PATH ON)
-    IF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
-    ELSE(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
-    STRING(REPLACE ${PROJECT_NAME} ${CPACK_PACKAGE_INSTALL_DIRECTORY} dummy ${CMAKE_INSTALL_PREFIX} )
-    SET(CMAKE_INSTALL_PREFIX ${dummy} CACHE PATH "" FORCE)
-    ENDIF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    # IF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    # ELSE(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    # STRING(REPLACE ${PROJECT_NAME} ${CPACK_PACKAGE_INSTALL_DIRECTORY} dummy ${CMAKE_INSTALL_PREFIX} )
+    # SET(CMAKE_INSTALL_PREFIX ${dummy} CACHE PATH "" FORCE)
+    # ENDIF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
 
   ELSE(WIN32 AND NOT UNIX)
-    # http://www.vtk.org/Wiki/CMake:CPackConfiguration
-    # List of files to be stripped. Starting with CMake 2.6.0 CPACK_STRIP_FILES will be a boolean variable which enables
-    # stripping of all files (a list of files evaluates to TRUE in CMake, so this change is compatible).
-    SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmscanner;bin/gdcminfo;bin/gdcmraw;bin/gdcmimg;bin/gdcmtar")
+    SET(CPACK_STRIP_FILES TRUE)
     SET(CPACK_SOURCE_STRIP_FILES "")
     SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
-
   ENDIF(WIN32 AND NOT UNIX)
 
   # cygwin stff also copied from cmake
@@ -631,7 +635,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_PACKAGE_CONTACT ${GDCM_PACKAGE_CONTACT})
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
-  SET(CPACK_SOURCE_IGNORE_FILES "/debian/" "/CVS/" "/\\\\.git/" "TODO" "/Testing/Data/")
+  SET(CPACK_SOURCE_IGNORE_FILES "/\\\\.gitmodules" "/\\\\.git/" "TODO" "/Testing/Data/")
   SET(CPACK_IGNORE_FILES ${CPACK_SOURCE_IGNORE_FILES})
 
   # List executables
@@ -656,6 +660,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   endif(GDCM_BUILD_APPLICATIONS)
   list(APPEND components Libraries)
   list(APPEND components Headers)
+  list(APPEND components Development)
   if(GDCM_WRAP_PYTHON)
     list(APPEND components PythonModule)
   endif(GDCM_WRAP_PYTHON)
@@ -665,6 +670,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   if(GDCM_WRAP_JAVA)
     list(APPEND components JavaModule)
   endif(GDCM_WRAP_JAVA)
+  if(GDCM_WRAP_PHP)
+    list(APPEND components PHPModule)
+  endif(GDCM_WRAP_PHP)
   if(GDCM_USE_VTK)
     foreach(comp ${components})
       list(APPEND components VTK${comp})
@@ -684,12 +692,14 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PYTHONMODULE_DISPLAY_NAME "GDCM Python Module")
   set(CPACK_COMPONENT_CSHARPMODULE_DISPLAY_NAME "GDCM C# Module")
   set(CPACK_COMPONENT_JAVAMODULE_DISPLAY_NAME "GDCM Java Module")
+  set(CPACK_COMPONENT_PHPMODULE_DISPLAY_NAME "GDCM PHP Module")
   set(CPACK_COMPONENT_VTKAPPLICATIONS_DISPLAY_NAME "VTK/GDCM Applications")
   set(CPACK_COMPONENT_VTKLIBRARIES_DISPLAY_NAME "VTK/GDCM Libraries")
   set(CPACK_COMPONENT_VTKHEADERS_DISPLAY_NAME "VTK/GDCM C/C++ Headers")
   set(CPACK_COMPONENT_VTKPYTHONMODULE_DISPLAY_NAME "VTK/GDCM Python Module")
   set(CPACK_COMPONENT_VTKCSHARPMODULE_DISPLAY_NAME "VTK/GDCM C# Module")
   set(CPACK_COMPONENT_VTKJAVAMODULE_DISPLAY_NAME "VTK/GDCM Java Module")
+  set(CPACK_COMPONENT_VTKPHPMODULE_DISPLAY_NAME "VTK/GDCM PHP Module")
   set(CPACK_COMPONENT_PARAVIEWMODULE_DISPLAY_NAME "ParaView Module")
 
   # Provide descriptions for each of the components to install.
@@ -709,6 +719,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     "C# Module for GDCM")
   set(CPACK_COMPONENT_JAVAMODULE_DESCRIPTION
     "Java Module for GDCM")
+  set(CPACK_COMPONENT_PHPMODULE_DESCRIPTION
+    "PHP Module for GDCM")
   set(CPACK_COMPONENT_VTKAPPLICATIONS_DESCRIPTION
     "Command line applications that uses GDCM: gdcmviewer & gdcm2vtk")
   set(CPACK_COMPONENT_VTKLIBRARIES_DESCRIPTION
@@ -721,6 +733,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     "C# Module for VTK/GDCM")
   set(CPACK_COMPONENT_VTKJAVAMODULE_DESCRIPTION
     "Java Module for VTK/GDCM")
+  set(CPACK_COMPONENT_VTKPHPMODULE_DESCRIPTION
+    "PHP Module for VTK/GDCM")
   set(CPACK_COMPONENT_PARAVIEWMODULE_DESCRIPTION
     "ParaView Module for VTK/GDCM")
 
@@ -730,17 +744,23 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PYTHONMODULE_GROUP "Development")
   set(CPACK_COMPONENT_CSHARPMODULE_GROUP "Development")
   set(CPACK_COMPONENT_JAVAMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_PHPMODULE_GROUP "Development")
   set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_HEADERS_GROUP "Development")
   set(CPACK_COMPONENT_VTKAPPLICATIONS_GROUP "Runtime")
   set(CPACK_COMPONENT_VTKPYTHONMODULE_GROUP "Development")
   set(CPACK_COMPONENT_VTKCSHARPMODULE_GROUP "Development")
   set(CPACK_COMPONENT_VTKJAVAMODULE_GROUP "Development")
+  set(CPACK_COMPONENT_VTKPHPMODULE_GROUP "Development")
   set(CPACK_COMPONENT_VTKLIBRARIES_GROUP "Development")
   set(CPACK_COMPONENT_VTKHEADERS_GROUP "Development")
   set(CPACK_COMPONENT_PARAVIEWMODULE_GROUP "Runtime")
   # Expand the "Development" group by default, since we have so few components.
   # Also, provide this group with a description.
+  if(CMAKE_VERSION VERSION_EQUAL 2.8.3)
+    # The following is needed for CMake 2.8.3 and above to preserve backward compat
+    set(CPACK_MONOLITHIC_INSTALL 1)
+  endif(CMAKE_VERSION VERSION_EQUAL 2.8.3)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED ON)
   set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
     "All of the tools you'll ever need to develop software using GDCM")
@@ -753,12 +773,14 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PYTHONMODULE_DEPENDS Libraries)
   set(CPACK_COMPONENT_CSHARPMODULE_DEPENDS Libraries)
   set(CPACK_COMPONENT_JAVAMODULE_DEPENDS Libraries)
+  set(CPACK_COMPONENT_PHPMODULE_DEPENDS Libraries)
   set(CPACK_COMPONENT_VTKHEADERS_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKLIBRARIES_DEPENDS Libraries)
   set(CPACK_COMPONENT_VTKAPPLICATIONS_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKPYTHONMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKCSHARPMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_VTKJAVAMODULE_DEPENDS VTKLibraries)
+  set(CPACK_COMPONENT_VTKPHPMODULE_DEPENDS VTKLibraries)
   set(CPACK_COMPONENT_PARAVIEWMODULE_DEPENDS VTKLibraries)
 
   # Create two installation types with pre-selected components.
@@ -772,12 +794,14 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PYTHONMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_CSHARPMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_JAVAMODULE_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_PHPMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKLIBRARIES_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKHEADERS_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKAPPLICATIONS_INSTALL_TYPES Full)
   set(CPACK_COMPONENT_VTKPYTHONMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKCSHARPMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_VTKJAVAMODULE_INSTALL_TYPES Developer Full)
+  set(CPACK_COMPONENT_VTKPHPMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_PARAVIEWMODULE_INSTALL_TYPES Developer Full)
 
   INCLUDE(CPack)

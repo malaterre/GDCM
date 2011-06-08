@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -54,7 +53,7 @@ int main(int argc, char *argv[])
   gdcm::File &file = reader.GetFile();
   gdcm::DataSet &ds = file.GetDataSet();
 
-  const unsigned int nitems = 1000;
+  //const unsigned int nitems = 1000;
   const unsigned int ptr_len = 42; /*94967296 / nitems; */
   //assert( ptr_len == 42949672 );
   char *ptr = new char[ptr_len];

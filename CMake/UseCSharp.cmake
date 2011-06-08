@@ -7,7 +7,7 @@
 #   CSHARP_LINK_LIBRARIES(name [ libraries ])
 #     - Link libraries to csharp library
 #
-#  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
@@ -54,7 +54,7 @@ IF(NOT CMAKE_CSHARP_COMPILER)
   MESSAGE("Sorry C# v${DESIRED_CSHARP_COMPILER_VERSION} was not found on your system")
 ELSE(NOT CMAKE_CSHARP_COMPILER)
   #IF (NOT CSHARP_FIND_QUIETLY)
-  MESSAGE("Will be using C# v${DESIRED_CSHARP_COMPILER_VERSION}: ${CMAKE_CSHARP_COMPILER}")
+  MESSAGE(STATUS "Will be using C# v${DESIRED_CSHARP_COMPILER_VERSION}: ${CMAKE_CSHARP_COMPILER}")
   #ENDIF (NOT CSHARP_FIND_QUIETLY)
 ENDIF(NOT CMAKE_CSHARP_COMPILER)
 

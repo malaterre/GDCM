@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -265,14 +264,14 @@ int main(int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( debug != 0);
+  gdcm::Trace::SetWarning( warning != 0);
+  gdcm::Trace::SetError( error != 0);
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( verbose != 0);
+    gdcm::Trace::SetError( verbose!= 0);
     }
 
   // else
@@ -311,7 +310,7 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
+  //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   //std::cout << h << std::endl;
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
@@ -374,8 +373,40 @@ int main(int argc, char *argv[])
     }
   else
     {
-    std::cerr << "Unhandled" << std::endl;
-    return 1;
+    const gdcm::Value &value = pdde.GetValue();
+    const gdcm::Value * v = &value;
+    const gdcm::SequenceOfItems *sqi = dynamic_cast<const gdcm::SequenceOfItems*>( v );
+    if( sqi )
+      {
+      //std::ofstream output(outfilename.c_str(), std::ios::binary);
+      //sqi->Write<gdcm::ImplicitDataElement, gdcm::SwapperNoOp>(output);
+      unsigned int nfrags = sqi->GetNumberOfItems();
+      gdcm::FilenameGenerator fg;
+      fg.SetNumberOfFilenames( nfrags );
+      fg.SetPrefix( outfilename.c_str() );
+      fg.SetPattern( pattern.c_str() );
+      if(!fg.Generate())
+        {
+        std::cerr << "Could not generate" << std::endl;
+        return 1;
+        }
+      for(unsigned int i = 0; i < nfrags; ++i)
+        {
+        const gdcm::Item& frag = sqi->GetItem(i+1);
+        const gdcm::DataSet &subds = frag.GetNestedDataSet();
+        const char *outfilenamei = fg.GetFilename(i);
+        std::ofstream outputi(outfilenamei, std::ios::binary);
+        // Let's imagine we found an undefined length Pixel Data attribute in
+        // this sequence. Let's pick ExplicitDataElement for writing out then
+        subds.Write<gdcm::ExplicitDataElement, gdcm::SwapperNoOp>(outputi);
+        }
+
+      }
+    else
+      {
+      std::cerr << "Unhandled" << std::endl;
+      return 1;
+      }
     }
 
   return 0;

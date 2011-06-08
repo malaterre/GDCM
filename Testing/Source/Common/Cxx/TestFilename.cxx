@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,6 +16,7 @@
 #include "gdcmTesting.h"
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib> // EXIT_FAILURE
 
 /*!
@@ -65,18 +65,18 @@ int TestFilename(int argc, char *argv[])
     return 1;
     }
   std::cerr << "Current:" << current << std::endl;
-  gdcm::Filename fn(current.c_str());
-  std::cerr << fn.GetPath() << std::endl;
-  std::string current2 = fn.GetPath();
+  gdcm::Filename fn0(current.c_str());
+  std::cerr << fn0.GetPath() << std::endl;
+  std::string current2 = fn0.GetPath();
   current2 += "/./";
-  current2 += fn.GetName();
+  current2 += fn0.GetName();
   std::cerr << current2 << std::endl;
   if( current2 == current )
     {
     return 1;
     }
   gdcm::Filename fn2(current2.c_str());
-  if( !fn.IsIdentical(fn2))
+  if( !fn0.IsIdentical(fn2))
     {
     return 1;
     }
@@ -114,29 +114,29 @@ int TestFilename(int argc, char *argv[])
   'm',
   0}; // trailing NULL char
   std::string sfn1 = gdcm::Testing::GetTempFilename(ifn1);
-  const char *fn1 = sfn1.c_str();
+  const char *csfn1 = sfn1.c_str();
   std::string sfn2 = gdcm::Testing::GetTempFilename(ifn2);
-  const char *fn2 = sfn2.c_str();
-  std::ofstream outputFileStream( fn1 );
+  const char *csfn2 = sfn2.c_str();
+  std::ofstream outputFileStream( csfn1 );
   if ( ! outputFileStream.is_open() )
     {
-    std::cerr << "Failed to create UTF-8 file: " << fn1 << std::endl;
+    std::cerr << "Failed to create UTF-8 file: " << csfn1 << std::endl;
     return EXIT_FAILURE;
     }
   const char secret[]= "My_secret_pass_phrase";
   outputFileStream << secret;
   outputFileStream.close();
-  if( !gdcm::System::FileExists(fn1) )
+  if( !gdcm::System::FileExists(csfn1) )
     {
-    std::cerr << "File does not exist: " << fn1 << std::endl;
+    std::cerr << "File does not exist: " << csfn1 << std::endl;
     return EXIT_FAILURE;
     }
 
   // Now open version 2 (different encoding)
-  std::ifstream inputFileStream( fn2 );
+  std::ifstream inputFileStream( csfn2 );
   if ( ! inputFileStream.is_open() )
     {
-    std::cerr << "Failed to open UTF-8 file: " << fn2 << std::endl;
+    std::cerr << "Failed to open UTF-8 file: " << csfn2 << std::endl;
     return EXIT_FAILURE;
     }
   std::string ssecret;
@@ -148,21 +148,30 @@ int TestFilename(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-  if( !gdcm::System::RemoveFile(fn1) )
+  if( !gdcm::System::RemoveFile(csfn1) )
     {
-    std::cerr << "Could not remvoe #1: " << fn1 << std::endl;
+    std::cerr << "Could not remvoe #1: " << csfn1 << std::endl;
     return EXIT_FAILURE;
     }
   // cannot remove twice the same file:
-  if( gdcm::System::RemoveFile(fn2) )
+  if( gdcm::System::RemoveFile(csfn2) )
     {
-    std::cerr << "Could remvoe #2 a second time...seriously " << fn2 << std::endl;
+    std::cerr << "Could remvoe #2 a second time...seriously " << csfn2 << std::endl;
     return EXIT_FAILURE;
     }
 #endif
 }
 
 {
+
+//#define TESTLONGPATHNAMES
+#ifdef TESTLONGPATHNAMES
+	//why are we testing this?  This is the operating system's deal, not GDCM's.
+	//GDCM is not responsible for long path names, and cannot fix this issue.
+	//if we want to move this to a configuration option (ie, test for long pathnames),
+	//then we can--otherwise, windows users should just beware of this issue.
+	//This path limit has been the case since Windows 95, and is unlikely to change any time soon.
+
   // Apparently there is an issue with long pathanem i nWin32 system:
   // http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
   // The only way to work around the 260 byte limitation it appears as if we
@@ -175,7 +184,11 @@ int TestFilename(int argc, char *argv[])
   const char *directory_ = gdcm::Testing::GetTempDirectory(subdir);
 #ifdef _WIN32
   gdcm::Filename mydir( directory_ );
-  std::string unc = "\\\\?\\";
+  std::string unc = "\\\\?\\";//on Windows, to use UNC, you need to:
+  //a) append this string
+  //b) use a network drive (ie, the gdcm file is made on a network drive) that
+  //c) you have access to.
+  //I don't think this is a good or useful test. mmr
   unc += mydir.ToWindowsSlashes();
   const char *directory = unc.c_str();
 #else
@@ -211,12 +224,13 @@ int TestFilename(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-    }
+  }
 else
 {
     std::cerr << "seriously " << fn << std::endl;
     return EXIT_FAILURE;
 }
+#endif //TESTLONGPATHNAMES
 }
 
   return 0;

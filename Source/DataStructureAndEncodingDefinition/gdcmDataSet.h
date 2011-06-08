@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -116,7 +115,6 @@ public:
     for( ; it != DES.end(); ++it)
       {
       assert( !(it->GetLength<TDE>().IsUndefined()) );
-      VL len = it->GetLength<TDE>();
       if ( it->GetTag() != Tag(0xfffe,0xe00d) )
         {
         ll += it->GetLength<TDE>();
@@ -273,13 +271,15 @@ protected:
   void InsertDataElement(const DataElement& de) {
     //if( de.GetTag() == Tag(0xfffe,0xe00d) ) return;
     //if( de.GetTag() == Tag(0xfffe,0xe0dd) ) return;
-    std::pair<Iterator,bool> pr = DES.insert(de);
 #ifndef NDEBUG
+    std::pair<Iterator,bool> pr = DES.insert(de);
     if( pr.second == false )
       {
       gdcmWarningMacro( "DataElement: " << de << " was already found, skipping duplicate entry.\n"
         "Original entry kept is: " << *pr.first );
       }
+#else
+    DES.insert(de);
 #endif
     assert( de.IsEmpty() || de.GetVL() == de.GetValue().GetLength() );
     }

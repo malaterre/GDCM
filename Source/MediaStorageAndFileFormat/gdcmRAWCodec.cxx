@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -18,9 +17,11 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmUnpacker12Bits.h"
-#include <limits>
 
+#include <limits>
 #include <sstream>
+
+#include <cstring>
 
 namespace gdcm
 {
@@ -89,7 +90,15 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
     // pixel of the tiled image.
     // removal of this assert also solve an issue with: SIEMENS_GBS_III-16-ACR_NEMA_1.acr
     // where we need to discard trailing pixel data bytes.
-    memcpy(outBytes, inBytes, inOutBufferLength);
+    if( inOutBufferLength <= inBufferLength )
+      {
+      memcpy(outBytes, inBytes, inOutBufferLength);
+      }
+    else
+      {
+      gdcmWarningMacro( "Requesting too much data. Truncating result" );
+      memcpy(outBytes, inBytes, inBufferLength);
+      }
     return true;
     }
   // else
@@ -103,7 +112,7 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
   if(!r) return false;
 
   std::string str = os.str();
-  std::string::size_type check = str.size();
+  //std::string::size_type check = str.size();//unused
 
   
   if( this->GetPixelFormat() == PixelFormat::UINT12 ||
@@ -111,8 +120,7 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
     {
     size_t len = str.size() * 16 / 12;
     char * copy = new char[len];
-    Unpacker12Bits u12;
-    bool b = u12.Unpack(copy, &str[0], str.size() );
+    bool b = Unpacker12Bits::Unpack(copy, &str[0], str.size() );
     assert( b );
     assert (len == inOutBufferLength);
     assert(inOutBufferLength == len);

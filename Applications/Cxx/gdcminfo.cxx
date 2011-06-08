@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -349,7 +348,6 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
     return 1;
     }
   const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = file.GetDataSet();
   gdcm::MediaStorage ms;
   ms.SetFromFile(file);
   /*
@@ -379,8 +377,8 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
       std::cerr << "Could not read image from: " << filename << std::endl;
       return 1;
       }
-    const gdcm::File &file = reader.GetFile();
-    const gdcm::DataSet &ds = file.GetDataSet();
+    //const gdcm::File &file = reader.GetFile();
+    //const gdcm::DataSet &ds = file.GetDataSet();
     const gdcm::Image &image = reader.GetImage();
     const double *dircos = image.GetDirectionCosines();
     gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
@@ -412,6 +410,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
   else if ( ms == gdcm::MediaStorage::EncapsulatedPDFStorage )
     {
 #ifdef GDCM_USE_SYSTEM_POPPLER
+    const gdcm::DataSet &ds = file.GetDataSet();
     const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x42,0x11) );
     const gdcm::ByteValue* bv = de.GetByteValue();
     const char *p = bv->GetPointer();
@@ -521,7 +520,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
 #endif // GDCM_USE_SYSTEM_POPPLER
     }
   // Do the IOD verification !
-  bool v = defs.Verify( file );
+  //bool v = defs.Verify( file );
   //std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
 
   return 0;
@@ -678,14 +677,14 @@ int main(int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( debug != 0);
+  gdcm::Trace::SetWarning( warning != 0);
+  gdcm::Trace::SetError( error != 0);
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( verbose != 0);
+    gdcm::Trace::SetError( verbose != 0);
     }
 
   if( !gdcm::System::FileExists(filename.c_str()) )
@@ -728,7 +727,7 @@ int main(int argc, char *argv[])
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     gdcm::Directory d;
-    d.Load(filename, recursive);
+    d.Load(filename, recursive!= 0);
     gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
     for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
       {

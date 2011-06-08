@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -143,6 +142,7 @@ int TestSystem(int, char *[])
   time_t timep; long milliseconds;
   if( !gdcm::System::ParseDateTime(timep, milliseconds, date) )
     {
+    std::cerr << "Could not re-parse: " << date << std::endl;
     return 1;
     }
   char date2[22];
@@ -188,6 +188,62 @@ int TestSystem(int, char *[])
     std::cerr << "date1=" << date << std::endl;
     std::cerr << "date2=" << date2 << std::endl;
     return 1;
+    }
+}
+
+  // Check some valid date
+{
+  // YYYYMMDDHHMMSS.FFFFFF&ZZXX
+  static const char *dates[] = {
+    "2001",
+    "200101",
+    "20010102",
+    "2001010203",
+    "200101020304",
+    "20010102030405",
+    "20010102030405",
+    "20010102030405.01",
+    "20010102030405.0101",
+    "20010102030405.010101",
+  };
+  for(int i = 0; i < 10; ++i )
+    {
+    const char *date = dates[i];
+    time_t timep; long milliseconds;
+    if( !gdcm::System::ParseDateTime(timep, milliseconds, date) )
+      {
+      std::cerr << "Should accept: " << date << std::endl;
+      return 1;
+      }
+    }
+}
+  // Check some invalid date
+{
+  // YYYYMMDDHHMMSS.FFFFFF&ZZXX
+  static const char *dates[] = {
+    "200",
+    "200121",
+    "20010142",
+    "2001010233",
+    "200101020374",
+    "20010102030485",
+    "20010102030405.",
+    "20010102030405-0000000",
+    "20010102030405.0000001",
+    "20010102030405.0000001",
+  };
+  for(int i = 0; i < 10; ++i )
+    {
+    const char *date = dates[i];
+    time_t timep; long milliseconds;
+    if( gdcm::System::ParseDateTime(timep, milliseconds, date) )
+      {
+      char buffer[22];
+      gdcm::System::FormatDateTime(buffer, timep, milliseconds);
+      std::cerr << "Should not accept: " << date << std::endl;
+      std::cerr << "rendered as: " << buffer << std::endl;
+      return 1;
+      }
     }
 }
 
@@ -312,6 +368,13 @@ std::cerr << "found:" << ss1 << std::endl;
 {
 std::cerr << "found:" << ss2 << std::endl;
   res++;
+}
+
+  const char *codeset = gdcm::System::GetLocaleCharset();
+if( !codeset )
+{
+std::cerr << "Could nto find Charset on your system. Please report." << std::endl;
+res++;
 }
 
   return res;

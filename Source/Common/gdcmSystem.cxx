@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -59,6 +58,10 @@
 #include <fcntl.h>
 #include <unistd.h> /* gethostname */
 #include <strings.h> // strncasecmp
+#endif
+
+#if defined(GDCM_HAVE_LANGINFO_H)
+#include <langinfo.h> // nl_langinfo
 #endif
 
 // TODO: WIN32 replacement for C99 stuff:
@@ -514,6 +517,7 @@ size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
   return sres.size();
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 bool System::GetHardwareAddress(unsigned char addr[6])
 {
   int stat = 0; //uuid_get_node_id(addr);
@@ -535,6 +539,7 @@ bool System::GetHardwareAddress(unsigned char addr[6])
   //gdcmWarningMacro("Problem in finding the MAC Address");
   return false;
 }
+#endif
 
 #if defined(_WIN32) && !defined(GDCM_HAVE_GETTIMEOFDAY)
 #include <stdio.h>
@@ -638,13 +643,20 @@ bool System::ParseDateTime(time_t &timep, const char date[22])
 bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22])
 {
   if(!date) return false;
-  assert( strlen(date) <= 22 );
   size_t len = strlen(date);
   if( len < 4 ) return false; // need at least the full year
+  if( len > 21 ) return false;
 
   struct tm ptm;
   // No such thing as strptime on some st*$^% platform
-  //char *ptr = strptime(date, "%Y%m%d%H%M%S", &ptm);
+#if defined(GDCM_HAVE_STRPTIME) && 0
+  char *ptr1 = strptime(date, "%Y%m%d%H%M%S", &ptm);
+  if( ptr1 != date + 14 )
+    {
+    // We stopped parsing the string at some point, assume this is an error
+    return false;
+    }
+#else
   // instead write our own:
   int year, mon, day, hour, min, sec, n;
   if ((n = sscanf(date, "%4d%2d%2d%2d%2d%2d",
@@ -659,10 +671,15 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     case 5: sec = 0;
       }
     ptm.tm_year = year - 1900;
+    if( mon < 1 || mon > 12 ) return false;
     ptm.tm_mon = mon - 1;
+    if( day < 1 || day > 31 ) return false;
     ptm.tm_mday = day;
+    if( hour > 24 ) return false;
     ptm.tm_hour = hour;
+    if( min > 60 ) return false;
     ptm.tm_min = min;
+    if( sec > 60 ) return false;
     ptm.tm_sec = sec;
     ptm.tm_wday = -1;
     ptm.tm_yday = -1;
@@ -672,6 +689,7 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     {
     return false;
     }
+#endif
   timep = mktime(&ptm);
   if( timep == (time_t)-1) return false;
 
@@ -692,10 +710,22 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
   return true;
 }
 
+const char *System::GetTimezoneOffsetFromUTC()
+{
+  static std::string buffer;
+  char outstr[10];
+  time_t t = time(NULL);
+  struct tm *tmp = localtime(&t);
+  size_t l = strftime(outstr, sizeof(outstr), "%z", tmp);
+  assert( l == 5 ); (void)l;
+  buffer = outstr;
+  return buffer.c_str();
+}
+
 bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 {
   // \precondition
-  assert( milliseconds >= 0 && milliseconds < 1000000 );
+  if( !(milliseconds >= 0 && milliseconds < 1000000) ) return false;
 
   // YYYYMMDDHHMMSS.FFFFFF&ZZXX
   if(!date) return false;
@@ -765,18 +795,13 @@ bool System::GetCurrentDateTime(char date[22])
   struct timeval tv;
   gettimeofday (&tv, NULL);
   timep = tv.tv_sec;
-  // A concatenated date-time character string in
-  // the format:
+  // A concatenated date-time character string in the format:
   // YYYYMMDDHHMMSS.FFFFFF&ZZXX
-  // The components of this string, from left to
-  // right, are YYYY = Year, MM = Month, DD =
-  // Day, HH = Hour (range "00" - "23"), MM =
-  // Minute (range "00" - "59"), SS = Second
-  // (range "00" - "60").
-  // FFFFFF = Fractional Second contains a
-  // fractional part of a second as small as 1
-  // millionth of a second (range ¿000000¿ -
-  // ¿999999¿).
+  // The components of this string, from left to right, are YYYY = Year, MM =
+  // Month, DD = Day, HH = Hour (range "00" - "23"), MM = Minute (range "00" -
+  // "59"), SS = Second (range "00" - "60").
+  // FFFFFF = Fractional Second contains a fractional part of a second as small
+  // as 1 millionth of a second (range 000000 - 999999).
   assert( tv.tv_usec >= 0 && tv.tv_usec < 1000000 );
   milliseconds = tv.tv_usec;
 
@@ -890,6 +915,74 @@ char *System::StrTokR(char *ptr, const char *sep, char **end)
 #else
   return strtok_r(ptr,sep,end);
 #endif
+}
+
+struct CharsetAliasType
+{
+  const char *alias;
+  const char *name;
+};
+
+#if defined(_WIN32)
+static const char *CharsetAliasToName(const char *alias)
+{
+  static CharsetAliasType aliases[] = {
+    { "CP1252", "UTF-8" }, // mingw + debian/6.0
+    { NULL, NULL },
+  };
+  for( CharsetAliasType *a = aliases; a->alias; a++)
+    {
+    if (strcmp (a->alias, alias) == 0)
+      {
+      return a->name;
+      }
+    }
+  // We need to tell the user...
+  return NULL;
+}
+#endif //_WIN32
+
+const char *System::GetLocaleCharset()
+{
+  const char *codeset = NULL;
+#if defined(GDCM_HAVE_NL_LANGINFO)
+  //setlocale (LC_CTYPE, NULL);
+  /* According to documentation nl_langinfo needs :
+     setlocale(3) needs to be executed with proper arguments before.
+     However even if CODESET only required LC_TYPE only setting LC_TYPE is not
+     enough to get it working on a debian/6.0 system within c++
+     so instead call setlocale on LC_ALL to fix it.
+   */
+  char *oldlocale = strdup(setlocale(LC_ALL, ""));
+  // TODO: what if setlocale return NULL ?
+  codeset = nl_langinfo (CODESET);
+  setlocale(LC_ALL, oldlocale);
+  free(oldlocale);
+#endif // GDCM_HAVE_NL_LANGINFO
+
+#if defined(_WIN32)
+#if 0
+  char buf1[128];
+  char buf2[128];
+  const char *codeset1;
+  const char *codeset2;
+  codeset1 = buf1;
+  codeset2 = buf2;
+  sprintf(buf1, "CP%d", GetConsoleCP());
+  sprintf(buf2, "CP%d", GetConsoleOutputCP());
+
+  // BUG: both returns 'CP437' on debian + mingw32...
+  // instead prefer GetACP() call:
+#endif
+  static char buf[2+10+1]; // 2 char, 10 bytes + 0
+  // GetACP: Retrieves the current Windows ANSI code page identifier for the
+  // operating system.
+  sprintf (buf, "CP%u", GetACP ());
+  codeset = CharsetAliasToName(buf);
+#endif
+
+  // warning ANSI_X3.4-1968 means ASCII
+  return codeset;
 }
 
 } // end namespace gdcm

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -14,6 +13,8 @@
 =========================================================================*/
 #include "gdcmTrace.h"
 #include "gdcmTransferSyntax.h"
+
+#include <limits.h>
 
 /*
  * jdatasrc.c
@@ -128,7 +129,9 @@ fill_input_buffer (j_decompress_ptr cinfo)
     src->infile->read( (char*)src->buffer, INPUT_BUF_SIZE);
     }
 
-  nbytes = src->infile->gcount();
+  std::streamsize gcount = src->infile->gcount();
+  assert(gcount < INT_MAX);
+  nbytes = (size_t)gcount;
 
   if (nbytes <= 0) {
     if (src->start_of_file)  /* Treat empty input file as fatal error */

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,12 +20,12 @@ namespace gdcm
 
 int TestFL()
 {
-  Element<VR::FL, VM::VM1> a = { TPI };
+  Element<VR::FL, VM::VM1> a = {{ TPI }};
   a.Print( std::cout );
   std::cout << std::endl;
 
   Element<VR::FL, VM::VM8> b =
-    { 0,1,2,3,4,5,6,7 };
+    {{ 0,1,2,3,4,5,6,7 }};
   b.Print( std::cout );
   std::cout << std::endl;
 
@@ -41,7 +40,7 @@ int TestFL()
 
 int TestFD()
 {
-  Element<VR::FD, VM::VM1> a = { TPI };
+  Element<VR::FD, VM::VM1> a = {{ TPI }};
   std::ostringstream os;
   a.Print( os );
   const std::string st = os.str(); // important
@@ -66,7 +65,8 @@ int TestAS()
   std::cout << std::endl;
 
   // TODO this should not compile:
-  Element<VR::AS, VM::VM6> b = { "019Yb" };
+  Element<VR::AS, VM::VM6> b = {{ "019Yb" }};
+  b = b;//to avoid the warning of b not being useful
 
   return 0;
 }
@@ -129,7 +129,7 @@ int TestOB()
 
 int TestUSVM3()
 {
-  Element<VR::US, VM::VM3> a = { 0x0001, 0x0002, 0x0003 };
+  Element<VR::US, VM::VM3> a = {{ 0x0001, 0x0002, 0x0003 }};
   a.Print( std::cout );
   std::cout << std::endl;
   unsigned short tmp = a.GetValue(0);

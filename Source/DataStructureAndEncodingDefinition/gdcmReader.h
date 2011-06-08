@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -93,6 +92,10 @@ public:
 
   /// Will only read the specified selected tags.
   bool ReadSelectedTags(std::set<Tag> const & tags);
+
+  /// Test whether this is a DICOM file
+  /// \warning need to call either SetFileName or SetStream first
+  bool CanRead() const;
 
 protected:
   bool ReadPreamble();

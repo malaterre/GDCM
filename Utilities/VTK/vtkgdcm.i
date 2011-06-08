@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -22,6 +21,12 @@
 #if defined(SWIGCSHARP)
 %{
 #define SWIGCSHARP
+%}
+#endif
+
+#if defined(SWIGPHP)
+%{
+#define SWIGPHP
 %}
 #endif
 
@@ -75,6 +80,8 @@
 #include "vtkVolumeReader.h"
 #include "vtkVolume16Reader.h"
 
+#include "vtkWindowToImageFilter.h"
+
 #include "vtkToolkits.h" // VTK_DATA_ROOT
 %}
 
@@ -111,6 +118,7 @@ using Kitware.VTK;
 #define VTK_FILTERING_EXPORT
 #define VTK_IO_EXPORT
 #define VTK_IMAGING_EXPORT
+#define VTK_RENDERING_EXPORT
 
 
 // FIXME. Including #include vtkSetGet would not work on siwg 1.3.33 ...
@@ -151,6 +159,9 @@ using Kitware.VTK;
 %ignore vtkMatrix4x4::Adjoint(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 %ignore vtkMatrix4x4::Invert(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 %ignore vtkMatrix4x4::Transpose(vtkMatrix4x4 *in, vtkMatrix4x4 *out);
+// In VTK 5.8 we have to ignore the const variant:
+%ignore vtkMatrix4x4::Invert(const vtkMatrix4x4 *in, vtkMatrix4x4 *out);
+%ignore vtkMatrix4x4::Transpose(const vtkMatrix4x4 *in, vtkMatrix4x4 *out);
 
 %ignore vtkImageWriter::GetInput; // I am getting a warning on swig 1.3.33 because of vtkImageAlgorithm.GetInput
 
@@ -346,7 +357,9 @@ using Kitware.VTK;
 }
 
 %include "vtkObjectBase.h"
+#ifdef SWIGCSHARP
 %csmethodmodifiers vtkObjectBase::ToString() "public override"
+#endif
 %extend vtkObjectBase
 {
   const char *ToString()
@@ -477,6 +490,22 @@ while we would want:
 %}
 };
 
+#ifdef SWIGPHP
+%extend vtkGDCMImageReader
+{
+//public function __construct2($res=null) {
+//  $this->_cPtr=vtkGDCMImageReader_Create();
+//}
+
+//%typemap(out) vtkGDCMImageReader* (vtkGDCMImageReader::New)
+//%{
+//public function __construct($res=null) {
+//  $this->_cPtr=vtkGDCMImageReader_Create();
+//}
+//%}
+};
+#endif
+
 %extend vtkGDCMImageWriter
 {
 %typemap(cscode) vtkGDCMImageWriter
@@ -491,6 +520,10 @@ while we would want:
 %clear double*;
 %clear double* GetDataSpacing();
 %clear double* GetDataOrigin();
+
+#ifdef SWIGPHP
+%include "vtkWindowToImageFilter.h"
+#endif
 
 #ifndef USEACTIVIZ
 %include "vtkImageExport.h"

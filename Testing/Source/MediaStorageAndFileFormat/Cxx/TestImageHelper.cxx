@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -20,10 +19,10 @@
 
 int TestImageHelper(int, char *[])
 {
-  gdcm::ImageHelper sh;
+//  gdcm::ImageHelper sh;
   const double pos[] = { 0,0,0,
                          1,1,1};
-  const double answer[3] = {1,1,1};
+  //const double answer[3] = {1,1,1};
 
   std::vector<double> impos(pos,pos+6);
   std::vector<double> spacing;

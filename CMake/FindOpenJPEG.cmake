@@ -6,7 +6,7 @@
 #  OPENJPEG_LIBRARIES - The libraries needed to use OpenJPEG
 
 #=============================================================================
-# Copyright 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+# Copyright 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -128,7 +127,7 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "D_CLUNIE_RG1_JPLL.dcm","08a9f8187cfad52150fffc80e76efa9e", "ae141f6fb91f63769a6adc572a942fb9" },
 { "D_CLUNIE_RG3_JPLY.dcm","3c39fb636e231a66e425d6c8645e086c", "cc2968949ffbb6548288ffde7e5202e4" },
 { "D_CLUNIE_MR3_RLE.dcm","847c8b74671107b463b90cbfa6535f7f", "fb03254fad02d2330d404225c3ea9b4e" },
-{ "NM-MONO2-16-13x-heart.dcm","05bb7ba880f849a5bb8fed713f4fc584", "c83ef2159abef677229d3afd26f9e6a0" },
+{ "NM-MONO2-16-13x-heart.dcm","7bfdb71668190142a547899329c1d9c3", "c83ef2159abef677229d3afd26f9e6a0" },
 { "LEADTOOLS_FLOWERS-8-MONO2-JpegLossy.dcm","bcfdeefa6f9808ae020586b164a29d99", "fa08fec923f34e009ec89f77232e52ad" },
 { "CT-MONO2-16-chest.dcm","f9110218ff6bd9310e6eb089fdb4ab0a", "78bb9ea4b746ff2aa5559be567f95030" },
 { "SIEMENS_Sonata-16-MONO2-Value_Multiplicity.dcm","aafebb62a52ad79ca0aea428fdfc7d1e", "017237320ccded3a367f07b44851788e" },

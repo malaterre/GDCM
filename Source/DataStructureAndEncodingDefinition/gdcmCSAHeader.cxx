@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -620,7 +619,7 @@ VR GetVRFromDataSetFormatDict( const Tag& t )
 {
   static const unsigned int nentries = sizeof(DataSetFormatDict) / sizeof(*DataSetFormatDict);
   VR ret = VR::VR_END;
-  static const Tag tend = Tag(0xffff,0xffff);
+  //static const Tag tend = Tag(0xffff,0xffff);
   for( unsigned int i = 0; i < nentries; ++i)
     {
     const DataSetFormatEntry &entry = DataSetFormatDict[i];
@@ -956,7 +955,6 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   InternalType = UNKNOWN; // reset
   gdcm::Tag t1(0x0029,0x0010);
   gdcm::Tag t2(0x0029,0x0020);
-  Tag toto = de.GetTag().GetPrivateCreator();
   uint16_t v = (de.GetTag().GetElement() << 8);
   uint16_t v2 = v >> 8;
   //if( de.GetTag().GetPrivateCreator() == t1 )
@@ -1033,7 +1031,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
         //std::cout << ds << std::endl;
         assert( ss.eof() );
         }
-      catch(std::exception &ex)
+      catch(std::exception &)
         {
         gdcmErrorMacro( "Something went wrong while decoding... please report" );
         return false;

@@ -48,6 +48,27 @@ IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "gdcm")
 ENDIF(UNIX)
 
+# See gdcm bug #3175803
+# This is fixed in SWIG 2.0.2:
+# http://sourceforge.net/tracker/?func=detail&atid=101645&aid=3166423&group_id=1645
+add_custom_command(TARGET ${SWIG_MODULE_php_gdcm_REAL_NAME}
+  PRE_BUILD
+  COMMAND sed -i -e 's/zend_error_noreturn/zend_error/g' "${swig_generated_file_fullname}"
+  COMMENT "Patching zend_error_noreturn into zend_error"
+  )
+
+# Let's copy gdcm.php into the bin dir:
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.php
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.php ${LIBRARY_OUTPUT_PATH}/gdcm.php
+  DEPENDS "${swig_generated_file_fullname}"
+  COMMENT "copying gdcm.php"
+)
+ADD_CUSTOM_TARGET(GDCMPHP ALL
+  DEPENDS ${LIBRARY_OUTPUT_PATH}/gdcm.php
+  COMMENT "building gdcm.php"
+)
+
 # Module are always place in the library destination
 # but for poor win32 user I decided to place them
 # right next to the other dlls

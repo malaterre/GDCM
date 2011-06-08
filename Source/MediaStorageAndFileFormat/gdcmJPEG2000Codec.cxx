@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -17,6 +16,8 @@
 #include "gdcmTrace.h"
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
+
+#include <cstring>
 
 #ifdef OPENJPEG_MAJOR_VERSION
 #if OPENJPEG_MAJOR_VERSION == 1
@@ -375,7 +376,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
@@ -446,6 +447,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     return false;
     }
 
+  int reversible;
 #if OPENJPEG_MAJOR_VERSION == 1
   /* catch events using our callbacks and give a local context */
   opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
@@ -484,7 +486,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
-  int reversible;
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
   bResult = opj_read_header(
@@ -586,7 +587,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   unsigned long len = Dimensions[0]*Dimensions[1] * (PF.GetBitsAllocated() / 8) * image->numcomps;
   char *raw = new char[len];
   //assert( len == fsrc->len );
-  for (unsigned int compno = 0; compno < image->numcomps; compno++)
+  for (unsigned int compno = 0; compno < (unsigned int)image->numcomps; compno++)
     {
     opj_image_comp_t *comp = &image->comps[compno];
 
@@ -1082,10 +1083,10 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
-  bool b = GetHeaderInfo( dummy_buffer, buf_size, ts );
+  bool b = GetHeaderInfo( dummy_buffer, (size_t)buf_size, ts );
   delete[] dummy_buffer;
   return b;
 }

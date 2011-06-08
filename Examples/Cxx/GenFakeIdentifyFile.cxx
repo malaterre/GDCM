@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -148,7 +147,7 @@ int main(int argc, char *argv[])
     {
     const gdcm::Tag &dicttag = dictit->first;
     if( dicttag == Tag(0x6e65,0x6146) ) break;
-    const gdcm::DictEntry &dictentry = dictit->second;
+    //const gdcm::DictEntry &dictentry = dictit->second;
     ds.Insert( CreateFakeElement( dicttag, false ) );
     }
   ds.Remove( gdcm::Tag(0x400,0x500) );

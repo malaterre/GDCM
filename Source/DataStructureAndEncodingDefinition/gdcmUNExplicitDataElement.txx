@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -99,6 +98,7 @@ std::istream &UNExplicitDataElement::ReadPreValue(std::istream &is)
     //gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
     //  TagField << " in order to read a buggy DICOM file." );
     //VRField = VR::INVALID;
+    (void)ex;
     ParseException pe;
     pe.SetLastElement( *this );
     throw pe;
@@ -173,7 +173,7 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
           assert(0);
           }
         }
-      catch( std::exception &ex)
+      catch( std::exception &)
         {
         // Must be one of those non-cp246 file...
         // but for some reason seekg back to previous offset + Read

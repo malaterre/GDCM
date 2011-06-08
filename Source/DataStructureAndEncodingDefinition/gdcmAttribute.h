@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -446,7 +445,11 @@ public:
     assert( GetVR().Compatible( de.GetVR() ) || de.GetVR() == VR::INVALID ); // In case of VR::INVALID cannot use the & operator
     if( de.IsEmpty() ) return;
     const ByteValue *bv = de.GetByteValue();
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( de.GetVR() == VR::UN /*|| de.GetVR() == VR::INVALID*/ )
+#else
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+#endif
       {
       SetByteValue(bv);
       }

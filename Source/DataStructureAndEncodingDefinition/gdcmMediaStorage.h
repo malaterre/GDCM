@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -114,6 +113,7 @@ public:
     RTIonPlanStorage, // 1.2.840.10008.5.1.4.1.1.481.8
     XRay3DAngiographicImageStorage, // 1.2.840.10008.5.1.4.1.1.13.1.1
     EnhancedXAImageStorage,
+    RTIonBeamsTreatmentRecordStorage, // 1.2.840.10008.5.1.4.1.1.481.9
     MS_END
   } MSType; // Media Storage Type
 

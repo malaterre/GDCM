@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -1433,7 +1432,7 @@ int vtkGDCMImageReader::RequestDataCompat()
     // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
     // the len of the buffer...technically all files should have the same len (not checked for now)
     unsigned long len = 0;
-    for(int j = dext[4]; j <= dext[5]; ++j)
+    for(int j = dext[4]; !this->AbortExecute && j <= dext[5]; ++j)
       {
       assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
       const char *filename = this->FileNames->GetValue( j );

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -235,14 +234,14 @@ int main(int argc, char *argv[])
     return 1;
     }
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
+  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
+  gdcm::Trace::SetError(  (error  > 0 ? true : false));
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
     }
 
   if( verbose )

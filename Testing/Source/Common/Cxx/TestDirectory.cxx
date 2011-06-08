@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -56,7 +55,7 @@ int TestDirectory(int argc, char *argv[])
     bool recursive = false;
     if ( argc > 2 )
       {
-      recursive = atoi(argv[2]);
+      recursive = (atoi(argv[2]) > 0 ? true : false);
       }
     res += TestOneDirectory( argv[1], recursive);
     }

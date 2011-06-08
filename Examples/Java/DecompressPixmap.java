@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -18,10 +17,10 @@
  * as ImplicitVRLittleEndian Transfer Syntax).
  *
  * Compilation:
- * $ CLASSPATH=gdcm.jar javac -source 1.5 ../../trunk/Examples/Java/DecompressPixmap.java -d .
+ * $ CLASSPATH=gdcm.jar javac ../../gdcm/Examples/Java/DecompressPixmap.java -d .
  *
  * Usage:
- * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java DecompressPixmap ~/Creatis/gdcmData/012345.002.050.dcm  out.dcm
+ * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java DecompressPixmap gdcmData/012345.002.050.dcm out.dcm
  */
 import gdcm.*;
 

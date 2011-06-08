@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -56,12 +55,14 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 #else
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[buf_size];
+  //assert(buf_size < INT_MAX);
+  char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
 
   JlsParamaters metadata;
-  if (JpegLsReadHeader(dummy_buffer, buf_size, &metadata) != OK)
+  //assert(buf_size < INT_MAX);
+  if (JpegLsReadHeader(dummy_buffer, (unsigned int)buf_size, &metadata) != OK)
     {
     return false;
     }
@@ -114,7 +115,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   else assert(0);
 
   // allowedlossyerror == 0 => Lossless
-  LossyFlag = metadata.allowedlossyerror;
+  LossyFlag = metadata.allowedlossyerror != 0;
 
   if( metadata.allowedlossyerror == 0 )
     {
@@ -172,7 +173,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       }
 
     // allowedlossyerror == 0 => Lossless
-    LossyFlag = metadata.allowedlossyerror;
+    LossyFlag = metadata.allowedlossyerror!= 0;
 
     const BYTE* pbyteCompressed = (const BYTE*)buffer;
     int cbyteCompressed = totalLen;
@@ -191,6 +192,10 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
     delete[] buffer;
 
+    if (result != OK)
+      {
+      return false;
+      }
     out = in;
 
     out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
@@ -228,7 +233,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       }
 
     // allowedlossyerror == 0 => Lossless
-    LossyFlag = metadata.allowedlossyerror;
+    LossyFlag = metadata.allowedlossyerror!= 0;
 
 
     int cbyteCompressed = totalLen;
@@ -244,10 +249,13 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
     JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
     ASSERT(result == OK);
-bool r = true;
+    bool r = true;
 
 
       delete[] mybuffer;
+      if (result != OK){
+        return false;
+      }
     os.write( (char*)&rgbyteOut[0], rgbyteOut.size() );
 
       if(!r) return false;
@@ -384,6 +392,13 @@ sample dit not suffer from that.
 void JPEGLSCodec::SetLossyError(int error)
 {
   LossyError = error;
+}
+
+bool JPEGLSCodec::Decode(DataElement const &, char* , uint32_t ,
+              uint32_t , uint32_t , uint32_t ,
+              uint32_t , uint32_t , uint32_t )
+{
+ return false;
 }
 
 } // end namespace gdcm

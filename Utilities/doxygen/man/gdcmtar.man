@@ -10,7 +10,8 @@ gdcmtar [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmtar is a command line tool used to tar/untar multi-frames images (including SIEMENS MOSAIC file)
+The \b gdcmtar is a command line tool used to tar/untar multi-frames images
+(including SIEMENS MOSAIC file)
 
 \section parameters PARAMETERS
 
@@ -24,8 +25,11 @@ file-out  DICOM output filename
 
 \subsection options options
 \verbatim
+     --enhance    enhance (default)
+  -U --unenhance  unenhance
   -M --mosaic     Split SIEMENS Mosaic image into multiple frames.
   -p --pattern    Specify trailing file pattern.
+     --root-uid        Root UID.
 \endverbatim
 
 \subsection general_options general options
@@ -49,11 +53,16 @@ file-out  DICOM output filename
          debug mode, print debug information
 \endverbatim
 
+\subsection environment_variable environment variable
+\verbatim
+  GDCM_ROOT_UID Root UID
+\endverbatim
+
 \section usage Typical usage
 \subsection mosaic SIEMENS Mosaic
 
 \verbatim
- $ gdcminfo MR-sonata-3D-as-Tile.dcm
+$ gdcminfo MR-sonata-3D-as-Tile.dcm
 \endverbatim
 
 \verbatim
@@ -105,7 +114,7 @@ Will output:
 \endverbatim
 
 \verbatim
- $ gdcminfo mosaic000.dcm
+$ gdcminfo mosaic000.dcm
 \endverbatim
 
 \verbatim
@@ -123,6 +132,6 @@ Dimensions: (64,64,1)
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2010 Mathieu Malaterre
+Copyright (c) 2006-2011 Mathieu Malaterre
 
 */

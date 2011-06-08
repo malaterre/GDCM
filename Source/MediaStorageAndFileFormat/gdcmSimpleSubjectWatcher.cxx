@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -29,7 +28,7 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
   m_IterationFilterCommand =  SimpleCommandType::New();
   m_AbortFilterCommand =      SimpleCommandType::New();
 
-  m_AnonymizeFilterCommand =      CommandType::New();
+  m_AnonymizeFilterCommand =  CommandType::New();
 
   // Assign the callbacks
   m_StartFilterCommand->SetCallbackFunction(this,
@@ -44,7 +43,6 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
                                         &SimpleSubjectWatcher::ShowAbort);
   m_AnonymizeFilterCommand->SetCallbackFunction(this,
                                         &SimpleSubjectWatcher::ShowAnonymization);
-
 
   // Add the commands as observers
   m_StartTag = m_Subject->AddObserver(StartEvent(), m_StartFilterCommand);
@@ -105,6 +103,8 @@ void SimpleSubjectWatcher::ShowProgress(Subject *caller, const Event &evt)
 {
   const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
   (void)caller;
+  if( !m_Comment.empty() )
+    std::cout << "(" << m_Comment << ") ";
   std::cout << "Progress: " << pe.GetProgress() << std::endl;
 }
 void SimpleSubjectWatcher::ShowIteration()

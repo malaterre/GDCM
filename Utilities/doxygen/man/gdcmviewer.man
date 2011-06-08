@@ -11,10 +11,11 @@ gdcmviewer [options] file-in
 \section description DESCRIPTION
 
 The \b gdcmviewer is a simple tool that show how to use vtkGDCMImageReader.
-The class that use gdcm to make a layer to VTK. \b gdcmviewer is basically only just a wrapper around GDCM.
+The class that use gdcm to make a layer to VTK. \b gdcmviewer is basically only
+just a wrapper around VTK/GDCM.
 
 This tool is meant for testing integration of GDCM in VTK. You should see it as
-a demo tool. It does compile with VTK ranging from 4.2 to 5.6, but only with
+a demo tool. It does compile with VTK ranging from 4.2 to 5.8, but only with
 VTK 5.2 (or above) can only play with the widgets (as described below).
 
 \section parameters PARAMETERS
@@ -60,7 +61,7 @@ For now gdcmviewer should be started from a command line prompt. The next
 argument should be the name of the DICOM file you wish to read. For instance:
 
 \verbatim
- $ gdcmviewer -V 012345.002.050.dcm
+$ gdcmviewer -V 012345.002.050.dcm
 \endverbatim
 
 gdcmviewer will try to read your file, and the print the vtk information
@@ -82,6 +83,6 @@ http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Gdcmviewer
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2010 Mathieu Malaterre
+Copyright (c) 2006-2011 Mathieu Malaterre
 
 */

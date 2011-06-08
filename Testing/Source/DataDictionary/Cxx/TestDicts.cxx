@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,7 +20,7 @@
 int TestDicts(int, char *[])
 {
   gdcm::Dicts dicts;
-  const gdcm::Dict &d = dicts.GetPublicDict();
+  //const gdcm::Dict &d = dicts.GetPublicDict();
   //std::cout << d << std::endl;
 
   const gdcm::Global& g = gdcm::GlobalInstance;

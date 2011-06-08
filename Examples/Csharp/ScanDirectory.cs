@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -33,7 +32,10 @@ public class ScanDirectory
     if(nfiles == 0) return 1;
     //System.Console.WriteLine( "Files:\n" + d.toString() );
 
-    Scanner s = new Scanner();
+    //Scanner s = new Scanner();
+    SmartPtrScan sscan = Scanner.New();
+    Scanner s = sscan.__ref__();
+    SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(s, "MySimple");
     s.AddTag( t );
     bool b = s.Scan( d.GetFilenames() );
     if(!b) return 1;

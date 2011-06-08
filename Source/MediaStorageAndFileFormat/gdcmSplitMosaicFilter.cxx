@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -76,7 +75,7 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
     const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
     if( !csael4.IsEmpty() )
       {
-      gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4 = { 0 };
+        gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4 = {{ 0 }};
       el4.Set( csael4.GetValue() );
       numberOfImagesInMosaic = el4.GetValue();
       }

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -102,8 +101,8 @@ public:
     ::X509 *ret = sk_X509_value(recips, i);
     return ret;
   }
-  void SetPrivateKey(::EVP_PKEY* pkey) {
-    this->pkey = pkey;
+  void SetPrivateKey(::EVP_PKEY* thepkey) {
+    this->pkey = thepkey;
   }
   ::EVP_PKEY* GetPrivateKey() const {
     return pkey;

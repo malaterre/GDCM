@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -537,6 +536,8 @@ std::istream &FileMetaInformation::Read(std::istream &is)
 
 std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 {
+  // \precondition
+  assert( is.good() );
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
   if( !IsEmpty() )
@@ -574,8 +575,21 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     }
   else if( t.GetGroup() == 0x0800 ) // Good ol' ACR NEMA
     {
-    is.seekg(-4, std::ios::cur); // Seek back
-    DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
+    char vr_str[3];
+    is.read(vr_str, 2);
+    vr_str[2] = '\0';
+    VR::VRType vr = VR::GetVRType(vr_str);
+    if( vr != VR::VR_END )
+      {
+      // File start with a 0x0008 element but no FileMetaInfo and is Explicit
+      DataSetTS = TransferSyntax::ExplicitVRBigEndian;
+      }
+    else
+      {
+      // File start with a 0x0008 element but no FileMetaInfo and is Implicit
+      DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
+      }
+    is.seekg(-6, std::ios::cur); // Seek back
     }
   else if( t.GetElement() == 0x0010 ) // Hum, is it a private creator ?
     {
@@ -600,7 +614,10 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     if( vr != VR::VR_END )
       {
       // Ok we found a VR, this is 99% likely to be our safe bet
-      DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
+      if( t.GetGroup() > 0xff || t.GetElement() > 0xff )
+        DataSetTS = TransferSyntax::ExplicitVRBigEndian;
+      else
+        DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
       }
     else
       {
@@ -669,7 +686,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       // Looks like an Explicit File Meta Information Header.
       is.seekg(-6, std::ios::cur); // Seek back
       //is.seekg(start, std::ios::beg); // Seek back
-      std::streampos dpos = is.tellg();
+      //std::streampos dpos = is.tellg();
       ExplicitDataElement xde;
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {

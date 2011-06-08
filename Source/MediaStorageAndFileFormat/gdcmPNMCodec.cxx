@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -138,7 +137,8 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
     is.get();
     }
   std::streampos pos = is.tellg();
-  size_t m = (len - pos ) / ( dims[0]*dims[1] );
+  //assert(pos < INT_MAX);
+  size_t m = (len - (size_t)pos ) / ( dims[0]*dims[1] );
   if( m * dims[0] * dims[1] != len - pos )
     {
     std::cerr << "Problem computing length" << std::endl;
@@ -192,7 +192,8 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
 bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
   is.seekg( 0, std::ios::end );
-  size_t len = is.tellg();
+  std::streampos len = is.tellg();
+  //assert(len < INT_MAX);
   is.seekg( 0, std::ios::beg );
 
   std::string type, str;
@@ -223,8 +224,10 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     {
     is.get();
     }
-  std::streampos pos = is.tellg();
-  size_t m = (len - pos ) / ( dims[0]*dims[1] );
+  std::streamoff pos = is.tellg();
+  //assert(len < INT_MAX);
+  //assert(pos < INT_MAX);
+  size_t m = ((size_t)len - (size_t)pos ) / ( dims[0]*dims[1] );
   if( m * dims[0] * dims[1] != len - pos )
     {
     std::cerr << "Problem computing length" << std::endl;

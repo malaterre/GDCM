@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -59,7 +58,8 @@ int main(int argc, char *argv[])
   // In this example we will show why using name to lookup attribute can be
   // dangerous.
   Tag tPatientName(0x0,0x0);
-  const DictEntry &de1 = pubdict.GetDictEntryByName("Patient Name", tPatientName);
+  //const DictEntry &de1 =
+  pubdict.GetDictEntryByName("Patient Name", tPatientName);
 
   std::cout << "Found: " << tPatientName << std::endl;
 
@@ -67,13 +67,15 @@ int main(int argc, char *argv[])
   // has become Patient's Name.
 
   Tag tPatientsName;
-  const DictEntry &de2 = pubdict.GetDictEntryByName("Patient's Name", tPatientsName);
+  //const DictEntry &de2 =
+  pubdict.GetDictEntryByName("Patient's Name", tPatientsName);
 
   std::cout << "Found: " << tPatientsName << std::endl;
 
   // Let's try to read an arbitrary DICOM Attribute:
   Tag tDoseGridScaling;
-  const DictEntry &de3 = pubdict.GetDictEntryByName("Dose Grid Scaling", tDoseGridScaling);
+  //const DictEntry &de3 =
+  pubdict.GetDictEntryByName("Dose Grid Scaling", tDoseGridScaling);
 
   std::cout << "Found: " << tDoseGridScaling << std::endl;
 
@@ -89,7 +91,7 @@ int main(int argc, char *argv[])
     std::cout << "Attribute Name Checked: " << pss.first << std::endl;
     std::cout << "Attribute Value (string): " << pss.second << std::endl;
 
-    const DataElement &dgs = ds.GetDataElement( tDoseGridScaling );
+    //const DataElement &dgs = ds.GetDataElement( tDoseGridScaling );
 
     // Let's assume for a moment we knew the tag number:
     Attribute<0x3004,0x000e> at;

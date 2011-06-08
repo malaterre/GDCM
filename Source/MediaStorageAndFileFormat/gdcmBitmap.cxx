@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -21,6 +20,8 @@
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
+
+#include <cstring>
 
 namespace gdcm
 {
@@ -208,6 +209,7 @@ bool Bitmap::GetBuffer(char *buffer) const
 
 unsigned long Bitmap::GetBufferLength() const
 {
+  //assert( !IsEncapsulated() );
   if( PF == PixelFormat::UNKNOWN ) return 0;
 
   assert( NumberOfDimensions );
@@ -227,7 +229,7 @@ unsigned long Bitmap::GetBufferLength() const
     }
   // Multiply by the pixel size:
   // Special handling of packed format:
-  if( PF == PixelFormat::UINT12 )
+  if( PF == PixelFormat::UINT12 || PF == PixelFormat::INT12 )
     {
 #if 1
     mul *= PF.GetPixelSize();
@@ -258,7 +260,8 @@ unsigned long Bitmap::GetBufferLength() const
     const ByteValue *bv = PixelData.GetByteValue();
     assert( bv );
     unsigned int ref = bv->GetLength() / mul;
-    assert( bv->GetLength() % mul == 0 );
+    if( !GetTransferSyntax().IsEncapsulated() )
+      assert( bv->GetLength() % mul == 0 );
     mul *= ref;
     }
   else
@@ -882,9 +885,9 @@ void Bitmap::Print(std::ostream &os) const
 {
   Object::Print(os);
   //assert( NumberOfDimensions );
-  os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
-  if( NumberOfDimensions )
+  if( !IsEmpty() )
     {
+    os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
     assert( Dimensions.size() );
     os << "Dimensions: (";
     std::vector<unsigned int>::const_iterator it = Dimensions.begin();
@@ -895,10 +898,10 @@ void Bitmap::Print(std::ostream &os) const
       }
     os << ")\n";
     PF.Print(os);
+    os << "PhotometricInterpretation: " << PI << "\n";
+    os << "PlanarConfiguration: " << PlanarConfiguration << "\n";
+    os << "TransferSyntax: " << TS << "\n";
     }
-  os << "PhotometricInterpretation: " << PI << "\n";
-  os << "PlanarConfiguration: " << PlanarConfiguration << "\n";
-  os << "TransferSyntax: " << TS << "\n";
 }
 
 }

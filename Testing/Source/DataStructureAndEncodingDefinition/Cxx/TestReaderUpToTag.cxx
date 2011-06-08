@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -40,9 +39,9 @@ int TestReadUpToTag(const char* filename, bool verbose = false)
     }
   std::streamoff outStreamOffset = is.tellg();
 
-  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
-
-  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  //commenting out for warning avoidance
+  //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
+  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
   if(verbose)
     std::cout << "{ \"" << filename << "\"," << outStreamOffset << " }," << std::endl;

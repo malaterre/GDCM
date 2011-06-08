@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -77,8 +76,12 @@ std::string to_string ( Float data ) {
                     digits -=1;
 #endif
             }
-            else if( ldata < 0)
-                digits += ldata; // (zeros before first significant digit)
+            else if( ldata < 0){
+				//since ldata is negative, to have the test pass,
+				//the right casting has to be done to avoid a casting warning here
+				unsigned long uldata = (unsigned long)(fabs(ldata)+1.0);
+                digits -= uldata; // (zeros before first significant digit)
+			}
         }
     }
     /*
@@ -100,8 +103,8 @@ std::string to_string ( Float data ) {
 
 bool checkerror(double d, std::string s)
 {
-
-    double error = fabs(d - atof( s.c_str() ));
+	double theConverted = atof(s.c_str());
+    double error = fabs(d - theConverted);
 
     int Log = (int)log10(fabs(d));
     int eo = ( Log - 14 );
@@ -122,7 +125,10 @@ bool checkerror(double d, std::string s)
         eo += 1;
 
 
-    if (error > pow(10., eo) )
+    //if (error > pow(10., eo) )
+	//pow will underflow at 10^-308, so errors lower than -308 will appear to be
+	//larger than pow(10., eo), because the 'pow' result will be 0 in vs2010
+	if (log10(error) > eo)
     {
         std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;
         return true;
@@ -163,13 +169,14 @@ bool singleTestDS(double d, int sz, bool se = false)
 {
     bool fail = false;
     std::cout << "           -|----------------|-" << std::endl;
-    std::string s = to_string( d );
+    std::string s = to_string<double>( d );
     std::cout << "  Result:    " << s << std::flush;
 
     if ( checkerror(d, s, se) )
         fail = true;
 
-    if( s.size() != sz )
+    assert(sz >= 0);
+    if( s.size() != (unsigned int)sz )
     {
         std::cout << "ERROR: Size = " << s.size() << " (should be " << sz << ")" << std::endl;
         fail = true;
@@ -422,16 +429,16 @@ int TestDS(int, char *[])
     int max_exp = std::numeric_limits<double>::max_exponent10;
 
     std::cout << "Running " << random_count << " random tests." << std::endl << std::endl;
-    for (int i = 0; i<random_count; i++)
+    for (unsigned int i = 0; i<random_count; i++)
     {
         // Create something that looks like a random double
-        int rand_exp =  ( ( std::rand() / (double)(RAND_MAX) ) * (max_exp - min_exp) ) + min_exp;
+        int rand_exp =  ( ((int)( std::rand() / (double)(RAND_MAX) ) ) * (max_exp - min_exp) ) + min_exp;
         double rand = static_cast<double>(std::rand()) * pow(10., rand_exp);
         if (rand != rand) {i--; continue;} // nan
         if (rand == std::numeric_limits<double>::infinity()) {i--; continue;} // inf
 
         std::string s = to_string( rand );
-//        std::cout << s;
+        //std::cout << s;
         if (s.size() > 16 || !s.compare("inf") || !s.compare("nan") )
         {
 //            std::cout << "\t--- FAIL" << std::endl;

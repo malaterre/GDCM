@@ -13,7 +13,7 @@
 
 #=============================================================================
 # Copyright 2004-2009 Kitware, Inc.
-# Copyright 2009-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+# Copyright 2009-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 # Copyright 2010 Thomas Sondergaard <ts@medical-insight.com>
 #
 # Distributed under the OSI-approved BSD License (the "License");

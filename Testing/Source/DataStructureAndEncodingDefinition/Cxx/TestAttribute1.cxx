@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -104,7 +103,7 @@ int TestAttributeDS()
   const double newvalues[] = {12.34,56.78,90.0};
   const unsigned int numvalues = sizeof(values) / sizeof(values[0]);
 
-  gdcm::Attribute<0x0020,0x0032> ipp = {-158.135803,-179.035797,-75.699997};
+  gdcm::Attribute<0x0020,0x0032> ipp = {{-158.135803,-179.035797,-75.699997}};
   // FIXME HARDCODED:
   if( ipp.GetVM() != gdcm::VM::VM3 ) return 1;
   if( ipp.GetVR() != gdcm::VR::DS ) return 1;
@@ -168,7 +167,7 @@ int TestAttributeIS()
   gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM1> fd1 = {0};
   if( fd1.GetVM() != gdcm::VM::VM1 ) return 1;
 
-  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM2> fd2 = {0,1};
+  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM2> fd2 = {{0,1}};
   if( fd2.GetVM() != gdcm::VM::VM2 ) return 1;
 
   // this one should not be allowed, I need a special CTest macro...
@@ -181,7 +180,25 @@ int TestAttributeIS()
 int TestAttributeLO() { return 0; }
 int TestAttributeLT() { return 0; }
 int TestAttributeOB() { return 0; }
-int TestAttributeOF() { return 0; }
+int TestAttributeOF()
+{
+  gdcm::DataSet ds;
+  const float array[] = { 0, 1, 2, 3, 4 };
+  gdcm::Attribute<0x5600,0x0020, gdcm::VR::OF, gdcm::VM::VM1_n> at;
+  at.SetValues( array, sizeof( array ) / sizeof( *array ) );
+  ds.Insert( at.GetAsDataElement() );
+
+  if( at.GetNumberOfValues() != 5 ) return 1;
+
+  // Sup 132
+  // Tag : (0x0066,0x0016), VR : OF, VM : 1, Type : 1
+  gdcm::Attribute<0x0066,0x0016> at1;
+  float value = 1.f;
+  at1.SetValue( value );
+  ds.Insert( at1.GetAsDataElement() );
+
+  return 0;
+}
 int TestAttributeOW() { return 0; }
 int TestAttributePN() { return 0; }
 int TestAttributeSH() { return 0; }

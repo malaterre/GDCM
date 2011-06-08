@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -33,8 +32,12 @@ public class HelloVTKWorld
     System.loadLibrary("vtkIOJava");
     System.loadLibrary("vtkImagingJava");
     System.loadLibrary("vtkGraphicsJava");
-    System.loadLibrary("vtkRenderingJava");
     System.loadLibrary("vtkgdcmJava");
+    try {
+      System.loadLibrary("vtkRenderingJava");
+    } catch (Throwable e) {
+      System.out.println("cannot load vtkHybrid, skipping...");
+    }
     try {
       System.loadLibrary("vtkHybridJava");
     } catch (Throwable e) {

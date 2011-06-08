@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -244,14 +243,14 @@ int main(int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( debug != 0 );
+  gdcm::Trace::SetWarning( warning != 0 );
+  gdcm::Trace::SetError( error != 0 );
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( verbose != 0 );
+    gdcm::Trace::SetError( verbose != 0);
     }
 
   if( !gdcm::System::FileExists(filename.c_str()) )
@@ -320,7 +319,7 @@ int main(int argc, char *argv[])
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     gdcm::Directory dir;
-    nfiles = dir.Load(filename, recursive);
+    nfiles = dir.Load(filename, recursive!= 0);
     filenames = dir.GetFilenames();
     gen.SetRootDirectory( filename );
     }

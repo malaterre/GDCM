@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -515,6 +514,146 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
   return 0;
 }
 
+namespace gdcm
+{
+
+const DataElement &GetNestedDataElement( const DataSet &ds, const Tag & t1, const Tag & t2 )
+{
+  assert( ds.FindDataElement( t1 ) );
+  SmartPointer<SequenceOfItems> sqi1 = ds.GetDataElement( t1 ).GetValueAsSQ();
+  assert( sqi1 );
+  const Item &item1 = sqi1->GetItem(1);
+  const DataSet & ds1 = item1.GetNestedDataSet();
+  assert( ds1.FindDataElement( t2 ) );
+  return ds1.GetDataElement( t2 );
+}
+
+static bool RemapSharedIntoOld( gdcm::DataSet & ds,
+ SequenceOfItems *sfgs,
+ SequenceOfItems *pffgs,
+ unsigned int index )
+{
+  assert( sfgs );
+  assert( pffgs );
+
+  assert( sfgs->GetNumberOfItems() == 1 );
+  Item const &item1 = sfgs->GetItem( 1 );
+  const DataSet & sfgs_ds = item1.GetNestedDataSet();
+#if 1
+  // Repetition Time
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x0080) ) );
+  // Echo Train Length
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x0091) ) );
+  // Flip Angle
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x1314) ) );
+  // Number of Averages
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9119), Tag(0x0018,0x0083) ) );
+
+  // Percent Sampling
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x0093) ) );
+  // Percent Phase Field of View
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x0094) ) );
+  // Receive Coil Name
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x1250) ) );
+  // Transmit Coil Name
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9049), Tag(0x0018,0x1251) ) );
+  // InPlanePhaseEncodingDirection
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x1312) ) );
+  // TransmitterFrequency
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9006), Tag(0x0018,0x9098) ) );
+  // InversionRecovery
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9115), Tag(0x0018,0x9009) ) );
+  // FlowCompensation
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9115), Tag(0x0018,0x9010) ) );
+  // ReceiveCoilType
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9043) ) );
+  // QuadratureReceiveCoil
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9044) ) );
+  // SlabThickness
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9104) ) );
+  // MultiCoilDefinitionSequence
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9045) ) );
+  // SlabOrientation
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9105) ) );
+  // MidSlabPosition
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9106) ) );
+  // OperatingModeSequence
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x9176) ) );
+  // MRAcquisitionPhaseEncodingStepsOutOf
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x9232) ) );
+  // SpecificAbsorptionRateSequence
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x9239) ) );
+  // AnatomicRegionSequence
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0020,0x9071), Tag(0x0008,0x2218) ) );
+  // Purpose of Reference Code Sequence
+  // FIXME what if there is multiple purpose of rcs ?
+  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0008,0x1140), Tag(0x0040,0xa170) ) );
+#else
+  for(
+    DataSet::ConstIterator it = sfgs_ds.Begin();
+    it != sfgs_ds.End(); ++it )
+    {
+    ds.Replace( *it );
+    }
+#endif
+
+  Item const &item2 = pffgs->GetItem( index + 1 );
+  const DataSet & pffgs_ds = item2.GetNestedDataSet();
+
+#if 1
+  // Effective Echo Time
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9114), Tag(0x0018,0x9082) ) );
+  // -> should also be Echo Time
+  // Nominal Cardiac Trigger Delay Time
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9118), Tag(0x0020,0x9153) ) );
+  // Metabolite Map Description
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9152), Tag(0x0018,0x9080) ) );
+  // IPP
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9113), Tag(0x0020,0x0032) ) );
+  // IOP
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9116), Tag(0x0020,0x0037) ) );
+  // Slice Thickness
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9110), Tag(0x0018,0x0050) ) );
+  // Pixel Spacing
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9110), Tag(0x0028,0x0030) ) );
+
+  // window level
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9132), Tag(0x0028,0x1050) ) );
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9132), Tag(0x0028,0x1051) ) );
+
+  // rescale slope/intercept
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1052) ) );
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1053) ) );
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1054) ) );
+
+  // FrameReferenceDateTime
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9151) ) );
+  // FrameAcquisitionDuration
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9220) ) );
+  // TemporalPositionIndex
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9128) ) );
+  // InStackPositionNumber
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9057) ) );
+  // FrameType
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9226), Tag(0x0008,0x9007) ) );
+  // DimensionIndexValues
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9157) ) );
+  // FrameAcquisitionDateTime
+  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9074) ) );
+  // Nominal Cardiac Trigger Delay Time -> Trigger Time
+  //const DataElement &NominalCardiacTriggerDelayTime =
+  //  GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9226), Tag(0x0008,0x9007) );
+#endif
+
+  // (0020,9228) UL 158                                      #   4, 1 ConcatenationFrameOffsetNumber
+  gdcm::Attribute<0x0020,0x9228> at = { index };
+  ds.Replace( at.GetAsDataElement() );
+
+  return true;
+}
+
+} // namespace gdcm
+
 int main (int argc, char *argv[])
 {
   int c;
@@ -724,14 +863,14 @@ int main (int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
+  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
+  gdcm::Trace::SetError(  (error  > 0 ? true : false));
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmtar" );
@@ -787,7 +926,7 @@ int main (int argc, char *argv[])
       return 1;
       }
 
-    const gdcm::Defs &defs = g.GetDefs();
+    //const gdcm::Defs &defs = g.GetDefs();
     }
 
 
@@ -874,8 +1013,6 @@ int main (int argc, char *argv[])
     }
   else if ( unenhance )
     {
-    std::cerr << "Not implemented" << std::endl;
-    return 1;
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
@@ -884,8 +1021,8 @@ int main (int argc, char *argv[])
       return 1;
       }
 
-    const gdcm::File &file = reader.GetFile();
-    const gdcm::DataSet &ds = file.GetDataSet();
+    gdcm::File &file = reader.GetFile();
+    gdcm::DataSet &ds = file.GetDataSet();
     gdcm::MediaStorage ms;
     ms.SetFromFile(file);
     if( ms.IsUndefined() )
@@ -903,12 +1040,26 @@ int main (int argc, char *argv[])
       return 1;
       }
 
+  // Preserve info:
+  gdcm::DataElement oldsopclassuid = ds.GetDataElement( gdcm::Tag(0x8,0x16) );
+  gdcm::DataElement oldinstanceuid = ds.GetDataElement( gdcm::Tag(0x8,0x18) );
+
+  // Ok then change it old Old MR Image Storage
+    gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
+    ms = gdcm::MediaStorage::MRImageStorage;
+    const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+    ds.Replace( de );
+
     const gdcm::Image &image = reader.GetImage();
     const unsigned int *dims = image.GetDimensions();
-    std::cout << image << std::endl;
+    //std::cout << image << std::endl;
     const gdcm::DataElement &pixeldata = image.GetDataElement();
-    const gdcm::ByteValue *bv = pixeldata.GetByteValue();
+    //const gdcm::ByteValue *bv = pixeldata.GetByteValue();
+    gdcm::SmartPointer<gdcm::ByteValue> bv = (gdcm::ByteValue*)pixeldata.GetByteValue();
     unsigned long slice_len = image.GetBufferLength() / dims[2];
+    assert( slice_len * dims[2] == image.GetBufferLength() );
     //assert( image.GetBufferLength() == bv->GetLength() );
 
     gdcm::FilenameGenerator fg;
@@ -927,6 +1078,48 @@ int main (int argc, char *argv[])
     const double *origin = image.GetOrigin();
     double zspacing = image.GetSpacing(2);
 
+    // Remove SharedFunctionalGroupsSequence
+    gdcm::SmartPointer<gdcm::SequenceOfItems> sfgs =
+      ds.GetDataElement( gdcm::Tag( 0x5200,0x9229 ) ).GetValueAsSQ();
+    ds.Remove( gdcm::Tag( 0x5200,0x9229 ) );
+    assert( ds.FindDataElement( gdcm::Tag( 0x5200,0x9229 ) ) == false );
+    // Remove PerFrameFunctionalGroupsSequence
+    gdcm::SmartPointer<gdcm::SequenceOfItems> pffgs =
+      ds.GetDataElement( gdcm::Tag( 0x5200,0x9230 ) ).GetValueAsSQ();
+    ds.Remove( gdcm::Tag( 0x5200,0x9230 ) );
+    assert( ds.FindDataElement( gdcm::Tag( 0x5200,0x9230 ) ) == false );
+    ds.Remove( gdcm::Tag( 0x28,0x8) );
+    ds.Remove( gdcm::Tag( 0x7fe0,0x0010) );
+    assert( ds.FindDataElement( gdcm::Tag( 0x7fe0,0x0010) ) == false );
+    //ds.Remove( gdcm::Tag( 0x0008,0x0012) );
+    //ds.Remove( gdcm::Tag( 0x0008,0x0013) );
+
+  // reference the old instance:
+  // PS 3.3-2009 C.7.6.16.1.3
+#if 0
+  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1150) ) == false );
+  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1155) ) == false );
+  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1160) ) == false );
+  oldsopclassuid.SetTag( gdcm::Tag(0x8,0x1150) );
+  oldinstanceuid.SetTag( gdcm::Tag(0x8,0x1155) );
+  ds.Insert( oldsopclassuid );
+  ds.Insert( oldinstanceuid );
+#endif
+
+  char date[22];
+  const size_t datelen = 8;
+  //int res = gdcm::System::GetCurrentDateTime(date);
+  gdcm::Attribute<0x8,0x12> instcreationdate;
+  instcreationdate.SetValue( gdcm::DTComp( date, datelen ) );
+  ds.Replace( instcreationdate.GetAsDataElement() );
+  gdcm::Attribute<0x8,0x13> instcreationtime;
+  instcreationtime.SetValue( gdcm::DTComp( date + datelen, 13 ) );
+  ds.Replace( instcreationtime.GetAsDataElement() );
+  const char *offset = gdcm::System::GetTimezoneOffsetFromUTC();
+  gdcm::Attribute<0x8,0x201> timezoneoffsetfromutc;
+  timezoneoffsetfromutc.SetValue( offset );
+  ds.Replace( timezoneoffsetfromutc.GetAsDataElement() );
+
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
       double new_origin[3];
@@ -938,33 +1131,41 @@ int main (int argc, char *argv[])
         }
 
       const char *outfilenamei = fg.GetFilename(i);
-      gdcm::ImageWriter writer;
+      //gdcm::ImageWriter writer;
+      gdcm::Writer writer;
       writer.SetFileName( outfilenamei );
       //writer.SetFile( filter.GetFile() );
       writer.SetFile( reader.GetFile() );
 
+      if ( !gdcm::RemapSharedIntoOld( ds, sfgs, pffgs, i ) )
+        {
+        return 1;
+        }
+
       //
       //writer.SetImage( filter.GetImage() );
-      gdcm::Image &slice = writer.GetImage();
-      slice = reader.GetImage();
-      slice.SetOrigin( new_origin );
-      slice.SetNumberOfDimensions( 2 );
-      assert( slice.GetPixelFormat() == reader.GetImage().GetPixelFormat() );
-      slice.SetSpacing(2, reader.GetImage().GetSpacing(2) );
+      //gdcm::Image & //slice = writer.GetImage();
+      //slice = reader.GetImage();
+//      slice.SetOrigin( new_origin );
+//      slice.SetNumberOfDimensions( 2 );
+//      assert( slice.GetPixelFormat() == reader.GetImage().GetPixelFormat() );
+//      slice.SetSpacing(2, reader.GetImage().GetSpacing(2) );
       //slice.Print( std::cout );
-      gdcm::DataElement &pd = slice.GetDataElement();
+//      gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
-      pd.SetByteValue( sliceptr, slice_len); // slow !
+      gdcm::DataElement newpixeldata( gdcm::Tag(0x7fe0,0x0010) );
+      newpixeldata.SetByteValue( sliceptr, slice_len); // slow !
+      ds.Replace( newpixeldata );
 
       if( !writer.Write() )
         {
         std::cerr << "Failed to write: " << outfilenamei << std::endl;
         return 1;
         }
-      else
-        {
-        std::cout << "Success to write: " << outfilenamei << std::endl;
-        }
+      //else
+      //  {
+      //  std::cout << "Success to write: " << outfilenamei << std::endl;
+      //  }
       }
 
     return 0;

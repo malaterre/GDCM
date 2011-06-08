@@ -25,7 +25,10 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
+  ExtractIconFromFile
+  pmsct_rgb1
   GenAllVR
+  ELSCINT1WaveToText
   DiscriminateVolume
   GetSubSequenceData
   GenLongSeqs
@@ -57,12 +60,19 @@ SET(EXAMPLES_SRCS
   ReadExplicitLengthSQIVR
   SortImage
   csa2img
+  iU22tomultisc
   rle2img
   uid_unique
   PublicDict
   GenSeqs
   GetJPEGSamplePrecision
 )
+IF(GDCM_USE_JPEGLS)
+SET(EXAMPLES_SRCS
+  ${EXAMPLES_SRCS}
+  FixJAIBugJPEGLS
+  )
+ENDIF(GDCM_USE_JPEGLS)
 
 IF(QT4_FOUND)
   INCLUDE(${QT_USE_FILE})
@@ -70,6 +80,9 @@ IF(QT4_FOUND)
   # qtGUI will resolved QImage symbol
   # qtcore will resolve qstring symbols
   TARGET_LINK_LIBRARIES(ConvertToQImage gdcmMSFF ${QT_LIBRARIES})
+
+  ADD_EXECUTABLE(ReadUTF8QtDir ReadUTF8QtDir.cxx)
+  TARGET_LINK_LIBRARIES(ReadUTF8QtDir gdcmMSFF ${QT_LIBRARIES})
 ENDIF(QT4_FOUND)
 
 IF(MAGIC_FOUND)
@@ -93,7 +106,11 @@ ENDIF(GDCM_BUILD_TESTING)
 
 FOREACH(example ${EXAMPLES_SRCS})
   ADD_EXECUTABLE(${example} ${example}.cxx)
-  TARGET_LINK_LIBRARIES(${example} gdcmMSFF)
+  IF(${example} STREQUAL "FixJAIBugJPEGLS")
+    TARGET_LINK_LIBRARIES(${example} gdcmMSFF gdcmcharls)
+  ELSE()
+    TARGET_LINK_LIBRARIES(${example} gdcmMSFF)
+  ENDIF()
 ENDFOREACH(example)
 
 IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)

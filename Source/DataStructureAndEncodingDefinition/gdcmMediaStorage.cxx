@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -122,6 +121,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.481.8", // RT Ion Plan Storage
   "1.2.840.10008.5.1.4.1.1.13.1.1", // XRay3DAngiographicImageStorage,
   "1.2.840.10008.5.1.4.1.1.12.1.1", // Enhanced XA Image Storage
+  "1.2.840.10008.5.1.4.1.1.481.9", //  RTIonBeamsTreatmentRecordStorage
   0
 };
 
@@ -195,6 +195,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == RTIonPlanStorage
     || ms == LeadECGWaveformStorage
     || ms == GeneralECGWaveformStorage
+    || ms == RTIonBeamsTreatmentRecordStorage
     || ms == RTStructureSetStorage )
     {
     return false;
@@ -280,6 +281,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},// RT Ion Plan Storage
   {"XA", 3},// XRay3DAngiographicImageStorage,
   {"XA", 3},// Enhanced XA Image Storage
+  {"  ", 2},// RTIonBeamsTreatmentRecordStorage
 
   {NULL, 0} //MS_END
 };

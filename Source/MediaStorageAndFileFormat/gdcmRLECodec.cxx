@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -22,7 +21,8 @@
 #include "gdcmSwapper.h"
 
 #include <vector>
-#include <cstddef> // ptrdiff_t
+#include <stddef.h> // ptrdiff_t fix
+#include <cstring>
 
 namespace gdcm
 {
@@ -256,7 +256,7 @@ ptrdiff_t rle_encode(char *output, unsigned int outputlength, const char *input,
     // count byte where read, move pin to new position:
     pin += count;
     // compute remaining length:
-    assert( count <= length );
+    assert( count <= (int)length );
     length -= count;
     }
   return pout - output;
@@ -358,6 +358,8 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     }
   else
     {
+    delete[] buffer;
+    delete[] bufferrgb;
     return false;
     }
 
@@ -488,7 +490,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       if( seg == MaxNumSegments - 1 )
         {
         partition += image_len % MaxNumSegments;
-        assert( (MaxNumSegments-1) * input_seg_length + partition == image_len );
+        assert( (MaxNumSegments-1) * input_seg_length + partition == (int)image_len );
         }
       assert( partition == input_seg_length );
 
@@ -686,7 +688,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       // This should be at most the \0 padding
       //gdcmWarningMacro( "RLE Header says: " << frame.Header.Offset[i] <<
       //   " when it should says: " << pos << std::endl );
-      uint32_t check = frame.Header.Offset[i] - pos;//should it be a streampos or a uint32? mmr
+      std::streamoff check = frame.Header.Offset[i] - pos;//should it be a streampos or a uint32? mmr
       // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
       assert( check == 1 || check == 2);
       (void)check; //warning removal

@@ -1,18 +1,11 @@
-# Add a python test from a python file
-# One cannot simply do:
-# SET(ENV{PYTHONPATH} ${LIBRARY_OUTPUT_PATH})
-# SET(my_test "from test_mymodule import *\;test_mymodule()")
-# ADD_TEST(PYTHON-TEST-MYMODULE  python -c ${my_test})
-# Since cmake is only transmitting the ADD_TEST line to ctest thus you are loosing
-# the env var. The only way to store the env var is to physically write in the cmake script
-# whatever PYTHONPATH you want and then add the test as 'cmake -P python_test.cmake'
+# Add a java test from a java file
 #
 # Usage:
 # SET_SOURCE_FILES_PROPERTIES(test.py PROPERTIES PYTHONPATH
 #   "${LIBRARY_OUTPUT_PATH}:${VTK_DIR}")
 # ADD_PYTHON_TEST(PYTHON-TEST test.py)
 #
-#  Copyright (c) 2006-2010 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -109,7 +108,7 @@ bool TestCrossDot()
 int TestDirectionCosines(int, char *[])
 {
   gdcm::DirectionCosines dc;
-  const double *dircos = dc;
+  //const double *dircos = dc;
   if( !dc.IsValid() )
     {
     return 1;

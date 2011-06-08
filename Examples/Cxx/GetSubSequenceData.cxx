@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -48,7 +47,7 @@ int main(int argc, char *argv[])
   const DataElement& seq1 = subds.GetDataElement( tseq1 );
 
   SmartPointer<SequenceOfItems> sqi2 = seq1.GetValueAsSQ();
-  int n = sqi2->GetNumberOfItems();
+  //int n = sqi2->GetNumberOfItems();
 //std::cout << n << std::endl;
 int i = 1;
 //  for( int i = 1; i <= n; ++i )
@@ -63,7 +62,7 @@ int i = 1;
 //    std::cout << seq2 << std::endl;
 
   SmartPointer<SequenceOfItems> sqi3 = seq2.GetValueAsSQ();
-  int ni3= sqi3->GetNumberOfItems();
+  //int ni3= sqi3->GetNumberOfItems();
   assert( sqi3->GetNumberOfItems() >= 1 );
   Item &item3 = sqi3->GetItem(1);
   DataSet &subds3 = item3.GetNestedDataSet();
@@ -76,7 +75,7 @@ int i = 1;
     std::cout << seq3 << std::endl;
 
   SmartPointer<SequenceOfItems> sqi4 = seq3.GetValueAsSQ();
-  int ni4= sqi4->GetNumberOfItems();
+  //int ni4= sqi4->GetNumberOfItems();
   assert( sqi4->GetNumberOfItems() >= 1 );
   Item &item4 = sqi4->GetItem(1);
   DataSet &subds4 = item4.GetNestedDataSet();

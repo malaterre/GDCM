@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -221,7 +220,7 @@ bool ImageWriter::Write()
     }
   else
     {
-    assert( pixeldata.GetIntercept() == 0 && pixeldata.GetSlope() == 1 );
+    assert( pixeldata.GetIntercept(0) == 0 && pixeldata.GetSlope(0) == 1 );
     }
 
 //      Attribute<0x0028, 0x0006> planarconfiguration;

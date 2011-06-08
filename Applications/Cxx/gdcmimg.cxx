@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -78,6 +77,7 @@ bool readsize(const char *str, unsigned int * size)
 bool readgeometry(const char *geometry, unsigned int * region)
 {
   int n = sscanf( geometry, "%i,%i,%i,%i,%i,%i", region, region+1, region+2, region+3, region+4, region+5);
+  if( n != 6 ) return false;
   return true;
 }
 
@@ -128,6 +128,7 @@ void PrintHelp()
   std::cout << "     --endian %s       Endianness (LSB/MSB)." << std::endl;
   std::cout << "  -d --depth %d        Depth (8/16/32)." << std::endl;
   std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
+  std::cout << "     --spp  %d         Sample Per Pixel (1/3)." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
@@ -348,7 +349,7 @@ bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Direc
 }
 
 
-bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int pixelsign )
+bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int pixelsign, int spp = 0, int pixelspp = 1 )
 {
   if( depth )
     {
@@ -372,6 +373,10 @@ bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int p
     {
     pf.SetPixelRepresentation( pixelsign );
     }
+  if( spp )
+    {
+    pf.SetSamplesPerPixel( pixelspp );
+    }
 
   return true;
 }
@@ -388,10 +393,10 @@ int main (int argc, char *argv[])
   gdcm::Filename outfilename;
   unsigned int region[6] = {}; // Rows & Columns are VR=US anyway...
   unsigned int color = 0;
-  bool b;
   int bregion = 0;
   int fill = 0;
   int sign = 0;
+  int spp = 0;
   int studyuid = 0;
   int seriesuid = 0;
   unsigned int size[2] = {};
@@ -399,6 +404,7 @@ int main (int argc, char *argv[])
   int endian = 0;
   int bpp = 0;
   int pixelsign = 0;
+  int pixelspp = 0;
   std::string sopclass;
   std::string lsb_msb;
   int sopclassuid = 0;
@@ -431,6 +437,7 @@ int main (int argc, char *argv[])
         {"sop-class-uid", 1, &sopclassuid, 1}, // specific SOP Class UID
         {"endian", 1, &endian, 1}, //
         {"sign", 1, &sign, 1}, //
+        {"spp", 1, &spp, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -516,6 +523,11 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "sign") == 0 );
             pixelsign = atoi(optarg);
+            }
+          else if( option_index == 12 ) /* spp */
+            {
+            assert( strcmp(s, "spp") == 0 );
+            pixelspp = atoi(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -699,14 +711,14 @@ int main (int argc, char *argv[])
     }
 
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( (debug  > 0 ? true : false));
+  gdcm::Trace::SetWarning(  (warning  > 0 ? true : false));
+  gdcm::Trace::SetError(  (error  > 0 ? true : false));
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
     }
 
   if( depth )
@@ -716,6 +728,10 @@ int main (int argc, char *argv[])
   if( sign )
     {
     if( pixelsign != 0 && pixelsign != 1 ) return 1;
+    }
+  if( spp )
+    {
+    if( pixelspp != 1 && pixelspp != 3 ) return 1;
     }
 
   const char *inputextension = filename.GetExtension();
@@ -739,9 +755,13 @@ int main (int argc, char *argv[])
       dims[1] = size[1];
       raw.SetDimensions( dims );
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
-      if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
+      if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign, spp, pixelspp ) ) return 1;
       raw.SetPixelFormat( pf );
       gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+      if( spp )
+        {
+        if( pixelspp == 3 ) pi = gdcm::PhotometricInterpretation::RGB;
+        }
       raw.SetPhotometricInterpretation( pi );
       raw.SetNeedByteSwap( false );
       if( endian )

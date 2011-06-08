@@ -205,6 +205,6 @@ Those are what is defined in ITU-T T.81, ISO/IEC IS 10918-1.
 
 \section copyright COPYRIGHT
 
-Copyright (c) 2006-2010 Mathieu Malaterre
+Copyright (c) 2006-2011 Mathieu Malaterre
 
 */

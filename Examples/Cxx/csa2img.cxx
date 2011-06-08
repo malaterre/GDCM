@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -56,7 +55,7 @@ int main(int argc, char *argv [])
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   //std::cout << t1 << std::endl;
-  const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
+  //const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
   if( ds.FindDataElement( t1 ) )
     {
@@ -68,7 +67,7 @@ int main(int argc, char *argv [])
     {
     const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
     std::cout << csael << std::endl;
-    const gdcm::ByteValue *bv = csael.GetByteValue();
+    //const gdcm::ByteValue *bv = csael.GetByteValue();
     gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el;
     el.Set( csael.GetValue() );
     dims[0] = el.GetValue();
@@ -123,8 +122,8 @@ int main(int argc, char *argv [])
   image.SetSpacing(1, spacing[1] );
   gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16; // bytepix = spm_type('int16','bits')/8;
 
-  unsigned long l = image.GetBufferLength();
-  const int p =  l / (dims[0] * dims[1]);
+  //unsigned long l = image.GetBufferLength();
+  //const int p =  l / (dims[0] * dims[1]);
 
   //image.SetNumberOfDimensions( 3 );
   //image.SetDimension(2, p / pixeltype.GetPixelSize() );

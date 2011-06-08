@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -43,7 +42,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       {
       std::cerr << "Missing lossy flag for: " << filename << std::endl;
       }
-    if( img.IsLossy() != reflossy )
+    if( img.IsLossy() != (reflossy > 0 ? true : false)  )//vs10 has a stupid bool/int cast warning
       {
       std::cerr << "Inconsistency for lossy flag for: " << filename << std::endl;
       return 1;

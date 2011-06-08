@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -505,6 +504,41 @@ One can find it also in the protocol:
   const gdcm::CSAHeaderDictEntry &csaentry = csadict.GetCSAHeaderDictEntry( gspec );
   std::cout << csaentry  << std::endl;
 #endif
+
+
+/*
+    sSliceArray.ucMode -- should be in (1, 2, 4)
+    enum SeriesMode
+    {
+      ASCENDING   = 0x01,
+      DESCENDING  = 0x02,
+      INTERLEAVED = 0x04
+    };
+*/
+  const char sliceorderstr[] = "sSliceArray.ucMode";
+  const gdcm::CSAHeaderDictEntry &sliceorder = csadict.GetCSAHeaderDictEntry( sliceorderstr );
+  std::cout << sliceorder << std::endl;
+
+  it = mymap.find ( sliceorderstr );
+  if( it == mymap.end() ) return 1;
+  const std::string &slice_order = it->second;
+  if( slice_order == "0x1" )
+    {
+    std::cout << "slice_order: ASCENDING" << std::endl;
+    }
+  else if( slice_order == "0x2" )
+    {
+    std::cout << "slice_order: DESCENDING" << std::endl;
+    }
+  else if( slice_order == "0x4" )
+    {
+    std::cout << "slice_order: INTERLEAVED" << std::endl;
+    }
+  else
+    {
+    std::cerr << "Impossible: " << slice_order << std::endl;
+    return 1;
+    }
 
   return 0;
 }

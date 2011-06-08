@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -25,6 +24,7 @@
  * gdcmdump has some feature not described in the DICOM standard:
  *   --csa : to print CSA information (dcmInfo.exe compatible)
  *   --pdb : to print PDB information (GEMS private info)
+ *   --elscint : to print ELSCINT information (ELSCINT private info)
  *
  *
  * TODO: it would be nice to have custom printing, namely printing as HTML/XML
@@ -60,6 +60,317 @@ int color = 0;
 
 int ignoreerrors = 0;
 
+namespace cleanup
+{
+// VEPRO
+/*
+[VIMDATA2]
+PrivateCreator = VEPRO VIM 5.0 DATA
+Group = 0x0055
+Element = 0x0020
+Data.ID     = C|0|3
+Data.Version     = C|3|3
+Data.UserName    = C|6|32
+Data.UserAdress1  = C|38|32
+Data.UserAdress2  = C|70|32
+Data.UserAdress3  = C|102|32
+Data.UserAdress4  = C|134|32
+Data.UserAdress5  = C|166|32
+Data.RecDate        = C|198|8
+Data.RecTime        = C|206|6
+Data.RecPlace        = C|212|64
+Data.RecSource        = C|276|64
+Data.DF1          = C|340|64
+Data.DF2          = C|404|64
+Data.DF3          = C|468|64
+Data.DF4          = C|532|64
+Data.DF5          = C|596|64
+Data.DF6          = C|660|64
+Data.DF7          = C|724|64
+Data.DF8          = C|788|64
+Data.DF9          = C|852|64
+Data.DF10          = C|916|64
+Data.DF11          = C|980|64
+Data.DF12          = C|1044|64
+Data.DF13          = C|1108|64
+Data.DF14          = C|1172|64
+Data.DF15          = C|1236|64
+Data.DF16          = C|1300|64
+Data.DF17          = C|1364|64
+Data.DF18          = C|1428|64
+Data.DF19          = C|1492|64
+Data.DF20          = C|1556|64
+Data.StudyUID          = C|1642|64
+Data.SeriesUID          = C|1706|64
+Data.Modality          = C|1770|16
+*/
+// TYPE[C/I] / OFFSET / LENGTH (in bytes)
+struct Data2
+{
+ char ID[3]; // Data.ID     = C|0|3
+ char Version[3]; // Data.Version     = C|3|3
+ char UserName[32]; // Data.UserName    = C|6|32
+ char UserAdress1[32]; // Data.UserAdress1  = C|38|32
+ char UserAdress2[32]; // Data.UserAdress2  = C|70|32
+ char UserAdress3[32]; // Data.UserAdress3  = C|102|32
+ char UserAdress4[32]; // Data.UserAdress4  = C|134|32
+ char UserAdress5[32]; // Data.UserAdress5  = C|166|32
+ char RecDate[8];  // Data.RecDate        = C|198|8
+ char RecTime[6];  // Data.RecTime        = C|206|6
+ char RecPlace[64]; // Data.RecPlace        = C|212|64
+ char RecSource[64];// Data.RecSource        = C|276|64
+ char DF1[64];       // Data.DF1          = C|340|64
+ char DF2[64];       // Data.DF2          = C|404|64
+ char DF3[64];       // Data.DF3          = C|468|64
+ char DF4[64];       // Data.DF4          = C|532|64
+ char DF5[64];       // Data.DF5          = C|596|64
+ char DF6[64];       // Data.DF6          = C|660|64
+ char DF7[64];       // Data.DF7          = C|724|64
+ char DF8[64];       // Data.DF8          = C|788|64
+ char DF9[64];       // Data.DF9          = C|852|64
+ char DF10[64];     // Data.DF10          = C|916|64
+ char DF11[64];     // Data.DF11          = C|980|64
+ char DF12[64];     // Data.DF12          = C|1044|64
+ char DF13[64];     // Data.DF13          = C|1108|64
+ char DF14[64];     // Data.DF14          = C|1172|64
+ char DF15[64];     // Data.DF15          = C|1236|64
+ char DF16[64];     // Data.DF16          = C|1300|64
+ char DF17[64];     // Data.DF17          = C|1364|64
+ char DF18[64];     // Data.DF18          = C|1428|64
+ char DF19[64];     // Data.DF19          = C|1492|64
+ char DF20[64];     // Data.DF20          = C|1556|64
+ char Padding[22]; // ?????
+ char StudyUID[64];  // Data.StudyUID          = C|1642|64
+ char SeriesUID[64];  // Data.SeriesUID          = C|1706|64
+ char Modality[16];  // Data.Modality          = C|1770|16
+
+ void Print( std::ostream &os )
+   {
+   os << "VIMDATA2: (0055,20,VEPRO VIM 5.0 DATA)\n";
+   os << "  ID: "          << std::string(ID,3) << "\n";
+   os << "  Version: "     << std::string(Version,3) << "\n";
+   os << "  UserName: "    << std::string(UserName,32) << "\n";
+   os << "  UserAdress1: " << std::string(UserAdress1,32) << "\n";
+   os << "  UserAdress2: " << std::string(UserAdress2,32) << "\n";
+   os << "  UserAdress3: " << std::string(UserAdress3,32) << "\n";
+   os << "  UserAdress4: " << std::string(UserAdress4,32) << "\n";
+   os << "  UserAdress5: " << std::string(UserAdress5,32) << "\n";
+   os << "  RecDate: "     << std::string(RecDate,8) << "\n";
+   os << "  RecTime: "     << std::string(RecTime,64) << "\n";
+   os << "  RecPlace: "    << std::string(RecPlace,64) << "\n";
+   os << "  RecSource: "   << std::string(RecSource,64) << "\n";
+   os << "  DF1: "         << std::string(DF1,64) << "\n";
+   os << "  DF2: "         << std::string(DF2,64) << "\n";
+   os << "  DF3: "         << std::string(DF3,64) << "\n";
+   os << "  DF4: "         << std::string(DF4,64) << "\n";
+   os << "  DF5: "         << std::string(DF5,64) << "\n";
+   os << "  DF6: "         << std::string(DF6,64) << "\n";
+   os << "  DF7: "         << std::string(DF7,64) << "\n";
+   os << "  DF8: "         << std::string(DF8,64) << "\n";
+   os << "  DF9: "         << std::string(DF9,64) << "\n";
+   os << "  DF10: "        << std::string(DF10,64) << "\n";
+   os << "  DF11: "        << std::string(DF11,64) << "\n";
+   os << "  DF12: "        << std::string(DF12,64) << "\n";
+   os << "  DF13: "        << std::string(DF13,64) << "\n";
+   os << "  DF14: "        << std::string(DF14,64) << "\n";
+   os << "  DF15: "        << std::string(DF15,64) << "\n";
+   os << "  DF16: "        << std::string(DF16,64) << "\n";
+   os << "  DF17: "        << std::string(DF17,64) << "\n";
+   os << "  DF18: "        << std::string(DF18,64) << "\n";
+   os << "  DF19: "        << std::string(DF19,64) << "\n";
+   os << "  DF20: "        << std::string(DF20,64) << "\n";
+   //os << "  Padding: " <<   std::string(Padding,22) << "\n";
+   os << "  StudyUID: "    << std::string(StudyUID,64) << "\n";
+   os << "  SeriesUID: "   << std::string(SeriesUID,64) << "\n";
+   os << "  Modality: "    << std::string(Modality,16) << "\n";
+   }
+};
+
+bool ProcessData( const char *buf, size_t len )
+{
+  Data2 data2;
+  size_t s = sizeof(data2);
+  assert( len >= s);
+  // VIMDATA2 is generally 2048 bytes, while s = 1786
+  // the end is filled with \0 bytes
+  memcpy(&data2, buf, s);
+
+  data2.Print( std::cout );
+  return true;
+}
+
+int DumpVEPRO(const gdcm::DataSet & ds)
+{
+  // 01f7,1026
+  const gdcm::PrivateTag tdata(0x55,0x0020,"VEPRO VIM 5.0 DATA");
+  if( !ds.FindDataElement( tdata ) ) return 1;
+  const gdcm::DataElement &data = ds.GetDataElement( tdata );
+  const gdcm::ByteValue *bv2 = data.GetByteValue();
+  ProcessData( bv2->GetPointer(), bv2->GetLength() );
+
+  return 0;
+}
+
+// ELSCINT1
+bool readastring(std::string &out, const char *input )
+{
+  out.clear();
+  while( *input )
+    {
+    out.push_back( *input++ );
+    }
+  return true;
+}
+
+struct el
+{
+  std::string name;
+  uint32_t pad;
+  std::vector<std::string> values;
+  size_t Size() const
+    {
+    size_t s = 0;
+    s += name.size() + 1;
+    s += sizeof(pad);
+    for( std::vector<std::string>::const_iterator it = values.begin(); it != values.end(); ++it )
+      s += it->size() + 1;
+    return s;
+    }
+  void ReadFromString( const char * input )
+    {
+    readastring( name, input );
+    const char *p = input + 1+  name.size();
+    memcpy( &pad, p, sizeof( pad ) );
+    //assert( pad == 1 || pad == 2 || pad == 3 || pad == 6 );
+    values.resize( pad );
+    const char *pp = p + sizeof(uint32_t);
+    for( uint32_t pidx = 0; pidx < pad; ++pidx )
+      {
+      readastring( values[pidx], pp );
+      pp = pp + values[pidx].size() + 1;
+      }
+    }
+  void Print() const
+    {
+    //std::cout << "  " << name << " : " << pad << " : (";
+    std::cout << "  " << name << " [";
+      {
+      std::vector<std::string>::const_iterator it = values.begin();
+      std::cout << *it++;
+      for(; it != values.end(); ++it )
+        {
+        std::cout << "\\";
+        std::cout << *it;
+        }
+      }
+    std::cout << "]" << std::endl;
+    }
+};
+
+
+struct info
+{
+  size_t Read(const char *in )
+    {
+    const char *m = in;
+    uint32_t h;
+    memcpy( &h, in, sizeof(h) );
+    in += sizeof(h);
+    std::string dummy;
+    readastring( dummy, in );
+    in += dummy.size();
+    in += 1;
+    if( h == 432154 ) // 0x6981a
+      {
+      // Single item
+      uint32_t nels;
+      memcpy( &nels, in, sizeof(nels) );
+      in += sizeof(nels);
+      //std::cout << "  ELSCINT1/Item name: " << dummy << " : " << nels << std::endl;
+      std::cout << "ELSCINT1/Item name: [" << dummy << "]" << std::endl;
+      for( uint32_t i = 0; i < nels; ++i )
+        {
+        el e;
+        e.ReadFromString( in );
+        e.Print();
+        in += e.Size();
+        }
+      }
+    else if( h == 2341 ) // 0x925
+      {
+      // Multiple Item(s)
+      uint32_t d;
+      memcpy( &d, in, sizeof(d) );
+      in += sizeof(d);
+      //std::cout << "  Info Name: " << dummy << " : " << d << std::endl;
+      std::cout << "ELSCINT1/Item name: " << dummy << std::endl;
+      for( uint32_t dix = 0; dix < d; ++dix )
+        {
+        uint32_t fixme;
+        memcpy( &fixme, in, sizeof(fixme) );
+        in += 4; //
+        //std::cout << "  number of  Subitems " << fixme << std::endl;
+        uint32_t nels = fixme;
+        if( nels )
+          std::cout << " SubItems #" << dix << std::endl;
+        else
+          std::cout << " No SubItems (Empty)" << std::endl;
+        for( uint32_t i = 0; i < nels; ++i )
+          {
+          el e;
+          e.ReadFromString( in );
+          e.Print();
+          in += e.Size();
+          }
+        }
+      // postcondition
+      uint32_t fixme;
+      memcpy( &fixme, in, sizeof(fixme) );
+      assert( fixme == 0x0006981A );
+      }
+    else
+      {
+      assert( 0 );
+      }
+    return in - m;
+    }
+};
+
+int DumpEl2_new(const gdcm::DataSet & ds)
+{
+  // 01f7,1026
+  const gdcm::PrivateTag t01f7_26(0x01f7,0x1026,"ELSCINT1");
+  if( !ds.FindDataElement( t01f7_26 ) ) return 1;
+  const gdcm::DataElement& de01f7_26 = ds.GetDataElement( t01f7_26 );
+  if ( de01f7_26.IsEmpty() ) return 1;
+  const gdcm::ByteValue * bv = de01f7_26.GetByteValue();
+
+  const char *begin = bv->GetPointer();
+  uint32_t val0[3];
+  memcpy( &val0, begin, sizeof( val0 ) );
+  assert( val0[0] == 0xF22D );
+  begin += sizeof( val0 );
+
+  // 1A 98 06 00 -> start element
+  // Next is a string (can be NULL)
+  // then number of (nested) elements
+
+  std::cout << "ELSCINT1 Dumping info from tag " << t01f7_26 << std::endl;
+  info i;
+  size_t o;
+  assert( val0[1] == 0x1 );
+  for( uint32_t idx = 0; idx < val0[2]; ++idx )
+    {
+    o = i.Read( begin );
+    std::cout << std::endl;
+    begin += o;
+    }
+
+  return 0;
+}
+
+} // end namespace cleanup
+
 template <typename TPrinter>
 int DoOperation(const std::string & filename)
 {
@@ -74,7 +385,7 @@ int DoOperation(const std::string & filename)
 
   TPrinter printer;
   printer.SetFile ( reader.GetFile() );
-  printer.SetColor( color );
+  printer.SetColor( color != 0);
   printer.Print( std::cout );
 
   // Only return success when file read succeeded not depending whether or not we printed it
@@ -118,6 +429,40 @@ int PrintASN1(const std::string & filename, bool verbose)
   bool b = gdcm::ASN1::ParseDump( bv->GetPointer(), bv->GetLength() );
   if( !b ) return 1;
   return 0;
+}
+
+int PrintELSCINT(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  int ret = cleanup::DumpEl2_new( ds );
+
+  return ret;
+}
+
+int PrintVEPRO(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  int ret = cleanup::DumpVEPRO( ds );
+
+  return ret;
 }
 
 int PrintPDB(const std::string & filename, bool verbose)
@@ -267,6 +612,8 @@ void PrintHelp()
   std::cout << "  -c --color          print in color." << std::endl;
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
+  std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
+  std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -292,6 +639,8 @@ int main (int argc, char *argv[])
   int print = 0;
   int printcsa = 0;
   int printpdb = 0;
+  int printelscint = 0;
+  int printvepro = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -330,6 +679,8 @@ int main (int argc, char *argv[])
         {"ignore-errors", 0, &ignoreerrors, 1},
         {"asn1", 0, &printasn1, 1},
         {"map-uid-names", 0, &mapuidnames, 1},
+        {"elscint", 0, &printelscint, 1},
+        {"vepro", 0, &printvepro, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -486,14 +837,14 @@ int main (int argc, char *argv[])
     return 1;
     }
   // Debug is a little too verbose
-  gdcm::Trace::SetDebug( debug );
-  gdcm::Trace::SetWarning( warning );
-  gdcm::Trace::SetError( error );
+  gdcm::Trace::SetDebug( debug != 0);
+  gdcm::Trace::SetWarning( warning != 0);
+  gdcm::Trace::SetError( error != 0);
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( verbose );
-    gdcm::Trace::SetError( verbose);
+    gdcm::Trace::SetWarning( verbose != 0);
+    gdcm::Trace::SetError( verbose!= 0);
     }
 
   if( mapuidnames )
@@ -511,7 +862,7 @@ int main (int argc, char *argv[])
   else if( gdcm::System::FileIsDirectory( filename.c_str() ) )
     {
     gdcm::Directory d;
-    d.Load(filename, recursive);
+    d.Load(filename, recursive!= 0);
     gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
     for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
       {
@@ -521,11 +872,19 @@ int main (int argc, char *argv[])
         }
       else if( printasn1 )
         {
-        res += PrintASN1(*it, verbose);
+        res += PrintASN1(*it, verbose!= 0);
+        }
+      else if( printvepro )
+        {
+        res += PrintVEPRO(*it, verbose!= 0);
+        }
+      else if( printelscint )
+        {
+        res += PrintELSCINT(*it, verbose!= 0);
         }
       else if( printpdb )
         {
-        res += PrintPDB(*it, verbose);
+        res += PrintPDB(*it, verbose!= 0);
         }
       else if( printcsa )
         {
@@ -552,11 +911,19 @@ int main (int argc, char *argv[])
       }
     else if( printasn1 )
       {
-      res += PrintASN1(filename, verbose);
+      res += PrintASN1(filename, verbose!= 0);
+      }
+    else if( printvepro )
+      {
+      res += PrintVEPRO(filename, verbose!= 0);
+      }
+    else if( printelscint )
+      {
+      res += PrintELSCINT(filename, verbose!= 0);
       }
     else if( printpdb )
       {
-      res += PrintPDB(filename, verbose);
+      res += PrintPDB(filename, verbose!= 0);
       }
     else if( printcsa )
       {

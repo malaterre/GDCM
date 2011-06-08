@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -101,7 +100,7 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename, bool verbose = false
   gdcm::Image img = reader2.GetImage();
   // When recompressing: US-RGB-8-epicard.dcm, make sure to compute the md5 using the
   // same original Planar Configuration...
-  if( img.GetPlanarConfiguration() !=  pc )
+  if( (int)img.GetPlanarConfiguration() !=  pc )
     {
     gdcm::ImageChangePlanarConfiguration icpc;
     icpc.SetInput( reader2.GetImage() );

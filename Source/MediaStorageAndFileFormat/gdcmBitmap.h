@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -91,7 +90,6 @@ public:
     {
     return *LUT;
     }
-
 
   /// Return the dimension of the pixel data, first dimension (x), then 2nd (y), then 3rd (z)...
   const unsigned int *GetDimensions() const;

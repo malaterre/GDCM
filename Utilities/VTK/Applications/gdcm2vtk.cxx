@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -26,8 +25,10 @@
 #include "vtkImageData.h"
 #include "vtkTIFFWriter.h"
 #include "vtkPNGWriter.h"
+#include "vtkBMPWriter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMetaImageReader.h"
+#include "vtkXMLImageDataReader.h"
 #include "vtkMetaImageWriter.h"
 #include "vtkDICOMImageReader.h"
 #include "vtkMINCImageReader.h"
@@ -87,6 +88,7 @@ void PrintHelp()
   std::cout << "  -T --study-uid        Study UID." << std::endl;
   std::cout << "  -S --series-uid       Series UID." << std::endl;
   std::cout << "     --root-uid         Root UID." << std::endl;
+  std::cout << "     --imageformat      Image Format [1-8] (aka PhotometricInterpretation)." << std::endl;
   std::cout << "Compression Types (lossless):" << std::endl;
   std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
@@ -130,8 +132,10 @@ int main(int argc, char *argv[])
   int lowerleft = 0;
   int oshift = 0;
   int oscale = 0;
+  int oimageformat = 0;
   double shift = 0.;
   double scale = 1.;
+  int imageformat = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -164,6 +168,7 @@ int main(int argc, char *argv[])
         {"lower-left", 0, &lowerleft, 1}, // use FileLowerLeftOn
         {"shift", 1, &oshift, 1}, //
         {"scale", 1, &oscale, 1}, //
+        {"imageformat", 1, &oimageformat, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -227,6 +232,11 @@ int main(int argc, char *argv[])
             {
             assert( strcmp(s, "scale") == 0 );
             scale = atof(optarg);
+            }
+          else if( option_index == 17 ) /* imageformat */
+            {
+            assert( strcmp(s, "imageformat") == 0 );
+            imageformat = atoi(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -370,18 +380,21 @@ int main(int argc, char *argv[])
     imgfactory->RegisterReader( reader );
   vtkImageReader2* imgreader =
     imgfactory->CreateImageReader2(filename);
-  // Set lowerleft *after* CreateImageReader2
-  imgreader->SetFileLowerLeft( lowerleft );
   vtkStructuredPointsReader *datareader = vtkStructuredPointsReader::New();
   datareader->SetFileName( filename );
+  vtkXMLReader *xmlreader = vtkXMLImageDataReader::New();
   int res = 0;
   if( !imgreader )
     {
-    res = datareader->IsFileStructuredPoints();
-    if( !res )
+    int xmlres = xmlreader->CanReadFile( filename );
+    if( !xmlres )
       {
-      std::cerr << "could not find no reader to handle file: " << filename << std::endl;
-      return 1;
+      res = datareader->IsFileStructuredPoints();
+      if( !res )
+        {
+        std::cerr << "could not find no reader to handle file: " << filename << std::endl;
+        return 1;
+        }
       }
     }
   imgfactory->Delete();
@@ -389,6 +402,7 @@ int main(int argc, char *argv[])
   vtkImageData *imgdata;
   if( imgreader )
     {
+    imgreader->SetFileLowerLeft( lowerleft );
     imgreader->SetFileName(filename);
     imgreader->Update();
     if( imgreader->GetErrorCode() )
@@ -410,6 +424,12 @@ int main(int argc, char *argv[])
       }
     imgdata = datareader->GetOutput();
     }
+  else if( xmlreader->CanReadFile( filename ) )
+    {
+    xmlreader->SetFileName(filename);
+    xmlreader->Update();
+    imgdata = vtkXMLImageDataReader::SafeDownCast(xmlreader)->GetOutput();
+    }
 
   gdcm::Filename fn = outfilename;
   const char *outputextension = fn.GetExtension();
@@ -421,6 +441,22 @@ int main(int argc, char *argv[])
       vtkStructuredPointsWriter * writer = vtkStructuredPointsWriter::New();
       writer->SetFileName( outfilename );
       writer->SetFileTypeToBinary();
+      writer->SetInput( imgdata );
+      writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        retcode = 1;
+        }
+#endif
+      writer->Delete();
+      goto cleanup;
+      }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".bmp") == 0 )
+      {
+      vtkBMPWriter * writer = vtkBMPWriter::New();
+      writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
@@ -667,8 +703,11 @@ int main(int argc, char *argv[])
       //reader->GetLookupTable()->Print( std::cout );
       if( palettecolor )
         {
-        reader->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader->GetLookupTable() );
-        writer->SetImageFormat( VTK_LOOKUP_TABLE );
+        if( reader->GetNumberOfScalarComponents() == 1 )
+          {
+          reader->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader->GetLookupTable() );
+          writer->SetImageFormat( VTK_LOOKUP_TABLE );
+          }
         }
       }
     else if( vtkGESignaReader * reader = vtkGESignaReader::SafeDownCast(imgreader) )
@@ -746,6 +785,10 @@ int main(int argc, char *argv[])
   if( oscale )
     {
     writer->SetScale( scale );
+    }
+  if( oimageformat )
+    {
+    writer->SetImageFormat( imageformat );
     }
 
   // Pass on the filetime of input file

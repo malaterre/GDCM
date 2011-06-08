@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -74,7 +73,7 @@ public:
 
 protected:
   static bool GenerateUUID(unsigned char *uuid_data);
-  const char* Generate2();
+  GDCM_LEGACY(const char* Generate2())
 
 private:
   static const char GDCM_UID[];

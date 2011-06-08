@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -77,7 +76,7 @@ int main(int argc, char *argv [])
       const gdcm::DataElement &de = (*it);
       // ne pas utiliser GetSequenceOfItems pour extraire les items
       gdcm::SmartPointer<gdcm::SequenceOfItems> sqi =de.GetValueAsSQ();
-      int itemused = 1;
+      unsigned int itemused = 1;
       while (itemused<=sqi->GetNumberOfItems())
 
         {
@@ -192,7 +191,7 @@ int main(int argc, char *argv [])
 
 
 
-                if(itemused <sqi->GetNumberOfItems())
+                if(itemused < sqi->GetNumberOfItems())
                   {itemused++;
                   }else{break;}
 

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -53,7 +52,7 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
   double outref[] = { 0 };
     {
     char *copy = (char*)outref;
-    const uint16_t in[] = { 1. };
+    const uint16_t in[] = { 1 };
     const char *tempimage = (char*)in;
     size_t vtklen = sizeof(in);
     ir.SetPixelFormat( gdcm::PixelFormat::UINT16 );

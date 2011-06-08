@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -49,8 +48,7 @@ void PixmapWriter::DoIconImage(DataSet & rootds, Pixmap const & image)
     //DataElement iconimagesq = rootds.GetDataElement( ticonimage );
     //iconimagesq.SetTag( ticonimage );
     DataElement iconimagesq;
-    Attribute<0x0088,0x0200> iiat;
-    iconimagesq.SetTag( iiat.GetTag() );
+    iconimagesq.SetTag( Attribute<0x0088,0x0200>::GetTag() );
     iconimagesq.SetVR( VR::SQ );
     SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
     sq->SetLengthToUndefined();

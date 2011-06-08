@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -57,8 +56,8 @@ int TestSequenceOfItems2(int, char *[])
 
   // std::cout << subds << std::endl;
   gdcm::Tag ticonpixeldata(0x7fe0,0x0010);
-  const gdcm::DataElement &iconpixeldata = subds.GetDataElement( ticonpixeldata );
-  const gdcm::ByteValue *bv = iconpixeldata.GetByteValue();
+  //const gdcm::DataElement &iconpixeldata = subds.GetDataElement( ticonpixeldata );
+//  const gdcm::ByteValue *bv = iconpixeldata.GetByteValue();//unused unless that lower #def is set to true
 
   // I could test that gdcm::JPEGCodec::GetHeaderInfo return JPEG file:
   // JPEG image data, JFIF standard 1.01

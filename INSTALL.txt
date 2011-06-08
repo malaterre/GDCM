@@ -28,8 +28,9 @@ Major options explained:
 * GDCM_WRAP_PYTHON: turn it on if you want to be able to access the GDCM API via python (required python dev files)
 * GDCM_WRAP_CSHARP: turn it on if you want to be able to access the GDCM API via C# (required mono or .NET environment)
 * GDCM_WRAP_JAVA: turn it on if you want to be able to access the GDCM API via java (required java sdk to compile)
+* GDCM_WRAP_PHP: turn it on if you want to be able to access the GDCM API via php (experimental)
 * GDCM_USE_VTK: turn if on if you want to be able to load DICOM file in VTK context (requires VTK)
-* GDCM_BUILD_APPLICATIONS: turn if on if you want the build gdcm applications (gdcmdump, gdcmconv, gdcminfo ...)
+* GDCM_BUILD_APPLICATIONS: turn it on if you want the build gdcm applications (gdcmdump, gdcmconv, gdcminfo ...)
 * GDCM_BUILD_TESTING: Turn it on if you want to be able to exectute GDCM testing suite
-* GDCM_DOCUMENTATION: turn if on if you want to generate the developer documentation (require doxygen)
-* GDCM_BUILD_EXAMPLES: turn if on if you want to build simple example demonstrate GDCM usage.
+* GDCM_DOCUMENTATION: turn it on if you want to generate the developer documentation (require doxygen)
+* GDCM_BUILD_EXAMPLES: turn it on if you want to build simple examples that demonstrates GDCM usage.

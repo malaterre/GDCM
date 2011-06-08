@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -14,9 +13,10 @@
 =========================================================================*/
 #include "gdcmSOPClassUIDToIOD.h"
 
+#include <iostream>
+
 int TestSOPClassUIDToIOD(int, char *[])
 {
-  gdcm::SOPClassUIDToIOD sop2iod;
 
   gdcm::SOPClassUIDToIOD::SOPClassUIDToIODType& s = gdcm::SOPClassUIDToIOD::GetSOPClassUIDToIOD(0);
   std::cout << s[0] << std::endl;

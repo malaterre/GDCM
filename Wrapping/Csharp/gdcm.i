@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -539,12 +538,15 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmUIDGenerator.h"
 //%template (ValuesType)      std::set<std::string>;
 %rename (CSharpTagToValue) SWIGTagToValue;
-%include "gdcmScanner.h"
-EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmSubject.h"
 %include "gdcmCommand.h"
+
+%template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
+%include "gdcmScanner.h"
+EXTEND_CLASS_PRINT(gdcm::Scanner)
+
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
 
@@ -726,7 +728,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
-%template (DoubleType) std::vector<double>;
+%template (DoubleArrayType) std::vector<double>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"

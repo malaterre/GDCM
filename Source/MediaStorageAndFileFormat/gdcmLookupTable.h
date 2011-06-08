@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -93,6 +92,9 @@ public:
   bool Initialized() const;
 
 private:
+  /// Unfinished work
+  void Encode(std::istream &is, std::ostream &os);
+
 protected:
   LookupTableInternal *Internal;
   unsigned short BitSample; // refer to the pixel type (not the bit size of LUT)

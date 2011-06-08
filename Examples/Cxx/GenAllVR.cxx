@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -97,10 +96,10 @@ int main(int argc, char *argv[])
   gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
   sq->SetLengthToUndefined();
 
-  gdcm::DummyValueGenerator dvg;
+//  gdcm::DummyValueGenerator dvg;
 
   const std::size_t len = 10;
-  char ss[len];
+  char ss[len+1];
   ss[len] = '\0';
 
   const char owner_str[] = "GDCM CONFORMANCE TESTS";
