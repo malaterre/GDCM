@@ -419,7 +419,8 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
   // Apply LUT
   if( P->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR )
     {
-    std::istringstream is( std::string(&vbuffer2[0], vbuffer2.size() ) );
+    std::string tempvbuf(&vbuffer2[0], vbuffer2.size());
+    std::istringstream is( tempvbuf );
     std::stringstream ss;
     P->GetLUT().Decode( is, ss );
 
