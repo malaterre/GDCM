@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
   const unsigned int niter = 8;
   for( unsigned int i = 0; i < niter; ++i)
     {
-    //bool b = 
+    //bool b =
     interpolate(&out[0], out.size() / 3, out2);
     //const double *pout = &out[0];
     out = out2;

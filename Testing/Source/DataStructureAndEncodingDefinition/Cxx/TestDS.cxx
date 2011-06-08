@@ -77,10 +77,10 @@ std::string to_string ( Float data ) {
 #endif
             }
             else if( ldata < 0){
-				//since ldata is negative, to have the test pass, 
+				//since ldata is negative, to have the test pass,
 				//the right casting has to be done to avoid a casting warning here
 				unsigned long uldata = (unsigned long)(fabs(ldata)+1.0);
-                digits -= uldata; // (zeros before first significant digit) 
+                digits -= uldata; // (zeros before first significant digit)
 			}
         }
     }
@@ -126,7 +126,7 @@ bool checkerror(double d, std::string s)
 
 
     //if (error > pow(10., eo) )
-	//pow will underflow at 10^-308, so errors lower than -308 will appear to be 
+	//pow will underflow at 10^-308, so errors lower than -308 will appear to be
 	//larger than pow(10., eo), because the 'pow' result will be 0 in vs2010
 	if (log10(error) > eo)
     {

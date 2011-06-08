@@ -51,7 +51,6 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
   m_DataFilterCommand->SetCallbackFunction(this,
                                         &SimpleSubjectWatcher::ShowData);
 
-
   // Add the commands as observers
   m_StartTag = m_Subject->AddObserver(StartEvent(), m_StartFilterCommand);
   m_EndTag = m_Subject->AddObserver(EndEvent(), m_EndFilterCommand);

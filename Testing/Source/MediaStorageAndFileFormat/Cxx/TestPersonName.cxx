@@ -40,18 +40,18 @@ int TestPersonName(int, char *[])
   std::cout << std::endl;
   std::cout << "NumComp:" << pn2.GetNumberOfComponents() << std::endl;
 
-// Rev. John Robert Quincy Adams, B.A. M.Div. “Adams^John Robert Quincy^^Rev.^B.A. M.Div.” [One family name; three given names; no middle name; one prefix; two suffixes.]
+// Rev. John Robert Quincy Adams, B.A. M.Div. Adams^John Robert Quincy^^Rev.^B.A. M.Div. [One family name; three given names; no middle name; one prefix; two suffixes.]
         PN pn3 = {{ "Adams", "John Robert Quincy", "", "Rev.", "B.A. M.Div." }};
   pn3.Print( std::cout );
   std::cout << std::endl;
   std::cout << "NumComp:" << pn3.GetNumberOfComponents() << std::endl;
-// Susan Morrison-Jones, Ph.D., Chief Executive Officer “Morrison-Jones^Susan^^^Ph.D., Chief Executive Officer” [Two family names; one given name; no middle name; no prefix; two suffixes.]
+// Susan Morrison-Jones, Ph.D., Chief Executive Officer Morrison-Jones^Susan^^^Ph.D., Chief Executive Officer [Two family names; one given name; no middle name; no prefix; two suffixes.]
         PN pn4 = {{ "Morrison-Jones", "Susan", "", "", "Ph.D., Chief Executive Officer" }};
   pn4.Print( std::cout );
   std::cout << std::endl;
   std::cout << "NumComp:" << pn4.GetNumberOfComponents() << std::endl;
 
-// John Doe “Doe^John” [One family name; one given name; no middle name, prefix, or suffix. Delimiters have been omitted for the three trailing null components.]
+// John Doe Doe^John [One family name; one given name; no middle name, prefix, or suffix. Delimiters have been omitted for the three trailing null components.]
         PN pn5 = {{ "Doe", "John" }};
   pn5.Print( std::cout );
   std::cout << std::endl;
@@ -65,7 +65,7 @@ int TestPersonName(int, char *[])
   pn6.Print( std::cout );
   std::cout << std::endl;
   std::cout << "NumComp:" << pn6.GetNumberOfComponents() << std::endl;
-//ABC Farms^Running on Water [A horse whose responsible organization is named ABC Farms, and whose name is “Running On Water”]
+//ABC Farms^Running on Water [A horse whose responsible organization is named ABC Farms, and whose name is Running On Water]
         PN pn7 = {{ "ABC Farms", "Running on Water" }};
   pn7.Print( std::cout );
   std::cout << std::endl;

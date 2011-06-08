@@ -128,7 +128,7 @@ int TestReaderCanRead(int argc, char *argv[])
     ++i;
     }
 
-  //int r2 = 
+  //int r2 =
   TestReadCanReadExtra();
   //r += r2;
 

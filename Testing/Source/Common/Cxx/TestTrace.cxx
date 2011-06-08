@@ -32,13 +32,13 @@ int TestTrace(int, char *[])
   gdcmErrorMacro( "ErrorOK_OFF" );
 
   gdcm::Trace::DebugOn();
-  gdcm::Trace::WarningOn(); 
+  gdcm::Trace::WarningOn();
   gdcm::Trace::ErrorOn();
 
   gdcmDebugMacro( "DebugOK_ON" );
   gdcmWarningMacro( "WarningOK_ON" );
   gdcmErrorMacro( "ErrorOK_ON" );
-  
+
   //in release mode, tracing just doesn't work any more, so this test isn't valid.
 #ifndef NDEBUG
   std::string result = useros.str();

@@ -191,10 +191,11 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     ASSERT(result == OK);
 
     delete[] buffer;
-      
-    if (result != OK) {
+
+    if (result != OK)
+      {
       return false;
-    }
+      }
     out = in;
 
     out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );

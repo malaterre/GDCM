@@ -198,7 +198,7 @@ uint8_t PixelFormat::GetPixelSize() const
     {
     pixelsize = 2; // fake a short value
     }
-  else 
+  else
     {
     assert( !(BitsAllocated % 8) );
     }
