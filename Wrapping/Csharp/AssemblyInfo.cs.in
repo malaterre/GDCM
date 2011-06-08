@@ -50,7 +50,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("GDCM -- http://gdcm.sourceforge.net")]
 [assembly: AssemblyProduct("gdcm-sharp.dll")]
 [assembly: AssemblyDefaultAlias("gdcm-sharp")]
-[assembly: AssemblyCopyright("Copyright ©2006-2011 Mathieu Malaterre. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright Â©2006-2011 Mathieu Malaterre. All rights reserved.")]
 [assembly: AssemblyTrademark("GDCM -- http://gdcm.sourceforge.net")]
 [assembly: AssemblyCulture("")]
 
