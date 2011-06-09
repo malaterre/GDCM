@@ -49,6 +49,7 @@ public:
   friend std::ostream& operator<< (std::ostream &os, const Item &val);
 
   void Clear() {
+    this->DataElement::Clear();
     NestedDataSet.Clear();
     }
 
