@@ -59,9 +59,8 @@ public:
   void SetLength(VL length) {
     SequenceLengthField = length;
   }
-  void SetLengthToUndefined() {
-    SequenceLengthField = 0xFFFFFFFF;
-  }
+  /// \brief Properly set the Sequence of Item to be undefined length
+  void SetLengthToUndefined();
   /// return if Value Length if of undefined length
   bool IsUndefinedLength() const {
     return SequenceLengthField.IsUndefined();
@@ -138,6 +137,8 @@ public:
         if( item.GetTag() == seqDelItem )
           {
           gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
+          assert( item.GetVL() == 0 );
+          assert( item.GetNestedDataSet().Size() == 0 );
           }
         //assert( item.GetTag() == Tag(0xfffe,0xe000) );
         Items.push_back( item );
