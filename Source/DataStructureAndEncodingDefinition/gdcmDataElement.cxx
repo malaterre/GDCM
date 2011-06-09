@@ -136,7 +136,7 @@ namespace gdcm
             ss.str( s );
             sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
             }
-          catch ( Exception &ex )
+          catch ( Exception & )
             {
             // Some people like to skew things up and write invalid SQ in VR:UN field
             // if conversion fails, simply keep the binary VR:UN stuff as-is
@@ -145,14 +145,16 @@ namespace gdcm
             // s -> gdcm::ImplicitDataElement -> Impossible (more)
             std::stringstream ss;
             ss.str(s);
-			(void)ex;  //to avoid unreferenced variable warning on release
-            try {
-            sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
-            } catch ( Exception & ) {
+            try
+              {
+              sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
+              }
+            catch ( Exception & )
+              {
               gdcmErrorMacro( "Could not read SQ. Giving up" );
+              throw "Could not decode this SQ";
               return NULL;
-            }
-			gdcmErrorMacro(ex.what());
+              }
             }
           return sqi;
           }
