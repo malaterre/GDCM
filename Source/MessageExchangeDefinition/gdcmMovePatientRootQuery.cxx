@@ -96,7 +96,7 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
   DataSet ds = GetQueryDataSet();
   if (ds.Size() == 0) return false;
 
-  //search for 0x8,0x52
+  // search for 0x8,0x52
   Attribute<0x0008, 0x0052> level;
   level.SetFromDataSet( ds );
   std::string theVal = level.GetValue();
@@ -104,69 +104,77 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
 
   std::vector<Tag> tags;
   if (inStrict)
-  {
+    {
     QueryBase* qb = NULL;
-    if (strcmp(theVal.c_str(), "PATIENT ") == 0){
+    if (strcmp(theVal.c_str(), "PATIENT ") == 0)
+      {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       qb = new QueryPatient();
-    }
-    if (strcmp(theVal.c_str(), "STUDY ") == 0){
+      }
+    else if (strcmp(theVal.c_str(), "STUDY ") == 0)
+      {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       qb = new QueryStudy();
-    }
-    if (strcmp(theVal.c_str(), "SERIES") == 0){
+      }
+    else if (strcmp(theVal.c_str(), "SERIES") == 0)
+      {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       qb = new QuerySeries();
-    }
-    if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0){
+      }
+    else if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0)
+      {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       qb = new QueryImage();
-    }
-    if (qb == NULL){
+      }
+    if (qb == NULL)
+      {
       return false;
+      }
+    tags = qb->GetUniqueTags(ePatientRootType);
     }
-      tags = qb->GetUniqueTags(ePatientRootType);
-  }
   else //include all previous levels (ie, series gets study and patient, image gets series, study, and patient)
-  {
+    {
     QueryBase* qb = NULL;
-    if (strcmp(theVal.c_str(), "PATIENT ") == 0){
+    if (strcmp(theVal.c_str(), "PATIENT ") == 0)
+      {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryPatient();
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
+      tagGroup = qb->GetUniqueTags(ePatientRootType);
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
-    }
-    if (strcmp(theVal.c_str(), "STUDY ") == 0){
+      }
+    else if (strcmp(theVal.c_str(), "STUDY ") == 0)
+      {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryPatient();
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
+      tagGroup = qb->GetUniqueTags(ePatientRootType);
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QueryStudy();
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
+      tagGroup = qb->GetUniqueTags(ePatientRootType);
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
-    }
-    if (strcmp(theVal.c_str(), "SERIES") == 0){
+      }
+    else if (strcmp(theVal.c_str(), "SERIES") == 0)
+      {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
       qb = new QueryPatient();
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
+      tagGroup = qb->GetUniqueTags(ePatientRootType);
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QueryStudy();
-        tagGroup = qb->GetUniqueTags(eStudyRootType);
+      tagGroup = qb->GetUniqueTags(eStudyRootType);
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       qb = new QuerySeries();
-        tagGroup = qb->GetUniqueTags(ePatientRootType);
+      tagGroup = qb->GetUniqueTags(ePatientRootType);
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
-    }
-    if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0)
+      }
+    else if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0)
       {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
@@ -191,7 +199,7 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
       {
       return false;
       }
-  }
+    }
   //all the tags in the dataset should be in that tag list
   //otherwise, it's not valid
   //also, while the level tag must be present, and the language tag can be
@@ -206,13 +214,14 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
     {
     Tag t = itor->GetTag();
     if (t == level.GetTag()) continue;
-    if (t.GetGroup() == language.GetTag().GetGroup() &&
-      t.GetElement() == language.GetTag().GetElement()) continue;
+    if (t == language.GetTag()) continue;
+    assert( !tags.empty() );
     if (std::find(tags.begin(), tags.end(), t) == tags.end())
       {
       //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
       //of the possible language tag values
       //well, for now, just allow it if it's present.
+      gdcmDebugMacro( "You have an extra tag: " << t );
       theReturn = false;
       break;
       }

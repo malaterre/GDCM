@@ -16,44 +16,46 @@
  *
  *=========================================================================*/
 /*
-filename: gdcmQueryPatient.cxx
-contains: class to construct a patient-based query for c-find and c-move
-name and date: 15 oct 2010 mmr
-
 //note that at the series and image levels, there is no distinction between the root query types.
 */
 
 #include "gdcmQueryPatient.h"
 
-namespace gdcm{
+namespace gdcm
+{
 
-std::vector<Tag> QueryPatient::GetRequiredTags(const ERootType& inRootType) const{
+std::vector<Tag> QueryPatient::GetRequiredTags(const ERootType& inRootType) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
-  switch (inRootType){
-    case ePatientRootType:
-    default:
-      theReturn.push_back(Tag(0x0010, 0x0010));
-      break;
-    case eStudyRootType:
-      //do nothing
-      break;
-  }
+  switch (inRootType)
+    {
+  case ePatientRootType:
+  default:
+    theReturn.push_back(Tag(0x0010, 0x0010));
+    break;
+  case eStudyRootType:
+    //do nothing
+    break;
+    }
   return theReturn;
 }
-std::vector<Tag> QueryPatient::GetUniqueTags(const ERootType& inRootType) const{
-  std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
-  switch (inRootType){
-    case ePatientRootType:
-    default:
-      theReturn.push_back(Tag(0x0010, 0x0020));
-      break;
-    case eStudyRootType:
-      //do nothing
-      break;
-  }
-  return theReturn;
 
+std::vector<Tag> QueryPatient::GetUniqueTags(const ERootType& inRootType) const
+{
+  std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
+  switch (inRootType)
+    {
+  case ePatientRootType:
+  default:
+    theReturn.push_back(Tag(0x0010, 0x0020));
+    break;
+  case eStudyRootType:
+    //do nothing
+    break;
+    }
+  return theReturn;
 }
+
 std::vector<Tag> QueryPatient::GetOptionalTags(const ERootType& inRootType) const{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
   switch (inRootType){
