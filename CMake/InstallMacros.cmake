@@ -40,7 +40,7 @@ MACRO (install_pdb library)
         get_target_property(library_dll ${library} LOCATION_${cfg})
         string(REPLACE .dll .pdb library_pdb ${library_dll})
         string(TOLOWER ${cfg} lcfg)
-        if(lcfg STREQUAL "debug" or lcfg STREQUAL "relwithdebinfo")
+        if(lcfg STREQUAL "debug" OR lcfg STREQUAL "relwithdebinfo")
           install (FILES ${library_pdb}
             DESTINATION ${GDCM_INSTALL_BIN_DIR}
             COMPONENT Development
@@ -55,7 +55,7 @@ MACRO (install_pdb library)
       get_target_property(library_dll ${library} LOCATION_${CMAKE_BUILD_TYPE})
       string(REPLACE .dll .pdb library_pdb ${library_dll})
       string(TOLOWER ${CMAKE_BUILD_TYPE} lcfg)
-      if(lcfg STREQUAL "debug" or lcfg STREQUAL "relwithdebinfo")
+      if(lcfg STREQUAL "debug" OR lcfg STREQUAL "relwithdebinfo")
         install (FILES ${library_pdb}
           DESTINATION ${GDCM_INSTALL_BIN_DIR}
           COMPONENT Development
