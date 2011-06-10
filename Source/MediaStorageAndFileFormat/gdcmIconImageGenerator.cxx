@@ -500,7 +500,8 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     }
   else if( P->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
     {
-    std::istringstream is( std::string(&vbuffer2[0], vbuffer2.size() ) );
+    std::string tempvbuf( &vbuffer2[0], vbuffer2.size() );
+    std::istringstream is( tempvbuf );
     if( I->GetPixelFormat() == PixelFormat::UINT8 )
       {
       //LookupTable &lut = I->GetLUT();
