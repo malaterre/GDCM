@@ -324,7 +324,6 @@ int main(int argc, char *argv[])
         ss >> cdummy;
         assert( cdummy == ',' || cdummy == '=' );
         std::string str;
-        //ss >> str;
         std::getline(ss, str); // do not skip whitespace
         keys.push_back( std::make_pair(tag, str) );
       }
@@ -475,7 +474,8 @@ int main(int argc, char *argv[])
   
   if( shostname.empty() )
     {
-    std::cerr << "Hostname missing" << std::endl;
+    //std::cerr << "Hostname missing" << std::endl;
+    PrintHelp(); // needed to display help message when no arg
     return 1;
     }
   if( port == 0 )
@@ -574,7 +574,8 @@ int main(int argc, char *argv[])
       {
       if (gdcm::Trace::GetErrorFlag())
         {
-        std::cerr << "Need to set explicitely port number for SCP association --port-scp" << std::endl;      
+        std::cerr << "Need to set explicitely port number for SCP association"
+          " --port-scp" << std::endl;
         }
       std::cerr << "Move failed." << std::endl;
       return 1;
@@ -590,15 +591,16 @@ int main(int argc, char *argv[])
         }
       }
 
-    if (!theQuery->ValidateQuery())
+    if (!theQuery->ValidateQuery(false))
       {
-      std::cerr << "You have not constructed a valid find query.  Please try again." << std::endl;
+      std::cerr << "You have not constructed a valid find query."
+        " Please try again." << std::endl;
       return 1;
       }
 
-    //!!! added the boolean to 'interleave writing', which basically writes each file out as it comes
-    //across, rather than all at once at the end.  Turn off the boolean to have
-    //it written all at once at the end.
+    //!!! added the boolean to 'interleave writing', which basically writes
+    //each file out as it comes across, rather than all at once at the end.
+    //Turn off the boolean to have it written all at once at the end.
     bool didItWork = gdcm::CompositeNetworkFunctions::CMove( hostname, port,
       theQuery, portscpnum,
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
@@ -663,7 +665,8 @@ int main(int argc, char *argv[])
     //look at the base query comments
     if (!theQuery->ValidateQuery())
       {
-      std::cerr << "You have not constructed a valid find query.  Please try again." << std::endl;
+      std::cerr << "You have not constructed a valid find query."
+        " Please try again." << std::endl;
       return 1;
       }
     //the value in that tag corresponds to the query type
