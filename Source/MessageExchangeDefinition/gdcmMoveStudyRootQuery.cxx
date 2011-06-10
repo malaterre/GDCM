@@ -171,30 +171,31 @@ bool MoveStudyRootQuery::ValidateQuery(bool inStrict) const
   //so, have two counts: 1 for tags that are found, 1 for tags that are not
   //if there are no found tags, then the query is invalid
   //if there is one improper tag found, then the query is invalid
-  int thePresentTagCount = 0;
+  int thePresentTagCount = 1;
   DataSet::ConstIterator itor;
   Attribute<0x0008, 0x0005> language;
-  for (itor = ds.Begin(); itor != ds.End(); itor++){
-    Tag t = itor->GetTag();
-    if (t == level.GetTag()) continue;
-    if (t == language.GetTag()) continue;
-    if (std::find(tags.begin(), tags.end(), t) == tags.end())
-      {
-      //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
-      //of the possible language tag values
-      //well, for now, just allow it if it's present.
-      if( inStrict )
+  if( inStrict )
+    {
+    thePresentTagCount = 0;
+    for (itor = ds.Begin(); itor != ds.End(); itor++){
+      Tag t = itor->GetTag();
+      if (t == level.GetTag()) continue;
+      if (t == language.GetTag()) continue;
+      if (std::find(tags.begin(), tags.end(), t) == tags.end())
         {
+        //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
+        //of the possible language tag values
+        //well, for now, just allow it if it's present.
         gdcmDebugMacro( "You have an extra tag: " << t );
         theReturn = false;
         break;
         }
-      }
-    else
-      {
-      thePresentTagCount++;
-      }
-  }
+      else
+        {
+        thePresentTagCount++;
+        }
+    }
+    }
   return theReturn && (thePresentTagCount > 0);
 }
 
