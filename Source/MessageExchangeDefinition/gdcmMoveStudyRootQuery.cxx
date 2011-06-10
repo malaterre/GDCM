@@ -177,17 +177,23 @@ bool MoveStudyRootQuery::ValidateQuery(bool inStrict) const
   for (itor = ds.Begin(); itor != ds.End(); itor++){
     Tag t = itor->GetTag();
     if (t == level.GetTag()) continue;
-    if (t.GetGroup() == language.GetTag().GetGroup() &&
-      t.GetElement() == language.GetTag().GetElement()) continue;
-    if (std::find(tags.begin(), tags.end(), t) == tags.end()){
+    if (t == language.GetTag()) continue;
+    if (std::find(tags.begin(), tags.end(), t) == tags.end())
+      {
       //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
       //of the possible language tag values
       //well, for now, just allow it if it's present.
-      theReturn = false;
-      break;
-    } else {
+      if( inStrict )
+        {
+        gdcmDebugMacro( "You have an extra tag: " << t );
+        theReturn = false;
+        break;
+        }
+      }
+    else
+      {
       thePresentTagCount++;
-    }
+      }
   }
   return theReturn && (thePresentTagCount > 0);
 }

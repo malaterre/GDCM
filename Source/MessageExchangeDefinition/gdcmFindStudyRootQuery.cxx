@@ -42,6 +42,8 @@ void FindStudyRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
       Attribute<0x20, 0xd> Studylevel = { "" };
       mDataSet.Insert( Studylevel.GetAsDataElement() );
       }
+  default: // ePatient
+    break;
   case eImageOrFrame:
       {
       Attribute<0x8,0x52> at1 = { "IMAGE " };
@@ -172,21 +174,28 @@ bool FindStudyRootQuery::ValidateQuery(bool inStrict) const
   int thePresentTagCount = 0;
   DataSet::ConstIterator itor;
   Attribute<0x0008, 0x0005> language;
-  for (itor = ds.Begin(); itor != ds.End(); itor++){
-    Tag t = itor->GetTag();
+  for (itor = ds.Begin(); itor != ds.End(); itor++)
+    {
+    const Tag & t = itor->GetTag();
     if (t == level.GetTag()) continue;
-    if (t.GetGroup() == language.GetTag().GetGroup() &&
-      t.GetElement() == language.GetTag().GetElement()) continue;
-    if (std::find(tags.begin(), tags.end(), t) == tags.end()){
+    if (t == language.GetTag()) continue;
+    if (std::find(tags.begin(), tags.end(), t) == tags.end())
+      {
       //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
       //of the possible language tag values
       //well, for now, just allow it if it's present.
-      theReturn = false;
-      break;
-    } else {
+      if( inStrict )
+        {
+        gdcmDebugMacro( "You have an extra tag: " << t );
+        theReturn = false;
+        break;
+        }
+      }
+    else
+      {
       thePresentTagCount++;
+      }
     }
-  }
   return theReturn && (thePresentTagCount > 0);
 }
 

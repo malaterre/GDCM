@@ -663,7 +663,7 @@ int main(int argc, char *argv[])
 
     //doing a non-strict query, the second parameter there.
     //look at the base query comments
-    if (!theQuery->ValidateQuery())
+    if (!theQuery->ValidateQuery(false))
       {
       std::cerr << "You have not constructed a valid find query."
         " Please try again." << std::endl;

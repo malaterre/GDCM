@@ -212,7 +212,7 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
   Attribute<0x0008, 0x0005> language;
   for (itor = ds.Begin(); itor != ds.End(); itor++)
     {
-    Tag t = itor->GetTag();
+    const Tag &t = itor->GetTag();
     if (t == level.GetTag()) continue;
     if (t == language.GetTag()) continue;
     assert( !tags.empty() );
@@ -221,9 +221,12 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
       //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
       //of the possible language tag values
       //well, for now, just allow it if it's present.
-      gdcmDebugMacro( "You have an extra tag: " << t );
-      theReturn = false;
-      break;
+      if( inStrict )
+        {
+        gdcmDebugMacro( "You have an extra tag: " << t );
+        theReturn = false;
+        break;
+        }
       }
     else
       {
