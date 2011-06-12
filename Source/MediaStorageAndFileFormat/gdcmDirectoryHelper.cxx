@@ -91,8 +91,14 @@ Directory::FilenamesType DirectoryHelper::GetFilenamesFromSeriesUIDs(const std::
         if( std::string::npos != endpos )
           theSeriesUID = theSeriesUID.substr( 0, endpos+1 );
       if (inSeriesUID == theSeriesUID){
-      theReturn.push_back(theScanner.GetFilenameFromTagToValue(Tag(0x0020,0x000e),
-        theSeriesValues[i].c_str()));
+	    gdcm::Directory::FilenamesType theFilenames = 
+		  theScanner.GetAllFilenamesFromTagToValue(Tag(0x0020, 0x000e), theSeriesValues[i].c_str());
+		gdcm::Directory::FilenamesType::const_iterator citor;
+		for (citor = theFilenames.begin(); citor < theFilenames.end(); citor++){
+		  theReturn.push_back(*citor);
+		  }
+//      theReturn.push_back(theScanner.GetFilenameFromTagToValue(Tag(0x0020,0x000e),
+//        theSeriesValues[i].c_str()));
       }
     }
     return theReturn;
