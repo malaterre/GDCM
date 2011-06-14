@@ -192,13 +192,15 @@ ENDIF(UNIX)
 
 #-----------------------------------------------------------------------------
 # Build the main lib...
-IF(MSVC)
-  INCLUDE_DIRECTORIES(
-    "${GDCM_SOURCE_DIR}/Utilities/C99"
-  )
-  # Process the install rules from C99
-  SUBDIRS(Utilities/C99)
-ENDIF(MSVC)
+IF( NOT GDCM_HAVE_STDINT_H )
+  IF( MSVC )
+    INCLUDE_DIRECTORIES(
+      "${GDCM_SOURCE_DIR}/Utilities/C99"
+      )
+    # Process the install rules from C99
+    SUBDIRS(Utilities/C99)
+  ENDIF()
+ENDIF()
 
 # --------------------------------------------------------------------------
 # Configure the export configuration
@@ -942,12 +944,14 @@ SET(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
-IF(MSVC)
-  SET(GDCM_INCLUDE_PATH
-    ${GDCM_INCLUDE_PATH}
-    "${GDCM_SOURCE_DIR}/Utilities/C99"
-  )
-ENDIF(MSVC)
+IF( NOT GDCM_HAVE_STDINT_H )
+  IF(MSVC)
+    SET(GDCM_INCLUDE_PATH
+      ${GDCM_INCLUDE_PATH}
+      "${GDCM_SOURCE_DIR}/Utilities/C99"
+    )
+  ENDIF(MSVC)
+ENDIF()
 IF(GDCM_USE_VTK)
     SET(GDCM_INCLUDE_PATH
       ${GDCM_INCLUDE_PATH}
