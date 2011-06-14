@@ -222,7 +222,7 @@ class MY_API sockbuf: public streambuf
 
         virtual int           sync ();
 
-        virtual streamsize    showmanyc () const;
+        virtual streamsize    showmanyc ();
         virtual streamsize    xsgetn (char_type* s, streamsize n);
         virtual int_type      underflow ();
         virtual int_type      uflow ();
@@ -303,7 +303,7 @@ class MY_API sockbuf: public streambuf
 
         bool atmark() const;
         long nread() const;
-        long howmanyc() const;
+        long howmanyc();
         void nbio(bool set=true) const;
         inline void setname(const char *name);
         inline void setname(const string &name);

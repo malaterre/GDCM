@@ -455,7 +455,7 @@ int sockbuf::sync ()
     return 0;
 }
 
-streamsize sockbuf::showmanyc () const
+streamsize sockbuf::showmanyc ()
 // return the number of chars in the input sequence
 {
     if (gptr () && gptr () < egptr ())
@@ -1041,7 +1041,7 @@ long sockbuf::nread () const
   return arg;
 }
 
-long sockbuf::howmanyc () const
+long sockbuf::howmanyc ()
 // return how many chars are available for reading in the input buffer
 // and the recvbuf of the socket.
 {
