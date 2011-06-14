@@ -20,8 +20,10 @@
 
 #include "gdcmTypes.h"
 
-namespace gdcm {
-  namespace network {
+namespace gdcm
+{
+namespace network
+{
 
 /**
  * \brief BasePDU
@@ -50,17 +52,19 @@ namespace gdcm {
  */
 class BasePDU
 {
-    public:
+public:
+  virtual ~BasePDU() {}
 
-      virtual std::istream &Read(std::istream &is) = 0;
-      virtual const std::ostream &Write(std::ostream &os) const = 0;
+  virtual std::istream &Read(std::istream &is) = 0;
+  virtual const std::ostream &Write(std::ostream &os) const = 0;
 
-      virtual size_t Size() const = 0;
-      virtual void Print(std::ostream &os) const = 0;
+  virtual size_t Size() const = 0;
+  virtual void Print(std::ostream &os) const = 0;
 
-      virtual bool IsLastFragment() const = 0;
-    };
-  }
-}
+  virtual bool IsLastFragment() const = 0;
+};
+
+} // end namespace network
+} // end namespace gdcm
 
 #endif // GDCMBASEPDU_H
