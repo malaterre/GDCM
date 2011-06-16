@@ -28,6 +28,7 @@ namespace gdcm
     template <typename EntryType>
     class Segment {
     public:
+        virtual ~Segment() {}
         typedef std::map<const EntryType*, const Segment*> SegmentMap;
         virtual bool Expand(const SegmentMap& instances,
             std::vector<EntryType>& expanded) const = 0;
