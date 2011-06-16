@@ -204,9 +204,9 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   std::vector<double> distances;
   gdcm::SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
   std::vector<double> dircos_subds2; dircos_subds2.resize(6);
-  for(gdcm::SequenceOfItems::SizeType i = 1; i <= nitems; ++i)
+  for(gdcm::SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
     {
-    const Item &item = sqi->GetItem(i);
+    const Item &item = sqi->GetItem(i0);
     const DataSet & subds = item.GetNestedDataSet();
     // (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
     const Tag tpms(0x0020,0x9113);
@@ -421,20 +421,22 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
     if( ds.FindDataElement( t1 ) )
       {
       SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( t1 ).GetValueAsSQ();
-      assert( sqi );
-      // Get first item:
-      const Item &item = sqi->GetItem(1);
-      const DataSet & subds = item.GetNestedDataSet();
-      const Tag timagepositionpatient(0x0020, 0x0032);
-      assert( subds.FindDataElement( timagepositionpatient ) );
-      Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
-      at.SetFromDataSet( subds );
-      ori.resize( at.GetNumberOfValues() );
-      for( unsigned int i = 0; i < at.GetNumberOfValues(); ++i )
+      if( sqi )
         {
-        ori[i] = at.GetValue(i);
+        // Get first item:
+        const Item &item = sqi->GetItem(1);
+        const DataSet & subds = item.GetNestedDataSet();
+        const Tag timagepositionpatient(0x0020, 0x0032);
+        assert( subds.FindDataElement( timagepositionpatient ) );
+        Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
+        at.SetFromDataSet( subds );
+        ori.resize( at.GetNumberOfValues() );
+        for( unsigned int i = 0; i < at.GetNumberOfValues(); ++i )
+          {
+          ori[i] = at.GetValue(i);
+          }
+        return ori;
         }
-      return ori;
       }
     ori.resize( 3 );
     gdcmWarningMacro( "Could not find Origin" );
@@ -553,30 +555,31 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     if( ds.FindDataElement( t1 ) )
       {
       SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( t1 ).GetValueAsSQ();
-      assert( sqi );
-      // Get first item:
-      const Item &item = sqi->GetItem(1);
-      const DataSet & subds = item.GetNestedDataSet();
+      if( sqi )
+        {
+        // Get first item:
+        const Item &item = sqi->GetItem(1);
+        const DataSet & subds = item.GetNestedDataSet();
 
-      dircos.resize( 6 );
-      bool b2 = ImageHelper::GetDirectionCosinesFromDataSet(subds, dircos);
-      if( b2 )
-        {
+        dircos.resize( 6 );
+        bool b2 = ImageHelper::GetDirectionCosinesFromDataSet(subds, dircos);
+        if( b2 )
+          {
+          }
+        else
+          {
+          gdcmErrorMacro( "Image Orientation (Patient) was not found" );
+          dircos[0] = 1;
+          dircos[1] = 0;
+          dircos[2] = 0;
+          dircos[3] = 0;
+          dircos[4] = 1;
+          dircos[5] = 0;
+          }
+        return dircos;
         }
-      else
-        {
-        gdcmErrorMacro( "Image Orientation (Patient) was not found" );
-        dircos[0] = 1;
-        dircos[1] = 0;
-        dircos[2] = 0;
-        dircos[3] = 0;
-        dircos[4] = 1;
-        dircos[5] = 0;
-        }
-      return dircos;
       }
     }
-
 
   dircos.resize( 6 );
   if( ms == MediaStorage::SecondaryCaptureImageStorage || !GetDirectionCosinesFromDataSet(ds, dircos) )
@@ -1404,11 +1407,11 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
     if( !ds.FindDataElement( tfgs ) )
       {
       sqi = new SequenceOfItems;
-      DataElement de( tfgs );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi );
-      de.SetVLToUndefined();
-      ds.Insert( de );
+      DataElement detmp( tfgs );
+      detmp.SetVR( VR::SQ );
+      detmp.SetValue( *sqi );
+      detmp.SetVLToUndefined();
+      ds.Insert( detmp );
       }
     //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
     sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
@@ -1426,11 +1429,11 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
     if( !subds.FindDataElement( tpms ) )
       {
       SequenceOfItems *sqi2 = new SequenceOfItems;
-      DataElement de( tpms );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi2 );
-      de.SetVLToUndefined();
-      subds.Insert( de );
+      DataElement detmp( tpms );
+      detmp.SetVR( VR::SQ );
+      detmp.SetValue( *sqi2 );
+      detmp.SetVLToUndefined();
+      subds.Insert( detmp );
       }
 
     //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
