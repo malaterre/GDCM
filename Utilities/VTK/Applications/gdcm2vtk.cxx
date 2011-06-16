@@ -617,7 +617,9 @@ int main(int argc, char *argv[])
   if( imgreader && imgreader->GetOutput()->GetNumberOfScalarComponents() == 4 && !argb )
     {
     if( verbose )
-      std::cout << "alpha channel will be lost" << std::endl;
+      {
+      std::cout << "alpha channel will be lost " << imgreader->GetOutput()->GetNumberOfScalarComponents() << std::endl;
+      }
     vtkImageExtractComponents *extract = vtkImageExtractComponents::New();
     extract->SetInput( imgreader->GetOutput() );
     extract->SetComponents( 0,1,2 );
