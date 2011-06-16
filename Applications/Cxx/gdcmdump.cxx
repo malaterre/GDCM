@@ -62,6 +62,162 @@ int ignoreerrors = 0;
 
 namespace cleanup
 {
+// {"1.3.46.670589.11.0.0.12.2"       ,"Philips Private MR Series Data Storage"},
+enum {
+  TYPE_FLOAT  = 0, // float
+  TYPE_INT32  = 1, // int32
+  TYPE_STRING = 2, // 80 bytes string (+1)
+  TYPE_UINT32 = 4, // uint32
+};
+
+template <typename T>
+void printvaluet(std::istream & is, uint32_t numels)
+{
+  T buffer;
+  for( uint32_t i = 0; i < numels; ++i )
+    {
+    if( i ) std::cout << "\\";
+    is.read( (char*)&buffer, sizeof(T) );
+    std::cout << buffer;
+    }
+}
+
+void printvalue(std::istream &is, uint32_t type, uint32_t numels, uint32_t pos)
+{
+  assert( numels > 0 );
+  std::streampos start = is.tellg();
+  is.seekg( pos );
+  std::cout << "[";
+  typedef char (string81)[81]; // 80'th byte == 0
+  assert( sizeof( string81 ) == 81 );
+  switch( type )
+    {
+  case TYPE_FLOAT:
+    printvaluet<float>(is, numels);
+    break;
+  case TYPE_INT32:
+    printvaluet<int32_t>(is, numels);
+    break;
+  case TYPE_STRING:
+    printvaluet<string81>(is, numels);
+    break;
+  case TYPE_UINT32:
+    printvaluet<uint32_t>(is, numels);
+    break;
+  default:
+    assert( 0 );
+    }
+  std::cout << "]";
+  std::cout << " # " << numels;
+  is.seekg( start );
+}
+
+struct PDFElement
+{
+  const char *getname() const { return name; }
+  uint32_t gettype() const { return getvalue(0); }
+  uint32_t getnumelems() const { return getvalue(1); }
+  uint32_t getdummy() const { return getvalue(2); }
+  uint32_t getoffset() const { return getvalue(3); }
+private:
+  char name[50];
+  // type , numel and offset needs to be read starting from the end
+  // the data in between name and those value can contains garbage stuff
+  uint32_t getvalue(int n) const {
+    uint32_t val = 0;
+    memcpy( (char*)&val, name + 50 - 16 + n * 4, sizeof( val ) );
+    return val;
+  }
+};
+
+void printbinary(std::istream &is, PDFElement const & pdfel )
+{
+  const char *bufferref = pdfel.getname();
+  std::cout << "  " << bufferref << " ";
+  uint32_t type = pdfel.gettype();
+  uint32_t numels = pdfel.getnumelems();
+  uint32_t dummy = pdfel.getdummy();
+  assert( dummy == 0 );
+  uint32_t offset = pdfel.getoffset();
+  uint32_t pos = offset + is.tellg() - 4;
+  printvalue(is, type, numels, pos);
+}
+
+void ProcessSDSData( std::istream & is )
+{
+  // havent been able to figure out what was the begin meant for
+  is.seekg( 0x20 - 8 );
+  uint32_t version = 0;
+  is.read( (char*)&version, sizeof(version) );
+  assert( version == 8 );
+  uint32_t numel = 0;
+  is.read( (char*)&numel, sizeof(numel) );
+  for( uint32_t el = 0; el < numel; ++el )
+    {
+    PDFElement pdfel;
+    assert( sizeof(pdfel) == 50 );
+    is.read( (char*)&pdfel, 50 );
+    if( *pdfel.getname() )
+      {
+      printbinary( is, pdfel );
+      std::cout << std::endl;
+      }
+    }
+
+}
+// PMS MR Series Data Storage
+int DumpPMS_MRSDS(const gdcm::DataSet & ds)
+{
+  const gdcm::PrivateTag tdata(0x2005,0x32,"Philips MR Imaging DD 002");
+  if( !ds.FindDataElement( tdata ) ) return 1;
+  const gdcm::DataElement &data = ds.GetDataElement( tdata );
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = data.GetValueAsSQ();
+  if( !sqi ) return 1;
+  std::cout << "PMS Dumping info from tag " << tdata << std::endl;
+  gdcm::SequenceOfItems::ConstIterator it = sqi->Begin();
+  for( ; it != sqi->End(); ++it )
+    {
+    const gdcm::Item & item = *it;
+    const gdcm::DataSet & nestedds = item.GetNestedDataSet();
+    const gdcm::PrivateTag tprotocoldataname(0x2005,0x37,"Philips MR Imaging DD 002");
+    const gdcm::DataElement & protocoldataname = nestedds.GetDataElement( tprotocoldataname );
+    const gdcm::ByteValue *bv1 = protocoldataname.GetByteValue();
+    const gdcm::PrivateTag tprotocoldatatype(0x2005,0x39,"Philips MR Imaging DD 002");
+    const gdcm::DataElement & protocoldatatype = nestedds.GetDataElement( tprotocoldatatype );
+    const gdcm::ByteValue *bv2 = protocoldatatype.GetByteValue();
+    const gdcm::PrivateTag tprotocoldatablock(0x2005,0x44,"Philips MR Imaging DD 002");
+    const gdcm::DataElement & protocoldatablock = nestedds.GetDataElement( tprotocoldatablock );
+    const gdcm::ByteValue *bv3 = protocoldatablock.GetByteValue();
+    const gdcm::PrivateTag tprotocoldatabool(0x2005,0x47,"Philips MR Imaging DD 002");
+    const gdcm::DataElement & protocoldatabool = nestedds.GetDataElement( tprotocoldatabool );
+    const gdcm::ByteValue *bv4 = protocoldatabool.GetByteValue();
+    std::string s1;
+    if( bv1 )
+      {
+      s1 = std::string( bv1->GetPointer(), bv1->GetLength() );
+      }
+    std::string s2;
+    if( bv2 )
+      {
+      s2 = std::string( bv2->GetPointer(), bv2->GetLength() );
+      }
+    std::string s3;
+    if( bv3 )
+      {
+      s3 = std::string( bv3->GetPointer(), bv3->GetLength() );
+      }
+    std::string s4;
+    if( bv4 )
+      {
+      s4 = std::string( bv4->GetPointer(), bv4->GetLength() );
+      }
+    std::istringstream is( s3 );
+    std::cout << "PMS/Item name: [" << s1 << "/" << s2 << "/" << s4 << "]" << std::endl;
+    ProcessSDSData( is );
+    }
+  return 0;
+}
+
 // VEPRO
 /*
 [VIMDATA2]
@@ -465,6 +621,24 @@ int PrintVEPRO(const std::string & filename, bool verbose)
   return ret;
 }
 
+int PrintSDS(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  int ret = cleanup::DumpPMS_MRSDS( ds );
+
+  return ret;
+}
+
+
 int PrintPDB(const std::string & filename, bool verbose)
 {
   (void)verbose;
@@ -614,6 +788,7 @@ void PrintHelp()
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
   std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA)." << std::endl;
+  std::cout << "     --sds            print Philips MR Series Data Storage (1.3.46.670589.11.0.0.12.2) Information (2005,32,Philips MR Imaging DD 002)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -641,6 +816,7 @@ int main (int argc, char *argv[])
   int printpdb = 0;
   int printelscint = 0;
   int printvepro = 0;
+  int printsds = 0; // MR Series Data Storage
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -681,6 +857,7 @@ int main (int argc, char *argv[])
         {"map-uid-names", 0, &mapuidnames, 1},
         {"elscint", 0, &printelscint, 1},
         {"vepro", 0, &printvepro, 1},
+        {"sds", 0, &printsds, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -878,6 +1055,10 @@ int main (int argc, char *argv[])
         {
         res += PrintVEPRO(*it, verbose!= 0);
         }
+      else if( printsds )
+        {
+        res += PrintSDS(*it, verbose!= 0);
+        }
       else if( printelscint )
         {
         res += PrintELSCINT(*it, verbose!= 0);
@@ -916,6 +1097,10 @@ int main (int argc, char *argv[])
     else if( printvepro )
       {
       res += PrintVEPRO(filename, verbose!= 0);
+      }
+    else if( printsds )
+      {
+      res += PrintSDS(filename, verbose!= 0);
       }
     else if( printelscint )
       {
