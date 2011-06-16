@@ -344,6 +344,10 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
     const uint16_t *end = (uint16_t*)(array + length);
     //const unsigned int ovlength = length / (8*2);
     assert( 8 * ovlength == (unsigned int)Internal->Rows * Internal->Columns );
+    if( Internal->Data.empty() )
+      {
+      return false;
+      }
     unsigned char * overlay = (unsigned char*)&Internal->Data[0];
     int c = 0;
     uint16_t pmask = 1 << Internal->BitPosition;
