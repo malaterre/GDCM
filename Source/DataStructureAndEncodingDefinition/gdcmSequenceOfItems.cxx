@@ -46,28 +46,6 @@ const Item &SequenceOfItems::GetItem(SizeType position) const
 void SequenceOfItems::SetLengthToUndefined()
 {
   SequenceLengthField = 0xFFFFFFFF;
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // The following is needed because by design GDCM loads extra
-  // Sequence Delimitation Item in defined length sequence
-  // Therefore when switching to undefined length it is necessary
-  // to remove this extra /extra/ Sequence Delimitation Item
-  // For now GDCM does not support two Sequence Delimitation Item
-  ItemVector::iterator it = Items.begin();
-  for(; it != Items.end(); )
-    {
-    Item & item = *it;
-    if( item.GetTag() == Tag(0xfffe, 0xe0dd) )
-      {
-      assert( item.GetVL() == 0 );
-      assert( item.GetNestedDataSet().Size() == 0 );
-      it = Items.erase( it );
-      }
-    else
-      {
-      ++it;
-      }
-    }
-#endif
 }
 
 bool SequenceOfItems::FindDataElement(const Tag &t) const
