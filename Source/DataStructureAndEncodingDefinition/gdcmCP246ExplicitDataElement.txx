@@ -104,7 +104,11 @@ std::istream &CP246ExplicitDataElement::ReadPreValue(std::istream &is)
     // 16bits only
     if( !ValueLengthField.template Read16<TSwap>(is) )
       {
-      assert(0 && "Should not happen");
+      //gdcmAssertAlwaysMacro(0 && "Should not happen");
+      // The following is occurs with gdcm 2.0.17 when two
+      // seq del item marker are found
+      // See UnexpectedSequenceDelimiterInFixedLengthSequence.dcm
+      throw Exception("Should not happen CP246");
       return is;
       }
     }
