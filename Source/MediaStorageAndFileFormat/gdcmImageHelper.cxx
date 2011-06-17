@@ -735,6 +735,7 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
     //  theReturn[1] = 1;
     //  }
   }
+#if 0
   // D 0054|0081 [US] [Planes] [512]
   {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
@@ -753,6 +754,18 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
     //  theReturn[1] = 1;
     //  }
   }
+#else
+  {
+  Attribute<0x0028,0x0008> at = { 0 };
+  at.SetFromDataSet( ds );
+  int numberofframes = at.GetValue();
+  if( numberofframes > 1 )
+    {
+    theReturn[2] = at.GetValue();
+    }
+  }
+
+#endif
   return theReturn;
 }
 
