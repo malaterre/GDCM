@@ -365,7 +365,7 @@ bool StreamImageWriter::CanWriteFile() const
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
   
   RAWCodec theCodec;
-  bool canDecodeWithRaw = !theCodec.CanDecode(ts);
+  bool canDecodeWithRaw = theCodec.CanDecode(ts);
   if (!canDecodeWithRaw)
     {
     return false; 
