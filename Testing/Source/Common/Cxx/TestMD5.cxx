@@ -215,7 +215,8 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "346ba438ade47d75c41e637858a419f8"  , "OsirixFake16BitsStoredFakeSpacing.dcm" },
 { "efe1ff2da3fc0bfcc5df834fa390d5cf"  , "MR16BitsAllocated_8BitsStored.dcm" },
 { "7900d059078278ad0387f7c4aaf2027d"  , "JPEGDefinedLengthSequenceOfFragments.dcm" },
-
+{ "dacb240b2fc701416d80193ad18baad5"  , "IM-0001-0066.CommandTag00.dcm" },
+{ "7f2f84d3adef913bb5531f583eceb004"  , "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" },
 { NULL, NULL}
 };
 
