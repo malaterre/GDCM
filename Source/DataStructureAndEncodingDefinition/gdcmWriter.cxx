@@ -153,9 +153,9 @@ bool Writer::Write()
     return false;
     }
 
+  os.flush();
   if (Ofstream)
     {
-    Ofstream->flush();
     Ofstream->close();
     }
 
