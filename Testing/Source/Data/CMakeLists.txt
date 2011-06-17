@@ -90,9 +90,6 @@ BogusItemStartItemEnd.dcm
   image.acr
   MergeCOM3_330_IM50.dcm
   ImplicitVRInExplicitDataSet2.dcm
-  BogugsItemAndSequenceLengthCorrected.dcm
-# Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
-  BogusItemLengthImplicitPrivateAtt.dcm
 
 # This image has an unknown Media Storage UID, when looking in Modality 'CR' is found;
 # but at the same time, there is no such thing as IPP/IOP in a ComputedRadiographyImageStorage ...
@@ -105,13 +102,11 @@ BogusItemStartItemEnd.dcm
 # buggy dcm4che
   kos.dcm
 
-# problem with overlay in unsed bits:
+# problem with overlay in unused bits:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
 # packed 12 bits still not ok:
   MR-MONO2-12-angio-an1.acr
-
-  PHILIPS_GDCM12xBug.dcm # See bug : 3196213
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
