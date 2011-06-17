@@ -202,6 +202,9 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "00191113.dcm","7c17afc7815f18ebaecd99b9b07950f1", "bfff320d1b058e91b4819aa4560c16f7" },
 { "D_CLUNIE_CT1_JLSL.dcm","4efffce4cded3f8785d5ac4d3b11da41", "a109da372df2b85ff0a705fba62e9589" },
 { "D_CLUNIE_CT1_JLSN.dcm","bcf17a67d96046ce7a2b4de4495dbd4c", "7ca273fff6311586bd02ac983ccfbb6b" },
+{ "IM-0001-0066.CommandTag00.dcm","51450a7a49ce7bc0e6a4ce18eaef2fff", "12d1567ed81236cf3b01dc12766581a0" },
+{ "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm","2b1296ded36f37beb83e28fae108c280", "d93d2f78d845c7a132489aab92eadd32" },
+{ "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm","f507ab11e56de33d6f0195dd185b5c62", "9eb513314b2fcf25d895e18ffb2ead0b" },
 
 /* Stopping condition */
 { 0 , 0 , 0 }

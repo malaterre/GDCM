@@ -96,6 +96,7 @@ int TestReaderUpToTag(int argc, char *argv[])
   // else
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

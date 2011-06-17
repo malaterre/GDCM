@@ -255,11 +255,11 @@ int TestSHA1Func(const char* filename, const char *sha1ref, bool verbose = false
 
 int TestSHA1(int argc, char *argv[])
 {
-//  if( argc == 2 )
-//    {
-//    const char *filename = argv[1];
-//    return TestSHA1Func(filename, true);
-//    }
+  if( argc == 2 )
+    {
+    const char *filename = argv[1];
+    return TestSHA1Func(filename, "", true);
+    }
 
   // else
   gdcm::Trace::DebugOff();
