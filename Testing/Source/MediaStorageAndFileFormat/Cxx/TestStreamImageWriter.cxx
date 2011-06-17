@@ -71,7 +71,13 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     //theStreamReader.GetFile().GetDataSet().Print( std::cout );
 
     theStreamWriter.SetFile(theImageReaderOriginal.GetFile());
+#if 0
     theStreamWriter.SetFileName(outfilename.c_str());
+#else
+    std::ofstream of;
+    of.open( outfilename.c_str(), std::ios::out | std::ios::binary );
+    theStreamWriter.SetStream(of);
+#endif
     if (!theStreamWriter.CanWriteFile()){
       delete [] theOriginalBuffer;
       return 0;//this means that the file was unwritable, period.

@@ -161,8 +161,10 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
 //    inStream->seekp(std::ios::beg);
 //    theOffset = mFileOffset;
 //    inStream->seekp(theOffset);
+    assert( inStream && *inStream && !inStream->eof() && inStream->good() );
     inStream->write(tmpBuffer2, theBufferSize);
     inStream->flush();
+    assert( inStream && *inStream );
 
   } catch(...){
     delete [] tmpBuffer1;
@@ -224,6 +226,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
   //tmpBuffer is for a single raster
+  assert( theStream && *theStream );
   char* tmpBuffer = new char[SubRowSize*bytesPerPixel];
   char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
   try {
@@ -237,7 +240,6 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
     }
     //only need to seek to the location once, and then write sequentially
     //may be trickier with compressed images, but should work for RAW
-    theStream->seekp(std::ios::end);
     //seeking to the end should be sufficient, if we're guaranteed to get chunks in order
 //    theOffset = mFileOffset + (mZMin * (int)(extent[1]*extent[0]) + mYMin*(int)extent[0] + mXMin)*bytesPerPixel + mElementOffsets;
 //    theStream->seekp(theOffset);
@@ -258,6 +260,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
           return false;
         }
         //should be appending
+        assert( theStream && *theStream );
         theStream->write(tmpBuffer2, SubRowSize*bytesPerPixel);
         theStream->flush();
       }
