@@ -56,6 +56,7 @@
 #cmakedefine GDCM_USE_SYSTEM_EXPAT
 #cmakedefine GDCM_USE_SYSTEM_LJPEG
 #cmakedefine GDCM_USE_SYSTEM_OPENJPEG
+#cmakedefine GDCM_USE_SYSTEM_CHARLS
 #cmakedefine GDCM_USE_SYSTEM_KAKADU
 #cmakedefine GDCM_USE_SYSTEM_PVRG
 
