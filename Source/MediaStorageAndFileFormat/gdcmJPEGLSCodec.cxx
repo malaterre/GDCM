@@ -17,15 +17,7 @@
 #include "gdcmDataElement.h"
 
 // CharLS includes
-#include "gdcmcharls/stdafx.h" // sigh...
-#include "gdcmcharls/interface.h"
-#include "gdcmcharls/util.h"
-#include "gdcmcharls/defaulttraits.h"
-#include "gdcmcharls/losslesstraits.h"
-#include "gdcmcharls/colortransform.h"
-#include "gdcmcharls/streams.h"
-#include "gdcmcharls/processline.h"
-
+#include "gdcm_charls.h"
 
 namespace gdcm
 {
@@ -60,7 +52,11 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+  JlsParameters metadata;
+#else
   JlsParamaters metadata;
+#endif
   //assert(buf_size < INT_MAX);
   if (JpegLsReadHeader(dummy_buffer, (unsigned int)buf_size, &metadata) != OK)
     {
@@ -166,7 +162,11 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     sf->GetBuffer(buffer, totalLen);
     //is.write(buffer, totalLen);
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JlsParameters metadata;
+#else
     JlsParamaters metadata;
+#endif
     if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
       {
       return false;
@@ -178,7 +178,11 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     const BYTE* pbyteCompressed = (const BYTE*)buffer;
     int cbyteCompressed = totalLen;
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JlsParameters params = {};
+#else
     JlsParamaters params = {};
+#endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
     std::vector<BYTE> rgbyteCompressed;
@@ -187,7 +191,11 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     std::vector<BYTE> rgbyteOut;
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
+#else
     JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+#endif
     ASSERT(result == OK);
 
     delete[] buffer;
@@ -226,7 +234,11 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   // what if 0xd9 is never found ?
   assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JlsParameters metadata;
+#else
     JlsParamaters metadata;
+#endif
     if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
       {
       return false;
@@ -238,7 +250,11 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
     int cbyteCompressed = totalLen;
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JlsParameters params = {};
+#else
     JlsParamaters params = {};
+#endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
     std::vector<BYTE> rgbyteCompressed;
@@ -247,7 +263,11 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     std::vector<BYTE> rgbyteOut;
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
+#else
     JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+#endif
     ASSERT(result == OK);
     bool r = true;
 
@@ -306,7 +326,11 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     {
     const char *inputdata = input + dim * image_len; //bv->GetPointer();
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JlsParameters params = {};
+#else
     JlsParamaters params = {};
+#endif
 /*
 The fields in JlsCustomParameters do not control lossy/lossless. They
 provide the possiblity to tune the JPEG-LS internals for better compression

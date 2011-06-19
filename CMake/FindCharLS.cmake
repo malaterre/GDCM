@@ -1,0 +1,40 @@
+#
+#  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+
+FIND_PATH(CHARLS_INCLUDE_DIR CharLS/interface.h
+/usr/local/include
+/usr/include
+)
+
+FIND_LIBRARY(CHARLS_LIBRARY
+  NAMES CharLS
+  PATHS /usr/lib /usr/local/lib
+  )
+
+IF (CHARLS_LIBRARY AND CHARLS_INCLUDE_DIR)
+    SET(CHARLS_LIBRARIES    ${CHARLS_LIBRARY})
+    SET(CHARLS_INCLUDE_DIRS ${CHARLS_INCLUDE_DIR})
+    SET(CHARLS_FOUND "YES")
+ELSE (CHARLS_LIBRARY AND CHARLS_INCLUDE_DIR)
+  SET(CHARLS_FOUND "NO")
+ENDIF (CHARLS_LIBRARY AND CHARLS_INCLUDE_DIR)
+
+IF (CHARLS_FOUND)
+   IF (NOT CHARLS_FIND_QUIETLY)
+      MESSAGE(STATUS "Found CHARLS: ${CHARLS_LIBRARIES}")
+   ENDIF (NOT CHARLS_FIND_QUIETLY)
+ELSE (CHARLS_FOUND)
+   IF (CHARLS_FIND_REQUIRED)
+      MESSAGE(FATAL_ERROR "Could not find CHARLS library")
+   ENDIF (CHARLS_FIND_REQUIRED)
+ENDIF (CHARLS_FOUND)
+
+MARK_AS_ADVANCED(
+  CHARLS_LIBRARIES
+  CHARLS_INCLUDE_DIR
+  )
