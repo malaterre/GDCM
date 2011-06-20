@@ -71,20 +71,21 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
     }
 
   std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
+  bool success = true;
   for(; it != empty_tags.end(); ++it)
     {
-    anon.Empty( *it );
+    success = success && anon.Empty( *it );
     }
   it = remove_tags.begin();
   for(; it != remove_tags.end(); ++it)
     {
-    anon.Remove( *it );
+    success = success && anon.Remove( *it );
     }
 
   std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it2 = replace_tags.begin();
   for(; it2 != replace_tags.end(); ++it2)
     {
-    anon.Replace( it2->first, it2->second.c_str() );
+    success = success && anon.Replace( it2->first, it2->second.c_str() );
     }
 
   gdcm::Writer writer;
@@ -104,7 +105,7 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
 
     return false;
     }
-  return true;
+  return success;
 }
 
 static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const char *outfilename, bool continuemode = false)

@@ -98,7 +98,6 @@ bool Anonymizer::Empty( Tag const &t)
 
 bool Anonymizer::Remove( Tag const &t )
 {
-  if( t.GetGroup() < 0x0008 ) return false;
   DataSet &ds = F->GetDataSet();
   return ds.Remove( t ) == 1;
 }
