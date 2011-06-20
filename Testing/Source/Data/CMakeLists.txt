@@ -107,9 +107,6 @@ BogusItemStartItemEnd.dcm
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
 # packed 12 bits still not ok:
   MR-MONO2-12-angio-an1.acr
-
-  # problem with openjpeg (segfault)
-  GDCMJ2K_TextGBR.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

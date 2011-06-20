@@ -205,6 +205,8 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "IM-0001-0066.CommandTag00.dcm","51450a7a49ce7bc0e6a4ce18eaef2fff", "12d1567ed81236cf3b01dc12766581a0" },
 { "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm","2b1296ded36f37beb83e28fae108c280", "d93d2f78d845c7a132489aab92eadd32" },
 { "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm","f507ab11e56de33d6f0195dd185b5c62", "9eb513314b2fcf25d895e18ffb2ead0b" },
+{ "GDCMJ2K_TextGBR.dcm","9935ec525ea42203f3a535d4c1187ed4", "56238d3665ebdb0251d1161fb7f4edc6" },
+{ "NM_Kakadu44_SOTmarkerincons.dcm","99b60ec88d410b437adc06a809590127", "6f26e552a1b71d386483118779d192ad" },
 
 /* Stopping condition */
 { 0 , 0 , 0 }
