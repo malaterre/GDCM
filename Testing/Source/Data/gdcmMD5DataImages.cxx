@@ -662,6 +662,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "9eb513314b2fcf25d895e18ffb2ead0b" , "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" },
 { "12d1567ed81236cf3b01dc12766581a0" , "IM-0001-0066.CommandTag00.dcm" },
+{ "6f26e552a1b71d386483118779d192ad" , "NM_Kakadu44_SOTmarkerincons.dcm" },
+{ "56238d3665ebdb0251d1161fb7f4edc6" , "GDCMJ2K_TextGBR.dcm" },
 
 /* Stopping condition */
 { 0 ,0 }

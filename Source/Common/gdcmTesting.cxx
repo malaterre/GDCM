@@ -399,6 +399,8 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0, "o.dcm" },
 { 0, "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" },
 { 0, "IM-0001-0066.CommandTag00.dcm" },
+{ 0, "NM_Kakadu44_SOTmarkerincons.dcm" },
+{ 0, "GDCMJ2K_TextGBR.dcm" },
 { 0, NULL }
 };
 
