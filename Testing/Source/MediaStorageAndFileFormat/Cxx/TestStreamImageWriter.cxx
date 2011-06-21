@@ -25,6 +25,7 @@
 
 int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose = false, bool lossydump = false)
 {
+  (void)lossydump;
   if( verbose )
     std::cerr << "Reading and writing: " << filename << std::endl;
   gdcm::ImageReader theImageReaderOriginal;
@@ -129,8 +130,8 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     delete [] theOriginalBuffer;
     theImageReader.SetFileName(outfilename.c_str());
     if (!theImageReader.Read()){
-      std::cerr << "unable to read in the written test file." << std::endl;
-      return 0;
+      std::cerr << "unable to read in the written test file: " << outfilename << std::endl;
+      return 1;
     } else {
       int res = 0;
       const gdcm::Image &img = theImageReader.GetImage();

@@ -759,6 +759,7 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
   Attribute<0x0028,0x0008> at = { 0 };
   at.SetFromDataSet( ds );
   int numberofframes = at.GetValue();
+  theReturn[2] = 1;
   if( numberofframes > 1 )
     {
     theReturn[2] = at.GetValue();
