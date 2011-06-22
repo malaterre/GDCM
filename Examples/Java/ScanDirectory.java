@@ -42,11 +42,22 @@ public class ScanDirectory
       }
     }
 
-  public static boolean WritePNG(Bitmap input, String outfilename )
+  public static byte[] GetAsByte(Bitmap input)
     {
     long len = input.GetBufferLength();
     byte[] buffer = new byte[ (int)len ];
-    input.GetBuffer( buffer );
+    input.GetArray( buffer );
+    return buffer;
+    }
+  public static short[] GetAsShort(Bitmap input)
+    {
+    long len = input.GetBufferLength();
+    short[] buffer = new short[ (int)len / 2 ];
+    input.GetArray( buffer );
+    return buffer;
+    }
+  public static boolean WritePNG(Bitmap input, String outfilename )
+    {
     /*
     try {
     FileOutputStream fos = new FileOutputStream("debug.raw");
@@ -117,7 +128,16 @@ public class ScanDirectory
       bi = new BufferedImage((int)width,(int)height,imageType);
       }
     WritableRaster wr = bi.getRaster();
-    wr.setDataElements (0, 0, (int)width, (int)height, buffer);
+    if( imageType == BufferedImage.TYPE_BYTE_GRAY )
+      {
+      byte[] buffer = GetAsByte( input );
+      wr.setDataElements (0, 0, (int)width, (int)height, buffer);
+      }
+    else if( imageType == BufferedImage.TYPE_USHORT_GRAY )
+      {
+      short[] buffer = GetAsShort( input );
+      wr.setDataElements (0, 0, (int)width, (int)height, buffer);
+      }
 
     File outputfile = new File( outfilename );
     try {
