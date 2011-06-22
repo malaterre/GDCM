@@ -32,9 +32,9 @@ extern "C" {
 
 #else
 extern "C" {
-#include <gdcmopenjpeg/libopenjpeg/openjpeg.h>
-#include <gdcmopenjpeg/libopenjpeg/j2k.h>
-#include <gdcmopenjpeg/libopenjpeg/jp2.h>
+#include <gdcmopenjpeg-v2/libopenjpeg/openjpeg.h>
+#include <gdcmopenjpeg-v2/libopenjpeg/j2k.h>
+#include <gdcmopenjpeg-v2/libopenjpeg/jp2.h>
 }
 #endif
 
