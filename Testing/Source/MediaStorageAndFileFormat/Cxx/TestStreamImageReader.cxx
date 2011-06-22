@@ -29,6 +29,7 @@
 
 int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydump = false)
 {
+  (void)lossydump;
   if( verbose )
     std::cerr << "Reading: " << filename << std::endl;
   gdcm::StreamImageReader reader;

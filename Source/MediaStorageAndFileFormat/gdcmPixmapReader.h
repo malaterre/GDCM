@@ -48,7 +48,7 @@ public:
 
   // Following methods are valid only after a call to 'Read'
 
-  /// Return the read image
+  /// Return the read image (need to call Read() first)
   const Pixmap& GetPixmap() const;
   Pixmap& GetPixmap();
   //void SetPixamp(Pixmap const &pix);
