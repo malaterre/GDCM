@@ -282,6 +282,7 @@ bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *
   bool b = jpeg.GetHeaderInfo( is, ts );
   if( !b )
     {
+    std::cerr << "Could not read: " << filename << std::endl;
     return false;
     }
 

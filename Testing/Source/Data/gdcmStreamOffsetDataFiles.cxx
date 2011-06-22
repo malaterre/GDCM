@@ -210,6 +210,11 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "simpleImageWithIcon.dcm",17478 },
 { "test.acr",182 },
 { "undefined_length_un_vr.dcm",9168 },
+{ "IM-0001-0066.CommandTag00.dcm", 3050 },
+{ "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm", 5956 },
+{ "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm", 4190 },
+{ "GDCMJ2K_TextGBR.dcm", 770 },
+{ "NM_Kakadu44_SOTmarkerincons.dcm", 1576 },
 
 /* Stopping condition */
 { 0 ,0 },

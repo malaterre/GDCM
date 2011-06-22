@@ -86,7 +86,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   gdcm::Filename fn( System::GetCurrentProcessFileName() );
   std::string executable_path = fn.GetPath();
 
-  std::string pvrg_command = executable_path + "gdcmjpeg";
+  std::string pvrg_command = executable_path + "/gdcmjpeg";
 #endif
   if( !System::FileExists( pvrg_command.c_str() ) )
     {
@@ -115,7 +115,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw
   pvrg_command += "-s ";
   pvrg_command += input;
-  pvrg_command += " ";
+  pvrg_command += " -ci 0 ";
   pvrg_command += output;
 
   //std::cerr << pvrg_command << std::endl;

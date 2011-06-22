@@ -59,9 +59,8 @@ public:
   void SetLength(VL length) {
     SequenceLengthField = length;
   }
-  void SetLengthToUndefined() {
-    SequenceLengthField = 0xFFFFFFFF;
-  }
+  /// \brief Properly set the Sequence of Item to be undefined length
+  void SetLengthToUndefined();
   /// return if Value Length if of undefined length
   bool IsUndefinedLength() const {
     return SequenceLengthField.IsUndefined();
@@ -135,12 +134,22 @@ public:
             throw ex;
             }
           }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         if( item.GetTag() == seqDelItem )
           {
-          gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
+          gdcmWarningMacro( "SegDelItem found in defined length Sequence. Skipping" );
+          assert( item.GetVL() == 0 );
+          assert( item.GetNestedDataSet().Size() == 0 );
           }
-        //assert( item.GetTag() == Tag(0xfffe,0xe000) );
-        Items.push_back( item );
+        else // Not a seq del item marker
+#endif
+          {
+          // By design we never load them. If we were to load those attribute
+          // as normal item it would become very complex to convert a sequence
+          // from defined length to undefined length with the risk to write two
+          // seq del marker
+          Items.push_back( item );
+          }
         l += item.template GetLength<TDE>();
         if( l > SequenceLengthField ) throw "Length of Item larger than expected";
         assert( l <= SequenceLengthField );

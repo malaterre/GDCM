@@ -24,6 +24,7 @@
  * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java ScanDirectory gdcmData
  */
 import gdcm.*;
+import gdcm.Reader;
 import gdcm.LookupTable;
 import java.io.File;
 import java.io.*;
@@ -42,11 +43,22 @@ public class ScanDirectory
       }
     }
 
-  public static boolean WritePNG(Bitmap input, String outfilename )
+  public static byte[] GetAsByte(Bitmap input)
     {
     long len = input.GetBufferLength();
     byte[] buffer = new byte[ (int)len ];
-    input.GetBuffer( buffer );
+    input.GetArray( buffer );
+    return buffer;
+    }
+  public static short[] GetAsShort(Bitmap input)
+    {
+    long len = input.GetBufferLength(); // length in bytes
+    short[] buffer = new short[ (int)len / 2 ];
+    input.GetArray( buffer );
+    return buffer;
+    }
+  public static boolean WritePNG(Bitmap input, String outfilename )
+    {
     /*
     try {
     FileOutputStream fos = new FileOutputStream("debug.raw");
@@ -117,7 +129,16 @@ public class ScanDirectory
       bi = new BufferedImage((int)width,(int)height,imageType);
       }
     WritableRaster wr = bi.getRaster();
-    wr.setDataElements (0, 0, (int)width, (int)height, buffer);
+    if( imageType == BufferedImage.TYPE_BYTE_GRAY )
+      {
+      byte[] buffer = GetAsByte( input );
+      wr.setDataElements (0, 0, (int)width, (int)height, buffer);
+      }
+    else if( imageType == BufferedImage.TYPE_USHORT_GRAY )
+      {
+      short[] buffer = GetAsShort( input );
+      wr.setDataElements (0, 0, (int)width, (int)height, buffer);
+      }
 
     File outputfile = new File( outfilename );
     try {
@@ -183,11 +204,11 @@ public class ScanDirectory
 
     for( long idx = 0; idx < fns.size(); ++idx )
       {
-      ImageReader r = new ImageReader();
+      Reader r = new Reader();
       String fn = fns.get( (int)idx );
       String outfn = fn + ".png";
       r.SetFileName( fn );
-      b = r.Read();
+      b = r.ReadUpToTag( new Tag(0x88,0x200) );
       if( b )
         {
         IconImageFilter iif = new IconImageFilter();
@@ -202,14 +223,19 @@ public class ScanDirectory
           }
         else
           {
-          Image img = r.GetImage();
-          IconImageGenerator iig = new IconImageGenerator();
-          iig.SetPixmap( img );
-          long idims[] = { 64, 64 };
-          iig.SetOutputDimensions( idims );
-          iig.Generate();
-          Bitmap icon = iig.GetIconImage();
-          WritePNG(icon, outfn);
+          ImageReader ir = new ImageReader();
+          ir.SetFileName( fn );
+          if( ir.Read() )
+            {
+            Image img = ir.GetImage();
+            IconImageGenerator iig = new IconImageGenerator();
+            iig.SetPixmap( img );
+            long idims[] = { 64, 64 };
+            iig.SetOutputDimensions( idims );
+            iig.Generate();
+            Bitmap icon = iig.GetIconImage();
+            WritePNG(icon, outfn);
+            }
           }
         }
       }

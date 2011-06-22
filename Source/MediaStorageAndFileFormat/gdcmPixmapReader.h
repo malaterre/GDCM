@@ -32,6 +32,8 @@ class MediaStorage;
  * See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of
  * attribute that belong to what gdcm calls a 'Pixmap'
  *
+ * \warning the API ReadUpToTag and ReadSelectedTag
+ *
  * \see Pixmap
  */
 class GDCM_EXPORT PixmapReader : public Reader
@@ -48,7 +50,7 @@ public:
 
   // Following methods are valid only after a call to 'Read'
 
-  /// Return the read image
+  /// Return the read image (need to call Read() first)
   const Pixmap& GetPixmap() const;
   Pixmap& GetPixmap();
   //void SetPixamp(Pixmap const &pix);

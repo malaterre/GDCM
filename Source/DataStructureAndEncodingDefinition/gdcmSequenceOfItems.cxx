@@ -43,6 +43,11 @@ const Item &SequenceOfItems::GetItem(SizeType position) const
   return Items[position-1];
 }
 
+void SequenceOfItems::SetLengthToUndefined()
+{
+  SequenceLengthField = 0xFFFFFFFF;
+}
+
 bool SequenceOfItems::FindDataElement(const Tag &t) const
 {
   ConstIterator it = Begin();

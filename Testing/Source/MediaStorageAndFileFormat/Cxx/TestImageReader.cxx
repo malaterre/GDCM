@@ -26,6 +26,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
   gdcm::ImageReader reader;
 
   reader.SetFileName( filename );
+  reader.ReadUpToTag( gdcm::Tag(0x10,0x10) );
   if ( reader.Read() )
     {
     int res = 0;
@@ -41,6 +42,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
     if( reflossy == -1 )
       {
       std::cerr << "Missing lossy flag for: " << filename << std::endl;
+      return 1;
       }
     if( img.IsLossy() != (reflossy > 0 ? true : false)  )//vs10 has a stupid bool/int cast warning
       {
@@ -51,7 +53,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
     bool res2 = img.GetBuffer(buffer);
     if( !res2 )
       {
-      std::cerr << "res2 failure:" << filename << std::endl;
+      std::cerr << "res2 failure: " << filename << std::endl;
       return 1;
       }
     // On big Endian system we have byteswapped the buffer (duh!)

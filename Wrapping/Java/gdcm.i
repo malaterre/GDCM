@@ -317,17 +317,14 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
 %clear const char* array;
 %extend gdcm::DataElement
 {
- void SetArray(unsigned char array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(unsigned char) );
+ void SetArray(signed char array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(signed char) );
  }
- void SetArray(char array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(char) );
+ void SetArray(signed short array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(signed short) );
  }
- void SetArray(unsigned short array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(unsigned short) );
- }
- void SetArray(short array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(short) );
+ void SetArray(signed int array[], unsigned int nitems) {
+   $self->SetByteValue((char*)array, nitems * sizeof(signed int) );
  }
  void SetArray(float array[], unsigned int nitems) {
    $self->SetByteValue((char*)array, nitems * sizeof(float) );
@@ -417,20 +414,15 @@ EXTEND_CLASS_PRINT(gdcm::File)
   bool GetBuffer(signed char *buffer) const {
     return self->GetBuffer((char*)buffer);
   }
-  bool GetArray(unsigned char buffer[]) const {
-    assert( $self->GetPixelFormat() == PixelFormat::UINT8 );
-    return $self->GetBuffer((char*)buffer);
-  }
-  bool GetArray(char buffer[]) const {
-    assert( $self->GetPixelFormat() == PixelFormat::INT8 );
-    return $self->GetBuffer((char*)buffer);
-  }
-  bool GetArray(unsigned short buffer[]) const {
-    assert( $self->GetPixelFormat() == PixelFormat::UINT16 );
+  // There is no such thing as unsigned type in java
+  // so we only wrap the signed API, and hope user understand what to do
+  bool GetArray(signed char buffer[]) const {
     return $self->GetBuffer((char*)buffer);
   }
   bool GetArray(short buffer[]) const {
-    assert( $self->GetPixelFormat() == PixelFormat::INT16 );
+    return $self->GetBuffer((char*)buffer);
+  }
+  bool GetArray(int buffer[]) const { // is int always 32bits in Java ?
     return $self->GetBuffer((char*)buffer);
   }
   bool GetArray(float buffer[]) const {

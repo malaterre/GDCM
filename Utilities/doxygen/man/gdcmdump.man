@@ -283,6 +283,59 @@ VIMDATA2: (0055,20,VEPRO VIM 5.0 DATA)
   Modality: CT
 \endverbatim
 
+\subsection pms_mr_sds Philips Private MR Series Data Storage (1.3.46.670589.11.0.0.12.2)
+
+Using this option it is possible to dump as a readable text what is contained
+in the private attribute as found in typical Philips Private MR Series Data Storage file.
+
+PMS Series Data Storage (2005,32,Philips MR Imaging DD 002)
+
+\verbatim
+$ gdcmdump --sds PMS_SeriesDataStorage.dcm
+\endverbatim
+
+\verbatim
+\&...
+PMS/Item name: [PDF_CONTROL_GEN_PARS/IEEE_PDF/Y ]
+\&...
+PMS/Item name: [PDF_CONTROL_PREP_PARS /IEEE_PDF/Y ]
+\&...
+PMS/Item name: [PDF_CONTROL_RECON_PARS/IEEE_PDF/Y ]
+\&...
+PMS/Item name: [PDF_CONTROL_SCAN_PARS /IEEE_PDF/Y ]
+\&...
+PMS/Item name: [PDF_EXAM_PARS /IEEE_PDF/Y ]
+\&...
+PMS/Item name: [PDF_HARDWARE_PARS /IEEE_PDF/Y ]
+\&...
+PMS/Item name: [PDF_PREP_PARS /IEEE_PDF/Y ]
+\&...
+PMS/Item name: [PDF_SPT_PARS/IEEE_PDF/Y ]
+  SP_scan_resol [256\256] # 2
+  SP_pda_profiles [0\0] # 2
+  SP_filter [324074] # 1
+  SP_analyse_with_iqt [0] # 1
+  SP_main_system_type [3] # 1
+  SP_gradient_system [6] # 1
+  SP_coil_type [2\2\0\0\0\0\0\0\0\0\0\0\0\0\0\0] # 16
+  SP_coil_id [2\34\0\0\0\0\0\0\0\0\0\0\0\0\0\0] # 16
+  SP_coil_part [0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0] # 16
+  SP_act_q [0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0] # 16
+  SP_act_coil_freq [0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0] # 16
+  SP_coil_m_pos [255\255\255\0\0\0\0\0\0\0\0\0\0\0\0\255] # 16
+  SP_coil_t_pos [255\128\255\0\0\0\0\0\0\0\0\0\0\0\0\255] # 16
+  SP_surface_coil_con [0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0] # 16
+  SP_proton_freq [127801349] # 1
+  SP_tm_result [2\2\2\2\2\2\2\2\2\2\2\2\2\2\2\2] # 16
+  SP_f0_result [0] # 1
+  SP_as_result [0] # 1
+  SP_po_result [0] # 1
+  SP_rg_result [0] # 1
+  SP_dc_result [0] # 1
+  SP_ph_result [0] # 1
+\&...
+\endverbatim
+
 \subsection asn1 Encapsulated ASN1 Structure
 
 This option is mainly used for dumping the ASN1 structure of the encrypted

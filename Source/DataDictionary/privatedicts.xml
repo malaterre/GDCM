@@ -7259,12 +7259,15 @@
   <entry owner="SPI-P Release 1" group="0009" element="xx16" vr="LO" vm="1" name="?"/>
   <entry owner="SPI-P Release 1" group="0009" element="xx18" vr="LO" vm="1" name="?"/>
   <entry owner="SPI-P Release 1" group="0009" element="xx21" vr="LT" vm="1" name="?"/>
-  <entry owner="SPI-P Release 1" group="0009" element="xx31" vr="LT" vm="1" name="PACS Unique Identifier"/>
-  <entry owner="SPI-P Release 1" group="0009" element="xx34" vr="LT" vm="1" name="Cluster Unique Identifier"/>
-  <entry owner="SPI-P Release 1" group="0009" element="xx38" vr="LT" vm="1" name="System Unique Identifier"/>
-  <entry owner="SPI-P Release 1" group="0009" element="xx39" vr="LT" vm="1" name="?"/>
-  <entry owner="SPI-P Release 1" group="0009" element="xx51" vr="LT" vm="1" name="Study Unique Identifier"/>
-  <entry owner="SPI-P Release 1" group="0009" element="xx61" vr="LT" vm="1" name="Series Unique Identifier"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx22" vr="LO" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx31" vr="LO" vm="1" name="PACS Unique Identifier"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx34" vr="LO" vm="1" name="Cluster Unique Identifier"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx38" vr="LO" vm="1" name="System Unique Identifier"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx39" vr="LO" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx40" vr="LO" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx41" vr="LO" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx51" vr="LO" vm="1" name="Study Unique Identifier"/>
+  <entry owner="SPI-P Release 1" group="0009" element="xx61" vr="LO" vm="1" name="Series Unique Identifier"/>
   <entry owner="SPI-P Release 1" group="0009" element="xx91" vr="LT" vm="1" name="?"/>
   <entry owner="SPI-P Release 1" group="0009" element="xxa0" vr="UN" vm="1" name="?"/>
   <entry owner="SPI-P Release 1" group="0009" element="xxf2" vr="LT" vm="1" name="?"/>
@@ -7365,6 +7368,23 @@
   <entry owner="SPI-P Release 1;1" group="0019" element="xx18" vr="UN" vm="1" name="Number Of Samples 2"/>
   <entry owner="SPI-P Release 1;1" group="0019" element="xx19" vr="UN" vm="1" name="Sample Data 2"/>
   <entry owner="SPI-P Release 1;1" group="0019" element="xx1a" vr="UN" vm="1" name="Sample Rate 2"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx41" vr="LO" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx42" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx43" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx44" vr="DS" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx45" vr="LO" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx50" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx51" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx52" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx60" vr="IS" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx61" vr="IS" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx67" vr="LO" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx6a" vr="DS" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx6b" vr="DS" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx6c" vr="US" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx6d" vr="DS" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx6e" vr="US" vm="1-n" name="?"/>
+  <entry owner="SPI-P Release 1;1" group="0021" element="xx6f" vr="DS" vm="1-n" name="?"/>
   <entry owner="SPI-P Release 1;1" group="0029" element="xx00" vr="LT" vm="1" name="Zoom ID"/>
   <entry owner="SPI-P Release 1;1" group="0029" element="xx01" vr="DS" vm="1-n" name="Zoom Rectangle"/>
   <entry owner="SPI-P Release 1;1" group="0029" element="xx03" vr="DS" vm="1" name="Zoom Factor"/>
@@ -7531,13 +7551,18 @@
   <entry owner="SPI-P-Private_CDS Release 1" group="0029" element="xx10" vr="OB" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0019" element="xx30" vr="DS" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0019" element="xx31" vr="LO" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx07" vr="SQ" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx08" vr="SQ" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx0c" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx0d" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx0e" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx0f" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx10" vr="SQ" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx18" vr="FD" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx1b" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx1c" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx1d" vr="SQ" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx1e" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx20" vr="UN" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx21" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx4c" vr="SQ" vm="1" name="?"/>
@@ -7546,19 +7571,30 @@
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx4f" vr="UN" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx50" vr="UN" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx51" vr="UN" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx66" vr="DS" vm="4" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx67" vr="LO" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx68" vr="US" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx6a" vr="LO" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx6b" vr="US" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx72" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx91" vr="IS" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx93" vr="LO" vm="1-n" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1" group="0029" element="xx94" vr="LO" vm="1-n" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx00" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx05" vr="FL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx06" vr="FL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx20" vr="FL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx21" vr="FL" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx22" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx23" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx24" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx25" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx26" vr="FD" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx30" vr="ST" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xx6b" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xxc1" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xxcb" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xxcc" vr="FD" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xxcd" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xxd4" vr="FL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;1" group="0029" element="xxd5" vr="FL" vm="1" name="?"/>
@@ -7569,13 +7605,13 @@
   <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xx03" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xx04" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xx05" vr="SL" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xx30" vr="LO" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa0" vr="UN" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa1" vr="UN" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa2" vr="UN" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa3" vr="UN" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xx30" vr="LT" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa0" vr="SL" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa1" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa2" vr="SL" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa3" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa5" vr="SQ" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa6" vr="UN" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxa6" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;2" group="0029" element="xxd9" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;3" group="0029" element="xx00" vr="ST" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;3" group="0029" element="xx01" vr="ST" vm="1" name="?"/>
@@ -7601,22 +7637,29 @@
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx0a" vr="FL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx0b" vr="FL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx0c" vr="FL" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx0e" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx0f" vr="US" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx10" vr="SL" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx90" vr="SL" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx9a" vr="SQ" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xx9c" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxa0" vr="US" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxa1" vr="US" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxb1" vr="US" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxb2" vr="US" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxb3" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxb5" vr="FL" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxb6" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxbc" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxbd" vr="SL" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxbe" vr="US" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxd6" vr="UN" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxd7" vr="UN" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxd6" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxd7" vr="FD" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxd8" vr="UN" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxd9" vr="UN" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxda" vr="UN" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxdc" vr="UN" vm="1" name="?"/>
-  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxdd" vr="UN" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxdc" vr="FD" vm="1" name="?"/>
+  <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxdd" vr="FD" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;4" group="0029" element="xxe0" vr="SQ" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;5" group="0029" element="xx50" vr="CS" vm="1" name="?"/>
   <entry owner="SPI-P-Private_ICS Release 1;5" group="0029" element="xx55" vr="CS" vm="1" name="?"/>
