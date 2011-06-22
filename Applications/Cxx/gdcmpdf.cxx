@@ -536,10 +536,10 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   gdcm::Attribute<0x0008, 0x0050> at;
   ds.Insert( at.GetAsDataElement() );
 }
-//(0008,0060) CS [OT]                                     #   2, 1 Modality
+//(0008,0060) CS [DOC]                                     #   2, 1 Modality
 {
   gdcm::Attribute<0x0008, 0x0060> at;
-  at.SetValue( "OT" );
+  at.SetValue( "DOC " );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0008,0064) CS [WSD]                                    #   4, 1 ConversionType
@@ -559,6 +559,14 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   gdcm::Attribute<0x0008, 0x0090> at;
   ds.Insert( at.GetAsDataElement() );
 }
+
+// In past DICOM implementation there used to be those neat tags:
+// (0088,0904) Topic Title TopicTitle LO 1 RET
+// (0088,0906) Topic Subject TopicSubject ST 1 RET
+// (0088,0910) Topic Author TopicAuthor LO 1 RET
+// (0088,0912) Topic Keywords TopicKeywords LO 1-32 RET
+// However they are now deprecated...
+
 //(0010,0010) PN (no value available)                     #   0, 0 PatientsName
 {
   gdcm::Attribute<0x0010, 0x0010> at;
