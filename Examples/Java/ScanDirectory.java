@@ -24,6 +24,7 @@
  * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java ScanDirectory gdcmData
  */
 import gdcm.*;
+import gdcm.Reader;
 import gdcm.LookupTable;
 import java.io.File;
 import java.io.*;
@@ -51,7 +52,7 @@ public class ScanDirectory
     }
   public static short[] GetAsShort(Bitmap input)
     {
-    long len = input.GetBufferLength();
+    long len = input.GetBufferLength(); // length in bytes
     short[] buffer = new short[ (int)len / 2 ];
     input.GetArray( buffer );
     return buffer;
@@ -203,11 +204,11 @@ public class ScanDirectory
 
     for( long idx = 0; idx < fns.size(); ++idx )
       {
-      ImageReader r = new ImageReader();
+      Reader r = new Reader();
       String fn = fns.get( (int)idx );
       String outfn = fn + ".png";
       r.SetFileName( fn );
-      b = r.Read();
+      b = r.ReadUpToTag( new Tag(0x88,0x200) );
       if( b )
         {
         IconImageFilter iif = new IconImageFilter();
@@ -222,14 +223,19 @@ public class ScanDirectory
           }
         else
           {
-          Image img = r.GetImage();
-          IconImageGenerator iig = new IconImageGenerator();
-          iig.SetPixmap( img );
-          long idims[] = { 64, 64 };
-          iig.SetOutputDimensions( idims );
-          iig.Generate();
-          Bitmap icon = iig.GetIconImage();
-          WritePNG(icon, outfn);
+          ImageReader ir = new ImageReader();
+          ir.SetFileName( fn );
+          if( ir.Read() )
+            {
+            Image img = ir.GetImage();
+            IconImageGenerator iig = new IconImageGenerator();
+            iig.SetPixmap( img );
+            long idims[] = { 64, 64 };
+            iig.SetOutputDimensions( idims );
+            iig.Generate();
+            Bitmap icon = iig.GetIconImage();
+            WritePNG(icon, outfn);
+            }
           }
         }
       }

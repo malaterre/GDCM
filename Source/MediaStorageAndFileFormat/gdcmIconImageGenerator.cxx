@@ -383,6 +383,8 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
 
   assert( I->GetPlanarConfiguration() == 0 );
 
+  // FIXME we should not retrieve the whole image, ideally we only need a
+  // single 2D frame
   std::vector< char > vbuffer;
   vbuffer.resize( P->GetBufferLength() );
   char *buffer = &vbuffer[0];
