@@ -19,6 +19,7 @@
 
 int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = false)
 {
+  (void)verbose;
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )

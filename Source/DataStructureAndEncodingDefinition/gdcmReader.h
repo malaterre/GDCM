@@ -87,8 +87,9 @@ public:
   /// Set/Get File
   void SetFile(File& file) { F = &file; }
 
-  /// Will read only up to Tag 'tag'
-  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags);
+  /// Will read only up to Tag \param tag and skipping any tag specified in
+  /// \param skiptags
+  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags = std::set<Tag>() );
 
   /// Will only read the specified selected tags.
   bool ReadSelectedTags(std::set<Tag> const & tags);
