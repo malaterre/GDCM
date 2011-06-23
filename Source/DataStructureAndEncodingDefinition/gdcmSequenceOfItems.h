@@ -151,7 +151,11 @@ public:
           Items.push_back( item );
           }
         l += item.template GetLength<TDE>();
-        if( l > SequenceLengthField ) throw "Length of Item larger than expected";
+        if( l > SequenceLengthField )
+          {
+          gdcmDebugMacro( "Found: Length of Item larger than expected" )
+          throw "Length of Item larger than expected";
+          }
         assert( l <= SequenceLengthField );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
