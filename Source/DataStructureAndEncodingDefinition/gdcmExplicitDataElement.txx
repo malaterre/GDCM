@@ -337,6 +337,24 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
     return is;
     }
 
+#if GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  if( SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&GetValue()) )
+    {
+    assert( ValueField->GetLength() == ValueLengthField );
+    // Recompute the total length:
+    if( !ValueLengthField.IsUndefined() )
+      {
+      // PhilipsInteraSeqTermInvLen.dcm
+      // contains an extra seq del item marker, which we are not loading. Therefore the
+      // total length needs to be recomputed when sqi is expressed in defined length
+      VL dummy = sqi->template ComputeLength<ExplicitDataElement>();
+      ValueLengthField = dummy;
+      sqi->SetLength( dummy );
+      gdcmAssertAlwaysMacro( dummy == ValueLengthField );
+      }
+    }
+#endif
+
   return is;
 }
 
