@@ -710,6 +710,13 @@ private:
 };
 
 template<uint16_t Group, uint16_t Element, int TVR>
+class Attribute<Group,Element,TVR,VM::VM1_3> : public Attribute<Group,Element,TVR,VM::VM1_n>
+{
+public:
+  VM  GetVM() const { return VM::VM1_3; }
+};
+
+template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM1_8> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
