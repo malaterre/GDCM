@@ -37,6 +37,11 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0009,0x0001,"DicomUtils 20100512",VR::SQ,VM::VM1,"DICOMUTILS_PROCESSING_METHODS",false },
+  {0x0009,0x0002,"DicomUtils 20100512",VR::LO,VM::VM1,"DICOMUTILS_VERSION",false },
+  {0x0009,0x0003,"DicomUtils 20100512",VR::LT,VM::VM1,"DICOMUTILS_ARGS",false },
+  {0x0009,0x0004,"DicomUtils 20100512",VR::LT,VM::VM1,"DICOMUTILS_COMMENT",false },
+  {0x0009,0x0005,"DicomUtils 20100512",VR::LT,VM::VM1,"DICOMUTILS_SITE",false },
   {0x0029,0x0000,"1.2.840.113663.1",VR::US,VM::VM1,"?",false },
   {0x0029,0x0001,"1.2.840.113663.1",VR::US,VM::VM1,"?",false },
   {0x0019,0x0010,"1.2.840.113681",VR::ST,VM::VM1,"CR Image Params Common",false },
