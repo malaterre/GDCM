@@ -11,6 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <dict>
+  <entry group="0009" element="0001" vr="SQ" vm="1" name="DICOMUTILS_PROCESSING_METHODS" owner="DicomUtils 20100512"/>
   <entry owner="1.2.840.113663.1" group="0029" element="xx00" vr="US" vm="1" name="?"/>
   <entry owner="1.2.840.113663.1" group="0029" element="xx01" vr="US" vm="1" name="?"/>
   <entry owner="1.2.840.113681" group="0019" element="xx10" vr="ST" vm="1" name="CR Image Params Common"/>
