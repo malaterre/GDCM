@@ -864,9 +864,16 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionDate(), gdcm::Tag(0x0008,0x0022), ano);
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
     // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 4 )
+#if 0
     int hour, minute, second;
     if( vtkMedicalImageProperties::GetTimeAsFields( this->MedicalImageProperties->GetStudyTime(), hour, minute, second ) )
+#else
+    time_t studytime;
+    char date[22];
+    strcpy( date, "19000101" );
+    strncpy( date + 8 , this->MedicalImageProperties->GetStudyTime(), 22 - 8 );
+    date[21] = 0;
+    if( gdcm::System::ParseDateTime(studytime, date ) )
 #endif
       SetStringValueFromTag( this->MedicalImageProperties->GetStudyTime(), gdcm::Tag(0x0008,0x0030), ano);
 #endif
