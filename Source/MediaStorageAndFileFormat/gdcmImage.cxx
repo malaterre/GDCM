@@ -287,7 +287,7 @@ void Image::Print(std::ostream &os) const
       os << ")\n";
       }
       {
-      os << "Rescale Intercept/Slope: (" << GetIntercept() << "," << GetSlope() << ")\n";
+      os << "Rescale Intercept/Slope: (" << GetIntercept(0) << "," << GetSlope(0) << ")\n";
       }
 
     }
