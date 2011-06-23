@@ -140,6 +140,8 @@ public:
           gdcmWarningMacro( "SegDelItem found in defined length Sequence. Skipping" );
           assert( item.GetVL() == 0 );
           assert( item.GetNestedDataSet().Size() == 0 );
+          // we need to pay attention that the length of the Sequence of Items will be wrong
+          // this way. Indeed by not adding this item we are changing the size of this sqi
           }
         else // Not a seq del item marker
 #endif
