@@ -761,8 +761,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       srange[1] = std::numeric_limits<uint16_t>::max() * this->Scale + this->Shift;
       }
     ir.SetMinMaxForPixelType( srange[0], srange[1] );
-    image.SetIntercept( this->Shift );
-    image.SetSlope( this->Scale );
+    image.SetIntercept(0, this->Shift );
+    image.SetSlope(0, this->Scale );
     copy = new char[len];
     ir.InverseRescale(copy,tempimage,vtklen);
     rescaled = true;
