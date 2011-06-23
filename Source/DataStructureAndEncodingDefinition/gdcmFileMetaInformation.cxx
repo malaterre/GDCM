@@ -755,7 +755,7 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
     }
   // Pad string with a \0
   ts = std::string(bv->GetPointer(), bv->GetLength());
-  gdcmDebugMacro( "TS: " << ts );
+  gdcmDebugMacro( "TS: " << ts.c_str() );
   TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
   if( tst == TransferSyntax::TS_END )
     {
