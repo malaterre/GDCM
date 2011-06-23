@@ -24,5 +24,10 @@ int TestAttribute7(int, char *[])
   at.SetFromDataElement( de );
   std::cout << at.GetValue() << std::endl;
 
+  gdcm::Attribute<0x3004, 0x0014> tissue;
+  //std::cout << tissue.GetVR() << std::endl;
+  if( tissue.GetVR() != gdcm::VR::CS ) return 1;
+
+
   return 0;
 }
