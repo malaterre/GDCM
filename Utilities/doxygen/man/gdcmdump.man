@@ -38,7 +38,8 @@ dcm_directory   DICOM input directory
   -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
   -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
      --elscint   print ELSCINT Protocol Information (01f7,26,ELSCINT1).
-     --vepro     print VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA).
+     --vepro     print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA).
+                    or VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA).
   -A --asn1      print encapsulated ASN1 structure >(0400,0520).
 \endverbatim
 
