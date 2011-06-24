@@ -803,7 +803,8 @@ void PrintHelp()
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
-  std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA)." << std::endl;
+  std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA)." << std::endl;
+  std::cout << "                         or VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA)." << std::endl;
   std::cout << "     --sds            print Philips MR Series Data Storage (1.3.46.670589.11.0.0.12.2) Information (2005,32,Philips MR Imaging DD 002)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
