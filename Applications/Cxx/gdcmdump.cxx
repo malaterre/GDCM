@@ -302,7 +302,6 @@ struct Data2
 
  void Print( std::ostream &os )
    {
-   os << "VIMDATA2: (0055,20,VEPRO VIM 5.0 DATA)\n";
    os << "  ID: "          << std::string(ID,3) << "\n";
    os << "  Version: "     << std::string(Version,3) << "\n";
    os << "  UserName: "    << std::string(UserName,32) << "\n";
@@ -358,13 +357,30 @@ bool ProcessData( const char *buf, size_t len )
 int DumpVEPRO(const gdcm::DataSet & ds)
 {
   // 01f7,1026
-  const gdcm::PrivateTag tdata(0x55,0x0020,"VEPRO VIM 5.0 DATA");
-  if( !ds.FindDataElement( tdata ) ) return 1;
-  const gdcm::DataElement &data = ds.GetDataElement( tdata );
-  const gdcm::ByteValue *bv2 = data.GetByteValue();
-  ProcessData( bv2->GetPointer(), bv2->GetLength() );
+  const gdcm::ByteValue *bv2 = NULL;
+  const gdcm::PrivateTag tdata1(0x55,0x0020,"VEPRO VIF 3.0 DATA");
+  const gdcm::PrivateTag tdata2(0x55,0x0020,"VEPRO VIM 5.0 DATA");
+  // Prefer VIF over VIM ?
+  if( ds.FindDataElement( tdata1 ) )
+    {
+    std::cout  << "VIF DATA: " << tdata1 << "\n";
+    const gdcm::DataElement &data = ds.GetDataElement( tdata1 );
+    bv2 = data.GetByteValue();
+    }
+  else if( ds.FindDataElement( tdata2 ) )
+    {
+    std::cout  << "VIMDATA2: " << tdata2 << "\n";
+    const gdcm::DataElement &data = ds.GetDataElement( tdata2 );
+    bv2 = data.GetByteValue();
+    }
 
-  return 0;
+  if( bv2 )
+    {
+    ProcessData( bv2->GetPointer(), bv2->GetLength() );
+    return 0;
+    }
+
+  return 1;
 }
 
 // ELSCINT1
