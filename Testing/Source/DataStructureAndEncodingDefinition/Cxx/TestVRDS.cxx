@@ -41,20 +41,20 @@ std::string TestVRDSFunc(const char *str)
 int TestVRDS(int, char *[])
 {
   const unsigned int dsmaxbytes = 16;
-  const char str[dsmaxbytes+1] = "0.123456789123";
+  const char str0[dsmaxbytes+1] = "0.123456789123";
   std::string copy;
 
   // Let's demonstrate the float can easily fails;
-  if( (copy = TestVRDSFunc<float,dsmaxbytes>(str)) == str )
+  if( (copy = TestVRDSFunc<float,dsmaxbytes>(str0)) == str0 )
     {
-    std::cerr << "Float works:" << copy << " vs " << str << std::endl;
+    std::cerr << "Float works:" << copy << " vs " << str0 << std::endl;
     return 1;
     }
 
   // Repeat with double, it works this time
-  if( (copy = TestVRDSFunc<double,dsmaxbytes>(str)) != str )
+  if( (copy = TestVRDSFunc<double,dsmaxbytes>(str0)) != str0 )
     {
-    std::cerr << "Double does not work:" << copy << " vs " << str << std::endl;
+    std::cerr << "Double does not work:" << copy << " vs " << str0 << std::endl;
     return 1;
     }
 
