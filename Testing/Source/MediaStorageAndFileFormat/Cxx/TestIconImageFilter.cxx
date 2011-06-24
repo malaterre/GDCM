@@ -37,6 +37,9 @@ static const char * const iconimagearray[][2] = {
   { "620f0b67a91f7f74151bc5be745b7110" , "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm" },
   { "938f6ea0bea13ff5c45c7934e603caac" , "US-GE-4AICL142.dcm" },
 
+  // VEPRO VIF
+  { "ea4673b2aa72f477188bac340e115f4c" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" },
+
   // gdcmDataExtra
   { "a144b851c9262c97dde567d4d3781733" , "2929J888_8b_YBR_RLE_PlanConf0_breaker.dcm" },
 

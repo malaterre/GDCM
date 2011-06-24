@@ -968,7 +968,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       // What ? A public element that we do not know about !!!
       os << GDCM_TERMINAL_VT100_BLINK;
       }
-    os << " UNKNOWN";
+    os << " GDCM:UNKNOWN"; // Special keyword
     os << GDCM_TERMINAL_VT100_NORMAL;
     }
   os << "\n";
