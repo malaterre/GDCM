@@ -18,7 +18,7 @@ SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
 
 # http://www.cmake.org/Wiki/CTest:Coverage
 SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")
-SET(ENV{CXXFLAGS} "-g -O0 -fprofile-arcs -ftest-coverage -Wno-deprecated -W -Wall")
+SET(ENV{CXXFLAGS} "-g -O0 -fprofile-arcs -ftest-coverage -Wno-deprecated -Wno-deprecated-declarations -W -Wall")
 SET(ENV{CFLAGS} "-g -O0 -fprofile-arcs -ftest-coverage -W -Wall")
 SET(ENV{LDFLAGS} "-fprofile-arcs -ftest-coverage")
 
