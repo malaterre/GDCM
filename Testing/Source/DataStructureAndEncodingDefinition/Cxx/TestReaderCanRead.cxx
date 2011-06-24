@@ -61,12 +61,12 @@ int TestReadCanRead(const char *subdir, const char* filename, bool verbose = fal
       return 1;
       }
 
-    gdcm::Reader reader;
-    reader.SetFileName( outfilename.c_str() );
-    b1 = reader.CanRead( );
-    //reader.GetFile().GetHeader().GetPreamble().Remove();
-    //assert( reader.GetFile().GetHeader().GetPreamble().IsEmpty() );
-    b2 = reader.Read();
+    gdcm::Reader reader2;
+    reader2.SetFileName( outfilename.c_str() );
+    b1 = reader2.CanRead( );
+    //reader2.GetFile().GetHeader().GetPreamble().Remove();
+    //assert( reader2.GetFile().GetHeader().GetPreamble().IsEmpty() );
+    b2 = reader2.Read();
     if ( (b1 && !b2) || (!b1 && b2)  )
       {
       std::cerr << "TestReadCanRead: incompatible result " << outfilename << std::endl;
