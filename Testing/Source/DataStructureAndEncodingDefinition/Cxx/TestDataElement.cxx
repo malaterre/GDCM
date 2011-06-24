@@ -34,8 +34,8 @@ inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
   // w will be written
   // r will be read back
   std::stringstream ss;
-  w.Write<gdcm::SwapperNoOp>(ss);
-  r.Read<gdcm::SwapperNoOp>(ss);
+  w.Write<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>(ss);
+  r.Read<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>(ss);
 }
 
 int TestDataElement1(const uint16_t group, const uint16_t element,
