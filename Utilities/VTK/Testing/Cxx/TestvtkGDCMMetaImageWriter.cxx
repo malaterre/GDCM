@@ -55,6 +55,17 @@ int TestvtkGDCMMetaImageWrite(const char *filename, bool verbose)
     // not an image
     return 0;
     }
+
+  const char *refms = gdcm::Testing::GetMediaStorageFromFile(filename);
+  if( !gdcm::MediaStorage::IsImage( gdcm::MediaStorage::GetMSType(refms) ) )
+    {
+    if( !refms )
+      {
+      std::cerr << "Missing SOP Class: " << filename << std::endl;
+      return 1;
+      }
+    }
+
   reader->SetFileName( filename );
   reader->Update();
 
