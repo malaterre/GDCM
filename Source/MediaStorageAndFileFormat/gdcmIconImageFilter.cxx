@@ -484,13 +484,24 @@ void IconImageFilter::ExtractVeproIconImages()
 {
   const DataSet &rootds = F->GetDataSet();
 
-  const gdcm::PrivateTag ticon(0x55,0x0030,"VEPRO VIM 5.0 DATA");
+  const gdcm::PrivateTag ticon1(0x55,0x0030,"VEPRO VIF 3.0 DATA");
+  const gdcm::PrivateTag ticon2(0x55,0x0030,"VEPRO VIM 5.0 DATA");
 
-  if( rootds.FindDataElement( ticon ) )
+  const gdcm::ByteValue * bv = NULL;
+  // Prefer VIF over VIM ?
+  if( rootds.FindDataElement( ticon1 ) )
     {
-    const DataElement &de = rootds.GetDataElement( ticon );
-    const gdcm::ByteValue * bv = de.GetByteValue();
+    const DataElement &de = rootds.GetDataElement( ticon1 );
+    bv = de.GetByteValue();
+    }
+  else if( rootds.FindDataElement( ticon2 ) )
+    {
+    const DataElement &de = rootds.GetDataElement( ticon2 );
+    bv = de.GetByteValue();
+    }
 
+  if( bv )
+    {
     const char *buf = bv->GetPointer();
     size_t len = bv->GetLength();
     VeproData data;
