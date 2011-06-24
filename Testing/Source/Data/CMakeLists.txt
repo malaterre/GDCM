@@ -55,6 +55,9 @@ SET(BLACK_LIST_READER
   TOSHIBA_MDW_HEADER.dcm
 # TODO, nasty:
   PhilipsLosslessRice.dcm
+
+# This file is incorrect
+  IM-0001-0066.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
