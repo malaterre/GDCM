@@ -131,7 +131,7 @@ namespace
   int TestDataElementEqualityComparison(
     const gdcm::DataElement* const equivalentDataElements = NULL)
   {
-    const unsigned numberOfDataElements = 6;
+    const unsigned int numberOfDataElements = 6;
 
     gdcm::DataElement dataElements[numberOfDataElements] =
     {
@@ -155,7 +155,7 @@ namespace
     // is called recursively, equivalentDataElements[i] is equivalent 
     // to dataElements[i].
 
-    for (unsigned i = 0; i < numberOfDataElements; ++i)
+    for (unsigned int i = 0; i < numberOfDataElements; ++i)
     {
       const gdcm::DataElement& dataElement = dataElements[i]; 
 
@@ -189,7 +189,7 @@ namespace
         return 1;
       }
 
-      for (unsigned j = i + 1; j < numberOfDataElements; ++j)
+      for (unsigned int j = i + 1; j < numberOfDataElements; ++j)
       {
         // dataElements[j] is different from dataElements[i].
 
