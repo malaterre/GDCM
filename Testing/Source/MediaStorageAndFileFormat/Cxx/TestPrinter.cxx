@@ -143,7 +143,7 @@ static const char * const printmd5[][2] = {
 { "9bac4c50cd8afce8f9995cefd542760f" , "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm" } ,
 { "b33f1a1050fc7135295a02627be88514" , "libido1.0-vol.acr" } ,
 { "05fe8714421e16371d62ae2c280b7107" , "LIBIDO-16-ACR_NEMA-Volume.dcm" } ,
-{ "04a35a16ab40fd3ed7708ce9a4022a3c" , "LIBIDO-24-ACR_NEMA-Rectangle.dcm" } ,
+{ "c0b5d6b5cd8bf16e94f8d5db64aa9a4a" , "LIBIDO-24-ACR_NEMA-Rectangle.dcm" } ,
 { "3338d3db1705db1b9a6474043b4772e3" , "LIBIDO-8-ACR_NEMA-Lena_128_128.acr" } ,
 { "e39e4923be2d8bb2fb19c6c8deae216f" , "LJPEG_BuginGDCM12.dcm" } ,
 { "e6bc657d132abebb01a675ade04129f1" , "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm" } ,
@@ -186,8 +186,8 @@ static const char * const printmd5[][2] = {
 { "bd5d9b2f994cfc0c6a95cca8c586533a" , "rle16sti.dcm" } ,
 { "631c5bb2e2f046215999072d13316363" , "SIEMENS-12-Jpeg_Process_2_4-Lossy-a.dcm" } ,
 { "593324f844b730f77bb4a337f51f3b3d" , "SIEMENS_CSA2.dcm" } ,
-{ "a65ce69a3cafe393ea3da9daf022f4de" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr" } ,
-{ "1178591e4f393fe007827898c9be7595" , "SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm" } ,
+{ "fa919f3ee7cef3af1f362dd166d53103" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr" } ,
+{ "825580733e8cfaf5d8679348889db40d" , "SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm" } ,
 { "a26065c162b9afc8a80a03136c90d964" , "SIEMENS_ImageLocationUN.dcm" } ,
 { "0f1ccdbb08b15c5b31f207410195136e" , "SIEMENS_MAGNETOM-12-ACR_NEMA_2-Modern.dcm" } ,
 { "bd3192fceb97c99234588f4dc0ede9a1" , "SIEMENS_MAGNETOM-12-MONO2-FileSeq0.dcm" } ,
@@ -233,6 +233,7 @@ int TestPrint(const char *filename, bool verbose= false)
   r.SetFileName( filename );
   if( !r.Read() )
     {
+    std::cerr << "Could not read: " << filename << std::endl;
     return 1;
     }
 
@@ -252,6 +253,8 @@ int TestPrint(const char *filename, bool verbose= false)
     if( strcmp(name, "test.acr" ) != 0
       && strcmp(name, "LIBIDO-8-ACR_NEMA-Lena_128_128.acr" ) != 0
       && strcmp(name, "gdcm-ACR-LibIDO.acr" ) != 0
+      && strcmp(name, "SIEMENS_GBS_III-16-ACR_NEMA_1.acr" ) != 0
+      && strcmp(name, "LIBIDO-24-ACR_NEMA-Rectangle.dcm" ) != 0
       && strcmp(name, "NM_Kakadu44_SOTmarkerincons.dcm" ) != 0
     )
       {
