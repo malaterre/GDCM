@@ -39,6 +39,7 @@ static const char * const iconimagearray[][2] = {
 
   // VEPRO VIF
   { "ea4673b2aa72f477188bac340e115f4c" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" },
+  { "660417e04b9af62832a43bf82369e4fa" , "GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm" },
 
   // gdcmDataExtra
   { "a144b851c9262c97dde567d4d3781733" , "2929J888_8b_YBR_RLE_PlanConf0_breaker.dcm" },
