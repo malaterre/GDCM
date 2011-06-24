@@ -84,11 +84,15 @@ int TestAnonymize2(const char *subdir, const char *filename)
     hasinstanceuid = false;
     }
 
+  gdcm::MediaStorage ms;
+  ms.SetFromFile( reader.GetFile() );
+
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile() )
     {
     std::cerr << "BasicApplicationLevelConfidentialityProfile fails for: " << filename << std::endl;
-    return 1;
+    if( ms != gdcm::MediaStorage::MS_END )
+      return 1;
     }
 
   gdcm::Writer writer;
