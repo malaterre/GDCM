@@ -45,9 +45,6 @@ SET(GDCM_DATA_FILENAMES_GLOB
 # List of images that are technically difficult to read
 # Hopefully we will soon be able to read them
 SET(BLACK_LIST_READER
-  EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
-  Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
-
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
 # Papyrus:
@@ -58,55 +55,6 @@ SET(BLACK_LIST_READER
   TOSHIBA_MDW_HEADER.dcm
 # TODO, nasty:
   PhilipsLosslessRice.dcm
-# TS is skrewed up, and the whole dataset is a pain to read...
-# I do not even believe there is a pattern
-  WeirdToshibaTS.dcm
-# Pixel Data is not were it should be :)
-  3DDCM011.dcm
-
-# Name says it all
-BogusItemStartItemEnd.dcm
-
-# Overlay Data in Unused bit are not passed in TestImageWriter:
-#  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
-#  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
-
-# quick fix:
-  tst_not.dcm
-  BogugsSequenceLengthCorrectItemLength.dcm
-  BogugsItemAndSequenceLength.dcm
-  BogusACRWithFileMeta.dcm
-  CompressedLossy.dcm
-
-# vtkGDCMImageWriter + rescale does not work on the following images:
-  LIBIDO-24-ACR_NEMA-Rectangle.dcm
-
-# remove for now
-  IM-0001-0066.dcm
-  4hd2a332a0je.dcm
-  TheralysNoModalityNoObject.dcm
-  ImplicitDeclaredAsExplicit.dcm
-  TheralysGDCM1.dcm
-  image.acr
-  MergeCOM3_330_IM50.dcm
-  ImplicitVRInExplicitDataSet2.dcm
-
-# This image has an unknown Media Storage UID, when looking in Modality 'CR' is found;
-# but at the same time, there is no such thing as IPP/IOP in a ComputedRadiographyImageStorage ...
-#  gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
-
-# invalid j2k stream:
-  PixelDataWithVRUN.dcm
-  InvalidYCCForJ2K.dcm
-
-# buggy dcm4che
-  kos.dcm
-
-# problem with overlay in unused bits:
-  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
-  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
-# packed 12 bits still not ok:
-  MR-MONO2-12-angio-an1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
