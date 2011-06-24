@@ -3729,7 +3729,7 @@
   <entry owner="PAPYRUS 3.0" group="60xx" element="xxc0" vr="SQ" vm="1" name="UIN Overlay Sequence"/>
   <entry owner="PHILIPS MR" group="0009" element="xx10" vr="LO" vm="1" name="SPI Release"/>
   <entry owner="PHILIPS MR" group="0009" element="xx12" vr="LO" vm="1" name="?"/>
-  <entry owner="PHILIPS MR R5.5/PART" group="0019" element="xx00" vr="DS" vm="1" name="Field of View"/>
+  <entry owner="PHILIPS MR R5.5/PART" group="0019" element="xx00" vr="DS" vm="2" name="Field of View"/>
   <entry owner="PHILIPS MR R5.6/PART" group="0019" element="xx00" vr="DS" vm="1" name="Field of View"/>
   <entry owner="PHILIPS MR SPECTRO;1" group="0019" element="xx01" vr="US" vm="1" name="?"/>
   <entry owner="PHILIPS MR SPECTRO;1" group="0019" element="xx02" vr="US" vm="1" name="?"/>
@@ -3953,7 +3953,7 @@
   <entry owner="PHILIPS MR/PART" group="0019" element="xxfa" vr="CS" vm="1" name="?"/>
   <entry owner="PHILIPS MR/PART" group="0019" element="xxfb" vr="CS" vm="1" name="?"/>
   <entry owner="PHILIPS MR/PART" group="0019" element="xxfc" vr="IS" vm="1" name="Resonance Frequency"/>
-  <entry owner="PHILIPS MR/PART" group="0021" element="xx00" vr="DA" vm="1" name="Scan Date"/>
+  <entry owner="PHILIPS MR/PART" group="0021" element="xx00" vr="IS" vm="1" name="Scan Date"/>
   <entry owner="PHILIPS MR/PART" group="0021" element="xx06" vr="LO" vm="1" name="?"/>
   <entry owner="PHILIPS MR/PART" group="0021" element="xx07" vr="DT" vm="1" name="?"/>
   <entry owner="PHILIPS MR/PART" group="0021" element="xx08" vr="LO" vm="1" name="?"/>
