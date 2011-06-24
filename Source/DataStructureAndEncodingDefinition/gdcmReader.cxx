@@ -332,8 +332,8 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           }
         catch( std::exception &ex )
           {
-			(void)ex;  //to avoid unreferenced variable warning on release
-			gdcmErrorMacro(ex.what());
+          (void)ex;  //to avoid unreferenced variable warning on release
+          gdcmWarningMacro(ex.what());
           // Weird implicit meta header:
           is.seekg(128+4, std::ios::beg );
           assert( is.good() );

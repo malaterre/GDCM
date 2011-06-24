@@ -41,7 +41,7 @@ int TestRead(const char* filename, bool verbose = false)
 
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  if( ms.IsUndefined() && ref )
+  if( ms.IsUndefined() && ref && *ref != 0 )
     {
     std::cerr << "TestReadError: MediaStorage: " << filename << std::endl;
     std::cerr << "It should be instead: " << ref << std::endl;
@@ -50,7 +50,7 @@ int TestRead(const char* filename, bool verbose = false)
 
   // Make sure it is the right one:
 
-  if( ref && ms != gdcm::MediaStorage::GetMSType(ref) )
+  if( ref && *ref != 0 && ms != gdcm::MediaStorage::GetMSType(ref) )
     {
     std::cerr << "Error: Found MediaStorage: " << ms << " for " << filename << std::endl;
     std::cerr << "It should be instead: " << ref << std::endl;
