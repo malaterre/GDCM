@@ -207,6 +207,7 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm","f507ab11e56de33d6f0195dd185b5c62", "9eb513314b2fcf25d895e18ffb2ead0b" },
 { "GDCMJ2K_TextGBR.dcm","9935ec525ea42203f3a535d4c1187ed4", "56238d3665ebdb0251d1161fb7f4edc6" },
 { "NM_Kakadu44_SOTmarkerincons.dcm","99b60ec88d410b437adc06a809590127", "6f26e552a1b71d386483118779d192ad" },
+{ "PhilipsInteraSeqTermInvLen.dcm","6ccabe05841e29633d9e4fe1aec81039", "f8a1f4ce85b51527267e670a8aa0c308" },
 
 /* Stopping condition */
 { 0 , 0 , 0 }
