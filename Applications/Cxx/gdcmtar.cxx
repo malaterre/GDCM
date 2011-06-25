@@ -313,7 +313,7 @@ bool ConcatenateImages(Image &im1, Image const &im2)
   DataElement& de1 = im1.GetDataElement();
   if( de1.GetByteValue() )
     {
-    ByteValue *bv1 = de1.GetByteValue();
+    const ByteValue *bv1 = de1.GetByteValue();
     std::vector<char> v1 = *bv1;
     const DataElement& de2 = im2.GetDataElement();
     const ByteValue *bv2 = de2.GetByteValue();
