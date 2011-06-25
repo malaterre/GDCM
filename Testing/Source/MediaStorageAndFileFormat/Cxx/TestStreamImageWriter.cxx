@@ -88,7 +88,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
       std::cerr << "unable to write image information" << std::endl;
       delete [] theOriginalBuffer;
       return 1; //the CanWrite function should prevent getting here, else,
-      //that's a test failure∫
+      //that's a test failure
     }
     std::vector<unsigned int> extent =
       gdcm::ImageHelper::GetDimensionsValue(theImageReaderOriginal.GetFile());
