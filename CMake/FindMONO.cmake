@@ -26,8 +26,8 @@ SET(MONO_FOUND FALSE)
 # TODO: what are 'cscc' and 'ilrun' ?
 
 FIND_PROGRAM(MONO_EXECUTABLE mono)
-FIND_PROGRAM(MCS_EXECUTABLE mcs)    # 1.0
-FIND_PROGRAM(GMCS_EXECUTABLE gmcs)  # 2.0
+FIND_PROGRAM(MCS_EXECUTABLE  mcs)    # 1.0
+FIND_PROGRAM(GMCS_EXECUTABLE mono-csc gmcs)  # 2.0
 FIND_PROGRAM(SMCS_EXECUTABLE smcs)  # Moonlight
 # mono-gac: /usr/bin/gacutil
 FIND_PROGRAM(GACUTIL_EXECUTABLE gacutil)  # gacutil - Global Assembly Cache management utility.

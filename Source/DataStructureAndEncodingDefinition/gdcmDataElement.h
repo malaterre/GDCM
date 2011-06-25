@@ -275,6 +275,11 @@ inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
   return os;
 }
 
+inline bool operator!=(const DataElement& lhs, const DataElement& rhs)
+{
+  return ! ( lhs == rhs );
+}
+
 } // end namespace gdcm
 
 #endif //GDCMDATAELEMENT_H

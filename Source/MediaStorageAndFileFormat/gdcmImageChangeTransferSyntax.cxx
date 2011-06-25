@@ -145,6 +145,15 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
   const TransferSyntax &ts = GetTransferSyntax();
 
   JPEGCodec jpgcodec;
+  // pass lossy/lossless flag:
+  // JPEGCodec are easier to deal with since there is no dual transfer syntax
+  // that can be both lossy and lossless:
+  if( ts.IsLossy() )
+    {
+    assert( !ts.IsLossless() );
+    jpgcodec.SetLossless( false );
+    }
+
   ImageCodec *codec = &jpgcodec;
   if( UserCodec && UserCodec->CanCode( ts ) )
     {

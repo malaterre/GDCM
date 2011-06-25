@@ -36,6 +36,7 @@ class IconImageFilterInternals;
  * - (0088,0200) Icon Image Sequence
  * - (0009,10,GEIIS) GE IIS Thumbnail Sequence
  * - (6003,10,GEMS_Ultrasound_ImageGroup_001) GEMS Image Thumbnail Sequence
+ * - (0055,30,VEPRO VIF 3.0 DATA) Icon Data
  * - (0055,30,VEPRO VIM 5.0 DATA) ICONDATA2
  *
  * \warning the icon stored in those private attribute do not conform to

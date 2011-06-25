@@ -140,6 +140,8 @@ public:
           gdcmWarningMacro( "SegDelItem found in defined length Sequence. Skipping" );
           assert( item.GetVL() == 0 );
           assert( item.GetNestedDataSet().Size() == 0 );
+          // we need to pay attention that the length of the Sequence of Items will be wrong
+          // this way. Indeed by not adding this item we are changing the size of this sqi
           }
         else // Not a seq del item marker
 #endif
@@ -151,7 +153,11 @@ public:
           Items.push_back( item );
           }
         l += item.template GetLength<TDE>();
-        if( l > SequenceLengthField ) throw "Length of Item larger than expected";
+        if( l > SequenceLengthField )
+          {
+          gdcmDebugMacro( "Found: Length of Item larger than expected" )
+          throw "Length of Item larger than expected";
+          }
         assert( l <= SequenceLengthField );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
