@@ -28,7 +28,7 @@ import gdcm
 tag = gdcm.Tag(0x10,0x10)
 de = gdcm.DataElement(tag)
 
-# Search all patient name where string match 'F*'
+# Search all patient name where string match 'F*'
 de.SetByteValue('F*',gdcm.VL(2))
 
 ds = gdcm.DataSet()
