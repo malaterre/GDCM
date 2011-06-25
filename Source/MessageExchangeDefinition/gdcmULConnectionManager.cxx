@@ -557,7 +557,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           }
           if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
             //check for other error fields
-            ByteValue *err1 = NULL, *err2 = NULL;
+            const ByteValue *err1 = NULL, *err2 = NULL;
             gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
             switch (theVal){
               case 0xA701:
@@ -845,7 +845,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success)
                 {
                 //check for other error fields
-                ByteValue *err1 = NULL, *err2 = NULL;
+                const ByteValue *err1 = NULL, *err2 = NULL;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
                 switch (theVal){
                   case 0xA701:
