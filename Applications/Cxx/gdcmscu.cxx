@@ -106,7 +106,7 @@ void PrintHelp()
   std::vector<gdcm::ECharSet> charsettype;
   charsettype.push_back( gdcm::QueryFactory::GetCharacterFromCurrentLocale() );
   gdcm::DataElement de = gdcm::QueryFactory::ProduceCharacterSetDataElement(charsettype);
-  gdcm::ByteValue *bv = de.GetByteValue();
+  const gdcm::ByteValue *bv = de.GetByteValue();
   std::string s( bv->GetPointer(), bv->GetLength() );
   std::cout << "DICOM Character Set: [" << s << "]" << std::endl;
 }

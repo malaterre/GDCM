@@ -422,7 +422,7 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success)
                 {
                 //check for other error fields
-                ByteValue *err1 = NULL, *err2 = NULL;
+                const ByteValue *err1 = NULL, *err2 = NULL;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
                 switch (theVal){
                   case 0xA701:
@@ -716,7 +716,7 @@ EStateID ServiceClassUser::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionC
           }
           if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
             //check for other error fields
-            ByteValue *err1 = NULL, *err2 = NULL;
+            const ByteValue *err1 = NULL, *err2 = NULL;
             gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
             switch (theVal){
               case 0xA701:
