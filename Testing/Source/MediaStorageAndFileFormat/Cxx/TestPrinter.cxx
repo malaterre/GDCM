@@ -91,31 +91,31 @@ static const char * const printmd5[][2] = {
 { "ee354d9b221360982f15b630e1fdb046" , "DICOMDIR" } ,
 { "3082f3a587959183b5c24ae8d7ec5b08" , "dicomdir_Acusson_WithPrivate_WithSR" } ,
 { "9934ab3c8adca82cad0fe8997b6c5cd3" , "DICOMDIR_MR_B_VA12A" } ,
-{ "f66c6315c53ce8e6a0fe8ba93d7f85a3" , "DICOMDIR-Philips-EasyVision-4200-Entries" } ,
+{ "6a4cfd1ddd6eea5538dd7f8cf1ba1e1f" , "DICOMDIR-Philips-EasyVision-4200-Entries" } ,
 { "4254e4123245565e43a86e191acff01b" , "dicomdir_Pms_With_heavy_embedded_sequence" } ,
 { "9afc3c3e9d208292430b45867a9981e1" , "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents" } ,
 { "356f30be965bbe4e335a56c6c5fe1928" , "dicomdir_With_embedded_icons" } ,
 { "d174a9f2dea0da9e013eb3180317ebbc" , "DMCPACS_ExplicitImplicit_BogusIOP.dcm" } ,
-{ "9a0fe39ec08581ad5e07966023225d33" , "DX_GE_FALCON_SNOWY-VOI.dcm" } ,
+{ "b160fb6d5d938301d9aa468570f655e4" , "DX_GE_FALCON_SNOWY-VOI.dcm" } ,
 { "1cbeb77ea2d6e0171dd38e0d6d5cb0b9" , "DX_J2K_0Padding.dcm" } ,
 { "3493bf0e698798529fde6ef488289879" , "ELSCINT1_JP2vsJ2K.dcm" } ,
 { "8f5581be656bd6f1ab6c9ec94f302284" , "ELSCINT1_LOSSLESS_RICE.dcm" } ,
 { "54f138a1aa6819ec1560a7ed344cde1a" , "ELSCINT1_PMSCT_RLE1.dcm" } ,
-{ "c90e737452eb2693d7af15ec8d077210" , "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm" } ,
+{ "ba63fc302b3dcc0f02c78e5ca3e411a2" , "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm" } ,
 { "3199cd21166043d619209d7a2073fb56" , "fffc0000UN.dcm" } ,
 { "9b426b02521cbc2f3ee25ab383ca835e" , "FUJI-10-MONO1-ACR_NEMA_2.dcm" } ,
-{ "678c2cb20ae5c8db45ac6fd8ed36e0c0" , "gdcm-ACR-LibIDO.acr" } ,
+{ "b920721186daa8b36a1db4a9fb0e568a" , "gdcm-ACR-LibIDO.acr" } ,
 { "b808c747b59f9d1a91a01491103abea5" , "gdcm-CR-DCMTK-16-NonSamplePerPix.dcm" } ,
 { "e7b5089a2a007221993ee5a7e6d44959" , "gdcm-JPEG-Extended.dcm" } ,
 { "20894653d750b4edf6034258a8dc3cf7" , "gdcm-JPEG-LossLess3a.dcm" } ,
 { "5011206e2a744c8a6f2cedb1ff7e5e11" , "gdcm-JPEG-LossLessThoravision.dcm" } ,
-{ "9a70209e955acef6a65aa13edebc0b09" , "gdcm-MR-PHILIPS-16-Multi-Seq.dcm" } ,
-{ "5156ad3b72556dfd8de94b348c6c95a6" , "gdcm-MR-PHILIPS-16-NonSquarePixels.dcm" } ,
+{ "899271699b9bd83c0ebd0e3e21785489" , "gdcm-MR-PHILIPS-16-Multi-Seq.dcm" } ,
+{ "3ada4145885084c465fc0d2969299428" , "gdcm-MR-PHILIPS-16-NonSquarePixels.dcm" } ,
 { "0f1ccdbb08b15c5b31f207410195136e" , "gdcm-MR-SIEMENS-16-2.acr" } ,
 { "48c49a7a41a7efea9ea0eadcd89ac9fa" , "gdcm-US-ALOKA-16.dcm" } ,
 { "9e9f42e825db2951519320c2e907d936" , "GE_CT_With_Private_compressed-icon.dcm" } ,
 { "9e126a24f81534e1cd653f16739a6192" , "GE_DLX-8-MONO2-Multiframe.dcm" } ,
-{ "48565dfe4c2d72ff12e6257a29a5a917" , "GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm" } ,
+{ "6b66f8c38fe96db805e7dedd9a997811" , "GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm" } ,
 { "61ca6c5115e6f74565f6f2ca06647444" , "GE_DLX-8-MONO2-PrivateSyntax.dcm" } ,
 { "2ed065d325227d88abfaaa7b6b693b75" , "GE_GENESIS-16-MONO2-Uncompressed-UnusualVR.dcm" } ,
 { "8d398fce426d3a248d8c3f7582e3751d" , "GE_GENESIS-16-MONO2-WrongLengthItem.dcm" } ,
@@ -143,22 +143,22 @@ static const char * const printmd5[][2] = {
 { "9bac4c50cd8afce8f9995cefd542760f" , "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm" } ,
 { "b33f1a1050fc7135295a02627be88514" , "libido1.0-vol.acr" } ,
 { "05fe8714421e16371d62ae2c280b7107" , "LIBIDO-16-ACR_NEMA-Volume.dcm" } ,
-{ "04a35a16ab40fd3ed7708ce9a4022a3c" , "LIBIDO-24-ACR_NEMA-Rectangle.dcm" } ,
-{ "9eb0ef9c007c7bae9bbf6b056957edc7" , "LIBIDO-8-ACR_NEMA-Lena_128_128.acr" } ,
+{ "c0b5d6b5cd8bf16e94f8d5db64aa9a4a" , "LIBIDO-24-ACR_NEMA-Rectangle.dcm" } ,
+{ "3338d3db1705db1b9a6474043b4772e3" , "LIBIDO-8-ACR_NEMA-Lena_128_128.acr" } ,
 { "e39e4923be2d8bb2fb19c6c8deae216f" , "LJPEG_BuginGDCM12.dcm" } ,
-{ "e630b285247cd5197deb6bd958ea4e12" , "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm" } ,
-{ "d257376f880ceeda31b5c3de869e3edb" , "MAROTECH_CT_JP2Lossy.dcm" } ,
+{ "e6bc657d132abebb01a675ade04129f1" , "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm" } ,
+{ "174d5848257864f700c2e32d8441d0c5" , "MAROTECH_CT_JP2Lossy.dcm" } ,
 { "497d6ea45b8f3f7f6a3bf8125dcc43b1" , "MR16BitsAllocated_8BitsStored.dcm" } ,
 { "5b23ccf10ad6358b253a7ec185deb2a9" , "MR-Brucker-CineTagging-NonSquarePixels.dcm" } ,
-{ "a75dfbf0919ce81cb02c43dab9efebbe" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" } ,
+{ "31246836410a24124acf6bea5a36a942" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" } ,
 { "c5042379519ac6b25df96b4ada96e9b1" , "MR_GE_with_Private_Compressed_Icon_0009_1110.dcm" } ,
 { "299776ad327c80f5caed305943f26041" , "MR-MONO2-12-an2.acr" } ,
 { "b4058b67ec1eb3d3d3acde27d51eb24a" , "MR-MONO2-12-angio-an1.acr" } ,
 { "f782f6ea25928310bd69c3ca5c6a97d2" , "MR-MONO2-12-shoulder.dcm" } ,
 { "7f6bccb00b34a7d277eacaffd2bb0362" , "MR-MONO2-16-head.dcm" } ,
 { "9bd4d79cc59c66b19c21577e12cd6226" , "MR-MONO2-8-16x-heart.dcm" } ,
-{ "4763db7ab25c451f7162ddf6258b238f" , "MR_Philips-Intera_BreaksNOSHADOW.dcm" } ,
-{ "d88c879b5c7a8d4e3f20f177df94a76d" , "MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm" } ,
+{ "d1b3b9ee6905b49ec70338f1f1c718bb" , "MR_Philips-Intera_BreaksNOSHADOW.dcm" } ,
+{ "b2c95ade86efa3ed7f2b897fb588ac37" , "MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm" } ,
 { "abce00bceef1711dca51e26950fc7a61" , "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm" } ,
 { "9b80a64ce87ac061b185991cb046c64c" , "MR_Philips_Intera_PrivateSequenceImplicitVR.dcm" } ,
 { "27af4f8d827b0a7863ee724c401145d9" , "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm" } ,
@@ -174,20 +174,20 @@ static const char * const printmd5[][2] = {
 { "071b840050588d14fde61646e058e1c6" , "PHILIPS_Brilliance_ExtraBytesInOverlay.dcm" } ,
 { "e6fffe81f8cf9a4f4b852b7599668821" , "PHILIPS_GDCM12xBug2.dcm" } ,
 { "d86e618d5f4e46f8bc2f14c23b10ec81" , "PHILIPS_GDCM12xBug.dcm" } ,
-{ "fcb350ba5067d2a270ced2716653839b" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" } ,
-{ "d335e74b45c8381ce73965ee3aad4c14" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" } ,
-{ "ea5cfb4c8ef6d41db52817ddd83223f1" , "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm" } ,
+{ "aa4e366280c194b4012083851d30e5dc" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" } ,
+{ "7817b32c5ac02e52b4d7d84f8729357a" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" } ,
+{ "61dc10a3cf58063848b1eb8075b04337" , "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm" } ,
 { "7c2c337ea316be2575a4a892b7ecd02f" , "PHILIPS_Intera-16-MONO2-Uncompress.dcm" } ,
 { "4f34474ed72e6a5960fc4691e588f8e0" , "PICKER-16-MONO2-Nested_icon.dcm" } ,
 { "629da04611e097e2cc532d6fe5e6454d" , "PICKER-16-MONO2-No_DicomV3_Preamble.dcm" } ,
-{ "df9760cfb62c7ca0d34631c67e3c0c1c" , "PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm" } ,
+{ "3aaca1826b4a4deb9e41ebf2af4fa6b2" , "PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm" } ,
 { "6dc48ff6f48d3c09db2fe877630ab003" , "RadBWLossLess.dcm" } ,
 { "c2f13224f3f0bc3aa8bbfa6f4a0a23ec" , "rle16loo.dcm" } ,
 { "bd5d9b2f994cfc0c6a95cca8c586533a" , "rle16sti.dcm" } ,
 { "631c5bb2e2f046215999072d13316363" , "SIEMENS-12-Jpeg_Process_2_4-Lossy-a.dcm" } ,
 { "593324f844b730f77bb4a337f51f3b3d" , "SIEMENS_CSA2.dcm" } ,
-{ "a65ce69a3cafe393ea3da9daf022f4de" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr" } ,
-{ "1178591e4f393fe007827898c9be7595" , "SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm" } ,
+{ "fa919f3ee7cef3af1f362dd166d53103" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr" } ,
+{ "825580733e8cfaf5d8679348889db40d" , "SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm" } ,
 { "a26065c162b9afc8a80a03136c90d964" , "SIEMENS_ImageLocationUN.dcm" } ,
 { "0f1ccdbb08b15c5b31f207410195136e" , "SIEMENS_MAGNETOM-12-ACR_NEMA_2-Modern.dcm" } ,
 { "bd3192fceb97c99234588f4dc0ede9a1" , "SIEMENS_MAGNETOM-12-MONO2-FileSeq0.dcm" } ,
@@ -204,13 +204,13 @@ static const char * const printmd5[][2] = {
 { "c56ae357244ed3d4203c2b28fe3ab447" , "SIEMENS_Sonata-16-MONO2-Value_Multiplicity.dcm" } ,
 { "7176eb4ec64dab63578eb6826318c87d" , "SignedShortLosslessBug.dcm" } ,
 { "ba40a5d86160fb17474759e7408c5326" , "simpleImageWithIcon.dcm" } ,
-{ "2987c857782490447714cf647de007b4" , "test.acr" } ,
+{ "9331b13c9d8945a07656d4d08bf4820b" , "test.acr" } ,
 { "0c2c475f6d21ae0aeadbf16565dcdbc4" , "TG18-CH-2k-01.dcm" } ,
 { "e8cc7ed19eedf9bed9ab60683f3dbfa1" , "THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm" } ,
 { "beda2947fcc433aa0c694377a23b553d" , "TheralysGDCM120Bug.dcm" } ,
 { "e8819809884c214fe78ee2b227417e5c" , "TOSHIBA_MRT150-16-MONO2-ACR_NEMA_2.dcm" } ,
 { "e6e83ba0c5435ad355767cd5eb9512b6" , "undefined_length_un_vr.dcm" } ,
-{ "ec1a38a5d00cab38c58b906cad9b8103" , "US-GE-4AICL142.dcm" } ,
+{ "54bcddcbac5e2a875b4c72736f727aa8" , "US-GE-4AICL142.dcm" } ,
 { "b894d6f1bf24b583fde241ee0b2cf3d5" , "US-IRAD-NoPreambleStartWith0003.dcm" } ,
 { "d9ede0f035b532025cf47630f350ea22" , "US-IRAD-NoPreambleStartWith0005.dcm" } ,
 { "17222122d388f2c1185884c644c041db" , "US-MONO2-8-8x-execho.dcm" } ,
@@ -218,7 +218,13 @@ static const char * const printmd5[][2] = {
 { "e0552f839d327506c32c4b9ceeb56459" , "US-RGB-8-epicard.dcm" } ,
 { "77bd6ff6dcac8e4fb763253e047dbdd2" , "US-RGB-8-esopecho.dcm" } ,
 { "7a3535f869f4a450b8de3d73a268e713" , "XA-MONO2-8-12x-catheter.dcm" } ,
-  { 0 ,0 }
+{ "167af475c7e2f4605544fa1602c34d50" , "IM-0001-0066.CommandTag00.dcm" },
+{ "d2cb6962750eb8f92c480e6cc2f4d104" , "GDCMJ2K_TextGBR.dcm" },
+{ "2e039bbc7520f809963e051ff5144ccf" , "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" },
+{ "0a90894370ba84dbe31acd1290ff9999" , "NM_Kakadu44_SOTmarkerincons.dcm" },
+{ "504f0fae0f9e6e1ed2a03a5c96c0500f" , "PhilipsInteraSeqTermInvLen.dcm" },
+
+{ 0 ,0 }
 };
 
 int TestPrint(const char *filename, bool verbose= false)
@@ -227,6 +233,7 @@ int TestPrint(const char *filename, bool verbose= false)
   r.SetFileName( filename );
   if( !r.Read() )
     {
+    std::cerr << "Could not read: " << filename << std::endl;
     return 1;
     }
 
@@ -237,12 +244,26 @@ int TestPrint(const char *filename, bool verbose= false)
     print.Print( std::cout );
   print.Print( out );
 
-  std::string buf = out.str();
-  char digest[33];
-  gdcm::Testing::ComputeMD5(&buf[0], buf.size(), digest);
-
   gdcm::Filename fn( filename );
   const char *name = fn.GetName();
+
+  std::string buf = out.str();
+  if( buf.find( "GDCM:UNKNOWN" ) != std::string::npos )
+    {
+    if( strcmp(name, "test.acr" ) != 0
+      && strcmp(name, "LIBIDO-8-ACR_NEMA-Lena_128_128.acr" ) != 0
+      && strcmp(name, "gdcm-ACR-LibIDO.acr" ) != 0
+      && strcmp(name, "SIEMENS_GBS_III-16-ACR_NEMA_1.acr" ) != 0
+      && strcmp(name, "LIBIDO-24-ACR_NEMA-Rectangle.dcm" ) != 0
+      && strcmp(name, "NM_Kakadu44_SOTmarkerincons.dcm" ) != 0
+    )
+      {
+      std::cerr << "UNKNOWN Attribute with : " << name << std::endl;
+      return 1;
+      }
+    }
+  char digest[33];
+  gdcm::Testing::ComputeMD5(&buf[0], buf.size(), digest);
 
   unsigned int i = 0;
   const char *p = printmd5[i][1];
@@ -284,6 +305,7 @@ int TestPrinter(int argc, char *argv[])
   int r = 0, i = 0;
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )

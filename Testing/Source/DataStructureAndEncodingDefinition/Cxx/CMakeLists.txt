@@ -21,7 +21,7 @@ SET(DSED_TEST_SRCS
   TestByteSwapFilter
   TestBasicOffsetTable
   TestComposite
-  #TestDataElement
+  TestDataElement
   TestDataSet
   TestVRDS
   TestDS

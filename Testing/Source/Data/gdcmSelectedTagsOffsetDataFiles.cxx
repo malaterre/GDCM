@@ -217,6 +217,7 @@ static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
 { "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm", 4190 },
 { "GDCMJ2K_TextGBR.dcm", 770 },
 { "NM_Kakadu44_SOTmarkerincons.dcm", 1576 },
+{ "PhilipsInteraSeqTermInvLen.dcm", 7440 },
 
 /* Stopping condition */
 { 0 ,0 },

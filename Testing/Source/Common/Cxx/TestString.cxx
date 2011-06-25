@@ -47,7 +47,11 @@ int TestString(int , char *[])
   if( ms3 != "WINDOW3" ) return 1;
 
   // we are at the end:
-  if( !!ss ) return 1;
+  if( !!ss )
+    {
+    std::cerr << "not at the end" << std::endl;
+    return 1;
+    }
 }
 {
   gdcm::String<'^'> s = "coucou";

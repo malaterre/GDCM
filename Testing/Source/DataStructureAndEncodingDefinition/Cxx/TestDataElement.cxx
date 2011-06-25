@@ -34,8 +34,8 @@ inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
   // w will be written
   // r will be read back
   std::stringstream ss;
-  w.Write<gdcm::SwapperNoOp>(ss);
-  r.Read<gdcm::SwapperNoOp>(ss);
+  w.Write<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>(ss);
+  r.Read<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>(ss);
 }
 
 int TestDataElement1(const uint16_t group, const uint16_t element,
@@ -119,6 +119,104 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
   return 0;
 }
 
+namespace
+{
+
+  // Tests operator== and operator!= for various gdcm::DataElement objects.
+  // Also tests comparing to itself, symmetry of the comparison operators
+  // with respect to their operands, and consistency between 
+  // operator== and operator!=.
+  // Note: This function recursively calls itself, in order to get a pointer
+  // to an equivalent array of gdcm::DataElement objects.
+  int TestDataElementEqualityComparison(
+    const gdcm::DataElement* const equivalentDataElements = NULL)
+  {
+    const unsigned int numberOfDataElements = 6;
+
+    gdcm::DataElement dataElements[numberOfDataElements] =
+    {
+      gdcm::DataElement(gdcm::Tag(0, 0), 0, gdcm::VR::INVALID),
+      gdcm::DataElement(gdcm::Tag(1, 1), 0, gdcm::VR::INVALID),
+      gdcm::DataElement(gdcm::Tag(1, 1), 1, gdcm::VR::INVALID),
+      gdcm::DataElement(gdcm::Tag(1, 1), 1, gdcm::VR::AE)
+    };
+
+    dataElements[4].SetByteValue("\0", 2);
+    dataElements[5].SetByteValue("123", 4);
+
+    // Now all data elements of the array dataElements are different. 
+
+    if ( equivalentDataElements == NULL )
+    {
+      return TestDataElementEqualityComparison(dataElements);
+    }
+
+    // equivalentDataElements != NULL, and because this function 
+    // is called recursively, equivalentDataElements[i] is equivalent 
+    // to dataElements[i].
+
+    for (unsigned int i = 0; i < numberOfDataElements; ++i)
+    {
+      const gdcm::DataElement& dataElement = dataElements[i]; 
+
+      if ( ! (dataElement == dataElement) )
+      {
+        std::cerr <<
+          "Error: A data element should compare equal to itself!\n";
+        return 1;
+      }
+      if ( dataElement != dataElement )
+      {
+        std::cerr <<
+          "Error: A data element should not compare unequal to itself!\n";
+        return 1;
+      }
+      const gdcm::DataElement& equivalentDataElement = equivalentDataElements[i]; 
+
+      if (  ! (dataElement == equivalentDataElement) ||
+        ! (equivalentDataElement == dataElement ) )
+      {
+        std::cerr <<
+          "Error: A data element should compare equal to an equivalent one!\n";
+        return 1;
+      }
+
+      if ( (dataElement != equivalentDataElement) ||
+        (equivalentDataElement != dataElement) )
+      {
+        std::cerr <<
+          "Error: A data element should not compare unequal to an equivalent one!\n";
+        return 1;
+      }
+
+      for (unsigned int j = i + 1; j < numberOfDataElements; ++j)
+      {
+        // dataElements[j] is different from dataElements[i].
+
+        const gdcm::DataElement& differentDataElement = dataElements[j];
+
+        if ( (dataElement == differentDataElement) ||
+          (differentDataElement == dataElement) )
+        {
+          std::cerr <<
+            "Error: A data element should not compare equal to a different one!\n";
+          return 1;
+        }
+
+        if ( !(dataElement != differentDataElement) ||
+          !(differentDataElement != dataElement) )
+        {
+          std::cerr <<
+            "Error: A data element should compare unequal to a different one!\n";
+          return 1;
+        }
+      }
+    }
+    return 0;
+  }
+
+} // End of unnamed namespace.
+
 // Test Data Element
 int TestDataElement(int , char *[])
 {
@@ -127,6 +225,7 @@ int TestDataElement(int , char *[])
   const uint16_t vl = 0x0;
   int r = 0;
   r += TestDataElement1(group, element, vl);
+  r += TestDataElementEqualityComparison();
 
   // Full DataElement
   //const char vr[] = "UN";

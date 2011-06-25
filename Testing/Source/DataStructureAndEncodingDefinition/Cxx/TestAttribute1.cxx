@@ -214,7 +214,7 @@ int TestAttributeUS() { return 0; }
 int TestAttributeUT() { return 0; }
 
 
-int TestAttribute1(int argc, char *argv[])
+int TestAttribute1(int , char *[])
 {
   int numerrors = 0;
   numerrors += TestAttributeAE();

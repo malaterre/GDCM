@@ -85,6 +85,7 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 // As a side note the FMI was set to Little Endian Implicit ...
 { "ddf83cd708e58021a633588927d55ab8" , "BugGDCM2_UndefItemWrongVL.dcm" }, // size mismatch
 
+{ "cb43a6ad60b8eacf718687b82126f625" , "NM_Kakadu44_SOTmarkerincons.dcm" }, // size mismatch
 
 { 0 ,0 }
 };

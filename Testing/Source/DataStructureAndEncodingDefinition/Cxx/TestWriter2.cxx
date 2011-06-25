@@ -49,10 +49,10 @@ int TestWrite2(const char *subdir, const char* filename, bool recursing)
   else if( ts.IsImplicit() )
     {
     gdcm::FileMetaInformation &fmi = reader.GetFile().GetHeader();
-    gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
-      ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+    gdcm::TransferSyntax ts2 = gdcm::TransferSyntax::ImplicitVRLittleEndian;
+    ts2 = gdcm::TransferSyntax::ExplicitVRLittleEndian;
 
-    const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    const char *tsuid = gdcm::TransferSyntax::GetTSString( ts2 );
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
     de.SetVR( VR::UI ); //gdcm::Attribute<0x0002, 0x0010>::GetVR() );

@@ -217,6 +217,9 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "7900d059078278ad0387f7c4aaf2027d"  , "JPEGDefinedLengthSequenceOfFragments.dcm" },
 { "dacb240b2fc701416d80193ad18baad5"  , "IM-0001-0066.CommandTag00.dcm" },
 { "7f2f84d3adef913bb5531f583eceb004"  , "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" },
+{ "f4bf27280aad0ff38d1fe3871a0a8afb"  , "GDCMJ2K_TextGBR.dcm" },
+{ "f445a6dc674e2c12c14bf3583c6c3e6f"  , "NM_Kakadu44_SOTmarkerincons.dcm" },
+{ "7c0c4eb0c73b4dc5b3a4d961653fc4e2"  , "PhilipsInteraSeqTermInvLen.dcm" },
 { NULL, NULL}
 };
 

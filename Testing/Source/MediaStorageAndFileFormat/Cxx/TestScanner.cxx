@@ -58,13 +58,13 @@ int TestScannerExtra()
     return 1;
     }
   //s.Print( std::cout );
-
   return 0;
 }
 
 int TestScanner(int argc, char *argv[])
 {
   gdcm::Trace::WarningOff();
+  gdcm::Trace::ErrorOff();
   const char *directory = gdcm::Testing::GetDataRoot();
   if( argc == 2 )
     {
@@ -79,7 +79,7 @@ int TestScanner(int argc, char *argv[])
 
   gdcm::Directory d;
   unsigned int nfiles = d.Load( directory ); // no recursion
-  d.Print( std::cout );
+//  d.Print( std::cout );
   std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
   gdcm::Scanner s;
@@ -89,19 +89,60 @@ int TestScanner(int argc, char *argv[])
   const gdcm::Tag t4(0x0004,0x5678); // DUMMY element
   const gdcm::Tag t5(0x0028,0x0010); // Rows
   const gdcm::Tag t6(0x0028,0x0011); // Columns
+  const gdcm::Tag t7(0x0008,0x0016); //
   s.AddTag( t1 );
   s.AddTag( t2 );
   s.AddTag( t3 );
   s.AddTag( t4 );
   s.AddTag( t5 );
   s.AddTag( t6 );
+  s.AddTag( t7 );
   bool b = s.Scan( d.GetFilenames() );
   if( !b )
     {
     std::cerr << "Scanner failed" << std::endl;
     return 1;
     }
-  s.Print( std::cout );
+//  s.Print( std::cout );
+
+  gdcm::Directory::FilenamesType const & files = s.GetFilenames();
+  if( files != d.GetFilenames() )
+    {
+    return 1;
+    }
+
+  int numerrors = 0;
+  for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+    {
+    const char *filename = it->c_str();
+    const char* value = s.GetValue(filename, t7);
+    const char *msstr = gdcm::Testing::GetMediaStorageFromFile(filename);
+    if( msstr && strcmp(msstr, "1.2.840.10008.1.3.10" ) == 0 )
+      {
+      // would need to check (0002,0002)...
+      }
+    if( value && msstr )
+      {
+      if( strcmp( value, msstr ) != 0 )
+        {
+        std::cerr << "Problem with file " << filename << std::endl;
+        std::cerr << value << "/" << msstr << std::endl;
+        ++numerrors;
+        }
+      }
+    else
+      {
+      if ( !msstr )
+        {
+        std::cerr << "Problem with file " << filename << std::endl;
+        if( value ) std::cerr << "Value found: " << value << std::endl;
+        ++numerrors;
+        }
+      }
+    }
+
+  if( numerrors )
+    return numerrors;
 
   // Check dummy filename:
   bool iskey = s.IsKey( "gdcm.rocks.invalid.name" );
@@ -116,6 +157,7 @@ int TestScanner(int argc, char *argv[])
   std::string sfilename;
   sfilename = gdcm::Testing::GetDataRoot();
   sfilename+= "/test.acr";
+{
   //const char *filename = d.GetFilenames()[0].c_str();
   const char *filename = sfilename.c_str();
   // The following breaks with Papyrus file: PET-cardio-Multiframe-Papyrus.dcm
@@ -143,6 +185,7 @@ int TestScanner(int argc, char *argv[])
     }
   const char * t1value = it2->second;
   std::cout << filename << " -> " << t1 << " = " << (*t1value ? t1value : "none" ) << std::endl;
+}
 
   const gdcm::Directory::FilenamesType &filenames = d.GetFilenames();
 {

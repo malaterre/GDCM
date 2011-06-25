@@ -44,6 +44,7 @@ static bool CheckResult( std::string const & filename, std::string const & value
 
 int TestParseXPATHFile(const char* filename, bool verbose = false )
 {
+  (void)verbose;
   //static gdcm::Global &g = gdcm::Global::GetInstance();
   //static const gdcm::Dicts &dicts = g.GetDicts();
   //static const gdcm::Dict &pubdict = dicts.GetPublicDict();

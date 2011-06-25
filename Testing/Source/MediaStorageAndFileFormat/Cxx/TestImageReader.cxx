@@ -26,7 +26,6 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
   gdcm::ImageReader reader;
 
   reader.SetFileName( filename );
-  reader.ReadUpToTag( gdcm::Tag(0x10,0x10) );
   if ( reader.Read() )
     {
     int res = 0;
