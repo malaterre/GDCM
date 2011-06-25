@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
   gdcm::ImageChangeTransferSyntax change;
   change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
   change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+  //change.SetTransferSyntax( gdcm::TransferSyntax::JPEGBaselineProcess1 );
   //change.SetTransferSyntax( image.GetTransferSyntax() );
   change.SetInput( image );
   bool b = change.Change();
