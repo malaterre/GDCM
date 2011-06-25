@@ -70,7 +70,7 @@ int TestVRDS(int, char *[])
   gdcm::DataElement de = at.GetAsDataElement();
   std::cout << de << std::endl;
 
-  gdcm::ByteValue* bv = de.GetByteValue();
+  const gdcm::ByteValue* bv = de.GetByteValue();
 {
   std::string str = bv->GetPointer();
   std::string::size_type pos1 = str.find("\\");

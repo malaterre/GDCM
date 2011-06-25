@@ -162,14 +162,16 @@ int main(int argc, char *argv[])
       //std::cout << owner << std::endl;
       gdcm::DataElement duplicate = de;
       duplicate.GetTag().SetPrivateCreator( new_private );
-      if( duplicate.GetByteValue() )
+      if( const gdcm::ByteValue *bv = duplicate.GetByteValue() )
         {
         // Warning: when doing : duplicate = de, only the pointer to the ByteValue is passed
         // (to avoid large memory duplicate). We need to explicitely duplicate the bytevalue ourselves:
-        duplicate.SetByteValue( de.GetByteValue()->GetPointer(), de.GetByteValue()->GetLength() );
+        gdcm::ByteValue *dupbv = new gdcm::ByteValue( bv->GetPointer(),
+          bv->GetLength() );
         // Let's recognize the duplicated ASCII-type elements:
         if( duplicate.GetVR() & gdcm::VR::VRASCII )
-          duplicate.GetByteValue()->Fill( 'X' );
+          dupbv->Fill( 'X' );
+        duplicate.SetValue( *dupbv );
         }
       dup.Insert( duplicate );
       }
