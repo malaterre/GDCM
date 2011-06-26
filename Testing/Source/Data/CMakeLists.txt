@@ -58,6 +58,8 @@ SET(BLACK_LIST_READER
 
 # This file is incorrect
   IM-0001-0066.dcm
+# Problem with RLE
+  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
