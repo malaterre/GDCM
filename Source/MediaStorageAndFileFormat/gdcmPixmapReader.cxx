@@ -411,7 +411,7 @@ void DoCurves(const DataSet& ds, Pixmap& pixeldata)
     }
 }
 
-void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
+bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
 {
   bool updateoverlayinfo = false;
   unsigned int numoverlays;
@@ -522,12 +522,20 @@ void DoOverlays(const DataSet& ds, Pixmap& pixeldata)
       {
       Overlay& o = pixeldata.GetOverlay(ov);
       // We need to update information
-      assert( o.GetBitsAllocated() == 16 );
-      o.SetBitsAllocated( 1 );
-      o.SetBitPosition( 0 );
+      if( o.GetBitsAllocated() == 16 )
+        {
+        o.SetBitsAllocated( 1 );
+        o.SetBitPosition( 0 );
+        }
+      else
+        {
+        gdcmErrorMacro( "Overlay is not supported" );
+        return false;
+        }
       }
     }
 
+  return true;
 }
 
 bool PixmapReader::ReadImage(MediaStorage const &ms)
@@ -943,7 +951,10 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   DoCurves(ds, *PixelData);
 
   // 7. Do the Overlays if any
-  DoOverlays(ds, *PixelData);
+  if( !DoOverlays(ds, *PixelData) )
+    {
+    return false;
+    }
 
   // 8. Do the PixelData
   if( ms == MediaStorage::MRSpectroscopyStorage )
