@@ -286,11 +286,16 @@ bool PixelFormat::Validate()
   if ( BitsAllocated == 24 )
     {
     gdcmDebugMacro( "ACR-NEMA way of storing RGB data. Updating" );
-    assert( BitsStored == 24 && HighBit == 23 && SamplesPerPixel == 1 );
-    BitsAllocated = 8;
-    BitsStored = 8;
-    HighBit = 7;
-    SamplesPerPixel = 3;
+    if( BitsStored == 24 && HighBit == 23 && SamplesPerPixel == 1 )
+      {
+      BitsAllocated = 8;
+      BitsStored = 8;
+      HighBit = 7;
+      SamplesPerPixel = 3;
+      return true;
+      }
+    // all other case, simply give up
+    return false;
     }
   return true;
 }
