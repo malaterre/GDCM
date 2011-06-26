@@ -469,6 +469,13 @@ ENDIF(GDCM_WRAP_CSHARP)
 SET(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 SET(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 
+# Need to subdirs in Source/Common before Wrapping
+# to have gdcmConfigure.h around
+SUBDIRS(
+  Utilities
+  Source
+  )
+
 SUBDIRS(Wrapping)
 IF(GDCM_WRAP_CSHARP)
   ADD_SUBDIRECTORY(Wrapping/Csharp)
@@ -502,12 +509,6 @@ CHECK_INCLUDE_FILE("pthread.h"      GDCM_HAVE_PTHREAD_H)
 # Big endian thing:
 INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
 TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
-
-
-SUBDIRS(
-  Utilities
-  Source
-  )
 
 IF(BUILD_TESTING)
   CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
