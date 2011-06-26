@@ -16,6 +16,8 @@ set(CTEST_TEST_TIMEOUT 3000)
 
 SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}:/local/mmalater/install/bin/")
 
+SET(ENV{CXXFLAGS} "-Wno-deprecated -Wno-deprecated-declarations")
+
 macro(dashboard_hook_init)
   set( dashboard_cache "
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
