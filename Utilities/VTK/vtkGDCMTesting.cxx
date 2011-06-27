@@ -202,6 +202,7 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "00191113.dcm","7c17afc7815f18ebaecd99b9b07950f1", "bfff320d1b058e91b4819aa4560c16f7" },
 { "D_CLUNIE_CT1_JLSL.dcm","4efffce4cded3f8785d5ac4d3b11da41", "a109da372df2b85ff0a705fba62e9589" },
 { "D_CLUNIE_CT1_JLSN.dcm","bcf17a67d96046ce7a2b4de4495dbd4c", "7ca273fff6311586bd02ac983ccfbb6b" },
+{ "LIBIDO-24-ACR_NEMA-Rectangle.dcm","28376a8bb2a64a9c8f6a50abfdbb336f", "81a40454eec2b18f4331cfd1ba4e501e" },
 
 /* Stopping condition */
 { 0 , 0 , 0 }
