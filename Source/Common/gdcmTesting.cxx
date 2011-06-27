@@ -402,6 +402,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0, "NM_Kakadu44_SOTmarkerincons.dcm" },
 { 0, "GDCMJ2K_TextGBR.dcm" },
 { 0, "PhilipsInteraSeqTermInvLen.dcm" },
+{ 0, "LIBIDO-24-ACR_NEMA-Rectangle.dcm" },
 { 0, NULL }
 };
 
