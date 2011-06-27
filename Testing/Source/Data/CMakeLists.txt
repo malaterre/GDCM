@@ -61,6 +61,8 @@ SET(BLACK_LIST_READER
 # Problem with RLE
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
+# TestImageChangeTransferSyntax1
+  MR-MONO2-12-angio-an1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
