@@ -408,8 +408,8 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       // gdcmData/DCMTK_JPEGExt_12Bits.dcm
       assert( GetPixelFormat().GetPixelRepresentation() ==
         codec.GetPixelFormat().GetPixelRepresentation() );
-      assert( GetPixelFormat().GetBitsStored() ==
-        codec.GetPixelFormat().GetBitsStored() );
+//      assert( GetPixelFormat().GetBitsStored() ==
+//        codec.GetPixelFormat().GetBitsStored() );
       assert( GetPixelFormat().GetBitsAllocated() == 12 );
       gdcm::Bitmap *i = (gdcm::Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
