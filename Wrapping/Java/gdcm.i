@@ -578,7 +578,21 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
 %include "gdcmIODEntry.h"
+%apply signed char[] { signed char* outbuffer }
+%apply signed char[] { signed char* inbuffer }
 %include "gdcmRescaler.h"
+%extend gdcm::Rescaler
+{
+  bool Rescale(signed char *outbuffer, const signed char *inbuffer, size_t n) {
+    return self->Rescale((char*)outbuffer, (const char*)inbuffer, n);
+  }
+  bool InverseRescale(char *outbuffer, const char *inbuffer, size_t n) {
+    return self->InverseRescale((char*)outbuffer, (const char*)inbuffer, n);
+  }
+};
+%clear signed char* outbuffer;
+%clear signed char* inbuffer;
+
 %include "gdcmSegmentedPaletteColorLookupTable.h"
 %include "gdcmUnpacker12Bits.h"
 
