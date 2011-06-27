@@ -202,6 +202,12 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "00191113.dcm","7c17afc7815f18ebaecd99b9b07950f1", "bfff320d1b058e91b4819aa4560c16f7" },
 { "D_CLUNIE_CT1_JLSL.dcm","4efffce4cded3f8785d5ac4d3b11da41", "a109da372df2b85ff0a705fba62e9589" },
 { "D_CLUNIE_CT1_JLSN.dcm","bcf17a67d96046ce7a2b4de4495dbd4c", "7ca273fff6311586bd02ac983ccfbb6b" },
+{ "IM-0001-0066.CommandTag00.dcm","51450a7a49ce7bc0e6a4ce18eaef2fff", "12d1567ed81236cf3b01dc12766581a0" },
+{ "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm","2b1296ded36f37beb83e28fae108c280", "d93d2f78d845c7a132489aab92eadd32" },
+{ "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm","f507ab11e56de33d6f0195dd185b5c62", "9eb513314b2fcf25d895e18ffb2ead0b" },
+{ "GDCMJ2K_TextGBR.dcm","9935ec525ea42203f3a535d4c1187ed4", "56238d3665ebdb0251d1161fb7f4edc6" },
+{ "NM_Kakadu44_SOTmarkerincons.dcm","99b60ec88d410b437adc06a809590127", "6f26e552a1b71d386483118779d192ad" },
+{ "PhilipsInteraSeqTermInvLen.dcm","6ccabe05841e29633d9e4fe1aec81039", "f8a1f4ce85b51527267e670a8aa0c308" },
 { "LIBIDO-24-ACR_NEMA-Rectangle.dcm","28376a8bb2a64a9c8f6a50abfdbb336f", "81a40454eec2b18f4331cfd1ba4e501e" },
 
 /* Stopping condition */
