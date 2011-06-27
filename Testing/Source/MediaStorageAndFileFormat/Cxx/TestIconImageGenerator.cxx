@@ -192,6 +192,11 @@ static const char * const iconimagearray[][2] = {
  {"0b818ac3983d76cfdc535a46058a1a53" , "LEADTOOLS_FLOWERS-24-RGB-JpegLossless.dcm" },
  {"20e2f6cc2b60ae26adfdd3b3ee0e1915" , "D_CLUNIE_VL1_RLE.dcm" },
  {"620f0b67a91f7f74151bc5be745b7110" , "DermaColorLossLess.dcm" },
+ {"ffab5ebdfe60100e71295fe50412a98f" , "IM-0001-0066.CommandTag00.dcm" },
+ {"796594769ee3570292de36fdb4509df1" , "LIBIDO-24-ACR_NEMA-Rectangle.dcm" },
+ {"4085155ff0a36230f55dfd17c07b016f" , "PhilipsInteraSeqTermInvLen.dcm" },
+ {"5fd844186b04820e1a55d42e99d81466" , "PHILIPS_GDCM12xBug.dcm" },
+ {"fd69a42d6ed9ac779fbdea5a874f27da" , "NM_Kakadu44_SOTmarkerincons.dcm" },
 
   // sentinel
   { 0, 0 }
