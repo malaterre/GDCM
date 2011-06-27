@@ -84,6 +84,10 @@ public class ScanDirectory
           {
           imageType = BufferedImage.TYPE_BYTE_GRAY;
           }
+        else if( pf.GetScalarType() == PixelFormat.ScalarType.UINT12 )
+          {
+          imageType = BufferedImage.TYPE_USHORT_GRAY;
+          }
         else if( pf.GetScalarType() == PixelFormat.ScalarType.UINT16 )
           {
           imageType = BufferedImage.TYPE_USHORT_GRAY;
