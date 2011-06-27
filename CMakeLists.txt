@@ -471,10 +471,8 @@ SET(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around
-SUBDIRS(
-  Utilities
-  Source
-  )
+SUBDIRS(Utilities)
+ADD_SUBDIRECTORY(Source)
 
 SUBDIRS(Wrapping)
 IF(GDCM_WRAP_CSHARP)
