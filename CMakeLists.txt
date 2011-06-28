@@ -469,6 +469,13 @@ ENDIF(GDCM_WRAP_CSHARP)
 SET(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 SET(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 
+#-----------------------------------------------------------------------------
+# we need to link against CoreFoundation so that we can use CFBundle to get the executable path.
+IF(APPLE)
+  FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
+ENDIF(APPLE)
+
+
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around
 SUBDIRS(Utilities)
@@ -852,12 +859,6 @@ ENDMACRO(PROCESSONEDIR)
 #  theoutput
 #)
 #MESSAGE("${theoutput}")
-
-#-----------------------------------------------------------------------------
-# we need to link against CoreFoundation so that we can use CFBundle to get the executable path.
-IF(APPLE)
-  FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
-ENDIF(APPLE)
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
