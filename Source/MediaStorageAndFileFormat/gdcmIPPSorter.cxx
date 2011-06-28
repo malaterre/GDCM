@@ -51,21 +51,22 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     }
 
   Scanner scanner;
-  const Tag ipp(0x0020,0x0032); // Image Position (Patient)
-  const Tag iop(0x0020,0x0037); // Image Orientation (Patient)
-  const Tag frame(0x0020,0x0052); // Frame of Reference UID
+  const Tag tipp(0x0020,0x0032); // Image Position (Patient)
+  const Tag tiop(0x0020,0x0037); // Image Orientation (Patient)
+  const Tag tframe(0x0020,0x0052); // Frame of Reference UID
   // Temporal Position Identifier (0020,0100) 3 Temporal order of a dynamic or functional set of Images.
   //const Tag tpi(0x0020,0x0100);
-  scanner.AddTag( ipp );
-  scanner.AddTag( iop );
+  scanner.AddTag( tipp );
+  scanner.AddTag( tiop );
+  scanner.AddTag( tframe );
   bool b = scanner.Scan( filenames );
   if( !b )
     {
     gdcmDebugMacro( "Scanner failed" );
     return false;
     }
-  Scanner::ValuesType iops = scanner.GetValues(iop);
-  Scanner::ValuesType frames = scanner.GetValues(frame);
+  Scanner::ValuesType iops = scanner.GetValues(tiop);
+  Scanner::ValuesType frames = scanner.GetValues(tframe);
   if( iops.size() != 1 )
     {
     gdcmDebugMacro( "More than one IOP (or no IOP): " << iops.size() );
@@ -80,7 +81,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 
   const char *reference = filenames[0].c_str();
   Scanner::TagToValue const &t2v = scanner.GetMapping(reference);
-  Scanner::TagToValue::const_iterator it = t2v.find( iop );
+  Scanner::TagToValue::const_iterator it = t2v.find( tiop );
   // Take the first file in the list of filenames, if not IOP is found, simply gives up:
   if( it == t2v.end() )
     {
@@ -88,7 +89,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     gdcmDebugMacro( "No iop in: " << reference );
     return false;
     }
-  if( it->first != iop )
+  if( it->first != tiop )
     {
     // first file does not contains Image Orientation (Patient), let's give up
     gdcmDebugMacro( "No iop in first file ");
@@ -131,7 +132,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     bool iskey = scanner.IsKey(filename);
     if( iskey )
       {
-      const char *value =  scanner.GetValue(filename, ipp);
+      const char *value =  scanner.GetValue(filename, tipp);
       if( value )
         {
         //gdcmDebugMacro( filename << " has " << ipp << " = " << value );
@@ -152,7 +153,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
         }
       else
         {
-        gdcmDebugMacro( "File: " << filename << " has no Tag" << ipp << ". Skipping." );
+        gdcmDebugMacro( "File: " << filename << " has no Tag" << tipp << ". Skipping." );
         }
       }
     else
