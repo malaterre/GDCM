@@ -737,7 +737,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     {
     outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
     }
-  int j = dext[4];
+  int jj = dext[4];
 
 
   bool rescaled = false;
@@ -794,7 +794,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       for(int i = dext[2]; i <= dext[3]; ++i)
         {
         memcpy(pointer,
-          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+          tempimage+((dext[3] - i)+jj*(dext[3]+1))*outsize, outsize);
         pointer += outsize;
         }
       }
