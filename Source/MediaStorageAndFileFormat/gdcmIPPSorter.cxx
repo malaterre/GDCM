@@ -96,6 +96,12 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     return false;
     }
   const char *dircos = it->second;
+  if( !dircos )
+    {
+    // first file does contains Image Orientation (Patient), but it is empty
+    gdcmDebugMacro( "Empty iop in first file ");
+    return false;
+    }
   std::stringstream ss;
   ss.str( dircos );
   Element<VR::DS,VM::VM6> cosines;
