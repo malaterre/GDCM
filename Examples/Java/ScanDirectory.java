@@ -195,6 +195,8 @@ public class ScanDirectory
       new Tag(0x0020, 0x1041),    // SliceLocation
       new Tag(0x0018, 0x0050),    // SliceThickness ?? Eg. Enhanced MR Image Storage
       new Tag(0x0008, 0x0080),    // InstitutionName
+      new Tag(0x0028, 0x1050),    // WindowCenter
+      new Tag(0x0028, 0x1051),    // WindowWidth
     };
     for( Tag t : tagarray ) {
       //System.out.println( "Tag: " + t.toString() );
