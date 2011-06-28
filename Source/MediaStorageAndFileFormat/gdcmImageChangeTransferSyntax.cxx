@@ -359,15 +359,15 @@ bool ImageChangeTransferSyntax::Change()
     {
     // In memory decompression:
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-    gdcm::ByteValue *bv = new gdcm::ByteValue();
-    unsigned long len = Input->GetBufferLength();
-    bv->SetLength( len );
-    bool b = Input->GetBuffer( (char*)bv->GetPointer() );
+    gdcm::ByteValue *bv0 = new gdcm::ByteValue();
+    unsigned long len0 = Input->GetBufferLength();
+    bv0->SetLength( len0 );
+    bool b = Input->GetBuffer( (char*)bv0->GetPointer() );
     if( !b )
       {
       return false;
       }
-    pixeldata.SetValue( *bv );
+    pixeldata.SetValue( *bv0 );
 
     bool success = false;
     if( !success ) success = TryRAWCodec(pixeldata, *Input, *Output);
