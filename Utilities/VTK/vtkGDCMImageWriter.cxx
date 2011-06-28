@@ -869,9 +869,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     if( vtkMedicalImageProperties::GetTimeAsFields( this->MedicalImageProperties->GetStudyTime(), hour, minute, second ) )
 #else
     time_t studytime;
-    char date[22];
+    char date[22] = { ' ' };
     strcpy( date, "19000101" );
-    strncpy( date + 8 , this->MedicalImageProperties->GetStudyTime(), 22 - 8 );
+    if( this->MedicalImageProperties->GetStudyTime() )
+      strncpy( date + 8 , this->MedicalImageProperties->GetStudyTime(), 22 - 8 );
     date[21] = 0;
     if( gdcm::System::ParseDateTime(studytime, date ) )
 #endif
