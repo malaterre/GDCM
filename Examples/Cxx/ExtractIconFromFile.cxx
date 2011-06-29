@@ -80,6 +80,7 @@ int main(int argc, char *argv [])
     iig.SetPixmap( img );
     const unsigned int idims[2] = { 64, 64 };
     iig.SetOutputDimensions( idims );
+    //iig.SetPixelMinMax(60, 868);
     iig.Generate();
     const gdcm::IconImage & icon = iig.GetIconImage();
     WriteIconAsPNM("icon.ppm", icon);
