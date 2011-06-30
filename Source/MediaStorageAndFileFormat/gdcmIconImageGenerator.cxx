@@ -326,12 +326,9 @@ void BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
 
 void IconImageGenerator::SetPixelMinMax(double min, double max)
 {
-  if( min >= 0 && max >= 0 && max >= min )
-    {
-    Internals->Min = min;
-    Internals->Max = max;
-    Internals->UseMinMax = true;
-    }
+  Internals->Min = min;
+  Internals->Max = max;
+  Internals->UseMinMax = true;
 }
 
 bool IconImageGenerator::Generate()
