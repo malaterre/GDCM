@@ -4,7 +4,7 @@ SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   TestvtkGDCMImageReader4
   TestvtkGDCMImageReaderIsLossy
-  TestImageChangeInformation
+  TestvtkImageChangeInformation
   #TestvtkGDCMImageActor
   #TestvtkGDCMImageViewer
 )
