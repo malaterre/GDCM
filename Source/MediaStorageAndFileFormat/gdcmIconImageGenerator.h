@@ -55,7 +55,6 @@ public:
   /// Override default min/max to compute best rescale for 16bits -> 8bits
   /// downscale. Typically those value can be read from the SmallestImagePixelValue
   /// LargestImagePixelValue DICOM attribute.
-  /// min and max should be positive, max needs to be greater than min
   void SetPixelMinMax(double min, double max);
 
   /// Generate Icon
