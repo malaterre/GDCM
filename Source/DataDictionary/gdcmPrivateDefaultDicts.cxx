@@ -2580,7 +2580,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x0081,"GEMS_PARM_01",VR::LO,VM::VM1,"GE Coil Name",false },
   {0x0043,0x0082,"GEMS_PARM_01",VR::LO,VM::VM1_n,"System Configuration Information",false },
   {0x0043,0x0083,"GEMS_PARM_01",VR::DS,VM::VM1_2,"Asset R Factors",false },
-  {0x0043,0x0084,"GEMS_PARM_01",VR::LO,VM::VM5,"Additional Asset Data",false },
+  {0x0043,0x0084,"GEMS_PARM_01",VR::LO,VM::VM1_n,"Additional Asset Data",false },
   {0x0043,0x0085,"GEMS_PARM_01",VR::UT,VM::VM1,"Debug Data (text format)",false },
   {0x0043,0x0086,"GEMS_PARM_01",VR::OB,VM::VM1,"Debug Data (binary format)",false },
   {0x0043,0x0087,"GEMS_PARM_01",VR::UT,VM::VM1,"Reserved",false },
