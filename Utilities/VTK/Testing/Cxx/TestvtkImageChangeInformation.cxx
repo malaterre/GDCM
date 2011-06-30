@@ -21,7 +21,7 @@
 #include "vtkRenderWindowInteractor.h"
 #include "vtkRenderer.h"
 
-int TestImageChangeInformation(int argc, char *argv[])
+int TestvtkImageChangeInformation(int argc, char *argv[])
 {
   if( argc < 2 ) return 1;
   const char *dirname = argv[1];
