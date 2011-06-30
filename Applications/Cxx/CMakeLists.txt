@@ -37,6 +37,7 @@ ENDIF(WIN32)
 
 SET(GDCM_EXECUTABLE_NAME
   gdcmdump
+  gdcmdiff
   gdcmraw
   gdcmscanner
   gdcmanon
