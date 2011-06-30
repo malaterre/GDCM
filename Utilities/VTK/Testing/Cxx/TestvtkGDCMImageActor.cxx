@@ -32,41 +32,29 @@ int TestvtkGDCMReadImageActor(const char *filename)
   reader->SetFileName( filename );
   reader->Update();
 
-  reader->GetOutput()->Print( cout );
+  //reader->GetOutput()->Print( cout );
 
+  vtkImageActor *ia = vtkImageActor::New();
+  ia->SetInput( reader->GetOutput() );
 
-vtkImageActor *ia = vtkImageActor::New();
-ia->SetInput( reader->GetOutput() );
+  // Create the RenderWindow, Renderer and both Actors
+  vtkRenderer *ren1 = vtkRenderer::New();
+  vtkRenderWindow *renWin = vtkRenderWindow::New();
+  renWin->AddRenderer (ren1);
+  vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
+  iren->SetRenderWindow (renWin);
 
-//# Create the RenderWindow, Renderer and both Actors
-vtkRenderer *ren1 = vtkRenderer::New();
-vtkRenderWindow *renWin = vtkRenderWindow::New();
-    renWin->AddRenderer (ren1);
-vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
-    iren->SetRenderWindow (renWin);
+  // Add the actors to the renderer, set the background and size
+  ren1->AddActor (ia);
 
-// Add the actors to the renderer, set the background and size
-ren1->AddActor (ia);
-//ren1-> SetBackground 0.1 0.2 0.4
-//renWin->SetSize (0,0);
-
-      vtkInteractorStyleImage *style = vtkInteractorStyleImage::New();
-      iren->SetInteractorStyle( style );
-      style->Delete();
-//# render the image
-//iren AddObserver UserEvent {wm deiconify .vtkInteract}
-//renWin->Render();
-iren->Initialize();
-iren->Start();
-
-
-//set cam1 [ren1 GetActiveCamera]
-//$cam1 Elevation -30
-//$cam1 Roll -20
-//ren1 ResetCameraClippingRange
-//renWin Render
+  vtkInteractorStyleImage *style = vtkInteractorStyleImage::New();
+  iren->SetInteractorStyle( style );
+  style->Delete();
+  iren->Initialize();
+  iren->Start();
 
   reader->Delete();
+
   return 0;
 }
 
