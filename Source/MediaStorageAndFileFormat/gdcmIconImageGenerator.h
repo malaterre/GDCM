@@ -57,6 +57,11 @@ public:
   /// LargestImagePixelValue DICOM attribute.
   void SetPixelMinMax(double min, double max);
 
+  /// Instead of explicitely specifying the min/max value for the rescale
+  /// operation, let the internal mechanism compute the min/max of icon and
+  /// rescale to best appropriate.
+  void AutoPixelMinMax(bool b);
+
   /// Generate Icon
   bool Generate();
 
