@@ -120,7 +120,7 @@ static const char * const printmd5[][2] = {
 { "2ed065d325227d88abfaaa7b6b693b75" , "GE_GENESIS-16-MONO2-Uncompressed-UnusualVR.dcm" } ,
 { "8d398fce426d3a248d8c3f7582e3751d" , "GE_GENESIS-16-MONO2-WrongLengthItem.dcm" } ,
 { "e854973d5aa7ad3ae6adcaa8cf9ef170" , "GE_LOGIQBook-8-RGB-HugePreview.dcm" } ,
-{ "e2813fcfdd414f256ac2a8a2002d9257" , "GE_MR_0025xx1bProtocolDataBlock.dcm" } ,
+{ "4baf83d23aa101ba8853193478764bda" , "GE_MR_0025xx1bProtocolDataBlock.dcm" } ,
 { "d5efa34d8091e1ad04683eefb41f33c7" , "GE_RHAPSODE-16-MONO2-JPEG-Fragments.dcm" } ,
 { "d41d8cd98f00b204e9800998ecf8427e" , "IM-0001-0066.dcm" } ,
 { "cd085d783924d8a7fa2270ff40c6dc3e" , "ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm" } ,
