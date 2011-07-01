@@ -1454,6 +1454,51 @@
 0064 0009 OF 1 Vector Grid Data
 0064 000f SQ 1 Pre Deformation Matrix Registration Sequence
 0064 0010 SQ 1 Post Deformation Matrix Registration Sequence
+0066 0001 UL 1 Number of Surfaces
+0066 0002 SQ 1 Surface Sequence
+0066 0003 UL 1 Surface Number
+0066 0004 LT 1 Surface Comments
+0066 0009 CS 1 Surface Processing
+0066 000a FL 1 Surface Processing Ratio
+0066 000b LO 1 Surface Processing Description
+0066 000c FL 1 Recommended Presentation Opacity
+0066 000d CS 1 Recommended Presentation Type
+0066 000e CS 1 Finite Volume
+0066 0010 CS 1 Manifold
+0066 0011 SQ 1 Surface Points Sequence
+0066 0012 SQ 1 Surface Points Normals Sequence
+0066 0013 SQ 1 Surface Mesh Primitives Sequence
+0066 0015 UL 1 Number of Surface Points
+0066 0016 OF 1 Point Coordinates Data
+0066 0017 FL 3 Point Position Accuracy
+0066 0018 FL 1 Mean Point Distance
+0066 0019 FL 1 Maximum Point Distance
+0066 001a FL 6 Points Bounding Box Coordinates
+0066 001b FL 3 Axis of Rotation
+0066 001c FL 3 Center of Rotation
+0066 001e UL 1 Number of Vectors
+0066 001f US 1 Vector Dimensionality
+0066 0020 FL 1-n Vector Accuracy
+0066 0021 OF 1 Vector Coordinate Data
+0066 0023 OW 1 Triangle Point Index List
+0066 0024 OW 1 Edge Point Index List
+0066 0025 OW 1 Vertex Point Index List
+0066 0026 SQ 1 Triangle Strip Sequence
+0066 0027 SQ 1 Triangle Fan Sequence
+0066 0028 SQ 1 Line Sequence
+0066 0029 OW 1 Primitive Point Index List
+0066 002a UL 1 Surface Count
+0066 002b SQ 1 Referenced Surface Sequence
+0066 002c UL 1 Referenced Surface Number
+0066 002d SQ 1 Segment Surface Generation Algorithm Identification Sequence
+0066 002e SQ 1 Segment Surface Source Instance Sequence
+0066 002f SQ 1 Algorithm Family Code Sequence
+0066 0030 SQ 1 Algorithm Name Code Sequence
+0066 0031 LO 1 Algorithm Version
+0066 0032 LT 1 Algorithm Parameters
+0066 0034 SQ 1 Facet Sequence
+0066 0035 SQ 1 Surface Processing Algorithm Identification Sequence
+0066 0036 LO 1 Algorithm Name
 0070 0001 SQ 1 Graphic Annotation Sequence
 0070 0002 CS 1 Graphic Layer
 0070 0003 CS 1 Bounding Box Annotation Units
