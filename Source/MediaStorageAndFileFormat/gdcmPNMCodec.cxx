@@ -51,7 +51,8 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     {
     os << "P5\n";
     }
-  else if( pi == PhotometricInterpretation::RGB )
+  else if( pi == PhotometricInterpretation::RGB
+    || pi == PhotometricInterpretation::PALETTE_COLOR )
     {
     os << "P6\n";
     }
@@ -88,14 +89,26 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     }
   assert(bv);
 
-  if( pf.GetBitsAllocated() == 16 )
+  if( pi == PhotometricInterpretation::PALETTE_COLOR )
     {
-    bv->Write<SwapperDoOp, uint16_t>( os );
+    std::stringstream is;
+    is.write( bv->GetPointer(), bv->GetLength() );
+
+    const gdcm::LookupTable &lut = this->GetLUT();
+    lut.Decode(is, os);
     }
   else
     {
-    //bv->Write<SwapperDoOp, uint8_t>( os );
-    bv->WriteBuffer( os );
+
+    if( pf.GetBitsAllocated() == 16 )
+      {
+      bv->Write<SwapperDoOp, uint16_t>( os );
+      }
+    else
+      {
+      //bv->Write<SwapperDoOp, uint8_t>( os );
+      bv->WriteBuffer( os );
+      }
     }
 
   os.close();
@@ -231,7 +244,7 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   //assert(len < INT_MAX);
   //assert(pos < INT_MAX);
   size_t m = ((size_t)len - (size_t)pos ) / ( dims[0]*dims[1] );
-  if( m * dims[0] * dims[1] != len - pos )
+  if( m * dims[0] * dims[1] != (size_t)len - pos )
     {
     std::cerr << "Problem computing length" << std::endl;
     return false;
