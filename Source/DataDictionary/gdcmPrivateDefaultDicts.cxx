@@ -2490,6 +2490,9 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x000d,"GEMS_PARM_01",VR::DS,VM::VM1,"PSD estimated limit",false },
   {0x0043,0x000e,"GEMS_PARM_01",VR::DS,VM::VM1,"PSD estimated limit in tesla per second",false },
   {0x0043,0x000f,"GEMS_PARM_01",VR::DS,VM::VM1,"Saravghead",false },
+  // (0043,1010) SS (US) 0                                    # 2,1 Window value
+  // however http://www.gemed.com.ar/usen/interoperability/dicom/docs/DOC0636565r4_CS.pdf
+  // indicates it to be US ! Is it a dual SS/US ?
   {0x0043,0x0010,"GEMS_PARM_01",VR::US,VM::VM1,"Window value",false },
   {0x0043,0x0011,"GEMS_PARM_01",VR::US,VM::VM1,"Total input views",false },
   {0x0043,0x0012,"GEMS_PARM_01",VR::SS,VM::VM3,"X-ray chain",false },
@@ -2599,7 +2602,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x0094,"GEMS_PARM_01",VR::DS,VM::VM1_n,"Spectro Ratio Values",false },
   {0x0043,0x0095,"GEMS_PARM_01",VR::LO,VM::VM1,"Prescan Reuse String",false },
   {0x0043,0x0096,"GEMS_PARM_01",VR::CS,VM::VM1,"Content Qualification",false },
-  {0x0043,0x0097,"GEMS_PARM_01",VR::LO,VM::VM8,"Image Filtering Parameters",false },
+  {0x0043,0x0097,"GEMS_PARM_01",VR::LO,VM::VM1_n,"Image Filtering Parameters",false },
   {0x0043,0x0098,"GEMS_PARM_01",VR::UI,VM::VM1,"ASSET Acquisition Calibration Series UID",false },
   {0x0043,0x0099,"GEMS_PARM_01",VR::LO,VM::VM1_n,"Extended Options",false },
   {0x0043,0x009a,"GEMS_PARM_01",VR::IS,VM::VM1,"Rx Stack Identification",false },
