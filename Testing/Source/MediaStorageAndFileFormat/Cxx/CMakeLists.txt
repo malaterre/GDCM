@@ -4,6 +4,7 @@ SET(MSFF_TEST_SRCS
   TestAnonymizer
   TestIconImageFilter
   TestIconImageGenerator
+  TestIconImageGenerator2
   TestParseXPATH
   TestValidate
   TestAnonymizeEvent
