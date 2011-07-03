@@ -27,6 +27,7 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   ExtractIconFromFile
+  DumpADAC
   ReadMultiTimesException
   pmsct_rgb1
   GenAllVR
