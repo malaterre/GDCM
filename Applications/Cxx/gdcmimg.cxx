@@ -277,7 +277,7 @@ bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *
    * during header parsing but discard them when copying the JPG byte stream into
    * the encapsulated Pixel Data Element...
    */
-  std::ifstream is(filename);
+  std::ifstream is(filename, std::ios::binary);
   gdcm::TransferSyntax ts;
   bool b = jpeg.GetHeaderInfo( is, ts );
   if( !b )
