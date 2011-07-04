@@ -75,13 +75,16 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_CUSTOM_COMMAND(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
-# 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated (which means all *.java should be there)
-# Some compiler are picky about Java version. For instance covariant return type was only added to Java 5, so to
-# please compiler such as ecj (Eclipse Java Compiler 0.894_R34x) explicitly state we want 1.5 version to compile
-# gdcm::ImageToImageFilter::GetOutput() const as covariant return type
+# 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated
+# (which means all *.java should be there) Some compiler are picky about Java
+# version. For instance covariant return type was only added to Java 5, so to
+# please compiler such as ecj (Eclipse Java Compiler 0.894_R34x) explicitly
+# state we want 1.5 version to compile gdcm::ImageToImageFilter::GetOutput()
+# const as covariant return type
   COMMAND ${JAVA_COMPILE} ARGS -source 1.5 "gdcm/*.java" #${javafiles}
-# 2. now that the *.class have been generated construct the jar file. We can only rely on the gdcm.java / gdcm.class
-# to build dependencie, I am pretty sure it will break parallel builds... oh well
+# 2. now that the *.class have been generated construct the jar file. We can
+# only rely on the gdcm.java / gdcm.class to build dependencie, I am pretty
+# sure it will break parallel builds... oh well
   COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar gdcm/*.class
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
   DEPENDS "${swig_generated_file_fullname}"
@@ -94,14 +97,11 @@ ADD_CUSTOM_TARGET(GDCMJavaJar ALL
   COMMENT "building gdcm.jar"
 )
 
-# 4. gdcm.jar has been generated, let's put it right next to libgdcm.so:
-#ADD_CUSTOM_COMMAND(
-#  TARGET   GDCMJavaJar
-#  POST_BUILD
-#  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar ${LIBRARY_OUTPUT_PATH}
-#  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
-#  COMMENT   "Copy gdcm.jar into ${LIBRARY_OUTPUT_PATH}"
-#)
+IF(WIN32)
+   SET(MODDST ${GDCM_INSTALL_BIN_DIR})
+ELSE()
+   SET(MODDST ${GDCM_INSTALL_LIB_DIR})
+ENDIF()
 
 # Module are always place in the library destination
 # but for poor win32 user I decided to place them
@@ -109,7 +109,7 @@ ADD_CUSTOM_TARGET(GDCMJavaJar ALL
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_gdcmjni_REAL_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT JavaModule
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT JavaModule
+    LIBRARY DESTINATION ${MODDST} COMPONENT JavaModule
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT JavaModule
   )
   # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
