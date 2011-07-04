@@ -210,6 +210,7 @@ public class ScanDirectory
       String outfn = fn + ".png";
       r.SetFileName( fn );
       b = r.ReadUpToTag( new Tag(0x88,0x200) );
+      UIntArrayType dims = ImageHelper.GetDimensionsValue( r.GetFile() );
       if( b )
         {
         IconImageFilter iif = new IconImageFilter();
