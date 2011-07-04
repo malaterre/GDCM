@@ -636,6 +636,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
 %template (DoubleArrayType) std::vector<double>;
+%template (UShortArrayType) std::vector<unsigned short>;
+%template (UIntArrayType) std::vector<unsigned int>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
