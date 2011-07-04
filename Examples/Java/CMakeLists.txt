@@ -12,6 +12,7 @@ set(examples
   HelloSimple
   DecompressPixmap
   ScanDirectory
+  ReadFiles
   )
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
