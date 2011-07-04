@@ -143,26 +143,13 @@ ADD_CUSTOM_COMMAND(
 #but for poor win32 user I decided to place them
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package} COMPONENT PythonModule
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Libraries
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Development
-  )
+  install_swig_module(${GDCM_PYTHON_IMPLEMENTATION_NAME} Python)
   # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py
     ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py
-    #DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Libraries
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT PythonModule
   )
-  # pth file are actually a pain to use since they are *required* to be in some very specific location;
-  # for instance you have a /tmp/gdcm.pth file and set PYTHONPATH=/tmp ... well believe it or not
-  # this won't work ! I might actually have to go away from this solution for generic solution :(
-  # only official rpm/deb could be sure of where the user will install those python module
-  #INSTALL(FILES
-  #  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
-  #  DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Libraries
-  #)
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
 # Test that will try to load any class in the target language: python

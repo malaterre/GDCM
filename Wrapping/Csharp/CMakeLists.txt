@@ -219,17 +219,13 @@ ENDIF(OLDSTYLECSHARP)
 #ENDIF(BUILD_TESTING)
 
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${SWIG_MODULE_gdcmsharpglue_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT CSharpModule
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
-  ${CPACK_NAMELINK_TYPE}
-  )
-SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-  # because gdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-    INSTALL(FILES
-      ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
-  #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
-      DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
+  install_swig_module(gdcmsharpglue CSharp)
+  SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
+  # because gdcm-sharp.dll is constructed with custom commands, it need the
+  # INSTALL(FILES signature:
+  INSTALL(FILES
+    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
+    #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
+    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
     )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)

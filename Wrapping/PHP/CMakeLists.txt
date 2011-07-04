@@ -73,11 +73,7 @@ ADD_CUSTOM_TARGET(GDCMPHP ALL
 # but for poor win32 user I decided to place them
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${SWIG_MODULE_php_gdcm_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT PHPModule
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT PHPModule
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT PHPModule
-  )
+  install_swig_module(php_gdcm PHP)
   # because gdcm.php is constructed with custom commands, it need the INSTALL(FILES signature:
   INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.php
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT PHPModule
