@@ -52,6 +52,9 @@ public:
   typename VRToType<TVR>::Type Internal[VMToLength<TVM>::Length];
   typedef typename VRToType<TVR>::Type Type;
 
+  static VR  GetVR()  { return (VR::VRType)TVR; }
+  static VM  GetVM()  { return (VM::VMType)TVM; }
+
   unsigned long GetLength() const {
     return VMToLength<TVM>::Length;
   }
@@ -397,6 +400,9 @@ public:
     }
     Internal = 0;
   }
+
+  static VR  GetVR()  { return (VR::VRType)TVR; }
+  static VM  GetVM()  { return VM::VM1_n; }
 
   // Length manipulation
   // SetLength should really be protected anyway...all operation
