@@ -103,6 +103,19 @@ public:
       }
   }
 
+  DataElement GetAsDataElement() const {
+    DataElement ret;
+    ret.SetVR( (VR::VRType)TVR );
+    if( Internal )
+      {
+      std::ostringstream os;
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
+        GetLength(),os);
+      ret.SetByteValue( os.str().c_str(), os.str().size() );
+      }
+    return ret;
+  }
+
   void Read(std::istream &_is) {
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
       GetLength(),_is);
