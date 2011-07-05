@@ -59,6 +59,8 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.4.90",
   // JPEG 2000
   "1.2.840.10008.1.2.4.91",
+  // JPIP Referenced
+  "1.2.840.10008.1.2.4.94",
   // RLE Lossless
   "1.2.840.10008.1.2.5",
   // MPEG2 Main Profile @ Main Level
