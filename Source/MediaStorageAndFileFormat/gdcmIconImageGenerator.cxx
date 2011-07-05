@@ -526,10 +526,6 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       std::stringstream ss2;
       ss2.str( std::string( &v8[0], v8.size() ) );
 
-      std::ostringstream os;
-      //I->GetLUT().Encode( ss2, os );
-
-      //std::string s2 = os.str();
       std::string s2 = ss2.str();
       // As per standard, we only support 8bits icon
       I->SetPixelFormat( PixelFormat::UINT8 );
@@ -601,6 +597,11 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
           *ybr_out = G; ++ybr_out;
           *ybr_out = B; ++ybr_out;
           }
+#if 0
+    std::ofstream d( "/tmp/d.rgb" );
+    d.write( &tempvbuf[0], tempvbuf.size() );
+    d.close();
+#endif
         assert( ybr_out == ybr_end );
         }
       else // ( P->GetPlanarConfiguration() == 1 )
