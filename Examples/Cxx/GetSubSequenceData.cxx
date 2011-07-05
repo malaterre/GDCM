@@ -76,7 +76,7 @@ bool PrintNameValueMapping( gdcm::SequenceOfItems *sqi_values, gdcm::SequenceOfI
       {
       return false;
       }
-    gdcm::Element<VR::FD, VM::VM1> el1;
+    gdcm::Element<VR::FD, VM::VM1_2> el1;
     el1.SetFromDataElement( index2 );
 
     UL copy = el1.GetValue();
