@@ -59,6 +59,7 @@ MeshPrimitive::MeshPrimitive():
   PrimitiveData(),
   PrimitiveType(MPType_END)
 {
+
 }
 
 MeshPrimitive::~MeshPrimitive()

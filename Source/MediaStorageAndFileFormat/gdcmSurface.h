@@ -125,8 +125,6 @@ private:
   STATES Manifold;
 
 
-
-
   //**        Point members      **//
   //0066 0015 UL 1 Number of Surface Points
   unsigned long NumberOfSurfacePoints;

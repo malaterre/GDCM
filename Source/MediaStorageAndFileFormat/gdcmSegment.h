@@ -41,7 +41,6 @@ public:
   static const char * GetALGOTypeString(ALGOType type);
   static ALGOType GetALGOType(const char * type);
 
-
   Segment();
 
   virtual ~Segment();
