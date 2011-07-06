@@ -17,7 +17,6 @@
 
 #include <cstring>
 
-
 namespace gdcm
 {
 static const char * STATESStrings[] = {
