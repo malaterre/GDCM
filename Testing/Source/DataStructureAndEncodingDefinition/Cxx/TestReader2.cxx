@@ -19,7 +19,7 @@
 
 // D_CLUNIE_CT1_J2KI.dcm
 //
-int TestReader2(int argc, char *argv[])
+int TestReader2(int , char *[])
 {
   //const char *filename = argv[1];
   std::string dataroot = gdcm::Testing::GetDataRoot();
