@@ -283,6 +283,7 @@ static MSModalityType MSModalityTypes[] = {
   {"XA", 3},// XRay3DAngiographicImageStorage,
   {"XA", 3},// Enhanced XA Image Storage
   {"  ", 2},// RTIonBeamsTreatmentRecordStorage
+  {"SM", 2},// VLWholeSlideMicroscopyImageStorage
 
   {NULL, 0} //MS_END
 };
