@@ -169,8 +169,8 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
 void Scanner::Print( std::ostream & os ) const
 {
   os << "Values:\n";
-  ValuesType::const_iterator it = Values.begin();
-  for( ; it != Values.end(); ++it)
+  for(ValuesType::const_iterator it = Values.begin() ; it != Values.end();
+    ++it)
     {
     os << *it << "\n";
     }
