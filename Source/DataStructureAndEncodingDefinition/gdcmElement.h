@@ -105,14 +105,24 @@ public:
 
   DataElement GetAsDataElement() const {
     DataElement ret;
+    std::ostringstream os;
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
+      GetLength(),os);
     ret.SetVR( (VR::VRType)TVR );
-    if( Internal )
+    assert( ret.GetVR() != VR::SQ );
+    if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
       {
-      std::ostringstream os;
-      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
-        GetLength(),os);
-      ret.SetByteValue( os.str().c_str(), os.str().size() );
+      if( GetVR() != VR::UI )
+        {
+        if( os.str().size() % 2 )
+          {
+          os << " ";
+          }
+        }
       }
+    VL::Type osStrSize = (VL::Type)os.str().size();
+    ret.SetByteValue( os.str().c_str(), osStrSize );
+
     return ret;
   }
 
@@ -551,12 +561,24 @@ public:
   DataElement GetAsDataElement() const {
     DataElement ret;
     ret.SetVR( (VR::VRType)TVR );
+    assert( ret.GetVR() != VR::SQ );
     if( Internal )
       {
       std::ostringstream os;
       EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
         GetLength(),os);
-      ret.SetByteValue( os.str().c_str(), os.str().size() );
+      if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
+        {
+        if( GetVR() != VR::UI )
+          {
+          if( os.str().size() % 2 )
+            {
+            os << " ";
+            }
+          }
+        }
+      VL::Type osStrSize = (VL::Type)os.str().size();
+      ret.SetByteValue( os.str().c_str(), osStrSize );
       }
     return ret;
   }
