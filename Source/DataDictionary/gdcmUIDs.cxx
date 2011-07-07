@@ -197,6 +197,7 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.77.1.5.2","Ophthalmic Photography 16 Bit Image Storage"},
 {"1.2.840.10008.5.1.4.1.1.77.1.5.3","Stereometric Relationship Storage"},
 {"1.2.840.10008.5.1.4.1.1.77.1.5.4","Ophthalmic Tomography Image Storage"},
+{"1.2.840.10008.5.1.4.1.1.77.1.6","VL Whole Slide Microscopy Image Storage"},
 {"1.2.840.10008.5.1.4.1.1.88.1","Text SR Storage - Trial"},
 {"1.2.840.10008.5.1.4.1.1.88.2","Audio SR Storage - Trial"},
 {"1.2.840.10008.5.1.4.1.1.88.3","Detail SR Storage - Trial"},

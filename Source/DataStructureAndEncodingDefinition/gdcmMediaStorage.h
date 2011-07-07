@@ -114,6 +114,7 @@ public:
     XRay3DAngiographicImageStorage, // 1.2.840.10008.5.1.4.1.1.13.1.1
     EnhancedXAImageStorage,
     RTIonBeamsTreatmentRecordStorage, // 1.2.840.10008.5.1.4.1.1.481.9
+    VLWholeSlideMicroscopyImageStorage, // 1.2.840.10008.5.1.4.1.1.77.1.6
     MS_END
   } MSType; // Media Storage Type
 
