@@ -14,6 +14,9 @@
 /**
  * Simple example showing that Jav UTF-16 string are properly passed to
  * GDCM layer as locale 8bits
+ * This example also explain the use of try {} finally {} in java to
+ * make sure the C++ RAII design of gdcm.Reader is properly used from
+ * Java and does not leak opened file destructor.
  *
  * Compilation:
  * $ CLASSPATH=gdcm.jar javac ../../gdcm/Examples/Java/ReadFiles.java -d .
@@ -26,16 +29,25 @@ import java.io.File;
 
 public class ReadFiles
 {
+  static int i = 0;
   public static void process(File file)
     {
     String path = file.getPath();
     assert PosixEmulation.FileExists(path) : "Problem converting to 8bits";
 
-    System.out.println("Reading: " + path );
+    //System.out.println("Reading: " + path );
+    System.out.println("File: " + i++);
     Reader r = new Reader();
-    r.SetFileName( path );
-    boolean b = r.ReadUpToTag( new Tag(0x88,0x200) );
-    System.out.println("DS:\n" + r.GetFile().GetDataSet().toString() );
+    try
+      {
+      r.SetFileName( path );
+      boolean b = r.ReadUpToTag( new Tag(0x88,0x200) );
+      //System.out.println("DS:\n" + r.GetFile().GetDataSet().toString() );
+      }
+    finally
+      {
+      r.delete(); // will properly call C++ destructor and close file descriptor
+      }
     }
 
   // Process only files under dir
@@ -55,11 +67,26 @@ public class ReadFiles
       }
     }
 
+  public static void waiting (int n)
+    {
+    long t0, t1;
+    t0 =  System.currentTimeMillis();
+    do
+      {
+      t1 = System.currentTimeMillis();
+      }
+    while ((t1 - t0) < (n * 1000));
+    }
+
   public static void main(String[] args) throws Exception
     {
     String directory = args[0];
 
-    File dir = new File(directory);
-    visitAllFiles(dir);
+    waiting( 10 );
+    for( int i = 0; i < 2; ++i )
+      {
+      File dir = new File(directory);
+      visitAllFiles(dir);
+      }
     }
 }
