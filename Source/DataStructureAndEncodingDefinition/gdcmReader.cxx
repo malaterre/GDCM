@@ -945,4 +945,14 @@ bool Reader::CanRead() const
   return false;
 }
 
+void Reader::SetFileName(const char *filename)
+{
+  if(Ifstream) delete Ifstream;
+  Ifstream = new std::ifstream();
+  Ifstream->open(filename, std::ios::binary);
+  Stream = Ifstream;
+  assert( Stream && *Stream );
+}
+
+
 } // end namespace gdcm
