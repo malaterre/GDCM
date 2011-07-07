@@ -558,93 +558,24 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     (void)str;//warning removal
     }
 
-  // Ok we have the dataset let's feed the Image (PixelData)
-  // 1. First find how many dimensions there is:
-  // D 0028|0008 [IS] [Number of Frames] [8 ]
-  const Tag tnumberofframes = Tag(0x0028, 0x0008);
-  //if( ds.FindDataElement( tnumberofframes ) /*&& ms != MediaStorage::SecondaryCaptureImageStorage*/ )
+  std::vector<unsigned int> vdims = ImageHelper::GetDimensionsValue(*F);
+  unsigned int numberofframes = vdims[2];
+  // What should I do when numberofframes == 0 ?
+  if( numberofframes > 1 )
     {
-    //const DataElement& de = ds.GetDataElement( tnumberofframes );
-    Attribute<0x0028,0x0008> at = { 0 };
-    at.SetFromDataSet( ds );
-    int numberofframes = at.GetValue();
-    // What should I do when numberofframes == 0 ?
-    if( numberofframes > 1 )
-      {
-      PixelData->SetNumberOfDimensions(3);
-      PixelData->SetDimension(2, numberofframes );
-      }
-    else
-      {
-      gdcmDebugMacro( "NumberOfFrames was specified with a value of: "
-        << numberofframes );
-      PixelData->SetNumberOfDimensions(2);
-      }
+    PixelData->SetNumberOfDimensions(3);
+    PixelData->SetDimension(2, numberofframes );
     }
-  //else
-  //  {
-  //  gdcmDebugMacro( "Attempting a guess for the number of dimensions" ); // FIXME
-  //  PixelData->SetNumberOfDimensions(2);
-  //  }
-
+  else
+    {
+    gdcmDebugMacro( "NumberOfFrames was specified with a value of: "
+      << numberofframes );
+    PixelData->SetNumberOfDimensions(2);
+    }
 
   // 2. What are the col & rows:
-  // D 0028|0011 [US] [Columns] [512]
-  //const Tag tcolumns(0x0028, 0x0011);
-  //if( ds.FindDataElement( tcolumns ) )
-    {
-    //PixelData->SetDimension(0,
-    //  ReadUSFromTag( tcolumns, ss, conversion ) );
-    //const DataElement& de = ds.GetDataElement( tcolumns );
-    Attribute<0x0028,0x0011> at = { 0 };
-    at.SetFromDataSet( ds );
-    PixelData->SetDimension(0, at.GetValue() );
-    }
-  //else
-  //  {
-  //  const TransferSyntax &ts = PixelData->GetTransferSyntax();
-  //  gdcmWarningMacro( "This should not happen: No Columns found." );
-  //  if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
-  //    {
-  //    // Pretty bad we really need this information. Should not
-  //    // happen in theory. Maybe papyrus files ??
-  //    return false;
-  //    }
-  //  }
-
-  // D 0028|0010 [US] [Rows] [512]
-  //PixelData->SetDimension(1,
-  //  ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
-    {
-    Attribute<0x0028,0x0010> at = { 0 };
-    //if( ds.FindDataElement( at.GetTag() ) )
-      {
-      //const DataElement& de = ds.GetDataElement( at.GetTag() );
-      at.SetFromDataSet( ds );
-      PixelData->SetDimension(1, at.GetValue() );
-      //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
-      }
-    //else
-    //  {
-    //  const TransferSyntax &ts = PixelData->GetTransferSyntax();
-    //  gdcmWarningMacro( "This should not happen: No Rows found." );
-    //  if( !ts.IsEncapsulated() || ts == TransferSyntax::RLELossless )
-    //    {
-    //    // Pretty bad we really need this information. Should not
-    //    // happen in theory. Maybe papyrus files ??
-    //    return false;
-    //    }
-    //  }
-    }
-
-  // Dummy check
-  //const unsigned int *dims = PixelData->GetDimensions();
-  //if( dims[0] == 0 || dims[1] == 0 )
-  //  {
-  //  // PhilipsLosslessRice.dcm
-  //  gdcmWarningMacro( "Image is empty" );
-  //  return false;
-  //  }
+  PixelData->SetDimension(0, vdims[0] );
+  PixelData->SetDimension(1, vdims[1] );
 
   // 3. Pixel Format ?
   PixelFormat pf;
