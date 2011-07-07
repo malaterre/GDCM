@@ -69,6 +69,7 @@ public:
   /// rows and columns of the image in pixels (as opposed to actual distances).
   /// The output is {col , row}
   static std::vector<unsigned int> GetDimensionsValue(const File& f);
+  static void SetDimensionsValue(File& f, const Image & img);
 
   /// This function returns pixel information about an image from its dataset
   /// That includes samples per pixel and bit depth (in that order)
