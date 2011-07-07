@@ -1751,6 +1751,8 @@ case 0x00460139:return VR::LO;
 case 0x00460145:return VR::SQ;
 case 0x00460146:return VR::FD;
 case 0x00460147:return VR::FD;
+case 0x00480006:return VR::UL;
+case 0x00480007:return VR::UL;
 case 0x00500004:return VR::CS;
 case 0x00500010:return VR::SQ;
 case 0x00500012:return VR::SQ;
