@@ -35,7 +35,7 @@ public class ReadFiles
     String path = file.getPath();
     assert PosixEmulation.FileExists(path) : "Problem converting to 8bits";
 
-    //System.out.println("Reading: " + path );
+    System.out.println("Reading: " + path );
     System.out.println("File: " + i++);
     Reader r = new Reader();
     try
@@ -82,7 +82,11 @@ public class ReadFiles
     {
     String directory = args[0];
 
-    waiting( 10 );
+    Directory gdir = new Directory();
+    long n = gdir.Load( directory );
+    System.out.println( gdir.toString() );
+
+    //waiting( 10 );
     for( int i = 0; i < 2; ++i )
       {
       File dir = new File(directory);
