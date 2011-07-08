@@ -85,6 +85,12 @@ public class ReadFiles
     Directory gdir = new Directory();
     long n = gdir.Load( directory );
     System.out.println( gdir.toString() );
+    FilenamesType files = gdir.GetFilenames();
+    for( long i = 0; i < n; ++i )
+      {
+      String path = files.get( (int)i );
+      assert PosixEmulation.FileExists(path);
+      }
 
     //waiting( 10 );
     for( int i = 0; i < 2; ++i )
