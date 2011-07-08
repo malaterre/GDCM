@@ -90,7 +90,20 @@ public class ReadFiles
       {
       String path = files.get( (int)i );
       assert PosixEmulation.FileExists(path);
+
+      Reader r = new Reader();
+      try
+        {
+        r.SetFileName( path );
+        boolean b = r.ReadUpToTag( new Tag(0x88,0x200) );
+        }
+      finally
+        {
+        r.delete();
+        }
       }
+
+    System.out.println( "Java API" );
 
     //waiting( 10 );
     for( int i = 0; i < 2; ++i )
