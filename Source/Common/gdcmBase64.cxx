@@ -22,9 +22,6 @@
 #include <openssl/buffer.h>
 #endif
 
-#if 0
-#include "gdcm_polarssl.h"
-#endif
 #include <string.h>
 
 /*
@@ -49,14 +46,6 @@ Base64::~Base64()
 
 int Base64::GetEncodeLength(const char *src, int slen )
 {
-#if 0
-  int dlen = 0;
-  int r = base64_encode( NULL, &dlen, (unsigned char*)(src), slen );
-  if( r == POLARSSL_ERR_BASE64_INVALID_CHARACTER )
-    return -1;
-  return dlen;
-#endif
-
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   BIO *bmem, *b64;
   BUF_MEM *bptr;
@@ -80,10 +69,6 @@ int Base64::GetEncodeLength(const char *src, int slen )
 int Base64::Encode( char *dst, int dlen,
                    const char *src, int  slen )
 {
-#if 0
-  return base64_encode( (unsigned char*)dst, &dlen, (unsigned char*)(src), slen );
-#endif
-
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   // Create a memory buffer which will contain the Base64 encoded string
   BIO * mem = BIO_new(BIO_s_mem());
@@ -118,14 +103,6 @@ int Base64::Encode( char *dst, int dlen,
 
 int Base64::GetDecodeLength( const char *src, int  slen )
 {
-#if 0
-  int dlen = 0;
-  int r = base64_decode( NULL, &dlen, (unsigned char*)(src), slen );
-  if( r == POLARSSL_ERR_BASE64_INVALID_CHARACTER )
-    return -1;
-  return dlen;
-#endif
-
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   // Create a memory buffer containing Base64 encoded string data
   BIO * mem = BIO_new_mem_buf((void *) src, slen);
@@ -156,9 +133,6 @@ int Base64::Decode( char *dst, int dlen,
                    const char *src, int  slen )
 {
  //http://markmail.org/message/cdndl7pofs7maixq#query:+page:1+mid:cdndl7pofs7maixq+state:results
-#if 0
-  return base64_decode( (unsigned char*)dst, &dlen, (unsigned char*)(src), slen );
-#endif
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   // Create a memory buffer containing Base64 encoded string data
