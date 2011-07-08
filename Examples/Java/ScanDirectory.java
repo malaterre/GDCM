@@ -47,15 +47,49 @@ public class ScanDirectory
     {
     long len = input.GetBufferLength();
     byte[] buffer = new byte[ (int)len ];
-    input.GetArray( buffer );
-    return buffer;
+    PhotometricInterpretation pi = input.GetPhotometricInterpretation();
+    if( pi.GetType() == PhotometricInterpretation.PIType.MONOCHROME1 )
+      {
+      ImageChangePhotometricInterpretation icpi = new ImageChangePhotometricInterpretation();
+      icpi.SetInput( input );
+      icpi.SetPhotometricInterpretation(
+        new PhotometricInterpretation(
+          PhotometricInterpretation.PIType.MONOCHROME2 ) );
+      if( icpi.Change() )
+        {
+        icpi.GetOutput().GetArray( buffer );
+        }
+      return buffer;
+      }
+    else
+      {
+      input.GetArray( buffer );
+      return buffer;
+      }
     }
   public static short[] GetAsShort(Bitmap input)
     {
     long len = input.GetBufferLength(); // length in bytes
     short[] buffer = new short[ (int)len / 2 ];
-    input.GetArray( buffer );
-    return buffer;
+    PhotometricInterpretation pi = input.GetPhotometricInterpretation();
+    if( pi.GetType() == PhotometricInterpretation.PIType.MONOCHROME1 )
+      {
+      ImageChangePhotometricInterpretation icpi = new ImageChangePhotometricInterpretation();
+      icpi.SetInput( input );
+      icpi.SetPhotometricInterpretation(
+        new PhotometricInterpretation(
+          PhotometricInterpretation.PIType.MONOCHROME2 ) );
+      if( icpi.Change() )
+        {
+        icpi.GetOutput().GetArray( buffer );
+        }
+      return buffer;
+      }
+    else
+      {
+      input.GetArray( buffer );
+      return buffer;
+      }
     }
   public static boolean WritePNG(Bitmap input, String outfilename )
     {

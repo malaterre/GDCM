@@ -14,30 +14,28 @@
 #ifndef GDCMPIXMAPTOPIXMAPFILTER_H
 #define GDCMPIXMAPTOPIXMAPFILTER_H
 
-#include "gdcmPixmap.h"
+#include "gdcmBitmapToBitmapFilter.h"
 
 namespace gdcm
 {
 
+class Pixmap;
 /**
  * \brief PixmapToPixmapFilter class
  * Super class for all filter taking an image and producing an output image
  */
-class GDCM_EXPORT PixmapToPixmapFilter
+class GDCM_EXPORT PixmapToPixmapFilter : public BitmapToBitmapFilter
 {
 public:
   PixmapToPixmapFilter();
   ~PixmapToPixmapFilter() {}
 
-  /// Set input image
-  void SetInput(const Pixmap& image);
+  Pixmap &GetInput();
 
   /// Get Output image
-  const Pixmap &GetOutput() const { return *Output; }
+//  const Pixmap &GetOutput() const;
 
 protected:
-  SmartPointer<Pixmap> Input;
-  SmartPointer<Pixmap> Output;
 };
 
 } // end namespace gdcm
