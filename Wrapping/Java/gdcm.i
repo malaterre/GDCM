@@ -477,6 +477,86 @@ EXTEND_CLASS_PRINT(gdcm::Dict)
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
+
+#if 0
+jstring JNU_NewStringNative(JNIEnv *env, const char *str)
+ {
+     jstring result;
+     jbyteArray bytes = 0;
+     int len;
+     if (env->EnsureLocalCapacity(2) < 0) {
+         return NULL; /* out of memory error */
+     }
+     len = strlen(str);
+     bytes = (*env)->NewByteArray(env, len);
+     if (bytes != NULL) {
+         (*env)->SetByteArrayRegion(env, bytes, 0, len,
+                                    (jbyte *)str);
+         result = (*env)->NewObject(env, Class_java_lang_String,
+                                    MID_String_init, bytes);
+         (*env)->DeleteLocalRef(env, bytes);
+         return result;
+     } /* else fall through */
+     return NULL;
+}
+#endif
+
+
+%{
+void
+ JNU_ThrowByName(JNIEnv *env, const char *name, const char *msg)
+ {
+     jclass cls = env->FindClass(name);
+     /* if cls is NULL, an exception has already been thrown */
+     if (cls != NULL) {
+         env->ThrowNew(cls, msg);
+     }
+     /* free the local ref */
+     env->DeleteLocalRef(cls);
+ }
+
+char *JNU_GetStringNativeChars(JNIEnv *env, jstring jstr)
+ {
+  if (jstr == NULL) {
+    return NULL;
+  }
+     jbyteArray bytes = 0;
+     jthrowable exc;
+     char *result = 0;
+     if (env->EnsureLocalCapacity(2) < 0) {
+         return 0; /* out of memory error */
+     }
+     jclass Class_java_lang_String = env->FindClass("java/lang/String");
+     jmethodID MID_String_getBytes = env->GetMethodID(
+       Class_java_lang_String, "getBytes", "()[B");
+     bytes = (jbyteArray) env->CallObjectMethod(jstr,
+                                      MID_String_getBytes);
+     exc = env->ExceptionOccurred();
+     if (!exc) {
+         jint len = env->GetArrayLength(bytes);
+         result = (char *)malloc(len + 1);
+         if (result == 0) {
+             JNU_ThrowByName(env, "java/lang/OutOfMemoryError",
+                             0);
+             env->DeleteLocalRef(bytes);
+             return 0;
+         }
+         env->GetByteArrayRegion(bytes, 0, len,
+                                    (jbyte *)result);
+         result[len] = 0; /* NULL-terminate */
+     } else {
+         env->DeleteLocalRef(exc);
+     }
+     env->DeleteLocalRef(bytes);
+     return result;
+ }
+%}
+
+%typemap(in) const char *filename_native {
+$1 = JNU_GetStringNativeChars(jenv, $input);
+}
+%typemap(freearg, noblock=1) const char *filename_native { if ($1) free($1); }
+
 %template (TagSetType) std::set<gdcm::Tag>;
 %ignore gdcm::Reader::SetStream;
 %include "gdcmReader.h"
