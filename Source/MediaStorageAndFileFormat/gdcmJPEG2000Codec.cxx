@@ -1337,8 +1337,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     specified as long as no multi-component transformation was specified by the
     JPEG 2000 bit stream.  3. Despite the application of a multi-component color
     transformation and its reflection in the Photometric Interpretation attribute,
-    the ¿color space¿ remains undefined.  There is currently no means of conveying
-    ¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC
+    the color space remains undefined.  There is currently no means of conveying
+    standard color spaces either by fixed values (such as sRGB) or by ICC
     profiles. Note in particular that the JP2 file header is not sent in the JPEG
     2000 bitstream that is encapsulated in DICOM.
      */
