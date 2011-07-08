@@ -162,4 +162,21 @@ bool Writer::Write()
   return true;
 }
 
+void Writer::SetFileName(const char *filename)
+{
+    //std::cerr << "Stream: " << filename << std::endl;
+    //std::cerr << "Ofstream: " << Ofstream << std::endl;
+    if (Ofstream && Ofstream->is_open())
+      {
+      Ofstream->close();
+      delete Ofstream;
+      }
+    Ofstream = new std::ofstream();
+    Ofstream->open(filename, std::ios::out | std::ios::binary );
+    assert( Ofstream->is_open() );
+    assert( !Ofstream->fail() );
+    //std::cerr << Stream.is_open() << std::endl;
+    Stream = Ofstream;
+  }
+
 } // end namespace gdcm

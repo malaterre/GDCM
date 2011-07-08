@@ -66,7 +66,7 @@ public:
 
   /// Set the filename to open. This will create a std::ifstream internally
   /// See SetStream if you are dealing with different std::istream object
-  void SetFileName(const char *filename);
+  void SetFileName(const char *filename_native);
 
   /// Set the open-ed stream directly
   void SetStream(std::istream &input_stream) {
