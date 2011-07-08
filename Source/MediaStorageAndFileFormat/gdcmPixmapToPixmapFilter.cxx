@@ -28,9 +28,9 @@ Pixmap &PixmapToPixmapFilter::GetInput()
   return dynamic_cast<Pixmap&>(*Input);
 }
 
-//const Pixmap &PixmapToPixmapFilter::GetOutput() const
-//{
-//  return dynamic_cast<const Pixmap&>(*Output);
-//}
+const Pixmap &PixmapToPixmapFilter::GetOutput() const
+{
+  return dynamic_cast<const Pixmap&>(*Output);
+}
 
 } // end namespace gdcm
