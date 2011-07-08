@@ -28,10 +28,10 @@ Image &ImageToImageFilter::GetInput()
   return dynamic_cast<Image&>(*Input);
 }
 
-//const Image &ImageToImageFilter::GetOutput() const
-//{
-//  return dynamic_cast<const Image&>(*Output);
-//}
+const Image &ImageToImageFilter::GetOutput() const
+{
+  return dynamic_cast<const Image&>(*Output);
+}
 
 
 } // end namespace gdcm
