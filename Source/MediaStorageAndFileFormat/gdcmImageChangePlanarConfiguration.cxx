@@ -44,7 +44,7 @@ bool ImageChangePlanarConfiguration::Change()
     return true;
     }
 
-  const Pixmap &image = *Input;
+  const Bitmap &image = *Input;
 
   const unsigned int *dims = image.GetDimensions();
   unsigned long len = image.GetBufferLength();

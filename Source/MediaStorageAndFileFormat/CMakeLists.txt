@@ -16,6 +16,7 @@ SET(MSFF_SRCS
   gdcmBitmap.cxx
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
+  gdcmBitmapToBitmapFilter.cxx
   gdcmPixmapToPixmapFilter.cxx
   gdcmImageChangeTransferSyntax.cxx
   gdcmImageApplyLookupTable.cxx
