@@ -99,7 +99,6 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     }
   else
     {
-
     if( pf.GetBitsAllocated() == 16 )
       {
       bv->Write<SwapperDoOp, uint16_t>( os );
@@ -164,13 +163,16 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
     pf = gdcm::PixelFormat::UINT8;
     break;
   case 1023:
-    pf = gdcm::PixelFormat::UINT12;
+    pf = gdcm::PixelFormat::UINT16;
+    pf.SetBitsStored( 10 );
     break;
   case 4095:
-    pf = gdcm::PixelFormat::UINT12;
-    break;
-  case 32767: // int16 ?
     pf = gdcm::PixelFormat::UINT16;
+    pf.SetBitsStored( 12 );
+    break;
+  case 32767:
+    pf = gdcm::PixelFormat::UINT16;
+    pf.SetBitsStored( 15 );
     break;
   case 65535:
     pf = gdcm::PixelFormat::UINT16;
@@ -251,6 +253,18 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     {
   case 255:
     pf = gdcm::PixelFormat::UINT8;
+    break;
+  case 1023:
+    pf = gdcm::PixelFormat::UINT16;
+    pf.SetBitsStored( 10 );
+    break;
+  case 4095:
+    pf = gdcm::PixelFormat::UINT16;
+    pf.SetBitsStored( 12 );
+    break;
+  case 32767:
+    pf = gdcm::PixelFormat::UINT16;
+    pf.SetBitsStored( 15 );
     break;
   case 65535:
     pf = gdcm::PixelFormat::UINT16;
