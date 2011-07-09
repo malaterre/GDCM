@@ -501,6 +501,7 @@ jstring JNU_NewStringNative(JNIEnv *env, const char *str)
 }
 #endif
 
+// http://java.sun.com/docs/books/jni/html/pitfalls.html#12400
 
 %{
 void
