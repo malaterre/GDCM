@@ -26,6 +26,7 @@ bool WriteIconAsPNM(const char* filename, const gdcm::IconImage& icon)
   pnm.SetDimensions( icon.GetDimensions() );
   pnm.SetPixelFormat( icon.GetPixelFormat() );
   pnm.SetPhotometricInterpretation( icon.GetPhotometricInterpretation() );
+  pnm.SetLUT( icon.GetLUT() );
   const gdcm::DataElement& in = icon.GetDataElement();
   bool b = pnm.Write( filename, in );
   assert( b );
@@ -77,11 +78,12 @@ int main(int argc, char *argv [])
 
     const gdcm::Image &img = reader.GetImage();
     gdcm::IconImageGenerator iig;
+    iig.AutoPixelMinMax(true);
     iig.SetPixmap( img );
     const unsigned int idims[2] = { 64, 64 };
     iig.SetOutputDimensions( idims );
     //iig.SetPixelMinMax(60, 868);
-    iig.Generate();
+    if( !iig.Generate() ) return 1;
     const gdcm::IconImage & icon = iig.GetIconImage();
     WriteIconAsPNM("icon.ppm", icon);
     }

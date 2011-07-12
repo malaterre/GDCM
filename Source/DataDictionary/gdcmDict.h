@@ -261,6 +261,16 @@ public:
     assert( s == 1 || s == 0 );
     return s == 1;
     }
+  bool FindDictEntry(const PrivateTag &tag) const
+    {
+    MapDictEntry::const_iterator it =
+      DictInternal.find(tag);
+    if (it == DictInternal.end())
+      {
+      return false;
+      }
+    return true;
+    }
   const DictEntry &GetDictEntry(const PrivateTag &tag) const
     {
     // if 0x10 -> return Private Creator

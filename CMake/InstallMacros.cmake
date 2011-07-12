@@ -11,6 +11,24 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
+MACRO (install_swig_module module_name module_type)
+  # The following trick permits installion of module to the right destination:
+  # binary path for dll (on windows)
+  # library for non-dll platform
+  IF(WIN32)
+    SET(MODDST ${GDCM_INSTALL_BIN_DIR})
+  ELSE()
+    SET(MODDST ${GDCM_INSTALL_LIB_DIR})
+  ENDIF()
+  IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+    INSTALL(TARGETS ${SWIG_MODULE_${module_name}_REAL_NAME}
+      RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT ${module_type}Module
+      LIBRARY DESTINATION ${MODDST}               COMPONENT ${module_type}Module
+      ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ${module_type}Module
+      )
+  ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+ENDMACRO (install_swig_module)
+
 MACRO (install_library library)
   IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     # Runtime

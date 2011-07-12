@@ -277,7 +277,7 @@ bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *
    * during header parsing but discard them when copying the JPG byte stream into
    * the encapsulated Pixel Data Element...
    */
-  std::ifstream is(filename);
+  std::ifstream is(filename, std::ios::binary);
   gdcm::TransferSyntax ts;
   bool b = jpeg.GetHeaderInfo( is, ts );
   if( !b )
@@ -740,7 +740,9 @@ int main (int argc, char *argv[])
   //if( !inputextension || !outputextension ) return 1;
   if( inputextension )
     {
-    if(  gdcm::System::StrCaseCmp(inputextension,".raw") == 0 )
+    if(  gdcm::System::StrCaseCmp(inputextension,".raw") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".gray") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 )
       {
       if( !size[0] || !size[1] )
         {
@@ -756,9 +758,15 @@ int main (int argc, char *argv[])
       dims[1] = size[1];
       raw.SetDimensions( dims );
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
+      gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+      if( gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 )
+        {
+        pi = gdcm::PhotometricInterpretation::RGB;
+        spp = 1;
+        pixelspp = 3;
+        }
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign, spp, pixelspp ) ) return 1;
       raw.SetPixelFormat( pf );
-      gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
       if( spp )
         {
         if( pixelspp == 3 ) pi = gdcm::PhotometricInterpretation::RGB;
@@ -787,6 +795,7 @@ int main (int argc, char *argv[])
       writer.SetFileName( outfilename );
       if( !writer.Write() )
         {
+        std::cerr << "Failed to write: " << outfilename << std::endl;
         return 1;
         }
 
@@ -931,6 +940,7 @@ int main (int argc, char *argv[])
       pnm.SetDimensions( imageori.GetDimensions() );
       pnm.SetPixelFormat( imageori.GetPixelFormat() );
       pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+      pnm.SetLUT( imageori.GetLUT() );
       const gdcm::DataElement& in = imageori.GetDataElement();
       bool b = pnm.Write( outfilename, in );
       if( !b )

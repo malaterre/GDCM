@@ -52,6 +52,9 @@ public:
   typename VRToType<TVR>::Type Internal[VMToLength<TVM>::Length];
   typedef typename VRToType<TVR>::Type Type;
 
+  static VR  GetVR()  { return (VR::VRType)TVR; }
+  static VM  GetVM()  { return (VM::VMType)TVM; }
+
   unsigned long GetLength() const {
     return VMToLength<TVM>::Length;
   }
@@ -98,6 +101,29 @@ public:
       {
       SetNoSwap(de.GetValue());
       }
+  }
+
+  DataElement GetAsDataElement() const {
+    DataElement ret;
+    std::ostringstream os;
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
+      GetLength(),os);
+    ret.SetVR( (VR::VRType)TVR );
+    assert( ret.GetVR() != VR::SQ );
+    if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
+      {
+      if( GetVR() != VR::UI )
+        {
+        if( os.str().size() % 2 )
+          {
+          os << " ";
+          }
+        }
+      }
+    VL::Type osStrSize = (VL::Type)os.str().size();
+    ret.SetByteValue( os.str().c_str(), osStrSize );
+
+    return ret;
   }
 
   void Read(std::istream &_is) {
@@ -398,6 +424,9 @@ public:
     Internal = 0;
   }
 
+  static VR  GetVR()  { return (VR::VRType)TVR; }
+  static VM  GetVM()  { return VM::VM1_n; }
+
   // Length manipulation
   // SetLength should really be protected anyway...all operation
   // should go through SetArray
@@ -532,12 +561,24 @@ public:
   DataElement GetAsDataElement() const {
     DataElement ret;
     ret.SetVR( (VR::VRType)TVR );
+    assert( ret.GetVR() != VR::SQ );
     if( Internal )
       {
       std::ostringstream os;
       EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal,
         GetLength(),os);
-      ret.SetByteValue( os.str().c_str(), os.str().size() );
+      if( (VR::VRType)VRToEncoding<TVR>::Mode == VR::VRASCII )
+        {
+        if( GetVR() != VR::UI )
+          {
+          if( os.str().size() % 2 )
+            {
+            os << " ";
+            }
+          }
+        }
+      VL::Type osStrSize = (VL::Type)os.str().size();
+      ret.SetByteValue( os.str().c_str(), osStrSize );
       }
     return ret;
   }
@@ -586,6 +627,16 @@ private:
 //class Element<VR::OB, TVM > : public Element<VR::OB, VM::VM1_n> {};
 
 // Partial specialization for derivatives of 1-n : 2-n, 3-n ...
+template<int TVR>
+class Element<TVR, VM::VM1_2> : public Element<TVR, VM::VM1_n>
+{
+public:
+  typedef Element<TVR, VM::VM1_n> Parent;
+  void SetLength(int len) {
+    if( len != 1 || len != 2 ) return;
+    Parent::SetLength(len);
+  }
+};
 template<int TVR>
 class Element<TVR, VM::VM2_n> : public Element<TVR, VM::VM1_n>
 {

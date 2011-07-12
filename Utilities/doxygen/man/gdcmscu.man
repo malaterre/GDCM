@@ -241,13 +241,13 @@ equivalent. Using gdcmscu --find, all Unique Keys will be added automatically. O
 therefore execute something like this:
 
 \verbatim
-$ gdcmscu --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112
+$ gdcmscu --find --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112
 \endverbatim
 
 instead of the more explicit form
 
 \verbatim
-$ gdcmscu --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112 --key 10,20 --key 20,d --key 20,e
+$ gdcmscu --find --patientroot --image --key 8,18=1.2.3.4.5.6 dicom.example.com 11112 --key 10,20 --key 20,d --key 20,e
 \endverbatim
 
 This would also be equivalent to:

@@ -27,6 +27,8 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   ExtractIconFromFile
+  CreateJPIPDataSet
+  DumpADAC
   ReadMultiTimesException
   pmsct_rgb1
   GenAllVR
@@ -111,7 +113,7 @@ ENDIF(GDCM_BUILD_TESTING)
 FOREACH(example ${EXAMPLES_SRCS})
   ADD_EXECUTABLE(${example} ${example}.cxx)
   IF(${example} STREQUAL "FixJAIBugJPEGLS")
-    TARGET_LINK_LIBRARIES(${example} gdcmMSFF gdcmcharls)
+    TARGET_LINK_LIBRARIES(${example} gdcmMSFF ${GDCM_CHARLS_LIBRARIES})
   ELSE()
     TARGET_LINK_LIBRARIES(${example} gdcmMSFF)
   ENDIF()

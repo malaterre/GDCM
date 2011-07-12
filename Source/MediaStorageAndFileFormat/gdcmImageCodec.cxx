@@ -38,6 +38,7 @@ ImageCodec::ImageCodec()
   RequestPaddedCompositePixelCode = false;
   PI = PhotometricInterpretation::UNKNOW;
   //LUT = LookupTable(LookupTable::UNKNOWN);
+  LUT = new LookupTable;
   NeedByteSwap = false;
   NeedOverlayCleanup = false;
   Dimensions[0] = Dimensions[1] = Dimensions[2] = 0;

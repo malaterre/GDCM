@@ -213,7 +213,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     {
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
     assert( sf );
-    assert( sf->GetNumberOfFragments() == Dimensions[2] );
+    gdcmAssertAlwaysMacro( sf->GetNumberOfFragments() == Dimensions[2] );
     std::stringstream os;
     for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
       {

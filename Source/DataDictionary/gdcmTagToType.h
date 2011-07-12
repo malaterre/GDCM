@@ -11980,6 +11980,20 @@ enum { VRType = VR::FD };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
+template <> struct TagToType<0x0048,0x0006> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
+template <> struct TagToType<0x0048,0x0007> {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType<VR::UL>::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 template <> struct TagToType<0x0050,0x0004> {
 static const char* GetVRString() { return "CS"; }
 typedef VRToType<VR::CS>::Type Type;

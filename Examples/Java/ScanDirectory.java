@@ -59,16 +59,6 @@ public class ScanDirectory
     }
   public static boolean WritePNG(Bitmap input, String outfilename )
     {
-    /*
-    try {
-    FileOutputStream fos = new FileOutputStream("debug.raw");
-    fos.write(buffer);
-    fos.close();
-    } catch(FileNotFoundException ex) {
-    } catch(IOException ex) {
-    }
-     */
-
     int imageType = BufferedImage.TYPE_CUSTOM;
     PixelFormat pf = input.GetPixelFormat();
     PhotometricInterpretation pi = input.GetPhotometricInterpretation();
@@ -109,6 +99,8 @@ public class ScanDirectory
         long bl2 = lut.GetLUT( LookupTable.LookupTableType.BLUE, bbuf );
         assert bl == bl2;
         colorModel = new IndexColorModel(8, (int)rl, rbuf, gbuf, bbuf);
+        // For code below
+        imageType = BufferedImage.TYPE_BYTE_GRAY;
         }
       }
     else if( pf.GetSamplesPerPixel() == 3 )
@@ -119,6 +111,8 @@ public class ScanDirectory
         imageType = BufferedImage.TYPE_3BYTE_BGR;
         }
       }
+    //System.out.println( "pf: " + pf.toString() );
+    //System.out.println( "pi: " + pi.toString() );
     long width  = input.GetDimension(0);
     long height = input.GetDimension(0);
     BufferedImage bi;
@@ -133,6 +127,7 @@ public class ScanDirectory
       bi = new BufferedImage((int)width,(int)height,imageType);
       }
     WritableRaster wr = bi.getRaster();
+    //System.out.println( "imagetype: " + imageType );
     if( imageType == BufferedImage.TYPE_BYTE_GRAY )
       {
       byte[] buffer = GetAsByte( input );
@@ -215,6 +210,7 @@ public class ScanDirectory
       String outfn = fn + ".png";
       r.SetFileName( fn );
       b = r.ReadUpToTag( new Tag(0x88,0x200) );
+      UIntArrayType dims = ImageHelper.GetDimensionsValue( r.GetFile() );
       if( b )
         {
         IconImageFilter iif = new IconImageFilter();
@@ -236,6 +232,7 @@ public class ScanDirectory
             Image img = ir.GetImage();
             IconImageGenerator iig = new IconImageGenerator();
             iig.SetPixmap( img );
+            iig.AutoPixelMinMax( true );
             long idims[] = { 64, 64 };
             iig.SetOutputDimensions( idims );
             iig.Generate();

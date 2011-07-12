@@ -81,7 +81,7 @@ is assumed.
 
 input format
 \verbatim
-  * RAW       (raw)
+  * RAW       (raw, gray, rgb)
   * RLE       (rle)
   * PNM       (pgm, pnm, ppm)
   * JPEG-LS   (jls)
@@ -119,13 +119,26 @@ but it is not recompressed.
 
 \subsection convert_raw Convert RAW to DICOM
 
-Recognized extension is .raw (case insensitive)
+Recognized extension is .raw, .gray or .rgb (case insensitive)
 
 \verbatim
 $ gdcmimg --size 512,512 --depth 16 -i input.raw -o output.dcm
 \endverbatim
 
 the image will be a Secondary Capture
+
+When the input is 3 component, one need to specify explicitely the Samples Per Pixel:
+
+\verbatim
+$ gdcmimg --size 512,512 --spp 3  input_rgb.raw output_rgb.dcm
+\endverbatim
+
+When the filename contains .rgb as file extension output is automatically recognized as RGB
+no need to specify --spp
+
+\verbatim
+$ gdcmimg --size 512,512 input.rgb output_rgb.dcm
+\endverbatim
 
 You can use the \b dd cmd line to skip any header you would like to discard, for instance,
 if you would like to skip the first 108 bytes, simply do:

@@ -184,6 +184,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //assumes that the file is organized in row-major format, with each row rastering across
 //  assert( mFileOffset != -1 );
   int y, z;
+(void)inBufferLength;
 //  std::streamoff theOffset;
 
   //need to get the pixel size information
