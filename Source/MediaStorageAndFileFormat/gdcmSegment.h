@@ -39,7 +39,7 @@ public:
   } ALGOType;
 
   static const char * GetALGOTypeString(ALGOType type);
-  static ALGOType GetALGOType(const char *str);
+  static ALGOType GetALGOType(const char * type);
 
 
   Segment();
