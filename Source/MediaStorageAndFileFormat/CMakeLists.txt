@@ -75,6 +75,8 @@ SET(MSFF_SRCS
   gdcmSegment.cxx
   gdcmSurface.cxx
   gdcmMeshPrimitive.cxx
+  gdcmSegmentWriter.cxx
+  gdcmSurfaceWriter.cxx
   )
 if(OPENJPEG_VERSION VERSION_LESS 2.0)
   list(APPEND MSFF_SRCS
