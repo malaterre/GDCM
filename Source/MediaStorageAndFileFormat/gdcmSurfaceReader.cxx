@@ -1,6 +1,7 @@
 #include "gdcmSurfaceReader.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmAttribute.h"
+#include "gdcmString.h"
 
 namespace gdcm
 {
@@ -106,11 +107,12 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   // Surface Processing
   Attribute<0x0066, 0x0009> surfaceProcessingAt;
   surfaceProcessingAt.SetFromDataSet( surfacesDS );
-  const char * surfaceProcessingStr = surfaceProcessingAt.GetValue();
-  unsigned int len = strlen(surfaceProcessingStr);
-  if (len > 3)
-    len = 3;
-  const bool surfaceProcessing = (strncmp(surfaceProcessingStr, "YES", len) == 0 ? true : false);
+  String<> surfaceProcessingStr( surfaceProcessingAt.GetValue() );
+  bool surfaceProcessing;
+  if (surfaceProcessingStr.Trim() == "YES")
+    surfaceProcessing = true;
+  else
+    surfaceProcessing = false;
   surface->SetSurfaceProcessing( surfaceProcessing );
 
   if (surfaceProcessing)
@@ -249,7 +251,7 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   }
   else
   {
-    gdcmWarningMacro( "Surface mesh primitives type not handled" );
+    gdcmErrorMacro( "Surface mesh primitives type not handled" );
     return false;
 
 //    SmartPointer< SequenceOfItems > typedSQ;

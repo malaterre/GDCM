@@ -19,13 +19,18 @@ const char * Segment::GetALGOTypeString(ALGOType type)
   return ALGOTypeStrings[(int)type];
 }
 
-Segment::ALGOType Segment::GetALGOType(const char *str)
+Segment::ALGOType Segment::GetALGOType(const char * type)
 {
-  if(!str) return ALGOType_END;
+  if(!type) return ALGOType_END;
+
+  // Delete possible space as last character
+  String<>  str( type );
+  str.Trim();
+  const char * strClear = str.Trim().c_str();
 
   for(unsigned int i = 0; ALGOTypeStrings[i] != 0; ++i)
     {
-    if( strcmp(str, ALGOTypeStrings[i]) == 0 )
+    if( strcmp(strClear, ALGOTypeStrings[i]) == 0 )
       {
       return (ALGOType)i;
       }
@@ -33,7 +38,7 @@ Segment::ALGOType Segment::GetALGOType(const char *str)
   // Ouch ! We did not find anything, that's pretty bad, let's hope that
   // the toolkit which wrote the image is buggy and tolerate space padded binary
   // string
-  CodeString codestring = str;
+  CodeString codestring = strClear;
   std::string cs = codestring.GetAsString();
   for(unsigned int i = 0; ALGOTypeStrings[i] != 0; ++i)
     {
