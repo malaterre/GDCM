@@ -27,9 +27,14 @@ MeshPrimitive::MPType MeshPrimitive::GetMPType(const char * type)
 {
   if(!type) return MPType_END;
 
+  // Delete possible space as last character
+  String<>  str( type );
+  str.Trim();
+  const char * typeClear = str.Trim().c_str();
+
   for(unsigned int i = 0; MPStrings[i] != 0; ++i)
   {
-    if( strcmp(type, MPStrings[i]) == 0 )
+    if( strcmp(typeClear, MPStrings[i]) == 0 )
     {
       return (MPType)i;
     }
@@ -37,7 +42,7 @@ MeshPrimitive::MPType MeshPrimitive::GetMPType(const char * type)
   // Ouch ! We did not find anything, that's pretty bad, let's hope that
   // the toolkit which wrote the image is buggy and tolerate space padded binary
   // string
-  CodeString  codestring  = type;
+  CodeString  codestring  = typeClear;
   std::string cs          = codestring.GetAsString();
   for(unsigned int i = 0; MPStrings[i] != 0; ++i)
   {
