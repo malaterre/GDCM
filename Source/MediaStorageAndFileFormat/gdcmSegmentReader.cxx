@@ -1,6 +1,7 @@
 #include "gdcmSegmentReader.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmAttribute.h"
+#include "gdcmString.h"
 
 namespace gdcm
 {
@@ -50,7 +51,8 @@ bool SegmentReader::Read()
   bool                        res     = false;
 
   MediaStorage                ms      = header.GetMediaStorage();
-  if ( strncmp(ms.GetModality(), "SEG", 3) == 0 )
+  String<>                    modality( ms.GetModality() );
+  if ( modality.Trim() ==  "SEG" )
   {
     res = ReadSegments();
   }

@@ -1,7 +1,9 @@
 #include "gdcmSurface.h"
 #include "gdcmCodeString.h"
+#include "gdcmString.h"
 
 #include <cstring>
+
 
 namespace gdcm
 {
@@ -23,11 +25,10 @@ Surface::STATES Surface::GetSTATES(const char * state)
 {
   if(!state) return STATES_END;
 
-  // Try to delete possible space as last character
-  std::string str = state;
-  size_t pos = str.find(" "); // Position
-  str = str.substr(0, pos);
-  const char * stateClear = str.c_str();
+  // Delete possible space as last character
+  String<>  str( state );
+  str.Trim();
+  const char * stateClear = str.Trim().c_str();
 
   for(unsigned int i = 0; STATESStrings[i] != 0; ++i)
   {
@@ -70,11 +71,10 @@ Surface::VIEWType Surface::GetVIEWType(const char * type)
 {
   if(!type) return VIEWType_END;
 
-  // Try to delete possible space as last character
-  std::string str = type;
-  size_t pos = str.find(" "); // Position
-  str = str.substr(0, pos);
-  const char * typeClear = str.c_str();
+  // Delete possible space as last character
+  String<>  str( type );
+  str.Trim();
+  const char * typeClear = str.Trim().c_str();
 
   for(unsigned int i = 0; VIEWStrings[i] != 0; ++i)
   {
