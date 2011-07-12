@@ -24,6 +24,7 @@ namespace gdcm
  */
 int TestWrite2(const char *subdir, const char* filename, bool recursing)
 {
+  (void)recursing;
   Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )

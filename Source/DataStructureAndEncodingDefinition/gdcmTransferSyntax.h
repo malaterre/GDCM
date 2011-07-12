@@ -75,6 +75,7 @@ public:
     JPEGLSNearLossless,
     JPEG2000Lossless,
     JPEG2000,
+    JPIPReferenced,
     RLELossless,
     MPEG2MainProfile,
     ImplicitVRBigEndianACRNEMA,

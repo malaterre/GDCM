@@ -149,7 +149,8 @@ void PrintHelp()
   std::cout << "  -R --rle                            Compress image in rle (lossless only)." << std::endl;
   std::cout << "  -F --force                          Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "     --generate-icon                  Generate icon." << std::endl;
-  std::cout << "     --icon-minmax                    Min/Max value for icon." << std::endl;
+  std::cout << "     --icon-minmax %d,%d              Min/Max value for icon." << std::endl;
+  std::cout << "     --icon-auto-minmax               Automatically commpute best Min/Max values for icon." << std::endl;
   std::cout << "     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
   std::cout << "     --planar-configuration [01]      Change planar configuration." << std::endl;
   std::cout << "  -Y --lossy                          Use the lossy (if possible) compressor." << std::endl;
@@ -455,6 +456,7 @@ int main (int argc, char *argv[])
   int compressicon = 0;
   int generateicon = 0;
   int iconminmax = 0;
+  int iconautominmax = 0;
   int removegrouplength = 0;
   int removeprivate = 0;
   int removeretired = 0;
@@ -521,6 +523,7 @@ int main (int argc, char *argv[])
         {"use-dict", 0, &usedict, 1}, //
         {"generate-icon", 0, &generateicon, 1}, //
         {"icon-minmax", 1, &iconminmax, 1}, //
+        {"icon-auto-minmax", 0, &iconautominmax, 1}, //
         {"compress-icon", 0, &compressicon, 1}, //
         {"remove-gl", 0, &removegrouplength, 1}, //
         {"remove-private-tags", 0, &removeprivate, 1}, //
@@ -595,33 +598,33 @@ int main (int argc, char *argv[])
             ss >> comma;
             ss >> iconmax;
             }
-          else if( option_index == 39 ) /* photometricinterpretation */
+          else if( option_index == 40 ) /* photometricinterpretation */
             {
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
-          else if( option_index == 41 ) /* rate */
+          else if( option_index == 42 ) /* rate */
             {
             assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
-          else if( option_index == 42 ) /* quality */
+          else if( option_index == 43 ) /* quality */
             {
             assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
-          else if( option_index == 43 ) /* tile */
+          else if( option_index == 44 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
             unsigned int n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
-          else if( option_index == 44 ) /* number of resolution */
+          else if( option_index == 45 ) /* number of resolution */
             {
             assert( strcmp(s, "number-resolution") == 0 );
             nresvalue = atoi(optarg);
             }
-          else if( option_index == 46 ) /* JPEG-LS error */
+          else if( option_index == 47 ) /* JPEG-LS error */
             {
             assert( strcmp(s, "allowed-error") == 0 );
             jpeglserror_value = atoi(optarg);
@@ -1110,6 +1113,7 @@ int main (int argc, char *argv[])
         {
         iig.SetPixelMinMax( iconmin, iconmax );
         }
+      iig.AutoPixelMinMax( iconautominmax );
       bool b = iig.Generate();
       if( !b ) return 1;
       const gdcm::IconImage &icon = iig.GetIconImage();

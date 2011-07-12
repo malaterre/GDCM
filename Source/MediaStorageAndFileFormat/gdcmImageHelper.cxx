@@ -707,67 +707,84 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
 {
   DataSet const & ds = f.GetDataSet();
 
-  //const DataSet& ds = inF.GetDataSet();
+  MediaStorage ms;
+  ms.SetFromFile(f);
   std::vector<unsigned int> theReturn(3);
-  {
-    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
-    Attribute<0x0028,0x0011> at = { 0 };
-    at.SetFromDataSet( ds );
-    theReturn[0] = at.GetValue();
-    //if( theReturn[0] == 0 )
-    //  {
-    //  // come' on ! WTF
-    //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0011.  Defaulting to the almost certainly wrong value of 1." );
-    //  theReturn[0] = 1;
-    //  }
-  }
-
-  // D 0028|0010 [US] [Rows] [512]
-  {
-    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-    Attribute<0x0028,0x0010> at = { 0 };
-    at.SetFromDataSet( ds );
-    theReturn[1] = at.GetValue();
-    //if( theReturn[1] == 0 )
-    //  {
-    //  // come' on ! WTF
-    //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
-    //  theReturn[1] = 1;
-    //  }
-  }
-#if 0
-  // D 0054|0081 [US] [Planes] [512]
-  {
-    //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-    Tag thePlanes(0x0054,0x0081);
-    if (ds.FindDataElement(thePlanes)){
-      Attribute<0x0054,0x0081> at = { 0 };
-      at.SetFromDataSet( ds );
-      theReturn[2] = at.GetValue();
-    } else {
-      theReturn[2] = 1;
-    }
-    //if( theReturn[1] == 0 )
-    //  {
-    //  // come' on ! WTF
-    //  gdcmWarningMacro( "Cannot find image extent tag 0x0028, 0x0010.  Defaulting to the almost certainly wrong value of 1." );
-    //  theReturn[1] = 1;
-    //  }
-  }
-#else
-  {
-  Attribute<0x0028,0x0008> at = { 0 };
-  at.SetFromDataSet( ds );
-  int numberofframes = at.GetValue();
-  theReturn[2] = 1;
-  if( numberofframes > 1 )
+  if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
     {
-    theReturn[2] = at.GetValue();
+      {
+      Attribute<0x0048,0x0006> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[0] = at.GetValue();
+      }
+      {
+      Attribute<0x0048,0x0007> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[1] = at.GetValue();
+      }
+    theReturn[2] = 1;
     }
-  }
+  else
+    {
+      {
+      Attribute<0x0028,0x0011> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[0] = at.GetValue();
+      }
+      {
+      Attribute<0x0028,0x0010> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[1] = at.GetValue();
+      }
+      {
+      Attribute<0x0028,0x0008> at = { 0 };
+      at.SetFromDataSet( ds );
+      int numberofframes = at.GetValue();
+      theReturn[2] = 1;
+      if( numberofframes > 1 )
+        {
+        theReturn[2] = at.GetValue();
+        }
+      }
+    }
 
-#endif
   return theReturn;
+}
+
+void ImageHelper::SetDimensionsValue(File& f, const Image & img)
+{
+  const unsigned int *dims = img.GetDimensions();
+  MediaStorage ms;
+  ms.SetFromFile(f);
+  DataSet& ds = f.GetDataSet();
+  assert( MediaStorage::IsImage( ms ) );
+  if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
+    {
+    Attribute<0x0048,0x0006> columns;
+    columns.SetValue( dims[0] );
+    ds.Replace( columns.GetAsDataElement() );
+    Attribute<0x0048,0x0007> rows;
+    rows.SetValue( dims[1] );
+    ds.Replace( rows.GetAsDataElement() );
+    if( dims[2] > 1 )
+      {
+      assert( 0 );
+      }
+    }
+  else
+    {
+    Attribute<0x0028,0x0010> rows;
+    rows.SetValue( dims[1] );
+    ds.Replace( rows.GetAsDataElement() );
+    Attribute<0x0028,0x0011> columns;
+    columns.SetValue( dims[0] );
+    ds.Replace( columns.GetAsDataElement() );
+    if( dims[2] > 1 )
+      {
+      Attribute<0x0028,0x0008> numframes;
+      ds.Replace( numframes.GetAsDataElement() );
+      }
+    }
 }
 
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)

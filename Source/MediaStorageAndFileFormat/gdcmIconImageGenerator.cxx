@@ -35,11 +35,13 @@ public:
     Min = 0;
     Max = 0;
     UseMinMax = false;
+    AutoMinMax = false;
     }
   unsigned int dims[2];
   double Min;
   double Max;
   bool UseMinMax;
+  bool AutoMinMax;
 };
 
 IconImageGenerator::IconImageGenerator():P(new Pixmap),I(new IconImage),Internals(new IconImageGeneratorInternals)
@@ -324,14 +326,57 @@ void BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
   assert( lut.Initialized() );
 }
 
+void IconImageGenerator::AutoPixelMinMax(bool b)
+{
+  if( b )
+    {
+    Internals->UseMinMax = false;
+    Internals->AutoMinMax = true;
+    }
+}
+
 void IconImageGenerator::SetPixelMinMax(double min, double max)
 {
-  if( min >= 0 && max >= 0 && max >= min )
+  Internals->Min = min;
+  Internals->Max = max;
+  Internals->UseMinMax = true;
+  Internals->AutoMinMax = false;
+}
+
+template <typename TPixelType>
+void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &max)
+{
+  assert( npixels );
+  TPixelType lmin = p[0]; // numeric_limits< TPixelType>::max();
+  TPixelType lmax = p[0]; // numeric_limits< TPixelType>::min();
+  for( size_t i = 0; i < npixels; ++i )
     {
-    Internals->Min = min;
-    Internals->Max = max;
-    Internals->UseMinMax = true;
+    if( p[i] < lmin )
+      {
+      lmin = p[i];
+      }
+    else if( p[i] > lmax )
+      {
+      lmax = p[i];
+      }
     }
+  // what if lmin == lmax == 0 for example:
+  // let's fake a slightly different min/max found:
+  if( lmin == lmax )
+    {
+    if( lmax + 1 < lmax )
+      {
+      lmin--;
+      assert( lmin + 1 > lmin );
+      }
+    else
+      {
+      lmax++;
+      }
+    }
+  min = lmin;
+  max = lmax;
+//  std::cout << min << " " << max << std::endl;
 }
 
 bool IconImageGenerator::Generate()
@@ -368,20 +413,31 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
   if( P->GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME1
     && P->GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME2
     && P->GetPhotometricInterpretation() != PhotometricInterpretation::PALETTE_COLOR
-    && P->GetPhotometricInterpretation() != PhotometricInterpretation::RGB )
+    && P->GetPhotometricInterpretation() != PhotometricInterpretation::RGB
+    && P->GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL
+    && P->GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL_422
+    && P->GetPhotometricInterpretation() != PhotometricInterpretation::YBR_RCT
+    && P->GetPhotometricInterpretation() != PhotometricInterpretation::YBR_ICT )
     {
     gdcmErrorMacro( "PhotometricInterpretation is not supported: "
       << P->GetPhotometricInterpretation() );
     return false;
     }
 
-  if( P->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+  if( P->GetPhotometricInterpretation() == PhotometricInterpretation::RGB
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
     {
     I->SetPhotometricInterpretation( PhotometricInterpretation::PALETTE_COLOR );
     }
   else
     {
     I->SetPhotometricInterpretation( P->GetPhotometricInterpretation() );
+    assert( I->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+      || I->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
+      || I->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR );
     }
 
   assert( I->GetPlanarConfiguration() == 0 );
@@ -391,8 +447,8 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
   std::vector< char > vbuffer;
   vbuffer.resize( P->GetBufferLength() );
   char *buffer = &vbuffer[0];
-  bool b = P->GetBuffer(buffer);
-  if( !b ) return false;
+  bool boolean = P->GetBuffer(buffer);
+  if( !boolean ) return false;
 
   // Important: After call to GetBuffer() in case we have a 12bits stored image
   I->SetPixelFormat( P->GetPixelFormat() );
@@ -470,10 +526,6 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       std::stringstream ss2;
       ss2.str( std::string( &v8[0], v8.size() ) );
 
-      std::ostringstream os;
-      //I->GetLUT().Encode( ss2, os );
-
-      //std::string s2 = os.str();
       std::string s2 = ss2.str();
       // As per standard, we only support 8bits icon
       I->SetPixelFormat( PixelFormat::UINT8 );
@@ -503,21 +555,136 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       BuildLUT(*I, 256 );
       }
     }
-  else if( P->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+  else if( P->GetPhotometricInterpretation() == PhotometricInterpretation::RGB
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT )
     {
     std::string tempvbuf( &vbuffer2[0], vbuffer2.size() );
+    if( P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
+      {
+      assert( I->GetPixelFormat() == PixelFormat::UINT8 );
+      if( P->GetPlanarConfiguration() == 0 )
+        {
+        unsigned char *ybr = (unsigned char*)&tempvbuf[0];
+        unsigned char *ybr_out = ybr;
+        unsigned char *ybr_end = ybr + vbuffer2.size();
+        int R, G, B;
+        for( ; ybr != ybr_end; )
+          {
+          unsigned char a = (unsigned char)(*ybr); ++ybr;
+          unsigned char b = (unsigned char)(*ybr); ++ybr;
+          unsigned char c = (unsigned char)(*ybr); ++ybr;
+
+          R = 38142 *(a-16) + 52298 *(c -128);
+          G = 38142 *(a-16) - 26640 *(c -128) - 12845 *(b -128);
+          B = 38142 *(a-16) + 66093 *(b -128);
+
+          R = (R+16384)>>15;
+          G = (G+16384)>>15;
+          B = (B+16384)>>15;
+
+          if (R < 0)   R = 0;
+          if (G < 0)   G = 0;
+          if (B < 0)   B = 0;
+          if (R > 255) R = 255;
+          if (G > 255) G = 255;
+          if (B > 255) B = 255;
+
+          *ybr_out = R; ++ybr_out;
+          *ybr_out = G; ++ybr_out;
+          *ybr_out = B; ++ybr_out;
+          }
+#if 0
+    std::ofstream d( "/tmp/d.rgb" );
+    d.write( &tempvbuf[0], tempvbuf.size() );
+    d.close();
+#endif
+        assert( ybr_out == ybr_end );
+        }
+      else // ( P->GetPlanarConfiguration() == 1 )
+        {
+        std::string tempvbufybr = tempvbuf;
+
+        unsigned char *ybr = (unsigned char*)&tempvbufybr[0];
+        unsigned char *ybr_end = ybr + vbuffer2.size();
+        assert( vbuffer2.size() % 3 == 0 );
+        size_t ybrl = vbuffer2.size() / 3;
+        unsigned char *ybra = ybr + 0 * ybrl;
+        unsigned char *ybrb = ybr + 1 * ybrl;
+        unsigned char *ybrc = ybr + 2 * ybrl;
+
+        unsigned char *ybr_out = (unsigned char*)&tempvbuf[0];
+        unsigned char *ybr_out_end = ybr_out + vbuffer2.size();
+        int R, G, B;
+        for( ; ybr_out != ybr_out_end; )
+          {
+          unsigned char a = (unsigned char)(*ybra); ++ybra;
+          unsigned char b = (unsigned char)(*ybrb); ++ybrb;
+          unsigned char c = (unsigned char)(*ybrc); ++ybrc;
+
+          R = 38142 *(a-16) + 52298 *(c -128);
+          G = 38142 *(a-16) - 26640 *(c -128) - 12845 *(b -128);
+          B = 38142 *(a-16) + 66093 *(b -128);
+
+          R = (R+16384)>>15;
+          G = (G+16384)>>15;
+          B = (B+16384)>>15;
+
+          if (R < 0)   R = 0;
+          if (G < 0)   G = 0;
+          if (B < 0)   B = 0;
+          if (R > 255) R = 255;
+          if (G > 255) G = 255;
+          if (B > 255) B = 255;
+
+          *ybr_out = R; ++ybr_out;
+          *ybr_out = G; ++ybr_out;
+          *ybr_out = B; ++ybr_out;
+          }
+        assert( ybra + 2 * ybrl == ybr_end );
+        assert( ybrb + 1 * ybrl == ybr_end );
+        assert( ybrc + 0 * ybrl == ybr_end );
+        }
+      }
+    else
+      {
+      if( P->GetPlanarConfiguration() == 1 )
+        {
+        assert( I->GetPixelFormat() == PixelFormat::UINT8 );
+        std::string tempvbufrgb = tempvbuf;
+
+        unsigned char *rgb = (unsigned char*)&tempvbufrgb[0];
+        unsigned char *rgb_end = rgb + vbuffer2.size();
+        assert( vbuffer2.size() % 3 == 0 );
+        size_t rgbl = vbuffer2.size() / 3;
+        unsigned char *rgba = rgb + 0 * rgbl;
+        unsigned char *rgbb = rgb + 1 * rgbl;
+        unsigned char *rgbc = rgb + 2 * rgbl;
+
+        unsigned char *rgb_out = (unsigned char*)&tempvbuf[0];
+        unsigned char *rgb_out_end = rgb_out + vbuffer2.size();
+        for( ; rgb_out != rgb_out_end; )
+          {
+          unsigned char a = (unsigned char)(*rgba); ++rgba;
+          unsigned char b = (unsigned char)(*rgbb); ++rgbb;
+          unsigned char c = (unsigned char)(*rgbc); ++rgbc;
+
+          *rgb_out = a; ++rgb_out;
+          *rgb_out = b; ++rgb_out;
+          *rgb_out = c; ++rgb_out;
+          }
+        assert( rgba + 2 * rgbl == rgb_end );
+        assert( rgbb + 1 * rgbl == rgb_end );
+        assert( rgbc + 0 * rgbl == rgb_end );
+        }
+      }
+
     std::istringstream is( tempvbuf );
     if( I->GetPixelFormat() == PixelFormat::UINT8 )
       {
-      //LookupTable &lut = I->GetLUT();
-      //lut.Allocate();
-
-      std::ostringstream os;
-      //P->BuildLUT( 256 );
-      //I->SetLUT( P->GetLUT() );
-      //I->GetLUT().Encode( is, os );
-
-      //std::string s = os.str();
       std::string s = is.str();
       // As per standard, we only support 8bits icon
       I->SetPixelFormat( PixelFormat::UINT8 );
@@ -596,13 +763,38 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       min = Internals->Min;
       max = Internals->Max;
       }
+    if( Internals->AutoMinMax )
+      {
+      const char *p = &vbuffer2[0];
+      size_t len = vbuffer2.size();
+      const PixelFormat &pf = I->GetPixelFormat();
+      assert( pf.GetSamplesPerPixel() == 1 );
+      switch ( pf.GetScalarType() )
+        {
+      case PixelFormat::UINT8:
+        ComputeMinMax<uint8_t>( (uint8_t*)p, len / sizeof( uint8_t ), min, max);
+        break;
+      case PixelFormat::INT8:
+        ComputeMinMax<int8_t>( (int8_t*)p, len / sizeof( int8_t ), min, max);
+        break;
+      case PixelFormat::UINT16:
+        ComputeMinMax<uint16_t>( (uint16_t*)p, len / sizeof( uint16_t ), min, max);
+        break;
+      case PixelFormat::INT16:
+        ComputeMinMax<int16_t>( (int16_t*)p, len / sizeof( int16_t ), min, max);
+        break;
+      default:
+        assert( 0 ); // should not happen
+        break;
+        }
+      }
     r.SetSlope( 255. / (max - min + 0) ); // UINT8_MAX
     const double step = min * r.GetSlope();
     r.SetIntercept( 0 - step );
 
     // paranoid self check:
-    assert( r.GetIntercept() + r.GetSlope() * min == 0. );
-    assert( r.GetIntercept() + r.GetSlope() * max == 255. );
+    assert( (int)(0.5 + r.GetIntercept() + r.GetSlope() * min) == 0 );
+    assert( (int)(0.5 + r.GetIntercept() + r.GetSlope() * max) == 255 );
 
     r.SetTargetPixelType( PixelFormat::UINT8 );
     r.SetUseTargetPixelType(true);
