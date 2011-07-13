@@ -104,6 +104,8 @@ public:
       {
       ++copy;
       }
+#else
+    assert( !IsOdd() );
 #endif
     TSwap::SwapArray(&copy,1);
     return os.write((char*)(&copy), sizeof(uint32_t));
@@ -119,6 +121,8 @@ public:
       {
       ++copy;
       }
+#else
+    assert( !IsOdd() );
 #endif
     TSwap::SwapArray(&copy,1);
     return os.write((char*)(&copy), sizeof(uint16_t));

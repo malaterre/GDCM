@@ -22,7 +22,7 @@
 namespace gdcm
 {
 
-  // FIXME gdcmSequenceOfItems qnd gdcmSequenceOfFragments
+  // FIXME gdcmSequenceOfItems and gdcmSequenceOfFragments
   // should be rethink (duplicate code)
 /**
  * \brief Class to represent a Sequence Of Fragments
@@ -33,17 +33,28 @@ class GDCM_EXPORT SequenceOfFragments : public Value
 public:
   // Typdefs:
   typedef std::vector<Fragment> FragmentVector;
+  typedef FragmentVector::size_type SizeType;
+  typedef FragmentVector::iterator Iterator;
+  typedef FragmentVector::const_iterator ConstIterator;
+  Iterator Begin() { return Fragments.begin(); }
+  Iterator End() { return Fragments.end(); }
+  ConstIterator Begin() const { return Fragments.begin(); }
+  ConstIterator End() const { return Fragments.end(); }
 
 /// \brief constructor (UndefinedLength by default)
   SequenceOfFragments():Table(),SequenceLengthField(0xFFFFFFFF) { }
 
   /// \brief Returns the SQ length, as read from disk
   VL GetLength() const {
-    return SequenceLengthField; }
+    return SequenceLengthField;
+  }
+
   /// \brief Sets the actual SQ length
   void SetLength(VL length) {
     SequenceLengthField = length;
   }
+
+  /// \brief Clear
   void Clear();
 
   /// \brief Appends a Fragment to the already added ones
@@ -60,8 +71,9 @@ public:
   // Get the buffer
   bool GetBuffer(char *buffer, unsigned long length) const;
   bool GetFragBuffer(unsigned int fragNb, char *buffer, unsigned long &length) const;
-  unsigned int GetNumberOfFragments() const;
-  const Fragment& GetFragment(unsigned int num) const;
+
+  SizeType GetNumberOfFragments() const;
+  const Fragment& GetFragment(SizeType num) const;
 
   // Write the buffer of each fragment (call WriteBuffer on all Fragments, which are
   // ByteValue). No Table information is written.
@@ -119,9 +131,11 @@ std::istream& Read(std::istream &is)
       {
       (void)ex;  //to avoid unreferenced variable warning on release
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-      // that's ok ! In all cases the whole file was read, because Fragment::Read only fail on eof() reached
-      // 1. SIEMENS-JPEG-CorruptFrag.dcm is more difficult to deal with, we have a partial fragment, read
-      // we decide to add it anyway to the stack of fragments (eof was reached so we need to clear error bit)
+      // that's ok ! In all cases the whole file was read, because
+      // Fragment::Read only fail on eof() reached 1.
+      // SIEMENS-JPEG-CorruptFrag.dcm is more difficult to deal with, we have a
+      // partial fragment, read we decide to add it anyway to the stack of
+      // fragments (eof was reached so we need to clear error bit)
       if( frag.GetTag() == Tag(0xfffe,0xe000)  )
         {
         gdcmWarningMacro( "Pixel Data Fragment could be corrupted. Use file at own risk" );
@@ -136,13 +150,16 @@ std::istream& Read(std::istream &is)
         assert( (unsigned char)bv->GetPointer()[ bv->GetLength() - 1 ] == 0xfe );
         // Yes this is an extra copy, this is a bug anyway, go fix YOUR code
         Fragments[0].SetByteValue( bv->GetPointer(), bv->GetLength() - 1 );
-        gdcmWarningMacro( "JPEG Fragment length was declared with an extra byte at the end: stripped !" );
+        gdcmWarningMacro( "JPEG Fragment length was declared with an extra byte"
+          " at the end: stripped !" );
         is.clear(); // clear the error bit
         }
       else
         {
-        // 3. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found instead of terminator (eof is the next char)
-        gdcmWarningMacro( "Reading failed at Tag:" << frag.GetTag() << ". Use file at own risk." << ex.what() );
+        // 3. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found
+        // instead of terminator (eof is the next char)
+        gdcmWarningMacro( "Reading failed at Tag:" << frag.GetTag() <<
+          ". Use file at own risk." << ex.what() );
         }
 #else
       (void)ex;
@@ -161,8 +178,7 @@ std::ostream const &Write(std::ostream &os) const
     assert(0 && "Should not happen");
     return os;
     }
-  SequenceOfFragments::FragmentVector::const_iterator it = Fragments.begin();
-  for(;it != Fragments.end(); ++it)
+  for(ConstIterator it = Begin();it != End(); ++it)
     {
     it->Write<TSwap>(os);
     }
@@ -189,9 +205,7 @@ public:
   void Print(std::ostream &os) const {
     os << "SQ L= " << SequenceLengthField << "\n";
     os << "Table:" << Table << "\n";
-    FragmentVector::const_iterator it =
-      Fragments.begin();
-    for(;it != Fragments.end(); ++it)
+    for(ConstIterator it = Begin();it != End(); ++it)
       {
       os << "  " << *it << "\n";
       }
@@ -212,7 +226,6 @@ public:
     }
 
 private:
-public:
   BasicOffsetTable Table;
   VL SequenceLengthField;
   /// \brief Vector of Sequence Fragments
