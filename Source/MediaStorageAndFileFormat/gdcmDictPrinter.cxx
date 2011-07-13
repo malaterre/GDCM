@@ -452,7 +452,6 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
     //owner = GetOwner(ds,de);
     //version = GetVersion(owner);
 
-    const Tag &t = de.GetTag();
     const VR &vr = de.GetVR();
     VR pvr = vr;
     if( vr == VR::INVALID ) pvr = VR::UN;
@@ -500,9 +499,8 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
     for(; it != sqi->Items.end(); ++it)
       {
       const Item &item = *it;
-      const DataSet &ds = item.GetNestedDataSet();
-      //const DataElement &deitem = item;
-      PrintDataSet2(os, ds);
+      const DataSet &nestedds = item.GetNestedDataSet();
+      PrintDataSet2(os, nestedds);
       }
     }
 }

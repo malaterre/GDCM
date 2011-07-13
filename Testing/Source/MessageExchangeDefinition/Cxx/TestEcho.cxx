@@ -20,7 +20,7 @@
 #include "gdcmTag.h"
 #include "gdcmQueryFactory.h"
 
-int TestEcho(int argc, char *argv[])
+int TestEcho(int , char *[])
 {
   std::string hostname = "common.bwh.harvard.edu";
   int port = 11112;
