@@ -23,7 +23,7 @@ void SequenceOfFragments::Clear()
   Fragments.clear();
 }
 
-unsigned int SequenceOfFragments::GetNumberOfFragments() const
+SequenceOfFragments::SizeType SequenceOfFragments::GetNumberOfFragments() const
 {
   // Do not count the last fragment
   //assert( SequenceLengthField.IsUndefined() );
@@ -57,6 +57,7 @@ unsigned long SequenceOfFragments::ComputeByteLength() const
   FragmentVector::const_iterator it = Fragments.begin();
   for(;it != Fragments.end(); ++it)
     {
+    assert( !it->GetVL().IsUndefined() );
     r += it->GetVL();
     }
   return r;
@@ -75,7 +76,7 @@ bool SequenceOfFragments::GetFragBuffer(unsigned int fragNb, char *buffer, unsig
   return true;
 }
 
-const Fragment& SequenceOfFragments::GetFragment(unsigned int num) const
+const Fragment& SequenceOfFragments::GetFragment(SizeType num) const
 {
   assert( num < Fragments.size() );
   FragmentVector::const_iterator it = Fragments.begin();

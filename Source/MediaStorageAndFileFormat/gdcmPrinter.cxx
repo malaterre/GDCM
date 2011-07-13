@@ -270,8 +270,8 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     os << std::endl;
     const SequenceOfFragments &sqf = static_cast<const SequenceOfFragments&>(value);
     os << sqf.GetTable() << std::endl;
-    SequenceOfFragments::FragmentVector::const_iterator it = sqf.Fragments.begin();
-    for(; it != sqf.Fragments.end(); ++it)
+    SequenceOfFragments::FragmentVector::const_iterator it = sqf.Begin();
+    for(; it != sqf.End(); ++it)
       {
       const Fragment &frag = *it;
       const Value &val = frag.GetValue(); (void)val;
