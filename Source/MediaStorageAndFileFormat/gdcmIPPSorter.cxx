@@ -102,10 +102,12 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     gdcmDebugMacro( "Empty iop in first file ");
     return false;
     }
-  std::stringstream ss;
-  ss.str( dircos );
   Element<VR::DS,VM::VM6> cosines;
-  cosines.Read( ss );
+    {
+    std::stringstream ss;
+    ss.str( dircos );
+    cosines.Read( ss );
+    }
 
   // http://www.itk.org/pipermail/insight-users/2003-September/004762.html
   // Compute normal:
