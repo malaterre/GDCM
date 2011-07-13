@@ -169,7 +169,6 @@ inline std::ostream &operator<<(std::ostream &os, const Fragment &val)
   return os;
 }
 
-
 } // end namespace gdcm
 
 #endif //GDCMFRAGMENT_H
