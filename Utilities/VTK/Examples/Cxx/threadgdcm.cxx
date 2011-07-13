@@ -110,7 +110,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   unsigned long len = image.GetBufferLength();
   const unsigned int *dims = image.GetDimensions();
   unsigned short pixelsize = pixeltype.GetPixelSize();
-  (void)pixeltype;
+  (void)pixelsize;
   assert( image.GetNumberOfDimensions() == 2 );
 
   vtkImageData *output = vtkImageData::New();
