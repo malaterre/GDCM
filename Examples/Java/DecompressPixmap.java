@@ -52,6 +52,7 @@ public class DecompressPixmap
     //
     // Hum looks like Java Covariant Return type is not working for some reason
     Pixmap out = ((PixmapToPixmapFilter)change).GetOutput();
+    Bitmap bitmap = change.GetOutput();
     System.out.println( out.toString() );
 
     // Set the Source Application Entity Title

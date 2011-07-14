@@ -14,7 +14,7 @@
 #include "gdcmLO.h"
 #include <iostream>
 
-int TestLO(int argc, char *argv[])
+int TestLO(int , char *[])
 {
   gdcm::LO lo = "hello world !";
   if( !lo.IsValid() ) return 1;
