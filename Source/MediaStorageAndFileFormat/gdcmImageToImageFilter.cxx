@@ -19,6 +19,8 @@ namespace gdcm
 
 ImageToImageFilter::ImageToImageFilter()
 {
+  Input = new Image;
+  Output = new Image;
 }
 
 Image &ImageToImageFilter::GetInput()
