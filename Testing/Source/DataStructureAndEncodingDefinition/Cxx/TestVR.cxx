@@ -198,7 +198,7 @@ int TestVR(int, char *[])
     return 1;
 
 {
-  gdcm::VR vr = gdcm::VR::AE;
+  vr = gdcm::VR::AE;
   if( vr & gdcm::VR::VRASCII )
     {
     std::cout << vr << "is ASCII\n";
@@ -235,7 +235,6 @@ int TestVR(int, char *[])
 
   // Let's check the & operator
 {
-  gdcm::VR vr;
   vr = gdcm::VR::OB;
   if( !( vr.Compatible( gdcm::VR::OB_OW ) ) )
     {
