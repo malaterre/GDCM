@@ -51,8 +51,8 @@ public class DecompressPixmap
     // Instead hack our way in, and use an ImageReader instead of a PixmapReader
     //
     // Hum looks like Java Covariant Return type is not working for some reason
-    Pixmap out = ((PixmapToPixmapFilter)change).GetOutput();
-    Bitmap bitmap = change.GetOutput();
+    Pixmap out = ((PixmapToPixmapFilter)change).GetOutput(); // old syntax
+    Pixmap out2 = (Pixmap)change.GetOutput(); // new syntax
     System.out.println( out.toString() );
 
     // Set the Source Application Entity Title
@@ -62,6 +62,7 @@ public class DecompressPixmap
     writer.SetFileName( file2 );
     writer.SetFile( reader.GetFile() );
     writer.SetImage( out );
+    writer.SetImage( out2 );
     ret = writer.Write();
     if( !ret )
       {
