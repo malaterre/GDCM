@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "gdcmBitmapToBitmapFilter.h"
 
+#include "gdcmImage.h"
+
 #include <limits>
 #include <stdlib.h> // abort
 #include <string.h> // memcpy
@@ -22,13 +24,29 @@ namespace gdcm
 
 BitmapToBitmapFilter::BitmapToBitmapFilter()
 {
-  if(!Input) Input = new Bitmap;
-  if(!Output) Output = new Bitmap;
 }
 
 void BitmapToBitmapFilter::SetInput(const Bitmap& image)
 {
   Input = image;
+  const Bitmap *p = &image;
+  if( dynamic_cast<const Image*>(p) )
+    {
+    Output = new Image;
+    }
+  else if( dynamic_cast<const Pixmap*>(p) )
+    {
+    Output = new Pixmap;
+    }
+  else if( dynamic_cast<const Bitmap*>(p) )
+    {
+    Output = new Bitmap;
+    }
+  else
+    {
+    Output = NULL;
+    assert( 0 );
+    }
 }
 
 

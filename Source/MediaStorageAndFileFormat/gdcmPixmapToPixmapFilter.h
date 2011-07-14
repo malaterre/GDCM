@@ -32,12 +32,8 @@ public:
 
   Pixmap &GetInput();
 
-#ifndef SWIG
   /// Get Output image
   const Pixmap &GetOutput() const;
-#endif
-
-protected:
 };
 
 } // end namespace gdcm
