@@ -204,6 +204,9 @@ static const char * const iconimagearray[][2] = {
  {"6246c70687f0deab108c889eacda1b8e" , "D_CLUNIE_MR1_RLE.dcm" },
  {"365049df79c7491d14476c21083283ee" , "LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm" },
  {"cee47e57f6b1aaace74bb813e33a74eb" , "00191113.dcm" },
+ {"07b6f4e2fba920d28e2f29dbb037b640" , "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
+ {"93f60acbb450c62992a1db09a6c19c05" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
+ {"fa02ad71bdf3e6970e18fc9a9df03a2d" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
 
  // sentinel
  { 0, 0 }
