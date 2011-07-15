@@ -62,6 +62,12 @@ public:
   /// rescale to best appropriate.
   void AutoPixelMinMax(bool b);
 
+  /// Converting from RGB to PALETTE_COLOR can be a slow operation. However DICOM
+  /// standard requires that color icon be described as palette. Set this boolean
+  /// to false only if you understand the consequences.
+  /// \default true, false generates invalid Icon Image Sequence
+  void ConvertRGBToPaletteColor(bool b);
+
   /// Generate Icon
   bool Generate();
 
@@ -71,6 +77,8 @@ public:
 protected:
 
 private:
+  void BuildLUT( Bitmap & bitmap, unsigned int maxcolor );
+
   SmartPointer<Pixmap> P;
   SmartPointer<IconImage> I;
   IconImageGeneratorInternals *Internals;

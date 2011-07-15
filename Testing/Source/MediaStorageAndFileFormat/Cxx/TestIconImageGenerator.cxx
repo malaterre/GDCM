@@ -248,9 +248,7 @@ int TestIconImageGenerate(const char *subdir, const char* filename, bool verbose
 
   IconImageGenerator iig;
   iig.SetPixmap( reader.GetImage() );
-  //iig.AutoPixelMinMax(true);
   const unsigned int idims[2] = { 64, 64 };
-  //const unsigned int idims[2] = { 384,288 };
   iig.SetOutputDimensions( idims );
   bool b = iig.Generate();
 
@@ -312,7 +310,7 @@ int TestIconImageGenerate(const char *subdir, const char* filename, bool verbose
 
     if( !refmd5 )
       {
-      std::cerr << " missing md5= {\"" << digest << "\" , \"" << name << "\" }, " << std::endl;
+      std::cerr << " missing md5= {\"" << digest << "\" , \"" << name << "\" }," << std::endl;
       return 1;
       }
     if( strcmp( refmd5, digest) )
