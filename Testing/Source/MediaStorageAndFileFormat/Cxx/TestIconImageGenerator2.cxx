@@ -309,7 +309,7 @@ int TestIconImageGenerate2(const char *subdir, const char* filename, bool verbos
 
     if( !refmd5 )
       {
-      std::cerr << " missing md5= {\"" << digest << "\" , \"" << name << "\" }, " << std::endl;
+      std::cerr << " missing md5= {\"" << digest << "\" , \"" << name << "\" }," << std::endl;
       return 1;
       }
     if( strcmp( refmd5, digest) )

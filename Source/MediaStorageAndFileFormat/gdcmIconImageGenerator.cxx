@@ -36,12 +36,14 @@ public:
     Max = 0;
     UseMinMax = false;
     AutoMinMax = false;
+    ConvertRGBToPaletteColor = true;
     }
   unsigned int dims[2];
   double Min;
   double Max;
   bool UseMinMax;
   bool AutoMinMax;
+  bool ConvertRGBToPaletteColor;
 };
 
 IconImageGenerator::IconImageGenerator():P(new Pixmap),I(new IconImage),Internals(new IconImageGeneratorInternals)
@@ -51,6 +53,14 @@ IconImageGenerator::IconImageGenerator():P(new Pixmap),I(new IconImage),Internal
 IconImageGenerator::~IconImageGenerator()
 {
   delete Internals;
+}
+
+// Implementation detail:
+// This function was required at some point in time since the implementation
+// RGB -> PALETTE is extremely slow
+void IconImageGenerator::ConvertRGBToPaletteColor(bool b)
+{
+  Internals->ConvertRGBToPaletteColor = b;
 }
 
 void IconImageGenerator::SetOutputDimensions(const unsigned int dims[2])
@@ -290,8 +300,9 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
 } // end namespace quantization
 
 // Create LUT with a maximum number of color equal to \param maxcolor
-void BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
+void IconImageGenerator::BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
 {
+  assert( Internals->ConvertRGBToPaletteColor );
   using namespace quantization;
   const unsigned int *dims = bitmap.GetDimensions();
   unsigned int numPoints = dims[0]*dims[1];
@@ -430,7 +441,14 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
     || P->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
     {
-    I->SetPhotometricInterpretation( PhotometricInterpretation::PALETTE_COLOR );
+    if( Internals->ConvertRGBToPaletteColor )
+      {
+      I->SetPhotometricInterpretation( PhotometricInterpretation::PALETTE_COLOR );
+      }
+    else
+      {
+      I->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
     }
   else
     {
@@ -438,6 +456,11 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     assert( I->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
       || I->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
       || I->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR );
+    if( !Internals->ConvertRGBToPaletteColor
+      && P->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR )
+      {
+      I->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
     }
 
   assert( I->GetPlanarConfiguration() == 0 );
@@ -544,19 +567,24 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     else
       {
       assert( I->GetPixelFormat() == PixelFormat::UINT8 );
-      LookupTable &lut = I->GetLUT();
-      lut.Allocate();
-
-      std::ostringstream os;
-      //I->GetLUT().Encode( ss, os );
-
-      //std::string s = os.str();
       std::string s = ss.str();
-      // As per standard, we only support 8bits icon
-      I->SetPixelFormat( PixelFormat::UINT8 );
-      pixeldata.SetByteValue( &s[0], s.size() );
+      if( Internals->ConvertRGBToPaletteColor )
+        {
+        LookupTable &lut = I->GetLUT();
+        lut.Allocate();
 
-      BuildLUT(*I, 256 );
+        // As per standard, we only support 8bits icon
+        I->SetPixelFormat( PixelFormat::UINT8 );
+        pixeldata.SetByteValue( &s[0], s.size() );
+
+        BuildLUT(*I, 256 );
+        }
+      else
+        {
+        I->SetPixelFormat( PixelFormat::UINT8 );
+        I->GetPixelFormat().SetSamplesPerPixel( 3 );
+        pixeldata.SetByteValue( &s[0], s.size() );
+        }
       }
     }
   else if( P->GetPhotometricInterpretation() == PhotometricInterpretation::RGB
@@ -685,11 +713,20 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     if( I->GetPixelFormat() == PixelFormat::UINT8 )
       {
       std::string s = is.str();
-      // As per standard, we only support 8bits icon
-      I->SetPixelFormat( PixelFormat::UINT8 );
-      pixeldata.SetByteValue( &s[0], s.size() );
+      if( Internals->ConvertRGBToPaletteColor )
+        {
+        // As per standard, we only support 8bits icon
+        I->SetPixelFormat( PixelFormat::UINT8 );
+        pixeldata.SetByteValue( &s[0], s.size() );
 
-      BuildLUT(*I, 256 );
+        BuildLUT(*I, 256 );
+        }
+      else
+        {
+        I->SetPixelFormat( PixelFormat::UINT8 );
+        I->GetPixelFormat().SetSamplesPerPixel( 3 );
+        pixeldata.SetByteValue( &s[0], s.size() );
+        }
       }
     else
       {
@@ -726,20 +763,22 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         return false;
         }
 
+      if( Internals->ConvertRGBToPaletteColor )
+        {
+        LookupTable &lut = I->GetLUT();
+        lut.Allocate();
 
-      LookupTable &lut = I->GetLUT();
-      lut.Allocate();
+        I->SetPixelFormat( PixelFormat::UINT8 );
+        pixeldata.SetByteValue( &v8[0], v8.size() );
 
-      std::ostringstream os;
-      //I->GetLUT().Encode( is, os );
-
-      //std::string s = os.str();
-      //std::string s = is.str();
-      // FIXME: impossible as per standard:
-      I->SetPixelFormat( PixelFormat::UINT8 );
-      pixeldata.SetByteValue( &v8[0], v8.size() );
-
-      BuildLUT(*I, 256 );
+        BuildLUT(*I, 256 );
+        }
+      else
+        {
+        I->SetPixelFormat( PixelFormat::UINT8 );
+        I->GetPixelFormat().SetSamplesPerPixel( 3 );
+        pixeldata.SetByteValue( &v8[0], v8.size() );
+        }
       }
     }
   else
@@ -813,6 +852,15 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     }
 
   // \postcondition
+  if( !Internals->ConvertRGBToPaletteColor
+    && I->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    {
+    assert( I->GetPixelFormat().GetSamplesPerPixel() == 3 );
+    }
+  else
+    {
+    assert( I->GetPixelFormat().GetSamplesPerPixel() == 1 );
+    }
   assert( I->GetPixelFormat().GetBitsAllocated() == 8 );
   assert( I->GetPixelFormat().GetBitsStored() == 8 );
   assert( I->GetPixelFormat().GetHighBit() == 7 );
