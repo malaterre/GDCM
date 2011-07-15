@@ -162,7 +162,8 @@ public class ScanDirectory
       }
     WritableRaster wr = bi.getRaster();
     //System.out.println( "imagetype: " + imageType );
-    if( imageType == BufferedImage.TYPE_BYTE_GRAY )
+    if( imageType == BufferedImage.TYPE_BYTE_GRAY
+      || imageType == BufferedImage.TYPE_3BYTE_BGR )
       {
       byte[] buffer = GetAsByte( input );
       wr.setDataElements (0, 0, (int)width, (int)height, buffer);
@@ -267,7 +268,8 @@ public class ScanDirectory
             IconImageGenerator iig = new IconImageGenerator();
             iig.SetPixmap( img );
             iig.AutoPixelMinMax( true );
-            long idims[] = { 64, 64 };
+            iig.ConvertRGBToPaletteColor( false );
+            long idims[] = { 128, 128};
             iig.SetOutputDimensions( idims );
             iig.Generate();
             Bitmap icon = iig.GetIconImage();
