@@ -1189,9 +1189,19 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
       const DataElement& de2 = ds.GetDataElement( at.GetValue() );
       if( at.GetValue() == Tag(0x0018,0x1063) && at.GetNumberOfValues() == 1 )
         {
+        // Make sure multiframe:
+        std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue( f );
         Attribute<0x0018,0x1063> at2;
         at2.SetFromDataElement( de2 );
-        sp.push_back( at2.GetValue() );
+        if( dims[2] > 1 )
+          {
+          sp.push_back( at2.GetValue() );
+          }
+        else
+          {
+          assert( at2.GetValue() == 0. );
+          sp.push_back( 1.0 );
+          }
         }
       else
         {
@@ -1206,6 +1216,9 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
     }
 
   assert( sp.size() == 3 );
+  assert( sp[0] != 0. );
+  assert( sp[1] != 0. );
+  assert( sp[2] != 0. );
   return sp;
 }
 
