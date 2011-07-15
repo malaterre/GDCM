@@ -250,6 +250,7 @@ int TestIconImageGenerate3(const char *subdir, const char* filename, bool verbos
   iig.SetPixmap( reader.GetImage() );
   iig.ConvertRGBToPaletteColor( false );
   const unsigned int idims[2] = { 128, 128};
+  //const unsigned int idims[2] = { 552,421 };
   iig.SetOutputDimensions( idims );
   bool b = iig.Generate();
 

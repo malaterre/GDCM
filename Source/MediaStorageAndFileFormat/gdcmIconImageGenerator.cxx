@@ -468,10 +468,20 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
   // FIXME we should not retrieve the whole image, ideally we only need a
   // single 2D frame
   std::vector< char > vbuffer;
+  size_t framelen = P->GetBufferLength();
+  if( P->GetNumberOfDimensions() == 3 )
+    {
+    const unsigned int *dims = P->GetDimensions();
+    assert( framelen % dims[2] == 0 );
+    framelen /= dims[2];
+    }
   vbuffer.resize( P->GetBufferLength() );
   char *buffer = &vbuffer[0];
   bool boolean = P->GetBuffer(buffer);
   if( !boolean ) return false;
+
+  // truncate to the size of a single frame:
+  vbuffer.resize( framelen );
 
   // Important: After call to GetBuffer() in case we have a 12bits stored image
   I->SetPixelFormat( P->GetPixelFormat() );
@@ -496,7 +506,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     for(unsigned int j = 0; j < Internals->dims[0]; ++j )
       {
       assert( (i * Internals->dims[0] + j) * ps < I->GetBufferLength() );
-      assert( (i * imgdims[0] * stepj + j * stepi) * ps < P->GetBufferLength() );
+      assert( (i * imgdims[0] * stepj + j * stepi) * ps < framelen /*P->GetBufferLength()*/ );
       memcpy(iconb + (i * Internals->dims[0] + j) * ps,
         imgb + (i * imgdims[0] * stepj + j * stepi) * ps, ps );
       }
