@@ -43,4 +43,4 @@ protected:
 
 } // end namespace gdcm
 
-#endif //__gdcmSpacing_h
+#endif // GDCMDATASETHELPER_H

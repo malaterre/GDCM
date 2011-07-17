@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmDefaultDicts_cxx
-#define __gdcmDefaultDicts_cxx
+#ifndef GDCMPRIVATEDEFAULTDICTS_CXX
+#define GDCMPRIVATEDEFAULTDICTS_CXX
 
 #include "gdcmDicts.h"
 #include "gdcmVR.h"
@@ -8818,4 +8818,4 @@ void PrivateDict::LoadDefault()
 }
 
 } // end namespace gdcm
-#endif // __gdcmDefaultDicts_cxx
+#endif // GDCMPRIVATEDEFAULTDICTS_CXX

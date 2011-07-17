@@ -36,8 +36,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmDefaultDicts_cxx
-#define __gdcmDefaultDicts_cxx
+#ifndef GDCMDEFAULTDICTS_CXX
+#define GDCMDEFAULTDICTS_CXX
 
 #include "gdcmDicts.h"
 #include "gdcmVR.h"
@@ -191,7 +191,7 @@ void PrivateDict::LoadDefault()
 }
 
 } // end namespace gdcm
-#endif // __gdcmDefaultDicts_cxx
+#endif // GDCMDEFAULTDICTS_CXX
 </xsl:text>
   </xsl:template>
   <xsl:template name="do-group-length">

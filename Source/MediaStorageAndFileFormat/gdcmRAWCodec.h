@@ -49,4 +49,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmRAWcodec_h
+#endif // GDCMRAWCODEC_H

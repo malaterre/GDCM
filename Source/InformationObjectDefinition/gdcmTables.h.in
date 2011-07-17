@@ -11,9 +11,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmTables_h
-#define __gdcmTables_h
+#ifndef GDCMTABLES_H
+#define GDCMTABLES_H
 const char * const gdcmTables[] = {
   @GDCM_XML_TABLES@
   0 };
-#endif // __gdcmTables_h
+#endif // GDCMTABLES_H
