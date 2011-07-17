@@ -130,4 +130,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmSpacing_h
+#endif // GDCMIMAGEHELPER_H

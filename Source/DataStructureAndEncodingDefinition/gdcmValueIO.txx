@@ -73,4 +73,4 @@ namespace gdcm
 
 } // end namespace gdcm
 
-#endif // __gdcmValue_txx
+#endif // GDCMVALUEIO_TXX
