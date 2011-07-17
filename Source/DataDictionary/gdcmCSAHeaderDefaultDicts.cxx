@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmCSAHeaderDict_cxx
-#define __gdcmCSAHeaderDict_cxx
+#ifndef GDCMCSAHEADERDEFAULTDICT_CXX
+#define GDCMCSAHEADERDEFAULTDICT_CXX
 
 #include "gdcmCSAHeaderDict.h"
 #include "gdcmCSAHeaderDictEntry.h"
@@ -352,4 +352,4 @@ void CSAHeaderDict::LoadDefault()
 }
 
 } // end namespace gdcm
-#endif // __gdcmCSAHeaderDict_cxx
+#endif // GDCMCSAHEADERDEFAULTDICT_CXX

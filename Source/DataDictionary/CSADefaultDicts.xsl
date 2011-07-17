@@ -36,8 +36,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmCSAHeaderDict_cxx
-#define __gdcmCSAHeaderDict_cxx
+#ifndef GDCMCSAHEADERDICT_CXX
+#define GDCMCSAHEADERDICT_CXX
 
 #include "gdcmCSAHeaderDict.h"
 #include "gdcmCSAHeaderDictEntry.h"
@@ -182,7 +182,7 @@ void CSAHeaderDict::LoadDefault()
 }
 
 } // end namespace gdcm
-#endif // __gdcmCSAHeaderDict_cxx
+#endif // GDCMCSAHEADERDICT_CXX
 </xsl:text>
   </xsl:template>
   <xsl:template name="do-group-length">

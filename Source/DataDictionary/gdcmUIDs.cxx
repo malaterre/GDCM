@@ -18,8 +18,6 @@
 #include "gdcmUIDs.h"
 #include <string.h> // strcmp
 
-//#ifdef __gdcmUIDs_cxx
-
 namespace gdcm
 {
         static const char * const TransferSyntaxStrings[][2] = {
@@ -433,5 +431,3 @@ const char *UIDs::GetName() const
 }
 
 } // end namespace gdcm
-
-//#endif //__gdcmUIDs_cxx
