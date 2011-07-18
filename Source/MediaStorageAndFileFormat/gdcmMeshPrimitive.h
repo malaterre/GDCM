@@ -15,8 +15,10 @@
 #ifndef GDCMMESHPRIMITIVE_H
 #define GDCMMESHPRIMITIVE_H
 
-#include <gdcmObject.h>
-#include <gdcmDataElement.h>
+#include "gdcmObject.h"
+#include "gdcmDataElement.h"
+
+#include <vector>
 
 namespace gdcm
 {
