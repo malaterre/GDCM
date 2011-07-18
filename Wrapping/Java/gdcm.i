@@ -243,6 +243,8 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
+%rename(GetType) MediaStorage::operator MSType () const;
+
 %include "gdcmMediaStorage.h"
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 //%rename(__getitem__) gdcm::Tag::operator[];
