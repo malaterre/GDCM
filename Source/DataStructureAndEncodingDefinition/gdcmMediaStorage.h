@@ -42,7 +42,11 @@ class GDCM_EXPORT MediaStorage
 {
 public:
   typedef enum {
-    MediaStorageDirectoryStorage = 0,
+    MediaStorageDirectoryStorage
+#if !defined(SWIG) || 1
+      = 0
+#endif
+    ,
     ComputedRadiographyImageStorage,
     DigitalXRayImageStorageForPresentation,
     DigitalXRayImageStorageForProcessing,

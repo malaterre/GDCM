@@ -185,6 +185,9 @@ using namespace gdcm;
 %include "std_map.i"
 %include "exception.i"
 
+//%include "enumtypesafe.swg" // optional as typesafe enums are the default
+//%javaconst(1);
+
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
 %ignore operator++;                     // Ignore
@@ -243,7 +246,36 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
+
+//%include "enums.swg"
+//%typemap(javain) enum SWIGTYPE "$javainput.ordinal()"
+//%typemap(javaout) enum SWIGTYPE {
+//    return $javaclassname.class.getEnumConstants()[$jnicall];
+//  }
+//%typemap(javabody) enum SWIGTYPE ""
+%rename(GetType) MediaStorage::operator MSType () const;
+
 %include "gdcmMediaStorage.h"
+//%clear enum SWIGTYPE;
+//%extend gdcm::MediaStorage
+//{
+//%typemap(javacode) MediaStorage
+//%{
+//  // For some reason the default equals operator is bogus, provide one ourself
+//  public boolean equals(Object obj)
+//    {
+//    MSType type = (MSType)obj;
+//    if( type == GetType() )
+//      {
+//      return true;
+//      }
+//    return false;
+//    }
+//%}
+//};
+
+//%include "enumtypesafe.swg" // optional as typesafe enums are the default
+
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 //%rename(__getitem__) gdcm::Tag::operator[];
 //%rename(this ) gdcm::Tag::operator[];
