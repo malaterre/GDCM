@@ -38,15 +38,19 @@ public:
         PrimitiveType = type;
     }
 
-    const DataElement & GetPrimitiveData() const { return PrimitiveData; }
-    DataElement & GetPrimitiveData() { return PrimitiveData; }
-    void SetPrimitiveData(DataElement const & de) { PrimitiveData = de; }
+    const DataElement & GetPrimitiveData() const;
+    DataElement & GetPrimitiveData();
+    void SetPrimitiveData(DataElement const & de);
+
+    const ::std::vector< DataElement > & GetPrimitivesData() const;
+    ::std::vector< DataElement > & GetPrimitivesData();
+    void SetPrimitivesData(::std::vector< DataElement > const & DEs);
 
 protected:
 
-    MPType      PrimitiveType;
+    MPType                        PrimitiveType;
 
-    DataElement PrimitiveData;
+    ::std::vector< DataElement >  PrimitiveData;
 };
 
 }
