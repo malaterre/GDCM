@@ -54,7 +54,7 @@ file2  DICOM output filename
 \b gdcmdiff is a great tool to diff DICOM files. Usage is simply:
 
 \verbatim
-$ gdcmconv input1.dcm input2.dcm
+$ gdcmdiff input1.dcm input2.dcm
 \endverbatim
 
 \section see_also SEE ALSO
