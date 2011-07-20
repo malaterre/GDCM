@@ -490,6 +490,7 @@ inline int getlastdigit(unsigned char *data, unsigned long size)
     data[i] = extended / 10;
     carry = extended % 10;
     }
+  assert( carry >= 0 && carry < 10 );
   return carry;
 }
 
@@ -504,7 +505,8 @@ size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
   while(!zero)
     {
     res = getlastdigit(addr, size);
-    sres.insert(sres.begin(), '0' + res);
+    const char v = '0' + res;
+    sres.insert(sres.begin(), v);
     zero = true;
     for(int i = 0; i < size; ++i)
       {
