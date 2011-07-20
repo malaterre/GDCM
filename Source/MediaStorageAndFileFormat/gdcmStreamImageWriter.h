@@ -135,6 +135,7 @@ protected:
   /// rewritten for each chunk that's passed in.
   /// For compressed data, the offset table will require rewrites of data.
   int mElementOffsets;
+  int mElementOffsets1;
 
 };
 

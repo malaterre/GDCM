@@ -26,6 +26,9 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
+  StreamImageReaderTest
+  Extracting_All_Resolution
+  Fake_Image_Using_Stream_Image_Writer
   DumpGEMSMovieGroup
   ExtractIconFromFile
   CreateJPIPDataSet
