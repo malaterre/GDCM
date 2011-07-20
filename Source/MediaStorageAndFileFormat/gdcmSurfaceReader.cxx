@@ -251,50 +251,55 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   }
   else
   {
-    gdcmErrorMacro( "Surface mesh primitives type not handled" );
-    return false;
+    SmartPointer< SequenceOfItems > typedSQ;
+    if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0026) ))
+    {
+      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0026) ).GetValueAsSQ();
+      meshPrimitive->SetPrimitiveType( MeshPrimitive::TRIANGLE_STRIP );
+    }
+    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0027)) )
+    {
+      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0027) ).GetValueAsSQ();
+      meshPrimitive->SetPrimitiveType( MeshPrimitive::TRIANGLE_FAN );
+    }
+    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0028)) )
+    {
+      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0028) ).GetValueAsSQ();
+      meshPrimitive->SetPrimitiveType( MeshPrimitive::LINE );
+    }
+    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0034)) )
+    {
+      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0034) ).GetValueAsSQ();
+      meshPrimitive->SetPrimitiveType( MeshPrimitive::FACET );
+    }
 
-//    SmartPointer< SequenceOfItems > typedSQ;
-//    if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0026) ))
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0026) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::TRIANGLE_STRIP );
-//    }
-//    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0027)) )
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0027) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::TRIANGLE_FAN );
-//    }
-//    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0028)) )
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0028) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::LINE );
-//    }
-//    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0034)) )
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0034) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::FACET );
-//    }
+    if (typedSQ && typedSQ->GetNumberOfItems() > 0)
+    {
+      const unsigned int              nbItems = typedSQ->GetNumberOfItems();
+      MeshPrimitive::PrimitivesData & primitivesData= meshPrimitive->GetPrimitivesData();
+      primitivesData.reserve( nbItems );
 
-//    if (typedSQ && typedSQ->GetNumberOfItems() != 0) // One Item shall be permitted
-//    {
-//      surfacePrimitivesDS = typedSQ->GetItem(1).GetNestedDataSet();
-
-//      if (typedPrimitivesDS.FindDataElement( Tag(0x0066, 0x0029)) )
-//      {
-//        typedTag = Tag(0x0066, 0x0029);
-//      }
-//      else
-//      {
-//        gdcmWarningMacro( "No Primitive Point Index List found" );
-//        return false;
-//      }
-//    }
-//    else
-//    {
-//      gdcmWarningMacro( "Mesh Primitive typed Sequence empty" );
-//      return false;
-//    }
+      SequenceOfItems::ConstIterator it   = typedSQ->Begin();
+      SequenceOfItems::ConstIterator itEnd= typedSQ->End();
+      for (; it != itEnd; it++)
+      {
+        const DataSet & typedPrimitivesDS = it->GetNestedDataSet();
+        if ( typedPrimitivesDS.FindDataElement( Tag(0x0066, 0x0029)) )
+        {
+          primitivesData.push_back(typedPrimitivesDS.GetDataElement( Tag(0x0066, 0x0029)) );
+        }
+        else
+        {
+          gdcmWarningMacro( "Missing Primitive Point Index List" );
+          return false;
+        }
+      }
+    }
+    else
+    {
+      gdcmWarningMacro( "Mesh Primitive typed Sequence empty" );
+      return false;
+    }
   }
 
   if (typedTag.GetElementTag() != 0)
