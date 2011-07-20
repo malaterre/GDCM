@@ -32,9 +32,11 @@ public:
 
   Image &GetInput();
 
+#ifndef SWIG
   // NOTE: covariant return-type to preserve backward compatible API
   /// Get Output image
   const Image &GetOutput() const;
+#endif
 
 protected:
 };
