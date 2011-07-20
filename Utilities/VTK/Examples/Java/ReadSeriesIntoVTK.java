@@ -18,7 +18,7 @@ import vtk.*;
 
 /*
  * Usage:
- * export LD_LIBRARY_PATH=LD_LIBRARY_PATH=/usr/lib/jvm/java-6-openjdk/jre/lib/amd64/xawt:.
+ * export LD_LIBRARY_PATH=/usr/lib/jvm/java-6-openjdk/jre/lib/amd64/xawt:.
  * java -classpath `pwd`/vtkgdcm.jar:/usr/share/java/vtk.jar:. ReadSeriesIntoVTK
  */
 public class ReadSeriesIntoVTK
