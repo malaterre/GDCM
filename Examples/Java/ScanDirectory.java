@@ -190,7 +190,7 @@ public class ScanDirectory
     String directory = args[0];
 
     Directory d = new Directory();
-    long nfiles = d.Load( directory );
+    long nfiles = d.Load( directory, true );
     if(nfiles == 0)
       {
       throw new Exception("No files found");
