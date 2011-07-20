@@ -36,7 +36,8 @@ bool SegmentWriter::PrepareWrite()
   const unsigned int              nbItems           = segmentsSQ->GetNumberOfItems();
   if (nbItems < numberOfSegments)
   {
-    const unsigned int nbOfItemToMake = numberOfSegments - nbItems;
+    const unsigned int diff           = numberOfSegments - nbItems;
+    const unsigned int nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
       Item item;
@@ -249,7 +250,8 @@ bool SegmentWriter::PrepareWrite()
       const unsigned int              nbItems           = segmentsRefSQ->GetNumberOfItems();
       if (nbItems < surfaceCount)
       {
-        const unsigned int nbOfItemToMake = surfaceCount - nbItems;
+        const unsigned int diff           = surfaceCount - nbItems;
+        const unsigned int nbOfItemToMake = (diff > 0?diff:0);
         for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
         {
           Item item;
