@@ -30,9 +30,9 @@ import java.io.File;
 public class ReadFiles
 {
   static int i = 0;
-  public static void process(File file)
+  public static void process(String path)
     {
-    String path = file.getPath();
+    //String path = file.getPath();
     assert PosixEmulation.FileExists(path) : "Problem converting to 8bits";
 
     System.out.println("Reading: " + path );
@@ -63,7 +63,7 @@ public class ReadFiles
       }
     else
       {
-      process(dir);
+      process(dir.getPath());
       }
     }
 
@@ -83,24 +83,13 @@ public class ReadFiles
     String directory = args[0];
 
     Directory gdir = new Directory();
-    long n = gdir.Load( directory );
+    long n = gdir.Load( directory, true );
     System.out.println( gdir.toString() );
     FilenamesType files = gdir.GetFilenames();
     for( long i = 0; i < n; ++i )
       {
       String path = files.get( (int)i );
-      assert PosixEmulation.FileExists(path);
-
-      Reader r = new Reader();
-      try
-        {
-        r.SetFileName( path );
-        boolean b = r.ReadUpToTag( new Tag(0x88,0x200) );
-        }
-      finally
-        {
-        r.delete();
-        }
+      process( path );
       }
 
     System.out.println( "Java API" );
