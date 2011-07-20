@@ -51,7 +51,8 @@ bool SurfaceWriter::PrepareWrite()
   const unsigned int              nbItems    = surfacesSQ->GetNumberOfItems();
   if (nbItems < nbSurfaces)
   {
-    const unsigned int nbOfItemToMake = nbSurfaces - nbItems;
+    const unsigned int diff           = nbSurfaces - nbItems;
+    const unsigned int nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
       Item item;
@@ -274,6 +275,10 @@ bool SurfaceWriter::PrepareWrite()
       //              (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
       //                (0066,0029) OW                                         #  0, 1 // Primitive Point Index List
       //              (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+      //                                            ...
+      //              (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+      //                (0066,0029) OW                                         #  0, 1 // Primitive Point Index List
+      //              (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
       //            (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
       //          (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
       //        (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
@@ -306,6 +311,7 @@ bool SurfaceWriter::PrepareWrite()
         //*****   Handle "Typed" Point Index List   *****//
         SmartPointer< MeshPrimitive > meshPrimitive = surface->GetMeshPrimitive();
         const MeshPrimitive::MPType   type          = meshPrimitive->GetPrimitiveType();
+        bool                          insertInSQ    = false;
 
         // Primitive Point Index List
         Tag         typedPrimitiveTag;
@@ -330,87 +336,125 @@ bool SurfaceWriter::PrepareWrite()
         case MeshPrimitive::TRIANGLE_FAN:
         case MeshPrimitive::LINE:
         case MeshPrimitive::FACET:
-          gdcmErrorMacro( "Surface mesh primitives type not handled" );
-          return false;
-          //        // Primitive Point Index List
-          //        typedPrimitiveTag.SetElement(0x0029);
-          //        insertInSQ = true;
-          //        break;
+          // Primitive Point Index List
+          typedPrimitiveTag.SetElement(0x0029);
+          insertInSQ = true;
+          break;
         default:
           gdcmErrorMacro( "Unknown surface mesh primitives type" );
           return false;
         }
 
-        //      if (insertInSQ)
-        //      {
-        //        Tag typedSequenceTag;
-
-        //        switch (type)
-        //        {
-        //        case MeshPrimitive::TRIANGLE_STRIP:
-        //          // Triangle Strip Sequence
-        //          typedSequenceTag.SetElement(0x0026);
-        //          break;
-        //        case MeshPrimitive::TRIANGLE_FAN:
-        //          // Triangle Fan Sequence
-        //          typedSequenceTag.SetElement(0x0027);
-        //          break;
-        //        case MeshPrimitive::LINE:
-        //          // Line Sequence
-        //          typedSequenceTag.SetElement(0x0028);
-        //          break;
-        //        case MeshPrimitive::FACET:
-        //          // Facet Sequence
-        //          typedSequenceTag.SetElement(0x0034);
-        //          break;
-        //        }
-
-        //        // "Typed" Sequence
-        //        SmartPointer<SequenceOfItems> typedSequenceSQ;
-        //        if( !surfaceMeshPrimitivesDS.FindDataElement( typedSequenceTag ) )
-        //          {
-        //          typedSequenceSQ = new SequenceOfItems;
-        //          DataElement detmp( typedSequenceTag );
-        //          detmp.SetVR( VR::SQ );
-        //          detmp.SetValue( *typedSequenceSQ );
-        //          detmp.SetVLToUndefined();
-        //          surfaceMeshPrimitivesDS.Insert( detmp );
-        //          }
-        //        typedSequenceSQ = surfaceMeshPrimitivesDS.GetDataElement( typedSequenceTag ).GetValueAsSQ();
-        //        typedSequenceSQ->SetLengthToUndefined();
-
-        //        if (typedSequenceSQ->GetNumberOfItems() < 1)  // One itme shall be permitted
-        //        {
-        //          Item item;
-        //          item.SetVLToUndefined();
-        //          typedSequenceSQ->AddItem(item);
-        //        }
-
-        //        Item &    typedSequenceItem = typedSequenceSQ->GetItem(1);
-        //        DataSet & pointIndexListDS   = typedSequenceItem.GetNestedDataSet();
-        //      }
-
-        // "Typed" Point Index List
-        DataElement typedPointIndexListDE( typedPrimitiveTag );
-        typedPointIndexListDE.SetVR( VR::OW );
-
-        const Value & pointIndexListValue = meshPrimitive->GetPrimitiveData().GetValue();
-        assert( &pointIndexListValue );
-        typedPointIndexListDE.SetValue( pointIndexListValue );
-
-        const ByteValue * pointIndexListBV = typedPointIndexListDE.GetByteValue();
-        VL pointIndexListVL;
-        if( pointIndexListBV && ts.IsExplicit() )
+        if (insertInSQ)
         {
-          pointIndexListVL = pointIndexListBV->GetLength();
+          Tag typedSequenceTag;
+          typedSequenceTag.SetGroup(0x0066);
+          switch (type)
+          {
+          case MeshPrimitive::TRIANGLE_STRIP:
+            // Triangle Strip Sequence
+            typedSequenceTag.SetElement(0x0026);
+            break;
+          case MeshPrimitive::TRIANGLE_FAN:
+            // Triangle Fan Sequence
+            typedSequenceTag.SetElement(0x0027);
+            break;
+          case MeshPrimitive::LINE:
+            // Line Sequence
+            typedSequenceTag.SetElement(0x0028);
+            break;
+          case MeshPrimitive::FACET:
+            // Facet Sequence
+            typedSequenceTag.SetElement(0x0034);
+            break;
+          }
+
+          // "Typed" Sequence
+          SmartPointer<SequenceOfItems> typedSequenceSQ;
+          if( !surfaceMeshPrimitivesDS.FindDataElement( typedSequenceTag ) )
+          {
+            typedSequenceSQ = new SequenceOfItems;
+            DataElement detmp( typedSequenceTag );
+            detmp.SetVR( VR::SQ );
+            detmp.SetValue( *typedSequenceSQ );
+            detmp.SetVLToUndefined();
+            surfaceMeshPrimitivesDS.Insert( detmp );
+          }
+          typedSequenceSQ = surfaceMeshPrimitivesDS.GetDataElement( typedSequenceTag ).GetValueAsSQ();
+          typedSequenceSQ->SetLengthToUndefined();
+
+          // Fill the Segment Sequence
+          const unsigned int              numberOfPrimitives  = meshPrimitive->GetNumberOfPrimitivesData();
+          const unsigned int              nbItems             = typedSequenceSQ->GetNumberOfItems();
+          if (nbItems < numberOfPrimitives)
+          {
+            const unsigned int diff           = numberOfPrimitives - nbItems;
+            const unsigned int nbOfItemToMake = (diff > 0?diff:0);
+            for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
+            {
+              Item item;
+              item.SetVLToUndefined();
+              typedSequenceSQ->AddItem(item);
+            }
+          }
+          // else Should I remove items?
+
+          const MeshPrimitive::PrimitivesData &         primitivesData= meshPrimitive->GetPrimitivesData();
+          MeshPrimitive::PrimitivesData::const_iterator it            = primitivesData.begin();
+          MeshPrimitive::PrimitivesData::const_iterator itEnd         = primitivesData.end();
+          unsigned int                                  i             = 1;
+          for (; it != itEnd; it++)
+          {
+            Item &    typedSequenceItem = typedSequenceSQ->GetItem(i++);
+            DataSet & pointIndexListDS  = typedSequenceItem.GetNestedDataSet();
+
+            // "Typed" Point Index List
+            DataElement typedPointIndexListDE( typedPrimitiveTag );
+            typedPointIndexListDE.SetVR( VR::OW );
+
+            const Value & pointIndexListValue = it->GetValue();
+            assert( &pointIndexListValue );
+            typedPointIndexListDE.SetValue( pointIndexListValue );
+
+            const ByteValue * pointIndexListBV = typedPointIndexListDE.GetByteValue();
+            VL pointIndexListVL;
+            if( pointIndexListBV && ts.IsExplicit() )
+            {
+              pointIndexListVL = pointIndexListBV->GetLength();
+            }
+            else
+            {
+              pointIndexListVL.SetToUndefined();
+            }
+            typedPointIndexListDE.SetVL( pointIndexListVL );
+
+            pointIndexListDS.Replace( typedPointIndexListDE );
+          }
         }
         else
         {
-          pointIndexListVL.SetToUndefined();
-        }
-        typedPointIndexListDE.SetVL( pointIndexListVL );
+          // "Typed" Point Index List
+          DataElement typedPointIndexListDE( typedPrimitiveTag );
+          typedPointIndexListDE.SetVR( VR::OW );
 
-        pointIndexListDS.Replace( typedPointIndexListDE );
+          const Value & pointIndexListValue = meshPrimitive->GetPrimitiveData().GetValue();
+          assert( &pointIndexListValue );
+          typedPointIndexListDE.SetValue( pointIndexListValue );
+
+          const ByteValue * pointIndexListBV = typedPointIndexListDE.GetByteValue();
+          VL pointIndexListVL;
+          if( pointIndexListBV && ts.IsExplicit() )
+          {
+            pointIndexListVL = pointIndexListBV->GetLength();
+          }
+          else
+          {
+            pointIndexListVL.SetToUndefined();
+          }
+          typedPointIndexListDE.SetVL( pointIndexListVL );
+
+          pointIndexListDS.Replace( typedPointIndexListDE );
+        }
       }
     }
   }

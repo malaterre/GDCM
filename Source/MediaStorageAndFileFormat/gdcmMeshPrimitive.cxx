@@ -80,19 +80,41 @@ void MeshPrimitive::SetPrimitiveData(DataElement const & de)
   PrimitiveData.front() = de;
 }
 
-const ::std::vector< DataElement > & MeshPrimitive::GetPrimitivesData() const
+const MeshPrimitive::PrimitivesData & MeshPrimitive::GetPrimitivesData() const
 {
   return PrimitiveData;
 }
 
-::std::vector< DataElement > & MeshPrimitive::GetPrimitivesData()
+MeshPrimitive::PrimitivesData & MeshPrimitive::GetPrimitivesData()
 {
   return PrimitiveData;
 }
 
-void MeshPrimitive::SetPrimitivesData(::std::vector< DataElement > const & DEs)
+void MeshPrimitive::SetPrimitivesData(PrimitivesData const & DEs)
 {
   PrimitiveData = DEs;
+}
+
+void MeshPrimitive::SetPrimitiveData(const unsigned int idx, DataElement const & de)
+{
+  assert( idx < this->GetNumberOfPrimitivesData() );
+  PrimitiveData[idx] = de;
+}
+
+const DataElement & MeshPrimitive::GetPrimitiveData(const unsigned int idx) const
+{
+    assert( idx < this->GetNumberOfPrimitivesData() );
+    return PrimitiveData[idx];
+}
+DataElement & MeshPrimitive::GetPrimitiveData(const unsigned int idx)
+{
+    assert( idx < this->GetNumberOfPrimitivesData() );
+    return PrimitiveData[idx];
+}
+
+const unsigned int MeshPrimitive::GetNumberOfPrimitivesData() const
+{
+  return PrimitiveData.size();
 }
 
 }
