@@ -11,6 +11,8 @@ class GDCM_EXPORT MeshPrimitive : public Object
 {
 public:
 
+  typedef std::vector< DataElement > PrimitivesData;
+
     typedef enum {
         VERTEX = 0,
         EDGE,
@@ -42,15 +44,21 @@ public:
     DataElement & GetPrimitiveData();
     void SetPrimitiveData(DataElement const & de);
 
-    const ::std::vector< DataElement > & GetPrimitivesData() const;
-    ::std::vector< DataElement > & GetPrimitivesData();
-    void SetPrimitivesData(::std::vector< DataElement > const & DEs);
+    const PrimitivesData & GetPrimitivesData() const;
+    PrimitivesData & GetPrimitivesData();
+    void SetPrimitivesData(PrimitivesData const & DEs);
+
+    const DataElement & GetPrimitiveData(const unsigned int idx) const;
+    DataElement & GetPrimitiveData(const unsigned int idx);
+    void SetPrimitiveData(const unsigned int idx, DataElement const & de);
+
+    const unsigned int GetNumberOfPrimitivesData() const;
 
 protected:
 
     MPType                        PrimitiveType;
 
-    ::std::vector< DataElement >  PrimitiveData;
+    PrimitivesData  PrimitiveData;
 };
 
 }
