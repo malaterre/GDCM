@@ -57,7 +57,8 @@ public class ScanDirectory
           PhotometricInterpretation.PIType.MONOCHROME2 ) );
       if( icpi.Change() )
         {
-        icpi.GetOutput().GetArray( buffer );
+        Bitmap output = icpi.GetOutput();
+        output.GetArray( buffer );
         }
       return buffer;
       }
@@ -81,7 +82,8 @@ public class ScanDirectory
           PhotometricInterpretation.PIType.MONOCHROME2 ) );
       if( icpi.Change() )
         {
-        icpi.GetOutput().GetArray( buffer );
+        Bitmap output = icpi.GetOutput();
+        output.GetArray( buffer );
         }
       return buffer;
       }
