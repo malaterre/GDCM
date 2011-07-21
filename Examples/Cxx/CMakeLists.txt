@@ -26,9 +26,6 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
-  StreamImageReaderTest
-  Extracting_All_Resolution
-  Fake_Image_Using_Stream_Image_Writer
   DumpGEMSMovieGroup
   ExtractIconFromFile
   CreateJPIPDataSet
@@ -75,6 +72,14 @@ SET(EXAMPLES_SRCS
   GenSeqs
   GetJPEGSamplePrecision
 )
+IF(GDCM_USE_OPENJPEG_V2)
+SET(EXAMPLES_SRCS
+  ${EXAMPLES_SRCS}
+  StreamImageReaderTest
+  Extracting_All_Resolution
+  Fake_Image_Using_Stream_Image_Writer
+  )
+ENDIF(GDCM_USE_OPENJPEG_V2)
 IF(GDCM_USE_JPEGLS)
 SET(EXAMPLES_SRCS
   ${EXAMPLES_SRCS}

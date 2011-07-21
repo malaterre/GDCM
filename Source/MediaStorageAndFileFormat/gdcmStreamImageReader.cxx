@@ -177,14 +177,14 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
          for(int j = 1; j<=z; j++)
          {
          int a =1;
-         for (int i=1; i<=extent[2]-j; i++)
+         for (unsigned int i=1; i<=extent[2]-j; i++)
               a = 2*a;
           mFileOffset =  mFileOffset + (int)((extent[1]/a)*(extent[0]/a)*bytesPerPixel);
           mFileOffset = mFileOffset + 4*sizeof(uint16_t);
          }
 
          int a = 1;
-        for (int i=1; i<=(extent[2]-mZMax);++i)
+        for (unsigned int i=1; i<=(extent[2]-mZMax);++i)
          a = a*2;
       for (y = mYMin; y < mYMax; ++y){
         theOffset = mFileOffset + (y*(int)(extent[0]/a) + mXMin)*bytesPerPixel;//manoj set this with resolution u r reading
@@ -297,7 +297,8 @@ bool StreamImageReader::ReadImageInformation()
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
       return false;
       }
-    mFileOffset = mReader.GetStreamPtr()->tellg()+4*sizeof(uint16_t)+2*sizeof(uint32_t);
+    std::streampos shift = 4*sizeof(uint16_t)+2*sizeof(uint32_t);
+    mFileOffset = mReader.GetStreamPtr()->tellg()+shift;
     }
   catch(std::exception & ex)
     {
