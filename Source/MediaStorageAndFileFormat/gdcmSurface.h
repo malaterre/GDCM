@@ -44,6 +44,7 @@ public:
   const unsigned short GetRecommendedDisplayCIELabValue(const unsigned int idx) const;
   void SetRecommendedDisplayCIELabValue(const unsigned short vl[3]);
   void SetRecommendedDisplayCIELabValue(const unsigned short vl, const unsigned int idx = 0);
+  void SetRecommendedDisplayCIELabValue(const std::vector< unsigned short > & vl);
 
   float GetRecommendedPresentationOpacity() const;
   void SetRecommendedPresentationOpacity(const float opacity);

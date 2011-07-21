@@ -159,6 +159,15 @@ void Surface::SetRecommendedDisplayCIELabValue(const unsigned short vl, const un
   RecommendedDisplayCIELabValue[idx] = vl;
 }
 
+void Surface::SetRecommendedDisplayCIELabValue(const std::vector< unsigned short > & vl)
+{
+  assert( vl.size() > 2 );
+
+  RecommendedDisplayCIELabValue[0] = vl[0];
+  RecommendedDisplayCIELabValue[1] = vl[1];
+  RecommendedDisplayCIELabValue[2] = vl[2];
+}
+
 float Surface::GetRecommendedPresentationOpacity() const
 {
   return RecommendedPresentationOpacity;
