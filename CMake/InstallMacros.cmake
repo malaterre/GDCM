@@ -36,13 +36,13 @@ MACRO (install_library library)
       EXPORT ${GDCM_TARGETS_NAME}
       RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
-      ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+      ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT DebugDevel
       )
     #Development
     if(NAMELINK_ONLY)
       INSTALL(TARGETS ${library}
         EXPORT ${GDCM_TARGETS_NAME}
-        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
+        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT DebugDevel ${NAMELINK_ONLY}
         )
     endif(NAMELINK_ONLY)
   ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -61,7 +61,7 @@ MACRO (install_pdb library)
         if(lcfg STREQUAL "debug" OR lcfg STREQUAL "relwithdebinfo")
           install (FILES ${library_pdb}
             DESTINATION ${GDCM_INSTALL_BIN_DIR}
-            COMPONENT Development
+            COMPONENT DebugDevel
             CONFIGURATIONS ${cfg}
             )
         endif()
@@ -76,7 +76,7 @@ MACRO (install_pdb library)
       if(lcfg STREQUAL "debug" OR lcfg STREQUAL "relwithdebinfo")
         install (FILES ${library_pdb}
           DESTINATION ${GDCM_INSTALL_BIN_DIR}
-          COMPONENT Development
+          COMPONENT DebugDevel
           )
       endif()
     ENDIF(CMAKE_CONFIGURATION_TYPES)
