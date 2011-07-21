@@ -56,7 +56,7 @@ MeshPrimitive::MPType MeshPrimitive::GetMPType(const char * type)
 }
 
 MeshPrimitive::MeshPrimitive():
-  PrimitiveData(),
+  PrimitiveData(1),
   PrimitiveType(MPType_END)
 {
 }
@@ -77,7 +77,7 @@ DataElement & MeshPrimitive::GetPrimitiveData()
 
 void MeshPrimitive::SetPrimitiveData(DataElement const & de)
 {
-  PrimitiveData.front() = de;
+  PrimitiveData.insert(PrimitiveData.begin(), de);
 }
 
 const MeshPrimitive::PrimitivesData & MeshPrimitive::GetPrimitivesData() const
@@ -97,8 +97,12 @@ void MeshPrimitive::SetPrimitivesData(PrimitivesData const & DEs)
 
 void MeshPrimitive::SetPrimitiveData(const unsigned int idx, DataElement const & de)
 {
-  assert( idx < this->GetNumberOfPrimitivesData() );
-  PrimitiveData[idx] = de;
+  PrimitiveData.insert(PrimitiveData.begin() + idx, de);
+}
+
+void MeshPrimitive::AddPrimitiveData(DataElement const & de)
+{
+  PrimitiveData.push_back(de);
 }
 
 const DataElement & MeshPrimitive::GetPrimitiveData(const unsigned int idx) const
