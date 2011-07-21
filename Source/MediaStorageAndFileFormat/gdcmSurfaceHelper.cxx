@@ -106,7 +106,7 @@ std::vector< float > SurfaceHelper::CIELabToXYZ(const std::vector<float> & CIELa
   const float B = tmp[1]*tmp[1]*tmp[1];
   const float C = tmp[2]*tmp[2]*tmp[2];
 
-  const float D = 16 / 116.;
+  const float D = 16. / 116.;
 
   // Compute f(t)
   if ( B > 0.008856 ) tmp[1] = B;
