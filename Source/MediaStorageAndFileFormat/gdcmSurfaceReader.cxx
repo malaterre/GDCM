@@ -16,15 +16,16 @@ SurfaceReader::~SurfaceReader()
 
 bool SurfaceReader::Read()
 {
+  bool res = false;
+
+  // Read Surface Segmentation module
   if (!SegmentReader::Read())
   {
-    return false;
+    return res;
   }
 
+  // Read Surface Mesh module
   const FileMetaInformation & header  = F->GetHeader();
-
-  bool                        res     = false;
-
   MediaStorage                ms      = header.GetMediaStorage();
   if( ms == MediaStorage::SurfaceSegmentationStorage )
   {
@@ -211,7 +212,6 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
     else
     {
       gdcmWarningMacro( "Surface Point Normals Sequence empty" );
-//      return false;
     }
   }
 
@@ -253,48 +253,6 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   {
     gdcmErrorMacro( "Surface mesh primitives type not handled" );
     return false;
-
-//    SmartPointer< SequenceOfItems > typedSQ;
-//    if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0026) ))
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0026) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::TRIANGLE_STRIP );
-//    }
-//    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0027)) )
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0027) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::TRIANGLE_FAN );
-//    }
-//    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0028)) )
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0028) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::LINE );
-//    }
-//    else if (surfacePrimitivesDS.FindDataElement( Tag(0x0066, 0x0034)) )
-//    {
-//      typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0034) ).GetValueAsSQ();
-//      meshPrimitive->SetPrimitiveType( MeshPrimitive::FACET );
-//    }
-
-//    if (typedSQ && typedSQ->GetNumberOfItems() != 0) // One Item shall be permitted
-//    {
-//      surfacePrimitivesDS = typedSQ->GetItem(1).GetNestedDataSet();
-
-//      if (typedPrimitivesDS.FindDataElement( Tag(0x0066, 0x0029)) )
-//      {
-//        typedTag = Tag(0x0066, 0x0029);
-//      }
-//      else
-//      {
-//        gdcmWarningMacro( "No Primitive Point Index List found" );
-//        return false;
-//      }
-//    }
-//    else
-//    {
-//      gdcmWarningMacro( "Mesh Primitive typed Sequence empty" );
-//      return false;
-//    }
   }
 
   if (typedTag.GetElementTag() != 0)

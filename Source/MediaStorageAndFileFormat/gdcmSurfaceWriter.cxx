@@ -51,7 +51,8 @@ bool SurfaceWriter::PrepareWrite()
   const unsigned int              nbItems    = surfacesSQ->GetNumberOfItems();
   if (nbItems < nbSurfaces)
   {
-    const unsigned int nbOfItemToMake = nbSurfaces - nbItems;
+    const int          diff           = nbSurfaces - nbItems;
+    const unsigned int nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
       Item item;
@@ -274,6 +275,10 @@ bool SurfaceWriter::PrepareWrite()
       //              (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
       //                (0066,0029) OW                                         #  0, 1 // Primitive Point Index List
       //              (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+      //                                    ...
+      //              (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+      //                (0066,0029) OW                                         #  0, 1 // Primitive Point Index List
+      //              (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
       //            (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
       //          (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
       //        (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
@@ -332,63 +337,10 @@ bool SurfaceWriter::PrepareWrite()
         case MeshPrimitive::FACET:
           gdcmErrorMacro( "Surface mesh primitives type not handled" );
           return false;
-          //        // Primitive Point Index List
-          //        typedPrimitiveTag.SetElement(0x0029);
-          //        insertInSQ = true;
-          //        break;
         default:
           gdcmErrorMacro( "Unknown surface mesh primitives type" );
           return false;
         }
-
-        //      if (insertInSQ)
-        //      {
-        //        Tag typedSequenceTag;
-
-        //        switch (type)
-        //        {
-        //        case MeshPrimitive::TRIANGLE_STRIP:
-        //          // Triangle Strip Sequence
-        //          typedSequenceTag.SetElement(0x0026);
-        //          break;
-        //        case MeshPrimitive::TRIANGLE_FAN:
-        //          // Triangle Fan Sequence
-        //          typedSequenceTag.SetElement(0x0027);
-        //          break;
-        //        case MeshPrimitive::LINE:
-        //          // Line Sequence
-        //          typedSequenceTag.SetElement(0x0028);
-        //          break;
-        //        case MeshPrimitive::FACET:
-        //          // Facet Sequence
-        //          typedSequenceTag.SetElement(0x0034);
-        //          break;
-        //        }
-
-        //        // "Typed" Sequence
-        //        SmartPointer<SequenceOfItems> typedSequenceSQ;
-        //        if( !surfaceMeshPrimitivesDS.FindDataElement( typedSequenceTag ) )
-        //          {
-        //          typedSequenceSQ = new SequenceOfItems;
-        //          DataElement detmp( typedSequenceTag );
-        //          detmp.SetVR( VR::SQ );
-        //          detmp.SetValue( *typedSequenceSQ );
-        //          detmp.SetVLToUndefined();
-        //          surfaceMeshPrimitivesDS.Insert( detmp );
-        //          }
-        //        typedSequenceSQ = surfaceMeshPrimitivesDS.GetDataElement( typedSequenceTag ).GetValueAsSQ();
-        //        typedSequenceSQ->SetLengthToUndefined();
-
-        //        if (typedSequenceSQ->GetNumberOfItems() < 1)  // One itme shall be permitted
-        //        {
-        //          Item item;
-        //          item.SetVLToUndefined();
-        //          typedSequenceSQ->AddItem(item);
-        //        }
-
-        //        Item &    typedSequenceItem = typedSequenceSQ->GetItem(1);
-        //        DataSet & pointIndexListDS   = typedSequenceItem.GetNestedDataSet();
-        //      }
 
         // "Typed" Point Index List
         DataElement typedPointIndexListDE( typedPrimitiveTag );

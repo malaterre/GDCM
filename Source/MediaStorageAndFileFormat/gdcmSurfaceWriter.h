@@ -14,10 +14,6 @@ public:
 
     virtual ~SurfaceWriter();
 
-//    const Surface & GetSurface() const { return *SurfaceData; }
-//    Surface & GetSurface() { return *SurfaceData; }
-//    void SetSurface(Surface const & segment);
-
     /// Write
     bool Write(); // Execute()
 
@@ -26,6 +22,7 @@ public:
 
 protected:
 
+    // Write Surface Mesh Module
     bool PrepareWrite();
 
     //0066 0001 UL 1 Number of Surfaces
