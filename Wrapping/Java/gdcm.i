@@ -253,7 +253,7 @@ EXTEND_CLASS_PRINT(gdcm::PixelFormat)
 //    return $javaclassname.class.getEnumConstants()[$jnicall];
 //  }
 //%typemap(javabody) enum SWIGTYPE ""
-%rename(GetType) MediaStorage::operator MSType () const;
+%rename(GetType) gdcm::MediaStorage::operator MSType () const;
 
 %include "gdcmMediaStorage.h"
 //%clear enum SWIGTYPE;
