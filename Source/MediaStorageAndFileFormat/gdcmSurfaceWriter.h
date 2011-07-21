@@ -33,10 +33,6 @@ public:
 
     virtual ~SurfaceWriter();
 
-//    const Surface & GetSurface() const { return *SurfaceData; }
-//    Surface & GetSurface() { return *SurfaceData; }
-//    void SetSurface(Surface const & segment);
-
     /// Write
     bool Write(); // Execute()
 
@@ -45,6 +41,7 @@ public:
 
 protected:
 
+    // Write Surface Mesh Module
     bool PrepareWrite();
 
     void ComputeNumberOfSurfaces();

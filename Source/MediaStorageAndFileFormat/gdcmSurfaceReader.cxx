@@ -41,6 +41,7 @@ bool SurfaceReader::Read()
     return res;
   }
 
+  // Read Surface Mesh module
   const FileMetaInformation & header  = F->GetHeader();
   MediaStorage                ms      = header.GetMediaStorage();
   if( ms == MediaStorage::SurfaceSegmentationStorage )
@@ -249,7 +250,6 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
     else
     {
       gdcmWarningMacro( "Surface Point Normals Sequence empty" );
-//      return false;
     }
   }
 
