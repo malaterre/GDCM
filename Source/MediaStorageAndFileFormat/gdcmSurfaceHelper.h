@@ -13,23 +13,60 @@ class GDCM_EXPORT SurfaceHelper
 {
 public:
 
-  /**
-    * \brief  Minimal structure which define a color array with 3 components.
-    */
   typedef std::vector< unsigned short > ColorArray;
 
+  /**
+    * \brief  Convert a RGB color into DICOM grayscale (ready to write).
+    *
+    * \see    PS 3.3 C.27.1 tag(0062,000C)
+    *
+    * \param  RGB RGB array.
+    * \param  rangeMax  Max value of the RGB range.
+    *
+    * \tparam T Type of RGB components.
+    * \tparam U Type of rangeMax value.
+    */
   template <typename T, typename U>
   static unsigned short RGBToRecommendedDisplayGrayscale(const std::vector<T> & RGB,
                                                          const U rangeMax = 255);
-
+  /**
+    * \brief  Convert a RGB color into DICOM CIE-Lab (ready to write).
+    *
+    * \see    PS 3.3 C.10.7.1.1
+    *
+    * \param  RGB RGB array.
+    * \param  rangeMax  Max value of the RGB range.
+    *
+    * \tparam T Type of RGB components.
+    * \tparam U Type of rangeMax value.
+    */
   template <typename T, typename U>
   static ColorArray RGBToRecommendedDisplayCIELab(const std::vector<T> & RGB,
                                                   const U rangeMax = 255);
-
+  /**
+    * \brief  Convert a DICOM CIE-Lab (after reading) color into RGB.
+    *
+    * \see    PS 3.3 C.10.7.1.1
+    *
+    * \param  CIELab DICOM CIE-Lab array.
+    * \param  rangeMax  Max value of the RGB range.
+    *
+    * \tparam T Type of CIELab components.
+    * \tparam U Type of rangeMax value.
+    */
   template <typename T, typename U>
   static std::vector<T> RecommendedDisplayCIELabToRGB(const ColorArray & CIELab,
                                                       const U rangeMax = 255);
-
+  /**
+    * \brief  Convert a DICOM CIE-Lab (after reading) color into RGB.
+    *
+    * \see    PS 3.3 C.10.7.1.1
+    *
+    * \param  CIELab DICOM CIE-Lab array.
+    * \param  rangeMax  Max value of the RGB range.
+    *
+    * \tparam U Type of rangeMax value.
+    */
   template <typename U>
   static std::vector<float> RecommendedDisplayCIELabToRGB(const ColorArray & CIELab,
                                                       const U rangeMax = 255);
@@ -57,8 +94,8 @@ unsigned short SurfaceHelper::RGBToRecommendedDisplayGrayscale(const std::vector
 
   // 0xFFFF "=" 255 "=" white
   Grayscale = (unsigned short) ((0.2989 * RGB[0] + 0.5870 * RGB[1] + 0.1140 * RGB[2])
-                                * inverseRangeMax
-                                * 0xFFFF);
+                                * inverseRangeMax // Convert to range 0-1
+                                * 0xFFFF);        // Convert to range 0x0000-0xFFFF
 
   return Grayscale;
 }
@@ -72,6 +109,7 @@ SurfaceHelper::ColorArray SurfaceHelper::RGBToRecommendedDisplayCIELab(const std
   ColorArray CIELab(3);
   std::vector<float> tmp(3);
 
+  // Convert to range 0-1
   const float inverseRangeMax = 1. / (float) rangeMax;
   tmp[0] = (float) (RGB[0] * inverseRangeMax);
   tmp[1] = (float) (RGB[1] * inverseRangeMax);
@@ -79,6 +117,7 @@ SurfaceHelper::ColorArray SurfaceHelper::RGBToRecommendedDisplayCIELab(const std
 
   tmp = SurfaceHelper::XYZToCIELab( SurfaceHelper::RGBToXYZ( tmp ) );
 
+  // Convert to range 0x0000-0xFFFF
   // 0xFFFF "=" 127, 0x8080 "=" 0, 0x0000 "=" -128
   CIELab[0] = (unsigned short) (          0xFFFF           * (tmp[0]*0.01));
   CIELab[1] = (unsigned short) (0x8080 + (0xFFFF - 0x8080) * (tmp[1]*0.01));
@@ -96,12 +135,14 @@ std::vector<T> SurfaceHelper::RecommendedDisplayCIELabToRGB(const ColorArray & C
   std::vector<T> RGB(3);
   std::vector<float> tmp(3);
 
+  // Convert to range 0-1
   tmp[0] = (float) ( CIELab[0]                    / (float)(0xFFFF)          * 100 );
   tmp[1] = (float) ((CIELab[1] - (float)(0x8080)) / (float)(0xFFFF - 0x8080) * 100 );
   tmp[2] = (float) ((CIELab[2] - (float)(0x8080)) / (float)(0xFFFF - 0x8080) * 100 );
 
   tmp = SurfaceHelper::XYZToRGB( SurfaceHelper::CIELabToXYZ( tmp ) );
 
+  // Convert to range 0-rangeMax
   RGB[0] = (T) (tmp[0] * rangeMax);
   RGB[1] = (T) (tmp[1] * rangeMax);
   RGB[2] = (T) (tmp[2] * rangeMax);
