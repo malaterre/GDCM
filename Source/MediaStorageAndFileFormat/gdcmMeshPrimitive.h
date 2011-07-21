@@ -51,6 +51,7 @@ public:
     const DataElement & GetPrimitiveData(const unsigned int idx) const;
     DataElement & GetPrimitiveData(const unsigned int idx);
     void SetPrimitiveData(const unsigned int idx, DataElement const & de);
+    void AddPrimitiveData(DataElement const & de);
 
     const unsigned int GetNumberOfPrimitivesData() const;
 
