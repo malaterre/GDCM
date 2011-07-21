@@ -41,7 +41,9 @@ public class ReadFiles
     try
       {
       r.SetFileName( path );
-      boolean b = r.ReadUpToTag( new Tag(0x88,0x200) );
+      TagSetType skip = new TagSetType();
+      skip.insert( new Tag(0x7fe0,0x10) );
+      boolean b = r.ReadUpToTag( new Tag(0x88,0x200), skip );
       //System.out.println("DS:\n" + r.GetFile().GetDataSet().toString() );
       }
     finally

@@ -20,7 +20,7 @@
 %include <std_common.i>
 
 // ------------------------------------------------------------------------
-// std::map
+// std::set
 // ------------------------------------------------------------------------
 
 %{
@@ -39,8 +39,8 @@ namespace std {
         typedef size_t size_type;
         typedef ptrdiff_t difference_type;
         typedef V value_type;
-        map();
-        map(const set<V> &);
+        set();
+        set(const set<V> &);
 
         unsigned int size() const;
         bool empty() const;
@@ -53,8 +53,8 @@ namespace std {
                 else
                     throw std::out_of_range("key not found");
             }
-            void set(const V& value) {
-                (*self).insert(value);
+            void insert(const V& key) { // Do NOT call this function 'set' !
+                self->insert(key);
             }
             void del(const V& key) throw (std::out_of_range) {
                 std::set<V>::iterator i = self->find(key);
