@@ -164,7 +164,8 @@ public class ScanDirectory
       }
     WritableRaster wr = bi.getRaster();
     //System.out.println( "imagetype: " + imageType );
-    if( imageType == BufferedImage.TYPE_BYTE_GRAY )
+    if( imageType == BufferedImage.TYPE_BYTE_GRAY
+      || imageType == BufferedImage.TYPE_3BYTE_BGR )
       {
       byte[] buffer = GetAsByte( input );
       wr.setDataElements (0, 0, (int)width, (int)height, buffer);
@@ -189,7 +190,7 @@ public class ScanDirectory
     String directory = args[0];
 
     Directory d = new Directory();
-    long nfiles = d.Load( directory );
+    long nfiles = d.Load( directory, true );
     if(nfiles == 0)
       {
       throw new Exception("No files found");
@@ -226,6 +227,8 @@ public class ScanDirectory
       new Tag(0x0020, 0x1041),    // SliceLocation
       new Tag(0x0018, 0x0050),    // SliceThickness ?? Eg. Enhanced MR Image Storage
       new Tag(0x0008, 0x0080),    // InstitutionName
+      new Tag(0x0028, 0x1050),    // WindowCenter
+      new Tag(0x0028, 0x1051),    // WindowWidth
     };
     for( Tag t : tagarray ) {
       //System.out.println( "Tag: " + t.toString() );
@@ -268,7 +271,8 @@ public class ScanDirectory
             IconImageGenerator iig = new IconImageGenerator();
             iig.SetPixmap( img );
             iig.AutoPixelMinMax( true );
-            long idims[] = { 64, 64 };
+            iig.ConvertRGBToPaletteColor( false );
+            long idims[] = { 128, 128};
             iig.SetOutputDimensions( idims );
             iig.Generate();
             Bitmap icon = iig.GetIconImage();
