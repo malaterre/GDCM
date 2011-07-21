@@ -286,7 +286,7 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
         const DataSet & typedPrimitivesDS = it->GetNestedDataSet();
         if ( typedPrimitivesDS.FindDataElement( Tag(0x0066, 0x0029)) )
         {
-          primitivesData.push_back(typedPrimitivesDS.GetDataElement( Tag(0x0066, 0x0029)) );
+          meshPrimitive->AddPrimitiveData( typedPrimitivesDS.GetDataElement( Tag(0x0066, 0x0029)) );
         }
         else
         {
