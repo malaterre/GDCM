@@ -12,6 +12,42 @@ SegmentWriter::~SegmentWriter()
 {
 }
 
+const unsigned int SegmentWriter::GetNumberOfSegments() const
+{
+  return Segments.size();
+}
+
+void SegmentWriter::SetNumberOfSegments(const unsigned int size)
+{
+  Segments.resize(size);
+}
+
+const SegmentWriter::SegmentVector & SegmentWriter::GetSegments() const
+{
+  return Segments;
+}
+
+SegmentWriter::SegmentVector & SegmentWriter::GetSegments()
+{
+  return Segments;
+}
+
+SmartPointer< Segment > SegmentWriter::GetSegment(const unsigned int idx /*= 0*/) const
+{
+  assert( idx < Segments.size() );
+  return Segments[idx];
+}
+
+void SegmentWriter::AddSegment(SmartPointer< Segment > segment)
+{
+  Segments.push_back(segment);
+}
+
+void SegmentWriter::SetSegments(SegmentVector & segments)
+{
+  Segments = segments;
+}
+
 bool SegmentWriter::PrepareWrite()
 {
   File &      file    = GetFile();
