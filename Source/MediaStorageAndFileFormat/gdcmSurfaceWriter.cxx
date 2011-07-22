@@ -13,6 +13,16 @@ SurfaceWriter::~SurfaceWriter()
 {
 }
 
+const unsigned long SurfaceWriter::GetNumberOfSurfaces() const
+{
+  return NumberOfSurfaces;
+}
+
+void SurfaceWriter::SetNumberOfSurfaces(const unsigned long nb)
+{
+  NumberOfSurfaces = nb;
+}
+
 bool SurfaceWriter::PrepareWrite()
 {
   if( !SegmentWriter::PrepareWrite() )
@@ -105,9 +115,9 @@ bool SurfaceWriter::PrepareWrite()
 
       if (surfaceProcessing)
       {
-        Attribute<0x0066, 0x000A> surfaceProcessingAt;
-        surfaceProcessingAt.SetValue( surface->GetSurfaceProcessingRatio() );
-        surfaceDS.Replace( surfaceProcessingAt.GetAsDataElement() );
+        Attribute<0x0066, 0x000A> surfaceProcessingRatioAt;
+        surfaceProcessingRatioAt.SetValue( surface->GetSurfaceProcessingRatio() );
+        surfaceDS.Replace( surfaceProcessingRatioAt.GetAsDataElement() );
 
         //*****   Surface Processing Algorithm Identification Sequence    *****//
         // hack me
@@ -156,7 +166,7 @@ bool SurfaceWriter::PrepareWrite()
         surfacePointsSq = surfaceDS.GetDataElement( Tag(0x0066, 0x0011) ).GetValueAsSQ();
         surfacePointsSq->SetLengthToUndefined();
 
-        if (surfacePointsSq->GetNumberOfItems() < 1)  // One itme shall be permitted
+        if (surfacePointsSq->GetNumberOfItems() < 1)  // One item shall be permitted
         {
           Item item;
           item.SetVLToUndefined();
@@ -217,7 +227,7 @@ bool SurfaceWriter::PrepareWrite()
         surfacePointsNormalsSQ = surfaceDS.GetDataElement( Tag(0x0066, 0x0012) ).GetValueAsSQ();
         surfacePointsNormalsSQ->SetLengthToUndefined();
 
-        if (surfacePointsNormalsSQ->GetNumberOfItems() < 1)  // One itme shall be permitted
+        if (surfacePointsNormalsSQ->GetNumberOfItems() < 1)  // One item shall be permitted
         {
           Item item;
           item.SetVLToUndefined();
@@ -347,6 +357,8 @@ bool SurfaceWriter::PrepareWrite()
 
         if (insertInSQ)
         {
+          // Handled "complex" mesh primitives
+
           Tag typedSequenceTag;
           typedSequenceTag.SetGroup(0x0066);
           switch (type)
@@ -433,6 +445,8 @@ bool SurfaceWriter::PrepareWrite()
         }
         else
         {
+          // Handled "simple" mesh primitives
+
           // "Typed" Point Index List
           DataElement typedPointIndexListDE( typedPrimitiveTag );
           typedPointIndexListDE.SetVR( VR::OW );
