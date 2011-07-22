@@ -19,10 +19,10 @@ if(IS_DIRECTORY ${VTK_DIR})
   if(IS_DIRECTORY ${VTK_DIR}/bin)
     # this is a build-tree VTK
     set(runtimepath "${VTK_DIR}/bin")
-    get_filename_component(dummyjava ${JAVA_AWT_LIBRARY} PATH)
+    #get_filename_component(dummyjava ${JAVA_AWT_LIBRARY} PATH)
     #set(JAVA_MAWT_LIBRARY ${dummyjava}/headless)
     #set(runtimepath "${runtimepath}:${dummyjava}/headless")
-    set(runtimepath "${runtimepath}:${dummyjava}/xawt")
+    set(runtimepath "${runtimepath}:${JAVA_LIBRARY_PATH}")
   endif()
 endif()
 
