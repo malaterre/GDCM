@@ -12,8 +12,7 @@ namespace gdcm
 class GDCM_EXPORT SegmentReader : public Reader
 {
 public:
-//  typedef std::vector< SmartPointer< Segment > > SegmentVector;
-  typedef std::map< unsigned long, SmartPointer< Segment > > SegmentMap;
+  typedef std::vector< SmartPointer< Segment > >             SegmentVector;
 
   SegmentReader();
 
@@ -25,17 +24,19 @@ public:
   //**        Segment getters/setters     **//
 //  const unsigned int GetNumberOfSegments() const;
 
-//  const SegmentVector & GetSegments() const;
-//  SegmentVector & GetSegments();
-
-  const SegmentMap & GetSegments() const;
-  SegmentMap & GetSegments();
+  const SegmentVector GetSegments() const;
+  SegmentVector GetSegments();
 
 protected:
+
+  typedef std::map< unsigned long, SmartPointer< Segment > > SegmentMap;
 
   bool ReadSegments();
 
   bool ReadSegment(const Item & segmentItem, const unsigned int idx);
+
+//  const SegmentMap & GetSegmentMap() const;
+//  SegmentMap & GetSegmentMap();
 
 //  SegmentVector Segments;
   SegmentMap Segments;
