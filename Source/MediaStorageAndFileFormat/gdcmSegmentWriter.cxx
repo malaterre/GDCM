@@ -70,7 +70,7 @@ bool SegmentWriter::PrepareWrite()
 
     // Segment Algorithm Type
     Attribute<0x0062, 0x0008> segmentAlgorithmType;
-    segmentAlgorithmType.SetValue( Segment::GetALGOTypeString( segment->GetAlgorithmType() ) );
+    segmentAlgorithmType.SetValue( Segment::GetALGOTypeString( segment->GetSegmentAlgorithmType() ) );
     segmentDS.Replace( segmentAlgorithmType.GetAsDataElement() );
 
     //*****   GENERAL ANATOMY MANDATORY MACRO ATTRIBUTES   *****//
@@ -356,7 +356,7 @@ bool SegmentWriter::PrepareWrite()
 
           // Algorithm Version
           Attribute<0x0066, 0x0031> algoVersion;
-          algoVersion.SetValue( "" );   // FIXME
+          algoVersion.SetValue( segment->GetAlgorithmVersion() );
           segmentsAlgoIdDS.Replace( algoVersion.GetAsDataElement() );
 
           // Algorithm Name
@@ -386,8 +386,9 @@ bool SegmentWriter::PrepareWrite()
     }
     else
     {
+      // Segment Algorithm Name
       Attribute<0x0062, 0x0009> segmentAlgorithmName;
-      segmentAlgorithmName.SetValue( segment->GetAlgorithmName() );
+      segmentAlgorithmName.SetValue( segment->GetSegmentAlgorithmName() );
       segmentDS.Replace( segmentAlgorithmName.GetAsDataElement() );
     }
   }
