@@ -70,6 +70,7 @@ SET(MSFF_TEST_SRCS
   TestFiducials
   TestEncapsulatedDocument
   TestSpectroscopy
+  TestSurfaceWriter
   )
 
 IF(GDCM_DATA_ROOT)
