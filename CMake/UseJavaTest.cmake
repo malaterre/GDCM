@@ -65,6 +65,7 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
   MESSAGE(\"pyenv: ${pyenv}\")
   MESSAGE(\"loc: ${loc}\")
   MESSAGE(\"loc2: ${loc2}\")
+  MESSAGE(\"classpath: ${classpath}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   EXECUTE_PROCESS(
     COMMAND ${JAVA_RUNTIME} -classpath ${classpath} ${loc2} ${wo_semicolumn}

@@ -14,14 +14,28 @@
 /*
  */
 import gdcm.*;
+import java.util.Properties;
+import java.util.Enumeration;
 
 public class TestReader
 {
   public static void main(String[] args) throws Exception
     {
+/*
+    System.out.println("PATH : "
+      + System.getProperty("java.library.path"));
+    Properties p = System.getProperties();
+    Enumeration keys = p.keys();
+    while (keys.hasMoreElements()) {
+      String key = (String)keys.nextElement();
+      String value = (String)p.get(key);
+      System.out.println(key + ": " + value);
+    }
+*/
+
     long nfiles = Testing.GetNumberOfFileNames();
-  Trace.DebugOff();
-  Trace.WarningOff();
+    Trace.DebugOff();
+    Trace.WarningOff();
 
     for( long i = 0; i < nfiles; ++i )
       {
