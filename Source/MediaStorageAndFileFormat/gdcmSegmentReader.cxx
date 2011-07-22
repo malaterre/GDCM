@@ -41,29 +41,41 @@ SegmentReader::SegmentMap & SegmentReader::GetSegments()
 
 bool SegmentReader::Read()
 {
+  bool res = false;
+
+  // Read a file
   if( !Reader::Read() )
   {
-    return false;
+    return res;
   }
 
+  // Set Segments from file
   const FileMetaInformation & header  = F->GetHeader();
-
-  bool                        res     = false;
-
   MediaStorage                ms      = header.GetMediaStorage();
+
+  // Check modality
   String<>                    modality( ms.GetModality() );
-  if ( modality.Trim() ==  "SEG" )
+  if ( modality.Trim() == "SEG" )
   {
     res = ReadSegments();
   }
   else
   {
+    // Check Media Storage (SOP Class UID)
     if( ms == MediaStorage::SegmentationStorage
      || ms == MediaStorage::SurfaceSegmentationStorage )
     {
       res = ReadSegments();
     }
-    // else if ( found Segment Sequence ) ?
+    else
+    {
+      // Try to find Segment Sequence
+      const DataSet & dsRoot = F->GetDataSet();
+      if (dsRoot.FindDataElement( Tag(0x0062, 0x0002) ))
+      {
+        res = ReadSegments();
+      }
+    }
   }
 
   return res;
@@ -85,13 +97,17 @@ bool SegmentReader::ReadSegments()
 
     const unsigned int numberOfSegments = segmentSQ->GetNumberOfItems();
     if ( numberOfSegments == 0)
+    {
+      gdcmErrorMacro( "No segment found" );
       return false;
+    }
 
     for (unsigned int i = 1; i <= numberOfSegments; ++i)
     {
       if ( !ReadSegment( segmentSQ->GetItem(i), i ) )
       {
         gdcmWarningMacro( "Segment "<<i<<" reading error" );
+        // return false?
       }
     }
 
@@ -103,9 +119,9 @@ bool SegmentReader::ReadSegments()
 
 bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx)
 {
-  SmartPointer< Segment > segment = new Segment;
+  SmartPointer< Segment > segment   = new Segment;
 
-  const DataSet & segmentDS = segmentItem.GetNestedDataSet();
+  const DataSet &         segmentDS = segmentItem.GetNestedDataSet();
 
   // Segment Number
   Attribute<0x0062, 0x0004> segmentNumber;
@@ -120,7 +136,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   // Segment Algorithm Type
   Attribute<0x0062, 0x0008> segmentAlgoType;
   segmentAlgoType.SetFromDataSet( segmentDS );
-  segment->SetAlgorithmType( segmentAlgoType.GetValue() );
+  segment->SetSegmentAlgorithmType( segmentAlgoType.GetValue() );
 
   // Surface Count
   Attribute<0x0066, 0x002A> surfaceCountAt;
@@ -128,48 +144,64 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   const unsigned long surfaceCount = surfaceCountAt.GetValue();
   segment->SetSurfaceCount( surfaceCount );
 
-  // Referenced Surface Sequence
-  const Tag refSurfaceSQTag(0x0066, 0x002B);
-  if (segmentDS.FindDataElement(refSurfaceSQTag))
+  // Check if there is a Surface Segmentation Module
+  if (surfaceCount > 0)
   {
-    SmartPointer< SequenceOfItems > refSurfaceSQ = segmentDS.GetDataElement(refSurfaceSQTag).GetValueAsSQ();
-
-    const unsigned int numberOfSurfaces = refSurfaceSQ->GetNumberOfItems();
-    if ( (unsigned long) numberOfSurfaces != surfaceCount)
+    // Referenced Surface Sequence
+    const Tag refSurfaceSQTag(0x0066, 0x002B);
+    if (segmentDS.FindDataElement(refSurfaceSQTag))
     {
-        segment->SetSurfaceCount( numberOfSurfaces ); // Is it the right thing to do?
-    }
+      SmartPointer< SequenceOfItems > refSurfaceSQ = segmentDS.GetDataElement(refSurfaceSQTag).GetValueAsSQ();
 
-    for (unsigned int i = 1; i <= numberOfSurfaces; ++i)
-    {
-      const DataSet & refSurfaceDS = refSurfaceSQ->GetItem(i).GetNestedDataSet();
-
-      // Referenced Surface Number
-      Attribute<0x0066, 0x002C> refSurfaceNumberAt;
-      refSurfaceNumberAt.SetFromDataSet( refSurfaceDS );
-      unsigned long refSurfaceNumber = idx;
-      if ( !refSurfaceNumberAt.GetAsDataElement().IsEmpty() )
+      const unsigned int numberOfSurfaces = refSurfaceSQ->GetNumberOfItems();
+      if ( (unsigned long) numberOfSurfaces != surfaceCount)
       {
-        refSurfaceNumber = refSurfaceNumberAt.GetValue();
+        segment->SetSurfaceCount( numberOfSurfaces ); // Is it the right thing to do?
       }
-      // Index the segment with its surface number
-      Segments[refSurfaceNumber] = segment;
+
+      // Index each surface of a segment
+      for (unsigned int i = 1; i <= numberOfSurfaces; ++i)
+      {
+        const DataSet & refSurfaceDS = refSurfaceSQ->GetItem(i).GetNestedDataSet();
+
+        // Referenced Surface Number
+        Attribute<0x0066, 0x002C> refSurfaceNumberAt;
+        refSurfaceNumberAt.SetFromDataSet( refSurfaceDS );
+        unsigned long             refSurfaceNumber;
+        if ( !refSurfaceNumberAt.GetAsDataElement().IsEmpty() )
+        {
+          refSurfaceNumber = refSurfaceNumberAt.GetValue();
+        }
+        else
+        {
+          refSurfaceNumber = idx;
+        }
+        // Index the segment with its referenced surface number
+        Segments[refSurfaceNumber] = segment;
+
+        // Algorithm Version
+        Attribute<0x0066, 0x0031> algoVersionAt;
+        algoVersionAt.SetFromDataSet( refSurfaceDS );
+        segment->SetAlgorithmVersion( algoVersionAt.GetValue() );
+
+        // Algorithm Name
+        Attribute<0x0066, 0x0036> algoNameAt;
+        algoNameAt.SetFromDataSet( refSurfaceDS );
+        segment->SetAlgorithmName( algoNameAt.GetValue() );
+      }
+    }
+    else
+    {// Index the segment with item number
+      Segments[idx] = segment;
     }
   }
   else
-  {
-    if (surfaceCount > 0)
-    {
-      Segments[idx] = segment;
-    }
-    else
-    { // If is not a surface segmentation storage
+  { // If is not a surface segmentation storage
 
-      // Segment Algorithm Name
-      Attribute<0x0062, 0x0009> segmentAlgoName;
-      segmentAlgoName.SetFromDataSet( segmentDS );
-      segment->SetAlgorithmName( segmentAlgoName.GetValue() );
-    }
+    // Segment Algorithm Name
+    Attribute<0x0062, 0x0009> segmentAlgoName;
+    segmentAlgoName.SetFromDataSet( segmentDS );
+    segment->SetAlgorithmName( segmentAlgoName.GetValue() );
   }
 
   return true;

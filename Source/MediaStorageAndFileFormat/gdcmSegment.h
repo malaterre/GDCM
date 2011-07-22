@@ -67,33 +67,27 @@ public:
   BasicCodedEntry const & GetAlgorithmFamily() const;
   void SetAlgorithmFamily(BasicCodedEntry const & BSE);
 
-  ALGOType GetAlgorithmType() const;
-  void SetAlgorithmType(ALGOType type);
-  void SetAlgorithmType(const char * typeStr);
+  ALGOType GetSegmentAlgorithmType() const;
+  void SetSegmentAlgorithmType(ALGOType type);
+  void SetSegmentAlgorithmType(const char * typeStr);
 
-  const char * GetAlgorithmName() const;
-  void SetAlgorithmName(const char * name);
+  const char * GetSegmentAlgorithmName() const;
+  void SetSegmentAlgorithmName(const char * name);
 
   //**        Surface getters/setters     **//
   unsigned long GetSurfaceCount() const;
-  void SetSurfaceCount(const unsigned long nb)
-  {
-    assert( nb );
-    SurfaceCount = nb;
-  }
+  void SetSurfaceCount(const unsigned long nb);
 
   std::vector< SmartPointer< Surface > > GetSurfaces() const;
-  SmartPointer< Surface > GetSurface(const unsigned int idx=0) const
-  {
-    assert( SurfaceCount );
-    assert( idx < SurfaceCount );
-    return Surfaces[idx];
-  }
+  SmartPointer< Surface > GetSurface(const unsigned int idx = 0) const;
 
-  void AddSurface(SmartPointer< Surface > surface)
-  {
-    Surfaces.push_back(surface);
-  }
+  void AddSurface(SmartPointer< Surface > surface);
+
+  const char * GetAlgorithmVersion() const;
+  void SetAlgorithmVersion(const char * str);
+
+  const char * GetAlgorithmName() const;
+  void SetAlgorithmName(const char * str);
 
 protected :
   //**        Segment members     **//
@@ -122,6 +116,12 @@ protected :
   //**        Surface members     **//
   //0066 002a UL 1 Surface Count
   unsigned long   SurfaceCount;
+
+  //0066 0031 LO 1 Algorithm Version
+  std::string     AlgorithmVersion;
+  //0066 0032 LT 1 Algorithm Parameters
+  //0066 0036 LO 1 Algorithm Name
+  std::string     AlgorithmName;
 
   std::vector< SmartPointer< Surface > > Surfaces;
 };
