@@ -1063,6 +1063,11 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   uint32_t unused;
   ss.read((char*)&unused, sizeof(unused));
   SwapperNoOp::SwapArray(&unused,1);
+  if( unused != 77 )
+    {
+    gdcmErrorMacro( "Must be a new format. Giving up" );
+    return false;
+    }
   assert( unused == 77 ); // 'M' character...
 
   for(uint32_t i = 0; i < n; ++i)

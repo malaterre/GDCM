@@ -34,8 +34,8 @@
 </xsl:text>
 
 <xsl:text>
-#ifndef __gdcmUIDs_h
-#define __gdcmUIDs_h
+#ifndef GDCMUIDS_H
+#define GDCMUIDS_H
 
   typedef enum {
 </xsl:text>
@@ -90,9 +90,9 @@
 </xsl:text>
     </xsl:for-each>
 <xsl:text>} TSName;
-#endif //__gdcmUIDs_h
+#endif // GDCMUIDS_H
 </xsl:text>
-#ifdef __gdcmUIDs_cxx
+#ifdef GDCMUIDS_CXX
         <xsl:text>static const char * const TransferSyntaxStrings[][2] = {
 </xsl:text>
     <xsl:for-each select="table/uid">
@@ -105,7 +105,7 @@
     </xsl:for-each>
         <xsl:text>{ 0, 0 }
 };
-#endif //__gdcmUIDs_cxx
+#endif // GDCMUIDS_CXX
 </xsl:text>
   </xsl:template>
 </xsl:stylesheet>

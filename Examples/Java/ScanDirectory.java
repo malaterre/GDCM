@@ -47,15 +47,51 @@ public class ScanDirectory
     {
     long len = input.GetBufferLength();
     byte[] buffer = new byte[ (int)len ];
-    input.GetArray( buffer );
-    return buffer;
+    PhotometricInterpretation pi = input.GetPhotometricInterpretation();
+    if( pi.GetType() == PhotometricInterpretation.PIType.MONOCHROME1 )
+      {
+      ImageChangePhotometricInterpretation icpi = new ImageChangePhotometricInterpretation();
+      icpi.SetInput( input );
+      icpi.SetPhotometricInterpretation(
+        new PhotometricInterpretation(
+          PhotometricInterpretation.PIType.MONOCHROME2 ) );
+      if( icpi.Change() )
+        {
+        Bitmap output = icpi.GetOutput();
+        output.GetArray( buffer );
+        }
+      return buffer;
+      }
+    else
+      {
+      input.GetArray( buffer );
+      return buffer;
+      }
     }
   public static short[] GetAsShort(Bitmap input)
     {
     long len = input.GetBufferLength(); // length in bytes
     short[] buffer = new short[ (int)len / 2 ];
-    input.GetArray( buffer );
-    return buffer;
+    PhotometricInterpretation pi = input.GetPhotometricInterpretation();
+    if( pi.GetType() == PhotometricInterpretation.PIType.MONOCHROME1 )
+      {
+      ImageChangePhotometricInterpretation icpi = new ImageChangePhotometricInterpretation();
+      icpi.SetInput( input );
+      icpi.SetPhotometricInterpretation(
+        new PhotometricInterpretation(
+          PhotometricInterpretation.PIType.MONOCHROME2 ) );
+      if( icpi.Change() )
+        {
+        Bitmap output = icpi.GetOutput();
+        output.GetArray( buffer );
+        }
+      return buffer;
+      }
+    else
+      {
+      input.GetArray( buffer );
+      return buffer;
+      }
     }
   public static boolean WritePNG(Bitmap input, String outfilename )
     {
@@ -128,7 +164,8 @@ public class ScanDirectory
       }
     WritableRaster wr = bi.getRaster();
     //System.out.println( "imagetype: " + imageType );
-    if( imageType == BufferedImage.TYPE_BYTE_GRAY )
+    if( imageType == BufferedImage.TYPE_BYTE_GRAY
+      || imageType == BufferedImage.TYPE_3BYTE_BGR )
       {
       byte[] buffer = GetAsByte( input );
       wr.setDataElements (0, 0, (int)width, (int)height, buffer);
@@ -153,7 +190,7 @@ public class ScanDirectory
     String directory = args[0];
 
     Directory d = new Directory();
-    long nfiles = d.Load( directory );
+    long nfiles = d.Load( directory, true );
     if(nfiles == 0)
       {
       throw new Exception("No files found");
@@ -209,7 +246,9 @@ public class ScanDirectory
       String fn = fns.get( (int)idx );
       String outfn = fn + ".png";
       r.SetFileName( fn );
-      b = r.ReadUpToTag( new Tag(0x88,0x200) );
+      TagSetType tst = new TagSetType();
+      tst.insert( new Tag(0x7fe0,0x10) );
+      b = r.ReadUpToTag( new Tag(0x88,0x200), tst );
       UIntArrayType dims = ImageHelper.GetDimensionsValue( r.GetFile() );
       if( b )
         {
@@ -233,7 +272,8 @@ public class ScanDirectory
             IconImageGenerator iig = new IconImageGenerator();
             iig.SetPixmap( img );
             iig.AutoPixelMinMax( true );
-            long idims[] = { 64, 64 };
+            iig.ConvertRGBToPaletteColor( false );
+            long idims[] = { 128, 128};
             iig.SetOutputDimensions( idims );
             iig.Generate();
             Bitmap icon = iig.GetIconImage();

@@ -1117,6 +1117,9 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     sp.push_back( 1.0 );
     }
   assert( sp.size() == 2 );
+  // Make sure multiframe:
+  std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue( f );
+
   // Do Z:
   Tag zspacingtag = ImageHelper::GetZSpacingTagFromMediaStorage(ms);
   if( zspacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( zspacingtag ) )
@@ -1148,7 +1151,10 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
             el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
             el.Read( ss );
             for(unsigned long i = 0; i < el.GetLength(); ++i)
-              sp.push_back( el.GetValue(i) );
+              {
+              const double value = el.GetValue(i);
+              sp.push_back( value );
+              }
             //assert( sp.size() == entry.GetVM() );
             }
           break;
@@ -1191,7 +1197,15 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
         {
         Attribute<0x0018,0x1063> at2;
         at2.SetFromDataElement( de2 );
-        sp.push_back( at2.GetValue() );
+        if( dims[2] > 1 )
+          {
+          sp.push_back( at2.GetValue() );
+          }
+        else
+          {
+          assert( at2.GetValue() == 0. );
+          sp.push_back( 1.0 );
+          }
         }
       else
         {
@@ -1206,6 +1220,10 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
     }
 
   assert( sp.size() == 3 );
+  assert( sp[0] != 0. );
+  assert( sp[1] != 0. );
+  if( ms != MediaStorage::MRImageStorage )
+    assert( sp[2] != 0. );
   return sp;
 }
 

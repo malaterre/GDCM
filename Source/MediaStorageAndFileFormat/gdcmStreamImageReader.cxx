@@ -45,6 +45,7 @@ void StreamImageReader::SetFileName(const char* inFileName)
 {
   mReader.SetFileName(inFileName);
 }
+
 void StreamImageReader::SetStream(std::istream& inStream)
 {
   mReader.SetStream(inStream);
@@ -151,7 +152,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   theCodec.SetNeedByteSwap( needbyteswap );
   theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mReader.GetFile()));
   theCodec.SetPlanarConfiguration(
-    ImageHelper::GetPlanarConfigurationValue(mReader.GetFile()));
+  ImageHelper::GetPlanarConfigurationValue(mReader.GetFile()));
   theCodec.SetPhotometricInterpretation(
     ImageHelper::GetPhotometricInterpretationValue(mReader.GetFile()));
   //how do I handle byte swapping here?  where is it set?
@@ -163,13 +164,30 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
   //tmpBuffer is for a single raster
+  //int a =1;
+ // for(int i=1; i<=(extent[2]-mZMax);i++)
+   //  a = a*2;
+
+
   char* tmpBuffer = new char[SubRowSize*bytesPerPixel];
   char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
   try {
     for (z = mZMin; z < mZMax; ++z){
+         theStream->seekg(std::ios::beg);
+         for(int j = 1; j<=z; j++)
+         {
+         int a =1;
+         for (unsigned int i=1; i<=extent[2]-j; i++)
+              a = 2*a;
+          mFileOffset =  mFileOffset + (int)((extent[1]/a)*(extent[0]/a)*bytesPerPixel);
+          mFileOffset = mFileOffset + 4*sizeof(uint16_t);
+         }
+
+         int a = 1;
+        for (unsigned int i=1; i<=(extent[2]-mZMax);++i)
+         a = a*2;
       for (y = mYMin; y < mYMax; ++y){
-        theStream->seekg(std::ios::beg);
-        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel;
+        theOffset = mFileOffset + (y*(int)(extent[0]/a) + mXMin)*bytesPerPixel;//manoj set this with resolution u r reading
         theStream->seekg(theOffset);
         theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
     //now, convert that buffer.
@@ -279,7 +297,8 @@ bool StreamImageReader::ReadImageInformation()
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
       return false;
       }
-    mFileOffset = mReader.GetStreamPtr()->tellg();
+    std::streampos shift = 4*sizeof(uint16_t)+2*sizeof(uint32_t);
+    mFileOffset = mReader.GetStreamPtr()->tellg()+shift;
     }
   catch(std::exception & ex)
     {

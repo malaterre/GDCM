@@ -170,10 +170,12 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #)
   INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2pnm.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdiff.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1

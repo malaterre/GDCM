@@ -666,6 +666,11 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "56238d3665ebdb0251d1161fb7f4edc6" , "GDCMJ2K_TextGBR.dcm" },
 { "f8a1f4ce85b51527267e670a8aa0c308" , "PhilipsInteraSeqTermInvLen.dcm" },
 
+// following 3 md5 computes with kdu_expand v6.3.1
+{ "d6347ed051d7b887bdaad1a91433c6ba" , "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
+{ "d6347ed051d7b887bdaad1a91433c6ba" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
+{ "94414d8b4300aa3d8cbe4475d34e8e54" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
+
 /* Stopping condition */
 { 0 ,0 }
 };

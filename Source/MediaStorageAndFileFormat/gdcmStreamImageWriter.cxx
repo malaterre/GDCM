@@ -35,6 +35,7 @@ StreamImageWriter::StreamImageWriter():mspFile(new File)
   mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
   mElementOffsets = 0;
+  mElementOffsets1 = 0;
 }
 StreamImageWriter::~StreamImageWriter()
 {
@@ -123,36 +124,75 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
   //and must be written in little endian (for now-- could do big endian raw, but not atm)
   //so, we set those 12 bytes up, send them through the codec, and then write them directly to disk
   //because this is raw, we know exactly the size that will be written.  So, let's do that.
-  uint16_t firstTag = 0x7fe0;
+  if(mElementOffsets == 0)
+ {
+     uint16_t firstTag = 0x7fe0;
   uint16_t secondTag = 0x0010;
   //uint16_t thirdTag = 0x4f42;
   uint16_t thirdTag = 0x424f; // OB
-  //uint16_t thirdTag = 0x574f; // OW
-  //static VR ComputeVR(File const & file, DataSet const &ds, const Tag& tag);
   uint16_t fourthTag = 0x0000;
+  //uint16_t fourthTag = 0x0000;
+
+  uint32_t fifthTag = 0xffffffff;
+
+  uint16_t sixthTag = 0xfffe;
+  uint16_t seventhTag = 0xe000;
+  uint32_t eightthTag = 0x00000000;
+
+  const int theBufferSize = 4*sizeof(uint16_t)+sizeof(uint32_t)+2*sizeof(uint16_t)+sizeof(uint32_t);
+  char* tmpBuffer1 = new char[theBufferSize];
+
+    memcpy(&(tmpBuffer1[0]), &firstTag, sizeof(uint16_t));
+    memcpy(&(tmpBuffer1[sizeof(uint16_t)]), &secondTag, sizeof(uint16_t));
+    memcpy(&(tmpBuffer1[2*sizeof(uint16_t)]), &thirdTag, sizeof(uint16_t));
+    memcpy(&(tmpBuffer1[3*sizeof(uint16_t)]), &fourthTag, sizeof(uint16_t));
+
+   //Addition by Manoj
+    memcpy(&(tmpBuffer1[4*sizeof(uint16_t)]), &fifthTag, sizeof(uint32_t));// Data Element Length 4 bytes
+
+
+    // Basic OffSet Tabl with No Item Value
+    memcpy(&(tmpBuffer1[4*sizeof(uint16_t)+sizeof(uint32_t)]), &sixthTag, sizeof(uint16_t)); //fffe
+    memcpy(&(tmpBuffer1[5*sizeof(uint16_t)+sizeof(uint32_t)]), &seventhTag, sizeof(uint16_t));//e000
+    memcpy(&(tmpBuffer1[6*sizeof(uint16_t)+sizeof(uint32_t)]), &eightthTag, sizeof(uint32_t));//00000000H
+
+    assert( inStream && *inStream && !inStream->eof() && inStream->good() );
+    inStream->write(tmpBuffer1, theBufferSize);
+    inStream->flush();
+    assert( inStream && *inStream );
+
+ }
+
+
+
+  uint16_t NinthTag = 0xfffe;
+  uint16_t TenthTag = 0xe000;
+
   std::vector<unsigned int> extent = ImageHelper::GetDimensionsValue(mWriter.GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(mWriter.GetFile());
   int bytesPerPixel = pixelInfo.GetPixelSize();
   uint32_t sizeTag = extent[0]*extent[1]*extent[2]*bytesPerPixel;
 
-  const int theBufferSize = 4*sizeof(uint16_t)+sizeof(uint32_t);
+  const int theBufferSize1 = 2*sizeof(uint16_t)+sizeof(uint32_t);
 
-  char* tmpBuffer1 = new char[theBufferSize];
-  char* tmpBuffer2 = new char[theBufferSize];
+  char* tmpBuffer3 = new char[theBufferSize1];
+  char* tmpBuffer4 = new char[theBufferSize1];
 //  std::streamoff theOffset;
 
   try {
-    memcpy(&(tmpBuffer1[0]), &firstTag, sizeof(uint16_t));
-    memcpy(&(tmpBuffer1[sizeof(uint16_t)]), &secondTag, sizeof(uint16_t));
-    memcpy(&(tmpBuffer1[2*sizeof(uint16_t)]), &thirdTag, sizeof(uint16_t));
-    memcpy(&(tmpBuffer1[3*sizeof(uint16_t)]), &fourthTag, sizeof(uint16_t));
-    memcpy(&(tmpBuffer1[4*sizeof(uint16_t)]), &sizeTag, sizeof(uint32_t));
+
+    //First Fragment (Single Frame) of Pixel Data
+    memcpy(&(tmpBuffer3[0]), &NinthTag, sizeof(uint16_t)); //fffe
+    memcpy(&(tmpBuffer3[sizeof(uint16_t)]), &TenthTag, sizeof(uint16_t)); //e000
+
+    memcpy(&(tmpBuffer3[2*sizeof(uint16_t)]), &sizeTag, sizeof(uint32_t));//Item Length
     //run that through the codec
 
-    if (!inCodec->DecodeBytes(tmpBuffer1, theBufferSize,
-      tmpBuffer2, theBufferSize)){
-      delete [] tmpBuffer1;
-      delete [] tmpBuffer2;
+    if (!inCodec->DecodeBytes(tmpBuffer3, theBufferSize1,
+      tmpBuffer4, theBufferSize1)){
+      delete [] tmpBuffer3;
+      std::cout << "\n  Problems in Header";
+      delete [] tmpBuffer4;
       return -1;
     }
 
@@ -162,18 +202,18 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
 //    theOffset = mFileOffset;
 //    inStream->seekp(theOffset);
     assert( inStream && *inStream && !inStream->eof() && inStream->good() );
-    inStream->write(tmpBuffer2, theBufferSize);
+    inStream->write(tmpBuffer4, theBufferSize1);
     inStream->flush();
     assert( inStream && *inStream );
 
   } catch(...){
-    delete [] tmpBuffer1;
-    delete [] tmpBuffer2;
+    delete [] tmpBuffer3;
+    delete [] tmpBuffer4;
     return -1;
   }
-  delete [] tmpBuffer1;
-  delete [] tmpBuffer2;
-  return theBufferSize;
+  delete [] tmpBuffer3;
+  delete [] tmpBuffer4;
+  return sizeTag;
 }
 
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
@@ -184,7 +224,6 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   //assumes that the file is organized in row-major format, with each row rastering across
 //  assert( mFileOffset != -1 );
   int y, z;
-(void)inBufferLength;
 //  std::streamoff theOffset;
 
   //need to get the pixel size information
@@ -214,7 +253,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   theCodec.SetNeedByteSwap( needbyteswap );
   theCodec.SetDimensions(ImageHelper::GetDimensionsValue(mWriter.GetFile()));
   theCodec.SetPlanarConfiguration(
-    ImageHelper::GetPlanarConfigurationValue(mWriter.GetFile()));
+  ImageHelper::GetPlanarConfigurationValue(mWriter.GetFile()));
   theCodec.SetPhotometricInterpretation(
     ImageHelper::GetPhotometricInterpretationValue(mWriter.GetFile()));
   //how do I handle byte swapping here?  where is it set?
@@ -231,19 +270,22 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   char* tmpBuffer = new char[SubRowSize*bytesPerPixel];
   char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
   try {
-    if (mElementOffsets == 0){
+    if (mElementOffsets == 0 || mElementOffsets1 ==0 ){
       mElementOffsets = WriteRawHeader(&theCodec, theStream);
+      mElementOffsets1 = mElementOffsets;
     }
     if (mElementOffsets < 0){//something broke during writing
+      std::cout << "Broke";
       delete [] tmpBuffer;
       delete [] tmpBuffer2;
       return false;
     }
     //only need to seek to the location once, and then write sequentially
     //may be trickier with compressed images, but should work for RAW
+   // theStream->seekp(std::ios::end);
     //seeking to the end should be sufficient, if we're guaranteed to get chunks in order
 //    theOffset = mFileOffset + (mZMin * (int)(extent[1]*extent[0]) + mYMin*(int)extent[0] + mXMin)*bytesPerPixel + mElementOffsets;
-//    theStream->seekp(theOffset);
+  //  theStream->seekp(mElementOffsets);
     for (z = mZMin; z < mZMax; ++z){
       for (y = mYMin; y < mYMax; ++y){
         //this next line may require a bit of finagling...
@@ -261,9 +303,10 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
           return false;
         }
         //should be appending
-        assert( theStream && *theStream );
-        theStream->write(tmpBuffer2, SubRowSize*bytesPerPixel);
-        theStream->flush();
+           //assert( theStream && *theStream && !theStream->eof() && theStream->good() );
+          theStream->write(tmpBuffer2, SubRowSize*bytesPerPixel);
+          theStream->flush();
+          //assert( theStream && *theStream );
       }
     }
   }
@@ -299,8 +342,9 @@ bool StreamImageWriter::WriteImageInformation(){
   try
   {
     //question! is this file a copy of the file that was given in, or a reference?
-    mFile.GetDataSet().Remove( Tag(0x7fe0,0x0010) ); // FIXME
-    assert( !mFile.GetDataSet().FindDataElement( Tag(0x7fe0,0x0010) ) );
+
+     mFile.GetDataSet().Remove( Tag(0x7fe0,0x0010) ); // FIXME
+     assert( !mFile.GetDataSet().FindDataElement( Tag(0x7fe0,0x0010) ) );
     if( !mWriter.Write() )//should write everything BUT the image tag.  right?
       {
       //assert( 0 );//this assert fires when the image is not writeable, ie, doesn't have
@@ -358,17 +402,20 @@ bool StreamImageWriter::CanWriteFile() const
   bool hasTag23 = mFile.GetDataSet().FindDataElement(Tag(0x02,0x03));
   bool hasTag818 = mFile.GetDataSet().FindDataElement(Tag(0x08,0x18));
   if (!hasTag23 && !hasTag818){
+    // std::cout << "It is good";
     return false; //need both tags to be able to write out to disk
   }
   
   
   const FileMetaInformation &header = mFile.GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
-  
+  //std::cout<< ts;
   RAWCodec theCodec;
+//  bool canDecodeWithRaw = !theCodec.CanDecode(ts);
   bool canDecodeWithRaw = theCodec.CanDecode(ts);
   if (!canDecodeWithRaw)
     {
+    //std::cout << "It is not good";
     return false; 
     }
 
@@ -381,6 +428,9 @@ bool StreamImageWriter::CanWriteFile() const
 void StreamImageWriter::SetFile(const File& inFile)
 {
   mspFile = inFile;
+  File &mFile = *mspFile;
+  mWriter.SetFile(mFile);
+  mElementOffsets1 = 0;
 }
 
 } // end namespace gdcm

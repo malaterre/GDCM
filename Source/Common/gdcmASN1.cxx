@@ -119,12 +119,14 @@ int ASN1::TestPBKDF2()
   unsigned char buf[1024];
 
   ic = 1;
-  PKCS5_PBKDF2_HMAC_SHA1(pass, strlen(pass), (unsigned char*)salt, strlen(salt), ic, 32+16, buf);
+  PKCS5_PBKDF2_HMAC_SHA1(pass, strlen(pass), (unsigned char*)salt,
+    strlen(salt), ic, 32+16, buf);
   printf("PKCS5_PBKDF2_HMAC_SHA1(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
   print_hex(buf, 32+16);
 
   ic = 1;
-  EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char*)salt, (unsigned char*)pass, strlen(pass), ic, buf, buf+32);
+  EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char*)salt,
+    (unsigned char*)pass, strlen(pass), ic, buf, buf+32);
   printf("EVP_BytesToKey(\"%s\", \"%s\", %d)=\n", pass, salt, ic);
   print_hex(buf, 32+16);
 

@@ -80,16 +80,20 @@ int TestSystem(int, char *[])
   unsigned long size1 = sizeof(off_t);
   unsigned long size2 = sizeof(size_t);
   unsigned long size3 = sizeof(uintmax_t);
-  (void)size3;
   unsigned long size4 = sizeof(std::streamsize);
   if( size1 > size2 )
     {
     std::cerr << "size_t is not appropriate on this system" << std::endl;
-    //return 1;
+    return 1;
+    }
+  if( size2 != size3 )
+    {
+    std::cerr << "size_t is diff from uintmax_t: " << size2 << " " << size3 << std::endl;
+    return 1;
     }
   if( size2 != size4 )
     {
-    std::cerr << "size_t is diff from uintmax_t: " << size2 << " " << size4 << std::endl;
+    std::cerr << "size_t is diff from std::streamsize: " << size2 << " " << size4 << std::endl;
     return 1;
     }
 

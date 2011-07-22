@@ -137,6 +137,7 @@
 //#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmBitmapToBitmapFilter.h"
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
@@ -148,10 +149,9 @@
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmImageChangeTransferSyntax.h"
-#include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
-//#include "gdcmImageChangePhotometricInterpretation.h"
+#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmDataSetHelper.h"
@@ -184,6 +184,9 @@ using namespace gdcm;
 %include "std_pair.i"
 %include "std_map.i"
 %include "exception.i"
+
+//%include "enumtypesafe.swg" // optional as typesafe enums are the default
+//%javaconst(1);
 
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
@@ -243,7 +246,36 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
+
+//%include "enums.swg"
+//%typemap(javain) enum SWIGTYPE "$javainput.ordinal()"
+//%typemap(javaout) enum SWIGTYPE {
+//    return $javaclassname.class.getEnumConstants()[$jnicall];
+//  }
+//%typemap(javabody) enum SWIGTYPE ""
+%rename(GetType) gdcm::MediaStorage::operator MSType () const;
+
 %include "gdcmMediaStorage.h"
+//%clear enum SWIGTYPE;
+//%extend gdcm::MediaStorage
+//{
+//%typemap(javacode) MediaStorage
+//%{
+//  // For some reason the default equals operator is bogus, provide one ourself
+//  public boolean equals(Object obj)
+//    {
+//    MSType type = (MSType)obj;
+//    if( type == GetType() )
+//      {
+//      return true;
+//      }
+//    return false;
+//    }
+//%}
+//};
+
+//%include "enumtypesafe.swg" // optional as typesafe enums are the default
+
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 //%rename(__getitem__) gdcm::Tag::operator[];
 //%rename(this ) gdcm::Tag::operator[];
@@ -477,6 +509,87 @@ EXTEND_CLASS_PRINT(gdcm::Dict)
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
+
+#if 0
+jstring JNU_NewStringNative(JNIEnv *env, const char *str)
+ {
+     jstring result;
+     jbyteArray bytes = 0;
+     int len;
+     if (env->EnsureLocalCapacity(2) < 0) {
+         return NULL; /* out of memory error */
+     }
+     len = strlen(str);
+     bytes = (*env)->NewByteArray(env, len);
+     if (bytes != NULL) {
+         (*env)->SetByteArrayRegion(env, bytes, 0, len,
+                                    (jbyte *)str);
+         result = (*env)->NewObject(env, Class_java_lang_String,
+                                    MID_String_init, bytes);
+         (*env)->DeleteLocalRef(env, bytes);
+         return result;
+     } /* else fall through */
+     return NULL;
+}
+#endif
+
+// http://java.sun.com/docs/books/jni/html/pitfalls.html#12400
+
+%{
+void
+ JNU_ThrowByName(JNIEnv *env, const char *name, const char *msg)
+ {
+     jclass cls = env->FindClass(name);
+     /* if cls is NULL, an exception has already been thrown */
+     if (cls != NULL) {
+         env->ThrowNew(cls, msg);
+     }
+     /* free the local ref */
+     env->DeleteLocalRef(cls);
+ }
+
+char *JNU_GetStringNativeChars(JNIEnv *env, jstring jstr)
+ {
+  if (jstr == NULL) {
+    return NULL;
+  }
+     jbyteArray bytes = 0;
+     jthrowable exc;
+     char *result = 0;
+     if (env->EnsureLocalCapacity(2) < 0) {
+         return 0; /* out of memory error */
+     }
+     jclass Class_java_lang_String = env->FindClass("java/lang/String");
+     jmethodID MID_String_getBytes = env->GetMethodID(
+       Class_java_lang_String, "getBytes", "()[B");
+     bytes = (jbyteArray) env->CallObjectMethod(jstr,
+                                      MID_String_getBytes);
+     exc = env->ExceptionOccurred();
+     if (!exc) {
+         jint len = env->GetArrayLength(bytes);
+         result = (char *)malloc(len + 1);
+         if (result == 0) {
+             JNU_ThrowByName(env, "java/lang/OutOfMemoryError",
+                             0);
+             env->DeleteLocalRef(bytes);
+             return 0;
+         }
+         env->GetByteArrayRegion(bytes, 0, len,
+                                    (jbyte *)result);
+         result[len] = 0; /* NULL-terminate */
+     } else {
+         env->DeleteLocalRef(exc);
+     }
+     env->DeleteLocalRef(bytes);
+     return result;
+ }
+%}
+
+%typemap(in) const char *filename_native {
+$1 = JNU_GetStringNativeChars(jenv, $input);
+}
+%typemap(freearg, noblock=1) const char *filename_native { if ($1) free($1); }
+
 %template (TagSetType) std::set<gdcm::Tag>;
 %ignore gdcm::Reader::SetStream;
 %include "gdcmReader.h"
@@ -612,6 +725,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 #endif
 //%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
+%include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
 //%ignore gdcm::ImageToImageFilter::GetOutput() const;
 %include "gdcmImageToImageFilter.h"
@@ -630,7 +744,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
-//%include "gdcmImageChangePhotometricInterpretation.h"
+%include "gdcmImageChangePhotometricInterpretation.h"
 %include "gdcmImageChangePlanarConfiguration.h"
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"

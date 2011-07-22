@@ -403,6 +403,9 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0, "GDCMJ2K_TextGBR.dcm" },
 { 0, "PhilipsInteraSeqTermInvLen.dcm" },
 { 0, "LIBIDO-24-ACR_NEMA-Rectangle.dcm" },
+{ 0, "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
+{ 0, "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
+{ 0, "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
 { 0, NULL }
 };
 
