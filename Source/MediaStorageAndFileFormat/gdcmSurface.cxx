@@ -176,7 +176,7 @@ float Surface::GetRecommendedPresentationOpacity() const
 void Surface::SetRecommendedPresentationOpacity(float opacity)
 {
   if( 0 <= opacity && opacity <= 1);
-  RecommendedPresentationOpacity = opacity;
+    RecommendedPresentationOpacity = opacity;
   //else keep default value : 1
 }
 
@@ -188,7 +188,7 @@ Surface::VIEWType Surface::GetRecommendedPresentationType() const
 void Surface::SetRecommendedPresentationType(VIEWType type)
 {
   if( type < VIEWType_END);
-  RecommendedPresentationType = type;
+    RecommendedPresentationType = type;
 }
 
 const unsigned long Surface::GetSurfaceNumber() const
