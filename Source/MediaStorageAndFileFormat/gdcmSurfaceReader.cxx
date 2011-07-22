@@ -14,17 +14,21 @@ SurfaceReader::~SurfaceReader()
 {
 }
 
+const unsigned long SurfaceReader::GetNumberOfSurfaces() const
+{
+  return Segments.size();
+}
+
 bool SurfaceReader::Read()
 {
+  bool res = false;
+
   if (!SegmentReader::Read())
   {
-    return false;
+    return res;
   }
 
   const FileMetaInformation & header  = F->GetHeader();
-
-  bool                        res     = false;
-
   MediaStorage                ms      = header.GetMediaStorage();
   if( ms == MediaStorage::SurfaceSegmentationStorage )
   {
