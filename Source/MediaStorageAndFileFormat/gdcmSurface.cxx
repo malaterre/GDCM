@@ -104,7 +104,7 @@ Surface::Surface():
   RecommendedPresentationOpacity(1),
   RecommendedPresentationType(SURFACE),
   SurfaceNumber(0),
-  SurfaceComments(),
+  SurfaceComments(""),
   SurfaceProcessing(false),
   SurfaceProcessingRatio(1.),
   FiniteVolume(UNKNOWN),
@@ -191,6 +191,16 @@ void Surface::SetRecommendedPresentationType(VIEWType type)
   RecommendedPresentationType = type;
 }
 
+const unsigned long Surface::GetSurfaceNumber() const
+{
+  return SurfaceNumber;
+}
+
+void Surface::SetSurfaceNumber(const unsigned long nb)
+{
+  SurfaceNumber = nb;
+}
+
 const char * Surface::GetSurfaceComments() const
 {
   return SurfaceComments.c_str();
@@ -241,6 +251,81 @@ void Surface::SetManifold(STATES state)
 {
   if( state <= STATES_END );
   Manifold = state;
+}
+
+unsigned long Surface::GetNumberOfSurfacePoints() const
+{
+  return NumberOfSurfacePoints;
+}
+
+void Surface::SetNumberOfSurfacePoints(const unsigned long nb)
+{
+  NumberOfSurfacePoints = nb;
+}
+
+const DataElement & Surface::GetPointCoordinatesData() const
+{
+  return PointCoordinatesData;
+}
+
+DataElement & Surface::GetPointCoordinatesData()
+{
+  return PointCoordinatesData;
+}
+
+void Surface::SetPointCoordinatesData(DataElement const & de)
+{
+  PointCoordinatesData = de;
+}
+
+unsigned long Surface::GetNumberOfVectors() const
+{
+  return NumberOfVectors;
+}
+
+void Surface::SetNumberOfVectors(const unsigned long nb)
+{
+  NumberOfVectors = nb;
+}
+
+unsigned long Surface::GetVectorDimensionality() const
+{
+  return VectorDimensionality;
+}
+
+void Surface::SetVectorDimensionality(const unsigned long dim)
+{
+  VectorDimensionality = dim;
+}
+
+const DataElement & Surface::GetVectorCoordinateData() const
+{
+  return VectorCoordinateData;
+}
+
+DataElement & Surface::GetVectorCoordinateData()
+{
+  return VectorCoordinateData;
+}
+
+void Surface::SetVectorCoordinateData(DataElement const & de)
+{
+  VectorCoordinateData = de;
+}
+
+const MeshPrimitive & Surface::GetMeshPrimitive() const
+{
+  return *Primitive;
+}
+
+MeshPrimitive & Surface::GetMeshPrimitive()
+{
+  return *Primitive;
+}
+
+void Surface::SetMeshPrimitive(MeshPrimitive & mp)
+{
+  Primitive = mp;
 }
 
 }
