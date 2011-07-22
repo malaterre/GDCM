@@ -30,7 +30,15 @@ bool SurfaceReader::Read()
   {
     res = ReadSurfaces();
   }
-  // else if ( found Surface Sequence ) ?
+  else
+  {
+    // Try to find Surface Sequence
+    const DataSet & dsRoot = F->GetDataSet();
+    if (dsRoot.FindDataElement( Tag(0x0066, 0x0002) ))
+    {
+      res = ReadSurfaces();
+    }
+  }
 
   return res;
 }
