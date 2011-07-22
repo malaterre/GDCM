@@ -479,6 +479,33 @@ bool SurfaceWriter::PrepareWrite()
     }
   }
 
+  //**  Complete the file   **//
+  // Is SOP Class UID defined?
+  if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+  {
+    const char * SOPClassUID = MediaStorage::GetMSString(MediaStorage::SurfaceSegmentationStorage);
+
+    DataElement de( Tag(0x0008, 0x0016) );
+    VL::Type strlenSOPClassUID= (VL::Type)strlen(SOPClassUID);
+    de.SetByteValue( SOPClassUID, strlenSOPClassUID );
+    de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
+    ds.ReplaceEmpty( de );
+  }
+
+  // Is SOP Instance UID defined?
+  if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+  {
+    UIDGenerator  UIDgen;
+    UIDgen.SetRoot( MediaStorage::GetMSString(MediaStorage::SurfaceSegmentationStorage) );
+    const char * SOPInstanceUID = UIDgen.Generate();
+
+    DataElement de( Tag(0x0008, 0x0018) );
+    VL::Type strlenSOPInstanceUID= (VL::Type)strlen(SOPInstanceUID);
+    de.SetByteValue( SOPInstanceUID, strlenSOPInstanceUID );
+    de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
+    ds.ReplaceEmpty( de );
+  }
+
   fmi.Clear();
   {
     const char *tsuid = TransferSyntax::GetTSString( ts );
