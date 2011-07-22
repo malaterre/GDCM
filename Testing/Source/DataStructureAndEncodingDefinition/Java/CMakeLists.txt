@@ -22,7 +22,7 @@ FOREACH(example ${GDCM_JAVA_TEST_SRCS})
     )
   list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
   SET_SOURCE_FILES_PROPERTIES(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/gdcm.jar")
-  ADD_JAVA_TEST(Test${example}Java ${EXECUTABLE_OUTPUT_PATH}/${example})
+  ADD_JAVA_TEST(${example}Java ${EXECUTABLE_OUTPUT_PATH}/${example})
 ENDFOREACH(example)
 
 # 3. ok now add the target
