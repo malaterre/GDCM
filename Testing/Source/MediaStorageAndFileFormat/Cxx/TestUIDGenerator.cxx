@@ -86,7 +86,7 @@ int TestUIDGeneratorValid()
   return 0; // no error
 }
 
-int TestUIDGenerator(int argc, char *argv[])
+int TestUIDGenerator(int , char *[])
 {
   gdcm::UIDGenerator uid;
   std::cout << gdcm::UIDGenerator::GetGDCMUID() << std::endl;

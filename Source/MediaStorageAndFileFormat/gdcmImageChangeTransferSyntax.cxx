@@ -384,32 +384,39 @@ bool ImageChangeTransferSyntax::Change()
 
     // same goes for icon
     gdcm::DataElement iconpixeldata( gdcm::Tag(0x7fe0,0x0010) );
-    if( !Input->GetIconImage().IsEmpty() )
+    Bitmap &bitmap = *Input;
+    if( Pixmap *pixmap = dynamic_cast<Pixmap*>( &bitmap ) )
       {
-      // same goes for icon
-      gdcm::ByteValue *bv = new gdcm::ByteValue();
-      unsigned long len = Input->GetIconImage().GetBufferLength();
-      bv->SetLength( len );
-      bool bb = Input->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
-      if( !bb )
+      Bitmap &outbitmap = *Output;
+      Pixmap *outpixmap = dynamic_cast<Pixmap*>( &outbitmap );
+      assert( outpixmap != NULL );
+      if( !pixmap->GetIconImage().IsEmpty() )
         {
-        return false;
-        }
-      iconpixeldata.SetValue( *bv );
+        // same goes for icon
+        gdcm::ByteValue *bv = new gdcm::ByteValue();
+        unsigned long len = pixmap->GetIconImage().GetBufferLength();
+        bv->SetLength( len );
+        bool bb = pixmap->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
+        if( !bb )
+          {
+          return false;
+          }
+        iconpixeldata.SetValue( *bv );
 
-      success = false;
-      if( !success ) success = TryRAWCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-      if( !success ) success = TryJPEGCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-      if( !success ) success = TryJPEGLSCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-      if( !success ) success = TryJPEG2000Codec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-      if( !success ) success = TryRLECodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
-      Output->GetIconImage().SetTransferSyntax( TS );
-      if( !success )
-        {
-        //assert(0);
-        return false;
+        success = false;
+        if( !success ) success = TryRAWCodec(iconpixeldata, pixmap->GetIconImage(), outpixmap->GetIconImage());
+        if( !success ) success = TryJPEGCodec(iconpixeldata, pixmap->GetIconImage(), outpixmap->GetIconImage());
+        if( !success ) success = TryJPEGLSCodec(iconpixeldata, pixmap->GetIconImage(), outpixmap->GetIconImage());
+        if( !success ) success = TryJPEG2000Codec(iconpixeldata, pixmap->GetIconImage(), outpixmap->GetIconImage());
+        if( !success ) success = TryRLECodec(iconpixeldata, pixmap->GetIconImage(), outpixmap->GetIconImage());
+        outpixmap->GetIconImage().SetTransferSyntax( TS );
+        if( !success )
+          {
+          //assert(0);
+          return false;
+          }
+        assert( outpixmap->GetIconImage().GetTransferSyntax() == TS );
         }
-      assert( Output->GetIconImage().GetTransferSyntax() == TS );
       }
 
     //Output->ComputeLossyFlag();
@@ -432,23 +439,30 @@ bool ImageChangeTransferSyntax::Change()
     return false;
     }
 
-    if( !Input->GetIconImage().IsEmpty() && CompressIconImage )
-  {
-    // same goes for icon
-    success = false;
-    if( !success ) success = TryRAWCodec(Input->GetIconImage().GetDataElement(), Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryJPEGCodec(Input->GetIconImage().GetDataElement(), Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryJPEGLSCodec(Input->GetIconImage().GetDataElement(), Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryJPEG2000Codec(Input->GetIconImage().GetDataElement(), Input->GetIconImage(), Output->GetIconImage());
-    if( !success ) success = TryRLECodec(Input->GetIconImage().GetDataElement(), Input->GetIconImage(), Output->GetIconImage());
-    Output->GetIconImage().SetTransferSyntax( TS );
-    if( !success )
+  Bitmap &bitmap = *Input;
+  if( Pixmap *pixmap = dynamic_cast<Pixmap*>( &bitmap ) )
+    {
+    if( !pixmap->GetIconImage().IsEmpty() && CompressIconImage )
       {
-      //assert(0);
-      return false;
+      Bitmap &outbitmap = *Output;
+      Pixmap *outpixmap = dynamic_cast<Pixmap*>( &outbitmap );
+
+      // same goes for icon
+      success = false;
+      if( !success ) success = TryRAWCodec(pixmap->GetIconImage().GetDataElement(), pixmap->GetIconImage(), outpixmap->GetIconImage());
+      if( !success ) success = TryJPEGCodec(pixmap->GetIconImage().GetDataElement(), pixmap->GetIconImage(), outpixmap->GetIconImage());
+      if( !success ) success = TryJPEGLSCodec(pixmap->GetIconImage().GetDataElement(), pixmap->GetIconImage(), outpixmap->GetIconImage());
+      if( !success ) success = TryJPEG2000Codec(pixmap->GetIconImage().GetDataElement(), pixmap->GetIconImage(), outpixmap->GetIconImage());
+      if( !success ) success = TryRLECodec(pixmap->GetIconImage().GetDataElement(), pixmap->GetIconImage(), outpixmap->GetIconImage());
+      outpixmap->GetIconImage().SetTransferSyntax( TS );
+      if( !success )
+        {
+        //assert(0);
+        return false;
+        }
+      assert( outpixmap->GetIconImage().GetTransferSyntax() == TS );
       }
-  assert( Output->GetIconImage().GetTransferSyntax() == TS );
-  }
+    }
 
   //Output->ComputeLossyFlag();
 

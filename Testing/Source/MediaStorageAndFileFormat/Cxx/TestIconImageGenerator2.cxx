@@ -204,6 +204,9 @@ static const char * const iconimagearray2[][2] = {
  {"890d0a5afdbf77398d857b523f86e83a" , "D_CLUNIE_MR1_RLE.dcm" },
  {"af193ff3143f299826d55e00696b3218" , "LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm" },
  {"cee47e57f6b1aaace74bb813e33a74eb" , "00191113.dcm" },
+ {"07b6f4e2fba920d28e2f29dbb037b640" , "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
+ {"93f60acbb450c62992a1db09a6c19c05" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
+ {"fa02ad71bdf3e6970e18fc9a9df03a2d" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
 
  // sentinel
  { 0, 0 }
@@ -309,7 +312,7 @@ int TestIconImageGenerate2(const char *subdir, const char* filename, bool verbos
 
     if( !refmd5 )
       {
-      std::cerr << " missing md5= {\"" << digest << "\" , \"" << name << "\" }, " << std::endl;
+      std::cerr << " missing md5= {\"" << digest << "\" , \"" << name << "\" }," << std::endl;
       return 1;
       }
     if( strcmp( refmd5, digest) )

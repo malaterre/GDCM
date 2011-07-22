@@ -341,8 +341,18 @@ int main(int argc, char *argv[])
   if ( ver200adacpegasysheaders.IsEmpty() ) return 1;
   const gdcm::ByteValue * bv = ver200adacpegasysheaders.GetByteValue();
 
+  // (0019,1021) US 1               # 2,1 Ver200 Number of ADAC Headers
+  // TODO
+
   // (0019,1041) IS [2048\221184 ]  # 12,1-n Ver200 ADAC Header/Image Size
   if( bv->GetLength() != 2048 ) return 1;
+
+  gdcm::Element<gdcm::VR::IS,gdcm::VM::VM2> el;
+  const gdcm::PrivateTag tver200adacheaderimagesize(0x0019,0x41,"ADAC_IMG");
+  if( !ds.FindDataElement( tver200adacheaderimagesize ) ) return 1;
+  const gdcm::DataElement& ver200adacheaderimagesize = ds.GetDataElement( tver200adacheaderimagesize );
+  el.SetFromDataElement( ver200adacheaderimagesize );
+  if( el.GetValue(0) != 2048 ) return 1;
 
   std::istringstream is;
   std::string dup( bv->GetPointer(), bv->GetLength() );

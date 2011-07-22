@@ -25,7 +25,7 @@
 #include "gdcmAnonymizer.h"
 #include "gdcmDicts.h"
 
-int main(int argc, char *argv[])
+int main(int , char *[])
 {
   using namespace gdcm;
   static Global &g = Global::GetInstance();

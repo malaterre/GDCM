@@ -228,6 +228,10 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" , "1.2.840.10008.5.1.4.1.1.20" },
 { "NM_Kakadu44_SOTmarkerincons.dcm" , "1.2.840.10008.5.1.4.1.1.1" },
 { "D_CLUNIE_CT1_JLSN.dcm", "1.2.840.10008.5.1.4.1.1.2" },
+{ "TOSHIBA_J2K_SIZ1_PixRep0.dcm",  "1.2.840.10008.5.1.4.1.1.2"},
+{ "TOSHIBA_J2K_SIZ0_PixRep1.dcm", "1.2.840.10008.5.1.4.1.1.2" },
+{ "TOSHIBA_J2K_OpenJPEGv2Regression.dcm", "1.2.840.10008.5.1.4.1.1.2" },
+
 /* Stopping condition */
 { 0 ,0 }
 };

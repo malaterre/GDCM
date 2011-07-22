@@ -126,6 +126,7 @@ size_t UserInformation::Size() const
 
 void UserInformation::Print(std::ostream &os) const
 {
+  (void)os;
 }
 
 } // end namespace network

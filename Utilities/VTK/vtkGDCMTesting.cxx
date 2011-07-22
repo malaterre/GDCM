@@ -209,6 +209,10 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "NM_Kakadu44_SOTmarkerincons.dcm","99b60ec88d410b437adc06a809590127", "6f26e552a1b71d386483118779d192ad" },
 { "PhilipsInteraSeqTermInvLen.dcm","6ccabe05841e29633d9e4fe1aec81039", "f8a1f4ce85b51527267e670a8aa0c308" },
 { "LIBIDO-24-ACR_NEMA-Rectangle.dcm","28376a8bb2a64a9c8f6a50abfdbb336f", "81a40454eec2b18f4331cfd1ba4e501e" },
+{ "TOSHIBA_J2K_SIZ1_PixRep0.dcm","b7551911535d7ee21a336b700e4f0e4f", "d6347ed051d7b887bdaad1a91433c6ba" },
+{ "TOSHIBA_J2K_OpenJPEGv2Regression.dcm","f417f1a4552aeb03137ed91a04345fa2", "94414d8b4300aa3d8cbe4475d34e8e54" },
+{ "TOSHIBA_J2K_SIZ0_PixRep1.dcm","fcaab3ded5c41993b82d831c4251526e", "d6347ed051d7b887bdaad1a91433c6ba" },
+
 
 /* Stopping condition */
 { 0 , 0 , 0 }

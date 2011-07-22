@@ -18,10 +18,10 @@ import vtk.*;
 
 /*
  * Compilation:
- * $ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/vtkgdcm.jar:/home/mmalaterre/Projects/VTK54-gcc/bin/vtk.jar javac HelloVTKWorld.java
+ * CLASSPATH=vtkgdcm.jar:/usr/share/java/vtk.jar javac HelloVTKWorld.java
  *
  * Usage:
- * LD_LIBRARY_PATH=/usr/lib/jvm/java-6-sun-1.6.0.07/jre/lib/amd64/xawt/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/:/home/mmalaterre/Projects/VTK54-gcc/bin/ CLASSPATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/vtkgdcm.jar:/home/mmalaterre/Projects/VTK54-gcc/bin/vtk.jar:. java HelloVTKWorld ~/Creatis/gdcmData/012345.002.050.dcm out.dcm
+ * LD_LIBRARY_PATH=/usr/lib/jvm/java-6-openjdk/jre/lib/amd64/xawt:/usr/lib/jni:. CLASSPATH=/usr/share/java/vtk.jar:vtkgdcm.jar:gdcm.jar:. java HelloVTKWorld gdcmData/012345.002.050.dcm bla.dcm
  *
  */
 public class HelloVTKWorld

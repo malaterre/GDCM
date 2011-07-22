@@ -67,7 +67,7 @@ enum {
   TYPE_FLOAT  = 0, // float
   TYPE_INT32  = 1, // int32
   TYPE_STRING = 2, // 80 bytes string (+1)
-  TYPE_UINT32 = 4, // uint32
+  TYPE_UINT32 = 4  // uint32
 };
 
 template <typename T>

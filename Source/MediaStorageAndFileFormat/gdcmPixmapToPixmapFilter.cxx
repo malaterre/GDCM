@@ -12,23 +12,23 @@
 
 =========================================================================*/
 #include "gdcmPixmapToPixmapFilter.h"
-#include <limits>
-#include <stdlib.h> // abort
-#include <string.h> // memcpy
+#include "gdcmPixmap.h"
 
 namespace gdcm
 {
 
 PixmapToPixmapFilter::PixmapToPixmapFilter()
 {
-  if(!Input) Input = new Pixmap;
-  if(!Output) Output = new Pixmap;
 }
 
-void PixmapToPixmapFilter::SetInput(const Pixmap& image)
+Pixmap &PixmapToPixmapFilter::GetInput()
 {
-  Input = image;
+  return dynamic_cast<Pixmap&>(*Input);
 }
 
+const Pixmap &PixmapToPixmapFilter::GetOutput() const
+{
+  return dynamic_cast<const Pixmap&>(*Output);
+}
 
 } // end namespace gdcm

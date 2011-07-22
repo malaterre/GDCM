@@ -218,6 +218,10 @@ static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
 { "GDCMJ2K_TextGBR.dcm", 770 },
 { "NM_Kakadu44_SOTmarkerincons.dcm", 1576 },
 { "PhilipsInteraSeqTermInvLen.dcm", 7440 },
+{ "LIBIDO-24-ACR_NEMA-Rectangle.dcm",  174 },
+{ "TOSHIBA_J2K_SIZ1_PixRep0.dcm",  2362  },
+{ "TOSHIBA_J2K_OpenJPEGv2Regression.dcm", 2362  },
+{ "TOSHIBA_J2K_SIZ0_PixRep1.dcm", 2346  },
 
 /* Stopping condition */
 { 0 ,0 },
