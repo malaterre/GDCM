@@ -36,7 +36,8 @@ bool SegmentWriter::PrepareWrite()
   const unsigned int              nbItems           = segmentsSQ->GetNumberOfItems();
   if (nbItems < numberOfSegments)
   {
-    const unsigned int nbOfItemToMake = numberOfSegments - nbItems;
+    const int          diff           = numberOfSegments - nbItems;
+    const unsigned int nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
       Item item;
@@ -249,7 +250,8 @@ bool SegmentWriter::PrepareWrite()
       const unsigned int              nbItems           = segmentsRefSQ->GetNumberOfItems();
       if (nbItems < surfaceCount)
       {
-        const unsigned int nbOfItemToMake = surfaceCount - nbItems;
+        const int          diff           = surfaceCount - nbItems;
+        const unsigned int nbOfItemToMake = (diff > 0?diff:0);
         for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
         {
           Item item;
@@ -266,14 +268,12 @@ bool SegmentWriter::PrepareWrite()
       unsigned int                                            surfaceNum        = 0;
       for (; it != itEnd; it++)
       {
-        SmartPointer< Surface > surface = *it;
-
         Item &    segmentsRefItem = segmentsRefSQ->GetItem( surfaceNum + 1 );
         DataSet & segmentsRefDS   = segmentsRefItem.GetNestedDataSet();
 
         // Referenced Surface Number
         Attribute<0x0066, 0x002C> refSurfaceNumberAt;
-        refSurfaceNumberAt.SetValue( refSurfaceNumber + surfaceNum );
+        refSurfaceNumberAt.SetValue( refSurfaceNumber + surfaceNum++ );
         segmentsRefDS.Replace( refSurfaceNumberAt.GetAsDataElement() );
 
         //*****   Segment Surface Generation Algorithm Identification Sequence    *****//
