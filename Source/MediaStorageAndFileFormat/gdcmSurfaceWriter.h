@@ -21,8 +21,8 @@ public:
     /// Write
     bool Write(); // Execute()
 
-    const unsigned long GetNumberOfSurfaces() const { return NumberOfSurfaces; }
-    void SetNumberOfSurfaces(const unsigned long nb) { NumberOfSurfaces = nb; }
+    const unsigned long GetNumberOfSurfaces() const;
+    void SetNumberOfSurfaces(const unsigned long nb);
 
 protected:
 

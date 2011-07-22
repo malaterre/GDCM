@@ -52,8 +52,8 @@ public:
   VIEWType GetRecommendedPresentationType() const;
   void SetRecommendedPresentationType(VIEWType type);
 
-  const unsigned long GetSurfaceNumber() const { return SurfaceNumber; }
-  void SetSurfaceNumber(const unsigned long nb) { SurfaceNumber = nb; }
+  const unsigned long GetSurfaceNumber() const;
+  void SetSurfaceNumber(const unsigned long nb);
 
   const char * GetSurfaceComments() const;
   void SetSurfaceComments(const char * comment);
@@ -71,31 +71,31 @@ public:
   void SetManifold(STATES state);
 
   //**    Points getters/setters      **//
-  unsigned long GetNumberOfSurfacePoints() const { return NumberOfSurfacePoints; }
-  void SetNumberOfSurfacePoints(const unsigned long nb) { NumberOfSurfacePoints = nb; }
+  unsigned long GetNumberOfSurfacePoints() const;
+  void SetNumberOfSurfacePoints(const unsigned long nb);
 
-  const DataElement & GetPointCoordinatesData() const { return PointCoordinatesData; }
-  DataElement & GetPointCoordinatesData() { return PointCoordinatesData; }
+  const DataElement & GetPointCoordinatesData() const;
+  DataElement & GetPointCoordinatesData();
 
-  void SetPointCoordinatesData(DataElement const & de) { PointCoordinatesData = de; }
+  void SetPointCoordinatesData(DataElement const & de);
 
   //**    Vectors getters/setters      **//
-  unsigned long GetNumberOfVectors() const { return NumberOfVectors; }
-  void SetNumberOfVectors(const unsigned long nb) { NumberOfVectors = nb; }
+  unsigned long GetNumberOfVectors() const;
+  void SetNumberOfVectors(const unsigned long nb);
 
-  unsigned long GetVectorDimensionality() const { return VectorDimensionality; }
-  void SetVectorDimensionality(const unsigned long dim) { VectorDimensionality = dim; }
+  unsigned long GetVectorDimensionality() const;
+  void SetVectorDimensionality(const unsigned long dim);
 
-  const DataElement & GetVectorCoordinateData() const { return VectorCoordinateData; }
-  DataElement & GetVectorCoordinateData() { return VectorCoordinateData; }
+  const DataElement & GetVectorCoordinateData() const;
+  DataElement & GetVectorCoordinateData();
 
-  void SetVectorCoordinateData(DataElement const & de) { VectorCoordinateData = de; }
+  void SetVectorCoordinateData(DataElement const & de);
 
   //**    Primitive getters/setters      **//
-  const MeshPrimitive & GetMeshPrimitive() const { return *Primitive; }
-  MeshPrimitive & GetMeshPrimitive() { return *Primitive; }
+  const MeshPrimitive & GetMeshPrimitive() const;
+  MeshPrimitive & GetMeshPrimitive();
 
-  void SetMeshPrimitive(MeshPrimitive & mp) { Primitive = mp; }
+  void SetMeshPrimitive(MeshPrimitive & mp);
 
 private:
 
@@ -132,7 +132,7 @@ private:
   //0066 0015 UL 1 Number of Surface Points
   unsigned long NumberOfSurfacePoints;
   //0066 0016 OF 1 Point Coordinates Data
-  DataElement PointCoordinatesData;
+  DataElement   PointCoordinatesData;
 
 
   //**        Normal members      **//
@@ -141,7 +141,7 @@ private:
   //0066 001f US 1 Vector Dimensionality
   unsigned long VectorDimensionality;
   //0066 0021 OF 1 Vector Coordinate Data
-  DataElement VectorCoordinateData;
+  DataElement   VectorCoordinateData;
 
 
   //**        Primitive members      **//
