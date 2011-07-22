@@ -238,7 +238,7 @@ Surface::STATES Surface::GetFiniteVolume() const
 
 void Surface::SetFiniteVolume(STATES state)
 {
-  if( state <= STATES_END );
+  assert( state < STATES_END );
   FiniteVolume = state;
 }
 
@@ -249,7 +249,7 @@ Surface::STATES Surface::GetManifold() const
 
 void Surface::SetManifold(STATES state)
 {
-  if( state <= STATES_END );
+  assert( state < STATES_END );
   Manifold = state;
 }
 

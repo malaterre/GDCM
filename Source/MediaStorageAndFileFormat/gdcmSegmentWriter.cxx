@@ -69,6 +69,7 @@ bool SegmentWriter::PrepareWrite()
 
   // Fill the Segment Sequence
   const unsigned int              numberOfSegments  = this->GetNumberOfSegments();
+  assert( numberOfSegments );
   const unsigned int              nbItems           = segmentsSQ->GetNumberOfItems();
   if (nbItems < numberOfSegments)
   {
@@ -83,33 +84,49 @@ bool SegmentWriter::PrepareWrite()
   }
   // else Should I remove items?
 
-  std::vector< SmartPointer< Segment > >::const_iterator  it    = Segments.begin();
-  std::vector< SmartPointer< Segment > >::const_iterator  itEnd = Segments.end();
-  unsigned int                                            i     = 1;
+  std::vector< SmartPointer< Segment > >::const_iterator  it            = Segments.begin();
+  std::vector< SmartPointer< Segment > >::const_iterator  itEnd         = Segments.end();
+  unsigned int                                            itemNumber    = 1;
+  unsigned long                                           surfaceNumber = 1;
   for (; it != itEnd; it++)
   {
     SmartPointer< Segment > segment = *it;
     assert( segment );
 
-    Item &    segmentItem = segmentsSQ->GetItem(i++);
+    Item &    segmentItem = segmentsSQ->GetItem(itemNumber);
     DataSet & segmentDS   = segmentItem.GetNestedDataSet();
 
-    // Segment Number
-    Attribute<0x0062, 0x0004> segmentNumber;
-    segmentNumber.SetValue( segment->GetSegmentNumber() );
-    segmentDS.Replace( segmentNumber.GetAsDataElement() );
+    // Segment Number (Type 1)
+    Attribute<0x0062, 0x0004> segmentNumberAt;
+    unsigned short segmentNumber = segment->GetSegmentNumber();
+    if (segmentNumber == 0)
+      segmentNumber = itemNumber;
+    segmentNumberAt.SetValue( segmentNumber );
+    segmentDS.Replace( segmentNumberAt.GetAsDataElement() );
 
-    // Segment Label
-    Attribute<0x0062, 0x0005> segmentLabel;
-    segmentLabel.SetValue( segment->GetSegmentLabel() );
-    segmentDS.Replace( segmentLabel.GetAsDataElement() );
+    // Segment Label (Type 1)
+    const char * segmentLabel = segment->GetSegmentLabel();
+    if ( segmentLabel != 0 )
+    {
+      Attribute<0x0062, 0x0005> segmentLabelAt;
+      segmentLabelAt.SetValue( segmentLabel );
+      segmentDS.Replace( segmentLabelAt.GetAsDataElement() );
+    }
+    // else assert? return false? gdcmWarning?
 
-    // Segment Algorithm Type
-    Attribute<0x0062, 0x0008> segmentAlgorithmType;
-    segmentAlgorithmType.SetValue( Segment::GetALGOTypeString( segment->GetSegmentAlgorithmType() ) );
-    segmentDS.Replace( segmentAlgorithmType.GetAsDataElement() );
+    // Segment Algorithm Type (Type 1)
+    const char * segmentAlgorithmType = Segment::GetALGOTypeString( segment->GetSegmentAlgorithmType() );
+    if ( segmentAlgorithmType != 0 )
+    {
+      Attribute<0x0062, 0x0008> segmentAlgorithmTypeAt;
+      segmentAlgorithmTypeAt.SetValue( segmentAlgorithmType );
+      segmentDS.Replace( segmentAlgorithmTypeAt.GetAsDataElement() );
+    }
+    // else assert? return false? gdcmWarning?
 
     //*****   GENERAL ANATOMY MANDATORY MACRO ATTRIBUTES   *****//
+    const Segment::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
+    if (!anatReg.CV.empty() && !anatReg.CSD.empty() && !anatReg.CM.empty())
     {
       // Anatomic Region Sequence (0008,2218) Type 1
       SmartPointer<SequenceOfItems> anatRegSQ;
@@ -140,26 +157,27 @@ bool SegmentWriter::PrepareWrite()
 
       //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
       {
-        const Segment::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
-
-        // Code Value
+        // Code Value (Type 1)
         Attribute<0x0008, 0x0100> codeValueAt;
         codeValueAt.SetValue( anatReg.CV );
         anatRegDS.Replace( codeValueAt.GetAsDataElement() );
 
-        // Coding Scheme
+        // Coding Scheme (Type 1)
         Attribute<0x0008, 0x0102> codingSchemeAt;
         codingSchemeAt.SetValue( anatReg.CSD );
         anatRegDS.Replace( codingSchemeAt.GetAsDataElement() );
 
-        // Code Meaning
+        // Code Meaning (Type 1)
         Attribute<0x0008, 0x0104> codeMeaningAt;
         codeMeaningAt.SetValue( anatReg.CM );
         anatRegDS.Replace( codeMeaningAt.GetAsDataElement() );
       }
     }
+    // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Category Code Sequence   *****//
+    const Segment::BasicCodedEntry & propCat = segment->GetPropertyCategory();
+    if (!propCat.CV.empty() && !propCat.CSD.empty() && !propCat.CM.empty())
     {
       // Segmented Property Category Code Sequence (0062,0003) Type 1
       SmartPointer<SequenceOfItems> propCatSQ;
@@ -190,26 +208,27 @@ bool SegmentWriter::PrepareWrite()
 
       //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
       {
-        const Segment::BasicCodedEntry & propCat = segment->GetPropertyCategory();
-
-        // Code Value
+        // Code Value (Type 1)
         Attribute<0x0008, 0x0100> codeValueAt;
         codeValueAt.SetValue( propCat.CV );
         propCatDS.Replace( codeValueAt.GetAsDataElement() );
 
-        // Coding Scheme
+        // Coding Scheme (Type 1)
         Attribute<0x0008, 0x0102> codingSchemeAt;
         codingSchemeAt.SetValue( propCat.CSD );
         propCatDS.Replace( codingSchemeAt.GetAsDataElement() );
 
-        // Code Meaning
+        // Code Meaning (Type 1)
         Attribute<0x0008, 0x0104> codeMeaningAt;
         codeMeaningAt.SetValue( propCat.CM );
         propCatDS.Replace( codeMeaningAt.GetAsDataElement() );
       }
     }
+    // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Type Code Sequence   *****//
+    const Segment::BasicCodedEntry & propType = segment->GetPropertyType();
+    if (!propType.CV.empty() && !propType.CSD.empty() && !propType.CM.empty())
     {
       // Segmented Property Type Code Sequence (0062,000F) Type 1
       SmartPointer<SequenceOfItems> propTypeSQ;
@@ -240,24 +259,23 @@ bool SegmentWriter::PrepareWrite()
 
       //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
       {
-        const Segment::BasicCodedEntry & propType = segment->GetPropertyType();
-
-        // Code Value
+        // Code Value (Type 1)
         Attribute<0x0008, 0x0100> codeValueAt;
         codeValueAt.SetValue( propType.CV );
         propTypeDS.Replace( codeValueAt.GetAsDataElement() );
 
-        // Coding Scheme
+        // Coding Scheme (Type 1)
         Attribute<0x0008, 0x0102> codingSchemeAt;
         codingSchemeAt.SetValue( propType.CSD );
         propTypeDS.Replace( codingSchemeAt.GetAsDataElement() );
 
-        // Code Meaning
+        // Code Meaning (Type 1)
         Attribute<0x0008, 0x0104> codeMeaningAt;
         codeMeaningAt.SetValue( propType.CM );
         propTypeDS.Replace( codeMeaningAt.GetAsDataElement() );
       }
     }
+    // else assert? return false? gdcmWarning?
 
     //***** Referenced Surface Sequence *****//
     const unsigned int surfaceCount = segment->GetSurfaceCount();
@@ -283,10 +301,10 @@ bool SegmentWriter::PrepareWrite()
       segmentsRefSQ->SetLengthToUndefined();
 
       // Fill the Segment Surface Generation Algorithm Identification Sequence
-      const unsigned int              nbItems           = segmentsRefSQ->GetNumberOfItems();
+      const unsigned int   nbItems        = segmentsRefSQ->GetNumberOfItems();
       if (nbItems < surfaceCount)
       {
-        const unsigned int diff           = surfaceCount - nbItems;
+        const int          diff           = surfaceCount - nbItems;
         const unsigned int nbOfItemToMake = (diff > 0?diff:0);
         for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
         {
@@ -300,18 +318,21 @@ bool SegmentWriter::PrepareWrite()
       std::vector< SmartPointer< Surface > >                  surfaces          = segment->GetSurfaces();
       std::vector< SmartPointer< Surface > >::const_iterator  it                = surfaces.begin();
       std::vector< SmartPointer< Surface > >::const_iterator  itEnd             = surfaces.end();
-      unsigned long                                           refSurfaceNumber  = segment->GetSegmentNumber();
-      unsigned int                                            surfaceNum        = 0;
+      unsigned int                                            itemSurfaceNumber = 1;
       for (; it != itEnd; it++)
       {
         SmartPointer< Surface > surface = *it;
 
-        Item &    segmentsRefItem = segmentsRefSQ->GetItem( surfaceNum + 1 );
+        Item &    segmentsRefItem = segmentsRefSQ->GetItem( itemSurfaceNumber++ );
         DataSet & segmentsRefDS   = segmentsRefItem.GetNestedDataSet();
 
         // Referenced Surface Number
         Attribute<0x0066, 0x002C> refSurfaceNumberAt;
-        refSurfaceNumberAt.SetValue( refSurfaceNumber + surfaceNum );
+        unsigned long refSurfaceNumber = surface->GetSurfaceNumber();
+        if (refSurfaceNumber == 0)
+          refSurfaceNumber = surfaceNumber++;
+        surface->SetSurfaceNumber( refSurfaceNumber );
+        refSurfaceNumberAt.SetValue( refSurfaceNumber );
         segmentsRefDS.Replace( refSurfaceNumberAt.GetAsDataElement() );
 
         //*****   Segment Surface Generation Algorithm Identification Sequence    *****//
@@ -342,9 +363,11 @@ bool SegmentWriter::PrepareWrite()
 
           //*****   Algorithm Family Code Sequence    *****//
           //See: PS.3.3 Table 8.8-1 and PS 3.16 Context ID 7162
+          const Segment::BasicCodedEntry & algoFamily = segment->GetAlgorithmFamily();
+          if (!algoFamily.CV.empty() && !algoFamily.CSD.empty() && !algoFamily.CM.empty())
           {
             SmartPointer<SequenceOfItems> algoFamilyCodeSQ;
-          const Tag algoFamilyCodeTag(0x0066, 0x002F);
+            const Tag algoFamilyCodeTag(0x0066, 0x002F);
             if( !segmentsAlgoIdDS.FindDataElement( algoFamilyCodeTag ) )
             {
               algoFamilyCodeSQ = new SequenceOfItems;
@@ -358,8 +381,7 @@ bool SegmentWriter::PrepareWrite()
             algoFamilyCodeSQ->SetLengthToUndefined();
 
             // Fill the Algorithm Family Code Sequence
-            const unsigned int nbItems = algoFamilyCodeSQ->GetNumberOfItems();
-            if (nbItems < 1)
+            if (algoFamilyCodeSQ->GetNumberOfItems() < 1)
             {
                 Item item;
                 item.SetVLToUndefined();
@@ -371,50 +393,60 @@ bool SegmentWriter::PrepareWrite()
 
             //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
             {
-              const Segment::BasicCodedEntry & algoFamily = segment->GetAlgorithmFamily();
-
-              // Code Value
+              // Code Value (Type 1)
               Attribute<0x0008, 0x0100> codeValueAt;
               codeValueAt.SetValue( algoFamily.CV );
               algoFamilyCodeDS.Replace( codeValueAt.GetAsDataElement() );
 
-              // Coding Scheme
+              // Coding Scheme (Type 1)
               Attribute<0x0008, 0x0102> codingSchemeAt;
               codingSchemeAt.SetValue( algoFamily.CSD );
               algoFamilyCodeDS.Replace( codingSchemeAt.GetAsDataElement() );
 
-              // Code Meaning
+              // Code Meaning (Type 1)
               Attribute<0x0008, 0x0104> codeMeaningAt;
               codeMeaningAt.SetValue( algoFamily.CM );
               algoFamilyCodeDS.Replace( codeMeaningAt.GetAsDataElement() );
             }
           }
+          // else assert? return false? gdcmWarning?
 
           // Algorithm Version
-          Attribute<0x0066, 0x0031> algoVersion;
-          algoVersion.SetValue( segment->GetAlgorithmVersion() );
-          segmentsAlgoIdDS.Replace( algoVersion.GetAsDataElement() );
+          const char * algorithmVersion = segment->GetAlgorithmVersion();
+          if (algorithmVersion != 0)
+          {
+            Attribute<0x0066, 0x0031> algorithmVersionAt;
+            algorithmVersionAt.SetValue( algorithmVersion );
+            segmentsAlgoIdDS.Replace( algorithmVersionAt.GetAsDataElement() );
+          }
+          // else assert? return false? gdcmWarning?
 
           // Algorithm Name
-          Attribute<0x0066, 0x0036> algoName;
-          algoName.SetValue( segment->GetAlgorithmName() );
-          segmentsAlgoIdDS.Replace( algoName.GetAsDataElement() );
+          const char * algorithmName = segment->GetAlgorithmName();
+          if (algorithmName != 0)
+          {
+            Attribute<0x0066, 0x0036> algorithmNameAt;
+            algorithmNameAt.SetValue( algorithmName );
+            segmentsAlgoIdDS.Replace( algorithmNameAt.GetAsDataElement() );
+          }
+          // else assert? return false? gdcmWarning?
         }
 
         //*****   Segment Surface Source Instance Sequence   *****//
         {
-          SmartPointer<SequenceOfItems> surfaceSourceSQ;
-          if( !segmentsRefDS.FindDataElement( Tag(0x0066, 0x002E) ) )
-          {
-            surfaceSourceSQ = new SequenceOfItems;
-            DataElement detmp( Tag(0x0066, 0x002E) );
-            detmp.SetVR( VR::SQ );
-            detmp.SetValue( *surfaceSourceSQ );
-            detmp.SetVLToUndefined();
-            segmentsRefDS.Insert( detmp );
-          }
-          surfaceSourceSQ = segmentsRefDS.GetDataElement( Tag(0x0066, 0x002E) ).GetValueAsSQ();
-          surfaceSourceSQ->SetLengthToUndefined();
+//          SmartPointer<SequenceOfItems> surfaceSourceSQ;
+//          if( !segmentsRefDS.FindDataElement( Tag(0x0066, 0x002E) ) )
+//          {
+//            surfaceSourceSQ = new SequenceOfItems;
+//            DataElement detmp( Tag(0x0066, 0x002E) );
+//            detmp.SetVR( VR::SQ );
+//            detmp.SetValue( *surfaceSourceSQ );
+//            detmp.SetVLToUndefined();
+//            segmentsRefDS.Insert( detmp );
+//          }
+//          surfaceSourceSQ = segmentsRefDS.GetDataElement( Tag(0x0066, 0x002E) ).GetValueAsSQ();
+//          surfaceSourceSQ->SetLengthToUndefined();
+
           //NOTE: If surfaces are derived from image, include ‘Image SOP Instance Reference Macro’ PS 3.3 Table C.10-3.
           //      How to know it?
         }
@@ -423,10 +455,17 @@ bool SegmentWriter::PrepareWrite()
     else
     {
       // Segment Algorithm Name
-      Attribute<0x0062, 0x0009> segmentAlgorithmName;
-      segmentAlgorithmName.SetValue( segment->GetSegmentAlgorithmName() );
-      segmentDS.Replace( segmentAlgorithmName.GetAsDataElement() );
+      const char * segmentAlgorithmName = segment->GetSegmentAlgorithmName();
+      if (segmentAlgorithmName != 0)
+      {
+        Attribute<0x0062, 0x0009> segmentAlgorithmNameAt;
+        segmentAlgorithmNameAt.SetValue( segmentAlgorithmName );
+        segmentDS.Replace( segmentAlgorithmNameAt.GetAsDataElement() );
+      }
+      // else assert? return false? gdcmWarning?
     }
+
+    ++itemNumber;
   }
 
   return true;
