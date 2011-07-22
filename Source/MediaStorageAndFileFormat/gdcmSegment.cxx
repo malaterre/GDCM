@@ -61,7 +61,9 @@ Segment::Segment():
   AlgorithmFamily(),
   SegmentAlgorithmType(ALGOType_END),
   SegmentAlgorithmName(""),
-  SurfaceCount(0)
+  SurfaceCount(0),
+  AlgorithmVersion(""),
+  AlgorithmName("")
 {
 }
 
@@ -137,28 +139,28 @@ void Segment::SetAlgorithmFamily(BasicCodedEntry const & BSE)
   AlgorithmFamily.CM   = BSE.CM;
 }
 
-Segment::ALGOType Segment::GetAlgorithmType() const
+Segment::ALGOType Segment::GetSegmentAlgorithmType() const
 {
   return SegmentAlgorithmType;
 }
 
-void Segment::SetAlgorithmType(Segment::ALGOType type)
+void Segment::SetSegmentAlgorithmType(Segment::ALGOType type)
 {
   assert(type <= ALGOType_END);
   SegmentAlgorithmType = type;
 }
 
-void Segment::SetAlgorithmType(const char * typeStr)
+void Segment::SetSegmentAlgorithmType(const char * typeStr)
 {
-  SetAlgorithmType( GetALGOType(typeStr) );
+  SetSegmentAlgorithmType( GetALGOType(typeStr) );
 }
 
-const char * Segment::GetAlgorithmName() const
+const char * Segment::GetSegmentAlgorithmName() const
 {
   return SegmentAlgorithmName.c_str();
 }
 
-void Segment::SetAlgorithmName(const char * name)
+void Segment::SetSegmentAlgorithmName(const char * name)
 {
   SegmentAlgorithmName = name;
 }
@@ -168,9 +170,45 @@ unsigned long Segment::GetSurfaceCount() const
   return SurfaceCount;
 }
 
+void Segment::SetSurfaceCount(const unsigned long nb)
+{
+  SurfaceCount = nb;
+}
+
 std::vector< SmartPointer< Surface > > Segment::GetSurfaces() const
 {
   return Surfaces;
+}
+
+SmartPointer< Surface > Segment::GetSurface(const unsigned int idx /*= 0*/) const
+{
+  assert( idx < SurfaceCount );
+  return Surfaces[idx];
+}
+
+void Segment::AddSurface(SmartPointer< Surface > surface)
+{
+  Surfaces.push_back(surface);
+}
+
+const char * Segment::GetAlgorithmVersion() const
+{
+  return AlgorithmVersion.c_str();
+}
+
+void Segment::SetAlgorithmVersion(const char * str)
+{
+  AlgorithmVersion = str;
+}
+
+const char * Segment::GetAlgorithmName() const
+{
+  return AlgorithmName.c_str();
+}
+
+void Segment::SetAlgorithmName(const char * str)
+{
+  AlgorithmName = str;
 }
 
 }
