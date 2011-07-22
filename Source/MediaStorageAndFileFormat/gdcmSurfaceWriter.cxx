@@ -1,5 +1,6 @@
 #include "gdcmSurfaceWriter.h"
 #include "gdcmAttribute.h"
+#include "gdcmUIDGenerator.h"
 
 namespace gdcm
 {
@@ -35,7 +36,7 @@ bool SurfaceWriter::PrepareWrite()
 
   FileMetaInformation &  fmi = file.GetHeader();
   const TransferSyntax & ts  = fmi.GetDataSetTransferSyntax();
-  assert( ts.IsExplicit() || ts.IsImplicit() );
+//  assert( ts.IsExplicit() || ts.IsImplicit() );
 
   // Number Of Surface
   const unsigned long       nbSurfaces = this->GetNumberOfSurfaces();
@@ -107,6 +108,11 @@ bool SurfaceWriter::PrepareWrite()
       surfaceNumber.SetValue( surface->GetSurfaceNumber() );
       surfaceDS.Replace( surfaceNumber.GetAsDataElement() );
 
+      // Surface Comments
+      Attribute<0x0066, 0x0004> surfaceComments;
+      surfaceComments.SetValue( surface->GetSurfaceComments() );
+      surfaceDS.Replace( surfaceComments.GetAsDataElement() );
+
       // Surface Processing
       const bool surfaceProcessing = surface->GetSurfaceProcessing();
       Attribute<0x0066, 0x0009> surfaceProcessingAt;
@@ -130,7 +136,11 @@ bool SurfaceWriter::PrepareWrite()
 
       // Presentation Type
       Attribute<0x0066, 0x000D> presentationType;
-      presentationType.SetValue( Surface::GetVIEWTypeString( surface->GetRecommendedPresentationType() ) );
+      const char * reconmmendedPresentationType = Surface::GetVIEWTypeString( surface->GetRecommendedPresentationType() );
+      if (reconmmendedPresentationType != 0)
+        presentationType.SetValue( reconmmendedPresentationType );
+      else
+        presentationType.SetValue( Surface::GetVIEWTypeString(Surface::SURFACE) );
       surfaceDS.Replace( presentationType.GetAsDataElement() );
 
       // Finite Volume
@@ -183,22 +193,20 @@ bool SurfaceWriter::PrepareWrite()
 
         // Point Coordinates Data
         DataElement pointCoordDataDE( Tag(0x0066, 0x0016) );
-        pointCoordDataDE.SetVR( VR::OF );
         const Value & pointCoordinateDataValue = surface->GetPointCoordinatesData().GetValue();
         assert( &pointCoordinateDataValue );
         pointCoordDataDE.SetValue( pointCoordinateDataValue );
 
         const ByteValue *bv = pointCoordDataDE.GetByteValue();
         VL vl;
-        if( bv && ts.IsExplicit() )
-        {
+        if ( bv )
           vl = bv->GetLength();
-        }
         else
-        {
           vl.SetToUndefined();
-        }
         pointCoordDataDE.SetVL( vl );
+
+        if ( ts.IsExplicit() )
+          pointCoordDataDE.SetVR( VR::OF );
 
         surfacePointsDs.Replace( pointCoordDataDE );
       }
@@ -256,15 +264,14 @@ bool SurfaceWriter::PrepareWrite()
 
         const ByteValue *bv = vectorCoordDataDE.GetByteValue();
         VL vl;
-        if( bv && ts.IsExplicit() )
-        {
+        if ( bv )
           vl = bv->GetLength();
-        }
         else
-        {
           vl.SetToUndefined();
-        }
         vectorCoordDataDE.SetVL( vl );
+
+        if ( ts.IsExplicit() )
+          vectorCoordDataDE.SetVR( VR::OF );
 
         surfacePointsNormalsDS.Replace( vectorCoordDataDE );
       }
@@ -457,15 +464,14 @@ bool SurfaceWriter::PrepareWrite()
 
           const ByteValue * pointIndexListBV = typedPointIndexListDE.GetByteValue();
           VL pointIndexListVL;
-          if( pointIndexListBV && ts.IsExplicit() )
-          {
+          if ( pointIndexListBV )
             pointIndexListVL = pointIndexListBV->GetLength();
-          }
           else
-          {
             pointIndexListVL.SetToUndefined();
-          }
           typedPointIndexListDE.SetVL( pointIndexListVL );
+
+          if ( ts.IsExplicit() )
+            typedPointIndexListDE.SetVR( VR::OF );
 
           pointIndexListDS.Replace( typedPointIndexListDE );
         }
