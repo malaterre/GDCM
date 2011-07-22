@@ -19,25 +19,43 @@ SegmentReader::~SegmentReader()
 //  return Segments.size();
 //}
 
-//const SegmentReader::SegmentVector & SegmentReader::GetSegments() const
+const SegmentReader::SegmentVector SegmentReader::GetSegments() const
+{
+  return GetSegments();
+}
+
+SegmentReader::SegmentVector SegmentReader::GetSegments()
+{
+  SegmentVector res;
+
+  SegmentMap::const_iterator itMap    = Segments.begin();
+  SegmentMap::const_iterator itMapEnd = Segments.end();
+
+  res.push_back(itMap->second);
+  itMap++;
+
+  SegmentVector::const_iterator itVec    = res.begin();
+  SegmentVector::const_iterator itVecEnd = res.end();
+  for (; itMap != itMapEnd; itMap++)
+  {
+    while (itVec != itVecEnd && itMap->second != *itVec)
+      itVec++;
+    if (itVec == itVecEnd)
+      res.push_back(itMap->second);
+  }
+
+  return res;
+}
+
+//const SegmentReader::SegmentMap & SegmentReader::GetSegments() const
 //{
 //  return Segments;
 //}
 
-//SegmentReader::SegmentVector & SegmentReader::GetSegments()
+//SegmentReader::SegmentMap & SegmentReader::GetSegments()
 //{
 //  return Segments;
 //}
-
-const SegmentReader::SegmentMap & SegmentReader::GetSegments() const
-{
-  return Segments;
-}
-
-SegmentReader::SegmentMap & SegmentReader::GetSegments()
-{
-  return Segments;
-}
 
 bool SegmentReader::Read()
 {
@@ -54,27 +72,28 @@ bool SegmentReader::Read()
   MediaStorage                ms      = header.GetMediaStorage();
 
   // Check modality
-  String<>                    modality( ms.GetModality() );
-  if ( modality.Trim() == "SEG" )
+  const char * modality = ms.GetModality();
+  if (modality != 0)
+  {
+    String<>     modality( ms.GetModality() );
+
+    if ( modality.Trim() == "SEG" )
+    {
+      res = ReadSegments();
+    }
+  }
+  else if( ms == MediaStorage::SegmentationStorage
+        || ms == MediaStorage::SurfaceSegmentationStorage )
   {
     res = ReadSegments();
   }
   else
   {
-    // Check Media Storage (SOP Class UID)
-    if( ms == MediaStorage::SegmentationStorage
-     || ms == MediaStorage::SurfaceSegmentationStorage )
+    // Try to find Segment Sequence
+    const DataSet & dsRoot = F->GetDataSet();
+    if (dsRoot.FindDataElement( Tag(0x0062, 0x0002) ))
     {
       res = ReadSegments();
-    }
-    else
-    {
-      // Try to find Segment Sequence
-      const DataSet & dsRoot = F->GetDataSet();
-      if (dsRoot.FindDataElement( Tag(0x0062, 0x0002) ))
-      {
-        res = ReadSegments();
-      }
     }
   }
 
