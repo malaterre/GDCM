@@ -84,9 +84,10 @@ bool SegmentWriter::PrepareWrite()
   }
   // else Should I remove items?
 
-  std::vector< SmartPointer< Segment > >::const_iterator  it         = Segments.begin();
-  std::vector< SmartPointer< Segment > >::const_iterator  itEnd      = Segments.end();
-  unsigned int                                            itemNumber = 1;
+  std::vector< SmartPointer< Segment > >::const_iterator  it            = Segments.begin();
+  std::vector< SmartPointer< Segment > >::const_iterator  itEnd         = Segments.end();
+  unsigned int                                            itemNumber    = 1;
+  unsigned long                                           surfaceNumber = 1;
   for (; it != itEnd; it++)
   {
     SmartPointer< Segment > segment = *it;
@@ -317,17 +318,21 @@ bool SegmentWriter::PrepareWrite()
       std::vector< SmartPointer< Surface > >                  surfaces          = segment->GetSurfaces();
       std::vector< SmartPointer< Surface > >::const_iterator  it                = surfaces.begin();
       std::vector< SmartPointer< Surface > >::const_iterator  itEnd             = surfaces.end();
-      unsigned int                                            surfaceNum        = 0;
+      unsigned int                                            itemSurfaceNumber = 1;
       for (; it != itEnd; it++)
       {
         SmartPointer< Surface > surface = *it;
 
-        Item &    segmentsRefItem = segmentsRefSQ->GetItem( surfaceNum + 1 );
+        Item &    segmentsRefItem = segmentsRefSQ->GetItem( itemSurfaceNumber++ );
         DataSet & segmentsRefDS   = segmentsRefItem.GetNestedDataSet();
 
         // Referenced Surface Number
         Attribute<0x0066, 0x002C> refSurfaceNumberAt;
-        refSurfaceNumberAt.SetValue( segmentNumber + surfaceNum );
+        unsigned long refSurfaceNumber = surface->GetSurfaceNumber();
+        if (refSurfaceNumber == 0)
+          refSurfaceNumber = surfaceNumber++;
+        surface->SetSurfaceNumber( refSurfaceNumber );
+        refSurfaceNumberAt.SetValue( refSurfaceNumber );
         segmentsRefDS.Replace( refSurfaceNumberAt.GetAsDataElement() );
 
         //*****   Segment Surface Generation Algorithm Identification Sequence    *****//
