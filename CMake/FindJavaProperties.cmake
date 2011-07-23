@@ -21,7 +21,7 @@ find_package(Java 1.5 REQUIRED)
 # For some reason I have to use two execute_process instead of a chained one...
 if(${current_list_path}/GetSystemProperty.java IS_NEWER_THAN ${CMAKE_CURRENT_BINARY_DIR}/GetSystemProperty.java)
 execute_process(
-  COMMAND javac ${current_list_path}/GetSystemProperty.java -d ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${Java_JAVAC_EXECUTABLE} ${current_list_path}/GetSystemProperty.java -d ${CMAKE_CURRENT_BINARY_DIR}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
 endif()
@@ -37,7 +37,7 @@ foreach(property ${JAVA_PROPERTY_LIST})
   string(TOUPPER ${property} property_upper)
   string(REPLACE "." "_" property_cmake_name ${property_upper})
   execute_process(
-    COMMAND java GetSystemProperty ${property}
+    COMMAND ${Java_JAVA_EXECUTABLE} GetSystemProperty ${property}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     OUTPUT_VARIABLE ${property_cmake_name}
     OUTPUT_STRIP_TRAILING_WHITESPACE

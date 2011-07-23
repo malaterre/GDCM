@@ -20,9 +20,6 @@ FIND_PACKAGE(Java 1.5 REQUIRED) # javac, jar
 FIND_PACKAGE(JNI REQUIRED)
 INCLUDE_DIRECTORIES(
   ${JNI_INCLUDE_DIRS}
-  #${JAVA_INCLUDE_PATH}
-  #${JAVA_INCLUDE_PATH2}
-  #${JAVA_AWT_INCLUDE_PATH}
   )
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 #INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
@@ -36,9 +33,7 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # http://www.debian.org/doc/packaging-manuals/java-policy/x105.html
 SWIG_ADD_MODULE(gdcmjni java gdcm.i)
 SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
-  #${JNI_LIBRARIES}
-  ${JAVA_AWT_LIB_PATH}
-  ${JAVA_JVM_LIB_PATH}
+  ${JNI_LIBRARIES}
 )
 # Stupid cmake-swig module is doing that for us, when not needed
 IF(UNIX)
