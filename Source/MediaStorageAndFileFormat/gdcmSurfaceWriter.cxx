@@ -14,8 +14,23 @@ SurfaceWriter::~SurfaceWriter()
 {
 }
 
-const unsigned long SurfaceWriter::GetNumberOfSurfaces() const
+const unsigned long SurfaceWriter::ComputeNumberOfSurfaces()
 {
+  std::vector< SmartPointer< Segment > >::const_iterator  it    = Segments.begin();
+  std::vector< SmartPointer< Segment > >::const_iterator  itEnd = Segments.end();
+  for (; it != itEnd; it++)
+  {
+    NumberOfSurfaces += (*it)->GetSurfaceCount();
+  }
+}
+
+const unsigned long SurfaceWriter::GetNumberOfSurfaces()
+{
+  if (NumberOfSurfaces == 0)
+  {
+    ComputeNumberOfSurfaces();
+  }
+
   return NumberOfSurfaces;
 }
 
@@ -31,15 +46,20 @@ bool SurfaceWriter::PrepareWrite()
     return false;
   }
 
-  File &      file  = GetFile();
-  DataSet &   ds    = file.GetDataSet();
+  File &                 file = GetFile();
+  DataSet &              ds   = file.GetDataSet();
 
-  FileMetaInformation &  fmi = file.GetHeader();
-  const TransferSyntax & ts  = fmi.GetDataSetTransferSyntax();
-//  assert( ts.IsExplicit() || ts.IsImplicit() );
+  FileMetaInformation &  fmi  = file.GetHeader();
+  const TransferSyntax & ts   = fmi.GetDataSetTransferSyntax();
+  assert( ts.IsExplicit() || ts.IsImplicit() );
 
   // Number Of Surface
-  const unsigned long       nbSurfaces = this->GetNumberOfSurfaces();
+  const unsigned long     nbSurfaces = this->GetNumberOfSurfaces();
+  if (nbSurfaces == 0)
+  {
+    gdcmErrorMacro( "No surface to write" );
+    return false;
+  }
   Attribute<0x0066, 0x0001> numberOfSurfaces;
   numberOfSurfaces.SetValue( nbSurfaces );
   ds.Replace( numberOfSurfaces.GetAsDataElement() );
@@ -62,7 +82,7 @@ bool SurfaceWriter::PrepareWrite()
   const unsigned int              nbItems    = surfacesSQ->GetNumberOfItems();
   if (nbItems < nbSurfaces)
   {
-    const unsigned int diff           = nbSurfaces - nbItems;
+    const int          diff           = nbSurfaces - nbItems;
     const unsigned int nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
@@ -90,7 +110,7 @@ bool SurfaceWriter::PrepareWrite()
       SmartPointer< Surface > surface = *it;
       assert( surface );
 
-      Item &    surfaceItem = surfacesSQ->GetItem(numSurface++);
+      Item &    surfaceItem = surfacesSQ->GetItem(numSurface);
       DataSet & surfaceDS   = surfaceItem.GetNestedDataSet();
 
       // Recommended Display Grayscale Value
@@ -104,14 +124,21 @@ bool SurfaceWriter::PrepareWrite()
       surfaceDS.Replace( recommendedDisplayCIELabValue.GetAsDataElement() );
 
       // Surface Number
-      Attribute<0x0066, 0x0003> surfaceNumber;
-      surfaceNumber.SetValue( surface->GetSurfaceNumber() );
-      surfaceDS.Replace( surfaceNumber.GetAsDataElement() );
+      Attribute<0x0066, 0x0003> surfaceNumberAt;
+      unsigned long surfaceNumber = surface->GetSurfaceNumber();
+      if (surfaceNumber == 0)
+        surfaceNumber = numSurface;
+      surfaceNumberAt.SetValue( surfaceNumber );
+      surfaceDS.Replace( surfaceNumberAt.GetAsDataElement() );
 
       // Surface Comments
-      Attribute<0x0066, 0x0004> surfaceComments;
-      surfaceComments.SetValue( surface->GetSurfaceComments() );
-      surfaceDS.Replace( surfaceComments.GetAsDataElement() );
+      const char * surfaceComments = surface->GetSurfaceComments();
+      if (surfaceComments != 0)
+      {
+        Attribute<0x0066, 0x0004> surfaceCommentsAt;
+        surfaceCommentsAt.SetValue( surfaceComments );
+        surfaceDS.Replace( surfaceCommentsAt.GetAsDataElement() );
+      }
 
       // Surface Processing
       const bool surfaceProcessing = surface->GetSurfaceProcessing();
@@ -140,7 +167,7 @@ bool SurfaceWriter::PrepareWrite()
       if (reconmmendedPresentationType != 0)
         presentationType.SetValue( reconmmendedPresentationType );
       else
-        presentationType.SetValue( Surface::GetVIEWTypeString(Surface::SURFACE) );
+        presentationType.SetValue( Surface::GetVIEWTypeString(Surface::SURFACE) );  // Is it the right thing to do?
       surfaceDS.Replace( presentationType.GetAsDataElement() );
 
       // Finite Volume
@@ -186,11 +213,6 @@ bool SurfaceWriter::PrepareWrite()
         Item &    surfacePointsItem = surfacePointsSq->GetItem(1);
         DataSet & surfacePointsDs   = surfacePointsItem.GetNestedDataSet();
 
-        // Number Of Surface Points
-        Attribute<0x0066, 0x0015> numberOfSurfacePoints;
-        numberOfSurfacePoints.SetValue( surface->GetNumberOfSurfacePoints() );
-        surfacePointsDs.Replace( numberOfSurfacePoints.GetAsDataElement() );
-
         // Point Coordinates Data
         DataElement pointCoordDataDE( Tag(0x0066, 0x0016) );
         const Value & pointCoordinateDataValue = surface->GetPointCoordinatesData().GetValue();
@@ -209,6 +231,14 @@ bool SurfaceWriter::PrepareWrite()
           pointCoordDataDE.SetVR( VR::OF );
 
         surfacePointsDs.Replace( pointCoordDataDE );
+
+        // Number Of Surface Points
+        Attribute<0x0066, 0x0015> numberOfSurfacePointsAt;
+        unsigned long numberOfSurfacePoints = surface->GetNumberOfSurfacePoints();
+        if (numberOfSurfacePoints == 0)
+          numberOfSurfacePoints = bv->GetLength() / (VR::GetLength(VR::OF) * 3);
+        numberOfSurfacePointsAt.SetValue( numberOfSurfacePoints );
+        surfacePointsDs.Replace( numberOfSurfacePointsAt.GetAsDataElement() );
       }
 
       //******    Surface Points Normals    *****//
@@ -252,6 +282,7 @@ bool SurfaceWriter::PrepareWrite()
 
         // Vector Dimensionality
         Attribute<0x0066, 0x001F> vectorDimensionality;
+        assert( surface->GetVectorDimensionality() );
         vectorDimensionality.SetValue( surface->GetVectorDimensionality() );
         surfacePointsNormalsDS.Replace( vectorDimensionality.GetAsDataElement() );
 
@@ -404,10 +435,11 @@ bool SurfaceWriter::PrepareWrite()
 
           // Fill the Segment Sequence
           const unsigned int              numberOfPrimitives  = meshPrimitive->GetNumberOfPrimitivesData();
+          assert( numberOfPrimitives );
           const unsigned int              nbItems             = typedSequenceSQ->GetNumberOfItems();
           if (nbItems < numberOfPrimitives)
           {
-            const unsigned int diff           = numberOfPrimitives - nbItems;
+            const int          diff           = numberOfPrimitives - nbItems;
             const unsigned int nbOfItemToMake = (diff > 0?diff:0);
             for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
             {
@@ -429,7 +461,6 @@ bool SurfaceWriter::PrepareWrite()
 
             // "Typed" Point Index List
             DataElement typedPointIndexListDE( typedPrimitiveTag );
-            typedPointIndexListDE.SetVR( VR::OW );
 
             const Value & pointIndexListValue = it->GetValue();
             assert( &pointIndexListValue );
@@ -437,7 +468,7 @@ bool SurfaceWriter::PrepareWrite()
 
             const ByteValue * pointIndexListBV = typedPointIndexListDE.GetByteValue();
             VL pointIndexListVL;
-            if( pointIndexListBV && ts.IsExplicit() )
+            if( pointIndexListBV )
             {
               pointIndexListVL = pointIndexListBV->GetLength();
             }
@@ -447,6 +478,9 @@ bool SurfaceWriter::PrepareWrite()
             }
             typedPointIndexListDE.SetVL( pointIndexListVL );
 
+            if ( ts.IsExplicit() )
+              typedPointIndexListDE.SetVR( VR::OW );
+
             pointIndexListDS.Replace( typedPointIndexListDE );
           }
         }
@@ -455,8 +489,7 @@ bool SurfaceWriter::PrepareWrite()
           // Handled "simple" mesh primitives
 
           // "Typed" Point Index List
-          DataElement typedPointIndexListDE( typedPrimitiveTag );
-          typedPointIndexListDE.SetVR( VR::OW );
+          DataElement   typedPointIndexListDE( typedPrimitiveTag );
 
           const Value & pointIndexListValue = meshPrimitive->GetPrimitiveData().GetValue();
           assert( &pointIndexListValue );
@@ -471,11 +504,13 @@ bool SurfaceWriter::PrepareWrite()
           typedPointIndexListDE.SetVL( pointIndexListVL );
 
           if ( ts.IsExplicit() )
-            typedPointIndexListDE.SetVR( VR::OF );
+            typedPointIndexListDE.SetVR( VR::OW );
 
           pointIndexListDS.Replace( typedPointIndexListDE );
         }
       }
+
+      ++numSurface;
     }
   }
 
