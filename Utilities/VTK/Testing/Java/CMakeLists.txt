@@ -3,11 +3,7 @@ SET(VTKGDCM_JAVA_TEST_SRCS
   TestvtkGDCMImageReader
   )
 
-if(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${LIBRARY_OUTPUT_PATH}/gdcm.jar:${VTK_JAVA_JAR}:${GDCM_VTK_JAVA_JAR})
-else(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${LIBRARY_OUTPUT_PATH}/gdcm.jar\;${VTK_JAVA_JAR}\;${GDCM_VTK_JAVA_JAR})
-endif(UNIX)
+set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar${PATH_SEPARATOR}${LIBRARY_OUTPUT_PATH}/gdcm.jar${PATH_SEPARATOR}${VTK_JAVA_JAR}${PATH_SEPARATOR}${GDCM_VTK_JAVA_JAR})
 
 if(IS_DIRECTORY ${VTK_DIR})
   if(IS_DIRECTORY ${VTK_DIR}/bin)
