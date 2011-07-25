@@ -56,15 +56,19 @@ public:
   //    const char * GetSegmentDescription() const;	// Type 3
 
   BasicCodedEntry const & GetAnatomicRegion() const;
+  BasicCodedEntry & GetAnatomicRegion();
   void SetAnatomicRegion(BasicCodedEntry const & BSE);
 
   BasicCodedEntry const & GetPropertyCategory() const;
+  BasicCodedEntry & GetPropertyCategory();
   void SetPropertyCategory(BasicCodedEntry const & BSE);
 
   BasicCodedEntry const & GetPropertyType() const;
+  BasicCodedEntry & GetPropertyType();
   void SetPropertyType(BasicCodedEntry const & BSE);
 
   BasicCodedEntry const & GetAlgorithmFamily() const;
+  BasicCodedEntry & GetAlgorithmFamily();
   void SetAlgorithmFamily(BasicCodedEntry const & BSE);
 
   ALGOType GetSegmentAlgorithmType() const;

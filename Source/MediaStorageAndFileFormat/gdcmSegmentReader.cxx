@@ -166,6 +166,102 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   // Check if there is a Surface Segmentation Module
   if (surfaceCount > 0)
   {
+    //*****   GENERAL ANATOMY MANDATORY MACRO ATTRIBUTES   *****//
+    // Anatomic Region Sequence (0008,2218) Type 1
+    if( !segmentDS.FindDataElement( Tag(0x0008, 0x2218) ) )
+    {
+      SmartPointer<SequenceOfItems> anatRegSQ = segmentDS.GetDataElement( Tag(0x0008, 0x2218) ).GetValueAsSQ();
+
+      if (anatRegSQ->GetNumberOfItems() > 0)  // Only one item is a type 1
+      {
+        const Item &    anatRegItem = anatRegSQ->GetItem(1);
+        const DataSet & anatRegDS   = anatRegItem.GetNestedDataSet();
+
+        //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
+        Segment::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
+
+        // Code Value (Type 1)
+        Attribute<0x0008, 0x0100> codeValueAt;
+        codeValueAt.SetFromDataSet( anatRegDS );
+        anatReg.CV = codeValueAt.GetValue();
+
+        // Coding Scheme (Type 1)
+        Attribute<0x0008, 0x0102> codingSchemeAt;
+        codingSchemeAt.SetFromDataSet( anatRegDS );
+        anatReg.CSD = codeValueAt.GetValue();
+
+        // Code Meaning (Type 1)
+        Attribute<0x0008, 0x0104> codeMeaningAt;
+        codeMeaningAt.SetFromDataSet( anatRegDS );
+        anatReg.CM = codeValueAt.GetValue();
+      }
+    }
+    // else assert? return false? gdcmWarning?
+
+    //*****   Segmented Property Category Code Sequence   *****//
+    // Segmented Property Category Code Sequence (0062,0003) Type 1
+    if( !segmentDS.FindDataElement( Tag(0x0062, 0x0003) ) )
+    {
+      SmartPointer<SequenceOfItems> propCatSQ = segmentDS.GetDataElement( Tag(0x0062, 0x0003) ).GetValueAsSQ();
+
+      if (propCatSQ->GetNumberOfItems() > 0)  // Only one item is a type 1
+      {
+        const Item &    propCatItem = propCatSQ->GetItem(1);
+        const DataSet & propCatDS   = propCatItem.GetNestedDataSet();
+
+        //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
+        Segment::BasicCodedEntry & propCat = segment->GetPropertyCategory();
+
+        // Code Value (Type 1)
+        Attribute<0x0008, 0x0100> codeValueAt;
+        codeValueAt.SetFromDataSet( propCatDS );
+        propCat.CV = codeValueAt.GetValue();
+
+        // Coding Scheme (Type 1)
+        Attribute<0x0008, 0x0102> codingSchemeAt;
+        codingSchemeAt.SetFromDataSet( propCatDS );
+        propCat.CSD = codeValueAt.GetValue();
+
+        // Code Meaning (Type 1)
+        Attribute<0x0008, 0x0104> codeMeaningAt;
+        codeMeaningAt.SetFromDataSet( propCatDS );
+        propCat.CM = codeValueAt.GetValue();
+      }
+    }
+    // else assert? return false? gdcmWarning?
+
+    //*****   Segmented Property Type Code Sequence   *****//
+    // Segmented Property Type Code Sequence (0062,000F) Type 1
+    if( !segmentDS.FindDataElement( Tag(0x0062, 0x000F) ) )
+    {
+      SmartPointer<SequenceOfItems> propTypSQ = segmentDS.GetDataElement( Tag(0x0062, 0x000F) ).GetValueAsSQ();
+
+      if (propTypSQ->GetNumberOfItems() > 0)  // Only one item is a type 1
+      {
+        const Item &    propTypItem = propTypSQ->GetItem(1);
+        const DataSet & propTypDS   = propTypItem.GetNestedDataSet();
+
+        //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
+        Segment::BasicCodedEntry & propTyp = segment->GetPropertyType();
+
+        // Code Value (Type 1)
+        Attribute<0x0008, 0x0100> codeValueAt;
+        codeValueAt.SetFromDataSet( propTypDS );
+        propTyp.CV = codeValueAt.GetValue();
+
+        // Coding Scheme (Type 1)
+        Attribute<0x0008, 0x0102> codingSchemeAt;
+        codingSchemeAt.SetFromDataSet( propTypDS );
+        propTyp.CSD = codeValueAt.GetValue();
+
+        // Code Meaning (Type 1)
+        Attribute<0x0008, 0x0104> codeMeaningAt;
+        codeMeaningAt.SetFromDataSet( propTypDS );
+        propTyp.CM = codeValueAt.GetValue();
+      }
+    }
+    // else assert? return false? gdcmWarning?
+
     // Referenced Surface Sequence
     const Tag refSurfaceSQTag(0x0066, 0x002B);
     if (segmentDS.FindDataElement(refSurfaceSQTag))
