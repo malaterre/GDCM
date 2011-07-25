@@ -203,7 +203,7 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   {
     SmartPointer< SequenceOfItems > surfaceNormalsSQ = surfacesDS.GetDataElement(surfaceNormalsSQTag).GetValueAsSQ();
 
-    if ( surfaceNormalsSQ->GetNumberOfItems() < 1)  // One Item shall be permitted
+    if ( surfaceNormalsSQ->GetNumberOfItems() > 0)  // One Item shall be permitted
     {
       const DataSet & surfaceNormalsDS = surfaceNormalsSQ->GetItem(1).GetNestedDataSet();
 
