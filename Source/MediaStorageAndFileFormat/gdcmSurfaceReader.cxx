@@ -174,19 +174,28 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
 
   const DataSet & surfacePointsDS = surfacePointsSQ->GetItem(1).GetNestedDataSet();
 
-  // Number of Surface Points
-  Attribute<0x0066, 0x0015> numberOfSurfacePoints;
-  numberOfSurfacePoints.SetFromDataSet( surfacePointsDS );
-  surface->SetNumberOfSurfacePoints( numberOfSurfacePoints.GetValue() );
-
   const Tag pointCoordDataTag = Tag(0x0066, 0x0016);
   if( !surfacePointsDS.FindDataElement( pointCoordDataTag ) )
     {
     gdcmWarningMacro( "No Point Coordinates Data Found" );
     return false;
     }
-  const DataElement & de = surfacePointsDS.GetDataElement( pointCoordDataTag );
-  surface->SetPointCoordinatesData( de );
+  const DataElement & pointCoordDataDe = surfacePointsDS.GetDataElement( pointCoordDataTag );
+  surface->SetPointCoordinatesData( pointCoordDataDe );
+
+  // Number of Surface Points
+  if (surfacePointsDS.FindDataElement( Tag(0x0066, 0x0015) )
+   && !surfacePointsDS.GetDataElement( Tag(0x0066, 0x0015) ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x0015> numberOfSurfacePointsAt;
+    numberOfSurfacePointsAt.SetFromDataSet( surfacePointsDS );
+    surface->SetNumberOfSurfacePoints( numberOfSurfacePointsAt.GetValue() );
+  }
+  else
+  {
+    const unsigned long numberOfSurfacePoints = (unsigned long) ( pointCoordDataDe.GetVL().GetLength() / (VR::GetLength(VR::OF) * 3) );
+    surface->SetNumberOfSurfacePoints( numberOfSurfacePoints );
+  }
 
   //*****   Surface Points Normals Sequence   ******//
   const Tag surfaceNormalsSQTag(0x0066, 0x0012);
@@ -284,8 +293,13 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
       typedSQ = surfacePrimitivesDS.GetDataElement( Tag(0x0066, 0x0034) ).GetValueAsSQ();
       meshPrimitive->SetPrimitiveType( MeshPrimitive::FACET );
     }
+    else
+    {
+      gdcmErrorMacro( "Unknown surface mesh primitives type" );
+       return false;
+    }
 
-    if (typedSQ && typedSQ->GetNumberOfItems() > 0)
+    if (typedSQ->GetNumberOfItems() > 0)
     {
       const unsigned int              nbItems = typedSQ->GetNumberOfItems();
       MeshPrimitive::PrimitivesData & primitivesData= meshPrimitive->GetPrimitivesData();
