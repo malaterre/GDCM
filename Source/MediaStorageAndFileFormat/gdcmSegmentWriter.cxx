@@ -330,8 +330,10 @@ bool SegmentWriter::PrepareWrite()
         Attribute<0x0066, 0x002C> refSurfaceNumberAt;
         unsigned long refSurfaceNumber = surface->GetSurfaceNumber();
         if (refSurfaceNumber == 0)
+        {
           refSurfaceNumber = surfaceNumber++;
-        surface->SetSurfaceNumber( refSurfaceNumber );
+          surface->SetSurfaceNumber( refSurfaceNumber );
+        }
         refSurfaceNumberAt.SetValue( refSurfaceNumber );
         segmentsRefDS.Replace( refSurfaceNumberAt.GetAsDataElement() );
 
