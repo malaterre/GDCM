@@ -140,6 +140,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
 {
   SmartPointer< Segment > segment   = new Segment;
 
+  const DataSet &         rootDs    = GetFile().GetDataSet();
   const DataSet &         segmentDS = segmentItem.GetNestedDataSet();
 
   // Segment Number
@@ -172,7 +173,8 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   segment->SetSurfaceCount( surfaceCount );
 
   // Check if there is a Surface Segmentation Module
-  if (surfaceCount > 0)
+  if (surfaceCount > 0
+   || rootDs.FindDataElement( Tag(0x0066, 0x0002) ))
   {
     //*****   GENERAL ANATOMY MANDATORY MACRO ATTRIBUTES   *****//
     // Anatomic Region Sequence (0008,2218) Type 1
@@ -325,6 +327,9 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
     Attribute<0x0062, 0x0009> segmentAlgoName;
     segmentAlgoName.SetFromDataSet( segmentDS );
     segment->SetAlgorithmName( segmentAlgoName.GetValue() );
+
+    // Index the segment with item number
+    Segments[idx] = segment;
   }
 
   return true;
