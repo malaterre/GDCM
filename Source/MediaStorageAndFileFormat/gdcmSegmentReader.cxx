@@ -143,9 +143,17 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   const DataSet &         segmentDS = segmentItem.GetNestedDataSet();
 
   // Segment Number
-  Attribute<0x0062, 0x0004> segmentNumber;
-  segmentNumber.SetFromDataSet( segmentDS );
-  segment->SetSegmentNumber( segmentNumber.GetValue() );
+  if (segmentDS.FindDataElement( Tag(0x0062, 0x0004) )
+  && !segmentDS.GetDataElement( Tag(0x0062, 0x0004) ).IsEmpty() )
+  {
+    Attribute<0x0062, 0x0004> segmentNumberAt;
+    segmentNumberAt.SetFromDataSet( segmentDS );
+    segment->SetSegmentNumber( segmentNumberAt.GetValue() );
+  }
+  else
+  {
+    segment->SetSegmentNumber( idx );
+  }
 
   // Segment Label
   Attribute<0x0062, 0x0005> segmentLabel;
