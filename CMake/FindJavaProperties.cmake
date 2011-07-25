@@ -32,6 +32,8 @@ set(JAVA_PROPERTY_LIST
   os.name
   java.home
   sun.boot.library.path
+  path.separator # : / ;
+  sun.arch.data.model # 32 / 64
   )
 foreach(property ${JAVA_PROPERTY_LIST})
   string(TOUPPER ${property} property_upper)
