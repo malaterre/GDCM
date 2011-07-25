@@ -61,6 +61,7 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
 "
   SET(ENV{LD_LIBRARY_PATH} ${ld_library_path})
+  SET(ENV{DYLD_LIBRARY_PATH} ${ld_library_path})
   #SET(ENV{CLASSPATH} ${pyenv}/gdcm.jar:.)
   MESSAGE(\"pyenv: ${pyenv}\")
   MESSAGE(\"loc: ${loc}\")
