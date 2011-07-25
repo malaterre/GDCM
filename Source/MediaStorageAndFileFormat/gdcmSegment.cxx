@@ -96,6 +96,11 @@ Segment::BasicCodedEntry const & Segment::GetAnatomicRegion() const
   return AnatomicRegion;
 }
 
+Segment::BasicCodedEntry & Segment::GetAnatomicRegion()
+{
+  return AnatomicRegion;
+}
+
 void Segment::SetAnatomicRegion(BasicCodedEntry const & BSE)
 {
   AnatomicRegion.CV   = BSE.CV;
@@ -105,7 +110,12 @@ void Segment::SetAnatomicRegion(BasicCodedEntry const & BSE)
 
 Segment::BasicCodedEntry const & Segment::GetPropertyCategory() const
 {
-return PropertyCategory;
+  return PropertyCategory;
+}
+
+Segment::BasicCodedEntry & Segment::GetPropertyCategory()
+{
+  return PropertyCategory;
 }
 
 void Segment::SetPropertyCategory(BasicCodedEntry const & BSE)
@@ -117,7 +127,12 @@ void Segment::SetPropertyCategory(BasicCodedEntry const & BSE)
 
 Segment::BasicCodedEntry const & Segment::GetPropertyType() const
 {
-return PropertyType;
+  return PropertyType;
+}
+
+Segment::BasicCodedEntry & Segment::GetPropertyType()
+{
+  return PropertyType;
 }
 
 void Segment::SetPropertyType(BasicCodedEntry const & BSE)
@@ -128,6 +143,11 @@ void Segment::SetPropertyType(BasicCodedEntry const & BSE)
 }
 
 Segment::BasicCodedEntry const & Segment::GetAlgorithmFamily() const
+{
+  return AlgorithmFamily;
+}
+
+Segment::BasicCodedEntry & Segment::GetAlgorithmFamily()
 {
   return AlgorithmFamily;
 }
