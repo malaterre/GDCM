@@ -13,8 +13,10 @@ if(IS_DIRECTORY ${VTK_DIR})
   if(IS_DIRECTORY ${VTK_DIR}/bin)
     # this is a build-tree VTK
     set(runtimepath "${VTK_DIR}/bin")
-    get_filename_component(dummyjava ${JAVA_MAWT_LIBRARY} PATH)
-    set(runtimepath "${runtimepath}:${JAVA_LIBRARY_PATH}:${dummyjava}")
+    if(UNIX)
+      get_filename_component(dummyjava ${JAVA_MAWT_LIBRARY} PATH)
+      set(runtimepath "${runtimepath}:${JAVA_LIBRARY_PATH}:${dummyjava}")
+    endif()
   endif()
 endif()
 
