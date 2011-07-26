@@ -639,7 +639,7 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
       if( interceptslope[1] == 0 )
         {
         // come' on ! WTF
-        gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+        gdcmDebugMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
         interceptslope[1] = 1;
         }
       }
