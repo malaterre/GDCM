@@ -125,7 +125,7 @@ bool SegmentWriter::PrepareWrite()
     // else assert? return false? gdcmWarning?
 
     //*****   GENERAL ANATOMY MANDATORY MACRO ATTRIBUTES   *****//
-    const Segment::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
+    const SegmentHelper::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
     if (!anatReg.CV.empty() && !anatReg.CSD.empty() && !anatReg.CM.empty())
     {
       // Anatomic Region Sequence (0008,2218) Type 1
@@ -176,7 +176,7 @@ bool SegmentWriter::PrepareWrite()
     // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Category Code Sequence   *****//
-    const Segment::BasicCodedEntry & propCat = segment->GetPropertyCategory();
+    const SegmentHelper::BasicCodedEntry & propCat = segment->GetPropertyCategory();
     if (!propCat.CV.empty() && !propCat.CSD.empty() && !propCat.CM.empty())
     {
       // Segmented Property Category Code Sequence (0062,0003) Type 1
@@ -227,7 +227,7 @@ bool SegmentWriter::PrepareWrite()
     // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Type Code Sequence   *****//
-    const Segment::BasicCodedEntry & propType = segment->GetPropertyType();
+    const SegmentHelper::BasicCodedEntry & propType = segment->GetPropertyType();
     if (!propType.CV.empty() && !propType.CSD.empty() && !propType.CM.empty())
     {
       // Segmented Property Type Code Sequence (0062,000F) Type 1
@@ -277,7 +277,7 @@ bool SegmentWriter::PrepareWrite()
     }
     // else assert? return false? gdcmWarning?
 
-    //***** Referenced Surface Sequence *****//
+    //*****   Surface segmentation    *****//
     const unsigned int surfaceCount = segment->GetSurfaceCount();
     if (surfaceCount > 0)
     {
@@ -336,103 +336,6 @@ bool SegmentWriter::PrepareWrite()
         }
         refSurfaceNumberAt.SetValue( refSurfaceNumber );
         segmentsRefDS.Replace( refSurfaceNumberAt.GetAsDataElement() );
-
-        //*****   Segment Surface Generation Algorithm Identification Sequence    *****//
-        {
-          SmartPointer<SequenceOfItems> segmentsAlgoIdSQ;
-          const Tag segmentsAlgoIdTag(0x0066, 0x002D);
-          if( !segmentsRefDS.FindDataElement( segmentsAlgoIdTag ) )
-          {
-            segmentsAlgoIdSQ = new SequenceOfItems;
-            DataElement detmp( segmentsAlgoIdTag );
-            detmp.SetVR( VR::SQ );
-            detmp.SetValue( *segmentsAlgoIdSQ );
-            detmp.SetVLToUndefined();
-            segmentsRefDS.Insert( detmp );
-          }
-          segmentsAlgoIdSQ = segmentsRefDS.GetDataElement( segmentsAlgoIdTag ).GetValueAsSQ();
-          segmentsAlgoIdSQ->SetLengthToUndefined();
-
-          if (segmentsAlgoIdSQ->GetNumberOfItems() < 1)
-          {
-            Item item;
-            item.SetVLToUndefined();
-            segmentsAlgoIdSQ->AddItem(item);
-          }
-
-          ::gdcm::Item &    segmentsAlgoIdItem  = segmentsAlgoIdSQ->GetItem(1);
-          ::gdcm::DataSet & segmentsAlgoIdDS    = segmentsAlgoIdItem.GetNestedDataSet();
-
-          //*****   Algorithm Family Code Sequence    *****//
-          //See: PS.3.3 Table 8.8-1 and PS 3.16 Context ID 7162
-          const Segment::BasicCodedEntry & algoFamily = segment->GetAlgorithmFamily();
-          if (!algoFamily.CV.empty() && !algoFamily.CSD.empty() && !algoFamily.CM.empty())
-          {
-            SmartPointer<SequenceOfItems> algoFamilyCodeSQ;
-            const Tag algoFamilyCodeTag(0x0066, 0x002F);
-            if( !segmentsAlgoIdDS.FindDataElement( algoFamilyCodeTag ) )
-            {
-              algoFamilyCodeSQ = new SequenceOfItems;
-              DataElement detmp( algoFamilyCodeTag );
-              detmp.SetVR( VR::SQ );
-              detmp.SetValue( *algoFamilyCodeSQ );
-              detmp.SetVLToUndefined();
-              segmentsAlgoIdDS.Insert( detmp );
-            }
-            algoFamilyCodeSQ = segmentsAlgoIdDS.GetDataElement( algoFamilyCodeTag ).GetValueAsSQ();
-            algoFamilyCodeSQ->SetLengthToUndefined();
-
-            // Fill the Algorithm Family Code Sequence
-            if (algoFamilyCodeSQ->GetNumberOfItems() < 1)
-            {
-                Item item;
-                item.SetVLToUndefined();
-                algoFamilyCodeSQ->AddItem(item);
-            }
-
-            ::gdcm::Item &    algoFamilyCodeItem  = algoFamilyCodeSQ->GetItem(1);
-            ::gdcm::DataSet & algoFamilyCodeDS    = algoFamilyCodeItem.GetNestedDataSet();
-
-            //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
-            {
-              // Code Value (Type 1)
-              Attribute<0x0008, 0x0100> codeValueAt;
-              codeValueAt.SetValue( algoFamily.CV );
-              algoFamilyCodeDS.Replace( codeValueAt.GetAsDataElement() );
-
-              // Coding Scheme (Type 1)
-              Attribute<0x0008, 0x0102> codingSchemeAt;
-              codingSchemeAt.SetValue( algoFamily.CSD );
-              algoFamilyCodeDS.Replace( codingSchemeAt.GetAsDataElement() );
-
-              // Code Meaning (Type 1)
-              Attribute<0x0008, 0x0104> codeMeaningAt;
-              codeMeaningAt.SetValue( algoFamily.CM );
-              algoFamilyCodeDS.Replace( codeMeaningAt.GetAsDataElement() );
-            }
-          }
-          // else assert? return false? gdcmWarning?
-
-          // Algorithm Version
-          const char * algorithmVersion = segment->GetAlgorithmVersion();
-          if (algorithmVersion != 0)
-          {
-            Attribute<0x0066, 0x0031> algorithmVersionAt;
-            algorithmVersionAt.SetValue( algorithmVersion );
-            segmentsAlgoIdDS.Replace( algorithmVersionAt.GetAsDataElement() );
-          }
-          // else assert? return false? gdcmWarning?
-
-          // Algorithm Name
-          const char * algorithmName = segment->GetAlgorithmName();
-          if (algorithmName != 0)
-          {
-            Attribute<0x0066, 0x0036> algorithmNameAt;
-            algorithmNameAt.SetValue( algorithmName );
-            segmentsAlgoIdDS.Replace( algorithmNameAt.GetAsDataElement() );
-          }
-          // else assert? return false? gdcmWarning?
-        }
 
         //*****   Segment Surface Source Instance Sequence   *****//
         {

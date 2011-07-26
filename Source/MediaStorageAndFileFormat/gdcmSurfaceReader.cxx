@@ -339,11 +339,105 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
     return false;
   }
 
+  // Get the appropriated segment
+  SmartPointer< Segment > segment = Segments[surfaceNumber];
+
+  //*****   Segment Sequence    *****//
+  SmartPointer<SequenceOfItems>   segmentsSQ      = F->GetDataSet().GetDataElement( Tag(0x0062, 0x0002) ).GetValueAsSQ();
+  SequenceOfItems::ConstIterator  itSegment       = segmentsSQ->Begin();
+  SequenceOfItems::ConstIterator  itEndSegment    = segmentsSQ->End();
+  bool                            findItem        = false;
+  while( !findItem && itSegment != itEndSegment )
+  {
+    const DataSet &                 segmentDS       = itSegment->GetNestedDataSet();
+
+    //*****   Referenced Surface Sequence    *****//
+    SmartPointer<SequenceOfItems>   refSurfaceSQ    = segmentDS.GetDataElement( Tag(0x0066, 0x002B) ).GetValueAsSQ();
+    SequenceOfItems::ConstIterator  itRefSurface    = refSurfaceSQ->Begin();
+    SequenceOfItems::ConstIterator  itEndRefSurface = refSurfaceSQ->End();
+    while( !findItem && itRefSurface != itEndRefSurface )
+    {
+      const DataSet &                 refSurfaceDS       = itRefSurface->GetNestedDataSet();
+
+      // Referenced Surface Number
+      Attribute<0x0066, 0x002C> refSurfaceNumberAt;
+      refSurfaceNumberAt.SetFromDataSet( refSurfaceDS );
+      unsigned long             refSurfaceNumber;
+      if ( !refSurfaceNumberAt.GetAsDataElement().IsEmpty() )
+      {
+        refSurfaceNumber = refSurfaceNumberAt.GetValue();
+      }
+      else
+      {
+        refSurfaceNumber = idx;
+      }
+
+      if (refSurfaceNumber == surfaceNumber)
+      {
+        findItem = true;
+
+        //*****   Segment Surface Generation Algorithm Identification Sequence    *****//
+        if( refSurfaceDS.FindDataElement( Tag(0x0066, 0x002D) ) )
+        {
+          SmartPointer<SequenceOfItems> algoSQ = refSurfaceDS.GetDataElement( Tag(0x0066, 0x002D) ).GetValueAsSQ();
+
+          if (algoSQ->GetNumberOfItems() > 0)  // Only one item is a type 1
+          {
+            const Item &    algoItem = algoSQ->GetItem(1);
+            const DataSet & algoDS   = algoItem.GetNestedDataSet();
+
+            //*****   Algorithm Family Code Sequence    *****//
+            if( algoDS.FindDataElement( Tag(0x0066, 0x002F) ) )
+            {
+              SmartPointer<SequenceOfItems> algoFamilySQ = algoDS.GetDataElement( Tag(0x0066, 0x002F) ).GetValueAsSQ();
+
+              if (algoFamilySQ->GetNumberOfItems() > 0)  // Only one item is a type 1
+              {
+                const Item &    algoFamilyItem = algoFamilySQ->GetItem(1);
+                const DataSet & algoFamilyDS   = algoFamilyItem.GetNestedDataSet();
+
+                //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
+                SegmentHelper::BasicCodedEntry & algoFamily = surface->GetAlgorithmFamily();
+
+                // Code Value (Type 1)
+                Attribute<0x0008, 0x0100> codeValueAt;
+                codeValueAt.SetFromDataSet( algoFamilyDS );
+                algoFamily.CV = codeValueAt.GetValue();
+
+                // Coding Scheme (Type 1)
+                Attribute<0x0008, 0x0102> codingSchemeAt;
+                codingSchemeAt.SetFromDataSet( algoFamilyDS );
+                algoFamily.CSD = codingSchemeAt.GetValue();
+
+                // Code Meaning (Type 1)
+                Attribute<0x0008, 0x0104> codeMeaningAt;
+                codeMeaningAt.SetFromDataSet( algoFamilyDS );
+                algoFamily.CM = codeMeaningAt.GetValue();
+              }
+            }
+
+            // Algorithm Version
+            Attribute<0x0066, 0x0031> algoVersionAt;
+            algoVersionAt.SetFromDataSet( algoDS );
+            surface->SetAlgorithmVersion( algoVersionAt.GetValue() );
+
+            // Algorithm Name
+            Attribute<0x0066, 0x0036> algoNameAt;
+            algoNameAt.SetFromDataSet( algoDS );
+            surface->SetAlgorithmName( algoNameAt.GetValue() );
+          }
+        }
+        // else assert? return false? gdcmWarning?
+      }
+      itRefSurface++;
+    }
+    itSegment++;
+  }
+
   // Add a MeshPrimitive to the surface
   surface->SetMeshPrimitive( *meshPrimitive );
 
   // Add surface to the appropriated segment
-  SmartPointer< Segment > segment = Segments[surfaceNumber];
   segment->AddSurface(surface);
 
   return true;

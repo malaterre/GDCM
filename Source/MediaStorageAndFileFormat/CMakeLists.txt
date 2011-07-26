@@ -81,6 +81,7 @@ SET(MSFF_SRCS
   gdcmSegmentReader.cxx
   gdcmSurfaceReader.cxx
   gdcmSurfaceHelper.cxx
+  gdcmSegmentHelper.cxx
   )
 if(OPENJPEG_VERSION VERSION_LESS 2.0)
   list(APPEND MSFF_SRCS
