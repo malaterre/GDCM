@@ -5,6 +5,7 @@ set(examples
   HelloVTKWorld
   ReadSeriesIntoVTK
   #AWTMedical3
+  MPRViewer
   )
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
