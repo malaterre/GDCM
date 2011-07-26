@@ -96,6 +96,7 @@ bool SurfaceWriter::PrepareWrite()
   std::vector< SmartPointer< Segment > >                  segments  = this->GetSegments();
   std::vector< SmartPointer< Segment > >::const_iterator  it        = segments.begin();
   std::vector< SmartPointer< Segment > >::const_iterator  itEnd     = segments.end();
+  unsigned int                                            numSegment= 1;
   unsigned int                                            numSurface= 1;
   for (; it != itEnd; it++)
   {
@@ -110,7 +111,7 @@ bool SurfaceWriter::PrepareWrite()
       SmartPointer< Surface > surface = *it;
       assert( surface );
 
-      Item &    surfaceItem = surfacesSQ->GetItem(numSurface);
+      Item &    surfaceItem = surfacesSQ->GetItem( numSegment );
       DataSet & surfaceDS   = surfaceItem.GetNestedDataSet();
 
       // Recommended Display Grayscale Value
@@ -512,6 +513,138 @@ bool SurfaceWriter::PrepareWrite()
 
       ++numSurface;
     }
+
+
+    //*****   Segment Sequence    *****//
+    SmartPointer<SequenceOfItems>   segmentsSQ      = ds.GetDataElement( Tag(0x0062, 0x0002) ).GetValueAsSQ();
+    Item &                          segmentIt       = segmentsSQ->GetItem( numSegment++ );
+    DataSet &                       segmentDS       = segmentIt.GetNestedDataSet();
+
+    //*****   Referenced Surface Sequence    *****//
+    SmartPointer<SequenceOfItems>   refSurfaceSQ    = segmentDS.GetDataElement( Tag(0x0066, 0x002B) ).GetValueAsSQ();
+    SequenceOfItems::Iterator       itRefSurface    = refSurfaceSQ->Begin();
+    SequenceOfItems::Iterator       itEndRefSurface = refSurfaceSQ->End();
+    unsigned int                    idxSurface      = 0;
+    // Flag to avoid empty Segment Surface Generation Algorithm Identification Sequence
+    bool                            insertASQ       = false;
+    for (; itRefSurface != itEndRefSurface; itRefSurface++)
+    {
+      DataSet &                     refSurfaceDS    = itRefSurface->GetNestedDataSet();
+      SmartPointer< Surface >       surface         = segment->GetSurface( idxSurface++ );
+
+      //*****   Segment Surface Generation Algorithm Identification Sequence    *****//
+      {
+        SmartPointer<SequenceOfItems> segmentsAlgoIdSQ;
+        const Tag segmentsAlgoIdTag(0x0066, 0x002D);
+        if( !refSurfaceDS.FindDataElement( segmentsAlgoIdTag ) )
+        {
+          segmentsAlgoIdSQ = new SequenceOfItems;
+        }
+        else
+        {
+          segmentsAlgoIdSQ = refSurfaceDS.GetDataElement( segmentsAlgoIdTag ).GetValueAsSQ();
+        }
+        segmentsAlgoIdSQ->SetLengthToUndefined();
+
+        if (segmentsAlgoIdSQ->GetNumberOfItems() < 1)
+        {
+          Item item;
+          item.SetVLToUndefined();
+          segmentsAlgoIdSQ->AddItem(item);
+        }
+
+        ::gdcm::Item &    segmentsAlgoIdItem  = segmentsAlgoIdSQ->GetItem(1);
+        ::gdcm::DataSet & segmentsAlgoIdDS    = segmentsAlgoIdItem.GetNestedDataSet();
+
+        //*****   Algorithm Family Code Sequence    *****//
+        //See: PS.3.3 Table 8.8-1 and PS 3.16 Context ID 7162
+        const SegmentHelper::BasicCodedEntry & algoFamily = surface->GetAlgorithmFamily();
+        if (!algoFamily.CV.empty() && !algoFamily.CSD.empty() && !algoFamily.CM.empty())
+        {
+          insertASQ = true;
+
+          SmartPointer<SequenceOfItems> algoFamilyCodeSQ;
+          const Tag algoFamilyCodeTag(0x0066, 0x002F);
+          if( !segmentsAlgoIdDS.FindDataElement( algoFamilyCodeTag ) )
+          {
+            algoFamilyCodeSQ = new SequenceOfItems;
+            DataElement detmp( algoFamilyCodeTag );
+            detmp.SetVR( VR::SQ );
+            detmp.SetValue( *algoFamilyCodeSQ );
+            detmp.SetVLToUndefined();
+            segmentsAlgoIdDS.Insert( detmp );
+          }
+          algoFamilyCodeSQ = segmentsAlgoIdDS.GetDataElement( algoFamilyCodeTag ).GetValueAsSQ();
+          algoFamilyCodeSQ->SetLengthToUndefined();
+
+          // Fill the Algorithm Family Code Sequence
+          if (algoFamilyCodeSQ->GetNumberOfItems() < 1)
+          {
+            Item item;
+            item.SetVLToUndefined();
+            algoFamilyCodeSQ->AddItem(item);
+          }
+
+          ::gdcm::Item &    algoFamilyCodeItem  = algoFamilyCodeSQ->GetItem(1);
+          ::gdcm::DataSet & algoFamilyCodeDS    = algoFamilyCodeItem.GetNestedDataSet();
+
+          //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
+          {
+            // Code Value (Type 1)
+            Attribute<0x0008, 0x0100> codeValueAt;
+            codeValueAt.SetValue( algoFamily.CV );
+            algoFamilyCodeDS.Replace( codeValueAt.GetAsDataElement() );
+
+            // Coding Scheme (Type 1)
+            Attribute<0x0008, 0x0102> codingSchemeAt;
+            codingSchemeAt.SetValue( algoFamily.CSD );
+            algoFamilyCodeDS.Replace( codingSchemeAt.GetAsDataElement() );
+
+            // Code Meaning (Type 1)
+            Attribute<0x0008, 0x0104> codeMeaningAt;
+            codeMeaningAt.SetValue( algoFamily.CM );
+            algoFamilyCodeDS.Replace( codeMeaningAt.GetAsDataElement() );
+          }
+        }
+        // else assert? return false? gdcmWarning?
+
+        // Algorithm Version
+        const char * algorithmVersion = surface->GetAlgorithmVersion();
+        if (algorithmVersion != 0)
+        {
+          insertASQ = true;
+
+          Attribute<0x0066, 0x0031> algorithmVersionAt;
+          algorithmVersionAt.SetValue( algorithmVersion );
+          segmentsAlgoIdDS.Replace( algorithmVersionAt.GetAsDataElement() );
+        }
+        // else assert? return false? gdcmWarning?
+
+        // Algorithm Name
+        const char * algorithmName = surface->GetAlgorithmName();
+        if (algorithmName != 0)
+        {
+          insertASQ = true;
+
+          Attribute<0x0066, 0x0036> algorithmNameAt;
+          algorithmNameAt.SetValue( algorithmName );
+          segmentsAlgoIdDS.Replace( algorithmNameAt.GetAsDataElement() );
+        }
+        // else assert? return false? gdcmWarning?
+
+        // Insert if necessary Segment Surface Generation Algorithm Identification Sequence
+        if( insertASQ
+         && !refSurfaceDS.FindDataElement( segmentsAlgoIdTag ) )
+        {
+          DataElement detmp( segmentsAlgoIdTag );
+          detmp.SetVR( VR::SQ );
+          detmp.SetValue( *segmentsAlgoIdSQ );
+          detmp.SetVLToUndefined();
+          refSurfaceDS.Insert( detmp );
+        }
+      }
+    }
+
   }
 
   //**  Complete the file   **//

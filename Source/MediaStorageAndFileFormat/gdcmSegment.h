@@ -5,6 +5,7 @@
 
 #include <gdcmObject.h>
 #include <gdcmSurface.h>
+#include "gdcmSegmentHelper.h"
 
 namespace gdcm
 {
@@ -12,25 +13,6 @@ namespace gdcm
 class GDCM_EXPORT Segment : public Object
 {
 public:
-
-  struct BasicCodedEntry
-  {
-    BasicCodedEntry():
-      CV(""),
-      CSD(""),
-      CM("")
-    {}
-
-    BasicCodedEntry(const char * a_CV, const char * a_CSD, const char * a_CM):
-      CV(a_CV),
-      CSD(a_CSD),
-      CM(a_CM)
-    {}
-
-    std::string CV;  // Code Value
-    std::string CSD; // Coding Scheme Designator
-    std::string CM;  // Code Meaning
-  };
 
   typedef enum {
     MANUAL = 0,
@@ -55,21 +37,17 @@ public:
 
   //    const char * GetSegmentDescription() const;	// Type 3
 
-  BasicCodedEntry const & GetAnatomicRegion() const;
-  BasicCodedEntry & GetAnatomicRegion();
-  void SetAnatomicRegion(BasicCodedEntry const & BSE);
+  SegmentHelper::BasicCodedEntry const & GetAnatomicRegion() const;
+  SegmentHelper::BasicCodedEntry & GetAnatomicRegion();
+  void SetAnatomicRegion(SegmentHelper::BasicCodedEntry const & BSE);
 
-  BasicCodedEntry const & GetPropertyCategory() const;
-  BasicCodedEntry & GetPropertyCategory();
-  void SetPropertyCategory(BasicCodedEntry const & BSE);
+  SegmentHelper::BasicCodedEntry const & GetPropertyCategory() const;
+  SegmentHelper::BasicCodedEntry & GetPropertyCategory();
+  void SetPropertyCategory(SegmentHelper::BasicCodedEntry const & BSE);
 
-  BasicCodedEntry const & GetPropertyType() const;
-  BasicCodedEntry & GetPropertyType();
-  void SetPropertyType(BasicCodedEntry const & BSE);
-
-  BasicCodedEntry const & GetAlgorithmFamily() const;
-  BasicCodedEntry & GetAlgorithmFamily();
-  void SetAlgorithmFamily(BasicCodedEntry const & BSE);
+  SegmentHelper::BasicCodedEntry const & GetPropertyType() const;
+  SegmentHelper::BasicCodedEntry & GetPropertyType();
+  void SetPropertyType(SegmentHelper::BasicCodedEntry const & BSE);
 
   ALGOType GetSegmentAlgorithmType() const;
   void SetSegmentAlgorithmType(ALGOType type);
@@ -87,12 +65,6 @@ public:
 
   void AddSurface(SmartPointer< Surface > surface);
 
-  const char * GetAlgorithmVersion() const;
-  void SetAlgorithmVersion(const char * str);
-
-  const char * GetAlgorithmName() const;
-  void SetAlgorithmName(const char * str);
-
 protected :
   //**        Segment members     **//
   //0062 0004 US 1 Segment Number
@@ -103,14 +75,11 @@ protected :
   //    std::string     SegmentDescription;
 
   // General Anatomic Region
-  BasicCodedEntry AnatomicRegion;
+  SegmentHelper::BasicCodedEntry AnatomicRegion;
   // Property Category Code
-  BasicCodedEntry PropertyCategory;
+  SegmentHelper::BasicCodedEntry PropertyCategory;
   // Property Type Code
-  BasicCodedEntry PropertyType;
-
-  // Algorithm Family Code
-  BasicCodedEntry AlgorithmFamily;
+  SegmentHelper::BasicCodedEntry PropertyType;
 
   //0062 0008 CS 1 Segment Algorithm Type
   ALGOType        SegmentAlgorithmType;
@@ -120,12 +89,6 @@ protected :
   //**        Surface members     **//
   //0066 002a UL 1 Surface Count
   unsigned long   SurfaceCount;
-
-  //0066 0031 LO 1 Algorithm Version
-  std::string     AlgorithmVersion;
-  //0066 0032 LT 1 Algorithm Parameters
-  //0066 0036 LO 1 Algorithm Name
-  std::string     AlgorithmName;
 
   std::vector< SmartPointer< Surface > > Surfaces;
 };

@@ -178,7 +178,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   {
     //*****   GENERAL ANATOMY MANDATORY MACRO ATTRIBUTES   *****//
     // Anatomic Region Sequence (0008,2218) Type 1
-    if( !segmentDS.FindDataElement( Tag(0x0008, 0x2218) ) )
+    if( segmentDS.FindDataElement( Tag(0x0008, 0x2218) ) )
     {
       SmartPointer<SequenceOfItems> anatRegSQ = segmentDS.GetDataElement( Tag(0x0008, 0x2218) ).GetValueAsSQ();
 
@@ -188,7 +188,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         const DataSet & anatRegDS   = anatRegItem.GetNestedDataSet();
 
         //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
-        Segment::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
+        SegmentHelper::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
 
         // Code Value (Type 1)
         Attribute<0x0008, 0x0100> codeValueAt;
@@ -198,19 +198,19 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         // Coding Scheme (Type 1)
         Attribute<0x0008, 0x0102> codingSchemeAt;
         codingSchemeAt.SetFromDataSet( anatRegDS );
-        anatReg.CSD = codeValueAt.GetValue();
+        anatReg.CSD = codingSchemeAt.GetValue();
 
         // Code Meaning (Type 1)
         Attribute<0x0008, 0x0104> codeMeaningAt;
         codeMeaningAt.SetFromDataSet( anatRegDS );
-        anatReg.CM = codeValueAt.GetValue();
+        anatReg.CM = codeMeaningAt.GetValue();
       }
     }
     // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Category Code Sequence   *****//
     // Segmented Property Category Code Sequence (0062,0003) Type 1
-    if( !segmentDS.FindDataElement( Tag(0x0062, 0x0003) ) )
+    if( segmentDS.FindDataElement( Tag(0x0062, 0x0003) ) )
     {
       SmartPointer<SequenceOfItems> propCatSQ = segmentDS.GetDataElement( Tag(0x0062, 0x0003) ).GetValueAsSQ();
 
@@ -220,7 +220,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         const DataSet & propCatDS   = propCatItem.GetNestedDataSet();
 
         //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
-        Segment::BasicCodedEntry & propCat = segment->GetPropertyCategory();
+        SegmentHelper::BasicCodedEntry & propCat = segment->GetPropertyCategory();
 
         // Code Value (Type 1)
         Attribute<0x0008, 0x0100> codeValueAt;
@@ -230,19 +230,19 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         // Coding Scheme (Type 1)
         Attribute<0x0008, 0x0102> codingSchemeAt;
         codingSchemeAt.SetFromDataSet( propCatDS );
-        propCat.CSD = codeValueAt.GetValue();
+        propCat.CSD = codingSchemeAt.GetValue();
 
         // Code Meaning (Type 1)
         Attribute<0x0008, 0x0104> codeMeaningAt;
         codeMeaningAt.SetFromDataSet( propCatDS );
-        propCat.CM = codeValueAt.GetValue();
+        propCat.CM = codeMeaningAt.GetValue();
       }
     }
     // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Type Code Sequence   *****//
     // Segmented Property Type Code Sequence (0062,000F) Type 1
-    if( !segmentDS.FindDataElement( Tag(0x0062, 0x000F) ) )
+    if( segmentDS.FindDataElement( Tag(0x0062, 0x000F) ) )
     {
       SmartPointer<SequenceOfItems> propTypSQ = segmentDS.GetDataElement( Tag(0x0062, 0x000F) ).GetValueAsSQ();
 
@@ -252,7 +252,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         const DataSet & propTypDS   = propTypItem.GetNestedDataSet();
 
         //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
-        Segment::BasicCodedEntry & propTyp = segment->GetPropertyType();
+        SegmentHelper::BasicCodedEntry & propTyp = segment->GetPropertyType();
 
         // Code Value (Type 1)
         Attribute<0x0008, 0x0100> codeValueAt;
@@ -262,12 +262,12 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         // Coding Scheme (Type 1)
         Attribute<0x0008, 0x0102> codingSchemeAt;
         codingSchemeAt.SetFromDataSet( propTypDS );
-        propTyp.CSD = codeValueAt.GetValue();
+        propTyp.CSD = codingSchemeAt.GetValue();
 
         // Code Meaning (Type 1)
         Attribute<0x0008, 0x0104> codeMeaningAt;
         codeMeaningAt.SetFromDataSet( propTypDS );
-        propTyp.CM = codeValueAt.GetValue();
+        propTyp.CM = codeMeaningAt.GetValue();
       }
     }
     // else assert? return false? gdcmWarning?
@@ -303,16 +303,6 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         }
         // Index the segment with its referenced surface number
         Segments[refSurfaceNumber] = segment;
-
-        // Algorithm Version
-        Attribute<0x0066, 0x0031> algoVersionAt;
-        algoVersionAt.SetFromDataSet( refSurfaceDS );
-        segment->SetAlgorithmVersion( algoVersionAt.GetValue() );
-
-        // Algorithm Name
-        Attribute<0x0066, 0x0036> algoNameAt;
-        algoNameAt.SetFromDataSet( refSurfaceDS );
-        segment->SetAlgorithmName( algoNameAt.GetValue() );
       }
     }
     else
@@ -326,7 +316,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
     // Segment Algorithm Name
     Attribute<0x0062, 0x0009> segmentAlgoName;
     segmentAlgoName.SetFromDataSet( segmentDS );
-    segment->SetAlgorithmName( segmentAlgoName.GetValue() );
+    segment->SetSegmentAlgorithmName( segmentAlgoName.GetValue() );
 
     // Index the segment with item number
     Segments[idx] = segment;
