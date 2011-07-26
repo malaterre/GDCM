@@ -383,7 +383,7 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
   std::vector< gdcm::Directory::FilenamesType >::const_iterator it = sorted.begin();
   for( ; it != sorted.end(); ++it )
     {
-  gdcm::ImageWriter im;
+    gdcm::ImageWriter im;
 
     gdcm::Directory::FilenamesType const & files = *it;
     gdcm::Directory::FilenamesType::const_iterator file = files.begin();
@@ -406,44 +406,43 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
     targetdir += "/old/";
 
     // make sure the dir exist first:
-  if( !gdcm::System::MakeDirectory( targetdir.c_str() ) )
-    {
-    std::cerr << "Could not create dir: " << targetdir << std::endl;
-    return 1;
-    }
+    if( !gdcm::System::MakeDirectory( targetdir.c_str() ) )
+      {
+      std::cerr << "Could not create dir: " << targetdir << std::endl;
+      return 1;
+      }
 
-  gdcm::FilenameGenerator fg;
-  fg.SetNumberOfFilenames( files.size() );
-  fg.SetPrefix( targetdir.c_str() );
-  fg.SetPattern( "%04d.dcm" );
-  if( !fg.Generate() )
-    {
-    assert( 0 );
-    }
+    gdcm::FilenameGenerator fg;
+    fg.SetNumberOfFilenames( files.size() );
+    fg.SetPrefix( targetdir.c_str() );
+    fg.SetPattern( "%04d.dcm" );
+    if( !fg.Generate() )
+      {
+      assert( 0 );
+      }
 
+    gdcm::ImageReader reader;
+    reader.SetFileName( reffile );
+    if( !reader.Read() )
+      {
+      assert( 0 );
+      }
+    gdcm::Image &currentim = reader.GetImage();
+    assert( currentim.GetNumberOfDimensions( ) == 2 );
+    currentim.SetNumberOfDimensions( 3 );
+    size_t count = 0;
 
-      gdcm::ImageReader reader;
-      reader.SetFileName( reffile );
-      if( !reader.Read() )
-        {
-        assert( 0 );
-        }
-      gdcm::Image &currentim = reader.GetImage();
-      assert( currentim.GetNumberOfDimensions( ) == 2 );
-      currentim.SetNumberOfDimensions( 3 );
-      size_t count = 0;
-
-      //gdcm::ImageWriter writer;
-      gdcm::Writer writer;
-      writer.SetFileName( fg.GetFilename( count ) );
-      writer.SetFile( reader.GetFile() );
-      writer.GetFile().GetHeader().Clear();
-      if( !writer.Write() )
-        {
-        assert( 0 );
-        }
-      ++file;
-      ++count;
+    //gdcm::ImageWriter writer;
+    gdcm::Writer writer;
+    writer.SetFileName( fg.GetFilename( count ) );
+    writer.SetFile( reader.GetFile() );
+    writer.GetFile().GetHeader().Clear();
+    if( !writer.Write() )
+      {
+      assert( 0 );
+      }
+    ++file;
+    ++count;
 
     for( ; file != files.end(); ++file, ++count )
       {
@@ -471,12 +470,12 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
         }
       }
 
-  im.SetFileName( (targetname + "/new.dcm").c_str() );
-//  im.SetFile( reader.GetFile() );
+    im.SetFileName( (targetname + "/new.dcm").c_str() );
+    //  im.SetFile( reader.GetFile() );
 
-  gdcm::DataSet &ds = im.GetFile().GetDataSet();
+    gdcm::DataSet &ds = im.GetFile().GetDataSet();
 
-  gdcm::MediaStorage ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+    gdcm::MediaStorage ms = gdcm::MediaStorage::EnhancedMRImageStorage;
 
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
@@ -484,32 +483,30 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
 
-  im.SetImage( currentim );
-  if( !im.Write() )
-    {
-    std::cerr << "Could not write: " << std::endl;
-    return 1;
-    }
+    im.SetImage( currentim );
+    if( !im.Write() )
+      {
+      std::cerr << "Could not write: " << std::endl;
+      return 1;
+      }
 
     }
 
   std::vector< gdcm::Directory::FilenamesType > const &unsorted = dv.GetUnsortedFiles();
   std::cerr << "Could not process the following files (please report): " << std::endl;
-{
-  std::vector< gdcm::Directory::FilenamesType >::const_iterator it = unsorted.begin();
-  for( ; it != unsorted.end(); ++it )
     {
-    gdcm::Directory::FilenamesType const & files = *it;
-    gdcm::Directory::FilenamesType::const_iterator file = files.begin();
-    for( ; file != files.end(); ++file )
+    std::vector< gdcm::Directory::FilenamesType >::const_iterator it = unsorted.begin();
+    for( ; it != unsorted.end(); ++it )
       {
-      std::cerr << *file << std::endl;
+      gdcm::Directory::FilenamesType const & files = *it;
+      gdcm::Directory::FilenamesType::const_iterator file = files.begin();
+      for( ; file != files.end(); ++file )
+        {
+        std::cerr << *file << std::endl;
+        }
+
       }
-
     }
-}
-
-
 
   return 0;
 }
