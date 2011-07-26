@@ -19,7 +19,10 @@
 #include "vtkGDCMImageReader.h"
 
 #include "vtkVersion.h"
+#include "vtkMedicalImageProperties.h"
 #include "vtkXMLImageDataWriter.h"
+#include "vtkInteractorStyleImage.h"
+#include "vtkCornerAnnotation.h"
 #include "vtkPNGWriter.h"
 #include "vtkImageShiftScale.h"
 #include "vtkOutlineFilter.h"
@@ -246,6 +249,7 @@ public:
           int max = ImageViewer->GetSliceMax();
           int slice = (ImageViewer->GetSlice() + 1) % ++max;
           ImageViewer->SetSlice( slice );
+          ImageViewer->GetRenderer()->ResetCamera();
 #else
           int max = ImageViewer->GetWholeZMax();
           int slice = (ImageViewer->GetZSlice() + 1 ) % ++max;
@@ -261,11 +265,7 @@ public:
         int *pick = rwi->GetEventPosition();
         vtkRenderer *ren1 = ImageViewer->GetRenderer();
         picker->Pick((double)pick[0], (double)pick[1], 0.0, ren1);
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-        double *pos = picker->GetPickPosition ();
-#else
-        float *pos = picker->GetPickPosition ();
-#endif
+        vtkFloatingPointType *pos = picker->GetPickPosition ();
         std::cout << pos[0] << "," << pos[1] << "," << pos[2] << std::endl;
         }
       else
@@ -303,6 +303,25 @@ public:
 };
 #endif
 
+void FillCornerFromMedProp( vtkCornerAnnotation *ca, vtkMedicalImageProperties *medprop )
+{
+  std::string bottomleft = "S: ";
+  bottomleft += medprop->GetSeriesNumber();
+  bottomleft += "\nI: ";
+  bottomleft += medprop->GetImageNumber();
+  bottomleft += "\n<window_level>";
+  ca->SetText(0, bottomleft.c_str());
+  std::string bottomright = medprop->GetStationName();
+  ca->SetText(1, bottomright.c_str());
+  std::string topleft = medprop->GetInstitutionName();
+  topleft += "\n";
+  topleft += medprop->GetPatientName();
+  ca->SetText(2, topleft.c_str());
+  std::string topright = medprop->GetStudyDate();
+  topright += "\n";
+  topright += medprop->GetAcquisitionTime();
+  ca->SetText(3, topright.c_str());
+}
 
 // A feature in VS6 make it painfull to write template code
 // that do not contain the template parameter in the function
@@ -332,11 +351,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   if( verbose )
     reader->GetOutput()->Print( cout );
   //reader->GetOutput(1)->Print( cout );
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-  double range[2];
-#else
-  float range[2];
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
+  vtkFloatingPointType range[2];
   reader->GetOutput()->GetScalarRange(range);
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   viewer->SetInputConnection ( reader->GetOutputPort(0) );
@@ -354,15 +369,15 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   vtkPointHandleRepresentation2D *handle = vtkPointHandleRepresentation2D::New();
   handle->GetProperty()->SetColor(1,0,0);
-  vtkDistanceRepresentation2D *rep = vtkDistanceRepresentation2D::New();
-  rep->SetHandleRepresentation(handle);
+  vtkDistanceRepresentation2D *drep = vtkDistanceRepresentation2D::New();
+  drep->SetHandleRepresentation(handle);
   handle->Delete();
 
   vtkDistanceWidget *dwidget = vtkDistanceWidget::New();
   dwidget->SetInteractor(iren);
   dwidget->CreateDefaultRepresentation();
-  dwidget->SetRepresentation(rep);
-  rep->Delete();
+  dwidget->SetRepresentation(drep);
+  drep->Delete();
 
   vtkAngleRepresentation2D *anglerep = vtkAngleRepresentation2D::New();
   vtkAngleWidget *anglewidget = vtkAngleWidget::New();
@@ -406,7 +421,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
       vtkLookupTable *lut = reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable();
       vtkImageMapToColors *map = vtkImageMapToColors::New ();
       map->SetInput (reader->GetIconImage());
-      map->SetLookupTable (reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable());
+      map->SetLookupTable ( lut );
       //FIXME there is no way to know the type of LUT the icon is using:
       //if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
         {
@@ -601,12 +616,27 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     std::cout << "Range: " << range[0] << " " << range[1] << std::endl;
 
   viewer->SetupInteractor (iren);
+
+//  vtkInteractorStyleImage *is = viewer->GetInteractorStyle();
+//  viewer->GetInteractorStyle()->AutoAdjustCameraClippingRangeOn();
+  vtkCornerAnnotation * ca = vtkCornerAnnotation::New();
+  ca->SetImageActor( viewer->GetImageActor() );
+  ca->SetWindowLevel( (vtkImageMapToWindowLevelColors*)viewer->GetWindowLevel() );
+  vtkMedicalImageProperties * medprop = reader->GetMedicalImageProperties();
+  FillCornerFromMedProp( ca, medprop );
+#if VTK_MAJOR_VERSION >= 5
+  viewer->GetRenderer()->AddViewProp( ca );
+#else
+  viewer->GetRenderer()->AddProp( ca );
+#endif
+
   int dims[3];
   reader->GetOutput()->GetDimensions(dims);
   // Make sure to display on most screen
   dims[0] = (dims[0] < 600 ) ? dims[0] : 600;
   dims[1] = (dims[1] < 600 ) ? dims[1] : 600;
   viewer->Render(); // EXTREMELY IMPORTANT for vtkImageViewer2
+  viewer->GetRenderer()->ResetCamera();
 
   viewer->SetSize( dims );
 
