@@ -109,6 +109,9 @@ Surface::Surface():
   SurfaceProcessingRatio(1.),
   FiniteVolume(UNKNOWN),
   Manifold(UNKNOWN),
+  AlgorithmFamily(),
+  AlgorithmVersion(""),
+  AlgorithmName(""),
   NumberOfSurfacePoints(0),
   PointCoordinatesData(),
   NumberOfVectors(0),
@@ -251,6 +254,43 @@ void Surface::SetManifold(STATES state)
 {
   assert( state < STATES_END );
   Manifold = state;
+}
+
+SegmentHelper::BasicCodedEntry const & Surface::GetAlgorithmFamily() const
+{
+  return AlgorithmFamily;
+}
+
+SegmentHelper::BasicCodedEntry & Surface::GetAlgorithmFamily()
+{
+  return AlgorithmFamily;
+}
+
+void Surface::SetAlgorithmFamily(SegmentHelper::BasicCodedEntry const & BSE)
+{
+  AlgorithmFamily.CV   = BSE.CV;
+  AlgorithmFamily.CSD  = BSE.CSD;
+  AlgorithmFamily.CM   = BSE.CM;
+}
+
+const char * Surface::GetAlgorithmVersion() const
+{
+  return AlgorithmVersion.c_str();
+}
+
+void Surface::SetAlgorithmVersion(const char * str)
+{
+  AlgorithmVersion = str;
+}
+
+const char * Surface::GetAlgorithmName() const
+{
+  return AlgorithmName.c_str();
+}
+
+void Surface::SetAlgorithmName(const char * str)
+{
+  AlgorithmName = str;
 }
 
 unsigned long Surface::GetNumberOfSurfacePoints() const

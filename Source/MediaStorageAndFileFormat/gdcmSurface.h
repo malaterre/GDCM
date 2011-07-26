@@ -4,6 +4,7 @@
 #include <gdcmObject.h>
 #include <gdcmDataElement.h>
 #include <gdcmMeshPrimitive.h>
+#include "gdcmSegmentHelper.h"  // for BasicCodedEntry
 
 namespace gdcm
 {
@@ -70,6 +71,16 @@ public:
   STATES GetManifold() const;
   void SetManifold(STATES state);
 
+  SegmentHelper::BasicCodedEntry const & GetAlgorithmFamily() const;
+  SegmentHelper::BasicCodedEntry & GetAlgorithmFamily();
+  void SetAlgorithmFamily(SegmentHelper::BasicCodedEntry const & BSE);
+
+  const char * GetAlgorithmVersion() const;
+  void SetAlgorithmVersion(const char * str);
+
+  const char * GetAlgorithmName() const;
+  void SetAlgorithmName(const char * str);
+
   //**    Points getters/setters      **//
   unsigned long GetNumberOfSurfacePoints() const;
   void SetNumberOfSurfacePoints(const unsigned long nb);
@@ -124,6 +135,15 @@ private:
   STATES FiniteVolume;
   //0066 0010 CS 1 Manifold
   STATES Manifold;
+
+  // Algorithm Family Code
+  SegmentHelper::BasicCodedEntry AlgorithmFamily;
+
+  //0066 0031 LO 1 Algorithm Version
+  std::string     AlgorithmVersion;
+  //0066 0032 LT 1 Algorithm Parameters
+  //0066 0036 LO 1 Algorithm Name
+  std::string     AlgorithmName;
 
 
 
