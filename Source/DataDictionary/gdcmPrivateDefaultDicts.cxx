@@ -6762,7 +6762,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0019,0x0026,"SIEMENS MR HEADER",VR::FD,VM::VM3,"RBMoCoRot",false },
   {0x0019,0x0027,"SIEMENS MR HEADER",VR::FD,VM::VM6,"B_matrix",false },
   {0x0019,0x0028,"SIEMENS MR HEADER",VR::FD,VM::VM1,"BandwidthPerPixelPhaseEncode",false },
-  {0x0019,0x0029,"SIEMENS MR HEADER",VR::FD,VM::VM1,"MosaicRefAcqTimes",false },
+  {0x0019,0x0029,"SIEMENS MR HEADER",VR::FD,VM::VM1_n,"MosaicRefAcqTimes",false },
   {0x0051,0x0008,"SIEMENS MR HEADER",VR::CS,VM::VM1,"CSA Image Header Type",false },
   {0x0051,0x0009,"SIEMENS MR HEADER",VR::LO,VM::VM1,"CSA Image Header Version ??",false },
   {0x0051,0x000a,"SIEMENS MR HEADER",VR::SH,VM::VM1,"?",false },
