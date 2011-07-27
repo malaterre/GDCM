@@ -20,7 +20,8 @@ FIND_PATH(JAVA_AWT_INCLUDE_PATH jawt.h
 )
 
 SET(JAVA_AWT_LIBRARY_DIRECTORIES
-  ${JavaProp_SUN_BOOT_LIBRARY_PATH}
+  ${JavaProp_SUN_BOOT_LIBRARY_PATH} # works for linux
+  ${JavaProp_JAVA_HOME}/../lib # works for win32
   )
 
 FOREACH(dir ${JavaProp_SUN_BOOT_LIBRARY_PATH})
