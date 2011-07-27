@@ -5,9 +5,19 @@ set(examples
   HelloVTKWorld
   ReadSeriesIntoVTK
   #AWTMedical3
-  MPRViewer
-  MIPViewer
   )
+if(VTK_HAS_IMAGERESLICEMAPPER)
+  set(examples
+    ${examples}
+    MPRViewer
+    )
+endif()
+if(VTK_HAS_SMARTVOLUMEMAPPER)
+  set(examples
+    ${examples}
+    MIPViewer
+    )
+endif()
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
