@@ -3,26 +3,16 @@ SET(VTKGDCM_JAVA_TEST_SRCS
   TestvtkGDCMImageReader
   )
 
-FIND_PACKAGE(Java 1.5 REQUIRED)
-FIND_PACKAGE(JNI REQUIRED)
-INCLUDE_DIRECTORIES(
-  ${JNI_INCLUDE_PATH}
-  )
-
-if(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${LIBRARY_OUTPUT_PATH}/gdcm.jar:${VTK_JAVA_JAR}:${GDCM_VTK_JAVA_JAR})
-else(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${LIBRARY_OUTPUT_PATH}/gdcm.jar\;${VTK_JAVA_JAR}\;${GDCM_VTK_JAVA_JAR})
-endif(UNIX)
+set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar${PATH_SEPARATOR}${LIBRARY_OUTPUT_PATH}/gdcm.jar${PATH_SEPARATOR}${VTK_JAVA_JAR}${PATH_SEPARATOR}${GDCM_VTK_JAVA_JAR})
 
 if(IS_DIRECTORY ${VTK_DIR})
   if(IS_DIRECTORY ${VTK_DIR}/bin)
     # this is a build-tree VTK
     set(runtimepath "${VTK_DIR}/bin")
-    get_filename_component(dummyjava ${JAVA_AWT_LIBRARY} PATH)
-    #set(JAVA_MAWT_LIBRARY ${dummyjava}/headless)
-    #set(runtimepath "${runtimepath}:${dummyjava}/headless")
-    set(runtimepath "${runtimepath}:${dummyjava}/xawt")
+    if(UNIX)
+      get_filename_component(dummyjava ${JAVA_MAWT_LIBRARY} PATH)
+      set(runtimepath "${runtimepath}:${JAVA_LIBRARY_PATH}:${dummyjava}")
+    endif()
   endif()
 endif()
 
@@ -49,4 +39,5 @@ ADD_CUSTOM_TARGET(VTKGDCMJavaTests ALL
   DEPENDS ${classfilesdep}
   COMMENT "building gdcm java vtk tests"
 )
-ADD_DEPENDENCIES(VTKGDCMJavaTests VTKGDCMJavaJar)
+ADD_DEPENDENCIES(VTKGDCMJavaTests VTKGDCMJavaJar
+  GDCMJavaJar)
