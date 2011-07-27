@@ -251,7 +251,11 @@ bool SurfaceWriter::PrepareWrite()
       //          (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
       //        (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
       const unsigned long numberOfVectors = surface->GetNumberOfVectors();
-      if (numberOfVectors > 0)
+      SmartPointer< MeshPrimitive > meshPrimitive = surface->GetMeshPrimitive();
+      const MeshPrimitive::MPType   primitiveType = meshPrimitive->GetPrimitiveType();
+      if (numberOfVectors > 0
+       && primitiveType != MeshPrimitive::TRIANGLE_STRIP
+       && primitiveType != MeshPrimitive::TRIANGLE_FAN)
       {
         SmartPointer<SequenceOfItems> surfacePointsNormalsSQ;
         if( !surfaceDS.FindDataElement( Tag(0x0066, 0x0012) ) )
@@ -307,6 +311,10 @@ bool SurfaceWriter::PrepareWrite()
 
         surfacePointsNormalsDS.Replace( vectorCoordDataDE );
       }
+      else if (numberOfVectors > 0)
+      {
+        gdcmWarningMacro("Triangle strip or fan have no surface points normals");
+      }
 
       //******    Surface Mesh Primitives    *****//
       //        Two exemples :
@@ -358,16 +366,14 @@ bool SurfaceWriter::PrepareWrite()
         DataSet & surfaceMeshPrimitivesDS   = surfaceMeshPrimitivesItem.GetNestedDataSet();
 
         //*****   Handle "Typed" Point Index List   *****//
-        SmartPointer< MeshPrimitive > meshPrimitive = surface->GetMeshPrimitive();
-        const MeshPrimitive::MPType   type          = meshPrimitive->GetPrimitiveType();
-        bool                          insertInSQ    = false;
+        bool      insertInSQ = false;
 
         // Primitive Point Index List
         Tag         typedPrimitiveTag;
         typedPrimitiveTag.SetGroup(0x0066);
         DataSet &   pointIndexListDS  = surfaceMeshPrimitivesDS;
 
-        switch (type)
+        switch (primitiveType)
         {
         case MeshPrimitive::VERTEX:
           // Vertex Point Index List
@@ -400,7 +406,7 @@ bool SurfaceWriter::PrepareWrite()
 
           Tag typedSequenceTag;
           typedSequenceTag.SetGroup(0x0066);
-          switch (type)
+          switch (primitiveType)
           {
           case MeshPrimitive::TRIANGLE_STRIP:
             // Triangle Strip Sequence
