@@ -27,6 +27,8 @@ class GDCM_EXPORT Segment : public Object
 {
 public:
 
+  typedef std::vector< SmartPointer< Surface > > SurfaceVector;
+
   typedef enum {
     MANUAL = 0,
     AUTOMATIC,
@@ -42,7 +44,7 @@ public:
   virtual ~Segment();
 
   //**        Segment getters/setters     **//
-  const unsigned short GetSegmentNumber() const;
+  unsigned short GetSegmentNumber() const;
   void SetSegmentNumber(const unsigned short num);
 
   const char * GetSegmentLabel() const;
@@ -73,7 +75,7 @@ public:
   unsigned long GetSurfaceCount() const;
   void SetSurfaceCount(const unsigned long nb);
 
-  std::vector< SmartPointer< Surface > > GetSurfaces() const;
+  SurfaceVector GetSurfaces() const;
   SmartPointer< Surface > GetSurface(const unsigned int idx = 0) const;
 
   void AddSurface(SmartPointer< Surface > surface);
@@ -103,7 +105,7 @@ protected :
   //0066 002a UL 1 Surface Count
   unsigned long   SurfaceCount;
 
-  std::vector< SmartPointer< Surface > > Surfaces;
+  SurfaceVector Surfaces;
 };
 
 }

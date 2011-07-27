@@ -30,7 +30,7 @@ public:
     /// Read
     virtual bool Read();
 
-    const unsigned long GetNumberOfSurfaces() const;
+    unsigned long GetNumberOfSurfaces() const;
 
   protected:
 
