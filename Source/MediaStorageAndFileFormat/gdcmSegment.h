@@ -62,7 +62,8 @@ public:
   unsigned long GetSurfaceCount() const;
   void SetSurfaceCount(const unsigned long nb);
 
-  SurfaceVector GetSurfaces() const;
+  SurfaceVector const & GetSurfaces() const;
+  SurfaceVector & GetSurfaces();
   SmartPointer< Surface > GetSurface(const unsigned int idx = 0) const;
 
   void AddSurface(SmartPointer< Surface > surface);
@@ -92,7 +93,7 @@ protected :
   //0066 002a UL 1 Surface Count
   unsigned long   SurfaceCount;
 
-  SurfaceVector Surfaces;
+  SurfaceVector   Surfaces;
 };
 
 }
