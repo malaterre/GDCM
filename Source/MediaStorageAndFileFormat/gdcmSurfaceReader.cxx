@@ -27,7 +27,7 @@ SurfaceReader::~SurfaceReader()
 {
 }
 
-const unsigned long SurfaceReader::GetNumberOfSurfaces() const
+unsigned long SurfaceReader::GetNumberOfSurfaces() const
 {
   return Segments.size();
 }
@@ -64,9 +64,7 @@ bool SurfaceReader::ReadSurfaces()
 {
   bool                        res     = false;
 
-  const FileMetaInformation & header  = F->GetHeader();
   const DataSet &             ds      = F->GetDataSet();
-  const TransferSyntax &      ts      = header.GetDataSetTransferSyntax();
 
   // Surface Sequence
   const Tag surfaceSQTag(0x0066, 0x0002);

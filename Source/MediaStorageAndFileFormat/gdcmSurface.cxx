@@ -141,7 +141,7 @@ Surface::~Surface()
 {
 }
 
-const unsigned short Surface::GetRecommendedDisplayGrayscaleValue() const
+unsigned short Surface::GetRecommendedDisplayGrayscaleValue() const
 {
   return RecommendedDisplayGrayscaleValue;
 }
@@ -156,7 +156,7 @@ const unsigned short * Surface::GetRecommendedDisplayCIELabValue() const
   return &RecommendedDisplayCIELabValue[0];
 }
 
-const unsigned short Surface::GetRecommendedDisplayCIELabValue(const unsigned int idx) const
+unsigned short Surface::GetRecommendedDisplayCIELabValue(const unsigned int idx) const
 {
   assert( idx < 3 );
   return RecommendedDisplayCIELabValue[idx];
@@ -191,8 +191,10 @@ float Surface::GetRecommendedPresentationOpacity() const
 
 void Surface::SetRecommendedPresentationOpacity(float opacity)
 {
-  if( 0 <= opacity && opacity <= 1);
+  if( (0 <= opacity) && (opacity <= 1) )
+  {
     RecommendedPresentationOpacity = opacity;
+  }
   //else keep default value : 1
 }
 
@@ -203,11 +205,13 @@ Surface::VIEWType Surface::GetRecommendedPresentationType() const
 
 void Surface::SetRecommendedPresentationType(VIEWType type)
 {
-  if( type < VIEWType_END);
+  if( type < VIEWType_END)
+  {
     RecommendedPresentationType = type;
+  }
 }
 
-const unsigned long Surface::GetSurfaceNumber() const
+unsigned long Surface::GetSurfaceNumber() const
 {
   return SurfaceNumber;
 }

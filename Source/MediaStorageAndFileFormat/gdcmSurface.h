@@ -51,11 +51,11 @@ public:
   virtual ~Surface();
 
   //**    Common getters/setters      **//
-  const unsigned short GetRecommendedDisplayGrayscaleValue() const;
+  unsigned short GetRecommendedDisplayGrayscaleValue() const;
   void SetRecommendedDisplayGrayscaleValue(const unsigned short vl);
 
   const unsigned short * GetRecommendedDisplayCIELabValue() const;
-  const unsigned short GetRecommendedDisplayCIELabValue(const unsigned int idx) const;
+  unsigned short GetRecommendedDisplayCIELabValue(const unsigned int idx) const;
   void SetRecommendedDisplayCIELabValue(const unsigned short vl[3]);
   void SetRecommendedDisplayCIELabValue(const unsigned short vl, const unsigned int idx = 0);
   void SetRecommendedDisplayCIELabValue(const std::vector< unsigned short > & vl);
@@ -66,7 +66,7 @@ public:
   VIEWType GetRecommendedPresentationType() const;
   void SetRecommendedPresentationType(VIEWType type);
 
-  const unsigned long GetSurfaceNumber() const;
+  unsigned long GetSurfaceNumber() const;
   void SetSurfaceNumber(const unsigned long nb);
 
   const char * GetSurfaceComments() const;

@@ -34,14 +34,14 @@ public:
     /// Write
     bool Write(); // Execute()
 
-    const unsigned long GetNumberOfSurfaces();
+    unsigned long GetNumberOfSurfaces();
     void SetNumberOfSurfaces(const unsigned long nb);
 
 protected:
 
     bool PrepareWrite();
 
-    const unsigned long ComputeNumberOfSurfaces();
+    void ComputeNumberOfSurfaces();
 
     //0066 0001 UL 1 Number of Surfaces
     unsigned long NumberOfSurfaces;
