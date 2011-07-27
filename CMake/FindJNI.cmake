@@ -5,15 +5,12 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # Make sure to not use FindJNI anymore and prefer FindJavaProperties
-#message(FATAL_ERROR "Do not use, prefer FindJavaProperties")
-
 FIND_PACKAGE(JavaProperties REQUIRED)
 FIND_PATH(JAVA_INCLUDE_PATH jni.h
-  ${JAVA_HOME}/../include
+  ${JavaProp_JAVA_HOME}/../include
 )
 
-STRING(TOLOWER ${OS_NAME} include_os_name)
-#  message("PATH: ${JAVA_INCLUDE_PATH}/${include_os_name}")
+STRING(TOLOWER ${JavaProp_OS_NAME} include_os_name) # Linux -> linux
 FIND_PATH(JAVA_INCLUDE_PATH2 jni_md.h
   ${JAVA_INCLUDE_PATH}/${include_os_name}
 )
@@ -23,10 +20,10 @@ FIND_PATH(JAVA_AWT_INCLUDE_PATH jawt.h
 )
 
 SET(JAVA_AWT_LIBRARY_DIRECTORIES
-  ${SUN_BOOT_LIBRARY_PATH}
+  ${JavaProp_SUN_BOOT_LIBRARY_PATH}
   )
 
-FOREACH(dir ${SUN_BOOT_LIBRARY_PATH})
+FOREACH(dir ${JavaProp_SUN_BOOT_LIBRARY_PATH})
   SET(JAVA_JVM_LIBRARY_DIRECTORIES
     ${JAVA_JVM_LIBRARY_DIRECTORIES}
     "${dir}"
@@ -50,7 +47,8 @@ FIND_LIBRARY(JAVA_JVM_LIBRARY NAMES jvm JavaVM
 # let's find this lib here then
 if(UNIX)
   FIND_LIBRARY(JAVA_MAWT_LIBRARY NAMES mawt
-    PATHS ${SUN_BOOT_LIBRARY_PATH}/xawt
+    # there is one also in headless but it does not work...
+    PATHS ${JavaProp_SUN_BOOT_LIBRARY_PATH}/xawt
     )
 endif(UNIX)
 

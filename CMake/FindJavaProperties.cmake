@@ -8,41 +8,66 @@
 # I can't get FindJNI.cmake to work, so instead re-write one more robust
 # which only requires javac and java being in the PATH
 
-#add_custom_command(
-#    OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
-#    COMMAND ${JAVA_COMPILE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/GetSystemProperty.java
-#    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/GetSystemProperty.java
-#    COMMENT "javac GetSystemProperty.java"
-#  )
 GET_FILENAME_COMPONENT(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
 find_package(Java 1.5 REQUIRED)
 
-# For some reason I have to use two execute_process instead of a chained one...
-if(${current_list_path}/GetSystemProperty.java IS_NEWER_THAN ${CMAKE_CURRENT_BINARY_DIR}/GetSystemProperty.java)
-execute_process(
-  COMMAND ${Java_JAVAC_EXECUTABLE} ${current_list_path}/GetSystemProperty.java -d ${CMAKE_CURRENT_BINARY_DIR}
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  )
+# need to re-run everytime the setting for Java has changed:
+# There is technically one caveat still, when one only modify
+# Java_JAVA_EXECUTABLE from cmake-gui, everything is re-run properly except the
+# FIND_PATH for jar and javac
+if(JavaProp_JAVA_HOME)
+  get_filename_component(javarealpath
+    ${Java_JAVA_EXECUTABLE}
+    REALPATH
+    )
+  get_filename_component(javahomesubdir
+    ${JavaProp_JAVA_HOME}
+    PATH
+    )
+  string(FIND "${javarealpath}" "${javahomesubdir}" res)
+  if(-1 EQUAL ${res})
+    message(STATUS "Need to re-execute JavaProp")
+    file(REMOVE
+      ${CMAKE_BINARY_DIR}/GetSystemProperty.class
+      )
+  endif()
 endif()
 
-set(JAVA_PROPERTY_LIST
-  java.library.path
-  os.arch
-  os.name
-  java.home
-  sun.boot.library.path
-  path.separator # : / ;
-  sun.arch.data.model # 32 / 64
-  )
-foreach(property ${JAVA_PROPERTY_LIST})
-  string(TOUPPER ${property} property_upper)
-  string(REPLACE "." "_" property_cmake_name ${property_upper})
+# For some reason I have to use two execute_process instead of a chained one...
+if(${current_list_path}/GetSystemProperty.java IS_NEWER_THAN ${CMAKE_BINARY_DIR}/GetSystemProperty.class)
+  #message("${current_list_path}/GetSystemProperty.java")
+  #message("${CMAKE_CURRENT_BINARY_DIR}/GetSystemProperty.class")
   execute_process(
-    COMMAND ${Java_JAVA_EXECUTABLE} GetSystemProperty ${property}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_VARIABLE ${property_cmake_name}
-    OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND ${Java_JAVAC_EXECUTABLE}
+    ${current_list_path}/GetSystemProperty.java -d ${CMAKE_BINARY_DIR}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
-  #message("${property} : ${property_cmake_name} : ${${property_cmake_name}}")
-endforeach(property)
+
+  # populate the following list of java properties into CMake properties:
+  set(JAVA_PROPERTY_LIST
+    java.library.path
+    os.arch
+    os.name
+    java.home
+    sun.boot.library.path
+    path.separator # : / ;
+    sun.arch.data.model # 32 / 64
+    )
+  foreach(property ${JAVA_PROPERTY_LIST})
+    string(TOUPPER ${property} property_upper)
+    string(REPLACE "." "_" property_cmake_name ${property_upper})
+    execute_process(
+      COMMAND ${Java_JAVA_EXECUTABLE} GetSystemProperty ${property}
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+      OUTPUT_VARIABLE ${property_cmake_name}
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+    #message("${property} : ${property_cmake_name} : ${${property_cmake_name}}")
+    set(JavaProp_${property_cmake_name} ${${property_cmake_name}}
+      CACHE STRING "Java Prop Value for: ${property}" FORCE
+      )
+    MARK_AS_ADVANCED(
+      JavaProp_${property_cmake_name}
+      )
+  endforeach(property)
+endif()
