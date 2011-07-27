@@ -80,6 +80,7 @@ Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(0)
   MaxPrintLength = 0x100; // Need to be %2
 
 }
+
 //-----------------------------------------------------------------------------
 Printer::~Printer()
 {
@@ -445,7 +446,8 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << "" << el.GetValue(); \
-      for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
+      VL l = std::min( (long) el.GetLength(), (long) MaxPrintLength / VR::GetLength(VR::type) ); \
+      for(unsigned long i = 1; i < l; ++i) os << "\\" << el.GetValue(i); \
       os << ""; } \
       else { if( de.IsEmpty() ) os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; \
                  else os << GDCM_TERMINAL_VT100_INVERSE << GDCM_TERMINAL_VT100_FOREGROUND_RED << "(VR=" << refvr << " is incompatible with length)" << GDCM_TERMINAL_VT100_NORMAL; } } \
@@ -554,6 +556,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     assert( refvr == VR::INVALID );
     refvr = VR::SQ;
     }
+
   // Print Value now:
   if( refvr & VR::VRASCII )
     {
