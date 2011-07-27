@@ -69,7 +69,7 @@ Segment::~Segment()
 {
 }
 
-const unsigned short Segment::GetSegmentNumber() const
+unsigned short Segment::GetSegmentNumber() const
 {
   return SegmentNumber;
 }
@@ -176,7 +176,7 @@ void Segment::SetSurfaceCount(const unsigned long nb)
   SurfaceCount = nb;
 }
 
-std::vector< SmartPointer< Surface > > Segment::GetSurfaces() const
+Segment::SurfaceVector Segment::GetSurfaces() const
 {
   return Surfaces;
 }

@@ -56,8 +56,8 @@ MeshPrimitive::MPType MeshPrimitive::GetMPType(const char * type)
 }
 
 MeshPrimitive::MeshPrimitive():
-  PrimitiveData(1),
-  PrimitiveType(MPType_END)
+  PrimitiveType(MPType_END),
+  PrimitiveData(1, DataElement())
 {
 }
 
@@ -116,7 +116,7 @@ DataElement & MeshPrimitive::GetPrimitiveData(const unsigned int idx)
     return PrimitiveData[idx];
 }
 
-const unsigned int MeshPrimitive::GetNumberOfPrimitivesData() const
+unsigned int MeshPrimitive::GetNumberOfPrimitivesData() const
 {
   return PrimitiveData.size();
 }

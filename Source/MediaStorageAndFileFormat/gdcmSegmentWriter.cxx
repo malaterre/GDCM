@@ -12,7 +12,7 @@ SegmentWriter::~SegmentWriter()
 {
 }
 
-const unsigned int SegmentWriter::GetNumberOfSegments() const
+unsigned int SegmentWriter::GetNumberOfSegments() const
 {
   return Segments.size();
 }
