@@ -61,7 +61,8 @@ Segment::Segment():
   PropertyType(),
   SegmentAlgorithmType(ALGOType_END),
   SegmentAlgorithmName(""),
-  SurfaceCount(0)
+  SurfaceCount(0),
+  Surfaces()
 {
 }
 
@@ -176,7 +177,12 @@ void Segment::SetSurfaceCount(const unsigned long nb)
   SurfaceCount = nb;
 }
 
-Segment::SurfaceVector Segment::GetSurfaces() const
+Segment::SurfaceVector const & Segment::GetSurfaces() const
+{
+  return Surfaces;
+}
+
+Segment::SurfaceVector & Segment::GetSurfaces()
 {
   return Surfaces;
 }
