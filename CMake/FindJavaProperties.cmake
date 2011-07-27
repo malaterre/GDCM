@@ -5,6 +5,15 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
+# This module will populate the following cmake variables:
+# JavaProp_JAVA_LIBRARY_PATH
+# JavaProp_OS_ARCH
+# JavaProp_OS_NAME
+# JavaProp_JAVA_HOME
+# JavaProp_SUN_BOOT_LIBRARY_PATH
+# JavaProp_PATH_SEPARATOR
+# JavaProp_SUN_ARCH_DATA_MODEL
+
 # I can't get FindJNI.cmake to work, so instead re-write one more robust
 # which only requires javac and java being in the PATH
 

@@ -367,11 +367,11 @@ IF(GDCM_WRAP_JAVA)
     # to recompile from an existing build tree with invalid generated *.java file...
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
-      #COMMAND ${JAVA_COMPILE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
+      #COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
       # No such thing as -cp for javac only java is listed:
       # http://java.sun.com/j2se/1.5.0/docs/tooldocs/windows/classpath.html
-      COMMAND ${JAVA_COMPILE} ARGS -classpath ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
-      COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
+      COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -classpath ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
+      COMMAND ${Java_JAR_EXECUTABLE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
       DEPENDS ${VTKGDCM_NAME}Java
       #${VTK_JAVA_DEPENDENCIES}

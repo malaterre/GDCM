@@ -45,7 +45,7 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
 
   set(classpath)
   if(theclasspath)
-    set(classpath "${theclasspath}${PATH_SEPARATOR}.")
+    set(classpath "${theclasspath}${JavaProp_PATH_SEPARATOR}.")
   else(theclasspath)
     set(classpath ".")
   endif(theclasspath)
