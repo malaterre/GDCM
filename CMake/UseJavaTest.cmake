@@ -45,7 +45,7 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
 
   set(classpath)
   if(theclasspath)
-    set(classpath "${theclasspath}:.")
+    set(classpath "${theclasspath}${PATH_SEPARATOR}.")
   else(theclasspath)
     set(classpath ".")
   endif(theclasspath)
@@ -60,16 +60,23 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
 
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
 "
+  if(UNIX)
   SET(ENV{LD_LIBRARY_PATH} ${ld_library_path})
+  SET(ENV{DYLD_LIBRARY_PATH} ${ld_library_path})
   #SET(ENV{CLASSPATH} ${pyenv}/gdcm.jar:.)
   MESSAGE(\"pyenv: ${pyenv}\")
+  else()
+  #set(the_path $ENV{PATH})
+  SET(ENV{PATH} "${ld_library_path}")
+  endif()
   MESSAGE(\"loc: ${loc}\")
   MESSAGE(\"loc2: ${loc2}\")
   MESSAGE(\"classpath: ${classpath}\")
+  MESSAGE(\"java runtime: ${JAVA_RUNTIME}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   EXECUTE_PROCESS(
-    COMMAND ${JAVA_RUNTIME} -classpath ${classpath} ${loc2} ${wo_semicolumn}
-    WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+    COMMAND ${JAVA_RUNTIME} -classpath \"${classpath}\" ${loc2} ${wo_semicolumn}
+    WORKING_DIRECTORY \"${EXECUTABLE_OUTPUT_PATH}\"
     RESULT_VARIABLE import_res
     OUTPUT_VARIABLE import_output
     ERROR_VARIABLE  import_output
