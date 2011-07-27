@@ -1,4 +1,4 @@
-set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar${PATH_SEPARATOR}${LIBRARY_OUTPUT_PATH}/gdcm.jar${PATH_SEPARATOR}${VTK_JAVA_JAR}${PATH_SEPARATOR}${GDCM_VTK_JAVA_JAR})
+set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar${JavaProp_PATH_SEPARATOR}${LIBRARY_OUTPUT_PATH}/gdcm.jar${JavaProp_PATH_SEPARATOR}${VTK_JAVA_JAR}${JavaProp_PATH_SEPARATOR}${GDCM_VTK_JAVA_JAR})
 
 set(classfilesdep)
 set(examples
@@ -9,7 +9,7 @@ set(examples
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
-    COMMAND ${JAVA_COMPILE} ARGS -classpath "${classpath}"
+    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -classpath "${classpath}"
     ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java
