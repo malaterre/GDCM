@@ -196,8 +196,6 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 #else
     JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
 #endif
-    ASSERT(result == OK);
-
     delete[] buffer;
 
     if (result != OK)
@@ -222,75 +220,70 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       const ByteValue *bv = frag.GetByteValue();
       assert( bv );
       char *mybuffer = new char[bv->GetLength()];
-    unsigned long totalLen = bv->GetLength();
+      unsigned long totalLen = bv->GetLength();
 
       bv->GetBuffer(mybuffer, bv->GetLength());
 
-    const BYTE* pbyteCompressed = (const BYTE*)mybuffer;
+      const BYTE* pbyteCompressed = (const BYTE*)mybuffer;
       while( totalLen > 0 && pbyteCompressed[totalLen-1] != 0xd9 )
         {
         totalLen--;
         }
-  // what if 0xd9 is never found ?
-  assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
+      // what if 0xd9 is never found ?
+      assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters metadata;
+      JlsParameters metadata;
 #else
-    JlsParamaters metadata;
+      JlsParamaters metadata;
 #endif
-    if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
-      {
-      return false;
-      }
+      if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
+        {
+        return false;
+        }
 
-    // allowedlossyerror == 0 => Lossless
-    LossyFlag = metadata.allowedlossyerror!= 0;
+      // allowedlossyerror == 0 => Lossless
+      LossyFlag = metadata.allowedlossyerror!= 0;
 
-
-    int cbyteCompressed = totalLen;
+      int cbyteCompressed = totalLen;
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters params = {};
+      JlsParameters params = {};
 #else
-    JlsParamaters params = {};
+      JlsParamaters params = {};
 #endif
-    JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+      JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
-    std::vector<BYTE> rgbyteCompressed;
-    rgbyteCompressed.resize(params.height *params.width* 4);
+      std::vector<BYTE> rgbyteCompressed;
+      rgbyteCompressed.resize(params.height *params.width* 4);
 
-    std::vector<BYTE> rgbyteOut;
-    rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
+      std::vector<BYTE> rgbyteOut;
+      rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
+      JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
 #else
-    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
+      JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
 #endif
-    ASSERT(result == OK);
-    bool r = true;
-
+      bool r = true;
 
       delete[] mybuffer;
-      if (result != OK){
+      if (result != OK)
+        {
         return false;
-      }
-    os.write( (char*)&rgbyteOut[0], rgbyteOut.size() );
+        }
+      os.write( (char*)&rgbyteOut[0], rgbyteOut.size() );
 
       if(!r) return false;
       assert( r == true );
-
-
       }
     std::string str = os.str();
     assert( str.size() );
     out.SetByteValue( &str[0], str.size() );
 
-
     return true;
     }
-    return false;
+  return false;
 
 #endif
 }
