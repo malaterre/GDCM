@@ -33,9 +33,19 @@ if(JavaProp_JAVA_HOME)
     ${JavaProp_JAVA_HOME}
     PATH
     )
-  string(FIND "${javarealpath}" "${javahomesubdir}" res)
-  if(-1 EQUAL ${res})
-    message(STATUS "Need to re-execute JavaProp")
+  #string(FIND "${javarealpath}" "${javahomesubdir}" res)
+  #if(-1 EQUAL ${res})
+  #  message(STATUS "Need to re-execute JavaProp")
+  #  file(REMOVE
+  #    ${CMAKE_BINARY_DIR}/GetSystemProperty.class
+  #    )
+  #endif()
+  string(REGEX MATCH "${javahomesubdir}"
+    outputvar
+    "${javarealpath}"
+    )
+  if(NOT outputvar)
+    message(STATUS "Need to re-execute JavaProp: ${outputvar}")
     file(REMOVE
       ${CMAKE_BINARY_DIR}/GetSystemProperty.class
       )
