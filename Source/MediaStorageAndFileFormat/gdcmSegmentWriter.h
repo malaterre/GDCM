@@ -20,7 +20,7 @@ public:
   bool Write(); // Set to protected ?
 
   //**        Segment getters/setters     **//
-  const unsigned int GetNumberOfSegments() const;
+  unsigned int GetNumberOfSegments() const;
   void SetNumberOfSegments(const unsigned int size);
 
   const SegmentVector & GetSegments() const;

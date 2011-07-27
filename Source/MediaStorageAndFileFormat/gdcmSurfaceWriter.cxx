@@ -14,7 +14,7 @@ SurfaceWriter::~SurfaceWriter()
 {
 }
 
-const unsigned long SurfaceWriter::ComputeNumberOfSurfaces()
+void SurfaceWriter::ComputeNumberOfSurfaces()
 {
   std::vector< SmartPointer< Segment > >::const_iterator  it    = Segments.begin();
   std::vector< SmartPointer< Segment > >::const_iterator  itEnd = Segments.end();
@@ -24,7 +24,7 @@ const unsigned long SurfaceWriter::ComputeNumberOfSurfaces()
   }
 }
 
-const unsigned long SurfaceWriter::GetNumberOfSurfaces()
+unsigned long SurfaceWriter::GetNumberOfSurfaces()
 {
   if (NumberOfSurfaces == 0)
   {
@@ -424,6 +424,9 @@ bool SurfaceWriter::PrepareWrite()
             // Facet Sequence
             typedSequenceTag.SetElement(0x0034);
             break;
+          default:
+            gdcmErrorMacro( "Unknown surface mesh primitives type" );
+            return false;
           }
 
           // "Typed" Sequence

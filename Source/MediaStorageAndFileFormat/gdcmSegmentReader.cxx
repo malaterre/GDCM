@@ -104,9 +104,7 @@ bool SegmentReader::ReadSegments()
 {
   bool                        res     = false;
 
-  const FileMetaInformation & header  = F->GetHeader();
   const DataSet &             ds      = F->GetDataSet();
-  const TransferSyntax &      ts      = header.GetDataSetTransferSyntax();
 
   // Segment Sequence
   const Tag segmentSQTag(0x0062, 0x0002);

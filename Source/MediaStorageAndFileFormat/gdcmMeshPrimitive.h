@@ -32,7 +32,7 @@ public:
 
     virtual ~MeshPrimitive();
 
-    const MPType GetPrimitiveType() const { return PrimitiveType; }
+    MPType GetPrimitiveType() const { return PrimitiveType; }
     MPType GetPrimitiveType() { return PrimitiveType; }
     void SetPrimitiveType(const MPType type)
     {
@@ -53,11 +53,11 @@ public:
     void SetPrimitiveData(const unsigned int idx, DataElement const & de);
     void AddPrimitiveData(DataElement const & de);
 
-    const unsigned int GetNumberOfPrimitivesData() const;
+    unsigned int GetNumberOfPrimitivesData() const;
 
 protected:
 
-    MPType                        PrimitiveType;
+    MPType          PrimitiveType;
 
     PrimitivesData  PrimitiveData;
 };
