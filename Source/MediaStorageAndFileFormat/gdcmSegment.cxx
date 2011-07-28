@@ -68,7 +68,7 @@ Segment::ALGOType Segment::GetALGOType(const char * type)
 Segment::Segment():
   SegmentNumber(0),
   SegmentLabel(""),
-//    SegmentDescription(),
+  SegmentDescription(""),
   AnatomicRegion(),
   PropertyCategory(),
   PropertyType(),
