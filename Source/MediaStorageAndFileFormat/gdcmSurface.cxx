@@ -120,6 +120,8 @@ Surface::Surface():
   SurfaceComments(""),
   SurfaceProcessing(false),
   SurfaceProcessingRatio(1.),
+  SurfaceProcessingDescription(""),
+  ProcessingAlgorithm(),
   FiniteVolume(UNKNOWN),
   Manifold(UNKNOWN),
   AlgorithmFamily(),
@@ -249,6 +251,33 @@ float Surface::GetSurfaceProcessingRatio() const
 void Surface::SetSurfaceProcessingRatio(const float ratio)
 {
   SurfaceProcessingRatio = ratio;
+}
+
+const char * Surface::GetSurfaceProcessingDescription() const
+{
+  return SurfaceProcessingDescription.c_str();
+}
+
+void Surface::SetSurfaceProcessingDescription(const char * description)
+{
+  SurfaceProcessingDescription = description;
+}
+
+SegmentHelper::BasicCodedEntry const & Surface::GetProcessingAlgorithm() const
+{
+  return ProcessingAlgorithm;
+}
+
+SegmentHelper::BasicCodedEntry & Surface::GetProcessingAlgorithm()
+{
+  return ProcessingAlgorithm;
+}
+
+void Surface::SetProcessingAlgorithm(SegmentHelper::BasicCodedEntry const & BSE)
+{
+  ProcessingAlgorithm.CV   = BSE.CV;
+  ProcessingAlgorithm.CSD  = BSE.CSD;
+  ProcessingAlgorithm.CM   = BSE.CM;
 }
 
 Surface::STATES Surface::GetFiniteVolume() const

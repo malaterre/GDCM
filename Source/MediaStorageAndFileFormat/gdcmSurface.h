@@ -89,6 +89,13 @@ public:
   float GetSurfaceProcessingRatio() const;
   void SetSurfaceProcessingRatio(const float ratio);
 
+  const char * GetSurfaceProcessingDescription() const;
+  void SetSurfaceProcessingDescription(const char * description);
+
+  SegmentHelper::BasicCodedEntry const & GetProcessingAlgorithm() const;
+  SegmentHelper::BasicCodedEntry & GetProcessingAlgorithm();
+  void SetProcessingAlgorithm(SegmentHelper::BasicCodedEntry const & BSE);
+
   STATES GetFiniteVolume() const;
   void SetFiniteVolume(STATES state);
 
@@ -149,11 +156,16 @@ private:
   unsigned long SurfaceNumber;
   //0066 0004 LT 1 Surface Comments
   std::string   SurfaceComments;
+
   //0066 0009 CS 1 Surface Processing
   bool          SurfaceProcessing;
   //0066 000a FL 1 Surface Processing Ratio
   float         SurfaceProcessingRatio;
   //0066 000b LO 1 Surface Processing Description
+  std::string   SurfaceProcessingDescription;
+  // Processing Algorithm Code
+  SegmentHelper::BasicCodedEntry ProcessingAlgorithm;
+
 
   //0066 000e CS 1 Finite Volume
   STATES        FiniteVolume;
