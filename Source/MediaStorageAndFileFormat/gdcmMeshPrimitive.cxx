@@ -81,36 +81,6 @@ MeshPrimitive::~MeshPrimitive()
 
 }
 
-const DataElement & MeshPrimitive::GetPrimitiveData() const
-{
-  return PrimitiveData.front();
-}
-
-DataElement & MeshPrimitive::GetPrimitiveData()
-{
-  return PrimitiveData.front();
-}
-
-void MeshPrimitive::SetPrimitiveData(DataElement const & de)
-{
-  PrimitiveData.front() = de;
-}
-
-const ::std::vector< DataElement > & MeshPrimitive::GetPrimitivesData() const
-{
-  return PrimitiveData;
-}
-
-::std::vector< DataElement > & MeshPrimitive::GetPrimitivesData()
-{
-  return PrimitiveData;
-}
-
-void MeshPrimitive::SetPrimitivesData(::std::vector< DataElement > const & DEs)
-{
-  PrimitiveData = DEs;
-}
-
 MeshPrimitive::MPType MeshPrimitive::GetPrimitiveType() const
 {
   return PrimitiveType;
