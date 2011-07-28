@@ -446,7 +446,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << "" << el.GetValue(); \
-      VL l = std::min( (long) el.GetLength(), (long) MaxPrintLength / VR::GetLength(VR::type) ); \
+      VL l = std::min( (long) el.GetLength(), (long) (MaxPrintLength / VR::GetLength(VR::type)) ); \
       for(unsigned long i = 1; i < l; ++i) os << "\\" << el.GetValue(i); \
       os << ""; } \
       else { if( de.IsEmpty() ) os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; \

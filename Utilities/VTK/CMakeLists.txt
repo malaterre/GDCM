@@ -19,6 +19,17 @@ IF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
 ENDIF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
 
 INCLUDE(${VTK_USE_FILE})
+
+INCLUDE(CheckCXXSourceCompiles)
+SET(CMAKE_REQUIRED_INCLUDES ${VTK_INCLUDE_DIRS})
+#SET(CMAKE_REQUIRED_LIBRARIES vtkVolumeRendering) # can't get it to work
+CHECK_CXX_SOURCE_COMPILES(
+  "\#include <vtkSmartVolumeMapper.h>\nint main() { vtkSmartVolumeMapper* p; return 0;}"
+  VTK_HAS_SMARTVOLUMEMAPPER)
+CHECK_CXX_SOURCE_COMPILES(
+  "\#include <vtkImageResliceMapper.h>\nint main() { vtkImageResliceMapper* p; return 0;}"
+  VTK_HAS_IMAGERESLICEMAPPER)
+
 INCLUDE_DIRECTORIES(
   ${GDCM_BINARY_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/Common
@@ -354,6 +365,10 @@ IF(GDCM_WRAP_JAVA)
       message(FATAL_ERROR "Could not find vtk.jar file, VTK_JAVA_JAR is wrong: ${VTK_JAVA_JAR}, please set proper GDCM_VTK_JAVA_JAR: ${GDCM_VTK_JAVA_JAR} replacement var")
     endif(EXISTS ${GDCM_VTK_JAVA_JAR})
     ADD_LIBRARY(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
+    # special jnilib extension:
+    IF(APPLE)
+      SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Java PROPERTIES SUFFIX ".jnilib")
+    ENDIF(APPLE)
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
     FOREACH(c ${vtkgdcm_LIBS})
       TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${c}Java)
@@ -363,11 +378,11 @@ IF(GDCM_WRAP_JAVA)
     # to recompile from an existing build tree with invalid generated *.java file...
     ADD_CUSTOM_COMMAND(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
-      #COMMAND ${JAVA_COMPILE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
+      #COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
       # No such thing as -cp for javac only java is listed:
       # http://java.sun.com/j2se/1.5.0/docs/tooldocs/windows/classpath.html
-      COMMAND ${JAVA_COMPILE} ARGS -classpath ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
-      COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
+      COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -classpath ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
+      COMMAND ${Java_JAR_EXECUTABLE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar vtk/*.class
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
       DEPENDS ${VTKGDCM_NAME}Java
       #${VTK_JAVA_DEPENDENCIES}
