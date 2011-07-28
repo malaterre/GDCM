@@ -169,6 +169,11 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   segmentLabel.SetFromDataSet( segmentDS );
   segment->SetSegmentLabel( segmentLabel.GetValue() );
 
+  // Segment Label
+  Attribute<0x0062, 0x0006> segmentDescriptionAt;
+  segmentDescriptionAt.SetFromDataSet( segmentDS );
+  segment->SetSegmentDescription( segmentDescriptionAt.GetValue() );
+
   // Segment Algorithm Type
   Attribute<0x0062, 0x0008> segmentAlgoType;
   segmentAlgoType.SetFromDataSet( segmentDS );

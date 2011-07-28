@@ -57,7 +57,8 @@ public:
   const char * GetSegmentLabel() const;
   void SetSegmentLabel(const char * label);
 
-  //    const char * GetSegmentDescription() const;	// Type 3
+  const char * GetSegmentDescription() const;
+  void SetSegmentDescription(const char * description);
 
   SegmentHelper::BasicCodedEntry const & GetAnatomicRegion() const;
   SegmentHelper::BasicCodedEntry & GetAnatomicRegion();
@@ -96,7 +97,7 @@ protected :
   //0062 0005 LO 1 Segment Label
   std::string     SegmentLabel;
   //0062 0006 ST 1 Segment Description
-  //    std::string     SegmentDescription;
+  std::string     SegmentDescription;
 
   // General Anatomic Region
   SegmentHelper::BasicCodedEntry AnatomicRegion;
