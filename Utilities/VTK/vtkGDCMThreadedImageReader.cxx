@@ -436,7 +436,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
 #else
 #ifdef _SC_NPROCESSORS_ONLN
   const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
-#endif
+#else
 #ifdef __APPLE__
   int count = 1;
   size_t size = sizeof(count);
@@ -446,8 +446,9 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
     count = 1;
     }
   const unsigned int nprocs = (unsigned int)count;
-#endif
-#endif
+#endif // __APPLE__
+#endif // _SC_NPROCESSORS_ONLN
+#endif // _WIN32
   const unsigned int nthreads = std::min( nprocs, nfiles );
   threadparams *params = new threadparams[nthreads];
 
