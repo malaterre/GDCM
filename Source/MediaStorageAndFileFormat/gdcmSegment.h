@@ -80,7 +80,7 @@ public:
   void SetSegmentAlgorithmName(const char * name);
 
   //**        Surface getters/setters     **//
-  unsigned long GetSurfaceCount() const;
+  unsigned long GetSurfaceCount();
   void SetSurfaceCount(const unsigned long nb);
 
   SurfaceVector const & GetSurfaces() const;
@@ -116,6 +116,9 @@ protected :
   unsigned long   SurfaceCount;
 
   SurfaceVector   Surfaces;
+
+private :
+  void ComputeSurfaceCount();
 };
 
 }

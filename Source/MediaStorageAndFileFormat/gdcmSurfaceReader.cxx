@@ -145,12 +145,58 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
 
   if (surfaceProcessing)
   {
+    // Surface Processing Ratio
     Attribute<0x0066, 0x000A> surfaceProcessingRatioAt;
     surfaceProcessingRatioAt.SetFromDataSet( surfacesDS );
     surface->SetSurfaceProcessingRatio( surfaceProcessingRatioAt.GetValue() );
 
+    // Surface Processing Description
+    Attribute<0x0066, 0x000B> surfaceProcessingDescriptionAt;
+    surfaceProcessingDescriptionAt.SetFromDataSet( surfacesDS );
+    String<>  str( surfaceProcessingDescriptionAt.GetValue() );
+    surface->SetSurfaceProcessingDescription( str.Trim().c_str() );
+
     //*****   Surface Processing Algorithm Identification Sequence    *****//
-    // hack me
+    if( surfacesDS.FindDataElement( Tag(0x0066, 0x0035) ) )
+    {
+      SmartPointer<SequenceOfItems> processingAlgoSQ = surfacesDS.GetDataElement( Tag(0x0066, 0x0035) ).GetValueAsSQ();
+
+      if (processingAlgoSQ->GetNumberOfItems() > 0)  // Only one item (type 1)
+      {
+        const Item &    processingAlgoItem = processingAlgoSQ->GetItem(1);
+        const DataSet & processingAlgoDS   = processingAlgoItem.GetNestedDataSet();
+
+        //*****   Algorithm Family Code Sequence    *****//
+        if( processingAlgoDS.FindDataElement( Tag(0x0066, 0x002F) ) )
+        {
+          SmartPointer<SequenceOfItems> algoFamilySQ = processingAlgoDS.GetDataElement( Tag(0x0066, 0x002F) ).GetValueAsSQ();
+
+          if (algoFamilySQ->GetNumberOfItems() > 0)  // Only one item (type 1)
+          {
+            const Item &    algoFamilyItem = algoFamilySQ->GetItem(1);
+            const DataSet & algoFamilyDS   = algoFamilyItem.GetNestedDataSet();
+
+            //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
+            SegmentHelper::BasicCodedEntry & processingAlgo = surface->GetProcessingAlgorithm();
+
+            // Code Value (Type 1)
+            Attribute<0x0008, 0x0100> codeValueAt;
+            codeValueAt.SetFromDataSet( algoFamilyDS );
+            processingAlgo.CV = codeValueAt.GetValue();
+
+            // Coding Scheme (Type 1)
+            Attribute<0x0008, 0x0102> codingSchemeAt;
+            codingSchemeAt.SetFromDataSet( algoFamilyDS );
+            processingAlgo.CSD = codingSchemeAt.GetValue();
+
+            // Code Meaning (Type 1)
+            Attribute<0x0008, 0x0104> codeMeaningAt;
+            codeMeaningAt.SetFromDataSet( algoFamilyDS );
+            processingAlgo.CM = codeMeaningAt.GetValue();
+          }
+        }
+      }
+    }
   }
 
   // Recommended Presentation Opacity
@@ -164,14 +210,21 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   surface->SetRecommendedPresentationType( Surface::GetVIEWType( recommendedPresentationType.GetValue() ) );
 
   // Finite Volume
-  Attribute<0x0066, 0x000E> finiteVolume;
-  finiteVolume.SetFromDataSet( surfacesDS );
-  surface->SetFiniteVolume( Surface::GetSTATES( finiteVolume.GetValue() ) );
+  Attribute<0x0066, 0x000E> finiteVolumeAt;
+  finiteVolumeAt.SetFromDataSet( surfacesDS );
+  Surface::STATES finiteVolume = Surface::GetSTATES( finiteVolumeAt.GetValue() );
+  if ( finiteVolume == Surface::STATES_END)
+    finiteVolume = Surface::UNKNOWN;
+  surface->SetFiniteVolume( finiteVolume );
+
 
   // Manifold
-  Attribute<0x0066, 0x0010> manifold;
-  manifold.SetFromDataSet( surfacesDS );
-  surface->SetManifold( Surface::GetSTATES( manifold.GetValue() ) );
+  Attribute<0x0066, 0x0010> manifoldAt;
+  manifoldAt.SetFromDataSet( surfacesDS );
+  Surface::STATES manifold = Surface::GetSTATES( manifoldAt.GetValue() );
+  if ( manifold == Surface::STATES_END )
+    manifold = Surface::UNKNOWN;
+  surface->SetManifold( manifold );
 
   //*****   Surface Points Sequence   ******//
   const Tag surfacePointsSQTag(0x0066, 0x0011);
