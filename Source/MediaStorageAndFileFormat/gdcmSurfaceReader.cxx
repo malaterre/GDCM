@@ -153,8 +153,7 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
     // Surface Processing Description
     Attribute<0x0066, 0x000B> surfaceProcessingDescriptionAt;
     surfaceProcessingDescriptionAt.SetFromDataSet( surfacesDS );
-    String<>  str( surfaceProcessingDescriptionAt.GetValue() );
-    surface->SetSurfaceProcessingDescription( str.Trim().c_str() );
+    surface->SetSurfaceProcessingDescription( surfaceProcessingDescriptionAt.GetValue() );
 
     //*****   Surface Processing Algorithm Identification Sequence    *****//
     if( surfacesDS.FindDataElement( Tag(0x0066, 0x0035) ) )
