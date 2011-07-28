@@ -9,10 +9,16 @@
 namespace gdcm
 {
 
+/**
+  * \brief  This class defines a segment reader.
+  * It reads attributes of group 0x0062.
+  *
+  * \see  PS 3.3 C.8.20.2 and C.8.23
+  */
 class GDCM_EXPORT SegmentReader : public Reader
 {
 public:
-  typedef std::vector< SmartPointer< Segment > >             SegmentVector;
+  typedef std::vector< SmartPointer< Segment > > SegmentVector;
 
   SegmentReader();
 
@@ -22,10 +28,10 @@ public:
   virtual bool Read(); // Set to protected ?
 
   //**        Segment getters/setters     **//
-//  const unsigned int GetNumberOfSegments() const;
-
   const SegmentVector GetSegments() const;
   SegmentVector GetSegments();
+
+//  unsigned int GetNumberOfSegments();
 
 protected:
 
@@ -35,11 +41,9 @@ protected:
 
   bool ReadSegment(const Item & segmentItem, const unsigned int idx);
 
-//  const SegmentMap & GetSegmentMap() const;
-//  SegmentMap & GetSegmentMap();
 
-//  SegmentVector Segments;
-  SegmentMap Segments;
+  SegmentMap Segments;  // The key value is item number (in segment sequence)
+                        // or the surface number (for a surface segmentation).
 };
 
 }

@@ -59,17 +59,22 @@ bool SurfaceReader::ReadSurfaces()
   {
     SmartPointer< SequenceOfItems > surfaceSQ = ds.GetDataElement(surfaceSQTag).GetValueAsSQ();
 
-    const unsigned long numberOfSurfaces = (unsigned long) surfaceSQ->GetNumberOfItems();
-    if ( numberOfSurfaces == 0)
-      return false;
-
-    for (unsigned long i = 1; i <= numberOfSurfaces; ++i) // FIXME : use iterator, because GetNumberOfItems() return unsigned int
+    if ( surfaceSQ->GetNumberOfItems() == 0)
     {
-      const Item & surfaceItem = surfaceSQ->GetItem(i);
-      if ( !ReadSurface( surfaceItem, i ) )
+      gdcmErrorMacro( "No surface found" );
+      return false;
+    }
+
+    SequenceOfItems::ConstIterator itSurface    = surfaceSQ->Begin();
+    SequenceOfItems::ConstIterator itEndSurface = surfaceSQ->End();
+    unsigned long                  idxItem      = 1;
+    for (; itSurface != itEndSurface; itSurface++)
+    {
+      if ( !ReadSurface( *itSurface, idxItem ) )
       {
-        gdcmWarningMacro( "Surface "<<i<<" reading error" );
+        gdcmWarningMacro( "Surface "<<idxItem<<" reading error" );
       }
+      ++idxItem;
     }
 
     res = true;
@@ -80,9 +85,9 @@ bool SurfaceReader::ReadSurfaces()
 
 bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long idx)
 {
-  SmartPointer< Surface > surface = new Surface;
+  SmartPointer< Surface > surface     = new Surface;
 
-  const DataSet & surfacesDS = surfaceItem.GetNestedDataSet();
+  const DataSet &         surfacesDS  = surfaceItem.GetNestedDataSet();
 
   // Recommended Display Grayscale Value
   Attribute<0x0062, 0x000C> recommendedDisplayGrayscaleValue;
@@ -182,8 +187,9 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   surface->SetPointCoordinatesData( pointCoordDataDe );
 
   // Number of Surface Points
-  if (surfacePointsDS.FindDataElement( Tag(0x0066, 0x0015) )
-   && !surfacePointsDS.GetDataElement( Tag(0x0066, 0x0015) ).IsEmpty() )
+  const Tag numberOfSurfacePointsTag = Tag(0x0066, 0x0015);
+  if (surfacePointsDS.FindDataElement( numberOfSurfacePointsTag )
+   && !surfacePointsDS.GetDataElement( numberOfSurfacePointsTag ).IsEmpty() )
   {
     Attribute<0x0066, 0x0015> numberOfSurfacePointsAt;
     numberOfSurfacePointsAt.SetFromDataSet( surfacePointsDS );

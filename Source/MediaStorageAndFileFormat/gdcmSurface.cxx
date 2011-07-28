@@ -357,7 +357,7 @@ void Surface::SetVectorCoordinateData(DataElement const & de)
   VectorCoordinateData = de;
 }
 
-const MeshPrimitive & Surface::GetMeshPrimitive() const
+MeshPrimitive const & Surface::GetMeshPrimitive() const
 {
   return *Primitive;
 }

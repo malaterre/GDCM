@@ -73,7 +73,7 @@ bool SegmentWriter::PrepareWrite()
   const unsigned int              nbItems           = segmentsSQ->GetNumberOfItems();
   if (nbItems < numberOfSegments)
   {
-    const unsigned int diff           = numberOfSegments - nbItems;
+    const int          diff           = numberOfSegments - nbItems;
     const unsigned int nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {

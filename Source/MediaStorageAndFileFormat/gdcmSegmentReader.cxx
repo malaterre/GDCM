@@ -14,11 +14,6 @@ SegmentReader::~SegmentReader()
 {
 }
 
-//const unsigned int SegmentReader::GetNumberOfSegments() const
-//{
-//  return Segments.size();
-//}
-
 const SegmentReader::SegmentVector SegmentReader::GetSegments() const
 {
   return GetSegments();
@@ -28,33 +23,33 @@ SegmentReader::SegmentVector SegmentReader::GetSegments()
 {
   SegmentVector res;
 
+  // Make a segment vector from map with no duplicate.
   SegmentMap::const_iterator itMap    = Segments.begin();
   SegmentMap::const_iterator itMapEnd = Segments.end();
-
-  res.push_back(itMap->second);
-  itMap++;
-
-  SegmentVector::const_iterator itVec    = res.begin();
-  SegmentVector::const_iterator itVecEnd = res.end();
-  for (; itMap != itMapEnd; itMap++)
+  if (itMap != itMapEnd)
   {
-    while (itVec != itVecEnd && itMap->second != *itVec)
-      itVec++;
-    if (itVec == itVecEnd)
-      res.push_back(itMap->second);
+    // Add first segment
+    res.push_back(itMap->second);
+    itMap++;
+
+    // Search and add only different segments
+    SegmentVector::const_iterator itVec    = res.begin();
+    SegmentVector::const_iterator itVecEnd = res.end();
+    for (; itMap != itMapEnd; itMap++)
+    {
+      while (itVec != itVecEnd && itMap->second != *itVec)
+        itVec++;
+      if (itVec == itVecEnd)
+        res.push_back(itMap->second);
+    }
   }
 
   return res;
 }
 
-//const SegmentReader::SegmentMap & SegmentReader::GetSegments() const
+//unsigned int SegmentReader::GetNumberOfSegments()
 //{
-//  return Segments;
-//}
-
-//SegmentReader::SegmentMap & SegmentReader::GetSegments()
-//{
-//  return Segments;
+//  return GetSegments().size();
 //}
 
 bool SegmentReader::Read()
@@ -67,32 +62,33 @@ bool SegmentReader::Read()
     return res;
   }
 
-  // Set Segments from file
+  // Read Segments from file
   const FileMetaInformation & header  = F->GetHeader();
   MediaStorage                ms      = header.GetMediaStorage();
 
-  // Check modality
-  const char * modality = ms.GetModality();
-  if (modality != 0)
-  {
-    String<>     modality( ms.GetModality() );
-
-    if ( modality.Trim() == "SEG" )
-    {
-      res = ReadSegments();
-    }
-  }
-  else if( ms == MediaStorage::SegmentationStorage
-        || ms == MediaStorage::SurfaceSegmentationStorage )
+  if( ms == MediaStorage::SegmentationStorage
+   || ms == MediaStorage::SurfaceSegmentationStorage )
   {
     res = ReadSegments();
   }
   else
   {
-    // Try to find Segment Sequence
-    const DataSet & dsRoot = F->GetDataSet();
-    if (dsRoot.FindDataElement( Tag(0x0062, 0x0002) ))
-    {
+    const char *    modality  = ms.GetModality();
+    const DataSet & dsRoot    = F->GetDataSet();
+    if (modality != 0)
+    { // Check modality
+      String<> modalityStr( modality );
+      if ( modalityStr.Trim() == "SEG" )
+      {
+        res = ReadSegments();
+      }
+      else if (dsRoot.FindDataElement( Tag(0x0062, 0x0002) ))
+      { // Try to find Segment Sequence
+        res = ReadSegments();
+      }
+    }
+    else if (dsRoot.FindDataElement( Tag(0x0062, 0x0002) ))
+    { // Try to find Segment Sequence
       res = ReadSegments();
     }
   }
@@ -142,8 +138,9 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   const DataSet &         segmentDS = segmentItem.GetNestedDataSet();
 
   // Segment Number
-  if (segmentDS.FindDataElement( Tag(0x0062, 0x0004) )
-  && !segmentDS.GetDataElement( Tag(0x0062, 0x0004) ).IsEmpty() )
+  const Tag segmentNumberTag(0x0062, 0x0004);
+  if (segmentDS.FindDataElement( segmentNumberTag )
+  && !segmentDS.GetDataElement( segmentNumberTag ).IsEmpty() )
   {
     Attribute<0x0062, 0x0004> segmentNumberAt;
     segmentNumberAt.SetFromDataSet( segmentDS );
@@ -276,16 +273,13 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
     {
       SmartPointer< SequenceOfItems > refSurfaceSQ = segmentDS.GetDataElement(refSurfaceSQTag).GetValueAsSQ();
 
-      const unsigned int numberOfSurfaces = refSurfaceSQ->GetNumberOfItems();
-      if ( (unsigned long) numberOfSurfaces != surfaceCount)
-      {
-        segment->SetSurfaceCount( numberOfSurfaces ); // Is it the right thing to do?
-      }
-
       // Index each surface of a segment
-      for (unsigned int i = 1; i <= numberOfSurfaces; ++i)
+      SequenceOfItems::ConstIterator itRefSurface     = refSurfaceSQ->Begin();
+      SequenceOfItems::ConstIterator itEndRefSurface  = refSurfaceSQ->End();
+      unsigned long                  numberOfSurfaces = 0;
+      for (; itRefSurface != itEndRefSurface; itRefSurface++)
       {
-        const DataSet & refSurfaceDS = refSurfaceSQ->GetItem(i).GetNestedDataSet();
+        const DataSet & refSurfaceDS = itRefSurface->GetNestedDataSet();
 
         // Referenced Surface Number
         Attribute<0x0066, 0x002C> refSurfaceNumberAt;
@@ -301,6 +295,16 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
         }
         // Index the segment with its referenced surface number
         Segments[refSurfaceNumber] = segment;
+
+        // Compute number of items
+        // (can not use GetNumberOfItems because of it returns a unsigned int)
+        ++numberOfSurfaces;
+      }
+
+      // Set surface count corresponding to number of items
+      if ( numberOfSurfaces != surfaceCount)
+      {
+        segment->SetSurfaceCount( numberOfSurfaces ); // Is it the right thing to do?
       }
     }
     else

@@ -9,6 +9,12 @@
 namespace gdcm
 {
 
+/**
+  * \brief  This class defines a SURFACE IE.
+  * This members are taken from required surface mesh module attributes.
+  *
+  * \see  PS 3.3 A.1.2.18 , A.57 and C.27
+  */
 class GDCM_EXPORT Surface : public Object
 {
 public:
@@ -23,6 +29,11 @@ public:
   static const char * GetSTATESString(STATES state);
   static STATES GetSTATES(const char * state);
 
+  /**
+    * \brief  Enumeration for Recommended Presentation Type
+    *
+    * \see  Tag(0x0066, 0x000D) and PS 3.3 C.27.1.1.3
+    */
   typedef enum {
     SURFACE = 0,
     WIREFRAME,
@@ -103,7 +114,7 @@ public:
   void SetVectorCoordinateData(DataElement const & de);
 
   //**    Primitive getters/setters      **//
-  const MeshPrimitive & GetMeshPrimitive() const;
+  MeshPrimitive const & GetMeshPrimitive() const;
   MeshPrimitive & GetMeshPrimitive();
 
   void SetMeshPrimitive(MeshPrimitive & mp);
@@ -132,20 +143,18 @@ private:
   //0066 000b LO 1 Surface Processing Description
 
   //0066 000e CS 1 Finite Volume
-  STATES FiniteVolume;
+  STATES        FiniteVolume;
   //0066 0010 CS 1 Manifold
-  STATES Manifold;
+  STATES        Manifold;
 
   // Algorithm Family Code
   SegmentHelper::BasicCodedEntry AlgorithmFamily;
 
   //0066 0031 LO 1 Algorithm Version
-  std::string     AlgorithmVersion;
+  std::string   AlgorithmVersion;
   //0066 0032 LT 1 Algorithm Parameters
   //0066 0036 LO 1 Algorithm Name
-  std::string     AlgorithmName;
-
-
+  std::string   AlgorithmName;
 
 
   //**        Point members      **//
@@ -166,12 +175,6 @@ private:
 
   //**        Primitive members      **//
   SmartPointer< MeshPrimitive > Primitive;
-
-  //0066 0023 OW 1 Triangle Point Index List
-
-  //0066 0024 OW 1 Edge Point Index List
-  //0066 0025 OW 1 Vertex Point Index List
-  //0066 0029 OW 1 Primitive Point Index List
 };
 
 }

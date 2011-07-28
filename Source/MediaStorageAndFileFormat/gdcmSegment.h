@@ -10,6 +10,13 @@
 namespace gdcm
 {
 
+/**
+  * \brief  This class defines a segment.
+  * It mainly contains attributes of group 0x0062.
+  * In addition, it can be associated with surface.
+  *
+  * \see  PS 3.3 C.8.20.2 and C.8.23
+  */
 class GDCM_EXPORT Segment : public Object
 {
 public:

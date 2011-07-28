@@ -27,7 +27,7 @@ struct BasicCodedEntry
   {}
 
   /**
-    * \brief constructor which define type 1 attributes.
+    * \brief constructor which defines type 1 attributes.
     */
   BasicCodedEntry(const char * a_CV,
                   const char * a_CSD,
@@ -39,7 +39,7 @@ struct BasicCodedEntry
   {}
 
   /**
-    * \brief constructor which define attributes.
+    * \brief constructor which defines attributes.
     */
   BasicCodedEntry(const char * a_CV,
                   const char * a_CSD,
