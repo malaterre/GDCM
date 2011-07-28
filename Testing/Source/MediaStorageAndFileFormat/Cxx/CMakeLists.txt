@@ -71,6 +71,7 @@ SET(MSFF_TEST_SRCS
   TestEncapsulatedDocument
   TestSpectroscopy
   TestSurfaceWriter
+  TestSurfaceWriter2
   )
 
 IF(GDCM_DATA_ROOT)
