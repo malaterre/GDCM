@@ -190,8 +190,18 @@ void Segment::SetSegmentAlgorithmName(const char * name)
   SegmentAlgorithmName = name;
 }
 
-unsigned long Segment::GetSurfaceCount() const
+void Segment::ComputeSurfaceCount()
 {
+  SurfaceCount = Surfaces.size();
+}
+
+unsigned long Segment::GetSurfaceCount()
+{
+  if (SurfaceCount == 0)
+  {
+    ComputeSurfaceCount();
+  }
+
   return SurfaceCount;
 }
 

@@ -301,7 +301,7 @@ bool SegmentWriter::PrepareWrite()
     // else assert? return false? gdcmWarning?
 
     //*****   Surface segmentation    *****//
-    const unsigned int surfaceCount = segment->GetSurfaceCount();
+    const unsigned long surfaceCount = segment->GetSurfaceCount();
     if (surfaceCount > 0)
     {
       // Surface Count
