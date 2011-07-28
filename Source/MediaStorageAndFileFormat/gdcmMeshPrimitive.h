@@ -7,12 +7,23 @@
 namespace gdcm
 {
 
+/**
+  * \brief  This class defines surface mesh primitives.
+  * It is designed from surface mesh primitives macro.
+  *
+  * \see  PS 3.3 C.27.4
+  */
 class GDCM_EXPORT MeshPrimitive : public Object
 {
 public:
 
   typedef std::vector< DataElement > PrimitivesData;
 
+  /**
+    * \brief  This enumeration defines primitive types.
+    *
+    * \see  PS 3.3 C.27.4.1
+    */
     typedef enum {
         VERTEX = 0,
         EDGE,
@@ -32,13 +43,8 @@ public:
 
     virtual ~MeshPrimitive();
 
-    MPType GetPrimitiveType() const { return PrimitiveType; }
-    MPType GetPrimitiveType() { return PrimitiveType; }
-    void SetPrimitiveType(const MPType type)
-    {
-        assert( type <= MPType_END );
-        PrimitiveType = type;
-    }
+    MPType GetPrimitiveType() const;
+    void SetPrimitiveType(const MPType type);
 
     const DataElement & GetPrimitiveData() const;
     DataElement & GetPrimitiveData();
@@ -57,8 +63,11 @@ public:
 
 protected:
 
+    // Use to define tag where PrimitiveData will be put.
     MPType          PrimitiveType;
 
+    // PrimitiveData contains point index list.
+    // It shall have 1 or 1-n DataElement following PrimitiveType.
     PrimitivesData  PrimitiveData;
 };
 

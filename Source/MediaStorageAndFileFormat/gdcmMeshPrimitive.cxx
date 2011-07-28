@@ -65,6 +65,17 @@ MeshPrimitive::~MeshPrimitive()
 {
 }
 
+MeshPrimitive::MPType MeshPrimitive::GetPrimitiveType() const
+{
+  return PrimitiveType;
+}
+
+void MeshPrimitive::SetPrimitiveType(const MPType type)
+{
+    assert( type <= MPType_END );
+    PrimitiveType = type;
+}
+
 const DataElement & MeshPrimitive::GetPrimitiveData() const
 {
   return PrimitiveData.front();
