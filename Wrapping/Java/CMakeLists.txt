@@ -20,9 +20,6 @@ FIND_PACKAGE(Java 1.5 REQUIRED) # javac, jar
 FIND_PACKAGE(JNI REQUIRED)
 INCLUDE_DIRECTORIES(
   ${JNI_INCLUDE_DIRS}
-  #${JAVA_INCLUDE_PATH}
-  #${JAVA_INCLUDE_PATH2}
-  #${JAVA_AWT_INCLUDE_PATH}
   )
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 #INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
@@ -36,9 +33,7 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # http://www.debian.org/doc/packaging-manuals/java-policy/x105.html
 SWIG_ADD_MODULE(gdcmjni java gdcm.i)
 SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
-  #${JNI_LIBRARIES}
-  ${JAVA_AWT_LIB_PATH}
-  ${JAVA_JVM_LIB_PATH}
+  ${JNI_LIBRARIES}
 )
 # Stupid cmake-swig module is doing that for us, when not needed
 IF(UNIX)
@@ -81,11 +76,11 @@ ADD_CUSTOM_COMMAND(
 # please compiler such as ecj (Eclipse Java Compiler 0.894_R34x) explicitly
 # state we want 1.5 version to compile gdcm::ImageToImageFilter::GetOutput()
 # const as covariant return type
-  COMMAND ${JAVA_COMPILE} ARGS -source 1.5 "gdcm/*.java" #${javafiles}
+  COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -source 1.5 "gdcm/*.java" #${javafiles}
 # 2. now that the *.class have been generated construct the jar file. We can
 # only rely on the gdcm.java / gdcm.class to build dependencie, I am pretty
 # sure it will break parallel builds... oh well
-  COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar gdcm/*.class
+  COMMAND ${Java_JAR_EXECUTABLE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar gdcm/*.class
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
   DEPENDS "${swig_generated_file_fullname}"
   COMMENT "javac *.java; jar cvf -> gdcm.jar"

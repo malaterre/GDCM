@@ -30,7 +30,7 @@ void underline(int depthSQ);
 void difference_of_sequences(const gdcm::DataElement& sqde1,
   const gdcm::DataElement& sqde2, const gdcm::DictEntry& dictentry, int depthSQ);
 
-// previous declaration of ‘int truncate(const char*, __off_t)’
+// previous declaration of 'int truncate(const char*, __off_t)'
 uint32_t Truncate=30; // trim dumped string values to this number of chars. zero means no trimming.
 std::stringstream sq_disp; // store SQ output while recursing through: only displayed if a difference is found within SQ
 
@@ -199,7 +199,7 @@ void display_element(std::ostream& os, const gdcm::DataElement& de,
     if (de.GetByteValue() != NULL)
       { // is this OK? it worked when de was a pointer, without the != NULL
       gdcm::VL vl = de.GetByteValue()->GetLength();
-      // error: operands to ?: have different types ‘gdcm::VL’ and ‘uint32_t’
+      // error: operands to ?: have different types 'gdcm::VL' and 'uint32_t'
       uint32_t val_vl = vl;
       uint32_t trimto = (Truncate > val_vl ) ? val_vl : Truncate;
       if (0 == Truncate)

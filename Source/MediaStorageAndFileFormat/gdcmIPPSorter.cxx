@@ -80,6 +80,17 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     }
 
   const char *reference = filenames[0].c_str();
+  // we cannot simply consider the first file, what if this is not DICOM ?
+  for(std::vector<std::string>::const_iterator it1 = filenames.begin();
+    it1 != filenames.end(); ++it1)
+    {
+    const char *filename = it1->c_str();
+    bool iskey = scanner.IsKey(filename);
+    if( iskey )
+      {
+      reference = filename;
+      }
+    }
   Scanner::TagToValue const &t2v = scanner.GetMapping(reference);
   Scanner::TagToValue::const_iterator it = t2v.find( tiop );
   // Take the first file in the list of filenames, if not IOP is found, simply gives up:
@@ -153,7 +164,8 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
         // FIXME: This test is weak, since implicitely we are doing a != on floating point value
         if( sorted.find(dist) != sorted.end() )
           {
-          gdcmDebugMacro( "dist: " << dist << " already found: " << filename );
+          gdcmWarningMacro( "dist: " << dist << " for " << filename <<
+            " already found in " << sorted.find(dist)->second );
           return false;
           }
         sorted.insert(

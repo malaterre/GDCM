@@ -1,3 +1,16 @@
+/*=========================================================================
+
+  Program: GDCM (Grassroots DICOM). A DICOM library
+
+  Copyright (c) 2006-2011 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
 #include "gdcmTesting.h"
 #include "gdcmSurfaceWriter.h"
 #include "gdcmSurfaceReader.h"
@@ -63,8 +76,6 @@ int TestSurfaceWriter(const char *subdir, const char* filename)
   }
   else if( strcmp(digest, ref) != 0 )
   {
-    // NOTE : problem with FileMetaInformation (Source Application Entity Title, ...)
-
     std::cerr << "Found " << digest << " instead of " << ref << std::endl;
     return 1;
   }

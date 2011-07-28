@@ -1,17 +1,4 @@
-FIND_PACKAGE(Java 1.5 REQUIRED) # javac, jar
-FIND_PACKAGE(JNI REQUIRED)
-INCLUDE_DIRECTORIES(
-  #${JNI_INCLUDE_PATH}
-  ${JAVA_INCLUDE_PATH}
-  ${JAVA_INCLUDE_PATH2}
-  ${JAVA_AWT_INCLUDE_PATH}
-  )
-
-if(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar:${LIBRARY_OUTPUT_PATH}/gdcm.jar:${VTK_JAVA_JAR}:${GDCM_VTK_JAVA_JAR})
-else(UNIX)
-  set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar\;${LIBRARY_OUTPUT_PATH}/gdcm.jar\;${VTK_JAVA_JAR}\;${GDCM_VTK_JAVA_JAR})
-endif(UNIX)
+set(classpath ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar${JavaProp_PATH_SEPARATOR}${LIBRARY_OUTPUT_PATH}/gdcm.jar${JavaProp_PATH_SEPARATOR}${VTK_JAVA_JAR}${JavaProp_PATH_SEPARATOR}${GDCM_VTK_JAVA_JAR})
 
 set(classfilesdep)
 set(examples
@@ -19,10 +6,22 @@ set(examples
   ReadSeriesIntoVTK
   #AWTMedical3
   )
+if(VTK_HAS_IMAGERESLICEMAPPER)
+  set(examples
+    ${examples}
+    MPRViewer
+    )
+endif()
+if(VTK_HAS_SMARTVOLUMEMAPPER)
+  set(examples
+    ${examples}
+    MIPViewer
+    )
+endif()
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
-    COMMAND ${JAVA_COMPILE} ARGS -classpath "${classpath}"
+    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -classpath "${classpath}"
     ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java
