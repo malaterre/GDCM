@@ -127,6 +127,16 @@ bool SegmentWriter::PrepareWrite()
     }
     // else assert? return false? gdcmWarning?
 
+    // Segment Description (Type 3)
+    const char * segmentDescription = segment->GetSegmentDescription();
+    if ( segmentDescription != 0 )
+    {
+      Attribute<0x0062, 0x0006> segmentDescriptionAt;
+      segmentDescriptionAt.SetValue( segmentDescription );
+      segmentDS.Replace( segmentDescriptionAt.GetAsDataElement() );
+    }
+    // else assert? return false? gdcmWarning?
+
     // Segment Algorithm Type (Type 1)
     const char * segmentAlgorithmType = Segment::GetALGOTypeString( segment->GetSegmentAlgorithmType() );
     if ( segmentAlgorithmType != 0 )

@@ -103,6 +103,16 @@ void Segment::SetSegmentLabel(const char * label)
   SegmentLabel = label;
 }
 
+const char * Segment::GetSegmentDescription() const
+{
+  return SegmentDescription.c_str();
+}
+
+void Segment::SetSegmentDescription(const char * description)
+{
+  SegmentDescription = description;
+}
+
 SegmentHelper::BasicCodedEntry const & Segment::GetAnatomicRegion() const
 {
   return AnatomicRegion;
