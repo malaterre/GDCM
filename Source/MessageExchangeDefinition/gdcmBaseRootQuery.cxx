@@ -204,8 +204,13 @@ DataSet & BaseRootQuery::GetQueryDataSet()
 
 void BaseRootQuery::AddQueryDataSet(const DataSet & ds)
 {
-  mDataSet.GetDES().insert( ds.GetDES().begin(), ds.GetDES().end() );
+  // Cannot use std::set::insert in case a unique key was added (eg. 10,20 with an empty
+  // value). The user defined value for 10,20 in ds would not be taken into account
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    mDataSet.Replace( *it );
+    }
 }
-
 
 }
