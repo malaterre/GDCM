@@ -32,6 +32,7 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
 
   // Modify data to test other writing/reading way
   SmartPointer< Segment >         segment = new Segment;
+  srand(time(NULL));
   SegmentHelper::BasicCodedEntry  processingAlgo("123", "TEST", "Test123");
   {
     SegmentReader::SegmentVector  segments = reader.GetSegments();
@@ -51,8 +52,10 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
         surf->SetSurfaceProcessingDescription( "Test processing" );
         surf->SetProcessingAlgorithm( processingAlgo );
 
-        //      if (surf->GetNumberOfVectors() > 0)
-        //        surf->SetNumberOfVectors( 42 );
+        if (surf->GetNumberOfVectors() > 0)
+          surf->SetNumberOfVectors( 42 );
+
+        surf->SetSurfaceNumber( rand()%1000 );
 
         segment->AddSurface(surf);
       }
@@ -76,7 +79,7 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
     SurfaceWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.AddSegment( segment );
-//  writer.SetNumberOfSurfaces( 1 );
+//  writer.SetNumberOfSurfaces( segment.GetSurfaces().size() );
 
     // Set same header to write file
     const FileMetaInformation & header = reader.GetFile().GetHeader();
@@ -116,6 +119,10 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
   Segment::SurfaceVector::iterator itSurfaces2    = surfaces2.begin();
   Segment::SurfaceVector::iterator itEndSurfaces2 = surfaces2.end();
   SegmentHelper::BasicCodedEntry processingAlgo2;
+
+  Segment::SurfaceVector           surfaces      = segment->GetSurfaces();
+  Segment::SurfaceVector::iterator itSurfaces    = surfaces.begin();
+  Segment::SurfaceVector::iterator itEndSurfaces = surfaces.end();
   for (; itSurfaces2 != itEndSurfaces2; itSurfaces2++)
   {
     SmartPointer< Surface > surf = *itSurfaces2;
@@ -132,14 +139,15 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
       return 1;
     }
 
-    if (strcmp(surf->GetSurfaceProcessingDescription(), "Test processing") != 0)
+    String<> str;
+    str = surf->GetSurfaceProcessingDescription();
+    if (str.Trim() != "Test processing")
     {
       std::cerr << "Find different surface processing description"<< std::endl;
       return 1;
     }
 
     processingAlgo2 = surf->GetProcessingAlgorithm();
-    String<> str;
     str = processingAlgo2.CV;
     processingAlgo2.CV = str.Trim();
     str = processingAlgo2.CSD;
@@ -152,6 +160,28 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
      || processingAlgo2.CM != processingAlgo.CM )
     {
       std::cerr << "Find different surface processing algorithm"<< std::endl;
+      return 1;
+    }
+
+    if (itSurfaces != itEndSurfaces)
+    {
+      if (surf->GetSurfaceNumber() != (*itSurfaces)->GetSurfaceNumber())
+      {
+        std::cerr << "Find different surface number"<< std::endl;
+        return 1;
+      }
+
+      if (surf->GetNumberOfVectors() > 0)
+      {
+        std::cerr << "Find different number of vectors"<< std::endl;
+        return 1;
+      }
+
+      itSurfaces++;
+    }
+    else
+    {
+      std::cerr << "Find different surface organization"<< std::endl;
       return 1;
     }
   }
