@@ -21,7 +21,7 @@ namespace SegmentHelper
 
 bool BasicCodedEntry::IsEmpty(const bool checkOptionalAttributes/* = false*/) const
 {
-  bool res = false;
+  bool res = true;
 
   if (!CV.empty() && !CSD.empty() && !CM.empty())
   {
@@ -29,12 +29,12 @@ bool BasicCodedEntry::IsEmpty(const bool checkOptionalAttributes/* = false*/) co
     {
       if (!CSV.empty())
       {
-        res =true;
+        res = false;
       }
     }
     else
     {
-      res = true;
+      res = false;
     }
   }
 

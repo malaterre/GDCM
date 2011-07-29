@@ -119,38 +119,47 @@ bool SegmentWriter::PrepareWrite()
 
     // Segment Label (Type 1)
     const char * segmentLabel = segment->GetSegmentLabel();
-    if ( segmentLabel != 0 )
+    if ( strcmp(segmentLabel, "") != 0 )
     {
-      Attribute<0x0062, 0x0005> segmentLabelAt;
-      segmentLabelAt.SetValue( segmentLabel );
-      segmentDS.Replace( segmentLabelAt.GetAsDataElement() );
+      gdcmWarningMacro("No segment label specified");
     }
-    // else assert? return false? gdcmWarning?
+    Attribute<0x0062, 0x0005> segmentLabelAt;
+    segmentLabelAt.SetValue( segmentLabel );
+    segmentDS.Replace( segmentLabelAt.GetAsDataElement() );
 
     // Segment Description (Type 3)
     const char * segmentDescription = segment->GetSegmentDescription();
-    if ( segmentDescription != 0 )
+    if ( strcmp(segmentDescription, "") != 0 )
     {
       Attribute<0x0062, 0x0006> segmentDescriptionAt;
       segmentDescriptionAt.SetValue( segmentDescription );
       segmentDS.Replace( segmentDescriptionAt.GetAsDataElement() );
     }
-    // else assert? return false? gdcmWarning?
 
     // Segment Algorithm Type (Type 1)
     const char * segmentAlgorithmType = Segment::GetALGOTypeString( segment->GetSegmentAlgorithmType() );
-    if ( segmentAlgorithmType != 0 )
+    if ( segmentAlgorithmType == 0 )
     {
+      gdcmWarningMacro("No segment algorithm type specified");
       Attribute<0x0062, 0x0008> segmentAlgorithmTypeAt;
-      segmentAlgorithmTypeAt.SetValue( segmentAlgorithmType );
+      segmentAlgorithmTypeAt.SetValue( "" );
       segmentDS.Replace( segmentAlgorithmTypeAt.GetAsDataElement() );
     }
-    // else assert? return false? gdcmWarning?
+    else
+    {
+    Attribute<0x0062, 0x0008> segmentAlgorithmTypeAt;
+    segmentAlgorithmTypeAt.SetValue( segmentAlgorithmType );
+    segmentDS.Replace( segmentAlgorithmTypeAt.GetAsDataElement() );
+    }
 
     //*****   GENERAL ANATOMY MANDATORY MACRO ATTRIBUTES   *****//
-    const SegmentHelper::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
-    if (!anatReg.CV.empty() && !anatReg.CSD.empty() && !anatReg.CM.empty())
     {
+      const SegmentHelper::BasicCodedEntry & anatReg = segment->GetAnatomicRegion();
+      if (anatReg.IsEmpty())
+      {
+        gdcmWarningMacro("Anatomic region not specified or incomplete");
+      }
+
       // Anatomic Region Sequence (0008,2218) Type 1
       SmartPointer<SequenceOfItems> anatRegSQ;
       const Tag anatRegSQTag(0x0008, 0x2218);
@@ -196,12 +205,15 @@ bool SegmentWriter::PrepareWrite()
         anatRegDS.Replace( codeMeaningAt.GetAsDataElement() );
       }
     }
-    // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Category Code Sequence   *****//
-    const SegmentHelper::BasicCodedEntry & propCat = segment->GetPropertyCategory();
-    if (!propCat.CV.empty() && !propCat.CSD.empty() && !propCat.CM.empty())
     {
+      const SegmentHelper::BasicCodedEntry & propCat = segment->GetPropertyCategory();
+      if (propCat.IsEmpty())
+      {
+        gdcmWarningMacro("Segmented property category not specified or incomplete");
+      }
+
       // Segmented Property Category Code Sequence (0062,0003) Type 1
       SmartPointer<SequenceOfItems> propCatSQ;
       const Tag propCatSQTag(0x0062, 0x0003);
@@ -247,12 +259,15 @@ bool SegmentWriter::PrepareWrite()
         propCatDS.Replace( codeMeaningAt.GetAsDataElement() );
       }
     }
-    // else assert? return false? gdcmWarning?
 
     //*****   Segmented Property Type Code Sequence   *****//
-    const SegmentHelper::BasicCodedEntry & propType = segment->GetPropertyType();
-    if (!propType.CV.empty() && !propType.CSD.empty() && !propType.CM.empty())
     {
+      const SegmentHelper::BasicCodedEntry & propType = segment->GetPropertyType();
+      if (propType.IsEmpty())
+      {
+        gdcmWarningMacro("Segmented property type not specified or incomplete");
+      }
+
       // Segmented Property Type Code Sequence (0062,000F) Type 1
       SmartPointer<SequenceOfItems> propTypeSQ;
       const Tag propTypeSQTag(0x0062, 0x000F);
@@ -268,7 +283,7 @@ bool SegmentWriter::PrepareWrite()
       propTypeSQ = segmentDS.GetDataElement( propTypeSQTag ).GetValueAsSQ();
       propTypeSQ->SetLengthToUndefined();
 
-      // Fill the Segmented Property Category Code Sequence
+      // Fill the Segmented Property Type Code Sequence
       const unsigned int nbItems = propTypeSQ->GetNumberOfItems();
       if (nbItems < 1)  // Only one item is a type 1
       {
@@ -298,7 +313,6 @@ bool SegmentWriter::PrepareWrite()
         propTypeDS.Replace( codeMeaningAt.GetAsDataElement() );
       }
     }
-    // else assert? return false? gdcmWarning?
 
     //*****   Surface segmentation    *****//
     const unsigned long surfaceCount = segment->GetSurfaceCount();
@@ -382,15 +396,15 @@ bool SegmentWriter::PrepareWrite()
     }
     else
     {
-      // Segment Algorithm Name
+      // Segment Algorithm Name (Type 1)
       const char * segmentAlgorithmName = segment->GetSegmentAlgorithmName();
-      if (segmentAlgorithmName != 0)
+      if ( strcmp(segmentAlgorithmName, "") != 0 )
       {
-        Attribute<0x0062, 0x0009> segmentAlgorithmNameAt;
-        segmentAlgorithmNameAt.SetValue( segmentAlgorithmName );
-        segmentDS.Replace( segmentAlgorithmNameAt.GetAsDataElement() );
+        gdcmWarningMacro("No segment algorithm name specified");
       }
-      // else assert? return false? gdcmWarning?
+      Attribute<0x0062, 0x0009> segmentAlgorithmNameAt;
+      segmentAlgorithmNameAt.SetValue( segmentAlgorithmName );
+      segmentDS.Replace( segmentAlgorithmNameAt.GetAsDataElement() );
     }
 
     ++itemNumber;
