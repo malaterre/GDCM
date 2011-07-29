@@ -137,7 +137,7 @@ bool SurfaceWriter::PrepareWrite()
       recommendedDisplayCIELabValue.SetValues( surface->GetRecommendedDisplayCIELabValue(), 3 );
       surfaceDS.Replace( recommendedDisplayCIELabValue.GetAsDataElement() );
 
-      // Surface Number
+      // Surface Number (Type 1)
       Attribute<0x0066, 0x0003> surfaceNumberAt;
       unsigned long surfaceNumber = surface->GetSurfaceNumber();
       if (surfaceNumber == 0)
@@ -145,9 +145,9 @@ bool SurfaceWriter::PrepareWrite()
       surfaceNumberAt.SetValue( surfaceNumber );
       surfaceDS.Replace( surfaceNumberAt.GetAsDataElement() );
 
-      // Surface Comments
+      // Surface Comments (Type 3)
       const char * surfaceComments = surface->GetSurfaceComments();
-      if (surfaceComments != 0)
+      if (strcmp(surfaceComments, "") != 0)
       {
         Attribute<0x0066, 0x0004> surfaceCommentsAt;
         surfaceCommentsAt.SetValue( surfaceComments );
@@ -167,7 +167,7 @@ bool SurfaceWriter::PrepareWrite()
         surfaceDS.Replace( surfaceProcessingRatioAt.GetAsDataElement() );
 
         const char * surfaceProcessingDescription = surface->GetSurfaceProcessingDescription();
-        if (surfaceProcessingDescription != 0)
+        if (strcmp(surfaceProcessingDescription, "") != 0)
         {
           Attribute<0x0066, 0x000B> surfaceProcessingDescriptionAt;
           surfaceProcessingDescriptionAt.SetValue( surfaceProcessingDescription );
@@ -176,17 +176,18 @@ bool SurfaceWriter::PrepareWrite()
 
         //*****   Surface Processing Algorithm Identification Sequence    *****//
         {
-          bool insertASQ = false;
           SmartPointer<SequenceOfItems> processingAlgoIdSQ;
           const Tag processingAlgoIdTag(0x0066, 0x0035);
           if( !surfaceDS.FindDataElement( processingAlgoIdTag ) )
           {
             processingAlgoIdSQ = new SequenceOfItems;
+            DataElement detmp( processingAlgoIdTag );
+            detmp.SetVR( VR::SQ );
+            detmp.SetValue( *processingAlgoIdSQ );
+            detmp.SetVLToUndefined();
+            surfaceDS.Insert( detmp );
           }
-          else
-          {
-            processingAlgoIdSQ = surfaceDS.GetDataElement( processingAlgoIdTag ).GetValueAsSQ();
-          }
+          processingAlgoIdSQ = surfaceDS.GetDataElement( processingAlgoIdTag ).GetValueAsSQ();
           processingAlgoIdSQ->SetLengthToUndefined();
 
           if (processingAlgoIdSQ->GetNumberOfItems() < 1) // One item shall be permitted
@@ -201,10 +202,12 @@ bool SurfaceWriter::PrepareWrite()
 
           //*****   Algorithm Family Code Sequence    *****//
           //See: PS.3.3 Table 8.8-1 and PS 3.16 Context ID 7162
-          const SegmentHelper::BasicCodedEntry & processingAlgo = surface->GetProcessingAlgorithm();
-          if (!processingAlgo.CV.empty() && !processingAlgo.CSD.empty() && !processingAlgo.CM.empty())
           {
-            insertASQ = true;
+            const SegmentHelper::BasicCodedEntry & processingAlgo = surface->GetProcessingAlgorithm();
+            if (processingAlgo.IsEmpty())
+            {
+              gdcmWarningMacro("Surface provessing algorithm family not specified or incomplete");
+            }
 
             SmartPointer<SequenceOfItems> algoFamilyCodeSQ;
             const Tag algoFamilyCodeTag(0x0066, 0x002F);
@@ -249,18 +252,6 @@ bool SurfaceWriter::PrepareWrite()
               algoFamilyCodeDS.Replace( codeMeaningAt.GetAsDataElement() );
             }
           }
-          // else assert? return false? gdcmWarning?
-
-          // Insert if necessary Segment Surface Generation Algorithm Identification Sequence
-          if( insertASQ
-           && !surfaceDS.FindDataElement( processingAlgoIdTag ) )
-          {
-            DataElement detmp( processingAlgoIdTag );
-            detmp.SetVR( VR::SQ );
-            detmp.SetValue( *processingAlgoIdSQ );
-            detmp.SetVLToUndefined();
-            surfaceDS.Insert( detmp );
-          }
         }
       }
 
@@ -279,14 +270,20 @@ bool SurfaceWriter::PrepareWrite()
       surfaceDS.Replace( presentationType.GetAsDataElement() );
 
       // Finite Volume
-      Attribute<0x0066, 0x000E> finiteVolume;
-      finiteVolume.SetValue( Surface::GetSTATESString( surface->GetFiniteVolume() ) );
-      surfaceDS.Replace( finiteVolume.GetAsDataElement() );
+      Attribute<0x0066, 0x000E> finiteVolumeAt;
+      Surface::STATES finiteVolume = surface->GetFiniteVolume();
+      if (finiteVolume == Surface::STATES_END)
+        finiteVolume = Surface::UNKNOWN;
+      finiteVolumeAt.SetValue( Surface::GetSTATESString( finiteVolume ) );
+      surfaceDS.Replace( finiteVolumeAt.GetAsDataElement() );
 
       // Manifold
-      Attribute<0x0066, 0x0010> manifold;
-      manifold.SetValue( Surface::GetSTATESString( surface->GetManifold() ) );
-      surfaceDS.Replace( manifold.GetAsDataElement() );
+      Attribute<0x0066, 0x0010> manifoldAt;
+      Surface::STATES manifold = surface->GetManifold();
+      if (manifold == Surface::STATES_END)
+        manifold = Surface::UNKNOWN;
+      manifoldAt.SetValue( Surface::GetSTATESString( manifold ) );
+      surfaceDS.Replace( manifoldAt.GetAsDataElement() );
 
       //******    Surface Points    *****//
       //        (0066,0011) SQ (Sequence with undefined length #=1)     # u/l, 1 Surface Points Sequence
@@ -640,13 +637,10 @@ bool SurfaceWriter::PrepareWrite()
     SequenceOfItems::Iterator       itRefSurface    = refSurfaceSQ->Begin();
     SequenceOfItems::Iterator       itEndRefSurface = refSurfaceSQ->End();
     unsigned int                    idxSurface      = 0;
-    // Flag to avoid empty Segment Surface Generation Algorithm Identification Sequence
-    bool                            insertASQ;
     for (; itRefSurface != itEndRefSurface; itRefSurface++)
     {
       DataSet &                     refSurfaceDS    = itRefSurface->GetNestedDataSet();
       SmartPointer< Surface >       surface         = segment->GetSurface( idxSurface++ );
-      insertASQ = false;
 
       //*****   Segment Surface Generation Algorithm Identification Sequence    *****//
       {
@@ -655,11 +649,13 @@ bool SurfaceWriter::PrepareWrite()
         if( !refSurfaceDS.FindDataElement( segmentsAlgoIdTag ) )
         {
           segmentsAlgoIdSQ = new SequenceOfItems;
+          DataElement detmp( segmentsAlgoIdTag );
+          detmp.SetVR( VR::SQ );
+          detmp.SetValue( *segmentsAlgoIdSQ );
+          detmp.SetVLToUndefined();
+          refSurfaceDS.Insert( detmp );
         }
-        else
-        {
-          segmentsAlgoIdSQ = refSurfaceDS.GetDataElement( segmentsAlgoIdTag ).GetValueAsSQ();
-        }
+        segmentsAlgoIdSQ = refSurfaceDS.GetDataElement( segmentsAlgoIdTag ).GetValueAsSQ();
         segmentsAlgoIdSQ->SetLengthToUndefined();
 
         if (segmentsAlgoIdSQ->GetNumberOfItems() < 1)
@@ -675,9 +671,10 @@ bool SurfaceWriter::PrepareWrite()
         //*****   Algorithm Family Code Sequence    *****//
         //See: PS.3.3 Table 8.8-1 and PS 3.16 Context ID 7162
         const SegmentHelper::BasicCodedEntry & algoFamily = surface->GetAlgorithmFamily();
-        if (!algoFamily.CV.empty() && !algoFamily.CSD.empty() && !algoFamily.CM.empty())
+        if (algoFamily.IsEmpty())
         {
-          insertASQ = true;
+          gdcmWarningMacro("Segment surface generation algorithm family not specified or incomplete");
+        }
 
           SmartPointer<SequenceOfItems> algoFamilyCodeSQ;
           const Tag algoFamilyCodeTag(0x0066, 0x002F);
@@ -723,43 +720,26 @@ bool SurfaceWriter::PrepareWrite()
             codeMeaningAt.SetValue( algoFamily.CM );
             algoFamilyCodeDS.Replace( codeMeaningAt.GetAsDataElement() );
           }
-        }
-        // else assert? return false? gdcmWarning?
 
         // Algorithm Version
         const char * algorithmVersion = surface->GetAlgorithmVersion();
-        if (algorithmVersion != 0)
+        if (strcmp(algorithmVersion, "") != 0)
         {
-          insertASQ = true;
-
-          Attribute<0x0066, 0x0031> algorithmVersionAt;
-          algorithmVersionAt.SetValue( algorithmVersion );
-          segmentsAlgoIdDS.Replace( algorithmVersionAt.GetAsDataElement() );
+          gdcmWarningMacro("No algorithm version specified");
         }
-        // else assert? return false? gdcmWarning?
+        Attribute<0x0066, 0x0031> algorithmVersionAt;
+        algorithmVersionAt.SetValue( algorithmVersion );
+        segmentsAlgoIdDS.Replace( algorithmVersionAt.GetAsDataElement() );
 
         // Algorithm Name
         const char * algorithmName = surface->GetAlgorithmName();
-        if (algorithmName != 0)
+        if (strcmp(algorithmName, "") != 0)
         {
-          insertASQ = true;
-
-          Attribute<0x0066, 0x0036> algorithmNameAt;
-          algorithmNameAt.SetValue( algorithmName );
-          segmentsAlgoIdDS.Replace( algorithmNameAt.GetAsDataElement() );
+          gdcmWarningMacro("No algorithm name specified");
         }
-        // else assert? return false? gdcmWarning?
-
-        // Insert if necessary Segment Surface Generation Algorithm Identification Sequence
-        if( insertASQ
-         && !refSurfaceDS.FindDataElement( segmentsAlgoIdTag ) )
-        {
-          DataElement detmp( segmentsAlgoIdTag );
-          detmp.SetVR( VR::SQ );
-          detmp.SetValue( *segmentsAlgoIdSQ );
-          detmp.SetVLToUndefined();
-          refSurfaceDS.Insert( detmp );
-        }
+        Attribute<0x0066, 0x0036> algorithmNameAt;
+        algorithmNameAt.SetValue( algorithmName );
+        segmentsAlgoIdDS.Replace( algorithmNameAt.GetAsDataElement() );
       }
     }
 
