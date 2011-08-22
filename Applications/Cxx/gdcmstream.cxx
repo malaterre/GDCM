@@ -133,7 +133,7 @@ int No_Of_Resolutions(const char *filename)
   //assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
-    dinfo = opj_create_decompress(CODEC_JP2);
+  dinfo = opj_create_decompress(CODEC_JP2);
 
   /* catch events using our callbacks and give a local context */
   opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
@@ -220,7 +220,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   //assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
-    dinfo = opj_create_decompress(CODEC_JP2);
+  dinfo = opj_create_decompress(CODEC_JP2);
 
   /* catch events using our callbacks and give a local context */
   opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);
@@ -233,50 +233,51 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
 
   /* decode the stream and fill the image structure */
   image = opj_decode(dinfo, cio);
-  if(!image) {
+  if(!image)
+    {
     opj_destroy_decompress(dinfo);
     opj_cio_close(cio);
     //gdcmErrorMacro( "opj_decode failed" );
     return 1;
-  }
+    }
 
-       opj_cp_t * cp = ((opj_jp2_t*)dinfo->jp2_handle)->j2k->cp;
-       opj_tcp_t *tcp = &cp->tcps[0];
-       opj_tccp_t *tccp = &tcp->tccps[0];
-    /*   std::cout << "\n No of Cols In Image" << image->x1;
+  opj_cp_t * cp = ((opj_jp2_t*)dinfo->jp2_handle)->j2k->cp;
+  opj_tcp_t *tcp = &cp->tcps[0];
+  opj_tccp_t *tccp = &tcp->tccps[0];
+  /*   std::cout << "\n No of Cols In Image" << image->x1;
        std::cout << "\n No of Rows In Image" << image->y1;
        std::cout << "\n No of Components in Image" << image->numcomps;
        std::cout << "\n No of Resolutions"<< tccp->numresolutions << "\n";
-*/
-        opj_j2k_t* j2k = NULL;
-        opj_jp2_t* jp2 = NULL;
-        jp2 = (opj_jp2_t*)dinfo->jp2_handle;
-        int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
-        //std:: cout << reversible;
-       int compno = 0;
-       opj_image_comp_t *comp = &image->comps[compno];
-       int Dimensions[2];
-       Dimensions[0]= comp->w;
-       Dimensions[1] = comp->h;
-       opj_cio_close(cio);
-       unsigned long len = Dimensions[0]*Dimensions[1] * image->numcomps;
-       //std::cout << "\nTest" <<image->comps[0].factor;
-       char *raw = new char[len];
+   */
+  opj_j2k_t* j2k = NULL;
+  opj_jp2_t* jp2 = NULL;
+  jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+  int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+  //std:: cout << reversible;
+  int compno = 0;
+  opj_image_comp_t *comp = &image->comps[compno];
+  int Dimensions[2];
+  Dimensions[0]= comp->w;
+  Dimensions[1] = comp->h;
+  opj_cio_close(cio);
+  unsigned long len = Dimensions[0]*Dimensions[1] * image->numcomps;
+  //std::cout << "\nTest" <<image->comps[0].factor;
+  char *raw = new char[len];
 
-	for (unsigned int compno = 0; compno < (unsigned int)image->numcomps; compno++)
+  for (unsigned int compno = 0; compno < (unsigned int)image->numcomps; compno++)
     {
     opj_image_comp_t *comp = &image->comps[compno];
 
     int w = image->comps[compno].w;
     int h = image->comps[compno].h;
-      uint8_t *data8 = (uint8_t*)raw + compno;
-      for (int i = 0; i < w * h ; i++)
-        {
-        int v = image->comps[compno].data[i];
-        *data8 = (uint8_t)v;
-        data8 += image->numcomps;
-        }
-   }
+    uint8_t *data8 = (uint8_t*)raw + compno;
+    for (int i = 0; i < w * h ; i++)
+      {
+      int v = image->comps[compno].data[i];
+      *data8 = (uint8_t)v;
+      data8 += image->numcomps;
+      }
+    }
 
 
   gdcm::Writer w;
@@ -303,227 +304,227 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   de2.SetVR( gdcm::VR::CS );
 
   if(image->numcomps == 1)
-  {
-  const char mystr[] = "MONOCHROME2";
-  de2.SetByteValue(mystr, strlen(mystr));
-  }
+    {
+    const char mystr[] = "MONOCHROME2";
+    de2.SetByteValue(mystr, strlen(mystr));
+    }
   else
-  {
-  const char mystr1[] = "RGB";
-  de2.SetByteValue(mystr1, strlen(mystr1));
-  }
+    {
+    const char mystr1[] = "RGB";
+    de2.SetByteValue(mystr1, strlen(mystr1));
+    }
 
- ds.Insert( de2 );
+  ds.Insert( de2 );
 
 
-   gdcm::Attribute<0x0028,0x0100> at = {8};
-   ds.Insert( at.GetAsDataElement() );
+  gdcm::Attribute<0x0028,0x0100> at = {8};
+  ds.Insert( at.GetAsDataElement() );
 
-   gdcm::Attribute<0x0028,0x0002> at1 = {image->numcomps};
-   ds.Insert( at1.GetAsDataElement() );
+  gdcm::Attribute<0x0028,0x0002> at1 = {image->numcomps};
+  ds.Insert( at1.GetAsDataElement() );
 
   gdcm::Attribute<0x0028,0x0101> at2 = {8};
-   ds.Insert( at2.GetAsDataElement() );
+  ds.Insert( at2.GetAsDataElement() );
 
   gdcm::Attribute<0x0028,0x0102> at3 = {7};
   ds.Insert( at3.GetAsDataElement() );
 
 
   if (flag == 1)  //This flag is to write Image Information
-  {
-
-    for (int i=0; i <= res; i++)    // Loop to set different dimensions of all resolution
     {
 
-     int a = 1;
-     int b =1;
-     while(a!=((res+1)-i))
+    for (int i=0; i <= res; i++)    // Loop to set different dimensions of all resolution
+      {
+
+      int a = 1;
+      int b =1;
+      while(a!=((res+1)-i))
         {
-          b = b*2;
-          a = a+1;
-         }
+        b = b*2;
+        a = a+1;
+        }
 
-     uint16_t row = (image->y1)/b;
-     uint16_t col = (image->x1)/b;
-     //std::cout << row;
+      uint16_t row = (image->y1)/b;
+      uint16_t col = (image->x1)/b;
+      //std::cout << row;
 
-     gdcm::Element<gdcm::VR::IS,gdcm::VM::VM1> el2;
-     el2.SetValue(i+1);
-     gdcm::DataElement rfn = el2.GetAsDataElement();     //rfn ---> reference frame number
-     rfn.SetTag( gdcm::Tag(0x0008,0x1160) );
+      gdcm::Element<gdcm::VR::IS,gdcm::VM::VM1> el2;
+      el2.SetValue(i+1);
+      gdcm::DataElement rfn = el2.GetAsDataElement();     //rfn ---> reference frame number
+      rfn.SetTag( gdcm::Tag(0x0008,0x1160) );
 
-     gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el;
-     el.SetValue(1,0);
-     el.SetValue(1,1);
-     gdcm::DataElement ulr = el.GetAsDataElement();     //ulr --> upper left col/row
-     ulr.SetTag( gdcm::Tag(0x0048,0x0201) );
+      gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el;
+      el.SetValue(1,0);
+      el.SetValue(1,1);
+      gdcm::DataElement ulr = el.GetAsDataElement();     //ulr --> upper left col/row
+      ulr.SetTag( gdcm::Tag(0x0048,0x0201) );
 
-     gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el1;
-     el1.SetValue(col,0);
-     el1.SetValue(row,1);
-     gdcm::DataElement brr = el1.GetAsDataElement();
-     brr.SetTag( gdcm::Tag(0x0048,0x0202) );            //brr --> bottom right col/row
+      gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el1;
+      el1.SetValue(col,0);
+      el1.SetValue(row,1);
+      gdcm::DataElement brr = el1.GetAsDataElement();
+      brr.SetTag( gdcm::Tag(0x0048,0x0202) );            //brr --> bottom right col/row
 
-    gdcm::Item it;
-    gdcm::DataSet &nds = it.GetNestedDataSet();
-    nds.Insert( rfn );
-    nds.Insert(ulr);
-    nds.Insert(brr);
+      gdcm::Item it;
+      gdcm::DataSet &nds = it.GetNestedDataSet();
+      nds.Insert( rfn );
+      nds.Insert(ulr);
+      nds.Insert(brr);
 
-    sq->AddItem(it);
-  }//For loop
+      sq->AddItem(it);
+      }//For loop
 
-  gdcm::File &file2 = w.GetFile();
-  gdcm::DataSet &ds1 = file2.GetDataSet();
+    gdcm::File &file2 = w.GetFile();
+    gdcm::DataSet &ds1 = file2.GetDataSet();
 
-   gdcm::Attribute<0x0028,0x0010> row1 = {image->y1};
-   ds1.Insert( row1.GetAsDataElement() );
+    gdcm::Attribute<0x0028,0x0010> row1 = {image->y1};
+    ds1.Insert( row1.GetAsDataElement() );
 
-   gdcm::Attribute<0x0028,0x0011> col1 = {image->x1};
-   ds1.Insert( col1.GetAsDataElement() );
-   gdcm::Attribute<0x0028,0x0008> Number_Of_Frames = {res+1};
-   ds1.Insert( Number_Of_Frames.GetAsDataElement() );
+    gdcm::Attribute<0x0028,0x0011> col1 = {image->x1};
+    ds1.Insert( col1.GetAsDataElement() );
+    gdcm::Attribute<0x0028,0x0008> Number_Of_Frames = {res+1};
+    ds1.Insert( Number_Of_Frames.GetAsDataElement() );
 
-  gdcm::DataElement des( gdcm::Tag(0x0048,0x0200) );
-  des.SetVR(gdcm::VR::SQ);
-  des.SetValue(*sq);
-  des.SetVLToUndefined();
+    gdcm::DataElement des( gdcm::Tag(0x0048,0x0200) );
+    des.SetVR(gdcm::VR::SQ);
+    des.SetValue(*sq);
+    des.SetVLToUndefined();
 
-  ds1.Insert(des);
+    ds1.Insert(des);
 
- theStreamWriter.SetFile(file2);
+    theStreamWriter.SetFile(file2);
 
-  if (!theStreamWriter.WriteImageInformation()){
+    if (!theStreamWriter.WriteImageInformation()){
       std::cerr << "unable to write image information" << std::endl;
       return 1; //the CanWrite function should prevent getting here, else,
       //that's a test failure∫
     }
 
-  ds1.Remove( gdcm::Tag(0x0028,0x0010) );
-  ds1.Remove( gdcm::Tag(0x0028,0x0011) );
-  ds1.Remove( gdcm::Tag(0x0028,0x0008) );
+    ds1.Remove( gdcm::Tag(0x0028,0x0010) );
+    ds1.Remove( gdcm::Tag(0x0028,0x0011) );
+    ds1.Remove( gdcm::Tag(0x0028,0x0008) );
 
 
 
- }//if (flag == 1)  //This flag is to write Image Information
+    }//if (flag == 1)  //This flag is to write Image Information
 
-   gdcm::Attribute<0x0028,0x0010> row = {image->comps[0].w};
-   ds.Insert( row.GetAsDataElement() );
+  gdcm::Attribute<0x0028,0x0010> row = {image->comps[0].w};
+  ds.Insert( row.GetAsDataElement() );
 
-   gdcm::Attribute<0x0028,0x0011> col = {image->comps[0].h};
-   ds.Insert( col.GetAsDataElement() );
+  gdcm::Attribute<0x0028,0x0011> col = {image->comps[0].h};
+  ds.Insert( col.GetAsDataElement() );
 
-   gdcm::Attribute<0x0028,0x0008> Number_Of_Frames = {1};
-   ds.Insert( Number_Of_Frames.GetAsDataElement() );
+  gdcm::Attribute<0x0028,0x0008> Number_Of_Frames = {1};
+  ds.Insert( Number_Of_Frames.GetAsDataElement() );
 
-   theStreamWriter.SetFile(file);
+  theStreamWriter.SetFile(file);
 
   if (!theStreamWriter.CanWriteFile()){
-      delete [] raw;
-      std::cerr << "Not able to write" << std::endl;
-      return 0;//this means that the file was unwritable, period.
-      //very similar to a ReadImageInformation failure
+    delete [] raw;
+    std::cerr << "Not able to write" << std::endl;
+    return 0;//this means that the file was unwritable, period.
+    //very similar to a ReadImageInformation failure
+  }
+
+  // Important to write here
+  std::vector<unsigned int> extent = gdcm::ImageHelper::GetDimensionsValue(file);
+
+  unsigned short xmax = extent[0];
+  unsigned short ymax = extent[1];
+  unsigned short theChunkSize = 4;
+  unsigned short ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
+  unsigned short zmax = extent[2];
+  //std::cout << "\n"<<xmax << "\n" << ymax<<"\n"<<zmax<<"\n" << image->numcomps<<"\n";
+
+
+  if (xmax == 0 || ymax == 0)
+    {
+    std::cerr << "Image has no size, unable to write zero-sized image." << std::endl;
+    return 0;
     }
 
- // Important to write here
- std::vector<unsigned int> extent = gdcm::ImageHelper::GetDimensionsValue(file);
 
-    unsigned short xmax = extent[0];
-    unsigned short ymax = extent[1];
-    unsigned short theChunkSize = 4;
-    unsigned short ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
-    unsigned short zmax = extent[2];
-    //std::cout << "\n"<<xmax << "\n" << ymax<<"\n"<<zmax<<"\n" << image->numcomps<<"\n";
-
-
-    if (xmax == 0 || ymax == 0)
-      {
-      std::cerr << "Image has no size, unable to write zero-sized image." << std::endl;
-      return 0;
-      }
-
-
-    int z, y, nexty;
-    unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
-    //the bytes sequentially.  So, store how far you got in the buffer with each iteration.
-    for (z = 0; z < zmax; ++z){
-      for (y = 0; y < ymax; y += ychunk){
-        nexty = y + ychunk;
-        if (nexty > ymax) nexty = ymax;
-        theStreamWriter.DefinePixelExtent(0, xmax, y, nexty, z, z+1);
-        unsigned long len = theStreamWriter.DefineProperBufferLength();
-        //std::cout << "\n" <<len;
-        char* finalBuffer = new char[len];
-        memcpy(finalBuffer, &(raw[prevLen]), len);
-        //std::cout << "\nable to write";
-        if (!theStreamWriter.Write(finalBuffer, len)){
-          std::cerr << "writing failure:" << "output.dcm" << " at y = " << y << " and z= " << z << std::endl;
-          delete [] raw;
-          delete [] finalBuffer;
-          return 1;
-        }
+  int z, y, nexty;
+  unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
+  //the bytes sequentially.  So, store how far you got in the buffer with each iteration.
+  for (z = 0; z < zmax; ++z){
+    for (y = 0; y < ymax; y += ychunk){
+      nexty = y + ychunk;
+      if (nexty > ymax) nexty = ymax;
+      theStreamWriter.DefinePixelExtent(0, xmax, y, nexty, z, z+1);
+      unsigned long len = theStreamWriter.DefineProperBufferLength();
+      //std::cout << "\n" <<len;
+      char* finalBuffer = new char[len];
+      memcpy(finalBuffer, &(raw[prevLen]), len);
+      //std::cout << "\nable to write";
+      if (!theStreamWriter.Write(finalBuffer, len)){
+        std::cerr << "writing failure:" << "output.dcm" << " at y = " << y << " and z= " << z << std::endl;
+        delete [] raw;
         delete [] finalBuffer;
-        prevLen += len;
+        return 1;
       }
+      delete [] finalBuffer;
+      prevLen += len;
     }
-    delete raw;
+  }
+  delete raw;
 
   delete[] src;  //FIXME
 
-if(dinfo) {
+  if(dinfo) {
     opj_destroy_decompress(dinfo);
   }
 
- opj_image_destroy(image);
+  opj_image_destroy(image);
 
- return true;
+  return true;
 
 }
 
 bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::StreamImageReader & reader, int resolution, std::ostream& of, int tile,std::vector<unsigned int> start, std::vector<unsigned int> end)
 {
- gdcm::File file1 = reader.GetFile();
- gdcm::DataSet ds1 = file1.GetDataSet();
+  gdcm::File file1 = reader.GetFile();
+  gdcm::DataSet ds1 = file1.GetDataSet();
 
   gdcm::Writer w;
   gdcm::File &file = w.GetFile();
   gdcm::DataSet &ds = file.GetDataSet();
 
- file.GetHeader().SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
- gdcm::DataElement uid = ds1.GetDataElement( gdcm::Tag(0x0008,0x0018) );
- ds.Insert( uid );
+  file.GetHeader().SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+  gdcm::DataElement uid = ds1.GetDataElement( gdcm::Tag(0x0008,0x0018) );
+  ds.Insert( uid );
 
- gdcm::DataElement ms = ds1.GetDataElement( gdcm::Tag(0x0008,0x0016) );
- ds.Insert( ms );
+  gdcm::DataElement ms = ds1.GetDataElement( gdcm::Tag(0x0008,0x0016) );
+  ds.Insert( ms );
 
   gdcm::DataElement mystr = ds1.GetDataElement( gdcm::Tag(0x0028,0x0004) );
   ds.Insert( mystr );
 
   std::vector<unsigned int> extent = reader.GetDimensionsValueForResolution(resolution);
-    gdcm::Element<gdcm::VR::US,gdcm::VM::VM1> row;
-     if(tile == 1)
-       {
-        row.SetValue((end[1]-start[1]),0);
-       }
-     else
-     {
-     row.SetValue(extent[1],0);
-     }
-     gdcm::DataElement ulr = row.GetAsDataElement();     //ulr --> upper left col/row
-     ulr.SetTag( gdcm::Tag(0x0028,0x0010) );
+  gdcm::Element<gdcm::VR::US,gdcm::VM::VM1> row;
+  if(tile == 1)
+    {
+    row.SetValue((end[1]-start[1]),0);
+    }
+  else
+    {
+    row.SetValue(extent[1],0);
+    }
+  gdcm::DataElement ulr = row.GetAsDataElement();     //ulr --> upper left col/row
+  ulr.SetTag( gdcm::Tag(0x0028,0x0010) );
   ds.Insert( ulr );
 
-    gdcm::Element<gdcm::VR::US,gdcm::VM::VM1> col;
-     if(tile == 1)
-       {
-        col.SetValue((end[0]-start[0]),0);
-      }
-     else
-     {
-     col.SetValue(extent[0],0);
-     }
-     gdcm::DataElement ulr1 = col.GetAsDataElement();     //ulr --> upper left col/row
-     ulr1.SetTag( gdcm::Tag(0x0028,0x0011) );
+  gdcm::Element<gdcm::VR::US,gdcm::VM::VM1> col;
+  if(tile == 1)
+    {
+    col.SetValue((end[0]-start[0]),0);
+    }
+  else
+    {
+    col.SetValue(extent[0],0);
+    }
+  gdcm::DataElement ulr1 = col.GetAsDataElement();     //ulr --> upper left col/row
+  ulr1.SetTag( gdcm::Tag(0x0028,0x0011) );
 
   ds.Insert( ulr1 );
 
@@ -533,8 +534,8 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
   gdcm::DataElement BA = ds1.GetDataElement( gdcm::Tag(0x0028,0x0100) );
   ds.Insert( BA );
 
-   gdcm::DataElement SPP = ds1.GetDataElement( gdcm::Tag(0x0028,0x0002) );
-   ds.Insert( SPP );
+  gdcm::DataElement SPP = ds1.GetDataElement( gdcm::Tag(0x0028,0x0002) );
+  ds.Insert( SPP );
 
   gdcm::DataElement BS = ds1.GetDataElement( gdcm::Tag(0x0028,0x0101) );
   ds.Insert( BS );
@@ -545,7 +546,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
 
   unsigned short xmin, xmax, ymin, ymax, zmin, zmax, ychunk, theChunkSize;
 
-    if(tile ==1 )
+  if(tile ==1 )
     {
     xmin = start[0];
     xmax = end[0];
@@ -557,7 +558,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
     zmax = extent[2];
     }
 
-    else
+  else
     {
     xmin = 0;
     xmax = extent[0];
@@ -569,67 +570,67 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
     zmax = extent[2];
     }
 
- if (xmax == 0 && ymax == 0)
-      {
-      std::cerr << "Image has no size, unable to write zero-sized image." << std::endl;
-      return 0;
-      }
+  if (xmax == 0 && ymax == 0)
+    {
+    std::cerr << "Image has no size, unable to write zero-sized image." << std::endl;
+    return 0;
+    }
 
- if (xmax < xmin || ymax < ymin)
-      {
-      std::cerr << "error in Region Of Interest Information" << std::endl;
-      return 0;
-      }
+  if (xmax < xmin || ymax < ymin)
+    {
+    std::cerr << "error in Region Of Interest Information" << std::endl;
+    return 0;
+    }
 
-    int z, y, nexty;
-    unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
-    //the bytes sequentially.  So, store how far you got in the buffer with each iteration.
+  int z, y, nexty;
+  unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
+  //the bytes sequentially.  So, store how far you got in the buffer with each iteration.
 
-    for (z = zmin; z < zmax; ++z){
+  for (z = zmin; z < zmax; ++z){
 
-      for (y = ymin; y < ymax; y += ychunk){
-        nexty = y + ychunk;
-        if (nexty > ymax) nexty = ymax;
-         reader.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
-         unsigned long len = reader.DefineProperBufferLength();
+    for (y = ymin; y < ymax; y += ychunk){
+      nexty = y + ychunk;
+      if (nexty > ymax) nexty = ymax;
+      reader.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
+      unsigned long len = reader.DefineProperBufferLength();
 
-         char* finalBuffer = new char[len];
-         if (reader.CanReadImage()){
+      char* finalBuffer = new char[len];
+      if (reader.CanReadImage()){
 
-         bool result = reader.Read(finalBuffer, len);
-      if( !result ){
-        std::cerr << "res2 failure:"  << std::endl;
-        delete [] finalBuffer;
-        return 1;
-                   }
-    else{
-     // std::cout<< "Able to read";
-      //delete [] finalBuffer;
-     // return 0; //essentially, we're going to skip this file since it can't be read by the streamer
-         }
-
-       }
-    else
-      {
-        std::cerr<< "Not able to put in read data buffer"<< std::endl;
-      }
-        theStreamWriter.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
-      //  unsigned long len = theStreamWriter.DefineProperBufferLength();
-        //std::cout << "\n" <<len;
-        //char* finalBuffer1 = new char[len];
-        //memcpy(finalBuffer1, &(finalBuffer[0]), len);
-        //std::cout << "\nable to write";
-
-        if (!theStreamWriter.Write(finalBuffer, len)){
-          std::cerr << "writing failure:" << "output.dcm" << " at y = " << y << " and z= " << z << std::endl;
-          //delete [] finalBuffer1;
+        bool result = reader.Read(finalBuffer, len);
+        if( !result ){
+          std::cerr << "res2 failure:"  << std::endl;
           delete [] finalBuffer;
           return 1;
         }
-        delete [] finalBuffer;
+        else{
+          // std::cout<< "Able to read";
+          //delete [] finalBuffer;
+          // return 0; //essentially, we're going to skip this file since it can't be read by the streamer
+        }
+
       }
+      else
+        {
+        std::cerr<< "Not able to put in read data buffer"<< std::endl;
+        }
+      theStreamWriter.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
+      //  unsigned long len = theStreamWriter.DefineProperBufferLength();
+      //std::cout << "\n" <<len;
+      //char* finalBuffer1 = new char[len];
+      //memcpy(finalBuffer1, &(finalBuffer[0]), len);
+      //std::cout << "\nable to write";
+
+      if (!theStreamWriter.Write(finalBuffer, len)){
+        std::cerr << "writing failure:" << "output.dcm" << " at y = " << y << " and z= " << z << std::endl;
+        //delete [] finalBuffer1;
+        delete [] finalBuffer;
+        return 1;
+      }
+      delete [] finalBuffer;
     }
-   //std::cout << "all is set";
+  }
+  //std::cout << "all is set";
   return true;
 }
 
