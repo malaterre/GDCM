@@ -420,7 +420,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
 
   if (!theStreamWriter.CanWriteFile()){
       delete [] raw;
-      std::cout << "Not able to write";
+      std::cerr << "Not able to write" << std::endl;
       return 0;//this means that the file was unwritable, period.
       //very similar to a ReadImageInformation failure
     }
@@ -598,7 +598,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
 
          bool result = reader.Read(finalBuffer, len);
       if( !result ){
-        std::cout << "res2 failure:"  << std::endl;
+        std::cerr << "res2 failure:"  << std::endl;
         delete [] finalBuffer;
         return 1;
                    }
@@ -1012,8 +1012,8 @@ int main (int argc, char *argv[])
   // For now only support one input / one output
   if (optind < argc)
     {
-    printf ("non-option ARGV-elements: ");
-    std::cout << "HERE";
+    //printf ("non-option ARGV-elements: ");
+    //std::cout << "HERE";
     std::vector<std::string> files;
     while (optind < argc)
       {
