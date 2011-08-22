@@ -127,7 +127,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
   if(mElementOffsets == 0)
  {
      uint16_t firstTag = 0x7fe0;
-  uint16_t secondTag = 0x0010;
+     uint16_t secondTag = 0x0010;
   //uint16_t thirdTag = 0x4f42;
   uint16_t thirdTag = 0x424f; // OB
   uint16_t fourthTag = 0x0000;
@@ -246,6 +246,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   RAWCodec theCodec;
   if( !theCodec.CanDecode(ts) )
     {
+    std::cout << "error in RAWcodec";
     gdcmDebugMacro( "Only RAW for now" );
     return false;
     }
@@ -342,7 +343,6 @@ bool StreamImageWriter::WriteImageInformation(){
   try
   {
     //question! is this file a copy of the file that was given in, or a reference?
-
      mFile.GetDataSet().Remove( Tag(0x7fe0,0x0010) ); // FIXME
      assert( !mFile.GetDataSet().FindDataElement( Tag(0x7fe0,0x0010) ) );
     if( !mWriter.Write() )//should write everything BUT the image tag.  right?

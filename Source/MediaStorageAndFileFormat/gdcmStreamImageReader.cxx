@@ -35,9 +35,9 @@ StreamImageReader::StreamImageReader(){
   mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
 }
+
 StreamImageReader::~StreamImageReader(){
 }
-
 
 /// One of either SetFileName or SetStream must be called prior
 /// to any other functions.
@@ -51,6 +51,28 @@ void StreamImageReader::SetStream(std::istream& inStream)
   mReader.SetStream(inStream);
 }
 
+
+std::vector<unsigned int> StreamImageReader::GetDimensionsValueForResolution( unsigned int res )
+{
+  std::vector<unsigned int> extent(3);
+  File file_t = mReader.GetFile();
+  DataSet ds_t = file_t.GetDataSet();
+
+  DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
+  SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
+
+  Item itemL = sqi->GetItem(res);
+  DataSet &subds_L = itemL.GetNestedDataSet();
+
+ DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
+ Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
+ elL1.SetFromDataElement( brrL );
+ extent[0] = elL1.GetValue(0);
+ extent[1] = elL1.GetValue(1);
+ extent[2] = res;
+ //std::cout<< "\n Col : " << extent[0] <<"\n Row : " <<  extent[1] << std::endl;
+ return extent;
+}
 
 /// Defines an image extent for the Read function.
 /// DICOM states that an image can have no more than 2^16 pixels per edge (as of 2009)
@@ -161,6 +183,7 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   //first, reopen the stream,then the loop should set the right position
   //mReader.SetFileName(mReader.GetFileName().c_str());
   std::istream* theStream = mReader.GetStreamPtr();//probably going to need a copy of this
+
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
   //tmpBuffer is for a single raster
@@ -174,20 +197,26 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   try {
     for (z = mZMin; z < mZMax; ++z){
          theStream->seekg(std::ios::beg);
-         for(int j = 1; j<=z; j++)
-         {
-         int a =1;
-         for (unsigned int i=1; i<=extent[2]-j; i++)
-              a = 2*a;
-          mFileOffset =  mFileOffset + (int)((extent[1]/a)*(extent[0]/a)*bytesPerPixel);
-          mFileOffset = mFileOffset + 4*sizeof(uint16_t);
-         }
 
-         int a = 1;
-        for (unsigned int i=1; i<=(extent[2]-mZMax);++i)
-         a = a*2;
+        if(mFileOffset1 == 0)
+         {
+           mFileOffset1 = mFileOffset;
+          for(int j = 1; j<=z; j++)
+          {
+           std::vector<unsigned int> extent = GetDimensionsValueForResolution(j);
+           mFileOffset1 =  mFileOffset1 + (int)((extent[1])*(extent[0])*bytesPerPixel);
+           mFileOffset1 = mFileOffset1 + 4*sizeof(uint16_t);
+          }
+	}
+        else
+	{
+          mFileOffset1 = mFileOffset;
+        }
+
+     std::vector<unsigned int> extent = GetDimensionsValueForResolution(z+1);
+
       for (y = mYMin; y < mYMax; ++y){
-        theOffset = mFileOffset + (y*(int)(extent[0]/a) + mXMin)*bytesPerPixel;//manoj set this with resolution u r reading
+        theOffset = mFileOffset1 + (y*(int)(extent[0]) + mXMin)*bytesPerPixel;//manoj set this with resolution u r reading
         theStream->seekg(theOffset);
         theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
     //now, convert that buffer.
@@ -204,8 +233,15 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
           (y-mYMin)*SubRowSize)// + mXMin)//shouldn't need mXMin
           *bytesPerPixel]), tmpBuffer2, SubRowSize*bytesPerPixel);
       }
+       if((mYMax == extent[1]) && (mXMax == extent[0]))
+          mFileOffset1 = mFileOffset1 + (int)((extent[1])*(extent[0])*bytesPerPixel) + 4*sizeof(uint16_t);
     }
+   mFileOffset = mFileOffset1;
+
   }
+
+
+
   catch (std::exception & ex){
     (void)ex;
     gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
@@ -298,7 +334,8 @@ bool StreamImageReader::ReadImageInformation()
       return false;
       }
     std::streampos shift = 4*sizeof(uint16_t)+2*sizeof(uint32_t);
-    mFileOffset = mReader.GetStreamPtr()->tellg()+shift;
+    mFileOffset = mReader.GetStreamPtr()->tellg()+ shift;
+    mFileOffset1 = 0;
     }
   catch(std::exception & ex)
     {
@@ -316,9 +353,80 @@ bool StreamImageReader::ReadImageInformation()
 
   // postcondition
   assert( mFileOffset != -1 );
+
+  File file_t = mReader.GetFile();
+  DataSet ds_t = file_t.GetDataSet();
+
+   if( !ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
+    {
+      std::cerr << "error occured in WSI File read";
+      return 1;
+    }
+
+  DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
+  SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
+  gdcm::SequenceOfItems::SizeType s = sqi->GetNumberOfItems();
+  //std::cout<< "\nNo. Of Resolutions in Image "<< s <<std::endl;
+
+ //std::cout << "\n Dimension of Lowest Reolution";
+
+  Item itemL = sqi->GetItem(1);
+  DataSet &subds_L = itemL.GetNestedDataSet();
+
+ if( !subds_L.FindDataElement( Tag(0x0008,0x1160) ) )
+    {
+       std::cerr << "Error occured during WSI File Read";
+      return 1;
+    }
+
+ DataElement rfnL = subds_L.GetDataElement( Tag(0x0008,0x1160) );
+ Element<gdcm::VR::IS,gdcm::VM::VM1> elL;
+ elL.SetFromDataElement( rfnL );
+ //std::cout<< "\n Resolution : " << elL.GetValue() << std::endl;
+
+if( !subds_L.FindDataElement( Tag(0x0048,0x0202) ) )
+    {
+      std::cerr<< "Error During WSI File Read";
+      return 1;
+    }
+
+ DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
+ Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
+ elL1.SetFromDataElement( brrL );
+ //std::cout<< "\n Col : " << elL1.GetValue(0) <<"\n Row : " <<  elL1.GetValue(1) << std::endl;
+
+ //std::cout << "\n Dimension of Highest Reolutions";
+
+  Item itemH = sqi->GetItem(s);
+  DataSet &subds_H = itemH.GetNestedDataSet();
+
+ if( !subds_H.FindDataElement( Tag(0x0008,0x1160) ) )
+    {
+       std::cerr << "Error occured during WSI File Read";
+      return 1;
+    }
+
+ DataElement rfnH = subds_H.GetDataElement( Tag(0x0008,0x1160) );
+ Element<gdcm::VR::IS,gdcm::VM::VM1> elH;
+ elH.SetFromDataElement( rfnH );
+ //std::cout<< "\n Resolution : " << elH.GetValue() << std::endl;
+
+if( !subds_H.FindDataElement( Tag(0x0048,0x0202) ) )
+    {
+      std::cerr<< "Error During WSI File Read";
+      return 1;
+    }
+
+ DataElement brrH = subds_H.GetDataElement( Tag(0x0048,0x0202) );
+ Element<gdcm::VR::US,gdcm::VM::VM2> elH1;
+ elH1.SetFromDataElement( brrH );
+ //std::cout<< "\n Col : " << elH1.GetValue(0) <<"\n Row : " <<  elH1.GetValue(1) << "\n" << std::endl;
+
+
   
   return true;
 }
+
 
   
 bool StreamImageReader::CanReadImage() const{
@@ -352,6 +460,7 @@ File const &StreamImageReader::GetFile() const
 {
   if (mFileOffset > 0)
     {
+    /// mFileOffset1 = 0;
     return mReader.GetFile();
     }
   else
