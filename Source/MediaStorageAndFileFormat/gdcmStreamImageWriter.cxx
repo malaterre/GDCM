@@ -191,7 +191,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
     if (!inCodec->DecodeBytes(tmpBuffer3, theBufferSize1,
       tmpBuffer4, theBufferSize1)){
       delete [] tmpBuffer3;
-      std::cout << "\n  Problems in Header";
+      gdcmErrorMacro( "Problems in Header" );
       delete [] tmpBuffer4;
       return -1;
     }
@@ -246,8 +246,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   RAWCodec theCodec;
   if( !theCodec.CanDecode(ts) )
     {
-    std::cout << "error in RAWcodec";
-    gdcmDebugMacro( "Only RAW for now" );
+    gdcmErrorMacro( "Only RAW for now" );
     return false;
     }
 
@@ -276,7 +275,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
       mElementOffsets1 = mElementOffsets;
     }
     if (mElementOffsets < 0){//something broke during writing
-      std::cout << "Broke";
+      gdcmErrorMacro( "Broke" );
       delete [] tmpBuffer;
       delete [] tmpBuffer2;
       return false;
