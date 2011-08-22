@@ -54,6 +54,8 @@ public:
   void SetFileName(const char* inFileName);
   void SetStream(std::istream& inStream);
 
+  std::vector<unsigned int> GetDimensionsValueForResolution( unsigned int  );
+
   /// Defines an image extent for the Read function.
   /// DICOM states that an image can have no more than 2^16 pixels per edge (as of 2009)
   /// In this case, the pixel extents ignore the direction cosines entirely, and
@@ -106,6 +108,7 @@ protected:
   Reader mReader;
 
   std::streamoff mFileOffset; //the fileoffset for getting header information
+  std::streamoff mFileOffset1;
   DataSet mHeaderInformation; //all the non-pixel information
 
   //for thread safety, these should not be stored here, but should be used
