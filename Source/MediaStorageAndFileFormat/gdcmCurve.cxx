@@ -299,20 +299,117 @@ void Curve::Decode(std::istream &is, std::ostream &os)
   assert(0);
 }
 
+/*
+PS 3.3 - 2004
+C.10.2.1.2 Data value representation
+0000H = unsigned short (US)
+0001H = signed short (SS)
+0002H = floating point single (FL)
+0003H = floating point double (FD)
+0004H = signed long (SL)
+*/
+inline size_t getsizeofrep( unsigned short dr )
+{
+  size_t val = 0;
+  switch( dr )
+    {
+  case 0:
+    val = sizeof( uint16_t );
+    break;
+  case 1:
+    val = sizeof( int16_t );
+    break;
+  case 2:
+    val = sizeof( float );
+    break;
+  case 3:
+    val = sizeof( double );
+    break;
+  case 4:
+    val = sizeof( int32_t );
+    break;
+    }
+  return val;
+}
+
 void Curve::GetAsPoints(float *array) const
 {
-  unsigned short * p = (unsigned short*)&Internal->Data[0];
-  assert( Internal->Data.size() == (uint32_t)Internal->NumberOfPoints * 2 );
+  assert( getsizeofrep(Internal->DataValueRepresentation) );
+  assert( Internal->Data.size() == (uint32_t)Internal->NumberOfPoints *
+    Internal->Dimensions * getsizeofrep( Internal->DataValueRepresentation) );
   assert( Internal->Dimensions == 1 || Internal->Dimensions == 2 );
-  assert( Internal->DataValueRepresentation == 0 ); // 0 => unsigned short
-  // GE_DLX-8-MONO2-Multiframe.dcm has 969 points ! what in the *** is the last
-  // point doing here ?
-  for(unsigned short i = 0; i < (Internal->NumberOfPoints / 2) * 2; i+=2 )
+
+  int mult = Internal->Dimensions;
+  if( Internal->DataValueRepresentation == 0 )
     {
-    //std::cout << p[i] << "," << p[i+1] << std::endl;
-    array[i+0] = p[i+0];
-    array[i+1] = p[i+1];
-    array[i+2] = 0;
+    // GE_DLX-8-MONO2-Multiframe.dcm has 969 points ! what in the *** is the last
+    // point doing here ?
+    uint16_t * p = (uint16_t*)&Internal->Data[0];
+    for(int i = 0; i < Internal->NumberOfPoints; i++ )
+      {
+      array[3*i+0] = p[mult*i + 0];
+      if( mult > 1 )
+        array[3*i+1] = p[mult*i + 1];
+      else
+        array[3*i+1] = 0;
+      array[3*i+2] = 0;
+      }
+    }
+  else if( Internal->DataValueRepresentation == 1 )
+    {
+    int16_t * p = (int16_t*)&Internal->Data[0];
+    for(int i = 0; i < Internal->NumberOfPoints; i++ )
+      {
+      array[3*i+0] = p[mult*i + 0];
+      if( mult > 1 )
+        array[3*i+1] = p[mult*i + 1];
+      else
+        array[3*i+1] = 0;
+      array[3*i+2] = 0;
+      }
+    }
+  else if( Internal->DataValueRepresentation == 2 )
+    {
+    float * p = (float*)&Internal->Data[0];
+    for(int i = 0; i < Internal->NumberOfPoints; i++ )
+      {
+      array[3*i+0] = p[mult*i + 0];
+      if( mult > 1 )
+        array[3*i+1] = p[mult*i + 1];
+      else
+        array[3*i+1] = 0;
+      array[3*i+2] = 0;
+      }
+    }
+  else if( Internal->DataValueRepresentation == 3 )
+    {
+    double * p = (double*)&Internal->Data[0];
+    for(int i = 0; i < Internal->NumberOfPoints; i++ )
+      {
+      array[3*i+0] = p[mult*i + 0];
+      if( mult > 1 )
+        array[3*i+1] = p[mult*i + 1];
+      else
+        array[3*i+1] = 0;
+      array[3*i+2] = 0;
+      }
+    }
+  else if( Internal->DataValueRepresentation == 4 )
+    {
+    int32_t * p = (int32_t*)&Internal->Data[0];
+    for(int i = 0; i < Internal->NumberOfPoints; i++ )
+      {
+      array[3*i+0] = p[mult*i + 0];
+      if( mult > 1 )
+        array[3*i+1] = p[mult*i + 1];
+      else
+        array[3*i+1] = 0;
+      array[3*i+2] = 0;
+      }
+    }
+  else
+    {
+    assert( 0 );
     }
 }
 
