@@ -62,6 +62,10 @@ public:
   void SetCurveDescription(const char *curvedescription);
   void SetDataValueRepresentation(unsigned short datavaluerepresentation);
   unsigned short GetDataValueRepresentation() const;
+  void SetCurveDataDescriptor(const uint16_t * values, size_t num);
+  void SetCoordinateStartValue( unsigned short v );
+  void SetCoordinateStepValue( unsigned short v );
+
   void SetCurve(const char *array, unsigned int length);
 
   bool IsEmpty() const;
@@ -70,6 +74,7 @@ public:
 
   Curve(Curve const &ov);
 private:
+  double ComputeValueFromStartAndStep(unsigned int idx) const;
   CurveInternal *Internal;
 };
 
