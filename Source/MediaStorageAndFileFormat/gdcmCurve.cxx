@@ -68,6 +68,9 @@ public:
   std::string CurveDescription;
   unsigned short DataValueRepresentation;
   std::vector<char> Data;
+  std::vector<unsigned short> CurveDataDescriptor;
+  unsigned short CoordinateStartValue;
+  unsigned short CoordinateStepValue;
   void Print(std::ostream &os) const {
     os << "Group           0x" <<  std::hex << Group << std::dec << std::endl;
     os << "Dimensions                         :" << Dimensions << std::endl;
@@ -207,15 +210,21 @@ void Curve::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x0110 ) // CurveDataDescriptor
     {
-      gdcmWarningMacro( "TODO" );
+    Attribute<0x5000,0x0110> at;
+    at.SetFromDataElement( de );
+    SetCurveDataDescriptor( at.GetValues(), at.GetNumberOfValues() );
     }
   else if( de.GetTag().GetElement() == 0x0112 ) // CoordinateStartValue
     {
-      gdcmWarningMacro( "TODO" );
+    Attribute<0x5000,0x0112> at;
+    at.SetFromDataElement( de );
+    SetCoordinateStartValue( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0114 ) // CoordinateStepValue
     {
-      gdcmWarningMacro( "TODO" );
+    Attribute<0x5000,0x0114> at;
+    at.SetFromDataElement( de );
+    SetCoordinateStepValue( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x2500 ) // CurveLabel
     {
@@ -278,6 +287,20 @@ void Curve::SetCurveDescription(const char *curvedescription) { Internal->CurveD
 void Curve::SetDataValueRepresentation(unsigned short datavaluerepresentation) { Internal->DataValueRepresentation = datavaluerepresentation; }
 unsigned short Curve::GetDataValueRepresentation() const { return Internal->DataValueRepresentation; }
 
+void Curve::SetCurveDataDescriptor(const uint16_t * values, size_t num)
+{
+  Internal->CurveDataDescriptor = std::vector<uint16_t>(values, values+num);
+}
+
+void Curve::SetCoordinateStartValue( unsigned short v )
+{
+  Internal->CoordinateStartValue = v;
+}
+void Curve::SetCoordinateStepValue( unsigned short v )
+{
+  Internal->CoordinateStepValue = v;
+}
+
 bool Curve::IsEmpty() const
 {
   return Internal->Data.empty();
@@ -332,28 +355,96 @@ inline size_t getsizeofrep( unsigned short dr )
   return val;
 }
 
+/*
+C.10.2.1.5 Curve data descriptor, coordinate start value, coordinate step value
+The Curve Data for dimension(s) containing evenly distributed data can be eliminated by using a
+method that defines the Coordinate Start Value and Coordinate Step Value (interval). The one
+dimensional data list is then calculated rather than being enumerated.
+For the Curve Data Descriptor (50xx,0110) an Enumerated Value describing how each
+component of the N-tuple curve is described, either by points or interval spacing. One value for
+each dimension. Where:
+0000H = Dimension component described using interval spacing
+0001H = Dimension component described using values
+Using interval spacing:
+Dimension component(s) described by interval spacing use Attributes of Coordinate Start Value
+(50xx,0112), Coordinate Step Value (50xx,0114) and Number of Points (50xx,0010). The 1-
+dimensional data list is calculated by using a start point of Coordinate Start Value and adding the
+interval (Coordinate Step Value) to obtain each data point until the Number of Points is satisfied.
+The data points of this dimension will be absent from Curve Data (50xx,3000).
+*/
+double Curve::ComputeValueFromStartAndStep(unsigned int idx) const
+{
+  assert( !Internal->CurveDataDescriptor.empty() );
+  const double res = Internal->CoordinateStartValue +
+    Internal->CoordinateStepValue * idx;
+  return res;
+}
+
 void Curve::GetAsPoints(float *array) const
 {
   assert( getsizeofrep(Internal->DataValueRepresentation) );
-  assert( Internal->Data.size() == (uint32_t)Internal->NumberOfPoints *
-    Internal->Dimensions * getsizeofrep( Internal->DataValueRepresentation) );
+  if( Internal->CurveDataDescriptor.empty() )
+    {
+    assert( Internal->Data.size() == (uint32_t)Internal->NumberOfPoints *
+      Internal->Dimensions * getsizeofrep( Internal->DataValueRepresentation) );
+    }
+  else
+    {
+    assert( Internal->Data.size() == (uint32_t)Internal->NumberOfPoints *
+      1 * getsizeofrep( Internal->DataValueRepresentation) );
+    }
   assert( Internal->Dimensions == 1 || Internal->Dimensions == 2 );
 
   int mult = Internal->Dimensions;
+  int genidx = -1;
+  if( !Internal->CurveDataDescriptor.empty() )
+    {
+    assert( Internal->CurveDataDescriptor.size() == Internal->Dimensions );
+    assert( Internal->CurveDataDescriptor.size() == 2 ); // FIXME
+    if( Internal->CurveDataDescriptor[0] == 0 )
+      {
+      assert( Internal->CurveDataDescriptor[1] == 1 );
+      genidx = 0;
+      }
+    else if( Internal->CurveDataDescriptor[1] == 0 )
+      {
+      assert( Internal->CurveDataDescriptor[0] == 1 );
+      genidx = 1;
+      }
+    else
+      {
+      assert( 0 && "TODO" );
+      }
+    }
   if( Internal->DataValueRepresentation == 0 )
     {
-    // GE_DLX-8-MONO2-Multiframe.dcm has 969 points ! what in the *** is the last
-    // point doing here ?
     uint16_t * p = (uint16_t*)&Internal->Data[0];
-    for(int i = 0; i < Internal->NumberOfPoints; i++ )
+    // X
+    if( genidx == 0 )
+      for(int i = 0; i < Internal->NumberOfPoints; i++ )
+        array[3*i+0] = ComputeValueFromStartAndStep( i );
+    else
+      for(int i = 0; i < Internal->NumberOfPoints; i++ )
+        array[3*i+0] = p[mult*i + 0];
+    // Y
+    if( genidx == 1 )
+      for(int i = 0; i < Internal->NumberOfPoints; i++ )
+        array[3*i+1] = ComputeValueFromStartAndStep( i );
+    else
       {
-      array[3*i+0] = p[mult*i + 0];
-      if( mult > 1 )
-        array[3*i+1] = p[mult*i + 1];
+      if( mult > 1 && genidx == -1 )
+        for(int i = 0; i < Internal->NumberOfPoints; i++ )
+          array[3*i+1] = p[mult*i + 1];
+      else if( mult > 1 )
+        for(int i = 0; i < Internal->NumberOfPoints; i++ )
+          array[3*i+1] = p[mult*i + 0];
       else
-        array[3*i+1] = 0;
-      array[3*i+2] = 0;
+        for(int i = 0; i < Internal->NumberOfPoints; i++ )
+          array[3*i+1] = 0;
       }
+    // Z
+    for(int i = 0; i < Internal->NumberOfPoints; i++ )
+      array[3*i+2] = 0;
     }
   else if( Internal->DataValueRepresentation == 1 )
     {
