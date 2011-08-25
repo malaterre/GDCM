@@ -497,7 +497,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
   ds.Insert( mystr );
 
   std::vector<unsigned int> extent = reader.GetDimensionsValueForResolution(resolution);
-  gdcm::Element<gdcm::VR::US,gdcm::VM::VM1> row;
+  gdcm::Element<gdcm::VR::UL,gdcm::VM::VM1> row;
   if(tile == 1)
     {
     row.SetValue((end[1]-start[1]),0);
@@ -510,7 +510,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
   ulr.SetTag( gdcm::Tag(0x0048,0x0006) );
   ds.Insert( ulr );
 
-  gdcm::Element<gdcm::VR::US,gdcm::VM::VM1> col;
+  gdcm::Element<gdcm::VR::UL,gdcm::VM::VM1> col;
   if(tile == 1)
     {
     col.SetValue((end[0]-start[0]),0);
@@ -733,6 +733,7 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
 
 
   gdcm::DataElement row = ds1.GetDataElement( gdcm::Tag(0x0048,0x0006) );
+  assert( row.GetVR() == gdcm::VR::UL );
   ds.Insert(row);
 
   gdcm::DataElement col = ds1.GetDataElement( gdcm::Tag(0x0048,0x0007) );
