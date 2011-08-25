@@ -374,10 +374,10 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
     gdcm::File &file2 = w.GetFile();
     gdcm::DataSet &ds1 = file2.GetDataSet();
 
-    gdcm::Attribute<0x0028,0x0010> row1 = {image->y1};
+    gdcm::Attribute<0x0048,0x0006> row1 = {image->y1};
     ds1.Insert( row1.GetAsDataElement() );
 
-    gdcm::Attribute<0x0028,0x0011> col1 = {image->x1};
+    gdcm::Attribute<0x0048,0x0007> col1 = {image->x1};
     ds1.Insert( col1.GetAsDataElement() );
     gdcm::Attribute<0x0028,0x0008> Number_Of_Frames = {res+1};
     ds1.Insert( Number_Of_Frames.GetAsDataElement() );
@@ -398,16 +398,14 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
       //that's a test failure∫
       }
 
-    ds1.Remove( gdcm::Tag(0x0028,0x0010) );
-    ds1.Remove( gdcm::Tag(0x0028,0x0011) );
+    ds1.Remove( gdcm::Tag(0x0048,0x0006) );
+    ds1.Remove( gdcm::Tag(0x0048,0x0007) );
     ds1.Remove( gdcm::Tag(0x0028,0x0008) );
     }//if (flag == 1)  //This flag is to write Image Information
 
-  //gdcm::Attribute<0x0028,0x0010> row = {image->comps[0].w};
   gdcm::Attribute<0x0048,0x0006> row = {image->comps[0].w};
   ds.Insert( row.GetAsDataElement() );
 
-  //gdcm::Attribute<0x0028,0x0011> col = {image->comps[0].h};
   gdcm::Attribute<0x0048,0x0007> col = {image->comps[0].h};
   ds.Insert( col.GetAsDataElement() );
 
@@ -509,7 +507,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
     row.SetValue(extent[1],0);
     }
   gdcm::DataElement ulr = row.GetAsDataElement();     //ulr --> upper left col/row
-  ulr.SetTag( gdcm::Tag(0x0028,0x0010) );
+  ulr.SetTag( gdcm::Tag(0x0048,0x0006) );
   ds.Insert( ulr );
 
   gdcm::Element<gdcm::VR::US,gdcm::VM::VM1> col;
@@ -522,7 +520,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
     col.SetValue(extent[0],0);
     }
   gdcm::DataElement ulr1 = col.GetAsDataElement();     //ulr --> upper left col/row
-  ulr1.SetTag( gdcm::Tag(0x0028,0x0011) );
+  ulr1.SetTag( gdcm::Tag(0x0048,0x0007) );
 
   ds.Insert( ulr1 );
 
@@ -594,8 +592,8 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
       unsigned long len = reader.DefineProperBufferLength();
 
       char* finalBuffer = new char[len];
-      if (reader.CanReadImage()){
-
+      if (reader.CanReadImage())
+        {
         bool result = reader.Read(finalBuffer, len);
         if( !result )
           {
@@ -609,7 +607,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
           //delete [] finalBuffer;
           // return 0; //essentially, we're going to skip this file since it can't be read by the streamer
           }
-      }
+        }
       else
         {
         std::cerr<< "Not able to put in read data buffer"<< std::endl;
@@ -734,10 +732,10 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
 
 
 
-  gdcm::DataElement row = ds1.GetDataElement( gdcm::Tag(0x0028,0x0010) );
+  gdcm::DataElement row = ds1.GetDataElement( gdcm::Tag(0x0048,0x0006) );
   ds.Insert(row);
 
-  gdcm::DataElement col = ds1.GetDataElement( gdcm::Tag(0x0028,0x0011) );
+  gdcm::DataElement col = ds1.GetDataElement( gdcm::Tag(0x0048,0x0007) );
   ds.Insert(col);
 
   gdcm::DataElement Number_Of_Frames = ds1.GetDataElement( gdcm::Tag(0x0028,0x0008) );
