@@ -125,7 +125,7 @@ public:
    * \note  Pointer is null if undefined
    */
   const float * GetPointPositionAccuracy() const;
-  void SetPointPositionAccuracy(const float * accuracy);
+  void SetPointPositionAccuracy(const float * accuracies);
 
   float GetMeanPointDistance() const;
   void SetMeanPointDistance(float average);
@@ -155,8 +155,11 @@ public:
   unsigned long GetNumberOfVectors() const;
   void SetNumberOfVectors(const unsigned long nb);
 
-  unsigned long GetVectorDimensionality() const;
-  void SetVectorDimensionality(const unsigned long dim);
+  unsigned short GetVectorDimensionality() const;
+  void SetVectorDimensionality(const unsigned short dim);
+
+  const float * GetVectorAccuracy() const;
+  void SetVectorAccuracy(const float * accuracy);
 
   const DataElement & GetVectorCoordinateData() const;
   DataElement & GetVectorCoordinateData();
@@ -237,7 +240,9 @@ private:
   //0066 001e UL 1 Number of Vectors
   unsigned long NumberOfVectors;
   //0066 001f US 1 Vector Dimensionality
-  unsigned long VectorDimensionality;
+  unsigned short VectorDimensionality;
+  //0066 0020 FL 1-n Vector Accuracy
+  float *       VectorAccuracy;
   //0066 0021 OF 1 Vector Coordinate Data
   DataElement   VectorCoordinateData;
 

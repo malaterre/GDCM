@@ -339,10 +339,20 @@ bool SurfaceWriter::PrepareWrite()
         surfacePointsNormalsDS.Replace( numberOfVectors.GetAsDataElement() );
 
         // Vector Dimensionality
-        Attribute<0x0066, 0x001F> vectorDimensionality;
-        assert( surface->GetVectorDimensionality() );
-        vectorDimensionality.SetValue( surface->GetVectorDimensionality() );
-        surfacePointsNormalsDS.Replace( vectorDimensionality.GetAsDataElement() );
+        Attribute<0x0066, 0x001F> vectorDimensionalityAt;
+        unsigned short vectorDimensionality = surface->GetVectorDimensionality();
+        assert( vectorDimensionality );
+        vectorDimensionalityAt.SetValue( vectorDimensionality );
+        surfacePointsNormalsDS.Replace( vectorDimensionalityAt.GetAsDataElement() );
+
+        // Vector Accuracy (Type 3)
+        Attribute<0x0066, 0x0020> vectorAccuracyAt;
+        const float * vectorAccuracy = surface->GetVectorAccuracy();
+        if (vectorAccuracy != 0)
+        {
+          vectorAccuracyAt.SetValues( vectorAccuracy, vectorDimensionality );
+          surfacePointsNormalsDS.Replace( vectorAccuracyAt.GetAsDataElement() );
+        }
 
         // Vector Coordinate Data
         DataElement vectorCoordDataDE( Tag(0x0066, 0x0021) );

@@ -137,6 +137,7 @@ Surface::Surface():
   CenterOfRotation(0),
   NumberOfVectors(0),
   VectorDimensionality(0),
+  VectorAccuracy(0),
   VectorCoordinateData(),
   Primitive(new MeshPrimitive)
 {
@@ -151,6 +152,8 @@ Surface::~Surface()
   if (PointsBoundingBoxCoordinates != 0)  delete PointsBoundingBoxCoordinates;
   if (AxisOfRotation != 0)                delete AxisOfRotation;
   if (CenterOfRotation != 0)              delete CenterOfRotation;
+
+  if (VectorAccuracy != 0)                delete VectorAccuracy;
 }
 
 unsigned short Surface::GetRecommendedDisplayGrayscaleValue() const
@@ -380,15 +383,15 @@ const float * Surface::GetPointPositionAccuracy() const
   return PointPositionAccuracy;
 }
 
-void Surface::SetPointPositionAccuracy(const float * accuracy)
+void Surface::SetPointPositionAccuracy(const float * accuracies)
 {
-  assert(accuracy);
+  assert(accuracies);
 
   if (PointPositionAccuracy != 0) PointPositionAccuracy = new float[3];
 
-  PointPositionAccuracy[0] = accuracy[0];
-  PointPositionAccuracy[1] = accuracy[1];
-  PointPositionAccuracy[2] = accuracy[2];
+  PointPositionAccuracy[0] = accuracies[0];
+  PointPositionAccuracy[1] = accuracies[1];
+  PointPositionAccuracy[2] = accuracies[2];
 }
 
 float Surface::GetMeanPointDistance() const
@@ -472,14 +475,29 @@ void Surface::SetNumberOfVectors(const unsigned long nb)
   NumberOfVectors = nb;
 }
 
-unsigned long Surface::GetVectorDimensionality() const
+unsigned short Surface::GetVectorDimensionality() const
 {
   return VectorDimensionality;
 }
 
-void Surface::SetVectorDimensionality(const unsigned long dim)
+void Surface::SetVectorDimensionality(const unsigned short dim)
 {
   VectorDimensionality = dim;
+}
+
+const float * Surface::GetVectorAccuracy() const
+{
+  return VectorAccuracy;
+}
+
+void Surface::SetVectorAccuracy(const float * accuracy)
+{
+  assert(accuracy);
+
+  if (VectorAccuracy != 0) VectorAccuracy = new float[ VectorDimensionality ];
+
+  for (unsigned int i = 0; i < VectorDimensionality; ++i)
+    VectorAccuracy[i] = accuracy[i];
 }
 
 const DataElement & Surface::GetVectorCoordinateData() const
