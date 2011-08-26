@@ -137,19 +137,19 @@ public:
    * \note  Pointer is null if undefined
    */
   const float * GetPointsBoundingBoxCoordinates() const;
-  void SetPointsBoundingBoxCoordinates(float * coordinates);
+  void SetPointsBoundingBoxCoordinates(const float * coordinates);
 
   /**
    * \note  Pointer is null if undefined
    */
   const float * GetAxisOfRotation() const;
-  void SetAxisOfRotation(float * axis);
+  void SetAxisOfRotation(const float * axis);
 
   /**
    * \note  Pointer is null if undefined
    */
   const float * GetCenterOfRotation() const;
-  void SetCenterOfRotation(float * center);
+  void SetCenterOfRotation(const float * center);
 
   //**    Vectors getters/setters      **//
   unsigned long GetNumberOfVectors() const;

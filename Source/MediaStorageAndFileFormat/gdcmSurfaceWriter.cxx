@@ -862,7 +862,7 @@ bool SurfaceWriter::PrepareWritePointMacro(SmartPointer< Surface > surface,
     }
 
     // Center of Rotation (Type 3)
-    Attribute<0x0066, 0x001b> centerOfRotationAt;
+    Attribute<0x0066, 0x001c> centerOfRotationAt;
     const float * centerOfRotation = surface->GetCenterOfRotation();
     if (centerOfRotation != 0)
     {
