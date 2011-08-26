@@ -113,15 +113,15 @@ Surface::VIEWType Surface::GetVIEWType(const char * type)
 }
 
 Surface::Surface():
-  RecommendedDisplayGrayscaleValue(0),
-  RecommendedPresentationOpacity(1),
-  RecommendedPresentationType(SURFACE),
   SurfaceNumber(0),
   SurfaceComments(""),
   SurfaceProcessing(false),
   SurfaceProcessingRatio(1.),
   SurfaceProcessingDescription(""),
   ProcessingAlgorithm(),
+  RecommendedDisplayGrayscaleValue(0),
+  RecommendedPresentationOpacity(1),
+  RecommendedPresentationType(SURFACE),
   FiniteVolume(UNKNOWN),
   Manifold(UNKNOWN),
   AlgorithmFamily(),
@@ -129,6 +129,12 @@ Surface::Surface():
   AlgorithmName(""),
   NumberOfSurfacePoints(0),
   PointCoordinatesData(),
+  PointPositionAccuracy(0),
+  MeanPointDistance(0),
+  MaximumPointDistance(0),
+  PointsBoundingBoxCoordinates(0),
+  AxisOfRotation(0),
+  CenterOfRotation(0),
   NumberOfVectors(0),
   VectorDimensionality(0),
   VectorCoordinateData(),
@@ -141,6 +147,10 @@ Surface::Surface():
 
 Surface::~Surface()
 {
+  if (PointPositionAccuracy != 0)         delete PointPositionAccuracy;
+  if (PointsBoundingBoxCoordinates != 0)  delete PointsBoundingBoxCoordinates;
+  if (AxisOfRotation != 0)                delete AxisOfRotation;
+  if (CenterOfRotation != 0)              delete CenterOfRotation;
 }
 
 unsigned short Surface::GetRecommendedDisplayGrayscaleValue() const
@@ -362,6 +372,94 @@ DataElement & Surface::GetPointCoordinatesData()
 void Surface::SetPointCoordinatesData(DataElement const & de)
 {
   PointCoordinatesData = de;
+}
+
+
+const float * Surface::GetPointPositionAccuracy() const
+{
+  return PointPositionAccuracy;
+}
+
+void Surface::SetPointPositionAccuracy(const float * accuracy)
+{
+  assert(accuracy);
+
+  if (PointPositionAccuracy != 0) PointPositionAccuracy = new float[3];
+
+  PointPositionAccuracy[0] = accuracy[0];
+  PointPositionAccuracy[1] = accuracy[1];
+  PointPositionAccuracy[2] = accuracy[2];
+}
+
+float Surface::GetMeanPointDistance() const
+{
+  return MeanPointDistance;
+}
+
+void Surface::SetMeanPointDistance(float average)
+{
+  MeanPointDistance = average;
+}
+
+float Surface::GetMaximumPointDistance() const
+{
+  return MaximumPointDistance;
+}
+
+void Surface::SetMaximumPointDistance(float maximum)
+{
+  MaximumPointDistance = maximum;
+}
+
+const float * Surface::GetPointsBoundingBoxCoordinates() const
+{
+  return PointsBoundingBoxCoordinates;
+}
+
+void Surface::SetPointsBoundingBoxCoordinates(float * coordinates)
+{
+  assert(coordinates);
+
+  if (PointsBoundingBoxCoordinates != 0) PointsBoundingBoxCoordinates = new float[6];
+
+  PointsBoundingBoxCoordinates[0] = coordinates[0];
+  PointsBoundingBoxCoordinates[1] = coordinates[1];
+  PointsBoundingBoxCoordinates[2] = coordinates[2];
+  PointsBoundingBoxCoordinates[3] = coordinates[3];
+  PointsBoundingBoxCoordinates[4] = coordinates[4];
+  PointsBoundingBoxCoordinates[5] = coordinates[5];
+}
+
+const float * Surface::GetAxisOfRotation() const
+{
+  return AxisOfRotation;
+}
+
+void Surface::SetAxisOfRotation(float * axis)
+{
+  assert(axis);
+
+  if (AxisOfRotation != 0) AxisOfRotation = new float[3];
+
+  AxisOfRotation[0] = axis[0];
+  AxisOfRotation[1] = axis[1];
+  AxisOfRotation[2] = axis[2];
+}
+
+const float * Surface::GetCenterOfRotation() const
+{
+  return CenterOfRotation;
+}
+
+void Surface::SetCenterOfRotation(float * center)
+{
+  assert(center);
+
+  if (CenterOfRotation != 0) CenterOfRotation = new float[3];
+
+  CenterOfRotation[0] = center[0];
+  CenterOfRotation[1] = center[1];
+  CenterOfRotation[2] = center[2];
 }
 
 unsigned long Surface::GetNumberOfVectors() const
