@@ -49,6 +49,10 @@ protected:
 
     void ComputeNumberOfSurfaces();
 
+    bool PrepareWritePointMacro(SmartPointer< Surface > surface,
+                                DataSet & surfaceDS,
+                                const TransferSyntax & ts);
+
     //0066 0001 UL 1 Number of Surfaces
     unsigned long NumberOfSurfaces;
 };
