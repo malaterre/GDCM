@@ -292,59 +292,8 @@ bool SurfaceWriter::PrepareWrite()
       //            (0066,0016) OW                                         #  0, 1 Point Coordinates Data
       //          (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
       //        (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
-
-      //*****   Surface Points Sequence   *****//
-      {
-        SmartPointer<SequenceOfItems> surfacePointsSq;
-        if( !surfaceDS.FindDataElement( Tag(0x0066, 0x0011) ) )
-        {
-          surfacePointsSq = new SequenceOfItems;
-          DataElement detmp( Tag(0x0066, 0x0011) );
-          detmp.SetVR( VR::SQ );
-          detmp.SetValue( *surfacePointsSq );
-          detmp.SetVLToUndefined();
-          surfaceDS.Insert( detmp );
-        }
-        surfacePointsSq = surfaceDS.GetDataElement( Tag(0x0066, 0x0011) ).GetValueAsSQ();
-        surfacePointsSq->SetLengthToUndefined();
-
-        if (surfacePointsSq->GetNumberOfItems() < 1)  // One item shall be permitted
-        {
-          Item item;
-          item.SetVLToUndefined();
-          surfacePointsSq->AddItem(item);
-        }
-
-        Item &    surfacePointsItem = surfacePointsSq->GetItem(1);
-        DataSet & surfacePointsDs   = surfacePointsItem.GetNestedDataSet();
-
-        // Point Coordinates Data
-        DataElement pointCoordDataDE( Tag(0x0066, 0x0016) );
-        const Value & pointCoordinateDataValue = surface->GetPointCoordinatesData().GetValue();
-        assert( &pointCoordinateDataValue );
-        pointCoordDataDE.SetValue( pointCoordinateDataValue );
-
-        const ByteValue *bv = pointCoordDataDE.GetByteValue();
-        VL vl;
-        if ( bv )
-          vl = bv->GetLength();
-        else
-          vl.SetToUndefined();
-        pointCoordDataDE.SetVL( vl );
-
-        if ( ts.IsExplicit() )
-          pointCoordDataDE.SetVR( VR::OF );
-
-        surfacePointsDs.Replace( pointCoordDataDE );
-
-        // Number Of Surface Points
-        Attribute<0x0066, 0x0015> numberOfSurfacePointsAt;
-        unsigned long numberOfSurfacePoints = surface->GetNumberOfSurfacePoints();
-        if (numberOfSurfacePoints == 0)
-          numberOfSurfacePoints = bv->GetLength() / (VR::GetLength(VR::OF) * 3);
-        numberOfSurfacePointsAt.SetValue( numberOfSurfacePoints );
-        surfacePointsDs.Replace( numberOfSurfacePointsAt.GetAsDataElement() );
-      }
+      if ( !PrepareWritePointMacro(surface, surfaceDS, ts) )
+        return false;
 
       //******    Surface Points Normals    *****//
       //        (0066,0012) SQ (Sequence with undefined length #=1)     # u/l, 1 Surface Points Sequence
@@ -801,6 +750,128 @@ bool SurfaceWriter::Write()
   }
 
   return true;
+}
+
+bool SurfaceWriter::PrepareWritePointMacro(SmartPointer< Surface > surface,
+                                           DataSet & surfaceDS,
+                                           const TransferSyntax & ts)
+{
+  //******    Surface Points    *****//
+  //        (0066,0011) SQ (Sequence with undefined length #=1)     # u/l, 1 Surface Points Sequence
+  //          (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+  //            (0066,0015) UL                                         #  0, 1 Number Of Surface Points
+  //            (0066,0016) OW                                         #  0, 1 Point Coordinates Data
+  //          (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+  //        (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+
+  //*****   Surface Points Sequence   *****//
+  {
+    SmartPointer<SequenceOfItems> surfacePointsSq;
+    if( !surfaceDS.FindDataElement( Tag(0x0066, 0x0011) ) )
+    {
+      surfacePointsSq = new SequenceOfItems;
+      DataElement detmp( Tag(0x0066, 0x0011) );
+      detmp.SetVR( VR::SQ );
+      detmp.SetValue( *surfacePointsSq );
+      detmp.SetVLToUndefined();
+      surfaceDS.Insert( detmp );
+    }
+    surfacePointsSq = surfaceDS.GetDataElement( Tag(0x0066, 0x0011) ).GetValueAsSQ();
+    surfacePointsSq->SetLengthToUndefined();
+
+    if (surfacePointsSq->GetNumberOfItems() < 1)  // One item shall be permitted
+    {
+      Item item;
+      item.SetVLToUndefined();
+      surfacePointsSq->AddItem(item);
+    }
+
+    Item &    surfacePointsItem = surfacePointsSq->GetItem(1);
+    DataSet & surfacePointsDs   = surfacePointsItem.GetNestedDataSet();
+
+    // Point Coordinates Data
+    DataElement pointCoordDataDE( Tag(0x0066, 0x0016) );
+    const Value & pointCoordinateDataValue = surface->GetPointCoordinatesData().GetValue();
+    assert( &pointCoordinateDataValue );
+    pointCoordDataDE.SetValue( pointCoordinateDataValue );
+
+    const ByteValue *bv = pointCoordDataDE.GetByteValue();
+    VL vl;
+    if ( bv )
+      vl = bv->GetLength();
+    else
+      vl.SetToUndefined();
+    pointCoordDataDE.SetVL( vl );
+
+    if ( ts.IsExplicit() )
+      pointCoordDataDE.SetVR( VR::OF );
+
+    surfacePointsDs.Replace( pointCoordDataDE );
+
+    // Number Of Surface Points
+    Attribute<0x0066, 0x0015> numberOfSurfacePointsAt;
+    unsigned long numberOfSurfacePoints = surface->GetNumberOfSurfacePoints();
+    if (numberOfSurfacePoints == 0)
+      numberOfSurfacePoints = bv->GetLength() / (VR::GetLength(VR::OF) * 3);
+    numberOfSurfacePointsAt.SetValue( numberOfSurfacePoints );
+    surfacePointsDs.Replace( numberOfSurfacePointsAt.GetAsDataElement() );
+
+    // Point Position Accuracy (Type 3)
+    Attribute<0x0066, 0x0017> pointPositionAccuracyAt;
+    const float * pointPositionAccuracy = surface->GetPointPositionAccuracy();
+    if (pointPositionAccuracy != 0)
+    {
+      pointPositionAccuracyAt.SetValues( pointPositionAccuracy );
+      surfacePointsDs.Replace( pointPositionAccuracyAt.GetAsDataElement() );
+    }
+
+    // Mean Point Distance (Type 3)
+    Attribute<0x0066, 0x0018> meanPointDistanceAt;
+    float meanPointDistance = surface->GetMeanPointDistance();
+    if (meanPointDistance != 0) // FIXME: user can specified 0 value
+    {
+      meanPointDistanceAt.SetValue( meanPointDistance );
+      surfacePointsDs.Replace( meanPointDistanceAt.GetAsDataElement() );
+    }
+
+    // Maximum Point Distance (Type 3)
+    Attribute<0x0066, 0x0019> maximumPointDistanceAt;
+    float maximumPointDistance = surface->GetMaximumPointDistance();
+    if (maximumPointDistance != 0) // FIXME: user can specified 0 value
+    {
+      maximumPointDistanceAt.SetValue( maximumPointDistance );
+      surfacePointsDs.Replace( maximumPointDistanceAt.GetAsDataElement() );
+    }
+
+    // Point Bounding Box Coordinates (Type 3)
+    Attribute<0x0066, 0x001a> pointsBoundingBoxCoordinatesAt;
+    const float * pointsBoundingBoxCoordinates = surface->GetPointsBoundingBoxCoordinates();
+    if (pointsBoundingBoxCoordinates != 0)
+    {
+      pointsBoundingBoxCoordinatesAt.SetValues( pointsBoundingBoxCoordinates );
+      surfacePointsDs.Replace( pointsBoundingBoxCoordinatesAt.GetAsDataElement() );
+    }
+
+    // Axis of Rotation (Type 3)
+    Attribute<0x0066, 0x001b> axisOfRotationAt;
+    const float * axisOfRotation = surface->GetAxisOfRotation();
+    if (axisOfRotation != 0)
+    {
+      axisOfRotationAt.SetValues( axisOfRotation );
+      surfacePointsDs.Replace( axisOfRotationAt.GetAsDataElement() );
+    }
+
+    // Center of Rotation (Type 3)
+    Attribute<0x0066, 0x001b> centerOfRotationAt;
+    const float * centerOfRotation = surface->GetCenterOfRotation();
+    if (centerOfRotation != 0)
+    {
+      centerOfRotationAt.SetValues( centerOfRotation );
+      surfacePointsDs.Replace( centerOfRotationAt.GetAsDataElement() );
+    }
+
+    return true;
+  }
 }
 
 }
