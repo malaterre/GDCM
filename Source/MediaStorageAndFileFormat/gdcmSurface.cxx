@@ -416,7 +416,7 @@ const float * Surface::GetPointsBoundingBoxCoordinates() const
   return PointsBoundingBoxCoordinates;
 }
 
-void Surface::SetPointsBoundingBoxCoordinates(float * coordinates)
+void Surface::SetPointsBoundingBoxCoordinates(const float * coordinates)
 {
   assert(coordinates);
 
@@ -435,7 +435,7 @@ const float * Surface::GetAxisOfRotation() const
   return AxisOfRotation;
 }
 
-void Surface::SetAxisOfRotation(float * axis)
+void Surface::SetAxisOfRotation(const float * axis)
 {
   assert(axis);
 
@@ -451,7 +451,7 @@ const float * Surface::GetCenterOfRotation() const
   return CenterOfRotation;
 }
 
-void Surface::SetCenterOfRotation(float * center)
+void Surface::SetCenterOfRotation(const float * center)
 {
   assert(center);
 
