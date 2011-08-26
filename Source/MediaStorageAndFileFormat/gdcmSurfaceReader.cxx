@@ -249,6 +249,19 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
       vectorDimensionality.SetFromDataSet( surfaceNormalsDS );
       surface->SetVectorDimensionality( vectorDimensionality.GetValue() );
 
+      // Vector Accuracy (Type 3)
+      const Tag vectorAccuracyTag = Tag(0x0066, 0x0020);
+      if ( surfaceNormalsDS.FindDataElement( vectorAccuracyTag ) )
+      {
+        const DataElement & vectorAccuracyDE = surfaceNormalsDS.GetDataElement( vectorAccuracyTag );
+        if ( !vectorAccuracyDE.IsEmpty() )
+        {
+          Attribute<0x0066, 0x0020> vectorAccuracyAt;
+          vectorAccuracyAt.SetFromDataElement( vectorAccuracyDE );
+          surface->SetVectorAccuracy( vectorAccuracyAt.GetValues() );
+        }
+      }
+
       const Tag vectorCoordDataTag = Tag(0x0066, 0x0021);
       if( surfaceNormalsDS.FindDataElement( vectorCoordDataTag ) )
       {
