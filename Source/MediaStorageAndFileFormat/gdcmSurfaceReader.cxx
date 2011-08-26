@@ -226,45 +226,8 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   surface->SetManifold( manifold );
 
   //*****   Surface Points Sequence   ******//
-  const Tag surfacePointsSQTag(0x0066, 0x0011);
-  if ( !surfacesDS.FindDataElement(surfacePointsSQTag))
-  {
-    gdcmWarningMacro( "No Surface Point Sequence Found" );
+  if ( !ReadPointMacro(surface, surfacesDS) )
     return false;
-  }
-  SmartPointer< SequenceOfItems > surfacePointsSQ = surfacesDS.GetDataElement(surfacePointsSQTag).GetValueAsSQ();
-
-  if ( surfacePointsSQ->GetNumberOfItems() == 0)  // One Item shall be permitted
-  {
-    gdcmWarningMacro( "Surface Point Sequence empty" );
-    return false;
-  }
-
-  const DataSet & surfacePointsDS = surfacePointsSQ->GetItem(1).GetNestedDataSet();
-
-  const Tag pointCoordDataTag = Tag(0x0066, 0x0016);
-  if( !surfacePointsDS.FindDataElement( pointCoordDataTag ) )
-    {
-    gdcmWarningMacro( "No Point Coordinates Data Found" );
-    return false;
-    }
-  const DataElement & pointCoordDataDe = surfacePointsDS.GetDataElement( pointCoordDataTag );
-  surface->SetPointCoordinatesData( pointCoordDataDe );
-
-  // Number of Surface Points
-  const Tag numberOfSurfacePointsTag = Tag(0x0066, 0x0015);
-  if (surfacePointsDS.FindDataElement( numberOfSurfacePointsTag )
-   && !surfacePointsDS.GetDataElement( numberOfSurfacePointsTag ).IsEmpty() )
-  {
-    Attribute<0x0066, 0x0015> numberOfSurfacePointsAt;
-    numberOfSurfacePointsAt.SetFromDataSet( surfacePointsDS );
-    surface->SetNumberOfSurfacePoints( numberOfSurfacePointsAt.GetValue() );
-  }
-  else
-  {
-    const unsigned long numberOfSurfacePoints = (unsigned long) ( pointCoordDataDe.GetVL().GetLength() / (VR::GetLength(VR::OF) * 3) );
-    surface->SetNumberOfSurfacePoints( numberOfSurfacePoints );
-  }
 
   //*****   Surface Points Normals Sequence   ******//
   const Tag surfaceNormalsSQTag(0x0066, 0x0012);
@@ -508,6 +471,112 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
 
   // Add surface to the appropriated segment
   segment->AddSurface(surface);
+
+  return true;
+}
+
+bool SurfaceReader::ReadPointMacro(SmartPointer< Surface > surface, const DataSet & surfaceDS)
+{
+  //*****   Surface Points Sequence   ******//
+  const Tag surfacePointsSQTag(0x0066, 0x0011);
+  if ( !surfaceDS.FindDataElement(surfacePointsSQTag))
+  {
+    gdcmWarningMacro( "No Surface Point Sequence Found" );
+    return false;
+  }
+  SmartPointer< SequenceOfItems > surfacePointsSQ = surfaceDS.GetDataElement(surfacePointsSQTag).GetValueAsSQ();
+
+  if ( surfacePointsSQ->GetNumberOfItems() == 0)  // One Item shall be permitted
+  {
+    gdcmWarningMacro( "Surface Point Sequence empty" );
+    return false;
+  }
+
+  const DataSet & surfacePointsDS = surfacePointsSQ->GetItem(1).GetNestedDataSet();
+
+  const Tag pointCoordDataTag = Tag(0x0066, 0x0016);
+  if( !surfacePointsDS.FindDataElement( pointCoordDataTag ) )
+    {
+    gdcmWarningMacro( "No Point Coordinates Data Found" );
+    return false;
+    }
+  const DataElement & pointCoordDataDe = surfacePointsDS.GetDataElement( pointCoordDataTag );
+  surface->SetPointCoordinatesData( pointCoordDataDe );
+
+  // Number of Surface Points
+  const Tag numberOfSurfacePointsTag = Tag(0x0066, 0x0015);
+  if (surfacePointsDS.FindDataElement( numberOfSurfacePointsTag )
+   && !surfacePointsDS.GetDataElement( numberOfSurfacePointsTag ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x0015> numberOfSurfacePointsAt;
+    numberOfSurfacePointsAt.SetFromDataSet( surfacePointsDS );
+    surface->SetNumberOfSurfacePoints( numberOfSurfacePointsAt.GetValue() );
+  }
+  else
+  {
+    const unsigned long numberOfSurfacePoints = (unsigned long) ( pointCoordDataDe.GetVL().GetLength() / (VR::GetLength(VR::OF) * 3) );
+    surface->SetNumberOfSurfacePoints( numberOfSurfacePoints );
+  }
+
+  // Point Position Accuracy (Type 3)
+  const Tag pointPositionAccuracyTag = Tag(0x0066, 0x0017);
+  if (surfacePointsDS.FindDataElement( pointPositionAccuracyTag )
+   && !surfacePointsDS.GetDataElement( pointPositionAccuracyTag ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x0017> pointPositionAccuracyAt;
+    pointPositionAccuracyAt.SetFromDataSet( surfacePointsDS );
+    surface->SetPointPositionAccuracy( pointPositionAccuracyAt.GetValues() );
+  }
+
+  // Mean Point Distance (Type 3)
+  const Tag meanPointDistanceTag = Tag(0x0066, 0x0018);
+  if (surfacePointsDS.FindDataElement( meanPointDistanceTag )
+   && !surfacePointsDS.GetDataElement( meanPointDistanceTag ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x0018> meanPointDistanceAt;
+    meanPointDistanceAt.SetFromDataSet( surfacePointsDS );
+    surface->SetMeanPointDistance( meanPointDistanceAt.GetValue() );
+  }
+
+  // Maximum Point Distance (Type 3)
+  const Tag maximumPointDistanceTag = Tag(0x0066, 0x0019);
+  if (surfacePointsDS.FindDataElement( maximumPointDistanceTag )
+   && !surfacePointsDS.GetDataElement( maximumPointDistanceTag ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x0019> maximumPointDistanceAt;
+    maximumPointDistanceAt.SetFromDataSet( surfacePointsDS );
+    surface->SetMaximumPointDistance( maximumPointDistanceAt.GetValue() );
+  }
+
+  // Point Bounding Box Coordinates (Type 3)
+  const Tag pointsBoundingBoxCoordinatesTag = Tag(0x0066, 0x001a);
+  if (surfacePointsDS.FindDataElement( pointsBoundingBoxCoordinatesTag )
+   && !surfacePointsDS.GetDataElement( pointsBoundingBoxCoordinatesTag ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x001a> pointsBoundingBoxCoordinatesAt;
+    pointsBoundingBoxCoordinatesAt.SetFromDataSet( surfacePointsDS );
+    surface->SetPointsBoundingBoxCoordinates( pointsBoundingBoxCoordinatesAt.GetValues() );
+  }
+
+  // Axis of Rotation (Type 3)
+  const Tag axisOfRotationTag = Tag(0x0066, 0x001b);
+  if (surfacePointsDS.FindDataElement( axisOfRotationTag )
+   && !surfacePointsDS.GetDataElement( axisOfRotationTag ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x001b> axisOfRotationAt;
+    axisOfRotationAt.SetFromDataSet( surfacePointsDS );
+    surface->SetAxisOfRotation( axisOfRotationAt.GetValues() );
+  }
+
+  // Center of Rotation (Type 3)
+  const Tag centerOfRotationTag = Tag(0x0066, 0x001c);
+  if (surfacePointsDS.FindDataElement( centerOfRotationTag )
+   && !surfacePointsDS.GetDataElement( centerOfRotationTag ).IsEmpty() )
+  {
+    Attribute<0x0066, 0x001c> centerOfRotationAt;
+    centerOfRotationAt.SetFromDataSet( surfacePointsDS );
+    surface->SetAxisOfRotation( centerOfRotationAt.GetValues() );
+  }
 
   return true;
 }
