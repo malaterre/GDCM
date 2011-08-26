@@ -43,6 +43,8 @@ public:
     bool ReadSurfaces();
 
     bool ReadSurface(const Item & surfaceItem, const unsigned long idx);
+
+    bool ReadPointMacro(SmartPointer< Surface > surface, const DataSet & surfaceDS);
 };
 
 }
