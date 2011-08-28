@@ -21,6 +21,7 @@
 #include "gdcmULBasicCallback.h"
 #include "gdcmPDUFactory.h"
 #include "gdcmAttribute.h"
+#include "gdcmULWritingCallback.h"
 
 #include "gdcmPrinter.h" // FIXME
 #include "gdcmReader.h" // FIXME
@@ -196,18 +197,26 @@ bool ServiceClassUser::SendEcho()
 
 bool ServiceClassUser::SendStore(const char *filename)
 {
+  if( !filename ) return false;
   Reader reader;
   reader.SetFileName( filename );
   bool b = reader.Read();
-  assert( b );
+  if( !b )
+    {
+    gdcmDebugMacro( "Could not read: " << filename );
+    return false;
+    }
   const File & file = reader.GetFile();
   return SendStore( file );
 }
 
 bool ServiceClassUser::SendStore(DataSet const &ds)
 {
-  assert( 0 );
-  return false;
+  SmartPointer<File> file = new File;
+  file->SetDataSet( ds );
+  file->GetHeader().SetDataSetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
+  file->GetHeader().FillFromDataSet( ds );
+  return SendStore(*file);
 }
 
 bool ServiceClassUser::SendStore(File const &file)
@@ -226,7 +235,7 @@ bool ServiceClassUser::SendStore(File const &file)
     return false;
     }
 
-  const DataSet* inDataSet = &file.GetDataSet();
+  //const DataSet* inDataSet = &file.GetDataSet();
   //DataSetEvent dse( inDataSet );
   //this->InvokeEvent( dse );
 
@@ -257,9 +266,36 @@ bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet>
 
 bool ServiceClassUser::SendMove(const BaseRootQuery* query, const char *outputdir)
 {
-  //std::vector<File> files;
-  //bool b = SendMove(query, files);
-  assert( 0 );
+  UserInformation userInfo2;
+  ULConnectionInfo connectInfo2;
+  if (!connectInfo2.Initialize(userInfo2, Internals->aetitle.c_str(),
+      Internals->calledaetitle.c_str(), 0, Internals->portscp, Internals->hostname))
+    {
+    return false;
+    }
+
+  // let's start the secondary connection
+  ULConnection* mSecondaryConnection = Internals->mSecondaryConnection;
+  if (mSecondaryConnection)
+    {
+    delete mSecondaryConnection;
+    }
+  Internals->mSecondaryConnection = new ULConnection(connectInfo2);
+  Internals->mSecondaryConnection->GetTimer().SetTimeout(Internals->timeout);
+
+  ULConnection* mConnection = Internals->mConnection;
+  network::ULWritingCallback theCallback;
+  theCallback.SetDirectory(outputdir);
+  network::ULConnectionCallback* inCallback = &theCallback;
+
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, query );
+  ULEvent theEvent(ePDATArequest, theDataPDU);
+  EStateID stateid = RunMoveEventLoop(theEvent, inCallback);
+  if( stateid != gdcm::network::eSta6TransferReady )
+    {
+    return false;
+    }
+
   return true;
 }
 
@@ -298,6 +334,12 @@ bool ServiceClassUser::SendMove(const BaseRootQuery* query, std::vector<DataSet>
   retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
 
   return true;
+}
+
+bool ServiceClassUser::SendMove(const BaseRootQuery* query, std::vector<File> &retFiles)
+{
+  assert( 0 && "unimplemented do not use" );
+  return false;
 }
 
 //event handler loop.
