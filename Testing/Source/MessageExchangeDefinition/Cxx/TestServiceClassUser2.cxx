@@ -43,7 +43,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::ServiceClassUser> scup = new gdcm::ServiceClassUser;
   gdcm::ServiceClassUser &scu = *scup;
-  gdcm::SimpleSubjectWatcher w( &scu, "TestServiceClassUser" );
+  gdcm::SimpleSubjectWatcher w( &scu, "TestServiceClassUser2" );
 
   scu.SetHostname( remote.c_str() );
   scu.SetPort( portno );
@@ -93,7 +93,7 @@ int TestServiceClassUser2(int argc, char *argv[])
   std::string filename = std::string(directory) + "/gdcm-MR-PHILIPS-16-NonSquarePixels.dcm";
   filenames.push_back( filename );
 
-  if( !generator.GenerateFromFilenames(filenames) )
+  if( !generator.GenerateFromUID( gdcm::UIDs::MRImageStorage ) )
     {
     return 1;
     }
@@ -114,7 +114,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::File & file = reader.GetFile();
   gdcm::UIDGenerator uid;
-  const int nmax = 50;
+  const int nmax = 500;
   for( int i = 0; i < nmax; ++i )
     {
     gdcm::DataSet & ds = file.GetDataSet();
@@ -129,7 +129,7 @@ int TestServiceClassUser2(int argc, char *argv[])
       at.SetValue( "TestServiceClassUser2" );
       ds.Replace( at.GetAsDataElement() );
       }
-    if( !scu.SendStore( file ) )
+    if( !scu.SendStore( file.GetDataSet() ) )
       {
       return 1;
       }
@@ -188,18 +188,18 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   // C-MOVE
   // customize the move query
-  gdcm::DataSet moveds;
+  gdcm::DataSet moveds1;
   // use results from the c-find to construct the c-move query:
-  moveds.Insert( datasets[0].GetDataElement( gdcm::Tag(0x10,0x20) ) );
-  moveds.Insert( datasets[0].GetDataElement( gdcm::Tag(0x20,0xd) ) );
-  moveds.Insert( datasets[0].GetDataElement( gdcm::Tag(0x20,0xe) ) );
+  moveds1.Insert( datasets[0].GetDataElement( gdcm::Tag(0x10,0x20) ) );
+  moveds1.Insert( datasets[0].GetDataElement( gdcm::Tag(0x20,0xd) ) );
+  moveds1.Insert( datasets[0].GetDataElement( gdcm::Tag(0x20,0xe) ) );
 
-  gdcm::SmartPointer<gdcm::BaseRootQuery> movequery =
+  gdcm::SmartPointer<gdcm::BaseRootQuery> movequery1 =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::eImageOrFrame, moveds, true);
+      gdcm::ePatientRootType, gdcm::eImageOrFrame, moveds1, true);
 
   // Generate the PresentationContext array from the query UID:
-  if( !generator.GenerateFromUID( movequery->GetAbstractSyntaxUID() ) )
+  if( !generator.GenerateFromUID( movequery1->GetAbstractSyntaxUID() ) )
     {
     return 1;
     }
@@ -215,11 +215,12 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   //std::cerr << "size: " << datasets.size() << std::endl;
 
+  size_t ndatasets = 0;
   for(
     std::vector<gdcm::DataSet>::const_iterator cfind_it = datasets.begin();
     cfind_it != datasets.end(); ++cfind_it )
     {
-    gdcm::DataSet &queryds = movequery->GetQueryDataSet();
+    gdcm::DataSet &queryds = movequery1->GetQueryDataSet();
     const gdcm::DataElement &instanceuid = cfind_it->GetDataElement( gdcm::Tag(0x8,0x18) );
     //std::cout << "CMove-ing: " << instanceuid << std::endl;
     queryds.Replace( instanceuid );
@@ -227,7 +228,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
     // C-MOVE
     std::vector<gdcm::DataSet> data;
-    if( !scu.SendMove(movequery, data) )
+    if( !scu.SendMove(movequery1, data) )
       {
       std::cerr << "CMove Failure for: " << instanceuid << std::endl;
       return 1;
@@ -237,6 +238,42 @@ int TestServiceClassUser2(int argc, char *argv[])
       std::cerr << "data size: " << data.size() << std::endl;
       return 1;
       }
+    ++ndatasets;
+    }
+
+  //std::cerr << "Total number of dataset: " << ndatasets << std::endl;
+
+  // Now let's do this again with a simplier request:
+  gdcm::DataSet moveds2;
+  moveds2.Insert( pid.GetAsDataElement() );
+  gdcm::SmartPointer<gdcm::BaseRootQuery> movequery2 =
+    gdcm::CompositeNetworkFunctions::ConstructQuery(
+      gdcm::ePatientRootType, gdcm::ePatient, moveds2, true);
+
+  const char outputdir[] = "TestServiceClassUser2";
+  // Make sure output dir exist, it will not be created
+  if( gdcm::System::FileIsDirectory( outputdir ) )
+    {
+    // cleanups old files:
+    gdcm::System::DeleteDirectory( outputdir );
+    }
+  gdcm::System::MakeDirectory( outputdir );
+
+  if( !scu.SendMove(movequery2, outputdir) )
+    {
+    std::cerr << "CMove Failure for Patient ID: " << pid.GetValue() << std::endl;
+    return 1;
+    }
+
+  // Compare results:
+  gdcm::Directory dir;
+  unsigned int ndatasets2 = dir.Load( outputdir, true );
+
+  if( ndatasets != ndatasets2 )
+    {
+    std::cerr << "Incompatible number of results: " << ndatasets << " vs " <<
+      ndatasets2 << std::endl;
+    return 1;
     }
 
   if( !scu.StopAssociation() )
