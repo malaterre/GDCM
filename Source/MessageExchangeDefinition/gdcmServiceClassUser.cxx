@@ -288,7 +288,11 @@ bool ServiceClassUser::SendMove(const BaseRootQuery* query, std::vector<DataSet>
 
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, query );
   ULEvent theEvent(ePDATArequest, theDataPDU);
-  RunMoveEventLoop(theEvent, inCallback);
+  EStateID stateid = RunMoveEventLoop(theEvent, inCallback);
+  if( stateid != gdcm::network::eSta6TransferReady )
+    {
+    return false;
+    }
 
   std::vector<DataSet> const & theDataSets = theCallback.GetDataSets();
   retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
@@ -619,8 +623,19 @@ EStateID ServiceClassUser::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionC
       //can fail if is_readready doesn't return true, ie, the connection
       //wasn't opened on the other side because the other side isn't sending data yet
       //for whatever reason (maybe there's nothing to get?)
-      secondConnectionEstablished =
-        Internals->mSecondaryConnection->InitializeIncomingConnection();
+      try
+        {
+        secondConnectionEstablished =
+          Internals->mSecondaryConnection->InitializeIncomingConnection();
+        }
+      catch ( std::exception & e )
+        {
+        gdcmErrorMacro( "Error 2nd connection:" << e.what() );
+        }
+      catch ( ... )
+        {
+        assert( 0 );
+        }
     }
     if (secondConnectionEstablished &&
       (Internals->mSecondaryConnection->GetState()== eSta1Idle ||
