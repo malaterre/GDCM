@@ -137,7 +137,7 @@ void PrintDataSets(std::vector<gdcm::DataSet> theDataSets)
 }
 
 
-int TestSCUValidation(int argc, char *argv[])
+int TestSCUValidation(int , char *[])
 {
   //set this to true to use a strict interpretation of the DICOM standard for query validation
   bool theUseStrictQueries = false;

@@ -36,6 +36,7 @@
 #include "config.h"
 
 #include <iostream> // must be ANSI compatible
+#include <exception> // must be ANSI compatible
 //#include <cstddef>
 #include <ctype.h>
 #include <stdio.h>
@@ -73,7 +74,7 @@ public:
 };
 
 // socket exception classes
-class MY_API sockerr
+class MY_API sockerr : public std::exception
 {
     int  err;
     StringWrapper text;
@@ -106,7 +107,7 @@ class MY_API sockerr
             text = O.text;
         }
 
-        const char* what () const { return "sockerr"; }
+        const char* what () const throw() { return "sockerr"; }
         const char* operation () const { return text.text.c_str(); }
 
 //      int errno () const { return err; }
