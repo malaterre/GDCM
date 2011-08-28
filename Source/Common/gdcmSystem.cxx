@@ -14,6 +14,7 @@
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmFilename.h"
+#include "gdcmDirectory.h"
 #include "gdcmException.h"
 
 #include <iostream>
@@ -223,6 +224,20 @@ bool System::FileIsDirectory(const char* name)
     }
 }
 
+bool System::FileIsSymlink(const char* name)
+{
+#if defined( _WIN32 )
+  (void)name;
+#else
+  struct stat fs;
+  if(lstat(name, &fs) == 0)
+    {
+    return S_ISLNK(fs.st_mode);
+    }
+#endif
+  return false;
+}
+
 // TODO st_mtimensec
 time_t System::FileTime(const char* filename)
 {
@@ -305,6 +320,47 @@ bool System::RemoveFile(const char* source)
     }
 #endif
   return res;
+}
+
+// RemoveDirectory is a WIN32 function, use different name
+bool System::DeleteDirectory(const char *source)
+{
+  unsigned short mode;
+  if(System::GetPermissions(source, mode))
+    {
+#if defined(_WIN32) && !defined(__CYGWIN__)
+    mode |= S_IWRITE;
+#else
+    mode |= S_IWUSR;
+#endif
+    System::SetPermissions(source, mode);
+    }
+
+  Directory dir;
+  unsigned int numfiles = dir.Load(source, false);
+  (void)numfiles;
+  Directory::FilenamesType const & files = dir.GetFilenames();
+  for ( Directory::FilenamesType::const_iterator it = files.begin();
+    it != files.end(); ++it )
+    {
+    const char *filename = it->c_str();
+    if( System::FileIsDirectory(filename) &&
+      !System::FileIsSymlink(filename) )
+      {
+      if (!System::DeleteDirectory(filename))
+        {
+        return false;
+        }
+      }
+    else
+      {
+      if(!System::RemoveFile(filename))
+        {
+        return false;
+        }
+      }
+    }
+  return Rmdir(source) == 0;
 }
 
 // return size of file; also returns zero if no file exists
