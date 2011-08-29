@@ -361,7 +361,9 @@ void ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
     }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
-  RunMoveEventLoop(theEvent, inCallback);
+  EStateID stateid = RunMoveEventLoop(theEvent, inCallback);
+  //assert( stateid == gdcm::network::eSta6TransferReady );
+  (void)stateid;
 }
 
 std::vector<DataSet> ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery)
