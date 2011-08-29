@@ -26,15 +26,18 @@ namespace gdcm
 class GDCM_EXPORT System
 {
 public:
-  /// Create a directory
+  /// Create a directory name path
   static bool MakeDirectory(const char *path);
   /// Check whether the specified file exist on the sytem
   static bool FileExists(const char* filename);
   /// Check whether the file specified is a directory:
   static bool FileIsDirectory(const char* name);
-  /// remove a file
+  /// Check whether name is a symlink
+  static bool FileIsSymlink(const char* name);
+  /// remove a file named source
   static bool RemoveFile(const char* source);
-  //static bool DeleteDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
+  /// remove a directory named source
+  static bool DeleteDirectory(const char *source);
 
   /// Return the last error
   static const char *GetLastSystemError();

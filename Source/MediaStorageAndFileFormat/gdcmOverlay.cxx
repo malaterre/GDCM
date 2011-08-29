@@ -99,6 +99,7 @@ Overlay::Overlay(Overlay const &ov):Object(ov)
   *Internal = *ov.Internal;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
 {
   Tag overlay(0x6000,0x0000); // First possible overlay
@@ -180,6 +181,7 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
   assert( numoverlays <= 16 );
   return numoverlays;
 }
+#endif
 
 void Overlay::Update(const DataElement & de)
 {

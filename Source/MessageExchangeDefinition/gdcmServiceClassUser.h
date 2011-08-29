@@ -80,18 +80,23 @@ public:
   /// C-ECHO
   bool SendEcho();
 
-  /// C-STORE
+  /// Execute a C-STORE on file on disk, named filename
   bool SendStore(const char *filename);
-  bool SendStore(DataSet const &ds);
+  /// Execute a C-STORE on a File, the transfer syntax used for the query is based on the
+  /// file.
   bool SendStore(File const &file);
+  /// Execute a C-STORE on a DataSet, the transfer syntax used will be Implicit
+  bool SendStore(DataSet const &ds);
 
-  /// C-FIND
+  /// C-FIND a query, return result are in retDatasets
   bool SendFind(const BaseRootQuery* query, std::vector<DataSet> &retDatasets);
 
-  /// C-MOVE
+  /// Execute a C-MOVE, based on query, return files are written in outputdir
   bool SendMove(const BaseRootQuery* query, const char *outputdir);
+  /// Execute a C-MOVE, based on query, returned dataset are Implicit
   bool SendMove(const BaseRootQuery* query, std::vector<DataSet> &retDatasets);
-  //bool SendMove(const BaseRootQuery* query, std::vector<File> &retFile);
+  /// Execute a C-MOVE, based on query, returned Files are stored in vector
+  bool SendMove(const BaseRootQuery* query, std::vector<File> &retFile);
 
 private:
   network::EStateID RunEventLoop(network::ULEvent& inEvent,

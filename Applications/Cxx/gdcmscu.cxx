@@ -572,12 +572,9 @@ int main(int argc, char *argv[])
 
     if( !portscp )
       {
-      if (gdcm::Trace::GetErrorFlag())
-        {
-        std::cerr << "Need to set explicitely port number for SCP association"
-          " --port-scp" << std::endl;
-        }
-      std::cerr << "Move failed." << std::endl;
+      std::cerr << "Need to set explicitely port number for SCP association"
+        " --port-scp" << std::endl;
+      //std::cerr << "Move failed." << std::endl;
       return 1;
       }
 
