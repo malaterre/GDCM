@@ -46,10 +46,12 @@ SegmentReader::SegmentVector SegmentReader::GetSegments()
     itMap++;
 
     // Search and add only different segments
-    SegmentVector::const_iterator itVec    = res.begin();
-    SegmentVector::const_iterator itVecEnd = res.end();
+    SegmentVector::const_iterator itVec;
+    SegmentVector::const_iterator itVecEnd;
     for (; itMap != itMapEnd; itMap++)
     {
+      itVec     = res.begin();
+      itVecEnd  = res.end();  // if res is a list, remove this line
       while (itVec != itVecEnd && itMap->second != *itVec)
         itVec++;
       if (itVec == itVecEnd)
