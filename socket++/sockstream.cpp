@@ -323,10 +323,10 @@ bool sockerr::benign () const
   return false;
 }
 
-sockbuf::sockbuf (const sockbuf::sockdesc& sd)
+sockbuf::sockbuf (const sockbuf::sockdesc& thesd)
 //  : rep (new sockbuf::sockcnt (sd.sock))
 {
-  rep = new sockbuf::sockcnt (sd.sock);
+  rep = new sockbuf::sockcnt (thesd.sock);
   char_type* gbuf = new char_type [BUFSIZ];
   char_type* pbuf = new char_type [BUFSIZ];
   setg (gbuf, gbuf + BUFSIZ, gbuf + BUFSIZ);
@@ -796,17 +796,17 @@ void sockbuf::shutdown (shuthow sh)
   if (::shutdown(rep->sock, sh) == -1) throw sockerr (errno, "sockbuf::shutdown", sockname.text.c_str());
 }
 
-int sockbuf::getopt (int op, void* buf, int len, int level) const
+int sockbuf::getopt (int op, void* buf, int len, int thelevel) const
 {
   socklen_t salen = len;
-  if (::getsockopt (rep->sock, level, op, (char*) buf, &salen) == -1)
+  if (::getsockopt (rep->sock, thelevel, op, (char*) buf, &salen) == -1)
     throw sockerr (errno, "sockbuf::getopt", sockname.text.c_str());
   return len;
 }
 
-void sockbuf::setopt (int op, void* buf, int len, int level) const
+void sockbuf::setopt (int op, void* buf, int len, int thelevel) const
 {
-  if (::setsockopt (rep->sock, level, op, (char*) buf, len) == -1)
+  if (::setsockopt (rep->sock, thelevel, op, (char*) buf, len) == -1)
     throw sockerr (errno, "sockbuf::setopt", sockname.text.c_str());
 }
 
