@@ -62,7 +62,7 @@ class Subject;
 class ULAction {
     private:
       //cannot copy a ULAction
-      ULAction(const ULAction& inAction) {};
+      ULAction(const ULAction& inAction);
 
     protected:
 

@@ -34,6 +34,7 @@ namespace network{
 std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
  const ULConnection &inConnection, const BaseRootQuery* inRootQuery)
 {
+  (void)inRootQuery;
   PresentationDataValue thePDV;
   PresentationContextRQ pc( UIDs::VerificationSOPClass );
   thePDV.SetPresentationContextID(
@@ -76,6 +77,7 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
 
 std::vector<PresentationDataValue>  CEchoRSP::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  (void)inDataSet;
   assert( 0 && "TODO" );
   return thePDV;
 }

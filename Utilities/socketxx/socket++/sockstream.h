@@ -79,17 +79,17 @@ class MY_API sockerr : public std::exception
     int  err;
     StringWrapper text;
     public:
-        sockerr (int e, const char *operation = NULL): err (e)
+        sockerr (int e, const char *theop = NULL): err (e)
         {
-            if (operation != NULL)
+            if (theop != NULL)
             {
-                text.text = operation;
+                text.text = theop;
             }
         }
-        sockerr (int e, const char *operation, const char *specification) : err (e)
+        sockerr (int e, const char *theop, const char *specification) : err (e)
         {
-            if (operation != NULL)
-                text.text = operation;
+            if (theop != NULL)
+                text.text = theop;
             if (specification != NULL)
             {
                 text.text += "(";
@@ -97,9 +97,9 @@ class MY_API sockerr : public std::exception
                 text.text += ")";
             }
         }
-        sockerr (int e, const string &operation): err (e)
+        sockerr (int e, const string &theoperation): err (e)
         {
-            text.text = operation;
+            text.text = theoperation;
         }
         sockerr (const sockerr &O)
         {

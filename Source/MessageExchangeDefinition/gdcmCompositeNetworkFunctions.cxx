@@ -261,7 +261,7 @@ public:
     progress = refprogress + (1. / nfiles ) * pe.GetProgress();
 //    std::cout << "Progress: " << progress << " " << pe.GetProgress() << std::endl;
     }
-  virtual void ShowDataSet(Subject *caller, const Event &evt) {}
+  virtual void ShowDataSet(Subject *, const Event &) {}
 };
 
 bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,

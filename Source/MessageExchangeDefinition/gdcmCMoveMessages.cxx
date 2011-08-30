@@ -32,6 +32,8 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
   const BaseRootQuery* inRootQuery)
 {
   std::vector<PresentationDataValue> thePDVs;
+  PresentationContextRQ pc( inRootQuery->GetAbstractSyntaxUID() );
+{
   PresentationDataValue thePDV;
 #if 0
   int contextID = ePatientRootQueryRetrieveInformationModelMOVE;
@@ -47,7 +49,6 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
     }
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 #else
-  PresentationContextRQ pc( inRootQuery->GetAbstractSyntaxUID() );
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromPresentationContext(pc) );
 #endif
@@ -90,6 +91,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
 
   thePDV.SetDataSet(ds);
   thePDVs.push_back(thePDV);
+}
   {
     PresentationDataValue thePDV;
     thePDV.SetPresentationContextID(
@@ -107,6 +109,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
 //but if you manage to do call it, return a blank dataset.
 std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
+  (void)inDataSet;
   assert( 0 && "TODO" );
   return thePDVs;
 
@@ -114,11 +117,13 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(const DataSet* inDataSe
 
 std::vector<PresentationDataValue>  CMoveRSP::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  (void)inDataSet;
   assert( 0 && "TODO" );
   return thePDV;
 }
 std::vector<PresentationDataValue>  CMoveCancelRq::ConstructPDV(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
+  (void)inDataSet;
   assert( 0 && "TODO" );
   return thePDV;
 }

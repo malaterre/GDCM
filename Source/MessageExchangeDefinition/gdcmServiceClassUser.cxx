@@ -338,6 +338,8 @@ bool ServiceClassUser::SendMove(const BaseRootQuery* query, std::vector<DataSet>
 
 bool ServiceClassUser::SendMove(const BaseRootQuery* query, std::vector<File> &retFiles)
 {
+  (void)query;
+  (void)retFiles;
   assert( 0 && "unimplemented do not use" );
   return false;
 }
