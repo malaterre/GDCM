@@ -268,6 +268,7 @@ const ULConnection &inConnection, const BaseRootQuery* inRootQuery)
 {
   std::vector<PresentationDataValue> thePDVs;
   (void)inRootQuery;
+  (void)inConnection;
   assert( 0 && "TODO" );
   return thePDVs;
 }

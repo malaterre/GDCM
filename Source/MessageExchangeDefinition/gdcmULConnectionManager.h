@@ -49,7 +49,7 @@ namespace gdcm {
       ULTransitionTable mTransitions;
 
       //no copying
-      ULConnectionManager(const ULConnectionManager& inCM){};
+      ULConnectionManager(const ULConnectionManager& inCM);
 
       //event handler loop.
       //will just keep running until the current event is nonexistent.

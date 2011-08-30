@@ -88,7 +88,6 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::Directory::FilenamesType filenames;
   const char *directory = gdcm::Testing::GetDataRoot();
-  // DEBUG:
   // storescu -R -xs --call GDCM_STORE macminig4 11112 gdcmData/gdcm-MR-PHILIPS-16-NonSquarePixels.dcm
   std::string filename = std::string(directory) + "/gdcm-MR-PHILIPS-16-NonSquarePixels.dcm";
   filenames.push_back( filename );
@@ -169,12 +168,12 @@ int TestServiceClassUser2(int argc, char *argv[])
     {
     return 1;
     }
+
+  // C-FIND
   // $ findscu --call GDCM_STORE -P  macminig4 11112 -k 8,52=IMAGE -k
   //   10,20=TestServiceClassUser2  -k 20,d  -k 20,e -k 8,18
   // gdcmscu --find --call GDCM_STORE --image --patientroot  macminig4 11112
   //   -k 10,20=TestServiceClassUser2 -k 8,18
-
-  // C-FIND
   std::vector<gdcm::DataSet> datasets;
   if( !scu.SendFind(findquery, datasets) )
     {
@@ -189,7 +188,7 @@ int TestServiceClassUser2(int argc, char *argv[])
   // C-MOVE
   // customize the move query
   gdcm::DataSet moveds1;
-  // use results from the c-find to construct the c-move query:
+  // use results from the C-FIND to construct the c-move query:
   moveds1.Insert( datasets[0].GetDataElement( gdcm::Tag(0x10,0x20) ) );
   moveds1.Insert( datasets[0].GetDataElement( gdcm::Tag(0x20,0xd) ) );
   moveds1.Insert( datasets[0].GetDataElement( gdcm::Tag(0x20,0xe) ) );
@@ -213,8 +212,6 @@ int TestServiceClassUser2(int argc, char *argv[])
     return 1;
     }
 
-  //std::cerr << "size: " << datasets.size() << std::endl;
-
   size_t ndatasets = 0;
   for(
     std::vector<gdcm::DataSet>::const_iterator cfind_it = datasets.begin();
@@ -222,9 +219,7 @@ int TestServiceClassUser2(int argc, char *argv[])
     {
     gdcm::DataSet &queryds = movequery1->GetQueryDataSet();
     const gdcm::DataElement &instanceuid = cfind_it->GetDataElement( gdcm::Tag(0x8,0x18) );
-    //std::cout << "CMove-ing: " << instanceuid << std::endl;
     queryds.Replace( instanceuid );
-    //std::cout << "ds: " << queryds << std::endl;
 
     // C-MOVE
     std::vector<gdcm::DataSet> data;
