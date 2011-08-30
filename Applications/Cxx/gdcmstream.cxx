@@ -11,47 +11,36 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#include "gdcmStreamImageReader.h"
-#include "gdcmVersion.h"
-#include "gdcmUIDGenerator.h"
-#include <getopt.h>
-#include "gdcmFilename.h"
-#include <fstream>
-#include <openjpeg.h>
-#include <stdint.h>
-#include <string.h>
-#include <assert.h>
-#include <gdcm_j2k.h>
-#include <gdcm_jp2.h>
-#include<iostream>
-#include <cstring>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <math.h>
-#include "gdcmImageReader.h"
-#include "gdcmSequenceOfItems.h"
-#include "gdcmSystem.h"
-#include <fstream>
-#include <getopt.h>
-
-#include <string>
-#include <iostream>
-
-#include "gdcmMediaStorage.h"
-#include "gdcmWriter.h"
-#include "gdcmItem.h"
-#include "gdcmImageReader.h"
 #include "gdcmAttribute.h"
 #include "gdcmFile.h"
+#include "gdcmFilename.h"
+#include "gdcmImageHelper.h"
+#include "gdcmItem.h"
+#include "gdcmMediaStorage.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmStreamImageReader.h"
+#include "gdcmStreamImageWriter.h"
+#include "gdcmSystem.h"
 #include "gdcmTag.h"
+#include "gdcmTrace.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmUIDGenerator.h"
-#include "gdcmAnonymizer.h"
-#include "gdcmStreamImageWriter.h"
-#include "gdcmImageHelper.h"
-#include "gdcmTrace.h"
+#include "gdcmVersion.h"
+
+#ifdef OPENJPEG_MAJOR_VERSION
+#if OPENJPEG_MAJOR_VERSION == 1
+#include "gdcm_openjpeg.h"
+#elif OPENJPEG_MAJOR_VERSION == 2
+#define USE_OPJ_DEPRECATED // opj_setup_decoder
+#include "gdcm_openjpeg2.h"
+#else
+#error should not happen
+#endif
+#else
+#error should not happen
+#endif
+
+#include <getopt.h>
 
 void error_callback(const char *msg, void *) {
   (void)msg;
