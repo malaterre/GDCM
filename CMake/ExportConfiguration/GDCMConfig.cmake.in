@@ -49,5 +49,7 @@ endif(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
 
 set(GDCM_USE_FILE ${SELF_DIR}/UseGDCM.cmake)
 
+SET(GDCM_LIBRARY_DIRS @GDCM_LIBRARY_DIRS@)
+
 # Backward compatible part:
 SET(GDCM_FOUND       TRUE)
