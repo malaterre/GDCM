@@ -106,6 +106,7 @@ class MY_API sockerr : public std::exception
             err = O.err;
             text = O.text;
         }
+        virtual ~sockerr() throw() {}
 
         const char* what () const throw() { return "sockerr"; }
         const char* operation () const { return text.text.c_str(); }
