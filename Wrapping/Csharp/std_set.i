@@ -39,7 +39,7 @@
 /* V is the C++ value type */
 %define SWIG_STD_SET_INTERNAL(V)
 
-%typemap(csinterfaces) std::set< V > "IDisposable \n#if !SWIG_DOTNET_1\n    , System.Collections.Generic.ISet<$typemap(cstype, V)>\n#endif\n";
+%typemap(csinterfaces) std::set< V > "IDisposable \n#if SWIG_DOTNET_3\n    , System.Collections.Generic.ISet<$typemap(cstype, V)>\n#endif\n";
 %typemap(cscode) std::set<K, T > %{
 
   public $typemap(cstype, V) this[$typemap(cstype, V) key] {
@@ -86,7 +86,7 @@
     %rename(Clear) clear;
     void clear();
     %extend {
-      const mapped_type& getitem(const value_type& val) throw (std::out_of_range) {
+      const value_type& getitem(const value_type& val) throw (std::out_of_range) {
         std::set< V >::iterator iter = $self->find(val);
         if (iter != $self->end())
           return *iter;
@@ -104,7 +104,7 @@
       }
 
       void Add(const value_type& val) throw (std::out_of_range) {
-        std::set< V >::iterator iter = $self->find(key);
+        std::set< V >::iterator iter = $self->find(val);
         if (iter != $self->end())
           throw std::out_of_range("key already exists");
         $self->insert(val);
@@ -127,10 +127,10 @@
         return new std::set< V >::iterator($self->begin());
       }
 
-      const key_type& get_next_key(std::set< V >::iterator *swigiterator) {
+      const value_type& get_next_key(std::set< V >::iterator *swigiterator) {
         std::set< V >::iterator iter = *swigiterator;
         swigiterator++;
-        return (*iter).first;
+        return *iter;
       }
 
       void destroy_iterator(std::set< V >::iterator *swigiterator) {

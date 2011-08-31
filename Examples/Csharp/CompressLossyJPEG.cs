@@ -73,7 +73,7 @@ public class CompressLossyJPEG
       }
 
     ImageWriter writer = new ImageWriter();
-    writer.SetImage( change.GetOutput() );
+    writer.SetImage( (gdcm.Image)change.GetOutput() );
     writer.SetFile( reader.GetFile() );
     writer.SetFileName( outfilename );
     if( !writer.Write() )

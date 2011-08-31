@@ -441,6 +441,7 @@ EXTEND_CLASS_PRINT(gdcm::File)
 //%cs_marshal_array(char, byte)
 %ignore gdcm::Bitmap::GetBuffer(char* buffer) const;
 %include "gdcmBitmap.h"
+EXTEND_CLASS_PRINT(gdcm::Bitmap)
 %extend gdcm::Bitmap
 {
   bool GetBuffer(signed char *buffer) const {
@@ -468,7 +469,6 @@ EXTEND_CLASS_PRINT(gdcm::File)
 };
 %clear signed char* buffer;
 %clear unsigned int* dims;
-EXTEND_CLASS_PRINT(gdcm::Bitmap)
 
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
@@ -691,9 +691,11 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
 %include "gdcmIODEntry.h"
+
 %apply signed char[] { signed char* outbuffer }
 %apply signed char[] { signed char* inbuffer }
 %include "gdcmRescaler.h"
+//EXTEND_CLASS_PRINT(gdcm::Rescaler)
 %extend gdcm::Rescaler
 {
   bool Rescale(signed char *outbuffer, const signed char *inbuffer, size_t n) {

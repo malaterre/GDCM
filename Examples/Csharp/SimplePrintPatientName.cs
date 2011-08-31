@@ -39,6 +39,9 @@ namespace GDCMTest
       gdcm.Reader reader = new gdcm.Reader();
       reader.SetFileName(args[0]);
       bool ret = reader.Read();
+      //TagSetType tst = new TagSetType();
+      //tst.Add( new Tag(0x7fe0,0x10) );
+      //bool ret = reader.ReadUpToTag( new Tag(0x88,0x200), tst );
       if( !ret )
         {
         return 1;

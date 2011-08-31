@@ -45,6 +45,12 @@ public class GetArray
     uint dimx = image.GetDimension(0);
     uint dimy = image.GetDimension(1);
     uint npixels = dimx * dimy;
+    //LookupTable lut = image.GetLUT();
+    //uint rl = lut.GetLUTLength( LookupTable.LookupTableType.RED );
+    //byte[] rbuf = new byte[ rl ];
+    //uint rl2 = lut.GetLUT( LookupTable.LookupTableType.RED, rbuf );
+    //assert rl == rl2;
+
     //byte[] str1 = new byte[ image.GetBufferLength()];
     //image.GetBuffer( str1 );
     if( pixeltype.GetScalarType() == PixelFormat.ScalarType.UINT8 )
