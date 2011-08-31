@@ -14,7 +14,7 @@ set(dashboard_do_coverage FALSE)
 
 #SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings ")
 #SET(ENV{CFLAGS}   "-g -O0 -Wall -W -pedantic -Wno-long-long")
-SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
+#SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}")
 
 # http://www.cmake.org/Wiki/CTest:Coverage
 #SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")

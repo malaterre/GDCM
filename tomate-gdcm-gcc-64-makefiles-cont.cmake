@@ -14,7 +14,7 @@ set(dashboard_do_coverage FALSE)
 set(dashboard_model Continuous)
 set(CTEST_TEST_TIMEOUT 3000)
 
-SET(ENV{PATH} "$ENV{HOME}/Software/cmake-2.8.2-Linux-i386/bin:$ENV{PATH}:/local/mmalater/install/bin/")
+SET(ENV{PATH} "$ENV{PATH}:/local/mmalater/install/bin/")
 
 SET(ENV{CXXFLAGS} "-Wno-deprecated -Wno-deprecated-declarations")
 
