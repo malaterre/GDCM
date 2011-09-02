@@ -64,7 +64,7 @@ argument should be the name of the DICOM file you wish to read. For instance:
 $ gdcmviewer -V 012345.002.050.dcm
 \endverbatim
 
-gdcmviewer will try to read your file, and the print the vtk information
+gdcmviewer will try to read your file, and then print the vtk information
 associated with this file. Basically what kind of image you are looking at.
 
 \li ScalarType is the DICOM Real World Value type
