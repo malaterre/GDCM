@@ -357,10 +357,10 @@ bool StreamImageReader::ReadImageInformation()
   File file_t = mReader.GetFile();
   DataSet ds_t = file_t.GetDataSet();
 
-   if( !ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
+  if( !ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
     {
-      std::cerr << "error occured in WSI File read";
-      return 1;
+    std::cerr << "error occured in WSI File read" << std::endl;
+    return 1;
     }
 
   DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
@@ -373,67 +373,65 @@ bool StreamImageReader::ReadImageInformation()
   Item itemL = sqi->GetItem(1);
   DataSet &subds_L = itemL.GetNestedDataSet();
 
- if( !subds_L.FindDataElement( Tag(0x0008,0x1160) ) )
+  if( !subds_L.FindDataElement( Tag(0x0008,0x1160) ) )
     {
-       std::cerr << "Error occured during WSI File Read";
-      return 1;
+    std::cerr << "Error occured during WSI File Read" << std::endl;
+    return 1;
     }
 
- DataElement rfnL = subds_L.GetDataElement( Tag(0x0008,0x1160) );
- Element<gdcm::VR::IS,gdcm::VM::VM1> elL;
- elL.SetFromDataElement( rfnL );
- //std::cout<< "\n Resolution : " << elL.GetValue() << std::endl;
+  DataElement rfnL = subds_L.GetDataElement( Tag(0x0008,0x1160) );
+  Element<gdcm::VR::IS,gdcm::VM::VM1> elL;
+  elL.SetFromDataElement( rfnL );
+  //std::cout<< "\n Resolution : " << elL.GetValue() << std::endl;
 
-if( !subds_L.FindDataElement( Tag(0x0048,0x0202) ) )
+  if( !subds_L.FindDataElement( Tag(0x0048,0x0202) ) )
     {
-      std::cerr<< "Error During WSI File Read";
-      return 1;
+    std::cerr<< "Error During WSI File Read" << std::endl;
+    return 1;
     }
 
- DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
- Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
- elL1.SetFromDataElement( brrL );
- //std::cout<< "\n Col : " << elL1.GetValue(0) <<"\n Row : " <<  elL1.GetValue(1) << std::endl;
+  DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
+  Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
+  elL1.SetFromDataElement( brrL );
+  //std::cout<< "\n Col : " << elL1.GetValue(0) <<"\n Row : " <<  elL1.GetValue(1) << std::endl;
 
- //std::cout << "\n Dimension of Highest Reolutions";
+  //std::cout << "\n Dimension of Highest Reolutions";
 
   Item itemH = sqi->GetItem(s);
   DataSet &subds_H = itemH.GetNestedDataSet();
 
- if( !subds_H.FindDataElement( Tag(0x0008,0x1160) ) )
+  if( !subds_H.FindDataElement( Tag(0x0008,0x1160) ) )
     {
-       std::cerr << "Error occured during WSI File Read";
-      return 1;
+    std::cerr << "Error occured during WSI File Read" << std::endl;
+    return 1;
     }
 
- DataElement rfnH = subds_H.GetDataElement( Tag(0x0008,0x1160) );
- Element<gdcm::VR::IS,gdcm::VM::VM1> elH;
- elH.SetFromDataElement( rfnH );
- //std::cout<< "\n Resolution : " << elH.GetValue() << std::endl;
+  DataElement rfnH = subds_H.GetDataElement( Tag(0x0008,0x1160) );
+  Element<gdcm::VR::IS,gdcm::VM::VM1> elH;
+  elH.SetFromDataElement( rfnH );
+  //std::cout<< "\n Resolution : " << elH.GetValue() << std::endl;
 
-if( !subds_H.FindDataElement( Tag(0x0048,0x0202) ) )
+  if( !subds_H.FindDataElement( Tag(0x0048,0x0202) ) )
     {
-      std::cerr<< "Error During WSI File Read";
-      return 1;
+    std::cerr<< "Error During WSI File Read";
+    return 1;
     }
 
- DataElement brrH = subds_H.GetDataElement( Tag(0x0048,0x0202) );
- Element<gdcm::VR::US,gdcm::VM::VM2> elH1;
- elH1.SetFromDataElement( brrH );
- //std::cout<< "\n Col : " << elH1.GetValue(0) <<"\n Row : " <<  elH1.GetValue(1) << "\n" << std::endl;
+  DataElement brrH = subds_H.GetDataElement( Tag(0x0048,0x0202) );
+  Element<gdcm::VR::US,gdcm::VM::VM2> elH1;
+  elH1.SetFromDataElement( brrH );
+  //std::cout<< "\n Col : " << elH1.GetValue(0) <<"\n Row : " <<  elH1.GetValue(1) << "\n" << std::endl;
 
-
-  
   return true;
 }
 
-
-  
-bool StreamImageReader::CanReadImage() const{
+bool StreamImageReader::CanReadImage() const
+{
   //this is the check to ensure that ReadImageInformation was read in properly
-  if (mFileOffset == -1){
+  if (mFileOffset == -1)
+    {
     return false;
-  }
+    }
   
   const FileMetaInformation &header = mReader.GetFile().GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
