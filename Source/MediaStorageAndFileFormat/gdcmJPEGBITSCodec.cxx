@@ -506,16 +506,24 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     }
   else if( cinfo.process == JPROC_PROGRESSIVE )
     {
-    if( this->BitSample == 12 )
+    if( this->BitSample == 8 )
+      {
       ts = TransferSyntax::JPEGFullProgressionProcess10_12;
+      }
+    else if( this->BitSample == 12 )
+      {
+      ts = TransferSyntax::JPEGFullProgressionProcess10_12;
+      }
     else
       {
-    assert(0); // TODO
+      assert(0); // TODO
+      return false;
       }
     }
   else
     {
     assert(0); // TODO
+    return false;
     }
   if( cinfo.process == JPROC_LOSSLESS )
     {
