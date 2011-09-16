@@ -387,7 +387,7 @@ void Surface::SetPointPositionAccuracy(const float * accuracies)
 {
   assert(accuracies);
 
-  if (PointPositionAccuracy != 0) PointPositionAccuracy = new float[3];
+  if (PointPositionAccuracy == 0) PointPositionAccuracy = new float[3];
 
   PointPositionAccuracy[0] = accuracies[0];
   PointPositionAccuracy[1] = accuracies[1];
@@ -423,7 +423,7 @@ void Surface::SetPointsBoundingBoxCoordinates(const float * coordinates)
 {
   assert(coordinates);
 
-  if (PointsBoundingBoxCoordinates != 0) PointsBoundingBoxCoordinates = new float[6];
+  if (PointsBoundingBoxCoordinates == 0) PointsBoundingBoxCoordinates = new float[6];
 
   PointsBoundingBoxCoordinates[0] = coordinates[0];
   PointsBoundingBoxCoordinates[1] = coordinates[1];
@@ -442,7 +442,7 @@ void Surface::SetAxisOfRotation(const float * axis)
 {
   assert(axis);
 
-  if (AxisOfRotation != 0) AxisOfRotation = new float[3];
+  if (AxisOfRotation == 0) AxisOfRotation = new float[3];
 
   AxisOfRotation[0] = axis[0];
   AxisOfRotation[1] = axis[1];
@@ -458,7 +458,7 @@ void Surface::SetCenterOfRotation(const float * center)
 {
   assert(center);
 
-  if (CenterOfRotation != 0) CenterOfRotation = new float[3];
+  if (CenterOfRotation == 0) CenterOfRotation = new float[3];
 
   CenterOfRotation[0] = center[0];
   CenterOfRotation[1] = center[1];
@@ -494,7 +494,7 @@ void Surface::SetVectorAccuracy(const float * accuracy)
 {
   assert(accuracy);
 
-  if (VectorAccuracy != 0) VectorAccuracy = new float[ VectorDimensionality ];
+  if (VectorAccuracy == 0) VectorAccuracy = new float[ VectorDimensionality ];
 
   for (unsigned int i = 0; i < VectorDimensionality; ++i)
     VectorAccuracy[i] = accuracy[i];
