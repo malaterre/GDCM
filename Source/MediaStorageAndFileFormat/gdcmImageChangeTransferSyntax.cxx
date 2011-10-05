@@ -365,6 +365,7 @@ bool ImageChangeTransferSyntax::Change()
     bool b = Input->GetBuffer( (char*)bv0->GetPointer() );
     if( !b )
       {
+      gdcmErrorMacro( "Error in getting buffer from input image." );
       return false;
       }
     pixeldata.SetValue( *bv0 );
