@@ -132,9 +132,23 @@ SurfaceHelper::ColorArray SurfaceHelper::RGBToRecommendedDisplayCIELab(const std
 
   // Convert to range 0x0000-0xFFFF
   // 0xFFFF "=" 127, 0x8080 "=" 0, 0x0000 "=" -128
-  CIELab[0] = (unsigned short) (          0xFFFF           * (tmp[0]*0.01));
-  CIELab[1] = (unsigned short) (0x8080 + (0xFFFF - 0x8080) * (tmp[1]*0.01));
-  CIELab[2] = (unsigned short) (0x8080 + (0xFFFF - 0x8080) * (tmp[2]*0.01));
+    CIELab[0] = (unsigned short) (          0xFFFF           * (tmp[0]*0.01));
+    if(tmp[1] >= -128 && tmp[1] <= 0)
+    {
+        CIELab[1] = (unsigned short)(((float)(0x8080)/128.0)*tmp[1] + ((float)0x8080));
+    }
+    else if(tmp[1] <= 127 && tmp[1] > 0)
+    {
+        CIELab[1] = (unsigned short)(((float)(0xFFFF - 0x8080)/127.0)*tmp[1] + (float)(0x8080));
+    }
+    if(tmp[2] >= -128 && tmp[2] <= 0)
+    {
+        CIELab[2] = (unsigned short)(((float)0x8080/128.0)*tmp[2] + ((float)0x8080));
+    }
+    else if(tmp[2] <= 127 && tmp[2] > 0)
+    {
+        CIELab[2] = (unsigned short)(((float)(0xFFFF - 0x8080)/127.0)*tmp[2] + (float)(0x8080));
+    }
 
   return CIELab;
 }
@@ -149,9 +163,24 @@ std::vector<T> SurfaceHelper::RecommendedDisplayCIELabToRGB(const ColorArray & C
   std::vector<float> tmp(3);
 
   // Convert to range 0-1
-  tmp[0] = (float) ( CIELab[0]                    / (float)(0xFFFF)          * 100 );
-  tmp[1] = (float) ((CIELab[1] - (float)(0x8080)) / (float)(0xFFFF - 0x8080) * 100 );
-  tmp[2] = (float) ((CIELab[2] - (float)(0x8080)) / (float)(0xFFFF - 0x8080) * 100 );
+
+    tmp[0] = 100.0*CIELab[0] /(float)(0xFFFF);
+    if(CIELab[1] >= 0x0000 && CIELab[1] <= 0x8080)
+    {
+        tmp[1] = (float)(((CIELab[1] - 0x8080) * 128.0)/(float)0x8080);
+    }
+    else if(CIELab[1] <= 0xFFFF && CIELab[1] > 0x8080)
+    {
+        tmp[1] = (float)((CIELab[1]-0x8080)*127.0 / (float)(0xFFFF - 0x8080));
+    }
+    if(CIELab[2] >= 0x0000 && CIELab[2] <= 0x8080)
+    {
+        tmp[2] = (float)(((CIELab[2] - 0x8080) * 128.0)/(float)0x8080);
+    }
+    else if(CIELab[2] <= 0xFFFF && CIELab[2] > 0x8080)
+    {
+        tmp[2] = (float)((CIELab[2]-0x8080)*127.0 / (float)(0XFFFF - 0x8080));
+    }
 
   tmp = SurfaceHelper::XYZToRGB( SurfaceHelper::CIELabToXYZ( tmp ) );
 
