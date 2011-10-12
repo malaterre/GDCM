@@ -269,9 +269,18 @@ public class ScanDirectory
           if( ir.Read() )
             {
             Image img = ir.GetImage();
+            StringFilter sf = new StringFilter();
+            sf.SetFile( r.GetFile() );
+            String strval = sf.ToString( new Tag(0x0028,0x0120) );
             IconImageGenerator iig = new IconImageGenerator();
             iig.SetPixmap( img );
             iig.AutoPixelMinMax( true );
+            try {
+              double val = Double.parseDouble( strval );
+              iig.SetOutsideValuePixel( val );
+            }
+            catch ( NumberFormatException e) {
+              }
             iig.ConvertRGBToPaletteColor( false );
             long idims[] = { 128, 128};
             iig.SetOutputDimensions( idims );
