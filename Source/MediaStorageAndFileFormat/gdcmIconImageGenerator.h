@@ -68,6 +68,11 @@ public:
   /// \default true, false generates invalid Icon Image Sequence
   void ConvertRGBToPaletteColor(bool b);
 
+  /// Set a pixel value that should be discarded. This happen typically for CT image, where
+  /// a pixel has been used to pad outside the image (see Pixel Padding Value).
+  /// Requires AutoPixelMinMax(true)
+  void SetOutsideValuePixel(double v);
+
   /// Generate Icon
   bool Generate();
 
