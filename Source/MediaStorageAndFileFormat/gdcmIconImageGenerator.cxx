@@ -37,6 +37,8 @@ public:
     UseMinMax = false;
     AutoMinMax = false;
     ConvertRGBToPaletteColor = true;
+    UseOutsideValuePixel = false;
+    OutsideValuePixel = 0;
     }
   unsigned int dims[2];
   double Min;
@@ -44,6 +46,8 @@ public:
   bool UseMinMax;
   bool AutoMinMax;
   bool ConvertRGBToPaletteColor;
+  bool UseOutsideValuePixel;
+  double OutsideValuePixel;
 };
 
 IconImageGenerator::IconImageGenerator():P(new Pixmap),I(new IconImage),Internals(new IconImageGeneratorInternals)
@@ -337,6 +341,15 @@ void IconImageGenerator::BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
   assert( lut.Initialized() );
 }
 
+void IconImageGenerator::SetOutsideValuePixel(double v)
+{
+  if( Internals->AutoMinMax )
+    {
+    Internals->UseOutsideValuePixel = true;
+    Internals->OutsideValuePixel = v;
+    }
+}
+
 void IconImageGenerator::AutoPixelMinMax(bool b)
 {
   if( b )
@@ -355,11 +368,52 @@ void IconImageGenerator::SetPixelMinMax(double min, double max)
 }
 
 template <typename TPixelType>
+void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &max, double discardvalue)
+{
+  assert( npixels );
+  const TPixelType discard = (TPixelType)discardvalue;
+  assert( (double)discard == discardvalue );
+  TPixelType lmin = std::numeric_limits< TPixelType>::max();
+  TPixelType lmax = std::numeric_limits< TPixelType>::min();
+  for( size_t i = 0; i < npixels; ++i )
+    {
+    if( p[i] < lmin && p[i] != discard )
+      {
+      lmin = p[i];
+      }
+    else if( p[i] > lmax /* && p[i] != discard */ )
+      {
+      lmax = p[i];
+      }
+    }
+  //assert( lmin != std::numeric_limits< TPixelType>::max() );
+  //assert( lmax != std::numeric_limits< TPixelType>::min() );
+
+  // what if lmin == lmax == 0 for example:
+  // let's fake a slightly different min/max found:
+  if( lmin == lmax )
+    {
+    if( lmax + 1 < lmax )
+      {
+      lmin--;
+      assert( lmin + 1 > lmin );
+      }
+    else
+      {
+      lmax++;
+      }
+    }
+  min = lmin;
+  max = lmax;
+//  std::cout << min << " " << max << std::endl;
+}
+
+template <typename TPixelType>
 void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &max)
 {
   assert( npixels );
-  TPixelType lmin = p[0]; // numeric_limits< TPixelType>::max();
-  TPixelType lmax = p[0]; // numeric_limits< TPixelType>::min();
+  TPixelType lmin = std::numeric_limits< TPixelType>::max();
+  TPixelType lmax = std::numeric_limits< TPixelType>::min();
   for( size_t i = 0; i < npixels; ++i )
     {
     if( p[i] < lmin )
@@ -371,6 +425,9 @@ void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &
       lmax = p[i];
       }
     }
+  //assert( lmin != std::numeric_limits< TPixelType>::max() );
+  //assert( lmax != std::numeric_limits< TPixelType>::min() );
+
   // what if lmin == lmax == 0 for example:
   // let's fake a slightly different min/max found:
   if( lmin == lmax )
@@ -822,6 +879,47 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       size_t len = vbuffer2.size();
       const PixelFormat &pf = I->GetPixelFormat();
       assert( pf.GetSamplesPerPixel() == 1 );
+      if( Internals->UseOutsideValuePixel )
+        {
+        const double d = Internals->OutsideValuePixel;
+        switch ( pf.GetScalarType() )
+          {
+        case PixelFormat::UINT8:
+          ComputeMinMax<uint8_t>( (uint8_t*)p, len / sizeof( uint8_t ), min, max, d);
+          break;
+        case PixelFormat::INT8:
+          ComputeMinMax<int8_t>( (int8_t*)p, len / sizeof( int8_t ), min, max, d);
+          break;
+        case PixelFormat::UINT16:
+          ComputeMinMax<uint16_t>( (uint16_t*)p, len / sizeof( uint16_t ), min, max, d);
+          break;
+        case PixelFormat::INT16:
+          ComputeMinMax<int16_t>( (int16_t*)p, len / sizeof( int16_t ), min, max, d);
+          break;
+        default:
+          assert( 0 ); // should not happen
+          break;
+          }
+        // ok we have found the min value, we should now be able to replace all value 'd' with this min now:
+        switch ( pf.GetScalarType() )
+          {
+        case PixelFormat::UINT8:
+          std::replace( (uint8_t*)p, (uint8_t*)p + len / sizeof( uint8_t ), d, min);
+          break;
+        case PixelFormat::INT8:
+          std::replace( (int8_t*)p, (int8_t*)p + len / sizeof( int8_t ), d, min);
+          break;
+        case PixelFormat::UINT16:
+          std::replace( (uint16_t*)p, (uint16_t*)p + len / sizeof( uint16_t ), d, min);
+          break;
+        case PixelFormat::INT16:
+          std::replace( (int16_t*)p, (int16_t*)p + len / sizeof( int16_t ), d, min);
+          break;
+        default:
+          assert( 0 ); // should not happen
+          break;
+          }
+        }
       switch ( pf.GetScalarType() )
         {
       case PixelFormat::UINT8:
