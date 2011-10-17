@@ -5,6 +5,7 @@ set(examples
   HelloVTKWorld
   ReadSeriesIntoVTK
   #AWTMedical3
+  MPRViewer2
   )
 if(VTK_HAS_IMAGERESLICEMAPPER)
   set(examples
