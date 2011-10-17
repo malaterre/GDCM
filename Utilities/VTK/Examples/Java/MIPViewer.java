@@ -91,8 +91,10 @@ public class MIPViewer extends Canvas
 
     FilenamesType sorted = ipp.GetFilenames();
     vtkStringArray files = new vtkStringArray();
-    for( String f : sorted )
-      {
+    long nfiles = sorted.size();
+    //for( String f : sorted )
+    for (int i = 0; i < nfiles; i++) {
+      String f = sorted.get(i);
       files.InsertNextValue( f );
       }
     vtkGDCMImageReader reader = new vtkGDCMImageReader();
