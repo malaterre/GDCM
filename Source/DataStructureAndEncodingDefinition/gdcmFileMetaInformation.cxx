@@ -240,7 +240,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
   if( FindDataElement( Tag(0x0002, 0x0010) ) && !GetDataElement( Tag(0x0002,0x0010) ).IsEmpty() )
     {
-    const DataElement& tsuid = GetDataElement( Tag(0x0002, 0x0010) );
+    DataElement tsuid = GetDataElement( Tag(0x0002, 0x0010) );
     const char * datasetts = DataSetTS.GetString();
     const ByteValue * bv = tsuid.GetByteValue();
     assert( bv );
