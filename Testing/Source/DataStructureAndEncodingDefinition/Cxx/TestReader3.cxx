@@ -43,7 +43,7 @@
 
 
 /*
- * http://www.ecst.csuchico.edu/~beej/guide/ipc/mmap.html
+ * http://beej.us/guide/bgipc/output/html/multipage/mmap.html
  * http://www.dba-oracle.com/oracle_tips_mount_options.htm
  */
 
