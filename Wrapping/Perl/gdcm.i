@@ -26,6 +26,9 @@
 
 
 %{
+// http://www.swig.org/Doc2.0/Perl5.html#Perl5_nn9
+#undef New
+
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
 #include "gdcmSmartPointer.h"
@@ -383,8 +386,8 @@ EXTEND_CLASS_PRINT(gdcm::BasicOffsetTable)
 %include "gdcmFileSet.h"
 EXTEND_CLASS_PRINT(gdcm::FileSet)
 
-%include "gdcmGlobal.h"
-EXTEND_CLASS_PRINT(gdcm::Global)
+//%include "gdcmGlobal.h"
+//EXTEND_CLASS_PRINT(gdcm::Global)
 
 %include "gdcmDictEntry.h"
 EXTEND_CLASS_PRINT(gdcm::DictEntry)
