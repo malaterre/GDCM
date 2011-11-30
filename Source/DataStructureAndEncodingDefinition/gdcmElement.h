@@ -685,12 +685,12 @@ public:
 //template<>
 //class Element<VR::AS> : public Element<VR::AS, VRToLength<VR::AS>::Length >
 
-// only 0010 1010 AS 1 Patient’s Age
+// only 0010 1010 AS 1 Patient's Age
 template<>
 class Element<VR::AS, VM::VM5>
 {
 public:
-  char Internal[VMToLength<VM::VM5>::Length];
+  char Internal[VMToLength<VM::VM5>::Length * sizeof( VRToType<VR::AS>::Type )];
   void Print(std::ostream &_os) const {
     _os << Internal;
     }
