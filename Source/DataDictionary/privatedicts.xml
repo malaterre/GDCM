@@ -6517,24 +6517,25 @@
   <entry owner="SIEMENS MED SMS USG ANTARES 3D VOLUME" group="0039" element="xxe8" vr="UN" vm="1" name="DICOMAttrNameVoiPivotZ"/>
   <entry owner="SIEMENS MED SMS USG ANTARES 3D VOLUME" group="0039" element="xxe9" vr="UN" vm="1" name="DICOMAttrNameCTopVoiQuad"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx00" vr="UN" vm="1" name="Private Creator Version"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx03" vr="UN" vm="1" name="Frame Rate"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx0c" vr="UN" vm="1" name="Burned in Graphics"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx0d" vr="UN" vm="1" name="SieClear Index"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx20" vr="UN" vm="1" name="B-Mode Submode"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx21" vr="UN" vm="1" name="B-Mode Dynamic Range"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx22" vr="UN" vm="1" name="B-Mode Overall Gain"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx23" vr="UN" vm="1" name="B-Mode Res/Speed Index"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx24" vr="UN" vm="1" name="B-Mode Edge Enhance Index"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx25" vr="UN" vm="1" name="B-Mode Persistence Index"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx26" vr="UN" vm="1" name="B-Mode Map Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx03" vr="FD" vm="1" name="Frame Rate"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx0c" vr="US" vm="1" name="Burned in Graphics"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx0d" vr="SH" vm="1" name="SieClear Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx20" vr="SH" vm="1" name="B-Mode Submode"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx21" vr="FD" vm="1" name="B-Mode Dynamic Range"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx22" vr="FD" vm="1" name="B-Mode Overall Gain"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx23" vr="US" vm="1" name="B-Mode Res/Speed Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx24" vr="US" vm="1" name="B-Mode Edge Enhance Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx25" vr="US" vm="1" name="B-Mode Persistence Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx26" vr="US" vm="1" name="B-Mode Map Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx27" vr="US" vm="1" name="??"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx28" vr="US" vm="1" name="??"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx29" vr="US" vm="1" name="??"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2a" vr="US" vm="1" name="B-Mode Tint Type"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2d" vr="UN" vm="1" name="B-Mode Tint Index"/>
-  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2e" vr="UN" vm="1" name="ClarifyVE Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2d" vr="US" vm="1" name="B-Mode Tint Index"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx2e" vr="SH" vm="1" name="ClarifyVE Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3a" vr="UN" vm="1" name="Image Flag"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3b" vr="LT" vm="1" name="IPDA/MDA Data"/>
+  <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx3c" vr="UT" vm="1" name="Thumbnail Data"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx40" vr="UN" vm="1" name="Color Flow state"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx41" vr="UN" vm="1" name="Color Flow Wall Filter Index"/>
   <entry owner="SIEMENS MED SMS USG S2000" group="0019" element="xx42" vr="UN" vm="1" name="Color Flow Submode"/>
