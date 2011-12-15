@@ -219,8 +219,8 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       if( frag.IsEmpty() ) return false;
       const ByteValue *bv = frag.GetByteValue();
       assert( bv );
-      char *mybuffer = new char[bv->GetLength()];
-      unsigned long totalLen = bv->GetLength();
+      size_t totalLen = bv->GetLength();
+      char *mybuffer = new char[totalLen];
 
       bv->GetBuffer(mybuffer, bv->GetLength());
 
