@@ -163,7 +163,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       const Fragment &frag = sf->GetFragment(i);
       if( frag.IsEmpty() ) return false;
       const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
-      char *mybuffer = new char[bv.GetLength()];
+      size_t bv_len = bv.GetLength();
+      char *mybuffer = new char[bv_len];
       bool b = bv.GetBuffer(mybuffer, bv.GetLength());
       assert( b ); (void)b;
       is.write(mybuffer, bv.GetLength());
@@ -180,7 +181,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
     {
     // GEIIS Icon:
     std::stringstream is;
-    char *mybuffer = new char[jpegbv->GetLength()];
+    size_t jpegbv_len = jpegbv->GetLength();
+    char *mybuffer = new char[jpegbv_len];
     bool b = jpegbv->GetBuffer(mybuffer, jpegbv->GetLength());
     assert( b ); (void)b;
     is.write(mybuffer, jpegbv->GetLength());
@@ -205,7 +207,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
         const Fragment &frag = sf->GetFragment(i);
         if( frag.IsEmpty() ) return false;
         const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
-        char *mybuffer = new char[bv.GetLength()];
+        size_t bv_len = bv.GetLength();
+        char *mybuffer = new char[bv_len];
         bool b = bv.GetBuffer(mybuffer, bv.GetLength());
         assert( b ); (void)b;
         is.write(mybuffer, bv.GetLength());

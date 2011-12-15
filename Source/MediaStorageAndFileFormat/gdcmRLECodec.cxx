@@ -597,7 +597,8 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
       std::stringstream is;
       const Fragment &frag = sf->GetFragment(i);
       const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
-      char *mybuffer = new char[bv.GetLength()];
+      size_t bv_len = bv.GetLength();
+      char *mybuffer = new char[bv_len];
       bv.GetBuffer(mybuffer, bv.GetLength());
       is.write(mybuffer, bv.GetLength());
       delete[] mybuffer;

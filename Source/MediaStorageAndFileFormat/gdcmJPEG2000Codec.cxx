@@ -343,7 +343,8 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       if( frag.IsEmpty() ) return false;
       const ByteValue *bv = frag.GetByteValue();
       assert( bv );
-      char *mybuffer = new char[bv->GetLength()];
+      size_t bv_len = bv->GetLength();
+      char *mybuffer = new char[bv_len];
       bv->GetBuffer(mybuffer, bv->GetLength());
       is.write(mybuffer, bv->GetLength());
       delete[] mybuffer;
