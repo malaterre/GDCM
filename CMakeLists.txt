@@ -338,6 +338,11 @@ IF(GDCM_USE_PVRG)
   ENDIF(GDCM_USE_SYSTEM_PVRG)
 ENDIF(GDCM_USE_PVRG)
 
+# Very advanced behavior only use if you want to keep backward compatible behavior
+# but possibly incorrect behavior.
+OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" OFF)
+MARK_AS_ADVANCED(GDCMV2_0_COMPATIBILITY)
+
 IF(GDCM_USE_KAKADU)
   OPTION(GDCM_USE_SYSTEM_KAKADU "Use system KAKADU " ON)
   MARK_AS_ADVANCED(GDCM_USE_SYSTEM_KAKADU)
