@@ -27,6 +27,7 @@ IPPSorter::IPPSorter()
   ComputeZSpacing = true;
   ZSpacing = 0;
   ZTolerance = 1e-6;
+  DirCosTolerance = 0.;
 }
 
 
@@ -67,11 +68,14 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     }
   Scanner::ValuesType iops = scanner.GetValues(tiop);
   Scanner::ValuesType frames = scanner.GetValues(tframe);
-  if( iops.size() != 1 )
+  if( DirCosTolerance == 0. )
     {
-    gdcmDebugMacro( "More than one IOP (or no IOP): " << iops.size() );
-    //std::copy(iops.begin(), iops.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
-    return false;
+    if( iops.size() != 1 )
+      {
+      gdcmDebugMacro( "More than one IOP (or no IOP): " << iops.size() );
+      //std::copy(iops.begin(), iops.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
+      return false;
+      }
     }
   if( frames.size() > 1 ) // Should I really tolerate no Frame of Reference UID ?
     {
@@ -113,30 +117,18 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     gdcmDebugMacro( "Empty iop in first file ");
     return false;
     }
-  Element<VR::DS,VM::VM6> cosines;
-    {
-    std::stringstream ss;
-    ss.str( dircos );
-    cosines.Read( ss );
-    }
 
   // http://www.itk.org/pipermail/insight-users/2003-September/004762.html
   // Compute normal:
   // The steps I take when reconstructing a volume are these: First,
   // calculate the slice normal from IOP:
   double normal[3];
-  normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
-  normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
-  normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
 
+          std::cout << "ref: " << dircos <<  std::endl;
   gdcm::DirectionCosines dc;
   dc.SetFromString( dircos );
   if( !dc.IsValid() ) return false;
-  double normal2[3];
-  dc.Cross( normal2 );
-  assert( normal2[0] == normal[0] &&
-          normal2[1] == normal[1] &&
-          normal2[2] == normal[2] );
+  dc.Cross( normal );
   // You only have to do this once for all slices in the volume. Next, for
   // each slice, calculate the distance along the slice normal using the IPP
   // tag ("dist" is initialized to zero before reading the first slice) :
@@ -145,6 +137,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   SortedFilenames sorted;
 {
   std::vector<std::string>::const_iterator it1 = filenames.begin();
+  DirectionCosines dc2;
   for(; it1 != filenames.end(); ++it1)
     {
     const char *filename = it1->c_str();
@@ -154,6 +147,27 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       const char *value =  scanner.GetValue(filename, tipp);
       if( value )
         {
+        if( DirCosTolerance != 0. )
+          {
+          const char *value2 =  scanner.GetValue(filename, tiop);
+          if( !dc2.SetFromString( value2 ) )
+            {
+            if( value2 )
+              gdcmWarningMacro( filename << " cant read IOP: " << value2 );
+            return false;
+            }
+          double cd = dc2.CrossDot( dc );
+          // result should be as close to 1 as possible:
+          if( fabs(1 - cd) > DirCosTolerance )
+            {
+            gdcmWarningMacro( filename << " Problem with DirCosTolerance: " );
+            // Cant print cd since 0.9999 is printed as 1... may confuse user
+            return false;
+            }
+          std::cout << cd << " " << value2 <<  std::endl;
+          //dc2.Normalize();
+          //dc2.Print( std::cout << std::endl );
+          }
         //gdcmDebugMacro( filename << " has " << ipp << " = " << value );
         Element<VR::DS,VM::VM3> ipp;
         std::stringstream ss;
