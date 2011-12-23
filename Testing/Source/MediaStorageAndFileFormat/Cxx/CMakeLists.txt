@@ -82,6 +82,7 @@ IF(GDCM_DATA_ROOT)
     TestPrinter2
     TestIPPSorter
     TestIPPSorter2
+    TestIPPSorter3
     TestCopyDataSet
     TestDataElementValueAsSQ
     TestImageWriter2
