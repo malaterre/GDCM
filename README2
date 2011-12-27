@@ -1,0 +1,14 @@
+Socket++-1.11ln
+---------------
+
+This is a modified version 1.11 of the Socket++ library. I had to change
+the source code a bit to make it compile with egcs-2.91.66 and gcc-2.96
+(Linux). This modified code will not necessarily compile under other
+platforms than Linux (i386). It has not been tested.
+
+If this code happens to compile with your compiler, that's good. But if
+it doesn't, I really can't help you. I actually even don't know very
+well how the code works, I just changed the lines that wouldn't compile.
+
+This source code was modified by:
+Lauri Nurmi <lanurmi@iki.fi>

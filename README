@@ -1,0 +1,186 @@
+This directory contains the source for the C++ socket library
+Version: 12Jan1997 1.11
+
+Manifest:
+--------
+	README.....................this file
+	configure config.h.in, Makefile.in, acconfig.h
+        configure.in...............configuring files
+	sockstream.h...............contains sockbuf, sockAddr, isockstream,
+				   osockstream, iosockstream class
+				   declarations
+	sockstream.C...............related to sockstream.h
+	pipestream.h...............contains ipipestream, opipestream, and
+				   iopipestream class definitions. They are
+				   used instead of pipe and socketpair system
+				   calls and popen C library function call.
+	pipestream.C...............related to pipestream.h
+	sockinet.h.................contains sockinetbuf, sockinetaddr classes.
+			           It also contains the definitions of
+				   isockinet, osockinet, and iosockinet stream
+				   classes.
+	sockinet.C.................related to sockinet.h
+	sockunix.h.................contains sockunix, sockunixaddr classes.
+				   It also contains the definitions of
+				   isockunix, osockunix, and iosockunix stream
+				   classes.
+	sockunix.C.................related to sockunix.h
+
+	Fork.h.....................wrapper class for fork () system call.
+        sig.h......................wrapper class Unix signals.
+
+	protocol.h, protocol.C.....base class for application protocols.
+	echo.h, echo.C.............Echo application protocol class.
+	smtp.h, smtp.C.............SMTP application protocol class.
+	ftp.h, ftp.C...............FTP application protocol class.
+
+	socket++.texi..............texinfo file for libsocket++.a
+
+	./test
+	------
+	tdunread.cc, tdunwrite.cc..test files for datagram unix sockets
+	tdinread.cc, tdinwrite.cc..test files for datagram inet sockets
+	tsunread.cc, tsunwrite.cc..test files for stream unix sockets
+	tsinread.cc, tsinwrite.cc..test files for stream inet sockets
+	tpipe.cc...................test file for pipe system call
+	tsockpair.cc...............test file for sockpair system call
+	tpopen.cc, tpopentest.cc...test files for popen function
+	testall.cc.................runs all the above tests
+	testall.exp................correct output of testall
+
+	tnntp.cc, tsmtp.cc, twhois.cc
+	tsendfiles.cc, thostnames.cc...........Some more examples
+
+
+Copyright Notice:
+----------------
+Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
+
+Permission is granted to use at your own risk and distribute this software
+in source and  binary forms provided  the above copyright notice and  this
+paragraph are  preserved on all copies.  This software is provided "as is"
+with no express or implied warranty.
+
+Installation Note:
+-----------------
+This software has been tested in sun4 running SunOs4.1.3 machine only.
+If you are having problems with any aspect of socket++, please
+email me at gs4t@virginia.edu. We can fix it together.
+
+This software works with proposed C++ standard iostream library. Thus
+if you are using libg++, you need at least libg++-2.7.2.
+
+Your C++ compiler should be able to handle C++ exceptions and templates.
+Thus if you are using G++, you need at least gcc-2.7.2.
+
+socket++.texi needs at least texinfo-2.16.
+
+Gcc, libg++, and texinfo are all available for anonymous ftp from
+	prep.ai.mit.edu:/pub/gnu
+
+	cd socket++-1.11
+	env CCC=c++ ./configure --prefix="your favorite location"
+	make           
+	cd test
+	make check     
+
+If you are using a compiler that is invoked by a command other than c++, 
+use that command instead on CCC=c++ in the above.
+
+Testing:
+-------
+make check will automatically run testall.
+
+You can also manually test as follows:
+	./testall > testall.out
+	diff -c testall.out testall.exp
+If there are any differences, manually check whether 
+testall.out and testall.exp have the same lines but only their
+order is different. If they have the same lines but
+for the order, you have installed properly. Otherwise,
+try to findout what might be the reason and if you couldn't
+please email me with your problem at gs4t@virginia.edu.
+
+Bug reports:
+-----------
+Send them to me at gs4t@virginia.edu
+
+News:
+----
+
+12Jan97 1.11
+  . This release brings back error handling through the use of
+    exceptions. I have not included any other enhancements in
+    this release. 
+  . Document is out-of-date. I will work on it in the next release.
+  . class sig is added. It is useful for handling signals.
+
+17Oct95 1.10
+  . Made to work cleanly in RS6000 machines
+  . Bug fixes sent in by Blair incorporated.
+
+07Aug95 1.9
+  . Exceptions dropped as many compilers do not support
+    it yet. A number of small bug fixes.
+  . Made to work with libg++-2.7.0 and gcc-2.7.0
+  . Configuration simplified greatly by Blair.
+
+15Jan95 1.8
+  . Error handling greatly enhanced through the use
+    of exceptions.
+  . FTP class added.
+
+08Nov94 1.7
+  . First stable version. Known to work in sunos4, aix3.2,
+    hpux, ultrix, linux, and osf2.
+ 
+Acknowledgements:
+----------------
+Gordon Joly <G.Joly@cs.ucl.ac.uk> for reporting bugs in
+pipestream class implementation. He also knows how to make
+the socket++ library a shared library. 
+
+Jim Anderson for reporting a bug in sockinet.C
+
+Carl Gay <cgay@skinner.cs.uoregon.edu> for reporting a bug
+and a fix in sockinet.C
+
+Oliver Imbusch <flabes@parystec.de> for reporting a bug
+in Makefile.in and suggesting several enhancements for sockbuf class.
+
+Dierk Wendt <wendt@lambda.hella.de> for reporting errors
+in the socket++ documentation.
+
+Christian Schlichtherle <s_schli@ira.uka.de> for sending
+patches for linux support.
+
+Ed Martini <emartini@netcom.com> and taylor d fraley <taylor@mik.uky.edu>
+sent in some more linux fixes.
+
+Dan R. Greening <greening@zuni.chaco.com> for a fix in sockstream.h
+
+Mike Christiansen for sending patches for hpux support and
+memory leaks. He used purify to check for memory leaks.
+
+Nanlin Xiao <nxiao@eng.tridom.com> for sending fixes
+to compile under Objectcenter C++ compiler.
+
+Solaris support is still weak, and thus the names
+of people who helped to port to solaris is not listed
+here yet.
+
+V. Olshevsky <ovg@nusun.jinr.dubna.su> for catching sequence
+point bugs in tdinwrite.C.
+
+Blair Zajac <blair@olympia.gps.caltech.edu> provided the autoconfig
+files and Makefile.ins needed to generate the configure and Makefiles
+and a number of bug fixes.
+
+Enjoy!
+
+-Sekar
+
+Gnanasekaran Swaminathan (gs4t@virginia.edu)
+CSIS Lab. Dept. of Elec. Eng.
+University of Virginia
+Charlottesville VA 22903

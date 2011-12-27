@@ -1,0 +1,22 @@
+// Copyright (C) 1992-1996 Gnanasekaran Swaminathan <gs4t@virginia.edu>
+//
+// Permission is granted to use at your own risk and distribute this software
+// in source and  binary forms provided  the above copyright notice and  this
+// paragraph are  preserved on all copies.  This software is provided "as is"
+// with no express or implied warranty.
+//
+// Version: 12Jan97 1.11
+
+#include <socket++/pipestream.h>
+
+using namespace std;
+
+int main()
+{
+        char buf[128];
+        iopipestream p("ftp");
+//        p->unbuffered();  // commented out by LN
+        p << "help\r\n" << flush;
+        while ( p.getline(buf, 127) ) cout << buf << endl;
+        return 0;
+}
