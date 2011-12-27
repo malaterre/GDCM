@@ -9,7 +9,9 @@ echo "Starting dcmqrscp"
 
 rm -rf /tmp/GDCM_STORE
 mkdir /tmp/GDCM_STORE
-dcmqrscp -v -d -c ./dcmqrscp.cfg 5678 &
+HOSTNAME=`hostname`
+sed -e "s/HOSTNAME/${HOSTNAME}/g" ./dcmqrscp.cfg.in > /tmp/dcmqrscp.cfg
+dcmqrscp -v -d -c /tmp/dcmqrscp.cfg 5678 &
 
 #ctest -S zorglub-gcc4-64-makefiles.cmake -V -O zorglub-gcc4-64-makefiles.log
 ctest -S zorglub-gcc43-64-makefiles.cmake -V -O zorglub-gcc43-64-makefiles.log
