@@ -153,6 +153,8 @@ protected:
 
   friend class PixmapReader;
   friend class ImageChangeTransferSyntax;
+  // Function to compute the lossy flag based only on the image buffer.
+  // Watch out that image can be lossy but in implicit little endian format...
   bool ComputeLossyFlag();
 
 //private:
