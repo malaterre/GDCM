@@ -11,7 +11,7 @@ rm -rf /tmp/GDCM_STORE
 mkdir /tmp/GDCM_STORE
 HOSTNAME=`hostname`
 sed -e "s/HOSTNAME/${HOSTNAME}/g" ./dcmqrscp.cfg.in > /tmp/dcmqrscp.cfg
-dcmqrscp -v -d -c /tmp/dcmqrscp.cfg 5678 &
+dcmqrscp --allow-shutdown -v -d -c /tmp/dcmqrscp.cfg 5678 &
 
 #ctest -S zorglub-gcc4-64-makefiles.cmake -V -O zorglub-gcc4-64-makefiles.log
 ctest -S zorglub-gcc43-64-makefiles.cmake -V -O zorglub-gcc43-64-makefiles.log
@@ -23,7 +23,7 @@ ctest -S zorglub-gcc-64-makefiles-release.cmake -V -O zorglub-gcc-64-makefiles-r
 
 echo "Stopping dcmqrscp"
 
-termscu --aetitle ACME1 --call ACME_STORE  gotlib 5678
+termscu --aetitle GDCMDASH --call GDCM_STORE $HOSTNAME 5678
 
 # Nightly doxygen:
 #cd $HOME/Dashboards/MyTests/gdcm-nightly && touch Utilities/doxygen/Doxyfile
