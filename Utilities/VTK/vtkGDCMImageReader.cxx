@@ -606,8 +606,8 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
     {
     const gdcm::Image &image = imageref;
     const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-    double shift = image.GetIntercept(0);
-    double scale = image.GetSlope(0);
+    double shift = image.GetIntercept();
+    double scale = image.GetSlope();
 
     gdcm::Rescaler r;
     r.SetIntercept( shift );
@@ -631,8 +631,8 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
         }
       const gdcm::Image &image = reader.GetImage();
       const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-      double shift = image.GetIntercept(0);
-      double scale = image.GetSlope(0);
+      double shift = image.GetIntercept();
+      double scale = image.GetSlope();
 
       gdcm::PixelFormat::ScalarType outputpt2 = pixeltype;
       gdcm::Rescaler r;
@@ -834,8 +834,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
 #endif
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-  this->Shift = image.GetIntercept(0);
-  this->Scale = image.GetSlope(0);
+  this->Shift = image.GetIntercept();
+  this->Scale = image.GetSlope();
 
   //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
   gdcm::PixelFormat::ScalarType outputpt =
@@ -1085,8 +1085,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   unsigned long overlaylen = 0;
   //image.GetBuffer(pointer);
   // HACK: Make sure that Shift/Scale are the one from the file:
-  this->Shift = image.GetIntercept(0);
-  this->Scale = image.GetSlope(0);
+  this->Shift = image.GetIntercept();
+  this->Scale = image.GetSlope();
 
   if( (this->Scale != 1.0 || this->Shift != 0.0) || this->ForceRescale )
   {

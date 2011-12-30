@@ -1715,7 +1715,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::EnhancedCTImageStorage
    && ms != MediaStorage::SegmentationStorage )
     {
-    if( img.GetIntercept(0) != 0. || img.GetSlope(0) != 1. )
+    if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
       {
       throw "Impossible"; // Please report
       }
@@ -1782,10 +1782,10 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     DataSet &subds2 = item2.GetNestedDataSet();
 
     Attribute<0x0028,0x1052> at1;
-    at1.SetValue( img.GetIntercept(0) );
+    at1.SetValue( img.GetIntercept() );
     subds2.Insert( at1.GetAsDataElement() );
     Attribute<0x0028,0x1053> at2;
-    at2.SetValue( img.GetSlope(0) );
+    at2.SetValue( img.GetSlope() );
     subds2.Insert( at2.GetAsDataElement() );
 
     return;
@@ -1794,7 +1794,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   if( ms == MediaStorage::RTDoseStorage )
     {
     Attribute<0x3004,0x00e> at2;
-    at2.SetValue( img.GetSlope(0) );
+    at2.SetValue( img.GetSlope() );
     ds.Replace( at2.GetAsDataElement() );
 
     return;
@@ -1802,16 +1802,16 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
   // Question: should I always insert them ?
   // Answer: not always, let's discard MR if (1,0):
-  if( ms == MediaStorage::MRImageStorage && img.GetIntercept(0) == 0. && img.GetSlope(0) == 1. )
+  if( ms == MediaStorage::MRImageStorage && img.GetIntercept() == 0. && img.GetSlope() == 1. )
     {
     }
   else
     {
     Attribute<0x0028,0x1052> at1;
-    at1.SetValue( img.GetIntercept(0) );
+    at1.SetValue( img.GetIntercept() );
     ds.Replace( at1.GetAsDataElement() );
     Attribute<0x0028,0x1053> at2;
-    at2.SetValue( img.GetSlope(0) );
+    at2.SetValue( img.GetSlope() );
     ds.Replace( at2.GetAsDataElement() );
 
     Attribute<0x0028,0x1054> at3; // Rescale Type

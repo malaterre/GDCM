@@ -143,8 +143,8 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
       ov.GetUnpackBuffer(overlaypointer);
       }
 
-    const double shift = image.GetIntercept(0);
-    const double scale = image.GetSlope(0);
+    const double shift = image.GetIntercept();
+    const double scale = image.GetSlope();
     if( self->GetShift() != shift || self->GetScale() != scale )
       {
       vtkGenericWarningMacro( "Specified Shift/Scale do not match file. This is not supported" );
