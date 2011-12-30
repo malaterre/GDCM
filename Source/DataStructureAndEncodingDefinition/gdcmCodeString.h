@@ -72,15 +72,8 @@ public:
     return Internal;
   }
 
-  /// \deprecated Remove extra leading and ending spaces.
-  GDCM_LEGACY(std::string Trim() const)
-
   /// Return the size of the string
   size_type Size() const { return Internal.size(); }
-
-  /// \deprecated
-  /// Return the size of the string
-  GDCM_LEGACY(size_type size() const)
 
 protected:
   std::string TrimInternal() const {

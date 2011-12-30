@@ -35,19 +35,4 @@ namespace gdcm
     return true;
   }
 
-#if !defined(GDCM_LEGACY_REMOVE)
-  CodeString::size_type CodeString::size() const
-    {
-    GDCM_LEGACY_REPLACED_BODY(CodeString::size, "GDCM 2.2",
-                              CodeString::size);
-    return Internal.size();
-    }
-  std::string CodeString::Trim() const
-    {
-    GDCM_LEGACY_REPLACED_BODY(CodeString::Trim, "GDCM 2.2",
-                              CodeString::Trim);
-    return Internal;
-    }
-#endif
-
 } // end namespace gdcm
