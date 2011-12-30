@@ -82,7 +82,9 @@ public class";
 #include "gdcmProgressEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
+#ifdef GDCM_BUILD_TESTING
 #include "gdcmTesting.h"
+#endif
 #include "gdcmObject.h"
 #include "gdcmPixelFormat.h"
 #include "gdcmMediaStorage.h"
@@ -182,6 +184,7 @@ public class";
 //#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmBitmapToBitmapFilter.h"
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
@@ -195,7 +198,7 @@ public class";
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
-//#include "gdcmImageChangePhotometricInterpretation.h"
+#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmDataSetHelper.h"
@@ -207,6 +210,9 @@ public class";
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmIconImageGenerator.h"
+#include "gdcmIconImageFilter.h"
+
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
@@ -222,7 +228,7 @@ using namespace gdcm;
 // gdcm does not use std::string in its interface, but we do need it for the
 // %extend (see below)
 %include "std_string.i"
-//%include "std_set.i"
+%include "std_set.i"
 %include "std_vector.i"
 %include "std_pair.i"
 %include "std_map.i"
@@ -413,7 +419,18 @@ EXTEND_CLASS_PRINT(gdcm::DataSet)
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
+%apply char[] { char* thebuffer }
+%ignore gdcm::LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
 %include "gdcmLookupTable.h"
+%extend gdcm::LookupTable
+{
+  unsigned int GetLUT(LookupTableType type, char *thebuffer) const {
+    unsigned int length = 0;
+    self->GetLUT( type, (unsigned char*)thebuffer, length);
+    return length;
+  }
+};
+%clear char* thebuffer;
 EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
 EXTEND_CLASS_PRINT(gdcm::Overlay)
@@ -519,6 +536,9 @@ EXTEND_CLASS_PRINT(gdcm::Dict)
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
+
+%template (TagSetType) std::set<gdcm::Tag>;
+%ignore gdcm::Reader::SetStream;
 %include "gdcmReader.h"
 //EXTEND_CLASS_PRINT(gdcm::Reader)
 %include "gdcmPixmapReader.h"
@@ -536,7 +556,7 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmStringFilter.h"
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
-//%template (ValuesType)      std::set<std::string>;
+%template (ValuesType)      std::set<std::string>;
 %rename (CSharpTagToValue) SWIGTagToValue;
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
@@ -706,7 +726,9 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 #endif
 //%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
+%include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
+//%ignore gdcm::ImageToImageFilter::GetOutput() const;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 //%feature("director") Coder;
@@ -723,12 +745,14 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
-//%include "gdcmImageChangePhotometricInterpretation.h"
+%include "gdcmImageChangePhotometricInterpretation.h"
 %include "gdcmImageChangePlanarConfiguration.h"
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
 %template (DoubleArrayType) std::vector<double>;
+%template (UShortArrayType) std::vector<unsigned short>;
+%template (UIntArrayType) std::vector<unsigned int>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
@@ -736,6 +760,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+%include "gdcmIconImageGenerator.h"
+%include "gdcmIconImageFilter.h"
 
 %feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"
