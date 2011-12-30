@@ -126,6 +126,7 @@ int TestOperator()
 
 int TestTag(int , char * [])
 {
+{
   const uint32_t dummy = 0x12345678;
   gdcm::Tag t16(0x1234, 0x5678);
   std::stringstream ss;
@@ -308,6 +309,7 @@ int TestTag(int , char * [])
     ||!(O2 < O4)
     ||!(O3 < O4) )
     {std::cout << "31" << std::endl ; return 1; }
+}
 
   // IsGroupXX:
     {
