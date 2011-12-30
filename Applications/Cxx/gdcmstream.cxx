@@ -384,7 +384,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
       {
       std::cerr << "unable to write image information" << std::endl;
       return 1; //the CanWrite function should prevent getting here, else,
-      //that's a test failure∫
+      //that's a test failure
       }
 
     ds1.Remove( gdcm::Tag(0x0048,0x0006) );
@@ -756,7 +756,7 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
     {
     std::cerr << "unable to write image information" << std::endl;
     return 1; //the CanWrite function should prevent getting here, else,
-    //that's a test failure∫
+    //that's a test failure
     }
 
 

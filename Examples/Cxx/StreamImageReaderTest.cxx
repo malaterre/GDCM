@@ -183,7 +183,7 @@ bool StreamImageRead(gdcm::StreamImageWriter & theStreamWriter,
      {
      std::cerr << "unable to write image information" << std::endl;
      return 1; //the CanWrite function should prevent getting here, else,
-     //that's a test failure∫
+     //that's a test failure
      }
     std::vector<unsigned int> extent1 = gdcm::ImageHelper::GetDimensionsValue(file);
 
