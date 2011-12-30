@@ -95,7 +95,7 @@ int TestSystem(int, char *[])
 
   char datetime[22];
   bool bres = gdcm::System::GetCurrentDateTime(datetime);
-  assert( bres );
+  if( !bres ) return 1;
   assert( datetime[21] == 0 );
   std::cerr << datetime << std::endl;
 
