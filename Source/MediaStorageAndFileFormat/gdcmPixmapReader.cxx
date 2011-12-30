@@ -990,7 +990,6 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   // - DataSet specify it to be 0, but there is still a change it could be wrong:
   if( !haslossyflag || !lossyflag )
     {
-    assert( haslossyflag && lossyflag );
     PixelData->ComputeLossyFlag();
     if( PixelData->IsLossy() && (!lossyflag && haslossyflag ) )
       {
