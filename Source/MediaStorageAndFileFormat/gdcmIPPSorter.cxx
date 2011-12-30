@@ -164,7 +164,6 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
             // Cant print cd since 0.9999 is printed as 1... may confuse user
             return false;
             }
-          std::cout << cd << " " << value2 <<  std::endl;
           //dc2.Normalize();
           //dc2.Print( std::cout << std::endl );
           }
