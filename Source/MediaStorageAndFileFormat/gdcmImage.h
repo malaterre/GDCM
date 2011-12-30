@@ -15,9 +15,6 @@
 #define GDCMIMAGE_H
 
 #include "gdcmPixmap.h"
-#if !defined(GDCM_LEGACY_REMOVE)
-#include "gdcmSwapCode.h"
-#endif
 
 #include <vector>
 
@@ -102,10 +99,6 @@ public:
 
   /// print
   void Print(std::ostream &os) const;
-
-  /// DEPRECATED DO NOT USE
-  GDCM_LEGACY(SwapCode GetSwapCode() const)
-  GDCM_LEGACY(void SetSwapCode(SwapCode sc))
 
   /// intercept
   GDCM_LEGACY(void SetIntercept(double intercept))

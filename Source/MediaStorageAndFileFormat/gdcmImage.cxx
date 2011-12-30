@@ -150,15 +150,6 @@ void Image::SetDirectionCosines(unsigned int idx, double dircos)
 }
 
 #if !defined(GDCM_LEGACY_REMOVE)
-SwapCode Image::GetSwapCode() const
-{
-  return SwapCode();
-}
-
-void Image::SetSwapCode(SwapCode)
-{
-}
-
 void Image::SetIntercept(double intercept) { InterceptSlopeArray[0][0] = intercept; }
 double Image::GetIntercept() const { return InterceptSlopeArray[0][0]; }
 
