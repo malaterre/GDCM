@@ -972,7 +972,33 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       }
     }
 
-  PixelData->ComputeLossyFlag();
+  // Let's be smart when computing the lossyflag (0028,2110) 
+  // LossyImageCompression
+  Attribute<0x0028,0x2110> licat;
+  bool lossyflag = false;
+  bool haslossyflag = false;
+  if( ds.FindDataElement( licat.GetTag() ) )
+    {
+    haslossyflag = true;
+    licat.SetFromDataSet( ds ); // could be empty
+    const CSComp & v = licat.GetValue();
+    lossyflag = atoi( v.c_str() ) == 1;
+    PixelData->SetLossyFlag(lossyflag);
+    }
+
+  // Two cases:
+  // - DataSet did not specify the lossyflag
+  // - DataSet specify it to be 0, but there is still a change it could be wrong:
+  if( !haslossyflag || !lossyflag )
+    {
+    assert( haslossyflag && lossyflag );
+    PixelData->ComputeLossyFlag();
+    if( PixelData->IsLossy() && (!lossyflag && haslossyflag ) )
+      {
+      // We always prefer the setting from the stream...
+      gdcmWarningMacro( "DataSet set LossyFlag to 0, while Codec made the stream lossy" );
+      }
+    }
 
   return true;
 }
