@@ -114,7 +114,7 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
     {
     size_t size1 = System::FileSize( filename );
     size_t size2 = System::FileSize( outfilename.c_str() );
-    assert( size1 == size2 );
+    if( size1 != size2 ) return 1;
     if(verbose)
     std::cerr << filename << " and " << outfilename << " are identical\n";
     return 0;

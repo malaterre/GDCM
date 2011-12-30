@@ -603,7 +603,6 @@ bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
 bool PixmapReader::ReadImage(MediaStorage const &ms)
 {
   const DataSet &ds = F->GetDataSet();
-  std::stringstream ss;
   std::string conversion;
 
   bool isacrnema = false;
@@ -1002,8 +1001,8 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
       sqf->WriteBuffer( ss );
       //std::string s( bv->GetPointer(), bv->GetLength() );
       //is.str( s );
-      gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
-      jpeg.SetPixelFormat( pf );
+      gdcm::PixelFormat jpegpf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+      jpeg.SetPixelFormat( jpegpf );
       gdcm::TransferSyntax ts;
       bool b = jpeg.GetHeaderInfo( ss, ts );
       if( b )
@@ -1077,21 +1076,21 @@ bool PixmapReader::ReadACRNEMAImage()
   const Tag timagedimensions = Tag(0x0028, 0x0005);
   if( ds.FindDataElement( timagedimensions ) )
     {
-    const DataElement& de = ds.GetDataElement( timagedimensions );
-    Attribute<0x0028,0x0005> at = { 0 };
-    at.SetFromDataElement( de );
-    assert( at.GetNumberOfValues() == 1 );
-    unsigned short imagedimensions = at.GetValue();
+    const DataElement& de0 = ds.GetDataElement( timagedimensions );
+    Attribute<0x0028,0x0005> at0 = { 0 };
+    at0.SetFromDataElement( de0 );
+    assert( at0.GetNumberOfValues() == 1 );
+    unsigned short imagedimensions = at0.GetValue();
     //assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
     if ( imagedimensions == 3 )
       {
       PixelData->SetNumberOfDimensions(3);
       // D 0028|0012 [US] [Planes] [262]
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0012) );
-      Attribute<0x0028,0x0012> at = { 0 };
-      at.SetFromDataElement( de );
-      assert( at.GetNumberOfValues() == 1 );
-      PixelData->SetDimension(2, at.GetValue() );
+      const DataElement& de1 = ds.GetDataElement( Tag(0x0028, 0x0012) );
+      Attribute<0x0028,0x0012> at1 = { 0 };
+      at1.SetFromDataElement( de1 );
+      assert( at1.GetNumberOfValues() == 1 );
+      PixelData->SetDimension(2, at1.GetValue() );
       //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
       }
     else if ( imagedimensions == 2 )

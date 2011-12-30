@@ -967,7 +967,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     for( unsigned int ovidx = 0; ovidx < numoverlays; ++ovidx )
       {
       const gdcm::Overlay& ov = image.GetOverlay(ovidx);
-      assert( (unsigned int)ov.GetRows() == image.GetRows() );
+      assert( (unsigned int)ov.GetRows() == image.GetRows() ); (void)ov;
       assert( (unsigned int)ov.GetColumns() == image.GetColumns() );
       }
     this->NumberOfOverlays = numoverlays;
@@ -1022,7 +1022,7 @@ void InPlaceYFlipImage(vtkImageData* data)
   for(int j = dext[4]; j <= dext[5]; ++j)
     {
     char *start = pointer;
-    assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) );
+    assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) ); (void)ref;
     // Swap two-lines at a time
     // when Rows is odd number (359) then dext[3] == 178
     // so we should avoid copying the line right in the center of the image

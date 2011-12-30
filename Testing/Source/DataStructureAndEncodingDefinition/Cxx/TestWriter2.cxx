@@ -22,7 +22,7 @@ namespace gdcm
 /*
  * we are only testing that we can convert an implicit dataset to explicit all the time...
  */
-int TestWrite2(const char *subdir, const char* filename, bool recursing)
+int TestWrite2(const char *subdir, const char* filename, bool )
 {
   (void)recursing;
   Reader reader;
