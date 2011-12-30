@@ -124,7 +124,6 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   // calculate the slice normal from IOP:
   double normal[3];
 
-          std::cout << "ref: " << dircos <<  std::endl;
   gdcm::DirectionCosines dc;
   dc.SetFromString( dircos );
   if( !dc.IsValid() ) return false;
@@ -164,7 +163,6 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
             // Cant print cd since 0.9999 is printed as 1... may confuse user
             return false;
             }
-          std::cout << cd << " " << value2 <<  std::endl;
           //dc2.Normalize();
           //dc2.Print( std::cout << std::endl );
           }
