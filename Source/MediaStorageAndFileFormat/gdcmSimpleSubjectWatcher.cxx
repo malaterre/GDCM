@@ -14,6 +14,7 @@
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmEvent.h"
 #include "gdcmAnonymizeEvent.h"
+#include "gdcmDataSetEvent.h"
 #include "gdcmProgressEvent.h"
 
 namespace gdcm
@@ -29,6 +30,8 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
   m_AbortFilterCommand =      SimpleCommandType::New();
 
   m_AnonymizeFilterCommand =  CommandType::New();
+  m_DataSetFilterCommand =  CommandType::New();
+  m_DataFilterCommand =  CommandType::New();
 
   // Assign the callbacks
   m_StartFilterCommand->SetCallbackFunction(this,
@@ -43,6 +46,10 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
                                         &SimpleSubjectWatcher::ShowAbort);
   m_AnonymizeFilterCommand->SetCallbackFunction(this,
                                         &SimpleSubjectWatcher::ShowAnonymization);
+  m_DataSetFilterCommand->SetCallbackFunction(this,
+                                        &SimpleSubjectWatcher::ShowDataSet);
+  m_DataFilterCommand->SetCallbackFunction(this,
+                                        &SimpleSubjectWatcher::ShowData);
 
   // Add the commands as observers
   m_StartTag = m_Subject->AddObserver(StartEvent(), m_StartFilterCommand);
@@ -55,6 +62,10 @@ SimpleSubjectWatcher::SimpleSubjectWatcher(Subject *s, const char *comment):m_Su
     = m_Subject->AddObserver(AbortEvent(), m_AbortFilterCommand);
   m_AnonymizeTag
     = m_Subject->AddObserver(AnonymizeEvent(), m_AnonymizeFilterCommand);
+  m_DataSetTag
+    = m_Subject->AddObserver(DataSetEvent(), m_DataSetFilterCommand);
+  m_DataTag
+    = m_Subject->AddObserver(DataEvent(), m_DataFilterCommand);
 
   m_TestAbort = false;
 }
@@ -88,6 +99,14 @@ SimpleSubjectWatcher::~SimpleSubjectWatcher()
       {
       m_Subject->RemoveObserver(m_AnonymizeTag);
       }
+    if (m_DataFilterCommand)
+      {
+      m_Subject->RemoveObserver(m_DataTag);
+      }
+    if (m_DataSetFilterCommand)
+      {
+      m_Subject->RemoveObserver(m_DataSetTag);
+      }
     }
 }
 
@@ -120,6 +139,19 @@ void SimpleSubjectWatcher::ShowAnonymization(Subject *caller, const Event &evt)
   const AnonymizeEvent &ae = dynamic_cast<const AnonymizeEvent&>(evt);
   (void)caller;
   std::cout << "AnonymizeEvent: " << ae.GetTag() << std::endl;
+}
+void SimpleSubjectWatcher::ShowData(Subject *caller, const Event &evt)
+{
+  const DataEvent &ae = dynamic_cast<const DataEvent&>(evt);
+  (void)caller;
+  std::cout << "DataEvent: " << ae.GetDataLength() << std::endl;
+}
+void SimpleSubjectWatcher::ShowDataSet(Subject *caller, const Event &evt)
+{
+  const DataSetEvent &ae = dynamic_cast<const DataSetEvent&>(evt);
+  (void)caller;
+  std::cout << "DataSetEvent: \n";
+  std::cout << ae.GetDataSet() << std::endl;
 }
 
 void SimpleSubjectWatcher::TestAbortOn()

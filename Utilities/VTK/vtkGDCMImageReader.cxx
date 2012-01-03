@@ -241,7 +241,9 @@ void vtkGDCMImageReader::ExecuteInformation()
     case 0:
       output->SetWholeExtent(this->DataExtent);
       output->SetSpacing(this->DataSpacing);
+#ifdef GDCMV2_0_COMPATIBILITY
       output->SetOrigin(this->DataOrigin);
+#endif
 
       output->SetScalarType(this->DataScalarType);
       output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
@@ -563,7 +565,9 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
       //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
       outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
+#ifdef GDCMV2_0_COMPATIBILITY
       outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
+#endif
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
       break;
     // Icon Image
@@ -801,6 +805,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
 #endif
     }
   // Apply transform:
+#ifdef GDCMV2_0_COMPATIBILITY
   if( dircos && origin )
     {
     if( this->FileLowerLeft )
@@ -826,6 +831,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       }
     }
   // Need to set the rest to 0 ???
+#endif
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();

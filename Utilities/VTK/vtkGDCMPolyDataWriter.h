@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -20,17 +19,21 @@
 // .SECTION Warning
 //
 // .SECTION See Also
-// vtkGDCMImageReader vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkGDCMImageReader vtkGDCMPolyDataReader vtkRTStructSetProperties
 
 
 #ifndef VTKGDCMPOLYDATAWRITER_H
 #define VTKGDCMPOLYDATAWRITER_H
 
 #include "vtkPolyDataWriter.h"
+#include "vtkStringArray.h"
+#include "vtkStdString.h"
+
 
 class vtkMedicalImageProperties;
+class vtkRTStructSetProperties;
 //BTX
-namespace gdcm { class Reader; }
+namespace gdcm { class File; }
 //ETX
 class VTK_EXPORT vtkGDCMPolyDataWriter : public vtkPolyDataWriter
 {
@@ -47,13 +50,37 @@ public:
   // Description:
   // Get the medical image properties object
 //  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
+  virtual void SetMedicalImageProperties(vtkMedicalImageProperties *pd);
+
+  virtual void SetRTStructSetProperties(vtkRTStructSetProperties *pd);
+
+
+  //this function will initialize the contained rtstructset with
+  //the inputs of the writer and the various extra information
+  //necessary for writing a complete rtstructset.
+  //NOTE: inputs must be set BEFORE calling this function!
+  //NOTE: the number of outputs for the appendpolydata MUST MATCH the ROI vectors!
+  void InitializeRTStructSet(vtkStdString inDirectory,
+     vtkStdString inStructLabel, vtkStdString inStructName,
+     vtkStringArray* inROINames,
+     vtkStringArray* inROIAlgorithmName,
+     vtkStringArray* inROIType);
+
+  // make parent class public...
+  void SetNumberOfInputPorts(int n);
 
 protected:
   vtkGDCMPolyDataWriter();
   ~vtkGDCMPolyDataWriter();
 
+  vtkMedicalImageProperties *MedicalImageProperties;
+  vtkRTStructSetProperties *RTStructSetProperties;
+
   void WriteData();
-  void WriteRTSTRUCT(vtkPoints *pts, vtkCellArray *polys);
+//BTX
+  void WriteRTSTRUCTInfo(gdcm::File &file);
+  void WriteRTSTRUCTData(gdcm::File &file, int num);
+//ETX
 
 private:
   vtkGDCMPolyDataWriter(const vtkGDCMPolyDataWriter&);  // Not implemented.

@@ -164,6 +164,11 @@
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
+#include "gdcmQueryBase.h"
+#include "gdcmBaseRootQuery.h"
+#include "gdcmCompositeNetworkFunctions.h"
+#include "gdcmServiceClassUser.h"
+
 using namespace gdcm;
 %}
 
@@ -691,3 +696,10 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
 %include "gdcmFileDerivation.h"
+
+// MEXD:
+%template (DataSetArrayType) std::vector<gdcm::DataSet>;
+%include "gdcmQueryBase.h"
+%include "gdcmBaseRootQuery.h"
+%include "gdcmCompositeNetworkFunctions.h"
+%include "gdcmServiceClassUser.h"

@@ -220,6 +220,10 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "f4bf27280aad0ff38d1fe3871a0a8afb"  , "GDCMJ2K_TextGBR.dcm" },
 { "f445a6dc674e2c12c14bf3583c6c3e6f"  , "NM_Kakadu44_SOTmarkerincons.dcm" },
 { "7c0c4eb0c73b4dc5b3a4d961653fc4e2"  , "PhilipsInteraSeqTermInvLen.dcm" },
+{ "64528209839b0369c2da530249f4ca58"  , "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
+{ "2498ca4aaf62991c8a1f629a804bfa44"  , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
+{ "e4d559b6db04679b54bea40c763b09e4"  , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
+
 { NULL, NULL}
 };
 

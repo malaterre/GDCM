@@ -16,6 +16,7 @@
 #include "gdcmTrace.h"
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmSwapper.h"
 
 #include <cstring>
 
@@ -303,6 +304,28 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
   if( NumberOfDimensions == 2 )
     {
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    const ByteValue *j2kbv = in.GetByteValue();
+    if( !sf && !j2kbv ) return false;
+    SmartPointer<SequenceOfFragments> sf_bug = new SequenceOfFragments;
+    if ( j2kbv )
+      {
+      gdcmWarningMacro( "Pixel Data is not encapsulated correctly. Continuing anyway" );
+      assert( !sf );
+      std::stringstream is;
+      size_t j2kbv_len = j2kbv->GetLength();
+      char *mybuffer = new char[j2kbv_len];
+      bool b = j2kbv->GetBuffer(mybuffer, j2kbv->GetLength());
+      assert( b ); (void)b;
+      is.write(mybuffer, j2kbv->GetLength());
+      delete[] mybuffer;
+
+      try {
+        sf_bug->Read<SwapperNoOp>(is);
+      } catch ( ... ) {
+        return false;
+      }
+      sf = &*sf_bug;
+      }
     if( !sf ) return false;
     std::stringstream is;
     unsigned long totalLen = sf->ComputeByteLength();

@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
@@ -25,7 +26,11 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
+  DumpGEMSMovieGroup
   ExtractIconFromFile
+  CreateJPIPDataSet
+  DumpADAC
+  ReadMultiTimesException
   pmsct_rgb1
   GenAllVR
   ELSCINT1WaveToText
@@ -67,6 +72,14 @@ SET(EXAMPLES_SRCS
   GenSeqs
   GetJPEGSamplePrecision
 )
+IF(GDCM_USE_OPENJPEG_V2)
+SET(EXAMPLES_SRCS
+  ${EXAMPLES_SRCS}
+  StreamImageReaderTest
+  Extracting_All_Resolution
+  Fake_Image_Using_Stream_Image_Writer
+  )
+ENDIF(GDCM_USE_OPENJPEG_V2)
 IF(GDCM_USE_JPEGLS)
 SET(EXAMPLES_SRCS
   ${EXAMPLES_SRCS}
@@ -83,6 +96,8 @@ IF(QT4_FOUND)
 
   ADD_EXECUTABLE(ReadUTF8QtDir ReadUTF8QtDir.cxx)
   TARGET_LINK_LIBRARIES(ReadUTF8QtDir gdcmMSFF ${QT_LIBRARIES})
+  ADD_EXECUTABLE(CStoreQtProgress CStoreQtProgress.cxx)
+  TARGET_LINK_LIBRARIES(CStoreQtProgress gdcmMEXD gdcmMSFF ${QT_LIBRARIES})
 ENDIF(QT4_FOUND)
 
 IF(MAGIC_FOUND)

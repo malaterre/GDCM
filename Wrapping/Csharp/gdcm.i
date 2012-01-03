@@ -217,6 +217,8 @@ public class";
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
+#include "gdcmCompositeNetworkFunctions.h"
+
 using namespace gdcm;
 %}
 
@@ -767,3 +769,6 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
 %include "gdcmFileDerivation.h"
+
+// MEXD:
+%include "gdcmCompositeNetworkFunctions.h"

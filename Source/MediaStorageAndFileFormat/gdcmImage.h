@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -16,7 +15,6 @@
 #define GDCMIMAGE_H
 
 #include "gdcmPixmap.h"
-#include "gdcmSwapCode.h"
 
 #include <vector>
 
@@ -86,19 +84,6 @@ public:
 
   /// print
   void Print(std::ostream &os) const;
-
-  /// DEPRECATED DO NOT USE
-  SwapCode GetSwapCode() const
-    {
-    return SC;
-    }
-  void SetSwapCode(SwapCode sc)
-    {
-    SC = sc;
-    }
-
-//  Image(Image const&);
-//  Image &operator= (Image const&);
 
   /// intercept
   void SetIntercept(double intercept) { Intercept = intercept; }

@@ -99,7 +99,6 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     }
   else
     {
-
     if( pf.GetBitsAllocated() == 16 )
       {
       bv->Write<SwapperDoOp, uint16_t>( os );

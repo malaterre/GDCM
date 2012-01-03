@@ -19,6 +19,17 @@ IF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
 ENDIF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
 
 INCLUDE(${VTK_USE_FILE})
+
+INCLUDE(CheckCXXSourceCompiles)
+SET(CMAKE_REQUIRED_INCLUDES ${VTK_INCLUDE_DIRS})
+#SET(CMAKE_REQUIRED_LIBRARIES vtkVolumeRendering) # can't get it to work
+CHECK_CXX_SOURCE_COMPILES(
+  "\#include <vtkSmartVolumeMapper.h>\nint main() { vtkSmartVolumeMapper* p; return 0;}"
+  VTK_HAS_SMARTVOLUMEMAPPER)
+CHECK_CXX_SOURCE_COMPILES(
+  "\#include <vtkImageResliceMapper.h>\nint main() { vtkImageResliceMapper* p; return 0;}"
+  VTK_HAS_IMAGERESLICEMAPPER)
+
 INCLUDE_DIRECTORIES(
   ${GDCM_BINARY_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/Common
@@ -79,6 +90,7 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyDataReader.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyDataWriter.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkRTStructSetProperties.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkLookupTable16.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx
     #${CMAKE_CURRENT_SOURCE_DIR}/vtkImagePlanarComponentsToComponents.cxx

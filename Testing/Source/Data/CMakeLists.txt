@@ -85,6 +85,26 @@ IF(GDCM_WORDS_BIGENDIAN)
   )
 ENDIF(GDCM_WORDS_BIGENDIAN)
 
+IF(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
+  SET(BLACK_LIST_READER
+    ${BLACK_LIST_READER}
+    GE_GENESIS-16-MONO2-WrongLengthItem.dcm # can't read odd length
+    PHILIPS_GDCM12xBug2.dcm # odd length
+    KODAK-12-MONO1-Odd_Terminated_Sequence.dcmq # odd length
+    PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm # odd length
+    PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm # odd length
+    BugGDCM2_UndefItemWrongVL.dcm # odd length
+    THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
+    CT-SIEMENS-MissingPixelDataInIconSQ.dcm # odd length
+    00191113.dcm
+    MR_Philips_Intera_PrivateSequenceImplicitVR.dcm
+    PICKER-16-MONO2-Nested_icon.dcm
+    PHILIPS_GDCM12xBug.dcm # odd length
+    MR_Philips-Intera_BreaksNOSHADOW.dcm
+    NM_Kakadu44_SOTmarkerincons.dcm
+    MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
+    )
+ENDIF(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
 
 SET(GDCM_DATA_FILENAMES)
 SET(GDCM_BLACK_LIST_READER_DATA_FILENAMES)

@@ -1,9 +1,8 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -23,7 +22,7 @@
 // would be inconsistant in between the two data structures.
 //
 // .SECTION See Also
-// vtkGDCMImageReader vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkGDCMImageReader vtkGDCMPolyDataWriter vtkRTStructSetProperties
 
 
 #ifndef VTKGDCMPOLYDATAREADER_H
@@ -32,6 +31,7 @@
 #include "vtkPolyDataAlgorithm.h"
 
 class vtkMedicalImageProperties;
+class vtkRTStructSetProperties;
 //BTX
 namespace gdcm { class Reader; }
 //ETX
@@ -51,12 +51,15 @@ public:
   // Get the medical image properties object
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
 
+  vtkGetObjectMacro(RTStructSetProperties, vtkRTStructSetProperties);
+
 protected:
   vtkGDCMPolyDataReader();
   ~vtkGDCMPolyDataReader();
 
   char *FileName;
   vtkMedicalImageProperties *MedicalImageProperties;
+  vtkRTStructSetProperties *RTStructSetProperties;
 //BTX
   void FillMedicalImageInformation(const gdcm::Reader &reader);
 //ETX

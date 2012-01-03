@@ -298,7 +298,7 @@ uid_1_2_840_10008_15_0_4_4 = 264, // dicomDevice
 uid_1_2_840_10008_15_0_4_5 = 265, // dicomNetworkAE
 uid_1_2_840_10008_15_0_4_6 = 266, // dicomNetworkConnection
 uid_1_2_840_10008_15_0_4_7 = 267, // dicomUniqueAETitle
-uid_1_2_840_10008_15_0_4_8 = 268 // dicomTransferCapability
+uid_1_2_840_10008_15_0_4_8 = 268, // dicomTransferCapability
 //frameref_1_2_840_10008_1_4_1_1 = 269, // Talairach Brain Atlas Frame of Reference
 //frameref_1_2_840_10008_1_4_1_2 = 270, // SPM2 T1 Frame of Reference
 //frameref_1_2_840_10008_1_4_1_3 = 271, // SPM2 T2 Frame of Reference
@@ -328,6 +328,7 @@ uid_1_2_840_10008_15_0_4_8 = 268 // dicomTransferCapability
 //uid_1_2_840_113543_6_6_1_3_10002 = 506,
 //uid_1_2_392_200036_9116_7_8_1_1_1 = 507,
 //uid_end = 1000
+uid_1_2_840_10008_5_1_4_1_1_77_1_6 // VL Whole Slide Microscopy Image Storage
 } TSType;
   typedef enum {
 VerificationSOPClass = 1, // Verification SOP Class
@@ -597,7 +598,7 @@ dicomDevice = 264, // dicomDevice
 dicomNetworkAE = 265, // dicomNetworkAE
 dicomNetworkConnection = 266, // dicomNetworkConnection
 dicomUniqueAETitle = 267, // dicomUniqueAETitle
-dicomTransferCapability = 268 // dicomTransferCapability
+dicomTransferCapability = 268, // dicomTransferCapability
 //TalairachBrainAtlasFrameofReference = 269, // Talairach Brain Atlas Frame of Reference
 //SPM2T1FrameofReference = 270, // SPM2 T1 Frame of Reference
 //SPM2T2FrameofReference = 271, // SPM2 T2 Frame of Reference
@@ -618,6 +619,7 @@ dicomTransferCapability = 268 // dicomTransferCapability
 //SPM2SINGLESUBJT1FrameofReference = 286, // SPM2 SINGLESUBJT1 Frame of Reference
 //ICBM452T1FrameofReference = 287, // ICBM 452 T1 Frame of Reference
 //ICBMSingleSubjectMRIFrameofReference = 288, // ICBM Single Subject MRI Frame of Reference
+VLWholeSlideMicroscopyImageStorage
 } TSName;
 
 

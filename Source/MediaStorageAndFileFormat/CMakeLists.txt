@@ -70,6 +70,18 @@ SET(MSFF_SRCS
   gdcmPhotometricInterpretation.cxx
   gdcmPixelFormat.cxx
   gdcmSegmentedPaletteColorLookupTable.cxx
+  gdcmStreamImageReader.cxx
+  gdcmStreamImageWriter.cxx
+  gdcmDirectoryHelper.cxx
+  gdcmSegment.cxx
+  gdcmSurface.cxx
+  gdcmMeshPrimitive.cxx
+  gdcmSegmentWriter.cxx
+  gdcmSurfaceWriter.cxx
+  gdcmSegmentReader.cxx
+  gdcmSurfaceReader.cxx
+  gdcmSurfaceHelper.cxx
+  gdcmSegmentHelper.cxx
   )
 if(OPENJPEG_VERSION VERSION_LESS 2.0)
   list(APPEND MSFF_SRCS

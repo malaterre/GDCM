@@ -12,6 +12,7 @@
 
 =========================================================================*/
 #include "gdcmElement.h"
+#include "gdcmDataSet.h"
 
 #define TPI 3.1415926535897931
 
@@ -34,6 +35,20 @@ int TestFL()
   c.SetArray( f, sizeof(f), false);
   c.Print( std::cout );
   std::cout << std::endl;
+
+  // Make sure this is possible to output as DataElement
+  // an Element, in case one cannot use gdcm::Attribute
+  // Eg. Sup 145 are not available -yet-
+{
+  DataSet ds;
+  Element<VR::FL,VM::VM1> el;
+  el.SetValue(1.2);
+
+  DataElement de = el.GetAsDataElement();
+  de.SetTag( Tag(0x0048,0x0201) );
+  ds.Insert( de );
+}
+
 
   return 0;
 }

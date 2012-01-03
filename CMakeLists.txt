@@ -37,8 +37,8 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
-SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 19)
+SET(GDCM_MINOR_VERSION 2)
+SET(GDCM_BUILD_VERSION 0)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_API_VERSION
@@ -284,6 +284,9 @@ IF(GDCM_USE_SYSTEM_POPPLER)
 ENDIF(GDCM_USE_SYSTEM_POPPLER)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_POPPLER)
 
+#FIND_PACKAGE(JavaProperties)
+#message(${JAVA_LIBRARY_PATH})
+
 OPTION(GDCM_USE_SYSTEM_PODOFO "Use system podofo (pdf)" OFF)
 IF(GDCM_USE_SYSTEM_PODOFO)
   #FIND_PACKAGE(PODOFO REQUIRED)
@@ -334,6 +337,11 @@ IF(GDCM_USE_PVRG)
     FIND_PACKAGE(PVRGJPEG REQUIRED)
   ENDIF(GDCM_USE_SYSTEM_PVRG)
 ENDIF(GDCM_USE_PVRG)
+
+# Very advanced behavior only use if you want to keep backward compatible behavior
+# but possibly incorrect behavior.
+OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" OFF)
+MARK_AS_ADVANCED(GDCMV2_0_COMPATIBILITY)
 
 IF(GDCM_USE_KAKADU)
   OPTION(GDCM_USE_SYSTEM_KAKADU "Use system KAKADU " ON)
@@ -450,10 +458,11 @@ IF(GDCM_BUILD_WRAPPING)
   MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
   SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
 ENDIF(GDCM_BUILD_WRAPPING)
+OPTION(GDCM_WRAP_PERL "perl wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping" OFF)
 OPTION(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
-MARK_AS_ADVANCED(GDCM_WRAP_PHP) #GDCM_WRAP_JAVA) # GDCM_WRAP_CSHARP)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_PERL)
 MARK_AS_ADVANCED(GDCM_USE_RLE)
 MARK_AS_ADVANCED(GDCM_USE_ACTIVIZ)
 #MARK_AS_ADVANCED(GDCM_TEST_BOOSTRAP)
@@ -726,7 +735,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # installer. If no descriptions are provided, the "Description"
   # box will be removed.
   set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
-    "Command line applications that uses GDCM: gdcmconv, gdcmdump, gdcminfo, gdcmscanner, gdcmimg, gdcmanon")
+    "Command line applications that uses GDCM: gdcmconv, gdcmscu, gdcmdump, gdcminfo, gdcmscanner, gdcmimg, gdcmanon")
   set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
     "Libraries used to build programs with GDCM")
   set(CPACK_COMPONENT_HEADERS_DESCRIPTION
@@ -866,6 +875,22 @@ ENDMACRO(PROCESSONEDIR)
 #)
 #MESSAGE("${theoutput}")
 
+# For DICOM Q/R testing
+IF(GDCM_BUILD_TESTING)
+  SET(GDCM_DICOM_CLIENT_AETITLE "" CACHE STRING "DICOM CLIENT AETITLE")
+  SET(GDCM_DICOM_SERVER_AETITLE "" CACHE STRING "DICOM SERVER AETITLE")
+  SET(GDCM_DICOM_SERVER_PEER    "" CACHE STRING "DICOM SERVER PEER")
+  SET(GDCM_DICOM_SERVER_PORT    "" CACHE STRING "DICOM SERVER PORT")
+  SET(GDCM_DICOM_CLIENT_PORT    "" CACHE STRING "DICOM CLIENT PORT")
+  MARK_AS_ADVANCED(
+    GDCM_DICOM_CLIENT_AETITLE
+    GDCM_DICOM_SERVER_AETITLE
+    GDCM_DICOM_SERVER_PEER
+    GDCM_DICOM_SERVER_PORT
+    GDCM_DICOM_CLIENT_PORT
+    )
+ENDIF(GDCM_BUILD_TESTING)
+
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
 SET(GDCM_INCLUDE_PATH
@@ -873,6 +898,7 @@ SET(GDCM_INCLUDE_PATH
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )

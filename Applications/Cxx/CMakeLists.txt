@@ -19,9 +19,14 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
+
+  "${GDCM_SOURCE_DIR}/Utilities/socketxx"
+  "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
+  "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
   )
 
 IF(WIN32)
@@ -32,6 +37,7 @@ ENDIF(WIN32)
 
 SET(GDCM_EXECUTABLE_NAME
   gdcmdump
+  gdcmdiff
   gdcmraw
   gdcmscanner
   gdcmanon
@@ -40,8 +46,10 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmimg
   #deflate
   gdcmconv
+  gdcmstream
   gdcmtar
   gdcminfo
+  gdcmscu
   )
 # poppler people have the worse API backward compatibility I know of.
 # there is absolutely no way to check the version of poppler
@@ -78,6 +86,14 @@ IF(GDCM_USE_SYSTEM_POPPLER)
   )
 ENDIF(GDCM_USE_SYSTEM_POPPLER)
 
+IF(GDCM_USE_SYSTEM_OPENJPEG)
+  INCLUDE_DIRECTORIES(${OPENJPEG_INCLUDE_DIRS} )
+ELSE(GDCM_USE_SYSTEM_OPENJPEG)
+  INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg"
+    )
+ENDIF(GDCM_USE_SYSTEM_OPENJPEG)
+
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   IF(${exename} STREQUAL "gdcminfo")
     ADD_EXECUTABLE(${exename} ${exename}.cxx puff.c)
@@ -87,6 +103,10 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
   IF(${exename} STREQUAL "gdcmpdf")
     TARGET_LINK_LIBRARIES(${exename} ${POPPLER_LIBRARIES})
+  ELSEIF(${exename} STREQUAL "gdcmscu")
+    TARGET_LINK_LIBRARIES(${exename} gdcmMEXD socketxx)
+  ELSEIF(${exename} STREQUAL "gdcmstream")
+    TARGET_LINK_LIBRARIES(${exename} ${GDCM_OPENJPEG_LIBRARIES})
   ELSEIF(${exename} STREQUAL "gdcminfo")
     IF(GDCM_USE_SYSTEM_PODOFO)
       TARGET_LINK_LIBRARIES(${exename} ${PODOFO_LIBRARIES})
@@ -108,3 +128,59 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
     )
   ENDIF(NOT GDCM_INSTALL_NO_RUNTIME)
 ENDFOREACH(exename)
+
+#IF(BUILD_TESTING)
+#  IF(GDCM_DATA_ROOT)
+#    FILE(MAKE_DIRECTORY ${GDCM_TEMP_DIRECTORY}/gdcmanon-gdcmdata)
+#    ADD_TEST(gdcmanon-gdcmdata ${EXECUTABLE_OUTPUT_PATH}/gdcmanon
+#      --continue  # skip LIBIDO-16-ACR_NEMA-Volume.dcm
+#      --certificate ${GDCM_SOURCE_DIR}/Testing/Source/Data/certificate.pem
+#      ${GDCM_DATA_ROOT}
+#      ${GDCM_TEMP_DIRECTORY}/gdcmanon-gdcmdata
+#      )
+#  ENDIF(GDCM_DATA_ROOT)
+#ENDIF(BUILD_TESTING)
+
+IF(BUILD_TESTING)
+  # http://www.na-mic.org/Wiki/index.php/CTSC:ARRA:Mockup
+  # http://www.dicomserver.co.uk/
+  # the NAMIC server is offline, Steve Pieper has volunteered his servers, but they are intermittent
+  # IP Address: common.bwh.harvard.edu (155.52.248.49)
+  # Port: 11112
+  # AE Title: CTK_AE
+  # and
+  # IP Address: joe.bwh.harvard.edu (155.52.248.50)
+  # Port: 5678
+  # AE Title: CONQUESTSRV1
+  #since these servers have no guaranteed uptime, these tests should be changed to some other, known-to-be-up server
+  #ADD_TEST(gdcmscu-echo-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo --call CONQUESTSRV1 joe.bwh.harvard.edu 5678)
+  ADD_TEST(gdcmscu-echo-dicomserver ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo www.dicomserver.co.uk 11112)
+  IF(GDCM_DATA_ROOT)
+    # CR-MONO1-10-chest.dcm gets rejected by www.dicomserver.co.uk:
+    # Tag 0x0,0x902 reported as Incorrect VM (1) - Minimum value is 2 : 'Array of N Elements' (error 42752)
+    # CR-MONO1-10-chest.dcm gets rejected by mi2b2.slicer.org
+    # Tag 0x0,0x902 reported as Acceptance of objects without Patient ID is disabled (error 43264)
+    #ADD_TEST(gdcmscu-store-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
+    ADD_TEST(gdcmscu-store-dicomserver ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store www.dicomserver.co.uk 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
+  ENDIF(GDCM_DATA_ROOT)
+  #ADD_TEST(gdcmscu-find-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 --patientroot -k 10,10=X*)
+  ADD_TEST(gdcmscu-find-dicomserver ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient www.dicomserver.co.uk 11112 --patientroot -k 10,20=*)
+
+  IF(GDCM_DICOM_SERVER_AETITLE)
+  IF(GDCM_DATA_ROOT)
+    # Let's C-STORE a limited subset of gdcmData for now:
+    SET(CSTORE_DATA_FILES
+      CR-MONO1-10-chest.dcm # Implicit VR Little Endian: Default Transfer Syntax for DICOM
+      012345.002.050.dcm    # JPEG Lossless, Non-Hierarchical, First-Order Prediction
+      )
+    FOREACH(cstorefile ${CSTORE_DATA_FILES})
+    ADD_TEST(gdcmscu-echo-${cstorefile}  ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo  --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT})
+    ADD_TEST(gdcmscu-store-${cstorefile} ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} ${GDCM_DATA_ROOT}/${cstorefile})
+    ADD_TEST(gdcmscu-find-${cstorefile}  ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} --patientroot -k 10,10=A* -k 10,20)
+    ADD_TEST(gdcmscu-move-${cstorefile}  ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=Anonymized --port-scp ${GDCM_DICOM_CLIENT_PORT})
+    ADD_TEST(gdcmscu-move-${cstorefile}  ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=X* --port-scp ${GDCM_DICOM_CLIENT_PORT})
+    ENDFOREACH(cstorefile)
+  ENDIF(GDCM_DATA_ROOT)
+  ENDIF(GDCM_DICOM_SERVER_AETITLE)
+
+ENDIF(BUILD_TESTING)

@@ -411,90 +411,152 @@ void DoCurves(const DataSet& ds, Pixmap& pixeldata)
     }
 }
 
+unsigned int GetNumberOfOverlaysInternal(DataSet const & ds, std::vector<uint16_t> & overlaylist)
+{
+  Tag overlay(0x6000,0x0000); // First possible overlay
+  bool finished = false;
+  unsigned int numoverlays = 0;
+  while( !finished )
+    {
+    const DataElement &de = ds.FindNextDataElement( overlay );
+    if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve
+      {
+      finished = true;
+      }
+    else if( de.GetTag().IsPrivate() )
+      {
+      // Move on to the next public one:
+      overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+      overlay.SetElement( 0 ); // reset just in case...
+      }
+    else
+      {
+      // Yeah this is a potential overlay element, let's check this is not a broken LEADTOOL image,
+      // or prova0001.dcm:
+      // (5000,0000) UL 0                                        #   4, 1 GenericGroupLength
+      // (6000,0000) UL 0                                        #   4, 1 GenericGroupLength
+      // (6001,0000) UL 28                                       #   4, 1 PrivateGroupLength
+      // (6001,0010) LT [PAPYRUS 3.0]                            #  12, 1 PrivateCreator
+      // (6001,1001) LT (no value available)                     #   0, 0 Unknown Tag & Data
+/*
+ * FIXME:
+ * In order to support : gdcmData/SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+ *                       gdcmDataExtra/gdcmSampleData/images_of_interest/XA_GE_JPEG_02_with_Overlays.dcm
+ * I cannot simply check for overlay_group,3000 this would not work
+ * I would need a strong euristick
+ */
+      // Store found tag in overlay:
+      overlay = de.GetTag();
+      // heuristic based on either the Overlay Data or the Col/Row info
+      Tag toverlaydata(overlay.GetGroup(),0x3000 );
+      Tag toverlayrows(overlay.GetGroup(),0x0010 );
+      Tag toverlaycols(overlay.GetGroup(),0x0011 );
+      Tag toverlaybitpos(overlay.GetGroup(),0x0102 );
+      if( ds.FindDataElement( toverlaydata ) )
+        {
+        // ok so far so good...
+        const DataElement& overlaydata = ds.GetDataElement( toverlaydata );
+        //const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x0010));
+        if( !overlaydata.IsEmpty() )
+          {
+          ++numoverlays;
+          overlaylist.push_back( overlay.GetGroup() );
+          }
+        }
+      else if( ds.FindDataElement( toverlayrows ) && ds.FindDataElement( toverlaycols )
+        && ds.FindDataElement( toverlaybitpos ) )
+        {
+        // Overlay Pixel are in Unused Pixel
+        assert( !ds.FindDataElement( toverlaydata ) );
+        const DataElement& overlayrows = ds.GetDataElement( toverlayrows );
+        const DataElement& overlaycols = ds.GetDataElement( toverlaycols );
+        assert( ds.FindDataElement( toverlaybitpos ) );
+        const DataElement& overlaybitpos = ds.GetDataElement( toverlaybitpos );
+        if( !overlayrows.IsEmpty() && !overlaycols.IsEmpty() && !overlaybitpos.IsEmpty() )
+          {
+          ++numoverlays;
+          overlaylist.push_back( overlay.GetGroup() );
+          }
+        }
+        // Move on to the next possible one:
+        overlay.SetGroup( overlay.GetGroup() + 2 );
+        // reset to element 0x0 just in case...
+        overlay.SetElement( 0 );
+      }
+    }
+
+  // at most one out of two :
+  assert( numoverlays < 0x00ff / 2 );
+  // PS 3.3 - 2004:
+  // C.9.2 Overlay plane module
+  // Each Overlay Plane is one bit deep. Sixteen separate Overlay Planes may be associated with an
+  // Image or exist as Standalone Overlays in a Series
+  assert( numoverlays <= 16 );
+  assert( numoverlays == overlaylist.size() );
+  return numoverlays;
+}
+
 bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
 {
   bool updateoverlayinfo = false;
   unsigned int numoverlays;
-  if( (numoverlays = Overlay::GetNumberOfOverlays( ds )) )
+  std::vector<uint16_t> overlaylist;
+  if( (numoverlays = GetNumberOfOverlaysInternal( ds, overlaylist )) )
     {
     pixeldata.SetNumberOfOverlays( numoverlays );
 
-    Tag overlay(0x6000,0x0000);
-    bool finished = false;
-    unsigned int idxoverlays = 0;
-    while( !finished )
+    for( unsigned int idxoverlays = 0; idxoverlays < numoverlays; ++idxoverlays )
       {
+      Overlay &ov = pixeldata.GetOverlay(idxoverlays);
+      uint16_t currentoverlay = overlaylist[idxoverlays];
+      Tag overlay(0x6000,0x0000);
+      overlay.SetGroup( currentoverlay );
       const DataElement &de = ds.FindNextDataElement( overlay );
-      // Are we done:
-      if( de.GetTag().GetGroup() > 0x60FF ) // last possible overlay curve
+      assert( !(currentoverlay % 2) ); // 0x6001 is not an overlay...
+      // Now loop on all element from this current group:
+      DataElement de2 = de;
+      while( de2.GetTag().GetGroup() == currentoverlay )
         {
-        finished = true;
+        ov.Update(de2);
+        overlay.SetElement( de2.GetTag().GetElement() + 1 );
+        de2 = ds.FindNextDataElement( overlay );
         }
-      else if( de.GetTag().IsPrivate() ) // GEMS owns some 0x6003
+
+      // Let's decode it:
+      std::ostringstream unpack;
+      ov.Decompress( unpack );
+      std::string s = unpack.str();
+      //size_t l = s.size();
+      // The following line will fail with images like XA_GE_JPEG_02_with_Overlays.dcm
+      // since the overlays are stored in the unused bit of the PixelData
+      if( !ov.IsEmpty() )
         {
-        // Move on to the next public one:
-        overlay.SetGroup( de.GetTag().GetGroup() + 1 );
-        overlay.SetElement( 0 );
+        //assert( unpack.str().size() / 8 == ((ov.GetRows() * ov.GetColumns()) + 7 ) / 8 );
+        assert( ov.IsInPixelData( ) == false );
         }
       else
         {
-        // Yay! this is an overlay element
-        Overlay &ov = pixeldata.GetOverlay(idxoverlays);
-        ++idxoverlays; // move on to the next one
-        overlay = de.GetTag();
-        uint16_t currentoverlay = overlay.GetGroup();
-        assert( !(currentoverlay % 2) ); // 0x6001 is not an overlay...
-        // Now loop on all element from this current group:
-        DataElement de2 = de;
-        while( de2.GetTag().GetGroup() == currentoverlay )
+        gdcmDebugMacro( "This image does not contains Overlay in the 0x60xx tags. "
+          << "Instead the overlay is stored in the unused bit of the Pixel Data. "
+          << "This is not supported right now"
+          << std::endl );
+        ov.IsInPixelData( true );
+        // make sure Overlay is valid
+        if( ov.GetBitsAllocated() != pixeldata.GetPixelFormat().GetBitsAllocated() )
           {
-          ov.Update(de2);
-          overlay.SetElement( de2.GetTag().GetElement() + 1 );
-          de2 = ds.FindNextDataElement( overlay );
-          // Next element:
-          //overlay.SetElement( overlay.GetElement() + 1 );
+          gdcmWarningMacro( "Bits Allocated are wrong. Correcting." );
+          ov.SetBitsAllocated( pixeldata.GetPixelFormat().GetBitsAllocated() );
           }
-        // If we exit the loop we have pass the current overlay and potentially point to the next one:
-        //overlay.SetElement( overlay.GetElement() + 1 );
-        //ov.Print( std::cout );
 
-        // Let's decode it:
-        std::ostringstream unpack;
-        ov.Decompress( unpack );
-        std::string s = unpack.str();
-        //size_t l = s.size();
-        // The following line will fail with images like XA_GE_JPEG_02_with_Overlays.dcm
-        // since the overlays are stored in the unused bit of the PixelData
-        if( !ov.IsEmpty() )
+        if( !ov.GrabOverlayFromPixelData(ds) )
           {
-          //assert( unpack.str().size() / 8 == ((ov.GetRows() * ov.GetColumns()) + 7 ) / 8 );
-          assert( ov.IsInPixelData( ) == false );
+          gdcmErrorMacro( "Could not extract Overlay from Pixel Data" );
+          //throw Exception("TODO: Could not extract Overlay Data");
           }
-        else
-          {
-          gdcmDebugMacro( "This image does not contains Overlay in the 0x60xx tags. "
-            << "Instead the overlay is stored in the unused bit of the Pixel Data. "
-            << "This is not supported right now"
-            << std::endl );
-          ov.IsInPixelData( true );
-          // make sure Overlay is valid
-          if( ov.GetBitsAllocated() != pixeldata.GetPixelFormat().GetBitsAllocated() )
-            {
-            gdcmWarningMacro( "Bits Allocated are wrong. Correcting." );
-            ov.SetBitsAllocated( pixeldata.GetPixelFormat().GetBitsAllocated() );
-            }
-
-          if( !ov.GrabOverlayFromPixelData(ds) )
-            {
-            gdcmErrorMacro( "Could not extract Overlay from Pixel Data" );
-            //throw Exception("TODO: Could not extract Overlay Data");
-            }
-          updateoverlayinfo = true;
-          }
+        updateoverlayinfo = true;
         }
       }
     //std::cout << "Num of Overlays: " << numoverlays << std::endl;
-    assert( idxoverlays == numoverlays );
     }
 
   // Now is good time to do some cleanup (eg. DX_GE_FALCON_SNOWY-VOI.dcm).
@@ -990,7 +1052,6 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
   // - DataSet specify it to be 0, but there is still a change it could be wrong:
   if( !haslossyflag || !lossyflag )
     {
-    assert( haslossyflag && lossyflag );
     PixelData->ComputeLossyFlag();
     if( PixelData->IsLossy() && (!lossyflag && haslossyflag ) )
       {

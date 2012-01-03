@@ -17,6 +17,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
   #${CMAKE_CURRENT_SOURCE_DIR}
 )
 
@@ -40,6 +41,7 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # libgdksharpglue.so
 SWIG_ADD_MODULE(gdcmsharpglue csharp gdcm.i)
 SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
+  gdcmMEXD
   #${JNI_LIBRARIES}
 #  ${JAVA_AWT_LIB_PATH}
 #  ${JAVA_JVM_LIB_PATH}

@@ -249,6 +249,7 @@ public class ScanDirectory
       TagSetType tst = new TagSetType();
       tst.insert( new Tag(0x7fe0,0x10) );
       b = r.ReadUpToTag( new Tag(0x88,0x200), tst );
+      UIntArrayType dims = ImageHelper.GetDimensionsValue( r.GetFile() );
       if( b )
         {
         IconImageFilter iif = new IconImageFilter();

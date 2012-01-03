@@ -74,7 +74,7 @@ associated with this file. Basically what kind of image you are looking at.
 
 \section wiki_link Wiki Link
 
-The wiki page, will color pictures can be found at:
+The wiki page, with color pictures can be found at:
 http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Gdcmviewer
 
 \section see_also SEE ALSO

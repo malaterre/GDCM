@@ -175,10 +175,12 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdiff.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmraw.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscu.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1

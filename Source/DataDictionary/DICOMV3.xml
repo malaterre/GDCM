@@ -1758,6 +1758,8 @@ This file was generated using the following commands:
   <entry group="0046" element="0145" keyword="ReferencedRefractiveMeasurementsSequence" vr="SQ" vm="1" name="Referenced Refractive Measurements Sequence"/>
   <entry group="0046" element="0146" keyword="SpherePower" vr="FD" vm="1" name="Sphere Power"/>
   <entry group="0046" element="0147" keyword="CylinderPower" vr="FD" vm="1" name="Cylinder Power"/>
+  <entry group="0048" element="0006" keyword="TotalPixelMatrixColumns" vr="UL" vm="1" name="Total Pixel Matrix Columns"/>
+  <entry group="0048" element="0007" keyword="TotalPixelMatrixRows" vr="UL" vm="1" name="Total Pixel Matrix Rows"/>
   <entry group="0050" element="0004" keyword="CalibrationImage" vr="CS" vm="1" name="Calibration Image"/>
   <entry group="0050" element="0010" keyword="DeviceSequence" vr="SQ" vm="1" name="Device Sequence"/>
   <entry group="0050" element="0012" keyword="ContainerComponentTypeCodeSequence" vr="SQ" vm="1" name="Container Component Type Code Sequence"/>

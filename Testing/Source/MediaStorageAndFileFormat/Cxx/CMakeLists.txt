@@ -46,6 +46,8 @@ SET(MSFF_TEST_SRCS
   TestPrint
   TestSorter
   TestImageReader
+  TestStreamImageReader
+  TestStreamImageWriter
   TestImageReaderRandomEmpty
   TestDirectionCosines
   TestImageWriter
@@ -69,6 +71,8 @@ SET(MSFF_TEST_SRCS
   TestFiducials
   TestEncapsulatedDocument
   TestSpectroscopy
+  TestSurfaceWriter
+  TestSurfaceWriter2
   )
 
 IF(GDCM_DATA_ROOT)

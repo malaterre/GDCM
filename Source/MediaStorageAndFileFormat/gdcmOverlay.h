@@ -43,10 +43,6 @@ public:
   /// Print
   void Print(std::ostream &) const;
 
-  /// Will traverse the dataset in search for overlay elements
-  /// this is an hybrid method I don't like having it attach to an Overlay object
-  static unsigned int GetNumberOfOverlays(DataSet const & ds);
-
   /// Update overlay from data element de:
   void Update(const DataElement & de);
 

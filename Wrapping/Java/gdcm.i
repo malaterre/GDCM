@@ -185,6 +185,9 @@ using namespace gdcm;
 %include "std_map.i"
 %include "exception.i"
 
+//%include "enumtypesafe.swg" // optional as typesafe enums are the default
+//%javaconst(1);
+
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
 %ignore operator++;                     // Ignore
@@ -243,9 +246,36 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
+
+//%include "enums.swg"
+//%typemap(javain) enum SWIGTYPE "$javainput.ordinal()"
+//%typemap(javaout) enum SWIGTYPE {
+//    return $javaclassname.class.getEnumConstants()[$jnicall];
+//  }
+//%typemap(javabody) enum SWIGTYPE ""
 %rename(GetType) gdcm::MediaStorage::operator MSType () const;
 
 %include "gdcmMediaStorage.h"
+//%clear enum SWIGTYPE;
+//%extend gdcm::MediaStorage
+//{
+//%typemap(javacode) MediaStorage
+//%{
+//  // For some reason the default equals operator is bogus, provide one ourself
+//  public boolean equals(Object obj)
+//    {
+//    MSType type = (MSType)obj;
+//    if( type == GetType() )
+//      {
+//      return true;
+//      }
+//    return false;
+//    }
+//%}
+//};
+
+//%include "enumtypesafe.swg" // optional as typesafe enums are the default
+
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 //%rename(__getitem__) gdcm::Tag::operator[];
 //%rename(this ) gdcm::Tag::operator[];
@@ -411,6 +441,7 @@ EXTEND_CLASS_PRINT(gdcm::File)
 //%cs_marshal_array(char, byte)
 %ignore gdcm::Bitmap::GetBuffer(char* buffer) const;
 %include "gdcmBitmap.h"
+EXTEND_CLASS_PRINT(gdcm::Bitmap)
 %extend gdcm::Bitmap
 {
   bool GetBuffer(signed char *buffer) const {
@@ -438,7 +469,6 @@ EXTEND_CLASS_PRINT(gdcm::File)
 };
 %clear signed char* buffer;
 %clear unsigned int* dims;
-EXTEND_CLASS_PRINT(gdcm::Bitmap)
 
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
@@ -503,6 +533,7 @@ jstring JNU_NewStringNative(JNIEnv *env, const char *str)
 }
 #endif
 
+// http://java.sun.com/docs/books/jni/html/pitfalls.html#12400
 
 %{
 void
@@ -660,9 +691,11 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
 %include "gdcmIODEntry.h"
+
 %apply signed char[] { signed char* outbuffer }
 %apply signed char[] { signed char* inbuffer }
 %include "gdcmRescaler.h"
+//EXTEND_CLASS_PRINT(gdcm::Rescaler)
 %extend gdcm::Rescaler
 {
   bool Rescale(signed char *outbuffer, const signed char *inbuffer, size_t n) {
@@ -719,6 +752,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
 %template (DoubleArrayType) std::vector<double>;
+%template (UShortArrayType) std::vector<unsigned short>;
+%template (UIntArrayType) std::vector<unsigned int>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"

@@ -122,6 +122,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.13.1.1", // XRay3DAngiographicImageStorage,
   "1.2.840.10008.5.1.4.1.1.12.1.1", // Enhanced XA Image Storage
   "1.2.840.10008.5.1.4.1.1.481.9", //  RTIonBeamsTreatmentRecordStorage
+  "1.2.840.10008.5.1.4.1.1.66.5", // Surface Segmentation Storage
+  "1.2.840.10008.5.1.4.1.1.77.1.6", // VLWholeSlideMicroscopyImageStorage
   0
 };
 
@@ -196,7 +198,8 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == LeadECGWaveformStorage
     || ms == GeneralECGWaveformStorage
     || ms == RTIonBeamsTreatmentRecordStorage
-    || ms == RTStructureSetStorage )
+    || ms == RTStructureSetStorage
+    || ms == SurfaceSegmentationStorage )
     {
     return false;
     }
@@ -282,6 +285,8 @@ static MSModalityType MSModalityTypes[] = {
   {"XA", 3},// XRay3DAngiographicImageStorage,
   {"XA", 3},// Enhanced XA Image Storage
   {"  ", 2},// RTIonBeamsTreatmentRecordStorage
+  {"SEG", 3},// Surface Segmentation Storage
+  {"SM", 2},// VLWholeSlideMicroscopyImageStorage
 
   {NULL, 0} //MS_END
 };

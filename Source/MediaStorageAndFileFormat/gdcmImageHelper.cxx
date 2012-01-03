@@ -710,6 +710,21 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
   MediaStorage ms;
   ms.SetFromFile(f);
   std::vector<unsigned int> theReturn(3);
+  if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
+    {
+      {
+      Attribute<0x0048,0x0006> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[0] = at.GetValue();
+      }
+      {
+      Attribute<0x0048,0x0007> at = { 0 };
+      at.SetFromDataSet( ds );
+      theReturn[1] = at.GetValue();
+      }
+    theReturn[2] = 1;
+    }
+  else
     {
       {
       Attribute<0x0028,0x0011> at = { 0 };
@@ -743,6 +758,20 @@ void ImageHelper::SetDimensionsValue(File& f, const Image & img)
   ms.SetFromFile(f);
   DataSet& ds = f.GetDataSet();
   assert( MediaStorage::IsImage( ms ) );
+  if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
+    {
+    Attribute<0x0048,0x0006> columns;
+    columns.SetValue( dims[0] );
+    ds.Replace( columns.GetAsDataElement() );
+    Attribute<0x0048,0x0007> rows;
+    rows.SetValue( dims[1] );
+    ds.Replace( rows.GetAsDataElement() );
+    if( dims[2] > 1 )
+      {
+      assert( 0 );
+      }
+    }
+  else
     {
     Attribute<0x0028,0x0010> rows;
     rows.SetValue( dims[1] );

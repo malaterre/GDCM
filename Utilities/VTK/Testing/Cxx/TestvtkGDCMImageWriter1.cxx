@@ -74,7 +74,10 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
 
     // Need to check we can still read this image back:
     gdcm::ImageReader r;
-    r.SetFileName( gdcmfile.c_str() );
+    if( gdcm::System::FileExists( gdcmfile.c_str() ) )
+      {
+      r.SetFileName( gdcmfile.c_str() );
+      }
     if( !r.Read() )
       {
       std::cerr << "failed to read back:" << gdcmfile << std::endl;

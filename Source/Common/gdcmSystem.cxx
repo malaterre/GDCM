@@ -546,6 +546,7 @@ inline int getlastdigit(unsigned char *data, unsigned long size)
     data[i] = extended / 10;
     carry = extended % 10;
     }
+  assert( carry >= 0 && carry < 10 );
   return carry;
 }
 
@@ -560,7 +561,8 @@ size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
   while(!zero)
     {
     res = getlastdigit(addr, size);
-    sres.insert(sres.begin(), '0' + res);
+    const char v = '0' + res;
+    sres.insert(sres.begin(), v);
     zero = true;
     for(int i = 0; i < size; ++i)
       {
@@ -572,30 +574,6 @@ size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
   strcpy(out, sres.c_str()); //, sres.size() );
   return sres.size();
 }
-
-#if !defined(GDCM_LEGACY_REMOVE)
-bool System::GetHardwareAddress(unsigned char addr[6])
-{
-  int stat = 0; //uuid_get_node_id(addr);
-  memset(addr,0,6);
-  /*
-  // For debugging you need to consider the worse case where hardware addres is max number:
-  addr[0] = 255;
-  addr[1] = 255;
-  addr[2] = 255;
-  addr[3] = 255;
-  addr[4] = 255;
-  addr[5] = 255;
-  */
-  if (stat == 1) // success
-    {
-    return true;
-    }
-  // else
-  //gdcmWarningMacro("Problem in finding the MAC Address");
-  return false;
-}
-#endif
 
 #if defined(_WIN32) && !defined(GDCM_HAVE_GETTIMEOFDAY)
 #include <stdio.h>
