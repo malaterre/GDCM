@@ -23,10 +23,6 @@ namespace gdcm
 static bool DebugFlag   = false;
 static bool WarningFlag = true;
 static bool ErrorFlag   = true;
-#if !defined(GDCM_LEGACY_REMOVE)
-static bool DebugToFile = false;
-static std::ofstream DebugFile;
-#endif
 static std::ostream * src = &std::cerr;
 
 void Trace::SetStream(std::ostream &os)
@@ -47,12 +43,6 @@ Trace::Trace()
 
 Trace::~Trace()
 {
-#if !defined(GDCM_LEGACY_REMOVE)
-  if ( DebugFile.is_open() )
-    {
-    DebugFile.close();
-    }
-#endif
 }
 
 void Trace::SetDebug(bool debug)  { DebugFlag = debug; }
@@ -79,21 +69,4 @@ bool Trace::GetErrorFlag()
   return ErrorFlag;
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
-bool Trace::GetDebugToFile()
-{
-  return DebugToFile;
-}
-
-/**
- * \brief Internal use only. Allow us to retrieve the static from anywhere
- *        in gdcm code
- * @return Debug file
- */
-std::ofstream &Trace::GetDebugFile ()
-{
-  return DebugFile;
-}
-#endif
-
-}
+} // end namespace gdcm

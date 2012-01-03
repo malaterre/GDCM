@@ -325,8 +325,8 @@ void *ReadFilesThread(void *voidparams)
     // read the shift/scale from the image
     const gdcm::Image &image = reader.GetImage();
 
-    const double shift = image.GetIntercept(0);
-    const double scale = image.GetSlope(0);
+    const double shift = image.GetIntercept();
+    const double scale = image.GetSlope();
 
     unsigned long len = image.GetBufferLength();
     // When not applying a transform:

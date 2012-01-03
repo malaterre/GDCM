@@ -182,13 +182,4 @@ namespace gdcm
     return 0;
     }
 
-//#if !defined(GDCM_LEGACY_REMOVE)
-//  ByteValue* DataElement::GetByteValue()
-//    {
-//    // Get the raw pointer from the gdcm::SmartPointer
-//    ByteValue *bv = dynamic_cast<ByteValue*>(ValueField.GetPointer());
-//    return bv; // Will return NULL if not ByteValue
-//    }
-//#endif
-
 } // end namespace gdcm

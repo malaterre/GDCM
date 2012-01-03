@@ -399,7 +399,6 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       }
     return os;
     }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > VL::GetVL16Max());
   if( VRField == VR::INVALID || vr16bitsimpossible )
     {
@@ -416,8 +415,8 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       ValueLengthField.Write<TSwap>(os);
     }
   else
-#endif
     {
+    assert( VRField.IsVRFile() && VRField != VR::INVALID );
     if( !VRField.Write(os) )
       {
       assert( 0 && "Should not happen" );
