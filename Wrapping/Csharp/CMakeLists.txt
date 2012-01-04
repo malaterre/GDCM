@@ -135,6 +135,10 @@ IF(OLDSTYLECSHARP)
     ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     @ONLY)
+  CONFIGURE_FILE(
+    ${CMAKE_CURRENT_SOURCE_DIR}/key.snk
+    ${CMAKE_CURRENT_BINARY_DIR}/key.snk
+    COPYONLY)
 
 # From Mirco Bauer on debian-cli
 # Hm? You wrote the C# binding for gdcm? Using C# in the lib name is
