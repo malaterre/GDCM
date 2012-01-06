@@ -781,7 +781,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Image & img)
     ds.Replace( columns.GetAsDataElement() );
     if( dims[2] > 1 )
       {
-      Attribute<0x0028,0x0008> numframes;
+      Attribute<0x0028,0x0008> numframes = { 0 };
       ds.Replace( numframes.GetAsDataElement() );
       }
     }
@@ -1395,27 +1395,31 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
         assert( vr == VR::DS );
         assert( de.GetTag() == Tag(0x3004,0x000c) );
         Attribute<0x28,0x8> numberoframes;
-        const DataElement& de1 = ds.GetDataElement( numberoframes.GetTag() );
-        numberoframes.SetFromDataElement( de1 );
+        // Make we are multiframes:
+        if( ds.FindDataElement( numberoframes.GetTag() ) )
+          {
+          const DataElement& de1 = ds.GetDataElement( numberoframes.GetTag() );
+          numberoframes.SetFromDataElement( de1 );
 
-            Element<VR::DS,VM::VM2_n> el;
-            el.SetLength( numberoframes.GetValue() * vr.GetSizeof() );
-            assert( entry.GetVM() == VM::VM2_n );
-            double spacing_start = 0;
-            assert( 0 < numberoframes.GetValue() );
-            for( int i = 0; i < numberoframes.GetValue(); ++i)
-              {
-              el.SetValue( spacing_start, i );
-              spacing_start += spacing[2];
-              }
-            //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
-            std::stringstream os;
-            el.Write( os );
-            de.SetVR( VR::DS );
-            VL::Type osStrSize = (VL::Type)os.str().size();
-            de.SetByteValue( os.str().c_str(), osStrSize );
-            ds.Replace( de );
-
+          Element<VR::DS,VM::VM2_n> el;
+          el.SetLength( numberoframes.GetValue() * vr.GetSizeof() );
+          assert( entry.GetVM() == VM::VM2_n );
+          double spacing_start = 0;
+          assert( 0 < numberoframes.GetValue() );
+          for( int i = 0; i < numberoframes.GetValue(); ++i)
+            {
+            el.SetValue( spacing_start, i );
+            spacing_start += spacing[2];
+            }
+          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+          std::stringstream os;
+          el.Write( os );
+          de.SetVR( VR::DS );
+          if( os.str().size() % 2 ) os << " ";
+          VL::Type osStrSize = (VL::Type)os.str().size();
+          de.SetByteValue( os.str().c_str(), osStrSize );
+          ds.Replace( de );
+          }
         }
       else
         {
