@@ -1,6 +1,6 @@
 /*!
 
-\page gdcmdiff
+\page gdcmdiff dumps differences of two DICOM files
 
 \section synopsis SYNOPSIS
 

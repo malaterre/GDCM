@@ -1,6 +1,6 @@
 /*!
 
-\page gdcm2pnm
+\page gdcm2pnm off-screen rendering of DICOM images
 
 \section synopsis SYNOPSIS
 
