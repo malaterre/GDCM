@@ -181,7 +181,6 @@ public class";
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
-//#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
 #include "gdcmBitmapToBitmapFilter.h"
@@ -217,7 +216,12 @@ public class";
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
+#include "gdcmQueryBase.h"
+#include "gdcmBaseRootQuery.h"
+#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextGenerator.h"
 #include "gdcmCompositeNetworkFunctions.h"
+#include "gdcmServiceClassUser.h"
 
 using namespace gdcm;
 %}
@@ -726,7 +730,6 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
   }
 };
 #endif
-//%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
 %include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
@@ -771,4 +774,15 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
+%template(DataSetArrayType) std::vector< gdcm::DataSet >;
+%template(FileArrayType) std::vector< gdcm::File >;
+%template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
+%template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
+%template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
+%include "gdcmQueryBase.h"
+%include "gdcmBaseRootQuery.h"
+%include "gdcmPresentationContext.h"
+//EXTEND_CLASS_PRINT(gdcm::PresentationContext)
+%include "gdcmPresentationContextGenerator.h"
 %include "gdcmCompositeNetworkFunctions.h"
+%include "gdcmServiceClassUser.h"
