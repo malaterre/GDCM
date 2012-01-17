@@ -516,14 +516,15 @@ refinstanceuid.GetValue().c_str() );
       vtkIdType *ptIds;
       unsigned int npts = at.GetNumberOfValues() / 3;
       assert( npts == numcontpoints.GetValue() );
-      if(npts>256)
+      assert( npts * 3 == at.GetNumberOfValues() );
+      //if(npts>256)
         {
         ptIds = new vtkIdType[npts];
         }
-      else
-        {
-        ptIds = buffer;
-        }
+      //else
+      //  {
+      //  ptIds = buffer;
+      //  }
       for(unsigned int i = 0; i < npts * 3; i+=3)
         {
         float x[3];
@@ -531,14 +532,16 @@ refinstanceuid.GetValue().c_str() );
         x[1] = pts[i+1];
         x[2] = pts[i+2];
         vtkIdType ptId = newPts->InsertNextPoint( x );
+        assert( i / 3 < npts );
         ptIds[i / 3] = ptId;
         }
       // Each Contour Data is in fact a Cell:
       vtkIdType cellId = polys->InsertNextCell( npts , ptIds);
       scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
-      if(npts>256)
+      //if(npts>256)
         {
         delete[] ptIds;
+        ptIds = NULL;
         }
       }
     output->SetPoints(newPts);
