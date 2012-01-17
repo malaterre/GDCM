@@ -400,6 +400,7 @@ int main(int argc, char *argv[])
   imgfactory->Delete();
 
   vtkImageData *imgdata;
+  std::string image_comments;
   if( imgreader )
     {
     imgreader->SetFileLowerLeft( lowerleft );
@@ -423,6 +424,10 @@ int main(int argc, char *argv[])
       return 1;
       }
     imgdata = datareader->GetOutput();
+    if( datareader->GetHeader() )
+      {
+      image_comments = datareader->GetHeader();
+      }
     }
   else if( xmlreader->CanReadFile( filename ) )
     {
@@ -777,6 +782,13 @@ int main(int argc, char *argv[])
     {
     if( !modality_str.empty() )
       writer->GetMedicalImageProperties()->SetModality( modality_str.c_str() );;
+    }
+
+  // I would like to use vtkStructuredPointsReader::GetHeader as Image Comments,
+  // however this is not possible with the current vtkMedicalImageProperties...
+  if( !image_comments.empty() )
+    {
+    writer->GetMedicalImageProperties()->SetSeriesDescription( image_comments.c_str() );;
     }
 
   // Let's do that at the end to be sure it always overwrite any other default
