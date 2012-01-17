@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 )
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/
