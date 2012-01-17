@@ -36,6 +36,42 @@
 
 using namespace gdcm;
 
+//view each organ independently of the others, to make sure that
+//organ names correspond to actual segmentations.
+void ShowOrgan(vtkPolyData* inData)
+{
+  // Now we'll look at it.
+  vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
+  cubeMapper->SetInput( inData );
+  cubeMapper->SetScalarRange(0,7);
+  vtkActor *cubeActor = vtkActor::New();
+  cubeActor->SetMapper(cubeMapper);
+  vtkProperty * property = cubeActor->GetProperty();
+  property->SetRepresentationToWireframe();
+
+  vtkRenderer *renderer = vtkRenderer::New();
+  vtkRenderWindow *renWin = vtkRenderWindow::New();
+  renWin->AddRenderer(renderer);
+
+  vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
+  iren->SetRenderWindow(renWin);
+
+  renderer->AddActor(cubeActor);
+  renderer->ResetCamera();
+  renderer->SetBackground(1,1,1);
+
+  renWin->SetSize(300,300);
+
+  renWin->Render();
+  iren->Start();
+
+  cubeMapper->Delete();
+  cubeActor->Delete();
+  renderer->Delete();
+  renWin->Delete();
+  iren->Delete();
+}
+
 /*
  * Full application which ... RTSTUCT
  */
@@ -83,24 +119,34 @@ int main(int argc, char *argv[])
   roiAlgorithms->SetNumberOfValues(numMasks);
   roiTypes->SetNumberOfValues(numMasks);
   vtkAppendPolyData* append = vtkAppendPolyData::New();
-  for (int i = 0; i < reader->GetNumberOfOutputPorts(); ++i)
-    {
-    writer->SetInput(i, reader->GetOutput(i));
-    append->AddInput(reader->GetOutput(i));
-    std::string theString = reader->GetRTStructSetProperties()->GetStructureSetROIName(i);
-    roiNames->InsertValue(i, theString);
-    theString = reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i);
-    roiAlgorithms->InsertValue(i, theString);
-    theString = reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i);
-    roiTypes->InsertValue(i, theString);
-    }
+
   //ok, now we'll add a blank organ
   //the blank organ is to test to ensure that blank organs work; there have been crash reports
+  //this code is added at the beginning to ensure that the blank organs are read
+  //and preserved as individual organs.
   vtkPolyData* blank = vtkPolyData::New();
-  writer->SetInput(numMasks-1, blank);
-  roiNames->InsertValue(numMasks-1, "blank");
-  roiAlgorithms->InsertValue(numMasks-1, "blank");
-  roiTypes->InsertValue(numMasks-1, "ORGAN");
+  writer->SetInput(0, blank);
+  roiNames->InsertValue(0, "blank");
+  roiAlgorithms->InsertValue(0, "blank");
+  roiTypes->InsertValue(0, "ORGAN");
+
+  //note the offsets used to place the blank rtstruct at the beginning of the newly generated RT.
+  //the idea is to run the program twice; first to generate an rtstruct with a blank mask (making
+  //sure that that functionality works), and then a second time to make sure that everything is
+  //being read properly.  Multiple organs with the same name could cause some strangenesses.
+  for (int i = 1; i < numMasks; ++i)
+    {
+    writer->SetInput(i, reader->GetOutput(i-1));
+    append->AddInput(reader->GetOutput(i-1));
+    std::string theString = reader->GetRTStructSetProperties()->GetStructureSetROIName(i-1);
+    roiNames->InsertValue(i, theString);
+    theString = reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i-1);
+    roiAlgorithms->InsertValue(i, theString);
+    theString = reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i-1);
+    roiTypes->InsertValue(i, theString);
+
+    ShowOrgan(reader->GetOutput(i-1));
+    }
 
   vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
   writer->SetRTStructSetProperties(theProperties);
@@ -117,38 +163,8 @@ int main(int argc, char *argv[])
   // print first output:
   reader->GetOutput()->Print( std::cout );
 
-  // Now we'll look at it.
-  vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
-  cubeMapper->SetInput( append->GetOutput());
-  cubeMapper->SetScalarRange(0,7);
-  vtkActor *cubeActor = vtkActor::New();
-  cubeActor->SetMapper(cubeMapper);
-  vtkProperty * property = cubeActor->GetProperty();
-  property->SetRepresentationToWireframe();
-
-  vtkRenderer *renderer = vtkRenderer::New();
-  vtkRenderWindow *renWin = vtkRenderWindow::New();
-  renWin->AddRenderer(renderer);
-
-  vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
-  iren->SetRenderWindow(renWin);
-
-  renderer->AddActor(cubeActor);
-  renderer->ResetCamera();
-  renderer->SetBackground(1,1,1);
-
-  renWin->SetSize(300,300);
-
-  renWin->Render();
-  iren->Start();
-
   reader->Delete();
   append->Delete();
-  cubeMapper->Delete();
-  cubeActor->Delete();
-  renderer->Delete();
-  renWin->Delete();
-  iren->Delete();
   roiNames->Delete();
   roiTypes->Delete();
   theProperties->Delete();
