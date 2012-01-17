@@ -289,7 +289,7 @@ For some application it might be necessary to produce a small preview of the mai
 to be able to quickly load that short preview instead of the main image. In that case:
 
 \verbatim
-gdcmconv --raw --generate-icon gdcmData/test.acr test_icon.dcm
+$ gdcmconv --raw --generate-icon gdcmData/test.acr test_icon.dcm
 \endverbatim
 
 In some cases the main Pixel Data element is expressed as pixel defined on
@@ -299,7 +299,7 @@ for doing the rescale operation user can specify the min max used for the
 rescale operation:
 
 \verbatim
-gdcmconv --raw --generate-icon --icon-minmax 0,192 gdcmData/012345.002.050.dcm icon_minmax.dcm
+$ gdcmconv --raw --generate-icon --icon-minmax 0,192 gdcmData/012345.002.050.dcm icon_minmax.dcm
 \endverbatim
 
 \subsection planar_configuration Changing the planar Configuration
