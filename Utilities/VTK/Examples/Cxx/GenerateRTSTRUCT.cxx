@@ -85,93 +85,97 @@ int main(int argc, char *argv[])
   std::string theDirName(argv[1]);
   Directory::FilenamesType theRTSeries =
     DirectoryHelper::GetRTStructSeriesUIDs(theDirName);
+
+
   if (theRTSeries.empty())
     {
     std::cerr << "No RTStructs found for the test, ending." << std::endl;
     return 1;
     }
 
-  Directory::FilenamesType theRTNames =
-    DirectoryHelper::GetFilenamesFromSeriesUIDs(theDirName, theRTSeries[0]);
-
-  vtkGDCMPolyDataReader * reader = vtkGDCMPolyDataReader::New();
-  reader->SetFileName( theRTNames[0].c_str() );
-  reader->Update();
-
-  //std::cout << reader->GetMedicalImageProperties()->GetStudyDate() << std::endl;
-
-  vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
-  int numMasks = reader->GetNumberOfOutputPorts() + 1;//add a blank one in
-  writer->SetNumberOfInputPorts( numMasks );
-  writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[0] + ".dcm").c_str());
-  writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-  //this line is cheating, we won't have the same stuff, and may not have a struct
-  //to start with.
-  //have to go back to the original data to reconstruct the RTStructureSetProperties
-  //writer->SetRTStructSetProperties( reader->GetRTStructSetProperties() );
-  //writer->Write();
-
-  //loop through the outputs in order to write them out as if they had been created and appended
-  vtkStringArray* roiNames = vtkStringArray::New();
-  vtkStringArray* roiAlgorithms = vtkStringArray::New();
-  vtkStringArray* roiTypes = vtkStringArray::New();
-  roiNames->SetNumberOfValues(numMasks);
-  roiAlgorithms->SetNumberOfValues(numMasks);
-  roiTypes->SetNumberOfValues(numMasks);
-  vtkAppendPolyData* append = vtkAppendPolyData::New();
-
-  //ok, now we'll add a blank organ
-  //the blank organ is to test to ensure that blank organs work; there have been crash reports
-  //this code is added at the beginning to ensure that the blank organs are read
-  //and preserved as individual organs.
-  vtkPolyData* blank = vtkPolyData::New();
-  writer->SetInput(0, blank);
-  roiNames->InsertValue(0, "blank");
-  roiAlgorithms->InsertValue(0, "blank");
-  roiTypes->InsertValue(0, "ORGAN");
-
-  //note the offsets used to place the blank rtstruct at the beginning of the newly generated RT.
-  //the idea is to run the program twice; first to generate an rtstruct with a blank mask (making
-  //sure that that functionality works), and then a second time to make sure that everything is
-  //being read properly.  Multiple organs with the same name could cause some strangenesses.
-  for (int i = 1; i < numMasks; ++i)
+  for (int q = 0; q < theRTSeries.size(); q++)
     {
-    writer->SetInput(i, reader->GetOutput(i-1));
-    append->AddInput(reader->GetOutput(i-1));
-    std::string theString = reader->GetRTStructSetProperties()->GetStructureSetROIName(i-1);
-    roiNames->InsertValue(i, theString);
-    theString = reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i-1);
-    roiAlgorithms->InsertValue(i, theString);
-    theString = reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i-1);
-    roiTypes->InsertValue(i, theString);
+    Directory::FilenamesType theRTNames =
+      DirectoryHelper::GetFilenamesFromSeriesUIDs(theDirName, theRTSeries[q]);
 
-    ShowOrgan(reader->GetOutput(i-1));
-    }
+    vtkGDCMPolyDataReader * reader = vtkGDCMPolyDataReader::New();
+    reader->SetFileName( theRTNames[0].c_str() );
+    reader->Update();
 
-  vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
-  writer->SetRTStructSetProperties(theProperties);
-  writer->InitializeRTStructSet(theDirName,
-    reader->GetRTStructSetProperties()->GetStructureSetLabel(),
-    reader->GetRTStructSetProperties()->GetStructureSetName(),
-    roiNames, roiAlgorithms, roiTypes);
+    //std::cout << reader->GetMedicalImageProperties()->GetStudyDate() << std::endl;
 
-  writer->SetRTStructSetProperties(theProperties);
-  writer->Write();
+    vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
+    int numMasks = reader->GetNumberOfOutputPorts() + 1;//add a blank one in
+    writer->SetNumberOfInputPorts( numMasks );
+    writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[q] + ".dcm").c_str());
+    writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    //this line is cheating, we won't have the same stuff, and may not have a struct
+    //to start with.
+    //have to go back to the original data to reconstruct the RTStructureSetProperties
+    //writer->SetRTStructSetProperties( reader->GetRTStructSetProperties() );
+    //writer->Write();
 
-  // print reader output:
-  reader->Print( std::cout );
-  // print first output:
-  reader->GetOutput()->Print( std::cout );
+    //loop through the outputs in order to write them out as if they had been created and appended
+    vtkStringArray* roiNames = vtkStringArray::New();
+    vtkStringArray* roiAlgorithms = vtkStringArray::New();
+    vtkStringArray* roiTypes = vtkStringArray::New();
+    roiNames->SetNumberOfValues(numMasks);
+    roiAlgorithms->SetNumberOfValues(numMasks);
+    roiTypes->SetNumberOfValues(numMasks);
+    vtkAppendPolyData* append = vtkAppendPolyData::New();
 
-  reader->Delete();
-  append->Delete();
-  roiNames->Delete();
-  roiTypes->Delete();
-  theProperties->Delete();
-  roiAlgorithms->Delete();
-  blank->Delete();
+    //ok, now we'll add a blank organ
+    //the blank organ is to test to ensure that blank organs work; there have been crash reports
+    //this code is added at the beginning to ensure that the blank organs are read
+    //and preserved as individual organs.
+    vtkPolyData* blank = vtkPolyData::New();
+    writer->SetInput(0, blank);
+    roiNames->InsertValue(0, "blank");
+    roiAlgorithms->InsertValue(0, "blank");
+    roiTypes->InsertValue(0, "ORGAN");
 
-  writer->Delete();
+    //note the offsets used to place the blank rtstruct at the beginning of the newly generated RT.
+    //the idea is to run the program twice; first to generate an rtstruct with a blank mask (making
+    //sure that that functionality works), and then a second time to make sure that everything is
+    //being read properly.  Multiple organs with the same name could cause some strangenesses.
+    for (int i = 1; i < numMasks; ++i)
+      {
+      writer->SetInput(i, reader->GetOutput(i-1));
+      append->AddInput(reader->GetOutput(i-1));
+      std::string theString = reader->GetRTStructSetProperties()->GetStructureSetROIName(i-1);
+      roiNames->InsertValue(i, theString);
+      theString = reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i-1);
+      roiAlgorithms->InsertValue(i, theString);
+      theString = reader->GetRTStructSetProperties()->GetStructureSetRTROIInterpretedType(i-1);
+      roiTypes->InsertValue(i, theString);
 
+      ShowOrgan(reader->GetOutput(i-1));
+      }
+
+    vtkRTStructSetProperties* theProperties = vtkRTStructSetProperties::New();
+    writer->SetRTStructSetProperties(theProperties);
+    writer->InitializeRTStructSet(theDirName,
+      reader->GetRTStructSetProperties()->GetStructureSetLabel(),
+      reader->GetRTStructSetProperties()->GetStructureSetName(),
+      roiNames, roiAlgorithms, roiTypes);
+
+    writer->SetRTStructSetProperties(theProperties);
+    writer->Write();
+
+    // print reader output:
+    reader->Print( std::cout );
+    // print first output:
+    reader->GetOutput()->Print( std::cout );
+
+    reader->Delete();
+    append->Delete();
+    roiNames->Delete();
+    roiTypes->Delete();
+    theProperties->Delete();
+    roiAlgorithms->Delete();
+    blank->Delete();
+
+    writer->Delete();
+  }
   return 0;
 }
