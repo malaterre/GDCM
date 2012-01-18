@@ -495,9 +495,15 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     cellpoints.resize(0);
     for(vtkIdType index = 0; index < npts; ++index){
       pts->GetPoint(indx[index],v);
+      //precision problems are _definitely_ here by this point
+      //this a crude hack to the get the 9999's under control,
+      //or pollution by switching from doubles to floats and back again
+      //cellpoints.push_back( (double)((int)(v[0]*10000.0))/10000.0 );
+      //cellpoints.push_back( (double)((int)(v[1]*10000.0))/10000.0 );
+      //cellpoints.push_back( (double)((int)(v[2]*10000.0))/10000.0 );
       cellpoints.push_back( v[0] );
       cellpoints.push_back( v[1] );
-      cellpoints.push_back( v[2] );
+      cellpoints.push_back( v[2 ]);
     }
     Item item;
     item.SetVLToUndefined();

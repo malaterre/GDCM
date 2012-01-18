@@ -456,6 +456,7 @@ refinstanceuid.GetValue().c_str() );
     scalars->SetNumberOfComponents(3);
 
     vtkPoints *newPts = vtkPoints::New();
+    newPts->SetDataTypeToDouble();//ensure that full precision is retained
     //std::string s(sde.GetByteValue()->GetPointer(), sde.GetByteValue()->GetLength());
     //std::cout << s << std::endl;
     //newPts->GetData()->SetName( s.c_str() );
@@ -527,7 +528,7 @@ refinstanceuid.GetValue().c_str() );
       //  }
       for(unsigned int i = 0; i < npts * 3; i+=3)
         {
-        float x[3];
+        double x[3];//must be double precision, as that's the precision in vtk
         x[0] = pts[i+0];
         x[1] = pts[i+1];
         x[2] = pts[i+2];
