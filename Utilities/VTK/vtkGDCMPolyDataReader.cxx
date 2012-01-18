@@ -566,7 +566,8 @@ refinstanceuid.GetValue().c_str() );
     {
     return 0;
     }
-  for(unsigned int obs = 0; obs < rtroiobssqsqi->GetNumberOfItems(); ++obs)
+  unsigned int theNumberOfItems = rtroiobssqsqi->GetNumberOfItems();
+  for(unsigned int obs = 0; obs < theNumberOfItems ; ++obs)
     {
     const gdcm::Item & item = rtroiobssqsqi->GetItem(obs+1); // Item start at #1
     const gdcm::DataSet& nestedds = item.GetNestedDataSet();
