@@ -31,7 +31,6 @@
 #include "vtkProperty.h"
 #include "vtkProperty2D.h"
 #include "vtkImageData.h"
-#include "vtkCellArray.h"
 
 #include "gdcmDirectoryHelper.h"
 
@@ -130,7 +129,6 @@ int main(int argc, char *argv[])
     //this code is added at the beginning to ensure that the blank organs are read
     //and preserved as individual organs.
     vtkPolyData* blank = vtkPolyData::New();
-    blank->SetPolys(vtkCellArray::New());
     writer->SetInput(0, blank);
     roiNames->InsertValue(0, "blank");
     roiAlgorithms->InsertValue(0, "blank");
