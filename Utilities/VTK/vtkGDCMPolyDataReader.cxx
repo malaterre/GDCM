@@ -513,19 +513,11 @@ refinstanceuid.GetValue().c_str() );
       //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
       //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
       const double* pts = at.GetValues();
-      vtkIdType buffer[256];
       vtkIdType *ptIds;
       unsigned int npts = at.GetNumberOfValues() / 3;
       assert( npts == numcontpoints.GetValue() );
       assert( npts * 3 == at.GetNumberOfValues() );
-      //if(npts>256)
-        {
-        ptIds = new vtkIdType[npts];
-        }
-      //else
-      //  {
-      //  ptIds = buffer;
-      //  }
+      ptIds = new vtkIdType[npts];
       for(unsigned int i = 0; i < npts * 3; i+=3)
         {
         double x[3];//must be double precision, as that's the precision in vtk
