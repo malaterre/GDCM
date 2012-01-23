@@ -266,7 +266,6 @@ ENDIF(GDCM_BUILD_SHARED_LIBS)
 #-----------------------------------------------------------------------------
 #System stuff, mainly for packager or paranoid people with up-to-date lib moto
 OPTION(GDCM_USE_SYSTEM_ZLIB "Use system zlib" OFF)
-#OPTION(GDCM_USE_SYSTEM_POLARSSL "Use system polarssl (xyssl)" OFF)
 OPTION(GDCM_USE_SYSTEM_OPENSSL  "Use system OpenSSL" OFF)
 IF(UNIX)
   # Will search for the uuid_generate symbols.
@@ -277,26 +276,29 @@ OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
 OPTION(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
 OPTION(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg" OFF)
 OPTION(GDCM_USE_SYSTEM_CHARLS "Use system charls" OFF)
-MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID
-  GDCM_USE_SYSTEM_EXPAT GDCM_USE_SYSTEM_OPENSSL)
-MARK_AS_ADVANCED(GDCM_USE_SYSTEM_OPENJPEG GDCM_USE_SYSTEM_LJPEG GDCM_USE_SYSTEM_CHARLS)
+MARK_AS_ADVANCED(
+  GDCM_USE_SYSTEM_ZLIB
+  GDCM_USE_SYSTEM_OPENSSL
+  GDCM_USE_SYSTEM_UUID
+  GDCM_USE_SYSTEM_EXPAT
+  GDCM_USE_SYSTEM_LJPEG
+  GDCM_USE_SYSTEM_OPENJPEG
+  GDCM_USE_SYSTEM_CHARLS
+  )
 OPTION(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
 IF(GDCM_USE_SYSTEM_POPPLER)
   FIND_PACKAGE(Poppler REQUIRED)
 ENDIF(GDCM_USE_SYSTEM_POPPLER)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_POPPLER)
 
-#FIND_PACKAGE(JavaProperties)
-#message(${JAVA_LIBRARY_PATH})
-
-OPTION(GDCM_USE_SYSTEM_PODOFO "Use system podofo (pdf)" OFF)
-IF(GDCM_USE_SYSTEM_PODOFO)
-  #FIND_PACKAGE(PODOFO REQUIRED)
-  IF(GDCM_USE_SYSTEM_POPPLER)
-    MESSAGE(FATAL_ERROR "Choose only one podofo vs poppler")
-  ENDIF(GDCM_USE_SYSTEM_POPPLER)
-ENDIF(GDCM_USE_SYSTEM_PODOFO)
-MARK_AS_ADVANCED(GDCM_USE_SYSTEM_PODOFO)
+#OPTION(GDCM_USE_SYSTEM_PODOFO "Use system podofo (pdf)" OFF)
+#IF(GDCM_USE_SYSTEM_PODOFO)
+#  #FIND_PACKAGE(PODOFO REQUIRED)
+#  IF(GDCM_USE_SYSTEM_POPPLER)
+#    MESSAGE(FATAL_ERROR "Choose only one podofo vs poppler")
+#  ENDIF(GDCM_USE_SYSTEM_POPPLER)
+#ENDIF(GDCM_USE_SYSTEM_PODOFO)
+#MARK_AS_ADVANCED(GDCM_USE_SYSTEM_PODOFO)
 
 IF(GDCM_USE_SYSTEM_LJPEG)
   FIND_PACKAGE(LJPEG REQUIRED)
@@ -340,8 +342,8 @@ IF(GDCM_USE_PVRG)
   ENDIF(GDCM_USE_SYSTEM_PVRG)
 ENDIF(GDCM_USE_PVRG)
 
-# Very advanced behavior only use if you want to keep backward compatible behavior
-# but possibly incorrect behavior.
+# Very advanced behavior only use if you want to keep backward compatible
+# behavior but possibly incorrect behavior.
 OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" OFF)
 MARK_AS_ADVANCED(GDCMV2_0_COMPATIBILITY)
 
@@ -362,15 +364,6 @@ IF(GDCM_USE_SYSTEM_ZLIB)
 ELSE(GDCM_USE_SYSTEM_ZLIB)
   SET(GDCM_ZLIB_LIBRARIES "gdcmzlib")
 ENDIF(GDCM_USE_SYSTEM_ZLIB)
-
-#IF(GDCM_USE_SYSTEM_POLARSSL)
-#  # If user say so, then this is a requirement !
-#  FIND_PACKAGE(POLARSSL REQUIRED)
-#  SET(GDCM_POLARSSL_LIBRARIES ${POLARSSL_LIBRARIES})
-#
-#ELSE(GDCM_USE_SYSTEM_POLARSSL)
-#  SET(GDCM_POLARSSL_LIBRARIES "gdcmpolarssl")
-#ENDIF(GDCM_USE_SYSTEM_POLARSSL)
 
 IF(GDCM_USE_SYSTEM_OPENSSL)
   FIND_PACKAGE(OpenSSL REQUIRED)
@@ -456,10 +449,6 @@ ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
 #-----------------------------------------------------------------------------
 # Wrapping
 OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
-IF(GDCM_BUILD_WRAPPING)
-  MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
-  SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
-ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PERL "perl wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping" OFF)
@@ -467,14 +456,11 @@ OPTION(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
 MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_PERL)
 MARK_AS_ADVANCED(GDCM_USE_RLE)
 MARK_AS_ADVANCED(GDCM_USE_ACTIVIZ)
-#MARK_AS_ADVANCED(GDCM_TEST_BOOSTRAP)
 OPTION(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
 MARK_AS_ADVANCED(GDCM_USE_JPEGLS)
 IF(GDCM_WRAP_CSHARP)
-FIND_PACKAGE(CSharp REQUIRED)
-INCLUDE(${CSharp_USE_FILE})
-#  cmake_minimum_required(VERSION 2.6)
-#  enable_language(CSharp)
+  FIND_PACKAGE(CSharp REQUIRED)
+  INCLUDE(${CSharp_USE_FILE})
 ENDIF(GDCM_WRAP_CSHARP)
 
 SET(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
@@ -485,7 +471,6 @@ SET(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 IF(APPLE)
   FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
 ENDIF(APPLE)
-
 
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around
@@ -561,14 +546,6 @@ IF(GDCM_USE_VTK)
   OPTION(GDCM_USE_PARAVIEW "paraview plugin ?" OFF)
   SUBDIRS(Utilities/VTK)
 ENDIF(GDCM_USE_VTK)
-
-#-----------------------------------------------------------------------------
-#OPTION(GDCM_USE_ITK "itk bridge ?" OFF)
-#MARK_AS_ADVANCED(GDCM_USE_ITK)
-IF(GDCM_USE_ITK_I_UNDERSTAND_WHAT_I_AM_DOING)
-  #MESSAGE(FATAL_ERROR "Do not use, instead prefer: ITK_USE_SYSTEM_GDCM, that was added after ITK 3.8")
-  SUBDIRS(Utilities/Insight)
-ENDIF(GDCM_USE_ITK_I_UNDERSTAND_WHAT_I_AM_DOING)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
