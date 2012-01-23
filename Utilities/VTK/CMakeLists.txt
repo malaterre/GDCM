@@ -256,10 +256,6 @@ IF(GDCM_WRAP_CSHARP)
   ENDIF(GDCM_USE_ACTIVIZ)
 
   CONFIGURE_FILE(
-    ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
-    ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
-    @ONLY)
-  CONFIGURE_FILE(
     ${GDCM_SOURCE_DIR}/Wrapping/Csharp/key.snk
     ${CMAKE_CURRENT_BINARY_DIR}/key.snk
     COPYONLY)
@@ -479,9 +475,37 @@ IF(GDCM_WRAP_CSHARP)
     ENDIF(MV_ONE_EXPORT_LAYER_DLL)
 
     set(csc_EXECUTABLE ${CMAKE_CSHARP_COMPILER})
-    SET(csharp_namespace "Kitware.VTK.GDCM")
+    # Set list of export-layer dlls in C# syntax as CMake variable
+    # MV_EXPORTLAYER_DLL_VARIABLES. This gets configured into
+    # WrappedObject.cs below.
+    #
+    SET(MV_EXPORTLAYER_DLL_VARIABLES "")
+    FOREACH(kit ${kits})
+      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// <summary>\n")
+      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// Export layer functions for 'vtk${kit}' are exported from\n")
+      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// the DLL named by the value of this variable.\n")
+      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// </summary>\n")
 
-    SET(AVDN_VTK_CSC_REFS "${ACTIVIZ_KITWARE_VTK_LIBRARY}")
+      IF(MV_ONE_EXPORT_LAYER_DLL)
+        SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    public const string vtk${kit}EL_dll = \"${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}\";\n")
+      ELSE(MV_ONE_EXPORT_LAYER_DLL)
+        SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    public const string vtk${kit}EL_dll = \"${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.vtk${kit}.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}\";\n")
+      ENDIF(MV_ONE_EXPORT_LAYER_DLL)
+    ENDFOREACH(kit)
+
+    SET(csharp_namespace "Kitware.VTK.GDCM")
+    CONFIGURE_FILE(
+      "${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in"
+      "${CMAKE_CURRENT_BINARY_DIR}/csharp/AssemblyInfo.cs"
+      @ONLY
+      )
+
+    SET(ALLKITS_CS_SOURCES
+      ${ALLKITS_CS_SOURCES}
+      "${CMAKE_CURRENT_BINARY_DIR}/csharp/AssemblyInfo.cs"
+      )
+
+    SET(AVDN_VTK_CSC_REFS ${ACTIVIZ_KITWARE_VTK_LIBRARY} ${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY})
     ADD_CSHARP_LIBRARY(
       "Kitware.VTK.GDCM" # name of library
       "${unmanaged_targets}" # list of CMake targets that need to build first
@@ -491,6 +515,10 @@ IF(GDCM_WRAP_CSHARP)
       # Source files:
       ${ALLKITS_CS_SOURCES}
       )
+
+    FOREACH(kit ${kits})
+      ADD_DEPENDENCIES(Kitware.VTK.GDCM "vtk${kit}GenerateWrappers")
+    ENDFOREACH(kit)
 
     #    ADD_CUSTOM_COMMAND(
     #      OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
@@ -502,6 +530,11 @@ IF(GDCM_WRAP_CSHARP)
     #      COMMENT "csc *.cs"
     #      )
   ELSE(GDCM_USE_ACTIVIZ)
+    CONFIGURE_FILE(
+      ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
+      ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+      @ONLY)
+
     ADD_CUSTOM_COMMAND(
       OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
       COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
