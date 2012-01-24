@@ -12,8 +12,7 @@
 
 =========================================================================*/
 using Kitware.VTK;
-using vtkgdcm;
-
+using Kitware.VTK.GDCM;
 
 /*
  * this is not so much an example but simply a test to make sure cstor / dstor work as expected
