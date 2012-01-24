@@ -12,7 +12,7 @@
 
 =========================================================================*/
 using Kitware.VTK;
-using vtkgdcm;
+using Kitware.VTK.GDCM;
 
 // The command line arguments are:
 // -I        => run in interactive mode; unless this is used, the program will
@@ -20,10 +20,8 @@ using vtkgdcm;
 // -D <path> => path to the data; the data should be in <path>/Data/
 
 /*
- * $ export MONO_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/
- * $ export LD_LIBRARY_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/
+ * $ export MONO_PATH=/usr/lib/cli/ActiViz.NET/:/usr/lib/cli/Kitware.mummy.Runtime-1.0
  * $ mono ./bin/HelloActiviz5.exe -I
- *
  */
 public class HelloActiviz5
 {

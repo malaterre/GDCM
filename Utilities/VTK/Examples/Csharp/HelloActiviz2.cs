@@ -12,12 +12,11 @@
 
 =========================================================================*/
 using Kitware.VTK;
-using vtkgdcm;
+using Kitware.VTK.GDCM;
 
 /*
  * Usage:
- * export LD_LIBRARY_PATH=/home/mathieu/Perso/gdcm/debug-activiz/bin:/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
- * export MONO_PATH=/home/mathieu/Software/ActiViz.NET-5.4.2.488-Linux-x86_64-Personal/bin
+ * $ export MONO_PATH=/usr/lib/cli/ActiViz.NET/:/usr/lib/cli/Kitware.mummy.Runtime-1.0
  * $ mono ./bin/HelloActiviz2.exe gdcmData/test.acr bla.png bla2.dcm
  */
 
@@ -35,7 +34,7 @@ public class HelloActiviz2
     string outfilename = args[1];
     string outfilename2 = args[2];
 
-    vtkgdcm.vtkGDCMImageReader reader = new vtkgdcm.vtkGDCMImageReader();
+    vtkGDCMImageReader reader = new Kitware.VTK.GDCM.vtkGDCMImageReader();
     reader.SetFileName( filename );
 
     // When calling multiple times creation of C# object from the same C++ object it triggers a:
@@ -62,7 +61,7 @@ public class HelloActiviz2
     pngwriter.Write();
 
     // at that point the .Write() should have triggered an Update() on the reader:
-    if( reader.GetImageFormat() == vtkgdcm.vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
+    if( reader.GetImageFormat() == vtkgdcm.VTK_LUMINANCE ) // MONOCHROME2
       {
       System.Console.WriteLine( "Image is MONOCHROME2" ); //
       }

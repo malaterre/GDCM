@@ -23,7 +23,8 @@ using System.Runtime.InteropServices;
  * 2. Temporary PNG (intermediate) file     (Activiz)
  * 3. Final DICOM file                      (SWIG)
  *
- * $ MONO_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/ LD_LIBRARY_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ mono ./bin/HelloActiviz.exe ~/Creatis/gdcmData/test.acr out.png toto.dcm
+ * $ export MONO_PATH=/usr/lib/cli/ActiViz.NET/:/usr/lib/cli/Kitware.mummy.Runtime-1.0
+ * $ mono ./bin/HelloActiviz.exe ~/Creatis/gdcmData/test.acr out.png toto.dcm
  *
  * Footnote:
  * this test originally used vtkBMPWriter / vtkBMPReader combination to store intermediate
