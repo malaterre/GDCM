@@ -286,7 +286,7 @@ IF(GDCM_WRAP_CSHARP)
     IF(MSVC90)
       SET(gccxml_compiler "msvc9")
     ENDIF(MSVC90)
-    MESSAGE(STATUS "gccxml_compiler='${gccxml_compiler}'...")
+    #MESSAGE(STATUS "gccxml_compiler='${gccxml_compiler}'...")
     SET(gccxml_include_args "")
     FOREACH(dir ${Mummy_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS})
       SET(gccxml_include_args ${gccxml_include_args} "-I${dir}")
@@ -362,7 +362,6 @@ IF(GDCM_WRAP_CSHARP)
           @ONLY
         )
 
-          message( "${CMAKE_CURRENT_BINARY_DIR}/xml/${cxxclass}.xml" )
         ADD_CUSTOM_COMMAND(
           OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/xml/${cxxclass}.xml
           COMMAND ${gccxml_EXECUTABLE}
@@ -437,9 +436,8 @@ IF(GDCM_WRAP_CSHARP)
       SET(MV_ONE_EXPORT_LAYER_DLL 1)
     ENDIF(VTK_BUILD_SHARED_LIBS)
 
-    message(${MV_ONE_EXPORT_LAYER_DLL})
-
     IF(MV_ONE_EXPORT_LAYER_DLL)
+      message(FATAL_ERROR "Unimplemented")
       #SET(AVDN_INSTALL_TARGETS ${AVDN_INSTALL_TARGETS} "Kitware.VTK.Unmanaged")
       #ADD_LIBRARY(Kitware.VTK.Unmanaged SHARED ${ALLKITS_EL_SOURCES})
       #SET(unmanaged_targets ${unmanaged_targets} "Kitware.VTK.Unmanaged")
@@ -529,6 +527,18 @@ IF(GDCM_WRAP_CSHARP)
     #      ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     #      COMMENT "csc *.cs"
     #      )
+
+    INSTALL(FILES
+      ${GDCM_LIBRARY_DIR}/Kitware.VTK.GDCM.dll
+      ${GDCM_LIBRARY_DIR}/Kitware.VTK.GDCM.xml
+      DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
+      )
+    INSTALL(TARGETS Kitware.VTK.vtk${kit}.Unmanaged
+      EXPORT ${GDCM_TARGETS_NAME}
+      RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKLibraries
+      LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKLibraries #${NAMELINK_SKIP}
+      ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKDevelopment
+      )
   ELSE(GDCM_USE_ACTIVIZ)
     CONFIGURE_FILE(
       ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
@@ -550,6 +560,13 @@ IF(GDCM_WRAP_CSHARP)
       #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
       COMMENT "building vtkgdcm-sharp.dll"
       )
+    # because vtkgdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
+    SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
+    INSTALL(FILES
+      ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
+      #${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
+      DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
+      )
   ENDIF(GDCM_USE_ACTIVIZ)
 
   #ADD_CUSTOM_COMMAND(
@@ -559,13 +576,6 @@ IF(GDCM_WRAP_CSHARP)
   #  COMMENT "Copying vtkgdcm-sharp.dll.config"
   #)
 
-  # because vtkgdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-  SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-  INSTALL(FILES
-    ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
-    #${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
-    )
 ENDIF(GDCM_WRAP_CSHARP)
 
 IF(GDCM_WRAP_JAVA)
@@ -589,7 +599,7 @@ IF(GDCM_WRAP_JAVA)
     endif(EXISTS ${VTK_JAVA_JAR})
     if(EXISTS /usr/lib/jni/libvtkCommonJava.so)
       # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533198
-      message("Implicitely adding debian package layout...")
+      message(STATUS "Implicitely adding debian package layout...")
       link_directories("/usr/lib/jni")
     endif()
     MARK_AS_ADVANCED(GDCM_VTK_JAVA_JAR)
@@ -651,7 +661,7 @@ IF(GDCM_WRAP_JAVA)
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
   ELSE(VTK_WRAP_JAVA)
-    MESSAGE("GDCM_WRAP_JAVA canot be build without VTK_WRAP_JAVA")
+    MESSAGE(STATUS "GDCM_WRAP_JAVA canot be build without VTK_WRAP_JAVA")
   ENDIF(VTK_WRAP_JAVA)
 ENDIF(GDCM_WRAP_JAVA)
 
@@ -720,7 +730,7 @@ IF(GDCM_WRAP_PYTHON)
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
   ELSE(VTK_WRAP_PYTHON)
-    MESSAGE("GDCM_WRAP_PYTHON canot be build without VTK_WRAP_PYTHON")
+    MESSAGE(STATUS "GDCM_WRAP_PYTHON canot be build without VTK_WRAP_PYTHON")
   ENDIF(VTK_WRAP_PYTHON)
 ENDIF(GDCM_WRAP_PYTHON)
 

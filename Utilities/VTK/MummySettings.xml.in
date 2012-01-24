@@ -178,6 +178,7 @@
   <ClassPattern pattern="^vtk" wrappable="true"
     defaultFactoryMethod="New"
     defaultDisposalMethod="Delete"
+    extraCsharpCode="@CMAKE_CURRENT_SOURCE_DIR@/dllexportconf.cs"
     shadow="false"
     registerMethod="Register(null)"
     unRegisterMethod="UnRegister(null)"
