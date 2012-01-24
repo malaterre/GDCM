@@ -217,6 +217,7 @@ public class";
 #include "gdcmFileDerivation.h"
 
 #include "gdcmQueryBase.h"
+#include "gdcmQueryFactory.h"
 #include "gdcmBaseRootQuery.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmPresentationContextGenerator.h"
@@ -779,10 +780,14 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
 %template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
 %template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
+%template(TagArrayType) std::vector< gdcm::Tag >;
 %include "gdcmQueryBase.h"
 %include "gdcmBaseRootQuery.h"
+%include "gdcmCompositeNetworkFunctions.h"
+%template(CharSetArrayType) std::vector< gdcm::ECharSet >;
+%include "gdcmQueryFactory.h"
 %include "gdcmPresentationContext.h"
 //EXTEND_CLASS_PRINT(gdcm::PresentationContext)
 %include "gdcmPresentationContextGenerator.h"
-%include "gdcmCompositeNetworkFunctions.h"
+typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
