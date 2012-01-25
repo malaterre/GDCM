@@ -960,9 +960,11 @@ struct CharsetAliasType
 #if defined(_WIN32)
 static const char *CharsetAliasToName(const char *alias)
 {
+  assert( alias );
+  //gdcmDebugMacro( alias );
   static CharsetAliasType aliases[] = {
-    { "CP1252", "UTF-8" }, // mingw + debian/6.0
-    { NULL, NULL },
+      { "CP1252", "ISO-8859-1" }, // mingw + debian/6.0
+      { NULL, NULL },
   };
   for( CharsetAliasType *a = aliases; a->alias; a++)
     {
