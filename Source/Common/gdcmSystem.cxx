@@ -53,7 +53,7 @@
 #include <direct.h>
 #define _unlink unlink
 #else
-//#include <features.h>	// we want GNU extensions
+//#include <features.h> // we want GNU extensions
 #include <dlfcn.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -962,6 +962,8 @@ static const char *CharsetAliasToName(const char *alias)
 {
   assert( alias );
   //gdcmDebugMacro( alias );
+  // http://msdn.microsoft.com/en-us/library/windows/desktop/dd317756(v=vs.85).aspx
+  // 1252 windows-1252  ANSI Latin 1; Western European (Windows)
   static CharsetAliasType aliases[] = {
       { "CP1252", "ISO-8859-1" }, // mingw + debian/6.0
       { NULL, NULL },
