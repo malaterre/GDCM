@@ -115,7 +115,9 @@
 #define RETSIGTYPE @RETSIGTYPE@
 
 /* Define to 1 if you have the ANSI C header files. */
+#ifndef STDC_HEADERS
 #define STDC_HEADERS @STDC_HEADERS@
+#endif
 
 /* Version number of package */
 #define VERSION "@VERSION@"
