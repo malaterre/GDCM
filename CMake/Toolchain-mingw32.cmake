@@ -1,7 +1,7 @@
 # http://www.cmake.org/Wiki/CmakeMingw
 # Usage:
 #
-#  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake
+#  $ cmake ../gdcm -DCMAKE_TOOLCHAIN_FILE=../gdcm/CMake/Toolchain-mingw32.cmake
 #
 #
 #  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
@@ -17,9 +17,10 @@ SET(CMAKE_SYSTEM_NAME Windows)
 # which compilers to use for C and C++
 SET(CMAKE_C_COMPILER i586-mingw32msvc-gcc)
 SET(CMAKE_CXX_COMPILER i586-mingw32msvc-g++)
+SET(CMAKE_RC_COMPILER i586-mingw32msvc-windres)
 
 # here is the target environment located
-SET(CMAKE_FIND_ROOT_PATH  /usr/i586-mingw32msvc )
+SET(CMAKE_FIND_ROOT_PATH  /usr/i586-mingw32msvc)
 
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search
