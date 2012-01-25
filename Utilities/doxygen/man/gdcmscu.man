@@ -25,10 +25,10 @@ C-MOVE operation are executed using two different ports (one for the SCU and one
 
 \subsection options options
 \verbatim
-  -H --hostname       Hostname.
-  -p --port           Port number.
-     --aetitle        Set calling AE Title.
-     --call           Set called AE Title.
+  -H --hostname    %s  Hostname.
+  -p --port        %d  Port number.
+     --aetitle     %s  Set calling AE Title.
+     --call        %s  Set called AE Title.
 \endverbatim
 
 \subsection mode_options mode options
@@ -41,30 +41,30 @@ C-MOVE operation are executed using two different ports (one for the SCU and one
 
 \subsection cstore_options C-STORE options
 \verbatim
-  -i --input          DICOM filename
-  -r --recursive      recursively process (sub-)directories
-     --store-query    Store constructed query in file
+  -i --input       %s   DICOM filename
+  -r --recursive        recursively process (sub-)directories
+     --store-query %s   Store constructed query in file
 \endverbatim
 
 \subsection cfind_options C-FIND/C-MOVE options
 \verbatim
-     --patientroot    C-FIND Patient Root Model.
-     --studyroot      C-FIND Study Root Model.
+     --patientroot       C-FIND Patient Root Model.
+     --studyroot         C-FIND Study Root Model.
 
-     --patient        C-FIND Query on Patient Info (cannot be used with --studyroot).
-     --study          C-FIND Query on Study Info.
-     --series         C-FIND Query on Series Info.
-     --image          C-FIND Query on Image Info.
-     --key            0123,4567=VALUE for specifying search criteria (wildcard allowed)
-                      With --key, leave blank (ie, --key 10,10="") to retrieve values
+     --patient           C-FIND Query on Patient Info (cannot be used with --studyroot).
+     --study             C-FIND Query on Study Info.
+     --series            C-FIND Query on Series Info.
+     --image             C-FIND Query on Image Info.
+     --key   %d,%d[=%s]  0123,4567=VALUE for specifying search criteria (wildcard allowed)
+                         With --key, leave blank (ie, --key 10,20="" or --key 10,20) to retrieve values
 \endverbatim
 
 \subsection cmove_options C-MOVE options
 \verbatim
-  -o --output     DICOM filename / directory
-     --port-scp   Port for incoming associations
-     --key            0123,4567=VALUE for specifying search criteria (wildcard not allowed)
-                      Note that C-MOVE supports the same queries as C-FIND, but no wildcards are allowed
+  -o --output    %s      DICOM filename / directory
+     --port-scp  %d      Port for incoming associations
+     --key   %d,%d[=%s   0123,4567=VALUE for specifying search criteria (wildcard not allowed)
+                         Note that C-MOVE supports the same queries as C-FIND, but no wildcards are allowed
 \endverbatim
 
 \subsection general_options general options
