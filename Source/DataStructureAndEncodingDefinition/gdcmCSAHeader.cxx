@@ -1010,8 +1010,9 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
       return true;
       }
     // cannot use strcmp / strncmp in the following ... doh !
-    else if( memcmp(signature, "\0\0" , 2 ) == 0 )
-      {
+    else if( memcmp(signature, "\0\0" , 2 ) == 0
+          || memcmp(signature, "\6\0" , 2 ) == 0 )
+    {
       // Most often start with an element (0000,xxxx)
       // And ends with element:
       // (ffff,ffff)  CS  10  END!
