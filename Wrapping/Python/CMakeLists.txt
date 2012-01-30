@@ -63,11 +63,6 @@ IF(MSVC)
 ENDIF(MSVC)
 SET_SOURCE_FILES_PROPERTIES(gdcmswig.i PROPERTIES CPLUSPLUS ON)
 
-
-# Some old swig 1.3 did not support this option:
-#SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
-
-#SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmpython)
 SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmswig)
 SET(MODULE_NAME gdcmswig)
 # BUG: DO NOT USE -interface flag it is NOT supported in cmake and in cmake > 2.6 will cause infinite rebuild
@@ -85,35 +80,6 @@ SET(MODULE_NAME gdcmswig)
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMEXD gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
 
-#MESSAGE(SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
-#  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
-#)
-
-# Need to rebuild gdcmPYTHON...cxx when any header is modified...
-#  FILE(GLOB_RECURSE headerfiles
-#    "${GDCM_SOURCE_DIR}/Source/*.h"
-#  )
-
-#ADD_DEPENDENCIES(
-#  ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-#  ${headerfiles}
-#	)
-#SET_SOURCE_FILES_PROPERTIES(
-#  ${swig_generated_file_fullname}
-#  PROPERTIES OBJECT_DEPENDS
-#  #${headerfiles}
-#  ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat/gdcmDirectionCosines.h
-#)
-#SET_SOURCE_FILES_PROPERTIES(
-#	${CMAKE_CURRENT_SOURCE_DIR}/gdcm.i
-#  PROPERTIES OBJECT_DEPENDS
-#  #${headerfiles}
-#  ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat/gdcmDirectionCosines.h
-#)
-
-
-
 # Python extension modules on Windows must have the extension ".pyd"
 # instead of ".dll" as of Python 2.5.  Older python versions do support
 # this suffix.
@@ -125,7 +91,6 @@ SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMEXD gdcmMSFF gdcmIOD
 IF(WIN32 AND NOT CYGWIN)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
 ENDIF(WIN32 AND NOT CYGWIN)
-#SET_TARGET_PROPERTIES(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 SET_TARGET_PROPERTIES(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 # swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
