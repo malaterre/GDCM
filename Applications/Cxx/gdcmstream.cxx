@@ -70,7 +70,7 @@ unsigned int readvector(std::vector<T> &v, const char *str)
 int No_Of_Resolutions(const char *filename)
 {
   std::ifstream is;
-  is.open( filename );
+  is.open( filename, std::ios::binary );
   opj_dparameters_t parameters;  /* decompression parameters */
   opj_event_mgr_t event_mgr;    /* event manager */
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
@@ -157,7 +157,7 @@ int No_Of_Resolutions(const char *filename)
 bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *filename, int res, std::ostream& of, int flag,  gdcm::SequenceOfItems *sq)
 {
   std::ifstream is;
-  is.open( filename );
+  is.open( filename, std::ios::binary );
   opj_dparameters_t parameters;  /* decompression parameters */
   opj_event_mgr_t event_mgr;    /* event manager */
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
