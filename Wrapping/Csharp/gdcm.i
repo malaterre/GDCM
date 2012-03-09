@@ -794,5 +794,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPresentationContextGenerator.h"
 typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
+%apply char[] { char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
+%clear char* inReadBuffer;
 %include "gdcmStreamImageWriter.h"

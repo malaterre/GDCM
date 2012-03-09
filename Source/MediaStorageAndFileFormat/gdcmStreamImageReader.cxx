@@ -107,7 +107,7 @@ uint32_t StreamImageReader::DefineProperBufferLength() const
 /// 1. The extent is not set
 /// 2. The output buffer is not set
 /// This method has been implemented to look similar to the metaimageio in itk
-bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLength){
+bool StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLength){
 
   //need to have some kind of extent defined.
   if (mXMin > mXMax || mYMin > mYMax || mZMin > mZMax)
