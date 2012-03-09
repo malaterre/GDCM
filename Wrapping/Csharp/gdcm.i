@@ -224,6 +224,8 @@ public class";
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmServiceClassUser.h"
 
+#include "gdcmStreamImageWriter.h"
+
 using namespace gdcm;
 %}
 
@@ -791,3 +793,4 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPresentationContextGenerator.h"
 typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
+%include "gdcmStreamImageWriter.h"
