@@ -28,6 +28,15 @@
 namespace gdcm
 {
 
+//see http://stackoverflow.com/questions/1448467/initializing-a-c-stdistringstream-from-an-in-memory-buffer/1449527#1449527
+struct OneShotReadBuf : public std::streambuf
+{
+  OneShotReadBuf(void* s, std::size_t n){
+    char* cast = (char*)s;
+    setg(cast, cast, cast+n);
+  }
+};
+
 StreamImageReader::StreamImageReader()
 {
   //set these values to be the opposite ends of possible,
