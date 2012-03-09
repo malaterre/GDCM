@@ -15,28 +15,29 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
-
-
 #include "gdcmStreamImageReader.h"
+
 #include "gdcmImage.h"
 #include "gdcmMediaStorage.h"
-#include <algorithm>
 #include "gdcmImageHelper.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGLSCodec.h"
 
+#include <algorithm>
+
 namespace gdcm
 {
 
-StreamImageReader::StreamImageReader(){
+StreamImageReader::StreamImageReader()
+{
   //set these values to be the opposite ends of possible,
   //so that if the extent is not defined, read can fail properly.
   mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
 }
 
-StreamImageReader::~StreamImageReader(){
+StreamImageReader::~StreamImageReader()
+{
 }
 
 /// One of either SetFileName or SetStream must be called prior
@@ -107,12 +108,13 @@ uint32_t StreamImageReader::DefineProperBufferLength() const
 /// 1. The extent is not set
 /// 2. The output buffer is not set
 /// This method has been implemented to look similar to the metaimageio in itk
-bool StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLength){
-
+bool StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLength)
+{
   //need to have some kind of extent defined.
   if (mXMin > mXMax || mYMin > mYMax || mZMin > mZMax)
+    {
     return false; //for now
-
+    }
 
 //  OneShotReadBuf osrb(inReadBuffer, inBufferLength);
 //  std::ostream ostr(&osrb);
@@ -121,15 +123,15 @@ bool StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLeng
 
 //  return ReadImageSubregionRAW(ostr);
   //just do memcpys instead of doing this stream shenanigans
-  return ReadImageSubregionRAW((char*)inReadBuffer, inBufferLength);
-
+  return ReadImageSubregionRAW(inReadBuffer, inBufferLength);
 }
+
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
     Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
     */
-//bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) {
-bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength) {
+bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength)
+{
   //assumes that the file is organized in row-major format, with each row rastering across
   assert( mFileOffset != -1 );
   (void)inBufferLength;

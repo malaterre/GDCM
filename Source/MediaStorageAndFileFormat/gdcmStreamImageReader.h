@@ -15,15 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMSTREAMIMAGEREADER_H
 #define GDCMSTREAMIMAGEREADER_H
 
-#include "gdcmPixmapReader.h"
-#include "gdcmImage.h"
 #include "gdcmReader.h"
-#include <iostream>
-#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -46,7 +41,6 @@ class GDCM_EXPORT StreamImageReader
 public:
   StreamImageReader();
   ~StreamImageReader();
-
 
   /// One of either SetFileName or SetStream must be called prior
   /// to any other functions.  These initialize an internal Reader class
