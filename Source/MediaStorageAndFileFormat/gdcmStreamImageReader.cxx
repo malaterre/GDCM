@@ -64,22 +64,22 @@ void StreamImageReader::SetStream(std::istream& inStream)
 std::vector<unsigned int> StreamImageReader::GetDimensionsValueForResolution( unsigned int res )
 {
   std::vector<unsigned int> extent(3);
-  File file_t = mReader.GetFile();
-  DataSet ds_t = file_t.GetDataSet();
+  File &file_t = mReader.GetFile();
+  DataSet &ds_t = file_t.GetDataSet();
 
-  DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
+  const DataElement &seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
   SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
 
-  Item itemL = sqi->GetItem(res);
+  Item &itemL = sqi->GetItem(res);
   DataSet &subds_L = itemL.GetNestedDataSet();
 
- DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
- Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
- elL1.SetFromDataElement( brrL );
- extent[0] = elL1.GetValue(0);
- extent[1] = elL1.GetValue(1);
- extent[2] = res;
- return extent;
+  const DataElement &brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
+  Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
+  elL1.SetFromDataElement( brrL );
+  extent[0] = elL1.GetValue(0);
+  extent[1] = elL1.GetValue(1);
+  extent[2] = res;
+  return extent;
 }
 
 /// Defines an image extent for the Read function.
