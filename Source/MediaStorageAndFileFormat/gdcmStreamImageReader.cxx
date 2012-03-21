@@ -15,28 +15,38 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
-
-
 #include "gdcmStreamImageReader.h"
+
 #include "gdcmImage.h"
 #include "gdcmMediaStorage.h"
-#include <algorithm>
 #include "gdcmImageHelper.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGLSCodec.h"
 
+#include <algorithm>
+
 namespace gdcm
 {
 
-StreamImageReader::StreamImageReader(){
+//see http://stackoverflow.com/questions/1448467/initializing-a-c-stdistringstream-from-an-in-memory-buffer/1449527#1449527
+struct OneShotReadBuf : public std::streambuf
+{
+  OneShotReadBuf(void* s, std::size_t n){
+    char* cast = (char*)s;
+    setg(cast, cast, cast+n);
+  }
+};
+
+StreamImageReader::StreamImageReader()
+{
   //set these values to be the opposite ends of possible,
   //so that if the extent is not defined, read can fail properly.
   mXMin = mYMin = mZMin = std::numeric_limits<uint16_t>::max();
   mXMax = mYMax = mZMax = std::numeric_limits<uint16_t>::min();
 }
 
-StreamImageReader::~StreamImageReader(){
+StreamImageReader::~StreamImageReader()
+{
 }
 
 /// One of either SetFileName or SetStream must be called prior
@@ -51,14 +61,13 @@ void StreamImageReader::SetStream(std::istream& inStream)
   mReader.SetStream(inStream);
 }
 
-
 std::vector<unsigned int> StreamImageReader::GetDimensionsValueForResolution( unsigned int res )
 {
   std::vector<unsigned int> extent(3);
   File file_t = mReader.GetFile();
   DataSet ds_t = file_t.GetDataSet();
 
-  if ( ds_t.FindDataElement( Tag(0x0048,0x0200) )
+  if ( ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
   {
     DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
     SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
@@ -66,12 +75,15 @@ std::vector<unsigned int> StreamImageReader::GetDimensionsValueForResolution( un
     Item itemL = sqi->GetItem(res);
     DataSet &subds_L = itemL.GetNestedDataSet();
 
-    DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
-    Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
-    elL1.SetFromDataElement( brrL );
-    extent[0] = elL1.GetValue(0);
-    extent[1] = elL1.GetValue(1);
-    extent[2] = res;
+    if ( ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
+    {
+        DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
+        Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
+        elL1.SetFromDataElement( brrL );
+        extent[0] = elL1.GetValue(0);
+        extent[1] = elL1.GetValue(1);
+        extent[2] = res;
+    }
     //std::cout<< "\n Col : " << extent[0] <<"\n Row : " <<  extent[1] << std::endl;
   }
   else 
@@ -116,12 +128,13 @@ uint32_t StreamImageReader::DefineProperBufferLength() const
 /// 1. The extent is not set
 /// 2. The output buffer is not set
 /// This method has been implemented to look similar to the metaimageio in itk
-bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLength){
-
+bool StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLength)
+{
   //need to have some kind of extent defined.
   if (mXMin > mXMax || mYMin > mYMax || mZMin > mZMax)
+    {
     return false; //for now
-
+    }
 
 //  OneShotReadBuf osrb(inReadBuffer, inBufferLength);
 //  std::ostream ostr(&osrb);
@@ -130,15 +143,15 @@ bool StreamImageReader::Read(void* inReadBuffer, const std::size_t& inBufferLeng
 
 //  return ReadImageSubregionRAW(ostr);
   //just do memcpys instead of doing this stream shenanigans
-  return ReadImageSubregionRAW((char*)inReadBuffer, inBufferLength);
-
+  return ReadImageSubregionRAW(inReadBuffer, inBufferLength);
 }
+
 /** Read a particular subregion, using the stored mFileOffset as the beginning of the stream.
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
     Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
     */
-//bool StreamImageReader::ReadImageSubregionRAW(std::ostream& os) {
-bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength) {
+bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength)
+{
   //assumes that the file is organized in row-major format, with each row rastering across
   assert( mFileOffset != -1 );
   (void)inBufferLength;
@@ -196,74 +209,86 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   //to ensure thread safety; if the stream ptr handler gets used simultaneously by different threads,
   //that would be BAD
   //tmpBuffer is for a single raster
-  //int a =1;
- // for(int i=1; i<=(extent[2]-mZMax);i++)
-   //  a = a*2;
-
 
   char* tmpBuffer = new char[SubRowSize*bytesPerPixel];
   char* tmpBuffer2 = new char[SubRowSize*bytesPerPixel];
-  try {
-    for (z = mZMin; z < mZMax; ++z){
-         theStream->seekg(std::ios::beg);
+  try
+    {
+    for (z = mZMin; z < mZMax; ++z)
+      {
+#if 0
+      theStream->seekg(std::ios::beg);
 
-        if(mFileOffset1 == 0)
-         {
-           mFileOffset1 = mFileOffset;
-          for(int j = 1; j<=z; j++)
+      if(mFileOffset1 == 0)
+        {
+        mFileOffset1 = mFileOffset;
+        for(int j = 1; j<=z; j++)
           {
-           std::vector<unsigned int> extent = GetDimensionsValueForResolution(j);
-           mFileOffset1 =  mFileOffset1 + (int)((extent[1])*(extent[0])*bytesPerPixel);
-           mFileOffset1 = mFileOffset1 + 4*sizeof(uint16_t);
+          std::vector<unsigned int> extent = GetDimensionsValueForResolution(j);
+          mFileOffset1 =  mFileOffset1 + (int)((extent[1])*(extent[0])*bytesPerPixel);
+          mFileOffset1 = mFileOffset1 + 4*sizeof(uint16_t);
           }
-	}
-        else
-	{
-          mFileOffset1 = mFileOffset;
+        }
+      else
+        {
+        mFileOffset1 = mFileOffset;
         }
 
-     std::vector<unsigned int> extent = GetDimensionsValueForResolution(z+1);
+      std::vector<unsigned int> extent = GetDimensionsValueForResolution(z+1);
+#endif
 
-      for (y = mYMin; y < mYMax; ++y){
-        theOffset = mFileOffset1 + (y*(int)(extent[0]) + mXMin)*bytesPerPixel;//manoj set this with resolution u r reading
+      for (y = mYMin; y < mYMax; ++y)
+        {
+#if 0
+        theOffset = mFileOffset1 + (y*(int)(extent[0]) + mXMin)*bytesPerPixel;
+#else
+        theStream->seekg(std::ios::beg);
+        theOffset = mFileOffset + (z * (int)(extent[1]*extent[0]) + y*(int)extent[0] + mXMin)*bytesPerPixel;
+#endif
         theStream->seekg(theOffset);
         theStream->read(tmpBuffer, SubRowSize*bytesPerPixel);
-    //now, convert that buffer.
+        //now, convert that buffer.
         if (!theCodec.DecodeBytes(tmpBuffer, SubRowSize*bytesPerPixel,
-          tmpBuffer2, SubRowSize*bytesPerPixel)){
+            tmpBuffer2, SubRowSize*bytesPerPixel))
+          {
           delete [] tmpBuffer;
           delete [] tmpBuffer2;
           return false;
-        }
+          }
         //this next line may require a bit of finagling...
         //std::copy(tmpBuffer2, &(tmpBuffer2[SubRowSize*bytesPerPixel]), std::ostream_iterator<char>(os));
         //make sure to have a test that will test different x, y, and z mins and maxes
         memcpy(&(inReadBuffer[((z-mZMin)*SubRowSize*SubColSize +
-          (y-mYMin)*SubRowSize)// + mXMin)//shouldn't need mXMin
+              (y-mYMin)*SubRowSize)// + mXMin)//shouldn't need mXMin
           *bytesPerPixel]), tmpBuffer2, SubRowSize*bytesPerPixel);
+        }
+#if 0
+      if((mYMax == extent[1]) && (mXMax == extent[0]))
+        {
+        mFileOffset1 = mFileOffset1 + (int)((extent[1])*(extent[0])*bytesPerPixel) + 4*sizeof(uint16_t);
+        }
+#endif
       }
-       if((mYMax == extent[1]) && (mXMax == extent[0]))
-          mFileOffset1 = mFileOffset1 + (int)((extent[1])*(extent[0])*bytesPerPixel) + 4*sizeof(uint16_t);
+#if 0
+    mFileOffset = mFileOffset1;
+#endif
     }
-   mFileOffset = mFileOffset1;
 
-  }
-
-
-
-  catch (std::exception & ex){
+  catch (std::exception & ex)
+    {
     (void)ex;
     gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
-  } 
-  catch (...){
+    } 
+  catch (...)
+    {
     gdcmWarningMacro( "Failed to read with unknown error." );
     delete [] tmpBuffer;
     delete [] tmpBuffer2;
     return false;
-  }
+    }
 
   delete [] tmpBuffer;
   delete [] tmpBuffer2;
@@ -342,20 +367,25 @@ bool StreamImageReader::ReadImageInformation()
       gdcmWarningMacro("Failed to read tags in the gdcm stream image reader.");
       return false;
       }
+#if 0
     std::streampos shift = 4*sizeof(uint16_t)+2*sizeof(uint32_t);
     mFileOffset = mReader.GetStreamPtr()->tellg()+ shift;
     mFileOffset1 = 0;
+#else
+    mFileOffset = mReader.GetStreamPtr()->tellg();
+#endif
     }
   catch(std::exception & ex)
     {
     (void)ex;
     gdcmWarningMacro( "Failed to read with ex:" << ex.what() );
+    return false;
     }
   catch(...)
     {
     gdcmWarningMacro( "Failed to read with unknown error" );
+    return false;
     }
-
 
   // eg. ELSCINT1_PMSCT_RLE1.dcm
   if( mFileOffset == -1 ) return false;
@@ -363,73 +393,70 @@ bool StreamImageReader::ReadImageInformation()
   // postcondition
   assert( mFileOffset != -1 );
 
-  File file_t = mReader.GetFile();
-  DataSet ds_t = file_t.GetDataSet();
+  const File &file_t = mReader.GetFile();
+  const DataSet &ds_t = file_t.GetDataSet();
 
-  if( !ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
+  MediaStorage ms;
+  ms.SetFromFile(file_t);
+
+  if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
     {
-    std::cerr << "error occured in WSI File read" << std::endl;
-    return 1;
+    if( !ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
+      {
+      gdcmWarningMacro( "error occured in WSI File read" );
+      return false;
+      }
+
+    DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
+    SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
+    gdcm::SequenceOfItems::SizeType s = sqi->GetNumberOfItems();
+
+    Item itemL = sqi->GetItem(1);
+    DataSet &subds_L = itemL.GetNestedDataSet();
+
+    if( !subds_L.FindDataElement( Tag(0x0008,0x1160) ) )
+      {
+      gdcmWarningMacro( "Error occured during WSI File Read" );
+      return false;
+      }
+
+    DataElement rfnL = subds_L.GetDataElement( Tag(0x0008,0x1160) );
+    Element<gdcm::VR::IS,gdcm::VM::VM1> elL;
+    elL.SetFromDataElement( rfnL );
+
+    if( !subds_L.FindDataElement( Tag(0x0048,0x0202) ) )
+      {
+      gdcmWarningMacro( "Error During WSI File Read" );
+      return false;
+      }
+
+    DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
+    Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
+    elL1.SetFromDataElement( brrL );
+
+    Item itemH = sqi->GetItem(s);
+    DataSet &subds_H = itemH.GetNestedDataSet();
+
+    if( !subds_H.FindDataElement( Tag(0x0008,0x1160) ) )
+      {
+      gdcmWarningMacro( "Error occured during WSI File Read" );
+      return false;
+      }
+
+    DataElement rfnH = subds_H.GetDataElement( Tag(0x0008,0x1160) );
+    Element<gdcm::VR::IS,gdcm::VM::VM1> elH;
+    elH.SetFromDataElement( rfnH );
+
+    if( !subds_H.FindDataElement( Tag(0x0048,0x0202) ) )
+      {
+      gdcmWarningMacro( "Error During WSI File Read" );
+      return false;
+      }
+
+    DataElement brrH = subds_H.GetDataElement( Tag(0x0048,0x0202) );
+    Element<gdcm::VR::US,gdcm::VM::VM2> elH1;
+    elH1.SetFromDataElement( brrH );
     }
-
-  DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
-  SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
-  gdcm::SequenceOfItems::SizeType s = sqi->GetNumberOfItems();
-  //std::cout<< "\nNo. Of Resolutions in Image "<< s <<std::endl;
-
- //std::cout << "\n Dimension of Lowest Reolution";
-
-  Item itemL = sqi->GetItem(1);
-  DataSet &subds_L = itemL.GetNestedDataSet();
-
-  if( !subds_L.FindDataElement( Tag(0x0008,0x1160) ) )
-    {
-    std::cerr << "Error occured during WSI File Read" << std::endl;
-    return 1;
-    }
-
-  DataElement rfnL = subds_L.GetDataElement( Tag(0x0008,0x1160) );
-  Element<gdcm::VR::IS,gdcm::VM::VM1> elL;
-  elL.SetFromDataElement( rfnL );
-  //std::cout<< "\n Resolution : " << elL.GetValue() << std::endl;
-
-  if( !subds_L.FindDataElement( Tag(0x0048,0x0202) ) )
-    {
-    std::cerr<< "Error During WSI File Read" << std::endl;
-    return 1;
-    }
-
-  DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
-  Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
-  elL1.SetFromDataElement( brrL );
-  //std::cout<< "\n Col : " << elL1.GetValue(0) <<"\n Row : " <<  elL1.GetValue(1) << std::endl;
-
-  //std::cout << "\n Dimension of Highest Reolutions";
-
-  Item itemH = sqi->GetItem(s);
-  DataSet &subds_H = itemH.GetNestedDataSet();
-
-  if( !subds_H.FindDataElement( Tag(0x0008,0x1160) ) )
-    {
-    std::cerr << "Error occured during WSI File Read" << std::endl;
-    return 1;
-    }
-
-  DataElement rfnH = subds_H.GetDataElement( Tag(0x0008,0x1160) );
-  Element<gdcm::VR::IS,gdcm::VM::VM1> elH;
-  elH.SetFromDataElement( rfnH );
-  //std::cout<< "\n Resolution : " << elH.GetValue() << std::endl;
-
-  if( !subds_H.FindDataElement( Tag(0x0048,0x0202) ) )
-    {
-    std::cerr<< "Error During WSI File Read";
-    return 1;
-    }
-
-  DataElement brrH = subds_H.GetDataElement( Tag(0x0048,0x0202) );
-  Element<gdcm::VR::US,gdcm::VM::VM2> elH1;
-  elH1.SetFromDataElement( brrH );
-  //std::cout<< "\n Col : " << elH1.GetValue(0) <<"\n Row : " <<  elH1.GetValue(1) << "\n" << std::endl;
 
   return true;
 }

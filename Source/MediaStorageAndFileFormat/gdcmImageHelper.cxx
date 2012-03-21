@@ -1815,10 +1815,16 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     ds.Replace( at2.GetAsDataElement() );
 
     Attribute<0x0028,0x1054> at3; // Rescale Type
-    if( ds.FindDataElement( at3.GetTag() ) || ms == MediaStorage::SecondaryCaptureImageStorage )
+    at3.SetValue( "US" ); // FIXME
+    if( ms == MediaStorage::SecondaryCaptureImageStorage )
       {
-      at3.SetValue( "US" ); // FIXME
+      // As per 3-2009, US is the only valid enumerated value:
       ds.Replace( at3.GetAsDataElement() );
+      }
+    else
+      {
+      // In case user decide to override the default:
+      ds.Insert( at3.GetAsDataElement() );
       }
     }
 }

@@ -158,7 +158,7 @@ public:
   int64_t GetMax() const;
 
   /// return IsValid
-  bool IsValid();
+  bool IsValid() const;
 
   bool operator==(ScalarType st) const
     {

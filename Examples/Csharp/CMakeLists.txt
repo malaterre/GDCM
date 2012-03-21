@@ -3,6 +3,7 @@
 
 SET(CSHARP_EXAMPLES
   SimplePrintPatientName
+  ExtractOneFrame
   ManipulateFile
   RescaleImage
   ExtractEncapsulatedFile
@@ -22,11 +23,11 @@ SET(CSHARP_EXAMPLES
   )
 
 IF(BUILD_TESTING)
-SET(CSHARP_EXAMPLES
-  ${CSHARP_EXAMPLES}
-  BasicAnonymizer
-  ClinicalTrialIdentificationWorkflow
-  )
+  SET(CSHARP_EXAMPLES
+    ${CSHARP_EXAMPLES}
+    BasicAnonymizer
+    ClinicalTrialIdentificationWorkflow
+    )
 ENDIF(BUILD_TESTING)
 
 SET(DEP)

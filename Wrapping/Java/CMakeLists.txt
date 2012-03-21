@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 )
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/
@@ -33,12 +34,9 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # http://www.debian.org/doc/packaging-manuals/java-policy/x105.html
 SWIG_ADD_MODULE(gdcmjni java gdcm.i)
 SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
+  gdcmMEXD
   ${JNI_LIBRARIES}
 )
-# Stupid cmake-swig module is doing that for us, when not needed
-IF(UNIX)
-  SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES PREFIX "lib")
-ENDIF(UNIX)
 SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 # swig-java dummy run:

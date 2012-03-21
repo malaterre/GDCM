@@ -456,6 +456,7 @@ refinstanceuid.GetValue().c_str() );
     scalars->SetNumberOfComponents(3);
 
     vtkPoints *newPts = vtkPoints::New();
+    newPts->SetDataTypeToDouble();//ensure that full precision is retained
     //std::string s(sde.GetByteValue()->GetPointer(), sde.GetByteValue()->GetLength());
     //std::cout << s << std::endl;
     //newPts->GetData()->SetName( s.c_str() );
@@ -512,33 +513,28 @@ refinstanceuid.GetValue().c_str() );
       //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
       //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
       const double* pts = at.GetValues();
-      vtkIdType buffer[256];
       vtkIdType *ptIds;
       unsigned int npts = at.GetNumberOfValues() / 3;
       assert( npts == numcontpoints.GetValue() );
-      if(npts>256)
-        {
-        ptIds = new vtkIdType[npts];
-        }
-      else
-        {
-        ptIds = buffer;
-        }
+      assert( npts * 3 == at.GetNumberOfValues() );
+      ptIds = new vtkIdType[npts];
       for(unsigned int i = 0; i < npts * 3; i+=3)
         {
-        float x[3];
+        double x[3];//must be double precision, as that's the precision in vtk
         x[0] = pts[i+0];
         x[1] = pts[i+1];
         x[2] = pts[i+2];
         vtkIdType ptId = newPts->InsertNextPoint( x );
+        assert( i / 3 < npts );
         ptIds[i / 3] = ptId;
         }
       // Each Contour Data is in fact a Cell:
       vtkIdType cellId = polys->InsertNextCell( npts , ptIds);
       scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
-      if(npts>256)
+      //if(npts>256)
         {
         delete[] ptIds;
+        ptIds = NULL;
         }
       }
     output->SetPoints(newPts);
@@ -563,7 +559,8 @@ refinstanceuid.GetValue().c_str() );
     {
     return 0;
     }
-  for(unsigned int obs = 0; obs < rtroiobssqsqi->GetNumberOfItems(); ++obs)
+  unsigned int theNumberOfItems = rtroiobssqsqi->GetNumberOfItems();
+  for(unsigned int obs = 0; obs < theNumberOfItems ; ++obs)
     {
     const gdcm::Item & item = rtroiobssqsqi->GetItem(obs+1); // Item start at #1
     const gdcm::DataSet& nestedds = item.GetNestedDataSet();

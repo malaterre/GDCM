@@ -952,8 +952,17 @@ void Reader::SetFileName(const char *filename)
   if(Ifstream) delete Ifstream;
   Ifstream = new std::ifstream();
   Ifstream->open(filename, std::ios::binary);
-  Stream = Ifstream;
-  assert( Stream && *Stream );
+  if( Ifstream->is_open() )
+    {
+    Stream = Ifstream;
+    assert( Stream && *Stream );
+    }
+  else
+    {
+    delete Ifstream;
+    Ifstream = NULL;
+    Stream = NULL;
+    }
 }
 
 

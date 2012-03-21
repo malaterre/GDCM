@@ -121,16 +121,15 @@ int main(int argc, char *argv[])
   std::cout<<"Getting image from ImageReader..."<<std::endl;
 
   const gdcm::Image &gimage = ir.GetImage();
-  //This buffer has been declared elsewhere
-  char *buffer = new char[gimage.GetBufferLength()];
-
+  std::vector<char> vbuffer;
+  vbuffer.resize( gimage.GetBufferLength() );
+  char *buffer = &vbuffer[0];
 
   QImage *imageQt = NULL;
   if( !ConvertToFormat_RGB888( gimage, buffer, imageQt ) )
     {
     return 1;
     }
-
 
   QImageWriter writer;
   writer.setFormat("png");
@@ -139,8 +138,6 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
-
-//  delete[] buffer;
 
   return 0;
 }

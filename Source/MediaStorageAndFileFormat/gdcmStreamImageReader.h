@@ -15,15 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-
 #ifndef GDCMSTREAMIMAGEREADER_H
 #define GDCMSTREAMIMAGEREADER_H
 
-#include "gdcmPixmapReader.h"
-#include "gdcmImage.h"
 #include "gdcmReader.h"
-#include <iostream>
-#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -35,7 +30,7 @@ class MediaStorage;
  * representation via an ITK streaming (ie, multithreaded) interface
  * Image is different from Pixmap has it has a position and a direction in
  * Space.
- * Currently, this class is threadsafe in that it can read a single extent
+ * Currently, this class is thread safe in that it can read a single extent
  * in a single thread.  Multiple versions can be used for multiple extents/threads.
  *
  * \see Image
@@ -46,7 +41,6 @@ class GDCM_EXPORT StreamImageReader
 public:
   StreamImageReader();
   ~StreamImageReader();
-
 
   /// One of either SetFileName or SetStream must be called prior
   /// to any other functions.  These initialize an internal Reader class
@@ -63,7 +57,6 @@ public:
   /// in space per the tags).  So, if the first 100 pixels of the first row are to be read in,
   /// this function should be called with DefinePixelExtent(0, 100, 0, 1), regardless
   /// of pixel size or orientation.
-  /// 15 nov 2010: added z dimension, defaults to being 1 plane large
   void DefinePixelExtent(uint16_t inXMin, uint16_t inXMax,
     uint16_t inYMin, uint16_t inYMax, uint16_t inZMin = 0, uint16_t inZMax = 1);
 
@@ -75,24 +68,23 @@ public:
 
   /// Read the DICOM image. There are three reasons for failure:
   /// 1. The extent is not set
-  /// 2. the conversion from void* to std::ostream (internally) fails
-  /// 3. the given buffer isn't large enough to accomodate the desired pixel extent.
+  /// 2. the conversion from char* to std::ostream (internally) fails
+  /// 3. the given buffer isn't large enough to accommodate the desired pixel extent.
   /// This method has been implemented to look similar to the metaimageio in itk
   /// MUST have an extent defined, or else Read will return false.
   /// If no particular extent is required, use ImageReader instead.
-  bool Read(void* inReadBuffer, const std::size_t& inBufferLength);
-  
+  bool Read(char* inReadBuffer, const std::size_t& inBufferLength);
+
   /// Only RAW images are currently readable by the stream reader.  As more
   /// streaming codecs are added, then this function will be updated to reflect
   /// those changes.  Calling this function prior to reading will ensure that 
   /// only streamable files are streamed.  Make sure to call ReadImageInformation
   /// prior to calling this function.
   bool CanReadImage() const;
-  
 
   /// Set the spacing and dimension information for the set filename.
   /// returns false if the file is not initialized or not an image,
-  /// with the pixel 0x7fe0, 0x0010 tag.
+  /// with the pixel (7fe0,0010) tag.
   virtual bool ReadImageInformation();
 
   /// Returns the dataset read by ReadImageInformation
@@ -101,13 +93,13 @@ public:
   File const & GetFile() const;
 
 protected:
-
+private:
   //contains a reader for being able to ReadUpToTag
   //however, we don't want the user to be able to call Read
   //either directly or via a parent class call, so we hide the reader in here.
   Reader mReader;
 
-  std::streamoff mFileOffset; //the fileoffset for getting header information
+  std::streamoff mFileOffset; //the file offset for getting header information
   std::streamoff mFileOffset1;
   DataSet mHeaderInformation; //all the non-pixel information
 
@@ -119,21 +111,11 @@ protected:
   ///  Make sure to call DefinePixelExtent and to initialize the buffer with the
   /// amount given by DefineProperBufferLength prior to calling this.
   /// reads by the RAW codec; other codecs are added once implemented
-  //virtual bool ReadImageSubregionRAW(std::ostream& os);
-  virtual bool ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength);
-  
+  bool ReadImageSubregionRAW(char* inReadBuffer, const std::size_t& inBufferLength);
+
   /// Reads the file via JpegLS.  The JpegLS codec, as of this writing, requires that the
   /// entire file be read in in order to decode a subregion, so that's what's done here.
   bool ReadImageSubregionJpegLS(char* inReadBuffer, const std::size_t& inBufferLength);
-
-};
-//see http://stackoverflow.com/questions/1448467/initializing-a-c-stdistringstream-from-an-in-memory-buffer/1449527#1449527
-struct OneShotReadBuf : public std::streambuf
-{
-  OneShotReadBuf(void* s, std::size_t n){
-    char* cast = (char*)s;
-    setg(cast, cast, cast+n);
-  }
 };
 
 } // end namespace gdcm

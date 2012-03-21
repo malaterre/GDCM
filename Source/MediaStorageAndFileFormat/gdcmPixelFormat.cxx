@@ -261,7 +261,7 @@ int64_t PixelFormat::GetMax() const
   return 0;
 }
 
-bool PixelFormat::IsValid()
+bool PixelFormat::IsValid() const
 {
   if( PixelRepresentation != 0 && PixelRepresentation != 1 )
     {

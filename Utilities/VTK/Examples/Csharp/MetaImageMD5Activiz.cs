@@ -12,12 +12,11 @@
 
 =========================================================================*/
 using Kitware.VTK;
-using vtkgdcm;
+using Kitware.VTK.GDCM;
 using gdcm;
 
 /*
- * $ export MONO_PATH=/usr/lib/cli/activiz-cil/
- * $ export LD_LIBRARY_PATH=/usr/lib/cli/activiz-cil/
+ * $ export MONO_PATH=/usr/lib/cli/ActiViz.NET/:/usr/lib/cli/Kitware.mummy.Runtime-1.0
  * $ mono ./bin/MetaImageMD5Activiz.exe gdcmData/012345.002.050.dcm
  */
 public class MetaImageMD5Activiz

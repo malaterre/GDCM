@@ -12,11 +12,11 @@
 
 =========================================================================*/
 using Kitware.VTK;
-using vtkgdcm;
+using Kitware.VTK.GDCM;
 
 /*
- * $ MONO_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/ LD_LIBRARY_PATH=/home/mmalaterre/Software/ActiViz.NET-5.4.0.455-Linux-x86_64-Personal/bin/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin/ mono ./bin/HelloActiviz3.exe ~/Creatis/gdcmData/test.acr
- *
+ * $ export MONO_PATH=/usr/lib/cli/ActiViz.NET/:/usr/lib/cli/Kitware.mummy.Runtime-1.0
+ * $ mono ./bin/HelloActiviz3.exe ~/Creatis/gdcmData/test.acr
  */
 public class HelloActiviz3
 {

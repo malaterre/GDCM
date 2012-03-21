@@ -170,6 +170,13 @@
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
+#include "gdcmQueryBase.h"
+#include "gdcmBaseRootQuery.h"
+#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextGenerator.h"
+#include "gdcmCompositeNetworkFunctions.h"
+#include "gdcmServiceClassUser.h"
+
 using namespace gdcm;
 %}
 
@@ -370,7 +377,7 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
 EXTEND_CLASS_PRINT(gdcm::Item)
 /*
 */
-%template() std::set< gdcm::Item >;
+%template() std::vector< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (JavaDataSet) SWIGDataSet;
@@ -768,3 +775,17 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
 %include "gdcmFileDerivation.h"
+
+// MEXD:
+%template(DataSetArrayType) std::vector< gdcm::DataSet >;
+%template(FileArrayType) std::vector< gdcm::File >;
+%template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
+%template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
+%template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
+%include "gdcmQueryBase.h"
+%include "gdcmBaseRootQuery.h"
+%include "gdcmPresentationContext.h"
+//EXTEND_CLASS_PRINT(gdcm::PresentationContext)
+%include "gdcmPresentationContextGenerator.h"
+%include "gdcmCompositeNetworkFunctions.h"
+%include "gdcmServiceClassUser.h"

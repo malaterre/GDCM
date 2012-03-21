@@ -25,30 +25,33 @@ const DataElement& DataSet::GetDEEnd() const
 
 std::string DataSet::GetPrivateCreator(const Tag &t) const
 {
-  Tag pc = t.GetPrivateCreator();
-  if( pc.GetElement() )
+  if( t.IsPrivate() && !t.IsPrivateCreator() )
     {
-    const DataElement r(pc);
-    ConstIterator it = DES.find(r);
-    if( it == DES.end() )
+    Tag pc = t.GetPrivateCreator();
+    if( pc.GetElement() )
       {
-      // FIXME, could this happen ?
-      return "";
+      const DataElement r(pc);
+      ConstIterator it = DES.find(r);
+      if( it == DES.end() )
+        {
+        // FIXME, could this happen ?
+        return "";
+        }
+      const DataElement &de = *it;
+      if( de.IsEmpty() ) return "";
+      const ByteValue *bv = de.GetByteValue();
+      assert( bv );
+      std::string owner = std::string(bv->GetPointer(),bv->GetLength());
+      // There should not be any trailing space character...
+      // TODO: tmp.erase(tmp.find_last_not_of(' ') + 1);
+      while( owner.size() && owner[owner.size()-1] == ' ' )
+        {
+        // osirix/AbdominalCT/36382443
+        owner.erase(owner.size()-1,1);
+        }
+      assert( owner.size() == 0 || owner[owner.size()-1] != ' ' );
+      return owner;
       }
-    const DataElement &de = *it;
-    if( de.IsEmpty() ) return "";
-    const ByteValue *bv = de.GetByteValue();
-    assert( bv );
-    std::string owner = std::string(bv->GetPointer(),bv->GetLength());
-    // There should not be any trailing space character...
-    // TODO: tmp.erase(tmp.find_last_not_of(' ') + 1);
-    while( owner.size() && owner[owner.size()-1] == ' ' )
-      {
-      // osirix/AbdominalCT/36382443
-      owner.erase(owner.size()-1,1);
-      }
-    assert( owner.size() == 0 || owner[owner.size()-1] != ' ' );
-    return owner;
     }
   return "";
 }

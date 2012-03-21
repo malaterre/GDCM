@@ -35,7 +35,9 @@
 #include "gdcmProgressEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
+#ifdef GDCM_BUILD_TESTING
 #include "gdcmTesting.h"
+#endif
 #include "gdcmObject.h"
 #include "gdcmPixelFormat.h"
 #include "gdcmMediaStorage.h"
@@ -135,6 +137,7 @@
 #include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmBitmapToBitmapFilter.h"
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
@@ -148,7 +151,7 @@
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
-//#include "gdcmImageChangePhotometricInterpretation.h"
+#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmDataSetHelper.h"
@@ -160,12 +163,17 @@
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmIconImageGenerator.h"
+#include "gdcmIconImageFilter.h"
+
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
 #include "gdcmQueryBase.h"
 #include "gdcmBaseRootQuery.h"
+#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextGenerator.h"
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmServiceClassUser.h"
 
@@ -478,10 +486,9 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 //%template (MappingType)     std::map<gdcm::Tag,FilenameToValue>;
 //%template (StringArray)     std::vector<const char*>;
 %template (ValuesType)      std::set<std::string>;
+%rename (PythonTagToValue) SWIGTagToValue;
 //%template (TagToValue)      std::map<gdcm::Tag,const char*>;
 //%template (TagToValue)      std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
-%include "gdcmScanner.h"
-EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%template (stdFilenameToValue) std::map<const char*,const char*>;
 //namespace gdcm
 //{
@@ -494,6 +501,11 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 %include "gdcmAttribute.h"
 %include "gdcmSubject.h"
 %include "gdcmCommand.h"
+
+%template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
+%include "gdcmScanner.h"
+EXTEND_CLASS_PRINT(gdcm::Scanner)
+
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
 
@@ -661,6 +673,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 #endif
 %include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
+%include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
@@ -678,12 +691,14 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
-//%include "gdcmImageChangePhotometricInterpretation.h"
+%include "gdcmImageChangePhotometricInterpretation.h"
 %include "gdcmImageChangePlanarConfiguration.h"
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
 %template (DoubleArrayType) std::vector<double>;
+%template (UShortArrayType) std::vector<unsigned short>;
+%template (UIntArrayType) std::vector<unsigned int>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
@@ -691,6 +706,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+%include "gdcmIconImageGenerator.h"
+%include "gdcmIconImageFilter.h"
 
 %feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"
@@ -698,8 +715,15 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
-%template (DataSetArrayType) std::vector<gdcm::DataSet>;
+%template(DataSetArrayType) std::vector< gdcm::DataSet >;
+%template(FileArrayType) std::vector< gdcm::File >;
+%template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
+%template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
+%template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
 %include "gdcmQueryBase.h"
 %include "gdcmBaseRootQuery.h"
+%include "gdcmPresentationContext.h"
+//EXTEND_CLASS_PRINT(gdcm::PresentationContext)
+%include "gdcmPresentationContextGenerator.h"
 %include "gdcmCompositeNetworkFunctions.h"
 %include "gdcmServiceClassUser.h"

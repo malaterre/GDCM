@@ -181,7 +181,6 @@ public class";
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
-//#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
 #include "gdcmBitmapToBitmapFilter.h"
@@ -217,7 +216,16 @@ public class";
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
+#include "gdcmQueryBase.h"
+#include "gdcmQueryFactory.h"
+#include "gdcmBaseRootQuery.h"
+#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextGenerator.h"
 #include "gdcmCompositeNetworkFunctions.h"
+#include "gdcmServiceClassUser.h"
+
+#include "gdcmStreamImageReader.h"
+#include "gdcmStreamImageWriter.h"
 
 using namespace gdcm;
 %}
@@ -726,7 +734,6 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
   }
 };
 #endif
-//%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
 %include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
@@ -771,4 +778,23 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmFileDerivation.h"
 
 // MEXD:
+%template(DataSetArrayType) std::vector< gdcm::DataSet >;
+%template(FileArrayType) std::vector< gdcm::File >;
+%template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
+%template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
+%template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
+%template(TagArrayType) std::vector< gdcm::Tag >;
+%include "gdcmQueryBase.h"
+%include "gdcmBaseRootQuery.h"
 %include "gdcmCompositeNetworkFunctions.h"
+%template(CharSetArrayType) std::vector< gdcm::ECharSet >;
+%include "gdcmQueryFactory.h"
+%include "gdcmPresentationContext.h"
+//EXTEND_CLASS_PRINT(gdcm::PresentationContext)
+%include "gdcmPresentationContextGenerator.h"
+typedef int64_t time_t; // FIXME
+%include "gdcmServiceClassUser.h"
+%apply char[] { char* inReadBuffer }
+%include "gdcmStreamImageReader.h"
+%clear char* inReadBuffer;
+%include "gdcmStreamImageWriter.h"
