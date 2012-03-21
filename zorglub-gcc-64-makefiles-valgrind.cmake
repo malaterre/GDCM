@@ -20,10 +20,9 @@ SET(ENV{GLIBCXX_FORCE_NEW} 1)
 SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -pedantic -Wno-long-long -Wsign-promo -Weffc++ -Wabi -D_GLIBCXX_DEBUG")
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long")
 
-SET(ENV{PATH} "/local/mmalater/install/bin:/opt/bin:/opt/jdk/bin:/opt/jre/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11:$ENV{PATH}")
-SET(ENV{JAVA_HOME} "/opt/jdk")
+#SET(ENV{JAVA_HOME} "/opt/jdk")
 # Need to pass the path to the VTK libraries
-SET(ENV{LD_LIBRARY_PATH} "${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate/bin")
+#SET(ENV{LD_LIBRARY_PATH} "${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate/bin")
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
@@ -33,7 +32,7 @@ GDCM_BUILD_APPLICATIONS:BOOL=ON
 GDCM_BUILD_EXAMPLES:BOOL=ON
 GDCM_USE_VTK:BOOL=ON
 # Cannot use CTEST_DASHBOARD_ROOT directly...
-VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate
+#VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/VTK-gcc-tomate
 CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
 # wrapping stuff
 GDCM_WRAP_PYTHON:BOOL=ON
