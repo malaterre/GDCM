@@ -58,20 +58,29 @@ std::vector<unsigned int> StreamImageReader::GetDimensionsValueForResolution( un
   File file_t = mReader.GetFile();
   DataSet ds_t = file_t.GetDataSet();
 
-  DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
-  SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
+  if ( ds_t.FindDataElement( Tag(0x0048,0x0200) )
+  {
+    DataElement seq = ds_t.GetDataElement( Tag(0x0048,0x0200) );
+    SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
 
-  Item itemL = sqi->GetItem(res);
-  DataSet &subds_L = itemL.GetNestedDataSet();
+    Item itemL = sqi->GetItem(res);
+    DataSet &subds_L = itemL.GetNestedDataSet();
 
- DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
- Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
- elL1.SetFromDataElement( brrL );
- extent[0] = elL1.GetValue(0);
- extent[1] = elL1.GetValue(1);
- extent[2] = res;
- //std::cout<< "\n Col : " << extent[0] <<"\n Row : " <<  extent[1] << std::endl;
- return extent;
+    DataElement brrL = subds_L.GetDataElement( Tag(0x0048,0x0202) );
+    Element<gdcm::VR::US,gdcm::VM::VM2> elL1;
+    elL1.SetFromDataElement( brrL );
+    extent[0] = elL1.GetValue(0);
+    extent[1] = elL1.GetValue(1);
+    extent[2] = res;
+    //std::cout<< "\n Col : " << extent[0] <<"\n Row : " <<  extent[1] << std::endl;
+  }
+  else 
+  {
+    extent = ImageHelper::GetDimensionsValue(mReader.GetFile());
+  }
+
+  // no dimensionsValueForResolution so return element
+  return extent;
 }
 
 /// Defines an image extent for the Read function.
