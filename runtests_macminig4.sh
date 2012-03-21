@@ -18,5 +18,11 @@ cd $HOME/Dashboards/MyTests/gdcm-nightly-kwstyle/Utilities/doxygen/latex
 rsync --quiet -av gdcm-2.1.0.pdf malat,gdcm@web.sourceforge.net:htdocs
 
 # mirror on github:
-cd $HOME/Dashboards/MyTests/gdcm
+#cd $HOME/Dashboards/MyTests/gdcm
+cd $HOME/Dashboards/MyTests/ty
+git remote update
 git push --mirror git@github.com:malaterre/GDCM.git
+
+
+cd $HOME/Dashboards/MyTests/tifffile
+./getorig.sh
