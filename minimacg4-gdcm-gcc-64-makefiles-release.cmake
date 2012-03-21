@@ -1,12 +1,10 @@
 # Client maintainer: mathieu . malaterre  gmail . com
 
-set(CTEST_SITE "tomate")
+set(CTEST_SITE "minimacg4")
 set(CTEST_BUILD_NAME "Linux-gcc-GIT-release-cov")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
-set(CTEST_DASHBOARD_ROOT "/local/mmalater")
 set(dashboard_root_name "MyTests")
-SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm-release")
 set(dashboard_binary_name "gdcm-nightly-release-cov")
 set(dashboard_git_branch release)

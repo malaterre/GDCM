@@ -1,12 +1,10 @@
 # Client maintainer: mathieu . malaterre  gmail . com
 
-set(CTEST_SITE "brocoli")
+set(CTEST_SITE "minimacg4")
 set(CTEST_BUILD_NAME "Linux-gcc-GIT")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
-set(CTEST_DASHBOARD_ROOT "/local/mmalater")
 set(dashboard_root_name "MyTests")
-SET(CTEST_BUILD_FLAGS "-j16")
 set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly-brocoli")
 set(dashboard_do_memcheck FALSE)
