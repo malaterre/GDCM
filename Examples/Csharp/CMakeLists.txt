@@ -42,7 +42,7 @@ FOREACH(example ${CSHARP_EXAMPLES})
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
     #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "${CSC_PLATFORM_FLAG}" "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
     #WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS #${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
             ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs

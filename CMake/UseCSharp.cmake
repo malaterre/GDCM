@@ -48,6 +48,34 @@ ELSE(DESIRED_CSHARP_COMPILER_VERSION MATCHES 3)
   MESSAGE(FATAL_ERROR "Do not know this version")
 ENDIF(DESIRED_CSHARP_COMPILER_VERSION MATCHES 1)
 
+# CMAKE_CSHARP_COMPILER /platform and anycpu
+if(WIN32)
+# There is a subttle issue when compiling on 64bits platform using a 32bits compiler
+# See bug ID: 3510023 (BadImageFormatException: An attempt was made to load a progr)
+
+SET(CSC_ACCEPTS_PLATFORM_FLAG 0) 
+ 
+IF(CMAKE_CSHARP_COMPILER) 
+  EXECUTE_PROCESS(COMMAND "${CMAKE_CSHARP_COMPILER}" "/?" OUTPUT_VARIABLE CSC_HELP) 
+  # when cmd locale is in French it displays: "/platform:<chaine>" in english: "/platform:<string>"
+  # so only regex match in /platform:
+  IF("${CSC_HELP}" MATCHES "/platform:") 
+    SET(CSC_ACCEPTS_PLATFORM_FLAG 1) 
+  ENDIF() 
+ENDIF(CMAKE_CSHARP_COMPILER) 
+ 
+IF(NOT DEFINED CSC_PLATFORM_FLAG) 
+  SET(CSC_PLATFORM_FLAG "") 
+  IF(CSC_ACCEPTS_PLATFORM_FLAG) 
+    SET(CSC_PLATFORM_FLAG "/platform:x86") 
+    IF("${CMAKE_SIZEOF_VOID_P}" GREATER 4) 
+      SET(CSC_PLATFORM_FLAG "/platform:x64") 
+    ENDIF("${CMAKE_SIZEOF_VOID_P}" GREATER 4) 
+  ENDIF(CSC_ACCEPTS_PLATFORM_FLAG) 
+ENDIF(NOT DEFINED CSC_PLATFORM_FLAG) 
+endif(WIN32)
+
+
 # Check something is found:
 IF(NOT CMAKE_CSHARP_COMPILER)
   # status message only for now:
