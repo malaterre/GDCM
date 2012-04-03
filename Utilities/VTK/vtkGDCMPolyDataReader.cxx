@@ -23,7 +23,7 @@
 #include "vtkCellData.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkRTStructSetProperties.h"
-
+#include "vtkEmptyCell.h"
 #include "gdcmReader.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmAttribute.h"
@@ -464,9 +464,8 @@ refinstanceuid.GetValue().c_str() );
         //still have to insert colors in blank masks, else they can get written incorrectly.
         //also because the number of points of a contour should not define whether or not the color is used.
         //looks kind of wonky to have a zero-sized polydata, but the polydata does need to still define organ color.
-        int npts = 0;
-        vtkIdType *ptIds = new vtkIdType[npts];
-        vtkIdType cellId = polys->InsertNextCell( npts , ptIds);
+        vtkEmptyCell* theEmptyCell = vtkEmptyCell::New();
+        vtkIdType cellId = polys->InsertNextCell(theEmptyCell);
         if (hasColor)
           {
           scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
@@ -478,7 +477,6 @@ refinstanceuid.GetValue().c_str() );
 
         output->GetCellData()->SetScalars(scalars);
         scalars->Delete();
-        delete [] ptIds;
 	      continue;
 	    }
 
