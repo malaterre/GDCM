@@ -428,10 +428,12 @@ refinstanceuid.GetValue().c_str() );
     //(3006,002a) IS [255\192\96]                              # 10,3 ROI Display Color
     gdcm::Tag troidc(0x3006,0x002a);
     gdcm::Attribute<0x3006,0x002a> color = {};
+    bool hasColor = false;//so that color[0] isn't referenced if the color isn't present.
     if( nestedds.FindDataElement( troidc) )
       {
       const gdcm::DataElement &decolor = nestedds.GetDataElement( troidc );
       color.SetFromDataElement( decolor );
+	  hasColor = true;
       //std::cout << "color:" << color[0] << "," << color[1] << "," << color[2] << std::endl;
       }
     //(3006,0040) SQ (Sequence with explicit length #=8)      # 4326, 1 ContourSequence
@@ -445,7 +447,7 @@ refinstanceuid.GetValue().c_str() );
 
     //const gdcm::SequenceOfItems *sqi2 = csq.GetSequenceOfItems();
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = csq.GetValueAsSQ();
-    if( !sqi2 || !sqi2->GetNumberOfItems() )
+    if( !sqi2 )//|| !sqi2->GetNumberOfItems() )
       {
       continue;
       }
@@ -454,6 +456,32 @@ refinstanceuid.GetValue().c_str() );
     //this->SetNumberOfOutputPorts(nitems);
     vtkDoubleArray *scalars = vtkDoubleArray::New();
     scalars->SetNumberOfComponents(3);
+    scalars->SetName( roiname.GetValue().c_str() );
+
+    vtkCellArray *polys = vtkCellArray::New();
+	  if (nitems == 0)
+	    {
+        //still have to insert colors in blank masks, else they can get written incorrectly.
+        //also because the number of points of a contour should not define whether or not the color is used.
+        //looks kind of wonky to have a zero-sized polydata, but the polydata does need to still define organ color.
+        int npts = 0;
+        vtkIdType *ptIds = new vtkIdType[npts];
+        vtkIdType cellId = polys->InsertNextCell( npts , ptIds);
+        if (hasColor)
+          {
+          scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
+          }
+        else 
+          {
+          scalars->InsertTuple3(cellId, 0,0,0);
+          }
+
+        output->GetCellData()->SetScalars(scalars);
+        scalars->Delete();
+        delete [] ptIds;
+	      continue;
+	    }
+
 
     vtkPoints *newPts = vtkPoints::New();
     newPts->SetDataTypeToDouble();//ensure that full precision is retained
@@ -463,8 +491,6 @@ refinstanceuid.GetValue().c_str() );
     // In VTK there is no API to specify the name of a vtkPolyData, you can only specify Name
     // for the scalars (pointdata or celldata), so let's do that...
     //scalars->SetName( structuresetroi.ROIName.c_str() );
-    scalars->SetName( roiname.GetValue().c_str() );
-    vtkCellArray *polys = vtkCellArray::New();
     for(unsigned int i = 0; i < nitems; ++i)
       {
       const gdcm::Item & item2 = sqi2->GetItem(i+1); // Item start at #1
@@ -530,12 +556,16 @@ refinstanceuid.GetValue().c_str() );
         }
       // Each Contour Data is in fact a Cell:
       vtkIdType cellId = polys->InsertNextCell( npts , ptIds);
-      scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
-      //if(npts>256)
+      if (hasColor)
         {
+        scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
+        }
+      else 
+        {
+        scalars->InsertTuple3(cellId, 0,0,0);
+        }
         delete[] ptIds;
         ptIds = NULL;
-        }
       }
     output->SetPoints(newPts);
     newPts->Delete();
@@ -555,11 +585,11 @@ refinstanceuid.GetValue().c_str() );
     }
   const gdcm::DataElement &rtroiobssq = ds.GetDataElement( trtroiobssq );
   gdcm::SmartPointer<gdcm::SequenceOfItems> rtroiobssqsqi = rtroiobssq.GetValueAsSQ();
-  if( !rtroiobssqsqi || !rtroiobssqsqi->GetNumberOfItems() )
+  unsigned int theNumberOfItems = rtroiobssqsqi->GetNumberOfItems();
+  if( !rtroiobssqsqi )// || !rtroiobssqsqi->GetNumberOfItems() )
     {
     return 0;
     }
-  unsigned int theNumberOfItems = rtroiobssqsqi->GetNumberOfItems();
   for(unsigned int obs = 0; obs < theNumberOfItems ; ++obs)
     {
     const gdcm::Item & item = rtroiobssqsqi->GetItem(obs+1); // Item start at #1
