@@ -41,6 +41,59 @@
 #include "gdcmTesting.h"
 #include "gdcmAttribute.h"
 
+#if 0
+class membuf: public std::streambuf
+{
+   public:
+      membuf(const char* filename)
+         :std::streambuf()
+      {
+         hFile = CreateFileA(
+               filename,
+               GENERIC_READ,
+               0,
+               NULL,
+               OPEN_EXISTING,
+               FILE_ATTRIBUTE_READONLY,
+               NULL);
+         hFileMappingObject = CreateFileMapping(
+               hFile,
+               NULL,
+               PAGE_READONLY,
+               0,
+               0,
+               NULL);
+         beg = MapViewOfFile(hFileMappingObject,
+               FILE_MAP_READ,
+               0,
+               0,
+               0);
+         char* e = (char*)beg;
+         e += GetFileSize( hFile, NULL );
+         setg((char*)beg,(char*)beg,e);
+         setp(&outBuf,&outBuf);
+      }
+      /// Close the memory mapping and the opened
+      /// file.
+      ~membuf()
+      {
+         UnmapViewOfFile(beg);
+         CloseHandle( hFileMappingObject );
+         CloseHandle( hFile );
+      }
+   private:
+      /// We can't copy this.
+      membuf(const membuf&);
+      membuf& operator=(const membuf&);
+      /// Outbuf buffer that is not used since we
+      /// don't write to the memory map.
+      char outBuf;
+      HANDLE hFile,hFileMappingObject;
+      /// Pointer to the beginning of the mapped
+      /// memory area.
+      LPVOID beg;
+};
+#endif
 
 /*
  * http://beej.us/guide/bgipc/output/html/multipage/mmap.html

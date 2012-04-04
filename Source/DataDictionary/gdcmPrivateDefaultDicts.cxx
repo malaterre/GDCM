@@ -37,6 +37,8 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0043,0x0014,"dcm4che/archive",VR::AE,VM::VM1,"ae name 1",false },
+  {0x0043,0x0015,"dcm4che/archive",VR::AE,VM::VM1,"ae name 2",false },
   {0x0009,0x0001,"DicomUtils 20100512",VR::SQ,VM::VM1,"DICOMUTILS_PROCESSING_METHODS",false },
   {0x0009,0x0002,"DicomUtils 20100512",VR::LO,VM::VM1,"DICOMUTILS_VERSION",false },
   {0x0009,0x0003,"DicomUtils 20100512",VR::LT,VM::VM1,"DICOMUTILS_ARGS",false },
