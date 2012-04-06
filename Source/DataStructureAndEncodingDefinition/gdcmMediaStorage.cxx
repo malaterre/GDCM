@@ -124,6 +124,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.481.9", //  RTIonBeamsTreatmentRecordStorage
   "1.2.840.10008.5.1.4.1.1.66.5", // Surface Segmentation Storage
   "1.2.840.10008.5.1.4.1.1.77.1.6", // VLWholeSlideMicroscopyImageStorage
+  "1.2.840.10008.5.1.4.1.1.481.7", // RTTreatmentSummaryRecordStorage
   0
 };
 
@@ -287,6 +288,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},// RTIonBeamsTreatmentRecordStorage
   {"SEG", 3},// Surface Segmentation Storage
   {"SM", 2},// VLWholeSlideMicroscopyImageStorage
+  {"RTRECORD", 2},//RTTreatmentSummaryRecordStorage
 
   {NULL, 0} //MS_END
 };
