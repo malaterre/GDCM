@@ -232,6 +232,25 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       const int l = (int)( -log10(ZTolerance) );
       ZSpacing = spacing_round(zspacing, l);
       }
+    if( !spacingisgood )
+    {
+        std::cout << "Filenames and 'z' positions" << std::endl;
+        double prev = 0.;
+        for(SortedFilenames::const_iterator& it = sorted.begin(); it!= sorted.end(); ++it)
+        {
+            std::string f = it->second;
+            if( f.length() > 32 )
+            {
+                f = f.substr(0,10) + " ... " + f.substr(f.length()-17);
+            }
+            double d = it->first - prev;
+            if( it != sorted.begin() && fabs(d - zspacing) > ZTolerance) std::cout << "* ";
+            else std::cout << "  ";
+            std::cout << it->first << "\t" << f << std::endl;
+            prev = it->first;
+        }
+        std::cout << std::endl;
+    }
     assert( spacingisgood == false ||  (ComputeZSpacing ? (ZSpacing > ZTolerance && ZTolerance > 0) : ZTolerance > 0) );
     }
 }
