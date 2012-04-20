@@ -29,7 +29,7 @@ SegmentReader::~SegmentReader()
 
 const SegmentReader::SegmentVector SegmentReader::GetSegments() const
 {
-  return GetSegments();
+  return const_cast<SegmentReader*>(this)->GetSegments();
 }
 
 SegmentReader::SegmentVector SegmentReader::GetSegments()
