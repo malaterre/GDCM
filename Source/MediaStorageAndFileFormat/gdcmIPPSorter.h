@@ -80,6 +80,11 @@ public:
   void SetDirectionCosinesTolerance(double tol) { DirCosTolerance = tol; }
   double GetDirectionCosinesTolerance() const { return DirCosTolerance; }
 
+  /// Makes the IPPSorter ignore multiple images located at the same position.
+  /// Only the first occurence will be kept.
+  /// DropDuplicatePositions defaults to false.
+  void SetDropDuplicatePositions(bool b) { DropDuplicatePositions = b; }
+
   /// Read-only function to provide access to the computed value for the Z-Spacing
   /// The ComputeZSpacing must have been set to true before execution of
   /// sort algorithm. Call this function *after* calling Sort();
@@ -90,6 +95,7 @@ public:
 
 protected:
   bool ComputeZSpacing;
+  bool DropDuplicatePositions;
   double ZSpacing;
   double ZTolerance;
   double DirCosTolerance;

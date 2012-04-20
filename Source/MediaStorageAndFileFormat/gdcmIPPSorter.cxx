@@ -25,6 +25,7 @@ namespace gdcm
 IPPSorter::IPPSorter()
 {
   ComputeZSpacing = true;
+  DropDuplicatePositions = false;
   ZSpacing = 0;
   ZTolerance = 1e-6;
   DirCosTolerance = 0.;
@@ -176,9 +177,14 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
         // FIXME: This test is weak, since implicitely we are doing a != on floating point value
         if( sorted.find(dist) != sorted.end() )
           {
-          gdcmWarningMacro( "dist: " << dist << " for " << filename <<
-            " already found in " << sorted.find(dist)->second );
-          return false;
+            if( this->DropDuplicatePositions )
+            {
+              gdcmWarningMacro( "dropping file " << filename << " since Z position: " << dist << " already found" );
+              continue;
+            }
+            gdcmWarningMacro( "dist: " << dist << " for " << filename <<
+              " already found in " << sorted.find(dist)->second );
+            return false;
           }
         sorted.insert(
           SortedFilenames::value_type(dist,filename) );
