@@ -864,6 +864,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   // (0028,0030) DS [ 0.8593750000\0.8593750000]             #  26, 2 PixelSpacing
   switch(ms)
     {
+  case MediaStorage::EnhancedUSVolumeStorage:
   // Enhanced stuff are handled elsewere... look carefully :)
   //case MediaStorage::EnhancedMRImageStorage:
   //case MediaStorage::EnhancedCTImageStorage:
@@ -948,6 +949,7 @@ Tag ImageHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
 
   switch(ms)
     {
+  case MediaStorage::EnhancedUSVolumeStorage:
   case MediaStorage::MRImageStorage:
   case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
   case MediaStorage::GeneralElectricMagneticResonanceImageStorage:
