@@ -474,9 +474,10 @@ refinstanceuid.GetValue().c_str() );
           {
           scalars->InsertTuple3(cellId, 0,0,0);
           }
-
+        theEmptyCell->Delete();
         output->GetCellData()->SetScalars(scalars);
         scalars->Delete();
+        polys->Delete();
 	      continue;
 	    }
 
