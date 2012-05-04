@@ -12,7 +12,10 @@ INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 # http://mail.python.org/pipermail/c++-sig/2002-May/001021.html
 # http://mail.python.org/pipermail/python-dev/2002-May/023923.html
 
-FIND_PACKAGE(SWIG REQUIRED)
+# 2.0.5 is required here to solve the issue with wrapping of vector<int>::size_type
+# see full thread at:
+# http://sourceforge.net/mailarchive/message.php?msg_id=29217941
+FIND_PACKAGE(SWIG 2.0.5 REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
 

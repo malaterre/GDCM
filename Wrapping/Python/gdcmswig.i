@@ -311,6 +311,7 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 EXTEND_CLASS_PRINT(gdcm::DataElement)
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
+%template() std::vector< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (PythonDataSet) SWIGDataSet;
