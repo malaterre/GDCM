@@ -28,6 +28,7 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 # swig expect a name like that: php_gdcm.so
 SWIG_ADD_MODULE(php_gdcm php gdcm.i)
 SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF)
+set_property(TARGET ${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
 SET_TARGET_PROPERTIES(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 # Remove 'lib' prefix :no-op on windows and valid for UNIX based syste
