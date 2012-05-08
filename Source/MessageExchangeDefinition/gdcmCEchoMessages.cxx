@@ -39,7 +39,6 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
   PresentationContextRQ pc( UIDs::VerificationSOPClass );
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromPresentationContext(pc) );
-  assert( thePDV.GetPresentationContextID() == 1 );
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);

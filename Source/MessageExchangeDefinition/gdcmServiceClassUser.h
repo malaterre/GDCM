@@ -71,6 +71,9 @@ public:
   /// Set the Presentation Context used for the Association
   void SetPresentationContexts(std::vector<PresentationContext> const & pcs);
 
+  /// Return if the passed in presentation was accepted during association negotiation.
+  bool IsPresentationContextAccepted(const PresentationContext& pc) const;
+
   /// Start the association. Need to call SetPresentationContexts before
   bool StartAssociation();
 

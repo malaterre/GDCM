@@ -152,7 +152,6 @@ void PresentationContextRQ::AddTransferSyntax( TransferSyntaxSub const &ts )
 
 void PresentationContextRQ::SetPresentationContextID( uint8_t id )
 {
-  assert( id % 2 == 1 );
   assert( id );
   ID = id;
 }
