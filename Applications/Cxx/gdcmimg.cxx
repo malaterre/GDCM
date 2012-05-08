@@ -872,6 +872,7 @@ int main (int argc, char *argv[])
     if(  gdcm::System::StrCaseCmp(inputextension,".jp2") == 0
       || gdcm::System::StrCaseCmp(inputextension,".j2k") == 0
       || gdcm::System::StrCaseCmp(inputextension,".j2c") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".jpx") == 0
       || gdcm::System::StrCaseCmp(inputextension,".jpc") == 0 )
       {
       /*
