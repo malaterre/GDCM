@@ -699,15 +699,21 @@ IF(GDCM_WRAP_PYTHON)
     ADD_LIBRARY(${VTKGDCM_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
     # this is a library set the version:
     # do not set the version on the Python module:
-    #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     ADD_LIBRARY(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
-    # do not set the version on the PythonD module:
-    SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-    TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME})
-    FOREACH(c ${vtkgdcm_LIBS})
+    # do not set the version on the Python module:
+    #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME} ${PYTHON_LIBRARY})
+    FOREACH(c ${vtkgdcm_LIBS} vtkFiltering)
       TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${c}Python${DEXTENSION})
     ENDFOREACH(c)
+    if(TARGET vtkPythonCore)
+      TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD vtkPythonCore)
+    endif()
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Python ${VTKGDCM_NAME}PythonD)
+SET_PROPERTY(TARGET ${VTKGDCM_NAME}PythonD PROPERTY LINK_INTERFACE_LIBRARIES "")
+    set_property(TARGET ${VTKGDCM_NAME}Python PROPERTY NO_SONAME 1)
+    #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY NO_SONAME 1)
     # Python extension modules on Windows must have the extension ".pyd"
     # instead of ".dll" as of Python 2.5.  Older python versions do support
     # this suffix.
