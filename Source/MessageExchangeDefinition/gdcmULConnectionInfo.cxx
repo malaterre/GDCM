@@ -28,7 +28,7 @@
 #include "gdcmULConnectionInfo.h"
 #include <socket++/sockinet.h>//for setting up the local socket
 
-#if defined (__FreeBSD__) // inet_addr
+#if defined (__FreeBSD__) || defined(__FreeBSD_kernel__) // inet_addr
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
