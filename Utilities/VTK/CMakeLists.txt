@@ -183,11 +183,13 @@ IF(GDCM_WRAP_PHP)
 
   SWIG_ADD_MODULE(php_vtkgdcm php vtkgdcm.i)
   SWIG_LINK_LIBRARIES(php_vtkgdcm vtkgdcm)
+  TARGET_LINK_LIBRARIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} ${vtkgdcm_LIBS})
   IF(UNIX)
-  SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
+    SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
   ENDIF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES PREFIX "")
   SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+  set_property(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
@@ -203,11 +205,13 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #  endif(NAMELINK_ONLY)
 
 # See gdcm bug #3175803
+if(${SWIG_VERSION} LESS 2.0.2)
 add_custom_command(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
   PRE_BUILD
   COMMAND sed -i -e 's/zend_error_noreturn/zend_error/g' "${swig_generated_file_fullname}"
   COMMENT "Patching zend_error_noreturn into zend_error"
   )
+endif()
 
 # Let's copy vtkgdcm.php into the bin dir:
 ADD_CUSTOM_COMMAND(
@@ -220,6 +224,9 @@ ADD_CUSTOM_TARGET(VTKGDCMPHP ALL
   DEPENDS ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
   COMMENT "building vtkgdcm.php"
 )
+      INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
+        DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule
+      )
 
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ENDIF(GDCM_WRAP_PHP)
