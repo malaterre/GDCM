@@ -143,6 +143,10 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       COMMENT  "GDCM: Executing GDCMDoxygenPDF"
     )
+    INSTALL(FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+      DESTINATION ${GDCM_INSTALL_DOC_DIR}
+    )
   ELSE(UNIX AND GDCM_PDF_DOCUMENTATION)
     # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
     ADD_CUSTOM_TARGET(GDCMDoxygenDoc
@@ -185,6 +189,10 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
     DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT Development
+  )
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${GDCM_INSTALL_DOC_DIR}
+    PATTERN "*.md5" EXCLUDE
+    PATTERN "*.dot" EXCLUDE
   )
 
   # http://lists.debian.org/debian-italian/2006/12/msg00878.html
