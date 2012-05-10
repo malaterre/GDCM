@@ -480,6 +480,8 @@ IF(GDCM_WRAP_CSHARP)
           TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged ${Mummy_RUNTIME_LINK_LIBRARIES})
         ENDIF(WIN32)
         TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged vtk${kit})
+        TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged vtkCommon)
+        set_property(TARGET Kitware.VTK.vtk${kit}.Unmanaged PROPERTY NO_SONAME 1)
         # TODO -- rename this CopyLibraries here too...
         ADD_DEPENDENCIES(Kitware.VTK.vtk${kit}.Unmanaged Kitware.mummy.CopyLibraries2)
         ADD_DEPENDENCIES(Kitware.VTK.vtk${kit}.Unmanaged "vtk${kit}GenerateWrappers")
