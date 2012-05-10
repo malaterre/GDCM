@@ -421,7 +421,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
     if( ds.FindDataElement( t1 ) )
       {
       SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( t1 ).GetValueAsSQ();
-      if( sqi )
+      if( sqi && sqi->GetNumberOfItems() >= 1)
         {
         // Get first item:
         const Item &item = sqi->GetItem(1);
@@ -555,7 +555,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     if( ds.FindDataElement( t1 ) )
       {
       SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( t1 ).GetValueAsSQ();
-      if( sqi )
+      if( sqi && sqi->GetNumberOfItems() >= 1 )
         {
         // Get first item:
         const Item &item = sqi->GetItem(1);
