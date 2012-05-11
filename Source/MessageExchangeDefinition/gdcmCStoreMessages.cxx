@@ -93,8 +93,6 @@ const DataSet* inDataSet = &file.GetDataSet();
   const char *uid = msclass.GetByteValue()->GetPointer();
   assert( uid );
   std::string suid = std::string(uid, msclass.GetByteValue()->GetLength());
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
 
   // self check
 //  const PresentationContextAC * pc = inConnection.GetPresentationContextACByID(prescontid);
@@ -175,8 +173,6 @@ const DataSet* inDataSet = &file.GetDataSet();
       const char *uid = bv->GetPointer();
       assert( uid );
       suid = std::string(uid, bv->GetLength() );
-      if( suid.size() % 2 )
-        suid.push_back( ' ' ); // no \0 !
       assert(suid.size() < std::numeric_limits<uint32_t>::max());
       }
     }
