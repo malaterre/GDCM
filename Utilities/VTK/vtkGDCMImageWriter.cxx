@@ -17,6 +17,7 @@
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
+#include "vtkLookupTable16.h"
 #include "vtkMath.h"
 #include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
@@ -664,7 +665,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
     //vtkLookupTable * vtklut = this->LookupTable;
     assert( vtklut );
+    //const char *name = vtklut->GetClassName ();
+    vtkLookupTable16 * vtklut16 = vtkLookupTable16::SafeDownCast( vtklut );
     //assert( vtklut->GetNumberOfTableValues() == 256 );
+    //vtkIdType vtknumcolors = vtklut->GetNumberOfTableValues();
     unsigned int lutlen = 256;
     assert( pixeltype.GetBitsAllocated() == 8 || pixeltype.GetBitsAllocated() == 16 );
     if( pixeltype.GetBitsAllocated() == 8 )
@@ -681,7 +685,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     lut->InitializeLUT( gdcm::LookupTable::RED,   lutlen, 0, 16 );
     lut->InitializeLUT( gdcm::LookupTable::GREEN, lutlen, 0, 16 );
     lut->InitializeLUT( gdcm::LookupTable::BLUE,  lutlen, 0, 16 );
-    if( !lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+    bool b;
+    if( vtklut16 )
+      b = lut->WriteBufferAsRGBA( vtklut16->WritePointer(0,4) );
+    else
+      b = lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) );
+    if( !b )
       {
       vtkWarningMacro( "Could not get values from LUT" );
       return 0;
