@@ -577,7 +577,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
 
     if( I->GetPixelFormat().GetBitsAllocated() == 16 )
       {
-      assert( I->GetPixelFormat().GetPixelRepresentation() == 0 );
+      //assert( I->GetPixelFormat().GetPixelRepresentation() == 0 );
       std::string s = ss.str();
       gdcm::Rescaler r;
       r.SetPixelFormat( I->GetPixelFormat() );
