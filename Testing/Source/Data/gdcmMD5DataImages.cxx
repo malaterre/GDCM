@@ -671,6 +671,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "d6347ed051d7b887bdaad1a91433c6ba" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
 { "94414d8b4300aa3d8cbe4475d34e8e54" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
 
+{ "304f147752d46adfdcff71a30cd03d0a" , "NM-PAL-16-PixRep1.dcm" },
+
 /* Stopping condition */
 { 0 ,0 }
 };
