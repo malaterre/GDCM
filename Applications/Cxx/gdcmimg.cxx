@@ -53,6 +53,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
 #include "gdcmPNMCodec.h"
+#include "gdcmPGXCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
@@ -853,6 +854,22 @@ int main (int argc, char *argv[])
       return 0;
       }
 
+    if(  gdcm::System::StrCaseCmp(inputextension,".pgx") == 0 )
+      {
+      gdcm::PGXCodec pnm;
+      gdcm::PixmapWriter writer;
+      if( !Populate( writer, pnm, filenames ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
+
+      writer.SetFileName( outfilename );
+      if( !writer.Write() )
+        {
+        return 1;
+        }
+
+      return 0;
+      }
+
     if(  gdcm::System::StrCaseCmp(inputextension,".jls") == 0 )
       {
       gdcm::JPEGLSCodec jpeg;
@@ -938,6 +955,23 @@ int main (int argc, char *argv[])
       || gdcm::System::StrCaseCmp(outputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
+      pnm.SetDimensions( imageori.GetDimensions() );
+      pnm.SetPixelFormat( imageori.GetPixelFormat() );
+      pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+      pnm.SetLUT( imageori.GetLUT() );
+      const gdcm::DataElement& in = imageori.GetDataElement();
+      bool b = pnm.Write( outfilename, in );
+      if( !b )
+        {
+        std::cerr << "Problem writing PNM file" << std::endl;
+        return 1;
+        }
+
+      return 0;
+      }
+    if(  gdcm::System::StrCaseCmp(outputextension,".pgx") == 0 )
+      {
+      gdcm::PGXCodec pnm;
       pnm.SetDimensions( imageori.GetDimensions() );
       pnm.SetPixelFormat( imageori.GetPixelFormat() );
       pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
