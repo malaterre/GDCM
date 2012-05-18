@@ -247,6 +247,8 @@ public:
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
 
+  std::ostream& WriteXML(std::ostream &os);
+
 protected:
   Tag TagField;
   // This is the value read from the file, might be different from the length of Value Field

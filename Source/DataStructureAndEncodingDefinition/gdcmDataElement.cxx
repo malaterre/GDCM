@@ -20,6 +20,11 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmTrace.h"
 
+/*Need to access Dictionary to write Keyword attribute in WriteXML() */
+
+#include "gdcmDicts.h"
+
+
 namespace gdcm
 {
   void DataElement::SetVLToUndefined() {
@@ -32,6 +37,49 @@ namespace gdcm
       assert( GetValueAsSQ()->IsUndefinedLength() );
       }
     ValueLengthField.SetToUndefined();
+  }
+
+  /*
+	inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
+{
+  os << val.TagField;
+  os << "\t" << val.VRField;
+  os << "\t" << val.ValueLengthField;
+  if( val.ValueField )
+    {
+    val.ValueField->Print( os << "\t" );
+    }
+  return os;
+}
+
+
+  */
+
+  std::ostream& DataElement::WriteXML(std::ostream &os)
+  {
+
+     
+     		
+     // The common name of the tag for each dicom attribute
+     os << "<DicomAttribute ";
+
+     // Printing the tag information for this XML node
+     os << " tag=\"" << TagField << "\"";
+
+     // Printing the VR -- Value Representation
+     os << " VR=\"" << VRField << "\"";
+
+     /* Printing the keyword after lookup from dictionary
+        Checks whether it is from public dictionary or private
+     os << " keyword=\"" << GetKeywordFromTag(TagField) << "\"";
+     */ 
+     
+     
+     
+     /*Add attributes for private creator, value --after checks to handle pixel data and SQ*/	
+
+    
+     os << "DicomAttribute ";//end tag
   }
 
 #if !defined(GDCM_LEGACY_REMOVE)
