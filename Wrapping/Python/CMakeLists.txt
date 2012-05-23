@@ -14,8 +14,11 @@ INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 
 # 2.0.5 is required here to solve the issue with wrapping of vector<int>::size_type
 # see full thread at:
-# http://sourceforge.net/mailarchive/message.php?msg_id=29217941
-FIND_PACKAGE(SWIG 2.0.5 REQUIRED)
+# http://sourceforge.net/mailarchive/message.php?msg_id=29217941
+# 2.0.5 cannot be used because of the error
+#  error: invalid initialization of reference of type 'ptrdiff_t& {aka int&}' from expression of type 'long int'
+# http://sourceforge.net/mailarchive/message.php?msg_id=29294773
+FIND_PACKAGE(SWIG 2.0.6 REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
 
