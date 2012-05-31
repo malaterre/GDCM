@@ -35,6 +35,7 @@ namespace gdcm
 
 class SequenceOfItems;
 class SequenceOfFragments;
+class Dicts;
 /**
  * \brief Class to represent a Data Element
  * either Implicit or Explicit
@@ -247,7 +248,7 @@ public:
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
 
-  std::ostream& WriteXML(std::ostream &os);
+  VR WriteXML(std::ostream &os, const Dicts &dicts);
 
 protected:
   Tag TagField;

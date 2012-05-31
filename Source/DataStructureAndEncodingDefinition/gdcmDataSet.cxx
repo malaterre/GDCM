@@ -13,6 +13,17 @@
 =========================================================================*/
 #include "gdcmDataSet.h"
 #include "gdcmPrivateTag.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmSequenceOfFragments.h"
+#include "gdcmDict.h"
+#include "gdcmDicts.h"
+#include "gdcmGroupDict.h"
+#include "gdcmVR.h"
+#include "gdcmVM.h"
+#include "gdcmElement.h"
+#include "gdcmGlobal.h"
+#include "gdcmAttribute.h"
+
 
 namespace gdcm
 {
@@ -105,5 +116,56 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
 {
   return GetDataElement( ComputeDataElement(t) );
 }
+
+
+void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de)
+{
+  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+  if( !sqi ) return;
+  assert(sqi);
+  const DataSet &ds =(*this);
+  SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+  for(; it != sqi->Items.end(); ++it)
+    {
+      const Item &item = *it;
+      *this = item.GetNestedDataSet();
+      const DataElement &deitem = item;
+      WriteXML(os);
+      if( deitem.GetVL().IsUndefined() )
+        {
+        // print this const Tag itemDelItem(0xfffe,0xe00d);
+        
+        }
+    }
+  if( sqi->GetLength().IsUndefined() )
+    {
+    //print this const Tag seqDelItem(0xfffe,0xe0dd);
+    
+    }
+    *this = ds;
+}
+
+void DataSet::WriteXML(std::ostream &os)
+{
+  
+  const Global& G = GlobalInstance;
+  const Dicts &dicts = G.GetDicts();
+  
+  DataElement de;
+  VR ret;
+  Iterator it = DES.begin();
+  for( ; it != DES.end(); ++it)
+    {
+     de = *it;
+     ret=de.WriteXML(os, dicts);      
+     
+     if(ret == VR::SQ)
+       SQ_XML_Write(os,dicts,de);
+     
+    }
+    
+}
+
+
 
 } // end namespace gdcm
