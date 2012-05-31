@@ -28,6 +28,7 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmDirectoryHelper.h"
 
 vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $")
 vtkStandardNewMacro(vtkGDCMPolyDataReader)
@@ -49,28 +50,6 @@ vtkGDCMPolyDataReader::~vtkGDCMPolyDataReader()
   this->RTStructSetProperties->Delete();
 }
 
-//----------------------------------------------------------------------------
-// inline keyword is needed since GetStringValueFromTag was copy/paste from vtkGDCMImageReader
-// FIXME: need to restructure code to avoid copy/paste
-inline const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
-{
-  static std::string buffer;
-  buffer = "";  // cleanup previous call
-
-  if( ds.FindDataElement( t ) )
-    {
-    const gdcm::DataElement& de = ds.GetDataElement( t );
-    const gdcm::ByteValue *bv = de.GetByteValue();
-    if( bv ) // Can be Type 2
-      {
-      buffer = std::string( bv->GetPointer(), bv->GetLength() );
-      // Will be padded with at least one \0
-      }
-    }
-
-  // Since return is a const char* the very first \0 will be considered
-  return buffer.c_str();
-}
 
 //----------------------------------------------------------------------------
 void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &reader)
@@ -78,81 +57,81 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
   const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = file.GetDataSet();
 
-  this->RTStructSetProperties->SetStructureSetLabel( GetStringValueFromTag( gdcm::Tag(0x3006,0x0002), ds) );
-  this->RTStructSetProperties->SetStructureSetName( GetStringValueFromTag( gdcm::Tag(0x3006,0x0004), ds) );
-  this->RTStructSetProperties->SetStructureSetDate( GetStringValueFromTag( gdcm::Tag(0x3006,0x0008), ds) );
-  this->RTStructSetProperties->SetStructureSetTime( GetStringValueFromTag( gdcm::Tag(0x3006,0x0009), ds) );
-  this->RTStructSetProperties->SetSOPInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0008,0x0018), ds) );
-  this->RTStructSetProperties->SetStudyInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0020,0x000d), ds) );
-  this->RTStructSetProperties->SetSeriesInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0020,0x000e), ds) );
+  this->RTStructSetProperties->SetStructureSetLabel( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0002), ds).c_str() );
+  this->RTStructSetProperties->SetStructureSetName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0004), ds).c_str() );
+  this->RTStructSetProperties->SetStructureSetDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0008), ds).c_str() );
+  this->RTStructSetProperties->SetStructureSetTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0009), ds).c_str() );
+  this->RTStructSetProperties->SetSOPInstanceUID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0018), ds).c_str() );
+  this->RTStructSetProperties->SetStudyInstanceUID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x000d), ds).c_str() );
+  this->RTStructSetProperties->SetSeriesInstanceUID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x000e), ds).c_str() );
 
   // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h
   // For ex: DICOM (0010,0010) = DOE,JOHN
-  this->MedicalImageProperties->SetPatientName( GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds) );
+  this->MedicalImageProperties->SetPatientName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds).c_str() );
   // For ex: DICOM (0010,0020) = 1933197
-  this->MedicalImageProperties->SetPatientID( GetStringValueFromTag( gdcm::Tag(0x0010,0x0020), ds) );
+  this->MedicalImageProperties->SetPatientID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0020), ds).c_str() );
   // For ex: DICOM (0010,1010) = 031Y
-  this->MedicalImageProperties->SetPatientAge( GetStringValueFromTag( gdcm::Tag(0x0010,0x1010), ds) );
+  this->MedicalImageProperties->SetPatientAge( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x1010), ds).c_str() );
   // For ex: DICOM (0010,0040) = M
-  this->MedicalImageProperties->SetPatientSex( GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds) );
+  this->MedicalImageProperties->SetPatientSex( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds).c_str() );
   // For ex: DICOM (0010,0030) = 19680427
-  this->MedicalImageProperties->SetPatientBirthDate( GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds) );
+  this->MedicalImageProperties->SetPatientBirthDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds).c_str() );
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
-  this->MedicalImageProperties->SetStudyDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds) );
+  this->MedicalImageProperties->SetStudyDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0022) = 20030617
-  this->MedicalImageProperties->SetAcquisitionDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds) );
+  this->MedicalImageProperties->SetAcquisitionDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds).c_str() );
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetStudyTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds) );
+  this->MedicalImageProperties->SetStudyTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetAcquisitionTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds) );
+  this->MedicalImageProperties->SetAcquisitionTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds).c_str() );
   // For ex: DICOM (0008,0023) = 20030617
-  this->MedicalImageProperties->SetImageDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0023), ds) );
+  this->MedicalImageProperties->SetImageDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0023), ds).c_str() );
   // For ex: DICOM (0008,0033) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetImageTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0033), ds) );
+  this->MedicalImageProperties->SetImageTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0033), ds).c_str() );
   // For ex: DICOM (0020,0013) = 1
-  this->MedicalImageProperties->SetImageNumber( GetStringValueFromTag( gdcm::Tag(0x0020,0x0013), ds) );
+  this->MedicalImageProperties->SetImageNumber( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0013), ds).c_str() );
   // For ex: DICOM (0020,0011) = 902
-  this->MedicalImageProperties->SetSeriesNumber( GetStringValueFromTag( gdcm::Tag(0x0020,0x0011), ds) );
+  this->MedicalImageProperties->SetSeriesNumber( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0011), ds).c_str() );
   // For ex: DICOM (0008,103e) = SCOUT
-  this->MedicalImageProperties->SetSeriesDescription( GetStringValueFromTag( gdcm::Tag(0x0008,0x103e), ds) );
+  this->MedicalImageProperties->SetSeriesDescription( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x103e), ds).c_str() );
   // For ex: DICOM (0020,0010) = 37481
-  this->MedicalImageProperties->SetStudyID( GetStringValueFromTag( gdcm::Tag(0x0020,0x0010), ds) );
+  this->MedicalImageProperties->SetStudyID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0010), ds).c_str() );
   // For ex: DICOM (0008,1030) = BRAIN/C-SP/FACIAL
-  this->MedicalImageProperties->SetStudyDescription( GetStringValueFromTag( gdcm::Tag(0x0008,0x1030), ds) );
+  this->MedicalImageProperties->SetStudyDescription( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1030), ds).c_str() );
   // For ex: DICOM (0008,0060)= CT
-  this->MedicalImageProperties->SetModality( GetStringValueFromTag( gdcm::Tag(0x0008,0x0060), ds) );
+  this->MedicalImageProperties->SetModality( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0060), ds).c_str() );
   // For ex: DICOM (0008,0070) = Siemens
-  this->MedicalImageProperties->SetManufacturer( GetStringValueFromTag( gdcm::Tag(0x0008,0x0070), ds) );
+  this->MedicalImageProperties->SetManufacturer( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0070), ds).c_str() );
   // For ex: DICOM (0008,1090) = LightSpeed QX/i
-  this->MedicalImageProperties->SetManufacturerModelName( GetStringValueFromTag( gdcm::Tag(0x0008,0x1090), ds) );
+  this->MedicalImageProperties->SetManufacturerModelName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1090), ds).c_str() );
   // For ex: DICOM (0008,1010) = LSPD_OC8
-  this->MedicalImageProperties->SetStationName( GetStringValueFromTag( gdcm::Tag(0x0008,0x1010), ds) );
+  this->MedicalImageProperties->SetStationName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1010), ds).c_str() );
   // For ex: DICOM (0008,0080) = FooCity Medical Center
-  this->MedicalImageProperties->SetInstitutionName( GetStringValueFromTag( gdcm::Tag(0x0008,0x0080), ds) );
+  this->MedicalImageProperties->SetInstitutionName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0080), ds).c_str() );
   // For ex: DICOM (0018,1210) = Bone
-  this->MedicalImageProperties->SetConvolutionKernel( GetStringValueFromTag( gdcm::Tag(0x0018,0x1210), ds) );
+  this->MedicalImageProperties->SetConvolutionKernel( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1210), ds).c_str() );
   // For ex: DICOM (0018,0050) = 0.273438
-  this->MedicalImageProperties->SetSliceThickness( GetStringValueFromTag( gdcm::Tag(0x0018,0x0050), ds) );
+  this->MedicalImageProperties->SetSliceThickness( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0050), ds).c_str() );
   // For ex: DICOM (0018,0060) = 120
-  this->MedicalImageProperties->SetKVP( GetStringValueFromTag( gdcm::Tag(0x0018,0x0060), ds) );
+  this->MedicalImageProperties->SetKVP( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0060), ds).c_str() );
   // For ex: DICOM (0018,1120) = 15
-  this->MedicalImageProperties->SetGantryTilt( GetStringValueFromTag( gdcm::Tag(0x0018,0x1120), ds) );
+  this->MedicalImageProperties->SetGantryTilt( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1120), ds).c_str() );
   // For ex: DICOM (0018,0081) = 105
-  this->MedicalImageProperties->SetEchoTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x0081), ds) );
+  this->MedicalImageProperties->SetEchoTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0081), ds).c_str() );
   // For ex: DICOM (0018,0091) = 35
-  this->MedicalImageProperties->SetEchoTrainLength( GetStringValueFromTag( gdcm::Tag(0x0018,0x0091), ds) );
+  this->MedicalImageProperties->SetEchoTrainLength( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0091), ds).c_str() );
   // For ex: DICOM (0018,0080) = 2040
-  this->MedicalImageProperties->SetRepetitionTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x0080), ds) );
+  this->MedicalImageProperties->SetRepetitionTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0080), ds).c_str() );
   // For ex: DICOM (0018,1150) = 5
-  this->MedicalImageProperties->SetExposureTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x1150), ds) );
+  this->MedicalImageProperties->SetExposureTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1150), ds).c_str() );
   // For ex: DICOM (0018,1151) = 400
-  this->MedicalImageProperties->SetXRayTubeCurrent( GetStringValueFromTag( gdcm::Tag(0x0018,0x1151), ds) );
+  this->MedicalImageProperties->SetXRayTubeCurrent( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1151), ds).c_str() );
   // For ex: DICOM (0018,1152) = 114
-  this->MedicalImageProperties->SetExposure( GetStringValueFromTag( gdcm::Tag(0x0018,0x1152), ds) );
+  this->MedicalImageProperties->SetExposure( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1152), ds).c_str() );
 
   // virtual void AddWindowLevelPreset(double w, double l);
   // (0028,1050) DS [   498\  498]                           #  12, 2 WindowCenter
