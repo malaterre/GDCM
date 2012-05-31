@@ -18,7 +18,9 @@ INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 # 2.0.5 cannot be used because of the error
 #  error: invalid initialization of reference of type 'ptrdiff_t& {aka int&}' from expression of type 'long int'
 # http://sourceforge.net/mailarchive/message.php?msg_id=29294773
-FIND_PACKAGE(SWIG 2.0.6 REQUIRED)
+# 2.0.6 cannot be used because of a serious typemap bug in 2.0.5
+# http://sourceforge.net/mailarchive/message.php?msg_id=29305946
+FIND_PACKAGE(SWIG 2.0.7 REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
 
