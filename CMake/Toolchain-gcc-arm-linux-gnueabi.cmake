@@ -13,6 +13,8 @@
 #
 #  sudo xapt -S squeeze -M http://ftp.fr.debian.org/debian/ -a armel -m zlib1g-dev uuid-dev libexpat1-dev
 #
+#  qemu-arm -L /usr/arm-linux-gnueabi/ ./bin/gdcminfo test.acr
+#
 #  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
