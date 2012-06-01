@@ -540,6 +540,11 @@ bool PixmapWriter::PrepareWrite()
   else
     {
     const ByteValue *bv = ds.GetDataElement( Tag(0x0008,0x0016) ).GetByteValue();
+    if( !bv )
+      {
+      gdcmErrorMacro( "Cant be empty" );
+      return false;
+      }
     if( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) != 0 )
       {
       DataElement de = ds.GetDataElement( Tag(0x0008,0x0016) );

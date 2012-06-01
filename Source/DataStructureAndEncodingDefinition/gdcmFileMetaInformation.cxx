@@ -174,8 +174,14 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
         DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
         assert( !mssopclass.IsEmpty() );
         const ByteValue *bv = sopclass.GetByteValue();
-        assert( bv );
-        mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
+        if( bv )
+          {
+          mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
+          }
+        else
+          {
+          throw gdcm::Exception( "SOP Class is empty sorry" );
+          }
         Replace( mssopclass );
         }
       }

@@ -1088,7 +1088,17 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         el.Read( ss );
         assert( el.GetLength() == 2 );
         for(unsigned long i = 0; i < el.GetLength(); ++i)
-          sp.push_back( el.GetValue(i) );
+          {
+          if( el.GetValue(i) )
+            {
+            sp.push_back( el.GetValue(i) );
+            }
+          else
+            {
+            gdcmWarningMacro( "Cant have a spacing of 0" );
+            sp.push_back( 1.0 );
+            }
+          }
         std::swap( sp[0], sp[1]);
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
@@ -1205,8 +1215,15 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
           }
         else
           {
-          assert( at2.GetValue() == 0. );
-          sp.push_back( 1.0 );
+          if( at2.GetValue() != 0. )
+            {
+            gdcmErrorMacro( "Number of Frame should be equal to 0" );
+            sp.push_back( 0.0 );
+            }
+          else
+            {
+            sp.push_back( 1.0 );
+            }
           }
         }
       else
@@ -1224,8 +1241,8 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
   assert( sp.size() == 3 );
   assert( sp[0] != 0. );
   assert( sp[1] != 0. );
-  if( ms != MediaStorage::MRImageStorage )
-    assert( sp[2] != 0. );
+  //if( ms != MediaStorage::MRImageStorage )
+  //  assert( sp[2] != 0. );
   return sp;
 }
 
