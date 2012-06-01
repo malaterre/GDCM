@@ -627,25 +627,21 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
       }
     else
       {
-#if 0
       DataElement null( Tag(0x0,0x0), 0);
       ImplicitDataElement ide;
-      ide.Read<SwapperNoOp>(is); // might throw an exception which will NOT be caught
-      // let's assume that we can read at most 10 null elements, after that we decide
-      // arbitrarily that the cannot possibly be a DICOM file.
-      if( ide == null && counter < 10 )
+      ide.ReadPreValue<SwapperNoOp>(is);
+      if( ide.GetTag() == null.GetTag() && ide.GetVL() == 4 )
         {
-        // Ok big deal we found a null dataelement, should we really add it
-        // in the dataset ? Well let's assume this is not that important
-        ReadCompat(is, counter + 1);
+        // This is insane, we are actually reading an attribute with tag (0,0) !
+        // something like IM-0001-0066.CommandTag00.dcm was crafted
+        ide.ReadValue<SwapperNoOp>(is);
+        ReadCompat(is); // this will read the next element
         assert( DataSetTS == TransferSyntax::ImplicitVRLittleEndian );
+        is.seekg(-12, std::ios::cur); // Seek back
         return is;
         }
-      else
-#endif
-        {
-        throw Exception( "Cannot find DICOM type. Giving up." );
-        }
+      // else
+      throw Exception( "Cannot find DICOM type. Giving up." );
       }
     }
   return is;

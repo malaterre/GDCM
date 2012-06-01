@@ -343,10 +343,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
             }
           catch( std::exception &ex2 )
             {
-			(void)ex2;  //to avoid unreferenced variable warning on release
+            (void)ex2;  //to avoid unreferenced variable warning on release
             // Ok I get it now... there is absolutely no meta header, giving up
             //hasmetaheader = false;
-			gdcmErrorMacro(ex2.what());
+            gdcmErrorMacro(ex2.what());
             }
           }
         }
