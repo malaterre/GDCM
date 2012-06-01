@@ -344,7 +344,7 @@ ENDIF(GDCM_USE_PVRG)
 
 # Very advanced behavior only use if you want to keep backward compatible
 # behavior but possibly incorrect behavior.
-OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" OFF)
+OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" ON)
 MARK_AS_ADVANCED(GDCMV2_0_COMPATIBILITY)
 
 IF(GDCM_USE_KAKADU)
