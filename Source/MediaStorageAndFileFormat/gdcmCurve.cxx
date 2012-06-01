@@ -202,11 +202,27 @@ void Curve::Update(const DataElement & de)
     {
     gdcmWarningMacro( "TODO" );
     }
+  else if( de.GetTag().GetElement() == 0x0040 ) // Axis Labels
+    {
+    gdcmWarningMacro( "TODO" );
+    }
   else if( de.GetTag().GetElement() == 0x0103 ) // DataValueRepresentation
     {
     Attribute<0x5000,0x0103> at;
     at.SetFromDataElement( de );
     SetDataValueRepresentation( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0104 ) // Minimum Coordinate Value
+    {
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x0105 ) // Maximum Coordinate Value
+    {
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x0106 ) // Curve Range
+    {
+    gdcmWarningMacro( "TODO" );
     }
   else if( de.GetTag().GetElement() == 0x0110 ) // CurveDataDescriptor
     {
@@ -228,7 +244,15 @@ void Curve::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x2500 ) // CurveLabel
     {
-      gdcmWarningMacro( "TODO" );
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x2600 ) // Referenced Overlay Sequence
+    {
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x2610 ) // Referenced Overlay Group
+    {
+    gdcmWarningMacro( "TODO" );
     }
   else if( de.GetTag().GetElement() == 0x3000 ) // CurveData
     {
@@ -236,7 +260,7 @@ void Curve::Update(const DataElement & de)
     }
   else
     {
-    assert( 0 && "should not happen" );
+    assert( 0 && "should not happen: Unknown curve tag" );
     }
 
 }
