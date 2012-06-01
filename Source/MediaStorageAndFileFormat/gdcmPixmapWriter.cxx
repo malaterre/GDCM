@@ -415,22 +415,27 @@ bool PixmapWriter::PrepareWrite()
 
   if( /*ts.IsLossy() &&*/ PixelData->IsLossy() )
     {
-    // Add the Lossy stuff:
     Attribute<0x0028,0x2110> at1;
-    at1.SetValue( "01" );
-    ds.Replace( at1.GetAsDataElement() );
-    /*
-    The Defined Terms for Lossy Image Compression Method (0028,2114) ar e :
-    ISO_10918_1 = JPEG Lossy Compression
-    ISO_14495_1 = JPEG-LS Near-lossless Compression
-    ISO_15444_1 = JPEG 2000 Irreversible Compression
-    ISO_13818_2 = MPEG2 Compression
-     */
-
-    if( ts_orig != TransferSyntax::TS_END )
+    Attribute<0x0028,0x2114> at3;
+    if( ts_orig == TransferSyntax::TS_END )
       {
-      assert( ts_orig.IsLossy() );
-      Attribute<0x0028,0x2114> at3;
+      // Add the Lossy stuff:
+      at1.SetValue( "01" );
+      ds.Replace( at1.GetAsDataElement() );
+      }
+    else if( ts_orig.IsLossy() )
+      {
+      // Add the Lossy stuff:
+      at1.SetValue( "01" );
+      ds.Replace( at1.GetAsDataElement() );
+      /*
+      The Defined Terms for Lossy Image Compression Method (0028,2114) are :
+      ISO_10918_1 = JPEG Lossy Compression
+      ISO_14495_1 = JPEG-LS Near-lossless Compression
+      ISO_15444_1 = JPEG 2000 Irreversible Compression
+      ISO_13818_2 = MPEG2 Compression
+       */
+
       if( ts_orig == TransferSyntax::JPEG2000 )
         {
         static const CSComp newvalues2[] = {"ISO_15444_1"};
@@ -453,10 +458,18 @@ bool PixmapWriter::PrepareWrite()
         }
       else
         {
-        gdcmErrorMacro( "Pixel Data is lossy but I cannot find the original transfer syntax" );
+        gdcmErrorMacro(
+          "Pixel Data is lossy but I cannot find the original transfer syntax" );
         return false;
         }
       ds.Replace( at3.GetAsDataElement() );
+      }
+    else
+      {
+      assert( ds.FindDataElement( at1.GetTag() ) );
+      assert( ds.FindDataElement( at3.GetTag() ) );
+      at1.Set( ds );
+      assert( atoi(at1.GetValue().c_str()) == 1 );
       }
     }
 
