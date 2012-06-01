@@ -60,6 +60,9 @@ public:
   // should be independant from file existence.
   bool IsIdentical(Filename const &fn) const;
 
+  /// Does the filename ends with a particular string ?
+  bool EndWith(const char ending[]) const;
+
 private:
   std::string FileName;
   std::string Path;

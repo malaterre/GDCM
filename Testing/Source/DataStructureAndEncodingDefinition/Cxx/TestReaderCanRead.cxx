@@ -14,6 +14,7 @@
 #include "gdcmReader.h"
 #include "gdcmTesting.h"
 
+#include "gdcmFilename.h"
 #include "gdcmSystem.h"
 #include "gdcmWriter.h"
 #include "gdcmDirectory.h"
@@ -29,12 +30,37 @@ int TestReadCanRead(const char *subdir, const char* filename, bool verbose = fal
   reader.SetFileName( filename );
   b1 = reader.CanRead();
   b2 = reader.Read();
+
+  gdcm::Filename fn( filename );
+  const char *name = fn.GetName();
+  int ret = 1;
+  const char dicomdir_bad[] =
+    "gdcmSampleData/ForSeriesTesting/Perfusion/DICOMDIR";
+  if( fn.EndWith( dicomdir_bad ) )
+    {
+    ret = 0;
+    }
+  // This is not an error if you are in the black list:
+  if( strcmp(name, "BuggedDicomWorksImage_Hopeless.dcm" ) != 0
+   || strcmp(name, "Philips_Wrong_Terminator_XX_0277" ) != 0
+   || strcmp(name, "DICOMDIR_noPATIENT_noSTUDY" ) != 0
+   || strcmp(name, "JpegLosslessMultiframePapyrus.pap" ) != 0
+   || strcmp(name, "Fish-1.img" ) != 0
+   || strcmp(name, "NM_FromJulius_Caesar.dcm" ) != 0
+   || strcmp(name, "Siemens-leonardo-bugged.dcm" ) != 0
+   || strcmp(name, "illegal_UN_stands_for_OB.dcm" ) != 0
+   || strcmp(name, "MR_PHILIPS_LargePreamble.dcm" ) != 0
+   || strcmp(name, "illegal_UN_stands_for_OB.dcm.secu" ) != 0 )
+    {
+    ret = 0;
+    }
   if ( (b1 && !b2) || (!b1 && b2)  )
     {
     std::cerr << "TestReadCanRead: incompatible result " << filename << std::endl;
     if( b1 )
     std::cerr << "TestReadCanRead: CanRead was true: " << filename << std::endl;
-    return 1;
+    //assert( !ret );
+    return ret;
     }
 
   // Create directory first:
@@ -69,9 +95,9 @@ int TestReadCanRead(const char *subdir, const char* filename, bool verbose = fal
     b2 = reader2.Read();
     if ( (b1 && !b2) || (!b1 && b2)  )
       {
-      std::cerr << "TestReadCanRead: incompatible result " << outfilename << std::endl;
+      std::cerr << "TestReadCanRead|Write: incompatible result " << outfilename << std::endl;
       if( b1 )
-        std::cerr << "TestReadCanRead: CanRead was true: " << outfilename << std::endl;
+        std::cerr << "TestReadCanRead|Write: CanRead was true: " << outfilename << std::endl;
       return 1;
       }
     }

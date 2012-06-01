@@ -171,9 +171,23 @@ namespace gdcm
       // TODO There's an optimization opportunity here:
       // dataElem.ReadWithLength only needs to read the value if the tag is selected!
       // Niels Dekker, LKEB, Jan 2010.
-      while( !inputStream.eof() && dataElem.template ReadWithLength<TDE,TSwap>(inputStream, length) )
+      while( !inputStream.eof() )
       {
+        static_cast<TDE&>(dataElem).template ReadPreValue<TSwap>(inputStream);
         const Tag tag = dataElem.GetTag();
+        if ( inputStream.fail() || maxTag < tag )
+          {
+          // Failed to read the tag, or the read tag exceeds the maximum.
+          // As we assume ascending tag ordering, we can exit the loop.
+          break;
+          }
+        static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream);
+        if ( inputStream.fail() )
+          {
+          // Failed to read the value.
+          break;
+          }
+
         const std::set<Tag>::iterator found = tags.find(tag);
 
         if ( found != tags.end() )
