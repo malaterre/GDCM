@@ -21,7 +21,7 @@ void CreateDataElement(gdcm::ExplicitDataElement &de, int offset)
 {
   std::stringstream ss;
 
-  gdcm::Tag tag(0x1234, 0x5678+offset);
+  gdcm::Tag tag(0x1234, (uint16_t)(0x5678+offset));
   gdcm::VR vr = gdcm::VR::UN;
   const char str[] = "GDCM";
   uint32_t len = strlen(str);

@@ -26,7 +26,7 @@ int TestSwapper(int argc, char *argv[])
     uint8_t  v8[8];
   } testswapper;
   testswapper t;
-  for(int i = 0; i < 8; ++i) t.v8[i] = i;
+  for(uint_fast8_t i = 0; i < 8; ++i) t.v8[i] = i;
 
   testswapper val;
   val.v64 = gdcm::SwapperDoOp::Swap(t.v64);

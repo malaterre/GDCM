@@ -62,11 +62,11 @@ void PixmapWriter::DoIconImage(DataSet & rootds, Pixmap const & image)
 
     // col & rows:
     Attribute<0x0028, 0x0011> columns;
-    columns.SetValue( icon.GetDimension(0) );
+    columns.SetValue( (uint16_t)icon.GetDimension(0) );
     ds.Insert( columns.GetAsDataElement() );
 
     Attribute<0x0028, 0x0010> rows;
-    rows.SetValue( icon.GetDimension(1) );
+    rows.SetValue( (uint16_t)icon.GetDimension(1) );
     ds.Insert( rows.GetAsDataElement() );
 
   PixelFormat pf = icon.GetPixelFormat();
@@ -93,7 +93,7 @@ void PixmapWriter::DoIconImage(DataSet & rootds, Pixmap const & image)
   if( pf.GetSamplesPerPixel() != 1 )
     {
     Attribute<0x0028, 0x0006> planarconf;
-    planarconf.SetValue( icon.GetPlanarConfiguration() );
+    planarconf.SetValue( (uint16_t)icon.GetPlanarConfiguration() );
     ds.Replace( planarconf.GetAsDataElement() );
     }
   PhotometricInterpretation pi = icon.GetPhotometricInterpretation();
@@ -241,11 +241,11 @@ bool PixmapWriter::PrepareWrite()
 
   // col & rows:
   Attribute<0x0028, 0x0011> columns;
-  columns.SetValue( PixelData->GetDimension(0) );
+  columns.SetValue( (uint16_t)PixelData->GetDimension(0) );
   ds.Replace( columns.GetAsDataElement() );
 
   Attribute<0x0028, 0x0010> rows;
-  rows.SetValue( PixelData->GetDimension(1) );
+  rows.SetValue( (uint16_t)PixelData->GetDimension(1) );
   ds.Replace( rows.GetAsDataElement() );
 
   // (0028,0008) IS [12]                                     #   2, 1 NumberOfFrames
@@ -316,7 +316,7 @@ bool PixmapWriter::PrepareWrite()
   if( pf.GetSamplesPerPixel() != 1 )
     {
     Attribute<0x0028, 0x0006> planarconf;
-    planarconf.SetValue( PixelData->GetPlanarConfiguration() );
+    planarconf.SetValue( (uint16_t)PixelData->GetPlanarConfiguration() );
     ds.Replace( planarconf.GetAsDataElement() );
     }
 

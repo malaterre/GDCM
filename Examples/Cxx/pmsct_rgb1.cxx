@@ -222,7 +222,7 @@ int main(int argc, char *argv [])
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OW );
-  pixeldata.SetByteValue( (char*)&buffer[0], buffer.size() );
+  pixeldata.SetByteValue( (char*)&buffer[0], (uint32_t)buffer.size() );
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
   // Add the pixel data element

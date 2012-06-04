@@ -346,7 +346,7 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
 
     if (typedSQ->GetNumberOfItems() > 0)
     {
-      const unsigned int              nbItems = typedSQ->GetNumberOfItems();
+      const size_t nbItems = typedSQ->GetNumberOfItems();
       MeshPrimitive::PrimitivesData & primitivesData= meshPrimitive->GetPrimitivesData();
       primitivesData.reserve( nbItems );
 

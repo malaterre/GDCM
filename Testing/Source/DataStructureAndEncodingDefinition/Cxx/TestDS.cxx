@@ -93,7 +93,7 @@ std::string to_string ( Float data ) {
     digits = (digits > max_digits) ? max_digits : digits;
     */
 
-    if ( in << std::dec << std::setprecision(digits) << data )
+    if ( in << std::dec << std::setprecision((int)digits) << data )
         return ( in.str() );
     else
         throw "Impossible Conversion"; // should not happen ...

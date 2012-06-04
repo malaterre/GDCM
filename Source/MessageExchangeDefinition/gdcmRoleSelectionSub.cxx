@@ -29,7 +29,7 @@ RoleSelectionSub::RoleSelectionSub()
   SCURole = 0;
   SCPRole = 0;
 
-  ItemLength = Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 

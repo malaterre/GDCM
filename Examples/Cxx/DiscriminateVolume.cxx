@@ -60,7 +60,7 @@ private:
   return theReturn;
 }
 
-void ProcessAIOP(Scanner const & s, Directory::FilenamesType const & subset, const char *iopval)
+void ProcessAIOP(Scanner const & , Directory::FilenamesType const & subset, const char *iopval)
 {
   std::cout << "IOP: " << iopval << std::endl;
   IPPSorter ipp;

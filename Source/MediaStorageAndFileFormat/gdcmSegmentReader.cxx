@@ -123,7 +123,7 @@ bool SegmentReader::ReadSegments()
   {
     SmartPointer< SequenceOfItems > segmentSQ = ds.GetDataElement(segmentSQTag).GetValueAsSQ();
 
-    const unsigned int numberOfSegments = segmentSQ->GetNumberOfItems();
+    const size_t numberOfSegments = segmentSQ->GetNumberOfItems();
     if ( numberOfSegments == 0)
     {
       gdcmErrorMacro( "No segment found" );
@@ -163,7 +163,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   }
   else
   {
-    segment->SetSegmentNumber( idx );
+    segment->SetSegmentNumber( (unsigned short)idx );
   }
 
   // Segment Label

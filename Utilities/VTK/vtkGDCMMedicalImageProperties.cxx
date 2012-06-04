@@ -53,7 +53,7 @@ void vtkGDCMMedicalImageProperties::Clear()
 void vtkGDCMMedicalImageProperties::PushBackFile(gdcm::File const &f)
 {
   this->Internals->Files.push_back( f );
-  int i = this->Internals->Files.size();
+  size_t i = this->Internals->Files.size();
   gdcm::DataSet &ds = this->Internals->Files[ i - 1 ]->GetDataSet();
   ds.Remove( gdcm::Tag( 0x7fe0, 0x0010 ) );
 }

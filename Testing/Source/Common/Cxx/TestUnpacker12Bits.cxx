@@ -27,7 +27,7 @@ int TestUnpacker12Bits(int, char *[])
   char *values = new char[len];
   for( size_t i = 0; i < len; ++i)
     {
-    values[i] = i;
+    values[i] = (char)i;
     }
   //const char values[] = {0, 1, 2};
   //const size_t len = sizeof(values) / sizeof(*values);
