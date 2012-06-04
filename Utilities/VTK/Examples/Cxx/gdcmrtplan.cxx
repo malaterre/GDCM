@@ -203,34 +203,35 @@ int main(int argc, char *argv[])
     vtkDoubleArray *scalars = vtkDoubleArray::New();
     scalars->SetNumberOfComponents(3);
 
-    gdcm::Attribute<0x300a,0x0104> bnpts; //  IS [179 ]                                     # 4,1 Block Number of Points
+    gdcm::Attribute<0x300a,0x0104> bnpts; //  IS [179 ] # 4,1 Block Number of Points
     if( !nestedds3.FindDataElement( bnpts.GetTag() ) )
       {
       return 1;
       }
     const gdcm::DataElement &blocknpts = nestedds3.GetDataElement( bnpts.GetTag() );
     bnpts.SetFromDataElement(  blocknpts );
-  std::cout << bnpts.GetValue() << std::endl;
+    std::cout << bnpts.GetValue() << std::endl;
 
     vtkPolyData *output = vtkPolyData::New();
     vtkPoints *newPts = vtkPoints::New();
     vtkCellArray *polys = vtkCellArray::New();
     const double *ptr = at_.GetValues();
-      //unsigned int npts = bnpts.GetNumberOfValues() / 2;
-      unsigned int npts = bnpts.GetValue();
+    //unsigned int npts = bnpts.GetNumberOfValues() / 2;
+    unsigned int npts = bnpts.GetValue();
     vtkIdType *ptIds =  new vtkIdType[npts];
     for(unsigned int i = 0; i < npts; ++i)
       {
-        float x[3] = {};
-        x[0] = ptr[2*i+0];
-        x[1] = ptr[2*i+1];
-        //x[2] = pts[i+2];
+      float x[3] = {};
+      x[0] = ptr[2*i+0];
+      x[1] = ptr[2*i+1];
+      //x[2] = pts[i+2];
       vtkIdType ptId = newPts->InsertNextPoint( x );
       //std::cout << x[0] << "," << x[1] << "," << x[2] << std::endl;
-        ptIds[i ] = ptId;
+      ptIds[i ] = ptId;
       }
-      vtkIdType cellId = polys->InsertNextCell(npts , ptIds);
-        delete[] ptIds;
+    vtkIdType cellId = polys->InsertNextCell(npts , ptIds);
+    (void)cellId;
+    delete[] ptIds;
 
     output->SetPoints(newPts);
     newPts->Delete();

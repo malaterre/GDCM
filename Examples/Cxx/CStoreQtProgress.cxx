@@ -76,7 +76,11 @@ public:
     qtprogress->setValue(i);
     win->show();
     }
-  virtual void ShowDataSet(Subject *caller, const Event &evt) {}
+  virtual void ShowDataSet(Subject *caller, const Event &evt)
+    {
+    (void)caller;
+    (void)evt;
+    }
 };
 } // end namespace gdcm
 

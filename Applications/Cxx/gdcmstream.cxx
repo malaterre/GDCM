@@ -75,7 +75,6 @@ int No_Of_Resolutions(const char *filename)
   opj_event_mgr_t event_mgr;    /* event manager */
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
   opj_cio_t *cio;
-  opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();
@@ -156,6 +155,7 @@ int No_Of_Resolutions(const char *filename)
 
 bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *filename, int res, std::ostream& of, int flag,  gdcm::SequenceOfItems *sq)
 {
+  (void)of;
   std::ifstream is;
   is.open( filename, std::ios::binary );
   opj_dparameters_t parameters;  /* decompression parameters */
@@ -230,18 +230,18 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
     return 1;
     }
 
-  opj_cp_t * cp = ((opj_jp2_t*)dinfo->jp2_handle)->j2k->cp;
-  opj_tcp_t *tcp = &cp->tcps[0];
-  opj_tccp_t *tccp = &tcp->tccps[0];
+  //opj_cp_t * cp = ((opj_jp2_t*)dinfo->jp2_handle)->j2k->cp;
+  //opj_tcp_t *tcp = &cp->tcps[0];
+  //opj_tccp_t *tccp = &tcp->tccps[0];
   /*   std::cout << "\n No of Cols In Image" << image->x1;
        std::cout << "\n No of Rows In Image" << image->y1;
        std::cout << "\n No of Components in Image" << image->numcomps;
        std::cout << "\n No of Resolutions"<< tccp->numresolutions << "\n";
    */
-  opj_j2k_t* j2k = NULL;
+  //opj_j2k_t* j2k = NULL;
   opj_jp2_t* jp2 = NULL;
   jp2 = (opj_jp2_t*)dinfo->jp2_handle;
-  int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+  //int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
   //std:: cout << reversible;
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
@@ -255,10 +255,10 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
 
   for (unsigned int compno = 0; compno < (unsigned int)image->numcomps; compno++)
     {
-    opj_image_comp_t *comp = &image->comps[compno];
+    const opj_image_comp_t *comp = &image->comps[compno];
 
-    int w = image->comps[compno].w;
-    int h = image->comps[compno].h;
+    int w = comp->w;
+    int h = comp->h;
     uint8_t *data8 = (uint8_t*)raw + compno;
     for (int i = 0; i < w * h ; i++)
       {
@@ -468,6 +468,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
 
 bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::StreamImageReader & reader, int resolution, std::ostream& of, int tile,std::vector<unsigned int> start, std::vector<unsigned int> end)
 {
+  (void)of;
   gdcm::File file1 = reader.GetFile();
   gdcm::DataSet ds1 = file1.GetDataSet();
 
@@ -568,7 +569,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
     }
 
   int z, y, nexty;
-  unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
+  //unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
   //the bytes sequentially.  So, store how far you got in the buffer with each iteration.
 
   for (z = zmin; z < zmax; ++z)
@@ -1092,7 +1093,7 @@ int main (int argc, char *argv[])
     }
 
   const char *inputextension  = filename.GetExtension();
-  const char *outputextension = outfilename.GetExtension();
+  //const char *outputextension = outfilename.GetExtension();
 
   gdcm::StreamImageWriter theStreamWriter;
   std::ofstream of;

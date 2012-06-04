@@ -333,6 +333,7 @@ void PrintHelp()
 
 int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
 {
+  (void)defs;
   if( deflated )
     {
     return checkdeflated(filename.c_str());
