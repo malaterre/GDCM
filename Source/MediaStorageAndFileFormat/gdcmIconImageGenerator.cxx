@@ -393,7 +393,7 @@ void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &
   // let's fake a slightly different min/max found:
   if( lmin == lmax )
     {
-    if( lmax + 1 < lmax )
+    if( lmax == std::numeric_limits<TPixelType>::max() )
       {
       lmin--;
       assert( lmin + 1 > lmin );
@@ -432,7 +432,7 @@ void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &
   // let's fake a slightly different min/max found:
   if( lmin == lmax )
     {
-    if( lmax + 1 < lmax )
+    if( lmax == std::numeric_limits<TPixelType>::max() )
       {
       lmin--;
       assert( lmin + 1 > lmin );
