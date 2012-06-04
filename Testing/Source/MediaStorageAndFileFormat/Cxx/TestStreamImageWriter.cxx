@@ -93,11 +93,11 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
     std::vector<unsigned int> extent =
       gdcm::ImageHelper::GetDimensionsValue(theImageReaderOriginal.GetFile());
 
-    unsigned short xmax = extent[0];
-    unsigned short ymax = extent[1];
+    unsigned short xmax = (unsigned short)extent[0];
+    unsigned short ymax = (unsigned short)extent[1];
     unsigned short theChunkSize = 4;
-    unsigned short ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
-    unsigned short zmax = extent[2];
+    unsigned short ychunk = (unsigned short)(extent[1]/theChunkSize); //go in chunk sizes of theChunkSize
+    unsigned short zmax = (unsigned short)extent[2];
 
     if (xmax == 0 || ymax == 0)
       {
@@ -112,7 +112,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
       for (y = 0; y < ymax; y += ychunk){
         nexty = y + ychunk;
         if (nexty > ymax) nexty = ymax;
-        theStreamWriter.DefinePixelExtent(0, xmax, y, nexty, z, z+1);
+        theStreamWriter.DefinePixelExtent(0, (uint16_t)xmax, (uint16_t)y, (uint16_t)nexty, (uint16_t)z, (uint16_t)(z+1));
         unsigned long len = theStreamWriter.DefineProperBufferLength();
         char* finalBuffer = new char[len];
         memcpy(finalBuffer, &(theOriginalBuffer[prevLen]), len);

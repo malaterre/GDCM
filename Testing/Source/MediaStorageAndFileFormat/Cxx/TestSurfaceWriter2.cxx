@@ -45,7 +45,7 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
 
   // Modify data to test other writing/reading way
   SmartPointer< Segment >         segment = new Segment;
-  srand(time(NULL));
+  srand( (unsigned int)time(NULL));
   SegmentHelper::BasicCodedEntry  processingAlgo("123", "TEST", "Test123");
     {
     SegmentReader::SegmentVector  segments = reader.GetSegments();
@@ -61,7 +61,7 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
         {
         SmartPointer< Surface > surf = *itSurfaces;
         surf->SetSurfaceProcessing( true );
-        surf->SetSurfaceProcessingRatio( 0.42 );
+        surf->SetSurfaceProcessingRatio( 0.42f );
         surf->SetSurfaceProcessingDescription( "Test processing" );
         surf->SetProcessingAlgorithm( processingAlgo );
 

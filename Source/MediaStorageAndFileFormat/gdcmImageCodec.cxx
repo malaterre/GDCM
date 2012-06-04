@@ -100,7 +100,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -135,7 +135,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -197,7 +197,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -236,7 +236,7 @@ bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -259,7 +259,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -270,7 +270,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   assert( !(buf_size % 2) );
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
-    for(long i = 0; i < buf_size/2; ++i)
+    for(size_t i = 0; i < buf_size/2; ++i)
       {
 #ifdef GDCM_WORDS_BIGENDIAN
       os.write( dummy_buffer+i, 1 );
@@ -284,7 +284,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   else if( GetPixelFormat().GetBitsAllocated() == 32 )
     {
   assert( !(buf_size % 4) );
-    for(long i = 0; i < buf_size/4; ++i)
+    for(size_t i = 0; i < buf_size/4; ++i)
       {
 #ifdef GDCM_WORDS_BIGENDIAN
       os.write( dummy_buffer+i, 1 );

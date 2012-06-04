@@ -43,7 +43,7 @@ bool PGXCodec::CanCode(TransferSyntax const &) const
 bool PGXCodec::Write(const char *filename, const DataElement &out) const
 {
   if( !filename ) return false;
-  const PhotometricInterpretation &pi = this->GetPhotometricInterpretation();
+  //const PhotometricInterpretation &pi = this->GetPhotometricInterpretation();
   std::vector<std::string> filenames;
   const PixelFormat& pf = GetPixelFormat();
   unsigned short nsamples = pf.GetSamplesPerPixel();
@@ -88,11 +88,15 @@ bool PGXCodec::Write(const char *filename, const DataElement &out) const
 
 bool PGXCodec::Read(const char *filename, DataElement &out) const
 {
+  (void)filename;
+  (void)out;
   return false;
 }
 
 bool PGXCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
+  (void)is;
+  (void)ts;
   return false;
 }
 

@@ -77,7 +77,7 @@ int No_Of_Resolutions(const char *filename)
   opj_cio_t *cio;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
@@ -165,8 +165,8 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[(unsigned int)buf_size];
+  size_t buf_size = (size_t)is.tellg();
+  char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;

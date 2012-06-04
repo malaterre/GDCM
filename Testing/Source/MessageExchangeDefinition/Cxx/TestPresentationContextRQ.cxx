@@ -17,7 +17,7 @@
  *=========================================================================*/
 #include "gdcmPresentationContextRQ.h"
 
-int TestPresentationContextRQ(int argc, char *argv[])
+int TestPresentationContextRQ(int , char *[])
 {
   gdcm::network::PresentationContextRQ o;
   return 0;

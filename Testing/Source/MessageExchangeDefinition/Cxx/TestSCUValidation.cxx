@@ -42,7 +42,7 @@ gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* th
   gdcm::network::ULConnectionManager *theManager =
     new gdcm::network::ULConnectionManager();
   if (!theManager->EstablishConnection(AETitle, PeerAETitle, ComputerName, 0,
-    port, 1000, generator.GetPresentationContexts() ))
+    (uint16_t)port, 1000, generator.GetPresentationContexts() ))
   {
     throw gdcm::Exception("Failed to establish connection.");
   }

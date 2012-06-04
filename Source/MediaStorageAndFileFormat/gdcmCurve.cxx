@@ -79,7 +79,7 @@ public:
     os << "CurveDescription                   :" << CurveDescription << std::endl;
     os << "DataValueRepresentation            :" << DataValueRepresentation << std::endl;
     unsigned short * p = (unsigned short*)&Data[0];
-    for(unsigned short i = 0; i < NumberOfPoints; i+=2)
+    for(int i = 0; i < NumberOfPoints; i+=2)
       {
       os << p[i] << "," << p[i+1] << std::endl;
       }
@@ -124,7 +124,7 @@ unsigned int Curve::GetNumberOfCurves(DataSet const & ds)
     else if( de.GetTag().IsPrivate() )
       {
       // Move on to the next public one:
-      overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+      overlay.SetGroup( (uint16_t)(de.GetTag().GetGroup() + 1) );
       overlay.SetElement( 0 ); // reset just in case...
       }
     else
@@ -144,7 +144,7 @@ unsigned int Curve::GetNumberOfCurves(DataSet const & ds)
       // Store found tag in overlay:
       overlay = de.GetTag();
       // Move on to the next possible one:
-      overlay.SetGroup( overlay.GetGroup() + 2 );
+      overlay.SetGroup( (uint16_t)(overlay.GetGroup() + 2) );
       // reset to element 0x0 just in case...
       overlay.SetElement( 0 );
       }
@@ -501,9 +501,9 @@ void Curve::GetAsPoints(float *array) const
     double * p = (double*)&Internal->Data[0];
     for(int i = 0; i < Internal->NumberOfPoints; i++ )
       {
-      array[3*i+0] = p[mult*i + 0];
+      array[3*i+0] = (float)p[mult*i + 0];
       if( mult > 1 )
-        array[3*i+1] = p[mult*i + 1];
+        array[3*i+1] = (float)p[mult*i + 1];
       else
         array[3*i+1] = 0;
       array[3*i+2] = 0;
@@ -514,9 +514,9 @@ void Curve::GetAsPoints(float *array) const
     int32_t * p = (int32_t*)&Internal->Data[0];
     for(int i = 0; i < Internal->NumberOfPoints; i++ )
       {
-      array[3*i+0] = p[mult*i + 0];
+      array[3*i+0] = (float)p[mult*i + 0];
       if( mult > 1 )
-        array[3*i+1] = p[mult*i + 1];
+        array[3*i+1] = (float)p[mult*i + 1];
       else
         array[3*i+1] = 0;
       array[3*i+2] = 0;

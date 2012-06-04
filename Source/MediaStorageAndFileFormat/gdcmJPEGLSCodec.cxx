@@ -46,7 +46,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   return false;
 #else
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
@@ -181,7 +181,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 #ifdef GDCM_USE_SYSTEM_CHARLS
     JlsParameters params;
 #else
-    JlsParamaters params = {};
+    JlsParamaters params;
 #endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
@@ -250,7 +250,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 #ifdef GDCM_USE_SYSTEM_CHARLS
       JlsParameters params;
 #else
-      JlsParamaters params = {};
+      JlsParamaters params;
 #endif
       JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
@@ -322,7 +322,7 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
 #ifdef GDCM_USE_SYSTEM_CHARLS
     JlsParameters params;
 #else
-    JlsParamaters params = {};
+    JlsParamaters params;
 #endif
 /*
 The fields in JlsCustomParameters do not control lossy/lossless. They

@@ -27,7 +27,7 @@ SOPClassExtendedNegociationSub::SOPClassExtendedNegociationSub()
   ItemLength = 0;
   UIDLength = 0;
 
-  ItemLength = Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 
@@ -55,7 +55,7 @@ std::istream &SOPClassExtendedNegociationSub::Read(std::istream &is)
 
   char blob[256];
   assert( uidlength < ItemLength );
-  uint16_t bloblength = ItemLength - 1 - 1 - 2 - 2 - uidlength;
+  uint16_t bloblength = (uint16_t)(ItemLength - 1 - 1 - 2 - 2 - uidlength);
   assert( bloblength < 256 );
   is.read( blob, bloblength );
   Blob = std::string(blob,bloblength);

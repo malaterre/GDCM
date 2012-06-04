@@ -25,7 +25,7 @@ const uint8_t ImplementationVersionNameSub::Reserved2 = 0x00;
 ImplementationVersionNameSub::ImplementationVersionNameSub()
 {
   ImplementationVersionName = FileMetaInformation::GetImplementationVersionName();
-  ItemLength = ImplementationVersionName.size();
+  ItemLength = (uint16_t)ImplementationVersionName.size();
   assert( (size_t)ItemLength + 4 == Size() );
 }
 

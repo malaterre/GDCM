@@ -399,8 +399,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[(unsigned int)buf_size];
+  size_t buf_size = (size_t)is.tellg();
+  char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
@@ -1106,8 +1106,8 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[(unsigned int)buf_size];
+  size_t buf_size = (size_t)is.tellg();
+  char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   bool b = GetHeaderInfo( dummy_buffer, (size_t)buf_size, ts );

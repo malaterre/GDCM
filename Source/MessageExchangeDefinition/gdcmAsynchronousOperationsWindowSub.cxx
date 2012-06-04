@@ -28,7 +28,7 @@ AsynchronousOperationsWindowSub::AsynchronousOperationsWindowSub()
   MaximumNumberOperationsInvoked = 0;
   MaximumNumberOperationsPerformed = 0;
 
-  ItemLength = Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 
