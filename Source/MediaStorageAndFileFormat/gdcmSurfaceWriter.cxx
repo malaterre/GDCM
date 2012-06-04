@@ -74,7 +74,7 @@ bool SurfaceWriter::PrepareWrite()
     return false;
   }
   Attribute<0x0066, 0x0001> numberOfSurfaces;
-  numberOfSurfaces.SetValue( nbSurfaces );
+  numberOfSurfaces.SetValue( (unsigned int)nbSurfaces );
   ds.Replace( numberOfSurfaces.GetAsDataElement() );
 
   // Surface Sequence
@@ -92,11 +92,11 @@ bool SurfaceWriter::PrepareWrite()
   surfacesSQ->SetLengthToUndefined();
 
   // Fill the Surface Sequence
-  const unsigned int              nbItems    = surfacesSQ->GetNumberOfItems();
+  const size_t nbItems    = surfacesSQ->GetNumberOfItems();
   if (nbItems < nbSurfaces)
   {
-    const int          diff           = nbSurfaces - nbItems;
-    const unsigned int nbOfItemToMake = (diff > 0?diff:0);
+    const size_t diff           = nbSurfaces - nbItems;
+    const size_t nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
       Item item;
@@ -142,7 +142,7 @@ bool SurfaceWriter::PrepareWrite()
       unsigned long surfaceNumber = surface->GetSurfaceNumber();
       if (surfaceNumber == 0)
         surfaceNumber = numSurface;
-      surfaceNumberAt.SetValue( surfaceNumber );
+      surfaceNumberAt.SetValue( (unsigned int)surfaceNumber );
       surfaceDS.Replace( surfaceNumberAt.GetAsDataElement() );
 
       // Surface Comments (Type 3)
@@ -335,7 +335,7 @@ bool SurfaceWriter::PrepareWrite()
 
         // Number of Vectors
         Attribute<0x0066, 0x001E> numberOfVectors;
-        numberOfVectors.SetValue( surface->GetNumberOfVectors() );
+        numberOfVectors.SetValue( (unsigned int)surface->GetNumberOfVectors() );
         surfacePointsNormalsDS.Replace( numberOfVectors.GetAsDataElement() );
 
         // Vector Dimensionality
@@ -509,11 +509,11 @@ bool SurfaceWriter::PrepareWrite()
           // Fill the Segment Sequence
           const unsigned int              numberOfPrimitives  = meshPrimitive->GetNumberOfPrimitivesData();
           assert( numberOfPrimitives );
-          const unsigned int              nbItems             = typedSequenceSQ->GetNumberOfItems();
+          const size_t nbItems             = typedSequenceSQ->GetNumberOfItems();
           if (nbItems < numberOfPrimitives)
           {
-            const int          diff           = numberOfPrimitives - nbItems;
-            const unsigned int nbOfItemToMake = (diff > 0?diff:0);
+            const size_t diff           = numberOfPrimitives - nbItems;
+            const size_t nbOfItemToMake = (diff > 0?diff:0);
             for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
             {
               Item item;
@@ -823,7 +823,7 @@ bool SurfaceWriter::PrepareWritePointMacro(SmartPointer< Surface > surface,
     unsigned long numberOfSurfacePoints = surface->GetNumberOfSurfacePoints();
     if (numberOfSurfacePoints == 0)
       numberOfSurfacePoints = bv->GetLength() / (VR::GetLength(VR::OF) * 3);
-    numberOfSurfacePointsAt.SetValue( numberOfSurfacePoints );
+    numberOfSurfacePointsAt.SetValue( (unsigned int)numberOfSurfacePoints );
     surfacePointsDs.Replace( numberOfSurfacePointsAt.GetAsDataElement() );
 
     // Point Position Accuracy (Type 3)

@@ -262,7 +262,7 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
         int prep = this->GetPixelFormat().GetPixelRepresentation();
         this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
-        this->PF.SetPixelRepresentation( prep );
+        this->PF.SetPixelRepresentation( (uint16_t)prep );
         return true;
         }
       else

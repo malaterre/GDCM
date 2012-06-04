@@ -39,7 +39,7 @@ namespace network
 {
 
 //Issue TRANSPORT CONNECT request primitive to local transport service.
-EStateID ULActionAE1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE1::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   //opening a local socket
@@ -57,7 +57,7 @@ EStateID ULActionAE1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 }
 
 //Send A-ASSOCIATE-RQ-PDU
-EStateID ULActionAE2::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE2::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
   bool& outWaitingForEvent, EEventID& outRaisedEvent)
 {
   AAssociateRQPDU thePDU;
@@ -91,7 +91,7 @@ EStateID ULActionAE2::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 //Issue A-ASSOCIATE confirmation (accept) primitive
 // NOTE: A-ASSOCIATE is NOT A-ASSOCIATE-AC
 // PS 3.7 / Annex D for A-ASSOCIATE definition
-EStateID ULActionAE3::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE3::PerformAction(Subject *, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
 
@@ -116,7 +116,7 @@ EStateID ULActionAE3::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 }
 
 //Issue A-ASSOCIATE confirmation (reject) primitive and close transport connection
-EStateID ULActionAE4::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE4::PerformAction(Subject *, ULEvent& , ULConnection& ,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   outWaitingForEvent = false;
@@ -125,7 +125,7 @@ EStateID ULActionAE4::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 }
 
 //Issue Transport connection response primitive, start ARTIM timer
-EStateID ULActionAE5::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE5::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
   //issue response primitive; have to set that up
@@ -142,7 +142,7 @@ EStateID ULActionAE5::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 //otherwise:
 //- issue A-ASSOCIATE-RJ-PDU and start ARTIM timer
 //Next state: eSta13AwaitingClose
-EStateID ULActionAE6::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
+EStateID ULActionAE6::PerformAction(Subject *, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent){
 
  // we are in a C-MOVE
@@ -219,7 +219,7 @@ EStateID ULActionAE6::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 
     outWaitingForEvent = false;
     outRaisedEvent = eAASSOCIATEresponseReject;
-    AAssociateRJPDU thePDU;//for now, use Matheiu's default values
+    AAssociateRJPDU thePDU;
     thePDU.Write(*inConnection.GetProtocol());
     inConnection.GetProtocol()->flush();
     inConnection.GetTimer().Stop();
@@ -229,25 +229,19 @@ EStateID ULActionAE6::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 }
 
 //Send A-ASSOCIATE-AC PDU
-EStateID ULActionAE7::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
-
-
-// FIXME  MM
-//  AAssociateACPDU thePDU;//for now, use Matheiu's default values
-//  thePDU.Write(*inConnection.GetProtocol());
-// FIXME
-
+EStateID ULActionAE7::PerformAction(Subject *, ULEvent& , ULConnection& ,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent)
+{
   outWaitingForEvent = true;
   outRaisedEvent = eEventDoesNotExist;
   return eSta6TransferReady;
 }
 
 //Send A-ASSOCIATE-RJ PDU and start ARTIM timer
-EStateID ULActionAE8::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
-
-  AAssociateRJPDU thePDU;//for now, use Matheiu's default values
+EStateID ULActionAE8::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent)
+{
+  AAssociateRJPDU thePDU;
   thePDU.Write(*inConnection.GetProtocol());
   inConnection.GetTimer().Start();
   outWaitingForEvent = false;

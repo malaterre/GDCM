@@ -42,7 +42,7 @@ int TestCopyDataSet(int, char *[])
   gdcm::DataElement n2( gdcm::Tag(0x0018,0x1020) );
   //const char versions[] = "1234567890\\1234567890\\1234567890\\1234567890\\1234567890\\1234567890";
   const char versions[] = "12345678901234567890123456789012345678901234567890123\\45678901234567890";
-  n2.SetByteValue( versions, strlen(versions) );
+  n2.SetByteValue( versions, (uint32_t)strlen(versions) );
   ds_copy.Replace( n2 );
 
   std::string outfilename = gdcm::Testing::GetTempFilename( "TestCopyDataSet.dcm" );

@@ -87,10 +87,10 @@ int TestByteSwap(int , char *[])
       }
     }
 
-  char n[2];
-  memcpy(n, &t, 2 );
-  gdcm::ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)n, sc, 1);
-  uint16_t tn = *((uint16_t*)n);
+  union { char n[2]; uint16_t tn; } u16;
+  memcpy(u16.n, &t, 2 );
+  gdcm::ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(&u16.tn, sc, 1);
+  uint16_t tn = u16.tn;
   if( sc == gdcm::SwapCode::BigEndian )
     {
     if( tn != 0x3412 )
@@ -109,8 +109,8 @@ int TestByteSwap(int , char *[])
       return 1;
       }
     }
-  gdcm::ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)n, gdcm::SwapCode::BigEndian, 1);
-  tn = *((uint16_t*)n);
+  gdcm::ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(&u16.tn, gdcm::SwapCode::BigEndian, 1);
+  tn = u16.tn;
   if( sc == gdcm::SwapCode::LittleEndian )
     {
     if( tn != 0x3412 )

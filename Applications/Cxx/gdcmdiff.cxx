@@ -231,9 +231,9 @@ void difference_of_sequences(const gdcm::DataElement& sqde1,
 {
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi1 = sqde1.GetValueAsSQ();
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = sqde2.GetValueAsSQ();
-  int n1 = sqi1->GetNumberOfItems();
-  int n2 = sqi2->GetNumberOfItems();
-  int n = (n1 < n2) ? n1 : n2 ;
+  size_t n1 = sqi1->GetNumberOfItems();
+  size_t n2 = sqi2->GetNumberOfItems();
+  size_t n = (n1 < n2) ? n1 : n2 ;
   std::stringstream sq_note;
   if (n1 != n2)
     {
@@ -245,7 +245,7 @@ void difference_of_sequences(const gdcm::DataElement& sqde1,
     sq_note << "[sequence]";
     }
   display_element(sq_disp, sqde1, dictentry, sq_note.str().c_str(),depthSQ);
-  for(int i=1; i <= n; i++)
+  for(size_t i=1; i <= n; i++)
     {
     difference_of_datasets( sqi1->GetItem(i).GetNestedDataSet(),
       sqi2->GetItem(i).GetNestedDataSet(), depthSQ+1);

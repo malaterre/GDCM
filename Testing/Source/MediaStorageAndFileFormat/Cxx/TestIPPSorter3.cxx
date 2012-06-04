@@ -54,7 +54,7 @@ int TestIPPSorter3(int , char *[])
   //const char iop_orig[] = "1\\-0\\-0\\0\\1\\-0";
   const char iop[] = "1\\-0\\-0\\0\\0.99999\\0.00001";
   gdcm::DataElement de( gdcm::Tag(0x0020,0x0037) );
-  de.SetByteValue( iop, strlen( iop ) );
+  de.SetByteValue( iop, (uint32_t)strlen( iop ) );
   reader.GetFile().GetDataSet().Replace( de );
 
   writer.SetFile( reader.GetFile() );

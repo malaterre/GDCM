@@ -218,6 +218,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
     */
 bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::size_t& inBufferLength)
 {
+  (void)inBufferLength;
   //assumes that the file is organized in row-major format, with each row rastering across
 //  assert( mFileOffset != -1 );
   int y, z;
