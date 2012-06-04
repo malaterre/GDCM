@@ -854,8 +854,8 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
         anonymizedUID = uid.Generate();
         }
 
-        copy.SetByteValue( anonymizedUID.c_str(), anonymizedUID.size() );
-        ds.Replace( copy );
+      copy.SetByteValue( anonymizedUID.c_str(), (uint32_t)anonymizedUID.size() );
+      ds.Replace( copy );
       }
     else
       {
@@ -875,7 +875,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
         }
 
       std::string &v = dummyMapNonUIDTags[ tvk ];
-      copy.SetByteValue( v.c_str(), v.size() );
+      copy.SetByteValue( v.c_str(), (uint32_t)v.size() );
       }
       ds.Replace( copy );
     }

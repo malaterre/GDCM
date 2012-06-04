@@ -91,9 +91,12 @@ public:
     }
   void SetBitsAllocated(unsigned short ba)
     {
-    BitsAllocated = ba;
-    BitsStored = ba;
-    HighBit = ba - 1;
+    if( ba )
+      {
+      BitsAllocated = ba;
+      BitsStored = ba;
+      HighBit = (unsigned short)(ba - 1);
+      }
     }
 
   /// BitsStored see Tag (0028,0101) US Bits Stored
@@ -104,10 +107,10 @@ public:
     }
   void SetBitsStored(unsigned short bs)
     {
-    if( bs <= BitsAllocated )
+    if( bs <= BitsAllocated && bs )
       {
       BitsStored = bs;
-      SetHighBit( BitsStored - 1 );
+      SetHighBit( (unsigned short) (bs - 1) );
       }
     }
 
