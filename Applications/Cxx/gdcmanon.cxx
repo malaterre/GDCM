@@ -585,7 +585,8 @@ int main(int argc, char *argv[])
     }
 
   // by default AES 256
-  gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
+  gdcm::CryptographicMessageSyntax::CipherTypes ciphertype =
+    gdcm::CryptographicMessageSyntax::AES256_CIPHER;
   if( !dumb_mode )
     {
     if( !des && !des3 && !aes128 && !aes192 && !aes256 )
