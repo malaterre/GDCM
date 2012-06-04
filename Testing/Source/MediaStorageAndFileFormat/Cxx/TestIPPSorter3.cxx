@@ -19,7 +19,7 @@
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
 
-int TestIPPSorter3(int argc, char *argv[])
+int TestIPPSorter3(int , char *[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   std::vector<std::string> filenames;
