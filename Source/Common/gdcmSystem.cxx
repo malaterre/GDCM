@@ -279,7 +279,7 @@ bool System::GetPermissions(const char* file, unsigned short& mode)
     {
     return false;
     }
-  mode = st.st_mode;
+  mode = (short)st.st_mode;
   return true;
 }
 
@@ -543,7 +543,7 @@ inline int getlastdigit(unsigned char *data, unsigned long size)
   for(unsigned int i=0;i<size;i++)
     {
     extended = (carry << 8) + data[i];
-    data[i] = extended / 10;
+    data[i] = (unsigned char)(extended / 10);
     carry = extended % 10;
     }
   assert( carry >= 0 && carry < 10 );
@@ -561,7 +561,7 @@ size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
   while(!zero)
     {
     res = getlastdigit(addr, size);
-    const char v = '0' + res;
+    const char v = (char)('0' + res);
     sres.insert(sres.begin(), v);
     zero = true;
     for(int i = 0; i < size; ++i)

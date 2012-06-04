@@ -71,7 +71,7 @@ std::string StringFilter::ToMIME64(const Tag& t) const
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << el.GetValue(); \
-      for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
+      for(unsigned int i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
       retvalue = os.str(); } } \
     } break
 
