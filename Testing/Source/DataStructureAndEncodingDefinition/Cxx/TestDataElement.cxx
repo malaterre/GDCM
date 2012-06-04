@@ -22,9 +22,8 @@
 inline void DebugElement(std::stringstream const &os)
 {
   std::ofstream of("/tmp/bla.bin", std::ios::binary);
-  const char *s = os.str().c_str();
-  int size = os.str().size();
-  of.write(s, size);
+  std::string str = os.str();
+  of.write(str.c_str(), str.size());
   of.close();
 }
 
@@ -78,7 +77,7 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
   const char* vr, const char* value)
 {
   const char *str;
-  const uint32_t vl = strlen( value );
+  const uint32_t vl = (uint32_t)strlen( value );
   std::stringstream ss;
   // SimpleData Element, just group,element and length
   str = reinterpret_cast<const char*>(&group);

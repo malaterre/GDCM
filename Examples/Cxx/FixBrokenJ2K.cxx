@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
       gdcm::Fragment frag;
       // remove 8 first bytes:
-      frag.SetByteValue( ptr + 8, len - 8 );
+      frag.SetByteValue( ptr + 8, (uint32_t)(len - 8) );
       sq->AddFragment( frag );
       pixeldata.SetValue( *sq );
       file.GetDataSet().Replace( pixeldata );

@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
             stmt,
             index,  // Index of wildcard
             value,
-            strlen(value),  // length of text
+            (int)strlen(value),  // length of text
             SQLITE_STATIC // SQLite assumes that the information is in static
         )
           != SQLITE_OK)

@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
       std::cout << t << std::endl;
       // Ok let's duplicate into the next available attribute:
       gdcm::DataElement duplicate = de;
-      duplicate.GetTag().SetElement( t.GetElement() + 1 );
+      duplicate.GetTag().SetElement( (uint16_t)(t.GetElement() + 1) );
       dup.Insert( duplicate );
       new_private = duplicate.GetTag();
       }
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
       }
     start = t;
     // move to next possible 'public' element
-    start.SetElement( start.GetElement() + 1);
+    start.SetElement( (uint16_t)(start.GetElement() + 1) );
     }
 
   gdcm::DataSet::ConstIterator it = dup.Begin();

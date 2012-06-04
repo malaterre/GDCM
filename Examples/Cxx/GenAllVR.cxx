@@ -56,7 +56,7 @@ struct rnd_gen {
     : range(range), len(std::strlen(range)) { }
 
   char operator ()() const {
-    return range[static_cast<std::size_t>(std::rand() * (1.0 / (RAND_MAX + 1.0 )) * len)];
+    return range[static_cast<std::size_t>(std::rand() * (1.0 / ((double)RAND_MAX + 1.0 )) * (double)len)];
   }
 private:
   char const* range;
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
   const char owner_str[] = "GDCM CONFORMANCE TESTS";
   gdcm::DataElement owner( gdcm::Tag(0x4d4d, 0x10) );
-  owner.SetByteValue(owner_str, strlen(owner_str));
+  owner.SetByteValue(owner_str, (uint32_t)strlen(owner_str));
   owner.SetVR( gdcm::VR::LO );
 
   // Create an item
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
       gdcm::DataElement de( t );
       std::generate_n(ss, len, rnd_gen());
       de.SetVR( vr );
-      de.SetByteValue( ss, std::strlen( ss ) );
+      de.SetByteValue( ss, (uint32_t)std::strlen( ss ) );
       nds.Insert( de );
       }
     }
@@ -145,13 +145,13 @@ int main(int argc, char *argv[])
   gdcm::DataElement de( Tag(0x8,0x18) ); // SOP Instance UID
   de.SetVR( VR::UI );
   const char *u = uid.Generate();
-  de.SetByteValue( u, strlen(u) );
+  de.SetByteValue( u, (uint32_t)strlen(u) );
   ds.Insert( de );
 
   de.SetTag( Tag(0x8,0x16) ); // SOP Class UID
   de.SetVR( VR::UI );
   gdcm::MediaStorage ms( gdcm::MediaStorage::RawDataStorage );
-  de.SetByteValue( ms.GetString(),strlen(ms.GetString()));
+  de.SetByteValue( ms.GetString(), (uint32_t)strlen(ms.GetString()));
   ds.Insert( de );
 
   gdcm::FileMetaInformation &fmi = f.GetHeader();

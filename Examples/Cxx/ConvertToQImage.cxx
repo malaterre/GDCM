@@ -79,9 +79,9 @@ bool ConvertToFormat_RGB888(gdcm::Image const & gimage, char *buffer, QImage* &i
         // *pubuffer++ = *buffer16;
         // *pubuffer++ = *buffer16;
         // instead do it right:
-        *pubuffer++ = std::min(255, (32768 + *buffer16) / 255);
-        *pubuffer++ = std::min(255, (32768 + *buffer16) / 255);
-        *pubuffer++ = std::min(255, (32768 + *buffer16) / 255);
+        *pubuffer++ = (unsigned char)std::min(255, (32768 + *buffer16) / 255);
+        *pubuffer++ = (unsigned char)std::min(255, (32768 + *buffer16) / 255);
+        *pubuffer++ = (unsigned char)std::min(255, (32768 + *buffer16) / 255);
         buffer16++;
         }
 

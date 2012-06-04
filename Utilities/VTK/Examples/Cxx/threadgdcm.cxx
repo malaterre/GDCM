@@ -24,7 +24,7 @@
 struct threadparams
 {
   const char **filenames;
-  unsigned int nfiles;
+  size_t nfiles;
   char *scalarpointer;
 // TODO I should also pass in the dim of the reference image just in case
 };
@@ -33,7 +33,7 @@ void *ReadFilesThread(void *voidparams)
 {
   const threadparams *params = static_cast<const threadparams *> (voidparams);
 
-  const unsigned int nfiles = params->nfiles;
+  const size_t nfiles = params->nfiles;
   for(unsigned int file = 0; file < nfiles; ++file)
     {
     /*
@@ -91,7 +91,7 @@ void ShowFilenames(const threadparams &params)
   std::cout << "end" << std::endl;
 }
 
-void ReadFiles(unsigned int nfiles, const char *filenames[])
+void ReadFiles(size_t nfiles, const char *filenames[])
 {
   // \precondition: nfiles > 0
   assert( nfiles > 0 );
@@ -114,7 +114,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   assert( image.GetNumberOfDimensions() == 2 );
 
   vtkImageData *output = vtkImageData::New();
-  output->SetDimensions(dims[0], dims[1], nfiles);
+  output->SetDimensions(dims[0], dims[1], (int)nfiles);
 
   switch( pixeltype )
     {
@@ -159,7 +159,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
 
   // There is nfiles, and nThreads
   assert( nfiles > nthreads );
-  const unsigned int partition = nfiles / nthreads;
+  const size_t partition = nfiles / nthreads;
   for (unsigned int thread=0; thread < nthreads; ++thread)
     {
     params[thread].filenames = filenames + thread * partition;
@@ -182,7 +182,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
     //ShowFilenames(params[thread]);
     }
 // DEBUG
-  unsigned int total = 0;
+  size_t total = 0;
   for (unsigned int thread=0; thread < nthreads; ++thread)
     {
     total += params[thread].nfiles;
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     gdcm::Directory d;
     d.Load( argv[1] );
     gdcm::Directory::FilenamesType l = d.GetFilenames();
-    const unsigned int nfiles = l.size();
+    const size_t nfiles = l.size();
     const char **filenames = new const char* [ nfiles ];
     for(unsigned int i = 0; i < nfiles; ++i)
       {
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
     {
     // Simply copy all filenames into the vector:
     const char **filenames = const_cast<const char**>(argv+1);
-    const unsigned int nfiles = argc - 1;
+    const size_t nfiles = argc - 1;
     ReadFiles(nfiles, filenames);
     }
 

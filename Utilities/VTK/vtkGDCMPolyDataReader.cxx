@@ -153,7 +153,7 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
       ss1.str( swc );
       gdcm::VR vr = gdcm::VR::DS;
       unsigned int vrsize = vr.GetSizeof();
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), swc.size());
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), (unsigned int)swc.size());
       elwc.SetLength( count * vrsize );
       elwc.Read( ss1 );
       std::stringstream ss2;
@@ -182,7 +182,7 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
       std::stringstream ss;
       ss.str( "" );
       std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size()); (void)count;
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), (unsigned int)swe.size()); (void)count;
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
       //assert( count >= (unsigned int)n );
@@ -406,13 +406,13 @@ refinstanceuid.GetValue().c_str() );
     //std::cout << nestedds << std::endl;
     //(3006,002a) IS [255\192\96]                              # 10,3 ROI Display Color
     gdcm::Tag troidc(0x3006,0x002a);
-    gdcm::Attribute<0x3006,0x002a> color = {};
+    gdcm::Attribute<0x3006,0x002a> color;
     bool hasColor = false;//so that color[0] isn't referenced if the color isn't present.
     if( nestedds.FindDataElement( troidc) )
       {
       const gdcm::DataElement &decolor = nestedds.GetDataElement( troidc );
       color.SetFromDataElement( decolor );
-	  hasColor = true;
+      hasColor = true;
       //std::cout << "color:" << color[0] << "," << color[1] << "," << color[2] << std::endl;
       }
     //(3006,0040) SQ (Sequence with explicit length #=8)      # 4326, 1 ContourSequence
@@ -430,7 +430,7 @@ refinstanceuid.GetValue().c_str() );
       {
       continue;
       }
-    unsigned int nitems = sqi2->GetNumberOfItems();
+    size_t nitems = sqi2->GetNumberOfItems();
     //std::cout << nitems << std::endl;
     //this->SetNumberOfOutputPorts(nitems);
     vtkDoubleArray *scalars = vtkDoubleArray::New();
@@ -519,7 +519,7 @@ refinstanceuid.GetValue().c_str() );
       const double* pts = at.GetValues();
       vtkIdType *ptIds;
       unsigned int npts = at.GetNumberOfValues() / 3;
-      assert( npts == numcontpoints.GetValue() );
+      assert( npts == (unsigned int)numcontpoints.GetValue() );
       assert( npts * 3 == at.GetNumberOfValues() );
       ptIds = new vtkIdType[npts];
       for(unsigned int i = 0; i < npts * 3; i+=3)
@@ -563,7 +563,7 @@ refinstanceuid.GetValue().c_str() );
     }
   const gdcm::DataElement &rtroiobssq = ds.GetDataElement( trtroiobssq );
   gdcm::SmartPointer<gdcm::SequenceOfItems> rtroiobssqsqi = rtroiobssq.GetValueAsSQ();
-  unsigned int theNumberOfItems = rtroiobssqsqi->GetNumberOfItems();
+  size_t theNumberOfItems = rtroiobssqsqi->GetNumberOfItems();
   if( !rtroiobssqsqi )// || !rtroiobssqsqi->GetNumberOfItems() )
     {
     return 0;
@@ -619,6 +619,7 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
     return 0;
     }
   const gdcm::DataElement &wba= nestedds.GetDataElement( twba );
+  (void)wba;
 
   //std::cout << wba << std::endl;
   //  (5400,1006) CS [SS]                                     #   2, 1 WaveformSampleInterpretation
@@ -649,9 +650,10 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
     float x[3];
     x[0] = (float)p[i] / 8800;
     //std::cout << p[i] << std::endl;
-    x[1] = i;
+    x[1] = (float)i;
     x[2] = 0;
     vtkIdType ptId = newPts->InsertNextPoint( x );
+    (void)ptId;
     }
   output->SetPoints(newPts);
   newPts->Delete();
@@ -742,10 +744,10 @@ int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader
     {
     return 0;
     }
-  unsigned int npds = sqi->GetNumberOfItems();
+  size_t npds = sqi->GetNumberOfItems();
 
   //std::cout << "Nb pd:" << npds << std::endl;
-  this->SetNumberOfOutputPorts( npds );
+  this->SetNumberOfOutputPorts( (int)npds );
 
   // Allocate
   for(unsigned int i = 1; i < npds; ++i) // first output is allocated for us
@@ -757,7 +759,7 @@ int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader
   return 1;
 }
 
-int vtkGDCMPolyDataReader::RequestInformation_HemodynamicWaveformStorage(gdcm::Reader const & reader)
+int vtkGDCMPolyDataReader::RequestInformation_HemodynamicWaveformStorage(gdcm::Reader const & )
 {
   return 1;
 }
@@ -766,7 +768,7 @@ int vtkGDCMPolyDataReader::RequestInformation_HemodynamicWaveformStorage(gdcm::R
 int vtkGDCMPolyDataReader::RequestInformation(
   vtkInformation *vtkNotUsed(request),
   vtkInformationVector **vtkNotUsed(inputVector),
-  vtkInformationVector *outputVector)
+  vtkInformationVector *vtkNotUsed(outputVector))
 {
   // get the info object
 //  vtkInformation *outInfo = outputVector->GetInformationObject(0);

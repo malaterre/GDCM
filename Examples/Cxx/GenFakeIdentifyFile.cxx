@@ -73,9 +73,9 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
   if( de.GetVR() != VR::SQ )
     {
     if( toremove )
-      de.SetByteValue( str, strlen(str) );
+      de.SetByteValue( str, (uint32_t)strlen(str) );
     else
-      de.SetByteValue( safe, strlen(safe) );
+      de.SetByteValue( safe, (uint32_t)strlen(safe) );
     }
   else
     {
@@ -158,14 +158,14 @@ int main(int argc, char *argv[])
   gdcm::DataElement de( Tag(0x8,0x18) ); // SOP Instance UID
   de.SetVR( VR::UI );
   const char *u = uid.Generate();
-  de.SetByteValue( u, strlen(u) );
+  de.SetByteValue( u, (uint32_t)strlen(u) );
   //ds.Insert( de );
   ds.Replace( de );
 
   de.SetTag( Tag(0x8,0x16) ); // SOP Class UID
   de.SetVR( VR::UI );
   gdcm::MediaStorage ms( gdcm::MediaStorage::RawDataStorage );
-  de.SetByteValue( ms.GetString(), strlen(ms.GetString()));
+  de.SetByteValue( ms.GetString(), (uint32_t)strlen(ms.GetString()));
   ds.Replace( de ); // replace !
 
   gdcm::FileMetaInformation &fmi = f.GetHeader();

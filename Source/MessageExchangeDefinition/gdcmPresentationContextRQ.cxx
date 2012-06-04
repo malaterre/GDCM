@@ -139,14 +139,14 @@ size_t PresentationContextRQ::Size() const
 void PresentationContextRQ::SetAbstractSyntax( AbstractSyntax const & as )
 {
   SubItems = as;
-  ItemLength = (uint16_t)Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 
 void PresentationContextRQ::AddTransferSyntax( TransferSyntaxSub const &ts )
 {
   TransferSyntaxes.push_back( ts );
-  ItemLength = (uint16_t)Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 

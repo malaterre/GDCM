@@ -509,11 +509,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     item.SetVLToUndefined();
     DataSet &subds = item.GetNestedDataSet();
     Attribute<0x3006,0x0050> at;
-    at.SetValues( &cellpoints[0], cellpoints.size(), false );
+    at.SetValues( &cellpoints[0], (unsigned int)cellpoints.size(), false );
     subds.Insert( at.GetAsDataElement() );
 
     Attribute<0x3006,0x0046> numcontpoints;
-    numcontpoints.SetValue( npts );
+    numcontpoints.SetValue( (int)npts );
     subds.Insert( numcontpoints.GetAsDataElement() );
     Attribute<0x3006,0x0042> contgeotype;
     contgeotype.SetValue( "CLOSED_PLANAR " );
@@ -567,17 +567,17 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     {
     double tuple[3];
     darray->GetTupleValue( 0, tuple );
-    intcolor[0] = tuple[0] * 255.;
-    intcolor[1] = tuple[1] * 255.;
-    intcolor[2] = tuple[2] * 255.;
+    intcolor[0] = (int32_t)(tuple[0] * 255.);
+    intcolor[1] = (int32_t)(tuple[1] * 255.);
+    intcolor[2] = (int32_t)(tuple[2] * 255.);
     }
   if( farray )
     {
     float ftuple[3];
     farray->GetTupleValue( 0, ftuple );
-    intcolor[0] = ftuple[0] * 255.;
-    intcolor[1] = ftuple[1] * 255.;
-    intcolor[2] = ftuple[2] * 255.;
+    intcolor[0] = (int32_t)(ftuple[0] * 255.);
+    intcolor[1] = (int32_t)(ftuple[1] * 255.);
+    intcolor[2] = (int32_t)(ftuple[2] * 255.);
     }
   roidispcolor.SetValues( intcolor, 3 );
   subds.Insert( roidispcolor.GetAsDataElement() );
@@ -693,7 +693,7 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
   for (unsigned long i = 0; i < theCTDataSets.size(); i++)
     {
     theRTStruct->AddReferencedFrameOfReference(theSOPClassID.c_str(),
-      DirectoryHelper::RetrieveSOPInstanceUIDFromIndex(i,theCTDataSets).c_str());
+      DirectoryHelper::RetrieveSOPInstanceUIDFromIndex((int)i,theCTDataSets).c_str());
     }
 
   //now, we have go to through each vtkPolyData, assign the ROI names per polydata, and then also assign the
@@ -738,7 +738,7 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
       theCells = polys;
       }
     double v[3];
-    int theNumCells = theCells->GetNumberOfCells();
+    vtkIdType theNumCells = theCells->GetNumberOfCells();
     gdcmDebugMacro("The number of cells:" << theNumCells);
     if (theNumCells == 0) continue;// no observation of blank organs
 

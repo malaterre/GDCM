@@ -235,8 +235,8 @@ int main(int argc, char *argv[])
     for(unsigned int i = 0; i < npts; ++i)
       {
       float x[3] = {};
-      x[0] = ptr[2*i+0];
-      x[1] = ptr[2*i+1];
+      x[0] = (float)ptr[2*i+0];
+      x[1] = (float)ptr[2*i+1];
       //x[2] = pts[i+2];
       vtkIdType ptId = newPts->InsertNextPoint( x );
       //std::cout << x[0] << "," << x[1] << "," << x[2] << std::endl;

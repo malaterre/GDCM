@@ -189,25 +189,27 @@ void PresentationDataValue::Print(std::ostream &os) const
 
 void PresentationDataValue::SetCommand(bool inCommand)
 {
+  const uint8_t flipped = ~1;
   if (inCommand)
     {
     MessageHeader |= 1;
     }
   else
     {
-    MessageHeader &= ~1;
+    MessageHeader &= flipped;
     }
 }
 
 void PresentationDataValue::SetLastFragment(bool inLast)
 {
+  const uint8_t flipped = ~2;
   if (inLast)
     {
     MessageHeader |= 2;
     }
   else
     {
-    MessageHeader &= ~2;//set the second field to zero
+    MessageHeader &= flipped;//set the second field to zero
     }
 }
 

@@ -22,10 +22,10 @@
 #include "gdcmMovePatientRootQuery.h"
 
 
-int TestFind(int argc, char *argv[])
+int TestFind(int , char *[])
 {
   std::string hostname = "www.dicomserver.co.uk";
-  int port = 11112;
+  uint16_t port = 11112;
   std::string callaetitle = "GDCM_ROCKS";
   std::string callingaetitle = "ACME1";
 

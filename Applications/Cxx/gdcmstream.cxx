@@ -64,7 +64,7 @@ unsigned int readvector(std::vector<T> &v, const char *str)
     os.get(); //  == ","
     }
 
-  return v.size();
+  return (unsigned int)v.size();
 }
 
 int No_Of_Resolutions(const char *filename)
@@ -279,13 +279,13 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   gdcm::DataElement de( gdcm::Tag(0x8,0x18) ); // SOP Instance UID
   de.SetVR( gdcm::VR::UI );
   const char *u = uid.Generate();
-  de.SetByteValue( u, strlen(u) );
+  de.SetByteValue( u, (uint32_t)strlen(u) );
   ds.Insert( de );
 
   gdcm::DataElement de1( gdcm::Tag(0x8,0x16) );
   de1.SetVR( gdcm::VR::UI );
   gdcm::MediaStorage ms( gdcm::MediaStorage::VLWholeSlideMicroscopyImageStorage );
-  de1.SetByteValue( ms.GetString(), strlen(ms.GetString()));
+  de1.SetByteValue( ms.GetString(), (uint32_t)strlen(ms.GetString()));
   ds.Insert( de1 );
 
   gdcm::DataElement de2( gdcm::Tag(0x28,0x04) );
@@ -295,12 +295,12 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   if(image->numcomps == 1)
     {
     const char mystr[] = "MONOCHROME2";
-    de2.SetByteValue(mystr, strlen(mystr));
+    de2.SetByteValue(mystr, (uint32_t)strlen(mystr));
     }
   else
     {
     const char mystr1[] = "RGB";
-    de2.SetByteValue(mystr1, strlen(mystr1));
+    de2.SetByteValue(mystr1, (uint32_t)strlen(mystr1));
     }
 
   ds.Insert( de2 );
@@ -309,7 +309,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   gdcm::Attribute<0x0028,0x0100> at = {8};
   ds.Insert( at.GetAsDataElement() );
 
-  gdcm::Attribute<0x0028,0x0002> at1 = {image->numcomps};
+  gdcm::Attribute<0x0028,0x0002> at1 = { (uint16_t)image->numcomps};
   ds.Insert( at1.GetAsDataElement() );
 
   gdcm::Attribute<0x0028,0x0101> at2 = {8};
@@ -331,8 +331,8 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
         a = a+1;
         }
 
-      uint16_t row = (image->y1)/b;
-      uint16_t col = (image->x1)/b;
+      uint16_t row = (uint16_t)((image->y1)/b);
+      uint16_t col = (uint16_t)((image->x1)/b);
 
       gdcm::Element<gdcm::VR::IS,gdcm::VM::VM1> el2;
       el2.SetValue(i+1);
@@ -414,11 +414,11 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   // Important to write here
   std::vector<unsigned int> extent = gdcm::ImageHelper::GetDimensionsValue(file);
 
-  unsigned short xmax = extent[0];
-  unsigned short ymax = extent[1];
+  unsigned short xmax = (uint16_t)extent[0];
+  unsigned short ymax = (uint16_t)extent[1];
   unsigned short theChunkSize = 4;
-  unsigned short ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
-  unsigned short zmax = extent[2];
+  unsigned short ychunk = (unsigned short)(extent[1]/theChunkSize); //go in chunk sizes of theChunkSize
+  unsigned short zmax = (uint16_t)extent[2];
   //std::cout << "\n"<<xmax << "\n" << ymax<<"\n"<<zmax<<"\n" << image->numcomps<<"\n";
 
   if (xmax == 0 || ymax == 0)
@@ -436,7 +436,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
       {
       nexty = y + ychunk;
       if (nexty > ymax) nexty = ymax;
-      theStreamWriter.DefinePixelExtent(0, xmax, y, nexty, z, z+1);
+      theStreamWriter.DefinePixelExtent(0, xmax, (uint16_t)y, (uint16_t)nexty, (uint16_t)z, (uint16_t)(z+1));
       unsigned long len = theStreamWriter.DefineProperBufferLength();
       //std::cout << "\n" <<len;
       char* finalBuffer = new char[len];
@@ -534,26 +534,26 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
 
   if(tile ==1 )
     {
-    xmin = start[0];
-    xmax = end[0];
-    ymin = start[1];
-    ymax = end[1];
+    xmin = (uint16_t)start[0];
+    xmax = (uint16_t)end[0];
+    ymin = (uint16_t)start[1];
+    ymax = (uint16_t)end[1];
     theChunkSize = 4;
-    ychunk = (end[1]-start[1])/theChunkSize; //go in chunk sizes of theChunkSize
-    zmin = extent[2]-1;
-    zmax = extent[2];
+    ychunk = (uint16_t)(end[1]-start[1])/theChunkSize; //go in chunk sizes of theChunkSize
+    zmin = (unsigned short)(extent[2]-1);
+    zmax = (unsigned short)extent[2];
     }
 
   else
     {
     xmin = 0;
-    xmax = extent[0];
+    xmax = (uint16_t)extent[0];
     ymin = 0;
-    ymax = extent[1];
+    ymax = (uint16_t)extent[1];
     theChunkSize = 4;
-    ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
-    zmin = extent[2]-1;
-    zmax = extent[2];
+    ychunk = (uint16_t)(extent[1]/theChunkSize); //go in chunk sizes of theChunkSize
+    zmin = (uint16_t)(extent[2]-1);
+    zmax = (uint16_t)extent[2];
     }
 
   if (xmax == 0 && ymax == 0)
@@ -578,7 +578,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
       {
       nexty = y + ychunk;
       if (nexty > ymax) nexty = ymax;
-      reader.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
+      reader.DefinePixelExtent(xmin, xmax, (uint16_t)y, (uint16_t)nexty, (uint16_t)z, (uint16_t)(z+1));
       unsigned long len = reader.DefineProperBufferLength();
 
       char* finalBuffer = new char[len];
@@ -602,7 +602,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
         {
         std::cerr<< "Not able to put in read data buffer"<< std::endl;
         }
-      theStreamWriter.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
+      theStreamWriter.DefinePixelExtent(xmin, xmax, (uint16_t)y, (uint16_t)nexty, (uint16_t)z, (uint16_t)(z+1));
       //  unsigned long len = theStreamWriter.DefineProperBufferLength();
       //std::cout << "\n" <<len;
       //char* finalBuffer1 = new char[len];
@@ -676,8 +676,8 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
     gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el2;
     if(tile == 1)
       {
-      el2.SetValue(start[0],0);
-      el2.SetValue(start[1],1);
+      el2.SetValue((unsigned short)start[0],0);
+      el2.SetValue((unsigned short)start[1],1);
       }
     else
       {
@@ -691,13 +691,13 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
     gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el3;
     if(tile == 1)
       {
-      el3.SetValue(end[0],0);
-      el3.SetValue(end[1],1);
+      el3.SetValue((unsigned short)end[0],0);
+      el3.SetValue((unsigned short)end[1],1);
       }
     else
       {
-      el3.SetValue(extent[0],0);
-      el3.SetValue(extent[1],1);
+      el3.SetValue((unsigned short)extent[0],0);
+      el3.SetValue((unsigned short)extent[1],1);
       }
     gdcm::DataElement brr = el3.GetAsDataElement();
     brr.SetTag( gdcm::Tag(0x0048,0x0202) );            //brr --> bottom right col/row
@@ -736,7 +736,7 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
   el.SetFromDataElement( Number_Of_Frames );
 
 
-  uint16_t No_Of_Resolutions  = el.GetValue(0);
+  uint16_t No_Of_Resolutions  = (uint16_t)el.GetValue(0);
   //std::cout << "HERE NO. "<< No_Of_Resolutions;
 
   gdcm::DataElement BA = ds1.GetDataElement( gdcm::Tag(0x0028,0x0100) );

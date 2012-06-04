@@ -399,7 +399,7 @@ int main(int argc, char *argv[])
     }
   imgfactory->Delete();
 
-  vtkImageData *imgdata;
+  vtkImageData *imgdata = NULL;
   std::string image_comments;
   if( imgreader )
     {

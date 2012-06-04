@@ -436,7 +436,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       ss1.str( swc );
       gdcm::VR vr = gdcm::VR::DS;
       unsigned int vrsize = vr.GetSizeof();
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), swc.size());
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), (unsigned int)swc.size());
       elwc.SetLength( count * vrsize );
       elwc.Read( ss1 );
       std::stringstream ss2;
@@ -465,7 +465,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       std::stringstream ss;
       ss.str( "" );
       std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size()); (void)count;
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), (unsigned int)swe.size()); (void)count;
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
       // oh wait but what if we have the countrary...
@@ -942,7 +942,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     }
 
   // Overlay!
-  unsigned int numoverlays = image.GetNumberOfOverlays();
+  size_t numoverlays = image.GetNumberOfOverlays();
   if( this->LoadOverlays && numoverlays )
     {
     // Do overlay specific stuff...
@@ -953,7 +953,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       assert( (unsigned int)ov.GetRows() == image.GetRows() ); (void)ov;
       assert( (unsigned int)ov.GetColumns() == image.GetColumns() );
       }
-    this->NumberOfOverlays = numoverlays;
+    this->NumberOfOverlays = (int)numoverlays;
     }
 
 //  return this->Superclass::RequestInformation(
@@ -1176,7 +1176,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
 
   // Do the Curve:
-  unsigned int numcurves = image.GetNumberOfCurves();
+  size_t numcurves = image.GetNumberOfCurves();
   if( numcurves )
     {
     const gdcm::Curve& curve = image.GetCurve();
@@ -1203,7 +1203,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   // Do the Overlay:
   if( this->LoadOverlays )
     {
-    unsigned int numoverlays = image.GetNumberOfOverlays();
+    size_t numoverlays = image.GetNumberOfOverlays();
     long overlayoutsize = (dext[1] - dext[0] + 1);
     //this->NumberOfOverlays = numoverlays;
     //if( numoverlays )
@@ -1288,8 +1288,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     vtkWindowLevelLookupTable *vtklut = vtkWindowLevelLookupTable::New();
     // Technically we could also use the first of the Window Width / Window Center
     // oh well, if they are missing let's just compute something:
-    int64_t min = pixeltype.GetMin();
-    int64_t max = pixeltype.GetMax();
+    const double min = (double)pixeltype.GetMin();
+    const double max = (double)pixeltype.GetMax();
     vtklut->SetWindow( max - min );
     vtklut->SetLevel( 0.5 * (max + min) );
     //vtklut->SetWindow(1024); // WindowWidth

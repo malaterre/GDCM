@@ -320,7 +320,7 @@ bool ConcatenateImages(Image &im1, Image const &im2)
     const std::vector<char> & v2 = *bv2;
     v1.insert( v1.end(), v2.begin(), v2.end() );
 
-    de1.SetByteValue(&v1[0], v1.size());
+    de1.SetByteValue(&v1[0], (uint32_t)v1.size());
     }
   else if( de1.GetSequenceOfFragments() )
     {
@@ -479,7 +479,7 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
 
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
 
@@ -997,7 +997,7 @@ int main (int argc, char *argv[])
       //slice.Print( std::cout );
       gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
-      pd.SetByteValue( sliceptr, slice_len);
+      pd.SetByteValue( sliceptr, (uint32_t)slice_len);
 
       if( !writer.Write() )
         {
@@ -1045,7 +1045,7 @@ int main (int argc, char *argv[])
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     ms = gdcm::MediaStorage::MRImageStorage;
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Replace( de );
 
@@ -1151,7 +1151,7 @@ int main (int argc, char *argv[])
 //      gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
       gdcm::DataElement newpixeldata( gdcm::Tag(0x7fe0,0x0010) );
-      newpixeldata.SetByteValue( sliceptr, slice_len); // slow !
+      newpixeldata.SetByteValue( sliceptr, (uint32_t)slice_len); // slow !
       ds.Replace( newpixeldata );
 
       if( !writer.Write() )

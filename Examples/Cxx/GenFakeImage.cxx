@@ -56,9 +56,9 @@ int main(int, char *[])
       ybr2[2] = b;
       //gdcm::ImageChangePhotometricInterpretation::YBR2RGB(rgb, ybr);
       //gdcm::ImageChangePhotometricInterpretation::RGB2YBR(ybr2, rgb);
-      *p++ = ybr2[0];
-      *p++ = ybr2[1];
-      *p++ = ybr2[2];
+      *p++ = (char)ybr2[0];
+      *p++ = (char)ybr2[1];
+      *p++ = (char)ybr2[2];
       }
 
   im->SetNumberOfDimensions( 2 );
@@ -75,7 +75,7 @@ int main(int, char *[])
     return 1;
     }
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-  pixeldata.SetByteValue( buffer, l );
+  pixeldata.SetByteValue( buffer, (uint32_t)l );
   delete[] buffer;
   im->SetDataElement( pixeldata );
 

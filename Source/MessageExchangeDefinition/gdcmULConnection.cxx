@@ -130,7 +130,7 @@ void ULConnection::AddAcceptedPresentationContext(const PresentationContextAC& i
 //given a particular data element, presumably the SOP class,
 //find the presentation context for that SOP
 //NOT YET IMPLEMENTED
-PresentationContextRQ ULConnection::FindContext(const DataElement& de) const
+PresentationContextRQ ULConnection::FindContext(const DataElement& ) const
 {
   PresentationContextRQ empty;
   assert( 0 && "TODO" );

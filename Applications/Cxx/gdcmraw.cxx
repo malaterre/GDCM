@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
     {
     if( splitfrags )
       {
-      unsigned int nfrags = sf->GetNumberOfFragments();
+      size_t nfrags = sf->GetNumberOfFragments();
       gdcm::FilenameGenerator fg;
       fg.SetNumberOfFilenames( nfrags );
       fg.SetPrefix( outfilename.c_str() );
@@ -380,7 +380,7 @@ int main(int argc, char *argv[])
       {
       //std::ofstream output(outfilename.c_str(), std::ios::binary);
       //sqi->Write<gdcm::ImplicitDataElement, gdcm::SwapperNoOp>(output);
-      unsigned int nfrags = sqi->GetNumberOfItems();
+      size_t nfrags = sqi->GetNumberOfItems();
       gdcm::FilenameGenerator fg;
       fg.SetNumberOfFilenames( nfrags );
       fg.SetPrefix( outfilename.c_str() );

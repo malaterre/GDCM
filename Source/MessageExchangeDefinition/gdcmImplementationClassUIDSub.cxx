@@ -26,7 +26,7 @@ ImplementationClassUIDSub::ImplementationClassUIDSub()
 {
   ImplementationClassUID = FileMetaInformation::GetImplementationClassUID();
 
-  ItemLength = ImplementationClassUID.size();
+  ItemLength = (uint16_t)ImplementationClassUID.size();
   assert( (size_t)ItemLength + 4 == Size() );
 }
 

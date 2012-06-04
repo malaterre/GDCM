@@ -56,7 +56,7 @@ int main(int , char *[])
 
   // Let's pretend that private lookup is on 0x10xx elements:
   gdcm::PrivateTag dummy = private_tag;
-  dummy.SetElement( 0x1000 + dummy.GetElement() );
+  dummy.SetElement( (uint16_t)(0x1000 + dummy.GetElement()) );
   const gdcm::DictEntry &entry5 = dicts.GetDictEntry(dummy,dummy.GetOwner());
   std::cout << entry5 << std::endl;
 

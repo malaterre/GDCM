@@ -37,7 +37,7 @@ int TestCodeString(int , char *[])
 
 {
   gdcm::DataElement de( at.GetTag() );
-  de.SetByteValue( fn3, strlen(fn3) );
+  de.SetByteValue( fn3, (uint32_t)strlen(fn3) );
 
   at.SetFromDataElement( de );
   n = at.GetNumberOfValues();
@@ -63,7 +63,7 @@ int TestCodeString(int , char *[])
     copy.push_back( ' ' );
     }
   gdcm::DataElement de( at.GetTag() );
-  de.SetByteValue( copy.c_str(), copy.size() );
+  de.SetByteValue( copy.c_str(), (uint32_t)copy.size() );
 
   at.SetFromDataElement( de );
   n = at.GetNumberOfValues();
@@ -90,7 +90,7 @@ int TestCodeString(int , char *[])
     }
 
   gdcm::DataElement de( at.GetTag() );
-  de.SetByteValue( copy.c_str(), copy.size() );
+  de.SetByteValue( copy.c_str(), (uint32_t)copy.size() );
 
   at.SetFromDataElement( de );
   n = at.GetNumberOfValues();

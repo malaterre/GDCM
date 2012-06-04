@@ -158,12 +158,12 @@ bool ServiceClassUser::StopAssociation()
 
 void ServiceClassUser::SetTimeout(time_t t)
 {
-  Internals->timeout = t;
+  Internals->timeout = (double)t;
 }
 
 time_t ServiceClassUser::GetTimeout() const
 {
-  return Internals->timeout;
+  return (time_t)Internals->timeout;
 }
 
 void ServiceClassUser::SetCalledAETitle(const char *aetitle)

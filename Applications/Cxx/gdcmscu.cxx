@@ -530,7 +530,7 @@ int main(int argc, char *argv[])
     {
     // ./bin/gdcmscu mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
-    bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( hostname, port,
+    bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( hostname, (uint16_t)port,
       callingaetitle.c_str(), callaetitle.c_str() );
     if (!didItWork)
       {
@@ -598,8 +598,8 @@ int main(int argc, char *argv[])
     //!!! added the boolean to 'interleave writing', which basically writes
     //each file out as it comes across, rather than all at once at the end.
     //Turn off the boolean to have it written all at once at the end.
-    bool didItWork = gdcm::CompositeNetworkFunctions::CMove( hostname, port,
-      theQuery, portscpnum,
+    bool didItWork = gdcm::CompositeNetworkFunctions::CMove( hostname, (uint16_t)port,
+      theQuery, (uint16_t)portscpnum,
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
     if (!didItWork)
       {
@@ -668,7 +668,7 @@ int main(int argc, char *argv[])
       }
     //the value in that tag corresponds to the query type
     std::vector<gdcm::DataSet> theDataSet;
-    if( !gdcm::CompositeNetworkFunctions::CFind(hostname, port, theQuery, theDataSet,
+    if( !gdcm::CompositeNetworkFunctions::CFind(hostname, (uint16_t)port, theQuery, theDataSet,
         callingaetitle.c_str(), callaetitle.c_str()) )
       {
       std::cerr << "Problem in CFind." << std::endl;
@@ -705,7 +705,7 @@ int main(int argc, char *argv[])
         }
       }
     bool didItWork = 
-      gdcm::CompositeNetworkFunctions::CStore(hostname, port, thefiles,
+      gdcm::CompositeNetworkFunctions::CStore(hostname, (uint16_t)port, thefiles,
         callingaetitle.c_str(), callaetitle.c_str());
 
     if (didItWork)

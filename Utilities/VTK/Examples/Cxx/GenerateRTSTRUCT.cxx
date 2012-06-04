@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  for (int q = 0; q < theRTSeries.size(); q++)
+  for (size_t q = 0; q < theRTSeries.size(); q++)
     {
     Directory::FilenamesType theRTNames =
       DirectoryHelper::GetFilenamesFromSeriesUIDs(theDirName, theRTSeries[q]);

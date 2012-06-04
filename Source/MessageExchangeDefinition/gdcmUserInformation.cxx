@@ -34,7 +34,7 @@ UserInformation::UserInformation()
   size_t t1 = ICUID.Size();
   size_t t2 = 0; //AOWS.Size();
   size_t t3 = IVNS.Size();
-  ItemLength = t0 + t1 + t2 + t3;
+  ItemLength = (uint16_t)(t0 + t1 + t2 + t3);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 

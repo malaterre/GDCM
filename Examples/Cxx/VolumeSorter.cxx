@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
   gdcm::Directory d;
   d.Load( dir1.c_str(), true ); // recursive !
   const gdcm::Directory::FilenamesType &l1 = d.GetFilenames();
-  const unsigned int nfiles = l1.size();
+  const size_t nfiles = l1.size();
   std::cout << nfiles << std::endl;
 
   //if( nfiles != 280 )
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 
   // Only get the DICOM files:
   gdcm::Directory::FilenamesType l2 = s.GetKeys();
-  const unsigned int nfiles2 = l2.size();
+  const size_t nfiles2 = l2.size();
   std::cout << nfiles2 << std::endl;
 
   if ( nfiles2 > nfiles )
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 
   // Let's try to check our result:
   // assume that IPP is precise enough so that we can test floating point equality:
-  unsigned int nvalues = 0;
+  size_t nvalues = 0;
 {
   gdcm::Scanner s;
   s.AddTag( gdcm::Tag(0x20,0x32) ); // Image Position (Patient)
