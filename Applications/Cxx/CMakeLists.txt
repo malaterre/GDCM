@@ -50,6 +50,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmtar
   gdcminfo
   gdcmscu
+  gdcmxml
   )
 # poppler people have the worse API backward compatibility I know of.
 # there is absolutely no way to check the version of poppler
