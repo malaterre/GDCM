@@ -117,8 +117,8 @@ protected:
 
   VR PrintDataElement(std::ostream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de );
   
-  void PrintSQ(const SequenceOfItems *sqi, std::ostream &os);  
-  
+  void PrintSQ(const SequenceOfItems *sqi, std::ostream &os);
+    
   PrintStyles PrintStyle;
   
   const File *F;

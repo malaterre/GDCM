@@ -12,7 +12,6 @@
 
 =========================================================================*/
 #include "gdcmByteValue.h"
-#include "gdcmUIDGenerator.h"
 
 #include <cstring> // memcpy
 

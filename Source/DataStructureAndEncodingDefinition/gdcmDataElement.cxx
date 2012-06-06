@@ -20,19 +20,6 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmTrace.h"
 
-/*Need to access Dictionary to write Keyword attribute in WriteXML() */
-
-#include "gdcmDicts.h"
-#include "gdcmDict.h"
-#include "gdcmGroupDict.h"
-#include "gdcmVR.h"
-#include "gdcmVM.h"
-#include "gdcmElement.h"
-#include "gdcmGlobal.h"
-#include "gdcmAttribute.h"
-
-
-
 namespace gdcm
 {
   void DataElement::SetVLToUndefined() {
@@ -47,23 +34,6 @@ namespace gdcm
     ValueLengthField.SetToUndefined();
   }
 
-  /*
-	inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
-{
-  os << val.TagField;
-  os << "\t" << val.VRField;
-  os << "\t" << val.ValueLengthField;
-  if( val.ValueField )
-    {
-    val.ValueField->Print( os << "\t" );
-    }
-  return os;
-}
-
-
-  */
-
-  
 #if !defined(GDCM_LEGACY_REMOVE)
   SequenceOfItems* DataElement::GetSequenceOfItems() {
     GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",

@@ -28,7 +28,7 @@
 
 #include "gdcmDataSet.h"
 
-#include <typeinfo> // for typeid
+#include <typeinfo>
 
 
 namespace gdcm
@@ -182,7 +182,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
       {
       
-      os << name;
+      //os << name;
+      //os = PrintXML_char(os,name);
       
       }
     
@@ -191,7 +192,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       {
       
       assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
-      os << name;
+      //os << name;
+      //os = PrintXML_char(os,name);
       
       }
     
@@ -199,10 +201,29 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     else
       {
       
-      os << name;
+      //os << name;
+      //os = PrintXML_char(os,name);
       
       }
+    
+    char c;
+    for (; (*name)!='\0'; name++)
+    {
+      c = *name;
+      if(c == '&')
+        os << "&amp;";
+      else if(c == '<')
+        os << "&lt;";
+      else if(c == '>')
+        os << "&gt;";
+      else if(c == '\'')
+        os << "&apos;";
+      else if(c == '\"')
+        os << "&quot;";    
+      else
+        os << c;      
     }
+  }  
     
   else
     {
@@ -237,29 +258,6 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       else { assert( de.IsEmpty());  } \
     } break    
 
-/*
-#define StringFilterCase(type) \
-  case VR::type: \
-    { \
-      Element<VR::type,VM::VM1_n> el; \ 
-      if( !de.IsEmpty() ) \
-      { \      
-        el.Set( de.GetValue() ); \
-          if( el.GetLength() ) \
-          { \
-            os << "" << el.GetValue(); \
-            VL l = (long) el.GetLength(); \
-            for(unsigned long i = 1; i < l; ++i) \
-            {\
-            os << "<Value number = \"" << i << "\" >" ;\
-            os << "\\" << el.GetValue(i); \
-            os << "</Value>"; \
-            }             \
-          }          \
-      }      \
-      else { assert( de.IsEmpty());}      \
-    }break \
-*/
 
   // Print Value now:
   

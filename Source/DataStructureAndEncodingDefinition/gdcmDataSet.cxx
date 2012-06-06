@@ -13,17 +13,6 @@
 =========================================================================*/
 #include "gdcmDataSet.h"
 #include "gdcmPrivateTag.h"
-#include "gdcmSequenceOfItems.h"
-#include "gdcmSequenceOfFragments.h"
-#include "gdcmDict.h"
-#include "gdcmDicts.h"
-#include "gdcmGroupDict.h"
-#include "gdcmVR.h"
-#include "gdcmVM.h"
-#include "gdcmElement.h"
-#include "gdcmGlobal.h"
-#include "gdcmAttribute.h"
-
 
 namespace gdcm
 {
@@ -116,7 +105,5 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
 {
   return GetDataElement( ComputeDataElement(t) );
 }
-
-
 
 } // end namespace gdcm

@@ -35,7 +35,6 @@ namespace gdcm
 
 class SequenceOfItems;
 class SequenceOfFragments;
-class Dicts;
 /**
  * \brief Class to represent a Data Element
  * either Implicit or Explicit
@@ -248,7 +247,6 @@ public:
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
 
-  
 protected:
   Tag TagField;
   // This is the value read from the file, might be different from the length of Value Field

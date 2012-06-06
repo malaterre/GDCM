@@ -58,7 +58,7 @@ void PrintHelp()
   std::cout << "Convert a DICOM file into an XML file \n";
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename" << std::endl;
-  std::cout << "  -o --output    XML filename" << std::endl;
+  //std::cout << "  -o --output    XML filename" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -B --loadBulkData   loads all bulk data like Pixel Data (by default UUID are written)." << std::endl;
   std::cout << "  -V --verbose        more verbose (warning+error)." << std::endl;
@@ -172,10 +172,10 @@ int main (int argc, char *argv[])
   if (optind < argc)
     {    
     int v = argc - optind;
-    if( v == 2 )
+    if( v == 1 )
       {
       DICOMfile = argv[optind];
-      XMLfile = argv[optind+1];
+      //XMLfile = argv[optind+1];
       }
     else
       {
