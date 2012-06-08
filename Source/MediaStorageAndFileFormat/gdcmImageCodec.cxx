@@ -463,7 +463,7 @@ bool ImageCodec::Decode(DataElement const &, DataElement &)
   return true;
 }
 
-bool ImageCodec::Decode(std::istream &is, std::ostream &os)
+bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
   assert( PI != PhotometricInterpretation::UNKNOW );

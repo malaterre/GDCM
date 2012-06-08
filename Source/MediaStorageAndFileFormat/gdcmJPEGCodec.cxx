@@ -169,7 +169,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       assert( b ); (void)b;
       is.write(mybuffer, bv.GetLength());
       delete[] mybuffer;
-      bool r = Decode(is, os);
+      bool r = DecodeByStreams(is, os);
       // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
       if( !r )
         {
@@ -187,7 +187,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
     assert( b ); (void)b;
     is.write(mybuffer, jpegbv->GetLength());
     delete[] mybuffer;
-    bool r = Decode(is, os);
+    bool r = DecodeByStreams(is, os);
     if( !r )
       {
       // let's try another time:
@@ -213,7 +213,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
         assert( b ); (void)b;
         is.write(mybuffer, bv.GetLength());
         delete[] mybuffer;
-        bool r2 = Decode(is, os);
+        bool r2 = DecodeByStreams(is, os);
         if( !r2 )
           {
           return false;
@@ -339,10 +339,10 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 }
 
 
-bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
+bool JPEGCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
   std::stringstream tmpos;
-  if ( !Internal->Decode(is,tmpos) )
+  if ( !Internal->DecodeByStreams(is,tmpos) )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // let's check if this is one of those buggy lossless JPEG
@@ -363,9 +363,9 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         //Internal->SetPixelFormat( this->GetPixelFormat() ); // FIXME
         Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaningless ?
         Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
-        if( Internal->Decode(is,tmpos) )
+        if( Internal->DecodeByStreams(is,tmpos) )
           {
-          return ImageCodec::Decode(tmpos,os);
+          return ImageCodec::DecodeByStreams(tmpos,os);
           }
         else
           {
@@ -393,7 +393,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
     this->PF.SetBitsAllocated( 16 );
     }
 
-  return ImageCodec::Decode(tmpos,os);
+  return ImageCodec::DecodeByStreams(tmpos,os);
 }
 
 bool JPEGCodec::IsValid(PhotometricInterpretation const &pi)
