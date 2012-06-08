@@ -118,7 +118,7 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
 }
 
 
-void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de)
+void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de) const
 {
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
   if( !sqi ) return;
@@ -128,7 +128,7 @@ void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de)
   for(; it != sqi->Items.end(); ++it)
     {
       const Item &item = *it;
-      *this = item.GetNestedDataSet();
+      //*this = item.GetNestedDataSet();
       const DataElement &deitem = item;
       WriteXML(os);
       if( deitem.GetVL().IsUndefined() )
@@ -142,25 +142,27 @@ void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de)
     //print this const Tag seqDelItem(0xfffe,0xe0dd);
     
     }
-    *this = ds;
+    //*this = ds;
 }
 
-void DataSet::WriteXML(std::ostream &os)
+void DataSet::WriteXML(std::ostream &os) const
 {
   
   const Global& G = GlobalInstance;
   const Dicts &dicts = G.GetDicts();
-  
+  //std::cout<< "I get called";
   DataElement de;
   VR ret;
   Iterator it = DES.begin();
   for( ; it != DES.end(); ++it)
     {
      de = *it;
+     os << "\n<DicomAttribute   " ;
      ret=de.WriteXML(os, dicts);      
      
      if(ret == VR::SQ)
        SQ_XML_Write(os,dicts,de);
+     os << "\n<\\DicomAttribute>";  
      
     }
     

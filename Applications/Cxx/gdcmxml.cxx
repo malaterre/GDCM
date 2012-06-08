@@ -42,10 +42,10 @@
 #include <stdlib.h>    /* for exit */
 #include <getopt.h>
 #include <string.h>
-
+using namespace gdcm;
 void PrintVersion()
 {
-  std::cout << "gdcmdump: gdcm " << gdcm::Version::GetVersion() << " ";
+  std::cout << "gdcmxml: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
@@ -71,8 +71,7 @@ void PrintHelp()
 int main (int argc, char *argv[])
 {
   int c;
-  //int digit_optind = 0;
-
+  //int digit_optind = 0;   
   std::string DICOMfile;
   std::string XMLfile;
   int loadBulkData = 0;
@@ -205,29 +204,40 @@ int main (int argc, char *argv[])
     
     
     gdcm::Reader reader;
-    reader.SetFileName( filename.c_str() );
+    reader.SetFileName( DICOMfile.c_str() );
     bool success = reader.Read();
-    if( !success && !ignoreerrors )
+    if( !success  )//!ignoreerrors )
     {
-      std::cerr << "Failed to read: " << filename << std::endl;
+      std::cerr << "Failed to read: " << DICOMfile << std::endl;
       return 1;
     }
-
-    const File *F;    
-    F = &reader.GetFile();
+    const File *F = &reader.GetFile();
     const DataSet &ds = F->GetDataSet();
-
-    if( XMLfile.empty() )
+    ds.WriteXML(std::cout);
+    
+    
+    //File &F=reader.GetFile();
+    //DataSet &ds = (F->GetDataSet());
+    //std::cout<< "HIout";
+    
+    /*if( XMLfile.empty() )
     {
-    ds.WriteXML(std::out);
+     //std::cout << "HIin";
+     ds.WriteXML(std::cout);
     }
     else
     {
     std::filebuf fb;
-    fb.open (XMLfile,std::ios::out);
+    fb.open (XMLfile,std::cout);
     std::ostream os(&fb);
-    ds.WriteXML(os);
-    }
+    ds->WriteXML(os);
     
+    //std::fstream f;
+    //f.open(XMLfile, ios::out);
+    //std::ostream os(&f);
+    //ds->WriteXML(os);
+    
+    }*/
+   
 
 }  

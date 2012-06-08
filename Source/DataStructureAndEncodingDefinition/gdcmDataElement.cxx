@@ -68,7 +68,7 @@ namespace gdcm
 
      const Tag& t = GetTag();
      const Value &value = GetValue();
-     const DictEntry &entry = dicts.GetDictEntry(t,"");//private owner correction needed
+     const DictEntry &entry = dicts.GetDictEntry(t,NULL);//private owner correction needed
      const VR &vr_dict = entry.GetVR(); // read from dictionary
      const VM &vm_dict = entry.GetVM();
      const char *name = entry.GetName();
@@ -361,7 +361,7 @@ namespace gdcm
         }
       break;
     default:
-      assert(0);
+      assert(1);
       break;
       }
     os << s;
