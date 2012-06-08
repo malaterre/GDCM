@@ -74,7 +74,7 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
 
 }
 
-std::vector<PresentationDataValue>  CEchoRSP::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue>  CEchoRSP::ConstructPDVByDataSet(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
   (void)inDataSet;
   assert( 0 && "TODO" );

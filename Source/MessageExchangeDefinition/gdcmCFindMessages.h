@@ -39,12 +39,12 @@ public:
 
 class CFindRSP : public BaseCompositeMessage {
 public:
-  std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+  std::vector<PresentationDataValue> ConstructPDVByDataSet(const DataSet* inDataSet);
 };
 
   class CFindCancelRQ : public BaseCompositeMessage {
   public:
-    std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+    std::vector<PresentationDataValue> ConstructPDVByDataSet(const DataSet* inDataSet);
   };
 }
 }

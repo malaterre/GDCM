@@ -93,13 +93,13 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(
   return thePDVs;
 }
 
-std::vector<PresentationDataValue>  CFindRSP::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue>  CFindRSP::ConstructPDVByDataSet(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
   (void)inDataSet;
   assert( 0 && "TODO" );
   return thePDV;
 }
-std::vector<PresentationDataValue>  CFindCancelRQ::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue>  CFindCancelRQ::ConstructPDVByDataSet(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
   (void)inDataSet;
   assert( 0 && "TODO" );
