@@ -99,11 +99,13 @@ void PixmapWriter::DoIconImage(DataSet & rootds, Pixmap const & image)
   PhotometricInterpretation pi = icon.GetPhotometricInterpretation();
 Attribute<0x0028,0x0004> piat;
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
+{
     DataElement de( Tag(0x0028, 0x0004 ) );
     VL::Type strlenPistr = (VL::Type)strlen(pistr);
     de.SetByteValue( pistr, strlenPistr );
     de.SetVR( piat.GetVR() );
     ds.Replace( de );
+}
 
     if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
@@ -388,10 +390,10 @@ bool PixmapWriter::PrepareWrite()
     }
 
   // Pixel Data
-  DataElement de( Tag(0x7fe0,0x0010) );
+  DataElement depixdata( Tag(0x7fe0,0x0010) );
   const Value &v = PixelData->GetDataElement().GetValue();
-  de.SetValue( v );
-  const ByteValue *bv = de.GetByteValue();
+  depixdata.SetValue( v );
+  const ByteValue *bvpixdata = depixdata.GetByteValue();
   const TransferSyntax &ts = PixelData->GetTransferSyntax();
   assert( ts.IsExplicit() || ts.IsImplicit() );
 
@@ -474,10 +476,10 @@ bool PixmapWriter::PrepareWrite()
     }
 
   VL vl;
-  if( bv )
+  if( bvpixdata )
     {
     // if ts is explicit -> set VR
-    vl = bv->GetLength();
+    vl = bvpixdata->GetLength();
     }
   else
     {
@@ -490,12 +492,12 @@ bool PixmapWriter::PrepareWrite()
       {
       case 1:
       case 8:
-        de.SetVR( VR::OB );
+        depixdata.SetVR( VR::OB );
         break;
       case 12:
       case 16:
       case 32:
-        de.SetVR( VR::OW );
+        depixdata.SetVR( VR::OW );
         break;
       default:
         assert( 0 && "should not happen" );
@@ -504,10 +506,10 @@ bool PixmapWriter::PrepareWrite()
     }
   else
     {
-    de.SetVR( VR::OB );
+    depixdata.SetVR( VR::OB );
     }
-  de.SetVL( vl );
-  ds.Replace( de );
+  depixdata.SetVL( vl );
+  ds.Replace( depixdata );
 
   // Do Icon Image
   DoIconImage(ds, GetPixmap());
@@ -568,14 +570,11 @@ bool PixmapWriter::PrepareWrite()
   if( ds.FindDataElement( Tag(0x0008, 0x0018) ) && false )
     {
     // We are coming from a real DICOM image, we need to reference it...
-    //assert( 0 && "TODO FIXME" );
     const Tag tsourceImageSequence(0x0008,0x2112);
-    //assert( ds.FindDataElement( tsourceImageSequence ) == false );
     SmartPointer<SequenceOfItems> sq;
     if( ds.FindDataElement( tsourceImageSequence ) )
       {
       DataElement &de = (DataElement&)ds.GetDataElement( tsourceImageSequence );
-      //assert( de.IsUndefinedLength() );
       de.SetVLToUndefined(); // For now
       if( de.IsEmpty() )
         {
@@ -590,7 +589,6 @@ bool PixmapWriter::PrepareWrite()
       }
     sq->SetLengthToUndefined();
     Item item; //( /*Tag(0xfffe,0xe000)*/ );
-    de.SetVLToUndefined();
     //DataSet sourceimageds;
     // (0008,1150) UI =MRImageStorage                          #  26, 1 ReferencedSOPClassUID
     // (0008,1155) UI [1.3.6.1.4.17434.1.1.5.2.1160650698.1160650698.0] #  48, 1 ReferencedSOPInstanceUID

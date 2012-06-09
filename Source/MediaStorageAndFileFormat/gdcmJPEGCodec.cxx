@@ -17,7 +17,6 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSwapper.h"
-
 #include "gdcmJPEG8Codec.h"
 #include "gdcmJPEG12Codec.h"
 #include "gdcmJPEG16Codec.h"
@@ -150,17 +149,17 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   assert( Internal );
   out = in;
   // Fragments...
-  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  const SequenceOfFragments *sf0 = in.GetSequenceOfFragments();
   const ByteValue *jpegbv = in.GetByteValue();
-  if( !sf && !jpegbv ) return false;
+  if( !sf0 && !jpegbv ) return false;
   std::stringstream os;
-  if( sf )
+  if( sf0 )
     {
     //unsigned long pos = 0;
-    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+    for(unsigned int i = 0; i < sf0->GetNumberOfFragments(); ++i)
       {
       std::stringstream is;
-      const Fragment &frag = sf->GetFragment(i);
+      const Fragment &frag = sf0->GetFragment(i);
       if( frag.IsEmpty() ) return false;
       const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
       size_t bv_len = bv.GetLength();
@@ -180,22 +179,22 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   else if ( jpegbv )
     {
     // GEIIS Icon:
-    std::stringstream is;
+    std::stringstream is0;
     size_t jpegbv_len = jpegbv->GetLength();
-    char *mybuffer = new char[jpegbv_len];
-    bool b = jpegbv->GetBuffer(mybuffer, jpegbv->GetLength());
-    assert( b ); (void)b;
-    is.write(mybuffer, jpegbv->GetLength());
-    delete[] mybuffer;
-    bool r = DecodeByStreams(is, os);
+    char *mybuffer0 = new char[jpegbv_len];
+    bool b0 = jpegbv->GetBuffer(mybuffer0, jpegbv->GetLength());
+    assert( b0 ); (void)b0;
+    is0.write(mybuffer0, jpegbv->GetLength());
+    delete[] mybuffer0;
+    bool r = DecodeByStreams(is0, os);
     if( !r )
       {
       // let's try another time:
       // JPEGDefinedLengthSequenceOfFragments.dcm
-      is.seekg(0);
+      is0.seekg(0);
       SequenceOfFragments sf_bug;
       try {
-        sf_bug.Read<SwapperNoOp>(is);
+        sf_bug.Read<SwapperNoOp>(is0);
       } catch ( ... ) {
         return false;
       }
