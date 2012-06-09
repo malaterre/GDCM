@@ -233,7 +233,7 @@ void vtkImageMapToColors16Execute(vtkImageMapToColors16 *self,
         {
         if (!(count%target))
           {
-          self->UpdateProgress(count/(50.0*target));
+          self->UpdateProgress((double)count/(50.0*(double)target));
           }
         count++;
         }
