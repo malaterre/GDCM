@@ -555,6 +555,9 @@ protected:
 
 void KeyCallback::Execute(vtkObject* caller, unsigned long eventId, void *calldata)
 {
+  (void)caller;
+  (void)eventId;
+  (void)calldata;
     std::string sym=_reslice->GetInteractor()->GetKeySym();
 
     if (!sym.compare("Up"))

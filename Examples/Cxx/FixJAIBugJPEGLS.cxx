@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 #ifdef GDCM_USE_SYSTEM_CHARLS
     JlsParameters params;
 #else
-    JlsParamaters params = {0};
+    JlsParamaters params;
 #endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 

@@ -121,6 +121,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   //std::cerr << pvrg_command << std::endl;
   gdcmDebugMacro( pvrg_command );
   int ret = system(pvrg_command.c_str());
+  (void)ret;
   //std::cerr << "system: " << ret << std::endl;
 
   size_t len = gdcm::System::FileSize(output);
@@ -145,7 +146,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #endif
       len/2);
     }
-  out.SetByteValue( buf, len );
+  out.SetByteValue( buf, (uint32_t)len );
   delete[] buf;
 
   if( !System::RemoveFile(input) )
@@ -177,6 +178,8 @@ bool PVRGCodec::Code(DataElement const &in, DataElement &out)
   (void)out;
   return false;
 #else
+  (void)in;
+  (void)out;
   /* Do I really want to produce JPEG by PRVRG ? Shouldn't IJG handle all cases nicely ? */
   return false;
 #endif

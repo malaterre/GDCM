@@ -770,36 +770,36 @@ void vtkImageColorViewer::AddInput(vtkImageData * input)
 {
   vtkRenderWindow *renwin = this->GetRenderWindow ();
   renwin->SetNumberOfLayers(2);
-  vtkRenderer *Renderer     = vtkRenderer::New();
-  Renderer->SetLayer(1);
+  vtkRenderer *renderer     = vtkRenderer::New();
+  renderer->SetLayer(1);
   OverlayImageActor->SetOpacity(0.5);
-  vtkImageMapToWindowLevelColors2 *WindowLevel     = vtkImageMapToWindowLevelColors2::New();
-  WindowLevel->SetInput(input);
-  OverlayImageActor->SetInput(WindowLevel->GetOutput());
-  Renderer->AddViewProp(OverlayImageActor);
+  vtkImageMapToWindowLevelColors2 *windowLevel     = vtkImageMapToWindowLevelColors2::New();
+  windowLevel->SetInput(input);
+  OverlayImageActor->SetInput(windowLevel->GetOutput());
+  renderer->AddViewProp(OverlayImageActor);
   OverlayImageActor->SetVisibility(1);
 
-  renwin->AddRenderer(Renderer);
-  Renderer->Delete();
-  WindowLevel->Delete();
+  renwin->AddRenderer(renderer);
+  renderer->Delete();
+  windowLevel->Delete();
 }
 
 void vtkImageColorViewer::AddInputConnection(vtkAlgorithmOutput* input)
 {
   vtkRenderWindow *renwin = this->GetRenderWindow ();
   renwin->SetNumberOfLayers(2);
-  vtkRenderer *Renderer     = vtkRenderer::New();
-  Renderer->SetLayer(1);
+  vtkRenderer *renderer     = vtkRenderer::New();
+  renderer->SetLayer(1);
   OverlayImageActor->SetOpacity(0.5);
-  vtkImageMapToWindowLevelColors2 *WindowLevel     = vtkImageMapToWindowLevelColors2::New();
-  WindowLevel->SetInputConnection(input);
-  OverlayImageActor->SetInput(WindowLevel->GetOutput());
-  Renderer->AddViewProp(OverlayImageActor);
+  vtkImageMapToWindowLevelColors2 *windowLevel     = vtkImageMapToWindowLevelColors2::New();
+  windowLevel->SetInputConnection(input);
+  OverlayImageActor->SetInput(windowLevel->GetOutput());
+  renderer->AddViewProp(OverlayImageActor);
   OverlayImageActor->SetVisibility(1);
 
-  renwin->AddRenderer(Renderer);
-  Renderer->Delete();
-  WindowLevel->Delete();
+  renwin->AddRenderer(renderer);
+  renderer->Delete();
+  windowLevel->Delete();
 }
 
 double vtkImageColorViewer::GetOverlayVisibility()

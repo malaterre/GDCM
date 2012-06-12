@@ -104,7 +104,7 @@ int TestvtkGDCMImageRead3(const char *dir, const char *studyuid)
   reader->Update();
 
   vtkImageData* img = reader->GetOutput();
-  int ssize = img->GetScalarSize();
+  size_t ssize = img->GetScalarSize();
   vtkIdType npts = img->GetNumberOfPoints();
   char * ptr = (char*)img->GetScalarPointer();
   if( wholebuffer.size() != npts * ssize || wholebuffer.empty() )
@@ -133,7 +133,7 @@ o2.close();
 }
 
 
-int TestvtkGDCMImageReader3(int argc, char *argv[])
+int TestvtkGDCMImageReader3(int , char *[])
 {
   int ret = 0;
   gdcm::Trace::DebugOff();

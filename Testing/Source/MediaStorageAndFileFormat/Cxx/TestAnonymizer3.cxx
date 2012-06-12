@@ -24,7 +24,7 @@
 #include "gdcmFileDerivation.h"
 #include "gdcmSystem.h"
 
-int TestAnonymizer3(int argc, char *argv[])
+int TestAnonymizer3(int , char *[])
 {
   using namespace gdcm;
   gdcm::Global& g = gdcm::Global::GetInstance();
