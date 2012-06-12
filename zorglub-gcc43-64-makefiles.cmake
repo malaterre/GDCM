@@ -16,7 +16,7 @@ SET(ENV{CC} "gcc-4.3")
 SET(ENV{CXX} "g++-4.3")
 #SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
 #SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspacingtestimages")
-SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -Wsign-promo -Weffc++ -Wabi -D_GLIBCXX_DEBUG")
+SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -Wsign-promo -Wabi -D_GLIBCXX_DEBUG")
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long")
 
 macro(dashboard_hook_init)
