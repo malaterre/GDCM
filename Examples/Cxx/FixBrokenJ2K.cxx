@@ -49,15 +49,15 @@ int main(int argc, char *argv[])
     }
 
   gdcm::File &file = reader.GetFile();
-  const gdcm::DataElement &pixeldata = file.GetDataSet().GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
-  const gdcm::SequenceOfFragments *sqf = pixeldata.GetSequenceOfFragments();
+  const gdcm::DataElement &pixeldata0 = file.GetDataSet().GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
+  const gdcm::SequenceOfFragments *sqf = pixeldata0.GetSequenceOfFragments();
   if( !sqf )
     {
     return 1;
     }
-  const gdcm::Fragment &frag = sqf->GetFragment(0);
+  const gdcm::Fragment &frag0 = sqf->GetFragment(0);
 
-  const gdcm::ByteValue *bv = frag.GetByteValue();
+  const gdcm::ByteValue *bv = frag0.GetByteValue();
   const char *ptr = bv->GetPointer();
   size_t len = bv->GetLength();
 

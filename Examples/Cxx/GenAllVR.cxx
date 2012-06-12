@@ -52,8 +52,8 @@ gdcm::Tag FindTagFromVR(gdcm::Dict const &dict, gdcm::VR const &vr)
 }
 
 struct rnd_gen {
-  rnd_gen(char const* range = "abcdefghijklmnopqrstuvwxyz0123456789")
-    : range(range), len(std::strlen(range)) { }
+  rnd_gen(char const* r = "abcdefghijklmnopqrstuvwxyz0123456789")
+    : range(r), len(std::strlen(r)) { }
 
   char operator ()() const {
     return range[static_cast<std::size_t>(std::rand() * (1.0 / ((double)RAND_MAX + 1.0 )) * (double)len)];

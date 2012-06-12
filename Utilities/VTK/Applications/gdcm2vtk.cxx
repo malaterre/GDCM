@@ -349,14 +349,14 @@ int main(int argc, char *argv[])
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
-  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  vtkGDCMImageReader *gdcmreader = vtkGDCMImageReader::New();
 
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   vtkDICOMImageReader *dicomreader = vtkDICOMImageReader::New();
 #endif
   if( debug )
     {
-    reader->DebugOn();
+    gdcmreader->DebugOn();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     dicomreader->DebugOn();
 #endif
@@ -377,7 +377,7 @@ int main(int argc, char *argv[])
     (void)0;
 #endif
   else
-    imgfactory->RegisterReader( reader );
+    imgfactory->RegisterReader( gdcmreader );
   vtkImageReader2* imgreader =
     imgfactory->CreateImageReader2(filename);
   vtkStructuredPointsReader *datareader = vtkStructuredPointsReader::New();
@@ -652,34 +652,34 @@ int main(int argc, char *argv[])
 
   if( imgreader )
     {
-    if( vtkGDCMImageReader * reader = vtkGDCMImageReader::SafeDownCast(imgreader) )
+    if( vtkGDCMImageReader * reader0 = vtkGDCMImageReader::SafeDownCast(imgreader) )
       {
-      writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-      writer->SetDirectionCosines( reader->GetDirectionCosines() );
-      writer->SetShift( reader->GetShift() );
-      writer->SetScale( reader->GetScale() );
-      writer->SetImageFormat( reader->GetImageFormat() );
-      writer->SetLossyFlag( reader->GetLossyFlag() );
+      writer->SetMedicalImageProperties( reader0->GetMedicalImageProperties() );
+      writer->SetDirectionCosines( reader0->GetDirectionCosines() );
+      writer->SetShift( reader0->GetShift() );
+      writer->SetScale( reader0->GetScale() );
+      writer->SetImageFormat( reader0->GetImageFormat() );
+      writer->SetLossyFlag( reader0->GetLossyFlag() );
       if( verbose )
         {
-        reader->GetOutput()->Print( std::cout );
-        reader->GetMedicalImageProperties()->Print( std::cout );
+        reader0->GetOutput()->Print( std::cout );
+        reader0->GetMedicalImageProperties()->Print( std::cout );
         }
       }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
-    else if( vtkDICOMImageReader * reader = vtkDICOMImageReader::SafeDownCast(imgreader) )
+    else if( vtkDICOMImageReader * reader1 = vtkDICOMImageReader::SafeDownCast(imgreader) )
       {
-      const float* iop = reader->GetImageOrientationPatient();
+      const float* iop = reader1->GetImageOrientationPatient();
       double dircos[6];
       for(int i = 0; i < 6; ++i)
         dircos[i] = iop[i];
       writer->SetDirectionCosinesFromImageOrientationPatient( dircos );
 
       writer->GetMedicalImageProperties()->SetModality( "MR" ); // FIXME
-      writer->GetMedicalImageProperties()->SetPatientName( reader->GetPatientName() );
-      //writer->GetMedicalImageProperties()->SetStudyUID( reader->GetStudyUID() ); // TODO
-      writer->GetMedicalImageProperties()->SetStudyID( reader->GetStudyID() );
-      //writer->GetMedicalImageProperties()->SetGantryTilt( reader->GetGantryAngle() ); // TODO
+      writer->GetMedicalImageProperties()->SetPatientName( reader1->GetPatientName() );
+      //writer->GetMedicalImageProperties()->SetStudyUID( reader1->GetStudyUID() ); // TODO
+      writer->GetMedicalImageProperties()->SetStudyID( reader1->GetStudyID() );
+      //writer->GetMedicalImageProperties()->SetGantryTilt( reader1->GetGantryAngle() ); // TODO
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 2
       writer->GetMedicalImageProperties()->SetDirectionCosine( dircos[0],
         dircos[1],
@@ -689,72 +689,72 @@ int main(int argc, char *argv[])
         dircos[5]
       );
 #endif
-      writer->SetShift( reader->GetRescaleOffset() );
-      writer->SetScale( reader->GetRescaleSlope() );
-      //writer->SetImageFormat( reader->GetImageFormat() );
-      //writer->SetLossyFlag( reader->GetLossyFlag() );
+      writer->SetShift( reader1->GetRescaleOffset() );
+      writer->SetScale( reader1->GetRescaleSlope() );
+      //writer->SetImageFormat( reader1->GetImageFormat() );
+      //writer->SetLossyFlag( reader1->GetLossyFlag() );
       }
 #endif
-    else if( vtkJPEGReader * reader = vtkJPEGReader::SafeDownCast(imgreader) )
+    else if( vtkJPEGReader * reader2 = vtkJPEGReader::SafeDownCast(imgreader) )
       {
-      (void)reader;
+      (void)reader2;
       // vtk JPEG reader only read 8bits lossy file
       writer->SetLossyFlag( 1 );
       // TODO: It would be nice to specify the original encoder was JPEG -> ISO_10918_1
       }
-    else if( vtkBMPReader * reader = vtkBMPReader::SafeDownCast(imgreader) )
+    else if( vtkBMPReader * reader3 = vtkBMPReader::SafeDownCast(imgreader) )
       {
       if( palettecolor )
-        reader->Allow8BitBMPOn( );
-      reader->Update( );
-      //reader->GetLookupTable()->Print( std::cout );
+        reader3->Allow8BitBMPOn( );
+      reader3->Update( );
+      //reader3->GetLookupTable()->Print( std::cout );
       if( palettecolor )
         {
-        if( reader->GetNumberOfScalarComponents() == 1 )
+        if( reader3->GetNumberOfScalarComponents() == 1 )
           {
-          reader->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader->GetLookupTable() );
+          reader3->GetOutput()->GetPointData()->GetScalars()->SetLookupTable( reader3->GetLookupTable() );
           writer->SetImageFormat( VTK_LOOKUP_TABLE );
           }
         }
       }
-    else if( vtkGESignaReader * reader = vtkGESignaReader::SafeDownCast(imgreader) )
+    else if( vtkGESignaReader * reader4 = vtkGESignaReader::SafeDownCast(imgreader) )
       {
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
-      writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+      writer->SetMedicalImageProperties( reader4->GetMedicalImageProperties() );
 #endif
-      //reader->GetMedicalImageProperties()->Print( std::cout );
+      //reader4->GetMedicalImageProperties()->Print( std::cout );
       }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
-    else if( vtkMINCImageReader *reader = vtkMINCImageReader::SafeDownCast( imgreader ) )
+    else if( vtkMINCImageReader *reader5 = vtkMINCImageReader::SafeDownCast( imgreader ) )
       {
-      writer->SetDirectionCosines( reader->GetDirectionCosines() );
+      writer->SetDirectionCosines( reader5->GetDirectionCosines() );
       //writer->GetMedicalImageProperties()->SetModality( "MR" );
       // the following does not work with VTKData/Data/t3_grid_0.mnc
-      //writer->SetScale( reader->GetRescaleSlope() );
-      //writer->SetShift( reader->GetRescaleIntercept() );
+      //writer->SetScale( reader5->GetRescaleSlope() );
+      //writer->SetShift( reader5->GetRescaleIntercept() );
       if( verbose )
-        reader->GetImageAttributes()->PrintFileHeader();
+        reader5->GetImageAttributes()->PrintFileHeader();
       }
 #endif
-    else if( vtkTIFFReader *reader = vtkTIFFReader::SafeDownCast( imgreader ) )
+    else if( vtkTIFFReader *reader6 = vtkTIFFReader::SafeDownCast( imgreader ) )
       {
       // TIFF has resolution (spacing), and VTK make sure to set set in mm
       // For some reason vtkTIFFReader is all skrew up and will load the image in whatever orientation
       // as stored on file, thus this is up to the user to set it properly...
       // If anyone has any clue why...
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
-      reader->SetOrientationType( ORIENTATION_BOTLEFT );
+      reader6->SetOrientationType( ORIENTATION_BOTLEFT );
 #endif
       }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
-    else if( vtkMetaImageReader *reader = vtkMetaImageReader::SafeDownCast( imgreader ) )
+    else if( vtkMetaImageReader *reader7 = vtkMetaImageReader::SafeDownCast( imgreader ) )
       {
 //  vtkGetMacro(RescaleSlope, double);
 //  vtkGetMacro(RescaleOffset, double);
-      writer->SetScale( reader->GetRescaleSlope() );
-      writer->SetShift( reader->GetRescaleOffset() );
+      writer->SetScale( reader7->GetRescaleSlope() );
+      writer->SetShift( reader7->GetRescaleOffset() );
 //  vtkGetStringMacro(Modality);
-      writer->GetMedicalImageProperties()->SetModality( reader->GetModality() );
+      writer->GetMedicalImageProperties()->SetModality( reader7->GetModality() );
 
 //  vtkGetStringMacro(DistanceUnits);
   // -> this one is insane, the default behavior is 'um' . What in the world is 'um' unit ?
@@ -841,7 +841,7 @@ int main(int argc, char *argv[])
 cleanup:
   if( imgreader ) imgreader->Delete();
   datareader->Delete();
-  reader->Delete();
+  gdcmreader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   dicomreader->Delete();
 #endif

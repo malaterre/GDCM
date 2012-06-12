@@ -260,19 +260,19 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     assert( sqi0->GetNumberOfItems() == 1 );
   for(unsigned int pd = 0; pd < sqi0->GetNumberOfItems(); ++pd)
     {
-    const gdcm::Item & item = sqi0->GetItem(pd+1); // Item start at #1
-    const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+    const gdcm::Item & item0 = sqi0->GetItem(pd+1); // Item start at #1
+    const gdcm::DataSet& nestedds0 = item0.GetNestedDataSet();
     // (3006,0012) SQ (Sequence with undefined length #=1)     # u/l, 1 RTReferencedStudySequence
     gdcm::Attribute<0x0020,0x052> frameofreferenceuid;
-    frameofreferenceuid.SetFromDataSet( nestedds );
+    frameofreferenceuid.SetFromDataSet( nestedds0 );
     this->RTStructSetProperties->SetReferenceFrameOfReferenceUID(
       frameofreferenceuid.GetValue() );
     gdcm::Tag trtrefstudysq(0x3006,0x0012);
-    if( !nestedds.FindDataElement( trtrefstudysq) )
+    if( !nestedds0.FindDataElement( trtrefstudysq) )
       {
       return 0;
       }
-    const gdcm::DataElement &rtrefstudysq = nestedds.GetDataElement( trtrefstudysq );
+    const gdcm::DataElement &rtrefstudysq = nestedds0.GetDataElement( trtrefstudysq );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi00 = rtrefstudysq.GetValueAsSQ();
     if( !sqi00 || !sqi00->GetNumberOfItems() )
       {
@@ -281,16 +281,16 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     assert( sqi00->GetNumberOfItems() == 1 );
     for(unsigned int pd0 = 0; pd0 < sqi00->GetNumberOfItems(); ++pd0)
       {
-      const gdcm::Item & item = sqi00->GetItem(pd0+1); // Item start at #1
-      const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+      const gdcm::Item & item00 = sqi00->GetItem(pd0+1); // Item start at #1
+      const gdcm::DataSet& nestedds00 = item00.GetNestedDataSet();
 
         // (3006,0014) SQ (Sequence with undefined length #=1)     # u/l, 1 RTReferencedSeriesSequence
     gdcm::Tag trtrefseriessq(0x3006,0x0014);
-    if( !nestedds.FindDataElement( trtrefseriessq) )
+    if( !nestedds00.FindDataElement( trtrefseriessq) )
       {
       return 0;
       }
-    const gdcm::DataElement &rtrefseriessq = nestedds.GetDataElement( trtrefseriessq);
+    const gdcm::DataElement &rtrefseriessq = nestedds00.GetDataElement( trtrefseriessq);
 
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi000 = rtrefseriessq.GetValueAsSQ();
     if( !sqi000 || !sqi000->GetNumberOfItems() )
@@ -300,22 +300,21 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     assert( sqi000->GetNumberOfItems() == 1 );
     for(unsigned int pd00 = 0; pd00 < sqi000->GetNumberOfItems(); ++pd00)
       {
-      const gdcm::Item & item = sqi000->GetItem(pd00+1); // Item start at #1
-      const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+      const gdcm::Item & item000 = sqi000->GetItem(pd00+1); // Item start at #1
+      const gdcm::DataSet& nestedds000 = item000.GetNestedDataSet();
 
     gdcm::Attribute<0x0020,0x000e> seriesinstanceuid;
-    seriesinstanceuid.SetFromDataSet( nestedds );
+    seriesinstanceuid.SetFromDataSet( nestedds000 );
     this->RTStructSetProperties->SetReferenceSeriesInstanceUID(
       seriesinstanceuid.GetValue() );
 
-
-            // (3006,0016) SQ (Sequence with undefined length #=162)   # u/l, 1 ContourImageSequence
+    // (3006,0016) SQ (Sequence with undefined length #=162)   # u/l, 1 ContourImageSequence
     gdcm::Tag tcontourimageseq(0x3006,0x0016);
-    if( !nestedds.FindDataElement( tcontourimageseq) )
+    if( !nestedds000.FindDataElement( tcontourimageseq) )
       {
       return 0;
       }
-    const gdcm::DataElement &contourimageseq = nestedds.GetDataElement( tcontourimageseq );
+    const gdcm::DataElement &contourimageseq = nestedds000.GetDataElement( tcontourimageseq );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi0000 = contourimageseq.GetValueAsSQ();
     if( !sqi0000 || !sqi0000->GetNumberOfItems() )
       {
@@ -469,9 +468,9 @@ refinstanceuid.GetValue().c_str() );
     // In VTK there is no API to specify the name of a vtkPolyData, you can only specify Name
     // for the scalars (pointdata or celldata), so let's do that...
     //scalars->SetName( structuresetroi.ROIName.c_str() );
-    for(unsigned int i = 0; i < nitems; ++i)
+    for(unsigned int ii = 0; ii < nitems; ++ii)
       {
-      const gdcm::Item & item2 = sqi2->GetItem(i+1); // Item start at #1
+      const gdcm::Item & item2 = sqi2->GetItem(ii+1); // Item start at #1
 
       const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
       //std::cout << nestedds2 << std::endl;
@@ -503,12 +502,12 @@ refinstanceuid.GetValue().c_str() );
         gdcm::SmartPointer<gdcm::SequenceOfItems> contourimagesequence_sqi = contourimagesequence.GetValueAsSQ();
         assert( contourimagesequence_sqi && contourimagesequence_sqi->GetNumberOfItems() == 1 );
         const gdcm::Item & theitem = contourimagesequence_sqi->GetItem(1);
-        const gdcm::DataSet& nestedds = theitem.GetNestedDataSet();
+        const gdcm::DataSet& thenestedds = theitem.GetNestedDataSet();
 
         gdcm::Attribute<0x0008,0x1150> classat;
-        classat.SetFromDataSet( nestedds );
+        classat.SetFromDataSet( thenestedds );
         gdcm::Attribute<0x0008,0x1155> instat;
-        instat.SetFromDataSet( nestedds );
+        instat.SetFromDataSet( thenestedds );
 
         this->RTStructSetProperties->AddContourReferencedFrameOfReference( pd,
           classat.GetValue(), instat.GetValue() );

@@ -243,15 +243,17 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   jp2 = (opj_jp2_t*)dinfo->jp2_handle;
   //int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
   //std:: cout << reversible;
+  int Dimensions[2];
+{
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
-  int Dimensions[2];
   Dimensions[0]= comp->w;
   Dimensions[1] = comp->h;
   opj_cio_close(cio);
-  unsigned long len = Dimensions[0]*Dimensions[1] * image->numcomps;
+}
+  unsigned long rawlen = Dimensions[0]*Dimensions[1] * image->numcomps;
   //std::cout << "\nTest" <<image->comps[0].factor;
-  char *raw = new char[len];
+  char *raw = new char[rawlen];
 
   for (unsigned int compno = 0; compno < (unsigned int)image->numcomps; compno++)
     {

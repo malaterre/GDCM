@@ -116,6 +116,7 @@ void vtkGDCMPolyDataWriter::WriteData()
 void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
 {
   DataSet& ds = file.GetDataSet();
+{
   const Tag sisq(0x3006,0x0039);
   DataElement de( sisq );
   de.SetVR( VR::SQ );
@@ -124,6 +125,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   de.SetValue( *sqi1 );
   de.SetVLToUndefined();
   ds.Insert( de );
+}
 
   UIDGenerator uid;
 
@@ -505,19 +507,19 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
       cellpoints.push_back( v[1] );
       cellpoints.push_back( v[2 ]);
     }
-    Item item;
-    item.SetVLToUndefined();
-    DataSet &subds = item.GetNestedDataSet();
+    Item item0;
+    item0.SetVLToUndefined();
+    DataSet &subds0 = item0.GetNestedDataSet();
     Attribute<0x3006,0x0050> at;
     at.SetValues( &cellpoints[0], (unsigned int)cellpoints.size(), false );
-    subds.Insert( at.GetAsDataElement() );
+    subds0.Insert( at.GetAsDataElement() );
 
     Attribute<0x3006,0x0046> numcontpoints;
     numcontpoints.SetValue( (int)npts );
-    subds.Insert( numcontpoints.GetAsDataElement() );
+    subds0.Insert( numcontpoints.GetAsDataElement() );
     Attribute<0x3006,0x0042> contgeotype;
     contgeotype.SetValue( "CLOSED_PLANAR " );
-    subds.Insert( contgeotype.GetAsDataElement() );
+    subds0.Insert( contgeotype.GetAsDataElement() );
 
     SmartPointer<SequenceOfItems> thesqi = new SequenceOfItems;
     {
@@ -540,10 +542,10 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     contimsq.SetVR( VR::SQ );
     contimsq.SetValue( *thesqi );
     contimsq.SetVLToUndefined();
-    subds.Insert( contimsq );
+    subds0.Insert( contimsq );
 
 
-    sqi->AddItem( item );
+    sqi->AddItem( item0 );
   }
   DataSet& ds = file.GetDataSet();
 {

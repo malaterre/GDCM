@@ -37,7 +37,7 @@ int TestvtkGDCMImageRead3(const char *dir, const char *studyuid)
   gdcm::Directory d;
   d.Load( dir );
   const gdcm::Directory::FilenamesType &l1 = d.GetFilenames();
-  const unsigned int nfiles = l1.size();
+  const size_t nfiles = l1.size(); (void)nfiles;
 
   // Sub-select only the DICOM files in this directory:
   gdcm::Scanner s;

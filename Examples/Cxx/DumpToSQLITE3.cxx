@@ -49,8 +49,8 @@ int main(int argc, char *argv[])
   s.AddTag( Tag(0x20,0xd) ); // Study Instance UID
   s.AddTag( Tag(0x20,0xe) ); // Series Instance UID
 
-  bool b = s.Scan( d.GetFilenames() );
-  if( !b ) return 1;
+  bool b0 = s.Scan( d.GetFilenames() );
+  if( !b0 ) return 1;
   time_t time_scanner = time(0);
 
   std::cout << "Finished loading data from : " << nfiles << " files" << std::endl;

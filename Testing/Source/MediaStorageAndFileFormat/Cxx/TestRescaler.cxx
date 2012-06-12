@@ -86,6 +86,7 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
 
   // Let's make sure that rescaler works in the simpliest case
   // it should be idempotent:
+{
   gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16;
   gdcm::Rescaler r;
   r.SetIntercept( 0.0 );
@@ -102,6 +103,7 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
     {
     return 1;
     }
+}
 
 {
   gdcm::PixelFormat::ScalarType outputpt ;

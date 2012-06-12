@@ -511,7 +511,7 @@ public:
 
         // Set the initial slice to be at the center of the sphere.
         // Divide by the spacing because this will be undone in SetSlice.
-        SetSlice(initialPosition / spacing[0]);
+        SetSlice( (int)(initialPosition / spacing[0]));
     }
 
     vtkRenderWindowInteractor* GetInteractor()

@@ -80,6 +80,7 @@ bool SegmentWriter::PrepareWrite()
   segmentsSQ = ds.GetDataElement( Tag(0x0062, 0x0002) ).GetValueAsSQ();
   segmentsSQ->SetLengthToUndefined();
 
+{
   // Fill the Segment Sequence
   const unsigned int              numberOfSegments  = this->GetNumberOfSegments();
   assert( numberOfSegments );
@@ -95,15 +96,16 @@ bool SegmentWriter::PrepareWrite()
       segmentsSQ->AddItem(item);
     }
   }
+}
   // else Should I remove items?
 
-  std::vector< SmartPointer< Segment > >::const_iterator  it            = Segments.begin();
-  std::vector< SmartPointer< Segment > >::const_iterator  itEnd         = Segments.end();
+  std::vector< SmartPointer< Segment > >::const_iterator  it0            = Segments.begin();
+  std::vector< SmartPointer< Segment > >::const_iterator  it0End         = Segments.end();
   unsigned int                                            itemNumber    = 1;
   unsigned long                                           surfaceNumber = 1;
-  for (; it != itEnd; it++)
+  for (; it0 != it0End; it0++)
   {
-    SmartPointer< Segment > segment = *it;
+    SmartPointer< Segment > segment = *it0;
     assert( segment );
 
     Item &    segmentItem = segmentsSQ->GetItem(itemNumber);

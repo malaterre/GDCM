@@ -112,27 +112,27 @@ int main(int argc, char *argv[])
 
   //d.Print( std::cout );
 
-  gdcm::Scanner s;
+  gdcm::Scanner s0;
   const gdcm::Tag t1(0x0020,0x000d); // Study Instance UID
   const gdcm::Tag t2(0x0020,0x000e); // Series Instance UID
   //const gdcm::Tag t3(0x0010,0x0010); // Patient's Name
-  s.AddTag( t1 );
-  s.AddTag( t2 );
-  //s.AddTag( t3 );
-  //s.AddTag( t4 );
-  //s.AddTag( t5 );
-  //s.AddTag( t6 );
-  bool b = s.Scan( d.GetFilenames() );
+  s0.AddTag( t1 );
+  s0.AddTag( t2 );
+  //s0.AddTag( t3 );
+  //s0.AddTag( t4 );
+  //s0.AddTag( t5 );
+  //s0.AddTag( t6 );
+  bool b = s0.Scan( d.GetFilenames() );
   if( !b )
     {
     std::cerr << "Scanner failed" << std::endl;
     return 1;
     }
 
-  //s.Print( std::cout );
+  //s0.Print( std::cout );
 
   // Only get the DICOM files:
-  gdcm::Directory::FilenamesType l2 = s.GetKeys();
+  gdcm::Directory::FilenamesType l2 = s0.GetKeys();
   const size_t nfiles2 = l2.size();
   std::cout << nfiles2 << std::endl;
 
