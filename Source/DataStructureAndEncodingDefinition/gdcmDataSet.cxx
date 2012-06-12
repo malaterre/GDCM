@@ -118,38 +118,40 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
 }
 
 
-void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de) const
+void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de, int loadBulkData) const
 {
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
   if( !sqi ) return;
   assert(sqi);
-  const DataSet &ds =(*this);
+  //const DataSet &ds =(*this);
   SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
   for(; it != sqi->Items.end(); ++it)
     {
       const Item &item = *it;
-      //*this = item.GetNestedDataSet();
+      //const DataElementSet DES_temp = item.GetNestedDataSet();
+      
       const DataElement &deitem = item;
-      WriteXML(os);
+      WriteXML(os,loadBulkData);
       if( deitem.GetVL().IsUndefined() )
         {
-        // print this const Tag itemDelItem(0xfffe,0xe00d);
+        // print the const Tag itemDelItem(0xfffe,0xe00d);
         
         }
     }
   if( sqi->GetLength().IsUndefined() )
     {
-    //print this const Tag seqDelItem(0xfffe,0xe0dd);
+    //print the const Tag seqDelItem(0xfffe,0xe0dd);
     
     }
-    //*this = ds;
+    
 }
 
-void DataSet::WriteXML(std::ostream &os) const
+void DataSet::WriteXML(std::ostream &os, int loadBulkData) const
 {
   
   const Global& G = GlobalInstance;
   const Dicts &dicts = G.GetDicts();
+  //static int flag = loadBulkData;
   //std::cout<< "I get called";
   DataElement de;
   VR ret;
@@ -158,10 +160,10 @@ void DataSet::WriteXML(std::ostream &os) const
     {
      de = *it;
      os << "\n<DicomAttribute   " ;
-     ret=de.WriteXML(os, dicts);      
+     ret=de.WriteXML(os, dicts, loadBulkData);      
      
      if(ret == VR::SQ)
-       SQ_XML_Write(os,dicts,de);
+       //SQ_XML_Write(os,dicts,de,loadBulkData);
      os << "\n<\\DicomAttribute>";  
      
     }

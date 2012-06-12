@@ -67,5 +67,45 @@ namespace gdcm
     gdcmDebugMacro( "Could not handle length= " << length );
     return false;
     }
+  
+  void ByteValue::PrintASCII_XML(std::ostream &os) const
+    {
+      //VL length = std::min(maxlength, Length);
+      // Special case for VR::UI, do not print the trailing \0
+      
+      /*if(Length && Internal[Length-1] == 0 )
+        {
+        Length = Length - 1;
+        }
+      */
+      // Check for non printable characters
+      
+      int count = 1;
+      
+      os << "\n<Value number = \"" << count << "\" >" ;
+      
+      std::vector<char>::const_iterator it = Internal.begin();
+      
+      for(; it != (Internal.begin() + Length); ++it)
+        {
+        const char &c = *it;
+        
+        if ( c == '\\' )
+        {
+            count++;
+            os << "\n</Value>";
+            os << "\n<Value number = \"" << count << "\" >" ;
+        }
+        
+        else if ( !( isprint((unsigned char)c) || isspace((unsigned char)c) ) ) 
+            os << ".";
+        
+        else 
+            os << c;
+        
+        }
+      os << "</Value>\n";
+    
+    }  
 
 }

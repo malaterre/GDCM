@@ -248,7 +248,7 @@ public:
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
 
-  VR WriteXML(std::ostream &os, const Dicts &dicts);
+  VR WriteXML(std::ostream &os, const Dicts &dicts, int loadBulkData);
 
 protected:
   Tag TagField;

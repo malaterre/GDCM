@@ -120,9 +120,9 @@ int main (int argc, char *argv[])
             assert( DICOMfile.empty() );
             DICOMfile = optarg;
             }
-          //printf (" with arg %s", optarg);
+          
           }
-        //printf ("\n");
+        
         }
       break;
 
@@ -178,8 +178,8 @@ int main (int argc, char *argv[])
       }
     else
       {
-      PrintHelp();
-      return 1;
+      //PrintHelp();
+      //return 1;
       }
     }
     
@@ -211,15 +211,11 @@ int main (int argc, char *argv[])
       std::cerr << "Failed to read: " << DICOMfile << std::endl;
       return 1;
     }
+    
     const File *F = &reader.GetFile();
     const DataSet &ds = F->GetDataSet();
-    ds.WriteXML(std::cout);
-    
-    
-    //File &F=reader.GetFile();
-    //DataSet &ds = (F->GetDataSet());
-    //std::cout<< "HIout";
-    
+    ds.WriteXML(std::cout,loadBulkData);
+                
     /*if( XMLfile.empty() )
     {
      //std::cout << "HIin";

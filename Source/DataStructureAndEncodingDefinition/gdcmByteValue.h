@@ -207,6 +207,10 @@ public:
       }
     return true;
     }
+  /**To Print Values in Native DICOM format **/
+  void PrintASCII_XML(std::ostream &os) const;
+    
+    
 
 protected:
   void Print(std::ostream &os) const {

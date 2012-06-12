@@ -63,18 +63,21 @@ namespace gdcm
 
   */
 
-  VR DataElement::WriteXML(std::ostream &os,const Dicts &dicts)
+  VR DataElement::WriteXML(std::ostream &os,const Dicts &dicts, int loadBulkData)
   {
 
      const Tag& t = GetTag();
      const Value &value = GetValue();
-     const DictEntry &entry = dicts.GetDictEntry(t,NULL);//private owner correction needed
+     const DictEntry &entry = dicts.GetDictEntry(t,NULL);//private owner correction needed (pass paramter for this from function call
      const VR &vr_dict = entry.GetVR(); // read from dictionary
      const VM &vm_dict = entry.GetVM();
      const char *name = entry.GetName();
      bool retired = entry.GetRetired();
-     const ByteValue *bv = GetByteValue();
+     
+     const ByteValue *bv = GetByteValue(); // Printing value is handled in ByteValue Class
+     
      const SequenceOfItems *sqi = 0; //de.GetSequenceOfItems();
+     
      const VR &vr_read = GetVR(); // read from data element
      const VL &vl_read = GetVL();
      
@@ -108,7 +111,9 @@ namespace gdcm
     {
     refvr = vr_read;
     }
-
+    
+    //compute vr from DataSet Helper first , then assertion will be true
+    
     assert( refvr != VR::US_SS );
     assert( refvr != VR::OB_OW );
 
@@ -145,10 +150,7 @@ namespace gdcm
     // when vr == VR::INVALID and vr_read is also VR::INVALID, we have a seldom case where we can guess
     // the vr
     // eg. CD1/647662/647663/6471066 has a SQ at (2001,9000)
-    
-    //os << "(SQ) ";
-    //Print SQ
-   
+        
     assert( refvr == VR::INVALID );
     refvr = VR::SQ;
     }
@@ -188,7 +190,7 @@ namespace gdcm
     else
       {
       
-      os << name;
+      os << name;//Public element
       
       }
     }
@@ -203,56 +205,28 @@ namespace gdcm
     os << "GDCM:UNKNOWN"; // Special keyword
     
     }
-   os << "\" ";
+   os << "\">\n   ";
     
     
     
     
-    
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    
-// Print Value now:
+
+  // Print Value now:
   if( refvr & VR::VRASCII )
     {
-    //assert( !sqi && !sqf );
+    //assert( !sqi && !sqf);
+    assert(!sqi);
     if( bv )
       {
-      VL l = bv->GetLength();
-      //os << "[";
-      //Print value tag IMP
-      //os << "\n<value
-      if( bv->IsPrintable(l) )
-        {
-        bv->PrintASCII(os,l);
-        }
-      else
-        {
-        bv->PrintASCII(os,l);
-        
-        }
-      //os << "]";
-      //Print value closing tag IMP
+      VL l = bv->GetLength();         
+      bv->PrintASCII_XML(os);    //new function to print each value in new child tag  
       }
     else
       {
-      assert( IsEmpty() );
-      
-      os << "(no value)";
-      
+      assert( IsEmpty() );      
       }
     }
+  
   else
     {
     assert( refvr & VR::VRBINARY || (vr_dict == VR::INVALID && refvr == VR::INVALID) );
@@ -355,8 +329,7 @@ namespace gdcm
         else
           {
           //assert( !sqi && !sqf );
-          assert( IsEmpty() );
-          //os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
+          assert( IsEmpty() );          
           }
         }
       break;
