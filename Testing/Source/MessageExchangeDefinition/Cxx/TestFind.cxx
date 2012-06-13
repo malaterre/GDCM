@@ -33,7 +33,7 @@ int TestFind(int , char *[])
   gdcm::Tag theTag(0x0010, 0x0010);
   std::string theName = "F*";
   std::pair<gdcm::Tag, std::string> theTagPair =
-    std::make_pair<gdcm::Tag, std::string>(theTag, theName);
+    std::make_pair(theTag, theName);
 
   std::vector<std::pair<gdcm::Tag, std::string> > theTags;
   theTags.push_back(theTagPair);

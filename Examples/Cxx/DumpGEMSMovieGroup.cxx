@@ -57,7 +57,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
     gdcm::Element<VR::LO, VM::VM1> el2;
     el2.SetFromDataElement( name );
 //    std::cout << el1.GetValue() << " " << el2.GetValue() << std::endl;
-    names.insert( std::make_pair< UL, std::string > ( el1.GetValue(), el2.GetValue() ) );
+    names.insert( std::make_pair( el1.GetValue(), el2.GetValue() ) );
     }
 
   SequenceOfItems::SizeType s2 = sqi_values->GetNumberOfItems();
