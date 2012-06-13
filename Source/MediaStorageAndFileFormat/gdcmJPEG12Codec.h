@@ -31,7 +31,7 @@ public:
   JPEG12Codec();
   ~JPEG12Codec();
 
-  bool Decode(std::istream &is, std::ostream &os);
+  bool DecodeByStreams(std::istream &is, std::ostream &os);
   bool InternalCode(const char *input, unsigned long len, std::ostream &os);
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);

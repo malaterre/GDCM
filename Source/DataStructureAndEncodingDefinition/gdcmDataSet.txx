@@ -161,42 +161,58 @@ namespace gdcm
 
 
   template <typename TDE, typename TSwap>
-  std::istream &DataSet::ReadSelectedTagsWithLength(std::istream &inputStream, const std::set<Tag> & selectedTags, VL & length) {
-    if ( ! selectedTags.empty() )
-    {
-      const Tag maxTag = *(selectedTags.rbegin());
-      std::set<Tag> tags = selectedTags;
-      DataElement dataElem;
-
-      // TODO There's an optimization opportunity here:
-      // dataElem.ReadWithLength only needs to read the value if the tag is selected!
-      // Niels Dekker, LKEB, Jan 2010.
-      while( !inputStream.eof() && dataElem.template ReadWithLength<TDE,TSwap>(inputStream, length) )
+    std::istream &DataSet::ReadSelectedTagsWithLength(std::istream &inputStream, const std::set<Tag> & selectedTags, VL & length)
       {
-        const Tag tag = dataElem.GetTag();
-        const std::set<Tag>::iterator found = tags.find(tag);
-
-        if ( found != tags.end() )
+      (void)length;
+      if ( ! selectedTags.empty() )
         {
-          InsertDataElement( dataElem );
-          tags.erase(found);
+        const Tag maxTag = *(selectedTags.rbegin());
+        std::set<Tag> tags = selectedTags;
+        DataElement dataElem;
 
-          if ( tags.empty() )
+        // TODO There's an optimization opportunity here:
+        // dataElem.ReadWithLength only needs to read the value if the tag is selected!
+        // Niels Dekker, LKEB, Jan 2010.
+        while( !inputStream.eof() )
           {
-            // All selected tags were found, we can exit the loop:
+          static_cast<TDE&>(dataElem).template ReadPreValue<TSwap>(inputStream);
+          const Tag tag = dataElem.GetTag();
+          if ( inputStream.fail() || maxTag < tag )
+            {
+            // Failed to read the tag, or the read tag exceeds the maximum.
+            // As we assume ascending tag ordering, we can exit the loop.
             break;
+            }
+          static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream);
+          if ( inputStream.fail() )
+            {
+            // Failed to read the value.
+            break;
+            }
+
+          const std::set<Tag>::iterator found = tags.find(tag);
+
+          if ( found != tags.end() )
+            {
+            InsertDataElement( dataElem );
+            tags.erase(found);
+
+            if ( tags.empty() )
+              {
+              // All selected tags were found, we can exit the loop:
+              break;
+              }
+            }
+          if ( ! (tag < maxTag ) )
+            {
+            // The maximum tag was encountered, and as we assume
+            // ascending tag ordering, we can exit the loop:
+            break;
+            }
           }
         }
-        if ( ! (tag < maxTag ) )
-        {
-          // The maximum tag was encountered, and as we assume
-          // ascending tag ordering, we can exit the loop:
-          break;
-        }
+      return inputStream;
       }
-    }
-    return inputStream;
-  }
 
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadWithLength(std::istream &is, VL &length) {

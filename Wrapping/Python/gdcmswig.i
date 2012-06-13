@@ -311,6 +311,7 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 EXTEND_CLASS_PRINT(gdcm::DataElement)
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
+%template() std::vector< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (PythonDataSet) SWIGDataSet;
@@ -440,8 +441,18 @@ EXTEND_CLASS_PRINT(gdcm::DictEntry)
 %include "gdcmCSAHeaderDictEntry.h"
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 
+%template(DictEntryTagPairType) std::pair< gdcm::DictEntry, gdcm::Tag>;
 %include "gdcmDict.h"
 EXTEND_CLASS_PRINT(gdcm::Dict)
+%extend gdcm::Dict
+{
+  std::pair<gdcm::DictEntry,gdcm::Tag> GetDictEntryByKeyword(const char *keyword) const {
+    std::pair<gdcm::DictEntry,gdcm::Tag> ret;
+    ret.first = self->GetDictEntryByKeyword(keyword, ret.second);
+    return ret;
+  }
+}
+%ignore gdcm::Dict::GetDictEntryByKeyword(const char *keyword, Tag & tag) const;
 %include "gdcmCSAHeaderDict.h"
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"

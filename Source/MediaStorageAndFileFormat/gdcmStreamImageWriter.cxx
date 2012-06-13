@@ -114,8 +114,8 @@ uint32_t StreamImageWriter::DefineProperBufferLength() {
 /// returns -1 if there's any failure, or the complete offset (12 bytes)
 /// if it works.  Those 12 bytes are then added to the position in order to determine
 /// where to write.
-int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream){
-
+int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
+{
   //if this is the first time writing the file out, then
   //the first few header bytes need to be written out; the tags, the length, etc
   //that information is found at 2009, section 5, annex A, table 4-1 and 4-2
@@ -125,31 +125,30 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
   //so, we set those 12 bytes up, send them through the codec, and then write them directly to disk
   //because this is raw, we know exactly the size that will be written.  So, let's do that.
   if(mElementOffsets == 0)
- {
-     uint16_t firstTag = 0x7fe0;
-     uint16_t secondTag = 0x0010;
-  //uint16_t thirdTag = 0x4f42;
-  uint16_t thirdTag = 0x424f; // OB
-  uint16_t fourthTag = 0x0000;
-  //uint16_t fourthTag = 0x0000;
+    {
+    uint16_t firstTag = 0x7fe0;
+    uint16_t secondTag = 0x0010;
+    //uint16_t thirdTag = 0x4f42;
+    uint16_t thirdTag = 0x424f; // OB
+    uint16_t fourthTag = 0x0000;
+    //uint16_t fourthTag = 0x0000;
 
-  uint32_t fifthTag = 0xffffffff;
+    uint32_t fifthTag = 0xffffffff;
 
-  uint16_t sixthTag = 0xfffe;
-  uint16_t seventhTag = 0xe000;
-  uint32_t eightthTag = 0x00000000;
+    uint16_t sixthTag = 0xfffe;
+    uint16_t seventhTag = 0xe000;
+    uint32_t eightthTag = 0x00000000;
 
-  const int theBufferSize = 4*sizeof(uint16_t)+sizeof(uint32_t)+2*sizeof(uint16_t)+sizeof(uint32_t);
-  char* tmpBuffer1 = new char[theBufferSize];
+    const int theBufferSize = 4*sizeof(uint16_t)+sizeof(uint32_t)+2*sizeof(uint16_t)+sizeof(uint32_t);
+    char* tmpBuffer1 = new char[theBufferSize];
 
     memcpy(&(tmpBuffer1[0]), &firstTag, sizeof(uint16_t));
     memcpy(&(tmpBuffer1[sizeof(uint16_t)]), &secondTag, sizeof(uint16_t));
     memcpy(&(tmpBuffer1[2*sizeof(uint16_t)]), &thirdTag, sizeof(uint16_t));
     memcpy(&(tmpBuffer1[3*sizeof(uint16_t)]), &fourthTag, sizeof(uint16_t));
 
-   //Addition by Manoj
+    //Addition by Manoj
     memcpy(&(tmpBuffer1[4*sizeof(uint16_t)]), &fifthTag, sizeof(uint32_t));// Data Element Length 4 bytes
-
 
     // Basic OffSet Tabl with No Item Value
     memcpy(&(tmpBuffer1[4*sizeof(uint16_t)+sizeof(uint32_t)]), &sixthTag, sizeof(uint16_t)); //fffe
@@ -160,10 +159,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
     inStream->write(tmpBuffer1, theBufferSize);
     inStream->flush();
     assert( inStream && *inStream );
-
- }
-
-
+    }
 
   uint16_t NinthTag = 0xfffe;
   uint16_t TenthTag = 0xe000;
@@ -177,7 +173,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
 
   char* tmpBuffer3 = new char[theBufferSize1];
   char* tmpBuffer4 = new char[theBufferSize1];
-//  std::streamoff theOffset;
+  //  std::streamoff theOffset;
 
   try {
 
@@ -189,7 +185,7 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
     //run that through the codec
 
     if (!inCodec->DecodeBytes(tmpBuffer3, theBufferSize1,
-      tmpBuffer4, theBufferSize1)){
+        tmpBuffer4, theBufferSize1)){
       delete [] tmpBuffer3;
       gdcmErrorMacro( "Problems in Header" );
       delete [] tmpBuffer4;
@@ -198,9 +194,9 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
 
     //write that chunk to the end of the file, ie, this function
     //requires that it be called with a stream in append mode
-//    inStream->seekp(std::ios::beg);
-//    theOffset = mFileOffset;
-//    inStream->seekp(theOffset);
+    //    inStream->seekp(std::ios::beg);
+    //    theOffset = mFileOffset;
+    //    inStream->seekp(theOffset);
     assert( inStream && *inStream && !inStream->eof() && inStream->good() );
     inStream->write(tmpBuffer4, theBufferSize1);
     inStream->flush();
@@ -220,7 +216,9 @@ int StreamImageWriter::WriteRawHeader(RAWCodec* inCodec, std::ostream* inStream)
     This class reads uncompressed data; other subclasses will reimplement this function for compression.
     Assumes that the given buffer is the size in bytes returned from DefineProperBufferLength.
     */
-bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::size_t& inBufferLength) {
+bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::size_t& inBufferLength)
+{
+  (void)inBufferLength;
   //assumes that the file is organized in row-major format, with each row rastering across
 //  assert( mFileOffset != -1 );
   int y, z;
@@ -244,7 +242,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
 
   RAWCodec theCodec;
-  if( !theCodec.CanDecode(ts) )
+  if( !theCodec.CanDecode(ts) || ts == gdcm::TransferSyntax::ExplicitVRBigEndian)
     {
     gdcmErrorMacro( "Only RAW for now" );
     return false;

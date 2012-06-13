@@ -406,6 +406,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0, "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
 { 0, "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
 { 0, "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
+{ 0, "NM-PAL-16-PixRep1.dcm" },
 { 0, NULL }
 };
 

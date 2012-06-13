@@ -47,7 +47,7 @@ static const LossLessTest LossLessTestArray[] = {
  { "/D_CLUNIE_CT1_JLSN.dcm", "/D_CLUNIE_CT1_JLSL.dcm", gdcm::TransferSyntax::JPEGLSNearLossless, gdcm::TransferSyntax::JPEGLSLossless }
 };
 
-int TestImageWriter2(int argc, char *argv[])
+int TestImageWriter2(int , char *[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   gdcm::Trace::WarningOff();

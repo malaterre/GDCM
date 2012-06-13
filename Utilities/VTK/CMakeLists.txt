@@ -127,6 +127,9 @@ ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
 SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
+IF(GDCM_HAVE_PTHREAD_H)
+  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} pthread)
+ENDIF(GDCM_HAVE_PTHREAD_H)
 # prevent viral dep of vtkgdcm
 SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -180,11 +183,13 @@ IF(GDCM_WRAP_PHP)
 
   SWIG_ADD_MODULE(php_vtkgdcm php vtkgdcm.i)
   SWIG_LINK_LIBRARIES(php_vtkgdcm vtkgdcm)
+  TARGET_LINK_LIBRARIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} ${vtkgdcm_LIBS})
   IF(UNIX)
-  SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
+    SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
   ENDIF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES PREFIX "")
   SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+  set_property(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
@@ -200,11 +205,13 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #  endif(NAMELINK_ONLY)
 
 # See gdcm bug #3175803
+if(${SWIG_VERSION} LESS 2.0.2)
 add_custom_command(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
   PRE_BUILD
   COMMAND sed -i -e 's/zend_error_noreturn/zend_error/g' "${swig_generated_file_fullname}"
   COMMENT "Patching zend_error_noreturn into zend_error"
   )
+endif()
 
 # Let's copy vtkgdcm.php into the bin dir:
 ADD_CUSTOM_COMMAND(
@@ -217,6 +224,9 @@ ADD_CUSTOM_TARGET(VTKGDCMPHP ALL
   DEPENDS ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
   COMMENT "building vtkgdcm.php"
 )
+      INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
+        DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule
+      )
 
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ENDIF(GDCM_WRAP_PHP)
@@ -470,6 +480,8 @@ IF(GDCM_WRAP_CSHARP)
           TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged ${Mummy_RUNTIME_LINK_LIBRARIES})
         ENDIF(WIN32)
         TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged vtk${kit})
+        TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged vtkCommon)
+        set_property(TARGET Kitware.VTK.vtk${kit}.Unmanaged PROPERTY NO_SONAME 1)
         # TODO -- rename this CopyLibraries here too...
         ADD_DEPENDENCIES(Kitware.VTK.vtk${kit}.Unmanaged Kitware.mummy.CopyLibraries2)
         ADD_DEPENDENCIES(Kitware.VTK.vtk${kit}.Unmanaged "vtk${kit}GenerateWrappers")
@@ -687,15 +699,21 @@ IF(GDCM_WRAP_PYTHON)
     ADD_LIBRARY(${VTKGDCM_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
     # this is a library set the version:
     # do not set the version on the Python module:
-    #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     ADD_LIBRARY(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
-    # do not set the version on the PythonD module:
-    SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-    TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME})
-    FOREACH(c ${vtkgdcm_LIBS})
+    # do not set the version on the Python module:
+    #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME} ${PYTHON_LIBRARY})
+    FOREACH(c ${vtkgdcm_LIBS} vtkFiltering)
       TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${c}Python${DEXTENSION})
     ENDFOREACH(c)
+    if(TARGET vtkPythonCore)
+      TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD vtkPythonCore)
+    endif()
     TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Python ${VTKGDCM_NAME}PythonD)
+SET_PROPERTY(TARGET ${VTKGDCM_NAME}PythonD PROPERTY LINK_INTERFACE_LIBRARIES "")
+    set_property(TARGET ${VTKGDCM_NAME}Python PROPERTY NO_SONAME 1)
+    #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY NO_SONAME 1)
     # Python extension modules on Windows must have the extension ".pyd"
     # instead of ".dll" as of Python 2.5.  Older python versions do support
     # this suffix.

@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
   image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-  pixeldata.SetByteValue( buf, len );
+  pixeldata.SetByteValue( buf, (uint32_t)len );
   image.SetDataElement( pixeldata );
 
   writer.SetFileName( outfilename );

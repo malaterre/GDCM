@@ -79,7 +79,7 @@ public:
     os << "CurveDescription                   :" << CurveDescription << std::endl;
     os << "DataValueRepresentation            :" << DataValueRepresentation << std::endl;
     unsigned short * p = (unsigned short*)&Data[0];
-    for(unsigned short i = 0; i < NumberOfPoints; i+=2)
+    for(int i = 0; i < NumberOfPoints; i+=2)
       {
       os << p[i] << "," << p[i+1] << std::endl;
       }
@@ -124,7 +124,7 @@ unsigned int Curve::GetNumberOfCurves(DataSet const & ds)
     else if( de.GetTag().IsPrivate() )
       {
       // Move on to the next public one:
-      overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+      overlay.SetGroup( (uint16_t)(de.GetTag().GetGroup() + 1) );
       overlay.SetElement( 0 ); // reset just in case...
       }
     else
@@ -144,7 +144,7 @@ unsigned int Curve::GetNumberOfCurves(DataSet const & ds)
       // Store found tag in overlay:
       overlay = de.GetTag();
       // Move on to the next possible one:
-      overlay.SetGroup( overlay.GetGroup() + 2 );
+      overlay.SetGroup( (uint16_t)(overlay.GetGroup() + 2) );
       // reset to element 0x0 just in case...
       overlay.SetElement( 0 );
       }
@@ -202,11 +202,27 @@ void Curve::Update(const DataElement & de)
     {
     gdcmWarningMacro( "TODO" );
     }
+  else if( de.GetTag().GetElement() == 0x0040 ) // Axis Labels
+    {
+    gdcmWarningMacro( "TODO" );
+    }
   else if( de.GetTag().GetElement() == 0x0103 ) // DataValueRepresentation
     {
     Attribute<0x5000,0x0103> at;
     at.SetFromDataElement( de );
     SetDataValueRepresentation( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0104 ) // Minimum Coordinate Value
+    {
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x0105 ) // Maximum Coordinate Value
+    {
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x0106 ) // Curve Range
+    {
+    gdcmWarningMacro( "TODO" );
     }
   else if( de.GetTag().GetElement() == 0x0110 ) // CurveDataDescriptor
     {
@@ -228,7 +244,15 @@ void Curve::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x2500 ) // CurveLabel
     {
-      gdcmWarningMacro( "TODO" );
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x2600 ) // Referenced Overlay Sequence
+    {
+    gdcmWarningMacro( "TODO" );
+    }
+  else if( de.GetTag().GetElement() == 0x2610 ) // Referenced Overlay Group
+    {
+    gdcmWarningMacro( "TODO" );
     }
   else if( de.GetTag().GetElement() == 0x3000 ) // CurveData
     {
@@ -236,7 +260,7 @@ void Curve::Update(const DataElement & de)
     }
   else
     {
-    assert( 0 && "should not happen" );
+    assert( 0 && "should not happen: Unknown curve tag" );
     }
 
 }
@@ -477,9 +501,9 @@ void Curve::GetAsPoints(float *array) const
     double * p = (double*)&Internal->Data[0];
     for(int i = 0; i < Internal->NumberOfPoints; i++ )
       {
-      array[3*i+0] = p[mult*i + 0];
+      array[3*i+0] = (float)p[mult*i + 0];
       if( mult > 1 )
-        array[3*i+1] = p[mult*i + 1];
+        array[3*i+1] = (float)p[mult*i + 1];
       else
         array[3*i+1] = 0;
       array[3*i+2] = 0;
@@ -490,9 +514,9 @@ void Curve::GetAsPoints(float *array) const
     int32_t * p = (int32_t*)&Internal->Data[0];
     for(int i = 0; i < Internal->NumberOfPoints; i++ )
       {
-      array[3*i+0] = p[mult*i + 0];
+      array[3*i+0] = (float)p[mult*i + 0];
       if( mult > 1 )
-        array[3*i+1] = p[mult*i + 1];
+        array[3*i+1] = (float)p[mult*i + 1];
       else
         array[3*i+1] = 0;
       array[3*i+2] = 0;

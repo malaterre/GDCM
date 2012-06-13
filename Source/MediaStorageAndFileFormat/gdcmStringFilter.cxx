@@ -71,7 +71,7 @@ std::string StringFilter::ToMIME64(const Tag& t) const
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << el.GetValue(); \
-      for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
+      for(unsigned int i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
       retvalue = os.str(); } } \
     } break
 
@@ -263,7 +263,6 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
     {
     assert( vr & VR::VRBINARY );
     const ByteValue *bv = de.GetByteValue();
-    std::ostringstream os;
     if( bv )
       {
       //VM::VMType vm = entry.GetVM();//!!mmr-- can I remove this, or will it mess with the stream?
@@ -388,7 +387,6 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
     {
     assert( vr & VR::VRBINARY );
     const ByteValue *bv = de.GetByteValue();
-    std::ostringstream os;
     if( bv )
       {
       //VM::VMType vm = entry.GetVM();//!!mmr-- can I remove this, or will it mess with the stream?

@@ -207,6 +207,7 @@ static const char * const iconimagearray3[][2] = {
  {"139f2ba3c6f578f883125d090163e730" , "D_CLUNIE_MR1_RLE.dcm" },
  {"a189258582a49855ae002d381016d02f" , "LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm" },
  {"afccf775abd15a6c053c7f134b204762" , "00191113.dcm" },
+ {"f4f35d60b3cc18aaa6d8d92f0cd3708a" , "NM-PAL-16-PixRep1.dcm" },
 
  // sentinel
  { 0, 0 }

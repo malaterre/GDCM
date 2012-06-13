@@ -23,11 +23,12 @@
 #include "vtkCellData.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkRTStructSetProperties.h"
-
+#include "vtkEmptyCell.h"
 #include "gdcmReader.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmDirectoryHelper.h"
 
 vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $")
 vtkStandardNewMacro(vtkGDCMPolyDataReader)
@@ -49,28 +50,6 @@ vtkGDCMPolyDataReader::~vtkGDCMPolyDataReader()
   this->RTStructSetProperties->Delete();
 }
 
-//----------------------------------------------------------------------------
-// inline keyword is needed since GetStringValueFromTag was copy/paste from vtkGDCMImageReader
-// FIXME: need to restructure code to avoid copy/paste
-inline const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
-{
-  static std::string buffer;
-  buffer = "";  // cleanup previous call
-
-  if( ds.FindDataElement( t ) )
-    {
-    const gdcm::DataElement& de = ds.GetDataElement( t );
-    const gdcm::ByteValue *bv = de.GetByteValue();
-    if( bv ) // Can be Type 2
-      {
-      buffer = std::string( bv->GetPointer(), bv->GetLength() );
-      // Will be padded with at least one \0
-      }
-    }
-
-  // Since return is a const char* the very first \0 will be considered
-  return buffer.c_str();
-}
 
 //----------------------------------------------------------------------------
 void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &reader)
@@ -78,81 +57,81 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
   const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = file.GetDataSet();
 
-  this->RTStructSetProperties->SetStructureSetLabel( GetStringValueFromTag( gdcm::Tag(0x3006,0x0002), ds) );
-  this->RTStructSetProperties->SetStructureSetName( GetStringValueFromTag( gdcm::Tag(0x3006,0x0004), ds) );
-  this->RTStructSetProperties->SetStructureSetDate( GetStringValueFromTag( gdcm::Tag(0x3006,0x0008), ds) );
-  this->RTStructSetProperties->SetStructureSetTime( GetStringValueFromTag( gdcm::Tag(0x3006,0x0009), ds) );
-  this->RTStructSetProperties->SetSOPInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0008,0x0018), ds) );
-  this->RTStructSetProperties->SetStudyInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0020,0x000d), ds) );
-  this->RTStructSetProperties->SetSeriesInstanceUID( GetStringValueFromTag( gdcm::Tag(0x0020,0x000e), ds) );
+  this->RTStructSetProperties->SetStructureSetLabel( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0002), ds).c_str() );
+  this->RTStructSetProperties->SetStructureSetName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0004), ds).c_str() );
+  this->RTStructSetProperties->SetStructureSetDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0008), ds).c_str() );
+  this->RTStructSetProperties->SetStructureSetTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x3006,0x0009), ds).c_str() );
+  this->RTStructSetProperties->SetSOPInstanceUID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0018), ds).c_str() );
+  this->RTStructSetProperties->SetStudyInstanceUID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x000d), ds).c_str() );
+  this->RTStructSetProperties->SetSeriesInstanceUID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x000e), ds).c_str() );
 
   // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h
   // For ex: DICOM (0010,0010) = DOE,JOHN
-  this->MedicalImageProperties->SetPatientName( GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds) );
+  this->MedicalImageProperties->SetPatientName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds).c_str() );
   // For ex: DICOM (0010,0020) = 1933197
-  this->MedicalImageProperties->SetPatientID( GetStringValueFromTag( gdcm::Tag(0x0010,0x0020), ds) );
+  this->MedicalImageProperties->SetPatientID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0020), ds).c_str() );
   // For ex: DICOM (0010,1010) = 031Y
-  this->MedicalImageProperties->SetPatientAge( GetStringValueFromTag( gdcm::Tag(0x0010,0x1010), ds) );
+  this->MedicalImageProperties->SetPatientAge( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x1010), ds).c_str() );
   // For ex: DICOM (0010,0040) = M
-  this->MedicalImageProperties->SetPatientSex( GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds) );
+  this->MedicalImageProperties->SetPatientSex( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds).c_str() );
   // For ex: DICOM (0010,0030) = 19680427
-  this->MedicalImageProperties->SetPatientBirthDate( GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds) );
+  this->MedicalImageProperties->SetPatientBirthDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds).c_str() );
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
-  this->MedicalImageProperties->SetStudyDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds) );
+  this->MedicalImageProperties->SetStudyDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0022) = 20030617
-  this->MedicalImageProperties->SetAcquisitionDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds) );
+  this->MedicalImageProperties->SetAcquisitionDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds).c_str() );
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetStudyTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds) );
+  this->MedicalImageProperties->SetStudyTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetAcquisitionTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds) );
+  this->MedicalImageProperties->SetAcquisitionTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds).c_str() );
   // For ex: DICOM (0008,0023) = 20030617
-  this->MedicalImageProperties->SetImageDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0023), ds) );
+  this->MedicalImageProperties->SetImageDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0023), ds).c_str() );
   // For ex: DICOM (0008,0033) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetImageTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0033), ds) );
+  this->MedicalImageProperties->SetImageTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0033), ds).c_str() );
   // For ex: DICOM (0020,0013) = 1
-  this->MedicalImageProperties->SetImageNumber( GetStringValueFromTag( gdcm::Tag(0x0020,0x0013), ds) );
+  this->MedicalImageProperties->SetImageNumber( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0013), ds).c_str() );
   // For ex: DICOM (0020,0011) = 902
-  this->MedicalImageProperties->SetSeriesNumber( GetStringValueFromTag( gdcm::Tag(0x0020,0x0011), ds) );
+  this->MedicalImageProperties->SetSeriesNumber( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0011), ds).c_str() );
   // For ex: DICOM (0008,103e) = SCOUT
-  this->MedicalImageProperties->SetSeriesDescription( GetStringValueFromTag( gdcm::Tag(0x0008,0x103e), ds) );
+  this->MedicalImageProperties->SetSeriesDescription( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x103e), ds).c_str() );
   // For ex: DICOM (0020,0010) = 37481
-  this->MedicalImageProperties->SetStudyID( GetStringValueFromTag( gdcm::Tag(0x0020,0x0010), ds) );
+  this->MedicalImageProperties->SetStudyID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0010), ds).c_str() );
   // For ex: DICOM (0008,1030) = BRAIN/C-SP/FACIAL
-  this->MedicalImageProperties->SetStudyDescription( GetStringValueFromTag( gdcm::Tag(0x0008,0x1030), ds) );
+  this->MedicalImageProperties->SetStudyDescription( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1030), ds).c_str() );
   // For ex: DICOM (0008,0060)= CT
-  this->MedicalImageProperties->SetModality( GetStringValueFromTag( gdcm::Tag(0x0008,0x0060), ds) );
+  this->MedicalImageProperties->SetModality( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0060), ds).c_str() );
   // For ex: DICOM (0008,0070) = Siemens
-  this->MedicalImageProperties->SetManufacturer( GetStringValueFromTag( gdcm::Tag(0x0008,0x0070), ds) );
+  this->MedicalImageProperties->SetManufacturer( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0070), ds).c_str() );
   // For ex: DICOM (0008,1090) = LightSpeed QX/i
-  this->MedicalImageProperties->SetManufacturerModelName( GetStringValueFromTag( gdcm::Tag(0x0008,0x1090), ds) );
+  this->MedicalImageProperties->SetManufacturerModelName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1090), ds).c_str() );
   // For ex: DICOM (0008,1010) = LSPD_OC8
-  this->MedicalImageProperties->SetStationName( GetStringValueFromTag( gdcm::Tag(0x0008,0x1010), ds) );
+  this->MedicalImageProperties->SetStationName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1010), ds).c_str() );
   // For ex: DICOM (0008,0080) = FooCity Medical Center
-  this->MedicalImageProperties->SetInstitutionName( GetStringValueFromTag( gdcm::Tag(0x0008,0x0080), ds) );
+  this->MedicalImageProperties->SetInstitutionName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0080), ds).c_str() );
   // For ex: DICOM (0018,1210) = Bone
-  this->MedicalImageProperties->SetConvolutionKernel( GetStringValueFromTag( gdcm::Tag(0x0018,0x1210), ds) );
+  this->MedicalImageProperties->SetConvolutionKernel( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1210), ds).c_str() );
   // For ex: DICOM (0018,0050) = 0.273438
-  this->MedicalImageProperties->SetSliceThickness( GetStringValueFromTag( gdcm::Tag(0x0018,0x0050), ds) );
+  this->MedicalImageProperties->SetSliceThickness( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0050), ds).c_str() );
   // For ex: DICOM (0018,0060) = 120
-  this->MedicalImageProperties->SetKVP( GetStringValueFromTag( gdcm::Tag(0x0018,0x0060), ds) );
+  this->MedicalImageProperties->SetKVP( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0060), ds).c_str() );
   // For ex: DICOM (0018,1120) = 15
-  this->MedicalImageProperties->SetGantryTilt( GetStringValueFromTag( gdcm::Tag(0x0018,0x1120), ds) );
+  this->MedicalImageProperties->SetGantryTilt( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1120), ds).c_str() );
   // For ex: DICOM (0018,0081) = 105
-  this->MedicalImageProperties->SetEchoTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x0081), ds) );
+  this->MedicalImageProperties->SetEchoTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0081), ds).c_str() );
   // For ex: DICOM (0018,0091) = 35
-  this->MedicalImageProperties->SetEchoTrainLength( GetStringValueFromTag( gdcm::Tag(0x0018,0x0091), ds) );
+  this->MedicalImageProperties->SetEchoTrainLength( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0091), ds).c_str() );
   // For ex: DICOM (0018,0080) = 2040
-  this->MedicalImageProperties->SetRepetitionTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x0080), ds) );
+  this->MedicalImageProperties->SetRepetitionTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0080), ds).c_str() );
   // For ex: DICOM (0018,1150) = 5
-  this->MedicalImageProperties->SetExposureTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x1150), ds) );
+  this->MedicalImageProperties->SetExposureTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1150), ds).c_str() );
   // For ex: DICOM (0018,1151) = 400
-  this->MedicalImageProperties->SetXRayTubeCurrent( GetStringValueFromTag( gdcm::Tag(0x0018,0x1151), ds) );
+  this->MedicalImageProperties->SetXRayTubeCurrent( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1151), ds).c_str() );
   // For ex: DICOM (0018,1152) = 114
-  this->MedicalImageProperties->SetExposure( GetStringValueFromTag( gdcm::Tag(0x0018,0x1152), ds) );
+  this->MedicalImageProperties->SetExposure( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1152), ds).c_str() );
 
   // virtual void AddWindowLevelPreset(double w, double l);
   // (0028,1050) DS [   498\  498]                           #  12, 2 WindowCenter
@@ -174,7 +153,7 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
       ss1.str( swc );
       gdcm::VR vr = gdcm::VR::DS;
       unsigned int vrsize = vr.GetSizeof();
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), swc.size());
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), (unsigned int)swc.size());
       elwc.SetLength( count * vrsize );
       elwc.Read( ss1 );
       std::stringstream ss2;
@@ -203,7 +182,7 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
       std::stringstream ss;
       ss.str( "" );
       std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size()); (void)count;
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), (unsigned int)swe.size()); (void)count;
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
       //assert( count >= (unsigned int)n );
@@ -281,19 +260,19 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     assert( sqi0->GetNumberOfItems() == 1 );
   for(unsigned int pd = 0; pd < sqi0->GetNumberOfItems(); ++pd)
     {
-    const gdcm::Item & item = sqi0->GetItem(pd+1); // Item start at #1
-    const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+    const gdcm::Item & item0 = sqi0->GetItem(pd+1); // Item start at #1
+    const gdcm::DataSet& nestedds0 = item0.GetNestedDataSet();
     // (3006,0012) SQ (Sequence with undefined length #=1)     # u/l, 1 RTReferencedStudySequence
     gdcm::Attribute<0x0020,0x052> frameofreferenceuid;
-    frameofreferenceuid.SetFromDataSet( nestedds );
+    frameofreferenceuid.SetFromDataSet( nestedds0 );
     this->RTStructSetProperties->SetReferenceFrameOfReferenceUID(
       frameofreferenceuid.GetValue() );
     gdcm::Tag trtrefstudysq(0x3006,0x0012);
-    if( !nestedds.FindDataElement( trtrefstudysq) )
+    if( !nestedds0.FindDataElement( trtrefstudysq) )
       {
       return 0;
       }
-    const gdcm::DataElement &rtrefstudysq = nestedds.GetDataElement( trtrefstudysq );
+    const gdcm::DataElement &rtrefstudysq = nestedds0.GetDataElement( trtrefstudysq );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi00 = rtrefstudysq.GetValueAsSQ();
     if( !sqi00 || !sqi00->GetNumberOfItems() )
       {
@@ -302,16 +281,16 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     assert( sqi00->GetNumberOfItems() == 1 );
     for(unsigned int pd0 = 0; pd0 < sqi00->GetNumberOfItems(); ++pd0)
       {
-      const gdcm::Item & item = sqi00->GetItem(pd0+1); // Item start at #1
-      const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+      const gdcm::Item & item00 = sqi00->GetItem(pd0+1); // Item start at #1
+      const gdcm::DataSet& nestedds00 = item00.GetNestedDataSet();
 
         // (3006,0014) SQ (Sequence with undefined length #=1)     # u/l, 1 RTReferencedSeriesSequence
     gdcm::Tag trtrefseriessq(0x3006,0x0014);
-    if( !nestedds.FindDataElement( trtrefseriessq) )
+    if( !nestedds00.FindDataElement( trtrefseriessq) )
       {
       return 0;
       }
-    const gdcm::DataElement &rtrefseriessq = nestedds.GetDataElement( trtrefseriessq);
+    const gdcm::DataElement &rtrefseriessq = nestedds00.GetDataElement( trtrefseriessq);
 
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi000 = rtrefseriessq.GetValueAsSQ();
     if( !sqi000 || !sqi000->GetNumberOfItems() )
@@ -321,22 +300,21 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     assert( sqi000->GetNumberOfItems() == 1 );
     for(unsigned int pd00 = 0; pd00 < sqi000->GetNumberOfItems(); ++pd00)
       {
-      const gdcm::Item & item = sqi000->GetItem(pd00+1); // Item start at #1
-      const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+      const gdcm::Item & item000 = sqi000->GetItem(pd00+1); // Item start at #1
+      const gdcm::DataSet& nestedds000 = item000.GetNestedDataSet();
 
     gdcm::Attribute<0x0020,0x000e> seriesinstanceuid;
-    seriesinstanceuid.SetFromDataSet( nestedds );
+    seriesinstanceuid.SetFromDataSet( nestedds000 );
     this->RTStructSetProperties->SetReferenceSeriesInstanceUID(
       seriesinstanceuid.GetValue() );
 
-
-            // (3006,0016) SQ (Sequence with undefined length #=162)   # u/l, 1 ContourImageSequence
+    // (3006,0016) SQ (Sequence with undefined length #=162)   # u/l, 1 ContourImageSequence
     gdcm::Tag tcontourimageseq(0x3006,0x0016);
-    if( !nestedds.FindDataElement( tcontourimageseq) )
+    if( !nestedds000.FindDataElement( tcontourimageseq) )
       {
       return 0;
       }
-    const gdcm::DataElement &contourimageseq = nestedds.GetDataElement( tcontourimageseq );
+    const gdcm::DataElement &contourimageseq = nestedds000.GetDataElement( tcontourimageseq );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi0000 = contourimageseq.GetValueAsSQ();
     if( !sqi0000 || !sqi0000->GetNumberOfItems() )
       {
@@ -427,11 +405,13 @@ refinstanceuid.GetValue().c_str() );
     //std::cout << nestedds << std::endl;
     //(3006,002a) IS [255\192\96]                              # 10,3 ROI Display Color
     gdcm::Tag troidc(0x3006,0x002a);
-    gdcm::Attribute<0x3006,0x002a> color = {};
+    gdcm::Attribute<0x3006,0x002a> color;
+    bool hasColor = false;//so that color[0] isn't referenced if the color isn't present.
     if( nestedds.FindDataElement( troidc) )
       {
       const gdcm::DataElement &decolor = nestedds.GetDataElement( troidc );
       color.SetFromDataElement( decolor );
+      hasColor = true;
       //std::cout << "color:" << color[0] << "," << color[1] << "," << color[2] << std::endl;
       }
     //(3006,0040) SQ (Sequence with explicit length #=8)      # 4326, 1 ContourSequence
@@ -445,28 +425,52 @@ refinstanceuid.GetValue().c_str() );
 
     //const gdcm::SequenceOfItems *sqi2 = csq.GetSequenceOfItems();
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = csq.GetValueAsSQ();
-    if( !sqi2 || !sqi2->GetNumberOfItems() )
+    if( !sqi2 )//|| !sqi2->GetNumberOfItems() )
       {
       continue;
       }
-    unsigned int nitems = sqi2->GetNumberOfItems();
+    size_t nitems = sqi2->GetNumberOfItems();
     //std::cout << nitems << std::endl;
     //this->SetNumberOfOutputPorts(nitems);
     vtkDoubleArray *scalars = vtkDoubleArray::New();
     scalars->SetNumberOfComponents(3);
+    scalars->SetName( roiname.GetValue().c_str() );
+
+    vtkCellArray *polys = vtkCellArray::New();
+	  if (nitems == 0)
+	    {
+        //still have to insert colors in blank masks, else they can get written incorrectly.
+        //also because the number of points of a contour should not define whether or not the color is used.
+        //looks kind of wonky to have a zero-sized polydata, but the polydata does need to still define organ color.
+        vtkEmptyCell* theEmptyCell = vtkEmptyCell::New();
+        vtkIdType cellId = polys->InsertNextCell(theEmptyCell);
+        if (hasColor)
+          {
+          scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
+          }
+        else 
+          {
+          scalars->InsertTuple3(cellId, 0,0,0);
+          }
+        theEmptyCell->Delete();
+        output->GetCellData()->SetScalars(scalars);
+        scalars->Delete();
+        polys->Delete();
+	      continue;
+	    }
+
 
     vtkPoints *newPts = vtkPoints::New();
+    newPts->SetDataTypeToDouble();//ensure that full precision is retained
     //std::string s(sde.GetByteValue()->GetPointer(), sde.GetByteValue()->GetLength());
     //std::cout << s << std::endl;
     //newPts->GetData()->SetName( s.c_str() );
     // In VTK there is no API to specify the name of a vtkPolyData, you can only specify Name
     // for the scalars (pointdata or celldata), so let's do that...
     //scalars->SetName( structuresetroi.ROIName.c_str() );
-    scalars->SetName( roiname.GetValue().c_str() );
-    vtkCellArray *polys = vtkCellArray::New();
-    for(unsigned int i = 0; i < nitems; ++i)
+    for(unsigned int ii = 0; ii < nitems; ++ii)
       {
-      const gdcm::Item & item2 = sqi2->GetItem(i+1); // Item start at #1
+      const gdcm::Item & item2 = sqi2->GetItem(ii+1); // Item start at #1
 
       const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
       //std::cout << nestedds2 << std::endl;
@@ -498,12 +502,12 @@ refinstanceuid.GetValue().c_str() );
         gdcm::SmartPointer<gdcm::SequenceOfItems> contourimagesequence_sqi = contourimagesequence.GetValueAsSQ();
         assert( contourimagesequence_sqi && contourimagesequence_sqi->GetNumberOfItems() == 1 );
         const gdcm::Item & theitem = contourimagesequence_sqi->GetItem(1);
-        const gdcm::DataSet& nestedds = theitem.GetNestedDataSet();
+        const gdcm::DataSet& thenestedds = theitem.GetNestedDataSet();
 
         gdcm::Attribute<0x0008,0x1150> classat;
-        classat.SetFromDataSet( nestedds );
+        classat.SetFromDataSet( thenestedds );
         gdcm::Attribute<0x0008,0x1155> instat;
-        instat.SetFromDataSet( nestedds );
+        instat.SetFromDataSet( thenestedds );
 
         this->RTStructSetProperties->AddContourReferencedFrameOfReference( pd,
           classat.GetValue(), instat.GetValue() );
@@ -512,34 +516,33 @@ refinstanceuid.GetValue().c_str() );
       //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
       //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
       const double* pts = at.GetValues();
-      vtkIdType buffer[256];
       vtkIdType *ptIds;
       unsigned int npts = at.GetNumberOfValues() / 3;
-      assert( npts == numcontpoints.GetValue() );
-      if(npts>256)
-        {
-        ptIds = new vtkIdType[npts];
-        }
-      else
-        {
-        ptIds = buffer;
-        }
+      assert( npts == (unsigned int)numcontpoints.GetValue() );
+      assert( npts * 3 == at.GetNumberOfValues() );
+      ptIds = new vtkIdType[npts];
       for(unsigned int i = 0; i < npts * 3; i+=3)
         {
-        float x[3];
+        double x[3];//must be double precision, as that's the precision in vtk
         x[0] = pts[i+0];
         x[1] = pts[i+1];
         x[2] = pts[i+2];
         vtkIdType ptId = newPts->InsertNextPoint( x );
+        assert( i / 3 < npts );
         ptIds[i / 3] = ptId;
         }
       // Each Contour Data is in fact a Cell:
       vtkIdType cellId = polys->InsertNextCell( npts , ptIds);
-      scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
-      if(npts>256)
+      if (hasColor)
         {
-        delete[] ptIds;
+        scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
         }
+      else 
+        {
+        scalars->InsertTuple3(cellId, 0,0,0);
+        }
+        delete[] ptIds;
+        ptIds = NULL;
       }
     output->SetPoints(newPts);
     newPts->Delete();
@@ -559,11 +562,12 @@ refinstanceuid.GetValue().c_str() );
     }
   const gdcm::DataElement &rtroiobssq = ds.GetDataElement( trtroiobssq );
   gdcm::SmartPointer<gdcm::SequenceOfItems> rtroiobssqsqi = rtroiobssq.GetValueAsSQ();
-  if( !rtroiobssqsqi || !rtroiobssqsqi->GetNumberOfItems() )
+  size_t theNumberOfItems = rtroiobssqsqi->GetNumberOfItems();
+  if( !rtroiobssqsqi )// || !rtroiobssqsqi->GetNumberOfItems() )
     {
     return 0;
     }
-  for(unsigned int obs = 0; obs < rtroiobssqsqi->GetNumberOfItems(); ++obs)
+  for(unsigned int obs = 0; obs < theNumberOfItems ; ++obs)
     {
     const gdcm::Item & item = rtroiobssqsqi->GetItem(obs+1); // Item start at #1
     const gdcm::DataSet& nestedds = item.GetNestedDataSet();
@@ -614,6 +618,7 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
     return 0;
     }
   const gdcm::DataElement &wba= nestedds.GetDataElement( twba );
+  (void)wba;
 
   //std::cout << wba << std::endl;
   //  (5400,1006) CS [SS]                                     #   2, 1 WaveformSampleInterpretation
@@ -644,9 +649,10 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
     float x[3];
     x[0] = (float)p[i] / 8800;
     //std::cout << p[i] << std::endl;
-    x[1] = i;
+    x[1] = (float)i;
     x[2] = 0;
     vtkIdType ptId = newPts->InsertNextPoint( x );
+    (void)ptId;
     }
   output->SetPoints(newPts);
   newPts->Delete();
@@ -737,10 +743,10 @@ int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader
     {
     return 0;
     }
-  unsigned int npds = sqi->GetNumberOfItems();
+  size_t npds = sqi->GetNumberOfItems();
 
   //std::cout << "Nb pd:" << npds << std::endl;
-  this->SetNumberOfOutputPorts( npds );
+  this->SetNumberOfOutputPorts( (int)npds );
 
   // Allocate
   for(unsigned int i = 1; i < npds; ++i) // first output is allocated for us
@@ -752,7 +758,7 @@ int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader
   return 1;
 }
 
-int vtkGDCMPolyDataReader::RequestInformation_HemodynamicWaveformStorage(gdcm::Reader const & reader)
+int vtkGDCMPolyDataReader::RequestInformation_HemodynamicWaveformStorage(gdcm::Reader const & )
 {
   return 1;
 }
@@ -761,7 +767,7 @@ int vtkGDCMPolyDataReader::RequestInformation_HemodynamicWaveformStorage(gdcm::R
 int vtkGDCMPolyDataReader::RequestInformation(
   vtkInformation *vtkNotUsed(request),
   vtkInformationVector **vtkNotUsed(inputVector),
-  vtkInformationVector *outputVector)
+  vtkInformationVector *vtkNotUsed(outputVector))
 {
   // get the info object
 //  vtkInformation *outInfo = outputVector->GetInformationObject(0);

@@ -17,7 +17,6 @@
 
 #include "gdcmFile.h"
 
-
 #include <fstream>
 
 namespace gdcm

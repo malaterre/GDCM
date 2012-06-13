@@ -74,6 +74,18 @@ blacklist = (
 "JPEG12Codec"
 "JPEG16Codec"
 "JPEG2000Codec"
+# segment
+"Segment"
+"SegmentHelper"
+"SegmentReader"
+"SegmentWriter"
+#mesh
+"MeshPrimitive"
+# surface
+"Surface"
+"SurfaceHelper"
+"SurfaceReader"
+"SurfaceWriter"
 # For now remove the codec part:
 "ImageCodec"
 "DeltaEncodingCodec"
@@ -86,6 +98,7 @@ blacklist = (
 "KAKADUCodec"
 "JPEGLSCodec"
 "PNMCodec"
+"PGXCodec"
 "PDFCodec"
 "Decoder"
 "Coder"
@@ -154,6 +167,8 @@ blacklist = (
 "ULWritingCallback"
 "CompositeMessageFactory"
 "CommandDataSet"
+"RoleSelectionSub"
+"SOPClassExtendedNegociationSub"
 "FindPatientRootQuery"
 )
 

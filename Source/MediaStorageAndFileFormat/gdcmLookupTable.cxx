@@ -205,7 +205,7 @@ void LookupTable::GetLUTDescriptor(LookupTableType type, unsigned short &length,
     }
   else
     {
-    length = Internal->Length[type];
+    length = (unsigned short)Internal->Length[type];
     }
   subscript = Internal->Subscript[type];
   bitsize = Internal->BitSize[type];
@@ -356,7 +356,7 @@ void LookupTable::Encode(std::istream &is, std::ostream &os)
       assert( u.rgb[3] == 0 );
       int d = 0;
       assert( d < 256 && d >= 0 );
-      os.put( d );
+      os.put( (char)d );
       }
 #endif
     }

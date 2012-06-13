@@ -201,7 +201,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
     {
     int zmin = 0;
     int zmax = 0;
-    zmax = this->FileNames->GetNumberOfValues() - 1;
+    zmax = (int)this->FileNames->GetNumberOfValues() - 1;
     if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
       {
       vtkErrorMacro( "Problem with extent" );
@@ -294,7 +294,7 @@ void *ReadFilesThread(void *voidparams)
   assert( nfiles ); //
   // pre compute progress delta for one file:
   assert( params->totalfiles );
-  const double progressdelta = 1. / params->totalfiles;
+  const double progressdelta = 1. / (double)params->totalfiles;
   for(unsigned int file = 0; file < nfiles; ++file)
     {
     const char *filename = params->filenames[file];
@@ -341,7 +341,7 @@ void *ReadFilesThread(void *voidparams)
     char *tempimage = pointer + file*params->len;
     image.GetBuffer(tempimage);
     // overlay
-    unsigned int numoverlays = image.GetNumberOfOverlays();
+    size_t numoverlays = image.GetNumberOfOverlays();
     //if( numoverlays && !params->reader->GetLoadOverlays() )
     //params->reader->SetNumberOfOverlays( numoverlays );
     if( numoverlays )
@@ -364,7 +364,7 @@ void *ReadFilesThread(void *voidparams)
         unsigned short *pout = out;
         for( ; pout != out + params->len / sizeof(unsigned short); ++pout )
           {
-          *pout = *pout + (short)shift;
+          *pout = (unsigned short)(*pout + (short)shift);
           }
         }
       else if ( shift == 0 && scale != (double)scale_int )
@@ -381,7 +381,8 @@ void *ReadFilesThread(void *voidparams)
         float *pout = out;
         for( ; pout != out + params->len / sizeof(float); ++pout )
           {
-          *pout = *pin * (float)scale; // scale is a double, but DICOM specify 32bits for floating point value
+          // scale is a double, but DICOM specify 32bits for floating point value
+          *pout = (float)((double)*pin * (float)scale);
           ++pin;
           }
         //assert( pin == in + len / sizeof(unsigned short) );
@@ -435,7 +436,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   const unsigned int nprocs = info.dwNumberOfProcessors;
 #else
 #ifdef _SC_NPROCESSORS_ONLN
-  const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
+  const unsigned int nprocs = (unsigned int)sysconf( _SC_NPROCESSORS_ONLN );
 #else
 #ifdef __APPLE__
   int count = 1;
@@ -567,14 +568,14 @@ void vtkGDCMThreadedImageReader::RequestDataCompat()
     {
     // Make sure that each file is single slice
     assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 ); (void)dext;
-    const unsigned int nfiles = this->FileNames->GetNumberOfValues();
+    const vtkIdType nfiles = this->FileNames->GetNumberOfValues();
     const char **filenames = new const char* [ nfiles ];
     for(unsigned int i = 0; i < nfiles; ++i)
       {
       filenames[i] = this->FileNames->GetValue( i );
       //std::cerr << filenames[i] << std::endl;
       }
-    ReadFiles(nfiles, filenames);
+    ReadFiles((unsigned int)nfiles, filenames);
     delete[] filenames;
     }
   else if( this->FileName )

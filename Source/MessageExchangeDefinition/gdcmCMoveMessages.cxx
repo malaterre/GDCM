@@ -107,7 +107,7 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(
 
 //this is a private function, should not be callable
 //but if you manage to do call it, return a blank dataset.
-std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue> CMoveRQ::ConstructPDVByDataSet(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDVs;
   (void)inDataSet;
   assert( 0 && "TODO" );
@@ -115,13 +115,13 @@ std::vector<PresentationDataValue> CMoveRQ::ConstructPDV(const DataSet* inDataSe
 
 }
 
-std::vector<PresentationDataValue>  CMoveRSP::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue>  CMoveRSP::ConstructPDVByDataSet(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
   (void)inDataSet;
   assert( 0 && "TODO" );
   return thePDV;
 }
-std::vector<PresentationDataValue>  CMoveCancelRq::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue>  CMoveCancelRq::ConstructPDVByDataSet(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
   (void)inDataSet;
   assert( 0 && "TODO" );

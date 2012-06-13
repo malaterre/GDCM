@@ -16,6 +16,7 @@
 #include "gdcmULTransitionTable.h"
 #include "gdcmULConnection.h"
 #include "gdcmULConnectionInfo.h"
+#include "gdcmPresentationContextAC.h"
 #include "gdcmPresentationDataValue.h"
 #include "gdcmULConnectionCallback.h"
 #include "gdcmULBasicCallback.h"
@@ -71,6 +72,25 @@ ServiceClassUser::~ServiceClassUser()
 void ServiceClassUser::SetPresentationContexts(std::vector<PresentationContext> const & pcs)
 {
   Internals->mConnection->SetPresentationContexts(pcs);
+}
+
+bool ServiceClassUser::IsPresentationContextAccepted(const PresentationContext& pc) const
+{
+  bool found = false;
+  const std::vector<PresentationContextAC> &acceptedContexts =
+    Internals->mConnection->GetAcceptedPresentationContexts();
+  std::vector<PresentationContextAC>::const_iterator itor;
+  uint8_t contextID = pc.GetPresentationContextID();
+
+  for (itor = acceptedContexts.begin();
+    itor != acceptedContexts.end() && !found;
+    itor++)
+    {
+    if (contextID == itor->GetPresentationContextID())
+      found = true;
+    }
+
+  return found;
 }
 
 bool ServiceClassUser::InitializeConnection()
@@ -138,12 +158,12 @@ bool ServiceClassUser::StopAssociation()
 
 void ServiceClassUser::SetTimeout(time_t t)
 {
-  Internals->timeout = t;
+  Internals->timeout = (double)t;
 }
 
 time_t ServiceClassUser::GetTimeout() const
 {
-  return Internals->timeout;
+  return (time_t)Internals->timeout;
 }
 
 void ServiceClassUser::SetCalledAETitle(const char *aetitle)

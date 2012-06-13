@@ -84,21 +84,24 @@ Directory::FilenamesType DirectoryHelper::GetFilenamesFromSeriesUIDs(const std::
     Directory::FilenamesType theSeriesValues = theScanner.GetOrderedValues(Tag(0x0020,0x000e));
     //now count the number of series that are of that given SOPClassUID
     size_t theNumSeries = theSeriesValues.size();
-    for (size_t i = 0; i < theNumSeries; i++){
+    for (size_t i = 0; i < theNumSeries; i++)
+      {
       std::string theSeriesUID = theSeriesValues[i];
       //dicom strings sometimes have trailing spaces; make sure to avoid those
       size_t endpos = theSeriesUID.find_last_not_of(" "); // Find the first character position from reverse af
-        if( std::string::npos != endpos )
-          theSeriesUID = theSeriesUID.substr( 0, endpos+1 );
-      if (inSeriesUID == theSeriesUID){
+      if( std::string::npos != endpos )
+        theSeriesUID = theSeriesUID.substr( 0, endpos+1 );
+      if (inSeriesUID == theSeriesUID)
+      {
 	    gdcm::Directory::FilenamesType theFilenames = 
-		  theScanner.GetAllFilenamesFromTagToValue(Tag(0x0020, 0x000e), theSeriesValues[i].c_str());
-		gdcm::Directory::FilenamesType::const_iterator citor;
-		for (citor = theFilenames.begin(); citor < theFilenames.end(); citor++){
-		  theReturn.push_back(*citor);
-		  }
-//      theReturn.push_back(theScanner.GetFilenameFromTagToValue(Tag(0x0020,0x000e),
-//        theSeriesValues[i].c_str()));
+		    theScanner.GetAllFilenamesFromTagToValue(Tag(0x0020, 0x000e), theSeriesValues[i].c_str());
+		  gdcm::Directory::FilenamesType::const_iterator citor;
+		  for (citor = theFilenames.begin(); citor < theFilenames.end(); citor++)
+        {
+		    theReturn.push_back(*citor);
+		    }
+    //      theReturn.push_back(theScanner.GetFilenameFromTagToValue(Tag(0x0020,0x000e),
+    //        theSeriesValues[i].c_str()));
       }
     }
     return theReturn;
@@ -238,5 +241,27 @@ std::string DirectoryHelper::GetFrameOfReference(const std::vector<DataSet>& inD
     return theReturn;
   }
   return blank;
+}
+
+
+//----------------------------------------------------------------------------
+//used by the vtkGDCMImageReader and vtkGDCMPolyDataReader. Could be used elsewhere, I suppose.
+std::string DirectoryHelper::GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
+{
+  std::string buffer;
+
+  if( ds.FindDataElement( t ) )
+    {
+    const gdcm::DataElement& de = ds.GetDataElement( t );
+    const gdcm::ByteValue *bv = de.GetByteValue();
+    if( bv ) // Can be Type 2
+      {
+      buffer = std::string( bv->GetPointer(), bv->GetLength() );
+      // Will be padded with at least one \0
+      }
+    }
+
+  // Since return is a const char* the very first \0 will be considered
+  return buffer.c_str(); // Yes, I mean .c_str()
 }
 } // end namespace gdcm

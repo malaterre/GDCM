@@ -137,7 +137,7 @@ int TestAttributeDS()
   const char v[] = "1.960000000000662 ";
   gdcm::DataElement invalid( gdcm::Tag(0x10,0x1030) ); // Patient's Weight
   invalid.SetVR( gdcm::VR::DS );
-  invalid.SetByteValue( v, strlen(v) );
+  invalid.SetByteValue( v, (uint32_t)strlen(v) );
 
   gdcm::Attribute<0x0010,0x1030> pw;
   pw.SetFromDataElement( invalid );

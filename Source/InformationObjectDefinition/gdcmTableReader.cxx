@@ -107,7 +107,7 @@ void TableReader::HandleMacroEntry(const char **atts)
       assert( r == 1 );
       assert( v <= 0xFFFF );
       (void)r; //removing warning
-      tag.SetGroup( v );
+      tag.SetGroup( (uint16_t)v );
       }
     else if( strelt == *current )
       {
@@ -117,7 +117,7 @@ void TableReader::HandleMacroEntry(const char **atts)
       assert( r == 1 );
       assert( v <= 0xFFFF );
       (void)r; //removing warning
-      tag.SetElement( v );
+      tag.SetElement( (uint16_t)v );
       }
     else if( strname == *current )
       {
@@ -157,7 +157,7 @@ void TableReader::HandleModuleEntry(const char **atts)
       assert( r == 1 );
       assert( v <= 0xFFFF );
       (void)r; //removing warning
-      tag.SetGroup( v );
+      tag.SetGroup( (uint16_t)v );
       }
     else if( strelt == *current )
       {
@@ -167,7 +167,7 @@ void TableReader::HandleModuleEntry(const char **atts)
       assert( r == 1 );
       assert( v <= 0xFFFF );
       (void)r; //removing warning
-      tag.SetElement( v );
+      tag.SetElement( (uint16_t)v );
       }
     else if( strname == *current )
       {

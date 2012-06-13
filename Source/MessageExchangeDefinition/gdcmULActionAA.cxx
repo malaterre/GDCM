@@ -35,8 +35,8 @@ namespace network
 {
 
 //Send A-ABORT PDU (service-user source) and start (or restart if already started) ARTIM timer
-EStateID ULActionAA1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA1::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
+        bool& , EEventID& ){
 
   AAbortPDU thePDU;
   thePDU.Write(*inConnection.GetProtocol());
@@ -46,8 +46,8 @@ EStateID ULActionAA1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 }
 
 //Stop ARTIM timer if running.  Close transport connection.
-EStateID ULActionAA2::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA2::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
+        bool& , EEventID& ){
 
 
   inConnection.GetTimer().Stop();
@@ -60,22 +60,22 @@ EStateID ULActionAA2::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 //- issue A-ABORT indication and close transport connection
 //otherwise (service-provider initiated abort):
 //- issue A-P-ABORT indication and close transport connection
-EStateID ULActionAA3::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA3::PerformAction(Subject *, ULEvent& , ULConnection& ,
+        bool& , EEventID& ){
 
   return eSta1Idle;
 }
 
 //Issue A-P-ABORT indication primitive
-EStateID ULActionAA4::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA4::PerformAction(Subject *, ULEvent& , ULConnection& ,
+        bool& , EEventID& ){
 
   return eSta1Idle;
 }
 
 //Stop ARTIM timer
-EStateID ULActionAA5::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA5::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
+        bool& , EEventID& ){
 
   inConnection.GetTimer().Stop();
 
@@ -83,15 +83,15 @@ EStateID ULActionAA5::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 }
 
 //Ignore PDU
-EStateID ULActionAA6::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA6::PerformAction(Subject *, ULEvent& , ULConnection& ,
+        bool& , EEventID& ){
   //do nothing, I guess.
   return eSta13AwaitingClose;
 }
 
 //Send A-ABORT PDU
-EStateID ULActionAA7::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA7::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
+        bool& , EEventID& ){
 
   AAbortPDU thePDU;//for now, use Matheiu's default values
   thePDU.Write(*inConnection.GetProtocol());
@@ -100,8 +100,8 @@ EStateID ULActionAA7::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 }
 
 //Send A-ABORT PDU (service-provider source), issue an A-P-ABORT indication, and start ARTIM timer
-EStateID ULActionAA8::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
+EStateID ULActionAA8::PerformAction(Subject *, ULEvent& , ULConnection& inConnection,
+        bool& , EEventID& ){
 
 
   AAbortPDU thePDU;//for now, use Matheiu's default values

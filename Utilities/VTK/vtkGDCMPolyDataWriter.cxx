@@ -116,6 +116,7 @@ void vtkGDCMPolyDataWriter::WriteData()
 void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
 {
   DataSet& ds = file.GetDataSet();
+{
   const Tag sisq(0x3006,0x0039);
   DataElement de( sisq );
   de.SetVR( VR::SQ );
@@ -124,6 +125,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   de.SetValue( *sqi1 );
   de.SetVLToUndefined();
   ds.Insert( de );
+}
 
   UIDGenerator uid;
 
@@ -445,17 +447,14 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     vtkDataArray *scalars = input->GetCellData()->GetScalars();
     vtkDoubleArray *darray = vtkDoubleArray::SafeDownCast( scalars );
     vtkFloatArray *farray = vtkFloatArray::SafeDownCast( scalars );
-    //if( !darray && !farray )
-    //  {
-    //  vtkErrorMacro(<<"No data to write!");
-    //  return;
-    //  }
-    //int nt = scalars->GetNumberOfTuples();
+
     if (pts == NULL || polys == NULL || lines == NULL)
       {
       vtkWarningMacro(<<"No data to write!");//should be a warning, not an error, because
       //it's entirely possible to have a blank ROI
-      return;
+      //return;//ok, you have to put the observation here, even if it's blank
+      //if it's blank, the color and so forth are still defined.  Otherwise,
+      //the observation will be incomplete.
       }
 
 /*
@@ -498,23 +497,29 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     cellpoints.resize(0);
     for(vtkIdType index = 0; index < npts; ++index){
       pts->GetPoint(indx[index],v);
+      //precision problems are _definitely_ here by this point
+      //this a crude hack to the get the 9999's under control,
+      //or pollution by switching from doubles to floats and back again
+      //cellpoints.push_back( (double)((int)(v[0]*10000.0))/10000.0 );
+      //cellpoints.push_back( (double)((int)(v[1]*10000.0))/10000.0 );
+      //cellpoints.push_back( (double)((int)(v[2]*10000.0))/10000.0 );
       cellpoints.push_back( v[0] );
       cellpoints.push_back( v[1] );
-      cellpoints.push_back( v[2] );
+      cellpoints.push_back( v[2 ]);
     }
-    Item item;
-    item.SetVLToUndefined();
-    DataSet &subds = item.GetNestedDataSet();
+    Item item0;
+    item0.SetVLToUndefined();
+    DataSet &subds0 = item0.GetNestedDataSet();
     Attribute<0x3006,0x0050> at;
-    at.SetValues( &cellpoints[0], cellpoints.size(), false );
-    subds.Insert( at.GetAsDataElement() );
+    at.SetValues( &cellpoints[0], (unsigned int)cellpoints.size(), false );
+    subds0.Insert( at.GetAsDataElement() );
 
     Attribute<0x3006,0x0046> numcontpoints;
-    numcontpoints.SetValue( npts );
-    subds.Insert( numcontpoints.GetAsDataElement() );
+    numcontpoints.SetValue( (int)npts );
+    subds0.Insert( numcontpoints.GetAsDataElement() );
     Attribute<0x3006,0x0042> contgeotype;
     contgeotype.SetValue( "CLOSED_PLANAR " );
-    subds.Insert( contgeotype.GetAsDataElement() );
+    subds0.Insert( contgeotype.GetAsDataElement() );
 
     SmartPointer<SequenceOfItems> thesqi = new SequenceOfItems;
     {
@@ -537,10 +542,10 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     contimsq.SetVR( VR::SQ );
     contimsq.SetValue( *thesqi );
     contimsq.SetVLToUndefined();
-    subds.Insert( contimsq );
+    subds0.Insert( contimsq );
 
 
-    sqi->AddItem( item );
+    sqi->AddItem( item0 );
   }
   DataSet& ds = file.GetDataSet();
 {
@@ -564,17 +569,17 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     {
     double tuple[3];
     darray->GetTupleValue( 0, tuple );
-    intcolor[0] = tuple[0] * 255.;
-    intcolor[1] = tuple[1] * 255.;
-    intcolor[2] = tuple[2] * 255.;
+    intcolor[0] = (int32_t)(tuple[0] * 255.);
+    intcolor[1] = (int32_t)(tuple[1] * 255.);
+    intcolor[2] = (int32_t)(tuple[2] * 255.);
     }
   if( farray )
     {
     float ftuple[3];
     farray->GetTupleValue( 0, ftuple );
-    intcolor[0] = ftuple[0] * 255.;
-    intcolor[1] = ftuple[1] * 255.;
-    intcolor[2] = ftuple[2] * 255.;
+    intcolor[0] = (int32_t)(ftuple[0] * 255.);
+    intcolor[1] = (int32_t)(ftuple[1] * 255.);
+    intcolor[2] = (int32_t)(ftuple[2] * 255.);
     }
   roidispcolor.SetValues( intcolor, 3 );
   subds.Insert( roidispcolor.GetAsDataElement() );
@@ -690,19 +695,22 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
   for (unsigned long i = 0; i < theCTDataSets.size(); i++)
     {
     theRTStruct->AddReferencedFrameOfReference(theSOPClassID.c_str(),
-      DirectoryHelper::RetrieveSOPInstanceUIDFromIndex(i,theCTDataSets).c_str());
+      DirectoryHelper::RetrieveSOPInstanceUIDFromIndex((int)i,theCTDataSets).c_str());
     }
 
   //now, we have go to through each vtkPolyData, assign the ROI names per polydata, and then also assign the
   //reference SOP instance UIDs on a per-plane basis.
-  for (int j = 0; j < GetNumberOfInputPorts(); j++)
+  int theNumPorts = GetNumberOfInputPorts();
+  for (int j = 0; j < theNumPorts; j++)
     {
-    theRTStruct->AddStructureSetROI(j,
-      theRTStruct->GetReferenceFrameOfReferenceUID(),
+    int contour = j;
+    theRTStruct->AddStructureSetROI(contour,
+        theRTStruct->GetReferenceFrameOfReferenceUID(),
       inROINames->GetValue(j).c_str(),
       inROIAlgorithmName->GetValue(j).c_str());
-    theRTStruct->AddStructureSetROIObservation(j,
-      j, inROIType->GetValue(j).c_str(), "");
+    
+    theRTStruct->AddStructureSetROIObservation(contour,
+      contour, inROIType->GetValue(j).c_str(), "");
      //for each organ, gotta go through and add in the right planes in the
      //order that the tuples appear, as well as the colors
      //right now, each cell in the vtkpolydata is a contour in an xy plane
@@ -732,7 +740,10 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
       theCells = polys;
       }
     double v[3];
-    gdcmDebugMacro("The number of cells:" << theCells->GetNumberOfCells());
+    vtkIdType theNumCells = theCells->GetNumberOfCells();
+    gdcmDebugMacro("The number of cells:" << theNumCells);
+    if (theNumCells == 0) continue;// no observation of blank organs
+
     for (theCells->InitTraversal(); theCells->GetNextCell(npts,indx); cellnum++ )
       {
       if (npts < 1)
@@ -748,7 +759,7 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
       //that's growing.
       gdcmDebugMacro("SOP Instance for plane " << theZ << " is " << theSOPInstance);
 
-      theRTStruct->AddContourReferencedFrameOfReference(j,
+      theRTStruct->AddContourReferencedFrameOfReference(contour,
         theSOPClassID.c_str(), theSOPInstance.c_str());
       }
   }

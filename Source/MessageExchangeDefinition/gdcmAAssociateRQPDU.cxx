@@ -47,7 +47,7 @@ AAssociateRQPDU::AAssociateRQPDU()
 
   //SetCallingAETitle( "MOVESCU" );
 
-  ItemLength = Size() - 6;
+  ItemLength = (uint32_t)Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
@@ -193,7 +193,7 @@ bool AAssociateRQPDU::IsAETitleValid(const char title[16])
 void AAssociateRQPDU::AddPresentationContext( PresentationContextRQ const &pc )
 {
   PresContext.push_back( pc );
-  ItemLength = Size() - 6;
+  ItemLength = (uint32_t)Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 

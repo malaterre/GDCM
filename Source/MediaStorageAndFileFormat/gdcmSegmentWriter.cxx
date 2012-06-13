@@ -27,7 +27,7 @@ SegmentWriter::~SegmentWriter()
 
 unsigned int SegmentWriter::GetNumberOfSegments() const
 {
-  return Segments.size();
+  return (unsigned int)Segments.size();
 }
 
 void SegmentWriter::SetNumberOfSegments(const unsigned int size)
@@ -80,14 +80,15 @@ bool SegmentWriter::PrepareWrite()
   segmentsSQ = ds.GetDataElement( Tag(0x0062, 0x0002) ).GetValueAsSQ();
   segmentsSQ->SetLengthToUndefined();
 
+{
   // Fill the Segment Sequence
   const unsigned int              numberOfSegments  = this->GetNumberOfSegments();
   assert( numberOfSegments );
-  const unsigned int              nbItems           = segmentsSQ->GetNumberOfItems();
+  const size_t nbItems           = segmentsSQ->GetNumberOfItems();
   if (nbItems < numberOfSegments)
   {
-    const int          diff           = numberOfSegments - nbItems;
-    const unsigned int nbOfItemToMake = (diff > 0?diff:0);
+    const size_t diff           = numberOfSegments - nbItems;
+    const size_t nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
       Item item;
@@ -95,15 +96,16 @@ bool SegmentWriter::PrepareWrite()
       segmentsSQ->AddItem(item);
     }
   }
+}
   // else Should I remove items?
 
-  std::vector< SmartPointer< Segment > >::const_iterator  it            = Segments.begin();
-  std::vector< SmartPointer< Segment > >::const_iterator  itEnd         = Segments.end();
+  std::vector< SmartPointer< Segment > >::const_iterator  it0            = Segments.begin();
+  std::vector< SmartPointer< Segment > >::const_iterator  it0End         = Segments.end();
   unsigned int                                            itemNumber    = 1;
   unsigned long                                           surfaceNumber = 1;
-  for (; it != itEnd; it++)
+  for (; it0 != it0End; it0++)
   {
-    SmartPointer< Segment > segment = *it;
+    SmartPointer< Segment > segment = *it0;
     assert( segment );
 
     Item &    segmentItem = segmentsSQ->GetItem(itemNumber);
@@ -113,7 +115,7 @@ bool SegmentWriter::PrepareWrite()
     Attribute<0x0062, 0x0004> segmentNumberAt;
     unsigned short segmentNumber = segment->GetSegmentNumber();
     if (segmentNumber == 0)
-      segmentNumber = itemNumber;
+      segmentNumber = (unsigned short)itemNumber;
     segmentNumberAt.SetValue( segmentNumber );
     segmentDS.Replace( segmentNumberAt.GetAsDataElement() );
 
@@ -176,7 +178,7 @@ bool SegmentWriter::PrepareWrite()
       anatRegSQ->SetLengthToUndefined();
 
       // Fill the Anatomic Region Sequence
-      const unsigned int nbItems = anatRegSQ->GetNumberOfItems();
+      const size_t nbItems = anatRegSQ->GetNumberOfItems();
       if (nbItems < 1)  // Only one item is a type 1
       {
         Item item;
@@ -230,7 +232,7 @@ bool SegmentWriter::PrepareWrite()
       propCatSQ->SetLengthToUndefined();
 
       // Fill the Segmented Property Category Code Sequence
-      const unsigned int nbItems = propCatSQ->GetNumberOfItems();
+      const size_t nbItems = propCatSQ->GetNumberOfItems();
       if (nbItems < 1)  // Only one item is a type 1
       {
         Item item;
@@ -284,7 +286,7 @@ bool SegmentWriter::PrepareWrite()
       propTypeSQ->SetLengthToUndefined();
 
       // Fill the Segmented Property Type Code Sequence
-      const unsigned int nbItems = propTypeSQ->GetNumberOfItems();
+      const size_t nbItems = propTypeSQ->GetNumberOfItems();
       if (nbItems < 1)  // Only one item is a type 1
       {
         Item item;
@@ -320,7 +322,7 @@ bool SegmentWriter::PrepareWrite()
     {
       // Surface Count
       Attribute<0x0066, 0x002A> surfaceCountAt;
-      surfaceCountAt.SetValue( surfaceCount );
+      surfaceCountAt.SetValue( (unsigned int)surfaceCount );
       segmentDS.Replace( surfaceCountAt.GetAsDataElement() );
 
       //*****   Referenced Surface Sequence   *****//
@@ -338,11 +340,11 @@ bool SegmentWriter::PrepareWrite()
       segmentsRefSQ->SetLengthToUndefined();
 
       // Fill the Segment Surface Generation Algorithm Identification Sequence
-      const unsigned int   nbItems        = segmentsRefSQ->GetNumberOfItems();
+      const size_t nbItems        = segmentsRefSQ->GetNumberOfItems();
       if (nbItems < surfaceCount)
       {
-        const int          diff           = surfaceCount - nbItems;
-        const unsigned int nbOfItemToMake = (diff > 0?diff:0);
+        const size_t diff           = surfaceCount - nbItems;
+        const size_t nbOfItemToMake = (diff > 0?diff:0);
         for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
         {
           Item item;
@@ -371,7 +373,7 @@ bool SegmentWriter::PrepareWrite()
           refSurfaceNumber = surfaceNumber++;
           surface->SetSurfaceNumber( refSurfaceNumber );
         }
-        refSurfaceNumberAt.SetValue( refSurfaceNumber );
+        refSurfaceNumberAt.SetValue( (unsigned int)refSurfaceNumber );
         segmentsRefDS.Replace( refSurfaceNumberAt.GetAsDataElement() );
 
         //*****   Segment Surface Source Instance Sequence   *****//

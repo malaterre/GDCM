@@ -52,7 +52,7 @@ int TestImageHelper(int, char *[])
 
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
 
@@ -71,7 +71,7 @@ int TestImageHelper(int, char *[])
 
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
 

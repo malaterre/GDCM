@@ -41,7 +41,7 @@ void* func (void* argc)
   return NULL;
 }
 
-int TestUIDGenerator2(int argc, char *argv[])
+int TestUIDGenerator2(int , char *[])
 {
   const unsigned int nthreads = 10; // multiple of 2 please
   pthread_t th[nthreads];

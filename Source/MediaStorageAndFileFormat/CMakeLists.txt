@@ -63,6 +63,7 @@ SET(MSFF_SRCS
   gdcmPVRGCodec.cxx
   gdcmKAKADUCodec.cxx
   gdcmPNMCodec.cxx
+  gdcmPGXCodec.cxx
   gdcmRAWCodec.cxx
   gdcmLookupTable.cxx
   gdcmOverlay.cxx

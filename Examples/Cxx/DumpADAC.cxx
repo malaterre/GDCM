@@ -165,7 +165,7 @@ uint16_t readint16(std::istream &is )
 {
   uint16_t val;
   is.read( (char*)&val, sizeof( val ));
-  return (val>>8) | (val<<8);
+  return (uint16_t)((val>>8) | (val<<8));
 }
 
 uint32_t readint32(std::istream &is )
@@ -248,7 +248,7 @@ bool DumpADAC( std::istream & is )
   is.read( magic, 6);
 //  std::cout << magic << " ";
   assert( strcmp( magic, "adac01" ) == 0 );
-  char c = is.get();
+  int c = is.get();
   assert( c == 0 );
   c = is.get();
   assert( c == 'X' );

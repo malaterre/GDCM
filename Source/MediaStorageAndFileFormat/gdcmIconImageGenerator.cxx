@@ -104,7 +104,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus)?oldid=12754
 */
 
-  const int NUM_DIMENSIONS = 3;
+  const unsigned int NUM_DIMENSIONS = 3;
 
   struct Point
     {
@@ -115,12 +115,12 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     {
     Point minCorner, maxCorner;
     Point* points;
-    int pointsLength;
+    size_t pointsLength;
   public:
-    Block(Point* points, int pointsLength);
+    Block(Point* points, size_t pointsLength);
     Point * getPoints();
-    int numPoints() const;
-    int longestSideIndex() const;
+    size_t numPoints() const;
+    size_t longestSideIndex() const;
     int longestSideLength() const;
     bool operator<(const Block& rhs) const;
     void shrink();
@@ -138,11 +138,11 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
 
   //std::list<Point> medianCut(Point* image, int numPoints, unsigned int desiredSize);
 
-  Block::Block(Point* pts, int ptslen)
+  Block::Block(Point* pts, size_t ptslen)
     {
     this->points = pts;
     this->pointsLength = ptslen;
-    for(int i=0; i < NUM_DIMENSIONS; i++)
+    for(size_t i=0; i < NUM_DIMENSIONS; i++)
       {
       minCorner.x[i] = std::numeric_limits<unsigned char>::min();
       maxCorner.x[i] = std::numeric_limits<unsigned char>::max();
@@ -154,16 +154,16 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     return points;
     }
 
-  int Block::numPoints() const
+  size_t Block::numPoints() const
     {
     return pointsLength;
     }
 
-  int Block::longestSideIndex() const
+  size_t Block::longestSideIndex() const
     {
     int m = maxCorner.x[0] - minCorner.x[0];
-    int maxIndex = 0;
-    for(int i=1; i < NUM_DIMENSIONS; i++)
+    size_t maxIndex = 0;
+    for(size_t i=1; i < NUM_DIMENSIONS; i++)
       {
       int diff = maxCorner.x[i] - minCorner.x[i];
       if (diff > m)
@@ -188,7 +188,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
 
   void Block::shrink()
     {
-    int i,j;
+    size_t i,j;
     for(j=0; j<NUM_DIMENSIONS; j++)
       {
       minCorner.x[j] = maxCorner.x[j] = points[0].x[j];
@@ -260,30 +260,30 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
       Point * points = block.getPoints();
 
       int sum[NUM_DIMENSIONS] = {0};
-      for(int i=0; i < block.numPoints(); i++)
+      for(size_t i=0; i < block.numPoints(); i++)
         {
-        for(int j=0; j < NUM_DIMENSIONS; j++)
+        for(size_t j=0; j < NUM_DIMENSIONS; j++)
           {
           sum[j] += points[i].x[j];
           }
         }
 
       Point averagePoint;
-      for(int j=0; j < NUM_DIMENSIONS; j++)
+      for(size_t j=0; j < NUM_DIMENSIONS; j++)
         {
-        averagePoint.x[j] = sum[j] / block.numPoints();
+        averagePoint.x[j] = (unsigned char)(sum[j] / block.numPoints());
         }
 
       result.push_back(averagePoint);
 
       //int index = std::distance(s.begin(), it.first);
-      int index = result.size();
+      size_t index = result.size();
       assert( index <= 256 );
 
       for(int i = 0; i < numPoints; i++)
         {
         const char *currentcolor = inbuffer + 3 * i;
-        for(int j = 0; j < block.numPoints(); j++)
+        for(size_t j = 0; j < block.numPoints(); j++)
           {
           assert( currentcolor < inbuffer + bvlen );
           assert( currentcolor + 3 <= inbuffer + bvlen );
@@ -291,7 +291,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
             {
             //assert( outputimage[i] == 0 );
             assert( index > 0 );
-            outputimage[i] = index - 1;
+            outputimage[i] = (unsigned char)(index - 1);
             }
           }
         }
@@ -315,7 +315,7 @@ void IconImageGenerator::BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
   std::list<Point> palette =
     medianCut(bitmap.GetDataElement(), numPoints, maxcolor, indeximage);
 
-  int ncolors = palette.size();
+  size_t ncolors = palette.size();
   LookupTable & lut = bitmap.GetLUT();
   lut.Clear();
   lut.Allocate( 8 );
@@ -333,11 +333,11 @@ void IconImageGenerator::BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
 
   for( int i = 0; i < 3; ++i )
     {
-    lut.InitializeLUT( LookupTable::LookupTableType(i), ncolors, 0, 8 );
-    lut.SetLUT( LookupTable::LookupTableType(i), &buffer[i][0], ncolors );
+    lut.InitializeLUT( LookupTable::LookupTableType(i), (unsigned short)ncolors, 0, 8 );
+    lut.SetLUT( LookupTable::LookupTableType(i), &buffer[i][0], (unsigned short)ncolors );
     }
 
-  bitmap.GetDataElement().SetByteValue( (char*)&indeximage[0], indeximage.size() );
+  bitmap.GetDataElement().SetByteValue( (char*)&indeximage[0], (uint32_t)indeximage.size() );
   assert( lut.Initialized() );
 }
 
@@ -393,7 +393,7 @@ void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &
   // let's fake a slightly different min/max found:
   if( lmin == lmax )
     {
-    if( lmax + 1 < lmax )
+    if( lmax == std::numeric_limits<TPixelType>::max() )
       {
       lmin--;
       assert( lmin + 1 > lmin );
@@ -432,7 +432,7 @@ void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &
   // let's fake a slightly different min/max found:
   if( lmin == lmax )
     {
-    if( lmax + 1 < lmax )
+    if( lmax == std::numeric_limits<TPixelType>::max() )
       {
       lmin--;
       assert( lmin + 1 > lmin );
@@ -577,7 +577,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
 
     if( I->GetPixelFormat().GetBitsAllocated() == 16 )
       {
-      assert( I->GetPixelFormat().GetPixelRepresentation() == 0 );
+      //assert( I->GetPixelFormat().GetPixelRepresentation() == 0 );
       std::string s = ss.str();
       gdcm::Rescaler r;
       r.SetPixelFormat( I->GetPixelFormat() );
@@ -620,7 +620,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         std::string s2 = ss2.str();
         // As per standard, we only support 8bits icon
         I->SetPixelFormat( PixelFormat::UINT8 );
-        pixeldata.SetByteValue( &s2[0], s2.size() );
+        pixeldata.SetByteValue( &s2[0], (uint32_t)s2.size() );
 
         BuildLUT( *I, 256 );
         }
@@ -628,7 +628,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         {
         I->SetPixelFormat( PixelFormat::UINT8 );
         I->GetPixelFormat().SetSamplesPerPixel( 3 );
-        pixeldata.SetByteValue( &v8[0], v8.size() );
+        pixeldata.SetByteValue( &v8[0], (uint32_t)v8.size() );
         }
       }
     else
@@ -642,7 +642,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
 
         // As per standard, we only support 8bits icon
         I->SetPixelFormat( PixelFormat::UINT8 );
-        pixeldata.SetByteValue( &s[0], s.size() );
+        pixeldata.SetByteValue( &s[0], (uint32_t)s.size() );
 
         BuildLUT(*I, 256 );
         }
@@ -650,7 +650,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         {
         I->SetPixelFormat( PixelFormat::UINT8 );
         I->GetPixelFormat().SetSamplesPerPixel( 3 );
-        pixeldata.SetByteValue( &s[0], s.size() );
+        pixeldata.SetByteValue( &s[0], (uint32_t)s.size() );
         }
       }
     }
@@ -692,9 +692,9 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
           if (G > 255) G = 255;
           if (B > 255) B = 255;
 
-          *ybr_out = R; ++ybr_out;
-          *ybr_out = G; ++ybr_out;
-          *ybr_out = B; ++ybr_out;
+          *ybr_out = (unsigned char)R; ++ybr_out;
+          *ybr_out = (unsigned char)G; ++ybr_out;
+          *ybr_out = (unsigned char)B; ++ybr_out;
           }
 #if 0
     std::ofstream d( "/tmp/d.rgb" );
@@ -739,9 +739,9 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
           if (G > 255) G = 255;
           if (B > 255) B = 255;
 
-          *ybr_out = R; ++ybr_out;
-          *ybr_out = G; ++ybr_out;
-          *ybr_out = B; ++ybr_out;
+          *ybr_out = (unsigned char)R; ++ybr_out;
+          *ybr_out = (unsigned char)G; ++ybr_out;
+          *ybr_out = (unsigned char)B; ++ybr_out;
           }
         assert( ybra + 2 * ybrl == ybr_end ); (void)ybr_end;
         assert( ybrb + 1 * ybrl == ybr_end );
@@ -789,7 +789,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         {
         // As per standard, we only support 8bits icon
         I->SetPixelFormat( PixelFormat::UINT8 );
-        pixeldata.SetByteValue( &s[0], s.size() );
+        pixeldata.SetByteValue( &s[0], (uint32_t)s.size() );
 
         BuildLUT(*I, 256 );
         }
@@ -797,7 +797,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         {
         I->SetPixelFormat( PixelFormat::UINT8 );
         I->GetPixelFormat().SetSamplesPerPixel( 3 );
-        pixeldata.SetByteValue( &s[0], s.size() );
+        pixeldata.SetByteValue( &s[0], (uint32_t)s.size() );
         }
       }
     else
@@ -841,7 +841,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         lut.Allocate();
 
         I->SetPixelFormat( PixelFormat::UINT8 );
-        pixeldata.SetByteValue( &v8[0], v8.size() );
+        pixeldata.SetByteValue( &v8[0], (uint32_t)v8.size() );
 
         BuildLUT(*I, 256 );
         }
@@ -849,7 +849,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         {
         I->SetPixelFormat( PixelFormat::UINT8 );
         I->GetPixelFormat().SetSamplesPerPixel( 3 );
-        pixeldata.SetByteValue( &v8[0], v8.size() );
+        pixeldata.SetByteValue( &v8[0], (uint32_t)v8.size() );
         }
       }
     }
@@ -857,7 +857,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     {
     // MONOCHROME1 / MONOCHROME2 ...
     char *buffer2 = &vbuffer2[0];
-    pixeldata.SetByteValue( buffer2, vbuffer2.size() );
+    pixeldata.SetByteValue( buffer2, (uint32_t)vbuffer2.size() );
 
     gdcm::Rescaler r;
     r.SetPixelFormat( I->GetPixelFormat() );
@@ -866,8 +866,8 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     // - Read the value from window/level to get better min,max value
     // - iterate over all possible value to find the min,max as we are looping
     // over all values anyway
-    double min = oripf.GetMin();
-    double max = oripf.GetMax();
+    double min = (double)oripf.GetMin();
+    double max = (double)oripf.GetMax();
     if( Internals->UseMinMax )
       {
       min = Internals->Min;
@@ -961,7 +961,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
 
     // As per standard, we only support 8bits icon
     I->SetPixelFormat( PixelFormat::UINT8 );
-    pixeldata.SetByteValue( &v8[0], v8.size() );
+    pixeldata.SetByteValue( &v8[0], (uint32_t)v8.size() );
     }
 
   // \postcondition

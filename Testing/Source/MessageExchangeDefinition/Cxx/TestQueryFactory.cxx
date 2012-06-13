@@ -17,7 +17,7 @@
  *=========================================================================*/
 #include "gdcmQueryFactory.h"
 
-int TestQueryFactory(int argc, char *argv[])
+int TestQueryFactory(int , char *[])
 {
   gdcm::QueryFactory o;
   (void)o;

@@ -38,7 +38,7 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 2)
-SET(GDCM_BUILD_VERSION 0)
+SET(GDCM_BUILD_VERSION 1)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 # let advanced user the option to define GDCM_API_VERSION:
@@ -344,7 +344,7 @@ ENDIF(GDCM_USE_PVRG)
 
 # Very advanced behavior only use if you want to keep backward compatible
 # behavior but possibly incorrect behavior.
-OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" OFF)
+OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" ON)
 MARK_AS_ADVANCED(GDCMV2_0_COMPATIBILITY)
 
 IF(GDCM_USE_KAKADU)
@@ -576,6 +576,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   IF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
     SET(CMAKE_INSTALL_MFC_LIBRARIES 0)
     SET(CMAKE_INSTALL_DEBUG_LIBRARIES 0)
+    IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+      SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+    ENDIF()
     INCLUDE(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
   ENDIF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
 

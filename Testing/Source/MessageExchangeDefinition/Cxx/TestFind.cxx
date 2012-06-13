@@ -22,18 +22,18 @@
 #include "gdcmMovePatientRootQuery.h"
 
 
-int TestFind(int argc, char *argv[])
+int TestFind(int , char *[])
 {
-  std::string hostname = "common.bwh.harvard.edu";
-  int port = 11112;
-  std::string callaetitle = "CTK_AE";
+  std::string hostname = "www.dicomserver.co.uk";
+  uint16_t port = 11112;
+  std::string callaetitle = "GDCM_ROCKS";
   std::string callingaetitle = "ACME1";
 
   
   gdcm::Tag theTag(0x0010, 0x0010);
   std::string theName = "F*";
   std::pair<gdcm::Tag, std::string> theTagPair =
-    std::make_pair<gdcm::Tag, std::string>(theTag, theName);
+    std::make_pair(theTag, theName);
 
   std::vector<std::pair<gdcm::Tag, std::string> > theTags;
   theTags.push_back(theTagPair);

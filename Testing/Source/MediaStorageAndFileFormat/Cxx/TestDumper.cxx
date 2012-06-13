@@ -25,11 +25,13 @@ int TestDump(const char *filename)
     return 1;
     }
 
+  std::ostringstream out;
+{
   gdcm::Dumper p;
   p.SetFile( r.GetFile() );
-  std::ostringstream out;
   //p.Print( std::cout );
   p.Print( out );
+}
 
   // Test CSA Header here too
   gdcm::CSAHeader csa;

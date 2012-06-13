@@ -333,6 +333,7 @@ void PrintHelp()
 
 int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
 {
+  (void)defs;
   if( deflated )
     {
     return checkdeflated(filename.c_str());
@@ -340,14 +341,14 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
 
   //const char *filename = argv[1];
   //std::cout << "filename: " << filename << std::endl;
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
+  gdcm::Reader reader0;
+  reader0.SetFileName( filename.c_str() );
+  if( !reader0.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
     }
-  const gdcm::File &file = reader.GetFile();
+  const gdcm::File &file = reader0.GetFile();
   gdcm::MediaStorage ms;
   ms.SetFromFile(file);
   /*

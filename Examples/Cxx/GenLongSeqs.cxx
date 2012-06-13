@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
   const char owner_str[] = "GDCM CONFORMANCE TESTS";
   gdcm::DataElement owner( gdcm::Tag(0x4d4d, 0x10) );
-  owner.SetByteValue(owner_str, strlen(owner_str));
+  owner.SetByteValue(owner_str, (uint32_t)strlen(owner_str));
   owner.SetVR( gdcm::VR::LO );
 
   size_t nitems = 1000;

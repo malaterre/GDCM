@@ -64,7 +64,7 @@ unsigned int readvector(std::vector<T> &v, const char *str)
     os.get(); //  == ","
     }
 
-  return v.size();
+  return (unsigned int)v.size();
 }
 
 int No_Of_Resolutions(const char *filename)
@@ -75,10 +75,9 @@ int No_Of_Resolutions(const char *filename)
   opj_event_mgr_t event_mgr;    /* event manager */
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
   opj_cio_t *cio;
-  opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
@@ -156,6 +155,7 @@ int No_Of_Resolutions(const char *filename)
 
 bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *filename, int res, std::ostream& of, int flag,  gdcm::SequenceOfItems *sq)
 {
+  (void)of;
   std::ifstream is;
   is.open( filename, std::ios::binary );
   opj_dparameters_t parameters;  /* decompression parameters */
@@ -165,8 +165,8 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[(unsigned int)buf_size];
+  size_t buf_size = (size_t)is.tellg();
+  char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
@@ -230,35 +230,37 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
     return 1;
     }
 
-  opj_cp_t * cp = ((opj_jp2_t*)dinfo->jp2_handle)->j2k->cp;
-  opj_tcp_t *tcp = &cp->tcps[0];
-  opj_tccp_t *tccp = &tcp->tccps[0];
+  //opj_cp_t * cp = ((opj_jp2_t*)dinfo->jp2_handle)->j2k->cp;
+  //opj_tcp_t *tcp = &cp->tcps[0];
+  //opj_tccp_t *tccp = &tcp->tccps[0];
   /*   std::cout << "\n No of Cols In Image" << image->x1;
        std::cout << "\n No of Rows In Image" << image->y1;
        std::cout << "\n No of Components in Image" << image->numcomps;
        std::cout << "\n No of Resolutions"<< tccp->numresolutions << "\n";
    */
-  opj_j2k_t* j2k = NULL;
+  //opj_j2k_t* j2k = NULL;
   opj_jp2_t* jp2 = NULL;
   jp2 = (opj_jp2_t*)dinfo->jp2_handle;
-  int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+  //int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
   //std:: cout << reversible;
+  int Dimensions[2];
+{
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
-  int Dimensions[2];
   Dimensions[0]= comp->w;
   Dimensions[1] = comp->h;
   opj_cio_close(cio);
-  unsigned long len = Dimensions[0]*Dimensions[1] * image->numcomps;
+}
+  unsigned long rawlen = Dimensions[0]*Dimensions[1] * image->numcomps;
   //std::cout << "\nTest" <<image->comps[0].factor;
-  char *raw = new char[len];
+  char *raw = new char[rawlen];
 
   for (unsigned int compno = 0; compno < (unsigned int)image->numcomps; compno++)
     {
-    opj_image_comp_t *comp = &image->comps[compno];
+    const opj_image_comp_t *comp = &image->comps[compno];
 
-    int w = image->comps[compno].w;
-    int h = image->comps[compno].h;
+    int w = comp->w;
+    int h = comp->h;
     uint8_t *data8 = (uint8_t*)raw + compno;
     for (int i = 0; i < w * h ; i++)
       {
@@ -279,13 +281,13 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   gdcm::DataElement de( gdcm::Tag(0x8,0x18) ); // SOP Instance UID
   de.SetVR( gdcm::VR::UI );
   const char *u = uid.Generate();
-  de.SetByteValue( u, strlen(u) );
+  de.SetByteValue( u, (uint32_t)strlen(u) );
   ds.Insert( de );
 
   gdcm::DataElement de1( gdcm::Tag(0x8,0x16) );
   de1.SetVR( gdcm::VR::UI );
   gdcm::MediaStorage ms( gdcm::MediaStorage::VLWholeSlideMicroscopyImageStorage );
-  de1.SetByteValue( ms.GetString(), strlen(ms.GetString()));
+  de1.SetByteValue( ms.GetString(), (uint32_t)strlen(ms.GetString()));
   ds.Insert( de1 );
 
   gdcm::DataElement de2( gdcm::Tag(0x28,0x04) );
@@ -295,12 +297,12 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   if(image->numcomps == 1)
     {
     const char mystr[] = "MONOCHROME2";
-    de2.SetByteValue(mystr, strlen(mystr));
+    de2.SetByteValue(mystr, (uint32_t)strlen(mystr));
     }
   else
     {
     const char mystr1[] = "RGB";
-    de2.SetByteValue(mystr1, strlen(mystr1));
+    de2.SetByteValue(mystr1, (uint32_t)strlen(mystr1));
     }
 
   ds.Insert( de2 );
@@ -309,7 +311,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   gdcm::Attribute<0x0028,0x0100> at = {8};
   ds.Insert( at.GetAsDataElement() );
 
-  gdcm::Attribute<0x0028,0x0002> at1 = {image->numcomps};
+  gdcm::Attribute<0x0028,0x0002> at1 = { (uint16_t)image->numcomps};
   ds.Insert( at1.GetAsDataElement() );
 
   gdcm::Attribute<0x0028,0x0101> at2 = {8};
@@ -331,8 +333,8 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
         a = a+1;
         }
 
-      uint16_t row = (image->y1)/b;
-      uint16_t col = (image->x1)/b;
+      uint16_t row = (uint16_t)((image->y1)/b);
+      uint16_t col = (uint16_t)((image->x1)/b);
 
       gdcm::Element<gdcm::VR::IS,gdcm::VM::VM1> el2;
       el2.SetValue(i+1);
@@ -414,11 +416,11 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   // Important to write here
   std::vector<unsigned int> extent = gdcm::ImageHelper::GetDimensionsValue(file);
 
-  unsigned short xmax = extent[0];
-  unsigned short ymax = extent[1];
+  unsigned short xmax = (uint16_t)extent[0];
+  unsigned short ymax = (uint16_t)extent[1];
   unsigned short theChunkSize = 4;
-  unsigned short ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
-  unsigned short zmax = extent[2];
+  unsigned short ychunk = (unsigned short)(extent[1]/theChunkSize); //go in chunk sizes of theChunkSize
+  unsigned short zmax = (uint16_t)extent[2];
   //std::cout << "\n"<<xmax << "\n" << ymax<<"\n"<<zmax<<"\n" << image->numcomps<<"\n";
 
   if (xmax == 0 || ymax == 0)
@@ -436,7 +438,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
       {
       nexty = y + ychunk;
       if (nexty > ymax) nexty = ymax;
-      theStreamWriter.DefinePixelExtent(0, xmax, y, nexty, z, z+1);
+      theStreamWriter.DefinePixelExtent(0, xmax, (uint16_t)y, (uint16_t)nexty, (uint16_t)z, (uint16_t)(z+1));
       unsigned long len = theStreamWriter.DefineProperBufferLength();
       //std::cout << "\n" <<len;
       char* finalBuffer = new char[len];
@@ -468,6 +470,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
 
 bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::StreamImageReader & reader, int resolution, std::ostream& of, int tile,std::vector<unsigned int> start, std::vector<unsigned int> end)
 {
+  (void)of;
   gdcm::File file1 = reader.GetFile();
   gdcm::DataSet ds1 = file1.GetDataSet();
 
@@ -533,26 +536,26 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
 
   if(tile ==1 )
     {
-    xmin = start[0];
-    xmax = end[0];
-    ymin = start[1];
-    ymax = end[1];
+    xmin = (uint16_t)start[0];
+    xmax = (uint16_t)end[0];
+    ymin = (uint16_t)start[1];
+    ymax = (uint16_t)end[1];
     theChunkSize = 4;
-    ychunk = (end[1]-start[1])/theChunkSize; //go in chunk sizes of theChunkSize
-    zmin = extent[2]-1;
-    zmax = extent[2];
+    ychunk = (uint16_t)(end[1]-start[1])/theChunkSize; //go in chunk sizes of theChunkSize
+    zmin = (unsigned short)(extent[2]-1);
+    zmax = (unsigned short)extent[2];
     }
 
   else
     {
     xmin = 0;
-    xmax = extent[0];
+    xmax = (uint16_t)extent[0];
     ymin = 0;
-    ymax = extent[1];
+    ymax = (uint16_t)extent[1];
     theChunkSize = 4;
-    ychunk = extent[1]/theChunkSize; //go in chunk sizes of theChunkSize
-    zmin = extent[2]-1;
-    zmax = extent[2];
+    ychunk = (uint16_t)(extent[1]/theChunkSize); //go in chunk sizes of theChunkSize
+    zmin = (uint16_t)(extent[2]-1);
+    zmax = (uint16_t)extent[2];
     }
 
   if (xmax == 0 && ymax == 0)
@@ -568,7 +571,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
     }
 
   int z, y, nexty;
-  unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
+  //unsigned long prevLen = 0; //when going through the char buffer, make sure to grab
   //the bytes sequentially.  So, store how far you got in the buffer with each iteration.
 
   for (z = zmin; z < zmax; ++z)
@@ -577,7 +580,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
       {
       nexty = y + ychunk;
       if (nexty > ymax) nexty = ymax;
-      reader.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
+      reader.DefinePixelExtent(xmin, xmax, (uint16_t)y, (uint16_t)nexty, (uint16_t)z, (uint16_t)(z+1));
       unsigned long len = reader.DefineProperBufferLength();
 
       char* finalBuffer = new char[len];
@@ -601,7 +604,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
         {
         std::cerr<< "Not able to put in read data buffer"<< std::endl;
         }
-      theStreamWriter.DefinePixelExtent(xmin, xmax, y, nexty, z, z+1);
+      theStreamWriter.DefinePixelExtent(xmin, xmax, (uint16_t)y, (uint16_t)nexty, (uint16_t)z, (uint16_t)(z+1));
       //  unsigned long len = theStreamWriter.DefineProperBufferLength();
       //std::cout << "\n" <<len;
       //char* finalBuffer1 = new char[len];
@@ -675,8 +678,8 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
     gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el2;
     if(tile == 1)
       {
-      el2.SetValue(start[0],0);
-      el2.SetValue(start[1],1);
+      el2.SetValue((unsigned short)start[0],0);
+      el2.SetValue((unsigned short)start[1],1);
       }
     else
       {
@@ -690,13 +693,13 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
     gdcm::Element<gdcm::VR::US,gdcm::VM::VM2> el3;
     if(tile == 1)
       {
-      el3.SetValue(end[0],0);
-      el3.SetValue(end[1],1);
+      el3.SetValue((unsigned short)end[0],0);
+      el3.SetValue((unsigned short)end[1],1);
       }
     else
       {
-      el3.SetValue(extent[0],0);
-      el3.SetValue(extent[1],1);
+      el3.SetValue((unsigned short)extent[0],0);
+      el3.SetValue((unsigned short)extent[1],1);
       }
     gdcm::DataElement brr = el3.GetAsDataElement();
     brr.SetTag( gdcm::Tag(0x0048,0x0202) );            //brr --> bottom right col/row
@@ -735,7 +738,7 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
   el.SetFromDataElement( Number_Of_Frames );
 
 
-  uint16_t No_Of_Resolutions  = el.GetValue(0);
+  uint16_t No_Of_Resolutions  = (uint16_t)el.GetValue(0);
   //std::cout << "HERE NO. "<< No_Of_Resolutions;
 
   gdcm::DataElement BA = ds1.GetDataElement( gdcm::Tag(0x0028,0x0100) );
@@ -1092,7 +1095,7 @@ int main (int argc, char *argv[])
     }
 
   const char *inputextension  = filename.GetExtension();
-  const char *outputextension = outfilename.GetExtension();
+  //const char *outputextension = outfilename.GetExtension();
 
   gdcm::StreamImageWriter theStreamWriter;
   std::ofstream of;

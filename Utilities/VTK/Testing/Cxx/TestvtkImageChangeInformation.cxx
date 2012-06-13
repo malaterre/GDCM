@@ -23,12 +23,20 @@
 
 int TestvtkImageChangeInformation(int argc, char *argv[])
 {
-  if( argc < 2 ) return 1;
+  if( argc < 2 )
+    {
+    std::cerr << "Need arg" << std::endl;
+    return 1;
+    }
   const char *dirname = argv[1];
 
   vtkDirectory * dir = vtkDirectory::New();
   int r = dir->Open( dirname );
-  if( !r ) return 1;
+  if( !r )
+    {
+    std::cerr << "Cannot open dir:" << dirname << std::endl;
+    return 1;
+    }
   vtkIdType nfiles = dir->GetNumberOfFiles();
 
   vtkImageChangeInformation *ici = vtkImageChangeInformation::New();
@@ -49,8 +57,8 @@ int TestvtkImageChangeInformation(int argc, char *argv[])
   double range[2];
   for ( vtkIdType file = 0; file < nfiles; ++file )
     {
-  vtkGDCMImageReader * reader = vtkGDCMImageReader::New();
-  ici->SetInput( reader->GetOutput() );
+    vtkGDCMImageReader * reader = vtkGDCMImageReader::New();
+    ici->SetInput( reader->GetOutput() );
     std::string filename = dir->GetFile(file);
     if( filename.find( "dcm" ) != std::string::npos )
       {
@@ -67,7 +75,7 @@ int TestvtkImageChangeInformation(int argc, char *argv[])
       renWin->Render();
       std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
       }
-  reader->Delete();
+    reader->Delete();
     }
 
   dir->Delete();

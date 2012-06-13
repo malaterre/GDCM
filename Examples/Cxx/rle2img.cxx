@@ -79,14 +79,14 @@ void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned shor
       {
       unsigned char v1 = (unsigned char)temp[i+1];
       unsigned char v2 = (unsigned char)temp[i+2];
-      int value = v2 * 256 + v1;
+      unsigned short value = (unsigned short)(v2 * 256 + v1);
       output.push_back( value );
       delta = value;
       i+=2;
       }
     else
       {
-      int value = temp[i] + delta;
+      unsigned short value = (unsigned short)(temp[i] + delta);
       output.push_back( value );
       delta = value;
       }
@@ -102,7 +102,13 @@ void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned shor
 
 int main(int argc, char *argv [])
 {
-  if( argc < 2 ) return 1;
+  if( argc < 2 )
+    {
+    std::cerr << argv[0] << "input.dcm [output.dcm]" << std::endl;
+    std::cerr << "will default to 'outrle.dcm' unless output.dcm is specified."
+      << std::endl;
+    return 1;
+    }
   const char *filename = argv[1];
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -130,6 +136,7 @@ int main(int argc, char *argv [])
   if( strncmp( bv->GetPointer(), comprgb.c_str(), comprgb.size() ) == 0 )
     {
     isrgb = true;
+    std::cerr << "See: pmsct_rgb1.cxx instead" << std::endl;
     return 1;
     }
   if( !isrgb && !isrle ) return 1;
@@ -140,12 +147,26 @@ int main(int argc, char *argv [])
   if ( compressionpixeldata.IsEmpty() ) return 1;
   const gdcm::ByteValue * bv2 = compressionpixeldata.GetByteValue();
 
-  std::vector<unsigned short> buffer;
-  delta_decode(bv2->GetPointer(), bv2->GetLength(), buffer);
+  gdcm::Attribute<0x0028,0x0010> at1;
+  at1.SetFromDataSet( ds );
+  gdcm::Attribute<0x0028,0x0011> at2;
+  at2.SetFromDataSet( ds );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OW );
-  pixeldata.SetByteValue( (char*)&buffer[0], buffer.size() * sizeof( unsigned short ) );
+  gdcm::VL bv2l = bv2->GetLength();
+  gdcm::VL at1l = at1.GetValue() * at2.GetValue() * 2; /* sizeof(unsigned short) == 2 */
+  // Handle special case that is not compressed:
+  if( bv2l == at1l )
+    {
+    pixeldata.SetByteValue( bv2->GetPointer(), bv2->GetLength() );
+    }
+  else
+    {
+    std::vector<unsigned short> buffer;
+    delta_decode(bv2->GetPointer(), bv2->GetLength(), buffer);
+    pixeldata.SetByteValue( (char*)&buffer[0], (uint32_t)(buffer.size() * sizeof( unsigned short )) );
+    }
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
   // Add the pixel data element

@@ -122,7 +122,7 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
 Three-byte repeats shall be encoded as Replicate Runs. Each row of the image shall be encoded
 separately and not cross a row boundary.
 */
-inline int count_identical_bytes(const char *start, unsigned int len)
+inline int count_identical_bytes(const char *start, size_t len)
 {
   assert( len );
 #if 0
@@ -137,7 +137,7 @@ inline int count_identical_bytes(const char *start, unsigned int len)
 #else
   const char ref = start[0];
   unsigned int count = 1; // start at one; make unsigned for comparison
-  const unsigned int cmin = std::min(128u,len);
+  const size_t cmin = std::min((size_t)128,len);
   while( count < cmin && start[count] == ref )
     {
   //std::cerr << "count/len:" << count << "," << len << std::endl;
@@ -149,7 +149,7 @@ inline int count_identical_bytes(const char *start, unsigned int len)
 #endif
 }
 
-inline int count_nonrepetitive_bytes(const char *start, unsigned int len)
+inline int count_nonrepetitive_bytes(const char *start, size_t len)
 {
 /*
  * TODO:
@@ -171,7 +171,7 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
   return p - start;
 #else
   unsigned int count = 1;
-  const unsigned int cmin = std::min(128u,len);
+  const size_t cmin = std::min((size_t)128,len);
 #if 0
   // TODO: this version that handles the note still does not work...
   while( count < cmin )
@@ -216,11 +216,11 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
 }
 
 /* return output length */
-ptrdiff_t rle_encode(char *output, unsigned int outputlength, const char *input, unsigned int inputlength)
+ptrdiff_t rle_encode(char *output, size_t outputlength, const char *input, size_t inputlength)
 {
   char *pout = output;
   const char *pin = input;
-  unsigned int length = inputlength;
+  size_t length = inputlength;
   while( pin != input + inputlength )
     {
     assert( length <= inputlength );
@@ -232,7 +232,7 @@ ptrdiff_t rle_encode(char *output, unsigned int outputlength, const char *input,
       //
       // Test first we are allowed to write two bytes:
       if( pout + 1 + 1 > output + outputlength ) return -1;
-      *pout = -count + 1;
+      *pout = (char)(-count + 1);
       assert( /**pout != -128 &&*/ 1 - *pout == count );
       assert( *pout <= -1 && *pout >= -127 );
       ++pout;
@@ -246,7 +246,7 @@ ptrdiff_t rle_encode(char *output, unsigned int outputlength, const char *input,
       count = count_nonrepetitive_bytes(pin, length);
       // first test we are allowed to write 1 + count bytes in the output buffer:
       if( pout + count + 1 > output + outputlength ) return -1;
-      *pout = count - 1;
+      *pout = (char)(count - 1);
       assert( *pout != -128 && *pout+1 == count );
       assert( *pout >= 0 );
       ++pout;
@@ -393,13 +393,13 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       {
       if( GetPixelFormat().GetBitsAllocated() == 8 )
         {
-        DoInvertPlanarConfiguration<char>(bufferrgb, ptr_img, image_len / sizeof(char));
+        DoInvertPlanarConfiguration<char>(bufferrgb, ptr_img, (uint32_t)(image_len / sizeof(char)));
         }
       else /* ( GetPixelFormat().GetBitsAllocated() == 16 ) */
         {
         assert( GetPixelFormat().GetBitsAllocated() == 16 );
         // should not happen right ?
-        DoInvertPlanarConfiguration<short>((short*)bufferrgb, (short*)ptr_img, image_len / sizeof(short));
+        DoInvertPlanarConfiguration<short>((short*)bufferrgb, (short*)ptr_img, (uint32_t)(image_len / sizeof(short)));
         }
       ptr_img = bufferrgb;
       }
@@ -480,17 +480,17 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       ptr_img = buffer;
       }
     assert( image_len % MaxNumSegments == 0 );
-    const int input_seg_length = image_len / MaxNumSegments;
+    const size_t input_seg_length = image_len / MaxNumSegments;
     std::string datastr;
     for(int seg = 0; seg < MaxNumSegments; ++seg )
       {
-      int partition = input_seg_length;
+      size_t partition = input_seg_length;
       const char *ptr = ptr_img + seg * input_seg_length;
       assert( ptr < ptr_img + image_len );
       if( seg == MaxNumSegments - 1 )
         {
         partition += image_len % MaxNumSegments;
-        assert( (MaxNumSegments-1) * input_seg_length + partition == (int)image_len );
+        assert( (MaxNumSegments-1) * input_seg_length + partition == (size_t)image_len );
         }
       assert( partition == input_seg_length );
 
@@ -511,7 +511,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         length += llength;
         }
       // update header
-      header.Offset[1+seg] = header.Offset[seg] + length;
+      header.Offset[1+seg] = (uint32_t)(header.Offset[seg] + length);
 
       assert( data.str().size() == length );
       datastr += data.str();
@@ -630,7 +630,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
       pos += check;
       }
     assert( pos == len );
-    out.SetByteValue( buffer, len );
+    out.SetByteValue( buffer, (uint32_t)len );
     delete[] buffer;
     return true;
     }
@@ -741,7 +741,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     assert( numOutBytes == length );
     }
 
-  return ImageCodec::Decode(tmpos,os);
+  return ImageCodec::DecodeByStreams(tmpos,os);
 }
 
 bool RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)

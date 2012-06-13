@@ -14,6 +14,8 @@
 #include "gdcmTransferSyntaxSub.h"
 #include "gdcmSwapper.h"
 
+#include <limits>
+
 namespace gdcm
 {
 namespace network
@@ -29,8 +31,12 @@ TransferSyntaxSub::TransferSyntaxSub()
 
 void TransferSyntaxSub::SetName( const char *name )
 {
-  Name = name;
-  ItemLength = Name.size();
+  if( name )
+    {
+    Name = name;
+    assert( Name.size() <= std::numeric_limits<uint16_t>::max() );
+    ItemLength = (uint16_t)Name.size();
+    }
 }
 
 std::istream &TransferSyntaxSub::Read(std::istream &is)
@@ -86,7 +92,7 @@ void TransferSyntaxSub::UpdateName( const char *name )
     if( b )
       {
       Name = name;
-      ItemLength = Name.size();
+      ItemLength = (uint16_t)Name.size();
       assert( (size_t)ItemLength + 4 == Size() );
       return;
       }

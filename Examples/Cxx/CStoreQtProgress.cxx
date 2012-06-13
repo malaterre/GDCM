@@ -68,15 +68,19 @@ public:
     // Retrieve the ProgressEvent:
     const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
     // compute global progress:
-    progress = refprogress + (1. / nfiles ) * pe.GetProgress();
+    progress = refprogress + (1. / (double)nfiles ) * pe.GetProgress();
     // Print Global and local progress to stdout:
     std::cout << "Global Progress: " << progress << " per file progress " << pe.GetProgress() << std::endl;
     //set progress value in the QtProgress bar
-    int i = progress * 100 + 0.5; // round to next int
+    int i = (int)(progress * 100 + 0.5); // round to next int
     qtprogress->setValue(i);
     win->show();
     }
-  virtual void ShowDataSet(Subject *caller, const Event &evt) {}
+  virtual void ShowDataSet(Subject *caller, const Event &evt)
+    {
+    (void)caller;
+    (void)evt;
+    }
 };
 } // end namespace gdcm
 
@@ -104,7 +108,7 @@ int main(int argc, char *argv[])
   gdcm::MyQtWatcher w( &scu, "QtWatcher", win, progress );
 
   scu.SetHostname( remote );
-  scu.SetPort( portno );
+  scu.SetPort( (uint16_t)portno );
   scu.SetTimeout( 1000 );
   scu.SetCalledAETitle( "GDCM_STORE" );
 

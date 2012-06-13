@@ -81,7 +81,7 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
     if ( filenames && filenames->GetNumberOfValues() > 1 )
       {
       dataextent[4] = 0;
-      dataextent[5] = filenames->GetNumberOfValues() - 1;
+      dataextent[5] = (int)filenames->GetNumberOfValues() - 1;
       }
     else
       {
@@ -160,7 +160,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename, bool verbose = false)
     gdcm::Directory d;
     d.Load( filename );
     gdcm::Directory::FilenamesType l = d.GetFilenames();
-    const unsigned int nfiles = l.size();
+    const size_t nfiles = l.size();
     vtkStringArray *sarray = vtkStringArray::New();
     for(unsigned int i = 0; i < nfiles; ++i)
       {

@@ -224,6 +224,9 @@ public class";
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmServiceClassUser.h"
 
+#include "gdcmStreamImageReader.h"
+#include "gdcmStreamImageWriter.h"
+
 using namespace gdcm;
 %}
 
@@ -783,11 +786,15 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %template(TagArrayType) std::vector< gdcm::Tag >;
 %include "gdcmQueryBase.h"
 %include "gdcmBaseRootQuery.h"
-%include "gdcmCompositeNetworkFunctions.h"
-%template(CharSetArrayType) std::vector< gdcm::ECharSet >;
 %include "gdcmQueryFactory.h"
+%template(CharSetArrayType) std::vector< gdcm::ECharSet >;
+%include "gdcmCompositeNetworkFunctions.h"
 %include "gdcmPresentationContext.h"
 //EXTEND_CLASS_PRINT(gdcm::PresentationContext)
 %include "gdcmPresentationContextGenerator.h"
 typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
+%apply char[] { char* inReadBuffer }
+%include "gdcmStreamImageReader.h"
+%clear char* inReadBuffer;
+%include "gdcmStreamImageWriter.h"

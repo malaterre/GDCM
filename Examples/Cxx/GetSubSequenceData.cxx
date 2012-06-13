@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 //    std::cout << seq2 << std::endl;
 
   SmartPointer<SequenceOfItems> sqi3 = seq2.GetValueAsSQ();
-  int ni3 = sqi3->GetNumberOfItems();
+  size_t ni3 = sqi3->GetNumberOfItems(); (void)ni3;
   assert( sqi3->GetNumberOfItems() >= 1 );
   Item &item3 = sqi3->GetItem(1);
   DataSet &subds3 = item3.GetNestedDataSet();
@@ -80,11 +80,11 @@ int main(int argc, char *argv[])
   if( !subds3.FindDataElement( tseq6 ) ) return 1;
   const DataElement& seq6 = subds3.GetDataElement( tseq6 );
   SmartPointer<SequenceOfItems> sqi6 = seq6.GetValueAsSQ();
-  int ni6= sqi6->GetNumberOfItems();
+  size_t ni6= sqi6->GetNumberOfItems();
   assert( sqi6->GetNumberOfItems() >= 1 );
   const PrivateTag tseq7(0x7fe1,0x86,"GEMS_Ultrasound_MovieGroup_001");
-  int dimx, dimy;
-  for( int i6 = 1; i6 <= ni6; ++i6 )
+  int dimx = 0, dimy = 0;
+  for( size_t i6 = 1; i6 <= ni6; ++i6 )
     {
     Item &item6 = sqi6->GetItem(i6);
     DataSet &subds6 = item6.GetNestedDataSet();
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 //    std::cout << seq3 << std::endl;
 
   SmartPointer<SequenceOfItems> sqi4 = seq3.GetValueAsSQ();
-  int ni4= sqi4->GetNumberOfItems();
+  size_t ni4= sqi4->GetNumberOfItems();
   assert( sqi4->GetNumberOfItems() >= 1 );
   const PrivateTag tseq8(0x7fe1,0x37,"GEMS_Ultrasound_MovieGroup_001");
   const PrivateTag tseq4(0x7fe1,0x43,"GEMS_Ultrasound_MovieGroup_001");
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
   std::vector<char> imbuffer;
   int dimz = 0;
-  for( int i4 = 1; i4 <= ni4; ++i4 )
+  for( size_t i4 = 1; i4 <= ni4; ++i4 )
     {
     Item &item4 = sqi4->GetItem(i4);
     DataSet &subds4 = item4.GetNestedDataSet();
@@ -133,6 +133,7 @@ int main(int argc, char *argv[])
     //    std::cout << seq5 << std::endl;
 
     const ByteValue *bv4 = seq4.GetByteValue();
+    (void)bv4;
 #if 0
       {
       std::ofstream out( "/tmp/mo4" );
@@ -153,7 +154,7 @@ int main(int argc, char *argv[])
     imbuffer.insert( imbuffer.begin(), bv5->GetPointer(), bv5->GetPointer() + bv5->GetLength() );
     }
   DataElement fakedata;
-  fakedata.SetByteValue( &imbuffer[0], imbuffer.size() );
+  fakedata.SetByteValue( &imbuffer[0], (uint32_t)imbuffer.size() );
 
 
   gdcm::SmartPointer<gdcm::Image> im = new gdcm::Image;
@@ -163,7 +164,9 @@ int main(int argc, char *argv[])
   im->SetDimension(1, dimy );
   im->SetDimension(2, dimz );
   size_t l1 = imbuffer.size();
+  (void)l1;
   size_t l2 = im->GetBufferLength();
+  (void)l2;
   assert( im->GetBufferLength() == imbuffer.size() );
   im->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::MONOCHROME2 );
 
@@ -177,7 +180,7 @@ int main(int argc, char *argv[])
   gdcm::DataElement de( Tag(0x8,0x18) ); // SOP Instance UID
   de.SetVR( VR::UI );
   const char *u = uid.Generate();
-  de.SetByteValue( u, strlen(u) );
+  de.SetByteValue( u, (uint32_t)strlen(u) );
   //ds.Insert( de );
   dataset.Replace( de );
 
@@ -185,7 +188,7 @@ int main(int argc, char *argv[])
   de.SetVR( VR::UI );
   gdcm::MediaStorage ms(
     gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage );
-  de.SetByteValue( ms.GetString(), strlen(ms.GetString()));
+  de.SetByteValue( ms.GetString(), (uint32_t)strlen(ms.GetString()));
   dataset.Replace( de ); // replace !
 
   w.SetFileName( "outvid.dcm" );

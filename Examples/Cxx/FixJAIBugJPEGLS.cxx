@@ -187,12 +187,12 @@ int main(int argc, char *argv[])
 #endif
 
     const char *pbyteCompressed = &vbuffer[0];
-    unsigned int cbyteCompressed = vbuffer.size(); // updated legnth
+    size_t cbyteCompressed = vbuffer.size(); // updated legnth
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters params = {0};
+    JlsParameters params;
 #else
-    JlsParamaters params = {0};
+    JlsParamaters params;
 #endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OW );
-  pixeldata.SetByteValue( (char*)&rgbyteOutall[0], rgbyteOutall.size() );
+  pixeldata.SetByteValue( (char*)&rgbyteOutall[0], (uint32_t)rgbyteOutall.size() );
 
 
   // Add the pixel data element

@@ -268,7 +268,7 @@ implement it).
 
 \section see_also SEE ALSO
 
-<b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1)
+<b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1), <b>dumpasn1</b>(1)
 
 \section copyright COPYRIGHT
 

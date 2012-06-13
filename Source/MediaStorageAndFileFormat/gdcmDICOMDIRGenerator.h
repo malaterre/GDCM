@@ -89,11 +89,11 @@ private:
   const char *ComputeFileID(const char *);
   bool TraverseDirectoryRecords(VL start );
   bool ComputeDirectoryRecordsOffset(const SequenceOfItems *sqi, VL start);
-  unsigned int FindNextDirectoryRecord( unsigned int item1, const char *directorytype );
+  size_t FindNextDirectoryRecord( size_t item1, const char *directorytype );
   SequenceOfItems *GetDirectoryRecordSequence();
-  unsigned int FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype );
+  size_t FindLowerLevelDirectoryRecord( size_t item1, const char *directorytype );
   typedef std::pair< std::string, Tag> MyPair;
-  MyPair GetReferenceValueForDirectoryType(unsigned int item);
+  MyPair GetReferenceValueForDirectoryType(size_t item);
   bool SeriesBelongToStudy(const char *seriesuid, const char *studyuid);
   bool ImageBelongToSeries(const char *sopuid, const char *seriesuid, Tag const &t1, Tag const &t2);
   bool ImageBelongToSameSeries(const char *sopuid, const char *seriesuid, Tag const &t);

@@ -33,7 +33,7 @@ AAssociateACPDU::AAssociateACPDU()
   memset(Reserved11_26, ' ', sizeof(Reserved11_26));
   memset(Reserved27_42, ' ', sizeof(Reserved27_42));
 
-  PDULength = Size() - 6;
+  PDULength = (uint32_t)(Size() - 6);
 }
 
 void AAssociateACPDU::SetCalledAETitle(const char calledaetitle[16])
@@ -177,7 +177,7 @@ size_t AAssociateACPDU::Size() const
 void AAssociateACPDU::AddPresentationContextAC( PresentationContextAC const &pcac )
 {
   PresContextAC.push_back( pcac );
-  PDULength = Size() - 6;
+  PDULength = (uint32_t)(Size() - 6);
   assert( PDULength + 4 + 1 + 1 == Size() );
 }
 

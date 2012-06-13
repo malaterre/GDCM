@@ -14,6 +14,8 @@
 #include "gdcmApplicationContext.h"
 #include "gdcmSwapper.h"
 
+#include <limits>
+
 namespace gdcm
 {
 namespace network
@@ -71,9 +73,13 @@ size_t ApplicationContext::Size() const
 
 void ApplicationContext::UpdateName( const char *name )
 {
-  Name = name;
-  ItemLength = Name.size();
-  assert( (size_t)ItemLength + 4 == Size() );
+  if( name )
+    {
+    Name = name;
+    assert( Name.size() < std::numeric_limits<uint16_t>::max() );
+    ItemLength = (uint16_t)Name.size();
+    assert( (size_t)ItemLength + 4 == Size() );
+    }
 }
 
 void ApplicationContext::Print(std::ostream &os) const

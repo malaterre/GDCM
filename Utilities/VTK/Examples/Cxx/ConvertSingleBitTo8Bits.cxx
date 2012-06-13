@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
   uarray->SetNumberOfTuples( nvalues );
   for(vtkIdType i = 0; i < nvalues; ++i)
     {
-    uarray->SetValue( i, barray->GetValue(i) );
+    uarray->SetValue( i, (unsigned char)barray->GetValue(i) );
     }
 
   vtkImageData *copy = vtkImageData::New();

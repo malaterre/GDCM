@@ -12,7 +12,15 @@ INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 # http://mail.python.org/pipermail/c++-sig/2002-May/001021.html
 # http://mail.python.org/pipermail/python-dev/2002-May/023923.html
 
-FIND_PACKAGE(SWIG REQUIRED)
+# 2.0.5 is required here to solve the issue with wrapping of vector<int>::size_type
+# see full thread at:
+# http://sourceforge.net/mailarchive/message.php?msg_id=29217941
+# 2.0.5 cannot be used because of the error
+#  error: invalid initialization of reference of type 'ptrdiff_t& {aka int&}' from expression of type 'long int'
+# http://sourceforge.net/mailarchive/message.php?msg_id=29294773
+# 2.0.6 cannot be used because of a serious typemap bug in 2.0.5
+# http://sourceforge.net/mailarchive/message.php?msg_id=29305946
+FIND_PACKAGE(SWIG 2.0.7 REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
 
@@ -78,7 +86,8 @@ SET(MODULE_NAME gdcmswig)
 # the other gdcm lib. bad !!!
 #SET (SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS ${SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS} ${CMAKE_CURRENT_SOURCE_DIR}/docstrings.i)
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
-SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMEXD gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
+SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMEXD gdcmMSFF gdcmIOD)
+set_property(TARGET ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTY NO_SONAME 1)
 
 # Python extension modules on Windows must have the extension ".pyd"
 # instead of ".dll" as of Python 2.5.  Older python versions do support

@@ -20,21 +20,25 @@ int TestMediaStorage(int argc, char *argv[])
   gdcm::MediaStorage ms;
   if( !ms.IsUndefined() )
     {
+    std::cerr << "ms.IsUndefined" << std::endl;
     return 1;
     }
   ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
+    std::cerr << "SecondaryCaptureImageStorage" << std::endl;
     return 1;
     }
   ms.GuessFromModality( "MR" );
   if( ms != gdcm::MediaStorage::MRImageStorage )
     {
+    std::cerr << "MRImageStorage" << std::endl;
     return 1;
     }
   ms.GuessFromModality( "MR" , 3 );
   if( ms != gdcm::MediaStorage::EnhancedMRImageStorage )
     {
+    std::cerr << "EnhancedMRImageStorage" << std::endl;
     return 1;
     }
   //checks *MSStrings[] and MSModalityTypes[] length
@@ -43,12 +47,14 @@ int TestMediaStorage(int argc, char *argv[])
     {
     if ( gdcm::MediaStorage::GetMSString(mst) == 0 )
       {
+      std::cerr << "GetMSString" << std::endl;
       return 1;
       }
     }
   mst = gdcm::MediaStorage::MS_END;
   if ( gdcm::MediaStorage::GetMSString(mst) != 0 )
     {
+    std::cerr << "2: GetMSString" << std::endl;
     return 1;
     }
   gdcm::MediaStorage ms2;

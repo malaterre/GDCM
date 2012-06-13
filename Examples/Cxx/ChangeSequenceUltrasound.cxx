@@ -64,7 +64,7 @@ int main(int argc, char* argv[] )
             {
             gdcm::DataElement cm = nestedds2.GetDataElement( tcm );
             std::string mystr = "GDCM was here";
-            cm.SetByteValue( mystr.c_str(), mystr.size() );
+            cm.SetByteValue( mystr.c_str(), (uint32_t)mystr.size() );
             nestedds2.Replace( cm );
             }
           }

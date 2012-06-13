@@ -98,7 +98,7 @@ size_t PresentationContextAC::Size() const
 void PresentationContextAC::SetTransferSyntax( TransferSyntaxSub const &ts )
 {
   SubItems = ts;
-  ItemLength = (uint16_t)Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 

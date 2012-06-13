@@ -16,7 +16,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfItems.h"
 
-int TestDataElementValueAsSQ(int argc, char *argv[])
+int TestDataElementValueAsSQ(int , char *[])
 {
   int ret = 0;
   const char *filenames[] = {

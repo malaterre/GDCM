@@ -24,7 +24,7 @@ const uint32_t AReleaseRPPDU::Reserved7_10 = 0x0;
 
 AReleaseRPPDU::AReleaseRPPDU()
 {
-  ItemLength = Size() - 6; // PDU Length
+  ItemLength = (uint32_t)(Size() - 6); // PDU Length
   assert( ItemLength + 6 == Size() );
 }
 

@@ -35,6 +35,7 @@ static const int losslylosslessarray[][3] = {
     { 0, 1, 1 }, //    ImplicitVRBigEndianACRNEMA,
     { 0, 1, 1 }, //    WeirdPapryus,
     { 0, 1, 1 }, //    CT_private_ELE,
+    { 1, 1, 1 }, //    JPIPReferenced
 };
 
 static int TestTransferSyntaxAll()

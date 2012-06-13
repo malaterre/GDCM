@@ -63,9 +63,9 @@ int main(int argc, char *argv [])
 
   gdcm::Image &image = writer.GetImage();
   image.SetNumberOfDimensions( 3 ); // good default
-  image.SetDimension(0, dims[0] );
-  image.SetDimension(1, dims[1] );
-  image.SetDimension(2, dims[2] );
+  image.SetDimension(0, (unsigned int)dims[0] );
+  image.SetDimension(1, (unsigned int)dims[1] );
+  image.SetDimension(2, (unsigned int)dims[2] );
   image.SetSpacing(0, spacing[0] );
   image.SetSpacing(1, spacing[1] );
   image.SetSpacing(2, spacing[2] );
@@ -85,7 +85,7 @@ int main(int argc, char *argv [])
   gdcm::MediaStorage ms(
     gdcm::MediaStorage::UltrasoundMultiFrameImageStorage );
 //    gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage );
-  de.SetByteValue( ms.GetString(), strlen(ms.GetString()));
+  de.SetByteValue( ms.GetString(), (uint32_t)strlen(ms.GetString()));
   writer.GetFile().GetDataSet().Replace( de );
 
   writer.SetFileName( outfilename.c_str() );

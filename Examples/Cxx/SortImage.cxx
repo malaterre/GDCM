@@ -69,6 +69,7 @@ bool mysort_dummy(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2 )
 
 int main(int argc, char *argv[])
 {
+  if (argc < 2 ) return 1;
   const char *dirname = argv[1];
   gdcm::Directory dir;
   unsigned int nfiles = dir.Load( dirname );
@@ -102,7 +103,7 @@ int main(int argc, char *argv[])
 
   // Count how many different IPP there are:
   const gdcm::Scanner::ValuesType &values = s.GetValues();
-  unsigned int nvalues = values.size();
+  size_t nvalues = values.size();
   std::cout << "There are " << nvalues << " different type of values" << std::endl;
 
   //std::cout << "nfiles=" << nfiles << std::endl;

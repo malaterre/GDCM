@@ -17,7 +17,6 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSwapper.h"
-
 #include "gdcmJPEG8Codec.h"
 #include "gdcmJPEG12Codec.h"
 #include "gdcmJPEG16Codec.h"
@@ -150,17 +149,17 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   assert( Internal );
   out = in;
   // Fragments...
-  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  const SequenceOfFragments *sf0 = in.GetSequenceOfFragments();
   const ByteValue *jpegbv = in.GetByteValue();
-  if( !sf && !jpegbv ) return false;
+  if( !sf0 && !jpegbv ) return false;
   std::stringstream os;
-  if( sf )
+  if( sf0 )
     {
     //unsigned long pos = 0;
-    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+    for(unsigned int i = 0; i < sf0->GetNumberOfFragments(); ++i)
       {
       std::stringstream is;
-      const Fragment &frag = sf->GetFragment(i);
+      const Fragment &frag = sf0->GetFragment(i);
       if( frag.IsEmpty() ) return false;
       const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
       size_t bv_len = bv.GetLength();
@@ -169,7 +168,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       assert( b ); (void)b;
       is.write(mybuffer, bv.GetLength());
       delete[] mybuffer;
-      bool r = Decode(is, os);
+      bool r = DecodeByStreams(is, os);
       // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
       if( !r )
         {
@@ -180,22 +179,22 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   else if ( jpegbv )
     {
     // GEIIS Icon:
-    std::stringstream is;
+    std::stringstream is0;
     size_t jpegbv_len = jpegbv->GetLength();
-    char *mybuffer = new char[jpegbv_len];
-    bool b = jpegbv->GetBuffer(mybuffer, jpegbv->GetLength());
-    assert( b ); (void)b;
-    is.write(mybuffer, jpegbv->GetLength());
-    delete[] mybuffer;
-    bool r = Decode(is, os);
+    char *mybuffer0 = new char[jpegbv_len];
+    bool b0 = jpegbv->GetBuffer(mybuffer0, jpegbv->GetLength());
+    assert( b0 ); (void)b0;
+    is0.write(mybuffer0, jpegbv->GetLength());
+    delete[] mybuffer0;
+    bool r = DecodeByStreams(is0, os);
     if( !r )
       {
       // let's try another time:
       // JPEGDefinedLengthSequenceOfFragments.dcm
-      is.seekg(0);
+      is0.seekg(0);
       SequenceOfFragments sf_bug;
       try {
-        sf_bug.Read<SwapperNoOp>(is);
+        sf_bug.Read<SwapperNoOp>(is0);
       } catch ( ... ) {
         return false;
       }
@@ -213,7 +212,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
         assert( b ); (void)b;
         is.write(mybuffer, bv.GetLength());
         delete[] mybuffer;
-        bool r2 = Decode(is, os);
+        bool r2 = DecodeByStreams(is, os);
         if( !r2 )
           {
           return false;
@@ -262,7 +261,7 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
         this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
         int prep = this->GetPixelFormat().GetPixelRepresentation();
         this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
-        this->PF.SetPixelRepresentation( prep );
+        this->PF.SetPixelRepresentation( (uint16_t)prep );
         return true;
         }
       else
@@ -339,10 +338,10 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 }
 
 
-bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
+bool JPEGCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
   std::stringstream tmpos;
-  if ( !Internal->Decode(is,tmpos) )
+  if ( !Internal->DecodeByStreams(is,tmpos) )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // let's check if this is one of those buggy lossless JPEG
@@ -363,9 +362,9 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         //Internal->SetPixelFormat( this->GetPixelFormat() ); // FIXME
         Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaningless ?
         Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
-        if( Internal->Decode(is,tmpos) )
+        if( Internal->DecodeByStreams(is,tmpos) )
           {
-          return ImageCodec::Decode(tmpos,os);
+          return ImageCodec::DecodeByStreams(tmpos,os);
           }
         else
           {
@@ -393,7 +392,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
     this->PF.SetBitsAllocated( 16 );
     }
 
-  return ImageCodec::Decode(tmpos,os);
+  return ImageCodec::DecodeByStreams(tmpos,os);
 }
 
 bool JPEGCodec::IsValid(PhotometricInterpretation const &pi)

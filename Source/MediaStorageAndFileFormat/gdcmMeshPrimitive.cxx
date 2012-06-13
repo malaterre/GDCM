@@ -143,7 +143,7 @@ DataElement & MeshPrimitive::GetPrimitiveData(const unsigned int idx)
 
 unsigned int MeshPrimitive::GetNumberOfPrimitivesData() const
 {
-  return PrimitiveData.size();
+  return (unsigned int)PrimitiveData.size();
 }
 
 }

@@ -53,6 +53,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
 #include "gdcmPNMCodec.h"
+#include "gdcmPGXCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
@@ -82,9 +83,8 @@ bool readgeometry(const char *geometry, unsigned int * region)
 }
 
 template <typename T>
-void FillRegionWithColor(char *cp, const unsigned int *dims, const unsigned int * region, unsigned int color, unsigned int nsamples)
+void FillRegionWithColor(T *p, const unsigned int *dims, const unsigned int * region, unsigned int color, unsigned int nsamples)
 {
-    T * p = (T*)cp;
     unsigned int xmin = region[0];
     unsigned int xmax = region[1];
     unsigned int ymin = region[2];
@@ -100,7 +100,7 @@ void FillRegionWithColor(char *cp, const unsigned int *dims, const unsigned int 
           {
           for( unsigned int sample = 0; sample < nsamples; ++sample)
             {
-            p[x*nsamples+y*dims[0]*nsamples+z*dims[0]*dims[1]*nsamples+sample] = color;
+            p[x*nsamples+y*dims[0]*nsamples+z*dims[0]*dims[1]*nsamples+sample] = (T)color;
             }
           }
         }
@@ -234,7 +234,7 @@ bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & 
       return false;
       }
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
     }
@@ -251,21 +251,19 @@ bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & 
     return false;
     }
 
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
+    de.SetByteValue( study_uid.c_str(), (uint32_t)study_uid.size() );
+    de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
+    ds.Insert( de );
+    }
 
-        {
-        gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
-        de.SetByteValue( study_uid.c_str(), study_uid.size() );
-        de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
-        ds.Insert( de );
-        }
-
-        {
-        gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
-        de.SetByteValue( series_uid.c_str(), series_uid.size() );
-        de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
-        ds.Insert( de );
-        }
-
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
+    de.SetByteValue( series_uid.c_str(), (uint32_t)series_uid.size() );
+    de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
+    ds.Insert( de );
+    }
 
   return true;
 }
@@ -311,13 +309,13 @@ bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *
   if( ts.IsEncapsulated() )
     {
     gdcm::Fragment frag;
-    frag.SetByteValue( buf, len );
+    frag.SetByteValue( buf, (uint32_t)len );
     sq->AddFragment( frag );
     pixeldata.SetValue( *sq );
     }
   else
     {
-    pixeldata.SetByteValue( buf, len );
+    pixeldata.SetByteValue( buf, (uint32_t)len );
     }
     delete[] buf;
   image.SetDataElement( pixeldata );
@@ -343,7 +341,7 @@ bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Direc
     }
   if( filenames.size() > 1 )
     {
-    image.SetDimension(2,  filenames.size() );
+    image.SetDimension(2,  (unsigned int)filenames.size() );
     }
 
   return b;
@@ -372,11 +370,11 @@ bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int p
     }
   if( sign )
     {
-    pf.SetPixelRepresentation( pixelsign );
+    pf.SetPixelRepresentation( (unsigned short)pixelsign );
     }
   if( spp )
     {
-    pf.SetSamplesPerPixel( pixelspp );
+    pf.SetSamplesPerPixel( (unsigned short)pixelspp );
     }
 
   return true;
@@ -853,6 +851,22 @@ int main (int argc, char *argv[])
       return 0;
       }
 
+    if(  gdcm::System::StrCaseCmp(inputextension,".pgx") == 0 )
+      {
+      gdcm::PGXCodec pnm;
+      gdcm::PixmapWriter writer;
+      if( !Populate( writer, pnm, filenames ) ) return 1;
+      if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
+
+      writer.SetFileName( outfilename );
+      if( !writer.Write() )
+        {
+        return 1;
+        }
+
+      return 0;
+      }
+
     if(  gdcm::System::StrCaseCmp(inputextension,".jls") == 0 )
       {
       gdcm::JPEGLSCodec jpeg;
@@ -872,6 +886,7 @@ int main (int argc, char *argv[])
     if(  gdcm::System::StrCaseCmp(inputextension,".jp2") == 0
       || gdcm::System::StrCaseCmp(inputextension,".j2k") == 0
       || gdcm::System::StrCaseCmp(inputextension,".j2c") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".jpx") == 0
       || gdcm::System::StrCaseCmp(inputextension,".jpc") == 0 )
       {
       /*
@@ -951,6 +966,23 @@ int main (int argc, char *argv[])
 
       return 0;
       }
+    if(  gdcm::System::StrCaseCmp(outputextension,".pgx") == 0 )
+      {
+      gdcm::PGXCodec pnm;
+      pnm.SetDimensions( imageori.GetDimensions() );
+      pnm.SetPixelFormat( imageori.GetPixelFormat() );
+      pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+      pnm.SetLUT( imageori.GetLUT() );
+      const gdcm::DataElement& in = imageori.GetDataElement();
+      bool b = pnm.Write( outfilename, in );
+      if( !b )
+        {
+        std::cerr << "Problem writing PNM file" << std::endl;
+        return 1;
+        }
+
+      return 0;
+      }
     }
 
 // else safely assume that if no outputextension matched then it is a DICOM file
@@ -1004,7 +1036,7 @@ int main (int argc, char *argv[])
     // FIXME what is overlay is in pixel data ?
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
     gdcm::ByteValue *bv = new gdcm::ByteValue();
-    bv->SetLength( len );
+    bv->SetLength( (uint32_t)len );
     //memcpy( bv->GetPointer(), imageori
     imageori.GetBuffer( (char*)bv->GetPointer() );
     // Rub out pixels:
@@ -1012,16 +1044,16 @@ int main (int argc, char *argv[])
     switch(pixeltype)
       {
     case gdcm::PixelFormat::UINT8:
-      FillRegionWithColor<uint8_t> (p, dims, region, color, pixeltype.GetSamplesPerPixel());
+      FillRegionWithColor<uint8_t> ((uint8_t*)p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     case gdcm::PixelFormat::INT8:
-      FillRegionWithColor<int8_t>  (p, dims, region, color, pixeltype.GetSamplesPerPixel());
+      FillRegionWithColor<int8_t>  ((int8_t*)p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     case gdcm::PixelFormat::UINT16:
-      FillRegionWithColor<uint16_t>(p, dims, region, color, pixeltype.GetSamplesPerPixel());
+      FillRegionWithColor<uint16_t>((uint16_t*)p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     case gdcm::PixelFormat::INT16:
-      FillRegionWithColor<int16_t> (p, dims, region, color, pixeltype.GetSamplesPerPixel());
+      FillRegionWithColor<int16_t> ((int16_t*)p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     default:
       std::cerr << "not implemented" << std::endl;

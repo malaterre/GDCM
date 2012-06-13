@@ -399,8 +399,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   opj_image_t *image = NULL;
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[(unsigned int)buf_size];
+  size_t buf_size = (size_t)is.tellg();
+  char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
@@ -635,7 +635,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
     if( comp->sgnd != PF.GetPixelRepresentation() )
       {
-      PF.SetPixelRepresentation( comp->sgnd );
+      PF.SetPixelRepresentation( (uint16_t)comp->sgnd );
       }
 #ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     assert( comp->prec == PF.GetBitsStored()); // D_CLUNIE_RG3_JPLY.dcm
@@ -1106,8 +1106,8 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
   // FIXME: Do some stupid work:
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
-  char *dummy_buffer = new char[(unsigned int)buf_size];
+  size_t buf_size = (size_t)is.tellg();
+  char *dummy_buffer = new char[buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
   bool b = GetHeaderInfo( dummy_buffer, (size_t)buf_size, ts );
@@ -1189,7 +1189,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   opj_setup_decoder(dinfo, &parameters);
 
   /* open a byte stream */
-  cio = opj_cio_open((opj_common_ptr)dinfo, src, file_length);
+  cio = opj_cio_open((opj_common_ptr)dinfo, src, (int)file_length);
 
   /* decode the stream and fill the image structure */
   image = opj_decode(dinfo, cio);
@@ -1327,7 +1327,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     }
   this->PF.SetBitsStored( (unsigned short)comp->prec );
   this->PF.SetHighBit( (unsigned short)(comp->prec - 1) );
-  this->PF.SetPixelRepresentation( comp->sgnd );
+  this->PF.SetPixelRepresentation( (unsigned short)comp->sgnd );
 
   if( image->numcomps == 1 )
     {

@@ -41,7 +41,7 @@ public:
     char* outBytes, size_t inOutBufferLength);
 
 protected:
-  bool Decode(std::istream &is, std::ostream &os);
+  bool DecodeByStreams(std::istream &is, std::ostream &os);
 
 private:
   RAWInternals *Internals;

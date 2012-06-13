@@ -39,7 +39,6 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
   PresentationContextRQ pc( UIDs::VerificationSOPClass );
   thePDV.SetPresentationContextID(
     inConnection.GetPresentationContextIDFromPresentationContext(pc) );
-  assert( thePDV.GetPresentationContextID() == 1 );
 
   thePDV.SetCommand(true);
   thePDV.SetLastFragment(true);
@@ -75,7 +74,7 @@ std::vector<PresentationDataValue> CEchoRQ::ConstructPDV(
 
 }
 
-std::vector<PresentationDataValue>  CEchoRSP::ConstructPDV(const DataSet* inDataSet){
+std::vector<PresentationDataValue>  CEchoRSP::ConstructPDVByDataSet(const DataSet* inDataSet){
   std::vector<PresentationDataValue> thePDV;
   (void)inDataSet;
   assert( 0 && "TODO" );

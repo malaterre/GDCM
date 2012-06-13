@@ -59,7 +59,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
     //unsigned short zmin = 0;
     //unsigned short zmax = extent[2];
       
-    reader.DefinePixelExtent(0, extent[0], 0, extent[1], 0, extent[2]);
+    reader.DefinePixelExtent(0, (uint16_t)extent[0], 0, (uint16_t)extent[1], 0, (uint16_t)extent[2]);
     unsigned long len = reader.DefineProperBufferLength();
     char* finalBuffer = new char[len];
     memset(finalBuffer, 0, sizeof(char)*len);

@@ -74,7 +74,7 @@ bool SurfaceWriter::PrepareWrite()
     return false;
   }
   Attribute<0x0066, 0x0001> numberOfSurfaces;
-  numberOfSurfaces.SetValue( nbSurfaces );
+  numberOfSurfaces.SetValue( (unsigned int)nbSurfaces );
   ds.Replace( numberOfSurfaces.GetAsDataElement() );
 
   // Surface Sequence
@@ -92,11 +92,12 @@ bool SurfaceWriter::PrepareWrite()
   surfacesSQ->SetLengthToUndefined();
 
   // Fill the Surface Sequence
-  const unsigned int              nbItems    = surfacesSQ->GetNumberOfItems();
+{
+  const size_t nbItems    = surfacesSQ->GetNumberOfItems();
   if (nbItems < nbSurfaces)
   {
-    const int          diff           = nbSurfaces - nbItems;
-    const unsigned int nbOfItemToMake = (diff > 0?diff:0);
+    const size_t diff           = nbSurfaces - nbItems;
+    const size_t nbOfItemToMake = (diff > 0?diff:0);
     for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
     {
       Item item;
@@ -104,24 +105,25 @@ bool SurfaceWriter::PrepareWrite()
       surfacesSQ->AddItem(item);
     }
   }
+}
   // else Should I remove items?
 
   std::vector< SmartPointer< Segment > >                  segments  = this->GetSegments();
-  std::vector< SmartPointer< Segment > >::const_iterator  it        = segments.begin();
-  std::vector< SmartPointer< Segment > >::const_iterator  itEnd     = segments.end();
+  std::vector< SmartPointer< Segment > >::const_iterator  it0        = segments.begin();
+  std::vector< SmartPointer< Segment > >::const_iterator  it0End     = segments.end();
   unsigned int                                            numSegment= 1;
   unsigned int                                            numSurface= 1;
-  for (; it != itEnd; it++)
+  for (; it0 != it0End; it0++)
   {
-    SmartPointer< Segment > segment = *it;
+    SmartPointer< Segment > segment = *it0;
     assert( segment );
 
     std::vector< SmartPointer< Surface > >                  surfaces  = segment->GetSurfaces();
-    std::vector< SmartPointer< Surface > >::const_iterator  it        = surfaces.begin();
-    std::vector< SmartPointer< Surface > >::const_iterator  itEnd     = surfaces.end();
-    for (; it != itEnd; it++)
+    std::vector< SmartPointer< Surface > >::const_iterator  it1        = surfaces.begin();
+    std::vector< SmartPointer< Surface > >::const_iterator  it1End     = surfaces.end();
+    for (; it1 != it1End; it1++)
     {
-      SmartPointer< Surface > surface = *it;
+      SmartPointer< Surface > surface = *it1;
       assert( surface );
 
       Item &    surfaceItem = surfacesSQ->GetItem( numSurface );
@@ -142,7 +144,7 @@ bool SurfaceWriter::PrepareWrite()
       unsigned long surfaceNumber = surface->GetSurfaceNumber();
       if (surfaceNumber == 0)
         surfaceNumber = numSurface;
-      surfaceNumberAt.SetValue( surfaceNumber );
+      surfaceNumberAt.SetValue( (unsigned int)surfaceNumber );
       surfaceDS.Replace( surfaceNumberAt.GetAsDataElement() );
 
       // Surface Comments (Type 3)
@@ -303,10 +305,10 @@ bool SurfaceWriter::PrepareWrite()
       //            (0066,0021) OF                                         #  0, 1_n Vector Coordinate Data
       //          (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
       //        (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
-      const unsigned long           numberOfVectors = surface->GetNumberOfVectors();
+      const unsigned long           numberofvectors = surface->GetNumberOfVectors();
       SmartPointer< MeshPrimitive > meshPrimitive   = surface->GetMeshPrimitive();
       const MeshPrimitive::MPType   primitiveType   = meshPrimitive->GetPrimitiveType();
-      if (numberOfVectors > 0
+      if (numberofvectors > 0
        && primitiveType != MeshPrimitive::TRIANGLE_STRIP
        && primitiveType != MeshPrimitive::TRIANGLE_FAN)
       {
@@ -335,7 +337,7 @@ bool SurfaceWriter::PrepareWrite()
 
         // Number of Vectors
         Attribute<0x0066, 0x001E> numberOfVectors;
-        numberOfVectors.SetValue( surface->GetNumberOfVectors() );
+        numberOfVectors.SetValue( (unsigned int)surface->GetNumberOfVectors() );
         surfacePointsNormalsDS.Replace( numberOfVectors.GetAsDataElement() );
 
         // Vector Dimensionality
@@ -374,7 +376,7 @@ bool SurfaceWriter::PrepareWrite()
 
         surfacePointsNormalsDS.Replace( vectorCoordDataDE );
       }
-      else if (numberOfVectors > 0)
+      else if (numberofvectors > 0)
       {
         gdcmWarningMacro("Triangle strip or fan have no surface points normals");
       }
@@ -434,7 +436,7 @@ bool SurfaceWriter::PrepareWrite()
         // Primitive Point Index List
         Tag         typedPrimitiveTag;
         typedPrimitiveTag.SetGroup(0x0066);
-        DataSet &   pointIndexListDS  = surfaceMeshPrimitivesDS;
+        DataSet &   pointIndexListDS0  = surfaceMeshPrimitivesDS;
 
         switch (primitiveType)
         {
@@ -509,11 +511,11 @@ bool SurfaceWriter::PrepareWrite()
           // Fill the Segment Sequence
           const unsigned int              numberOfPrimitives  = meshPrimitive->GetNumberOfPrimitivesData();
           assert( numberOfPrimitives );
-          const unsigned int              nbItems             = typedSequenceSQ->GetNumberOfItems();
+          const size_t nbItems             = typedSequenceSQ->GetNumberOfItems();
           if (nbItems < numberOfPrimitives)
           {
-            const int          diff           = numberOfPrimitives - nbItems;
-            const unsigned int nbOfItemToMake = (diff > 0?diff:0);
+            const size_t diff           = numberOfPrimitives - nbItems;
+            const size_t nbOfItemToMake = (diff > 0?diff:0);
             for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
             {
               Item item;
@@ -579,7 +581,7 @@ bool SurfaceWriter::PrepareWrite()
           if ( ts.IsExplicit() )
             typedPointIndexListDE.SetVR( VR::OW );
 
-          pointIndexListDS.Replace( typedPointIndexListDE );
+          pointIndexListDS0.Replace( typedPointIndexListDE );
         }
       }
       ++numSurface;
@@ -823,7 +825,7 @@ bool SurfaceWriter::PrepareWritePointMacro(SmartPointer< Surface > surface,
     unsigned long numberOfSurfacePoints = surface->GetNumberOfSurfacePoints();
     if (numberOfSurfacePoints == 0)
       numberOfSurfacePoints = bv->GetLength() / (VR::GetLength(VR::OF) * 3);
-    numberOfSurfacePointsAt.SetValue( numberOfSurfacePoints );
+    numberOfSurfacePointsAt.SetValue( (unsigned int)numberOfSurfacePoints );
     surfacePointsDs.Replace( numberOfSurfacePointsAt.GetAsDataElement() );
 
     // Point Position Accuracy (Type 3)

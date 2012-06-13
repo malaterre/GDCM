@@ -46,7 +46,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   return false;
 #else
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
@@ -81,7 +81,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     {
     assert(0);
     }
-  this->PF.SetBitsStored( metadata.bitspersample );
+  this->PF.SetBitsStored( (uint16_t)metadata.bitspersample );
   assert( this->PF.IsValid() );
 //  switch( metadata.bitspersample )
 //    {
@@ -176,12 +176,12 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     LossyFlag = metadata.allowedlossyerror!= 0;
 
     const BYTE* pbyteCompressed = (const BYTE*)buffer;
-    int cbyteCompressed = totalLen;
+    size_t cbyteCompressed = totalLen;
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters params = {};
+    JlsParameters params;
 #else
-    JlsParamaters params = {};
+    JlsParamaters params;
 #endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
@@ -204,7 +204,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       }
     out = in;
 
-    out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
+    out.SetByteValue( (char*)&rgbyteOut[0], (uint32_t)rgbyteOut.size() );
     return true;
     }
   else if( NumberOfDimensions == 3 )
@@ -245,12 +245,12 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       // allowedlossyerror == 0 => Lossless
       LossyFlag = metadata.allowedlossyerror!= 0;
 
-      int cbyteCompressed = totalLen;
+      size_t cbyteCompressed = totalLen;
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-      JlsParameters params = {};
+      JlsParameters params;
 #else
-      JlsParamaters params = {};
+      JlsParamaters params;
 #endif
       JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
@@ -279,7 +279,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       }
     std::string str = os.str();
     assert( str.size() );
-    out.SetByteValue( &str[0], str.size() );
+    out.SetByteValue( &str[0], (uint32_t)str.size() );
 
     return true;
     }
@@ -320,9 +320,9 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     const char *inputdata = input + dim * image_len; //bv->GetPointer();
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters params = {};
+    JlsParameters params;
 #else
-    JlsParamaters params = {};
+    JlsParamaters params;
 #endif
 /*
 The fields in JlsCustomParameters do not control lossy/lossless. They
@@ -394,7 +394,7 @@ sample dit not suffer from that.
     assert( cbyteCompressed < rgbyteCompressed.size() );
 
     Fragment frag;
-    frag.SetByteValue( (char*)&rgbyteCompressed[0], cbyteCompressed );
+    frag.SetByteValue( (char*)&rgbyteCompressed[0], (uint32_t)cbyteCompressed );
     sq->AddFragment( frag );
     }
 
@@ -411,7 +411,7 @@ void JPEGLSCodec::SetLossyError(int error)
   LossyError = error;
 }
 
-bool JPEGLSCodec::Decode(DataElement const &, char* , uint32_t ,
+bool JPEGLSCodec::Decode(DataElement const &, char* , size_t,
               uint32_t , uint32_t , uint32_t ,
               uint32_t , uint32_t , uint32_t )
 {
