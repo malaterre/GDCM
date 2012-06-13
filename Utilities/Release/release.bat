@@ -16,18 +16,19 @@
 set TMPDIR=%TMP%\gdcm_release
 
 set major=2
-set minor=0
-set patch=19
+set minor=2
+set patch=0
 set version="%major%.%minor%.%patch%"
 
 @rem use VCExpress 2005 for portability
 call "%VS80COMNTOOLS%vsvars32.bat"
 
-@rem SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0\Lib;%LIB%
-@rem SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0\Include;%INCLUDE%
-SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%
-SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Include;%INCLUDE%
-SET PATH=%PATH%;C:\Program Files\Swig\swigwin-2.0.7
+SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0\Lib;%LIB%
+SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0\Include;%INCLUDE%
+@rem SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%
+@rem SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Include;%INCLUDE%
+SET PATH=%PATH%;C:\Program Files\Git\bin
+@rem SET PATH=%PATH%;C:\Program Files\Swig\swigwin-2.0.7
 
 @rem prepare target dir
 mkdir %TMPDIR%
@@ -35,6 +36,7 @@ mkdir %TMPDIR%\gdcm-build
 
 copy config.win32 %TMPDIR%\gdcm-build\CMakeCache.txt
 
+c:
 cd %TMPDIR%
 @rem git is itselft a batch:
 call git clone --branch release git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm
