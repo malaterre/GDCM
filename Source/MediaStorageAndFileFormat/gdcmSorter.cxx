@@ -78,7 +78,7 @@ bool Sorter::StableSort(std::vector<std::string> const & filenames)
 
   std::vector< SmartPointer<FileWithName> >::iterator it2 = filelist.begin();
   for( Directory::FilenamesType::const_iterator it = filenames.begin();
-    it != filenames.end(), it2 != filelist.end(); ++it, ++it2)
+    it != filenames.end() && it2 != filelist.end(); ++it, ++it2)
     {
     gdcm::Reader reader;
     reader.SetFileName( it->c_str() );
@@ -119,7 +119,7 @@ bool Sorter::Sort(std::vector<std::string> const & filenames)
 
   std::vector< SmartPointer<FileWithName> >::iterator it2 = filelist.begin();
   for( Directory::FilenamesType::const_iterator it = filenames.begin();
-    it != filenames.end(), it2 != filelist.end(); ++it, ++it2)
+    it != filenames.end() && it2 != filelist.end(); ++it, ++it2)
     {
     gdcm::Reader reader;
     reader.SetFileName( it->c_str() );
