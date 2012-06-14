@@ -76,7 +76,7 @@ bool SHA1::Compute(const char *buffer, unsigned long buf_len, char digest[])
 }
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-inline bool process_file(const char *filename, unsigned char *digest)
+static bool process_file(const char *filename, unsigned char *digest)
 {
   if( !filename || !digest ) return false;
 
@@ -97,9 +97,12 @@ inline bool process_file(const char *filename, unsigned char *digest)
   if( read != file_size ) return false;
 
   SHA_CTX ctx;
-  SHA1_Init(&ctx);
-  SHA1_Update(&ctx, buffer, file_size);
-  SHA1_Final(digest, &ctx);
+  int ret = SHA1_Init(&ctx);
+  if( !ret ) return false;
+  ret = SHA1_Update(&ctx, buffer, file_size);
+  if( !ret ) return false;
+  ret = SHA1_Final(digest, &ctx);
+  if( !ret ) return false;
 
   /*printf("MD5 (\"%s\") = ", test[i]); */
   /*for (int di = 0; di < 16; ++di)
