@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     filename = argv[1];
     }
   //std::cout << "Reading: " << filename << std::endl;
-  std::ifstream is(filename);
+  std::ifstream is(filename, std::ios::binary );
 
   gdcm::Attribute<0x0008,0x0000, gdcm::VR::UL, gdcm::VM::VM1> a;
   a.Read(is);
