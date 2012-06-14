@@ -1073,8 +1073,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   // of the encrypted one ?
   if( !nds2.FindDataElement( Tag(0x8,0x18) ) )
     {
-    gdcmErrorMacro( "Could not find Instance UID" );
-    return false;
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( *F );
+    if( ms != MediaStorage::MediaStorageDirectoryStorage )
+      {
+      gdcmErrorMacro( "Could not find Instance UID" );
+      return false;
+      }
     }
 }
 
