@@ -378,7 +378,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     assert( MaxNumSegments % 3 == 0 );
     }
 
-  RLEHeader header = { MaxNumSegments, { 64 } };
+  RLEHeader header = { static_cast<uint32_t> ( MaxNumSegments ), { 64 } };
   // there cannot be any space in between the end of the RLE header and the start
   // of the first RLE segment
   //
