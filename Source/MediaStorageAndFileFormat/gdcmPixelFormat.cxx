@@ -111,7 +111,6 @@ void PixelFormat::SetScalarType(ScalarType st)
     break;
     }
   BitsStored = BitsAllocated;
-  assert( BitsStored );
   HighBit = (uint16_t)(BitsStored - 1);
 }
 

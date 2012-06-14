@@ -75,7 +75,7 @@ bool MD5::Compute(const char *buffer, unsigned long buf_len, char digest_str[33]
 }
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-inline bool process_file(const char *filename, unsigned char *digest)
+static bool process_file(const char *filename, unsigned char *digest)
 {
   if( !filename || !digest ) return false;
 

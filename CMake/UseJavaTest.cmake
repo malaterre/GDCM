@@ -72,10 +72,10 @@ MACRO(ADD_JAVA_TEST TESTNAME FILENAME)
   MESSAGE(\"loc: ${loc}\")
   MESSAGE(\"loc2: ${loc2}\")
   MESSAGE(\"classpath: ${classpath}\")
-  MESSAGE(\"java runtime: ${JAVA_RUNTIME}\")
+  MESSAGE(\"java runtime: ${Java_JAVA_EXECUTABLE}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   EXECUTE_PROCESS(
-    COMMAND ${JAVA_RUNTIME} -classpath \"${classpath}\" ${loc2} ${wo_semicolumn}
+    COMMAND ${Java_JAVA_EXECUTABLE} -classpath \"${classpath}\" ${loc2} ${wo_semicolumn}
     WORKING_DIRECTORY \"${EXECUTABLE_OUTPUT_PATH}\"
     RESULT_VARIABLE import_res
     OUTPUT_VARIABLE import_output

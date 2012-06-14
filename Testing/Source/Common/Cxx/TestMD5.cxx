@@ -282,7 +282,8 @@ int TestMD5(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestMD5Func(filename, "", true);
+    const char *md5 = GetMD5Sum( filename );
+    return TestMD5Func(filename, md5, true);
     }
 
   // else

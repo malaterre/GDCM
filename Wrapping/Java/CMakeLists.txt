@@ -35,7 +35,9 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 SWIG_ADD_MODULE(gdcmjni java gdcm.i)
 SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
   gdcmMEXD
-  ${JNI_LIBRARIES}
+  # There is no real point in linking explicitely to jni libraries. This is a java module
+  # it could contains undefined symbols after all.
+  #${JNI_LIBRARIES}
 )
 SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
