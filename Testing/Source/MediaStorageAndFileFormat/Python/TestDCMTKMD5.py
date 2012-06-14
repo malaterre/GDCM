@@ -34,7 +34,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   'gdcm-CR-DCMTK-16-NonSamplePerPix.dcm', # this is not an image
   'ELSCINT1_PMSCT_RLE1.dcm',
   'SignedShortLosslessBug.dcm',
-  #'JDDICOM_Sample2.dcm',
+  'JPEGDefinedLengthSequenceOfFragments.dcm', # dcmtk 3.6.0 gives garbage
   'GE_DLX-8-MONO2-PrivateSyntax.dcm',
   'PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm',
   #'DermaColorLossLess.dcm', # technically I could support this one...
