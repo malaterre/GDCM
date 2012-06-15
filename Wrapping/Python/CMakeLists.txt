@@ -19,7 +19,7 @@ INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 #  error: invalid initialization of reference of type 'ptrdiff_t& {aka int&}' from expression of type 'long int'
 # http://sourceforge.net/mailarchive/message.php?msg_id=29294773
 # 2.0.6 cannot be used because of a serious typemap bug in 2.0.5
-# http://sourceforge.net/mailarchive/message.php?msg_id=29305946
+# http://sourceforge.net/mailarchive/message.php?msg_id=29305946
 FIND_PACKAGE(SWIG 2.0.7 REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
@@ -44,7 +44,8 @@ INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-FIND_PACKAGE(PythonLibs REQUIRED)
+FIND_PACKAGE(PythonInterp REQUIRED)
+FIND_PACKAGE(PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
 MARK_AS_ADVANCED(PYTHON_LIBRARY PYTHON_INCLUDE_PATH)
 # Lamest excuse ever:
 # http://mail.python.org/pipermail/python-list/2002-April/141189.html
@@ -76,7 +77,14 @@ SET(MODULE_NAME gdcmswig)
 # BUG: DO NOT USE -interface flag it is NOT supported in cmake and in cmake > 2.6 will cause infinite rebuild
 # Ref: http://www.cmake.org/pipermail/cmake/2008-August/023237.html
 # UseSWIG and -interface flag (was: Re: CMake 2.6.1 available for download)
-#SET(CMAKE_SWIG_FLAGS "-interface _${GDCM_PYTHON_IMPLEMENTATION_NAME}")
+if(${PYTHON_VERSION_MAJOR} EQUAL 3)
+  # http://swig.org/Doc2.0/SWIGDocumentation.html#Python_python3support
+  SET(CMAKE_SWIG_FLAGS "-py3")
+endif()
+# TODO: PythonInterp and PythonLibs are not working together well
+# see: http://bugs.debian.org/677598
+#message(${PYTHONLIBS_VERSION_STRING})
+#message(${PYTHON_VERSION_MAJOR})
 #SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 
 # While trying to get rid of the compilation warning in swig generated c++ code, I thought I could

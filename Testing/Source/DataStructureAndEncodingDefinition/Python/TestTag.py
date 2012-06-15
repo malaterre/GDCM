@@ -32,7 +32,7 @@ if __name__ == "__main__":
     sys.exit(1)
 
   if o1 > o2:
-    print "Fail o1 > o2"
+    print("Fail o1 > o2")
     sys.exit(1)
 
   sys.exit(0)

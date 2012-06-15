@@ -19,13 +19,13 @@ def TestScan(dirname, recursive = False):
   # Check the dirname is indeed a directory
   system = gdcm.System()
   if not system.FileIsDirectory(dirname):
-    print "Need a directory"
+    print("Need a directory")
     sys.exit(1)
 
   # Retrieve all the files within that dir (recursively?)
   d = gdcm.Directory()
   nfiles = d.Load( dirname, recursive )
-  print "done retrieving all the",nfiles,"files"
+  print("done retrieving all the",nfiles,"files")
 
   s = gdcm.Scanner()
   t1 = gdcm.Tag(0x0020,0x000d) # VR::UI
@@ -41,13 +41,13 @@ def TestScan(dirname, recursive = False):
   s.AddTag( t5 )
   b = s.Scan( d.GetFilenames() )
   if not b:
-    print "Scanner failed";
+    print("Scanner failed")
     sys.exit(1)
 
   # Raw Values found:
   values  = s.GetValues()
-  print "Values found for all tags are:"
-  print values
+  print("Values found for all tags are:")
+  print(values)
 
   # get the main super-map :
   mappings = s.GetMappings()
@@ -64,7 +64,7 @@ def TestScan(dirname, recursive = False):
 
   # For each file get the value for tag t1:
   for f in d.GetFilenames():
-    print "Working on:",f
+    print("Working on:",f)
     mapping = s.GetMapping(f)
     pttv = gdcm.PythonTagToValue(mapping)
     # reset iterator to start position
@@ -76,7 +76,7 @@ def TestScan(dirname, recursive = False):
       # Warning value can be None
       tag = pttv.GetCurrentTag()
       value = pttv.GetCurrentValue()
-      print tag,"->",value
+      print(tag,"->",value)
       # increment iterator
       pttv.Next()
 

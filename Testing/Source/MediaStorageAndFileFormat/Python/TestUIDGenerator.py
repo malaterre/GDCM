@@ -18,14 +18,14 @@ import os,sys
 if __name__ == "__main__":
   uid = gdcm.UIDGenerator()
   for i in range(0,100):
-    print uid.Generate()
+    print(uid.Generate())
 
   MY_ROOT = "1.2.3.4"
 
   # static function:
   gdcm.UIDGenerator_SetRoot( MY_ROOT )
   for i in range(0,100):
-    print uid.Generate()
+    print(uid.Generate())
 
 
   # Test succeed ?

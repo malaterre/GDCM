@@ -17,13 +17,13 @@ import os,sys
 
 t = gdcm.Testing()
 nfiles = t.GetNumberOfFileNames()
-print nfiles
+print(nfiles)
 for i in range(0,nfiles):
-  print t.GetFileName(i)
+  print(t.GetFileName(i))
 
-print t.GetFileName(10000)
+print(t.GetFileName(10000))
 
-print t.GetDataRoot()
+print(t.GetDataRoot())
 
 # Test succeed ?
 #sys.exit(sucess != 1)
