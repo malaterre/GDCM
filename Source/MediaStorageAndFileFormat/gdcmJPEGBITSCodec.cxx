@@ -795,7 +795,7 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
         {
         gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
           GetPhotometricInterpretation() << " but JPEG says: "
-          << cinfo.jpeg_color_space );
+          << (int)cinfo.jpeg_color_space );
         //Internals->SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
         this->PI = PhotometricInterpretation::MONOCHROME2;
         }
@@ -819,7 +819,7 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
         // LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm (lossy)
         gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
           GetPhotometricInterpretation() << " but JPEG says: "
-          << cinfo.jpeg_color_space );
+          << (int)cinfo.jpeg_color_space );
         // Here it gets nasty since apparently when this occurs lossless means
         // we should not do any color conversion, but we *might* be breaking
         // correct DICOM file.

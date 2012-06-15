@@ -1056,7 +1056,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
     InternalType = SV10;
     }
   assert( InternalType != UNKNOWN );
-  gdcmDebugMacro( "Found Type: " << InternalType );
+  gdcmDebugMacro( "Found Type: " << (int)InternalType );
 
   uint32_t n;
   ss.read((char*)&n, sizeof(n));

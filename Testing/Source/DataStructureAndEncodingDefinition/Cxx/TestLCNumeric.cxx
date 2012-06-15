@@ -17,7 +17,7 @@
 #include <locale.h>
 
 
-int TestLCNumeric(int argc, char *argv[])
+int TestLCNumeric(int , char *[])
 {
   //setenv("LC_NUMERIC", "fr_FR", 1);
   //const char ss[] = "LC_NUMERIC=fr_FR";

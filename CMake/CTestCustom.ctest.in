@@ -19,6 +19,8 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "warning CS0108:"
   "warning CS0109:"
   "warning CS1591:"
+  "gdcmJAVA_wrap.cxx"
+  "gdcmswigPYTHON_wrap.cxx"
   )
 
 # Disable dynamic analysis on some tests:

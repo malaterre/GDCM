@@ -387,7 +387,7 @@ sample dit not suffer from that.
     JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, inputdata, inputlength, &params);
     if( error != OK )
       {
-      gdcmErrorMacro( "Error compressing: " << error );
+      gdcmErrorMacro( "Error compressing: " << (int)error );
       return false;
       }
 
