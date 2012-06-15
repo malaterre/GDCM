@@ -20,7 +20,7 @@ def TestRead(filename, verbose = False):
   r.SetFileName( filename )
   sucess = r.Read()
   #if verbose: print r.GetFile()
-  if verbose: print r.GetFile().GetDataSet()
+  if verbose: print(r.GetFile().GetDataSet())
   return sucess
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ def TestImageRead(filename, verbose = False):
   r = gdcm.ImageReader()
   r.SetFileName( filename )
   success = r.Read()
-  if verbose: print r.GetImage()
+  if verbose: print(r.GetImage())
   return success
 
 if __name__ == "__main__":

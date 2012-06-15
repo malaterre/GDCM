@@ -31,7 +31,7 @@ if nfiles == 0:
 #print dir.GetFilenames()
 
 for file in dir.GetFilenames():
-  print file
+  print(file)
 
 # Test succeed ?
 #sys.exit(sucess != 1)

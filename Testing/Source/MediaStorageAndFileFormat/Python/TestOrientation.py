@@ -24,32 +24,32 @@ if __name__ == "__main__":
 
   label1 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori1 ) )
   if label1 != 'AXIAL':
-    print "Found:",label1
+    print("Found:",label1)
     sucess = False
   label2 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori2 ) )
   if label2 != 'CORONAL':
-    print "Found:",label2
+    print("Found:",label2)
     sucess = False
   label3 = gdcm.Orientation.GetLabel( gdcm.Orientation.GetType( ori3 ) )
   if label3 != 'SAGITTAL':
-    print "Found:",label3
+    print("Found:",label3)
     sucess = False
 
   image = gdcm.Image()
   image.SetNumberOfDimensions(2)
-  print image
-  print image.GetDimensions()
-  print image.GetOrigin()
-  print image.GetSpacing()
-  print image.GetDirectionCosines()
+  print(image)
+  print(image.GetDimensions())
+  print(image.GetOrigin())
+  print(image.GetSpacing())
+  print(image.GetDirectionCosines())
 
   image.SetNumberOfDimensions(3)
   image.SetDimensions( (512,256,128) )
-  print image.GetDimensions()
+  print(image.GetDimensions())
 
   #dircos = gdcm.DirectionCosines( (1,0,0,0,0,-1) )
   dircos = gdcm.DirectionCosines()
-  print dircos
+  print(dircos)
   #print dircos.Cross()
 
   # Test succeed ?

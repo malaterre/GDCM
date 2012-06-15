@@ -20,15 +20,15 @@ if __name__ == "__main__":
   #gi = gdcm.GlobalInstance
   #print gi
   singleton = gdcm.Global.GetInstance()
-  print singleton
+  print(singleton)
   d = singleton.GetDicts()
-  print d
+  print(d)
   t = gdcm.Tag(0x0010,0x0010)
   entry = d.GetDictEntry( t )
-  print entry
-  print entry.GetName()
+  print(entry)
+  print(entry.GetName())
   #print entry.GetVM()
-  print entry.GetVR()
+  print(entry.GetVR())
 
   # Test succeed ?
   sys.exit(0)

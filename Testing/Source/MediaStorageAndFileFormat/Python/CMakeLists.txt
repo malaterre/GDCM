@@ -9,7 +9,7 @@ SET(GDCM_PYTHON_TEST_SRCS
   #TestStringFilter
   TestOrientation
   TestIPPSorter
-  TestPythonFilter
+  #TestPythonFilter
   )
 IF(BUILD_APPLICATIONS)
   IF(DCMTK_DCMDUMP_EXECUTABLE)

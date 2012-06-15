@@ -24,18 +24,18 @@ if __name__ == "__main__":
   keyword = d.GetKeywordFromTag( t )
   if keyword != 'PatientName':
     sys.exit(1)
-  print keyword
+  print(keyword)
 
   p = d.GetDictEntryByKeyword( keyword )
   if p[0].GetKeyword() != keyword:
     sys.exit(1)
-  print p[0].GetKeyword()
+  print(p[0].GetKeyword())
 
   p = d.GetDictEntryByKeyword( 'foobar' )
   undef = gdcm.Tag(0xffff,0xffff)
   if p[1] != undef:
     sys.exit(1)
-  print p[1]
+  print(p[1])
 
   # Test succeed ?
   sys.exit(0)
