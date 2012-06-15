@@ -12,22 +12,26 @@
 
 =========================================================================*/
 
-/* this class is designed to help mitigate some of the commonly performed operations on directories.
-namely:
-1) the ability to determine the number of series in a directory by what type of series is present
-2) the ability to find all ct series in a directory
-3) the ability to find all mr series in a directory
-4) to load a set of DataSets from a series that's already been sorted by the IPP sorter
-5) For rtstruct stuff, you need to know the sopinstanceuid of each z plane,
-  so there's a retrieval function for that
-6) then a few other functions for rtstruct writeouts
-*/
-
 #include "gdcmDirectory.h"
 #include "gdcmDataSet.h"
 
 namespace gdcm
 {
+
+/**
+ * \brief DirectoryHelper
+ * this class is designed to help mitigate some of the commonly performed
+ * operations on directories.  namely:
+ * 1) the ability to determine the number of series in a directory by what type
+ * of series is present
+ * 2) the ability to find all ct series in a directory
+ * 3) the ability to find all mr series in a directory
+ * 4) to load a set of DataSets from a series that's already been sorted by the
+ * IPP sorter
+ * 5) For rtstruct stuff, you need to know the sopinstanceuid of each z plane,
+ * so there's a retrieval function for that
+ * 6) then a few other functions for rtstruct writeouts
+ */
 class GDCM_EXPORT DirectoryHelper
 {
 public:
