@@ -59,7 +59,7 @@ typedef bool (*BOOL_FUNCTION_PFILE_PFILE_POINTER)(File *, File *);
 class Scanner;
 
 /**
- * \class SerieHelper
+ * \brief SerieHelper
  * DO NOT USE this class, it is only a temporary solution for ITK migration from GDCM 1.x to GDCM 2.x
  * It will disapear soon, you've been warned.
  *

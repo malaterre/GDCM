@@ -35,6 +35,10 @@ class CEchoRQ : public BaseCompositeMessage {
         const BaseRootQuery* inRootQuery);
     };
 
+/**
+ * \brief CEchoRSP
+ * this file defines the messages for the cecho action
+ */
     class CEchoRSP : public BaseCompositeMessage {
     public:
       std::vector<PresentationDataValue> ConstructPDVByDataSet(const DataSet* inDataSet);

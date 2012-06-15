@@ -23,7 +23,6 @@ namespace gdcm
 
 /**
  * \brief Image
- * \note
  * This is the container for an Image in the general sense.
  * From this container you should be able to request information like:
  * - Origin

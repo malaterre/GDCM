@@ -35,6 +35,10 @@ class CStoreRQ : public BaseCompositeMessage {
         const File& file);
     };
 
+/**
+ * \brief CStoreRSP
+ * this file defines the messages for the cecho action
+ */
     class CStoreRSP : public BaseCompositeMessage {
       std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection, const BaseRootQuery* inRootQuery);//to fulfill the virtual contract
     public:
