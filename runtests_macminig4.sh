@@ -10,12 +10,12 @@ ctest -S macminig4-gcc-64-makefiles-kwstyle.cmake -V -O macminig4-gcc-64-makefil
 cd $HOME/Dashboards/MyTests/gdcm-nightly-kwstyle && touch Utilities/doxygen/Doxyfile
 cd $HOME/Dashboards/MyTests/gdcm-nightly-kwstyle && make
 cd $HOME/Dashboards/MyTests/gdcm-nightly-kwstyle && make rebuild_cache && make vtkgdcmDoxygenDoc
-rsync --quiet -av Utilities/doxygen/gdcm-2.1.0-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs
+rsync --quiet -av Utilities/doxygen/gdcm-2.3.0-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs
 rsync --quiet -av -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs
 
 # Nightly PDF Doxygen
 cd $HOME/Dashboards/MyTests/gdcm-nightly-kwstyle/Utilities/doxygen/latex
-rsync --quiet -av gdcm-2.1.0.pdf malat,gdcm@web.sourceforge.net:htdocs
+rsync --quiet -av gdcm-2.3.0.pdf malat,gdcm@web.sourceforge.net:htdocs
 
 # mirror on github:
 #cd $HOME/Dashboards/MyTests/gdcm
