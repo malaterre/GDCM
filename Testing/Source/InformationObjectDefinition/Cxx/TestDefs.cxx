@@ -48,9 +48,9 @@ int TestDefs(int, char *[])
         && mst != MediaStorage::CSANonImageStorage
         && mst != MediaStorage::GeneralElectricMagneticResonanceImageStorage )
         {
-        std::cerr << "Missing iod for MS: " << mst << " " <<
+        std::cerr << "Missing iod for MS: " << (int)mst << " " <<
           gdcm::MediaStorage::GetMSString(mst) << "  "; //std::endl;
-        std::cerr << "MediaStorage is " << mst << " [" << uid.GetName() << "]" << std::endl;
+        std::cerr << "MediaStorage is " << (int)mst << " [" << uid.GetName() << "]" << std::endl;
         ++ret;
         }
       }
