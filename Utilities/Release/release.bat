@@ -25,6 +25,8 @@ call "%VS80COMNTOOLS%vsvars32.bat"
 
 SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0\Lib;%LIB%
 SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0\Include;%INCLUDE%
+SET LIB=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%LIB%
+SET INCLUDE=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;%INCLUDE%
 @rem SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%
 @rem SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Include;%INCLUDE%
 SET PATH=%PATH%;C:\Program Files\Git\bin
