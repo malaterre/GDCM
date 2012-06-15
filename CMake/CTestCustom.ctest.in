@@ -8,8 +8,6 @@
 SET(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "Utilities"
-  "Utilities/expat"
-  "expat"
   "Utilities.gdcmopenjpeg.*warning C4101: '.*' : unreferenced local variable"
   "gdcm.*.cxx.obj : warning LNK4221: no public symbols found; archive member will be inaccessible"
   "/usr/bin/ranlib: for architecture: .* file: .* has no symbols"
@@ -19,8 +17,9 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "warning CS0108:"
   "warning CS0109:"
   "warning CS1591:"
-  "gdcmJAVA_wrap.cxx"
-  "gdcmswigPYTHON_wrap.cxx"
+  "gdcmJAVA_wrap.cxx" # swig generated
+  "gdcmswigPYTHON_wrap.cxx" # swig generated
+  "puff.c" # zlib code
   )
 
 # Disable dynamic analysis on some tests:
