@@ -68,19 +68,19 @@ sockinetaddr::sockinetaddr ()
   sin_port      = 0;
 }
 
-sockinetaddr::sockinetaddr(unsigned long addr, int port_no)
+sockinetaddr::sockinetaddr(unsigned long addr_, int port_no)
 // addr and port_no are in host byte order
 {
   sin_family      = sockinetbuf::af_inet;
-  sin_addr.s_addr = htonl(addr);
+  sin_addr.s_addr = htonl(addr_);
   sin_port      = htons(port_no);
 }
 
-sockinetaddr::sockinetaddr(unsigned long addr, const char* sn, const char* pn)
+sockinetaddr::sockinetaddr(unsigned long addr_, const char* sn, const char* pn)
 // addr is in host byte order
 {
   sin_family      = sockinetbuf::af_inet;
-  sin_addr.s_addr = htonl (addr); // Added by cgay@cs.uoregon.edu May 29, 1993
+  sin_addr.s_addr = htonl (addr_); // Added by cgay@cs.uoregon.edu May 29, 1993
   setport(sn, pn);
 }
 
@@ -147,8 +147,8 @@ const char* sockinetaddr::gethostname () const
   return "";
 }
 
-sockinetbuf::sockinetbuf (const sockbuf::sockdesc& sd)
-  : sockbuf (sd.sock)
+sockinetbuf::sockinetbuf (const sockbuf::sockdesc& sd_)
+  : sockbuf (sd_.sock)
 {}
 
 sockinetbuf::sockinetbuf(sockbuf::type ty, int proto)
