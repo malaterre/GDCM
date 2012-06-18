@@ -87,7 +87,7 @@ class MY_API sockerr : public std::exception
         {
             text.text = theoperation;
         }
-        sockerr (const sockerr &O)
+        sockerr (const sockerr &O): std::exception(O)
         {
             err = O.err;
             text = O.text;

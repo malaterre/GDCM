@@ -43,7 +43,7 @@ namespace gdcm
       void DataSetHandled() { mHandledDataSet = true; }
     public:
       ULConnectionCallback() { mHandledDataSet = false; }
-      ~ULConnectionCallback() {}; //placeholder for inherited objects
+      virtual ~ULConnectionCallback() {}; //placeholder for inherited objects
       virtual void HandleDataSet(const DataSet& inDataSet) = 0;
 
       bool DataSetHandles() const { return mHandledDataSet; }

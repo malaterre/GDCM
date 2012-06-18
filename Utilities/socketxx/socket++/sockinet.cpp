@@ -53,7 +53,7 @@
 
 // Do not include anything below that define. That should in no case change any forward decls in
 // system headers ...
-#if (defined(__APPLE__)&&(__GNUC__<4)) || (defined(WIN32)&&!defined(__CYGWIN__)) || \
+#if (defined(__APPLE__)&&(__GNUC__<3)) || (defined(WIN32)&&!defined(__CYGWIN__)) || \
  (!defined(__APPLE__) && !defined(WIN32) && !defined(_XOPEN_SOURCE_EXTENDED) && !defined(__FreeBSD__))
 #define socklen_t int
 #endif
@@ -97,7 +97,7 @@ sockinetaddr::sockinetaddr(const char* hn, const char* sn, const char* pn)
   setport(sn, pn);
 }
 
-sockinetaddr::sockinetaddr (const sockinetaddr& sina)
+sockinetaddr::sockinetaddr (const sockinetaddr& sina):sockAddr(sina),sockaddr_in(sina)
 {
   sin_family      = sockinetbuf::af_inet;
   sin_addr.s_addr = sina.sin_addr.s_addr;
