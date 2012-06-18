@@ -29,6 +29,8 @@ macro(dashboard_hook_init)
   set( dashboard_cache "
 GDCM_WRAP_PYTHON:BOOL=ON
 PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.1
+PYTHON_INCLUDE_DIR:PATH=/usr/include/python3.1
+PYTHON_LIBRARY:FILEPATH=/usr/lib/libpython3.1.so
 GDCM_WRAP_CSHARP:BOOL=OFF
 GDCM_WRAP_JAVA:BOOL=ON
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
