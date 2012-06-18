@@ -120,7 +120,7 @@ void Swap4(T &a, SwapCode const &swapcode)
 //note: according to http://www.parashift.com/c++-faq-lite/templates.html#faq-35.8
 //the inlining of the template class means that the specialization doesn't cause linker errors
 template<class T>
-void inline Swap8(T &a, SwapCode const &swapcode)
+inline void Swap8(T &a, SwapCode const &swapcode)
 {
   switch (swapcode)
     {
@@ -151,7 +151,7 @@ void inline Swap8(T &a, SwapCode const &swapcode)
 }
 
 template <>
-void inline Swap8<uint16_t>(uint16_t &a, SwapCode const &swapcode)
+inline void Swap8<uint16_t>(uint16_t &a, SwapCode const &swapcode)
 {
   switch (swapcode)
     {

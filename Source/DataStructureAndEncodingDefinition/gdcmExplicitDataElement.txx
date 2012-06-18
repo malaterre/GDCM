@@ -399,7 +399,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       }
     return os;
     }
-  bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > VL::GetVL16Max());
+  bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > (uint32_t)VL::GetVL16Max());
   if( VRField == VR::INVALID || vr16bitsimpossible )
     {
     VR un = VR::UN;

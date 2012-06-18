@@ -58,7 +58,7 @@ public:
 
   void Print(std::ostream &os) const;
 
-  AAssociateRQPDU(const AAssociateRQPDU &)
+  AAssociateRQPDU(const AAssociateRQPDU &pdu):BasePDU(pdu)
     {
     assert( 0 );
     }
