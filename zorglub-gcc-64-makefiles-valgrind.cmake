@@ -36,6 +36,11 @@ GDCM_USE_VTK:BOOL=ON
 CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
 # wrapping stuff
 GDCM_WRAP_PYTHON:BOOL=ON
+# cant get python/cmake stuff working:
+# hardcode for now:
+PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python2.6
+PYTHON_INCLUDE_DIR:PATH=/usr/include/python2.6
+PYTHON_LIBRARY:FILEPATH=/usr/lib/libpython2.6.so
 GDCM_WRAP_JAVA:BOOL=ON
 GDCM_WRAP_CSHARP:BOOL=OFF
 GDCM_USE_SYSTEM_OPENSSL:BOOL=ON
