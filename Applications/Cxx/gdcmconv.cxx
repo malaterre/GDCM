@@ -1207,6 +1207,7 @@ int main (int argc, char *argv[])
         }
       const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
 #ifdef GDCM_WORDS_BIGENDIAN
+	(void)ts;
       change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
 #else
       if( ts.IsExplicit() )
