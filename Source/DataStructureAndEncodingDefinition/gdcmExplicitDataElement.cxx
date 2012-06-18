@@ -49,7 +49,7 @@ VL ExplicitDataElement::GetLength() const
     // Each time VR::GetLength() is 2 then Value Length is coded in 2
     //                              4 then Value Length is coded in 4
     assert( !ValueField || ValueField->GetLength() == ValueLengthField );
-    bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > VL::GetVL16Max());
+    bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > (uint32_t)VL::GetVL16Max());
     if( vr16bitsimpossible || VRField == VR::INVALID )
       return TagField.GetLength() + 2*VR::GetLength(VR::UN) + ValueLengthField;
     return TagField.GetLength() + 2*VRField.GetLength() + ValueLengthField;
