@@ -904,16 +904,16 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         switch ( pf.GetScalarType() )
           {
         case PixelFormat::UINT8:
-          std::replace( (uint8_t*)p, (uint8_t*)p + len / sizeof( uint8_t ), d, min);
+          std::replace( (uint8_t*)p, (uint8_t*)p + len / sizeof( uint8_t ), (uint8_t)d, (uint8_t)min);
           break;
         case PixelFormat::INT8:
-          std::replace( (int8_t*)p, (int8_t*)p + len / sizeof( int8_t ), d, min);
+          std::replace( (int8_t*)p, (int8_t*)p + len / sizeof( int8_t ), (int8_t)d, (int8_t)min);
           break;
         case PixelFormat::UINT16:
-          std::replace( (uint16_t*)p, (uint16_t*)p + len / sizeof( uint16_t ), d, min);
+          std::replace( (uint16_t*)p, (uint16_t*)p + len / sizeof( uint16_t ), (uint16_t)d, (uint16_t)min);
           break;
         case PixelFormat::INT16:
-          std::replace( (int16_t*)p, (int16_t*)p + len / sizeof( int16_t ), d, min);
+          std::replace( (int16_t*)p, (int16_t*)p + len / sizeof( int16_t ), (int16_t)d, (int16_t)min);
           break;
         default:
           assert( 0 ); // should not happen
