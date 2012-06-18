@@ -44,7 +44,7 @@ class GDCM_EXPORT StreamImageWriter
 
 public:
   StreamImageWriter();
-  ~StreamImageWriter();
+  virtual ~StreamImageWriter();
 
 
   /// One of either SetFileName or SetStream must be called prior
