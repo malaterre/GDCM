@@ -329,7 +329,8 @@ uid_1_2_840_10008_15_0_4_8 = 268, // dicomTransferCapability
 //uid_1_2_392_200036_9116_7_8_1_1_1 = 507,
 //uid_end = 1000
 uid_1_2_840_10008_5_1_4_1_1_77_1_6, // VL Whole Slide Microscopy Image Storage
-uid_1_2_840_10008_5_1_4_1_1_6_2 // EnhancedUSVolumeStorage
+uid_1_2_840_10008_5_1_4_1_1_6_2, // EnhancedUSVolumeStorage
+uid_1_2_840_10008_5_1_4_1_1_66_5 // Surface Segmentation Storage
 
 } TSType;
   typedef enum {
@@ -622,7 +623,8 @@ dicomTransferCapability = 268, // dicomTransferCapability
 //ICBM452T1FrameofReference = 287, // ICBM 452 T1 Frame of Reference
 //ICBMSingleSubjectMRIFrameofReference = 288, // ICBM Single Subject MRI Frame of Reference
 VLWholeSlideMicroscopyImageStorage,
-EnhancedUSVolumeStorage
+EnhancedUSVolumeStorage,
+SurfaceSegmentationStorage
 } TSName;
 
 
