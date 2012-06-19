@@ -45,30 +45,23 @@ INCLUDE_DIRECTORIES(
 )
 
 FIND_PACKAGE(PythonInterp REQUIRED)
-FIND_PACKAGE(PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
+FIND_PACKAGE(PythonLibs REQUIRED)
+# TODO Need to check consistency python interp and python libs...
 MARK_AS_ADVANCED(PYTHON_LIBRARY PYTHON_INCLUDE_PATH)
 # Lamest excuse ever:
 # http://mail.python.org/pipermail/python-list/2002-April/141189.html
 # So here come craziest hack ever, since I cannot control the output of swig,
 # I need to fake a Python.h file only for MSVC compilers...insane !
 IF(MSVC)
-  CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/Python.h.in
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Python.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/Python.h @ONLY
   )
   INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
-  # does not work quite as expected...
-  #  IF(CMAKE_CONFIGURATION_TYPES)
-  #SET_SOURCE_FILES_PROPERTIES(
-  #        "${swig_generated_file_fullname}"
-  #        PROPERTIES
-  #        COMPILE_FLAGS "/U _DEBUG")
-  #  ENDIF(CMAKE_CONFIGURATION_TYPES)
-
-  ELSE(MSVC)
-  # just plain including pyconfig.h is working...until one crazy python dev decide otherwise...
-    INCLUDE_DIRECTORIES(
-      ${PYTHON_INCLUDE_PATH}
-    )
+ELSE(MSVC)
+# just plain including pyconfig.h is working...until one crazy python dev decide otherwise...
+  INCLUDE_DIRECTORIES(
+    ${PYTHON_INCLUDE_PATH}
+  )
 ENDIF(MSVC)
 SET_SOURCE_FILES_PROPERTIES(gdcmswig.i PROPERTIES CPLUSPLUS ON)
 
