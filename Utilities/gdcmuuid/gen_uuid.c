@@ -134,11 +134,6 @@ ssize_t read(int fd, void *buf, size_t count)
 }
 #endif
 
-int uuid_gettimeofday(struct timeval *tv, struct timezone *tz)
-{
-  return gettimeofday(tv,tz);
-}
-
 static int get_random_fd(void)
 {
   struct timeval  tv;
