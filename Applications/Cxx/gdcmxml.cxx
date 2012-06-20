@@ -33,6 +33,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmASN1.h"
 #include "gdcmFile.h"
+#include "gdcmXMLPrinter.h"
 
 #include <string>
 #include <iostream>
@@ -212,11 +213,18 @@ int main (int argc, char *argv[])
       return 1;
     }
     
+    
+    XMLPrinter printer;
+    
+    printer.SetFile ( reader.GetFile() );
+    
+    printer.Print( std::cout );
+    /*
     const File *F = &reader.GetFile();
     const DataSet &ds = F->GetDataSet();
     ds.WriteXML(std::cout,loadBulkData);
                 
-    /*if( XMLfile.empty() )
+    if( XMLfile.empty() )
     {
      //std::cout << "HIin";
      ds.WriteXML(std::cout);
