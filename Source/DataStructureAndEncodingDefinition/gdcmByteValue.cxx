@@ -107,5 +107,26 @@ namespace gdcm
       os << "</Value>\n";
     
     }  
+    
+    void ByteValue::PrintHex_XML(std::ostream &os, int loadBulkData ) const 
+    {
+      //VL length = std::min(maxlength, Length);
+      // WARNING: Internal.end() != Internal.begin()+Length
+      
+      std::vector<char>::const_iterator it = Internal.begin();
+      os << std::hex;
+      for(; it != Internal.begin() + Length; ++it)
+        {
+        //const char &c = *it;
+        uint8_t v = *it;
+        if( it != Internal.begin() ) os << "\\";
+        os << std::setw( 2 ) << std::setfill( '0' ) << (uint16_t)v;
+        //++it;
+        //os << std::setw( 1 ) << std::setfill( '0' ) << (int)*it;
+        }
+      os << std::dec;
+      
+    }
+
 
 }
