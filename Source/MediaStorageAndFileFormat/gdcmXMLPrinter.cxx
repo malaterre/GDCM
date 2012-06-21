@@ -168,21 +168,24 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     
   if( name && *name )
     {
-    // No owner case !
+    
+    /*  No owner */
     if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
       {
       
       os << name;
       
       }
-    // retired element
+    
+    /* retired element */
     else if( retired )
       {
-      assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
       
+      assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
       os << name;
       
       }
+      
     else
       {
       
@@ -190,12 +193,14 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       
       }
     }
+    
   else
     {
     
     if( t.IsPublic() )
       {
-      // What ? A public element that we do not know about !!!
+      
+      //An unknown public element.
       
       }
     os << "GDCM:UNKNOWN"; // Special keyword
@@ -267,6 +272,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           //int width = (vr == VR::OW ? 4 : 2);
           //os << std::hex << std::setw( width ) << std::setfill('0');
           //bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 4*/);
+          bv->PrintHex_XML(os,PrintStyle);
           //os << std::dec;
           }
         else if ( sqf )
@@ -321,34 +327,36 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
         
         if( bv )
           {
-          VL l = bv->GetLength();
-          if( bv->IsPrintable(l) )
+         
+          if( bv->IsPrintable(bv->GetLength()) )
             {
            
-            bv->PrintASCII(os,l);
+            bv->PrintASCII_XML(os);
            
              }
-          else if( t == Tag(0xfffe,0xe000) );// bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 8*/);
+          else if( t == Tag(0xfffe,0xe000) )
+          // bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 8*/);
+          bv->PrintHex_XML(os,PrintStyle);
           else
             {
-            //os << GDCM_TERMINAL_VT100_INVERSE;
+            
             // << "(non-printable character found)"
             //bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 8*/);
-            //os << GDCM_TERMINAL_VT100_NORMAL;
+            bv->PrintHex_XML(os,PrintStyle);
+            
             }
           }
         else
           {
           assert( !sqi && !sqf );
-          assert( de.IsEmpty() );
-          //os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
+          assert( de.IsEmpty() );          
           }
         }
 
         
       break;
     default:
-      //assert(0);CHECK
+      //assert(0);CHECK IMPORTANT BY NAKULL
       break;
       }
     
@@ -492,37 +500,17 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
     //const ByteValue *bv = de.GetByteValue();
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
-    //std::ostringstream os;
+    
     os << "\n<DicomAttribute   " ;
     VR refvr = PrintDataElement(os, dicts, ds, de);
 
     if( refvr == VR::SQ /*|| sqi*/ )
       {
-      //SmartPointer<SequenceOfItems> sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
+      
+      
       SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ();
       PrintSQ(sqi2, os);
-      /*
-      const SequenceOfItems *sqi = de.GetSequenceOfItems();
-      if( sqi ) // empty SQ ?
-      {
-      assert( sqi );
-      PrintSQ(sqi, os, indent);
-      }
-      else
-      {
-      if( !de.IsEmpty() )
-      {
-      // Ok so far we know:
-      // 1. VR is SQ sqi == NULL
-      // 2. DataElement is not empty ...
-      // => This is a VR:UN or Implicit SQ with defined length.
-      // let's try to interpret this sequence
-      SequenceOfItems *sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
-      if(sqi2) PrintSQ(sqi2, os, indent);
-      delete sqi2;
-      }
-      }
-       */
+     
       }
     else if ( sqf )
       {
@@ -564,21 +552,15 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
 //-----------------------------------------------------------------------------
 void XMLPrinter::Print(std::ostream& os)
 {
-  os << "# Dicom-File-Format\n";
+  os << "<NativeDicomModel>";
   os << "\n";
-  os << "# Dicom-Meta-Information-Header\n";
-  os << "# Used TransferSyntax: \n";
-
   
-  /*os << "\n# Dicom-Data-Set\n";
-  os << "# Used TransferSyntax: ";
-  const TransferSyntax &metats = meta.GetDataSetTransferSyntax();
-  os << metats;
-  os << std::endl;     ADD META INFO FOR XML here*/
+  /******** ADD META INFO FOR XML here ********/
   
   const DataSet &ds = F->GetDataSet();
   
   PrintDataSet(ds, os);
+   os << "\n</NativeDicomModel>";
   
 }
 
