@@ -40,6 +40,7 @@ SET(MSFF_SRCS
   gdcmUIDGenerator.cxx
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
+  gdcmXMLPrinter.cxx
   gdcmScanner.cxx
   gdcmPixmapReader.cxx
   gdcmImageReader.cxx
