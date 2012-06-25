@@ -20,6 +20,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "gdcmJAVA_wrap.cxx" # swig generated
   "gdcmswigPYTHON_wrap.cxx" # swig generated
   "gdcmCSHARP_wrap.cxx" # swig generated
+  "gdcmPythonFilter.cxx" # need some love
   "puff.c" # zlib code
   "/usr/bin/ld: warning: libavcodec.so.52" # needed by .*libvtkIO.so, may conflict with libavcodec.so.53"
   "/usr/bin/ld: warning: libavformat.so.52" #needed by libvtkIO.so, may conflict with libavformat.so.53"
