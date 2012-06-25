@@ -18,6 +18,8 @@ SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wshadow -Wunused -Wno-system-headers -Wno-de
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -pedantic -Wno-long-long")
 # set any extra envionment variables here
 #SET (ENV{JAVA_HOME} "/usr/lib/jvm/default-java")
+#set(ENV{JFLAGS} "-Xlint:deprecation")
+set(ENV{JFLAGS} "-Xlint:unchecked")
 
 # http://www.cmake.org/Wiki/CTest:Coverage
 SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")
