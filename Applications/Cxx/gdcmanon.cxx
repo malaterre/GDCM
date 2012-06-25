@@ -29,6 +29,13 @@
 
 #include <getopt.h>
 
+#include "gdcmCAPICryptographicMessageSyntax.h"
+#include "gdcmCAPICryptoFactory.h"
+
+//#include "gdcmOpenSSLCryptographicMessageSyntax.h"
+//#include "gdcmOpenSSLCryptoFactory.h"
+//#pragma comment(lib, "gdcmCommon.lib")
+
 static void PrintVersion()
 {
   std::cout << "gdcmanon: gdcm " << gdcm::Version::GetVersion() << " ";
@@ -276,6 +283,9 @@ static gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char *
 
 int main(int argc, char *argv[])
 {
+  //gdcm::CryptoFactory::AddLib(1, new gdcm::OpenSSLCryptoFactory());
+  gdcm::CryptoFactory::AddLib(2, new gdcm::CAPICryptoFactory());
+
   int c;
   //int digit_optind = 0;
 
@@ -745,7 +755,9 @@ int main(int argc, char *argv[])
     }
 
   // Get private key/certificate
-  gdcm::CryptographicMessageSyntax cms;
+  //gdcm::CryptographicMessageSyntax cms;
+  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(1);
+  gdcm::CryptographicMessageSyntax& cms = capi.CreateCMSProvider();
   if( !dumb_mode )
     {
     if( !GetRSAKeys(cms, rsa_path.c_str(), cert_path.c_str() ) )
@@ -788,3 +800,5 @@ int main(int argc, char *argv[])
     }
   return 0;
 }
+
+std::map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;

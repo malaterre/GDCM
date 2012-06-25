@@ -114,7 +114,16 @@ SET(Common_SRCS
   gdcmBase64.cxx
   gdcmSHA1.cxx
   gdcmDummyValueGenerator.cxx
+  #gdcmCryptographicMessageSyntax.cxx
+
   gdcmCryptographicMessageSyntax.cxx
+  gdcmCAPICryptographicMessageSyntax.cxx
+  gdcmCAPICryptoFactory.cxx
+  gdcmCryptoFactory.cxx
+  gdcmOpenSSLCryptoFactory.cxx
+  gdcmOpenSSLCryptographicMessageSyntax.cxx
+  Helper.cxx
+
   gdcmASN1.cxx
   gdcmObject.cxx
   gdcmSubject.cxx

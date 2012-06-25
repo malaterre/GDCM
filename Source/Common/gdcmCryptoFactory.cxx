@@ -11,12 +11,18 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCryptographicMessageSyntax.h"
+#include <iostream>
+using namespace std;
 
-int TestCryptographicMessageSyntax(int, char *[])
+/*class CryptoFactory
 {
-  //gdcm::CryptographicMessageSyntax o;
-  //(void)o;
+public:
+   virtual void CreateProvider() = 0;
+}*/
 
-  return 0;
+#include "gdcmCryptoFactory.h"
+#include <map>
+namespace gdcm
+{
+//map<int, CryptoFactory*> CryptoFactory::libs;// = new map<int, CryptoFactory*>();
 }

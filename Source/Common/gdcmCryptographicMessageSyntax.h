@@ -1,44 +1,20 @@
-/*=========================================================================
+#ifndef GDCMCMS_H
+#define GDCMCMS_H
 
-  Program: GDCM (Grassroots DICOM). A DICOM library
-
-  Copyright (c) 2006-2011 Mathieu Malaterre
-  All rights reserved.
-  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
-
-=========================================================================*/
-#ifndef GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
-#define GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
+#include <iostream>
+using namespace std;
 
 #include "gdcmTypes.h"
 
 namespace gdcm
 {
-class CryptographicMessageSyntaxInternals;
-//-----------------------------------------------------------------------------
-
-/**
- * \brief
- * Class for CryptographicMessageSyntax encryption. This is just a simple
- * wrapper around openssl PKCS7_encrypt functionalities
- *
- * See online documentation
- * http://www.openssl.org/docs/crypto/PKCS7_encrypt.html
- *
- */
-class GDCM_EXPORT CryptographicMessageSyntax
+class CryptographicMessageSyntax
 {
-public :
-  CryptographicMessageSyntax();
-  ~CryptographicMessageSyntax();
-
-  // X.509
-  bool ParseCertificateFile( const char *filename );
-  bool ParseKeyFile( const char *filename );
+public:
+  
+  CryptographicMessageSyntax() : cipherType(AES128_CIPHER)
+  {
+  }
 
   typedef enum {
     DES_CIPHER,    // DES
@@ -48,23 +24,27 @@ public :
     AES256_CIPHER  // '   '
   } CipherTypes;
 
-  /// Set Cipher Type.
-  /// Default is: AES256_CIPHER
-  void SetCipherType(CipherTypes type);
-  CipherTypes GetCipherType() const;
+   virtual void Encrypt() = 0;
+   virtual void Decrypt() = 0;
+
+     // X.509
+  virtual bool ParseCertificateFile( const char *filename ) = 0;
+  virtual bool ParseKeyFile( const char *filename ) = 0;
 
   /// create a PKCS#7 envelopedData structure
-  bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
+  virtual bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
+  virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) = 0;
+  virtual bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len) = 0;
 
-  /// decrypt content from a PKCS#7 envelopedData structure
-  bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
+  void SetCipherType(CipherTypes type)
+  {
+    cipherType = type;
+  }
 
-private:
-  CryptographicMessageSyntaxInternals *Internals;
-private:
-  CryptographicMessageSyntax(const CryptographicMessageSyntax&);  // Not implemented.
-  void operator=(const CryptographicMessageSyntax&);  // Not implemented.
+protected:
+  CipherTypes cipherType;
+
 };
-} // end namespace gdcm
-//-----------------------------------------------------------------------------
-#endif //GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
+}
+
+#endif //GDCMCMS_H

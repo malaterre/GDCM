@@ -11,12 +11,5 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCryptographicMessageSyntax.h"
 
-int TestCryptographicMessageSyntax(int, char *[])
-{
-  //gdcm::CryptographicMessageSyntax o;
-  //(void)o;
-
-  return 0;
-}
+#include "gdcmOpenSSLCryptoFactory.h"
