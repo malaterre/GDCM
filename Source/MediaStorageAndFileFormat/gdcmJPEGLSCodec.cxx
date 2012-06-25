@@ -53,9 +53,9 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   is.read( dummy_buffer, buf_size);
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-  JlsParameters metadata;
+  JlsParameters metadata = {};
 #else
-  JlsParamaters metadata;
+  JlsParamaters metadata = {};
 #endif
   //assert(buf_size < INT_MAX);
   if (JpegLsReadHeader(dummy_buffer, (unsigned int)buf_size, &metadata) != OK)
@@ -163,9 +163,9 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     //is.write(buffer, totalLen);
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters metadata;
+    JlsParameters metadata = {};
 #else
-    JlsParamaters metadata;
+    JlsParamaters metadata = {};
 #endif
     if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
       {
@@ -179,9 +179,9 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     size_t cbyteCompressed = totalLen;
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters params;
+    JlsParameters params = {};
 #else
-    JlsParamaters params;
+    JlsParamaters params = {};
 #endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
@@ -233,9 +233,9 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-      JlsParameters metadata;
+      JlsParameters metadata = {};
 #else
-      JlsParamaters metadata;
+      JlsParamaters metadata = {};
 #endif
       if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
         {
@@ -248,9 +248,9 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       size_t cbyteCompressed = totalLen;
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-      JlsParameters params;
+      JlsParameters params = {};
 #else
-      JlsParamaters params;
+      JlsParamaters params = {};
 #endif
       JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
@@ -320,9 +320,9 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     const char *inputdata = input + dim * image_len; //bv->GetPointer();
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters params;
+    JlsParameters params = {};
 #else
-    JlsParamaters params;
+    JlsParamaters params = {};
 #endif
 /*
 The fields in JlsCustomParameters do not control lossy/lossless. They
@@ -370,9 +370,9 @@ sample dit not suffer from that.
     params.width = image_width;
 
     if (sample_pixel == 4)
-{
+      {
       params.ilv = ILV_LINE;
-}
+      }
     else if (sample_pixel == 3)
       {
       params.ilv = ILV_LINE;
