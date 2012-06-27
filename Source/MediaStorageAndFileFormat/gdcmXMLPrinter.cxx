@@ -61,14 +61,6 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   const Tag& t = de.GetTag();
   UIDGenerator UIDgen;
   
-  if( t.IsPrivate() && !t.IsPrivateCreator() )
-    {
-    strowner = ds.GetPrivateCreator(t);
-    owner = strowner.c_str();
-    os << " owner = \"" << std::hex << std::setw(4) << std::setfill('0') <<
-      t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
-    }
-    
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
   const VR &vr = entry.GetVR();
   const VM &vm = entry.GetVM();
@@ -364,32 +356,34 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
     const DataSet &ds = item.GetNestedDataSet();
     const DataElement &deitem = item;
     
-    os << deitem.GetTag();
+    /*os << deitem.GetTag();
     os << " ";
     os << "na"; //deitem.GetVR();
-    os << " ";
+    os << " ";*/
+    os << "<DicomAttribute  tag = \"";
+    os << std::hex << std::setw(4) << std::setfill('0') <<
+      deitem.GetTag().GetGroup() <<  std::setw(4) << ((uint16_t)(deitem.GetTag().GetElement() << 8) >> 8) << "\" ";
+    os << " VR = \"UN\"  keyword = ";     
+
     if( deitem.GetVL().IsUndefined() )
       {
-      os << "(Item with undefined length)";
+      os << "\"Item with undefined length\"";
       }
     else
       {
-      os << "(Item with defined length)";
+      os << "\"Item with defined length\"";
       }
-    os << "\n";
+    os << ">\n";
     PrintDataSet(ds, os);
     if( deitem.GetVL().IsUndefined() )
       {
-      //const Tag itemDelItem(0xfffe,0xe00d);
-      //os << itemDelItem << "\n";      
-      os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"Item Delimitation Item\"/>\n";
+            os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"Item Delimitation Item\"/>\n";
       }
+    os << "</DicomAttribute>\n\n";  
     }
   if( sqi->GetLength().IsUndefined() )
     {
-    //const Tag seqDelItem(0xfffe,0xe0dd);
-    //os << seqDelItem << "\n";
-    os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>\n";
+        os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>\n";
     }
 }
 
@@ -408,7 +402,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
     
-    os << "<DicomAttribute   " ;
+    os << "<DicomAttribute  " ;
     VR refvr = PrintDataElement(os, dicts, ds, de);
 
     if( refvr == VR::SQ /*|| sqi*/ )
@@ -423,20 +417,20 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
       {
       
       const BasicOffsetTable & table = sqf->GetTable();
-     
+      os << "<DicomAttribute  ";
       PrintDataElement(os,dicts,ds,table);
+      os << "</DicomAttribute>\n\n";
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
         
         {        
         const Fragment& frag = sqf->GetFragment(i);
-        PrintDataElement(os,dicts,ds,frag);        
+        os << "<DicomAttribute  ";
+        PrintDataElement(os,dicts,ds,frag); 
+        os << "</DicomAttribute>\n\n";       
         }
         
-      const Tag seqDelItem(0xfffe,0xe0dd);
-      VL zero = 0;
-      os << seqDelItem;
-      os << " " << zero << "\n";
+      os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>\n";
       }
     else
       {
