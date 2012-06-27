@@ -250,26 +250,14 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     
     std::string s;
     switch(refvr)
-      {/*
-      StringFilterCase(AT);
-      StringFilterCase(FL);
-      StringFilterCase(FD);
-      //StringFilterCase(OB);
-      StringFilterCase(OF);
-      //StringFilterCase(OW);
-      StringFilterCase(SL);
-      //StringFilterCase(SQ);
-      StringFilterCase(SS);
-      StringFilterCase(UL);
-      //StringFilterCase(UN);
-      StringFilterCase(US);
-      //StringFilterCase(UT);*/
+      {
     case VR::OB:
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
     case VR::US_SS_OW: 
       {
+        
         if ( bv )
           {
                     
@@ -332,16 +320,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
         
         if( bv )
           {
-         
-          if( bv->IsPrintable(bv->GetLength()) )
-            {           
-              bv->PrintASCII_XML(os);
-            }
-             
-          else
-            {            
-            // << "(non-printable character found)"
-            //bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 8*/);
+            
             if(PrintStyle)
              bv->PrintHex_XML(os);
             else
@@ -349,7 +328,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
              os << "<BulkData UID = \""<<      
              UIDgen.Generate() << "\" />";  
              }
-            }
+            
             
           }
           
