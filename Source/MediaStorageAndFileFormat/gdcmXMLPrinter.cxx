@@ -382,14 +382,14 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
       {
       //const Tag itemDelItem(0xfffe,0xe00d);
       //os << itemDelItem << "\n";      
-      os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"Item Delimitation Item\"/>";
+      os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"Item Delimitation Item\"/>\n";
       }
     }
   if( sqi->GetLength().IsUndefined() )
     {
     //const Tag seqDelItem(0xfffe,0xe0dd);
     //os << seqDelItem << "\n";
-    os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>";
+    os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>\n";
     }
 }
 
@@ -408,7 +408,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
     
-    os << "\n<DicomAttribute   " ;
+    os << "<DicomAttribute   " ;
     VR refvr = PrintDataElement(os, dicts, ds, de);
 
     if( refvr == VR::SQ /*|| sqi*/ )
@@ -443,39 +443,23 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
       // This is a byte value, so it should have been already treated
       }
     
-    os << "\n</DicomAttribute>";
+    os << "</DicomAttribute>\n\n";
     }
 }
-
-
-
-/*
-void PrintUID(std::ostream &os)
-{      
-  UIDGenerator UIDgen;
-      
-  os << "<BulkData UID = \""<<      
-  UIDgen.Generate() << "\" />";  
-}      
-*/      
-     
-
 
 
 
 //-----------------------------------------------------------------------------
 void XMLPrinter::Print(std::ostream& os)
 {
-  os "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
-  os << "<NativeDicomModel xml:space=\"preserve\">";
-  os << "\n";
-  
+  os << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n";
+  os << "<NativeDicomModel xml:space=\"preserve\">\n\n";
+   
   const DataSet &ds = F->GetDataSet();
   
   PrintDataSet(ds, os);
   
-  os << "\n</NativeDicomModel>";
-  
+  os << "\n</NativeDicomModel>";  
 }
 
-}
+}//end namespace gdcm

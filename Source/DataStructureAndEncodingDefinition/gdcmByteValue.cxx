@@ -12,6 +12,7 @@
 
 =========================================================================*/
 #include "gdcmByteValue.h"
+#include "gdcmUIDGenerator.h"
 
 #include <cstring> // memcpy
 
@@ -82,7 +83,7 @@ namespace gdcm
       
       int count = 1;
       
-      os << "\n<Value number = \"" << count << "\" >" ;
+      os << "<Value number = \"" << count << "\" >" ;
       
       std::vector<char>::const_iterator it = Internal.begin();
       
@@ -93,8 +94,8 @@ namespace gdcm
         if ( c == '\\' )
         {
             count++;
-            os << "\n</Value>";
-            os << "\n<Value number = \"" << count << "\" >" ;
+            os << "</Value>\n";
+            os << "<Value number = \"" << count << "\" >" ;
         }
         
         else if ( !( isprint((unsigned char)c) || isspace((unsigned char)c) ) ) 
@@ -104,15 +105,15 @@ namespace gdcm
             os << c;
         
         }
-      os << "</Value>\n";
+      os << "</Value>";
     
     }  
     
-    void ByteValue::PrintHex_XML(std::ostream &os, int loadBulkData ) const 
+    void ByteValue::PrintHex_XML(std::ostream &os ) const 
     {
       //VL length = std::min(maxlength, Length);
       // WARNING: Internal.end() != Internal.begin()+Length
-      
+     
       std::vector<char>::const_iterator it = Internal.begin();
       os << std::hex;
       for(; it != Internal.begin() + Length; ++it)
@@ -126,7 +127,7 @@ namespace gdcm
         }
       os << std::dec;
       
-    }
+     }  
 
 
 }
