@@ -801,6 +801,7 @@ bool Bitmap::TryRLECodec(char *buffer, bool &lossyflag ) const
     {
     //assert( sf->GetNumberOfFragments() == 1 );
     //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
+    codec.SetDimensions( GetDimensions() );
     codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );

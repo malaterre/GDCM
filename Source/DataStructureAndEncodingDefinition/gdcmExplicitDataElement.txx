@@ -25,7 +25,6 @@
 
 namespace gdcm
 {
-
 //-----------------------------------------------------------------------------
 template <typename TSwap>
 std::istream &ExplicitDataElement::Read(std::istream &is)
@@ -92,7 +91,7 @@ std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
     ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
     bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
-    (void)failed;
+    gdcmAssertAlwaysMacro( !failed );
     return is;
     //throw Exception( "Unhandled" );
     }
@@ -311,7 +310,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
       failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
       break;
     default:
-    failed = true;
+      failed = true;
       assert(0);
       }
     }

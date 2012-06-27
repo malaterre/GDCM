@@ -746,6 +746,30 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
         theReturn[2] = at.GetValue();
         }
       }
+    // ACR-NEMA legacy
+      {
+      Attribute<0x0028,0x0005> at = { 0 };
+      if( ds.FindDataElement( at.GetTag() ) )
+        {
+        const DataElement &de = ds.GetDataElement( at.GetTag() );
+        // SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm picks VR::SS instead...
+        if( de.GetVR().Compatible( at.GetVR() ) || de.GetVR() == VR::INVALID )
+          {
+          at.SetFromDataSet( ds );
+          int imagedimensions = at.GetValue();
+          if( imagedimensions == 3 )
+            {
+            Attribute<0x0028,0x0012> at2 = { 0 };
+            at2.SetFromDataSet( ds );
+            theReturn[2] = at2.GetValue();
+            }
+          }
+        else
+          {
+          gdcmWarningMacro( "Sorry cant read attribute (wrong VR): " << at.GetTag() );
+          }
+        }
+      }
     }
 
   return theReturn;

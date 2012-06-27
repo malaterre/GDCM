@@ -84,7 +84,11 @@ namespace gdcm
         //is.seekg( de.GetVL() );
         }
       // tag was found, we can exit the loop:
-      if ( t <= de.GetTag() ) break;
+      if ( t <= de.GetTag() )
+        {
+        std::streampos pos = is.tellg();
+        break;
+        }
       }
     return is;
   }

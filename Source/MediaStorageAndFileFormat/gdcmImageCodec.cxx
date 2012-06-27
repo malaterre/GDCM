@@ -582,4 +582,24 @@ bool ImageCodec::IsValid(PhotometricInterpretation const &)
   return false;
 }
 
+void ImageCodec::SetDimensions(const unsigned int d[3])
+{
+  Dimensions[0] = d[0];
+  Dimensions[1] = d[1];
+  Dimensions[2] = d[2];
+}
+
+void ImageCodec::SetDimensions(const std::vector<unsigned int> & d)
+{
+  size_t theSize = d.size();
+  assert(theSize<= 3);
+  for (size_t i = 0; i < 3; i++)
+    {
+    if (i < theSize)
+      Dimensions[i] = d[i];
+    else
+      Dimensions[i] = 1;
+    }
+}
+
 } // end namespace gdcm
