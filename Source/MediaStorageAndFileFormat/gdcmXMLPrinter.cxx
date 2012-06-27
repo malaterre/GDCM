@@ -346,86 +346,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     
     }
     
-  /*
-  ***************VL AND VM PRINTING NOT REQUIRED************
-  // Append the VL
-  if( vl_read.IsUndefined() )
-    {
-    os << "u/l";
-    }
-  else
-    {
-    os << std::dec << vl_read;
-    }
-  if( vl_read.IsOdd() )
-    {
-    os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
-    os << " (" << (vl_read + 1) << ")";
-    os << GDCM_TERMINAL_VT100_NORMAL;
-    }
-  os << ",";
-  // Append the VM
-  if( vm != VM::VM0 )
-    {
-    os << vm;
-    }
-  else
-    {
-    os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
-    os << "?";
-    os << GDCM_TERMINAL_VT100_NORMAL;
-    }
-  VM guessvm = VM::VM0;
-  if( refvr & VR::VRASCII )
-    {
-    assert( refvr != VR::INVALID );
-    assert( refvr & VR::VRASCII );
-    if( bv )
-      {
-      unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
-      guessvm = VM::GetVMTypeFromLength(count, 1); // hackish...
-      }
-    }
-  else if( refvr & VR::VRBINARY )
-    {
-    assert( refvr != VR::INVALID );
-    assert( refvr & VR::VRBINARY );
-    if( refvr & VR::OB_OW || refvr == VR::SQ )
-      {
-      guessvm = VM::VM1;
-      }
-    else if ( refvr == VR::UN && sqi )
-      {
-      // This is a SQ / UN
-      guessvm = VM::VM1;
-      }
-    else if( bv )
-      {
-      guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
-      }
-    else
-      {
-      if( de.IsEmpty() ) guessvm = VM::VM0;
-      else assert( 0 && "Impossible" );
-      }
-    }
-  else if( refvr == VR::INVALID )
-    {
-    refvr = VR::UN;
-    guessvm = VM::VM1;
-    }
-  else
-    {
-    // Burst into flames !
-    assert( 0 && "Impossible happen" );
-    }
-  if( !vm.Compatible( guessvm ) )
-    {
-    os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
-    os << " (" << guessvm << ") ";
-    os << GDCM_TERMINAL_VT100_NORMAL;
-    }
-  */
+  
   os << "\n";
   return refvr;
 }
@@ -545,15 +466,15 @@ void PrintUID(std::ostream &os)
 //-----------------------------------------------------------------------------
 void XMLPrinter::Print(std::ostream& os)
 {
-  os << "<NativeDicomModel>";
+  os "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+  os << "<NativeDicomModel xml:space=\"preserve\">";
   os << "\n";
-  
-  /******** ADD META INFO FOR XML here ********/
   
   const DataSet &ds = F->GetDataSet();
   
   PrintDataSet(ds, os);
-   os << "\n</NativeDicomModel>";
+  
+  os << "\n</NativeDicomModel>";
   
 }
 
