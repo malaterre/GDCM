@@ -22,10 +22,11 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "gdcmCSHARP_wrap.cxx" # swig generated
   "gdcmPythonFilter.cxx" # need some love
   "puff.c" # zlib code
-  "/usr/bin/ld: warning: libavcodec.so.52" # needed by .*libvtkIO.so, may conflict with libavcodec.so.53"
-  "/usr/bin/ld: warning: libavformat.so.52" #needed by libvtkIO.so, may conflict with libavformat.so.53"
-  "/usr/bin/ld: warning: libavutil.so.49" # needed by .*libvtkIO.so, may conflict with libavutil.so.51"
-  "/usr/bin/ld: warning: libswscale.so.0" # needed by .*libvtkIO.so, may conflict with libswscale.so.2"
+  "/usr/bin/ld: warning: libjpeg.so.62" # needed by .*libvtkIO.so, may conflict with libjpeg.so.8
+  "/usr/bin/ld: warning: libavcodec.so.52" # needed by .*libvtkIO.so, may conflict with libavcodec.so.53
+  "/usr/bin/ld: warning: libavformat.so.52" #needed by libvtkIO.so, may conflict with libavformat.so.53
+  "/usr/bin/ld: warning: libavutil.so.49" # needed by .*libvtkIO.so, may conflict with libavutil.so.51
+  "/usr/bin/ld: warning: libswscale.so.0" # needed by .*libvtkIO.so, may conflict with libswscale.so.2
   )
 
 # Disable dynamic analysis on some tests:
