@@ -118,58 +118,5 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
 }
 
 
-void DataSet::SQ_XML_Write(std::ostream &os,const Dicts &dicts, DataElement de, int loadBulkData) const
-{
-  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-  if( !sqi ) return;
-  assert(sqi);
-  //const DataSet &ds =(*this);
-  SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
-  for(; it != sqi->Items.end(); ++it)
-    {
-      const Item &item = *it;
-      //const DataElementSet DES_temp = item.GetNestedDataSet();
-      
-      const DataElement &deitem = item;
-      WriteXML(os,loadBulkData);
-      if( deitem.GetVL().IsUndefined() )
-        {
-        // print the const Tag itemDelItem(0xfffe,0xe00d);
-        
-        }
-    }
-  if( sqi->GetLength().IsUndefined() )
-    {
-    //print the const Tag seqDelItem(0xfffe,0xe0dd);
-    
-    }
-    
-}
-
-void DataSet::WriteXML(std::ostream &os, int loadBulkData) const
-{
-  
-  const Global& G = GlobalInstance;
-  const Dicts &dicts = G.GetDicts();
-  //static int flag = loadBulkData;
-  //std::cout<< "I get called";
-  DataElement de;
-  VR ret;
-  Iterator it = DES.begin();
-  for( ; it != DES.end(); ++it)
-    {
-     de = *it;
-     os << "\n<DicomAttribute   " ;
-     ret=de.WriteXML(os, dicts, loadBulkData);      
-     
-     if(ret == VR::SQ)
-       //SQ_XML_Write(os,dicts,de,loadBulkData);
-     os << "\n<\\DicomAttribute>";  
-     
-    }
-    
-}
-
-
 
 } // end namespace gdcm

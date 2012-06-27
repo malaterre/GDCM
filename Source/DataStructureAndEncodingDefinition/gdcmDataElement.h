@@ -248,8 +248,7 @@ public:
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
 
-  VR WriteXML(std::ostream &os, const Dicts &dicts, int loadBulkData);
-
+  
 protected:
   Tag TagField;
   // This is the value read from the file, might be different from the length of Value Field

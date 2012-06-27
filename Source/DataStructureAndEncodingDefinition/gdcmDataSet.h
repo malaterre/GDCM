@@ -258,8 +258,6 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length);
   
-  void WriteXML(std::ostream &os, int loadBulkData) const;
-  void SQ_XML_Write(std::ostream&,const Dicts &dicts, gdcm::DataElement, int loadBulkData) const;
    
 protected:
   /* GetDEEnd is a Win32 only issue, one cannot use a dllexported
