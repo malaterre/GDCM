@@ -673,6 +673,11 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "304f147752d46adfdcff71a30cd03d0a" , "NM-PAL-16-PixRep1.dcm" },
 
+// gdcmDataExtra:
+{ "cb26bfacea534b5cd6881bc36520ecfc" , "US_512x512x2496_JPEG_BaseLine_Process_1.dcm" },
+{ "d40e2d27988f0c546b0daeb67fcbfba8" , "i32.XADC.7.215MegaBytes.dcm" },
+{ "c383b244fd43cb0a9db764b71cb59741" , "1.3.46.670589.7.5.10.80002138018.20001204.181556.9.1.1.dcm" },
+
 /* Stopping condition */
 { 0 ,0 }
 };

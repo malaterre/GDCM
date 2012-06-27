@@ -11,16 +11,16 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMEXPLICITIMPLICITDATAELEMENT_TXX
 #define GDCMEXPLICITIMPLICITDATAELEMENT_TXX
+
+#include "gdcmExplicitImplicitDataElement.h"
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmVL.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
-
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
 
@@ -38,12 +38,6 @@ template <typename TSwap>
 std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
 {
   TagField.Read<TSwap>(is);
-  return is;
-}
-
-template <typename TSwap>
-std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
-{
   // See PS 3.5, Data Element Structure With Explicit VR
   // Read Tag
   if( !is )
@@ -333,6 +327,19 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
     ValueLengthField = ValueLengthField - 7;
     }
 #endif
+
+  return is;
+}
+
+template <typename TSwap>
+std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
+{
+  if( is.eof() ) return is;
+  /* thechnically the following is bad
+     it assumes that in the case of explicit/implicit dataset
+     we are not handle the prevalue call properly for buggy implicit attribute
+   */
+  if( VRField == VR::INVALID ) return is;
 
   if( ValueLengthField == 0 )
     {

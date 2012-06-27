@@ -129,7 +129,6 @@ std::istream& Read(std::istream &is)
       }
     catch(Exception &ex)
       {
-      (void)ex;  //to avoid unreferenced variable warning on release
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       // that's ok ! In all cases the whole file was read, because
       // Fragment::Read only fail on eof() reached 1.

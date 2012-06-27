@@ -104,6 +104,8 @@ ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 
 SET(Common_SRCS
   gdcmVersion.cxx
+  gdcmRegion.cxx
+  gdcmBoxRegion.cxx
   gdcmEvent.cxx
   gdcmDataEvent.cxx
   gdcmProgressEvent.cxx

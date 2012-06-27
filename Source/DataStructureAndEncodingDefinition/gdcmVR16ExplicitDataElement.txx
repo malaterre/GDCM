@@ -164,6 +164,7 @@ std::istream &VR16ExplicitDataElement::ReadPreValue(std::istream &is)
   // chances is that 99% of times there is now way we can reach here, so safely throw an exception
   if( TagField == Tag(0x0000,0x0000) && ValueLengthField == 0 && VRField == VR::INVALID )
     {
+    // This handles DMCPACS_ExplicitImplicit_BogusIOP.dcm
     ParseException pe;
     pe.SetLastElement( *this );
     throw pe;

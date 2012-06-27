@@ -29,6 +29,7 @@ class JPEG2000Internals;
  */
 class GDCM_EXPORT JPEG2000Codec : public ImageCodec
 {
+friend class ImageRegionReader;
   friend class Bitmap;
 public:
   JPEG2000Codec();
@@ -57,8 +58,17 @@ public:
   void SetReversible(bool res);
 
 protected:
-  bool Decode(std::istream &is, std::ostream &os);
+  bool DecodeExtent(
+    char *buffer,
+    unsigned int xmin, unsigned int xmax,
+    unsigned int ymin, unsigned int ymax,
+    unsigned int zmin, unsigned int zmax,
+    std::istream & is
+  );
+
+  bool DecodeByStreams(std::istream &is, std::ostream &os);
 private:
+  std::pair<char *, size_t> DecodeByStreamsCommon(char *dummy_buffer, size_t buf_size);
   bool GetHeaderInfo(const char * dummy_buffer, size_t len, TransferSyntax &ts);
   JPEG2000Internals *Internals;
 };

@@ -227,6 +227,10 @@ public class";
 #include "gdcmStreamImageReader.h"
 #include "gdcmStreamImageWriter.h"
 
+#include "gdcmRegion.h"
+#include "gdcmBoxRegion.h"
+#include "gdcmImageRegionReader.h"
+
 using namespace gdcm;
 %}
 
@@ -798,3 +802,10 @@ typedef int64_t time_t; // FIXME
 %include "gdcmStreamImageReader.h"
 %clear char* inReadBuffer;
 %include "gdcmStreamImageWriter.h"
+%include "gdcmRegion.h"
+EXTEND_CLASS_PRINT(gdcm::Region)
+%include "gdcmBoxRegion.h"
+EXTEND_CLASS_PRINT(gdcm::BoxRegion)
+%apply char[] { char* inreadbuffer }
+%include "gdcmImageRegionReader.h"
+%clear char* inreadbuffer;

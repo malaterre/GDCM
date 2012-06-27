@@ -47,6 +47,9 @@ SET(MSFF_TEST_SRCS
   TestSorter
   TestImageReader
   TestStreamImageReader
+  TestImageRegionReader1
+  TestImageRegionReader2
+  TestImageRegionReader3
   TestStreamImageWriter
   TestImageReaderRandomEmpty
   TestDirectionCosines
@@ -105,6 +108,7 @@ IF(GDCM_DATA_EXTRA_ROOT)
     ${MSFF_TEST_SRCS}
     TestSplitMosaicFilter
     TestOverlay2
+    TestImageRegionReader4
     )
 ENDIF(GDCM_DATA_EXTRA_ROOT)
 

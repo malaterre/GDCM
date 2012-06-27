@@ -11,35 +11,22 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef GDCMDECODER_H
-#define GDCMDECODER_H
-
-#include "gdcmTypes.h"
-#include "gdcmDataElement.h" // FIXME
+#include "gdcmRegion.h"
+#include "gdcmBoxRegion.h"
 
 namespace gdcm
 {
 
-class TransferSyntax;
-class DataElement;
-/**
- * \brief Decoder
- */
-class GDCM_EXPORT Decoder
+Region::Region()
 {
-public:
-  virtual ~Decoder() {}
+}
 
-  /// Return whether this decoder support this transfer syntax (can decode it)
-  virtual bool CanDecode(TransferSyntax const &) const = 0;
+Region::~Region()
+{
+}
 
-  /// Decode
-  virtual bool Decode(DataElement const &, DataElement &) { return false; }
-protected:
-  virtual bool DecodeByStreams(std::istream &, std::ostream &) { return false; }
-};
+void Region::Print(std::ostream &os) const
+{
+}
 
 } // end namespace gdcm
-
-#endif //GDCMDECODER_H

@@ -21,6 +21,9 @@
 #include "gdcmJPEG12Codec.h"
 #include "gdcmJPEG16Codec.h"
 
+#include <numeric>
+#include <string.h>
+
 namespace gdcm
 {
 
@@ -140,9 +143,8 @@ void JPEGCodec::SetBitSample(int bit)
 
 /*
 A.4.1 JPEG image compression
-
-For all images, including all frames of a multi-frame image, the JPEG Interchange Format shall be used
-(the table specification shall be included).
+For all images, including all frames of a multi-frame image, the JPEG
+Interchange Format shall be used (the table specification shall be included).
 */
 bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 {
@@ -421,6 +423,190 @@ bool JPEGCodec::IsValid(PhotometricInterpretation const &pi)
 //      ret = false;
     }
   return ret;
+}
+
+bool JPEGCodec::DecodeExtent(
+    char *buffer,
+    unsigned int xmin, unsigned int xmax,
+    unsigned int ymin, unsigned int ymax,
+    unsigned int zmin, unsigned int zmax,
+    std::istream & is
+  )
+{
+  BasicOffsetTable bot;
+  bot.Read<SwapperNoOp>( is );
+
+  const unsigned int * dimensions = this->GetDimensions();
+  const PixelFormat & pf = this->GetPixelFormat();
+  //assert( pf.GetBitsAllocated() % 8 == 0 );
+  assert( pf != PixelFormat::SINGLEBIT );
+  //assert( pf != PixelFormat::UINT12 && pf != PixelFormat::INT12 );
+
+  if( NumberOfDimensions == 2 )
+    {
+    char *dummy_buffer = NULL;
+    std::vector<char> vdummybuffer;
+    size_t buf_size = 0;
+
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    gdcm::Fragment frag;
+    unsigned int nfrags = 0;
+    try
+      {
+      while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+        {
+        ++nfrags;
+        size_t fraglen = frag.GetVL();
+        size_t oldlen = vdummybuffer.size();
+        // update
+        buf_size = fraglen + oldlen;
+        vdummybuffer.resize( buf_size );
+        dummy_buffer = &vdummybuffer[0];
+        // read J2K
+        is.read( &vdummybuffer[oldlen], fraglen );
+        }
+    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+      }
+    catch(Exception &ex)
+      {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+      // that's ok ! In all cases the whole file was read, because
+      // Fragment::Read only fail on eof() reached 1.
+      // SIEMENS-JPEG-CorruptFrag.dcm is more difficult to deal with, we have a
+      // partial fragment, read we decide to add it anyway to the stack of
+      // fragments (eof was reached so we need to clear error bit)
+      if( frag.GetTag() == Tag(0xfffe,0xe000)  )
+        {
+        gdcmWarningMacro( "Pixel Data Fragment could be corrupted. Use file at own risk" );
+        //Fragments.push_back( frag );
+        is.clear(); // clear the error bit
+        }
+      // 2. GENESIS_SIGNA-JPEG-CorruptFrag.dcm
+      else if ( frag.GetTag() == Tag(0xddff,0x00e0) )
+        {
+        assert( nfrags == 1 );
+        const ByteValue *bv = frag.GetByteValue();
+        assert( (unsigned char)bv->GetPointer()[ bv->GetLength() - 1 ] == 0xfe );
+        // Yes this is an extra copy, this is a bug anyway, go fix YOUR code
+        frag.SetByteValue( bv->GetPointer(), bv->GetLength() - 1 );
+        assert( 0 );
+        gdcmWarningMacro( "JPEG Fragment length was declared with an extra byte"
+          " at the end: stripped !" );
+        is.clear(); // clear the error bit
+        }
+      else
+        {
+        // 3. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found
+        // instead of terminator (eof is the next char)
+        gdcmWarningMacro( "Reading failed at Tag:" << frag.GetTag() <<
+          ". Use file at own risk." << ex.what() );
+        }
+#else
+      (void)ex;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
+      }
+
+    assert( zmin == zmax );
+    assert( zmin == 0 );
+
+    std::stringstream iis;
+    iis.write( &vdummybuffer[0], vdummybuffer.size() );
+    std::stringstream os;
+    bool b = DecodeByStreams(iis,os);
+    assert( b );
+
+    const unsigned int rowsize = xmax - xmin + 1;
+    const unsigned int colsize = ymax - ymin + 1;
+    const unsigned int bytesPerPixel = pf.GetPixelSize();
+    os.seekg(0, std::ios::beg );
+    assert( os.good() );
+    std::istream *theStream = &os;
+    std::vector<char> buffer1;
+    buffer1.resize( rowsize*bytesPerPixel );
+    char *tmpBuffer1 = &buffer1[0];
+    unsigned int y, z;
+    std::streamoff theOffset;
+    for (z = zmin; z <= zmax; ++z)
+      {
+      for (y = ymin; y <= ymax; ++y)
+        {
+        theStream->seekg(std::ios::beg);
+        theOffset = 0 + (z*dimensions[1]*dimensions[0] + y*dimensions[0] + xmin)*bytesPerPixel;
+        theStream->seekg(theOffset);
+        theStream->read(tmpBuffer1, rowsize*bytesPerPixel);
+        memcpy(&(buffer[((z-zmin)*rowsize*colsize +
+              (y-ymin)*rowsize)*bytesPerPixel]),
+          tmpBuffer1, rowsize*bytesPerPixel);
+        }
+      }
+    }
+  else if ( NumberOfDimensions == 3 )
+    {
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    gdcm::Fragment frag;
+    std::streamoff thestart = is.tellg();
+    unsigned int numfrags = 0;
+    std::vector< size_t > offsets;
+    while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+      {
+      //std::streamoff relstart = is.tellg();
+      //assert( relstart - thestart == 8 );
+      std::streamoff off = frag.GetVL();
+      offsets.push_back( off );
+      is.seekg( off, std::ios::cur );
+      ++numfrags;
+      }
+    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    assert( numfrags == offsets.size() );
+    if( numfrags != Dimensions[2] )
+      {
+      gdcmErrorMacro( "Not handled" );
+      return false;
+      }
+
+    for( unsigned int z = zmin; z <= zmax; ++z )
+      {
+      size_t curoffset = std::accumulate( offsets.begin(), offsets.begin() + z, 0 );
+      is.seekg( thestart + curoffset + 8 * z, std::ios::beg );
+      is.seekg( 8, std::ios::cur );
+      std::streampos relstart = is.tellg();
+
+      //const size_t buf_size = offsets[z];
+      //char *dummy_buffer = new char[ buf_size ];
+      //is.read( dummy_buffer, buf_size );
+
+      std::stringstream os;
+      bool b = DecodeByStreams(is, os);
+      assert( b );
+      /* free the memory containing the code-stream */
+      //delete[] dummy_buffer;
+
+      os.seekg(0, std::ios::beg );
+      assert( os.good() );
+      std::istream *theStream = &os;
+
+      unsigned int rowsize = xmax - xmin + 1;
+      unsigned int colsize = ymax - ymin + 1;
+      unsigned int bytesPerPixel = pf.GetPixelSize();
+
+      std::vector<char> buffer1;
+      buffer1.resize( rowsize*bytesPerPixel );
+      char *tmpBuffer1 = &buffer1[0];
+      unsigned int y;
+      std::streamoff theOffset;
+      for (y = ymin; y <= ymax; ++y)
+        {
+        theStream->seekg(std::ios::beg);
+        theOffset = 0 + (0*dimensions[1]*dimensions[0] + y*dimensions[0] + xmin)*bytesPerPixel;
+        theStream->seekg(theOffset);
+        theStream->read(tmpBuffer1, rowsize*bytesPerPixel);
+        memcpy(&(buffer[((z-zmin)*rowsize*colsize +
+              (y-ymin)*rowsize)*bytesPerPixel]),
+          tmpBuffer1, rowsize*bytesPerPixel);
+        }
+      }
+    }
+  return true;
 }
 
 } // end namespace gdcm

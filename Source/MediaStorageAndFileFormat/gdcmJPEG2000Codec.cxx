@@ -19,6 +19,7 @@
 #include "gdcmSwapper.h"
 
 #include <cstring>
+#include <numeric>
 
 #ifdef OPENJPEG_MAJOR_VERSION
 #if OPENJPEG_MAJOR_VERSION == 1
@@ -314,9 +315,9 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       std::stringstream is;
       size_t j2kbv_len = j2kbv->GetLength();
       char *mybuffer = new char[j2kbv_len];
-      bool b = j2kbv->GetBuffer(mybuffer, j2kbv->GetLength());
-      assert( b ); (void)b;
-      is.write(mybuffer, j2kbv->GetLength());
+      bool b = j2kbv->GetBuffer(mybuffer, j2kbv_len);
+      assert( b );
+      if( b ) is.write(mybuffer, j2kbv_len);
       delete[] mybuffer;
 
       try {
@@ -334,7 +335,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     is.write(buffer, totalLen);
     delete[] buffer;
     std::stringstream os;
-    bool r = Decode(is, os);
+    bool r = DecodeByStreams(is, os);
     if(!r) return false;
     out = in;
     std::string str = os.str();
@@ -371,7 +372,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       bv->GetBuffer(mybuffer, bv->GetLength());
       is.write(mybuffer, bv->GetLength());
       delete[] mybuffer;
-      bool r = Decode(is, os);
+      bool r = DecodeByStreams(is, os);
       if(!r) return false;
       assert( r == true );
       }
@@ -385,7 +386,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
   return false;
 }
 
-bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
+std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffer, size_t buf_size)
 {
   opj_dparameters_t parameters;  /* decompression parameters */
 #if OPENJPEG_MAJOR_VERSION == 1
@@ -397,12 +398,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   opj_stream_t *cio = NULL;
 #endif // OPENJPEG_MAJOR_VERSION == 1
   opj_image_t *image = NULL;
-  // FIXME: Do some stupid work:
-  is.seekg( 0, std::ios::end);
-  size_t buf_size = (size_t)is.tellg();
-  char *dummy_buffer = new char[buf_size];
-  is.seekg(0, std::ios::beg);
-  is.read( dummy_buffer, buf_size);
+
   unsigned char *src = (unsigned char*)dummy_buffer;
   uint32_t file_length = (uint32_t)buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
 
@@ -468,7 +464,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     break;
   default:
     gdcmErrorMacro( "Impossible happen" );
-    return false;
+    return std::make_pair<char*,size_t>(0,0);
     }
 
   int reversible;
@@ -488,7 +484,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     opj_destroy_decompress(dinfo);
     opj_cio_close(cio);
     gdcmErrorMacro( "opj_decode failed" );
-    return false;
+    return std::make_pair<char*,size_t>(0,0);
   }
 #elif OPENJPEG_MAJOR_VERSION == 2
   myfile mysrc;
@@ -582,7 +578,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
     break;
   default:
     gdcmErrorMacro( "Impossible happen" );
-    return false;
+    return std::make_pair<char*,size_t>(0,0);
     }
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
@@ -682,10 +678,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
         }
       }
     }
-  os.write(raw, len );
-  delete[] raw;
-  /* free the memory containing the code-stream */
-  delete[] src;  //FIXME
 
 #if OPENJPEG_MAJOR_VERSION == 1
   /* free remaining structures */
@@ -703,6 +695,25 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   /* free image data structure */
   opj_image_destroy(image);
 
+  return std::make_pair(raw,len);
+}
+
+bool JPEG2000Codec::DecodeByStreams(std::istream &is, std::ostream &os)
+{
+  // FIXME: Do some stupid work:
+  is.seekg( 0, std::ios::end);
+  size_t buf_size = (size_t)is.tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.seekg(0, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+
+  std::pair<char*,size_t> raw_len = this->DecodeByStreamsCommon(dummy_buffer, buf_size);
+  /* free the memory containing the code-stream */
+  delete[] dummy_buffer;
+
+  if( !raw_len.first || !raw_len.second ) return false;
+  os.write( raw_len.first, raw_len.second);
+  delete[] raw_len.first;
   return true;
 }
 
@@ -1437,6 +1448,126 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   opj_image_destroy(image);
 
 
+  return true;
+}
+
+bool JPEG2000Codec::DecodeExtent(
+  char *buffer,
+  unsigned int xmin, unsigned int xmax,
+  unsigned int ymin, unsigned int ymax,
+  unsigned int zmin, unsigned int zmax,
+  std::istream & is
+)
+{
+  BasicOffsetTable bot;
+  bot.Read<SwapperNoOp>( is );
+
+  const unsigned int * dimensions = this->GetDimensions();
+  const PixelFormat & pf = this->GetPixelFormat();
+  assert( pf.GetBitsAllocated() % 8 == 0 );
+  assert( pf != PixelFormat::SINGLEBIT );
+  assert( pf != PixelFormat::UINT12 && pf != PixelFormat::INT12 );
+
+  if( NumberOfDimensions == 2 )
+    {
+    char *dummy_buffer = NULL;
+    std::vector<char> vdummybuffer;
+    size_t buf_size = 0;
+
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    gdcm::Fragment frag;
+    while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+      {
+      size_t fraglen = frag.GetVL();
+      size_t oldlen = vdummybuffer.size();
+      // update
+      buf_size = fraglen + oldlen;
+      vdummybuffer.resize( buf_size );
+      dummy_buffer = &vdummybuffer[0];
+      // read J2K
+      is.read( &vdummybuffer[oldlen], fraglen );
+      }
+    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    assert( zmin == zmax );
+    assert( zmin == 0 );
+
+    std::pair<char*,size_t> raw_len = this->DecodeByStreamsCommon(dummy_buffer, buf_size);
+    if( !raw_len.first || !raw_len.second ) return false;
+
+    char *raw = raw_len.first;
+    const unsigned int rowsize = xmax - xmin + 1;
+    const unsigned int colsize = ymax - ymin + 1;
+    const unsigned int bytesPerPixel = pf.GetPixelSize();
+
+    const char *tmpBuffer1 = raw;
+    unsigned int z = 0;
+    for (unsigned int y = ymin; y <= ymax; ++y)
+      {
+      size_t theOffset = 0 + (z*dimensions[1]*dimensions[0] + y*dimensions[0] + xmin)*bytesPerPixel;
+      tmpBuffer1 = raw + theOffset;
+      memcpy(&(buffer[((z-zmin)*rowsize*colsize +
+            (y-ymin)*rowsize)*bytesPerPixel]),
+        tmpBuffer1, rowsize*bytesPerPixel);
+      }
+    delete[] raw_len.first;
+
+    }
+  else if ( NumberOfDimensions == 3 )
+    {
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    gdcm::Fragment frag;
+    std::streamoff thestart = is.tellg();
+    unsigned int numfrags = 0;
+    std::vector< size_t > offsets;
+    while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+      {
+      //std::streamoff relstart = is.tellg();
+      //assert( relstart - thestart == 8 );
+      std::streamoff off = frag.GetVL();
+      offsets.push_back( off );
+      is.seekg( off, std::ios::cur );
+      ++numfrags;
+      }
+    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    assert( numfrags == offsets.size() );
+    if( numfrags != Dimensions[2] )
+      {
+      gdcmErrorMacro( "Not handled" );
+      return false;
+      }
+
+    for( unsigned int z = zmin; z <= zmax; ++z )
+      {
+      size_t curoffset = std::accumulate( offsets.begin(), offsets.begin() + z, 0 );
+      is.seekg( thestart + curoffset + 8 * z, std::ios::beg );
+      is.seekg( 8, std::ios::cur );
+      std::streampos relstart = is.tellg();
+
+      const size_t buf_size = offsets[z];
+      char *dummy_buffer = new char[ buf_size ];
+      is.read( dummy_buffer, buf_size );
+      std::pair<char*,size_t> raw_len = this->DecodeByStreamsCommon(dummy_buffer, buf_size);
+      /* free the memory containing the code-stream */
+      delete[] dummy_buffer;
+      if( !raw_len.first || !raw_len.second ) return false;
+
+      char *raw = raw_len.first;
+      const unsigned int rowsize = xmax - xmin + 1;
+      const unsigned int colsize = ymax - ymin + 1;
+      const unsigned int bytesPerPixel = pf.GetPixelSize();
+
+      const char *tmpBuffer1 = raw;
+      for (unsigned int y = ymin; y <= ymax; ++y)
+        {
+        size_t theOffset = 0 + (0*dimensions[1]*dimensions[0] + y*dimensions[0] + xmin)*bytesPerPixel;
+        tmpBuffer1 = raw + theOffset;
+        memcpy(&(buffer[((z-zmin)*rowsize*colsize +
+              (y-ymin)*rowsize)*bytesPerPixel]),
+          tmpBuffer1, rowsize*bytesPerPixel);
+        }
+      delete[] raw_len.first;
+      }
+    }
   return true;
 }
 
