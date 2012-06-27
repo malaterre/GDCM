@@ -72,7 +72,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   
   //Printing Tag
   os << " tag = \"" << std::hex << std::setw(4) << std::setfill('0') <<
-      t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
+      t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\"" << std::dec;
       
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {
@@ -218,14 +218,41 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       if( !de.IsEmpty() ) { \
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
-      os << "" << el.GetValue(); \
+      os << "<Value number = \"1\" >" ;os << "" << el.GetValue();os << "</Value>"; \
       VL l = (long) el.GetLength(); \
-      for(unsigned long i = 1; i < l; ++i) os << "\\" << el.GetValue(i); \
+      for(unsigned long i = 2; i <= l; ++i) \
+      { \
+      os << "<Value number = \"" << i << "\" >" ;\
+      os << "\\" << el.GetValue(i);os << "</Value>";} \
       os << ""; } \
       else { if( de.IsEmpty() )  \
                  ; } } \
       else { assert( de.IsEmpty());  } \
     } break    
+
+/*
+#define StringFilterCase(type) \
+  case VR::type: \
+    { \
+      Element<VR::type,VM::VM1_n> el; \ 
+      if( !de.IsEmpty() ) \
+      { \      
+        el.Set( de.GetValue() ); \
+          if( el.GetLength() ) \
+          { \
+            os << "" << el.GetValue(); \
+            VL l = (long) el.GetLength(); \
+            for(unsigned long i = 1; i < l; ++i) \
+            {\
+            os << "<Value number = \"" << i << "\" >" ;\
+            os << "\\" << el.GetValue(i); \
+            os << "</Value>"; \
+            }             \
+          }          \
+      }      \
+      else { assert( de.IsEmpty());}      \
+    }break \
+*/
 
   // Print Value now:
   
