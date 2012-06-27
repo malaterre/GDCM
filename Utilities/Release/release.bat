@@ -20,8 +20,8 @@ set minor=2
 set patch=0
 set version="%major%.%minor%.%patch%"
 
-@rem use VCExpress 2005 for portability
-call "%VS80COMNTOOLS%vsvars32.bat"
+@rem use VCExpress 2008 for compatibilities with OpenSSL binaries
+call "%VS90COMNTOOLS%vsvars32.bat"
 
 SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0\Lib;%LIB%
 SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0\Include;%INCLUDE%
@@ -30,7 +30,8 @@ SET INCLUDE=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\I
 @rem SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%
 @rem SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Include;%INCLUDE%
 SET PATH=%PATH%;C:\Program Files\Git\bin
-@rem SET PATH=%PATH%;C:\Program Files\Swig\swigwin-2.0.7
+SET PATH=%PATH%;C:\Program Files\Swig\swigwin-2.0.7
+SET PATH=%PATH%;C:\Program Files\Java\jdk1.6.0_25\bin
 
 @rem prepare target dir
 mkdir %TMPDIR%
