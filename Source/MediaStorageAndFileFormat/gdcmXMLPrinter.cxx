@@ -211,13 +211,21 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     }  
    os << "\">\n   ";  
     
-    
-    
-    
-    
-    
-    
-    
+#define StringFilterCase(type) \
+  case VR::type: \
+    { \
+      Element<VR::type,VM::VM1_n> el; \
+      if( !de.IsEmpty() ) { \
+      el.Set( de.GetValue() ); \
+      if( el.GetLength() ) { \
+      os << "" << el.GetValue(); \
+      VL l = (long) el.GetLength(); \
+      for(unsigned long i = 1; i < l; ++i) os << "\\" << el.GetValue(i); \
+      os << ""; } \
+      else { if( de.IsEmpty() )  \
+                 ; } } \
+      else { assert( de.IsEmpty());  } \
+    } break    
 
   // Print Value now:
   
@@ -243,6 +251,20 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     std::string s;
     switch(refvr)
       {
+    
+      StringFilterCase(AT);
+      StringFilterCase(FL);
+      StringFilterCase(FD);
+      //StringFilterCase(OB);
+      StringFilterCase(OF);
+      //StringFilterCase(OW);
+      StringFilterCase(SL);
+      //StringFilterCase(SQ);
+      StringFilterCase(SS);
+      StringFilterCase(UL);
+      //StringFilterCase(UN);
+      StringFilterCase(US);
+      //StringFilterCase(UT);  
     case VR::OB:
     case VR::OW:
     case VR::OB_OW:
@@ -345,9 +367,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 
 void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
 {
-  
-  /* RESEARCH ABOUT ITEM START END TAGS, ADD XML NODES APPROPRIATELY */
-  
+      
   if( !sqi ) return;
   SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
   for(; it != sqi->Items.end(); ++it)
@@ -355,11 +375,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
     const Item &item = *it;
     const DataSet &ds = item.GetNestedDataSet();
     const DataElement &deitem = item;
-    
-    /*os << deitem.GetTag();
-    os << " ";
-    os << "na"; //deitem.GetVR();
-    os << " ";*/
+        
     os << "<DicomAttribute  tag = \"";
     os << std::hex << std::setw(4) << std::setfill('0') <<
       deitem.GetTag().GetGroup() <<  std::setw(4) << ((uint16_t)(deitem.GetTag().GetElement() << 8) >> 8) << "\" ";
