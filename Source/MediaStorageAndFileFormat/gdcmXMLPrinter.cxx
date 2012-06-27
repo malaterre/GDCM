@@ -23,6 +23,7 @@
 #include "gdcmGlobal.h"
 #include "gdcmAttribute.h"
 #include "gdcmDataSetHelper.h"
+#include "gdcmUIDGenerator.h"
 
 #include "gdcmDataSet.h"
 
@@ -32,7 +33,7 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-XMLPrinter::XMLPrinter():PrintStyle(XMLPrinter::LOADBULKDATA),F(0)
+XMLPrinter::XMLPrinter():PrintStyle(XMLPrinter::OnlyUUID),F(0)
 {
 }
 
@@ -58,11 +59,14 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   std::string strowner;
   const char *owner = 0;
   const Tag& t = de.GetTag();
+  UIDGenerator UIDgen;
   
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
+    os << " owner = \"" << std::hex << std::setw(4) << std::setfill('0') <<
+      t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
     }
     
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
@@ -77,6 +81,13 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   //Printing Tag
   os << " tag = \"" << std::hex << std::setw(4) << std::setfill('0') <<
       t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
+      
+  if( t.IsPrivate() && !t.IsPrivateCreator() )
+    {
+    strowner = ds.GetPrivateCreator(t);
+    owner = strowner.c_str();
+    os << " PrivateCreator = \"" << owner << "\" ";
+    }
   
   
   VR refvr;
@@ -257,57 +268,51 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
-    case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm
-      /*
-      VR::US_SS_OW:
-      undefined_length_un_vr.dcm
-      GDCMFakeJPEG.dcm
-      PhilipsWith15Overlays.dcm
-       */
-        {
+    case VR::US_SS_OW: 
+      {
         if ( bv )
           {
-          //VL l = std::min( bv->GetLength(), MaxPrintLength );
-          //VL l = std::min( (int)bv->GetLength(), 0xF );
-          //int width = (vr == VR::OW ? 4 : 2);
-          //os << std::hex << std::setw( width ) << std::setfill('0');
-          //bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 4*/);
-          bv->PrintHex_XML(os,PrintStyle);
-          //os << std::dec;
+                    
+          if(PrintStyle)
+          {
+             bv->PrintHex_XML(os);
           }
+          
+          else          
+          {
+             os << "<BulkData UID = \""<<      
+             UIDgen.Generate() << "\" />";  
+          }
+          
+          
+          }
+          
         else if ( sqf )
           {
-          assert( t == Tag(0x7fe0,0x0010) );
-          //os << *sqf;
+          assert( t == Tag(0x7fe0,0x0010) );          
           }
+          
         else if ( sqi )
-          {
-          // gdcmDataExtra/gdcmSampleData/images_of_interest/illegal_UN_stands_for_SQ.dcm
-          gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );
-          //os << *sqi;
+          {          
+          gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );          
           }
+          
         else
           {
           assert( !sqi && !sqf );
-          assert( de.IsEmpty() );
-          
+          assert( de.IsEmpty() );          
           }
+          
         }
       break;
+    
     case VR::US_SS:
-      // impossible...
       assert( refvr != VR::US_SS );
       break;
+      
     case VR::SQ:
-      if( !sqi /*!de.GetSequenceOfItems()*/ && !de.IsEmpty() && de.GetValue().GetLength() )
+      if( !sqi && !de.IsEmpty() && de.GetValue().GetLength() )
         {
-        // This case is insane, this is an implicit file, with a defined length SQ.
-        // Since this is a private element there is no way to guess that, and to
-        // make it even worse the binary blob does not start with item start...
-        // Bug_Philips_ItemTag_3F3F.dcm
-        //os << GDCM_TERMINAL_VT100_BACKGROUND_RED;
-        //bv->PrintHex(os, MaxPrintLength / 4);
-        //os << GDCM_TERMINAL_VT100_NORMAL;
         }
       else
         {
@@ -321,40 +326,40 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           }
         }
       break;
-      // Let's be a little more helpful and try to print anyway when possible:
+      
     case VR::INVALID:
-        {
+        
         
         if( bv )
           {
          
           if( bv->IsPrintable(bv->GetLength()) )
-            {
-           
-            bv->PrintASCII_XML(os);
-           
-             }
-          else if( t == Tag(0xfffe,0xe000) )
-          // bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 8*/);
-          bv->PrintHex_XML(os,PrintStyle);
+            {           
+              bv->PrintASCII_XML(os);
+            }
+             
           else
-            {
-            
+            {            
             // << "(non-printable character found)"
             //bv->PrintHex(os, bv->GetLength()/*MaxPrintLength / 8*/);
-            bv->PrintHex_XML(os,PrintStyle);
-            
+            if(PrintStyle)
+             bv->PrintHex_XML(os);
+            else
+             {
+             os << "<BulkData UID = \""<<      
+             UIDgen.Generate() << "\" />";  
+             }
             }
+            
           }
+          
         else
           {
           assert( !sqi && !sqf );
           assert( de.IsEmpty() );          
-          }
-        }
-
-        
+          }        
       break;
+      
     default:
       //assert(0);CHECK IMPORTANT BY NAKULL
       break;
@@ -475,14 +480,16 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
     PrintDataSet(ds, os);
     if( deitem.GetVL().IsUndefined() )
       {
-      const Tag itemDelItem(0xfffe,0xe00d);
-      os << itemDelItem << "\n";
+      //const Tag itemDelItem(0xfffe,0xe00d);
+      //os << itemDelItem << "\n";      
+      os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"Item Delimitation Item\"/>";
       }
     }
   if( sqi->GetLength().IsUndefined() )
     {
-    const Tag seqDelItem(0xfffe,0xe0dd);
-    os << seqDelItem << "\n";
+    //const Tag seqDelItem(0xfffe,0xe0dd);
+    //os << seqDelItem << "\n";
+    os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>";
     }
 }
 
@@ -542,9 +549,16 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
 
 
 
-
-
-
+/*
+void PrintUID(std::ostream &os)
+{      
+  UIDGenerator UIDgen;
+      
+  os << "<BulkData UID = \""<<      
+  UIDgen.Generate() << "\" />";  
+}      
+*/      
+     
 
 
 
