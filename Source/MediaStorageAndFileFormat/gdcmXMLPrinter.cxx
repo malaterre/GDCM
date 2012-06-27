@@ -381,7 +381,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       break;
       
     default:
-      //assert(0);CHECK IMPORTANT BY NAKULL
+      assert(0);//CHECK IMPORTANT BY NAKULL
       break;
       }
     

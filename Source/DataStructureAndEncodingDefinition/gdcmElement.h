@@ -485,7 +485,7 @@ public:
     return Internal[idx];
   }
   typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) {
-    assert( idx < Length );
+    //assert( idx < Length );
     return Internal[idx];
   }
   typename VRToType<TVR>::Type operator[] (unsigned int idx) const {
