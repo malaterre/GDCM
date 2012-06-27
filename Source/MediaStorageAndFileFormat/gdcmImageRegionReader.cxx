@@ -110,7 +110,7 @@ bool ImageRegionReader::ReadInformation()
     }
   std::streampos fileoffset = GetStreamPtr()->tellg();
 
-  if( fileoffset == -1 )
+  if( fileoffset == std::streampos(-1) )
     {
     gdcmWarningMacro("Fail fileoffset.");
     return false;
