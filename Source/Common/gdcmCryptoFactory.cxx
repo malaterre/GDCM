@@ -24,5 +24,5 @@ public:
 #include <map>
 namespace gdcm
 {
-//map<int, CryptoFactory*> CryptoFactory::libs;// = new map<int, CryptoFactory*>();
+  //map<int, CryptoFactory*> CryptoFactory::libs;// = new map<int, CryptoFactory*>();
 }

@@ -195,7 +195,7 @@ bool CAPICMS::EncryptXP(char *output, size_t &outlen, const char *array, size_t 
     printf("MsgCalculateEncodedLength failed with error 0x%.8X\n", GetLastError());
   }
     
-  printf("%d\n", cbLEN);
+  //printf("%d\n", cbLEN);
 
   if (! CryptMsgOpenToEncode(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, NULL, CMSG_ENVELOPED, &encodeInfo, szOID_RSA_envelopedData, NULL))
   {

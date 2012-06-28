@@ -13,3 +13,12 @@
 =========================================================================*/
 
 #include "gdcmCAPICryptoFactory.h"
+
+//#include "gdcmCryptoFactory.h"
+//#include "gdcmCAPICryptographicMessageSyntax.h"
+
+//namespace
+//  {
+  //gdcm::CAPICryptoFactory gdcm::CAPICryptoFactory::asd;
+  gdcm::CAPICryptoFactory capif;
+//  }

@@ -25,12 +25,14 @@ using namespace std;
 
 namespace gdcm
 {
-class CAPICryptoFactory : public CryptoFactory
+class GDCM_EXPORT CAPICryptoFactory : public CryptoFactory
 {
+  //static CAPICryptoFactory asd;
 public:
   CAPICryptoFactory()
     {
-    cout << "CAPI Factory creted" << endl;
+    cout << "CAPI Factory created (and registered?)" << endl;
+    CryptoFactory::AddLib(2, this);
     }
     
 public:
@@ -43,7 +45,6 @@ public:
     {
     return 0;
     }
-
 };
 } // end namespace gdcm
 #endif //GDCMCAPIFACTORY_H

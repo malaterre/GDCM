@@ -24,6 +24,9 @@
 #include "gdcmFileDerivation.h"
 #include "gdcmSystem.h"
 
+#include "gdcmCAPICryptoFactory.h"
+#include "gdcmOpenSSLCryptoFactory.h"
+
 int TestAnonymizer3(int , char *[])
 {
   using namespace gdcm;
@@ -102,7 +105,9 @@ int TestAnonymizer3(int , char *[])
 
 // Encrypt
 {
-  gdcm::CryptographicMessageSyntax cms;
+  //gdcm::CryptographicMessageSyntax cms;
+  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(2);
+  gdcm::CryptographicMessageSyntax& cms = capi.CreateCMSProvider();
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
     return 1;

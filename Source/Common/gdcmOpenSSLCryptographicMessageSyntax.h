@@ -20,11 +20,6 @@
 //#include "gdcmTypes.h"
 using namespace std;
 
-
-#define GDCM_EXPORT 
-
-
-
 namespace gdcm
 {
 class CryptographicMessageSyntaxInternals;

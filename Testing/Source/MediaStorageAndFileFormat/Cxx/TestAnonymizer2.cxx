@@ -16,6 +16,10 @@
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
 #include "gdcmCryptographicMessageSyntax.h"
+
+#include "gdcmOpenSSLCryptoFactory.h"
+#include "gdcmCAPICryptoFactory.h"
+
 #include "gdcmSmartPointer.h"
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
@@ -56,7 +60,10 @@ int TestAnonymize2(const char *subdir, const char *filename)
 
 // Encrypt
 {
-  gdcm::CryptographicMessageSyntax cms;
+  //gdcm::CryptographicMessageSyntax cms;
+  gdcm::CryptoFactory& cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(2);
+  gdcm::CryptographicMessageSyntax& cms = cryptoFactory.CreateCMSProvider();
+
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
     std::cerr << "Could not parse cert: " << certpath << std::endl;
@@ -113,7 +120,9 @@ int TestAnonymize2(const char *subdir, const char *filename)
 }
 // Decrypt
 {
-  gdcm::CryptographicMessageSyntax cms;
+  //gdcm::CryptographicMessageSyntax cms;
+  gdcm::CryptoFactory& cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(2);
+  gdcm::CryptographicMessageSyntax& cms = cryptoFactory.CreateCMSProvider();
   if( !cms.ParseKeyFile( keypath.c_str() ) )
     {
     std::cerr << "Could not parse key: " << keypath << std::endl;

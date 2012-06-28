@@ -25,13 +25,15 @@ using namespace std;
 
 namespace gdcm
 {
-class OpenSSLCryptoFactory : public CryptoFactory
+class GDCM_EXPORT OpenSSLCryptoFactory : public CryptoFactory
 {
 public:
   OpenSSLCryptoFactory()
     {
-    //HMODULE libInst = LoadLibrary(L"libeay32.dll");
+    cout << "OpenSSL Factory created (and registered?)" << endl;
+    CryptoFactory::AddLib(1, this);
 
+    //HMODULE libInst = LoadLibrary(L"libeay32.dll");
     /*if (libInst != NULL)
       {
       cout << "OpenSSL successfully loaded." << endl;
@@ -40,7 +42,6 @@ public:
       {
       cout << "OpenSSL Library not found." << endl;
       }*/
-    
     }
     
 public:
@@ -55,7 +56,7 @@ public:
     }
 
     //friend class CryptoFactory;
-};
+}/* OpenSSL_Crypto_Factory*/;
 }
 
 #endif //GDCMOPENSSLFACTORY_H

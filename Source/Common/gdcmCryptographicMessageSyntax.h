@@ -8,7 +8,7 @@ using namespace std;
 
 namespace gdcm
 {
-class CryptographicMessageSyntax
+class GDCM_EXPORT CryptographicMessageSyntax
 {
 public:
   

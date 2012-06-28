@@ -51,7 +51,8 @@ class Helper
 
   static bool LoadFileWin(const char * filename, BYTE * & buffer, DWORD & bufLen)
   {
-    HANDLE hFile = CreateFileA( filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+    //HANDLE hFile = CreateFileA( filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+    HANDLE hFile = CreateFileA( filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
     if ( hFile == INVALID_HANDLE_VALUE )
       {
       fprintf( stderr, "Failed to open file. error: %dn", GetLastError() );

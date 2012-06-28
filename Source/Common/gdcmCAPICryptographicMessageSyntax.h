@@ -31,7 +31,7 @@
 
 namespace gdcm
 {
-class CAPICMS : public CryptographicMessageSyntax
+class GDCM_EXPORT CAPICMS : public CryptographicMessageSyntax
 {
 public:
   CAPICMS() {
@@ -95,7 +95,7 @@ public:
 
       if(dwMessageType == CMSG_ENVELOPED) 
         {
-        printf("The message is an enveloped message. Proceed. \n");
+        //printf("The message is an enveloped message. Proceed. \n");
         }
       else 
         {
@@ -153,7 +153,7 @@ public:
         DWORD rsaPadding = NULL;
         if (strcmp(recipientInfo->pKeyTrans->KeyEncryptionAlgorithm.pszObjId, szOID_RSAES_OAEP) == 0)
           {
-          printf("Unsing OAEP padding");
+          //printf("Using OAEP padding");
           rsaPadding = CRYPT_OAEP;
           }
 

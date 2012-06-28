@@ -23,21 +23,33 @@ using namespace std;
 
 namespace gdcm
 {
-class CryptoFactory
+class GDCM_EXPORT CryptoFactory
 {
 public:
+  CryptoFactory(){}
   virtual CryptographicMessageSyntax& CreateCMSProvider() = 0;
   virtual bool getStatus() = 0;
 
-  static std::map<int, CryptoFactory*> libs;
+  static std::map<int, CryptoFactory*>& getMap()
+  {
+    static std::map<int, CryptoFactory*> libs;
+    return libs;
+  }
   static void AddLib(int id, CryptoFactory* f)
     {
-    libs.insert(pair<int, CryptoFactory*>(id, f));
+    //libs.insert(pair<int, CryptoFactory*>(id, f));
+    getMap().insert(pair<int, CryptoFactory*>(id, f));
     }
   static CryptoFactory& getFactoryInstance(int id)
     {
-    //if (libs.);
-    return *libs[id];
+    //if (libs[id] == NULL) 
+    if (getMap()[id] == NULL) 
+    {
+      cout << "No crypto library registered by id " << id << endl;
+      exit(0);
+    }
+    //return *libs[id];
+    return *getMap()[id];
     }
 };
 //map<int, CryptoFactory*> CryptoFactory::libs;

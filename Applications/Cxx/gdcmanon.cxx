@@ -20,7 +20,7 @@
 #include "gdcmWriter.h"
 #include "gdcmVersion.h"
 #include "gdcmSystem.h"
-#include "gdcmCryptographicMessageSyntax.h"
+//#include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmGlobal.h"
@@ -29,12 +29,21 @@
 
 #include <getopt.h>
 
-#include "gdcmCAPICryptographicMessageSyntax.h"
-#include "gdcmCAPICryptoFactory.h"
+//#pragma comment(linker, "/gdcmCommon.lib")
+
+//#include "gdcmCAPICryptographicMessageSyntax.h"
 
 //#include "gdcmOpenSSLCryptographicMessageSyntax.h"
-//#include "gdcmOpenSSLCryptoFactory.h"
 //#pragma comment(lib, "gdcmCommon.lib")
+
+//map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;
+
+
+#include "gdcmCAPICryptoFactory.h"
+#include "gdcmOpenSSLCryptoFactory.h"
+//extern gdcm::CAPICryptoFactory capif;
+//extern gdcm::OpenSSLCryptoFactory osslf;
+//extern map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;
 
 static void PrintVersion()
 {
@@ -284,7 +293,7 @@ static gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char *
 int main(int argc, char *argv[])
 {
   //gdcm::CryptoFactory::AddLib(1, new gdcm::OpenSSLCryptoFactory());
-  gdcm::CryptoFactory::AddLib(2, new gdcm::CAPICryptoFactory());
+  //gdcm::CryptoFactory::AddLib(2, new gdcm::CAPICryptoFactory());
 
   int c;
   //int digit_optind = 0;
@@ -756,7 +765,7 @@ int main(int argc, char *argv[])
 
   // Get private key/certificate
   //gdcm::CryptographicMessageSyntax cms;
-  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(1);
+  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(2);
   gdcm::CryptographicMessageSyntax& cms = capi.CreateCMSProvider();
   if( !dumb_mode )
     {
@@ -800,5 +809,3 @@ int main(int argc, char *argv[])
     }
   return 0;
 }
-
-std::map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;
