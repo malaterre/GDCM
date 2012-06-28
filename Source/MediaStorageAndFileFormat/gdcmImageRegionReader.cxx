@@ -115,7 +115,7 @@ bool ImageRegionReader::ReadInformation()
     gdcmWarningMacro("Fail fileoffset.");
     return false;
     }
-  assert( fileoffset != -1 );
+  assert( fileoffset != std::streampos(-1) );
   Internals->SetFileOffset( fileoffset );
 
   const File &file = GetFile();
@@ -392,7 +392,7 @@ bool ImageRegionReader::ReadIntoBuffer(char *buffer, size_t buflen)
     gdcmDebugMacro( "buffer cannot be smaller than computed buffer length" );
     return false;
     }
-  assert( Internals->GetFileOffset() != -1 );
+  assert( Internals->GetFileOffset() != std::streampos(-1) );
   gdcmDebugMacro( "Using FileOffset: " << Internals->GetFileOffset() );
   std::istream* theStream = GetStreamPtr();
   theStream->seekg( Internals->GetFileOffset() );
