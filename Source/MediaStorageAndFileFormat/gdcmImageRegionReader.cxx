@@ -131,6 +131,7 @@ bool ImageRegionReader::ReadInformation()
 
 bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -195,6 +196,7 @@ bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadRLEIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -243,6 +245,7 @@ bool ImageRegionReader::ReadRLEIntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -291,6 +294,7 @@ bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -339,6 +343,7 @@ bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
