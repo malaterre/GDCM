@@ -218,13 +218,15 @@ int main (int argc, char *argv[])
     
     printer.SetFile ( reader.GetFile() );
     
+    printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
+    
     printer.Print( std::cout );
     /*
     const File *F = &reader.GetFile();
     const DataSet &ds = F->GetDataSet();
     ds.WriteXML(std::cout,loadBulkData);
                 
-    if( XMLfile.empty() )
+    if( XMLfile.empty() )loadBulk
     {
      //std::cout << "HIin";
      ds.WriteXML(std::cout);

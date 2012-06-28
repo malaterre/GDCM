@@ -167,13 +167,13 @@ namespace gdcm
             os << "<Ideographic> ";
             count2++;
             }
-            else if(count2==2)
+            else if(count1==2)
             {
             os << "</Ideographic>\n";
             os << "<Phonetic> ";
             count2++;
             }
-            else if(count2==3)
+            else if(count1==3)
             {
             os << "</Phonetic>\n";            
             count2++;
@@ -259,7 +259,7 @@ namespace gdcm
             os << "\t<Value number = \"" << count << "\" >" ;
         }
         
-        else if ( !( isprint((unsigned char)c) || isspace((unsigned char)c) ) ) 
+        else if ( !( isprint((unsigned char)c) ) ) 
             os << ".";
         
         else 

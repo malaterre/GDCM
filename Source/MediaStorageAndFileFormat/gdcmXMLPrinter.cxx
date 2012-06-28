@@ -11,12 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/* TO DO
 
-1) Checking characters
-2) Handling PN
-
-*/
 #include "gdcmXMLPrinter.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
@@ -48,7 +43,7 @@ XMLPrinter::~XMLPrinter()
 {
 }
 
-// TODO / FIXME
+// Carreied forward from Printer Class
 // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is a tough kid: 0009,1131 is supposed to be VR::UL, but
 // there are only two bytes...
 
@@ -58,7 +53,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 {
 
   const ByteValue *bv = de.GetByteValue();
-  const SequenceOfItems *sqi = 0; //de.GetSequenceOfItems();
+  const SequenceOfItems *sqi = 0; 
   const Value &value = de.GetValue();
   const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
@@ -76,9 +71,13 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   const VR &vr_read = de.GetVR();
   const VL &vl_read = de.GetVL();
   
+  
   //Printing Tag
+  
   os << " tag = \"" << std::hex << std::setw(4) << std::setfill('0') <<
       t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\"" << std::dec;
+  
+  //Printing Private Creator
       
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {
@@ -90,7 +89,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   
   VR refvr;
   
-  // always prefer the vr from the file:
+  // Prefer the vr from the file:
+  
   if( vr_read == VR::INVALID )
     {
     refvr = vr;
@@ -99,15 +99,16 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     {
     refvr = vr;
     }
-  else // cool the file is Explicit !
+  else // The file is Explicit !
     {
     refvr = vr_read;
     }
-  if( refvr.IsDual() ) // This mean vr was read from a dict entry:
+  if( refvr.IsDual() ) // This means vr was read from a dict entry:
     {
     refvr = DataSetHelper::ComputeVR(*F,ds, t);
     }
-
+  
+  //as DataSetHelper would have been called
   assert( refvr != VR::US_SS );
   assert( refvr != VR::OB_OW );
 
@@ -140,7 +141,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     assert( vr != VR::INVALID );
     
     /*
-    No need as will save only the VR to which it is stored by GDCM
+    No need as we will save only the VR to which it is stored by GDCM in the XML file
     
     if( vr == VR::US_SS || vr == VR::OB_OW )
       {
@@ -167,8 +168,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   // Printing the VR -- Value Representation
   os << " VR = \"" << refvr << "\" ";
   
-  
-  
+   
   
   // Add the keyword attribute :  
     
@@ -194,11 +194,12 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       os << name;
       
       }
-      
+    
+    /* Public element */  
     else
       {
       
-      os << name;//Public element
+      os << name;
       
       }
     }
@@ -209,13 +210,13 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     if( t.IsPublic() )
       {
       
-      //An unknown public element.
+      assert("An unknown public element.");
       
       }
     os << "GDCM:UNKNOWN"; // Special keyword
     
     }  
-   os << "\">\n   ";  
+   os << "\">\n";  
     
 #define StringFilterCase(type) \
   case VR::type: \
@@ -353,7 +354,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       assert( refvr != VR::US_SS );
       break;
       
-    case VR::SQ:
+    case VR::SQ://The below info need not be printed into the XML infoset acc. to the standard
       if( !sqi && !de.IsEmpty() && de.GetValue().GetLength() )
         {
         }
@@ -370,8 +371,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
         }
       break;
       
-    case VR::INVALID:
-        
+    case VR::INVALID:            
         
         if( bv )
           {
@@ -382,8 +382,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
              {
              os << "<BulkData UID = \""<<      
              UIDgen.Generate() << "\" />";  
-             }
-            
+             }            
             
           }
           
@@ -391,12 +390,14 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           {
           assert( !sqi && !sqf );
           assert( de.IsEmpty() );          
-          }        
+          }   
+               
       break;
       
     default:
       assert(0 && "No Match! Impossible!!");
       break;
+      
       }
     
     }
@@ -404,15 +405,19 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   
   os << "\n";
   return refvr;
+  
 }
 
 void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
 {
       
   if( !sqi ) return;
+  
   SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+  
   for(; it != sqi->Items.end(); ++it)
     {
+    
     const Item &item = *it;
     const DataSet &ds = item.GetNestedDataSet();
     const DataElement &deitem = item;
@@ -431,17 +436,21 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
       os << "\"Item with defined length\"";
       }
     os << ">\n";
+    
     PrintDataSet(ds, os);
+    
     if( deitem.GetVL().IsUndefined() )
       {
             os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"Item Delimitation Item\"/>\n";
       }
     os << "</DicomAttribute>\n\n";  
     }
+    
   if( sqi->GetLength().IsUndefined() )
     {
         os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>\n";
     }
+    
 }
 
 void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
@@ -451,11 +460,12 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
   const Dict &d = dicts.GetPublicDict(); (void)d;
 
   DataSet::ConstIterator it = ds.Begin();
+  
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
 
-    //const ByteValue *bv = de.GetByteValue();
+    
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
     
@@ -491,7 +501,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
       }
     else
       {
-      // This is a byte value, so it should have been already treated
+      // This is a byte value, so it should have been already treated.
       }
     
     os << "</DicomAttribute>\n\n";
@@ -500,9 +510,12 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
 
 
 
-//-----------------------------------------------------------------------------
+/*------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 void XMLPrinter::Print(std::ostream& os)
 {
+  /* XML Meta Info */
+  
   os << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n";
   os << "<NativeDicomModel xml:space=\"preserve\">\n\n";
    
@@ -511,6 +524,7 @@ void XMLPrinter::Print(std::ostream& os)
   PrintDataSet(ds, os);
   
   os << "\n</NativeDicomModel>";  
+  
 }
 
 }//end namespace gdcm

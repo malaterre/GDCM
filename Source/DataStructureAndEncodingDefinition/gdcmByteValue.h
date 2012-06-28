@@ -237,7 +237,10 @@ protected:
     os << "(no value available)";
     }
   }
-
+/*
+//Introduce check for invalid XML characters
+friend std::ostream& operator<<(std::ostream &os,const char c);
+*/
 
 private:
   std::vector<char> Internal;
@@ -247,7 +250,24 @@ private:
   // of byte, so we need to keep the right Length
   VL Length;
 };
-
+/*
+//Introduce check for invalid XML characters; Overload print
+inline std::ostream& operator<<(std::ostream &os, char c)
+{
+  if(c == '&')
+    os << "&amp;";
+  else if(c == '<')
+    os << "&lt;";
+  else if(c == '>')
+    os << "&gt;";
+  else if(c == '\'')
+    os << "&apos;";
+  else if(c == '\"')
+    os << "&quot;";    
+  else
+    os << c;  
+}
+*/
 } // end namespace gdcm
 
 #endif //GDCMBYTEVALUE_H
