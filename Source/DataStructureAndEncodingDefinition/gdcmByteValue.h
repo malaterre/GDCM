@@ -208,8 +208,9 @@ public:
     return true;
     }
   /**To Print Values in Native DICOM format **/
+  void PrintPN_XML(std::ostream &os) const;
   void PrintASCII_XML(std::ostream &os) const;
-  void PrintHex_XML(std::ostream &os, int loadBulkData) const;
+  void PrintHex_XML(std::ostream &os) const;
     
     
 

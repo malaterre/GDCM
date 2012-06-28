@@ -69,6 +69,167 @@ namespace gdcm
     return false;
     }
   
+  void ByteValue::PrintPN_XML(std::ostream &os) const
+    {
+      /*
+      PersonName = element PersonName {
+      Number,
+      element SingleByte { NameComponents }?,
+      element Ideographic { NameComponents }?,
+      element Phonetic { NameComponents }?
+      }
+
+      NameComponents =
+        element FamilyName {xsd:string}?,
+        element GivenName {xsd:string}?,
+        element MiddleName {xsd:string}?,
+        element NamePrefix {xsd:string}?,
+        element NameSuffix {xsd:string}?
+      */
+      
+            
+      int count1 , count2;
+      count1=count2=1;            
+      
+      os << "<PersonName number = \"" << count1 << "\" >\n" ;
+      os << "<SingleByte>\n<FamilyName> " ;
+      
+      std::vector<char>::const_iterator it = Internal.begin();
+      
+      for(; it != (Internal.begin() + Length); ++it)
+        {
+        const char &c = *it;
+        
+        if ( c == '^' )
+        {
+            if(count2==1)
+            {
+            os << "</FamilyName>\n";
+            os << "<GivenName> ";
+            count2++;
+            }
+            if(count2==2)
+            {
+            os << "</GivenName>\n";
+            os << "<MiddleName> ";
+            count2++;
+            }
+            else if(count2==3)
+            {
+            os << "</MiddleName>\n";
+            os << "<NamePrefix> ";
+            count2++;
+            }            
+            else if(count2==4)
+            {
+            os << "</NamePrefix>\n";
+            os << "<NameSuffix> ";
+            count2++;
+            }
+            else
+            {
+            //in the rare case there are more ^ characters
+            assert("Name components exceeded");
+            }
+        }
+        
+        
+        else if ( c == '=' )
+        {
+            if(count2==1)
+            {
+            os << "</FamilyName>\n";
+            }
+            if(count2==2)
+            {
+            os << "</GivenName>\n";            
+            }
+            else if(count2==3)
+            {
+            os << "</MiddleName>\n";            
+            }            
+            else if(count2==4)
+            {
+            os << "</NamePrefix>\n";            
+            }
+            else if(count2==5)
+            {
+            os << "</NameSuffix>\n";            
+            }
+            
+            
+            /*----------------------------------------------------------------*/
+            
+            
+            if(count1==1)
+            {
+            os << "</SingleByte>\n";
+            os << "<Ideographic> ";
+            count2++;
+            }
+            else if(count2==2)
+            {
+            os << "</Ideographic>\n";
+            os << "<Phonetic> ";
+            count2++;
+            }
+            else if(count2==3)
+            {
+            os << "</Phonetic>\n";            
+            count2++;
+            } 
+            else
+            {
+            assert("Impossible - only 3 names allowed");
+            }       
+        }
+        
+        else if ( !( isprint((unsigned char)c) ) ) 
+            os << ".";
+        
+        else 
+            os << c;
+        
+        }
+        
+       if(count2==1)
+        {
+            os << "</FamilyName>\n";
+        }
+       if(count2==2)
+        {
+            os << "</GivenName>\n";            
+        }
+       else if(count2==3)
+        {
+            os << "</MiddleName>\n";            
+        }            
+       else if(count2==4)
+        {
+            os << "</NamePrefix>\n";            
+        }
+       else if(count2==5)
+        {
+            os << "</NameSuffix>\n";            
+        }     
+        
+        
+       if(count1==1)
+       {
+       os << "</SingleByte>\n";         
+       }
+       else if(count1==2)
+       {
+       os << "</Ideographic>\n";         
+       }
+       else if(count1==3)
+       {
+       os << "</Phonetic>\n";         
+       }          
+      
+      os << "</PersonName>";
+    
+    }  
   void ByteValue::PrintASCII_XML(std::ostream &os) const
     {
       //VL length = std::min(maxlength, Length);
@@ -95,7 +256,7 @@ namespace gdcm
         {
             count++;
             os << "</Value>\n";
-            os << "<Value number = \"" << count << "\" >" ;
+            os << "\t<Value number = \"" << count << "\" >" ;
         }
         
         else if ( !( isprint((unsigned char)c) || isspace((unsigned char)c) ) ) 

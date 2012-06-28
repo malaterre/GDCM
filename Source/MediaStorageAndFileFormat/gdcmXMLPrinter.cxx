@@ -11,6 +11,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/* TO DO
+
+1) Checking characters
+2) Handling PN
+
+*/
 #include "gdcmXMLPrinter.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
@@ -218,12 +224,12 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       if( !de.IsEmpty() ) { \
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
-      os << "<Value number = \"1\" >" ;os << "" << el.GetValue();os << "</Value>"; \
+      os << "<Value number = \"1\" >" ;os << "" << el.GetValue();os << "</Value>\n"; \
       VL l = (long) el.GetLength(); \
       for(unsigned long i = 2; i <= l; ++i) \
       { \
       os << "<Value number = \"" << i << "\" >" ;\
-      os << "\\" << el.GetValue(i);os << "</Value>";} \
+      os << "\\" << el.GetValue(i);os << "</Value>\n";} \
       os << ""; } \
       else { if( de.IsEmpty() )  \
                  ; } } \
@@ -256,13 +262,25 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 
   // Print Value now:
   
-  if( refvr & VR::VRASCII )
+  //Handle PN first, acc. to Standard
+  if(refvr == VR::PN)
+    {
+    if( bv )
+      {        
+      bv->PrintPN_XML(os);    //new function to print each value in new child tag  
+      }
+    else
+      {
+      assert( de.IsEmpty() );      
+      }
+
+    }
+  else if( refvr & VR::VRASCII )
     {
     //assert( !sqi && !sqf);
     assert(!sqi);
     if( bv )
-      {
-      VL l = bv->GetLength();         
+      {              
       bv->PrintASCII_XML(os);    //new function to print each value in new child tag  
       }
     else
@@ -281,17 +299,13 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     
       StringFilterCase(AT);
       StringFilterCase(FL);
-      StringFilterCase(FD);
-      //StringFilterCase(OB);
-      StringFilterCase(OF);
-      //StringFilterCase(OW);
-      StringFilterCase(SL);
-      //StringFilterCase(SQ);
+      StringFilterCase(FD);      
+      StringFilterCase(OF);      
+      StringFilterCase(SL);      
       StringFilterCase(SS);
-      StringFilterCase(UL);
-      //StringFilterCase(UN);
+      StringFilterCase(UL);      
       StringFilterCase(US);
-      //StringFilterCase(UT);  
+        
     case VR::OB:
     case VR::OW:
     case VR::OB_OW:
@@ -381,7 +395,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       break;
       
     default:
-      assert(0);//CHECK IMPORTANT BY NAKULL
+      assert(0 && "No Match! Impossible!!");
       break;
       }
     

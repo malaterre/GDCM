@@ -65,8 +65,10 @@ public:
   
 
   typedef enum {
-    LOADBULKDATA = 0,     
-    OnlyUUID
+  
+    OnlyUUID = 0 ,
+    LOADBULKDATA = 1     
+    
   } PrintStyles;
 
   /// Set PrintStyle value
@@ -86,12 +88,16 @@ public:
 
   /// Print an individual dataset
   void PrintDataSet(const DataSet &ds, std::ostream& os);
+  
+  //void PrintUID(std::ostream &os);
 
 protected:
 
   VR PrintDataElement(std::ostream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de );
   
   void PrintSQ(const SequenceOfItems *sqi, std::ostream &os);
+  
+  
   
   PrintStyles PrintStyle;
   
