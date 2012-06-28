@@ -23,15 +23,17 @@ set version="%major%.%minor%.%patch%"
 @rem use VCExpress 2008 for compatibilities with OpenSSL binaries
 call "%VS90COMNTOOLS%vsvars32.bat"
 
-SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0\Lib;%LIB%
-SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0\Include;%INCLUDE%
-SET LIB=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%LIB%
-SET INCLUDE=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;%INCLUDE%
-@rem SET LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%
-@rem SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0A\Include;%INCLUDE%
+@rem User32.lib and al.
+SET LIB=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%
+SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include;%INCLUDE%
+
+@rem GDCM deps:
 SET PATH=%PATH%;C:\Program Files\Git\bin
 SET PATH=%PATH%;C:\Program Files\Swig\swigwin-2.0.7
 SET PATH=%PATH%;C:\Program Files\Java\jdk1.6.0_25\bin
+
+@rem needed to get RC.EXE:
+SET PATH=C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;%PATH%
 
 @rem prepare target dir
 mkdir %TMPDIR%
@@ -42,7 +44,7 @@ copy config.win32 %TMPDIR%\gdcm-build\CMakeCache.txt
 c:
 cd %TMPDIR%
 @rem git is itselft a batch:
-call git clone --branch release git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm
+call git clone --branch release git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm > git.log 2>&1
 cd gdcm
 call git checkout "v%version%"
 cd ..
