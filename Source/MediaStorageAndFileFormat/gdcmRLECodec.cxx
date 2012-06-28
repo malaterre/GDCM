@@ -730,7 +730,7 @@ bool RLECodec::DecodeExtent(
   return true;
 }
 
-bool RLECodec::DecodeByStreamsCommon(std::istream &is, std::ostream &os)
+bool RLECodec::DecodeByStreamsCommon(std::istream &, std::ostream &)
 {
   return false;
 }

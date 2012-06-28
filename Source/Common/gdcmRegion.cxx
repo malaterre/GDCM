@@ -25,7 +25,7 @@ Region::~Region()
 {
 }
 
-void Region::Print(std::ostream &os) const
+void Region::Print(std::ostream &) const
 {
 }
 
