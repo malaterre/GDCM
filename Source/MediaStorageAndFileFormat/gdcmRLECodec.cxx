@@ -805,7 +805,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
       if( byte >= 0 /*&& byte <= 127*/ ) /* 2nd is always true */
         {
         is.read( dummy_buffer, byte+1 );
-        assert( is.good() );
+        //assert( is.good() ); // impossible because ALOKA_SSD-8-MONO2-RLE-SQ.dc
         numberOfReadBytes += byte+1;
         numOutBytes += byte+ 1;
         tmpos.write( dummy_buffer, byte+1 );
@@ -823,7 +823,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
         {
         assert( byte == -128 );
         }
-      assert( numberOfReadBytes + frame.Header.Offset[i] - is.tellg() + start == 0);
+      //assert( numberOfReadBytes + frame.Header.Offset[i] - is.tellg() + start == 0);
       }
     assert( numOutBytes == length );
     }
