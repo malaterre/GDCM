@@ -63,6 +63,7 @@ SET(MSFF_TEST_SRCS
   TestLookupTable
   TestOverlay
   TestCurve
+  TestCurve2
   TestPixelFormat
   TestPersonName
   TestImageCodec
