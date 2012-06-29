@@ -32,7 +32,7 @@ public:
   CAPICryptoFactory()
     {
     cout << "CAPI Factory created (and registered?)" << endl;
-    CryptoFactory::AddLib(2, this);
+    CryptoFactory::AddLib(1, this);
     }
     
 public:

@@ -19,8 +19,6 @@
 #include "gdcmCryptoFactory.h"
 #include "gdcmOpenSSLCryptographicMessageSyntax.h"
 
-//#include <Windows.h> //for linux different id needed
-
 using namespace std;
 
 namespace gdcm
@@ -31,7 +29,7 @@ public:
   OpenSSLCryptoFactory()
     {
     cout << "OpenSSL Factory created (and registered?)" << endl;
-    CryptoFactory::AddLib(1, this);
+    CryptoFactory::AddLib(0, this);
 
     //HMODULE libInst = LoadLibrary(L"libeay32.dll");
     /*if (libInst != NULL)

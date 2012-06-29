@@ -50,7 +50,7 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
 
   try
   {
-    if (!Helper::LoadFileWin(filename, certHexBuf, certHexBufLen))
+    if (!Helper::LoadFileWin(filename, (char *&)certHexBuf, certHexBufLen))
       {
       //return false;
       throw NULL;
@@ -73,7 +73,7 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
       //return false;
       throw NULL;
       }
-
+    
     PCCERT_CONTEXT certContext = NULL;
     certContext = CertCreateCertificateContext(X509_ASN_ENCODING, (BYTE*)certBin, certBinLen);
 
@@ -104,7 +104,7 @@ bool CAPICMS::ParseKeyFile( const char *filename ) {
   LPBYTE keyBinBuffer, keyBlob;
   HCRYPTKEY hKey = NULL;
   try {
-    if (!Helper::LoadFileWin(filename, keyHexBuffer, keyHexBufferLen))
+    if (!Helper::LoadFileWin(filename, (char *&)keyHexBuffer, keyHexBufferLen))
       {
       //return false;
       throw NULL;

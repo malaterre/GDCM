@@ -327,6 +327,7 @@ int main(int argc, char *argv[])
   int empty_tag = 0;
   int remove_tag = 0;
   int replace_tag = 0;
+  int use_capi = 0;
   std::vector<gdcm::Tag> empty_tags;
   std::vector<gdcm::Tag> remove_tags;
   std::vector< std::pair<gdcm::Tag, std::string> > replace_tags_value;
@@ -355,6 +356,7 @@ int main(int argc, char *argv[])
         {"remove", 1, &remove_tag, 1},
         {"replace", 1, &replace_tag, 1},
         {"continue", 0, &continuemode, 1},
+        {"capi", 0, &use_capi, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -765,7 +767,7 @@ int main(int argc, char *argv[])
 
   // Get private key/certificate
   //gdcm::CryptographicMessageSyntax cms;
-  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(2);
+  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(use_capi);
   gdcm::CryptographicMessageSyntax& cms = capi.CreateCMSProvider();
   if( !dumb_mode )
     {

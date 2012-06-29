@@ -49,7 +49,7 @@ class Helper
     fclose(f);
   }
 
-  static bool LoadFileWin(const char * filename, BYTE * & buffer, DWORD & bufLen)
+  /*static bool LoadFileWin(const char * filename, BYTE * & buffer, DWORD & bufLen)
   {
     //HANDLE hFile = CreateFileA( filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
     HANDLE hFile = CreateFileA( filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
@@ -71,11 +71,38 @@ class Helper
       }
 
       return true;
-  }
+  }*/
 
-  static bool LoadFile(const char * filename, char * & buffer, unsigned long & bufLen)
+  static bool LoadFileWin(const char * filename, char * & buffer, unsigned long & bufLen)
   {
-    return false;
+    FILE * f = fopen(filename, "rb");
+    if (f == NULL)
+      {
+      printf("Couldn't open the file: %s\n", filename);
+      return false;
+      }
+    
+    fseek(f, 0L, SEEK_END);
+    long sz = ftell(f);
+    //fseek(f, 0L, SEEK_SET);
+    rewind(f);
+    
+    buffer = new char[sz];
+    /*if (bufLen < sz)
+      {
+      printf("Buffer too small to load the file: %d < %d\n", bufLen, sz);
+      return false;
+      }
+      */
+    bufLen = sz;
+
+
+    while (sz)
+    {
+      sz -= fread(buffer + bufLen - sz, sizeof(char), sz, f);
+    }
+
+    return true;
   }
 
 };
