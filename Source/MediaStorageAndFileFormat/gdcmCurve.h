@@ -17,6 +17,8 @@
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
 
+#include <vector>
+
 namespace gdcm
 {
 
@@ -43,7 +45,6 @@ public:
 
   void GetAsPoints(float *array) const;
 
-
   static unsigned int GetNumberOfCurves(DataSet const & ds);
 
   // Update curve data from dataelmenet de:
@@ -63,6 +64,7 @@ public:
   void SetDataValueRepresentation(unsigned short datavaluerepresentation);
   unsigned short GetDataValueRepresentation() const;
   void SetCurveDataDescriptor(const uint16_t * values, size_t num);
+  std::vector<unsigned short> const &GetCurveDataDescriptor() const;
   void SetCoordinateStartValue( unsigned short v );
   void SetCoordinateStepValue( unsigned short v );
 

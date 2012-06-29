@@ -271,7 +271,11 @@ void Curve::SetDimensions(unsigned short dimensions) { Internal->Dimensions = di
 unsigned short Curve::GetDimensions() const { return Internal->Dimensions; }
 void Curve::SetNumberOfPoints(unsigned short numberofpoints) { Internal->NumberOfPoints = numberofpoints; }
 unsigned short Curve::GetNumberOfPoints() const { return Internal->NumberOfPoints; }
-void Curve::SetTypeOfData(const char *typeofdata) { Internal->TypeOfData = typeofdata; }
+void Curve::SetTypeOfData(const char *typeofdata)
+{
+  if( typeofdata )
+    Internal->TypeOfData = typeofdata;
+}
 const char *Curve::GetTypeOfData() const { return Internal->TypeOfData.c_str(); }
 
 static const char * const TypeOfDataDescription[][2] = {
@@ -307,13 +311,21 @@ const char *Curve::GetTypeOfDataDescription() const
   return t[i][1];
 }
 
-void Curve::SetCurveDescription(const char *curvedescription) { Internal->CurveDescription = curvedescription; }
+void Curve::SetCurveDescription(const char *curvedescription)
+{
+  if( curvedescription )
+    Internal->CurveDescription = curvedescription;
+}
 void Curve::SetDataValueRepresentation(unsigned short datavaluerepresentation) { Internal->DataValueRepresentation = datavaluerepresentation; }
 unsigned short Curve::GetDataValueRepresentation() const { return Internal->DataValueRepresentation; }
 
 void Curve::SetCurveDataDescriptor(const uint16_t * values, size_t num)
 {
   Internal->CurveDataDescriptor = std::vector<uint16_t>(values, values+num);
+}
+std::vector<unsigned short> const &Curve::GetCurveDataDescriptor() const
+{
+  return Internal->CurveDataDescriptor;
 }
 
 void Curve::SetCoordinateStartValue( unsigned short v )
