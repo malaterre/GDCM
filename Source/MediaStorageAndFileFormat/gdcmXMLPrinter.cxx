@@ -65,7 +65,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
   const VR &vr = entry.GetVR();
   const VM &vm = entry.GetVM();
-  const char *name = entry.GetName();
+  const char *name = entry.GetKeyword();
   bool retired = entry.GetRetired();
   
   const VR &vr_read = de.GetVR();
