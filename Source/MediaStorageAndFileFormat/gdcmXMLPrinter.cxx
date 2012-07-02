@@ -322,7 +322,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           
           else          
           {
-             os << "<BulkData UID = \""<<      
+             os << "<BulkData UUID = \""<<      
              UIDgen.Generate() << "\" />";  
           }
           
@@ -378,7 +378,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
              bv->PrintHex_XML(os);
             else
              {
-             os << "<BulkData UID = \""<<      
+             os << "<BulkData UUID = \""<<      
              UIDgen.Generate() << "\" />";  
              }            
             
