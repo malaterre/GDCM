@@ -234,7 +234,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       assert("An unknown public element.");
       
       }
-    os << "GDCM:UNKNOWN"; // Special keyword
+    os << ""; // Special keyword
     
     }  
    os << "\">\n";  
