@@ -103,6 +103,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     {
     refvr = vr_read;
     }
+    
   if( refvr.IsDual() ) // This means vr was read from a dict entry:
     {
     refvr = DataSetHelper::ComputeVR(*F,ds, t);
@@ -164,6 +165,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     refvr = VR::SQ;
     }
 
+  if(refvr == VR::INVALID)
+    refvr = VR::UN;
   
   // Printing the VR -- Value Representation
   os << " VR = \"" << refvr << "\" ";
