@@ -516,11 +516,25 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
 void XMLPrinter::Print(std::ostream& os)
 {
   /* XML Meta Info */
+  const Tag CharacterEncoding(0x0008,0x0005);
   
-  os << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n";
+  const DataSet &ds = F->GetDataSet();
+  
+  os << "<?xml version=\"1.0\" encoding=\"";
+  if(ds.FindDataElement(CharacterEncoding))
+  {
+    const DataElement &de = ds.GetDataElement(CharacterEncoding);
+    const ByteValue *bv = de.GetByteValue();
+    bv->PrintASCII(os,bv->GetLength()); 
+    os << "\"?>\n\n"; 
+  }
+  else
+  {
+  os << "ISO-8859-1\"?>\n\n";
+  }
   os << "<NativeDicomModel xml:space=\"preserve\">\n\n";
    
-  const DataSet &ds = F->GetDataSet();
+  
   
   PrintDataSet(ds, os);
   
