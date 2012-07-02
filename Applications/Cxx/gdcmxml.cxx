@@ -126,6 +126,11 @@ int main (int argc, char *argv[])
       DICOMfile = optarg;
       break;
     
+    case 'o':      
+      assert( XMLfile.empty() );
+      XMLfile = optarg;
+      break;  
+    
     case 'B':
       loadBulkData = 1;
       break;
