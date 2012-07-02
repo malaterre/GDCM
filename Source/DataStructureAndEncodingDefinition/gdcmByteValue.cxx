@@ -163,24 +163,26 @@ namespace gdcm
             if(count1==1)
             {
             os << "</SingleByte>\n";
-            os << "<Ideographic> ";
-            count2++;
+            os << "<Ideographic> \n<FamilyName> ";
+            count1++;
             }
             else if(count1==2)
             {
             os << "</Ideographic>\n";
-            os << "<Phonetic> ";
-            count2++;
+            os << "<Phonetic> \n<FamilyName> ";
+            count1++;
             }
             else if(count1==3)
             {
-            os << "</Phonetic>\n";            
-            count2++;
+            os << "</Phonetic> \n<FamilyName> \n";            
+            count1++;
             } 
             else
             {
             assert("Impossible - only 3 names allowed");
-            }       
+            }    
+            
+            count2=1;   
         }
         
         else if ( !( isprint((unsigned char)c) ) ) 
