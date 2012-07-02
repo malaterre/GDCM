@@ -430,11 +430,11 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
 
     if( deitem.GetVL().IsUndefined() )
       {
-      os << "\"Item with undefined length\"";
+      os << "\"ItemWithUndefinedLength\"";
       }
     else
       {
-      os << "\"Item with defined length\"";
+      os << "\"ItemWithDefinedLength\"";
       }
     os << ">\n";
     
@@ -442,14 +442,14 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
     
     if( deitem.GetVL().IsUndefined() )
       {
-            os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"Item Delimitation Item\"/>\n";
+            os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"ItemDelimitationItem\"/>\n";
       }
     os << "</DicomAttribute>\n\n";  
     }
     
   if( sqi->GetLength().IsUndefined() )
     {
-        os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>\n";
+        os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
     }
     
 }
@@ -498,7 +498,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
         os << "</DicomAttribute>\n\n";       
         }
         
-      os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"Sequence Delimitation Item\"/>\n";
+      os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
       }
     else
       {
