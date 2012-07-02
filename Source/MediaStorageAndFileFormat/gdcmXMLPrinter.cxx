@@ -530,7 +530,7 @@ void XMLPrinter::Print(std::ostream& os)
   }
   else
   {
-  os << "ISO-8859-1\"?>\n\n";
+  os << "UTF-8\"?>\n\n";
   }
   os << "<NativeDicomModel xml:space=\"preserve\">\n\n";
    
