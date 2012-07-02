@@ -68,7 +68,7 @@ namespace gdcm
     return false;
     }
   
-  void ByteValue::PrintPN_XML(std::ostream &os) const
+  void ByteValue::PrintPNXML(std::ostream &os) const
     {
       /*
       PersonName = element PersonName {
@@ -229,7 +229,7 @@ namespace gdcm
       os << "</PersonName>";
     
     }  
-  void ByteValue::PrintASCII_XML(std::ostream &os) const
+  void ByteValue::PrintASCIIXML(std::ostream &os) const
     {
       //VL length = std::min(maxlength, Length);
       // Special case for VR::UI, do not print the trailing \0
@@ -269,7 +269,7 @@ namespace gdcm
     
     }  
     
-    void ByteValue::PrintHex_XML(std::ostream &os ) const 
+    void ByteValue::PrintHexXML(std::ostream &os ) const 
     {
       //VL length = std::min(maxlength, Length);
       // WARNING: Internal.end() != Internal.begin()+Length

@@ -266,7 +266,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     {
     if( bv )
       {        
-      bv->PrintPN_XML(os);    //new function to print each value in new child tag  
+      bv->PrintPNXML(os);    //new function to print each value in new child tag  
       }
     else
       {
@@ -280,7 +280,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     assert(!sqi);
     if( bv )
       {              
-      bv->PrintASCII_XML(os);    //new function to print each value in new child tag  
+      bv->PrintASCIIXML(os);    //new function to print each value in new child tag  
       }
     else
       {
@@ -317,7 +317,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
                     
           if(PrintStyle)
           {
-             bv->PrintHex_XML(os);
+             bv->PrintHexXML(os);
           }
           
           else          
@@ -375,7 +375,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           {
             
             if(PrintStyle)
-             bv->PrintHex_XML(os);
+             bv->PrintHexXML(os);
             else
              {
              os << "<BulkData UUID = \""<<      
