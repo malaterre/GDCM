@@ -11,13 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-/*
- * Command line tool to convert a DICOM file into XML format (in Native DICOM format).
-   
-   Author - Nakull Gupta
- 
- 
- */
 
 #include "gdcmReader.h"
 #include "gdcmVersion.h"
@@ -58,7 +51,7 @@ void PrintHelp()
   std::cout << "Convert a DICOM file into an XML file \n";
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename" << std::endl;
-  //std::cout << "  -o --output    XML filename" << std::endl;
+  std::cout << "  -o --output    XML filename" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -B --loadBulkData   loads all bulk data like Pixel Data (by default UUID are written)." << std::endl;
   std::cout << "  -V --verbose        more verbose (warning+error)." << std::endl;
@@ -172,15 +165,19 @@ int main (int argc, char *argv[])
   if (optind < argc)
     {    
     int v = argc - optind;
-    if( v == 1 )
+    if( v == 2 )
       {
       DICOMfile = argv[optind];
-      //XMLfile = argv[optind+1];
+      XMLfile = argv[optind+1];
       }
+    else if( v == 1 )
+      {
+      DICOMfile = argv[optind];      
+      }  
     else
       {
-      //PrintHelp();
-      //return 1;
+      PrintHelp();
+      return 1;
       }
     }
     
@@ -220,30 +217,21 @@ int main (int argc, char *argv[])
     
     printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
     
-    printer.Print( std::cout );
-    /*
-    const File *F = &reader.GetFile();
-    const DataSet &ds = F->GetDataSet();
-    ds.WriteXML(std::cout,loadBulkData);
+    
+    
                 
-    if( XMLfile.empty() )loadBulk
+    if( XMLfile.empty() )
     {
-     //std::cout << "HIin";
-     ds.WriteXML(std::cout);
+      printer.Print( std::cout ); 
     }
     else
     {
-    std::filebuf fb;
-    fb.open (XMLfile,std::cout);
-    std::ostream os(&fb);
-    ds->WriteXML(os);
-    
-    //std::fstream f;
-    //f.open(XMLfile, ios::out);
-    //std::ostream os(&f);
-    //ds->WriteXML(os);
-    
-    }*/
+      std::ofstream outfile;
+
+      outfile.open (XMLfile.c_str());
+      
+      printer.Print( outfile );     
+    }
    
 
 }  
