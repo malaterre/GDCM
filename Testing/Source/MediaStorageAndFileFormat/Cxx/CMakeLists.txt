@@ -42,6 +42,7 @@ SET(MSFF_TEST_SRCS
   TestStringFilter
   TestUIDGenerator
   #TestUIDGenerator3
+  TestXMLPrinter
   TestPrinter
   TestPrint
   TestSorter
