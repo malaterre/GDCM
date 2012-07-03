@@ -65,7 +65,7 @@ void PrintHelp()
 int main (int argc, char *argv[])
 {
   int c;
-  //int digit_optind = 0;   
+  //int digit_optind = 0;
   std::string DICOMfile;
   std::string XMLfile;
   int loadBulkData = 0;
@@ -76,7 +76,7 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
   while (1) {
-    
+
     int option_index = 0;
 
     static struct option long_options[] = {
@@ -105,7 +105,6 @@ int main (int argc, char *argv[])
     case '-':
         {
         const char *s = long_options[option_index].name;
-        
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -114,9 +113,7 @@ int main (int argc, char *argv[])
             assert( DICOMfile.empty() );
             DICOMfile = optarg;
             }
-          
           }
-        
         }
       break;
 
@@ -125,16 +122,16 @@ int main (int argc, char *argv[])
       assert( DICOMfile.empty() );
       DICOMfile = optarg;
       break;
-    
-    case 'o':      
+
+    case 'o':
       assert( XMLfile.empty() );
       XMLfile = optarg;
-      break;  
-    
+      break;
+
     case 'B':
       loadBulkData = 1;
       break;
-      
+
     case 'V':
       verbose = 1;
       break;
@@ -168,7 +165,7 @@ int main (int argc, char *argv[])
   }
 
   if (optind < argc)
-    {    
+    {
     int v = argc - optind;
     if( v == 2 )
       {
@@ -177,15 +174,15 @@ int main (int argc, char *argv[])
       }
     else if( v == 1 )
       {
-      DICOMfile = argv[optind];      
-      }  
+      DICOMfile = argv[optind];
+      }
     else
       {
       PrintHelp();
       return 1;
       }
     }
-    
+
   if( DICOMfile.empty() )
     {
     PrintHelp();
@@ -193,50 +190,40 @@ int main (int argc, char *argv[])
     }
 
   if( version )
-    {    
+    {
     PrintVersion();
     return 0;
     }
 
   if( help )
-    {    
+    {
     PrintHelp();
     return 0;
     }
-    
-    
-    
-    gdcm::Reader reader;
-    reader.SetFileName( DICOMfile.c_str() );
-    bool success = reader.Read();
-    if( !success  )//!ignoreerrors )
-    {
-      std::cerr << "Failed to read: " << DICOMfile << std::endl;
-      return 1;
-    }
-    
-    
-    XMLPrinter printer;
-    
-    printer.SetFile ( reader.GetFile() );
-    
-    printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
-    
-    
-    
-                
-    if( XMLfile.empty() )
-    {
-      printer.Print( std::cout ); 
-    }
-    else
-    {
-      std::ofstream outfile;
 
-      outfile.open (XMLfile.c_str());
-      
-      printer.Print( outfile );     
+  gdcm::Reader reader;
+  reader.SetFileName( DICOMfile.c_str() );
+  bool success = reader.Read();
+  if( !success )//!ignoreerrors )
+    {
+    std::cerr << "Failed to read: " << DICOMfile << std::endl;
+    return 1;
     }
-   
 
-}  
+  XMLPrinter printer;
+  printer.SetFile ( reader.GetFile() );
+  printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
+
+  if( XMLfile.empty() )
+    {
+    printer.Print( std::cout );
+    }
+  else
+    {
+    std::ofstream outfile;
+    outfile.open (XMLfile.c_str());
+    printer.Print( outfile );
+    outfile.close();
+    }
+  return 0;
+}

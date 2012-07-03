@@ -207,12 +207,11 @@ public:
       }
     return true;
     }
+
   /**To Print Values in Native DICOM format **/
   void PrintPNXML(std::ostream &os) const;
   void PrintASCIIXML(std::ostream &os) const;
   void PrintHexXML(std::ostream &os) const;
-    
-    
 
 protected:
   void Print(std::ostream &os) const {
@@ -263,9 +262,9 @@ inline std::ostream& operator<<(std::ostream &os, char c)
   else if(c == '\'')
     os << "&apos;";
   else if(c == '\"')
-    os << "&quot;";    
+    os << "&quot;";
   else
-    os << c;  
+    os << c;
 }
 */
 } // end namespace gdcm

@@ -49,11 +49,10 @@ XMLPrinter::~XMLPrinter()
 
 VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const DataSet & ds,
   const DataElement &de)
-  
 {
 
   const ByteValue *bv = de.GetByteValue();
-  const SequenceOfItems *sqi = 0; 
+  const SequenceOfItems *sqi = 0;
   const Value &value = de.GetValue();
   const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
@@ -67,30 +66,29 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   const VM &vm = entry.GetVM();
   const char *name = entry.GetKeyword();
   bool retired = entry.GetRetired();
-  
+
   const VR &vr_read = de.GetVR();
   const VL &vl_read = de.GetVL();
-  
-  
+
   //Printing Tag
+
   
   os << " tag = \"" << std::hex << std::setw(4) << std::setfill('0') <<
       t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\"" << std::dec;
-  
+
   //Printing Private Creator
-      
+
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
     os << " PrivateCreator = \"" << owner << "\" ";
     }
-  
-  
+
   VR refvr;
-  
+
   // Prefer the vr from the file:
-  
+
   if( vr_read == VR::INVALID )
     {
     refvr = vr;
@@ -103,12 +101,12 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     {
     refvr = vr_read;
     }
-    
+
   if( refvr.IsDual() ) // This means vr was read from a dict entry:
     {
     refvr = DataSetHelper::ComputeVR(*F,ds, t);
     }
-  
+
   //as DataSetHelper would have been called
   assert( refvr != VR::US_SS );
   assert( refvr != VR::OB_OW );
@@ -140,7 +138,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID || vr_read == VR::UN ) )
     {
     assert( vr != VR::INVALID );
-    
+
     /*
     No need as we will save only the VR to which it is stored by GDCM in the XML file
     
@@ -167,48 +165,36 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 
   if(refvr == VR::INVALID)
     refvr = VR::UN;
-  
+
   // Printing the VR -- Value Representation
   os << " VR = \"" << refvr << "\" ";
-  
-   
-  
-  // Add the keyword attribute :  
+
+  // Add the keyword attribute :
     
-  os <<"keyword = \"";  
-    
-    
+  os <<"keyword = \"";
+
   if( name && *name )
     {
-    
     /*  No owner */
     if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
       {
-      
       //os << name;
       //os = PrintXML_char(os,name);
-      
       }
-    
     /* retired element */
     else if( retired )
       {
-      
       assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
       //os << name;
       //os = PrintXML_char(os,name);
-      
       }
-    
-    /* Public element */  
+    /* Public element */
     else
       {
-      
       //os << name;
       //os = PrintXML_char(os,name);
-      
       }
-    
+
     char c;
     for (; (*name)!='\0'; name++)
     {
@@ -222,26 +208,21 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       else if(c == '\'')
         os << "&apos;";
       else if(c == '\"')
-        os << "&quot;";    
+        os << "&quot;";
       else
-        os << c;      
+        os << c;
     }
-  }  
-    
+  }
   else
     {
-    
     if( t.IsPublic() )
       {
-      
       assert("An unknown public element.");
-      
       }
     os << ""; // Special keyword
-    
-    }  
-   os << "\">\n";  
-    
+    }
+   os << "\">\n";
+
 #define StringFilterCase(type) \
   case VR::type: \
     { \
@@ -256,105 +237,89 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       os << "<Value number = \"" << i << "\" >" ;\
       os << "\\" << el.GetValue(i);os << "</Value>\n";} \
       os << ""; } \
-      else { if( de.IsEmpty() )  \
+      else { if( de.IsEmpty() ) \
                  ; } } \
-      else { assert( de.IsEmpty());  } \
-    } break    
+      else { assert( de.IsEmpty()); } \
+    } break
 
 
   // Print Value now:
-  
+
   //Handle PN first, acc. to Standard
   if(refvr == VR::PN)
     {
     if( bv )
-      {        
-      bv->PrintPNXML(os);    //new function to print each value in new child tag  
+      {
+      bv->PrintPNXML(os);    //new function to print each value in new child tag
       }
     else
       {
-      assert( de.IsEmpty() );      
+      assert( de.IsEmpty() );
       }
-
     }
   else if( refvr & VR::VRASCII )
     {
     //assert( !sqi && !sqf);
     assert(!sqi);
     if( bv )
-      {              
-      bv->PrintASCIIXML(os);    //new function to print each value in new child tag  
+      {
+      bv->PrintASCIIXML(os);    //new function to print each value in new child tag
       }
     else
       {
-      assert( de.IsEmpty() );      
+      assert( de.IsEmpty() );
       }
     }
-  
   else
     {
     assert( refvr & VR::VRBINARY || (vr == VR::INVALID && refvr == VR::INVALID) );
-    
     std::string s;
     switch(refvr)
       {
-    
       StringFilterCase(AT);
       StringFilterCase(FL);
-      StringFilterCase(FD);      
-      StringFilterCase(OF);      
-      StringFilterCase(SL);      
+      StringFilterCase(FD);
+      StringFilterCase(OF);
+      StringFilterCase(SL);
       StringFilterCase(SS);
-      StringFilterCase(UL);      
+      StringFilterCase(UL);
       StringFilterCase(US);
-        
     case VR::OB:
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
     case VR::US_SS_OW: 
-      {
-        
+        {
         if ( bv )
           {
-                    
           if(PrintStyle)
-          {
-             bv->PrintHexXML(os);
+            {
+            bv->PrintHexXML(os);
+            }
+          else
+            {
+            os << "<BulkData UUID = \""<<
+              UIDgen.Generate() << "\" />";
+            }
           }
-          
-          else          
-          {
-             os << "<BulkData UUID = \""<<      
-             UIDgen.Generate() << "\" />";  
-          }
-          
-          
-          }
-          
         else if ( sqf )
           {
-          assert( t == Tag(0x7fe0,0x0010) );          
+          assert( t == Tag(0x7fe0,0x0010) );
           }
-          
         else if ( sqi )
-          {          
-          gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );          
+          {
+          gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );
           }
-          
         else
           {
           assert( !sqi && !sqf );
-          assert( de.IsEmpty() );          
+          assert( de.IsEmpty() );
           }
-          
         }
       break;
-    
     case VR::US_SS:
       assert( refvr != VR::US_SS );
       break;
-      
     case VR::SQ://The below info need not be printed into the XML infoset acc. to the standard
       if( !sqi && !de.IsEmpty() && de.GetValue().GetLength() )
         {
@@ -371,58 +336,44 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           }
         }
       break;
-      
-    case VR::INVALID:            
-        
-        if( bv )
-          {
-            
-            if(PrintStyle)
-             bv->PrintHexXML(os);
-            else
-             {
-             os << "<BulkData UUID = \""<<      
-             UIDgen.Generate() << "\" />";  
-             }            
-            
-          }
-          
+    case VR::INVALID:
+      if( bv )
+        {
+        if(PrintStyle)
+          bv->PrintHexXML(os);
         else
           {
-          assert( !sqi && !sqf );
-          assert( de.IsEmpty() );          
-          }   
-               
+          os << "<BulkData UUID = \""<<
+            UIDgen.Generate() << "\" />";
+          }
+        }
+      else
+        {
+        assert( !sqi && !sqf );
+        assert( de.IsEmpty() );
+        }
       break;
-      
     default:
       assert(0 && "No Match! Impossible!!");
       break;
-      
       }
-    
     }
-    
-  
+
   os << "\n";
   return refvr;
-  
 }
 
 void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
 {
-      
   if( !sqi ) return;
-  
+
   SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
-  
   for(; it != sqi->Items.end(); ++it)
     {
-    
     const Item &item = *it;
     const DataSet &ds = item.GetNestedDataSet();
     const DataElement &deitem = item;
-        
+
     os << "<DicomAttribute  tag = \"";
     os << std::hex << std::setw(4) << std::setfill('0') <<
       deitem.GetTag().GetGroup() <<  std::setw(4) << ((uint16_t)(deitem.GetTag().GetElement() << 8) >> 8) << "\" ";
@@ -437,21 +388,20 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
       os << "\"ItemWithDefinedLength\"";
       }
     os << ">\n";
-    
+
     PrintDataSet(ds, os);
-    
+
     if( deitem.GetVL().IsUndefined() )
       {
             os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"ItemDelimitationItem\"/>\n";
       }
     os << "</DicomAttribute>\n\n";  
     }
-    
+
   if( sqi->GetLength().IsUndefined() )
     {
         os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
     }
-    
 }
 
 void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
@@ -475,36 +425,29 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
 
     if( refvr == VR::SQ /*|| sqi*/ )
       {
-      
-      
       SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ();
       PrintSQ(sqi2, os);
-     
       }
     else if ( sqf )
       {
-      
       const BasicOffsetTable & table = sqf->GetTable();
       os << "<DicomAttribute  ";
       PrintDataElement(os,dicts,ds,table);
       os << "</DicomAttribute>\n\n";
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
-        
-        {        
+        {
         const Fragment& frag = sqf->GetFragment(i);
         os << "<DicomAttribute  ";
         PrintDataElement(os,dicts,ds,frag); 
-        os << "</DicomAttribute>\n\n";       
+        os << "</DicomAttribute>\n\n";
         }
-        
       os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
       }
     else
       {
       // This is a byte value, so it should have been already treated.
       }
-    
     os << "</DicomAttribute>\n\n";
     }
 }
@@ -517,9 +460,9 @@ void XMLPrinter::Print(std::ostream& os)
 {
   /* XML Meta Info */
   const Tag CharacterEncoding(0x0008,0x0005);
-  
+
   const DataSet &ds = F->GetDataSet();
-  
+
   os << "<?xml version=\"1.0\" encoding=\"";
   if(ds.FindDataElement(CharacterEncoding))
   {
@@ -533,13 +476,10 @@ void XMLPrinter::Print(std::ostream& os)
   os << "UTF-8\"?>\n\n";
   }
   os << "<NativeDicomModel xml:space=\"preserve\">\n\n";
-   
-  
-  
+
   PrintDataSet(ds, os);
-  
-  os << "\n</NativeDicomModel>";  
-  
+
+  os << "\n</NativeDicomModel>";
 }
 
 }//end namespace gdcm

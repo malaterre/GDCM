@@ -50,7 +50,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmtar
   gdcminfo
   gdcmscu
-  gdcmxml  
+  gdcmxml
   )
 # poppler people have the worse API backward compatibility I know of.
 # there is absolutely no way to check the version of poppler
@@ -110,7 +110,7 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   IF(${exename} STREQUAL "gdcmpdf")
     TARGET_LINK_LIBRARIES(${exename} ${POPPLER_LIBRARIES})
   ELSEIF(${exename} STREQUAL "xmlgdcm")
-    TARGET_LINK_LIBRARIES(${exename} ${Libxml++_LIBRARIES})  
+    TARGET_LINK_LIBRARIES(${exename} ${Libxml++_LIBRARIES})
   ELSEIF(${exename} STREQUAL "gdcmscu")
     TARGET_LINK_LIBRARIES(${exename} gdcmMEXD socketxx)
   ELSEIF(${exename} STREQUAL "gdcmstream")
