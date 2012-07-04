@@ -693,7 +693,7 @@ bool RLECodec::DecodeExtent(
       os.put( 0 );
       end = (size_t)end - 1;
       }
-    assert( end - start == frag.GetVL() || end - start + 1 == frag.GetVL() );
+    assert( end - start == frag.GetVL() || (size_t)(end - start) + 1 == frag.GetVL() );
     // sync is (rle16loo.dcm)
     if( (end - start) % 2 == 1 )
       {
