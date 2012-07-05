@@ -2,7 +2,6 @@
 #define HELPER_H
 
 #include <stdio.h>
-#include <io.h>
 #include <Windows.h>
 
 namespace gdcm

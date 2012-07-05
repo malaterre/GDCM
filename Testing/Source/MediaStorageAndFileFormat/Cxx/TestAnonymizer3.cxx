@@ -24,8 +24,9 @@
 #include "gdcmFileDerivation.h"
 #include "gdcmSystem.h"
 
-#include "gdcmCAPICryptoFactory.h"
-#include "gdcmOpenSSLCryptoFactory.h"
+#include "gdcmCAPICryptographicMessageSyntax.h"
+//#include "gdcmCAPICryptoFactory.h"
+//#include "gdcmOpenSSLCryptoFactory.h"
 
 int TestAnonymizer3(int , char *[])
 {

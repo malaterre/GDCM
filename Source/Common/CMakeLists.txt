@@ -117,12 +117,9 @@ SET(Common_SRCS
   #gdcmCryptographicMessageSyntax.cxx
 
   gdcmCryptographicMessageSyntax.cxx
-  gdcmCAPICryptographicMessageSyntax.cxx
-  gdcmCAPICryptoFactory.cxx
   gdcmCryptoFactory.cxx
   gdcmOpenSSLCryptoFactory.cxx
   gdcmOpenSSLCryptographicMessageSyntax.cxx
-  Helper.cxx
 
   gdcmASN1.cxx
   gdcmObject.cxx
@@ -140,6 +137,14 @@ SET(Common_SRCS
   gdcmByteSwap.cxx
   gdcmUnpacker12Bits.cxx
   )
+
+IF(WIN32)
+SET(Common_SRCS ${Common_SRCS}
+  gdcmCAPICryptographicMessageSyntax.cxx
+  gdcmCAPICryptoFactory.cxx
+  Helper.cxx
+)
+ENDIF(WIN32)
 
 IF(GDCM_BUILD_TESTING)
 SET(Common_SRCS ${Common_SRCS}

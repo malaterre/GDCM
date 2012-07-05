@@ -11,12 +11,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-//#include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmCryptoFactory.h"
+
+#include <string.h>
+
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
-
-#include "Helper.h"
 
 int TestCryptographicMessageSyntax(int, char *[])
 {
@@ -43,10 +44,10 @@ int TestCryptographicMessageSyntax(int, char *[])
   size_t outlen = 5000, decoutlen = 5000;
 
   gdcm::CryptographicMessageSyntax::CipherTypes ciphers[] = {
-    gdcm::CryptographicMessageSyntax::CipherTypes::AES128_CIPHER,
-    gdcm::CryptographicMessageSyntax::CipherTypes::AES192_CIPHER,
-    gdcm::CryptographicMessageSyntax::CipherTypes::AES256_CIPHER,
-    gdcm::CryptographicMessageSyntax::CipherTypes::DES3_CIPHER
+    gdcm::CryptographicMessageSyntax::AES128_CIPHER,
+    gdcm::CryptographicMessageSyntax::AES192_CIPHER,
+    gdcm::CryptographicMessageSyntax::AES256_CIPHER,
+    gdcm::CryptographicMessageSyntax::DES3_CIPHER
     };
   //int cipher = CryptographicMessageSyntax::CipherTypes::AES128_CIPHER;
 

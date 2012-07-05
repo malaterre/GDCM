@@ -38,9 +38,9 @@
 
 //map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;
 
-
-#include "gdcmCAPICryptoFactory.h"
-#include "gdcmOpenSSLCryptoFactory.h"
+#include "gdcmCryptographicMessageSyntax.h"
+//#include "gdcmCAPICryptoFactory.h"
+//#include "gdcmOpenSSLCryptoFactory.h"
 //extern gdcm::CAPICryptoFactory capif;
 //extern gdcm::OpenSSLCryptoFactory osslf;
 //extern map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;
