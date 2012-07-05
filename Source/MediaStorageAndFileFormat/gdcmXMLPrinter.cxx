@@ -468,7 +468,10 @@ void XMLPrinter::Print(std::ostream& os)
   {
     const DataElement &de = ds.GetDataElement(CharacterEncoding);
     const ByteValue *bv = de.GetByteValue();
-    bv->PrintASCII(os,bv->GetLength()); 
+    if(bv)
+      {
+        bv->PrintASCII(os,bv->GetLength()); 
+      }
     os << "\"?>\n\n"; 
   }
   else
