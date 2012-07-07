@@ -82,7 +82,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     {
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
-    os << " PrivateCreator = \"" << owner << "\" ";
+    os << " privateCreator = \"" << owner << "\" ";
     }
 
   VR refvr;
@@ -167,7 +167,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     refvr = VR::UN;
 
   // Printing the VR -- Value Representation
-  os << " VR = \"" << refvr << "\" ";
+  os << " vr = \"" << refvr << "\" ";
 
   // Add the keyword attribute :
     
@@ -298,7 +298,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
             }
           else
             {
-            os << "<BulkData UUID = \""<<
+            os << "<BulkData uuid = \""<<
               UIDgen.Generate() << "\" />";
             }
           }
@@ -343,7 +343,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           bv->PrintHexXML(os);
         else
           {
-          os << "<BulkData UUID = \""<<
+          os << "<BulkData uuid = \""<<
             UIDgen.Generate() << "\" />";
           }
         }
