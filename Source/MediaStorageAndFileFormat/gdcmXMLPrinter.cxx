@@ -471,8 +471,13 @@ void XMLPrinter::Print(std::ostream& os)
     if(bv)
       {
         bv->PrintASCII(os,bv->GetLength()); 
+        os << "\"?>\n\n"; 
       }
-    os << "\"?>\n\n"; 
+    
+    else
+      {
+        os << "UTF-8\"?>\n\n";
+      }
   }
   else
   {
