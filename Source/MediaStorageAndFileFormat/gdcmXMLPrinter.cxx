@@ -73,8 +73,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   //Printing Tag
 
   
-  os << " tag = \"" << std::hex << std::setw(4) << std::setfill('0') <<
-      t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\"" << std::dec;
+  os << " tag = \"" << std::uppercase << std::hex << std::setw(4) << std::setfill('0') <<
+      t.GetGroup() <<  std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << std::nouppercase <<"\"" << std::dec;
 
   //Printing Private Creator
 
