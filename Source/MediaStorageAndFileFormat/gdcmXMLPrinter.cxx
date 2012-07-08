@@ -366,6 +366,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
 {
   if( !sqi ) return;
+  
+  int noItems = 1;
 
   SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
   for(; it != sqi->Items.end(); ++it)
@@ -373,7 +375,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
     const Item &item = *it;
     const DataSet &ds = item.GetNestedDataSet();
     const DataElement &deitem = item;
-
+    /*
     os << "<DicomAttribute  tag = \"";
     os << std::hex << std::setw(4) << std::setfill('0') <<
       deitem.GetTag().GetGroup() <<  std::setw(4) << ((uint16_t)(deitem.GetTag().GetElement() << 8) >> 8) << "\" ";
@@ -388,20 +390,24 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
       os << "\"ItemWithDefinedLength\"";
       }
     os << ">\n";
-
+    */
+    os << "<Item number = \"" << noItems << "\">\n"; 
     PrintDataSet(ds, os);
-
+    /*
     if( deitem.GetVL().IsUndefined() )
       {
             os << "<DicomAttribute    tag = \"fffee00d\"  VR = \"UN\" keyword = \"ItemDelimitationItem\"/>\n";
       }
     os << "</DicomAttribute>\n\n";  
+    */
+    os << "</Item>";
     }
-
+  /*
   if( sqi->GetLength().IsUndefined() )
     {
         os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
     }
+  */  
 }
 
 void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
