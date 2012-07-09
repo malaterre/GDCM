@@ -298,6 +298,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
             }
           else
             {
+            if(bv->GetLength())
             os << "<BulkData uuid = \""<<
               UIDgen.Generate() << "\" />";
             }
@@ -343,6 +344,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           bv->PrintHexXML(os);
         else
           {
+          if(bv->GetLength())
           os << "<BulkData uuid = \""<<
             UIDgen.Generate() << "\" />";
           }
@@ -441,7 +443,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
       os << "<DicomAttribute  ";
       PrintDataElement(os,dicts,ds,table);
       os << "</DicomAttribute>\n\n";
-      os << "</Item>";
+      os << "</Item>\n";
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
         {
@@ -450,7 +452,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
         os << "<DicomAttribute  ";
         PrintDataElement(os,dicts,ds,frag); 
         os << "</DicomAttribute>\n\n";
-        os << "</Item>";
+        os << "</Item>\n";
         }
       //os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
       }
