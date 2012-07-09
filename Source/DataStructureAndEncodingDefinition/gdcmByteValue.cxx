@@ -173,6 +173,16 @@ namespace gdcm
         }
       else if ( !( isprint((unsigned char)c) ) )
         os << ".";
+      else if(c == '&')
+        os << "&amp;";
+      else if(c == '<')
+        os << "&lt;";
+      else if(c == '>')
+        os << "&gt;";
+      else if(c == '\'')
+        os << "&apos;";
+      else if(c == '\"')
+        os << "&quot;";
       else
         os << c;
       }
@@ -238,6 +248,16 @@ namespace gdcm
         }
       else if ( !( isprint((unsigned char)c) ) )
         os << ".";
+      else if(c == '&')
+        os << "&amp;";
+      else if(c == '<')
+        os << "&lt;";
+      else if(c == '>')
+        os << "&gt;";
+      else if(c == '\'')
+        os << "&apos;";
+      else if(c == '\"')
+        os << "&quot;";
       else
         os << c;
       }
@@ -262,5 +282,6 @@ namespace gdcm
       }
     os << std::dec;
     }
-
+   
+   
 }

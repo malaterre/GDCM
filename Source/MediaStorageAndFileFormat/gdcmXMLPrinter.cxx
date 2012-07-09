@@ -467,6 +467,31 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
 
 
 /*------------------------------------------------------------------------------------------------------------------------------------------------*/
+static   char *GetEncodingXML(const ByteValue *bv)
+{
+  if( !bv) return 0;
+  const char *internal = bv->GetPointer();
+  if( !internal ) return 0;
+  size_t length = bv->GetLength();
+  char * enc = new char(length);
+  int i=0;
+  const char * it = internal;
+
+  for(; it != internal + length; ++it)
+    {
+    const char &c = *it;
+    if ( c == '\\' )
+      {
+      return enc;
+      }
+    else if ( !( isprint((unsigned char)c) ) )
+      enc[i++] = '.';
+    else
+      enc[i++] = c;
+    }
+
+  return enc;
+}
 
 void XMLPrinter::Print(std::ostream& os)
 {
@@ -474,6 +499,8 @@ void XMLPrinter::Print(std::ostream& os)
   const Tag CharacterEncoding(0x0008,0x0005);
 
   const DataSet &ds = F->GetDataSet();
+  
+  char* EncodingFromFile;
 
   os << "<?xml version=\"1.0\" encoding=\"";
   if(ds.FindDataElement(CharacterEncoding))
@@ -482,10 +509,35 @@ void XMLPrinter::Print(std::ostream& os)
     const ByteValue *bv = de.GetByteValue();
     if(bv)
       {
-        bv->PrintASCII(os,bv->GetLength()); 
+        EncodingFromFile=GetEncodingXML(bv);
+        //os << "\n\nhi there" << EncodingFromFile << "\n\n";
+        if (!strcmp(EncodingFromFile,"ISO_IR 6"))
+                os << "UTF-8";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 192"))
+                os << "UTF-8";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 100"))
+                os << "ISO-8859-1";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 101"))
+                os << "ISO-8859-2";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 109"))
+                os << "ISO-8859-3";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 110"))
+                os << "ISO-8859-4";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 148"))
+                os << "ISO-8859-9";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 144"))
+                os << "ISO-8859-5";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 127"))
+                os << "ISO-8859-6";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 126"))
+                os << "ISO-8859-7";
+        else if (!strcmp(EncodingFromFile,"ISO_IR 138"))
+                os << "ISO-8859-8"; 
+        else
+                os << "UTF-8";        
         os << "\"?>\n\n"; 
+        delete[] EncodingFromFile;
       }
-    
     else
       {
         os << "UTF-8\"?>\n\n";
