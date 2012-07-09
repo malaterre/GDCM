@@ -436,19 +436,23 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
       }
     else if ( sqf )
       {
+      os << "<Item number = \"1\">\n"; 
       const BasicOffsetTable & table = sqf->GetTable();
       os << "<DicomAttribute  ";
       PrintDataElement(os,dicts,ds,table);
       os << "</DicomAttribute>\n\n";
+      os << "</Item>";
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
         {
+        os << "<Item number = \"" << i+2 << "\">\n"; 
         const Fragment& frag = sqf->GetFragment(i);
         os << "<DicomAttribute  ";
         PrintDataElement(os,dicts,ds,frag); 
         os << "</DicomAttribute>\n\n";
+        os << "</Item>";
         }
-      os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
+      //os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
       }
     else
       {
