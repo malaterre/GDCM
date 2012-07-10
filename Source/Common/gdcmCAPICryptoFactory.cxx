@@ -20,5 +20,5 @@
 //namespace
 //  {
   //gdcm::CAPICryptoFactory gdcm::CAPICryptoFactory::asd;
-  gdcm::CAPICryptoFactory capif;
+  //gdcm::CAPICryptoFactory capif;
 //  }

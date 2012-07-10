@@ -15,43 +15,41 @@
 #define GDCMCRYPTOFACTORY_H
 
 
-#include <map>
-#include <string>
 #include "gdcmCryptographicMessageSyntax.h"
-#include <iostream>
-using namespace std;
+#include <map>
 
 namespace gdcm
 {
 class GDCM_EXPORT CryptoFactory
 {
 public:
-  CryptoFactory(){}
   virtual CryptographicMessageSyntax& CreateCMSProvider() = 0;
+
   virtual bool getStatus() = 0;
+
+  static CryptoFactory& getFactoryInstance(int id);
+
+  enum CryptoLibs {OPENSSL, CAPI};
+
+protected:
+  CryptoFactory(CryptoLibs id)
+  {
+    AddLib(id, this);
+  }
 
   static std::map<int, CryptoFactory*>& getMap()
   {
     static std::map<int, CryptoFactory*> libs;
     return libs;
   }
+
   static void AddLib(int id, CryptoFactory* f)
-    {
-    //libs.insert(pair<int, CryptoFactory*>(id, f));
+  {
     getMap().insert(pair<int, CryptoFactory*>(id, f));
-    }
-  static CryptoFactory& getFactoryInstance(int id)
-    {
-    //if (libs[id] == NULL) 
-    if (getMap()[id] == NULL) 
-    {
-      cout << "No crypto library registered by id " << id << endl;
-      exit(0);
-    }
-    //return *libs[id];
-    return *getMap()[id];
-    }
+  }
+
+protected:
+  CryptoFactory(){}
 };
-//map<int, CryptoFactory*> CryptoFactory::libs;
 }
 #endif //GDCMCRYPTOFACTORY_H

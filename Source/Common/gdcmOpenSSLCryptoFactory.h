@@ -26,35 +26,26 @@ namespace gdcm
 class GDCM_EXPORT OpenSSLCryptoFactory : public CryptoFactory
 {
 public:
-  OpenSSLCryptoFactory()
-    {
+  OpenSSLCryptoFactory(CryptoLibs id) : CryptoFactory(id)
+  {
     cout << "OpenSSL Factory created (and registered?)" << endl;
-    CryptoFactory::AddLib(0, this);
-
-    //HMODULE libInst = LoadLibrary(L"libeay32.dll");
-    /*if (libInst != NULL)
-      {
-      cout << "OpenSSL successfully loaded." << endl;
-      }
-    else
-      {
-      cout << "OpenSSL Library not found." << endl;
-      }*/
-    }
+    //CryptoFactory::AddLib(0, this);
+  }
     
 public:
   CryptographicMessageSyntax& CreateCMSProvider()
-    {
+  {
     return *(new OpenSSLCMS());
-    }
+  }
 
   bool getStatus()
-    {
+  {
     return 0;
-    }
+  }
 
-    //friend class CryptoFactory;
-}/* OpenSSL_Crypto_Factory*/;
+private:
+  OpenSSLCryptoFactory(){}
+};
 }
 
 #endif //GDCMOPENSSLFACTORY_H

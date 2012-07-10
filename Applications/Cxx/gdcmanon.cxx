@@ -29,21 +29,7 @@
 
 #include <getopt.h>
 
-//#pragma comment(linker, "/gdcmCommon.lib")
-
-//#include "gdcmCAPICryptographicMessageSyntax.h"
-
-//#include "gdcmOpenSSLCryptographicMessageSyntax.h"
-//#pragma comment(lib, "gdcmCommon.lib")
-
-//map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;
-
-#include "gdcmCryptographicMessageSyntax.h"
-//#include "gdcmCAPICryptoFactory.h"
-//#include "gdcmOpenSSLCryptoFactory.h"
-//extern gdcm::CAPICryptoFactory capif;
-//extern gdcm::OpenSSLCryptoFactory osslf;
-//extern map<int, gdcm::CryptoFactory*> gdcm::CryptoFactory::libs;
+#include "gdcmCryptoFactory.h"
 
 static void PrintVersion()
 {
@@ -292,9 +278,6 @@ static gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char *
 
 int main(int argc, char *argv[])
 {
-  //gdcm::CryptoFactory::AddLib(1, new gdcm::OpenSSLCryptoFactory());
-  //gdcm::CryptoFactory::AddLib(2, new gdcm::CAPICryptoFactory());
-
   int c;
   //int digit_optind = 0;
 
@@ -327,7 +310,7 @@ int main(int argc, char *argv[])
   int empty_tag = 0;
   int remove_tag = 0;
   int replace_tag = 0;
-  int use_capi = 0;
+  int crypto_api = 0;
   std::vector<gdcm::Tag> empty_tags;
   std::vector<gdcm::Tag> remove_tags;
   std::vector< std::pair<gdcm::Tag, std::string> > replace_tags_value;
@@ -356,7 +339,8 @@ int main(int argc, char *argv[])
         {"remove", 1, &remove_tag, 1},
         {"replace", 1, &replace_tag, 1},
         {"continue", 0, &continuemode, 1},
-        {"capi", 0, &use_capi, 1},
+        {"openssl", 0, &crypto_api, 1},
+        {"capi", 0, &crypto_api, 2},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -766,8 +750,18 @@ int main(int argc, char *argv[])
     }
 
   // Get private key/certificate
-  //gdcm::CryptographicMessageSyntax cms;
-  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(use_capi);
+
+  gdcm::CryptoFactory::CryptoLibs crypto_lib;
+#ifdef WIN32
+  crypto_lib = gdcm::CryptoFactory::CAPI;
+#else
+  crypto_lib = gdcm::CryptoFactory::OPENSSL;
+#endif
+  
+  if (crypto_api == 1) crypto_lib = gdcm::CryptoFactory::OPENSSL;
+  else if (crypto_api == 2) crypto_lib = gdcm::CryptoFactory::CAPI;
+
+  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(crypto_lib);
   gdcm::CryptographicMessageSyntax& cms = capi.CreateCMSProvider();
   if( !dumb_mode )
     {

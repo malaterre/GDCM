@@ -61,7 +61,7 @@ public:
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len);
 
 private:
-  static ALG_ID getAlgIdByObjId(char * pszObjId);
+  static ALG_ID getAlgIdByObjId(const char * pszObjId);
 
   LPSTR getCipherObjId() const;
 

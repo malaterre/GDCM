@@ -29,10 +29,10 @@ class GDCM_EXPORT CAPICryptoFactory : public CryptoFactory
 {
   //static CAPICryptoFactory asd;
 public:
-  CAPICryptoFactory()
+  CAPICryptoFactory(CryptoLibs id) : CryptoFactory(id)
     {
     cout << "CAPI Factory created (and registered?)" << endl;
-    CryptoFactory::AddLib(1, this);
+    //CryptoFactory::AddLib(1, this);
     }
     
 public:
@@ -45,6 +45,10 @@ public:
     {
     return 0;
     }
+
+private:
+  CAPICryptoFactory(){}
+
 };
 } // end namespace gdcm
 #endif //GDCMCAPIFACTORY_H

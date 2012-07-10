@@ -17,9 +17,7 @@
 #include "gdcmTesting.h"
 #include "gdcmCryptographicMessageSyntax.h"
 
-#include "gdcmCAPICryptographicMessageSyntax.h"
-//#include "gdcmOpenSSLCryptoFactory.h"
-//#include "gdcmCAPICryptoFactory.h"
+#include "gdcmCryptoFactory.h"
 
 #include "gdcmSmartPointer.h"
 #include "gdcmReader.h"

@@ -15,5 +15,5 @@
 #include "gdcmOpenSSLCryptoFactory.h"
 
 //namespace gdcm{
-  gdcm::OpenSSLCryptoFactory osslf;
+  //gdcm::OpenSSLCryptoFactory osslf;
 //}

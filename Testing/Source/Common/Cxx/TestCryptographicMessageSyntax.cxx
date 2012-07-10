@@ -11,8 +11,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCryptographicMessageSyntax.h"
+//#include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmCryptoFactory.h"
+#include "Helper.h"
 
 #include <string.h>
 
@@ -26,19 +27,23 @@ int TestCryptographicMessageSyntax(int, char *[])
 
   const char *input = "12345";
 
-  gdcm::CryptoFactory& ossl = gdcm::CryptoFactory::getFactoryInstance(0);
-  gdcm::CryptographicMessageSyntax& ocms = ossl.CreateCMSProvider();
-
-  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(1);
-  gdcm::CryptographicMessageSyntax& ccms = capi.CreateCMSProvider();
-    
   std::string certpath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
   std::string keypath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/privatekey.pem" );
+  std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
 
-  ccms.ParseCertificateFile(certpath.c_str());
-  ocms.ParseCertificateFile(certpath.c_str());
-  ccms.ParseKeyFile(keypath.c_str());
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  gdcm::CryptoFactory& ossl = gdcm::CryptoFactory::getFactoryInstance(0);
+  gdcm::CryptographicMessageSyntax& ocms = ossl.CreateCMSProvider();
   ocms.ParseKeyFile(keypath.c_str());
+  ocms.ParseCertificateFile(certpath.c_str());
+#endif
+
+#ifdef WIN32
+  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(1);
+  gdcm::CryptographicMessageSyntax& ccms = capi.CreateCMSProvider();
+  ccms.ParseCertificateFile(certpath.c_str());
+  ccms.ParseKeyFile(keypath.c_str());
+#endif
   
   char output[5000], decout[5000];
   size_t outlen = 5000, decoutlen = 5000;
@@ -47,18 +52,50 @@ int TestCryptographicMessageSyntax(int, char *[])
     gdcm::CryptographicMessageSyntax::AES128_CIPHER,
     gdcm::CryptographicMessageSyntax::AES192_CIPHER,
     gdcm::CryptographicMessageSyntax::AES256_CIPHER,
-    gdcm::CryptographicMessageSyntax::DES3_CIPHER
+    gdcm::CryptographicMessageSyntax::DES3_CIPHER,
     };
-  //int cipher = CryptographicMessageSyntax::CipherTypes::AES128_CIPHER;
+
+  char * test_vector;
+  unsigned long tvlen;
+  gdcm::Helper::LoadFileWin(encrypted_vector.c_str(), test_vector, tvlen);
+
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  for (int i = 0; i < 4; i++)
+    {
+    ocms.SetCipherType(ciphers[i]);
+    ocms.Encrypt(output, outlen, input, 5);
+    ocms.Decrypt(decout, decoutlen, output, outlen);
+    assert(strncmp(input, decout, 5) == 0);
+    }
+  ocms.Decrypt(decout, decoutlen, test_vector, tvlen);
+  assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
+  assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
+#endif
+
+#ifdef WIN32
+  for (int i = 0; i < 4; i++)
+    {
+    ccms.SetCipherType(ciphers[i]);
+    ccms.Encrypt(output, outlen, input, 5);
+    ccms.Decrypt(decout, decoutlen, output, outlen);
+    assert(strncmp(input, decout, 5) == 0);
+    }
+  ocms.Decrypt(decout, decoutlen, test_vector, tvlen);
+  assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
+  assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
+#endif
+
+#ifdef WIN32
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 
   for (int i = 0; i < 4; i++)
-  {
+    {
     ocms.SetCipherType(ciphers[i]);
     ccms.SetCipherType(ciphers[i]);
     ocms.Encrypt(output, outlen, input, 5);
     ccms.Decrypt(decout, decoutlen, output, outlen);
     assert(strncmp(input, decout, 5) == 0);
-  }
+    }
 
   // IMPORTANT: OpenSSL seems not to be able to decrypt the
   // messages with OAEP RSA padding, maybe that's only available
@@ -66,7 +103,7 @@ int TestCryptographicMessageSyntax(int, char *[])
   // ...
   // In CAPI can't find a way to specify the RSA padding
   /*for (int i = 0; i < 4; i++)
-  {
+    {
     ocms.SetCipherType(ciphers[i]);
     ccms.SetCipherType(ciphers[i]);
     ccms.Encrypt(output, outlen, input, 5);
@@ -74,7 +111,10 @@ int TestCryptographicMessageSyntax(int, char *[])
     assert(strncmp(input, decout, 5) == 0);
 
     if (i == 0) gdcm::Helper::DumpToFile("D:\\ossldump.bin", (BYTE*)output, outlen);
-  }*/
+    }*/
+
+#endif
+#endif
 
   return 0;
 }

@@ -14,15 +14,28 @@
 #include <iostream>
 using namespace std;
 
-/*class CryptoFactory
-{
-public:
-   virtual void CreateProvider() = 0;
-}*/
-
 #include "gdcmCryptoFactory.h"
 #include <map>
+
+#ifdef WIN32
+#include "gdcmCAPICryptoFactory.h"
+#endif
+#include "gdcmOpenSSLCryptoFactory.h"
+
 namespace gdcm
 {
-  //map<int, CryptoFactory*> CryptoFactory::libs;// = new map<int, CryptoFactory*>();
+  CryptoFactory& CryptoFactory::getFactoryInstance(int id)
+  {
+    #ifdef WIN32
+    static CAPICryptoFactory capi(CryptoFactory::CAPI);
+    #endif
+    static OpenSSLCryptoFactory ossl(CryptoFactory::OPENSSL);
+
+    if (getMap()[id] == NULL) 
+      {
+      cout << "No crypto library registered by id " << id << endl;
+      exit(0);
+      }
+    return *getMap()[id];
+  }
 }

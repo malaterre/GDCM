@@ -153,6 +153,8 @@ bool CAPICMS::ParseKeyFile( const char *filename ) {
 }
 
 bool CAPICMS::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const {
+  //DWORD dwResult;
+  
   //DWORD EncryptAlgSize;
   CRYPT_ALGORITHM_IDENTIFIER EncryptAlgorithm = {0};
   //EncryptAlgSize = sizeof(EncryptAlgorithm);
@@ -170,7 +172,11 @@ bool CAPICMS::Encrypt(char *output, size_t &outlen, const char *array, size_t le
 
   if(! CryptEncryptMessage(&EncryptParams, certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, len, (BYTE *)output, (DWORD *)&outlen) )
     {
-    printf("Failed to parse private key. Error 0x%.8X\n", GetLastError());
+    printf("Couldn't encrypt message. Error 0x%.8X\n", GetLastError());
+  if (GetLastError() == CRYPT_E_UNKNOWN_ALGO)
+    {
+    gdcmErrorMacro("Unknown encryption algorithm. If on Windows XP please use only 3DES.");
+    }
     return false;
     }
   return true;
@@ -616,7 +622,7 @@ bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t le
   return ret;
 }
 
-ALG_ID CAPICMS::getAlgIdByObjId(char * pszObjId)
+ALG_ID CAPICMS::getAlgIdByObjId(const char * pszObjId)
 {
   if (strcmp(pszObjId, szOID_NIST_AES128_CBC) == 0)
     {
@@ -673,13 +679,35 @@ bool CAPICMS::Initialize() {
         return false;
         }
       }
+  else if (dwResult == NTE_KEYSET_NOT_DEF)
+    {
+      //Probably WinXP
+    if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
+    {
+    dwResult = GetLastError();
+    if (dwResult == NTE_BAD_KEYSET)
+      {
+      if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
+      {
+      dwResult = GetLastError();
+      cout << "Error [0x%x]: CryptAcquireContext() failed.";
+      return false;
+      }
+      }
     else 
       {
       dwResult = GetLastError();
       return false;
       }
     }
-  initialized = true;
+    }
+    else 
+      {
+      dwResult = GetLastError();
+      return false;
+      }
+    }
+  //initialized = true;
   return true;
 }
 }
