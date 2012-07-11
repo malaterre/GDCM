@@ -473,7 +473,7 @@ static   char *GetEncodingXML(const ByteValue *bv)
   const char *internal = bv->GetPointer();
   if( !internal ) return 0;
   size_t length = bv->GetLength();
-  char * enc = new char(length);
+  char * enc = new char[length+1];
   int i=0;
   const char * it = internal;
 
@@ -482,7 +482,7 @@ static   char *GetEncodingXML(const ByteValue *bv)
     const char &c = *it;
     if ( c == '\\' )
       {
-      return enc;
+      break;
       }
     else if ( !( isprint((unsigned char)c) ) )
       enc[i++] = '.';
@@ -490,6 +490,7 @@ static   char *GetEncodingXML(const ByteValue *bv)
       enc[i++] = c;
     }
 
+  enc[i] = 0; // C-string are 0-padded
   return enc;
 }
 
