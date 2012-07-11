@@ -208,6 +208,7 @@ static const char * const iconimagearray[][2] = {
  {"206713a8ff161546d664d1285f99f90b" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
  {"dc70ae52689ebf8f5003320e1c7f216b" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
  {"3475cb96e0308cb84502be1c1531b588" , "NM-PAL-16-PixRep1.dcm" },
+ {"bcac830aae8652a88f4c4aa6d9e7e116" , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 
  // sentinel
  { 0, 0 }

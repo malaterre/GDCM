@@ -672,6 +672,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "94414d8b4300aa3d8cbe4475d34e8e54" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
 
 { "304f147752d46adfdcff71a30cd03d0a" , "NM-PAL-16-PixRep1.dcm" },
+{ "20b1e4de7b864d44fcd0dda1fc42402c" , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 
 // gdcmDataExtra:
 { "cb26bfacea534b5cd6881bc36520ecfc" , "US_512x512x2496_JPEG_BaseLine_Process_1.dcm" },
