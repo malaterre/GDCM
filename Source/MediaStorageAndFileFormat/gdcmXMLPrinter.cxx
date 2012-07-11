@@ -478,7 +478,7 @@ void XMLPrinter::Print(std::ostream& os)
   {
   os << "UTF-8\"?>\n\n";
   }
-  os << "<NativeDicomModel xml:space=\"preserve\">\n\n";
+  os << "<NativeDicomModel xmlns=\"http://dicom.nema.org/PS3.19/models/NativeDICOM\">\n\n";
 
   PrintDataSet(ds, os);
 
