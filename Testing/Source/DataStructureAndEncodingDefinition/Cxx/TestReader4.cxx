@@ -28,9 +28,9 @@ int TestReader4(int , char *[])
   outfilename += "/";
   outfilename += "fake.jpg";
 
-  const char jpeg[] = { 0xFF,0xD8,0xFF,0xE0,0x00,0x10,0x4A,0x46 };
+  const unsigned char jpeg[] = { 0xFF,0xD8,0xFF,0xE0,0x00,0x10,0x4A,0x46 };
   std::ofstream out( outfilename.c_str() );
-  out.write( jpeg, sizeof( jpeg ) );
+  out.write( (char*)jpeg, sizeof( jpeg ) );
   out.close();
 
   const char *filename = outfilename.c_str();
