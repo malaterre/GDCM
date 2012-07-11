@@ -35,7 +35,7 @@ Value = element Value { Number, xsd:string }
 Item = element Item { Number, DicomDataSet }
 PersonName = element PersonName {
   Number,
-  element SingleByte { NameComponents }?,
+  element SingleByte  { NameComponents }?,
   element Ideographic { NameComponents }?,
   element Phonetic    { NameComponents }?
 }
@@ -52,7 +52,7 @@ NameComponents =
 Keyword = attribute keyword { xsd:token }
 # canonical XML definition of Hex, with lowercase letters disallowed
 Tag = attribute tag { xsd:string{ minLength="8" maxLength="8" pattern="[0-9A-F]{8}" } }
-VR = attribute vr { "AE" | "AS" | "AT"| "CS" | "DA" | "DS" | "DT" | "FL" | "FD"
+VR = attribute vr { "AE" | "AS" | "AT" | "CS" | "DA" | "DS" | "DT" | "FL" | "FD"
                   | "IS" | "LO" | "LT" | "OB" | "OF" | "OW" | "PN" | "SH" | "SL"
                   | "SQ" | "SS" | "ST" | "TM" | "UI" | "UL" | "UN" | "US" | "UT" }
 PrivateCreator = attribute privateCreator{ xsd:string }
