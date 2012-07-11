@@ -512,6 +512,7 @@ bool JPEGCodec::DecodeExtent(
     iis.write( &vdummybuffer[0], vdummybuffer.size() );
     std::stringstream os;
     bool b = DecodeByStreams(iis,os);
+    if(!b) return false;
     assert( b );
 
     const unsigned int rowsize = xmax - xmin + 1;
