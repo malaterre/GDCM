@@ -26,6 +26,7 @@ int TestCryptographicMessageSyntax(int, char *[])
   //(void)o;
 
   const char *input = "12345";
+  size_t inputlen = 5;
 
   std::string certpath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
   std::string keypath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/privatekey.pem" );
@@ -63,9 +64,9 @@ int TestCryptographicMessageSyntax(int, char *[])
   for (int i = 0; i < 4; i++)
     {
     ocms.SetCipherType(ciphers[i]);
-    ocms.Encrypt(output, outlen, input, 5);
+    ocms.Encrypt(output, outlen, input, inputlen);
     ocms.Decrypt(decout, decoutlen, output, outlen);
-    assert(strncmp(input, decout, 5) == 0);
+    assert(strncmp(input, decout, inputlen) == 0);
     }
   ocms.Decrypt(decout, decoutlen, test_vector, tvlen);
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
@@ -76,9 +77,9 @@ int TestCryptographicMessageSyntax(int, char *[])
   for (int i = 0; i < 4; i++)
     {
     ccms.SetCipherType(ciphers[i]);
-    ccms.Encrypt(output, outlen, input, 5);
+    ccms.Encrypt(output, outlen, input, inputlen);
     ccms.Decrypt(decout, decoutlen, output, outlen);
-    assert(strncmp(input, decout, 5) == 0);
+    assert(strncmp(input, decout, inputlen) == 0);
     }
   ocms.Decrypt(decout, decoutlen, test_vector, tvlen);
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
@@ -92,9 +93,9 @@ int TestCryptographicMessageSyntax(int, char *[])
     {
     ocms.SetCipherType(ciphers[i]);
     ccms.SetCipherType(ciphers[i]);
-    ocms.Encrypt(output, outlen, input, 5);
+    ocms.Encrypt(output, outlen, input, inputlen);
     ccms.Decrypt(decout, decoutlen, output, outlen);
-    assert(strncmp(input, decout, 5) == 0);
+    assert(strncmp(input, decout, inputlen) == 0);
     }
 
   // IMPORTANT: OpenSSL seems not to be able to decrypt the
@@ -106,11 +107,10 @@ int TestCryptographicMessageSyntax(int, char *[])
     {
     ocms.SetCipherType(ciphers[i]);
     ccms.SetCipherType(ciphers[i]);
-    ccms.Encrypt(output, outlen, input, 5);
+    ccms.Encrypt(output, outlen, input, inputlen);
     ocms.Decrypt(decout, decoutlen, output, outlen);
-    assert(strncmp(input, decout, 5) == 0);
+    assert(strncmp(input, decout, inputlen) == 0);
 
-    if (i == 0) gdcm::Helper::DumpToFile("D:\\ossldump.bin", (BYTE*)output, outlen);
     }*/
 
 #endif
