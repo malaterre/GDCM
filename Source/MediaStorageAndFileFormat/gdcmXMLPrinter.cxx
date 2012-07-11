@@ -64,6 +64,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
   const VR &vr = entry.GetVR();
   const VM &vm = entry.GetVM();
+  (void)vm;
   const char *name = entry.GetKeyword();
   bool retired = entry.GetRetired();
 
@@ -238,7 +239,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       os << "\\" << el.GetValue(i);os << "</Value>\n";} \
       os << ""; } \
       else { if( de.IsEmpty() ) \
-                 ; } } \
+                 {} } } \
       else { assert( de.IsEmpty()); } \
     } break
 
@@ -376,7 +377,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
     {
     const Item &item = *it;
     const DataSet &ds = item.GetNestedDataSet();
-    const DataElement &deitem = item;
+    //const DataElement &deitem = item;
     /*
     os << "<DicomAttribute  tag = \"";
     os << std::hex << std::setw(4) << std::setfill('0') <<
