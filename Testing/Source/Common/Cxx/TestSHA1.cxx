@@ -223,6 +223,7 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "bf68f33e0922508d6075f0893298d339d817aa86"  , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
 { "6d21ac7b5b4ad32b7d91750a70b574a732b679a7"  , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
 { "94cadb9e79e0d04f3c212cf6fa069b3cf3f09a76"  , "NM-PAL-16-PixRep1.dcm" },
+{ "156463350047cada3ec091396695d3f3ef660c9a"  , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 
 { NULL, NULL}
 };

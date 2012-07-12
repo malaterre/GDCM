@@ -36,7 +36,7 @@ if os.name == 'posix':
     try:
       import DLFCN as dl
     except ImportError:
-      print "Could not import dl"
+      print("Could not import dl")
       dl = None
   if dl:
     #print "dl was imported"
@@ -56,7 +56,7 @@ try:
   # if vtkStringArray can be found in vtk let's use it !
   from vtk import vtkStringArray
 except:
-  print "Using compatibility layer (VTK 4) for vtkStringArray"
+  print("Using compatibility layer (VTK 4) for vtkStringArray")
 
 # bye bye
 del os

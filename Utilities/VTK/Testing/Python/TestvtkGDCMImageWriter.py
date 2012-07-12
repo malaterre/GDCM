@@ -17,14 +17,14 @@ import os,sys
 
 def PrintProgress(object, event):
   assert event == "ProgressEvent"
-  print "Progress:", object.GetProgress()
+  print("Progress:", object.GetProgress())
 
 if __name__ == "__main__":
   try:
     filename = os.sys.argv[1]
   except:
     # failure
-    print "Need a filename"
+    print("Need a filename")
     sys.exit(1)
 
   # setup reader
@@ -33,7 +33,7 @@ if __name__ == "__main__":
   r.SetFileName( filename )
   r.AddObserver("ProgressEvent", PrintProgress)
   r.Update()
-  print r.GetOutput()
+  print(r.GetOutput())
   # Write output
   writer = vtkgdcm.vtkGDCMImageWriter()
   writer.SetInput( r.GetOutput() )

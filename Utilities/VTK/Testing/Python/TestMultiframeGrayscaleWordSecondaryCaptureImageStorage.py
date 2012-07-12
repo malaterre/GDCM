@@ -19,7 +19,7 @@ from vtk.util.misc import vtkGetDataRoot
 
 #print vtkGetDataRoot()
 VTK_DATA_ROOT = vtkGetDataRoot()
-print VTK_DATA_ROOT
+print(VTK_DATA_ROOT)
 
 v16 = vtk.vtkVolume16Reader()
 v16.SetDataDimensions(64, 64)
