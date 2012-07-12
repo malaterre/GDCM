@@ -75,6 +75,7 @@
 #include "gdcmReader.h"
 #include "gdcmPixmapReader.h"
 #include "gdcmImageReader.h"
+#include "gdcmImageRegionReader.h"
 #include "gdcmWriter.h"
 #include "gdcmPixmapWriter.h"
 #include "gdcmImageWriter.h"
@@ -99,6 +100,7 @@
 #include "gdcmIPPSorter.h"
 #include "gdcmSpectroscopy.h"
 #include "gdcmPrinter.h"
+#include "gdcmXMLPrinter.h"
 #include "gdcmDumper.h"
 #include "gdcmOrientation.h"
 #include "gdcmFiducials.h"
@@ -475,6 +477,8 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 //EXTEND_CLASS_PRINT(gdcm::PixmapReader)
 %include "gdcmImageReader.h"
 //EXTEND_CLASS_PRINT(gdcm::ImageReader)
+%include "gdcmImageRegionReader.h"
+//EXTEND_CLASS_PRINT(gdcm::ImageRegionReader)
 %include "gdcmWriter.h"
 //EXTEND_CLASS_PRINT(gdcm::Writer)
 %include "gdcmPixmapWriter.h"
@@ -591,6 +595,8 @@ EXTEND_CLASS_PRINT(gdcm::IPPSorter)
 //EXTEND_CLASS_PRINT(gdcm::Spectroscopy)
 %include "gdcmPrinter.h"
 //EXTEND_CLASS_PRINT(gdcm::Printer)
+%include "gdcmXMLPrinter.h"
+//EXTEND_CLASS_PRINT(gdcm::XMLPrinter)
 %include "gdcmDumper.h"
 //EXTEND_CLASS_PRINT(gdcm::Dumper)
 

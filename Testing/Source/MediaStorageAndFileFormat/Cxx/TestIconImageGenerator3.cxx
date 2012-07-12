@@ -208,7 +208,7 @@ static const char * const iconimagearray3[][2] = {
  {"a189258582a49855ae002d381016d02f" , "LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm" },
  {"afccf775abd15a6c053c7f134b204762" , "00191113.dcm" },
  {"f4f35d60b3cc18aaa6d8d92f0cd3708a" , "NM-PAL-16-PixRep1.dcm" },
- {"bcac830aae8652a88f4c4aa6d9e7e116" , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
+ {"843f097f2161014cd1b11be5413eace9" , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 
  // sentinel
  { 0, 0 }

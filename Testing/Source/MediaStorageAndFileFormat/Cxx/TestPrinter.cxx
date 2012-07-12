@@ -227,6 +227,7 @@ static const char * const printmd5[][2] = {
 { "696917fea41e83b9980bad82b609162c" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
 { "7ef3da46c43e51cfe2eb82e4d23dd623" , "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
 { "7f69568a362343fe7ff0266db7b3614f" , "NM-PAL-16-PixRep1.dcm" },
+{ "8272b02db757629bf21b2cbea24e6e93" , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 
 { 0 ,0 }
 };

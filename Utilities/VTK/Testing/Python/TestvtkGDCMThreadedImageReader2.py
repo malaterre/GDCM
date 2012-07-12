@@ -22,12 +22,12 @@ import os,sys
 
 def PrintProgress(object, event):
   assert event == "ProgressEvent"
-  print "Progress:", object.GetProgress()
+  print("Progress:", object.GetProgress())
 
 if __name__ == "__main__":
   root = gdcm.Testing.GetDataExtraRoot()
   dirname = os.path.join(root, "gdcmSampleData/ForSeriesTesting/Perfusion/images" )
-  print dirname
+  print(dirname)
 
   # setup reader
   r = vtkgdcm.vtkGDCMThreadedImageReader2()
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     # Setup the ProgressEvent
     r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
-    print r.GetOutput()
+    print(r.GetOutput())
 
   # Test succeed ?
   #sys.exit(sucess != 1)
