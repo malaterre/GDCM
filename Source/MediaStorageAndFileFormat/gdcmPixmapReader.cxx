@@ -250,14 +250,16 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
     pixeldata.SetPixelFormat( pf );
     // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
     const Tag tphotometricinterpretation(0x0028, 0x0004);
-    assert( ds.FindDataElement( tphotometricinterpretation ) );
-    const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
-    std::string photometricinterpretation_str(
-      photometricinterpretation->GetPointer(),
-      photometricinterpretation->GetLength() );
-    PhotometricInterpretation pi(
-      PhotometricInterpretation::GetPIType(
-        photometricinterpretation_str.c_str()));
+    PhotometricInterpretation pi = PhotometricInterpretation::MONOCHROME2;
+    if( ds.FindDataElement( tphotometricinterpretation ) )
+      {
+      const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
+      std::string photometricinterpretation_str(
+        photometricinterpretation->GetPointer(),
+        photometricinterpretation->GetLength() );
+      pi = PhotometricInterpretation::GetPIType(
+        photometricinterpretation_str.c_str());
+      }
     assert( pi != PhotometricInterpretation::UNKNOW);
     pixeldata.SetPhotometricInterpretation( pi );
 
