@@ -110,12 +110,12 @@ bool ImageRegionReader::ReadInformation()
     }
   std::streampos fileoffset = GetStreamPtr()->tellg();
 
-  if( fileoffset == -1 )
+  if( fileoffset == std::streampos(-1) )
     {
     gdcmWarningMacro("Fail fileoffset.");
     return false;
     }
-  assert( fileoffset != -1 );
+  assert( fileoffset != std::streampos(-1) );
   Internals->SetFileOffset( fileoffset );
 
   const File &file = GetFile();
@@ -131,6 +131,7 @@ bool ImageRegionReader::ReadInformation()
 
 bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -195,6 +196,7 @@ bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadRLEIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -243,6 +245,7 @@ bool ImageRegionReader::ReadRLEIntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -291,6 +294,7 @@ bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -339,6 +343,7 @@ bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
 
 bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
 {
+  (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
   PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
@@ -392,7 +397,7 @@ bool ImageRegionReader::ReadIntoBuffer(char *buffer, size_t buflen)
     gdcmDebugMacro( "buffer cannot be smaller than computed buffer length" );
     return false;
     }
-  assert( Internals->GetFileOffset() != -1 );
+  assert( Internals->GetFileOffset() != std::streampos(-1) );
   gdcmDebugMacro( "Using FileOffset: " << Internals->GetFileOffset() );
   std::istream* theStream = GetStreamPtr();
   theStream->seekg( Internals->GetFileOffset() );

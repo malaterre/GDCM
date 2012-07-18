@@ -37,6 +37,9 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x2111,0x0010,"Viztek OPALRAD PrivateGroup",VR::UT,VM::VM1,"XML annotations",false },
+  {0x0caf,0x0011,"Xinapse Systems",VR::LO,VM::VM1,"Private attributes Identification Code",false },
+  {0x0caf,0x0001,"Xinapse Systems",VR::OB,VM::VM1,"Regions of interest",false },
   {0x0043,0x0014,"dcm4che/archive",VR::AE,VM::VM1,"ae name 1",false },
   {0x0043,0x0015,"dcm4che/archive",VR::AE,VM::VM1,"ae name 2",false },
   {0x0009,0x0001,"DicomUtils 20100512",VR::SQ,VM::VM1,"DICOMUTILS_PROCESSING_METHODS",false },
@@ -399,7 +402,9 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0017,0x0011,"Acuson X500",VR::UN,VM::VM1,"DIMAQ Software",false },
   {0x0017,0x0020,"Acuson X500",VR::UN,VM::VM1,"Private Data",false },
   {0x0019,0x0020,"Acuson X500",VR::UN,VM::VM1,"Import Structured",false },
+  //{0x0019,0x0007,"Agfa ADC NX",VR::SS,VM::VM1,"?",false },
   {0x0019,0x0009,"Agfa ADC NX",VR::SQ,VM::VM1,"?",false },
+  //{0x0019,0x0021,"Agfa ADC NX",VR::SL,VM::VM1,"?",false },
   {0x0019,0x00f5,"Agfa ADC NX",VR::CS,VM::VM1,"Cassette Orientation",false },
   {0x0019,0x00f6,"Agfa ADC NX",VR::DS,VM::VM1,"Plate Sensitivity",false },
   {0x0019,0x00f7,"Agfa ADC NX",VR::DS,VM::VM1,"Plate Erasability",false },

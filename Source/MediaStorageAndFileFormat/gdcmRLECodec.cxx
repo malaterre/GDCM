@@ -693,7 +693,7 @@ bool RLECodec::DecodeExtent(
       os.put( 0 );
       end = (size_t)end - 1;
       }
-    assert( end - start == frag.GetVL() || end - start + 1 == frag.GetVL() );
+    assert( end - start == frag.GetVL() || (size_t)(end - start) + 1 == frag.GetVL() );
     // sync is (rle16loo.dcm)
     if( (end - start) % 2 == 1 )
       {
@@ -730,7 +730,7 @@ bool RLECodec::DecodeExtent(
   return true;
 }
 
-bool RLECodec::DecodeByStreamsCommon(std::istream &is, std::ostream &os)
+bool RLECodec::DecodeByStreamsCommon(std::istream &, std::ostream &)
 {
   return false;
 }
@@ -805,7 +805,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
       if( byte >= 0 /*&& byte <= 127*/ ) /* 2nd is always true */
         {
         is.read( dummy_buffer, byte+1 );
-        assert( is.good() );
+        //assert( is.good() ); // impossible because ALOKA_SSD-8-MONO2-RLE-SQ.dc
         numberOfReadBytes += byte+1;
         numOutBytes += byte+ 1;
         tmpos.write( dummy_buffer, byte+1 );
@@ -823,7 +823,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
         {
         assert( byte == -128 );
         }
-      assert( numberOfReadBytes + frame.Header.Offset[i] - is.tellg() + start == 0);
+      //assert( numberOfReadBytes + frame.Header.Offset[i] - is.tellg() + start == 0);
       }
     assert( numOutBytes == length );
     }

@@ -469,6 +469,7 @@ bool JPEGCodec::DecodeExtent(
       }
     catch(Exception &ex)
       {
+      (void)ex;
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       // that's ok ! In all cases the whole file was read, because
       // Fragment::Read only fail on eof() reached 1.
@@ -501,8 +502,6 @@ bool JPEGCodec::DecodeExtent(
         gdcmWarningMacro( "Reading failed at Tag:" << frag.GetTag() <<
           ". Use file at own risk." << ex.what() );
         }
-#else
-      (void)ex;
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       }
 
@@ -513,6 +512,7 @@ bool JPEGCodec::DecodeExtent(
     iis.write( &vdummybuffer[0], vdummybuffer.size() );
     std::stringstream os;
     bool b = DecodeByStreams(iis,os);
+    if(!b) return false;
     assert( b );
 
     const unsigned int rowsize = xmax - xmin + 1;

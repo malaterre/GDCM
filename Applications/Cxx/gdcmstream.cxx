@@ -365,10 +365,10 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
     gdcm::File &file2 = w.GetFile();
     gdcm::DataSet &ds1 = file2.GetDataSet();
 
-    gdcm::Attribute<0x0048,0x0006> row1 = {image->y1};
+    gdcm::Attribute<0x0048,0x0006> row1 = {(unsigned short)image->y1};
     ds1.Insert( row1.GetAsDataElement() );
 
-    gdcm::Attribute<0x0048,0x0007> col1 = {image->x1};
+    gdcm::Attribute<0x0048,0x0007> col1 = {(unsigned short)image->x1};
     ds1.Insert( col1.GetAsDataElement() );
     gdcm::Attribute<0x0028,0x0008> Number_Of_Frames = {res+1};
     ds1.Insert( Number_Of_Frames.GetAsDataElement() );
@@ -394,10 +394,10 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
     ds1.Remove( gdcm::Tag(0x0028,0x0008) );
     }//if (flag == 1)  //This flag is to write Image Information
 
-  gdcm::Attribute<0x0048,0x0006> row = {image->comps[0].w};
+  gdcm::Attribute<0x0048,0x0006> row = {(unsigned short)image->comps[0].w};
   ds.Insert( row.GetAsDataElement() );
 
-  gdcm::Attribute<0x0048,0x0007> col = {image->comps[0].h};
+  gdcm::Attribute<0x0048,0x0007> col = {(unsigned short)image->comps[0].h};
   ds.Insert( col.GetAsDataElement() );
 
   gdcm::Attribute<0x0028,0x0008> Number_Of_Frames = {1};

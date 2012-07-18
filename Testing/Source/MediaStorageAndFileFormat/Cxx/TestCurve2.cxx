@@ -123,7 +123,7 @@ static int TestCurve2Read(const char* filename, bool verbose = false)
       std::vector<float> points;
       points.resize( 3 * npts );
       curve.GetAsPoints( (float*)&points[0] );
-#if 1
+#if 0
       for( size_t i = 0; i < npts; i += 3 )
         {
         std::cout << points[i + 0] << ","
