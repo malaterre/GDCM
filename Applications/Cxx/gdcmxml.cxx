@@ -64,6 +64,26 @@ void PrintHelp()
   std::cout << "  -v --version        print version." << std::endl;
 }
 
+static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
+{
+	xmlTextReaderPtr reader;
+    int ret;
+
+    reader = xmlReaderForFile(filename, NULL, 0);
+    if (reader != NULL) {
+        ret = xmlTextReaderRead(reader);
+        while (ret == 1) {
+            //processNode(reader);
+            ret = xmlTextReaderRead(reader);
+        }
+        xmlFreeTextReader(reader);
+        if (ret != 0) {
+            fprintf(stderr, "%s : failed to parse\n", filename);
+        }
+    } else {
+        fprintf(stderr, "Unable to open %s\n", filename);
+    }
+}
 int main (int argc, char *argv[])
 {
   int c;
@@ -235,6 +255,24 @@ int main (int argc, char *argv[])
   	return 0;
   	}
   else
-  	{
+    {
+  	/*
+     * this initialize the library and check potential ABI mismatches
+     * between the version it was compiled for and the actual shared
+     * library used.
+     */
+  	LIBXML_TEST_VERSION
+
+    XMLtoDICOM(file1,file2);
+
+    /*
+     * Cleanup function for the XML library.
+     */
+    xmlCleanupParser();
+    /*
+     * this is to debug memory for regression tests
+     */
+    xmlMemoryDump();
+
   	}
 }
