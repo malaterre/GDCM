@@ -91,8 +91,14 @@ static void processNode(xmlTextReaderPtr reader)
     }
 }
 
-static void WriteDataSet(xmlTextReaderPtr reader)
+static void WriteDataSet(xmlTextReaderPtr reader, gdcm::Filename file2)
 {
+	DataSet DS;
+	DataElement de;
+	File F;
+	Writer W;
+	
+	//populate DS
 	int ret = xmlTextReaderRead(reader);
   while (ret == 1) 
   	{
@@ -103,7 +109,19 @@ static void WriteDataSet(xmlTextReaderPtr reader)
   if (ret != 0) 
   	{
 		fprintf(stderr, "Failed to parse XML file\n");
+		exit(1);
     }
+	
+	//add to File  
+	F.SetDataSet(DS);
+	
+	//add to Writer
+	W.SetFile(F);  
+  W.CheckFileMetaInformationOff();
+  W.SetFileName(file2.GetFileName());
+  
+  //finally write to file
+  W.Write();    
 }
 
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
@@ -131,7 +149,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   //reader = xmlReaderForFile(filename, "UTF-8", 0);
   if (reader != NULL) 
   	{
-  	WriteDataSet(reader);
+  	WriteDataSet(reader, file2);
     } 
 	else 
 		{
