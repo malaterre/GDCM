@@ -100,7 +100,6 @@
 #include "gdcmIPPSorter.h"
 #include "gdcmSpectroscopy.h"
 #include "gdcmPrinter.h"
-#include "gdcmXMLPrinter.h"
 #include "gdcmDumper.h"
 #include "gdcmOrientation.h"
 #include "gdcmFiducials.h"
@@ -595,8 +594,6 @@ EXTEND_CLASS_PRINT(gdcm::IPPSorter)
 //EXTEND_CLASS_PRINT(gdcm::Spectroscopy)
 %include "gdcmPrinter.h"
 //EXTEND_CLASS_PRINT(gdcm::Printer)
-%include "gdcmXMLPrinter.h"
-//EXTEND_CLASS_PRINT(gdcm::XMLPrinter)
 %include "gdcmDumper.h"
 //EXTEND_CLASS_PRINT(gdcm::Dumper)
 
