@@ -94,23 +94,47 @@ static void processNode(xmlTextReaderPtr reader)
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
 {
 	xmlTextReaderPtr reader;
-    int ret;
+  int ret;
+  FILE *in;
+	char *buffer;
+	long numBytes;
+  in = fopen(filename, "r");
+  
+	if(in == NULL)
+		return ;
+		
+	fseek(in, 0L, SEEK_END);
+	numBytes = ftell(in);
+	fseek(in, 0L, SEEK_SET);
+	buffer = (char*)calloc(numBytes, sizeof(char));
 
-    reader = xmlReaderForFile(filename, NULL, 0);
-    if (reader != NULL) {
-        ret = xmlTextReaderRead(reader);
-        while (ret == 1) {
-            processNode(reader);
-            ret = xmlTextReaderRead(reader);
-        }
-        xmlFreeTextReader(reader);
-        if (ret != 0) {
-            fprintf(stderr, "%s : failed to parse\n", filename);
-        }
-    } else {
-        fprintf(stderr, "Unable to open %s\n", filename);
-    }
+	if(buffer == NULL)
+	  return ;
+
+	fread(buffer, sizeof(char), numBytes, in);
+	fclose(in);
+	reader = xmlReaderForMemory	(buffer, numBytes, NULL, NULL, 0);
+  //reader = xmlReaderForFile(filename, "UTF-8", 0);
+  if (reader != NULL) 
+  	{
+  	ret = xmlTextReaderRead(reader);
+    while (ret == 1) 
+    	{
+			processNode(reader);
+      ret = xmlTextReaderRead(reader);
+      }
+		xmlFreeTextReader(reader);
+    if (ret != 0) 
+    	{
+      fprintf(stderr, "%s : failed to parse\n", filename);
+      }
+    } 
+	else 
+		{
+		fprintf(stderr, "Unable to open %s\n", filename);
+   	}
 }
+
 int main (int argc, char *argv[])
 {
   int c;
