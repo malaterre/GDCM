@@ -12,6 +12,7 @@
 
 =========================================================================*/
 
+#include "gdcmFilename.h"
 #include "gdcmReader.h"
 #include "gdcmVersion.h"
 #include "gdcmFileMetaInformation.h"
@@ -27,6 +28,7 @@
 #include "gdcmASN1.h"
 #include "gdcmFile.h"
 #include "gdcmXMLPrinter.h"
+#include <libxml/xmlreader.h>
 
 #include <string>
 #include <iostream>
@@ -66,8 +68,8 @@ int main (int argc, char *argv[])
 {
   int c;
   //int digit_optind = 0;
-  std::string DICOMfile;
-  std::string XMLfile;
+  gdcm::Filename file1;
+  gdcm::Filename file2;
   int loadBulkData = 0;
   int verbose = 0;
   int warning = 0;
@@ -110,8 +112,8 @@ int main (int argc, char *argv[])
           if( option_index == 0 ) /* input */
             {
             assert( strcmp(s, "input") == 0 );
-            assert( DICOMfile.empty() );
-            DICOMfile = optarg;
+            assert( file1.IsEmpty() );
+            file1 = optarg;
             }
           }
         }
@@ -119,13 +121,13 @@ int main (int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( DICOMfile.empty() );
-      DICOMfile = optarg;
+      assert( file1.IsEmpty() );
+      file1 = optarg;
       break;
 
     case 'o':
-      assert( XMLfile.empty() );
-      XMLfile = optarg;
+      assert( file2.IsEmpty() );
+      file2 = optarg;
       break;
 
     case 'B':
@@ -169,12 +171,12 @@ int main (int argc, char *argv[])
     int v = argc - optind;
     if( v == 2 )
       {
-      DICOMfile = argv[optind];
-      XMLfile = argv[optind+1];
+      file1 = argv[optind];
+      file2 = argv[optind+1];
       }
     else if( v == 1 )
       {
-      DICOMfile = argv[optind];
+      file1 = argv[optind];
       }
     else
       {
@@ -183,7 +185,7 @@ int main (int argc, char *argv[])
       }
     }
 
-  if( DICOMfile.empty() )
+  if( file1.IsEmpty() )
     {
     PrintHelp();
     return 1;
@@ -200,30 +202,39 @@ int main (int argc, char *argv[])
     PrintHelp();
     return 0;
     }
+  
+  const char *file1extension = file1.GetExtension();
+  const char *file2extension = file2.GetExtension();
 
-  gdcm::Reader reader;
-  reader.SetFileName( DICOMfile.c_str() );
-  bool success = reader.Read();
-  if( !success )//!ignoreerrors )
-    {
-    std::cerr << "Failed to read: " << DICOMfile << std::endl;
-    return 1;
-    }
+  if(gdcm::System::StrCaseCmp(file1extension,".xml") != 0)// by default we assume it is a DICOM file-- as no extension is required for it
+  	{
+  	gdcm::Reader reader;
+  	reader.SetFileName( file1.GetFileName() );
+  	bool success = reader.Read();
+  	if( !success )//!ignoreerrors )
+    	{
+    	std::cerr << "Failed to read: " << file1 << std::endl;
+    	return 1;
+    	}
 
-  XMLPrinter printer;
-  printer.SetFile ( reader.GetFile() );
-  printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
+  	XMLPrinter printer;
+  	printer.SetFile ( reader.GetFile() );
+  	printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
 
-  if( XMLfile.empty() )
-    {
-    printer.Print( std::cout );
-    }
+  	if( file2.IsEmpty() )
+  	  {
+  	  printer.Print( std::cout );
+  	  }
+  	else
+  	  {
+  	  std::ofstream outfile;
+  	  outfile.open (file2.GetFileName());
+  	  printer.Print( outfile );
+  	  outfile.close();
+  	  }
+  	return 0;
+  	}
   else
-    {
-    std::ofstream outfile;
-    outfile.open (XMLfile.c_str());
-    printer.Print( outfile );
-    outfile.close();
-    }
-  return 0;
+  	{
+  	}
 }
