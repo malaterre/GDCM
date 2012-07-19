@@ -64,6 +64,33 @@ void PrintHelp()
   std::cout << "  -v --version        print version." << std::endl;
 }
 
+static void processNode(xmlTextReaderPtr reader) 
+{
+	const xmlChar *name, *value;
+  name = xmlTextReaderConstName(reader);
+
+  if (name == NULL)
+		name = BAD_CAST "--";
+
+	value = xmlTextReaderConstValue(reader);
+	printf("%d %d %s %d %d", 
+	    xmlTextReaderDepth(reader),
+	    xmlTextReaderNodeType(reader),
+	    name,
+	    xmlTextReaderIsEmptyElement(reader),
+	    xmlTextReaderHasValue(reader));
+	    
+	if(value == NULL)
+		printf("\n");
+  else 
+  	{
+		if (xmlStrlen(value) > 40)
+			printf(" %.40s...\n", value);
+    else
+	    printf(" %s\n", value);
+    }
+}
+
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
 {
 	xmlTextReaderPtr reader;
@@ -73,7 +100,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
     if (reader != NULL) {
         ret = xmlTextReaderRead(reader);
         while (ret == 1) {
-            //processNode(reader);
+            processNode(reader);
             ret = xmlTextReaderRead(reader);
         }
         xmlFreeTextReader(reader);
