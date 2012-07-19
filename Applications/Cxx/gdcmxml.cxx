@@ -50,12 +50,12 @@ void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmxml [OPTION]... FILE..." << std::endl;
-  std::cout << "Convert a DICOM file into an XML file \n";
+  std::cout << "Convert a DICOM file into an XML file or vice-versa \n";
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input     DICOM filename" << std::endl;
-  std::cout << "  -o --output    XML filename" << std::endl;
+  std::cout << "  -i --input     Filename1" << std::endl;
+  std::cout << "  -o --output    Filename2" << std::endl;
   std::cout << "General Options:" << std::endl;
-  std::cout << "  -B --loadBulkData   loads all bulk data like Pixel Data (by default UUID are written)." << std::endl;
+  std::cout << "  -B --loadBulkData   for DICOM -> XML, loads all bulk data like Pixel Data (by default UUID are written)." << std::endl;
   std::cout << "  -V --verbose        more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning        print warning info." << std::endl;
   std::cout << "  -D --debug          print debug info." << std::endl;
