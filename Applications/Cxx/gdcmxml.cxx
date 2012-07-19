@@ -91,10 +91,24 @@ static void processNode(xmlTextReaderPtr reader)
     }
 }
 
+static void WriteDataSet(xmlTextReaderPtr reader)
+{
+	int ret = xmlTextReaderRead(reader);
+  while (ret == 1) 
+  	{
+		processNode(reader);
+    ret = xmlTextReaderRead(reader);
+    }
+	xmlFreeTextReader(reader);
+  if (ret != 0) 
+  	{
+		fprintf(stderr, "Failed to parse XML file\n");
+    }
+}
+
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
 {
-	xmlTextReaderPtr reader;
-  int ret;
+	xmlTextReaderPtr reader;  
   FILE *in;
 	char *buffer;
 	long numBytes;
@@ -117,17 +131,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   //reader = xmlReaderForFile(filename, "UTF-8", 0);
   if (reader != NULL) 
   	{
-  	ret = xmlTextReaderRead(reader);
-    while (ret == 1) 
-    	{
-			processNode(reader);
-      ret = xmlTextReaderRead(reader);
-      }
-		xmlFreeTextReader(reader);
-    if (ret != 0) 
-    	{
-      fprintf(stderr, "%s : failed to parse\n", file1.GetFileName());
-      }
+  	WriteDataSet(reader);
     } 
 	else 
 		{
