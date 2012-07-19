@@ -98,7 +98,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   FILE *in;
 	char *buffer;
 	long numBytes;
-  in = fopen(filename, "r");
+  in = fopen(file1.GetFileName(), "r");
   
 	if(in == NULL)
 		return ;
@@ -126,12 +126,12 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
 		xmlFreeTextReader(reader);
     if (ret != 0) 
     	{
-      fprintf(stderr, "%s : failed to parse\n", filename);
+      fprintf(stderr, "%s : failed to parse\n", file1.GetFileName());
       }
     } 
 	else 
 		{
-		fprintf(stderr, "Unable to open %s\n", filename);
+		fprintf(stderr, "Unable to open %s\n", file1.GetFileName());
    	}
 }
 
@@ -275,7 +275,7 @@ int main (int argc, char *argv[])
     }
   
   const char *file1extension = file1.GetExtension();
-  const char *file2extension = file2.GetExtension();
+  //const char *file2extension = file2.GetExtension();
 
   if(gdcm::System::StrCaseCmp(file1extension,".xml") != 0)// by default we assume it is a DICOM file-- as no extension is required for it
   	{
