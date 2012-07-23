@@ -28,7 +28,10 @@
 #include "gdcmASN1.h"
 #include "gdcmFile.h"
 #include "gdcmXMLPrinter.h"
+
+#ifdef GDCM_USE_SYSTEM_LIBXML2
 #include <libxml/xmlreader.h>
+#endif
 
 #include <string>
 #include <iostream>
@@ -64,6 +67,7 @@ void PrintHelp()
   std::cout << "  -v --version        print version." << std::endl;
 }
 
+#ifdef GDCM_USE_SYSTEM_LIBXML2
 static void processNode(xmlTextReaderPtr reader) 
 {
 	const xmlChar *name, *value;
@@ -156,6 +160,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
 		fprintf(stderr, "Unable to open %s\n", file1.GetFileName());
    	}
 }
+#endif // GDCM_USE_SYSTEM_LIBXML2
 
 int main (int argc, char *argv[])
 {
@@ -329,6 +334,7 @@ int main (int argc, char *argv[])
   	}
   else
     {
+#ifdef GDCM_USE_SYSTEM_LIBXML2
   	/*
      * this initialize the library and check potential ABI mismatches
      * between the version it was compiled for and the actual shared
@@ -346,6 +352,6 @@ int main (int argc, char *argv[])
      * this is to debug memory for regression tests
      */
     xmlMemoryDump();
-
+#endif
   	}
 }

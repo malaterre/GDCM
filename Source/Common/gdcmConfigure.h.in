@@ -49,6 +49,7 @@
 #cmakedefine GDCM_USE_SYSTEM_ZLIB
 #cmakedefine GDCM_USE_SYSTEM_UUID
 #cmakedefine GDCM_USE_SYSTEM_POPPLER
+#cmakedefine GDCM_USE_SYSTEM_LIBXML2
 #cmakedefine GDCM_USE_SYSTEM_PODOFO
 #cmakedefine GDCM_USE_SYSTEM_OPENSSL
 #cmakedefine GDCM_USE_SYSTEM_MD5
