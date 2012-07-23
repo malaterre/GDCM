@@ -301,8 +301,12 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
           else
             {
             if(bv->GetLength())
-            os << "<BulkData uuid = \""<<
-              UIDgen.Generate() << "\" />";
+              {
+              const char *suid = UIDgen.Generate();
+              os << "<BulkData uuid = \""<<
+                suid << "\" />";
+              HandleBulkData( suid, bv->GetPointer(), bv->GetLength() );
+              }
             }
           }
         else if ( sqf )
@@ -347,8 +351,12 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
         else
           {
           if(bv->GetLength())
-          os << "<BulkData uuid = \""<<
-            UIDgen.Generate() << "\" />";
+            {
+            const char *suid = UIDgen.Generate();
+            os << "<BulkData uuid = \""<<
+              suid << "\" />";
+            HandleBulkData( suid, bv->GetPointer(), bv->GetLength() );
+            }
           }
         }
       else
@@ -526,6 +534,16 @@ void XMLPrinter::Print(std::ostream& os)
   PrintDataSet(ds, os);
 
   os << "\n</NativeDicomModel>";
+}
+
+// Drop BulkData by default.
+// Application programmer can override this mecanism
+void XMLPrinter::HandleBulkData(const char *uuid,
+  const char *bulkdata, size_t bulklen)
+{
+  (void)uuid;
+  (void)bulkdata;
+  (void)bulklen;
 }
 
 }//end namespace gdcm

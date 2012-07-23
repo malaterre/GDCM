@@ -41,7 +41,24 @@
 #include <stdlib.h>    /* for exit */
 #include <getopt.h>
 #include <string.h>
+
 using namespace gdcm;
+
+// This is a very dumb implementation for getData handling
+// by default GDCM simply drop the BulkData so we need to store
+// the actual BulkData somewhere for proper implementation of getData
+class SimpleFileXMLPrinter : public XMLPrinter
+{
+public:
+  void HandleBulkData(const char *uuid,
+    const char *bulkdata, size_t bulklen)
+    {
+    std::ofstream out( uuid, std::ios::binary );
+    out.write( bulkdata, bulklen );
+    out.close();
+    }
+};
+
 void PrintVersion()
 {
   std::cout << "gdcmxml: gdcm " << gdcm::Version::GetVersion() << " ";
@@ -70,57 +87,57 @@ void PrintHelp()
 #ifdef GDCM_USE_SYSTEM_LIBXML2
 static void processNode(xmlTextReaderPtr reader) 
 {
-	const xmlChar *name, *value;
+  const xmlChar *name, *value;
   name = xmlTextReaderConstName(reader);
 
   if (name == NULL)
-		name = BAD_CAST "--";
+    name = BAD_CAST "--";
 
-	value = xmlTextReaderConstValue(reader);
-	printf("%d %d %s %d %d", 
-	    xmlTextReaderDepth(reader),
-	    xmlTextReaderNodeType(reader),
-	    name,
-	    xmlTextReaderIsEmptyElement(reader),
-	    xmlTextReaderHasValue(reader));
-	    
-	if(value == NULL)
-		printf("\n");
+  value = xmlTextReaderConstValue(reader);
+  printf("%d %d %s %d %d", 
+      xmlTextReaderDepth(reader),
+      xmlTextReaderNodeType(reader),
+      name,
+      xmlTextReaderIsEmptyElement(reader),
+      xmlTextReaderHasValue(reader));
+      
+  if(value == NULL)
+    printf("\n");
   else 
-  	{
-		if (xmlStrlen(value) > 40)
-			printf(" %.40s...\n", value);
+    {
+    if (xmlStrlen(value) > 40)
+      printf(" %.40s...\n", value);
     else
-	    printf(" %s\n", value);
+      printf(" %s\n", value);
     }
 }
 
 static void WriteDataSet(xmlTextReaderPtr reader, gdcm::Filename file2)
 {
-	DataSet DS;
-	DataElement de;
-	File F;
-	Writer W;
-	
-	//populate DS
-	int ret = xmlTextReaderRead(reader);
+  DataSet DS;
+  DataElement de;
+  File F;
+  Writer W;
+  
+  //populate DS
+  int ret = xmlTextReaderRead(reader);
   while (ret == 1) 
-  	{
-		processNode(reader);
+    {
+    processNode(reader);
     ret = xmlTextReaderRead(reader);
     }
-	xmlFreeTextReader(reader);
+  xmlFreeTextReader(reader);
   if (ret != 0) 
-  	{
-		fprintf(stderr, "Failed to parse XML file\n");
-		exit(1);
+    {
+    fprintf(stderr, "Failed to parse XML file\n");
+    exit(1);
     }
-	
-	//add to File  
-	F.SetDataSet(DS);
-	
-	//add to Writer
-	W.SetFile(F);  
+  
+  //add to File  
+  F.SetDataSet(DS);
+  
+  //add to Writer
+  W.SetFile(F);  
   W.CheckFileMetaInformationOff();
   W.SetFileName(file2.GetFileName());
   
@@ -130,35 +147,35 @@ static void WriteDataSet(xmlTextReaderPtr reader, gdcm::Filename file2)
 
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
 {
-	xmlTextReaderPtr reader;  
+  xmlTextReaderPtr reader;  
   FILE *in;
-	char *buffer;
-	long numBytes;
+  char *buffer;
+  long numBytes;
   in = fopen(file1.GetFileName(), "r");
   
-	if(in == NULL)
-		return ;
-		
-	fseek(in, 0L, SEEK_END);
-	numBytes = ftell(in);
-	fseek(in, 0L, SEEK_SET);
-	buffer = (char*)calloc(numBytes, sizeof(char));
+  if(in == NULL)
+    return ;
+    
+  fseek(in, 0L, SEEK_END);
+  numBytes = ftell(in);
+  fseek(in, 0L, SEEK_SET);
+  buffer = (char*)calloc(numBytes, sizeof(char));
 
-	if(buffer == NULL)
-	  return ;
+  if(buffer == NULL)
+    return ;
 
-	fread(buffer, sizeof(char), numBytes, in);
-	fclose(in);
-	reader = xmlReaderForMemory	(buffer, numBytes, NULL, NULL, 0);
+  fread(buffer, sizeof(char), numBytes, in);
+  fclose(in);
+  reader = xmlReaderForMemory  (buffer, numBytes, NULL, NULL, 0);
   //reader = xmlReaderForFile(filename, "UTF-8", 0);
   if (reader != NULL) 
-  	{
-  	WriteDataSet(reader, file2);
+    {
+    WriteDataSet(reader, file2);
     } 
-	else 
-		{
-		fprintf(stderr, "Unable to open %s\n", file1.GetFileName());
-   	}
+  else 
+    {
+    fprintf(stderr, "Unable to open %s\n", file1.GetFileName());
+     }
 }
 #endif // GDCM_USE_SYSTEM_LIBXML2
 
@@ -305,42 +322,43 @@ int main (int argc, char *argv[])
   //const char *file2extension = file2.GetExtension();
 
   if(gdcm::System::StrCaseCmp(file1extension,".xml") != 0)// by default we assume it is a DICOM file-- as no extension is required for it
-  	{
-  	gdcm::Reader reader;
-  	reader.SetFileName( file1.GetFileName() );
-  	bool success = reader.Read();
-  	if( !success )//!ignoreerrors )
-    	{
-    	std::cerr << "Failed to read: " << file1 << std::endl;
-    	return 1;
-    	}
+    {
+    gdcm::Reader reader;
+    reader.SetFileName( file1.GetFileName() );
+    bool success = reader.Read();
+    if( !success )//!ignoreerrors )
+      {
+      std::cerr << "Failed to read: " << file1 << std::endl;
+      return 1;
+      }
 
-  	XMLPrinter printer;
-  	printer.SetFile ( reader.GetFile() );
-  	printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
+    //SimpleFileXMLPrinter printer;
+    XMLPrinter printer;
+    printer.SetFile ( reader.GetFile() );
+    printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
 
-  	if( file2.IsEmpty() )
-  	  {
-  	  printer.Print( std::cout );
-  	  }
-  	else
-  	  {
-  	  std::ofstream outfile;
-  	  outfile.open (file2.GetFileName());
-  	  printer.Print( outfile );
-  	  outfile.close();
-  	  }
-  	return 0;
-  	}
+    if( file2.IsEmpty() )
+      {
+      printer.Print( std::cout );
+      }
+    else
+      {
+      std::ofstream outfile;
+      outfile.open (file2.GetFileName());
+      printer.Print( outfile );
+      outfile.close();
+      }
+    return 0;
+    }
   else
     {
 #ifdef GDCM_USE_SYSTEM_LIBXML2
-  	/*
+    /*
      * this initialize the library and check potential ABI mismatches
      * between the version it was compiled for and the actual shared
      * library used.
      */
-  	LIBXML_TEST_VERSION
+    LIBXML_TEST_VERSION
 
     XMLtoDICOM(file1,file2);
 
@@ -353,5 +371,5 @@ int main (int argc, char *argv[])
      */
     xmlMemoryDump();
 #endif
-  	}
+    }
 }
