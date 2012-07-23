@@ -38,6 +38,7 @@ SET(MSFF_SRCS
   gdcmPersonName.cxx
   gdcmIconImage.cxx
   gdcmUIDGenerator.cxx
+  gdcmUUIDGenerator.cxx
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
   gdcmXMLPrinter.cxx

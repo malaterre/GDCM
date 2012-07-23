@@ -24,7 +24,7 @@
 #include "gdcmGlobal.h"
 #include "gdcmAttribute.h"
 #include "gdcmDataSetHelper.h"
-#include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 
 #include "gdcmDataSet.h"
 
@@ -59,7 +59,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   std::string strowner;
   const char *owner = 0;
   const Tag& t = de.GetTag();
-  UIDGenerator UIDgen;
+  UUIDGenerator UIDgen;
   
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
   const VR &vr = entry.GetVR();

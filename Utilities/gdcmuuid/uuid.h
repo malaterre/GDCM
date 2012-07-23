@@ -106,10 +106,10 @@ void uuid_generate_time(uuid_t out);
 #define uuid_is_null(uu) (!memcmp(uu, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", sizeof(uu)))
 
 /* parse.c */
-int uuid_parse(const char *in, uuid_t uu);
+UUID_EXPORT int uuid_parse(const char *in, uuid_t uu);
 
 /* unparse.c */
-void uuid_unparse(const uuid_t uu, char *out);
+UUID_EXPORT void uuid_unparse(const uuid_t uu, char *out);
 void uuid_unparse_lower(const uuid_t uu, char *out);
 void uuid_unparse_upper(const uuid_t uu, char *out);
 
