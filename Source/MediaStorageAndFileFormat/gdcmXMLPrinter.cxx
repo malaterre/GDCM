@@ -171,11 +171,11 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   os << " vr = \"" << refvr << "\" ";
 
   // Add the keyword attribute :
-    
-  os <<"keyword = \"";
 
   if( name && *name )
     {
+    os <<"keyword = \"";
+
     /*  No owner */
     if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
       {
@@ -198,7 +198,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 
     char c;
     for (; (*name)!='\0'; name++)
-    {
+      {
       c = *name;
       if(c == '&')
         os << "&amp;";
@@ -212,17 +212,18 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
         os << "&quot;";
       else
         os << c;
+      }
+    os << "\"";
     }
-  }
   else
     {
     if( t.IsPublic() )
       {
-      assert("An unknown public element.");
+      gdcmWarningMacro( "An unknown public element.");
       }
-    os << ""; // Special keyword
+    //    os << ""; // Special keyword
     }
-   os << "\">\n";
+    os << ">\n";
 
 #define StringFilterCase(type) \
   case VR::type: \
