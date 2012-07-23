@@ -246,8 +246,15 @@ namespace gdcm
         os << "</Value>\n";
         os << "\t<Value number = \"" << count << "\" >";
         }
+      else if ( !c )
+        {
+        // \0 is found ...
+        }
       else if ( !( isprint((unsigned char)c) ) )
-        os << ".";
+        {
+        assert( 0 );
+        gdcmErrorMacro( "Should not happen" );
+        }
       else if(c == '&')
         os << "&amp;";
       else if(c == '<')

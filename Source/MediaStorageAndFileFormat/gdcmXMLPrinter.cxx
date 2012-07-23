@@ -60,7 +60,12 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   const char *owner = 0;
   const Tag& t = de.GetTag();
   UUIDGenerator UIDgen;
-  
+
+  if( t.IsPrivate() && !t.IsPrivateCreator() )
+    {
+    strowner = ds.GetPrivateCreator(t);
+    owner = strowner.c_str();
+    }
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
   const VR &vr = entry.GetVR();
   const VM &vm = entry.GetVM();
@@ -78,11 +83,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       t.GetGroup() <<  std::setw(4) << t.GetElement() << std::nouppercase <<"\"" << std::dec;
 
   //Printing Private Creator
-
-  if( t.IsPrivate() && !t.IsPrivateCreator() )
+  if( owner && *owner )
     {
-    strowner = ds.GetPrivateCreator(t);
-    owner = strowner.c_str();
     os << " privateCreator = \"" << owner << "\" ";
     }
 
@@ -172,58 +174,61 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 
   // Add the keyword attribute :
 
-  if( name && *name )
+  if( t.IsPublic())
     {
-    os <<"keyword = \"";
+    if( name && *name )
+      {
+      os <<"keyword = \"";
 
-    /*  No owner */
-    if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
-      {
-      //os << name;
-      //os = PrintXML_char(os,name);
+      /*  No owner */
+      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
+        {
+        //os << name;
+        //os = PrintXML_char(os,name);
+        }
+      /* retired element */
+      else if( retired )
+        {
+        assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
+        //os << name;
+        //os = PrintXML_char(os,name);
+        }
+      /* Public element */
+      else
+        {
+        //os << name;
+        //os = PrintXML_char(os,name);
+        }
+
+      char c;
+      for (; (*name)!='\0'; name++)
+        {
+        c = *name;
+        if(c == '&')
+          os << "&amp;";
+        else if(c == '<')
+          os << "&lt;";
+        else if(c == '>')
+          os << "&gt;";
+        else if(c == '\'')
+          os << "&apos;";
+        else if(c == '\"')
+          os << "&quot;";
+        else
+          os << c;
+        }
+      os << "\"";
       }
-    /* retired element */
-    else if( retired )
-      {
-      assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
-      //os << name;
-      //os = PrintXML_char(os,name);
-      }
-    /* Public element */
     else
       {
-      //os << name;
-      //os = PrintXML_char(os,name);
+      if( t.IsPublic() )
+        {
+        gdcmWarningMacro( "An unknown public element.");
+        }
+      //    os << ""; // Special keyword
       }
-
-    char c;
-    for (; (*name)!='\0'; name++)
-      {
-      c = *name;
-      if(c == '&')
-        os << "&amp;";
-      else if(c == '<')
-        os << "&lt;";
-      else if(c == '>')
-        os << "&gt;";
-      else if(c == '\'')
-        os << "&apos;";
-      else if(c == '\"')
-        os << "&quot;";
-      else
-        os << c;
-      }
-    os << "\"";
     }
-  else
-    {
-    if( t.IsPublic() )
-      {
-      gdcmWarningMacro( "An unknown public element.");
-      }
-    //    os << ""; // Special keyword
-    }
-    os << ">\n";
+  os << ">\n";
 
 #define StringFilterCase(type) \
   case VR::type: \
