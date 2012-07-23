@@ -48,14 +48,16 @@ const char* UUIDGenerator::Generate()
   uint32_t rv;
   uuid_t g;
   uuid_create(&g, &rv);
-  if (rv != uuid_s_ok)
-    return false;
-  uint32_t status;
-  uuid_to_string(&g, &uuid_data, &status);
+  if (rv != uuid_s_ok) return NULL;
+  uuid_to_string(&g, &uuid_data, &rv);
+  if (rv != uuid_s_ok) return NULL;
 #elif defined(HAVE_UUIDCREATE)
   UUID uuid;
   UuidCreate(&uuid);
-  UuidToString(&uuid, uuid_data);
+  BYTE * str = 0;
+  UuidToString(&uuid, &str);
+  Unique = (char*)str;
+  RpcStringFree(&str);
 #else
 #error should not happen
 #endif

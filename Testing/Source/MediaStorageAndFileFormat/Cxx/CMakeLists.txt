@@ -41,6 +41,7 @@ SET(MSFF_TEST_SRCS
   TestApplicationEntity
   TestStringFilter
   TestUIDGenerator
+  TestUUIDGenerator
   #TestUIDGenerator3
   TestXMLPrinter
   TestPrinter
