@@ -20,6 +20,7 @@
 int TestBase64(int , char *[])
 {
   const char str[] = "GDCM Test Base64 Encoding";
+  const char str64[] = "R0RDTSBUZXN0IEJhc2U2NCBFbmNvZGluZwA=";
   gdcm::Base64 base64;
 
   std::cout << "sizeof:" << sizeof(str) << std::endl;
@@ -42,6 +43,12 @@ int TestBase64(int , char *[])
   if( l2 != 0 )
     {
     std::cerr << "Fail 3" << std::endl;
+    return 1;
+    }
+
+  if( strcmp( buffer, str64 ) != 0 )
+    {
+    std::cerr << "Found: " << buffer << " instead of " << str64 << std::endl;
     return 1;
     }
 
